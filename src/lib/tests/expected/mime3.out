@@ -29,6 +29,7 @@ nested MIME structure
   name:[(null)]
   filename:[file2.gif]
   content-type: image/gif
+  content-transer-encoding: binary
   size:[29]
   data:[  ...contents of file2.gif...]
 
@@ -37,6 +38,7 @@ nested MIME structure
   name:[(null)]
   filename:[file3.gif]
   content-type: image/gif
+  content-transer-encoding: binary
   size:[29]
   data:[  ...contents of file3.gif...]
 

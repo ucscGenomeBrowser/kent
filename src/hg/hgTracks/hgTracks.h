@@ -16,6 +16,14 @@
 #include "cart.h"
 #endif
 
+#ifndef PSL_H
+#include "psl.h"
+#endif
+
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 #ifndef TRACKLAYOUT_H
 #include "trackLayout.h"
 #endif /* TRACKLAYOUT_H */
@@ -445,7 +453,7 @@ void resampleBytes(UBYTE *s, int sct, UBYTE *d, int dct);
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
-boolean tgLoadNothing(struct track *tg);
+void tgLoadNothing(struct track *tg);
 void tgDrawNothing(struct track *tg);
 void tgFreeNothing(struct track *tg);
 int tgItemNoStart(struct track *tg, void *item);
@@ -463,12 +471,14 @@ int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
-void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
+void changeTrackVis(struct group *groupList, char *groupTarget, 
+        int changeVis, boolean ifVisible);
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. */
+ * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
+ * visibility to change only for non-hidden tracks */
 
 void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,
@@ -640,6 +650,10 @@ void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 
 /* Make track group for wig - wiggle tracks. */
+
+void chromGraphMethods(struct track *tg);
+/* Fill in methods for chromGraph tracks. */
+
 
 void wigMafMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);

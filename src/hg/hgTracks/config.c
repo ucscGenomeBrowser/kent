@@ -32,7 +32,7 @@ struct group *group;
 boolean showedRuler = FALSE;
 
 setRulerMode();
-changeTrackVis(groupList, groupTarget, changeVis);
+changeTrackVis(groupList, groupTarget, changeVis, FALSE);
 
 /* Set up ruler mode according to changeVis. */
 #ifdef BOB_DOESNT_LIKE

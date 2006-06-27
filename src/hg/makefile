@@ -1,13 +1,14 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.108 2006/05/20 14:56:35 hiram Exp $
+# 	$Id: makefile,v 1.109 2006/06/02 17:15:37 hiram Exp $
 
 BROWSER_BINS=cartReset das hgBlat hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver visiGene/hgVisiGene \
-	encode/mkEncodeFrameset encode/hgEncodeDataVersions
+	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
+	makeDb/hgLoadBed makeDb/hgLoadWiggle
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToMafFrames\
@@ -122,6 +123,7 @@ UTIL_DIRS = \
 	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
+	dbTrash \
 	estOrient \
 	embossToPsl \
 	fakeFinContigs \

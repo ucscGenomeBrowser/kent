@@ -9,6 +9,14 @@
 struct liftOverChain *liftOverChainList();
 /* Get list of all liftOver chains in the central database */
 
+void filterOutMissingChains(struct liftOverChain **pChainList);
+/* Filter out chains that don't exist.  Helps partially mirrored sites. */
+
+struct liftOverChain *liftOverChainListFiltered();
+/* Get list of all liftOver chains in the central database
+ * filtered to include only those chains whose liftover files exist.
+ * This helps partially mirrored sites */
+
 struct liftOverChain *liftOverChainForDb(char *fromDb);
 /* Return list of liftOverChains for this database. */
 

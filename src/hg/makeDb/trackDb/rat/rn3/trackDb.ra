@@ -55,6 +55,16 @@ color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility dense
+color 34,139,34
+type genePred
+cdsDrawDefault genomic\ codons
+
 track blastzTightHg15
 shortLabel Human Tight Hg15
 longLabel Human Blastz (hg15-Apr 03), Tight Subset of Best Alignments
@@ -431,3 +441,8 @@ visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
+
+searchTable nscanGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
+searchPriority 50

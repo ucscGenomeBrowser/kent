@@ -87,7 +87,7 @@ group map
 priority 30
 visibility hide
 type psl .
-url http://wwwtest.genetrap.org/cgi-bin/annotation.py?cellline=$$
+url http://www.genetrap.org/cgi-bin/annotation.py?cellline=$$
 urlLabel IGTC Cell Line Annotation: 
 
 track xenoRefGene
@@ -322,6 +322,23 @@ priority 87
 visibility hide
 type psl .
 
+track regPotential7X
+shortLabel Reg Potential 7 species
+longLabel SPERR Regulatory Potential (7 species)
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.10
+windowingFunction mean
+spanList 1
+type wig -1.0 1.0
+
 track chainFr1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -499,10 +516,10 @@ type netAlign rheMac1 chainRheMac1
 otherDb rheMac1
 
 track chainDanRer3
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 159.1
+priority 159.3
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -513,10 +530,10 @@ type chain danRer3
 otherDb danRer3
                                                                                 
 track netDanRer3
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 159.2
+priority 159.4
 visibility hide
 spectrum on
 type netAlign danRer3 chainDanRer3
@@ -636,30 +653,6 @@ visibility hide
 spectrum on
 type netAlign dasNov1 chainDasNov1
 otherDb dasNov1
-
-track chainRheMac2
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 257.1
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain rheMac2
-otherDb rheMac2
-
-track netRheMac2
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 257.2
-visibility hide
-spectrum on
-type netAlign rheMac2 chainRheMac2
-otherDb rheMac2
 
 track chainPanTro1
 shortLabel $o_Organism Chain
@@ -939,4 +932,3 @@ searchType psl
 searchMethod prefix
 searchPriority 50
 termRegex [A-Z0-9\._+-]+
-

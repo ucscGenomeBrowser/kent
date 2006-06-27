@@ -51,6 +51,14 @@ echo "Now beginning to build new branch $BRANCHNN"
 
 echo
 
+#echo debug: disabled ok cleanup
+if ( -e CvsReports.ok ) then
+    rm CvsReports.ok
+endif
+if (-e 32bitUtils.ok) then
+    rm 32bitUtils.ok
+endif
+
 #echo debug: disabled cgiVersion
 ./updateCgiVersion.csh real
 
@@ -76,21 +84,16 @@ echo
 echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL"
 echo
 #echo debug: disabled buildCvsReports
-ssh hgwdev $WEEKLYBLD/buildCvsReports.csh branch real &
-# note - we are now trying running it in the background on dev
-if ( $status ) then
- echo "buildCvsReports.csh  failed on $HOST"
- exit 1
-endif
-echo "buildCvsReports.csh done on $HOST"
+ssh hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
+# note - we are now running it in the background on hgwdev
 
 #---------------------
 
 echo
-echo  "NOW STARTING 32-BIT BUILD ON HGWDEV IN PARALLEL"
+echo  "NOW STARTING 32-BIT BUILD ON $BOX32 IN PARALLEL"
 echo
 #echo debug: disabled parallel build 32bit utils on dev
-ssh hgwdev "$WEEKLYBLD/doNewBranch32.csh opensesame" &
+ssh $BOX32 "$WEEKLYBLD/doNewBranch32.csh opensesame" >& doNew32.log &
 
 echo
 #unpack the new branch on BUILDDIR for beta
@@ -128,17 +131,28 @@ else
     echo "Robots done. No errors reported."
 endif
 
+if ( -e CvsReports.ok ) then
+    echo "CVS Reports finished ok."
+else
+    echo "CVS Reports had some error, no ok file found."
+endif
+if (-e 32bitUtils.ok) then
+    echo "32-bit utils build finished ok."
+else
+    echo "32-bit utils build had some error, no ok file found."
+endif
+
 
 # do not do this here this way - we might as well wait until
 #  later in the week to run this after most branch-tag moves will have been applied.
 # Besides it does not work to run this script
 #  from beta because when ssh wants the password
 #  it fails to get input from stdin redirected across machines,
-#  so that means actually logging into hgwdev and then running it.
+#  so that means actually logging into $BOX32 and then running it.
 #  But it will take care of the rest.
-#ssh hgwdev $WEEKLYBLD/buildCgi32.csh
+#ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
 if ( $status ) then
-    echo "build 32-bit CGIs on hgwdev failed"
+    echo "build 32-bit CGIs on $BOX32 failed"
     exit 1
 endif
 

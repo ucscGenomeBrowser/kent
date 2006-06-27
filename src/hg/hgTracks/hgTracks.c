@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1115.2.1 2006/06/01 18:43:56 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1131 2006/06/19 17:02:57 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -348,8 +348,7 @@ struct group *groupList = NULL;    /* List of all tracks. */
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
-boolean tgLoadNothing(struct track *tg){return TRUE;}
-void tgDrawNothing(struct track *tg){}
+void tgLoadNothing(struct track *tg){}
 void tgFreeNothing(struct track *tg){}
 int tgItemNoStart(struct track *tg, void *item) {return -1;}
 int tgItemNoEnd(struct track *tg, void *item) {return -1;}
@@ -501,12 +500,14 @@ int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fon
 return height;
 }
 
-void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+void changeTrackVis(struct group *groupList, char *groupTarget, 
+        int changeVis, boolean ifVisible)
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. */
+ * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
+ * visibility to change only for non-hidden tracks */
 {
 struct group *group;
 if (changeVis == -2)
@@ -521,8 +522,8 @@ for (group = groupList; group != NULL; group = group->next)
 	    struct track *track = tr->track;
 	    if (changeVis == -1)
 	        track->visibility = track->tdb->visibility;
-	    else
-	        track->visibility = changeVis;
+            else if (track->visibility != tvHide || !ifVisible)
+                track->visibility = changeVis;
 	    cartSetString(cart, track->mapName, 
 	    	hStringFromTv(track->visibility));
 	    }
@@ -968,6 +969,8 @@ struct simpleFeature *exon = exons;
 int newWinSize = winEnd - winStart;
 int bufferToEdge = 0.05 * newWinSize;
 int newWinStart, newWinEnd;
+int numExons = 0;
+int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
@@ -980,8 +983,10 @@ if (next)
     slSort(&exonList, exonSlRefCmp);
 else 
     slSort(&exonList, exonSlRefReverseCmp);
-for (ref = exonList; ref != NULL; ref = ref->next)
+numExons = slCount(exonList);
+for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     {
+    char mouseOverText[256];
     boolean bigExon = FALSE;
     exon = ref->val;
     if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
@@ -995,7 +1000,8 @@ for (ref = exonList; ref != NULL; ref = ref->next)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Next Feature");
+	safef(mouseOverText, sizeof(mouseOverText), "Next Feature (%d/%d)", exonIx+1, numExons);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
@@ -1007,9 +1013,10 @@ for (ref = exonList; ref != NULL; ref = ref->next)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Previous Feature");
+	safef(mouseOverText, sizeof(mouseOverText), "Prev Feature (%d/%d)", numExons-exonIx, numExons);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
-	}				     
+	}
     }    
 slFreeList(&exonList);
 }
@@ -1894,7 +1901,6 @@ if (vis == tvPack || vis == tvSquish)
 	    }
 	y = yOff + origLineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
@@ -3499,6 +3505,84 @@ tg->itemHeight 	= tgFixedItemHeight;
 tg->itemStart 	= superfamilyItemStart;
 tg->itemEnd 	= superfamilyItemEnd;
 tg->drawName 	= FALSE;
+}
+
+void rgdQtlDrawAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single rgdQtl item at position. */
+{
+struct bed *bed = item;
+struct sqlConnection *conn = hAllocConn();
+char cond_str[256];
+char *chp;
+
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int x3, x4;
+int w, w2;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char *directUrl = trackDbSetting(tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    }
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName && vis != tvSquish)
+	{
+	char *s;
+	
+	/* get description from rgdQtlLink table */
+	sprintf(cond_str, "name='%s'", tg->itemName(tg, bed));
+        s  = sqlGetField(conn, database, "rgdQtlLink", "description", cond_str);
+
+	/* chop off text starting from " (human)" */
+	chp = strstr(s, " (human)");
+	if (chp != NULL) *chp = '\0';
+	
+	x3 = x1;
+	x4 = x2;
+	
+	/* adjust range of text display to fit within the display window */
+	if (x3 < xOff) x3 = xOff;
+	if (x4 > (insideWidth + xOff)) x4 = insideWidth + xOff;
+	w2 = x4 - x3;
+	if (w2 > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x3, y, w2, heightPer, textColor, font, s);
+	    }
+	else if (w2 > mgFontStringWidth(font, s)/2)
+	    {
+	    /* sqeez in the text for shorter QTL range */
+	    Color textColor = contrastingColor(vg, color);
+	    vgText(vg, x3+1, y+heightPer/2-2, textColor, font, s);
+	    }
+	/* enable mouse over */
+	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), s, directUrl, withHgsid);
+	}
+    }
+}
+
+void rgdQtlMethods(struct track *tg)
+/* Fill in methods for rgdQtl track. */
+{
+tg->drawItemAt 	= rgdQtlDrawAt;
+tg->drawName 	= TRUE;
 }
 
 char *getOrganism(struct sqlConnection *conn, char *acc)
@@ -7852,6 +7936,7 @@ return y;
 static int doMapItems(struct track *track, int fontHeight, int y)
 /* Draw map boxes around track items */
 {
+char *type = track->tdb->type;
 int newy;
 char *directUrl = trackDbSetting(track->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(track->tdb, "hgsid") != NULL);
@@ -7859,13 +7944,26 @@ int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int start = 1;
 struct slList *item;
+boolean isWig = (sameString("wig", type) || startsWith("wig ", type) ||
+		startsWith("bedGraph", type));
 
-if (track->subType == lfSubSample && track->items == NULL)
-     y += track->lineHeight;
 if (isWithCenterLabels(track))
     y += fontHeight;
-/* override doMapItems for hapmapLd track */
+if (track->mapsSelf)
+    {
+    /* Wiggle track's ->height is actually one less than what it returns from 
+     * totalHeight()... I think the least disruptive way to account for this
+     * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
+     * we see wiggle or bedGraph: */
+    if (isWig)
+        return y+track->height + 1;
+    else
+        return y+track->height;
+    }
+if (track->subType == lfSubSample && track->items == NULL)
+     y += track->lineHeight;
 
+/* override doMapItems for hapmapLd track */
 /* does not scale with subtracks right now, so this is commented out until it can be fixed
 if (startsWith("hapmapLd",track->mapName))
     {
@@ -7909,9 +8007,7 @@ for (item = track->items; item != NULL; item = item->next)
  * totalHeight()... I think the least disruptive way to account for this
  * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
  * we see wiggle or bedGraph: */
-if (sameString("wig", track->tdb->type) ||
-    startsWith("wig ", track->tdb->type) ||
-    startsWith("bedGraph", track->tdb->type))
+if (isWig)
     y++;
 return y;
 }
@@ -10233,6 +10329,10 @@ else if (sameWord(type, "bed6FloatScore"))
     bedMethods(track);
     track->loadItems = loadSimpleBed;
     }
+else if (sameWord(type, "chromGraph"))
+    {
+    chromGraphMethods(track);
+    }
 
 }
 
@@ -10511,7 +10611,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10553,7 +10653,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10608,7 +10708,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10655,7 +10755,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10852,14 +10952,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
-
     tg = newCustomTrack(ct);
     vis = cartOptionalString(cart, tg->mapName);
     if (vis != NULL)
 	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
-}	/*	void loadCustomTracks(struct track **pGroupList)	*/
+}
 
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
@@ -11119,13 +11218,15 @@ registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
 registerTrackHandler("snp125", snp125Methods);
+registerTrackHandler("snp126", snp125Methods);
 registerTrackHandler("ld", ldMethods);
+registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpIafrate", cnpIafrateMethods);
 registerTrackHandler("cnpSebat", cnpSebatMethods);
-registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpFosmid", cnpFosmidMethods);
 registerTrackHandler("delConrad", delConradMethods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
+registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
@@ -11181,6 +11282,7 @@ registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
+registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
@@ -11343,6 +11445,10 @@ registerTrackHandler("transMap", transMapMethods);
 registerTrackHandler("transMapGene", transMapMethods);
 registerTrackHandler("transMapRefGene", transMapMethods);
 registerTrackHandler("transMapMRnaGene", transMapMethods);
+registerTrackHandler("transMapAnc", transMapMethods);
+registerTrackHandler("transMapAncGene", transMapMethods);
+registerTrackHandler("transMapAncRefGene", transMapMethods);
+registerTrackHandler("transMapAncMRnaGene", transMapMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -11357,7 +11463,7 @@ loadCustomTracks(&trackList);
 
 groupTracks(&trackList, pGroupList);
 if (cgiOptionalString( "hideTracks"))
-    changeTrackVis(groupList, NULL, tvHide);
+    changeTrackVis(groupList, NULL, tvHide, FALSE);
 
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
@@ -11401,6 +11507,8 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean hideAllNotCt = cgiVarExists("hgt.hideAllNotCt");
+char *visAll = cgiUsualString("hgt.visAll", NULL);
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
@@ -11424,8 +11532,6 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracks
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
 
-
-
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
 if (userSeqString && !ssFilesExist(userSeqString))
@@ -11442,12 +11548,24 @@ trackList = getTrackList(&groupList);
 if (measureTiming)
     uglyTime("getTrackList");
 
-/* If hideAll flag set, make all tracks hidden */
+/* Honor hideAll and visAll variables */
 if(hideAll || defaultTracks)
     {
     int vis = (hideAll ? tvHide : -1);
-    changeTrackVis(groupList, NULL, vis);
+    changeTrackVis(groupList, NULL, vis, FALSE);
     }
+else if (hideAllNotCt)
+    {  
+    struct group *group;
+    for (group = groupList; group != NULL; group = group->next)
+        {
+        if (sameString("user", group->name))
+            continue;
+        changeTrackVis(groupList, group->name, tvHide, FALSE);
+        }
+    }
+else if (visAll)
+    changeTrackVis(groupList, NULL, hTvFromString(visAll), TRUE);
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
 if (cgiVarExists("hgt.nextItem"))       
@@ -12442,7 +12560,8 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
+			"hgt.tui", "hgt.hideAll", "hgt.visAll", 
+                        "hgt.hideAllNotCt", "hgt.psOutput", "hideControls",
 			NULL };
 
 int main(int argc, char *argv[])

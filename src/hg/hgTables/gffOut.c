@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.15 2005/03/02 00:20:29 hiram Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.16 2006/06/12 23:06:11 angie Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -132,6 +132,8 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	int nextPhase = 0;
 	int startIndx = 0;
 	int stopIndx = 0;
+	if (bed->thickStart == 0 && bed->thickEnd == 0)
+	    bed->thickStart = bed->thickEnd = bed->chromStart;
 	/* first pass: compute frames, in order dictated by strand. */
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
@@ -209,13 +211,16 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	}
     else if (hti->hasCDS && fieldCount > 4)
 	{
+	if (bed->thickStart == 0 && bed->thickEnd == 0)
+	    bed->thickStart = bed->thickEnd = bed->chromStart;
 	if (bed->thickStart > bed->chromStart)
 	    {
 	    addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
 			      bed->thickStart, '.', txName);
 	    }
-	addGffLineFromBed(&gffList, bed, source, "CDS", bed->thickStart,
-			  bed->thickEnd, '0', txName);
+	if (bed->thickEnd > bed->thickStart)
+	    addGffLineFromBed(&gffList, bed, source, "CDS", bed->thickStart,
+			      bed->thickEnd, '0', txName);
 	if (bed->thickEnd < bed->chromEnd)
 	    {
 	    addGffLineFromBed(&gffList, bed, source, "exon", bed->thickEnd,

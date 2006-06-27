@@ -6,7 +6,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest mimeTests
+test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
+    mimeTests base64Tests quotedPTests
 	rm -r output
 	@echo tested all
 
@@ -88,7 +89,7 @@ ${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} $L
 
 
-mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeBlat
+mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeAutoBoundary mimeBlat
 
 ${BIN_DIR}/mimeTester:  mkdirs mimeTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} $L
@@ -122,6 +123,10 @@ mimeAltHead: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -altHeader='CONTENT_TYPE=multipart/form-data; boundary=----------0xKhTmLbOuNdArY' < input/$@.txt > output/$@.out
 	diff expected/$@.out output/$@.out
 
+mimeAutoBoundary: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester -autoBoundary < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
 mimeBlat: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -altHeader='CONTENT_TYPE=multipart/form-data; boundary=----------0xKhTmLbOuNdArY' < input/$@.txt > output/$@.out
 	diff expected/$@.out output/$@.out
@@ -137,6 +142,45 @@ htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 	${BIN_DIR}/htmlMimeTest http://hgwdev.cse.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 3490 3502 > output/$@.out
 	diff expected/$@.out output/$@.out
 
+
+base64Tests: base64Encode base64Decode
+
+${BIN_DIR}/testBase64:  mkdirs testBase64.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS} $L
+
+base64Encode: ${BIN_DIR}/testBase64 mkdirs
+	${BIN_DIR}/testBase64 'My Test String' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+base64Decode: ${BIN_DIR}/testBase64 mkdirs
+	${BIN_DIR}/testBase64 'TXkgVGVzdCBTdHJpbmc=' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+
+
+quotedPTests: quotedPEncode quotedPDecode
+
+${BIN_DIR}/testQuotedP:  mkdirs testQuotedP.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} $L
+
+quotedPEncode: ${BIN_DIR}/testQuotedP mkdirs
+	${BIN_DIR}/testQuotedP 'taxes are quite high ' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
+	${BIN_DIR}/testQuotedP 'taxes=20are=20quite=20high=20=' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+
+
+${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS} $L
+
+
+mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
+	${BIN_DIR}/mimeDecodeTest -cid -autoBoundary output < input/$@.txt
+	diff expected/noName1.html output/noName1.html
+		
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out

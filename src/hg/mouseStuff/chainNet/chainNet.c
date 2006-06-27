@@ -9,7 +9,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.35 2006/05/13 05:39:56 markd Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.36 2006/06/07 19:25:57 angie Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -31,7 +31,7 @@ errAbort(
   "options:\n"
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
-  "   -minScore=N - minimum chain score to consider, default %d\n"
+  "   -minScore=N - minimum chain score to consider, default %.1lf\n"
   "   -verbose=N - Alter verbosity (default 1)\n"
   , minSpace, minScore);
 }
@@ -383,7 +383,6 @@ struct slRef *spaceList;
 struct slRef *ref;
 struct cBlock *startBlock, *block, *nextBlock;
 struct gap *gap;
-struct fill *fill = NULL;
 
 spaceList = findSpaces(chrom->spaces,chain->tStart,chain->tEnd);
 startBlock = chain->blockList;
@@ -438,7 +437,6 @@ struct slRef *ref;
 struct cBlock *startBlock, *block, *nextBlock;
 int gapStart, gapEnd;
 struct gap *gap;
-struct fill *fill = NULL;
 boolean isRev = (chain->qStrand == '-'); 
 int qStart = chain->qStart, qEnd = chain->qEnd;
 
@@ -517,7 +515,6 @@ void sortNet(struct gap *gap)
 /* Recursively sort lists. */
 {
 struct fill *fill;
-struct gap *g;
 slSort(&gap->fillList, fillCmpStart);
 for (fill = gap->fillList; fill != NULL; fill = fill->next)
     {

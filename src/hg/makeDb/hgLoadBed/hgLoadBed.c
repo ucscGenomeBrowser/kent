@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.41 2006/05/18 16:33:14 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.42 2006/05/31 23:31:26 heather Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -304,7 +304,7 @@ else if (!oldTable)
        dyStringAppend(dy, "  INDEX(name(16)),\n");
     if (noBin)
 	{
-	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
+	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart)\n", minLength);
 	}
     else
 	{

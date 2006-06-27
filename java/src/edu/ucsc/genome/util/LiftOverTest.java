@@ -30,6 +30,8 @@ class LiftOverTest {
     HGDBInfo dbinfo = new HGDBInfo(target.server, target.database);
     String dbURL = QADBLibrary.jdbcURL(dbinfo);
 
+    //System.out.println(dbURL);  //debug
+
     Connection con = DriverManager.getConnection(dbURL);
     Statement stmt = con.createStatement();
     String query = "select * from " + target.table;
@@ -114,7 +116,7 @@ class LiftOverTest {
     // use origAssembly and newAssembly to construct path to chain file
     chain = "/gbdb/" + testcase.origAssembly + "/liftOver/";
     String targetAssembly = capitalize(testcase.newAssembly);
-    chain = chain + testcase.origAssembly + "To" + targetAssembly + ".over.chain";
+    chain = chain + testcase.origAssembly + "To" + targetAssembly + ".over.chain.gz";
     if (!checkForFile(chain)) {
       System.out.println("Cannot find or open " + chain);
       return (false);

@@ -283,6 +283,87 @@ matrixHeader A, C, G, T
 type chain mm8
 otherDb mm8
 
+track chainMonDom4
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 128.2 
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain monDom4
+otherDb monDom4
+
+track netMonDom4
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 128.3
+visibility hide
+spectrum on
+type netAlign monDom4 chainMonDom4
+otherDb monDom4
+
+# release alpha: $o_db in shortLabel
+track chainXenTro2
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 130.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain xenTro2
+otherDb xenTro2
+release alpha
+
+# release beta: $o_Organism in shortLabel
+track chainXenTro2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 130.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain xenTro2
+otherDb xenTro2
+release beta
+
+# release alpha: $o_db in shortLabel
+track netXenTro2
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 130.3
+visibility hide
+spectrum on
+type netAlign xenTro2 chainXenTro2
+otherDb xenTro2
+release alpha
+
+#release beta: $o_Organism in shortLabel
+track netXenTro2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 130.3
+visibility hide
+spectrum on
+type netAlign xenTro2 chainXenTro2
+otherDb xenTro2
+release beta
+
+
 searchTable wz_ests
 searchMethod prefix
 searchType psl

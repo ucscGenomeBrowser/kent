@@ -27,7 +27,7 @@ searchLabel Known Gene Names
 
 name proteinName
 shortLabel UniProt
-longLabel UniProt(SwissProt/TrEMBL) Protein Display ID
+longLabel UniProt (SwissProt/TrEMBL) Protein Display ID
 priority 2.1
 visibility off
 type association kgXref
@@ -39,7 +39,7 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name proteinAcc
 shortLabel UniProt Acc
-longLabel UniProt(SwissProt/TrEMBL) Protein Accession
+longLabel UniProt (SwissProt/TrEMBL) Protein Accession
 priority 2.15
 visibility off
 type lookup kgXref kgID spID

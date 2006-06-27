@@ -766,7 +766,7 @@ rn4.mgcTables.mgc = all
     hgLoadWiggle -pathPrefix=/gbdb/rn4/wib rn4 gc5Base gc5Base.wig
 
 
-# ENSEMBL GENES (DONE 1/30/06 angie)
+# ENSEMBL GENES (DONE 1/30/06 angie - UPDATED 6/12/06)
     mkdir /cluster/data/rn4/bed/ensembl
     cd /cluster/data/rn4/bed/ensembl
     # Get the ensembl gene data from 
@@ -794,8 +794,7 @@ rn4.mgcTables.mgc = all
     # Choose Text, tab-separated as the output format.  Result name ensGtp.
     # Save file as ensGtp.txt.gz
     gunzip ensGtp.txt.gz
-    hgsql rn4 < ~/kent/src/hg/lib/ensGtp.sql
-    hgsql rn4 -e 'load data local infile "ensGtp.txt" into table ensGtp'
+    hgLoadSqlTab rn4 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.txt
 
     # Load Ensembl peptides:
     # Get them from ensembl as above in the gene section except for
@@ -2139,7 +2138,7 @@ while (<>) {
     hgLoadSqlTab rn4 kgXref ~/kent/src/hg/lib/kgXref.sql kgXref.tab
 
     # Build spMrna table
-    hgsql rn4 -N -e 'select name, proteinID from knownGene' > kgSpMrna.tab
+    hgsql rn4 -N -e 'select proteinID, name from knownGene' > kgSpMrna.tab
     hgLoadSqlTab rn4 spMrna ~/kent/src/hg/lib/spMrna.sql kgSpMrna.tab
 
     # Build kgProtMap table
@@ -2789,54 +2788,6 @@ cat  << 'EOF' > spec
       /usr/local/apache/htdocs/images/phylo/rn4_9way.jpg
 
 
-# MULTIZ9WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/3/2006 angie)
-    # We haven't publicly documented the annotated maf format yet,
-    # so put the unannotated mafs out for download.
-    ssh hgwdev
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30
-    mkdir mafDownloads
-    cd mafDownloads
-    # upstream mafs 
-cat > mafFrags.csh << 'EOF'
-    date
-    foreach i (1000 2000 5000)
-        echo "making upstream$i.maf"
-        nice featureBits rn4 refGene:upstream:$i -fa=/dev/null -bed=up.bad
-        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
-        rm up.bad
-        nice mafFrags rn4 multiz9way up.bed upstream$i.maf \
-                -orgs=../species.lst
-        rm up.bed
-    end
-    date
-'EOF'
-    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
-#75.280u 480.470s 17:07.43 54.0% 0+0k 0+0io 4640pf+0w
-
-    ssh kkstore04
-    mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
-cat > downloads.csh << 'EOF'
-    date
-    foreach f (../maf/chr*.maf)
-	set c = $f:t:r
-        echo $c
-	nice gzip -c $f > $c.maf.gz
-    end
-    md5sum *.gz > md5sum.txt
-    date
-'EOF'
-    time csh -efx downloads.csh >&! downloads.log
-    # ~30min
-
-    ssh hgwdev
-    set dir = /usr/local/apache/htdocs/goldenPath/rn4/multiz9way
-    mkdir $dir
-    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads/{*.gz,md5sum.txt} $dir
-    cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
-    # edit README.txt
-
-
 # ANNOTATE MULTIZ9WAY MAF AND LOAD TABLES (DONE 4/4/2006 angie)
     ssh kolossus
     mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/anno
@@ -2896,7 +2847,60 @@ date
     ln -s multiz9way.2006-03-30 /cluster/data/rn4/bed/multiz9way
 
 
+# MULTIZ9WAY DOWNLOADABLES (UNANNOTATED) (DONE 6/9/2006 angie)
+    # Annotated MAF is now documented, so use anno/maf for downloads.
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
+    # upstream mafs 
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits rn4 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags rn4 multiz9way up.bed upstream$i.maf \
+                -orgs=../species.lst
+        rm up.bed
+    end
+    date
+'EOF'
+    # << emacs
+    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
+#old hgwdev:
+#75.280u 480.470s 17:07.43 54.0% 0+0k 0+0io 4640pf+0w
+#new hgwdev:
+#85.814u 171.368s 7:37.96 56.1%  0+0k 0+0io 0pf+0w
+
+    ssh kkstore04
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
+cat > downloads.csh << 'EOF'
+    date
+    foreach f (../anno/maf/chr*.maf)
+	set c = $f:t:r
+        echo $c
+	nice gzip -c $f > $c.maf.gz
+    end
+    md5sum *.gz > md5sum.txt
+    date
+'EOF'
+    # << emacs
+    time csh -efx downloads.csh >&! downloads.log
+#1897.874u 25.317s 32:58.19 97.2%        0+0k 0+0io 2pf+0w
+    nice gzip up*.maf
+    nice md5sum up*.maf.gz >> md5sum.txt
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/rn4/multiz9way
+    mkdir $dir
+    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
+    # edit README.txt
+
+
 # MULTIZ9WAY MAF FRAMES (DONE 4/5/2006 angie)
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
     ssh hgwdev
     mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/frames
     cd /cluster/data/rn4/bed/multiz9way.2006-03-30/frames
@@ -3006,7 +3010,17 @@ date
     # clean up
     rm -rf ${clusterDir}
 
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/rn4/bed/multiz9way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../anno/maf/*.maf | time genePredToMafFrames rn4 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer3 genes/danRer3.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz rn4 genes/rn4.gp.gz xenTro1 genes/xenTro1.gp.gz |  gzip >multiz9way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/multiz9way/frames
 
+    hgLoadMafFrames rn4 multiz9wayFrames multiz9way.mafFrames.gz >&log&
 # PHASTCONS (DONE 4/2/2006 angie)
 # Using Kate's process from makeHg17.doc.
 # This process is distilled from Hiram and Adam's experiments
@@ -3120,7 +3134,6 @@ cp -p $san/ss/$c/$f.ss ../elliotsEncodePruned.mod $tmp
 pushd $tmp > /dev/null
 /cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncodePruned.mod \
   --rho $rho --expected-length $len --target-coverage $cov --quiet \
-  --not-informative panTro1,rheMac2 \
   --seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
 mkdir -p $san/pp/$c $san/bed/$c
@@ -3473,7 +3486,7 @@ _EOF_
     # Create table that maps between known genes and RefSeq
     hgMapToGene rn4 refGene knownGene knownToRefSeq
 
-    # Create knownToEnsembl column
+    # Create knownToEnsembl column -- redone 6/12/06 after ensGene update
     hgMapToGene rn4 ensGene knownGene knownToEnsembl
 
 
@@ -3526,4 +3539,97 @@ BASE=/cluster/data/rn4/bed/blastz.xenTro2.2006-04-19
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-19 /cluster/data/rn4/bed/blastz.xenTro2
 
+
+#########################################################################
+# BLASTZ CHICKEN galGal3 (DONE 5/25/06 angie)
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.galGal3.2006-05-24
+    cd /cluster/data/rn4/bed/blastz.galGal3.2006-05-24
+    cat << '_EOF_' > DEF
+# rat vs chicken
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Rat rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_SMSK=/san/sanvol1/scratch/rn4/linSpecRep.notInNonMammal
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal3 - single chunk big enough to run entire chrom
+SEQ2_DIR=/san/sanvol1/galGal3/nib
+SEQ2_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/galGal3/linSpecRep
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.galGal3.2006-05-24
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl DEF -blastzOutRoot /san/sanvol1/scratch/gg3vsrn4 \
+      -bigClusterHub=pk -smallClusterHub=pk \
+      -chainMinScore=5000 -chainLinearGap=loose \
+      >& do.log & tail -f do.log
+    ln -s blastz.galGal3.2006-05-24 /cluster/data/rn4/bed/blastz.galGal3
+
+#########################################################################
+###### ADD gdbPdb ENTRY FOR rn4 INTO THE CENTRAL DB. (DONE, 6/1/06, Fan)
+
+    mysql -u hgcat -p$HGPSWD -h genome-testdb -A hgcentraltest
+
+    	delete from gdbPdb where genomeDb='rn4';
+    	insert into gdbPdb values('rn4', 'proteins060115');
+
+###########################################################
+#BUILD KEGG PATHWAY TABLES. DONE 6/12/06.  Fan.
+   ssh hgwdev
+   cd /cluster/store11/kg/kgRn4A
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgRn4A rn4 060115
+
+# This script exited early due to SOAP module of perl seems missing
+# So go to hgwdevold and manually ran the following:
+
+   ~/src/hg/protein/getKeggList2.pl rno > keggList.tab
+
+   hgsql rn4 < ~/kent/src/hg/lib/keggList.sql
+   hgsql -e 'LOAD DATA local INFILE "keggList.tab" into table keggList;' rn4
+
+# go back to hgwdev
+
+   hgKegg3 rn4 rn4
+ 
+   hgsql rn4 -e "drop table keggMapDesc"
+   hgsql rn4 -e "drop table keggPathway"
+   hgsql rn4 <~/src/hg/lib/keggMapDesc.sql
+   hgsql rn4 <~/src/hg/lib/keggPathway.sql
+   hgsql rn4 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql rn4 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+  
+#########################################################################
+# BUILD SOME KNOWNTO... TABLES, DONE 6/12/06 Fan.
+
+cd /cluster/data/rn4/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene rn4 refGene knownGene knownToRefSeq
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" rn4 > refToLl.txt
+hgMapToGene rn4 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt rn4 knownGene name proteinID Pfam knownToPfam
+hgsql -e "select count(*) from knownToPfam;" rn4
+
+#########################################################################
 

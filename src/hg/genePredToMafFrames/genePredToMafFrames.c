@@ -5,12 +5,12 @@
 #include "mkMafFrames.h"
 #include "splitMultiMappings.h"
 #include "finishMafFrames.h"
-#include "geneBins.h"
+#include "orgGenes.h"
 #include "chromBins.h"
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.8 2006/04/25 01:05:58 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.10 2006/06/05 03:58:48 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -33,63 +33,84 @@ for (ef = exon->frames; ef != NULL; ef = ef->next)
     }
 }
 
-static void outputFrames(struct geneBins *genes, char *mafFramesFile, char *bedFile)
+static void outputFrames(struct orgGenes *orgs, char *mafFramesFile, char *bedFile)
 /* output all mafFrames rows */
 {
 FILE *frameFh = mustOpen(mafFramesFile, "w");
 FILE *bedFh = (bedFile != NULL) ? mustOpen(bedFile, "w") : NULL;
+struct orgGenes *genes;
 struct gene *gene;
 struct cdsExon *exon;
-for (gene = genes->genes; gene != NULL; gene = gene->next)
+for (genes = orgs; genes != NULL; genes = genes->next)
     {
-    geneCheck(gene);
-    for (exon = gene->exons; exon != NULL; exon = exon->next)
-        outputExonFrames(exon, frameFh, bedFh);
+    for (gene = genes->genes; gene != NULL; gene = gene->next)
+        {
+        geneCheck(gene);
+        for (exon = gene->exons; exon != NULL; exon = exon->next)
+            outputExonFrames(exon, frameFh, bedFh);
+        }
     }
-
 carefulClose(&frameFh);
 carefulClose(&bedFh);
 }
 
-static void dumpGeneInfo(char *desc, struct geneBins *genes)
+static void dumpGeneInfo(char *desc, struct orgGenes *orgs)
 /* dump information about genes */
 {
 FILE *fh = verboseLogFile();
 int i;
+struct orgGenes *genes;
 struct gene *gene;
-for (gene = genes->genes; gene != NULL; gene = gene->next)
+for (genes = orgs; genes != NULL; genes = genes->next)
     {
-    geneSortFramesOffTarget(gene);
-    fprintf(fh, "%s: ", desc);
-    geneDump(fh, gene);
+    fprintf(fh, "srcDb: %s\n", genes->srcDb);
+    for (gene = genes->genes; gene != NULL; gene = gene->next)
+        {
+        geneSortFramesOffTarget(gene);
+        fprintf(fh, "%s: ", desc);
+        geneDump(fh, gene);
+        }
+    for (i = 0; i < 90; i++)
+        fputc('-', fh);
+    fputc('\n', fh);
     }
-for (i = 0; i < 90; i++)
-    fputc('-', fh);
-fputc('\n', fh);
 }
 
-static void genePredToMafFrames(char *geneDb, char *targetDb, char *genePredFile,
-                                char *mafFramesFile, char *bedFile,
-                                int numMafFiles, char **mafFiles)
+static struct orgGenes *loadGenePreds(int numGeneDbs, char **geneDbs,
+                                      char **genePreds)
+/* build list of genes for all organisms */
+{
+struct orgGenes *orgs = NULL;
+int i;
+for (i = 0; i < numGeneDbs; i++)
+    slSafeAddHead(&orgs, orgGenesNew(geneDbs[i], genePreds[i]));
+return orgs;
+}
+
+static void genePredToMafFrames(char *targetDb, char *mafFile, char *mafFramesFile,
+                                int numGeneDbs, char **geneDbs, char **genePreds,
+                                char *bedFile)
 /* create mafFrames tables from genePreds  */
 {
-struct geneBins *genes = geneBinsNew(genePredFile);
-int i;
+/* get list of organisms and their genes */
+struct orgGenes *orgs = loadGenePreds(numGeneDbs, geneDbs, genePreds);
+struct orgGenes *genes;
 
-for (i = 0; i < numMafFiles; i++)
-    mkMafFramesForMaf(geneDb, targetDb, genes, mafFiles[i]);
+mkMafFramesForMaf(targetDb, orgs, mafFile);
 
 if (verboseLevel() >= 4)
-    dumpGeneInfo("after load", genes);
-splitMultiMappings(genes);
+    dumpGeneInfo("after load", orgs);
+for (genes = orgs; genes != NULL; genes = genes->next)
+    splitMultiMappings(genes);
 if (verboseLevel() >= 5)
-    dumpGeneInfo("after split", genes);
-finishMafFrames(genes);
+    dumpGeneInfo("after split", orgs);
+for (genes = orgs; genes != NULL; genes = genes->next)
+    finishMafFrames(genes);
 if (verboseLevel() >= 5)
-    dumpGeneInfo("after finish", genes);
-outputFrames(genes, mafFramesFile, bedFile);
+    dumpGeneInfo("after finish", orgs);
+outputFrames(orgs, mafFramesFile, bedFile);
 
-geneBinsFree(&genes);
+orgGenesFree(&genes);
 }
 
 void usage(char *msg)
@@ -99,18 +120,19 @@ errAbort("%s\n"
     "\n"
     "genePredToMafFrames - create mafFrames tables from a genePreds\n"
     "\n"
-    "genePredToMafFrames [options] geneDb targetDb genePred mafFrames maf1 [maf2..]\n"
+    "genePredToMafFrames [options] targetDb maf mafFrames geneDb1 genePred1 [geneDb2 genePred2...] \n"
     "\n"
-    "Create frame annotations for a component of aa set of MAFs.  The\n"
-    "resulting file maybe combined with mafFrames for other components.\n"
+    "Create frame annotations for one or more components of a MAF.\n"
+    "It is significantly faster to process multiple gene sets in the same\""
+    "run, as 95%% of the CPU time is spent reading the MAF\n"
     "\n"
     "Arguments:\n"
-    "  o geneDb - db in MAF that corresponds to genePred's organism.\n"
     "  o targetDb - db of target genome\n"
-    "  o genePred - genePred file.  Overlapping annotations ahould have\n"
-    "    be removed.  This file may optionally include frame annotations\n"
+    "  o maf - input MAF file\n"
     "  o mafFrames - output file\n"
-    "  o maf1,... - MAF files\n"
+    "  o geneDb1 - db in MAF that corresponds to genePred's organism.\n"
+    "  o genePred1 - genePred file.  Overlapping annotations ahould have\n"
+    "    be removed.  This file may optionally include frame annotations\n"
     "Options:\n"
     "  -bed=file - output a bed of for each mafFrame region, useful for debugging.\n"
     "  -verbose=level - enable verbose tracing, the following levels are implemented:\n"
@@ -124,11 +146,34 @@ errAbort("%s\n"
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int numGeneDbs, i, j;
+char **geneDbs, **genePreds;
 optionInit(&argc, argv, optionSpecs);
-if (argc < 6)
+if ((argc < 6) || ((argc % 2) != 0))
     usage("wrong # args");
-genePredToMafFrames(argv[1], argv[2], argv[3], argv[4], optionVal("bed", NULL),
-                    argc-5, argv+5);
+numGeneDbs = (argc - 4) / 2;
+AllocArray(geneDbs, numGeneDbs);
+AllocArray(genePreds, numGeneDbs);
 
+for (i = 0, j = 4; j < argc; i++, j += 2)
+    {
+    geneDbs[i] = argv[j];
+    genePreds[i] = argv[j+1];
+    }
+/* try to detect old command line arguments, and warn user of change:
+ * genePredToMafFrames geneDb   targetDb genePred  mafFrames maf1 [maf2..]\n"
+ * 0                   1        2        3         4         5           
+  "genePredToMafFrames targetDb maf      mafFrames geneDb1   genePred1 [geneDb2 genePred2...] \n"
+ */
+
+if (endsWith(argv[3], ".gp") || sameString(argv[3], "stdin")
+    || endsWith(argv[4], "mafFrame") || sameString(argv[4], "stdout")
+    || endsWith(argv[5], "maf") || endsWith(argv[5], "maf.gz")
+    || sameString(argv[5], "stdin"))
+    errAbort("Error: appear to be using old command arguments, please review usage");
+
+genePredToMafFrames(argv[1], argv[2], argv[3], 
+                    numGeneDbs, geneDbs, genePreds,
+                    optionVal("bed", NULL));
 return 0;
 }

@@ -204,7 +204,7 @@ if (strain == NULL)
 *retStrain = strain;
 }
 
-void printExpression(FILE *f, struct sqlConnection *conn, char *imagePaneKey)
+void printExpression(FILE *f, struct sqlConnection *conn, char *imagePaneKey, char *assayKey)
 /* Print associated expression info on assay/pane as indented lines. */
 {
 struct dyString *query = dyStringNew(0);
@@ -212,13 +212,17 @@ struct sqlResult *sr;
 char **row;
 
 dyStringPrintf(query, 
-    "select GXD_Structure.printName,GXD_InSituResult._Strength_key "
-    "from GXD_Structure,GXD_InSituResult, GXD_InSituResultImage,GXD_ISResultStructure "
+    "select GXD_Structure.printName,GXD_InSituResult._Strength_key,GXD_Pattern.pattern "
+    "from GXD_Structure,GXD_InSituResult,GXD_InSituResultImage,"
+    "GXD_ISResultStructure,GXD_Pattern,GXD_Specimen "
     "where GXD_InSituResultImage._ImagePane_key = %s "
     "and GXD_InSituResultImage._Result_key = GXD_ISResultStructure._Result_key "
     "and GXD_InSituResultImage._Result_key = GXD_InSituResult._Result_key "
     "and GXD_ISResultStructure._Structure_key = GXD_Structure._Structure_key "
-    , imagePaneKey);
+    "and GXD_Pattern._Pattern_key = GXD_InSituResult._Pattern_key "
+    "and GXD_Specimen._Specimen_key = GXD_InSituResult._Specimen_key "
+    "and GXD_Specimen._Assay_key = %s "
+    , imagePaneKey, assayKey);
 sr = sqlGetResultVerbose(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -226,14 +230,37 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (bodyPart[0] != 0)
 	{
 	int expression = sqlSigned(row[1]);
-	float level = (float)expression;
-	if (level > 0.0) 
-	    level = (level - 1.0) / 7.0;
-	/* Strip trailing # if any from body part. */
+	char *pattern = skipLeadingSpaces(row[2]);
+	float level;
 	int lastChar = strlen(bodyPart)-1;
+	/* Strip trailing # if any from body part. */
 	if (bodyPart[lastChar] == '#')
 	    bodyPart[lastChar] = 0;
-	fprintf(f, "\texpression\t%s\t%f\n", bodyPart, level);
+	subChar(bodyPart,';','-');
+	/* treat expression 2 "present" as full 1.0 so will appear as (+) 
+	 * treat -1 and -2 (not applic and not spec) as 1.0 + so won't disappear
+	 *  0 shouldn't happen but we'll catch it anyway */
+	switch(expression) 
+	    {
+	    case 3:
+	    case 4:
+	    case 5:
+	    case 6:
+	    case 7:
+		level = (float)(expression - 2) / 6.0;
+		break;
+	    case 1:
+		level = 0.0;
+		break;
+	    case -2:
+	    case -1:
+	    case 0:
+	    case 2:
+	    case 8:
+	    default: 
+		level = 1.0;
+	    }
+	fprintf(f, "\texpression\t%s\t%f\t\t\t%s\n", bodyPart, level, pattern);
 	}
     }
 sqlFreeResult(&sr);
@@ -838,7 +865,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%d\t", imageWidth);
     fprintf(tab, "%d\n", imageHeight);
 
-    printExpression(tab,  conn2,  imagePaneKey);
+    printExpression(tab,  conn2,  imagePaneKey, assayKey);
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);

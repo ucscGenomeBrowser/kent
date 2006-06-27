@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.49 2006/03/30 04:58:00 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.50 2006/06/09 21:25:35 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -546,7 +546,7 @@ if (!sameString(npu.user,""))
     char up[256];
     char *b64up = NULL;
     safef(up, sizeof(up), "%s:%s", npu.user, npu.password);
-    b64up = base64Encode(up);
+    b64up = base64Encode(up, strlen(up));
     dyStringPrintf(dy, "Authorization: Basic %s\r\n", b64up);
     freez(&b64up);
     }
@@ -1026,7 +1026,7 @@ if (!sameString(npu->user,""))
     char up[256];
     char *b64up = NULL;
     safef(up,sizeof(up), "%s:%s", npu->user, npu->password);
-    b64up = base64Encode(up);
+    b64up = base64Encode(up, strlen(up));
     dyStringPrintf(dy, "Authorization: Basic %s\r\n", b64up);
     freez(&b64up);
     }

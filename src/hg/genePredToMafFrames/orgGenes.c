@@ -1,6 +1,6 @@
-/* geneBins - objects used to hold gene related data */
+/* orgGenes - objects used to hold gene related data */
 #include "common.h"
-#include "geneBins.h"
+#include "orgGenes.h"
 #include "genePred.h"
 #include "genePredReader.h"
 #include "chromBins.h"
@@ -10,7 +10,7 @@
 #include "maf.h"
 #include "mafFrames.h"
 
-static char *chromStrAlloc(struct geneBins *genes, char *chrom)
+static char *chromStrAlloc(struct orgGenes *genes, char *chrom)
 /* allocated a chrom name from the pool, caching the last allocated */
 {
 if ((genes->curChrom == NULL) || !sameString(chrom, genes->curChrom))
@@ -18,7 +18,7 @@ if ((genes->curChrom == NULL) || !sameString(chrom, genes->curChrom))
 return genes->curChrom;
 }
 
-static void checkOverlap(struct geneBins *genes, struct binKeeper *chrBins,
+static void checkOverlap(struct orgGenes *genes, struct binKeeper *chrBins,
                          struct genePred *gp, int start, int end)
 /* check for a CDS exon overlapping any other */
 {
@@ -50,7 +50,7 @@ slAddHead(&gene->exons, exon);
 return exon;
 }
 
-static void loadGene(struct geneBins *genes, struct genePred *gp)
+static void loadGene(struct orgGenes *genes, struct genePred *gp)
 /* break one gene into cds exons and add to bins. check for overlapping CDS */
 {
 struct binKeeper *chrBins = chromBinsGet(genes->bins, gp->chrom, TRUE);
@@ -87,7 +87,7 @@ else
 slReverse(&gene->exons);
 }
 
-static void loadGenes(struct geneBins *genes, char *genePredFile)
+static void loadGenes(struct orgGenes *genes, char *genePredFile)
 /* load genePred file into object */
 {
 struct genePredReader *gpr = genePredReaderFile(genePredFile, NULL);
@@ -102,23 +102,25 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
 genePredReaderFree(&gpr);
 }
 
-struct geneBins *geneBinsNew(char *genePredFile)
-/* construct a new geneBins object from the specified file */
+struct orgGenes *orgGenesNew(char *srcDb, char *genePredFile)
+/* construct a new orgGenes object from the specified file */
 {
-struct geneBins *genes;
+struct orgGenes *genes;
 AllocVar(genes);
+genes->srcDb = cloneString(srcDb);
 genes->bins = chromBinsNew(NULL);
 genes->memPool = lmInit(1024*1024);
 loadGenes(genes, genePredFile);
 return genes;
 }
 
-void geneBinsFree(struct geneBins **genesPtr)
-/* free geneBins object */
+void orgGenesFree(struct orgGenes **genesPtr)
+/* free orgGenes object */
 {
-struct geneBins *genes = *genesPtr;
+struct orgGenes *genes = *genesPtr;
 if (genes != NULL)
     {
+    freeMem(genes->srcDb);
     chromBinsFree(&genes->bins);
     lmCleanup(&genes->memPool);
     freeMem(genes);
@@ -155,7 +157,7 @@ static int cmpExonsDescend(const void *va, const void *vb)
 return cmpExonsAscend(vb, va);
 }
 
-struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp,
+struct binElement *orgGenesFind(struct orgGenes *genes, struct mafComp *comp,
                                 int sortDir)
 /* Return list of references to exons overlapping the specified component,
  * sorted into assending order sortDir is 1, descending if it's -1.
@@ -323,17 +325,18 @@ for (exon = gene->exons; exon != NULL; exon = exon->next)
 }
 
 struct exonFrames *cdsExonAddFrames(struct cdsExon *exon,
-                                    char *src, int qStart, int qEnd, char qStrand,
+                                    int qStart, int qEnd, char qStrand,
                                     char *tName, int tStart, int tEnd,
                                     char frame, char geneStrand, int cdsOff)
 /* allocate a new mafFrames object and link it exon */
 {
+struct orgGenes *genes = exon->gene->genes;
 struct exonFrames *ef;
-lmAllocVar(exon->gene->genes->memPool, ef);
+lmAllocVar(genes->memPool, ef);
 ef->exon = exon;
 
 /* fill in query part */
-ef->mf.src = lmCloneString(exon->gene->genes->memPool, src);
+ef->mf.src = genes->srcDb;
 ef->srcStart = qStart;
 ef->srcEnd = qEnd;
 ef->srcStrand = qStrand;
@@ -341,7 +344,7 @@ ef->cdsStart = cdsOff;
 ef->cdsEnd = cdsOff + (qEnd - qStart);
 
 /* fill in mafFrames part */
-ef->mf.chrom = lmCloneString(exon->gene->genes->memPool, tName);
+ef->mf.chrom = lmCloneString(genes->memPool, tName);
 ef->mf.chromStart = tStart;
 ef->mf.chromEnd = tEnd;
 ef->mf.frame = frame;

@@ -517,8 +517,8 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
-    sr = hRangeQuery(conn, ct->dbTrackName, region->chrom,
+    safef(query, sizeof(query), "select * from %s", ct->dbTableName);
+    sr = hRangeQuery(conn, ct->dbTableName, region->chrom,
 	region->start, region->end, NULL, &rowOffset);
 
     while ((row = sqlNextRow(sr)) != NULL)

@@ -5230,4 +5230,43 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
       /gbdb/rn3/liftOver/rn3ToRn4.over.chain.gz \
       -path=/gbdb/rn3/liftOver/rn3ToRn4.over.chain.gz
 
+##########################################################################
+# NSCAN track - (2006-05-29 markd)
+    cd /cluster/data/rn3/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv http://genes.cs.wustl.edu/jeltje/rn3/rn3.nscan.gtf
+    gzip rn3.nscan.gtf
+    wget -nv -r -np http://genes.cs.wustl.edu/jeltje/rn3/chr_ptx/
+    cat genes.cs.wustl.edu/jeltje/rn3/chr_ptx/*.fa >rn3.nscan.pep.fa
+    gzip rn3.nscan.pep.fa
+    rm -rf genes.cs.wustl.edu
+    chmod a-w *.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt rn3 nscanGene rn3.nscan.gtf.gz
+    # add .a suffix to match transcript id
+    hgPepPred -suffix=.a rn3 generic nscanPep rn3.nscan.pep.fa.gz
+    rm *.tab
+
+    # update trackDb; need a rn3-specific page to describe informants
+    rat/rn3/nscanGene.html    (from  CanFam1_hg17_nscan_10_18_2005/description.html )
+    rat/rn3/trackDb.ra
+
+    # replace twinScan track with n-scan when pushed.
+    drop table twinscan;
+    drop table twinscanPep;
+
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/rn3/bed/genomicSuperDups
+    cd /cluster/data/rn3/bed/genomicSuperDups
+    hgLoadBed rn3 genomicSuperDups rn3_genomicSuperDup.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
 

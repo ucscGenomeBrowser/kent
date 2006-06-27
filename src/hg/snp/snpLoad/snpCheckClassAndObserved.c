@@ -19,7 +19,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.24 2006/04/06 23:43:29 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.26 2006/06/07 23:54:02 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -169,11 +169,11 @@ boolean checkObservedSize(char *chromName, int start, int end, int snp_id, int l
 int observedLen = strlen(observed) - 2;
 int span = end - start;
 
-if (loc_type == 2 || loc_type == 3) return TRUE;
+if (loc_type == 3) return TRUE;
 
 /* start with simple deletions */
-/* class is deletion if and only if loc_type is 1 */
-if (sameString(class, "deletion") && loc_type == 1)
+/* deletions can be range (loc_type 1) or exact (loc_type 2) */
+if (sameString(class, "deletion") && (loc_type == 1 || loc_type == 2))
     {
     if (observedLen != span)
         {

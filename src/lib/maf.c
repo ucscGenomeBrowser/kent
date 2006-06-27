@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.25 2006/05/28 22:48:41 baertsch Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.26 2006/06/02 16:28:17 braney Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -490,6 +490,12 @@ return NULL;
 
 struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
 	int newStart, int newEnd)
+{
+return mafSubsetE(maf, componentSource, newStart, newEnd, FALSE);
+}
+
+struct mafAli *mafSubsetE(struct mafAli *maf, char *componentSource,
+	int newStart, int newEnd, bool getInitialDashes)
 /* Extract subset of maf that intersects a given range
  * in a component sequence.  The newStart and newEnd
  * are given in the forward strand coordinates of the
@@ -529,6 +535,12 @@ s = skipIgnoringDash(mcMaster->text, newStart - mcMaster->start, TRUE);
 e = skipIgnoringDash(s, newEnd - newStart, TRUE);
 textStart = s - mcMaster->text;
 textSize = e - s;
+
+if (getInitialDashes && (newStart == mcMaster->start))
+    {
+    textStart = 0;
+    textSize += s - mcMaster->text;
+    }
 
 /* Allocate subset structure and fill it in */
 AllocVar(subset);

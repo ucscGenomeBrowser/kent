@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.84 2006/06/01 16:27:15 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.86 2006/06/05 20:14:42 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -330,7 +330,7 @@ for (i=0; i < snp125LocTypeCartSize; i++)
     }
 
 
-bedLoadItem(tg, "snp125", (ItemLoader)snp125Load);
+bedLoadItem(tg, tg->mapName, (ItemLoader)snp125Load);
 
 filterSnpItems(tg, snp125AvHetFilterItem);
 filterSnpItems(tg, snp125WeightFilterItem);
@@ -1557,6 +1557,11 @@ Color delMccarrollItemColor (struct track *tg, void *item, struct vGfx *vg)
 return MG_RED;
 }
 
+Color delHindsItemColor (struct track *tg, void *item, struct vGfx *vg)
+{
+return MG_RED;
+}
+
 
 void cnpSharpMethods(struct track *tg)
 {
@@ -1600,4 +1605,10 @@ void delMccarrollMethods(struct track *tg)
 {
 tg->itemColor = delMccarrollItemColor;
 tg->itemNameColor = delMccarrollItemColor;
+}
+
+void delHindsMethods(struct track *tg)
+{
+tg->itemColor = delHindsItemColor;
+tg->itemNameColor = delHindsItemColor;
 }

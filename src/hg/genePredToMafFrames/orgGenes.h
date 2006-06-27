@@ -2,13 +2,15 @@
 #ifndef GENEBINS
 #define GENEBINS
 #include "mafFrames.h"
-struct geneBins;
+struct orgGenes;
 struct mafComp;
 struct mafFrames;
 
-struct geneBins
-/* binRange table of genes, by chromosome */
+struct orgGenes
+/* object with genes for a given organism, indexable by range */
 {
+    struct orgGenes *next;   /* next organism */
+    char *srcDb;             /* gene source db */
     struct chromBins *bins;  /* map of chrom and ranges to cds exons */
     struct lm *memPool;      /* memory for exons allocated from this pool */
     char *curChrom;          /* cache of current string for allocating pool memory */
@@ -26,7 +28,7 @@ struct gene
     int chromSize;           /* zero until first MAF hit */
     struct cdsExon *exons;   /* list of CDS exons, in transcription order */
     int numExonFrames;       /* count of associated exonFrames objects */
-    struct geneBins *genes;  /* link back to geneBins object */
+    struct orgGenes *genes;  /* link back to orgGenes object */
 };
 
 struct cdsExon
@@ -58,13 +60,13 @@ struct exonFrames
                                * the target genomic coordinates */
 };
 
-struct geneBins *geneBinsNew(char *genePredFile);
-/* construct a new geneBins object from the specified file */
+struct orgGenes *orgGenesNew(char *srcDb, char *genePredFile);
+/* construct a new orgGenes object from the specified file */
 
-void geneBinsFree(struct geneBins **genesPtr);
-/* free geneBins object */
+void orgGenesFree(struct orgGenes **genesPtr);
+/* free orgGenes object */
 
-struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp,
+struct binElement *orgGenesFind(struct orgGenes *genes, struct mafComp *comp,
                                 int sortDir);
 /* Return list of references to exons overlapping the specified component,
  * sorted into assending order sortDir is 1, descending if it's -1.
@@ -89,7 +91,7 @@ void geneCheck(struct gene *gene);
 /* sanity check a gene object */
 
 struct exonFrames *cdsExonAddFrames(struct cdsExon *exon,
-                                    char *src, int qStart, int qEnd, char qStrand,
+                                    int qStart, int qEnd, char qStrand,
                                     char *tName, int tStart, int tEnd,
                                     char frame, char geneStrand, int cdsOff);
 /* allocate a new mafFrames object and link it exon */

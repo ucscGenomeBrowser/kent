@@ -373,8 +373,6 @@ int main(argc, argv)
 	char **p;
 	char *arg0, *arg1;
 
-	int i,j;
-
 if (argc==2) 
 	{
 	p=argv;

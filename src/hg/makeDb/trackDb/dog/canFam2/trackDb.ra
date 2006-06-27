@@ -82,3 +82,17 @@ visibility hide
 color 150,0,0
 type bed 5 .
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility dense
+color 34,139,34
+type genePred
+cdsDrawDefault genomic\ codons
+
+searchTable nscanGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
+searchPriority 50

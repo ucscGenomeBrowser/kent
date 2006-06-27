@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.58 2006/05/30 19:58:47 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.59 2006/05/31 22:17:03 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -46,7 +46,7 @@ if (isCustomTrack(table)) \
  \
     if (ct->dbTrack) \
 	safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", \
-		ct->dbTrackName); \
+		ct->dbTableName); \
     else \
 	safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", \
 		ct->wigFile); \

@@ -125,9 +125,9 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    # update 32bit sandbox on hgwdev too
+    # update 32bit sandbox on $BOX32 too
     echo "$cmd32"
-    ssh hgwdev "$cmd32"
+    ssh $BOX32 "$cmd32"
     # delete the following line soon
     #echo "$f $p --> $r" >> $WEEKLYBLD/mbt-up.txt  
     set msg = "$msg $f $p --> $r\n"

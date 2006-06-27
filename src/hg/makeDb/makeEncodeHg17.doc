@@ -1921,13 +1921,15 @@ cat > load.csh << 'EOF'
 
     
 ##########################################################################
-# UW/Regulome Chromatin Accessibility Profiling (CAP)
+# UW/Regulome Chromatin Accessibility Profiling (CAP) - RENAMED, see below
 #  Submitted 2006-1-17 by Scott Kuehn
 # update of data received on 2006-05-04 (sent to Kate) by Scott Kuehn
-# Not called CAP anymore, now called DNase array for DNaseI 
-# so track is: UW/Regulome DNase I Array - Regulome DNase I 
-# sensitivity/hypersensitivity. Date is for lymphoblastoid cells (GM06990).
 # Update done 2006-05-19 - 2006-05-23 (hartera)
+# Not called CAP anymore, now called DNase array for DNase I
+# Track short label is now: UW DNase GM 
+# long label: ENCODE UW DNase/Array GM06690 - DNase I 
+# sensitivity/hypersensitivity in GM06990 Cells 
+# Data is for lymphoblastoid cells (GM06990).
     cd /cluster/data/encode/Regulome
     mkdir -p 2006-05-04/lab
     cd 2006-05-04
@@ -2050,4 +2052,15 @@ cat > load.csh << 'EOF'
     echo "load data local infile 'encodePseudogeneClass2.txt' into \
          table encodePseudogeneClass" | hgsql hg17
 
-# UPDATE OF 
+
+##########################################################################
+# Univ. Uppsala, Sweden Chip/chip (butyrate-treated H3Ac, H4Ac)
+# Submitted 5/29/06 by Adam Ameur <mada@lcb.uu.se>
+# 6 subtracks
+
+    cd /cluster/data/encode/Uppsala
+    mkdir -p 2006-05-09/lab
+    cd 2006-05-09/lab
+    unzip H3H4ac_butyrate.zip
+
+

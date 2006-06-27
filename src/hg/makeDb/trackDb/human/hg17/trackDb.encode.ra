@@ -604,7 +604,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H3K4me1 HFL-1
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, HFL-1 cells) 
-    subGroups celltype=hlf1 factor=h3k4me1
+    subGroups celltype=hfl1 factor=h3k4me1
     dataVersion Jan 2006
     priority 15
     color 10,10,10
@@ -613,7 +613,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H3K4me2 HFL-1
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, HFL-1 cells)
-    subGroups celltype=hlf1 factor=h3k4me2
+    subGroups celltype=hfl1 factor=h3k4me2
     dataVersion Jan 2006
     priority 16
     color 10,10,10
@@ -622,7 +622,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H3K4me3 HFL-1
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, HFL-1 cells)
-    subGroups celltype=hlf1 factor=h3k4me3
+    subGroups celltype=hfl1 factor=h3k4me3
     dataVersion Jan 2006
     priority 17
     color 10,10,10
@@ -631,7 +631,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H3ac HFL-1
     longLabel Sanger Institute ChIP/Chip (H3ac ab, HFL-1 cells) 
-    subGroups celltype=hlf1 factor=h3ac
+    subGroups celltype=hfl1 factor=h3ac
     dataVersion Jan 2006
     priority 18
     color 10,10,10
@@ -640,7 +640,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H4ac HFL-1
     longLabel Sanger Institute ChIP/Chip (H4ac ab, HFL-1 cells)
-    subGroups celltype=hlf1 factor=h4ac
+    subGroups celltype=hfl1 factor=h4ac
     dataVersion Jan 2006
     priority 19
     color 10,10,10
@@ -1963,14 +1963,14 @@ dataVersion ENCODE Oct2005 Freeze
 
 track encodeRegulomeDnaseArray
 compositeTrack on
-shortLabel UW DNase/Array GM06690
+shortLabel UW DNase GM
 longLabel ENCODE UW DNase/Array GM06690 - DNase I sensitivity/hypersensitivity in GM06990 Cells
 group encodeChrom
 priority 66.5
 type bedGraph 4
 maxHeightPixels 128:32:16
-minLimit 0
-maxLimit 9.5
+minLimit -5
+maxLimit 10
 graphType bar
 viewLimits 0:4
 yLineMark 0.0
@@ -1992,6 +1992,7 @@ chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr2
     shortLabel DnaseI HSs 
     longLabel UW DNase/Array GM06990 HSs
     noInherit on
+    visibility dense
     useScore 1
     type bed5FloatScore
     priority 2

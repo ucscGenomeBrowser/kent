@@ -3,9 +3,9 @@
 #ifndef SPLITMULTIMAPPINGS_H
 #define SPLITMULTIMAPPINGS_H
 
-struct geneBins;
+struct orgGenes;
 
-void splitMultiMappings(struct geneBins *genes);
+void splitMultiMappings(struct orgGenes *genes);
 /* check if genes are mapped to multiple locations, and if so, split them
  * into two or more genes */
 

@@ -727,59 +727,8 @@ cat  << 'EOF' > spec
 #Submission to last job:          3771s      62.85m     1.05h    0.04d
 
 
-# MULTIZ7WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/28/2006 angie)
-    # We haven't publicly documented the annotated maf format yet,
-    # so put the unannotated mafs out for download.
-    ssh hgwdev
-    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    # upstream mafs 
-cat > mafFrags.csh << 'EOF'
-    date
-    foreach i (1000 2000 5000)
-        echo "making upstream$i.maf"
-        nice featureBits xenTro2 mgcGenes:upstream:$i -fa=/dev/null -bed=up.bad
-        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
-        rm up.bad
-        nice mafFrags xenTro2 multiz7way up.bed upstream$i.maf \
-                -orgs=../species.lst
-        rm up.bed
-    end
-    date
-'EOF'
-    # << emacs
-    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
-#628.650u 89.300s 14:54.56 80.2% 0+0k 0+0io 4617pf+0w
-
-    # Consolidate multi-level maf to monolithic file
-    # No need to sort chunks by position because the chunk size is greater 
-    # than the largest scaffold size.  That may not be true in other 
-    # assemblies.
-    ssh kkstore04
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
-    mkdir mafDownloads
-    cp /dev/null mafDownloads/xenTro2.maf
-    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
-      set f = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
-                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
-                              print "maf/$d1/$d0/scaffold_$1.maf";'`
-      cat $f >> mafDownloads/xenTro2.maf
-    end
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    time nice gzip xenTro2.maf
-#171.259u 2.665s 2:54.58 99.6%   0+0k 0+0io 1pf+0w
-    nice gzip up*.maf
-    nice md5sum *.gz > md5sum.txt
-
-    ssh hgwdev
-    set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/multiz7way
-    mkdir $dir
-    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads/{*.gz,md5sum.txt} $dir
-    cp /usr/local/apache/htdocs/goldenPath/rn4/multiz9way/README.txt $dir
-    # edit README.txt
-
-
 # ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 4/28/2006 angie)
+# -- mafFilter'd and reloaded 6/9/2006
     ssh kkr8u00
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
@@ -838,6 +787,13 @@ cat > mafFrags.csh << 'EOF'
                               print "maf/$d1/$d0/scaffold_$1.maf";'`
       cat $f >> xenTro2.maf
     end
+    # 6/9/2006 -- mafFilter rejected two single-row (xenTro2 only) blocks due to 
+    # its default minRow of 2.  That's reasonable, so replace the original with 
+    # the filtered version (and reload the db tables based on the file).
+    mafFilter -overlap -reject=rf xenTro2.maf > xenTro2.mf.maf
+#rejected 2 blocks
+    gzip -c xenTro2.maf > xenTro2.preFilter.maf.gz
+    mv xenTro2.mf.maf xenTro2.maf
 
     # Load annotated maf
     ssh hgwdev
@@ -846,8 +802,11 @@ cat > mafFrags.csh << 'EOF'
     ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno/xenTro2.maf \
       /gbdb/xenTro2/multiz7way/anno/
     time nice hgLoadMaf -pathPrefix=/gbdb/xenTro2/multiz7way/anno xenTro2 multiz7way
-#Loaded 1610298 mafs in 1 files from /gbdb/xenTro2/multiz7way/anno
+#Loaded 1610296 mafs in 1 files from /gbdb/xenTro2/multiz7way/anno
+#old hgwdev:
 #126.780u 41.500s 7:15.57 38.6%  0+0k 0+0io 264pf+0w
+#new hgwdev:
+#31.754u 8.324s 1:12.56 55.2%    0+0k 0+0io 3pf+0w
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -855,8 +814,8 @@ cat > mafFrags.csh << 'EOF'
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
     time nice hgLoadMafSummary xenTro2 -minSize=30000 -mergeGap=1500 \
              -maxSize=200000 -test multiz7waySummary xenTro2.maf
-#Created 570630 summary blocks from 3284353 components and 1610298 mafs from xenTro2.maf
-#50.727u 7.354s 0:59.16 98.1%    0+0k 0+0io 3pf+0w
+#Created 570630 summary blocks from 3284353 components and 1610296 mafs from xenTro2.maf
+#55.767u 11.404s 1:08.32 98.3%   0+0k 0+0io 4pf+0w
 
     ssh hgwdev
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
@@ -864,9 +823,58 @@ cat > mafFrags.csh << 'EOF'
       > /tmp/multiz7waySummary.sql
     time nice hgLoadSqlTab xenTro2 multiz7waySummary \
       /tmp/multiz7waySummary.sql multiz7waySummary.tab
+#old hgwdev:
 #0.000u 0.000s 2:01.79 0.0%      0+0k 0+0io 234pf+0w
+#new hgwdev:
+#0.000u 0.001s 0:10.88 0.0%      0+0k 0+0io 3pf+0w
     rm *.tab
     ln -s multiz7way.2006-04-27 /cluster/data/xenTro2/bed/multiz7way
+
+
+# MULTIZ7WAY DOWNLOADABLES (DONE 6/9/2006 angie)
+    # Annotated MAF is now documented, so use anno/maf for downloads.
+    ssh hgwdev
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    # upstream mafs 
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits xenTro2 mgcGenes:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags xenTro2 multiz7way up.bed upstream$i.maf \
+                -orgs=../species.lst
+        rm up.bed
+    end
+    date
+'EOF'
+    # << emacs
+    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
+# old hgwdev:
+#628.650u 89.300s 14:54.56 80.2% 0+0k 0+0io 4617pf+0w
+# new hgwdev:
+#89.631u 24.492s 2:58.28 64.0%   0+0k 0+0io 0pf+0w
+
+    # Make a gzipped version of the monolithic annotated maf file:
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    time nice gzip -c anno/xenTro2.maf > mafDownloads/xenTro2.maf.gz
+#416.982u 2.804s 7:10.50 97.5%   0+0k 0+0io 0pf+0w
+
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    time nice gzip up*.maf
+#6.301u 0.096s 0:06.50 98.3%     0+0k 0+0io 0pf+0w
+    time nice md5sum *.gz > md5sum.txt
+#1.812u 0.369s 0:02.24 96.8%     0+0k 0+0io 0pf+0w
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/multiz7way
+    mkdir $dir
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/rn4/multiz9way/README.txt $dir
+    # edit README.txt
 
 
 # MULTIZ7WAY MAF FRAMES (DONE 4/28/2006 angie)
@@ -976,6 +984,21 @@ cat > mafFrags.csh << 'EOF'
     #------------------------------------------------------------------------
     # clean up
     rm -rf ${clusterDir}
+
+
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/multiz7way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (find  ../anno/maf -name '*.maf'|xargs cat | time genePredToMafFrames xenTro2 stdin stdout danRer4 genes/danRer4.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz rn4 genes/rn4.gp.gz xenTro2 genes/xenTro2.gp.gz | gzip >multiz7way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way/frames
+
+    hgLoadMafFrames xenTro2 multiz7wayFrames multiz7way.mafFrames.gz >&log&
 
 
 # PHASTCONS (DONE 5/2/2006 angie)

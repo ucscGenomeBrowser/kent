@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mimeTester.c,v 1.1 2005/12/02 03:00:45 galt Exp $";
+static char const rcsid[] = "$Id: mimeTester.c,v 1.3 2006/06/09 20:25:26 galt Exp $";
 
 char *altHeader = NULL;
 
@@ -23,6 +23,7 @@ errAbort(
     "  -altHeader='CONTENT_TYPE=\"multipart/form-data, boundary=AaB03x\"'\n"
     "    be sure to specify the same boundary pattern that is used \n"
     "    in the stdin input.\n"
+    "  -autoBoundary - no boundary given, scan for --.\n"
     "  -sizeSeries=n - run a series of mime messages to parse of increasing size\n"
     "    with dna field size 0 to n\n"
     "  --help - this help screen\n",
@@ -34,6 +35,7 @@ int sizeSeries = -1;
 static struct optionSpec options[] =
 {
     {"altHeader", OPTION_STRING},
+    {"autoBoundary", OPTION_BOOLEAN},
     {"sizeSeries", OPTION_INT},
     {"-help", OPTION_BOOLEAN},
     {NULL, 0},
@@ -45,7 +47,8 @@ void printMimeInfo(struct mimePart *mp, FILE *out, int level)
 /* print mimeParts recursively if needed */
 {
 
-char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL, *ct = NULL;
+char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL, 
+ *ct = NULL, *ce = NULL;
 char *margin = needMem(level+1);
 int i = 0;
 for(i=0;i<level;++i)
@@ -55,6 +58,7 @@ margin[level] = 0;
 
 cd = hashFindVal(mp->hdr,"content-disposition");
 ct = hashFindVal(mp->hdr,"content-type");
+ce = hashFindVal(mp->hdr,"content-transfer-encoding");
 
 if (cd)
     {
@@ -69,6 +73,8 @@ if (cd)
     }
 if (ct)
     fprintf(out,"%scontent-type: %s\n",margin,ct);
+if (ce)
+    fprintf(out,"%scontent-transer-encoding: %s\n",margin,ce);
 
 if (cd)
     {
@@ -109,11 +115,11 @@ freez(&margin);
 
 
 
-static struct mimePart * cgiParseMultipart(int fd, FILE *out)
+static struct mimePart * cgiParseMultipart(int fd, FILE *out, boolean autoBoundary)
 /* process a multipart form */
 {
 char h[1024];  /* hold mime header line */
-char *s = NULL, *ct = NULL;
+char *s = NULL;
 struct dyString *dy = newDyString(256);
 struct mimeBuf *mb = NULL;
 struct mimePart *mp = NULL;
@@ -148,6 +154,8 @@ mb = initMimeBuf(fd);
 
 if (altHeader)
     mp = parseMultiParts(mb, cloneString(dy->string)); /* The Alternate Header will get freed */
+else if (autoBoundary)    
+    mp = parseMultiParts(mb, "autoBoundary"); 
 else    
     mp = parseMultiParts(mb, NULL); 
 
@@ -265,7 +273,7 @@ for (i=0;i<sizeSeries;++i)
     out = mustOpen(TESTFILEOUT, "w");
     makeTestFile(i);
     fd = open(TESTFILENAME, O_RDONLY);
-    mp = cgiParseMultipart(fd, out);
+    mp = cgiParseMultipart(fd, out, FALSE);
     fprintf(stderr,"ouput %d ok\n",i);
     close(fd);
     fd = -1;
@@ -285,8 +293,13 @@ if (optionExists("-help"))
     usage("help");
 if (optionExists("altHeader") && optionExists("sizeSeries"))
     usage("-altHeader and -sizeSeries may not be used together");
+if (optionExists("altHeader") && optionExists("autoBoundary"))
+    usage("-altHeader and -autoBoundary may not be used together");
+if (optionExists("autoBoundary") && optionExists("sizeSeries"))
+    usage("-autoBoundary and -sizeSeries may not be used together");
 altHeader  = optionVal("altHeader",altHeader);
 sizeSeries = optionInt("sizeSeries",sizeSeries);
+
 if (altHeader)
     putenv(altHeader);
 
@@ -296,7 +309,7 @@ if (optionExists("sizeSeries"))
     }
 else    
     {
-    struct mimePart *mp = cgiParseMultipart(STDIN_FILENO, stdout);
+    struct mimePart *mp = cgiParseMultipart(STDIN_FILENO, stdout, optionExists("autoBoundary"));
     freeMimeParts(&mp);
     }
 

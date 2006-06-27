@@ -1,7 +1,7 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.8 2006/05/21 08:12:41 markd Exp $
+# $Id: Config.py,v 1.9 2006/06/01 01:15:09 markd Exp $
 #
 
 import re, string
@@ -203,3 +203,4 @@ class Config(dict):
         """Combine keys into '.' separate key, Get a boolean configuration
         value for a database, or the default, or None if neither are
         specified"""
+        return self.getDbBoolNone(db, ".".join(keys))

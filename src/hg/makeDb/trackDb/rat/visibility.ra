@@ -13,6 +13,9 @@ visibility	pack
 track	twinscan
 visibility	dense
 
+track	nscanGene
+visibility	dense
+
 track	sgpGene
 visibility	dense
 

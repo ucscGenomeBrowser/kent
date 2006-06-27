@@ -642,6 +642,10 @@ struct slName *hLiftOverToOrgs(char *fromDb);
  * If fromDb!=NULL, return only those with that
  * fromDb. */
 
+struct hash *hGetDatabaseRank();
+/* Get list of databases and make a hash of order rank
+ * Dispose of this with hashFree. */ 
+
 struct dbDb *hGetLiftOverFromDatabases();
 /* Get list of databases for which there is at least one liftOver chain file
  * Dispose of this with dbDbFreeList. */
@@ -801,6 +805,10 @@ int chrSlNameCmp(const void *el1, const void *el2);
 /* Compare chromosome names by number, then suffix.  el1 and el2 must be 
  * slName **s (as passed in by slSort) whose names match the regex 
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
+
+int compareDbs(char *dbA, char *dbB);
+/* Compare two org# e.g. mm6 vs. mm16 or mm6 vs. hg17
+ * Return > 0 if dbA > dbB, < 0 if less than, and 0 if equal */
 
 int getTableSize(char *table);
 /* Get count of rows in a table in the primary database */

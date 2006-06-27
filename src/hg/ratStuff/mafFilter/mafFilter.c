@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.11 2006/05/28 22:49:33 baertsch Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.12 2006/06/09 21:45:37 angie Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -59,8 +59,6 @@ char *componentFile = NULL;
 struct hash *cHash = NULL;
 char *rejectFile = NULL;
 char *needComp = NULL;
-/* for overlap detection */
-int prevRefStart = 0, prevRefEnd = 0;
 
 static jmp_buf recover;    /* Catch errors in load maf the hard way in C. */
 
@@ -96,6 +94,10 @@ int ncol = maf->textSize;
 int nrow = slCount(maf->components);
 double ncol2 = ncol * ncol;
 double fscore = -minFactor * ncol2 * nrow;
+char *ref = maf->components->src;
+/* for overlap detection */
+static char *prevRef = NULL;
+static int prevRefStart = 0, prevRefEnd = 0;
 int refStart = maf->components->start;
 int refEnd = refStart + maf->components->size;
 
@@ -115,11 +117,17 @@ if (nrow < minRow || ncol < minCol ||
     }
 if (optionExists("overlap"))
     {
-    if (refStart < prevRefEnd && refEnd > prevRefStart)
+    if (prevRef && sameString(ref, prevRef) &&
+	refStart < prevRefEnd && refEnd > prevRefStart)
         return FALSE;
+    if (!prevRef || !sameString(ref, prevRef))
+	{
+	freeMem(prevRef);
+	prevRef = cloneString(ref);
+	}
+    prevRefStart = refStart;
+    prevRefEnd = refEnd;
     }
-prevRefStart = refStart;
-prevRefEnd = refEnd;
 return TRUE;
 }
 

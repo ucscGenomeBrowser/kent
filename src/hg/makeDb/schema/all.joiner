@@ -16,7 +16,7 @@ set dm dm1,dm2
 set dp dp2,dp3
 set sacCer sacCer1
 set panTro panTro1,panTro2
-set galGal galGal2
+set galGal galGal2,galGal3
 set ci ci1,ci2
 set danRer danRer1,danRer2,danRer3,danRer4
 set canFam canFam1,canFam2
@@ -65,7 +65,7 @@ databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,Fr1,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2
+set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -871,12 +871,20 @@ identifier stsAccession external=genbank typeOf=genbankAccession
 
 identifier bacEndNames 
 "Names for BAC end reads."
-    $gbd.all_bacends.qName dupeOk
+    $gbd,!danRer3.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $danRer.bacEndSingles.lfNames comma
     $danRer.bacEndPairsBad.lfNames comma
     $danRer.bacEndAlias.alias minCheck=0.55
     $hg.fishClones.beNames comma minCheck=0.70
+
+identifier danRerBacEndNames
+"Names for BAC end reads for danRer assemblies with split tables."
+    danRer3.allBacends.qName $split dupeOk
+    danRer3.bacEndPairs.lfNames comma
+    danRer3.bacEndSingles.lfNames comma
+    danRer3.bacEndPairsBad.lfNames comma
+    danRer3.bacEndAlias.alias minCheck=0.55
 
 identifier danRerBacExtName
 "External name for BAC clones." 
@@ -1771,6 +1779,7 @@ identifier blastHg17KGPep02Id
      $hg.blastKGRef02.acc
      monDom2.blastHg17KG.qName
      danRer3.blastHg17KG.qName
+     danRer4.blastHg17KG.qName
      $bosTau,!bosTau1.blastHg17KG.qName
      canFam2.blastHg17KG.qName
 
@@ -2321,6 +2330,7 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeRegulomeDnaseGM06990%
     encodeStanfordPromoters%
     encodeUcsdChipAch3Imr90
     encodeUcsdChipMeh3k4Imr90

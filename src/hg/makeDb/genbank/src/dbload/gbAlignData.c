@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.23 2006/03/11 00:07:57 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.25 2006/06/03 07:34:25 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -155,10 +155,12 @@ return tblInfo;
 }
 
 void gbAlignDataInit(char *tmpDirPath, struct dbLoadOptions* options)
-/* initialize for outputing PSL files, called once per genbank type */
+/* initialize for outputing PSL files, called once per genbank type.
+ * tmpDirPath can be null to setup just for deletion.*/
 {
 gOptions = options;
-strcpy(gTmpDir, tmpDirPath);
+if (tmpDirPath != NULL)
+    strcpy(gTmpDir, tmpDirPath);
 if (gChroms == NULL)
     gChroms = hAllChromNames();
 
@@ -659,18 +661,13 @@ if (gXenoRefGeneInfo != NULL)
     gXenoRefGeneInfo->upd = NULL;
 }
 
-static void deleteGenBankAligns(struct sqlConnection *conn,
-                                struct sqlDeleter* deleter, unsigned type)
-/* delete outdated genbank alignments from the database. */
+static void deleteGenBankChromAligns(struct sqlConnection *conn,
+                                     struct sqlDeleter* deleter,
+                                     unsigned type, char *typeStr)
+/* delete outdated genbank alignments from per-chrom tables. */
 {
-char table[64];
-char* typeStr = ((type == GB_MRNA) ? "mrna" : "est");
-char *xenoTable = ((type == GB_MRNA) ? "xenoMrna" : "xenoEst");
 struct slName* chrom = gChroms;
-
-safef(table, sizeof(table), "all_%s", typeStr);
-sqlDeleterDel(deleter, conn, table, "qName");
-
+char table[64];
 while (chrom != NULL)
     {
     safef(table, sizeof(table), "%s_%s", chrom->name, typeStr);
@@ -681,6 +678,26 @@ while (chrom != NULL)
         sqlDeleterDel(deleter, conn, table, "qName");
         }
     chrom = chrom->next;
+    }
+}
+
+static void deleteGenBankAligns(struct sqlConnection *conn,
+                                struct sqlDeleter* deleter, unsigned type)
+/* delete outdated genbank alignments from the database. */
+{
+char table[64];
+char* typeStr = ((type == GB_MRNA) ? "mrna" : "est");
+char *xenoTable = ((type == GB_MRNA) ? "xenoMrna" : "xenoEst");
+
+safef(table, sizeof(table), "all_%s", typeStr);
+sqlDeleterDel(deleter, conn, table, "qName");
+
+if (gOptions->flags & DBLOAD_PER_CHROM_ALIGN)
+    deleteGenBankChromAligns(conn, deleter, type, typeStr);
+else 
+    {
+    if (type == GB_EST)
+        sqlDeleterDel(deleter, conn, "intronEst", "qName");
     }
 
 sqlDeleterDel(deleter, conn, xenoTable, "qName");

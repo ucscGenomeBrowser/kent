@@ -33,6 +33,7 @@ irows on
 speciesGroups mammal vertebrate
 sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
 sGroup_vertebrate galGal2 xenTro1 danRer3
+speciesDefaultOff bosTau2 danRer3
 treeImage phylo/rn4_9way.jpg
 
 track phastConsElements9way
@@ -87,7 +88,7 @@ track chainMm7
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 254
+priority 281
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -101,7 +102,7 @@ track netMm7
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 254.1
+priority 281.1
 visibility hide
 spectrum on
 type netAlign mm7 chainMm7

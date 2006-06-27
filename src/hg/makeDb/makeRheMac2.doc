@@ -451,7 +451,8 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
   /cluster/bin/i386/faSplit about rheMac2.hardmask.fa 2000000 hardmask-split
 
 # DOWNLOAD FILES
-
+# REMAKE SOME BIGZIPS DOWNLOADS IN SAME FORMAT AS FOR OTHER ASSEMBLIES 
+# WITH ONE FILE PER CHROMOSOME (DONE, 2006-06-12, hartera)
   ssh hgwdev
   cd /cluster/data/rheMac2
   cp rheMac2.softmask.fa /usr/local/apache/htdocs/goldenPath/rheMac2/bigZips
@@ -462,6 +463,43 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
   nice gzip rheMac2.softmask.fa
   nice gzip rheMac2.softmask2.fa
   nice gzip rheMac2.hardmask.fa
+  # Remake some of the bigZips downlods in the same format as for 
+  # other assemblies with one file per chrom (2006-06-12, hartera)
+  ssh kkstore01
+  cd /cluster/data/rheMac2
+  # use rheMac2.softmask2.fa as they contain masking from RepeatMasker
+  # and from trf.
+  cat << '_EOF_' > jkStuff/zipAll.csh
+mkdir -p bigZips
+# RepeatMasker files
+tar cvzf bigZips/chromOut.tar.gz ?{,?}/chr*.fa.out
+tar cvzf bigZips/chromTrf.tar.gz bed/simpleRepeat/chr*.bed
+# get soft masked and hard masked sequences, one per chrom
+mkdir softMask hardMask
+foreach c (`awk '{print$1}' /cluster/data/rheMac2/chrom.sizes`)
+   faOneRecord /cluster/data/rheMac2/rheMac2.softmask2.fa \
+        $c > softMask/${c}.fa
+   faOneRecord /cluster/data/rheMac2/rheMac2.hardmask.fa \
+        $c > hardMask/${c}.fa.masked
+end
+tar cvzf bigZips/chromFa.tar.gz softMask/chr*.fa
+tar cvzf bigZips/chromFaMasked.tar.gz hardMask/chr*.fa.masked
+'_EOF_'
+   # << this line makes emacs coloring happy
+   chmod +x jkStuff/zipAll.csh
+   csh -ef ./jkStuff/zipAll.csh >& zipAll.log &
+   # Took about 50 minutes.
+   rm repeats.all.gz  rheMac2.hardmask.fa.gz  rheMac2.softmask.fa.gz \
+      rheMac2.chrom.fa.gz
+   md5sum *.gz > md5sum.txt
+   # link the *.gz and *.txt files to hgwdev:/usr/local/apache/...
+   ssh hgwdev
+   set gp = /usr/local/apache/htdocs/goldenPath/rheMac2
+   mkdir -p $gp/bigZips
+   rm repeats.all.gz  rheMac2.hardmask.fa.gz  rheMac2.softmask.fa.gz \
+      rheMac2.chrom.fa.gz md5sum.txt
+   ln -s /cluster/data/rheMac2/bigZips/{chrom*.gz,*.txt} $gp/bigZips
+   # Update README.txt to give correct file names.
 
 # REGENERATE 2BIT NIB (DONE Jan 30, 2006 Robert)
   ssh kkstore02
@@ -594,6 +632,7 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
 
 ###########################################################################
 # 5 way multiz WITH RheMac2 (robert, 5/3/06) -- MM8, RN4, CANFAM2, HG18
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
 
     # first build 5-way multiz alignment from syntenic nets (helps reduce
     # false positive predictions due to paralogous alignments)
@@ -827,6 +866,19 @@ cat > downloads.csh << 'EOF'
 #speciesDefaultOff 
 
     # request push to hgwdev
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore01
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../mafSyn/*.maf | time genePredToMafFrames rheMac2 stdin stdout canFam2 genes/canFam2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz | gzip >multiz5wayFrames.mafFrames.gz)>&log
+    ssh hgwdev
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/frames
+    hgLoadMafFrames rheMac2 multiz5wayFrames multiz5wayFrames.mafFrames.gz >&log
+    
 
 ###############################################################
 # PHASTCONS CONSERVATION (NOT DONE yet, 2006-05-06 Robert)
@@ -1114,4 +1166,14 @@ cat > downloads.csh << 'EOF'
     set dir = /usr/local/apache/htdocs/goldenPath/hg18/multiz17way
     mkdir $dir
     ln -s /cluster/data/hg18/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
+
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/rheMac2/bed/genomicSuperDups
+    cd /cluster/data/rheMac2/bed/genomicSuperDups
+    hgLoadBed rheMac2 genomicSuperDups rheMac2_genomicSuperDup.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
 

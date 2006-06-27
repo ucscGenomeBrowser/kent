@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.31 2005/11/19 04:52:29 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.32 2006/06/08 01:26:39 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -28,8 +28,8 @@ errAbort(
   "Where outputFile is a tab-separated file describing the clustering,\n"
   "database is a genome database such as mm4 or hg16,\n"
   "and the table parameters are either tables in genePred format in that\n"
-  "database or genePred tab seperated files. If the database argument is 'no', \n"
-  "then no database is used and -chrom= must be specified (useful for cluster runs).\n"
+  "database or genePred tab seperated files. If the input is all from files, the argument\n"
+  "can be `no'.\n"
   "options:\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -chrom=chrN - Just work this chromosome, maybe repeated.\n"
@@ -68,7 +68,6 @@ static struct optionSpec options[] = {
 /* from command line  */
 boolean gUseCds;
 boolean gTrackNames;
-struct track *gTracks = NULL;  /* all tracks */
 boolean gJoinContained = FALSE;
 boolean gDetectConflicted = FALSE;
 
@@ -76,59 +75,211 @@ struct track
 /*  Object representing a track. */
 {
     struct track *next;
-    char *name;            /* name to use */
-    char *table;           /* table or file */
-    boolean isDb;          /* is this a database table or file? */
+    char *name;             /* name to use */
+    char *table;            /* table or file */
+    boolean isDb;           /* is this a database table or file? */
+    struct genePred *genes; /* genes read from a file, sorted by chrom and strand */
 };
+
+static int genePredStandCmp(const void *va, const void *vb)
+/* Compare to sort based on chromosome, strand, txStart, txEnd, and name.  The
+ * location and name are just included to help make tests consistent. */
+{
+const struct genePred *a = *((struct genePred **)va);
+const struct genePred *b = *((struct genePred **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = strcmp(a->strand, b->strand);
+if (dif == 0)
+    dif = a->txStart - b->txStart;
+if (dif == 0)
+    dif = a->txEnd - b->txEnd;
+if (dif == 0)
+    dif = strcmp(a->name, b->name);
+return dif;
+}
+
+static char *trackNameCreate(char* name,
+                             char *table)
+/* get name to use for a table */
+{
+if (name != NULL)
+    return cloneString(name);
+else
+    {
+    /* will strip directories and trailing extensions, if any */
+    char trackName[256];
+    splitPath(table, NULL, trackName, NULL);
+    if (endsWith(table, ".gz"))
+        {
+        char *ext2 = strrchr(trackName, '.');
+        if (ext2 != NULL)
+            *ext2 = '\0';
+        }
+    return cloneString(trackName);
+    }
+}
+
+struct track* trackFileNew(char* name,
+                           char *table)
+/* construct a track from a file */
+{
+struct track* track;
+AllocVar(track);
+track->name = trackNameCreate(name, table);
+track->isDb = FALSE;
+track->genes = genePredReaderLoadFile(table, NULL);
+slSort(&track->genes, genePredStandCmp);
+return track;
+}
+
+struct genePred *trackFileGetGenes(struct track *track,
+                                   char *chrom, char strand)
+/* get genes from a file track for chrom and strand. Must be called in
+ * assending chrom and then +,- order.  By passed chroms are deleted from
+ * list */
+{
+struct genePred *genes = NULL;
+
+/* bypass and delete genes before this chrom/strand */
+while ((track->genes != NULL)
+       && (strcmp(track->genes->chrom, chrom) < 0)
+       && (track->genes->strand[0] < strand))
+    {
+    struct genePred *gp = slPopHead(&track->genes);
+    genePredFree(&gp);
+    }
+
+/* add genes on same chrom/strand */
+while ((track->genes != NULL)
+       && sameString(track->genes->chrom, chrom)
+       && (track->genes->strand[0] == strand))
+    {
+    slSafeAddHead(&genes, slPopHead(&track->genes));
+    }
+slReverse(&genes);
+return genes;
+}
+
+struct track* trackTableNew(char* name,
+                            char *table)
+/* construct a track from a file */
+{
+struct track* track;
+AllocVar(track);
+track->name = trackNameCreate(name, table);
+track->isDb = TRUE;
+return track;
+}
+
+struct genePred *trackTableGetGenes(struct track *track,
+                                    struct sqlConnection *conn,
+                                    char *chrom, char strand)
+/* get genes from a table track for chrom and strand. */
+{
+char where[128];
+safef(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
+return genePredReaderLoadQuery(conn, track->table,  where);
+}
 
 struct track* trackNew(struct sqlConnection *conn,
                        char* name,
                        char *table)
-/* create a new track, adding it to the global list, if name is NULL,
- * name is derived from table. */
+/* create a new track, if name is NULL,  name is derived from table. */
 {
-struct track* track;
-AllocVar(track);
-
 /* determine if table or file, if name contains */
 if (fileExists(table) || strchr(table, '.') || (conn == NULL))
-    {
-    track->isDb = FALSE;
-    /* can't read pipes, due to read per chromsome and per strand */
-    if (sameString(table, "stdin") || sameString(table, "/dev/stdin"))
-        errAbort("can't read track from stdin");
-    }
-else if (hTableExists(table))
-    track->isDb = TRUE;
+    return trackFileNew(name, table);
+else if (sqlTableExists(conn, table))
+    return trackTableNew(name, table);
 else
-    errAbort("table %s.%s or file %s doesn't exist", hGetDb(), table, table);
+    errAbort("table %s.%s or file %s doesn't exist", sqlGetDatabase(conn), table, table);
+return NULL;
+}
 
-/* either default or save name */
-if (name == NULL)
+
+struct track *buildTracks(struct sqlConnection *conn, int specCount, char *specs[])
+/* build list of tracks, consisting of list of tables, files, or
+ * pairs of trackNames and files */
+{
+struct track* tracks = NULL;
+int i;
+if (gTrackNames)
     {
-    if (!track->isDb)
-        {
-        /* will load from file, strip directories and trailing extensions */
-        char trackName[256];
-        splitPath(table, NULL, trackName, NULL);
-        if (endsWith(table, ".gz"))
-            {
-            char *ext2 = strrchr(trackName, '.');
-            if (ext2 != NULL)
-                *ext2 = '\0';
-            }
-        track->name = cloneString(trackName);
-        }
-    else
-        {
-        /* will load from db table */
-        track->name = cloneString(table);
-        }
+    for (i = 0; i < specCount; i += 2)
+        slSafeAddHead(&tracks, trackNew(conn, specs[i], specs[i+1]));
     }
 else
-    track->name = cloneString(name);
-track->table = cloneString(table);
-return track;
+    {
+    for (i = 0; i < specCount; i++)
+        slSafeAddHead(&tracks, trackNew(conn, NULL, specs[i]));
+    }
+slReverse(&tracks);
+return tracks;
+}
+
+static void addTrackChroms(struct track *track, struct hash *chromSet)
+/* add chroms for a track */
+{
+char *prevChrom = NULL;
+struct genePred *gp;
+for (gp = track->genes; gp != NULL; gp = gp->next)
+    {
+    if ((prevChrom == NULL) || !sameString(gp->chrom, prevChrom))
+        {
+        hashStoreName(chromSet, gp->chrom);
+        prevChrom = gp->chrom;
+        }
+    }
+}
+
+struct slName *getFileTracksChroms(struct track* tracks)
+/* get list of chromosome for all file tracks */
+{
+struct track* tr;
+struct slName *chroms = NULL;
+struct hash *chromSet = hashNew(20); /* in case of scaffolds */
+struct hashCookie cookie;
+struct hashEl* hel;
+
+for (tr = tracks; tr != NULL; tr = tr->next)
+    {
+    if (!tr->isDb)
+        addTrackChroms(tr, chromSet);
+    }
+
+cookie = hashFirst(chromSet);
+while ((hel = hashNext(&cookie)) != NULL)
+    slSafeAddHead(&chroms, slNameNew(hel->name));
+hashFree(&chromSet);
+return chroms;
+}
+
+struct slName *getChroms(struct sqlConnection *conn, struct track* tracks)
+/* build list of possible chromosomes for all tracks, including command line
+ * restrictions */
+{
+struct track* tr;
+boolean anyDb = FALSE;
+struct slName *chroms = NULL;
+
+/* check for cmd line restriction first */
+if (optionExists("chrom"))
+    chroms = slNameCloneList(optionMultiVal("chrom", NULL));
+else
+    {
+    /* if there are any tracks from the databases, include all chroms? */
+    for (tr = tracks; tr != NULL; tr = tr->next)
+        if (tr->isDb)
+        anyDb = TRUE;
+    if (anyDb)
+        chroms = slNameCloneList(hAllChromNames());
+    else
+        chroms = getFileTracksChroms(tracks);
+    }
+slNameSort(&chroms);
+return chroms;
 }
 
 boolean gpGetExon(struct genePred* gp, int exonIx, boolean cdsOnly, 
@@ -575,40 +726,24 @@ else
 
 void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
                struct track* track, char *chrom, char strand,
-               struct genePred **gpList)
+               struct genePred **allGenes)
 /* load genes into cluster from a table or file */
 {
-struct genePredReader *gpr;
-struct genePred *gp;
+struct genePred *genes, *gp;
 verbose(2, "%s %s %c\n", track->table, chrom, strand);
 
-/* setup reader for file or table */
 if (track->isDb)
-    {
-    char where[128];
-    safef(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
-    gpr = genePredReaderQuery(conn, track->table,  where);
-    }
-else 
-    {
-    gpr = genePredReaderFile(track->table, chrom);
-    }
+    genes = trackTableGetGenes(track, conn, chrom, strand);
+else
+    genes = trackFileGetGenes(track, chrom, strand);
 
-/* read and add to cluster and deletion list */
-while ((gp = genePredReaderNext(gpr)) != NULL)
+/* add to cluster and deletion list */
+while ((gp = slPopHead(&genes)) != NULL)
     {
-    if (gp->strand[0] == strand)
-        {
-        slAddHead(gpList, gp);
-        clusterMakerAdd(cm, track, gp);
-        ++totalGeneCount;
-        }
-    else
-        {
-        genePredFree(&gp);
-        }
+    slAddHead(allGenes, gp);
+    clusterMakerAdd(cm, track, gp);
+    ++totalGeneCount;
     }
-genePredReaderFree(&gpr);
 }
 
 void prConflicts(FILE *f, struct slRef* conflicts)
@@ -728,45 +863,25 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
         }
 }
 
-void clusterGenesOnStrand(struct sqlConnection *conn,
+void clusterGenesOnStrand(struct sqlConnection *conn, struct track* tracks,
                           char *chrom, char strand, FILE *outFh,
                           FILE *clBedFh, FILE *flatBedFh)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
 struct cluster *clusterList = NULL;
-struct track* track;
+struct track *tr;
 int chromSize = (conn != NULL) ? hChromSize(chrom) : 400000000;
 struct clusterMaker *cm = clusterMakerStart(chromSize);
 
-for (track = gTracks; track != NULL; track = track->next)
-    loadGenes(cm, conn, track, chrom, strand, &gpList);
+for (tr = tracks; tr != NULL; tr = tr->next)
+    loadGenes(cm, conn, tr, chrom, strand, &gpList);
 
 clusterList = clusterMakerFinish(&cm);
 outputClusters(clusterList, strand, outFh, clBedFh, flatBedFh);
 
 genePredFreeList(&gpList);
 clusterFreeList(&clusterList);
-}
-
-struct track *buildTrackList(struct sqlConnection *conn, int specCount, char *specs[])
-/* build list of tracks, consisting of list of tables, files, or
- * pairs of trackNames and files */
-{
-struct track* tracks = NULL;
-int i;
-if (gTrackNames)
-    {
-    for (i = 0; i < specCount; i += 2)
-        slSafeAddHead(&tracks, trackNew(conn, specs[i], specs[i+1]));
-    }
-else
-    {
-    for (i = 0; i < specCount; i++)
-        slSafeAddHead(&tracks, trackNew(conn, NULL, specs[i]));
-    }
-slReverse(&tracks);
-return tracks;
 }
 
 FILE *openOutput(char *outFile)
@@ -793,8 +908,9 @@ return f;
 void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
 /* clusterGenes - Cluster genes from genePred tracks. */
 {
-struct slName *chromList, *chrom;
+struct slName *chroms, *chrom;
 struct sqlConnection *conn = NULL;
+struct track *tracks;
 FILE *outFh = NULL;
 FILE *clBedFh = NULL;
 FILE *flatBedFh = NULL;
@@ -805,16 +921,8 @@ if (!sameString(database, "no"))
     conn = hAllocConn();
     }
 
-chromList = optionMultiVal("chrom", NULL);
-if (chromList == NULL)
-    {
-    if (conn == NULL)
-        errAbort("must specify -chrom with a database of \"no\"");
-    chromList = hAllChromNames();
-    }
-slNameSort(&chromList);
-
-gTracks  = buildTrackList(conn, specCount, specs);
+tracks  = buildTracks(conn, specCount, specs);
+chroms = getChroms(conn, tracks);
 
 outFh = openOutput(outFile);
 if (optionExists("clusterBed"))
@@ -822,10 +930,10 @@ if (optionExists("clusterBed"))
 if (optionExists("flatBed"))
     flatBedFh = mustOpen(optionVal("flatBed", NULL), "w");
 
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+for (chrom = chroms; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, chrom->name, '+', outFh, clBedFh, flatBedFh);
-    clusterGenesOnStrand(conn, chrom->name, '-', outFh, clBedFh, flatBedFh);
+    clusterGenesOnStrand(conn, tracks, chrom->name, '+', outFh, clBedFh, flatBedFh);
+    clusterGenesOnStrand(conn, tracks, chrom->name, '-', outFh, clBedFh, flatBedFh);
     }
 carefulClose(&clBedFh);
 carefulClose(&flatBedFh);

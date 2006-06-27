@@ -2,7 +2,7 @@
  * exons into separate gene objects. */
 #include "common.h"
 #include "splitMultiMappings.h"
-#include "geneBins.h"
+#include "orgGenes.h"
 
 /* maximum size allowed for an intron, large ones are assumed to be multiple
  * alignments and split */
@@ -150,7 +150,7 @@ splitChromStrand(gene, &geneRest);
 splitMultAlign(gene, &geneRest);
 }
 
-void splitMultiMappings(struct geneBins *genes)
+void splitMultiMappings(struct orgGenes *genes)
 /* check if genes are mapped to multiple locations, and if so, split them
  * into two or more genes */
 {

@@ -20301,6 +20301,7 @@ TMPDIR=/scratch/tmp
 #########################################################################
 # BUILD MAF ANNOTATION FOR MULTIZ17WAY  (kate 2006-02-16)
 # Redo to fix overlaps (2006-04-09 kate)
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
 
     ssh kkstore01
     cd /cluster/data/rheMac2
@@ -20387,8 +20388,18 @@ cat > loadMaf.csh << 'EOF'
     #   the 'para make' can restart the job
     make loadDb >&! loadDb.log &
 
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/multiz17way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | genePredToMafFrames hg17 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer3 genes/danRer3.gp.gz fr1 genes/fr1.gp.gz galGal2 genes/galGal2.gp.gz hg17 genes/hg17.gp.gz mm7 genes/mm7.gp.gz oryCun1 genes/oryCun1.gp.gz panTro1 genes/panTro1.gp.gz rheMac2 genes/rheMac2.gp.gz rn3 genes/rn3.gp.gz xenTro1 genes/xenTro1.gp.gz |  gzip >multiz17way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/frames
 
-# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
+    hgLoadMafFrames hg17 multiz17wayFrames multiz17way.mafFrames.gz >&log&# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
     ssh kolossus
     mkdir /cluster/data/hg17/rmsk
     cd /cluster/data/hg17/rmsk
@@ -21167,6 +21178,46 @@ cd /cluster/data/dbSnp
 hgsql hg17 < snp125ExceptionDesc.sql
 mysql> load data local file 'exception.template' into table snp125ExceptionDesc;
 
+#######
+# Add new case for ObservedWrongSize (Heather June 9, 2006)
+# revisions 1.25 and 1.26 kent/src/hg/snp/snpLoad/snpCheckClassAndObserved.c
+ssh kkr5u00
+cd /scratch/snp/125/human
+/bin/csh pipeline.csh
+# wait 35 minutes
+grep ObservedWrongSize snpCheckClassAndObserved.exceptions > ObservedWrongSize
+grep ObservedWrongSize snpPARexceptions.tab >> ObservedWrongSize
+cp ObservedWrongSize /cluster/home/heather/transfer/snp
+ssh hgwdev
+hgsql -e 'alter table snp125Exceptions drop index name' hg17
+hgsql -e 'load data local infile "/cluster/home/heather/transfer/snp/ObservedWrongSize" into table snp125Exceptions' hg17
+hgsql -e 'alter table snp125Exceptions add index name'
+
+# fix counts
+hgsql -e 'select count(*), exception from snp125Exceptions group by exception' hg17
+
++----------+------------------------------------+
+| count(*) | exception                          |
++----------+------------------------------------+
+|   785903 | MultipleAlignments                 |
+|      623 | NamedClassWrongLocType             |
+|     7686 | ObservedMismatch                   |
+|     4333 | ObservedNotAvailable               |
+|       97 | ObservedWrongFormat                |
+|    73558 | ObservedWrongSize                  |
+|      466 | RangeSubstitutionLocTypeExactMatch |
+|       62 | RefAlleleMismatch                  |
+|    99849 | RefAlleleNotRevComp                |
+|     1278 | RefAlleleWrongSize                 |
+|    20749 | SingleClassBetweenLocType          |
+|     2306 | SingleClassQuadAllelic             |
+|    15639 | SingleClassRangeLocType            |
+|    19330 | SingleClassTriAllelic              |
++----------+------------------------------------+
+
+# edit /cluster/data/dbSNP/exception.template (need to automate this)
+hgsql -e 'delete from snp125ExceptionDesc' hg17
+hgsql -e 'load data local infile "/cluster/data/dbSNP/exception.template" into table snp125ExceptionDesc' hg17
 
 ############
 # UPDATE hg17 knownToVisiGene (2006-04-05 galt)
@@ -21174,4 +21225,76 @@ mysql> load data local file 'exception.template' into table snp125ExceptionDesc;
     # mapping to other species such as mouse, zebrafish, frog
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+#############################################################
+# ADD A NEW TRACK GROUP (DONE, 6/3/06, Fan)
+# Create a new track group, "phenDis".
 
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("phenDis", "Phenotype and Disease Associations", 2.5)' \
+   | hgsql hg17
+
+#############################################################
+# hgMut - Human Mutation track - Belinda Giardine
+# list of tables by show tables like 'hgMut%'
+# summary of current load June 7, 2006
+#table definitions for autoSql
+autoSql hgMut.as hgMut -dbLink
+#move bin in struct so works as bed 4+
+#hgMut.sql: change INDEXes as needed, put in enums
+#shrink mutId to 64 chars, plus acc to 48
+#data files and details under ~giardine/humPhen/
+cd humPhen/hgMutData/April2006/
+cat hgMutHbVar.txt hgMutPah.txt hgMutBgmut.txt hgMutCftr.txt hgMutARdb.txt > hgMutUnsorted.txt
+grep "^chr" hgMutUnsorted.txt | sort -k1,1 -k2,2n > hgMut.bed
+#create tables
+hgsql hg17 < ../../hgMut.sql
+#loading
+hgLoadBed hg17 hgMut hgMut.bed -noSort -oldTable -tab
+#load small vocab control tables
+hgsql hg17 < hgMutLink.sql
+hgsql hg17 < hgMutAttrClass.sql
+hgsql hg17 < hgMutAttrName.sql
+hgsql hg17 < hgMutSrc.sql
+#from hgsql hg17
+load data local infile "hgMutExtLinkHbVar.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkARdb.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkBgmut.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkCFTR.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkPah.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkSP.txt" into table hgMutExtLink;
+load data local infile "hgMutAttrHbVar2.txt" into table hgMutAttr;
+load data local infile "hgMutAttrHbvarProt2.txt" into table hgMutAttr;
+load data local infile "hgMutAttrARdb.txt" into table hgMutAttr;
+load data local infile "hgMutAttrARdbProt.txt" into table hgMutAttr;
+load data local infile "hgMutAliasHbVar.txt" into table hgMutAlias;
+load data local infile "hgMutAliasARdb.txt" into table hgMutAlias;
+load data local infile "hgMutAliasBgmut.txt" into table hgMutAlias;
+load data local infile "hgMutAliasPah.txt" into table hgMutAlias;
+load data local infile "hgMutExtLinkHbVarOmim.txt" into table hgMutExtLink;
+load data local infile "hgMutAttrLink.txt" into table hgMutAttrLink;
+load data local infile "hgMutAttrSP.txt" into table hgMutAttr;
+
+#############################################################
+# Illumina Hap300
+
+cd /cluster/data/hg17/bed
+mkdir illumina
+cd illumina
+trim.pl < Illumina_HumanHap300_SNPlist_01.13.2006.txt > trim.out
+hgsql hg17 < illuminaTmp.sql
+hgsql -e "load data local infile 'trim.out' into table illuminaTmp" hg17
+/cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg17 illuminaTmp snp125 snp125Exceptions illuminaLookup.out illuminaLookup.err
+# errors:
+# unexpected chrom chr1 for snp rs1291584
+# unexpected chrom chr17 for snp rs3826555
+# unexpected locType between for snp rs2036773
+# unexpected locType between for snp rs2249255
+# unexpected locType between for snp rs8051412
+# unexpected locType between for snp rs1017238
+# unexpected locType between for snp rs5019493
+# 16 with locType = range*
+# 402 not found!
+# None that have multiple alignments.
+hgsql hg17 < illumina.sql
+hgsql -e "load data local infile 'illuminaLookup.out' into table illumina" hg17
+hgsql -e "alter table illumina add index name (name)" hg17
+hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17

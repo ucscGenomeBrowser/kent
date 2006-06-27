@@ -12,21 +12,19 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.28 2006/05/13 05:38:48 markd Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.29 2006/06/08 23:55:59 galt Exp $";
 
 
-/* Return how long the named file is in bytes. 
- * Return -1 if no such file. */
-off_t fileSize(char *fileName)
+off_t fileSize(char *pathname)
+/* get file size for pathname. return -1 if not found */
 {
-int fd;
-off_t size;
-fd = open(fileName, O_RDONLY, 0);
-if (fd < 0)
+struct stat mystat;
+ZeroVar(&mystat);
+if (stat(pathname,&mystat)==-1)
+    {
     return -1;
-size = lseek(fd, 0L, 2);
-close(fd);
-return size;
+    }
+return mystat.st_size;
 }
 
 
@@ -209,18 +207,6 @@ struct stat st;
 if (stat(pathName, &st) < 0)
     errAbort("stat failed in fileModTime");
 return st.st_mtime;
-}
-
-off_t fsize(char *pathname)
-/* get file size for pathname. return -1 if not found */
-{
-struct stat mystat;
-ZeroVar(&mystat);
-if (stat(pathname,&mystat)==-1)
-    {
-    return -1;
-    }
-return mystat.st_size;
 }
 
 

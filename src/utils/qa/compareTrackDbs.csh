@@ -4,22 +4,22 @@ if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares trackDb on two machines."
  echo "  optionally compares another field instead of tableName."
- echo "  this will break when hgText is replaced by hgTables."
+ echo "  this will break when hgText is retired."
  echo
  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
  echo ""
  exit 1
 endif
 
-#set machine1 = "hgwdev"
-#set machine1 = "hgwbeta"
-#set machine2 = "hgw1"
-
 set machine1 = $argv[1]
 set machine2 = $argv[2]
 set db = $argv[3]
 set cent=""
 set host=""
+
+#set machine1 = "hgwdev"
+#set machine1 = "hgwbeta"
+#set machine2 = "hgw1"
 
 # check validity of machine name and existence of db on the machine
 foreach machine ( $machine1 $machine2 )
@@ -36,21 +36,30 @@ foreach machine ( $machine1 $machine2 )
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
       set host="-h hgwbeta"
+      hgsql -N $host -e "SHOW TABLES" "$db" >& /dev/null
+      if ( $status ) then
+        echo
+        echo "  database $db is not found on $machine"
+        echo
+        echo ${0}:
+        $0
+        exit 1
+      endif
     else
       set cent=""
       set host="-h genome-centdb"
     endif
   endif
+
   hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent | grep "$db" >& /dev/null
   if ( $status ) then
     echo
-    echo "  database $db is not found on $machine"
+    echo "  database $db is not in dbDb on $machine"
     echo
     echo ${0}:
     $0
     exit 1
   endif
-  
 end
 
 set table = "trackDb"

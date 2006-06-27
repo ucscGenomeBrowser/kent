@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.70 2006/04/10 13:42:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.72 2006/06/07 23:39:40 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -451,6 +451,9 @@ char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
 char *xrefTable;
 char *geneIdCol;
+int  i, exonCnt, cdsExonCnt;
+int  cdsStart, cdsEnd;
+
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
@@ -541,7 +544,7 @@ if (protAcc != NULL)
     spDisplayId = spAnyAccToId(spConn, protAcc);
     if (spDisplayId == NULL) 
     	{
-	errAbort("<br>%s seems no longer a valid protein ID in our latest UniProt DB.", protAcc);
+	errAbort("<br>%s seems to no longer be a valid protein ID in our latest UniProt DB.", protAcc);
 	}
 	
     /* defensive logic to guard against curProtId being NULL */
@@ -583,6 +586,31 @@ if (summaryTables != NULL)
 /* print genome position and size */
 hPrintf("<BR><B>Position:</B> %s:%d-%d</A>\n", curGeneChrom, curGeneStart+1, curGeneEnd);
 hPrintf("<BR><B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
+
+/* print exon count(s) */
+exonCnt = curGenePred->exonCount;
+cdsStart= curGenePred->cdsStart;
+cdsEnd  = curGenePred->cdsEnd;
+hPrintf("<BR><B>Exon Count:</B> %d\n", exonCnt);
+
+/* count CDS exons */
+if (exonCnt > 1)
+    {
+    cdsExonCnt = 0;
+    for (i=0; i<exonCnt; i++)
+    	{
+	if ( (cdsStart <= curGenePred->exonEnds[i]) &&  
+	     (cdsEnd >= curGenePred->exonStarts[i]) )
+	     cdsExonCnt++;
+	}
+    /* print CDS exon count only if it is different than exonCnt */
+    if (cdsExonCnt != exonCnt) 
+    	{
+	hPrintf("&nbsp&nbsp&nbsp");
+	hPrintf("<B>CDS Exon Count:</B> %d\n", cdsExonCnt);
+	}
+    }	
+
 fflush(stdout);
 }
 

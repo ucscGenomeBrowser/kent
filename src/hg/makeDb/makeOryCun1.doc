@@ -321,6 +321,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 # MAKE DOWNLOADABLE FILES (DONE 11/4/04 angie)
 # RECREATE BIGZIPS DOWNLOADS AND README FILE (DONE, 2006-05-05, hartera)
 # MOVED LIFTOVER FILES FOR DOWNLOAD (DONE, 2006-05-23, hartera)
+# CORRECTED LINKS FOR RABBIT BIGZIPS (DONE, 2006-06-11, hartera)
     ssh kkstore01
     mkdir /cluster/data/oryCun1/zips
     cd /cluster/data/oryCun1
@@ -369,11 +370,13 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     md5sum *.gz > md5sum.txt
     
     # link the *.gz and *.txt files to hgwdev:/usr/local/apache/....
+    # Remake the links to rabbit bigZips - linked to dasNov1 bigZips before
+    # (2006-06-11, hartera).
     ssh hgwdev
     set gp=/usr/local/apache/htdocs/goldenPath/oryCun1
     rm -r $gp/bigZips
     mkdir -p $gp/bigZips
-    ln -s /cluster/data/dasNov1/bigZips/{*.gz,*.txt} $gp/bigZips
+    ln -s /cluster/data/oryCun1/bigZips/{*.gz,*.txt} $gp/bigZips
     # copy over README.txt and edit for bigZips
     # oryCun1.mm7.over.chain.gz liftOver chain is in the md5sum.txt in the
     # vsMm7 directory. It should be in the liftOver directory so move it there

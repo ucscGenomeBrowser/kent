@@ -191,8 +191,11 @@
 #include "hgMut.h"
 #include "landmark.h"
 #include "ec.h"
+#include "transMapClick.h"
+#include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1022 2006/05/26 22:22:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1033 2006/06/13 15:11:37 giardine Exp $";
+static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -245,9 +248,6 @@ char *uniprotFormat = "http://www.expasy.org/cgi-bin/niceprot.pl?%s";
 struct customTrack *theCtList = NULL;
 
 /* forwards */
-struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
-void printAlignments(struct psl *pslList, 
-		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 char *getPredMRnaProtSeq(struct genePred *gp);
 
 void hgcStart(char *title)
@@ -3546,8 +3546,10 @@ else
 	char buf[256];
 	if ((hti->nameField[0] != 0) && (item[0] != 0))
 	    {
-	    safef(buf, sizeof(buf), "%s = '%s'", hti->nameField, item);
+	    char *quotedItem = makeQuotedString(item, '\'');
+	    safef(buf, sizeof(buf), "%s = %s", hti->nameField, quotedItem);
 	    where = buf;
+	    freeMem(quotedItem);
 	    }
 	itemCount = hgSeqItemsInRange(tbl, seqName, start, end, where);
 	}
@@ -6441,13 +6443,14 @@ void htcDnaNearGene(char *geneName)
 char *table    = cartString(cart, "o");
 char constraints[256];
 int itemCount;
-
-snprintf(constraints, sizeof(constraints), "name = '%s'", geneName);
+char *quotedItem = makeQuotedString(geneName, '\'');
+safef(constraints, sizeof(constraints), "name = %s", quotedItem);
 puts("<PRE>");
 itemCount = hgSeqItemsInRange(table, seqName, winStart, winEnd, constraints);
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
+freeMem(quotedItem);
 }
 
 void doViralProt(struct trackDb *tdb, char *geneName)
@@ -13177,12 +13180,21 @@ if (startsWith("No.", pos))
     pos += strlen("No.");
 pos = cloneString(pos);
 wordCount = chopString(pos, sep, words, ArraySize(words));
-if (wordCount != 3)
+if (wordCount < 2 || wordCount > 3)
     errAbort("parseSuperDupsChromPointPos: Expected something like "
-	     "(No\\.)?[0-9]+[.,][a-zA-Z0-9_]+:[0-9]+ but got %s", origPos);
-*retID = sqlUnsigned(words[0]);
-safef(retChrom, 64, words[1]);
-*retPos = sqlUnsigned(words[2]);
+	     "(No\\.)?([0-9]+[.,])?[a-zA-Z0-9_]+:[0-9]+ but got %s", origPos);
+if (wordCount == 3)
+    {
+    *retID = sqlUnsigned(words[0]);
+    safef(retChrom, 64, words[1]);
+    *retPos = sqlUnsigned(words[2]);
+    }
+else
+    {
+    *retID = -1;
+    safef(retChrom, 64, words[0]);
+    *retPos = sqlUnsigned(words[1]);
+    }
 }
 
 
@@ -13214,8 +13226,10 @@ if (cgiVarExists("o"))
 		   track, seqName);
     if (rowOffset > 0)
 	hAddBinToQuery(start, end, query);
-    dyStringPrintf(query, "chromStart = %d and uid = %d and otherStart = %d",
-		   start, dupId, oStart);
+    if (dupId >= 0)
+	dyStringPrintf(query, "uid = %d and ", dupId);
+    dyStringPrintf(query, "chromStart = %d and otherStart = %d",
+		   start, oStart);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)))
 	{
@@ -15912,7 +15926,7 @@ else
 	int rcCount = 0;
 
 	safef(where, sizeof(where), "name = '%s'", itemName);
-	sr = hRangeQuery(conn, ct->dbTrackName, seqName, winStart, winEnd,
+	sr = hRangeQuery(conn, ct->dbTableName, seqName, winStart, winEnd,
                      where, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -17282,15 +17296,17 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+char *escName;
 
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
 /* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+      "chromStart=%d and name = '%s'", table, seqName, start, escName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -17303,8 +17319,98 @@ sqlFreeResult(&sr);
 
 /* fetch and print the source? */
 landmarkFree(&r);
+freeMem(escName);
 printTrackHtml(tdb);
 hFreeConn(&conn);
+}
+
+void printHgMutAttrLink (int attrLinkId)
+/* this prints the link for a hgMut attribute, internal or external */
+/* left off here adding links to attributes */
+{
+struct hgMutAttrLink *link = NULL;
+struct hash *linkInstructions = NULL;
+struct hash *thisLink = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *linktype, *label;
+
+hgReadRa(database, organism, rootDir, "hgMutAttr.ra", &linkInstructions);
+safef(query, sizeof(query), "select * from hgMutAttrLink "
+    "where mutAttrLinkId = %d", attrLinkId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct sqlResult *sr2;
+    char **row2;
+
+    link = hgMutAttrLinkLoad(row);
+    if (link == NULL) 
+        continue; /* no link found */
+    /* determine how to do link from .ra file */
+    thisLink = hashFindVal(linkInstructions, link->mutAttrLink);
+    if (thisLink == NULL) 
+        continue; /* no link found */
+    /* link->mutAttrAcc - accession for link */
+    /* type determined by fields: url = external, dataSql = internal, others added later? */
+    linktype = hashFindVal(thisLink, "dataSql");
+    label = hashFindVal(thisLink, "label");
+    if (linktype != NULL) 
+        {
+        safef(query, sizeof(query), linktype, link->mutAttrAcc);
+        sr2 = sqlGetResult(conn2, query);
+        while ((row2 = sqlNextRow(sr2)) != NULL)
+            {
+            /* should this print more than 1 column, how know how many? */
+            if (row2[0] != NULL)
+                {
+                /* print label and result */
+                printf("%s - %s<BR />\n", label, row2[0]);
+                }
+            }
+        sqlFreeResult(&sr2);
+        }
+    else 
+        {
+        linktype = hashFindVal(thisLink, "url");
+        if (linktype != NULL)
+            {
+            char url[256];
+            safef(url, sizeof(url), linktype, link->mutAttrAcc);
+            printf("%s - <A HREF=\"%s\">%s</A><BR />\n", label, url, link->mutAttrAcc);
+            }
+        }
+    }
+sqlFreeResult(&sr);
+}
+
+void doIllumina (struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int start = cartInt(cart, "o");
+// char *chrom = cartString(cart, "c");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select chromEnd, illuminaName from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
+    printf("<B>Illumina ID:</B> %s <BR />\n", row[1]);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+
 }
 
 void doHgMut (struct trackDb *tdb, char *itemName)
@@ -17318,8 +17424,20 @@ struct hgMutAttr attr;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
+//struct sqlResult *sr4;
 char **row;
 char query[256];
+char *escName;
+
+//struct dvXref2 *dvXref2;
+//struct omimTitle *omimTitle;
+
+/*
+char query4[256];
+char *commentTypeIx;
+char *kgId, *spId=NULL, *geneSymbol=NULL;
+*/
+
 int i;
 char *prevClass = NULL, *prevName = NULL;
 
@@ -17328,9 +17446,10 @@ int start = cartInt(cart, "o");
 genericHeader(tdb, itemName);
 
 /* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
-      "chromStart=%d and mutId = '%s'", table, seqName, start, itemName);
+      "chromStart=%d and mutId = '%s'", table, seqName, start, escName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -17339,6 +17458,24 @@ if ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed *)mut, 3);
     }
 sqlFreeResult(&sr);
+
+/*
+if (mut->srcId == 3)
+    {
+    safef(query, sizeof(query),
+    "select kgId, kgXref.spId, geneSymbol from kgXref, dv where varId='%s' and dv.spId=kgXref.spId", 
+    mut->mutId);
+	  
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	kgId = strdup(row[0]);
+    	spId = strdup(row[1]);
+    	geneSymbol = strdup(row[2]);
+    	}
+    }
+sqlFreeResult(&sr);
+*/
 
 /* fetch and print the source */
 safef(query, sizeof(query),
@@ -17376,8 +17513,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (link != NULL) 
         {
         url = replaceChars(link->url, "$$", row[1]);
-        printf("<A HREF=%s", url);
-        printf(" Target=_blank> %s </A> <BR />\n", link->linkDisplayName);
+        printf("%s <A HREF=%s", link->linkDisplayName, url);
+        printf(" Target=_blank> %s </A> <BR />\n", row[1]);
         freeMem(url);
         }
     }
@@ -17416,8 +17553,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     hgMutAttrStaticLoad(row, &attr);
     safef(query, sizeof(query), "select * from hgMutAttrClass where mutAttrClassId = %d", attr.mutAttrClassId);
     class = hgMutAttrClassLoadByQuery(conn2, query);
+    if (class == NULL)
+        continue; /* skip this one if invalid classId */
     safef(query, sizeof(query), "select * from hgMutAttrName where mutAttrNameId = %d", attr.mutAttrNameId);
     name = hgMutAttrNameLoadByQuery(conn2, query);
+    if (name == NULL) 
+        continue;
     /* only print name and class if different */
     if (prevClass == NULL || differentString(prevClass, class->mutAttrClass))
         {
@@ -17438,6 +17579,13 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("</DD><DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
         }
     printf("%s<BR />\n", attr.mutAttrVal);
+    if (attr.mutAttrLinkId != 0) 
+        {
+        /* indent attrLinks */
+        printf("<DL><DT></DT><DD>\n");
+        printHgMutAttrLink(attr.mutAttrLinkId);
+        printf("</DD></DL>");
+        }
     }
 sqlFreeResult(&sr);
 if (prevClass != NULL)
@@ -17448,7 +17596,82 @@ if (prevClass != NULL)
     }
 printf("</DD></DL>\n");
 
+/*
+if (spId == NULL) goto skip_dv;
+
+printf("<DL><DT><B>Variation and Disease Info Related to Gene Locus of %s (Protein %s):</B></DT>\n<DD> ", geneSymbol, spId);
+
+fflush(stdout);
+safef(query, sizeof(query), "select id from uniProt.commentType where val='POLYMORPHISM'");
+sr = sqlGetResult(protDbConn, query);
+row = sqlNextRow(sr);
+commentTypeIx = strdup(row[0]);
+sqlFreeResult(&sr);
+safef(query, sizeof(query), 
+"select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=%s and comment.commentVal=commentVal.id", spId, commentTypeIx);
+sr = sqlGetResult(protDbConn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    printf("<B>POLYMORPHISM:</B> ");
+    printf("%s<BR>\n", row[0]);fflush(stdout);
+    sqlFreeResult(&sr);
+    fflush(stdout);
+    }
+safef(query, sizeof(query), "select id from uniProt.commentType where val='DISEASE'");
+sr = sqlGetResult(protDbConn, query);
+row = sqlNextRow(sr);
+commentTypeIx = strdup(row[0]);
+sqlFreeResult(&sr);
+
+safef(query, sizeof(query), 
+"select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=%s and comment.commentVal=commentVal.id", spId, commentTypeIx);
+sr = sqlGetResult(protDbConn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<B>DISEASE:</B> ");
+    printf("%s<BR>\n", row[0]);fflush(stdout);
+    sqlFreeResult(&sr);
+    }
+    
+safef(query, sizeof(query), "select * from dvXref2 where varId = '%s' ", itemName);
+sr = sqlGetResult(protDbConn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    dvXref2 = dvXref2Load(row);
+    if (sameString("MIM", dvXref2->extSrc)) 
+        {
+        printf("<B>OMIM:</B> ");
+        printf("<A HREF=");
+        printOmimUrl(stdout, dvXref2->extAcc);
+        printf(" Target=_blank> %s</A> \n", dvXref2->extAcc);
+*/
+	/* nested query here */
+/*
+        if (hTableExists("omimTitle"))
+	    {
+            safef(query4, sizeof(query4), 
+	    	  "select * from omimTitle where omimId = '%s' ", dvXref2->extAcc);
+            sr4 = sqlGetResult(conn, query4);
+            while ((row = sqlNextRow(sr4)) != NULL)
+                {
+		omimTitle = omimTitleLoad(row);
+		printf("%s\n", omimTitle->title);
+		omimTitleFree(&omimTitle);
+		}
+	    }
+	    printf("<BR>\n");
+	}
+    dvXref2Free(&dvXref2);
+    }
+sqlFreeResult(&sr);
+printf("</DD></DL>");
+
+skip_dv:
+*/
+
 hgMutFree(&mut);
+freeMem(escName);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -17482,16 +17705,14 @@ void doIgtc(struct trackDb *tdb, char *itemName)
 /* Details for International Gene Trap Consortium. */
 {
 char *name = cloneString(itemName);
-char *source = strrchr(name, '_');
+char *source = NULL;
 
+cgiDecode(name, name, strlen(name));
+source = strrchr(name, '_');
 if (source == NULL)
     source = "Unknown";
 else
-    {
-    *source = '\0';
     source++;
-    }
-cgiDecode(name, name, strlen(name));
 
 genericHeader(tdb, itemName);
 printf("<B>Source:</B> %s<BR>\n", source);
@@ -17608,6 +17829,10 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+else if (startsWith("transMap", track))
+    transMapClickHandler(tdb, item);
+else if (sameString(track, "hgcTransMapCdnaAli"))
+    transMapShowCdnaAli(item);
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	 sameWord(track, "all_mrna") ||
 	 sameWord(track, "all_est") ||
@@ -18400,6 +18625,10 @@ else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
     }
+else if (sameString("illumina", track))
+    {
+    doIllumina(tdb, item);
+    }
 else if (sameString("hgMut", track))
     {
     doHgMut(tdb, item);
@@ -18455,6 +18684,8 @@ char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "
 
 int main(int argc, char *argv[])
 {
+pushCarefulMemHandler(2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)));
+	/*	== 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

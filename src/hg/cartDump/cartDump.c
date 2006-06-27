@@ -6,7 +6,7 @@
 #include "cart.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.11 2006/03/22 23:46:37 angie Exp $";
+static char const rcsid[] = "$Id: cartDump.c,v 1.12 2006/06/12 21:03:15 angie Exp $";
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
@@ -48,6 +48,8 @@ printf(" ");
 cgiMakeButton("submit", "submit");
 printf("<BR>\n");
 printf("Put n/a in for the new value to clear a variable.");
+printf("<P>Cookies passed to %s:<BR>\n%s\n</P>\n",
+       cgiServerName(), getenv("HTTP_COOKIE"));
 }
 
 char *excludeVars[] = { "submit", "Submit", MATCH_VAR, NULL };

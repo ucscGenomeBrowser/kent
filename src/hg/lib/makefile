@@ -15,7 +15,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chicken13kInfo.o chromBins.o chr18deletions.o \
-    chromInfo.o chromInserts.o chromKeeper.o \
+    chromGraph.o chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cnpIafrate.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
@@ -46,17 +46,17 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mafFrames.o mafSummary.o mapSts.o \
-    mcnBreakpoints.o minGeneInfo.o mrnaMisMatch.o \
+    mcnBreakpoints.o metaChromGraph.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o omimTitle.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
-    riken.o rikenBest.o rikenCluster.o rmskOut.o \
+    rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o riken.o rikenBest.o rikenCluster.o rmskOut.o \
     rnaFold.o rnaGene.o rnaGroup.o tRNAs.o gbRNAs.o \
     rnaSecStr.o tfbsConsFactors.o \
-    roughAli.o sage.o sageCounts.o sageExp.o sample.o \
+    roughAli.o transMapInfo.o sage.o sageCounts.o sageExp.o sample.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o \
     sanger22extra.o sangerGene.o sargassoSeaXra.o \
     scopDes.o scoredRef.o sgdAbundance.o \

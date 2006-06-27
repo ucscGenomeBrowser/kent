@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.46 2006/05/25 17:53:23 angie Exp $"
+#	"$Id: makeMm8.doc,v 1.52 2006/06/12 16:54:16 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3712,6 +3712,7 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     #------------------------------------------------------------------------
     # create frames
     #	beware, BASH syntax here ...
+    # rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
     clusterDir=/cluster/bluearc/mm8/multiz17wayFrames
     multizDir=/cluster/data/mm8/bed/multiz17way
     mafDir=$multizDir/mafDownloads
@@ -3774,6 +3775,19 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     #------------------------------------------------------------------------
     # clean up
     rm -rf ${clusterDir}
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/multiz17way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | time genePredToMafFrames mm8 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer4 genes/danRer4.gp.gz fr1 genes/fr1.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz loxAfr1 genes/loxAfr1.gp.gz mm8 genes/mm8.gp.gz oryCun1 genes/oryCun1.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz tetNig1 genes/tetNig1.gp.gz xenTro2 genes/xenTro2.gp.gz  bosTau2 genes/bosTau2.gp.gz |  gzip >multiz17way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/multiz17way/frames
+
+    hgLoadMafFrames mm8 multiz17wayFrames multiz17way.mafFrames.gz |&mail markd&
+
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
@@ -5689,5 +5703,70 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
       >& do.log & tail -f do.log
     ln -s blastz.galGal3.2006-05-23 /cluster/data/mm8/bed/blastz.galGal3
 
+#########################################################################
+# ADD LINK TO GENENETWORK (DONE. 5/31/06 Fan).
+
+# Copy geneNetwork ID list from mm7
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm8/bed/geneNetwork
+    cd /cluster/data/mm8/bed/geneNetwork
+
+    hgsql mm7 -N -e 'select * from geneNetworkId' > geneNetworkId.tab
+
+    hgsql mm8 -e 'drop table geneNetworkId'
+    hgsql mm8 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql mm8 -e \
+    'load data local infile "geneNetworkId.tab" into table geneNetworkId'
+
+############################################################################
+# SGP GENES (DONE - 2006-06-12 - Hiram)
+    ssh kkstore02
+    cd  /cluster/data/mm8/bed
+    ln -s /cluster/store8/mm8/bed/sgp .
+    cd sgp
+    #   They don't do chrM
+    for C in `awk '{print $1}' /cluster/data/mm8/chrom.sizes | grep -v chrM`
+    do
+        wget --timestamping \
+"http://genome.imim.es/genepredictions/M.musculus/mmMar2006/SGP/humangp200603/${C}.gtf" \
+        -O "${C}.gtf"
+    done
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/sgp
+    ldHgGene -gtf -genePredExt mm8 sgpGene chr*.gtf
+
+    featureBits mm8 -enrichment refGene:CDS sgpGene
+    #	refGene:CDS 1.063%, sgpGene 1.455%, both 0.918%, cover 86.32%,
+    #	enrich 59.32x
 
 #########################################################################
+# BUILD KNOWN GENE LIST FOR GOOGLE. (DONE.  6/6/06 Fan).
+
+    cd /cluster/data/mm8/bed
+    rm -rf knownGeneList/mm8
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/mm8
+
+    hgKnownGeneList mm8
+
+    # copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/mm8
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/mm8
+    cp -Rfp knownGeneList/mm8/* /usr/local/apache/htdocs/knownGeneList/mm8
+
+
+#########################################################################
+### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-12 - angie)
+### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/igtc
+    cd /cluster/data/mm8/bed/igtc
+    wget http://www.genetrap.org/blattrack/genetrap_mm8.psl
+    grep -v ^track genetrap_mm8.psl \
+    | hgLoadPsl mm8 -table=igtc stdin
+
+############################################################################

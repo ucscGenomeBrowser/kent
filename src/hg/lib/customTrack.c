@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.89 2006/05/30 23:49:42 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.100 2006/06/09 16:39:18 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -141,11 +141,14 @@ for (i = 0; i < wigOptCount; ++i)
 tdb->settings = dyStringCannibalize(&wigSettings);
 }
 
-boolean ctDbAvailable()
-/*	determine if custom tracks database is available	*/
+boolean ctDbAvailable(char *tableName)
+/*	determine if custom tracks database is available
+ *	and if tableName non-NULL, verify table exists
+ */
 {
+static boolean dbExists = FALSE;
 static boolean checked = FALSE;
-static boolean status = FALSE;
+boolean status = dbExists;
 
 if (! checked)
     {
@@ -157,10 +160,41 @@ if (! checked)
     else
 	{
 	status = TRUE;
+	dbExists = TRUE;
+	if (tableName)
+	    {
+	    status = sqlTableExists(conn, tableName);
+	    }
 	sqlDisconnect(&conn);
 	}
     }
+else if (dbExists && ((char *)NULL != tableName))
+    {
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    status = sqlTableExists(conn, tableName);
+    sqlDisconnect(&conn);
+    }
+
 return(status);
+}
+
+static boolean ctUseAll()
+/* check if hg.conf says to try DB loaders for all incoming data tracks */
+{
+static boolean checked = FALSE;
+static boolean enabled = FALSE;
+
+if (!checked)
+    {
+    if (ctDbAvailable((char *)NULL))	/* must have DB for this to work */
+	{
+	char *val = cfgOptionDefault("customTracks.useAll", NULL);
+	if (val != NULL)
+	    enabled = sameString(val, "yes");
+	}
+    checked = TRUE;
+    }
+return enabled;
 }
 
 static char *trackLoader(char *type)
@@ -208,11 +242,13 @@ putenv(envPass);
 
 /*	the different loaders require different pipeline commands */
 if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
+	|| startsWith("gff", track->dbTrackType)
+	|| startsWith("gtf", track->dbTrackType)
 	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
     {
     /* running the single command:
      *	hgLoadBed -verbose=0 -tmpDir=../trash
-     *	--maxChromNameLength=${nameLength}
+     *		-maxChromNameLength=${nameLength} stdin
      */
     struct dyString *tmpDy = newDyString(0);
     char *cmd1[] = {NULL, "-verbose=0", "-tmpDir=../trash", NULL, NULL, NULL, "stdin", NULL};
@@ -221,7 +257,7 @@ if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
     cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", db);
     cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    dyStringPrintf(tmpDy, "%s", track->dbTableName);
     cmd1[5] = dyStringCannibalize(&tmpDy);
     /* the "/dev/null" file isn't actually used for anything, but it is used
      * in the pipeLineOpen to properly get a pipe started that isn't simply
@@ -236,7 +272,7 @@ else if (startsWith("wiggle_0", track->dbTrackType))
      *	loader/wigEncode -verbose=0 stdin stdout ${wibFile} | \
      *	    loader/hgLoadWiggle -verbose=0 -tmpDir=../trash \
      *		-maxChromNameLength=${nameLength} -chromInfoDb=${database} \
-     *		    -pathPrefix=${pathPrefix} ${db} ${table} stdin
+     *		    -pathPrefix=. ${db} ${table} stdin
      */
     struct dyString *tmpDy = newDyString(0);
     char *cmd1[] = {NULL, "-verbose=0", "stdin", "stdout", NULL, NULL};
@@ -251,11 +287,12 @@ else if (startsWith("wiggle_0", track->dbTrackType))
     cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "-chromInfoDb=%s", "hg18");
     cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "-pathPrefix=../trash");
+    /*	the ../trash/ prefix is already encoded into the file column */
+    dyStringPrintf(tmpDy, "-pathPrefix=.");
     cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", db);
     cmd2[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    dyStringPrintf(tmpDy, "%s", track->dbTableName);
     cmd2[7] = dyStringCannibalize(&tmpDy);
 
     dbDataPipe = pipelineOpen(cmds, pipelineWrite, "/dev/null");
@@ -281,6 +318,7 @@ va_start(args, format);
 if (tdb->settings)
     dyStringPrintf(settings, "%s\n", tdb->settings);
 dyStringVaPrintf(settings, format, args);
+dyStringPrintf(settings, "\n");
 va_end(args);
 tdb->settings = dyStringCannibalize(&settings);
 }
@@ -288,7 +326,7 @@ tdb->settings = dyStringCannibalize(&settings);
 static char *dbOptions[] =
 {
     "db",
-    "dbTrackName",
+    "dbTableName",
     "fieldCount",
 };
 static int dbOptCount = sizeof(dbOptions) / sizeof(char *);
@@ -322,6 +360,34 @@ for (i = 0; i < dbOptCount; ++i)
 tdb->settings = dyStringCannibalize(&dbSettings);
 }
 
+static void establishDbNames(struct customTrack *track)
+/*	create dbTableName, sets dbTableName and dbDataLoad	*/
+{
+char count[16];
+char *baseName;
+static struct tempName tn;
+static int trackCount = 0;
+
+/*	verify known track type, this fails and exits when no good */
+trackLoader(track->dbTrackType);
+
+/* the makeTempName() function is getting confused
+ * because we aren't actually making any trash files,
+ *	so, help it out by adding a count to our names.
+ */
+safef(count, sizeof(count), "ct_%d", trackCount++);
+makeTempName(&tn, count, ".dbData.gz");
+track->dbTableName = cloneString(tn.forCgi);
+track->dbDataLoad = FALSE;	/*	not yet	*/
+/*	SQL table names can not have - signs, change to _ */
+subChar(track->dbTableName, '-', '_');
+stripString(track->dbTableName, ".dbData.gz");
+/*	remove the ../trash/ prefix from the file name	*/
+baseName = rStringIn("/",track->dbTableName);
+if (baseName)
+    track->dbTableName = baseName + 1;
+}
+
 char *customTrackTableFromLabel(char *label)
 /* Convert custom track short label to table name. */
 {
@@ -343,7 +409,8 @@ struct customTrack *track;
 struct trackDb *tdb = tdbDefault();	/* begin with default track */
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
-static int trackCount = 0;
+boolean isWiggle = FALSE;
+boolean dbRequested = FALSE;
 
 AllocVar(track);
 track->tdb = tdb;
@@ -354,60 +421,62 @@ if ((val = hashFindVal(hash, "name")) != NULL)
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
     }
 
+if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
+    isWiggle = TRUE;
+
 /*	check if there is a db= specification which is asking for a
  *	database instance of this track, and it specifies the type.
  *	When the DB isn't available, the fall back position is normal
  *	file processing.
  */
-if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable()))
+if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
     {
-    char *dbStrings;
     track->dbTrackType = cloneString(val);
-    /*	verify known track type, this fails and exits when no good	*/
-    trackLoader(track->dbTrackType);
+    dbRequested = TRUE;
+    }
 
+/*	see if this normal wiggle incoming should attempt to go to the DB
+ *	even in the case where it hasn't been requested
+ */
+if (!dbRequested && ctUseAll() && isWiggle &&
+	((hashFindVal(hash, "wibFile")) == NULL))
+    {
+    hashAdd(hash, "db", "wiggle_0");
+    track->dbTrackType = cloneString("wiggle_0");
+    dbRequested = TRUE;
+    }
+
+if (dbRequested)
+    {
     /*	is this data already in the database ?	*/
-    if ((dbStrings = hashFindVal(hash, "dbTrackName")) == NULL)
+    if ((val = hashFindVal(hash, "dbTableName")) == NULL)
 	{
-	char count[16];
-	char *baseName;
-	static struct tempName tn;
-	/* the makeTempName() function is getting confused
-	 * because we aren't actually making any trash files,
-	 *	so, help it out by adding a count to our names.
-	 */
-	safef(count, sizeof(count), "ct_%d", trackCount++);
-	makeTempName(&tn, count, ".dbData.gz");
-	track->dbTrackName = cloneString(tn.forCgi);
-	track->dbDataLoad = FALSE;	/*	not yet	*/
-	/*	SQL table names can not have - signs, change to _ */
-	subChar(track->dbTrackName, '-', '_');
-	stripString(track->dbTrackName, ".dbData.gz");
-	/*	remove the ../trash/ prefix from the file name	*/
-	baseName = rStringIn("/",track->dbTrackName);
-	if (baseName)
-	    track->dbTrackName = baseName + 1;
-	hashAdd(hash, "dbTrackName", cloneString(track->dbTrackName));
+	establishDbNames(track);
+	hashAdd(hash, "dbTableName", cloneString(track->dbTableName));
 	}
     else
 	{
-	track->dbTrackName = cloneString(dbStrings);
-	track->dbDataLoad = TRUE;	/* already in DB */
-	if ((val = hashFindVal(hash, "fieldCount")) != NULL)
-	    track->fieldCount = sqlSigned(val);
-	else
+	/*	verify database table has not disappeared on us	*/
+	if (ctDbAvailable(val))
 	    {
-	    if ((val = hashFindVal(hash, "type")) == NULL)
-errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
-	    if (differentString(val,"wiggle_0"))
-errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+	    track->dbTableName = cloneString(val);
+	    track->dbDataLoad = TRUE;	/* already in DB */
+	    if ((val = hashFindVal(hash, "fieldCount")) != NULL)
+		track->fieldCount = sqlSigned(val);
+	    else
+		{
+		if (!isWiggle)
+    errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+		}
 	    }
+	else
+	    return ((struct customTrack *)NULL);	/* !! EXPIRED TRACK */
 	}
     track->dbTrack = TRUE;
     parseDbSettings(tdb, hash);	/* adds our new values to settings */
     }
 
-if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
+if (isWiggle)
     {
     char *wigFileNames;
     static struct tempName tn;
@@ -431,6 +500,9 @@ if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
 	/*	the wib file may have expired	*/
 	if (!fileExists(track->wibFile))
 	    return ((struct customTrack *)NULL);	/* !! EXPIRED TRACK */
+	/* there is no wigAscii since it was used once only when loading
+	 * happened the first time around.
+	 */
 	track->wigAscii = (char *) NULL;
 	}
 
@@ -1030,6 +1102,9 @@ for (track = trackList; track != NULL; track = track->next)
 static void finishDbPipeline(struct customTrack *track,
 	struct pipeline **dbDataPL, FILE *dbDataFH,
 	struct hash *chromHash)
+/*	finish off the pipeline write, verify it is OK, set
+ *	track->dbDataLoad with success status
+ */
 {
 struct bed *bed;
 int offset = track->offset;
@@ -1179,7 +1254,7 @@ for (;;)
 	    {
 	    if (track->dbTrack)
 		{
-		if (!track->dbDataLoad)	/* loaded already ?	*/
+		if (!track->dbDataLoad)	/* not loaded yet ?	*/
 		    {
 		    /*	we need the maxChromName for index creation */
 		    track->maxChromName = hGetMinIndexLength();
@@ -1354,6 +1429,7 @@ for (track = trackList; track != NULL; track = track->next)
 		bed->thickEnd += offset;
 		}
 	     }
+	 track->offset = 0;	/*	so DB load later won't do this again */
 	 }
     if (!track->wiggle)
 	{
@@ -1392,7 +1468,7 @@ boolean bogusMacEmptyChars(char *s)
  * Mac browser putting in bogus chars into empty text box. */
 {
 char c = *s;
-return c != '_' && !isalnum(c);
+return (c != '_') && (c != '#') && !isalnum(c);
 }
 
 static struct customTrack *customTracksParseCartOrDie(struct cart *cart,
@@ -1562,20 +1638,23 @@ char *line;
 lf = lineFileOnString("settings", TRUE, settings);
 while (lineFileNext(lf, &line, NULL))
     {
-    char *blank;
-    blank = strchr(line, ' ');
-    if (blank != (char *)NULL)
+    if ((char)NULL != line[0])
 	{
-	int nameLen = blank - line;
-	char name[256];
+	char *blank;
+	blank = strchr(line, ' ');
+	if (blank != (char *)NULL)
+	    {
+	    int nameLen = blank - line;
+	    char name[256];
 
-	nameLen = (nameLen < 256) ? nameLen : 255;
-	strncpy(name, line, nameLen);
-	name[nameLen] = (char)NULL;
-	fprintf(f, "\t%s='%s'", name, blank+1);
+	    nameLen = (nameLen < 256) ? nameLen : 255;
+	    strncpy(name, line, nameLen);
+	    name[nameLen] = (char)NULL;
+	    fprintf(f, "\t%s='%s'", name, blank+1);
+	    }
+	else
+	    fprintf(f, "\t%s", line);
 	}
-    else
-	fprintf(f, "\t%s", line);
     }
 lineFileClose(&lf);
 }
@@ -1668,12 +1747,25 @@ FILE *f = mustOpen(fileName, "w");
 for (track = trackList; track != NULL; track = track->next)
     {
     boolean validTrack = TRUE;
+
+    /*	have we been requested to use DB for all incoming tracks ? */
+    if (!track->dbTrack && ctUseAll())
+	{
+	char trackType[64];
+	if (track->wiggle)
+	    safef(trackType, sizeof(trackType), "wiggle_0");
+	else
+	    safef(trackType, sizeof(trackType), "bed%d", track->fieldCount);
+	track->dbTrackType = cloneString(trackType);
+	ctAddToSettings(track->tdb, "db='%s'", track->dbTrackType);
+	}
+
     if (track->wiggle || track->dbTrack)
 	{
 	if (track->dbTrack && (!track->dbDataLoad))/* was loading successful ?	*/
 	    {
 	    validTrack = FALSE;	/*	failed	*/
-	    warn("track: %s failed database loading<BR>\n",track->tdb->shortLabel);
+	    warn("track: '%s' failed database loading<BR>\n",track->tdb->shortLabel);
 	    }
 	else
 	    {
@@ -1683,6 +1775,50 @@ for (track = trackList; track != NULL; track = track->next)
 		double upperLimit, lowerLimit;
 		lowerLimit = 0.0;
 		upperLimit = 100.0;
+		if (!track->dbTrack)
+		    {
+		    /* should we attempt to put it into the db ? */
+		    if (ctUseAll())
+			{
+			struct pipeline *dbDataPL = (struct pipeline *)NULL;
+			FILE *dbDataFH = (FILE *)NULL;
+			struct lineFile *lf = NULL;
+			char *line = NULL;
+
+			establishDbNames(track);
+			ctAddToSettings(track->tdb, "dbTableName %s",
+				track->dbTableName);
+			track->dbTrack = TRUE;
+			track->dbDataLoad = TRUE;/* assumed true until failed */
+			/*	we need the maxChromName for index creation */
+			track->maxChromName = hGetMinIndexLength();
+			/*	open pipeline to loader	*/
+			dbDataPL = pipeToLoader(track);
+			dbDataFH = pipelineFile(dbDataPL);
+			lf = lineFileOpen(track->wigAscii, TRUE);
+			while (lineFileNext(lf, &line, NULL))
+			    fprintf(dbDataFH, "%s\n", line);
+			finishDbPipeline(track, &dbDataPL, dbDataFH, NULL);
+			if (!track->dbDataLoad)	/* was loading successful ?*/
+			    {
+			    validTrack = FALSE;	/*	failed	*/
+			    warn("track: '%s' failed database loading<BR>\n",
+				    track->tdb->shortLabel);
+			    }
+			unlink(track->wigAscii);/* done with this, remove it */
+			unlink(track->wigFile);/* unused, remove it */
+			/* it would be nice to get rid of the wigFile
+ 			 * setting in the tdb
+			 */
+			}
+		    else
+			{
+			wigAsciiToBinary(track->wigAscii, track->wigFile,
+			    track->wibFile, &upperLimit, &lowerLimit, NULL);
+			fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
+			unlink(track->wigAscii);/* done with this, remove it */
+			}
+		    }
 		if (track->dbTrack)
 		    {
 		    char **row;
@@ -1694,7 +1830,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 		    safef(query,sizeof(query),
 		     "select min(lowerLimit),max(lowerLimit+dataRange) from %s",
-			track->dbTrackName);
+			track->dbTableName);
 		    sr = sqlGetResult(conn, query);
 		    if ((row = sqlNextRow(sr)) != NULL);
 			{
@@ -1703,7 +1839,7 @@ for (track = trackList; track != NULL; track = track->next)
 			}
 		    sqlFreeResult(&sr);
 		    safef(query,sizeof(query),
-		     "select span from %s group by span", track->dbTrackName);
+		     "select span from %s group by span", track->dbTableName);
 		    sr = sqlGetResult(conn, query);
 		    if ((row = sqlNextRow(sr)) != NULL);
 			{
@@ -1723,13 +1859,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 		    sqlDisconnect(&conn);
 		    }
-		else
-		    {
-		    wigAsciiToBinary(track->wigAscii, track->wigFile,
-			track->wibFile, &upperLimit, &lowerLimit, NULL);
-		    fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
-		    unlink(track->wigAscii);	/* done with this, remove it */
-		    }
+
 		safef(buf, sizeof(buf), "wig %g %g",lowerLimit, upperLimit);
 		freeMem(track->tdb->type);
 		track->tdb->type = cloneString(buf);
@@ -1739,11 +1869,44 @@ for (track = trackList; track != NULL; track = track->next)
 
     if (validTrack)
 	{
-	saveTdbLine(f, fileName, track->tdb);
-	if (!(track->wiggle || track->dbTrack))
+	/*	if we are going to attempt DB loading at this late point in
+ 	 *	the process, we need to setup everything for it to use
+	 */
+	if (!track->dbTrack && ctUseAll())
 	    {
-	    for (bed = track->bedList; bed != NULL; bed = bed->next)
-		 saveBedPart(f, bed, track->fieldCount);
+	    struct pipeline *dbDataPL = (struct pipeline *)NULL;
+	    FILE *dbDataFH = (FILE *)NULL;
+
+	    establishDbNames(track);
+
+	    ctAddToSettings(track->tdb, "dbTableName %s", track->dbTableName);
+	    ctAddToSettings(track->tdb, "fieldCount %d", track->fieldCount);
+
+	    track->dbTrack = TRUE;
+	    /*	we need the maxChromName for index creation */
+	    track->maxChromName = hGetMinIndexLength();
+	    /*	open pipeline to loader	*/
+	    dbDataPL = pipeToLoader(track);
+	    dbDataFH = pipelineFile(dbDataPL);
+	    track->dbDataLoad = TRUE;	/* assumed true until failed */
+	    if (track->gffHelper)
+		errAbort("should not have a gffHelper here\n");
+	    finishDbPipeline(track, &dbDataPL, dbDataFH, NULL);
+	    if (!track->dbDataLoad)	/* was loading successful ?	*/
+		{
+		validTrack = FALSE;	/*	failed	*/
+		warn("track: '%s' failed database loading<BR>\n",
+			track->tdb->shortLabel);
+		}
+	    }
+	if (validTrack)
+	    {
+	    saveTdbLine(f, fileName, track->tdb);
+	    if (!(track->wiggle || track->dbTrack))
+		{
+		for (bed = track->bedList; bed != NULL; bed = bed->next)
+		     saveBedPart(f, bed, track->fieldCount);
+		}
 	    }
 	}
     }

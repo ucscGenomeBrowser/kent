@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.35 2006/05/16 18:15:42 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.36 2006/05/31 22:17:03 hiram Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -414,7 +414,7 @@ if (ct->dbTrack)
     {
     struct sqlConnection *conn = sqlCtConn(TRUE);
     webNewSection("Sample Rows");
-    printSampleRows(10, conn, ct->dbTrackName);
+    printSampleRows(10, conn, ct->dbTableName);
     printTrackHtml(ct->tdb);
     }
 else

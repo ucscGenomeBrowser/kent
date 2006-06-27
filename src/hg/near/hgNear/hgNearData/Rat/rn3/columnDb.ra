@@ -1,6 +1,6 @@
 name gnfAtlas2
 shortLabel GNF Atlas 2
-longLabel GNF Expression Atlas 2 Data from RAE230 Rat Chip
+longLabel GNF Expression Atlas 2 Data from U34A Rat Chip
 priority 2.70
 visibility on
 type expMulti knownToGnfAtlas2

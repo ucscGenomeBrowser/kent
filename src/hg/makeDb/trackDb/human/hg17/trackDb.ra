@@ -4,7 +4,7 @@ include trackDb.encode.ra
 track rgdQtl
 shortLabel RGD QTL
 longLabel Quantitative Trait Locus (from RGD)
-group map
+group phenDis
 priority 4.5
 visibility hide
 color 12,12,120
@@ -31,6 +31,26 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+
+track dvBed
+shortLabel DV
+longLabel Disease Variation
+group phenDis
+priority 145
+visibility hide
+color 200,0,0
+type bed 4 +
+url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
+
+track kgProtMap
+shortLabel kgProtMap
+longLabel kgProtMap
+group genes
+priority 146
+visibility hide
+spectrum on
+type psl .
+cdsDrawOptions enabled
 
 track ensGene
 shortLabel Ensembl Genes
@@ -1277,18 +1297,18 @@ otherDb hg17
 
 track hgMut
 shortLabel Human Mutation
-longLabel Compilation of human disease variants and other mutations
-group varRep
+longLabel Compilation of Human Disease Variants and Other Mutations
+group phenDis
 priority 144.7
-visibility hide
+visibility pack
 color 150,0,150
 type bed 4 +
 
 track landmark
 shortLabel Landmarks
-longLabel Compilation of landmarks from locus experts
-group regulation
-priority 97
+longLabel Compilation of Landmarks from Locus Experts
+group phenDis
+priority 144.8
 visibility hide
 color 30,130,210
 type bed 4 +
@@ -1999,6 +2019,74 @@ defaultViewLimits 0:10000
 spanList 1
 type wig 0 12231
 
+track seg 
+shortLabel Novel SEGs 
+longLabel Predictions of Novel Single-Exon Genes 
+compositeTrack on 
+visibility hide 
+type genePred 
+group genes 
+priority 75
+ 
+    track transmapSeg 
+    subTrack seg 
+    shortLabel TransMap 
+    longLabel TransMap Novel SEGs 
+    color 34,139,34 
+    priority 1 
+ 
+    track exoniphySeg 
+    subTrack seg 
+    shortLabel ExoniPhy 
+    longLabel ExoniPhy Novel SEGs 
+    color 173,17,162 
+    priority 2 
+ 
+    track nscanGeneSeg 
+    subTrack seg 
+    shortLabel N-SCAN 
+    longLabel N-SCAN Novel SEGs 
+    color 84,119,34 
+    priority 3 
+ 
+    track twinscanSeg 
+    subTrack seg 
+    shortLabel Twinscan 
+    longLabel Twinscan Novel SEGs 
+    color 0,100,100 
+    type genePred twinscanPep 
+    priority 4 
+ 
+    track ensGeneSeg 
+    subTrack seg 
+    shortLabel Ensembl 
+    longLabel Ensembl Novel SEGs 
+    color 150,0,0 
+    type genePred ensPep 
+    url http://www.ensembl.org/perl/transview?transcript=$$ 
+    priority 5 
+ 
+    track sgpGeneSeg 
+    subTrack seg 
+    shortLabel SGP  
+    longLabel SGP Novel SEGs 
+    color 0,90,100 
+    priority 6 
+ 
+    track multipleSeg 
+    subTrack seg 
+    shortLabel Multiple 
+    longLabel Novel SEGs Predicted by Multiple Methods (Loci) 
+    color 0,0,0 
+    priority 7 
+
+    track bestSeg  
+    subTrack seg  
+    shortLabel Best  
+    longLabel Novel SEGs Passing All Filters (Loci)  
+    color 0,0,0  
+    priority 8  
+  
 searchTable bacendsCow
 searchMethod exact
 searchType bed

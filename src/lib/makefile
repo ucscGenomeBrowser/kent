@@ -20,8 +20,8 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     memalloc.o memgfx.o mgCircle.o mgPolygon.o mime.o net.o nib.o nibTwo.o \
     nt4.o obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o phyloTree.o \
     pipeline.o portimpl.o pscmGfx.o psGfx.o psl.o pslGenoShow.o \
-    pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o qa.o quickHeap.o ra.o rbTree.o \
-    repMask.o rle.o rnautil.o rudp.o scoreWindow.o \
+    pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o qa.o quickHeap.o quotedP.o \
+    ra.o rbTree.o repMask.o rle.o rnautil.o rudp.o scoreWindow.o \
     seqOut.o seqStats.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     slog.o snof.o snofmake.o snofsig.o \

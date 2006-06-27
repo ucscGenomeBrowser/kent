@@ -4835,3 +4835,12 @@ BASE=/cluster/data/galGal2/bed/blastz.xenTro2.2006-04-20
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/galGal2/bed/blastz.xenTro2
 
 
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/galGal2/bed/genomicSuperDups
+    cd /cluster/data/galGal2/bed/genomicSuperDups
+    hgLoadBed galGal2 genomicSuperDups galGal2_genomicSuperDup.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+

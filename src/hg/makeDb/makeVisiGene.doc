@@ -320,7 +320,7 @@ vgProbeTrack EXT working mm8
 
 # updated jackson20060328 db on kkr3u00 (see hg/visiGene/jackson/makeJackson.doc)
 
-# Dropped old visiGeneOld db, asked Heather to clone visiGene db to visiGene db,
+# Dropped old visiGeneOld db, asked Heather to clone visiGene db to visiGeneOld db,
 # and then ran this query to remove the old previous JAX info:
 # MULTI-TABLE DELETE:
 delete submissionSource, submissionSet, submissionContributor, image,
@@ -499,11 +499,11 @@ vgProbeTrack EXT working mm8
 
 
 # RE-MAKE knownToVisiGene tables (see respective makedocs for these)
-#knownToVisiGene mm6
-#knownToVisiGene mm7
-#knownToVisiGene mm8
-#knownToVisiGene hg17 -fromProbePsl=vgAllProbes
-#knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+knownToVisiGene mm6
+knownToVisiGene mm7
+knownToVisiGene mm8
+knownToVisiGene hg17 -fromProbePsl=vgAllProbes
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
 # update text/index for visiGene
 cd hg/visiGene/vgGetText
@@ -843,4 +843,162 @@ mysql> select * from contributor where name in ('Mahoney mahoney');
 +------+-----------------+
 
 insert into submissionContributor select id, '3987' from submissionSet where submissionSource = 1;
+
+############################
+
+###  JACKSON UPDATE (re-done to fix expression data 2006-06-05 galt)  #############
+
+# The expression data was not correctly matching subpanels,
+# and the bodyPart was incorrectly displaying just "floor plate" 
+# instead of the full part-tree-lineage available in field printName.
+#
+# We found the solution in vgLoadJax was to NOT use the GXD_Expression
+# table at all - apparently it is not necessary as the data is in other tables.
+# This meant that we are using GXD_Strength values instead of the old 1/0 for level.
+# We made the vgLoadJax code treat these correctly, and tweaked hgVisiGene too.
+# And then we also decided to add the expression pattern while we were at it
+# since JAX db had it - so added it to vgLoadJax and hgVisiGene.
+
+# previously updated: jackson20060328 db on kkr3u00 
+# (see above, and see hg/visiGene/jackson/makeJackson.doc)
+
+# save imageFileFwd data in new form for easy restore:
+create table iffKeepThis as 
+select a.fileName "fromFN", b.fileName "toFN" from imageFileFwd iff, imageFile a, imageFile b 
+where iff.fromIf = a.id and iff.toIf = b.id;
+
+create index fromFN on iffKeepThis(fromFn(10));
+create index toFN on iffKeepThis(toFn(10));
+
+
+# Asked Heather to clone visiGene db to visiGeneBadExpr db,
+# and then ran this query to remove the old previous JAX info:
+# MULTI-TABLE DELETE:
+
+# CRITICAL! to make sure that analyze table has been run on all tables involved,
+# otherwise this will run forever.  Don't assume that the cardinality is defined.
+# Running analyze table is super quick.
+
+analyze table submissionSource;
+analyze table submissionSet;
+analyze table submissionContributor;
+analyze table image;
+analyze table imageFile;
+analyze table imageProbe;
+analyze table expressionLevel;
+
+delete from submissionSource where name = 'MGI';
+# 1 rows
+
+delete submissionSet from submissionSet ss left join submissionSource so on ss.submissionSource=so.id where so.id is null;
+# 1113 rows
+
+delete submissionContributor from submissionContributor sc left join submissionSet ss on sc.submissionSet=ss.id where ss.id is null;
+# 7926 rows
+
+delete image from image i left join submissionSet ss on i.submissionSet=ss.id where ss.id is null;
+# 33816 rows 
+
+delete imageFile from imageFile imf left join submissionSet ss on imf.submissionSet=ss.id where ss.id is null;
+# 13854 rows
+
+delete imageProbe from imageProbe ip left join image i on ip.image=i.id where i.id is null;
+# 35395 rows
+
+delete expressionLevel from expressionLevel el left join imageProbe ip on el.imageProbe=ip.id where ip.id is null;
+# 102293 rows
+
+delete from imageFileFwd;
+# 5724 rows 
+
+
+#recompile vgLoadJax on dev
+#run vgLoadJax to create .ra .tab .txt for each submissionSet
+ssh kkr3u00
+cd ~/kent/src/hg/visiGene/vgLoadJax
+#remove any old data dir
+rm -fr visiGene/
+# visiGene in line below is just an output dir for the .ra/.tab/.txt files
+vgLoadJax /san/sanvol1/visiGene/gbdb jackson20060328 visiGene
+#refCount=2971
+
+#ran loadAll to load the updated jax .ra .tab .txt into visiGene db
+ssh hgwdev
+cd ~/kent/src/hg/visiGene/vgLoadJax
+loadAll
+
+
+# deal with parallel Mahoney-in-Jax data
+
+select * from submissionSet where name='jax92242' \G
+*************************** 1. row ***************************
+              id: 2848
+            name: jax92242
+     publication: Mouse Brain Organization Revealed Through Direct Genome-Scale TF Expression Analysis
+
+select id,name from submissionSet where name like 'mahoney%';
++----+-----------------+
+| id | name            |
++----+-----------------+
+|  2 | mahoneySlices01 |
+|  1 | mahoneyWhole01  |
++----+-----------------+
+
+# save imageFileFwd data in new form for easy restore:
+insert into imageFileFwd 
+select a.id, b.id from iffKeepThis iff, imageFile a, imageFile b 
+where iff.fromFN = a.fileName and iff.toFN = b.fileName
+and a.submissionSet in (1,2) and b.submissionSet in (2848);
+
+drop table iffKeepThis;
+
+# Since we had lost the privateUser settings,
+# I just replicated it from visiGeneBadExpr backup with a simple query.
+update visiGene.submissionSet n, visiGeneBadExpr.submissionSet o set n.privateUser=-1
+where o.privateUser=-1 and o.name = n.name;
+# currently this is just jax submissionSets for which we have not received permissions to use,
+# and the mahoney-in-jax that is suppressed.
+
+
+# ran vgGetText to update cgi-bin-galt/visiGeneData/ using visiGene db
+cd ~/kent/src/hg/visiGene/vgGetText
+make alpha
+
+# recompiled hgVisiGene earlier to support new expression level scale, and pattern
+
+
+# RE-MAKE knownToVisiGene tables (see respective makedocs for these)
+knownToVisiGene mm6
+knownToVisiGene mm7
+knownToVisiGene mm8
+knownToVisiGene hg17 -fromProbePsl=vgAllProbes
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+
+# Patch contributors so we can search MGI submission sets 
+#  by specifying JAX or MGI in the search box.
+#
+
+select id from submissionSource where name = 'MGI';
++----+
+| id |
++----+
+| 7  |
++----+
+
+# note: we have to double the search word or else the search doesn't work
+# skip adding these two which are already there:
+#   insert into contributor set name = 'JAX JAX';
+#   insert into contributor set name = 'MGI MGI';
+mysql> select * from contributor where name in ('JAX JAX','MGI MGI');
++------+---------+
+| id   | name    |
++------+---------+
+| 3981 | JAX JAX |
+| 3982 | MGI MGI |
++------+---------+
+
+insert into submissionContributor select id, '3981' from submissionSet where submissionSource = 7;
+insert into submissionContributor select id, '3982' from submissionSet where submissionSource = 7;
+
+
 

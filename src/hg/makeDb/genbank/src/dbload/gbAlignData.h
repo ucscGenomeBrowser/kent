@@ -15,7 +15,8 @@ struct sqlDeleter;
 struct dbLoadOptions;
 
 void gbAlignDataInit(char *tmpDirPath, struct dbLoadOptions* options);
-/* initialize for outputing PSL files, called once per genbank type */
+/* initialize for outputing PSL files, called once per genbank type.
+ * tmpDirPath can be null to setup just for deletion.*/
 
 void gbAlignDataProcess(struct sqlConnection *conn, struct gbSelect* select,
                         struct gbStatusTbl* statusTbl);

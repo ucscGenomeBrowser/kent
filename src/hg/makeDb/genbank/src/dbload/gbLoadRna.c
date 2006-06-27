@@ -31,7 +31,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.31 2006/03/19 18:17:06 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.33 2006/06/03 07:34:25 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -52,6 +52,7 @@ static struct optionSpec optionSpecs[] = {
     {"maxShrinkage", OPTION_FLOAT},
     {"allowLargeDeletes", OPTION_BOOLEAN},
     {"gbdbGenBank", OPTION_STRING},
+    {"forceIgnoreDelete", OPTION_BOOLEAN},
     {"reloadList", OPTION_STRING},
     {"reload", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
@@ -66,6 +67,8 @@ static char* gGbdbGenBank = NULL;     /* root file path to put in database */
 static float gMaxShrinkage = 0.1;     /* restriction on number deleted */
 static char* gWorkDir = NULL;         /* tmp directory */
 static boolean gReload = FALSE;       /* reload the select categories */
+static boolean gForceIgnoreDelete = FALSE; /* force entries in ignore.idx to
+                                            * be dropped even if not in gbStatus */
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
 /* other globals */
@@ -556,7 +559,10 @@ if (gOptions.flags & DBLOAD_INITIAL)
 
 /* delete anything on the reload list up front */
 if (((gOptions.flags & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
+    {
+    gbAlignDataInit(NULL, &gOptions);
     gbReloadDelete(reloadList, gWorkDir);
+    }
 
 selectList = dbLoadPartitionsGet(&gOptions, index);
 if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
@@ -564,7 +570,8 @@ if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
 
 /* clean up any ignored entries before setting anything up */
 gbVerbEnter(3, "delete ignored");
-gbIgnoredDelete(selectList, gWorkDir);
+gbAlignDataInit(NULL, &gOptions);
+gbIgnoredDelete(selectList, gForceIgnoreDelete, gWorkDir);
 gbVerbLeave(3, "delete ignored");
 
 /* loaded table to track updates that have been processed */
@@ -789,6 +796,9 @@ errAbort(
   "     -dryRun - go throught the selection process,  but don't update.\n"
   "      This will still remove ignored accessions.\n"
   "\n"
+  "     -forceIgnoreDelete - force entries in ignore.idx to be dropped even\n"
+  "      not in gbStatus.  Slow, but a nice way to clean up confusion.\n"
+  "\n"
   "     -reloadList=file - File containing sequence ids, one per line, to\n"
   "      remove from the databases before updating.  This causes these\n" 
   "      sequences to be reloaded.  This optional also causes all partitions\n"
@@ -848,6 +858,7 @@ else
     char *reloadList = optionVal("reloadList", NULL);
     gDatabase = argv[1];
     gOptions = dbLoadOptionsParse(gDatabase);
+    gForceIgnoreDelete = optionExists("forceIgnoreDelete");
 
     gMaxShrinkage = optionFloat("maxShrinkage", 0.1);
     gGbdbGenBank = optionVal("gbdbGenBank", "/gbdb/genbank");
