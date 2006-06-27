@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.42 2006/05/31 23:31:26 heather Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.43 2006/06/27 18:15:20 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -27,6 +27,7 @@ int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 int maxChromNameLength = 0;		/* specify to avoid chromInfo */
 char *tmpDir = (char *)NULL;	/*	location to create a temporary file */
+boolean nameIx = TRUE;	/*	FALSE == do not create the name index */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -44,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"strict", OPTION_BOOLEAN},
     {"maxChromNameLength", OPTION_INT},
     {"tmpDir", OPTION_STRING},
+    {"noNameIx", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -72,6 +74,7 @@ errAbort(
   "               - reference to chromInfo table\n"
   "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
   "                   - which will be removed after loading\n"
+  "   -noNameIx  - no index for the name column (default creates index)\n"
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
   "   -verbose=N - verbose level for extra information to STDERR"
@@ -233,7 +236,7 @@ if ( ! noLoad )
     conn = sqlConnect(database);
 
 if ((char *)NULL != tmpDir)
-    tab = cloneString(rTempName(tmpDir,"loadBed",".bed"));
+    tab = cloneString(rTempName(tmpDir,"loadBed",".tab"));
 else
     tab = cloneString("bed.tab");
 
@@ -300,7 +303,7 @@ else if (!oldTable)
     if (bedSize >= 15)
        maybeBedGraph(15, dy, "  expScores longblob not null,\n");
     dyStringAppend(dy, "#Indices\n");
-    if ((bedSize >= 4) && (0 == bedGraph))
+    if (nameIx && (bedSize >= 4) && (0 == bedGraph))
        dyStringAppend(dy, "  INDEX(name(16)),\n");
     if (noBin)
 	{
@@ -399,6 +402,7 @@ if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
 strict = optionExists("strict");
 tmpDir = optionVal("tmpDir", tmpDir);
+nameIx = ! optionExists("noNameIx");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
