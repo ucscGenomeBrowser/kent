@@ -25,8 +25,8 @@ echo "Make libs."
 cd kent
 cd src
 make libs >& make.log
-sed -i -e "s/-DJK_WARN//" make.log
-sed -i -e "s/-Werror//" make.log
+sed -i -e "s/-DJK_WARN//g" make.log
+sed -i -e "s/-Werror//g" make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.log`
@@ -40,8 +40,8 @@ endif
 echo "Make compile."
 cd hg
 make compile >& make.compile.log
-sed -i -e "s/-DJK_WARN//" make.compile.log
-sed -i -e "s/-Werror//" make.compile.log
+sed -i -e "s/-DJK_WARN//g" make.compile.log
+sed -i -e "s/-Werror//g" make.compile.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.compile.log`
