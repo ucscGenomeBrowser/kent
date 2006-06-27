@@ -3828,6 +3828,8 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
 # Build tables needed by pbGlobal in proteins060115
 
    cd /cluster/data/superfamily/060619  
+   hgsql proteins060115 -e 'delete from sfAssign'
+   hgsql proteins060115 -e 'delete from sfDes'
    hgsql proteins060115 -e 'load data local infile "ass_18-Jun-2006.tab" into table sfAssign'
    hgsql proteins060115 -e 'load data local infile "sfDes.tab" into table sfDes'
 
