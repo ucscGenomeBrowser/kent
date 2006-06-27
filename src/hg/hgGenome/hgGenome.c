@@ -24,7 +24,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.15 2006/06/27 17:29:44 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.16 2006/06/27 23:46:27 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -142,6 +142,27 @@ if (color == NULL) color = defaultColors[0][0];
 return color;
 }
 
+Color colorFromAscii(struct vGfx *vg, char *asciiColor)
+/* Get color index for a named color. */
+{
+if (sameWord("red", asciiColor))
+    return MG_RED;
+else if (sameWord("blue", asciiColor))
+    return MG_BLUE;
+else if (sameWord("yellow", asciiColor))
+    return vgFindColorIx(vg, 190, 190, 0);
+else if (sameWord("purple", asciiColor))
+    return vgFindColorIx(vg, 150, 0, 200);
+else if (sameWord("orange", asciiColor))
+    return vgFindColorIx(vg, 200, 100, 0);
+else if (sameWord("green", asciiColor))
+    return vgFindColorIx(vg, 0, 180, 0);
+else if (sameWord("gray", asciiColor))
+    return MG_GRAY;
+else
+    return MG_BLACK;
+}
+
 /* Page drawing stuff. */
 
 void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
@@ -171,7 +192,8 @@ while (chromGraphBinNextChrom(cgb))
     }
 }
 
-void genomeGif(struct sqlConnection *conn, struct genoLay *gl)
+void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
+	int graphRows, int graphCols, int oneRowHeight)
 /* Create genome GIF file and HTML that includes it. */
 {
 struct vGfx *vg;
@@ -179,6 +201,9 @@ struct tempName gifTn;
 Color shadesOfGray[10];
 int maxShade = ArraySize(shadesOfGray)-1;
 int spacing = 1;
+int yOffset = 2*spacing;
+int innerHeight = oneRowHeight - 3*spacing;
+int i,j;
 
 /* Create gif file and make reference to it in html. */
 makeTempName(&gifTn, "hgtIdeo", ".gif");
@@ -195,14 +220,21 @@ genoLayDrawBandedChroms(gl, vg, database, conn,
 	shadesOfGray, maxShade, MG_BLACK);
 
 /* Draw chromosome graphs. */
-if (sqlTableExists(conn, "fakeChromGraph2"))
-    drawChromGraph(vg, conn, gl, "fakeChromGraph2", 
-	    gl->betweenChromOffsetY + 2*spacing, 
-	    gl->betweenChromHeight - 3*spacing, MG_RED);
-if (sqlTableExists(conn, "fakeChromGraph"))
-    drawChromGraph(vg, conn, gl, "fakeChromGraph", 
-	    gl->betweenChromOffsetY + 2*spacing, 
-	    gl->betweenChromHeight - 3*spacing, MG_BLUE);
+for (i=0; i<graphRows; ++i)
+    {
+    for (j=0; j<graphCols; ++j)
+	{
+	char *graph = graphSourceAt(i,j);
+	if (graph[0] != 0 && sqlTableExists(conn, graph))
+	    {
+	    Color color = colorFromAscii(vg, graphColorAt(i,j));
+	    drawChromGraph(vg, conn, gl, graph, 
+		    gl->betweenChromOffsetY + yOffset, 
+		    innerHeight,  color);
+	    }
+	}
+    yOffset += oneRowHeight;
+    }
 vgClose(&vg);
 }
 
@@ -219,6 +251,7 @@ struct slName *el;
 struct slName *userList = userListAll();
 struct slName *dbList=chromGraphListAll(conn);
 int totalCount = 1 + slCount(userList) + slCount(dbList);
+char *curVal = cartUsualString(cart, varName, "");
 char **menu, **values;
 int i = 0;
 
@@ -239,7 +272,7 @@ for (el = dbList; el != NULL; el = el->next)
     menu[i] = el->name;
     values[i] = el->name;
     }
-cgiMakeDropListFull(varName, menu, values, totalCount, values[0], NULL);
+cgiMakeDropListFull(varName, menu, values, totalCount, curVal, NULL);
 freez(&menu);
 freez(&values);
 }
@@ -261,6 +294,7 @@ struct genoLay *gl;
 int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
+int oneRowHeight;
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
@@ -277,7 +311,7 @@ for (i=0; i<graphRows; ++i)
 	    hPrintf("graph ");
 	hPrintf("</TD>");
 	}
-    for (j=0; j<graphCols; ++j)
+    for (j=graphCols-1; j>=0; --j)
 	{
 	hPrintf("<TD>");
 	graphDropdown(conn, graphVarName(i,j));
@@ -290,13 +324,13 @@ for (i=0; i<graphRows; ++i)
 	{
 	hPrintf("<TD>");
 	cgiMakeButton("submit", "Go!");
-	hPrintf(" ");
-	cgiMakeButton(hggUpload, "Upload");
 	hPrintf("</TD>");
 	}
     hPrintf("</TR>");
     }
 hPrintf("</TABLE>");
+cgiMakeButton(hggUpload, "Upload");
+hPrintf(" ");
 cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");
 cgiMakeButton(hggCorrelate, "Correlate");
@@ -313,11 +347,12 @@ trackLayoutInit(&tl, cart);
 
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
-gl = genoLayNew(chromList, tl.font, tl.picWidth, graphHeight()+3,
+oneRowHeight = graphHeight()+3;
+gl = genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
 	3*tl.nWidth, 4*tl.nWidth);
 
 /* Draw picture. */
-genomeGif(conn, gl);
+genomeGif(conn, gl, graphRows, graphCols, oneRowHeight);
 hPrintf("</FORM>\n");
 }
 
@@ -337,8 +372,7 @@ if (cartVarExists(cart, hggConfigure))
     }
 else if (cartVarExists(cart, hggUpload))
     {
-    cartWebStart(cart, "Theoretically uploading, please go back");
-    cartWebEnd();
+    uploadPage();
     }
 else if (cartVarExists(cart, hggCorrelate))
     {

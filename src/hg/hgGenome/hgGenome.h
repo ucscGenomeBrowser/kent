@@ -17,6 +17,10 @@
 #define hggThreshold hggPrefix "threshold"
 #define hggGraphsPerLine hggPrefix "graphsPerLine"
 #define hggLinesOfGraphs hggPrefix "linesOfGraphs"
+#define hggDataSetName hggPrefix "dataSetName"
+#define hggDataSetDescription hggPrefix "dataSetDescription"
+#define hggLocType hggPrefix "locType"
+#define hggUploadFile hggPrefix "uploadFile"
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"
@@ -24,6 +28,7 @@
 #define hggSort hggDo "Sort"
 #define hggCorrelate hggDo "Correlate"
 #define hggUpload hggDo "Upload"
+#define hggSubmitUpload hggDo "SubmitUpload"
 
 /*** External vars declared in hgGenome.h ***/
 extern struct cart *cart;
@@ -70,5 +75,8 @@ char *graphColorAt(int row, int col);
 
 void configurePage();
 /* Put up configuration page. */
+
+void uploadPage();
+/* Put up initial upload page. */
 
 #endif /* HGGENOME_H */
