@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.18 2006/06/23 03:03:52 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.19 2006/06/28 03:04:54 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +48,22 @@ struct hash *ctHash;
 struct slName *browserLines = NULL;
 char *ctFileName;
 
+void initFieldFromFileButton(char *form, char *field, char *file, char *button)
+/* Make button to fill field with text from a file*/
+{
+char *buf;
+char path[256];
+struct dyString *ds = newDyString(0);
+
+safef(path, sizeof path, "%s/%s", hDocumentRoot(), file);
+readInGulp(path, &buf, NULL);
+/* quote newlines and quotes */
+dyStringPrintf(ds, "document.%s.%s.value = '%s'; document.%s.submit();\"", 
+                        form, field, 
+                        makeEscapedString(makeEscapedString(buf, '\n'), '\''), form);
+cgiMakeOnClickButton(ds->string, button);
+}
+
 void addCustomTextEntry()
 /* display UI for adding custom tracks by URL or pasting data */
 {
@@ -77,8 +93,7 @@ cgiTableRowEnd();
 
 /* third row - label for description text entry */
 cgiSimpleTableRowStart();
-cgiTableField("Optional <A TARGET=_BLANK HREF=\"/goldenPath/help/ct_description.txt\">description</A>");
-cgiTableFieldEnd();
+cgiTableField("Optional description");
 cgiTableRowEnd();
 
 /* fourth row - text entry for description, and clear button */
@@ -87,10 +102,16 @@ puts("<TD COLSPAN=2>");
 cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 6, 65);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
 cgiMakeClearButton("mainForm", hgCtDocText);
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+initFieldFromFileButton("mainForm", hgCtDocText, "/goldenPath/help/ct_description.txt", "&nbsp; Fill &nbsp; &nbsp;");
+cgiTableRowEnd();
+cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
-
 
 cgiTableEnd();
 }
@@ -158,7 +179,7 @@ void helpCustom()
 /* display documentation */
 {
 webNewSection("Loading Custom Tracks");
-htmlIncludeWebFile("/goldenPath/help/loadingCustomTracks.html");
+webIncludeFile("/goldenPath/help/loadingCustomTracks.html");
 webEndSection();
 }
 
@@ -275,12 +296,10 @@ while ((p = stringIn(DOC_TRACK_PREFIX, html)) != NULL)
     trackName = p + strlen(DOC_NAME_TAG);
     for (p = trackName; p != q && !isspace(*p); p++);
     *p = 0;
-    //uglyf("<BR>trackName=%s\n", trackName);
     html = q + strlen(DOC_TRACK_SUFFIX);
     }
 if (trackName)
     {
-    //uglyf("<BR>adding to hash: %s (%d)", trackName, (int)strlen(html));
     hashAdd(docHash, trackName, html);
     }
 return docHash;
@@ -338,6 +357,7 @@ if (cartVarExists(cart, hgCtDoFileEntry) && cartBoolean(cart, hgCtDoFileEntry))
 else
     addCustomTextEntry();
 
+
 /* process submit buttons */
 if (cartVarExists(cart,hgCtDataFile))
     {
@@ -390,10 +410,6 @@ if (ctList != NULL)
             {
             if ((html = hashFindVal(docHash, ct->tdb->shortLabel)) != NULL)
                 {
-                /*
-                uglyf("<BR>found html for %s (%d)", ct->tdb->shortLabel,
-                                        (int)strlen(html));
-                                        */
                 ct->tdb->html = cloneString(html);
                 }
             }
