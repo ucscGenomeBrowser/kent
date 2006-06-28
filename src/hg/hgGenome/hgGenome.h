@@ -37,6 +37,20 @@ extern struct hash *oldCart;
 extern char *database;
 extern char *genome;
 
+/*** Info on a single graph. ***/
+
+struct genoGraph
+/* A genomic graph */
+    {
+    struct genoGraph *next;	/* Next in list. */
+    char *name;			/* Graph name. */
+    char *shortLabel;		/* Short label. */
+    char *longLabel;		/* Long label. */
+    struct hash *settings;	/* Settings information. */
+    char *binFileName;		/* Binary file associated with graph. */
+    };
+
+
 /*** Routines from hgGenome.h ***/
 
 void hPrintf(char *format, ...);
@@ -72,6 +86,8 @@ char *graphSourceAt(int row, int col);
 char *graphColorAt(int row, int col);
 /* Return graph color at given row/column, NULL if nonw. */
 
+
+
 /*** Functions imported from other modules. ***/
 
 void configurePage();
@@ -82,5 +98,6 @@ void uploadPage();
 
 void submitUpload(struct sqlConnection *conn);
 /* Called when they've submitted from uploads page */
+
 
 #endif /* HGGENOME_H */

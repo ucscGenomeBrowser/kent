@@ -11,6 +11,7 @@
 #include "cart.h"
 #include "hui.h"
 #include "dbDb.h"
+#include "ra.h"
 #include "hdb.h"
 #include "web.h"
 #include "portable.h"
@@ -24,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.18 2006/06/28 20:56:28 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.19 2006/06/28 22:29:28 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -32,6 +33,8 @@ struct hash *oldCart;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
+struct genoGraph *ggList; /* List of active genome graphs */
+struct hash *ggHash;	  /* Hash of active genome graphs */
 
 
 void usage()
@@ -43,6 +46,102 @@ errAbort(
   "   db=<genome database>\n"
   "   hggt_table=on where table is name of chromGraph table\n"
   );
+}
+
+/* ---- Get list of graphs. ---- */
+
+struct genoGraph *getUserGraphs()
+/* Get list of all user graphs */
+{
+struct genoGraph *list = NULL, *gg;
+char *fileName = cartOptionalString(cart, hggUploadRa);
+if (fileName != NULL && fileExists(fileName))
+    {
+    struct hash *ra;
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    while ((ra = raNextRecord(lf)) != NULL)
+        {
+	char *name = hashFindVal(ra, "name");
+	char *binaryFile = hashFindVal(ra, "binaryFile");
+	if (name != NULL && binaryFile != NULL && fileExists(binaryFile))
+	    {
+	    char nameBuf[256];
+	    safef(nameBuf, sizeof(nameBuf), "user: %s", name);
+	    AllocVar(gg);
+	    gg->name = cloneString(nameBuf);
+	    gg->shortLabel = name;
+	    gg->longLabel = hashFindVal(ra, "description");
+	    if (gg->longLabel == NULL) gg->longLabel = name;
+	    gg->binFileName = binaryFile;
+	    slAddHead(&list, gg);
+	    }
+	}
+    }
+slReverse(&list);
+return list;
+}
+
+struct genoGraph *getDbGraphs(struct sqlConnection *conn)
+/* Get graphs defined in database. */
+{
+struct genoGraph *list = NULL, *gg;
+char *trackDbTable = hTrackDbName();
+struct sqlResult *sr;
+char **row;
+
+/* Get initial information from metaChromGraph table */
+if (sqlTableExists(conn, "metaChromGraph"))
+    {
+    sr = sqlGetResult(conn, "select name,binaryFile from metaChromGraph");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	char *table = row[0], *binaryFile = row[1];
+
+	AllocVar(gg);
+	gg->name = gg->shortLabel = gg->longLabel = cloneString(table);
+	gg->binFileName = cloneString(binaryFile);
+	slAddHead(&list, gg);
+	}
+    sqlFreeResult(&sr);
+    }
+
+/* Where possible fill in additional info from trackDb.  Also
+ * add db: prefix to name. */
+for (gg = list; gg != NULL; gg = gg->next)
+    {
+    char query[512];
+    char nameBuf[256];
+    safef(query, sizeof(query), 
+    	"select shortLabel,longLabel,settings from %s where tableName='%s'",
+	trackDbTable, gg->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	gg->shortLabel = cloneString(row[0]);
+	gg->longLabel = cloneString(row[1]);
+	gg->settings = raFromString(row[2]);
+	}
+    sqlFreeResult(&sr);
+
+    /* Add db: prefix to separate user and db name space. */
+    safef(nameBuf, sizeof(nameBuf), "db: %s", gg->name);
+    gg->name = cloneString(nameBuf);
+    }
+
+slReverse(&list);
+return list;
+}
+
+void getGenoGraphs(struct sqlConnection *conn)
+/* Set up ggList and ggHash with all available genome graphs */
+{
+struct genoGraph *userList = getUserGraphs();
+struct genoGraph *dbList = getDbGraphs(conn);
+struct genoGraph *gg;
+ggList = slCat(userList, dbList);
+ggHash = hashNew(0);
+for (gg = ggList; gg != NULL; gg = gg->next)
+    hashAdd(ggHash, gg->name, gg);
 }
 
 /* ---- Some html helper routines. ---- */
@@ -170,23 +269,26 @@ void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn,
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
-char *fileName = chromGraphBinaryFileName(chromGraph, conn);
-struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
-double gMin, gMax, gScale;
-double pixelsPerBase = 1.0/gl->basesPerPixel;
-
-chromGraphDataRange(chromGraph, conn, &gMin, &gMax);
-gScale = height/(gMax-gMin+1);
-while (chromGraphBinNextChrom(cgb))
+struct genoGraph *gg = hashFindVal(ggHash, chromGraph);
+if (gg != NULL)
     {
-    struct genoLayChrom *chrom = hashFindVal(gl->chromHash, cgb->chrom);
-    while (chromGraphBinNextVal(cgb))
-        {
-	if (chrom)
+    char *fileName = gg->binFileName;
+    struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
+    double pixelsPerBase = 1.0/gl->basesPerPixel;
+    double gMin = cgb->minVal, gMax = cgb->maxVal, gScale;
+
+    gScale = height/(gMax-gMin+1);
+    while (chromGraphBinNextChrom(cgb))
+	{
+	struct genoLayChrom *chrom = hashFindVal(gl->chromHash, cgb->chrom);
+	while (chromGraphBinNextVal(cgb))
 	    {
-	    int y = (height - ((cgb->val - gMin)*gScale));
-	    int x = (pixelsPerBase*cgb->chromStart);
-	    vgDot(vg, x+chrom->x, y+chrom->y+yOff, color);
+	    if (chrom)
+		{
+		int y = (height - ((cgb->val - gMin)*gScale));
+		int x = (pixelsPerBase*cgb->chromStart);
+		vgDot(vg, x+chrom->x, y+chrom->y+yOff, color);
+		}
 	    }
 	}
     }
@@ -225,7 +327,7 @@ for (i=0; i<graphRows; ++i)
     for (j=0; j<graphCols; ++j)
 	{
 	char *graph = graphSourceAt(i,j);
-	if (graph[0] != 0 && sqlTableExists(conn, graph))
+	if (graph[0] != 0)
 	    {
 	    Color color = colorFromAscii(vg, graphColorAt(i,j));
 	    drawChromGraph(vg, conn, gl, graph, 
@@ -247,10 +349,8 @@ return NULL;
 void graphDropdown(struct sqlConnection *conn, char *varName)
 /* Make a drop-down with available chrom graphs */
 {
-struct slName *el;
-struct slName *userList = userListAll();
-struct slName *dbList=chromGraphListAll(conn);
-int totalCount = 1 + slCount(userList) + slCount(dbList);
+struct genoGraph *gg;
+int totalCount = 1 + slCount(ggList);
 char *curVal = cartUsualString(cart, varName, "");
 char **menu, **values;
 int i = 0;
@@ -258,21 +358,15 @@ int i = 0;
 AllocArray(menu, totalCount);
 AllocArray(values, totalCount);
 menu[0] = "";
-values[0] = "none";
+values[0] = "";
 
-for (el = userList; el != NULL; el = el->next)
+for (gg = ggList; gg != NULL; gg = gg->next)
     {
     ++i;
-    menu[i] = el->name;
-    values[i] = el->name;
+    menu[i] = gg->shortLabel;
+    values[i] = gg->name;
     }
-for (el = dbList; el != NULL; el = el->next)
-    {
-    ++i;
-    menu[i] = el->name;
-    values[i] = el->name;
-    }
-cgiMakeDropListFull(varName, menu, values, totalCount, curVal, NULL);
+cgiMakeDropListWithVals(varName, menu, values, totalCount, curVal);
 freez(&menu);
 freez(&values);
 }
@@ -285,9 +379,8 @@ char *curVal = graphColorAt(row, col);
 cgiMakeDropList(varName, allColors, ArraySize(allColors), curVal);
 }
 
-void webMain(struct sqlConnection *conn)
-/* Set up fancy web page with hotlinks bar and
- * sections. */
+void mainPage(struct sqlConnection *conn)
+/* Do main page of application:  hotlinks bar, controls, graphic. */
 {
 struct genoLayChrom *chromList;
 struct genoLay *gl;
@@ -295,6 +388,9 @@ int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
 int oneRowHeight;
+
+cartWebStart(cart, "%s Genome Graphs", genome);
+getGenoGraphs(conn);
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
@@ -354,6 +450,7 @@ gl = genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
 /* Draw picture. */
 genomeGif(conn, gl, graphRows, graphCols, oneRowHeight);
 hPrintf("</FORM>\n");
+cartWebEnd();
 }
 
 void cartMain(struct cart *theCart)
@@ -396,9 +493,7 @@ else if (cartVarExists(cart, hggSort))
 else
     {
     /* Default case - start fancy web page. */
-    cartWebStart(cart, "%s Genome Association View", genome);
-    webMain(conn);
-    cartWebEnd();
+    mainPage(conn);
     }
 cartRemovePrefix(cart, hggDo);
 }
