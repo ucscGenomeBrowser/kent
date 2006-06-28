@@ -59,7 +59,7 @@
 
 #include "phyloForm.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.4 2006/06/27 00:47:25 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.5 2006/06/28 18:51:10 galt Exp $";
 
 int width=240,height=512;
 boolean branchLengths = FALSE;  /* branch lengths */
@@ -67,6 +67,7 @@ boolean lengthLegend = FALSE;   /* length legend */
 boolean branchLabels = FALSE;   /* labelled branch lengths */
 boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
 boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
+int branchDecimals = 2;         /* show branch label length to two decimals by default */
 char *escapePattern = NULL;      /* use to escape dash '-' char in input */
 
 void usage(char *msg)
@@ -79,18 +80,19 @@ errAbort(
     "Command-line Usage:\n"
     "   phyloGif [options] > phylo.gif \n"
     "Options/CGI-vars:\n"
-    "  -phyloGif_width - width of output GIF, default %d\n"
-    "  -phyloGif_height - height of output GIF, default %d\n"
-    "  -phyloGif_tree - data in format (nodeA:0.5,nodeB:0.6):1.2;\n"
+    "  -phyloGif_width=N - width of output GIF, default %d\n"
+    "  -phyloGif_height=N - height of output GIF, default %d\n"
+    "  -phyloGif_tree= - data in format (nodeA:0.5,nodeB:0.6):1.2;\n"
     "     If running at the command-line, can put filename here or stdin\n"
     "     (this is actually required)\n"
     "  -phyloGif_branchLengths - use branch lengths for layout\n"
     "  -phyloGif_lengthLegend - show length legend at bottom\n"
     "  -phyloGif_branchLabels - show length of branch as label\n"
     "     (used with -phyloGif_branchLengths)\n"
+    "  -phyloGif_branchDecimals=N - show length of branch to N decimals, default %d\n"
     "  -phyloGif_htmlPage - wrap the output in an html page (cgi only)\n"
     "  -phyloGif_underscores - preserve underscores in input as spaces in output\n"
-    , msg, width, height);
+    , msg, width, height, branchDecimals);
 }
 
 struct phyloLayout
@@ -256,8 +258,10 @@ if (branchLabels)
     {
     if (phyloTree->ident->length > 0.0 && this->hPos > 0.0)
 	{
+	char patt[16];
 	char label[256];
-	safef(label,sizeof(label),"%6.4f",phyloTree->ident->length);
+	safef(patt,sizeof(patt),"%%%d.%df",branchDecimals+2,branchDecimals);
+	safef(label,sizeof(label),patt,phyloTree->ident->length);  /* was %6.4f */
     	mgTextCentered(mg, MARGIN+(this->hPos-phyloTree->ident->length)*minMaxFactor, v+(fHeight/2)*(isRightEdge?1:-1), 
 	    phyloTree->ident->length*minMaxFactor, fHeight, MG_BLACK, font, label);
 	}
@@ -316,6 +320,7 @@ phyloData = cloneString(cgiOptionalString("phyloGif_tree"));
 branchLengths = cgiVarExists("phyloGif_branchLengths");
 lengthLegend = cgiVarExists("phyloGif_lengthLegend");
 branchLabels = cgiVarExists("phyloGif_branchLabels");
+branchDecimals = cgiOptionalInt("phyloGif_branchDecimals", branchDecimals);
 preserveUnderscores = cgiVarExists("phyloGif_underscores");
 if (!phyloData)
     {
@@ -398,6 +403,7 @@ if (htmlPageWrapper)
 	printf("&phyloGif_lengthLegend=1");
     if (branchLabels)
 	printf("&phyloGif_branchLabels=1");
+    printf("&phyloGif_branchDecimals=%d",branchDecimals);
     if (preserveUnderscores)
 	printf("&phyloGif_underscores=1");
     printf("\"></body></html>\n");
