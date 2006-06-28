@@ -9,7 +9,7 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.3 2006/06/13 16:15:50 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.4 2006/06/28 19:35:01 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -109,7 +109,7 @@ if (doLoad)
     makeDir(path);
 
     /* Make chrom graph file */
-    safef(path, sizeof(path), "/cluster/data/%s/bed/%s/%s.chromGraph", 
+    safef(path, sizeof(path), "/cluster/data/%s/bed/%s/%s.cgb", 
     	db, track, track);
     chromGraphToBin(list, path);
 
@@ -118,10 +118,10 @@ if (doLoad)
     makeDir(path);
     safef(path, sizeof(path), "/gbdb/%s/chromGraph", db);
     makeDir(path);
-    safef(gbdbPath, sizeof(gbdbPath), "%s/%s.chromGraph", path, track);
+    safef(gbdbPath, sizeof(gbdbPath), "%s/%s.cgb", path, track);
     remove(gbdbPath);
     dyStringClear(dy);
-    dyStringPrintf(dy, "ln -s /cluster/data/%s/bed/%s/%s.chromGraph ",
+    dyStringPrintf(dy, "ln -s /cluster/data/%s/bed/%s/%s.cgb ",
     	db, track, track);
     dyStringPrintf(dy, "%s", gbdbPath);
     if (system(dy->string) != 0)
