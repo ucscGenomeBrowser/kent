@@ -24,7 +24,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.16 2006/06/27 23:46:27 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.17 2006/06/28 05:44:02 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -373,6 +373,10 @@ if (cartVarExists(cart, hggConfigure))
 else if (cartVarExists(cart, hggUpload))
     {
     uploadPage();
+    }
+else if (cartVarExists(cart, hggSubmitUpload))
+    {
+    submitUpload(conn);
     }
 else if (cartVarExists(cart, hggCorrelate))
     {

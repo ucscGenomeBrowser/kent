@@ -21,6 +21,7 @@
 #define hggDataSetDescription hggPrefix "dataSetDescription"
 #define hggLocType hggPrefix "locType"
 #define hggUploadFile hggPrefix "uploadFile"
+#define hggUploadRa hggPrefix "uploadRa"
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"
@@ -78,5 +79,8 @@ void configurePage();
 
 void uploadPage();
 /* Put up initial upload page. */
+
+void submitUpload(struct sqlConnection *conn);
+/* Called when they've submitted from uploads page */
 
 #endif /* HGGENOME_H */
