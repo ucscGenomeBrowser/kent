@@ -70,6 +70,9 @@ void chromGraphOutput(struct chromGraph *el, FILE *f, char sep, char lastSep);
 int chromGraphCmp(const void *va, const void *vb);
 /* Compare to sort based on query chromStart. */
 
+void chromGraphGetMinMax(struct chromGraph *list, double *pMin, double *pMax);
+/* Figure out min/max values in list. */
+
 struct chromGraphSettings
 /* Settings */
     {
@@ -144,6 +147,7 @@ struct chromGraphBin
     boolean isSwapped;	/* Need to swap? */
     struct cgbChrom *chromList;	/* List of chromosomes/positions */
     struct hash *chromHash;	/* Hash of all chromosomes/positions */
+    double minVal, maxVal;	/* Min/max values in file */
     	/* Variables used when scanning through file. */
     char chrom[256];	/* Current chromosome. */
     bits32 chromStart;	/* Current position. */

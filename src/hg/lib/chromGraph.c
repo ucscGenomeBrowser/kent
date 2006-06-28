@@ -10,7 +10,7 @@
 #include "sig.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.7 2006/06/28 19:25:32 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.8 2006/06/28 19:57:54 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -136,6 +136,27 @@ dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
+}
+
+void chromGraphGetMinMax(struct chromGraph *list, double *pMin, double *pMax)
+/* Figure out min/max values in list. */
+{
+double minVal = 0, maxVal = 0;
+if (list != NULL)
+    {
+    struct chromGraph *el;
+    minVal = maxVal = list->val;
+    for (el = list->next; el != NULL; el = el->next)
+        {
+	double val = el->val;
+	if (val < minVal)
+	    minVal = val;
+	if (val > maxVal)
+	    maxVal = val;
+	}
+    }
+*pMin = minVal;
+*pMax = maxVal;
 }
 
 void chromGraphVarName(char *track, char *var, 
@@ -345,10 +366,23 @@ bits32 endMarker = (bits32)(-1);
 struct cInfo *ci, *ciList = cInfoMake(list, fileName);
 bits32 chromCount = slCount(ciList);
 fpos_t indexPos;
+double minVal, maxVal;
+bits32 reserved1=0, reserved2=0, reserved3=0, reserved4=0;
 
 /* Start out with file signature and chromosome count */
 writeOne(f, sig);
 writeOne(f, chromCount);
+
+/* Figure and write min/max values. */
+chromGraphGetMinMax(list, &minVal, &maxVal);
+writeOne(f, minVal);
+writeOne(f, maxVal);
+
+/* Write out reserved (currently zero) words */
+writeOne(f, reserved1);
+writeOne(f, reserved2);
+writeOne(f, reserved3);
+writeOne(f, reserved4);
 
 /* Write preliminary version of index, with offsets not filled in */
 fgetpos(f, &indexPos);
@@ -393,6 +427,7 @@ bits32 sig;
 bits32 chromCount, i;
 boolean isSwapped = FALSE;
 struct cgbChrom *chrom;
+bits32 reserved1, reserved2, reserved3, reserved4;
 
 /* Read in signature and use it to make sure it's the right type
  * of file, and to tell if we need to swap bytes on integers. */
@@ -416,6 +451,16 @@ cgb->chromHash = hashNew(0);
 mustReadOne(f, chromCount);
 if (isSwapped)
     chromCount = byteSwap32(chromCount);
+
+/* Read in min/max */
+mustReadOne(f, cgb->minVal);
+mustReadOne(f, cgb->maxVal);
+
+/* Read in reserved (currently zero) words */
+mustReadOne(f, reserved1);
+mustReadOne(f, reserved2);
+mustReadOne(f, reserved3);
+mustReadOne(f, reserved4);
 
 /* Read index into list/hash */
 for (i=0; i<chromCount; ++i)
