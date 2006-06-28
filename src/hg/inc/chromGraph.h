@@ -121,6 +121,20 @@ void chromGraphToBin(struct chromGraph *list, char *fileName);
  *     chromGraphBinFree(&cgb);
  */
 	  
+struct cgbChrom
+/* Info on a single chromosome in a chromGraph file */
+    {
+    struct cgbChrom *next;	/* Next in list. */
+    char *name;			/* Chromosome name. */
+    bits64 offset;		/* Offset to start of chrom in file */
+    };
+
+void cgbChromFree(struct cgbChrom **pChrom);
+/* Free up one cgbChrom */
+
+void cgbChromFreeList(struct cgbChrom **pList);
+/* Free up list of cgbChrom */
+
 struct chromGraphBin
 /* A handle to binary representation to chrom graph */
     {
@@ -128,6 +142,9 @@ struct chromGraphBin
     char *fileName;	/* Name of file. */
     FILE *f;		/* File handle. */
     boolean isSwapped;	/* Need to swap? */
+    struct cgbChrom *chromList;	/* List of chromosomes/positions */
+    struct hash *chromHash;	/* Hash of all chromosomes/positions */
+    	/* Variables used when scanning through file. */
     char chrom[256];	/* Current chromosome. */
     bits32 chromStart;	/* Current position. */
     double val;		/* Current value. */
@@ -144,6 +161,9 @@ boolean chromGraphBinNextChrom(struct chromGraphBin *cgb);
 
 boolean chromGraphBinNextVal(struct chromGraphBin *cgb);
 /* Fetch next pos/val or FALSE if at end of chromosome. */
+
+boolean chromGraphBinSeekToChrom(struct chromGraphBin *cgb, char *chromName);
+/* Seek to chromosome if have data for it.  Otherwise return FALSE. */
 
 #endif /* CHROMGRAPH_H */
 

@@ -10,7 +10,7 @@
 #include "sig.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.6 2006/06/25 18:08:33 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.7 2006/06/28 19:25:32 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -265,43 +265,122 @@ if (cart != NULL)
 return cgs;
 }
 
+void cgbChromFree(struct cgbChrom **pChrom)
+/* Free up one cgbChrom */
+{
+struct cgbChrom *chrom = *pChrom;
+if (chrom != NULL)
+    {
+    freeMem(chrom->name);
+    freez(pChrom);
+    }
+}
+
+void cgbChromFreeList(struct cgbChrom **pList)
+/* Free a list of dynamically allocated cgbChrom's */
+{
+struct cgbChrom *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cgbChromFree(&el);
+    }
+*pList = NULL;
+}
+
+struct cInfo
+/* Local structure to help us keep track of chromosomes */
+    {
+    struct cInfo *next;
+    char *name;	/* Not allocated here. */
+    struct chromGraph *start;	/* First element in this chrom */
+    struct chromGraph *end;	/* First element not in this chrom */
+    bits64 offset;		/* Offset to start of chrom in file */
+    };
+
+struct cInfo *cInfoMake(struct chromGraph *cgList, char *fileName)
+/* Go through cgList and create cInfo list pointing into
+ * start and end of each chromosome.  slFreeList this when done. */
+{
+struct chromGraph *cg; 
+int lastPos = -1;
+struct hash *uniqHash = hashNew(0);
+struct cInfo *ciList = NULL, *ci = NULL;
+for (cg = cgList; cg != NULL; cg = cg->next)
+    {
+    if (ci == NULL || !sameString(ci->name, cg->chrom))
+        {
+	if (hashLookup(uniqHash, cg->chrom) != NULL)
+	    errAbort("%s isn't sorted by chrom,start", fileName);
+	hashAdd(uniqHash, cg->chrom, NULL);
+	if (ci != NULL)
+	    ci->end = cg;
+	AllocVar(ci);
+	ci->name = cg->chrom;
+	ci->start = cg;
+	slAddHead(&ciList, ci);
+	lastPos = -1;
+	}
+    else
+        {
+	if (cg->chromStart < lastPos)
+	    errAbort("%s isn't sorted by chrom,start", fileName);
+	lastPos = cg->chromStart;
+	}
+    }
+hashFree(&uniqHash);
+slReverse(&ciList);
+return ciList;
+}
+
 void chromGraphToBin(struct chromGraph *list, char *fileName)
 /* Create binary representation of chromGraph list, which should
  * be sorted. */
 {
 struct chromGraph *el;
-char *lastChrom = "";
-bits32 lastPos = 0;
 FILE *f = mustOpen(fileName, "wb");
 bits32 sig = chromGraphSig;
 bits32 endMarker = (bits32)(-1);
+struct cInfo *ci, *ciList = cInfoMake(list, fileName);
+bits32 chromCount = slCount(ciList);
+fpos_t indexPos;
+
+/* Start out with file signature and chromosome count */
 writeOne(f, sig);
-for (el = list; el != NULL; el = el->next)
+writeOne(f, chromCount);
+
+/* Write preliminary version of index, with offsets not filled in */
+fgetpos(f, &indexPos);
+for (ci = ciList; ci != NULL; ci = ci->next)
     {
-    bits32 pos = el->chromStart;
-    if (!sameString(el->chrom, lastChrom))
-        {
-	int length = strlen(el->chrom);
-	UBYTE len = length;
-	if (el != list)
-	    {
-	    writeOne(f, endMarker);
-	    }
-	if (length > 255)
-	    errAbort("Chrom name %s too long", el->chrom);
-	writeOne(f, len);
-	mustWrite(f, el->chrom, length);
-	lastChrom = el->chrom;
-	lastPos = 0;
-	}
-    if (lastPos > pos)
-        errAbort("%s is not sorted", fileName);
-    lastPos = pos;
-    writeOne(f, pos);
-    writeOne(f, el->val);
+    writeString(f, ci->name);
+    writeBits64(f, ci->offset);
     }
-writeOne(f, endMarker);
+
+/* Write data. */
+for (ci = ciList; ci  != NULL; ci = ci->next)
+    {
+    ci->offset = ftell(f);
+    writeString(f, ci->name);
+    for (el = ci->start; el != ci->end; el = el->next)
+        {
+	bits32 pos = el->chromStart;
+	writeOne(f, pos);
+	writeOne(f, el->val);
+	}
+    writeOne(f, endMarker);
+    }
+
+/* Go back and rewrite index. */
+fsetpos(f, &indexPos);
+for (ci = ciList; ci != NULL; ci = ci->next)
+    {
+    writeString(f, ci->name);
+    writeBits64(f, ci->offset);
+    }
 carefulClose(&f);
+slFreeList(&ciList);
 }
 	  
 
@@ -311,18 +390,54 @@ struct chromGraphBin *chromGraphBinOpen(char *path)
 struct chromGraphBin *cgb;
 FILE *f = mustOpen(path, "rb");
 bits32 sig;
-AllocVar(cgb);
-cgb->fileName = cloneString(path);
-cgb->f = f;
+bits32 chromCount, i;
+boolean isSwapped = FALSE;
+struct cgbChrom *chrom;
+
+/* Read in signature and use it to make sure it's the right type
+ * of file, and to tell if we need to swap bytes on integers. */
 if (!readOne(f, sig))
     errAbort("%s is empty", path);
 if (sig == chromGraphSig)
-    cgb->isSwapped = FALSE;
+    isSwapped = FALSE;
 else if (sig == chromGraphSwapSig)
-    cgb->isSwapped = TRUE;
+    isSwapped = TRUE;
 else
     errAbort("%s is not a chromGraph binary file", path);
+
+/* Allocate object and fill in several fields*/
+AllocVar(cgb);
+cgb->fileName = cloneString(path);
+cgb->f = f;
+cgb->isSwapped = isSwapped;
+cgb->chromHash = hashNew(0);
+
+/* Read in chromosome count, swapping if need be. */
+mustReadOne(f, chromCount);
+if (isSwapped)
+    chromCount = byteSwap32(chromCount);
+
+/* Read index into list/hash */
+for (i=0; i<chromCount; ++i)
+    {
+    AllocVar(chrom);
+    chrom->name =  readString(f);
+    chrom->offset = readBits64(f);
+    slAddHead(&cgb->chromList, chrom);
+    hashAdd(cgb->chromHash, chrom->name, chrom);
+    }
 return cgb;
+}
+
+boolean chromGraphBinSeekToChrom(struct chromGraphBin *cgb, char *chromName)
+/* Seek to chromosome if have data for it.  Otherwise return FALSE. */
+{
+struct cgbChrom *chrom = hashFindVal(cgb->chromHash, chromName);
+if (chrom == NULL)
+    return FALSE;
+fseek(cgb->f, chrom->offset, SEEK_SET);
+chromGraphBinNextChrom(cgb);
+return TRUE;
 }
 
 void chromGraphBinFree(struct chromGraphBin **pCgb)
@@ -331,8 +446,10 @@ void chromGraphBinFree(struct chromGraphBin **pCgb)
 struct chromGraphBin *cgb = *pCgb;
 if (cgb != NULL)
      {
-     freeMem(cgb->fileName);
      carefulClose(&cgb->f);
+     freeMem(cgb->fileName);
+     hashFree(&cgb->chromHash);
+     cgbChromFreeList(&cgb->chromList);
      freez(pCgb);
      }
 }
