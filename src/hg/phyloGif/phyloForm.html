@@ -30,10 +30,24 @@
 <tr><td>&nbsp;</td><td><INPUT type="submit" name="phyloGif_submit" value="submit"></td></tr>
 </table>
 <br>
-Notes: <br>
-1. If a space is required in a node label, enter it as a dash.<br>
-2. Underscores and anything following them are automatically stripped from node labels unless the preserve-underscores checkbox is checked.<br>
-3. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.<br>
+<pre>
+Notes: 
+1. If a space is required in a node label, enter it as a dash.
+
+2. Underscores and anything following them are automatically stripped from node labels 
+unless the preserve-underscores checkbox is checked.
+
+3. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.
+
+4. The branch lengths are expected substitutions per site, allowing for
+multiple hits.  So a branch length of 0.5 means an average of one
+substitutions every two nucleotide sites, but the percent id will be
+less than 50% because some of those substitutions are obscured by
+subsequent substitutions.  They're estimated from neutral sites,
+sometimes fourfold degenerate sites in coding regions, or sometimes
+"nonconserved" sites according to phastCons.  The numbers are significant
+to two or 3 figures.
+
 </form>
 </body>
 </html>
