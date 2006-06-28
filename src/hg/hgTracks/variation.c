@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.86 2006/06/05 20:14:42 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.87 2006/06/28 21:44:40 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -410,10 +410,12 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
     {
     case snp125ColorSourceMolType:
 	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeDataNameSize);
+	if (index2 < 0) index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125MolTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     case snp125ColorSourceClass:
 	index2 = stringArrayIx(el->class,snp125ClassDataName,snp125ClassDataNameSize);
+	if (index2 < 0) index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     /* validity is a set */
@@ -432,6 +434,7 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
 	break;
     case snp125ColorSourceLocType:
 	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
+	if (index2 < 0) index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     default:
@@ -678,6 +681,7 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
