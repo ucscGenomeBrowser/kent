@@ -34,5 +34,10 @@ void raFoldIn(char *fileName, struct hash *hashOfHash);
 struct hash *raReadSingle(char *fileName);
 /* Read in first ra record in file and return as hash. */
 
+struct hash *raReadAll(char *fileName, char *keyField);
+/* Return hash that contains all ra records in file keyed
+ * by given field, which must exist.  The values of the
+ * hash are themselves hashes. */
+
 #endif /* RA_H */
 
