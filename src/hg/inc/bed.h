@@ -170,6 +170,10 @@ struct genePred *bedToGenePred(struct bed *bed);
 struct bed *bedFromGenePred(struct genePred *genePred);
 /* Convert a single genePred to a bed structure */
 
+void makeItBed12(struct bed *bedList, int numFields);
+/* If it's less than bed 12, make it bed 12. The numFields */
+/* param is for how many fields the bed *currently* has. */
+
 struct bed *cloneBed(struct bed *bed);
 /* Make an all-newly-allocated copy of a single bed record. */
 
