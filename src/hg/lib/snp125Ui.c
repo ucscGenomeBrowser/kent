@@ -422,7 +422,7 @@ char *snp125LocTypeStrings[] = {
 };
 char *snp125LocTypeDataName[] = {
     "unknown",
-    "genomic",
+    "range",
     "exact",
     "between",
     "rangeInsertion",
