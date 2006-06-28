@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.79 2006/06/12 21:00:12 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.80 2006/06/28 22:26:20 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -964,6 +964,26 @@ for (i=0; i<menuSize; ++i)
 printf("</SELECT>\n");
 }
 
+void cgiMakeDropListWithVals(char *name, char *menu[], char *values[], 
+                         int menuSize, char *checked)
+/* Make a drop-down list with names and values. In this case checked
+ * corresponds to a value, not a menu. */
+{
+int i;
+char *selString;
+if (checked == NULL) checked = values[0];
+
+printf("<SELECT NAME=\"%s\">\n", name);
+for (i=0; i<menuSize; ++i)
+    {
+    if (sameWord(values[i], checked))
+        selString = " SELECTED";
+    else
+        selString = "";
+    printf("<OPTION%s VALUE=\"%s\">%s</OPTION>\n", selString, values[i], menu[i]);
+    }
+printf("</SELECT>\n");
+}
 
 void cgiMakeHiddenVar(char *varName, char *string)
 /* Store string in hidden input for next time around. */
