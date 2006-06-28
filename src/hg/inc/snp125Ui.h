@@ -21,11 +21,11 @@ extern int snp125ColorLabelSize;
 /* Molecule Type, Class, Validation, Function */
 
 enum snp125ColorSourceEnum {
-    snp125ColorSourceMolType,
+    snp125ColorSourceLocType,
     snp125ColorSourceClass,
     snp125ColorSourceValid,
     snp125ColorSourceFunc,
-    snp125ColorSourceLocType,
+    snp125ColorSourceMolType,
 };
 
 extern char *snp125ColorSourceLabels[];
