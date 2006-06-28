@@ -24,7 +24,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.17 2006/06/28 05:44:02 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.18 2006/06/28 20:56:28 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -329,17 +329,17 @@ for (i=0; i<graphRows; ++i)
     hPrintf("</TR>");
     }
 hPrintf("</TABLE>");
-cgiMakeButton(hggUpload, "Upload");
+cgiMakeButton(hggUpload, "(Upload)");
 hPrintf(" ");
 cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");
-cgiMakeButton(hggCorrelate, "Correlate");
+cgiMakeButton(hggCorrelate, "(Correlate)");
 hPrintf(" significance threshold:");
 cgiMakeDoubleVar(hggThreshold, 3.5, 3);
 hPrintf(" ");
-cgiMakeButton(hggBrowse, "Browse Regions");
+cgiMakeButton(hggBrowse, "(Browse Regions)");
 hPrintf(" ");
-cgiMakeButton(hggSort, "Sort Genes");
+cgiMakeButton(hggSort, "(Sort Genes)");
 hPrintf("<BR>");
 
 /* Figure out basic dimensions of image. */

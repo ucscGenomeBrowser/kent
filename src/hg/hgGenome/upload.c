@@ -8,25 +8,18 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "web.h"
-#include "hgGenome.h"
+#include "chromInfo.h"
+#include "chromGraph.h"
 #include "errCatch.h"
+#include "hgGenome.h"
 
 /* Symbolic defines for types of markers we support. */
-#define hggUpGenomic "genomic"
-#define hggUpSts "sts"
-#define hggUpSnp "snp"
-#define hggUpAffy100 "affy100k"
-#define hggUpAffy500 "affy500k"
-#define hggUpHumanHap300 "humanHap300"
-
-static char *locDescriptions[] = {
-	"chromosome base",
-	"STS marker",
-	"dbSNP rsID",
-	"Affymetrix 100K Gene Chip",
-	"Affymetrix 500K Gene Chip",
-	"Illumina HumanHap300 BeadChip",
-	};
+#define hggUpGenomic "chromosome base"
+#define hggUpSts "STS marker"
+#define hggUpSnp "dbSNP rsID"
+#define hggUpAffy100 "Affymetrix 100K Gene Chip"
+#define hggUpAffy500 "Affymetrix 500k Gene Chip"
+#define hggUpHumanHap300 "Illumina HumanHap300 BeadChip"
 
 static char *locNames[] = {
     hggUpGenomic,
@@ -40,22 +33,29 @@ static char *locNames[] = {
 void uploadPage()
 /* Put up initial upload page. */
 {
+char *oldFileName = cartUsualString(cart, hggUploadFile "__filename", "");
 cartWebStart(cart, "Upload Data to Genome Association View");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">");
 cartSaveSession(cart);
 hPrintf("Name of data set: ");
 cartMakeTextVar(cart, hggDataSetName, "", 16);
 hPrintf(" Locations are: ");
-cgiMakeDropListFull(hggLocType, locDescriptions, locNames, 
-	ArraySize(locNames), cartUsualString(cart, hggLocType, locNames[0]),
-	NULL);
+cgiMakeDropList(hggLocType, locNames, 
+	ArraySize(locNames), cartUsualString(cart, hggLocType, locNames[0]));
 hPrintf("<BR>");
 hPrintf("Description: ");
 cartMakeTextVar(cart, hggDataSetDescription, "", 64);
 hPrintf("<BR>");
-hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\">", hggUploadFile);
+hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
+	oldFileName);
 cgiMakeButton(hggSubmitUpload, "Submit");
 hPrintf("</FORM>\n");
+hPrintf("<i>note: If you are uploading more than one data set please give them ");
+hPrintf("different names.  Only the most recent data set of a given name is ");
+hPrintf("kept.  Data sets will be kept for at least 8 hours.  After that time ");
+hPrintf("you may have to upload them again.</i>");
+
+/* Put up section that describes file formats. */
 webNewSection("Upload file formats");
 hPrintf("%s", 
 "The input data files contain one line for each marker. "
@@ -75,7 +75,24 @@ hPrintf("%s",
 cartWebEnd();
 }
 
-void  processDbBed(struct lineFile *lf, FILE *f, char *bedTable)
+struct hash *chromInfoHash(struct sqlConnection *conn)
+/* Build up hash of chromInfo keyed by name */
+{
+struct sqlResult *sr;
+char **row;
+struct hash *hash = hashNew(0);
+sr = sqlGetResult(conn, "select * from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chromInfo *ci = chromInfoLoad(row);
+    hashAdd(hash, ci->chrom, ci);
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
+void  processDbBed(struct sqlConnection *conn, struct lineFile *lf, 
+	char *outFileName, char *bedTable)
 /* Process two column input file into chromGraph.  Treat first
  * column as a name to look up in bed-format table, which should
  * not be split. Return TRUE on success. */
@@ -83,11 +100,34 @@ void  processDbBed(struct lineFile *lf, FILE *f, char *bedTable)
 uglyf("Theoretically processing via bed-format table %s<BR>", bedTable);
 }
 
-void  processGenomic(struct lineFile *lf, FILE *f)
+void  processGenomic(struct sqlConnection *conn, struct lineFile *lf, 
+	char *outFileName)
 /* Process three column file into chromGraph.  Abort if
  * there's a problem. */
 {
-uglyf("Theoretically processing via three column format.<BR>");
+char *row[3];
+struct chromGraph *list = NULL, *cg;
+struct hash *chromHash = chromInfoHash(conn);
+struct chromInfo *ci;
+
+while (lineFileRow(lf, row))
+    {
+    cg = chromGraphLoad(row);
+    ci = hashFindVal(chromHash, cg->chrom);
+    if (ci == NULL)
+        errAbort("Error line %d of %s. "
+	         "Chromosome %s not found in this assembly (%s).", 
+		 lf->lineIx, lf->fileName, cg->chrom, database);
+    if (cg->chromStart < 0 || cg->chromStart >= ci->size)
+        errAbort("Error line %d of %s. "
+	         "Chromosome %s is %d bases long, but got coordinate %u",
+		 lf->lineIx, lf->fileName, ci->chrom, ci->size, cg->chromStart);
+    slAddHead(&list, cg);
+    }
+slSort(&list, chromGraphCmp);
+chromGraphToBin(list, outFileName);
+hPrintf("Read in %d markers and values in <i>chromosome base</i> format.<BR>", 
+	slCount(list));
 }
 
 boolean errCatchFinish(struct errCatch **pErrCatch)
@@ -110,30 +150,96 @@ if (errCatch != NULL)
 return ok;
 }
 
-boolean mayProcessGenomic(struct lineFile *lf, FILE *f)
+boolean mayProcessGenomic(struct sqlConnection *conn, struct lineFile *lf, 
+	char *outFileName)
 /* Process three column file into chromGraph.  If there's a problem
  * print warning message and return FALSE. */
 {
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
-     processGenomic(lf, f);
+     processGenomic(conn, lf, outFileName);
 return errCatchFinish(&errCatch);
 }
 
-boolean mayProcessDbBed(struct lineFile *lf, FILE *f, char *bedTable)
+boolean mayProcessDbBed(struct sqlConnection *conn,
+	struct lineFile *lf, char *outFileName, char *bedTable)
 /* Process three column file into chromGraph.  If there's a problem
  * print warning message and return FALSE. */
 {
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
-     processDbBed(lf, f, bedTable);
+     processDbBed(conn, lf, outFileName, bedTable);
 return errCatchFinish(&errCatch);
 }
+
+void raSaveNext(struct hash *ra, FILE *f)
+/* Write hash to file */
+{
+struct hashEl *el, *list = hashElListHash(ra);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+    fprintf(f, "%s\t%s\n", el->name, (char*)el->val);
+fprintf(f, "\n");
+hashElFreeList(&list);
+}
+
+void raSaveAll(struct hash *allHash, char *fileName)
+/* Save all elements of allHas to ra file */
+{
+FILE *f = mustOpen(fileName, "w");
+struct hashEl *el, *list = hashElListHash(allHash);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+    raSaveNext(el->val, f);
+hashElFreeList(&list);
+carefulClose(&f);
+}
+
 
 void updateUploadRa(char *binFileName)
 /* Update upload ra file with current upload data */
 {
-uglyf("Theoretically updating upload ra file.<BR>\n");
+char *fileName = cartOptionalString(cart, hggUploadRa);
+struct tempName tempName;
+struct hash *allRaHash, *ra;
+char *graphName = skipLeadingSpaces(cartUsualString(cart, hggDataSetName, ""));
+
+if (graphName == "")
+    graphName = "user data";
+
+/* Read in old ra file if possible, otherwise just dummy up an
+ * empty hash */
+if (fileName == NULL || !fileExists(fileName))
+    {
+    makeTempName(&tempName, "hggUp", ".ra");
+    fileName = tempName.forCgi;
+    allRaHash = hashNew(0);
+    cartSetString(cart, hggUploadRa, fileName);
+    }
+else
+    {
+    allRaHash = raReadAll(fileName, "name");
+    }
+
+/* Get rid of old ra record of same name if any */
+if (hashLookup(allRaHash, graphName))
+    hashRemove(allRaHash, graphName);
+
+/* Create ra hash with our info in it. */
+ra = hashNew(8);
+hashAdd(ra, "name", graphName);
+hashAdd(ra, "description", 
+	cartUsualString(cart, hggDataSetDescription, graphName));
+hashAdd(ra, "locType",
+	cartUsualString(cart, hggLocType, locNames[0]));
+hashAdd(ra, "binaryFile", binFileName);
+
+/* Update allRaHash and save */
+hashAdd(allRaHash, graphName, ra);
+raSaveAll(allRaHash, fileName);
+
+hPrintf("Select \"%s\" from one of the drop down menus ", graphName);
+hPrintf("in the main page to view this data.<BR>");
 }
 
 void processUpload(char *text, struct sqlConnection *conn)
@@ -144,26 +250,24 @@ void processUpload(char *text, struct sqlConnection *conn)
 char *type = cartUsualString(cart, hggLocType, hggUpGenomic);
 struct tempName tempName;
 char *binFile;
-FILE *f;
 boolean ok = FALSE;
 struct lineFile *lf = lineFileOnString("uploaded data", TRUE, text);
 /* NB - do *not* lineFileClose this or a double free can happen. */
 
-makeTempName(&tempName, "up", ".cgb");
+makeTempName(&tempName, "hggUp", ".cgb");
 binFile = tempName.forCgi;
-f = mustOpen(binFile, "wb");
 if (sameString(type, hggUpGenomic))
-    ok = mayProcessGenomic(lf, f);
+    ok = mayProcessGenomic(conn, lf, binFile);
 else if (sameString(type, hggUpSts))
-    ok = mayProcessDbBed(lf, f, "stsMap");
+    ok = mayProcessDbBed(conn, lf, binFile, "stsMap");
 else if (sameString(type, hggUpSnp))
     {
     if (sqlTableExists(conn, "snp126"))
-        ok = mayProcessDbBed(lf, f, "snp126");
+        ok = mayProcessDbBed(conn, lf, binFile, "snp126");
     else if (sqlTableExists(conn, "snp125"))
-        ok = mayProcessDbBed(lf, f, "snp125");
+        ok = mayProcessDbBed(conn, lf, binFile, "snp125");
     else if (sqlTableExists(conn, "snp"))
-        ok = mayProcessDbBed(lf, f, "snp");
+        ok = mayProcessDbBed(conn, lf, binFile, "snp");
     else
         warn("Couldn't find SNP table");
     }
@@ -179,7 +283,6 @@ else if (sameString(type, hggUpHumanHap300))
     {
     warn("Support for Illumina HumanHap300 coming soon.");
     }
-carefulClose(&f);
 if (ok)
     updateUploadRa(binFile);
 }
@@ -194,7 +297,9 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 processUpload(rawText, conn);
 cartRemove(cart, hggUploadFile);
+hPrintf("<CENTER>");
 cgiMakeButton("submit", "OK");
+hPrintf("</CENTER>");
 hPrintf("</FORM>");
 cartWebEnd();
 }
