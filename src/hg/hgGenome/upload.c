@@ -55,6 +55,9 @@ hPrintf(" Max Value: ");
 cartMakeTextVar(cart, hggMaxVal, "", 5);
 hPrintf(" <i>Leave these blank to show all data</i><BR>");
 
+hPrintf("Label Values: ");
+cartMakeTextVar(cart, hggLabelVals, "", 32);
+hPrintf(" <i>Comma-separated numbers for axis label</i><BR>");
 hPrintf("Draw lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 3000000, 8);
 hPrintf(" bases.<BR>");
@@ -344,6 +347,7 @@ hashAdd(ra, "binaryFile", binFileName);
 addIfNonempty(ra, hggMinVal, "minVal");
 addIfNonempty(ra, hggMaxVal, "minVal");
 addIfNonempty(ra, hggMaxGapToFill, "maxGapToFill");
+addIfNonempty(ra, hggLabelVals, "linesAt");
 
 /* Update allRaHash and save */
 hashAdd(allRaHash, graphName, ra);

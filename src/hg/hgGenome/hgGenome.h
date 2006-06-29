@@ -22,6 +22,7 @@
 #define hggLocType hggPrefix "locType"
 #define hggMinVal hggPrefix "minVal"
 #define hggMaxVal hggPrefix "maxVal"
+#define hggLabelVals hggPrefix "labelVals"
 #define hggMaxGapToFill hggPrefix "maxGapToFill"
 #define hggUploadFile hggPrefix "uploadFile"
 #define hggUploadRa hggPrefix "uploadRa"
