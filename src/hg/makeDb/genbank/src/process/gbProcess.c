@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.13 2006/02/02 17:36:11 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.14 2006/06/29 05:42:23 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -71,6 +71,8 @@ static struct kvt *kvt;
  * of kvt memory is in tables in gbParse. (all yuk) */
 static struct dyString *dbXrefBuf = NULL;
 static struct dyString *omimIdBuf = NULL;
+static struct dyString *srcOrgBuf = NULL;
+static struct dyString *synOrgBuf = NULL;
 static char locusLinkId[64];
 static char geneId[64];
 static char faOffStr[128], faSizeStr[64];
@@ -925,6 +927,58 @@ while (xref != NULL)
 slFreeList(&head);
 }
 
+void parseSourceOrganism()
+/* parse source /organism fields, output as srcOrg if different from org */
+{
+int numOrgs, i;
+char **orgs;
+if (gbSourceOrganism->val->stringSize == 0)
+    return;
+if (srcOrgBuf == NULL)
+    srcOrgBuf = dyStringNew(256);
+dyStringClear(srcOrgBuf);
+
+numOrgs = chopString(gbSourceOrganism->val->string, ";", NULL, 0);
+AllocArray(orgs, numOrgs);
+chopString(gbSourceOrganism->val->string, ";", orgs, numOrgs);
+for (i = 0; i < numOrgs; i++)
+    {
+    if (!sameString(orgs[i], gbOrganismField->val->string))
+        {
+        if (srcOrgBuf->stringSize > 0)
+            dyStringAppendC(srcOrgBuf, ';');
+        dyStringAppend(srcOrgBuf, orgs[i]);
+        }
+    }
+freeMem(orgs);
+if (srcOrgBuf->stringSize > 0)
+    kvtAdd(kvt, "srcOrg", srcOrgBuf->string);
+}
+
+char *findSyntheticTarget()
+/* for a synthetic sequence, attempt to find the targete organism.  This was
+ * added to support the ORFeome clones.  In general, there is no simple way to
+ * determine an organism that a synthenic clone targets. */
+{
+struct keyVal *kv;
+if (synOrgBuf == NULL)
+    synOrgBuf = dyStringNew(256);
+dyStringClear(synOrgBuf);
+
+kv = kvtGet(kvt, "srcOrg");
+if (kv != NULL)
+    dyStringAppend(synOrgBuf, kv->val);
+
+if (synOrgBuf->stringSize > 0)
+    {
+    kvtAdd(kvt, "synOrg", synOrgBuf->string);
+    return synOrgBuf->string;
+    }
+else
+    return NULL;
+}
+
+
 void writePepSeq()
 /* If information is available, write the peptide sequence and
  * save offset and size in kvt */
@@ -970,6 +1024,7 @@ char *gi = NULL;
 char *verChar = gbVersionField->val->string;
 char *s;
 char *org = gbOrganismField->val->string;
+char *synOrg = NULL;
 struct keyVal *seqKey, *sizeKey, *commentKey;
 boolean isEst = FALSE, keepIt;
 char verNum[8];
@@ -1063,6 +1118,10 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 
 /* Handle other fields */
 parseDbXrefs();
+parseSourceOrganism();
+
+if (startsWith("synthetic construct", gbOrganismField->val->string))
+    synOrg = findSyntheticTarget();
 
 /* for refseqs, we only keep NC_, NR_ and NM_ */
 if (gbGuessSrcDb(accession) == GB_REFSEQ)
@@ -1103,7 +1162,7 @@ if (dna != NULL)
                 hel = hashAdd(estAuthorHash, author, ae);
                 ae->name = hel->name;
                 ae->count = 1;
-                strncpy(ae->accession, accession, sizeof(ae->accession));                        
+                strncpy(ae->accession, accession, sizeof(ae->accession));
                 slAddHead(&estAuthorList, ae);
                 }
             else
@@ -1143,8 +1202,12 @@ if (dna != NULL)
         }
     kvtWriteAll(kvt, raFile, filter->hideKeys);
     if (gbIdxFile != NULL)
+        {
+        /* use synthetic target if it was determined */
         gbProcessedWriteIdxRec(gbIdxFile, accession, version,
-                               kvtLookup(kvt, "dat"), org);
+                               kvtLookup(kvt, "dat"),
+                               ((synOrg != NULL) ? synOrg : org));
+        }
     }
 else
     gbfSkipSequence(lf);

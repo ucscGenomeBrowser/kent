@@ -15,6 +15,7 @@ struct lineFile;
 #define GBF_CONCAT_VAL 0x10 /* don't space-seperate multiline values */
 #define GBF_BOOLEAN    0x20 /* boolean value */
 #define GBF_SUB_SPACE  0x40 /* change spaces to _ in values */
+#define GBF_MULTI_SEMI 0x80 /* semi-colon separate multiple values */
 
 struct gbFieldUseCounter
 /* For some fields we use this to keep track of all
@@ -55,6 +56,7 @@ extern struct gbField *gbDevStageField;
 extern struct gbField *gbCloneField;
 extern struct gbField *gbChromosomeField;
 extern struct gbField *gbMapField;
+extern struct gbField *gbSourceOrganism;
 extern struct gbField *gbPrtField;
 extern struct gbField *gbGeneDbxField;
 extern struct gbField *gbCdsDbxField;
