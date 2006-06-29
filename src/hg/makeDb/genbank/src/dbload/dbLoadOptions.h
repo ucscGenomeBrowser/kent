@@ -12,6 +12,9 @@ struct gbIndex;
 #define DBLOAD_PER_CHROM_ALIGN   0x10   /* build per-chromosome alignment tables */
 #define DBLOAD_EXT_FILE_UPDATE   0x20   /* update gbSeq to link to the latest
                                          * latest release's files. */
+#define DBLOAD_BYPASS_GBLOADED   0x40   /* skip gbLoaded table optimizations,
+                                         * needed if native or xeno partation is
+                                         * added*/
 
 struct dbLoadAttr
 /* attributes associated with a srcDb+type+orgCat */
