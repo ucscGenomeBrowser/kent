@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.9 2006/02/16 02:17:03 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.10 2006/06/29 21:41:14 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -138,7 +138,7 @@ while((maf = mafNext(mf)) != NULL)
 	    //printf("new species %s\n",species);
 	    AllocVar(subSpecies);
 	    subSpecies->name = cloneString(species);
-	    subSpecies->hash = newHash(0);
+	    subSpecies->hash = newHash(6);
 	    subSpecies->blockStatus.strand = '+';
 	    subSpecies->blockStatus.masterStart = masterMc->start;
 	    slAddHead(&speciesList, subSpecies);
@@ -185,14 +185,10 @@ for(; strandHead ; strandHead = strandHead->next)
     struct hash *chromHash = (hel != NULL) ? hel->val : NULL;
     struct binKeeper *bk = (chromHash != NULL) ? hashFindVal(chromHash, strandHead->qName): NULL;
 
-    //if (chromHash == NULL)
-    //fprintf(stderr,"bk for %s %s %x\n",strandHead->species,strandHead->qName,bk);
-    //printf("chaining %s %s\n",strandHead->name, strandHead->species);
     slReverse(&strandHead->links);
 
     prevLink = strandHead->links;
     prevLink->mc->leftStatus = MAF_NEW_STATUS;
-    //printf("new %d %d %d %d\n",prevLink->cb.tStart,prevLink->cb.tEnd,prevLink->cb.qStart,prevLink->cb.qEnd);
     for(link = prevLink->next; link; prevLink = link, link = link->next)
 	{
 	int tDiff = link->cb.tStart - prevLink->cb.tEnd;
@@ -211,30 +207,26 @@ for(; strandHead ; strandHead = strandHead->next)
 	    nEnd = strandHead->qSize - prevLink->cb.qEnd;
 	    nStart = strandHead->qSize - link->cb.qStart;
 	    }
-	if (bk != NULL)
+	if ((nStart != nEnd) && (bk != NULL))
+	    {
 	    hitList = binKeeperFind(bk, nStart, nEnd);
-	//if (hitList && hitList->next)
-	    //printf("more than one N region in gap. Fix me");
+	    }
+	if (hitList)
+	    ; //printf("one N region in gap. Fix me");
+	else if (hitList && hitList->next)
+	    printf("more than one N region in gap. Fix me");
 	for (hit = hitList; hit != NULL; hit = hit->next)
 	    nCount += positiveRangeIntersection(nStart, nEnd, hit->start, hit->end);
 	slFreeList(&hitList);
-//	    if (nCount)
-//	    printf("found %d N's in gap (%d) %c %d %d\n",nCount, qDiff,strandHead->strand, nStart, nEnd);
-
-	//tDiff -= nCount;
-	//qDiff -= nCount;
 
 	if ((qDiff && (100 * nCount / qDiff > 95))
 		&& (tDiff && (100 * nCount / tDiff > 10)))
 	    {
-	    //printf("Nfill %s qDiff %d nCount %d %d %d\n",strandHead->species,qDiff,nCount, prevLink->cb.tEnd, link->cb.tStart);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_MISSING_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = nCount;
 	    }
-	//else if  ((tDiff > 100000) || ((qDiff < -1000) || (qDiff > 100000)))
 	else if  ((tDiff > 100000) || ((qDiff < 0) || (qDiff > 100000)))
 	    {
-	//printf("new %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = 0;
 	    }
@@ -389,18 +381,15 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 				prevMaf->next = newMaf;
 			    else
 				mafList = newMaf;
+			    masterMc = miniMasterMc;
 			    }
 			else
 			    {
-//			    printf("no fill\n");
 			    lastMc->next = mc;
 			    }
 			lastMc = mc;
 			if  (blockStatus->mc->rightStatus ==  MAF_MISSING_STATUS)
 			    {
-			    //mc->size = maf->textSize;
-//			    printf("back filling %s\n",species->name);
-//			    printf("blockStatus %s\n",mc->src);
 			    if (addN)
 				{
 				char buffer[256];
@@ -416,30 +405,22 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    }
 			else
 			    {
-			    //mc->size = maf->textSize;
-			    //char buffer[256];
-
-			    //safef(buffer, sizeof(buffer), "%s.dash",species->name);
-			    //mc->src = cloneString(buffer);
-			    //mc->start = 0;
-			    //mc->srcSize = 200000;
-			    //mc->size =  masterMc->start - lastEnd;
-
 			    if (addDash)
 				{
+				mc->size = masterMc->size;
 				mc->srcSize = blockStatus->mc->srcSize;
 				mc->text = needMem(mc->size + 1);
 				memset(mc->text, '-', mc->size);
+				mc->text[mc->size] = 0;
+				if (mc->size == 0)
+				    errAbort("bad dash add");
 				mc->size = 0;
 				}
-			    //else mc->srcSize =  0;
 			    }
 			break;
 		    }
 		}
 	    }
-	//if (mc)
-	    //blockStatus->mc = mc;
 	}
     lastEnd = masterMc->start + masterMc->size;
     for(lastMc = masterMc; lastMc->next; lastMc = lastMc->next)
@@ -449,16 +430,13 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	{
 	blockStatus = &species->blockStatus;
 	
-//printf("second round species %s\n",species->name);
 	mc = NULL;
 	if ((blockStatus->masterStart <= masterMc->start) && 
 	    (blockStatus->masterEnd > masterMc->start) && 
 	 ((mc = mafMayFindCompPrefix(maf, species->name,NULL)) == NULL))
 	    {
-	    //printf("don't have mc for %s\n",species->name);
 	    if (blockStatus->mc != NULL)
 		{
-	    //printf("have blockstatus for %s\n",blockStatus->mc->src);
 		switch (blockStatus->mc->rightStatus)
 		    {
 		    case MAF_MISSING_STATUS:
@@ -473,52 +451,35 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			if (mc->leftStatus == MAF_NEW_NESTED_STATUS)
 			    mc->leftStatus = MAF_INSERT_STATUS;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
-			//mc->leftLen = blockStatus->mc->start + blockStatus->mc->size;
-			//mc->rightLen = blockStatus->mc->rightLen;
 			mc->src = blockStatus->mc->src;
 			mc->strand = blockStatus->mc->strand;
 			mc->srcSize = blockStatus->mc->srcSize;
 			mc->start = blockStatus->mc->start + blockStatus->mc->size ;
 			lastMc->next = mc;
 			lastMc = mc;
-			if  (addN && blockStatus->mc->rightStatus ==  MAF_MISSING_STATUS)
+			if  (addN && (blockStatus->mc->rightStatus ==  MAF_MISSING_STATUS))
 			    {
 			    char buffer[256];
 			    int ii;
 
-			    //printf("filling %s\n",species->name);
 			    safef(buffer, sizeof(buffer), "%s.N",species->name);
 			    mc->src = cloneString(buffer);
 			    mc->start = 0;
 			    mc->srcSize = 200000;
 			    mc->size = maf->textSize;
-			   // mc->size =  masterMc->size;
 			    mc->text = needMem(mc->size + 1);
-			    //for(ii=0; ii < mc->size; ii++)
-			//	{
-			//	if (masterMc->text[ii] == '-')
-			//	    mc->text[ii] = '-';
-			//	else
-			//	    mc->text[ii] = 'N';
-			//	}
 			    memset(mc->text, 'N', mc->size);
 			    }
 			else if (addDash)
 			    {
-			    //char buffer[256];
-
-			    //safef(buffer, sizeof(buffer), "%s.dash",species->name);
-			    //mc->src = cloneString(buffer);
-			    //mc->start = 0;
-			    //mc->srcSize = 200000;
-			   // mc->size =  masterMc->size;
-			    mc->size = maf->textSize;
+				mc->size = masterMc->size;
 			    mc->text = needMem(mc->size + 1);
+			    if (mc->size == 0)
+				errAbort("bad dash add");
 			    memset(mc->text, '-', mc->size);
+			    mc->text[mc->size] = 0;
 			    mc->size = 0;
 			    }
-			//else
-			    //mc->srcSize = 0;
 			    
 			break;
 		    default:
@@ -526,13 +487,10 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 		    }
 		}
 	    }
-	    //else if (mc) printf("have mc %s for species %s\n",mc->src,species->name);
-	    //else printf("no mc, no nothing\n");
 	if (mc)
-	{
-	    //printf("on species %s adding mc %s \n",species->name,mc->src);
+	    {
 	    blockStatus->mc = mc;
-	}
+	    }
 	}
     }
 }
@@ -542,7 +500,7 @@ struct hash *readSize(char *fileName)
 char *row[2];
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct binKeeper *bk;
-struct hash *hash = newHash(0);
+struct hash *hash = newHash(6);
 struct hashEl *hel;
 struct bed3 *bed;
 int size;
@@ -565,7 +523,7 @@ struct hash *readBed(char *fileName, struct hash *sizeHash)
 char *row[3];
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct binKeeper *bk;
-struct hash *hash = newHash(0);
+struct hash *hash = newHash(6);
 struct hashEl *hel;
 struct bed3 *bed;
 int size;
@@ -584,7 +542,11 @@ while (lineFileRow(lf, row))
 	size = atoi(ptr);
 	//printf("got %d for %s\n",size,row[0]);
 	bk = binKeeperNew(0, size);
-	hel = hashAdd(hash, row[0], bk);
+	if ((ptr = strchr(row[0], '.')) != NULL)
+	    ptr++;
+	else 
+	    ptr = row[0];
+	hel = hashAdd(hash, ptr, bk);
 	}
     bk = hel->val;
     AllocVar(bed);
@@ -630,8 +592,8 @@ FILE *f = mustOpen(mafOut, "w");
 struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 struct mafAli *mafList, *maf;
 struct mafFile *mf = mafOpen(mafIn);
-struct hash *bedHash = newHash(0); 
-struct hash *sizeFileHash = newHash(0); 
+struct hash *bedHash = newHash(6); 
+struct hash *sizeFileHash = newHash(6); 
 
 if (sizeFile != NULL)
     {
@@ -647,11 +609,13 @@ if (nBedFile != NULL)
     struct lineFile *lf = lineFileOpen(nBedFile, TRUE);
     char *row[1];
     while (lineFileRow(lf, row))
+	{
 	addBed(row[0], bedHash, sizeFileHash);
+	}
     lineFileClose(&lf);
     }
 
-speciesHash = newHash(0);
+speciesHash = newHash(6);
 mafList = readMafs(mf);
 mafWriteStart(f, mf->scoring);
 mafFileFree(&mf);
