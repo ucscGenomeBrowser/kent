@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.20 2006/06/29 01:24:51 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.21 2006/06/29 14:55:14 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -49,7 +49,6 @@ errAbort(
 }
 
 /* ---- Get list of graphs. ---- */
-
 
 struct genoGraph *getUserGraphs()
 /* Get list of all user graphs */
@@ -149,7 +148,62 @@ struct genoGraph *gg;
 ggList = slCat(userList, dbList);
 ggHash = hashNew(0);
 for (gg = ggList; gg != NULL; gg = gg->next)
+    {
     hashAdd(ggHash, gg->name, gg);
+    }
+}
+
+void fakeEmptyLabels(struct chromGraphSettings *cgs)
+/* If no labels, fake them at 1/3 and 2/3 of the way through. */
+{
+if (cgs->linesAtCount == 0)
+    {
+    cgs->linesAtCount = 2;
+    AllocArray(cgs->linesAt, 2);
+    double range = cgs->maxVal - cgs->minVal;
+    cgs->linesAt[0] = cgs->minVal + range/3.0;
+    cgs->linesAt[1] = cgs->minVal + 2.0*range/3.0;
+    if (range >= 3)
+        {
+	cgs->linesAt[0] = round(cgs->linesAt[0]);
+	cgs->linesAt[1] = round(cgs->linesAt[1]);
+	}
+    }
+}
+
+void ggRefineUsed(struct genoGraph *gg)
+/* Refine genoGraphs that are used. */
+{
+if (!gg->didRefine)
+    {
+    struct chromGraphSettings *cgs = gg->settings;
+    gg->cgb = chromGraphBinOpen(gg->binFileName);
+    if (cgs->minVal >= cgs->minVal)
+        {
+	cgs->minVal = gg->cgb->minVal;
+	cgs->maxVal = gg->cgb->maxVal;
+	}
+    fakeEmptyLabels(gg->settings);
+    gg->didRefine = TRUE;
+    }
+}
+
+int ggLabelWidth(struct genoGraph *gg, MgFont *font)
+/* Return width used by graph labels. */
+{
+struct chromGraphSettings *cgs = gg->settings;
+int i;
+int minLabelWidth = 0, labelWidth;
+char buf[24];
+fakeEmptyLabels(cgs);
+for (i=0; i<cgs->linesAtCount; ++i)
+    {
+    safef(buf, sizeof(buf), "%g ", cgs->linesAt[i]);
+    labelWidth = mgFontStringWidth(font, buf);
+    if (labelWidth > minLabelWidth)
+        minLabelWidth = labelWidth;
+    }
+return minLabelWidth;
 }
 
 /* ---- Some html helper routines. ---- */
@@ -273,31 +327,19 @@ else
 /* Page drawing stuff. */
 
 void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
-	struct genoLay *gl, char *chromGraph, int yOff, int height, Color color)
+	struct genoLay *gl, char *chromGraph, int yOff, int height, Color color,
+	boolean leftLabel, boolean rightLabel)
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
 struct genoGraph *gg = hashFindVal(ggHash, chromGraph);
 if (gg != NULL)
     {
-    char *fileName = gg->binFileName;
-    struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
-    struct chromGraphSettings *settings = gg->settings;
-    int maxGapToFill = settings->maxGapToFill;
+    struct chromGraphBin *cgb = gg->cgb;
+    struct chromGraphSettings *cgs = gg->settings;
+    int maxGapToFill = cgs->maxGapToFill;
     double pixelsPerBase = 1.0/gl->basesPerPixel;
-    double gMin, gMax, gScale;
-
-    /* Figure out min/max to display. */
-    if (settings->minVal < settings->minVal)
-        {
-	gMin = settings->minVal;
-	gMax = settings->maxVal;
-	}
-    else
-        {
-	gMin = cgb->minVal;
-	gMax = cgb->maxVal;
-	}
+    double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
 
     gScale = height/(gMax-gMin+1);
     while (chromGraphBinNextChrom(cgb))
@@ -306,6 +348,9 @@ if (gg != NULL)
 	if (chrom)
 	    {
 	    int chromX = chrom->x, chromY = chrom->y;
+	    int minY = chromY + yOff;
+	    int maxY = chromY + yOff + height - 1;
+
 	    if (chromGraphBinNextVal(cgb))
 	        {
 		/* Handle first point as special case here, so don't
@@ -314,6 +359,8 @@ if (gg != NULL)
 		start = lastStart = cgb->chromStart;
 		x = lastX = pixelsPerBase*start + chromX;
 		y = lastY = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
+		if (y < minY) y = minY;
+		else if (y > maxY) y = maxY;
 		vgDot(vg, x, y, color);
 
 		/* Draw rest of points, connecting with line to previous point
@@ -323,6 +370,8 @@ if (gg != NULL)
 		    start = cgb->chromStart;
 		    x = pixelsPerBase*start + chromX;
 		    y = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
+		    if (y < minY) y = minY;
+		    else if (y > maxY) y = maxY;
 		    if (x != lastX || y != lastY)
 		        {
 			if (start - lastStart <= maxGapToFill)
@@ -341,6 +390,53 @@ if (gg != NULL)
 	    /* Just read and discard data. */
 	    while (chromGraphBinNextVal(cgb))
 	        ;
+	    }
+	}
+
+
+    /* Draw labels. */
+    if (leftLabel || rightLabel)
+        {
+	int lineY = yOff;
+	int i,j;
+	int spaceWidth = tl.nWidth;
+	int tickWidth = spaceWidth*2/3;
+	int fontPixelHeight = mgFontPixelHeight(gl->font);
+	for (i=0; i<gl->lineCount; ++i)
+	    {
+	    for (j=0; j< cgs->linesAtCount; ++j)
+	        {
+		double lineAt = cgs->linesAt[j];
+		int y = (height - ((lineAt - gMin)*gScale)) + lineY;
+		int textTop = y - fontPixelHeight/2+1;
+		int textBottom = textTop + fontPixelHeight;
+		char label[24];
+		safef(label, sizeof(label), "%g", lineAt);
+		if (leftLabel)
+		    {
+		    vgBox(vg, gl->margin + gl->leftLabelWidth - tickWidth-1, y,
+		    	tickWidth, 1, color);
+		    if (textTop >= lineY && textBottom < lineY + height)
+			{
+			vgTextRight(vg, gl->margin, textTop, 
+			    gl->leftLabelWidth-spaceWidth, fontPixelHeight,
+			    color, gl->font, label);
+			}
+		    }
+		if (rightLabel)
+		    {
+		    vgBox(vg, 
+		    	gl->picWidth - gl->margin - gl->rightLabelWidth+1, 
+		    	y, tickWidth, 1, color);
+		    if (textTop >= lineY && textBottom < lineY + height)
+			{
+			vgText(vg,
+			    gl->picWidth - gl->margin - gl->rightLabelWidth + spaceWidth,
+			    textTop, color, gl->font, label);
+			}
+		    }
+		}
+	    lineY += gl->lineHeight;
 	    }
 	}
     }
@@ -376,7 +472,7 @@ genoLayDrawBandedChroms(gl, vg, database, conn,
 /* Draw chromosome graphs. */
 for (i=0; i<graphRows; ++i)
     {
-    for (j=0; j<graphCols; ++j)
+    for (j=graphCols-1; j>=0; --j)
 	{
 	char *graph = graphSourceAt(i,j);
 	if (graph != NULL && graph[0] != 0)
@@ -384,7 +480,7 @@ for (i=0; i<graphRows; ++i)
 	    Color color = colorFromAscii(vg, graphColorAt(i,j));
 	    drawChromGraph(vg, conn, gl, graph, 
 		    gl->betweenChromOffsetY + yOffset, 
-		    innerHeight,  color);
+		    innerHeight,  color, j==0, j==1);
 	    }
 	}
     yOffset += oneRowHeight;
@@ -440,6 +536,7 @@ int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
 int oneRowHeight;
+int minLeftLabelWidth = 0, minRightLabelWidth = 0;
 
 cartWebStart(cart, "%s Genome Graphs", genome);
 getGenoGraphs(conn);
@@ -459,7 +556,7 @@ for (i=0; i<graphRows; ++i)
 	    hPrintf("graph ");
 	hPrintf("</TD>");
 	}
-    for (j=graphCols-1; j>=0; --j)
+    for (j=0; j<graphCols; ++j)
 	{
 	hPrintf("<TD>");
 	graphDropdown(conn, graphVarName(i,j));
@@ -493,11 +590,33 @@ hPrintf("<BR>");
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
 
+/* Figure out side label sizes */
+for (i=0; i<graphRows; ++i)
+    {
+    for (j=0; j<graphCols && j < 2; ++j)
+        {
+	char *source = graphSourceAt(i,j);
+	if (source != NULL)
+	    {
+	    struct genoGraph *gg = hashFindVal(ggHash, source);
+	    if (gg != NULL)
+	        {
+		int labelWidth;
+		ggRefineUsed(gg);
+		labelWidth = ggLabelWidth(gg, tl.font);
+		if (j == 0 && labelWidth > minLeftLabelWidth)
+		    minLeftLabelWidth = labelWidth;
+		if (j == 1 && labelWidth > minRightLabelWidth)
+		    minRightLabelWidth = labelWidth;
+		}
+	    }
+	}
+    }
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
 oneRowHeight = graphHeight()+3;
 gl = genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
-	3*tl.nWidth, 4*tl.nWidth);
+	minLeftLabelWidth, minRightLabelWidth);
 
 /* Draw picture. */
 genomeGif(conn, gl, graphRows, graphCols, oneRowHeight);

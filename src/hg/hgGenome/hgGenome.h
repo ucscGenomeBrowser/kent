@@ -51,6 +51,8 @@ struct genoGraph
     char *longLabel;		/* Long label. */
     char *binFileName;		/* Binary file associated with graph. */
     struct chromGraphSettings *settings;  /* Display settings */
+    boolean didRefine;		/* Set to true after refined */
+    struct chromGraphBin *cgb;  /* Binary data handle. */
     };
 
 
