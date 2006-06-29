@@ -15,6 +15,7 @@
 #define hggGraphColorPrefix hggPrefix "graphColor"
 #define hggGraphHeight hggPrefix "graphHeight"
 #define hggThreshold hggPrefix "threshold"
+#define defaultThreshold 3.5
 #define hggGraphsPerLine hggPrefix "graphsPerLine"
 #define hggLinesOfGraphs hggPrefix "linesOfGraphs"
 #define hggDataSetName hggPrefix "dataSetName"
@@ -78,6 +79,9 @@ int graphsPerLine();
 int linesOfGraphs();
 /* Return number of lines of graphs */
 
+void getGenoGraphs(struct sqlConnection *conn);
+/* Set up ggList and ggHash with all available genome graphs */
+
 char *graphVarName(int row, int col);
 /* Get graph data source variable for given row and column.  Returns
  * static buffer. */
@@ -92,7 +96,8 @@ char *graphSourceAt(int row, int col);
 char *graphColorAt(int row, int col);
 /* Return graph color at given row/column, NULL if nonw. */
 
-
+struct genoGraph *ggFirstVisible();
+/* Return first visible graph, or NULL if none. */
 
 /*** Functions imported from other modules. ***/
 
@@ -105,5 +110,8 @@ void uploadPage();
 void submitUpload(struct sqlConnection *conn);
 /* Called when they've submitted from uploads page */
 
+void browseRegions(struct sqlConnection *conn);
+/* Put up a frame with a list of links on the left and the
+ * first link selected on the right. */
 
 #endif /* HGGENOME_H */

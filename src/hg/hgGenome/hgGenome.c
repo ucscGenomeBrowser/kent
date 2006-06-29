@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.21 2006/06/29 14:55:14 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.22 2006/06/29 18:50:40 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -281,6 +281,29 @@ if (cartVarExists(cart, varName))
 return source;
 }
 
+struct genoGraph *ggAt(int row, int col)
+/* Return genoGraph at given position or NULL */
+{
+char *source = graphSourceAt(row, col);
+if (source != NULL)
+     return hashFindVal(ggHash, source);
+return NULL;
+}
+
+struct genoGraph *ggFirstVisible()
+/* Return first visible graph, or NULL if none. */
+{
+int graphRows = linesOfGraphs();
+int graphCols = graphsPerLine();
+struct genoGraph *gg = NULL;
+int i,j;
+for (i=0; i<graphRows; ++i)
+   for (j=0; j<graphCols; ++j)
+       if ((gg = ggAt(i,j)) != NULL)
+           break;
+return gg;
+}
+
 static char *allColors[] = {
     "black", "blue", "purple", "red", "orange", "yellow", "green", "gray",
 };
@@ -494,12 +517,11 @@ struct slName *userListAll()
 return NULL;
 }
 
-void graphDropdown(struct sqlConnection *conn, char *varName)
+void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal)
 /* Make a drop-down with available chrom graphs */
 {
 struct genoGraph *gg;
 int totalCount = 1 + slCount(ggList);
-char *curVal = cartUsualString(cart, varName, "");
 char **menu, **values;
 int i = 0;
 
@@ -537,6 +559,7 @@ int graphCols = graphsPerLine();
 int i, j;
 int oneRowHeight;
 int minLeftLabelWidth = 0, minRightLabelWidth = 0;
+int realCount = 0;
 
 cartWebStart(cart, "%s Genome Graphs", genome);
 getGenoGraphs(conn);
@@ -558,8 +581,12 @@ for (i=0; i<graphRows; ++i)
 	}
     for (j=0; j<graphCols; ++j)
 	{
+	char *varName = graphVarName(i,j);
+	char *curVal = cartUsualString(cart, varName, "");
+	if (curVal[0] != 0)
+	    ++realCount;
 	hPrintf("<TD>");
-	graphDropdown(conn, graphVarName(i,j));
+	graphDropdown(conn, varName, curVal);
 	hPrintf(" in ");
 	colorDropdown(i, j);
 	if (j != graphCols-1) hPrintf(",");
@@ -578,13 +605,13 @@ cgiMakeButton(hggUpload, "Upload");
 hPrintf(" ");
 cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");
-cgiMakeButton(hggCorrelate, "(Correlate)");
+cgiMakeOptionalButton(hggCorrelate, "(Correlate)", realCount < 2);
 hPrintf(" significance threshold:");
-cgiMakeDoubleVar(hggThreshold, 3.5, 3);
+cgiMakeDoubleVar(hggThreshold, defaultThreshold,  3);
 hPrintf(" ");
-cgiMakeButton(hggBrowse, "(Browse Regions)");
+cgiMakeOptionalButton(hggBrowse, "(Browse Regions)", realCount == 0);
 hPrintf(" ");
-cgiMakeButton(hggSort, "(Sort Genes)");
+cgiMakeOptionalButton(hggSort, "(Sort Genes)", realCount == 0);
 hPrintf("<BR>");
 
 /* Figure out basic dimensions of image. */
@@ -653,8 +680,7 @@ else if (cartVarExists(cart, hggCorrelate))
     }
 else if (cartVarExists(cart, hggBrowse))
     {
-    cartWebStart(cart, "Theoretically browsing, please go back");
-    cartWebEnd();
+    browseRegions(conn);
     }
 else if (cartVarExists(cart, hggSort))
     {
