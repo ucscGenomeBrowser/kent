@@ -98,6 +98,10 @@ struct trackDb *trackDbFromRa(char *raFile);
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
 
+struct hash *trackDbHashSettings(struct trackDb *tdb);
+/* Force trackDb to hash up it's settings.  Usually this is just
+ * done on demand. Returns settings hash. */
+
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 

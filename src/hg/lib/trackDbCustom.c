@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.25 2005/12/02 01:09:33 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.26 2006/06/29 01:27:08 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -317,6 +317,15 @@ while ((raRecord = raNextRecord(lf)) != NULL)
     hashFree(&raRecord);
     }
 lineFileClose(&lf);
+}
+
+struct hash *trackDbHashSettings(struct trackDb *tdb)
+/* Force trackDb to hash up it's settings.  Usually this is just
+ * done on demand. Returns settings hash. */
+{
+if (tdb->settingsHash == NULL)
+    tdb->settingsHash = raFromString(tdb->settings);
+return tdb->settingsHash;
 }
 
 char *trackDbSetting(struct trackDb *tdb, char *name)
