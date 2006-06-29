@@ -42,6 +42,25 @@ struct bed
     float *expScores;	/* Comma separated list of Experiment scores. */
     };
 
+struct bed3
+/* Browser extensible data - first three fields */
+    {
+    struct bed3 *next;  /* Next in singly linked list. */
+    char *chrom;	/* Human chromosome or FPC contig */
+    unsigned chromStart;	/* Start position in chromosome */
+    unsigned chromEnd;	/* End position in chromosome */
+    };
+
+struct bed4
+/* Browser extensible data - first four fields */
+    {
+    struct bed4 *next;  /* Next in singly linked list. */
+    char *chrom;	/* Human chromosome or FPC contig */
+    unsigned chromStart;	/* Start position in chromosome */
+    unsigned chromEnd;	/* End position in chromosome */
+    char *name;	/* Name of item */
+    };
+
 void bedStaticLoad(char **row, struct bed *ret);
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
