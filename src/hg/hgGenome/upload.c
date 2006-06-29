@@ -18,9 +18,9 @@
 #define hggUpGenomic "chromosome base"
 #define hggUpSts "STS marker"
 #define hggUpSnp "dbSNP rsID"
-#define hggUpAffy100 "Affymetrix 100K Gene Chip"
-#define hggUpAffy500 "Affymetrix 500k Gene Chip"
-#define hggUpHumanHap300 "Illumina HumanHap300 BeadChip"
+#define hggUpAffy100 "(Affymetrix 100K Gene Chip)"
+#define hggUpAffy500 "(Affymetrix 500k Gene Chip)"
+#define hggUpHumanHap300 "(Illumina HumanHap300 BeadChip)"
 
 static char *locNames[] = {
     hggUpGenomic,
@@ -111,18 +111,18 @@ struct chromPos
     int pos;
     };
 
-struct hash *hashBedTable(struct sqlConnection *conn, char *bedTable)
+struct hash *tableToChromPosHash(struct sqlConnection *conn, char *table, 
+	char *query)
 /* Create hash of chromPos keyed by name field. */ 
 {
-char query[256];
+char buf[256];
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(23);
 struct lm *lm = hash->lm;
 struct chromPos *pos;
-safef(query, sizeof(query), "select chrom,round((chromStart+chromEnd)*0.5),name from %s",
-	bedTable);
-sr = sqlGetResult(conn, query);
+safef(buf, sizeof(buf), query, table);
+sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     lmAllocVar(lm, pos);
@@ -134,23 +134,55 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-void  processDbBed(struct sqlConnection *conn, struct lineFile *lf, 
-	char *outFileName, char *bedTable)
+struct hash *tableToAliasHash(struct sqlConnection *conn, char *table,
+	char *query)
+/* Create hash of true name keyed by alias */
+{
+struct sqlResult *sr;
+char **row;
+struct hash *hash = hashNew(19);
+char buf[256];
+safef(buf, sizeof(buf), query, table);
+sr = sqlGetResult(conn, buf);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(hash, row[0], lmCloneString(hash->lm, row[1]));
+sqlFreeResult(&sr);
+return hash;
+}
+
+void processDb(struct sqlConnection *conn,
+	struct lineFile *lf, char *outFileName, 
+	char *table, char *query, char *aliasTable, char *aliasQuery)
 /* Process two column input file into chromGraph.  Treat first
  * column as a name to look up in bed-format table, which should
  * not be split. Return TRUE on success. */
 {
-struct hash *hash = hashBedTable(conn, bedTable);
+struct hash *hash = tableToChromPosHash(conn, table, query);
+struct hash *aliasHash = NULL;
 char *row[2];
 int match = 0, total = 0;
 struct chromGraph *list = NULL, *cg;
 struct chromPos *pos;
 hPrintf("Loaded %d elements from %s table for mapping.<BR>", hash->elCount,
-	bedTable);
+	table);
+if (aliasTable != NULL)
+    {
+    aliasHash = tableToAliasHash(conn, aliasTable, aliasQuery);
+    hPrintf("Loaded %d aliases from %s table as well.<BR>", aliasHash->elCount,
+    	aliasTable);
+    }
 while (lineFileRow(lf, row))
     {
+    char *name = row[0];
     ++total;
-    if ((pos = hashFindVal(hash, row[0])) != NULL)
+    pos = hashFindVal(hash, name);
+    if (pos == NULL && aliasHash != NULL)
+        {
+	name = hashFindVal(aliasHash, name);
+	if (name != NULL)
+	    pos = hashFindVal(hash, name);
+	}
+    if (pos != NULL)
         {
 	++match;
 	AllocVar(cg);
@@ -164,6 +196,8 @@ hPrintf("Mapped %d of %d (%3.1f%%) of markers<BR>", match, total,
 	100.0*match/total);
 slSort(&list, chromGraphCmp);
 chromGraphToBin(list, outFileName);
+#ifdef SOON
+#endif /* SOON */
 }
 
 void  processGenomic(struct sqlConnection *conn, struct lineFile *lf, 
@@ -227,14 +261,15 @@ if (errCatchStart(errCatch))
 return errCatchFinish(&errCatch);
 }
 
-boolean mayProcessDbBed(struct sqlConnection *conn,
-	struct lineFile *lf, char *outFileName, char *bedTable)
-/* Process three column file into chromGraph.  If there's a problem
+boolean mayProcessDb(struct sqlConnection *conn,
+	struct lineFile *lf, char *outFileName, 
+	char *table, char *query, char *aliasTable, char *aliasQuery)
+/* Process database table into chromGraph.  If there's a problem
  * print warning message and return FALSE. */
 {
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
-     processDbBed(conn, lf, outFileName, bedTable);
+     processDb(conn, lf, outFileName, table, query, aliasTable, aliasQuery);
 return errCatchFinish(&errCatch);
 }
 
@@ -335,15 +370,18 @@ binFile = tempName.forCgi;
 if (sameString(type, hggUpGenomic))
     ok = mayProcessGenomic(conn, lf, binFile);
 else if (sameString(type, hggUpSts))
-    ok = mayProcessDbBed(conn, lf, binFile, "stsMap");
+    ok = mayProcessDb(conn, lf, binFile, "stsMap",
+    	"select chrom,round((chromStart+chromEnd)*0.5),name from %s",
+	"stsAlias", "select alias,trueName from %s");
 else if (sameString(type, hggUpSnp))
     {
+    char *query = "select chrom,chromStart,name from %s";
     if (sqlTableExists(conn, "snp126"))
-        ok = mayProcessDbBed(conn, lf, binFile, "snp126");
+        ok = mayProcessDb(conn, lf, binFile, "snp126", query, NULL, NULL);
     else if (sqlTableExists(conn, "snp125"))
-        ok = mayProcessDbBed(conn, lf, binFile, "snp125");
+        ok = mayProcessDb(conn, lf, binFile, "snp125", query, NULL, NULL);
     else if (sqlTableExists(conn, "snp"))
-        ok = mayProcessDbBed(conn, lf, binFile, "snp");
+        ok = mayProcessDb(conn, lf, binFile, "snp", query, NULL, NULL);
     else
         warn("Couldn't find SNP table");
     }
