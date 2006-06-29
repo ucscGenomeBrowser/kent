@@ -45,14 +45,14 @@ on various conservation methods.</P>
 <H2>Display Conventions and Configuration</H2>
 <P>
 In full display mode, this track shows pairwise alignments
-of each species aligned to the human genome.
-The alignments are shown in dense display mode using a gray-scale
+of each species aligned to the human genome.  
+In dense mode, the alignments are depicted using a gray-scale
 density gradient.  The checkboxes in the track configuration section allow
-the exclusion of species from the pairwise display.
+the exclusion of species from the pairwise display.</P>
 <P>
 When zoomed-in to the base-display level, the track shows the base
-composition of each alignment. The numbers and symbols on the &quot;human
-gap&quot; line indicate the lengths of gaps in the human sequence at those
+composition of each alignment. The numbers and symbols on the &quot;Gaps&quot; 
+line indicate the lengths of gaps in the human sequence at those
 alignment positions relative to the longest non-human sequence. If the gap
 size is greater than 9, a non-numeric symbol is shown; if the
 gap size is a multiple of 3, a &quot;*&quot; is displayed,
@@ -62,21 +62,23 @@ alignments at a specific position, zoom in the display to 30,000 or fewer
 bases, then click on the alignment.  </P>
 
 <H2>Methods</H2>
-<P>MLAGAN alignments were produced by a pipeline specifically designed for
-ENCODE. First, WU-BLAST [1] was used to find local similarities (anchors) 
+<P>
+MLAGAN alignments were produced by a pipeline specifically designed for
+ENCODE. First, <A HREF="http://blast.wustl.edu" TARGET=_blank>WU-BLAST</A> was 
+used to find local similarities (anchors) 
 between the human sequence and the sequence of every other species. Then, 
-Shuffle-LAGAN [2] was used to calculate the highest-scoring
+Shuffle-LAGAN was used to calculate the highest-scoring
 human-monotonic 
 chain of these local similarities (according to a scoring scheme that 
-penalized evolutionary rearrangements), and (with the help of a utility 
-called SuperMap) produce a map of orthologous segments, in increasing human 
-coordinates. This map was used to undo the genomic rearrangements of the 
+penalized evolutionary rearrangements), and &mdash; with the help of a utility 
+called SuperMap &mdash; produce a map of orthologous segments, in increasing 
+human coordinates. This map was used to undo the genomic rearrangements of the 
 other sequence and convert it to a form that was directly alignable to the
 human sequence. The new humanized sequences, together with the human 
-sequence, were then multiply aligned using <A 
-HREF="http://lagan.stanford.edu/" TARGET=_blank>MLAGAN</A> [3]. The 
-resulting alignments were subsequently refined using <A 
-HREF="http://www.drive5.com/muscle/" TARGET=_blank>MUSCLE</A> [4], which 
+sequence, were then multiply aligned using 
+<A HREF="http://lagan.stanford.edu/" TARGET=_blank>MLAGAN</A>. The 
+resulting alignments were subsequently refined using 
+<A HREF="http://www.drive5.com/muscle/" TARGET=_blank>MUSCLE</A>, which 
 processed small non-overlapping alignment windows and realigned them in an
 iterative fashion, keeping the refined alignment if it had a better 
 sum-of-pairs score than the original.  Finally, a pairwise refinement
@@ -93,17 +95,12 @@ TARGET=_blank>ENCODE group</A>.</P>
 Shuffle-LAGAN, SuperMap and MLAGAN were written by Mike Brudno.</P>
 <P>
 MUSCLE was authored by Bob Edgar.</P>
+<P>
+WU-BLAST was provided by
+the <A HREF="http://sapiens.wustl.edu/~gishlab/" TARGET=_blank>Gish lab</A>
+at the School of Medicine, University of Washington in St. Louis.</P>
 
 <H2>References</H2>
-<P>
-Gish, W. (1996-2004) 
-<A TARGET=_BLANK HREF="http://blast.wustl.edu">WU-BLAST</A>
-<P>
-Brudno, M., Malde, S., Poliakov, A., Do, C., Couronne, O., Dubchak, I. and 
-Batzoglou, S.
-<A HREF="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/19/suppl_1/i54"
-TARGET=_blank>Global alignment: finding rearrangements during alignment</A>.
-<em>Bioinformatics</em> <B>19</B>(Suppl. 1), i54-i62 (2003).</P>
 <P>
 Brudno, M., Do, C., Cooper, G., Kim, M.F., Davydov, E., Green, E.D., Sidow, A.
 and Batzoglou, S. 
@@ -111,6 +108,12 @@ and Batzoglou, S.
 TARGET=_blank>LAGAN and Multi-LAGAN: efficient tools for large-scale multiple 
 alignment of genomic DNA</A>.
 <em>Genome Res.</em> <B>13</B>(4), 721-31 (2003).</P>
+<P>
+Brudno, M., Malde, S., Poliakov, A., Do, C., Couronne, O., Dubchak, I. and 
+Batzoglou, S.
+<A HREF="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/19/suppl_1/i54"
+TARGET=_blank>Global alignment: finding rearrangements during alignment</A>.
+<em>Bioinformatics</em> <B>19</B>(Suppl. 1), i54-i62 (2003).</P>
 <P>
 Edgar, R.C. 
 <A HREF="http://nar.oupjournals.org/cgi/content/full/32/5/1792?ijkey=48Nmt1tta0fMg&keytype=ref"
