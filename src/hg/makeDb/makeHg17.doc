@@ -21578,3 +21578,13 @@ hgsql hg17 <~/kent/src/hg/lib/rgdQtlLink.sql
 hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLink;'
 
 ########################################################################
+
+#########################################################################
+#Reload omimTitle table			Belinda Giardine June 28, 2006
+#fetched omim.txt.Z from OMIM downloads.
+#parse out title lines (*FIELD* TI)
+convertTitle < omim.txt > omimTitle.txt
+#load into omimTitle table
+truncate table omimTitle;
+load data local infile "omimTitle.txt" into table omimTitle;
+
