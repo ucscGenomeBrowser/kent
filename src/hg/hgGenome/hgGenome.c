@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.19 2006/06/28 22:29:28 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.20 2006/06/29 01:24:51 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -50,6 +50,7 @@ errAbort(
 
 /* ---- Get list of graphs. ---- */
 
+
 struct genoGraph *getUserGraphs()
 /* Get list of all user graphs */
 {
@@ -73,6 +74,8 @@ if (fileName != NULL && fileExists(fileName))
 	    gg->longLabel = hashFindVal(ra, "description");
 	    if (gg->longLabel == NULL) gg->longLabel = name;
 	    gg->binFileName = binaryFile;
+	    gg->settings = chromGraphSettingsGet(name, NULL, NULL, NULL);
+	    chromGraphSettingsFillFromHash(gg->settings, ra, name);
 	    slAddHead(&list, gg);
 	    }
 	}
@@ -86,6 +89,7 @@ struct genoGraph *getDbGraphs(struct sqlConnection *conn)
 {
 struct genoGraph *list = NULL, *gg;
 char *trackDbTable = hTrackDbName();
+struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
 char **row;
 
@@ -112,22 +116,26 @@ for (gg = list; gg != NULL; gg = gg->next)
     char query[512];
     char nameBuf[256];
     safef(query, sizeof(query), 
-    	"select shortLabel,longLabel,settings from %s where tableName='%s'",
-	trackDbTable, gg->name);
+    	"select * from %s where tableName='%s'", trackDbTable, gg->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
-	gg->shortLabel = cloneString(row[0]);
-	gg->longLabel = cloneString(row[1]);
-	gg->settings = raFromString(row[2]);
+	struct trackDb *tdb = trackDbLoad(row);
+	struct chromGraphSettings *cgs = chromGraphSettingsGet(gg->name,
+		conn2, tdb, cart);
+	gg->shortLabel = tdb->shortLabel;
+	gg->longLabel = tdb->longLabel;
+	gg->settings = cgs;
 	}
+    else
+        gg->settings = chromGraphSettingsGet(gg->name, NULL, NULL, NULL);
     sqlFreeResult(&sr);
 
     /* Add db: prefix to separate user and db name space. */
     safef(nameBuf, sizeof(nameBuf), "db: %s", gg->name);
     gg->name = cloneString(nameBuf);
     }
-
+hFreeConn(&conn2);
 slReverse(&list);
 return list;
 }
@@ -253,7 +261,7 @@ else if (sameWord("yellow", asciiColor))
 else if (sameWord("purple", asciiColor))
     return vgFindColorIx(vg, 150, 0, 200);
 else if (sameWord("orange", asciiColor))
-    return vgFindColorIx(vg, 200, 100, 0);
+    return vgFindColorIx(vg, 230, 120, 0);
 else if (sameWord("green", asciiColor))
     return vgFindColorIx(vg, 0, 180, 0);
 else if (sameWord("gray", asciiColor))
@@ -274,21 +282,65 @@ if (gg != NULL)
     {
     char *fileName = gg->binFileName;
     struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
+    struct chromGraphSettings *settings = gg->settings;
+    int maxGapToFill = settings->maxGapToFill;
     double pixelsPerBase = 1.0/gl->basesPerPixel;
-    double gMin = cgb->minVal, gMax = cgb->maxVal, gScale;
+    double gMin, gMax, gScale;
+
+    /* Figure out min/max to display. */
+    if (settings->minVal < settings->minVal)
+        {
+	gMin = settings->minVal;
+	gMax = settings->maxVal;
+	}
+    else
+        {
+	gMin = cgb->minVal;
+	gMax = cgb->maxVal;
+	}
 
     gScale = height/(gMax-gMin+1);
     while (chromGraphBinNextChrom(cgb))
 	{
 	struct genoLayChrom *chrom = hashFindVal(gl->chromHash, cgb->chrom);
-	while (chromGraphBinNextVal(cgb))
+	if (chrom)
 	    {
-	    if (chrom)
-		{
-		int y = (height - ((cgb->val - gMin)*gScale));
-		int x = (pixelsPerBase*cgb->chromStart);
-		vgDot(vg, x+chrom->x, y+chrom->y+yOff, color);
+	    int chromX = chrom->x, chromY = chrom->y;
+	    if (chromGraphBinNextVal(cgb))
+	        {
+		/* Handle first point as special case here, so don't
+		 * have to test for first point in inner loop. */
+		int x,y,start,lastStart,lastX,lastY;
+		start = lastStart = cgb->chromStart;
+		x = lastX = pixelsPerBase*start + chromX;
+		y = lastY = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
+		vgDot(vg, x, y, color);
+
+		/* Draw rest of points, connecting with line to previous point
+		 * if not too far off. */
+		while (chromGraphBinNextVal(cgb))
+		    {
+		    start = cgb->chromStart;
+		    x = pixelsPerBase*start + chromX;
+		    y = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
+		    if (x != lastX || y != lastY)
+		        {
+			if (start - lastStart <= maxGapToFill)
+			    vgLine(vg, lastX, lastY, x, y, color);
+			else
+			    vgDot(vg, x, y, color);
+			}
+		    lastX = x;
+		    lastY = y;
+		    lastStart = start;
+		    }
 		}
+	    }
+	else
+	    {
+	    /* Just read and discard data. */
+	    while (chromGraphBinNextVal(cgb))
+	        ;
 	    }
 	}
     }
@@ -327,7 +379,7 @@ for (i=0; i<graphRows; ++i)
     for (j=0; j<graphCols; ++j)
 	{
 	char *graph = graphSourceAt(i,j);
-	if (graph[0] != 0)
+	if (graph != NULL && graph[0] != 0)
 	    {
 	    Color color = colorFromAscii(vg, graphColorAt(i,j));
 	    drawChromGraph(vg, conn, gl, graph, 
@@ -425,7 +477,7 @@ for (i=0; i<graphRows; ++i)
     hPrintf("</TR>");
     }
 hPrintf("</TABLE>");
-cgiMakeButton(hggUpload, "(Upload)");
+cgiMakeButton(hggUpload, "Upload");
 hPrintf(" ");
 cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");

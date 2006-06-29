@@ -20,6 +20,9 @@
 #define hggDataSetName hggPrefix "dataSetName"
 #define hggDataSetDescription hggPrefix "dataSetDescription"
 #define hggLocType hggPrefix "locType"
+#define hggMinVal hggPrefix "minVal"
+#define hggMaxVal hggPrefix "maxVal"
+#define hggMaxGapToFill hggPrefix "maxGapToFill"
 #define hggUploadFile hggPrefix "uploadFile"
 #define hggUploadRa hggPrefix "uploadRa"
 
@@ -46,8 +49,8 @@ struct genoGraph
     char *name;			/* Graph name. */
     char *shortLabel;		/* Short label. */
     char *longLabel;		/* Long label. */
-    struct hash *settings;	/* Settings information. */
     char *binFileName;		/* Binary file associated with graph. */
+    struct chromGraphSettings *settings;  /* Display settings */
     };
 
 

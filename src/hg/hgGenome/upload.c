@@ -6,6 +6,7 @@
 #include "ra.h"
 #include "portable.h"
 #include "cheapcgi.h"
+#include "localmem.h"
 #include "cart.h"
 #include "web.h"
 #include "chromInfo.h"
@@ -43,9 +44,21 @@ hPrintf(" Locations are: ");
 cgiMakeDropList(hggLocType, locNames, 
 	ArraySize(locNames), cartUsualString(cart, hggLocType, locNames[0]));
 hPrintf("<BR>");
+
 hPrintf("Description: ");
 cartMakeTextVar(cart, hggDataSetDescription, "", 64);
 hPrintf("<BR>");
+
+hPrintf("Display Min Value: ");
+cartMakeTextVar(cart, hggMinVal, "", 5);
+hPrintf(" Max Value: ");
+cartMakeTextVar(cart, hggMaxVal, "", 5);
+hPrintf(" <i>Leave these blank to show all data</i><BR>");
+
+hPrintf("Draw lines between markers separated by up to ");
+cartMakeIntVar(cart, hggMaxGapToFill, 3000000, 8);
+hPrintf(" bases.<BR>");
+
 hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 cgiMakeButton(hggSubmitUpload, "Submit");
@@ -91,13 +104,66 @@ sqlFreeResult(&sr);
 return hash;
 }
 
+struct chromPos
+/* Just chromosome and position */
+    {
+    char *chrom;	/* Not allocated here */
+    int pos;
+    };
+
+struct hash *hashBedTable(struct sqlConnection *conn, char *bedTable)
+/* Create hash of chromPos keyed by name field. */ 
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(23);
+struct lm *lm = hash->lm;
+struct chromPos *pos;
+safef(query, sizeof(query), "select chrom,round((chromStart+chromEnd)*0.5),name from %s",
+	bedTable);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    lmAllocVar(lm, pos);
+    pos->chrom = lmCloneString(lm, row[0]);
+    pos->pos = sqlUnsigned(row[1]);
+    hashAdd(hash, row[2], pos);
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
 void  processDbBed(struct sqlConnection *conn, struct lineFile *lf, 
 	char *outFileName, char *bedTable)
 /* Process two column input file into chromGraph.  Treat first
  * column as a name to look up in bed-format table, which should
  * not be split. Return TRUE on success. */
 {
-uglyf("Theoretically processing via bed-format table %s<BR>", bedTable);
+struct hash *hash = hashBedTable(conn, bedTable);
+char *row[2];
+int match = 0, total = 0;
+struct chromGraph *list = NULL, *cg;
+struct chromPos *pos;
+hPrintf("Loaded %d elements from %s table for mapping.<BR>", hash->elCount,
+	bedTable);
+while (lineFileRow(lf, row))
+    {
+    ++total;
+    if ((pos = hashFindVal(hash, row[0])) != NULL)
+        {
+	++match;
+	AllocVar(cg);
+	cg->chrom = pos->chrom;
+	cg->chromStart = pos->pos;
+	cg->val = atof(row[1]);
+	slAddHead(&list, cg);
+	}
+    }
+hPrintf("Mapped %d of %d (%3.1f%%) of markers<BR>", match, total, 
+	100.0*match/total);
+slSort(&list, chromGraphCmp);
+chromGraphToBin(list, outFileName);
 }
 
 void  processGenomic(struct sqlConnection *conn, struct lineFile *lf, 
@@ -195,6 +261,13 @@ hashElFreeList(&list);
 carefulClose(&f);
 }
 
+static void addIfNonempty(struct hash *ra, char *cgiVar, char *raVar)
+/* If cgiVar exists and is non-empty, add it to ra. */
+{
+char *val = skipLeadingSpaces(cartUsualString(cart, cgiVar, ""));
+if (val[0] != 0)
+    hashAdd(ra, raVar, val);
+}
 
 void updateUploadRa(char *binFileName)
 /* Update upload ra file with current upload data */
@@ -204,7 +277,7 @@ struct tempName tempName;
 struct hash *allRaHash, *ra;
 char *graphName = skipLeadingSpaces(cartUsualString(cart, hggDataSetName, ""));
 
-if (graphName == "")
+if (graphName[0] == 0)
     graphName = "user data";
 
 /* Read in old ra file if possible, otherwise just dummy up an
@@ -233,6 +306,9 @@ hashAdd(ra, "description",
 hashAdd(ra, "locType",
 	cartUsualString(cart, hggLocType, locNames[0]));
 hashAdd(ra, "binaryFile", binFileName);
+addIfNonempty(ra, hggMinVal, "minVal");
+addIfNonempty(ra, hggMaxVal, "minVal");
+addIfNonempty(ra, hggMaxGapToFill, "maxGapToFill");
 
 /* Update allRaHash and save */
 hashAdd(allRaHash, graphName, ra);
@@ -290,18 +366,27 @@ if (ok)
 void submitUpload(struct sqlConnection *conn)
 /* Called when they've submitted from uploads page */
 {
-char *rawText = cartUsualString(cart, hggUploadFile, "");
-int rawTextSize = strlen(rawText);
-cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
-cartSaveSession(cart);
-processUpload(rawText, conn);
-cartRemove(cart, hggUploadFile);
-hPrintf("<CENTER>");
-cgiMakeButton("submit", "OK");
-hPrintf("</CENTER>");
-hPrintf("</FORM>");
-cartWebEnd();
+char *rawText = cartUsualString(cart, hggUploadFile, NULL);
+if (rawText == NULL || rawText[0] == 0)
+    {
+    cartWebStart(cart, "Upload error");
+    hPrintf("Please go back, enter a file with something in it, and try again.");
+    cartWebEnd();
+    }
+else
+    {
+    int rawTextSize = strlen(rawText);
+    cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);
+    hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
+    cartSaveSession(cart);
+    processUpload(rawText, conn);
+    cartRemove(cart, hggUploadFile);
+    hPrintf("<CENTER>");
+    cgiMakeButton("submit", "OK");
+    hPrintf("</CENTER>");
+    hPrintf("</FORM>");
+    cartWebEnd();
+    }
 }
 
 void foo()
