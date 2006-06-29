@@ -12,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.6 2006/05/03 03:20:54 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.7 2006/06/29 16:43:11 angie Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;
@@ -368,19 +368,19 @@ safef(cmd, sizeof(cmd),
     "hgsql %s -e 'drop table if exists %s; create table %s (query varchar(255), target varchar(255), distance float);'",
     db, table, table);
 printf("%s\n",cmd);
-if (status=system(cmd)) errAbort("returned %d\n",status);
+if ((status=system(cmd))) errAbort("returned %d\n",status);
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'load data local infile \"hgNetDist.tmp.tab\" into table %s ignore 1 lines;'",
     db, table);
 printf("%s\n",cmd);
-if (status=system(cmd)) errAbort("returned %d\n",status);
+if ((status=system(cmd))) errAbort("returned %d\n",status);
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'create index query on %s (query(8));'",
     db, table);
 printf("%s\n",cmd);
-if (status=system(cmd)) errAbort("returned %d\n",status);
+if ((status=system(cmd))) errAbort("returned %d\n",status);
 
 remove("hgNetDist.tmp.tab");
 
