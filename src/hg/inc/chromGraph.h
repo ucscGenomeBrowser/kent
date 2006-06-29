@@ -73,6 +73,8 @@ int chromGraphCmp(const void *va, const void *vb);
 void chromGraphGetMinMax(struct chromGraph *list, double *pMin, double *pMax);
 /* Figure out min/max values in list. */
 
+#define chromGraphDefaultGapToFill 25000
+
 struct chromGraphSettings
 /* Settings */
     {
@@ -84,6 +86,14 @@ struct chromGraphSettings
     int pixels;			/* Actual pixels. */
     int maxPixels;		/* Maximum allowed pixels. */
     };
+
+void chromGraphParseMinMax(char *trackName, char *text, 
+	double *pMin, double *pMax);
+/* Parse out min,max from text.  TrackName is just for error reporting */
+
+void chromGraphSettingsFillFromHash(struct chromGraphSettings *cgs, 
+	struct hash *hash, char *trackName);
+/* Fill in settings from hash table. TrackName is just for error reporting. */
 
 struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
 	struct sqlConnection *conn, struct trackDb *tdb, struct cart *cart);

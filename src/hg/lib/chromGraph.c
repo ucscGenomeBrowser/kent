@@ -8,9 +8,10 @@
 #include "obscure.h"
 #include "jksql.h"
 #include "sig.h"
+#include "trackDb.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.8 2006/06/28 19:57:54 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.9 2006/06/29 01:26:20 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -204,6 +205,56 @@ safef(query, sizeof(query),
 return sqlQuickString(conn, query);
 }
 
+void chromGraphParseMinMax(char *trackName, char *text, 
+	double *pMin, double *pMax)
+/* Parse out min,max from text.  TrackName is just for error reporting */
+{
+struct slName *list = commaSepToSlNames(text);
+if (slCount(list) != 2)
+    errAbort("minMax must have two values in %s", trackName);
+*pMin = atof(list->name);
+*pMax = atof(list->next->name);
+slFreeList(&list);
+}
+
+void chromGraphSettingsFillFromHash(struct chromGraphSettings *cgs, 
+	struct hash *hash, char *trackName)
+/* Fill in settings from hash table. TrackName is just for error reporting. */
+{
+char *setting;
+if ((setting = hashFindVal(hash, "maxGapToFill")) != NULL)
+    cgs->maxGapToFill = sqlUnsigned(setting);
+if ((setting = hashFindVal(hash, "minMax")) != NULL)
+    chromGraphParseMinMax(trackName, setting, &cgs->minVal, &cgs->maxVal);
+/* They can store min/max separately as well as together... */
+if ((setting = hashFindVal(hash, "maxVal")) != NULL)
+    cgs->maxVal = atof(setting);
+if ((setting = hashFindVal(hash, "minVal")) != NULL)
+    cgs->minVal = atof(setting);
+if ((setting = hashFindVal(hash, "linesAt")) != NULL)
+    {
+    struct slName *el, *list = commaSepToSlNames(setting);
+    int i;
+    cgs->linesAtCount = slCount(list);
+    if (cgs->linesAtCount <= 0)
+	errAbort("Missing linesAt data in %s", trackName);
+    AllocArray(cgs->linesAt, cgs->linesAtCount);
+    for (i=0,el=list; el!=NULL; ++i,el=el->next)
+	cgs->linesAt[i] = atof(el->name);
+    slFreeList(&list);
+    }
+if ((setting = hashFindVal(hash, "maxHeightPixels")) != NULL)
+    {
+    struct slName *list = charSepToSlNames(setting, ':');
+    if (slCount(list) != 3)
+	errAbort("maxHeightPixels in %s must have 3 : separated fields", 
+	    trackName);
+    cgs->maxPixels = sqlUnsigned(list->name);
+    cgs->pixels = sqlUnsigned(list->next->name);
+    cgs->minPixels = sqlUnsigned(list->next->next->name);
+    }
+
+}
 
 struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
 	struct sqlConnection *conn, struct trackDb *tdb, struct cart *cart)
@@ -214,7 +265,7 @@ struct chromGraphSettings *cgs;
 
 /* Allocate in memory with default settings */
 AllocVar(cgs);
-cgs->maxGapToFill = 25000;
+cgs->maxGapToFill = chromGraphDefaultGapToFill;
 cgs->minVal = 0;
 cgs->maxVal = 100;
 cgs->minPixels = 8;
@@ -230,40 +281,8 @@ if (conn != NULL)
 /* Try and fill in settings from tdb */
 if (tdb != NULL)
     {
-    char *setting;
-    if ((setting = trackDbSetting(tdb, "maxGapToFill")) != NULL)
-        cgs->maxGapToFill = sqlUnsigned(setting);
-    if ((setting = trackDbSetting(tdb, "minMax")) != NULL)
-	{
-	struct slName *list = commaSepToSlNames(setting);
-	if (slCount(list) != 2)
-	    errAbort("minMax must have two values in %s", trackName);
-	cgs->minVal = atof(list->name);
-	cgs->maxVal = atof(list->next->name);
-	slFreeList(&list);
-	}
-    if ((setting = trackDbSetting(tdb, "linesAt")) != NULL)
-	{
-	struct slName *el, *list = commaSepToSlNames(setting);
-	int i;
-	cgs->linesAtCount = slCount(list);
-	if (cgs->linesAtCount <= 0)
-	    errAbort("Missing linesAt data in %s", trackName);
-	AllocArray(cgs->linesAt, cgs->linesAtCount);
-	for (i=0,el=list; el!=NULL; ++i,el=el->next)
-	    cgs->linesAt[i] = atof(el->name);
-	slFreeList(&list);
-	}
-    if ((setting = trackDbSetting(tdb, "maxHeightPixels")) != NULL)
-        {
-	struct slName *list = charSepToSlNames(setting, ':');
-	if (slCount(list) != 3)
-	    errAbort("maxHeightPixels in %s must have 3 : separated fields", 
-	    	trackName);
-	cgs->maxPixels = sqlUnsigned(list->name);
-	cgs->pixels = sqlUnsigned(list->next->name);
-	cgs->minPixels = sqlUnsigned(list->next->next->name);
-	}
+    struct hash *hash = trackDbHashSettings(tdb);
+    chromGraphSettingsFillFromHash(cgs, hash, trackName);
     }
 
 /* Finally try and fill in settings from cart */
