@@ -7,7 +7,7 @@ TARGET=_blank>GERP</A> (Genomic Evolutionary Rate Profiling),
 conservation scoring of human ENCODE genomic DNA alignments to 27 
 other vertebrates using the 
 <A HREF="http://lagan.stanford.edu/lagan_web/index.shtml" 
-TARGET=_blank>MAVID</A> alignment package. 
+TARGET=_blank>MAVID</A> alignment package. </P>
 <P>
 The multiple sequence alignments may be viewed in
 the MAVID Alignment track. Another related track, MAVID Cons, shows 
@@ -34,7 +34,7 @@ respective Methods sections below.</P>
 <P>
 The predicted MCSs are segments of the alignment that are likely to
 have been &quot;generated&quot; by the conserved state of the phylo-HMM,
-<em>i.e</em>., maximal segments in which the maximum-likelihood (Viterbi)
+<em>i.e</em>. maximal segments in which the maximum-likelihood (Viterbi)
 path remains in the conserved state.</P>  
 
 <H3>BinCons-based Elements</H3>
@@ -46,16 +46,16 @@ reference sequence and each other species, given the neutral rate
 at four-fold degenerate sites. Neutral rates are calculated
 separately at each targeted region. For targets with no gene annotations,
 the average percent identity across all alignable sequence was instead used
-to weight the individual species binomial scores (this latter
-weighting scheme was found to closely match 4D weights).</P>
+to weight the individual species binomial scores; this latter
+weighting scheme was found to closely match 4D weights.</P>
 <P>
-The negative log of these P-values was then averaged across all 
+The negative log of these p-values was then averaged across all 
 human-referenced pairwise combinations, and the highest scoring overlapping 
 25 bp window for each base was the resulting score. This track shows the 
 plotting of a ranked percentile score normalized between 0 and 1 across all 
 ENCODE regions, such that the top 5% most conserved sequence across all ENCODE
-regions have a score of 0.95 or greater (top 10% have a score of 0.9 or 
-greater, and so on).</P>
+regions have a score of 0.95 or greater, the top 10% have a score of 0.9 or 
+greater, and so on.</P>
 <P>
 For each ENCODE target, a conservation score threshold was picked to match
 the number of conserved bases predicted by phastCons, an alternative method
