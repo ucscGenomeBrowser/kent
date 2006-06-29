@@ -11,16 +11,17 @@ ENCODE regions.
 The multiple sequence alignments may be viewed in the TBA Alignment
 track. Another related track, TBA Cons, shows the conservation scoring. 
 The descriptions accompanying these tracks detail
-the methods used to create the alignments and conservation.</P>
+the methods used to create the alignments and conservation scoring.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 The locations of conserved elements are indicated by blocks in the graphical
 display. This composite annotation track consists of several subtracks that
 show conserved elements derived by the various methods listed above.
-To show only selected subtracks, uncheck the boxes next to the tracks
+To view only selected subtracks, uncheck the boxes next to the tracks
 you wish to hide. </P>
-<P>The display may also be filtered to show only those items
+<P>
+The display may also be filtered to show only those items
 with unnormalized scores that meet or exceed a certain threshhold. To set a
 threshhold, type the minimum score into the text box at the top of the 
 description page.</P>
@@ -47,16 +48,16 @@ reference sequence and each other species, given the neutral rate
 at four-fold degenerate sites. Neutral rates are calculated
 separately at each targeted region. For targets with no gene annotations,
 the average percent identity across all alignable sequence was instead used
-to weight the individual species binomial scores (this latter
-weighting scheme was found to closely match 4D weights).</P>
+to weight the individual species binomial scores; this latter
+weighting scheme was found to closely match 4D weights.</P>
 <P>
-The negative log of these P-values was then averaged across all 
-human-referenced pairwise combinations, and the highest scoring overlapping 
+The negative log of these p-values was then averaged across all 
+human-referenced pairwise combinations, and the highest-scoring overlapping 
 25 bp window for each base was the resulting score. This track shows the 
 plotting of a ranked percentile score normalized between 0 and 1 across all 
 ENCODE regions, such that the top 5% most conserved sequence across all ENCODE
-regions have a score of 0.95 or greater (top 10% have a score of 0.9 or 
-greater, and so on).</P>
+regions have a score of 0.95 or greater, the top 10% have a score of 0.9 or 
+greater, and so on.</P>
 <P>
 For each ENCODE target, a conservation score threshold was picked to match
 the number of conserved bases predicted by phastCons, an alternative method
@@ -109,7 +110,7 @@ score is first defined as the sum of (-log p + log t) along an
 interval, where p is the SCONE score and t is some threshold value for
 conservation. This additive score may be treated as a random walk;
 elements are defined as the intervals between local minima and maxima
-along this walk. Subsequently a cutoff is set for the additive scores
+along this walk. Subsequently, a cutoff is set for the additive scores
 for each element. This cutoff is chosen such that the elements scoring
 above the cutoff for a random sequence of scores draw from a uniform
 distribution [0,1] with threshold t = 0.25 will cover no more than
