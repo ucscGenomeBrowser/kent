@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.98 2006/06/27 20:18:44 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.99 2006/06/30 19:40:03 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1024,7 +1024,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     /* create pairwise maf list from the multiple maf */
     for (maf = (struct mafAli *)track->customPt; maf != NULL; maf = maf->next)
         {
-        if ((mcThis = mafMayFindCompPrefix(maf, mi->db, "")) == NULL)
+        if ((mcThis = mafMayFindCompSpecies(maf, mi->db, '.')) == NULL)
             continue;
 	//if (mcPair->srcSize != 0)
         // TODO: replace with a cloneMafComp()
@@ -1040,7 +1040,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
         mcPair->rightStatus = mcThis->rightStatus;
         mcPair->rightLen = mcThis->rightLen;
 
-        mcThis = mafFindCompPrefix(maf, database, "");
+        mcThis = mafFindCompSpecies(maf, database, '.');
         AllocVar(mcMaster);
         mcMaster->src = cloneString(mcThis->src);
         mcMaster->srcSize = mcThis->srcSize;
@@ -1239,7 +1239,7 @@ else if (frame && (prevEnd != -1))
 	case 1:
 	    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd , prevEnd + 1  );
 	    sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
-	    comp = mafMayFindCompPrefix(sub, compName, ".");
+	    comp = mafMayFindCompSpecies(sub, compName, '.');
 	    if (comp && comp->text && (!(ISGAPSPACEORN(comp->text[0]) ||ISGAPSPACEORN(ptr[0]) ||ISGAPSPACEORN(ptr[1]))))
 		{
 		if (strand == '-')
@@ -1267,7 +1267,7 @@ else if (frame && (prevEnd != -1))
 		ali = mafLoadInRegion(conn, tableName, chromName, prevEnd - 1  , prevEnd + 1  );
 		sub = mafSubset(ali, masterChrom, prevEnd - 1  , prevEnd + 1  );
 		}
-	    comp = mafMayFindCompPrefix(sub, compName, ".");
+	    comp = mafMayFindCompSpecies(sub, compName, '.');
 	    if (comp && comp->text && (!(ISGAPSPACEORN(comp->text[0])||ISGAPSPACEORN(comp->text[1]) ||ISGAPSPACEORN(*ptr))))
 		{
 		if (strand == '-')
@@ -1342,7 +1342,7 @@ if (length && (nextStart != -1))
 	ali = mafLoadInRegion(conn, tableName, chromName, nextStart , nextStart + 2 );
 	sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
 	}
-    comp = mafMayFindCompPrefix(sub, compName, ".");
+    comp = mafMayFindCompSpecies(sub, compName, '.');
     if (comp && comp->text)
 	{
 	switch(length)
@@ -1574,7 +1574,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
             if (mi->db == NULL)
                 /* not a species line -- it's the gaps line, or... */
                 continue;
-            if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
+            if ((mc = mafMayFindCompSpecies(sub, mi->db, '.')) == NULL)
                 continue;
 	    if (mafStart == subStart)
 		{
@@ -1589,7 +1589,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    if (startInserts)
 		{
 		struct mafComp *mc1;
-		if (((mc1 = mafMayFindCompPrefix(maf, mi->db, "")) != NULL) && 
+		if (((mc1 = mafMayFindCompSpecies(maf, mi->db, '.')) != NULL) && 
 		    ((mc1->text) && (countNonDash(mc1->text, startInserts) > 0)))
 			{
 			mi->inserts[mi->insertsSize] =  (subStart - seqStart)+ 1;
