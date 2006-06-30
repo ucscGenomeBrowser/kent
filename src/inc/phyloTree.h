@@ -4,9 +4,7 @@
 #ifndef PHYLOTREE_H
 #define PHYLOTREE_H
 
-#ifndef LINEFILE_H
 #include "linefile.h"
-#endif
 
 struct phyloName
 {
