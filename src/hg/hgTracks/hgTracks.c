@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1142 2006/06/27 16:21:44 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1143 2006/06/30 19:56:18 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9980,6 +9980,34 @@ for (el = tg->items; el != NULL; el = el->next)
         char *hgvs = NULL;
         safef(query, sizeof(query), "select name from gv where id = '%s'", escId);
         hgvs = sqlQuickString(conn, query);
+        if (strlen(hgvs) > 30)
+            {
+            char *sN = NULL;
+            struct sqlResult *sr;
+            char **row;
+            char pos[128];
+            safef(pos, sizeof(pos), "%s:%d-%d ", el->chrom, el->chromStart, el->chromEnd);
+
+            /* long name check to see if there is a shorter one */
+            safef(query, sizeof(query), "select attrVal from gvAttr where id = '%s' and attrType = '%s'", escId, "shortName");
+            sr = sqlGetResult(conn, query);
+            while ((row = sqlNextRow(sr)) != NULL)
+                 {
+                 if (startsWith(pos, row[0]))
+                     {
+                     char *n = row[0];
+                     n+= strlen(pos); /* go to first letter in short name */
+                     sN = cloneString(n);
+                     break;
+                     }
+                 }
+            sqlFreeResult(&sr);
+            if (sN != NULL)
+                {
+                freeMem(hgvs);
+                hgvs = sN;
+                }
+            }
         freeMem(escId);
         if (hgvs != NULL)
             dyStringAppend(name, hgvs);

@@ -1888,6 +1888,7 @@ identifier gvId
     hg17.gv.id
     hg17.gvLink.id
     hg17.gvAttr.id
+    hg17.gvAttrLong.id
 
 identifier gvSrcId
 "Human Mutation track source ID"     

@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1045 2006/06/27 13:56:34 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1046 2006/06/30 19:56:27 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17780,14 +17780,15 @@ void doGv (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Genome variation track */
 {
 char *table = tdb->tableName;
-struct gvPos *mut;
-struct gv *details;
+struct gvPos *mut = NULL;
+struct gv *details = NULL;
 struct gvAttr attr;
+struct gvAttrLong attrLong;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName;
+char *escName = NULL;
 int hasAttr = 0;  
 int i;
 int start = cartInt(cart, "o");
@@ -17798,8 +17799,11 @@ genericHeader(tdb, itemName);
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query), "select * from gv where id = '%s'", escName);
 details = gvLoadByQuery(conn, query); 
-/* change this based on species? */
-printf("<B>HGVS name:</B> %s <BR />\n", details->name);
+/* change label based on species */
+if (sameString(organism, "Human"))
+    printf("<B>HGVS name:</B> %s <BR />\n", details->name);
+else
+    printf("<B>Official name:</B> %s <BR />\n", details->name);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, escName);
@@ -17841,6 +17845,20 @@ printf("<DL>");
 /* loop through attributes */
 for(i=0; i<gvAttrSize; i++)
     {
+    /* check all 3 attribute tables for each type */
+    safef(query, sizeof(query),
+        "select * from gvAttrLong where id = '%s' and attrType = '%s'",
+        escName, gvAttrTypeKey[i]);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        hasAttr++;
+        gvAttrLongStaticLoad(row, &attrLong);
+        printGvAttrCatType(i); /* only print header, if data */
+        /* print value */
+        printf("%s<BR />", attrLong.attrVal);
+        }
+    sqlFreeResult(&sr);
     safef(query, sizeof(query),
         "select * from gvAttr where id = '%s' and attrType = '%s'",
         escName, gvAttrTypeKey[i]);
@@ -17854,9 +17872,9 @@ for(i=0; i<gvAttrSize; i++)
         /* print value */
         printf("%s<BR />", attr.attrVal);
         }
+    sqlFreeResult(&sr);
     hasAttr += printGvLink(escName, i);
     }
-sqlFreeResult(&sr);
 if (hasAttr > 0)
     printf("</DD>"); 
 printf("</DL>\n");

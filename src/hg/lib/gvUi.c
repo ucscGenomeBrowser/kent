@@ -93,6 +93,7 @@ int gvAccuracySize = ArraySize(gvAccuracyLabel);
 
 /* list in display order of attribute type, key that is used in table */
 char *gvAttrTypeKey[] = {
+    "longName",
     "commonName",
     "alias",
     "links",
@@ -107,6 +108,7 @@ char *gvAttrTypeKey[] = {
 
 /* list in display order of attribute type display names */
 char *gvAttrTypeDisplay[] = {
+    "Full name",
     "Common name",
     "Alias",
     "External links",
@@ -121,6 +123,7 @@ char *gvAttrTypeDisplay[] = {
 
 /* category for each type above, match up by array index */
 char *gvAttrCategory[] = {
+    "Alias",
     "Alias",
     "Alias",
     "Links",

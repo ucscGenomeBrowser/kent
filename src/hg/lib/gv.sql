@@ -20,7 +20,7 @@ CREATE TABLE gv (
 	'exon', 
 	'5'' UTR', 
 	'3'' UTR', 
-	'not within known transcription unit'),
+	'not within known transcription unit') not null,
     coordinateAccuracy tinyint unsigned not null,	# 0=estimated, 1=definite, others?
               #Indices
     PRIMARY KEY(id)
@@ -32,7 +32,7 @@ CREATE TABLE gvPos (
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
-    name varchar(255) not null,	# ID for this mutation
+    name varchar(48) not null,	# ID for this mutation
               #Indices
     INDEX(bin),
     UNIQUE KEY (chrom(12), chromStart, chromEnd, name)
@@ -53,7 +53,7 @@ CREATE TABLE gvAttr (
     attrType varchar(48) not null,	# attribute type
     attrVal varchar(255) not null,	# value for this attribute
               #Indices
-    INDEX(id)
+    INDEX(id, attrType)
 );
 
 #links both urls and local table lookups
@@ -64,5 +64,14 @@ CREATE TABLE gvLink (
     acc varchar(255) not null,	# accession or id used by link
     displayVal varchar(255) not null,	# value to display if different from acc
               #Indices
-    INDEX(id)
+    INDEX(id, attrType)
+);
+
+#attributes associated with a mutation that need long text
+CREATE TABLE gvAttrLong (
+    id varchar(48) not null,	# mutation ID
+    attrType varchar(48) not null,	# attribute type
+    attrVal longblob not null,	# value for this attribute
+              #Indices
+    INDEX(id, attrType)
 );

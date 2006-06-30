@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "gv.h"
 
-static char const rcsid[] = "$Id: gv.c,v 1.1 2006/06/27 13:56:50 giardine Exp $";
+static char const rcsid[] = "$Id: gv.c,v 1.2 2006/06/30 19:56:46 giardine Exp $";
 
 void gvStaticLoad(char **row, struct gv *ret)
 /* Load a row from gv table into ret.  The contents of ret will
@@ -354,6 +354,7 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
+ret->id = NULL;
 *pS = s;
 return ret;
 }
@@ -367,6 +368,7 @@ struct gvPos *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->id);
 freez(pEl);
 }
 
@@ -958,6 +960,186 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->displayVal);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void gvAttrLongStaticLoad(char **row, struct gvAttrLong *ret)
+/* Load a row from gvAttrLong table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = row[0];
+ret->attrType = row[1];
+ret->attrVal = row[2];
+}
+
+struct gvAttrLong *gvAttrLongLoad(char **row)
+/* Load a gvAttrLong from row fetched with select * from gvAttrLong
+ * from database.  Dispose of this with gvAttrLongFree(). */
+{
+struct gvAttrLong *ret;
+
+AllocVar(ret);
+ret->id = cloneString(row[0]);
+ret->attrType = cloneString(row[1]);
+ret->attrVal = cloneString(row[2]);
+return ret;
+}
+
+struct gvAttrLong *gvAttrLongLoadAll(char *fileName) 
+/* Load all gvAttrLong from a whitespace-separated file.
+ * Dispose of this with gvAttrLongFreeList(). */
+{
+struct gvAttrLong *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = gvAttrLongLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct gvAttrLong *gvAttrLongLoadAllByChar(char *fileName, char chopper) 
+/* Load all gvAttrLong from a chopper separated file.
+ * Dispose of this with gvAttrLongFreeList(). */
+{
+struct gvAttrLong *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = gvAttrLongLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct gvAttrLong *gvAttrLongLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all gvAttrLong from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gvAttrLongFreeList(). */
+{
+struct gvAttrLong *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = gvAttrLongLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void gvAttrLongSaveToDb(struct sqlConnection *conn, struct gvAttrLong *el, char *tableName, int updateSize)
+/* Save gvAttrLong as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use gvAttrLongSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%s)", 
+	tableName,  el->id,  el->attrType,  el->attrVal);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void gvAttrLongSaveToDbEscaped(struct sqlConnection *conn, struct gvAttrLong *el, char *tableName, int updateSize)
+/* Save gvAttrLong as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than gvAttrLongSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *id, *attrType, *attrVal;
+id = sqlEscapeString(el->id);
+attrType = sqlEscapeString(el->attrType);
+attrVal = sqlEscapeString(el->attrVal);
+
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+	tableName,  id,  attrType,  attrVal);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&id);
+freez(&attrType);
+freez(&attrVal);
+}
+
+struct gvAttrLong *gvAttrLongCommaIn(char **pS, struct gvAttrLong *ret)
+/* Create a gvAttrLong out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new gvAttrLong */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlStringComma(&s);
+ret->attrType = sqlStringComma(&s);
+ret->attrVal = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void gvAttrLongFree(struct gvAttrLong **pEl)
+/* Free a single dynamically allocated gvAttrLong such as created
+ * with gvAttrLongLoad(). */
+{
+struct gvAttrLong *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->id);
+freeMem(el->attrType);
+freeMem(el->attrVal);
+freez(pEl);
+}
+
+void gvAttrLongFreeList(struct gvAttrLong **pList)
+/* Free a list of dynamically allocated gvAttrLong's */
+{
+struct gvAttrLong *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    gvAttrLongFree(&el);
+    }
+*pList = NULL;
+}
+
+void gvAttrLongOutput(struct gvAttrLong *el, FILE *f, char sep, char lastSep) 
+/* Print out gvAttrLong.  Separate fields with sep. Follow last field with lastSep. */
+{
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->id);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->attrType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->attrVal);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
