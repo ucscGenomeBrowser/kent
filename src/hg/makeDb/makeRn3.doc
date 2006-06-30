@@ -5262,11 +5262,12 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
 
 
 #####################################################################
-# SEGMENTAL DUPLICATIONS (DONE 6/22/06 angie)
+# SEGMENTAL DUPLICATIONS (DONE 6/30/06 angie)
     # File emailed from Xinwei She <xws@u.washington.edu>
     mkdir /cluster/data/rn3/bed/genomicSuperDups
     cd /cluster/data/rn3/bed/genomicSuperDups
     sed -e 's/\t_\t/\t-\t/' rn3_genomicSuperDup.tab \
+    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed rn3 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
