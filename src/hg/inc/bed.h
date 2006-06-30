@@ -300,5 +300,8 @@ int bedParseRgb(char *itemRgb);
 /*	parse a string: "r,g,b" into three unsigned char values
 	returned as 24 bit number, or -1 for failure */
 
+long long bedTotalSize(struct bed *bedList);
+/* Add together sizes of all beds in list. */
+
 #endif /* BED_H */
 
