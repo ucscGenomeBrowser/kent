@@ -58,7 +58,7 @@ hPrintf(" <i>Leave these blank to show all data</i><BR>");
 hPrintf("Label Values: ");
 cartMakeTextVar(cart, hggLabelVals, "", 32);
 hPrintf(" <i>Comma-separated numbers for axis label</i><BR>");
-hPrintf("Draw lines between markers separated by up to ");
+hPrintf("Draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 3000000, 8);
 hPrintf(" bases.<BR>");
 

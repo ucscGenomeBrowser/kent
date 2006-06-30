@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.22 2006/06/29 18:50:40 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.23 2006/06/30 05:30:37 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -365,6 +365,7 @@ if (gg != NULL)
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
 
     gScale = height/(gMax-gMin+1);
+    chromGraphBinRewind(cgb);
     while (chromGraphBinNextChrom(cgb))
 	{
 	struct genoLayChrom *chrom = hashFindVal(gl->chromHash, cgb->chrom);
