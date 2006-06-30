@@ -63,7 +63,7 @@
 #include "web.h"
 
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.7 2006/06/30 08:22:39 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.8 2006/06/30 17:47:19 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -406,14 +406,20 @@ if (useCart)
 	webNewSection("Notes");
     	puts(
 "<pre>\n"
-"1. If a space is required in a node label, enter it as a dash.\n"
+"1. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.\n"
 "\n"
-"2. Underscores and anything following them are automatically stripped from node labels \n"
+"2. If a space is required in a node label, enter it as a dash.\n"
+"\n"
+"3. Underscores and anything following them are automatically stripped from node labels \n"
 "unless the preserve-underscores checkbox is checked.\n"
 "\n"
-"3. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.\n"
+"4. The tree is in the phastCons or .nh format name:length.  Parentheses create a parent.\n"
+"Parents must have two children. Length is not required if use-branch-lengths is not checked.\n"
+"The length of the root branch is usually not specified. A semi-colon terminates the tree.\n"
+"Example:\n"
+"((A:0.1,B:0.1):0.2,C:0.15);\n"
 "\n"
-"4. The branch lengths are expected substitutions per site, allowing for\n"
+"5. PhastCons branch lengths are expected substitutions per site, allowing for\n"
 "multiple hits.  So a branch length of 0.5 means an average of one\n"
 "substitutions every two nucleotide sites, but the percent id will be\n"
 "less than 50% because some of those substitutions are obscured by\n"
