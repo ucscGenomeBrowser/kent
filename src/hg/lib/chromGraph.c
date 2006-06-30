@@ -9,9 +9,10 @@
 #include "jksql.h"
 #include "sig.h"
 #include "trackDb.h"
+#include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.11 2006/06/30 05:27:44 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.12 2006/06/30 20:35:27 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -548,5 +549,61 @@ if (cgb->chromStart == (bits32)(-1))
     return FALSE;
 mustReadOne(f, cgb->val);
 return TRUE;
+}
+
+struct bed3 *chromGraphBinToBed3(char *fileName, boolean threshold)
+/* Stream through making list of all places above threshold. */
+{
+struct bed3 *list = NULL, *bed = NULL;
+struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
+double val, lastVal = 0;
+int start, lastStart = 0;
+while (chromGraphBinNextChrom(cgb))
+    {
+    /* Set up bed around first point in chromosome. */
+    char *chrom = cgb->chrom;
+    bed = NULL;
+    if (!chromGraphBinNextVal(cgb))
+        continue;
+    lastVal = val = cgb->val;
+    lastStart = start = cgb->chromStart;
+    if (val >= threshold)
+	{
+	bed = bed3New(chrom, start, start+1);
+	slAddHead(&list, bed);
+	}
+
+    /* Loop for next points, extending bed when get transition out, 
+     * creating bed when getting transition in. */
+    while (chromGraphBinNextVal(cgb))
+        {
+	val = cgb->val;
+	start = cgb->chromStart;
+
+	if (lastVal >= threshold && val < threshold)
+	    {
+	    double ratio = (lastVal - threshold)/(lastVal - val);
+	    assert(bed != NULL);
+	    bed->chromEnd = lastStart + (start-lastStart)*ratio;
+	    bed = NULL;
+	    }
+	else if (lastVal < threshold && val >= threshold)
+	    {
+	    double ratio = (threshold - lastVal)/(val - lastVal);
+	    int cross = lastStart + (start - lastStart)*ratio;
+	    bed = bed3New(chrom, cross, cross+1);
+	    slAddHead(&list, bed);
+	    }
+	lastVal = val;
+	lastStart = start;
+	}
+
+    /* Handle last val */
+    if (bed != NULL && lastVal >= threshold)
+	bed->chromEnd = lastStart+1;
+
+    }
+slReverse(&list);
+return list;
 }
 
