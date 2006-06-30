@@ -179,5 +179,8 @@ boolean chromGraphBinNextVal(struct chromGraphBin *cgb);
 boolean chromGraphBinSeekToChrom(struct chromGraphBin *cgb, char *chromName);
 /* Seek to chromosome if have data for it.  Otherwise return FALSE. */
 
+void chromGraphBinRewind(struct chromGraphBin *cgb);
+/* Position file pointer back to the first chromosome */
+
 #endif /* CHROMGRAPH_H */
 

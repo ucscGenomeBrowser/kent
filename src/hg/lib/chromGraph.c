@@ -11,7 +11,7 @@
 #include "trackDb.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.9 2006/06/29 01:26:20 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.10 2006/06/30 05:25:17 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -502,6 +502,12 @@ if (chrom == NULL)
 fseek(cgb->f, chrom->offset, SEEK_SET);
 chromGraphBinNextChrom(cgb);
 return TRUE;
+}
+
+void chromGraphBinRewind(struct chromGraphBin *cgb)
+/* Position file pointer back to the first chromosome */
+{
+fseek(cgb->f, cgb->chromList->offset, SEEK_SET);
 }
 
 void chromGraphBinFree(struct chromGraphBin **pCgb)
