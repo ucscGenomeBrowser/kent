@@ -4,6 +4,7 @@
 #include "bed.h"
 #include "htmshell.h"
 #include "cart.h"
+#include "hui.h"
 #include "web.h"
 #include "chromGraph.h"
 #include "hgGenome.h"
@@ -46,10 +47,14 @@ char *indexFrame = "index";
 struct tempName indexTn;
 makeTempName(&indexTn, "hggIndex", ".html");
 FILE *f = mustOpen(indexTn.forCgi, "w");
+htmlSetBackground(hBackgroundImage());
 htmStart(f, "Region Index");
 fprintf(f, "<BODY>");
 fprintf(f, "<B>%s</B><BR>\n", gg->shortLabel);
-fprintf(f, "%d&nbsp;regions&nbsp;>&nbsp;%g<BR>", slCount(bedList), threshold);
+fprintf(f, "%3.1f&nbsp;Mb&nbsp;in<BR>\n",
+	0.000001*bedTotalSize((struct bed*)bedList));
+fprintf(f, "%d&nbsp;regions&nbsp;>&nbsp;%g<BR>\n", 
+	slCount(bedList), threshold);
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     fprintf(f, "<A HREF=");
