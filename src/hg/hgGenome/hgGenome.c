@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.23 2006/06/30 05:30:37 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.24 2006/06/30 20:38:13 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -66,7 +66,7 @@ if (fileName != NULL && fileExists(fileName))
 	if (name != NULL && binaryFile != NULL && fileExists(binaryFile))
 	    {
 	    char nameBuf[256];
-	    safef(nameBuf, sizeof(nameBuf), "user: %s", name);
+	    safef(nameBuf, sizeof(nameBuf), "%s%s", hggUserTag, name);
 	    AllocVar(gg);
 	    gg->name = cloneString(nameBuf);
 	    gg->shortLabel = name;
@@ -131,7 +131,7 @@ for (gg = list; gg != NULL; gg = gg->next)
     sqlFreeResult(&sr);
 
     /* Add db: prefix to separate user and db name space. */
-    safef(nameBuf, sizeof(nameBuf), "db: %s", gg->name);
+    safef(nameBuf, sizeof(nameBuf), "%s%s", hggDbTag, gg->name);
     gg->name = cloneString(nameBuf);
     }
 hFreeConn(&conn2);
@@ -608,9 +608,9 @@ cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");
 cgiMakeOptionalButton(hggCorrelate, "(Correlate)", realCount < 2);
 hPrintf(" significance threshold:");
-cgiMakeDoubleVar(hggThreshold, defaultThreshold,  3);
+cartMakeDoubleVar(cart, hggThreshold, defaultThreshold,  3);
 hPrintf(" ");
-cgiMakeOptionalButton(hggBrowse, "(Browse Regions)", realCount == 0);
+cgiMakeOptionalButton(hggBrowse, "Browse Regions", realCount == 0);
 hPrintf(" ");
 cgiMakeOptionalButton(hggSort, "(Sort Genes)", realCount == 0);
 hPrintf("<BR>");
@@ -702,7 +702,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetStyle(htmlStyleUndecoratedLink);
+// htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
 oldCart = hashNew(12);

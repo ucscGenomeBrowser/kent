@@ -42,6 +42,10 @@ extern struct hash *oldCart;
 extern char *database;
 extern char *genome;
 
+/*** Name prefixes to separate user from db graphs. */
+#define hggUserTag "user: "
+#define hggDbTag "db: "
+
 /*** Info on a single graph. ***/
 
 struct genoGraph
