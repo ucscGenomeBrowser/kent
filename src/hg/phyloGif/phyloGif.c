@@ -63,7 +63,10 @@
 #include "web.h"
 
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.8 2006/06/30 17:47:19 galt Exp $";
+#include "errabort.h"
+#include "errCatch.h"
+
+static char const rcsid[] = "$Id: phyloGif.c,v 1.9 2006/06/30 23:13:37 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -77,10 +80,11 @@ boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
 boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
 int branchDecimals = 2;         /* show branch label length to two decimals by default */
 char *escapePattern = NULL;      /* use to escape dash '-' char in input */
+char layoutErrMsg[1024] = "";
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", NULL};
+char *excludeVars[] = {"Submit", "submit", "phyloGif_submit", "phyloGif_restore", NULL};
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -165,6 +169,9 @@ if (depth > *pMaxDepth)
 phyloTree->priv = (void *) needMem(sizeof(struct phyloLayout));
 this = (struct phyloLayout *) phyloTree->priv;
 this->hPos = parentHPos + phyloTree->ident->length;
+if (branchLengths && phyloTree->ident->length == 0 && depth != 0)
+    safef(layoutErrMsg,sizeof(layoutErrMsg),"Branch length is missing for %s.\n",
+	phyloTree->ident->name ? phyloTree->ident->name : "an internal node");
 if (phyloTree->numEdges == 2)  /* node */
     {
     int maxDepth = 0;
@@ -207,7 +214,12 @@ else if (phyloTree->numEdges == 0)  /* leaf */
 	*pMinMaxFactor = factor;
     }
 else
-    errAbort("expected tree nodes to have 0 or 2 edges, found %d\n", phyloTree->numEdges); 
+    {
+    safef(layoutErrMsg,sizeof(layoutErrMsg),
+	"Expected tree nodes to have 0 or 2 edges, found %d.\n"
+	"Check for missing commas or missing data.\n"
+	,phyloTree->numEdges); 
+    }
 
 }
 
@@ -318,7 +330,7 @@ if (onWeb)
 //cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 
 
-useCart = (!cgiOptionalString("phyloGif_tree"));
+useCart = (!cgiOptionalString("phyloGif_tree") || cgiVarExists("phyloGif_restore"));
 
 MgFont *font = mgMediumBoldFont();
 htmlPageWrapper = cgiVarExists("phyloGif_htmlPage"); /* wrap output in a page */
@@ -363,7 +375,7 @@ if (useCart)
     	printf("Content-type: text/html\r\n");
 	printf("\r\n");
 	cartWebStart(cart, "%s", "phyloGif Interactive Phylogenetic Tree Gif Maker");
-	printf("<form method=\"GET\" action=\"phyloGif\" name=\"mainForm\">");
+	puts("<form method=\"GET\" action=\"phyloGif\" name=\"mainForm\">");
 	cartSaveSession(cart);
 	puts("<table>");
 	puts("<tr><td>Width:</td><td>"); cartMakeIntVar(cart, "phyloGif_width", width, 4); puts("</td></tr>");
@@ -375,8 +387,11 @@ if (useCart)
 	puts("<tr><td>Preserve Underscores?</td><td>"); cartMakeCheckBox(cart, "phyloGif_underscores", preserveUnderscores); puts("</td></tr>");
 	puts("<tr><td>Wrap in html page?</td><td>"); cartMakeCheckBox(cart, "phyloGif_htmlPage", htmlPageWrapper); puts("</td></tr>");
 
-        printf("<tr><td>TREE:</td><td><textarea name=\"phyloGif_tree\" rows=14 cols=80>");
-	if (NULL == phyloData || phyloData[0] == '\0')
+        printf("<tr><td><big>TREE:</big>");
+	puts("<br><br><INPUT type=\"submit\" name=\"phyloGif_restore\" value=\"restore default\">");
+	
+	puts("</td><td><textarea name=\"phyloGif_tree\" rows=14 cols=80>");
+	if (NULL == phyloData || phyloData[0] == '\0' || cgiVarExists("phyloGif_restore"))
 	    {
 	    puts(
 "(((((((((\n"
@@ -396,38 +411,44 @@ if (useCart)
 	    }
 	else
 	    {
-	    puts(phyloData);
+	    printf("%s",phyloData);
 	    }
-	puts("</TEXTAREA>\n");
+	puts("</TEXTAREA>");
 	puts("</td></tr>");
-	puts("<tr><td>&nbsp;</td><td><INPUT type=\"submit\" name=\"phyloGif_submit\" value=\"submit\"></td></tr>");
+	puts("<tr><td>&nbsp;</td><td>");
+	puts("<INPUT type=\"submit\" name=\"phyloGif_submit\" value=\"submit\">");
+	puts("</td></tr>");
 	puts("</table>");
 	puts("</form>");
 	webNewSection("Notes");
     	puts(
-"<pre>\n"
-"1. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.\n"
 "\n"
-"2. If a space is required in a node label, enter it as a dash.\n"
-"\n"
-"3. Underscores and anything following them are automatically stripped from node labels \n"
-"unless the preserve-underscores checkbox is checked.\n"
-"\n"
+"1. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.<br>\n"
+"<br>\n"
+"2. Underscores and anything following them are automatically stripped from node labels\n"
+"unless the preserve-underscores checkbox is checked, in which case they are converted to spaces.<br>\n"
+"<br>\n"
+"3. If a space is required in a node label, enter it as a dash.<br>\n"
+"<br>\n"
 "4. The tree is in the phastCons or .nh format name:length.  Parentheses create a parent.\n"
 "Parents must have two children. Length is not required if use-branch-lengths is not checked.\n"
-"The length of the root branch is usually not specified. A semi-colon terminates the tree.\n"
-"Example:\n"
-"((A:0.1,B:0.1):0.2,C:0.15);\n"
-"\n"
+"The length of the root branch is usually not specified.<br>\n"
+"Example:<br>\n"
+"&nbsp;((A:0.1,B:0.1):0.2,C:0.15);<br>\n"
+"<br>\n"
 "5. PhastCons branch lengths are expected substitutions per site, allowing for\n"
 "multiple hits.  So a branch length of 0.5 means an average of one\n"
-"substitutions every two nucleotide sites, but the percent id will be\n"
+"substitution every two nucleotide sites, but the percent id will be\n"
 "less than 50% because some of those substitutions are obscured by\n"
-"subsequent substitutions.  They're estimated from neutral sites,\n"
+"subsequent substitutions.  They are estimated from neutral sites,\n"
 "sometimes fourfold degenerate sites in coding regions, or sometimes\n"
 "\"nonconserved\" sites according to phastCons.  The numbers are significant\n"
-"to two or 3 figures.\n"
-"</pre>"
+"to two or 3 figures.<br>\n"
+"<br>\n"
+"6. Wrap-in-html is useful when the browser automatically shinks a large image.\n"
+"This option keeps the image view full in the browser automatically.\n"
+"However, do not use with IE6 when performing save-as.\n"
+"<br>"
 	    );
 	cartWebEnd();
 	return 0;
@@ -435,6 +456,31 @@ if (useCart)
     else	    
     	usage("-phyloGif_tree is required 'option' or cgi variable.");
     }
+
+if (htmlPageWrapper)
+    {
+    printf("Content-type: text/html\r\n");
+    printf("\r\n");
+    puts("<html><head><title>Phylogenetic Tree</title></head><body>");
+    printf("<IMAGE SRC=\"http://%s%s"
+	    "?phyloGif_width=%d"
+	    "&phyloGif_height=%d"
+	    "&phyloGif_tree=%s"
+	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,phyloData);
+    if (branchLengths)
+	printf("&phyloGif_branchLengths=1");
+    if (lengthLegend)
+	printf("&phyloGif_lengthLegend=1");
+    if (branchLabels)
+	printf("&phyloGif_branchLabels=1");
+    printf("&phyloGif_branchDecimals=%d",branchDecimals);
+    if (preserveUnderscores)
+	printf("&phyloGif_underscores=1");
+    puts("\"></body></html>");
+    freez(&phyloData);
+    return 0;
+    }
+
 
 
 if (!onWeb && phyloData[0] != '(')
@@ -484,50 +530,84 @@ if (!strchr(phyloData,';'))
     freez(&temp);
     }
 
-if (htmlPageWrapper)
+
+/* parse phyloTree, but catch errAborts if any */
+
+{
+struct errCatch *errCatch = errCatchNew();
+char *errMsg = NULL;
+if (errCatchStart(errCatch))
     {
-    printf("Content-type: text/html\r\n");
-    printf("\r\n");
-    printf("<html><head><title></title></head><body>\n");
-    printf("<IMAGE SRC=\"http://%s%s"
-	    "?phyloGif_width=%d"
-	    "&phyloGif_height=%d"
-	    "&phyloGif_tree=%s"
-	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,phyloData);
-    if (branchLengths)
-	printf("&phyloGif_branchLengths=1");
-    if (lengthLegend)
-	printf("&phyloGif_lengthLegend=1");
-    if (branchLabels)
-	printf("&phyloGif_branchLabels=1");
-    printf("&phyloGif_branchDecimals=%d",branchDecimals);
-    if (preserveUnderscores)
-	printf("&phyloGif_underscores=1");
-    printf("\"></body></html>\n");
+    phyloTree = phyloParseString(phyloData);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    errMsg = cloneString(errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+if (errMsg)
+    {
+    if (onWeb)
+	{
+	printf("Content-type: text/html\r\n");
+	printf("\r\n");
+	puts("<html><head><title>PhyloTree parse error</title></head><body><pre>");
+	/* we dont think the specific error message coming back are correct or useful
+	 * so supply a generic err msg */
+	errMsg = cloneString("syntax error.");
+    	printf("input tree: [%s]\n\n%s",cgiString("phyloGif_tree"),errMsg);
+    	puts("</pre></body></html>");
+	}
+    else
+	{
+    	warn(errMsg);
+	}
+    freez(&errMsg);    
     freez(&phyloData);
     return 0;
     }
+}
 
 
-mg = mgNew(width,height);
-mgClearPixels(mg);
 
-lengthLegend = lengthLegend && branchLengths;  /* moot without lengths */
 
-if (lengthLegend)
-    {
-    int fHeight = mgFontPixelHeight(font);
-    height -= (MARGIN+2*fHeight);
-    }
-
-phyloTree = phyloParseString(phyloData);
 if (phyloTree)
     {
+    mg = mgNew(width,height);
+    mgClearPixels(mg);
+
+    lengthLegend = lengthLegend && branchLengths;  /* moot without lengths */
+    if (lengthLegend)
+	{
+	int fHeight = mgFontPixelHeight(font);
+	height -= (MARGIN+2*fHeight);
+	}
 
     phyloTreeLayoutBL(phyloTree, &maxDepth, &numLeafs, 0, font, &maxLabelWidth, width, &minMaxFactor, 0.0);
     
+    if (layoutErrMsg[0] != 0)
+	{
+	if (onWeb)
+	    {
+	    printf("Content-type: text/html\r\n");
+	    printf("\r\n");
+	    puts("<html><head><title>PhyloTree error</title></head><body><pre>");
+	    printf("input tree: [%s]\n\n%s",cgiString("phyloGif_tree"),layoutErrMsg);
+	    puts("</pre></body></html>");
+	    }
+	else
+	    {
+	    warn(layoutErrMsg);
+	    }
+	freez(&phyloData);
+	mgFree(&mg);
+	return 0;
+	}
+
     if (branchLengths)
-        phyloTreeGifBL(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, FALSE);
+        phyloTreeGifBL(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, 
+	    mg, font, minMaxFactor, FALSE);
     else	    
         phyloTreeGif(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
 
@@ -539,6 +619,7 @@ if (phyloTree)
 	int fHeight = mgFontPixelHeight(font);
 	int x=0;
 	int dh=0;
+	
 	mgDrawLine(mg, MARGIN,       height+fHeight/2, 
 		       width-MARGIN, height+fHeight/2, MG_BLACK);
 	while(TRUE)
