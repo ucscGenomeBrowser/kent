@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.11 2006/06/30 15:43:24 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.12 2006/06/30 19:41:06 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -250,7 +250,7 @@ for(; subSpecies; subSpecies = subSpecies->next)
     for(maf = mafList; maf ;  maf = maf->next)
 	{
 	masterMc = maf->components;
-	if ((mc = mafMayFindCompPrefix(maf, subSpecies->name,NULL)) == NULL)
+	if ((mc = mafMayFindCompSpecies(maf, subSpecies->name,'.')) == NULL)
 	    {
 	    continue;
 	    }
@@ -424,7 +424,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	mc = NULL;
 	if ((blockStatus->masterStart <= masterMc->start) && 
 	    (blockStatus->masterEnd > masterMc->start) && 
-	 ((mc = mafMayFindCompPrefix(maf, species->name,NULL)) == NULL))
+	 ((mc = mafMayFindCompSpecies(maf, species->name,'.')) == NULL))
 	    {
 	    if (blockStatus->mc != NULL)
 		{
