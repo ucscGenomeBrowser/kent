@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: patCount.c,v 1.4 2004/06/03 21:03:06 galt Exp $";
+static char const rcsid[] = "$Id: patCount.c,v 1.5 2006/06/30 15:29:28 angie Exp $";
 
 void usage()
 {
@@ -116,13 +116,13 @@ bits16 bigEnough = 0x3fff;
 
 for (i=0; i<oligoSize-1; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     }
 for (i=oligoSize-1; i<dnaSize; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     bits &= mask;
