@@ -11,7 +11,7 @@
 #include "trackDb.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.10 2006/06/30 05:25:17 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.11 2006/06/30 05:27:44 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -490,6 +490,7 @@ for (i=0; i<chromCount; ++i)
     slAddHead(&cgb->chromList, chrom);
     hashAdd(cgb->chromHash, chrom->name, chrom);
     }
+slReverse(&cgb->chromList);
 return cgb;
 }
 
