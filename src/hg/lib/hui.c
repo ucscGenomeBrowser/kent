@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.77 2006/04/13 17:44:08 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.78 2006/06/30 00:23:47 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1065,7 +1065,7 @@ for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
     struct trackDb *tdb = trackEl->val;
     char *dupe = cloneString(tdb->type);
     char *type = firstWordInLine(dupe);
-    if ((sameString(type, "genePred")) && (!sameString(tdb->tableName, "tigrGeneIndex")))
+    if ((sameString(type, "genePred")) && (!sameString(tdb->tableName, "tigrGeneIndex") && !trackDbIsComposite(tdb)))
 	{
 	AllocVar(name);
 	name->name = tdb->tableName;
