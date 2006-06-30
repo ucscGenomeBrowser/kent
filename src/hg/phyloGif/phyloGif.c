@@ -63,7 +63,7 @@
 #include "web.h"
 
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.6 2006/06/30 08:07:36 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.7 2006/06/30 08:22:39 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -308,15 +308,14 @@ cgiSpoof(&argc, argv);
 if (argc != 1)
     usage("wrong number of args");
 
-/* this will cause it to kick out the set-cookie: http response header line */
 if (onWeb)
     {
     htmlSetBackground(hBackgroundImage());  /* uses cfgOption */
+    /* this will cause it to kick out the set-cookie: http response header line */
     cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
     }
 
 //cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
-//cartCheckout(&cart);
 
 
 useCart = (!cgiOptionalString("phyloGif_tree"));
@@ -380,18 +379,18 @@ if (useCart)
 	if (NULL == phyloData || phyloData[0] == '\0')
 	    {
 	    puts(
-"((((((((("
-"(human_hg18:0.006690,chimp_panTro1:0.007571):0.024272,"
-"  macaque_rheMac2:0.0592):0.023960,"
-"    ((rat_rn4:0.081728,mouse_mm8:0.077017):0.229273,"
-"          rabbit_oryCun1:0.206767):0.1065):0.023026,"
-"          (cow_bosTau2:0.159182,dog_canFam2:0.147731):0.039450):0.028505,"
-"          armadillo_dasNov1:0.149862):0.015994,"
-"          (elephant_loxAfr1:0.104891,tenrec_echTel1:0.259797):0.040371):0.218400,"
-"          monodelphis_monDom4:0.371073):0.189124,"
-"          chicken_galGal2:0.454691):0.123297,"
-"          xenopus_xenTro1:0.782453):0.156067,"
-"          ((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.492961,"
+"(((((((((\n"
+"(human_hg18:0.006690,chimp_panTro1:0.007571):0.024272,\n"
+"  macaque_rheMac2:0.0592):0.023960,\n"
+"    ((rat_rn4:0.081728,mouse_mm8:0.077017):0.229273,\n"
+"          rabbit_oryCun1:0.206767):0.1065):0.023026,\n"
+"          (cow_bosTau2:0.159182,dog_canFam2:0.147731):0.039450):0.028505,\n"
+"          armadillo_dasNov1:0.149862):0.015994,\n"
+"          (elephant_loxAfr1:0.104891,tenrec_echTel1:0.259797):0.040371):0.218400,\n"
+"          monodelphis_monDom4:0.371073):0.189124,\n"
+"          chicken_galGal2:0.454691):0.123297,\n"
+"          xenopus_xenTro1:0.782453):0.156067,\n"
+"          ((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.492961,\n"
 "              zebrafish_danRer3:0.782561):0.156067);"
 		);
 	    }
