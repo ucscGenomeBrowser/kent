@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.44 2005/07/06 00:06:03 hiram Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.45 2006/06/30 00:56:06 galt Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -65,6 +65,7 @@ mg->height = height;
 mg->colorHash = colHashNew();
 mgSetDefaultColorMap(mg);
 mgUnclip(mg);
+mgClearPixels(mg);
 return mg;
 }
 
