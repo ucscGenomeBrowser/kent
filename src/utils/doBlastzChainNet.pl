@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.42 2006/06/27 23:25:15 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.43 2006/06/30 19:19:03 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -924,7 +924,7 @@ sub loadUp {
   # Make sure previous stage was successful.
   my $successDir = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
                              "$buildDir/mafNet/";
-  if (! -d $successDir && ! $opt_debug) {
+  if (! -e $successDir && ! $opt_debug) {
     die "loadUp: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
   }
