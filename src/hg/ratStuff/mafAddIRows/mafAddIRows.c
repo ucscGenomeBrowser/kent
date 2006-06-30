@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.10 2006/06/29 21:41:14 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.11 2006/06/30 15:43:24 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -20,15 +20,6 @@ struct strandHead *strandHeads;
 
 boolean addN = FALSE;
 boolean addDash = FALSE;
-
-struct bed3 
-/* A three field bed. */
-    {
-    struct bed3 *next;
-    char *chrom;	/* Allocated in hash. */
-    int start;		/* Start (0 based) */
-    int end;		/* End (non-inclusive) */
-    };
 
 void usage()
 /* Explain usage and exit. */
@@ -551,11 +542,11 @@ while (lineFileRow(lf, row))
     bk = hel->val;
     AllocVar(bed);
     bed->chrom = hel->name;
-    bed->start = lineFileNeedNum(lf, row, 1);
-    bed->end = lineFileNeedNum(lf, row, 2);
-    if (bed->start > bed->end)
+    bed->chromStart = lineFileNeedNum(lf, row, 1);
+    bed->chromEnd = lineFileNeedNum(lf, row, 2);
+    if (bed->chromStart > bed->chromEnd)
         errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
-    binKeeperAdd(bk, bed->start, bed->end, bed);
+    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
     }
 lineFileClose(&lf);
 return hash;
