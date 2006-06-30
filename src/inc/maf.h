@@ -122,6 +122,14 @@ struct mafComp *mafMayFindComponentDb(struct mafAli *maf, char *db);
 struct mafComp *mafFindComponent(struct mafAli *maf, char *src);
 /* Find component of given source or die trying. */
 
+struct mafComp *mafMayFindCompSpecies(struct mafAli *maf, char *species, char sepChar);
+/* Find component of given source that starts with species followed by sepChar or '\0'
+   Return NULL if not found. */
+
+struct mafComp *mafFindCompSpecies(struct mafAli *maf, char *species, char sepChar);
+/* Find component of given source that starts with species followed by sepChar or '\0'
+   or die trying. */
+
 struct mafComp *mafMayFindCompPrefix(struct mafAli *maf, char *pre, char *sep);
 /* Find component of given source that starts with pre followed by sep.
    Return NULL if not found. */
