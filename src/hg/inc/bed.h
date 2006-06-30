@@ -51,6 +51,9 @@ struct bed3
     unsigned chromEnd;	/* End position in chromosome */
     };
 
+struct bed3 *bed3New(char *chrom, int start, int end);
+/* Make new bed3. */
+
 struct bed4
 /* Browser extensible data - first four fields */
     {

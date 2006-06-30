@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.43 2006/06/28 00:50:47 aamp Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.44 2006/06/30 20:34:58 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1237,3 +1237,15 @@ return ( ((atoi(row[0]) & 0xff) << 16) |
 	((atoi(row[1]) & 0xff) << 8) |
 	(atoi(row[2]) & 0xff) );
 }
+
+struct bed3 *bed3New(char *chrom, int start, int end)
+/* Make new bed3. */
+{
+struct bed3 *bed;
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+return bed;
+}
+
