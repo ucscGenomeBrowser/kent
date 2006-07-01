@@ -1493,8 +1493,8 @@ identifier rgdEstId external=RGD
 
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
-    $rn.rgdQtl.name
-    $rn.rgdQtlLink.name
+    $rn,hg17.rgdQtl.name
+    $rn,hg17.rgdQtlLink.name
 
 identifier rgdSslpId external=RGD
 "RGD SSLP ID"
