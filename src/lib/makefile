@@ -6,7 +6,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     blastOut.o blastParse.o boxClump.o boxLump.o browserGfx.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o \
     chainToPsl.o cheapcgi.o codebias.o colHash.o common.o \
-    dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o \
+    correlate.o dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o \
     dnaseq.o dnautil.o dnaMotif.o dtdParse.o dystring.o \
     emblParse.o errabort.o errCatch.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
