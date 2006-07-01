@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.28 2006/07/01 08:53:07 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.29 2006/07/01 09:14:52 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -638,7 +638,7 @@ trackLayoutInit(&tl, cart);
 /* Figure out side label sizes */
 for (i=0; i<graphRows; ++i)
     {
-    for (j=0; j<graphCols && j < 2; ++j)
+    for (j=0; j<graphCols; ++j)
         {
 	char *source = graphSourceAt(i,j);
 	if (source != NULL)
