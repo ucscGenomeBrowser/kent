@@ -29,7 +29,6 @@ void browseRegions(struct sqlConnection *conn)
  * first link selected on the right. */
 {
 /* Get list of regions. */
-getGenoGraphs(conn);
 struct genoGraph *gg = ggFirstVisible();
 if (gg == NULL)
     errAbort("Please go back and select a graph.");

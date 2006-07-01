@@ -29,7 +29,6 @@ if (!hgNearOk(database))
     errAbort("Sorry, gene sorter not available for this database.");
 
 /* Get list of regions. */
-getGenoGraphs(conn);
 struct genoGraph *gg = ggFirstVisible();
 if (gg == NULL)
     errAbort("Please go back and select a graph.");

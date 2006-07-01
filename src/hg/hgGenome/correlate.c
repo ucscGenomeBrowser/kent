@@ -116,7 +116,6 @@ void correlatePage(struct sqlConnection *conn)
 cartWebStart(cart, "Correlations of all pairs of graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
 cartSaveSession(cart);
-getGenoGraphs(conn);
 struct slRef *ggRefList = ggAllVisible(conn);
 struct slRef *aRef, *bRef;
 hPrintf("<TABLE><TR><TD>");

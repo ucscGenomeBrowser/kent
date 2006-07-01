@@ -36,6 +36,9 @@
 #define hggCorrelate hggDo "Correlate"
 #define hggUpload hggDo "Upload"
 #define hggSubmitUpload hggDo "SubmitUpload"
+#define hggClick hggDo "Click"
+#define hggClickX hggClick ".x"
+#define hggClickY hggClick ".x"
 
 /*** External vars declared in hgGenome.h ***/
 extern struct cart *cart;
@@ -127,5 +130,8 @@ void browseRegions(struct sqlConnection *conn);
 
 void sortGenes(struct sqlConnection *conn);
 /* Put up sort gene page. */
+
+void clickOnImage(struct sqlConnection *conn);
+/* Handle click on image - calculate position in forward to genome browser. */
 
 #endif /* HGGENOME_H */

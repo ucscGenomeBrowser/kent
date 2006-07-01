@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.30 2006/07/01 09:24:37 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.31 2006/07/01 19:50:20 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -499,8 +499,11 @@ int i,j;
 /* Create gif file and make reference to it in html. */
 makeTempName(&gifTn, "hgtIdeo", ".gif");
 vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
-printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d>",
-	    gifTn.forHtml, gl->picWidth, gl->picHeight);
+
+// hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
+	    gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
+// hPrintf("</TD></TR></TABLE>\n");
 
 /* Get our grayscale. */
 hMakeGrayShades(vg, shadesOfGray, maxShade);
@@ -526,6 +529,11 @@ for (i=0; i<graphRows; ++i)
 	}
     yOffset += oneRowHeight;
     }
+
+vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
+vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
+vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
+vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
 vgClose(&vg);
 }
 
@@ -580,7 +588,6 @@ int minLeftLabelWidth = 0, minRightLabelWidth = 0;
 int realCount = 0;
 
 cartWebStart(cart, "%s Genome Graphs", genome);
-getGenoGraphs(conn);
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
@@ -683,8 +690,9 @@ struct sqlConnection *conn = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
-withLabels = cartBoolean(cart, hggLabels);
+withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn();
+getGenoGraphs(conn);
 
 if (cartVarExists(cart, hggConfigure))
     {
@@ -709,6 +717,10 @@ else if (cartVarExists(cart, hggBrowse))
 else if (cartVarExists(cart, hggSort))
     {
     sortGenes(conn);
+    }
+else if (cartVarExists(cart, hggClickX))
+    {
+    clickOnImage(conn);
     }
 else
     {
