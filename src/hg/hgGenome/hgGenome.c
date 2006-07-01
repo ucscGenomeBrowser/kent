@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.25 2006/07/01 05:02:35 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.26 2006/07/01 08:20:01 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -302,6 +302,23 @@ for (i=0; i<graphRows; ++i)
        if ((gg = ggAt(i,j)) != NULL)
            break;
 return gg;
+}
+
+struct slRef *ggAllVisible()
+/* Return list of references to all visible graphs */
+{
+struct slRef *list = NULL;
+int graphRows = linesOfGraphs();
+int graphCols = graphsPerLine();
+struct genoGraph *gg = NULL;
+int i,j;
+for (i=0; i<graphRows; ++i)
+   for (j=0; j<graphCols; ++j)
+       if ((gg = ggAt(i,j)) != NULL)
+	   refAdd(&list, gg);	
+           // refAddUnique(&list, gg);
+slReverse(&list);
+return list;
 }
 
 static char *allColors[] = {
@@ -677,8 +694,7 @@ else if (cartVarExists(cart, hggSubmitUpload))
     }
 else if (cartVarExists(cart, hggCorrelate))
     {
-    cartWebStart(cart, "Theoretically correlating, please go back");
-    cartWebEnd();
+    correlatePage(conn);
     }
 else if (cartVarExists(cart, hggBrowse))
     {

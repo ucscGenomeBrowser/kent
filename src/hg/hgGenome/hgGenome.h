@@ -103,13 +103,19 @@ char *graphColorAt(int row, int col);
 struct genoGraph *ggFirstVisible();
 /* Return first visible graph, or NULL if none. */
 
+struct slRef *ggAllVisible();
+/* Return list of references to all visible graphs */
+
 /*** Functions imported from other modules. ***/
+
+void uploadPage();
+/* Put up initial upload page. */
 
 void configurePage();
 /* Put up configuration page. */
 
-void uploadPage();
-/* Put up initial upload page. */
+void correlatePage(struct sqlConnection *conn);
+/* Put up correlation page. */
 
 void submitUpload(struct sqlConnection *conn);
 /* Called when they've submitted from uploads page */
