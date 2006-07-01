@@ -3,6 +3,7 @@
 #include "common.h"
 #include "web.h"
 #include "jksql.h"
+#include "cheapcgi.h"
 #include "chromGraph.h"
 #include "correlate.h"
 #include "hgGenome.h"
@@ -113,9 +114,12 @@ void correlatePage(struct sqlConnection *conn)
 /* Put up correlation page. */
 {
 cartWebStart(cart, "Correlations of all pairs of graphs");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
+cartSaveSession(cart);
 getGenoGraphs(conn);
 struct slRef *ggRefList = ggAllVisible(conn);
 struct slRef *aRef, *bRef;
+hPrintf("<TABLE><TR><TD>");
 webPrintLinkTableStart();
 webPrintLabelCell("Graph A");
 webPrintLabelCell("Graph B");
@@ -130,6 +134,12 @@ for (aRef = ggRefList; aRef != NULL; aRef = aRef->next)
 	}
     }
 webPrintLinkTableEnd();
+hPrintf("</TD><TD>");
+hPrintf("<CENTER>");
+cgiMakeButton("submit", "Return to Graphs");
+hPrintf("</CENTER>");
+hPrintf("</TD></TR></TABLE>");
+
 hPrintf("<P>R, also known as Pearson's correlation coefficient, is a measure ");
 hPrintf("of the extent that two graphs move together.  The value of R ranges ");
 hPrintf("between -1 and 1.  A positive R indicates that the graphs tend to ");
@@ -139,5 +149,6 @@ hPrintf("<P>R-Squared (which is indeed just R*R) measures how much of the ");
 hPrintf("variation in one graph can be explained by a linear dependence on ");
 hPrintf("other graph. R-Squared ranges between 0 when the two graphs are ");
 hPrintf("independent to 1 when the graphs are completely dependent.</P>");
+hPrintf("</FORM>");
 cartWebEnd();
 }

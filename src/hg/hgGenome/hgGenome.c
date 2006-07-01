@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.27 2006/07/01 08:46:51 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.28 2006/07/01 08:53:07 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -315,8 +315,7 @@ int i,j;
 for (i=0; i<graphRows; ++i)
    for (j=0; j<graphCols; ++j)
        if ((gg = ggAt(i,j)) != NULL)
-	   refAdd(&list, gg);	
-           // refAddUnique(&list, gg);
+           refAddUnique(&list, gg);
 slReverse(&list);
 return list;
 }
