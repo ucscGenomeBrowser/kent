@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.24 2006/06/30 20:38:13 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.25 2006/07/01 05:02:35 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -231,7 +231,7 @@ va_end(args);
 int graphHeight()
 /* Return height of graph. */
 {
-return cartUsualIntClipped(cart, hggGraphHeight, 25, 5, 200);
+return cartUsualIntClipped(cart, hggGraphHeight, 27, 5, 200);
 }
 
 int graphsPerLine()
@@ -612,7 +612,8 @@ cartMakeDoubleVar(cart, hggThreshold, defaultThreshold,  3);
 hPrintf(" ");
 cgiMakeOptionalButton(hggBrowse, "Browse Regions", realCount == 0);
 hPrintf(" ");
-cgiMakeOptionalButton(hggSort, "(Sort Genes)", realCount == 0);
+cgiMakeOptionalButton(hggSort, "Sort Genes", 
+	realCount == 0 || !hgNearOk(database));
 hPrintf("<BR>");
 
 /* Figure out basic dimensions of image. */
@@ -685,8 +686,7 @@ else if (cartVarExists(cart, hggBrowse))
     }
 else if (cartVarExists(cart, hggSort))
     {
-    cartWebStart(cart, "Theoretically sorting, please go back");
-    cartWebEnd();
+    sortGenes(conn);
     }
 else
     {

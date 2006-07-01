@@ -118,4 +118,7 @@ void browseRegions(struct sqlConnection *conn);
 /* Put up a frame with a list of links on the left and the
  * first link selected on the right. */
 
+void sortGenes(struct sqlConnection *conn);
+/* Put up sort gene page. */
+
 #endif /* HGGENOME_H */
