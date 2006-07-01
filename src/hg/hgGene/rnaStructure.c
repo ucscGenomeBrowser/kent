@@ -6,10 +6,11 @@
 #include "jksql.h"
 #include "rnaFold.h"
 #include "hui.h"
+#include "web.h"
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.8 2006/06/23 21:43:24 hiram Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.9 2006/07/01 08:32:33 kent Exp $";
 
 static void rnaTrashDirsInit(char **tables, int count)
 /*	create trash directories if necessary */
@@ -47,12 +48,12 @@ if (firstTime)
     firstTime = FALSE;
     }
 
-hPrintLinkTableStart();
-hPrintLabelCell("Region");
-hPrintLabelCell("Fold Energy");
-hPrintLabelCell("Bases");
-hPrintLabelCell("Energy/Base");
-hPrintWideLabelCell("<CENTER>Display As</CENTER>", 3);
+webPrintLinkTableStart();
+webPrintLabelCell("Region");
+webPrintLabelCell("Fold Energy");
+webPrintLabelCell("Bases");
+webPrintLabelCell("Energy/Base");
+webPrintWideLabelCell("<CENTER>Display As</CENTER>", 3);
 for (side = 0; side < ArraySize(names); ++side)
     {
     char *table = tables[side];
@@ -85,19 +86,19 @@ for (side = 0; side < ArraySize(names); ++side)
 	/* Print row of table, starting with energy terms . */
 	hPrintf("</TR><TR>");
 	bases = strlen(fold.seq);
-	hPrintLinkCell(names[side]);
-	hPrintLinkCellStart();
+	webPrintLinkCell(names[side]);
+	webPrintLinkCellStart();
 	hPrintf("%1.2f", fold.energy);
-	hPrintLinkCellEnd();
-	hPrintLinkCellStart();
+	webPrintLinkCellEnd();
+	webPrintLinkCellStart();
 	hPrintf("%d", bases);
-	hPrintLinkCellEnd();
-	hPrintLinkCellStart();
+	webPrintLinkCellEnd();
+	webPrintLinkCellStart();
 	hPrintf("%1.3f", fold.energy/bases);
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 
 	/* Print link to png image. */
-	hPrintLinkCellStart();
+	webPrintLinkCellStart();
 	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
 	    geneCgi, cartSidUrlString(cart), 
 	    hggMrnaFoldRegion, table,
@@ -105,28 +106,28 @@ for (side = 0; side < ArraySize(names); ++side)
 	    hggDoRnaFoldDisplay, "picture");
 	hPrintf(" Picture ");
 	hPrintf("</A>");
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 
 	/* Print link to PostScript. */
-	hPrintLinkCellStart();
+	webPrintLinkCellStart();
 	hPrintf("<A HREF=\"%s\" class=\"toc\">", psName);
 	hPrintf(" PostScript ");
 	hPrintf("</A>");
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 
 	/* Print link to text. */
-	hPrintLinkCellStart();
+	webPrintLinkCellStart();
 	hPrintf("<A HREF=\"%s?%s&%s=%s&%s=%s\" class=\"toc\" TARGET=_blank>",
 	    geneCgi, cartSidUrlString(cart), 
 	    hggMrnaFoldRegion, table,
 	    hggDoRnaFoldDisplay, "text");
 	hPrintf(" Text ");
 	hPrintf("</A>");
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 	}
     sqlFreeResult(&sr);
     }
-hPrintLinkTableEnd();
+webPrintLinkTableEnd();
 hPrintf("<BR>The RNAfold program from the ");
 hPrintf("<A HREF=\"http://www.tbi.univie.ac.at/~ivo/RNA/\" TARGET=_blank>");
 hPrintf("Vienna RNA Package</A> is used to perform the ");

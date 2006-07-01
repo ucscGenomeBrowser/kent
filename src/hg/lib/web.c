@@ -10,7 +10,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.90 2006/06/01 23:44:29 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.91 2006/07/01 08:32:34 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -901,3 +901,67 @@ void saveDbAndGenome(struct cart *cart, char *db, char *genome)
 cartSetString(cart, "db", db);
 cartSetString(cart, "org", genome);
 }
+
+void webPrintLinkTableStart()
+/* Print link table start in our colors. */
+{
+printf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+printf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
+}
+
+void webPrintLinkTableEnd()
+/* Print link table end in our colors. */
+{
+printf("</TR></TABLE>\n");
+printf("</TD></TR></TABLE>\n");
+}
+
+void webPrintLinkCellStart()
+/* Print link cell start in our colors. */
+{
+printf("<TD BGCOLOR=\"#"HG_COL_TABLE"\">");
+}
+
+void webPrintLinkCellEnd()
+/* Print link cell end in our colors. */
+{
+printf("</TD>");
+}
+
+void webPrintLinkCell(char *label)
+/* Print label cell in our colors. */
+{
+webPrintLinkCellStart();
+printf(label);
+webPrintLinkCellEnd();
+}
+
+void webPrintWideLabelCell(char *label, int colSpan)
+/* Print label cell over multiple columns in our colors. */
+{
+printf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
+if (colSpan > 1)
+    printf(" COLSPAN=%d", colSpan);
+printf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);
+}
+
+void webPrintLabelCell(char *label)
+/* Print label cell in our colors. */
+{
+webPrintWideLabelCell(label, 1);
+}
+
+void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
+/* Fill out partially empty last row. */
+{
+if (rowIx != 0 && itemPos < maxPerRow)
+    {
+    int i;
+    for (i=itemPos; i<maxPerRow; ++i)
+        {
+	webPrintLinkCellStart();
+	webPrintLinkCellEnd();
+	}
+    }
+}
+

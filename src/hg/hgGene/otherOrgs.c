@@ -5,11 +5,12 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "hui.h"
+#include "web.h"
 #include "hdb.h"
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.13 2006/04/17 21:35:47 angie Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.14 2006/07/01 08:32:33 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -166,7 +167,7 @@ static void otherOrgPrintLink(struct otherOrg *otherOrg,
 	char *otherId, char *urlFormat)
 /* If label and urlFormat exist then print up a link.  Otherwise print n/a. */
 {
-hPrintLinkCellStart();
+webPrintLinkCellStart();
 if (urlFormat != NULL && label != NULL)
     {
     if (otherId != NULL)
@@ -188,7 +189,7 @@ if (urlFormat != NULL && label != NULL)
     }
 else
     hPrintf("&nbsp;");
-hPrintLinkCellEnd();
+webPrintLinkCellEnd();
 }
 
 void otherOrgPepLink(struct otherOrg *otherOrg, char *command, char *label,
@@ -196,7 +197,7 @@ void otherOrgPepLink(struct otherOrg *otherOrg, char *command, char *label,
 /* Print link that will invoke self to work on other organism peptide. */
 {
 boolean gotIt = FALSE;
-hPrintLinkCellStart();
+webPrintLinkCellStart();
 if (id != NULL)
     {
     if (otherOrg->db != NULL && otherOrg->pepTable != NULL)
@@ -228,7 +229,7 @@ if (id != NULL)
     }
 if (!gotIt)
     hPrintf("&nbsp;");
-hPrintLinkCellEnd();
+webPrintLinkCellEnd();
 }
 
 static void otherOrgsPrint(struct section *section, struct sqlConnection *conn,
@@ -237,9 +238,9 @@ static void otherOrgsPrint(struct section *section, struct sqlConnection *conn,
 {
 struct otherOrg *otherOrg, *otherOrgList = section->items;
 
-hPrintLinkTableStart();
+webPrintLinkTableStart();
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
-    hPrintLabelCell(otherOrg->shortLabel);
+    webPrintLabelCell(otherOrg->shortLabel);
 hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
@@ -287,7 +288,7 @@ for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     otherOrgPepLink(otherOrg, hggDoOtherProteinAli, "Alignment", id, conn);
     freeMem(id);
     }
-hPrintLinkTableEnd();
+webPrintLinkTableEnd();
 }
 
 struct section *otherOrgsSection(struct sqlConnection *conn,

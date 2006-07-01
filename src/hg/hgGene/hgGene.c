@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.72 2006/06/07 23:39:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.73 2006/07/01 08:32:33 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -176,71 +176,6 @@ while ((c = *s++) != '\0')
         putchar(c);
     }
 }
-
-void hPrintLinkTableStart()
-/* Print link table start in our colors. */
-{
-hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
-hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
-}
-
-void hPrintLinkTableEnd()
-/* Print link table end in our colors. */
-{
-hPrintf("</TR></TABLE>\n");
-hPrintf("</TD></TR></TABLE>\n");
-}
-
-void hPrintLinkCellStart()
-/* Print link cell start in our colors. */
-{
-hPrintf("<TD BGCOLOR=\"#"HG_COL_TABLE"\">");
-}
-
-void hPrintLinkCellEnd()
-/* Print link cell end in our colors. */
-{
-hPrintf("</TD>");
-}
-
-void hPrintLinkCell(char *label)
-/* Print label cell in our colors. */
-{
-hPrintLinkCellStart();
-hPrintf(label);
-hPrintLinkCellEnd();
-}
-
-void hPrintWideLabelCell(char *label, int colSpan)
-/* Print label cell over multiple columns in our colors. */
-{
-hPrintf("<TD BGCOLOR=\"#"HG_COL_TABLE_LABEL"\"");
-// hPrintf("<TD BGCOLOR=\"#"HG_COL_TABLE\"");
-if (colSpan > 1)
-    hPrintf(" COLSPAN=%d", colSpan);
-hPrintf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);
-}
-
-void hPrintLabelCell(char *label)
-/* Print label cell in our colors. */
-{
-hPrintWideLabelCell(label, 1);
-}
-
-void hFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
-/* Fill out partially empty last row. */
-{
-if (rowIx != 0 && itemPos < maxPerRow)
-    {
-    int i;
-    for (i=itemPos; i<maxPerRow; ++i)
-        {
-	hPrintLinkCellStart();
-	hPrintLinkCellEnd();
-	}
-    }
-}
-
 
 
 /* --------------- Mid-level utility functions ----------------- */
@@ -732,8 +667,8 @@ struct section *section;
 
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
-hPrintLinkTableStart();
-hPrintLabelCell("Page Index");
+webPrintLinkTableStart();
+webPrintLabelCell("Page Index");
 itemPos += 1;
 for (section=sectionList; section != NULL; section = section->next)
     {
@@ -743,13 +678,13 @@ for (section=sectionList; section != NULL; section = section->next)
 	itemPos = 1;
 	++rowIx;
 	}
-    hPrintLinkCellStart();
+    webPrintLinkCellStart();
     hPrintf("<A HREF=\"#%s\" class=\"toc\">%s</A>", 
     	section->name, section->shortLabel);
-    hPrintLinkCellEnd();
+    webPrintLinkCellEnd();
     }
-hFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
-hPrintLinkTableEnd();
+webFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
+webPrintLinkTableEnd();
 }
 
 void printSections(struct section *sectionList, struct sqlConnection *conn,
