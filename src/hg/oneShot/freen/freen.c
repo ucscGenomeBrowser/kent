@@ -4,9 +4,9 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "hash.h"
-#include "binRange.h"
+#include "correlate.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.67 2006/06/29 01:27:45 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.68 2006/07/01 07:09:14 kent Exp $";
 
 void usage()
 {
@@ -20,14 +20,13 @@ int level = 0;
 void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-FILE *f = mustOpen(fileName, "wb");
-bits64 x = 0x123456789ABCDEF0;
-uglyf("before = %llx\n", x);
-writeBits64(f, x);
-carefulClose(&f);
-f = mustOpen(fileName, "rb");
-x = readBits64(f);
-uglyf("after = %llx\n", x);
+static double x[] = {1, 2, 1, 2, 1, 2, 1};
+static double y[] = {2, 4, 2, 4, 2, 4, 2};
+static double z[] = {-1,-2,-1,-2,-1,-2,-1};
+static double r[] = {1, 2, 3, 4, 5, 6, 7};
+printf("r(xy) = %f\n", correlateArrays(x, y, 7));
+printf("r(xz) = %f\n", correlateArrays(x, z, 7));
+printf("r(xr) = %f\n", correlateArrays(x, r, 7));
 }
 
 int main(int argc, char *argv[])
