@@ -95,6 +95,9 @@ struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end)
 struct binElement *binKeeperFindAll(struct binKeeper *bk);
 /* Get all elements sorted. */
 
+boolean binKeeperAnyOverlap(struct binKeeper *bk, int start, int end);
+/* Return TRUE if start/end overlaps with any items in binKeeper. */
+
 void binKeeperReplaceVal(struct binKeeper *bk, int start, int end,
 	void *oldVal, void *newVal);
 /* Replace occurences of old val in range from start->end with newVal */

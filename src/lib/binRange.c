@@ -13,7 +13,7 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.19 2006/02/10 20:59:16 hiram Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.20 2006/07/01 05:01:25 kent Exp $";
 
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *	effective limit is now the size of an integer since chrom start
@@ -225,6 +225,37 @@ for (i=0; i<ArraySize(binOffsetsExtended); ++i)
     endBin >>= _binNextShift;
     }
 return list;
+}
+
+boolean binKeeperAnyOverlap(struct binKeeper *bk, int start, int end)
+/* Return TRUE if start/end overlaps with any items in binKeeper. */
+{
+struct binElement *el;
+int startBin, endBin;
+int i,j;
+
+if (start < bk->minPos) start = bk->minPos;
+if (end > bk->maxPos) end = bk->maxPos;
+if (start >= end) return FALSE;
+startBin = (start>>_binFirstShift);
+endBin = ((end-1)>>_binFirstShift);
+for (i=0; i<ArraySize(binOffsetsExtended); ++i)
+    {
+    int offset = binOffsetsExtended[i];
+    for (j=startBin+offset; j<=endBin+offset; ++j)
+        {
+	for (el=bk->binLists[j]; el != NULL; el = el->next)
+	    {
+	    if (rangeIntersection(el->start, el->end, start, end) > 0)
+	        {
+		return TRUE;
+		}
+	    }
+	}
+    startBin >>= _binNextShift;
+    endBin >>= _binNextShift;
+    }
+return FALSE;
 }
 
 void binKeeperReplaceVal(struct binKeeper *bk, int start, int end,
