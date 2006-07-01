@@ -38,7 +38,7 @@
 #define hggSubmitUpload hggDo "SubmitUpload"
 #define hggClick hggDo "Click"
 #define hggClickX hggClick ".x"
-#define hggClickY hggClick ".x"
+#define hggClickY hggClick ".y"
 
 /*** External vars declared in hgGenome.h ***/
 extern struct cart *cart;
@@ -75,6 +75,8 @@ void hPrintf(char *format, ...);
 int graphHeight();
 /* Return height of graph. */
 
+#define betweenRowPad 3
+
 #define minGraphsPerLine 1
 #define maxGraphsPerLine 4
 #define defaultGraphsPerLine 2
@@ -104,11 +106,18 @@ char *graphSourceAt(int row, int col);
 char *graphColorAt(int row, int col);
 /* Return graph color at given row/column, NULL if nonw. */
 
+struct genoLay *ggLayout(struct sqlConnection *conn, 
+	int graphRows, int graphCols);
+/* Figure out how to lay out image. */
+
 struct genoGraph *ggFirstVisible();
 /* Return first visible graph, or NULL if none. */
 
 struct slRef *ggAllVisible();
 /* Return list of references to all visible graphs */
+
+void mainPage(struct sqlConnection *conn);
+/* Do main page of application:  hotlinks bar, controls, graphic. */
 
 /*** Functions imported from other modules. ***/
 

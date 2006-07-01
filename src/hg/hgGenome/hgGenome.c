@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.31 2006/07/01 19:50:20 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.32 2006/07/01 20:10:32 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -575,16 +575,59 @@ char *curVal = graphColorAt(row, col);
 cgiMakeDropList(varName, allColors, ArraySize(allColors), curVal);
 }
 
+struct genoLay *ggLayout(struct sqlConnection *conn, 
+	int graphRows, int graphCols)
+/* Figure out how to lay out image. */
+{
+int i,j;
+struct genoLayChrom *chromList;
+int oneRowHeight;
+int minLeftLabelWidth = 0, minRightLabelWidth = 0;
+
+/* Figure out basic dimensions of image. */
+trackLayoutInit(&tl, cart);
+
+/* Refine all graphs actually used, and calculate label
+ * widths if need be. */
+for (i=0; i<graphRows; ++i)
+    {
+    for (j=0; j<graphCols; ++j)
+	{
+	char *source = graphSourceAt(i,j);
+	if (source != NULL)
+	    {
+	    struct genoGraph *gg = hashFindVal(ggHash, source);
+	    if (gg != NULL)
+		{
+		ggRefineUsed(gg);
+		if (withLabels)
+		    {
+		    int labelWidth;
+		    labelWidth = ggLabelWidth(gg, tl.font);
+		    if (j == 0 && labelWidth > minLeftLabelWidth)
+			minLeftLabelWidth = labelWidth;
+		    if (j == 1 && labelWidth > minRightLabelWidth)
+			minRightLabelWidth = labelWidth;
+		    }
+		}
+	    }
+	}
+    }
+
+/* Get list of chromosomes and lay them out. */
+chromList = genoLayDbChroms(conn, FALSE);
+oneRowHeight = graphHeight()+betweenRowPad;
+return genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
+	minLeftLabelWidth, minRightLabelWidth);
+}
+
 void mainPage(struct sqlConnection *conn)
 /* Do main page of application:  hotlinks bar, controls, graphic. */
 {
-struct genoLayChrom *chromList;
 struct genoLay *gl;
 int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
-int oneRowHeight;
-int minLeftLabelWidth = 0, minRightLabelWidth = 0;
 int realCount = 0;
 
 cartWebStart(cart, "%s Genome Graphs", genome);
@@ -640,44 +683,12 @@ cgiMakeOptionalButton(hggSort, "Sort Genes",
 	realCount == 0 || !hgNearOk(database));
 hPrintf("<BR>");
 
-/* Figure out basic dimensions of image. */
-trackLayoutInit(&tl, cart);
 
-/* Refine all graphs actually used, and calculate label
- * widths if need be. */
-for (i=0; i<graphRows; ++i)
-    {
-    for (j=0; j<graphCols; ++j)
-	{
-	char *source = graphSourceAt(i,j);
-	if (source != NULL)
-	    {
-	    struct genoGraph *gg = hashFindVal(ggHash, source);
-	    if (gg != NULL)
-		{
-		ggRefineUsed(gg);
-		if (withLabels)
-		    {
-		    int labelWidth;
-		    labelWidth = ggLabelWidth(gg, tl.font);
-		    if (j == 0 && labelWidth > minLeftLabelWidth)
-			minLeftLabelWidth = labelWidth;
-		    if (j == 1 && labelWidth > minRightLabelWidth)
-			minRightLabelWidth = labelWidth;
-		    }
-		}
-	    }
-	}
-    }
-
-/* Get list of chromosomes and lay them out. */
-chromList = genoLayDbChroms(conn, FALSE);
-oneRowHeight = graphHeight()+3;
-gl = genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
-	minLeftLabelWidth, minRightLabelWidth);
+/* Get genome layout. */
+gl = ggLayout(conn, graphRows, graphCols);
 
 /* Draw picture. */
-genomeGif(conn, gl, graphRows, graphCols, oneRowHeight);
+genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
 hPrintf("</FORM>\n");
 cartWebEnd();
 }
