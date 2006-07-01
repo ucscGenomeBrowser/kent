@@ -204,6 +204,10 @@ struct slName *sqlQuickList(struct sqlConnection *conn, char *query);
 /* Return a list of slNames for a single column query.
  * Do a slFreeList on result when done. */
 
+struct hash *sqlQuickHash(struct sqlConnection *conn, char *query);
+/* Return a hash filled with results of two column query. 
+ * The first column is the key, the second the value. */
+
 struct slInt *sqlQuickNumList(struct sqlConnection *conn, char *query);
 /* Return a list of slInts for a single column query.
  * Do a slFreeList on result when done. */
