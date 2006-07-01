@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.26 2006/07/01 08:20:01 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.27 2006/07/01 08:46:51 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -623,7 +623,7 @@ cgiMakeButton(hggUpload, "Upload");
 hPrintf(" ");
 cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");
-cgiMakeOptionalButton(hggCorrelate, "(Correlate)", realCount < 2);
+cgiMakeOptionalButton(hggCorrelate, "Correlate", realCount < 2);
 hPrintf(" significance threshold:");
 cartMakeDoubleVar(cart, hggThreshold, defaultThreshold,  3);
 hPrintf(" ");

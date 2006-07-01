@@ -83,14 +83,12 @@ double r;
 
 for (chrom = a->chromList; chrom != NULL; chrom = chrom->next)
     {
-    uglyf("Procesing %s<BR>\n", chrom->name);
     chromGraphBinSeekToChrom(a, chrom->name);
     if (chromGraphBinSeekToChrom(b, chrom->name))
         {
 	correlateChrom(a, b, c);
 	}
     }
-uglyf("N is %d<BR>\n", c->n);
 r = correlateResult(c);
 correlateFree(&c);
 return r;
@@ -100,30 +98,46 @@ void correlateGraphs(struct genoGraph *aGg, struct genoGraph *bGg)
 /* Do correlation between two graphs */
 {
 double r = chromGraphBinCorrelate(aGg->binFileName, bGg->binFileName);
-hPrintf("<TR>");
-hPrintf("<TD>%s</TD>", aGg->shortLabel);
-hPrintf("<TD>%s</TD>", bGg->shortLabel);
-hPrintf("<TD>%f</TD>", r);
-hPrintf("<TD>%f</TD>", r*r);
-hPrintf("</TR>");
+
+webPrintLinkCell(aGg->shortLabel);
+webPrintLinkCell(bGg->shortLabel);
+webPrintLinkCellStart();
+hPrintf("%f", r);
+webPrintLinkCellEnd();
+webPrintLinkCellStart();
+hPrintf("%f", r*r);
+webPrintLinkCellEnd();
 }
 
 void correlatePage(struct sqlConnection *conn)
 /* Put up correlation page. */
 {
-cartWebStart(cart, "Theoretically correlating, please go back");
+cartWebStart(cart, "Correlations of all pairs of graphs");
 getGenoGraphs(conn);
 struct slRef *ggRefList = ggAllVisible(conn);
 struct slRef *aRef, *bRef;
-hPrintf("<TABLE>\n");
-hPrintf("<TR><TH>Graph A</TH><TH>Graph B</TH><TH>R</TH><TH>R-squared</TH></TR>");
+webPrintLinkTableStart();
+webPrintLabelCell("Graph A");
+webPrintLabelCell("Graph B");
+webPrintLabelCell("R");
+webPrintLabelCell("R-Squared");
 for (aRef = ggRefList; aRef != NULL; aRef = aRef->next)
     {
     for (bRef = aRef->next; bRef != NULL; bRef = bRef->next)
         {
+	hPrintf("</TR><TR>");
 	correlateGraphs(aRef->val, bRef->val);
 	}
     }
-hPrintf("</TABLE>\n");
+webPrintLinkTableEnd();
+hPrintf("<P>R, also known as Pearson's correlation coefficient, is a measure ");
+hPrintf("of the extent that two graphs move together.  The value of R ranges ");
+hPrintf("between -1 and 1.  A positive R indicates that the graphs tend to ");
+hPrintf("move in the same direction, while a negative R indicates that they ");
+hPrintf("tend to move in in opposite directions.</P>\n");
+hPrintf("<P>R-Squared (which is indeed just R*R) measures how much of the ");
+hPrintf("variation in one graph can be explained by a linear dependence on ");
+hPrintf("other graph. R-Squared ranges between 0 when the two graphs are ");
+hPrintf("independent to 1 when the graphs are completely dependent.</P>");
 cartWebEnd();
 }
