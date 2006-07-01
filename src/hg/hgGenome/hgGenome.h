@@ -14,6 +14,7 @@
 #define hggGraphPrefix hggPrefix "graph"
 #define hggGraphColorPrefix hggPrefix "graphColor"
 #define hggGraphHeight hggPrefix "graphHeight"
+#define hggLabels hggPrefix "labels"
 #define hggThreshold hggPrefix "threshold"
 #define defaultThreshold 3.5
 #define hggGraphsPerLine hggPrefix "graphsPerLine"

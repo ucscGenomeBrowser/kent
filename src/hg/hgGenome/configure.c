@@ -7,7 +7,7 @@
 #include "web.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.2 2006/06/27 23:46:27 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.3 2006/07/01 09:24:37 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -56,6 +56,11 @@ hPrintf("<TD>\n");
 cgiMakeButton("submit", "Submit");
 hPrintf("</TD>\n");
 hPrintf("</TR>\n");
+hPrintf("<TR>\n");
+hPrintf("<TD>\n");
+cartMakeCheckBox(cart, hggLabels, TRUE);
+hPrintf("numerical labels");
+hPrintf("</TD>\n");
 hPrintf("</TABLE>\n");
 hPrintf("</FORM>\n");
 cartWebEnd();

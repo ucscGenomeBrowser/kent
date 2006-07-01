@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.29 2006/07/01 09:14:52 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.30 2006/07/01 09:24:37 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -35,6 +35,7 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
 struct genoGraph *ggList; /* List of active genome graphs */
 struct hash *ggHash;	  /* Hash of active genome graphs */
+boolean withLabels;	/* Draw labels? */
 
 
 void usage()
@@ -435,7 +436,7 @@ if (gg != NULL)
 
 
     /* Draw labels. */
-    if (leftLabel || rightLabel)
+    if (withLabels && (leftLabel || rightLabel))
         {
 	int lineY = yOff;
 	int i,j;
@@ -635,28 +636,33 @@ hPrintf("<BR>");
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
 
-/* Figure out side label sizes */
+/* Refine all graphs actually used, and calculate label
+ * widths if need be. */
 for (i=0; i<graphRows; ++i)
     {
     for (j=0; j<graphCols; ++j)
-        {
+	{
 	char *source = graphSourceAt(i,j);
 	if (source != NULL)
 	    {
 	    struct genoGraph *gg = hashFindVal(ggHash, source);
 	    if (gg != NULL)
-	        {
-		int labelWidth;
+		{
 		ggRefineUsed(gg);
-		labelWidth = ggLabelWidth(gg, tl.font);
-		if (j == 0 && labelWidth > minLeftLabelWidth)
-		    minLeftLabelWidth = labelWidth;
-		if (j == 1 && labelWidth > minRightLabelWidth)
-		    minRightLabelWidth = labelWidth;
+		if (withLabels)
+		    {
+		    int labelWidth;
+		    labelWidth = ggLabelWidth(gg, tl.font);
+		    if (j == 0 && labelWidth > minLeftLabelWidth)
+			minLeftLabelWidth = labelWidth;
+		    if (j == 1 && labelWidth > minRightLabelWidth)
+			minRightLabelWidth = labelWidth;
+		    }
 		}
 	    }
 	}
     }
+
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
 oneRowHeight = graphHeight()+3;
@@ -677,6 +683,7 @@ struct sqlConnection *conn = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
+withLabels = cartBoolean(cart, hggLabels);
 conn = hAllocConn();
 
 if (cartVarExists(cart, hggConfigure))
