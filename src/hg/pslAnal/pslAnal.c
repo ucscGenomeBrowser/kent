@@ -22,6 +22,7 @@
 #include "psl.h"
 #include "options.h"
 #include "hgConfig.h"
+#include "genbank.h"
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -34,6 +35,7 @@ static struct optionSpec optionSpecs[] = {
     {"mismatches", OPTION_BOOLEAN},
     {"codonsub", OPTION_BOOLEAN},
     {"noVersions", OPTION_BOOLEAN},
+    {"genbankCds", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -41,6 +43,7 @@ boolean indelReport = FALSE;
 boolean unaliReport = FALSE;
 boolean mismatchReport = FALSE;
 boolean codonSubReport = FALSE;
+boolean genbankCdsFmt = FALSE;
 boolean xeno = FALSE;
 boolean noVersions = FALSE;
 
@@ -306,26 +309,52 @@ cloneFree(&(el->mrnaCloneId));
 freez(pi);
 }
 
+void parseCdsCols(struct lineFile *cf, char **words, int wordCnt)
+/* parse CDS row in a column format */
+{
+if (wordCnt < 3)
+    lineFileExpectWords(cf, 3, wordCnt);
+else
+    {
+    char *name = words[0];
+    int start = sqlUnsigned(words[1]) - 1;
+    int end = sqlUnsigned(words[2]);
+    hashAddInt(cdsStarts, name, start);
+    hashAddInt(cdsEnds, name, end);
+    }
+}
+
+void parseCdsGenbank(struct lineFile *cf, char **words, int wordCnt)
+/* parse CDS row in genbank format */
+{
+if (wordCnt < 2)
+    lineFileExpectWords(cf, 2, wordCnt);
+else
+    {
+    char *name = words[0];
+    struct genbankCds cds;
+    if (!genbankCdsParse(words[1], &cds))
+        errAbort("invalid cds for %s: %s", words[0], words[1]);
+    hashAddInt(cdsStarts, name, cds.start);
+    hashAddInt(cdsEnds, name, cds.end);
+    }
+}
 void readCds(struct lineFile *cf)
 /* Read in file of coding region starts and stops 
    Convert start to 0-based to make copmarison with psl easier */
 {
-int lineSize, wordCount;
+int wordCnt;
 char *words[4];
-char *name;
-int start;
-int end;
 
 cdsStarts = newHash(16);
 cdsEnds = newHash(16);
 
-while (lineFileChopNext(cf, words, 3))
+while ((wordCnt = lineFileChopNextTab(cf, words, ArraySize(words))) > 0)
     {
-    name = cloneString(words[0]);
-    start = sqlUnsigned(words[1]) - 1;
-    end = sqlUnsigned(words[2]);
-    hashAddInt(cdsStarts, name, start);
-    hashAddInt(cdsEnds, name, end);
+    if (genbankCdsFmt)
+        parseCdsGenbank(cf, words, wordCnt);
+    else
+        parseCdsCols(cf, words, wordCnt);
     }
 }
 
@@ -2045,6 +2074,7 @@ if (argc != 6)
     fprintf(stderr, "\t-unaligned\n");
     fprintf(stderr, "\t-mismatches\n");
     fprintf(stderr, "\t-codonsub\n");
+    fprintf(stderr, "\t-genbankCds\n");
     return 1;
     }
 db = optionVal("db", "hg15");
@@ -2054,20 +2084,21 @@ indelReport = optionExists("indels");
 unaliReport = optionExists("unaligned");
 mismatchReport = optionExists("mismatches");
 codonSubReport = optionExists("codonsub");
+genbankCdsFmt = optionExists("genbankCds");
 xeno = optionExists("xeno");
 noVersions = optionExists("noVersions");
 pf = pslFileOpen(argv[1]);
-cf = lineFileOpen(argv[2], FALSE);
-lf = lineFileOpen(argv[3], FALSE);
+cf = lineFileOpen(argv[2], TRUE);
+lf = lineFileOpen(argv[3], TRUE);
 faFile = argv[4];
 safef(filename, sizeof(filename), "%s.anal", argv[5]);
 of = mustOpen(filename, "w");
 fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tSyn\tNonSyn\tSynSnp\tNonSynSnp\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\tGaps\n");
 fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\t10N\n");
 if (vfName) 
-  vf = lineFileOpen(vfName, FALSE);
+  vf = lineFileOpen(vfName, TRUE);
 if (dfName) 
-  df = lineFileOpen(dfName, FALSE);
+  df = lineFileOpen(dfName, TRUE);
 if (indelReport) 
     {
     safef(filename, sizeof(filename), "%s.indel", argv[5]);
