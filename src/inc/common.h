@@ -97,7 +97,9 @@
 #define FALSE 0
 #define boolean int
 #ifndef	__cplusplus
+#ifndef bool
 #define bool char
+#endif
 #endif
 
 /* Some other type synonyms */
