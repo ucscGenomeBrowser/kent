@@ -245,6 +245,9 @@ void cartHtmlShellPbGlobal(char *title, void (*doMiddle)(struct cart *cart),
  * variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 
+void cartWriteCookie(struct cart *cart, char *cookieName);
+/* Write out HTTP Set-Cookie statement for cart. */
+
 struct cart *cartAndCookie(char *cookieName, char **exclude, 
 	struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write cookie and 
@@ -260,6 +263,10 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
 /* Load cart from cookie and session cgi variable.  Write cookie 
  * and optionally content-type part HTTP preamble to web page.  Don't 
  * write any HTML though. */
+
+struct cart *cartForSession(char *cookieName, char **exclude, 
+	struct hash *oldVars);
+/* This gets the cart without writing any HTTP lines at all to stdout. */
 
 void cartSetDbConnector(DbConnector connector);
 /* Set the connector that will be used by the cart to connect to the

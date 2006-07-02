@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.56 2006/06/24 22:00:44 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.57 2006/07/02 18:56:27 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -746,23 +746,32 @@ clearDbContents(conn, "sessionDb", hgsid);
 cartDefaultDisconnector(&conn);
 }
 
+void cartWriteCookie(struct cart *cart, char *cookieName)
+/* Write out HTTP Set-Cookie statement for cart. */
+{
+printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
+	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+}
+
+struct cart *cartForSession(char *cookieName, char **exclude, 
+	struct hash *oldVars)
+/* This gets the cart without writing any HTTP lines at all to stdout. */
+{
+int hguid = getCookieId(cookieName);
+int hgsid = getSessionId();
+struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
+cartExclude(cart, sessionVar);
+return cart;
+}
+
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, 
 	struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie 
  * and optionally content-type part HTTP preamble to web page.  Don't 
  * write any HTML though. */
 {
-/* Get the current cart from cookie and cgi session variable. */
-int hguid = getCookieId(cookieName);
-int hgsid = getSessionId();
-struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
-
-/* Remove some internal variables from cart permanent storage. */
-cartExclude(cart, sessionVar);
-
-/* Write out cookie for next time. */
-printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\n",
-	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+struct cart *cart = cartForSession(cookieName, exclude, oldVars);
+cartWriteCookie(cart, cookieName);
 if (doContentType)
     {
     puts("Content-Type:text/html");
@@ -864,8 +873,6 @@ else
     htmlEnd();
 popWarnHandler();
 }
-
-
 
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, 
 	char **exclude, struct hash *oldVars)
