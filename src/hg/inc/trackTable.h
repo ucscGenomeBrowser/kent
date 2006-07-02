@@ -22,7 +22,11 @@ struct trackTable
     unsigned char altColorB;	/* Light color blue component 0-255 */
     unsigned char useScore;	/* 1 if use score, 0 if not */
     unsigned char isSplit;	/* 1 if table is split across chromosomes */
+#ifndef	__cplusplus
     unsigned char private;	/* 1 if only want to show it on test site */
+#else
+    unsigned char priv;		/* don't conflict with C++ keyword */
+#endif
     };
 
 void trackTableStaticLoad(char **row, struct trackTable *ret);

@@ -96,7 +96,9 @@
 #define TRUE 1
 #define FALSE 0
 #define boolean int
+#ifndef	__cplusplus
 #define bool char
+#endif
 
 /* Some other type synonyms */
 #define UBYTE unsigned char   /* Wants to be unsigned 8 bits. */
