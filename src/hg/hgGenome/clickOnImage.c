@@ -33,13 +33,14 @@ struct genoLay *gl = ggLayout(conn, linesOfGraphs(), graphsPerLine());
 struct genoLayChrom *chrom = genoLayChromAt(gl, x, y);
 if (chrom != NULL)
     {
-    cartWebStart(cart, "Theoretically processing image click");
     int base = gl->basesPerPixel*(x - chrom->x);
-    uglyf("Click at %d %d in %s %d<BR>\n", x, y, chrom->fullName, base);
-    cartWebEnd();
+    int start = base-500000, end=base+500000;
+    if (start<0) start=0;
+    printf("Location: ../cgi-bin/hgTracks?db=%s&%s&position=%s:%d-%d\r\n\r\n",
+    	database, cartSidUrlString(cart), chrom->fullName, start+1, end);
     }
 else
     {
-    mainPage(conn);
+    hggDoUsualHttp();
     }
 }

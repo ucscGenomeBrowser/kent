@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.32 2006/07/01 20:10:32 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.33 2006/07/02 18:58:07 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -693,18 +693,11 @@ hPrintf("</FORM>\n");
 cartWebEnd();
 }
 
-void cartMain(struct cart *theCart)
-/* We got the persistent/CGI variable cart.  Now
- * set up the globals and make a web page. */
+void dispatchPage()
+/* Look at command variables in cart and figure out which
+ * page to draw. */
 {
-struct sqlConnection *conn = NULL;
-cart = theCart;
-getDbAndGenome(cart, &database, &genome);
-hSetDb(database);
-withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
-conn = hAllocConn();
-getGenoGraphs(conn);
-
+struct sqlConnection *conn = hAllocConn();
 if (cartVarExists(cart, hggConfigure))
     {
     configurePage();
@@ -729,10 +722,6 @@ else if (cartVarExists(cart, hggSort))
     {
     sortGenes(conn);
     }
-else if (cartVarExists(cart, hggClickX))
-    {
-    clickOnImage(conn);
-    }
 else
     {
     /* Default case - start fancy web page. */
@@ -741,16 +730,60 @@ else
 cartRemovePrefix(cart, hggDo);
 }
 
+void hggDoUsualHttp()
+/* Wrap html page dispatcher with code that writes out
+ * HTTP header and write cart back to database. */
+{
+cartWriteCookie(cart, hUserCookie());
+printf("Content-Type:text/html\r\n\r\n");
+
+/* Dispatch other pages, that actually want to write HTML. */
+cartWarnCatcher(dispatchPage, cart, cartEarlyWarningHandler);
+cartCheckout(&cart);
+}
+
+
+void dispatchLocation()
+/* When this is called no output has been written at all.  We
+ * look at command variables in cart and figure out if we just
+ * are going write an HTTP location line, which happens when we
+ * want to invoke say the genome browser or gene sorter without 
+ * another intermediate page.  If we need to do more than that
+ * then we call hggDoUsualHttp. */
+{
+struct sqlConnection *conn = NULL;
+getDbAndGenome(cart, &database, &genome);
+hSetDb(database);
+withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
+conn = hAllocConn();
+getGenoGraphs(conn);
+
+/* Handle cases that just want a HTTP Location line: */
+if (cartVarExists(cart, hggClickX))
+    {
+    clickOnImage(conn);
+    return;
+    }
+
+hFreeConn(&conn);
+
+/* For other cases we want to print out some of the usual HTTP
+ * lines including content-type */
+hggDoUsualHttp();
+}
+
 char *excludeVars[] = {"Submit", "submit", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 // htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
 oldCart = hashNew(12);
-cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldCart);
+cart = cartForSession(hUserCookie(), excludeVars, oldCart);
+dispatchLocation();
 return 0;
 }

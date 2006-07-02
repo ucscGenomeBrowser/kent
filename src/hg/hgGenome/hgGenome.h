@@ -116,6 +116,10 @@ struct genoGraph *ggFirstVisible();
 struct slRef *ggAllVisible();
 /* Return list of references to all visible graphs */
 
+void hggDoUsualHttp();
+/* Wrap html page dispatcher with code that writes out
+ * HTTP header and write cart back to database. */
+
 void mainPage(struct sqlConnection *conn);
 /* Do main page of application:  hotlinks bar, controls, graphic. */
 
