@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.33 2006/07/02 18:58:07 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.34 2006/07/02 19:04:33 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -687,8 +687,15 @@ hPrintf("<BR>");
 /* Get genome layout. */
 gl = ggLayout(conn, graphRows, graphCols);
 
-/* Draw picture. */
+/* Draw picture. Enclose in table to add a couple of pixels between
+ * it and controls on IE. */
+hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
 genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
+hPrintf("</TD></TR></TABLE>\n");
+
+/* Write a little click-on-help */
+hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
+
 hPrintf("</FORM>\n");
 cartWebEnd();
 }
