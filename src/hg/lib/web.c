@@ -1,16 +1,18 @@
 #include "common.h"
+#include "obscure.h"
 #include "dnautil.h"
 #include "errabort.h"
 #include "htmshell.h"
 #include "web.h"
 #include "hdb.h"
+#include "hui.h"
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "axtInfo.h"
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.91 2006/07/01 08:32:34 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.92 2006/07/03 15:18:50 kate Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -900,6 +902,27 @@ void saveDbAndGenome(struct cart *cart, char *db, char *genome)
 {
 cartSetString(cart, "db", db);
 cartSetString(cart, "org", genome);
+}
+
+void webIncludeFile(char *file)
+/* Include an HTML file in a CGI.
+ *   The file path is relative to the web server document root */
+{
+char *str = NULL;
+size_t len = 0;
+char path[256];
+
+if (file == NULL)
+    errAbort("Program error: including null file");
+safef(path, sizeof path, "%s/%s", hDocumentRoot(), file);
+if (!fileExists(path))
+   errAbort("Missing file %s", path); 
+readInGulp(path, &str, &len);
+
+if (len <= 0)
+    errAbort("Error reading included file: %s", path);
+puts(str);
+freeMem(str);
 }
 
 void webPrintLinkTableStart()

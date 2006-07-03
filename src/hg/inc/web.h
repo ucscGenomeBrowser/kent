@@ -31,6 +31,9 @@ void webStartWrapperDetailed(struct cart *theCart, char *headerText,
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
+void webEndSection();
+/* Close down a section */
+
 void webEnd();
 /* output the footer of the HTML page */
 
@@ -175,6 +178,10 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
 
 void saveDbAndGenome(struct cart *cart, char *db, char *genome);
 /* Save db and genome (as org) in cart. */
+
+void webIncludeFile(char *file);
+/* Include an HTML file in a CGI.
+ *   The file path is relative to the web server document root */
 
 /*** Inside the "web" pages doing a table that looks good is
  *** hard.  These routines help. ***/
