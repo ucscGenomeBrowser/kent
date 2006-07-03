@@ -31,6 +31,7 @@ if ( $err ) then
  echo "error zipping $zip: $err" 
  exit 1
 endif 
+chmod 664 $zip
 # remove temp directory branch_zip
 cd $BUILDDIR
 set dir = "v"$BRANCHNN"_branch_zip"
