@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.9 2006/06/30 23:13:37 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.10 2006/07/03 23:21:55 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -433,9 +433,25 @@ if (useCart)
 "4. The tree is in the phastCons or .nh format name:length.  Parentheses create a parent.\n"
 "Parents must have two children. Length is not required if use-branch-lengths is not checked.\n"
 "The length of the root branch is usually not specified.<br>\n"
-"Example:<br>\n"
-"&nbsp;((A:0.1,B:0.1):0.2,C:0.15);<br>\n"
-"<br>\n"
+"Examples:<br>\n"
+"<table cellpadding=10><tr><td><PRE>\n"
+"((A:0.1,B:0.1):0.2,C:0.15);\n"
+"</PRE></td><td>\n"
+"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((A:0.1,B:0.1):0.2,C:0.15);\">\n"
+"</td></tr>\n"
+"<tr><td><PRE>\n"
+"  ((((\n"
+"   (\n"
+"     ((mouse,rat),human),\n"
+"       (dog,cow)\n"
+"    ),\n"
+"     opossum),\n"
+"     chicken),\n"
+"     xenopus),\n"
+"    (tetraodon,zebrafish));\n"
+"</PRE></td><td>\n"
+"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=200&phyloGif_tree=(((((((mouse,rat),human),(dog,cow)),opossum),chicken),xenopus),(tetraodon,zebrafish));\">\n"
+"</td></tr></table>\n"
 "5. PhastCons branch lengths are expected substitutions per site, allowing for\n"
 "multiple hits.  So a branch length of 0.5 means an average of one\n"
 "substitution every two nucleotide sites, but the percent id will be\n"
