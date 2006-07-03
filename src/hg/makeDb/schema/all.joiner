@@ -415,7 +415,7 @@ identifier vgImageProbe
 
 identifier vgExpressionPattern
 "Expression pattern - scattered, regional, etc."
-    visiGene.expressionPattern.ix
+    visiGene.expressionPattern.id
     visiGene.expressionLevel.expressionPattern
 
 identifier vgLifeStageScheme
