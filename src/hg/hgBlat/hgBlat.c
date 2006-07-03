@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.96 2006/06/20 16:14:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.97 2006/07/03 17:07:20 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -733,7 +733,9 @@ printf("%s",
 "Like most of Jim's software, interactive use on this web server is free to all.\n"
 "Sources and executables to run batch jobs on your own server are available free\n"
 "for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
-"licenses are also available.  Contact Jim for details.</P>\n"
+"licenses are also available. See the \n"
+"<A HREF=\"http://www.kentinformatics.com\" TARGET=_blank>Kent Informatics</A>\n"
+"website for details.</P>\n"
 "\n");
 }
 
