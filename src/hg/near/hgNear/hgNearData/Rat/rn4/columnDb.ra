@@ -33,3 +33,7 @@ longLabel Affymetrix U34A ID
 priority 2.615
 visibility off
 type lookup knownToU34A name value
+
+name zebrafishOrthologs
+itemUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
+
