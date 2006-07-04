@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.34 2006/07/02 19:04:33 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.35 2006/07/04 23:26:03 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -33,7 +33,9 @@ struct hash *oldCart;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
-struct genoGraph *ggList; /* List of active genome graphs */
+struct genoGraph *ggUserList;	/* List of user graphs */
+struct genoGraph *ggDbList;	/* List of graphs in database. */
+struct slRef *ggList; /* List of active genome graphs */
 struct hash *ggHash;	  /* Hash of active genome graphs */
 boolean withLabels;	/* Draw labels? */
 
@@ -146,10 +148,21 @@ void getGenoGraphs(struct sqlConnection *conn)
 struct genoGraph *userList = getUserGraphs();
 struct genoGraph *dbList = getDbGraphs(conn);
 struct genoGraph *gg;
-ggList = slCat(userList, dbList);
+struct slRef *ref, *refList = NULL;
+
+/* Buld up ggList from user and db lists. */
+for (gg = userList; gg != NULL; gg = gg->next)
+    refAdd(&refList, gg);
+for (gg = dbList; gg != NULL; gg = gg->next)
+    refAdd(&refList, gg);
+slReverse(&refList);
+ggList = refList;
+
+/* Buld up ggHash from ggList. */
 ggHash = hashNew(0);
-for (gg = ggList; gg != NULL; gg = gg->next)
+for (ref = ggList; ref != NULL; ref = ref->next)
     {
+    gg = ref->val;
     hashAdd(ggHash, gg->name, gg);
     }
 }
@@ -443,6 +456,14 @@ if (gg != NULL)
 	int spaceWidth = tl.nWidth;
 	int tickWidth = spaceWidth*2/3;
 	int fontPixelHeight = mgFontPixelHeight(gl->font);
+	uglyf("name %s, scale %g, ", gg->name, gScale);
+	for (j=0; j<cgs->linesAtCount; ++j)
+	     {
+	    double lineAt = cgs->linesAt[j];
+	    int y = (height - ((lineAt - gMin)*gScale));
+	     uglyf("%g->%d:%d ", lineAt, y, y+lineY);
+	     }
+	uglyf("<BR>\n");
 	for (i=0; i<gl->lineCount; ++i)
 	    {
 	    for (j=0; j< cgs->linesAtCount; ++j)
@@ -500,10 +521,9 @@ int i,j;
 makeTempName(&gifTn, "hgtIdeo", ".gif");
 vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
 
-// hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
 hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
 	    gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
-// hPrintf("</TD></TR></TABLE>\n");
+uglyf("<BR>");
 
 /* Get our grayscale. */
 hMakeGrayShades(vg, shadesOfGray, maxShade);
@@ -550,14 +570,16 @@ struct genoGraph *gg;
 int totalCount = 1 + slCount(ggList);
 char **menu, **values;
 int i = 0;
+struct slRef *ref;
 
 AllocArray(menu, totalCount);
 AllocArray(values, totalCount);
 menu[0] = "";
 values[0] = "";
 
-for (gg = ggList; gg != NULL; gg = gg->next)
+for (ref = ggList; ref != NULL; ref = ref->next)
     {
+    struct genoGraph *gg = ref->val;
     ++i;
     menu[i] = gg->shortLabel;
     values[i] = gg->name;

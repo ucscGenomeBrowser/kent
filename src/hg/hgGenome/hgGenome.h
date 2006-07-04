@@ -40,11 +40,14 @@
 #define hggClickX hggClick ".x"
 #define hggClickY hggClick ".y"
 
-/*** External vars declared in hgGenome.h ***/
+/*** External vars declared in hgGenome.c ***/
 extern struct cart *cart;
 extern struct hash *oldCart;
 extern char *database;
 extern char *genome;
+extern struct genoGraph *ggUserList;	/* List of user graphs */
+extern struct genoGraph *ggDbList;	/* List of graphs in database. */
+extern struct slRef *ggList; /* List of active genome graphs */
 
 /*** Name prefixes to separate user from db graphs. */
 #define hggUserTag "user: "

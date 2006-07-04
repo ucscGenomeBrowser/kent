@@ -61,7 +61,6 @@ hPrintf(" <i>Comma-separated numbers for axis label</i><BR>");
 hPrintf("Draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 3000000, 8);
 hPrintf(" bases.<BR>");
-
 hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 cgiMakeButton(hggSubmitUpload, "Submit");
@@ -131,6 +130,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     lmAllocVar(lm, pos);
     pos->chrom = lmCloneString(lm, row[0]);
     pos->pos = sqlUnsigned(row[1]);
+    touppers(row[2]);
     hashAdd(hash, row[2], pos);
     }
 sqlFreeResult(&sr);
@@ -148,7 +148,11 @@ char buf[256];
 safef(buf, sizeof(buf), query, table);
 sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
+    {
+    touppers(row[0]);
+    touppers(row[1]);
     hashAdd(hash, row[0], lmCloneString(hash->lm, row[1]));
+    }
 sqlFreeResult(&sr);
 return hash;
 }
@@ -177,6 +181,7 @@ if (aliasTable != NULL)
 while (lineFileRow(lf, row))
     {
     char *name = row[0];
+    touppers(name);
     ++total;
     pos = hashFindVal(hash, name);
     if (pos == NULL && aliasHash != NULL)
