@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.43 2006/06/30 19:19:03 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.44 2006/07/04 00:32:07 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -37,12 +37,9 @@ my $paraRun = ("$para make jobList\n" .
 	       "$para check\n" .
 	       "$para time > run.time\n" .
 	       'cat run.time');
-my $dbHost = 'hgwdev';
-my $centralDbSql = "ssh -x $dbHost hgsql -h genome-testdb -A -N hgcentraltest";
 my $clusterData = '/cluster/data';
 my $trackBuild = 'bed';
 my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
-my $downloadPath = "$dbHost:$goldenPath";
 my $gbdb = '/gbdb';
 my $clusterLocal = '/scratch/hg';
 my $clusterSortaLocal = '/iscratch/i';
@@ -83,6 +80,7 @@ my $stepper = new HgStepManager(
 # Option defaults:
 my $bigClusterHub = 'kk';
 my $smallClusterHub = 'kki';
+my $dbHost = 'hgwdev';
 my $workhorse = 'kolossus';
 my $defaultChainLinearGap = "loose";
 my $defaultChainMinScore = "1000";	# from axtChain itself
@@ -116,7 +114,7 @@ print STDERR <<_EOF_
                                   axtChain command.  (default: loose)
 _EOF_
   ;
-print STDERR &HgAutomate::getCommonOptionHelp($workhorse,
+print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $workhorse,
 				   $bigClusterHub, $smallClusterHub);
 print STDERR "
 Automates UCSC's blastz/chain/net pipeline:
@@ -145,14 +143,14 @@ Assumptions:
    $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/ will be the directory 
    created for this run, where \$tDb is the target/reference db and 
    \$qDb is the query.  (Can be overridden, see #10 below.)  
-   $downloadPath/\$tDb/vs\$QDb/ (or vsSelf) 
+   $dbHost:$goldenPath/\$tDb/vs\$QDb/ (or vsSelf) 
    is the directory where downloadable files need to go.
    LiftOver chains (not applicable for self-alignments) go in this file:
    $clusterData/\$tDb/$trackBuild/liftOver/\$tDbTo\$QDb.over.chain.gz
    a copy is kept here (in case the liftOver/ copy is overwritten):
    $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/\$tDb.\$qDb.over.chain.gz
    and symbolic links to the liftOver/ file are put here:
-   $downloadPath/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
+   $dbHost:$goldenPath/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
    $dbHost:$gbdb/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
 2. DEF's SEQ1* variables describe the target/reference assembly.
    DEF's SEQ2* variables describe the query assembly.
@@ -1005,18 +1003,6 @@ _EOF_
 }
 
 
-sub getAssemblyInfo {
-  # Do a quick dbDb lookup to get assembly descriptive info for README.txt.
-  my ($db) = @_;
-  my $query = "select genome,description,sourceName from dbDb " .
-              "where name = \"$db\";";
-  my $line = `echo '$query' | $centralDbSql`;
-  chomp $line;
-  my ($genome, $date, $source) = split("\t", $line);
-  return ($genome, $date, $source);
-}
-
-
 sub getBlastzParams {
   # Return parameters in BLASTZ_Q file, or defaults, for README.txt.
   my $matrix = 
@@ -1109,8 +1095,8 @@ sub dumpDownloadReadme {
   # Write a file (README.txt) describing the download files.
   my ($file) = @_;
   my $fh = &HgAutomate::mustOpen(">$file");
-  my ($tGenome, $tDate, $tSource) = &getAssemblyInfo($tDb);
-  my ($qGenome, $qDate, $qSource) = &getAssemblyInfo($qDb);
+  my ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $tDb);
+  my ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $qDb);
   my $dir = $splitRef ? 'axtNet/*.' : '';
   my ($matrix, $o, $e, $k, $l, $h, $blastzOther) = &getBlastzParams();
   my $defaultMatrix = $defVars{'BLASTZ_Q'} ? '' : ' the default matrix';
