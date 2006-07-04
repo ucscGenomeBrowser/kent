@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.87 2006/06/28 21:44:40 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.88 2006/07/04 03:19:23 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -172,7 +172,7 @@ int i;
 
 for (i=0; i<snp125ValidLabelsSize; i++)
     {
-    if (!sameString(snp125ValidDataName[i], el->valid)) continue;
+    if (!containsStringNoCase(el->valid, snp125ValidDataName[i])) continue;
     return snp125ValidIncludeCart[i];
     }
 return TRUE;
@@ -199,7 +199,7 @@ int i;
 
 for (i=0; i<snp125FuncLabelsSize; i++)
     {
-    if (!sameString(snp125FuncDataName[i], el->func)) continue;
+    if (!containsStringNoCase(el->func, snp125FuncDataName[i])) continue;
     return snp125FuncIncludeCart[i];
     }
 return TRUE;
