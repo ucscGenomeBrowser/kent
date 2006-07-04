@@ -4,19 +4,337 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.3 2006/06/27 22:47:22 angie Exp $
+# $Id: HgAutomate.pm,v 1.4 2006/07/04 00:28:46 angie Exp $
 package HgAutomate;
 
 use warnings;
 use strict;
+use Carp;
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
 @ISA = qw(Exporter);
-@EXPORT_OK = qw( makeGsub mustMkdir mustOpen nfsNoodge run verbose
-		 getCommonOptionHelp processCommonOptions
+@EXPORT_OK = qw( getAssemblyInfo
+		 makeGsub mustMkdir mustOpen nfsNoodge run verbose
+		 choosePermanentStorage
+		 chooseWorkhorse chooseFileServer chooseClusterByBandwidth
+		 chooseFilesystemsForCluster checkClusterPath
+		 getCommonOptionHelp getCommonOptionHelpNoClusters
+		 processCommonOptions
 		 @commonOptionVars @commonOptionSpec
 	       );
+
+#########################################################################
+# A simple model of our local compute environment with some subroutines
+# for checking the validity of path+machine combos and for suggesting
+# appropriate storage and machines.
+
+use vars qw( %cluster %clusterFilesystem );
+
+%cluster = 
+    ( 'pk' =>
+        { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
+	  'hostCount' => 394, },
+      'kk' =>
+        { 'enabled' => 1, 'gigaHz' => 0.8, 'ram' => 1,
+	  'hostCount' => 700, },
+      'kki' =>
+        { 'enabled' => 1, 'gigaHz' => 2.2, 'ram' => 8,
+	  'hostCount' => 16, },
+      'kk9' => # Guessing here since the machines are down:
+        { 'enabled' => 0, 'gigaHz' => 1.5, 'ram' => 2,
+	  'hostCount' => 100, },
+    );
+
+my @allClusters = (keys %cluster);
+
+%clusterFilesystem =
+    ( 'scratch' =>
+        { root => '/scratch/hg', clusterLocality => 1.0,
+	  distrHost => [], distrCommand => '',
+	  inputFor => \@allClusters, outputFor => [], },
+      'iscratch' =>
+        { root => '/iscratch/i', clusterLocality => 0.5,
+	  distrHost => ['kkr1u00'], distrCommand => 'iSync',
+	  inputFor => ['kk', 'kki', 'kk9'], outputFor => [], },
+      'san' =>
+        { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
+	  distrHost => ['pk', 'kkstore*'], distrCommand => '',
+	  inputFor => ['pk'], outputFor => ['pk'], },
+      'bluearc' =>
+        { root => '/cluster/bluearc', clusterLocality => 0.1,
+	  distrHost => ['kkstore*'], distrCommand => '',
+	  inputFor => \@allClusters, outputFor => \@allClusters, },
+      'panasas' =>
+        { root => '/cluster/panasas/home/store', clusterLocality => 0.1,
+	  distrHost => ['kkstore*'], distrCommand => '',
+	  inputFor => \@allClusters, outputFor => \@allClusters, },
+    );
+
+sub choosePermanentStorage {
+  # Return the disk drive with the most available space.
+  #*** would be good to parameterize instead of hardcoding this!
+  confess "Too many arguments" if (scalar(@_) != 0);
+  my $maxAvail;
+  my $bestRaid;
+  for (my $i=1;  $i < 20;  $i++) {
+    my $raid = "/cluster/store$i";
+    my $df = `df $raid/ 2>>1 | grep -v "No such" | egrep -v '^[A-Za-z]'`;
+    if ($df =~ s/.*\s+(\d+)\s+\d+\%.*/$1/) {
+      if (! defined $maxAvail || $df > $maxAvail) {
+	$maxAvail = $df;
+	$bestRaid = $raid;
+      }
+    }
+  }
+  confess "Could not df any /cluster/store's" if (! defined $bestRaid);
+  return $bestRaid;
+}
+
+sub getMountPoint {
+  # Extract the mount point for a given path from df.
+  # This can hang if filesystem is unhappy -- c'est la vie.
+  my ($path) = @_;
+  my $df = `df $path`;
+  if ($df =~ m@\d+\s+\d+\%\s+([/\w]+)$@) {
+    return $1;
+  } else {
+    return undef;
+  }
+}
+
+sub getClusterFsInfo {
+  # Get clusterFilesystem record for the given path, if there is one.
+  # Unless path starts with /scratch or /iscratch which may not be the
+  # same on localhost as on the cluster nodes,
+  #*** would be good to parameterize instead of hardcoding this!
+  # use df to determine real location of path.
+  my ($path) = @_;
+  confess "must have complete, not relative, path" if ($path !~ m@^/@);
+  if ($path =~ m@^/(scratch|iscratch)/@) {
+    return $clusterFilesystem{$1};
+  } else {
+    my $mountPoint = &getMountPoint($path);
+    foreach my $fs (keys %clusterFilesystem) {
+      my $info = $clusterFilesystem{$fs};
+      return $info if ($info->{'root'} =~ /^$mountPoint/);
+    }
+  }
+  return undef;
+}
+
+sub getOkClusters {
+  # Return a list of clusters that are known to be OK for the given path.
+  my ($path, $isInput) = @_;
+  my $fsInfo = &getClusterFsInfo($path);
+  my @okClusters = ();
+  if ($fsInfo) {
+    @okClusters = $isInput ?
+                       @{$fsInfo->{'inputFor'}} : @{$fsInfo->{'outputFor'}};
+  }
+  return @okClusters;
+}
+
+sub getWarnClusters {
+  # If path is not on a clusterFilesytem, and it is used as input to a big
+  # cluster or output from small cluster, warn but don't die.
+  # Would be nice to use cluster parameters here instead of hardcoding.
+  my ($path, $isInput) = @_;
+  my $fsInfo = &getClusterFsInfo($path);
+  if (! $fsInfo) {
+    if ($isInput) {
+      return @allClusters;
+    } else {
+      return ('kki');
+    }
+  }
+}
+
+sub checkClusterPath {
+  # Make sure that the list of paths is OK for the given cluster and in/out.
+  my ($cluster, $inOrOut, @pathList) = @_;
+  confess "Must have at least 3 arguments" if (scalar(@_) < 3);
+  my $clusterInfo = $cluster{$cluster};
+  if (! defined $clusterInfo) {
+    confess "Unrecognized cluster \"$cluster\"";
+  }
+  if ($inOrOut ne "in" and $inOrOut ne "out") {
+    confess "\$inOrOut must be either \"in\" or \"out\"";
+  }
+  foreach my $p (@pathList) {
+    my $isInput = ($inOrOut eq 'in');
+    my @okClusters = &getOkClusters($p, $isInput);
+    my @warnClusters = &getWarnClusters($p, $isInput);
+    my $do = $isInput ? 'take input from' : 'send output to';
+    if (scalar(grep /^$cluster$/, @warnClusters)) {
+      warn "Warning: Cluster $cluster probably should not $do $p .\n";
+    } elsif (! scalar(grep /^$cluster$/, @okClusters)) {
+      die "Error: Cluster $cluster cannot $do $p .\n";
+    }
+  }
+}
+
+sub getLoadFactor {
+  # Return the load factor (most-recent) for the given machine.
+  # If it doesn't produce a recognizable uptime result, return a
+  # very high load.
+  my ($mach) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  my $cmd = "ssh -x $mach uptime 2>>1 | grep load";
+  verbose(4, "about to run '$cmd'\n");
+  my $load = `$cmd`;
+  if ($load =~ s/.*load average: (\d+\.\d+).*/$1/) {
+    return $load;
+  }
+  return 1000;
+}
+
+sub getWorkhorseLoads {
+  #*** Would be nice to parameterize instead of hardcoding hostnames...
+  # Return a hash of workhorses (kolossus and all idle small cluster machines),
+  # associated with their load factors.
+  confess "Too many arguments" if (scalar(@_) != 0);
+  my %horses = ();
+  foreach my $machLine ('kolossus',
+		    `ssh -x kki parasol list machines | grep idle`) {
+    my $mach = $machLine;
+    $mach =~ s/[\. ].*//;
+    $mach =~ s/\n$//;
+    $horses{$mach} = &getLoadFactor($mach);
+  }
+  return %horses;
+}
+
+sub chooseWorkhorse {
+  # Choose a suitable "workhorse" machine.  If -workhorse was given, use that.
+  # Otherwise, randomly pick a fast machine with low load factor, or wait if
+  # none are available.  This can wait indefinitely, so if it's broken or if
+  # all workhorses are down, it's up to the engineer to halt the script.
+  confess "Too many arguments" if (shift);
+  if ($main::opt_workhorse) {
+    return $main::opt_workhorse;
+  }
+  while (1) {
+    my %horses = &getWorkhorseLoads();
+    foreach my $maxLoad (0.5, 1.0, 2.0) {
+      my @fastHorses = ();
+      foreach my $horse (keys %horses) {
+	push @fastHorses, $horse if ($horses{$horse} <= $maxLoad);
+      }
+      if (scalar(@fastHorses) > 0) {
+	return $fastHorses[int(rand(scalar(@fastHorses)))];
+      }
+    }
+    my $delay = 120;
+    &HgAutomate::verbose(1, "chooseWorkhorse: all machines have high load." .
+			 "  waiting $delay seconds...\n");
+    sleep($delay);
+  }
+}
+
+sub getFileServer {
+  # Use df to determine the fileserver for $path.
+  my ($path) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  my $host = `df $path 2>>1 | grep -v Filesystem`;
+  if ($host =~ s/(\S+):\/.*/$1/) {
+    return $1;
+  } else {
+    confess "Could not extract server from output of \"df $path\":\n$host\n";
+  }
+}
+
+sub canLogin {
+  # Return true if logins are enabled on the given fileserver.
+  #*** hardcoded
+  my ($mach) = @_;
+  return ($mach =~ /^kkstore/ || $mach eq 'eieio');
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+}
+
+sub chooseFileServer {
+  # Choose a suitable machine for an I/O-intensive task.
+  # If -fileServer was given, use that.
+  # Otherwise, determine the fileserver for $path, and if we can log in
+  # on the fileserver, and its load is not too high, return it.
+  # Otherwise, use a workhorse machine.
+  my ($path) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  if ($main::opt_fileServer) {
+    return $main::opt_fileServer;
+  }
+  my $server = &getFileServer($path);
+  verbose(4, "Fileserver from df is '$server'\n");
+  $server =~ s/-10$//;
+  if ($server && &canLogin($server) && (&getLoadFactor($server) < 2.0)) {
+    return $server;
+  }
+  return &chooseWorkhorse();
+}
+
+sub chooseClusterByBandwidth {
+  # Choose cluster by apparent available bandwidth.
+  # Note: this does not take I/O into account, so it's best to call this
+  # before distributing inputs instead of after (unless they have been
+  # distributed somewhere that is fast for all clusters like /scratch).
+  confess "Too many arguments" if (shift);
+  my $maxOomph;
+  my $bestCluster;
+  foreach my $paraHub (keys %cluster) {
+    my $clusterInfo = $cluster{$paraHub};
+    next if (! $clusterInfo->{'enabled'});
+    my @machInfo = `ssh -x $paraHub parasol list machines | grep -v dead`;
+    my $idleCount = 0;
+    my $busyCount = 0;
+    foreach my $info (@machInfo) {
+      if ($info =~ /idle$/) {
+	$idleCount++;
+      } else {
+	$busyCount++;
+      }
+    }
+    my $batchCount =
+      `ssh -x $paraHub parasol list batches | grep -v ^# | wc -l`;
+    my $expectedPortion = 1 / (1 + $batchCount);
+    my $oomph = (($idleCount + ($busyCount * $expectedPortion)) *
+		 $clusterInfo->{'gigaHz'});
+    &verbose(2, "$paraHub: ((idle=$idleCount + (busy=$busyCount * portion=$expectedPortion)) * speed=$clusterInfo->{gigaHz}) = $oomph\n");
+    if (! defined $maxOomph || ($oomph > $maxOomph)) {
+      $maxOomph = $oomph;
+      $bestCluster = $paraHub;
+    }
+  }
+  if (! defined $bestCluster) {
+    confess "Failed to find a live cluster";
+  }
+  &verbose(2, "cluster with the most bandwidth: $bestCluster\n");
+  return $bestCluster;
+}
+
+sub chooseFilesystemsForCluster {
+  # Return a list of suitable filesystems for given cluster and direction.
+  my ($cluster, $inOrOut) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $clusterInfo = $cluster{$cluster};
+  confess "Unrecognized cluster $cluster" if (! $clusterInfo);
+  confess "Second arg must be either \"in\" or \"out\""
+    if ($inOrOut ne 'in' && $inOrOut ne 'out');
+  my @filesystems = ();
+  foreach my $fs (keys %clusterFilesystem) {
+    my $fsInfo = $clusterFilesystem{$fs};
+    my @okClusters = ($inOrOut eq 'in') ?
+       @{$fsInfo->{'inputFor'}} :  @{$fsInfo->{'outputFor'}};
+    if (scalar(grep /^$cluster$/, @okClusters)) {
+      push @filesystems, $fsInfo->{'root'};
+    }
+  }
+  return @filesystems;
+}
+
+
+#########################################################################
+# Support for command line options expected to be common to many
+# automation scripts:
 
 use vars qw( @commonOptionVars @commonOptionSpec );
 
@@ -26,6 +344,7 @@ my $defaultVerbose = 1;
 @commonOptionVars = qw(
     $opt_workhorse
     $opt_fileServer
+    $opt_dbHost
     $opt_bigClusterHub
     $opt_smallClusterHub
     $opt_debug
@@ -35,6 +354,7 @@ my $defaultVerbose = 1;
 
 @commonOptionSpec = ("workhorse=s",
 		     "fileServer=s",
+		     "dbHost=s",
 		     "bigClusterHub=s",
 		     "smallClusterHub=s",
 		     "verbose=n",
@@ -44,16 +364,36 @@ my $defaultVerbose = 1;
 
 sub getCommonOptionHelp {
   # Return description of common options, given defaults, for usage message.
-  my ($workhorse, $bigClusterHub, $smallClusterHub) = @_;
+  my ($dbHost, $workhorse, $bigClusterHub, $smallClusterHub) = @_;
+  confess "Must have exactly 4 arguments" if (scalar(@_) != 4);
   my $help = <<_EOF_
     -workhorse machine    Use machine (default: $workhorse) for compute or
                           memory-intensive steps.
     -fileServer mach      Use mach (default: fileServer of the build directory)
                           for I/O-intensive steps.
+    -dbHost mach          Use mach (default: $dbHost) as database server.
     -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub
                           for blastz cluster run.
     -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub
                           for cat & chain cluster runs.
+    -debug                Don't actually run commands, just display them.
+    -verbose num          Set verbose level to num (default $defaultVerbose).
+    -help                 Show detailed help and exit.
+_EOF_
+  ;
+  return $help;
+}
+
+sub getCommonOptionHelpNoClusters {
+  # Return description of common options (sans clusters), for usage message.
+  my ($dbHost, $workhorse) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $help = <<_EOF_
+    -workhorse machine    Use machine (default: $workhorse) for compute or
+                          memory-intensive steps.
+    -fileServer mach      Use mach (default: fileServer of the build directory)
+                          for I/O-intensive steps.
+    -dbHost mach          Use mach (default: $dbHost) as database server.
     -debug                Don't actually run commands, just display them.
     -verbose num          Set verbose level to num (default $defaultVerbose).
     -help                 Show detailed help and exit.
@@ -68,9 +408,29 @@ sub processCommonOptions {
   $main::opt_verbose = $defaultVerbose if (! defined $main::opt_verbose);
 }
 
+
+#########################################################################
+# General utility subroutines:
+
+sub getAssemblyInfo {
+  # Do a quick dbDb lookup to get assembly descriptive info for README.txt.
+  my ($dbHost, $db) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $centralDbSql =
+    "ssh -x $dbHost hgsql -h genome-testdb -A -N hgcentraltest";
+  my $query = "select genome,description,sourceName from dbDb " .
+              "where name = \"$db\";";
+  my $line = `echo '$query' | $centralDbSql`;
+  chomp $line;
+  my ($genome, $date, $source) = split("\t", $line);
+  return ($genome, $date, $source);
+}
+
 sub makeGsub {
   # Create a gsub file in the given dir with the given contents.
   my ($runDir, $templateCmd) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  confess "undef input" if (! defined $runDir || ! defined $templateCmd);
   $templateCmd =~ s/\n$//;
   my $fh = mustOpen(">$runDir/gsub");
   print $fh  <<_EOF_
@@ -86,12 +446,16 @@ sub mustMkdir {
   # mkdir || die.  Immune to -debug -- we need to create the dir structure 
   # and dump out the scripts even if we don't actually execute the scripts.
   my ($dir) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "undef input" if (! defined $dir);
   system("mkdir -p $dir") == 0 || die "Couldn't mkdir $dir\n";
 }
 
 sub mustOpen {
   # Open a file or else die with informative error message.
   my ($fileSpec) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "undef input" if (! defined $fileSpec);
   open(my $handle, $fileSpec)
     || die "Couldn't open \"$fileSpec\": $!\n";
   return $handle;
@@ -101,8 +465,10 @@ sub nfsNoodge {
   # sometimes localhost can't see the newly created file immediately,
   # so insert some artificial delay in order to prevent the next step
   # from dieing on lack of file:
-  return if ($main::opt_debug);
   my ($file) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "undef input" if (! defined $file);
+  return if ($main::opt_debug);
   for (my $i=0;  $i < 5;  $i++) {
     last if (system("ls $file >& /dev/null") == 0);
     sleep(2);
@@ -112,6 +478,8 @@ sub nfsNoodge {
 sub run {
   # Run a command in sh (unless -debug).
   my ($cmd) = @_;
+  confess "Must have exactly 1 argument" if (scalar(@_) != 1);
+  confess "undef input" if (! defined $cmd);
   if ($main::opt_debug) {
     print "# $cmd\n";
   } else {
@@ -122,6 +490,8 @@ sub run {
 
 sub verbose {
   my ($level, $message) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  confess "undef input" if (! defined $level || ! defined $message);
   print STDERR $message if ($main::opt_verbose >= $level);
 }
 
