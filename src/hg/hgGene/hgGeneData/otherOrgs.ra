@@ -43,11 +43,10 @@ name zebrafish
 shortLabel Zebrafish
 tables drBlastTab
 idSql select target from drBlastTab where query = '%s'
-idToProtIdSql select transcript from ensGtp where protein like '%s.%%'
 pepTable ensPep
 genomeUrl ../cgi-bin/hgTracks?org=Zebrafish&position=%s
 otherName Ensembl
-otherUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
+otherUrl http://www.ensembl.org/Danio_rerio/transview?transcript=%s
 priority 30
 
 name drosophila
