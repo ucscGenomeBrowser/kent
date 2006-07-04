@@ -1804,22 +1804,6 @@ release beta
     priority 8
 
 track encodeRegulomeProb
-release beta
-compositeTrack on
-shortLabel UW/Reg DNaseI HSs
-longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
-group encodeChrom
-priority 66.2
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-type bedGraph 4
-minLimit 1.1
-maxLimit 3.0
-viewLimits 1:2
-autoScaleDefault Off
-maxHeightPixels 128:16:16
-dataVersion ENCODE June 2005 Freeze
-
-track encodeRegulomeProb
 release alpha
 compositeTrack on
 shortLabel UW/Reg DNaseI HSs
@@ -1836,6 +1820,8 @@ maxHeightPixels 128:16:16
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbCACO2
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel CACO2 
     longLabel CACO2 DNaseI HSs
@@ -1843,23 +1829,18 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeRegulomeProbGM
-release alpha
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel GM06990
     longLabel GM06990 DNaseI HSs
     color 90,50,210
     priority 2
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeProbGM06990
-release beta
-    subTrack encodeRegulomeProb
-    shortLabel GM06990
-    longLabel GM06990 DNaseI HSs
-    color 90,50,210
-    priority 2
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbSKNSH
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel SKNSH
     longLabel SKNSH DNaseI HSs
@@ -1867,6 +1848,8 @@ release beta
     priority 3
 
     track encodeRegulomeProbHuh7
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel Huh7
     longLabel Huh7 DNaseI HSs
@@ -1874,6 +1857,8 @@ release beta
     priority 4
 
     track encodeRegulomeProbHepG2
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel HepG2
     longLabel HepG2 DNaseI HSs
@@ -1881,35 +1866,114 @@ release beta
     priority 5
 
     track encodeRegulomeProbK562
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel K562
     longLabel K562 DNaseI HSs
     color 210,50,90
     priority 6
-
-    track encodeRegulomeProbCD34
-release alpha
-    subTrack encodeRegulomeProb
-    shortLabel CD34
-    longLabel CD34 DNaseI HSs
-    color 240,50,60
-    priority 7
-dataVersion ENCODE Oct 2005 Freeze
-
+    
     track encodeRegulomeProbERY
-release beta
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel ERY
     longLabel Adult Erythroblast DNaseI HSs
     color 240,50,60
     priority 7
 
+    track encodeRegulomeProbCD34
+   release alpha
+   type bedGraph 5
+    subTrack encodeRegulomeProb
+    shortLabel CD34
+    longLabel CD34 DNaseI HSs
+    color 240,50,60
+    priority 7
+    dataVersion ENCODE Oct 2005 Freeze
+
     track encodeRegulomeProbHeLa
+   release alpha
+   type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel HeLa
     longLabel HeLa DNaseI HSs
     color 60,50,240
     priority 8
+
+track encodeRegulomeProb
+release beta
+compositeTrack on
+shortLabel UW/Reg DNaseI HSs
+longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
+group encodeChrom
+priority 66.2
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bedGraph 4
+minLimit 1.1
+maxLimit 3.0
+viewLimits 1:2
+autoScaleDefault Off
+maxHeightPixels 128:16:16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeRegulomeProbCACO2
+    release beta
+    type bedGraph 4
+    subTrack encodeRegulomeProb
+    shortLabel CACO2 
+    longLabel CACO2 DNaseI HSs
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeProbGM06990
+    release beta
+    subTrack encodeRegulomeProb
+    shortLabel GM06990
+    longLabel GM06990 DNaseI HSs
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeProbSKNSH
+    release beta
+    subTrack encodeRegulomeProb
+    shortLabel SKNSH
+    longLabel SKNSH DNaseI HSs
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeProbHuh7
+    release beta
+    subTrack encodeRegulomeProb
+    shortLabel Huh7
+    longLabel Huh7 DNaseI HSs
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeProbHepG2
+    release beta
+    subTrack encodeRegulomeProb
+    shortLabel HepG2
+    longLabel HepG2 DNaseI HSs
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeProbK562
+    release beta
+    subTrack encodeRegulomeProb
+    shortLabel K562
+    longLabel K562 DNaseI HSs
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeProbERY
+    release beta
+    subTrack encodeRegulomeProb
+    shortLabel ERY
+    longLabel Adult Erythroblast DNaseI HSs
+    color 240,50,60
+    priority 7
 
 track encodeRegulomeQuality
 release alpha
