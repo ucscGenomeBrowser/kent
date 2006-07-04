@@ -5,7 +5,8 @@ name rat
 db rn3
 
 name zebrafish
-db danRer2
+db danRer3
+otherUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name drosophila
 db dm2
