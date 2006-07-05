@@ -1572,6 +1572,20 @@ query select tName,tStart,tEnd,qName from %s where qName like '%s;'
 searchPriority 16
 termPrefix HG-
 
+searchName affyU133NoSemiColon
+searchTable affyU133
+searchMethod prefix
+searchType psl
+termRegex U133[A-Z]:[0-9]+[[:alnum:]_]*_at
+searchPriority 16
+
+searchName affyU133NoChip
+searchTable affyU133
+searchMethod fuzzy
+searchType psl
+termRegex [0-9]+[[:alnum:]_]*_at
+searchPriority 16
+
 searchTable affyU133Plus2
 searchMethod exact
 searchType psl
