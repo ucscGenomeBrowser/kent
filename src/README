@@ -84,6 +84,9 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
    While you're at it set the MYSQLLIBS
    variable to point to something like
    /usr/lib/mysql/libmysqlclient.a -lz
+   When available, the commands: mysql_config --include
+	and mysql_config --libs
+	will display the required arguments for these environment settings.
 3. Execute make in jksrc/hg/lib
 4. Execute make in the directory containing the
    application you wish to build.
@@ -307,3 +310,5 @@ if (doMask)
 return twoBit;
 }
 
+====================================================================
+This file last updated: $Date: 2006/07/05 18:48:40 $
