@@ -28,7 +28,12 @@ To build the source tree.
 	If your system does not have this set of include files
 	or this static client.a file, you may need to install
 	the mysql-devel RPM to obtain the mysql development
-	environment.
+	environment.  With that RPM installed, this command:
+		mysql_config --libs
+	will display the appropriate libraries to link with
+	for your system configuration.  And:
+		mysql_config --include
+	will display the appropriate MYSQLINC directory.
 
 4.  In the source tree, perform the following:
 	$ cd kent/src
@@ -58,5 +63,6 @@ To build the source tree.
 	$ make compile
 	$ make install DESTDIR=/destination/prefix
 
+
 ====================================================================
-This file last updated: $Date: 2005/03/07 18:31:55 $
+This file last updated: $Date: 2006/07/05 18:49:26 $
