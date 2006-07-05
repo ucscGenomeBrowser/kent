@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1143 2006/06/30 19:56:18 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1144 2006/07/05 17:34:54 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3585,6 +3585,7 @@ if (color)
 		tg->mapName, tg->mapItemName(tg, bed), s, directUrl, withHgsid);
 	}
     }
+hFreeConn(&conn);
 }
 
 void rgdQtlMethods(struct track *tg)
