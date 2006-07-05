@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.61 2006/06/22 23:00:24 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.62 2006/07/05 18:03:39 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -1458,7 +1458,7 @@ mm8.mgcTables.mgc = all
     # update /cluster/data/genbank/
     make etc-update
 
-    ssh kkstore02
+    ssh kkstore04
     cd /cluster/data/genbank
     nice bin/gbAlignStep -initial mm8 &
     #	var/build/logs/2006.02.17-16:10:17.mm8.initalign.log
@@ -5779,7 +5779,7 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
 #########################################################################
 # REGULATORY POTENTIAL (DONE - 2006-06-12 - Hiram)
     #	download data from "James Taylor" <james@bx.psu.edu>
-    ssh kkstore02
+    ssh kkstore04
     cd /cluster/data/mm8/bed
     mkdir /cluster/store8/mm8/bed/regPotential7X
     ln -s /cluster/store8/mm8/bed/regPotential7X .
@@ -5820,6 +5820,18 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     time hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 -hBinCount=100 \
 	-hMinVal=0.0 -db=mm8 regPotential7X > histogram.data 2>&1
     #	real    18m29.167s
+
+    #	create download gzip files from the bz2 files:
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/regPotential7X
+
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.mm8.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.mm8.gz
+	echo
+    done
 
 #########################################################################
 # MAP CONTIGS TRACK (DONE - 2005-10-04 - Hiram)

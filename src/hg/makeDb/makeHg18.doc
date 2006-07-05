@@ -9599,6 +9599,17 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
     #	real    2m42.311s
     #	73 % of the data values are zero
 
+    #	create download gzip files from the bz2 files:
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/regPotential7X
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg18.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg18.gz
+	echo
+    done
+
 #########################################################################
 # create md5sum.txt under bigZips (DONE, 6/7/06, Fan)
 

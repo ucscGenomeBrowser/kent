@@ -21483,6 +21483,15 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
     #	real    2m48.810s
     #	73 % of the data values are zero
 
+    #	create download gzip files from the bz2 files:
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg17.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg17.gz
+	echo
+    done
+
 #########################################################################
 ####### RE-BUILD RGD HUMAN QTL TRACKS (DONE 06/21/06 Fan) ##############
 
