@@ -78,6 +78,11 @@ your platform to link network applications.<BR>
 <P>
 For example, Solaris often needs:<BR>
 <TT>MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz -lsocket -lnsl'</TT> 
+<LI>
+If available, the commands<BR>
+<TT>mysql_config --libs</TT><BR>
+<TT>mysql_config --include</TT><BR>
+will display the appropriate arguments to use in these environment variables.
 </OL>
 <P>
 <LI>
