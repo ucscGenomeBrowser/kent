@@ -1291,6 +1291,14 @@ priority 149.3
 visibility hide
 type bed 4 +
 
+track microsat
+shortLabel Microsatellite
+longLabel Microsatellites - Di-nucleotide and Tri-nucleotide Repeats
+group varRep
+priority 149.4
+visibility hide
+type bed 4 
+
 track blastzSelfUnmasked
 shortLabel Self Unmasked
 longLabel Blastz Self Join without Repeats Masked (tandem repeats masked)
