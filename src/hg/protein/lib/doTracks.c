@@ -888,14 +888,14 @@ conn2 = hAllocConn();
 conn3 = hAllocConn();
 
 safef(query2, sizeof(query), 
-      "select protein from %s.ensemblXref3 where swissAcc='%s'", 
+      "select distinct protein from %s.ensemblXref3 where swissAcc='%s'", 
       protDbName, proteinID);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 if (row2 == NULL) 
     {
     safef(query2, sizeof(query), 
-          "select protein from %s.ensemblXref3 where tremblAcc='%s';", 
+          "select distinct protein from %s.ensemblXref3 where tremblAcc='%s';", 
           protDbName, proteinID);
     sr2  = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
