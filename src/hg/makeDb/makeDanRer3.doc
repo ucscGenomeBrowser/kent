@@ -5918,8 +5918,9 @@ _EOF_
 # also need to update:
 # dm1, hg{15,16,17}, mm{5,6,7}, rn{2,3}
 # Human (hg15 and hg16), Drosophila, mouse mm5 and rat all use danRer1.
-# Human hg17 and mouse mm6 and mm7, uses danRer2.
+# Human hg17 and mouse mm6 and mm7 uses danRer2.
   # Update these all to use the Zv5 (danRer3) Ensembl proteins.
+  # Ensembl 38 (April 2006)
   ssh hgwdev
   cd /cluster/data/danRer3/bed/hgNearBlastp/updates2
 cat << _EOF_ > config2.ra
@@ -5949,9 +5950,9 @@ _EOF_
     nice doHgNearBlastp.pl config2.ra -noSelf -queryOnly >& do2.log &
     tail -f do2.log
     # Took about 30 minutes
-    # Update and commit hgGeneData and hgNearData files to make sure that all queries
-    # and links now work for the transcript ID instead of peptide ID for ensZfishBlastTab
-    # and drBlastTab tables.
+    # Update and commit hgGeneData and hgNearData files to make sure that 
+    # all queries and links now work for the transcript ID instead of 
+    # peptide ID for ensZfishBlastTab and drBlastTab tables.
 
 # END OF HGNEAR STUFF
 ####################################################
