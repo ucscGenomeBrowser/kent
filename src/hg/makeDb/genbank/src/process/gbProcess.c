@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.14 2006/06/29 05:42:23 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.15 2006/07/06 19:20:00 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1123,12 +1123,10 @@ parseSourceOrganism();
 if (startsWith("synthetic construct", gbOrganismField->val->string))
     synOrg = findSyntheticTarget();
 
-/* for refseqs, we only keep NC_, NR_ and NM_ */
+/* for refseqs, we only keep NM_ */
 if (gbGuessSrcDb(accession) == GB_REFSEQ)
     {
-    keepIt = startsWith("NC_", accession) || startsWith("NR_", accession)
-        || startsWith("NM_", accession)
-        || (inclXMs && startsWith("XM_", accession));
+    keepIt = startsWith("NM_", accession) || (inclXMs && startsWith("XM_", accession));
     }
 else
     keepIt = TRUE;
