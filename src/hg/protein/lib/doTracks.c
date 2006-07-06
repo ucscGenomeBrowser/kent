@@ -14,6 +14,8 @@
 #include "hgColors.h"
 #include "pbTracks.h"
 
+static char const rcsid[] = "$Id: doTracks.c,v 1.11 2006/07/06 18:26:03 fanhsu Exp $";
+
 int prevGBOffsetSav;
 char trackOffset[20];
 int pixWidth, pixHeight;
