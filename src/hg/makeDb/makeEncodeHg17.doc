@@ -2184,7 +2184,7 @@ close (FH)
 # Submitted 5/19/06 by John Stam <jstam@U.WASHINGTON.EDU>
 # 1 zip file data: UW_may06_ENCODE_data, plus Description.doc
 
-    cd /cluster/data/encode
+    cd /cluster/data/encode/Regulome
     mkdir -p 2006-05-19/lab
     cd 2006-05-19/lab
     # deposit data
@@ -2209,6 +2209,18 @@ close (FH)
 		| hgLoadBed -noSort -noBin -strict -bedGraph=5 hg17 \
 		    encodeUWRegulomeBase$CELL stdin
     done
+
+    #	gross statistics for the data
+    awk '{print $5}' data/*.baseline.hg17.bed | ave stdin
+    #	Q1 -0.201029
+    #	median 0.000000
+    #	Q3 0.207335
+    #	average 0.018950
+    #	min -5.454980
+    #	max 6.327273
+    #	count 291642
+    #	total 5526.507662
+    #	standard deviation 0.489442
 
     #	a histogram of the data:
     awk '{print $5}' data/* | textHistogram -verbose=2 -binSize=0.12 \
@@ -2254,3 +2266,44 @@ close (FH)
 	echo
 	I=`expr $I + 1`
     done > trackDb.entries.txt
+
+##########################################################################
+# UW/Regulome QCP data again 2006-07-05 - Hiram
+
+    ssh hgwdev
+    cd /cluster/data/encode/Regulome/2006-06-13/lab
+
+    for CELL in CD4 CaCo2 CaLU3 EryAdult EryFetal GM HMEC HRE HeLa HepG2 \
+        Huh7 K562 NHBE PANC SAEC SKnSH
+    do
+	ls -og ${CELL}.normalized_060206.hg17.bed
+	sort -k1,1 -k2,2n ${CELL}.normalized_060206.hg17.bed \
+	    | /cluster/data/encode/bin/scripts/trimOverlap.pl \
+		| hgLoadBed -noSort -noBin -strict -bedGraph=5 hg17 \
+		    encodeUWRegulomeBase${CELL} stdin
+    done
+
+    #	gross statistics for the data
+    awk '{print $5}' *.normalized_060206.hg17.bed | ave stdin
+    #	Q1 -0.494604
+    #	median -0.000000
+    #	Q3 0.510167
+    #	average 0.046097
+    #	min -13.409856
+    #	max 15.554195
+    #	count 297650
+    #	total 13720.736560
+    #	standard deviation 1.203400
+
+    #	calculate histogram 100 bin size:
+    echo -13.5 15.6 | awk '{print ($2-$1)/100}'
+    #	0.291
+
+    #	a histogram of the data:
+    awk '{print $5}' *.normalized_060206.hg17.bed | \
+	textHistogram -verbose=2 -binSize=0.292 \
+	-maxBinCount=100 -minVal=-13.5 -real -pValues stdin \
+	    > histogram.data
+    #	looks like the majority of the data is within -1.0 to 1.0
+
+    #	The trackDb entries made previously should be OK
