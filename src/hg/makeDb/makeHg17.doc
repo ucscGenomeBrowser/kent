@@ -21494,6 +21494,8 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
 
 #########################################################################
 ####### RE-BUILD RGD HUMAN QTL TRACKS (DONE 06/21/06 Fan) ##############
+# DELETED RECORD FROM rgdQtlLink SO CONSISTENT WITH REMOVAL FROM rgdQtl
+# (DONE, 2006-06-30, hartera)
 
 ssh hgwdev
 mkdir -p /cluster/store8/rgd/human12062005
@@ -21577,6 +21579,10 @@ hgsql hg17 -e "delete from rgdQtl where name='AASTH39_H'"
 hgsql hg17 -e "drop table hg17.rgdQtlLink;"
 hgsql hg17 <~/kent/src/hg/lib/rgdQtlLink.sql
 hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLink;'
+
+# Delete the record from rgdQtlLink table that was removed from the rgdQtl
+# table above. (hartera, 2006-06-30)
+hgsql hg17 -e "delete from rgdQtlLink where name='AASTH39_H'"
 
 ########################################################################
 
