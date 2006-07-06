@@ -17,6 +17,8 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
+static char const rcsid[] = "$Id: pbUtil.c,v 1.15 2006/07/06 21:06:48 fanhsu Exp $";
+
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
 {

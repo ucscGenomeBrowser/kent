@@ -5,6 +5,8 @@
 #include "localmem.h"
 #include "hash.h"
 
+static char const rcsid[] = "$Id: unirefTbl.c,v 1.2 2006/07/06 21:09:27 fanhsu Exp $";
+
 struct unirefTbl
 /* table of uniref entries.*/
 {
