@@ -14,6 +14,8 @@
 #include "hgColors.h"
 #include "pbTracks.h"
 
+static char const rcsid[] = "$Id: doTracks.c,v 1.11 2006/07/06 18:26:03 fanhsu Exp $";
+
 int prevGBOffsetSav;
 char trackOffset[20];
 int pixWidth, pixHeight;
@@ -888,14 +890,14 @@ conn2 = hAllocConn();
 conn3 = hAllocConn();
 
 safef(query2, sizeof(query), 
-      "select protein from %s.ensemblXref3 where swissAcc='%s'", 
+      "select distinct protein from %s.ensemblXref3 where swissAcc='%s'", 
       protDbName, proteinID);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 if (row2 == NULL) 
     {
     safef(query2, sizeof(query), 
-          "select protein from %s.ensemblXref3 where tremblAcc='%s';", 
+          "select distinct protein from %s.ensemblXref3 where tremblAcc='%s';", 
           protDbName, proteinID);
     sr2  = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
@@ -1147,6 +1149,7 @@ for (ii=0; ii<sf_cnt; ii++)
 	{
 	jj++;
 	safef(exonNumStr, sizeof(exonNumStr), "%d", jj);
+
 	calxy(sfStart[ii], *yOffp, &xx, &yy);
 
 	sf_len   = sfEnd[ii] - sfStart[ii];
@@ -1161,6 +1164,8 @@ for (ii=0; ii<sf_cnt; ii++)
 	    }
 
 	len = strlen(superfam_name[ii]);
+	/* prevent the painting spill over to the label */
+	if (xx < 120) xx = 120;
 	vgDrawBox(g_vg, xx, yy-9+(jj%4)*5, (sfEnd[ii] - sfStart[ii])*pbScale, 9, sfColor);
 	mapBoxSuperfamily(xx, yy-9+(jj%4)*5, 
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,

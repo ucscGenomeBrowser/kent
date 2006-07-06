@@ -48,8 +48,8 @@ echo "Building src utils."
 cd $base/kent/src
 make utils >& make.utils.log
 make blatSuite >>& make.utils.log
-sed -i -e "s/-DJK_WARN//g" make.utils.log
-sed -i -e "s/-Werror//g" make.utils.log
+sed -i -e "s/-DJK_WARN//" make.utils.log
+sed -i -e "s/-Werror//" make.utils.log
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.utils.log`
 set wc = `echo "$res" | wc -w` 

@@ -1,6 +1,6 @@
-setenv BRANCHNN 136
-setenv TODAY 2006-06-26     # v136 final
-setenv LASTWEEK 2006-06-12  # v135 final
+setenv BRANCHNN 135
+setenv TODAY 2006-06-12     # v135 final
+setenv LASTWEEK 2006-05-30  # v134 final
 setenv REVIEWDAY 2006-06-05  # preview of v135
 setenv LASTREVIEWDAY 2006-05-22 # preview of v134
 setenv WEEKLYBLD /cluster/bin/build/scripts
