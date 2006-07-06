@@ -75,7 +75,7 @@ summary multiz6waySummary
 speciesGroups vertebrate mammal
 sGroup_mammal hg17 mm6 monDom1
 sGroup_vertebrate tetNig1 fr1
-treeImage phylo/DanRer2_6way.jpg
+treeImage phylo/danRer2_6way.gif
 
 track blastHg17KG
 shortLabel $o_Organism Proteins
