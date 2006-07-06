@@ -18,7 +18,8 @@ autoScaleDefault Off
 summary multiz7waySummary
 speciesGroups vertebrate
 sGroup_vertebrate hg18 galGal2 mm8 rn4 xenTro2 danRer3
-treeImage phylo/monDom4_7way.jpg
+# treeImage phylo/monDom4_7way.jpg
+treeImage phylo/monDom4_5way.gif
 
 track phastConsElements7way
 shortLabel Most Conserved
