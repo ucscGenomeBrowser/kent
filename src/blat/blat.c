@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.107 2005/12/06 18:28:50 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.108 2006/07/07 00:18:14 angie Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -287,11 +287,30 @@ else
     }
 if (seq->size > qWarnSize)
     {
-    warn("Query sequence %d has size %d, it might take a while.", seq->name, seq->size);
+    warn("Query sequence %s has size %d, it might take a while.",
+	 seq->name, seq->size);
     }
 return qMaskBits;
 }
 	    
+void searchOneMaskTrim(struct dnaSeq *seq, boolean isProt,
+		       struct genoFind *gf, FILE *outFile,
+		       struct hash *maskHash,
+		       unsigned long *retTotalSize, int *retCount)
+/* Search a single sequence against a single genoFind index. */
+{
+boolean maskQuery = (qMask != NULL);
+boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
+Bits *qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
+struct dnaSeq trimmedSeq;
+ZeroVar(&trimmedSeq);
+trimSeq(seq, &trimmedSeq);
+searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
+*retTotalSize += seq->size;
+*retCount += 1;
+bitFree(&qMaskBits);
+}
+
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
 	boolean isProt, struct hash *maskHash, FILE *outFile, boolean showStatus)
 /* Search all sequences in all files against single genoFind index. */
@@ -301,10 +320,6 @@ char *fileName;
 bioSeq *seqList = NULL, *targetSeq;
 int count = 0; 
 unsigned long totalSize = 0;
-boolean maskQuery = (qMask != NULL);
-boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
-struct dnaSeq trimmedSeq;
-ZeroVar(&trimmedSeq);
 
 gfOutputHead(gvo, outFile);
 for (i=0; i<fileCount; ++i)
@@ -312,7 +327,6 @@ for (i=0; i<fileCount; ++i)
     fileName = files[i];
     if (nibIsFile(fileName))
         {
-	FILE *f;
 	struct dnaSeq *seq;
 	Bits *qMaskBits = NULL;
 
@@ -321,32 +335,39 @@ for (i=0; i<fileCount; ++i)
 	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
-	qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
-	trimSeq(seq, &trimmedSeq);
-	carefulClose(&f);
-	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
-	totalSize += seq->size;
+	searchOneMaskTrim(seq, isProt, gf, outFile,
+			  maskHash, &totalSize, &count);
 	freeDnaSeq(&seq);
-	count += 1;
-	bitFree(&qMaskBits);
 	}
-    else if (twoBitIsFile(fileName))
-        {
-	struct twoBitFile *tbf = twoBitOpen(fileName);
-	struct twoBitIndex *index;
+    else if (twoBitIsSpec(fileName))
+	{
+	struct twoBitSpec *tbs = twoBitSpecNew(fileName);
+	struct twoBitFile *tbf = twoBitOpen(tbs->fileName);
 	if (isProt)
-	    errAbort("%s is a two bit file , which doesn't work for proteins.", 
+	    errAbort("%s is a two bit file, which doesn't work for proteins.", 
 	    	fileName);
-	for (index = tbf->indexList; index != NULL; index = index->next)
+	if (tbs->seqs != NULL)
 	    {
-	    struct dnaSeq *seq = twoBitReadSeqFrag(tbf, index->name, 0, 0);
-	    Bits *qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
-	    trimSeq(seq, &trimmedSeq);
-	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
-	    totalSize += seq->size;
-	    count += 1;
-	    dnaSeqFree(&seq);
-	    bitFree(&qMaskBits);
+	    struct twoBitSeqSpec *ss = NULL;
+	    for (ss = tbs->seqs;  ss != NULL;  ss = ss->next)
+		{
+		struct dnaSeq *seq = twoBitReadSeqFrag(tbf, ss->name,
+						       ss->start, ss->end);
+		searchOneMaskTrim(seq, isProt, gf, outFile,
+				  maskHash, &totalSize, &count);
+		dnaSeqFree(&seq);
+		}
+	    }
+	else
+	    {
+	    struct twoBitIndex *index = NULL;
+	    for (index = tbf->indexList; index != NULL; index = index->next)
+		{
+		struct dnaSeq *seq = twoBitReadSeqFrag(tbf, index->name, 0, 0);
+		searchOneMaskTrim(seq, isProt, gf, outFile,
+				  maskHash, &totalSize, &count);
+		dnaSeqFree(&seq);
+		}
 	    }
 	}
     else
@@ -355,12 +376,8 @@ for (i=0; i<fileCount; ++i)
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
-	    Bits *qMaskBits = maskQuerySeq(&seq, isProt, maskQuery, lcMask);
-	    trimSeq(&seq, &trimmedSeq);
-	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
-	    totalSize += seq.size;
-	    count += 1;
-	    bitFree(&qMaskBits);
+	    searchOneMaskTrim(&seq, isProt, gf, outFile,
+			      maskHash, &totalSize, &count);
 	    }
 	lineFileClose(&lf);
 	}
@@ -496,7 +513,8 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 		}
 	    if (qSeq.size > qWarnSize)
 	        {
-		warn("Query sequence %d has size %d, it might take a while.", qSeq.name, qSeq.size);
+		warn("Query sequence %s has size %d, it might take a while.",
+		     qSeq.name, qSeq.size);
 		}
 	    trimSeq(&qSeq, &trimmedSeq);
 	    if (transQuery)
