@@ -21414,6 +21414,7 @@ load data local infile "gvAttrLongBgmut.txt" into table gvAttrLong;
 #############################################################
 # Illumina Hap300 (Heather, July 2006)
 
+ssh hgwdev
 cd /cluster/data/hg17/bed
 mkdir illumina
 cd illumina
@@ -21437,6 +21438,19 @@ hgsql hg17 < snpArrayIllumina300.sql
 hgsql -e "load data local infile 'illuminaLookup.out' into table snpArrayIllumina300" hg17
 hgsql -e "alter table snpArrayIllumina300 add index name (name)" hg17
 hgsql -e "alter table snpArrayIllumina300 add index chrom (chrom, bin)" hg17
+
+#############################################################
+# Affy 500K (Heather, July 2006)
+
+ssh hgwdev
+cd /cluster/data/hg17/bed/snp/affyData/500K
+/bin/csh cmds.csh
+cp Mapping250K_Nsp.bed all.bed
+cat Mapping250K_Sty.bed >> all.bed
+hgsql hg17 < snpArrayAffy500.sql
+hgsql -e "load data local infile 'all.bed' into table snpArrayAffy500" hg17
+hgsql -e "alter table snpArrayAffy500 add index name (name)" hg17
+hgsql -e "alter table snpArrayAffy500 add index chrom (chrom, bin)" hg17
 
 
 #########################################################################
