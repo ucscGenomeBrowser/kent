@@ -21412,7 +21412,7 @@ load data local infile "gvAttrLongBgmut.txt" into table gvAttrLong;
 
 
 #############################################################
-# Illumina Hap300
+# Illumina Hap300 (Heather, July 2006)
 
 cd /cluster/data/hg17/bed
 mkdir illumina
@@ -21420,6 +21420,7 @@ cd illumina
 trim.pl < Illumina_HumanHap300_SNPlist_01.13.2006.txt > trim.out
 hgsql hg17 < illuminaTmp.sql
 hgsql -e "load data local infile 'trim.out' into table illuminaTmp" hg17
+# illuminaLookup generates bin
 /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg17 illuminaTmp snp125 snp125Exceptions illuminaLookup.out illuminaLookup.err
 # errors:
 # unexpected chrom chr1 for snp rs1291584
@@ -21432,10 +21433,10 @@ hgsql -e "load data local infile 'trim.out' into table illuminaTmp" hg17
 # 16 with locType = range*
 # 402 not found!
 # None that have multiple alignments.
-hgsql hg17 < illumina.sql
-hgsql -e "load data local infile 'illuminaLookup.out' into table illumina" hg17
-hgsql -e "alter table illumina add index name (name)" hg17
-hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
+hgsql hg17 < snpArrayIllumina300.sql
+hgsql -e "load data local infile 'illuminaLookup.out' into table snpArrayIllumina300" hg17
+hgsql -e "alter table snpArrayIllumina300 add index name (name)" hg17
+hgsql -e "alter table snpArrayIllumina300 add index chrom (chrom, bin)" hg17
 
 
 #########################################################################
