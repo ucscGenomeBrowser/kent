@@ -22,6 +22,8 @@
 #define hggDataSetName hggPrefix "dataSetName"
 #define hggDataSetDescription hggPrefix "dataSetDescription"
 #define hggLocType hggPrefix "locType"
+#define hggFormatType hggPrefix "formatType"
+#define hggColumnLabels hggPrefix "columnLabels"
 #define hggMinVal hggPrefix "minVal"
 #define hggMaxVal hggPrefix "maxVal"
 #define hggLabelVals hggPrefix "labelVals"
@@ -39,6 +41,7 @@
 #define hggClick hggDo "Click"
 #define hggClickX hggClick ".x"
 #define hggClickY hggClick ".y"
+#define hggSubmitUpload2 hggDo "SubmitUpload2"
 
 /*** External vars declared in hgGenome.c ***/
 extern struct cart *cart;
@@ -138,6 +141,9 @@ void correlatePage(struct sqlConnection *conn);
 /* Put up correlation page. */
 
 void submitUpload(struct sqlConnection *conn);
+/* Called when they've submitted from uploads page */
+
+void submitUpload2(struct sqlConnection *conn);
 /* Called when they've submitted from uploads page */
 
 void browseRegions(struct sqlConnection *conn);

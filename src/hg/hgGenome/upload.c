@@ -14,21 +14,61 @@
 #include "errCatch.h"
 #include "hgGenome.h"
 
+struct chromPos
+/* Just chromosome and position */
+    {
+    char *chrom;	/* Not allocated here */
+    int pos;
+    };
+
+struct labeledFile
+/* A list of file and label */
+    {
+    struct labeledFile *next;
+    char *fileName;	/* File name */
+    char *label;	/* Label */
+    struct chromGraph *cgList;	/* List of associated chrom graphs */
+    };
+
 /* Symbolic defines for types of markers we support. */
-#define hggUpGenomic "chromosome base"
-#define hggUpSts "STS marker"
-#define hggUpSnp "dbSNP rsID"
-#define hggUpAffy100 "(Affymetrix 100K Gene Chip)"
-#define hggUpAffy500 "(Affymetrix 500k Gene Chip)"
-#define hggUpHumanHap300 "(Illumina HumanHap300 BeadChip)"
+#define hggIdBestGuess "best guess"
+#define hggIdGenomic "chromosome base"
+#define hggIdSts "STS marker"
+#define hggIdSnp "dbSNP rsID"
+#define hggIdAffy100 "(Affymetrix 100K Gene Chip)"
+#define hggIdAffy500 "(Affymetrix 500k Gene Chip)"
+#define hggIdHumanHap300 "(Illumina HumanHap300 BeadChip)"
 
 static char *locNames[] = {
-    hggUpGenomic,
-    hggUpSts,
-    hggUpSnp,
-    hggUpAffy100,
-    hggUpAffy500,
-    hggUpHumanHap300,
+    hggIdBestGuess,
+    hggIdGenomic,
+    hggIdSts,
+    hggIdSnp,
+    hggIdAffy100,
+    hggIdAffy500,
+    hggIdHumanHap300,
+    };
+
+#define hggFormatGuess "best guess"
+#define hggFormatTab "tab delimited"
+#define hggFormatComma "comma delimited"
+#define hggFormatSpace "whitespace separated"
+
+char *formatNames[] = {
+    hggFormatGuess,
+    hggFormatTab,
+    hggFormatComma,
+    hggFormatSpace,
+    };
+
+#define hggColLabelGuess	"best guess"
+#define hggColLabelNumbered	"numbered"
+#define hggColLabelFirstRow	"first row"
+
+char *colLabelNames[] = {
+    hggColLabelGuess,
+    hggColLabelNumbered,
+    hggColLabelFirstRow,
     };
 
 void uploadPage()
@@ -40,30 +80,44 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=\"POST\" ENCTYPE=\"multipar
 cartSaveSession(cart);
 hPrintf("Name of data set: ");
 cartMakeTextVar(cart, hggDataSetName, "", 16);
-hPrintf(" Locations are: ");
-cgiMakeDropList(hggLocType, locNames, 
-	ArraySize(locNames), cartUsualString(cart, hggLocType, locNames[0]));
+hPrintf("<i>Only first 16 letters are displayed in the genome browser.</i>");
 hPrintf("<BR>");
 
-hPrintf("Description: ");
-cartMakeTextVar(cart, hggDataSetDescription, "", 64);
-hPrintf("<BR>");
+hPrintf("<TABLE><TR><TD>");
+hPrintf("File format: ");
+cgiMakeDropList(hggFormatType, formatNames, ArraySize(formatNames), 
+    	cartUsualString(cart, hggFormatType, formatNames[0]));
+hPrintf("</TD><TD>");
+hPrintf(" Identifiers are: ");
+cgiMakeDropList(hggLocType, locNames, ArraySize(locNames), 
+    	cartUsualString(cart, hggLocType, locNames[0]));
+hPrintf("</TD><TD>");
+hPrintf(" Column labels: ", colLabelNames, ArraySize(colLabelNames),
+	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
+cgiMakeDropList(hggColumnLabels, colLabelNames, ArraySize(colLabelNames), 
+	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
+hPrintf("</TD></TR></TABLE>");
+
+// hPrintf("Description: ");
+// cartMakeTextVar(cart, hggDataSetDescription, "", 64);
+// hPrintf("<BR>");
 
 hPrintf("Display Min Value: ");
 cartMakeTextVar(cart, hggMinVal, "", 5);
 hPrintf(" Max Value: ");
 cartMakeTextVar(cart, hggMaxVal, "", 5);
-hPrintf(" <i>Leave these blank to show all data</i><BR>");
+hPrintf(" <i>Leave min/max blank to show all data</i><BR>");
 
 hPrintf("Label Values: ");
 cartMakeTextVar(cart, hggLabelVals, "", 32);
 hPrintf(" <i>Comma-separated numbers for axis label</i><BR>");
 hPrintf("Draw connecting lines between markers separated by up to ");
-cartMakeIntVar(cart, hggMaxGapToFill, 3000000, 8);
+cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
 hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 cgiMakeButton(hggSubmitUpload, "Submit");
+cgiMakeButton(hggSubmitUpload2, "Testing 1 2 3");
 hPrintf("</FORM>\n");
 hPrintf("<i>note: If you are uploading more than one data set please give them ");
 hPrintf("different names.  Only the most recent data set of a given name is ");
@@ -106,12 +160,126 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-struct chromPos
-/* Just chromosome and position */
+void saveFileList(struct labeledFile *fileList)
+/* Save out lists to all files. */
+{
+struct labeledFile *fileEl;
+for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     {
-    char *chrom;	/* Not allocated here */
-    int pos;
-    };
+    slSort(&fileEl->cgList, chromGraphCmp);
+    chromGraphToBin(fileEl->cgList, fileEl->fileName);
+    }
+}
+
+static int commaChopper(char *line, char **cols, int maxCol)
+/* Chop line by commas and return line count */
+{
+return chopByChar(line, ',', cols, maxCol);
+}
+
+static int tabChopper(char *line, char **cols, int maxCol)
+/* Chop line by commas and return line count */
+{
+return chopByChar(line, '\t', cols, maxCol);
+}
+
+
+typedef int (*chopper)(char *line, char **cols, int maxCol);
+
+static chopper getChopper(char *formatType)
+/* Get appropriate chopper function for format type */
+{
+if (sameString(formatType, hggFormatTab))
+    return tabChopper;
+else if (sameString(formatType, hggFormatComma))
+    return commaChopper;
+else if (sameString(formatType, hggFormatSpace))
+    return chopByWhite;
+else
+    {
+    internalErr();
+    return NULL;
+    }
+}
+
+static boolean allWhite(char *s)
+/* Return TRUE if s is nothing but white space */
+{
+s = skipLeadingSpaces(s);
+return s[0] == 0;
+}
+
+
+static void readLabels(struct lineFile *lf, int dataStart, chopper chopper,
+	char **row, int colCount, struct labeledFile *fileList)
+/* Read in first nonempty line of file and fill in labels from it. */
+{
+char *line;
+int colsRead;
+int i;
+struct labeledFile *fileEl;
+if (!lineFileNextReal(lf, &line))
+    errAbort("%s is empty", lf->fileName);
+colsRead = chopper(line, row, colCount);
+lineFileExpectWords(lf, colCount, colsRead);
+for (i=dataStart, fileEl = fileList; i < colCount; i++, fileEl = fileEl->next)
+    {
+    char *label = row[i];
+    if (!allWhite(label))
+	fileEl->label = cloneString(row[i]);
+    }
+}
+
+void  processGenomic(struct sqlConnection *conn, struct lineFile *lf, 
+	int colCount, char *formatType, boolean firstLineLabels,
+	struct labeledFile *fileList)
+/* Process three column file into chromGraph.  Abort if
+ * there's a problem. */
+{
+char **row;
+struct chromGraph *cg;
+struct hash *chromHash = chromInfoHash(conn);
+struct labeledFile *fileEl;
+struct chromInfo *ci;
+int i;
+int rowCount = 0;
+chopper chopper = getChopper(formatType);
+char *line;
+
+AllocArray(row, colCount);
+if (firstLineLabels)
+    readLabels(lf, 2, chopper, row, colCount, fileList);
+while (lineFileNextReal(lf, &line))
+    {
+    chopper(line, row, colCount);
+    char *chrom = cloneString(row[0]);
+    int start = lineFileNeedNum(lf, row, 1);
+    ci = hashFindVal(chromHash, chrom);
+    if (ci == NULL)
+	errAbort("Error line %d of %s. "
+		 "Chromosome %s not found in this assembly (%s).", 
+		 lf->lineIx, lf->fileName, chrom, database);
+    if (start < 0 || start >= ci->size)
+	errAbort("Error line %d of %s. "
+		 "Chromosome %s is %d bases long, but got coordinate %u",
+		 lf->lineIx, lf->fileName, chrom, ci->size, start);
+    for (i=2, fileEl = fileList; i<colCount; ++i, fileEl = fileEl->next)
+	{
+	char *val = row[i];
+	if (val[0] != 0)
+	    {
+	    AllocVar(cg);
+	    cg->chrom = chrom;
+	    cg->chromStart = start;
+	    cg->val = lineFileNeedDouble(lf, row, i);
+	    slAddHead(&fileEl->cgList, cg);
+	    }
+	}
+    ++rowCount;
+    }
+hPrintf("Read in %d markers and values in <i>chromosome base</i> format.<BR>", 
+    rowCount);
+}
 
 struct hash *tableToChromPosHash(struct sqlConnection *conn, char *table, 
 	char *query)
@@ -158,7 +326,8 @@ return hash;
 }
 
 void processDb(struct sqlConnection *conn,
-	struct lineFile *lf, char *outFileName, 
+	struct lineFile *lf, int colCount, char *formatType, 
+	boolean firstLineLabels, struct labeledFile *fileList, 
 	char *table, char *query, char *aliasTable, char *aliasQuery)
 /* Process two column input file into chromGraph.  Treat first
  * column as a name to look up in bed-format table, which should
@@ -166,7 +335,7 @@ void processDb(struct sqlConnection *conn,
 {
 struct hash *hash = tableToChromPosHash(conn, table, query);
 struct hash *aliasHash = NULL;
-char *row[2];
+char **row;
 int match = 0, total = 0;
 struct chromGraph *list = NULL, *cg;
 struct chromPos *pos;
@@ -178,8 +347,16 @@ if (aliasTable != NULL)
     hPrintf("Loaded %d aliases from %s table as well.<BR>", aliasHash->elCount,
     	aliasTable);
     }
-while (lineFileRow(lf, row))
+AllocArray(row, colCount);
+chopper chopper = getChopper(formatType);
+char *line;
+
+AllocArray(row, colCount);
+if (firstLineLabels)
+    readLabels(lf, 1, chopper, row, colCount, fileList);
+while (lineFileNextReal(lf, &line))
     {
+    chopper(line, row, colCount);
     char *name = row[0];
     touppers(name);
     ++total;
@@ -192,51 +369,27 @@ while (lineFileRow(lf, row))
 	}
     if (pos != NULL)
         {
+	int i;
+	struct labeledFile *fileEl;
 	++match;
-	AllocVar(cg);
-	cg->chrom = pos->chrom;
-	cg->chromStart = pos->pos;
-	cg->val = atof(row[1]);
-	slAddHead(&list, cg);
+	for (i=1, fileEl=fileList; i < colCount; ++i, fileEl = fileEl->next)
+	    {
+	    char *val = row[i];
+	    if (val[0] != 0)
+		{
+		AllocVar(cg);
+		cg->chrom = pos->chrom;
+		cg->chromStart = pos->pos;
+		cg->val = lineFileNeedDouble(lf, row, i);
+		slAddHead(&fileEl->cgList, cg);
+		}
+	    }
 	}
     }
 hPrintf("Mapped %d of %d (%3.1f%%) of markers<BR>", match, total, 
 	100.0*match/total);
-slSort(&list, chromGraphCmp);
-chromGraphToBin(list, outFileName);
-#ifdef SOON
-#endif /* SOON */
 }
 
-void  processGenomic(struct sqlConnection *conn, struct lineFile *lf, 
-	char *outFileName)
-/* Process three column file into chromGraph.  Abort if
- * there's a problem. */
-{
-char *row[3];
-struct chromGraph *list = NULL, *cg;
-struct hash *chromHash = chromInfoHash(conn);
-struct chromInfo *ci;
-
-while (lineFileRow(lf, row))
-    {
-    cg = chromGraphLoad(row);
-    ci = hashFindVal(chromHash, cg->chrom);
-    if (ci == NULL)
-        errAbort("Error line %d of %s. "
-	         "Chromosome %s not found in this assembly (%s).", 
-		 lf->lineIx, lf->fileName, cg->chrom, database);
-    if (cg->chromStart < 0 || cg->chromStart >= ci->size)
-        errAbort("Error line %d of %s. "
-	         "Chromosome %s is %d bases long, but got coordinate %u",
-		 lf->lineIx, lf->fileName, ci->chrom, ci->size, cg->chromStart);
-    slAddHead(&list, cg);
-    }
-slSort(&list, chromGraphCmp);
-chromGraphToBin(list, outFileName);
-hPrintf("Read in %d markers and values in <i>chromosome base</i> format.<BR>", 
-	slCount(list));
-}
 
 boolean errCatchFinish(struct errCatch **pErrCatch)
 /* Finish up error catching.  Report error if there is a
@@ -259,25 +412,28 @@ return ok;
 }
 
 boolean mayProcessGenomic(struct sqlConnection *conn, struct lineFile *lf, 
-	char *outFileName)
+	int colCount, char *formatType, boolean firstLineLabels, 
+	struct labeledFile *fileList)
 /* Process three column file into chromGraph.  If there's a problem
  * print warning message and return FALSE. */
 {
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
-     processGenomic(conn, lf, outFileName);
+     processGenomic(conn, lf, colCount, formatType, firstLineLabels, fileList);
 return errCatchFinish(&errCatch);
 }
 
 boolean mayProcessDb(struct sqlConnection *conn,
-	struct lineFile *lf, char *outFileName, 
+	struct lineFile *lf, int colCount, char *formatType, 
+	boolean firstLineLabels, struct labeledFile *fileList, 
 	char *table, char *query, char *aliasTable, char *aliasQuery)
 /* Process database table into chromGraph.  If there's a problem
  * print warning message and return FALSE. */
 {
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
-     processDb(conn, lf, outFileName, table, query, aliasTable, aliasQuery);
+     processDb(conn, lf, colCount, formatType, firstLineLabels, 
+     	fileList, table, query, aliasTable, aliasQuery);
 return errCatchFinish(&errCatch);
 }
 
@@ -312,16 +468,28 @@ if (val[0] != 0)
     hashAdd(ra, raVar, val);
 }
 
-void updateUploadRa(char *binFileName)
+struct labeledFile *labeledFileNew(char *fileName, char *label)
+/* Create new labeledFile struct */
+{
+struct labeledFile *el;
+AllocVar(el);
+el->fileName = cloneString(fileName);
+el->label = cloneString(label);
+return el;
+}
+
+void updateUploadRa(struct labeledFile *list)
 /* Update upload ra file with current upload data */
 {
 char *fileName = cartOptionalString(cart, hggUploadRa);
+struct labeledFile *el;
 struct tempName tempName;
 struct hash *allRaHash, *ra;
-char *graphName = skipLeadingSpaces(cartUsualString(cart, hggDataSetName, ""));
+char *dataSetName = skipLeadingSpaces(cartUsualString(cart, hggDataSetName, ""));
+char graphName[512];
 
-if (graphName[0] == 0)
-    graphName = "user data";
+if (dataSetName[0] == 0)
+    dataSetName = "user data";
 
 /* Read in old ra file if possible, otherwise just dummy up an
  * empty hash */
@@ -337,77 +505,131 @@ else
     allRaHash = raReadAll(fileName, "name");
     }
 
-/* Get rid of old ra record of same name if any */
-if (hashLookup(allRaHash, graphName))
-    hashRemove(allRaHash, graphName);
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el->label[0] != 0)
+        safef(graphName, sizeof(graphName), "%s %s", dataSetName, el->label);
+    else
+        safef(graphName, sizeof(graphName), "%s", dataSetName);
 
-/* Create ra hash with our info in it. */
-ra = hashNew(8);
-hashAdd(ra, "name", graphName);
-hashAdd(ra, "description", 
-	cartUsualString(cart, hggDataSetDescription, graphName));
-hashAdd(ra, "locType",
-	cartUsualString(cart, hggLocType, locNames[0]));
-hashAdd(ra, "binaryFile", binFileName);
-addIfNonempty(ra, hggMinVal, "minVal");
-addIfNonempty(ra, hggMaxVal, "minVal");
-addIfNonempty(ra, hggMaxGapToFill, "maxGapToFill");
-addIfNonempty(ra, hggLabelVals, "linesAt");
+    /* Get rid of old ra record of same name if any */
+    if (hashLookup(allRaHash, graphName))
+	hashRemove(allRaHash, graphName);
 
-/* Update allRaHash and save */
-hashAdd(allRaHash, graphName, ra);
+    /* Create ra hash with our info in it. */
+    ra = hashNew(8);
+    hashAdd(ra, "name", cloneString(graphName));
+    hashAdd(ra, "description", 
+	    cartUsualString(cart, hggDataSetDescription, graphName));
+    hashAdd(ra, "locType",
+	    cartUsualString(cart, hggLocType, locNames[0]));
+    hashAdd(ra, "binaryFile", el->fileName);
+    addIfNonempty(ra, hggMinVal, "minVal");
+    addIfNonempty(ra, hggMaxVal, "maxVal");
+    addIfNonempty(ra, hggMaxGapToFill, "maxGapToFill");
+    addIfNonempty(ra, hggLabelVals, "linesAt");
+
+    /* Update allRaHash and save */
+    hashAdd(allRaHash, graphName, ra);
+    }
+
 raSaveAll(allRaHash, fileName);
 
 hPrintf("Select \"%s\" from one of the drop down menus ", graphName);
 hPrintf("in the main page to view this data.<BR>");
 }
 
-void processUpload(char *text, struct sqlConnection *conn)
+void updateUploadRaOne(char *binFileName)
+/* Update upload ra file with current upload data */
+{
+updateUploadRa(labeledFileNew(binFileName, ""));
+}
+
+static int locCols(char *locType)
+/* The number of columns used for location. */
+{
+if (sameString(locType, hggIdGenomic))
+    return 2;
+else
+    return 1;
+}
+
+void processUpload(char *text, int colCount, 
+	char *formatType, char *locType,  boolean firstLineLabels, 
+	struct sqlConnection *conn)
 /* Parse uploaded text.  If it looks good then make a 
  * binary chromGraph file out of it, and save information
  * about it in the upload ra file. */
 {
-char *type = cartUsualString(cart, hggLocType, hggUpGenomic);
-struct tempName tempName;
 char *binFile;
 boolean ok = FALSE;
 struct lineFile *lf = lineFileOnString("uploaded data", TRUE, text);
+int posColCount = locCols(locType);
 /* NB - do *not* lineFileClose this or a double free can happen. */
+struct labeledFile *fileList = NULL, *fileEl;
+int i;
 
-makeTempName(&tempName, "hggUp", ".cgb");
-binFile = tempName.forCgi;
-if (sameString(type, hggUpGenomic))
-    ok = mayProcessGenomic(conn, lf, binFile);
-else if (sameString(type, hggUpSts))
-    ok = mayProcessDb(conn, lf, binFile, "stsMap",
+/* Create list of files. */
+for (i=posColCount; i<colCount; ++i)
+    {
+    struct tempName tempName;
+    char buf[16];
+    safef(buf, sizeof(buf), "hggUp%d", i);
+    makeTempName(&tempName, buf, ".cgb");
+    safef(buf, sizeof(buf), "%d", i+1);
+    fileEl = labeledFileNew(tempName.forCgi, buf);
+    slAddTail(&fileList, fileEl);
+    }
+slReverse(&fileList);
+
+
+if (sameString(locType, hggIdGenomic))
+    ok = mayProcessGenomic(conn, lf, colCount, formatType, 
+    	firstLineLabels, fileList);
+else if (sameString(locType, hggIdSts))
+    ok = mayProcessDb(conn, lf, colCount, formatType, 
+    	firstLineLabels, fileList, "stsMap",
     	"select chrom,round((chromStart+chromEnd)*0.5),name from %s",
 	"stsAlias", "select alias,trueName from %s");
-else if (sameString(type, hggUpSnp))
+else if (sameString(locType, hggIdSnp))
     {
     char *query = "select chrom,chromStart,name from %s";
     if (sqlTableExists(conn, "snp126"))
-        ok = mayProcessDb(conn, lf, binFile, "snp126", query, NULL, NULL);
+        ok = mayProcessDb(conn, lf, colCount, formatType, 
+		firstLineLabels, fileList, "snp126", 
+		query, NULL, NULL);
     else if (sqlTableExists(conn, "snp125"))
-        ok = mayProcessDb(conn, lf, binFile, "snp125", query, NULL, NULL);
+        ok = mayProcessDb(conn, lf, colCount, formatType, 
+		firstLineLabels, fileList, 
+		"snp125", query, NULL, NULL);
     else if (sqlTableExists(conn, "snp"))
-        ok = mayProcessDb(conn, lf, binFile, "snp", query, NULL, NULL);
+        ok = mayProcessDb(conn, lf, colCount, formatType, 
+		firstLineLabels, fileList, 
+		"snp", query, NULL, NULL);
     else
         warn("Couldn't find SNP table");
     }
-else if (sameString(type, hggUpAffy100))
+else if (sameString(locType, hggIdAffy100))
     {
     warn("Support for Affy 100k chip coming soon.");
     }
-else if (sameString(type, hggUpAffy500))
+else if (sameString(locType, hggIdAffy500))
     {
     warn("Support for Affy 500k chip coming soon.");
     }
-else if (sameString(type, hggUpHumanHap300))
+else if (sameString(locType, hggIdHumanHap300))
     {
     warn("Support for Illumina HumanHap300 coming soon.");
     }
+else
+    {
+    errAbort("Unknown identifier format.");
+    }
 if (ok)
-    updateUploadRa(binFile);
+    {
+    saveFileList(fileList);
+    updateUploadRa(fileList);
+    }
 }
 
 void submitUpload(struct sqlConnection *conn)
@@ -423,10 +645,12 @@ if (rawText == NULL || rawText[0] == 0)
 else
     {
     int rawTextSize = strlen(rawText);
+    char *locType = cartUsualString(cart, hggLocType, hggIdGenomic);
     cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);
     hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
     cartSaveSession(cart);
-    processUpload(rawText, conn);
+    processUpload(rawText, 1 + locCols(locType), hggFormatSpace, locType,
+    	FALSE, conn);
     cartRemove(cart, hggUploadFile);
     hPrintf("<CENTER>");
     cgiMakeButton("submit", "OK");
@@ -436,8 +660,311 @@ else
     }
 }
 
-void foo()
+char *findNthUseOfChar(char *s, char c, int n)
+/* Return the nth occurence of c in s, or NULL if not that many. */
 {
-hPrintf("After uploading data, look for the data set name in the graph ");
-hPrintf("drop-down menus.");
+int i;
+s -= 1;	/* To make loop go more easily */
+for (i=0; i<n; ++i)
+    {
+    s += 1;
+    s = strchr(s, c);
+    if (s == NULL)
+        break;
+    }
+return s;
+}
+
+void fixLineEndings(char *s)
+/* Convert <CR> or <CR><LF> line endings to <LF> */
+{
+char *in = s, *out = s, c;
+int crLfCount = 0;
+int crCount = 0;
+while ((c = *in++) != 0)
+    {
+    if (c == '\r')
+        {
+	if (*in == '\n')
+	   {
+	   ++in;
+	   ++crLfCount;
+	   }
+	c = '\n';
+	++crCount;
+	}
+    *out++ = c;
+    }
+*out++ = 0;
+}
+
+char *dupeLines(char *text, int lineCount)
+/* Return duplicate of first lines of text. */
+{
+char *dupe;
+char *end = findNthUseOfChar(text, '\n', lineCount);
+if (end == NULL) 
+    dupe = cloneString(text);
+else
+    dupe = cloneStringZ(text, end-text+1);
+return dupe;
+}
+
+boolean delimitedTableSize(char *text, int colDelim, int rowDelim,
+	int *retCols, int *retRows)
+/* Return TRUE if text looks to be a table delimited by a simple character
+ * set.  If true, then retCols and retRows is size of table. */
+{
+char *s = text;
+int rowCount = 0;
+int colDelimExpected = 0;
+int colDelimCount = 0;
+for (;;)
+    {
+    char c = *s++;
+    if (c == rowDelim)
+        {
+	if (rowCount == 0)
+	    colDelimExpected = colDelimCount;
+	else
+	    if (colDelimExpected != colDelimCount)
+	        return FALSE;
+	rowCount += 1;
+	colDelimCount = 0;
+	}
+    else if (c == colDelim)
+        {
+	colDelimCount += 1;
+	}
+    else if (c == 0)
+        {
+	break;
+	}
+    }
+*retRows = rowCount;
+*retCols = colDelimExpected+1;
+return colDelimExpected > 0;
+}
+
+boolean spaceDelimitedTableSize(char *text, int *retCols, int *retRows)
+/* Return TRUE if text looks to be a table delimited by white space */
+{
+char *dupe = cloneString(text);
+char **rows;
+boolean ok = TRUE;
+int colsObserved = 0, rowsObserved = 0;
+
+/* Chop it into lines, tolerating missing final end of line. */
+int origRowCount = countChars(dupe, '\n')+1;
+AllocArray(rows, origRowCount);
+origRowCount = chopByChar(dupe, '\n', rows, origRowCount);
+
+if (origRowCount > 0)
+    {
+    int colsExpected = 0;
+    int i;
+    for (i=0; i < origRowCount; ++i)
+        {
+	char *row = rows[i];
+	if (!allWhite(row))
+	    {
+	    colsObserved = chopByWhite(row, NULL, 0);
+	    if (colsExpected == 0)
+	        colsExpected = colsObserved;
+	    else if (colsExpected != colsObserved)
+	        {
+		ok = FALSE;
+		break;
+		}
+	    ++rowsObserved;
+	    }
+	}
+    }
+else
+    ok = FALSE;
+
+freeMem(rows);
+freeMem(dupe);
+*retRows = rowsObserved;
+*retCols = colsObserved;
+return ok;
+}
+
+
+boolean analyseText(char *text, char **retType, int *retCols)
+/* Look at first ten lines of text and figure out 
+ * what sort of table we think it is.  Return FALSE if we
+ * can't figure it out, otherwise return info in retType/retCols */
+{
+char *sampleText = dupeLines(text, 10);
+int colCount, rowCount;
+char *type = hggFormatGuess;
+boolean ok = TRUE;
+
+if (delimitedTableSize(sampleText, '\t', '\n', &colCount, &rowCount))
+    {
+    type = hggFormatTab;
+    }
+else if (spaceDelimitedTableSize(sampleText, &colCount, &rowCount))
+    {
+    type = hggFormatSpace;
+    }
+else if (delimitedTableSize(sampleText, ',', '\n', &colCount, &rowCount))
+    {
+    type = hggFormatComma;
+    }
+else 
+    {
+    type = hggFormatGuess;
+    ok = FALSE;
+    }
+*retType = type;
+*retCols = colCount;
+return ok;
+}
+
+boolean firstRowConsistentWithData(char *text, char *formatType, int colCount)
+/* Return TRUE if first row is consistent with being real data. */
+{
+/* We'll actually get the first 10 lines, and look at the first one of
+ * these that is non-blank. */
+int sampleSize = 10, i;
+char *sampleText = dupeLines(text, sampleSize);
+char **rows, **cols;
+AllocArray(rows, sampleSize);
+AllocArray(cols, colCount);
+sampleSize = chopByChar(sampleText, '\n', rows, sampleSize);
+boolean ok = TRUE;
+int oneColCount = 0;
+
+for (i=0; i<sampleSize; ++i)
+    {
+    char *line = rows[0];
+    oneColCount = 0;
+    if (!allWhite(line))
+	{
+	if (sameString(formatType, hggFormatTab))
+	    {
+	    oneColCount = chopByChar(line, '\t', cols, colCount);
+	    break;
+	    }
+	else if (sameString(formatType, hggFormatComma))
+	    {
+	    oneColCount = chopByChar(line, ',', cols, colCount);
+	    break;
+	    }
+	else if (sameString(formatType, hggFormatSpace))
+	    {
+	    oneColCount = chopByWhite(line, cols, colCount);
+	    break;
+	    }
+	else
+	    internalErr();
+	}
+    }
+if (oneColCount == colCount)
+    {
+    if (allWhite(cols[i]))
+        ok = FALSE;
+    else
+	{
+	for (i=1; i<colCount; ++i)
+	    {
+	    char *col = cols[i];
+	    char c = col[0];
+	    if (!(isdigit(c) || (c == '-' && isdigit(col[1]))))
+		{
+		ok = FALSE;
+		break;
+		}
+	    }
+	}
+    }
+else
+    ok = FALSE;
+freeMem(sampleText);
+freeMem(rows);
+freeMem(cols);
+return ok;
+}
+
+int countColumns(char *text, char *formatType)
+/* Return number of columns. */
+{
+int sampleSize = 10;
+char *sampleText = dupeLines(text, sampleSize);
+char **rows;
+AllocArray(rows, sampleSize);
+sampleSize = chopByChar(sampleText, '\n', rows, sampleSize);
+int i;
+int count = 0;
+for (i=0; i<sampleSize; ++i)
+    {
+    char *line = rows[0];
+    if (!allWhite(line))
+        {
+	if (sameString(formatType, hggFormatTab))
+	    {
+	    count = countChars(line, '\t') + 1;
+	    break;
+	    }
+	else if (sameString(formatType, hggFormatComma))
+	    {
+	    count = countChars(line, ',') + 1;
+	    break;
+	    }
+	else if (sameString(formatType, hggFormatSpace))
+	    {
+	    count = chopByWhite(line, NULL, 0);
+	    break;
+	    }
+	else
+	    internalErr();
+	}
+    }
+freeMem(rows);
+return count;
+}
+
+void trySubmitUpload2(struct sqlConnection *conn, char *rawText)
+/* Called when they've submitted from uploads page */
+{
+int colCount = 0;
+char *formatType = cartUsualString(cart, hggFormatType, formatNames[0]);
+fixLineEndings(rawText);
+if (sameString(formatType, hggFormatGuess))
+    if (!analyseText(rawText, &formatType, &colCount))
+	errAbort("Sorry, can't figure out this file's format. Please go back and try another file.");
+colCount = countColumns(rawText, formatType);
+char *labelType = cartUsualString(cart, hggColumnLabels, colLabelNames[0]);
+if (sameString(labelType, hggColLabelGuess))
+    {
+    if (firstRowConsistentWithData(rawText, formatType, colCount))
+        labelType = hggColLabelNumbered;
+    else
+        labelType = hggColLabelFirstRow;
+    }
+char *locType = cartUsualString(cart, hggLocType, hggIdGenomic);
+processUpload(rawText, colCount, formatType, locType,
+    sameString(labelType, hggColLabelFirstRow), conn);
+cartRemove(cart, hggUploadFile);
+hPrintf("<CENTER>");
+cgiMakeButton("submit", "OK");
+hPrintf("</CENTER>");
+}
+
+void submitUpload2(struct sqlConnection *conn)
+/* Called when they've submitted from uploads page */
+{
+char *rawText = cartUsualString(cart, hggUploadFile, NULL);
+int rawTextSize = strlen(rawText);
+// struct errCatch *errCatch = errCatchNew();
+cartWebStart(cart, "Data Upload2 Complete (%d bytes)", rawTextSize);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
+cartSaveSession(cart);
+// if (errCatchStart(errCatch))
+     trySubmitUpload2(conn, rawText);
+// errCatchFinish(&errCatch);
+hPrintf("</FORM>");
+cartWebEnd();
 }

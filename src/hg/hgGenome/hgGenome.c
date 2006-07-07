@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.35 2006/07/04 23:26:03 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.36 2006/07/07 06:01:09 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -192,7 +192,7 @@ if (!gg->didRefine)
     {
     struct chromGraphSettings *cgs = gg->settings;
     gg->cgb = chromGraphBinOpen(gg->binFileName);
-    if (cgs->minVal >= cgs->minVal)
+    if (cgs->minVal >= cgs->maxVal)
         {
 	cgs->minVal = gg->cgb->minVal;
 	cgs->maxVal = gg->cgb->maxVal;
@@ -456,14 +456,11 @@ if (gg != NULL)
 	int spaceWidth = tl.nWidth;
 	int tickWidth = spaceWidth*2/3;
 	int fontPixelHeight = mgFontPixelHeight(gl->font);
-	uglyf("name %s, scale %g, ", gg->name, gScale);
 	for (j=0; j<cgs->linesAtCount; ++j)
 	     {
 	    double lineAt = cgs->linesAt[j];
 	    int y = (height - ((lineAt - gMin)*gScale));
-	     uglyf("%g->%d:%d ", lineAt, y, y+lineY);
 	     }
-	uglyf("<BR>\n");
 	for (i=0; i<gl->lineCount; ++i)
 	    {
 	    for (j=0; j< cgs->linesAtCount; ++j)
@@ -523,7 +520,6 @@ vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
 
 hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
 	    gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
-uglyf("<BR>");
 
 /* Get our grayscale. */
 hMakeGrayShades(vg, shadesOfGray, maxShade);
@@ -738,6 +734,10 @@ else if (cartVarExists(cart, hggUpload))
 else if (cartVarExists(cart, hggSubmitUpload))
     {
     submitUpload(conn);
+    }
+else if (cartVarExists(cart, hggSubmitUpload2))
+    {
+    submitUpload2(conn);
     }
 else if (cartVarExists(cart, hggCorrelate))
     {
