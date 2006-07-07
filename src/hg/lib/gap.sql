@@ -9,6 +9,6 @@ CREATE TABLE gap (
    size int unsigned not null,	
    type varchar(255) not null,
    bridge varchar(255) not null,
-   INDEX(bin),\n
+   INDEX(bin)
 );
 
