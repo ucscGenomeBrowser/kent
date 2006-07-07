@@ -599,6 +599,29 @@ priority 143
 visibility hide 
 type bed 6 +
 
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 144
+visibility hide
+type bed 4 .
+
+    track snpArrayAffy500
+    subTrack snpArray
+    shortLabel Affy 500K
+    longLabel Affymetrix GeneChip Human Mapping 500K
+    type bed 6 +
+    priority 1
+
+    track snpArrayIllumina300
+    subTrack snpArray
+    shortLabel Illumina 300K
+    longLabel Illumina HumanHap300 BeadChip
+    type bed 4 .
+    priority 2
+
 track varMultizHMRDEC
 shortLabel varMultiz6Way
 longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
