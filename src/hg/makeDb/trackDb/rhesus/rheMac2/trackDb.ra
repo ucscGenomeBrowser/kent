@@ -180,6 +180,7 @@ priority 290.1
 visibility hide
 spectrum on
 type netAlign panTro2 chainPanTro2
+otherDb panTro2
 
 track xenoRefGene
 shortLabel Other RefSeq
