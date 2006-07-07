@@ -609,7 +609,7 @@ otherDb panTro2
 
 track netPanTro2
 shortLabel PanTro2 Net
-longLabel PanTro2 $o_Organism ($o_date/$o_db) Alignment Net
+longLabel PanTro2 ($o_date/$o_db) Alignment Net
 group compGeno
 priority 290.1
 visibility hide
