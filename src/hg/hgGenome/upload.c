@@ -40,7 +40,7 @@ struct labeledFile
 #define hggIdHumanHap300 "(Illumina HumanHap300 BeadChip)"
 
 static char *locNames[] = {
-    hggIdBestGuess,
+    // hggIdBestGuess,
     hggIdGenomic,
     hggIdSts,
     hggIdSnp,
@@ -80,44 +80,51 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=\"POST\" ENCTYPE=\"multipar
 cartSaveSession(cart);
 hPrintf("Name of data set: ");
 cartMakeTextVar(cart, hggDataSetName, "", 16);
-hPrintf("<i>Only first 16 letters are displayed in the genome browser.</i>");
+hPrintf("<i>Only first 16 letters are displayed in some contexts.</i>");
 hPrintf("<BR>");
 
-hPrintf("<TABLE><TR><TD>");
+hPrintf("Description: ");
+cartMakeTextVar(cart, hggDataSetDescription, "", 64);
+hPrintf(" <i>Optional - used in Genome Browser</i> ");
+hPrintf("<BR>\n");
+
+
 hPrintf("File format: ");
 cgiMakeDropList(hggFormatType, formatNames, ArraySize(formatNames), 
     	cartUsualString(cart, hggFormatType, formatNames[0]));
-hPrintf("</TD><TD>");
-hPrintf(" Identifiers are: ");
+hPrintf(" <i>Guess is usually accurate, override if problems.</i> ");
+hPrintf("<BR>\n");
+
+hPrintf(" Markers are: ");
 cgiMakeDropList(hggLocType, locNames, ArraySize(locNames), 
     	cartUsualString(cart, hggLocType, locNames[0]));
-hPrintf("</TD><TD>");
+hPrintf("<i> This says how values are mapped to chromosomes.</i>");
+hPrintf("<BR>\n");
+
 hPrintf(" Column labels: ", colLabelNames, ArraySize(colLabelNames),
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
 cgiMakeDropList(hggColumnLabels, colLabelNames, ArraySize(colLabelNames), 
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
-hPrintf("</TD></TR></TABLE>");
-
-// hPrintf("Description: ");
-// cartMakeTextVar(cart, hggDataSetDescription, "", 64);
-// hPrintf("<BR>");
+hPrintf("<i> Optionally include first row of file in labels.</i>");
+hPrintf("<BR>\n");
 
 hPrintf("Display Min Value: ");
 cartMakeTextVar(cart, hggMinVal, "", 5);
 hPrintf(" Max Value: ");
 cartMakeTextVar(cart, hggMaxVal, "", 5);
-hPrintf(" <i>Leave min/max blank to show all data</i><BR>");
+hPrintf(" <i>Leave min/max blank to take scale from data itself.</i><BR>\n");
 
 hPrintf("Label Values: ");
 cartMakeTextVar(cart, hggLabelVals, "", 32);
-hPrintf(" <i>Comma-separated numbers for axis label</i><BR>");
+hPrintf(" <i>Comma-separated numbers for axis label</i><BR>\n");
 hPrintf("Draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
 hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
-cgiMakeButton(hggSubmitUpload, "Submit");
-cgiMakeButton(hggSubmitUpload2, "Testing 1 2 3");
+hPrintf(" ");
+// cgiMakeButton(hggSubmitUpload, "Submit");
+cgiMakeButton(hggSubmitUpload2, "Submit");
 hPrintf("</FORM>\n");
 hPrintf("<i>note: If you are uploading more than one data set please give them ");
 hPrintf("different names.  Only the most recent data set of a given name is ");
@@ -127,18 +134,27 @@ hPrintf("you may have to upload them again.</i>");
 /* Put up section that describes file formats. */
 webNewSection("Upload file formats");
 hPrintf("%s", 
-"The input data files contain one line for each marker. "
+"<P>The upload file is a table in some format.  In all formats there is "
+"a single line for each marker. "
 "Each line starts with information on the marker, and ends with "
-"a numerical value associated with that marker. The exact format "
+"the numerical values associated with that marker. The exact format "
 "of the line depends on what is selected from the locations drop "
 "down menu.  If this is <i>chromosome base</i> then the line will "
-"contain three tab or space-separated fields:  chromosome, position, "
-"and value.  The first base in a chromosome is considered position 0. "
+"contain the tab or space-separated fields:  chromosome, position, "
+"and value(s).  The first base in a chromosome is considered position 0. "
 "An example <i>chromosome base</i> type line is is:<PRE><TT>\n"
 "chrX 100000 1.23\n"
 "</TT></PRE>The lines for other location type contain two fields: "
-"marker and value.  For dbSNP rsID's an example is:<PRE><TT>\n"
+"marker and value(s).  For dbSNP rsID's an example is:<PRE><TT>\n"
 "rs10218492 0.384\n"
+"</TT></PRE>"
+"</P><P>"
+"The file can contain multiple value fields.  In this case a "
+"separate graph will be available for each value column in the input "
+"table. It's a "
+"good idea to set the display min/max values above if you want the "
+"graphs to share the same scale."
+"</P>"
 );
 
 cartWebEnd();
@@ -535,8 +551,8 @@ for (el = list; el != NULL; el = el->next)
 
 raSaveAll(allRaHash, fileName);
 
-hPrintf("Select \"%s\" from one of the drop down menus ", graphName);
-hPrintf("in the main page to view this data.<BR>");
+hPrintf("This data is now available in the drop down menus on the ");
+hPrintf("main page for graphing.<BR>");
 }
 
 void updateUploadRaOne(char *binFileName)

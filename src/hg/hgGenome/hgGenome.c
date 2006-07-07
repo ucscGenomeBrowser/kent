@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.36 2006/07/07 06:01:09 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.37 2006/07/07 16:53:36 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -388,13 +388,41 @@ void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn,
 struct genoGraph *gg = hashFindVal(ggHash, chromGraph);
 if (gg != NULL)
     {
+    /* Get binary data source and scaling info etc. */
     struct chromGraphBin *cgb = gg->cgb;
     struct chromGraphSettings *cgs = gg->settings;
     int maxGapToFill = cgs->maxGapToFill;
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
-
     gScale = height/(gMax-gMin+1);
+
+    /* Draw significance threshold as a light blue line */
+    if (leftLabel)
+        {
+	static struct rgbColor guidelineColor = { 220, 220, 255};
+	Color lightBlue = vgFindRgb(vg, &guidelineColor);
+	struct slRef *ref;
+	struct genoLayChrom *chrom;
+	int rightX = gl->picWidth - gl->rightLabelWidth - gl->margin;
+	int leftX = gl->leftLabelWidth + gl->margin;
+	int width = rightX - leftX;
+	double threshold = cartUsualDouble(cart, hggThreshold, 
+		defaultThreshold);
+	int y = height - ((threshold - gMin)*gScale) + yOff;
+	for (ref = gl->leftList; ref != NULL; ref = ref->next)
+	    {
+	    chrom = ref->val;
+	    vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+	    }
+	ref = gl->bottomList;
+	if (ref != NULL)
+	    {
+	    chrom = ref->val;
+	    vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+	    }
+	}
+
+    /* Draw graphs on each chromosome */
     chromGraphBinRewind(cgb);
     while (chromGraphBinNextChrom(cgb))
 	{
