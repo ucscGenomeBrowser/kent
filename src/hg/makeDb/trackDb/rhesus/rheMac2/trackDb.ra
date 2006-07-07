@@ -161,8 +161,8 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track chainPanTro2
-shortLabel PanTro2 Chain
-longLabel PanTro2 ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 290
 visibility hide
@@ -173,8 +173,8 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
-shortLabel PanTro2 Net
-longLabel PanTro2 ($o_date/$o_db) Alignment Net
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 290.1
 visibility hide
