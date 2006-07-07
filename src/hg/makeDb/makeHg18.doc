@@ -10171,6 +10171,20 @@ hgsql hg18 < snp126ExceptionDesc.sql
 hgsql -e 'select count(*), exception from snp126Exceptions group by exception' hg18
 mysql> load data local infile 'exception.human.126' into table snp126ExceptionDesc;
 
+################################################################
+# SNP126 edit: condense UTR/intron func into just intron at Jim's request
+ssh kkr5u00
+cd /scratch/snp/126/human
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense hg18snp126 
+/bin/csh pipeline.csh
+ssh hgwdev
+cd /cluster/home/heather/transfer/snp
+hgsql hg18 -e 'drop table snp126'
+hgsql hg18 < /cluster/home/heather/kent/src/hg/lib/snp126.sql
+hgsql hg18 -e 'load data local infile "snp126.tab" into table snp126'
+hgsql hg18 -e 'alter table snp126 add index name (name)'
+hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
+
 
 #################################################################
 ###### BUILD SUPERFAMILY RELATED TABLES (DONE - 2006-06-20 - Fan)
