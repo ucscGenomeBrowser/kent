@@ -2653,7 +2653,6 @@ searchName snp125Short
 searchTable snp125
 searchMethod exact
 searchType bed
-shortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
