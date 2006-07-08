@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1048 2006/07/08 03:17:15 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1049 2006/07/08 03:24:10 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17643,7 +17643,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
     if (differentString(row[1],"?")) {printf("<B>Strand: </B>%s\n", row[1]);}
     printf("<BR><B>Polymorphism:</B> %s <BR />\n", row[2]);
-    // printf("<BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=?%s\" TARGET=_blank>NetAffx</A>\n", itemName);
+    printf("<BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
     if (!sameString(row[3], "unknown"))
         {
         printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
