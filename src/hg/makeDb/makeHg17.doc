@@ -21447,8 +21447,12 @@ cd /cluster/data/hg17/bed/snp/affyData/500K
 /bin/csh cmds.csh
 cp Mapping250K_Nsp.bed all.bed
 cat Mapping250K_Sty.bed >> all.bed
+hgsql hg17 < affyTmp.sql
+hgsql -e "load data local infile 'all.bed' into table affyTmp" hg17
+# get dbSNP rsIDs
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affyTmp snp124
 hgsql hg17 < snpArrayAffy500.sql
-hgsql -e "load data local infile 'all.bed' into table snpArrayAffy500" hg17
+hgsql -e "load data local infile 'affyLookup.out' into table snpArrayAffy500" hg17
 hgsql -e "alter table snpArrayAffy500 add index name (name)" hg17
 hgsql -e "alter table snpArrayAffy500 add index chrom (chrom, bin)" hg17
 
