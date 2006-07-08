@@ -20,14 +20,21 @@ disequilibrium between the pair of SNPs, with darker shades indicating
 stronger LD.  For the LOD values, additional colors are used in some
 cases:
 <UL>
-  <LI><I>White</I> diamonds indicate pairwise D' values less than 1
-      with no statistically significant evidence of LD (LOD < 2).</LI>
+  <LI><I>Shades of pink/red</I> diamonds are drawn when the statistical
+      significance is high (LOD >= 2). </LI>
   <LI><I>Light blue</I> diamonds indicate high D' values (>0.99) with
       low statistical significance (LOD < 2). </LI>
-  <LI><I>Light pink</I> diamonds are drawn when the statistical
-      significance is high (LOD >= 2) but the D' value is low (less
-      than 0.5). </LI>
+  <LI><I>White</I> diamonds indicate pairwise D' values less than 1
+      with no statistically significant evidence of LD (LOD < 2).</LI>
 </UL>
+<table summary="Standard Color Scheme" border="1">
+<colgroup><col><col><col></colgroup>
+<tbody>
+<tr><td align="center">&nbsp;</td><td align="center">D' &lt; 1</td><td align="center">D' = 1</td></tr>
+<tr><td align="center">LOD &ge; 2</td><td align="center">shades of pink/red</td><td align="center">bright red</td></tr>
+<tr><td align="center">LOD &lt; 2</td><td align="center">white</td><td align="center">blue</td></tr>
+</tbody>
+</table>
 </P>
 
 <H2>Methods</H2>
