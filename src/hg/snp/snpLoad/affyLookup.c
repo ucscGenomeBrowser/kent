@@ -1,15 +1,15 @@
-
 /* affyLookup - Find rsIds for Affy SNPs. */
 #include "common.h"
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyLookup.c,v 1.1 2006/07/08 00:25:43 heather Exp $";
+static char const rcsid[] = "$Id: affyLookup.c,v 1.2 2006/07/08 01:04:55 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;
 char *snpTable = NULL;
 char *outputFile = NULL;
+FILE *outputFileHandle = NULL;
 char *errorFile = NULL;
 FILE *errorFileHandle = NULL;
 int missCount = 0;
@@ -21,9 +21,10 @@ void usage()
 errAbort(
     "affyLookup - find rsIds for Affy SNPs\n"
     "usage:\n"
-    "    affyLookup database affyTable snpTable outputFile\n");
+    "    affyLookup database affyTable snpTable\n"
+    "    output to affyLookup.out\n"
+    "    errors to affyLookup.err\n");
 }
-
 
 
 struct binKeeper *readSnps(char *chrom)
@@ -67,17 +68,12 @@ void affyLookup(char *chromName)
 {
 struct binKeeper *snps = NULL;
 struct binElement *elList = NULL;
-char fileName[64];
-FILE *fileHandle = NULL;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int start = 0;
 int end = 0;
-
-safef(fileName, sizeof(fileName), "%s.%s", outputFile, chromName);
-fileHandle = mustOpen(fileName, "w");
 
 snps = readSnps(chromName);
 
@@ -92,15 +88,15 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	missCount++;
         fprintf(errorFileHandle, "Missing rsId for affy SNP %s\n", row[4]);
-        fprintf(fileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
-        fprintf(fileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
-        fprintf(fileHandle, "%s\n", "unknown");
+        fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
+        fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
+        fprintf(outputFileHandle, "%s\n", "unknown");
 	continue;
 	}
      /* just use the first one found */
-     fprintf(fileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
-     fprintf(fileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
-     fprintf(fileHandle, "%s\n", (char *)elList->val);
+     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
+     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
+     fprintf(outputFileHandle, "%s\n", (char *)elList->val);
      /* check for extras */
      if (elList->next != NULL)
         {
@@ -109,7 +105,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 hFreeConn(&conn);
-carefulClose(&fileHandle);
 }
 
 
@@ -117,7 +112,7 @@ int main(int argc, char *argv[])
 /* Check args and call affyLookup. */
 {
 struct slName *chromList, *chromPtr;
-if (argc != 5)
+if (argc != 4)
     usage();
 database = argv[1];
 if(!hDbExists(database))
@@ -129,7 +124,7 @@ if(!hTableExistsDb(database, affyTable))
 snpTable = argv[3];
 if(!hTableExistsDb(database, snpTable))
     errAbort("no %s in %s\n", snpTable, database);
-outputFile = argv[4];
+outputFileHandle = mustOpen("affyLookup.out", "w");
 errorFileHandle = mustOpen("affyLookup.err", "w");
 chromList = hAllChromNamesDb(database);
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
@@ -138,6 +133,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     affyLookup(chromPtr->name);
     }
 carefulClose(&errorFileHandle);
+carefulClose(&outputFileHandle);
 verbose(1, "missing count = %d\n", missCount);
 verbose(1, "multiple count = %d\n", multipleCount);
 return 0;
