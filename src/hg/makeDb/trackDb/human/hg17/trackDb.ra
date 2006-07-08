@@ -2201,3 +2201,41 @@ searchMethod fuzzy
 padding 1000
 searchPriority 51
 
+searchName illuminaShort
+searchTable snpArrayIllumina300
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName affy500Short
+searchTable snpArrayAffy500
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName illuminaLong
+searchTable snpArrayIllumina300
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16
+padding 250
+
+searchName affy500Long
+searchTable snpArrayAffy500
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (SNP_A-[0-9]+(_[0-9]+)?)
+searchPriority 16
+padding 250
+
