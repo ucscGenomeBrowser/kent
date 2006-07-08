@@ -10186,6 +10186,49 @@ hgsql hg18 -e 'alter table snp126 add index name (name)'
 hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
 
 
+################################################################
+### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
+    # Make file/table of high quality single base pair differences
+    # between hg18 and panTro2
+    set bedDir = /cluster/data/hg18/bed/chimpHiQualDiffs
+    mkdir -p $bedDir
+    cd $bedDir
+    sed 's/simpleNucDiff/chimpHiQualDiffs/' ~/kent/src/hg/lib/simpleNucDiff.sql >! chimpHiQualDiffs.sql
+
+    set axtDir = /cluster/data/hg18/bed/blastz.panTro2/axtRBestNet
+    mkdir -p chroms; cd chroms
+    ls -1 $axtDir | grep chr | grep axt | sed 's/.hg18.panTro2.net.axt.gz//' | grep -v random | grep -v "_" | xargs mkdir
+    set workDir = /scratch/chqd
+    mkdir -p $workDir
+    touch $workDir/chqd.log
+#       time nice /cluster/home/daryl/bin/i386/chimpHiQualDiffs $workDir/$f /cluster/data/panTro2/bed/quality/qac/panTro2.qac $f.chimpHiQualDiffs
+.bed>>& $workDir/chqd.log
+    foreach f (chr*)
+        echo -n $f "  "
+        mkdir -p $workDir/$f/
+        cp $axtDir/$f.*.axt.gz $workDir/$f/
+        gunzip $workDir/$f/$f.*.axt.gz
+        time nice /cluster/home/daryl/bin/i386/chimpHiQualDiffs $workDir/$f /cluster/data/panTro2/bed/quality/qac/panTro2.qac $f.chimpHiQualDiffs
+.bed
+        rm -f $workDir/$f/$f.*axt
+        rmdir $workDir/$f/
+    end
+    mv $workDir/chqd.log .
+    cat chr*bed >! ../chimpHiQualDiffs.bed
+
+    ## The load (sort) ran out of memory on hgwdev, so sort the 
+    ## file first on kolossus and then load it on hgwdev
+    ssh kolossus
+    time hgLoadBed -strict -sqlTable=chimpHiQualDiffs.sql -noLoad hg18 chimpHiQualDiffs chimpHiQualDiffs.bed
+    # 110.214u 10.836s 2:24.42 83.8%  0+0k 0+0io 1pf+0w
+    exit
+    ## hgwdev 
+    time hgLoadBed -hasBin -noSort -sqlTable=chimpHiQualDiffs.sql hg18 chimpHiQualDiffs bed.tab
+    # 328.890u 113.230s 42:26.00 17.3%        0+0k 0+0io 197676pf+0w
+
+    ## TODO: need to filter out polymorphic sites (SNPs)
+
+
 #################################################################
 ###### BUILD SUPERFAMILY RELATED TABLES (DONE - 2006-06-20 - Fan)
 
