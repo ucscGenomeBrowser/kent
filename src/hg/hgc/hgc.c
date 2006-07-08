@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1047 2006/07/08 03:13:55 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1048 2006/07/08 03:17:15 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17655,7 +17655,7 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doIllumina (struct trackDb *tdb, char *itemName)
+void doIllumina300K (struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
@@ -17668,13 +17668,12 @@ int start = cartInt(cart, "o");
 genericHeader(tdb, itemName);
 
 safef(query, sizeof(query),
-      "select chromEnd, illuminaName from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+      "select chromEnd from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
-    {
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
-    printf("<B>Illumina ID:</B> %s <BR />\n", row[1]);
-    }
+printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -19048,9 +19047,9 @@ else if (sameString("snpArrayAffy500", track))
     {
     doAffy500K(tdb, item);
     }
-else if (sameString("illumina", track))
+else if (sameString("snpArrayIllumina300", track))
     {
-    doIllumina(tdb, item);
+    doIllumina300K(tdb, item);
     }
 else if (sameString("hgMut", track))
     {
