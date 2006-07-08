@@ -7745,9 +7745,8 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     cd       /cluster/data/hg16/bed/hapmap/recombination/HapMap_PhaseI/20051115
     wget -N http://www.stats.ox.ac.uk/~cfreeman/HapMap_Phase1/genetic_map_HapMap_Phase1_UCSC.tar.gz
     tar xvfz genetic_map_HapMap_Phase1_UCSC.tar.gz
-    rm -f hg16.hapmapRecombRate.bed
-    tail --lines=+2 -q Gen_map_chr*_COMBINED_UCSC.txt | sed 's/_non_par//;s/_par1//;s/_par2//' | awk '{printf "%s\t%d\t%d\t%0.3f\n",$1,$2,$3,$4}' > hg16.hapmapRecombRate.bed
-    liftOver hg16.hapmapRecombRate.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.hapmapRecombRate.bed hg16ToHg17.unmapped
+    tail --lines=+2 -q Gen_map_chr*_COMBINED_UCSC.txt | sed 's/_non_par//;s/_par1//;s/_par2//' | awk '{printf "%s\t%d\t%d\t%0.3f\n",$1,$2,$3,$4}' >! hg16.hapmapRecombRate.bed
+    liftOver hg16.hapmapRecombRate.bed /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain.gz hg17.hapmapRecombRate.bed hg16ToHg17.unmapped
     hgLoadBed -bedGraph=4 hg16 hapmapRecombRate hg16.hapmapRecombRate.bed
     hgLoadBed -bedGraph=4 hg17 hapmapRecombRate hg17.hapmapRecombRate.bed
     rm -f bed.tab Gen_map_chr*.txt
