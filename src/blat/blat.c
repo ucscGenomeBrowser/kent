@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.108 2006/07/07 00:18:14 angie Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.109 2006/07/10 16:31:55 angie Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -369,6 +369,7 @@ for (i=0; i<fileCount; ++i)
 		dnaSeqFree(&seq);
 		}
 	    }
+	twoBitClose(&tbf);
 	}
     else
         {
