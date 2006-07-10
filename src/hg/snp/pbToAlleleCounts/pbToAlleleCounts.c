@@ -14,7 +14,7 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.3 2006/07/08 18:35:46 daryl Exp $";
+static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.4 2006/07/10 04:18:52 daryl Exp $";
 
 static int ssnpId=0;
 boolean strictSnp=FALSE;
@@ -169,12 +169,8 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 
     allele=cloneString(row[2]);
     convertToUppercase(allele);
-//    if ( !stringIn("N",row[2]) && !stringIn("-",row[2]))
     if ( sameString(allele,"A") || sameString(allele,"C") || 
 	 sameString(allele,"G") || sameString(allele,"T") )
-//    if ( differentString(allele,"A") && differentString(allele,"C") && 
-//	 differentString(allele,"G") && differentString(allele,"T") )
-//	l->strictSnp = FALSE;
 	{
 	for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
 	    if (sameString(aiPtr->allele, allele))
@@ -195,9 +191,6 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
     convertToUppercase(allele);
     if ( sameString(allele,"A") || sameString(allele,"C") || 
 	 sameString(allele,"G") || sameString(allele,"T") )
-//	if ( differentString(allele,"A") && differentString(allele,"C") && 
-//	     differentString(allele,"G") && differentString(allele,"T") )
-//	    l->strictSnp = FALSE;
 	{
 	for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
 	    if (sameString(aiPtr->allele, allele))
@@ -217,13 +210,11 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 slReverse(&l);
 for(lPtr=l; lPtr!=NULL; lPtr=lPtr->next)
     {
-//    printf("%s\n",lPtr->hugoId);fflush(stdout);
     strand = hashFindVal(strandHash, lPtr->hugoId);
     if (strand == NULL)
 	{
-	hashStore(missingHugoIdHash, lPtr->hugoId);//strandHash, strand->name, strand, &strand->name);
+	hashStore(missingHugoIdHash, lPtr->hugoId);
 	slRemoveEl(l, lPtr);
-//	lPtr->strand=cloneString("?");
 	continue;
 	}
     lPtr->strand = cloneString(strand->strand);
@@ -231,7 +222,7 @@ for(lPtr=l; lPtr!=NULL; lPtr=lPtr->next)
 freeHash(&strandHash);
 hashPtr = hashFirst(missingHugoIdHash);
 while ( (missingName=hashNextName(&hashPtr)) != NULL )
-    printf("HUGO ID '%s' was not found in database\n", missingName);
+    printf("HUGO ID was not found in strand.txt (usually from proteome.hgncXref): %s\n", missingName);
 freeHash(&missingHugoIdHash);
 return l;
 }
