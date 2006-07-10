@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgRemoteScript.pm instead.
 
-# $Id: HgRemoteScript.pm,v 1.1 2006/06/26 19:01:03 angie Exp $
+# $Id: HgRemoteScript.pm,v 1.2 2006/07/10 19:43:53 angie Exp $
 package HgRemoteScript;
 
 use warnings;
@@ -23,8 +23,10 @@ use Exporter;
 sub new {
   # Create and return an HgRemoteScript object.  $configFile is optional.
   my ($class, $scriptFile, $runHost, $runDir, $purpose, $configFile) = @_;
-  confess "Too few arguments" if (! defined $purpose);
-  confess "Too many arguments" if (scalar(@_) > 6);
+  confess "Must have 5 or 6 arguments" if (scalar(@_) < 5 || scalar(@_) > 6);
+  confess "undef input" if (! defined $class || ! defined $scriptFile ||
+			    ! defined $runHost || ! defined $runDir ||
+			    ! defined $purpose);
   my $this = {};
   $this->{'fileName'} = $scriptFile;
   $this->{'runHost'} = $runHost;
@@ -57,6 +59,8 @@ _EOF_
 sub add {
   # Add text to the script (must not be called after execute).
   my $this = shift;
+  confess "Must have at least one argument" if (scalar(@_) < 1);
+  confess "undef input" if (! defined $_[0]);
   if ($this->{'hasBeenExecuted'}) {
     confess "Cannot be called after execute.";
   }
@@ -67,6 +71,7 @@ sub add {
 sub execute {
   # Close the script file, chmod, and run it on the intended host.
   my $this = shift;
+  confess "Must have no arguments" if (scalar(@_) > 0);
   $this->{'hasBeenExecuted'} = 1;
   close($this->{'fh'});
   &HgAutomate::run("chmod a+x $this->{fileName}");
