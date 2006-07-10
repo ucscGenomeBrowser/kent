@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.4 2006/07/04 00:28:46 angie Exp $
+# $Id: HgAutomate.pm,v 1.5 2006/07/10 20:41:14 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -14,15 +14,31 @@ use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
 @ISA = qw(Exporter);
-@EXPORT_OK = qw( getAssemblyInfo
-		 makeGsub mustMkdir mustOpen nfsNoodge run verbose
-		 choosePermanentStorage
-		 chooseWorkhorse chooseFileServer chooseClusterByBandwidth
-		 chooseFilesystemsForCluster checkClusterPath
-		 getCommonOptionHelp getCommonOptionHelpNoClusters
-		 processCommonOptions
-		 @commonOptionVars @commonOptionSpec
-	       );
+
+# This is a listing of the public methods and variables (which should be
+# treated as constants) exported by this module:
+@EXPORT_OK = (
+    # Support for common command line options:
+    qw( getCommonOptionHelp getCommonOptionHelpNoClusters
+	processCommonOptions
+	@commonOptionVars @commonOptionSpec
+      ),
+    # Some basic smarts about our compute infrastructure:
+    qw( choosePermanentStorage
+	chooseWorkhorse chooseFileServer chooseClusterByBandwidth
+	chooseFilesystemsForCluster checkClusterPath
+      ),
+    # General-purpose utility routines:
+    qw( checkCleanSlate checkExistsUnlessDebug
+	getAssemblyInfo machineHasFile
+	makeGsub mustMkdir mustOpen nfsNoodge run verbose
+      ),
+    # Hardcoded paths/commands/constants:
+    qw( $gensub2 $para $paraRun $centralDbSql $cvs
+	$clusterData $trackBuild $goldenPath $gbdb
+	$splitThreshold
+      ),
+);
 
 #########################################################################
 # A simple model of our local compute environment with some subroutines
@@ -199,8 +215,8 @@ sub getWorkhorseLoads {
 		    `ssh -x kki parasol list machines | grep idle`) {
     my $mach = $machLine;
     $mach =~ s/[\. ].*//;
-    $mach =~ s/\n$//;
-    $horses{$mach} = &getLoadFactor($mach);
+    chomp $mach;
+    $horses{$mach} = &getLoadFactor($mach) if (! exists $horses{$mach});
   }
   return %horses;
 }
@@ -214,6 +230,8 @@ sub chooseWorkhorse {
   if ($main::opt_workhorse) {
     return $main::opt_workhorse;
   }
+  &verbose(2, "chooseWorkhorse: polling load factors of kolossus and " .
+	   "idle small cluster machines.  This may take a minute...\n");
   while (1) {
     my %horses = &getWorkhorseLoads();
     foreach my $maxLoad (0.5, 1.0, 2.0) {
@@ -222,7 +240,10 @@ sub chooseWorkhorse {
 	push @fastHorses, $horse if ($horses{$horse} <= $maxLoad);
       }
       if (scalar(@fastHorses) > 0) {
-	return $fastHorses[int(rand(scalar(@fastHorses)))];
+	my $randomFastEnough = $fastHorses[int(rand(scalar(@fastHorses)))];
+	&verbose(2, "chooseWorkhorse: $randomFastEnough meets load " .
+		 "threshold of $maxLoad.\n");
+	return $randomFastEnough;
       }
     }
     my $delay = 120;
@@ -237,11 +258,15 @@ sub getFileServer {
   my ($path) = @_;
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
   my $host = `df $path 2>>1 | grep -v Filesystem`;
-  if ($host =~ s/(\S+):\/.*/$1/) {
+  if ($host =~ /(\S+):\/.*/) {
     return $1;
-  } else {
-    confess "Could not extract server from output of \"df $path\":\n$host\n";
+  } elsif ($host =~ /^\/\w/) {
+    my $localhost = $ENV{'HOST'};
+    if ($localhost =~ s/^(\w+)(\..*)?$/$1/) {
+      return $localhost;
+    }
   }
+  confess "Could not extract server from output of \"df $path\":\n$host\n";
 }
 
 sub canLogin {
@@ -269,6 +294,7 @@ sub chooseFileServer {
   if ($server && &canLogin($server) && (&getLoadFactor($server) < 2.0)) {
     return $server;
   }
+#*** SMALL CLUSTER MACHINES CANNOT WGET OUTSIDE, SO NOT ALWAYS A GOOD CHOICE HERE
   return &chooseWorkhorse();
 }
 
@@ -298,7 +324,10 @@ sub chooseClusterByBandwidth {
     my $expectedPortion = 1 / (1 + $batchCount);
     my $oomph = (($idleCount + ($busyCount * $expectedPortion)) *
 		 $clusterInfo->{'gigaHz'});
-    &verbose(2, "$paraHub: ((idle=$idleCount + (busy=$busyCount * portion=$expectedPortion)) * speed=$clusterInfo->{gigaHz}) = $oomph\n");
+    &verbose(3, "chooseClusterByBandwidth: " .
+	     "$paraHub: ((idle=$idleCount + " .
+	     "(busy=$busyCount * portion=$expectedPortion)) " .
+	     "* speed=$clusterInfo->{gigaHz}) = $oomph\n");
     if (! defined $maxOomph || ($oomph > $maxOomph)) {
       $maxOomph = $oomph;
       $bestCluster = $paraHub;
@@ -307,7 +336,8 @@ sub chooseClusterByBandwidth {
   if (! defined $bestCluster) {
     confess "Failed to find a live cluster";
   }
-  &verbose(2, "cluster with the most bandwidth: $bestCluster\n");
+  &verbose(2, "chooseClusterByBandwidth: $bestCluster " .
+	   "($maxOomph Gop/s est)\n");
   return $bestCluster;
 }
 
@@ -373,9 +403,9 @@ sub getCommonOptionHelp {
                           for I/O-intensive steps.
     -dbHost mach          Use mach (default: $dbHost) as database server.
     -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub
-                          for blastz cluster run.
+                          for cluster runs with very large job counts.
     -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub
-                          for cat & chain cluster runs.
+                          for cluster runs with smallish job counts.
     -debug                Don't actually run commands, just display them.
     -verbose num          Set verbose level to num (default $defaultVerbose).
     -help                 Show detailed help and exit.
@@ -410,20 +440,101 @@ sub processCommonOptions {
 
 
 #########################################################################
+# Hardcoded paths/command sequences:
+use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
+		$clusterData $trackBuild $goldenPath $gbdb
+		$splitThreshold
+	   );
+use vars qw( $gensub2 $para $paraRun $clusterData $trackBuild
+	     $goldenPath $gbdb $centralDbSql $splitThreshold );
+$gensub2 = '/parasol/bin/gensub2';
+$para = '/parasol/bin/para';
+$paraRun = ("$para make jobList\n" .
+	    "$para check\n" .
+	    "$para time > run.time\n" .
+	    'cat run.time');
+$centralDbSql = "hgsql -h genome-testdb -A -N hgcentraltest";
+$cvs = "/usr/bin/cvs";
+
+$clusterData = '/cluster/data';
+$trackBuild = 'bed';
+$goldenPath = '/usr/local/apache/htdocs/goldenPath';
+$gbdb = '/gbdb';
+
+# This is the max number of sequences in an assembly that we will consider
+# "chrom-based" (allow split tables; per-seq files can fit in one directory)
+# as opposed to "scaffold-based" (no split tables; multi-level directory for
+# per-seq files, or use set of multi-seq files).
+$splitThreshold = 100;
+
+
+#########################################################################
 # General utility subroutines:
+
+sub checkCleanSlate {
+  # Exit with an error message if it looks like this step has already been run
+  # based on the existence of the given file(s) or directory(ies).
+  my ($step, $nextStep, @files) = @_;
+  confess "Must have at least 3 arguments" if (scalar(@_) < 3);
+  confess "undef input" if (! defined $step || ! defined $nextStep);
+  my $problem = 0;
+  foreach my $f (@files) {
+    confess "undef input" if (! defined $f);
+    if (-e $f) {
+      warn "$step: looks like this was run successfully already " .
+	"($f exists).  Either run with -continue $nextStep or some later " .
+	"step, or move aside/remove $f and run again.\n";
+      $problem = 1;
+    }
+  }
+  exit 1 if ($problem);
+}
+
+sub checkExistsUnlessDebug {
+  # Exit with an error message if required files don't exist,
+  # unless $opt_debug.
+  my ($prevStep, $step, @files) = @_;
+  confess "Must have at least 3 arguments" if (scalar(@_) < 3);
+  confess "undef input" if (! defined $prevStep || ! defined $step);
+  return if ($main::opt_debug);
+  my $problem = 0;
+  foreach my $f (@files) {
+    confess "undef input" if (! defined $f);
+    if (! -e $f) {
+      warn "$step: output of previous step $prevStep, $f , is required " .
+	"but does not appear to exist.\n" .
+	"If it actually does exist, then this error is probably due to " .
+	"network/filesystem delays -- wait a minute and restart with " .
+	"-continue $step.\n" .
+	"If it really doesn't exist, either fix things manually or " .
+	"try -continue $prevStep";
+      $problem = 1;
+    }
+  }
+  exit 1 if ($problem);
+}
 
 sub getAssemblyInfo {
   # Do a quick dbDb lookup to get assembly descriptive info for README.txt.
   my ($dbHost, $db) = @_;
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
-  my $centralDbSql =
-    "ssh -x $dbHost hgsql -h genome-testdb -A -N hgcentraltest";
   my $query = "select genome,description,sourceName from dbDb " .
               "where name = \"$db\";";
-  my $line = `echo '$query' | $centralDbSql`;
+  my $line = `echo '$query' | ssh -x $dbHost $centralDbSql`;
   chomp $line;
   my ($genome, $date, $source) = split("\t", $line);
   return ($genome, $date, $source);
+}
+
+sub machineHasFile {
+  # Return a positive integer if $mach appears to have $file or 0 if it
+  # does not.
+  my ($mach, $file) = @_;
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  confess "undef input" if (! defined $mach || ! defined $file);
+  my $count = `ssh -x $mach ls -1 $file 2>>/dev/null | wc -l`;
+  chomp $count;
+  return $count + 0;
 }
 
 sub makeGsub {
@@ -431,7 +542,7 @@ sub makeGsub {
   my ($runDir, $templateCmd) = @_;
   confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
   confess "undef input" if (! defined $runDir || ! defined $templateCmd);
-  $templateCmd =~ s/\n$//;
+  chomp $templateCmd;
   my $fh = mustOpen(">$runDir/gsub");
   print $fh  <<_EOF_
 #LOOP
@@ -494,6 +605,7 @@ sub verbose {
   confess "undef input" if (! defined $level || ! defined $message);
   print STDERR $message if ($main::opt_verbose >= $level);
 }
+
 
 # perl packages need to end by returning a positive value:
 1;
