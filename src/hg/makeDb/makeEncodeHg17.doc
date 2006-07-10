@@ -2267,6 +2267,73 @@ close (FH)
 	I=`expr $I + 1`
     done > trackDb.entries.txt
 
+
+##########################################################################
+# EBI PECAN Alignments (2006-06-22 kate)
+#  From Ben Paten
+
+    cd /cluster/data/encode
+    mkdir -p PECAN/SEP-05/lab
+    cd PECAN/SEP-05/lab
+    wget http://www.ebi.ac.uk/~bjp/pecan/encode_sept_pecan_mafs.tar.bz2
+    bunzip2 encode_sept_pecan_mafs.tar.bz2
+    tar xvf encode_sept_pecan_mafs.tar
+    cd ..
+
+
+cat > project.csh << 'EOF'
+    mkdir -p tmp
+    set tmpDir = tmp
+    foreach f (lab/*MAF/EN[mr]*)
+        set r = $f:t:r
+        echo $r
+        set c = `echo "SELECT chrom from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        set start =  \
+                `echo "SELECT chromStart from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        set size = \
+                `echo "SELECT size from chromInfo WHERE chrom='$c'" | \
+                        hgsql -N hg17`
+        /cluster/data/encode/bin/scripts/mafCoord.pl < $f \
+                human.0 hg17.$c $start $size | \
+            sed 's/^a$/a score=0.0/' > $tmpDir/$r.db.maf
+        echo "projecting $r"
+        /cluster/bin/penn/maf_project $tmpDir/$r.db.maf hg17.$c > $r.maf
+        echo "finished $r"
+    end
+'EOF'
+    csh project.csh >&! project.log &
+    rm -fr tmp
+    set gdir = /gbdb/hg17/encode/PECAN/SEP-05/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/PECAN/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodeMlaganAlign >&! load.log
+    # lots of "score too small" messages -- these are OK.
+    cat *.maf | hgLoadMafSummary hg17 encodeMlaganSummary stdin
+
+cat > reformat.csh << 'EOF'
+    foreach f (lab/*/*.maf)
+        set r = $f:t:r
+        echo $r
+        sed 's/^s human\./s hg17./;          s/^s dog\./s canFam1./; \
+                 s/^s zebrafish\./s danRer2./;   s/^s fugu\./s fr1./; \
+                 s/^s chicken\./s galGal2./;     s/^s mouse\./s mm6./; \
+                 s/^s monodelphis\./s monDom1./; s/^s chimp\./s panTro1./; \
+                 s/^s macaque\./s rheMac1./;     s/^s rat\./s rn3./; \
+                 s/^s tetraodon\./s tetNig1./;' $f > $r.maf
+    end
+'EOF'
+    csh reformat.csh >&! reformat.log &
+    set gdir = /gbdb/hg17/encode/PECAN/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/PECAN/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodePecanAlign >&! load.log
+    # lots of "score too small" messages -- these are OK.
+    cat *.maf | hgLoadMafSummary hg17 encodeTbaSummary stdin
+
 ##########################################################################
 # UW/Regulome QCP data again 2006-07-05 - Hiram
 
