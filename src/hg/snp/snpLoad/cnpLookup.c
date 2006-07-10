@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: cnpLookup.c,v 1.1 2006/07/10 17:38:26 heather Exp $";
+static char const rcsid[] = "$Id: cnpLookup.c,v 1.2 2006/07/10 18:00:27 heather Exp $";
 
 struct coords 
     {
@@ -73,6 +73,8 @@ struct coords *cel = NULL;
 FILE *fileHandle = mustOpen(fileName, "w");
 FILE *logFileHandle = mustOpen(logFileName, "w");
 FILE *liftFileHandle = mustOpen(liftFileName, "w");
+char *cnpName = NULL;
+char variantSignal;
 int bin = 0;
 
 verbose(1, "process CNPs...\n");
@@ -80,7 +82,16 @@ safef(query, sizeof(query), "select * from %s", cnpTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hel = hashLookup(bacHash, row[4]);
+    cnpName = cloneString(row[4]);
+    variantSignal = lastChar(cnpName);
+    if (variantSignal == '*')
+       stripChar(cnpName, '*');
+    if (variantSignal == '?')
+       stripChar(cnpName, '?');
+    if (variantSignal == '#')
+        stripChar(cnpName, '#');
+
+    hel = hashLookup(bacHash, cnpName);
     if (hel == NULL) 
         {
 	fprintf(liftFileHandle, "%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4]);
