@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1049 2006/07/08 03:24:10 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1050 2006/07/10 17:46:13 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11856,9 +11856,11 @@ if (variantSignal == '*')
    stripChar(itemCopy, '*');
 if (variantSignal == '?')
    stripChar(itemCopy, '?');
+if (variantSignal == '#')
+   stripChar(itemCopy, '#');
 genericHeader(tdb, itemCopy);
 checkAndPrintCloneRegUrl(stdout,itemCopy);
-if (variantSignal == '*' || variantSignal == '?')
+if (variantSignal == '*' || variantSignal == '?' || variantSignal == '#')
     printf("<B>Note this BAC was found to be variant.   See references.</B><BR>\n");
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
