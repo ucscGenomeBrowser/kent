@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1144 2006/07/05 17:34:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1145 2006/07/11 16:45:05 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9794,15 +9794,14 @@ boolean gvFilterAccuracy(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
-char accur[10];
-safef(accur, sizeof(accur), "%u", el->coordinateAccuracy);
 for (cnt = 0; cnt < gvAccuracySize; cnt++)
     {
     if (cartVarExists(cart, gvAccuracyString[cnt]) &&
         cartString(cart, gvAccuracyString[cnt]) != NULL &&
         differentString(cartString(cart,gvAccuracyString[cnt]), "0") &&
-        sameString(gvAccuracyDbValue[cnt], accur))
+        gvAccuracyDbValue[cnt] == el->coordinateAccuracy)
         {
+        /* string 0/1 unselected/selected, unsigned 0/1 estimated/known */
         return FALSE;
         }
     }
@@ -9815,6 +9814,7 @@ boolean gvFilterSrc(struct gv *el, struct gvSrc *srcList)
 int cnt = 0;
 struct gvSrc *src = NULL;
 char *srcTxt = NULL;
+struct hashEl *filterList = NULL;
 
 for (src = srcList; src != NULL; src = src->next)
     {
@@ -9824,8 +9824,15 @@ for (src = srcList; src != NULL; src = src->next)
         break;
         }
     }
+filterList = cartFindPrefix(cart, "gvPos.filter.src.");
 if (srcTxt == NULL)
     errAbort("Bad value for srcId");
+else if (filterList == NULL) 
+    {
+    /* if no src filters, set or unset, use defaults */
+    cartSetInt(cart, gvSrcString[0], 1);
+    }
+hashElFreeList(&filterList);
 
 for (cnt = 0; cnt < gvSrcSize; cnt++)
     {
@@ -9857,8 +9864,22 @@ for (src = srcList; src != NULL; src = src->next)
         }
     }
 filterList = cartFindPrefix(cart, "hgMut.filter.src.");
-if (filterList == NULL || srcTxt == NULL)
+if (srcTxt == NULL) 
     return TRUE;
+else if (filterList == NULL)
+    {
+    /* by default filter out the Swiss-Prot */
+    if (sameString(srcTxt, "Swiss-Prot"))
+        {
+        char filter[128];
+        safef(filter, sizeof(filter), "hgMut.filter.src.%s", srcTxt);
+        /* add to cart so it will show up as excluded */
+        cartSetInt(cart, filter, 1);
+        return FALSE;
+        }
+    else 
+        return TRUE;
+    }
 for (hashel = filterList; hashel != NULL; hashel = hashel->next)
     {
     if (endsWith(hashel->name, srcTxt) && 

@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.283 2006/06/27 13:56:23 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.284 2006/07/11 16:45:05 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -588,14 +588,20 @@ for (i = 0; i < gvLocationSize; i++)
     printf (" %s<BR />", gvLocationLabel[i]);
     }
 
+/* exclude Swiss-Prot data by default, can be misleading */
 printf("<BR /><B>Exclude data source</B><BR />");
 for (i = 0; i < gvSrcSize; i++)
     {
-    cartMakeCheckBox(cart, gvSrcString[i], FALSE);
     if (differentString(gvSrcDbValue[i], "LSDB"))
+        {
+        cartMakeCheckBox(cart, gvSrcString[i], TRUE);
         printf (" %s<BR />", gvSrcDbValue[i]); /* label with db value */
+        }
     else 
+        {
+        cartMakeCheckBox(cart, gvSrcString[i], FALSE);
         printf (" Locus Specific Databases<BR />");
+        }
     }
 
 printf("<BR /><B>Color mutations by type</B><BR />");
@@ -637,11 +643,17 @@ sr = sqlGetResult(conn, "select distinct(src) from hgMutSrc order by src");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(srcButton, sizeof(srcButton), "hgMut.filter.src.%s", row[0]);
-    cartMakeCheckBox(cart, srcButton, FALSE);
     if (differentString(row[0], "LSDB")) 
+        {
+        cartMakeCheckBox(cart, srcButton, TRUE);
         printf (" %s<BR />", row[0]);
+        }
     else 
+        {
+        cartMakeCheckBox(cart, srcButton, FALSE);
         printf (" Locus Specific Databases<BR />");
+        }
+
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

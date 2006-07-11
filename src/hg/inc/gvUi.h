@@ -23,7 +23,7 @@ extern int gvAttrSize;
 
 extern char *gvAccuracyString[];
 extern char *gvAccuracyLabel[];
-extern unsigned char *gvAccuracyDbValue[];
+extern unsigned gvAccuracyDbValue[];
 extern int gvAccuracySize;
 
 extern char *gvColorLabels[];

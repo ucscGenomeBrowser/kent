@@ -83,8 +83,8 @@ char *gvAccuracyString[] = {
     "gvPos.filter.estimate",
 };
 
-unsigned char *gvAccuracyDbValue[] = {
-    "0",
+unsigned gvAccuracyDbValue[] = {
+    0,
 };
 
 int gvAccuracySize = ArraySize(gvAccuracyLabel);
