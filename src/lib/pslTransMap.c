@@ -29,18 +29,6 @@ struct block
     int tEnd;            /* Target end position. */
 };
 
-static char pslTStrand(struct psl *psl)
-/* get the target strand, return implied + for untranslated */
-{
-return ((psl->strand[1] == '-') ? '-' : '+');
-}
-
-static char pslQStrand(struct psl *psl)
-/* get the query strand */
-{
-return psl->strand[0];
-}
-
 static void pslProtToNA(struct psl *psl)
 /* convert a protein/NA alignment to a NA/NA alignment */
 {
