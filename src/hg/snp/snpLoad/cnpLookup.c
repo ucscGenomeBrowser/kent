@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: cnpLookup.c,v 1.2 2006/07/10 18:00:27 heather Exp $";
+static char const rcsid[] = "$Id: cnpLookup.c,v 1.3 2006/07/11 01:32:59 heather Exp $";
 
 struct coords 
     {
@@ -75,7 +75,6 @@ FILE *logFileHandle = mustOpen(logFileName, "w");
 FILE *liftFileHandle = mustOpen(liftFileName, "w");
 char *cnpName = NULL;
 char variantSignal;
-int bin = 0;
 
 verbose(1, "process CNPs...\n");
 safef(query, sizeof(query), "select * from %s", cnpTable);
@@ -94,7 +93,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hel = hashLookup(bacHash, cnpName);
     if (hel == NULL) 
         {
-	fprintf(liftFileHandle, "%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4]);
+	fprintf(liftFileHandle, "%s\t%s\t%s\t%s\t", row[1], row[2], row[3], row[4]);
 	fprintf(liftFileHandle, "%s\t%s\t%s\t%s\t%s\t", row[5], row[6], row[7], row[8], row[9]);
 	fprintf(liftFileHandle, "%s\t%s\t%s\t%s\t%s\n", row[10], row[11], row[12], row[13], row[14]);
 	continue;
@@ -104,8 +103,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!sameString(cel->chrom, row[1]))
 	fprintf(logFileHandle, "chrom mismatch for %s: cnp on %s, BAC on %s\n", row[4], row[1], cel->chrom);
 
-    bin = hFindBin(cel->start, cel->end);
-    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\t", bin, cel->chrom, cel->start, cel->end, row[4]);
+    fprintf(fileHandle, "%s\t%d\t%d\t%s\t", cel->chrom, cel->start, cel->end, row[4]);
     fprintf(fileHandle, "%s\t%s\t%s\t%s\t%s\t", row[5], row[6], row[7], row[8], row[9]);
     fprintf(fileHandle, "%s\t%s\t%s\t%s\t%s\n", row[10], row[11], row[12], row[13], row[14]);
     }
