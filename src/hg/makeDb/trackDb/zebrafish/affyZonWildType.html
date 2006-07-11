@@ -12,15 +12,18 @@ description page. For more information, see the Track Configuration section.
 <H2>Methods</H2>
 <P>
 For detailed information about the experimental methods, see Weber 
-<em>et al.</em> 2005. This expression data for five strains of wild type 
-zebrafish whole embryos at different devlopmental stages. Alignments 
+<em>et al.</em> 2005. This expression data is for five strains of wild type 
+zebrafish whole embryos at different developmental stages. Alignments 
 displayed on the track correspond to the target sequences used by Affymetrix 
 to choose probes.</P>
 <P>
 Microarray data were preprocessed using MAS background correction, MAS
-probe specific correction, and Loess normalization. <A HREF "http://bioconductor.org/packages/1.8/bioc/html/affy.html" TARGET=_blank">Bioconductor's affy</A>
+probe specific correction, and Loess normalization. 
+<A HREF "http://bioconductor.org/download" TARGET=_blank">
+Bioconductor's affy</A>
 package was used to perform this processing. CEL files were normalized as
-a single group and log2 transformed.
+a single group and log2 transformed with scaling so that the average (mean) 
+value of the expression data is zero for each single experiment.
 The track color denotes the average (median) signal over all replicate 
 experiments for a specific developmental stage and strain on a log base 2 
 scale. Lighter colors correspond to lower signals and darker colors 
@@ -32,12 +35,10 @@ href="http://zfrhmaps.tch.harvard.edu/ZonRHmapper/">Children&#8217;s Hospital
 Boston Zebrafish Genome Initiative</a>. &nbsp;<o:p></o:p></span></font></p>
 
 The rows show the median expression of a gene for a specific developmental 
-stage and strain. A gene that is more highly expressed in a tissue is colored 
-red, and a less expressed gene is shown in green. The values are colored on a 
-logarithmic scale. Black indicates that a gene is neither over- nor 
-under-expressed in the tissue. Uncolored boxes (white on most browsers) 
-represent missing data. 
-
+stage and strain. Over- (under-)expressed genes are colored red (green).
+The values are colored on a logarithmic scale. Black indicates that a gene 
+is neither over- nor under-expressed in the tissue. Uncolored boxes 
+(white on most browsers) represent missing data. 
 </P>
 
 <H2>Track Configuration</H2>
@@ -136,7 +137,7 @@ post-fertilization.</P>
 kindly providing this data as part of the following NIH grants PO1
 DK 055381 - Characterization of the Zebrafish Genome, 
 UO1 DK 63328 - SCGAP, and P30 DK49216 - Center Grant Core. Data 
-collection and curation was performed by Dr. Gerhard Weber, Yi Zhou, 
+collection and curation was performed by Gerhard Weber, Yi Zhou, 
 Anhua Song and Tony DiBiase.</>
 
 <H2>References</H2>
