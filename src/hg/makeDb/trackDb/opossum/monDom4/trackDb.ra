@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track multiz7way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
