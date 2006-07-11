@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1050 2006/07/10 17:46:13 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1051 2006/07/11 22:58:03 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4743,9 +4743,15 @@ void doAffy(struct trackDb *tdb, char *item, char *itemForUrl)
 
 {
 char *dupe, *type, *words[16];
+char *orthoTable = trackDbSetting(tdb, "orthoTable");
+char *otherDb = trackDbSetting(tdb, "otherDb");
 int wordCount;
 int start = cartInt(cart, "o");
+char query[256];
+char **row;
+struct sqlResult *sr = NULL;
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -4754,6 +4760,23 @@ genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
+/* If this is the affyZebrafish track, check for human ortholog information */
+if (sameString("affyZebrafish", tdb->tableName))
+    {
+    if (orthoTable != NULL && hTableExists(orthoTable))
+        { 
+        safef(query, sizeof(query), "select geneSymbol, description from %s where name = '%s' ", orthoTable, item);
+        sr = sqlMustGetResult(conn, query);
+        row = sqlNextRow(sr);
+        if (row != NULL)
+            {
+            printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+            printf("<TR><TH ALIGN=left>Human %s Ortholog:</TH><TD>%s</TD></TR>\n", otherDb, row[0]);
+            printf("<TR><TH ALIGN=left>Ortholog Description:</TH><TD>%s</TD></TR>\n",row[1]);
+            printf("</TABLE>\n");
+            }
+        }
+    }
 if (wordCount > 0)
     {
     type = words[0];
@@ -4763,12 +4786,13 @@ if (wordCount > 0)
 	char *subType = ".";
 	if (wordCount > 1)
 	    subType = words[1];
-        printPslFormat(conn, tdb, item, start, subType);
+        printPslFormat(conn2, tdb, item, start, subType);
 	}
     }
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 void doRHmap(struct trackDb *tdb, char *itemName) 
@@ -18769,7 +18793,7 @@ else if(sameWord(track, "affy"))
     }
 else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
 	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") 
-	|| sameWord(track, "affyUclaNorm") )
+	|| sameWord(track, "affyUclaNorm") || sameWord(track, "zonWildType") )
     {
     gnfExpRatioDetails(tdb, item);
     }
