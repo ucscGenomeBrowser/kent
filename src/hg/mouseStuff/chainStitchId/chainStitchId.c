@@ -70,9 +70,9 @@ int i=0;
  * ID as we go. */
 while ((chain = chainRead(lf)) != NULL)
     {
-    if (chain->id >= idArrLen)
+    while (chain->id >= idArrLen)
 	{
-	idArr = needMoreMem(idArr, idArrLen, idArrLen*2);
+	idArr = needMoreMem(idArr, idArrLen, idArrLen*2*sizeof(idArr[0]));
 	idArrLen *= 2;
 	}
     if (idArr[chain->id] == NULL)
