@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.20 2006/07/11 16:57:25 ann Exp $"
+#	"$Id: makePanTro2.doc,v 1.21 2006/07/11 21:05:42 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -153,7 +153,9 @@ cat > jkStuff/checkChroms.csh << 'EOF'
     cd wustl.chr9
     wget ftp://genome.wustl.edu/pub/user/lhillier/pub/chr9.agp.gz
     gunzip *.gz
-    cp -p chr9.agp ../9
+    cp -p chr9.agp ../9 
+    mv wustl/chr9.agp wustl/chr9.agp.old
+    cp -p chr9.agp wustl/chr9.agp
     cd ../9
     agpToFa -simpleMultiMixed chr9.agp chr9 chr9.fa parts/chr9.contigs.fa
     checkAgpAndFa chr9.agp chr9.fa | tail -1
@@ -295,13 +297,13 @@ cat > toWig.csh << 'EOF'
 
 # GOLD AND GAP TRACKS (DONE 2006-02-28 kate)
     # Redo to fix chr9 (2006-03-02 kate)
+    # Change chrY centromere to unbridged (2006-07-11 kate)
     ssh hgwdev
     cd /cluster/data/panTro2
-    #hgGoldGapGl -noGl -chromLst=chrom.lst panTro2 /cluster/data/panTro2 .
-    hgGoldGapGl -noGl panTro2 /cluster/data/panTro2 .
-    # featureBits fails if there's missing tables, so make them:
-    hgsql panTro2 -e "create table chrM_gap select * from chr1_gap where 0=1"
-    hgsql panTro2 -e "create table chr6_hla_hap1_gap select * from chr1_gap where 0=1"
+    cp -p wustl/chrY.agp wustl/chrY.agp.old
+    sed '/centromere/s/yes/no/' wustl/chrY.agp.old > wustl/chrY.agp
+    cp wustl/chrY.agp Y
+    cat wustl/*.agp | grep -v chrM | hgGoldGapGl -noGl panTro2 stdin
 
 [kate@hgwdev panTro2]$ nice featureBits panTro2 -countGaps -noRandom gap
 423043673 bases of 3175632892 (13.322%) in intersection
@@ -343,10 +345,6 @@ chrM   0 bases of 16554 (0.000%) in intersection
 chrUn   8188633 bases of 58616431 (13.970%) in intersection
 chrX   24409881 bases of 155361357 (15.712%) in intersection
 chrY   1261428 bases of 23952694 (5.266%) in intersection
-
-#QA NOTE: (7-11-2006 ASZ) Changed the centromeric gap in chrY
-to be un-bridged:
-update gap set bridge = 'no' where chrom = 'chrY' and type = "centromere";
 
 
 # HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 2006-03-03 kate)
@@ -1971,8 +1969,6 @@ TMPDIR=/scratch/tmp
     #	986978326 bases of 2909512873 (33.922%) in intersection
 
 
-
-
 ############################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM PANTRO1  (2006-03-13 kate)
 
@@ -1987,7 +1983,13 @@ TMPDIR=/scratch/tmp
 # Do not use lineage-specific repeats, on recommendation of Arian Smit
 # Do use latest human-chimp scoring matrix and gap penalties from Webb Miller
 # via rico (Richard Burhans) at PSU
-cat /cluster/data/penn/human_chimp.v2.q
+
+# NOTE: these alignments have been extensively reviewed by Kateryna 
+# Makerova, Richard Burnhams and Webb Miller at Penn state to 
+# verify parameters are suitable.  The same parameters were
+# used for the HG18 alignments, below.
+
+    cat /cluster/data/penn/human_chimp.v2.q
 #    A    C    G    T
 #    90 -330 -236 -356
 #  -330  100 -318 -236
@@ -2067,87 +2069,127 @@ TMPDIR=/scratch/tmp
     -continue=load \
     `pwd`/DEF >&! blastz.3.out &
 
-nice featureBits panTro2 chainHg17Link
-# 2759308860 bases of 2909512873 (94.837%) in intersection
-nice featureBits panTro2 chainHg17OldLink
-# from alignments with default matrix
-#2782705676 bases of 2909512873 (95.642%) in intersection
+    nice featureBits panTro2 chainHg17Link
+        # 2759308860 bases of 2909512873 (94.837%) in intersection
+    nice featureBits panTro2 chainHg17OldLink
+        # from alignments with default matrix
+        #2782705676 bases of 2909512873 (95.642%) in intersection
 
-hgsql panTro2 -e "select count(*) from chr7_chainHg17"
-    # 75376
-hgsql panTro2 -e "select count(*) from chr7_chainHg17Old"
-    # 241200
+    hgsql panTro2 -e "select count(*) from chr7_chainHg17"
+        # 75376
+    hgsql panTro2 -e "select count(*) from chr7_chainHg17Old"
+        # 241200
 
     # swap alignments to hg17 reference
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
         -swap -bigClusterHub=pk \
         `pwd`/DEF >&! swap.out &
 
- nice featureBits hg17 chainPanTro2Link
-# 2719566113 bases of 2866216770 (94.883%) in intersection
- nice featureBits hg17 chainPanTro2LinkOld
-# 2739413164 bases of 2866216770 (95.576%) in intersection
+    nice featureBits hg17 chainPanTro2Link
+        # 2719566113 bases of 2866216770 (94.883%) in intersection
+    nice featureBits hg17 chainPanTro2LinkOld
+        # 2739413164 bases of 2866216770 (95.576%) in intersection
 
-hgsql panTro2 -e "select count(*) from chr7_chainPanTro2"
-    # 105398
-hgsql panTro2 -e "select count(*) from chr7_chainPanTro2Old"
-    # 333069
+    hgsql panTro2 -e "select count(*) from chr7_chainPanTro2"
+        # 105398
+    hgsql panTro2 -e "select count(*) from chr7_chainPanTro2Old"
+        # 333069
 
-# GOT HERE
+    nice featureBits panTro2 chainHg17Link | tee fb.panTro2.chainHg17Link
+        # 2759308860 bases of 2823407242 (97.730%) in intersection
 
-# PREVIOUS RUN
 
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
-        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
-        -continue=cat \
-        `pwd`/DEF >&! blastz.cat.out &
+########################
+# BLASTZ HUMAN HG18 (2006-07-9 kate)
+# Do not use lineage-specific repeats, on recommendation of Arian Smit
+# Do use latest human-chimp scoring matrix and gap penalties from Webb Miller
+# via rico (Richard Burhans) at PSU
 
+    cat /cluster/data/penn/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+# O = 600 E = 150
 
     ssh pk
-    cd /cluster/data/panTro2/bed/blastz.hg17
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
-        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
-        -continue=chainRun \
-        `pwd`/DEF >&! blastz.chainRun.out &
+    cd /cluster/data/panTro2/bed
+    mkdir blastz.hg18.2006-07-09
+    ln -s blastz.hg18.2006-07-09 blastz.hg18
+    cd blastz.hg18
 
-    # chaining failed on chr19, ran mini-cluster node out of memory
-    # ran manually on hgwdev64  with higher minScore.
-    # this should reduce chains ~12%.  Note that hg18 chr19 chains
-    #  number 5M, while chr18 are only 200K!
-    ssh kki
-    cd /cluster/data/panTro2/bed/blastz.hg17/axtChain/run
-cat > chain.csh << 'EOF'
-#!/bin/csh -ef
-zcat ../../pslParts/$1*.psl.gz \
-| pslCDnaFilter -minId=70 stdin stdout \
-| axtChain -psl -verbose=0  -minScore=5000 -linearGap=medium stdin \
-    /scratch/hg/panTro2/panTro2.2bit \
-    /scratch/hg/hg17/hg17.2bit \
-    stdout \
-| chainAntiRepeat /scratch/hg/panTro2/panTro2.2bit \
-    /scratch/hg/hg17/hg17.2bit \
-    stdin $2
-'EOF'
-    csh doChainRun.csh >&! doChainRun.log &
-    cd ../../
+    cat << '_EOF_' > DEF
+# chimp vs human
+# Specially tuned blastz parameters from Webb Miller
 
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
-        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
-        -continue=chainMerge \
-        `pwd`/DEF >&! blastz.chainMerge.out &
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/blastz/human_chimp.v2.q
+
+# TARGET: Chimmp panTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/bluearc/panTro2/chrom.sizes
+
+# QUERY: Human hg18 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ2_LEN=/cluster/bluearc/hg18/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastz.hg18.2006-07-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+# << happy emacs
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg18 \
+    `pwd`/DEF >&! blastz.out &
+
+# Mini-cluster nodes were dead, so restart required after admins fixed.
+
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg18 \
+    -continue=cat \
+    `pwd`/DEF >&! blastz.2.out &
+
+    hgsql panTro2 -Nse "select count(*) from chr7_chainHg18"
+        # 76122
+    hgsql panTro2 -Nse "select count(*) from chr7_chainHg17"
+        # 75376
+
+    featureBits panTro2 -chrom=chr7 chr7_chainHg18Link
+        # 146031865 bases of 151077879 (96.660%) in intersection
+    featureBits panTro2 -chrom=chr7 chr7_chainHg17Link
+        # 145990849 bases of 151077879 (96.633%) in intersection
+
+    nice featureBits panTro2 chainHg18Link >& fb.panTro2.chainHg18Link &
+    cat  fb.panTro2.chainHg18Link
+        # 2760856313 bases of 2823407242 (97.785%) in intersection
+    cat ../blastz.hg17/fb.panTro2.chainHg17Link
+        # 2759308860 bases of 2823407242 (97.730%) in intersection
 
 
 #########################################################################
 # BLASTZ danRer3 (2006-04-07 kate)
 # Includes both randoms
-ssh pk
-mkdir /cluster/data/panTro2/bed/blastz.danRer3.2006-04-07
-cd /cluster/data/panTro2/bed
-ln -s blastz.danRer3.2006-04-07 blastz.danRer3
-cd blastz.danRer3
+
+    ssh pk
+    mkdir /cluster/data/panTro2/bed/blastz.danRer3.2006-04-07
+    cd /cluster/data/panTro2/bed
+    ln -s blastz.danRer3.2006-04-07 blastz.danRer3
+    cd blastz.danRer3
 
 cat << 'EOF' > DEF
 # human target, zebrafish query
@@ -2207,4 +2249,53 @@ TMPDIR=/scratch/tmp
 # failed due to bad NFS mount on one of the mini-cluster nodes.
 # finished manually, and created run,time
 
+#########################################################################
+# BLASTZ danRer4 (2006-07-10 kate)
+# Includes both randoms
 
+    ssh pk
+    mkdir /cluster/data/panTro2/bed/blastz.danRer4.2006-07-10
+    cd /cluster/data/panTro2/bed
+    ln -s blastz.danRer4.2006-07-10 blastz.danRer4
+    cd blastz.danRer4
+
+    cat << 'EOF' > DEF
+# human target, zebrafish query
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# use parameters suggested for human-fish evolutionary distance
+# recommended in doBlastzChainNet.pl help
+# (previously used for  hg16-fr1, danrer1-mm5)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+
+# TARGET: Human panTro2
+SEQ1_DIR=/scratch/hg/panTro2/nib
+SEQ1_SMSK=/cluster/bluearc/panTro2/linSpecRep/notInZebrafish
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/panTro2/chrom.sizes
+
+# QUERY: zebrafish danRer4
+# Use all chroms, including both randoms (chrUn and chrNA)
+SEQ2_DIR=/san/sanvol1/scratch/danRer4/nib
+SEQ2_SMSK=/san/sanvol1/scratch/danRer4/linSpecRep.notInOthers
+SEQ2_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=1000
+
+BASE=/cluster/data/panTro2/bed/blastz.danRer4.2006-07-10
+TMPDIR=/scratch/tmp
+'EOF'
+# << happy emacs
+
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.danRer4 \
+    `pwd`/DEF >& blastz.out &
