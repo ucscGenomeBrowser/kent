@@ -16,13 +16,27 @@ visibility hide
 spectrum on
 type psl est
 
+track affyZonWildType
+shortLabel Wild Type Array
+longLabel Zon Lab Expression data for Wild Type Zebrafish strains
+group regulation
+priority 80
+visibility hide
+type expRatio
+expScale 8.0
+expStep 1.0
+expTable zebrafishZonWTMedianExps
+chip Zebrafish
+
 track affyZebrafish
 shortLabel Affy Zebrafish
 longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
 group regulation
-priority 80
+priority 89
 visibility hide
 type psl .
+orthoTable affyToHg16Orthologs
+otherDb hg16
 
 track blastHg16KG
 shortLabel $o_Organism Proteins
@@ -363,7 +377,6 @@ type netAlign xenTro2 chainXenTro2
 otherDb xenTro2
 release beta
 
-
 searchTable wz_ests
 searchMethod prefix
 searchType psl
@@ -392,4 +405,11 @@ shortCircuit 1
 termRegex [Dr][[:alnum:]_\.]+.*_at
 searchPriority 15
 
+searchName affyZebrafishHg16Ortholog
+searchTable affyZebrafish
+searchMethod prefix
+searchType psl
+xrefTable affyToHg16Orthologs
+xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
+searchPriority 20
 
