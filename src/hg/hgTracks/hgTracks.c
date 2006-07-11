@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1145 2006/07/11 16:45:05 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1146 2006/07/11 20:35:59 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3432,11 +3432,13 @@ static void superfamilyDrawAt(struct track *tg, void *item,
 /* Draw a single superfamily item at position. */
 {
 struct bed *bed = item;
+char *sLong;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
+sLong = superfamilyNameLong(tg, item);
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
 else
@@ -3455,11 +3457,9 @@ if (color)
     // important info on structures and functions
     if (vis == tvFull)
         {
-    	char *s = superfamilyNameLong(tg, item);
-        vgTextRight(vg, x1-mgFontStringWidth(font, s)-2, y, mgFontStringWidth(font, s),
-                heightPer, MG_BLACK, font, s);
+        vgTextRight(vg, x1-mgFontStringWidth(font, sLong)-2, y, mgFontStringWidth(font, sLong),
+                heightPer, MG_BLACK, font, sLong);
         }
-
     if (tg->drawName && vis != tvSquish)
 	{
 	/* Clip here so that text will tend to be more visible... */
@@ -3470,9 +3470,9 @@ if (color)
 	    Color textColor = vgContrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
-	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-		tg->mapName, tg->mapItemName(tg, bed), NULL);
 	}
+    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	     tg->mapName, tg->mapItemName(tg, bed), sLong);
     }
 if (tg->subType == lfWithBarbs)
     {
