@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.19 2006/06/19 04:23:54 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.20 2006/07/11 16:57:25 ann Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -343,6 +343,10 @@ chrM   0 bases of 16554 (0.000%) in intersection
 chrUn   8188633 bases of 58616431 (13.970%) in intersection
 chrX   24409881 bases of 155361357 (15.712%) in intersection
 chrY   1261428 bases of 23952694 (5.266%) in intersection
+
+#QA NOTE: (7-11-2006 ASZ) Changed the centromeric gap in chrY
+to be un-bridged:
+update gap set bridge = 'no' where chrom = 'chrY' and type = "centromere";
 
 
 # HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 2006-03-03 kate)
