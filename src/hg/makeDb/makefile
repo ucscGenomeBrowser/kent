@@ -57,6 +57,8 @@ DIRS = \
 	hgPepPred \
 	hgPhMouse \
 	hgRatioMicroarray \
+        hgDropSplitTable \
+        hgRenameSplitTable \
 	hgRnaGenes \
 	hgSanger20 \
 	hgSanger22 \
