@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.44 2006/07/04 00:32:07 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.45 2006/07/11 00:11:13 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -31,16 +31,6 @@ use HgStepManager;
 my $getFileServer = '/cluster/bin/scripts/fileServer';
 my $blastzRunUcsc = '/cluster/bin/scripts/blastz-run-ucsc';
 my $partition = '/cluster/bin/scripts/partitionSequence.pl';
-my $gensub2 = '/parasol/bin/gensub2';
-my $para = '/parasol/bin/para';
-my $paraRun = ("$para make jobList\n" .
-	       "$para check\n" .
-	       "$para time > run.time\n" .
-	       'cat run.time');
-my $clusterData = '/cluster/data';
-my $trackBuild = 'bed';
-my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
-my $gbdb = '/gbdb';
 my $clusterLocal = '/scratch/hg';
 my $clusterSortaLocal = '/iscratch/i';
 my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/san/sanvol1');
@@ -50,7 +40,6 @@ my @fileServerNoNo = ('kkhome', 'kks00');
 my @fileServerNoLogin = ('kkusr01', '10.1.1.3', '10.1.10.11',
 			 'sanhead1', 'sanhead2', 'sanhead3', 'sanhead4',
 			 'sanhead5', 'sanhead6', 'sanhead7', 'sanhead8');
-my $splitThreshold = 100;
 
 # Option variable names, both common and peculiar to doBlastz:
 use vars @HgAutomate::commonOptionVars;
@@ -99,7 +88,7 @@ options:
 print STDERR <<_EOF_
     -blastzOutRoot dir    Directory path where outputs of the blastz cluster
                           run will be stored.  By default, they will be
-                          stored in the $clusterData build directory , but
+                          stored in the $HgAutomate::clusterData build directory , but
                           this option can specify something more cluster-
                           friendly: $clusterNAS .
                           If dir does not already exist it will be created.
@@ -107,7 +96,7 @@ print STDERR <<_EOF_
     -swap                 DEF has already been used to create chains; swap
                           those chains (target for query), then net etc. in
                           a new directory:
-                          $clusterData/\$qDb/$trackBuild/blastz.\$tDb.swap/
+                          $HgAutomate::clusterData/\$qDb/$HgAutomate::trackBuild/blastz.\$tDb.swap/
     -chainMinScore n      Add -minScore=n (default: $defaultChainMinScore) to the
                                   axtChain command.
     -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
@@ -139,19 +128,19 @@ well.  :)
   # Detailed help (-help):
   print STDERR "
 Assumptions:
-1. $clusterData/\$db/ is the main directory for database/assembly \$db.
-   $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/ will be the directory 
+1. $HgAutomate::clusterData/\$db/ is the main directory for database/assembly \$db.
+   $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb.\$date/ will be the directory 
    created for this run, where \$tDb is the target/reference db and 
    \$qDb is the query.  (Can be overridden, see #10 below.)  
-   $dbHost:$goldenPath/\$tDb/vs\$QDb/ (or vsSelf) 
+   $dbHost:$HgAutomate::goldenPath/\$tDb/vs\$QDb/ (or vsSelf) 
    is the directory where downloadable files need to go.
    LiftOver chains (not applicable for self-alignments) go in this file:
-   $clusterData/\$tDb/$trackBuild/liftOver/\$tDbTo\$QDb.over.chain.gz
+   $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/liftOver/\$tDbTo\$QDb.over.chain.gz
    a copy is kept here (in case the liftOver/ copy is overwritten):
-   $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/\$tDb.\$qDb.over.chain.gz
+   $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb.\$date/\$tDb.\$qDb.over.chain.gz
    and symbolic links to the liftOver/ file are put here:
-   $dbHost:$goldenPath/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
-   $dbHost:$gbdb/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
+   $dbHost:$HgAutomate::goldenPath/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
+   $dbHost:$HgAutomate::gbdb/\$tDb/liftOver/\$tDbTo\$QDb.over.chain.gz
 2. DEF's SEQ1* variables describe the target/reference assembly.
    DEF's SEQ2* variables describe the query assembly.
    If those are the same assembly, then we're doing self-alignments and 
@@ -164,7 +153,7 @@ Assumptions:
 4. DEF's SEQ1_LEN is a tab-separated dump of the target database table 
    chromInfo -- or at least a file that contains all sequence names 
    in the first column, and corresponding sizes in the second column.
-   Normally this will be $clusterData/\$tDb/chrom.sizes, but for a 
+   Normally this will be $HgAutomate::clusterData/\$tDb/chrom.sizes, but for a 
    scaffold-based assembly, it is a good idea to put it in $clusterSortaLocal 
    or $clusterNAS
    because it will be a large file and it is read by blastz-run-ucsc 
@@ -199,7 +188,7 @@ BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=6000
 BLASTZ_K=2200
-BLASTZ_Q=$clusterData/blastz/HoxD55.q
+BLASTZ_Q=$HgAutomate::clusterData/blastz/HoxD55.q
    Blastz parameter tuning is somewhat of an art and is beyond the scope 
    here.  Webb Miller and Jim can provide guidance on how to set these for 
    a new pair of organisms.  
@@ -209,7 +198,7 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
    If DEF does not contain a PATH, blastz-run-ucsc will use its own default.
 10. DEF's BLASTZ variable can specify an alternate path for blastz.
 11. DEF's BASE variable can specify the blastz/chain/net build directory 
-    (defaults to $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/).
+    (defaults to $HgAutomate::clusterData/\$tDb/$HgAutomate::trackBuild/blastz.\$qDb.\$date/).
 12. SEQ?_CTGDIR specifies sequence source with the contents of full chrom
     sequences and the contig randoms and chrUn.  This keeps the contigs
     separate during the blastz and chaining so that chains won't go through
@@ -522,8 +511,8 @@ sub doBlastzClusterRun {
   my $bossScript = new HgRemoteScript("$runDir/doClusterRun.csh", $paraHub,
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
-$gensub2 $targetList $queryList gsub jobList
-$paraRun
+$HgAutomate::gensub2 $targetList $queryList gsub jobList
+$HgAutomate::paraRun
 _EOF_
     );
   $bossScript->execute();
@@ -575,9 +564,9 @@ each subdirectory of $outRoot into a per-target-chunk file.";
 (cd $outRoot; find . -type d -maxdepth 1 | grep '^./') \\
         | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
-$gensub2 tParts.lst single gsub jobList
+$HgAutomate::gensub2 tParts.lst single gsub jobList
 mkdir ../pslParts
-$paraRun
+$HgAutomate::paraRun
 _EOF_
     );
   $bossScript->execute();
@@ -699,9 +688,9 @@ to each target sequence.";
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 chmod a+x chain.csh
-$gensub2 pslParts.lst single gsub jobList
+$HgAutomate::gensub2 pslParts.lst single gsub jobList
 mkdir chain liftedChain
-$paraRun
+$HgAutomate::paraRun
 rmdir liftedChain
 _EOF_
   );
@@ -843,7 +832,7 @@ sub netChains {
   }
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $altOver = "$tDb.$qDb.over.chain.gz";
-  my $liftOverDir = "$clusterData/$tDb/$trackBuild/liftOver";
+  my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
   my $whatItDoes =
 "It generates nets (without repeat/gap stats -- those are added later on
 $dbHost) from chains, and generates axt, maf and .over.chain from the nets.";
@@ -1262,9 +1251,9 @@ sub installDownloads {
   }
   &dumpDownloadReadme("$runDir/README.txt");
   my $over = $tDb . "To$QDb.over.chain.gz";
-  my $liftOverDir = "$clusterData/$tDb/$trackBuild/liftOver";
-  my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
-  my $gbdbLiftOverDir = "$gbdb/$tDb/liftOver";
+  my $liftOverDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
+  my $gpLiftOverDir = "$HgAutomate::goldenPath/$tDb/liftOver";
+  my $gbdbLiftOverDir = "$HgAutomate::gbdb/$tDb/liftOver";
   my $andNets = $isSelf ? "." :
     ", nets and axtNet,\n" .
     "# and copies the liftOver chains to the liftOver download dir.";
@@ -1272,9 +1261,9 @@ sub installDownloads {
   my $bossScript = new HgRemoteScript("$runDir/installDownloads.csh", $dbHost,
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
-mkdir -p $goldenPath/$tDb
-mkdir $goldenPath/$tDb/vs$QDb
-cd $goldenPath/$tDb/vs$QDb
+mkdir -p $HgAutomate::goldenPath/$tDb
+mkdir $HgAutomate::goldenPath/$tDb/vs$QDb
+cd $HgAutomate::goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
 cp -p $runDir/README.txt .
 ln -s $runDir/md5sum.txt .
@@ -1363,10 +1352,14 @@ open(STDIN, '/dev/null');
 &loadDef($DEF);
 &checkDef();
 
+my $seq1IsSplit = (`wc -l < $defVars{SEQ1_LEN}` <=
+		   $HgAutomate::splitThreshold);
+my $seq2IsSplit = (`wc -l < $defVars{SEQ2_LEN}` <=
+		   $HgAutomate::splitThreshold);
+
 # Undocumented option for quickly generating a README from DEF:
 if ($opt_readmeOnly) {
-  $splitRef = $opt_swap ? (`wc -l < $defVars{SEQ2_LEN}` < $splitThreshold) :
-    (`wc -l < $defVars{SEQ1_LEN}` < $splitThreshold);
+  $splitRef = $opt_swap ? $seq2IsSplit : $seq1IsSplit;
   &swapGlobals() if $opt_swap;
   &dumpDownloadReadme("/tmp/README.txt");
   exit 0;
@@ -1375,7 +1368,7 @@ if ($opt_readmeOnly) {
 my $date = `date +%Y-%m-%d`;
 chomp $date;
 $buildDir = $defVars{'BASE'} ||
-  "$clusterData/$tDb/$trackBuild/blastz.$qDb.$date";
+  "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/blastz.$qDb.$date";
 
 if ($opt_swap) {
   my $inChain = &getAllChain("$buildDir/axtChain");
@@ -1383,9 +1376,9 @@ if ($opt_swap) {
     die "-swap: Can't find $buildDir/axtChain/[$tDb.$qDb.]all.chain[.gz]\n" .
         "which is required for -swap.\n";
   }
-  $swapDir = "$clusterData/$qDb/$trackBuild/blastz.$tDb.swap";
+  $swapDir = "$HgAutomate::clusterData/$qDb/$HgAutomate::trackBuild/blastz.$tDb.swap";
   &HgAutomate::mustMkdir("$swapDir/axtChain");
-  $splitRef = (`wc -l < $defVars{SEQ2_LEN}` < $splitThreshold);
+  $splitRef = $seq2IsSplit;
   &HgAutomate::verbose(1, "Swapping from $buildDir/axtChain/$inChain\n" .
 	      "to $swapDir/axtChain/$qDb.$tDb.all.chain.gz .\n");
 } else {
@@ -1397,7 +1390,7 @@ if ($opt_swap) {
     &enforceClusterNoNo($buildDir,
 	    'blastz/chain/net build directory (or use -blastzOutRoot)');
   }
-  $splitRef = (`wc -l < $defVars{SEQ1_LEN}` < $splitThreshold);
+  $splitRef = $seq1IsSplit;
   &HgAutomate::verbose(1, "Building in $buildDir\n");
 }
 
