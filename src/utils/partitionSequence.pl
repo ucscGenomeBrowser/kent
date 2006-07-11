@@ -9,7 +9,7 @@
 # Actual batch list creation can be done with gensub2 and a spec,
 # using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.7 2005/10/07 07:51:00 aamp Exp $
+# $Id: partitionSequence.pl,v 1.8 2006/07/11 00:11:53 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -28,7 +28,7 @@ sub usage {
   my $base = $0;
   $base =~ s/^(.*\/)?//;
   print STDERR "
-usage: $base chunk lap seqDir seqSizeFile
+usage: $base chunk lap seqDir seqSizeFile seqLimit
     Partitions a set of sequences by size and prints out a list of file 
     specs suitable for creating a parasol job list with gensub2 and a job 
     template.  
@@ -41,6 +41,8 @@ usage: $base chunk lap seqDir seqSizeFile
     containing .fa(.gz) and/or .nib files or a .2bit file.  
     seqSizeFile (usually /cluster/data/\$db/chrom.sizes) must have sequence 
     names in its first column, and sequence sizes in its second column.  
+    seqLimit is the maximum number of small sequences that may be lumped 
+    together in the same partition.  It can be set to 0 for no limit.
 options:
     -oneBased     Output 1-based start coords (for Scott's blastz-run)
     -concise      Don't add range specifiers to filenames unless they're split.
