@@ -58,6 +58,14 @@ visibility hide
 type bed 6 +
 exonArrows off
 
+track affyZebrafish
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+group regulation
+priority 89
+visibility hide
+type psl .
+
 track multiz6way
 shortLabel 6-Way Conservation
 longLabel 6-Way Vertebrate Multiz Alignment & Conservation
