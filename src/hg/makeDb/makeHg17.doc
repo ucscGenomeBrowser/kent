@@ -21614,3 +21614,36 @@ convertTitle < omim.txt > omimTitle.txt
 truncate table omimTitle;
 load data local infile "omimTitle.txt" into table omimTitle;
 
+#############################################################
+# Lift SV track from hg16 (Heather, July 2006)
+# hg16 SV track is comprised of 7 subtracks:
+# cnpFosmid, cnpSebat, cnpIafrate, cnpSharp, delConrad, delMccarroll, delHinds
+# Use the same table formats as hg16; pre-create
+# (No bin for del tables)
+
+cd /cluster/data/hg17/bed
+mkdir svMixed
+cd svMixed
+
+# I got hg17 coords from Andy Sharp for cnpFosmid and delHinds
+trimFosmid.pl < cnpFosmid.txt > cnpFosmid.bed
+hgLoadBed -tab hg17 cnpFosmid cnpFosmid.bed
+hinds.pl < hinds.txt > delHinds.bed
+hgLoadBed -tab -noBin hg17 delHinds delHinds.bed
+
+# Simple lifts for delConrad and delMccarroll
+# Use -multiple for delConrad; increases coverage but doesn't cause big proliferations
+# One data point lifts 13x, another 7x, another 4x.  The rest are once or twice.
+/bin/csh liftDel.csh
+
+# Andy Sharp says the Sebat data has already been lifted, so be conservative here
+# Create hg16.cnpSebatLiftCandidate that excludes 5 rows that had wild proliferations
+/bin/csh liftSebat.csh
+
+# For Andy's data, use bacEndPairs first, then lift the remainder
+/bin/csh liftSharp.csh
+
+# For the Iafrate data, the BAC End lookup wasn't good, so just lift
+# Create hg16.cnpIafrateLiftCandidate that excludes 2 rows that had wild proliferations
+/bin/csh liftIafrate.csh
+
