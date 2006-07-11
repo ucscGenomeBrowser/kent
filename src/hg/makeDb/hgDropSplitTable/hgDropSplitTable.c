@@ -11,7 +11,7 @@ void usage()
 errAbort(
   "hgDropSplitTable - Drop a table, or drop all tables in a split table\n"
   "usage:\n"
-  "   hgDropSplitTable db old new\n"
+  "   hgDropSplitTable db tableRoo \n"
   );
 }
 
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
 hgDropSplitTable(argv[1], argv[2]);
 return 0;
