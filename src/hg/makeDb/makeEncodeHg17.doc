@@ -2269,7 +2269,7 @@ close (FH)
 
 
 ##########################################################################
-# EBI PECAN Alignments (2006-06-22 kate)
+# EBI PECAN Alignments (IN PROGRESS 2006-06-22 kate)
 #  From Ben Paten
 
     cd /cluster/data/encode
@@ -2309,30 +2309,11 @@ cat > project.csh << 'EOF'
     mkdir -p $gdir
     rm -f $gdir/*.maf
     ln -s /cluster/data/encode/PECAN/SEP-05/*.maf $gdir
-    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodeMlaganAlign >&! load.log
-    # lots of "score too small" messages -- these are OK.
-    cat *.maf | hgLoadMafSummary hg17 encodeMlaganSummary stdin
-
-cat > reformat.csh << 'EOF'
-    foreach f (lab/*/*.maf)
-        set r = $f:t:r
-        echo $r
-        sed 's/^s human\./s hg17./;          s/^s dog\./s canFam1./; \
-                 s/^s zebrafish\./s danRer2./;   s/^s fugu\./s fr1./; \
-                 s/^s chicken\./s galGal2./;     s/^s mouse\./s mm6./; \
-                 s/^s monodelphis\./s monDom1./; s/^s chimp\./s panTro1./; \
-                 s/^s macaque\./s rheMac1./;     s/^s rat\./s rn3./; \
-                 s/^s tetraodon\./s tetNig1./;' $f > $r.maf
-    end
-'EOF'
-    csh reformat.csh >&! reformat.log &
-    set gdir = /gbdb/hg17/encode/PECAN/maf
-    mkdir -p $gdir
-    rm -f $gdir/*.maf
-    ln -s /cluster/data/encode/PECAN/SEP-05/*.maf $gdir
     hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodePecanAlign >&! load.log
     # lots of "score too small" messages -- these are OK.
-    cat *.maf | hgLoadMafSummary hg17 encodeTbaSummary stdin
+    cat *.maf | hgLoadMafSummary hg17 encodePecanSummary stdin
+
+
 
 ##########################################################################
 # UW/Regulome QCP data again 2006-07-05 - Hiram
