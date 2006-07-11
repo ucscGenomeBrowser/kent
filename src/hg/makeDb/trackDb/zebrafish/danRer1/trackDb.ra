@@ -23,6 +23,14 @@ group map
 visibility dense
 type bed 3 +
 
+track affyZebrafish
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+group regulation
+priority 89
+visibility hide
+type psl .
+
 track blastzHg17
 shortLabel Human Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
