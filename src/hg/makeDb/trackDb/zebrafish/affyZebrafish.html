@@ -1,17 +1,69 @@
 <H2>Description</H2>
 <P>
 This track shows the location of the consensus sequences used for the 
-selection of probes on the Affymetrix Zebrafish genome chip.</P> 
+selection of probes on the Affymetrix Zebrafish genome chip. The details 
+page also shows the human (UCSC hg16) gene orthologs for each Affymetrix 
+Zebrafish GeneChip probeset. These were annotated by the Trans-NIH 
+Zebrafish Genome Initiative at Children's Hospital Boston. A total of 
+12092 Affymetrix zebrafish probes from the complete set of 15617 
+(115 of which are controls) have been annotated with human known genes 
+(UCSC HG16):  7846 probesets manually annotated by the Zebrafish 
+Genome Initiative, 4246 probesets bear Affymetrix annotations dated 
+Sept. 17, 2005.</P> 
 
 <H2>Methods</H2>
 <P>
+<H3>Blat Alignments</H3>
 Consensus sequences were downloaded from the
 <A HREF="http://www.affymetrix.com/support/technical/byproduct.affx?product=zebrafish" 
 TARGET=_blank>Affymetrix Product Support</A> web page.
 The sequences were mapped to the genome with blat followed by pslReps using 
 the parameters <TT>-minAli=0.95</TT> and <TT>-nearTop=0.005</TT>.  </P>
+<P>
+<H3>Human Orthologs</H3>
+Human orthologs were identified for Affymetrix zebrafish microarray probesets 
+(corresponding to zebrafish genes) in a three step process:
+
+(1) finding the best representative sequence for each microarray probe.
+
+(2) aligning the representative sequence to the set of known human genes using
+blastn and automatically filtering the results.
+
+(3) manually selecting the best (both in terms of sequence identity and 
+protein family uniqueness) blast hits above an e-value and
+identity threshold.
+</P>
+<UL>
+<LI><B>Step 1:</B> The Affymetrix zebrafish microarray probe nucleotide 
+consensus sequence for 15,617 probes was the starting point.  Each probeset 
+consensus sequence was aligned, using blastn, to the following sequence 
+databases to establish the longest possible representative sequence:  
+TIGR ESTs, NCBI ZGCs, NCBI zebrafish non-redundant set (NR), and WZ ESTs.  
+If a longer sequence from these databases met the filtering criteria 
+(e-value < 1e-100), then it was used in place of the Affymetrix consensus 
+sequence.
+
+<LI><B>Step 2:</B> Each representative nucleotide sequence from step 1 was 
+than used to query the UCSC hg16 known genes protein sequences set using 
+blastx.  The set of candidate blast hits above an e-value threshold were 
+saved for each representative sequence for use in step 3.
+
+<LI><B>Step 3:</B> A web-based ortholog annotation GUI presented the set of 
+candidate blast hits for each representative sequence (from step 2) to a 
+manual annotator for inspection.  To be considered as an ortholog, it was
+required that a blast hit must meet the following criteria:  (1) the candidate 
+has at least 50 percent identity with a human known gene and has at least 
+one highly conserved region of identity, (2) the overlap between the 
+full length of the representative sequence and the human gene must be greater 
+than one third of the total length the representative sequence, and, (3) no 
+other candidates in the list can be protein family members of the candidate 
+in question.
+</UL></P>
 
 <H2>Credits</H2>
 <P>
 Thanks to <A HREF="http://www.affymetrix.com" TARGET=_blank>Affymetrix</A> for
-the data underlying this track.</P>
+the probeset sequence and annotation data underlying this track. Thanks also 
+to the <A HREF="http://134.174.23.167/zonrhmapper/" TARGET=_blank>
+Trans-NIH Zebrafish Genome Initiative</A> at Children's Hospital Boston 
+for providing the human ortholog data.</P>
