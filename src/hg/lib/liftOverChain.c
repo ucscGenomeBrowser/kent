@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: liftOverChain.c,v 1.4 2005/11/29 20:53:43 aamp Exp $";
+static char const rcsid[] = "$Id: liftOverChain.c,v 1.5 2006/07/11 05:51:39 kate Exp $";
 
 void liftOverChainStaticLoad(char **row, struct liftOverChain *ret)
 /* Load a row from liftOverChain table into ret.  The contents of ret will
@@ -230,3 +230,24 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean liftOverChainExists(struct sqlConnection *conn, char *tableName,
+                                char *fromDb, char *toDb)
+/* Return TRUE if row where fromDb and toDb match */
+{
+char query[256];
+safef(query, sizeof(query), 
+        "select count(*) from %s where fromDb = '%s' and toDb = '%s'",
+	        tableName, fromDb, toDb);
+return sqlQuickNum(conn, query) > 0;
+}
+
+void liftOverChainRemove(struct sqlConnection *conn, char *tableName,
+                                char *fromDb, char *toDb)
+/* Remove rows where fromDb and toDb match */
+{
+char query[256];
+safef(query, sizeof(query), 
+        "delete from %s where fromDb = '%s' and toDb = '%s'",
+	        tableName, fromDb, toDb);
+sqlUpdate(conn, query);
+}

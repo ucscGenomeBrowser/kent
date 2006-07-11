@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.7 2006/04/14 14:53:33 angie Exp $";
+static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.8 2006/07/11 05:51:39 kate Exp $";
 
 #define TABLE_NAME "liftOverChain"
 
@@ -24,6 +24,7 @@ boolean multiple = FALSE; /* Map query to multiple regions. */
 float minBlocks = 1; /* Min ratio of alignment blocks/exons that must map. */
 boolean fudgeThick = FALSE; /* If thickStart/thickEnd is not mapped, use the,
                               closest mapped base. */
+boolean noForce = FALSE;        
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -34,6 +35,7 @@ static struct optionSpec optionSpecs[] = {
         {"multiple", OPTION_BOOLEAN},
         {"minBlocks", OPTION_FLOAT},
         {"fudgeThick", OPTION_BOOLEAN},
+        {"noForce", OPTION_BOOLEAN},
         {NULL, 0}
 };
 
@@ -55,7 +57,9 @@ errAbort(
     "    -multiple               Allow multiple output regions\n"
     "    -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
     "                             when mapping to multiple output regions\n"
-    "                                     (default 0, 0)"
+    "                                     (default 0, 0)\n"
+    "    -noForce       Do not remove/overwrite existing entries matching\n"
+    "                             this fromDb/toDb pair"
     , minMatch, minBlocks);
 }
 
@@ -88,7 +92,16 @@ if (!sqlTableExists(conn, TABLE_NAME))
     freeDyString(&dy);
     }
 
-verbose(1, "Inserting record in %s\n", TABLE_NAME);
+if (liftOverChainExists(conn, TABLE_NAME, fromDb, toDb))
+    {
+    if (noForce)
+        errAbort("Liftover chain %s to %s already exists", fromDb, toDb);
+    verbose(1, "Removing existing %s entries for %s to %s\n", 
+                        TABLE_NAME, fromDb, toDb);
+    liftOverChainRemove(conn, TABLE_NAME, fromDb, toDb);
+    }
+
+verbose(1, "Inserting record %s to %s in %s\n", fromDb, toDb, TABLE_NAME);
 /* Create entry and write out to tab-separated file */
 
 if (!fileExists(chainFile))
@@ -136,6 +149,7 @@ minSizeT = optionInt("minSizeT", minSizeQ);
 multiple = optionExists("multiple");
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
+noForce = optionExists("noForce");
 hgAddLiftOverChain(fromDb, toDb, path);
 return 0;
 }

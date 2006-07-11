@@ -94,5 +94,13 @@ void liftOverChainOutput(struct liftOverChain *el, FILE *f, char sep, char lastS
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean liftOverChainExists(struct sqlConnection *conn, char *tableName,
+                                char *fromDb, char *toDb);
+/* Return TRUE if row where fromDb and toDb match */
+
+void liftOverChainRemove(struct sqlConnection *conn, char *tableName,
+                                char *fromDb, char *toDb);
+/* Remove rows where fromDb and toDb match */
+
 #endif /* LIFTOVERCHAIN_H */
 
