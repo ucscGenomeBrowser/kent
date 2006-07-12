@@ -1040,7 +1040,9 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 # Saving bed.tab
 # Loading hg18
 
+########################################################################
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2005-12-16 - Fan)
+# RELOADED PEPTIDE TABLE, GENSCANPEP (DONE, 2006-07-11, hartera)
     
     ssh hgwdev
     mkdir /cluster/data/hg18/bed/genscan
@@ -1140,7 +1142,6 @@ ssh kkr7u00.kilokluster.ucsc.edu
     #	55323340 bases of 2866216770 (1.930%) in intersection
     #	featureBits hg16 genscan
     #	55333689 bases of 2865248791 (1.931%) in intersection
-
     #	featureBits hg18 genscanSubopt
     # 55685959 bases of 2881515245 (1.933%) in intersection 
     # featureBits hg17 genscanSubopt
@@ -1151,6 +1152,14 @@ ssh kkr7u00.kilokluster.ucsc.edu
     #	Should be zero intersection with rmsk
     #	featureBits -chrom=chr1 hg18 genscan rmsk
 
+    # Reload genscanPep table - requested by a user. It has been dropped
+    # from hgwdev.
+    # (hartera, 2006-07-11)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/genscan
+    hgPepPred hg18 generic genscanPep genscan.pep
+
+############################################################################
 # CREATE 2 BIT FILE (DONE 12/20/05, Fan)
    
    ssh kkstore02
