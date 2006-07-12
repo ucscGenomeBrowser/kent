@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.62 2006/07/05 18:03:39 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.63 2006/07/12 00:32:46 hartera Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2170,6 +2170,87 @@ TMPDIR=/scratch/tmp
     cat fb.danRer4.chainDanRer4Link
     #	58145856 bases of 1626093931 (3.576%) in intersection
 
+#########################################################################
+# BLASTZ danRer4 (DONE - 2006-04-26 - 2006-04-28 - Hiram)
+# REMAKE THIS USING ALL CHROMS FOR danRer4 (2005-05-22 -  ).
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastzDanRer4.2006-05-22
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-05-22
+   # ln -s blastzDanRer4.2006-04-26 blastz.danRer4
+
+    cat << '_EOF_' > DEF
+# mouse vs zebrafish
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn/x86_64:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_SMSK=/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer4)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer4/nib
+SEQ2_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/scratch/danRer4/linSpecRep.notInOthers
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzDanRer4.2006-05-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+    chmod +x DEF
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-05-22
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF >& blastz.out &
+    # 0.118u 0.107s 4:05:08.71 0.0%   0+0k 0+0io 0pf+0w
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF >& net.out &
+    # 0.121u 0.072s 4:48.04 0.0%      0+0k 0+0io 0pf+0w
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-05-22
+    #	swap, see also makeDanRer4.doc
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF >& swap.out &
+    # 0.129u 0.109s 5:02.55 0.0%      0+0k 0+0io 0pf+0w 
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-05-22
+    featureBits mm8 chainDanRer4Link >& fb.mm8.chainDanRer4Link &
+    cat fb.mm8.chainDanRer4Link
+    # 55147954 bases of 2567283971 (2.148%) in intersection
+    featureBits danRer4 chainMm8Link >& fb.danRer4.chainDanRer4Link &
+    cat fb.danRer4.chainDanRer4Link
+    # 60721886 bases of 1626093931 (3.734%) in intersection
+    featureBits -chrom=chr1 mm8 refGene:cds chainDanRer4Link -enrichment
+    # refGene:cds 0.856%, chainDanRer4Link 1.867%, both 0.584%, 
+    # cover 68.16%, enrich 36.51x
+    featureBits -chrom=chr1 mm8 refGene:cds chainDanRer3Link -enrichment
+    # refGene:cds 0.856%, chainDanRer3Link 1.760%, both 0.492%, cover 57.49%, 
+    # enrich 32.67x
+    featureBits -chrom=chr1 danRer4 refGene:cds chainMm8Link -enrichment
+    # refGene:cds 0.746%, chainMm8Link 3.807%, both 0.566%, cover 75.86%, 
+    # enrich 19.93x
+    featureBits -chrom=chr1 danRer3 refGene:cds chainMm8Link -enrichment
+    # refGene:cds 0.786%, chainMm8Link 4.581%, both 0.612%, cover 77.88%, 
+    # enrich 17.00x
+    # Higher coverage than for danRer3 chains on mm8 and similar coverage
+    # for mm8 chains on danRer4 as on danRer3 so that is good.
+ 
 #########################################################################
 # BLASTZ danRer3 (DONE - 2006-02-28 - Hiram)
     ssh pk
@@ -5906,6 +5987,7 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
 
 #####################################################################
 #### LOAD ENSEMBL GENES (DONE - 2006-06-21 - Hiram)
+# ADDED PEPTIDE TABLE, ENSPEP (DONE, 2006-07-11, hartera)
    mkdir /cluster/data/mm8/bed/ensGene
    cd /cluster/data/mm7/bed/ensGene
 
@@ -6061,6 +6143,20 @@ done
 
     #	Conclusion, the 37 differences out of 31,302 are not worth the
     #	trouble to load up the entire Ensembl peptide table 
+    # Add Ensembl peptide table - requested by a user (hartera, 2006-07-11)
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/ensGene
+cat << EOF > ensPep.sql
+CREATE TABLE ensPep (
+name varchar(255) not null,     # Name of gene - same as in genePred
+seq longblob not null,     # Peptide sequence
+#Indices
+PRIMARY KEY(name(64))
+);
+EOF
+    cp ./testPeptides/ensPepMm8.fa.tab.gz .
+    gunzip ensPepMm8.fa.tab.gz
+    hgLoadSqlTab mm8 ensPep ensPep.sql ensPepMm8.fa.tab -warn
 
 ###########################################################################
 ## MAKE SUPERFAMILY TRACK (DONE, 6/22/06, Fan)
