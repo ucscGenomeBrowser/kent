@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.43 2006/06/27 18:15:20 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.44 2006/07/12 20:35:17 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -28,6 +28,7 @@ char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 int maxChromNameLength = 0;		/* specify to avoid chromInfo */
 char *tmpDir = (char *)NULL;	/*	location to create a temporary file */
 boolean nameIx = TRUE;	/*	FALSE == do not create the name index */
+boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -46,6 +47,7 @@ static struct optionSpec optionSpecs[] = {
     {"maxChromNameLength", OPTION_INT},
     {"tmpDir", OPTION_STRING},
     {"noNameIx", OPTION_BOOLEAN},
+    {"ignoreEmpty", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -75,6 +77,7 @@ errAbort(
   "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
   "                   - which will be removed after loading\n"
   "   -noNameIx  - no index for the name column (default creates index)\n"
+  "   -ignoreEmpty  - no error on empty input file\n"
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
   "   -verbose=N - verbose level for extra information to STDERR"
@@ -90,7 +93,10 @@ int findBedSize(char *fileName, struct lineFile **retLf)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[64], *line;
 int wordCount;
-lineFileNeedNext(lf, &line, NULL);
+
+if (!lineFileNext(lf, &line, NULL))
+    if (ignoreEmpty)
+	return(0);
 line = cloneString(line);
 if (strictTab)
     wordCount = chopTabs(line, words);
@@ -350,6 +356,12 @@ struct lineFile *lf = NULL;
 int bedSize = findBedSize(bedFiles[0], &lf);
 struct bedStub *bedList = NULL;
 int i;
+int loadedElementCount;
+
+if ((0 == bedSize) && !ignoreEmpty)
+    errAbort("empty input file for table %s.%s", database,track);
+if ((0 == bedSize) && ignoreEmpty)
+    return;
 
 if (hasBin)
     bedSize--;
@@ -368,7 +380,8 @@ for (i=0; i<bedCount; ++i)
     loadOneBed(lf, bedSize, &bedList);
     lineFileClose(&lf);
     }
-verbose(1, "Loaded %d elements of size %d\n", slCount(bedList), bedSize);
+loadedElementCount = slCount(bedList);
+verbose(1, "Loaded %d elements of size %d\n", loadedElementCount, bedSize);
 if (!noSort)
     {
     slSort(&bedList, bedStubCmp);
@@ -380,7 +393,10 @@ else
     slReverse(&bedList);
     }
 
-loadDatabase(database, track, bedSize, bedList);
+if (loadedElementCount > 0)
+    loadDatabase(database, track, bedSize, bedList);
+else if (! ignoreEmpty)
+    errAbort("empty input file for %s.%s", database,track);
 }
 
 int main(int argc, char *argv[])
@@ -403,6 +419,7 @@ maxChromNameLength = optionInt("maxChromNameLength",0);
 strict = optionExists("strict");
 tmpDir = optionVal("tmpDir", tmpDir);
 nameIx = ! optionExists("noNameIx");
+ignoreEmpty = optionExists("ignoreEmpty");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
