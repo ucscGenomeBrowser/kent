@@ -8957,6 +8957,7 @@ zcat gene_association.goa_uniprot.gz|\
 
 ##########################################################################
 # GENEID GENE PREDICTIONS (DONE - 2006-04-21 FIXED: 2006-05-09 - Hiram)
+# RELOADED PEPTIDE TABLE, GENEIDPEP (DONE, 2006-07-11, hartera)
     ssh hgwdev
     mkdir /cluster/data/hg18/bed/geneid
     cd /cluster/data/hg18/bed/geneid
@@ -9008,7 +9009,11 @@ zcat gene_association.goa_uniprot.gz|\
 # QA NOTE (ASZ 5-11-2006) I dropped the geneidPep table and the reference
 # to it from the trackDb.ra file.  This functionality is now done on the
 # fly and this table is no longer needed.
-
+    # Added back the geneidPep table as requested by a user
+    # (hartera, 2006-07-11)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/geneid
+    hgPepPred hg18 generic geneidPep geneid.fa 
 
 ##########################################################################
 # BLASTZ/CHAIN/NET XENTRO2 (DONE 4/20/06 angie)
