@@ -63,7 +63,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     sanger22extra.o sangerGene.o sargassoSeaXra.o \
     scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
-    snp.o snp125.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
+    snp.o snp125.o snp126.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
