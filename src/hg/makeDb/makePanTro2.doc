@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.21 2006/07/11 21:05:42 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.22 2006/07/12 05:19:14 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1882,7 +1882,7 @@ TMPDIR=/scratch/tmp
     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
     cat pep/*.pep > genscan.pep
 
-    # Load into the database as so:
+    # Load into the database
     ssh hgwdev
     cd /cluster/data/panTro2/bed/genscan
     ldHgGene panTro2 genscan genscan.gtf
@@ -2295,7 +2295,23 @@ TMPDIR=/scratch/tmp
 'EOF'
 # << happy emacs
 
-/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
-    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.danRer4 \
-    `pwd`/DEF >& blastz.out &
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.danRer4 \
+        `pwd`/DEF >& blastz.out &
+
+# 2 jobs crashed on kki, pk was rebooted
+# finish jobs with para push on kki, then continue
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.danRer4 \
+        -continue=chainRun \
+        `pwd`/DEF >& blastz.2.out &
+
+#########################################################################
+# LifUunder to panTro1 (2005-07-11 kate)
+
+    ssh kk
+    cd /cluster/data/panTro2
+    doSameSpeciesLiftOver.pl panTro2 panTro1 >& lift.out &
