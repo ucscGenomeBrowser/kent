@@ -9014,6 +9014,8 @@ zcat gene_association.goa_uniprot.gz|\
     ssh hgwdev
     cd /cluster/data/hg18/bed/geneid
     hgPepPred hg18 generic geneidPep geneid.fa 
+    # The trackDb.ra file in kent/src/makeDb seems to have a reference
+    # to the geneidPep table already.
 
 ##########################################################################
 # BLASTZ/CHAIN/NET XENTRO2 (DONE 4/20/06 angie)
