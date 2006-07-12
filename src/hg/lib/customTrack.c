@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.107 2006/07/12 20:38:31 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.108 2006/07/12 21:13:09 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -272,14 +272,15 @@ if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
     struct dyString *tmpDy = newDyString(0);
     char *cmd1[] = {NULL, "-verbose=0", "-noNameIx", "-ignoreEmpty", NULL,
 	NULL, NULL, NULL, "stdin", NULL};
+    cmd1[0] = trackLoader(track->dbTrackType);
     dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
-    cmd1[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
     cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", db);
+    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
     cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", db);
+    cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", track->dbTableName);
-    cmd1[6] = dyStringCannibalize(&tmpDy);
+    cmd1[7] = dyStringCannibalize(&tmpDy);
     /* the "/dev/null" file isn't actually used for anything, but it is used
      * in the pipeLineOpen to properly get a pipe started that isn't simply
      * to STDOUT which is what a NULL would do here instead of this name.
