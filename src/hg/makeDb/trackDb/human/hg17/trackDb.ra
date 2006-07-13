@@ -1344,6 +1344,33 @@ spectrum on
 type netAlign hg17 chainSelf
 otherDb hg17
 
+track polyAluL1SVA
+compositeTrack on 
+shortLabel Poly Alu/L1/SVA
+longLabel Retrotransposon Insertion Polymorphisms in Humans
+group varRep
+priority 167
+visibility hide 
+type bed 6 .
+
+    track dbRIP_Alu 
+    subTrack polyAluL1SVA 
+    shortLabel Polymorphic Alu 
+    longLabel Alu Retrotransposon Insertion Polymorphisms in Humans
+    priority 1 
+
+    track dbRIP_L1 
+    subTrack polyAluL1SVA 
+    shortLabel Polymorphic L1 
+    longLabel L1 Retrotransposon Insertion Polymorphisms in Humans
+    priority 2 
+
+    track dbRIP_SVA 
+    subTrack polyAluL1SVA 
+    shortLabel Polymorphic SVA 
+    longLabel SVA Retrotransposon Insertion Polymorphisms in Humans
+    priority 3 
+
 track hgMut
 shortLabel Human Mutation
 longLabel Compilation of Human Disease Variants and Other Mutations
