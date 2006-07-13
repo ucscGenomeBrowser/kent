@@ -1348,7 +1348,7 @@ track polyAluL1SVA
 compositeTrack on 
 shortLabel Poly Alu/L1/SVA
 longLabel Retrotransposon Insertion Polymorphisms in Humans
-group varRep
+group phenDis
 priority 167
 visibility hide 
 type bed 6 .
