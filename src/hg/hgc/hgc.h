@@ -190,4 +190,7 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 void doFlyreg(struct trackDb *tdb, char *item);
 /* flyreg.org: Drosophila DNase I Footprint db. */
 
+void dbRIP(struct trackDb *tdb, char *item, char *itemForUrl);
+/* Put up dbRIP track info */
+
 #endif
