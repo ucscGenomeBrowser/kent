@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.9 2005/09/20 23:40:09 hiram Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.10 2006/07/13 00:50:35 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +22,7 @@ errAbort(
   "   -end=X - end at given position in sequence (non-inclusive)\n"
   "   -seqList=file - file containing list of sequence names \n"
   "                    to output of form the seqSpec[:start-end]\n"
+  "   -noMask - convert sequence to all upper case\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"
@@ -37,12 +38,14 @@ char *clSeq = NULL;	/* Command line sequence. */
 int clStart = 0;	/* Start from command line. */
 int clEnd = 0;		/* End from command line. */
 char *clSeqList = NULL; /* file containing list of seq names */
+bool noMask = FALSE;  /* convert seq to upper case */
 
 static struct optionSpec options[] = {
    {"seq", OPTION_STRING},
    {"seqList", OPTION_STRING},
    {"start", OPTION_INT},
    {"end", OPTION_INT},
+   {"noMask", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -51,6 +54,8 @@ void outputOne(struct twoBitFile *tbf, char *seqSpec, FILE *f,
 /* Output sequence. */
 {
 struct dnaSeq *seq = twoBitReadSeqFrag(tbf, seqSpec, start, end);
+if (noMask)
+    toUpperN(seq->dna, seq->size);
 faWriteNext(f, seq->name, seq->dna, seq->size);
 dnaSeqFree(&seq);
 }
@@ -116,6 +121,7 @@ if ((clStart > clEnd) && (clSeq == NULL))
     errAbort("must specify -seq with -start and -end");
 if ((clSeq != NULL) && (clSeqList != NULL))
     errAbort("can't specify both -seq and -seqList");
+noMask = optionExists("noMask");
 dnaUtilOpen();
 twoBitToFa(argv[1], argv[2]);
 return 0;
