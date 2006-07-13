@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1147 2006/07/13 22:00:16 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1148 2006/07/13 22:29:18 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -398,6 +398,23 @@ float dif = a->group->priority - b->group->priority;
 
 if (dif == 0)
     dif = a->priority - b->priority;
+if (dif < 0)
+   return -1;
+else if (dif == 0.0)
+   return 0;
+else
+   return 1;
+}
+
+int gCmpPriority(const void *va, const void *vb)
+/* Compare to sort based on priority. */
+{
+const struct group *a = *((struct group **)va);
+const struct group *b = *((struct group **)vb);
+float dif = a->priority - b->priority;
+
+if (dif == 0)
+    return 0;
 if (dif < 0)
    return -1;
 else if (dif == 0.0)
@@ -11450,6 +11467,8 @@ for (track = *pTrackList; track != NULL; track = track->next)
 /* Straighten things out, clean up, and go home. */
 for (group = list; group != NULL; group = group->next)
     slReverse(&group->trackList);
+slSort(&list, gCmpPriority);
+printf("sort groups %s %f<br>\n",list->next->name, list->next->priority);
 hashFree(&hash);
 *pGroupList = list;
 }
