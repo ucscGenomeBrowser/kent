@@ -279,6 +279,7 @@ extern struct slName *browserLines; /* Custom track "browser" lines. */
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
+extern boolean withPriorityOverride;    /* enable track reordering? */
 Color shadesOfLowe1[10+1];
 Color shadesOfLowe2[10+1];
 Color shadesOfLowe3[10+1];

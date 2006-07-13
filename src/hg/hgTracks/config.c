@@ -11,7 +11,6 @@
 #include "customTrack.h"
 #include "hgTracks.h"
 
-extern boolean withPriorityOverride;
 void textSizeDropDown()
 /* Create drop down for font size. */
 {
