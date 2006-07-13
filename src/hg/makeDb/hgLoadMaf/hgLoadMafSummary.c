@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.15 2006/05/01 16:34:29 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.16 2006/07/13 16:42:51 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -201,7 +201,7 @@ void flushSummaryBlocks(struct hash *componentHash, FILE *f)
 struct mafSummary *ms;
 struct hashCookie hc = hashFirst(componentHash);
 
-while (((struct mafSummary *)ms = hashNextVal(&hc)) != NULL)
+while ((ms = (struct mafSummary *)hashNextVal(&hc)) != NULL)
     {
     outputSummary(f, ms);
     }
