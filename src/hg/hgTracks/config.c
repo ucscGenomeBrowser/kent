@@ -104,7 +104,7 @@ for (group = groupList; group != NULL; group = group->next)
         if (withPriorityOverride)
             {
             hPrintf("<TD>");
-            hPrintf("0");
+            hPrintf("");
             hPrintf("</TD>");
             }
 	hPrintf("</TR>\n");
