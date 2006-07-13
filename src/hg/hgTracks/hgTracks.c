@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1148 2006/07/13 22:29:18 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1149 2006/07/13 22:30:52 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11468,7 +11468,6 @@ for (track = *pTrackList; track != NULL; track = track->next)
 for (group = list; group != NULL; group = group->next)
     slReverse(&group->trackList);
 slSort(&list, gCmpPriority);
-printf("sort groups %s %f<br>\n",list->next->name, list->next->priority);
 hashFree(&hash);
 *pGroupList = list;
 }
