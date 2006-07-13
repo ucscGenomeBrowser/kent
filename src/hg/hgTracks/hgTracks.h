@@ -338,6 +338,9 @@ void hTextVar(char *varName, char *initialVal, int charSize);
 void hIntVar(char *varName, int initialVal, int maxDigits);
 /* Write out numerical entry field if not supressed. */
 
+void hDoubleVar(char *varName, double initialVal, int maxDigits);
+/* Write out numerical entry field if not supressed. */
+
 void hCheckBox(char *varName, boolean checked);
 /* Make check box if not suppressed. */
 

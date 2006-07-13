@@ -11,6 +11,7 @@
 #include "customTrack.h"
 #include "hgTracks.h"
 
+extern boolean withPriorityOverride;
 void textSizeDropDown()
 /* Create drop down for font size. */
 {
@@ -28,6 +29,7 @@ void trackConfig(struct track *trackList, struct group *groupList,
  * unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 {
+char pname[512];
 struct group *group;
 boolean showedRuler = FALSE;
 
@@ -76,7 +78,14 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf(" ");
     cgiMakeButton("submit", "submit");
     hPrintf("</TH>\n");
-    hPrintf("</TR>");
+    if (withPriorityOverride)
+        {
+        hPrintf("<TH>\n");
+        safef(pname, sizeof(pname), "%s.priority",group->name);
+        hDoubleVar(pname, (double)group->priority, 4);
+        hPrintf("</TH>\n");
+        }
+    hPrintf("</TR>\n");
 
     /* First group gets ruler. */
     if (!showedRuler)
@@ -92,7 +101,13 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
 	hPrintf("</TD>");
-	hPrintf("</TR>");
+        if (withPriorityOverride)
+            {
+            hPrintf("<TD>");
+            hPrintf("0");
+            hPrintf("</TD>");
+            }
+	hPrintf("</TR>\n");
 	}
 
     /* Loop through this group. */
@@ -122,7 +137,14 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TD>");
 	hPrintf("%s", track->longLabel);
 	hPrintf("</TD>");
-	hPrintf("</TR>");
+        if (withPriorityOverride)
+            {
+            hPrintf("<TD>");
+            safef(pname, sizeof(pname), "%s.priority",track->mapName);
+            hDoubleVar(pname, (double)track->priority, 4);
+            hPrintf("</TD>");
+            }
+	hPrintf("</TR>\n");
 	}
     hTableEnd();
     hPrintf("<BR>");
@@ -188,33 +210,38 @@ if (ideoTrack != NULL)
     hCheckBox("ideogram", cartUsualBoolean(cart, "ideogram", TRUE));
     hPrintf("</TD><TD>");
     hPrintf("Display chromosome ideogram above main graphic");
-    hPrintf("</TD></TR>");
+    hPrintf("</TD></TR>\n");
     }
 hPrintf("<TR><TD>");
 hCheckBox("guidelines", cartUsualBoolean(cart, "guidelines", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Show light blue vertical guidelines");
-hPrintf("</TD></TR>");
+hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>");
 hCheckBox("leftLabels", cartUsualBoolean(cart, "leftLabels", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Display labels to the left of items in tracks");
-hPrintf("</TD></TR>");
+hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>");
 hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Display description above each track");
-hPrintf("</TD></TR>");
+hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>");
 hCheckBox("trackControlsOnMain", cartUsualBoolean(cart, "trackControlsOnMain", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Show track controls under main graphic");
-hPrintf("</TD></TR>");
+hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>");
 hCheckBox("nextItemArrows", cartUsualBoolean(cart, "nextItemArrows", FALSE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous item navigation");
-hPrintf("</TD></TR>");
+hPrintf("</TD></TR>\n");
+hPrintf("<TR><TD>");
+hCheckBox("priorityOverride", cartUsualBoolean(cart, "priorityOverride", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Enable Track re-ordering");
+hPrintf("</TD></TR>\n");
 hTableEnd();
 
 webNewSection("Configure Tracks");
@@ -238,5 +265,6 @@ hPrintf("</FORM>");
 void configPage()
 /* Put up configuration page. */
 {
+withPriorityOverride = cartUsualBoolean(cart, "priorityOverride", FALSE);
 configPageSetTrackVis(-2);
 }

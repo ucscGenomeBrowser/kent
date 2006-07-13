@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1146 2006/07/11 20:35:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1147 2006/07/13 22:00:16 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -194,6 +194,7 @@ boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextItemArrows = FALSE;	/* Display next exon/feature navigation buttons near center labels? */
+boolean withPriorityOverride = FALSE;	/* Display priority for each track to allow reordering */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
 int rulerMode = tvHide;         /* on, off, full */
@@ -311,6 +312,13 @@ void hIntVar(char *varName, int initialVal, int maxDigits)
 {
 if (!suppressHtml)
     cgiMakeIntVar(varName, initialVal, maxDigits);
+}
+
+void hDoubleVar(char *varName, double initialVal, int maxDigits)
+/* Write out numerical entry field if not supressed. */
+{
+if (!suppressHtml)
+    cgiMakeDoubleVar(varName, initialVal, maxDigits);
 }
 
 void hCheckBox(char *varName, boolean checked)
@@ -1397,7 +1405,7 @@ else if (tg->colorShades)
     {
     boolean isXeno = (tg->subType == lfSubXeno) 
 				|| (tg->subType == lfSubChain) 
-                                || startsWith("mrnaBlastz", tg->mapName);
+                                || startsWith("mrnaBla", tg->mapName);
     *retColor =  tg->colorShades[lf->grayIx+isXeno];
     *retBarbColor =  tg->colorShades[(lf->grayIx>>1)];
     }
@@ -11376,6 +11384,7 @@ struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps();
 struct grp *grp;
+char cartVar[512];
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
@@ -11385,7 +11394,13 @@ for (grp = grps; grp != NULL; grp = grp->next)
     hashAdd(hash, grp->name, group);
     group->name = cloneString(grp->name);
     group->label = cloneString(grp->label);
-    group->priority = grp->priority;
+    if (withPriorityOverride)
+        {
+        safef(cartVar, sizeof(cartVar), "%s.priority",group->name);
+        group->priority = (float)cartUsualDouble(cart, cartVar, grp->priority);
+        }
+    else
+        group->priority = grp->priority;
     }
 grpFreeList(&grps);
 
@@ -11415,6 +11430,13 @@ for (track = *pTrackList; track != NULL; track = track->next)
     }
 slReverse(&list);  /* Postpone this til here so unknown will be last. */
 
+/* Read priority from cart, if user has overriden priority from trackDb */
+if (withPriorityOverride)
+    for (track = *pTrackList; track != NULL; track = track->next)
+        {
+        safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
+        track->priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+        }
 /* Sort tracks by combined group/track priority, and
  * then add references to track to group. */
 slSort(pTrackList, tgCmpPriority);
@@ -11598,6 +11620,8 @@ registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("pseudoGeneLink", retroGeneMethods);
+registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
+registerTrackHandler("retroMrnaInfo", retroGeneMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);
@@ -12442,6 +12466,7 @@ withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
+withPriorityOverride = cartUsualBoolean(cart, "priorityOverride", FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
