@@ -7,6 +7,7 @@ install:
 	cp -p --remove-destination checkAllStaticLinks.csh ${SCRIPTS}
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
+	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
