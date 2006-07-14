@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.68 2006/07/05 18:03:39 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.69 2006/07/14 19:33:06 hartera Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12104,6 +12104,7 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
         # Choose Ensembl 38 and Mus musculus genes (NCBIM35), click next
         # Follow this sequence through the pages:
 1) Select "Known genes" in the Gene section. Hit next.
+NOTE: "Known genes" is no longer available for later versions of BioMart.
 2) Uncheck everything on "Filter" page. Then hit next.
         3) Select "Structures". 
         4) Choose GTF as the output, choose gzip compression, name the
