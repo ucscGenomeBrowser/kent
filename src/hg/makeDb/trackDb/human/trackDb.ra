@@ -44,6 +44,17 @@ group map
 visibility dense
 type bed 3 +
 
+track gad
+release alpha
+shortLabel NIA GAD
+longLabel Genetic Association Studies of Complex Diseases and Disorders
+group phenDis
+priority 29.5
+visibility full
+color 200,0,0
+type bed 4
+url http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=gene=
+
 track ccdsGene
 shortLabel CCDS
 longLabel Consensus CDS
