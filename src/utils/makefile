@@ -49,6 +49,7 @@ SCRIPT_FILES = \
         iSync \
         lodToBedScore \
 	makeGenomeDb.pl \
+	makePushQSql.pl \
 	mkMafFrames.pl \
 	partitionSequence.pl
 
