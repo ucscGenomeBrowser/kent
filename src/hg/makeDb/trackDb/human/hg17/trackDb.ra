@@ -2305,3 +2305,19 @@ query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%
 searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 100
+
+searchTable dbRIP_L1
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
+searchDescription Retrotransposon Insertion Polymorphisms in Humans
+searchPriority 6
+padding 100
+
+searchTable dbRIP_SVA
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
+searchDescription Retrotransposon Insertion Polymorphisms in Humans
+searchPriority 6
+padding 100
