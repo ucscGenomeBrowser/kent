@@ -2267,3 +2267,26 @@ dontCheck (SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16
 padding 250
 
+searchName dbRIPAlu
+searchTable dbRIP_Alu
+searchMethod exact
+searchType bed
+termRegex RIP_Alu_chr[0-9XY]+_[0-9]+_[0-9]+
+searchPriority 18
+padding 250
+
+searchName dbRIPL1
+searchTable dbRIP_L1
+searchMethod exact
+searchType bed
+termRegex RIP_L1_chr[0-9XY]+_[0-9]+_[0-9]+
+searchPriority 18
+padding 250
+
+searchName dbRIPSVA
+searchTable dbRIP_SVA
+searchMethod exact
+searchType bed
+termRegex RIP_SVA_chr[0-9XY]+_[0-9]+_[0-9]+
+searchPriority 18
+padding 250
