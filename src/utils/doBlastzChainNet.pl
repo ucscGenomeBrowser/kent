@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.45 2006/07/11 00:11:13 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.46 2006/07/14 20:49:31 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -29,8 +29,8 @@ use HgStepManager;
 
 # Hardcoded paths/command sequences:
 my $getFileServer = '/cluster/bin/scripts/fileServer';
-my $blastzRunUcsc = '/cluster/bin/scripts/blastz-run-ucsc';
-my $partition = '/cluster/bin/scripts/partitionSequence.pl';
+my $blastzRunUcsc = '$Bin/blastz-run-ucsc';
+my $partition = '$Bin/partitionSequence.pl';
 my $clusterLocal = '/scratch/hg';
 my $clusterSortaLocal = '/iscratch/i';
 my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/san/sanvol1');
@@ -1336,13 +1336,8 @@ _EOF_
 #
 # -- main --
 
-# Sometimes it gets hung on tty input at the very end of run.cat/doCatRun.csh
-# (after completing the para run), sometimes it doesn't...?  To get around
-# that, just redirect stdin to be from /dev/null (just closing it causes the
-# stdin filehandle to be reused for some files that we open for writing later,
-# which prompts warnings).
-close(STDIN);
-open(STDIN, '/dev/null');
+# Prevent "Suspended (tty input)" hanging:
+&HgAutomate::closeStdin();
 
 &checkOptions();
 
