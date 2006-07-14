@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1152 2006/07/14 22:00:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1153 2006/07/14 22:04:49 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2495,7 +2495,6 @@ char **row;
 int rowOffset;
 struct dbRIP *loadItem, *itemList = NULL;
 
-printf("loadDbRIP: '%s'<BR>\n", tg->mapName);
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
 	winEnd, NULL, &rowOffset);
 
@@ -2514,7 +2513,6 @@ tg->items = itemList;
 static void dbRIPMethods(struct track *tg)
 /* Fill in track methods for dbRIP tracks */
 {
-printf("dbRIPMethods: '%s'<BR>\n", tg->mapName);
 bedMethods(tg);
 tg->loadItems = loadDbRIP;
 tg->itemColor = dbRIPColor;
