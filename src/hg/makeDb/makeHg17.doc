@@ -21647,3 +21647,92 @@ hgLoadBed -tab -noBin hg17 delHinds delHinds.bed
 # Create hg16.cnpIafrateLiftCandidate that excludes 2 rows that had wild proliferations
 /bin/csh liftIafrate.csh
 
+##############################################################################
+#  dbRIP POLYALUL1SVA track added (2006-07-14 - DONE - Hiram)
+#  dbRIP polyAluL1SVA
+#	Data provider: Dr. Liang at the Liang lab:
+#	http://falcon.roswellpark.org/index.html
+#	Ping.Liang@roswellpark.org
+
+#	Adding this track is a new data type into our browser.
+#	data definitions for dbRIP and polyGenotype were added to
+#	the hg/lib/ directory:
+#	-rw-rw-r--  1  351 Jul 13 12:20 polyGenotype.as
+#	-rw-rw-r--  1  694 Jul 13 12:22 polyGenotype.sql
+#	-rw-rw-r--  1 6398 Jul 13 12:22 polyGenotype.c
+#	-rw-rw-r--  1   980 Jul 10 17:59 dbRIP.as
+#	-rw-rw-r--  1 11408 Jul 13 11:16 dbRIP.c
+#	-rw-rw-r--  1  1578 Jul 13 12:06 dbRIP.sql
+#	With associated .h files in hg/inc/
+#	-rw-rw-r--  1 4600 Jul 10 18:00 dbRIP.h
+#	-rw-rw-r--  1 4375 Jul 13 16:16 polyGenotype.h
+#	Changes in hgTracks and hgc to make this track appear as it does
+#	at their browser:
+#	http://falcon.roswellpark.org:9090/cgi-bin/hgTables
+
+#	For this first instance of the track, the data was obtained
+#	directly from their Genome browser via the tables browser,
+#	dumping the tables:
+#	hg17.polyAluL1 and hg17.polyGenotype
+#	saving these data dumps to:
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/dbRIP
+    cd /cluster/data/hg17/bed/dbRIP
+    #	-rw-rw-r--  1  994695 Jul  7 13:31 dbRIP.txt.gz
+    #	-rw-rw-r--  1   18476 Jul 12 16:56 polyGenotype.txt.gz
+    #	Rearrange their data columns to more closely match the
+    #	standard BED definitions, and split into three different
+    #	data sets:
+zcat dbRIP.txt.gz | headRest 1 stdin | awk -F'\t' '
+{
+chromEnd=$7
+if ($6 == $7) { chromEnd += 1 }
+if (match($1,"^RIP_SVA_.*")) {
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+}
+}' | sort -k1,1 -k2,2n > dbRIP.SVA.txt
+
+zcat dbRIP.txt.gz | headRest 1 stdin | awk -F'\t' '
+{
+chromEnd=$7
+if ($6 == $7) { chromEnd += 1 }
+if (match($1,"^RIP_L1_.*")) {
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+}
+}' | sort -k1,1 -k2,2n > dbRIP.L1.txt
+
+zcat dbRIP.txt.gz | headRest 1 stdin | awk -F'\t' '
+{
+chromEnd=$7
+if ($6 == $7) { chromEnd += 1 }
+if (match($1,"^RIP_Alu_.*")) {
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+}
+}' | sort -k1,1 -k2,2n > dbRIP.Alu.txt
+
+    #	Create three specific sql table create definitions:
+    sed -e "s/dbRIP/dbRIP_SVA/" $HOME/kent/src/hg/lib/dbRIP.sql > dbRIP_SVA.sql
+    sed -e "s/dbRIP/dbRIP_L1/" $HOME/kent/src/hg/lib/dbRIP.sql > dbRIP_L1.sql
+    sed -e "s/dbRIP/dbRIP_Alu/" $HOME/kent/src/hg/lib/dbRIP.sql > dbRIP_Alu.sql
+
+    #	And loading those three data tables:
+    hgLoadBed -verbose=3 -maxChromNameLength=6 -strict -tab -notItemRgb \
+        -sqlTable=dbRIP_SVA.sql hg17 dbRIP_SVA dbRIP.SVA.txt
+
+    hgLoadBed -verbose=3 -maxChromNameLength=6 -strict -tab -notItemRgb \
+	-sqlTable=dbRIP_L1.sql hg17 dbRIP_L1 dbRIP.L1.txt
+
+    hgLoadBed -verbose=3 -maxChromNameLength=6 -strict -tab -notItemRgb \
+	-sqlTable=dbRIP_Alu.sql hg17 dbRIP_Alu dbRIP.Alu.txt
+
+    #	And an associated table of genotype frequencies:
+    hgsql hg17 < $HOME/kent/src/hg/lib/polyGenotype.sql
+    zcat polyGenotype.txt.gz | headRest 1 stdin | \
+    hgsql hg17 -e 'load data local infile "/dev/stdin" into table polyGenotype;'
+
+    #	A composite track was added to human/hg17/trackDb.ra to contain
+    #	these three tracks, and search methods to get the name column
+    #	participating in the search.  Need to figure out how to get some
+    #	of the other text-rich columns participating in the search.
+
+##############################################################################
