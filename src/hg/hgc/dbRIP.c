@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.2 2006/07/14 18:06:51 hiram Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.3 2006/07/14 19:07:33 hiram Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -80,7 +80,6 @@ if (slCount(pgList) > 0)
 	sampleSize = pg->plusPlus + pg->plusMinus + pg->minusMinus;
 	alleleFrequency = (double)plusAlleles /
 		(double)(plusAlleles + minusAlleles);
-	unbiasedHeterozygosity = 1.0 - (alleleFrequency*alleleFrequency);
 
 	printf("<TR><TD align=left>%s</TD>", pg->ethnicGroup);
 	printf("<TD align=center>%d</TD>", sampleSize);
@@ -88,6 +87,20 @@ if (slCount(pgList) > 0)
 	printf("<TD align=center>%d</TD>", pg->plusPlus);
 	printf("<TD align=center>%d</TD>", pg->plusMinus);
 	printf("<TD align=center>%d</TD>", pg->minusMinus);
+
+	/*	adjust by 2N/(2N-1) for small sample heterozygosity calculation
+	 *	http://www.genetics.org/cgi/content/abstract/89/3/583
+	 *	Masatoshi Nei (1978)
+	 */
+	if (sampleSize > 0)
+	    {
+	    unbiasedHeterozygosity=2*alleleFrequency*(1.0 - alleleFrequency);
+	    unbiasedHeterozygosity *=
+		(double)(sampleSize << 1) / (double)((sampleSize << 1) - 1);
+	    }
+	else
+	    unbiasedHeterozygosity=2*alleleFrequency*(1.0 - alleleFrequency);
+
 	printf("<TD align=center>%.3f</TD>", unbiasedHeterozygosity);
 	printf("</TR>\n");
 
@@ -100,13 +113,20 @@ if (slCount(pgList) > 0)
     plusAlleles = (totalPlusPlus << 1) + totalPlusMinus;
     minusAlleles = (totalMinusMinus << 1) + totalPlusMinus;
     alleleFrequency = (double)plusAlleles/(double)(plusAlleles + minusAlleles);
-    unbiasedHeterozygosity = 1.0 - (alleleFrequency*alleleFrequency);
     printf("<TR><TH align=left>All Samples</TH>");
     printf("<TH align=center>%d</TH>", totalSamples);
     printf("<TH align=center>%.3f</TH>", alleleFrequency);
     printf("<TH align=center>%d</TH>", totalPlusPlus);
     printf("<TH align=center>%d</TH>", totalPlusMinus);
     printf("<TH align=center>%d</TH>", totalMinusMinus);
+    if (totalSamples > 0)
+	{
+	unbiasedHeterozygosity = 2 * alleleFrequency * (1.0 - alleleFrequency);
+	unbiasedHeterozygosity *= 
+	    (double)(totalSamples << 1)/(double)((totalSamples << 1) - 1);
+	}
+    else
+	unbiasedHeterozygosity = 2 * alleleFrequency * (1.0 - alleleFrequency);
     printf("<TH align=center>%.3f</TH>", unbiasedHeterozygosity);
     printf("</TR>\n");
     printf("</TABLE>\n");
