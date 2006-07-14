@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/doTemplate.pl instead.
 
-# $Id: doTemplate.pl,v 1.1 2006/07/12 21:30:49 angie Exp $
+# $Id: doTemplate.pl,v 1.2 2006/07/14 20:54:47 angie Exp $
 
 # HOW TO USE THIS TEMPLATE:
 # 1. Global-replace doTemplate.pl with your actual script name.
@@ -154,7 +154,7 @@ _EOF_
 
 # Force debug and verbose until this is looking pretty solid:
 $opt_debug = 1;
-$opt_verbose = 3 if (! $opt_verbose);
+$opt_verbose = 3 if ($opt_verbose < 3);
 
 # Establish what directory we will work in.
 my $date = `date +%Y-%m-%d`;
