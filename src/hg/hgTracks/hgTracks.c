@@ -103,8 +103,9 @@
 #include "landmark.h"
 #include "landmarkUi.h"
 #include "bed12Source.h"
+#include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1150 2006/07/14 18:39:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1151 2006/07/14 21:34:52 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2472,6 +2473,53 @@ void loadBacEndPairs(struct track *tg)
 /* Load up bac end pairs from table into track items. */
 {
 tg->items = lfsFromBedsInRange("bacEndPairs", winStart, winEnd, chromName);
+}
+
+Color dbRIPColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw dbRIP item */
+{
+struct dbRIP *thisItem = item;
+
+if (startsWith("Other", thisItem->polySource))
+    return tg->ixAltColor;
+else
+    return tg->ixColor;
+}
+
+
+static void loadDbRIP(struct track *tg)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct dbRIP *loadItem, *itemList = NULL;
+
+printf("loadDbRIP: '%s'<BR>\n", tg->mapName);
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
+	winEnd, NULL, &rowOffset);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    loadItem = dbRIPLoad(row+rowOffset);
+    slAddHead(&itemList, loadItem);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slSort(&itemList, bedCmp);
+tg->items = itemList;
+}
+
+
+static void dbRIPMethods(struct track *tg)
+/* Fill in track methods for dbRIP tracks */
+{
+printf("dbRIPMethods: '%s'<BR>\n", tg->mapName);
+bedMethods(tg);
+tg->loadItems = loadDbRIP;
+tg->itemColor = dbRIPColor;
+tg->itemNameColor = dbRIPColor;
+tg->itemLabelColor = dbRIPColor;
 }
 
 void bacEndPairsMethods(struct track *tg)
@@ -11907,6 +11955,7 @@ registerTrackHandler("transMapAnc", transMapMethods);
 registerTrackHandler("transMapAncGene", transMapMethods);
 registerTrackHandler("transMapAncRefGene", transMapMethods);
 registerTrackHandler("transMapAncMRnaGene", transMapMethods);
+registerTrackHandler("polyAluL1SVA", dbRIPMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
