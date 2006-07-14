@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1151 2006/07/14 21:34:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1152 2006/07/14 22:00:49 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4562,6 +4562,7 @@ int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 char *directUrl = trackDbSetting(tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
+boolean thickDrawItem = (trackDbSetting(tdb, "thickDrawItem") != NULL);
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
@@ -4573,6 +4574,13 @@ else
 w = x2-x1;
 if (w < 1)
     w = 1;
+/*	Keep the item at least 4 pixels wide at all viewpoints */
+if (thickDrawItem && (w < 4))
+    {
+    x1 -= ((5-w) >> 1);
+    w = 4;
+    x2 = x1 + w;
+    }
 if (color)
     {
     vgBox(vg, x1, y, w, heightPer, color);
