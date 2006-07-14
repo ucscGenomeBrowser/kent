@@ -1,0 +1,2 @@
+name ensembl
+itemUrl http://apr2006.archive.ensembl.org/Mus_musculus/geneview?transcript=%s
