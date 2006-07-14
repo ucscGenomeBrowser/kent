@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1052 2006/07/13 18:05:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1053 2006/07/14 18:40:27 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6902,6 +6902,158 @@ if (itemForUrl == NULL)
 
 genericHeader(tdb, item);
 printRgdQtlCustomUrl(tdb, itemForUrl, item == itemForUrl);
+printTrackHtml(tdb);
+}
+
+void printGadDetails(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of a GAD entry. */
+{
+int refPrinted = 0;
+boolean showCompleteGadList;
+
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chrom, *chromStart, *chromEnd;
+struct dyString *currentCgiUrl;
+
+char *url = tdb->url;
+
+if (url != NULL && url[0] != 0)
+    {
+    showCompleteGadList = FALSE;
+    if (cgiOptionalString("showAllRef") != NULL)
+    	{
+        if (sameWord(cgiOptionalString("showAllRef"), "Y") ||
+	    sameWord(cgiOptionalString("showAllRef"), "y") )
+	    {
+	    showCompleteGadList = TRUE;
+	    }
+	}
+    currentCgiUrl = cgiUrlString();
+   
+    printf("<H3>Gene %s: ", itemName);
+    sprintf(query, "select geneName from gadAll where geneSymbol='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)printf("%s", row[0]);
+    printf("</H3>");
+    sqlFreeResult(&sr);
+
+    printf("<B>Genetic Association Database: ");
+    printf("<A HREF=\"%s'%s'\" target=_blank>", url, itemName);
+    printf("%s</B></A>\n", itemName);
+
+    printf("<BR><B>CDC HuGE Published Literature:  ");
+    printf("<A HREF=\"%s%s%s\" target=_blank>", 
+       "http://apps.nccd.cdc.gov/Genomics/GDPQueryTool/frmQuerySumPage.asp?IO_strGeneSymbolValue=",
+       itemName, "&selConditionGene=2&strCurrentForm=SearchByGene.asp");
+    printf("%s</B></A>\n", itemName);
+
+    sprintf(query, "select distinct omimId from gadAll where geneSymbol='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL) printf("<BR><B>OMIM: </B>");
+    while (row != NULL)
+    	{
+	printf("<A HREF=\"%s%s\" target=_blank>",
+		"http://www.ncbi.nih.gov/entrez/dispomim.cgi?id=", row[0]);
+	printf("%s</B></A>\n", row[0]);
+	row = sqlNextRow(sr);
+        }
+    sqlFreeResult(&sr);
+    
+    printf("<BR><B>Submitter: </B>");
+    sprintf(query, "select submitter from gadAll where geneSymbol='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)printf("%s", row[0]);
+    sqlFreeResult(&sr);
+    
+    sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL) 
+    	{
+	printf("<BR><B>Associated Diseases and Disorders:  </B>");
+	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=DISEASE%20like%20'%25",
+	row[0], "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	printf("%s</B></A>\n", row[0]);
+        row = sqlNextRow(sr);
+    	}
+	
+    while (row != NULL)
+        {
+	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
+	// may need to use UPPER 
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=DISEASE%20like%20'%25",
+	row[0], "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	printf("%s</B></A>\n", row[0]);
+        row = sqlNextRow(sr);
+	}
+    sqlFreeResult(&sr);
+    
+    refPrinted = 0;
+    sprintf(query, 
+       "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s';", 
+       itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    
+    if (row != NULL) printf("<BR><BR><B>Related Studies: </B><OL>");
+    while (row != NULL)
+        {
+        printf("<LI><B>%s </B>", row[0]);
+
+	printf("<br>%s, %s, %s.\n", row[1], row[2], row[3]);
+	if (!sameWord(row[4], ""))
+	    {
+	    printf(" [PubMed ");
+	    printf("<A HREF=\"%s%s%s'\" target=_blank>",
+	    "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=Abstract&list_uids=",
+	    row[4],"&query_hl=1&itool=genome.ucsc.edu");
+	    printf("%s</B></A>]\n", row[4]);
+	    }
+	printf("<br><i>%s</i>\n", row[5]);
+	
+	printf("</LI>\n");
+        refPrinted++;
+        if ((!showCompleteGadList) && (refPrinted >= 5)) break;
+	row = sqlNextRow(sr);
+    	}
+    sqlFreeResult(&sr);
+    printf("</OL>");
+    
+    if ((!showCompleteGadList) && (row != NULL))
+    	{
+        printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; more ...  </B>");
+        printf("<A HREF=\"%s?showAllRef=Y&%s\">click here to view the complete list</A> ", 
+	       hgcName(), currentCgiUrl->string);
+    	}
+	
+    sprintf(query, "select chrom, chromStart, chromEnd from gad where name='%s';", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+	chrom      = row[0];
+        chromStart = row[1];
+	chromEnd   = row[2];
+	printf("<HR>");
+	printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+        } 
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+}
+
+void doGad(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up GAD track info. */
+{
+genericHeader(tdb, item);
+printGadDetails(tdb, item, FALSE);
 printTrackHtml(tdb);
 }
 
@@ -18366,6 +18518,10 @@ else if (sameWord(track, "rgdEst"))
 else if (sameWord(track, "rgdSslp"))
     {
     doRgdSslp(tdb, item, NULL);
+    }
+else if (sameWord(track, "gad"))
+    {
+    doGad(tdb, item, NULL);
     }
 else if (sameWord(track, "rgdQtl"))
     {
