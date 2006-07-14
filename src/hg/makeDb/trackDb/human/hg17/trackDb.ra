@@ -2297,3 +2297,11 @@ searchType bed
 termRegex RIP_SVA_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
 padding 250
+
+searchTable dbRIP_Alu
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
+searchDescription Retrotransposon Insertion Polymorphisms in Humans
+searchPriority 6
+padding 100
