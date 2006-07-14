@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.1 2006/07/11 00:07:17 angie Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.2 2006/07/14 18:44:39 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -533,6 +533,9 @@ sub getSeqAndSizes {
 
 #########################################################################
 # main
+
+# Prevent "Suspended (tty input)" hanging:
+&HgAutomate::closeStdin();
 
 &checkOptions();
 

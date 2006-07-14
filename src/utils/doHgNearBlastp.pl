@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.6 2006/06/26 19:04:01 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.7 2006/07/14 18:44:03 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -358,6 +358,9 @@ sub celebrate {
 
 ###########################################################################
 # MAIN
+
+# Prevent "Suspended (tty input)" hanging:
+&HgAutomate::closeStdin();
 
 &checkOptions();
 
