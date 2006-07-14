@@ -8,7 +8,7 @@ O = kgPepMrna.o
 
 kgPepMrna: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/kgPepMrna $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/kgPepMrna
+	${STRIP} ${HOME}/bin/${MACHTYPE}/kgPepMrna${EXE}
 
 clean:
 	rm -f $O

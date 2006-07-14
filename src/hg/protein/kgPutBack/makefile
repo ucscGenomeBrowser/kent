@@ -8,7 +8,7 @@ O = kgPutBack.o
 
 kgPutBack: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/kgPutBack $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/kgPutBack
+	${STRIP} ${HOME}/bin/${MACHTYPE}/kgPutBack${EXE}
 
 clean:
 	rm -f $O
