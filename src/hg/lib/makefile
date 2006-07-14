@@ -51,7 +51,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     mcnBreakpoints.o metaChromGraph.o microarray.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o omimTitle.o ooUtils.o \
-    pbStamp.o pepPred.o plasEndPairs.o pscreen.o \
+    pbStamp.o pepPred.o plasEndPairs.o polyGenotype.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
