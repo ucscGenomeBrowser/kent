@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1149 2006/07/13 22:30:52 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1150 2006/07/14 18:39:15 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3539,6 +3539,123 @@ tg->itemHeight 	= tgFixedItemHeight;
 tg->itemStart 	= superfamilyItemStart;
 tg->itemEnd 	= superfamilyItemEnd;
 tg->drawName 	= FALSE;
+}
+
+/* reserve space no more than 100 unique gad disease entries */
+char gadBuffer[25600];
+
+char *gadDiseaseList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a GAD entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+int i=0;
+
+conn = hAllocConn();
+
+sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s';", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = gadBuffer;
+while ((row != NULL) && i<20)
+    {
+    if (i != 0)
+	{
+	sprintf(chp, "; ");
+	chp++;chp++;
+	}
+    sprintf(chp, "%s", row[0]);
+    chp = chp+strlen(row[0]);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    sprintf(chp, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(gadBuffer);
+}
+
+static void gadDrawAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sDiseases;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sDiseases = gadDiseaseList(tg, item);
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
+    }
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    
+    if (vis == tvFull)
+        {
+        vgTextRight(vg, x1-mgFontStringWidth(font, sDiseases)-2, y, 
+		    mgFontStringWidth(font, sDiseases),
+                    heightPer, MG_BLACK, font, sDiseases);
+        }
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = vgContrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	}
+    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	     tg->mapName, tg->mapItemName(tg, bed), sDiseases);
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-') 
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = vgContrastingColor(vg, color);
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 	
+		dir, textColor, TRUE);
+	}
+    }
+}
+
+void gadMethods(struct track *tg)
+/* Methods for GAD track. */
+{
+tg->drawItemAt 	= gadDrawAt;
 }
 
 void rgdQtlDrawAt(struct track *tg, void *item, 
@@ -11619,6 +11736,7 @@ registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
+registerTrackHandler("gad", gadMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastMm6", blastMethods);
