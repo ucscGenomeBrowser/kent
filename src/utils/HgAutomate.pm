@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.5 2006/07/10 20:41:14 angie Exp $
+# $Id: HgAutomate.pm,v 1.6 2006/07/14 18:43:14 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -29,7 +29,7 @@ use Exporter;
 	chooseFilesystemsForCluster checkClusterPath
       ),
     # General-purpose utility routines:
-    qw( checkCleanSlate checkExistsUnlessDebug
+    qw( checkCleanSlate checkExistsUnlessDebug closeStdin
 	getAssemblyInfo machineHasFile
 	makeGsub mustMkdir mustOpen nfsNoodge run verbose
       ),
@@ -234,7 +234,7 @@ sub chooseWorkhorse {
 	   "idle small cluster machines.  This may take a minute...\n");
   while (1) {
     my %horses = &getWorkhorseLoads();
-    foreach my $maxLoad (0.5, 1.0, 2.0) {
+    foreach my $maxLoad (0.1, 0.5, 1.0, 2.0) {
       my @fastHorses = ();
       foreach my $horse (keys %horses) {
 	push @fastHorses, $horse if ($horses{$horse} <= $maxLoad);
@@ -512,6 +512,15 @@ sub checkExistsUnlessDebug {
     }
   }
   exit 1 if ($problem);
+}
+
+sub closeStdin {
+  # If we don't do this, the script can hang ("Suspended (tty input)")
+  # when it is run backgrounded (&) and then something is typed into the
+  # terminal... or something like that.  Anyway, doesn't hurt.  It does not
+  # prevent hanging on ssh prompts, however.
+  close(STDIN);
+  open(STDIN, '/dev/null');
 }
 
 sub getAssemblyInfo {
