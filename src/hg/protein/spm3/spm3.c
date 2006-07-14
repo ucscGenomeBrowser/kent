@@ -20,8 +20,7 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn2, *conn3;
-char *bioDB;
-  
+ 
 char query2[256], query3[256];
 struct sqlResult *sr2, *sr3;
 char **row2, **row3;
@@ -36,13 +35,10 @@ char *proteinDataDate;
 char *genomeRelease;
  
 FILE   *o2, *o3;
-char *swissID, *pdb;
 char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
      *exonCount, *exonStarts, *exonEnds;
 
 char *bioDBID, *bioentryID;
-char *chp;
-char *refseqID;
 
 if (argc != 3) usage();
 proteinDataDate = argv[1];

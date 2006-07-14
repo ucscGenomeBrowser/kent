@@ -19,13 +19,12 @@ errAbort(
 int main(int argc, char *argv[])
     {
     struct sqlConnection *conn, *conn2, *conn3;
-    char query[256], query2[256];
-    struct sqlResult *sr, *sr2;
-    char **row, **row2;
+    char query2[256];
+    struct sqlResult *sr2;
+    char **row2;
     char cond_str[256];  
   
     char *kgID;
-    char *proteinDisplayID;
     
     char *seqType;	/* sequence type m=mRNA g=genomic u=undefined */
 
@@ -39,7 +38,7 @@ int main(int argc, char *argv[])
     char *answer;
 
     int leg;		/* marker for debugging */
-    char *mRNA, *spID, *spDisplayID, *geneSymbol, *refseqID, *desc;
+    char *spID, *spDisplayID, *geneSymbol, *refseqID, *desc;
 
     if (argc != 4) usage();
     database  = cloneString(argv[1]);
@@ -164,6 +163,9 @@ int main(int argc, char *argv[])
 	}
 
     fclose(o1);
+    hFreeConn(&conn);
+    hFreeConn(&conn2);
+    hFreeConn(&conn3);
     system("cat j.dat|sort|uniq  >kgXref.tab");
     system("rm j.dat");
     return(0);

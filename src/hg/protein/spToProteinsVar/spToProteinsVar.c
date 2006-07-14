@@ -19,9 +19,9 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2;
-char **row, **row2;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 char cond_str[255];
 char proteinDatabaseName[255];
 char proteinsDB[255];

@@ -7,7 +7,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: kgGetCds.c,v 1.3 2006/02/06 21:16:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: kgGetCds.c,v 1.4 2006/07/14 16:32:16 angie Exp $";
 
 char cdsBloc[2000][30];
 void usage(char *msg)
@@ -41,8 +41,6 @@ char *ranking;
 int  protDbId;
 char condStr[255];
 int  i;
-char *parProtAcc;
-boolean first;
 char *chp;
 char *isCurated;
 

@@ -55,60 +55,23 @@ int cal_months(char *date)
 
 int main(int argc, char *argv[])
 {
-int  ixm, maxixm;       // index for mRNA
-int  maxScore;
-char proteinID[20], mrnaName[20];
+FILE *inf;
 
-int  monthss[500];
-int  mrnalens[500];
-FILE *inf, *inf2, *outf;
-
-int  newMrna;
-int  ii= -1;
-char line[2000];
 char *mrnaDate;
 int  months;
-int  diff;
-int  mrnalen;
-int  imrna;
 char dirName[PATH_MAX];
-char mrnaFile[PATH_MAX];
-char outName[PATH_MAX];
-char outDir[PATH_MAX];
-char blatCmd[PATH_MAX];
-char cwd[PATH_MAX];
 
-struct dnaSeq *seq;
-HGID id;
-bioSeq *mSeq, qSeq, *pSeq;
-
-struct sqlConnection *conn, *conn2, *conn3;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2, *sr3;
-char **row, **row2, **row3;
-
-char *accession;
-char *displayID;
-char *division;
-char *extDB;
-char *extAC;
+struct sqlConnection *conn, *conn3;
+char query[256];
+struct sqlResult *sr;
+char **row;
 
 char *protAcc, *mrnaAcc, *matchStr;
 char *protSizeStr, *mrnaSizeStr;
 int  protSize, mrnaSize, match;
 
-char *chp0, *chp;
-
-int totalCount, matchCount;
-
-char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd, *exonCount, *exonStarts, *exonEnds;
 char *protMrnaTableName;
 
-int  i;
-char *mrnaID;
-
-FILE *aaOut, *mrnaOut;
-char *aaSeq, *mrnaSeq;
 char condStr[255];
 int score;
 
@@ -136,7 +99,6 @@ if ((FILE *) NULL == o7)
     errAbort("ERROR: Can not open output file: best.lis");
 
 conn = hAllocConn();
-conn2= hAllocConn();
 conn3= hAllocConn();
    
 proteinCount = 0; 
@@ -174,7 +136,6 @@ while (row != NULL)
     }    
 
 hFreeConn(&conn);
-hFreeConn(&conn2);
 hFreeConn(&conn3);
 fclose(o3);
 fclose(o7);

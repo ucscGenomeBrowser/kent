@@ -23,9 +23,9 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2, *conn3;
-char query2[256], query3[256], query4[256];
-struct sqlResult *sr2, *sr3, *sr4;
-char **row2, **row3, **row4;
+char query2[256], query3[256];
+struct sqlResult *sr2, *sr3;
+char **row2, **row3;
 char condStr[255];
 char *answer;
 
@@ -37,8 +37,7 @@ char *chp;
 char *acc2;
 
 char *name, *txStart, *txEnd;
-char *chrStart, *chrEnd;
-char *chrom, *chr;
+char *chrom;
 char *acc, *stat;
 char *frame, *start, *stop;
 char *causes;
@@ -199,6 +198,7 @@ while (row2 != NULL)
     }
 sqlFreeResult(&sr2);
 
+hFreeConn(&conn);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
 fclose(outf);

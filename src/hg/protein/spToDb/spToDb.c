@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.11 2005/10/17 22:13:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.12 2006/07/14 16:32:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -152,7 +152,7 @@ static void spParseComment(struct lineFile *lf, char *line,
 /* Parse comment into records and hang them on spr. */
 {
 struct spComment *com = NULL;
-char *type, word;
+char *type;
 for (;;)
     {
     /* Process current line. */
@@ -253,7 +253,6 @@ static void spParseReference(struct lineFile *lf, char *line,
 /* Parse refence into record and hang it on spr. */
 {
 struct spLitRef *lit;
-char *name, *val, *e;
 
 /* We just ignore the RN line.  It is implicit in order in list. */
 lmAllocVar(lm, lit);
@@ -529,7 +528,7 @@ for (;;)
 	}
     else if (startsWith("OS", type))
         {
-	char *common, *end, *s;
+	char *common, *s;
 	char *latin;
 	groupLine(lf, type, line, dy);
 	latin = dy->string;
@@ -750,10 +749,10 @@ void spToDb(char *datFile, char *tabDir)
 struct lineFile *lf = lineFileOpen(datFile, TRUE);
 struct spRecord *spr;
 struct dyString *dy = newDyString(4096);
-boolean isNewDir = makeDir(tabDir);
 
 /* We have 25 tables to make this fully relational and not
  * lose any info. Better start opening files. */
+makeDir(tabDir);
 FILE *displayId = createAt(tabDir, "displayId");
 FILE *otherAcc = createAt(tabDir, "otherAcc");
 FILE *organelle = createAt(tabDir, "organelle");

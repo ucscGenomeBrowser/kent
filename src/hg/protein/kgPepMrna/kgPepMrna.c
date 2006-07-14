@@ -4,7 +4,6 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-struct sqlConnection *conn, *conn2;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,17 +20,16 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-char query[256], query2[256];
-struct sqlResult *sr, *sr2;
-char **row, **row2;
+struct sqlConnection *conn, *conn2;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 
 char cond_str[256];
 char *kgID;
 char *proteinID;
 char *protAcc;
 char *seq;
-char *acc;
-char *bioentryID;
  
 char *tempKgDb; 
 char *roDbName;
@@ -57,6 +55,7 @@ hSetDb(roDbName);
 sprintf(proteinsDbName, "proteins%s", protDbDate);
 sprintf(spDbName,   "sp%s", protDbDate);
 
+conn= hAllocConn();
 conn2= hAllocConn();
 sprintf(query2,"select name, proteinID from %s.knownGene;", roDbName);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -110,6 +109,7 @@ while (row2 != NULL)
     row2 = sqlNextRow(sr2);
     }
 
+hFreeConn(&conn);
 hFreeConn(&conn2);
 sqlFreeResult(&sr2);
 

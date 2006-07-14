@@ -26,8 +26,6 @@ struct sqlConnection *conn, *conn2, *conn3;
 char query2[256], query3[256], query[256];
 struct sqlResult *sr2, *sr3, *sr;
 char **row2, **row3, **row;
-char condStr[255];
-char *answer;
 int  icnt;
 char *proteinID;
 char *kgId;
@@ -36,25 +34,11 @@ char *kgTempDb;
 char *outfileName;
 FILE *outf;
 int  i;
-char *chp;
-char *acc2;
 
-char *name, *txStart, *txEnd;
-char *chrStart, *chrEnd;
-char *chrom, *chr;
-char *acc, *stat;
-char *frame, *start, *stop;
-char *causes;
 char *genomeDb;
-char *geneName;
-char srcType;
-int  alignCnt = 0;
 int  iAlign = 0;
 
-char *putBackTable, *chkTable;
-int  orfStop, cdsGap, cdsSplice, numCdsIntrons;
-boolean passed;
-float ranking;
+char *putBackTable;
 
 if (argc != 6) usage();
 kgTempDb    = argv[1];

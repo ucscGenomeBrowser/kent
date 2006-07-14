@@ -30,11 +30,10 @@ void getCDS(char *cdsStart, char *cdsEnd, char *exonCount, char *exonStarts_in, 
 
 {
 int exCount;
-int pepLen;
 
 char *sp, *ep;
 char *chp;
-int  i,j, l;
+int  i, j;
 int  aalen;
 int  cdsS, cdsE;
 int  eS, eE;
@@ -149,17 +148,17 @@ fprintf(o4, "\t");
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn3, *conn4;
+struct sqlConnection *conn2;
 char proteinName[40], mrnaName[40];
-char query[256], query2[256], query3[256], query4[256];
+char query2[256];
 char cond_str[500];
 
 FILE *inf;
 char line[1000];
 int alignmentID;
 
-struct sqlResult *sr, *sr2, *sr3, *sr4;
-char **row, **row2, **row3, **row4;
+struct sqlResult *sr2;
+char **row2;
     
 char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
      *exonCount, *exonStarts, *exonEnds;
@@ -167,10 +166,6 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 char mrnaDate[500];
 char *pdbID;
 
-char *chp0, *chp, *chp2, *chp3;
-char *exon2StartStr, *exon2EndStr;
-int  exon2Start, exon2End;
-int  icdsStart, icdsEnd;
 char *genomeDBname;
 char *genomeReadOnly;
 char *proteinDataDate;
@@ -184,7 +179,6 @@ int priority;
 
 bioSeq *mSeq;
 HGID id;
-char *buf;
 
 if (argc != 4) usage();
 
@@ -199,9 +193,6 @@ o4 = fopen("jj.dat", "w");
 o5 = fopen("align.lis", "w");
     
 conn2= hAllocConn();
-conn3= hAllocConn();
-conn4= hAllocConn();
-    
 
 inf   = mustOpen("best.lis", "r");
 alignmentID = 0;

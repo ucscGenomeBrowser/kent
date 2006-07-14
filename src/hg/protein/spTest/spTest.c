@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spTest.c,v 1.4 2003/10/01 06:01:29 kent Exp $";
+static char const rcsid[] = "$Id: spTest.c,v 1.5 2006/07/14 16:32:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -60,7 +60,6 @@ struct slName *geneList, *gene, *accList, *n, *list;
 struct slName *nameList, *name, *keyList, *key, *typeList, *type;
 struct spFeature *featList, *feat;
 struct spCitation *citeList, *cite;
-boolean ok;
 int taxon;
 int classId = 0, typeId = 0, refId = 0;
 

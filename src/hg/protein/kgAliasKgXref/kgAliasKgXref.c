@@ -18,20 +18,16 @@ int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2;
 
-char query[256], query2[256], query5[256];
-struct sqlResult *sr, *sr2, *sr5;
-char **row, **row2, **row5;
-char *r1, *r2, *r3, *r5;
-    
-char *chp0, *chp;
+char query[256], query2[256];
+struct sqlResult *sr, *sr2;
+char **row, **row2;
+ 
 char *kgID;
-FILE *o1, *o2;
-char cond_str[256];
+FILE *o2;
 char *database;
 char *geneSymbol;
 
 char *proteinID;
-char *proteinAC;
 
 if (argc != 2) usage();
 database  = cloneString(argv[1]);
@@ -64,6 +60,8 @@ while (row2 != NULL)
     }
 sqlFreeResult(&sr2);
 carefulClose(&o2);
+hFreeConn(&conn);
+hFreeConn(&conn2);
 
 system("cat jj.dat|sort|uniq  >kgAliasKgXref.tab");
 system("rm jj.dat");

@@ -90,7 +90,6 @@ char *kgTempDb;
 char *outfileName, *dupOutfileName;
 FILE *outf, *dupOutf;
 char *score;
-int  i;
 char *protAcc;
 char *ranking;
 char *cdsId, *mrnaID, *alignID;

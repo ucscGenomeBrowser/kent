@@ -20,11 +20,7 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn5;
-char query[256], query2[256], query5[256];
-struct sqlResult *sr, *sr2, *sr5;
-char **row, **row2, **row5;
-char *r1, *r2, *r5;
+struct sqlConnection *conn;
     
 FILE *inf;
 FILE *o1;
@@ -34,7 +30,7 @@ char *database;
 char *proteinFileName;
 char *outputFileName;
 char *answer;
-char *symbol, *alias, *aliases;
+char *alias;
 
 char *id;
 char *chp0, *chp1, *chp2, *chp;
@@ -49,8 +45,7 @@ proteinFileName  = cloneString(argv[2]);
 outputFileName   = cloneString(argv[3]);
 
 conn = hAllocConn();
-conn2= hAllocConn();
-	
+
 o1 = mustOpen(outputFileName, "w");
     
 if ((inf = mustOpen(proteinFileName, "r")) == NULL)
@@ -178,6 +173,7 @@ while (fgets(line, 1000, inf) != NULL)
     	} while (fgets(line, 1000, inf) != NULL);
     }
 fclose(o1);
+hFreeConn(&conn);
 return(0);
 }
 

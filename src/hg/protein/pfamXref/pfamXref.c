@@ -22,7 +22,7 @@ errAbort(
 char line[2000];
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn5;
+struct sqlConnection *conn;
     
 FILE *inf;
 FILE *o1, *o2;
@@ -33,8 +33,7 @@ char *proteinFileName;
 char *answer;
 char *outputFileName, *outputFileName2;
 char *desc;
-char *id;
-char *chp0, *chp1, *chp2, *chp=NULL;
+char *chp1, *chp=NULL;
 char *pfamID, *pfamAC;
 char *swissAC, *swissDisplayID;
 char emptyString[10] = {""};
@@ -152,6 +151,7 @@ while (!done)
     }
 fclose(o1);
 fclose(o2);
+hFreeConn(&conn);
 
 sprintf(cond_str, "cat jj.dat | sort | uniq >%s",outputFileName2);
 system(cond_str);

@@ -17,8 +17,8 @@ errAbort(
 
 int main(int argc, char *argv[])
     {
-    struct sqlConnection *conn, *conn2, *conn5;
-    char query[256], query2[256], query5[256];
+    struct sqlConnection *conn, *conn2;
+    char query[256], query2[256];
     struct sqlResult *sr, *sr2;
     char **row, **row2;
 
@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
     char spDB[256];
     char proteinDB[256];
 
-    char *alias;
     char *chp;
 
     char *alignID;
@@ -113,6 +112,8 @@ int main(int argc, char *argv[])
     sqlFreeResult(&sr2);
 
     fclose(o1);
+    hFreeConn(&conn);
+    hFreeConn(&conn2);
 
     system("cat j.dat|sort|uniq  >kgProtAlias.tab");
     system("rm j.dat");

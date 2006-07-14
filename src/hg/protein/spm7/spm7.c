@@ -31,17 +31,13 @@ errAbort(
     
 int main(int argc, char *argv[])
 {
-char  SWISS_DB[20] = {"SWISS"};
-char TREMBL_DB[20] = {"TrEMBL"};
-char *bioDB;
-
 char *skippedKgId;
 char *lastValidKgId;
     
 struct sqlConnection *conn2, *conn3;
-struct sqlResult *sr2, *sr3;
-char query2[256], query3[256];
-char **row, **row2, **row3;
+struct sqlResult *sr2;
+char query2[256];
+char **row2;
     
 char *proteinID;
 FILE   *o3, *o7;
@@ -50,9 +46,8 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 
 char *alignID;
 
-char *bioDBID, *bioentryID;
-char *chp0, *chp, *chp2, *chp3;
-int  i, j, l;
+char *chp;
+int  i, j;
 
 int  isDuplicate;
     

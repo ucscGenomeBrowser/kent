@@ -67,21 +67,12 @@ int cal_months(char *date)
 
 int main(int argc, char *argv[])
 {
-int  ixm, maxixm;       // index for mRNA
-int  maxScore;
-char proteinID[20], mrnaName[20];
+char proteinID[20];
 
-int  monthss[500];
-int  mrnalens[500];
 FILE *IN, *OUT;
 
-int  newRef;
-int  ii= -1;
 char line[2000];
 char mrnaDate[20];
-int  months;
-int  diff;
-int  mrnalen;
 int  imrna;
 char dirName[1000];
 char protName[1000];
@@ -90,32 +81,18 @@ char outName[1000];
 char outDir[1000];
 char blatCmd[1000];
 
-struct dnaSeq *seq;
 HGID id;
-bioSeq *mSeq, qSeq, *pSeq;
+bioSeq *mSeq;
 
-struct sqlConnection *conn, *conn2, *conn3;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2, *sr3;
-char **row, **row2, **row3;
+struct sqlConnection *conn2, *conn3;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 
-char *accession;
-char *displayID;
-char *division;
-char *extDB;
-char *extAC;
-  
-char *chp0, *chp;
-
-int totalCount, matchCount;
-
-char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd, *exonCount, *exonStarts, *exonEnds;
-
-int  i;
 char *mrnaID;
 
 FILE *aaOut, *mrnaOut;
-char *aaSeq, *mrnaSeq;
+char *aaSeq;
 char cond_str[200];
 
 if (argc != 4) usage();
