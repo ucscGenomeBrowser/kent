@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.1 2006/07/14 18:49:28 angie Exp $
+# $Id: makePushQSql.pl,v 1.2 2006/07/14 20:14:05 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -314,6 +314,16 @@ sub getTrackEntries {
       # to determine files associated with wiggle tables and to look in
       # extFile.
       $entry{'files'} = "";
+      if ($type =~ /^netAlign\s+(\w+)/) {
+	my $oDb = $1;
+	my $ODb = ucfirst($oDb);
+	my $downloads = "$HgAutomate::goldenPath/$db/vs$ODb/*";
+	if (&HgAutomate::machineHasFile($dbHost, $downloads)) {
+	  $entry{'files'} = $downloads;
+	} else {
+	  &HgAutomate::verbose(1, "$dbHost does not have $downloads\n");
+	}
+      }
       # Remove accounted-for tables.
       foreach my $t (split(" ", $entry{'tables'})) {
 	delete $allTables->{$t};
