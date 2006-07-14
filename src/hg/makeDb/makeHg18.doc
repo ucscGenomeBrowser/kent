@@ -10316,3 +10316,19 @@ hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
 # created 27,511 rows in knownToSuper
 
 ############################################################################
+# SEGMENTAL DUPLICATIONS (DONE 7/14/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/hg18/bed/genomicSuperDups
+    cd /cluster/data/hg18/bed/genomicSuperDups
+    # The sed command is necessary to fix "_" used as strand.
+    # The awk command was necessary for some recent other species
+    # genomicSuperDups that had some too-short regions.  It does not seem 
+    # to be necessary here, but doesn't hurt and may be useful in 
+    # future builds.
+    sed -e 's/\t_\t/\t-\t/' hg18genomicSuperDup.tab \
+    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
+    | hgLoadBed hg18 genomicSuperDups stdin \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+
+############################################################################
