@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.22 2006/07/12 05:19:14 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.23 2006/07/15 21:50:22 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -164,8 +164,11 @@ cat > jkStuff/checkChroms.csh << 'EOF'
 ########################
 # QUALITY SCORES  (2006-03-15 kate)
 # From Joanne Nelson, WUSTL
+# Redo chr7 with finished clone scores newly available (2006-07-13 kate)
+# Finished chr21 scores are being submitted to Genbank by Riken,
+# but are not yet available
 
-    ssh kkstore01
+    ssh kkstore04
     cd /cluster/data/panTro2
     mkdir bed/quality
     cd bed/quality
@@ -210,6 +213,10 @@ cat > makeQuals.csh << 'EOF'
     nice zcat wustl/chr7.contigs.qvl.gz | \
         nice qaToQac stdin stdout | \
         nice qacAgpLift -mScore=98 agp.tmp stdin qac/chr7.qac
+
+    # Redo chr7 with finished clone scores newly available (2006-07-13)
+    wget -nd -r ftp://genome.wustl.edu/private/723378195268200/chimpqual
+    # oops -- no longer at this site -- inquiring with Joanne Nelson
 
     # Also, create dummy chrY, chrY_random,  chr21, all of which
     # are finished sequence from clones
@@ -1844,21 +1851,45 @@ TMPDIR=/scratch/tmp
 ############################################################################
 # GENSCAN PREDICTIONS (2006-03-18 kate)
 
+    ssh kkstore04
+    cd /cluster/data/panTro2
+    mkdir bed/genscan
+    cd bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+
+    # create 5M split of hardmasked chroms
+    cd /cluster/data/panTro2
+    set s = /san/sanvol1/scratch/panTro2/splitHard5M
+    rm -fr $s
+    foreach d (`cat chrom.lst`)
+        set c = chr$d
+        mkdir -p $s/$c
+        faSplit gap -minGapSize=100 -verbose=2 $d/$c.fa 5000000 \
+                $s/$c/${c}_ -lift=$s/$c.lft
+        set r = ${c}_random
+        if (-e $d/$r.fa) then
+            mkdir -p $s/$r
+            faSplit gap -minGapSize=100 -verbose=2 $d/$r.fa 5000000 \
+                $s/$r/${r}_ -lift=$s/$r.lft
+        endif
+    end
+    mkdir $s/lifts
+    cat $s/*.lft > $s/lifts/splitAll.lft
+
+    # create list of chunks for cluster run
+    cd bed/genscan
+    ls $s/chr*/chr*_* > genome.list
+
+    # retrieve executable
+
     ssh hgwdev
-    cd /cluster/data/panTro2/bed
-    mkdir genscan
-    cd genscan
+    cd /cluster/data/panTro2/bed/genscan
     cvs co hg3rdParty/genscanlinux
 
-    ssh kkstore01
-    cd /cluster/data/panTro2/bed/genscan
-    # Make 3 subdirectories for genscan to put their output files in
-    mkdir -p gtf pep subopt
-
-    ls /cluster/data/panTro2/{?{,?},6_hla_hap1}/chr*.fa.masked  > genome.list
-        
     ssh kki
     cd /cluster/data/panTro2/bed/genscan
+
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
@@ -1868,28 +1899,30 @@ TMPDIR=/scratch/tmp
     # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
-        # 52 jobs written to batch
+        # 652 jobs written to batch
     para try
     para check
     para push
 
-    # DONE TO HERE
+    # GOT HERE
 
-    # Convert these to chromosome level files as so:     
-    ssh kkstore01
+    # Convert these to chromosome level files
+    ssh kkstore04
     cd /cluster/data/panTro2/bed/genscan
-    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
-    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    set liftFile = /san/sanvol1/scratch/panTro2/splitHard5M/lifts/splitAll.lft
+    liftUp genscan.gtf $liftFile warn gtf/*.gtf
+    liftUp genscanSubopt.bed $liftFile warn subopt/*.bed
     cat pep/*.pep > genscan.pep
 
     # Load into the database
     ssh hgwdev
     cd /cluster/data/panTro2/bed/genscan
     ldHgGene panTro2 genscan genscan.gtf
-        # Read 41471 transcripts in 303679 lines in 1 files
     hgPepPred panTro2 generic genscanPep genscan.pep
-    hgLoadBed panTro2 genscanSubopt genscanSubopt.bed
-        # Loaded 535541 elements of size 6
+    hgLoadBed -strict panTro2 genscanSubopt genscanSubopt.bed
+
+    featureBits panTro2 genscan
+    featureBits panTro1 genscan
 
 
 #######################################################################
@@ -2312,6 +2345,12 @@ TMPDIR=/scratch/tmp
 #########################################################################
 # LifUunder to panTro1 (2005-07-11 kate)
 
-    ssh kk
+    ssh pk
     cd /cluster/data/panTro2
-    doSameSpeciesLiftOver.pl panTro2 panTro1 >& lift.out &
+    doSameSpeciesLiftOver.pl panTro2 panTro1 >& liftUnder.out &
+    ln -s panTro1.2005-07-14 blat.panTro1
+
+    # stalled out looking for workhorse, restarting
+    doSameSpeciesLiftOver.pl panTro2 panTro1 \
+        -buildDir=/cluster/data/panTro2/bed/blat.panTro1 \
+        -continue=net -workhorse=kolossus >& liftOver.2.out &
