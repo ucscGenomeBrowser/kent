@@ -46,7 +46,7 @@ type bed 3 +
 
 track gad
 release alpha
-shortLabel NIA GAD
+shortLabel GAD
 longLabel Genetic Association Studies of Complex Diseases and Disorders
 group phenDis
 priority 29.5
