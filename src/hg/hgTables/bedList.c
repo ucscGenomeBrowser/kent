@@ -20,7 +20,7 @@
 #include "correlate.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.47 2006/05/16 18:16:17 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.48 2006/07/15 00:09:33 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -568,9 +568,7 @@ for (region = regionList; region != NULL; region = region->next)
 		{
 		if (bed->name != NULL)
 		    {
-		    char *ptr = strchr(bed->name, ' ');
-		    if (ptr != NULL)
-			*ptr = 0;
+		    subChar(bed->name, ' ', '_');
 		    }
 		if (doCt)
 		    {
