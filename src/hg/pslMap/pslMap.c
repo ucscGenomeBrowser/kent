@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.14 2006/05/20 23:59:44 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.15 2006/07/15 00:55:23 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -28,9 +28,6 @@ static unsigned mapOpts = pslTransMapNoOpts;
 static boolean chainMapFile = FALSE;
 static boolean swapMap = FALSE;
 static char* mapInfoFile = NULL;
-
-/* count of non-fatal errors */
-static int errCount = 0;
 
 static char *mapInfoHdr =
     "#srcQName\t" "srcQStart\t" "srcQEnd\t" "srcQSize\t"
@@ -191,12 +188,8 @@ static void mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
 {
 struct psl* mappedPsl;
 if (inPsl->tSize != mapAln->psl->qSize)
-    {
-    fprintf(stderr, "Non-fatal error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)\n",
-            inPsl->tName, inPsl->tSize, mapAln->psl->qName, mapAln->psl->qSize);
-    errCount++;
-    return;
-    }
+    errAbort("Error: inPsl %s tSize (%d) != mapping alignment %s qSize (%d) (perhaps you need to specify -swapMap?)\n",
+             inPsl->tName, inPsl->tSize, mapAln->psl->qName, mapAln->psl->qSize);
 
 mappedPsl = pslTransMap(mapOpts, inPsl, mapAln->psl);
 
@@ -266,13 +259,7 @@ swapMap = optionExists("swapMap");
 mapInfoFile = optionVal("mapInfo", NULL);
 pslMap(argv[1], argv[2], argv[3]);
 
-if (errCount > 0)
-    {
-    fprintf(stderr, "Error: %d non-fatal errors\n", errCount);
-    return 1;
-    }
-else
-    return 0;
+return 0;
 }
 /*
  * Local Variables:
