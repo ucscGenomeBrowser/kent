@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.6 2006/07/14 18:43:14 angie Exp $
+# $Id: HgAutomate.pm,v 1.7 2006/07/16 06:05:34 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -95,7 +95,7 @@ sub choosePermanentStorage {
   my $bestRaid;
   for (my $i=1;  $i < 20;  $i++) {
     my $raid = "/cluster/store$i";
-    my $df = `df $raid/ 2>>1 | grep -v "No such" | egrep -v '^[A-Za-z]'`;
+    my $df = `df $raid/ 2>&1 | grep -v "No such" | egrep -v '^[A-Za-z]'`;
     if ($df =~ s/.*\s+(\d+)\s+\d+\%.*/$1/) {
       if (! defined $maxAvail || $df > $maxAvail) {
 	$maxAvail = $df;
@@ -196,7 +196,7 @@ sub getLoadFactor {
   # very high load.
   my ($mach) = @_;
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
-  my $cmd = "ssh -x $mach uptime 2>>1 | grep load";
+  my $cmd = "ssh -x $mach uptime 2>&1 | grep load";
   verbose(4, "about to run '$cmd'\n");
   my $load = `$cmd`;
   if ($load =~ s/.*load average: (\d+\.\d+).*/$1/) {
@@ -257,7 +257,7 @@ sub getFileServer {
   # Use df to determine the fileserver for $path.
   my ($path) = @_;
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
-  my $host = `df $path 2>>1 | grep -v Filesystem`;
+  my $host = `df $path 2>&1 | grep -v Filesystem`;
   if ($host =~ /(\S+):\/.*/) {
     return $1;
   } elsif ($host =~ /^\/\w/) {
