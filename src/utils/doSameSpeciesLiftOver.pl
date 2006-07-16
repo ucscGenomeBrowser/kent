@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.2 2006/07/14 18:44:39 angie Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.3 2006/07/16 06:06:11 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -414,7 +414,7 @@ liftOver chains.";
   my $mach = &HgAutomate::chooseWorkhorse();
   my $bossScript = new HgRemoteScript("$runDir/doNet.csh", $mach,
 				      $runDir, $whatItDoes);
-  my $chromBased = (`wc -l $tSizes` <= $HgAutomate::splitThreshold);
+  my $chromBased = (`wc -l < $tSizes` <= $HgAutomate::splitThreshold);
   my $lump = $chromBased ? "" : "-lump=100";
   $bossScript->add(<<_EOF_
 # Use local scratch disk... this can be quite I/O intensive:
