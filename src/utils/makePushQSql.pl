@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.2 2006/07/14 20:14:05 angie Exp $
+# $Id: makePushQSql.pl,v 1.3 2006/07/17 23:59:00 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -32,7 +32,8 @@ options:
 ";
   print STDERR &HgAutomate::getCommonOptionHelpNoClusters($dbHost, $workhorse);
   print STDERR "
-Prints (to stdout) SQL commands for creation of a new push queue for db.
+Prints (to stdout) SQL commands for creation of a new push queue for db
+and the addition of an Initial Release entry in the main push queue.
 These commands probably should be redirected to a file which is then reviewed
 and edited before executing the SQL on the push queue host.  Ask QA for
 push queue guidance when in doubt.
@@ -448,6 +449,32 @@ sub printAllEntries {
 } # printAllEntries
 
 
+sub printMainPushQEntry {
+  # Print out an Initial Release entry for the Main Push Queue that refers
+  # to the new $db push queue created above.
+  my $date = `date +%Y-%m-%d`;
+  my $size = 0;
+  chomp $date;
+  my $qidQuery = 'select qid from pushQ order by qid desc limit 1';
+  my $qapushqSql = 'ssh -x hgwbeta hgsql -N qapushq';
+  my $qid = `echo $qidQuery | $qapushqSql`;
+  $qid = sprintf "%06d", ($qid + 1);
+  my $rankQuery = 'select rank from pushQ order by rank desc limit 1';
+  my $rank = `echo $rankQuery | $qapushqSql`;
+  $rank += 1;
+  my (undef, undef, $assemblyLabel) =
+    &HgAutomate::getAssemblyInfo($dbHost, $db);
+  print <<_EOF_
+
+-- New entry in Main Push Queue, to alert QA to existence of $db:
+-- NOTE -- if you wait very long before executing this statement, the first
+-- column value (qid) may need to be increased!
+INSERT INTO pushQ VALUES ('$qid','','A',$rank,'$date','Y','$db Initial Release','$db','','','',$size,'hgwdev','N','','N','N','','$ENV{USER}','','','','','N','$date','',0,'','','Initial $db release (using $assemblyLabel): see separate push queue $db.','');
+_EOF_
+  ;
+} # printMainPushQEntry
+
+
 sub reportStragglers {
   my ($stragglers) = @_;
   my @names = sort (keys %{$stragglers});
@@ -465,6 +492,7 @@ sub makePushQSql {
   my ($entries, $stragglers) = &getEntries();
   &printHeader;
   &printAllEntries($entries);
+  &printMainPushQEntry();
   &reportStragglers($stragglers);
 } # makePushQSql
 
@@ -494,6 +522,10 @@ _EOF_
  *** 4. This script currently does not recognize composite tracks.  If $db
         has any composite tracks, you should manually merge the separate
         per-table entries into one entry.
+ *** 5. Just before executing the sql, note the ID of the most recent entry
+        in the Main Push Queue.  If the ID (first column) of the last
+        INSERT statement is not 1 greater than the most recent entry's,
+        make it so to avoid an ID clash with an existing entry.
  *** When everything looks complete and correct, use hgsql on the qapushq
      machine (currently hgwbeta) to execute the sql file.  (Make sure that
      qapushq does not already have a table named $db.)  Then use the Push
