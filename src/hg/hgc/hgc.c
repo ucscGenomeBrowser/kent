@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1054 2006/07/17 16:37:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1055 2006/07/17 21:01:10 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13543,9 +13543,11 @@ if (cgiVarExists("o"))
     int start = cgiInt("o");
     int end   = cgiInt("t");
     char *alignUrl = NULL;
-    if (sameString("hg17", database))
+    if (sameString("hg18", database))
+	alignUrl = "http://humanparalogy.gs.washington.edu/build36";
+    else if (sameString("hg17", database))
 	alignUrl = "http://humanparalogy.gs.washington.edu";
-    if (sameString("hg15", database) || sameString("hg16", database))
+    else if (sameString("hg15", database) || sameString("hg16", database))
 	alignUrl = "http://humanparalogy.gs.washington.edu/jab/der_oo33";
     rowOffset = hOffsetPastBin(seqName, track);
     parseSuperDupsChromPointPos(dupName, oChrom, &oStart, &dupId);
