@@ -105,7 +105,20 @@ void dbRIPOutput(struct dbRIP *el, FILE *f, char sep, char lastSep);
 #define dbRIPCommaOut(el,f) dbRIPOutput(el,f,',',',');
 /* Print out dbRIP as a comma separated list including final comma. */
 
-/* -------------------------------- End autoSql Generated Code -------------------------------- */
+/* ---------------- End autoSql Generated Code ---------------------- */
+
+/* items for trackUi options and filters	*/
+#define GENE_CONTEXT	"dbRIP.geneContext"
+#define POLY_SOURCE	"dbRIP.polySource"
+#define POLY_SUBFAMILY	"dbRIP.polySubFamily"
+#define ETHNIC_GROUP	"dbRIP.ethnicGroup"
+#define ETHNIC_GROUP_EXCINC	"dbRIP.ethnicExcInc"
+
+#define GENE_CONTEXT_DEFAULT	"any"
+#define POLY_SOURCE_DEFAULT	"don't care"
+#define POLY_SUBFAMILY_DEFAULT	"any"
+#define ETHNIC_GROUP_DEFAULT	"any"
+#define ETHNIC_NOT_DEFAULT	"include"
 
 #endif /* DBRIP_H */
 
