@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.97 2006/06/28 17:59:35 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.98 2006/07/17 18:32:10 hiram Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -534,6 +534,19 @@ memcpy(sn->name, name, size);
 return sn;
 }
 
+int slNameCmpCase(const void *va, const void *vb)
+/* Compare two slNames, ignore case. */
+{
+const struct slName *a = *((struct slName **)va);
+const struct slName *b = *((struct slName **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+void slNameSortCase(struct slName **pList)
+/* Sort slName list, ignore case. */
+{
+slSort(pList, slNameCmpCase);
+}
 
 int slNameCmp(const void *va, const void *vb)
 /* Compare two slNames. */
