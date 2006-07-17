@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.1 2006/07/11 00:08:38 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.2 2006/07/17 21:51:59 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -1074,7 +1074,9 @@ _EOF_
 				      $runDir, $whatItDoes, $CONFIG);
 
   $bossScript->add(<<_EOF_
-$HgAutomate::cvs co -P kent/src/hg/makeDb/trackDb
+# These directories are necessary for running make in trackDb:
+$HgAutomate::cvs -q co -P \\
+  kent/src/inc kent/src/hg/lib kent/src/hg/makeDb/trackDb
 
 cd kent/src/hg/makeDb/trackDb
 
@@ -1126,6 +1128,9 @@ _EOF_
 
 #########################################################################
 # main
+
+# Prevent "Suspended (tty input)" hanging:
+&HgAutomate::closeStdin();
 
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 1);
