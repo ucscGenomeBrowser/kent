@@ -39,7 +39,8 @@ extern DNA ntChars[256];
 extern AA aaChars[256];
 
 /* An array that converts alphabetical DNA representation
- * to numerical one: X_BASE_VAL as above. */
+ * to numerical one: X_BASE_VAL as above.  For charaters
+ * other than [atgcATGC], has -1. */
 extern int ntVal[256];
 extern int aaVal[256];
 extern int ntValLower[256];	/* NT values only for lower case. */
