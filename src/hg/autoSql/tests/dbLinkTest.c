@@ -6,11 +6,11 @@
 #include "jksql.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "newTest.h"
+#include "output/newTest.h"
 #include "hgConfig.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: dbLinkTest.c,v 1.2 2004/07/31 20:56:06 markd Exp $";
+static char const rcsid[] = "$Id: dbLinkTest.c,v 1.3 2006/07/17 19:35:31 markd Exp $";
 
 char *testTableName = "autoTest"; /* table name that newTest.as will produce. */
 int numPassed = 0;  /* How many tests we have passed. */
@@ -46,12 +46,13 @@ void setupTable(struct sqlConnection *conn)
 /* Set up the autoTest table for testing. Call dropTable() later
  to remove table. */
 {
-struct lineFile *lf = lineFileOpen("newTest.sql", TRUE);
+struct lineFile *lf = lineFileOpen("output/newTest.sql", TRUE);
 char *update = NULL;
 char *line = NULL;
 struct dyString *ds = newDyString(256);
 if(sqlTableExists(conn, testTableName))
-    errAbort("dbLinkTest.c::setupTable() - Table autoTest already exists. Can't create another.");
+    errAbort("dbLinkTest.c::setupTable() - Table %s.%s already exists. Can't create another.",
+             sqlGetDatabase(conn), testTableName);
 while(lineFileNextReal(lf, &line)) 
     {
     char *tmp = strstr(line, "not null");

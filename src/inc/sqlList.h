@@ -5,6 +5,7 @@
 
 #ifndef SQLLIST_H
 #define SQLLIST_H
+struct hash;
 
 int sqlDoubleArray(char *s, double *array, int maxArraySize);
 int sqlFloatArray(char *s, float *array, int maxArraySize);
@@ -119,6 +120,23 @@ void sqlFixedStringComma(char **pS, char *buf, int bufSize);
 char *sqlEatChar(char *s, char c);
 /* Make sure next character is 'c'.  Return past next char */
 
+unsigned sqlEnumParse(char *valStr, char **values, struct hash **valHashPtr);
+/* parse an enumerated column value */
+
+unsigned sqlEnumComma(char **pS, char **values, struct hash **valHashPtr);
+/* Return enum at *pS.  (Either quoted or not.)  Advance *pS. */
+
+void sqlEnumPrint(FILE *f, unsigned value, char **values);
+/* print an enumerated column value */
+
+unsigned sqlSetParse(char *valStr, char **values, struct hash **valHashPtr);
+/* parse a set column value */
+
+unsigned sqlSetComma(char **pS, char **values, struct hash **valHashPtr);
+/* Return set at *pS.  (Either quoted or not.)  Advance *pS. */
+
+void sqlSetPrint(FILE *f, unsigned value, char **values);
+/* print a set column value */
 
 #endif /* SQLLIST_H */
 

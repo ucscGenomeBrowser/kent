@@ -5,7 +5,7 @@
 #include "tokenizer.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.4 2004/08/31 00:50:18 markd Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.5 2006/07/17 19:35:30 markd Exp $";
 
 /* n.b. switched double/float from %f to %g to partially address losing
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
@@ -25,6 +25,8 @@ struct asTypeInfo asTypes[] = {
     {t_off,     "bigint",  FALSE,  FALSE,"bigint",           "long long",     "LongLong", "LongLong", "%lld"},
     {t_string,  "string",  FALSE, TRUE,  "varchar(255)",     "char *",        "String", "String", "%s"},
     {t_lstring,    "lstring",    FALSE, TRUE,  "longblob",   "char *",        "String", "String", "%s"},
+    {t_enum,    "enum",    FALSE, FALSE, "enum",             "!error!",       "Enum",   "Enum", NULL},
+    {t_set,     "set",     FALSE, FALSE, "set",              "unsigned",      "Set",    "Set", NULL},
     {t_object,  "object",  FALSE, FALSE, "longblob",         "!error!",       "Object", "Object", NULL},
     {t_object,  "table",   FALSE, FALSE, "longblob",         "!error!",       "Object", "Object", NULL},
     {t_simple,  "simple",  FALSE, FALSE, "longblob",         "!error!",       "Simple", "Simple", NULL},
@@ -71,114 +73,147 @@ for (obj = objList; obj != NULL; obj = obj->next)
 return NULL;
 }
 
+static void asParseColArraySpec(struct tokenizer *tkz, struct asObject *obj,
+                                struct asColumn *col)
+/* parse the array length specification for a column */
+{
+if (col->lowType->type == t_simple)
+    col->isArray = TRUE;
+else
+    col->isList = TRUE;
+tokenizerMustHaveNext(tkz);
+if (isdigit(tkz->string[0]))
+    {
+    col->fixedSize = atoi(tkz->string);
+    tokenizerMustHaveNext(tkz);
+    }
+else if (isalpha(tkz->string[0]))
+    {
+    if (obj->isSimple)
+        tokenizerErrAbort(tkz, "simple objects can't include variable length arrays\n");
+    col->linkedSizeName = cloneString(tkz->string);
+    col->linkedSize = mustFindColumn(obj, col->linkedSizeName);
+    col->linkedSize->isSizeLink = TRUE;
+    tokenizerMustHaveNext(tkz);
+    }
+else
+    tokenizerErrAbort(tkz, "must have column name or integer inside []'s\n");
+tokenizerMustMatch(tkz, "]");
+}
+
+static void asParseColSymSpec(struct tokenizer *tkz, struct asObject *obj,
+                              struct asColumn *col)
+/* parse the enum or set symbolic values for a column */
+{
+tokenizerMustHaveNext(tkz);
+while (tkz->string[0] != ')')
+    {
+    slSafeAddHead(&col->values, slNameNew(tkz->string));
+    /* look for `,' or `)', but allow `,' after last token */
+    tokenizerMustHaveNext(tkz);
+    if (!((tkz->string[0] == ',') || (tkz->string[0] == ')')))
+        tokenizerErrAbort(tkz, "expected `,' or `)' got `%s'", tkz->string);
+    if (tkz->string[0] != ')')
+        tokenizerMustHaveNext(tkz);
+    }
+tokenizerMustMatch(tkz, ")");
+slReverse(&col->values);
+}
+
+static void asParseColDef(struct tokenizer *tkz, struct asObject *obj)
+/* Parse a column definintion */
+{
+struct asColumn *col;
+AllocVar(col);
+
+col->lowType = findLowType(tkz);
+tokenizerMustHaveNext(tkz);
+
+if (col->lowType->type == t_object || col->lowType->type == t_simple)
+    {
+    col->obName = cloneString(tkz->string);
+    tokenizerMustHaveNext(tkz);
+    }
+
+if (tkz->string[0] == '[')
+    asParseColArraySpec(tkz, obj, col);
+else if (tkz->string[0] == '(')
+    asParseColSymSpec(tkz, obj, col);
+
+col->name = cloneString(tkz->string);
+tokenizerMustHaveNext(tkz);
+tokenizerMustMatch(tkz, ";");
+col->comment = cloneString(tkz->string);
+tokenizerMustHaveNext(tkz);
+if (col->lowType->type == t_char && col->fixedSize != 0)
+    col->isList = FALSE;	/* It's not really a list... */
+slAddHead(&obj->columnList, col);
+}
+
+static struct asObject *asParseTableDef(struct tokenizer *tkz)
+/* Parse a table or object definintion */
+{
+struct asObject *obj;
+AllocVar(obj);
+if (sameWord(tkz->string, "table"))
+    obj->isTable = TRUE;
+else if (sameWord(tkz->string, "simple"))
+    obj->isSimple = TRUE;
+else if (sameWord(tkz->string, "object"))
+    ;
+else
+    tokenizerErrAbort(tkz, "Expecting 'table' or 'object' got '%s'", tkz->string);
+tokenizerMustHaveNext(tkz);
+obj->name = cloneString(tkz->string);
+tokenizerMustHaveNext(tkz);
+obj->comment = cloneString(tkz->string);
+
+/* parse columns */
+tokenizerMustHaveNext(tkz);
+tokenizerMustMatch(tkz, "(");
+while (tkz->string[0] != ')')
+    asParseColDef(tkz, obj);
+slReverse(&obj->columnList);
+return obj;
+}
+
+static void asLinkEmbeddedObjects(struct asObject *obj, struct asObject *objList)
+/* Look up any embedded objects. */
+{
+struct asColumn *col;
+for (col = obj->columnList; col != NULL; col = col->next)
+    {
+    if (col->obName != NULL)
+        {
+        if ((col->obType = findObType(objList, col->obName)) == NULL)
+            errAbort("%s used but not defined", col->obName);
+        if (obj->isSimple)
+            {
+            if (!col->obType->isSimple)
+                errAbort("Simple object %s with embedded non-simple object %s",
+                    obj->name, col->name);
+            }
+        }
+    }
+}
 
 static struct asObject *asParseTokens(struct tokenizer *tkz)
 /* Parse file into a list of objects. */
 {
 struct asObject *objList = NULL;
 struct asObject *obj;
-struct asColumn *col;
 
-for (;;)
+while (tokenizerNext(tkz))
     {
-    if (!tokenizerNext(tkz))
-	break;
-    AllocVar(obj);
-    if (sameWord(tkz->string, "table"))
-	obj->isTable = TRUE;
-    else if (sameWord(tkz->string, "simple"))
-	obj->isSimple = TRUE;
-    else if (sameWord(tkz->string, "object"))
-	;
-    else
-	tokenizerErrAbort(tkz, "Expecting 'table' or 'object' got '%s'", tkz->string);
-    tokenizerMustHaveNext(tkz);
-    if (findObType(objList, tkz->string))
-	tokenizerErrAbort(tkz, "Duplicate definition of %s", tkz->string);
-    obj->name = cloneString(tkz->string);
-    tokenizerMustHaveNext(tkz);
-    obj->comment = cloneString(tkz->string);
-    tokenizerMustHaveNext(tkz);
-    tokenizerMustMatch(tkz, "(");
-    for (;;)
-	{
-	int ltt;
-	if (tkz->string[0] == ')')
-	    break;
-	AllocVar(col);
-
-	col->lowType = findLowType(tkz);
-	tokenizerMustHaveNext(tkz);
-	ltt = col->lowType->type;
-
-	if (ltt == t_object || ltt == t_simple)
-	    {
-	    col->obName = cloneString(tkz->string);
-	    tokenizerMustHaveNext(tkz);
-	    }
-	
-	if (tkz->string[0] == '[')
-	    {
-	    if (ltt == t_simple)
-	    	col->isArray = TRUE;
-	    else
-		col->isList = TRUE;
-	    tokenizerMustHaveNext(tkz);
-	    if (isdigit(tkz->string[0]))
-		{
-		col->fixedSize = atoi(tkz->string);
-		tokenizerMustHaveNext(tkz);
-		}
-	    else if (isalpha(tkz->string[0]))
-		{
-		if (obj->isSimple)
-		    {
-		    tokenizerErrAbort(tkz, "simple objects can't include variable length arrays\n");
-		    }
-		col->linkedSizeName = cloneString(tkz->string);
-		col->linkedSize = mustFindColumn(obj, col->linkedSizeName);
-		col->linkedSize->isSizeLink = TRUE;
-		tokenizerMustHaveNext(tkz);
-		}
-	    else
-		{
-		tokenizerErrAbort(tkz, "must have column name or integer inside []'s\n");
-		}
-	     tokenizerMustMatch(tkz, "]");
-	    }
-
-	col->name = cloneString(tkz->string);
-	tokenizerMustHaveNext(tkz);
-	tokenizerMustMatch(tkz, ";");
-	col->comment = cloneString(tkz->string);
-	tokenizerMustHaveNext(tkz);
-	if (col->lowType->type == t_char && col->fixedSize != 0)
-	    {
-	    col->isList = FALSE;	/* It's not really a list... */
-	    }
-	slAddHead(&obj->columnList, col);
-	}
-    slReverse(&obj->columnList);
+    obj = asParseTableDef(tkz);
+    if (findObType(objList, obj->name))
+        tokenizerErrAbort(tkz, "Duplicate definition of %s", obj->name);
     slAddTail(&objList, obj);
     }
-/* Look up any embedded objects. */
+
 for (obj = objList; obj != NULL; obj = obj->next)
-    {
-    for (col = obj->columnList; col != NULL; col = col->next)
-	{
-	if (col->obName != NULL)
-	    {
-	    if ((col->obType = findObType(objList, col->obName)) == NULL)
-		errAbort("%s used but not defined", col->obName);
-	    if (obj->isSimple)
-		{
-		if (!col->obType->isSimple)
-		    errAbort("Simple object %s with embedded non-simple object %s",
-			obj->name, col->name);
-		}
-	    }
-	}
-    }
+    asLinkEmbeddedObjects(obj, objList);
+
 return objList;
 }
 

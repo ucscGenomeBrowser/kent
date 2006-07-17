@@ -8,3 +8,10 @@ table addressBook
     char[2] state;  "Just store the abbreviation for the state"
     )
 
+table symbolCols
+"example of enum and set symbolic columns"
+    (
+    int id;                                          "unique id"
+    enum(male, female) sex;                          "enumerated column"
+    set(cProg,javaProg,pythonProg,awkProg) skills;   "set column"
+    )

@@ -9,8 +9,9 @@
 #include "sqlNum.h"
 #include "sqlList.h"
 #include "dystring.h"
+#include "hash.h"
 
-static char const rcsid[] = "$Id: sqlList.c,v 1.18 2005/12/12 04:02:53 kent Exp $";
+static char const rcsid[] = "$Id: sqlList.c,v 1.19 2006/07/17 19:35:30 markd Exp $";
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 
@@ -1096,3 +1097,82 @@ if (*s++ != c)
 return s;
 }
 
+static struct hash *buildSymHash(char **values, boolean isEnum)
+/* build a hash of values for either enum or set symbolic column */
+{
+struct hash *valHash = hashNew(0);
+unsigned setVal = 1; /* not used for enum */
+int iVal;
+for (iVal = 0; values[iVal] != NULL; iVal++)
+    {
+    if (isEnum)
+        hashAddInt(valHash, values[iVal], iVal);
+    else
+        {
+        hashAddInt(valHash, values[iVal], setVal);
+        setVal = setVal << 1;
+        }
+    }
+return valHash;
+}
+
+unsigned sqlEnumParse(char *valStr, char **values, struct hash **valHashPtr)
+/* parse an enumerated column value */
+{
+if (*valHashPtr == NULL)
+    *valHashPtr = buildSymHash(values, TRUE);
+return hashIntVal(*valHashPtr, valStr);
+}
+
+unsigned sqlEnumComma(char **pS, char **values, struct hash **valHashPtr)
+/* Return enum at *pS.  (Either quoted or not.)  Advance *pS. */
+{
+return sqlEnumParse(sqlGetOptQuoteString(pS), values, valHashPtr);
+}
+
+void sqlEnumPrint(FILE *f, unsigned value, char **values)
+/* print an enumerated column value */
+{
+fputs(values[value], f);
+}
+
+unsigned sqlSetParse(char *valStr, char **values, struct hash **valHashPtr)
+/* parse a set column value */
+{
+if (*valHashPtr == NULL)
+    *valHashPtr = buildSymHash(values, FALSE);
+/* parse comma separated string */
+unsigned value = 0;
+char *val = strtok(valStr, ",");
+while (val != NULL)
+    {
+    value |= hashIntVal(*valHashPtr, val);
+    val = strtok(NULL, ",");
+    }
+
+return value;
+}
+
+unsigned sqlSetComma(char **pS, char **values, struct hash **valHashPtr)
+/* Return set at *pS.  (Either quoted or not.)  Advance *pS. */
+{
+return sqlSetParse(sqlGetOptQuoteString(pS), values, valHashPtr);
+}
+
+void sqlSetPrint(FILE *f, unsigned value, char **values)
+/* print a set column value */
+{
+int iVal;
+unsigned curVal = 1;
+int cnt = 0;
+for (iVal = 0; values[iVal] != NULL; iVal++, curVal = curVal << 1)
+    {
+    if (curVal & value)
+        {
+        if (cnt > 0)
+            fputc(',', f);
+        fputs(values[iVal], f);
+        cnt++;
+        }
+    }
+}

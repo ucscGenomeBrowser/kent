@@ -20,6 +20,8 @@ enum asTypes
    t_lstring,     /* variable sized large string. */
    t_object,   /* composite object - object/table - forms lists. */
    t_simple,   /* simple composite object - forms arrays. */
+   t_enum,     /* enumerated symbolic values */
+   t_set,      /* set of symbolic values */
    };
 
 struct asTypeInfo
@@ -50,6 +52,7 @@ struct asColumn
     bool isSizeLink;               /* Flag to tell if have read link. */
     bool isList;                   /* TRUE if a list. */
     bool isArray;                  /* TRUE if an array. */
+    struct slName *values;         /* values for symbolic types */
     };
 
 struct asObject

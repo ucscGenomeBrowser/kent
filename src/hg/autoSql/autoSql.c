@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.27 2005/12/16 20:24:02 kent Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.28 2006/07/17 19:35:30 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -33,44 +33,159 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
 	 "generates code to execute queries and updates of the table.\n");
 }
 
+void sqlSymDef(struct asColumn *col, FILE *f)
+/* print symbolic column definition for sql */
+{
+fprintf(f, "%s(", col->lowType->sqlName);
+struct slName *val;
+for (val = col->values; val != NULL; val = val->next)
+    {
+    fprintf(f, "\"%s\"", val->name);
+    if (val->next != NULL)
+        fputs(", ", f);
+    }
+fprintf(f, ") not null");
+}
+
+void sqlColumn(struct asColumn *col, FILE *f)
+/* Print out column in SQL. */
+{
+struct asTypeInfo *lt = col->lowType;
+fprintf(f, "    %s ", col->name);
+if ((lt->type == t_enum) || (lt->type == t_set))
+    sqlSymDef(col, f);
+else if (col->isList || col->isArray)
+    fprintf(f, "longblob not null");
+else if (lt->type == t_char)
+    fprintf(f, "char(%d) not null", col->fixedSize ? col->fixedSize : 1);
+else
+    fprintf(f, "%s not null", lt->sqlName);
+fputc(',', f);
+fprintf(f, "\t# %s\n", col->comment);
+}
+
 void sqlTable(struct asObject *table, FILE *f)
 /* Print out structure of table in SQL. */
 {
 struct asColumn *col;
-struct asTypeInfo *lt;
 
 fprintf(f, "\n#%s\n", table->comment);
 fprintf(f, "CREATE TABLE %s (\n", table->name);
 for (col = table->columnList; col != NULL; col = col->next)
-    {
-    lt = col->lowType;
-    fprintf(f, "    %s ", col->name);
-    if (col->isList || col->isArray)
-	fprintf(f, "longblob not null");
-    else if (lt->type == t_char)
-	fprintf(f, "char(%d) not null", col->fixedSize ? col->fixedSize : 1);
-    else
-	fprintf(f, "%s not null", lt->sqlName);
-    fputc(',', f);
-    fprintf(f, "\t# %s\n", col->comment);
-    }
+    sqlColumn(col, f);
+
 fprintf(f,"              #Indices\n");
 fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
 fprintf(f, ");\n");
+}
+
+void cSymTypeDef(struct asColumn *col, FILE *f)
+/* print out C enum for enum or set columns */
+{
+boolean isEnum = (col->lowType->type == t_enum);
+fprintf(f, "enum %s\n    {\n", col->name);
+unsigned value = isEnum ? 0 : 1;
+struct slName *val;
+for (val = col->values; val != NULL; val = val->next)
+    {
+    if (isEnum)
+        {
+        fprintf(f, "    %s = %d,\n", val->name, value);
+        value++;
+        }
+    else
+        {
+        fprintf(f, "    %s = 0x%.4x,\n", val->name, value);
+        value = value << 1;
+        }
+    }
+fprintf(f, "    };\n");
+}
+
+void cObjColumn(struct asColumn *col, FILE *f)
+/* Print out an object column in C. */
+{
+if (col->lowType->type == t_object)
+    fprintf(f, "    struct %s *%s", col->obType->name, col->name);
+else if (col->lowType->type == t_simple)
+    {
+    if (col->isArray)
+        {
+        if (col->fixedSize)
+            fprintf(f, "    struct %s %s[%d]", 
+                col->obType->name, col->name, col->fixedSize);
+        else
+            fprintf(f, "    struct %s *%s", 
+                col->obType->name, col->name);
+        }
+    else
+        fprintf(f, "    struct %s %s", col->obType->name, col->name);
+    }
+else
+    assert(FALSE);
+}
+
+void cCharColumn(struct asColumn *col, FILE *f)
+/* Print out a char column in C. */
+{
+fprintf(f, "    %s", col->lowType->cName);
+if (col->fixedSize > 0)
+    fprintf(f, " %s[%d]", col->name, col->fixedSize+1); 
+else if (col->isList)
+    fprintf(f, " *%s", col->name);
+else
+    fprintf(f, " %s", col->name); 
+}
+
+void cEnumColumn(struct asColumn *col, FILE *f)
+/* print out enum column def in C */
+{
+fprintf(f, "    enum %s %s", col->name, col->name);
+}
+
+void cOtherColumn(struct asColumn *col, FILE *f)
+/* Print out other types of column in C. */
+{
+fprintf(f, "    %s", col->lowType->cName);
+if (!col->lowType->stringy)
+    fputc(' ',f);
+if (col->isList && !col->fixedSize)
+    fputc('*', f);
+fprintf(f, "%s", col->name);
+if (col->isList && col->fixedSize)
+    fprintf(f, "[%d]", col->fixedSize);
+}
+
+void cColumn(struct asColumn *col, FILE *f)
+/* Print out a column in C. */
+{
+if (col->obType != NULL)
+    cObjColumn(col, f);
+else if (col->lowType->type == t_char)
+    cCharColumn(col, f);
+else if (col->lowType->type == t_enum)
+    cEnumColumn(col, f);
+else
+    cOtherColumn(col, f);
+fprintf(f, ";\t/* %s */\n", col->comment);
 }
 
 void cTable(struct asObject *dbObj, FILE *f)
 /* Print out structure of dbObj in C. */
 {
 struct asColumn *col;
-struct asTypeInfo *lt;
-struct asObject *obType;
 char defineName[256];
 
-safef(defineName, sizeof(defineName), "%s", dbObj->name);
+splitPath(dbObj->name, NULL, defineName, NULL);
 touppers(defineName);
 fprintf(f, "#define %s_NUM_COLS %d\n\n", defineName,
         slCount(dbObj->columnList));
+
+for (col = dbObj->columnList; col != NULL; col = col->next)
+    {
+    if ((col->lowType->type == t_enum) || (col->lowType->type == t_set))
+        cSymTypeDef(col, f);
+    }
 
 fprintf(f, "struct %s\n", dbObj->name);
 fprintf(f, "/* %s */\n", dbObj->comment);
@@ -78,64 +193,7 @@ fprintf(f, "    {\n");
 if (!dbObj->isSimple)
     fprintf(f, "    struct %s *next;  /* Next in singly linked list. */\n", dbObj->name);
 for (col = dbObj->columnList; col != NULL; col = col->next)
-    {
-    lt = col->lowType;
-    if ((obType = col->obType) != NULL)
-	{
-	if (lt->type == t_object)
-	    fprintf(f, "    struct %s *%s", obType->name, col->name);
-	else if (lt->type == t_simple)
-	    {
-	    if (col->isArray)
-		{
-		if (col->fixedSize)
-		    {
-		    fprintf(f, "    struct %s %s[%d]", 
-		    	obType->name, col->name, col->fixedSize);
-		    }
-		else
-		    {
-		    fprintf(f, "    struct %s *%s", 
-		    	obType->name, col->name);
-		    }
-		}
-	    else
-		{
-		fprintf(f, "    struct %s %s", obType->name, col->name);
-		}
-	    }
-	else
-	    {
-	    assert(FALSE);
-	    }
-	}
-    else
-	{
-	fprintf(f, "    %s", lt->cName);
-	if (lt->type == t_char)
-	    {
-	    if (col->fixedSize > 0)
-		fprintf(f, " %s[%d]", col->name, col->fixedSize+1); 
-	    else if (col->isList)
-		fprintf(f, " *%s", col->name);
-	    else
-		fprintf(f, " %s", col->name); 
-	    }
-	else
-	    {
-	    if (!lt->stringy)
-		fputc(' ',f);
-	    if (col->isList && !col->fixedSize)
-		fputc('*', f);
-	    fprintf(f, "%s", col->name);
-	    if (col->isList && col->fixedSize)
-		{
-		fprintf(f, "[%d]", col->fixedSize);
-		}
-	    }
-	}
-    fprintf(f, ";\t/* %s */\n", col->comment);
-    }
+    cColumn(col, f);
 fprintf(f, "    };\n\n");
 }
 
@@ -173,6 +231,9 @@ if (obType != NULL)
 	assert(FALSE);
 	}
     }
+else if ((lt->type == t_enum) || (lt->type == t_set))
+    fprintf(f, "%sret->%s = sql%sComma(&s, values_%s, &valhash_%s);\n", indent,
+            col->name, lt->nummyName,  col->name,  col->name);
 else if (lt->stringy)
     fprintf(f, "%sret->%s%s = sqlStringComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->isUnsigned)
@@ -320,6 +381,13 @@ if (col->isSizeLink == isSizeLink)
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
 		fprintf(f, "}\n");
+		break;
+		}
+	    case t_enum:
+	    case t_set:
+		{
+		fprintf(f, "ret->%s = sql%sParse(row[%d], values_%s, &valhash_%s);\n", col->name,
+                        col->lowType->nummyName, colIx, col->name, col->name);
 		break;
 		}
 	    default:
@@ -987,13 +1055,143 @@ fprintf(f, "*pList = NULL;\n");
 fprintf(f, "}\n\n");
 }
 
+void makeArrayColOutput(struct asColumn *col, boolean mightNeedQuotes,
+                        char *outString, char *lineEnd, FILE *f)
+/* Make code that prints one array or list column to a tab delimited file. */
+{
+struct asTypeInfo *lt = col->lowType;
+struct asObject *obType = col->obType;
+char *indent = "";
+fprintf(f, "{\n");
+fprintf(f, "int i;\n");
+if (obType != NULL)
+    {
+    fprintf(f, "/* Loading %s list. */\n", obType->name);
+    fprintf(f, "    {\n    struct %s *it = el->%s;\n", 
+        obType->name, col->name);
+    indent = "    ";
+    }
+fprintf(f, "%sif (sep == ',') fputc('{',f);\n", indent);
+if (col->fixedSize)
+    fprintf(f, "%sfor (i=0; i<%d; ++i)\n", indent, col->fixedSize);
+else
+    fprintf(f, "%sfor (i=0; i<el->%s; ++i)\n", indent, col->linkedSize->name);
+fprintf(f, "%s    {\n", indent);
+if (lt->type == t_object)
+    {
+    fprintf(f, "%s    fputc('{',f);\n", indent);
+    fprintf(f, "%s    %sCommaOut(it,f);\n", indent, obType->name);
+    fprintf(f, "%s    it = it->next;\n", indent);
+    fprintf(f, "%s    fputc('}',f);\n", indent);
+    fprintf(f, "%s    fputc(',',f);\n", indent);
+    }
+else if (lt->type == t_simple)
+    {
+    fprintf(f, "%s    fputc('{',f);\n", indent);
+    fprintf(f, "%s    %sCommaOut(&it[i],f);\n", indent, obType->name);
+    fprintf(f, "%s    fputc('}',f);\n", indent);
+    fprintf(f, "%s    fputc(',',f);\n", indent);
+    }
+else
+    {
+    if (mightNeedQuotes)
+        fprintf(f, "%s    if (sep == ',') fputc('\"',f);\n", indent);
+    fprintf(f, "%s    fprintf(f, \"%s\", el->%s[i]);\n", indent, outString, 
+            col->name);
+    if (mightNeedQuotes)
+        fprintf(f, "%s    if (sep == ',') fputc('\"',f);\n", indent);
+    fprintf(f, "%s    fputc(',', f);\n", indent);
+    }
+fprintf(f, "%s    }\n", indent);
+fprintf(f, "%sif (sep == ',') fputc('}',f);\n", indent);
+if (obType != NULL)
+    fprintf(f, "    }\n");
+fprintf(f, "}\n");
+fprintf(f, "fputc(%s,f);\n", lineEnd);
+}
+
+void makeScalarColOutput(struct asColumn *col, boolean mightNeedQuotes,
+                         char *outString, char *lineEnd, FILE *f)
+/* Make code that prints one scalar column to a tab delimited file. */
+{
+struct asTypeInfo *lt = col->lowType;
+if (lt->type == t_object)
+    {
+    struct asObject *obj = col->obType;
+    fprintf(f, "if (sep == ',') fputc('{',f);\n");
+    fprintf(f, "if(el->%s != NULL)", col->name);
+    fprintf(f, "    %sCommaOut(el->%s,f);\n", obj->name, col->name);
+    fprintf(f, "if (sep == ',') fputc('}',f);\n");
+    fprintf(f, "fputc(%s,f);\n", lineEnd);
+    }
+else if (lt->type == t_simple)
+    {
+    struct asObject *obj = col->obType;
+    fprintf(f, "if (sep == ',') fputc('{',f);\n");
+    fprintf(f, "%sCommaOut(&el->%s,f);\n", obj->name, col->name);
+    fprintf(f, "if (sep == ',') fputc('}',f);\n");
+    fprintf(f, "fputc(%s,f);\n", lineEnd);
+    }
+else
+    {
+    if (mightNeedQuotes)
+        fprintf(f, "if (sep == ',') fputc('\"',f);\n");
+    fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString, 
+            col->name);
+    if (mightNeedQuotes)
+        fprintf(f, "if (sep == ',') fputc('\"',f);\n");
+    fprintf(f, "fputc(%s,f);\n", lineEnd);
+    }
+}
+
+void makeSymColOutput(struct asColumn *col, char *lineEnd, FILE *f)
+/* Make code that prints one symbolic column to a tab delimited file. */
+{
+fprintf(f, "if (sep == ',') fputc('\"',f);\n");
+fprintf(f, "sql%sPrint(f, el->%s, values_%s);\n",
+        col->lowType->nummyName, col->name, col->name);
+fprintf(f, "if (sep == ',') fputc('\"',f);\n");
+fprintf(f, "fputc(%s,f);\n", lineEnd);
+}
+
+void makeColOutput(struct asColumn *col, FILE *f)
+/* Make code that prints one column to a tab delimited file. */
+{
+char *outString = NULL;
+struct asTypeInfo *lt = col->lowType;
+enum asTypes type = lt->type;
+char *lineEnd = (col->next != NULL ? "sep" : "lastSep");
+boolean mightNeedQuotes = FALSE;
+
+switch(type)
+    {
+    case t_char:
+        outString = (col->fixedSize > 0) ? "%s" : "%c";
+        mightNeedQuotes = TRUE;
+        break;
+    case t_string:
+    case t_lstring:
+        outString = "%s";
+        mightNeedQuotes = TRUE;
+        break;
+    default:
+        outString = lt->outFormat;
+        break;
+    }
+
+if (col->isList || col->isArray)
+    makeArrayColOutput(col, mightNeedQuotes, outString, lineEnd, f);
+else if ((lt->type == t_enum) || (lt->type == t_set))
+    makeSymColOutput(col, lineEnd, f);
+else
+    makeScalarColOutput(col, mightNeedQuotes, outString, lineEnd, f);
+}
 
 void makeOutput(struct asObject *table, FILE *f, FILE *hFile)
 /* Make function that prints table to tab delimited file. */
 {
 char *tableName = table->name;
 struct asColumn *col;
-char *outString = NULL;
 
 fprintf(hFile, 
   "void %sOutput(struct %s *el, FILE *f, char sep, char lastSep);\n", tableName, tableName);
@@ -1020,118 +1218,69 @@ fprintf(hFile,
 
 fprintf(f, "{\n");
 for (col = table->columnList; col != NULL; col = col->next)
-    {
-    char *colName = col->name;
-    struct asTypeInfo *lt = col->lowType;
-    enum asTypes type = lt->type;
-    struct asObject *obType = col->obType;
-    char *lineEnd = (col->next != NULL ? "sep" : "lastSep");
-    boolean mightNeedQuotes = FALSE;
-
-    switch(type)
-	{
-	case t_char:
-	    outString = (col->fixedSize > 0) ? "%s" : "%c";
-	    mightNeedQuotes = TRUE;
-	    break;
-	case t_string:
-	case t_lstring:
-	    outString = "%s";
-	    mightNeedQuotes = TRUE;
-	    break;
-	default:
-	    outString = lt->outFormat;
-	    break;
-	}
-
-    if (col->isList || col->isArray)
-	{
-	char *indent = "";
-        fprintf(f, "{\n");
-        fprintf(f, "int i;\n");
-	if (obType != NULL)
-	    {
-	    fprintf(f, "/* Loading %s list. */\n", obType->name);
-	    fprintf(f, "    {\n    struct %s *it = el->%s;\n", 
-	    	obType->name, col->name);
-	    indent = "    ";
-	    }
-	fprintf(f, "%sif (sep == ',') fputc('{',f);\n", indent);
-	if (col->fixedSize)
-	    fprintf(f, "%sfor (i=0; i<%d; ++i)\n", indent, col->fixedSize);
-	else
-	    fprintf(f, "%sfor (i=0; i<el->%s; ++i)\n", indent, col->linkedSize->name);
-	fprintf(f, "%s    {\n", indent);
-	if (type == t_object)
-	    {
-	    fprintf(f, "%s    fputc('{',f);\n", indent);
-	    fprintf(f, "%s    %sCommaOut(it,f);\n", indent, obType->name);
-	    fprintf(f, "%s    it = it->next;\n", indent);
-	    fprintf(f, "%s    fputc('}',f);\n", indent);
-	    fprintf(f, "%s    fputc(',',f);\n", indent);
-	    }
-	else if (type == t_simple)
-	    {
-	    fprintf(f, "%s    fputc('{',f);\n", indent);
-	    fprintf(f, "%s    %sCommaOut(&it[i],f);\n", indent, obType->name);
-	    fprintf(f, "%s    fputc('}',f);\n", indent);
-	    fprintf(f, "%s    fputc(',',f);\n", indent);
-	    }
-	else
-	    {
-	    if (mightNeedQuotes)
-		fprintf(f, "%s    if (sep == ',') fputc('\"',f);\n", indent);
-	    fprintf(f, "%s    fprintf(f, \"%s\", el->%s[i]);\n", indent, outString, 
-		colName);
-	    if (mightNeedQuotes)
-		fprintf(f, "%s    if (sep == ',') fputc('\"',f);\n", indent);
-	    fprintf(f, "%s    fputc(',', f);\n", indent);
-	    }
-	fprintf(f, "%s    }\n", indent);
-	fprintf(f, "%sif (sep == ',') fputc('}',f);\n", indent);
-	if (obType != NULL)
-	    fprintf(f, "    }\n");
-        fprintf(f, "}\n");
-	fprintf(f, "fputc(%s,f);\n", lineEnd);
-	}
-    else
-	{
-	if (type == t_object)
-	    {
-	    struct asObject *obj = col->obType;
-	    fprintf(f, "if (sep == ',') fputc('{',f);\n");
-	    fprintf(f, "if(el->%s != NULL)", colName);
-	    fprintf(f, "    %sCommaOut(el->%s,f);\n", obj->name, col->name);
-	    fprintf(f, "if (sep == ',') fputc('}',f);\n");
-	    fprintf(f, "fputc(%s,f);\n", lineEnd);
-	    }
-	else if (type == t_simple)
-	    {
-	    struct asObject *obj = col->obType;
-	    fprintf(f, "if (sep == ',') fputc('{',f);\n");
-	    fprintf(f, "%sCommaOut(&el->%s,f);\n", obj->name, col->name);
-	    fprintf(f, "if (sep == ',') fputc('}',f);\n");
-	    fprintf(f, "fputc(%s,f);\n", lineEnd);
-	    }
-	else
-	    {
-	    if (mightNeedQuotes)
-		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
-	    fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString, 
-		colName);
-	    if (mightNeedQuotes)
-		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
-	    fprintf(f, "fputc(%s,f);\n", lineEnd);
-	    }
-	}
-    }
+    makeColOutput(col, f);
 fprintf(f, "}\n\n");
+}
+
+void cSymColumnDef(struct asColumn *col, FILE *cFile)
+/* output definition used for parsing and formating a symbolic column field */
+{
+struct slName *val;
+fprintf(cFile, "/* definitions for %s column */\n", col->name);
+fprintf(cFile, "static char *values_%s[] = {", col->name);
+for (val = col->values; val != NULL; val = val->next)
+    fprintf(cFile, "\"%s\", ", val->name);
+fprintf(cFile, "NULL};\n");
+fprintf(cFile, "static struct hash *valhash_%s = NULL;\n\n", col->name);
+}
+
+void cSymColumnDefs(struct asObject *obj, FILE *cFile)
+/* output definitions used for parsing and formating a symbolic column fields */
+{
+struct asColumn *col;
+for (col = obj->columnList; col != NULL; col = col->next)
+    {
+    if ((col->lowType->type == t_enum) || (col->lowType->type == t_set))
+        cSymColumnDef(col, cFile);
+    }
+}
+
+void genObjectCode(struct asObject *obj, boolean doDbLoadAndSave,
+                   FILE *cFile, FILE *hFile, FILE *sqlFile)
+/* output code for one object */
+{
+cTable(obj, hFile);
+cSymColumnDefs(obj, cFile);
+
+if (obj->isTable)
+    {
+    sqlTable(obj, sqlFile);
+    if (!objectHasVariableLists(obj) && !objectHasSubObjects(obj))
+        staticLoadRow(obj, cFile, hFile);
+    dynamicLoadRow(obj, cFile, hFile);
+    dynamicLoadAll(obj, cFile, hFile);
+    dynamicLoadAllByChar(obj, cFile, hFile);
+    if(doDbLoadAndSave)
+        {
+        dynamicLoadByQuery(obj, cFile, hFile);
+        dynamicSaveToDb(obj, cFile, hFile);
+        dynamicSaveToDbEscaped(obj, cFile, hFile);
+        }
+    }
+makeCommaIn(obj, cFile, hFile);
+if (!obj->isSimple)
+    {
+    makeFree(obj, cFile, hFile);
+    makeFreeList(obj, cFile, hFile);
+    }
+makeOutput(obj, cFile, hFile);
+printf("Made %s object\n", obj->name);
 }
 
 int main(int argc, char *argv[])
 {
 struct asObject *objList, *obj;
-char *outRoot;
+char *outRoot, outTail[256];
 char dotC[256];
 char dotH[256];
 char dotSql[256];
@@ -1147,6 +1296,8 @@ if (argc != 3)
 
 objList = asParseFile(argv[1]);
 outRoot = argv[2];
+/* don't embed directories in files */
+splitPath(outRoot, NULL, outTail, NULL);
 
 sprintf(dotC, "%s.c", outRoot);
 cFile = mustOpen(dotC, "w");
@@ -1157,24 +1308,24 @@ sqlFile = mustOpen(dotSql, "w");
 
 /* Print header comment in all files. */
 fprintf(hFile, 
-   "/* %s was originally generated by the autoSql program, which also \n"
-   " * generated %s and %s.  This header links the database and\n"
+   "/* %s.h was originally generated by the autoSql program, which also \n"
+   " * generated %s.c and %s.sql.  This header links the database and\n"
    " * the RAM representation of objects. */\n\n",
-   dotH, dotC, dotSql);
+   outTail, outTail, outTail);
 fprintf(cFile, 
-   "/* %s was originally generated by the autoSql program, which also \n"
-   " * generated %s and %s.  This module links the database and\n"
+   "/* %s.c was originally generated by the autoSql program, which also \n"
+   " * generated %s.h and %s.sql.  This module links the database and\n"
    " * the RAM representation of objects. */\n\n",
-   dotC, dotH, dotSql);
+   outTail, outTail, outTail);
 fprintf(sqlFile, 
-   "# %s was originally generated by the autoSql program, which also \n"
-   "# generated %s and %s.  This creates the database representation of\n"
+   "# %s.sql was originally generated by the autoSql program, which also \n"
+   "# generated %s.c and %s.h.  This creates the database representation of\n"
    "# an object which can be loaded and saved from RAM in a fairly \n"
    "# automatic way.\n",
-   dotSql, dotC, dotH);
+   outTail, outTail, outTail);
 
 /* Bracket H file with definition that keeps it from being included twice. */
-sprintf(defineName, "%s_H", outRoot);
+sprintf(defineName, "%s_H", outTail);
 touppers(defineName);
 fprintf(hFile, "#ifndef %s\n", defineName);
 fprintf(hFile, "#define %s\n\n", defineName);
@@ -1200,32 +1351,7 @@ fprintf(cFile, "\n");
 /* Process each object in specification file and output to .c, 
  * .h, and .sql. */
 for (obj = objList; obj != NULL; obj = obj->next)
-    {
-    cTable(obj, hFile);
-    if (obj->isTable)
-	{
-	sqlTable(obj, sqlFile);
-	if (!objectHasVariableLists(obj) && !objectHasSubObjects(obj))
-	    staticLoadRow(obj, cFile, hFile);
-	dynamicLoadRow(obj, cFile, hFile);
-	dynamicLoadAll(obj, cFile, hFile);
-	dynamicLoadAllByChar(obj, cFile, hFile);
-	if(doDbLoadAndSave)
-	    {
-	    dynamicLoadByQuery(obj, cFile, hFile);
-	    dynamicSaveToDb(obj, cFile, hFile);
-	    dynamicSaveToDbEscaped(obj, cFile, hFile);
-	    }
-	}
-    makeCommaIn(obj, cFile, hFile);
-    if (!obj->isSimple)
-	{
-	makeFree(obj, cFile, hFile);
-	makeFreeList(obj, cFile, hFile);
-	}
-    makeOutput(obj, cFile, hFile);
-    printf("Made %s object\n", obj->name);
-    }
+    genObjectCode(obj, doDbLoadAndSave, cFile, hFile, sqlFile);
 
 fprintf(cFile, "/* -------------------------------- End autoSql Generated Code -------------------------------- */\n\n");
 fprintf(hFile, "/* -------------------------------- End autoSql Generated Code -------------------------------- */\n\n");
