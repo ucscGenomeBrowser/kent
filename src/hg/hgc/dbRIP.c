@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.3 2006/07/14 19:07:33 hiram Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.4 2006/07/17 16:44:51 hiram Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -171,7 +171,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Class:</B>&nbsp;%s<BR>\n", loadItem->polyClass);
     printf("<B>Family:</B>&nbsp;%s<BR>\n", loadItem->polyFamily);
     printf("<B>Subfamily:</B>&nbsp;%s<BR>\n", loadItem->polySubfamily);
-    printf("<B>Associated disease:</B>&nbsp;%s<BR>\n", loadItem->disease);
+    printf("<B>Associated Disease:</B>&nbsp;%s<BR>\n", loadItem->disease);
     printf("<B>Sequence of L1 insertion and 400bp flanking on each side:</B>");
     printf("(<font color=blue>5' flanking-</font><font color=green>");
     printf("<u>TSD1</u>-</font><font color=red>REPEAT SEQUENCE</font>");
@@ -198,9 +198,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Genome Source:</B>&nbsp;%s<BR>\n", loadItem->polySource);
     printf("<B>Remarks:</B>&nbsp;%s<BR>\n", loadItem->remarks);
     if (strlen(loadItem->genoRegion) > 0)
-	printf("<B>Genomic region:</B>&nbsp;%s<BR>\n", loadItem->genoRegion);
+	printf("<B>Gene Context:</B>&nbsp;%s<BR>\n", loadItem->genoRegion);
     else
-	printf("<B>Genomic region:</B>&nbsp;NA<BR>\n");
+	printf("<B>Gene Context:</B>&nbsp;NA<BR>\n");
     polyTable(loadItem->name);
     printPosOnChrom(loadItem->chrom, loadItem->chromStart, loadItem->chromEnd,
 	loadItem->strand, TRUE, loadItem->name);
