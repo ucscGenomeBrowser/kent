@@ -27,13 +27,14 @@
 #include "landmarkUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
+#include "dbRIP.h"
 
 #define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.284 2006/07/11 16:45:05 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.285 2006/07/17 19:16:49 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -688,6 +689,125 @@ printf("unknown = black<BR />\n");
 printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR />\n");
 
 printf("<BR /><B>Include subtracks</B>");
+}
+
+void retroposonsUi(struct trackDb *tdb) 
+{
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+char **row;
+struct sqlResult *sr;
+struct slName *sList = NULL, *item;
+int menuSize = 0;
+char **menu;
+int i;
+char *tableList[3];
+
+i = 0;
+tableList[i++] = "dbRIP_Alu";
+tableList[i++] = "dbRIP_L1";
+tableList[i++] = "dbRIP_SVA";
+
+safef(query, sizeof(query),
+"SELECT genoRegion FROM dbRIP_Alu GROUP BY genoRegion ORDER BY genoRegion DESC");
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    slNameAddHead(&sList, row[0]);
+    }
+sqlFreeResult(&sr);
+
+menuSize = slCount(sList) + 1;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+
+i = 0;
+menu[i++] = GENE_CONTEXT_DEFAULT;
+for (item = sList; item != NULL; item = item->next)
+    menu[i++] = item->name;
+
+puts("<P><B>Add filters:</B><BR><BR>\n" );
+puts("<B>Gene Context:</B>&nbsp;" );
+cgiMakeDropList(GENE_CONTEXT, menu, menuSize,
+    cartCgiUsualString(cart, GENE_CONTEXT, menu[0]));
+slFreeList(&sList);
+freez(&menu);
+
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+i = 0;
+menu[i++] = POLY_SOURCE_DEFAULT;
+menu[i++] = "yes";
+menu[i++] = "no";
+
+puts("<BR><BR>\n<B>Insertion found in reference sequence:</B>&nbsp;");
+cgiMakeDropList(POLY_SOURCE, menu, menuSize,
+    cartCgiUsualString(cart, POLY_SOURCE, menu[0]));
+freez(&menu);
+
+for (i = 0; i < 3; ++i)
+    {
+    safef(query, sizeof(query),
+    "SELECT polySubfamily FROM %s GROUP BY polySubfamily ORDER BY polySubfamily DESC", tableList[i]);
+    sr = sqlGetResult(conn, query);
+
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	slNameStore(&sList, row[0]);
+	}
+    sqlFreeResult(&sr);
+    }
+slNameSortCase(&sList);
+
+menuSize = slCount(sList) + 1;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+
+i = 0;
+menu[i++] = POLY_SUBFAMILY_DEFAULT;
+for (item = sList; item != NULL; item = item->next)
+    menu[i++] = item->name;
+
+puts("<BR><BR>\n<B>Insertion identified in sub-family:</B>&nbsp;");
+cgiMakeDropList(POLY_SUBFAMILY, menu, menuSize,
+    cartCgiUsualString(cart, POLY_SUBFAMILY, menu[0]));
+slFreeList(&sList);
+freez(&menu);
+
+safef(query, sizeof(query),
+"SELECT ethnicGroup FROM polyGenotype GROUP BY ethnicGroup ORDER BY ethnicGroup DESC");
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+{
+    slNameStore(&sList, row[0]);
+    }
+sqlFreeResult(&sr);
+
+menuSize = slCount(sList) + 1;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+
+i = 0;
+menu[i++] = ETHNIC_GROUP_DEFAULT;
+for (item = sList; item != NULL; item = item->next)
+    menu[i++] = item->name;
+
+puts("<BR><BR>\n<B>Ethnic group:</B>&nbsp;");
+cgiMakeDropList(ETHNIC_GROUP, menu, menuSize,
+    cartCgiUsualString(cart, ETHNIC_GROUP, menu[0]));
+slFreeList(&sList);
+freez(&menu);
+puts("&nbsp;");
+
+radioButton(ETHNIC_GROUP_EXCINC,
+	cartUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT),
+	"include");
+radioButton(ETHNIC_GROUP_EXCINC,
+	cartUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT),
+	"exclude");
+puts("<B>this ethnic group</B><BR>\n");
+
+puts("\n</P>\n");
+hFreeConn(&conn);
 }
 
 void cbrWabaUi(struct trackDb *tdb)
@@ -1412,6 +1532,18 @@ else
 
 }
 
+#define NET_OPT_TOP  "netTopOnly"
+
+void netUi(struct trackDb *tdb)
+/* UI for net track */
+{
+char option[64];
+safef(option, sizeof option, "%s.%s", tdb->tableName, NET_OPT_TOP);
+puts("<P>");
+cgiMakeCheckBox(option, cartUsualBoolean(cart, option, FALSE));
+puts("<B>&nbsp; Show top-level only</B>");
+}
+
 void wigUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
@@ -2075,6 +2207,8 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
         || sameString(track, "blastHg18KG")
         || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
+else if (startsWith("netAlign", tdb->type))
+        netUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
 	wigUi(tdb);
 else if (startsWith("wig", tdb->type))
@@ -2138,6 +2272,8 @@ else if (sameString(track, "landmark"))
     landmarkUi(tdb);
 else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
+else if (startsWith("retroposons", track))
+    retroposonsUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
