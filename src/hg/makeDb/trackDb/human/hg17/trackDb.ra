@@ -1344,18 +1344,18 @@ spectrum on
 type netAlign hg17 chainSelf
 otherDb hg17
 
-track polyAluL1SVA
+track retroposons
 compositeTrack on 
-shortLabel Poly Alu/L1/SVA
+shortLabel Retroposon Polymorphisms
 longLabel Retrotransposon Insertion Polymorphisms in Humans
-group phenDis
-priority 167
+group varRep
+priority 149.5
 visibility hide 
 thickDrawItem on
 type bed 6 .
 
     track dbRIP_Alu 
-    subTrack polyAluL1SVA 
+    subTrack retroposons 
     shortLabel Polymorphic Alu 
     longLabel Alu Retrotransposon Insertion Polymorphisms in Humans
     color 0,0,255
@@ -1363,7 +1363,7 @@ type bed 6 .
     priority 1 
 
     track dbRIP_L1 
-    subTrack polyAluL1SVA 
+    subTrack retroposons 
     shortLabel Polymorphic L1 
     longLabel L1 Retrotransposon Insertion Polymorphisms in Humans
     color 0,0,255
@@ -1371,7 +1371,7 @@ type bed 6 .
     priority 2 
 
     track dbRIP_SVA 
-    subTrack polyAluL1SVA 
+    subTrack retroposons 
     shortLabel Polymorphic SVA 
     longLabel SVA Retrotransposon Insertion Polymorphisms in Humans
     color 0,0,255
