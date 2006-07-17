@@ -455,8 +455,14 @@ struct slName *newSlName(char *name);
 struct slName *slNameNewN(char *name, int size);
 /* Return new slName of given size. */
 
+int slNameCmpCase(const void *va, const void *vb);
+/* Compare two slNames, ignore case. */
+
 int slNameCmp(const void *va, const void *vb);
 /* Compare two slNames. */
+
+void slNameSortCase(struct slName **pList);
+/* Sort slName list, ignore case. */
 
 void slNameSort(struct slName **pList);
 /* Sort slName list. */
