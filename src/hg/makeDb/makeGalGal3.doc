@@ -105,6 +105,12 @@ exit; # don't actually run this like a script :)
 
 #########################################################################
 # REPEAT MASKING (DONE 5/15/06 angie)
+
+    # RepeatMasker version and library version:
+#    May 3 2005 (open-3-1-0) version of RepeatMasker
+    cat /cluster/bluearc/RepeatMasker050305/Libraries/version
+#RepBase Update 9.11, RM database version 20050112
+
     #- Split contigs into 500kb chunks, at gaps if possible:
     ssh kkstore03
     cd /cluster/data/galGal3
@@ -808,13 +814,6 @@ galGal3.downloadDir = galGal3
     make etc-update
 
 
-#########################################################################
-# BACENDS
-#########################################################################
-# STS?
-#########################################################################
-#########################################################################
-
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK FOR hg18 (DONE,  2006-06-16, braney)
     ssh kkstore03
@@ -988,4 +987,224 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/galGal3/bed/tblastn.hg18KG/blastOut
 
 #end human proteins
+
+
+#########################################################################
+# BACEND PAIRS TRACK
+# DOWNLOAD CLONEENDS (BACENDS) FROM NCBI (DONE 6/20/06 angie)
+    ssh kkstore03
+    cd /cluster/data/galGal3
+    # Plenty of room at the moment:
+    df -h .
+#                      2.0T  1.6T  280G  86% /cluster/store6
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/gallus_gallus/\*
+    cd ..
+    # Extract unversioned accessions from headers and combine into one 
+    # uncompressed file which we will link to from /gbdb/:
+    zcat ncbi/*ends*.mfa.gz \
+    | perl -wpe 'if (/^>/) { \
+       s/^>.*\|(gb|dbj)\|(\w+)\.\d+\|.*/>$2/ || die "parse line $.:$_\n"; }' \
+      > cloneEnds.fa
+    # Make sure the sequences are intact after the header-munging:
+    faSize ncbi/*.mfa.gz
+#146777127 bases (3202228 N's 143574899 real 131081897 upper 12493002 lower) in 135327 sequences in 8 files
+#Total size: mean 1084.6 sd 183.8 min 64 (gi|30716935|gb|CC322877.1|) max 2431 (gi|30609044|gb|CC263290.1|) median 1095
+    faSize cloneEnds.fa
+#146777127 bases (3202228 N's 143574899 real 131081897 upper 12493002 lower) in 135327 sequences in 1 files
+#Total size: mean 1084.6 sd 183.8 min 64 (CC322877) max 2431 (CC263290) median 1095
+
+    # Extract pairings from info files:
+    zcat ncbi/*info*.txt.gz \
+    | /cluster/bin/scripts/convertCloneEndInfo stdin
+#55099 pairs and 22655 singles
+
+    # split for cluster run
+    mkdir /cluster/bluearc/galGal3/cloneEnds
+    faSplit sequence cloneEnds.fa 100 /cluster/bluearc/galGal3/cloneEnds/cloneEnds
+    #	Check to ensure no breakage:
+    faSize /cluster/bluearc/galGal3/cloneEnds/*.fa
+#146777127 bases (3202228 N's 143574899 real 131081897 upper 12493002 lower) in 135327 sequences in 99 files
+#Total size: mean 1084.6 sd 183.8 min 64 (CC322877) max 2431 (CC263290) median 1095
+    #	same numbers as before
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/galGal3/cloneend
+    ln -s /cluster/data/galGal3/bed/cloneend/cloneEnds.fa /gbdb/galGal3/cloneend/
+    cd /tmp
+    hgLoadSeq galGal3 /gbdb/galGal3/cloneend/cloneEnds.fa
+#135327 sequences
+
+
+# BACEND SEQUENCE ALIGNMENTS (DONE 7/17/06 angie)
+    ssh kkstore03
+    # Make unmasked fasta.
+    cd /cluster/data/galGal3
+    mkdir /cluster/bluearc/galGal3/noMask
+    foreach f (?{,?}/chr*.fa)
+      echo $f:t:r
+      perl -wpe 'tr/a-z/A-Z/ if (! /^>/);' $f \
+        > /cluster/bluearc/galGal3/noMask/$f:t
+    end
+
+    # kluster run  [san is down today so use kk this time]
+    ssh kk
+    mkdir /cluster/data/galGal3/bed/bacends
+    cd /cluster/data/galGal3/bed/bacends
+    mkdir out
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+    cat << '_EOF_' > runBlat.csh
+#!/bin/csh -ef
+set root1 = $1
+set root2 = $2
+set result = $3
+rm -fr /scratch/tmp/${root1}_${root2}
+mkdir /scratch/tmp/${root1}_${root2}
+pushd /scratch/tmp/${root1}_${root2}
+/cluster/bin/i386/blat /cluster/bluearc/galGal3/noMask/${root1}.fa \
+  /cluster/bluearc/galGal3/cloneEnds/${root2}.fa ${root1}.${root2}.psl \
+  -ooc=/cluster/bluearc/galGal3/10.ooc -tileSize=10
+popd
+mkdir -p out/${root2}
+rm -f ${result}
+mv /scratch/tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /scratch/tmp/${root1}_${root2}
+'_EOF_'
+    #	<< emacs
+    chmod +x runBlat.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.csh $(root1) $(root2) {check out line+ out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    ls -1S /cluster/bluearc/galGal3/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    ls -1S /cluster/bluearc/galGal3/noMask/chr*.fa > contig.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para make jobList
+#Completed: 5247 of 5247 jobs
+#CPU time in finished jobs:      69864s    1164.39m    19.41h    0.81d  0.002 y
+#IO & Wait Time:                614130s   10235.51m   170.59h    7.11d  0.019 y
+#Average job time:                 130s       2.17m     0.04h    0.00d
+#Longest finished job:            3306s      55.10m     0.92h    0.04d
+#Submission to last job:          3674s      61.23m     1.02h    0.04d
+
+    ssh kkstore03
+    cd /cluster/data/galGal3/bed/bacends
+    mkdir temp
+    time pslSort dirs raw.psl temp out/*
+#9.349u 1.074s 0:10.54 98.7%     0+0k 0+0io 2pf+0w
+    time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl \
+      bacEnds.psl /dev/null
+#4.838u 0.158s 0:05.09 97.8%     0+0k 0+0io 2pf+0w
+
+
+# BACEND PAIRS TRACK (IN PROGRESS 6/20/06 angie)
+    ssh kolossus
+    cd /cluster/data/galGal3/bed/bacends
+    time /cluster/bin/x86_64/pslPairs -tInsert=10000 \
+      -minId=0.91 -noBin -min=25000 \
+      -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+      -mismatch -verbose bacEnds.psl \
+        ../cloneend/cloneEndPairs.txt all_bacends bacEnds
+#1.076u 0.292s 0:01.68 80.9%     0+0k 0+0io 3pf+0w
+
+    # Filter by score and sort by {chrom,chromStart}:
+    awk '$5 >= 300 {print;}' bacEnds.pairs | sort -k1,2n > bacEndPairs.bed
+    cat bacEnds.{slop,short,long,mismatch,orphan} \
+    | awk '$5 >= 300 {print;}' | sort -k1,2n > bacEndPairsBad.bed
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+
+    /cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+      bacEndPairsBad.bed \
+    | sorttbl tname tstart | headchg -del \
+    > bacEnds.load.psl
+    wc -l bacEnds.*
+#  136054 bacEnds.psl
+#  106769 bacEnds.load.psl
+#   29879 bacEnds.pairs
+#       5 bacEnds.long
+#      99 bacEnds.lst
+#      56 bacEnds.mismatch
+#   20125 bacEnds.orphan
+#     106 bacEnds.short
+#      78 bacEnds.slop
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/bacends
+    hgLoadBed -strict -notItemRgb galGal3 bacEndPairs bacEndPairs.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+#Loaded 29879 elements of size 11
+    # note - the "Bad" track isn't pushed to RR, just used for assembly QA.
+    hgLoadBed -strict -notItemRgb galGal3 bacEndPairsBad bacEndPairsBad.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+#Loaded 20360 elements of size 11
+    time hgLoadPsl galGal3 -table=all_bacends bacEnds.load.psl
+#1.123u 0.104s 0:04.23 28.8%     0+0k 0+0io 3pf+0w
+
+    # Compares favorably to previous release (good cov up, bad cov down):
+    featureBits galGal3 all_bacends
+#58629720 bases of 1042591351 (5.623%) in intersection
+    featureBits galGal2 all_bacends
+#52184234 bases of 1054197620 (4.950%) in intersection
+    featureBits galGal3 bacEndPairs
+#43710407 bases of 1042591351 (4.192%) in intersection
+    featureBits galGal2 bacEndPairs
+#39206208 bases of 1054197620 (3.719%) in intersection
+    featureBits galGal3 bacEndPairsBad
+#15784430 bases of 1042591351 (1.514%) in intersection
+    featureBits galGal2 bacEndPairsBad
+#27538232 bases of 1054197620 (2.612%) in intersection
+
+    # Clean up.
+    rm psl.tab psl.tab.loaded raw.psl bed.tab
+    rm -r out
+    rmdir temp
+    rm -r /cluster/bluearc/galGal3/noMask/ /cluster/bluearc/galGal3/cloneEnds/
+
+# end BACEND PAIRS TRACK
+
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 7/13/06 angie)
+    ssh hgwdev
+    cd /cluster/data/galGal3
+    ~/kent/src/utils/makeDownloads.pl galGal3 -verbose=2 \
+      >& jkStuff/downloads.log
+    # Edit README.txt files when done:
+# *** Edit each README.txt to resolve any notes marked with "***":
+#     /cluster/data/galGal3/goldenPath/database/README.txt
+#     /cluster/data/galGal3/goldenPath/bigZips/README.txt
+#     /cluster/data/galGal3/goldenPath/chromosomes/README.txt
+#     (The htdocs/goldenPath/galGal3/*/README.txt "files" are just links to those.)
+
+
+
+#########################################################################
+# MAKE EMPTY CHRM_GOLD (DONE 7/14/06 angie)
+# Kayla found that hgTracks was complaining about missing chrM_gold.
+# We can use hgFakeAgp to make a fake chrM.agp, and load that.
+# However, then the chrM Assembly track shows faked contents that do not
+# match the track/assembly description.  So remove the faked contents,
+# leaving an empty table which is fine -- chrM is not part of the assembly.
+    ssh hgwdev
+    cd /cluster/data/galGal3
+    hgFakeAgp M/chrM.fa M/chrM.agp
+    hgGoldGapGl -noGl -chromLst=chrom.lst galGal3 /cluster/data/galGal3 .
+    hgsql galGal3 -e 'delete from chrM_gold'
+
+
+#########################################################################
+# STS?
+#########################################################################
+#########################################################################
+
 
