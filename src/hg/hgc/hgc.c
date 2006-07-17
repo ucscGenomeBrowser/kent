@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1053 2006/07/14 18:40:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1054 2006/07/17 16:37:31 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6917,6 +6917,7 @@ struct sqlResult *sr;
 char **row;
 char *chrom, *chromStart, *chromEnd;
 struct dyString *currentCgiUrl;
+char *upperDisease;
 
 char *url = tdb->url;
 
@@ -6974,22 +6975,26 @@ if (url != NULL && url[0] != 0)
     sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
+    
     if (row != NULL) 
     	{
+	upperDisease = strdup(row[0]);
+	touppers(upperDisease);
 	printf("<BR><B>Associated Diseases and Disorders:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=DISEASE%20like%20'%25",
-	row[0], "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
     	}
 	
     while (row != NULL)
         {
+	upperDisease = strdup(row[0]);
+	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	// may need to use UPPER 
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=DISEASE%20like%20'%25",
-	row[0], "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
 	}
