@@ -9,17 +9,20 @@
 #include "jksql.h"
 #endif
 
-#define POLYGENOTYPE_NUM_COLS 5
+#define POLYGENOTYPE_NUM_COLS 8
 
 struct polyGenotype
 /* Genotype Information for Retrotransposon Insertion Polymorphisms (RIP) in Humans */
     {
     struct polyGenotype *next;  /* Next in singly linked list. */
-    char *databaseId;	/* Database ID identifying RIP */
+    char *name;	/* Database ID identifying RIP */
     char *ethnicGroup;	/* Ethnic group for this measurement */
     int plusPlus;	/* homozygous wild type */
     int plusMinus;	/* heterozygous */
     int minusMinus;	/* homozygous */
+    int sampleSize;	/* number of measurements */
+    float alleleFrequency;	/* homozygosity */
+    float unbiasedHeterozygosity;	/* heterozygosity */
     };
 
 void polyGenotypeStaticLoad(char **row, struct polyGenotype *ret);

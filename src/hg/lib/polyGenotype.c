@@ -8,18 +8,21 @@
 #include "jksql.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: polyGenotype.c,v 1.1 2006/07/13 19:22:44 hiram Exp $";
+static char const rcsid[] = "$Id: polyGenotype.c,v 1.2 2006/07/18 19:14:26 hiram Exp $";
 
 void polyGenotypeStaticLoad(char **row, struct polyGenotype *ret)
 /* Load a row from polyGenotype table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->databaseId = row[0];
+ret->name = row[0];
 ret->ethnicGroup = row[1];
 ret->plusPlus = sqlSigned(row[2]);
 ret->plusMinus = sqlSigned(row[3]);
 ret->minusMinus = sqlSigned(row[4]);
+ret->sampleSize = sqlSigned(row[5]);
+ret->alleleFrequency = sqlFloat(row[6]);
+ret->unbiasedHeterozygosity = sqlFloat(row[7]);
 }
 
 struct polyGenotype *polyGenotypeLoad(char **row)
@@ -29,11 +32,14 @@ struct polyGenotype *polyGenotypeLoad(char **row)
 struct polyGenotype *ret;
 
 AllocVar(ret);
-ret->databaseId = cloneString(row[0]);
+ret->name = cloneString(row[0]);
 ret->ethnicGroup = cloneString(row[1]);
 ret->plusPlus = sqlSigned(row[2]);
 ret->plusMinus = sqlSigned(row[3]);
 ret->minusMinus = sqlSigned(row[4]);
+ret->sampleSize = sqlSigned(row[5]);
+ret->alleleFrequency = sqlFloat(row[6]);
+ret->unbiasedHeterozygosity = sqlFloat(row[7]);
 return ret;
 }
 
@@ -43,7 +49,7 @@ struct polyGenotype *polyGenotypeLoadAll(char *fileName)
 {
 struct polyGenotype *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +67,7 @@ struct polyGenotype *polyGenotypeLoadAllByChar(char *fileName, char chopper)
 {
 struct polyGenotype *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -105,8 +111,8 @@ void polyGenotypeSaveToDb(struct sqlConnection *conn, struct polyGenotype *el, c
  * If worried about this use polyGenotypeSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d)", 
-	tableName,  el->databaseId,  el->ethnicGroup,  el->plusPlus,  el->plusMinus,  el->minusMinus);
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d,%d,%g,%g)", 
+	tableName,  el->name,  el->ethnicGroup,  el->plusPlus,  el->plusMinus,  el->minusMinus,  el->sampleSize,  el->alleleFrequency,  el->unbiasedHeterozygosity);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -121,15 +127,15 @@ void polyGenotypeSaveToDbEscaped(struct sqlConnection *conn, struct polyGenotype
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *databaseId, *ethnicGroup;
-databaseId = sqlEscapeString(el->databaseId);
+char  *name, *ethnicGroup;
+name = sqlEscapeString(el->name);
 ethnicGroup = sqlEscapeString(el->ethnicGroup);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d)", 
-	tableName,  databaseId,  ethnicGroup, el->plusPlus , el->plusMinus , el->minusMinus );
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%d,%d,%d,%d,%g,%g)", 
+	tableName,  name,  ethnicGroup, el->plusPlus , el->plusMinus , el->minusMinus , el->sampleSize , el->alleleFrequency , el->unbiasedHeterozygosity );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
-freez(&databaseId);
+freez(&name);
 freez(&ethnicGroup);
 }
 
@@ -142,11 +148,14 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->databaseId = sqlStringComma(&s);
+ret->name = sqlStringComma(&s);
 ret->ethnicGroup = sqlStringComma(&s);
 ret->plusPlus = sqlSignedComma(&s);
 ret->plusMinus = sqlSignedComma(&s);
 ret->minusMinus = sqlSignedComma(&s);
+ret->sampleSize = sqlSignedComma(&s);
+ret->alleleFrequency = sqlFloatComma(&s);
+ret->unbiasedHeterozygosity = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -158,7 +167,7 @@ void polyGenotypeFree(struct polyGenotype **pEl)
 struct polyGenotype *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->databaseId);
+freeMem(el->name);
 freeMem(el->ethnicGroup);
 freez(pEl);
 }
@@ -180,7 +189,7 @@ void polyGenotypeOutput(struct polyGenotype *el, FILE *f, char sep, char lastSep
 /* Print out polyGenotype.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->databaseId);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -192,6 +201,12 @@ fputc(sep,f);
 fprintf(f, "%d", el->plusMinus);
 fputc(sep,f);
 fprintf(f, "%d", el->minusMinus);
+fputc(sep,f);
+fprintf(f, "%d", el->sampleSize);
+fputc(sep,f);
+fprintf(f, "%g", el->alleleFrequency);
+fputc(sep,f);
+fprintf(f, "%g", el->unbiasedHeterozygosity);
 fputc(lastSep,f);
 }
 

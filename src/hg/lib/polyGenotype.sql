@@ -5,11 +5,14 @@
 
 #Genotype Information for Retrotransposon Insertion Polymorphisms (RIP) in Humans
 CREATE TABLE polyGenotype (
-    databaseId varchar(255) not null,	# Database ID identifying RIP
+    name varchar(255) not null,	# Database ID identifying RIP
     ethnicGroup varchar(255) not null,	# Ethnic group for this measurement
     plusPlus int not null,	# homozygous wild type
     plusMinus int not null,	# heterozygous
     minusMinus int not null,	# homozygous
+    sampleSize int not null,	# number of measurements
+    alleleFrequency float not null,	# homozygosity
+    unbiasedHeterozygosity float not null,	# heterozygosity
               #Indices
-    INDEX(databaseId(20))
+    INDEX(name(20))
 );
