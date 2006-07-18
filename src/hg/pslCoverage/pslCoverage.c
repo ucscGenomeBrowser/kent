@@ -6,7 +6,7 @@
 #include "memalloc.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCoverage.c,v 1.3 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslCoverage.c,v 1.4 2006/07/18 14:47:01 angie Exp $";
 
 void usage()
 /* Print usage instructions and exit. */
@@ -130,9 +130,7 @@ struct psl *psl;
 int qSize;
 int *scoreTrack = NULL;
 int milliScore;
-int pslIx;
 int goodAliCount = 0;
-int bestAliCount = 0;
 int i, start, end, size;
 struct probe *probe;
 struct psl *longestPsl = NULL;
@@ -311,15 +309,11 @@ void pslCoverage(char *inLst, char *inPsl, double aliRatio, int trimSize, char *
 struct lineFile *in = pslFileOpen(inPsl);
 FILE *out = mustOpen(outName, "a");
 FILE *misAsm = mustOpen(misAsmName, "w");
-int lineSize;
-char *line;
-char *words[32];
-int wordCount;
 struct psl *pslList = NULL, *psl;
 char lastName[256];
 int threshold = round((1.0 - (1.0 - aliRatio)*2)*1000);
 struct hash *probeHash;
-struct probe *probeList, *probe;
+struct probe *probeList;
 
 readProbeList(inLst, &probeList, &probeHash);
 printf("Found %d probes in %s\n", slCount(probeList), inLst);
