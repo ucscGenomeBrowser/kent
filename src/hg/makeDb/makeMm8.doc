@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.63 2006/07/12 00:32:46 hartera Exp $"
+#	"$Id: makeMm8.doc,v 1.64 2006/07/18 18:52:03 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2060,6 +2060,28 @@ TMPDIR=/scratch/tmp
     #	211663336 bases of 2567283971 (8.245%) in intersection
     time nice -n +19 featureBits monDom4 chainMm8Link
     #	210933035 bases of 3501643220 (6.024%) in intersection
+
+    #	Something caused the loaded chains and nets on Mm8 to disappear.
+    #	to reload them  (DONE - Hiram - 2006-07-18)
+    #	recover the individual chain files
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/blastzMonDom4.2006-02-23/axtChain
+    nice chainSplit chain mm8.monDom4.all.chain.gz
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/blastzMonDom4.2006-02-23/axtChain/chain
+    foreach f (*.chain)
+	set c = $f:r
+	echo hgLoadChain mm8 ${c}_chainMonDom4 $f
+	hgLoadChain mm8 ${c}_chainMonDom4 $f
+    end
+
+    time netFilter -minGap=10 mm8.monDom4.net.gz \
+	| hgLoadNet -verbose=0 mm8 netMonDom4 stdin
+
+    #	clean up
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/blastzMonDom4.2006-02-23/axtChain
+    rm -fr chain
 
 #########################################################################
 # BLASTZ panTro1 (DONE - 2006-02-23 - Hiram)
