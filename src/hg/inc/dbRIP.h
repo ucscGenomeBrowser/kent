@@ -108,13 +108,13 @@ void dbRIPOutput(struct dbRIP *el, FILE *f, char sep, char lastSep);
 /* ---------------- End autoSql Generated Code ---------------------- */
 
 /* items for trackUi options and filters	*/
-#define GENE_CONTEXT	"dbRIP.geneContext"
+#define GENO_REGION	"dbRIP.genoRegion"
 #define POLY_SOURCE	"dbRIP.polySource"
 #define POLY_SUBFAMILY	"dbRIP.polySubFamily"
 #define ETHNIC_GROUP	"dbRIP.ethnicGroup"
 #define ETHNIC_GROUP_EXCINC	"dbRIP.ethnicExcInc"
 
-#define GENE_CONTEXT_DEFAULT	"any"
+#define GENO_REGION_DEFAULT	"any"
 #define POLY_SOURCE_DEFAULT	"don't care"
 #define POLY_SUBFAMILY_DEFAULT	"any"
 #define ETHNIC_GROUP_DEFAULT	"any"
