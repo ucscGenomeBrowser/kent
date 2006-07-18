@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.285 2006/07/17 19:16:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.286 2006/07/18 22:55:07 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -722,14 +722,14 @@ menuSize = slCount(sList) + 1;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 
 i = 0;
-menu[i++] = GENE_CONTEXT_DEFAULT;
+menu[i++] = GENO_REGION_DEFAULT;
 for (item = sList; item != NULL; item = item->next)
     menu[i++] = item->name;
 
 puts("<P><B>Add filters:</B><BR><BR>\n" );
 puts("<B>Gene Context:</B>&nbsp;" );
-cgiMakeDropList(GENE_CONTEXT, menu, menuSize,
-    cartCgiUsualString(cart, GENE_CONTEXT, menu[0]));
+cgiMakeDropList(GENO_REGION, menu, menuSize,
+    cartCgiUsualString(cart, GENO_REGION, menu[0]));
 slFreeList(&sList);
 freez(&menu);
 
