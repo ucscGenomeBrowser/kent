@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1055 2006/07/17 21:01:10 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1056 2006/07/18 22:54:22 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2864,7 +2864,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 /* printTrackHtml is done in genericClickHandlerPlus. */
 }
-
 
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
