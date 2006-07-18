@@ -26,32 +26,15 @@ my: compile scoreSort blast0To8 pslUniq pslChain
 	${STRIP} $(BINDIR)/blastToPsl${EXE}
 	mv scoreSort $(BINDIR)
 	mv blast0To8 $(BINDIR)
-#	mv smashTab $(BINDIR)
 	mv pslUniq $(BINDIR)
-#	mv vegaBuildInfo $(BINDIR)
 	mv pslChain $(BINDIR)
 
 pslChain: pslChain.o
 	${CC} pslChain.o ${F64} ${MYLIBS} ${L} 
 	mv ${AOUT} pslChain
-vegaBuildInfo: vegaBuildInfo.o
-	${CC} vegaBuildInfo.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} vegaBuildInfo
 pslUniq: pslUniq.o
 	${CC} pslUniq.o ${F64} ${MYLIBS} ${L} 
 	mv ${AOUT} pslUniq
-blast0ToPsl: blast0ToPsl.o
-	${CC} blast0ToPsl.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} blast0ToPsl
-tryToPsl: tryToPsl.o
-	${CC} tryToPsl.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} tryToPsl
-blastLink: blastLink.o
-	${CC} blastLink.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} blastLink
-smashTab: smashTab.o
-	${CC} smashTab.o ${F64} ${MYLIBS} ${L} 
-	mv ${AOUT} smashTab
 blast0To8: blast0To8.o
 	${CC} blast0To8.o ${F64} ${MYLIBS} ${L} 
 	mv ${AOUT} blast0To8
@@ -75,8 +58,8 @@ test:	compile
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f *.o blastToPsl scoreSort blast0To8 smashTab blast0ToPsl \
-		pslUniq vegaBuildInfo pslChain
+	rm -f *.o blastToPsl scoreSort blast0To8 \
+		pslUniq pslChain
 	cd tests && ${MAKE} clean
 
 tags: 

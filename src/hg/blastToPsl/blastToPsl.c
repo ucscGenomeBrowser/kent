@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.16 2006/03/24 15:40:47 angie Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.17 2006/07/18 06:03:32 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -55,33 +55,19 @@ errAbort(
   );
 }
 
-struct psl* createPsl(struct blastBlock *bb, int pslMax)
+struct psl* createPsl(struct blastBlock *bb, int pslSpace)
 /* create PSL for a blast block */
 {
-struct psl* psl;
 struct blastGappedAli *ba = bb->gappedAli;
+char strand[3];
 
-AllocVar(psl);
-psl->qName = cloneString(ba->query->query);
-psl->qSize = ba->query->queryBaseCount;
+strand[0] = (bb->qStrand > 0) ? '+' : '-';
+strand[1] = (bb->tStrand > 0) ? '+' : '-';
+strand[2] = '\0';
 
-psl->tName = cloneString(ba->targetName);
-psl->tSize = ba->targetSize;
-
-psl->strand[0] = (bb->qStrand > 0) ? '+' : '-';
-psl->strand[1] = (bb->tStrand > 0) ? '+' : '-';
-psl->strand[2] = '\0';
-
-/* allocate initial array space */
-AllocArray(psl->blockSizes, pslMax);
-AllocArray(psl->qStarts, pslMax);
-AllocArray(psl->tStarts, pslMax);
-if (pslxFmt)
-    {
-    AllocArray(psl->qSequence, pslMax);
-    AllocArray(psl->tSequence, pslMax);
-    }
-return psl;
+return pslNew(ba->query->query, ba->query->queryBaseCount, 0, 0,
+              ba->targetName, ba->targetSize, 0, 0,
+              strand, pslSpace, (pslxFmt ? PSL_XA_FORMAT : 0));
 }
 
 void makeUntranslated(struct psl* psl)
@@ -114,29 +100,14 @@ if ((flags & PROT_DNA_ALIGN) == 0)
 assert(((flags & PROT_DNA_ALIGN) != 0) == pslIsProtein(psl));
 }
 
-void growPsl(struct psl* psl, int* pslMax)
-/* grow psl block space */
-{
-int newMax = 2 * *pslMax;
-ExpandArray(psl->blockSizes, psl->blockCount, newMax);
-ExpandArray(psl->qStarts, psl->blockCount, newMax);
-ExpandArray(psl->tStarts, psl->blockCount, newMax);
-if (pslxFmt)
-    {
-    ExpandArray(psl->qSequence, psl->blockCount, newMax);
-    ExpandArray(psl->tSequence,psl->blockCount, newMax);
-    }
-*pslMax = newMax;
-}
-
 void addPslBlock(struct psl* psl, struct blastBlock *bb, struct block* blk,
-                 int* pslMax)
+                 int* pslSpace)
 /* add a block to a psl */
 {
 unsigned newIBlk = psl->blockCount;
 unsigned blkSize = blk->qEnd - blk->qStart;
-if (newIBlk >= *pslMax)
-    growPsl(psl, pslMax);
+if (newIBlk >= *pslSpace)
+    pslGrow(psl, pslSpace);
 psl->qStarts[newIBlk] = blk->qStart;
 psl->tStarts[newIBlk] = blk->tStart;
 /* uses query size so protein psl is right */
@@ -269,8 +240,8 @@ for (i = 0; i < blkSize; i++, qPtr++, tPtr++)
 void processBlock(struct blastBlock *bb, unsigned flags, FILE* pslFh, FILE* scoreFh)
 /* process one alignment block  */
 {
-int pslMax = 8;
-struct psl *psl = createPsl(bb, pslMax);
+int pslSpace = 8;
+struct psl *psl = createPsl(bb, pslSpace);
 struct block blk, prevBlk;
 ZeroVar(&blk);
 ZeroVar(&prevBlk);
@@ -280,7 +251,7 @@ blk.tSizeMult = (flags & PROT_DNA_ALIGN) ? 3 : 1;
 while (nextUngappedBlk(bb, &blk))
     {
     countBlock(bb, &blk, &prevBlk, psl);
-    addPslBlock(psl, bb, &blk, &pslMax);
+    addPslBlock(psl, bb, &blk, &pslSpace);
     prevBlk = blk;
     }
 if (psl->blockCount > 0 && (bb->eVal <= eVal || eVal == -1))
