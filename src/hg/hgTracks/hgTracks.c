@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1154 2006/07/18 19:21:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1155 2006/07/18 20:07:31 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2573,7 +2573,6 @@ tg->loadItems = loadDbRIP;
 tg->itemColor = dbRIPColor;
 tg->itemNameColor = dbRIPColor;
 tg->itemLabelColor = dbRIPColor;
-printf("dbRIPMethods<BR>\n");
 }
 
 void bacEndPairsMethods(struct track *tg)
