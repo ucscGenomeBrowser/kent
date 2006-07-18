@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1155 2006/07/18 20:07:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1156 2006/07/18 22:52:49 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2483,7 +2483,7 @@ struct dbRIP *thisItem = item;
 if (startsWith("Other", thisItem->polySource))
     return tg->ixAltColor;
 else
-    return tg->ixColor;
+    return MG_BLUE;
 }
 
 static void loadDbRIP(struct track *tg)
@@ -2494,30 +2494,41 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct dbRIP *loadItem, *itemList = NULL;
-struct dyString *extra = dyStringNew(64);
+struct dyString *query = dyStringNew(64);
 char *option = NULL;
-boolean andWhere = FALSE;
 
-/*
 option = cartCgiUsualString(cart, ETHNIC_GROUP, ETHNIC_GROUP_DEFAULT);
 if (differentString(option,ETHNIC_GROUP_DEFAULT))
     {
     char *optionNot =
 	cartCgiUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT);
     if (sameWord(optionNot,"include"))
-printf("need join to include polyGenotype.ethnicGroup = \"%s\"<BR>\n", option);
+	{
+	dyStringPrintf(query,
+	    "select %s.* from %s,polyGenotype where "
+	    "%s.name=polyGenotype.name and polyGenotype.ethnicGroup=\"%s\" and",
+		tg->mapName, tg->mapName, tg->mapName, option);
+	}
 	else
-printf("need join to exclude polyGenotype.ethnicGroup = \"%s\"<BR>\n", option);
+	{
+	dyStringPrintf(query,
+	    "select %s.* from %s,polyGenotype where "
+	    "%s.name=polyGenotype.name and polyGenotype.ethnicGroup!=\"%s\" and",
+		tg->mapName, tg->mapName, tg->mapName, option);
+	}
     }
-*/
+else
+    {
+    dyStringPrintf(query, "select * from %s where ", tg->mapName);
+    }
+
+hAddBinToQuery(winStart, winEnd, query);
+dyStringPrintf(query, "chrom=\"%s\"", chromName);
 
 option = cartCgiUsualString(cart, GENO_REGION, GENO_REGION_DEFAULT);
 
 if (differentString(option,GENO_REGION_DEFAULT))
-    {
-    dyStringPrintf(extra, "genoRegion=\"%s\"", option);
-    andWhere = TRUE;
-    }
+    dyStringPrintf(query, " and genoRegion=\"%s\"", option);
 
 option = cartCgiUsualString(cart, POLY_SOURCE, POLY_SOURCE_DEFAULT);
 if (differentString(option,POLY_SOURCE_DEFAULT))
@@ -2529,29 +2540,15 @@ if (differentString(option,POLY_SOURCE_DEFAULT))
 	which = ucsc;
     else
 	which = other;
-    if (andWhere)
-	dyStringPrintf(extra, " and polySource=\"%s\"", which);
-    else
-	dyStringPrintf(extra, "polySource=\"%s\"", which);
-    andWhere = TRUE;
+    dyStringPrintf(query, " and polySource=\"%s\"", which);
     }
 
 option = cartCgiUsualString(cart, POLY_SUBFAMILY, POLY_SUBFAMILY_DEFAULT);
 if (differentString(option,POLY_SUBFAMILY_DEFAULT))
-    {
-    if (andWhere)
-	dyStringPrintf(extra, " and polySubfamily=\"%s\"", option);
-    else
-	dyStringPrintf(extra, "polySubfamily=\"%s\"", option);
-    andWhere = TRUE;
-    }
+    dyStringPrintf(query, " and polySubfamily=\"%s\"", option);
 
-if (andWhere > 0)
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
-	winEnd, dyStringCannibalize(&extra), &rowOffset);
-else
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
-	winEnd, NULL, &rowOffset);
+sr = sqlGetResult(conn, dyStringCannibalize(&query));
+rowOffset=1;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
