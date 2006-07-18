@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.5 2006/07/18 19:16:39 hiram Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.6 2006/07/18 20:06:52 hiram Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -78,8 +78,13 @@ if (slCount(pgList) > 0)
 	minusAlleles = (pg->minusMinus << 1) + pg->plusMinus;
 
 	sampleSize = pg->plusPlus + pg->plusMinus + pg->minusMinus;
-	alleleFrequency = (double)plusAlleles /
+	if ((plusAlleles + minusAlleles) > 0)
+	    {
+	    alleleFrequency = (double)plusAlleles /
 		(double)(plusAlleles + minusAlleles);
+	    }
+	else
+	    alleleFrequency = 0.0;
 
 	printf("<TR><TD align=left>%s</TD>", pg->ethnicGroup);
 	printf("<TD align=center>%d</TD>", sampleSize);
@@ -112,7 +117,15 @@ if (slCount(pgList) > 0)
 
     plusAlleles = (totalPlusPlus << 1) + totalPlusMinus;
     minusAlleles = (totalMinusMinus << 1) + totalPlusMinus;
-    alleleFrequency = (double)plusAlleles/(double)(plusAlleles + minusAlleles);
+    if ((plusAlleles + minusAlleles) > 0)
+	{
+	alleleFrequency = (double)plusAlleles /
+		(double)(plusAlleles + minusAlleles);
+	}
+    else
+	{
+	alleleFrequency = 0.0;
+	}
     printf("<TR><TH align=left>All Samples</TH>");
     printf("<TH align=center>%d</TH>", totalSamples);
     printf("<TH align=center>%.3f</TH>", alleleFrequency);
