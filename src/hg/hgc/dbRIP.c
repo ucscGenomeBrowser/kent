@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.4 2006/07/17 16:44:51 hiram Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.5 2006/07/18 19:16:39 hiram Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -22,7 +22,7 @@ const struct polyGenotype *p2 = *((struct polyGenotype**)e2);
 return(strcmp(p1->ethnicGroup, p2->ethnicGroup));
 }
 
-static void polyTable(char *databaseId)
+static void polyTable(char *name)
 {
 struct sqlConnection *conn = hAllocConn();
 char query[256];
@@ -30,7 +30,7 @@ struct sqlResult *sr;
 char **row;
 struct polyGenotype *pgList = NULL;
 
-sprintf(query, "select * from polyGenotype where databaseId = '%s'", databaseId);
+sprintf(query, "select * from polyGenotype where name = '%s'", name);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
