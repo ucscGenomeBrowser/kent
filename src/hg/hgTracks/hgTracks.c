@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1153 2006/07/14 22:04:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1154 2006/07/18 19:21:33 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2475,7 +2475,7 @@ void loadBacEndPairs(struct track *tg)
 tg->items = lfsFromBedsInRange("bacEndPairs", winStart, winEnd, chromName);
 }
 
-Color dbRIPColor(struct track *tg, void *item, struct vGfx *vg)
+static Color dbRIPColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw dbRIP item */
 {
 struct dbRIP *thisItem = item;
@@ -2486,16 +2486,71 @@ else
     return tg->ixColor;
 }
 
-
 static void loadDbRIP(struct track *tg)
+/*	retroposons tracks load methods	*/
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct dbRIP *loadItem, *itemList = NULL;
+struct dyString *extra = dyStringNew(64);
+char *option = NULL;
+boolean andWhere = FALSE;
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
+/*
+option = cartCgiUsualString(cart, ETHNIC_GROUP, ETHNIC_GROUP_DEFAULT);
+if (differentString(option,ETHNIC_GROUP_DEFAULT))
+    {
+    char *optionNot =
+	cartCgiUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT);
+    if (sameWord(optionNot,"include"))
+printf("need join to include polyGenotype.ethnicGroup = \"%s\"<BR>\n", option);
+	else
+printf("need join to exclude polyGenotype.ethnicGroup = \"%s\"<BR>\n", option);
+    }
+*/
+
+option = cartCgiUsualString(cart, GENO_REGION, GENO_REGION_DEFAULT);
+
+if (differentString(option,GENO_REGION_DEFAULT))
+    {
+    dyStringPrintf(extra, "genoRegion=\"%s\"", option);
+    andWhere = TRUE;
+    }
+
+option = cartCgiUsualString(cart, POLY_SOURCE, POLY_SOURCE_DEFAULT);
+if (differentString(option,POLY_SOURCE_DEFAULT))
+    {
+    char *ucsc = "UCSC";
+    char *other = "Other";
+    char *which;
+    if (sameWord(option,"yes"))
+	which = ucsc;
+    else
+	which = other;
+    if (andWhere)
+	dyStringPrintf(extra, " and polySource=\"%s\"", which);
+    else
+	dyStringPrintf(extra, "polySource=\"%s\"", which);
+    andWhere = TRUE;
+    }
+
+option = cartCgiUsualString(cart, POLY_SUBFAMILY, POLY_SUBFAMILY_DEFAULT);
+if (differentString(option,POLY_SUBFAMILY_DEFAULT))
+    {
+    if (andWhere)
+	dyStringPrintf(extra, " and polySubfamily=\"%s\"", option);
+    else
+	dyStringPrintf(extra, "polySubfamily=\"%s\"", option);
+    andWhere = TRUE;
+    }
+
+if (andWhere > 0)
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
+	winEnd, dyStringCannibalize(&extra), &rowOffset);
+else
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart,
 	winEnd, NULL, &rowOffset);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2518,6 +2573,7 @@ tg->loadItems = loadDbRIP;
 tg->itemColor = dbRIPColor;
 tg->itemNameColor = dbRIPColor;
 tg->itemLabelColor = dbRIPColor;
+printf("dbRIPMethods<BR>\n");
 }
 
 void bacEndPairsMethods(struct track *tg)
@@ -11961,7 +12017,7 @@ registerTrackHandler("transMapAnc", transMapMethods);
 registerTrackHandler("transMapAncGene", transMapMethods);
 registerTrackHandler("transMapAncRefGene", transMapMethods);
 registerTrackHandler("transMapAncMRnaGene", transMapMethods);
-registerTrackHandler("polyAluL1SVA", dbRIPMethods);
+registerTrackHandler("retroposons", dbRIPMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
