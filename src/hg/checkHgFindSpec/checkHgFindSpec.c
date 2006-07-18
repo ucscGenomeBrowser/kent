@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.10 2006/05/26 22:36:36 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.11 2006/07/18 14:49:23 angie Exp $";
 
 char *database = NULL;
 /* Need to get a cart in order to use hgFind. */
@@ -137,11 +137,16 @@ if (isNotEmpty(termToSearch))
     endMs = clock1000();
     if (hgp != NULL && hgp->singlePos != NULL)
 	{
+	struct hgPos *pos = hgp->singlePos;
 	char *table = "[No reported table!]";
+	char *name = pos->name ? pos->name : "";
+	char *browserName = pos->browserName ? pos->browserName : "";
+	char *description = pos->description ? pos->description : "";
 	if (hgp->tableList != NULL)
 	    table = hgp->tableList->name;
-	printf("\nSingle result for %s from %s: %s:%d-%d\n", termToSearch,
-	       table, chrom, chromStart+1, chromEnd);
+	printf("\nSingle result for %s from %s: %s:%d-%d   [%s | %s | %s]\n",
+	       termToSearch, table, chrom, chromStart+1, chromEnd,
+	       name, browserName, description);
 	}
     printf("\nTook %dms to search for %s.\n\n",
 	   endMs - startMs, termToSearch);
