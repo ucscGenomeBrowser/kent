@@ -38,7 +38,7 @@ shortLabel RefSeq
 longLabel Chimp and Human RefSeq Genes
 group genes
 priority 35
-visibility dense
+visibility pack
 color 12,12,120
 type genePred refPep refMrna
 
@@ -47,7 +47,7 @@ shortLabel Other RefSeq
 longLabel Non-Chimp or Human RefSeq Genes
 group genes
 priority 36
-visibility pack
+visibility hide
 color 12,12,120
 type genePred
 
