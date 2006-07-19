@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: basic srcPre dups
+test: basic srcPre dups impliedStop
 
 # basic conversion
 basic: mkdirs
@@ -21,6 +21,11 @@ dups: mkdirs
 	if gtfToGenePred -allErrors input/dups.gtf output/$@.gp >output/$@.out 2>&1 ; then false ; else true ; fi
 	diff expected/$@.out output/$@.out
 	diff expected/$@.gp output/$@.gp
+
+impliedStop: mkdirs
+	gtfToGenePred -impliedStopAfterCds -infoOut=output/$@.info input/flybase.gtf output/$@.gp
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.info output/$@.info
 
 mkdirs:
 	mkdir -p output

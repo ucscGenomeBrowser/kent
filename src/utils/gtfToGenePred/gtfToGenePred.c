@@ -22,7 +22,7 @@ errAbort(
   "     -infoOut=file - write a file with informaton on each transcript\n"
   "     -sourcePrefix=pre - only process entries where the source name has the\n"
   "      specified prefix.  Maybe repeated.\n"
-  );
+  "     -impliedStopAfterCds - implied stop codon in after CDS\n");
 }
 
 static struct optionSpec options[] = {
@@ -30,11 +30,13 @@ static struct optionSpec options[] = {
     {"allErrors", OPTION_BOOLEAN},
     {"infoOut", OPTION_STRING},
     {"sourcePrefix", OPTION_STRING|OPTION_MULTI},
+    {"impliedStopAfterCds", OPTION_BOOLEAN},
     {NULL, 0},
 };
 boolean clGenePredExt = FALSE;  /* include frame and geneName */
 boolean clAllErrors = FALSE;    /* report as many errors as possible */
 struct slName *clSourcePrefixes; /* list of source prefixes to match */
+unsigned clGxfOptions = 0;       /* options for converting GTF/GFF */
 
 int badGroupCount = 0;  /* count of inconsistent groups found */
 
@@ -63,7 +65,7 @@ struct errCatch *errCatch = errCatchNew();
 
 if (errCatchStart(errCatch))
     {
-    gp = genePredFromGroupedGtf(gtf, group, group->name, optFields);
+    gp = genePredFromGroupedGtf(gtf, group, group->name, optFields, clGxfOptions);
     genePredTabOut(gp, gpFh);
     genePredFree(&gp);
     }
@@ -140,6 +142,8 @@ if (argc != 3)
 clGenePredExt = optionExists("genePredExt");
 clAllErrors = optionExists("allErrors");
 clSourcePrefixes = optionMultiVal("sourcePrefix", NULL);
+if (optionExists("impliedStopAfterCds"))
+    clGxfOptions |= genePredGxfImpliedStopAfterCds;
 
 gtfToGenePred(argv[1], argv[2], optionVal("infoOut", NULL));
 if (badGroupCount > 0)
