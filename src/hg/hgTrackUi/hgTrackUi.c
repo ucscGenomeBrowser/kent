@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.286 2006/07/18 22:55:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.287 2006/07/19 22:00:02 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -805,6 +805,40 @@ radioButton(ETHNIC_GROUP_EXCINC,
 	cartUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT),
 	"exclude");
 puts("<B>this ethnic group</B><BR>\n");
+
+menuSize = 10;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+i = 0;
+menu[i++] = "0.0"; menu[i++] = "0.1"; menu[i++] = "0.2"; menu[i++] = "0.3";
+menu[i++] = "0.4"; menu[i++] = "0.5"; menu[i++] = "0.6"; menu[i++] = "0.7";
+menu[i++] = "0.8"; menu[i++] = "0.9";
+
+/*	safety check on bad user input, they may have set them illegally
+ *	in which case reset them to defaults 0.0 <= f <= 1.0
+ */
+double freqLow = sqlFloat(cartCgiUsualString(cart, ALLELE_FREQ_LOW, menu[0]));
+double freqHi = sqlFloat(cartCgiUsualString(cart, ALLELE_FREQ_HI, menu[9]));
+
+puts("<BR>\n<B>Restrict polymorphism frequency to:</B>&nbsp;");
+if (freqLow < freqHi)
+    cgiMakeDropList(ALLELE_FREQ_LOW, menu, menuSize,
+	cartCgiUsualString(cart, ALLELE_FREQ_LOW, menu[0]));
+else
+    cgiMakeDropList(ALLELE_FREQ_LOW, menu, menuSize, menu[0]);
+
+
+i = 0;
+menu[i++] = "0.1"; menu[i++] = "0.2"; menu[i++] = "0.3"; menu[i++] = "0.4";
+menu[i++] = "0.5"; menu[i++] = "0.6"; menu[i++] = "0.7"; menu[i++] = "0.8";
+menu[i++] = "0.9"; menu[i++] = "1.0";
+
+puts("&nbsp;&lt;=&nbsp;f&nbsp;&lt;=&nbsp;");
+if (freqLow < freqHi)
+    cgiMakeDropList(ALLELE_FREQ_HI, menu, menuSize,
+	cartCgiUsualString(cart, ALLELE_FREQ_HI, menu[9]));
+else
+    cgiMakeDropList(ALLELE_FREQ_HI, menu, menuSize, menu[9]);
+freez(&menu);
 
 puts("\n</P>\n");
 hFreeConn(&conn);
