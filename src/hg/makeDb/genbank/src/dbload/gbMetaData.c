@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.31 2006/03/26 19:18:16 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.32 2006/07/19 18:06:03 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -58,6 +58,7 @@ static char* gbCdnaInfoCreate =
   "geneName int unsigned not null,"               /* Ref in geneName table. */
   "productName int unsigned not null,"            /* Ref in productName table. */
   "author int unsigned not null,"                 /* Ref in author table. */
+  "gi int unsigned not null,"                     /* NCBI GI number. */
            /* Extra indices. */
   "unique(acc),"
   "index(type),"
@@ -162,6 +163,8 @@ static struct sqlUpdater* refLinkUpd = NULL;
 /* other state objects */
 static struct extFileTbl* extFiles = NULL;
 
+static boolean haveGi = FALSE; /* does the gbCdnaInfo table have the gi
+                                * column? */
 
 static void gbWarn(char *format, ...)
 /* issue a warning */
@@ -193,7 +196,13 @@ if (imageCloneTbl == NULL)
     imageCloneTbl = imageCloneTblNew(conn, gTmpDir, (gbVerbose >= 4));
 
 if (!sqlTableExists(conn, "gbCdnaInfo"))
+    {
     sqlUpdate(conn, gbCdnaInfoCreate);
+    haveGi = TRUE;
+    }
+else
+    haveGi = sqlFieldIndex(conn, "gbCdnaInfo", "gi") >= 0;
+
 if (gbCdnaInfoUpd == NULL)
     gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 4), &allUpdaters);
 
@@ -267,33 +276,62 @@ static void gbCdnaInfoUpdate(struct gbStatus* status, struct sqlConnection *conn
 {
 if (status->stateChg & GB_NEW)
     {
-    sqlUpdaterAddRow(gbCdnaInfoUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
-                     status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
-                     ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
-                     raFieldCurId("src"), raFieldCurId("org"),
-                     raFieldCurId("lib"), raFieldCurId("clo"),
-                     raFieldCurId("sex"), raFieldCurId("tis"),
-                     raFieldCurId("dev"), raFieldCurId("cel"),
-                     raFieldCurId("cds"), raFieldCurId("key"),
-                     raFieldCurId("def"), raFieldCurId("gen"),
-                     raFieldCurId("pro"), raFieldCurId("aut"));
+    if (haveGi)
+        sqlUpdaterAddRow(gbCdnaInfoUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
+                         status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
+                         ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
+                         raFieldCurId("src"), raFieldCurId("org"),
+                         raFieldCurId("lib"), raFieldCurId("clo"),
+                         raFieldCurId("sex"), raFieldCurId("tis"),
+                         raFieldCurId("dev"), raFieldCurId("cel"),
+                         raFieldCurId("cds"), raFieldCurId("key"),
+                         raFieldCurId("def"), raFieldCurId("gen"),
+                         raFieldCurId("pro"), raFieldCurId("aut"),
+                         raGi);
+    else
+        sqlUpdaterAddRow(gbCdnaInfoUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
+                         status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
+                         ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
+                         raFieldCurId("src"), raFieldCurId("org"),
+                         raFieldCurId("lib"), raFieldCurId("clo"),
+                         raFieldCurId("sex"), raFieldCurId("tis"),
+                         raFieldCurId("dev"), raFieldCurId("cel"),
+                         raFieldCurId("cds"), raFieldCurId("key"),
+                         raFieldCurId("def"), raFieldCurId("gen"),
+                         raFieldCurId("pro"), raFieldCurId("aut"));
     }
 else if (status->stateChg & GB_META_CHG)
     {
-    sqlUpdaterModRow(gbCdnaInfoUpd, 1, "version='%u', moddate='%s', direction='%c', "
-                     "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
-                     "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
-                     "description=%u, geneName=%u, productName=%u, author=%u "
-                     "WHERE id=%u",
-                     raVersion, gbFormatDate(raModDate), raDir,
-                     raFieldCurId("src"), raFieldCurId("org"),
-                     raFieldCurId("lib"), raFieldCurId("clo"),
-                     raFieldCurId("sex"), raFieldCurId("tis"),
-                     raFieldCurId("dev"), raFieldCurId("cel"),
-                     raFieldCurId("cds"), raFieldCurId("key"),
-                     raFieldCurId("def"), raFieldCurId("gen"),
-                     raFieldCurId("pro"), raFieldCurId("aut"),
-                     status->gbSeqId);
+    if (haveGi)
+        sqlUpdaterModRow(gbCdnaInfoUpd, 1, "version='%u', moddate='%s', direction='%c', "
+                         "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
+                         "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
+                         "description=%u, geneName=%u, productName=%u, author=%u, gi=%u "
+                         "WHERE id=%u",
+                         raVersion, gbFormatDate(raModDate), raDir,
+                         raFieldCurId("src"), raFieldCurId("org"),
+                         raFieldCurId("lib"), raFieldCurId("clo"),
+                         raFieldCurId("sex"), raFieldCurId("tis"),
+                         raFieldCurId("dev"), raFieldCurId("cel"),
+                         raFieldCurId("cds"), raFieldCurId("key"),
+                         raFieldCurId("def"), raFieldCurId("gen"),
+                         raFieldCurId("pro"), raFieldCurId("aut"),
+                         raGi, status->gbSeqId);
+    else
+        sqlUpdaterModRow(gbCdnaInfoUpd, 1, "version='%u', moddate='%s', direction='%c', "
+                         "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
+                         "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
+                         "description=%u, geneName=%u, productName=%u, author=%u "
+                         "WHERE id=%u",
+                         raVersion, gbFormatDate(raModDate), raDir,
+                         raFieldCurId("src"), raFieldCurId("org"),
+                         raFieldCurId("lib"), raFieldCurId("clo"),
+                         raFieldCurId("sex"), raFieldCurId("tis"),
+                         raFieldCurId("dev"), raFieldCurId("cel"),
+                         raFieldCurId("cds"), raFieldCurId("key"),
+                         raFieldCurId("def"), raFieldCurId("gen"),
+                         raFieldCurId("pro"), raFieldCurId("aut"),
+                         status->gbSeqId);
     }
 }
 

@@ -12,7 +12,7 @@
 #include "gbFileOps.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.7 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.8 2006/07/19 18:06:02 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -42,6 +42,7 @@ unsigned raProtSize;
 off_t raProtFaOff;
 unsigned raProtFaSize;
 struct dyString* raLocusTag = NULL;
+unsigned raGi;
 
 struct raField
 /* Entry for a ra field.  New values are buffered until we decide that
@@ -235,6 +236,7 @@ raProtFaSize = 0;
 if (raLocusTag == NULL)
     raLocusTag = dyStringNew(128);
 dyStringClear(raLocusTag);
+raGi = 0;
 
 for (;;)
     {
@@ -298,6 +300,8 @@ for (;;)
         /* might have multiple values, just use first */
         raOmimId = gbParseUnsigned(gRaLf, firstWordInLine(val));
         }
+    else if (sameString(tag, "ngi"))
+        raGi = gbParseUnsigned(gRaLf, val);
     else
         {
         /* save under hashed name */
