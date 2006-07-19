@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1159 2006/07/19 22:01:47 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1160 2006/07/19 22:22:07 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2576,6 +2576,15 @@ if (differentString(option,POLY_SOURCE_DEFAULT))
 option = cartCgiUsualString(cart, POLY_SUBFAMILY, POLY_SUBFAMILY_DEFAULT);
 if (differentString(option,POLY_SUBFAMILY_DEFAULT))
     dyStringPrintf(query, " and polySubfamily=\"%s\"", option);
+
+option = cartCgiUsualString(cart, dbRIP_DISEASE, DISEASE_DEFAULT);
+if (differentString(option,DISEASE_DEFAULT))
+    {
+    if (sameWord(option,"no"))
+	dyStringPrintf(query, " and disease=\"NA\"");
+    else
+	dyStringPrintf(query, " and disease!=\"NA\"");
+    }
 
 dyStringPrintf(query, " group by %s.name", tg->mapName);
 
