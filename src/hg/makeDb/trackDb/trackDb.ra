@@ -1275,6 +1275,16 @@ spectrum on
 type rmsk
 canPack off
 
+track rmskNew
+shortLabel CENSOR Repeats
+longLabel Repeating Elements by CENSOR and RepBase 11.6 (Giri Ihstitute)
+group varRep
+priority 149.2
+visibility hide
+spectrum on
+type rmsk
+canPack off
+
 track reconRepeat
 shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
