@@ -7,12 +7,12 @@
 CREATE TABLE polyGenotype (
     name varchar(255) not null,	# Database ID identifying RIP
     ethnicGroup varchar(255) not null,	# Ethnic group for this measurement
-    plusPlus int not null,	# homozygous wild type
-    plusMinus int not null,	# heterozygous
-    minusMinus int not null,	# homozygous
+    plusPlus int not null,	# homozygous wild type allele count
+    plusMinus int not null,	# heterozygous allele count
+    minusMinus int not null,	# homozygous allele count
     sampleSize int not null,	# number of measurements
-    alleleFrequency float not null,	# homozygosity
-    unbiasedHeterozygosity float not null,	# heterozygosity
+    alleleFrequency float not null,	# frequency of homozygosity
+    unbiasedHeterozygosity float not null,	# frequency of heterozygosity
               #Indices
     INDEX(name(20))
 );
