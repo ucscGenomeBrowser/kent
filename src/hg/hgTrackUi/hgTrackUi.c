@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.287 2006/07/19 22:00:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.288 2006/07/19 22:33:01 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -838,6 +838,18 @@ if (freqLow < freqHi)
 	cartCgiUsualString(cart, ALLELE_FREQ_HI, menu[9]));
 else
     cgiMakeDropList(ALLELE_FREQ_HI, menu, menuSize, menu[9]);
+freez(&menu);
+
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+i = 0;
+menu[i++] = DISEASE_DEFAULT;
+menu[i++] = "yes";
+menu[i++] = "no";
+
+puts("<BR><BR>\n<B>Associated disease state known:</B>&nbsp;");
+cgiMakeDropList(dbRIP_DISEASE, menu, menuSize,
+    cartCgiUsualString(cart, dbRIP_DISEASE, menu[0]));
 freez(&menu);
 
 puts("\n</P>\n");

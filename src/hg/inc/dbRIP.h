@@ -113,12 +113,14 @@ void dbRIPOutput(struct dbRIP *el, FILE *f, char sep, char lastSep);
 #define POLY_SUBFAMILY	"dbRIP.polySubFamily"
 #define ETHNIC_GROUP	"dbRIP.ethnicGroup"
 #define ETHNIC_GROUP_EXCINC	"dbRIP.ethnicExcInc"
+#define dbRIP_DISEASE	"dbRIP.disease"
 
 #define GENO_REGION_DEFAULT	"any"
 #define POLY_SOURCE_DEFAULT	"don't care"
 #define POLY_SUBFAMILY_DEFAULT	"any"
 #define ETHNIC_GROUP_DEFAULT	"any"
 #define ETHNIC_NOT_DEFAULT	"include"
+#define DISEASE_DEFAULT	"don't care"
 
 #define ALLELE_FREQ_HI	"alleleFreqHi"
 #define ALLELE_FREQ_LOW	"alleleFreqLow"
