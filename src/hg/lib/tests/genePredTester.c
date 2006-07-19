@@ -13,7 +13,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.8 2005/07/04 16:37:43 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.9 2006/07/19 06:51:44 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -70,7 +70,9 @@ errAbort(
     "  -exonSelectWord=feat - use feat as the exon feature name when creating\n"
     "   from GFF\n"
     "  -ignoreUnconverted - don't print warnings when genens couldn't be converted\n"
-    "   to genePreds\n",
+    "   to genePreds\n"
+    "  -impliedStopAfterCds - implied stop codon in GFF/GTF after CDS\n"
+    "  -noCheck - don't geneCheck results\n",
     msg);
 }
 
@@ -86,12 +88,15 @@ static struct optionSpec options[] = {
     {"output", OPTION_STRING},
     {"info", OPTION_STRING},
     {"withBin", OPTION_BOOLEAN},
+    {"noCheck", OPTION_BOOLEAN},
     {"exonSelectWord", OPTION_STRING},
     {"ignoreUnconverted", OPTION_BOOLEAN},
+    {"impliedStopAfterCds", OPTION_BOOLEAN},
     {NULL, 0},
 };
 unsigned gOptFields = genePredNoOptFld;;
 unsigned gCreateOpts = genePredBasicSql;
+unsigned gGxfCreateOpts = genePredGxfDefaults;
 int gMaxRows = BIGNUM;
 int gMinRows = 1;
 int gNeedRows = -1;
@@ -101,6 +106,18 @@ char *gOutput = NULL;
 char *gInfo = NULL;
 char *gExonSelectWord = NULL;
 boolean gIgnoreUnconverted = FALSE;
+boolean gNoCheck = FALSE;
+int errCount = 0;
+
+void checkGenePred(char *desc, struct genePred* gp)
+/* check a genePred */
+{
+if (!gNoCheck)
+    {
+    if (genePredCheck(desc, stderr, -1, gp) > 0)
+        errCount++;
+    }
+}
 
 void checkNumRows(char *src, int numRows)
 /* check the number of row constraints */
@@ -147,6 +164,7 @@ if (gOutput != NULL)
 
 while ((numRows < gMaxRows) && ((gp = genePredReaderNext(gpr)) != NULL))
     {
+    checkGenePred(table, gp);
     if (outFh != NULL)
         genePredTabOut(gp, outFh);
     if (numRows == 0)
@@ -180,6 +198,7 @@ while ((numRows < gMaxRows) && ((gp = genePredReaderNext(gpr)) != NULL))
     {
     if (gCreateOpts & genePredWithBin)
         fprintf(tabFh, "%u\t", binFromRange(gp->txStart, gp->txEnd));
+    checkGenePred(gpFile, gp);
     genePredTabOut(gp, tabFh);
     if (numRows == 0)
         writeInfo(gp);
@@ -212,6 +231,7 @@ if (gOutput != NULL)
 
 while ((numRows < gMaxRows) && ((gp = genePredReaderNext(gpr)) != NULL))
     {
+    checkGenePred(gpFile, gp);
     if (outFh != NULL)
         genePredTabOut(gp, outFh);
     if (numRows == 0)
@@ -262,6 +282,7 @@ for (psl = pslList; (psl != NULL) && (numRows < gMaxRows);
     {
     struct genbankCds* cds = hashFindVal(cdsTbl, psl->qName);
     struct genePred* gp = genePredFromPsl2(psl, gOptFields, cds, 5);
+    checkGenePred(pslFile, gp);
     if (outFh != NULL)
         genePredTabOut(gp, outFh);
     if (numRows == 0)
@@ -306,10 +327,11 @@ gffGroupLines(gxf);
 for (group = gxf->groupList; group != NULL; group = group->next)
     {
     if (isGtf)
-        gp = genePredFromGroupedGtf(gxf, group, group->name, gOptFields);
+        gp = genePredFromGroupedGtf(gxf, group, group->name,
+                                    gOptFields, gGxfCreateOpts);
     else
         gp = genePredFromGroupedGff(gxf, group,  group->name, gExonSelectWord,
-                                    gOptFields);
+                                    gOptFields, gGxfCreateOpts);
     if (gp == NULL)
         {
         if (!gIgnoreUnconverted)
@@ -317,6 +339,7 @@ for (group = gxf->groupList; group != NULL; group = group->next)
         }
     else
         {
+        checkGenePred(gxfFile, gp);
         if (outFh != NULL)
             genePredTabOut(gp, outFh);
         if (numRows == 0)
@@ -352,9 +375,11 @@ gWhere = optionVal("where", gWhere);
 gChrom = optionVal("chrom", gChrom);
 gOutput = optionVal("output", gOutput);
 gInfo = optionVal("info", gInfo);
+gNoCheck = optionVal("noCheck", gInfo);
 gExonSelectWord = optionVal("exonSelectWord", gExonSelectWord);
 gIgnoreUnconverted = optionExists("ignoreUnconverted");
-
+if (optionExists("impliedStopAfterCds"))
+    gGxfCreateOpts |= genePredGxfImpliedStopAfterCds;
 if (optionExists("withBin"))
     gCreateOpts |= genePredWithBin;
 
@@ -399,6 +424,5 @@ else
     usage("invalid task");
     }
 
-
-return 0;
+return (errCount == 0) ? 0 : 1;
 }

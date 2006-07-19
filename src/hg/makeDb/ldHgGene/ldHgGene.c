@@ -12,7 +12,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.35 2006/05/31 19:12:18 angie Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.36 2006/07/19 06:51:45 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -20,7 +20,7 @@ boolean useBin = FALSE;         /* add bin column */
 char *outFile = NULL;	        /* Output file as alternative to database. */
 unsigned gOptFields = 0;        /* optional fields from cmdline */
 unsigned gCreateOpts = 0;       /* table create options from cmdline */
-
+unsigned gGxfOptions = 0;       /* options for converting GTF/GFF */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -33,6 +33,7 @@ static struct optionSpec optionSpecs[] = {
     {"predTab", OPTION_BOOLEAN},
     {"requireCDS", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
+    {"impliedStopAfterCds", OPTION_BOOLEAN},
     {"out", OPTION_STRING},
     {NULL, 0}
 };
@@ -54,7 +55,8 @@ errAbort(
     "     -out=gpfile  write output, in genePred format, instead of loading\n"
     "                  table. Database is ignored.\n"
     "     -genePredExt create a extended genePred, including frame\n"
-    "                  information and gene name\n");
+    "                  information and gene name\n"
+    "     -impliedStopAfterCds - implied stop codon in GFF/GTF after CDS\n");
 }
 
 void loadIntoDatabase(char *database, char *table, char *tabName,
@@ -162,9 +164,9 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	name = convertSoftberryName(name);
 	}
     if (isGtf)
-        gp = genePredFromGroupedGtf(gff, group, name, gOptFields);
+        gp = genePredFromGroupedGtf(gff, group, name, gOptFields, gGxfOptions);
     else
-        gp = genePredFromGroupedGff(gff, group, name, exonType, gOptFields);
+        gp = genePredFromGroupedGff(gff, group, name, exonType, gOptFields, gGxfOptions);
     if (gp != NULL)
 	{
 	if (nonCoding)
@@ -215,7 +217,8 @@ if (optionExists("genePredExt"))
     gOptFields |= genePredAllFlds;
 if (useBin)
     gCreateOpts |= genePredWithBin;
-
+if (optionExists("impliedStopAfterCds"))
+    gGxfOptions |= genePredGxfImpliedStopAfterCds;
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
 else

@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.85 2006/05/22 18:32:43 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.86 2006/07/19 06:51:43 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -477,11 +477,88 @@ switch (phase)
 return -1;
 }
 
+static int findPosExon(struct genePred *gp, int pos)
+/* find exon containing the specified position */
+{
+int i;
+for (i = 0; i < gp->exonCount; i++)
+    {
+    if ((gp->exonStarts[i] <= pos) && (pos < gp->exonEnds[i]))
+        return i;
+    }
+errAbort("bug: position %d not found in exon of %s genePred", pos, gp->name);
+return 0;
+}
+
+static boolean adjImpliedStopPos(struct genePred *gp)
+/* implied stop codon adjustment for positive strand gene */
+{
+int iExon = findPosExon(gp, gp->cdsEnd-1);
+unsigned space = (gp->exonEnds[iExon]-gp->cdsEnd);
+if (space >= 3)
+    {
+    // room in current exon
+    gp->cdsEnd += 3;
+    return TRUE;
+    }
+else if ((iExon < gp->exonCount)
+         && ((gp->exonEnds[iExon+1]-gp->exonStarts[iExon+1])+space) >= 3)
+    {
+    // room including next exon
+    gp->cdsEnd = gp->exonStarts[iExon+1] + (3-space);
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean adjImpliedStopNeg(struct genePred *gp)
+/* implied stop codon adjustment for negative strand gene */
+{
+int iExon = findPosExon(gp, gp->cdsStart);
+unsigned space = (gp->cdsStart-gp->exonStarts[iExon]);
+if (space >= 3)
+    {
+    // room in current exon
+    gp->cdsStart -= 3;
+    return TRUE;
+    }
+else if ((iExon > 0)
+         && ((gp->exonEnds[iExon-1]-gp->exonStarts[iExon-1])+space) >= 3)
+    {
+    // room including previous exon
+    gp->cdsStart = gp->exonEnds[iExon-1] - (3-space);
+    return TRUE;
+    }
+return FALSE;
+}
+
+static void adjImpliedStopAfterCds(struct genePred *gp)
+/* adjust CDS bounds to include implied stop codon outside of CDS. */
+{
+if (gp->strand[0] == '+')
+    {
+    if (adjImpliedStopPos(gp))
+        {
+        if (gp->optFields & genePredCdsStatFld)
+            gp->cdsEndStat = cdsComplete;
+        }
+    }
+else
+    {
+    if (adjImpliedStopNeg(gp))
+        {
+        if (gp->optFields & genePredCdsStatFld)
+            gp->cdsStartStat = cdsComplete;
+        }
+    }
+}
+
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
-                                         boolean isGtf, char *exonSelectWord, unsigned optFields)
+                                         boolean isGtf, char *exonSelectWord, unsigned optFields,
+                                         unsigned options)
 /* common function to create genePreds from GFFs or GTFs.  This is a little
  * ugly with to many check of isGtf, however the was way to much identical
- * code the other way.*/
+ * code the other way. Options are from genePredFromGxfOpts */
 {
 struct genePred *gp;
 int stopCodonStart = -1, stopCodonEnd = -1;
@@ -682,6 +759,11 @@ if (optFields & genePredExonFramesFld)
 	}
     }
 
+/* adjust for flybase type of GFFs, with stop codon implied and outside of
+ * CDS. */
+if ((options & genePredGxfImpliedStopAfterCds) && !haveStopCodon)
+    adjImpliedStopAfterCds(gp);
+
 /* only fix frame if some entries in the gene had frame */
 if (haveFrame)
     fixStopFrame(gp);
@@ -690,8 +772,8 @@ return gp;
 }
 
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
-	char *exonSelectWord, unsigned optFields)
-/* Convert gff->groupList to genePred list. */
+                                        char *exonSelectWord, unsigned optFields, unsigned options)
+/* Convert gff->groupList to genePred list. See genePred.h for details. */
 {
 struct gffLine *gl;
 boolean anyExon = FALSE;
@@ -713,22 +795,17 @@ else
 if (!anyExon)
     exonSelectWord = "CDS";
 
-return mkFromGroupedGxf(gff, group, name, FALSE, exonSelectWord, optFields);
+return mkFromGroupedGxf(gff, group, name, FALSE, exonSelectWord, optFields,
+                        options);
 }
 
-struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, unsigned optFields)
-/* Convert gff->groupList to genePred list, using GTF feature conventions;
- * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
- * gffGroup is sorted in assending coords, with overlaping starts sorted by
- * end coords, which is true if it was created by gffGroupLines().  If
- * optFields contains the bit set of optional fields to add to the genePred.
- * If genePredName2Fld is specified, then the gene_id is used for the name2
- * field.  If genePredCdsStatFld is set, then the CDS status information is
- * set based on the presences of start_codon, stop_codon, and CDS features.
- * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
- */
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name,
+                                        unsigned optFields, unsigned options)
+/* Convert gff->groupList to genePred list, using GTF feature conventions.
+ * See genePred.h for details. */
 {
-return mkFromGroupedGxf(gff, group, name, TRUE, NULL, optFields);
+return mkFromGroupedGxf(gff, group, name, TRUE, NULL, optFields,
+                        options);
 }
 
 static void mapCdsToGenome(struct psl *psl, struct genbankCds* cds,
@@ -1348,11 +1425,11 @@ int iExon;
 gpErrorCnt = 0;
 gpErrFh = out;
 if (!(sameString(gp->strand, "+") || sameString(gp->strand, "-")))
-    gpError("%s: invalid strand: \"%s\"", desc, gp->strand);
+    gpError("%s: %s invalid strand: \"%s\"", desc, gp->name, gp->strand);
 
 /* check chrom */
 if (chromSize == 0)
-    gpError("%s: chrom not a valid chromosome: \"%s\"", desc, gp->chrom);
+    gpError("%s: %s chrom not a valid chromosome: \"%s\"", desc, gp->name, gp->chrom);
 else if (chromSize > 0)
     {
     if (gp->txEnd > chromSize)

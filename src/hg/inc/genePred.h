@@ -36,6 +36,14 @@ enum genePredFromPslOpts
 };
 
 
+enum genePredFromGxfOpts
+/* bit set of options for genePredFromGroupedGff/genePredFromGroupedGtf */
+{
+    genePredGxfDefaults = 0x00,            /* used if nothing special */
+    genePredGxfImpliedStopAfterCds = 0x01  /* stop codon is implied outside of
+                                            * the annotated CDS bounds  */
+};
+
 enum genePredFields
 /* Bit set to indicate which optional fields are used.
  * N.B. value order must match order in genePred */
@@ -147,16 +155,21 @@ int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
 
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, 
-	char *name, char *exonSelectWord, unsigned optFields);
+                                        char *name, char *exonSelectWord, unsigned optFields,
+                                        unsigned options);
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
  * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in)
  * If optFields contains the bit set of optional fields to add to the genePred.
  * If genePredCdsStatFld is set, then the CDS status information is
  * set based on the presences of start_codon, stop_codon, and CDS features.
  * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
+ * Options are from genePredFromGxfOpts.  If genePredGxfImpliedStopAfterCds
+ * is specified, it is treated as if a stop_codon annotation was found,
+ * if there isn't one.
  */
 
-struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, unsigned optFields);
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name,
+                                        unsigned optFields, unsigned options);
 /* Convert gff->groupList to genePred list, using GTF feature conventions;
  * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
  * gffGroup is sorted in assending coords, with overlaping starts sorted by
@@ -166,6 +179,9 @@ struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *gr
  * field.  If genePredCdsStatFld is set, then the CDS status information is
  * set based on the presences of start_codon, stop_codon, and CDS features.
  * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
+ * Options are from genePredFromGxfOpts.  If genePredGxfImpliedStopAfterCds
+ * is specified, it is treated as if a stop_codon annotation was found,
+ * if there isn't one.
  */
 
 struct genePred *genePredFromPsl3(struct psl *psl,  struct genbankCds* cds, 
