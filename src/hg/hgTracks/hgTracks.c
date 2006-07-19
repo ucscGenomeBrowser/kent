@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1158 2006/07/19 20:55:58 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1159 2006/07/19 22:01:47 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2496,25 +2496,55 @@ int rowOffset;
 struct dbRIP *loadItem, *itemList = NULL;
 struct dyString *query = dyStringNew(64);
 char *option = NULL;
+double freqLow = sqlFloat(cartCgiUsualString(cart, ALLELE_FREQ_LOW, "0.0"));
+double freqHi = sqlFloat(cartCgiUsualString(cart, ALLELE_FREQ_HI, "1.0"));
+boolean needJoin = FALSE;	/* need join to polyGenotype ?	*/
+
+/*	safety check on bad user input, they may have set them illegally
+ *	in which case reset them to defaults 0.0 <= f <= 1.0
+ *	This reset also happens in hgTrackUi so they will see it reset there
+ *	when they go back.
+ */
+if (! (freqLow < freqHi))
+    {
+    freqLow = 0.0;
+    freqHi = 1.0;
+    }
+if ((freqLow > 0.0) || (freqHi < 1.0))
+    needJoin = TRUE;
 
 option = cartCgiUsualString(cart, ETHNIC_GROUP, ETHNIC_GROUP_DEFAULT);
 if (differentString(option,ETHNIC_GROUP_DEFAULT))
+    needJoin = TRUE;
+
+if (needJoin)
     {
-    char *optionNot =
-	cartCgiUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT);
-    if (sameWord(optionNot,"include"))
+    dyStringPrintf(query, "select %s.* from %s,polyGenotype where ",
+	tg->mapName, tg->mapName);
+
+    if (differentString(option,ETHNIC_GROUP_DEFAULT))
 	{
-	dyStringPrintf(query,
-	    "select %s.* from %s,polyGenotype where "
-	    "%s.name=polyGenotype.name and polyGenotype.ethnicGroup=\"%s\" and",
-		tg->mapName, tg->mapName, tg->mapName, option);
+	char *optionNot =
+	    cartCgiUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT);
+	if (sameWord(optionNot,"include"))
+	    {
+	    dyStringPrintf(query, "%s.name=polyGenotype.name and "
+		"polyGenotype.ethnicGroup=\"%s\" and ",
+		    tg->mapName, option);
+	    }
+	    else
+	    {
+	    dyStringPrintf(query, "%s.name=polyGenotype.name and "
+		"polyGenotype.ethnicGroup!=\"%s\" and ",
+		    tg->mapName, option);
+	    }
 	}
-	else
+    if ((freqLow > 0.0) || (freqHi < 1.0))
 	{
-	dyStringPrintf(query,
-	    "select %s.* from %s,polyGenotype where "
-	    "%s.name=polyGenotype.name and polyGenotype.ethnicGroup!=\"%s\" and",
-		tg->mapName, tg->mapName, tg->mapName, option);
+	    dyStringPrintf(query,
+		"polyGenotype.alleleFrequency>=\"%.1f\" and "
+		    "polyGenotype.alleleFrequency<=\"%.1f\" and ",
+			freqLow, freqHi);
 	}
     }
 else
