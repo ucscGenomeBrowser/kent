@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1157 2006/07/18 23:44:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1158 2006/07/19 20:55:58 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10654,9 +10654,8 @@ if (dot != NULL)
  * or have xeno genbank.  However the db caching mechanism only handles
  * 2 databases, so just open a connection on first use and keep it open. */
 if (defDbConn == NULL)
-    {
     defDbConn = sqlConnect(hDefaultDb());
-    }
+
 org = getOrganismShort(defDbConn, acc);
 if (org != NULL)
     dyStringPrintf(label, "%s ", org);
@@ -12007,14 +12006,18 @@ registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 
+/* transMap */
 registerTrackHandler("transMap", transMapMethods);
-registerTrackHandler("transMapGene", transMapMethods);
 registerTrackHandler("transMapRefGene", transMapMethods);
+registerTrackHandler("transMapRefAliGene", transMapMethods);
 registerTrackHandler("transMapMRnaGene", transMapMethods);
+registerTrackHandler("transMapMRnaAliGene", transMapMethods);
 registerTrackHandler("transMapAnc", transMapMethods);
-registerTrackHandler("transMapAncGene", transMapMethods);
 registerTrackHandler("transMapAncRefGene", transMapMethods);
+registerTrackHandler("transMapAncRefAliGene", transMapMethods);
 registerTrackHandler("transMapAncMRnaGene", transMapMethods);
+registerTrackHandler("transMapAncMRnaAliGene", transMapMethods);
+
 registerTrackHandler("retroposons", dbRIPMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
