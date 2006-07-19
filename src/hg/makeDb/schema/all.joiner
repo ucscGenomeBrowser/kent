@@ -30,7 +30,7 @@ set apiMel apiMel1,apiMel2
 set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1,xenTro2
-set monDom monDom1,monDom2
+set monDom monDom1,monDom2,monDom4
 set bosTau bosTau1,bosTau2
 set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
