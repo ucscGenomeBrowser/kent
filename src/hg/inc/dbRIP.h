@@ -120,5 +120,8 @@ void dbRIPOutput(struct dbRIP *el, FILE *f, char sep, char lastSep);
 #define ETHNIC_GROUP_DEFAULT	"any"
 #define ETHNIC_NOT_DEFAULT	"include"
 
+#define ALLELE_FREQ_HI	"alleleFreqHi"
+#define ALLELE_FREQ_LOW	"alleleFreqLow"
+
 #endif /* DBRIP_H */
 

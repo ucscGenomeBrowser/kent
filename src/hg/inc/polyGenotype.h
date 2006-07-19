@@ -17,12 +17,12 @@ struct polyGenotype
     struct polyGenotype *next;  /* Next in singly linked list. */
     char *name;	/* Database ID identifying RIP */
     char *ethnicGroup;	/* Ethnic group for this measurement */
-    int plusPlus;	/* homozygous wild type */
-    int plusMinus;	/* heterozygous */
-    int minusMinus;	/* homozygous */
+    int plusPlus;	/* homozygous wild type allele count */
+    int plusMinus;	/* heterozygous allele count */
+    int minusMinus;	/* homozygous allele count */
     int sampleSize;	/* number of measurements */
-    float alleleFrequency;	/* homozygosity */
-    float unbiasedHeterozygosity;	/* heterozygosity */
+    float alleleFrequency;	/* frequency of homozygosity */
+    float unbiasedHeterozygosity;	/* frequency of heterozygosity */
     };
 
 void polyGenotypeStaticLoad(char **row, struct polyGenotype *ret);
