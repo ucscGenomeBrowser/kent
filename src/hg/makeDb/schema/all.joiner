@@ -1059,7 +1059,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
     rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
     $kgDb,!hg15,!hg16.pseudoGeneLink.kgName
-    hg15,hg16,hg17,hg18.pseudoGeneLink.kgName minCheck=0.78 dupeOk exclude=noKg
+    hg15,hg16,hg17,hg18.pseudoGeneLink.kgName minCheck=0.78 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
@@ -1894,6 +1894,22 @@ identifier gvSrcId
 "Human Mutation track source ID"     
     hg17.gvSrc.srcId
     hg17.gv.srcId
+
+# retroposon track, dbRIP_* and polyGenotype table link
+identifier dbRIPNameAlu
+"Retroposon, dbRIP database name id to polymorphism statistics link"
+    hg17.polyGenotype.name dupeOk
+    hg17.dbRIP_Alu.name unique
+
+identifier dbRIPNameL1
+"Retroposon, dbRIP database name id to polymorphism statistics link"
+    hg17.polyGenotype.name dupeOk
+    hg17.dbRIP_L1.name unique
+
+identifier dbRIPNameSVA
+"Retroposon, dbRIP database name id to polymorphism statistics link"
+    hg17.polyGenotype.name dupeOk
+    hg17.dbRIP_SVA.name unique
 
 # Dependencies not already captured in identifiers
 
