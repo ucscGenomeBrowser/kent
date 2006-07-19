@@ -13,7 +13,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.9 2006/07/19 06:51:44 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.10 2006/07/19 15:19:54 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -125,7 +125,7 @@ void checkNumRows(char *src, int numRows)
 if (numRows < gMinRows)
     errAbort("expected at least %d rows from %s, got %d", gMinRows, src, numRows);
 if ((gNeedRows >= 0) && (numRows != gNeedRows))
-    errAbort("expected %d rows from %s, got %d", src, gNeedRows, numRows);
+    errAbort("expected %d rows from %s, got %d", gNeedRows, src, numRows);
 verbose(2, "read %d rows from %s\n", numRows, src);
 }
 
@@ -375,7 +375,7 @@ gWhere = optionVal("where", gWhere);
 gChrom = optionVal("chrom", gChrom);
 gOutput = optionVal("output", gOutput);
 gInfo = optionVal("info", gInfo);
-gNoCheck = optionVal("noCheck", gInfo);
+gNoCheck = optionExists("noCheck");
 gExonSelectWord = optionVal("exonSelectWord", gExonSelectWord);
 gIgnoreUnconverted = optionExists("ignoreUnconverted");
 if (optionExists("impliedStopAfterCds"))
