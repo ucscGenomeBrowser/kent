@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1056 2006/07/18 22:54:22 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1057 2006/07/19 01:04:22 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5867,7 +5867,10 @@ if (offset >= 0)
     sprintf(query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
 	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);
-    printf("<H3>RepeatMasker Information</H3>\n");
+    if (sameString(track,"rmskNew"))
+        printf("<H3>CENSOR Information</H3>\n");
+    else
+        printf("<H3>RepeatMasker Information</H3>\n");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	ro = rmskOutLoad(row+hasBin);
@@ -18497,7 +18500,7 @@ else if (sameWord(track, "wabaCbr"))
     {
     doHgCbr(tdb, item);
     }
-else if (sameWord(track, "rmsk"))
+else if (startsWith("rmsk", track))
     {
     doHgRepeat(tdb, item);
     }
