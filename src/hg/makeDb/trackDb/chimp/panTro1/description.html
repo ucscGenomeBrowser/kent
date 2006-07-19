@@ -1,12 +1,31 @@
+<!-- Display image at top right of page -->
+<TABLE ALIGN=RIGHT BORDER=0 WIDTH=315>
+  <TR><TD ALIGN=RIGHT><A HREF="need link here to sequencing center"" TARGET=_blank>
+      <IMG SRC="/images/Pan_troglodytes.jpg" WIDTH=300 HEIGHT=219 ALT="Chimpanzee"></A>
+    </TD></TR>
+  <TR><TD ALIGN=RIGHT>
+  <FONT SIZE=-1> <em>Pan troglodytes</em><BR>
+  </FONT>
+  <FONT SIZE=-2>
+    Photo credit: <A HREF="http://www.smm.org/" TARGET=_blank>Science Museum of 
+	Minnesota</A>. All rights reserved.<BR>
+    Courtesy of
+    <A HREF = "http://www.nsf.gov/news/mmg/mmg_disp.cfm?med_id=57020&from=search_list"
+    TARGET = _BLANK>National Science Foundation</A><BR>
+</FONT>
+  </TD></TR>
+</TABLE>
+
 <P>
-The 13 Nov. 2003 chimpanzee (<em>Pan troglodytes</em>) Arachne assembly &mdash; NCBI Build 
-1 Version 1 &mdash; was produced by the Chimpanzee Genome Sequencing Consortium.
+The 13 Nov. 2003 chimpanzee (<em>Pan troglodytes</em>) Arachne assembly &mdash; 
+NCBI Build 1 Version 1 &mdash; was produced by the Chimpanzee Sequencing and 
+Analysis Consortium.</P>
 
 <H3>Sample position queries</H3>
 <P>
 A genome position can be specified by the HUGO Gene Nomenclature Committee gene 
-name of a human RefSeq, the accession number of a
-mRNA or EST, a chromosomal coordinate range, a scaffold (supercontig)
+name of a human RefSeq, the accession number of an EST or mRNA,
+a chromosomal coordinate range, a scaffold (supercontig)
 coordinate range, or keywords from 
 the GenBank description of an mRNA. The following list shows 
 examples of valid position queries for the chimpanzee genome.
@@ -35,9 +54,10 @@ User's Guide</A> for more information.
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Displays a region of chr 6 that spans 2000 bases, starting with position 1000000 </TD>
     </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
     <TR><TD VALIGN=Top NOWRAP>BRCA1</TD>
        	<TD WIDTH=14></TD>
-       	<TD>Displays region of genome where human RefSeq gene BRCA1 aligns</TD>
+       	<TD>Displays region of genome where human RefSeq gene BRCA1 (or features associated with BRCA1) aligns</TD>
     </TR>
     <TR><TD VALIGN=Top NOWRAP>AF115459</TD>
        	<TD WIDTH=14></TD>
@@ -46,15 +66,16 @@ User's Guide</A> for more information.
     <TR>
 	<TD VALIGN=Top NOWRAP>348</TD>
 	<TD><BR></TD>
-	<TD VALIGN=Top NOWRAP>Displays the region of genome with LocusLink identifier 348</TD>
+	<TD VALIGN=Top NOWRAP>Displays the region of genome with Entrez Gene identifier 348</TD>
     </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
     <TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
        	<TD WIDTH=14></TD>
        	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
     </TR>
     <TR><TD VALIGN=Top NOWRAP>sialic acid</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Lists mRNAs and RefSeqs with sialic acid in the GenBank keywords</TD>
+       	<TD VALIGN=Top>Lists mRNAs and RefSeqs with GenBank keywords sialic acid</TD>
     </TR>
     <TR><TD VALIGN=Top NOWRAP>huntington</TD>
        	<TD WIDTH=14></TD>
@@ -73,6 +94,7 @@ User's Guide</A> for more information.
 <P>
 <HR>
 <H3>Assembly details</H3>
+<P>
 This assembly covers about 95 percent of the genome and is based on 4X sequence 
 coverage. It is composed of 361,782 contigs with an N50 length of 15.7 kb, and 
 37,849 supercontigs having an N50 length of 8.6 Mb (not including gaps). The total 
