@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.108 2006/07/12 21:13:09 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.109 2006/07/19 07:43:59 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1057,7 +1057,8 @@ gffGroupLines(gff);
 for (group = gff->groupList; group != NULL; group = group->next)
     {
     /* First convert to gene-predictions since this is almost what we want. */
-    gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), exonSelectWord, genePredNoOptFld);
+    gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), exonSelectWord, genePredNoOptFld,
+                                genePredGxfDefaults);
     if (gp != NULL)
         {
 	/* Make a bed out of the gp. */
