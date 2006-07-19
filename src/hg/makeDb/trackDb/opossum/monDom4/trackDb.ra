@@ -111,7 +111,7 @@ track blastHg18KG
 shortLabel Human Proteins
 longLabel Human(hg18) proteins mapped by chained tBLASTn
 group genes
-priority 1
+priority 51
 visibility pack
 colorChromDefault off
 type psl protein
