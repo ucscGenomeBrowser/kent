@@ -59,6 +59,7 @@ type bed 6 +
 exonArrows off
 
 track ensGene
+release alpha
 shortLabel Ensembl Genes
 longLabel Ensembl v32 Gene Predictions (Protein Coding Genes)
 group genes
@@ -71,6 +72,18 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+
+track ensGene
+release beta
+shortLabel Ensembl Genes
+longLabel Ensembl v32 Gene Predictions (Protein Coding Genes)
+group genes
+priority 32.8
+hgGene on
+visibility pack
+color 150,0,0
+type genePred ensPep
+url http://jul2005.archive.ensembl.org/perl/transview?transcript=$$
 
 track multiz5way
 shortLabel Conservation
