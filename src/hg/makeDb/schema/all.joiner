@@ -1107,6 +1107,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
 #   $kgDb.blastKGRef01.acc minCheck=0.99
     $kgDb.blastKGPep02.name minCheck=0.99
     $kgDb.blastKGRef02.acc minCheck=0.99
+    $kgDb.blastKGPep04.name minCheck=0.99
+    $kgDb.blastKGRef04.acc minCheck=0.99
     $kgDb.refSeqKg.kgId minCheck=0.50
     $kgDb.rankProp.query
     $kgDb.rankProp.target
@@ -1792,6 +1794,13 @@ identifier blastHg17KGPep02Id
      danRer4.blastHg17KG.qName
      $bosTau,!bosTau1.blastHg17KG.qName
      canFam2.blastHg17KG.qName
+
+identifier blastHg18KGPep04Id 
+"hg18 peptides 04"
+     $hg.blastKGPep04.name
+     $hg.knownGene.name  minCheck=0.95
+     $hg.blastKGRef04.acc
+     monDom4.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
