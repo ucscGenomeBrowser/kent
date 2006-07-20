@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.26 2006/06/02 16:28:17 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.27 2006/06/30 19:36:44 braney Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -442,6 +442,37 @@ struct mafComp *mafFindComponent(struct mafAli *maf, char *src)
 struct mafComp *mc = mafMayFindComponent(maf, src);
 if (mc == NULL)
     errAbort("Couldn't find %s in maf", src);
+return mc;
+}
+
+struct mafComp *mafMayFindCompSpecies(struct mafAli *maf, char *species, char sepChar)
+/* Find component of given source that starts with species possibly followed by sepChar or \0 .
+   Return NULL if not found. */
+{
+struct mafComp *mc;
+int speciesLen = strlen(species);
+
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    if (startsWith(species, mc->src) )
+	{
+	char endChar = mc->src[speciesLen];
+
+	if ((endChar == '\0') || (endChar == sepChar))
+	    return mc;
+	}
+    }
+return NULL;
+}
+
+
+struct mafComp *mafFindCompSpecies(struct mafAli *maf, char *species, char sepChar)
+/* Find component of given source that starts with species followed by sepChar
+   or die trying. */
+{
+struct mafComp *mc = mafMayFindCompSpecies(maf, species, sepChar);
+if (mc == NULL)
+    errAbort("Couldn't find %s%c or just %s... in maf", species,sepChar,species);
 return mc;
 }
 

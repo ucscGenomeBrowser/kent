@@ -263,7 +263,7 @@ longLabel <em>Danio rerio</em> Ortholog (Best Blastp Hit to Ensembl)
 priority 8.1
 visibility off
 type lookup drBlastTab query target
-itemUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
+itemUrl http://www.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name flyOrthologs
 shortLabel Drosophila

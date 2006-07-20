@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.3 2006/06/08 21:18:47 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.4 2006/07/06 23:00:56 heather Exp $";
 
 struct snpSubset 
     {
@@ -98,9 +98,6 @@ return ret;
 
 
 
-
-
-
 void processSnps(struct hash *snpHash, char *illuminaTable, char *fileName, char *errorFileName)
 /* read illuminaTable */
 /* lookup details in snpHash */
@@ -119,7 +116,7 @@ FILE *errors = mustOpen(errorFileName, "w");
 int bin = 0;
 
 verbose(1, "process SNPs...\n");
-safef(query, sizeof(query), "select dbSnpId, chrom, name from %s", illuminaTable);
+safef(query, sizeof(query), "select dbSnpId, chrom, pos from %s", illuminaTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -143,8 +140,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, row[0]);
 
     bin = hFindBin(subsetElement->start, subsetElement->end);
-    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\t%s\n", 
-        bin, subsetElement->chrom, subsetElement->start, subsetElement->end, row[0], row[2]);
+    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\n", 
+        bin, subsetElement->chrom, subsetElement->start, subsetElement->end, row[0]);
     }
 
 carefulClose(&fileHandle);

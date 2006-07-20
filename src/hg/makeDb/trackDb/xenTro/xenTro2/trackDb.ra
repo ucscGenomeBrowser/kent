@@ -50,7 +50,7 @@ sGroup_bird galGal2
 sGroup_mammal monDom4 hg18 mm8 rn4
 sGroup_fish danRer4
 speciesDefaultOff rn4
-treeImage phylo/xenTro2_7way.jpg
+treeImage phylo/xenTro2_7way.gif
 
 track phastConsElements7way
 shortLabel Most Conserved

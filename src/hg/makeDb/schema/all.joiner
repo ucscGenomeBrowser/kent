@@ -30,7 +30,7 @@ set apiMel apiMel1,apiMel2
 set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1,xenTro2
-set monDom monDom1,monDom2
+set monDom monDom1,monDom2,monDom4
 set bosTau bosTau1,bosTau2
 set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
@@ -415,8 +415,8 @@ identifier vgImageProbe
 
 identifier vgExpressionPattern
 "Expression pattern - scattered, regional, etc."
-    visiGene.expressionPattern.ix
-    visiGene.expressionLevel.expressionPattern
+    visiGene.expressionPattern.id
+    visiGene.expressionLevel.expressionPattern exclude=0
 
 identifier vgLifeStageScheme
 "A scheme for describing stages of development for an organism"
@@ -1058,8 +1058,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.scBlastTab.query
     $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
     rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName
-    hg15,hg16.pseudoGeneLink.kgName minCheck=0.78
+    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
@@ -1107,6 +1106,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
 #   $kgDb.blastKGRef01.acc minCheck=0.99
     $kgDb.blastKGPep02.name minCheck=0.99
     $kgDb.blastKGRef02.acc minCheck=0.99
+    $kgDb.blastKGPep04.name minCheck=0.99
+    $kgDb.blastKGRef04.acc minCheck=0.99
     $kgDb.refSeqKg.kgId minCheck=0.50
     $kgDb.rankProp.query
     $kgDb.rankProp.target
@@ -1493,8 +1494,8 @@ identifier rgdEstId external=RGD
 
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
-    $rn.rgdQtl.name
-    $rn.rgdQtlLink.name
+    $rn,hg17.rgdQtl.name
+    $rn,hg17.rgdQtlLink.name
 
 identifier rgdSslpId external=RGD
 "RGD SSLP ID"
@@ -1793,6 +1794,16 @@ identifier blastHg17KGPep02Id
      $bosTau,!bosTau1.blastHg17KG.qName
      canFam2.blastHg17KG.qName
 
+identifier blastHg18KGPep04Id 
+"hg18 peptides 04"
+     hg18.blastKGPep04.name
+     hg18.blastKGRef04.acc full
+     hg18.knownGene.name  minCheck=0.95
+     monDom4.blastHg18KG.qName
+     galGal3.blastHg18KG.qName
+     xenTro2.blastHg18KG.qName
+     danRer4.blastHg18KG.qName
+
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
      $hg.blastKGRef01.extra1 dupeOk
@@ -1888,11 +1899,28 @@ identifier gvId
     hg17.gv.id
     hg17.gvLink.id
     hg17.gvAttr.id
+    hg17.gvAttrLong.id
 
 identifier gvSrcId
 "Human Mutation track source ID"     
     hg17.gvSrc.srcId
     hg17.gv.srcId
+
+# retroposon track, dbRIP_* and polyGenotype table link
+identifier dbRIPNameAlu
+"Retroposon, dbRIP database name id to polymorphism statistics link"
+    hg17.polyGenotype.name dupeOk
+    hg17.dbRIP_Alu.name unique
+
+identifier dbRIPNameL1
+"Retroposon, dbRIP database name id to polymorphism statistics link"
+    hg17.polyGenotype.name dupeOk
+    hg17.dbRIP_L1.name unique
+
+identifier dbRIPNameSVA
+"Retroposon, dbRIP database name id to polymorphism statistics link"
+    hg17.polyGenotype.name dupeOk
+    hg17.dbRIP_SVA.name unique
 
 # Dependencies not already captured in identifiers
 

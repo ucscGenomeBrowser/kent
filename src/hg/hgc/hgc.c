@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1045 2006/06/27 13:56:34 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1050 2006/07/10 17:46:13 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11856,9 +11856,11 @@ if (variantSignal == '*')
    stripChar(itemCopy, '*');
 if (variantSignal == '?')
    stripChar(itemCopy, '?');
+if (variantSignal == '#')
+   stripChar(itemCopy, '#');
 genericHeader(tdb, itemCopy);
 checkAndPrintCloneRegUrl(stdout,itemCopy);
-if (variantSignal == '*' || variantSignal == '?')
+if (variantSignal == '*' || variantSignal == '?' || variantSignal == '#')
     printf("<B>Note this BAC was found to be variant.   See references.</B><BR>\n");
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
@@ -17623,7 +17625,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void doIllumina (struct trackDb *tdb, char *itemName)
+void doAffy500K (struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
@@ -17636,13 +17638,44 @@ int start = cartInt(cart, "o");
 genericHeader(tdb, itemName);
 
 safef(query, sizeof(query),
-      "select chromEnd, illuminaName from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+      "select chromEnd, strand, observed, rsId from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
-    printf("<B>Illumina ID:</B> %s <BR />\n", row[1]);
+    if (differentString(row[1],"?")) {printf("<B>Strand: </B>%s\n", row[1]);}
+    printf("<BR><B>Polymorphism:</B> %s <BR />\n", row[2]);
+    printf("<BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
+    if (!sameString(row[3], "unknown"))
+        {
+        printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", row[3]);
+	}
     }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void doIllumina300K (struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int start = cartInt(cart, "o");
+// char *chrom = cartString(cart, "c");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select chromEnd from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
+printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -17780,14 +17813,15 @@ void doGv (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Genome variation track */
 {
 char *table = tdb->tableName;
-struct gvPos *mut;
-struct gv *details;
+struct gvPos *mut = NULL;
+struct gv *details = NULL;
 struct gvAttr attr;
+struct gvAttrLong attrLong;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName;
+char *escName = NULL;
 int hasAttr = 0;  
 int i;
 int start = cartInt(cart, "o");
@@ -17798,8 +17832,11 @@ genericHeader(tdb, itemName);
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query), "select * from gv where id = '%s'", escName);
 details = gvLoadByQuery(conn, query); 
-/* change this based on species? */
-printf("<B>HGVS name:</B> %s <BR />\n", details->name);
+/* change label based on species */
+if (sameString(organism, "Human"))
+    printf("<B>HGVS name:</B> %s <BR />\n", details->name);
+else
+    printf("<B>Official name:</B> %s <BR />\n", details->name);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, escName);
@@ -17841,6 +17878,20 @@ printf("<DL>");
 /* loop through attributes */
 for(i=0; i<gvAttrSize; i++)
     {
+    /* check all 3 attribute tables for each type */
+    safef(query, sizeof(query),
+        "select * from gvAttrLong where id = '%s' and attrType = '%s'",
+        escName, gvAttrTypeKey[i]);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        hasAttr++;
+        gvAttrLongStaticLoad(row, &attrLong);
+        printGvAttrCatType(i); /* only print header, if data */
+        /* print value */
+        printf("%s<BR />", attrLong.attrVal);
+        }
+    sqlFreeResult(&sr);
     safef(query, sizeof(query),
         "select * from gvAttr where id = '%s' and attrType = '%s'",
         escName, gvAttrTypeKey[i]);
@@ -17854,9 +17905,9 @@ for(i=0; i<gvAttrSize; i++)
         /* print value */
         printf("%s<BR />", attr.attrVal);
         }
+    sqlFreeResult(&sr);
     hasAttr += printGvLink(escName, i);
     }
-sqlFreeResult(&sr);
 if (hasAttr > 0)
     printf("</DD>"); 
 printf("</DL>\n");
@@ -18994,9 +19045,13 @@ else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
     }
-else if (sameString("illumina", track))
+else if (sameString("snpArrayAffy500", track))
     {
-    doIllumina(tdb, item);
+    doAffy500K(tdb, item);
+    }
+else if (sameString("snpArrayIllumina300", track))
+    {
+    doIllumina300K(tdb, item);
     }
 else if (sameString("hgMut", track))
     {

@@ -2,10 +2,11 @@ name mouse
 db mm8
 
 name rat
-db rn3
+db rn4
 
 name zebrafish
 db danRer3
+otherUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name drosophila
 db dm2

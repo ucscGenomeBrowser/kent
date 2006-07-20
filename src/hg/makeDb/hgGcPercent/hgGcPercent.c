@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.23 2006/04/24 14:47:36 angie Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.24 2006/07/08 18:27:59 daryl Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -418,6 +418,8 @@ if (verboseLevel() >= 2)
     if (doGaps) fprintf(stderr, " -doGaps");
     if (wigOut) fprintf(stderr, " -wigOut");
     if (chr) fprintf(stderr, " -chr=%s", chr);
+    if (bedRegionInName) fprintf(stderr, " -bedRegionInName=%s", bedRegionInName);
+    if (bedRegionOutName) fprintf(stderr, " -bedRegionOutName=%s", bedRegionOutName);
     fprintf(stderr, "\n");
     }
 

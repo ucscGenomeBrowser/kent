@@ -1,5 +1,7 @@
 include ../../inc/common.mk
 
+HG_WARN=-Wall
+
 L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
@@ -10,21 +12,18 @@ O = ${A}.o
 
 include ../../inc/cgi_build_rules.mk
 
-compile: phyloForm.h $O
+compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 	chmod a+rx $A${EXE}
 	cp $A${EXE} ${HOME}/bin/${MACHTYPE}/
 
-phyloForm.h: phyloForm.html
-	echo "char phyloForm[] =" > phyloForm.h
-	sed -e 's/\"/\\\"/g' phyloForm.html | gawk '{ print "\"" $$0 "\\n\"" }' >> phyloForm.h
-	echo ";" >> phyloForm.h
-			
-
 test: compile
 	${HOME}/bin/${MACHTYPE}/phyloGif -phyloGif_tree=17way.nh > test.gif
 
+testWeb: compile
+	wget -O testWeb.gif 'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?phyloGif_tree=(A:0.1,B:0.1);'
+	
 clean::
-	rm -f test.gif phyloForm.h
+	rm -f test.gif testWeb.gif
 

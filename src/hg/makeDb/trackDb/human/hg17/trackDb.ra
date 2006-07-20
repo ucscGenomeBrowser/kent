@@ -326,7 +326,7 @@ speciesGroups mammal vertebrate
 sGroup_mammal panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
 sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1 
 speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
-treeImage phylo/Mm7_17way.jpg
+treeImage phylo/hg17_17way.gif
 
 track altConservation
 compositeTrack on
@@ -598,6 +598,29 @@ group varRep
 priority 143
 visibility hide 
 type bed 6 +
+
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 144
+visibility hide
+type bed 4 .
+
+    track snpArrayAffy500
+    subTrack snpArray
+    shortLabel Affy 500K
+    longLabel Affymetrix GeneChip Human Mapping 500K
+    type bed 6 +
+    priority 1
+
+    track snpArrayIllumina300
+    subTrack snpArray
+    shortLabel Illumina 300K
+    longLabel Illumina HumanHap300 BeadChip
+    type bed 4 .
+    priority 2
 
 track varMultizHMRDEC
 shortLabel varMultiz6Way
@@ -2158,4 +2181,60 @@ xrefQuery select mutId, name from %s where name like '%%%s%%'
 searchMethod fuzzy
 padding 1000
 searchPriority 51
+
+searchName gvNameSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+xrefTable gv
+xrefQuery select id, name from %s where name like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+
+searchName gvAliasSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+dontCheckXrefQueryFormat on
+xrefTable gvAttr
+xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+
+searchName illuminaShort
+searchTable snpArrayIllumina300
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName affy500Short
+searchTable snpArrayAffy500
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName illuminaLong
+searchTable snpArrayIllumina300
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16
+padding 250
+
+searchName affy500Long
+searchTable snpArrayAffy500
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (SNP_A-[0-9]+(_[0-9]+)?)
+searchPriority 16
+padding 250
 

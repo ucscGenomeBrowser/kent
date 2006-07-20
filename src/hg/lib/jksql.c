@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.89 2006/05/20 00:54:56 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.90 2006/07/01 05:02:05 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1152,6 +1152,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&list);
 return list;
+}
+
+struct hash *sqlQuickHash(struct sqlConnection *conn, char *query)
+/* Return a hash filled with results of two column query. 
+ * The first column is the key, the second the value. */
+{
+struct hash *hash = hashNew(16);
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(hash, row[0], cloneString(row[1]));
+sqlFreeResult(&sr);
+return hash;
 }
 
 struct slInt *sqlQuickNumList(struct sqlConnection *conn, char *query)

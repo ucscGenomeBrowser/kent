@@ -14,6 +14,8 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
+static char const rcsid[] = "$Id: doStamps.c,v 1.3 2006/07/06 21:05:27 fanhsu Exp $";
+
 Color boundaryColor;
 
 void setPbStampPict(struct pbStampPict *stampPictPtr, struct pbStamp *stampDataP, int ix, int iy, int iw, int ih)
@@ -405,6 +407,7 @@ int i;
 
 conn2= hAllocConn();
 safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
+//safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", "proteins060115", stampName);
     	
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);

@@ -96,7 +96,11 @@
 #define TRUE 1
 #define FALSE 0
 #define boolean int
+#ifndef	__cplusplus
+#ifndef bool
 #define bool char
+#endif
+#endif
 
 /* Some other type synonyms */
 #define UBYTE unsigned char   /* Wants to be unsigned 8 bits. */
@@ -818,7 +822,13 @@ boolean fastReadString(FILE *f, char buf[256]);
 /* Read a string into buffer, which must be long enough
  * to hold it.  String is in 'writeString' format. 
  * Returns FALSE at EOF. */
- 
+
+void writeBits64(FILE *f, bits64 x);
+/* Write out 64 bit number in manner that is portable across architectures */
+
+bits64 readBits64(FILE *f);
+/* Write out 64 bit number in manner that is portable across architectures */
+
 void carefulClose(FILE **pFile);
 /* Close file if open and null out handle to it. */
 

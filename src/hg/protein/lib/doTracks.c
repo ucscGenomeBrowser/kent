@@ -14,7 +14,7 @@
 #include "hgColors.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.11 2006/07/06 18:26:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.12 2006/07/11 20:53:02 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -824,7 +824,6 @@ for (j = 0; j < mrnaLen; j++)
 	}
     vgBox(g_vg, xx, yy-9+3*(j-(j/3)*3), pbScale, 3, color);
     }
-
 if ((exonEndPos - exonStartPos)*pbScale/3 > 12)
     {
     safef(exonNumStr, sizeof(exonNumStr), "%d", exonNumber);
@@ -871,12 +870,9 @@ char **row, **row2;
 
 char cond_str[255];
 
-char *genomeID, *seqID, *modelID, *eValue, *sfID, *sfDesc;
-
-char *region;
+char *sfID, *seqID, *sfDesc,  *region;
 int  done;
-
-char *ensPep;
+int j;
 
 char *chp, *chp2;
 int  sfCnt;
@@ -890,45 +886,34 @@ conn2 = hAllocConn();
 conn3 = hAllocConn();
 
 safef(query2, sizeof(query), 
-      "select distinct protein from %s.ensemblXref3 where swissAcc='%s'", 
-      protDbName, proteinID);
+    "select distinct sfID, seqID from %s.ensemblXref3 x, %s.sfAssign a where (swissAcc='%s' or tremblAcc='%s') and seqID=x.protein and protein != '' and evalue <= 0.02",
+      protDbName, protDbName, proteinID, proteinID);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
-if (row2 == NULL) 
-    {
-    safef(query2, sizeof(query), 
-          "select distinct protein from %s.ensemblXref3 where tremblAcc='%s';", 
-          protDbName, proteinID);
-    sr2  = sqlMustGetResult(conn2, query2);
-    row2 = sqlNextRow(sr2);
-    if (row2 == NULL) return(0);
-    }
-
 sfCnt=0;    
 while (row2 != NULL)
     {      
-    ensPep = row2[0];
-    if (sameWord(ensPep, "")) continue;
-
-    ensPepName = ensPep;
-
+    sfID = row2[0];
+    seqID= row2[1];
+    
     safef(query, sizeof(query), 
-    	  "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", protDbName, ensPep);
+    	  "select region from %s.sfAssign where sfID='%s' and seqID='%s' and evalue <=0.02", 
+	  protDbName, sfID, seqID);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     
     while (row != NULL)
     	{      
-    	genomeID = row[0];
-    	seqID    = row[1];
-    	modelID  = row[2];
-    	region   = row[3];
-    	eValue   = row[4];
-    	sfID     = row[5];
-        /* sfDesc   = row[6]; */
-        /* !!! the recent Suprefamily sfAssign table does not have valid sf description */
-    	safef(cond_str, sizeof(cond_str), "id=%s;", sfID);
+  	region   = row[0];
+    	
+	for (j=0; j<sfCnt; j++)
+	    {
+	    if (sfId[j] == atoi(sfID)) goto skip;
+	    }
+	
+	safef(cond_str, sizeof(cond_str), "id=%s;", sfID);
     	sfDesc = sqlGetField(conn3, protDbName, "sfDes", "description", cond_str);
+
 
     	/* !!! refine logic here later to be defensive against illegal syntax */
     	chp = region;
@@ -953,16 +938,14 @@ while (row2 != NULL)
 		}
 	    chp2++;
 	    sscanf(chp, "%d", &int_end);
-
  	    sfId[sfCnt]    = atoi(sfID);
 	    sfStart[sfCnt] = int_start;
 	    sfEnd[sfCnt]   = int_end;
 	    strncpy(superfam_name[sfCnt], sfDesc, MAXNAMELEN-1);
-
 	    sfCnt++;
 	    chp = chp2;
 	    }
-
+skip:
     	row = sqlNextRow(sr);
     	}
 
@@ -974,7 +957,6 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
 sqlFreeResult(&sr2);
-  
 return(sfCnt);
 }
     
@@ -1164,8 +1146,6 @@ for (ii=0; ii<sf_cnt; ii++)
 	    }
 
 	len = strlen(superfam_name[ii]);
-	/* prevent the painting spill over to the label */
-	if (xx < 120) xx = 120;
 	vgDrawBox(g_vg, xx, yy-9+(jj%4)*5, (sfEnd[ii] - sfStart[ii])*pbScale, 9, sfColor);
 	mapBoxSuperfamily(xx, yy-9+(jj%4)*5, 
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,
@@ -1176,7 +1156,7 @@ for (ii=0; ii<sf_cnt; ii++)
 	}
     }
 calxy0(0, *yOffp, &xx, &yy);
-vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
+vgBox(g_vg, 0, yy-8, xx, 22, bkgColor);
 
 trackTitle = cloneString("Superfamily/SCOP");
 vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, trackTitle);

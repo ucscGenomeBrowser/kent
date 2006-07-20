@@ -694,6 +694,7 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
 
 # AUTO UPDATE GENBANK MRNA RUN  (DONE 7/8/04 angie)
     # 7/22/04: added xenoRefGene
+    # 2/22/06: added refGene
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -768,6 +769,23 @@ canFam1.downloadDir = canFam1
 #10958036 bases of 2359845093 (0.464%) in intersection
     # Clean up:
     rm -r work/initial.canFam1
+
+    # 2/22/06: add native refseq
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    # genbank.conf: canFam1.refseq.mrna.native.load = yes
+    make etc-update
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -orgCat=native -initial \
+      canFam1 &
+    tail -f var/build/logs/2006.02.22-17:54:01.canFam1.initalign.log
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad canFam1 &
+    tail -f var/dbload/hgwdev/logs/2006.02.22-18:01:09.dbload.log
+    featureBits canFam1 refGene
+#1220839 bases of 2359845093 (0.052%) in intersection
 
 
 # COMPARE COUNTS OF ALIGNED VS NON-ALIGNED MRNAS (DONE 7/8/04 angie)
@@ -1930,51 +1948,6 @@ set chr = "chr$c"
       $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndy.sql
     hgLoadBed canFam1 cpgIslandGgfAndy -tab -noBin \
       -sqlTable=cpgIslandGgfAndy.sql cpgIslandGgfAndy.bed
-
-
-# RELOAD ENSEMBL GENES (TODO 9/1/04 angie)
-    # previous set was sent out to dog group -- pull in the released 
-    # version from Ensembl's main site.  Looks like 75 transcripts have 
-    # been yanked, will ask Steve Searle and Ewan.  
-    mkdir /cluster/data/canFam1/bed/ensembl
-    cd /cluster/data/canFam1/bed/ensembl
-    # Get the ensembl gene data from 
-    # http://www.ensembl.org/Canis_familiaris/martview
-    # Follow this sequence through the pages:
-    # Page 1) Make sure that the Canis_familiaris choice is selected. Hit next.
-    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
-    # Page 3) Choose the "Structures" box. 
-    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
-    # Save as ensembl.gff.gz
-    # Add "chr" to front of each line in the gene data gtf file to make 
-    # it compatible with our software.
-    gunzip -c ensembl.gff.gz \
-    | perl -wpe 's/^([1-9][0-9]?|[XYM]|Un)/chr$1/ \
-                 || die "Line $. doesnt start with dog chrom:\n$_"' \
-    > ensGene.gtf
-    ssh hgwdev
-    ldHgGene -gtf -genePredExt canFam1 ensGene \
-      /cluster/data/canFam1/bed/ensembl/ensGene.gtf
-
-    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
-    # hgKnownToSuper.  Use ensMart to create it as above, except:
-    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
-    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
-    # Choose Text, tab-separated as the output format.  Result name ensGtp.
-    # Save file as ensGtp.txt.gz
-    gunzip ensGtp.txt.gz
-    hgsql canFam1 < ~/kent/src/hg/lib/ensGtp.sql
-    hgsql canFam1 -e 'load data local infile "ensGtp.txt" into table ensGtp'
-
-    # Load Ensembl peptides:
-    # Get them from ensembl as above in the gene section except for
-    # Page 3) Choose the "Sequences" box. 
-    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
-    # Save file as ensemblPep.fa.gz
-    gunzip -c ensemblPep.fa.gz \
-    | perl -wpe 's/^(>ENSCANT\d+\.\d+).*/$1/' \
-    > ensPep.fa
-    hgPepPred canFam1 generic ensPep ensPep.fa
 
 
 # NEW PHASTCONS DOG/HUMAN/MOUSE (DONE 9/29/04 angie)
@@ -3251,7 +3224,8 @@ EOF
     # it compatible with our software.
     gunzip -c ensembl.gff.gz \
     | perl -wpe 's/^([0-9]+|X|Y|M|Un(_random)?)/chr$1/ \
-                 || die "Line $. doesnt start with rat chrom:\n$_"' \
+                 || die "Line $. doesnt start with rat chrom:\n$_"; \
+                 s/chrMT/chrM/;' \
     > ensGene.gtf
     ssh hgwdev
     ldHgGene -gtf -genePredExt canFam1 ensGene \
@@ -3303,4 +3277,18 @@ EOF
     # update trackDb; need a canFam1-specific page to describe informants
     dog/canFam1/nscanGene.html    (from  CanFam1_hg17_nscan_10_18_2005/description.html )
     dog/canFam1/trackDb.ra
+
+
+###########################################################################
+# LIFTOVER CHAINS CANFAM1 -> CANFAM2 (DONE 7/10/06 angie)
+    # Started 7/5 -- This creates the directory and scripts:
+    ~/kent/src/utils/doSameSpeciesLiftOver.pl canFam1 canFam2 -debug
+    # Run it for real and log it:
+    cd /cluster/data/canFam1/bed/blat.canFam2.2006-07-05
+    ~/kent/src/utils/doSameSpeciesLiftOver.pl canFam1 canFam2 \
+       >& do.log & tail -f do.log
+    # Had to use -continue a few times because I'm debugging the script,
+    # and -buildDir /cluster/data/canFam1/bed/blat.canFam2.2006-07-05 when
+    # the date changed, but it finished!
+
 

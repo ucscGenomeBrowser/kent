@@ -19,10 +19,9 @@ int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2;
 
-char query[256], query2[256], query5[256];
-struct sqlResult *sr, *sr2, *sr5;
-char **row, **row2, **row5;
-char *r1, *r2, *r3, *r5;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
     
 char *chp0, *chp;
 char *kgID;
@@ -30,7 +29,6 @@ FILE *o1, *o2;
 char cond_str[256];
 char *database;
 char *proteinDB;
-char *refSeqName;
 boolean doingAlias, bothDone;
 
 char *answer;

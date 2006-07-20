@@ -22,7 +22,7 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.7 2006/04/22 00:30:15 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.8 2006/07/06 17:34:25 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -46,6 +46,9 @@ void printArray(FILE *f)
 {
 int i;
 boolean first = TRUE;
+/* special case for UTR/intron */
+if (functionFound[5] && functionFound[6])
+    functionFound[5] = FALSE;
 for (i=0; i<ArraySize(functionStrings); i++)
     if (functionFound[i])
         {

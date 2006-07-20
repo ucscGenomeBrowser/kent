@@ -5815,6 +5815,10 @@ done
 # for mm8 on 2006-03-13 (see makeMm8.doc).
 # RECREATE THE HGNEAR TABLES FOR RAT AND MOUSE TO UPDATE THEM 
 # (DONE, 2006-05-31, hartera)
+# RE-MADE THE ZEBRAFISH BLASTP TABLES USING THE TRANSCRIPT ID INSTEAD OF THE
+# PEPTIDE ID FOR EACH SEQUENCE - FOR ALL OTHER SPECIES THE PEPTIDE SEQUENCES
+# ARE REPRESENTED BY THEIR KNOWN GENES TRANSCRIPT ID
+# (DONE, 2006-07-03, hartera)
     ssh hgwdev
     mkdir -p /cluster/data/danRer3/bed/hgNearBlastp
     cd /cluster/data/danRer3/bed/hgNearBlastp
@@ -5871,6 +5875,84 @@ _EOF_
     nice doHgNearBlastp.pl config.ra >& do.log &
     tail -f do.log
     # Took about 25 minutes.
+
+    # Need to remake all the BlastTab tables using the transcript Id instead
+    # of the protein ID for zebrafish Ensembl Genes.
+    # create ensZfishBlastTab and drBlastTab tables using the Ensembl 
+    # transcript Ids for the tables instead of the peptide Ids
+    # (2006-07-03, hartera)
+    ssh hgwdev
+    # create the FASTA file of Ensembl peptide sequences with transcript IDs
+    # there is a one to one relationship between these IDs.
+    cd /cluster/data/danRer3/bed/blastp
+    # then create a fasta file of the sequences:
+    pepPredToFa danRer3 ensPep ensPep.faa
+    mkdir /cluster/data/danRer3/bed/hgNearBlastp/updates2 
+    cd /cluster/data/danRer3/bed/hgNearBlastp/updates2 
+cat << _EOF_ > config.ra
+# Latest zebrafish vs. other Gene Sorter orgs:
+# human, mouse, rat, fly, worm, yeast
+
+targetGenesetPrefix ensZfish
+targetDb danRer3
+queryDbs hg18 mm8 rn4 dm2 ce2 sacCer1
+
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensPep.faa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+rn4Fa /cluster/data/rn4/bed/blastp/known.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep154.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/danRer3/bed/hgNearBlastp/updates2
+scratchDir /san/sanvol1/scratch/danRer3HgNearBlastp/updates2
+_EOF_
+     # << this line makes emacs coloring happy
+    nice doHgNearBlastp.pl config.ra >& do.log &
+    tail -f do.log
+    # Took about 45 minutes
+    # update sacCer1 otherOrgs.ra to use danRer3 instead of danRer1 
+    # for drBlastTab.
+    
+# also need to update:
+# dm1, hg{15,16,17}, mm{5,6,7}, rn{2,3}
+# Human (hg15 and hg16), Drosophila, mouse mm5 and rat all use danRer1.
+# Human hg17 and mouse mm6 and mm7 uses danRer2.
+  # Update these all to use the Zv5 (danRer3) Ensembl proteins.
+  # Ensembl 38 (April 2006)
+  ssh hgwdev
+  cd /cluster/data/danRer3/bed/hgNearBlastp/updates2
+cat << _EOF_ > config2.ra
+# Latest zebrafish vs. other Gene Sorter orgs:
+# human, mouse, rat, fly - older databases
+
+targetGenesetPrefix ensZfish
+targetDb danRer3
+queryDbs hg17 hg16 hg15 mm7 mm6 mm5 rn3 rn2 dm1
+
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensPep.faa
+hg17Fa /cluster/data/hg17/bed/blastp/known.faa
+hg16Fa /cluster/data/hg16/bed/blastp/known.faa
+hg15Fa /cluster/data/hg15/bed/blastp/known.faa
+mm7Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+mm6Fa /cluster/data/mm6/bed/geneSorter/blastp/known.faa
+mm5Fa /cluster/data/mm5/bed/geneSorter/blastp/known.faa
+rn3Fa /cluster/data/rn3/bed/blastp/known.faa
+rn2Fa /cluster/data/rn2/bed/blastp/known.faa
+dm1Fa /cluster/data/dm1/bed/blastp/bdgp.faa
+
+buildDir /cluster/data/danRer3/bed/hgNearBlastp/updates2
+scratchDir /san/sanvol1/scratch/danRer3HgNearBlastp/updates2
+_EOF_
+     # << this line makes emacs coloring happy
+    # create BlastTab tables for all queries vs target and no self blastp
+    nice doHgNearBlastp.pl config2.ra -noSelf -queryOnly >& do2.log &
+    tail -f do2.log
+    # Took about 30 minutes
+    # Update and commit hgGeneData and hgNearData files to make sure that 
+    # all queries and links now work for the transcript ID instead of 
+    # peptide ID for ensZfishBlastTab and drBlastTab tables.
 
 # END OF HGNEAR STUFF
 ####################################################
@@ -6351,7 +6433,6 @@ CREATE TABLE ens38Zfish (
     # ENSDART00000009971 has only 48% Identity to Q5DTD0. maps to Q58EF8 on
     # Ensembl web page.
     # Use ensBlastp90.
-
 # Add a proteinID column to the ensGene table:
     ssh hgwdev
     cd /cluster/data/danRer3/bed/ensGenes
@@ -6372,6 +6453,52 @@ CREATE TABLE ens38Zfish (
     # once this is done, can create ensCanonical and ensIsoforms table -
     # see section on "BUILD GENE SORTER TABLES".
     
+    # Add table for Ensembl 38 Ensembl Transcript IDs and RefSeq IDs
+    # and Entrez Gene ID.
+    ssh hgwdev 
+    cd /cluster/data/danRer3/bed/ensGenes 
+cat << 'EOF' > ens38Zfish2.sql
+CREATE TABLE ens38Zfish2 (
+    transcriptId varchar(255) not null,     
+    entrezGeneId varchar(255) not null,     
+    refSeqId varchar(255) not null
+);
+'EOF'
+    # << emacs
+    tail +2 ensGeneInfo38Coding2.txt > ens38Coding2.tab
+    hgLoadSqlTab test ens38Zfish2 ens38Zfish2.sql ens38Coding2.tab
+    hgsql -N -e 'select distinct(entrezGeneId) from ens38Zfish2;' test \
+         | sort > ens38Zfish2.geneId.uniq
+    wc -l ens38Zfish2.geneId.uniq
+    # 6764 ens38Zfish2.geneId.uniq 
+    hgsql -e 'select count(distinct extDbId) from ens38Zfish;' test
+    # 9028
+    hgsql -N -e 'select distinct(extDbId) from ens38Zfish;' test \
+          | sort > ens38Zfish.extDbId.sort
+    grep -v NM ens38Zfish.extDbId.sort > ens38Zfish.extDbIdNoNM.sort
+    # 8982 left
+    grep -v BRARE ens38Zfish.extDbIdNoNM.sort \
+            > ens38Zfish.extDbIdNoNMandNoSP.sort
+    grep -v NP ens38Zfish.extDbIdNoNMandNoSP.sort \
+            > ens38Zfish.extDbIdNoNMNoSPNoNP.sort
+    wc -l ens38Zfish.extDbIdNoNMNoSPNoNP.sort
+    # 5284 ens38Zfish.extDbIdNoNMNoSPNoNP.sort
+    awk '{print $2}' ens38/ensToRefSeqvsZFIN.txt | sort | uniq \
+        > ensToRefSeqvsZFIN.names.uniq
+    # how many in common
+    comm -12 ens38Zfish.extDbIdNoNMNoSPNoNP.sort ensToRefSeqvsZFIN.names.uniq \
+        > common
+    wc -l common
+    # 4176 common
+    comm -23 ens38Zfish.extDbIdNoNMNoSPNoNP.sort ensToRefSeqvsZFIN.names.uniq \
+        > extDbIdNotfromZFINviaRefSeq 
+    hgsql -N -e 'select mrnaAcc from refLink where locusLinkId != "";' danRer3 | sort | uniq > mrnaAcc.refLink.dr3.uniq
+    wc -l mrnaAcc.refLink.dr3.uniq
+    # 8811 mrnaAcc.refLink.dr3.uniq
+    comm -12 mrnaAcc.refLink.dr3.uniq ensToRefSeq.refseq | wc
+    # 7738 
+    wc -l ensToRefSeq.refseq
+    # 7738 
     # for the Known Genes details pages. Changed table name from 
     # ensGeneXRef to ensXRefZfish as there are a number of tables already
     # with similar names to ensGeneXRef so this would be confusing.

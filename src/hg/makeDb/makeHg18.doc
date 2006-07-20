@@ -9599,6 +9599,17 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
     #	real    2m42.311s
     #	73 % of the data values are zero
 
+    #	create download gzip files from the bz2 files:
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/regPotential7X
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg18.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg18.gz
+	echo
+    done
+
 #########################################################################
 # create md5sum.txt under bigZips (DONE, 6/7/06, Fan)
 
@@ -10159,6 +10170,63 @@ hgsql hg18 < snp126ExceptionDesc.sql
 # add counts to exception.human.126, can start with exception.template
 hgsql -e 'select count(*), exception from snp126Exceptions group by exception' hg18
 mysql> load data local infile 'exception.human.126' into table snp126ExceptionDesc;
+
+################################################################
+# SNP126 edit: condense UTR/intron func into just intron at Jim's request
+ssh kkr5u00
+cd /scratch/snp/126/human
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense hg18snp126 
+/bin/csh pipeline.csh
+ssh hgwdev
+cd /cluster/home/heather/transfer/snp
+hgsql hg18 -e 'drop table snp126'
+hgsql hg18 < /cluster/home/heather/kent/src/hg/lib/snp126.sql
+hgsql hg18 -e 'load data local infile "snp126.tab" into table snp126'
+hgsql hg18 -e 'alter table snp126 add index name (name)'
+hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
+
+
+################################################################
+### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
+    # Make file/table of high quality single base pair differences
+    # between hg18 and panTro2
+    set bedDir = /cluster/data/hg18/bed/chimpHiQualDiffs
+    mkdir -p $bedDir
+    cd $bedDir
+    sed 's/simpleNucDiff/chimpHiQualDiffs/' ~/kent/src/hg/lib/simpleNucDiff.sql >! chimpHiQualDiffs.sql
+
+    set axtDir = /cluster/data/hg18/bed/blastz.panTro2/axtRBestNet
+    mkdir -p chroms; cd chroms
+    ls -1 $axtDir | grep chr | grep axt | sed 's/.hg18.panTro2.net.axt.gz//' | grep -v random | grep -v "_" | xargs mkdir
+    set workDir = /scratch/chqd
+    mkdir -p $workDir
+    touch $workDir/chqd.log
+#       time nice /cluster/home/daryl/bin/i386/chimpHiQualDiffs $workDir/$f /cluster/data/panTro2/bed/quality/qac/panTro2.qac $f.chimpHiQualDiffs
+.bed>>& $workDir/chqd.log
+    foreach f (chr*)
+        echo -n $f "  "
+        mkdir -p $workDir/$f/
+        cp $axtDir/$f.*.axt.gz $workDir/$f/
+        gunzip $workDir/$f/$f.*.axt.gz
+        time nice /cluster/home/daryl/bin/i386/chimpHiQualDiffs $workDir/$f /cluster/data/panTro2/bed/quality/qac/panTro2.qac $f.chimpHiQualDiffs
+.bed
+        rm -f $workDir/$f/$f.*axt
+        rmdir $workDir/$f/
+    end
+    mv $workDir/chqd.log .
+    cat chr*bed >! ../chimpHiQualDiffs.bed
+
+    ## The load (sort) ran out of memory on hgwdev, so sort the 
+    ## file first on kolossus and then load it on hgwdev
+    ssh kolossus
+    time hgLoadBed -strict -sqlTable=chimpHiQualDiffs.sql -noLoad hg18 chimpHiQualDiffs chimpHiQualDiffs.bed
+    # 110.214u 10.836s 2:24.42 83.8%  0+0k 0+0io 1pf+0w
+    exit
+    ## hgwdev 
+    time hgLoadBed -hasBin -noSort -sqlTable=chimpHiQualDiffs.sql hg18 chimpHiQualDiffs bed.tab
+    # 328.890u 113.230s 42:26.00 17.3%        0+0k 0+0io 197676pf+0w
+
+    ## TODO: need to filter out polymorphic sites (SNPs)
 
 
 #################################################################

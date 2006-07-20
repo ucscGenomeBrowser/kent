@@ -21338,7 +21338,7 @@ load data local infile "hgMutAttrLink.txt" into table hgMutAttrLink;
 load data local infile "hgMutAttrSP.txt" into table hgMutAttr;
 
 #############################################################
-# genomeVar  Belinda Giardine
+# gv*  Belinda Giardine
 # These tables are to replace the hgMut tables
 # Most data is converted by me (on PSU machines) to loadable format and copied.
 # The Swiss-Prot/UniProt data, is generated from the dv track tables and
@@ -21367,67 +21367,61 @@ convertAttrSP < listSPconnections.tab > genomeVarAttrSPgene.txt
 #generateHGVSname is up 1 directory and does rest of SwissProt data
 #this script needs redone to not depend on dv tables
 
-# June 21, 2006
-autoSql genomeVar.as genomeVar -dbLink
-#move bin in struct so works as bed 4+
-#move .h file to inc
-
+#June 27, 2006
+autoSql gv.as gv -dbLink
 #edit indexes and string lengths in .sql file
-mutId=64, lsdbAbrev=48, nameType=48, linkId=64, raKey=64
-primary key=index except genomeVarSrc table
+id=48, srcId=48, raKey=48, attrType=48,
+primary key=index on bin and attr and link ids (id, attrType for attrs)
 #do enums
 #add unique index, to prevent doubles
-UNIQUE KEY (chrom(12), chromStart, chromEnd, mutId)
+UNIQUE KEY (chrom(12), chromStart, chromEnd, name)
+#added id field to gvPos struct so can keep ID when change name
+#    char *id;   /* Added field to hold ID if change name */
+#set to null in gv.c file
 
-#create tables
-hgsql hg17 < genomeVar.sql
-
-#prep data: concatenate all the genomeVar data
-cat genomeVarSP.txt genomeVarBgmut.txt genomeVarCftr.txt genomeVarHbVar.txt genomeVarPah.txt genomeVarARdb.txt > genomeVarAll.txt
-#sort
-grep "^chr" genomeVarAll.txt | sort -k1,1 -k2,2n > genomeVarSortedHg17.bed
+#prep data: concatenate all the gvPos data, sort
+cat gvPosSP.txt gvPosHbVar.txt gvPosARdb.txt gvPosBgmut.txt gvPosCftr.txt gvPosPah.txt > gvPosAll.txt
+grep "^chr" gvPosAll.txt | sort -k1,1 -k2,2n > gvPosSortedHg17.bed
 
 #load tables
-hgLoadBed hg17 genomeVar genomeVarSortedHg17.bed -noSort -oldTable -tab
-hgsql hg17 < genomeVarSrc.sql
+hgLoadBed hg17 gvPos gvPosSortedHg17.bed -noSort -oldTable -tab
+hgsql hg17 < gvSrc.sql
 hgsql hg17
-        load data local infile "genomeVarAttrSP.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrSPgene.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrARdb.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrBgmut.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrCftr.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrHbVar.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrPah.txt" into table genomeVarAttr;
-        load data local infile "genomeVarAttrLinkSP.txt" into table genomeVarAttrLink;
-        load data local infile "genomeVarAttrLinkSPgene.txt" into table genomeVarAttrLink;
-        load data local infile "genomeVarAttrLinkBgmut.txt" into table genomeVarAttrLink;
-        load data local infile "genomeVarAttrLinkHbVar.txt" into table genomeVarAttrLink;
-        load data local infile "genomeVarAttrLinkPah.txt" into table genomeVarAttrLink;
-        load data local infile "genomeVarAliasHbVar.txt" into table genomeVarAlias;
-        load data local infile "genomeVarAliasBgmut.txt" into table genomeVarAlias;
-        load data local infile "genomeVarAliasCftr.txt" into table genomeVarAlias;
-        load data local infile "genomeVarAliasPah.txt" into table genomeVarAlias;
-#loading results:
-load of genomeVar did not go as planned: 21572 record(s), 1245 row(s) skipped, 1 warning(s) loading bed.tab
-#skipped okay, from unique index, warning?
-#warning from unknown in cftr data - fixed
-load of genomeVar did not go as planned: 21572 record(s), 1245 row(s) skipped, 0 warning(s) loading bed.tab
-#all load data local lines loaded without errors
+        load data local infile "gvLinkSP.txt" into table gvLink;
+        load data local infile "gvSP.txt" into table gv;
+        load data local infile "gvLinkHbVar.txt" into table gvLink;
+        load data local infile "gvHbVar.txt" into table gv;
+        load data local infile "gvAttrHbVar.txt" into table gvAttr;
+        load data local infile "gvARdb.txt" into table gv;
+        load data local infile "gvAttrARdb.txt" into table gvAttr;
+        load data local infile "gvBgmut.txt" into table gv;
+        load data local infile "gvAttrBgmut.txt" into table gvAttr;
+        load data local infile "gvLinkBgmut.txt" into table gvLink;
+        load data local infile "gvCftr.txt" into table gv;
+        load data local infile "gvAttrCftr.txt" into table gvAttr;
+        load data local infile "gvPah.txt" into table gv;
+        load data local infile "gvAttrPah.txt" into table gvAttr;
+        load data local infile "gvLinkPah.txt" into table gvLink;
 
-#reloaded SP attributes, to handle new omimTitle set up June 22, 2006
-#removed OMIM links that are no longer needed
-delete from genomeVarAttr where mutId like 'VAR%' and attrKey = 'links' and attrVal = 'OMIM';
-Query OK, 49502 rows affected (0.78 sec)
+#add new table, cut and paste in create stmt
+#reload BGMUT, fixing names that were truncated
+delete from gv where id like 'BGMUT%';
+load data local infile "gvBgmut.txt" into table gv;
+load data local infile "gvAttrLongBgmut.txt" into table gvAttrLong;
+#rebuild cgis
+
 
 #############################################################
-# Illumina Hap300
+# Illumina Hap300 (Heather, July 2006)
 
+ssh hgwdev
 cd /cluster/data/hg17/bed
 mkdir illumina
 cd illumina
 trim.pl < Illumina_HumanHap300_SNPlist_01.13.2006.txt > trim.out
 hgsql hg17 < illuminaTmp.sql
 hgsql -e "load data local infile 'trim.out' into table illuminaTmp" hg17
+# illuminaLookup generates bin
 /cluster/home/heather/kent/src/hg/snp/snpLoad/illuminaLookup hg17 illuminaTmp snp125 snp125Exceptions illuminaLookup.out illuminaLookup.err
 # errors:
 # unexpected chrom chr1 for snp rs1291584
@@ -21440,10 +21434,27 @@ hgsql -e "load data local infile 'trim.out' into table illuminaTmp" hg17
 # 16 with locType = range*
 # 402 not found!
 # None that have multiple alignments.
-hgsql hg17 < illumina.sql
-hgsql -e "load data local infile 'illuminaLookup.out' into table illumina" hg17
-hgsql -e "alter table illumina add index name (name)" hg17
-hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
+hgsql hg17 < snpArrayIllumina300.sql
+hgsql -e "load data local infile 'illuminaLookup.out' into table snpArrayIllumina300" hg17
+hgsql -e "alter table snpArrayIllumina300 add index name (name)" hg17
+hgsql -e "alter table snpArrayIllumina300 add index chrom (chrom, bin)" hg17
+
+#############################################################
+# Affy 500K (Heather, July 2006)
+
+ssh hgwdev
+cd /cluster/data/hg17/bed/snp/affyData/500K
+/bin/csh cmds.csh
+cp Mapping250K_Nsp.bed all.bed
+cat Mapping250K_Sty.bed >> all.bed
+hgsql hg17 < affyTmp.sql
+hgsql -e "load data local infile 'all.bed' into table affyTmp" hg17
+# get dbSNP rsIDs
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affyTmp snp124
+hgsql hg17 < snpArrayAffy500.sql
+hgsql -e "load data local infile 'affyLookup.out' into table snpArrayAffy500" hg17
+hgsql -e "alter table snpArrayAffy500 add index name (name)" hg17
+hgsql -e "alter table snpArrayAffy500 add index chrom (chrom, bin)" hg17
 
 
 #########################################################################
@@ -21491,8 +21502,19 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
     #	real    2m48.810s
     #	73 % of the data values are zero
 
+    #	create download gzip files from the bz2 files:
+    for F in chr*.scores.truncated.bz2
+    do
+	C=`echo $F | awk -F'.' '{print $1}'`
+	echo -n "${C}.regPotential7X.hg17.gz working ... "
+	bzcat ${F} | gzip > ${C}.regPotential7X.hg17.gz
+	echo
+    done
+
 #########################################################################
 ####### RE-BUILD RGD HUMAN QTL TRACKS (DONE 06/21/06 Fan) ##############
+# DELETED RECORD FROM rgdQtlLink SO CONSISTENT WITH REMOVAL FROM rgdQtl
+# (DONE, 2006-06-30, hartera)
 
 ssh hgwdev
 mkdir -p /cluster/store8/rgd/human12062005
@@ -21577,4 +21599,18 @@ hgsql hg17 -e "drop table hg17.rgdQtlLink;"
 hgsql hg17 <~/kent/src/hg/lib/rgdQtlLink.sql
 hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLink;'
 
+# Delete the record from rgdQtlLink table that was removed from the rgdQtl
+# table above. (hartera, 2006-06-30)
+hgsql hg17 -e "delete from rgdQtlLink where name='AASTH39_H'"
+
 ########################################################################
+
+#########################################################################
+#Reload omimTitle table			Belinda Giardine June 28, 2006
+#fetched omim.txt.Z from OMIM downloads.
+#parse out title lines (*FIELD* TI)
+convertTitle < omim.txt > omimTitle.txt
+#load into omimTitle table
+truncate table omimTitle;
+load data local infile "omimTitle.txt" into table omimTitle;
+

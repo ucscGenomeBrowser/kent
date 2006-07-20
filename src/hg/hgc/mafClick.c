@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.37 2006/06/02 17:17:28 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.38 2006/06/30 19:38:59 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -548,7 +548,7 @@ else
 
 	    for (i = 0; i < speciesCt; i++)
 		{
-		if ((mcThis = mafMayFindCompPrefix(maf, species[i], "")) == NULL)
+		if ((mcThis = mafMayFindCompSpecies(maf, species[i], '.')) == NULL)
 		    continue;
 		newOrder[mcCount++] = mcThis;
 		}

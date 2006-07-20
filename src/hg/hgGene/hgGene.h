@@ -143,30 +143,6 @@ void hPrintf(char *format, ...);
 /* Print out some html.  Check for write error so we can
  * terminate if http connection breaks. */
 
-void hPrintLinkTableStart();
-/* Print link table start in our colors. */
-
-void hPrintLinkTableEnd();
-/* Print link table end in our colors. */
-
-void hPrintLinkCellStart();
-/* Print link cell start in our colors. */
-
-void hPrintLinkCellEnd();
-/* Print link cell end in our colors. */
-
-void hPrintLinkCell(char *label);
-/* Print label cell in our colors. */
-
-void hPrintLabelCell(char *label);
-/* Print label cell in our colors. */
-
-void hPrintWideLabelCell(char *label, int colSpan);
-/* Print label cell over multiple columns in our colors. */
-
-void hFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
-/* Fill out partially empty last row. */
-
 struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 /* Read in ra in root, root/org, and root/org/database. */
 

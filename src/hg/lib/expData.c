@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: expData.c,v 1.4 2006/06/27 00:28:55 aamp Exp $";
+static char const rcsid[] = "$Id: expData.c,v 1.5 2006/06/27 19:56:27 galt Exp $";
 
 struct expData *expDataLoad(char **row)
 /* Load a expData from row fetched with select * from expData
@@ -155,8 +155,9 @@ struct expData *expDataLoadTable(struct sqlConnection *conn, char *table)
 char query[256];
 char **row;
 struct expData *exps = NULL;
+struct sqlResult *sr = NULL;
 safef(query, sizeof(query), "select name, expCount, expScores from %s", table);
-struct sqlResult *sr = sqlGetResult(conn, query);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct expData *addMe = expDataLoad(row);

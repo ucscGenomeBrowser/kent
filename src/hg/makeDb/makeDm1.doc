@@ -6557,11 +6557,12 @@ zcat `ls -1 /cluster/bluearc/dm1/multiz.dm1droYak1dp2anoGam1/phastCons/POSTPROBS
 
 
 #####################################################################
-# SEGMENTAL DUPLICATIONS (DONE 6/22/06 angie)
+# SEGMENTAL DUPLICATIONS (DONE 6/30/06 angie)
     # File emailed from Xinwei She <xws@u.washington.edu>
     mkdir /cluster/data/dm1/bed/genomicSuperDups
     cd /cluster/data/dm1/bed/genomicSuperDups
     sed -e 's/\t_\t/\t-\t/' dm1_genomicSuperDup.tab \
+    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed dm1 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 

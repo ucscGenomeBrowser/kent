@@ -109,7 +109,7 @@ summary multiz10waySummary
 speciesGroups mammal vertebrate
 sGroup_mammal rn3 hg17 canFam2 bosTau1 monDom1
 sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1
-treeImage phylo/Mm6_10way.jpg
+treeImage phylo/mm6_10way.gif
 
 track jaxRepTranscript
 shortLabel Jax Rep Transcript

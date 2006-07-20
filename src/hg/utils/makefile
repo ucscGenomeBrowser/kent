@@ -1,6 +1,6 @@
 # Build all directories in utils
-
-# 	$Id: makefile,v 1.2 2006/06/13 20:21:04 kent Exp $
+# test comment
+# 	$Id: makefile,v 1.3 2006/07/06 00:06:07 aamp Exp $
 
 include ../../inc/common.mk
 

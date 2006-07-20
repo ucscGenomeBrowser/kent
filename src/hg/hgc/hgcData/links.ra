@@ -2,6 +2,7 @@
 
 name ORegAnno
 url http://www.oreganno.org/oregano/recordview.action?recid=%s
+label ORegAnno
 acc yes
 
 name HbVar
@@ -31,18 +32,22 @@ acc yes
 
 name PAHdb
 url http://www.pahdb.mcgill.ca/cgi-bin/pahdb/pahdbsearch.cgi?Field=id_mut&OrderedField=nucl_no&Value=%s&SortType=Asc&Search=Mutation&Go=1&ToShowFrom=0&F2S1=id_mut&F2S2=nucl_no&F2S3=syst_name&F2S5=amino_acid&F2S6=mut_name&F2S7=other_name&F2S17=Mutation.comment
+label PAHdb
 acc yes
 
 name BGMUT
 url http://www.ncbi.nlm.nih.gov/projects/mhc/xslcgi.fcgi?cmd=bgmut/allele_details&id=%s
+label BGMUT
 acc yes
 
 name CFMDB
 url http://www3.genet.sickkids.on.ca/cftr/MutationDetailPage.external?sp=%s
+label CFMDB
 acc yes
 
 name dbSNP
 url http://www.ncbi.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+label dbSNP
 acc yes
 
 name uniProtDis

@@ -11,7 +11,7 @@
 #include "hgConfig.h"
 
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.12 2006/01/27 01:00:45 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.13 2006/06/28 16:19:01 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -333,7 +333,6 @@ void hgMapTableToGene(struct sqlConnection *conn, char *geneTable, char *geneTab
 struct slName *chromList, *chrom;
 char *tempDir = ".";
 FILE *f;
-int fieldIx;
 boolean doAll = optionExists("all");
 
 /* Process each strand of each chromosome into tab-separated file. */
@@ -399,8 +398,6 @@ void hgMapToGene(char *database, char *track, char *geneTrack, char *newTable)
 /* hgMapToGene - Map a track to a genePred track.. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-char query[512];
-char typeBuf[128];
 char *type = optionVal("type", NULL);
 char *lookupFile = optionVal("lookup", NULL);
 struct hash *lookupHash = NULL;

@@ -24,7 +24,11 @@ struct trackDb
     unsigned char altColorG;	/* Light color green component 0-255 */
     unsigned char altColorB;	/* Light color blue component 0-255 */
     unsigned char useScore;	/* 1 if use score, 0 if not */
+#ifndef	__cplusplus
     unsigned char private;	/* 1 if only want to show it on test site */
+#else
+    unsigned char priv;		/* don't conflict with C++ keyword */
+#endif
     int restrictCount;	/* Number of chromosomes this is on (0=all though!) */
     char **restrictList;	/* List of chromosomes this is on */
     char *url;	/* URL to link to when they click on an item */
@@ -97,6 +101,10 @@ struct trackDb *trackDbFromRa(char *raFile);
 
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
+
+struct hash *trackDbHashSettings(struct trackDb *tdb);
+/* Force trackDb to hash up it's settings.  Usually this is just
+ * done on demand. Returns settings hash. */
 
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */

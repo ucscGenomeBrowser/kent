@@ -3492,11 +3492,14 @@ _EOF_
 # *** knownBaseBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
 
 
-# HGNEAR PROTEIN BLAST TABLES -- QUERIES (TODO //06 angie)
+# HGNEAR PROTEIN BLAST TABLES -- QUERIES (DONE 6/26/06 angie)
     ssh hgwdev
     cd /cluster/data/rn4/bed/hgNearBlastp
     # Do -queryOnly after rn4 has been released:
-    doHgNearBlastp.pl -queryOnly config.ra >& do.queries.log & tail -f do.log
+    doHgNearBlastp.pl -queryOnly config.ra >& do.queries.log &
+    tail -f do.queries.log
+# *** Check rnBlastTab in these databases:
+# *** hg18 mm8 danRer3 dm2 ce2 sacCer1 
 
 
 # MORE HGNEAR TABLES (DONE 4/13/06 angie)
@@ -3828,6 +3831,8 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
 # Build tables needed by pbGlobal in proteins060115
 
    cd /cluster/data/superfamily/060619  
+   hgsql proteins060115 -e 'delete from sfAssign'
+   hgsql proteins060115 -e 'delete from sfDes'
    hgsql proteins060115 -e 'load data local infile "ass_18-Jun-2006.tab" into table sfAssign'
    hgsql proteins060115 -e 'load data local infile "sfDes.tab" into table sfDes'
 

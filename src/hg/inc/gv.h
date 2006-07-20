@@ -402,6 +402,83 @@ void gvLinkOutput(struct gvLink *el, FILE *f, char sep, char lastSep);
 #define gvLinkCommaOut(el,f) gvLinkOutput(el,f,',',',');
 /* Print out gvLink as a comma separated list including final comma. */
 
+#define GVATTRLONG_NUM_COLS 3
+
+struct gvAttrLong
+/* attributes associated with a mutation that need long text */
+    {
+    struct gvAttrLong *next;  /* Next in singly linked list. */
+    char *id;	/* mutation ID */
+    char *attrType;	/* attribute type */
+    char *attrVal;	/* value for this attribute */
+    };
+
+void gvAttrLongStaticLoad(char **row, struct gvAttrLong *ret);
+/* Load a row from gvAttrLong table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct gvAttrLong *gvAttrLongLoad(char **row);
+/* Load a gvAttrLong from row fetched with select * from gvAttrLong
+ * from database.  Dispose of this with gvAttrLongFree(). */
+
+struct gvAttrLong *gvAttrLongLoadAll(char *fileName);
+/* Load all gvAttrLong from whitespace-separated file.
+ * Dispose of this with gvAttrLongFreeList(). */
+
+struct gvAttrLong *gvAttrLongLoadAllByChar(char *fileName, char chopper);
+/* Load all gvAttrLong from chopper separated file.
+ * Dispose of this with gvAttrLongFreeList(). */
+
+#define gvAttrLongLoadAllByTab(a) gvAttrLongLoadAllByChar(a, '\t');
+/* Load all gvAttrLong from tab separated file.
+ * Dispose of this with gvAttrLongFreeList(). */
+
+struct gvAttrLong *gvAttrLongLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all gvAttrLong from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gvAttrLongFreeList(). */
+
+void gvAttrLongSaveToDb(struct sqlConnection *conn, struct gvAttrLong *el, char *tableName, int updateSize);
+/* Save gvAttrLong as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use gvAttrLongSaveToDbEscaped() */
+
+void gvAttrLongSaveToDbEscaped(struct sqlConnection *conn, struct gvAttrLong *el, char *tableName, int updateSize);
+/* Save gvAttrLong as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than gvAttrLongSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
+struct gvAttrLong *gvAttrLongCommaIn(char **pS, struct gvAttrLong *ret);
+/* Create a gvAttrLong out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new gvAttrLong */
+
+void gvAttrLongFree(struct gvAttrLong **pEl);
+/* Free a single dynamically allocated gvAttrLong such as created
+ * with gvAttrLongLoad(). */
+
+void gvAttrLongFreeList(struct gvAttrLong **pList);
+/* Free a list of dynamically allocated gvAttrLong's */
+
+void gvAttrLongOutput(struct gvAttrLong *el, FILE *f, char sep, char lastSep);
+/* Print out gvAttrLong.  Separate fields with sep. Follow last field with lastSep. */
+
+#define gvAttrLongTabOut(el,f) gvAttrLongOutput(el,f,'\t','\n');
+/* Print out gvAttrLong as a line in a tab-separated file. */
+
+#define gvAttrLongCommaOut(el,f) gvAttrLongOutput(el,f,',',',');
+/* Print out gvAttrLong as a comma separated list including final comma. */
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* GV_H */

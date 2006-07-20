@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.8 2006/04/14 20:23:22 heather Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.9 2006/07/05 18:31:23 heather Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -212,7 +212,7 @@ int status = 0;
 
 if (write500)
     {
-    safef(fileName, ArraySize(fileName), "/tmp/apacheMonitor/%d.tab", secondsNow);
+    safef(fileName, ArraySize(fileName), "/scratch/apacheMonitor/%d.tab", secondsNow);
     outputFileHandle = mustOpen(fileName, "w");
     }
 
@@ -353,12 +353,12 @@ struct sqlConnection *conn = hAllocConn();
 FILE *f;
 
 /* open the file because hgLoadNamedTabFile closes it */
-safef(fullfileName, ArraySize(fullfileName), "/tmp/apacheMonitor/%d.tab", timeNow);
+safef(fullfileName, ArraySize(fullfileName), "/scratch/apacheMonitor/%d.tab", timeNow);
 f = mustOpen(fullfileName, "r");
 
 safef(tableName, ArraySize(tableName), "status500");
 safef(localfileName, ArraySize(localfileName), "%d", timeNow);
-hgLoadNamedTabFile(conn, "/tmp/apacheMonitor", tableName, localfileName, &f);
+hgLoadNamedTabFile(conn, "/scratch/apacheMonitor", tableName, localfileName, &f);
 
 hFreeConn(&conn);
 }
@@ -366,7 +366,7 @@ hFreeConn(&conn);
 void cleanup(int timeNow)
 {
 char command[255];
-safef(command, ArraySize(command), "rm /tmp/apacheMonitor/%d.tab", timeNow);
+safef(command, ArraySize(command), "rm /scratch/apacheMonitor/%d.tab", timeNow);
 system(command);
 }
 

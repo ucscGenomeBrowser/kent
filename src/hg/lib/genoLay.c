@@ -137,7 +137,7 @@ struct genoLay *genoLayNew(struct genoLayChrom *chromList,
  * two columns with sex chromosomes on bottom.  This is complicated
  * by the platypus having a bunch of sex chromosomes. */
 {
-int margin = 2;
+int margin = 3;
 struct slRef *refList = NULL, *ref, *left, *right;
 struct genoLayChrom *chrom;
 struct genoLay *gl;

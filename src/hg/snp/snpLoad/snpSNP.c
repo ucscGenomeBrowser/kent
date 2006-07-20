@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.13 2006/06/23 21:52:54 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.14 2006/06/28 19:09:27 heather Exp $";
 
 struct snpData
     {
@@ -102,6 +102,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         fprintf(errorFileHandle, "no match for snp_id %s\n", row[0]);
 	continue;
 	}
+    /* check here for avHet < 0 */
+    /* check here for class = "single" and isBiallelic(observed) and avHet <= .5 */
+    /* check here for class = "single" and isTriallelic(observed) and avHet <= .3333 */
+    /* check here for class = "single" and isQuadallelic(observed) and avHet <= .25 */
     fprintf(f, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
     fprintf(f, "%s\t%s\t%s\t", row[4], row[5], row[6]);
     fprintf(f, "%d\t%s\t%s\t", sel->validation_status, sel->avHet, sel->avHetSE);

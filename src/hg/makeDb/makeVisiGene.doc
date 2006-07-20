@@ -911,6 +911,11 @@ delete expressionLevel from expressionLevel el left join imageProbe ip on el.ima
 delete from imageFileFwd;
 # 5724 rows 
 
+delete antibodySource from antibodySource abs left join submissionSource so on abs.submissionSource=so.id where so.id is null;
+# 745 rows
+
+
+
 
 #recompile vgLoadJax on dev
 #run vgLoadJax to create .ra .tab .txt for each submissionSet

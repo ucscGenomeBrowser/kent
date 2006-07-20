@@ -49,7 +49,7 @@ speciesGroups mammal vertebrate
 sGroup_mammal panTro1 rheMac2 mm8 rn4 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
 sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
 speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
-treeImage phylo/Mm7_17way.jpg
+treeImage phylo/hg17_17way.gif
 speciesCodonDefault hg18
 
 track phastConsElements17way
@@ -609,7 +609,7 @@ otherDb panTro2
 
 track netPanTro2
 shortLabel PanTro2 Net
-longLabel PanTro2 $o_Organism ($o_date/$o_db) Alignment Net
+longLabel PanTro2 ($o_date/$o_db) Alignment Net
 group compGeno
 priority 290.1
 visibility hide

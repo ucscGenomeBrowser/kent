@@ -2125,13 +2125,14 @@ chainSome $(path1)
 
 
 #####################################################################
-# SEGMENTAL DUPLICATIONS (DONE 6/22/06 angie)
+# SEGMENTAL DUPLICATIONS (DONE 6/30/06 angie)
     # File emailed from Xinwei She <xws@u.washington.edu>
     mkdir /cluster/data/fr1/bed/genomicSuperDups
     cd /cluster/data/fr1/bed/genomicSuperDups
     liftUp -type=.bed stdout /cluster/data/fr1/jkStuff/liftAll.lft warn \
       fr1_genomicSuperDup.tab \
     | sed -e 's/\t_\t/\t-\t/' \
+    | awk '($3 - $2) >= 500 && ($9 - $8) >= 500 {print;}' \
     | hgLoadBed fr1 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 

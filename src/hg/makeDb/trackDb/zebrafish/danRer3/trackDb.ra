@@ -92,7 +92,7 @@ sGroup_vertebrate tetNig1 fr1
 irows on
 frames multiz5wayFrames
 speciesCodonDefault danRer3
-treeImage phylo/danRer3_5way.jpg
+treeImage phylo/danRer3_5way.gif
 
 track chainHg18
 shortLabel  $o_Organism Chain

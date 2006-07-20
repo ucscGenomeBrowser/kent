@@ -7,6 +7,7 @@
 #include "cheapcgi.h"
 #include "hui.h"
 #include "hdb.h"
+#include "web.h"
 #include "dnautil.h"
 #include "dbDb.h"
 #include "axtInfo.h"
@@ -14,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.14 2006/03/06 17:46:35 angie Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.15 2006/07/01 08:32:33 kent Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -33,14 +34,14 @@ static void genomicLink(struct sqlConnection *conn, char *geneId,
 /* Figure out known genes table, position of gene, link it. */
 {
 char *table = genomeSetting("knownGene");
-hPrintLinkCellStart();
+webPrintLinkCellStart();
 printGenomicAnchor(table, geneId, chrom, start, end);
 hPrintf("Genomic (%s:", chrom);
 printLongWithCommas(stdout, start+1);
 hPrintf("-");
 printLongWithCommas(stdout, end);
 hPrintf(")</A>");
-hPrintLinkCellEnd();
+webPrintLinkCellEnd();
 }
 
 static void comparativeLink(struct sqlConnection *conn, char *geneId,
@@ -55,7 +56,7 @@ if (sqlTableExists(conn, "axtInfo"))
         {
 	char *db2 = dbList->name;
 	struct axtInfo *aiList = hGetAxtAlignments(db2);
-	hPrintLinkCellStart();
+	webPrintLinkCellStart();
 	hPrintf("<A HREF=\"%s?%s", hgcName(), cartSidUrlString(cart) );
 	hPrintf("&g=htcGenePsl&i=%s&c=%s&l=%d&r=%d", 
 		geneId, chrom, start, end);
@@ -63,7 +64,7 @@ if (sqlTableExists(conn, "axtInfo"))
 		table, cgiEncode(aiList->alignment), db2);
 	hPrintf(" class=\"toc\">");
 	hPrintf("Comparative</A>");
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 	dbDbFreeList(&dbList);
 	}
     }
@@ -81,11 +82,11 @@ if (sqlTableExists(conn, table))
     	table, geneId);
     if (sqlExists(conn, query))
         {
-	hPrintLinkCellStart();
+	webPrintLinkCellStart();
 	hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=1\" class=\"toc\">",
 	       cartSidUrlString(cart), command);
 	hPrintf("%s</A>", label);
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 	}
     }
 }
@@ -130,12 +131,12 @@ char *chrom;
 int start,end;
 
 /* Print the current position. */
-hPrintLinkTableStart();
+webPrintLinkTableStart();
 genomicLink(conn, geneId, curGeneChrom, curGeneStart, curGeneEnd);
 comparativeLink(conn, geneId, curGeneChrom, curGeneStart, curGeneEnd);
 printMrnaLink(conn,geneId);
 printProteinLink(conn,geneId);
-hPrintLinkTableEnd();
+webPrintLinkTableEnd();
 
 /* Print out any additional positions. */
 dyStringPrintf(query, "select chrom,txStart,txEnd from %s", table);
@@ -150,10 +151,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     chrom = row[0];
     start = atoi(row[1]);
     end = atoi(row[2]);
-    hPrintLinkTableStart();
+    webPrintLinkTableStart();
     genomicLink(conn2, geneId, chrom, start, end);
     comparativeLink(conn2, geneId, chrom, start, end);
-    hPrintLinkTableEnd();
+    webPrintLinkTableEnd();
     hFreeConn(&conn2);
     }
 sqlFreeResult(&sr);

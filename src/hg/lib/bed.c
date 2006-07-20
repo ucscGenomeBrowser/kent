@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.42 2006/04/11 21:43:07 baertsch Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.45 2006/06/30 21:10:43 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -727,6 +727,47 @@ for (i=0; i<blockCount; ++i)
 return bed;
 }
 
+void makeItBed12(struct bed *bedList, int numFields)
+/* If it's less than bed 12, make it bed 12. The numFields */
+/* param is for how many fields the bed *currently* has. */
+{
+int i = 1;
+struct bed *cur;
+for (cur = bedList; cur != NULL; cur = cur->next)
+    {
+    /* it better be bigger than bed 3. */
+    if (numFields < 4)
+	{
+	char name[50];
+	safef(name, ArraySize(name), "item.%d", i+1);
+	cur->name = cloneString(name);
+	}
+    if (numFields < 5)
+	cur->score = 1000;
+    if (numFields < 6)
+	{
+	cur->strand[0] = '?';
+	cur->strand[1] = '\0';
+	}
+    if (numFields < 8)
+	{
+	cur->thickStart = cur->chromStart;
+	cur->thickEnd = cur->chromEnd;
+	}
+    if (numFields < 9)
+	cur->itemRgb = 0;
+    if (numFields < 12)
+	{
+	cur->blockSizes = needMem(sizeof(int));
+	cur->chromStarts = needMem(sizeof(int));
+	cur->blockCount = 1;
+	cur->chromStarts[0] = 0;
+	cur->blockSizes[0] = cur->chromEnd - cur->chromStart;
+	}
+    i++;
+    }
+}
+
 struct bed *lmCloneBed(struct bed *bed, struct lm *lm)
 /* Make a copy of bed in local memory. */
 {
@@ -1196,3 +1237,25 @@ return ( ((atoi(row[0]) & 0xff) << 16) |
 	((atoi(row[1]) & 0xff) << 8) |
 	(atoi(row[2]) & 0xff) );
 }
+
+long long bedTotalSize(struct bed *bedList)
+/* Add together sizes of all beds in list. */
+{
+long long total=0;
+struct bed *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    total += (bed->chromEnd - bed->chromStart);
+return total;
+}
+
+struct bed3 *bed3New(char *chrom, int start, int end)
+/* Make new bed3. */
+{
+struct bed3 *bed;
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+return bed;
+}
+

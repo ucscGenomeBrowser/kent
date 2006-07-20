@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.96 2006/06/23 23:45:01 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.97 2006/06/28 17:59:35 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1512,6 +1512,34 @@ if ((len = bLen)> 0)
 buf[len] = 0;
 return TRUE;
 } 
+
+void writeBits64(FILE *f, bits64 x)
+/* Write out 64 bit number in manner that is portable across architectures */
+{
+int i;
+UBYTE buf[8];
+for (i=7; i>=0; --i)
+    {
+    buf[i] = (UBYTE)(x&0xff);
+    x >>= 8;
+    }
+mustWrite(f, buf, 8);
+}
+
+bits64 readBits64(FILE *f)
+/* Write out 64 bit number in manner that is portable across architectures */
+{
+int i;
+UBYTE buf[8];
+bits64 x = 0;
+mustRead(f, buf, 8);
+for (i=0; i<8; ++i)
+    {
+    x <<= 8;
+    x |= buf[i];
+    }
+return x;
+}
 
 
 char *addSuffix(char *head, char *suffix)

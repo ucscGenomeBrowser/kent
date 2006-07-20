@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.14 2006/02/02 17:16:37 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.15 2006/06/29 05:42:23 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -30,6 +30,7 @@ struct gbField *gbDevStageField;
 struct gbField *gbCloneField;
 struct gbField *gbChromosomeField;
 struct gbField *gbMapField;
+struct gbField *gbSourceOrganism;
 struct gbField *gbPrtField;
 struct gbField *gbGeneDbxField;
 struct gbField *gbCdsDbxField;
@@ -252,7 +253,10 @@ slAddTail(&c1->children, c2);
 gbChromosomeField = c2 = newField("/chromosome", "chr", GBF_TRACK_VALS, 16);
 slAddTail(&c1->children, c2);
 
-gbMapField = c2 = newField("/map", "map", GBF_TRACK_VALS, 128);         
+gbMapField = c2 = newField("/map", "map", GBF_TRACK_VALS, 128);
+slAddTail(&c1->children, c2);
+
+gbSourceOrganism = c2 = newField("/organism", NULL, GBF_MULTI_VAL|GBF_MULTI_SEMI, 128);
 slAddTail(&c1->children, c2);
 
 /* FEATURES gene */
@@ -342,8 +346,8 @@ if (gbf->val->stringSize > 0)
     if (!(gbf->flags & GBF_MULTI_VAL))
         return; /* not supported, skip */
 
-    /* space-separate values */
-    dyStringAppendC(gbf->val, ' ');
+    /* space-separate or semi-colon separate values */
+    dyStringAppendC(gbf->val, ((gbf->flags & GBF_MULTI_SEMI) ? ';' : ' '));
     }
 
 if (inSlashSub)

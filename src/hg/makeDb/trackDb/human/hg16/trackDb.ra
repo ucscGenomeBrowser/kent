@@ -1170,6 +1170,7 @@ yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg
 speciesOrder panTro1 mm3 rn3 galGal2
+treeImage phylo/hg16_5way.gif
 
 track pHMM_5_WayTop5
 shortLabel Thresholded Cons

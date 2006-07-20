@@ -42,6 +42,28 @@ struct bed
     float *expScores;	/* Comma separated list of Experiment scores. */
     };
 
+struct bed3
+/* Browser extensible data - first three fields */
+    {
+    struct bed3 *next;  /* Next in singly linked list. */
+    char *chrom;	/* Human chromosome or FPC contig */
+    unsigned chromStart;	/* Start position in chromosome */
+    unsigned chromEnd;	/* End position in chromosome */
+    };
+
+struct bed3 *bed3New(char *chrom, int start, int end);
+/* Make new bed3. */
+
+struct bed4
+/* Browser extensible data - first four fields */
+    {
+    struct bed4 *next;  /* Next in singly linked list. */
+    char *chrom;	/* Human chromosome or FPC contig */
+    unsigned chromStart;	/* Start position in chromosome */
+    unsigned chromEnd;	/* End position in chromosome */
+    char *name;	/* Name of item */
+    };
+
 void bedStaticLoad(char **row, struct bed *ret);
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -170,6 +192,10 @@ struct genePred *bedToGenePred(struct bed *bed);
 struct bed *bedFromGenePred(struct genePred *genePred);
 /* Convert a single genePred to a bed structure */
 
+void makeItBed12(struct bed *bedList, int numFields);
+/* If it's less than bed 12, make it bed 12. The numFields */
+/* param is for how many fields the bed *currently* has. */
+
 struct bed *cloneBed(struct bed *bed);
 /* Make an all-newly-allocated copy of a single bed record. */
 
@@ -273,6 +299,9 @@ struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordC
 int bedParseRgb(char *itemRgb);
 /*	parse a string: "r,g,b" into three unsigned char values
 	returned as 24 bit number, or -1 for failure */
+
+long long bedTotalSize(struct bed *bedList);
+/* Add together sizes of all beds in list. */
 
 #endif /* BED_H */
 

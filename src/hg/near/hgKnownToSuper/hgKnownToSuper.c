@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgKnownToSuper.c,v 1.1 2003/10/26 08:15:52 kent Exp $";
+static char const rcsid[] = "$Id: hgKnownToSuper.c,v 1.2 2006/06/27 17:42:04 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -110,7 +110,6 @@ while (lineFileRow(lf, row))
     if (sameString(row[0], org))
         {
 	char *pepName = row[1];
-	char *modelId = row[2];
 	char *regions = row[3];
 	char *eVal = row[4];
 	char *supId = row[5];

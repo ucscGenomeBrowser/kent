@@ -8,6 +8,8 @@
 #include "hash.h"
 #include "linefile.h"
 
+static char const rcsid[] = "$Id: spKgMap.c,v 1.3 2006/07/06 21:08:00 fanhsu Exp $";
+
 struct spKgMap
 /* map of swissprot accs to kg ids */
 {

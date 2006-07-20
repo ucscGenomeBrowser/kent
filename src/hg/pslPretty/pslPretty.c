@@ -11,7 +11,7 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.31 2005/06/01 22:56:06 jill Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.32 2006/07/01 00:08:09 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -696,11 +696,11 @@ int dotMod = dot;
 
 if (checkFileName != NULL)
     checkFile = mustOpen(checkFileName, "w");
-fprintf(stderr,"Scanning %s\n", targetList);
+/* fprintf(stderr,"Scanning %s\n", targetList); */
 hashFileList(targetList, fileHash, tHash);
-fprintf(stderr,"Scanning %s\n", queryList);
+/* fprintf(stderr,"Scanning %s\n", queryList); */
 hashFileList(queryList, fileHash, qHash);
-fprintf(stderr,"Converting %s\n", pslName);
+/* fprintf(stderr,"Converting %s\n", pslName); */
 while ((psl = pslNext(lf)) != NULL)
     {
     if (dot > 0)
@@ -714,7 +714,8 @@ while ((psl = pslNext(lf)) != NULL)
     prettyOne(psl, qHash, tHash, fileCache, f, axt, checkFile);
     pslFree(&psl);
     }
-fprintf(stderr,"\n");
+if (dot > 0)
+    fprintf(stderr,"\n");
 if (checkFile != NULL)
     {
     fprintf(checkFile,"missLargeStart: %d\n", total_missLargeStart);

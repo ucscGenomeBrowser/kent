@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.20 2006/04/11 00:51:07 heather Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.21 2006/06/29 16:37:08 angie Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -35,6 +35,7 @@ errAbort(
   "   -search=gene - Use selected gene\n"
   "   -dataDir=dataDir - Use selected data dir, default %s\n"
   "   -repeat=N - Number of times to repeat test (on random genes)\n"
+  "               (default %d)\n"
   , dataDir, clRepeat);
 }
 
@@ -111,7 +112,6 @@ int nearCountUniqAccRows(struct htmlPage *page)
 /* Count number of unique rows in table containing just hyperlinked 
  * accessions. */
 {
-char *startTable, *endTable, *startRow;
 char *s, *e, *row, *acc;
 int count = 0;
 struct hash *uniqHash = hashNew(0);
@@ -199,8 +199,6 @@ void testCol(struct htmlPage *emptyConfig, char *org, char *db, char *col, char 
 /* Test one column. */
 {
 struct htmlPage *printPage = NULL;
-struct nearTest *test;
-struct qaStatus *qs;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 htmlPageSetVar(emptyConfig, NULL, visVar, "on");
@@ -316,7 +314,6 @@ void testDbSorts(struct htmlPage *dbPage, char *org, char *db,
 /* Test on one database. */
 {
 struct htmlPage *emptyConfig;
-struct slName *colList = NULL, *col;
 struct htmlFormVar *sortVar = htmlFormVarGet(dbPage->forms, orderVarName);
 struct slName *gene, *sort;
 

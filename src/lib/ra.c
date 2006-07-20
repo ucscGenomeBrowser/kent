@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.9 2005/03/06 03:07:51 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.10 2006/06/28 20:25:55 kent Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -164,4 +164,24 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = raNextRecord(lf);
 lineFileClose(&lf);
 return hash;
+}
+
+struct hash *raReadAll(char *fileName, char *keyField)
+/* Return hash that contains all ra records in file keyed
+ * by given field, which must exist.  The values of the
+ * hash are themselves hashes. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *bigHash = hashNew(0);
+struct hash *hash;
+while ((hash = raNextRecord(lf)) != NULL)
+    {
+    char *key = hashFindVal(hash, keyField);
+    if (key == NULL)
+        errAbort("Couldn't find key field %s line %d of %s",
+		keyField, lf->lineIx, lf->fileName);
+    hashAdd(bigHash, key, hash);
+    }
+lineFileClose(&lf);
+return bigHash;
 }

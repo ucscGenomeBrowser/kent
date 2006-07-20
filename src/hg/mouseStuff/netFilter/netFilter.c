@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.19 2006/06/22 08:27:02 jill Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.20 2006/07/05 06:50:34 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,6 +49,7 @@ errAbort(
   "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
   "   -line - Do this a line at a time, not recursing\n"
   "   -noRandom      - suppress chains involving 'random' chromosomes\n"
+  "   -noHap         - suppress chains involving chromosome names inc '_hap'\n"
   );
 }
 
@@ -83,6 +84,7 @@ struct optionSpec options[] = {
    {"gap", OPTION_BOOLEAN},
    {"line", OPTION_BOOLEAN},
    {"noRandom", OPTION_BOOLEAN},
+   {"noHap", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -151,6 +153,7 @@ boolean fillOnly = FALSE;	/* Only pass fills? */
 boolean gapOnly = FALSE;	/* Only pass gaps? */
 struct slName *types = NULL;	/* Only pass given types */
 boolean noRandom = FALSE;	/* Only pass non-random chromosomes. */
+boolean noHap = FALSE;		/* Only pass non-hap chromosomes. */
 
 boolean synFilter(struct cnFill *fill)
 /* Filter based on synteny - tuned for human/mouse */
@@ -227,6 +230,8 @@ if (fill->chainId)
 	    || sameWord("chrU", fill->qName)) /* dm */
 	    return FALSE;
 	}
+    if (noHap && stringIn("_hap",fill->qName))
+	return FALSE;
     if (fill->qStart < qStartMin || fill->qStart >= qStartMax)
         return FALSE;
     if ((fill->qStart+fill->qSize) < qEndMin || (fill->qStart+fill->qSize) >= qEndMax)
@@ -352,6 +357,7 @@ fillOnly = optionExists("fill");
 gapOnly = optionExists("gap");
 types = optionMultiVal("type", types);
 noRandom = optionExists("noRandom");
+noHap = optionExists("noHap");
 
 for (i=0; i<inCount; ++i)
     {
@@ -375,6 +381,8 @@ for (i=0; i<inCount; ++i)
 			     || sameWord("chrNA", net->name) /* danRer */
 			     || sameWord("chrU", net->name)))  /* dm */
 	        writeIt = FALSE;
+	    if (noHap && stringIn("_hap",net->name))
+		writeIt = FALSE;
 	    if (writeIt)
 		{
 		writeFiltered(net, f);

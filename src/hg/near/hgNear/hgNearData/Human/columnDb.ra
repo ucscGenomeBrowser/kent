@@ -187,3 +187,7 @@ longLabel phastOdds DNA Conservation Score (CDS) for Selected Gene
 priority 4.0
 visibility off
 type float phastOdds name score
+
+name zebrafishOrthologs
+itemUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
+

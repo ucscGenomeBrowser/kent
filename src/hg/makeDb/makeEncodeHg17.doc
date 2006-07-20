@@ -2184,7 +2184,7 @@ close (FH)
 # Submitted 5/19/06 by John Stam <jstam@U.WASHINGTON.EDU>
 # 1 zip file data: UW_may06_ENCODE_data, plus Description.doc
 
-    cd /cluster/data/encode
+    cd /cluster/data/encode/Regulome
     mkdir -p 2006-05-19/lab
     cd 2006-05-19/lab
     # deposit data
@@ -2209,6 +2209,18 @@ close (FH)
 		| hgLoadBed -noSort -noBin -strict -bedGraph=5 hg17 \
 		    encodeUWRegulomeBase$CELL stdin
     done
+
+    #	gross statistics for the data
+    awk '{print $5}' data/*.baseline.hg17.bed | ave stdin
+    #	Q1 -0.201029
+    #	median 0.000000
+    #	Q3 0.207335
+    #	average 0.018950
+    #	min -5.454980
+    #	max 6.327273
+    #	count 291642
+    #	total 5526.507662
+    #	standard deviation 0.489442
 
     #	a histogram of the data:
     awk '{print $5}' data/* | textHistogram -verbose=2 -binSize=0.12 \
@@ -2254,3 +2266,242 @@ close (FH)
 	echo
 	I=`expr $I + 1`
     done > trackDb.entries.txt
+
+
+##########################################################################
+# EBI PECAN Alignments (2006-06-22 kate)
+#  From Ben Paten
+
+    cd /cluster/data/encode
+    mkdir -p PECAN/SEP-05/lab
+    cd PECAN/SEP-05/lab
+    wget http://www.ebi.ac.uk/~bjp/pecan/encode_sept_pecan_mafs.tar.bz2
+    bunzip2 encode_sept_pecan_mafs.tar.bz2
+    tar xvf encode_sept_pecan_mafs.tar
+    cd ..
+
+
+cat > project.csh << 'EOF'
+    mkdir -p tmp
+    set tmpDir = tmp
+    foreach f (lab/*MAF/EN[mr]*)
+        set r = $f:t:r
+        echo $r
+        set c = `echo "SELECT chrom from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        set start =  \
+                `echo "SELECT chromStart from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        set size = \
+                `echo "SELECT size from chromInfo WHERE chrom='$c'" | \
+                        hgsql -N hg17`
+        /cluster/data/encode/bin/scripts/mafCoord.pl < $f \
+                human.0 hg17.$c $start $size | \
+            sed 's/^a$/a score=0.0/' > $tmpDir/$r.db.maf
+        echo "projecting $r"
+        /cluster/bin/penn/maf_project $tmpDir/$r.db.maf hg17.$c > $r.maf
+        echo "finished $r"
+    end
+'EOF'
+    csh project.csh >&! project.log &
+    rm -fr tmp
+    set gdir = /gbdb/hg17/encode/PECAN/SEP-05/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/PECAN/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodeMlaganAlign >&! load.log
+    # lots of "score too small" messages -- these are OK.
+    cat *.maf | hgLoadMafSummary hg17 encodeMlaganSummary stdin
+
+cat > reformat.csh << 'EOF'
+    foreach f (lab/*/*.maf)
+        set r = $f:t:r
+        echo $r
+        sed 's/^s human\./s hg17./;          s/^s dog\./s canFam1./; \
+                 s/^s zebrafish\./s danRer2./;   s/^s fugu\./s fr1./; \
+                 s/^s chicken\./s galGal2./;     s/^s mouse\./s mm6./; \
+                 s/^s monodelphis\./s monDom1./; s/^s chimp\./s panTro1./; \
+                 s/^s macaque\./s rheMac1./;     s/^s rat\./s rn3./; \
+                 s/^s tetraodon\./s tetNig1./;' $f > $r.maf
+    end
+'EOF'
+    csh reformat.csh >&! reformat.log &
+    set gdir = /gbdb/hg17/encode/PECAN/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/PECAN/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodePecanAlign >&! load.log
+    # lots of "score too small" messages -- these are OK.
+    cat *.maf | hgLoadMafSummary hg17 encodeTbaSummary stdin
+
+##########################################################################
+# UW/Regulome QCP data again 2006-07-05 - Hiram
+
+    ssh hgwdev
+    cd /cluster/data/encode/Regulome/2006-06-13/lab
+
+    for CELL in CD4 CaCo2 CaLU3 EryAdult EryFetal GM HMEC HRE HeLa HepG2 \
+        Huh7 K562 NHBE PANC SAEC SKnSH
+    do
+	ls -og ${CELL}.normalized_060206.hg17.bed
+	sort -k1,1 -k2,2n ${CELL}.normalized_060206.hg17.bed \
+	    | /cluster/data/encode/bin/scripts/trimOverlap.pl \
+		| hgLoadBed -noSort -noBin -strict -bedGraph=5 hg17 \
+		    encodeUWRegulomeBase${CELL} stdin
+    done
+
+    #	gross statistics for the data
+    awk '{print $5}' *.normalized_060206.hg17.bed | ave stdin
+    #	Q1 -0.494604
+    #	median -0.000000
+    #	Q3 0.510167
+    #	average 0.046097
+    #	min -13.409856
+    #	max 15.554195
+    #	count 297650
+    #	total 13720.736560
+    #	standard deviation 1.203400
+
+    #	calculate histogram 100 bin size:
+    echo -13.5 15.6 | awk '{print ($2-$1)/100}'
+    #	0.291
+
+    #	a histogram of the data:
+    awk '{print $5}' *.normalized_060206.hg17.bed | \
+	textHistogram -verbose=2 -binSize=0.292 \
+	-maxBinCount=100 -minVal=-13.5 -real -pValues stdin \
+	    > histogram.data
+    #	looks like the majority of the data is within -1.0 to 1.0
+
+    #	The trackDb entries made previously should be OK
+
+############################################################
+# DLESS acs 05/02/06
+# sorry this is a bit sketchy.  See me with questions
+
+    cd /cluster/home/acs/encode-dless/hg17
+
+    # make tree model
+    tree_doctor /cluster/home/acs/DLESS-CSHL/encode17.mod --rename "human->hg17" > tree.mod
+    tree_doctor --tree-only tree.mod > tree.nh
+
+    # make SS files, annotated with indels by Brian
+    cat > prepAlignmentsIndels.sh <<EOF
+#!/bin/sh
+
+TARGET=$1
+CHR=$2
+START=$3
+END=$4
+
+/cluster/bin/phast/msa_view /cluster/bluearc/encode/TBA/SEP-05/maf-indels/human.${TARGET}.maf -i MAF --refseq /cluster/bluearc/hg17/chrom/${CHR}.fa -o SS --start $START --end $END --refidx 1 > /scratch/${TARGET}.sso
+
+/cluster/bin/phast/msa_view /scratch/$TARGET.sso -i SS -o SS --seqs hg17,chimp,baboon,macaque,marmoset,galago,rat,mouse,rabbit,cow,dog,rfbat,armadillo,elephant,tenrec,monodelphis,platypus --gap-strip ALL | /cluster/home/acs/phast-opteron/bin/msa_view - -i SS -o SS --order  hg17,chimp,baboon,macaque,marmoset,galago,rat,mouse,rabbit,cow,dog,rfbat,armadillo,elephant,tenrec,monodelphis,platypus > /cluster/bluearc/encode/TBA/SEP-05/ss-indels/${TARGET}.sso
+# second call adds rows of missing data for missing species
+
+rm /scratch/$TARGET.sso
+EOF
+    chmod +x prepAlignmentsIndels.sh
+
+    mkdir -p /cluster/bluearc/encode/TBA/SEP-05/maf-indels /cluster/bluearc/encode/TBA/SEP-05/ss-indels
+    rsync -avz /cluster/store11/encodeMafAnno/TBA/APR-26/human.*.maf /cluster/bluearc/encode/TBA/SEP-05/maf-indels   # location of Brian's files
+    hgsql hg17 -e "select * from encodeRegions" --skip-column-names > regions.txt
+    awk '{printf "prepAlignmentsIndels.sh %s %s %s %s\n", $1, $2, $3, $4}' regions.txt > jobList7  # never mind numbering; there were some other experimental runs that I've omitted
+    # para create, para push, etc.
+
+    # get indel histories and estimate indel params
+    mkdir -p consElements
+    awk '{printf "select chrom, chromStart - %d + 1, chromEnd - %d + 1 from encodeTbaPhastConsEl where chrom = \"%s\" and chromStart >= %d and chromEnd <= %d\n", $3, $3, $2, $3, $4 > $1 ".sql"}' regions.txt 
+    for file in *.sql ; do hgsql hg17 --skip-column-names < $file > consElements/`basename $file .sql`.bed ; done
+    rm *.sql
+
+    cat > indelHistoryParsBrian.sh <<EOF
+#!/bin/sh
+
+TARGET=$1
+/cluster/bin/phast/indelHistory /cluster/bluearc/encode/TBA/SEP-05/ss-indels/$TARGET.sso tree.nh -i SS > /cluster/bluearc/encode/DLESS/IH-indels/$TARGET.pars.ih
+EOF
+    chmod +x indelHistoryParsBrian.sh
+
+    rm -f jobList8
+    mkdir -p /cluster/bluearc/encode/DLESS/IH-indels
+    awk '{print $1}' regions.txt > targets
+    for t in `cat targets` ; do echo "indelHistoryParsBrian.sh $t" >> jobList8 ; done
+    # para create, para push, etc.
+
+    cat > indelModelsBrian.sh <<EOF
+#!/bin/sh
+
+TARGET=$1
+/cluster/bin/phast/indelFit /cluster/bluearc/encode/DLESS/IH-indels/$TARGET.pars.ih tree.nh --features consElements/$TARGET.bed --reference hg17 > IM-indels/$TARGET.pars.im
+EOF
+    chmod +x indelModelsBrian.sh
+
+    rm -f jobList9
+    mkdir -p IM-indels
+    for t in `cat targets` ; do echo "indelModelsBrian.sh $t" >> jobList9 ; done
+    # para create, para push, etc.
+
+    # average estimates across targets
+    sed 's/,//g' IM-indels/*.pars.im | awk '{if ($2 == 0) {nbg++; a_bg += $6; b_bg += $9; t_bg += $12} else if ($2 == 1) {nco++; a_co += $6; b_co += $9; t_co += $12}} END {printf "bg: alpha = %f, beta = %f, tau = %f\nco: alpha = %f, beta = %f, tau = %f\n", a_bg/nbg, b_bg/nbg, t_bg/nbg, a_co/nco, b_co/nco, t_co/nco}' > ave.pars.brian.im
+    #bg: alpha = 0.033417, beta = 0.053284, tau = 0.052852
+    #co: alpha = 0.011655, beta = 0.020610, tau = 0.065395
+
+    # now estimate DLESS params by ML
+    cat > doDlessEstimateParsBrian.sh <<EOF
+#!/bin/sh
+
+TARGET=$1
+CHR=$2
+/cluster/bin/phast/dless /cluster/bluearc/encode/TBA/SEP-05/ss-indels/$TARGET.sso tree.mod --expected-length 20 --target-coverage ~0.2 -i SS --seqname $CHR --idpref $TARGET --indel-model 0.033417,0.053284,0.052852,0.011655,0.020610,0.065395 --phi ~0.5 --indel-history /cluster/bluearc/encode/DLESS/IH-indels/$TARGET.pars.ih 1> /cluster/bluearc/encode/DLESS/ESTIMATE-indels/$TARGET.pars.gff 2> /cluster/bluearc/encode/DLESS/ESTIMATE-indels/$TARGET.pars.stderr
+EOF
+    chmod +x doDlessEstimateParsBrian.sh
+
+    mkdir -p /cluster/bluearc/encode/DLESS/ESTIMATE-indels
+    awk '{printf "doDlessEstimateParsBrian.sh %s %s\n", $1, $2}' regions.txt > jobList10
+    # para create, para push, etc.
+
+    # average estimates across targets
+    rm -f estimates.pars.brian.txt 
+    grep '^Done' -l /cluster/bluearc/encode/DLESS/ESTIMATE-indels/*.pars.stderr > tmp1
+    for file in `cat tmp1` ; do tail -9 $file | head -1 | awk '{print $2, $3}'>> estimates.pars.brian.txt ; done
+    awk '{x += $1; y += $2} END {print "Pars:", x/NR, y/NR}' estimates.pars.brian.txt
+    rm tmp1
+    # Pars: 0.0551889 0.261488
+
+    # predict elements
+    cat > doDlessPars.sh <<EOF
+#!/usr/local/bin/bash -e
+
+TARGET=$1
+CHR=$2
+/cluster/bin/phast/dless /cluster/bluearc/encode/TBA/SEP-05/ss-indels/$TARGET.sso tree.mod --expected-length 20 --target-coverage 0.055 --phi 0.261 -i SS --seqname $CHR --idpref $TARGET --indel-model 0.033417,0.053284,0.052852,0.011655,0.020610,0.065395 --indel-history /cluster/bluearc/encode/DLESS/IH-indels/$TARGET.pars.ih 1> /cluster/bluearc/encode/DLESS/GFF/$TARGET.pars.gff 2> /cluster/bluearc/encode/DLESS/STDERR/$TARGET.pars.stderr
+EOF
+    chmod +x doDlessPars.sh
+
+    mkdir -p /cluster/bluearc/encode/DLESS/GFF /cluster/bluearc/encode/DLESS/STDERR
+    awk '{printf "doDlessPars.sh %s %s\n", $1, $2}' regions.txt > jobList4
+    # para create, para push, etc.
+
+    # compute P-values with phyloP
+    cat > doGeneric.sh <<EOF
+#!/usr/local/bin/bash
+
+echo $1 ${*:3} '>' $2
+$1 ${*:3} > $2
+EOF
+    chmod +x doGeneric.sh
+
+    mkdir -p /cluster/bluearc/encode/DLESS/DLESSP
+    rm -f jobList5
+    for t in `cat targets` ; do \
+            echo "./doGeneric.sh /cluster/bin/phast/dlessP /cluster/bluearc/encode/DLESS/DLESSP/$t.pars.dlessP /cluster/bluearc/encode/TBA/SEP-05/ss-indels/$t.sso -i SS /cluster/home/acs/encode-dless/hg17/tree.mod /cluster/bluearc/encode/DLESS/GFF/$t.pars.gff" >> jobList5 ;\
+    done
+    # para create, para push, etc.
+
+    # load track
+    echo "drop table if exists encodeDless" | hgsql hg17
+    cat /cluster/bluearc/encode/DLESS/DLESSP/*.pars.dlessP | grep -v '^#' | sort -k1,1 -k2,2n | awk 'NF == 24' |sed 's/hg17/human/'  > dless.dat
+    awk '{ if (($6 == "conserved" && $8 < 0.05) || ($6 == "gain" && $8 < 0.05 && $9 > 0.05 && $10 < 0.05) || ($6 == "loss" && $8 > 0.05 && $9 < 0.05 && $11 < 0.05)) print $0}' dless.dat > dless.filtered.dat
+    sed 's/dless/encodeDless/g' ~/kent/src/hg/lib/dless.sql | hgsql hg17
+    echo "load data local infile 'dless.filtered.dat' into table encodeDless" | hgsql hg17

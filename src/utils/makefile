@@ -41,11 +41,14 @@ SCRIPT_FILES = \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
 	doHgNearBlastp.pl \
+	doSameSpeciesLiftOver.pl \
 	dumpDb.pl \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
+	HgStepManager.pm \
         iSync \
         lodToBedScore \
+	makeGenomeDb.pl \
 	mkMafFrames.pl \
 	partitionSequence.pl
 

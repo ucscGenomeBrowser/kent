@@ -14,7 +14,7 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.2 2006/02/27 07:21:11 daryl Exp $";
+static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.4 2006/07/10 04:18:52 daryl Exp $";
 
 static int ssnpId=0;
 boolean strictSnp=FALSE;
@@ -109,7 +109,7 @@ for (l=head; l!=NULL; l=l->next)
 struct hash *readStrand(char *strandFile)
 /* read the strands from a file */
 {
-struct hash *strandHash = newHash(4);
+struct hash *strandHash = newHash(16);
 struct lineFile  *lf = lineFileOpen(strandFile, TRUE); /* input file */
 char             *row[2]; /* number of fields in input file */
 
@@ -130,6 +130,9 @@ struct locus *readSs(char *pbFile, char *strandFile)
 {
 struct hash *strandHash = readStrand(strandFile);
 struct strand *strand = NULL;
+struct hash *missingHugoIdHash = newHash(16);
+struct hashCookie hashPtr;
+char *missingName;
 struct locus     *l  = NULL, *lPtr = NULL;
 struct alleleInfo *aPtr = NULL;
 struct lineFile  *lf = lineFileOpen(pbFile, TRUE); /* input file */
@@ -146,8 +149,6 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
     struct alleleInfo *ai1 = NULL, *ai2 = NULL, *aiPtr;
     struct locus *m        = NULL;
 
-    if (stringIn("N",row[2])||stringIn("N",row[3]))
-	continue;
     chopString(row[0], "-", row2, 3);
     chromStart = sqlUnsigned(row2[0]);
     chromEnd   = chromStart+1;
@@ -168,48 +169,61 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 
     allele=cloneString(row[2]);
     convertToUppercase(allele);
-    if ( differentString(allele,"A") && differentString(allele,"C") && 
-	 differentString(allele,"G") && differentString(allele,"T") )
-	l->strictSnp = FALSE;
-    for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
-	if (sameString(aiPtr->allele, allele))
-	    break;
-    if (aiPtr==NULL)
+    if ( sameString(allele,"A") || sameString(allele,"C") || 
+	 sameString(allele,"G") || sameString(allele,"T") )
 	{
-	AllocVar(ai1);
-	ai1->allele=cloneString(allele);
-	slAddHead(&(l->alleles), ai1);
-	l->alleleCount++;
-	aiPtr=l->alleles;
+	for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
+	    if (sameString(aiPtr->allele, allele))
+		break;
+	if (aiPtr==NULL)
+	    {
+	    AllocVar(ai1);
+	    ai1->allele=cloneString(allele);
+	    slAddHead(&(l->alleles), ai1);
+	    l->alleleCount++;
+	    aiPtr=l->alleles;
+	    }
+	aiPtr->count++;
+	l->sampleSize++;
 	}
-    aiPtr->count++;
-    l->sampleSize++;
 
     allele=cloneString(row[3]);
     convertToUppercase(allele);
-    if ( differentString(allele,"A") && differentString(allele,"C") && 
-	 differentString(allele,"G") && differentString(allele,"T") )
-	l->strictSnp = FALSE;
-    for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
-	if (sameString(aiPtr->allele, allele))
-	    break;
-    if (aiPtr==NULL)
+    if ( sameString(allele,"A") || sameString(allele,"C") || 
+	 sameString(allele,"G") || sameString(allele,"T") )
 	{
-	AllocVar(ai2);
-	ai2->allele=cloneString(allele);
-	slAddHead(&(l->alleles), ai2);
-	l->alleleCount++;
-	aiPtr=l->alleles;
+	for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
+	    if (sameString(aiPtr->allele, allele))
+		break;
+	if (aiPtr==NULL)
+	    {
+	    AllocVar(ai2);
+	    ai2->allele=cloneString(allele);
+	    slAddHead(&(l->alleles), ai2);
+	    l->alleleCount++;
+	    aiPtr=l->alleles;
+	    }
+	aiPtr->count++;
+	l->sampleSize++;
 	}
-    aiPtr->count++;
-    l->sampleSize++;
     }
 slReverse(&l);
 for(lPtr=l; lPtr!=NULL; lPtr=lPtr->next)
     {
     strand = hashFindVal(strandHash, lPtr->hugoId);
+    if (strand == NULL)
+	{
+	hashStore(missingHugoIdHash, lPtr->hugoId);
+	slRemoveEl(l, lPtr);
+	continue;
+	}
     lPtr->strand = cloneString(strand->strand);
     }
+freeHash(&strandHash);
+hashPtr = hashFirst(missingHugoIdHash);
+while ( (missingName=hashNextName(&hashPtr)) != NULL )
+    printf("HUGO ID was not found in strand.txt (usually from proteome.hgncXref): %s\n", missingName);
+freeHash(&missingHugoIdHash);
 return l;
 }
 

@@ -31,6 +31,9 @@ void webStartWrapperDetailed(struct cart *theCart, char *headerText,
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
+void webEndSection();
+/* Close down a section */
+
 void webEnd();
 /* output the footer of the HTML page */
 
@@ -175,5 +178,36 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
 
 void saveDbAndGenome(struct cart *cart, char *db, char *genome);
 /* Save db and genome (as org) in cart. */
+
+void webIncludeFile(char *file);
+/* Include an HTML file in a CGI.
+ *   The file path is relative to the web server document root */
+
+/*** Inside the "web" pages doing a table that looks good is
+ *** hard.  These routines help. ***/
+
+void webPrintLinkTableStart();
+/* Print link table start in our colors. */
+
+void webPrintLinkTableEnd();
+/* Print link table end in our colors. */
+
+void webPrintLinkCellStart();
+/* Print link cell start in our colors. */
+
+void webPrintLinkCellEnd();
+/* Print link cell end in our colors. */
+
+void webPrintLinkCell(char *label);
+/* Print label cell in our colors. */
+
+void webPrintLabelCell(char *label);
+/* Print label cell in our colors. */
+
+void webPrintWideLabelCell(char *label, int colSpan);
+/* Print label cell over multiple columns in our colors. */
+
+void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
+/* Fill out partially empty last row. */
 
 #endif /* WEB_H */

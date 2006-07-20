@@ -70,6 +70,11 @@ void chromGraphOutput(struct chromGraph *el, FILE *f, char sep, char lastSep);
 int chromGraphCmp(const void *va, const void *vb);
 /* Compare to sort based on query chromStart. */
 
+void chromGraphGetMinMax(struct chromGraph *list, double *pMin, double *pMax);
+/* Figure out min/max values in list. */
+
+#define chromGraphDefaultGapToFill 25000
+
 struct chromGraphSettings
 /* Settings */
     {
@@ -81,6 +86,14 @@ struct chromGraphSettings
     int pixels;			/* Actual pixels. */
     int maxPixels;		/* Maximum allowed pixels. */
     };
+
+void chromGraphParseMinMax(char *trackName, char *text, 
+	double *pMin, double *pMax);
+/* Parse out min,max from text.  TrackName is just for error reporting */
+
+void chromGraphSettingsFillFromHash(struct chromGraphSettings *cgs, 
+	struct hash *hash, char *trackName);
+/* Fill in settings from hash table. TrackName is just for error reporting. */
 
 struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
 	struct sqlConnection *conn, struct trackDb *tdb, struct cart *cart);
@@ -121,6 +134,20 @@ void chromGraphToBin(struct chromGraph *list, char *fileName);
  *     chromGraphBinFree(&cgb);
  */
 	  
+struct cgbChrom
+/* Info on a single chromosome in a chromGraph file */
+    {
+    struct cgbChrom *next;	/* Next in list. */
+    char *name;			/* Chromosome name. */
+    bits64 offset;		/* Offset to start of chrom in file */
+    };
+
+void cgbChromFree(struct cgbChrom **pChrom);
+/* Free up one cgbChrom */
+
+void cgbChromFreeList(struct cgbChrom **pList);
+/* Free up list of cgbChrom */
+
 struct chromGraphBin
 /* A handle to binary representation to chrom graph */
     {
@@ -128,6 +155,10 @@ struct chromGraphBin
     char *fileName;	/* Name of file. */
     FILE *f;		/* File handle. */
     boolean isSwapped;	/* Need to swap? */
+    struct cgbChrom *chromList;	/* List of chromosomes/positions */
+    struct hash *chromHash;	/* Hash of all chromosomes/positions */
+    double minVal, maxVal;	/* Min/max values in file */
+    	/* Variables used when scanning through file. */
     char chrom[256];	/* Current chromosome. */
     bits32 chromStart;	/* Current position. */
     double val;		/* Current value. */
@@ -144,6 +175,15 @@ boolean chromGraphBinNextChrom(struct chromGraphBin *cgb);
 
 boolean chromGraphBinNextVal(struct chromGraphBin *cgb);
 /* Fetch next pos/val or FALSE if at end of chromosome. */
+
+boolean chromGraphBinSeekToChrom(struct chromGraphBin *cgb, char *chromName);
+/* Seek to chromosome if have data for it.  Otherwise return FALSE. */
+
+void chromGraphBinRewind(struct chromGraphBin *cgb);
+/* Position file pointer back to the first chromosome */
+
+struct bed3 *chromGraphBinToBed3(char *fileName, boolean threshold);
+/* Stream through making list of all places above threshold. */
 
 #endif /* CHROMGRAPH_H */
 

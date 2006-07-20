@@ -33,11 +33,18 @@ Filter file format:
 
 The restrict and hide lines can refer to the following fields:
      org - Organism.   Example "Homo sapiens"
+     synOrg - If this is a synthetic sequence and the targeted organism can
+              be determined, then this is the targeted organism.  This was
+              added to support the ORFeome clones.  In general, there is
+              no simple way to determine an organism that a synthenic clone
+              targets.
      siz - Size of sequence in bases.
      acc - Genbank accession.  Example "AC100002"
      ver - Version of sequence in Genbank.  Typically a small number"
      def - Definition.  A one sentence description of sequence usually.
      src - Source of sequence.  Often similar to 'org'
+     srcOrg - Organisms from source fields, if different than src.
+              Targeted organism in some synthetic constructs (e.g. ORFeome).
      key - Search keywords for sequence.  HTG is a frequent one for large projects
      aut - Author.  People who submitted sequence.
      dat - Date submitted to Genbank.  Example "2001-07-02"

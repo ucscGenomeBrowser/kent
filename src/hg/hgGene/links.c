@@ -4,11 +4,12 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "web.h"
 #include "hui.h"
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.24 2006/04/16 12:34:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.25 2006/07/01 08:32:33 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -224,7 +225,7 @@ int maxPerRow = 6, itemPos = 0;
 int rowIx = 0;
 struct link *link, *linkList = section->items;
 
-hPrintLinkTableStart();
+webPrintLinkTableStart();
 for (link = linkList; link != NULL; link = link->next)
     {
     char *url = linkGetUrl(link, conn, geneId);
@@ -237,16 +238,16 @@ for (link = linkList; link != NULL; link = link->next)
 	    itemPos = 1;
 	    ++rowIx;
 	    }
-	hPrintLinkCellStart();
+	webPrintLinkCellStart();
 	hPrintf("<A HREF=\"%s\"%s class=\"toc\">", url, target);
 	hPrintf("%s", link->shortLabel);
 	hPrintf("</A>");
-	hPrintLinkCellEnd();
+	webPrintLinkCellEnd();
 	freez(&url);
 	}
     }
-hFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
-hPrintLinkTableEnd();
+webFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
+webPrintLinkTableEnd();
 }
 
 struct section *linksSection(struct sqlConnection *conn,

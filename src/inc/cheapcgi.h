@@ -163,6 +163,11 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names. 
  * uses style "normalText" */
 
+void cgiMakeDropListWithVals(char *name, char *menu[], char *values[], 
+                         int menuSize, char *checked);
+/* Make a drop-down list with names and values. In this case checked
+ * corresponds to a value, not a menu. */
+
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
 /* Make a drop-down list with names and values. */
 

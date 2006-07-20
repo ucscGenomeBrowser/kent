@@ -44,3 +44,12 @@ table gvLink
     string acc;             "accession or id used by link"
     string displayVal;      "value to display if different from acc"
     )
+
+table gvAttrLong
+"attributes associated with a mutation that need long text"
+    (
+    string id;		    "mutation ID"
+    string attrType;        "attribute type"
+    lstring attrVal;         "value for this attribute"
+    )
+

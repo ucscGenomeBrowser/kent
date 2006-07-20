@@ -17,6 +17,8 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
+static char const rcsid[] = "$Id: pbUtil.c,v 1.16 2006/07/11 22:25:07 fanhsu Exp $";
+
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
 {
@@ -797,7 +799,7 @@ char *pbOrgSciName[MAX_PB_ORG];
 boolean pbOrgPresented[MAX_PB_ORG];
 boolean skipIt;
 int  i, maxPbOrg;
-
+int  otherCnt;
 connCentral = hConnectCentral();
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\"");    
@@ -909,8 +911,10 @@ sqlDisconnect(&conn);
 
 if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     {
+    otherCnt = -1;
     if (protCntInSupportedGenomeDb >0)
     	{
+	otherCnt = 0;
     	hPrintf("<FONT SIZE=4><B>Other Organisms:</B></FONT>\n");
     	hPrintf("<UL>");
 	}
@@ -972,6 +976,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	/* print protein entry, if it is not already displayed in the PB supported genome list */
 	if (!skipIt)
 	    {
+	    otherCnt++;
 	    if (sameWord(protAcc, protDisp))
 		{
 		hPrintf("<LI><A HREF=\"../cgi-bin/pbGlobal?proteinID=%s\">", protAcc);
@@ -993,6 +998,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	oldOrg = strdup(protOrg);
 	row3 = sqlNextRow(sr3);
 	}
+    if (otherCnt == 0) hPrintf("</UL>None");fflush(stdout);	
     sqlFreeResult(&sr3);
     sqlDisconnect(&conn3);
     }
@@ -1014,6 +1020,7 @@ conn = sqlConnect(UNIPROT_DB_NAME);
 safef(query, sizeof(query), 
      "select count(*) from gene, displayId, accToTaxon,taxon where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc order by taxon.id", 
      queryGeneID);
+ 
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
