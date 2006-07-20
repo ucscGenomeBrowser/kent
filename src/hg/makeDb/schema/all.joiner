@@ -1058,8 +1058,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.scBlastTab.query
     $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
     rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName
-    hg15,hg16,hg17,hg18.pseudoGeneLink.kgName minCheck=0.78 exclude=noKg
+    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
