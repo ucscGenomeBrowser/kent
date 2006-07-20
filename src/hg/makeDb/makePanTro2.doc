@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.23 2006/07/15 21:50:22 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.24 2006/07/20 00:54:22 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -256,6 +256,25 @@ cat > toWig.csh << 'EOF'
     cd /cluster/data/panTro2/bed/quality
     ln -s /cluster/data/panTro2/bed/quality/quality.wib /gbdb/panTro2/wib
     hgLoadWiggle panTro2 quality quality.wig
+
+    # create downloads for quality scores
+    ssh kkstore04
+    cd /cluster/data/panTro2/bed/quality
+    mkdir qa
+cat > makeDownload.csh >> 'EOF'
+    foreach f (qac/chr*.qac)
+        set c = $f:t:r
+        echo $c
+        qacToQa $f stdout | gzip > qa/$c.qa.gz
+    end
+    cd qa
+    tar cvfz chromQuals.tar.gz chr*.qa.gz
+'EOF'
+    rm -fr qa
+    ssh hgwdev
+    ln -s /cluster/data/panTro2/bed/quality/chromQuals.tar.gz \
+        /usr/local/apache/htdocs/goldenPath/panTro2/bigZips
+    # edit README.txt and update md5sum.txt
 
 
 ########################
@@ -1854,35 +1873,62 @@ TMPDIR=/scratch/tmp
     ssh kkstore04
     cd /cluster/data/panTro2
     mkdir bed/genscan
+
+    # setup to break hardmasked chrom sequence into 5MB chunks at 
+    # unbridged contigs/gaps
+    set sdir = /san/sanvol1/scratch/panTro2/splitHard
+    foreach d (`cat chrom.lst | grep -v M`)
+        mkdir -p $sdir/$d
+        foreach agp ($d/chr*.agp)
+            set c = $agp:t:r
+            echo $c
+            cp $agp $sdir/$d
+            cp $d/$c.fa.masked $sdir/$d
+        end
+    end
+
+    ssh pk
+    cd /cluster/data/panTro2
     cd bed/genscan
-    # Make 3 subdirectories for genscan to put their output files in
+    # Make 3 subdirectories for genscan output files
     mkdir gtf pep subopt
 
-    # create 5M split of hardmasked chroms
-    cd /cluster/data/panTro2
-    set s = /san/sanvol1/scratch/panTro2/splitHard5M
-    rm -fr $s
-    foreach d (`cat chrom.lst`)
-        set c = chr$d
-        mkdir -p $s/$c
-        faSplit gap -minGapSize=100 -verbose=2 $d/$c.fa 5000000 \
-                $s/$c/${c}_ -lift=$s/$c.lft
-        set r = ${c}_random
-        if (-e $d/$r.fa) then
-            mkdir -p $s/$r
-            faSplit gap -minGapSize=100 -verbose=2 $d/$r.fa 5000000 \
-                $s/$r/${r}_ -lift=$s/$r.lft
-        endif
+    # finish split
+cat > bed/genscan/doSplit.csh << 'EOF'
+    set sdir = /san/sanvol1/scratch/panTro2/splitHard
+    cd /san/sanvol1/scratch/panTro2/splitHard
+    foreach agp (*/chr*.agp)
+        set d = $agp:h
+        set c = $agp:t:r
+        set fa = $d/$c.fa.masked
+        echo splitting $agp $fa
+        nice splitFaIntoContigs $agp $fa . -nSize=5000000
     end
-    mkdir $s/lifts
-    cat $s/*.lft > $s/lifts/splitAll.lft
+'EOF'
+    csh bed/genscan/doSplit.csh >&! bed/genscan/doSplit.log &
 
+    # add chrM
+        
     # create list of chunks for cluster run
     cd bed/genscan
-    ls $s/chr*/chr*_* > genome.list
+    rm -f genome.list
+    set sdir = /san/sanvol1/scratch/panTro2/splitHard
+
+    # slip in chrM
+    mkdir -p $sdir/M/chrM_1
+    cp ../../M/chrM.fa.masked $sdir/M/chrM_1/chrM_1.fa
+    mkdir $sdir/M/lift
+    awk '/chrM/ {printf("%d\t%s\t%d\t%s\t%d\n", 0, "M/chrM", $2, "chrM", $2)}' \
+        /cluster/data/panTro2/chrom.sizes > $sdir/M/lift/ordered.lft
+    
+    cd $sdir
+    foreach f (*/chr*_*/*.fa) 
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $sdir/$f >> \
+                /cluster/data/panTro2/bed/genscan/genome.list
+    end
 
     # retrieve executable
-
     ssh hgwdev
     cd /cluster/data/panTro2/bed/genscan
     cvs co hg3rdParty/genscanlinux
@@ -1899,30 +1945,44 @@ TMPDIR=/scratch/tmp
     # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
-        # 652 jobs written to batch
+        # 646 jobs written to batch
     para try
     para check
     para push
+# CPU time in finished jobs:     444979s    7416.32m   123.61h    5.15d  0.014 y
+# IO & Wait Time:                  1898s      31.63m     0.53h    0.02d  0.000 y
+# Time in running jobs:          150791s    2513.18m    41.89h    1.75d  0.005 y
+# Average job time:                 693s      11.55m     0.19h    0.01d
+# Longest running job:           150791s    2513.18m    41.89h    1.75d
+# Longest finished job:           86693s    1444.88m    24.08h    1.00d
+# Submission to last job:         87402s    1456.70m    24.28h    1.01d
 
-    # GOT HERE
+   # Excessively long on chunks with centromere not at start or end of chunk
+   # Next time, try to break these.
 
     # Convert these to chromosome level files
     ssh kkstore04
     cd /cluster/data/panTro2/bed/genscan
-    set liftFile = /san/sanvol1/scratch/panTro2/splitHard5M/lifts/splitAll.lft
-    liftUp genscan.gtf $liftFile warn gtf/*.gtf
-    liftUp genscanSubopt.bed $liftFile warn subopt/*.bed
+    set sdir = /san/sanvol1/scratch/panTro2/splitHard
+    cat $sdir/*/lift/*.lft > $sdir/liftAll.lft
+    liftUp genscan.gtf $sdir/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed $sdir/liftAll.lft warn subopt/*.bed
     cat pep/*.pep > genscan.pep
 
     # Load into the database
     ssh hgwdev
     cd /cluster/data/panTro2/bed/genscan
     ldHgGene panTro2 genscan genscan.gtf
+        # 42844 gene predictions
+    hgsql panTro1 -Ne "select count(*) from genscan"
+        # 41471
     hgPepPred panTro2 generic genscanPep genscan.pep
     hgLoadBed -strict panTro2 genscanSubopt genscanSubopt.bed
 
     featureBits panTro2 genscan
+        # 53758249 bases of 2909485072 (1.848%) in intersection
     featureBits panTro1 genscan
+        # 53757565 bases of 2909485072 (1.848%) in intersection
 
 
 #######################################################################
@@ -2213,6 +2273,19 @@ TMPDIR=/scratch/tmp
     cat ../blastz.hg17/fb.panTro2.chainHg17Link
         # 2759308860 bases of 2823407242 (97.730%) in intersection
 
+    # SWAP ALIGNMENTS (2006-03-19 kate)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed
+    mkdir blastz.panTro2.swap
+    cd blastz.panTro2
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap \
+        /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
+
+    # failed during liftover chain copy (netChains.csh)
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap -continue=download\
+        /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.download.log &
+
 
 #########################################################################
 # BLASTZ danRer3 (2006-04-07 kate)
@@ -2354,3 +2427,361 @@ TMPDIR=/scratch/tmp
     doSameSpeciesLiftOver.pl panTro2 panTro1 \
         -buildDir=/cluster/data/panTro2/bed/blat.panTro1 \
         -continue=net -workhorse=kolossus >& liftOver.2.out &
+
+#############################################################################
+# 8-WAY MULTIZ ALIGNMENTS (2006-07-15 kate)
+
+# hg18
+# rheMac2
+# mm8
+# canFam2
+# monDom4
+# galGal2
+# danRer4
+
+    # copy net mafs to cluster-friendly storage for multiz run
+    ssh kkstore04
+    cd /cluster/data/panTro2/bed
+    set d = /san/sanvol1/scratch/panTro2/mafNet
+    mkdir -p $d
+    foreach s (hg18 rheMac2 mm8 canFam2 monDom4 galGal2 danRer4)
+        echo $s
+        cp -Rp blastz.$s/mafNet $d/$s
+    end
+
+    # make output dir and run dir
+    ssh pk
+    cd /cluster/data/panTro2/bed
+    mkdir -p multiz8way.2006-07-15
+    ln -s multiz8way.2006-07-15 multiz8way
+    cd multiz8way
+
+    cp /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod .
+    cat elliotsEncode.mod
+ALPHABET: A C G T 
+ORDER: 0
+SUBST_MOD: REV
+TRAINING_LNL: -988246.132962
+BACKGROUND: 0.295 0.205 0.205 0.295
+RATE_MAT:
+  -1.165221    0.315494    0.589884    0.259843 
+   0.189778   -0.878194    0.208718    0.479698 
+   0.444622    0.261535   -0.885604    0.179447 
+   0.234867    0.720815    0.215191   -1.170872 
+TREE: (((((((((((((hg17:0.006690,panTro1:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn3:0.081728,mm7:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom2:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro1:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
+
+    # create species list and stripped down tree for autoMZ
+    sed -n '/TREE: /s///p' elliotsEncode.mod > elliotsEncode.nh
+
+    /cluster/bin/phast/tree_doctor elliotsEncode.nh \
+     --prune-all-but=hg17,panTro1,rheMac1,mm7,canFam2,monDom2,galGal2,danRer3 \
+     --rename="hg17->hg18;panTro1->panTro2;rheMac1->rheMac2;mm7->mm8;monDom2->monDom4;danRer3->danRer4" > 8way.nh
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' 8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    grep panTro2 8way.distances.txt | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\t%s\n", $3, $2, $1)}' > distances.txt
+    cat distances.txt
+# 0.0143  chimp_panTro2   human_hg18
+# 0.0910  macaque_rheMac2 chimp_panTro2
+# 0.2660  dog_canFam2     chimp_panTro2
+# 0.4686  mouse_mm8       chimp_panTro2
+# 0.7128  monodelphis_monDom4     chimp_panTro2
+# 0.9855  chicken_galGal2 chimp_panTro2
+# 1.7488  zebrafish_danRer4       chimp_panTro2
+
+    mkdir -p maf run
+    cd run
+
+    # stash binaries 
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = panTro2
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/mafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        set in = $pairs/$s/$c.maf
+        set out = $db.$s.sing.maf
+        if ($s == panTro2) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/panTro2/bed/multiz8way.2006-07-15/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+# << happy emacs
+
+    awk '{print $1}' /cluster/data/panTro2/chrom.sizes > chrom.lst
+
+    gensub2 chrom.lst single spec jobList
+    para create jobList
+        # 52 files
+    para try
+    para check
+    para push
+    para time > run.time
+# CPU time inn finished jobs:      99662s    1661.03m    27.68h    1.15d  0.003 y
+# IO & Wait Time:                  2009s      33.49m     0.56h    0.02d  0.000 y
+# Average job time:                1955s      32.59m     0.54h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            8172s     136.20m     2.27h    0.09d
+# Submission to last job:          8172s     136.20m     2.27h    0.09d
+
+    # annotate mafs
+    ssh kolossus
+    cd /cluster/data/panTro2/bed/multiz8way
+    mkdir anno 
+    cd anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+
+    foreach i (`cat /cluster/data/panTro2/bed/multiz8way/species.lst`)
+        ln -s  /cluster/data/$i/chrom.sizes $i.len
+        ln -s  /cluster/data/$i/$i.N.bed $i.bed
+        echo $i.bed  >> nBeds
+        echo $i.len  >> sizes
+    end
+
+    echo date > jobs.csh
+    foreach i (../../maf/*.maf)
+        echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $i /cluster/data/panTro2/panTro2.2bit ../maf/`basename $i` >> jobs.csh
+        echo "echo $i" >> jobs.csh
+    end 
+    echo date >> jobs.csh
+
+    # do smaller jobs first
+    tac jobs.csh > jobsRev.csh
+    mv jobsRev.csh jobs.csh
+    
+    csh jobs.csh > jobs.log &
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/multiz8way/maf
+    mkdir -p /gbdb/panTro2/multiz8way/maf
+    ln -s /cluster/data/panTro2/bed/multiz8way/maf/*.maf \
+        /gbdb/panTro2/multiz8way/maf
+cat > loadMaf.csh << 'EOF'
+    hgLoadMaf -pathPrefix=/gbdb/panTro2/multiz8way/maf panTro2 multiz8way
+    cat *.maf | \
+        nice hgLoadMafSummary panTro2 -minSize=30000 -mergeGap=1500 -maxSize=200000  multiz8way stdin
+'EOF'
+    # 3213116
+
+#<< happy emacs
+    # multiple hours for this
+    csh loadMaf.csh  >&! loadMaf.log &
+
+    # generate .gif of tree
+    phyloGif
+
+#############################################################################
+# PHASTCONS CONSERVATION (2006-07-18 kate)
+
+    # create cluster-friendly copies of chrom fasta files
+    ssh kkstore04
+    cd /cluster/data/panTro2
+    set sdir = /san/sanvol1/scratch/panTro2/chrom
+    mkdir -p $sdir
+    foreach d (`cat chrom.lst`)
+        echo $d
+        cp -p $d/chr*.fa $sdir
+    end
+
+    # split mafs
+    ssh pk
+    cd /cluster/data/panTro2/bed/multiz8way
+    mkdir cons
+    cd cons
+    mkdir run.split
+    cd run.split
+    set WINDOWS = /san/sanvol1/scratch/panTro2/multiz8way/cons/ss
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+
+    cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+    set MAFS = /cluster/data/panTro2/bed/multiz8way/maf
+    set WINDOWS = /san/sanvol1/scratch/panTro2/multiz8way/cons/ss
+    set sdir = /san/sanvol1/scratch/panTro2/chrom
+    cd $WINDOWS
+    set c = $1
+    echo $c
+    rm -fr $c
+    mkdir $c
+    /cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$c.maf -i MAF \
+        -M $sdir/$c.fa -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+    echo "Done" >> $c.done
+'EOF'
+# << happy emacs
+    chmod +x doSplit.csh
+
+    rm -f jobList
+    foreach f (../../maf/*.maf) 
+        set c = $f:t:r
+	echo "doSplit.csh $c {check out line+ $WINDOWS/$c.done}" >> jobList
+    end
+    
+    para create jobList
+        # 52 jobs
+    para try
+    para check
+    para push
+#CPU time in finished jobs:       2426s      40.44m     0.67h    0.03d  0.000 y
+#IO & Wait Time:                   988s      16.46m     0.27h    0.01d  0.000 y
+#Average job time:                  66s       1.09m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             234s       3.90m     0.07h    0.00d
+#Submission to last job:           346s       5.77m     0.10h    0.00d
+
+    # run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cd ..
+    # create tree model file from ENCODE model file, with tree
+    # pruned and renamed for this set of alignments
+
+    sed '/TREE: /d' ../elliotsEncode.mod > 8way.mod
+    echo "TREE: `cat ../8way.nh`" >> 8way.mod
+    mkdir run.cons
+    cd run.cons
+    cat > doPhast.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set tmp = /scratch/tmp/$f
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/panTro2/multiz8way/cons
+cp -p $san/ss/$c/$f.ss ../8way.mod $tmp
+pushd $tmp > /dev/null
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss 8way.mod \
+   --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative hg18,rheMac2 \
+	--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/pp/$c $san/bed/$c
+sleep 1
+mv $tmp/$f.pp $san/pp/$c
+mv $tmp/$f.bed $san/bed/$c
+rm -fr $tmp
+'EOF'
+    # emacs happy
+    chmod a+x doPhast.csh
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    # start with parameters from previous human 8way
+    cat > template << 'EOF'
+#LOOP
+doPhast.csh $(root1) $(file1) 14 .11 .3
+#ENDLOOP
+'EOF'
+    #	happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/panTro2/multiz8way/cons
+    ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/panTro2/bed/multiz8way/cons/run.cons/in.list
+    popd
+
+    gensub2 in.list single template jobList
+    para create jobList
+        # 346 jobs
+    para try
+    para check
+    para push
+
+    # Note: 1/3 of jobs crashed, but succeeded on retry
+    # These jobs are probably too small/too fast.
+    # Consider increasing the size of the msa_split even further
+    # in future runs.
+
+    para time
+#CPU time in finished jobs:      10586s     176.44m     2.94h    0.12d  0.000 y
+#IO & Wait Time:                  5465s      91.08m     1.52h    0.06d  0.000 y
+#Average job time:                  46s       0.77m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              66s       1.10m     0.02h    0.00d
+#Submission to last job:           581s       9.68m     0.16h    0.01d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/panTro2/multiz8way/cons
+    #	The sed's and the sort get the file names in chrom,start order
+    # (Hiram tricks -- split into columns on [.-/] with 
+    #    identifying x,y,z, to allow column sorting and
+    #    restoring the filename.  Warning: the sort column
+    # will depend on how deep you are in the dir
+    find ./bed -name "chr*.bed" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+	awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+	/cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/panTro2/bed/multiz8way/cons
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/multiz8way/cons
+    hgLoadBed -strict panTro2 phastConsElements8way mostConserved.bed
+    # compare with previous tracks
+    hgsql panTro2 -e "select count(*) from phastConsElements8way"
+        # 2011952
+    hgsql hg18 -e "select count(*) from phastConsElements17way"
+        # 1601903
+    hgsql panTro2 -e "select count(*) from phastConsElements8way where chrom='chr7'"
+    hgsql hg18 -e "select count(*) from phastConsElements17way where chrom='chr7'"
+    # Try for 5% overall cov, and 70% CDS cov 
+    #12, .20
+    featureBits panTro2 -chrom=chr7 -enrichment refGene:cds phastConsElements8way
+        #refGene:cds 0.861%, phastConsElements8way 8.316%, both 0.668%, cover 77.56%, enrich 9.33x
+
+    featureBits hg18 -chrom=chr7 -enrichment refGene:cds phastConsElements17way
+        # refGene:cds 0.883%, phastConsElements17way 4.838%, both 0.621%, cover 70.31%, enrich 14.53x
+
+    #12, .11
+    featureBits panTro2 -chrom=chr7 -enrichment refGene:cds phastConsElements8way
+        # refGene:cds 0.861%, phastConsElements8way 7.304%, both 0.666%, cover 77.34%, enrich 10.59x
+    featureBits hg18 -chrom=chr7 -enrichment refGene:cds phastConsElements17way
+        # refGene:cds 0.883%, phastConsElements17way 4.838%, both 0.621%, cover 70.31%, enrich 14.53x
+
+
