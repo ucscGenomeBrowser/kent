@@ -1797,10 +1797,13 @@ identifier blastHg17KGPep02Id
 
 identifier blastHg18KGPep04Id 
 "hg18 peptides 04"
-     $hg.blastKGPep04.name
-     $hg.knownGene.name  minCheck=0.95
-     $hg.blastKGRef04.acc
+     hg18.blastKGPep04.name
+     hg18.blastKGRef04.acc full
+     hg18.knownGene.name  minCheck=0.95
      monDom4.blastHg18KG.qName
+     galGal3.blastHg18KG.qName
+     xenTro2.blastHg18KG.qName
+     danRer4.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
