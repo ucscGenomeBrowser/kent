@@ -1,0 +1,25 @@
+track multiz7way
+shortLabel Conservation
+longLabel Chicken/Human/Mouse/Rat/Opossum/Frog/Zebrafish Multiz Alignments & Cons.
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7way
+yLineOnOff Off
+autoScaleDefault Off
+windowingFunction mean
+pairwise netBlastz
+speciesOrder hg18 mm8 rn4 monDom4 xenTro2 danRer4
+
+track phastConsElements7way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105.1
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
