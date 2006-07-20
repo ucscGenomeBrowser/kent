@@ -596,8 +596,8 @@ type chain ponAbe0
 otherDb ponAbe0
 
 track chainPanTro2
-shortLabel PanTro2 Chain
-longLabel PanTro2 ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 290
 visibility hide
@@ -610,8 +610,8 @@ type chain panTro2
 otherDb panTro2
 
 track netPanTro2
-shortLabel PanTro2 Net
-longLabel PanTro2 ($o_date/$o_db) Alignment Net
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 290.1
 visibility hide
@@ -620,8 +620,8 @@ type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
 track chainPanTro1
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+shortLabel panTro1 Chain
+longLabel panTro1 ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 290.2
 visibility hide
@@ -634,8 +634,8 @@ type chain panTro1
 otherDb panTro1
 
 track netPanTro1
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+shortLabel panTro1 Net
+longLabel panTro1 ($o_date/$o_db) Alignment Net
 group compGeno
 priority 290.3
 visibility hide
