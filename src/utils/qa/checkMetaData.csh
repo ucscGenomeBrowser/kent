@@ -171,9 +171,9 @@ hgsql $host2 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
 # check liftOverChain
 set metatable="liftOverChain"
 
-hgsql $host1 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'"' $centdb1 | sort \
+hgsql $host1 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" or toDb = "'$db'"' $centdb1 | sort \
    > $metatable.$db.$out1
-hgsql $host2 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'"' $centdb2 | sort \
+hgsql $host2 -e 'SELECT * FROM liftOverChain WHERE fromDb = "'$db'" or toDb = "'$db'"' $centdb2 | sort \
   > $metatable.$db.$out2
 
 
