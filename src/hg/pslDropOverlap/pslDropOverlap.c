@@ -4,7 +4,7 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: pslDropOverlap.c,v 1.3 2003/09/19 19:18:45 baertsch Exp $";
+static char const rcsid[] = "$Id: pslDropOverlap.c,v 1.4 2006/07/20 15:10:51 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -139,16 +139,10 @@ FILE *f = mustOpen(outName, "w");
 struct psl *psl;
 char *line;
 int lineSize;
-int skipMatch = 0, skipMis = 0, skipIns = 0, skipRepMatch = 0;
+int skipMatch = 0;
 int totMatch = 0, totMis = 0, totIns = 0, totRepMatch = 0;
-int minScore = 0;
-int minSize = 0;
 int totSkip = 0;
 int totLines = 0;
-boolean noSelf = FALSE;
-boolean anyFilter = TRUE;
-boolean passFilter;
-
 
 if (!lineFileNext(lf, &line, &lineSize))
     errAbort("%s is empty\n", inName);
