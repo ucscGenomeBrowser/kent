@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1057 2006/07/19 01:04:22 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1058 2006/07/21 19:42:39 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15236,7 +15236,7 @@ if (spAcc != NULL)
     {
     printf("<B>UniProt:</B> ");
     printf("<A HREF=");
-    printSwissProtProteinUrl(stdout, spAcc);
+    printf(uniprotFormat, spAcc);
     if (spAcc == NULL)
         {
         printf(" TARGET=_blank>%s</A></B><BR>\n", item);
