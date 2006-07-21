@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: expRecord.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
+static char const rcsid[] = "$Id: expRecord.c,v 1.5 2006/07/21 22:14:22 aamp Exp $";
 
 struct expRecord *expRecordLoad(char **row)
 /* Load a expRecord from row fetched with select * from expRecord
@@ -243,3 +243,29 @@ safef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
+struct expRecord *expRecordLoadTable(struct sqlConnection *conn, char *table)
+/* Load expression record format table of given name. */
+{
+char query[256];
+char **row;
+struct expRecord *ers = NULL;
+safef(query, sizeof(query), "select * from  %s", table);
+struct sqlResult *sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct expRecord *addMe = expRecordLoad(row);
+    slAddHead(&ers, addMe);
+    }
+slReverse(&ers);
+sqlFreeResult(&sr);
+return ers;
+}
+
+struct expRecord *expRecordConnectAndLoadTable(char *database, char *table)
+/* Load expression record format table of given name. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct expRecord *ers = expRecordLoadTable(conn, table);
+sqlDisconnect(&conn);
+return ers;
+}
