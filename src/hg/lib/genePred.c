@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.86 2006/07/19 06:51:43 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.87 2006/07/21 00:59:54 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1265,6 +1265,8 @@ if (bestMatch != NULL)
 
     if (bestMatch->optFields & genePredName2Fld)
         gp->name2 = cloneString(bestMatch->name2);
+    else
+        gp->name2 = NULL;
     if (bestMatch->optFields & genePredCdsStatFld)
         {
         gp->cdsStartStat = bestMatch->cdsStartStat;
