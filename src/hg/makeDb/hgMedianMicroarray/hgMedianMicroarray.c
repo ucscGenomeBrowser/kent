@@ -10,8 +10,9 @@
 #include "hgRelate.h"
 #include "expRecord.h"
 #include "expData.h"
+#include "microarray.h"
 
-static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.5 2006/05/05 15:43:14 angie Exp $";
+static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.6 2006/07/21 21:58:00 aamp Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -50,62 +51,11 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct medSpec
-/* A specification for median. */
-    {
-    struct medSpec *next;
-    char *name;		/* Column name. */
-    char *group;	/* Tissue/group name. */
-    int count;		/* Count of experiments to median. */
-    int *ids;		/* Id's (indexes) of experiments to median. */
-    };
-
-struct medSpec *medSpecReadAll(char *fileName)
-/* Read in file and parse it into medSpecs. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct medSpec *medList = NULL, *med;
-char *row[256], *line;
-int i, count;
-
-while (lineFileNextReal(lf, &line))
-    {
-    char *name = nextQuotedWord(&line);
-    char *group = nextQuotedWord(&line);
-    if (group == NULL)
-	lineFileShort(lf);
-    count = chopLine(line, row);
-    if (count < 1)
-        lineFileShort(lf);
-    if (count >= ArraySize(row))
-        errAbort("Too many experiments in median line %d of %s",
-		lf->lineIx, lf->fileName);
-    AllocVar(med);
-    med->name = cloneString(name);
-    med->group = cloneString(group);
-    med->count = count;
-    AllocArray(med->ids, count);
-    for (i=0; i<count; ++i)
-        {
-	char *asc = row[i];
-	if (!isdigit(asc[0]))
-	    errAbort("Expecting number got %s line %d of %s", asc,
-	    	lf->lineIx, lf->fileName);
-	med->ids[i] = atoi(asc);
-	}
-    slAddHead(&medList, med);
-    }
-lineFileClose(&lf);
-slReverse(&medList);
-return medList;
-}
-
-
-void makeNewExpTable(char *oldTable, struct medSpec *medList, char *newTable)
+void makeNewExpTable(char *oldTable, struct maMedSpec *medList, char *newTable)
 /* Create new expTable in hgFixed that is very similar
  * to oldExpTable, but with rows defined by medList. */
 {
-struct medSpec *med;
+struct maMedSpec *med;
 struct expRecord *oldExp, newExp;
 struct sqlConnection *conn = sqlConnect("hgFixed");
 FILE *f = hgCreateTabFile(tabDir, newTable);
@@ -149,74 +99,26 @@ if (doLoad)
 sqlDisconnect(&conn);
 }
 
-#define missingData -10000.0
-
-void makeNewDataTable(char *database, char *oldTable, struct medSpec *medList, char *newTable)
+void makeNewDataTable(char *database, char *oldTable, struct maMedSpec *medList, char *newTable)
 /* Create new table in database based on medians of data
  * in old table as defined by medList. */
 {
-struct medSpec *med;
 struct sqlConnection *conn = sqlConnect(database);
 FILE *f = hgCreateTabFile(tabDir, newTable);
-char query[256], **row;
-struct sqlResult *sr;
-int medCount = slCount(medList);
+struct expData *expList, *medianExpList, *exp;
 
-if (limit != 0)
-    {
-    safef(query, sizeof(query),
-	"select name,expScores from %s limit %d", oldTable, limit);
-    }
-else
-    {
-    safef(query, sizeof(query),
-	"select name,expScores from %s", oldTable);
-    }
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    int valCount;
-    double *vals;
-    double median;
-
-    fprintf(f, "%s\t%d\t", row[0], medCount);
-    sqlDoubleDynamicArray(row[1], &vals, &valCount);
-    for (med = medList; med != NULL; med = med->next)
-	{
-	int i, realCount = 0;
-	double *selVals, val;
-	AllocArray(selVals, med->count);
-	for (i=0; i<med->count; ++i)
-	    {
-	    int ix = med->ids[i];
-	    if (ix >= valCount)
-	        errAbort("%d index in median list, but only %d total", 
-			ix, valCount);
-	    val = vals[ix];
-	    if (val > missingData)
-	        {
-		selVals[realCount] = vals[ix];
-		++realCount;
-		}
-	    }
-	if (realCount < minExps)
-	    median = missingData;
-	else
-	    median = doubleMedian(realCount, selVals);
-	fprintf(f, "%0.3f,", median);
-	freeMem(selVals);
-	}
-    fprintf(f, "\n");
-    freeMem(vals);
-    }
-
+expList = expDataLoadTableLimit(conn, oldTable, limit);
+medianExpList = maExpDataMedianFromSpec(expList, medList, minExps);
+for (exp = medianExpList; exp != NULL; exp = exp->next)
+    expDataTabOut(exp, f);
 if (doLoad)
     {
     expDataCreateTable(conn, newTable);
     hgLoadTabFile(conn, tabDir, newTable, &f);
     hgRemoveTabFile(tabDir, newTable);
     }
+expDataFreeList(&expList);
+expDataFreeList(&medianExpList);
 sqlDisconnect(&conn);
 }
 
@@ -226,7 +128,7 @@ void hgMedianMicroarray(char *database, char *table, char *expTable,
 /* hgMedianMicroarray - Create a copy of microarray database that contains 
  * the median value of replicas. */
 {
-struct medSpec *medList = medSpecReadAll(specFile);
+struct maMedSpec *medList = maMedSpecReadAll(specFile);
 makeNewExpTable(expTable, medList, newExpTable);
 makeNewDataTable(database, table, medList, newTable);
 }
