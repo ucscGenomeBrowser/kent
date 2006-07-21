@@ -1,17 +1,24 @@
 track multiz7way
 shortLabel Conservation
-longLabel Chicken/Human/Mouse/Rat/Opossum/Frog/Zebrafish Multiz Alignments & Cons.
+longLabel Vertebrate Multiz Alignments & Cons.
 group compGeno
 priority 100
 visibility pack
+color 0, 10, 100
+altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons7way
+pairwiseHeight 12
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
-windowingFunction mean
-pairwise netBlastz
+summary multiz7waySummary
+frames multiz7wayFrames
+irows on
+speciesCodonDefault galGal3
 speciesOrder hg18 mm8 rn4 monDom4 xenTro2 danRer4
+treeImage phylo/galGal3_7way.gif
 
 track phastConsElements7way
 shortLabel Most Conserved
