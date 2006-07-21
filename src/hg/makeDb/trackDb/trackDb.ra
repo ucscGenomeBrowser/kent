@@ -385,49 +385,54 @@ compositeTrack on
 shortLabel TransMap
 longLabel TransMap Genes
 group genes
+type genePred
 priority 36.05
 visibility hide
-type psl
+cdsDrawDefault genomic\ codons
 
     track transMapRefGene
     subTrack transMap
     shortLabel TransMapRefGene
     longLabel TransMap RefSeq Gene Predictions
-    color 34,139,34
-    priority 1
     type genePred
-    itemAttrTbl transMapRefAttr
+    priority 1
+    color 34,139,34
+    noInherit on
     cdsDrawDefault genomic\ codons
+    itemAttrTbl transMapRefAttr
 
     track transMapRefAliGene
     subTrack transMap off
     shortLabel TransMapRefAli
     longLabel TransMap RefSeq Alignments
-    color 120,12,120
-    priority 2
     type genePred
-    itemAttrTbl transMapRefAttr
+    priority 2
+    color 120,12,120
+    noInherit on
     cdsDrawDefault genomic\ codons
+    itemAttrTbl transMapRefAttr
 
     track transMapMRnaGene
     subTrack transMap
     shortLabel TransMapMRnaGene
     longLabel TransMap Protein Coding mRNA Predictions
-    color 34,139,34
-    priority 3
     type genePred
-    itemAttrTbl transMapMRnaAttr
+    priority 3
+    color 34,139,34
+    noInherit on
     cdsDrawDefault genomic\ codons
+    itemAttrTbl transMapMRnaAttr
 
     track transMapMRnaAliGene
     subTrack transMap off
     shortLabel TransMapMRnaAli
     longLabel TransMap mRNA alignments
-    color 134,139,34
-    priority 4
     type genePred
-    itemAttrTbl transMapMRnaAttr
+    priority 4
+    color 134,139,34
+    noInherit on
     cdsDrawDefault genomic\ codons
+    itemAttrTbl transMapMRnaAttr
 
 track transMapAnc
 compositeTrack on
@@ -436,8 +441,7 @@ longLabel TransMap via Ancestor Tree Genes
 group genes
 priority 36.06
 visibility hide
-type psl
-noInherit on
+type genePred
 
     track transMapAncRefGene
     subTrack transMapAnc
