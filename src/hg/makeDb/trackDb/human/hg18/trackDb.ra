@@ -784,18 +784,6 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
-track affyHumanExon
-shortLabel Affy All Exon
-longLabel Affymetrix All Exon Chips
-group regulation
-priority 79.1
-visibility hide
-type expRatio
-expScale 3.0
-expStep 0.5
-expProbeTable affyHumanExonProbeAnnot
-expTable affyHumanExonExps
-
 searchTable wgRna
 searchMethod fuzzy
 searchType bed
