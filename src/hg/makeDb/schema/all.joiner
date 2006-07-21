@@ -623,6 +623,17 @@ identifier affyU34A
     $rn.affyU34A.qName dupeOk
     $rn.knownToU34A.value
 
+identifier affyHumanExonProbeId
+"Affy Human All Exon 1.0 chip probe identifiers"
+    $hg.affyHumanExon.name
+    hgFixed.affyHumanExonProbeAnnot.name
+
+identifier affyHumanExonSampleId
+"Affy Human All Exon 1.0 chip sample identifiers"
+    hgFixed.affyHumanExonExps.id
+    $hg.affyHumanExon.expIds comma full
+    $hg.affyHumanExon.expScores comma indexOf full
+
 identifier kimWormGeneId
 "Identifiers for Kim-lab worm genes"
     hgFixed.kimWormLifeAllRatio.name
