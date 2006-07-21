@@ -1104,7 +1104,7 @@ rm -fr /scratch/tmp/${root1}_${root2}
 #4.838u 0.158s 0:05.09 97.8%     0+0k 0+0io 2pf+0w
 
 
-# BACEND PAIRS TRACK (IN PROGRESS 6/20/06 angie)
+# BACEND PAIRS TRACK (DONE 7/17/06 angie)
     ssh kolossus
     cd /cluster/data/galGal3/bed/bacends
     time /cluster/bin/x86_64/pslPairs -tInsert=10000 \
@@ -1200,6 +1200,580 @@ rm -fr /scratch/tmp/${root1}_${root2}
     hgFakeAgp M/chrM.fa M/chrM.agp
     hgGoldGapGl -noGl -chromLst=chrom.lst galGal3 /cluster/data/galGal3 .
     hgsql galGal3 -e 'delete from chrM_gold'
+
+
+#########################################################################
+# MULTIZ7WAY (DONE 7/18/06 angie)
+# (((galGal3 ((hg18 (mm8 rn4)) monDom4)) xenTro2) danRer4)
+    ssh kkstore03
+    mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18
+
+    # copy MAF's to cluster-friendly server
+    mkdir /san/sanvol1/scratch/galGal3/mafNet
+    foreach s (rn4 mm8 hg18 monDom4 xenTro2 danRer4)
+      echo $s
+      rsync -av /cluster/data/galGal3/bed/blastz.$s/mafNet/* \
+        /san/sanvol1/scratch/galGal3/mafNet/$s/
+    end
+
+    # Prune the hg17 17way tree to just these 9 and update db names:
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=rat_rn3,mouse_mm7,human_hg17,monodelphis_monDom2,chicken_galGal2,xenopus_xenTro1,zebrafish_danRer3 \
+      --rename="rat_rn3 -> rat_rn4 ; mouse_mm7 -> mouse_mm8 ; human_hg17 -> human_hg18 ; monodelphis_monDom2 -> monodelphis_monDom4 ; chicken_galGal2 -> chicken_galGal3 ; zebrafish_danRer3 -> zebrafish_danRer4 ; xenopus_xenTro1 -> xenopus_xenTro2" \
+      /cluster/data/hg17/bed/multiz17way/17way.nh > 7way.nh
+    # *carefully* edit 7way.nh to put galGal3 first.
+
+    /cluster/bin/phast/all_dists 7way.nh > 7way.distances.txt
+    grep galGal3 7way.distances.txt | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
+    cat distances.txt
+#0.9847  human_hg18
+#1.0149  monodelphis_monDom4
+#1.3425  mouse_mm8
+#1.3472  rat_rn4
+#1.3604  xenopus_xenTro2
+#1.6727  zebrafish_danRer4
+    # the order in the browser display will be by tree topology,
+    # not by distance, but in this case (unlike human) they happen to match.
+
+    # create species list and stripped down tree for autoMZ
+    sed -e 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' 7way.nh \
+      > tree-commas.nh
+    sed -e 's/ //g; s/,/ /g' tree-commas.nh > tree.nh
+    sed -e 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    ssh pk
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18
+    mkdir maf run
+    cd run
+
+    # stash binaries 
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = galGal3
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/mafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        set in = $pairs/$s/$c.maf
+        set out = $db.$s.sing.maf
+        if ($s == $db) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'EOF'
+    # << emacs
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/galGal3/bed/multiz7way.2006-07-18/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    # << emacs
+
+    awk '{print $1}' /cluster/data/galGal3/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single spec jobList
+    para make jobList
+    para time
+#Completed: 57 of 57 jobs
+#CPU time in finished jobs:       6545s     109.08m     1.82h    0.08d  0.000 y
+#IO & Wait Time:                   206s       3.43m     0.06h    0.00d  0.000 y
+#Average job time:                 118s       1.97m     0.03h    0.00d
+#Longest finished job:             890s      14.83m     0.25h    0.01d
+#Submission to last job:           891s      14.85m     0.25h    0.01d
+
+    # Make .gif for tree by pasting the contents of 7way.nh into Galt's 
+    # cgi-bin/phyloGif tool.  Save the .gif in your checkout of the browser/ 
+    # CVS tree as browser/images/phylo/galGal3_7way.gif .
+    ssh hgwdev
+    cd ~/browser/images/phylo
+    cvs add galGal3_7way.gif
+    cvs ci -m "phyloGif-generated galGal3 7way tree image." galGal3_7way.gif
+    # Do a "make alpha" to install the file in htdocs/images/phylo/ :
+    cd ~/browser
+    cvs up -d -P
+    make alpha
+    # Include the file in the push request, and include
+    # "treeImage images/galGal3_7way.gif" in the multiz7way trackDb.ra entry.
+
+
+#########################################################################
+# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 7/18/2006 angie)
+    ssh kolossus
+    mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    foreach db (`cat /cluster/data/galGal3/bed/multiz7way.2006-07-18/species.lst`)
+      ln -s  /cluster/data/$db/chrom.sizes $db.len
+      if (! -e /cluster/data/$db/$db.N.bed) then
+        twoBitInfo -nBed /cluster/data/$db/$db.{2bit,N.bed}
+      endif
+      ln -s  /cluster/data/$db/$db.N.bed $db.bed
+      echo $db.bed  >> nBeds
+      echo $db.len  >> sizes
+    end
+    echo date > jobs.csh
+    # do smaller jobs first:
+    foreach f (`ls -1rS ../../maf/*.maf`)
+      echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
+        /cluster/data/galGal3/galGal3.2bit ../maf/`basename $f` >> jobs.csh
+      echo "echo $f" >> jobs.csh
+    end 
+    echo date >> jobs.csh
+    csh -efx jobs.csh >&! jobs.log & tail -f jobs.log
+    # 21min
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno/maf
+    mkdir -p /gbdb/galGal3/multiz7way/anno/maf
+    ln -s /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno/maf/*.maf \
+      /gbdb/galGal3/multiz7way/anno/maf
+    nice hgLoadMaf -pathPrefix=/gbdb/galGal3/multiz7way/anno/maf \
+      galGal3 multiz7way
+#Loaded 2292252 mafs in 57 files from /gbdb/galGal3/multiz7way/anno/maf
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kolossus
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno/maf
+    cat *.maf \
+    | nice hgLoadMafSummary galGal3 -minSize=30000 -mergeGap=1500 -maxSize=200000 \
+             -test multiz7waySummary stdin
+#Created 518561 summary blocks from 3179814 components and 2292252 mafs from stdin
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno/maf
+    sed -e 's/mafSummary/multiz7waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz7waySummary.sql
+    time nice hgLoadSqlTab galGal3 multiz7waySummary /tmp/multiz7waySummary.sql \
+      multiz7waySummary.tab
+#0.000u 0.000s 0:07.56 0.0%      0+0k 0+0io 3pf+0w
+    rm *.tab
+    ln -s multiz7way.2006-07-18 /cluster/data/galGal3/bed/multiz7way
+
+
+#########################################################################
+# MULTIZ7WAY DOWNLOADABLES (DONE 7/18/2006 angie)
+    # Annotated MAF is now documented, so use anno/maf for downloads.
+    ssh hgwdev
+    mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads
+    # upstream mafs 
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits galGal3 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags galGal3 multiz7way up.bed upstream$i.maf \
+                -orgs=../species.lst
+        rm up.bed
+    end
+    date
+'EOF'
+    # << emacs
+    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
+#10.144u 15.154s 0:52.22 48.4%   0+0k 0+0io 5pf+0w
+
+    ssh kkstore03
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads
+cat > downloads.csh << 'EOF'
+    date
+    foreach f (../anno/maf/chr*.maf)
+	set c = $f:t:r
+        echo $c
+	nice gzip -c $f > $c.maf.gz
+    end
+    md5sum *.gz > md5sum.txt
+    date
+'EOF'
+    # << emacs
+    time csh -efx downloads.csh >&! downloads.log
+#355.340u 3.718s 5:59.55 99.8%   0+0k 0+0io 1pf+0w
+    nice gzip up*.maf
+    nice md5sum up*.maf.gz >> md5sum.txt
+    # Make a README.txt
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/galGal3/multiz7way
+    mkdir $dir
+    ln -s /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads/{*.gz,*.txt} $dir
+
+
+
+#########################################################################
+# MULTIZ7WAY MAF FRAMES (DONE 7/18/2006 angie)
+    ssh hgwdev
+    mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/frames
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/frames
+    # The following is adapted from MarkD's Makefile used for mm7...
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes: danRer4
+    mkdir genes
+    foreach queryDb (danRer4)
+      set tmpExt = `mktemp temp.XXXXXX`
+      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
+      set tmpMrna = ${queryDb}.mrna.${tmpExt}
+      set tmpCds = ${queryDb}.cds.${tmpExt}
+      echo $queryDb
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       ${queryDb} > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
+        stdout \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for galGal3
+    # using mgcGenes for xenTro2
+    # no genes for monDom4
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    foreach queryDb (galGal3 rn4 mm8 hg18 xenTro2)
+      unset geneTbl range
+      if ($queryDb == "xenTro2") then
+        set geneTbl = mgcGenes
+        set range = 1-10
+      else if ($queryDb == "galGal3") then
+        set geneTbl = refGene
+        set range = 2-11
+      else
+        set geneTbl = knownGene
+        set range = 1-10
+      endif
+      echo $queryDb
+      hgsql -N -e "select * from $geneTbl" ${queryDb} | cut -f $range \
+      | genePredSingleCover stdin stdout \
+      | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+    end
+
+    #------------------------------------------------------------------------
+    # create frames
+    ssh kkstore03
+    nice tcsh # easy way to get process niced
+    cd /cluster/data/galGal3/bed/multiz7way/frames
+    (cat  ../anno/maf/*.maf \
+     | time genePredToMafFrames galGal3 stdin stdout \
+         danRer4 genes/danRer4.gp.gz \
+         rn4 genes/rn4.gp.gz \
+         hg18 genes/hg18.gp.gz \
+         mm8 genes/mm8.gp.gz \
+         xenTro2 genes/xenTro2.gp.gz \
+         galGal3 genes/galGal3.gp.gz \
+     | gzip > multiz7way.mafFrames.gz) >& mafFrames.log & tail -f mafFrames.log
+
+    #------------------------------------------------------------------------
+    # load the database
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/frames
+    hgLoadMafFrames galGal3 multiz7wayFrames multiz7way.mafFrames.gz
+
+
+#########################################################################
+# PHASTCONS (DONE 7/20/2006 angie)
+# Using Kate's process from makeHg17.doc.
+# This process is distilled from Hiram and Adam's experiments
+# on mouse (mm7) 17way track.  Many parameters are now fixed, without
+# being experimentally derived, either because the experiments
+# were lengthy and produced similar results, or because they
+# weren't runnable given the alignment size.
+# These parameters are:
+# --rho
+# --expected-length
+# --target-coverage
+# Also, instead of generating cons and noncons tree models,
+# we use a single, pre-existing tree model -- Elliot Margulies' model 
+# from the (37-way) ENCODE alignments.
+    ssh kkstore03
+    cd /cluster/data/galGal3
+    foreach f (`cat chrom.lst`)
+      echo $f
+      cp -p $f/*.fa /san/sanvol1/scratch/galGal3/chrom/
+    end
+
+    # Split chromosome MAF's into windows and use to generate
+    # "sufficient statistics" (ss) files for phastCons input
+    # NOTE: as the SAN fs has lotsa space, we're leaving these
+    # big (temp) files unzipped, to save time during phastCons run.
+    # Note also the larger chunk sizes from previous runs -- this
+    # reduces run-time on the split, slows down the actual phastCons
+    # enough so jobs don't crash (jobs are very quick, just a minute
+    # or so), and according to Adam, will produce better results.
+    # The previous small chunks were probably required by
+    # the phyloFit step, which we are no longer using for the
+    # human alignments.
+    ssh pk
+    mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=rn3,mm7,hg17,monDom2,galGal2,xenTro1,danRer3 \
+      --rename="galGal2 -> galGal3 ; rn3 -> rn4 ; hg17 -> hg18 ; mm7 -> mm8 ; monDom2 -> monDom4 ; xenTro1 -> xenTro2 ; danRer3 -> danRer4" \
+      /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod \
+      > elliotsEncodePruned.mod
+    mkdir run.split
+    cd run.split
+    set WINDOWS = /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/ss
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+
+    cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+    set MAFS = /cluster/data/galGal3/bed/multiz7way.2006-07-18/maf
+    set WINDOWS = /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/ss
+    cd $WINDOWS
+    set c = $1
+    echo $c
+    rm -fr $c
+    mkdir $c
+    /cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$c.maf -i MAF \
+        -M /san/sanvol1/scratch/galGal3/chrom/$c.fa \
+        -o SS -r $c/$c -w 10000000,0 -I 1000 -B 5000
+    echo "Done" >> $c.done
+'EOF'
+# << emacs
+    chmod +x doSplit.csh
+
+    rm -f jobList
+    foreach f (../../maf/*.maf) 
+      set c = $f:t:r
+      echo "doSplit.csh $c {check out line+ $WINDOWS/$c.done}" >> jobList
+    end
+    
+    para make jobList
+    para time
+#Completed: 54 of 57 jobs
+#Crashed: 3 jobs
+#CPU time in finished jobs:        570s       9.49m     0.16h    0.01d  0.000 y
+#IO & Wait Time:                   229s       3.82m     0.06h    0.00d  0.000 y
+#Average job time:                  15s       0.25m     0.00h    0.00d
+#Longest finished job:             112s       1.87m     0.03h    0.00d
+#Submission to last job:           223s       3.72m     0.06h    0.00d
+    para crashed
+#chr12_random, chr17_random and chr32 crashed because their maf's contain
+#nothing but comments -- no alignments.  That's OK, no windows for them.
+
+    # check tree model on 5MB chunk, using params recommended by Adam,
+    # (to verify branch lengths on 2X species)
+    ssh kolossus
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS -E -p MED -s HKY85 \
+        --tree "`cat ../tree-commas.nh`" \
+        /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/ss/chr7/chr7.10000001-19997442.ss \
+        -o phyloFit.tree
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS -E -p MED -s REV \
+        --tree "`cat ../tree-commas.nh`" \
+        /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/ss/chr7/chr7.10000001-19997442.ss \
+        -o phyloFit.rev.tree
+    # Comment from makeHg17.doc:
+    # # he ok'ed the results -- not necessary for next human run
+    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and 
+    # TREE are different between the phyloFit and elliotsEncode models,
+    # not sure if the differences are significant.  I will proceed with 
+    # elliotsEncode as in makeHg17.doc.
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons/run.cons
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons/run.cons
+    cat > doPhast.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set tmp = /scratch/tmp/$f
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons
+cp -p $san/ss/$c/$f.ss ../elliotsEncodePruned.mod $tmp
+pushd $tmp > /dev/null
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncodePruned.mod \
+  --rho $rho --expected-length $len --target-coverage $cov --quiet \
+  --seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/pp/$c $san/bed/$c
+sleep 1
+mv $tmp/$f.pp $san/pp/$c
+mv $tmp/$f.bed $san/bed/$c
+rm -fr $tmp
+'EOF'
+    # << emacs
+    chmod a+x doPhast.csh
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << 'EOF'
+#LOOP
+doPhast.csh $(root1) $(file1) 12 .05 .20
+#ENDLOOP
+'EOF'
+    # << emacs
+
+    # Create parasol batch and run it
+    ssh pk
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons/run.cons
+    pushd /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons
+    ls -1S ss/chr*/chr*.ss \
+    | sed 's/.ss$//' \
+      > /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons/run.cons/in.list
+    popd
+
+    gensub2 in.list single template jobList
+    para make jobList
+    para time
+#Completed: 151 of 151 jobs
+#CPU time in finished jobs:       2832s      47.20m     0.79h    0.03d  0.000 y
+#IO & Wait Time:                   644s      10.74m     0.18h    0.01d  0.000 y
+#Average job time:                  23s       0.38m     0.01h    0.00d
+#Longest finished job:              34s       0.57m     0.01h    0.00d
+#Submission to last job:           181s       3.02m     0.05h    0.00d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons
+    #	The sed's and the sort get the file names in chrom,start order
+    # (Hiram tricks -- split into columns on [.-/] with 
+    #    identifying x,y,z, to allow column sorting and
+    #    restoring the filename.  Warning: the sort column
+    # will depend on how deep you are in the dir
+    find ./bed -name "chr*.bed" \
+    | sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" \
+    | sort -k7,7 -k9,9n \
+    | sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" \
+    | xargs cat \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore /dev/stdin > phastConsElements7way.bed
+    cp -p phastConsElements7way.bed /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+
+    # Measure coverage.  If good, load elements into database and proceed with wiggle.
+    # Try for 5% overall cov, and 70% CDS cov.
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+    featureBits galGal3 -enrichment refGene:cds phastConsElements7way.bed
+    featureBits galGal3 -enrichment xenoRefGene:cds phastConsElements7way.bed
+
+    # FIRST ITERATION: doPhast (len cov rho) = (12 .1 .27)
+#refGene:cds 0.504%, phastConsElements7way.bed 7.891%, both 0.414%, cover 82.18%, enrich 10.41x
+#xenoRefGene:cds 1.785%, phastConsElements7way_12_100_27.bed 7.891%, both 1.610%, cover 90.22%, enrich 11.43x
+    mv phastConsElements7way.bed phastConsElements7way_12_100_27.bed
+    # SECOND ITERATION: doPhast (len cov rho) = (12 .1 .3)
+#refGene:cds 0.504%, phastConsElements7way.bed 8.336%, both 0.421%, cover 83.61%, enrich 10.03x
+#xenoRefGene:cds 1.785%, phastConsElements7way.bed 8.336%, both 1.635%, cover 91.59%, enrich 10.99x
+    mv phastConsElements7way.bed phastConsElements7way_12_100_30.bed
+    # THIRD ITERATION: doPhast (len cov rho) = (12 .05 .27)
+#refGene:cds 0.504%, phastConsElements7way.bed 7.650%, both 0.415%, cover 82.26%, enrich 10.75x
+#xenoRefGene:cds 1.785%, phastConsElements7way.bed 7.650%, both 1.615%, cover 90.49%, enrich 11.83x
+    mv phastConsElements7way.bed phastConsElements7way_12_050_27.bed
+    # FOURTH ITERATION: doPhast (len cov rho) = (12 .05 .20)
+#refGene:cds 0.504%, phastConsElements7way.bed 6.480%, both 0.392%, cover 77.82%, enrich 12.01x
+#xenoRefGene:cds 1.785%, phastConsElements7way.bed 6.480%, both 1.535%, cover 86.02%, enrich 13.28x
+    mv phastConsElements7way.bed phastConsElements7way_12_050_20.bed
+    # The coverage doesn't want to drop too much and maybe it shouldn't --
+    # I don't like the idea of throwing extreme parameters in order to get
+    # the desired coverage figure from a model that doesn't want to go there.
+    # Load this up and see how it looks...
+
+
+    # When happy:
+    hgLoadBed -strict galGal3 phastConsElements7way \
+      phastConsElements7way_12_050_20.bed
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kolossus
+    cd /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    #next time try Angie's simpler sort, below
+    time find ./pp -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+        sort -k7,7 -k9,9n | \
+        sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+        xargs cat | \
+        nice wigEncode stdin phastCons7way.wig phastCons7way.wib
+    cp -p phastCons7way.wi? \
+      /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons
+    ln -s `pwd`/phastCons7way.wib /gbdb/galGal3/multiz7way/phastCons7way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/galGal3/multiz7way galGal3 \
+        phastCons7way phastCons7way.wig
+
+
+#########################################################################
+# PHASTCONS SCORES DOWNLOADABLES FOR 7WAY (DONE 7/20/2006 angie)
+    ssh kolossus
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18
+    mkdir phastConsDownloads
+    cd phastConsDownloads
+    cat > downloads.csh << 'EOF'
+    date
+    cd /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons/pp
+    foreach chr (`awk '{print $1}' /cluster/data/galGal3/chrom.sizes`)
+      echo $chr
+      cat `ls -1 $chr/$chr.*.pp | sort -t\. -k2,2n` \
+        | nice gzip -c \
+            > /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastConsDownloads/$chr.gz
+    end
+    date
+'EOF'
+    # << emacs
+    csh -efx downloads.csh >&! downloads.log & tail -f downloads.log
+    # ~3min
+    md5sum *.gz > md5sum.txt
+    # Make a README.txt
+
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastConsDownloads
+    set dir = /usr/local/apache/htdocs/goldenPath/galGal3/phastCons7way
+    mkdir $dir
+    ln -s /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastConsDownloads/{*.gz,*.txt} $dir
+    # Clean up after phastCons run.
+    ssh kkstore03
+    rm /cluster/data/galGal3/bed/multiz7way.2006-07-18/phastCons/*.tab
+    rm -r /san/sanvol1/scratch/galGal3/multiz7way.2006-07-18/phastCons
 
 
 #########################################################################
