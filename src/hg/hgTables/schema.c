@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.36 2006/05/31 22:17:03 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.37 2006/07/21 23:54:50 hiram Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -181,6 +181,41 @@ puts("<P><I>Note: all start coordinates in our database are 0-based, not \n"
      "here</A>.</I></P>");
 }
 
+static void stripHtmlTags(char *text)
+/* remove HTML tags from text string, replacing in place by moving
+ * the text up to take their place
+ */
+{
+char *s = text;
+char *e = text;
+char c = *text;
+for ( ; c != 0 ; )
+    {
+    c = *s++;
+    if (c == 0)
+	/*	input string is NULL, or it ended with '>' without any
+	 *	opening '>'
+	 */
+	{
+	*e = 0;
+	break;
+	}
+    /* stays in the while loop for adjacent tags <TR><TD> ... etc */
+    while (c == '<' && c != 0)
+	{
+	s = strchr(s,'>');
+	if (s != NULL)
+	    {
+	    if (*s == '>') ++s; /* skip closing bracket > */
+	    c = *s++;		/* next char after the closing bracket > */
+	    }
+	else
+	    c = 0;	/* no closing bracket > found, end of string */
+	}
+    *e++ = c;	/*	copies all text outside tags, including ending NULL */
+    }
+}
+
 
 static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table)
 /* Put up sample values. */
@@ -229,7 +264,28 @@ while ((row = sqlNextRow(sr)) != NULL)
 		(rgb & 0xff00) >> 8, (rgb & 0xff));
 	    }
 	else
-	    hPrintf("<TD>%s</TD>", row[i]);
+	    {
+	    if (strlen(row[i]) > 128)
+		{
+		char *s = cloneStringZ(row[i],128);
+		char *r;
+		stripHtmlTags(s);
+		eraseTrailingSpaces(s);
+		r = replaceChars(s, " ", "&nbsp;");
+		hPrintf("<TD>%s&nbsp;...</TD>", r);
+		freeMem(s);
+		freeMem(r);
+		}
+	    else
+		{
+		char *r;
+		stripHtmlTags(row[i]);
+		eraseTrailingSpaces(row[i]);
+		r = replaceChars(row[i], " ", "&nbsp;");
+		hPrintf("<TD>%s</TD>", r);
+		freeMem(r);
+		}
+	    }
 	}
     hPrintf("</TR>\n");
     }
@@ -334,6 +390,7 @@ if (asObj != NULL)
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
+
 /* sort and unique list */
 slUniqify(&jpList, joinerPairCmpOnAandB, joinerPairFree);
 
