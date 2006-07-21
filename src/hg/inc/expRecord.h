@@ -82,5 +82,13 @@ void expRecordOutput(struct expRecord *el, FILE *f, char sep, char lastSep);
 void expRecordCreateTable(struct sqlConnection *conn, char *table);
 /* Create expression record format table of given name. */
 
+struct expRecord *expRecordLoadTable(struct sqlConnection *conn, char *table);
+/* Load expression record format table of given name. */
+
+struct expRecord *expRecordConnectAndLoadTable(char *database, char *table);
+/* Load expression record format table of given name. */
+
+
+
 #endif /* EXPRECORD_H */
 
