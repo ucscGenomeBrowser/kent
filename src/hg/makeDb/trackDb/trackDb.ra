@@ -388,7 +388,6 @@ group genes
 priority 36.05
 visibility hide
 type psl
-noInherit on
 
     track transMapRefGene
     subTrack transMap
@@ -396,7 +395,6 @@ noInherit on
     longLabel TransMap RefSeq Gene Predictions
     color 34,139,34
     priority 1
-    noInherit on
     type genePred
     itemAttrTbl transMapRefAttr
     cdsDrawDefault genomic\ codons
@@ -407,8 +405,6 @@ noInherit on
     longLabel TransMap RefSeq Alignments
     color 120,12,120
     priority 2
-    visibility hide
-    noInherit on
     type genePred
     itemAttrTbl transMapRefAttr
     cdsDrawDefault genomic\ codons
@@ -419,7 +415,6 @@ noInherit on
     longLabel TransMap Protein Coding mRNA Predictions
     color 34,139,34
     priority 3
-    noInherit on
     type genePred
     itemAttrTbl transMapMRnaAttr
     cdsDrawDefault genomic\ codons
@@ -430,8 +425,6 @@ noInherit on
     longLabel TransMap mRNA alignments
     color 134,139,34
     priority 4
-    visibility hide
-    noInherit on
     type genePred
     itemAttrTbl transMapMRnaAttr
     cdsDrawDefault genomic\ codons
