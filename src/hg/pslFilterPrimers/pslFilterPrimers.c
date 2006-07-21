@@ -147,8 +147,8 @@ for (s = *sList; s != NULL; s = next)
 void readPrimerInfo(struct lineFile *sf)
 /* Read in primer info from all.primers file */
 {
-int lineSize, wordCount;
-char *words[5], *line;
+int wordCount;
+char *words[5];
 char *dist1, *dist[2];
 struct sts *sts;
 
@@ -204,8 +204,8 @@ boolean epcrInList(struct epcr *eList, struct epcr *epcr)
 void readEpcr(struct lineFile *ef)
 /* Read in and record epcr records */
 {
-int lineSize, wordCount;
-char *words[8], *line;
+int wordCount;
+char *words[8];
 char *pos[4];
 struct epcr *epcr;
 struct sts *sts;
@@ -294,7 +294,6 @@ void filterPrimersAndWrite(FILE *of, struct sts *sts)
 {
   int bestScore = 1000;
   struct place *p = NULL;
-  boolean found = FALSE;
 
   for (p = sts->place; p != NULL; p=p->next)
     if (p->badBits < bestScore)
@@ -395,7 +394,7 @@ int main(int argc, char *argv[])
 {
   struct lineFile *pf, *ef, *apf;
   FILE *of, *nf, *enf=NULL;
-  char *faFile, *efName=NULL, filename[256];
+  char *efName=NULL, filename[256];
   int verb = 0;
 
 verboseSetLevel(0);
