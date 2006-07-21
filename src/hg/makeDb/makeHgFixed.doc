@@ -123,6 +123,12 @@ hgMedianMicroarray hgFixed arbFlyLifeAllRatio arbFlyLifeAllExps arbMed.ra \
   arbFlyLifeMedianRatio arbFlyLifeMedianExps
 # cvs add and check in arbMed.ra
 
+###########################
+# REGENERATING FLY LIFE-CYCLE TABLES. (DONE 5/12/2006 ANDY)
+hgsql hgFixed -e "rename table kimWormLifeAllRatio to kimWormLifeAllRatio_old"  
+hgsql hgFixed -e "rename table kimWormLifeMedianExps to kimWormLifeMedianExps_old"
+hgsql hgFixed -e "rename table kimWormLifeMedianRatio to kimWormLifeMedianRatio_old"
+
 # The scopDes table, which is used by the SuperFamily column in hgNear.
 mkdir /cluster/store1/scop
 cd /cluster/store1/scop
@@ -413,6 +419,28 @@ _EOF_
    hgLoadBed hg18 affyHumanExon hg18.bed
      # Create human-level trackDb entry and affyHumanExon.html
      # and check into cvs.
+
+###### AFFY HUMAN EXONS (COMPLETE DATA) (DONE 7-21-2006, Andy)
+    ssh hgwdev
+    cd /projects/compbio/data/microarray/affyHumanExon/
+    mkdir moreData
+    cd moreData/
+    ssh bark
+    cd /scratch
+    cp forAndy/* /projects/compbio/data/microarray/affyHumanExon/moreData
+    exit
+    sed -e "s/huex_wta_//g" -e "s/\.CEL//g" exonData.vs.tab > data.txt
+    hgGenericMicroarray hgFixed affyHumanExon data.txt
+    hgsql hgFixed -e "select * from affyHumanExonExps" | sed "/^\+/d" | tail +2 | sed "s/_.,/,/" > newExps.tab
+    hgsql hgFixed -e "delete from affyHumanExonExps"
+    hgsql hgFixed -e "load data local infile 'newExps.tab' into table affyHumanExonExps"
+    cd ~/kent/src/hg/makeDb/hgRatioMicroarray/
+    # Make file affyHumanExon.ra in the medSpec style.
+    hgRatioMicroarray -minAbsVal=0 -clump=affyHumanExon.ra affyHumanExon affyHumanExonRatio    
+    bedMergeExpData hgFixed.affyHumanExonRatio hg17.affyHumanExonProbes hg17.bed
+    bedMergeExpData hgFixed.affyHumanExonRatio hg18.affyHumanExonProbes hg18.bed
+    hgLoadBed hg17 affyHumanExon hg17.bed
+    hgLoadBed hg18 affyHumanExon hg18.bed
 
 # QA push new cutters and rebaseRefs tables (04-06-2006: ASZ).
 
