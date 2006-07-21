@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "affyAllExonProbe.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.11 2006/03/28 04:40:51 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.12 2006/07/21 16:14:04 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -861,6 +861,24 @@ slNameFreeList(&extras);
 freez(&mapping);
 }
 
+void printAffyHumanExonProbeInfo(struct trackDb *tdb, char *item, char *probeTable)
+/* Get information on a probe and print that out.*/
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+struct affyAllExonProbe *oneProbe;
+char query[200];
+safef(query, ArraySize(query), "select * from %s where name = \'%s\'", probeTable, item);
+oneProbe = affyAllExonProbeLoadByQuery(conn, query);
+if (oneProbe != NULL)
+    {
+    printf("<h3>Details for Probe %s</h3>\n", item);
+    printf("<B>Exon evidence:</B> %s<BR>\n", oneProbe->evidence); 
+    printf("<B>Exon level:</B> %s<BR>\n", oneProbe->level); 
+    affyAllExonProbeFreeList(&oneProbe);
+    }
+sqlDisconnect(&conn);
+}
+
 void affyAllExonDetails(struct trackDb *tdb, char *expName, char *tableName, char *expTable,
 	char *chip, float stepSize, float maxScore) 
 /* print out a page for the affy data from gnf based on ratio of
@@ -871,6 +889,7 @@ char *itemName = cgiUsualString("i2","none");
 struct expRecord *erList = NULL, *er;
 char buff[32];
 struct hash *erHash;
+char *expProbes = trackDbRequiredSetting(tdb, "expProbeTable");
 genericHeader(tdb, itemName);
 bedList = loadMsBed(tableName, seqName, winStart, winEnd);
 if(bedList == NULL)
@@ -886,7 +905,7 @@ else
     affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
     affyAllExonType = affyAllExonStringToEnum(affyAllExonMap);
     if (affyAllExonType == affyAllExonTissue)
-	bedListExpRecordAverage(&bedList, &erList, affyAllExonTissue);
+	bedListExpRecordAverage(&bedList, &erList, 2);
     for(er = erList; er != NULL; er=er->next)
 	{
 	snprintf(buff, sizeof(buff), "%d", er->id);
@@ -900,6 +919,8 @@ else
     bedFreeList(&bedList);
     }
 printf("<h2></h2><p>\n");
+printAffyHumanExonProbeInfo(tdb, expName, expProbes);
+printf("%s", tdb->html);
 }
 
 void affyDetails(struct trackDb *tdb, char *expName) 
@@ -1214,24 +1235,6 @@ void genericExpRatio(struct sqlConnection *conn, struct trackDb *tdb,
 grcExpRatio(tdb, item, NULL, FALSE);
 }
 
-void printAffyHumanExonProbeInfo(struct trackDb *tdb, char *item, char *probeTable)
-/* Get information on a probe and print that out.*/
-{
-struct sqlConnection *conn = sqlConnect("hgFixed");
-struct affyAllExonProbe *oneProbe;
-char query[200];
-safef(query, ArraySize(query), "select * from %s where name = \'%s\'", probeTable, item);
-oneProbe = affyAllExonProbeLoadByQuery(conn, query);
-if (oneProbe != NULL)
-    {
-    printf("<h3>Details for Probe %s</h3>\n", item);
-    printf("<B>Exon evidence:</B> %s<BR>\n", oneProbe->evidence); 
-    printf("<B>Exon level:</B> %s<BR>\n", oneProbe->level); 
-    affyAllExonProbeFreeList(&oneProbe);
-    }
-sqlDisconnect(&conn);
-}
-
 void doAffyHumanExon(struct trackDb *tdb, char *item)
 /* Display details for the affy all human exon track. */
 /* It's approximately a expRatio track, without the required */
@@ -1240,9 +1243,7 @@ void doAffyHumanExon(struct trackDb *tdb, char *item)
 char *expTable = trackDbRequiredSetting(tdb, "expTable");
 char *expScale = trackDbRequiredSetting(tdb, "expScale");
 char *expStep = trackDbRequiredSetting(tdb, "expStep");
-char *expProbes = trackDbRequiredSetting(tdb, "expProbeTable");
 double maxScore = atof(expScale);
 double stepSize = atof(expStep);
 affyAllExonDetails(tdb, item, tdb->tableName, expTable, NULL, stepSize, maxScore);
-printAffyHumanExonProbeInfo(tdb, item, expProbes);
 }

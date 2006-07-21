@@ -367,17 +367,19 @@ if(tg->limitedVis == tvDense)
     }
 else if(affyAllExonType == affyAllExonTissue)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonTissue, NULL, -1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, 2, NULL, -1);
     slSort(&tg->items,lfsSortByName);
     }
 else if(affyAllExonType == affyAllExonChip)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonChip, NULL, -1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, -1, NULL, -1);
     }
 else
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonAllData, affyAllExonMap, 1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, 2, NULL, -1);
     slSort(&tg->items,lfsSortByName);
+/*     tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonAllData, affyAllExonMap, 1); */
+/*     slSort(&tg->items,lfsSortByName); */
     }
 bedFreeList(&bedList);
 }
