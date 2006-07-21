@@ -622,6 +622,55 @@ type bed 4 .
     type bed 4 .
     priority 2
 
+track cnp
+compositeTrack on
+shortLabel Structural Var
+longLabel Structural Variation
+group varRep
+priority 146
+visibility hide
+type bed 4 +
+
+    track cnpSharp
+    subTrack cnp 
+    shortLabel CNPs (Sharp) 
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
+    noInherit on
+    type bed 4 +
+    priority 1
+
+    track cnpIafrate
+    subTrack cnp
+    shortLabel CNPs (Iafrate) 
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
+    noInherit on
+    type bed 4 +
+    priority 2
+
+    track cnpSebat
+    subTrack cnp
+    shortLabel CNPs (Sebat) 
+    longLabel Copy Number Polymorphisms from ROMA (Sebat)
+    noInherit on
+    type bed 4 +
+    priority 3
+
+    track cnpFosmid
+    subTrack cnp
+    shortLabel SV Fosmids (Tuzun)
+    longLabel Structural Variation identified by Fosmids (Tuzun)
+    noInherit on
+    type bed 4 +
+    priority 4
+
+    track delMccarroll
+    subTrack cnp
+    shortLabel Deletions (McCarroll)
+    longLabel Deletions from Genotype Analysis (McCarroll)
+    noInherit on
+    type bed 4 .
+    priority 5
+
 track varMultizHMRDEC
 shortLabel varMultiz6Way
 longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
