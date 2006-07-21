@@ -1319,7 +1319,7 @@ cat  << 'EOF' > spec
     cvs up -d -P
     make alpha
     # Include the file in the push request, and include
-    # "treeImage images/galGal3_7way.gif" in the multiz7way trackDb.ra entry.
+    # "treeImage phylo/galGal3_7way.gif" in the multiz7way trackDb.ra entry.
 
 
 #########################################################################
