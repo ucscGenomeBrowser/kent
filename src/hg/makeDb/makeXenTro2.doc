@@ -1469,3 +1469,14 @@ chainOne $(path1)
     rm -rf /cluster/data/xenTro2/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/blastOut
 #end tblastn
+
+
+# SWAP CHAINS/NET GALGAL3 (DONE 7/20/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.galGal3.swap
+    cd /cluster/data/xenTro2/bed/blastz.galGal3.swap
+    doBlastzChainNet.pl -swap /cluster/data/galGal3/bed/blastz.xenTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.galGal3.swap /cluster/data/xenTro2/bed/blastz.galGal3
+
+
