@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.16 2006/04/11 21:43:09 baertsch Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.17 2006/07/21 20:35:47 baertsch Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -629,7 +629,7 @@ char query[256];
 
 if (conn==NULL)
     {
-    conn = sqlConnect(PROTEOME_DB_NAME);
+    conn = sqlMayConnect(PROTEOME_DB_NAME);
     if (conn == NULL) return NULL;
     }
 
@@ -651,7 +651,7 @@ char *geneTable = "gene";
 
 if (conn==NULL)
     {
-    conn = sqlConnect(pdb);
+    conn = sqlMayConnect(pdb);
     if (conn == NULL) return NULL;
     }
 if (geneTable != NULL && sqlTableExists(conn,geneTable)) 
