@@ -4,6 +4,10 @@
 #ifndef MICROARRAY_H
 #define MICROARRAY_H
 
+#ifndef EXPRECORD_H
+#include "expRecord.h"
+#endif
+
 #define MICROARRAY_MISSING_DATA -10000
 /* This is an important constant.  Often zero and negative numbers are valid */
 /* microarray data.  -10000 is often used then. */
@@ -34,19 +38,19 @@ struct maMedSpec
 struct maMedSpec *maMedSpecReadAll(char *fileName);
 /* Read in file and parse it into maMedSpecs. */
 
-struct expData *maExpDataGroupByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, enum maCombineMethod method);
+struct expData *maExpDataGroupByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, enum maCombineMethod method, int minExps);
 /* Combine experiments using mean or median and the grouping defined by the */
 /* expRecord/extrasIndex combination. */
 
-struct expData *maExpDataMeanByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex);
+struct expData *maExpDataMeanByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, int minExps);
 /* Given the data, the expRecords, and the index for the grouping, mean the */
 /* columns in the data. */
 
-struct expData *maExpDataMedianByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex);
+struct expData *maExpDataMedianByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, int minExps);
 /* Given the data, the expRecords, and the index for the grouping, median the */
 /* columns in the data. */
 
-struct expData *maExpDataMedianFromSpec(struct expData *exps, struct maMedSpec *specs);
+struct expData *maExpDataMedianFromSpec(struct expData *exps, struct maMedSpec *specs, int minExps);
 /* Given the data, the and a maMedSpec list, median the columns in the data. */
 
 int maExpDataNumBadScoresForProbe(struct expData *exps, char *probeName);

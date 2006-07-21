@@ -154,18 +154,25 @@ for (i = 0; i < count; i++)
 return ret;
 }
 
-static float maCalcNewScore(float *expScores, int *mapRow, enum maCombineMethod method)
+static float maCalcNewScore(float *expScores, int *mapRow, enum maCombineMethod method, int minExps)
 /* Calculate a median, mean, etc for a group of scores and return it. */
 {
 double ret = MICROARRAY_MISSING_DATA;
 double *grouping;
 int k;
+int realCount = 0;
 if (!expScores || !mapRow)
     return MICROARRAY_MISSING_DATA;
 AllocArray(grouping, mapRow[0]);
 for (k = 0; k < mapRow[0]; k++)
+    {
     grouping[k] = (double)expScores[mapRow[k+1]];
-if (method == useMedian)
+    if (grouping[k] > MICROARRAY_MISSING_DATA)
+	realCount++;
+    }
+if ((realCount == 0) || ((minExps > 0) && (realCount < minExps)))
+    ret = MICROARRAY_MISSING_DATA;
+else if (method == useMedian)
     ret = maDoubleMedianHandleNA(mapRow[0], grouping);
 else if (method == useMean)
     ret = maDoubleMeanHandleNA(mapRow[0], grouping);
@@ -173,7 +180,7 @@ freez(&grouping);
 return (float)ret;
 }
 
-struct maExpDataMatrix *maCombineCols(struct maExpDataMatrix *origMat, struct mapArray *mapping, enum maCombineMethod method)
+struct maExpDataMatrix *maCombineCols(struct maExpDataMatrix *origMat, struct mapArray *mapping, enum maCombineMethod method, int minExps)
 /* Make a new matrix combining the columns of the given one however then */
 /* return it. */
 {
@@ -189,12 +196,12 @@ for (i = 0; i < newMat->nrow; i++)
     {
     AllocArray(newMat->data[i], newMat->ncol);
     for (j = 0; j < newMat->ncol; j++)
-	newMat->data[i][j] = maCalcNewScore(origMat->data[i], mapping->data[j], method);
+	newMat->data[i][j] = maCalcNewScore(origMat->data[i], mapping->data[j], method, minExps);
     }
 return newMat;
 }
 
-struct expData *maExpDataCombineCols(struct expData *exps, struct mapArray *mapping, enum maCombineMethod method)
+struct expData *maExpDataCombineCols(struct expData *exps, struct mapArray *mapping, enum maCombineMethod method, int minExps)
 /* median, mean, etc. the columns of the expData according to the grouping */
 /* from the mapping array. Return a new expData list. */
 {
@@ -204,7 +211,7 @@ int i;
 if (!exps)
     return NULL;
 mat = makeMatrix(exps);
-combinedMat = maCombineCols(mat, mapping, method);
+combinedMat = maCombineCols(mat, mapping, method, minExps);
 for (cur = exps, i = 0; cur != NULL; cur = cur->next, i++)
     {
     struct expData *newExp;
@@ -319,36 +326,36 @@ for (spec = specList, i = 0; spec != NULL; spec = spec->next, i++)
 return ret;
 }
 
-struct expData *maExpDataGroupByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, enum maCombineMethod method)
+struct expData *maExpDataGroupByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, enum maCombineMethod method, int minExps)
 /* Combine experiments using mean or median and the grouping defined by the */
 /* expRecord/extrasIndex combination. */
 {
 struct mapArray *mapping = mappingFromExpRecords(erList, extrasIndex);
-struct expData *ret = maExpDataCombineCols(exps, mapping, method);
+struct expData *ret = maExpDataCombineCols(exps, mapping, method, minExps);
 freeMem(mapping->data);
 freez(&mapping);
 return ret;
 }
 
-struct expData *maExpDataMeanByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex)
+struct expData *maExpDataMeanByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, int minExps)
 /* Given the data, the expRecords, and the index for the grouping, mean the */
 /* columns in the data. */
 {
-return maExpDataGroupByExtras(exps, erList, extrasIndex, useMean);
+return maExpDataGroupByExtras(exps, erList, extrasIndex, useMean, minExps);
 }
 
-struct expData *maExpDataMedianByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex)
+struct expData *maExpDataMedianByExtras(struct expData *exps, struct expRecord *erList, int extrasIndex, int minExps)
 /* Given the data, the expRecords, and the index for the grouping, median the */
 /* columns in the data. */
 {
-return maExpDataGroupByExtras(exps, erList, extrasIndex, useMedian);
+return maExpDataGroupByExtras(exps, erList, extrasIndex, useMedian, minExps);
 }
 
-struct expData *maExpDataMedianFromSpec(struct expData *exps, struct maMedSpec *specs)
+struct expData *maExpDataMedianFromSpec(struct expData *exps, struct maMedSpec *specs, int minExps)
 /* Given the data, the and a maMedSpec list, median the columns in the data. */
 {
 struct mapArray *mapping = mappingFromMedSpec(specs);
-struct expData *ret = maExpDataCombineCols(exps, mapping, useMedian);
+struct expData *ret = maExpDataCombineCols(exps, mapping, useMedian, minExps);
 freeMem(mapping->data);
 freez(&mapping);
 return ret;
@@ -480,11 +487,17 @@ for (exp = exps; exp != NULL; exp = exp->next)
     q = (mean) ? maDoubleMeanHandleNA(exp->expCount, tmpVals) : maDoubleMedianHandleNA(exp->expCount, tmpVals);
     freez(&tmpVals);
     if (q <= 0)
-	continue;
-    invQ = 1/q;
-    for (i = 0; i < exp->expCount; i++)
-	if (exp->expScores[i] > MICROARRAY_MISSING_DATA)
-	    exp->expScores[i] = logBase2(exp->expScores[i] * invQ);
+	{
+	for (i = 0; i < exp->expCount; i++)
+	    exp->expScores[i] = MICROARRAY_MISSING_DATA;
+	}
+    else
+	{
+	invQ = 1/q;
+	for (i = 0; i < exp->expCount; i++)
+	    if (exp->expScores[i] > MICROARRAY_MISSING_DATA)
+		exp->expScores[i] = logBase2(exp->expScores[i] * invQ);
+	}
     }
 }
 
@@ -494,7 +507,7 @@ void maExpDataDoLogRatioClumping(struct expData *exps, struct mapArray *mapping,
 {
 struct expData *cur;
 struct maExpDataMatrix *originalMat = makeMatrix(exps);
-struct maExpDataMatrix *clumpedMat = maCombineCols(originalMat, mapping, method);
+struct maExpDataMatrix *clumpedMat = maCombineCols(originalMat, mapping, method, 0);
 int i, j;
 if (!clumpedMat)
     return;
@@ -506,10 +519,17 @@ for (i = 0, cur = exps; (cur != NULL) && (i < clumpedMat->nrow); cur = cur->next
     double invQ;
     freeMem(tmpArray);
     if (q <= 0)
-	continue;
-    invQ = 1/q;
-    for (j = 0; j < cur->expCount; j++)
-	cur->expScores[j] = (cur->expScores[j] > 0) ? logBase2(invQ * cur->expScores[j]) : cur->expScores[j];
+	{
+	for (j = 0; j < cur->expCount; j++) 
+	    cur->expScores[j] = MICROARRAY_MISSING_DATA;
+	}
+    else
+	{
+	invQ = 1/q;
+	for (j = 0; j < cur->expCount; j++)
+	    cur->expScores[j] = (cur->expScores[j] > 0) ? 
+		logBase2(invQ * cur->expScores[j]) : cur->expScores[j];
+	}
     }
 freeExpDataMatrix(&originalMat);
 freeExpDataMatrix(&clumpedMat);
@@ -530,7 +550,16 @@ void maExpDataDoLogRatioGivenMedSpec(struct expData *exps, struct maMedSpec *spe
 /* Same as maExpDataDoLogRatioClumpExpRecord except use the maMedSpec as the */
 /* thing to base the groupings off of. */
 {
-struct mapArray *mapping = mappingFromMedSpec(specList);
+struct mapArray *mapping;
+if (specList == NULL) 
+    {
+    if (method == useMedian)
+	maExpDataDoLogRatioMeanOrMedian(exps, FALSE);
+    else if (method == useMean)
+	maExpDataDoLogRatioMeanOrMedian(exps, TRUE);
+    return;
+    }
+mapping = mappingFromMedSpec(specList);
 maExpDataDoLogRatioClumping(exps, mapping, method);
 freeMem(mapping->data);
 freez(&mapping);
