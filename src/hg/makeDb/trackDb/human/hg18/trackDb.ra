@@ -777,7 +777,7 @@ mafTrack multiz17way
 
 track wgRna
 shortLabel sno/miRNA
-longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
+longLabel C/D and H/ACA snoRNAs, scaRNAs and microRNAs from snoRNABase and miRBase
 group genes
 priority 63.5
 visibility hide
