@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: expData.c,v 1.5 2006/06/27 19:56:27 galt Exp $";
+static char const rcsid[] = "$Id: expData.c,v 1.6 2006/07/21 17:45:52 aamp Exp $";
 
 struct expData *expDataLoad(char **row)
 /* Load a expData from row fetched with select * from expData
@@ -147,25 +147,46 @@ safef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
+struct expData *expDataLoadTableLimit(struct sqlConnection *conn, char *table, int limitRows)
+/* Same as expDataLoadTable, but limit to only loading limitRows # of rows. */
+{
+char query[256];
+char **row;
+int numLoaded = 0;
+struct expData *exps = NULL;
+struct sqlResult *sr = NULL;
+if (limitRows < 0)
+    return NULL;
+safef(query, sizeof(query), "select name, expCount, expScores from %s", table);
+sr = sqlGetResult(conn, query);
+if (limitRows > 0)
+    {
+    while (((row = sqlNextRow(sr)) != NULL) && (numLoaded < limitRows))
+	{
+	struct expData *addMe = expDataLoad(row);
+	slAddHead(&exps, addMe);
+	numLoaded++;
+	}
+    }
+else
+    {
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct expData *addMe = expDataLoad(row);
+	slAddHead(&exps, addMe);
+	}
+    }
+slReverse(&exps);
+sqlFreeResult(&sr);
+return exps;
+}
+
 struct expData *expDataLoadTable(struct sqlConnection *conn, char *table)
 /* Load all the rows of an SQL table (already connected to the database) */
 /* into a list and return it. This should work on BED 15 tables as well */
 /* as native expData tables. */
 {
-char query[256];
-char **row;
-struct expData *exps = NULL;
-struct sqlResult *sr = NULL;
-safef(query, sizeof(query), "select name, expCount, expScores from %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct expData *addMe = expDataLoad(row);
-    slAddHead(&exps, addMe);
-    }
-slReverse(&exps);
-sqlFreeResult(&sr);
-return exps;
+return expDataLoadTableLimit(conn, table, 0);
 }
 
 struct expData *expDataConnectAndLoadTable(char *database, char *table)

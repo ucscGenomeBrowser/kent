@@ -58,6 +58,9 @@ void expDataOutput(struct expData *el, FILE *f, char sep, char lastSep);
 void expDataCreateTable(struct sqlConnection *conn, char *table);
 /* Create table with given name. */
 
+struct expData *expDataLoadTableLimit(struct sqlConnection *conn, char *table, int limitRows);
+/* Same as expDataLoadTable, but limit to only loading limitRows # of rows. */
+
 struct expData *expDataLoadTable(struct sqlConnection *conn, char *table);
 /* Load all the rows of an SQL table (already connected to the database) */
 /* into a list and return it. This should work on BED 15 tables as well */
