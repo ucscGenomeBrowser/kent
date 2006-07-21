@@ -74,9 +74,11 @@ for (i = 1; i < ncols; i++)
     oneRec->url = CSNA;
     oneRec->ref = CSNA;
     oneRec->credit = CSNA;
-    oneRec->numExtras = 1;
-    AllocArray(oneRec->extras, 1);
-    oneRec->extras[0] = cloneString(strings[i]);
+    oneRec->numExtras = 3;
+    AllocArray(oneRec->extras, oneRec->numExtras);
+    oneRec->extras[0] = cloneString("n/a");
+    oneRec->extras[1] = cloneString("n/a");
+    oneRec->extras[2] = cloneString(strings[i]);
     slAddHead(&exps, oneRec);
     }
 slReverse(&exps);
