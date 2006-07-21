@@ -97,6 +97,7 @@ char *gvAttrTypeKey[] = {
     "commonName",
     "alias",
     "links",
+    "mutType",
     "rnaNtChange",
     "protEffect",
     "phenoCommon",
@@ -104,6 +105,7 @@ char *gvAttrTypeKey[] = {
     "geneVarsDis",
     "hap",
     "ethnic",
+    "comment",
 };
 
 /* list in display order of attribute type display names */
@@ -112,6 +114,7 @@ char *gvAttrTypeDisplay[] = {
     "Common name",
     "Alias",
     "External links",
+    "Type of mutation",
     "RNA nucleotide change",
     "Effect on Protein",
     "Phenotype common name",
@@ -119,6 +122,7 @@ char *gvAttrTypeDisplay[] = {
     "Variation and Disease information related to gene locus",
     "Haplotype",
     "Ethnicity/Nationality",
+    "Comments",
 };
 
 /* category for each type above, match up by array index */
@@ -128,10 +132,12 @@ char *gvAttrCategory[] = {
     "Alias",
     "Links",
     "RNA effect",
+    "RNA effect",
     "Protein effect",
     "Patient/Subject phenotype",
     "Patient/Subject phenotype",
     "Data related to gene locus",
+    "Other Ancillary data",
     "Other Ancillary data",
     "Other Ancillary data",
 };
