@@ -791,9 +791,9 @@ group regulation
 priority 79.1
 visibility hide
 type expRatio
-expScale 15.0
-expStep 3.0
-expProbeTable affyHumanExonProbe
+expScale 3.0
+expStep 0.5
+expProbeTable affyHumanExonProbeAnnot
 expTable affyHumanExonExps
 
 searchTable wgRna
