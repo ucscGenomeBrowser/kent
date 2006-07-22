@@ -1,13 +1,13 @@
 overlapSelect [options] selectFile inFile outFile
 
-Select records based on overlaping chromosome ranges.
-The ranges are specified in the selectFile, with each block
-specifying a range.  Records are copied from the inFile to outFile
-based on the selection criteria.  Selection is based on blocks or
-exons rather than entire range.
+Select records based on overlaping chromosome ranges.  The ranges are
+specified in the selectFile, with each block specifying a range.
+Records are copied from the inFile to outFile based on the selection
+criteria.  Selection is based on blocks or exons rather than entire
+range.
 
-Options starting with -select* apply to selectFile and
-those starting with -in* apply to inFile.
+Options starting with -select* apply to selectFile and those starting
+with -in* apply to inFile.
 
 Options:
   -selectFmt=fmt - specify selectFile format:
@@ -17,7 +17,7 @@ Options:
           bed - BED format (default for *.bed files).
                 If BED doesn't have blocks, the bed range is used. 
   -selectCoordCols=spec - selectFile is tab-separate with coordinates
-          as described by spec, which is one of:
+       as described by spec, which is one of:
             o chromCol - chrom in this column followed by start and end.
             o chromCol,startCol,endCol - chrom, start, and end in specified
               columns.
@@ -43,21 +43,25 @@ Options:
       records. -overlapSimilarity and -mergeOutput will not work with
       this option.
   -overlapThreshold=0.0 - minimun fraction of an inFile record that
-      must be overlapped by a single select record to be considered overlapping.
-      Note that this is only coverage by a single select record, not total coverage.
+      must be overlapped by a single select record to be considered
+      overlapping.  Note that this is only coverage by a single select
+      record, not total coverage.
   -overlapSimilarity=0.0 - minimun fraction of inFile and select records that
-      Note that this is only coverage by a single select record and this is;
-      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0
-      will select identical records (or CDS if both CDS options are specified.
-      Not currently supported with -aggregate.
+      Note that this is only coverage by a single select record and this
+      is; bidirectional inFile and selectFile must overlap by this
+      amount.  A value of 1.0 will select identical records (or CDS if
+      both CDS options are specified.  Not currently supported with
+      -aggregate.
+  -overlapBases=- - minimum number of bases of overlap, < 0 disables.
   -statsOutput - output overlap statistics instead of selected records. 
-      If no overlap criteria is specified, all overlapping entries are reported,
-      Otherwise only the pairs passing the citeria are reported. This results
-      in a tab-seperated file with the columns:
-         inId selectId inOverlap selectOverlap 
-      Where inOverlap is the fraction of the inFile record overlapped by the selectFile
-      record and selectOverlap is the fraction of the select record overlap by inFile
-      records.  With -aggregate, output is:
+      If no overlap criteria is specified, all overlapping entries are
+      reported, Otherwise only the pairs passing the citeria are
+      reported. This results in a tab-seperated file with the columns:
+         inId selectId inOverlap selectOverlap overBases
+      Where inOverlap is the fraction of the inFile record overlapped by
+      the selectFile record and selectOverlap is the fraction of the
+      select record overlap by inFile records.  With -aggregate, output
+      is:
          inId inOverlap inOverBases inBases
   -statsOutputAll - like -statsOutput, however output all inFile records,
       even ones that are not overlapped.
@@ -68,7 +72,7 @@ Options:
       This will increase the memory required
       Not currently supported with -aggregate.
   -idOutput - output a table seprate file of pairs of
-        inId selectId
+         inId selectId
       with -aggregate, omly a single column of inId is written
   -dropped=file  - output rows that were dropped to this file.
   -verbose=n - verbose > 1 prints some details,

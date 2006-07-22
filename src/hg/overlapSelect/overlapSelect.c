@@ -30,6 +30,7 @@ static struct optionSpec optionSpecs[] = {
     {"dropped", OPTION_STRING},
     {"overlapThreshold", OPTION_FLOAT},
     {"overlapSimilarity", OPTION_FLOAT},
+    {"overlapBases", OPTION_INT},
     {"merge", OPTION_BOOLEAN},
     {"mergeOutput", OPTION_BOOLEAN},
     {"statsOutput", OPTION_BOOLEAN},
@@ -41,7 +42,7 @@ static struct optionSpec optionSpecs[] = {
 /* incompatible with aggregate */
 static char *aggIncompatible[] =
 {
-    "overlapSimilarity", "merge", "mergeOutput", "idMatch", NULL
+    "overlapSimilarity", "overlapBases", "merge", "mergeOutput", "idMatch", NULL
 };
 
 /* file format constants */
@@ -64,9 +65,7 @@ boolean mergeOutput = FALSE;
 boolean idOutput = FALSE;
 boolean statsOutput = FALSE;
 boolean outputAll = FALSE;
-float overlapThreshold = 0.0;
-float overlapSimilarity = 0.0;
-
+struct overlapCriteria criteria = {0.0, 0.0, -1};
 
 struct ioFiles
 /* object containing input files */
@@ -118,7 +117,7 @@ static char *getPrintId(struct chromAnn* ca)
 return (ca->name == NULL) ? "<unknown>" : ca->name;
 }
 
-static void outputMerge(struct chromAnn* inCa, struct ioFiles *ioFiles,
+static void outputMerge(struct chromAnn* inCa, FILE *outFh,
                         struct slRef *overlappingRecs)
 /* output for the -mergeOutput option; pairs of inRec and overlap */
 {
@@ -126,11 +125,11 @@ struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    fprintf(ioFiles->outFh, "%s\t%s\n", inCa->recLine, selectCa->recLine);
+    fprintf(outFh, "%s\t%s\n", inCa->recLine, selectCa->recLine);
     }
 }
 
-static void outputIds(struct chromAnn* inCa, struct ioFiles *ioFiles,
+static void outputIds(struct chromAnn* inCa, FILE *outFh,
                       struct slRef *overlappingRecs)
 /* output for the -idOutput option; pairs of inRec and overlap ids */
 {
@@ -138,11 +137,11 @@ struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    fprintf(ioFiles->outFh, "%s\t%s\n", getPrintId(inCa), getPrintId(selectCa));
+    fprintf(outFh, "%s\t%s\n", getPrintId(inCa), getPrintId(selectCa));
     }
 }
 
-static void outputStats(struct chromAnn* inCa, struct ioFiles *ioFiles,
+static void outputStats(struct chromAnn* inCa, FILE *outFh,
                         struct slRef *overlappingRecs)
 /* output for the -statOutput option; pairs of inRec and overlap ids */
 {
@@ -150,8 +149,9 @@ struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    fprintf(ioFiles->outFh, "%s\t%s\t%0.3g\t%0.3g\n", getPrintId(inCa), getPrintId(selectCa),
-            selectFracOverlap(inCa, selectCa), selectFracOverlap(selectCa, inCa));
+    unsigned overBases = selectOverlapBases(inCa, selectCa);
+    fprintf(outFh, "%s\t%s\t%0.3g\t%0.3g\t%d\n", getPrintId(inCa), getPrintId(selectCa),
+            selectFracOverlap(inCa, overBases), selectFracOverlap(selectCa, overBases), overBases);
     }
 }
 
@@ -165,16 +165,15 @@ boolean overlaps = FALSE;
 if (mergeOutput || idOutput || statsOutput)
     overlappingRecsPtr = &overlappingRecs;
 
-overlaps = selectIsOverlapped(selectOpts, inCa, overlapThreshold, overlapSimilarity,
-                              overlappingRecsPtr);
+overlaps = selectIsOverlapped(selectOpts, inCa, &criteria, overlappingRecsPtr);
 if ((nonOverlapping) ? !overlaps : overlaps)
     {
     if (mergeOutput)
-        outputMerge(inCa, ioFiles, overlappingRecs);
+        outputMerge(inCa, ioFiles->outFh, overlappingRecs);
     else if (idOutput)
-        outputIds(inCa, ioFiles, overlappingRecs);
+        outputIds(inCa, ioFiles->outFh, overlappingRecs);
     else if (statsOutput)
-        outputStats(inCa, ioFiles, overlappingRecs);
+        outputStats(inCa, ioFiles->outFh, overlappingRecs);
     else
         fprintf(ioFiles->outFh, "%s\n", inCa->recLine);
     }
@@ -193,12 +192,12 @@ static void doAggregateOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
 /* Do aggreate overlap process of chromAnn object given the criteria,
  * and if so output */
 {
-struct overlapStats stats = selectAggregateOverlap(selectOpts, inCa);
+struct overlapAggStats stats = selectAggregateOverlap(selectOpts, inCa);
 boolean overlaps;
-if (overlapThreshold <= 0.0)
+if (criteria.threshold <= 0.0)
     overlaps = (stats.inOverlap > 0.0); /* any overlap */
 else
-    overlaps = (stats.inOverlap >= overlapThreshold);
+    overlaps = (stats.inOverlap >= criteria.threshold);
 if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
     {
     if (idOutput)
@@ -329,7 +328,7 @@ if (statsOutput)
     if (useAggregate)
         fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", ioFiles.outFh);
     else
-        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
+        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\t" "overBases\n", ioFiles.outFh);
     }
 
 switch (inFmt)
@@ -423,9 +422,10 @@ if (optionExists("excludeSelf"))
 if (optionExists("idMatch"))
     selectOpts |= selIdMatch;
 
-overlapThreshold = optionFloat("overlapThreshold", 0.0);
-overlapSimilarity = optionFloat("overlapSimilarity", 0.0);
-if ((overlapThreshold != 0.0) && (overlapSimilarity != 0.0))
+criteria.threshold = optionFloat("overlapThreshold", 0.0);
+criteria.similarity = optionFloat("overlapSimilarity", 0.0);
+criteria.bases = optionInt("overlapBases", -1);
+if ((criteria.threshold != 0.0) && (criteria.similarity != 0.0))
     errAbort("can't specify both -overlapThreshold and -overlapSimilarity");
 
 /* output options */

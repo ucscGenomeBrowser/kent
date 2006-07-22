@@ -13,6 +13,7 @@ test:   pslSelectTests \
 	statsOutputTests \
 	thresholdTests \
 	similarityTests \
+	overlapBasesTests \
 	aggregateTests \
 	protTests \
 	idMatchTests \
@@ -391,6 +392,23 @@ gp_gp_similarityCds100: mkout
 	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
 	${DIFF} expected/$@.ids output/$@.ids
 	${DIFF} expected/$@Rev.ids output/$@Rev.ids
+
+###
+# -overlapBases tests
+###
+overlapBasesTests: overlapBases250 overlapBases2100 overlapBases3000
+
+overlapBases250: mkout
+	${OVERSEL} -overlapBases=250 input/NM_015110.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+
+overlapBases2100: mkout
+	${OVERSEL} -overlapBases=2100 input/NM_015110.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+
+overlapBases3000: mkout
+	${OVERSEL} -overlapBases=3000 input/NM_015110.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 ###
 # aggregate threshold tests

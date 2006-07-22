@@ -1,3 +1,3 @@
-#inId	selectId	inOverlap	selectOverlap
-D31716	NM_001206	1	0.998
-S72504	NM_001206	1	0.276
+#inId	selectId	inOverlap	selectOverlap	overBases
+D31716	NM_001206	1	0.998	4838
+S72504	NM_001206	1	0.276	1340

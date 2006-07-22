@@ -4,7 +4,7 @@
 #include "selectTable.h"
 #include "linefile.h"
 #include "binRange.h"
-#include <bits.h>
+#include "bits.h"
 #include "hash.h"
 #include "chromAnn.h"
 #include "verbose.h"
@@ -144,7 +144,7 @@ if ((opts & selIdMatch) && (inCa->name != NULL) && (selCa->name != NULL)
 return TRUE;
 }
 
-static int overlappedBases(struct chromAnn *ca1, struct chromAnn *ca2)
+int selectOverlapBases(struct chromAnn *ca1, struct chromAnn *ca2)
 /* determine the number of bases of overlap in two annotations */
 {
 int overBases = 0;
@@ -164,31 +164,50 @@ for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
 return overBases;
 }
 
-float selectFracOverlap(struct chromAnn *inCa, struct chromAnn *selCa)
-/* get the fraction of inCa overlapped by selCa */
+float selectFracOverlap(struct chromAnn *ca, int overBases)
+/* get the fraction of ca overlapped give number of overlapped bases */
 {
-return ((float)overlappedBases(inCa, selCa)) / ((float)inCa->totalSize);
+return ((float)overBases) / ((float)ca->totalSize);
 }
 
 static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa,
-                            float overlapThreshold, float overlapSimilarity)
+                            struct overlapCriteria *criteria)
 /* see if a chromAnn objects overlap base on thresholds.  If thresholds are zero,
  * any overlap will select. */
 {
-if (overlapSimilarity > 0.0)
+boolean anyCriteria = FALSE;
+boolean overlapped = FALSE;
+unsigned overBases = selectOverlapBases(inCa, selCa);
+if (criteria->similarity > 0.0)
     {
-    /* bi-directional */
-    return (selectFracOverlap(inCa, selCa) >= overlapSimilarity)
-        && (selectFracOverlap(selCa, inCa) >= overlapSimilarity);
+    // bi-directional
+    if ((selectFracOverlap(inCa, overBases) >= criteria->similarity)
+        && (selectFracOverlap(selCa, overBases) >= criteria->similarity))
+        overlapped = TRUE;
+    anyCriteria = TRUE;
     }
-else
+else if (criteria->threshold > 0.0)
     {
-    /* uni-directional */
-    if (overlapThreshold <= 0.0)
-        return (selectFracOverlap(inCa, selCa) > 0.0); /* any overlap */
-    else
-        return (selectFracOverlap(inCa, selCa) >= overlapThreshold);
+    // uni-directional
+    if (selectFracOverlap(inCa, overBases) >= criteria->threshold)
+        overlapped = TRUE;
+    anyCriteria = TRUE;
     }
+if (criteria->bases >= 0)
+    {
+    // base overlap
+    if (overBases >= criteria->bases)
+        overlapped = TRUE;
+    anyCriteria = TRUE;
+    }
+
+if (!anyCriteria)
+    {
+    // test for any overlap
+    if (overBases > 0)
+        overlapped = TRUE;
+    }
+return overlapped;
 }
 
 static void addOverlapRecs(struct slRef **overlappingRecs, struct slRef *newRecs)
@@ -202,8 +221,7 @@ for (orl = newRecs; orl != NULL; orl = orl->next)
     }
 }
 static boolean selectOverlappingEntry(unsigned opts, struct chromAnn *inCa,
-                                      struct chromAnn* selCa,
-                                      float overlapThreshold, float overlapSimilarity)
+                                      struct chromAnn* selCa, struct overlapCriteria *criteria)
 /* select based on a single select chromAnn */
 {
 boolean overlapped = FALSE;
@@ -215,7 +233,7 @@ if (!passCriteria(opts, inCa, selCa))
     }
 else
     {
-    overlapped = isOverlapped(opts, inCa, selCa, overlapThreshold, overlapSimilarity);
+    overlapped = isOverlapped(opts, inCa, selCa, criteria);
     verbose(2, "\toverlapping: leave %s: %s\n", selCa->name,
             (overlapped ? "yes" : "no"));
     }
@@ -224,7 +242,7 @@ return overlapped;
 
 static boolean selectWithOverlapping(unsigned opts, struct chromAnn *inCa,
                                      struct binElement* overlapping,
-                                     float overlapThreshold, float overlapSimilarity,
+                                     struct overlapCriteria *criteria,
                                      struct slRef **overlappingRecs)
 /* given a list of overlapping elements, see if inCa is selected, optionally returning
  * the list of selected records */
@@ -237,7 +255,7 @@ struct binElement* o;
 for (o = overlapping; o != NULL; o = o->next)
     {
     struct chromAnn* selCa = o->val;
-    if (selectOverlappingEntry(opts, inCa, selCa, overlapThreshold, overlapSimilarity))
+    if (selectOverlappingEntry(opts, inCa, selCa, criteria))
         {
         anyHits = TRUE;
         if (overlappingRecs != NULL)
@@ -257,7 +275,7 @@ return anyHits;
 }
 
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
-                           float overlapThreshold, float overlapSimilarity,
+                           struct overlapCriteria *criteria,
                            struct slRef **overlappingRecs)
 /* Determine if a range is overlapped.  If overlappingRecs is not null, a list
  * of the of selected records is returned.  Free with slFreelList. */
@@ -269,8 +287,7 @@ verbose(2, "selectIsOverlapping: enter %s: %s %d-%d, %c\n", inCa->name, inCa->ch
 if (bins != NULL)
     {
     struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
-    hit = selectWithOverlapping(opts, inCa, overlapping, overlapThreshold,
-                                overlapSimilarity, overlappingRecs);
+    hit = selectWithOverlapping(opts, inCa, overlapping, criteria, overlappingRecs);
     slFreeList(&overlapping);
     }
 verbose(2, "selectIsOverlapping: leave %s %s\n", inCa->name, (hit ? "yes" : "no"));
@@ -299,7 +316,7 @@ for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
 
 static void computeAggregateOverlap(unsigned opts, struct chromAnn *inCa,
                                     struct binElement* overlapping,
-                                    struct overlapStats *stats)
+                                    struct overlapAggStats *stats)
 /* Compute the aggregate overlap */
 {
 
@@ -324,11 +341,11 @@ bitFree(&overMap);
 stats->inOverlap = ((float)stats->inOverBases) / ((float)inCa->totalSize);
 }
 
-struct overlapStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
+struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
 /* Compute the aggregate overlap of a chromAnn */
 {
 struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
-struct overlapStats stats;
+struct overlapAggStats stats;
 ZeroVar(&stats);
 stats.inBases = inCa->totalSize;
 if (bins != NULL)

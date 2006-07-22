@@ -13,14 +13,21 @@ enum selectOpts
     selIdMatch      = 0x20     /* ids must match and overlap  */
 };
 
-struct overlapStats
-/* overlap stats */
+struct overlapCriteria
+/* criteria for selecting */
 {
-    float inOverlap;          /* fraction of in object overlapped */
-    unsigned inOverBases;     /* number of bases overlaped */
-    unsigned inBases;         /* number of possible bases to overlap */
+    float threshold;    // threshold fraction
+    float similarity;   // bidirectional threshold
+    int bases;          // number of bases
 };
 
+struct overlapAggStats
+/* aggregate overlap stats */
+{
+    float inOverlap;          // fraction of in object overlapped
+    unsigned inOverBases;     // number of bases overlaped
+    unsigned inBases;         // number of possible bases to overlap
+};
 
 struct coordCols;
 struct lineFile;
@@ -38,16 +45,19 @@ void selectAddBeds(unsigned opts, struct lineFile* bedLf);
 void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols* cols);
 /* add records with coordiates at a specified columns */
 
-float selectFracOverlap(struct chromAnn *inCa, struct chromAnn *selCa);
-/* get the fraction of inCa overlapped by selCa */
+int selectOverlapBases(struct chromAnn *ca1, struct chromAnn *ca2);
+/* determine the number of bases of overlaping in two annotations */
+
+float selectFracOverlap(struct chromAnn *ca, int overBases);
+/* get the fraction of ca overlapped give number of overlapped bases */
 
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
-                           float overlapThreshold, float overlapSimilarity,
+                           struct overlapCriteria *criteria,
                            struct slRef **overlappingRecs);
 /* Determine if a range is overlapped.  If overlappingRecs is not null, a list
  * of the of selected records is returned.  Free with slFreelList. */
 
-struct overlapStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
+struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
 /* Compute the aggregate overlap of a chromAnn */
 
 #endif
