@@ -195,6 +195,9 @@ void webPrintLinkTableEnd();
 void webPrintLinkCellStart();
 /* Print link cell start in our colors. */
 
+void webPrintLinkCellRightStart();
+/* Print right-justified cell start in our colors. */
+
 void webPrintLinkCellEnd();
 /* Print link cell end in our colors. */
 
@@ -206,6 +209,9 @@ void webPrintLabelCell(char *label);
 
 void webPrintWideLabelCell(char *label, int colSpan);
 /* Print label cell over multiple columns in our colors. */
+
+void webPrintLinkTableNewRow();
+/* start a new row */
 
 void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
 /* Fill out partially empty last row. */

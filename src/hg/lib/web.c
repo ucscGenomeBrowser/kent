@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.92 2006/07/03 15:18:50 kate Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.93 2006/07/22 03:15:09 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -945,6 +945,12 @@ void webPrintLinkCellStart()
 printf("<TD BGCOLOR=\"#"HG_COL_TABLE"\">");
 }
 
+void webPrintLinkCellRightStart()
+/* Print right-justified cell start in our colors. */
+{
+printf("<TD BGCOLOR=\"#"HG_COL_TABLE"\" ALIGN=\"right\">");
+}
+
 void webPrintLinkCellEnd()
 /* Print link cell end in our colors. */
 {
@@ -972,6 +978,12 @@ void webPrintLabelCell(char *label)
 /* Print label cell in our colors. */
 {
 webPrintWideLabelCell(label, 1);
+}
+
+void webPrintLinkTableNewRow()
+/* start a new row */
+{
+printf("</TR>\n<TR>");
 }
 
 void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
