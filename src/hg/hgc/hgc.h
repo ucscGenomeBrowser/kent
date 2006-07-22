@@ -24,6 +24,8 @@ extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
 extern char *database;		/* Name of mySQL database. */
+extern char *organism;		/* Colloquial name of organism. */
+extern char *scientificName;	/* Scientific name of organism. */
 extern struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 
@@ -192,5 +194,31 @@ void doFlyreg(struct trackDb *tdb, char *item);
 
 void dbRIP(struct trackDb *tdb, char *item, char *itemForUrl);
 /* Put up dbRIP track info */
+
+void printEntrezNucleotideUrl(FILE *f, char *accession);
+/* Print URL for Entrez browser on a nucleotide. */
+
+void printEntrezProteinUrl(FILE *f, char *accession);
+/* Print URL for Entrez browser on a protein. */
+
+void printCcdsForMappedGene(struct sqlConnection *conn, char *acc,
+                            char *mapTable);
+/* Print out CCDS links a gene mapped via a cddsGeneMap table  */
+
+int getImageId(struct sqlConnection *conn, char *acc);
+/* get the image id for a clone, or 0 if none */
+
+char *getRefSeqSummary(struct sqlConnection *conn, char *acc);
+/* RefSeq summary or NULL if not available; free result */
+
+char *getRefSeqCdsCompleteness(struct sqlConnection *conn, char *acc);
+/* get description of RefSeq CDS completeness or NULL if not available */
+
+char *kgIdToSpId(struct sqlConnection *conn, char* kgId);
+/* get the swissprot id for a known genes id; resulting string should be
+ * freed */
+
+char *hgTracksPathAndSettings();
+/* Return path with hgTracks CGI path and session state variable. */
 
 #endif

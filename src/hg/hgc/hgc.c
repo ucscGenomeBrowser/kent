@@ -176,8 +176,6 @@
 #include "flyreg.h"
 #include "putaInfo.h"
 #include "gencodeIntron.h"
-#include "ccdsInfo.h"
-#include "ccdsGeneMap.h"
 #include "cutter.h"
 #include "chicken13kInfo.h"
 #include "gapCalc.h"
@@ -194,9 +192,11 @@
 #include "landmarkUi.h"
 #include "ec.h"
 #include "transMapClick.h"
+#include "mgcClick.h"
+#include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1058 2006/07/21 19:42:39 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1059 2006/07/22 03:20:45 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -263,13 +263,13 @@ void hgcStart(char *title)
 cartHtmlStart(title);
 }
 
-static void printEntrezNucleotideUrl(FILE *f, char *accession)
+void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, entrezFormat, "Nucleotide", accession, "GenBank");
 }
 
-static void printEntrezProteinUrl(FILE *f, char *accession)
+void printEntrezProteinUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a protein. */
 {
 fprintf(f, entrezFormat, "Protein", accession, "GenPept");
@@ -387,46 +387,6 @@ static void printBDGPUrl(FILE *f, char *bdgpName)
 fprintf(f, "\"http://www.fruitfly.org/cgi-bin/annot/gene?%s\"", bdgpName);
 }
 
-void printCcdsForSrcDb(struct sqlConnection *conn, char *acc)
-/* Print out CCDS link for a refseq, ensembl, or vega gene, if it
- * exists.  */
-{
-struct ccdsInfo *ccdsInfo = NULL;
-if (hTableExists("ccdsInfo"))
-    ccdsInfo = ccdsInfoSelectByMrna(conn, acc);
-if (ccdsInfo != NULL)
-    {
-    printf("<B>CCDS:</B> <A href=\"../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s\">%s</A><BR>",
-           cartSidUrlString(cart), ccdsInfo->ccds, seqName, 
-           winStart, winStart, winEnd, database, ccdsInfo->ccds);
-    }
-}
-
-void printCcdsForMappedGene(struct sqlConnection *conn, char *acc,
-                            char *mapTable)
-/* Print out CCDS links a gene mapped via a cddsGeneMap table  */
-{
-struct ccdsGeneMap *ccdsGenes = NULL, *gene;
-if (sqlTableExists(conn, mapTable) && sqlTableExists(conn, "ccdsInfo"))
-    ccdsGenes = ccdsGeneMapSelectByGeneOver(conn, mapTable, acc,
-                                            seqName,  winStart, winEnd,
-                                            0.0);
-if (ccdsGenes != NULL)
-    {
-    slSort(&ccdsGenes, ccdsGeneMapCcdsIdCmp);
-    printf("<B>CCDS:</B> ");
-    for (gene = ccdsGenes; gene != NULL; gene = gene->next)
-        {
-        if (gene != ccdsGenes)
-            printf(", ");
-        printf("<A href=\"../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s\">%s</A>",
-               cartSidUrlString(cart), gene->ccdsId, seqName, 
-               winStart, winStart, winEnd, database, gene->ccdsId);
-        }
-    printf("<BR>\n");
-    }
-}
-
 char *hgTracksPathAndSettings()
 /* Return path with hgTracks CGI path and session state variable. */
 {
@@ -541,6 +501,22 @@ if (chromSize < 0)
 if (*pStart < 0) *pStart = 0;
 if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
+}
+
+struct genbankCds getCds(struct sqlConnection *conn, char *acc)
+/* obtain and parse the CDS, errAbort if not found or invalid */
+{
+char query[256];
+safef(query, sizeof(query), "select cds.name from gbCdnaInfo,cds where (acc=\"%s\") and (cds.id=cds)",
+      acc);
+
+char *cdsStr = sqlQuickString(conn, query);
+if (cdsStr == NULL)
+    errAbort("no CDS found for %s", acc);
+struct genbankCds cds;
+if (!genbankCdsParse(cdsStr, &cds))
+    errAbort("can't parse CDS for %s: %s", acc, cdsStr);
+return cds;
 }
 
 void printCappedSequence(int start, int end, int extra)
@@ -4134,7 +4110,6 @@ if (startsWith("hg", database) && isNotEmpty(geneName))
     }
 }
 
-
 int getImageId(struct sqlConnection *conn, char *acc)
 /* get the image id for a clone, or 0 if none */
 {
@@ -4153,151 +4128,6 @@ if (sqlTableExists(conn, "imageClone"))
     sqlFreeResult(&sr);
     }
 return imageId;
-}
-
-static char *mgcStatusDesc[][2] =
-/* Table of MGC status codes to descriptions.  This is essentially duplicated
- * from MGC loading code, but we don't share the data to avoid creating some
- * dependencies.  Might want to move these to a shared file or just put these
- * in a table.  Although it is nice to be able to customize for the browser. */
-{
-    {"unpicked", "not picked"},
-    {"picked", "picked"},
-    {"notBack", "not back"},
-    {"noDecision", "no decision yet"},
-    {"fullLength", "full length"},
-    {"fullLengthShort", "full length (short isoform)"},
-    {"fullLengthSynthetic", "full length (synthetic, expression ready, no stop)"},
-    {"incomplete", "incomplete"},
-    {"chimeric", "chimeric"},
-    {"frameShift", "frame shifted"},
-    {"contaminated", "contaminated"},
-    {"retainedIntron", "retained intron"},
-    {"mixedWells", "mixed wells"},
-    {"noGrowth", "no growth"},
-    {"noInsert", "no insert"},
-    {"no5est", "no 5' EST match"},
-    {"microDel", "no cloning site / microdeletion"},
-    {"artifact", "library artifacts"},
-    {"noPolyATail", "no polyA-tail"},
-    {"cantSequence", "unable to sequence"},
-    {"inconsistentWithGene", "inconsistent with known gene structure"},
-    {NULL, NULL}
-};
-
-char *getMgcStatusDesc(struct sqlConnection *conn, int imageId)
-/* get a description of the status of a MGC clone */
-{
-struct sqlResult *sr;
-char **row;
-char query[128];
-char *desc = NULL;
-
-/* mgcFullStatus is used on browsers with only the full-length (mgc genes)
- * track */
-if (sqlTableExists(conn, "mgcStatus"))
-    safef(query, sizeof(query),
-          "SELECT status FROM mgcStatus WHERE (imageId = %d)", imageId);
-else
-    safef(query, sizeof(query),
-          "SELECT status FROM mgcFullStatus WHERE (imageId = %d)", imageId);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    desc = "no MGC status available; please report to browser maintainers";
-else
-    {
-    int i;
-    for (i = 0; (mgcStatusDesc[i][0] != NULL) && (desc == NULL); i++)
-        {
-        if (sameString(row[0], mgcStatusDesc[i][0]))
-            desc = mgcStatusDesc[i][1];
-        }
-    if (desc == NULL)
-        desc = "unknown MGC status; please report to browser maintainers";
-    }
-
-sqlFreeResult(&sr);
-return desc;
-}                   
-
-struct mgcDb
-/* information about an MGC databases */
-{
-    char *name;       /* collection name */
-    char *organism;   /* organism name for URL, case-sensitive */
-    char *server;     /* MGC server */
-};
-
-struct mgcDb getMgcDb()
-/* get the mgc database info for the current host */
-{
-struct mgcDb mgcDb;
-mgcDb.name = "MGC";
-mgcDb.server = "mgc";
-/* NOTE: mgc server likes first letter of organism capitalized */
-if (startsWith("hg", database))
-    mgcDb.organism = "Hs";
-else if (startsWith("mm", database))
-    mgcDb.organism = "Mm";
-else if (startsWith("rn", database))
-    mgcDb.organism = "Rn";
-else if (startsWith("danRer", database))
-    {
-    mgcDb.name = "ZGC";
-    mgcDb.organism = "Dr";
-    mgcDb.server = "zgc";
-    }
-else if (startsWith("xenTro", database))
-    {
-    mgcDb.name = "XGC";
-    mgcDb.organism = "Str";
-    mgcDb.server = "xgc";
-    }
-else
-    errAbort("can't map database \"%s\" to an MGC organism", database);
-return mgcDb;
-}
-
-char *mgcDbName() 
-/* get just the MGC collection name for the current ucsc database */
-{
-return getMgcDb().name;
-}
-
-void printMgcUrl(int imageId)
-/* print out an URL TO link to the MGC site for a full-length MGC clone */
-{
-struct mgcDb mgcDb = getMgcDb();
-printf("http://%s.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d",
-       mgcDb.server, mgcDb.organism, imageId);
-}
-
-void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
-/* print status information for MGC mRNA or EST; must have imageId */
-{
-struct sqlConnection *conn = hgAllocConn();
-struct mgcDb mgcDb = getMgcDb();
-char *statusDesc;
-boolean isMgcGenes = sameString(tdb->tableName, "mgcGenes");
-
-/* link to MGC site only for full-length mRNAs */
-if (isMgcGenes)
-    {
-    printf("<B>%s clone information:</B> ", mgcDb.name);
-    printf("<A href=\"");
-    printMgcUrl(imageId);
-    printf("\" TARGET=_blank>IMAGE:%d</A><BR>", imageId);
-    }
-
-/* add status description */
-statusDesc = getMgcStatusDesc(conn, imageId);
-if (statusDesc != NULL)
-    printf("<B>%s status:</B> %s<BR>", mgcDb.name, statusDesc);
-if (isMgcGenes)
-    printCcdsForMappedGene(conn, acc, "ccdsMgcMap");
-
-hFreeConn(&conn);
 }
 
 void htcDisplayMrna(char *acc)
@@ -6203,7 +6033,7 @@ char where[256];
 char protName[256];
 char *prot = NULL;
 
-hgcStart("Protein Translation");
+hgcStart("Protein Translation from Genome");
 safef(where, sizeof(where), "name = \"%s\"", geneName);
 gp = genePredReaderLoadQuery(conn, tdb->tableName, where);
 hFreeConn(&conn);
@@ -6218,6 +6048,27 @@ displayProteinPrediction(protName, prot);
 
 freez(&prot);
 genePredFree(&gp);
+}
+
+void htcTranslatedMRna(struct trackDb *tdb, char *acc)
+/* Translate mRNA to protein and display it. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct genbankCds cds = getCds(conn, acc);
+struct dnaSeq *mrna = hGenBankGetMrna(acc, NULL);
+if (mrna == NULL)
+    errAbort("mRNA sequence %s not found", acc);
+if (cds.end > mrna->size)
+    errAbort("CDS bounds exceed length of mRNA for %s", acc);
+
+int protBufSize = ((cds.end-cds.start)/3)+4;
+char *prot = needMem(protBufSize);
+
+mrna->dna[cds.end] = '\0';
+dnaTranslateSome(mrna->dna+cds.start, prot, protBufSize);
+
+hgcStart("Protein Translation of mRNA");
+displayProteinPrediction(acc, prot);
 }
 
 void getCdsInMrna(struct genePred *gp, int *retCdsStart, int *retCdsEnd)
@@ -6346,7 +6197,7 @@ struct dnaSeq *seq;
 int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(seqName, table);
 
-hgcStart("Predicted mRNA from genome");
+hgcStart("Predicted mRNA from Genome");
 safef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -6497,6 +6348,14 @@ if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
 freeMem(quotedItem);
+}
+
+void htcTrackHtml(struct trackDb *tdb)
+/* Handle click to display track html */
+{
+cartWebStart(cart, "%s", tdb->shortLabel);
+printTrackHtml(tdb);
+webEnd();
 }
 
 void doViralProt(struct trackDb *tdb, char *geneName)
@@ -7239,7 +7098,7 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-char *refSeqCdsCompleteness(struct sqlConnection *conn, char *sqlRnaName)
+char *getRefSeqCdsCompleteness(struct sqlConnection *conn, char *acc)
 /* get description of RefSeq CDS completeness or NULL if not available */
 {
 /* table mapping names to descriptions */
@@ -7261,7 +7120,7 @@ if (sqlTableExists(conn, "refSeqSummary"))
     int i;
     safef(query, sizeof(query),
           "select completeness from refSeqSummary where mrnaAcc = '%s'",
-          sqlRnaName);
+          acc);
     cmpl = sqlQuickQuery(conn, query, buf, sizeof(buf));
     if (cmpl != NULL)
         {
@@ -7274,7 +7133,8 @@ if (sqlTableExists(conn, "refSeqSummary"))
     }
 return NULL;
 }
-char *refSeqSummary(struct sqlConnection *conn, char *sqlRnaName)
+
+char *getRefSeqSummary(struct sqlConnection *conn, char *acc)
 /* RefSeq summary or NULL if not available; free result */
 {
 char * summary = NULL;
@@ -7282,8 +7142,7 @@ if (sqlTableExists(conn, "refSeqSummary"))
     {
     char query[256];
     safef(query, sizeof(query),
-          "select summary from refSeqSummary where mrnaAcc = '%s'",
-          sqlRnaName);
+          "select summary from refSeqSummary where mrnaAcc = '%s'", acc);
     summary = sqlQuickString(conn, query);
     }
 return summary;
@@ -7405,7 +7264,7 @@ if (isXeno || isNewChimp(database))
 else
     printCcdsForSrcDb(conn, rl->mrnaAcc);
     
-cdsCmpl = refSeqCdsCompleteness(conn, sqlRnaName);
+cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
 if (cdsCmpl != NULL)
     {
     printf("<B>CDS:</B> %s<BR>", cdsCmpl);
@@ -7556,7 +7415,7 @@ addGeneExtra(rl->name);  /* adds columns if extra info is available */
 printf("</tr>\n</table>\n");
 
 /* optional summary text */
-summary = refSeqSummary(conn, sqlRnaName);
+summary = getRefSeqSummary(conn, sqlRnaName);
 if (summary != NULL)
     {
     htmlHorizontalLine();
@@ -7583,121 +7442,6 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-char *getCcdsGeneSymbol(struct sqlConnection *conn, struct ccdsInfo *rsCcds)
-/* get the gene name for a CCDS */
-{
-struct ccdsInfo *ci;
-char accBuf[GENBANK_ACC_BUFSZ], query[256];
-char *geneSym = NULL;
-
-for (ci = rsCcds; ci != NULL; ci = ci->next)
-    {
-    safef(query, sizeof(query), "select name from refLink where mrnaAcc='%s'",
-          genbankDropVer(accBuf, ci->mrnaAcc));
-    geneSym = sqlQuickString(conn, query);
-    if (geneSym != NULL)
-        return geneSym;
-    }
-return NULL;
-}
-
-char *getCcdsRefSeqSummary(struct sqlConnection *conn, struct ccdsInfo *rsCcds)
-/* get the refseq summary for a CCDS */
-{
-struct ccdsInfo *ci;
-char accBuf[GENBANK_ACC_BUFSZ], query[256];
-char *summary = NULL;
-
-for (ci = rsCcds; ci != NULL; ci = ci->next)
-    {
-    safef(query, sizeof(query), "select summary from refSeqSummary where mrnaAcc='%s'",
-          genbankDropVer(accBuf, ci->mrnaAcc));
-    summary = sqlQuickString(conn, query);
-    if (summary != NULL)
-        return summary;
-    }
-return NULL;
-}
-
-struct ccdsGeneMap *ccdsGetGenes(struct sqlConnection *conn, char *mapTable,
-                                 char *ccdsId)
-/* Get ccdsGeneMap objects for a ccdsId.  Returns only
- * the best overlapping ones (ones with the same cdsSimilariy as
- * the highest cdsSimilariy. */
-{
-struct ccdsGeneMap *ccdsGenes = NULL, *bestCcdsGenes = NULL, *ccdsGene;
-
-ccdsGenes = ccdsGeneMapSelectByCcds(conn, mapTable, ccdsId, 0.0);
-if (ccdsGenes == NULL)
-    return NULL;
-
-bestCcdsGenes = slPopHead(&ccdsGenes);  /* seed with first */
-while ((ccdsGene = slPopHead(&ccdsGenes)) != NULL)
-    {
-    if (ccdsGene->cdsSimilarity == bestCcdsGenes->cdsSimilarity)
-        {
-        /* same as best, keep */
-        slAddHead(&bestCcdsGenes, ccdsGene);
-        }
-    else if (ccdsGene->cdsSimilarity > bestCcdsGenes->cdsSimilarity)
-        {
-        /* new best, replace list */
-        ccdsGeneMapFreeList(&bestCcdsGenes);
-        bestCcdsGenes = ccdsGene;
-        }
-    else
-        {
-        /* worse, drop */
-        ccdsGeneMapFree(&ccdsGene);
-        }
-    }
-
-/* only keep one of each gene */
-slUniqify(&bestCcdsGenes, ccdsGeneMapGeneIdCmp, ccdsGeneMapFree);
-
-return bestCcdsGenes;
-}
-
-void printCcdsHgGeneUrl(struct sqlConnection *conn, char *ccdsId, char* kgId)
-/* output a URL to hgGene for a ccds */
-{
-char where[128];
-struct genePredReader *gpr;
-struct genePred *ccdsGene = NULL, *kgGene = NULL;
-
-/* get ccds genePred to get location */
-safef(where, sizeof(where), "chrom = '%s' and name = '%s'", seqName, ccdsId);
-gpr = genePredReaderQuery(conn, "ccdsGene", where);
-ccdsGene = genePredReaderAll(gpr);
-genePredReaderFree(&gpr);
-if (ccdsGene == NULL)
-    errAbort("%s not found in ccdsGene table for chrom %s", ccdsId, seqName);
-else if (ccdsGene->next != NULL)
-    errAbort("multiple %s rows found in ccdsGene table for chrom %s", ccdsId, seqName);
-
-/* get KG genePred, as need exact location for link */
-safef(where, sizeof(where), "name = '%s' and strand = '%s'", kgId,
-      ccdsGene->strand);
-gpr = genePredReaderRangeQuery(conn, "knownGene", seqName,
-                               ccdsGene->txStart, ccdsGene->txEnd, where);
-kgGene = genePredReaderAll(gpr);
-genePredReaderFree(&gpr);
-if (kgGene == NULL)
-    errAbort("%s not found in knownGene table for chrom %s", kgId, seqName);
-else if (kgGene->next != NULL)
-    errAbort("multiple %s rows found in knownGene table for chrom %s", kgId, seqName);
-
-printf("../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d",
-       cartSidUrlString(cart),
-       "db", database,
-       "hgg_gene", kgId,
-       "hgg_chrom", seqName,
-       "hgg_start", kgGene->txStart,
-       "hgg_end", kgGene->txEnd);
-genePredFree(&ccdsGene);
-genePredFree(&kgGene);
-}
-
 char *kgIdToSpId(struct sqlConnection *conn, char* kgId)
 /* get the swissprot id for a known genes id; resulting string should be
  * freed */
@@ -7705,218 +7449,6 @@ char *kgIdToSpId(struct sqlConnection *conn, char* kgId)
 char query[64];
 safef(query, sizeof(query), "select spID from kgXref where kgID='%s'", kgId);
 return sqlNeedQuickString(conn, query);
-}
-
-void ccdsNcbiRows(char *ccdsId, struct ccdsInfo *rsCcds)
-/* output RefSeq CCDS entries */
-{
-struct ccdsInfo *ci;
-for (ci = rsCcds; ci != NULL; ci = ci->next)
-    {
-    printf("<TR>");
-    if (ci == rsCcds)
-        printf("<TH ROWSPAN=%d>RefSeq", slCount(rsCcds));
-    printf("<TD><A HREF=\"");
-    printEntrezNucleotideUrl(stdout, ci->mrnaAcc);
-    printf("\" TARGET=_blank>%s</A>&nbsp;", ci->mrnaAcc);
-    printf("<TD><A HREF=\"");
-    printEntrezProteinUrl(stdout, ci->protAcc);
-    printf("\" TARGET=_blank>%s</A>", ci->protAcc);
-    printf("</TR>\n");
-    }
-}
-
-void ccdsHinxtonRows(char *ccdsId, bool isVega,struct ccdsInfo *hinCcds)
-/* output Ensembl or vega CCDS entries */
-{
-struct ccdsInfo *ci;
-char *dbArg = isVega ? "&db=vega" : "";
-char *ensGenome = ensOrgNameFromScientificName(scientificName);
-if (ensGenome == NULL)
-    errAbort("%s: ensOrgNameFromScientificName failed", ccdsId);
-
-for (ci = hinCcds; ci != NULL; ci = ci->next)
-    {
-    printf("<TR>");
-    if (ci == hinCcds)
-        printf("<TH ROWSPAN=%d>%s", slCount(hinCcds),
-               (isVega ? "Vega" : "Ensembl"));
-    printf("<TD><A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s%s\""
-           " TARGET=_blank>%s</A>&nbsp;",
-           ensGenome, ci->mrnaAcc, dbArg, ci->mrnaAcc);
-    printf("<TD><A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s%s\""
-           " TARGET=_blank>%s</A>",
-           ensGenome, ci->protAcc, dbArg, ci->protAcc);
-    printf("</TR>\n");
-    }
-}
-
-void ccdsKnownGenesRows(struct sqlConnection *conn, char *ccdsId)
-/* output KnownGenes mapped to CCDS */
-{
-struct ccdsGeneMap *ccdsKgs = ccdsGetGenes(conn, "ccdsKgMap", ccdsId);
-struct ccdsGeneMap *ccdsKg;
-boolean havePb = hgPbOk(database);
-for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
-    {
-    char *spId = kgIdToSpId(conn, ccdsKg->geneId);
-    printf("<TR>");
-    if (ccdsKg == ccdsKgs)
-        printf("<TH ROWSPAN=%d>%s", slCount(ccdsKgs),
-               (havePb ? "UCSC Known Genes/<br>Proteome Browser"
-                : "UCSC Known Genes"));
-    printf("<TD><A HREF=\"");
-    printCcdsHgGeneUrl(conn, ccdsId, ccdsKg->geneId);
-    printf("\" TARGET=_blank>%s</A>", ccdsKg->geneId);
-
-    if (havePb)
-        printf("<TD><A HREF=\"../cgi-bin/pbTracks?proteinID=%s&db=%s\""
-               " TARGET=_blank>%s</A>", spId, database, spId);
-    else
-        printf("<TD>&nbsp;");
-    freez(&spId);
-
-    printf("</TR>\n");
-    }
-}
-
-void ccdsMgcRows(struct sqlConnection *conn, char *ccdsId)
-/* output MGCs mapped to CCDS */
-{
-struct ccdsGeneMap *ccdsMgcs = ccdsGetGenes(conn, "ccdsMgcMap", ccdsId);
-struct ccdsGeneMap *ccdsMgc;
-for (ccdsMgc = ccdsMgcs; ccdsMgc != NULL; ccdsMgc = ccdsMgc->next)
-    {
-    printf("<TR>");
-    if (ccdsMgc == ccdsMgcs)
-        printf("<TH ROWSPAN=%d>MGC", slCount(ccdsMgcs));
-    printf("<TD><A HREF=\"");
-    printMgcUrl(getImageId(conn, ccdsMgc->geneId));
-    printf("\" TARGET=_blank>%s</A>", ccdsMgc->geneId);
-
-    printf("<TD>&nbsp;</TR>\n");
-    }
-}
-
-void doCcdsGene(struct trackDb *tdb, char *ccdsId)
-/* Process click on a CCDS gene. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct ccdsInfo *rsCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoNcbi);
-struct ccdsInfo *vegaCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoVega);
-struct ccdsInfo *ensCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoEnsembl);
-char *geneSym, *desc, *summary;
-
-if (rsCcds == NULL)
-    errAbort("database inconsistency: no NCBI ccdsInfo entries found for %s", ccdsId);
-if ((vegaCcds == NULL) && (ensCcds == NULL))
-    errAbort("database inconsistency: no Hinxton ccdsInfo entries found for %s", ccdsId);
-
-ccdsInfoMRnaSort(&rsCcds);
-ccdsInfoMRnaSort(&vegaCcds);
-ccdsInfoMRnaSort(&ensCcds);
-
-cartWebStart(cart, "CCDS Gene");
-
-printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
-
-/* table with basic information about the CCDS (2 columns) */
-printf("<TABLE class=\"hgcCcds\"><TBODY>\n");
-
-/* gene symbol */
-geneSym = getCcdsGeneSymbol(conn, rsCcds);
-if (geneSym != NULL)
-    printf("<TR><TH>Gene<TD>%s</TR>\n", geneSym);
-freez(&geneSym);
-
-/* description */
-desc = hGenBankGetDesc(rsCcds->mrnaAcc, TRUE);
-if (desc != NULL)
-    printf("<TR><TH>Description<TD>%s</TR>\n", desc);
-freez(&desc);
-
-/* CCDS sequence links */
-printf("<TR>\n");
-printf("<TH>Sequences");
-printf("<TD>");
-hgcAnchorSomewhere("htcGeneMrna", ccdsId, "ccdsGene", seqName);
-printf("CDS</A>, &nbsp;");
-hgcAnchorSomewhere("htcTranslatedPredMRna", ccdsId, "translate", seqName);
-printf("protein</A>, &nbsp;");
-hgcAnchorSomewhere( "htcGeneInGenome", ccdsId, "ccdsGene", seqName);
-printf("genomic</A>");
-printf("</TR>\n");
-
-/* CCDS databases */
-printf("<TR>\n");
-printf("<TH>CCDS database");
-printf("<TD> <A HREF=\"http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA=%s\" TARGET=_blank>%s</A>",
-       ccdsId, ccdsId);
-printf("</TR>\n");
-
-printf("</TBODY></TABLE>\n");
-printf("<BR>\n");
-
-/* table with links to other browser apps or external databases (3 columns) */
-printf("<TABLE class=\"hgcCcds\">\n");
-printf("<CAPTION>Associated Sequences</CAPTION>\n");
-printf("<THEAD>\n");
-printf("<TR><TH>&nbsp;<TH>mRNA<TH>Protein</TR>\n");
-printf("</THEAD><TBODY>\n");
-if (hTableExists("ccdsKgMap"))
-    ccdsKnownGenesRows(conn, ccdsId);
-ccdsNcbiRows(ccdsId, rsCcds);
-if (vegaCcds != NULL)
-    ccdsHinxtonRows(ccdsId, TRUE, vegaCcds);
-if (ensCcds != NULL)
-    ccdsHinxtonRows(ccdsId, FALSE, ensCcds);
-if (sqlTableExists(conn, "ccdsMgcMap"))
-    ccdsMgcRows(conn, ccdsId);
-
-printf("</TBODY></TABLE>\n");
-
-printf("<P><EM>Note: mRNA and protein sequences in other gene collections "
-       "may differ from the CCDS sequences.</EM>\n");
-
-summary = getCcdsRefSeqSummary(conn, rsCcds);
-if (summary != NULL)
-    {
-    htmlHorizontalLine();
-    printf("<H3>RefSeq summary of %s</H3>\n", ccdsId);
-    printf("<P>%s</P>\n", summary);
-    freez(&summary);
-    }
-
-printTrackHtml(tdb);
-ccdsInfoFreeList(&rsCcds);
-ccdsInfoFreeList(&vegaCcds);
-ccdsInfoFreeList(&ensCcds);
-hFreeConn(&conn);
-}
-
-void doMgcGenes(struct trackDb *tdb, char *acc)
-/* Process click on a mgcGenes track. */
-{
-struct sqlConnection *conn = hAllocConn();
-int start = cartInt(cart, "o");
-struct psl *pslList = NULL;
-
-/* Print non-sequence info. */
-cartWebStart(cart, acc);
-
-printRnaSpecs(tdb, acc);
-htmlHorizontalLine();
-geneShowPosAndLinks(acc, acc, tdb, NULL, NULL,
-                    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
-
-/* print alignments that track was based on */
-pslList = getAlignments(conn, "all_mrna", acc);
-htmlHorizontalLine();
-printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", "all_mrna", acc);
-
-printTrackHtml(tdb);
-hFreeConn(&conn);
 }
 
 void doHInvGenes(struct trackDb *tdb, char *item)
@@ -18349,6 +17881,15 @@ else
 printTrackHtml(tdb);
 }
 
+struct trackDb *tdbForTableArg()
+/* get trackDb for track passed in table arg */
+{
+char *table = cartString(cart, "table");
+struct trackDb *tdb = hashFindVal(trackHash, table);
+if (tdb == NULL)
+    errAbort("no trackDb entry for %s", table);
+return tdb;
+}
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -18894,11 +18435,11 @@ else if (sameWord(track, "htcTranslatedProtein"))
     }
 else if (sameWord(track, "htcTranslatedPredMRna"))
     {
-    char *table = cartString(cart, "table");
-    tdb = hashFindVal(trackHash, table);
-    if (tdb == NULL)
-        errAbort("no trackDb entry for %s", table);
-    htcTranslatedPredMRna(tdb, item);
+    htcTranslatedPredMRna(tdbForTableArg(), item);
+    }
+else if (sameWord(track, "htcTranslatedMRna"))
+    {
+    htcTranslatedMRna(tdbForTableArg(), item);
     }
 else if (sameWord(track, "htcGeneMrna"))
     {
@@ -19002,6 +18543,10 @@ else if (sameWord(track, "gbProtCode"))
 else if (sameWord(track, "refSeq"))
     {
     doRefSeq(tdb, item,"gbProtCodePep","gbProtCodeXra");
+    }
+else if (sameWord(track, "htcTrackHtml"))
+    {
+    htcTrackHtml(tdbForTableArg());
     }
 else if (sameWord(track, "sargassoSea"))
     {
