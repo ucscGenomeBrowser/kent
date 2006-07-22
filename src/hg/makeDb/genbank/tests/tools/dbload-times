@@ -17,9 +17,16 @@ BEGIN {
     OFS="\t";
 }
 
-# begin loading a partition
-# ->load for genbank.136.0 hg16 native,xeno mrna: sec=9.49 vm=24.45m
-/^->load for / {
+# begin line, get host
+# hgw1 2006.07.20-16:30:02 dbload: begin
+/dbload: begin$/ {
+    host = $1;
+    hosts[host] = 1;
+}
+
+# Count of sequences changes
+# gbLoadRna: genbank.136.0 hg16 native,xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=552880 orphan=0 noChg=0
+/^gbLoadRna: .* delete=/ {
     db=$4;
     if ($3 ~ /^genbank/) {
         srcDb = "genbank";
@@ -33,50 +40,47 @@ BEGIN {
     } else if ($6 ~ /^est/) {
         type = "est";
     } else {
-        die("can't parse est: " $0);
+        die("can't parse type: " $0);
     }
-    key = db "\t" srcDb "\t" type;
-}
-
-# Count of sequences changes
-# gbLoadRna: genbank.136.0 hg16 native,xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=552880 orphan=0 noChg=0
-/^gbLoadRna: .* delete=/ {
+    key = host "\t" db "\t" srcDb "\t" type;
+    keys[key] = 1;
     if (match($0, "delete=([0-9]*) seqChg=([0-9]*) metaChg=([0-9]*) extChg=([0-9]*) new=([0-9]*) orphan=([0-9]*) noChg=([0-9]*)", parts) == 0) {
         die("can't parse counts from: " $0);
     }
     deleteCnt[key] += parts[1];
     seqChgCnt[key] += parts[2];
-    metaChrCnt[key] += parts[3];
+    metaChgCnt[key] += parts[3];
     extChgCnt[key] += parts[4];
     newCnt[key] += parts[5];
     orphanCnt[key] += parts[6];
     noChgCnt[key] += parts[7];
 
-    deleteTotalCnt += parts[1];
-    seqChgTotalCnt += parts[2];
-    metaChrTotalCnt += parts[3];
-    extChgTotalCnt += parts[4];
-    newTOtalCnt += parts[5];
-    orphanTotalCnt += parts[6];
-    noChgTotalCnt += parts[7];
+    deleteTotalCnt[host] += parts[1];
+    seqChgTotalCnt[host] += parts[2];
+    metaChgTotalCnt[host] += parts[3];
+    extChgTotalCnt[host] += parts[4];
+    newTOtalCnt[host] += parts[5];
+    orphanTotalCnt[host] += parts[6];
+    noChgTotalCnt[host] += parts[7];
 }
 
 # load time
-# <-load for genbank.136.0 hg16 native,xeno est.aa: sec=2437.83 step=1737.36 vm=197.97m
-/^<-load for/ {
-    if (match($0, "step=([0-9.]*)", parts) == 0) {
+# <-load for genbank.154.0 anoGam1 native,xeno mrna: real=143.37 cpu=23.13 sys=10.31 wait=109.93 childCpu=0.04 childSys=0.04 tod=2006-07-20T16:32:38
+/<-load for .* real=/ {
+    if (match($0, "real=([0-9.]*)", parts) == 0) {
         die("can't parse load time: " $0);
     }
     dbLoadTime[key] += parts[1];
-    dbLoadTotalTime += parts[1];
+    dbLoadTotalTime[host] += parts[1];
 }
 
 END {
-    # report by type
-
-    print "db","srcdb","type", "delete","seqChg","metaChr","extChg","new","orphan","noChg","hours";
-    for (key in deleteCnt) {
-        print key, deleteCnt[key], seqChgCnt[key], metaChrCnt[key], extChgCnt[key], newCnt[key], orphanCnt[key], noChgCnt[key],getHours(dbLoadTime[key]);
+    # report by db/srcDb/type
+    print "host", "db","srcdb","type", "delete","seqChg","metaChg","extChg","new","orphan","noChg","hours";
+    for (key in keys) {
+        print key, deleteCnt[key], seqChgCnt[key], metaChgCnt[key], extChgCnt[key], newCnt[key], orphanCnt[key], noChgCnt[key],getHours(dbLoadTime[key]);
     }
-    print "total","","", deleteTotalCnt, seqChgTotalCnt, metaChrTotalCnt, extChgTotalCnt, newTotalCnt, orphanTotalCnt, noChgTotalCnt,getHours(dbLoadTotalTime);;
+    for (host in hosts) {
+        print host,"total","","", deleteTotalCnt[host], seqChgTotalCnt[host], metaChgTotalCnt[host], extChgTotalCnt[host], newTotalCnt[host], orphanTotalCnt[host], noChgTotalCnt[host],getHours(dbLoadTotalTime[host]);
+    }
 }
