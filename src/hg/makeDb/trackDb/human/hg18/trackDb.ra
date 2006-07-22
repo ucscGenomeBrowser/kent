@@ -7,15 +7,6 @@ visibility hide
 color 0,90,100
 type genePred
 
-track mgcGenes
-shortLabel MGC Genes
-longLabel Mammalian Gene Collection Full ORF mRNAs
-group genes
-priority 36
-visibility hide
-color 34,139,34
-type genePred
-
 track ensGene
 shortLabel Ensembl Genes
 longLabel Ensembl (Build 38) Gene Predictions
