@@ -283,9 +283,8 @@ for (ccdsMgc = ccdsMgcs; ccdsMgc != NULL; ccdsMgc = ccdsMgc->next)
     if (ccdsMgc == ccdsMgcs)
         printf("<TH ROWSPAN=%d>MGC", slCount(ccdsMgcs));
     printf("<TD><A HREF=\"");
-    printMgcUrl(getImageId(conn, ccdsMgc->geneId));
-    printf("\" TARGET=_blank>%s</A>", ccdsMgc->geneId);
-
+    printMgcDetailsUrl(ccdsMgc->geneId);
+    printf("\">%s</A>", ccdsMgc->geneId);
     printf("<TD>&nbsp;</TR>\n");
     }
 }

@@ -136,6 +136,15 @@ static void printImageUrl(int imageId)
 printf("http://image.llnl.gov/image/IQ/bin/singleCloneQuery?clone_id=%d", imageId);
 }
 
+void printMgcDetailsUrl(char *acc)
+/* print out an URL to link to MGC details pages from another details page in
+ * the browser.*/
+{
+// pass zero coordiates for window to indicate this isn't a browser click
+printf("../cgi-bin/hgc?%s&g=mgcGenes&i=%s&l=0&r=0&db=%s",
+       cartSidUrlString(cart), acc, database);
+}
+
 struct mgcInfo
 /* information on a MGC clone collected from various tables */
 {
@@ -372,12 +381,12 @@ webPrintLinkCellEnd();
 webPrintLinkTableNewRow();
 webPrintLinkCellStart();
 hgcAnchorSomewhere("htcGeneMrna", acc, table, seqName);
-printf("Predicted mRNA</A>");
+printf("Reference genome mRNA</A>");
 webPrintLinkCellEnd();
 
 webPrintLinkCellStart();
 hgcAnchorSomewhere("htcTranslatedPredMRna", acc, table, seqName);
-printf("Predicted protein</A>");
+printf("Reference genome protein</A>");
 webPrintLinkCellEnd();
 
 webFinishPartialLinkTable(1, 2, 3);
@@ -443,13 +452,17 @@ static void prAligns(struct sqlConnection *conn, char *acc, int start)
 struct psl* pslList = getAlignments(conn, "mgcFullMrna", acc);
 slSort(&pslList, pslCmpMatch);
 
-// header
+// header, print note about order only if we have multiple alignments and didn't
+// come from another details page
 webNewSection("Alignments");
+if ((pslList->next != NULL) && (winStart < winEnd))
+    printf("<font size=-3><em>The alignment you clicked on is shown first.</em></font>\n");
+
 webPrintLinkTableStart();
-webPrintLabelCell("genomic");
+webPrintLabelCell("genomic (browser)");
 webPrintLabelCell("span");
 webPrintLabelCell("");
-webPrintLabelCell("mRNA");
+webPrintLabelCell("mRNA (alignment details)");
 webPrintLabelCell("identity");
 webPrintLabelCell("aligned");
 
@@ -466,6 +479,7 @@ for (pass = 1; pass <= 2; pass++)
             }
     }
 webPrintLinkTableEnd();
+
 webEndSection();
 }
 
