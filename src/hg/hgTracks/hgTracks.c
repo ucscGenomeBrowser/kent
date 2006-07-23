@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1160 2006/07/19 22:22:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1161 2006/07/23 16:55:45 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10672,16 +10672,14 @@ tg->itemName = jaxPhenotypeName;
 }
 
 
-void getTransMapItemLabel(struct sqlConnection *conn,
+void getTransMapItemLabel(struct sqlConnection *defDbConn,
                           boolean useGeneName, boolean useAcc,
                           struct linkedFeatures *lf)
 /* get label for a transMap item */
 {
-static struct sqlConnection *defDbConn = NULL;
 boolean labelStarted = FALSE;
 struct dyString *label = dyStringNew(64);
 char *org = NULL, acc[256], *dot;
-
 
 /* remove version and qualifier */
 safef(acc, sizeof(acc), "%s", lf->name);
@@ -10689,19 +10687,13 @@ dot = strchr(acc, '.');
 if (dot != NULL)
     *dot = '\0';
 
-/* get organism prefix using defaultDb, since we might not have genbank,
- * or have xeno genbank.  However the db caching mechanism only handles
- * 2 databases, so just open a connection on first use and keep it open. */
-if (defDbConn == NULL)
-    defDbConn = sqlConnect(hDefaultDb());
-
 org = getOrganismShort(defDbConn, acc);
 if (org != NULL)
     dyStringPrintf(label, "%s ", org);
 
 if (useGeneName)
     {
-    char *gene = getGeneName(conn, acc);
+    char *gene = getGeneName(defDbConn, acc);
     if (gene != NULL)
         {
         dyStringAppend(label, gene);
@@ -10722,14 +10714,18 @@ lf->extra = dyStringCannibalize(&label);
 void lookupTransMapLabels(struct track *tg)
 /* This converts the transMap ids to labels. */
 {
+/* get organism prefix using defaultDb, since we might not have genbank,
+ * or have xeno genbank.  However the db caching mechanism only handles
+ * 2 databases, so just open a connection on first use and keep it open. */
+struct sqlConnection *defDbConn = sqlConnect(hDefaultDb());
+
 struct linkedFeatures *lf;
-struct sqlConnection *conn = hAllocConn();
 boolean useGeneName = FALSE;  /* FIXME: need to add track UI */
 boolean useAcc =  TRUE;
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
-    getTransMapItemLabel(conn, useGeneName, useAcc, lf);
-hFreeConn(&conn);
+    getTransMapItemLabel(defDbConn, useGeneName, useAcc, lf);
+sqlDisconnect(&defDbConn);
 }
 
 void loadTransMap(struct track *tg)
