@@ -5,7 +5,7 @@ group genes
 priority 49
 visibility hide
 color 0,90,100
-type genePred
+type genePred geneidPep
 
 track ensGene
 shortLabel Ensembl Genes
