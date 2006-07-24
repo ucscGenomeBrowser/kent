@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1161 2006/07/23 16:55:45 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1162 2006/07/24 23:03:01 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -153,7 +153,7 @@ int z;
 int maxCount;
 int bestColor;
 int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
-int maxItemsToUseOverflow = 10000; /* Maximum number of items to allow overflow mode. */
+int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
@@ -484,6 +484,18 @@ if (maxItemsString != NULL)
 return maxItems * tl.fontHeight;
 }
 
+static int maxItemsToOverflow(struct track *tg)
+/* Return the maximum number of items to allow overflow indication. */
+{
+int answer = maxItemsToUseOverflowDefault;
+char *maxItemsString = trackDbSetting(tg->tdb, "maxItemsToOverflow");
+if (maxItemsString != NULL)
+    answer = sqlUnsigned(maxItemsString);
+
+return answer;
+}
+
+
 int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
 			       int lineHeight, int heightPer, boolean allowOverflow)
 /* Most fixed height track groups will use this to figure out the height 
@@ -492,6 +504,7 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
 int rows;
 double maxHeight = maximumTrackHeight(tg);
 int itemCount = slCount(tg->items);
+int maxItemsToUseOverflow = maxItemsToOverflow(tg);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
 
@@ -504,6 +517,7 @@ tg->lineHeight = lineHeight;
    allow the track enough rows to go over the maxHeight (thus if the
    spaceSaver fills up the total height will be more than maxHeight).
 */
+
 switch (vis)
     {
     case tvFull:
@@ -2000,7 +2014,7 @@ if (vis == tvPack || vis == tvSquish)
 		{
 		vgUnclip(vg);
 		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		safef(nameBuff, sizeof(nameBuff), "%d in Last Row", overflowCount);
+		safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
 		mgFontStringWidth(font, nameBuff);
 		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, lineHeight, 
 			    color, font, nameBuff);
