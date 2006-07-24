@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.11 2006/07/24 13:13:22 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.12 2006/07/24 13:17:15 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -163,7 +163,7 @@ errAbort(
     "    -bedOut=bed output file of mismatches.\n"
     "    -species1=psl file with alignment of mrna/EST to other species.\n"
     "    -species2=psl file with alignment of mrna/EST to other species.\n"
-    "    -snp=snp.tab.gz contains snps with or without bin field \n"
+    "    -snp=snp.tab.gz contains snps with or without bin field in snp126 format\n"
     "    -nibdir1=sequence of species 1 \n"
     "    -nibdir2=sequence of species 2 \n"
     "    -mrna1=fasta file with sequence of mrna/EST used in alignment 1\n"
