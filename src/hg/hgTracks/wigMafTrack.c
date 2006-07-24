@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.99 2006/06/30 19:40:03 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.100 2006/07/24 23:12:59 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -558,7 +558,7 @@ int i, baseIx = 0;
 struct mafComp *mc;
 char c;
 
-for (i=0; i < maf->textSize /*&& baseIx < baseCount*/; i++)
+for (i=0; i < maf->textSize && baseIx < baseCount - 1; i++)
     {
     c = text[i];
     if (c == '-')
