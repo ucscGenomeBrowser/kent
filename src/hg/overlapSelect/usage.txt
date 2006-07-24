@@ -68,9 +68,8 @@ Options:
   -mergeOutput - output file with be a merge of the input file with the
       selectFile records that selected it.  The format is
          inRec<tab>selectRec.
-      if multiple select records hit, inRec is repeated.
-      This will increase the memory required
-      Not currently supported with -aggregate.
+      if multiple select records hit, inRec is repeated. This will increase
+      the memory required. Not supported with -nonOverlapping or -aggregate.
   -idOutput - output a table seprate file of pairs of
          inId selectId
       with -aggregate, omly a single column of inId is written

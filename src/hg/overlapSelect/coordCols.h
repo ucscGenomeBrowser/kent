@@ -1,8 +1,7 @@
 /* coordCols - parsing of file by specifying coordinate columns */
 #ifndef COORD_COLS_H
 #define COORD_COLS_H
-
-struct lineFile;
+struct rowReader;
 
 struct coordCols
 /* coordinate columns to parse from file */
@@ -32,9 +31,8 @@ struct coordCols coordColsParseSpec(char *optName, char* optValue);
  *     strand in specified columns.
  */
 
-struct coordColVals coordColParseRow(struct coordCols* cols, 
-                                     struct lineFile* lf,
-                                     char **row, int numCols);
+struct coordColVals coordColParseRow(struct coordCols* cols,
+                                     struct rowReader *rr);
 /* parse coords from a row */
 
 #endif

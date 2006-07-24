@@ -1,8 +1,8 @@
 /* coordCols - parsing of file by specifying coordinate columns */
 #include "common.h"
 #include "coordCols.h"
+#include "rowReader.h"
 #include "sqlNum.h"
-#include "linefile.h"
 
 static void invalidSpec(char *optName, char* spec)
 /* generate an error, msg can be null */
@@ -56,19 +56,18 @@ cols.minNumCols++;
 return cols;
 }
 
-struct coordColVals coordColParseRow(struct coordCols* cols, 
-                                     struct lineFile* lf,
-                                     char **row, int numCols)
+struct coordColVals coordColParseRow(struct coordCols* cols,
+                                     struct rowReader *rr)
 /* parse coords from a row */
 {
 struct coordColVals colVals;
 ZeroVar(&colVals);
-lineFileExpectAtLeast(lf, cols->minNumCols, numCols);
-colVals.chrom = row[cols->chromCol];
-colVals.start = sqlUnsigned(row[cols->startCol]);
-colVals.end = sqlUnsigned(row[cols->endCol]);
+rowReaderExpectAtLeast(rr, cols->minNumCols);
+colVals.chrom = rr->row[cols->chromCol];
+colVals.start = sqlUnsigned(rr->row[cols->startCol]);
+colVals.end = sqlUnsigned(rr->row[cols->endCol]);
 if (cols->strandCol >= 0)
-    colVals.strand = row[cols->strandCol][0];
+    colVals.strand = rr->row[cols->strandCol][0];
 return colVals;
 }
 

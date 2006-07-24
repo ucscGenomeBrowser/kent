@@ -2,7 +2,7 @@
  * other formats */
 #ifndef CHROMANN_H
 #define CHROMANN_H
-struct lineFile;
+struct rowReader;
 struct coordCols;
 
 enum chromAnnOpts
@@ -19,13 +19,14 @@ struct chromAnn
  * formats */
 {
     struct chromAnn *next;
-    char* name;     /* optional name of the item */
-    char* chrom;    /* object coordinates */
+    char* name;      /* optional name of the item */
+    char* chrom;     /* object coordinates */
     char strand;
-    int start;      /* start of first block */
-    int end;        /* end of last block */
-    int totalSize;  /* size of all blocks */
-    char *recLine;  /* optional record containing the original record */
+    int start;       /* start of first block */
+    int end;         /* end of last block */
+    int totalSize;   /* size of all blocks */
+    char **rawCols;  /* optional columns of original record, NULL terminated,
+                      * single malloc block,  */
     struct chromAnnBlk *blocks;  /* ranges associated with this object */
 };
 
@@ -41,18 +42,23 @@ struct chromAnnBlk
 void chromAnnFree(struct chromAnn **caPtr);
 /* free an object */
 
-struct chromAnn* chromAnnFromBed(unsigned opts, struct lineFile *lf, char *line);
-/* create a chromAnn object from line read from a BED file */
+void chromAnnWrite(struct chromAnn* ca, FILE *fh, char term);
+/* write tab separated row using rawCols */
 
-struct chromAnn* chromAnnFromGenePred(unsigned opts, struct lineFile *lf, char *line);
-/* create a chromAnn object from line read from a GenePred file.  If there is
- * no CDS, and chromAnnCds is specified, it will return a record with
+struct chromAnn* chromAnnFromBed(unsigned opts, struct rowReader *rr);
+/* create a chromAnn object from a row read from a BED file or table */
+
+struct chromAnn* chromAnnFromGenePred(unsigned opts, struct rowReader *rr);
+/* create a chromAnn object from a row read from a GenePred file or table.  If
+ * there is no CDS, and chromAnnCds is specified, it will return a record with
  * zero-length range.*/
 
-struct chromAnn* chromAnnFromPsl(unsigned opts, struct lineFile *lf, char *line);
-/* create a chromAnn object from line read from a psl file */
+struct chromAnn* chromAnnFromPsl(unsigned opts, struct rowReader *rr);
+/* create a chromAnn object from a row read from a psl file or table */
 
-struct chromAnn* chromAnnFromCoordCols(unsigned opts, struct lineFile *lf, char *line, struct coordCols* cols);
-/* create a chromAnn object from a line read from tab file with coordiates at
- * a specified columns */
+struct chromAnn* chromAnnFromCoordCols(unsigned opts, struct coordCols* cols,
+                                       struct rowReader *rr);
+/* create a chromAnn object from a line read from a tab file or table with
+ * coordiates at a specified columns */
+
 #endif

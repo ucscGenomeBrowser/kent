@@ -2,42 +2,33 @@
 
 #include "common.h"
 #include "selectTable.h"
-#include "linefile.h"
+#include "rowReader.h"
+#include "chromBins.h"
 #include "binRange.h"
 #include "bits.h"
 #include "hash.h"
 #include "chromAnn.h"
 #include "verbose.h"
 
-/* tables are never freed; these should be real objects  */
-static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeeper of
+/* tables are never freed  */
+static struct chromBins* selectBins = NULL;  /* per-chrom binKeepers of
                                               * chromAnn objects */
-static struct binKeeper* selectGetChromBins(char* chrom, boolean createMissing,
-                                            char** key)
-/* get the bins for a chromsome, optionally creating if it doesn't exist.
- * Return key if requested so string can be reused. */
+static struct binKeeper *selectBinsGet(char *chrom, boolean create)
+/* get chromosome binKeeper, optionally creating if it doesn't exist */
 {
-struct hashEl* hel;
-
-if (selectChromHash == NULL)
-    selectChromHash = hashNew(10);  /* first time */
-hel = hashLookup(selectChromHash, chrom);
-if ((hel == NULL) && createMissing)
+if (selectBins == NULL)
     {
-    struct binKeeper* bins = binKeeperNew(0, 300000000);
-    hel = hashAdd(selectChromHash, chrom, bins);
+    if (!create)
+        return NULL;
+    selectBins = chromBinsNew((chromBinsFreeFunc*)chromAnnFree);
     }
-if (hel == NULL)
-    return NULL;
-if ((key != NULL) && (hel != NULL))
-    *key = hel->name;
-return (struct binKeeper*)hel->val;
+return chromBinsGet(selectBins, chrom, create);
 }
 
 static void selectAddChromAnn(struct chromAnn *ca)
 /* Add a chromAnn to the select table */
 {
-struct binKeeper* bins = selectGetChromBins(ca->chrom, TRUE, NULL);
+struct binKeeper* bins = selectBinsGet(ca->chrom, TRUE);
 if (verboseLevel() >= 2)
     {
     verbose(2, "selectAddChromAnn: %s: %s %c %d-%d\n", ca->name, ca->chrom,
@@ -69,40 +60,34 @@ if (selOpts & selSaveLines)
 return caOpts;
 }
 
-void selectAddPsls(unsigned opts, struct lineFile *pslLf)
-/* add records from a psl file to the select table */
+void selectAddPsls(unsigned opts, struct rowReader *rr)
+/* add psl records to the select table */
 {
-char *line;
-
-while (lineFileNextReal(pslLf, &line))
-    selectAddChromAnn(chromAnnFromPsl(getChomAnnOpts(opts), pslLf, line));
+while (rowReaderNext(rr))
+    selectAddChromAnn(chromAnnFromPsl(getChomAnnOpts(opts), rr));
 }
 
-void selectAddGenePreds(unsigned opts, struct lineFile *genePredLf)
-/* add blocks from a genePred file to the select table */
+void selectAddGenePreds(unsigned opts,  struct rowReader *rr)
+/* add genePred records to the select table */
 {
-char *line;
-while (lineFileNextReal(genePredLf, &line))
-    selectAddChromAnn(chromAnnFromGenePred(getChomAnnOpts(opts), genePredLf, line));
+while (rowReaderNext(rr))
+    selectAddChromAnn(chromAnnFromGenePred(getChomAnnOpts(opts), rr));
 }
 
-void selectAddBeds(unsigned opts, struct lineFile* bedLf)
-/* add records from a bed file to the select table */
+void selectAddBeds(unsigned opts,  struct rowReader *rr)
+/* add bed records to the select table */
 {
-char *line;
-
-while (lineFileNextReal(bedLf, &line))
-    selectAddChromAnn(chromAnnFromBed(getChomAnnOpts(opts), bedLf, line));
+while (rowReaderNext(rr))
+    selectAddChromAnn(chromAnnFromBed(getChomAnnOpts(opts), rr));
 }
 
-void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols* cols)
+void selectAddCoordCols(unsigned opts, struct coordCols* cols, struct rowReader *rr)
 /* add records with coordiates at a specified column */
 {
-char *line;
 unsigned caOpts = getChomAnnOpts(opts);
 
-while (lineFileNextReal(tabLf, &line))
-    selectAddChromAnn(chromAnnFromCoordCols(caOpts, tabLf, line, cols));
+while (rowReaderNext(rr))
+    selectAddChromAnn(chromAnnFromCoordCols(caOpts, cols, rr));
 }
 
 static boolean isSelfMatch(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
@@ -281,7 +266,7 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
  * of the of selected records is returned.  Free with slFreelList. */
 {
 boolean hit = FALSE;
-struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
+struct binKeeper* bins = selectBinsGet(inCa->chrom, FALSE);
 verbose(2, "selectIsOverlapping: enter %s: %s %d-%d, %c\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
         ((inCa->strand == '\0') ? '?' : inCa->strand));
 if (bins != NULL)
@@ -344,7 +329,7 @@ stats->inOverlap = ((float)stats->inOverBases) / ((float)inCa->totalSize);
 struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
 /* Compute the aggregate overlap of a chromAnn */
 {
-struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
+struct binKeeper* bins = selectBinsGet(inCa->chrom, FALSE);
 struct overlapAggStats stats;
 ZeroVar(&stats);
 stats.inBases = inCa->totalSize;

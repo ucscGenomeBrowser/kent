@@ -1,7 +1,7 @@
 /* overlapSelect - select records based on overlap of chromosome ranges */
 
 #include "common.h"
-#include "linefile.h"
+#include "rowReader.h"
 #include "selectTable.h"
 #include "psl.h"
 #include "bed.h"
@@ -70,7 +70,7 @@ struct overlapCriteria criteria = {0.0, 0.0, -1};
 struct ioFiles
 /* object containing input files */
 {
-    struct lineFile *inLf;
+    struct rowReader *inRr;
     FILE* outFh;
     FILE* dropFh;
 };
@@ -125,7 +125,8 @@ struct slRef *selectCaRef;
 for (selectCaRef = overlappingRecs; selectCaRef != NULL; selectCaRef = selectCaRef->next)
     {
     struct chromAnn *selectCa = selectCaRef->val;
-    fprintf(outFh, "%s\t%s\n", inCa->recLine, selectCa->recLine);
+    chromAnnWrite(inCa, outFh, '\t');
+    chromAnnWrite(selectCa, outFh, '\n');
     }
 }
 
@@ -175,14 +176,14 @@ if ((nonOverlapping) ? !overlaps : overlaps)
     else if (statsOutput)
         outputStats(inCa, ioFiles->outFh, overlappingRecs);
     else
-        fprintf(ioFiles->outFh, "%s\n", inCa->recLine);
+        chromAnnWrite(inCa, ioFiles->outFh, '\n');
     }
 else if (ioFiles->dropFh != NULL)
     {
     if (idOutput)
         fprintf(ioFiles->dropFh, "%s\n", getPrintId(inCa));
     else
-        fprintf(ioFiles->dropFh, "%s\n", inCa->recLine);
+        chromAnnWrite(inCa, ioFiles->dropFh, '\n');
     }
 
 slFreeList(&overlappingRecs);
@@ -206,14 +207,14 @@ if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
         fprintf(ioFiles->outFh, "%s\t%0.3g\t%d\t%d\n", getPrintId(inCa),
                 stats.inOverlap, stats.inOverBases, stats.inBases);
     else
-        fprintf(ioFiles->outFh, "%s\n", inCa->recLine);
+        chromAnnWrite(inCa, ioFiles->outFh, '\n');
     }
 else if (ioFiles->dropFh != NULL)
     {
     if (idOutput)
         fprintf(ioFiles->dropFh, "%s\n", getPrintId(inCa));
     else
-        fprintf(ioFiles->dropFh, "%s\n", inCa->recLine);
+        chromAnnWrite(inCa, ioFiles->dropFh, '\n');
     }
 }
 
@@ -230,11 +231,10 @@ else
 void pslSelect(struct ioFiles *ioFiles)
 /* copy psl records that matches the selection criteria */
 {
-char *line;
 struct chromAnn* inCa;
-while (lineFileNextReal(ioFiles->inLf, &line))
+while (rowReaderNext(ioFiles->inRr))
     {
-    inCa = chromAnnFromPsl(inCaOpts, ioFiles->inLf, line);
+    inCa = chromAnnFromPsl(inCaOpts, ioFiles->inRr);
     doOverlap(inCa, ioFiles);
     chromAnnFree(&inCa);
     }
@@ -243,11 +243,10 @@ while (lineFileNextReal(ioFiles->inLf, &line))
 void genePredSelect(struct ioFiles *ioFiles)
 /* copy genePred records that matches the selection criteria */
 {
-char *line;
 struct chromAnn* inCa;
-while (lineFileNextReal(ioFiles->inLf, &line))
+while (rowReaderNext(ioFiles->inRr))
     {
-    inCa = chromAnnFromGenePred(inCaOpts, ioFiles->inLf, line);
+    inCa = chromAnnFromGenePred(inCaOpts, ioFiles->inRr);
     doOverlap(inCa, ioFiles);
     chromAnnFree(&inCa);
     }
@@ -256,11 +255,10 @@ while (lineFileNextReal(ioFiles->inLf, &line))
 void bedSelect(struct ioFiles *ioFiles)
 /* copy bed records that matches the selection criteria */
 {
-char *line;
 struct chromAnn* inCa;
-while (lineFileNextReal(ioFiles->inLf, &line))
+while (rowReaderNext(ioFiles->inRr))
     {
-    inCa = chromAnnFromBed(inCaOpts, ioFiles->inLf, line);
+    inCa = chromAnnFromBed(inCaOpts, ioFiles->inRr);
     doOverlap(inCa, ioFiles);
     chromAnnFree(&inCa);
     }
@@ -271,11 +269,10 @@ void coordColsSelect(struct ioFiles *ioFiles)
  * specified by start column. */
 {
 /*FIXME: should keep header lines in files */
-char *line;
 struct chromAnn* inCa;
-while (lineFileNextReal(ioFiles->inLf, &line))
+while (rowReaderNext(ioFiles->inRr))
     {
-    inCa = chromAnnFromCoordCols(inCaOpts, ioFiles->inLf, line, &inCoordCols);
+    inCa = chromAnnFromCoordCols(inCaOpts, &inCoordCols, ioFiles->inRr);
     doOverlap(inCa, ioFiles);
     chromAnnFree(&inCa);
     }
@@ -284,25 +281,23 @@ while (lineFileNextReal(ioFiles->inLf, &line))
 void loadSelectTable(char *selectFile)
 /* load the select table from a file */
 {
-struct lineFile *lf = (selectFmt == PSL_FMT)
-    ? pslFileOpen(selectFile)
-    : lineFileOpen(selectFile, TRUE);
+struct rowReader *rr = rowReaderOpen(selectFile, (selectFmt == PSL_FMT));
 switch (selectFmt)
     {
     case PSL_FMT:
-        selectAddPsls(selectOpts, lf);
+        selectAddPsls(selectOpts, rr);
         break;
     case GENEPRED_FMT:
-        selectAddGenePreds(selectOpts, lf);
+        selectAddGenePreds(selectOpts, rr);
         break;
     case BED_FMT:
-        selectAddBeds(selectOpts, lf);
+        selectAddBeds(selectOpts, rr);
         break;
     case COORD_COLS_FMT:
-        selectAddCoordCols(selectOpts, lf, &selectCoordCols);
+        selectAddCoordCols(selectOpts, &selectCoordCols, rr);
         break;
     }
-lineFileClose(&lf);
+rowReaderFree(&rr);
 }
 
 void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile)
@@ -310,7 +305,7 @@ void overlapSelect(char *selectFile, char *inFile, char *outFile, char *dropFile
 {
 struct ioFiles ioFiles;
 ZeroVar(&ioFiles);
-ioFiles.inLf = (inFmt == PSL_FMT) ? pslFileOpen(inFile) : lineFileOpen(inFile, TRUE);
+ioFiles.inRr = rowReaderOpen(inFile, (inFmt == PSL_FMT));
 
 loadSelectTable(selectFile);
 ioFiles.outFh = mustOpen(outFile, "w");
@@ -346,7 +341,7 @@ switch (inFmt)
         coordColsSelect(&ioFiles);
         break;
     }
-lineFileClose(&ioFiles.inLf);
+rowReaderFree(&ioFiles.inRr);
 carefulClose(&ioFiles.outFh);
 carefulClose(&ioFiles.dropFh);
 }
@@ -429,8 +424,6 @@ if ((criteria.threshold != 0.0) && (criteria.similarity != 0.0))
     errAbort("can't specify both -overlapThreshold and -overlapSimilarity");
 
 /* output options */
-if (optionExists("merge")) /* FIXME: this is tmp */
-    errAbort("please use -mergeOutput instead of -merge; trying to keep option names sane");
 mergeOutput = optionExists("mergeOutput");
 idOutput = optionExists("idOutput");
 statsOutput = optionExists("statsOutput") || optionExists("statsOutputAll");
@@ -446,6 +439,8 @@ if (mergeOutput)
     {
     if (nonOverlapping)
         errAbort("can't use -mergeOutput with -nonOverlapping");
+    if (useAggregate)
+        errAbort("can't use -mergeOutput with -aggregate");
     selectOpts |= selSaveLines;
     }
 dropFile = optionVal("dropped", NULL);

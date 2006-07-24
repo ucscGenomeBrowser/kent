@@ -2,6 +2,8 @@
 #ifndef SELECT_TABLE_H
 #define SELECT_TABLE_H
 
+struct rowReader;
+
 enum selectOpts
 /* selection table options */
 {
@@ -33,17 +35,17 @@ struct coordCols;
 struct lineFile;
 struct chromAnn;
 
-void selectAddPsls(unsigned opts, struct lineFile *pslLf);
-/* add records from a psl file to the select table */
+void selectAddPsls(unsigned opts, struct rowReader *rr);
+/* add psl records to the select table */
 
-void selectAddGenePreds(unsigned opts, struct lineFile *genePredLf);
-/* add blocks from a genePred file to the select table */
+void selectAddGenePreds(unsigned opts,  struct rowReader *rr);
+/* add genePred records to the select table */
 
-void selectAddBeds(unsigned opts, struct lineFile* bedLf);
-/* add records from a bed file to the select table */
+void selectAddBeds(unsigned opts,  struct rowReader *rr);
+/* add bed records to the select table */
 
-void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols* cols);
-/* add records with coordiates at a specified columns */
+void selectAddCoordCols(unsigned opts, struct coordCols* cols, struct rowReader *rr);
+/* add records with coordiates at a specified column */
 
 int selectOverlapBases(struct chromAnn *ca1, struct chromAnn *ca2);
 /* determine the number of bases of overlaping in two annotations */

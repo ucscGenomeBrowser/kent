@@ -2,8 +2,8 @@
  * other formats */
 #include "common.h"
 #include "chromAnn.h"
-#include "linefile.h"
 #include "binRange.h"
+#include "rowReader.h"
 #include "psl.h"
 #include "bed.h"
 #include "genePred.h"
@@ -45,9 +45,8 @@ while ((blk = slPopHead(&blks)) != NULL)
     freeMem(blk);
 }
 
-static struct chromAnn* chromAnnNew(char* chrom, char strand, char* name, char *recLine)
-/* create new object. If recLine is not null, it's malloced and ownership
- * is passed to this object. */
+static struct chromAnn* chromAnnNew(char* chrom, char strand, char* name, char **rawCols)
+/* create new object, ownership of rawCols is passed */
 {
 struct chromAnn* ca;
 AllocVar(ca);
@@ -57,7 +56,7 @@ if (name != NULL)
     ca->name = cloneString(name);
 ca->start = 0;
 ca->end = 0; 
-ca->recLine = recLine;
+ca->rawCols = rawCols;
 return ca;
 }
 
@@ -76,9 +75,42 @@ if (ca != NULL)
     freeMem(ca->chrom);
     freeMem(ca->name);
     chromAnnBlkFreeList(ca->blocks);
-    freeMem(ca->recLine);
+    freeMem(ca->rawCols);
     freez(caPtr);
     }
+}
+
+void chromAnnWrite(struct chromAnn* ca, FILE *fh, char term)
+/* write tab separated row using rawCols */
+{
+int i;
+for (i = 0; ca->rawCols[i] != NULL; i++)
+    {
+    if (i > 0)
+        fputc_unlocked('\t', fh);
+    fputs_unlocked(ca->rawCols[i], fh);
+    }
+fputc_unlocked(term, fh);
+}
+
+static char **saveRawCols(struct rowReader *rr)
+/* Save raw row columns for output.  Must be called before autoSql parser
+ * is called on a row, as it will modify array rows. */
+{
+int vecSz = (rr->numCols+1)*sizeof(char*);
+int memSz = vecSz;
+int i;
+for (i =-0; i < rr->numCols; i++)
+    memSz += strlen(rr->row[i])+1;
+char **rawCols = needMem(memSz);
+char *p = ((char*)rawCols) + vecSz;
+for (i =-0; i < rr->numCols; i++)
+    {
+    rawCols[i] = p;
+    strcpy(p, rr->row[i]);
+    p += strlen(rr->row[i]) + 1;
+    }
+return rawCols;
 }
 
 static void addBedBlocks(struct chromAnn* ca, unsigned opts, struct bed* bed)
@@ -101,23 +133,14 @@ for (iBlk = 0; iBlk < bed->blockCount; iBlk++)
     }
 }
 
-struct chromAnn* chromAnnFromBed(unsigned opts, struct lineFile *lf, char *line)
-/* create a chromAnn object from line read from a BED file */
+struct chromAnn* chromAnnFromBed(unsigned opts,  struct rowReader *rr)
+/* create a chromAnn object from a row read from a BED file or table */
 {
-char *recLine = NULL;
-char* row[256];  /* allow for extra columns */
-int numCols;
-struct chromAnn* ca;
-struct bed *bed;
+rowReaderExpectAtLeast(rr, 3);
 
-/* save copy of line before chopping; don't free this, ownership is passed */
-if (opts & chromAnnSaveLines)
-    recLine = cloneString(line);
-
-numCols = chopTabs(line, row);
-lineFileExpectAtLeast(lf, 3, numCols);
-bed = bedLoadN(row, numCols);
-ca = chromAnnNew(bed->chrom, bed->strand[0], bed->name, recLine);
+char **rawCols = (opts & chromAnnSaveLines) ? saveRawCols(rr) : NULL;
+struct bed *bed = bedLoadN(rr->row, rr->numCols);
+struct chromAnn *ca = chromAnnNew(bed->chrom, bed->strand[0], bed->name, rawCols);
 
 if ((bed->blockCount == 0) || (opts & chromAnnRange))
     {
@@ -154,25 +177,16 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     }
 }
 
-struct chromAnn* chromAnnFromGenePred(unsigned opts, struct lineFile *lf, char *line)
-/* create a chromAnn object from line read from a GenePred file.  If there is
- * no CDS, and chromAnnCds is specified, it will return a record with
+struct chromAnn* chromAnnFromGenePred(unsigned opts,  struct rowReader *rr)
+/* create a chromAnn object from a row read from a GenePred file or table.  If
+ * there is no CDS, and chromAnnCds is specified, it will return a record with
  * zero-length range.*/
 {
-char *recLine = NULL;
-char* row[GENEPRED_NUM_COLS];  /* allow for extra columns */
-int numCols;
-struct chromAnn* ca;
-struct genePred *gp;
+rowReaderExpectAtLeast(rr, GENEPRED_NUM_COLS);
 
-/* save copy of line before chopping; don't free this, ownership is passed */
-if (opts & chromAnnSaveLines)
-    recLine = cloneString(line);
-
-numCols = chopTabs(line, row);
-lineFileExpectAtLeast(lf, GENEPRED_NUM_COLS, numCols);
-gp = genePredLoad(row);
-ca = chromAnnNew(gp->chrom, gp->strand[0], gp->name, recLine);
+char **rawCols = (opts & chromAnnSaveLines) ? saveRawCols(rr) : NULL;
+struct genePred *gp = genePredLoad(rr->row);
+struct chromAnn* ca = chromAnnNew(gp->chrom, gp->strand[0], gp->name, rawCols);
 
 if (opts & chromAnnRange)
     {
@@ -207,29 +221,16 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     }
 }
 
-struct chromAnn* chromAnnFromPsl(unsigned opts, struct lineFile *lf, char *line)
-/* create a chromAnn object from line read from a psl file */
+struct chromAnn* chromAnnFromPsl(unsigned opts, struct rowReader *rr)
+/* create a chromAnn object from a row read from a psl file or table */
 {
-char *recLine = NULL;
-char* row[PSL_NUM_COLS];  /* allow for extra columns */
-int numCols;
-struct chromAnn* ca;
-struct psl *psl;
-char strand;
+rowReaderExpectAtLeast(rr, PSL_NUM_COLS);
 
-/* save copy of line before chopping; don't free this, ownership is passed */
-if (opts & chromAnnSaveLines)
-    recLine = cloneString(line);
+char **rawCols = (opts & chromAnnSaveLines) ? saveRawCols(rr) : NULL;
 
-numCols = chopTabs(line, row);
-lineFileExpectAtLeast(lf, PSL_NUM_COLS, numCols);
-
-psl = pslLoad(row);
-if (psl->strand[1] == '\0')
-    strand = psl->strand[0];
-else
-    strand = psl->strand[1];
-ca = chromAnnNew(psl->tName, strand, psl->qName, recLine);
+struct psl *psl = pslLoad(rr->row);
+char strand = (psl->strand[1] == '\0') ? psl->strand[0] :  psl->strand[1];
+struct chromAnn* ca = chromAnnNew(psl->tName, strand, psl->qName, rawCols);
 
 if (opts & chromAnnRange)
     chromAnnBlkNew(ca, psl->tStart, psl->tEnd);
@@ -240,30 +241,18 @@ pslFree(&psl);
 return ca;
 }
 
-struct chromAnn* chromAnnFromCoordCols(unsigned opts, struct lineFile *lf, char *line, struct coordCols* cols)
-/* create a chromAnn object from a line read from tab file with coordiates at
- * a specified columns */
+struct chromAnn* chromAnnFromCoordCols(unsigned opts, struct coordCols* cols,
+                                       struct rowReader *rr)
+/* create a chromAnn object from a line read from a tab file or table with
+ * coordiates at a specified columns */
 {
-struct coordColVals colVals;
-char *recLine = NULL;
-char** row = needMem(cols->minNumCols*sizeof(char*));
-int numCols;
-struct chromAnn* ca;
+rowReaderExpectAtLeast(rr, cols->minNumCols);
 
-/* save copy of line before chopping; don't free this, ownership is passed */
-if (opts & chromAnnSaveLines)
-    recLine = cloneString(line);
+char **rawCols = (opts & chromAnnSaveLines) ? saveRawCols(rr) : NULL;
+struct coordColVals colVals = coordColParseRow(cols, rr);
 
-/* save copy of line before chopping; don't free this, ownership is passed */
-if (opts & chromAnnSaveLines)
-    recLine = cloneString(line);
-numCols = chopByChar(line, '\t', row, cols->minNumCols);
-lineFileExpectAtLeast(lf, cols->minNumCols, numCols);
-colVals = coordColParseRow(cols, lf, row, numCols);
-
-ca = chromAnnNew(colVals.chrom, colVals.strand, NULL, recLine);
+struct chromAnn *ca = chromAnnNew(colVals.chrom, colVals.strand, NULL, rawCols);
 chromAnnBlkNew(ca, colVals.start, colVals.end);
-freez(&row);
 return ca;
 }
 

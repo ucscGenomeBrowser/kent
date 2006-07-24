@@ -6,8 +6,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = chromAnn.h selectTable.h coordCols.h
-O = chromAnn.o selectTable.o coordCols.o overlapSelect.o
+H = rowReader.h chromAnn.h selectTable.h coordCols.h
+O = rowReader.o chromAnn.o selectTable.o coordCols.o overlapSelect.o
 B =  ${HOME}/bin/${MACHTYPE}/overlapSelect
 
 $B: overlapSelect
@@ -17,9 +17,10 @@ $B: overlapSelect
 overlapSelect: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o overlapSelect $O ${MYLIBS} ${MYSQLLIBS} $L
 
-chromAnn.o: chromAnn.c chromAnn.h
+chromAnn.o: rowReader.c rowReader.h
+chromAnn.o: chromAnn.c chromAnn.h rowReader.h
 coordCols.o: coordCols.c coordCols.h
-selectTable.o: selectTable.c selectTable.h coordCols.h chromAnn.h
+selectTable.o: selectTable.c selectTable.h coordCols.h chromAnn.h rowReader.h
 overlapSelect.o: usage.msg overlapSelect.c coordCols.h selectTable.h chromAnn.h
 
 # create usage msg from text
