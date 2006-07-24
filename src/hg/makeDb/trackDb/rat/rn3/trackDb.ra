@@ -62,7 +62,7 @@ group genes
 priority 45.1
 visibility dense
 color 34,139,34
-type genePred
+type genePred nscanPep
 cdsDrawDefault genomic\ codons
 
 track blastzTightHg15
