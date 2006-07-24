@@ -2232,9 +2232,12 @@ TMPDIR=/scratch/tmp
     # for these.
     ldHgGene -bin -gtf -genePredExt canFam2 nscanGene canFam2.nscan.gtf.gz
     # add .a suffix to match transcript id
-    hgPepPred -suffix=.a canFam2 generic nscanPep canFam2.nscan.pep.fa.gz
+    WRONG, see below: hgPepPred -suffix=.a canFam2 generic nscanPep canFam2.nscan.pep.fa.gz
     rm *.tab
 
     # update trackDb; need a canFam2-specific page to describe informants
     dog/canFam2/nscanGene.html
     dog/canFam2/trackDb.ra
+
+    # 2006-07-24 markd: reloaded without -suffix
+    hgPepPred canFam2 generic nscanPep canFam2.nscan.pep.fa.gz

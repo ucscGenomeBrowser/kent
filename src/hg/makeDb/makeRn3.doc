@@ -5249,7 +5249,7 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
     # for these.
     ldHgGene -bin -gtf -genePredExt rn3 nscanGene rn3.nscan.gtf.gz
     # add .a suffix to match transcript id
-    hgPepPred -suffix=.a rn3 generic nscanPep rn3.nscan.pep.fa.gz
+    WRONG, see below: hgPepPred -suffix=.a rn3 generic nscanPep rn3.nscan.pep.fa.gz
     rm *.tab
 
     # update trackDb; need a rn3-specific page to describe informants
@@ -5260,6 +5260,9 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
     drop table twinscan;
     drop table twinscanPep;
 
+
+    # 2006-07-24 markd: reloaded without -suffix
+    hgPepPred rn3 generic nscanPep rn3.nscan.pep.fa.gz
 
 #####################################################################
 # SEGMENTAL DUPLICATIONS (DONE 6/30/06 angie)
