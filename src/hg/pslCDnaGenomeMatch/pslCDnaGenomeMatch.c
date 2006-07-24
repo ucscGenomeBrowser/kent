@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "memalloc.h"
 #include "psl.h"
-#include "snp.h"
 #include "hdb.h"
 #include "axt.h"
 #include "dnautil.h"
@@ -22,6 +21,7 @@
 #include "verbose.h"
 #include "twoBit.h"
 #include "bed.h"
+#include "snp126.h"
 //#include "chainToAxt.h"
 #include "pipeline.h"
 #define MINDIFF 3
@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.10 2006/04/02 01:14:06 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.11 2006/07/24 13:13:22 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -338,12 +338,12 @@ struct hash *readSnpToBinKeeper(char *sizeFileName, char *snpFileName)
 /* read a list of psls and return results in hash of binKeeper structure for fast query*/
 {
 struct binKeeper *bk; 
-struct snp *snp;
+struct snp126 *snp;
 struct lineFile *sf = lineFileOpen(sizeFileName, TRUE);
 struct lineFile *pf = lineFileOpen(snpFileName , TRUE);
 struct hash *hash = newHash(0);
 char *chromRow[2];
-char *row[SNP_NUM_COLS+1] ;
+char *row[SNP126_NUM_COLS+1] ;
 int wordCount = 0;
 
 while (lineFileRow(sf, chromRow))
@@ -362,8 +362,8 @@ while (lineFileRow(sf, chromRow))
     }
 while ((wordCount = lineFileChopNextTab(pf, row, ArraySize(row))))
     {
-    int offset = wordCount-SNP_NUM_COLS;
-    snp = snpLoad(row+offset);
+    int offset = wordCount-SNP126_NUM_COLS;
+    snp = snp126Load(row+offset);
     bk = hashMustFindVal(hash, snp->chrom);
     binKeeperAdd(bk, snp->chromStart, snp->chromEnd, snp);
     }
@@ -441,12 +441,12 @@ for (i = 0 ; i < mm->misMatchCount; i++)
     }
 }
 
-struct snp *getSnpList(char *chrom, int chromStart, int chromEnd, char genomeStrand)
+struct snp126 *getSnpList(char *chrom, int chromStart, int chromEnd, char genomeStrand)
 /* get list of snps from hash based on genome coordinates */
 {
 struct binKeeper *bk; 
 struct binElement *elist = NULL, *el = NULL;
-struct snp *snpList = NULL;
+struct snp126 *snpList = NULL;
 if (snpHash == NULL)
     return NULL;
 bk = hashFindVal(snpHash, chrom);
@@ -456,7 +456,7 @@ elist = binKeeperFindSorted(bk, chromStart, chromEnd ) ;
 for (el = elist; el != NULL ; el = el->next)
     {
     /* retrieve snp and complement to agree with strand of mrna  */
-    struct snp *snp = el->val;
+    struct snp126 *snp = el->val;
     char *snpDna = NULL;
     verbose(3, "%s %s:%d \n", snp->name, snp->chrom, snp->chromStart);
     snpDna = replaceChars(snp->observed, "/",".");
@@ -469,7 +469,7 @@ return snpList;
 
 struct misMatch *newMisMatch(char *name, int offset  , char genomeBase, char mrnaBase, 
         char *chrom, int chromStart, int mrnaLoc, char strand, int index , 
-        struct loci *lociList, struct snp *snpList)
+        struct loci *lociList, struct snp126 *snpList)
 /* add new mismatch to list, figure out which loci we are mapped to */
 {
 struct misMatch *misMatch = NULL;
@@ -488,7 +488,7 @@ if (index > 5000)
 misMatch->snpCount = 0;
 if (snpList != NULL)
     {
-    struct snp *snp = NULL;
+    struct snp126 *snp = NULL;
     AllocArray(misMatch->snpObs, slCount(snpList));
     AllocArray(misMatch->snps, slCount(snpList));
     for (snp = snpList ; snp != NULL ; snp = snp->next)
@@ -550,7 +550,7 @@ for (el = *pList; el != NULL; el = next)
 
 
 void newMisMatches(struct misMatch **misMatchList, char *name, int offset  , char genomeBase, char mrnaBase, 
-        char *chrom, int chromStart, int mrnaLoc, char strand, struct loci *lociList, struct snp *snpList)
+        char *chrom, int chromStart, int mrnaLoc, char strand, struct loci *lociList, struct snp126 *snpList)
 /* add new mismatch to list, figure out which loci we are mapped to */
 {
 struct loci *l = NULL;
@@ -812,6 +812,13 @@ if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
                 missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, 
                 gapCount[maxIndex], snpCount[maxIndex],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
+        fprintf(scoreFile, "##bestHit %s %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
+                gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
+                name,  psl->tName , psl->tStart, chromEnd, maxIndex, 
+                missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
+                missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, 
+                gapCount[maxIndex], snpCount[maxIndex],
+                seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
         if (psl->strand[0] == '+' && psl->strand[1] == '-')
             pslRc(psl);
         pslTabOut(psl, outFile);
@@ -922,7 +929,7 @@ if (genomeStrand == '-')
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
-    struct snp *snp = NULL, *snpList = NULL;
+    struct snp126 *snp = NULL, *snpList = NULL;
     if (hashFindVal(twoBitFile->hash, psl->qName) == NULL)
         {
         printf("skipping %s not found \n",psl->qName);
@@ -1153,7 +1160,7 @@ char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
-    struct snp *snp = NULL, *snpList = NULL;
+    struct snp126 *snp = NULL, *snpList = NULL;
     struct dnaSeq *qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+(psl->blockSizes[blockIx]));
     int i = 0;
