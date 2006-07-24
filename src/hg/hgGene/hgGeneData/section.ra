@@ -13,6 +13,11 @@ shortLabel Sequence
 longLabel Sequence
 priority 30
 
+name gad
+shortLabel GAD
+longLabel Genetic Association Studies of Complex Diseases and Disorders
+priority 35
+
 name microarray
 shortLabel Microarray
 longLabel Microarray Expression Data
