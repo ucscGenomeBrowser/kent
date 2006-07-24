@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.37 2006/07/07 16:53:36 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.38 2006/07/24 16:19:06 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -394,7 +394,8 @@ if (gg != NULL)
     int maxGapToFill = cgs->maxGapToFill;
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
-    gScale = height/(gMax-gMin+1);
+    gScale = height/(gMax-gMin);
+    uglyf("chromGraph %s, gMin %f, gMax %f, Height %d, gScale %f\n<BR>\n", chromGraph, gMin, gMax, height, gScale);
 
     /* Draw significance threshold as a light blue line */
     if (leftLabel)
