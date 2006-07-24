@@ -671,6 +671,22 @@ type bed 4 +
     type bed 4 .
     priority 5
 
+    track delMccarroll
+    subTrack cnp
+    shortLabel Deletions (McCarroll)
+    longLabel Deletions from Genotype Analysis (McCarroll)
+    noInherit on
+    type bed 4 .
+    priority 5
+
+    track delConrad
+    subTrack cnp
+    shortLabel Deletions (Conrad)
+    longLabel Deletions from Genotype Analysis (Conrad)
+    noInherit on
+    type bed 8 .
+    priority 6
+
 track varMultizHMRDEC
 shortLabel varMultiz6Way
 longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 

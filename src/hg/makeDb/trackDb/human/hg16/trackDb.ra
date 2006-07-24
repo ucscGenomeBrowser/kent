@@ -704,6 +704,22 @@ type bed 4 +
     type bed 4 .
     priority 5
 
+    track delConrad
+    subTrack cnp
+    shortLabel Deletions (Conrad)
+    longLabel Deletions from Genotype Analysis (Conrad)
+    noInherit on
+    type bed 8 .
+    priority 6
+
+    track delHinds
+    subTrack cnp
+    shortLabel Deletions (Hinds)
+    longLabel Deletions from Haploid Hybridization Analysis (Hinds)
+    noInherit on
+    type bed 4 .
+    priority 7
+
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
