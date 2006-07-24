@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslGlue.c,v 1.3 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslGlue.c,v 1.4 2006/07/24 17:40:50 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,8 +32,6 @@ struct psl *psl, *lastPsl;
 struct psl *list;
 int minDiff = 15;
 boolean isRelevant = FALSE;
-int threshold = 600;
-
 
 slReverse(pList);
 ++outCount;
@@ -103,7 +101,6 @@ void pslGlueRna(char *listFile, char *partDir, char *pslName, char *gluName)
 FILE *pslOut;
 FILE *gluOut;
 struct psl *pslList = NULL, *psl, *nextPsl;
-int i;
 struct psl *localList = NULL;
 int glueCount = 0;
 int pslCount = 0;
