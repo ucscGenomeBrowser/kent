@@ -521,7 +521,7 @@ identifier twinscanName dependency
 identifier nscanName dependency
 "Link together nscan predicted gene structure and peptide"
     $gbd.nscanGene.name
-    $gbd.nscanPep.name unique chopAfter=.
+    $gbd.nscanPep.name unique
 
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
