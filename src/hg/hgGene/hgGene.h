@@ -100,6 +100,10 @@ struct section *altSpliceSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create altSplice section. */
 
+struct section *gadSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create GAD section. */
+
 struct section *domainsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create domains section. */
