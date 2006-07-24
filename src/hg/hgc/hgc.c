@@ -196,7 +196,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1059 2006/07/22 03:20:45 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1060 2006/07/24 23:31:23 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6832,8 +6832,11 @@ if (url != NULL && url[0] != 0)
     row = sqlNextRow(sr);
     if (row != NULL)printf("%s", row[0]);
     sqlFreeResult(&sr);
-    
-    sprintf(query, "select distinct broadPhen from gadAll where geneSymbol='%s';", itemName);
+
+    /* First list diseases associated with the gene */
+    sprintf(query, 
+    "select distinct broadPhen from gadAll where geneSymbol='%s' and association != 'N' order by broadPhen;", 
+    itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     
@@ -6842,6 +6845,37 @@ if (url != NULL && url[0] != 0)
 	upperDisease = strdup(row[0]);
 	touppers(upperDisease);
 	printf("<BR><B>Associated Diseases and Disorders:  </B>");
+	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	printf("%s</B></A>\n", row[0]);
+        row = sqlNextRow(sr);
+    	}
+	
+    while (row != NULL)
+        {
+	upperDisease = strdup(row[0]);
+	touppers(upperDisease);
+	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	printf("%s</B></A>\n", row[0]);
+        row = sqlNextRow(sr);
+	}
+    sqlFreeResult(&sr);
+
+    /* then list diseases NOT associated with the gene */
+    sprintf(query, 
+    	    "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'N' order by broadPhen", 
+	    itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    
+    if (row != NULL) 
+    	{
+	upperDisease = strdup(row[0]);
+	touppers(upperDisease);
+	printf("<BR><B>Diseases and Disorders Found Possibly Not Associated with the Gene:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
 	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
