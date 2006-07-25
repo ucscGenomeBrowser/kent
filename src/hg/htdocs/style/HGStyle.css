@@ -5,7 +5,7 @@
 .normalText {background-color: white}
 
 /* CLASS DECLARATIONS FOR THE REST OF THE BROWSERS */
-A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0); font-size: 15px; }
+A:link.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }
 A:visited.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }                         
 A:active.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #E0F0F0; font-size: 15px; }                         
 A:hover.topbar { text-decoration: none; font-family: arial, Geneva, Helvetica, san-serif; color: #EAE360; font-size: 15px; }
