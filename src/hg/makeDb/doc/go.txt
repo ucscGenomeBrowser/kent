@@ -1,0 +1,36 @@
+### UPDATE GO DATABASE (DONE 04-11-24)
+# Adopted from an earlier process Gill did for his private go database
+# Update GO database (2005-07-26, hartera)
+# Download the terms and make the database.
+    ssh hgwdev
+        
+    mkdir /cluster/store1/geneOntology/20041124
+    cd /cluster/store1/geneOntology/20041124
+
+    wget --timestamping http://www.godatabase.org/dev/database/archive/latest/go_200411-assocdb-data.gz
+
+    hgsql mysql <<end
+    create database go041124;
+    end
+    zcat go_*data.gz | hgsql go041124
+
+# Download the associations
+    wget --timestamping ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_uniprot.gz
+
+# Note no specific taxon specified, this will import everything
+    zcat gene_association.goa_uniprot.gz | hgGoAssociation go041124 goaPart stdin 
+# Passed 4502016 of 5291097 of 5291097, 85.09%
+
+# Ask sys-admin to point go to go041124
+
+# Asked sys-admin to rename database to go041115 and point go to the new name -- kuhn 12-06-04
+
+# REBUILD GO WITH LATEST VERSION (DONE, 2005-07-26, hartera)
+# Re-made GO database as above, only the dates in names have changed
+# so downloads are in /cluster/store1/geneOntology/20050726 and the database
+# is called go050726. 
+# Download file of terms is go_200507-assocdb-data.gz (July 18, 2005)
+# Download file of associations is gene_association.goa_uniprot.gz 
+# (June 16, 2005)
+# hgGoAssociation:
+# Passed 5515470 of 6413534 of 6413534, 86.00% 
