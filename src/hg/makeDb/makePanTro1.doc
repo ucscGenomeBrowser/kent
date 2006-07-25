@@ -1035,7 +1035,7 @@ type wig 0 100
     ls ?{,?}/*.fa > jkStuff/chrom.lst
     blat jkStuff/chrom.lst jkStuff/ooc.txt jkStuff/ooc.psl \
         -tileSize=11 -makeOoc=11.ooc -repMatch=1024
-    cp 11.ooc /cluster/bluearc/hg/h/chimp11.ooc
+    cp 11.ooc /cluster/bluearc/hg/h/chimp11.ooc /cluster/bluearc/panTro1/11.ooc
 
     # redo chimp mrna's
     ssh eieio
@@ -2018,4 +2018,27 @@ cat > makeAxt.csh << 'EOF'
 
     # test by converting a region using the "convert" link on
     # the browser, and comparing to blat of the same region
+
+
+#######################################################################
+#       2bit file to filesystems for kluster runs (2006-07-11 kate)
+    ssh kkr1u00
+    mkdir /iscratch/i/panTro1
+    cd /iscratch/i/panTro1
+    cp -p /cluster/data/panTro1/panTro1.2bit .
+    cp -p /cluster/data/panTro1/chrom.sizes .
+    foreach R (2 3 4 5 6 7 8)
+        rsync -a --progress /iscratch/i/panTro1/ kkr${R}u00:/iscratch/i/panTro1/
+    end
+
+    # request push to /scratch/hg from cluster admins ?
+
+# GOT HERE -- need pk and SAN to be up to complete
+    ssh pk
+    mkdir /san/sanvol1/scratch/panTro1
+    cd /san/sanvol1/scratch/panTro1
+    cp -p /cluster/data/panTro1/panTro1.2bit .
+    cp -p /cluster/data/panTro1/chrom.sizes .
+
+#######################################################################
 
