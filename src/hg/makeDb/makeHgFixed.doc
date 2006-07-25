@@ -479,7 +479,6 @@ hgsql hgFixed -e "load data local infile 'taxonGencode.txt' into table taxonGene
 echo "select o.name, n.taxon as ncbi_taxon, n.name , toGenus from sp060115.taxon t, hgFixed.taxonName n, organism o where o.name = n.name and n.taxon = t.id order by toGenus;" | hgsql hg17 -N -B > taxonXref.txt
 hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 
-
 #--**************************************************************************
 #--  This is the NCBI genetic code table
 #--  Initial base data set from Andrzej Elzanowski while at PIR International
@@ -712,3 +711,109 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 #  -- Base3  TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 # }
 #}
+
+##########################################################################
+# Added Zebrafish microarray data (DONE, 2006-06-10, hartera)
+# From Leonard Zon's group at the Children's Hospital, Boston
+# Contact: Tony DiBiase, adibiase@enders.tch.harvard.edu
+# Data is normalized and log2 transformed, centered on mean of 0. 
+   ssh hgwdev
+   mkdir /projects/compbio/data/microarray/zebrafishWT
+   cd /projects/compbio/data/microarray/zebrafishWT
+   # copy the data here received by e-mail and unzip
+   unzip zmwt2.zip 
+   mv zmwt2.txt wildTypeAffy.txt
+   # remove the quotes and the experiment names
+   perl -pi.bak -e 's/"//g' wildTypeAffy.txt
+cat << 'EOF' > format.pl
+#!/usr/bin/perl -w
+use strict;
+
+while (<STDIN>)
+{
+# reformat file. change Tu to TU and remove experiment name from the
+# column headings and translate the name to something human readable.
+my ($f, @a, $n, $strain, $somites, $hpf, $fullName);
+$f = $_;
+if ($f !~ /at/)
+   {
+   @a = split(/\t/, $f);
+   foreach $n (@a)
+      {
+      $fullName = "";
+      $somites = 0;
+      $hpf = 0;
+      if ($n =~ /^([A-Za-z]+)\.([0-9]+)\.([0-9]+)\.[0-9]+\.[0-9]+/)
+         {
+         $strain = $1;
+         $somites = $2;
+         $hpf = $3;
+         $strain =~ s/Tu/TU/;
+         if ($somites > 0)
+            {
+            $fullName = $strain . "-" . $somites . "-somites";
+            }
+         elsif ($hpf > 0) 
+            {
+            $fullName = $strain . "-" . $hpf . "-hpf";
+            }       
+         print "\t$fullName";
+         }
+       }
+     print "\n";
+    }
+else
+   {
+   print $f;
+   }
+}
+'EOF'
+   # << emacs
+chmod +x format.pl
+perl format.pl < wildTypeAffy.txt > zebrafishWildType.txt
+# Then load the data into hgFixed using hgGnfMicroarrray and use options
+# to set the url, ref, and credit to "n/a" and chip to Zebrafish.
+# Need to use this program to get 3 extras needed for hgMedianMicroarray
+hgGnfMicroarray zebrafishZonWTAllExps zebrafishZonWTAll \
+     zebrafishWildType.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a
+   # this makes two tables: zebrafishZonWildType and zebrafishZonWildTypeExps
+   # then create a table of medians for this data. make a .ra file of medians
+hgsql -N -e 'select extras, id from zebrafishZonWTAllExps;' hgFixed \
+      > zfishWTExps
+# remove extra information and leave experiment name
+perl -pi.bak -e 's/Zebrafish,n\/a,//' zfishWTExps
+perl -pi.bak -e 's/,//' zfishWTExps
+
+cat << 'EOF' > cnvToMedian
+#!/usr/bin/awk -f
+
+BEGIN {
+    FS = "\t";
+    OFS = "\t";
+}
+
+{
+    data[$1] = data[$1] " " $2;
+}
+
+END {
+    for (id in data) {
+        split(id, a, "\\-");
+        print id, a[1], substr(data[id], 2);
+    }
+}
+'EOF'
+   # << emacs
+chmod +x cnvToMedian
+cnvToMedian zfishWTExps > zfishZonWTMedian.ra
+# re-order the *.ra file as this determines the order of display
+sort zfishZonWTMedian.ra | grep "somites" > tmp.ra
+sort zfishZonWTMedian.ra | grep "hpf" >> tmp.ra
+mv tmp.ra zfishZonWTMedian.ra
+cp zfishZonWTMedian.ra ~/kent/src/hg/makeDb/hgMedianMicroarray
+cd ~/kent/src/hg/makeDb/hgMedianMicroarray
+# Take the median value over multiple replicants and put in this table:
+hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
+  zfishZonWTMedian.ra zebrafishZonWTMedian \
+  zebrafishZonWTMedianExps -minExps=1
+
