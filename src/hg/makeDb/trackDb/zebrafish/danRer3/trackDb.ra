@@ -64,7 +64,6 @@ shortLabel Ensembl Genes
 longLabel Ensembl v32 Gene Predictions (Protein Coding Genes)
 group genes
 priority 32.8
-hgGene on
 visibility pack
 color 150,0,0
 type genePred ensPep
@@ -79,7 +78,6 @@ shortLabel Ensembl Genes
 longLabel Ensembl v32 Gene Predictions (Protein Coding Genes)
 group genes
 priority 32.8
-hgGene on
 visibility pack
 color 150,0,0
 type genePred ensPep
