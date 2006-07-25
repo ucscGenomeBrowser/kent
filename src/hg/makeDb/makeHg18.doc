@@ -3538,6 +3538,13 @@ TMPDIR=/scratch/tmp
 
     #	for the swap, see makeMonDom4.doc 2006-04-28
 
+    #	Creating download directory (DONE - 2006-07-18 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+        -continue=download -stop=download `pwd`/DEF > download.out 2>&1
+
 ##########################################################################
 # BLASTZ OPOSSUM monDom2 first time (EXPERIMENT - 2006-01-23 - Hiram)
 
