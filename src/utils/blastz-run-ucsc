@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.17 2006/02/13 20:14:49 angie Exp $
+# $Id: blastz-run-ucsc,v 1.18 2006/07/25 17:39:18 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -162,7 +162,7 @@ sub parseFileSpec {
   if ($info =~ /^(\S+):(\S+):(\d+)-(\d+)$/) {
     ($fName, $seq, $start, $end) = ($1, $2, $3, $4);
   } elsif ($info =~ /^(\S+):(\d+)-(\d+)$/) {
-    ($fName, $seq, $start, $end) = ($1, &fileBase($info), $2, $4);
+    ($fName, $seq, $start, $end) = ($1, &fileBase($info), $2, $3);
   } else {
     ($fName, $seq, $start, $end) = ($info, &fileBase($info), 0, 0);
   }
