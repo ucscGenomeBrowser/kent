@@ -19,9 +19,10 @@
 #include "dystring.h"
 #include "pseudoGeneLink.h"
 #include "verbose.h"
-#include "twoBit.h"
+//#include "twoBit.h"
+#include "nibTwo.h"
 #include "bed.h"
-#include "snp126.h"
+#include "snp125.h"
 //#include "chainToAxt.h"
 #include "pipeline.h"
 #define MINDIFF 3
@@ -29,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.12 2006/07/24 13:17:15 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.13 2006/07/25 20:13:36 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -163,7 +164,7 @@ errAbort(
     "    -bedOut=bed output file of mismatches.\n"
     "    -species1=psl file with alignment of mrna/EST to other species.\n"
     "    -species2=psl file with alignment of mrna/EST to other species.\n"
-    "    -snp=snp.tab.gz contains snps with or without bin field in snp126 format\n"
+    "    -snp=snp.tab.gz contains snps with or without bin field in snp125 format\n"
     "    -nibdir1=sequence of species 1 \n"
     "    -nibdir2=sequence of species 2 \n"
     "    -mrna1=fasta file with sequence of mrna/EST used in alignment 1\n"
@@ -235,7 +236,7 @@ else
     return FALSE;
 }
 
-struct dnaSeq *nibInfoLoadStrand(struct nibInfo *nib, int start, int end,
+struct dnaSeq *nibInfoLoadStrand(struct nibInfo *nib, char *seqName, int start, int end,
 	char strand)
 /* Load in a mixed case sequence from nib file, from reverse strand if
  * strand is '-'. */
@@ -247,11 +248,15 @@ if (strand == '-')
     {
     reverseIntRange(&start, &end, nib->size);
     seq = nibInfoLoadSeq(nib, start, size);
+//    seq = nibTwoCacheSeqPart(ntc, seqName, 
+//	start, size, &retFullSeqSize);
     reverseComplement(seq->dna, seq->size);
     }
 else
     {
     seq = nibInfoLoadSeq(nib, start, size);
+//    seq = nibTwoCacheSeqPart(ntc, seqName, 
+//	start, size, &retFullSeqSize);
     }
 return seq;
 }
@@ -338,12 +343,12 @@ struct hash *readSnpToBinKeeper(char *sizeFileName, char *snpFileName)
 /* read a list of psls and return results in hash of binKeeper structure for fast query*/
 {
 struct binKeeper *bk; 
-struct snp126 *snp;
+struct snp125 *snp;
 struct lineFile *sf = lineFileOpen(sizeFileName, TRUE);
 struct lineFile *pf = lineFileOpen(snpFileName , TRUE);
 struct hash *hash = newHash(0);
 char *chromRow[2];
-char *row[SNP126_NUM_COLS+1] ;
+char *row[SNP125_NUM_COLS+1] ;
 int wordCount = 0;
 
 while (lineFileRow(sf, chromRow))
@@ -362,8 +367,8 @@ while (lineFileRow(sf, chromRow))
     }
 while ((wordCount = lineFileChopNextTab(pf, row, ArraySize(row))))
     {
-    int offset = wordCount-SNP126_NUM_COLS;
-    snp = snp126Load(row+offset);
+    int offset = wordCount-SNP125_NUM_COLS;
+    snp = snp125Load(row+offset);
     bk = hashMustFindVal(hash, snp->chrom);
     binKeeperAdd(bk, snp->chromStart, snp->chromEnd, snp);
     }
@@ -441,12 +446,12 @@ for (i = 0 ; i < mm->misMatchCount; i++)
     }
 }
 
-struct snp126 *getSnpList(char *chrom, int chromStart, int chromEnd, char genomeStrand)
+struct snp125 *getSnpList(char *chrom, int chromStart, int chromEnd, char genomeStrand)
 /* get list of snps from hash based on genome coordinates */
 {
 struct binKeeper *bk; 
 struct binElement *elist = NULL, *el = NULL;
-struct snp126 *snpList = NULL;
+struct snp125 *snpList = NULL;
 if (snpHash == NULL)
     return NULL;
 bk = hashFindVal(snpHash, chrom);
@@ -456,7 +461,7 @@ elist = binKeeperFindSorted(bk, chromStart, chromEnd ) ;
 for (el = elist; el != NULL ; el = el->next)
     {
     /* retrieve snp and complement to agree with strand of mrna  */
-    struct snp126 *snp = el->val;
+    struct snp125 *snp = el->val;
     char *snpDna = NULL;
     verbose(3, "%s %s:%d \n", snp->name, snp->chrom, snp->chromStart);
     snpDna = replaceChars(snp->observed, "/",".");
@@ -469,7 +474,7 @@ return snpList;
 
 struct misMatch *newMisMatch(char *name, int offset  , char genomeBase, char mrnaBase, 
         char *chrom, int chromStart, int mrnaLoc, char strand, int index , 
-        struct loci *lociList, struct snp126 *snpList)
+        struct loci *lociList, struct snp125 *snpList)
 /* add new mismatch to list, figure out which loci we are mapped to */
 {
 struct misMatch *misMatch = NULL;
@@ -488,7 +493,7 @@ if (index > 5000)
 misMatch->snpCount = 0;
 if (snpList != NULL)
     {
-    struct snp126 *snp = NULL;
+    struct snp125 *snp = NULL;
     AllocArray(misMatch->snpObs, slCount(snpList));
     AllocArray(misMatch->snps, slCount(snpList));
     for (snp = snpList ; snp != NULL ; snp = snp->next)
@@ -550,7 +555,7 @@ for (el = *pList; el != NULL; el = next)
 
 
 void newMisMatches(struct misMatch **misMatchList, char *name, int offset  , char genomeBase, char mrnaBase, 
-        char *chrom, int chromStart, int mrnaLoc, char strand, struct loci *lociList, struct snp126 *snpList)
+        char *chrom, int chromStart, int mrnaLoc, char strand, struct loci *lociList, struct snp125 *snpList)
 /* add new mismatch to list, figure out which loci we are mapped to */
 {
 struct loci *l = NULL;
@@ -919,6 +924,7 @@ int blockIx = 0;
 //int i, j,    sum = 0;
 struct psl *psl = align->psl;
 struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
+//nibTwoCache
 static struct dnaSeq *tSeq = NULL;
 int tStart = psl->tStart;
 int tEnd   = psl->tEnd;
@@ -929,7 +935,7 @@ if (genomeStrand == '-')
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
-    struct snp126 *snp = NULL, *snpList = NULL;
+    struct snp125 *snp = NULL, *snpList = NULL;
     if (hashFindVal(twoBitFile->hash, psl->qName) == NULL)
         {
         printf("skipping %s not found \n",psl->qName);
@@ -952,7 +958,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     if (genomeStrand == '-')
         reverseIntRange(&ts, &te, psl->tSize);
 
-    tSeq = nibInfoLoadStrand(tNib, psl->tStarts[blockIx], 
+    tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
     verbose(4,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
@@ -1077,7 +1083,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     if (genomeStrand == '-')
         reverseIntRange(&ts, &te, psl->tSize);
 
-    tSeq = nibInfoLoadStrand(tNib, psl->tStarts[blockIx], 
+    tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
     for (mm = *misMatchList ; mm != NULL ; mm = mm->next)
@@ -1160,7 +1166,7 @@ char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
-    struct snp126 *snp = NULL, *snpList = NULL;
+    struct snp125 *snp = NULL, *snpList = NULL;
     struct dnaSeq *qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+(psl->blockSizes[blockIx]));
     int i = 0;
@@ -1170,7 +1176,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     if (genomeStrand == '-')
         reverseIntRange(&ts, &te, psl->tSize);
 
-    tSeq = nibInfoLoadStrand(tNib, psl->tStarts[blockIx], 
+    tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
     verbose(4,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
@@ -1366,7 +1372,7 @@ while (psl != NULL )
     newPsl = psl;
     psl = psl->next;
     align->psl = newPsl; 
-    align->db = "hg17";
+    align->db = "db";
     align->nibDir = tNibDir;
     align->mrnaPath = NULL;
     rm = slRemoveEl(&pslList, newPsl);
