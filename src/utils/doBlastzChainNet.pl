@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.46 2006/07/14 20:49:31 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.47 2006/07/25 01:13:29 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -29,8 +29,8 @@ use HgStepManager;
 
 # Hardcoded paths/command sequences:
 my $getFileServer = '/cluster/bin/scripts/fileServer';
-my $blastzRunUcsc = '$Bin/blastz-run-ucsc';
-my $partition = '$Bin/partitionSequence.pl';
+my $blastzRunUcsc = "$Bin/blastz-run-ucsc";
+my $partition = "$Bin/partitionSequence.pl";
 my $clusterLocal = '/scratch/hg';
 my $clusterSortaLocal = '/iscratch/i';
 my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/san/sanvol1');
