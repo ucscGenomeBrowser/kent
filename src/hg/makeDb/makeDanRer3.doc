@@ -3071,12 +3071,6 @@ if ($found eq "TRUE")
      # 163174 bacEndPairs.lfs
      # 212775 bacEndSingles.lfs
  
-    #  hgsql -N -e "select * from bacEndPairs order by name, chromStart;" \
-      #    bacsDr3_rah > bacEndPairs.lfs
-    # hgsql -N -e "select * from bacEndPairsBad order by name, chromStart;" \
-     #     bacsDr3_rah > bacEndPairsBad.lfs
-    # hgsql -N -e "select * from bacEndSingles order by name, chromStart;" \
-     #     bacsDr3_rah > bacEndSingles.lfs
      # remove replicate rows where names match and the overlapping region
      # (chromEnd - chromStart) is greater than or equal to 0.999.
      ssh kolossus
@@ -7298,6 +7292,18 @@ _EOF_
     # that they work correctly (bacPairsIntName, bacSinglesIntName, 
     # bacPairsSangerSts and bacSinglesSangerSts). (2006-04-19, hartera)
 
+    # Remake the all_bacends table. extractPslLoad extracts psl alignments
+    # by name so even those that are filtered out end up in the all_bacends
+    # table. Wrote a program that matches BAC end psl alignments from the
+    # bacEnd{Pairs, PairsBad, Singles} tables by name, chrom, chromStart and
+    # chromEnd.
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/bacends
+    mkdir extractPsl
+    cd extractPsl
+    nohup nice /cluster/home/hartera/bin/x86_64/extractPslForLfs \
+      -verbose=1 ../bacEnds.psl bacEndPairsGoodScores.bed bacPairs.psl &  
+    # PID: 5452  Start: Jul 18 16:25
     # RE-DO RH MAP:
     # isPcr of sequences. 
     # 1) Make a list from FASTA file of sequences.
