@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.25 2006/07/24 21:44:51 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.26 2006/07/25 18:35:06 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -2718,7 +2718,7 @@ rm -fr $tmp
     # start with parameters from previous human 8way
     cat > template << 'EOF'
 #LOOP
-doPhast.csh $(root1) $(file1) 13 .007 .27
+doPhast.csh $(root1) $(file1) 13 .01 .23
 #ENDLOOP
 'EOF'
     #	happy emacs
@@ -2730,7 +2730,8 @@ doPhast.csh $(root1) $(file1) 13 .007 .27
     popd
 
     gensub2 in.list single template jobList
-    para make jobList
+    grep chr7 jobList > jobList.chr7
+    para make jobList.chr7
         # 346 jobs
     # using para make because jobs are so small they crash 
 
@@ -2771,29 +2772,95 @@ doPhast.csh $(root1) $(file1) 13 .007 .27
     hgLoadBed -strict panTro2 phastConsElements8way mostConserved.bed
     # compare with previous tracks
     hgsql panTro2 -e "select count(*) from phastConsElements8way"
-        # 2011952
+        # 1596760 elements 
     hgsql hg18 -e "select count(*) from phastConsElements17way"
         # 1601903
-    hgsql panTro2 -e "select count(*) from phastConsElements8way where chrom='chr7'"
-    hgsql hg18 -e "select count(*) from phastConsElements17way where chrom='chr7'"
     # Try for 5% overall cov, and 70% CDS cov 
+    featureBits panTro2 -enrichment refGene:cds phastConsElements8way
+        # refGene:cds 1.020%, phastConsElements8way 4.999%, both 0.731%, cover 71.68%, enrich 14.34x
+    # experiments
     featureBits hg18 -chrom=chr7 -enrichment refGene:cds phastConsElements17way
-        # refGene:cds 0.883%, phastConsElements17way 4.838%, both 0.621%, cover 70.31%, enrich 14.53x
+# refGene:cds 0.883%, phastConsElements17way 4.838%, both 0.621%, cover 70.31%, enrich 14.53x
     featureBits panTro2 -chrom=chr7 -enrichment refGene:cds phastConsElements8way
+    # 13 .01 .23
+# refGene:cds 0.861%, phastConsElements8way 4.914%, both 0.626%, cover 72.71%, enrich 14.80x
+    # 13 .007 .23
+# refGene:cds 0.861%, phastConsElements8way 4.780%, both 0.626%, cover 72.69%, enrich 15.21x
+    # 12 .007 .23
+# refGene:cds 0.861%, phastConsElements8way 4.599%, both 0.623%, cover 72.34%, enrich 15.73x
+    # 12 .006 .23
+# refGene:cds 0.861%, phastConsElements8way 4.553%, both 0.623%, cover 72.35%, enrich 15.89x
+    # 12 .006 .24
+# refGene:cds 0.861%, phastConsElements8way 4.657%, both 0.630%, cover 73.11%, enrich 15.70x
+    # 12 .006 .25
+# refGene:cds 0.861%, phastConsElements8way 4.765%, both 0.636%, cover 73.90%, enrich 15.51x
+    # 12 .004 .27
+# refGene:cds 0.861%, phastConsElements8way 4.845%, both 0.647%, cover 75.14%, enrich 15.51x
+    # 12 .006 .27
+# refGene:cds 0.861%, phastConsElements8way 4.962%, both 0.647%, cover 75.17%, enrich 15.15x
+    # 13 .007 .27
+# refGene:cds 0.861%, phastConsElements8way 5.241%, both 0.651%, cover 75.57%, enrich 14.42x
+    # 12 .008 .28
+# refGene:cds 0.861%, phastConsElements8way 5.152%, both 0.653%, cover 75.82%, enrich 14.72x
     # 12 .007 .27
-        # phastConsElements8way 5.011%, both 0.648%, cover 75.19%, enrich 15.01x
-    #11 .005 .27
-        #refGene:cds 0.861%, phastConsElements8way 4.673%, both 0.644%, cover 74.78%, enrich 16.00x
-    #14 .008 .28
-        # refGene:cds 0.861%, phastConsElements8way 5.629%, both 0.659%, cover 76.57%, enrich 13.60x
-    #10,  .11
-        # refGene:cds 0.861%, phastConsElements8way 7.936%, both 0.671%, cover 77.92%, enrich 9.82x
-    #12 .008 .28
-        # refGene:cds 0.861%, phastConsElements8way 5.152%, both 0.653%, cover 75.82%, enrich 14.72x
-    #12, .20
-        #refGene:cds 0.861%, phastConsElements8way 8.316%, both 0.668%, cover 77.56%, enrich 9.33x
-    #12, .11
-        # refGene:cds 0.861%, phastConsElements8way 7.304%, both 0.666%, cover 77.34%, enrich 10.59x
-    #14, .11
-        #refGene:cds 0.861%, phastConsElements8way 7.936%, both 0.671%, cover 77.92%, enrich 9.82x
+#                     phastConsElements8way 5.011%, both 0.648%, cover 75.19%, enrich 15.01x
+    # 11 .005 .27
+# refGene:cds 0.861%, phastConsElements8way 4.673%, both 0.644%, cover 74.78%, enrich 16.00x
+    # 14 .008 .28
+# refGene:cds 0.861%, phastConsElements8way 5.629%, both 0.659%, cover 76.57%, enrich 13.60x
+    # 10,  .11
+# refGene:cds 0.861%, phastConsElements8way 7.936%, both 0.671%, cover 77.92%, enrich 9.82x
+    # 12, .20
+# refGene:cds 0.861%, phastConsElements8way 8.316%, both 0.668%, cover 77.56%, enrich 9.33x
+    # 12, .11
+# refGene:cds 0.861%, phastConsElements8way 7.304%, both 0.666%, cover 77.34%, enrich 10.59x
+    # 14, .11
+# refGene:cds 0.861%, phastConsElements8way 7.936%, both 0.671%, cover 77.92%, enrich 9.82x
 
+    # create wiggle files
+    ssh pk
+    cd /san/sanvol1/scratch/panTro2/multiz8way/cons/
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    find ./pp -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+        nice wigEncode stdin phastCons8way.wig phastCons8way.wib
+    # half an hour or so
+    mv phastCons8way.* /cluster/data/panTro2/bed/multiz8way/cons
+
+    # GOT HERE
+    
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/multiz8way/cons
+    ln -s /cluster/data/panTro2/bed/multiz8way/cons/phastCons8way.wib \
+        /gbdb/panTro2/multiz8way/phastCons8way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/panTro2/multiz8way panTro2 \
+        phastCons8way phastCons8way.wig
+
+    # add Mark D's codon framing
+    ssh kkstore04
+    cd /cluster/data/panTro2/bed/multiz8way
+    mkdir frames
+    cd frames
+    cp /cluster/data/hg17/bed/multiz17way/frames/mkMafFrames .
+    cp /cluster/data/hg17/bed/multiz17way/frames/Makefile.genes .
+    #edit Makefile to correct species names and set and sanDir, prune out all
+    # but getGenes target, as the remainder is below.
+
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/multiz8way/frames
+    make getGenes >&! getGenes.log &
+        
+    ssh kkstore04
+    cd /cluster/data/panTro2/bed/multiz8way/frames
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | genePredToMafFrames panTro2 stdin stdout panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz canFam2 genes/canFam2.gp.gz danRer4 genes/danRer4.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz | gzip > multiz8way.mafFrames.gz)>&log&
+ 
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/multiz8way/frames
+    hgLoadMafFrames panTro2 multiz8wayFrames multiz8way.mafFrames.gz >&log&
+
+    # RUNNING
