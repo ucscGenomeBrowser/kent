@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslHitPercent.c,v 1.2 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslHitPercent.c,v 1.3 2006/07/25 16:44:48 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +34,7 @@ int count = 0;
 int i;
 
 for (i=0; i<size; ++i)
-    if (ntVal[dna[i]] < 0)
+    if (ntVal[(int)dna[i]] < 0)
         ++count;
 return count;
 }
@@ -47,7 +47,7 @@ int i;
 
 for (i=0; i<size; ++i)
     {
-    if (ntVal[dna[i]] >= 0)
+    if (ntVal[(int)dna[i]] >= 0)
 	{
         if (++count >= 100)
 	    {
@@ -110,7 +110,6 @@ lineFileClose(&lf);
 void pslHitPercent(char *pslFile, char *faFile)
 /* pslHitPercent - Figure out percentage of reads in FA file that hit.. */
 {
-char *words[32];
 struct hash *readHash = newHash(20);
 struct readInfo *riList = NULL, *ri;
 int allCount = 0, goodCount = 0, allAliCount = 0, goodAliCount = 0;
