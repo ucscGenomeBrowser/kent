@@ -1631,6 +1631,36 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > blastz.out 2>&1 &
     # XXXX	running 2006-03-29
 
+    # 2 chroms crashed out-of-mem, so run manually on kolossus
+    ssh kolossus
+    cd /cluster/data/monDom4/bed/blastz.panTro2/axtChain/run
+    (chain.csh monDom4.2bit:chr4: chain/monDom4.2bit:chr4:.chain; \
+    chain.csh monDom4.2bit:chr3: chain/monDom4.2bit:chr3:.chain) > chain.log &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -continue=chainMerge \
+	`pwd`/DEF > blastz.chainMerge.out 2>&1 &
+
+    # failed during load due to mysql restart
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -continue=load \
+	`pwd`/DEF > blastz.load.out 2>&1 &
+
+    # SWAP ALIGNMENTS
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -swap \
+        -workhorse=kolossus \
+        `pwd`/DEF > swap.log 2>&1 &
+
+    # failed on file perm change on liftOver file owned by Hiram
+    rm /cluster/data/monDom4/bed/liftOver/monDom4ToPanTro2.over.chain.gz
+    rm /cluster/data/panTro2/bed/blastz.monDom4.swap/axtChain/noClass.net
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -swap \
+        -workhorse=kolossus \
+        -continue=net \
+        `pwd`/DEF > swap.net.log 2>&1 &
+
+
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
