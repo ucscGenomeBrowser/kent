@@ -4558,6 +4558,7 @@ end
    cp query_tracedb getZfishSeqs.csh ./downloads
    cd downloads
    nohup nice getZfishSeqs.csh >& zfishSeqs.log &
+   # Took 5 hours 14 minutes.
    # Start: Wed May 10 09:57 Finished: 14:51
    # Start: May  2 21:43 Finish: May 3 03:08
    ssh kkstore04
@@ -4601,24 +4602,120 @@ end
    # from the list, can find out which files are needed to get the CLONEENDS
    # and the library names: need CHORI-211, DKEY, DKEYP, CHORI-73,  RPCI-71
    # and BUSM1 PAC. 
- ssh kkstore04
-   cd /cluster/data/danRer4/bed/bacEnds/sequences/downloads
+   # get BAC end sequences from NBCI Trace archive ftp site:
+   ssh kkstore04
+   mkdir /cluster/data/danRer4/bed/bacEnds/sequences2
+   mkdir /cluster/bluearc/danRer4/bacEndsDownloads
+   cd /cluster/data/danRer4/bed/bacEnds/sequences2
+   ln -s /cluster/bluearc/danRer4/bacEndsDownloads
+   cd /cluster/data/danRer4/bed/bacEnds/sequences2/bacEndsDownloads
+   # get index page and ftp for the trace server
+   wget --timestamping \
+        ftp://ftp.ncbi.nih.gov/pub/TraceDB/danio_rerio/
+   # grab just the ftp link for each file.
+   grep "anc" index.html > ancillary.lst
+   perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' ancillary.lst
+   rm *.bak
+   # this contains just the ftp link for each file to get the ancillary
+   # information files.
+cat << '_EOF_' > getFtpFiles.csh
+#!/bin/csh -fe
+set s=$1
+foreach f (`cat "${s}"`)
+   echo $f
+   nice wget --timestamping $f 
+end
+'_EOF_'
+   chmod +x getFtpFiles.csh 
+   nohup nice getFtpFiles.csh ancillary.lst >& ancillary.log &
+   # Took about 25 minutes.
+   grep "fasta" index.html > otherFiles.lst
+   grep "mate_pairs" index.html >> otherFiles.lst
+   grep "xml" index.html >> otherFiles.lst
+   perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' otherFiles.lst
+   rm *.bak
+   mkdir otherFiles
+   cd otherFiles
+   cp ../otherFiles.lst .
+   # then get these files by ftp
+   nice ../getFtpFiles.csh otherFiles.lst >& otherFiles.log &
+   # Took about 6 hours and 50 minutes.
+   # There are 181 files as expected.
+   foreach f (*.gz)
+     nice gunzip $f
+   end
+   cd ..
+   cat ./otherFiles/fasta* > danRerBacEnds.fa
+   # Took about 20 minutes
+   grep '>' danRerBacEnds.fa | wc -l
+   # 14566448
+   cat ./otherFiles/xml* > danRer.xml
+   # Took 4 hours and 40 minutes.
+   # find out which have CLONEEND information in them
+cat << '_EOF_' > findCloneEnds.csh
+#!/bin/csh -fe
+foreach f (otherFiles/xml.*)
+   echo $f >> cloneEndsXml.txt
+   grep CLONEEND $f >> cloneEndsXml.txt
+end
+'_EOF_'
+   chmod +x findCloneEnds.csh
+   nice findCloneEnds.csh & 
+   # Took 1.5 hours
+   # CLONEEND is only in xml.danio_rerio.024 and xml.danio_rerio.033
+   cd /cluster/data/danRer4/bed/bacEnds/sequences2/bacEndsDownloads
+   cat otherFiles/xml.danio_rerio.024 otherFiles/xml.danio_rerio.033 \
+       > cloneEnds.xml
+   # cleanup xml files
+   rm otherFiles/xml.*
+   # get list of libraries:
+   grep "LIBRARY_ID" cloneEnds.xml | sort | uniq > libraries.xml.txt
+
+   # TRACE_TYPE_CODE = CLONEEND AND LIBRARY_ID = 
+#####
+   ssh kkstore04
+   cd /cluster/data/danRer4/bed/bacEnds
+   mkdir -p /san/sanvol1/danRer4/bacEnds/ensemblSeqs
+   ln -s /san/sanvol1/danRer4/bacEnds/ensemblSeqs
+   cd ensemblSeqs
    wget --timestamping  \
         ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/
    # gets index.html page
-   # get list of cloneEnd files
+   # get list of cloneEnd FASTA files
    grep cloneEnd index.html > cloneEndsFile
    perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' cloneEndsFile
    rm *.bak
-   # this contains just the ftp link for each file
    foreach f (`cat cloneEndsFile`)
      echo $f
      wget --timestamping $f 
    end
- 
+   # then do the same to get the trace info xml files:
    wget --timestamping \
-        ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/*cloneEnd*.gz
-
+      ftp://ftp.ensembl.org/pub/traces/danio_rerio/traceinfo/
+   grep cloneEnd index.html > cloneEndsXmlFile
+   perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' cloneEndsXmlFile
+   rm *.bak
+   foreach f (`cat cloneEndsXmlFile`)
+     echo $f
+     wget --timestamping $f
+   end
+   gunzip *.gz
+   # check for multiple occurrences of same sequence ID
+   grep trace_name *.xml | sort | uniq -c | sort -nr > traceNames.count
+   # top of list has count of 1 so the end names are unique.
+   # FASTA files have clone end names as sequence names
+   # concatenate the 19 fasta files
+   cat *.fasta > Zv6BacEnds.fa    
+   grep '>' Zv6BacEnds.fa | wc -l
+   # 1031375
+   # Zv5 had 729101 but these were not unique reads for each sequence. 
+   faSize Zv6BacEnds.fa >& Zv6.faSize.txt
+   # there are 31 sequence names with no sequence.
+   awk '{print $10}' Zv6.faSize.txt > cloneEnds.noSeq
+   grep -f cloneEnds.noSeq *.fasta > cloneEnds.noSeqs.files
+   # sent this list of sequence names and files to Kerstin Howe
+   # at Sanger: kj2@sanger.ac.uk
+   # invalid FASTA file format
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM OTHER DANRER ASSEMBLIES
 # (DONE, 2006-06-27, hartera)
