@@ -120,6 +120,7 @@ DIRS = \
 	subChar \
 	subs \
 	tableSum \
+	tailLines \
 	textHist2 \
 	textHistogram \
 	tickToDate \
