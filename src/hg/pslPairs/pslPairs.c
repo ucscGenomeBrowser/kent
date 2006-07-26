@@ -472,7 +472,7 @@ void printOut(char *pslTable)
 int main(int argc, char *argv[])
 {
   struct lineFile *pf, *prf;
-  char filename[64], *db, *pslTable;
+  char filename[64], *pslTable;
 
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
