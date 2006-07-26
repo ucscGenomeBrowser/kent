@@ -104,22 +104,21 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-#wiggle phastCons8way
-#spanList 1
-#pairwiseHeight 12
-#yLineOnOff Off
-#frames multiz8wayFrames
+wiggle phastCons8way
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+frames multiz8wayFrames
 #irows on
-#autoScaleDefault Off
-#windowingFunction mean
-#summary multiz8waySummary
+autoScaleDefault Off
+windowingFunction mean
+summary multiz8waySummary
 speciesGroups primate mammal vertebrate
 sGroup_primate hg18 rheMac2 
 sGroup_mammal mm8 canFam2 monDom4
 sGroup_vertebrate galGal2 danRer4
-#speciesDefaultOff 
-#treeImage phylo/panTro2_8way.gif
-#speciesCodonDefault panTro2
+treeImage phylo/panTro2_8way.gif
+speciesCodonDefault panTro2
 
 track phastConsElements8way
 release alpha
