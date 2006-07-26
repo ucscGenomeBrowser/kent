@@ -4,9 +4,9 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "hash.h"
-#include "correlate.h"
+#include "customPp.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.68 2006/07/01 07:09:14 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.69 2006/07/26 06:10:21 kent Exp $";
 
 void usage()
 {
@@ -20,13 +20,17 @@ int level = 0;
 void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-static double x[] = {1, 2, 1, 2, 1, 2, 1};
-static double y[] = {2, 4, 2, 4, 2, 4, 2};
-static double z[] = {-1,-2,-1,-2,-1,-2,-1};
-static double r[] = {1, 2, 3, 4, 5, 6, 7};
-printf("r(xy) = %f\n", correlateArrays(x, y, 7));
-printf("r(xz) = %f\n", correlateArrays(x, z, 7));
-printf("r(xr) = %f\n", correlateArrays(x, r, 7));
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct customPp *cpp = customPpNew(lf);
+char *line;
+struct slName *list, *el;
+while ((line = customPpNext(cpp)) != NULL)
+    puts(line);
+printf("---- browser lines ----\n");
+list = customPpTakeBrowserLines(cpp);
+customPpFree(&cpp);
+for (el = list; el != NULL; el = el->next)
+    puts(el->name);
 }
 
 int main(int argc, char *argv[])
