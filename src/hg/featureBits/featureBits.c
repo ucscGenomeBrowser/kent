@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.45 2006/05/11 00:47:36 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.46 2006/07/26 04:18:03 baertsch Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -35,6 +35,7 @@ static struct optionSpec optionSpecs[] =
     {"enrichment", OPTION_BOOLEAN},
     {"where", OPTION_STRING},
     {"bin", OPTION_STRING},
+    {"chromSize", OPTION_STRING},
     {"binSize", OPTION_INT},
     {"binOverlap", OPTION_INT},
     {"bedRegionIn", OPTION_STRING},
@@ -47,6 +48,7 @@ char *clChrom = "all";	/* Which chromosome. */
 boolean orLogic = FALSE;  /* Do ors instead of ands? */
 boolean notResults = FALSE;   /* negate results? */
 char *where = NULL;		/* Extra selection info. */
+char *chromSizes = NULL;		/* read chrom sizes from file instead of database . */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 boolean noHap = FALSE;	/* Exclude _hap chromosomes? */
@@ -75,6 +77,7 @@ errAbort(
   "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
+  "   -chromSize=sizefile      read chrom sizes from file instead of database.\n"
   "   -or               Or tables together instead of anding them\n"
   "   -not              Output negation of resulting bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
@@ -832,9 +835,12 @@ if (faName)
     faIndependent = (!faMerge);
     }
 
-chromInfoList = createChromInfoList(clChrom, database);
-conn = hAllocConn();
+if (chromSizes != NULL)
+    chromInfoList = chromInfoLoadAll(chromSizes);
+else
+    chromInfoList = createChromInfoList(clChrom, database);
 
+conn = hAllocConn();
 checkInputExists(conn, chromInfoList, tableCount, tables);
 
 if (!faIndependent)
@@ -938,6 +944,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 clChrom = optionVal("chrom", clChrom);
+chromSizes = optionVal("chromSize", NULL);
 orLogic = optionExists("or");
 notResults = optionExists("not");
 countGaps = optionExists("countGaps");
