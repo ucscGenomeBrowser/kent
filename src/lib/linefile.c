@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.46 2006/07/26 17:01:50 baertsch Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.47 2006/07/26 17:45:28 baertsch Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -539,8 +539,6 @@ while (lineFileNext(lf, retStart, NULL))
     {
     s = skipLeadingSpaces(*retStart);
     c = s[0];
-    if (c == '#')
-        metaDataAdd(lf, *retStart);
     if (c != 0 && c != '#')
         {
 	return TRUE;
