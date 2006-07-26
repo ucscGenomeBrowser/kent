@@ -23,8 +23,8 @@ group regulation
 priority 80
 visibility hide
 type expRatio
-expScale 8.0
-expStep 1.0
+expScale 6.0
+expStep 0.5
 expTable zebrafishZonWTMedianExps
 chip Zebrafish
 
