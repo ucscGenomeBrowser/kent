@@ -78,6 +78,9 @@ struct lineFile *lineFileOnString(char *name, bool zTerm, char *s);
 void lineFileClose(struct lineFile **pLf);
 /* Close up a line file. */
 
+void lineFileCloseList(struct lineFile **pList);
+/* Close up a list of line files. */
+
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file. */
 

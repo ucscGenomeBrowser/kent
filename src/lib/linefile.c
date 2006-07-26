@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.44 2006/06/18 23:07:43 kate Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.45 2006/07/26 06:03:00 kent Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -485,12 +485,27 @@ if ((lf = *pLf) != NULL)
         pipelineFree(&lf->pl);
         }
     else if (lf->fd > 0 && lf->fd != fileno(stdin))
+	{
 	close(lf->fd);
+	freeMem(lf->buf);
+	}
     freeMem(lf->fileName);
-    freeMem(lf->buf);
     metaDataFree(lf);
     freez(pLf);
     }
+}
+
+void lineFileCloseList(struct lineFile **pList)
+/* Close up a list of line files. */
+{
+struct lineFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    lineFileClose(&el);
+    }
+*pList = NULL;
 }
 
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got)
