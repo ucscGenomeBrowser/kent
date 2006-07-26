@@ -44,7 +44,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$can
 set wgs $rn,$panTro,$galGal,$canFam,$bosTau
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac
+set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
