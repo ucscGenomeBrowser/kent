@@ -63,7 +63,7 @@ if (cpp->toReuse)
 while ((lf = cpp->fileStack) != NULL)
     {
     char *line;
-    if (lineFileNextReal(lf, &line))
+    if (lineFileNext(lf, &line, NULL))
         {
 	if (startsWith("http://", line) || startsWith("ftp://", line))
 	    {
@@ -89,6 +89,21 @@ while ((lf = cpp->fileStack) != NULL)
 	}
     }
 return NULL;
+}
+
+char *customPpNextReal(struct customPp *cpp)
+/* Return next line that's nonempty and non-space. */
+{
+for (;;)
+    {
+    char *line = customPpNext(cpp);
+    if (line == NULL)
+        return line;
+    char *s = skipLeadingSpaces(line);
+    char c = *s;
+    if (c != 0 && c != '#')
+        return line;
+    }
 }
 
 void customPpReuse(struct customPp *cpp, char *line)

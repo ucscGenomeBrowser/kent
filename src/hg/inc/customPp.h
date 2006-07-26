@@ -29,6 +29,9 @@ void customPpFree(struct customPp **pCpp);
 char *customPpNext(struct customPp *cpp);
 /* Return next line. */
 
+char *customPpNextReal(struct customPp *cpp);
+/* Return next line that's nonempty and non-space. */
+
 void customPpReuse(struct customPp *cpp, char *line);
 /* Reuse line.  May be called repeatedly */
 
