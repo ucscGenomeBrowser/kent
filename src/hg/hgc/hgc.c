@@ -196,7 +196,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1060 2006/07/24 23:31:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1061 2006/07/26 15:20:42 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4038,7 +4038,7 @@ row = sqlNextRow(sr);
 
 if (row != NULL)
     {
-    seqid=strdup(row[0]);
+    seqid=cloneString(row[0]);
 
     snprintf(qry, sizeof(qry), 
 	     "select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence "
@@ -4805,7 +4805,7 @@ if (hTableExists("certificate"))
     {
     first = 1;
     again:
-    tmpString = strdup(frag.frag);
+    tmpString = cloneString(frag.frag);
     chp = strstr(tmpString, ".");
     if (chp != NULL) *chp = '\0';
 
@@ -6439,7 +6439,7 @@ if (url != NULL && url[0] != 0)
     char *chp;
 
     /* shortItemName is the name without the "." + version */ 
-    shortItemName = strdup(itemName);
+    shortItemName = cloneString(itemName);
     chp = strstr(shortItemName, ".");
     if (chp != NULL) 
 	*chp = '\0';
@@ -6796,7 +6796,7 @@ if (url != NULL && url[0] != 0)
     currentCgiUrl = cgiUrlString();
    
     printf("<H3>Gene %s: ", itemName);
-    sprintf(query, "select geneName from gadAll where geneSymbol='%s';", itemName);
+    safef(query, sizeof(query), "select geneName from gadAll where geneSymbol='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)printf("%s", row[0]);
@@ -6813,7 +6813,8 @@ if (url != NULL && url[0] != 0)
        itemName, "&selConditionGene=2&strCurrentForm=SearchByGene.asp");
     printf("%s</B></A>\n", itemName);
 
-    sprintf(query, "select distinct omimId from gadAll where geneSymbol='%s';", itemName);
+    safef(query, sizeof(query), 
+    	  "select distinct omimId from gadAll where geneSymbol='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL) printf("<BR><B>OMIM: </B>");
@@ -6827,14 +6828,14 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
     
     printf("<BR><B>Submitter: </B>");
-    sprintf(query, "select submitter from gadAll where geneSymbol='%s';", itemName);
+    safef(query, sizeof(query), "select submitter from gadAll where geneSymbol='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)printf("%s", row[0]);
     sqlFreeResult(&sr);
 
     /* First list diseases associated with the gene */
-    sprintf(query, 
+    safef(query, sizeof(query), 
     "select distinct broadPhen from gadAll where geneSymbol='%s' and association != 'N' order by broadPhen;", 
     itemName);
     sr = sqlMustGetResult(conn, query);
@@ -6842,7 +6843,7 @@ if (url != NULL && url[0] != 0)
     
     if (row != NULL) 
     	{
-	upperDisease = strdup(row[0]);
+	upperDisease = cloneString(row[0]);
 	touppers(upperDisease);
 	printf("<BR><B>Associated Diseases and Disorders:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
@@ -6854,7 +6855,7 @@ if (url != NULL && url[0] != 0)
 	
     while (row != NULL)
         {
-	upperDisease = strdup(row[0]);
+	upperDisease = cloneString(row[0]);
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
@@ -6865,7 +6866,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     /* then list diseases NOT associated with the gene */
-    sprintf(query, 
+    safef(query, sizeof(query), 
     	    "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'N' order by broadPhen", 
 	    itemName);
     sr = sqlMustGetResult(conn, query);
@@ -6873,7 +6874,7 @@ if (url != NULL && url[0] != 0)
     
     if (row != NULL) 
     	{
-	upperDisease = strdup(row[0]);
+	upperDisease = cloneString(row[0]);
 	touppers(upperDisease);
 	printf("<BR><B>Diseases and Disorders Found Possibly Not Associated with the Gene:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
@@ -6885,7 +6886,7 @@ if (url != NULL && url[0] != 0)
 	
     while (row != NULL)
         {
-	upperDisease = strdup(row[0]);
+	upperDisease = cloneString(row[0]);
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
@@ -6896,7 +6897,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
     
     refPrinted = 0;
-    sprintf(query, 
+    safef(query, sizeof(query),
        "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s';", 
        itemName);
     sr = sqlMustGetResult(conn, query);
@@ -6933,7 +6934,8 @@ if (url != NULL && url[0] != 0)
 	       hgcName(), currentCgiUrl->string);
     	}
 	
-    sprintf(query, "select chrom, chromStart, chromEnd from gad where name='%s';", itemName);
+    safef(query, sizeof(query),
+    	  "select chrom, chromStart, chromEnd from gad where name='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -6971,7 +6973,7 @@ if (url != NULL && url[0] != 0)
     struct sqlResult *sr;
     char **row;
 
-    sprintf(query, "select id from rgdSslpLink where name='%s';", itemName);
+    safef(query, sizeof(query), "select id from rgdSslpLink where name='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -7059,7 +7061,7 @@ if (strchr(rnaName, '\''))
 
 cartWebStart(cart, tdb->longLabel);
 
-sprintf(query, "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
+safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
@@ -7067,7 +7069,7 @@ rl = refLinkLoad(row);
 sqlFreeResult(&sr);
 printf("<H2>Gene %s</H2>\n", rl->name);
     
-sprintf(query, "select id from rgdGeneLink where refSeq = '%s'", sqlRnaName);
+safef(query, sizeof(query), "select id from rgdGeneLink where refSeq = '%s'", sqlRnaName);
 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -7086,7 +7088,7 @@ printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 /* If refSeqStatus is available, report it: */
 if (hTableExists("refSeqStatus"))
     {
-    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+    safef(query, sizeof(query), "select status from refSeqStatus where mrnaAcc = '%s'",
 	    sqlRnaName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -7326,7 +7328,7 @@ if (rl->locusLinkId != 0)
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    printf("<B>Mouse Genome Informatics:</B> ");
-	    mgiID = strdup(row[0]);
+	    mgiID = cloneString(row[0]);
 		
 	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
@@ -7577,10 +7579,10 @@ printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
 printf("<B>3D Structure Prediction (PDB file):</B> ");
 gotPDBFile = 0;    
-sprintf(cond_str, "proteinID='%s' and evalue <1.0e-5;", itemName);
+safef(cond_str, sizeof(cond_str), "proteinID='%s' and evalue <1.0e-5;", itemName);
 if (sqlGetField(conn2, database, "protHomolog", "proteinID", cond_str) != NULL)
     {
-    sprintf(cond_str, "proteinID='%s'", itemName);
+    safef(cond_str, sizeof(cond_str), "proteinID='%s'", itemName);
     predFN = sqlGetField(conn2, database, "protPredFile", "predFileName", cond_str);
     if (predFN != NULL)
 	{
@@ -7600,7 +7602,7 @@ homologCount = 0;
 strcpy(goodSCOPdomain, "dummy");
 
 conn2= hAllocConn();
-sprintf(query2,
+safef(query2, sizeof(query2), 
 	"select homologID,eValue,SCOPdomain,chain from sc1.protHomolog where proteinID='%s' and evalue <= 0.01;",
 	itemName);
 sr2 = sqlMustGetResult(conn2, query2);
@@ -7667,7 +7669,7 @@ struct softberryHom hom;
 
 if (sqlTableExists(conn, table))
     {
-    sprintf(query, "select * from %s where name = '%s'", table, geneName);
+    safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -7682,7 +7684,7 @@ if (sqlTableExists(conn, table))
 	    gotAny = TRUE;
 	    }
 	printf("<A HREF=\"");
-	sprintf(query, "%s", gi);
+	safef(query, sizeof(query), "%s", gi);
 	printEntrezProteinUrl(stdout, query);
 	printf("\" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
 	}
@@ -7707,7 +7709,7 @@ char *clone;
 
 if (sqlTableExists(conn, table))
     {
-    sprintf(query, "select * from %s where name = '%s'", table, geneName);
+    safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -7726,7 +7728,7 @@ if (sqlTableExists(conn, table))
 	if (partCount > 1)
 	    {
 	    printf("<A HREF=");
-	    sprintf(query, "%s", parts[1]);
+	    safef(query, sizeof(query), "%s", parts[1]);
 	    printSwissProtProteinUrl(stdout, query);
 	    printf(" TARGET=_blank>Jump to SwissProt %s </A> " ,geneName);
 	    }
@@ -8066,7 +8068,7 @@ printCustomUrl(tdb, geneName, FALSE);
 if ((sameString(tdb->tableName, "encodePseudogeneConsensus")) || 
          (sameString(tdb->tableName, "encodePseudogeneYale")))
     {
-    sprintf(query, "select name2 from %s where name = '%s'", tdb->tableName, geneName);
+    safef(query, sizeof(query), "select name2 from %s where name = '%s'", tdb->tableName, geneName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8092,7 +8094,7 @@ struct softberryHom hom;
 
 if (sqlTableExists(connMm, table))
     {
-    sprintf(query, "select * from %s where name = '%s'", table, geneName);
+    safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
     sr = sqlGetResult(connMm, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -8107,7 +8109,7 @@ if (sqlTableExists(connMm, table))
 	    gotAny = TRUE;
 	    }
 	printf("<A HREF=\"");
-	sprintf(query, "%s[gi]", gi);
+	safef(query, sizeof(query), "%s[gi]", gi);
 	printEntrezProteinUrl(stdout, query);
 	printf("\" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
 	}
@@ -8140,7 +8142,7 @@ if (hTableExists(extraTable))
     struct sqlResult *sr;
     char **row;
 
-    sprintf(query, "select * from %s where name = '%s'", extraTable, geneName);
+    safef(query, sizeof(query), "select * from %s where name = '%s'", extraTable, geneName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -10951,7 +10953,7 @@ if (strncmp(rsId,"rs",2)) /* is not a valid rsId, so it must be an affyId */
 	return 0;
     }
 else
-    rsId = strdup("valid");
+    rsId = cloneString("valid");
 return rsId;
 }
 
