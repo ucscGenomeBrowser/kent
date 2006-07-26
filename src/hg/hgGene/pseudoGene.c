@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pseudoGene.c,v 1.2 2006/03/06 17:46:35 angie Exp $";
+static char const rcsid[] = "$Id: pseudoGene.c,v 1.3 2006/07/26 15:29:24 fanhsu Exp $";
 
 static boolean pseudoGeneExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -50,7 +50,7 @@ char *emptyStr;
 char query[255];
 char *name, *chrom, *chromStart, *chromEnd, *refseq;
 
-emptyStr = strdup("");
+emptyStr = cloneString("");
 safef(query, sizeof(query),
       "select distinct name, chrom, chromStart, chromEnd, refseq from pseudoGeneLink where name='%s' or kgName='%s' or refseq='%s'",
       geneId, geneId, geneId);

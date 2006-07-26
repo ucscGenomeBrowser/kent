@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.14 2006/03/15 16:46:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.15 2006/07/26 15:27:47 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -66,7 +66,7 @@ static void bioCycLink(struct pathwayLink *pl, struct sqlConnection *conn,
 {
 char query[512], **row;
 struct sqlResult *sr;
-char *oldMapId = strdup("");
+char *oldMapId = cloneString("");
 
 safef(query, sizeof(query),
 	"select bioCycPathway.mapId,description"
@@ -84,7 +84,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     	row[0]);
     	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
-    oldMapId = strdup(row[0]);	
+    oldMapId = cloneString(row[0]);	
     }
 sqlFreeResult(&sr);
 }
@@ -221,7 +221,7 @@ safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
 spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
 if (spID != NULL)
     {
-    origSpID = strdup(spID);
+    origSpID = cloneString(spID);
     /* convert splice variant UniProt ID to its main root ID */
     chp = strstr(spID, "-");
     if (chp != NULL) *chp = '\0';

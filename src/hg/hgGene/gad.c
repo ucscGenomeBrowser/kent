@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.1 2006/07/24 22:51:33 fanhsu Exp $";
+static char const rcsid[] = "$Id: gad.c,v 1.2 2006/07/26 15:24:43 fanhsu Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -44,7 +44,7 @@ struct dyString *currentCgiUrl;
 char *upperDisease;
 
 char *url = 
-strdup("http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=gene=");
+cloneString("http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=gene=");
 char *itemName;
 
 if (url != NULL && url[0] != 0)
@@ -74,7 +74,7 @@ if (url != NULL && url[0] != 0)
     printf("%s</B></A>\n", itemName);
 
     /* List diseases associated with the gene */
-    sprintf(query, 
+    safef(query, sizeof(query),
     "select distinct broadPhen from gadAll where geneSymbol='%s' and association != 'N' order by broadPhen;", 
     itemName);
     sr = sqlMustGetResult(conn, query);
@@ -82,7 +82,7 @@ if (url != NULL && url[0] != 0)
     
     if (row != NULL) 
     	{
-	upperDisease = strdup(row[0]);
+	upperDisease = cloneString(row[0]);
 	touppers(upperDisease);
 	printf("<BR><B>Associated Diseases and Disorders:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
@@ -94,7 +94,7 @@ if (url != NULL && url[0] != 0)
 	
     while (row != NULL)
         {
-	upperDisease = strdup(row[0]);
+	upperDisease = cloneString(row[0]);
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
@@ -105,7 +105,7 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     refPrinted = 0;
-    sprintf(query, 
+    safef(query, sizeof(query), 
        "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s';", 
        itemName);
     sr = sqlMustGetResult(conn, query);

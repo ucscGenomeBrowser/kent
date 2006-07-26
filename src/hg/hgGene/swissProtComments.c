@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: swissProtComments.c,v 1.11 2006/02/27 17:05:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: swissProtComments.c,v 1.12 2006/07/26 15:28:38 fanhsu Exp $";
 
 struct spComment
 /* Swiss prot comment. */
@@ -54,7 +54,7 @@ if (!commentFound)
     row = sqlNextRow(sr);
     if (row != NULL)
     	{
-	acc = strdup(row[0]);
+	acc = cloneString(row[0]);
 	sqlFreeResult(&sr);
 	safef(query, sizeof(query),
 	      "select commentType,commentVal from comment where acc='%s'" , acc);
