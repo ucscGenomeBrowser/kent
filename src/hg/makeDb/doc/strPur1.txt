@@ -1,5 +1,5 @@
-#!/bin/bash  # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 
 # Strongylocentrotus purpuratus -- 0.5 assembly April 15, 2005
 # 

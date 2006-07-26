@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 
 # Tetraodon Nigirividis from Genoscope, version v6 (released 5/6/02)
 #    Project website:

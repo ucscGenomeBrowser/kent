@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 
 # CREATE BUILD DIRECTORY (DONE 4/17/06 angie)
     # df -h /cluster/store*, choose the one with the most space...

@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 
 # Anopheles gambiae -- complete chromosomes from Ensembl, apparently from 
 # May 2004:

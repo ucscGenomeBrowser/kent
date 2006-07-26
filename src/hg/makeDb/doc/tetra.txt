@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit
+# for emacs: -*- mode: sh; -*-
+
 
 # This file describes processing of genomic sequence for the pufferfish
 # Tetraodon nigroviridis (Green Spotted Pufferfish), obtained

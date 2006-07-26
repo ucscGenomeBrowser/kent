@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
  
 # This file describes building the browser database for the archaeal
 # species Methanosarcina barkeri

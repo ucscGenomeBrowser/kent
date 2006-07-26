@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
                                                                                 # This is a browser for Vibrio cholerae O1 biovar eltor str. N16961
 
 mkdir -p /cluster/store5/bacteria/vibCho1

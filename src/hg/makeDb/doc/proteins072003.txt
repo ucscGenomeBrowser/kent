@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 
 # This file describes how we made the proteins database using
 # 6/29/03 release of NR database files from SWISS-PROT

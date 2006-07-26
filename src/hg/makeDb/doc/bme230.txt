@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
                                                                                                
 # The following are browsers built for BME 230, Spring 2004 class:
 #   Aquifex aeolicus VF5             (bacteria)

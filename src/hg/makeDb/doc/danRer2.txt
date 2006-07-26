@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
                                                                                 
 # Danio Rerio (zebrafish) from Sanger, version Zv4 (released 6/30/04)
 #  Project website:

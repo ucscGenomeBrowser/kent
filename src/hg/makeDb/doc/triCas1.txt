@@ -1,5 +1,5 @@
-#!/bin/bash  # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 # 
 # RED FLOUR BEETLE!!!
 # Tribolium castaneum -- 1.0 assembly Jan 20, 2005

@@ -1,5 +1,5 @@
-#!/bin/csh -f # set emacs mode
-exit; # don't actually run this like a script :)
+# for emacs: -*- mode: sh; -*-
+
 
 # This file describes how we made the browser database on 
 # NCBI build 34 (July 18, 2003 freeze)
