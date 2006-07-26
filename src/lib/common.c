@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.98 2006/07/17 18:32:10 hiram Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.99 2006/07/26 18:38:59 hiram Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -985,18 +985,13 @@ ptr = strstr(string, old);
 resultPtr = result;
 while(NULL != ptr)
     {
-/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     strLen = ptr - string;
     strcpy(resultPtr, string);
     string = ptr + oldLen;
 
-/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     resultPtr += strLen;
-/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     strcpy(resultPtr, new);
-/*     fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */
     resultPtr += newLen;
-/*    fprintf(stderr, "RESULT: %s XXXXXXXXXXXXXXXXXXXXXXX<BR>\n", result); */ 
     ptr = strstr(string, old);
     }
 
