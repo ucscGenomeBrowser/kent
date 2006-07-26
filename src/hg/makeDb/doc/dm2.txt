@@ -3819,10 +3819,13 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
 
 
 # FLYBASE 4.2 ANNOTATIONS (DONE (except for contacting flybase-help) 1/13/06 angie)
-# Reloaded flyBaseNoncoding and flyBase2004Xref 5/30/06 after changing 
+# RELOADED flyBaseNoncoding and flyBase2004Xref 5/30/06 after changing 
 # extractGenes to catch some new RNA keywords after user reported loss of 
 # many mir's.  (They were marked "ncRNA" in 4.1 but "miRNA" in 4.2.)  
 # Now extractGenes catches [a-z]+RNA.
+# RELOADED flyBaseGene 7/12/06 after user reported a problem with split
+# start codons -- cause by error in extractGenes.pl that caused us not to
+# notice a single-base overlap between CDS range and exon range.
     ssh kkstore01
     mkdir /cluster/data/dm2/bed/flybase4.2
     cd /cluster/data/dm2/bed/flybase4.2
@@ -3918,6 +3921,9 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     # 2/6/06: fill in missing symbol values with accession so hgNear
     # has something to draw a link on...
     hgsql dm2 -e 'update flyBase2004Xref set symbol = name where symbol = ""'
+
+    # 7/12/06: reload flyBaseGene after correcting extractGenes.pl.
+    ldHgGene -gtf dm2 flyBaseGene flybase.gtf
 
 
 # FLYBASE ACODE CROSS-REFERENCING DATA (DONE 1/27/06 angie)
@@ -4191,43 +4197,136 @@ _EOF_
 #############################################################################
 
 
-# RECIPROCAL BEST DM2-DROSIM1 (DONE 2/28/06 angie)
-    # Special request for user...
+# RECIPROCAL BEST DM2-DROSIM1 (DONE 2/28/06 angie - REDONE 6/19/06)
+    # Special request for user (Toshio Yoshimatsu and JJ Emerson, UChicago)
     ssh kolossus
     cd /cluster/data/dm2/bed/blastz.droSim1/axtChain
-    # Run chainNet again, this time keeping its second output:
-    chainPreNet dm2.droSim1.all.chain.gz \
-      /cluster/data/{dm2,droSim1}/chrom.sizes stdout \
-    | chainNet stdin /cluster/data/{dm2,droSim1}/chrom.sizes /dev/null stdout \
-    | netSyntenic stdin droSim1.dm2_ref.net
-    # Get the droSim1 chains from the droSim1-referenced (but dm2-centric) net:
-    chainSwap dm2.droSim1.all.chain.gz droSim1.dm2.all.chain
-    netChainSubset droSim1.dm2_ref.net droSim1.dm2.all.chain stdout \
-    | chainSort stdin droSim1.dm2_ref.subset.chain
-    # Net those (sorted) dm2 chains, and keep both outputs, to get 
-    # reciprocal best nets referenced to both species:
-    chainPreNet droSim1.dm2_ref.subset.chain \
+    # Swap dm2-best chains to be droSim1-referenced:
+    chainStitchId dm2.droSim1.over.chain.gz stdout \
+    | chainSwap stdin stdout \
+    | chainSort stdin droSim1.dm2.tBest.chain
+    # Net those on droSim1 to get droSim1-ref'd reciprocal best net:
+    chainPreNet droSim1.dm2.tBest.chain \
       /cluster/data/{droSim1,dm2}/chrom.sizes stdout \
-    | chainNet stdin /cluster/data/{droSim1,dm2}/chrom.sizes \
-      tmp1 tmp2
-    netSyntenic tmp1 droSim1.dm2.rbest.net
-    netSyntenic tmp2 dm2.droSim1.rbest.net
-    rm tmp1 tmp2
-    # Get the chains from the recip-best nets for stringent liftOver:
-    netChainSubset droSim1.dm2.rbest.net droSim1.dm2.all.chain \
-      droSim1ToDm2.rbest.over.chain
-    netChainSubset dm2.droSim1.rbest.net dm2.droSim1.all.chain.gz \
-      dm2ToDroSim1.rbest.over.chain
-    nice gzip droSim1* dm2.droSim1.rbest.net dm2ToDroSim1.rbest.over.chain
+    | chainNet -minSpace=1 stdin /cluster/data/{droSim1,dm2}/chrom.sizes \
+        stdout /dev/null \
+    | netSyntenic stdin droSim1.dm2.rbest.net
+    # Extract droSim1-ref'd reciprocal best chain:
+    netChainSubset droSim1.dm2.rbest.net droSim1.dm2.tBest.chain stdout \
+    | chainStitchId stdin stdout \
+    | chainSort stdin droSim1.dm2.rbest.chain
+    # Swap to get dm2-ref'd reciprocal best chain:
+    chainSwap droSim1.dm2.rbest.chain stdout \
+    | chainSort stdin dm2.droSim1.rbest.chain
+    # Net those on dm2 to get dm2-ref'd reciprocal best net:
+    chainPreNet dm2.droSim1.rbest.chain \
+      /cluster/data/{dm2,droSim1}/chrom.sizes stdout \
+    | chainNet -minSpace=1 -minScore=0 \
+      stdin /cluster/data/{dm2,droSim1}/chrom.sizes stdout /dev/null \
+    | netSyntenic stdin dm2.droSim1.rbest.net
+    # Compress and clean up.
+    rm droSim1.dm2.tBest.chain
+    gzip *.rbest.*
+    md5sum *.rbest.*.gz > md5sum.txt
+
+    # Test coverage of *.rbest.* -- should be equal.
+    netToBed -maxGap=1 droSim1.dm2.rbest.net.gz droSim1.dm2.rbest.net.bed
+    netToBed -maxGap=1 dm2.droSim1.rbest.net.gz dm2.droSim1.rbest.net.bed
+    chainToPsl droSim1.dm2.rbest.chain.gz \
+      /cluster/data/{droSim1,dm2}/chrom.sizes \
+      /cluster/data/droSim1/droSim1.2bit /cluster/data/dm2/dm2.2bit \
+      droSim1.dm2.rbest.chain.psl
+    chainToPsl dm2.droSim1.rbest.chain.gz \
+      /cluster/data/{dm2,droSim1}/chrom.sizes \
+      /cluster/data/dm2/dm2.2bit /cluster/data/droSim1/droSim1.2bit \
+      dm2.droSim1.rbest.chain.psl
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/blastz.droSim1/axtChain
+    featureBits droSim1 droSim1.dm2.rbest.net.bed
+#104047585 bases of 127256433 (81.762%) in intersection
+    featureBits droSim1 droSim1.dm2.rbest.chain.psl
+#104047585 bases of 127256433 (81.762%) in intersection
+    featureBits dm2     dm2.droSim1.rbest.chain.psl
+#104047585 bases of 131698467 (79.004%) in intersection
+    featureBits dm2     dm2.droSim1.rbest.net.bed
+#104047585 bases of 131698467 (79.004%) in intersection
+    mkdir experiments
+    mv *.bed *.psl experiments
+
     # Put out for download (hgwdev-only)
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dm2/vsDroSim1/reciprocalBest
     cd /usr/local/apache/htdocs/goldenPath/dm2/vsDroSim1/reciprocalBest
-    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/dm2.droSim1.rbest.net.gz .
-    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/dm2ToDroSim1.rbest.over.chain.gz .
-    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/droSim1.dm2.rbest.net.gz .
-    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/droSim1ToDm2.rbest.over.chain.gz .
+    rm -f *.gz md5sum.txt
+    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/*.rbest.*.gz .
+    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/md5sum.txt .
     # Make a README.txt.
+
+
+# RECIPROCAL BEST DM2-DROYAK2 (DONE 6/20/06 angie)
+    # Special request for user (Toshio Yoshimatsu and JJ Emerson, UChicago)
+    ssh kolossus
+    cd /cluster/data/dm2/bed/blastz.droYak2/axtChain
+    # Swap dm2-best chains to be droYak2-referenced:
+    chainStitchId dm2.droYak2.over.chain.gz stdout \
+    | chainSwap stdin stdout \
+    | chainSort stdin droYak2.dm2.tBest.chain
+    # Net those on droYak2 to get droYak2-ref'd reciprocal best net:
+    chainPreNet droYak2.dm2.tBest.chain \
+      /cluster/data/{droYak2,dm2}/chrom.sizes stdout \
+    | chainNet -minSpace=1 stdin /cluster/data/{droYak2,dm2}/chrom.sizes \
+        stdout /dev/null \
+    | netSyntenic stdin droYak2.dm2.rbest.net
+    # Extract droYak2-ref'd reciprocal best chain:
+    netChainSubset droYak2.dm2.rbest.net droYak2.dm2.tBest.chain stdout \
+    | chainStitchId stdin droYak2.dm2.rbest.chain
+    # Swap to get dm2-ref'd reciprocal best chain:
+    chainSwap droYak2.dm2.rbest.chain stdout \
+    | chainSort stdin dm2.droYak2.rbest.chain
+    # Net those on dm2 to get dm2-ref'd reciprocal best net:
+    chainPreNet dm2.droYak2.rbest.chain \
+      /cluster/data/{dm2,droYak2}/chrom.sizes stdout \
+    | chainNet -minSpace=1 -minScore=0 \
+      stdin /cluster/data/{dm2,droYak2}/chrom.sizes stdout /dev/null \
+    | netSyntenic stdin dm2.droYak2.rbest.net
+    # Compress and clean up.
+    rm droYak2.dm2.tBest.chain
+    gzip *.rbest.*
+    md5sum *.rbest.*.gz > md5sum.rbest.txt
+
+    # Test coverage of *.rbest.* -- should be equal.
+    netToBed -maxGap=1 droYak2.dm2.rbest.net.gz droYak2.dm2.rbest.net.bed
+    netToBed -maxGap=1 dm2.droYak2.rbest.net.gz dm2.droYak2.rbest.net.bed
+    chainToPsl droYak2.dm2.rbest.chain.gz \
+      /cluster/data/{droYak2,dm2}/chrom.sizes \
+      /cluster/data/droYak2/droYak2.2bit /cluster/data/dm2/dm2.2bit \
+      droYak2.dm2.rbest.chain.psl
+    chainToPsl dm2.droYak2.rbest.chain.gz \
+      /cluster/data/{dm2,droYak2}/chrom.sizes \
+      /cluster/data/dm2/dm2.2bit /cluster/data/droYak2/droYak2.2bit \
+      dm2.droYak2.rbest.chain.psl
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/blastz.droYak2/axtChain
+    featureBits droYak2 droYak2.dm2.rbest.net.bed
+#105927235 bases of 162681153 (65.113%) in intersection
+    featureBits droYak2 droYak2.dm2.rbest.chain.psl
+#105927235 bases of 162681153 (65.113%) in intersection
+    featureBits dm2     dm2.droYak2.rbest.chain.psl
+#105927235 bases of 131698467 (80.432%) in intersection
+    featureBits dm2     dm2.droYak2.rbest.net.bed
+#105927235 bases of 131698467 (80.432%) in intersection
+    mkdir experiments
+    mv *.bed *.psl experiments
+
+    # Put out for download (hgwdev-only)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm2/vsDroYak2/reciprocalBest
+    cd /usr/local/apache/htdocs/goldenPath/dm2/vsDroYak2/reciprocalBest
+    rm -f *.gz md5sum.txt
+    ln -s /cluster/data/dm2/bed/blastz.droYak2/axtChain/*.rbest.*.gz .
+    ln -s /cluster/data/dm2/bed/blastz.droYak2/axtChain/md5sum.rbest.txt md5sum.txt
+    # Make a README.txt.
+
 
 ########################################################################
 ### microRNA targets tracks  (DONE - 2006-03-29 - 2006-04-26 - Hiram)
