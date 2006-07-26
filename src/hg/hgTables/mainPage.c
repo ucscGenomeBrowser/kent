@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.96 2006/06/06 15:46:53 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.97 2006/07/26 23:29:19 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -183,7 +183,7 @@ else
     {
     boolean allTracks = sameString(selGroup->name, "allTracks");
     hPrintf("<B>track:</B>\n");
-    hPrintf("<SELECT NAME=%s %s>\n", trackVar, trackScript);
+    hPrintf("<SELECT NAME=\"%s\" %s>\n", trackVar, trackScript);
     if (allTracks)
         {
 	selTrack = findSelectedTrack(fullTrackList, NULL, trackVar);
@@ -196,9 +196,11 @@ else
     for (track = fullTrackList; track != NULL; track = track->next)
 	{
 	if (allTracks || sameString(selGroup->name, track->grp))
-	    hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
+	    {
+	    hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->tableName,
 		(track == selTrack ? " SELECTED" : ""),
 		track->shortLabel);
+	    }
 	}
     hPrintf("</SELECT>\n");
     }
@@ -378,13 +380,13 @@ if (!slNameInList(nameList, selTable))
 
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
-hPrintf("<SELECT NAME=%s %s>\n", varName, onChangeTable());
+hPrintf("<SELECT NAME=\"%s\" %s>\n", varName, onChangeTable());
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
     if (track != NULL)
 	tdb = findCompositeTdb(track, name->name);
-    hPrintf("<OPTION VALUE=%s", name->name);
+    hPrintf("<OPTION VALUE=\"%s\"", name->name);
     if (sameString(selTable, name->name))
         hPrintf(" SELECTED");
     if (tdb != NULL)
