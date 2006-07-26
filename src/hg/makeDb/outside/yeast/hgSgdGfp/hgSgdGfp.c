@@ -5,7 +5,7 @@
 #include "options.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgSgdGfp.c,v 1.1 2006/07/26 04:00:22 markd Exp $";
+static char const rcsid[] = "$Id: hgSgdGfp.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -68,9 +68,6 @@ if (!startsWith("orfid\tyORF", line))
 while (lineFileRowTab(lf, row))
     {
     char *orf = row[1];
-    char *gfpTagged = row[3];
-    char *gfpVisualized = row[4];
-    char *tapVisualized = row[5];
     char *abundance = row[6];
     char *error = row[7];
     char *localization = row[8];

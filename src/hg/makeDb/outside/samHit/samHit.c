@@ -42,7 +42,7 @@ void processOneLine(char *line)
 /* process one line */
 {
 int i;
-char *chp, *chp2;
+char *chp;
 char ch;
 
 chp = line;

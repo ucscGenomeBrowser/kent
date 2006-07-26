@@ -12,7 +12,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.1 2006/07/26 03:59:50 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.2 2006/07/26 04:59:18 markd Exp $";
 
 
 void usage()
@@ -127,7 +127,6 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[7];
 int count = 0;
 struct genomePos *posList = NULL, *pos;
-struct dyString *dy = dyStringNew(1024);
 
 while (lineFileRow(lf, row))
     {

@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkSgdSync.c,v 1.1 2006/07/26 04:00:16 markd Exp $";
+static char const rcsid[] = "$Id: checkSgdSync.c,v 1.2 2006/07/26 04:59:19 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -66,8 +66,6 @@ void checkGff(char *gff, struct hash *chromHash)
 {
 struct lineFile *lf = lineFileOpen(gff, TRUE);
 char *row[10];
-int start,end;
-char *strand;
 int cdsCount = 0, goodCount = 0, badCount = 0;
 
 while (lineFileRowTab(lf, row))
@@ -78,7 +76,6 @@ while (lineFileRowTab(lf, row))
 	int end = lineFileNeedNum(lf, row, 4);
 	int size = end-start;
 	char strand = row[6][0];
-	boolean good = TRUE;
 	char chrom[64];
 	struct dnaSeq *seq;
 	char *startCodon;

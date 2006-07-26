@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.1 2006/07/26 04:00:20 markd Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,7 +51,6 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct tenFields *tfList = NULL, *tf;
 char *words[11];
 int wordCount, i;
-char *s;
 
 while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) != 0)
     {
@@ -96,10 +95,8 @@ for (tf = tfList; tf != NULL; tf = tf->next)
     char *s = tf->fields[9];
     if (startsWith("ID=", s))
         {
-	char *type = tf->fields[2];
 	char *id = s+3, *note = "";
 	char *e = strchr(s, ';');
-	FILE *f = (isCds(type) ? cdsFile : otherFile);
 	if (!hashLookup(uniqHash, id))
 	    {
 	    hashAdd(uniqHash, id, NULL);
@@ -174,7 +171,7 @@ FILE *codingFile = openInDir(outDir, "codingGenes.gff");
 FILE *otherFile = openInDir(outDir, "otherFeatures.bed");
 FILE *descriptionFile = openInDir(outDir, "descriptions.txt");
 FILE *noteFile = openInDir(outDir, "notes.txt");
-struct tenFields *tf, *tfList = parseTenFields(inGff);
+struct tenFields *tfList = parseTenFields(inGff);
 
 noteIds(tfList, inGff, descriptionFile, noteFile);
 saveFeatures(tfList, inGff, codingFile, descriptionFile, otherFile);

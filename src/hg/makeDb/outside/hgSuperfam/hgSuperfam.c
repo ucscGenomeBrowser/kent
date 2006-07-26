@@ -26,20 +26,18 @@ struct sqlResult *sr, *sr2;
 char **row, **row2;
 char cond_str[200];
 
-char *genomeID, *seqID, *modelID, *start, *end, *eValue, *sfID, *sfDesc;
+char *genomeID, *seqID, *modelID, *eValue, *sfID, *sfDesc;
 char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
      *exonCount, *exonStarts, *exonEnds;
 char *region;
 float E,score;
 
-char *translation_id;
 char *translation_name;
 
 char *genomeDb, *superfamDb;
 char gene_name[200];
 
 char *chp;
-int  i,l;
 
 FILE *o3, *o4;
    

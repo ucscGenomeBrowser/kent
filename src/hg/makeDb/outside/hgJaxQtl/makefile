@@ -1,7 +1,7 @@
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 L = -lm ${MYSQLLIBS}
-MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBDIR = ../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgJaxQtl
@@ -21,7 +21,7 @@ lib:
 	cd ../../lib && ${MAKE}
 
 tags: 
-	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h
+	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../../lib/*.c ../../../inc/*.h
 
 clean::
 	rm -f $A $A.o $A${EXE}

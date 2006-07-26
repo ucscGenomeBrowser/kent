@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgSgdPep.c,v 1.1 2006/07/26 04:00:24 markd Exp $";
+static char const rcsid[] = "$Id: hgSgdPep.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -60,7 +60,7 @@ while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
         {
-	char *orf, *gene, *e;
+	char *orf, *gene;
 	inPep = FALSE;
 	if ((line = stringIn(pattern, line)) != NULL)
 	    {

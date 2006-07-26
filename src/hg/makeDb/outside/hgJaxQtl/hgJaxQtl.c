@@ -47,7 +47,6 @@ struct sqlConnection *conn2, *conn3;
 char query2[256], query3[256];
 struct sqlResult *sr2, *sr3;
 char **row2, **row3;
-char cond_str[255];
 
 FILE   *outF;
 
@@ -65,11 +64,8 @@ char *qtlThickStart, *qtlThickEnd, *qtlMarker, *qtlMgiID, *qtlDescription, *qtlC
 
 char *flankChrom,  *flankChromStart, *flankChromEnd;
 
-char chrCheck[10];
 char na[10] = {""};
 char zero[10] = {"0"};
-char minus1[10] = {"-1"};
-int peakFound;
 int qtlValid;
 int pos;
 int iFlank;

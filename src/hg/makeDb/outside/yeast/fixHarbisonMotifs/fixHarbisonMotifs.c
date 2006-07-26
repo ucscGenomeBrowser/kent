@@ -8,7 +8,7 @@
 #include "dnaMotifSql.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: fixHarbisonMotifs.c,v 1.1 2006/07/26 04:00:18 markd Exp $";
+static char const rcsid[] = "$Id: fixHarbisonMotifs.c,v 1.2 2006/07/26 04:59:19 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,7 +40,6 @@ void fixMotif(struct dnaMotif *motif,  int targetSize, char *motifTable, struct 
 /* Try and fix motif by trimming degenerate columns. */
 {
 struct dyString *dy = dyStringNew(0);
-int i;
 
 printf("Fixing %s in %s from:\n", motif->name, motifTable);
 dnaMotifPrintProb(motif, uglyOut);

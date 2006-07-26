@@ -16,21 +16,16 @@ USE_DIRS = $(DIRS)
 DIRS = \
 	hgAar \
 	hgAddLiftOverChain \
-	hgAvidShortBed \
 	hgClonePos \
 	hgCountAlign \
 	hgCtgPos \
 	hgDeleteChrom \
-	hgExonerate \
 	hgExperiment \
 	hgExtFileCheck \
 	hgFakeAgp \
-	hgFiberglass \
 	hgFindSpec \
-	hgFlyBase \
 	hgGcPercent \
 	hgGeneBands \
-	hgGnfMicroarray \
 	hgGoldGapGl \
 	hgKgGetText \
 	hgKgMrna \
@@ -55,15 +50,11 @@ DIRS = \
 	hgMedianMicroarray \
 	hgNibSeq \
 	hgPepPred \
-	hgPhMouse \
 	hgRatioMicroarray \
         hgDropSplitTable \
         hgRenameSplitTable \
-	hgRnaGenes \
 	hgSanger20 \
 	hgSanger22 \
-	hgSoftberryHom \
-	hgSoftPromoter \
 	hgStanfordMicroarray \
 	hgStsAlias \
 	hgStsMarkers \
@@ -73,14 +64,9 @@ DIRS = \
 	hgTrackDb \
 	hgWaba \
 	ldHgGene \
-	sanger22gtf \
 	tailLines \
-	vegaBuildInfo \
-	hgBioCyc \
-	hgKegg \
-	hgKegg2 \
 	hgMrnaRefseq \
-	hgCGAP \
 	schema \
 	tfbsConsLoc \
-	tfbsConsSort
+	tfbsConsSort \
+	outside

@@ -1,7 +1,7 @@
-include ../../../../inc/common.mk
+include ../../../../../inc/common.mk
 
 L = -lm
-MYLIBDIR = ../../../../lib/${MACHTYPE}
+MYLIBDIR = ../../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 O = nibbPrepImages.o

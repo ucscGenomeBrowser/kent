@@ -11,7 +11,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.1 2006/07/26 04:00:26 markd Exp $";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -70,11 +70,8 @@ for (cIx=0; cIx<3; ++cIx)
    for (pIx=0; pIx<3; ++pIx)
        {
        struct lineFile *lf;
-       char *line, *row[10];
+       char *row[10];
        char fileName[PATH_LEN];
-       int score = 1000 / (cIx + pIx + 1);
-       char *pLevel = pLevelBed[pIx];
-       char *consLevel = consLevelBed[cIx];
        char hashKey[256];
 
        safef(fileName, sizeof(fileName), "%s/IGR_v24.%s.%s.GFF",

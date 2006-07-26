@@ -1,8 +1,8 @@
 
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 L = -lm ${MYSQLLIBS}
-MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBDIR = ../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = samHit

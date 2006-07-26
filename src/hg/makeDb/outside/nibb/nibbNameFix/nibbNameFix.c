@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibbNameFix.c,v 1.1 2006/07/26 04:00:05 markd Exp $";
+static char const rcsid[] = "$Id: nibbNameFix.c,v 1.2 2006/07/26 04:59:19 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,7 +31,6 @@ void fixName(char *name)
 if (startsWith("gi|", name))
     {
     static char *pat = "|gb|";
-    static int patSize = 4;
     char *s = stringIn(pat, name);
     if (s != NULL)
         {
@@ -62,7 +61,6 @@ struct lineFile *lfFa = lineFileOpen(oldFa, TRUE);
 struct lineFile *lfPsl = pslFileOpen(oldPsl);
 struct dnaSeq seq;
 struct psl *psl;
-int imageProbes = 0;
 int faCount = 0;
 
 ZeroVar(&seq);

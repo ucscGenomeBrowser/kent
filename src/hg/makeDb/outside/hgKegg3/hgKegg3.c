@@ -29,8 +29,6 @@ char query[256], query3[256];
 struct sqlResult *sr, *sr3;
 char **row, **row3;
 
-char *r1,*r3;
-    
 FILE *o1, *o2;
 
 char *locusID;	/* LocusLink ID */
