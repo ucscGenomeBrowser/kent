@@ -1,6 +1,6 @@
 #!/bin/bash -e
 usage='
-  kentBuild [-update] [kentDir] [outRoot]
+  kentBuild [options] [kentDir] [outRoot]
 
 Build kent/src tree and run tests.  
 
@@ -14,7 +14,10 @@ This requires a checked out tree, a cvs update can optionally be done
 after a make clean, so that deleted directories can be removed.
 
 Options:
-   -update - do a cvs update after the make clean.
+   -update - do a cvs update after the make clean
+   -noClean - do not execute the make clean step
+   -noCompile - do not execute the compile step
+   -noTest - do not execute the make test step
 Arguments:
    o kentDir - top of kent tree; this should be the "kent" directory,
      NOT kent/src.  Defaults  to ~/kent.
@@ -44,9 +47,15 @@ makeErr() {
 
 # begin here
 doUpdate="no"
+doClean="yes"
+doCompile="yes"
+doTest="yes"
 while [[ "$1" == -* ]] ; do
     case $1 in
         -update) doUpdate="yes" ;;
+        -noClean) doClean="no" ;;
+        -noCompile) doCompile="no" ;;
+        -noTest) doTest="no" ;;
         *) echo "Error: invalid option: $1" >&2
             exit 1;;
     esac
@@ -109,9 +118,11 @@ fi
 
 cd $kentDir
 
-((cd src && make -k clean) > clean.log 2>&1) || {
-    makeErr "clean" clean.log
-}
+if [ $doClean = "yes" ] ; then
+    ((cd src && make -k clean) > clean.log 2>&1) || {
+        makeErr "clean" clean.log
+    }
+fi
 
 if [ $doUpdate = "yes" ] ; then
     (cvs update -d -P > update.log 2>&1) || {
@@ -121,15 +132,19 @@ if [ $doUpdate = "yes" ] ; then
     }
 fi
 
-((cd src && make -k) > compile.log 2>&1) || {
-    makeErr "compile" compile.log
-}
+if [ $doCompile = "yes" ] ; then
+    ((cd src && make -k) > compile.log 2>&1) || {
+        makeErr "compile" compile.log
+    }
+fi
+
 
 ((cd src && make tags etags) > tags.log 2>&1) || {
     makeErr "tags" tags.log
 }
 
-((cd src && make -k test) > test.log 2>&1) || {
-    makeErr "tests" test.log
-}
-
+if [ $doTest = "yes" ] ; then
+    ((cd src && make -k test) > test.log 2>&1) || {
+        makeErr "tests" test.log
+    }
+fi
