@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.6 2005/07/03 22:15:14 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSplit.c,v 1.7 2006/07/26 01:22:18 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
 int maxLines = 7000;	/* cut out this many unique qNames in each output file. */
@@ -215,13 +215,18 @@ for (i = 0; i<inFileCount; ++i)
     {
     int linesLeft = maxLines;
     bool breakNext = FALSE;
+    //char name[512];
     inFile = inFiles[i];
     printf("Processing %s", inFile);
     fflush(stdout);
     lf = pslFileOpen(inFile);
+    psl = nextPsl(lf) ;
+    prev = cloneString(psl->qName);
+    slAddHead(&pslList, psl);
     while ((psl = nextPsl(lf)) != NULL)
 	{
-	slAddHead(&pslList, psl);
+        //safef(name, sizeof(name), "%s",psl->qName);
+        //chopSuffix(name);
         if (!sameString(prev, psl->qName))
             {
             prev = cloneString(psl->qName);
@@ -242,6 +247,7 @@ for (i = 0; i<inFileCount; ++i)
 	    printf(".");
 	    fflush(stdout);
 	    }
+	slAddHead(&pslList, psl);
         //freeMem(&prev);
 	}
     printf("\n");
