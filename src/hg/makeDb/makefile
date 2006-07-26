@@ -64,7 +64,6 @@ DIRS = \
 	hgTrackDb \
 	hgWaba \
 	ldHgGene \
-	tailLines \
 	hgMrnaRefseq \
 	schema \
 	tfbsConsLoc \
