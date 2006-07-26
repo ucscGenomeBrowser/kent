@@ -1693,7 +1693,7 @@ sGroup_primate panTro1 baboon rheMac1 marmoset galago
 sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog armadillo elephant tenrec
 sGroup_mammal monDom1 platypus 
 sGroup_vertebrate galGal2 xenTro1 danRer2 tetNig1 fr1
-treeImage phylo/hg16_23way.jpg
+treeImage phylo/hg16_23way.gif
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
 
