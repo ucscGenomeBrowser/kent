@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1162 2006/07/24 23:03:01 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1163 2006/07/26 23:07:52 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11724,8 +11724,20 @@ slReverse(&list);  /* Postpone this til here so unknown will be last. */
 if (withPriorityOverride)
     for (track = *pTrackList; track != NULL; track = track->next)
         {
+        int priority = 0;
+        char *groupName = NULL;
         safef(cartVar, sizeof(cartVar), "%s.priority",track->mapName);
+        priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+        /* remove cart variables that are the same as the trackDb settings */
+        if (abs(priority - track->priority) < 0.00001)
+            cartRemove(cart, cartVar);
         track->priority = (float)cartUsualDouble(cart, cartVar, track->priority);
+        safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
+        groupName = cartUsualString(cart, cartVar, track->group->name);
+        if (sameString(groupName, track->group->name))
+            cartRemove(cart, cartVar);
+        if (hashFindVal(hash, groupName)!=NULL)
+            track->group = hashFindVal(hash, groupName);
         }
 /* Sort tracks by combined group/track priority, and
  * then add references to track to group. */
@@ -12092,7 +12104,9 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	s = cgiOptionalString(track->mapName);
 	if (s != NULL)
+            {
 	    cartSetString(cart, track->mapName, s);
+            }
 	}
     if (s != NULL)
 	track->visibility = hTvFromString(s);
@@ -12164,6 +12178,7 @@ if (!hideControls)
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList);
+
 if (measureTiming)
     uglyTime("getTrackList");
 
@@ -12195,6 +12210,8 @@ else if (cgiVarExists("hgt.prevItem"))
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
+    /* remove cart priority variables if they are set  
+       to the default values in the trackDb */
     if(!hTrackOnChrom(track->tdb, chromName)) 
 	{
 	track->limitedVis = tvHide;

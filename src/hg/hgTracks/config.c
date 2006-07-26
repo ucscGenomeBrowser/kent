@@ -20,14 +20,13 @@ cartUsualString(cart, textSizeVar, "small");
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
-void printGroupListHtml(struct group *groupList, char *defaultGroup)
+void printGroupListHtml(char *groupCgiName, struct group *groupList, char *defaultGroup)
 /* Make an HTML select input listing the groups. */
 {
 char *groups[128];
 char *labels[128];
 char *defaultLabel = NULL;
 int numGroups = 0;
-static char *groupCgiName = "group";
 struct group *group = NULL;
 
 for (group = groupList; group != NULL; group = group->next)
@@ -54,6 +53,7 @@ void trackConfig(struct track *trackList, struct group *groupList,
  * be tvHide, tvDense, etc. */
 {
 char pname[512];
+char gname[512];
 struct group *group;
 boolean showedRuler = FALSE;
 
@@ -177,7 +177,8 @@ for (group = groupList; group != NULL; group = group->next)
             hDoubleVar(pname, (double)track->priority, 4);
             hPrintf("</TD>");
             hPrintf("<TD>\n");
-            printGroupListHtml(groupList, track->group->name);
+            safef(gname, sizeof(gname), "%s.group",track->mapName);
+            printGroupListHtml(gname, groupList, track->group->name);
             hPrintf("</TD>");
             }
 	hPrintf("</TR>\n");
