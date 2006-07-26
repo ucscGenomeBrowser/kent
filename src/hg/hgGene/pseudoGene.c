@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pseudoGene.c,v 1.3 2006/07/26 15:29:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: pseudoGene.c,v 1.4 2006/07/26 15:32:05 fanhsu Exp $";
 
 static boolean pseudoGeneExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -64,11 +64,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     refseq	= row[4];
    
     desc = emptyStr;
-    sprintf(condStr, "acc='%s'", name);
+    safef(condStr, sizeof(condStr), "acc='%s'", name);
     descID= sqlGetField(NULL, database, "gbCdnaInfo", "description", condStr);
     if (descID != NULL)
     	{
-    	sprintf(condStr, "id=%s", descID);
+    	safef(condStr, sizeof(condStr), "id=%s", descID);
     	desc = sqlGetField(NULL, database, "description", "name", condStr);
 	if (desc == NULL) desc = emptyStr;
 	}
