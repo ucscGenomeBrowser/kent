@@ -10,7 +10,7 @@ scp -p /cluster/bin/i386/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/ad
 scp -p /cluster/bin/x86_64/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/liftOver.linux.x86_64
 
 echo
-echo "hgdownload utils (liftOver) gz'd on $HOST and scp'd to hgdownload"
+echo "hgdownload utils (liftOver) scp'd to hgdownload"
 #
 exit 0
 

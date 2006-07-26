@@ -54,13 +54,17 @@ rm -fr hgNearData
 rm -fr hgGeneData
 rm -fr visiGeneData
 rm -fr hgcData
+
 echo "the customTrack loader is to be released soon, then remove the next line:"
 rm -fr loader
-echo "the hgSession and hgCustom cgi is to be released soon, then remove the next line:"
+
+echo "the hgSession cgi is to be released soon, then remove the next line:"
 if (-e hgSession) then
     rm hgSession
 endif    
-if (-e hgSession) then
+
+echo "the hgSession and hgCustom cgi is to be released soon, then remove the next line:"
+if (-e hgCustom) then
     rm hgCustom
 endif    
 
