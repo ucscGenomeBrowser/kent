@@ -11,7 +11,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.2 2006/07/26 04:59:20 markd Exp $";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.3 2006/07/26 06:12:28 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -174,7 +174,6 @@ void makeMotifs(char *inFile, struct hash *tfHash, char *outFile)
 /* Parse input motifs and save them to outFile in dnaMotif format. */
 {
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
-boolean done = FALSE;
 FILE *f = mustOpen(outFile, "w");
 struct hashEl *hel;
 
@@ -239,7 +238,7 @@ struct hash *makeProbeBed(char *inGff, char *outBed)
 /* Convert probe location GFF file to BED. */
 {
 struct lineFile *lf = lineFileOpen(inGff, TRUE);
-char *line, *row[9];
+char *row[9];
 struct hash *hash = newHash(16);
 FILE *f = mustOpen(outBed, "w");
 while (lineFileNextRowTab(lf, row, ArraySize(row)))
@@ -353,7 +352,6 @@ void hgYeastRegCode(
 /* hgYeastRegCode - Load files from the regulatory code paper 
  * (large scale CHIP-CHIP on yeast) into database. */
 {
-struct hash *probeHash = makeProbeBed(probeGff, outProbe);
 struct hash *tfHash = makeMotifBed(motifGffDir, outMotifBed);
 makeMotifs(inMotifs, tfHash, outMotifs);
 makeConditions(inConditions, outConditions);
