@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.110 2006/07/27 20:58:41 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.111 2006/07/27 22:12:42 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1847,7 +1847,7 @@ for (track = trackList; track != NULL; track = track->next)
 			    track->wibFile, &upperLimit, &lowerLimit, &options);
 			/* return is number of bytes in wib file */
 			if (options.wibSizeLimit >= 300000000)
-			    printf("#\twarning: reached data limit for wiggle track '%s'<BR>\n", track->tdb->shortLabel);
+			    printf("#\twarning: reached data limit for wiggle track '%s' %lld >= 300,000,000<BR>\n", track->tdb->shortLabel, options.wibSizeLimit);
 			fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
 			unlink(track->wigAscii);/* done with this, remove it */
 			}
