@@ -1822,7 +1822,7 @@ sGroup_primate chimp baboon rhesus marmoset galago
 sGroup_placental rat mouse rabbit cow dog rfbat hedgehog armadillo elephant tenrec
 sGroup_mammal opossum platypus
 sGroup_vertebrate chicken x_tropicalis zebrafish tetraodon fugu
-treeImage phylo/hg16_23way.jpg
+treeImage phylo/hg16_23way.gif
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
 
