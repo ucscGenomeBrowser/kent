@@ -44,7 +44,7 @@ test:
 test_verbose:
 	cd tests && ./RunTest.sh -verbose
 
-install::
+install_tests::
 	rm -f ${SCRIPTS}/chkWiggleTable.sh
 	cp -p chkWiggleTable.sh ${SCRIPTS}
 	rm -f ${SCRIPTS}/varStepToBedGraph.pl
