@@ -13,6 +13,8 @@
 #include "cart.h"
 #include "portable.h"
 
+#define CT_PREFIX       "ct_"
+
 struct customTrack
 /* A custom track. */
     {
@@ -88,5 +90,8 @@ void ctAddToSettings(struct trackDb *tdb, char *format, ...);
 
 void customTrackTrashFile(struct tempName *tn, char *suffix);
 /*	obtain a customTrackTrashFile name	*/
+
+boolean isCustomTrack(char *track);
+/* determine if track name refers to a custom track */
 
 #endif

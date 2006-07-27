@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.109 2006/07/19 07:43:59 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.110 2006/07/27 20:58:41 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -56,7 +56,7 @@ if (firstTime)
     mkdirTrashDirectory("ct");
     firstTime = FALSE;
     }
-safef(prefix, sizeof(prefix), "ct/ct_%d", trackCount++);
+safef(prefix, sizeof(prefix), "ct/%s%d", CT_PREFIX, trackCount++);
 makeTempName(tn, prefix, suffix);
 }
 
@@ -69,7 +69,7 @@ static int count=0;
 AllocVar(tdb);
 tdb->longLabel = cloneString("User Supplied Track");
 tdb->shortLabel = cloneString("User Track");
-safef(buf, sizeof(buf), "ct_%d", ++count);
+safef(buf, sizeof(buf), "%s%d", CT_PREFIX, ++count);
 tdb->tableName = cloneString(buf);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
@@ -416,7 +416,7 @@ tmp = cloneString(label);
 eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
 stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
 stripChar(tmp,'-');	/*	since that's the Invalid table */
-safef(buf, sizeof(buf), "ct_%s", tmp);	/*	name check in hgText	*/
+safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText	*/
 freeMem(tmp);
 return cloneString(buf);
 }
@@ -1254,6 +1254,17 @@ for (;;)
 	if (track == (struct customTrack *)NULL)
 	    continue; /* may have expired data files or db tables */
 	    /* !!! next line of data !!!  */
+        if (isFile)
+            {
+            char docFile[128];
+            char *buf = cloneString(text);
+            chopSuffix(buf);
+            safef(docFile,sizeof docFile, "%s.%s.html", buf, 
+                    track->tdb->tableName);
+            if (fileExists(docFile))
+                readInGulp(docFile, &buf, NULL);
+            track->tdb->html = buf;
+            }
 
 	/*	close previous track data file if in use	*/
 	if (inDbData && (dbDataPL != (struct pipeline *)NULL))
@@ -1500,7 +1511,7 @@ static struct customTrack *customTracksParseCartOrDie(struct cart *cart,
  * back here so that hgText could use it too. */
 struct customTrack *ctList = NULL;
 char *customText = cartOptionalString(cart, "hgt.customText");
-char *fileName = cartOptionalString(cart, "ct");
+char *ctFileNameFromCart = cartOptionalString(cart, "ct");
 char *ctFileName = NULL;
 
 /*	the *fileName from cart "ct" is either from here, re-using an
@@ -1547,24 +1558,9 @@ customText = skipLeadingSpaces(customText);
 
 if (customText != NULL && customText[0] != 0)
     {
-    struct customTrack *theCtList = NULL;
-    struct slName *browserLines = NULL;
     static struct tempName tn;
+
     customTrackTrashFile(&tn, ".bed");
-
-    if (cgiBooleanDefined("hgt.customAppend") && (fileName != (char *)NULL))
-	{
-	if (!fileExists(fileName))	/* Cope with expired tracks. */
-	    {
-	    fileName = NULL;
-	    cartRemove(cart, "ct");
-	    }
-	else
-	    {
-	    theCtList = customTracksParse(fileName, TRUE, &browserLines);
-	    }
-	}
-
     ctList = customTracksParse(customText, FALSE, retBrowserLines);
     ctFileName = tn.forCgi;
     customTrackSave(ctList, tn.forCgi);
@@ -1574,17 +1570,16 @@ if (customText != NULL && customText[0] != 0)
     cartRemove(cart, "hgt.customFile__filename");
     cartRemove(cart, "hgt.customFile__binary");
     }
-else if (fileName != NULL)
+else if (ctFileNameFromCart != NULL)
     {
-    if (!fileExists(fileName))	/* Cope with expired tracks. */
+    if (!fileExists(ctFileNameFromCart))	/* Cope with expired tracks. */
         {
-	fileName = NULL;
 	cartRemove(cart, "ct");
 	}
     else
         {
-	ctList = customTracksParse(fileName, TRUE, retBrowserLines);
-	ctFileName = fileName;
+	ctList = customTracksParse(ctFileNameFromCart, TRUE, retBrowserLines);
+	ctFileName = ctFileNameFromCart;
 	}
     }
 
@@ -1710,6 +1705,15 @@ if (tdb->settings && (strlen(tdb->settings) > 0))
 fputc('\n', f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
+if (tdb->html)
+    {
+    /* write doc file */
+    char docFile[128];
+    char *prefix = cloneString(fileName);
+    chopSuffix(prefix);
+    safef(docFile, sizeof docFile, "%s.%s.html", prefix, tdb->tableName);
+    writeGulp(docFile, tdb->html, strlen(tdb->html));
+    }
 trackDbFree(&def);
 }
 
@@ -1942,6 +1946,12 @@ for (track = trackList; track != NULL; track = track->next)
 carefulClose(&f);
 }	/*	void customTrackSave()	*/
 
+boolean isCustomTrack(char *track)
+/* determine if track name refers to a custom track */
+{
+return (startsWith(CT_PREFIX, track));
+}
+
 static char *testData = 
 "track shortLabel='Colors etc.' undefined=nothing longLabel='Some colors you might use'\n"
 "chr2	1	12	rose\n"
@@ -1976,3 +1986,4 @@ if (slCount(trackList) != 0)
 warn("Passed customTrackTest()");
 return TRUE;
 }
+
