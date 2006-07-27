@@ -196,7 +196,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1061 2006/07/26 15:20:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1062 2006/07/27 21:15:07 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15797,15 +15797,15 @@ struct customTrack *ct;
 struct bed *bed = (struct bed *)NULL;
 int start = cartInt(cart, "o");
 
-cartWebStart(cart, "Custom Track");
 fileName = nextWord(&fileItem);
-itemName = skipLeadingSpaces(fileItem);
-printf("<H2>Custom Track Item %s</H2>\n", itemName);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (sameString(trackId, ct->tdb->tableName))
 	break;
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
+cartWebStart(cart, "Custom Track: %s", ct->tdb->shortLabel);
+itemName = skipLeadingSpaces(fileItem);
+printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (ct->wiggle)
     {
     if (ct->dbTrack)
@@ -15857,6 +15857,7 @@ else
     printCustomUrl(ct->tdb, itemName, TRUE);
     bedPrintPos(bed, ct->fieldCount);
     }
+printTrackHtml(ct->tdb);
 }
 
 void blastProtein(struct trackDb *tdb, char *itemName)
@@ -17933,7 +17934,7 @@ void doMiddle()
 char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
 char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
-struct trackDb *tdb;
+struct trackDb *tdb = NULL;
 
 /*	database and organism are global variables used in many places	*/
 database = cartUsualString(cart, "db", hGetDb());
@@ -17949,6 +17950,7 @@ protDbConn = sqlConnect(protDbName);
 seqName = hgOfficialChromName(cartString(cart, "c"));
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
+
 /* Allow faked-out c=0 l=0 r=0 (e.g. for unaligned mRNAs) but not just any 
  * old bogus position: */
 if (seqName == NULL)
@@ -17960,36 +17962,39 @@ if (seqName == NULL)
     else
 	seqName = hDefaultChrom();
     }
-trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
-if (parentWigMaf)
+if (!isCustomTrack(track))
     {
-    int wordCount, i;
-    char *words[16];
-    char *typeLine;
-    char *wigType = needMem(128);
-    tdb = hashFindVal(trackHash, parentWigMaf);
-    if (!tdb)
-        errAbort("can not find trackDb entry for parentWigMaf track %s.",
-		parentWigMaf);
-    typeLine = cloneString(tdb->type);
-    wordCount = chopLine(typeLine, words);
-    if (wordCount < 1)
-     errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
-		parentWigMaf);
-    safef(wigType, 128, "wig ");
-    for (i = 1; i < wordCount; ++i)
-	{
-	strncat(wigType, words[i], 128 - strlen(wigType));
-	strncat(wigType, " ", 128 - strlen(wigType));
-	}
-    strncat(wigType, "\n", 128 - strlen(wigType));
-    tdb->type = wigType;
-    tdb->tableName = cloneString(track);
-    freeMem(typeLine);
-    cartRemove(cart, "parentWigMaf");	/* ONE TIME ONLY USE !!!	*/
+    trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
+    if (parentWigMaf)
+        {
+        int wordCount, i;
+        char *words[16];
+        char *typeLine;
+        char *wigType = needMem(128);
+        tdb = hashFindVal(trackHash, parentWigMaf);
+        if (!tdb)
+            errAbort("can not find trackDb entry for parentWigMaf track %s.",
+                    parentWigMaf);
+        typeLine = cloneString(tdb->type);
+        wordCount = chopLine(typeLine, words);
+        if (wordCount < 1)
+         errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
+                    parentWigMaf);
+        safef(wigType, 128, "wig ");
+        for (i = 1; i < wordCount; ++i)
+            {
+            strncat(wigType, words[i], 128 - strlen(wigType));
+            strncat(wigType, " ", 128 - strlen(wigType));
+            }
+        strncat(wigType, "\n", 128 - strlen(wigType));
+        tdb->type = wigType;
+        tdb->tableName = cloneString(track);
+        freeMem(typeLine);
+        cartRemove(cart, "parentWigMaf");	/* ONE TIME ONLY USE !!!	*/
+        }
+    else
+        tdb = hashFindVal(trackHash, track);
     }
-else
-    tdb = hashFindVal(trackHash, track);
 
 if (sameWord(track, "getDna"))
     {
@@ -18357,7 +18362,7 @@ else if (sameWord(track, "softPromoter"))
     {
     hgSoftPromoter(track, item);
     }
-else if (startsWith("ct_", track))
+else if (isCustomTrack(track))
     {
     hgCustom(track, item);
     }

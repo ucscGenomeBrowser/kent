@@ -27,6 +27,7 @@
 #include "landmarkUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
+#include "customTrack.h"
 #include "dbRIP.h"
 
 #define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
@@ -34,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.290 2006/07/27 17:49:17 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.291 2006/07/27 21:15:08 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2472,8 +2473,9 @@ return trackDbForPseudoTrack(OLIGO_MATCH_TRACK_NAME,
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
-struct trackDb *tdb;
+struct trackDb *tdb = NULL;
 char *track;
+struct customTrack *ct, *ctList = NULL;
 cart = theCart;
 track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
@@ -2486,6 +2488,18 @@ else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
 else if (sameWord(track, CUTTERS_TRACK_NAME))
     tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
+else if (isCustomTrack(track))
+    {
+    ctList = customTracksParseCart(cart, NULL, NULL);
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        {
+        if (sameString(track, ct->tdb->tableName))
+            {
+            tdb = ct->tdb;
+            break;
+            }
+        }
+    }
 else
     tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
