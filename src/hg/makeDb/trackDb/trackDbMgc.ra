@@ -456,8 +456,8 @@ priority 600
 # Vancouver BCGSC
 track gscMgc1
 compositeTrack on
-shortLabel GSC set 1
-longLabel GSC RT-PCR for MGC set 1
+shortLabel BCGSC set 1
+longLabel BCGSC RT-PCR for MGC set 1
 group mgcBCGSC
 priority 2105.2
 type bed
@@ -467,8 +467,8 @@ noInherit on
     track gscMgcTargets1
     noInherit on
     subTrack gscMgc1
-    shortLabel GSC targets set 1
-    longLabel GSC MGC RT-PCR targets set 1
+    shortLabel BCGSC targets set 1
+    longLabel BCGSC MGC RT-PCR targets set 1
     priority 1
     visibility hide
     color 200,0,50
@@ -479,8 +479,8 @@ noInherit on
     track gscMgcClones1
     noInherit on
     subTrack gscMgc1
-    shortLabel GSC clones set 1
-    longLabel GSC MGC RT-PCR clones set 1
+    shortLabel BCGSC clones set 1
+    longLabel BCGSC MGC RT-PCR clones set 1
     priority 2
     visibility hide
     color 155,0,125
@@ -490,8 +490,8 @@ noInherit on
 
 track gscMgc2
 compositeTrack on
-shortLabel GSC set 2
-longLabel GSC RT-PCR for MGC set 2
+shortLabel BCGSC set 2
+longLabel BCGSC RT-PCR for MGC set 2
 group mgcBCGSC
 priority 2105.2
 type bed
@@ -501,8 +501,8 @@ noInherit on
     track gscMgcTargets2
     noInherit on
     subTrack gscMgc2
-    shortLabel GSC targets set 2
-    longLabel GSC MGC RT-PCR targets set 2
+    shortLabel BCGSC targets set 2
+    longLabel BCGSC MGC RT-PCR targets set 2
     priority 1
     visibility hide
     color 200,0,50
@@ -513,8 +513,8 @@ noInherit on
     track gscMgcClones2
     noInherit on
     subTrack gscMgc2
-    shortLabel GSC clones set 2
-    longLabel GSC MGC RT-PCR clones set 2
+    shortLabel BCGSC clones set 2
+    longLabel BCGSC MGC RT-PCR clones set 2
     priority 2
     visibility hide
     color 155,0,125
@@ -524,8 +524,8 @@ noInherit on
 
 track gscMgc3
 compositeTrack on
-shortLabel GSC set 3
-longLabel GSC RT-PCR for MGC set 3
+shortLabel BCGSC set 3
+longLabel BCGSC RT-PCR for MGC set 3
 group mgcBCGSC
 priority 2105.3
 type bed
@@ -535,8 +535,8 @@ noInherit on
     track gscMgcTargets3
     noInherit on
     subTrack gscMgc3
-    shortLabel GSC targets set 3
-    longLabel GSC MGC RT-PCR targets set 3
+    shortLabel BCGSC targets set 3
+    longLabel BCGSC MGC RT-PCR targets set 3
     priority 1
     visibility hide
     color 200,0,50
@@ -547,8 +547,8 @@ noInherit on
     track gscMgcClones3
     noInherit on
     subTrack gscMgc3
-    shortLabel GSC clones set 3
-    longLabel GSC MGC RT-PCR clones set 3
+    shortLabel BCGSC clones set 3
+    longLabel BCGSC MGC RT-PCR clones set 3
     priority 2
     visibility hide
     color 155,0,125
@@ -558,8 +558,8 @@ noInherit on
 
 track gscMgc4
 compositeTrack on
-shortLabel GSC sets 4,5
-longLabel GSC RT-PCR for MGC sets 4,5
+shortLabel BCGSC sets 4,5
+longLabel BCGSC RT-PCR for MGC sets 4,5
 group mgcBCGSC
 priority 2105.4
 type bed
@@ -569,8 +569,8 @@ noInherit on
     track gscMgcTargets4
     noInherit on
     subTrack gscMgc4
-    shortLabel GSC targets sets 4,5 
-    longLabel GSC MGC RT-PCR targets set 4,5
+    shortLabel BCGSC targets sets 4,5 
+    longLabel BCGSC MGC RT-PCR targets set 4,5
     priority 1
     visibility hide
     color 200,0,50
@@ -581,8 +581,8 @@ noInherit on
     track gscMgcClones4
     noInherit on
     subTrack gscMgc4
-    shortLabel GSC clones sets 4,5
-    longLabel GSC MGC RT-PCR clones set 4,5
+    shortLabel BCGSC clones sets 4,5
+    longLabel BCGSC MGC RT-PCR clones set 4,5
     priority 2
     visibility hide
     color 155,0,125
@@ -592,21 +592,21 @@ noInherit on
 
 track gscMgc6
 compositeTrack on
-shortLabel GSC set6
-longLabel GSC RT-PCR for MGC set 7
+shortLabel BCGSC set6
+longLabel BCGSC RT-PCR for MGC set 6
 group mgcBCGSC
 priority 2105.6
 type bed
-visibility hide
+visibility pack
 noInherit on
 
     track gscMgcTargets6
     noInherit on
     subTrack gscMgc6
-    shortLabel GSC targets sets 6
-    longLabel GSC MGC RT-PCR targets set 6
+    shortLabel BCGSC targets sets 6
+    longLabel BCGSC MGC RT-PCR targets set 6
     priority 1
-    visibility hide
+    visibility pack
     color 200,0,50
     type genePred
     exonArrows on
@@ -614,11 +614,11 @@ noInherit on
 
     track gscMgcClones6
     noInherit on
-    subTrack gscMgc4
-    shortLabel GSC clones sets 6
-    longLabel GSC MGC RT-PCR clones set 6
+    subTrack gscMgc6
+    shortLabel BCGSC clones sets 6
+    longLabel BCGSC MGC RT-PCR clones set 6
     priority 2
-    visibility hide
+    visibility pack
     color 155,0,125
     type psl .
     exonArrows on
