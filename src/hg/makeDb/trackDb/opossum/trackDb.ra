@@ -56,7 +56,7 @@ type psl xeno
 
 track multiz5way
 shortLabel Conservation
-longLabel Conservation in Opossum/Chicken/Human/Mouse/Zebrafish
+longLabel Conservation in Opossum/Human/Mouse/Chicken/Zebrafish
 group compGeno
 priority 109
 visibility pack
@@ -68,6 +68,7 @@ yLinOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
 speciesOrder hg17 mm5 galGal2 danRer2
+treeImage phylo/monDom1_5way.gif
 
 track mostConserved
 shortLabel Most Conserved
