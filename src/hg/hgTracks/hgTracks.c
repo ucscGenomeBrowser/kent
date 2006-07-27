@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1164 2006/07/27 01:35:00 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1165 2006/07/27 01:40:43 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -590,15 +590,17 @@ for (group = groupList; group != NULL; group = group->next)
 	    {
 	    struct track *track = tr->track;
 	    if (changeVis == -1)
+                {
 	        track->visibility = track->tdb->visibility;
+                /* set the track priority back to the default value */
+                safef(pname, sizeof(pname), "%s.priority",track->mapName);
+                cartRemove(cart, pname);
+                track->priority = track->defaultPriority;
+                }
             else if (track->visibility != tvHide || !ifVisible)
                 track->visibility = changeVis;
 	    cartSetString(cart, track->mapName, 
 	    	hStringFromTv(track->visibility));
-            /* set the track priority back to the default value */
-            safef(pname, sizeof(pname), "%s.priority",track->mapName);
-            cartRemove(cart, pname);
-            track->priority = track->defaultPriority;
 	    }
 	}
     }
