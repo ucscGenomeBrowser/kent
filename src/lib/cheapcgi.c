@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.80 2006/06/28 22:26:20 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.81 2006/07/27 21:36:59 hiram Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -378,6 +378,7 @@ while (namePt != NULL && namePt[0] != 0)
 	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
+    cgiDecode(namePt,namePt,strlen(namePt));	/* for unusual ct names */
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
     el->val = dataPt;
