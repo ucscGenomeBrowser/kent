@@ -21631,6 +21631,19 @@ hgLoadBed -tab hg17 cnpFosmid cnpFosmid.bed
 hinds.pl < hinds.txt > delHinds.bed
 hgLoadBed -tab -noBin hg17 delHinds delHinds.bed
 
+# (7-27-2006 Brooke Rhead -- edited the cnpFosmid table)
+# According to Andy Sharp, the name='Gap' items should be removed from
+# cnpFosmid.  I dumped the table, removed the 'Gap' lines, then dumped the
+# table again.
+
+cd /cluster/data/hg17/bed/svMixed
+hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withGaps.bed
+
+hgsql hg17
+delete from cnpFosmid where name='Gap';
+
+hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withoutGaps.bed
+
 # Simple lifts for delConrad and delMccarroll
 # Use -multiple for delConrad; increases coverage but doesn't cause big proliferations
 # One data point lifts 13x, another 7x, another 4x.  The rest are once or twice.
