@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.41 2005/12/05 22:14:11 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.42 2006/07/27 18:08:38 hiram Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -366,7 +366,7 @@ for (;;)
     if ((c = *var) == 0)
         break;
     if (!isalpha(c))
-	errAbort("line %d of custom input: variable needs to start with letter", lineIx);
+	errAbort("line %d of custom input: variable needs to start with letter '%s'", lineIx, var);
     val = strchr(var, '=');
     if (val == NULL)
         {
