@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.19 2006/06/28 03:04:54 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.20 2006/07/27 21:16:13 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -74,17 +74,18 @@ cgiSimpleTableStart();
 
 /* first row - label, link for file upload, and submit button*/
 cgiSimpleTableRowStart();
-cgiTableField("Paste in URLs or data, or <A HREF=\"../cgi-bin/hgCustom?hgCt_do_fileEntry=1\">upload from a file\n");
-cgiTableFieldEnd();
+cgiTableField("Paste URLs or data:");
 puts("<TD ALIGN='RIGHT'>");
-cgiMakeSubmitButton();
+puts("Or upload: ");
+cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
+//cgiTableField("");
 cgiTableRowEnd();
 
 /* second row - text entry box for URL's or data  and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 8, 65);
+cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 7, 68);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeClearButton("mainForm", hgCtDataText);
@@ -93,25 +94,44 @@ cgiTableRowEnd();
 
 /* third row - label for description text entry */
 cgiSimpleTableRowStart();
-cgiTableField("Optional description");
+cgiTableField("Optional description:");
+puts("<TD ALIGN='RIGHT'>");
+puts("Or upload: ");
+cgiMakeFileEntry(hgCtDocFile);
+cgiTableFieldEnd();
+//cgiTableField("");
 cgiTableRowEnd();
 
 /* fourth row - text entry for description, and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 6, 65);
+cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 7, 68);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
+
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
 cgiMakeClearButton("mainForm", hgCtDocText);
-cgiTableRowEnd();
-cgiSimpleTableRowStart();
-initFieldFromFileButton("mainForm", hgCtDocText, "/goldenPath/help/ct_description.txt", "&nbsp; Fill &nbsp; &nbsp;");
-cgiTableRowEnd();
-cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+initFieldFromFileButton("mainForm", hgCtDocText, "/goldenPath/help/ct_description.txt", "&nbsp; Fill &nbsp; ");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+cgiTableEnd();
+
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* fifth row - submit button */
+cgiSimpleTableRowStart();
+puts("<TD COLSPAN=2 ALIGN='RIGHT'>");
+cgiMakeSubmitButton();
+cgiTableRowEnd();
+
+cgiTableFieldEnd();
 
 cgiTableEnd();
 }
