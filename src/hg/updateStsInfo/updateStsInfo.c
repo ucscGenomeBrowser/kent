@@ -23,7 +23,7 @@
 #include "stsInfo2.h"
 
 /*	over time these listings and numbers are growing. */
-#define MAX_ID_LIST	2048
+#define MAX_ID_LIST	262144
 #define MAX_STS_ID	9000000
 
 /* command line option specifications */
@@ -480,12 +480,9 @@ void readDbstsNames(struct lineFile *daf)
   struct primer *p;
   char *words[4], *names[64], name[64], *org;
   int dbstsId, nameCount, i;
-    int lineCount = 0;
-int assigned = 0;
 
   while (lineFileChopNext(daf, words, 2))
     {
-    ++lineCount;
       /* Make sure this is a human marker */
       org = hashFindVal(orgHash, words[0]);
       if (hashLookup(orgHash, words[0]) && !sameString(org, "Homo sapiens\0") && !sameString(org, "\0"))
@@ -506,7 +503,6 @@ int assigned = 0;
       /* If the id has not been assigned, see any of the names are being used */
       if (s == NULL) 
 	{
-	++assigned;
 	  nameCount = chopByChar(words[1], ';', names, ArraySize(names));
 	  for (i = 0; i < nameCount; i++) 
 	    {
@@ -630,7 +626,6 @@ int assigned = 0;
 	    }
 	}
     }     
-				 
 }
 
 void readAllSts(FILE *asf) 
