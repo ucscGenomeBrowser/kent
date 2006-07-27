@@ -134,6 +134,7 @@ struct track
 
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
     float priority;   /* Tracks are drawn in priority order. */
+    float defaultPriority;   /* Tracks are drawn in priority order. */
     char *groupName;	/* Name of group if any. */
     struct group *group;  /* Group this track is associated with. */
     boolean canPack;	/* Can we pack the display for this track? */
@@ -845,6 +846,7 @@ void setRulerMode();
 #define configShowAll "hgt_doConfigShowAll"
 #define configDefaultAll "hgt_doDefaultShowAll"
 #define configGroupTarget "hgt_configGroupTarget"
+#define configPriorityOverride "hgt_priorityOverride"
 
 void configPage();
 /* Put up configuration page. */

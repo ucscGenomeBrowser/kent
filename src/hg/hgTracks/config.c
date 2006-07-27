@@ -199,6 +199,7 @@ struct track *trackList =  NULL;
 struct track *ideoTrack = NULL;
 struct group *groupList = NULL;
 char *trackReordering = cfgOption("hgTracks.trackReordering");
+withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 
 /* Get track list and group them. */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
@@ -278,7 +279,7 @@ hPrintf("</TD></TR>\n");
 if (trackReordering != NULL && sameString(trackReordering,"on"))
     {
     hPrintf("<TR><TD>");
-    hCheckBox("priorityOverride", cartUsualBoolean(cart, "priorityOverride", FALSE));
+    hCheckBox(configPriorityOverride , cartUsualBoolean(cart, configPriorityOverride , FALSE));
     hPrintf("</TD><TD>");
     hPrintf("Enable Track re-ordering");
     hPrintf("</TD></TR>\n");
@@ -306,6 +307,5 @@ hPrintf("</FORM>");
 void configPage()
 /* Put up configuration page. */
 {
-withPriorityOverride = cartUsualBoolean(cart, "priorityOverride", FALSE);
 configPageSetTrackVis(-2);
 }

@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1163 2006/07/26 23:07:52 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1164 2006/07/27 01:35:00 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -585,6 +585,7 @@ for (group = groupList; group != NULL; group = group->next)
     struct trackRef *tr;
     if (groupTarget == NULL || sameString(group->name,groupTarget))
         {
+        static char pname[512];
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
 	    struct track *track = tr->track;
@@ -594,6 +595,10 @@ for (group = groupList; group != NULL; group = group->next)
                 track->visibility = changeVis;
 	    cartSetString(cart, track->mapName, 
 	    	hStringFromTv(track->visibility));
+            /* set the track priority back to the default value */
+            safef(pname, sizeof(pname), "%s.priority",track->mapName);
+            cartRemove(cart, pname);
+            track->priority = track->defaultPriority;
 	    }
 	}
     }
@@ -11173,6 +11178,8 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
+    /* save default priority so we can reset it later */
+    track->defaultPriority = track->priority;
 
     if (slCount(tdb->subtracks) != 0)
         makeCompositeTrack(track, tdb);
@@ -11731,6 +11738,8 @@ if (withPriorityOverride)
         /* remove cart variables that are the same as the trackDb settings */
         if (abs(priority - track->priority) < 0.00001)
             cartRemove(cart, cartVar);
+        else
+            track->defaultPriority = track->priority;
         track->priority = (float)cartUsualDouble(cart, cartVar, track->priority);
         safef(cartVar, sizeof(cartVar), "%s.group",track->mapName);
         groupName = cartUsualString(cart, cartVar, track->group->name);
@@ -12780,7 +12789,7 @@ withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-withPriorityOverride = cartUsualBoolean(cart, "priorityOverride", FALSE);
+withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
