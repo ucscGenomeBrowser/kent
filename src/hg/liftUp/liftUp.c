@@ -16,7 +16,7 @@
 #include "options.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.38 2006/01/13 20:14:15 hiram Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.39 2006/07/27 22:14:26 hiram Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -1311,16 +1311,19 @@ char root[128], ext[64];
 char *s, *contig;
 int len;
 
+verbose(2,"#\tname: %s\n", name);
 splitPath(name, dirBuf, root, ext);
 len = strlen(dirBuf);
 if (len == 0)
     errAbort("Need contig directory in file name to lift .gl files\n");
 if (dirBuf[len-1] == '/')
     dirBuf[len-1] = 0;
+verbose(2,"#\tdirBuf: %s\n", dirBuf);
 if ((s = strrchr(dirBuf, '/')) != NULL)
     contig = s+1;
 else
     contig = dirBuf;
+verbose(2,"#\ts: %s\n", s);
 return contig;
 } 
 
@@ -1345,6 +1348,7 @@ for (i=0; i<sourceCount; ++i)
     source = sources[i];
     if (!pipeOut) printf("Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
+    verbose(2,"#\tcontig: %s, source: %s, dirBuf: %s\n", contig, source, dirBuf);
     if (!startsWith("ctg", contig) &&
 	!startsWith("NC_", contig) &&
 	!startsWith("NT_", contig) &&
@@ -1352,6 +1356,7 @@ for (i=0; i<sourceCount; ++i)
         {
 	sprintf(chromName, "chr%s", contig);
 	contig = chromName;
+    verbose(2,"#\tcontig: %s, chromName: %s\n", contig, chromName);
 	}
     spec = findLift(liftHash, contig, lf);
     if (spec == NULL)
