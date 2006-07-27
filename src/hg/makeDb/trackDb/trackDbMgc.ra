@@ -590,6 +590,40 @@ noInherit on
     exonArrows on
     cdsDrawOptions enabled
 
+track gscMgc6
+compositeTrack on
+shortLabel GSC set6
+longLabel GSC RT-PCR for MGC set 7
+group mgcBCGSC
+priority 2105.6
+type bed
+visibility hide
+noInherit on
+
+    track gscMgcTargets6
+    noInherit on
+    subTrack gscMgc6
+    shortLabel GSC targets sets 6
+    longLabel GSC MGC RT-PCR targets set 6
+    priority 1
+    visibility hide
+    color 200,0,50
+    type genePred
+    exonArrows on
+    cdsDrawDefault genomic\ codons
+
+    track gscMgcClones6
+    noInherit on
+    subTrack gscMgc4
+    shortLabel GSC clones sets 6
+    longLabel GSC MGC RT-PCR clones set 6
+    priority 2
+    visibility hide
+    color 155,0,125
+    type psl .
+    exonArrows on
+    cdsDrawOptions enabled
+
 searchName mgcWUPcrConfirmed
 searchTable mgcWUPcrConfirmed
 searchMethod exact
