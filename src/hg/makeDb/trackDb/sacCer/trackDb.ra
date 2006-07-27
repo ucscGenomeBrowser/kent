@@ -61,6 +61,23 @@ visibility hide
 type bed 4 +
 exonArrows off
 
+track nucleosome
+shortLabel Nucleosome
+longLabel Per base Probability of Nucleasome positions E. Segal et al.
+group regulation
+priority 100
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+defaultViewLimits 0:1
+spanList 1
+type wig 0 100 
+
 track multizYeast 
 shortLabel Conservation
 longLabel Seven Species of Saccharomyces, Alignments & Conservation
