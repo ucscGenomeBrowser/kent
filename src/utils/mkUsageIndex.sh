@@ -1,13 +1,12 @@
 #!/bin/sh
 #	mkUsageIndex.sh - create index of usage messages from current
-#	binaries on kolossus in /cluster/bin/x86_64
+#	binaries in /cluster/bin/x86_64
 
-#	$Id: mkUsageIndex.sh,v 1.2 2006/04/04 19:25:02 hiram Exp $
+#	$Id: mkUsageIndex.sh,v 1.3 2006/07/27 22:35:32 hiram Exp $
 
 usage() {
     echo "mkUsageIndex.sh - create index of usage messages"
     echo "usage: mkUsageIndex.sh <anything> > useMessageIndex.html"
-    echo "expects to be working on kolossus"
     exit 255
 }
 
@@ -16,7 +15,7 @@ if [ $# -lt 1 ]; then
 fi
 
 cd /cluster/bin/x86_64
-find . -type f -newer randomPlacement \
+find . -type f -newer xlogo \
 	| sed -e "s/^\.\///" | sort > /tmp/x86_64.list
 
 echo "<HTML><HEAD><TITLE>kent source tree programs</TITLE></HEAD>"
