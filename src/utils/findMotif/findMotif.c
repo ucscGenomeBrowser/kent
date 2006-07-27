@@ -7,8 +7,10 @@
 #include "dnaseq.h"
 #include "dnaLoad.h"
 #include "portable.h"
+#include "memalloc.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.10 2006/03/18 02:34:37 angie Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.11 2006/07/27 22:39:28 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -144,6 +146,16 @@ for (i=0; i < seq->size; ++i)
 	    break;
 	}
     }
+if ((chromPosition - enterGap) > 0)
+    {
+    ++gapCount;
+    verbose(3,
+	    "#\treturn from gap at %llu, gap length: %llu\n",
+	    chromPosition+1, chromPosition - enterGap + 1);
+    verbose(4, "#GAP %s\t%llu\t%llu\t%llu\t%llu\t%s\n",
+	    seq->name, enterGap-1, chromPosition, gapCount,
+	    chromPosition - enterGap + 1, "+");
+    }
 
 verbose(2, "#\tfound: %llu times + strand, %llu times - strand\n",
     posFound, negFound );
@@ -173,11 +185,22 @@ int main(int argc, char *argv[])
 int i;
 char *cp;
 unsigned long long reversed;
+size_t maxAlloc;
+char asciiAlloc[32];
 
 optionInit(&argc, argv, options);
 
 if (argc < 2)
     usage();
+
+maxAlloc = 2100000000 *
+	 (((sizeof(size_t)/4)*(sizeof(size_t)/4)*(sizeof(size_t)/4)));
+sprintLongWithCommas(asciiAlloc, (long long) maxAlloc);
+verbose(4, "#\tmaxAlloc: %s\n", asciiAlloc);
+setMaxAlloc(maxAlloc);
+/* produces: size_t is 4 == 2100000000 ~= 2^31 = 2Gb
+ *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
+ */
 
 dnaUtilOpen();
 
@@ -202,7 +225,7 @@ else {
     warn("ERROR: -motif string empty, please specify a motif\n");
     usage();
 }
-verbose(2, "#\ttype output: %s\n", wigOutput ? "bed format" : "wiggle data");
+verbose(2, "#\ttype output: %s\n", wigOutput ? "wiggle data" : "bed format");
 verbose(2, "#\tspecified sequence: %s\n", argv[1]);
 verbose(2, "#\tsizeof(motifVal): %d\n", (int)sizeof(motifVal));
 if (strand)
