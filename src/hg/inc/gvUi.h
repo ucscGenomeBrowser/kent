@@ -26,6 +26,11 @@ extern char *gvAccuracyLabel[];
 extern unsigned gvAccuracyDbValue[];
 extern int gvAccuracySize;
 
+extern char *gvFilterDAString[];
+extern char *gvFilterDALabel[];
+extern char *gvFilterDADbValue[];
+extern int gvFilterDASize;
+
 extern char *gvColorLabels[];
 extern int gvColorLabelSize;
 
@@ -34,5 +39,10 @@ extern char *gvColorTypeStrings[];
 extern char *gvColorTypeDefault[];
 extern char *gvColorTypeBaseChangeType[];
 extern int gvColorTypeSize;
+extern char *gvColorDALabels[];
+extern char *gvColorDAStrings[];
+extern char *gvColorDADefault[];
+extern char *gvColorDAAttrVal[];
+extern int gvColorDASize;
 
 #endif

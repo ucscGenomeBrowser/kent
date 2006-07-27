@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1165 2006/07/27 01:40:43 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1166 2006/07/27 17:49:17 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10043,7 +10043,55 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
-Color gvColor(struct track *tg, void *item, struct vGfx *vg)
+Color gvColorByDisease(struct track *tg, void *item, struct vGfx *vg)
+/* color items by whether they are known or likely to cause disease */
+{
+struct gvPos *el = item;
+struct gvAttr *attr = NULL;
+struct sqlConnection *conn = hAllocConn();
+char *escId = NULL;
+char *useColor = NULL;
+int index = -1;
+char query[256];
+if (el->id != NULL)
+    escId = sqlEscapeString(el->id);
+else
+    escId = sqlEscapeString(el->name);
+safef(query, sizeof(query), "select * from gvAttr where id = '%s' and attrType = 'disease'", escId);
+attr = gvAttrLoadByQuery(conn, query);
+if (attr == NULL)
+    {
+    AllocVar(attr);
+    attr->attrVal = cloneString("NULL");
+    attr->id = NULL; /* so free will work */
+    attr->attrType = NULL;
+    }
+index = stringArrayIx(attr->attrVal, gvColorDAAttrVal, gvColorDASize);
+if (index < 0 || index >= gvColorDASize)
+    return MG_BLACK;
+useColor = cartUsualString(cart, gvColorDAStrings[index], gvColorDADefault[index]);
+gvAttrFreeList(&attr);
+hFreeConn(&conn);
+freeMem(escId);
+if (sameString(useColor, "red"))
+    return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+else if (sameString(useColor, "orange"))
+    return vgFindColorIx(vg, 255, 153, 0);
+else if (sameString(useColor, "green"))
+    return vgFindColorIx(vg, 0, 153, 0); /* dark green */
+else if (sameString(useColor, "gray"))
+    return MG_GRAY;
+else if (sameString(useColor, "purple"))
+    return vgFindColorIx(vg, 204, 0, 255);
+else if (sameString(useColor, "blue"))
+    return MG_BLUE;
+else if (sameString(useColor, "brown"))
+    return vgFindColorIx(vg, 100, 50, 0); /* brown */
+else
+    return MG_BLACK;
+}
+
+Color gvColorByType(struct track *tg, void *item, struct vGfx *vg)
 /* color items by type */
 {
 struct gvPos *el = item;
@@ -10051,7 +10099,7 @@ struct gv *details = NULL;
 struct sqlConnection *conn = hAllocConn();
 char *typeColor = NULL;
 int index = 5;
-char *escId = NULL; // name changed already, how get ID?
+char *escId = NULL; 
 char query[256];
 if (el->id != NULL)
     escId = sqlEscapeString(el->id);
@@ -10061,7 +10109,7 @@ else
 safef(query, sizeof(query), "select * from gv where id = '%s'", escId);
 details = gvLoadByQuery(conn, query);
 index = stringArrayIx(details->baseChangeType, gvColorTypeBaseChangeType, gvColorTypeSize);
-if (index < 0)
+if (index < 0 || index >= gvColorTypeSize)
     return MG_BLACK;
 typeColor = cartUsualString(cart, gvColorTypeStrings[index], gvColorTypeDefault[index]);
 gvFreeList(&details);
@@ -10077,8 +10125,23 @@ else if (sameString(typeColor, "blue"))
     return MG_BLUE;
 else if (sameString(typeColor, "brown"))
     return vgFindColorIx(vg, 100, 50, 0); /* brown */
+else if (sameString(typeColor, "gray"))
+    return MG_GRAY;
+else if (sameString(typeColor, "red"))
+    return vgFindColorIx(vg, 221, 0, 0); /* dark red */
 else 
     return MG_BLACK;
+}
+
+Color gvColor(struct track *tg, void *item, struct vGfx *vg)
+/* color items, multiple choices for determination */
+{
+char *choice = NULL;
+choice = cartOptionalString(cart, "gvPos.filter.colorby");
+if (choice != NULL && sameString(choice, "disease"))
+    return gvColorByDisease(tg, item, vg);
+else
+    return gvColorByType(tg, item, vg);
 }
 
 Color hgMutColor(struct track *tg, void *item, struct vGfx *vg)
@@ -10202,6 +10265,45 @@ for (hashel = filterList; hashel != NULL; hashel = hashel->next)
     }
 hashElFreeList(&filterList);
 freeMem(srcTxt);
+return TRUE;
+}
+
+boolean gvFilterDA(struct gv *el)
+/* Check to see if this element should be excluded (disease association attribute) */
+{
+int cnt = 0;
+struct gvAttr *attr = NULL;
+char query[256];
+char *escId = NULL;
+struct sqlConnection *conn = hAllocConn();
+
+if (el->id != NULL)
+    escId = sqlEscapeString(el->id);
+else
+    escId = sqlEscapeString(el->name);
+
+safef(query, sizeof(query), "select * from gvAttr where id = '%s' and attrType = 'disease'", escId);
+attr = gvAttrLoadByQuery(conn, query);
+hFreeConn(&conn);
+if (attr == NULL) 
+    {
+    AllocVar(attr);
+    attr->attrVal = cloneString("NULL");
+    attr->id = NULL; /* so free will work */
+    attr->attrType = NULL;
+    }
+for (cnt = 0; cnt < gvFilterDASize; cnt++)
+    {
+    if (cartVarExists(cart, gvFilterDAString[cnt]) &&
+        cartString(cart, gvFilterDAString[cnt]) != NULL &&
+        differentString(cartString(cart, gvFilterDAString[cnt]), "0") &&
+        sameString(gvFilterDADbValue[cnt], attr->attrVal))
+        {
+        gvAttrFree(&attr);
+        return FALSE;
+        }
+    }
+gvAttrFree(&attr);
 return TRUE;
 }
 
@@ -10470,6 +10572,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     else if (!gvFilterSrc(details, srcList))
         gvPosFree(&el);
     else if (!gvFilterAccuracy(details))
+        gvPosFree(&el);
+    else if (!gvFilterDA(details))
         gvPosFree(&el);
     else
         slAddHead(&list, el);

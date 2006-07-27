@@ -8,7 +8,19 @@ listed in the Methods section below.
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-This track is color-coded by the mutation type, the default colors are:
+This track is color-coded by the disease-association or mutation type.<BR />
+The default colors for disease-association are:
+<UL>
+<LI>
+known to be disease-associated = <font color="#DD0000">red</font>
+<LI>
+likely to be phenotype-associated = <font color="#FF9900">orange</font>
+<LI>
+not disease-associated = <font color="#009900">green</font>
+<LI>
+remaining mutations = <font color="GRAY">gray</font>
+</UL>
+The default colors for mutation type are:
 <UL>
 <LI>
 substitution = <font color="#CC00FF">purple</font>
@@ -69,6 +81,15 @@ A possible connection with <A HREF="http://www.centralmutations.org"
 TARGET=_blank>WayStation</A>, the HGVS community-wide database.
 -->
 </UL>
+<p>The disease association is determined by a database curator listing the
+mutations that are "known to be disease-associated" or "not disease-associated".
+Of the remaining mutations those that are insertions or deletions or 
+non-synonymous substitutions in coding regions are considered to be
+"likely to be phenotype-associated", as well as known splicing mutations.
+Also mutations that intersect with 
+regions in the most conserved track are considered to be 
+"likely to be phenotype-associated".  The remaining entries are not known and
+left blank (gray by default).
 
 <H2>Credits</H2>
 

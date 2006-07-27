@@ -89,6 +89,29 @@ unsigned gvAccuracyDbValue[] = {
 
 int gvAccuracySize = ArraySize(gvAccuracyLabel);
 
+char *gvFilterDALabel[] = {
+    "known to be disease-associated",
+    "likely to be phenotype-associated",
+    "not disease-associated",
+    "remaining mutations",
+};
+
+char *gvFilterDAString[] = {
+    "gvPos.filter.da.known",
+    "gvPos.filter.da.likely",
+    "gvPos.filter.da.not",
+    "gvPos.filter.da.null",
+};
+
+char *gvFilterDADbValue[] = {
+    "known to be disease-associated",
+    "likely to be phenotype-associated",
+    "not disease-associated",
+    "NULL",
+};
+
+int gvFilterDASize = ArraySize(gvFilterDAString);
+
 /***************Attribute display**************/
 
 /* list in display order of attribute type, key that is used in table */
@@ -100,6 +123,7 @@ char *gvAttrTypeKey[] = {
     "mutType",
     "rnaNtChange",
     "protEffect",
+    "disease",
     "phenoCommon",
     "phenoOfficial",
     "geneVarsDis",
@@ -117,6 +141,7 @@ char *gvAttrTypeDisplay[] = {
     "Type of mutation",
     "RNA nucleotide change",
     "Effect on Protein",
+    "Disease association",
     "Phenotype common name",
     "Phenotype official nomenclature",
     "Variation and Disease information related to gene locus",
@@ -136,6 +161,7 @@ char *gvAttrCategory[] = {
     "Protein effect",
     "Patient/Subject phenotype",
     "Patient/Subject phenotype",
+    "Patient/Subject phenotype",
     "Data related to gene locus",
     "Other Ancillary data",
     "Other Ancillary data",
@@ -147,12 +173,14 @@ int gvAttrSize = ArraySize(gvAttrTypeKey);
 /***************Color options**************/
 
 char *gvColorLabels[] = {
+    "red",
     "purple",
     "green",
     "orange",
     "blue",
     "brown",
     "black",
+    "gray",
 };
 
 int gvColorLabelSize = ArraySize(gvColorLabels);
@@ -195,3 +223,34 @@ char *gvColorTypeBaseChangeType[] = {
 
 /* all type arrays are same size */
 int gvColorTypeSize = ArraySize(gvColorTypeStrings);
+
+/* color by disease association */
+char *gvColorDALabels[] = {
+    "known to be disease-associated",
+    "likely to be phenotype-associated",
+    "not disease-associated",
+    "remaining mutations",
+};
+
+char *gvColorDAStrings[] = {
+    "gvColorDAKnown",
+    "gvColorDALikely",
+    "gvColorDANot",
+    "gvColorDARest",
+};
+
+char *gvColorDADefault[] = {
+    "red",
+    "orange",
+    "green",
+    "gray",
+};
+
+char *gvColorDAAttrVal[] = {
+    "known to be disease-associated",
+    "likely to be phenotype-associated",
+    "not disease-associated",
+    "NULL",
+};
+
+int gvColorDASize = ArraySize(gvColorDAStrings);

@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.289 2006/07/25 23:34:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.290 2006/07/27 17:49:17 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -589,6 +589,13 @@ for (i = 0; i < gvLocationSize; i++)
     printf (" %s<BR />", gvLocationLabel[i]);
     }
 
+printf("<BR /><B>Exclude disease association</B><BR />");
+for (i = 0; i < gvFilterDASize; i++)
+    {
+    cartMakeCheckBox(cart, gvFilterDAString[i], FALSE);
+    printf (" %s<BR />", gvFilterDALabel[i]);
+    }
+
 /* exclude Swiss-Prot data by default, can be misleading */
 printf("<BR /><B>Exclude data source</B><BR />");
 for (i = 0; i < gvSrcSize; i++)
@@ -605,7 +612,18 @@ for (i = 0; i < gvSrcSize; i++)
         }
     }
 
-printf("<BR /><B>Color mutations by type</B><BR />");
+printf("<BR />");
+cartMakeRadioButton(cart, "gvPos.filter.colorby", "disease", "disease");
+printf("<B>Color mutations by disease-association</B><BR />");
+for (i = 0; i < gvColorDASize; i++)
+    {
+    char *defaultVal = cartUsualString(cart, gvColorDAStrings[i], gvColorDADefault[i]);
+    printf (" %s ", gvColorDALabels[i]);
+    cgiMakeDropList(gvColorDAStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
+    }
+printf("<BR />");
+cartMakeRadioButton(cart, "gvPos.filter.colorby", "type", "disease");
+printf("<B>Color mutations by type</B><BR />");
 for (i = 0; i < gvColorTypeSize; i++)
     {
     char *defaultVal = cartUsualString(cart, gvColorTypeStrings[i], gvColorTypeDefault[i]);
