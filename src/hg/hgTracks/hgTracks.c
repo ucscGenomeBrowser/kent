@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1166 2006/07/27 17:49:17 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1167 2006/07/27 20:34:04 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -575,7 +575,9 @@ void changeTrackVis(struct group *groupList, char *groupTarget,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
- * visibility to change only for non-hidden tracks */
+ * visibility to change only for non-hidden tracks.
+ * If we are going back to default visibility, then reset the track
+ * ordering also. */
 {
 struct group *group;
 if (changeVis == -2)
