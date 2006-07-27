@@ -20,5 +20,9 @@ hgLoadGap: ${LOADGAP_O}  ../../../lib/${MACHTYPE}/jkweb.a
 lib:
 	cd ../../../lib && ${MAKE}
 
+compile: ${GOLDGAP_O} ${LOADGAP_O}  ../../../lib/${MACHTYPE}/jkweb.a
+	${CC} ${COPT} -o hgGoldGapGl ${GOLDGAP_O} ${MYLIBS} $L
+	${CC} ${COPT} -o hgLoadGap ${LOADGAP_O} ${MYLIBS} $L
+
 clean::
 	rm -f hgGoldGapGl hgLoadGap ${GOLDGAP_O} ${LOADGAP_O}
