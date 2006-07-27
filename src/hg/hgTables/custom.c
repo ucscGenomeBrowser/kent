@@ -16,12 +16,6 @@
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
 
-boolean isCustomTrack(char *table)
-/* Return TRUE if table is a custom track. */
-{
-return startsWith("ct_", table);
-}
-
 struct customTrack *getCustomTracks()
 /* Get custom track list. */
 {
