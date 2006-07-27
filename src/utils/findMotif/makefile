@@ -10,5 +10,8 @@ findMotif: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/findMotif $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/findMotif${EXE}
 
+compile: ${O} ${MYLIBS}
+	${CC} ${COPT} -o findMotif $O ${MYLIBS} $L
+
 clean:
-	rm -f $O
+	rm -f $O findMotif
