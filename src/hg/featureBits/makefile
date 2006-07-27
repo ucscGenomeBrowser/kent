@@ -13,3 +13,6 @@ featureBits: $O ${MYLIBS}
 
 compile:	$O
 	${CC} ${COPT} ${CFLAGS} -o featureBits $O ${MYLIBS} $L
+
+clean::
+	rm -f featureBits ${O}
