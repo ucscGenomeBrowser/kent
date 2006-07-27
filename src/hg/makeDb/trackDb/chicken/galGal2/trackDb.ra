@@ -57,6 +57,7 @@ autoScaleDefault Off
 windowingFunction mean
 pairwise netBlastz
 speciesOrder hg17 mm5 monDom1 xenTro1 danRer2 tetNig1
+treeImage phylo/galGal2_7way.gif
 
 track phastConsElements7way
 shortLabel Most Conserved
