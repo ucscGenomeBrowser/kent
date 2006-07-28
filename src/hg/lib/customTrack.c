@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.111 2006/07/27 22:12:42 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.112 2006/07/28 18:18:30 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -437,7 +437,15 @@ track->tdb = tdb;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
     tdb->shortLabel = cloneString(val);
+    stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
+    stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    }
+if ((val = hashFindVal(hash, "description")) != NULL)
+    {
+    tdb->longLabel = cloneString(val);
+    stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
+    stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
     }
 
 if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
@@ -584,8 +592,6 @@ if (!track->wiggle)
 	}
     }
 
-if ((val = hashFindVal(hash, "description")) != NULL)
-    tdb->longLabel = cloneString(val);
 if ((val = hashFindVal(hash, "url")) != NULL)
     tdb->url = cloneString(val);
 if ((val = hashFindVal(hash, "visibility")) != NULL)
@@ -1681,10 +1687,18 @@ static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
 struct trackDb *def = tdbDefault();
 
 fprintf(f, "track");
-//if (!sameString(tdb->shortLabel, def->shortLabel))
-    fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
+
+/* these names might be coming in from hgTables, make the names safe */
+stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
+stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
+fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
+
 if (!sameString(tdb->longLabel, def->longLabel))
+    {
+    stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
+    stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
     fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
+    }
 if (tdb->url != NULL)
     fprintf(f, "\t%s='%s'", "url", tdb->url);
 if (tdb->visibility != def->visibility)
