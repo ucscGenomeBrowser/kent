@@ -66,7 +66,7 @@ url http://www.informatics.jax.org/searches/Phat.cgi?id=%s
 
 name omimTitle2
 label OMIM title
-dataSql select title, omimId from omimTitle where omimId = '%s'
+dataSql select title, omimId from hgFixed.omimTitle where omimId = '%s'
 dataId mrna
 dataLink OMIM
 dataLinkCol 2
