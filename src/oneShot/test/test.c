@@ -29,17 +29,19 @@ struct refString
 
 struct refString refString = {0, 0, "Hello world", 11, 11, TRUE};
 
-void test(char *s)
+void test(char *word, char *line)
 {
-printf("%s\n", refString.s);
+boolean isSame = firstWordSame(word, line);
+printf("'%s' %s first word of '%s.'\n", word,
+    (isSame ? "is" : "isn't"), line);
 }
 
 int main(int argc, char *argv[], char *env[])
 /* Process command line. */
 {
 int i;
-if (argc != 2)
+if (argc != 3)
    usage();
-test(argv[1]);
+test(argv[1], argv[2]);
 return 0;
 }
