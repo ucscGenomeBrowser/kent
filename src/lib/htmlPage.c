@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.30 2006/07/28 22:42:47 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.31 2006/07/28 23:41:41 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -781,6 +781,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    var->curVal = cloneStringZ(tag->end, e - tag->end);
 	}
     }
+freeHash(&hash);    
 slReverse(&varList);
 for (var = varList; var != NULL; var = var->next)
     {
