@@ -610,9 +610,9 @@ int differentStringNullOk(char *a, char *b);
 boolean startsWith(char *start,char *string);
 /* Returns TRUE if string begins with start. */
 
-boolean firstWordSame(char *word, char *line);
-/* Return TRUE if first word (case insensitive) of line is
- * same as word. */
+boolean startsWithWord(char *firstWord, char *line);
+/* Return TRUE if first white-space-delimited word in line
+ * is same as firstWord.  Comparison is case sensitive. */
 
 #define stringIn(needle, haystack) strstr(haystack, needle)
 /* Returns position of needle in haystack or NULL if it's not there. */
