@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1168 2006/07/27 21:15:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1169 2006/07/28 15:25:51 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10070,7 +10070,10 @@ if (attr == NULL)
     }
 index = stringArrayIx(attr->attrVal, gvColorDAAttrVal, gvColorDASize);
 if (index < 0 || index >= gvColorDASize)
+    {
+    hFreeConn(&conn);
     return MG_BLACK;
+    }
 useColor = cartUsualString(cart, gvColorDAStrings[index], gvColorDADefault[index]);
 gvAttrFreeList(&attr);
 hFreeConn(&conn);
@@ -10112,7 +10115,10 @@ safef(query, sizeof(query), "select * from gv where id = '%s'", escId);
 details = gvLoadByQuery(conn, query);
 index = stringArrayIx(details->baseChangeType, gvColorTypeBaseChangeType, gvColorTypeSize);
 if (index < 0 || index >= gvColorTypeSize)
+    {
+    hFreeConn(&conn);
     return MG_BLACK;
+    }
 typeColor = cartUsualString(cart, gvColorTypeStrings[index], gvColorTypeDefault[index]);
 gvFreeList(&details);
 hFreeConn(&conn);
