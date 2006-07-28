@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1171 2006/07/28 17:23:06 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1172 2006/07/28 18:45:49 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -664,6 +664,7 @@ for (tg = trackList; tg != NULL; tg = tg->next)
     int vis = tg->visibility;
     if (tg == toggleGroup)
 	{
+	char *encodedMapName = cgiEncode(tg->mapName);
 	if (vis == tvDense)
 	    {    
 	    if (tg->canPack)
@@ -673,7 +674,8 @@ for (tg = trackList; tg != NULL; tg = tg->next)
 	    }
 	else if (vis == tvFull || vis == tvPack || vis == tvSquish)
 	    vis = tvDense;
-	dyStringPrintf(dy, "&%s=%s", tg->mapName, hStringFromTv(vis));
+	dyStringPrintf(dy, "&%s=%s", encodedMapName, hStringFromTv(vis));
+	freeMem(encodedMapName);
 	}
     }
 return dy;
@@ -695,11 +697,14 @@ static void mapBoxUi(int x, int y, int width, int height,
                                 char *name, char *shortLabel)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
+char *encodedName = cgiEncode(name);
+
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), cartSessionVarName(),
-                         cartSessionId(cart), chromName, name);
+                         cartSessionId(cart), chromName, encodedName);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
+freeMem(encodedName);
 }
 
 void mapBoxTrackUi(int x, int y, int width, int height, struct track *tg)
@@ -811,19 +816,20 @@ if (xEnd > tl.picWidth) xEnd = tl.picWidth;
 if (x < xEnd)
     {
     char *encodedItem = cgiEncode(item);
+    char *encodedTrack = cgiEncode(track);
 
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (directUrl)
 	{
 	hPrintf("HREF=\"");
-	hPrintf(directUrl, item, chromName, start, end, track, database);
+	hPrintf(directUrl, item, chromName, start, end, encodedTrack, database);
 	if (withHgsid)
 	     hPrintf("&%s", cartSidUrlString(cart));
 	}
     else
 	{
 	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-	    hgcNameAndSettings(), start, end, track, encodedItem, 
+	    hgcNameAndSettings(), start, end, encodedTrack, encodedItem, 
 	    chromName, winStart, winEnd, 
 	    database, tl.picWidth);
 	}
@@ -831,6 +837,7 @@ if (x < xEnd)
 	mapStatusMessage("%s", statusLine);
     hPrintf(">\n");
     freeMem(encodedItem);
+    freeMem(encodedTrack);
     }
 }
 
