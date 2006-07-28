@@ -1912,15 +1912,15 @@ identifier hgMutLinkId
 identifier gvId
 "Human Mutation track mutation identifier for attributes and links"
     hg17.gvPos.name dupeOk
-    hg17.gv.id
-    hg17.gvLink.id
-    hg17.gvAttr.id
-    hg17.gvAttrLong.id
+    hgFixed.gv.id
+    hgFixed.gvLink.id
+    hgFixed.gvAttr.id
+    hgFixed.gvAttrLong.id
 
 identifier gvSrcId
 "Human Mutation track source ID"     
-    hg17.gvSrc.srcId
-    hg17.gv.srcId
+    hgFixed.gvSrc.srcId
+    hgFixed.gv.srcId
 
 # retroposon track, dbRIP_* and polyGenotype table link
 identifier dbRIPNameAlu
