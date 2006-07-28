@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.291 2006/07/27 21:15:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.292 2006/07/28 19:14:40 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1699,7 +1699,6 @@ printf("<BR><A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",
 	WIGGLE_HELP_PAGE);
 
 freeMem(typeLine);
-
 }
 
 void chromGraphUi(struct trackDb *tdb)
@@ -2392,37 +2391,42 @@ specificUi(tdb);
 
 puts("</FORM>");
 
-/* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
-if (hTableOrSplitExists(tdb->tableName))
+if (isCustomTrack(tdb->tableName))
     {
-    char *tableName = tdb->tableName;
-    if (sameString(tableName, "mrna"))
-	tableName = "all_mrna";
-    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-	   "TARGET=_BLANK>"
-	   "View table schema</A></P>\n",
-	   database, tdb->grp, tableName, tableName);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+	{
+	htmlHorizontalLine();
+	puts(tdb->html);
+	}
     }
-else if (tdb->subtracks != NULL)
+else
     {
-    /* handle multi-word subTrack settings: */
-    char *words[2];
-    if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
-	hTableOrSplitExists(words[0]))
+    /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
+    if (hTableOrSplitExists(tdb->tableName))
+	{
+	char *tableName = tdb->tableName;
+	if (sameString(tableName, "mrna"))
+	    tableName = "all_mrna";
 	printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	       "TARGET=_BLANK>"
 	       "View table schema</A></P>\n",
-	       database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+	       database, tdb->grp, tableName, tableName);
+	}
+    else if (tdb->subtracks != NULL)
+	{
+	/* handle multi-word subTrack settings: */
+	char *words[2];
+	if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
+	    hTableOrSplitExists(words[0]))
+	    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+		   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
+		   "TARGET=_BLANK>"
+		   "View table schema</A></P>\n",
+		   database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+	}
     }
-
-if (tdb->html != NULL && tdb->html[0] != 0)
-    {
-    htmlHorizontalLine();
-    puts(tdb->html);
-    }
-}
+}	/*	void trackUi(struct trackDb *tdb)	*/
 
 struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel, 
 	char *longLabel, int defaultVis, boolean canPack)
