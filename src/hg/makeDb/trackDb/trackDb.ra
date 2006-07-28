@@ -1274,7 +1274,7 @@ spectrum on
 type rmsk
 canPack off
 
-track rmskNew
+track rmskCensor
 shortLabel CENSOR Repeats
 longLabel Repeating Elements by CENSOR and RepBase 11.6 (Giri Ihstitute)
 group varRep
