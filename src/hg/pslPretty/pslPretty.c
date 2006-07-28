@@ -11,7 +11,7 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.32 2006/07/01 00:08:09 jill Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.33 2006/07/28 18:50:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -79,9 +79,6 @@ void addTwoBit(char *file, struct hash *fileHash, struct hash *seqHash)
 /* Add a nib file to hashes. */
 {
 struct seqFilePos *sfp;
-char root[128];
-int size;
-FILE *f = NULL;
 struct twoBitFile *tbf = twoBitOpen(file);
 struct twoBitIndex *index;
 for (index = tbf->indexList; index != NULL; index = index->next)
@@ -100,7 +97,6 @@ void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
 {
 struct lineFile *lf = lineFileOpen(file, TRUE);
 char *line, *name;
-char root[128];
 char *rFile = hashStoreName(fileHash, file);
 
 while (lineFileNext(lf, &line, NULL))
@@ -261,12 +257,12 @@ else
     fprintf(f, "%d %s %d %d %s %d %d %c %d\n", ++ix, psl->tName, psl->tStart+1, 
             psl->tEnd, psl->qName, qs+1, qe, psl->strand[0], score);
 if (strlen(t) != size)
-    warn("size of T %d and Q %d differ on line %d\n",strlen(t), size, ix);
+    warn("size of T %ld and Q %d differ on line %d\n",strlen(t), size, ix);
 for (i=0; i<size ; i++) 
     fputc(t[i],f);
 fputc('\n',f);
 if (strlen(q) != size)
-    warn("size of T %d and Q %d differ on line %d\n",strlen(q), size, ix);
+    warn("size of T %ld and Q %d differ on line %d\n",strlen(q), size, ix);
 for (i=0; i<size ; i++) 
     fputc(q[i],f);
 fputc('\n',f);
@@ -585,7 +581,7 @@ static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
 struct dyString *q = newDyString(16*1024);
 struct dyString *t = newDyString(16*1024);
-int blockIx, diff;
+int blockIx;
 int qs, ts;
 int lastQ = 0, lastT = 0, size;
 int qOffset = 0;
