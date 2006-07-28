@@ -196,7 +196,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1062 2006/07/27 21:15:07 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1063 2006/07/28 02:38:18 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14905,7 +14905,7 @@ if (list != NULL)
 	char query[256];
 	char *description;
 	safef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", el->name);
-	if (!sqlTableExists(conn,"pfamDesc")) 
+	if (!sqlTableExists(spConn,"pfamDesc")) 
 	    {
 	    safef(query, sizeof(query), 
 	    "select extDbRef.extAcc1 from extDbRef,extDb "
