@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.12 2006/06/30 19:41:06 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.13 2006/07/28 16:56:04 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -372,7 +372,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 				prevMaf->next = newMaf;
 			    else
 				mafList = newMaf;
-			    masterMc = miniMasterMc;
+			    //masterMc = miniMasterMc; 
 			    }
 			else
 			    {
