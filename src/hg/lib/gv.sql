@@ -4,7 +4,7 @@
 # automatic way.
 
 #track for mutation data
-CREATE TABLE gv (
+CREATE TABLE hgFixed.gv (
     id varchar(48) not null,	# unique ID for this mutation
     name varchar(255) not null,	# Official nomenclature description of mutation
     srcId varchar(48) not null,	# source ID for this mutation
@@ -39,7 +39,7 @@ CREATE TABLE gvPos (
 );
 
 #sources for mutation track
-CREATE TABLE gvSrc (
+CREATE TABLE hgFixed.gvSrc (
     srcId varchar(48) not null,	# key into gv table
     src varchar(255) not null,	# name of genome wide source or LSDB
     lsdb varchar(255) not null,	# for LSDB name of actual source DB
@@ -48,7 +48,7 @@ CREATE TABLE gvSrc (
 );
 
 #attributes asssociated with the mutation
-CREATE TABLE gvAttr (
+CREATE TABLE hgFixed.gvAttr (
     id varchar(48) not null,	# mutation ID
     attrType varchar(48) not null,	# attribute type
     attrVal varchar(255) not null,	# value for this attribute
@@ -57,7 +57,7 @@ CREATE TABLE gvAttr (
 );
 
 #links both urls and local table lookups
-CREATE TABLE gvLink (
+CREATE TABLE hgFixed.gvLink (
     id varchar(48) not null,	# id for attribute link
     attrType varchar(48) not null,	# attribute type
     raKey varchar(48) not null,	# key into .ra file on how to do link
@@ -68,7 +68,7 @@ CREATE TABLE gvLink (
 );
 
 #attributes associated with a mutation that need long text
-CREATE TABLE gvAttrLong (
+CREATE TABLE hgFixed.gvAttrLong (
     id varchar(48) not null,	# mutation ID
     attrType varchar(48) not null,	# attribute type
     attrVal longblob not null,	# value for this attribute

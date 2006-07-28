@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1169 2006/07/28 15:25:51 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1170 2006/07/28 17:19:12 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10059,7 +10059,7 @@ if (el->id != NULL)
     escId = sqlEscapeString(el->id);
 else
     escId = sqlEscapeString(el->name);
-safef(query, sizeof(query), "select * from gvAttr where id = '%s' and attrType = 'disease'", escId);
+safef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", escId);
 attr = gvAttrLoadByQuery(conn, query);
 if (attr == NULL)
     {
@@ -10111,7 +10111,7 @@ if (el->id != NULL)
 else
     escId = sqlEscapeString(el->name);
 
-safef(query, sizeof(query), "select * from gv where id = '%s'", escId);
+safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
 details = gvLoadByQuery(conn, query);
 index = stringArrayIx(details->baseChangeType, gvColorTypeBaseChangeType, gvColorTypeSize);
 if (index < 0 || index >= gvColorTypeSize)
@@ -10290,7 +10290,7 @@ if (el->id != NULL)
 else
     escId = sqlEscapeString(el->name);
 
-safef(query, sizeof(query), "select * from gvAttr where id = '%s' and attrType = 'disease'", escId);
+safef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", escId);
 attr = gvAttrLoadByQuery(conn, query);
 hFreeConn(&conn);
 if (attr == NULL) 
@@ -10420,7 +10420,7 @@ for (el = tg->items; el != NULL; el = el->next)
         char query[256];
         char *escId = sqlEscapeString(el->name);
         char *hgvs = NULL;
-        safef(query, sizeof(query), "select name from gv where id = '%s'", escId);
+        safef(query, sizeof(query), "select name from hgFixed.gv where id = '%s'", escId);
         hgvs = sqlQuickString(conn, query);
         if (strlen(hgvs) > 30)
             {
@@ -10431,7 +10431,7 @@ for (el = tg->items; el != NULL; el = el->next)
             safef(pos, sizeof(pos), "%s:%d-%d ", el->chrom, el->chromStart, el->chromEnd);
 
             /* long name check to see if there is a shorter one */
-            safef(query, sizeof(query), "select attrVal from gvAttr where id = '%s' and attrType = '%s'", escId, "shortName");
+            safef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = '%s'", escId, "shortName");
             sr = sqlGetResult(conn, query);
             while ((row = sqlNextRow(sr)) != NULL)
                  {
@@ -10462,7 +10462,7 @@ for (el = tg->items; el != NULL; el = el->next)
         char query[256];
         char *commonName = NULL;
         char *escId = sqlEscapeString(el->name);
-        safef(query, sizeof(query), "select attrVal from gvAttr where id = '%s' and attrType = 'commonName'", escId);
+        safef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = 'commonName'", escId);
         commonName = sqlQuickString(conn, query);
         freeMem(escId);
         if (labelStarted) dyStringAppendC(name, '/');
@@ -10562,7 +10562,7 @@ int rowOffset;
 enum trackVisibility vis = tg->visibility;
 
 /* load as linked list once, outside of loop */
-srcList = gvSrcLoadByQuery(conn, "select * from gvSrc");
+srcList = gvSrcLoadByQuery(conn, "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -10571,7 +10571,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char query[256], *escId;
     struct gvPos *el = gvPosLoad(row);
     escId = sqlEscapeString(el->name);
-    safef(query, sizeof(query), "select * from gv where id = '%s'", escId);
+    safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
     details = gvLoadByQuery(conn2, query);
     if (!gvFilterType(details))
         gvPosFree(&el);

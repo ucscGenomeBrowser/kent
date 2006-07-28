@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1067 2006/07/28 15:19:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1068 2006/07/28 17:19:12 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16265,7 +16265,7 @@ int attrCnt = 0;
 
 hgReadRa(database, organism, rootDir, "links.ra", &linkInstructions);
 safef(query, sizeof(query),
-     "select * from gvLink where id = '%s' and attrType = '%s'",
+     "select * from hgFixed.gvLink where id = '%s' and attrType = '%s'",
      id, gvAttrTypeKey[i]);
 /* attrType == gvAttrTypeKey should be quote safe */
 
@@ -16362,7 +16362,7 @@ genericHeader(tdb, itemName);
 
 /* postion, band, genomic size */
 escName = sqlEscapeString(itemName);
-safef(query, sizeof(query), "select * from gv where id = '%s'", escName);
+safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escName);
 details = gvLoadByQuery(conn, query); 
 /* change label based on species */
 if (sameString(organism, "Human"))
@@ -16382,7 +16382,7 @@ sqlFreeResult(&sr);
 
 /* fetch and print the source */
 safef(query, sizeof(query),
-      "select * from gvSrc where srcId = '%s'", details->srcId);
+      "select * from hgFixed.gvSrc where srcId = '%s'", details->srcId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -16412,7 +16412,7 @@ for(i=0; i<gvAttrSize; i++)
     {
     /* check all 3 attribute tables for each type */
     safef(query, sizeof(query),
-        "select * from gvAttrLong where id = '%s' and attrType = '%s'",
+        "select * from hgFixed.gvAttrLong where id = '%s' and attrType = '%s'",
         escName, gvAttrTypeKey[i]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -16425,7 +16425,7 @@ for(i=0; i<gvAttrSize; i++)
         }
     sqlFreeResult(&sr);
     safef(query, sizeof(query),
-        "select * from gvAttr where id = '%s' and attrType = '%s'",
+        "select * from hgFixed.gvAttr where id = '%s' and attrType = '%s'",
         escName, gvAttrTypeKey[i]);
     /* attrType == gvAttrTypeKey should be quote safe */
     sr = sqlGetResult(conn, query);
