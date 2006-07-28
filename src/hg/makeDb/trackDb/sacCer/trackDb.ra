@@ -78,6 +78,27 @@ defaultViewLimits 0:1
 spanList 1
 type wig 0 100 
 
+track nucleosomeStable
+shortLabel Stable Nucleosomes 
+longLabel Highly Stable Nucleasomes p > 0.5 from Eran Segal (score >= 500)
+group regulation
+priority 101 
+visibility pack
+scoreFilter 500
+spectrum on
+type bed 5 +
+exonArrows off
+
+track nucleosomeBest
+shortLabel Best Nucleosomes 
+longLabel Genome wide Single Best Nucleasomes from Eran Segal 
+group regulation
+priority 102 
+visibility pack
+spectrum on
+type bed 5 +
+exonArrows off
+
 track multizYeast 
 shortLabel Conservation
 longLabel Seven Species of Saccharomyces, Alignments & Conservation
