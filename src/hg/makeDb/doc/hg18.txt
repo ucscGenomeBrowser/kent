@@ -9786,6 +9786,19 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
 # 37437558 bases of 2866216770 (1.306%) in intersection
 
 
+# Renamed the new BAC End Pairs tables (7-27-2006 Brooke)
+mysql> alter table all_bacends rename all_bacendsOld;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> alter table bacEndPairs rename bacEndPairsOld;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> alter table all_bacendsUpdate rename all_bacends;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> alter table bacEndPairsUpdate rename bacEndPairs;
+Query OK, 0 rows affected (0.00 sec)
+
 #########################################################################
 # dbSNP BUILD 126 (Heather, June 2006)
 
