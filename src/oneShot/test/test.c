@@ -31,7 +31,7 @@ struct refString refString = {0, 0, "Hello world", 11, 11, TRUE};
 
 void test(char *word, char *line)
 {
-boolean isSame = firstWordSame(word, line);
+boolean isSame = startsWithWord(word, line);
 printf("'%s' %s first word of '%s.'\n", word,
     (isSame ? "is" : "isn't"), line);
 }
