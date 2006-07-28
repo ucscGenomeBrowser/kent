@@ -42,6 +42,8 @@ struct bed
     float *expScores;	/* Comma separated list of Experiment scores. */
     };
 
+#define bedKnownFields 15	/* Maximum known fields in bed */
+
 struct bed3
 /* Browser extensible data - first three fields */
     {
