@@ -38,7 +38,7 @@ positions in the region.\
 </P>\
 <H2>Known Limitations</H2>\
 <P>The number of bases that can be processed is limited, on the order of \
-about 60,000,000, due to memory and processing time limits.  Therefore, \
+about 300,000,000, due to memory and processing time limits.  Therefore, \
 large chromosomes, <em>e.g.</em> chr1 on human, cannot be processed entirely. \
 Future improvements are expected to remove this processing limit.\
 </P>\

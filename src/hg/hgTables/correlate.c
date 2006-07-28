@@ -20,13 +20,17 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.52 2006/03/06 17:50:03 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.53 2006/07/28 21:35:53 hiram Exp $";
+
+#define MAX_POINTS_STR	"300,000,000"
+#define MAX_POINTS	300000000
 
 static char *maxResultsMenu[] =
 {
     "20,000,000",
     "40,000,000",
     "60,000,000",
+    MAX_POINTS_STR,
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 
@@ -1666,63 +1670,66 @@ hPrintf("</TABLE>\n");
 /*	and end the special container table	*/
 hPrintf("</TD></TR></TABLE></P>\n");
 
-/*	debugging when 1 region, less than 1400 dataPoints, show all values	*/
-if ((1 == 0) && (1 == rowsOutput) &&
-	(table1->vSet->count < 400) && (table2->vSet->count < 400))
+/*	debugging when 1 region, less than 100000 dataPoints, show all values	*/
+if ((1 == 0) && ((1 == rowsOutput) || (1 != rowsOutput)) &&
+	(table1->count < 100000) && (table2->count < 100000))
     {
-    int start, end, i;
-    int v1Index = 0;
-    int v2Index = 0;
     v1 = table1->vSet;
     v2 = table2->vSet;
-    start = min(v1->start,v2->start);
-    end = max(v1->end,v2->end);
-
     hPrintf("<PRE>\n");
     hPrintf("# Position\t%s\t%s\tResiduals\n",
-	table1->shortLabel, table2->shortLabel);
+	    table1->shortLabel, table2->shortLabel);
 
-    for (i = start; i < end; ++i)
+    for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
 	{
-	int printResidual = 0;
+	int start, end, i;
+	int v1Index = 0;
+	int v2Index = 0;
+	start = min(v1->start,v2->start);
+	end = max(v1->end,v2->end);
 
-	if ((i == v1->position[v1Index]) || (i == v2->position[v2Index]))
-	    hPrintf("%d\t", i+1);
+	for (i = start; i < end; ++i)
+	    {
+	    int printResidual = 0;
 
-	if (i >= v1->start)
-	    {
-	    if (i == v1->position[v1Index])
+	    if ((i == v1->position[v1Index]) || (i == v2->position[v2Index]))
+		hPrintf("%d\t", i+1);
+
+	    if (i >= v1->start)
 		{
-		hPrintf("%g\t", v1->value[v1Index]);
-		++v1Index;
-		++printResidual;
+		if (i == v1->position[v1Index])
+		    {
+		    hPrintf("%g\t", v1->value[v1Index]);
+		    ++v1Index;
+		    ++printResidual;
+		    }
+		else if (i > v1->position[v1Index])
+		    {
+		    hPrintf("N/A\t");
+		    ++v1Index;
+		    }
 		}
-	    else if (i > v1->position[v1Index])
-		{
+	    else
 		hPrintf("N/A\t");
-		++v1Index;
-		}
-	    }
-	else
-	    hPrintf("N/A\t");
-	if (i >= v2->start)
-	    {
-	    if (i == v2->position[v2Index])
+	    if (i >= v2->start)
 		{
-		hPrintf("%g\t", v2->value[v2Index]);
-		++v2Index;
-		++printResidual;
+		if (i == v2->position[v2Index])
+		    {
+		    hPrintf("%g\t", v2->value[v2Index]);
+		    ++v2Index;
+		    ++printResidual;
+		    }
+		else if (i > v2->position[v2Index])
+		    {
+		    hPrintf("N/A\t");
+		    ++v2Index;
+		    }
 		}
-	    else if (i > v2->position[v2Index])
-		{
+	    else
 		hPrintf("N/A\t");
-		++v2Index;
-		}
+	    if (printResidual == 2)
+		hPrintf("%g\n", result->value[v1Index-1]);
 	    }
-	else
-	    hPrintf("N/A\t");
-	if (printResidual == 2)
-	    hPrintf("%g\n", result->value[v1Index-1]);
 	}
     hPrintf("</PRE>\n");
     }
@@ -1890,12 +1897,13 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
     struct dataVector *v2;
     long bases = region->end - region->start;
 
-    if (bases > 64000000)
+    if (bases > MAX_POINTS)
 	{
 	hPrintf("<P><B>warning:</B> This region: %s:%d-%d is too large",
 		region->chrom, region->start, region->end);
 	hPrintf(" to process.  This function can currently only work on\n");
-	hPrintf("regions of less than 64,000,000 bases. Perhaps future\n");
+	hPrintf("regions of less than %s bases. Perhaps future\n",
+		MAX_POINTS_STR);
 	hPrintf("improvements will raise this limit.\n");
 	errAbort(" ");
 	}
@@ -2337,7 +2345,6 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	if (windowingSize > 1)
 		totalBases = windowData(tableList, windowingSize);
 
-//hPrintf("<P>intersected vectors produce %d data points</P>\n", totalBases);
 	if (totalBases > 0)
 	    {
 	    struct trackTable *table1 = tableList;
@@ -2350,7 +2357,6 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    showThreeVectors(table1, table2, residuals);
 	    showPlots(table1, table2, residuals);
 	    freeDataVector(&residuals);
-//hPrintf("<P>free residuals OK</P>\n");
 	    }
 	else
 	    hPrintf("<P>no intersection between the two tables "
@@ -2360,7 +2366,6 @@ if (1 == 0)
     tableInfoDebugDisplay(tableList);	/*	dbg	*/
 
 	freeTrackTableList(&tableList);
-//hPrintf("<P>freeTrackTableList OK</P>\n");
 	endTime = clock1000();
 
 	hPrintf("<P>total elapsed time for this calculation:");
@@ -2436,9 +2441,3 @@ void doCorrelateSubmit(struct sqlConnection *conn)
 copyCartVars(cart, nextVars, curVars, ArraySize(curVars));
 doCorrelatePage(conn);
 }
-
-#ifdef NOT
-hPrintf("<TR><TH ALIGN=LEFT>%.4g<BR>&nbsp;<BR>%s<BR>&nbsp;<BR>%.4g</TH>\n",
-	table1->shortLabel);
-	/*table1->shortLabel, table1->vSet->max, table1->vSet->min);*/
-#endif
