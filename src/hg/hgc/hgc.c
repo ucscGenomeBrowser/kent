@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1070 2006/07/28 23:34:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1071 2006/07/28 23:56:17 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2062,15 +2062,8 @@ void printTrackHtml(struct trackDb *tdb)
  * to the TB table schema page for this table. */
 {
 char *tableName;
-if (isCustomTrack(tdb->tableName))
-    {
-    if (tdb->html != NULL && tdb->html[0] != 0)
-	{
-	htmlHorizontalLine();
-	puts(tdb->html);
-	}
-    }
-else
+
+if (! isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
     printDataVersion(tdb);
@@ -2083,6 +2076,11 @@ else
 	    printf("<B>Data last updated:</B> %s<BR>\n", date);
 	hFreeConn(&conn);
 	}
+    }
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    htmlHorizontalLine();
+    puts(tdb->html);
     }
 }
 
