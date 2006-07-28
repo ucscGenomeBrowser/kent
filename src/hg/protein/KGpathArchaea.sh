@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGpathArchaea.sh,v 1.1 2005/10/27 03:56:15 baertsch Exp $"
+#	"$Id: KGpathArchaea.sh,v 1.2 2006/07/28 01:48:53 baertsch Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -190,7 +190,9 @@ esac
 
 if [ ! -s ${SPECIES}.lis ]; then
     wget --timestamping -O ${SPECIES}.html "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=${SPECIES}&mode=bfind&max_hit=1000&.cgifields=max_hit"
-    grep HREF ${SPECIES}.html | perl -wpe "s/<[^>]+>//g" |sed -e 's/path:d/path:/g' > ${SPECIES}.lis
+    grep -i HREF ${SPECIES}.html | perl -wpe "s/<[^>]+>//g" |sed -e 's/path:d/path:/g' > ${SPECIES}.lis
+    wc -l ${SPECIES}.lis
+    echo "$HOME/kent/src/hg/protein/getKeggList2.pl ${SPECIES} > keggList.tab"
     $HOME/kent/src/hg/protein/getKeggList2.pl ${SPECIES} > keggList.tab
 fi
 
