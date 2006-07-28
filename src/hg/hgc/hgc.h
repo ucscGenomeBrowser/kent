@@ -221,4 +221,27 @@ char *kgIdToSpId(struct sqlConnection *conn, char* kgId);
 char *hgTracksPathAndSettings();
 /* Return path with hgTracks CGI path and session state variable. */
 
+void medlineLinkedTermLine(char *title, char *text, char *search, char *keyword);
+/* Produce something that shows up on the browser as
+ *     TITLE: value
+ * with the value hyperlinked to medline using a specified search term. */
+
+void medlineLinkedLine(char *title, char *text, char *search);
+/* Produce something that shows up on the browser as
+ *     TITLE: value
+ * with the value hyperlinked to medline. */
+
+void hgcAnchorPosition(char *group, char *item); 
+/* Generate an anchor that calls click processing program with item 
+ * and group parameters. */
+
+void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb, 
+			 char *pepTable, char *pepClick, 
+			 char *mrnaClick, char *genomicClick, char *mrnaDescription);
+/* Show parts of gene common to everything. If pepTable is not null,
+ * it's the old table name, but will check gbSeq first. */
+
+bool loweLabClick(char *track, char *item, struct trackDb *tdb);
+/* check if we have one of the lowelab tracks */
+
 #endif
