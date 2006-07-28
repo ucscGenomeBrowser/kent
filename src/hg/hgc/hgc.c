@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1066 2006/07/28 06:23:12 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1067 2006/07/28 15:19:15 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6758,6 +6758,45 @@ printRgdQtlCustomUrl(tdb, itemForUrl, item == itemForUrl);
 printTrackHtml(tdb);
 }
 
+char *gadExpand(char *inString)
+/* Return a copy of inString that replace "'" with "''" 
+   This is needed to accomodate GAD's convention in
+   dealing with disease names with "'" in them.
+*/
+{
+char c;
+int outSize = 0;
+char *outString, *out, *in;
+
+if (inString == NULL)
+    return(cloneString(""));
+
+/* Count up how long it will be */
+in = inString;
+while ((c = *in++) != 0)
+    {
+    if (c == '\'')
+        outSize += 2;
+    else
+        outSize += 1;
+    }
+outString = needMem(outSize+1);
+
+/* Encode string */
+in = inString;
+out = outString;
+while ((c = *in++) != 0)
+    {
+    *out++ = c;
+    if (c == '\'')
+        {
+        *out++ = c;
+	}
+    }
+*out++ = 0;
+return outString;
+}
+
 void printGadDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a GAD entry. */
 {
@@ -6835,19 +6874,22 @@ if (url != NULL && url[0] != 0)
     
     if (row != NULL) 
     	{
-	upperDisease = cloneString(row[0]);
+	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
 	printf("<BR><B>Associated Diseases and Disorders:  </B>");
-	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	
+	printf("<A HREF=\"%s",
+	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
+	printf("%s", cgiEncode(upperDisease));
+	printf("%s%s%s\" target=_blank>", "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
     	}
 	
     while (row != NULL)
         {
-	upperDisease = cloneString(row[0]);
+	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
@@ -6866,7 +6908,7 @@ if (url != NULL && url[0] != 0)
     
     if (row != NULL) 
     	{
-	upperDisease = cloneString(row[0]);
+	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
 	printf("<BR><B>Diseases and Disorders Found Possibly Not Associated with the Gene:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
@@ -6878,7 +6920,7 @@ if (url != NULL && url[0] != 0)
 	
     while (row != NULL)
         {
-	upperDisease = cloneString(row[0]);
+	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
