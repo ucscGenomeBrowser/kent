@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1069 2006/07/28 19:18:20 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1070 2006/07/28 23:34:18 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6436,6 +6436,7 @@ if (url != NULL && url[0] != 0)
     char *ensPep;
     char *chp;
 
+
     /* shortItemName is the name without the "." + version */ 
     shortItemName = cloneString(itemName);
     chp = strstr(shortItemName, ".");
@@ -6460,10 +6461,11 @@ if (url != NULL && url[0] != 0)
 	printf("%s</A><br>", itemName);
 	}
 
+
     if (hTableExists("superfamily"))
 	{
     	sprintf(cond_str, "transcript_name='%s'", shortItemName);    
-	
+
         /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
     	proteinID = NULL;
 
@@ -6552,7 +6554,7 @@ if (url != NULL && url[0] != 0)
             printf("%s</A><BR>\n", proteinID);
 	    }
         }
-    free(shortItemName);
+    freeMem(shortItemName);
     }
 }
 
@@ -6573,6 +6575,7 @@ wordCount = chopLine(dupe, words);
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
 printCcdsForSrcDb(conn, item);
 printf("<BR>\n");
+
 
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
