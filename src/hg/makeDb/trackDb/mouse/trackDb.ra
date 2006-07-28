@@ -893,6 +893,31 @@ termRegex MG-U74C:.+
 searchPriority 16
 termPrefix MG-U74C:
 
+searchName affyMOE430
+searchTable affyMOE430
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex (A:|B:)[0-9]+[[:alnum:]_]*_at
+searchPriority 16
+
+searchName affyMOE430ChipPrefix
+searchTable affyMOE430
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex MOE430(A|B):.+
+searchPriority 16
+termPrefix MOE430
+
+searchName affyMOE430NoChip
+searchTable affyMOE430
+searchMethod fuzzy
+searchType psl
+shortCircuit 1
+termRegex [0-9]+[[:alnum:]_]*_at
+searchPriority 16
+
 searchTable affyGnf1m
 searchMethod exact
 searchType psl
