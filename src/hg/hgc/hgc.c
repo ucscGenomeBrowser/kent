@@ -127,16 +127,6 @@
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "scoredRef.h"
-/*
-#include "minGeneInfo.h"
-#include "tigrCmrGene.h"
-#include "sargassoSeaXra.h"
-#include "codeBlastScore.h"
-#include "codeBlast.h"
-#include "tigrOperon.h"
-#include "easyGene.h"
-#include "llaInfo.h"
-*/
 #include "blastTab.h"
 #include "hdb.h"
 #include "hgc.h"
@@ -198,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1065 2006/07/28 06:14:20 lowe Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1066 2006/07/28 06:23:12 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
