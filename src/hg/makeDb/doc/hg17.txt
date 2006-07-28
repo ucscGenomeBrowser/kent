@@ -21749,3 +21749,208 @@ printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%
     #	of the other text-rich columns participating in the search.
 
 ##############################################################################
+# hg17 -> hg15 LIFTOVER CHAINS (DONE 7/27/06 Fan)
+    # I used a size of 10kb instead of 3kb for the split (blat query) sizes in
+    # hg15.  This had a huge affect on the amount of hits in the blat, which
+    # then had a huge effect on the amount of chains.  I should also mention 
+    # that hg15 chromosomes chr1 and chr2 were split further 
+    # into more than a single query file.  This helped a LOT in avoiding 
+    # cluster hippos classically associated with those chroms.
+    
+    ######## LIFTOVER PREPARATION
+    # Split up hg15
+    ssh pk
+    cd /san/sanVol1/scratch/hg15
+    mkdir -p liftSplits/{split,lift}
+    bash
+    for fa in /cluster/data/hg15/?{,?}/*.fa; do
+      c=`basename $fa .fa`
+      echo $c
+      faSplit -lift=liftSplits/lift/${c}.lft size $fa -oneFile 10000 liftSplits/split/$c
+    done
+    mkdir -p biggerSplits/split
+    cd biggerSplits/
+    ln -s ../liftSplits/lift
+    cd split/
+    ln -s ../../liftSplits/split/* .
+    faSplit sequence chr1.fa 5 chr1_
+    faSplit sequence chr2.fa 5 chr2_
+    rm chr{1,2}.fa
+
+    # Make some dirs
+    # cd /san/sanVol1/scratch
+    # mkdir -p hg17
+
+    # Copy 11.ooc files to hg17 subdirectory.
+    # cp -p /cluster/store5/gs.16/build33/11.ooc hg17
+
+    ## First, copy over scripts. (Already done before)
+
+    # mkdir -p /san/sanVol1/scratch/fan
+    # cp -p /san/sanVol1/scratch/fan/*.sh /san/sanVol1/scratch/fan
+    # cp /san/sanVol1/scratch/andy/psl.header /san/sanVol1/scratch/fan
+
+    ######## LIFTOVER BLATING  
+
+    # HG17
+    ssh kk
+    cd /cluster/data/hg17
+    #makeLoChain-align hg17 /scratch/hg/hg17/nib hg15 /san/sanVol1/scratch/hg15/biggerSplits/split
+
+    makeLoChain-align hg17 /scratch/hg/hg17/bothMaskedNibs hg15  /san/sanVol1/scratch/hg15/liftOver/biggerSplits/split 
+
+# Completed: 2392 of 2392 jobs
+# CPU time in finished jobs:   25651277s  427521.28m  7125.35h  296.89d  0.813 y
+# IO & Wait Time:                 74118s    1235.30m    20.59h    0.86d  0.002 y
+# Average job time:               10755s     179.25m     2.99h    0.12d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           82545s    1375.75m    22.93h    0.96d
+# Submission to last job:         82579s    1376.32m    22.94h    0.96d
+
+    ssh kkstore02
+
+    cd /cluster/data/hg17
+    cd bed
+
+    mv blat.hg15.2006-07-25 /san/sanVol1/scratch/hg17 
+
+    ssh pk
+    cd /san/sanVol1/scratch/hg17/blat.hg15.2006-07-25/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/fan/" $0 " hg17ToHg15"}' > newspec
+    para create newspec
+    para try
+    para push
+# Completed: 2392 of 2392 jobs
+# CPU time in finished jobs:     612316s   10205.26m   170.09h    7.09d  0.019 y
+# IO & Wait Time:                 12421s     207.02m     3.45h    0.14d  0.000 y
+# Average job time:                 261s       4.35m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3524s      58.73m     0.98h    0.04d
+# Submission to last job:          3588s      59.80m     1.00h    0.04d
+
+    ######## LIFTOVER CHAINING
+    # LIFTING
+    ssh pk
+    cd /san/sanVol1/scratch/fan
+    cp mm7SplitLift.sh hg15SplitLift.sh
+
+    # change andy to fan, mm7 to hg15, and chrX to chr2, and remove chrUn_random 
+    vi hg15SplitLift.sh
+
+    cat << 'EOF' > hg15ChainMergeSplit.sh
+#!/bin/bash
+cp -r chainRaw/ /scratch/fan/hg15Lifts
+pushd /scratch/fan/hg15Lifts
+mkdir chain
+/cluster/bin/x86_64/chainMergeSort chainRaw/*.chain | /cluster/bin/x86_64/chainSplit chain stdin
+cp -r chain `dirs +1`
+rm -rf chain chainRaw
+'EOF'
+
+    chmod +x hg15ChainMergeSplit.sh
+
+    # HG17
+    cd /san/sanVol1/scratch/hg17/blat.hg15.2006-07-25/raw
+    /san/sanVol1/scratch/fan/hg15SplitLift.sh
+# There was an extra file, nib22.fa, under /cluster/data/hg15/nib, which should not be there.
+# -rw-rw-r--  1 2429 protein  50466533 May 20  2003 nib22.fa
+# This caused hg15SplitLift.sh to end abnormally.
+
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -linearGap=medium -psl $(path1) /scratch/hg/hg17/bothMaskedNibs  /san/sanVol1/scratch/hg15/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+'EOF'
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+    para time
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:       3596s      59.94m     1.00h    0.04d  0.000 y
+# IO & Wait Time:                   919s      15.31m     0.26h    0.01d  0.000 y
+# Average job time:                 103s       1.71m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             274s       4.57m     0.08h    0.00d
+# Submission to last job:           284s       4.73m     0.08h    0.00d
+    ######### CHAINMERGE/NET/NETSUBSET
+    ssh kolossus
+    mkdir -p /scratch/fan/hg15Lifts
+    cd /scratch/fan/hg15Lifts
+
+    cp -r /san/sanvol1/scratch/hg17/blat.hg15.2006-07-25/chainRaw/ .
+    mkdir chain
+    /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+# about 30 minutes.
+
+    cp -rp chain /san/sanvol1/scratch/hg17/blat.hg15.2006-07-25/
+    rm -rf chain
+    rm -rf chainRaw
+
+    ssh pk
+    cd /san/sanvol1/scratch/fan
+    cat << 'EOF' > netOver.sh 
+#!/bin/bash
+
+chain=$1
+chrom=`basename $chain .chain`
+sizesHGOld=$2
+sizesHG15=/cluster/data/hg15/chrom.sizes
+chainDir=`dirname $chain`
+blatDir=`dirname $chainDir`
+net=${blatDir}/net/${chrom}.net
+over=${blatDir}/over/${chrom}.over
+
+mkdir -p ${blatDir}/{over,net}
+/cluster/bin/x86_64/chainNet $chain $sizesHGOld $sizesHG15 $net /dev/null
+/cluster/bin/x86_64/netChainSubset $net $chain $over
+'EOF'
+    chmod +x netOver.sh
+
+    mkdir netRun
+
+    cd netRun/
+
+    find /san/sanVol1/scratch/hg17/blat.hg15.2006-07-25/chain -name "*.chain" \
+     | awk '{print "/san/sanVol1/scratch/fan/netOver.sh " $1 " /cluster/data/hg17/chrom.sizes"}' > spec
+    para create spec
+    para push
+    para time
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:        438s       7.30m     0.12h    0.01d  0.000 y
+# IO & Wait Time:                   118s       1.97m     0.03h    0.00d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              28s       0.47m     0.01h    0.00d
+# Submission to last job:            67s       1.12m     0.02h    0.00d
+
+    ########## FINISHING
+    ssh hgwdev
+
+    # HG17
+    cd /san/sanvol1/scratch/hg17/blat.hg15.2006-07-25/over
+    cat * >> ../hg17ToHg15.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -rp blat.hg15.2006-07-25/ /cluster/data/hg17/bed
+
+    cd /cluster/data/hg17/bed
+    ln -s blat.hg15.2006-07-25 blat.hg15
+    ln -s `pwd`/blat.hg15/hg17ToHg15.over.chain liftOver/hg17ToHg15.over.chain
+    ln -s `pwd`/liftOver/hg17ToHg15.over.chain /gbdb/hg17/liftOver/hg17ToHg15.over.chain
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+
+    gzip /cluster/store5/gs.18/build35/bed/blat.hg15/hg17ToHg15.over.chain
+    ln -s /cluster/store5/gs.18/build35/bed/blat.hg15/hg17ToHg15.over.chain.gz /gbdb/hg17/liftOver/
+    cp -p /cluster/store5/gs.18/build35/bed/blat.hg15/hg17ToHg15.over.chain.gz /cluster/data/hg17/bed/liftOver 
+
+    cd /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    ln -s /cluster/store5/gs.18/build35/bed/blat.hg15/hg17ToHg15.over.chain.gz hg17ToHg15.over.chain.gz
+    hgAddLiftOverChain hg17 hg15 
+
+############################################################################
