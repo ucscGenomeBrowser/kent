@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1172 2006/07/28 18:45:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1173 2006/07/28 19:51:49 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12563,9 +12563,13 @@ if (showTrackControls)
 	    track = tr->track;
 	    controlGridStartCell(cg);
 	    if (track->hasUi)
+		{
+		char *encodedMapName = cgiEncode(track->mapName);
 		hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
 		    cartSessionVarName(), cartSessionId(cart),
-		    chromName, track->mapName);
+		    chromName, encodedMapName);
+		freeMem(encodedMapName);
+		}
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
