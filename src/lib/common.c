@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.99 2006/07/26 18:38:59 hiram Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.100 2006/07/28 21:00:10 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -861,6 +861,19 @@ for (i=0; ;i += 1)
     if (string[i] != c)
         return FALSE;
     }
+}
+
+boolean firstWordSame(char *word, char *line)
+/* Return TRUE if first word (case insensitive) of line is
+ * same as word. */
+{
+int len = strlen(word);
+int i;
+for (i=0; i<len; ++i)
+   if (toupper(word[i]) != toupper(line[i]))
+       return FALSE;
+char c = line[len];
+return c == 0 || isspace(c);
 }
 
 char *rStringIn(char *needle, char *haystack)
