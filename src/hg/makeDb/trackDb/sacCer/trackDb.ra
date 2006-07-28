@@ -63,10 +63,10 @@ exonArrows off
 
 track nucleosome
 shortLabel Nucleosome
-longLabel Per base Probability of Nucleasome positions E. Segal et al.
+longLabel Per base Probability of Nucleasome Occupancy E. Segal et al.
 group regulation
 priority 100
-visibility hide
+visibility full
 autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
@@ -83,7 +83,7 @@ shortLabel Stable Nucleosomes
 longLabel Highly Stable Nucleasomes p > 0.5 from Eran Segal (score >= 500)
 group regulation
 priority 101 
-visibility pack
+visibility hide
 scoreFilter 500
 spectrum on
 type bed 5 +
@@ -94,7 +94,7 @@ shortLabel Best Nucleosomes
 longLabel Genome wide Single Best Nucleasomes from Eran Segal 
 group regulation
 priority 102 
-visibility pack
+visibility hide
 spectrum on
 type bed 5 +
 exonArrows off
