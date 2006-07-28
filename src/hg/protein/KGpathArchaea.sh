@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGpathArchaea.sh,v 1.2 2006/07/28 01:48:53 baertsch Exp $"
+#	"$Id: KGpathArchaea.sh,v 1.3 2006/07/28 19:12:49 lowe Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -56,7 +56,7 @@ fi
 
 ###########################  MAIN  ###################################
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -ne 4 ]; then
     echo "usage: KGpath <DB> <RO_DB> <YYMMDD>"
     echo -e "\t<DB> - organism database to load"
     echo -e "\t<RO_DB> - read only from this database (the target)"
@@ -111,6 +111,7 @@ fi
 DB=$1
 RO_DB=$2
 DATE=$3
+SPECIES=$4
 PDB=proteins${DATE}
 TOP=/cluster/data/kgDB/bed/${DB}
 export DB RO_DB DATE PDB TOP
@@ -130,63 +131,7 @@ echo TOP=$TOP
 #
 #	This business here is species specific:
 #	mmu == mouse, rno == rat, hsa = human
-SPECIES=mac
-case ${RO_DB} in
-    mm*) SPECIES=mmu
-	;;
-    rn*) SPECIES=rno
-	;;
-    hg*) SPECIES=hsa
-	;;
-    aerPer*) SPECIES=ape
-        ;;
-    archFulg*) SPECIES=afu
-        ;;
-    halMor*) SPECIES=hma
-        ;;
-    haloHalo*) SPECIES=hal
-        ;;
-    metAce*) SPECIES=mac
-        ;;
-    metMar*) SPECIES=mmp
-        ;;
-    methBark*) SPECIES=mba
-        ;;
-    methJann*) SPECIES=mja
-        ;;
-    methKand*) SPECIES=mka
-        ;;
-    methMaze*) SPECIES=mma
-        ;;
-    methTher*) SPECIES=mth
-        ;;
-    nanEqu*) SPECIES=neq
-        ;;
-    natrPhar*) SPECIES=nph
-        ;;
-    picrTorr*) SPECIES=pto
-        ;;
-    pyrAby*) SPECIES=pab
-        ;;
-    pyrAer*) SPECIES=pai
-        ;;
-    pyrFur*) SPECIES=pfu
-        ;;
-    pyrHor*) SPECIES=pho
-        ;;
-    sulSol*) SPECIES=sso
-        ;;
-    sulfAcid*) SPECIES=sai
-        ;;
-    sulfToko*) SPECIES=sto
-        ;;
-    therAcid*) SPECIES=tac
-        ;;
-    therKoda*) SPECIES=tko
-        ;;
-    therVolc*) SPECIES=tvo
-        ;;
-esac
+
 
 if [ ! -s ${SPECIES}.lis ]; then
     wget --timestamping -O ${SPECIES}.html "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=${SPECIES}&mode=bfind&max_hit=1000&.cgifields=max_hit"
