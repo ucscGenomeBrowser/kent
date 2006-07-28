@@ -196,7 +196,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1063 2006/07/28 02:38:18 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1064 2006/07/28 04:23:34 lowe Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14018,49 +14018,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 
-/*Print out the table for the alignments*/
-printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
-printf(" <tbody>\n    <tr>\n");
-printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
-printf("</td>\n    </tr>\n    <tr>");
-printf("     <td style=\"vertical-align: top;\">%s where each - is approx. %f amino acids", trnaName, dashlength);
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<code>\n");
-for(z=0; z<60; z++)
-    printf("-");
-printf("</code>");
-
-printf("</td>\n    </tr>\n    <tr>");
 flag=0;
 flag2=0;
 
-for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
-    {		    
-    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
-    dashes=cbs2->queryseqstart-cbs2->queryseqend;
-    if(dashes<0) dashes=dashes*-1;          
-    printf("<a name=\"%i-align\"></a>",cbs2->GI);
-    printf("<a\nhref=\"#%i-desc\">%s</a>, %s",cbs2->GI, cbs2->species,cbs2->qName);
-    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
-    printf("<code>\n");
-    dashes=dashes/dashlength;
-    if(cbs2->queryseqstart>cbs2->queryseqend)
-	for(z=0; z<((cbs2->queryseqend)/dashlength); z++)
-	    printf("&nbsp;");
-    else
-        for(z=0; z<((cbs2->queryseqstart)/dashlength); z++)
-	    printf("&nbsp;");
-    if(dashes<1) printf("-");
-    for(z=0; z<dashes; z++) printf("-");
-    printf("</code>");
-    printf("</td>\n    </tr>\n");
-    flag=0;
-    }
-   
-
 /*Print out table with Blast information*/
-printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
+ printf("   </tbody>\n</table>\n<br><br>");
+
+printf("<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
 printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -14101,12 +14065,12 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     printf("<br></td>\n    </tr>\n");
     flag=0;	    
     }	
-printf("  <br><br></tbody>\n</table>  \n");
-printf("  </tbody>\n</table>  \n");
+/* printf("  <br><br></tbody>\n</table>  \n"); */
+
 
 
 /*Print out the table for the alignments*/
-printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
+printf("<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
 printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
@@ -14168,7 +14132,7 @@ void printCode(char code)
     switch(code)
 	{
 	case 'a':    
-	    printf("Aerobic");
+	    printf("Aerobe");
 	    break;
 	case 'b':
 	    printf("Bacteria");
@@ -14183,7 +14147,7 @@ void printCode(char code)
 	    printf("Euryarchaea");
 	    break;
 	case 'g':
-	    printf("Genus");
+	    printf("Within Genus");
 	    break;
 	case 'h':
 	    printf("Hyperthermophile");
@@ -14192,7 +14156,7 @@ void printCode(char code)
 	    printf("Methanogen");
 	    break;
 	case 'n':
-	     printf("Anaerobic");
+	     printf("Anaerobe");
 	    break;
 	case 'o':
 	    printf("Nanoarchaea");
@@ -14213,7 +14177,7 @@ void printCode(char code)
 	    printf("Halophile");
     	    break;
 	case 'r':
-	    printf("Both Aerobic and Anaerobic");
+	    printf("Facultative Aerobe");
     	    break;
 	default:
 	    break;
@@ -14483,9 +14447,29 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"%s?db=pyrFur2&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
+	    else if((sameString(cbs2->species, "Pyrococcus abyssi"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=pyrAby1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Pyrococcus horikoshii"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=pyrHor1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Thermococcus kodakaraensis"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=therKoda1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
 	    else if((sameString(cbs2->species, "Sulfolobus solfataricus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"%s?db=sulSol1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Sulfolobus tokodaii"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=sulfToko1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Sulfolobus acidocaldarius"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=sulfAcid1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrobaculum aerophilum"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -14495,25 +14479,89 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"%s?db=nanEqu1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
-	    else if((sameString(cbs2->species, "Methanococcus maripaludis"))){
+	    else if((sameString(cbs2->species, "Methanosarcina acetivorans"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"%s?db=metMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=metAce1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanosarcina barkeri"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methBark1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanosarcina mazei"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methMaze1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanothermobacter thermautotrophicus"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methTher1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanococcoides burtonii"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methBurt1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanopyrus kandleri"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methKand1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Haloarcula marismortui"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"%s?db=halMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
+	    else if((sameString(cbs2->species, "Halobacterium sp."))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=haloHalo1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
 	    else if((sameString(cbs2->species, "Aeropyrum pernix"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"%s?db=aerPer1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
-	    else if((sameString(cbs2->species, "Pyrococcus abyssi"))){
+	    else if((sameString(cbs2->species, "Archaeoglobus fulgidus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"%s?db=pyrAby1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=archFulg1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
-	    else if((sameString(cbs2->species, "Pyrococcus horikoshii"))){
+	    else if((sameString(cbs2->species, "Thermoplasma acidophilum"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"%s?db=pyrHor1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=therAcid1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Thermoplasma volcanium"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=therVolc1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanocaldococcus jannaschii"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methJann1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanococcus maripaludis"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=metMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanosphaera stadtmanae"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methStad1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanospirillum hungatei"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=methHung1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Aquifex aeolicus"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=aquiAeol1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Thermotoga maritima"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=therMari1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Escherichia coli K12"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=eschColi_K12_1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Bacillus subtilis"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=baciSubt1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Shewanella oneidensis"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"%s?db=shewOnei1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else{
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -14816,10 +14864,13 @@ if (spAcc != NULL)
     }
 /* ncbi blast hits */
     hits = chopString(ginfo.gi,":",giwords,sizeof(giwords));
-    printf("<B>NCBI Blast Hits:</B> "
-               "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
-	       "TARGET=_BLANK>%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
-	       (hits == 2) ? giwords[1] : giwords[0]);
+    if (hits > 0)
+        {
+	printf("<B>NCBI Blast Hits:</B> "
+		   "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
+		   "TARGET=_BLANK>%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
+		   (hits == 2) ? giwords[1] : giwords[0]);
+	}
 /* cog description */
 if (hTableExists("COG"))
     { 
