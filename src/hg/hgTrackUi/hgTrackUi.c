@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.292 2006/07/28 19:14:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.293 2006/07/29 00:02:02 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2391,15 +2391,7 @@ specificUi(tdb);
 
 puts("</FORM>");
 
-if (isCustomTrack(tdb->tableName))
-    {
-    if (tdb->html != NULL && tdb->html[0] != 0)
-	{
-	htmlHorizontalLine();
-	puts(tdb->html);
-	}
-    }
-else
+if (!isCustomTrack(tdb->tableName))
     {
     /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
     if (hTableOrSplitExists(tdb->tableName))
@@ -2425,6 +2417,12 @@ else
 		   "View table schema</A></P>\n",
 		   database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
 	}
+    }
+
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    htmlHorizontalLine();
+    puts(tdb->html);
     }
 }	/*	void trackUi(struct trackDb *tdb)	*/
 
