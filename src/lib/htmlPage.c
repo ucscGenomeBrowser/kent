@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.31 2006/07/28 23:41:41 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.32 2006/07/29 00:17:28 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1396,6 +1396,7 @@ newPage = htmlPageParse(url, dyStringCannibalize(&dyText));
 freez(&url);
 dyStringFree(&dyUrl);
 dyStringFree(&dyHeader);
+freez(&cgiVars);
 return newPage;
 }
 
