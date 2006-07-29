@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.113 2006/07/11 00:33:56 heather Exp $
+# 	$Id: makefile,v 1.114 2006/07/29 05:51:58 markd Exp $
 
 BROWSER_BINS=cartReset das hgBlat hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
@@ -160,6 +160,7 @@ UTIL_DIRS = \
 	hgTablesTest \
 	hgChroms \
 	hgGetAnn \
+	hgSelect \
 	hgSpeciesRna \
 	hgsql \
 	hgsqladmin \
