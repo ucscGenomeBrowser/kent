@@ -1,6 +1,6 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.3 2006/07/06 00:06:07 aamp Exp $
+# 	$Id: makefile,v 1.4 2006/07/31 22:28:43 angie Exp $
 
 include ../../inc/common.mk
 
@@ -45,7 +45,8 @@ DIRS = \
 	chromGraphFromBin \
 	chromGraphToBin \
 	safePush \
-	toDev64
+	toDev64 \
+	twoBitMask
 
 BAD_DIRS= \
 	ccCpLock \
