@@ -21341,32 +21341,43 @@ load data local infile "hgMutAttrSP.txt" into table hgMutAttr;
 # gv*  Belinda Giardine
 # These tables are to replace the hgMut tables
 # Most data is converted by me (on PSU machines) to loadable format and copied.
-# The Swiss-Prot/UniProt data, is generated from the dv track tables and
-# the UniProt database, using perl scripts and table dumps.
-# scripts: generateHGVSname, convertAttrLink, convertAttrSP
+# The Swiss-Prot/UniProt data, is generated from the UniProt database at UCSC, 
+# using perl scripts and table dumps.
+# scripts in kent/src/hg/utils/gvParsers/swissProt/
+# everything redone to not depend on the dv track in July 2006
 
-#building Swiss-Prot attributes
-#start at links work back to attributes.
-#need a linkId for each spId that has UniProt disease, polymorphism, or OMIM title
-# scripts in ~giardine/humPhen/dvData
-#map OMIM IDs to spIds listSpXref2.sql
-#spId omimId (all have titles?)
+#make list of variants from Swiss-Prot (make sure featureClass 23 is variant)
+hgsql -N uniProt > spVars.txt <<end
+select feature.acc, start, end-start, featureType.val, featureId.val from
+feature, featureType, accToTaxon, featureId where featureClass=23 and
+featureType=featureType.id and accToTaxon.acc=feature.acc and taxon=9606 and
+feature.featureId=featureId.id;
+end
+#need list mapping 3 letter amino acids to 1 letter. (aminoInfoDump from PSU)
+#known gene protein map (kgProtMap) has psl data from (blastp)
+# with qName being the spId
+hgsql -N hg17 > kgProtMapDump.txt <<end
+select kgProtMap.* from kgProtMap, uniProt.feature where kgProtMap.qName =
+uniProt.feature.acc;
+end
+#table join duplicates; perl script to throw out extra before use
+uniqueRows < kgProtMapDump.txt > kgProtMapUniq.txt
+#check variables for output and input file names
+computeSpVars > errors.txt
+#errors.txt will list variants that couldn't be mapped
+#July 18, 2006
+#37 gaps, 564 proteins (2228 variants) not in kgProtMap (test one did align)
+#found 22389
+#Swiss-Prot attributes: 
+hgsql hg17 < listSPconnections.sql > listSPconnections.txt
 hgsql proteome < listSpXref2.sql > listSpXref2.txt
-#make other lists from tables
-hgsql hg17 < listGeneVals.sql > listGeneVals.tab
-hgsql hg17 < listGenes.sql > listGenes.txt
-hgsql hg17 < listSPconnections.sql > listSPconnections.tab
-#next make genomeVarAttrLink entries from the gene list
-#assign an ID per gene, 1 row per gene based link in ra, add appropriate acc
-#only make links where data available (listGeneVals)
-cat listGeneVals.tab listGenes.txt | convertAttrLink > genomeVarAttrLinkSPgene.txt
-#next generate the hgMutAttr entries, for the SP variants
-#use listSPconnections to get ID connections, based on dv table
-#match up spId to get gene ID
-convertAttrSP < listSPconnections.tab > genomeVarAttrSPgene.txt
-#generateHGVSname is up 1 directory and does rest of SwissProt data
-#this script needs redone to not depend on dv tables
+convertOmimTitle > gvLinkSPomim.txt
+hgsql hg17 < listGeneVals.sql > listGeneVals.txt
+convertDisPoly > gvLinkSPuni.txt
+cat gvLinkSPuni.txt gvLinkSPomim.txt > gvLinkSp.txt
+cp gvLinkSp.txt ../../../gv/gvData/
 
+#creating gv* tables and loading 
 #June 27, 2006
 autoSql gv.as gv -dbLink
 #edit indexes and string lengths in .sql file
@@ -21379,16 +21390,25 @@ UNIQUE KEY (chrom(12), chromStart, chromEnd, name)
 #    char *id;   /* Added field to hold ID if change name */
 #set to null in gv.c file
 
+#reload data July 2006 with more data and corrected Swiss-Prot data
+#also moved gv*(except gvPos) and omimTitle to hgFixed
 #prep data: concatenate all the gvPos data, sort
-cat gvPosSP.txt gvPosHbVar.txt gvPosARdb.txt gvPosBgmut.txt gvPosCftr.txt gvPosPah.txt > gvPosAll.txt
+cat gvPosSP.txt gvPosHbVar.txt gvPosARdb.txt gvPosBgmut.txt gvPosCftr.txt
+gvPosPah.txt gvPosSrd5a2.txt gvPosBrca.txt > gvPosAll.txt
 grep "^chr" gvPosAll.txt | sort -k1,1 -k2,2n > gvPosSortedHg17.bed
 
 #load tables
 hgLoadBed hg17 gvPos gvPosSortedHg17.bed -noSort -oldTable -tab
 hgsql hg17 < gvSrc.sql
 hgsql hg17
+        load data local infile "gvBrca.txt" into table gv;
+        load data local infile "gvAttrBrca.txt" into table gvAttr;
+        load data local infile "gvLinkBrca.txt" into table gvLink;
         load data local infile "gvLinkSP.txt" into table gvLink;
+        load data local infile "gvLinkSPgene.txt" into table gvLink;
         load data local infile "gvSP.txt" into table gv;
+        load data local infile "gvAttrSP.txt" into table gvAttr;
+        load data local infile "gvAttrLongSP.txt" into table gvAttrLong;
         load data local infile "gvLinkHbVar.txt" into table gvLink;
         load data local infile "gvHbVar.txt" into table gv;
         load data local infile "gvAttrHbVar.txt" into table gvAttr;
@@ -21396,19 +21416,25 @@ hgsql hg17
         load data local infile "gvAttrARdb.txt" into table gvAttr;
         load data local infile "gvBgmut.txt" into table gv;
         load data local infile "gvAttrBgmut.txt" into table gvAttr;
+        load data local infile "gvAttrLongBgmut.txt" into table gvAttrLong;
         load data local infile "gvLinkBgmut.txt" into table gvLink;
         load data local infile "gvCftr.txt" into table gv;
         load data local infile "gvAttrCftr.txt" into table gvAttr;
         load data local infile "gvPah.txt" into table gv;
         load data local infile "gvAttrPah.txt" into table gvAttr;
         load data local infile "gvLinkPah.txt" into table gvLink;
+        load data local infile "gvSrd5a2.txt" into table gv;
+        load data local infile "gvAttrSrd5a2.txt" into table gvAttr;
+        load data local infile "gvAttrConservedDisease.txt" into table gvAttr;
 
-#add new table, cut and paste in create stmt
-#reload BGMUT, fixing names that were truncated
-delete from gv where id like 'BGMUT%';
-load data local infile "gvBgmut.txt" into table gv;
-load data local infile "gvAttrLongBgmut.txt" into table gvAttrLong;
-#rebuild cgis
+#get disease association predictions for conserved variants
+#get list a variants that are already done
+hgsql -N hg17 > gvWithDiseaseStatus.txt <<end
+select id from gvAttr where attrType = 'disease';
+end
+#use table browser to get variants that intersect most conserved track
+#set conserved variants that are null to likely
+computeDiseaseAssocCons > gvAttrConservedDisease.txt
 
 
 #############################################################
