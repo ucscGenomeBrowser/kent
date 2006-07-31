@@ -109,6 +109,9 @@ struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask);
 /* Convert dnaSeq representation in memory to twoBit representation.
  * If doMask is true interpret lower-case letters as masked. */
 
+struct twoBit *twoBitFromFile(char *fileName);
+/* Get twoBit list of all sequences in twoBit file. */
+
 void twoBitWriteOne(struct twoBit *twoBit, FILE *f);
 /* Write out one twoBit sequence to binary file. 
  * Note this does not include the name, which is

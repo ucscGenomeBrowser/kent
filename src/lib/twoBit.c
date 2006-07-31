@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.21 2006/01/26 21:32:44 markd Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.22 2006/07/31 22:18:22 angie Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -172,6 +172,7 @@ if (doMask)
     }
 return twoBit;
 }
+
 
 static int twoBitSizeInFile(struct twoBit *twoBit)
 /* Figure out size structure will take in file. */
@@ -367,6 +368,86 @@ if (index == NULL)
 fseek(tbf->f, index->offset, SEEK_SET);
 }
 
+static void readBlockCoords(FILE *f, boolean isSwapped, bits32 *retBlockCount,
+			    bits32 **retBlockStarts, bits32 **retBlockSizes)
+/* Read in blockCount, starts and sizes from file. (Same structure used for
+ * both blocks of N's and masked blocks.) */
+{
+bits32 blkCount = readBits32(f, isSwapped);
+*retBlockCount = blkCount;
+if (blkCount == 0)
+    {
+    *retBlockStarts = NULL;
+    *retBlockSizes = NULL;
+    }
+else
+    {
+    bits32 *nStarts, *nSizes;
+    AllocArray(nStarts, blkCount);
+    AllocArray(nSizes, blkCount);
+    fread(nStarts, sizeof(nStarts[0]), blkCount, f);
+    fread(nSizes, sizeof(nSizes[0]), blkCount, f);
+    if (isSwapped)
+	{
+	int i;
+	for (i=0; i<blkCount; ++i)
+	    {
+	    nStarts[i] = byteSwap32(nStarts[i]);
+	    nSizes[i] = byteSwap32(nSizes[i]);
+	    }
+	}
+    *retBlockStarts = nStarts;
+    *retBlockSizes = nSizes;
+    }
+}
+
+struct twoBit *twoBitFromFile(char *fileName)
+/* Get twoBit list of all sequences in twoBit file. */
+{
+struct twoBitFile *tbf = twoBitOpen(fileName);
+struct twoBitIndex *index;
+struct twoBit *twoBitList = NULL, *twoBit = NULL;
+boolean isSwapped = tbf->isSwapped;
+FILE *f = tbf->f;
+
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    char *name = index->name;
+    bits32 packByteCount;
+
+    AllocVar(twoBit);
+    twoBit->name = cloneString(name);
+
+    /* Find offset in index and seek to it */
+    twoBitSeekTo(tbf, name);
+
+    /* Read in seqSize. */
+    twoBit->size = readBits32(f, isSwapped);
+
+    /* Read in blocks of N. */
+    readBlockCoords(f, isSwapped, &(twoBit->nBlockCount),
+		    &(twoBit->nStarts), &(twoBit->nSizes));
+
+    /* Read in masked blocks. */
+    readBlockCoords(f, isSwapped, &(twoBit->maskBlockCount),
+		    &(twoBit->maskStarts), &(twoBit->maskSizes));
+
+    /* Reserved word. */
+    twoBit->reserved = readBits32(f, isSwapped);
+
+    /* Read in data. */
+    packByteCount = packedSize(twoBit->size);
+    twoBit->data = needLargeMem(packByteCount);
+    mustRead(f, twoBit->data, packByteCount);
+
+    slAddHead(&twoBitList, twoBit);
+    }
+
+twoBitClose(&tbf);
+slReverse(&twoBitList);
+return twoBitList;
+}
+
 struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd, boolean doMask, int *retFullSize)
 /* Read part of sequence from .2bit file.  To read full
@@ -402,41 +483,10 @@ if (outSize < 1)
     errAbort("twoBitReadSeqFrag in %s start (%d) >= end (%d)", name, fragStart, fragEnd);
 
 /* Read in blocks of N. */
-nBlockCount = readBits32(f, isSwapped);
-
-if (nBlockCount > 0)
-    {
-    AllocArray(nStarts, nBlockCount);
-    AllocArray(nSizes, nBlockCount);
-    fread(nStarts, sizeof(nStarts[0]), nBlockCount, f);
-    fread(nSizes, sizeof(nSizes[0]), nBlockCount, f);
-    if (isSwapped)
-        {
-	for (i=0; i<nBlockCount; ++i)
-	    {
-	    nStarts[i] = byteSwap32(nStarts[i]);
-	    nSizes[i] = byteSwap32(nSizes[i]);
-	    }
-	}
-    }
+readBlockCoords(f, isSwapped, &nBlockCount, &nStarts, &nSizes);
 
 /* Read in masked blocks. */
-maskBlockCount = readBits32(f, isSwapped);
-if (maskBlockCount > 0)
-    {
-    AllocArray(maskStarts, maskBlockCount);
-    AllocArray(maskSizes, maskBlockCount);
-    fread(maskStarts, sizeof(maskStarts[0]), maskBlockCount, f);
-    fread(maskSizes, sizeof(maskSizes[0]), maskBlockCount, f);
-    if (isSwapped)
-        {
-	for (i=0; i<maskBlockCount; ++i)
-	    {
-	    maskStarts[i] = byteSwap32(maskStarts[i]);
-	    maskSizes[i] = byteSwap32(maskSizes[i]);
-	    }
-	}
-    }
+readBlockCoords(f, isSwapped, &maskBlockCount, &maskStarts, &maskSizes);
 
 /* Skip over reserved word. */
 readBits32(f, isSwapped);
