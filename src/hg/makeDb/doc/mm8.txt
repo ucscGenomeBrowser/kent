@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.2 2006/07/26 16:59:57 angie Exp $"
+#	"$Id: mm8.txt,v 1.3 2006/07/31 18:47:49 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3680,6 +3680,40 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     # smaller, then save as jpg
 #    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm7_17way.jpg
 
+    # creating upstream mafs (DONE - 2006-07-31 - Hiram)
+    ssh hgwdev
+    #	data load balancing in the kkstore04 filesystems
+    mkdir /cluster/store8/mm8/bed/multiz17way/upstreamMafs
+    cd /cluster/data/mm8/bed/multiz17way
+    ln -s /cluster/store8/mm8/bed/multiz17way/upstreamMafs ./upstreamMafs
+    cd upstreamMafs
+    for N in 1000 2000 5000
+do
+    echo "making up${N}.bed"
+    nice featureBits mm8 refGene:upstream:${N} -fa=/dev/null -bed=stdout \
+	| awk -F '\t' \
+'{
+gsub("_up.*","",$4)
+printf("%s\t%s\t%s\t%s\t%d\t%s\n", $1, $2, $3, $4, 0, $5)}' \
+	> up${N}.bed
+done
+    for N in 1000 2000 5000
+do
+    echo "making upstream${N}.maf"
+    nice mafFrags mm8 multiz17way up${N}.bed upstream${N}.maf \
+                -orgs=/cluster/data/mm8/bed/multiz17way/species.lst
+done
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/multiz17way/upstreamMafs
+    for N in 1000 2000 5000
+do
+    echo "nice gzip upstream${N}.maf"
+    nice gzip upstream${N}.maf
+done
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm8/multiz17way
+    ln -s /cluster/data/mm8/bed/multiz17way/upstreamMafs/upstream*.maf.gz .
 ############################################################################
 # ANNOTATE MULTIZ17WAY MAF AND LOAD TABLES (DONE - 2006-04-24 - Hiram)
 #	RE-DONE 2006-05-03 with danRer4 in place of danRer3
