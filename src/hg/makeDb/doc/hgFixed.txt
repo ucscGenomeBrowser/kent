@@ -717,7 +717,10 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # From Leonard Zon's group at the Children's Hospital, Boston
 # Contact: Tony DiBiase, adibiase@enders.tch.harvard.edu
 # Data is normalized and log2 transformed, centered on mean of 0.
-# Changed table names (DONE, 2006-07-30, hartera) 
+# Changed table names and reloaded MedianExps table so that the extras has
+# the strain plus time point for the name otherwise the average is taken
+# over all time points for a strain for the track display 
+# when Tissue Averages is selected. (DONE, 2006-07-30, hartera) 
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
    cd /projects/compbio/data/microarray/zebrafishWT
@@ -785,6 +788,12 @@ hgsql -N -e 'select extras, id from zebrafishZonWTAllExps;' hgFixed \
 perl -pi.bak -e 's/Zebrafish,n\/a,//' zfishWTExps
 perl -pi.bak -e 's/,//' zfishWTExps
 
+# alter script so that name for each experiment in column 2 is not just the 
+# strain but the strain plus time point (same as first column). This goes into
+# the extras column for zebrafishWTMedianExps and is used for Tissue Averages
+# display for the arry data track. Otherwise an average is taken for the 
+# strain (hartera, 2006-07-30).
+
 cat << 'EOF' > cnvToMedian
 #!/usr/bin/awk -f
 
@@ -799,8 +808,7 @@ BEGIN {
 
 END {
     for (id in data) {
-        split(id, a, "\\-");
-        print id, a[1], substr(data[id], 2);
+        print id, id, substr(data[id], 2);
     }
 }
 'EOF'
@@ -813,6 +821,7 @@ sort zfishZonWTMedian.ra | grep "hpf" >> tmp.ra
 mv tmp.ra zfishZonWTMedian.ra
 cp zfishZonWTMedian.ra ~/kent/src/hg/makeDb/hgMedianMicroarray
 cd ~/kent/src/hg/makeDb/hgMedianMicroarray
+
 # Take the median value over multiple replicants and put in this table:
 hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedian \
@@ -822,5 +831,17 @@ hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
 # in a similar way to the Ratio tables for other data sets since they
 # can be visualiszed using the red/green color scale (hartera, 2006-07-30).
 hgsql -e 'alter table zebrafishZonWTAll rename zebrafishZonWTAllLog;' hgFixed
-hgsql -e 'alter table zebrafishZonWTMedian rename zebrafishZonWTMedianLog;' \
-         hgFixed 
+
+# Alter zebrafishZonWTMedianExps so that for extras, the time point is shown
+# as well as the strain as in zebrafishZonWTAllExp - see above.
+# Drop old tables and reload:
+hgsql -e 'drop table zebrafishZonWTMedianLog; ' hgFixed
+hgsql -e 'drop table zebrafishZonWTMedianExps;' hgFixed
+
+# Reload table using new table names. (hartera, 2006-07-30)
+# Take the median value over multiple replicants and put in this table:
+hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
+  zfishZonWTMedian.ra zebrafishZonWTMedianLog \
+  zebrafishZonWTMedianExps -minExps=1
+
+
