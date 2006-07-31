@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1071 2006/07/28 23:56:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1072 2006/07/31 15:56:51 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -7549,9 +7549,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     hinv = HInvLoad(row);
     if (hinv != NULL)
 	{
-        printf("<B> Gene ID: </B> <A HREF=\"http://www.jbirc.aist.go.jp/hinv/soup/pub_Detail.pl?acc_id=%s\" TARGET=_blank> %s <BR></A>", 
+        printf("<B> Gene ID: </B> <A HREF=\"http://www.jbirc.jbic.or.jp/hinv/soup/pub_Detail.pl?acc_id=%s\" TARGET=_blank> %s <BR></A>", 
                 hinv->mrnaAcc, hinv->geneId );
-        printf("<B> Cluster ID: </B> <A HREF=\"http://www.jbirc.aist.go.jp/hinv/soup/pub_Locus.pl?locus_id=%s\" TARGET=_blank> %s <BR></A>", 
+        printf("<B> Cluster ID: </B> <A HREF=\"http://www.jbirc.jbic.or.jp/hinv/soup/pub_Locus.pl?locus_id=%s\" TARGET=_blank> %s <BR></A>", 
                 hinv->clusterId, hinv->clusterId );
         printf("<B> cDNA Accession: </B> <A HREF=\"http://getentry.ddbj.nig.ac.jp/cgi-bin/get_entry.pl?%s\" TARGET=_blank> %s <BR></A>", 
                 hinv->mrnaAcc, hinv->mrnaAcc );
