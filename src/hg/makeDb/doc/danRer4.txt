@@ -5034,6 +5034,11 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 ###########################################################################
 # CREATE MICROARRAY DATA TRACK BY ADDING MICROARRAY DATA TO AFFY ZEBRAFISH 
 # ALIGNMENTS (DONE, 2006-06-10, hartera)
+# Array data is for whole embryos of five wild type zebrafish strains. 
+# Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
+# Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
+# Zon Lab WT Affy data tables in hgFixed renamed to reflect that the data 
+# is log2 transformed (DONE, 2006-07-30, hartera)
     ssh hgwdev
     mkdir /cluster/data/danRer4/bed/ZonLab/wtArray
     cd /cluster/data/danRer4/bed/ZonLab/wtArray
@@ -5041,6 +5046,10 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
          /cluster/data/danRer4/bed/affyZebrafish/affyZebrafish.psl
     # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
     # Mapped 14819,  multiply-mapped 6667, missed 0, unmapped 798
+    # hgFixed.zebrafishZonWTMedian table renamed as 
+    # hgFixed.zebrafishZonWTMedianLog and hgFixed.zebrafishZonWTAll table
+    # renamed as hgFixed.zebrafishZonWTAllLog (hartera, 2006-07-30)
+
     hgLoadBed danRer4 affyZonWildType zebrafishZonWT.bed
     # Loaded 21486 elements of size 15
     # add trackDb.ra entry at trackDb/zebrafish level
