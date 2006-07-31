@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.112 2006/07/28 18:18:30 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.113 2006/07/31 21:14:07 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1268,8 +1268,10 @@ for (;;)
             safef(docFile,sizeof docFile, "%s.%s.html", buf, 
                     track->tdb->tableName);
             if (fileExists(docFile))
+                {
                 readInGulp(docFile, &buf, NULL);
-            track->tdb->html = buf;
+                track->tdb->html = buf;
+                }
             }
 
 	/*	close previous track data file if in use	*/
