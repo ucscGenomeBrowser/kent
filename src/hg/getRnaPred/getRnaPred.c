@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.17 2005/11/22 19:26:34 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.18 2006/07/31 21:38:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -260,8 +260,8 @@ if (gp->exonFrames != NULL)
  * an alignment of an mRNA to the genome.  */
 
 /* just overwrite the buffer with the peptide, which will stop at end of DNA
- * if no stop codon.*/
-dnaTranslateSome(cdsBuf->string+offset, cdsBuf->string+offset, (cdsBuf->stringSize+2)/3);
+ * if no stop codon. Buffer size must allow for stop codon. */
+dnaTranslateSome(cdsBuf->string+offset, cdsBuf->string+offset, ((cdsBuf->stringSize+2)/3)+1);
 faWriteNext(faFh, name, cdsBuf->string+offset, strlen(cdsBuf->string+offset));
 }
 
