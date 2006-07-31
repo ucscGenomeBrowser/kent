@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.300 2006/06/13 21:33:57 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.301 2006/07/31 04:56:34 galt Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -4163,7 +4163,9 @@ for (hel = helList; hel != NULL; hel = hel->next)
     {
     ra = hel->val;
     slAddHead(&raList, ra);
+    hel->val = NULL;
     }
+hashElFreeList(&helList);
 
 if (retHashOfHash)
     *retHashOfHash = hashOfHash;
