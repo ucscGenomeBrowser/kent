@@ -20,11 +20,11 @@ errAbort(
 }
 
 void dotOut()
-/* Print dot to standard output and flush it so user can
+/* Print dot to standard error and flush it so user can
  * see it right away. */
  {
- fputc('.', stdout);
- fflush(stdout);
+ fputc('.', stderr);
+ fflush(stderr);
  }
 
 char *unburyAcc(struct lineFile *lf, char *longNcbiName)
@@ -72,7 +72,7 @@ struct lineFile *lf = lineFileOpen(faName, TRUE);
 bioSeq seq;
 int dotMod = 0;
 
-printf("Reading %s\n", faName);
+fprintf(stderr, "Reading %s\n", faName);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, isDna))
     {
     if (clDots > 0 && ++dotMod == clDots )
@@ -88,7 +88,7 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, isDna))
     seq.name = accWithoutSuffix(seq.name);
     fprintf(out, "%s\t%s\n", seq.name, seq.dna);
     }
-if (clDots) printf("\n");
+if (clDots) fprintf(stderr, "\n");
 lineFileClose(&lf);
 }
 
@@ -120,6 +120,6 @@ else
    writeSeqTable(infileName, outf, FALSE, FALSE);
    }
 fclose(outf);
-printf("%s created.\n", outfileName);
+fprintf(stderr, "%s created.\n", outfileName);
 return 0;
 }
