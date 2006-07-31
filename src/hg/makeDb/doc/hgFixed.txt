@@ -716,7 +716,8 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # Added Zebrafish microarray data (DONE, 2006-06-10, hartera)
 # From Leonard Zon's group at the Children's Hospital, Boston
 # Contact: Tony DiBiase, adibiase@enders.tch.harvard.edu
-# Data is normalized and log2 transformed, centered on mean of 0. 
+# Data is normalized and log2 transformed, centered on mean of 0.
+# Changed table names (DONE, 2006-07-30, hartera) 
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
    cd /projects/compbio/data/microarray/zebrafishWT
@@ -817,3 +818,9 @@ hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedian \
   zebrafishZonWTMedianExps -minExps=1
 
+# Changed table names to reflect that they are log scaled. They are used
+# in a similar way to the Ratio tables for other data sets since they
+# can be visualiszed using the red/green color scale (hartera, 2006-07-30).
+hgsql -e 'alter table zebrafishZonWTAll rename zebrafishZonWTAllLog;' hgFixed
+hgsql -e 'alter table zebrafishZonWTMedian rename zebrafishZonWTMedianLog;' \
+         hgFixed 
