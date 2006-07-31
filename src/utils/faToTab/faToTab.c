@@ -16,7 +16,8 @@ errAbort(
   "usage:\n"
   "   hgFaToTab infileName outFileName\n"
   "options:\n"
-  "     -type=seqType   sequence type, dna or protein, default is dna\n");
+  "     -type=seqType   sequence type, dna or protein, default is dna\n"
+  "     -keepAccSuffix - don't strip dot version off of sequence id, keep as is\n");
 }
 
 void dotOut()
@@ -65,7 +66,8 @@ if (dotIndex)
 return fixedAcc;
 }
 
-void writeSeqTable(char *faName, FILE *out, boolean unburyAccession, boolean isDna)
+void writeSeqTable(char *faName, FILE *out, boolean unburyAccession, boolean isDna,
+                   boolean keepAccSuffix)
 /* Write out contents of fa file to name/sequence pairs in tabbed out file. */
 {
 struct lineFile *lf = lineFileOpen(faName, TRUE);
@@ -84,8 +86,8 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, isDna))
         {
 	seq.name = unburyAcc(lf, seq.name);
         }
-    
-    seq.name = accWithoutSuffix(seq.name);
+    if (!keepAccSuffix)
+        seq.name = accWithoutSuffix(seq.name);
     fprintf(out, "%s\t%s\n", seq.name, seq.dna);
     }
 if (clDots) fprintf(stderr, "\n");
@@ -97,6 +99,7 @@ int main(int argc, char *argv[])
 {
 static struct optionSpec optionSpecs[] = {
     {"type", OPTION_STRING},
+    {"keepAccSuffix", OPTION_BOOLEAN},
     {NULL, 0}
     };
 char *infileName, *outfileName;
@@ -109,16 +112,12 @@ optionInit(&argc, argv, optionSpecs);
 infileName  = argv[1];
 outfileName = argv[2];
 seqType = optionVal("type", seqType);
+boolean keepAccSuffix = optionExists("keepAccSuffix");
+
 
 outf = mustOpen(outfileName,  "w");
-if (sameWord(seqType, "dna"))
-   {
-   writeSeqTable(infileName, outf, FALSE, TRUE);
-   }
-else
-   {
-   writeSeqTable(infileName, outf, FALSE, FALSE);
-   }
+writeSeqTable(infileName, outf, FALSE, sameWord(seqType, "dna"),
+              keepAccSuffix);
 fclose(outf);
 fprintf(stderr, "%s created.\n", outfileName);
 return 0;
