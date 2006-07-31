@@ -3,7 +3,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.3 2006/07/27 20:41:58 kate Exp $"
+#	"$Id: panTro2.txt,v 1.4 2006/07/31 16:23:14 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -2906,4 +2906,34 @@ doPhast.csh $(root1) $(file1) 13 .01 .23
     ssh hgwdev
     cd /cluster/data/panTro2/bed/multiz8way/frames
     hgLoadMafFrames panTro2 multiz8wayFrames multiz8way.mafFrames.gz >&log&
+
+##########################################################################
+# NSCAN track - (2006-07-28 markd)
+    cd /cluster/data/panTro2/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/panTro2/chr_gtf
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/panTro2/chr_ptx
+    # clean up and rename downloaded directorys:
+    mv ardor.wustl.edu/jeltje/panTro2/chr_gtf .
+    mv ardor.wustl.edu/jeltje/panTro2/chr_ptx .
+    rm -rf ardor.wustl.edu
+    rm chr_*/index.html*
+    gzip chr_*/*
+    chmod a-w chr_**.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt panTro2 nscanGene chr_gtf/chr*.gtf.gz
+    # add .a suffix to match transcript id
+
+    # add .a suffix to match transcript id
+    hgPepPred -suffix=.a panTro2 generic nscanPep chr_ptx/chr*.fa.gz
+    rm *.tab
+
+    # update trackDb; need a panTro2-specific page to describe informants
+    chimp/panTro2/nscanGene.html    (from  CanFam1_hg17_nscan_10_18_2005/description.html )
+    chimp/panTro2/trackDb.ra
 

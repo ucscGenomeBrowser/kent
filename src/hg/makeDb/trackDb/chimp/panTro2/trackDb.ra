@@ -51,6 +51,16 @@ visibility hide
 color 12,12,120
 type genePred
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility dense
+color 34,139,34
+type genePred nscanPep
+cdsDrawDefault genomic\ codons
+
 track mrna
 shortLabel mRNAs
 longLabel Chimp and Human mRNAs from GenBank 
