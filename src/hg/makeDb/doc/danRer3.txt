@@ -7555,6 +7555,8 @@ exit 0
 # Array data is for whole embryos of five wild type zebrafish strains. 
 # Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
 # Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
+# Zon Lab WT Affy data tables in hgFixed renamed to reflect that the data 
+# is log2 transformed (DONE, 2006-07-30, hartera)
     ssh hgwdev
     mkdir /cluster/data/danRer3/bed/ZonLab/wtArray
     cd /cluster/data/danRer3/bed/ZonLab/wtArray
@@ -7562,6 +7564,10 @@ exit 0
          /cluster/data/danRer3/bed/affyZebrafish/affyZebrafish.psl
     # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
     # Mapped 14335,  multiply-mapped 6861, missed 0, unmapped 1282
+    # hgFixed.zebrafishZonWTMedian table renamed as 
+    # hgFixed.zebrafishZonWTMedianLog and hgFixed.zebrafishZonWTAll table
+    # renamed as hgFixed.zebrafishZonWTAllLog (hartera, 2006-07-30)
+
     hgLoadBed danRer3 affyZonWildType zebrafishZonWT.bed
     # Loaded 21196 elements of size 15
     # add trackDb.ra entry at trackDb/zebrafish level
@@ -7569,6 +7575,8 @@ exit 0
 ###########################################################################
 # BUILD GENE SORTER TABLES (AKA FAMILY BROWSER) 
 # (DONE, 2006-06-08 - 2006-06-12, hartera)
+# Zon Lab WT Affy data tables in hgFixed renamed to reflect that the data 
+# is log2 transformed (DONE, 2006-07-30, hartera)
 #  This should be done after creating ensGene, ensGtp and ensPep tables
 #  for the Ensembl Genes track.
 #  The BlastTab tables are already built - see HGNEAR PROTEIN BLAST TABLES
@@ -7614,6 +7622,10 @@ exit 0
    # Loaded zebrafishZonWTDistance
    # Made query index
    # Took 2 minutes.
+   # hgFixed.zebrafishZonWTMedian renamed as hgFixed.zebrafishZonWTMedianLog
+   # and hgFixed.zebrafishZonWTAll table renamed as 
+   # hgFixed.zebrafishZonWTAllLog to show that the data is log 
+   # transformed. (hartera, 2006-07-30)
    # To allow data to be viewed in Gene Sorter, add the hgNearOk=1 
    # to the dbDb table entry for danRer3 on hgcentraltest -
    # see section on MAKE HGCENTRALTEST ENTRY FOR DANRER3.
