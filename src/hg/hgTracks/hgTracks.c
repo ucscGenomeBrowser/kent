@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1173 2006/07/28 19:51:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1174 2006/07/31 03:06:29 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12120,6 +12120,7 @@ registerTrackHandler("affyHumanExon", affyAllExonMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
 registerTrackHandler("gnfAtlas2", affyRatioMethods);
+registerTrackHandler("affyZonWildType", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );
