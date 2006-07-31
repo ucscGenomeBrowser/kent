@@ -1,0 +1,199 @@
+#!/usr/bin/perl -w
+$ENV{'PATH'} = '/usr/local/bin:/bin';
+
+#expects caller to break apart mutations with multiple changes
+#numbering expected to be coding (c.*)
+
+#hgMut format
+#chrom start stop name mutId srcId hasPhenData baseChangeType location
+#we only have: chrom start stop name baseChangeType 
+
+use strict;
+
+my $geneFile = shift @ARGV;
+my $gbAcc = shift @ARGV;
+my $name = shift @ARGV;
+my $nameCopy = $name;
+if (!$name or !$geneFile or !$gbAcc) {
+   print "usage: parseHgvsName psl_file GenBankAcc 'hgvs_name'\n";
+   exit;
+}
+
+my $converter = '/home/bio2/giardine/newHbVar/coordinate_conversion/convert_coors2';
+
+if ($name =~ /^p\./) { 
+   print "ERROR sorry can't parse protein based descriptions at this time.\n";
+   exit;
+}
+$name =~ s/^c\.//; #remove if present
+if ($name =~ /delins/) {
+   print "ERROR can't handle delins yet\n";
+}elsif ($name =~ /del/) {
+   if ($name =~ /(\-?\d+[+-]?\d*_?\-?\d*[+-]?\d*)\s*del([ACTG]*\d*)/) {
+      my $pos = $1;
+      my $del = $2;
+      my $pos2 = $pos;
+      if ($pos =~ /(\-?\d+[+-]?\d*)_(\-?\d+[+-]?\d*)/) { $pos = $1; $pos2 = $2; }
+      elsif ($name =~ /(\-?\d+[+-]?\d*)del(\d+)$/) { $pos2 += ($2 - 1); }
+      my $len;
+      if ($del =~ /\D/) { $len = length $del; }
+      elsif ($del) { $len = $del; }
+      
+      #allow different lengths, may be unclear which deleted
+      #if ($len && $pos !~ /\d+[-+]\d+/ && $pos2 !~ /\d+[-+]\d+/ && $pos2 - $pos != $len - 1) {
+         #print "ERROR lengths of deletion are not equal\n";
+         #exit;
+      #}
+      #convert to chrom and print in hgMut format
+      my($chr, $cst) = convert_pos($pos);
+      my $cend;
+      if ($chr =~ /in a gap/) { 
+         ($chr, $cst, $cend) = redo_gap($pos, $pos2, $chr); 
+      }
+      if ($chr =~ /ERROR/) { print $chr; exit; }
+      if (!$cend) {
+         ($chr, $cend) = convert_pos($pos2);
+         if ($chr =~ /in a gap/) {
+            ($chr, $cst, $cend) = redo_gap($pos, $pos2, $chr);
+         }
+         if ($chr =~ /ERROR/) { print $chr; exit; }
+      }
+      if ($cend < $cst) { #-strand need to switch order
+         my $t = $cend;
+         $cend = $cst;
+         $cst = $t;
+      }
+      print "$chr\t$cst\t$cend\t$nameCopy\tdeletion\n";
+   }else {
+      print "ERROR bad deletion format for $nameCopy\n";
+   }
+}elsif ($name =~ /ins/) {
+   if ($name =~ /(\-?\d+[+-]?\d*_?\-?\d*[+-]?\d*)\s*ins[ACTGactg]*\d*/) {
+      my $pos = $1;
+      my $pos2 = $pos;
+      if ($pos =~ /(\-?\d+[+-]?\d*)_(\-?\d+[+-]?\d*)/) { $pos = $1; $pos2 = $2;}
+      #convert to chrom and print in hgMut format
+      my($chr, $cst) = convert_pos($pos);
+      my $cend;
+      if ($chr =~ /in a gap/) {
+         ($chr, $cst, $cend) = redo_gap($pos, $pos2, $chr);
+      }
+      if ($chr =~ /ERROR/) { print $chr; exit; }
+      if (!$cend) {
+         ($chr, $cend) = convert_pos($pos2);
+         if ($chr =~ /in a gap/) {
+            ($chr, $cst, $cend) = redo_gap($pos, $pos2, $chr);
+         }
+         if ($chr =~ /ERROR/) { print $chr; exit; }
+      }
+      if ($cend < $cst) { #-strand need to switch order
+         my $t = $cend;
+         $cend = $cst;
+         $cst = $t;
+      }
+      print "$chr\t$cst\t$cend\t$nameCopy\tinsertion\n";
+   }else {
+      print "ERROR bad insertion format for $nameCopy\n";
+   }
+}elsif ($name =~ /dup/) {
+   if ($name =~ /(\-?\d+[+-]?\d*_?\-?\d*[+-]?\d*)dup[ACTGactg]*\d*/) {
+      my $pos = $1;
+      my $pos2 = $pos;
+      if ($pos =~ /(\-?\d+[+-]?\d*)_(\-?\d+[+-]?\d*)/) { $pos = $1; $pos2 = $2;}
+      #convert to chrom and print in hgMut format
+      my($chr, $cst) = convert_pos($pos);
+      my $cend;
+      if ($chr =~ /in a gap/) {
+         ($chr, $cst, $cend) = redo_gap($pos, $pos2, $chr);
+      }
+      if ($chr =~ /ERROR/) { print $chr; exit; }
+      if ($cend) {
+         ($chr, $cend) = convert_pos($pos2);
+         if ($chr =~ /in a gap/) {
+            ($chr, $cst, $cend) = redo_gap($pos, $pos2, $chr);
+         }
+         if ($chr =~ /ERROR/) { print $chr; exit; }
+      }
+      if ($cend < $cst) { #-strand need to switch order
+         my $t = $cend;
+         $cend = $cst;
+         $cst = $t;
+      }
+      print "$chr\t$cst\t$cend\t$nameCopy\tduplication\n";
+   }else {
+      print "ERROR bad duplication format for $nameCopy\n";
+   }
+}elsif ($name =~ /\>/) {
+   if ($name =~ /(\-?\d+[+-]?\d*)\s*[ACTGactg]\>[ACTGactg]/) {
+      my $pos = $1;
+      my ($chr, $cst) = convert_pos($pos);
+      my $cend;
+      if ($chr =~ /in a gap/) {
+         ($chr, $cst, $cend) = redo_gap($pos, $pos, $chr);
+      }
+      if ($chr =~ /ERROR/) { print $chr; exit; }
+      if (!$cend) { $cend = $cst; }
+      print "$chr\t$cst\t$cend\t$nameCopy\tsubstitution\n";
+   }else {
+      print "ERROR bad substitution format\n";
+   }
+}else {
+   print "ERROR didn't recognize format of $nameCopy\n";
+}
+
+exit;
+
+#this converts a coding position to a chrom position
+sub convert_pos {
+   my $pos = shift @_;
+   my $chr;
+   my $cnum;
+   my $fh;
+   open($fh, "$converter $geneFile $gbAcc $pos 2>&1 |")
+      or die "ERROR Couldn't run convert_coors2, $!\n";
+   while (<$fh>) {
+      if (/ERROR/) { $chr = $_; last; }
+      /is mapped to (\w+\d*) (\d+)/;
+      $cnum = $2;
+      $chr = $1;
+   }
+   if (!$chr) { close $fh; return("ERROR couldn't convert '$pos'", undef); }
+   if ($chr =~ /ERROR/ && $pos !~ /\d+[+-]\d+/ && $chr =~ /end of gene at (\d+)/) {
+      my $end = $1;
+      my $diff = $pos - $end;
+      open($fh, "$converter $geneFile $gbAcc $end+$diff 2>&1 |")
+      or die "ERROR Couldn't run convert_coors2, $!\n";
+      while (<$fh>) {
+         if (/ERROR/) { $chr = $_; last; }
+         /is mapped to (\w+\d+) (\d+)/;
+         $cnum = $2;
+         $chr = $1;
+      }
+   }
+   close $fh or die "ERROR Couldn't finish convert_coors run, $!\n";
+   return($chr, $cnum);
+}
+####End 
+
+#this redoes mutations in gaps as if an insertion in the chrom coors
+sub redo_gap {
+   my $pos = shift;
+   my $pos2 = shift;
+   my $chr = shift;
+   my $cst;
+   my $cend;
+   while ($chr =~ /in a gap/) {
+      $pos--;
+      if ($pos == 0) { last; }
+      ($chr, $cst) = convert_pos($pos);
+   }
+   if ($chr =~ /ERROR/) { return ($chr, $cst, $cend); }
+   ($chr, $cend) = convert_pos($pos2);
+   while ($chr =~  /in a gap/) {
+      $pos2++;
+      ($chr, $cend) = convert_pos($pos2);
+   }
+   $nameCopy .= ' #insertion in reference#';
+   return ($chr, $cst, $cend);
+}
+####End
