@@ -96,7 +96,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 static struct optionSpec optionSpecs[] = {
-    {"type", OPTION_STRING}
+    {"type", OPTION_STRING},
+    {NULL, 0}
     };
 char *infileName, *outfileName;
 FILE *outf;
