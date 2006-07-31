@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1174 2006/07/31 03:06:29 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1175 2006/07/31 20:10:27 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10153,10 +10153,10 @@ Color gvColor(struct track *tg, void *item, struct vGfx *vg)
 {
 char *choice = NULL;
 choice = cartOptionalString(cart, "gvPos.filter.colorby");
-if (choice != NULL && sameString(choice, "disease"))
-    return gvColorByDisease(tg, item, vg);
-else
+if (choice != NULL && sameString(choice, "type"))
     return gvColorByType(tg, item, vg);
+else
+    return gvColorByDisease(tg, item, vg);
 }
 
 Color hgMutColor(struct track *tg, void *item, struct vGfx *vg)
