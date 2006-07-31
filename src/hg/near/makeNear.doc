@@ -513,7 +513,7 @@ hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandsca
 hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandscapeDistance -lookup=knownToXM
 hgExpDistance hg17 hgFixed.gladHumES hgFixed.gladHumESExps gladHumESDistance -lookup=knownToGnfAtlas2
 
-#---------
+#----------------------------------------------------------
 
 ## (galt 2005-06-03)
 # p2p Protein-to-protein network - P2P column and sort order
@@ -539,4 +539,64 @@ hgNetDist flytest.tab dm1 flyP2P -threshold=2 -sqlRemap="select flyBaseId, bdgpN
 #worm: (15 minutes for about 2514 genes, 3871 edges - interaction data available is small)
 hgNetDist wormP2P.tab ce2 wormP2P -threshold=2
  
+
+#----------------------------------------------------------
+
+## (galt 2006-07-31)
+# Human p2p Protein-to-protein network - P2P column and sort order
+# I used the hgNetDist program to calculate network-distances for all gene pairs from gene-to-gene edges in input data,
+# I have also deposited copies of the .tab files used in /cluster/data/$db/p2p/{vidal,wanker}
+# added entries to hgNearData/Human/{orderDb,columbDb}.ra
+# added hgNearData/Human/{vidal,wanker}P2p.html
+#  
+#vidal 
+ 
+cat nature04209-s17.xls | gawk '{print $1 "\t" $3 "\t" "1.0"}' > humanVidal.p2p
+
+hgNetDist humanVidal.p2p hg18 humanVidalP2P -threshold=2 -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+
+#Added to hgNearData/Human/hg18/columbDb.ra
+#-------------
+name vidalP2p
+type distance humanVidalP2P query target distance
+visibility off
+shortLabel Vidal P2P
+longLabel Human Protein-Protein Interaction Network from Marc Vidal
+priority 12
+
+
+#Added to hgNearData/Human/hg18/orderDb.ra
+#-----------
+name vidalP2p
+shortLabel Vidal Protein-to-Protein
+longLabel P2P Network Distance to Selected Gene from Marc Vidal data
+type pair humanVidalP2P query target distance 1
+priority 9
+
+
+#wanker
+cat table_S3.txt | gawk '{print $4 "\t" $7 "\t" "1.0"}' > humanWanker.p2p
+
+hgNetDist wanker/humanWanker.p2p hg18 humanWankerP2P -threshold=2 -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+
+#Did exactly the same for hg17 also.
+
+#Did the same thing to the .ra files all over again for name wankerP2p.
+
+---
+
+# show amount of overlap between Vidal and Wanker data sets
+#These following queries joining both P2P data were 
+#glacial until I added these better indexes:
+
+create index ninny on humanVidalP2P(query(9),target(9));
+create index ninny on humanWankerP2P(query(9),target(9));
+
+select count(*) from humanVidalP2P v, humanWankerP2P w where v.query=w.query and v.target=w.target; 
+#+----------+
+#| count(*) |
+#+----------+
+#|     1661 |
+#+----------+
+
 
