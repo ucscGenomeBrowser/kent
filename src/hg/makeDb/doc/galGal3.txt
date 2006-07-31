@@ -764,12 +764,6 @@ BASE=/cluster/data/galGal3/bed/blastz.xenTro2.2006-05-26
     
 
 #########################################################################
-# MULTIZ7WAY
-# PHASTCONS
-#########################################################################
-
-
-#########################################################################
 # GENBANK AUTO UPDATE (DONE 6/9/06 angie)
     # align with revised genbank process. drop xeno ESTs.
     cd ~/kent/src/hg/makeDb/genbank
@@ -1323,7 +1317,8 @@ cat  << 'EOF' > spec
 
 
 #########################################################################
-# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 7/18/2006 angie)
+# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 7/18/2006 angie - REDONE 7/28)
+    # REDONE 7/28/06 after Kayla found overlaps and Brian fixed mafAddIRows.
     ssh kolossus
     mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno
     cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno
@@ -1343,12 +1338,14 @@ cat  << 'EOF' > spec
     # do smaller jobs first:
     foreach f (`ls -1rS ../../maf/*.maf`)
       echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
-        /cluster/data/galGal3/galGal3.2bit ../maf/`basename $f` >> jobs.csh
-      echo "echo $f" >> jobs.csh
+        /cluster/data/galGal3/galGal3.2bit ../maf/$f:t  >> jobs.csh
     end 
     echo date >> jobs.csh
     csh -efx jobs.csh >&! jobs.log & tail -f jobs.log
-    # 21min
+    # 23min
+    # Run mafFilter -overlap to make sure everything is cool before loading:
+    mafFilter -overlap -reject=/tmp/chr1.rej.maf ../maf/chr1.maf > /dev/null
+#rejected 0 blocks
 
     # Load anno/maf
     ssh hgwdev
@@ -1358,7 +1355,7 @@ cat  << 'EOF' > spec
       /gbdb/galGal3/multiz7way/anno/maf
     nice hgLoadMaf -pathPrefix=/gbdb/galGal3/multiz7way/anno/maf \
       galGal3 multiz7way
-#Loaded 2292252 mafs in 57 files from /gbdb/galGal3/multiz7way/anno/maf
+#Loaded 1488826 mafs in 57 files from /gbdb/galGal3/multiz7way/anno/maf
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
     ssh kolossus
@@ -1366,20 +1363,20 @@ cat  << 'EOF' > spec
     cat *.maf \
     | nice hgLoadMafSummary galGal3 -minSize=30000 -mergeGap=1500 -maxSize=200000 \
              -test multiz7waySummary stdin
-#Created 518561 summary blocks from 3179814 components and 2292252 mafs from stdin
+#Created 518561 summary blocks from 3179814 components and 1488826 mafs from stdin
     ssh hgwdev
     cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/anno/maf
     sed -e 's/mafSummary/multiz7waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
       > /tmp/multiz7waySummary.sql
     time nice hgLoadSqlTab galGal3 multiz7waySummary /tmp/multiz7waySummary.sql \
       multiz7waySummary.tab
-#0.000u 0.000s 0:07.56 0.0%      0+0k 0+0io 3pf+0w
+#0.000u 0.002s 0:08.00 0.0%      0+0k 0+0io 3pf+0w
     rm *.tab
     ln -s multiz7way.2006-07-18 /cluster/data/galGal3/bed/multiz7way
 
 
 #########################################################################
-# MULTIZ7WAY DOWNLOADABLES (DONE 7/18/2006 angie)
+# MULTIZ7WAY DOWNLOADABLES (DONE 7/18/2006 angie - REDONE 7/28)
     # Annotated MAF is now documented, so use anno/maf for downloads.
     ssh hgwdev
     mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/mafDownloads
@@ -1429,7 +1426,7 @@ cat > downloads.csh << 'EOF'
 
 
 #########################################################################
-# MULTIZ7WAY MAF FRAMES (DONE 7/18/2006 angie)
+# MULTIZ7WAY MAF FRAMES (DONE 7/18/2006 angie - REDONE 7/31)
     ssh hgwdev
     mkdir /cluster/data/galGal3/bed/multiz7way.2006-07-18/frames
     cd /cluster/data/galGal3/bed/multiz7way.2006-07-18/frames
