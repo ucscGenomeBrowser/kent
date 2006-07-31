@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.293 2006/07/29 00:02:02 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.294 2006/07/31 03:07:09 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2270,7 +2270,7 @@ else if (startsWith("wig", tdb->type))
         }
 else if (startsWith("chromGraph", tdb->type))
         chromGraphUi(tdb);
-else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") )
+else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") || sameString(track, "affyZonWildType"))
         affyUi(tdb);
 else if (sameString(track, "affyHumanExon"))
         affyAllExonUi(tdb);
