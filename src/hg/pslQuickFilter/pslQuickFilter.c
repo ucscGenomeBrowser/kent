@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
   struct lineFile *pf;
   FILE *of;
   char filename[512], outfile[512], *inDir, *outDir;
-  int fileCount;
   struct slName *dirDir, *dirFile;
 
   optionInit(&argc, argv, optionSpecs);
