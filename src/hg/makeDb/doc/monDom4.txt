@@ -2830,12 +2830,56 @@ BASE=/cluster/data/monDom4/bed/blastzGalGal3.2006-05-25
     #	need to try some other options here to get the same sequence
 
 
+    #	It turns out it is necessary to have the ensGtp table to enable a link
+    #	to Ensemble from a gene's details page
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as monDom4.ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql monDom4 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    zcat monDom4.ensGtp.txt.gz \
+	| hgsql monDom4 \
+-e "load data local infile '/dev/stdin' into table ensGtp ignore 1 lines"
+
     #	Obtaining protein sequence from EnsMart
     #	Select "sequences" from the pull-down on the output page
     #	check Peptide in the "Sequences" selection area
     #	and "Ensembl Transcript ID (versioned) in the Transcript
     #	Attributes area
-    #	Text,Fasta output, gzip, file name: ensPepMm8
-    #	becomes ensPepMm8.fasta.gz
+    #	Uncheck all items in the Gene Attributes section.
+    #	Text,Fasta output, gzip, file name: monDom4.ensPep
+    #	becomes monDom4.ensPep.fasta.gz
+    #	The result should be just an ID and a peptide, e.g.:
+# >ENSMODT00000024417.2
+# MSEFWLCFNCCIAEQPQPKRRRRIDRSMIGEPTNFVHTAHVGSGDLFSGMNSVSSIQSQMQSKGGYGGGMPSNGQMQLVETKAG
+    #
+    #	 monDom4.ensPep.fa.gz
+    zcat monDom4.ensPep.fa.gz | \
+	$HOME/kent/src/utils/faToTab/faToTab.pl  /dev/null /dev/stdin \
+	> ensGene.fa.tab
+    #	There appear to be more peptides than there were genes before.
+    #	I wonder if Ensembl has updated this list since the gene data was
+    #	fetched before:
+    awk '{print $1}' genePred.tab | sort -u > geneNameList
+    awk '{print $1}' ensGene.fa.tab | sort -u > pepNameList
+    wc geneNameList pepNameList
+    #	33878   33878  711438 geneNameList
+    #	33915   33914  712193 pepNameList
+    #	67793   67792 1423631 total
+    comm -12 geneNameList pepNameList | wc
+    #	33878   33878  711438
+    #	So create an exclude list to get rid of the extras:
+    comm -13 geneNameList pepNameList  > excludeList
+    #	and leave them out
+    zcat monDom4.ensPep.fa.gz | \
+	$HOME/kent/src/utils/faToTab/faToTab.pl excludeList /dev/stdin \
+	> ensGene.fa.tab
+
+    hgPepPred monDom4 tab ensPep ensGene.fa.tab
 
 ###########################################################################
