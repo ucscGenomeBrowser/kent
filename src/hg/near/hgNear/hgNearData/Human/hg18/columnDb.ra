@@ -1,0 +1,16 @@
+
+name vidalP2p
+type distance humanVidalP2P query target distance
+visibility off
+shortLabel Vidal P2P
+longLabel Human Protein-Protein Interaction Network from Marc Vidal
+priority 12
+
+name wankerP2p
+type distance humanWankerP2P query target distance
+visibility off
+shortLabel Wanker P2P
+longLabel Human Protein-Protein Interaction Network from Erich Wanker
+priority 12
+
+
