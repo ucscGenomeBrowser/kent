@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.21 2006/06/29 16:37:08 angie Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.22 2006/07/31 05:38:08 galt Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -426,6 +426,7 @@ void testDb(struct htmlPage *orgPage, char *org, char *db)
 struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
 char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
 char *accColumn = hashMustFindVal(genomeRa, "idColumn");
+
 struct slName *geneList = sqlRandomSample(db, canonicalTable, "transcript", clRepeat);
 struct htmlPage *dbPage;
 struct slName *ptr;
@@ -434,10 +435,11 @@ verbose(1, "genelist:\n");
 for (ptr = geneList; ptr != NULL; ptr = ptr->next)
     verbose(1, "%s\n", ptr->name);
 
-
 htmlPageSetVar(orgPage, NULL, "db", db);
 htmlPageSetVar(orgPage, NULL, searchVarName, "");
+
 dbPage = quickSubmit(orgPage, NULL, org, db, NULL, NULL, "dbEmptyPage", "submit", "go");
+
 quickErrReport();
 if (dbPage != NULL)
     {
@@ -446,7 +448,9 @@ if (dbPage != NULL)
     testDbFilters(dbPage, org, db, accColumn, geneList);
     }
 
+htmlPageFree(&dbPage);
 hashFree(&genomeRa);
+slNameFreeList(&geneList);
 }
 
 
@@ -458,7 +462,6 @@ struct htmlPage *orgPage;
 struct htmlForm *mainForm;
 struct htmlFormVar *dbVar;
 struct slName *db;
-
 htmlPageSetVar(rootPage, rootForm, "org", org);
 htmlPageSetVar(rootPage, rootForm, "db", NULL);
 htmlPageSetVar(rootPage, rootForm, searchVarName, "");
@@ -528,6 +531,7 @@ for (i=0; i<=ntiiCol; ++i)
 for (test = list; test != NULL; test = test->next)
     qaStatisticsAdd(stats, test->status);
 qaStatisticsReport(stats, "Total", f);
+freeMem(stats);
 }
 
 
@@ -546,9 +550,11 @@ void hgNearTest(char *url, char *log)
 /* hgNearTest - Test hgNear web page. */
 {
 struct htmlPage *rootPage = htmlPageGet(url);
+
 struct htmlForm *mainForm;
 struct htmlFormVar *orgVar;
 FILE *f = mustOpen(log, "w");
+
 htmlPageValidateOrAbort(rootPage);
 htmlPageSetVar(rootPage, NULL, orderVarName, "geneDistance");
 htmlPageSetVar(rootPage, NULL, countVarName, "25");
@@ -566,12 +572,17 @@ else
 	testOrg(rootPage, mainForm, org->name, clDb);
 	}
     }
+
 htmlPageFree(&rootPage);
+
 slReverse(&nearTestList);
+
 reportSummary(nearTestList, stdout);
 reportAll(nearTestList, f);
 fprintf(f, "---------------------------------------------\n");
 reportSummary(nearTestList, f);
+slFreeList(&nearTestList);
+carefulClose(&f);
 }
 
 #ifdef TEST 
