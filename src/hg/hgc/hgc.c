@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1072 2006/07/31 15:56:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1073 2006/08/01 18:37:31 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6874,7 +6874,7 @@ if (url != NULL && url[0] != 0)
 
     /* First list diseases associated with the gene */
     safef(query, sizeof(query), 
-    "select distinct broadPhen from gadAll where geneSymbol='%s' and association != 'N' order by broadPhen;", 
+    "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen;", 
     itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -6883,7 +6883,7 @@ if (url != NULL && url[0] != 0)
     	{
 	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
-	printf("<BR><B>Associated Diseases and Disorders:  </B>");
+	printf("<BR><B>Positive Disease Associations:  </B>");
 	
 	printf("<A HREF=\"%s",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
@@ -6906,40 +6906,9 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    /* then list diseases NOT associated with the gene */
-    safef(query, sizeof(query), 
-    	    "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'N' order by broadPhen", 
-	    itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    
-    if (row != NULL) 
-    	{
-	upperDisease = gadExpand(row[0]);
-	touppers(upperDisease);
-	printf("<BR><B>Diseases and Disorders Found Possibly Not Associated with the Gene:  </B>");
-	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
-	printf("%s</B></A>\n", row[0]);
-        row = sqlNextRow(sr);
-    	}
-	
-    while (row != NULL)
-        {
-	upperDisease = gadExpand(row[0]);
-	touppers(upperDisease);
-	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
-	printf("%s</B></A>\n", row[0]);
-        row = sqlNextRow(sr);
-	}
-    sqlFreeResult(&sr);
-    
     refPrinted = 0;
     safef(query, sizeof(query),
-       "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s';", 
+       "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen", 
        itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
