@@ -21723,15 +21723,17 @@ hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withoutGaps.bed
 #	dumping the tables:
 #	hg17.polyAluL1 and hg17.polyGenotype
 #	saving these data dumps to:
+#		(after a couple of versions were used ...)
     ssh hgwdev
     mkdir /cluster/data/hg17/bed/dbRIP
     cd /cluster/data/hg17/bed/dbRIP
-    #	-rw-rw-r--  1  994695 Jul  7 13:31 dbRIP.txt.gz
-    #	-rw-rw-r--  1   18476 Jul 12 16:56 polyGenotype.txt.gz
+    #	-rw-rw-r--  1  994485 Aug  1 16:03 dbRIP.2006-08-01.txt.gz
+    #	-rw-rw-r--  1   18532 Aug  1 16:05 polyGenotype.2006-08-01.txt.gz
+
     #	Rearrange their data columns to more closely match the
     #	standard BED definitions, and split into three different
     #	data sets:
-zcat dbRIP.txt.gz | headRest 1 stdin | awk -F'\t' '
+zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
 chromEnd=$7
 if ($6 == $7) { chromEnd += 1 }
@@ -21740,7 +21742,7 @@ printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%
 }
 }' | sort -k1,1 -k2,2n > dbRIP.SVA.txt
 
-zcat dbRIP.txt.gz | headRest 1 stdin | awk -F'\t' '
+zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
 chromEnd=$7
 if ($6 == $7) { chromEnd += 1 }
@@ -21749,7 +21751,7 @@ printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%
 }
 }' | sort -k1,1 -k2,2n > dbRIP.L1.txt
 
-zcat dbRIP.txt.gz | headRest 1 stdin | awk -F'\t' '
+zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
 chromEnd=$7
 if ($6 == $7) { chromEnd += 1 }
@@ -21773,10 +21775,30 @@ printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%
     hgLoadBed -verbose=3 -maxChromNameLength=6 -strict -tab -notItemRgb \
 	-sqlTable=dbRIP_Alu.sql hg17 dbRIP_Alu dbRIP.Alu.txt
 
-    #	And an associated table of genotype frequencies:
+    #	And an associated table of genotype frequencies
+    #	Add three extra rows to the original data to provide a better handle
+    #	on MySQL lookups for allele Frequency
+    hgsql hg17 -e "drop table polyGenotype;"
     hgsql hg17 < $HOME/kent/src/hg/lib/polyGenotype.sql
-    zcat polyGenotype.txt.gz | headRest 1 stdin | \
-    hgsql hg17 -e 'load data local infile "/dev/stdin" into table polyGenotype;'
+    zcat polyGenotype.2006-08-01.txt.gz | headRest 1 stdin | \
+awk -F'\t' '
+{
+sampleSize = $3 + $4 + $5
+plus = ($3 * 2) + $4
+minus = ($5 * 2) + $4
+if ((plus + minus) < 1) { alleleFreq=0 } else
+        { alleleFreq = plus / (plus + minus) }
+if (sampleSize > 0) {
+heteroZyg = (2 * alleleFreq * (1.0 - alleleFreq)) * ((sampleSize * 2)/((sampleSize * 2) - 1))
+} else {
+heteroZyg = 2 * alleleFreq * (1.0 - alleleFreq)
+}
+printf "%s\t%s\t%d\t%d\t%d\t%.3f\t%.3f\t%.3f\n", $1, $2, $3, $4, $5, sampleSize, alleleFreq, heteroZyg
+}
+' > polyGenotype.txt
+
+    hgsql hg17 -e \
+	'load data local infile "polyGenotype.txt" into table polyGenotype;'
 
     #	A composite track was added to human/hg17/trackDb.ra to contain
     #	these three tracks, and search methods to get the name column
