@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.20 2006/07/27 21:16:13 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.21 2006/08/01 00:19:55 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +34,6 @@ errAbort(
 #define hgCtDocFile      "hgCt_docFile"
 #define hgCtDoDelete     "hgCt_do_delete"
 #define hgCtDeletePrefix "hgCt_del"
-#define hgCtDoFileEntry  "hgCt_do_fileEntry"
 
 /* Global variables */
 struct cart *cart;
@@ -59,15 +58,17 @@ safef(path, sizeof path, "%s/%s", hDocumentRoot(), file);
 readInGulp(path, &buf, NULL);
 /* quote newlines and quotes */
 dyStringPrintf(ds, "document.%s.%s.value = '%s'; document.%s.submit();\"", 
-                        form, field, 
-                        makeEscapedString(makeEscapedString(buf, '\n'), '\''), form);
+                form, field, 
+                makeEscapedString(makeEscapedString(buf, '\n'), '\''), form);
 cgiMakeOnClickButton(ds->string, button);
 }
 
-void addCustomTextEntry()
+void addCustom()
 /* display UI for adding custom tracks by URL or pasting data */
 {
-cartRemovePrefix(cart, hgCtDataFile);
+#define TEXT_ENTRY_ROWS 7
+#define TEXT_ENTRY_COLS 70
+
 cgiParagraph("");
 
 cgiSimpleTableStart();
@@ -79,13 +80,13 @@ puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
-//cgiTableField("");
 cgiTableRowEnd();
 
 /* second row - text entry box for URL's or data  and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 7, 68);
+cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 
+        TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeClearButton("mainForm", hgCtDataText);
@@ -99,13 +100,13 @@ puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDocFile);
 cgiTableFieldEnd();
-//cgiTableField("");
 cgiTableRowEnd();
 
 /* fourth row - text entry for description, and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 7, 68);
+cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 
+        TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 
@@ -136,48 +137,18 @@ cgiTableFieldEnd();
 cgiTableEnd();
 }
 
-void addCustomFileEntry()
-{
-/* display UI for adding custom tracks by file upload 
- *    consisting of a label, entry box/browser, and button */
-
-cartRemove(cart, hgCtDataText);
-
-cgiParagraph("Upload file, or <A HREF=\"../cgi-bin/hgCustom?hgCt_do_fileEntry=0\">paste in URLs or data</A>");
-cgiParagraph("");
-cgiSimpleTableStart();
-
-cgiSimpleTableRowStart();
-cgiTableField("Data file:");
-cgiSimpleTableFieldStart();
-cgiMakeFileEntry(hgCtDataFile);
-cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
-cgiMakeButton("SubmitFile", "Submit Files");
-cgiTableFieldEnd();
-cgiTableRowEnd();
-
-cgiSimpleTableRowStart();
-cgiTableField("Optional <A TARGET=_BLANK HREF=\"/goldenPath/help/ct_description.txt\">description</A>:");
-puts("<TD>");
-cgiMakeFileEntry(hgCtDocFile);
-cgiTableFieldEnd();
-cgiTableRowEnd();
-
-cgiTableEnd();
-}
-
 void showCustom()
 /* list custom tracks and display checkboxes so user can select for delete */
 {
-//int i;
 struct customTrack *ct;
 char option[64];
 
 webNewSection("Remove Custom Tracks");
 hTableStart();
-puts("<TR><TH ALIGN=LEFT COLSPAN=2 BGCOLOR=#536ED3>");
-printf("<B>&nbsp;%s</B> ", wrapWhiteFont("Custom Tracks"));
+puts("<TR><TH ALIGN=LEFT BGCOLOR=#536ED3>");
+printf("<B>&nbsp;%s</B> ", wrapWhiteFont("Name"));
+puts("<TD BGCOLOR=#536ED3>");
+printf("<B>&nbsp;%s</B> ", wrapWhiteFont("Description"));
 puts("<TD BGCOLOR=#536ED3>");
 cgiMakeButton(hgCtDoDelete, "Delete");
 cgiTableFieldEnd();
@@ -267,7 +238,7 @@ if (errCatchStart(errCatch))
         {
         if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
             {
-            printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
+            printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'><B>Replacing track: %s</B><BR>", ct->tdb->tableName);
             slRemoveEl(&ctList, oldCt);
             }
         next = ct->next;
@@ -278,7 +249,7 @@ if (errCatchStart(errCatch))
 else {}
 errCatchEnd(errCatch);
 if (errCatch->gotError)
-    printf("<BR><FONT COLOR='RED'>%s</FONT>", errCatch->message->string);
+    printf("<BR><FONT COLOR='RED'><B>%s</B></FONT>", errCatch->message->string);
 errCatchFree(&errCatch);
 return addCts;
 }
@@ -372,27 +343,16 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 
 /* display form to add custom tracks -- either URL-based or file-based */
-if (cartVarExists(cart, hgCtDoFileEntry) && cartBoolean(cart, hgCtDoFileEntry))
-    addCustomFileEntry();
-else
-    addCustomTextEntry();
-
+addCustom();
 
 /* process submit buttons */
-if (cartVarExists(cart,hgCtDataFile))
+if (cartNonemptyString(cart, hgCtDataFileName))
     {
-    /* add from file */
     if (cartNonemptyString(cart, hgCtDataFile))
         addCts = parseTracks(hgCtDataFile);
     else
-        {
-        char *file = cartString(cart, hgCtDataFileName);
-        if (sameString(file, ""))
-            printf("<BR><FONT COLOR='RED'>No file specified</FONT>");
-        else
-            printf("<BR><FONT COLOR='RED'>Error reading file:  %s</FONT>", 
+        printf("<BR><FONT COLOR='RED'><B>Error reading file:  %s</B></FONT>", 
                         cartString(cart, hgCtDataFileName));
-        }
     }
 else if (cartVarExists(cart, hgCtDoDelete))
     {
@@ -460,7 +420,7 @@ if (ctList != NULL)
     customTrackSave(ctList, ctFileName);
     cartSetString(cart, "hgta_group", "user");
 
-    //cartRemovePrefix(cart, "hgCt_");
+    cartRemovePrefix(cart, "hgCt_");
     }
 else
     {
