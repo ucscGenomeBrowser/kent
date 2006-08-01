@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.2 2006/07/26 15:24:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: gad.c,v 1.3 2006/08/01 18:33:06 fanhsu Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -27,6 +27,45 @@ if (sqlTableExists(conn, "gadAll") == TRUE)
     if (geneSymbol != NULL) return(TRUE);
     }
 return(FALSE);
+}
+
+char *gadExpand(char *inString)
+/* Return a copy of inString that replace "'" with "''" 
+   This is needed to accomodate GAD's convention in
+   dealing with disease names with "'" in them.
+*/
+{
+char c;
+int outSize = 0;
+char *outString, *out, *in;
+
+if (inString == NULL)
+    return(cloneString(""));
+
+/* Count up how long it will be */
+in = inString;
+while ((c = *in++) != 0)
+    {
+    if (c == '\'')
+        outSize += 2;
+    else
+        outSize += 1;
+    }
+outString = needMem(outSize+1);
+
+/* Encode string */
+in = inString;
+out = outString;
+while ((c = *in++) != 0)
+    {
+    *out++ = c;
+    if (c == '\'')
+        {
+        *out++ = c;
+	}
+    }
+*out++ = 0;
+return outString;
 }
 
 static void gadPrint(struct section *section, 
@@ -75,26 +114,25 @@ if (url != NULL && url[0] != 0)
 
     /* List diseases associated with the gene */
     safef(query, sizeof(query),
-    "select distinct broadPhen from gadAll where geneSymbol='%s' and association != 'N' order by broadPhen;", 
+    "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen",
     itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     
     if (row != NULL) 
     	{
-	upperDisease = cloneString(row[0]);
+	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
-	printf("<BR><B>Associated Diseases and Disorders:  </B>");
+	printf("<BR><B>Positive Disease Associations:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
 	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
     	}
-	
     while (row != NULL)
         {
-	upperDisease = cloneString(row[0]);
+	upperDisease = gadExpand(row[0]);
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
@@ -106,7 +144,7 @@ if (url != NULL && url[0] != 0)
 
     refPrinted = 0;
     safef(query, sizeof(query), 
-       "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s';", 
+       "select broadPhen,reference,title,journal, pubMed, conclusion from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen",
        itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
