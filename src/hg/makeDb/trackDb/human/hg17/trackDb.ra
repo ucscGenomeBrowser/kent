@@ -1411,7 +1411,7 @@ otherDb hg17
 
 track retroposons
 compositeTrack on 
-shortLabel Retroposon Polymorphisms
+shortLabel Retrotransposon Polymorphisms
 longLabel Retrotransposon Insertion Polymorphisms in Humans
 group varRep
 priority 149.5
