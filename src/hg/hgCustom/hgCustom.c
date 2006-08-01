@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.21 2006/08/01 00:19:55 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.22 2006/08/01 23:40:14 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,12 +26,19 @@ errAbort(
   );
 }
 
+#define TEXT_ENTRY_ROWS 7
+#define TEXT_ENTRY_COLS 73
+
+#define SECTION_MANAGE_MSG      "Manage Custom Tracks"
+#define SECTION_ADD_MSG         "Add Custom Tracks"
+
 /* CGI variables */
 #define hgCtDataText     "hgCt_dataText"
 #define hgCtDataFile     "hgCt_dataFile"
 #define hgCtDataFileName  hgCtDataFile "__filename"
 #define hgCtDocText      "hgCt_docText"
 #define hgCtDocFile      "hgCt_docFile"
+#define hgCtDocTrackName "hgCt_docTrackName"
 #define hgCtDoDelete     "hgCt_do_delete"
 #define hgCtDeletePrefix "hgCt_del"
 
@@ -47,36 +54,29 @@ struct hash *ctHash;
 struct slName *browserLines = NULL;
 char *ctFileName;
 
-void initFieldFromFileButton(char *form, char *field, char *file, char *button)
-/* Make button to fill field with text from a file*/
-{
-char *buf;
-char path[256];
-struct dyString *ds = newDyString(0);
 
-safef(path, sizeof path, "%s/%s", hDocumentRoot(), file);
-readInGulp(path, &buf, NULL);
-/* quote newlines and quotes */
-dyStringPrintf(ds, "document.%s.%s.value = '%s'; document.%s.submit();\"", 
-                form, field, 
-                makeEscapedString(makeEscapedString(buf, '\n'), '\''), form);
-cgiMakeOnClickButton(ds->string, button);
-}
-
-void addCustom()
+void addCustom(char *err, char *warn)
 /* display UI for adding custom tracks by URL or pasting data */
 {
-#define TEXT_ENTRY_ROWS 7
-#define TEXT_ENTRY_COLS 70
+#ifdef NEW
+puts("Display your own custom annotation tracks in the browser"
+     " using the procedure described in the custom tracks"
+"<A TARGET=_BLANK HREF=\"/goldenPath/help/customTrack.html\"> user's guide </A>.");
+puts("For information on upload procedures and supported formats, see "
+     "the \"Loading Custom Annotation Tracks\" section, below.");
+#endif
 
-cgiParagraph("");
+puts("Display custom annotation tracks in the browser"
+     " using the procedure described"
+"<A TARGET=_BLANK HREF=\"/goldenPath/help/customTrack.html\"> here </A>.");
 
+cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
 
 /* first row - label, link for file upload, and submit button*/
 cgiSimpleTableRowStart();
 cgiTableField("Paste URLs or data:");
-puts("<TD ALIGN='RIGHT'>");
+puts("<TD COLSPAN=2 ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
@@ -84,7 +84,7 @@ cgiTableRowEnd();
 
 /* second row - text entry box for URL's or data  and clear button */
 cgiSimpleTableRowStart();
-puts("<TD COLSPAN=2>");
+puts("<TD COLSPAN=3>");
 cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
@@ -95,7 +95,11 @@ cgiTableRowEnd();
 
 /* third row - label for description text entry */
 cgiSimpleTableRowStart();
-cgiTableField("Optional description:");
+cgiTableField("Optional HTML for track: ");
+puts("<TD ALIGN='LEFT'>");
+cgiMakeTextVar(hgCtDocTrackName, 
+                cartCgiUsualString(cart, hgCtDocTrackName, ""), 10);
+puts("</TD>");
 puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDocFile);
@@ -104,66 +108,88 @@ cgiTableRowEnd();
 
 /* fourth row - text entry for description, and clear button */
 cgiSimpleTableRowStart();
-puts("<TD COLSPAN=2>");
+puts("<TD COLSPAN=3>");
 cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-
-cgiSimpleTableStart();
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
 cgiMakeClearButton("mainForm", hgCtDocText);
-cgiTableFieldEnd();
-cgiTableRowEnd();
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-initFieldFromFileButton("mainForm", hgCtDocText, "/goldenPath/help/ct_description.txt", "&nbsp; Fill &nbsp; ");
-cgiTableFieldEnd();
-cgiTableRowEnd();
-cgiTableEnd();
-
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 /* fifth row - submit button */
 cgiSimpleTableRowStart();
+printf("<TD><A TARGET=_BLANK HREF='../goldenPath/help/ct_description.txt'>HTML doc template</A></TD>");
 puts("<TD COLSPAN=2 ALIGN='RIGHT'>");
 cgiMakeSubmitButton();
 cgiTableRowEnd();
-
-cgiTableFieldEnd();
-
 cgiTableEnd();
+
+if (err)
+    printf("<BR><FONT COLOR='RED'><B>%s</B></FONT>", err);
+if (warn)
+    printf("<BR><FONT COLOR='GREEN'><B>%s</B></FONT>", warn);
 }
 
-void showCustom()
+void tableHeaderFieldStart()
+{
+/* print table column header with white text on black background */
+printf("<TD ALIGN='CENTER' BGCOLOR=#536ED3>");
+}
+
+void tableHeaderField(char *label, char *description)
+{
+/* print table column header with white text on black background */
+puts("<TD ALIGN='CENTER' BGCOLOR=#536ED3 ");
+if (description)
+    printf("TITLE='%s'", description);
+printf("><B>%s</B></TD> ", wrapWhiteFont(label));
+}
+
+void manageCustom()
 /* list custom tracks and display checkboxes so user can select for delete */
 {
 struct customTrack *ct;
 char option[64];
 
-webNewSection("Remove Custom Tracks");
 hTableStart();
-puts("<TR><TH ALIGN=LEFT BGCOLOR=#536ED3>");
-printf("<B>&nbsp;%s</B> ", wrapWhiteFont("Name"));
-puts("<TD BGCOLOR=#536ED3>");
-printf("<B>&nbsp;%s</B> ", wrapWhiteFont("Description"));
-puts("<TD BGCOLOR=#536ED3>");
-cgiMakeButton(hgCtDoDelete, "Delete");
+cgiSimpleTableRowStart();
+tableHeaderField("Name", NULL);
+tableHeaderField("Description", NULL);
+tableHeaderFieldStart();
+cgiMakeButton(hgCtDoDelete, "Del");
+tableHeaderField("Doc", "HTML track description");
+tableHeaderField("Items", NULL);
+tableHeaderField("Pos"," Default track position or first item");
 cgiTableFieldEnd();
-puts("</TH></TR>");
+cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    printf("<TR><TD>&nbsp; %s &nbsp; </TD><TD>&nbsp; %s &nbsp; </TD><TD ALIGN=CENTER>", 
+    printf("<TR><TD>%s</TD><TD>%s</TD><TD ALIGN=CENTER>", 
             ct->tdb->shortLabel, ct->tdb->longLabel);
     safef(option, sizeof(option), "%s_%s", hgCtDeletePrefix, 
             ct->tdb->tableName);
     cgiMakeCheckBox(option, FALSE);
+    printf("</TD><TD ALIGN='CENTER'>%s", ct->tdb->html ? "X" : "&nbsp");
+    printf("</TD><TD ALIGN='CENTER'>%d", slCount(ct->bedList));
+    printf("</TD><TD><A HREF='%s?%s&position=%s:%d-%d'>%s:</A>", 
+            hgTracksName(), cartSidUrlString(cart),
+            ct->bedList->chrom, ct->bedList->chromStart, ct->bedList->chromEnd,
+            ct->bedList->chrom);
     puts("</TD></TR>");
     }
 hTableEnd();
-webEndSection();
+
+/* close down the section */
+/* webEndSection() with less vertical whitespace */
+#ifdef NEW
+puts(
+    "" "\n"
+    "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
+    "	</TD></TR></TABLE>" "\n"
+    "	</TD></TR></TABLE>" "\n"
+    "	" );
+#endif
 }
 
 void helpCustom()
@@ -223,13 +249,16 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     }
 }
 
-static struct customTrack *parseTracks(char *var)
+struct customTrack *parseTracks(char *var, char **err, char **warn)
 /* get tracks from CGI/cart variable and add to custom track list */
 {
 struct customTrack *addCts = NULL;
 struct customTrack *ct, *oldCt, *next;
 struct errCatch *errCatch = errCatchNew();
+struct dyString *ds = dyStringNew(80);
 
+*err = NULL;
+*warn = NULL;
 if (errCatchStart(errCatch))
     {
     addCts = customTracksParse(cartString(cart, var), FALSE, &browserLines);
@@ -238,7 +267,8 @@ if (errCatchStart(errCatch))
         {
         if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
             {
-            printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'><B>Replacing track: %s</B><BR>", ct->tdb->tableName);
+            dyStringPrintf(ds, "Replacing track: %s", ct->tdb->tableName);
+            *warn = dyStringCannibalize(&ds);
             slRemoveEl(&ctList, oldCt);
             }
         next = ct->next;
@@ -249,7 +279,7 @@ if (errCatchStart(errCatch))
 else {}
 errCatchEnd(errCatch);
 if (errCatch->gotError)
-    printf("<BR><FONT COLOR='RED'><B>%s</B></FONT>", errCatch->message->string);
+    *err = cloneString(errCatch->message->string);
 errCatchFree(&errCatch);
 return addCts;
 }
@@ -258,7 +288,7 @@ return addCts;
 #define DOC_TRACK_SUFFIX  "-->"
 #define DOC_NAME_TAG    "NAME="
 
-static struct hash *getCustomTrackDocs(char *text)
+struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
 /* get HTML descriptions from text with special comments to name 
  * and delimit tracks */
 {
@@ -289,22 +319,15 @@ while ((p = stringIn(DOC_TRACK_PREFIX, html)) != NULL)
     *p = 0;
     html = q + strlen(DOC_TRACK_SUFFIX);
     }
-if (trackName)
-    {
-    hashAdd(docHash, trackName, html);
-    }
+if (!trackName)
+    trackName = defaultTrackName;
+hashAdd(docHash, trackName, html);
 return docHash;
 }
 
 void startCustomForm()
-/* create form for adding new custom tracks */
 {
-puts("Display your own custom annotation tracks in the browser"
-     " using the procedure described in the custom tracks"
-"<A TARGET=_BLANK HREF=\"/goldenPath/help/customTrack.html\"> user's guide </A>."
-     " For information on upload procedures and supported formats, see "
-     "the \"Loading Custom Annotation Tracks\" section, below.");
-/* create HMTL form */
+/* create form for adding new custom tracks */
 puts("<FORM ACTION=\"/cgi-bin/hgCustom\" METHOD=\"POST\" "
                " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 }
@@ -321,16 +344,14 @@ void doMiddle(struct cart *theCart)
 struct tempName tn;
 struct customTrack *ct;
 struct customTrack *addCts = NULL;
+char *firstSectionMsg;
+char *err = NULL, *warn = NULL;
 
 cart = theCart;
 /* needed ? */
 getDbAndGenome(cart, &database, &organism);
 saveDbAndGenome(cart, database, organism);
 hSetDb(database);
-
-/* display header and panel to add custom tracks */
-cartWebStart(cart, "Add Custom Track");
-startCustomForm();
 cartSaveSession(cart);
 
 /* get existing custom tracks from cart */
@@ -342,17 +363,18 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     hashAdd(ctHash, ct->tdb->tableName, ct);
     }
 
-/* display form to add custom tracks -- either URL-based or file-based */
-addCustom();
-
 /* process submit buttons */
 if (cartNonemptyString(cart, hgCtDataFileName))
     {
     if (cartNonemptyString(cart, hgCtDataFile))
-        addCts = parseTracks(hgCtDataFile);
+        addCts = parseTracks(hgCtDataFile, &err, &warn);
     else
-        printf("<BR><FONT COLOR='RED'><B>Error reading file:  %s</B></FONT>", 
+        {
+        struct dyString *ds = dyStringNew(80);
+        dyStringPrintf(ds, "Error reading file:  %s", 
                         cartString(cart, hgCtDataFileName));
+        err = dyStringCannibalize(&ds);
+        }
     }
 else if (cartVarExists(cart, hgCtDoDelete))
     {
@@ -367,14 +389,19 @@ else if (cartVarExists(cart, hgCtDoDelete))
     }
 else if (cartNonemptyString(cart, hgCtDataText))
     {
-    addCts = parseTracks(hgCtDataText);
+    addCts = parseTracks(hgCtDataText, &err, &warn);
     }
 
-if (ctList != NULL)
+if (ctList == NULL)
+    firstSectionMsg = SECTION_ADD_MSG;
+else
     {
+    firstSectionMsg = SECTION_MANAGE_MSG;
+
     /* get HTML docs */
     char *html = NULL;
     struct hash *docHash;
+    char *defaultTrackName;
     if (cartNonemptyString(cart, hgCtDocText))
         {
         html = cartString(cart, hgCtDocText);
@@ -383,7 +410,9 @@ if (ctList != NULL)
         {
         html = cartString(cart, hgCtDocFile);
         }
-    docHash = getCustomTrackDocs(html);
+    defaultTrackName = (addCts != NULL ?
+                        addCts->tdb->shortLabel: ctList->tdb->shortLabel);
+    docHash = getCustomTrackDocs(html, defaultTrackName);
     if (docHash)
         {
         for (ct = ctList; ct != NULL; ct = ct->next)
@@ -396,17 +425,16 @@ if (ctList != NULL)
         }
     }
 
-#ifdef MAYBE
-/* links to navigate to genome or table browser */
-cgiParagraph(" ");
-puts("&nbsp; <A HREF=/cgi-bin/hgTracks>Genome Browser</A>");
-puts("&nbsp; &nbsp; <A HREF=/cgi-bin/hgTables?hgta_group=user>Table Browser</A>");
-#endif
+/* display header and first section header */
+cartWebStart(cart, firstSectionMsg);
+
+/* create form for input */
+startCustomForm();
 
 if (ctList != NULL)
     {
     /* display list of custom tracks, with checkboxes to select for delete */
-    showCustom();
+    manageCustom();
 
     /* create custom track file in trash dir, if needed */
     if (ctFileName == NULL)
@@ -421,13 +449,19 @@ if (ctList != NULL)
     cartSetString(cart, "hgta_group", "user");
 
     cartRemovePrefix(cart, "hgCt_");
+    webNewSection("Add Custom Tracks");
     }
 else
     {
     /* clean up cart.  File cleanup handled by trash cleaner */
     cartRemove(cart, "ct");
     }
+
+/* display form to add custom tracks -- either URL-based or file-based */
+addCustom(err, warn);
+
 endCustomForm();
+
 helpCustom();
 cartWebEnd(cart);
 }
