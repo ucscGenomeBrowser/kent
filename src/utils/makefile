@@ -41,6 +41,7 @@ SCRIPT_FILES = \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
 	doHgNearBlastp.pl \
+	doRepeatMasker.pl \
 	doSameSpeciesLiftOver.pl \
 	dumpDb.pl \
 	HgAutomate.pm \
