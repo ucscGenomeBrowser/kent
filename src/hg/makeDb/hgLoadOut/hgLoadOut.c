@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.16 2006/01/18 02:45:22 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.17 2006/08/01 00:14:43 angie Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -32,10 +32,10 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 "             #Indices\n";
 
 boolean noBin = FALSE;
+boolean split = FALSE;
 boolean noSplit = FALSE;
 char *tabFileName = NULL;
 char *suffix = NULL;
-FILE *tabFile = NULL;
 int badRepCnt = 0;
 
 /* command line option specifications */
@@ -44,6 +44,7 @@ static struct optionSpec optionSpecs[] = {
     {"tabfile", OPTION_STRING},
     {"nosplit", OPTION_BOOLEAN},
     {"noSplit", OPTION_BOOLEAN},
+    {"split",   OPTION_BOOLEAN},
     {"table", OPTION_STRING},
     {NULL, 0}
 };
@@ -60,6 +61,7 @@ errAbort(
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
   "   -nosplit - assume single rmsk table rather than chrN_rmsks\n"
+  "   -split - load chrN_rmsk tables even if a single file is given\n"
   "   -table=name - use a different suffix other than the default (rmsk)\n");
 }
 
@@ -111,25 +113,71 @@ if (r->repStart > r->repEnd)
 return TRUE;
 }
 
-void loadOneOut(struct sqlConnection *conn, char *rmskFile, char *suffix)
-/* Load one RepeatMasker .out file into database. */
+FILE *theFile = NULL;
+struct hash *chromFpHash = NULL;
+char *defaultTempName = "rmsk.tab";
+
+FILE *getFileForChrom(char *chrom)
+/* Return the appropriate file pointer for the given chrom if -split.
+ * If not using -split, then there is only one file pointer in action. */
 {
-char dir[256], base[128], extension[64];
-char tableName[128];
+static int chromCount = 0;
+char *tempName = tabFileName ? tabFileName : defaultTempName;
+
+if (split)
+    {
+    if (chromFpHash == NULL)
+	chromFpHash = hashNew(10);
+    theFile = (FILE *)hashFindVal(chromFpHash, chrom);
+    if (theFile == NULL)
+	{
+	char fName[512];
+	if (chromCount > 1000)
+	    {
+	    /* We will probably run into the operating system limit on open
+	     * files well before this point, but just in case... */
+	    errAbort("-split should not be used when there are >1000 sequences"
+		     " -- too many split tables.");
+	    }
+	safef(fName, sizeof(fName), "%s_%s", chrom, tempName);
+	theFile = mustOpen(fName, "w");
+	hashAdd(chromFpHash, chrom, theFile);
+	chromCount++;
+	}
+    }
+else
+    {
+    if (theFile == NULL)
+	theFile = mustOpen(tempName, "w");
+    }
+return theFile;
+}
+
+void helCarefulClose(struct hashEl *hel)
+/* Call carefulClose on hashed file pointer. */
+{
+FILE *f = (FILE *)(hel->val);
+carefulClose(&f);
+}
+
+void closeFiles()
+/* If split, close each file pointer in chromFpHash.  Otherwise close the
+ * single file pointer that we've been using. */
+{
+if (split)
+    {
+    hashTraverseEls(chromFpHash, helCarefulClose);
+    }
+else
+    carefulClose(&theFile);
+}
+
+void readOneOut(char *rmskFile)
+/* Read .out file rmskFile, check each line, and print OK lines to .tab. */
+{
 struct lineFile *lf;
 char *line, *words[24];
 int lineSize, wordCount;
-char *tempName = "out.tab";
-FILE *f = NULL;
-struct dyString *query = newDyString(1024);
-
-verbose(1, "Processing %s\n", rmskFile);
-
-/* Make temporary tab delimited file. */
-if (tabFile != NULL)
-    f = tabFile;
-else
-    f = mustOpen(tempName, "w");
 
 /* Open .out file and process header. */
 lf = lineFileOpen(rmskFile, TRUE);
@@ -175,56 +223,92 @@ while (lineFileNext(lf, &line, &lineSize))
     r.id[0] = ((wordCount > 14) ? words[14][0] : ' ');
     if (checkRepeat(&r, lf))
         {
+	FILE *f = getFileForChrom(r.genoName);
         if (!noBin)
             fprintf(f, "%u\t", hFindBin(r.genoStart, r.genoEnd));
         rmskOutTabOut(&r, f);
         }
     }
+}
 
-/* Create database table. */
-if (tabFile == NULL)
+void loadOneTable(struct sqlConnection *conn, char *tempName, char *tableName)
+/* Load .tab file tempName into tableName and remove tempName. */
+{
+struct dyString *query = newDyString(1024);
+
+verbose(1, "Loading up table %s\n", tableName);
+if (sqlTableExists(conn, tableName))
     {
-    carefulClose(&f);
-    splitPath(rmskFile, dir, base, extension);
-    if (!noSplit)
-	{
-	chopSuffix(base);
-	sprintf(tableName, "%s_%s", base,suffix);
-	}
-    else
-        sprintf(tableName, "%s", suffix);
-    verbose(1, "Loading up table %s\n", tableName);
-    if (sqlTableExists(conn, tableName))
-	{
-	dyStringPrintf(query, "DROP table %s", tableName);
-	sqlUpdate(conn, query->string);
-	}
-
-    /* Create first part of table definitions, the fields. */
-    dyStringClear(query);
-    dyStringPrintf(query, createRmskOut, tableName);
-
-    /* Create the indexes */
-    if (!noSplit)
-        {
-	dyStringAppend(query, "   INDEX(bin))\n");
-	}
-    else
-        {
-	int indexLen = hGetMinIndexLength();
-	dyStringPrintf(query, 
-	   "   INDEX(genoName(%d),bin))\n", indexLen);
-	}
-
+    dyStringPrintf(query, "DROP table %s", tableName);
     sqlUpdate(conn, query->string);
-
-    /* Load database from tab-file. */
-    dyStringClear(query);
-    dyStringPrintf(query, 
-	"LOAD data local infile '%s' into table %s", tempName, tableName);
-    sqlUpdate(conn, query->string);
-    remove(tempName);
     }
+
+/* Create first part of table definitions, the fields. */
+dyStringClear(query);
+dyStringPrintf(query, createRmskOut, tableName);
+
+/* Create the indexes */
+if (!noSplit)
+    {
+    dyStringAppend(query, "   INDEX(bin))\n");
+    }
+else
+    {
+    int indexLen = hGetMinIndexLength();
+    dyStringPrintf(query, "   INDEX(genoName(%d),bin))\n", indexLen);
+    }
+
+sqlUpdate(conn, query->string);
+
+/* Load database from tab-file. */
+dyStringClear(query);
+dyStringPrintf(query, "LOAD data local infile '%s' into table %s",
+	       tempName, tableName);
+sqlUpdate(conn, query->string);
+remove(tempName);
+}
+
+void processOneOut(struct sqlConnection *conn, char *rmskFile, char *suffix)
+/* Read one RepeatMasker .out file and load it into database. */
+{
+verbose(1, "Processing %s\n", rmskFile);
+
+if (split || noSplit)
+    errAbort("program error: processOneOut doesn't do -split or -nosplit.");
+
+readOneOut(rmskFile);
+
+/* Create database table (if not -tabFile). */
+if (tabFileName == NULL)
+    {
+    char dir[256], base[128], extension[64];
+    char tableName[256];
+    splitPath(rmskFile, dir, base, extension);
+    chopSuffix(base);
+    safef(tableName, sizeof(tableName), "%s_%s", base, suffix);
+    closeFiles();
+    loadOneTable(conn, defaultTempName, tableName);
+    }
+}
+
+struct sqlConnection *theConn = NULL;
+
+void loadOneSplitTable(struct hashEl *hel)
+/* Load the table for the given chrom. */
+{
+char tempName[512];
+char tableName[256];
+char *chrom = hel->name;
+safef(tempName, sizeof(tempName), "%s_%s", chrom, defaultTempName);
+safef(tableName, sizeof(tableName), "%s_%s", chrom, suffix);
+loadOneTable(theConn, tempName, tableName);
+}
+
+void loadSplitTables(struct sqlConnection *conn)
+/* For each chrom in chromHash, load its tempfile into table chrom_suffix. */
+{
+theConn = conn;
+hashTraverseEls(chromFpHash, loadOneSplitTable);
 }
 
 
@@ -234,7 +318,7 @@ void hgLoadOut(char *database, int rmskCount, char *rmskFileNames[], char *suffi
 struct sqlConnection *conn = NULL;
 int i;
 
-if (tabFile == NULL)
+if (tabFileName == NULL)
     {
     hSetDb(database);
     conn = hAllocConn();
@@ -242,7 +326,18 @@ if (tabFile == NULL)
     }
 for (i=0; i<rmskCount; ++i)
     {
-    loadOneOut(conn, rmskFileNames[i], suffix);
+    if (split || noSplit)
+	readOneOut(rmskFileNames[i]);
+    else
+	processOneOut(conn, rmskFileNames[i], suffix);
+    }
+closeFiles();
+if (tabFileName == NULL)
+    {
+    if (split)
+	loadSplitTables(conn);
+    else if (noSplit)
+	loadOneTable(conn, defaultTempName, suffix);
     }
 sqlDisconnect(&conn);
 if (badRepCnt > 0)
@@ -260,12 +355,13 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 noSplit = (optionExists("noSplit") || optionExists("nosplit"));
+split = optionExists("split");
 suffix = optionVal("table", "rmsk");
 tabFileName = optionVal("tabFile", tabFileName);
 if (tabFileName == NULL)
     tabFileName = optionVal("tabfile", tabFileName);
-if (tabFileName != NULL)
-    tabFile = mustOpen(tabFileName, "w");
+if (split && noSplit)
+    errAbort("-split and -nosplit cannot be used together.");
 hgLoadOut(argv[1], argc-2, argv+2, suffix) ;
 return 0;
 }
