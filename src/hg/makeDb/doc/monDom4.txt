@@ -2446,6 +2446,168 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+#########################################################################
+# Build maf annotation for multiz7way  (DONE - 2006-07-31 - Hiram)
+
+    ssh kolossus
+    cd /cluster/data/monDom4/bed/multiz7way
+    mkdir anno 
+    cd anno
+    mkdir maf run
+    cd run
+    rm sizes nBeds
+
+    for i in `cat /cluster/data/monDom4/bed/multiz7way/species.lst`
+do
+    ln -s  /cluster/data/$i/chrom.sizes $i.len
+    ln -s  /cluster/data/$i/$i.N.bed $i.bed
+    echo $i.bed  >> nBeds
+    echo $i.len  >> sizes
+done
+
+    echo "#!/bin/csh -fe" > jobs.csh
+    echo date >> jobs.csh
+    #	do smaller jobs first, the 'ls -rS' lists in reverse order by size
+    for i in `ls -rS ../../maf/*.maf`
+do
+echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $i /cluster/data/monDom4/monDom4.2bit ../maf/`basename $i` >> jobs.csh
+echo "echo $i" >> jobs.csh
+done 
+    echo date >> jobs.csh
+
+    chmod +x jobs.csh
+    
+    #	establish a screen for this long running job
+    screen
+    cd /cluster/data/monDom4/bed/multiz7way
+    time ./jobs.csh > jobs.log 2>&1
+    #	real    195m54.071s
+    #	user    57m51.373s
+    #	sys     128m25.386s
+    #	ctrl-a ctrl-d to release
+    #	to return to the screen:
+    screen -r -d
+
+
+    cd /cluster/data/monDom4/bed/multiz7way/anno/maf
+    mkdir -p /gbdb/monDom4/multiz7way/anno/maf
+    ln -s /cluster/data/monDom4/bed/multiz7way/anno/maf/*.maf \
+        /gbdb/monDom4/multiz7way/anno/maf
+
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/monDom4/multiz7way/anno/maf \
+                monDom4 multiz7way
+# Loaded 2781002 mafs in 10 files from /gbdb/monDom4/multiz7way/anno/maf
+# real    1m49.236s
+
+    time cat *.maf \
+	| nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+		-maxSize=50000 monDom4 multiz7waySummary stdin
+# Created 1423996 summary blocks from 5463968 components and 2781002 mafs
+#	from stdin
+#	real    2m30.875s
+
+#######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2006-08-01 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/monDom4/bed/multiz7way/frames
+    cd /cluster/data/monDom4/bed/multiz7way/frames
+    # The following is adapted from the sequence in mm8.txt
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes:
+    mkdir genes
+
+    for qDB in danRer4
+    do
+      tmpExt=`mktemp temp.XXXXXX`
+      tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
+      tmpMrna=${qDB}.mrna.${tmpExt}
+      tmpCds=${qDB}.cds.${tmpExt}
+      echo $qDB
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       ${qDB} > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
+        stdout \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+    #	tried to use monDom4 in the above loop, but got this error:
+    #	(450211944 450214274) out of range (0 400000000) in binKeeperAdd
+    #	Which is interesting.  This should be looked into to see why
+    #	this is here.
+
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for galGal2
+    # using mgcGenes for xenTro2
+    # no genes for monDom4 dasNov1 echTel1
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in rn4 mm8 hg18 galGal2 xenTro2
+    for qDB in monDom4
+    do
+      if [ $qDB = "xenTro2" ]; then
+        geneTbl=mgcGenes
+      elif [ $qDB = "galGal2" ]; then
+        geneTbl=refGene
+      elif [ $qDB = "monDom4" ]; then
+        geneTbl=ensGene
+      else
+        geneTbl=knownGene
+      fi
+      echo hgsql -N -e 'select * from '"$geneTbl ${qDB}"
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    #------------------------------------------------------------------------
+    # create frames
+    ssh kkstore04
+    cd /cluster/data/monDom4/bed/multiz7way/frames
+    rm mkMafFrames.sh
+    for C in `awk '{print $1;}' /cluster/data/monDom4/chrom.sizes`
+do
+    echo "echo mafFrames/${C}.maf"
+    echo genePredToMafFrames monDom4 ../mafDownloads/${C}.maf.gz \
+	mafFrames/${C}.maf \
+	monDom4 genes/monDom4.gp.gz \
+	hg18 genes/hg18.gp.gz \
+	mm8 genes/mm8.gp.gz \
+	rn4 genes/rn4.gp.gz \
+	galGal2 genes/galGal2.gp.gz \
+	danRer4 genes/danRer4.gp.gz \
+	xenTro2 genes/xenTro2.gp.gz
+done > mkMafFrames.sh
+
+    chmod +x mkMafFrames.sh
+    ./mkMafFrames.sh
+    gzip mafFrames/*.maf
+
+
+    #------------------------------------------------------------------------
+    # load the database
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/multiz7way/frames
+    time nice -n +19 hgLoadMafFrames monDom4 multiz7wayFrames \
+	mafFrames/*.maf.gz
+    #	real    0m15.102s
+
+    #	The use of this table requires an entry in the trackDb.ra for this:
+    #	frames multiz7wayFrames
+    #	irows on
+
 ###########################################################################
 # BLASTZ SWAP OF ZEBRAFISH (danRer4) CHAIN AND NET ALIGNMENTS OVER TO 
 # monDom4 AND CREATE AXNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS 
@@ -2807,20 +2969,20 @@ BASE=/cluster/data/monDom4/bed/blastzGalGal3.2006-05-25
     #	 41868 chrUn
     #	  9965 chrX
 
-    ldHgGene monDom4 ensGene ensGene.gtf
+    ldHgGene -gtf monDom4 ensGene ensGene.gtf
 # Read 33878 transcripts in 692884 lines in 1 files
 #   33878 groups 10 seqs 1 sources 4 feature types
 # 33878 gene predictions
 
     featureBits monDom4 ensGene
-    #	32770541 bases of 3501643220 (0.936%) in intersection
+    #	32770559 bases of 3501643220 (0.936%) in intersection
 
     #	Let's see if the peptides created from the genome sequence are
     #	different than the peptides that Ensemble says they are making:
 
     #	fetch chrX peptides from the ensGene table, sort them by their
     #	name into single line instances:
-    getRnaPred -cdsOnly -peptides monDom4 ensGene chrX stdout \
+    getRnaPred -peptides monDom4 ensGene chrX stdout \
 	| faToTab -type=protein stdin stdout | sort > ensGenePep.chrX.fa
     #	And chrX peptides downloaded from ensmart:
     faToTab -type=protein ensPepMonDom4chrX.fasta.gz stdout \
