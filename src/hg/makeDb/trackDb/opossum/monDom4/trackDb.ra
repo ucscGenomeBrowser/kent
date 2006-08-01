@@ -20,8 +20,8 @@ wiggle phastCons7
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
-# frames multiz7wayFrames
-# irows on
+frames multiz7wayFrames
+irows on
 autoScaleDefault Off
 summary multiz7waySummary
 speciesGroups vertebrate
