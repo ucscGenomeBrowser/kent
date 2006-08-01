@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.3 2006/07/31 18:47:49 hiram Exp $"
+#	"$Id: mm8.txt,v 1.4 2006/08/01 16:59:29 kent Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -443,6 +443,16 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$outputFN
     # 82600648 bases of 2627444668 (3.144%) in intersection
     featureBits mm3 simpleRepeat
     # 75457193 bases of 2505900260 (3.011%) in intersection
+
+###########################################################################
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/mm8/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed mm8 microsat microsat.bed
+
 
 #############################################################################
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2006-02-14 - Hiram)

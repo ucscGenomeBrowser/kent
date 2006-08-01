@@ -451,6 +451,13 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
         where cytoBandIdeo.name = bandToStain.name; \
       drop table bandToStain;'
 
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/rn4/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed rn4 microsat microsat.bed
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 1/30/06 angie)
     # After the simpleRepeats track has been built, make a filtered version 

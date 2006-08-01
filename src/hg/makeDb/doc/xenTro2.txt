@@ -207,6 +207,13 @@ cd $tmpDir/xenTro2/$2
     nice featureBits -chrom=scaffold_1 xenTro1 simpleRepeat
 #123690 bases of 7406505 (1.670%) in intersection
 
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/xenTro2/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed xenTro2 microsat microsat.bed
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 4/17/06 angie)
     # After the simpleRepeats track has been built, make a filtered version 

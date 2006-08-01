@@ -352,6 +352,14 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     featureBits canFam2 simpleRepeat
 #52885863 bases of 2384996543 (2.217%) in intersection
 
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/canFam2/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed
+    /cluster/bin/i386/hgLoadBed canFam2 microsat microsat.bed
+
 
 # PROCESS SIMPLE REPEATS INTO MASK  (DONE 2005-07-11 braney)
 # 2005-12-02 angie: continuing redo of chr10_1, see below. 

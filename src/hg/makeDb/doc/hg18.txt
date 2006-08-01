@@ -747,6 +747,14 @@ warn trf/*.bed  > lu.out 2>&1
 #	featureBits -countGaps hg18 simpleRepeat
 #	54964044 bases of 3096628158 (1.775%) in intersection
 
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/hg18/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed hg18 microsat microsat.bed
+
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2005-12-09 - Fan)
 # After the simpleRepeats track has been built, make a filtered version 
 # of the trf output: keep trf's with period <= 12:

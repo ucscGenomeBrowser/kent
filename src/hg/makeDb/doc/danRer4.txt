@@ -875,6 +875,15 @@ cat << '_EOF_' > gsub
       where ix = 2;' danRer4
 
 ###########################################################################
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/danRer4/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed canFam2 microsat microsat.bed
+
+###########################################################################
 # PROCESS SIMPLE REPEATS INTO MASK (DONE, 2005-06-14, hartera)
 # RE-DO AFTER RENAMING RANDOM CHROMS AS chrNA_random AND chrUn_random
 # (DONE, 2006-04-21, hartera)

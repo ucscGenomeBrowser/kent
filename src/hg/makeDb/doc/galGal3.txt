@@ -332,6 +332,15 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
     # galGal2 coverage:
 #8434365 bases of 1054197620 (0.800%) in intersection
 
+###########################################################################
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/galGal3/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed galGal3 microsat microsat.bed
+
 
 #########################################################################
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 5/15/06 angie)

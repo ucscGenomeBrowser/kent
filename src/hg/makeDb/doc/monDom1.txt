@@ -475,6 +475,14 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     featureBits monDom1 simpleRepeat
     #	54952425 bases of 2866216770 (1.917%) in intersection
 
+# CREATE MICROSAT TRACK (done 2006-7-5 JK)
+     ssh hgwdev
+     cd /cluster/data/monDom1/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    /cluster/bin/i386/hgLoadBed monDom1 microsat microsat.bed
+
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-12-06 - Hiram)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
