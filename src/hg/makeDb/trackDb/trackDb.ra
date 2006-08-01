@@ -1254,6 +1254,7 @@ group varRep
 priority 146
 visibility hide
 type bed 6 .
+noScoreFilter .
 
 track lineageMutations
 shortLabel LineageMutations
