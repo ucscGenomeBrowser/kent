@@ -3,7 +3,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.4 2006/07/31 16:23:14 markd Exp $"
+#	"$Id: panTro2.txt,v 1.5 2006/08/01 18:43:11 archanat Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -2012,6 +2012,10 @@ cat > bed/genscan/doSplit.csh << 'EOF'
     featureBits panTro1 genscan
         # 53757565 bases of 2909485072 (1.848%) in intersection
 
+QA NOTE:
+
+Ran mytouch for genscanPep table and changed the Update_time to 2006-07-19
+18:00:00, because runJoiner was complaining. 
 
 #######################################################################
 #  OPOSSUM BLASTZ - (WORKING - 2006-03-20 - Hiram)
