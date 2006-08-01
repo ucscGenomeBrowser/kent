@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.16 2004/01/27 21:15:19 markd Exp $";
+static char const rcsid[] = "$Id: pslReps.c,v 1.17 2006/08/01 19:02:56 angie Exp $";
 
 /* command line */
 static struct optionSpec optionSpecs[] = {
@@ -216,7 +216,6 @@ int qSize;
 int *repTrack = NULL;
 int *scoreTrack = NULL;
 int milliScore;
-int pslIx;
 int goodAliCount = 0;
 int bestAliCount = 0;
 int milliMin = 1000*minAli;
@@ -282,7 +281,6 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     int runVal = repTrack[0];
     int curVal;
     int runSize = 1;
-    int runStart = 0;
     int packetCount = 0;
     int *packetSize = NULL;
     int *packetVal = NULL;
