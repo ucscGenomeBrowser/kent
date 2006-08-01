@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.113 2006/07/31 21:14:07 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.114 2006/08/01 00:13:35 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -592,6 +592,13 @@ if (!track->wiggle)
 	}
     }
 
+if ((val = hashFindVal(hash, "htmlFile")) != NULL)
+    if (fileExists(val))
+        {
+        char *buf;
+        readInGulp(val, &buf, NULL);
+        track->tdb->html = buf;
+        }
 if ((val = hashFindVal(hash, "url")) != NULL)
     tdb->url = cloneString(val);
 if ((val = hashFindVal(hash, "visibility")) != NULL)
@@ -1260,19 +1267,6 @@ for (;;)
 	if (track == (struct customTrack *)NULL)
 	    continue; /* may have expired data files or db tables */
 	    /* !!! next line of data !!!  */
-        if (isFile)
-            {
-            char docFile[128];
-            char *buf = cloneString(text);
-            chopSuffix(buf);
-            safef(docFile,sizeof docFile, "%s.%s.html", buf, 
-                    track->tdb->tableName);
-            if (fileExists(docFile))
-                {
-                readInGulp(docFile, &buf, NULL);
-                track->tdb->html = buf;
-                }
-            }
 
 	/*	close previous track data file if in use	*/
 	if (inDbData && (dbDataPL != (struct pipeline *)NULL))
@@ -1716,20 +1710,22 @@ if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != d
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
 	|| tdb->altColorB != tdb->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
+if (tdb->html)
+    {
+    /* write doc file in trash and add reference to the track line*/
+    char *htmlFile;
+    static struct tempName tn;
+
+    customTrackTrashFile(&tn, ".html");
+    htmlFile = tn.forCgi;
+    writeGulp(htmlFile, tdb->html, strlen(tdb->html));
+    fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
+    }
 if (tdb->settings && (strlen(tdb->settings) > 0))
     saveSettings(f, cloneString(tdb->settings));
 fputc('\n', f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
-if (tdb->html)
-    {
-    /* write doc file */
-    char docFile[128];
-    char *prefix = cloneString(fileName);
-    chopSuffix(prefix);
-    safef(docFile, sizeof docFile, "%s.%s.html", prefix, tdb->tableName);
-    writeGulp(docFile, tdb->html, strlen(tdb->html));
-    }
 trackDbFree(&def);
 }
 
