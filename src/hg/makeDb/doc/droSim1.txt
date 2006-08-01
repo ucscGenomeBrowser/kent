@@ -799,11 +799,18 @@ chainSome $(path1)
 # End tblastn
 
 
-# BLASTZ/CHAIN/NET DROYAK1 (DONE 4/19/05 angie)
-    mkdir /cluster/data/droSim1/bed/blastz.droYak1.2005-04-19
-    cd /cluster/data/droSim1/bed/blastz.droYak1.2005-04-19
+# BLASTZ/CHAIN/NET DROYAK1 (REDONE 6/26/05 angie)
+    # Originally run w/default human-mouse params 4/19/05.
+    mkdir /cluster/data/droSim1/bed/blastz.droYak1.2006-06-26
+    cd /cluster/data/droSim1/bed/blastz.droYak1.2006-06-26
     cat << '_EOF_' > DEF
 # D.simulans vs. D.yakuba
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 
 # TARGET - D. simulans
 SEQ1_DIR=/iscratch/i/droSim1/droSim1.2bit
@@ -817,23 +824,22 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/cluster/data/droYak1/chrom.sizes
 
-BASE=/cluster/data/droSim1/bed/blastz.droYak1.2005-04-19
+BASE=/cluster/data/droSim1/bed/blastz.droYak1.2006-06-26
 '_EOF_'
     # << this line keeps emacs coloring happy
-    doBlastzChainNet.pl DEF \
+    ~/kent/src/utils/doBlastzChainNet.pl DEF \
       -blastzOutRoot /cluster/bluearc/droSim1droYak1 >& do.log &
     tail -f do.log
-    rmdir /cluster/bluearc/droSim1droYak1
-    ln -s blastz.droYak1.2005-04-19 /cluster/data/droSim1/bed/blastz.droYak1
+    ln -s blastz.droYak1.2006-06-26 /cluster/data/droSim1/bed/blastz.droYak1
     # Add {chain,net}DroYak1 to trackDb.ra if necessary.
     featureBits -chrom=chr2R droSim1 chainDroYak1Link
-#16744844 bases of 18190314 (92.054%) in intersection
+#16921386 bases of 18190314 (93.024%) in intersection
     featureBits -chrom=chr2R droSim1 chainDm2Link
-#17286574 bases of 18190314 (95.032%) in intersection
+#17421444 bases of 18190314 (95.773%) in intersection
     featureBits -chrom=chr4 droSim1 chainDroYak1Link
-#556566 bases of 807953 (68.886%) in intersection
+#634681 bases of 807953 (78.554%) in intersection
     featureBits -chrom=chr4 droSim1 chainDm2Link
-#651712 bases of 807953 (80.662%) in intersection
+#696892 bases of 807953 (86.254%) in intersection
 
 
 # BLASTZ/CHAIN/NET DP2 (DONE 4/21/05 angie)
@@ -1631,5 +1637,140 @@ chainSome $(path1)
       wget http://genome.imim.es/genepredictions/D.simulans/golden_path_200504/geneidv1.2/$chr.gtf
     end
     ldHgGene -gtf -genePredExt droSim1 geneid *.gtf
+
+
+# BLASTZ/CHAIN/NET DROYAK2 (DONE 7/28/05 angie)
+    mkdir /cluster/data/droSim1/bed/blastz.droYak2.2006-07-24
+    cd /cluster/data/droSim1/bed/blastz.droYak2.2006-07-24
+    cat << '_EOF_' > DEF
+# D.simulans vs. D.yakuba
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. simulans
+SEQ1_DIR=/san/sanvol1/scratch/droSim1/droSim1.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/droSim1/chrom.sizes
+
+# QUERY - D. yakuba
+SEQ2_DIR=/san/sanvol1/scratch/droYak2/droYak2.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droYak2/chrom.sizes
+
+BASE=/cluster/data/droSim1/bed/blastz.droYak2.2006-07-24
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -blastzOutRoot /san/sanvol1/scratch/droSim1droYak2 >& do.log &
+    tail -f do.log
+    # The chain job for droSim1.chrU kept running out of mem, so I 
+    # made a separate .csh script that would chain chunks of chrU.
+    # Some chains may be split because of this, but they're on chrU 
+    # anyway...
+    ssh kkr6u00
+    cd /cluster/store8/droSim1/bed/blastz.droYak2.2006-07-24/axtChain/run
+    para time > run.time
+    cat run.time >>& ../../do.log 
+    cat > chain_chrU.csh <<'_EOF_'
+#!/bin/csh -efx
+foreach f (../../pslParts/$1*.psl.gz)
+  zcat $f \
+  | axtChain -psl -verbose=0 -scoreScheme=/cluster/data/blastz/HoxD55.q   -linearGap=loose stdin \
+      /san/sanvol1/scratch/droSim1/droSim1.2bit \
+      /san/sanvol1/scratch/droYak2/droYak2.2bit \
+      stdout \
+  | chainAntiRepeat /san/sanvol1/scratch/droSim1/droSim1.2bit \
+      /san/sanvol1/scratch/droYak2/droYak2.2bit \
+      stdin $f:t:r:r.chain
+end
+chainMergeSort $1*.chain > $2
+'_EOF_'
+    # << emacs
+    ./chain_chrU.csh droSim1.2bit:chrU: chain/droSim1.2bit:chrU:.chain \
+      >& chain_chrU.log & tail -f chain_chrU.log
+    cat chain_chrU.log >> ../../do.log
+    cd ../..
+    doBlastzChainNet.pl DEF -continue chainMerge -workhorse=kkr6u00 \
+      >>& do.log & tail -f do.log
+    ln -s blastz.droYak2.2006-07-24 /cluster/data/droSim1/bed/blastz.droYak2
+    featureBits -chrom=chr2R droSim1 chainDroYak2Link
+#16933107 bases of 18190314 (93.089%) in intersection
+    featureBits -chrom=chr2R droSim1 chainDm2Link
+#17421444 bases of 18190314 (95.773%) in intersection
+    featureBits -chrom=chr4 droSim1 chainDroYak2Link
+#635094 bases of 807953 (78.605%) in intersection
+    featureBits -chrom=chr4 droSim1 chainDm2Link
+#696892 bases of 807953 (86.254%) in intersection
+
+
+# RECIPROCAL BEST DROSIM1-DROYAK2 (IN PROGRESS 8/1/06 angie)
+    # Special request for user (Toshio Yoshimatsu and JJ Emerson, UChicago)
+    ssh kolossus
+    cd /cluster/data/droSim1/bed/blastz.droYak2/axtChain
+    # Swap droSim1-best chains to be droYak2-referenced:
+    chainStitchId droSim1.droYak2.over.chain.gz stdout \
+    | chainSwap stdin stdout \
+    | chainSort stdin droYak2.droSim1.tBest.chain
+    # Net those on droYak2 to get droYak2-ref'd reciprocal best net:
+    chainPreNet droYak2.droSim1.tBest.chain \
+      /cluster/data/{droYak2,droSim1}/chrom.sizes stdout \
+    | chainNet -minSpace=1 stdin /cluster/data/{droYak2,droSim1}/chrom.sizes \
+        stdout /dev/null \
+    | netSyntenic stdin droYak2.droSim1.rbest.net
+    # Extract droYak2-ref'd reciprocal best chain:
+    netChainSubset droYak2.droSim1.rbest.net droYak2.droSim1.tBest.chain stdout \
+    | chainStitchId stdin droYak2.droSim1.rbest.chain
+    # Swap to get droSim1-ref'd reciprocal best chain:
+    chainSwap droYak2.droSim1.rbest.chain stdout \
+    | chainSort stdin droSim1.droYak2.rbest.chain
+    # Net those on droSim1 to get droSim1-ref'd reciprocal best net:
+    chainPreNet droSim1.droYak2.rbest.chain \
+      /cluster/data/{droSim1,droYak2}/chrom.sizes stdout \
+    | chainNet -minSpace=1 -minScore=0 \
+      stdin /cluster/data/{droSim1,droYak2}/chrom.sizes stdout /dev/null \
+    | netSyntenic stdin droSim1.droYak2.rbest.net
+    # Compress and clean up.
+    rm droYak2.droSim1.tBest.chain
+    gzip *.rbest.*
+    md5sum *.rbest.*.gz > md5sum.rbest.txt
+
+    # Test coverage of *.rbest.* -- should be equal.
+    netToBed -maxGap=1 droYak2.droSim1.rbest.net.gz droYak2.droSim1.rbest.net.bed
+    netToBed -maxGap=1 droSim1.droYak2.rbest.net.gz droSim1.droYak2.rbest.net.bed
+    chainToPsl droYak2.droSim1.rbest.chain.gz \
+      /cluster/data/{droYak2,droSim1}/chrom.sizes \
+      /cluster/data/droYak2/droYak2.2bit /cluster/data/droSim1/droSim1.2bit \
+      droYak2.droSim1.rbest.chain.psl
+    chainToPsl droSim1.droYak2.rbest.chain.gz \
+      /cluster/data/{droSim1,droYak2}/chrom.sizes \
+      /cluster/data/droSim1/droSim1.2bit /cluster/data/droYak2/droYak2.2bit \
+      droSim1.droYak2.rbest.chain.psl
+    ssh hgwdev
+    cd /cluster/data/droSim1/bed/blastz.droYak2/axtChain
+    featureBits droYak2 droYak2.droSim1.rbest.net.bed
+#101989543 bases of 162681153 (62.693%) in intersection
+    featureBits droYak2 droYak2.droSim1.rbest.chain.psl
+#101989543 bases of 162681153 (62.693%) in intersection
+    featureBits droSim1     droSim1.droYak2.rbest.chain.psl
+#101989543 bases of 127256433 (80.145%) in intersection
+    featureBits droSim1     droSim1.droYak2.rbest.net.bed
+#101989543 bases of 127256433 (80.145%) in intersection
+    mkdir experiments
+    mv *.bed *.psl experiments
+
+    # Put out for download (hgwdev-only)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/droSim1/vsDroYak2/reciprocalBest
+    cd /usr/local/apache/htdocs/goldenPath/droSim1/vsDroYak2/reciprocalBest
+    ln -s /cluster/data/droSim1/bed/blastz.droYak2/axtChain/*.rbest.*.gz .
+    ln -s /cluster/data/droSim1/bed/blastz.droYak2/axtChain/md5sum.rbest.txt md5sum.txt
+    # Make a README.txt.
 
 
