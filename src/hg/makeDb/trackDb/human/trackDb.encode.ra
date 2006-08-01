@@ -2661,17 +2661,17 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (PeakFinder)
     priority 2
     
-    track encodeUncFairePeaksApr2006
+    track encodeUncFairePeaksChipotle
     subTrack encodeUncFaire
     shortLabel UNC FAIRE ChIPOTle
-    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (ChIPOTle) Apr. 2006 Update
+    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (ChIPOTle)
     noInherit on
     type bedGraph 4
     maxHeightPixels 128:16:16
     autoScale off
     windowingFunction mean
-    viewLimits .2:2.6
-    color 20,150,20
+    viewLimits 0.0:2.7
+    color 0,0,255
     altColor 50,100,50
     priority 3
 
