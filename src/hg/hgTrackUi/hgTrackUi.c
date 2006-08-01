@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.294 2006/07/31 03:07:09 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.295 2006/08/01 18:40:53 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2354,7 +2354,9 @@ else if (tdb->type != NULL)
 		     wgRna table has a new field 'type', which is used to store RNA type info
 		     and from which to determine the display color of each entry.
 	    */
-	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna") && !startsWith("encodeGencodeIntron", track))
+	    if ((atoi(words[1])>4) && !trackDbSetting(tdb, "noScoreFilter") &&
+		!sameString(track, "jaxQTL3") && !sameString(track, "wgRna") &&
+		!startsWith("encodeGencodeIntron", track))
 		scoreUi(tdb, 1000);
 	    }
 	else if (sameWord(words[0], "psl"))
