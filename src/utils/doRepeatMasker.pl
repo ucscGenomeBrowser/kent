@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.1 2006/08/01 00:18:48 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.2 2006/08/01 01:35:36 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -238,7 +238,7 @@ _EOF_
 sub doCat {
   my $runDir = "$buildDir";
   &HgAutomate::checkExistsUnlessDebug('cluster', 'cat',
-				      '$buildDir/run.cluster/run.time');
+				      "$buildDir/run.cluster/run.time");
 
   my $whatItDoes = 
 "It concatenates .out files from cluster run into a single $db.fa.out.";
@@ -344,8 +344,12 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf RMPart/???
-gzip $db.out.align
+if (-e RMPart/000) then
+  rm -rf RMPart/???
+endif
+if (-e $db.fa.align) then
+  gzip $db.fa.align
+endif
 _EOF_
   );
   $bossScript->execute();
