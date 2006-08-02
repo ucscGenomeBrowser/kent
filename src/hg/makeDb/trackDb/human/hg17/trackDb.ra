@@ -32,16 +32,6 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
-track dvBed
-shortLabel DV
-longLabel Disease Variation
-group phenDis
-priority 145
-visibility hide
-color 200,0,0
-type bed 4 +
-url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
-
 track kgProtMap
 shortLabel kgProtMap
 longLabel kgProtMap
