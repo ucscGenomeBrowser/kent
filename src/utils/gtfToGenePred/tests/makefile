@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: basic srcPre dups impliedStop
+test: basic srcPre dups impliedStop ensembl
 
 # basic conversion
 basic: mkdirs
@@ -24,6 +24,12 @@ dups: mkdirs
 
 impliedStop: mkdirs
 	gtfToGenePred -impliedStopAfterCds -infoOut=output/$@.info input/flybase.gtf output/$@.gp
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.info output/$@.info
+
+# protein id
+ensembl: mkdirs
+	gtfToGenePred -infoOut=output/$@.info input/ensembl.gtf output/$@.gp
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.info output/$@.info
 

@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "gtfToGenePred - convert a GTF file to a genePred\n"
   "usage:\n"
-  "   gtfToGenePred gff genePred\n"
+  "   gtfToGenePred gtf genePred\n"
   "\n"
   "options:\n"
   "     -genePredExt - create a extended genePred, including frame\n"
@@ -42,17 +42,27 @@ int badGroupCount = 0;  /* count of inconsistent groups found */
 
 
 /* header for info file */
-static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\n";
+static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\tproteinId\n";
 
 static void writeInfo(FILE *infoFh, struct gffGroup *group)
 /* write a row for a GTF group from the info file */
 {
-char *geneId = group->lineList->geneId;
-if (geneId == NULL)
-    geneId = "";
-fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\n",
-        group->name, geneId, group->source,
-        group->seq, group->start, group->end, group->strand);
+
+// scan lineList for group and protein ids
+struct gffLine *ll;
+char *geneId = NULL, *proteinId = NULL;
+for (ll = group->lineList; ll != NULL; ll = ll->next)
+    {
+    if ((geneId == NULL) && (ll->geneId != NULL))
+        geneId = ll->geneId;
+    if ((proteinId == NULL) && (ll->proteinId != NULL))
+        proteinId = ll->proteinId;
+    }
+
+fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\n",
+        group->name, emptyForNull(geneId), group->source,
+        group->seq, group->start, group->end, group->strand,
+        emptyForNull(proteinId));
 }
 
 static void gtfGroupToGenePred(struct gffFile *gtf, struct gffGroup *group, FILE *gpFh,
@@ -109,7 +119,7 @@ return TRUE;
 }
 
 static void gtfToGenePred(char *gtfFile, char *gpFile, char *infoFile)
-/* gtfToGenePred - Look at a gff file and report some basic stats. */
+/* gtfToGenePred -  convert a GTF file to a genePred.. */
 {
 struct gffFile *gtf = gffRead(gtfFile);
 FILE *gpFh, *infoFh = NULL;
