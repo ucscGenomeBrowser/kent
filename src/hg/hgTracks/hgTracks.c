@@ -1,3 +1,4 @@
+
 /* hgTracks - Human Genome browser main cgi script. */
 #include "common.h"
 #include "hCommon.h"
@@ -105,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1176 2006/08/02 00:05:53 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1177 2006/08/02 19:57:27 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12321,7 +12322,6 @@ if (userSeqString && !ssFilesExist(userSeqString))
     }
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
-
 if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList);
@@ -12430,26 +12430,26 @@ if (!hideControls)
     topButton("hgt.out3", ZOOM_10X);
     hWrites("<BR>\n");
 
-if (showTrackControls)
-    {
-    /* Break into a second form so that zooming and scrolling
-     * can be done with a 'GET' so that user can back up from details
-     * page without Internet Explorer popping up an annoying dialog.
-     * Do rest of page as a 'POST' so that the ultra-long URL from
-     * all the track controls doesn't break things.  IE URL limit
-     * is 2000 bytes, but some firewalls impose a ~1000 byte limit.
-     * As a side effect of breaking up the page into two forms
-     * we need to repeat the position in a hidden variable here
-     * so that zoom/scrolling always has current position to work
-     * from. */
-    hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\" "
-            "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
-    hPrintf("</CENTER></FORM>\n");
-    hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    clearButtonJavascript = "document.TrackForm.position.value=''";
-    hPrintf("<CENTER>");
-    }
+    if (showTrackControls)
+	{
+	/* Break into a second form so that zooming and scrolling
+	 * can be done with a 'GET' so that user can back up from details
+	 * page without Internet Explorer popping up an annoying dialog.
+	 * Do rest of page as a 'POST' so that the ultra-long URL from
+	 * all the track controls doesn't break things.  IE URL limit
+	 * is 2000 bytes, but some firewalls impose a ~1000 byte limit.
+	 * As a side effect of breaking up the page into two forms
+	 * we need to repeat the position in a hidden variable here
+	 * so that zoom/scrolling always has current position to work
+	 * from. */
+	hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\" "
+		"VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
+	hPrintf("</CENTER></FORM>\n");
+	hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+	cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+	clearButtonJavascript = "document.TrackForm.position.value=''";
+	hPrintf("<CENTER>");
+	}
 
 
     /* Make line that says position. */
