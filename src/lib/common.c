@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.101 2006/07/28 21:06:33 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.102 2006/08/02 20:10:11 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -457,10 +457,10 @@ return a;
 }
 
 int slDoubleCmp(const void *va, const void *vb)
-/* Compare two slNames. */
+/* Compare two slDoubles. */
 {
-const struct slInt *a = *((struct slInt **)va);
-const struct slInt *b = *((struct slInt **)vb);
+const struct slDouble *a = *((struct slDouble **)va);
+const struct slDouble *b = *((struct slDouble **)vb);
 double diff = a->val - b->val;
 if (diff < 0)
     return -1;

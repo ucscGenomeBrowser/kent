@@ -425,7 +425,7 @@ struct slDouble *slDoubleNew(double x);
 /* Return a new int. */
 
 int slDoubleCmp(const void *va, const void *vb);
-/* Compare two slNames. */
+/* Compare two slDoubles. */
 
 double slDoubleMedian(struct slDouble *list);
 /* Return median value on list. */
