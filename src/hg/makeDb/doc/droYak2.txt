@@ -753,3 +753,12 @@ chainSome $(path1)
     hgLoadBed droYak2 contamination contamination.bed
 
 
+# SWAP CHAINS FROM DROSIM1, BUILD NETS ETC. (DONE 8/1/06 angie)
+    mkdir /cluster/data/droYak2/bed/blastz.droSim1.swap
+    cd /cluster/data/droYak2/bed/blastz.droSim1.swap
+    doBlastzChainNet.pl -swap /cluster/data/droSim1/bed/blastz.droYak2/DEF \
+      >& do.log &
+    tail -f do.log
+    ln -s blastz.droSim1.swap /cluster/data/droYak2/bed/blastz.droSim1
+
+
