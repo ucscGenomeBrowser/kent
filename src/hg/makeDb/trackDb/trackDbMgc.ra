@@ -67,9 +67,9 @@ cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
 url http://genome.cs.wustl.edu/cgi-bin/mgc.cgi?action=cloneRpt&acc=$$
 
-track mgcAListGene
-shortLabel A-List
-longLabel MGC A-List Genes
+track mgcABListGene
+shortLabel A/B-List 2006-08-01
+longLabel MGC AB-List Genes 2006-04-16 list, 2006-08-01 build
 group mgc
 priority 100
 visibility pack
@@ -78,16 +78,31 @@ type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
 
-track mgcBListGene
-shortLabel B-List
-longLabel MGC B-List Genes
+track mgcABListGene20050808
+compositeTrack on
+shortLabel A/B-List 2005-08-08
+longLabel MGC A/B-List Genes  2005-04-25 list, 2005-08-08 build
 group mgc
-priority 101
-visibility pack
-color 200,50,0
+priority 100.5
+visibility hide
+color 200,0,50
 type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
+
+    track mgcAListGene20050808
+    shortLabel A-List
+    longLabel MGC A-List Genes
+    subTrack mgcABListGene20050808
+    type genePred
+    priority 1
+
+    track mgcBListGene20050808
+    shortLabel B-List
+    longLabel MGC B-List Genes
+    subTrack mgcABListGene20050808
+    type genePred
+    priority 2
 
 track mgcWUPcrConfirmed
 shortLabel C-List Confirmed
