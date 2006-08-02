@@ -1179,3 +1179,27 @@ cat > downloads.csh << 'EOF'
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
 
+######
+# ENSEMBL (done  6/20/06 robert)
+wget http://www.sanger.ac.uk/Users/lec/macaque_data/gtf.tar.gz
+wget http://www.sanger.ac.uk/Users/lec/macaque_data/macaque_ensembl_cdnas.fa.gz
+wget -q http://www.sanger.ac.uk/Users/lec/macaque_data/macaque_ensembl_peptides.fa.gz 
+gunzip *.gz
+for i in `ls ensembl_macaque_gtf_data/` ; do echo ${i%%.gtf} ; awk '{print "chr"$0}' ensembl_macaque_gtf_data/$i > chr$i ; done
+rm -f chrscaffold.gtf
+cp ensembl_macaque_gtf_data/scaffold.gtf scaffold.gtf 
+cat chr*.gtf > ensGene.gtf
+grep -v pseudo ensAll.gtf > ensGene.gtf
+ldHgGene rheMac2 ensGene ensGene.gtf -gtf -genePredExt
+Reading ensGene.gtf
+Read 38561 transcripts in 741623 lines in 1 files
+  38561 groups 22 seqs 8 sources 4 feature types
+38561 gene predictions
+hgsql rheMac2 < ~/kent/src/hg/lib/ensGtp.sql
+awk '{print $10,$12,$16}' ensGene.gtf |grep ENSMMUP|awk 'NF==3{print $0}'|sed -e 's/\"//g' | sed -e 's/\;//g'|sed -e 's/ /\t/g' |sort -u > ensGtp.tab
+echo "load data local infile 'ensGtp.tab' into table ensGtp ignore 1 lines" | hgsql -N rheMac2
+sed -e 's/_/ /' macaque_ensembl_peptides.fa  > ensPep.fa
+hgPepPred rheMac2  ensembl ensPep.fa
+grep pseudogene ensAll.gtf > ensPseudo.gtf
+grep -v protein_coding ensAll.gtf |grep -v pseudo > ensRna.gtf
+
