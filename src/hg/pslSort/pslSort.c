@@ -7,7 +7,7 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSort.c,v 1.7 2005/03/29 21:24:35 hiram Exp $";
+static char const rcsid[] = "$Id: pslSort.c,v 1.8 2006/08/02 16:44:26 angie Exp $";
 
 boolean nohead = FALSE; /* No header for psl files?  Command line option. */
 
@@ -57,7 +57,6 @@ char *line;
 int lineSize;
 char *words[32];
 int wordCount;
-struct psl *psl;
 
 if (!lineFileNext(lf, &line, &lineSize))
     {
@@ -89,7 +88,6 @@ char *line;
 int lineSize;
 char *words[32];
 int wordCount;
-struct psl *psl;
 
 if (!lineFileNext(lf, &line, &lineSize))
     return NULL;
@@ -228,7 +226,6 @@ for (i=0; i<count; ++i)
 struct psl *mirrorLmPsl(struct psl *psl, struct lm *lm)
 /* Reflect a psl into local memory. */
 {
-static int timeCount = 0;
 struct psl *p = lmCloneMem(lm, psl, sizeof(*psl));
 p->qNumInsert = psl->tNumInsert;
 p->tNumInsert = psl->qNumInsert;
@@ -343,7 +340,6 @@ if (!secondOnly)
 	    ++filesInMidFile, ++totalFilesProcessed, name = name->next)
 	    {
 	    boolean reflectMe = FALSE;
-	    boolean gotEnd = FALSE;
 	    if (doReflect)
 		{
 		reflectMe = !selfFile(name->name);
