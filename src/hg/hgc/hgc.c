@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1073 2006/08/01 18:37:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1074 2006/08/02 15:58:24 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6765,45 +6765,6 @@ printRgdQtlCustomUrl(tdb, itemForUrl, item == itemForUrl);
 printTrackHtml(tdb);
 }
 
-char *gadExpand(char *inString)
-/* Return a copy of inString that replace "'" with "''" 
-   This is needed to accomodate GAD's convention in
-   dealing with disease names with "'" in them.
-*/
-{
-char c;
-int outSize = 0;
-char *outString, *out, *in;
-
-if (inString == NULL)
-    return(cloneString(""));
-
-/* Count up how long it will be */
-in = inString;
-while ((c = *in++) != 0)
-    {
-    if (c == '\'')
-        outSize += 2;
-    else
-        outSize += 1;
-    }
-outString = needMem(outSize+1);
-
-/* Encode string */
-in = inString;
-out = outString;
-while ((c = *in++) != 0)
-    {
-    *out++ = c;
-    if (c == '\'')
-        {
-        *out++ = c;
-	}
-    }
-*out++ = 0;
-return outString;
-}
-
 void printGadDetails(struct trackDb *tdb, char *itemName, boolean encode)
 /* Print details of a GAD entry. */
 {
@@ -6881,7 +6842,7 @@ if (url != NULL && url[0] != 0)
     
     if (row != NULL) 
     	{
-	upperDisease = gadExpand(row[0]);
+	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf("<BR><B>Positive Disease Associations:  </B>");
 	
@@ -6896,7 +6857,7 @@ if (url != NULL && url[0] != 0)
 	
     while (row != NULL)
         {
-	upperDisease = gadExpand(row[0]);
+	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
 	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
