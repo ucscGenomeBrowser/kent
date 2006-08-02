@@ -230,7 +230,7 @@ mgc:
 		    cmd="hgTrackDb -strict -release=beta -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgsql $$DB < grpMgc.sql" ; \
-		    echo $$cmd ;  $$cmd ; \
+		    echo $$cmd ; eval $$cmd ; \
 		fi ; \
 	    fi ; \
 	done
