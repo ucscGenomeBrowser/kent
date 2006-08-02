@@ -178,7 +178,7 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("</TD>");
             hPrintf("<TD>\n");
             safef(gname, sizeof(gname), "%s.group",track->mapName);
-            printGroupListHtml(gname, groupList, track->group->name);
+            printGroupListHtml(gname, groupList, track->groupName);
             hPrintf("</TD>");
             }
 	hPrintf("</TR>\n");

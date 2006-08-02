@@ -105,7 +105,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1175 2006/07/31 20:10:27 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1176 2006/08/02 00:05:53 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -588,6 +588,7 @@ for (group = groupList; group != NULL; group = group->next)
     if (groupTarget == NULL || sameString(group->name,groupTarget))
         {
         static char pname[512];
+        static char gname[512];
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
 	    struct track *track = tr->track;
@@ -598,6 +599,14 @@ for (group = groupList; group != NULL; group = group->next)
                 safef(pname, sizeof(pname), "%s.priority",track->mapName);
                 cartRemove(cart, pname);
                 track->priority = track->defaultPriority;
+                if (track->defaultGroupName != NULL && 
+                        differentString(track->groupName, track->defaultGroupName))
+                    {
+                    safef(gname, sizeof(gname), "%s.group",track->mapName);
+                    cartRemove(cart, gname);
+                    track->groupName = cloneString(track->defaultGroupName);
+//                    track->group = NULL;
+                    }
                 }
             else if (track->visibility != tvHide || !ifVisible)
                 track->visibility = changeVis;
@@ -11299,8 +11308,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    /* save default priority so we can reset it later */
+    /* save default priority and group so we can reset it later */
     track->defaultPriority = track->priority;
+    track->defaultGroupName = track->groupName;
 
     if (slCount(tdb->subtracks) != 0)
         makeCompositeTrack(track, tdb);
@@ -11869,7 +11879,10 @@ if (withPriorityOverride)
         if (sameString(groupName, track->group->name))
             cartRemove(cart, cartVar);
         if (hashFindVal(hash, groupName)!=NULL)
+            {
+            track->groupName = cloneString(groupName);
             track->group = hashFindVal(hash, groupName);
+            }
         }
 /* Sort tracks by combined group/track priority, and
  * then add references to track to group. */

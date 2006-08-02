@@ -137,6 +137,7 @@ struct track
     float defaultPriority;   /* Tracks are drawn in priority order. */
     char *groupName;	/* Name of group if any. */
     struct group *group;  /* Group this track is associated with. */
+    char *defaultGroupName;  /* default Group this track is associated with. */
     boolean canPack;	/* Can we pack the display for this track? */
     struct spaceSaver *ss;  /* Layout when packed. */
 
