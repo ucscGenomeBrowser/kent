@@ -4373,3 +4373,13 @@ _EOF_
       summary.txt.060503
 
 
+###########################################################################
+# LIFTOVER CHAINS DM2 -> DM3 (DONE 8/1/06 angie)
+    # Started 8/1 -- This creates the directory and scripts:
+    ~/kent/src/utils/doSameSpeciesLiftOver.pl dm2 dm3 -debug
+    # Run it for real and log it:
+    cd /cluster/data/dm2/bed/blat.dm3.2006-08-01
+    ~/kent/src/utils/doSameSpeciesLiftOver.pl dm2 dm3 \
+       >& do.log & tail -f do.log
+
+
