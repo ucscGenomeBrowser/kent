@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.19 2005/03/28 23:50:27 kate Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.20 2006/08/02 20:10:58 markd Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -50,6 +50,7 @@ if ((gff = *pGff) != NULL)
     freeHash(&gff->geneIdHash);
     freeHash(&gff->exonHash);
     freeHash(&gff->intronStatusHash);
+    freeHash(&gff->proteinIdHash);
     slFreeList(&gff->lineList);
     slFreeList(&gff->seqList);
     slFreeList(&gff->sourceList);
@@ -212,6 +213,12 @@ for (;;)
 	   hel = hashAdd(gff->intronStatusHash, val, NULL);
        gl->intronStatus = hel->name;
        }
+   else if (sameString("protein_id", type))
+       {
+       if ((hel = hashLookup(gff->proteinIdHash, val)) == NULL)
+	   hel = hashAdd(gff->proteinIdHash, val, NULL);
+       gl->proteinId = hel->name;
+       }
    }
 if (gl->group == NULL)
     {
@@ -339,6 +346,7 @@ gff->groupHash = newHash(12);
 gff->geneIdHash = newHash(12);
 gff->exonHash = newHash(16);
 gff->intronStatusHash = newHash(4);
+gff->proteinIdHash = newHash(12);
 return gff;
 }
 
