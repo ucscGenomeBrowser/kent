@@ -227,7 +227,7 @@ mgc:
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
 		    vis="" ; \
-		    cmd="hgTrackDb -strict -release=beta -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
+		    cmd="hgTrackDb -strict -release=beta -raName=trackDbMgc.ra $$vis $$org $$DB trackDbMgc ../../lib/trackDb.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgsql $$DB < grpMgc.sql" ; \
 		    echo $$cmd ; eval $$cmd ; \
