@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.12 2006/06/09 21:45:37 angie Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.13 2006/08/02 23:59:42 kate Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -48,6 +48,15 @@ static struct optionSpec options[] = {
    {"overlap", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+/* record number of rejected blocks, and reason */
+int rejectMinCol = 0;
+int rejectMinRow = 0;
+int rejectMinScore = 0;
+int rejectMinFactor = 0;
+int rejectNeedComp = 0;
+int rejectComponentFilter = 0;
+int rejectOverlap = 0;
 
 int minCol = DEFAULT_MIN_COL;
 int minRow = DEFAULT_MIN_ROW;
@@ -102,24 +111,58 @@ int refStart = maf->components->start;
 int refEnd = refStart + maf->components->size;
 
 if (needComp && (mafMayFindCompPrefix(maf, needComp, "." ) == NULL))
+    {
+    verbose(3, "%s:%d needComp\n", 
+            maf->components->src, maf->components->start);
+    rejectNeedComp++;
     return FALSE;
+    }
 
 if (componentFile != NULL && (mafMayFindComponentInHash(maf, cHash) == NULL))
-    return FALSE;
-if (nrow < minRow || ncol < minCol ||
-    (gotMinScore && maf->score < minScore) ||
-    (gotMinFactor && maf->score < fscore))
     {
-    verbose(3, "col=%d, row=%d, score=%f, fscore=%f\n", 
-                        ncol, nrow, maf->score, fscore);
-    verbose(3, "ncol**2=%d\n", ncol * ncol);
+    verbose(3, "%s:%d componentFilter\n", 
+                maf->components->src, maf->components->start);
+    rejectComponentFilter++;
+    return FALSE;
+    }
+if (nrow < minRow)
+    {
+    verbose(3, "%s:%d nrow=%d\n", maf->components->src, 
+                    maf->components->start, nrow);
+    rejectMinRow++;
+    return FALSE;
+    }
+if (ncol < minCol)
+    {
+    verbose(3, "%s:%d ncol=%d\n", maf->components->src, 
+                    maf->components->start, ncol);
+    rejectMinCol++;
+    return FALSE;
+    }
+if (gotMinScore && maf->score < minScore)
+    {
+    verbose(3, "%s:%d score=%f\n", maf->components->src, 
+                    maf->components->start, maf->score);
+    rejectMinScore++;
+    return FALSE;
+    }
+if (gotMinFactor && maf->score < fscore)
+    {
+    verbose(3, "%s:%d fscore=%f\n", maf->components->src, 
+                    maf->components->start, fscore);
+    rejectMinFactor++;
     return FALSE;
     }
 if (optionExists("overlap"))
     {
     if (prevRef && sameString(ref, prevRef) &&
-	refStart < prevRefEnd && refEnd > prevRefStart)
+            refStart < prevRefEnd && refEnd > prevRefStart)
+        {
+        verbose(3, "%s:%d overlap %d\n", maf->components->src, 
+                maf->components->start, prevRefStart);
+        rejectOverlap++;
         return FALSE;
+        }
     if (!prevRef || !sameString(ref, prevRef))
 	{
 	freeMem(prevRef);
@@ -139,6 +182,7 @@ FILE *rf = NULL;
 int i;
 int status;
 int rejects = 0;
+int categorizedRejects = 0;
 
 for (i=0; i<fileCount; ++i)
     {
@@ -181,7 +225,26 @@ for (i=0; i<fileCount; ++i)
 	}
     mafFileFree(&mf);
     }
-fprintf(stderr, "rejected %d blocks\n", rejects);
+if (rejectMinCol)
+    fprintf(stderr, "rejected minCol: %d\n", rejectMinCol);
+if ( rejectMinRow)
+    fprintf(stderr, "rejected minRow: %d\n", rejectMinRow);
+if ( rejectMinScore)
+    fprintf(stderr, "rejected minScore: %d\n", rejectMinScore);
+if (rejectMinFactor)
+    fprintf(stderr, "rejected minFactor: %d\n", rejectMinFactor);
+if (rejectNeedComp)
+    fprintf(stderr, "rejected needComp: %d\n", rejectNeedComp);
+if (rejectComponentFilter)
+    fprintf(stderr, "rejected componentFilter: %d\n", rejectComponentFilter);
+if ( rejectOverlap)
+    fprintf(stderr, "rejected overlap: %d\n", rejectOverlap);
+categorizedRejects = rejectMinCol + rejectMinRow + rejectMinScore +
+                     rejectMinFactor + rejectNeedComp + rejectComponentFilter +
+                     rejectOverlap;
+if (rejects != categorizedRejects)
+    fprintf(stderr, "uncategorized rejects: %d\n",rejects - categorizedRejects);
+fprintf(stderr, "total rejected: %d blocks\n", rejects);
 }
 
 int main(int argc, char *argv[])
