@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.288 2006/07/19 22:33:01 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.289 2006/07/25 23:34:15 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1578,18 +1578,6 @@ else
 
 }
 
-#define NET_OPT_TOP  "netTopOnly"
-
-void netUi(struct trackDb *tdb)
-/* UI for net track */
-{
-char option[64];
-safef(option, sizeof option, "%s.%s", tdb->tableName, NET_OPT_TOP);
-puts("<P>");
-cgiMakeCheckBox(option, cartUsualBoolean(cart, option, FALSE));
-puts("<B>&nbsp; Show top-level only</B>");
-}
-
 void wigUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
@@ -2253,8 +2241,6 @@ else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
         || sameString(track, "blastHg18KG")
         || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
-else if (startsWith("netAlign", tdb->type))
-        netUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
 	wigUi(tdb);
 else if (startsWith("wig", tdb->type))

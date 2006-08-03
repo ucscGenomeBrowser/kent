@@ -10,6 +10,7 @@
 #include "web.h"
 #include "customTrack.h"
 #include "hgTracks.h"
+#include "hgConfig.h"
 
 void textSizeDropDown()
 /* Create drop down for font size. */
@@ -19,6 +20,30 @@ cartUsualString(cart, textSizeVar, "small");
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
+void printGroupListHtml(struct group *groupList, char *defaultGroup)
+/* Make an HTML select input listing the groups. */
+{
+char *groups[128];
+char *labels[128];
+char *defaultLabel = NULL;
+int numGroups = 0;
+static char *groupCgiName = "group";
+struct group *group = NULL;
+
+for (group = groupList; group != NULL; group = group->next)
+    {
+    groups[numGroups] = group->name;
+    labels[numGroups] = group->name;
+    if (sameWord(defaultGroup, groups[numGroups]))
+	defaultLabel = labels[numGroups];
+    numGroups++;
+    if (numGroups >= ArraySize(groups))
+	internalErr();
+    }
+
+cgiMakeDropListFull(groupCgiName, labels, groups, numGroups, 
+		    defaultLabel, NULL);
+}
 
 void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
@@ -76,12 +101,18 @@ for (group = groupList; group != NULL; group = group->next)
 	   configDefaultAll, "default", configGroupTarget, group->name);
     hPrintf(" ");
     cgiMakeButton("submit", "submit");
+    hPrintf("&nbsp;&nbsp;&nbsp;");
+    hPrintf("&nbsp;&nbsp;&nbsp;");
+    hPrintf(wrapWhiteFont(" Track Order: "));
     hPrintf("</TH>\n");
     if (withPriorityOverride)
         {
         hPrintf("<TH>\n");
         safef(pname, sizeof(pname), "%s.priority",group->name);
         hDoubleVar(pname, (double)group->priority, 4);
+        hPrintf("</TH>\n");
+        hPrintf("<TH align=LEFT BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group"));
+        hPrintf("&nbsp;&nbsp;&nbsp;");
         hPrintf("</TH>\n");
         }
     hPrintf("</TR>\n");
@@ -102,6 +133,9 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("</TD>");
         if (withPriorityOverride)
             {
+            hPrintf("<TD>");
+            hPrintf("");
+            hPrintf("</TD>");
             hPrintf("<TD>");
             hPrintf("");
             hPrintf("</TD>");
@@ -142,6 +176,9 @@ for (group = groupList; group != NULL; group = group->next)
             safef(pname, sizeof(pname), "%s.priority",track->mapName);
             hDoubleVar(pname, (double)track->priority, 4);
             hPrintf("</TD>");
+            hPrintf("<TD>\n");
+            printGroupListHtml(groupList, track->group->name);
+            hPrintf("</TD>");
             }
 	hPrintf("</TR>\n");
 	}
@@ -160,6 +197,7 @@ char *groupTarget = NULL;
 struct track *trackList =  NULL;
 struct track *ideoTrack = NULL;
 struct group *groupList = NULL;
+char *trackReordering = cfgOption("hgTracks.trackReordering");
 
 /* Get track list and group them. */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
@@ -236,11 +274,14 @@ hCheckBox("nextItemArrows", cartUsualBoolean(cart, "nextItemArrows", FALSE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous item navigation");
 hPrintf("</TD></TR>\n");
-hPrintf("<TR><TD>");
-hCheckBox("priorityOverride", cartUsualBoolean(cart, "priorityOverride", FALSE));
-hPrintf("</TD><TD>");
-hPrintf("Enable Track re-ordering");
-hPrintf("</TD></TR>\n");
+if (trackReordering != NULL && sameString(trackReordering,"on"))
+    {
+    hPrintf("<TR><TD>");
+    hCheckBox("priorityOverride", cartUsualBoolean(cart, "priorityOverride", FALSE));
+    hPrintf("</TD><TD>");
+    hPrintf("Enable Track re-ordering");
+    hPrintf("</TD></TR>\n");
+    }
 hTableEnd();
 
 webNewSection("Configure Tracks");

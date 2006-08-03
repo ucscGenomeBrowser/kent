@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.188 2006/07/19 19:07:01 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.189 2006/07/26 23:19:06 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2851,18 +2851,23 @@ char *sqlRangeExp =
 		     "[[:space:]]*\\|[[:space:]]*"
 		     "([0-9,]+)$";
 
-static boolean chimpSpecialChrom(struct hgPositions *hgp, char **term)
+static boolean chimpSpecialChrom(struct hgPositions *hgp, char **term, 
+                                        char *hgAppName)
 /* special handling for newer chimp assemblies to warn user
  * that chr2 is gone, and set default position */
 {
+char *msg = "No chr2 or chr23 in newer chimp assemblies: see <A TARGET=_BLANK HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download25\">Chimp Chromosome Numbering</A>";
+
 if (isNewChimp(hgp->database))
     {
     if (sameString("chr2", *term) || startsWith("chr2:", *term) ||
         sameString("chr23", *term) || startsWith("chr23:", *term))
         {
-        warn("No chr2 or chr23 in newer chimp assemblies: see %s",
-    "<A TARGET=_BLANK HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download25\">Chimp Chromosome Numbering</A>");
         *term = hDefaultPos(hgp->database);
+        if (endsWith(hgAppName, "hgTables"))
+            errAbort(msg);
+        else
+            warn(msg);
         return TRUE;
         }
     }
@@ -2896,7 +2901,7 @@ if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
-chimpSpecialChrom(hgp, &term);
+chimpSpecialChrom(hgp, &term, hgAppNameIn);
 
 /* Allow any search term to end with a :Start-End range -- also support stuff 
  * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
