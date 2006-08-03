@@ -221,7 +221,7 @@ if (sameString(groupTarget, "none"))
 
 dyStringPrintf(title, "Configure Image");
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
-webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, "", title->string, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);
 
 hPrintf(" image width: ");

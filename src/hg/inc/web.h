@@ -22,11 +22,16 @@ void webStartWrapper(struct cart *theCart, char *format, va_list args, boolean w
 	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapperDetailed(struct cart *theCart, char *headerText,
+void webStartWrapperDetailedArgs(struct cart *theCart, char *headerText,
 	char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
 /* output a CGI and HTML header with the given title in printf format with
- * quite a few options. */
+ * quite a few options.  See also next: */
+void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
+	char *format, boolean withHttpHeader,
+	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader);
+/* output a CGI and HTML header with the given title in printf format with
+ * quite a few options.  Same as above without va_list args */
 
 void webNewSection(char* format, ...);
 /* create a new section on the web page */

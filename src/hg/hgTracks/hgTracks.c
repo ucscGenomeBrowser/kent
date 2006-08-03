@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1178 2006/08/03 18:29:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1179 2006/08/03 18:41:33 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13219,7 +13219,7 @@ char *defaultChrom = hDefaultChrom();
 struct dyString *title = dyStringNew(512);
 dyStringPrintf(title, "%s %s (%s) Browser Sequences",
 	       hOrganism(database), hFreezeFromDb(database), database);
-webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, "", title->string, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
 

@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.93 2006/07/22 03:15:09 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.94 2006/08/03 18:40:59 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -77,26 +77,16 @@ webInTextMode = TRUE;
 webPushErrHandlers();
 }
 
-void webStartWrapperDetailed(struct cart *theCart, char *headerText,
-	char *format, va_list args, boolean withHttpHeader,
-	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
+static void webStartWrapperDetailedInternal(struct cart *theCart,
+	char *headerText, char *format, char *textOutBuf,
+	boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader,
+	boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
-char textOutBuf[512];
-
-/* found that on x86_64, the args could only be used once in this safef
- * business.  If you tried to do this a second time, which was happening
- * in this code, it caused a SIGSEGV.
- * Also, if args==NULL, SIGSEGV on x86_64.
- */
-if (args == NULL)
-    safef(textOutBuf, sizeof(textOutBuf), format);
-else
-    vasafef(textOutBuf, sizeof(textOutBuf), format, args);
 
 if (theCart)
     db = cartOptionalString(theCart, "db");
@@ -337,13 +327,41 @@ if(!skipSectionHeader)
 webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
+}	/*	static void webStartWrapperDetailedInternal()	*/
+
+void webStartWrapperDetailedArgs(struct cart *theCart, char *headerText,
+	char *format, va_list args, boolean withHttpHeader,
+	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
+/* output a CGI and HTML header with the given title in printf format */
+{
+char textOutBuf[512];
+va_list argscp;
+
+va_copy(argscp,args);
+vasafef(textOutBuf, sizeof(textOutBuf), format, argscp);
+va_end(argscp);
+
+webStartWrapperDetailedInternal(theCart, headerText, format, textOutBuf,
+	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
+}
+
+void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
+	char *format, boolean withHttpHeader,
+	boolean withLogo, boolean skipSectionHeader, boolean withHtmlHeader)
+/* output a CGI and HTML header with the given title in printf format */
+{
+char textOutBuf[512];
+
+safef(textOutBuf, sizeof(textOutBuf), format);
+webStartWrapperDetailedInternal(theCart, headerText, format, textOutBuf,
+	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 
 void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
     char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo, boolean skipSectionHeader)
 {
-webStartWrapperDetailed(theCart, headerText, format, args, withHttpHeader,
+webStartWrapperDetailedArgs(theCart, headerText, format, args, withHttpHeader,
 	withLogo, skipSectionHeader, TRUE);
 }
 
