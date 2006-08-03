@@ -409,4 +409,13 @@ char *sqlVersion(struct sqlConnection *conn);
 
 int sqlMajorVersion(struct sqlConnection *conn);
 /* Return major version of database. */
+
+char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
+/* Return a name for a temporary table. Name will start with
+ * prefix.  This call doesn't actually  make table.  (So you should 
+ * make table before next call to insure uniqueness.)  However the
+ * table name encorperates the host, pid, and time, which helps insure
+ * uniqueness between different processes at least.  FreeMem the result
+ * when you are done. */
+
 #endif /* JKSQL_H */

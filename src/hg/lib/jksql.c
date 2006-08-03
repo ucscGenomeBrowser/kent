@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.90 2006/07/01 05:02:05 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.91 2006/08/03 18:03:34 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1865,4 +1865,23 @@ carefulClose(&f);
 return count;
 }
 
+char *sqlTempTableName(struct sqlConnection *conn, char *prefix)
+/* Return a name for a temporary table. Name will start with
+ * prefix.  This call doesn't actually  make table.  (So you should 
+ * make table before next call to insure uniqueness.)  However the
+ * table name encorperates the host, pid, and time, which helps insure
+ * uniqueness between different processes at least.  FreeMem the result
+ * when you are done. */
+{
+int i;
+char tableName[PATH_LEN];
+for (i=0; ;i++)
+    {
+    char *x = semiUniqName(prefix);
+    safef(tableName, sizeof(tableName), "%s%d", x, i);
+    if (!sqlTableExists(conn, tableName))
+        break;
+    }
+return cloneString(tableName);
+}
 
