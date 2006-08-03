@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.22 2006/08/01 23:40:14 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.23 2006/08/03 16:44:23 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -156,6 +156,7 @@ hTableStart();
 cgiSimpleTableRowStart();
 tableHeaderField("Name", NULL);
 tableHeaderField("Description", NULL);
+tableHeaderField("Type", NULL);
 tableHeaderFieldStart();
 cgiMakeButton(hgCtDoDelete, "Del");
 tableHeaderField("Doc", "HTML track description");
@@ -165,17 +166,24 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    printf("<TR><TD>%s</TD><TD>%s</TD><TD ALIGN=CENTER>", 
-            ct->tdb->shortLabel, ct->tdb->longLabel);
+    printf("<TR><TD>%s</TD><TD>%s</TD><TD>",  
+                ct->tdb->shortLabel, ct->tdb->longLabel);
+    printf("%s", ct->tdb->type ? firstWordInLine(cloneString(ct->tdb->type)) : "");
+    puts("</TD><TD ALIGN=CENTER>");
     safef(option, sizeof(option), "%s_%s", hgCtDeletePrefix, 
             ct->tdb->tableName);
     cgiMakeCheckBox(option, FALSE);
     printf("</TD><TD ALIGN='CENTER'>%s", ct->tdb->html ? "X" : "&nbsp");
-    printf("</TD><TD ALIGN='CENTER'>%d", slCount(ct->bedList));
-    printf("</TD><TD><A HREF='%s?%s&position=%s:%d-%d'>%s:</A>", 
+    if (ct->bedList)
+        {
+        printf("</TD><TD ALIGN='CENTER'>%d", slCount(ct->bedList));
+        printf("</TD><TD><A HREF='%s?%s&position=%s:%d-%d'>%s:</A>", 
             hgTracksName(), cartSidUrlString(cart),
             ct->bedList->chrom, ct->bedList->chromStart, ct->bedList->chromEnd,
             ct->bedList->chrom);
+        }
+    else
+        puts("</TD><TD></TD><TD>&nbsp;");
     puts("</TD></TR>");
     }
 hTableEnd();
