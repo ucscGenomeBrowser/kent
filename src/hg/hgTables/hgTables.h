@@ -663,9 +663,6 @@ void wigShowFilter(struct sqlConnection *conn);
 /* print out wiggle data value filter */
 
 /* ----------- Custom track stuff. -------------- */
-boolean isCustomTrack(char *table);
-/* Return TRUE if table is a custom track. */
-
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
 
