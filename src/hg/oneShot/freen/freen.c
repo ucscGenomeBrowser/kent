@@ -4,9 +4,13 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "hash.h"
+#include "jksql.h"
+#include "hdb.h"
 #include "customPp.h"
+#include "customTrack.h"
+#include "customFactory.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.69 2006/07/26 06:10:21 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.70 2006/08/03 18:06:03 kent Exp $";
 
 void usage()
 {
@@ -17,27 +21,23 @@ errAbort("freen - test some hairbrained thing.\n"
 int level = 0;
 
 
-void freen(char *fileName)
+void freen(char *inFile, char *outFile)
 /* Test some hair-brained thing. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct customPp *cpp = customPpNew(lf);
-char *line;
-struct slName *list, *el;
-while ((line = customPpNext(cpp)) != NULL)
-    puts(line);
-printf("---- browser lines ----\n");
-list = customPpTakeBrowserLines(cpp);
-customPpFree(&cpp);
-for (el = list; el != NULL; el = el->next)
-    puts(el->name);
+hSetDb("hg18");
+struct slName *bLines = NULL, *b;
+struct customTrack *track, *trackList = customFactoryParse(inFile, TRUE, &bLines);
+carefulCheckHeap();
+customTrackSave(trackList, outFile);
+carefulCheckHeap();
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2)
+pushCarefulMemHandler(1000000*1024L);
+if (argc != 3)
    usage();
-freen(argv[1]);
+freen(argv[1], argv[2]);
 return 0;
 }
