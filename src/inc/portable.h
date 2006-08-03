@@ -68,6 +68,12 @@ struct tempName
 void makeTempName(struct tempName *tn, char *base, char *suffix);
 /* Make a good name for a temp file. */
 
+char *semiUniqName(char *base);
+/* Figure out a name likely to be unique.
+ * Name will have no periods.  Returns a static
+ * buffer, so best to clone result unless using
+ * immediately. */
+
 char *cgiDir();
 /* Return directory to look for cgi in. */
 

@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.29 2006/06/08 23:55:59 galt Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.30 2006/08/03 18:07:16 kent Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -259,27 +259,40 @@ if (!gotIt)
 return host;
 }
 
+char *semiUniqName(char *base)
+/* Figure out a name likely to be unique.
+ * Name will have no periods.  Returns a static
+ * buffer, so best to clone result unless using
+ * immediately. */
+{
+int pid = getpid();
+int num = time(NULL)&0xFFFFF;
+char host[512];
+strcpy(host, getHost());
+char *s = strchr(host, '.');
+if (s != NULL)
+     *s = 0;
+subChar(host, '-', '_');
+static char name[PATH_LEN];
+safef(name, sizeof(name), "%s_%s_%x_%x",
+	base, host, pid, num);
+return name;
+}
+
 char *rTempName(char *dir, char *base, char *suffix)
 /* Make a temp name that's almost certainly unique. */
 {
-int pid = getpid();
-int num = time(NULL);
-static char fileName[512];
-char host[512];
-char *s;
-
-strcpy(host, getHost());
-s = strchr(host, '.');
-if (s != NULL)
-     *s = 0;
-for (;;)
-   {
-   safef(fileName, sizeof(fileName), "%s/%s_%s_%d_%d%s",
-	 dir, base, host, pid, num, suffix);
-   if (!fileExists(fileName))
-       break;
-   num += 1;
-   }
+char *x;
+static char fileName[PATH_LEN];
+int i;
+for (i=0;;++i)
+    {
+    x = semiUniqName(base);
+    safef(fileName, sizeof(fileName), "%s/%s%d%s",
+    	dir, x, i, suffix);
+    if (!fileExists(fileName))
+        break;
+    }
 return fileName;
 }
 
