@@ -14,8 +14,6 @@ struct customPp
 /* Custom track preprocessor. */
     {
     struct customPp *next;	 /* Next customPp in list */
-    struct slName *toReuse;	 /* List of lines we process again */
-    struct slName *doneReuse;	 /* Lines we've already reused */
     struct lineFile *fileStack;  /* Keep track of files we're included from */
     struct slName *browserLines; /* Lines seen so far that start w/ browser */
     };
@@ -33,7 +31,7 @@ char *customPpNextReal(struct customPp *cpp);
 /* Return next line that's nonempty and non-space. */
 
 void customPpReuse(struct customPp *cpp, char *line);
-/* Reuse line.  May be called repeatedly */
+/* Reuse line.  May be called only once before next customPpNext/NextReal */
 
 struct slName *customPpTakeBrowserLines(struct customPp *cpp);
 /* Grab browser lines from cpp, which will no longer have them. */

@@ -29,8 +29,6 @@ struct customPp *cpp = *pCpp;
 if (cpp)
     {
     lineFileCloseList(&cpp->fileStack);
-    slFreeList(&cpp->toReuse);
-    freeMem(cpp->doneReuse);
     slFreeList(&cpp->browserLines);
     }
 }
@@ -40,23 +38,7 @@ char *customPpNext(struct customPp *cpp)
 {
 struct lineFile *lf;
 
-/* If there's a line to reuse, move that line off of toReuse and
- * onto doneReuse.  Free whatever used to be on doneReuse.  This
- * little bit of complexity makes it so that the reuse lines don't
- * indefinitely take up memory, but the line is still available in
- * unfreed memory on return from this function call until the next 
- * call. */
-if (cpp->toReuse)
-    {
-    struct slName *n;
-    freeMem(cpp->doneReuse);
-    cpp->doneReuse = n = cpp->toReuse;
-    cpp->toReuse = n->next;
-    n->next = NULL;
-    return n->name;
-    }
-
-/* Otherwise get next line from file on top of stack.  If at EOF
+/* Get next line from file on top of stack.  If at EOF
  * go to next file in stack.  If get a http:// or ftp:// line
  * open file this references and push it onto stack. Meanwhile
  * squirrel away 'browser' lines. */
@@ -107,9 +89,9 @@ for (;;)
 }
 
 void customPpReuse(struct customPp *cpp, char *line)
-/* Reuse line.  May be called repeatedly */
+/* Reuse line.  May be called only once before next customPpNext/NextReal */
 {
-slNameAddHead(&cpp->toReuse, line);
+lineFileReuse(cpp->fileStack);
 }
 
 struct slName *customPpTakeBrowserLines(struct customPp *cpp)

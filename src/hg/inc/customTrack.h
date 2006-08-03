@@ -16,7 +16,7 @@
 #define CT_PREFIX       "ct_"
 
 struct customTrack
-/* A custom track. */
+/* A custom track.  */
     {
     struct customTrack *next;	/* Next in list. */
     struct trackDb *tdb;	/* TrackDb description of track. */
@@ -38,17 +38,6 @@ struct customTrack
     char *groupName;		/* Group name if any. */
     };
 
-struct customTrack *customTracksFromText(char *text);
-/* Parse text into a custom set of tracks. */
-
-struct customTrack *customTracksFromFile(char *text);
-/* Parse file into a custom set of tracks. */
-
-struct customTrack *customTracksParse(char *text, boolean isFile, 
-	struct slName **retBrowserLines);
-/* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.  If retBrowserLines is non-null
- * then it will return a list of lines starting with the word "browser". */
 
 struct customTrack *customTracksParseCart(struct cart *cart,
 					  struct slName **retBrowserLines,
@@ -58,6 +47,8 @@ struct customTrack *customTracksParseCart(struct cart *cart,
  * If retBrowserLines is non-null then it will return a list of lines 
  * starting with the word "browser".  If retCtFileName is non-null then 
  * it will return the custom track filename. */
+
+/* Another method of creating customTracks is customFactoryParse. */
 
 void customTrackSave(struct customTrack *trackList, char *fileName);
 /* Save out custom tracks. */
@@ -70,6 +61,11 @@ boolean customTrackNeedsLift(struct customTrack *trackList);
 
 struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx);
 /* Convert a row of strings to a bed. */
+
+struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
+	struct hash *chromHash, int lineIx);
+/* Convert a psl format row of strings to a bed. */
+
 
 char *customTrackTableFromLabel(char *label);
 /* Convert custom track short label to table name. */
@@ -85,13 +81,22 @@ boolean ctDbAvailable(char *tableName);
  *	and if tableName non-NULL, verify table exists
  */
 
+boolean ctDbUseAll();
+/* check if hg.conf says to try DB loaders for all incoming data tracks */
+
 void ctAddToSettings(struct trackDb *tdb, char *format, ...);
 /*	add a variable to tdb->settings string	*/
 
 void customTrackTrashFile(struct tempName *tn, char *suffix);
 /*	obtain a customTrackTrashFile name	*/
 
+struct trackDb *customTrackTdbDefault();
+/* Return default custom table: black, dense, etc. */
+
 boolean isCustomTrack(char *track);
 /* determine if track name refers to a custom track */
+
+void  customTrackDump(struct customTrack *track);
+/* Write out info on custom track to stdout */
 
 #endif
