@@ -24,6 +24,10 @@
 #include "hCommon.h"
 #endif
 
+#ifndef CUSTOMTRACK_H
+#include "customTrack.h"
+#endif
+
 #ifndef GRP_H
 #include "grp.h"
 #endif
