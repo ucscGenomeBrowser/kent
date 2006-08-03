@@ -559,6 +559,24 @@ if (pl->options & pipelineRead)
 return exitCode;
 }
 
+void pipelineDumpCmds(char ***cmds)
+/* Dump out pipeline-formatted commands to stdout for debugging. */
+{
+char **cmd;
+boolean first = TRUE;
+while ((cmd = *cmds++) != NULL)
+   {
+   char *word;
+   if (first)
+      first = FALSE;
+   else
+      printf("| ");
+   while ((word = *cmd++) != NULL)
+       printf("%s ", word);
+   }
+printf("<BR>\n");
+}
+
 /*
  * Local Variables:
  * c-file-style: "jkent-c"

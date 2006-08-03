@@ -93,6 +93,9 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * object.  If pipelineWrite is specified, the input of the pipeline is
  * writable from the pipeline object. */
 
+void pipelineDumpCmds(char ***cmds);
+/* Dump out pipeline-formatted commands to stdout for debugging. */
+
 struct pipeline *pipelineOpenMem(char ***cmds, unsigned opts,
                                  void *otherEndBuf, size_t otherEndBufSize,
                                  int stderrFd);
