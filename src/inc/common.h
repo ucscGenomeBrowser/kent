@@ -116,6 +116,9 @@
 
 #define BIGNUM 0x3fffffff	/* A really big number */
 
+#define LIMIT_2or8GB (2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)))
+/*      == 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
+
 /* Default size of directory path string buffers */
 #define PATH_LEN 512
 
