@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.40 2006/05/15 22:49:42 aamp Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.41 2006/08/03 00:52:55 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -71,6 +71,35 @@ if (zoomed)
         }
     }
 }
+
+static void drawDiffBaseTickmarks(struct vGfx *vg, 
+				  int chromStart, int chromEnd,
+				  double scale, int xOff, int y, int height,
+				  char *text, int maxPixels)
+/* Draw 1-pixel wide white vertical lines (tickmarks) where there are 
+ * differences recorded in text. */
+{
+int x1, x2, w;
+int i;
+
+x1 = round((double)(chromStart-winStart)*scale) + xOff;
+x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+if (x2 >= maxPixels)
+    x2 = maxPixels - 1;
+w = x2 - x1;
+if (w < 1)
+    w = 1;
+
+for (i=0; i < strlen(text); i++)
+    {
+    if (text[i] != ' ')
+	{
+	int thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
+	vgLine(vg, thisX, y+1, thisX, y+height-2, whiteIndex());
+	}
+    }
+}
+
 
 static int convertCoordUsingPsl( int s, struct psl *psl )
 /*return query position corresponding to target position in one 
@@ -925,8 +954,6 @@ if(mrnaS >= 0)
 
     if (e <= lf->tallEnd)
 	{
-
-	int mrnaGrayIx;
         boolean trueBool = TRUE;
         boolean *nullFoundStart = &trueBool;
         boolean startColor = FALSE;
@@ -939,15 +966,20 @@ if(mrnaS >= 0)
         if (isDiff)
 	        genomicColor = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, ixColor);
 
-	//re-set color of this block based on mrna seq rather tha
-	//than genomic, but keep the odd/even cycle of dark/light
-	//blue.
-        mrnaGrayIx = setColorByCds(tempStr,(grayIx > 26),nullFoundStart, FALSE);
-        if(color == cdsColor[CDS_START])
+	if (displayOption == CDS_DRAW_MRNA_CODONS ||
+	    displayOption == CDS_DRAW_DIFF_CODONS)
+	    {
+	    /* re-set color of this block based on mrna codons rather than
+	     * genomic, but keep the odd/even cycle of dark/light shades. */
+	    int mrnaGrayIx = setColorByCds(tempStr, (grayIx > 26),
+					   nullFoundStart, FALSE);
+	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
-	color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx, cdsColor, ixColor);
-        if(startColor && sameString(mrnaCodon,"M"))
+	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
+					    cdsColor, ixColor);
+	    if (startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
+	    }
         if(genomicInsertion)
                 textColor = color = cdsColor[CDS_GENOMIC_INSERTION];
 	}
@@ -975,14 +1007,22 @@ if(mrnaS >= 0)
 				    color, lf->score, font, retStrDy, 
                                     zoomedToBaseLevel, cdsColor, 
                                     winStart, maxPixels );
+	if (zoomedToCdsColorLevel && !zoomedToBaseLevel)
+	    drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
+				  retStrDy, maxPixels);
 	}
     else if (displayOption == CDS_DRAW_DIFF_CODONS)
 	{
 	if (mrnaCodon[0] != codon[0])
+	    {
 	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
 					heightPer, color, lf->score, font,
                                         mrnaCodon, zoomedToCodonLevel,
                                         cdsColor, winStart, maxPixels );
+	    if (zoomedToCdsColorLevel && !zoomedToCodonLevel)
+		drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
+				      " X ", maxPixels);
+	    }
 	else
 	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
 				color, lf->score );
@@ -1091,7 +1131,7 @@ if (!cdsColorsMade)
     cdsColorsMade = TRUE;
     }
    
-if(drawOptionNum>0 && zoomedToCodonLevel)
+if(drawOptionNum>0 && zoomedToCdsColorLevel)
     {
     if (startsWith("mrna", tg->mapName) || 
 	sameString(tg->mapName,"xenoMrna") ||
