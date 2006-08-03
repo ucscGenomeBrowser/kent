@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.130 2006/07/28 21:35:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.131 2006/08/03 18:02:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1255,10 +1255,10 @@ void doOutPrimaryTable(char *table, struct sqlConnection *conn)
 {
 if (anySubtrackMerge(database, table))
     errAbort("Can't do all fields output when subtrack merge is on. "
-    "Please go back and select another output type, or clear the subtrack merge.");
+    "Please go back and select another output type (BED or custom track is good), or clear the subtrack merge.");
 if (anyIntersection())
     errAbort("Can't do all fields output when intersection is on. "
-    "Please go back and select another output type, or clear the intersection.");
+    "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
 textOpen();
 tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
 }
