@@ -13,8 +13,9 @@
 #include "hdb.h"
 #include "featureBits.h"
 #include "hgTables.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.35 2006/02/07 20:38:12 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.36 2006/08/03 18:46:00 hiram Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
