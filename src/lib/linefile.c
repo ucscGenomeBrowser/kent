@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.47 2006/07/26 17:45:28 baertsch Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.48 2006/08/04 17:50:10 markd Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -130,7 +130,7 @@ testName=getFileNameFromHdrSig(testbytes);
 freez(&testbytes);
 if (!testName)
     return NULL;  /* avoid error from pipeline */
-pl = pipelineOpen1(getDecompressor(fileName), pipelineRead, fileName);
+pl = pipelineOpen1(getDecompressor(fileName), pipelineRead, fileName, NULL);
 lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;
