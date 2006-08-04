@@ -9,10 +9,11 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.33 2006/06/16 20:54:22 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.34 2006/08/04 23:37:45 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
+static char *mapGroup = NULL;
 
 static struct hash *ctgPosHash = NULL;
 static struct hash *contigCoords = NULL;
@@ -31,7 +32,7 @@ void usage()
 errAbort(
     "snpContigLocFilter - filter the ContigLoc table\n"
     "usage:\n"
-    "    snpContigLocFilter snpDb contigGroup\n");
+    "    snpContigLocFilter snpDb contigGroup mapGroup\n");
 }
 
 void loadCtgPos()
@@ -134,10 +135,11 @@ struct hashEl *hel = NULL;
 weightHash = newHash(16);
 
 verbose(1, "hashing MapInfo...\n");
-safef(query, sizeof(query), "select snp_id, weight from MapInfo");
+safef(query, sizeof(query), "select snp_id, weight, assembly from MapInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (!sameString(row[2],  mapGroup)) continue;
     hel = hashLookup(weightHash, row[0]);
     // storing weight as a string
     if (hel == NULL)
@@ -273,11 +275,12 @@ int main(int argc, char *argv[])
 {
 struct sqlConnection *conn ;
 
-if (argc != 3)
+if (argc != 4)
     usage();
 
 snpDb = argv[1];
 contigGroup = argv[2];
+mapGroup = argv[3];
 hSetDb(snpDb);
 
 /* check for needed tables */
