@@ -2520,7 +2520,7 @@ done
     # using mrna table as genes:
     mkdir genes
 
-    for qDB in danRer4
+    for qDB in danRer3
     do
       tmpExt=`mktemp temp.XXXXXX`
       tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
@@ -2542,18 +2542,13 @@ done
       mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
       rm -f $tmpExt
     done
-    #	tried to use monDom4 in the above loop, but got this error:
-    #	(450211944 450214274) out of range (0 400000000) in binKeeperAdd
-    #	Which is interesting.  This should be looked into to see why
-    #	this is here.
 
     # using knownGene for rn4 mm8 hg18
     # using refGene for galGal2
     # using mgcGenes for xenTro2
-    # no genes for monDom4 dasNov1 echTel1
+    # using ensGene for monDom4
     # genePreds; (must keep only the first 10 columns for knownGene)
-    for qDB in rn4 mm8 hg18 galGal2 xenTro2
-    for qDB in monDom4
+    for qDB in rn4 mm8 hg18 galGal2 xenTro2 monDom4
     do
       if [ $qDB = "xenTro2" ]; then
         geneTbl=mgcGenes
@@ -2587,12 +2582,13 @@ do
 	mm8 genes/mm8.gp.gz \
 	rn4 genes/rn4.gp.gz \
 	galGal2 genes/galGal2.gp.gz \
-	danRer4 genes/danRer4.gp.gz \
+	danRer3 genes/danRer3.gp.gz \
 	xenTro2 genes/xenTro2.gp.gz
 done > mkMafFrames.sh
 
     chmod +x mkMafFrames.sh
-    ./mkMafFrames.sh
+    time nice -n +19 ./mkMafFrames.sh
+    #	real    1m10.711s
     gzip mafFrames/*.maf
 
 
@@ -2602,7 +2598,7 @@ done > mkMafFrames.sh
     cd /cluster/data/monDom4/bed/multiz7way/frames
     time nice -n +19 hgLoadMafFrames monDom4 multiz7wayFrames \
 	mafFrames/*.maf.gz
-    #	real    0m15.102s
+    #	real    0m17.864s
 
     #	The use of this table requires an entry in the trackDb.ra for this:
     #	frames multiz7wayFrames
