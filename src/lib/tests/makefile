@@ -76,9 +76,10 @@ pipelineReadMem: ${BIN_DIR}/pipelineTester mkdirs
 pipelineExitCode: ${BIN_DIR}/pipelineTester
 	${BIN_DIR}/pipelineTester -exitCode=1 false
 
-# test redirecting stderr 
+# test redirecting stderr, see that two process can write stderr, but only
+# the second's stdout should make it to the end of the pipe
 pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"
+	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
 	diff expected/$@.out output/$@.out
 	diff expected/$@.err output/$@.err
 
