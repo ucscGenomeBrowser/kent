@@ -86,12 +86,14 @@ struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
  * writable from the pipeline object. */
 
 struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
-                              char *otherEndFile);
+                              char *otherEndFile, char *stderrFile);
 /* Create a pipeline from an array of commands.  Each command is an array of
  * arguments.  Shell expansion is not done on the arguments.  If pipelineRead
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
- * writable from the pipeline object. */
+ * writable from the pipeline object.  If stderrFile is NULL, stderr is inherited,
+ * otherwise it is redirected to this file.
+ */
 
 void pipelineDumpCmds(char ***cmds);
 /* Dump out pipeline-formatted commands to stdout for debugging. */
@@ -108,7 +110,7 @@ struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
 /* like pipelineOpenFd(), only takes a single command */
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
-                               char *otherEndFile);
+                               char *otherEndFile, char *stderrFile);
 /* like pipelineOpen(), only takes a single command */
 
 struct pipeline *pipelineOpenMem1(char **cmd, unsigned opts,

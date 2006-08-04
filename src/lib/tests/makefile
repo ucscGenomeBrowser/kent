@@ -36,9 +36,7 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
-		pipelineExitCode
-
-
+		pipelineExitCode pipelineWriteErr
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
@@ -77,6 +75,12 @@ pipelineReadMem: ${BIN_DIR}/pipelineTester mkdirs
 
 pipelineExitCode: ${BIN_DIR}/pipelineTester
 	${BIN_DIR}/pipelineTester -exitCode=1 false
+
+# test redirecting stderr 
+pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
+	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"
+	diff expected/$@.out output/$@.out
+	diff expected/$@.err output/$@.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} $L
@@ -133,7 +137,6 @@ mimeBlat: ${BIN_DIR}/mimeTester mkdirs
 
 mimeSeries: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -sizeSeries=3000
-	
 
 ${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/htmlMimeTest htmlMimeTest.o ${MYLIBS} $L
@@ -180,7 +183,6 @@ ${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
 mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
 	${BIN_DIR}/mimeDecodeTest -cid -autoBoundary output < input/$@.txt
 	diff expected/noName1.html output/noName1.html
-		
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out

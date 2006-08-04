@@ -253,7 +253,7 @@ cmd1[7] = dyStringCannibalize(&tmpDy);
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
  */
-return pipelineOpen1(cmd1, pipelineWrite, "/dev/null");
+return pipelineOpen1(cmd1, pipelineWrite, "/dev/null", NULL);
 }
 
 static boolean bedFinish(struct customTrack *track, boolean dbRequested)
@@ -823,7 +823,7 @@ cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 cmd2[5] = "-pathPrefix=.";
 cmd2[6] = db;
 cmd2[7] = track->dbTableName;
-return pipelineOpen(cmds, pipelineWrite, "/dev/null");
+return pipelineOpen(cmds, pipelineWrite, "/dev/null", NULL);
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,

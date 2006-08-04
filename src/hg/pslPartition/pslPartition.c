@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslPartition.c,v 1.4 2005/07/09 20:02:19 markd Exp $";
+static char const rcsid[] = "$Id: pslPartition.c,v 1.5 2006/08/04 06:00:20 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -63,7 +63,7 @@ if (endsWith(pslFile, ".gz") || endsWith(pslFile, ".Z"))
 cmds[iCmd++] = sortCmd;
 cmds[iCmd++] = NULL;
 
-return pipelineOpen(cmds, pipelineRead, pslFile);
+return pipelineOpen(cmds, pipelineRead, pslFile, NULL);
 }
 
 struct pslInput *pslInputNew(char *pslFile)

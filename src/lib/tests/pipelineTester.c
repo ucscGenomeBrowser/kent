@@ -4,7 +4,7 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pipelineTester.c,v 1.3 2005/10/21 18:46:06 markd Exp $";
+static char const rcsid[] = "$Id: pipelineTester.c,v 1.4 2006/08/04 06:00:20 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -17,7 +17,8 @@ errAbort(
     "   pipelineTester [options] cmdArgs1 [cmdArgs2 ..]\n"
     "\n"
     "Each cmdArgs are a command and whitespace separated\n"
-    "arguments to pipe together\n"
+    "arguments to pipe together.  Within a cmdArgs, single or\n"
+    "double quote maybe used to quote words.\n"
     "\n"
     "Options:\n"
     "  -exitCode=n - run with no-abort and expect this error code,\n"
@@ -28,6 +29,7 @@ errAbort(
     "   to this file for verification.  For a write pipeline, data from this\n"
     "   file is written to the pipeline.\n"
     "  -otherEnd=file - file for other end of pipeline\n"
+    "  -stderr=file - file for stderr of pipeline\n"
     "  -fdApi - use the file descriptor API\n",
     msg);
 }
@@ -39,6 +41,7 @@ static struct optionSpec options[] =
     {"memApi", OPTION_BOOLEAN},
     {"pipeData", OPTION_STRING},
     {"otherEnd", OPTION_STRING},
+    {"stderr", OPTION_STRING},
     {"fdApi", OPTION_BOOLEAN},
     {NULL, 0},
 };
@@ -51,6 +54,7 @@ boolean isWrite = FALSE; /* make a write pipeline */
 boolean memApi = FALSE; /* test memory buffer API */
 char *pipeDataFile = NULL;   /* use for input or output to the pipeline */
 char *otherEndFile = NULL;   /* file for other end of pipeline */
+char *stderrFile = NULL;   /* file for other stderr of pipeline */
 
 int countOpenFiles()
 /* count the number of opens.  This is used to make sure no stray
@@ -67,13 +71,58 @@ for (fd = 0; fd < 64; fd++)
 return cnt;
 }
 
-char **splitCmd(char *cmdArgs)
-/* split a command and arguments into null termiated list */
+int mustOpenFd(char *fname, boolean isWrite)
+/* open a file, returning a descriptor or aborting */
 {
-int numWords = chopByWhite(cmdArgs, NULL, 0);
-char **words = needMem((numWords+1)*sizeof(char*));
+int fd = open(fname, (isWrite ? O_WRONLY|O_CREAT|O_TRUNC : O_RDONLY), 0777);
+if (fd < 0)
+    errnoAbort("open of %s failed", fname);
+return fd;
+}
 
-chopByWhite(cmdArgs, words, numWords);
+void mustCloseFd(int fd)
+/* close a file, abort on an error */
+{
+if (close(fd) < 0)
+    errnoAbort("close failed");
+}
+
+char *parseQuoted(char **spPtr, char *cmdArgs)
+/* parse a quoted string */
+{
+char *start = *spPtr;
+char quote = *start++;
+char *end = strchr(start, quote);
+if (end == NULL)
+    errAbort("no closing quote in: %s", cmdArgs);
+*spPtr = end+1;
+return cloneStringZ(start, end-start);
+}
+
+char **splitCmd(char *cmdArgs)
+/* split a command and arguments into null termiated list, handling quoting */
+{
+// this will get the maximum number of words, as it doesn't consider quoting
+int maxNumWords = chopByWhite(cmdArgs, NULL, 0);
+char **words = needMem((maxNumWords+1)*sizeof(char*));
+int iWord = 0;
+char *sp = skipLeadingSpaces(cmdArgs);
+
+while (*sp != '\0')
+    {
+    assert(iWord < maxNumWords);
+    if ((*sp == '"') || (*sp == '\''))
+        words[iWord++] = parseQuoted(&sp, cmdArgs);
+    else
+        {
+        char *end = skipToSpaces(sp);
+        if (end == NULL)
+            end = sp + strlen(sp);
+        words[iWord++] = cloneStringZ(sp, (end - sp));
+        sp = end;
+        }
+    sp = skipLeadingSpaces(sp);
+    }
 return words;
 }
 
@@ -136,37 +185,9 @@ carefulClose(&fh);
 return buf;
 }
 
-void runPipeline(int nCmdsArgs, char **cmdsArgs)
-/* pipeline tester */
+void runPipelineTest(struct pipeline *pl)
+/* execute and validate test once pipeline has been created */
 {
-unsigned options = (isWrite ? pipelineWrite : pipelineRead);
-char ***cmds;
-int exitCode, endOpenCnt;
-int startOpenCnt = countOpenFiles();
-int otherEndFd = -1;
-void *otherEndBuf = NULL;
-size_t otherEndBufSize = 0;
-struct pipeline *pl;
-
-if (noAbort)
-    options |= pipelineNoAbort;
-cmds = splitCmds(nCmdsArgs, cmdsArgs);
-
-if (fdApi)
-    {
-    otherEndFd = open(otherEndFile, (isWrite ? O_WRONLY|O_CREAT|O_TRUNC : O_RDONLY), 0777);
-    if (otherEndFd < 0)
-        errnoAbort("open of %s failed", otherEndFile);
-    pl = pipelineOpenFd(cmds, options, otherEndFd, STDERR_FILENO);
-    }
-else if (memApi)
-    {
-    otherEndBuf = loadMemData(otherEndFile, &otherEndBufSize);
-    pl = pipelineOpenMem(cmds, options, otherEndBuf, otherEndBufSize, STDERR_FILENO);
-    }
-else
-    pl = pipelineOpen(cmds, options, otherEndFile);
-
 /* if no data file is specified, we just let the pipeline run without
  * interacting with it */
 if (pipeDataFile != NULL)
@@ -176,23 +197,69 @@ if (pipeDataFile != NULL)
     else
         readTest(pl);
     }
-
-exitCode = pipelineWait(pl);
+int exitCode = pipelineWait(pl);
 if (exitCode != expectExitCode)
     errAbort("expected exitCode %d, got %d", expectExitCode, exitCode);
+}
+
+void pipelineTestFd(char ***cmds, unsigned options)
+/* test for file descriptor API */
+{
+int otherEndFd = mustOpenFd(otherEndFile, isWrite);
+int stderrFd = (stderrFile == NULL) ? STDERR_FILENO
+    : mustOpenFd(stderrFile, TRUE);
+struct pipeline *pl = pipelineOpenFd(cmds, options, otherEndFd, stderrFd);
+runPipelineTest(pl);
+pipelineFree(&pl);
+mustCloseFd(otherEndFd);
+if (stderrFile != NULL)
+    mustCloseFd(stderrFd);
+}
+
+void pipelineTestMem(char ***cmds, unsigned options)
+/* test for memory buffer API */
+{
+int stderrFd = (stderrFile == NULL) ? STDERR_FILENO
+    : mustOpenFd(stderrFile, TRUE);
+size_t otherEndBufSize = 0;
+void *otherEndBuf = loadMemData(otherEndFile, &otherEndBufSize);
+struct pipeline *pl = pipelineOpenMem(cmds, options, otherEndBuf, otherEndBufSize, stderrFd);
+runPipelineTest(pl);
+pipelineFree(&pl);
+freeMem(otherEndBuf);
+if (stderrFile != NULL)
+    mustCloseFd(stderrFd);
+}
+
+void pipelineTestFName(char ***cmds, unsigned options)
+/* test for file name API */
+{
+struct pipeline *pl = pipelineOpen(cmds, options, otherEndFile, stderrFile);
+runPipelineTest(pl);
+pipelineFree(&pl);
+}
+
+void pipelineTester(int nCmdsArgs, char **cmdsArgs)
+/* pipeline tester */
+{
+unsigned options = (isWrite ? pipelineWrite : pipelineRead);
+if (noAbort)
+    options |= pipelineNoAbort;
+int startOpenCnt = countOpenFiles();
+char ***cmds = splitCmds(nCmdsArgs, cmdsArgs);
 
 if (fdApi)
-    {
-    if (close(otherEndFd) < 0)
-        errnoAbort("close of otherEnd file descriptor failed");
-    }
+    pipelineTestFd(cmds, options);
+else if (memApi)
+    pipelineTestMem(cmds, options);
+else
+    pipelineTestFName(cmds, options);
 
-endOpenCnt = countOpenFiles();
 /* it's ok to have less open, as would happen if we read from stdin */
+int endOpenCnt = countOpenFiles();
 if (endOpenCnt > startOpenCnt)
     errAbort("started with %d files open, now have %d open", startOpenCnt,
              endOpenCnt);
-pipelineFree(&pl);
 }
 
 int main(int argc, char *argv[])
@@ -217,6 +284,7 @@ if (fdApi && (otherEndFile == NULL))
     errAbort("-fdApi requires -otherEndFile");
 if (memApi && (otherEndFile == NULL))
     errAbort("-memApi requires -otherEndFile");
-runPipeline(argc-1, argv+1);
+stderrFile = optionVal("stderr", NULL);
+pipelineTester(argc-1, argv+1);
 return 0;
 }

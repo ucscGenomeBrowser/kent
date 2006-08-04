@@ -6,7 +6,7 @@
 #include "pipeline.h"
 #include "textOut.h"
 
-static char const rcsid[] = "$Id: textOut.c,v 1.2 2006/04/25 00:00:04 angie Exp $";
+static char const rcsid[] = "$Id: textOut.c,v 1.3 2006/08/04 06:00:20 markd Exp $";
 
 static void textOutWarnHandler(char *format, va_list args)
 /* Text mode error message handler. */
@@ -139,7 +139,7 @@ else
 
     /* Redirect stdout to compressor pipeline object. */
     compressPipeline = pipelineOpen1(getCompressor(compressType),
-				     pipelineWrite, NULL);
+				     pipelineWrite, NULL, NULL);
     if (-1 == dup2(pipelineFd(compressPipeline), STDOUT_FILENO))
 	errnoAbort("dup2(pipelineFd %d, stdout %d) failed in textOpen()",
 		   pipelineFd(compressPipeline), STDOUT_FILENO);

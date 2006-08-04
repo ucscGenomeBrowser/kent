@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.189 2006/07/26 23:19:06 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.190 2006/08/04 06:00:19 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -382,7 +382,7 @@ if (keyCount > 0)
 	extraOptions = "";
     makeCmds(cmds, keyWords, keyCount, extraOptions);
 
-    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile);
+    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile, NULL);
     lf = pipelineLineFile(pl);
     verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
 	    indexFile, pipelineDesc(pl));

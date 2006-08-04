@@ -7,7 +7,7 @@
 #include "pipeline.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadMafFrames.c,v 1.1 2005/10/07 05:21:19 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadMafFrames.c,v 1.2 2006/08/04 06:00:20 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -36,7 +36,7 @@ void processFrameFiles(char *tabFile, int numFramesFiles, char **framesFiles)
 /* sort by chrom location, accounting for bin column */
 static char *cmd[] = {"sort", "-k", "2,2", "-k", "3,3n", NULL};
 int i;
-struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite, tabFile);
+struct pipeline *pl = pipelineOpen1(cmd, pipelineWrite, tabFile, NULL);
 FILE *sortFh = pipelineFile(pl);
 
 for (i = 0; i < numFramesFiles; i++)
