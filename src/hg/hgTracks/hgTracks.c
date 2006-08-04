@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1179 2006/08/03 18:41:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1180 2006/08/04 19:46:58 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4934,7 +4934,9 @@ tg->loadItems = oligoMatchLoad;
 tg->itemName = oligoMatchName;
 tg->mapItemName = oligoMatchName;
 tg->priority = 99;
+tg->defaultPriority = 99;
 tg->groupName = "map";
+tg->defaultGroupName = "map";
 tdb->tableName = tg->mapName;
 tdb->shortLabel = tg->shortLabel;
 tdb->longLabel = tg->longLabel;
