@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.19 2006/03/09 04:17:12 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.20 2006/08/04 17:13:00 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -175,6 +175,11 @@ getDataFromFasta("Multi");
 createTable("Multi");
 loadDatabase("Multi");
 addIndex("Multi");
+
+getDataFromFasta("Un");
+createTable("Un");
+loadDatabase("Un");
+addIndex("Un");
 
 carefulClose(&errorFileHandle);
 return 0;
