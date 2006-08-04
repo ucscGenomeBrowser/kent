@@ -21,7 +21,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.27 2006/06/26 22:50:22 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.28 2006/08/04 17:04:31 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -227,7 +227,7 @@ if (sameString(class, "single") && loc_type == 2 && strlen(refUCSC) == 1)
     return;
     }
 
-if (sameString(class, "deletion") && loc_type == 1)
+if (sameString(class, "deletion"))
     {
     subString = cloneString(observed);
     subString = subString + 2;
