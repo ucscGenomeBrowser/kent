@@ -197,6 +197,7 @@ struct group
     char *name;		   /* Symbolic name. */
     char *label;	   /* User visible name. */
     float priority;        /* Display order, 0 is on top. */
+    float defaultPriority; /* original priority before reordering */
     struct trackRef *trackList;  /* List of tracks. */
     };
 
