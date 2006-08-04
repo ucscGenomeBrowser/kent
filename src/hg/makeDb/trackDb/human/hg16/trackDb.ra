@@ -666,7 +666,7 @@ type bed 4 +
 
     track cnpSharp
     subTrack cnp 
-    shortLabel CNPs (Sharp) 
+    shortLabel Sharp CNPs 
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
     noInherit on
     type bed 4 +
@@ -674,7 +674,7 @@ type bed 4 +
 
     track cnpIafrate
     subTrack cnp
-    shortLabel CNPs (Iafrate) 
+    shortLabel Iafrate CNPs 
     longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
     noInherit on
     type bed 4 +
@@ -682,7 +682,7 @@ type bed 4 +
 
     track cnpSebat
     subTrack cnp
-    shortLabel CNPs (Sebat) 
+    shortLabel Sebat CNPs 
     longLabel Copy Number Polymorphisms from ROMA (Sebat)
     noInherit on
     type bed 4 +
@@ -690,7 +690,7 @@ type bed 4 +
 
     track cnpFosmid
     subTrack cnp
-    shortLabel SV Fosmids (Tuzun)
+    shortLabel Tuzun Fosmids
     longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
     type bed 4 +
@@ -698,7 +698,7 @@ type bed 4 +
 
     track delMccarroll
     subTrack cnp
-    shortLabel Deletions (McCarroll)
+    shortLabel McCarroll Dels
     longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
     type bed 4 .
@@ -706,7 +706,7 @@ type bed 4 +
 
     track delConrad
     subTrack cnp
-    shortLabel Deletions (Conrad)
+    shortLabel Conrad Dels
     longLabel Deletions from Genotype Analysis (Conrad)
     noInherit on
     type bed 8 .
@@ -714,7 +714,7 @@ type bed 4 +
 
     track delHinds
     subTrack cnp
-    shortLabel Deletions (Hinds)
+    shortLabel Hinds Dels
     longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
     type bed 4 .
