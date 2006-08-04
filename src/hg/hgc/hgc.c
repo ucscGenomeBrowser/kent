@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1075 2006/08/03 18:18:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1076 2006/08/04 18:46:18 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6826,13 +6826,6 @@ if (url != NULL && url[0] != 0)
         }
     sqlFreeResult(&sr);
     
-    printf("<BR><B>Submitter: </B>");
-    safef(query, sizeof(query), "select submitter from gadAll where geneSymbol='%s';", itemName);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)printf("%s", row[0]);
-    sqlFreeResult(&sr);
-
     /* First list diseases associated with the gene */
     safef(query, sizeof(query), 
     "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' order by broadPhen;", 
