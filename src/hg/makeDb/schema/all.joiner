@@ -887,20 +887,12 @@ identifier stsAccession external=genbank typeOf=genbankAccession
 
 identifier bacEndNames 
 "Names for BAC end reads."
-    $gbd,!danRer3.all_bacends.qName dupeOk
+    $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $danRer.bacEndSingles.lfNames comma
     $danRer.bacEndPairsBad.lfNames comma
     $danRer.bacEndAlias.alias minCheck=0.55
     $hg.fishClones.beNames comma minCheck=0.70
-
-identifier danRerBacEndNames
-"Names for BAC end reads for danRer assemblies with split tables."
-    danRer3.allBacends.qName $split dupeOk
-    danRer3.bacEndPairs.lfNames comma
-    danRer3.bacEndSingles.lfNames comma
-    danRer3.bacEndPairsBad.lfNames comma
-    danRer3.bacEndAlias.alias minCheck=0.55
 
 identifier danRerBacExtName
 "External name for BAC clones." 
