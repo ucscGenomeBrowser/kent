@@ -44,6 +44,16 @@ color 12,12,120
 type genePred
 cdsDrawDefault genomic\ codons
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility dense
+color 34,139,34
+type genePred nscanPep
+cdsDrawDefault genomic\ codons
+
 track multiz6waySyn
 shortLabel Conservation 
 longLabel Human/Chimp/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments

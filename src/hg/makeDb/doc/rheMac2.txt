@@ -1203,3 +1203,33 @@ hgPepPred rheMac2  ensembl ensPep.fa
 grep pseudogene ensAll.gtf > ensPseudo.gtf
 grep -v protein_coding ensAll.gtf |grep -v pseudo > ensRna.gtf
 
+##########################################################################
+# N-SCAN gene predictions (nscanGene) - (2006-08-04 markd)
+    cd /cluster/data/rheMac2/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/rheMac2/chr_gtf
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/rheMac2/proteins
+    # clean up and rename downloaded directorys:
+    mv ardor.wustl.edu/jeltje/rheMac2/chr_gtf .
+    mv ardor.wustl.edu/jeltje/rheMac2/proteins chr_ptx
+    rm -rf ardor.wustl.edu
+    rm chr_*/index.html*
+    gzip chr_*/*
+    chmod a-w chr_*/*.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt rheMac2 nscanGene chr_gtf/chr*.gtf.gz
+    # add .a suffix to match transcript id
+
+    # add .a suffix to match transcript id
+    hgPepPred -suffix=.a rheMac2 generic nscanPep chr_ptx/chr*.fa.gz
+    rm *.tab
+
+    # update trackDb; need a rheMac2-specific page to describe informants
+    rhesus/rheMac2/nscanGene.html   (copy from panTro2 and edit)
+    rhesus/rheMac2/trackDb.ra
+
