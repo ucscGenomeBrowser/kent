@@ -101,8 +101,10 @@ for (group = groupList; group != NULL; group = group->next)
 	   configDefaultAll, "default", configGroupTarget, group->name);
     hPrintf(" ");
     cgiMakeButton("submit", "submit");
-    hPrintf("&nbsp;&nbsp;&nbsp;");
-    hPrintf("&nbsp;&nbsp;&nbsp;");
+    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
     hPrintf(wrapWhiteFont(" Track Order: "));
     hPrintf("</TH>\n");
     if (withPriorityOverride)
@@ -111,7 +113,7 @@ for (group = groupList; group != NULL; group = group->next)
         safef(pname, sizeof(pname), "%s.priority",group->name);
         hDoubleVar(pname, (double)group->priority, 4);
         hPrintf("</TH>\n");
-        hPrintf("<TH align=LEFT BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group"));
+        hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B> ", wrapWhiteFont("Group"));
         hPrintf("&nbsp;&nbsp;&nbsp;");
         hPrintf("</TH>\n");
         }
