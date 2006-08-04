@@ -28,6 +28,7 @@ install:
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
+	cp -p --remove-destination findLevel.csh           ${SCRIPTS}
 	cp -p --remove-destination findTableSize.csh       ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
