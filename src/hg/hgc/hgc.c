@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1076 2006/08/04 18:46:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1077 2006/08/04 22:43:46 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4596,7 +4596,7 @@ if (sameString("affyZebrafish", tdb->tableName))
         if (row != NULL)
             {
             printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
-            printf("<TR><TH ALIGN=left>Human %s Ortholog:</TH><TD>%s</TD></TR>\n", otherDb, row[0]);
+            printf("<TR><TH ALIGN=left><H2>Human %s Ortholog:</H2></TH><TD>%s</TD></TR>\n", otherDb, row[0]);
             printf("<TR><TH ALIGN=left>Ortholog Description:</TH><TD>%s</TD></TR>\n",row[1]);
             printf("</TABLE>\n");
             }
@@ -12578,20 +12578,27 @@ int end = cartInt(cart, "t");
 int count = 0;
 boolean foundStsResult = FALSE;
 
-/* query db to find the sanger STS name, relationship, uniSTSId and primers and print out */  
-sprintf(query, "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
-sr1 = sqlMustGetResult(conn1, query);
+/* query db to find the sanger STS name, relationship, uniSTSId and */
+/* primers and print out */  
+if (hTableExists("bacCloneXRef"))
+    {
+    sprintf(query, "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
+    sr1 = sqlMustGetResult(conn1, query);
+    }
 
 /* if no Sanger STS names for BAC clone, just print aliases */
 if (sr1 == NULL)
     {
     /* get aliases from bacCloneAlias and print */
-    sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
-    printf("<TR><TH ALIGN=left>BAC Clone Aliases:</TH><TD WIDTH=75%%>"); 
-    while ((row = sqlNextRow(sr)))
-      {
-      printf("%s, ", row[0]); 
-      }
+    if (hTableExists("bacCloneAlias"))
+        {
+        sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
+        printf("<TR><TH ALIGN=left>BAC Clone Aliases:</TH><TD WIDTH=75%%>"); 
+        while ((row = sqlNextRow(sr)))
+            {
+            printf("%s, ", row[0]); 
+            }
+        }
     }
 printBand(seqName, start, end, TRUE);
 printf("</TABLE>\n");
