@@ -20,7 +20,7 @@ set status=""
 
 if ( $#argv != 2 ) then
   echo
-  echo " searches trackDb heirarchy for your table and corresponding .html file"
+  echo " searches trackDb hierarchy for your table and corresponding .html file"
   echo " returns the lowest-level directory for each" 
   echo
   echo "    usage:  database tableName"
