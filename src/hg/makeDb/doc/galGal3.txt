@@ -107,9 +107,9 @@
 # REPEAT MASKING (DONE 5/15/06 angie)
 
     # RepeatMasker version and library version:
-#    May 3 2005 (open-3-1-0) version of RepeatMasker
-    cat /cluster/bluearc/RepeatMasker050305/Libraries/version
-#RepBase Update 9.11, RM database version 20050112
+#    March 20 2006 (open-3-1-5) version of RepeatMasker
+    grep RELEASE /cluster/bluearc/RepeatMasker060320/Libraries/RepeatMaskerLib.embl
+#CC   RELEASE 20060315;                                            *
 
     #- Split contigs into 500kb chunks, at gaps if possible:
     ssh kkstore03
@@ -1177,11 +1177,13 @@ rm -fr /scratch/tmp/${root1}_${root2}
 
 
 #########################################################################
-# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 7/13/06 angie)
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 7/13/06 angie - REDONE 8/4)
+# REDONE 8/4 after makeDownloads.pl was fixed to not try to include complete
+# paths in the tar files.
     ssh hgwdev
     cd /cluster/data/galGal3
     ~/kent/src/utils/makeDownloads.pl galGal3 -verbose=2 \
-      >& jkStuff/downloads.log
+      >& jkStuff/downloads.log & tail -f jkStuff/downloads.log
     # Edit README.txt files when done:
 # *** Edit each README.txt to resolve any notes marked with "***":
 #     /cluster/data/galGal3/goldenPath/database/README.txt
