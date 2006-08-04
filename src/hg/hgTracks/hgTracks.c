@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1180 2006/08/04 19:46:58 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1181 2006/08/04 21:20:17 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -590,6 +590,11 @@ for (group = groupList; group != NULL; group = group->next)
         {
         static char pname[512];
         static char gname[512];
+        /* if default vis then reset group priority */
+        if (changeVis == -1)
+            {
+            group->priority = group->defaultPriority;
+            }
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
 	    struct track *track = tr->track;
@@ -606,7 +611,6 @@ for (group = groupList; group != NULL; group = group->next)
                     safef(gname, sizeof(gname), "%s.group",track->mapName);
                     cartRemove(cart, gname);
                     track->groupName = cloneString(track->defaultGroupName);
-//                    track->group = NULL;
                     }
                 }
             else if (track->visibility != tvHide || !ifVisible)
@@ -11263,6 +11267,7 @@ track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;
 track->priority = tdb->priority;
+track->defaultPriority = tdb->priority;
 track->groupName = tdb->grp;
 track->canPack = tdb->canPack;
 if (tdb->useScore)
@@ -11831,8 +11836,16 @@ for (grp = grps; grp != NULL; grp = grp->next)
     group->label = cloneString(grp->label);
     if (withPriorityOverride)
         {
+        float priority = 0;
         safef(cartVar, sizeof(cartVar), "%s.priority",group->name);
-        group->priority = (float)cartUsualDouble(cart, cartVar, grp->priority);
+        priority = (float)cartUsualDouble(cart, cartVar, grp->priority);
+        if (abs(priority - group->priority) < 0.00001)
+            cartRemove(cart, cartVar);
+        else
+            {
+            group->defaultPriority = grp->priority;
+            group->priority = priority;
+            }
         }
     else
         group->priority = grp->priority;
