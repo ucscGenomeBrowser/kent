@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.4 2006/08/01 16:59:29 kent Exp $"
+#	"$Id: mm8.txt,v 1.5 2006/08/04 22:46:58 heather Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -6254,4 +6254,386 @@ EOF
    cat /cluster/data/superfamily/060619/ass_18-Jun-2006.tab \
    | hgKnownToSuper mm8 mm stdin
 # 26547 records output
+
+
+###########################################################################
+# dbSNP BUILD 126 (Heather, August 2006)
+
+# Set up directory structure
+ssh kkstore02
+cd /cluster/data/dbSNP/126/mouse
+mkdir mm8
+cd mm8
+mkdir data
+mkdir schema
+mkdir rs_fasta
+
+# Get data from NCBI (anonymous FTP)
+cd /cluster/data/dbSNP/126/mouse/mm8/data
+ftp ftp.ncbi.nih.gov
+cd snp/organisms/mouse_10090/database/organism_data
+# ContigLoc table has coords, orientation, loc_type, and refNCBI allele
+get b126_SNPContigLoc_36_1.bcp.gz
+# ContigLocusId has function
+get b126_SNPContigLocusId_36_1.bcp.gz
+get b126_ContigInfo_36_1.bcp.gz
+# MapInfo has alignment weights
+get b126_SNPMapInfo_36_1.bcp.gz
+# SNP has univar_id, validation status and heterozygosity
+get SNP.bcp.gz
+
+# Get schema from NCBI
+cd /cluster/data/dbSNP/126/mouse/mm8/schema
+ftp ftp.ncbi.nih.gov
+cd snp/organisms/mouse_10090/database/organism_schema
+get mouse_10090_table.sql.gz
+
+# Get fasta files from NCBI
+# using headers of fasta files for molType
+cd /cluster/data/dbSNP/126/mouse/mouse_10090/rs_fasta
+ftp ftp.ncbi.nih.gov
+cd snp/organisms/mouse_10090/rs_fasta
+prompt
+mget *.gz
+
+# Simplify names of data files
+cd /cluster/data/dbSNP/126/mouse/mm8/data
+mv b126_ContigInfo_36_1.bcp.gz ContigInfo.gz
+mv b126_SNPContigLoc_36_1.bcp.gz ContigLoc.gz
+mv b126_SNPContigLocusId_36_1.bcp.gz ContigLocusId.gz
+mv b126_SNPMapInfo_36_1.bcp.gz MapInfo.gz
+mv SNP.bcp.gz SNP.gz
+ls -1 *.gz > filelist
+
+# edit table descriptions
+cd /cluster/data/dbSNP/126/mouse/mm8/schema
+# get CREATE statements from mouse_10090_table.sql for our 5 tables
+# store in table.tmp
+# convert and rename tables
+sed -f 'mssqlToMysql.sed' table.tmp > table2.tmp
+rm table.tmp
+sed -f 'tableRename.sed' table2.tmp > table.sql
+rm table2.tmp
+
+# Get updated UniVariation table
+cd /cluster/data/dbSNP/126/shared
+ftp ftp.ncbi.nih.gov
+cd snp/database/shared_data
+get UniVariation.bcp.gz
+cd ../shared_schema
+get dbSNP_main_table.sql.gz
+# get UniVariation CREATE statement from dbSNP_main_table.sql
+# use mssqlToMysql.sed to convert 
+
+# get header lines from rs_fasta
+cd /cluster/data/dbSNP/126/mouse/mm8/rs_fasta
+/bin/csh gnl.csh
+
+# load on kkr5u00
+ssh kkr5u00
+hgsql -e mysql 'create database mm8snp126' 
+cd /cluster/data/dbSNP/126/mouse/mm8/schema
+hgsql mm8snp126 < table.sql
+cd ../data
+/bin/csh load.csh
+
+# note rowcount
+# ContigLoc     23811983 
+# SNP           10837184 
+# MapInfo       23570302 
+# ContigLocusId 10317095 
+
+cd /cluster/data/dbSNP/126/shared
+hgsql mm8snp126 < UniVariation.sql
+zcat UniVariation.bcp.gz | hgsql -e 'load data local infile "/dev/stdin" into table UniVariation' mm8snp126
+
+# create working /scratch dir
+cd /scratch/snp/126
+mkdir mouse
+cd mouse
+
+# get mm8 ctgPos, load into mm8snp126, compare contig list between ctgPos and ContigInfo
+# No issues in non-random
+# No PAR issues 
+
+# get gnl files
+cp /cluster/data/dbSNP/126/mouse/mm8/rs_fasta/*.gnl .
+
+# examine ContigInfo for group_term and edit pipeline.csh
+# use "ref_strain" 
+
+# filter ContigLoc into ContigLocFilter
+# this lifts from contig coords to chrom coords
+# phys_pos_from is used to check coords for non-random chroms
+# errors reported to stdout
+# this gets rid of alternate assemblies (using ContigInfo)
+# this also gets rid of poor quality alignments (weight == 10 || weight == 0 in MapInfo)
+# assumes all contigs are positively oriented; will abort if not true
+# Note for mouse we also screen on assembly = "C57BL/6J" in MapInfo
+
+mysql> desc ContigLocFilter;
+#  +---------------+-------------+------+-----+---------+-------+
+#  | Field         | Type        | Null | Key | Default | Extra |
+#  +---------------+-------------+------+-----+---------+-------+
+#  | snp_id        | int(11)     | NO   |     |         |       |
+#  | ctg_id        | int(11)     | NO   |     |         |       |
+#  | chromName     | varchar(32) | NO   |     |         |       |
+#  | loc_type      | tinyint(4)  | NO   |     |         |       |
+#  | start         | int(11)     | NO   |     |         |       |
+#  | end           | int(11)     | YES  |     | NULL    |       |
+#  | orientation   | tinyint(4)  | NO   |     |         |       |
+#  | allele        | blob        | YES  |     | NULL    |       |
+#  +---------------+-------------+------+-----+---------+-------+
+ 
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter mm8snp126 ref_strain
+# note rowcount
+# ContigLocFilter  7923033
+# how many are positive strand? hopefully 90%
+mysql> select count(*) from ContigLocFilter where orientation = 0;
+# 7779413
+# note count by loc_type
+mysql> select count(*), loc_type from ContigLocFilter group by loc_type;
+# +----------+----------+
+# | count(*) | loc_type |
+# +----------+----------+
+# |     2144 |        1 |
+# |  7903966 |        2 |
+# |    13105 |        3 |
+# |     1052 |        4 |
+# |      523 |        5 |
+# |     2243 |        6 |
+# +----------+----------+
+
+
+# filter ContigLocusId into ContigLocusIdFilter
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdFilter mm8snp126 ref_strain
+# note rowcount 
+# ContigLocusIdFilter  3484757
+
+# condense ContigLocusIdFilter into ContigLocusIdCondense (one SNP can have multiple functions)
+# assumes SNPs are in numerical order; will errAbort if not true
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense mm8snp126 
+# note rowcount; expect about 50% (ascertainment bias for SNPs within genes)
+# ContigLocusIdCondense 2789998 
+# could delete ContigLocusIdFilter table here
+
+# create chrN_snpFasta tables from *.gnl files
+# we are just using molType, but also storing class and observed
+# need chromInfo for this
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta mm8snp126 
+
+# (could start using pipeline.csh here)
+# (pipeline.csh takes about 35 minutes to run)
+
+# split ContigLocFilter by chrom 
+# create the first chrN_snpTmp
+# we will reuse this table name, adding/changing columns as we go
+# at this point chrN_snpTmp will have the same description as ContigLocFilter
+# this opens a file handle for every chrom, so will not scale to scaffold-based assemblies
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom mm8snp126 ref_strain
+
+# adjust coords using loc_type
+# possible errors logged to snpLocType.error:
+# Unknown locType 
+# Between with end != start + 1 
+# Between with allele != '-' 
+# Exact with end != start 
+# Range with end < start 
+
+# possible exceptions logged to snpLocType.exceptions:
+# RefAlleleWrongSize
+
+# This run no errors, no exceptions
+
+# morph chrN_snpTmp 
+
+mysql> desc chr1_snpTmp;
+
+#  +---------------+-------------+------+-----+---------+-------+
+#  | Field         | Type        | Null | Key | Default | Extra |
+#  +---------------+-------------+------+-----+---------+-------+
+#  | snp_id        | int(11)     | NO   |     |         |       |
+#  | ctg_id        | int(11)     | NO   |     |         |       |
+#  | chromStart    | int(11)     | NO   |     |         |       |
+#  | chromEnd      | int(11)     | NO   |     |         |       |
+#  | loc_type      | tinyint(4)  | NO   |     |         |       |
+#  | orientation   | tinyint(4)  | NO   |     |         |       |
+#  | allele        | blob        | YES  |     | NULL    |       |
+#  +---------------+-------------+------+-----+---------+-------+
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoctype mm8snp126 ref_strain
+
+# expand allele as necessary
+# report syntax errors to snpExpandAllele.errors
+# possible exceptions logged to snpExpandAllele.exceptions:
+# RefAlleleWrongSize
+# This run no errors, no exceptions
+# 200? alleles expanded
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpExpandAllele mm8snp126 ref_strain
+
+# the next few steps prepare for working in UCSC space
+
+# sort by position
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSort mm8snp126 ref_strain
+
+# rename MT --> M (pipeline.csh takes care of this)
+hgsql -e "rename table chrMT_snpTmp to chrM_snpTmp" mm8snp126
+
+# get mm8 nib files
+# get mm8 chromInfo, load into mm8snp126 with editted path
+# lookup reference allele in nibs
+# keep reverse complement to use in error checking (snpCheckAlleles)
+# check here for SNPs larger than 1024
+# errAbort if detected
+# check for coords that are too large, log to snpRefUCSC.error and skip
+# This run no errors
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpRefUCSC mm8snp126
+
+# morph chrN_snpTmp 
+
+mysql> desc chr1_snpTmp;
+
+#  +--------------------+-------------+------+-----+---------+-------+
+#  | Field              | Type        | Null | Key | Default | Extra |
+#  +--------------------+-------------+------+-----+---------+-------+
+#  | snp_id             | int(11)     | NO   |     |         |       |
+#  | ctg_id             | int(11)     | NO   |     |         |       |
+#  | chromStart         | int(11)     | NO   |     |         |       |
+#  | chromEnd           | int(11)     | NO   |     |         |       |
+#  | loc_type           | tinyint(4)  | NO   |     |         |       |
+#  | orientation        | tinyint(4)  | NO   |     |         |       |
+#  | allele             | blob        | YES  |     | NULL    |       |
+#  | refUCSC            | blob        | YES  |     | NULL    |       |
+#  | refUCSCReverseComp | blob        | YES  |     | NULL    |       |
+#  +--------------------+-------------+------+-----+---------+-------+
+
+# compare allele from dbSNP to refUCSC
+# locType between is excluded from this check
+# log exceptions to snpCheckAllele.exceptions
+# if SNP is positive strand, expect allele == refUCSC
+# log RefAlleleMismatch if not
+# if SNP is negative strand, if not allele == refUCSC, then check for allele == refUCSCReverseComp
+# If allele == refUCSCRevComp, log RefAlleleNotRevComp
+# If allele doesn't match either of refUCSC or refUCSCReverseComp, log RefAlleleMismatch
+# This run we got:
+# 0 RefAlleleMismatch
+# 9621   RefAlleleNotRevComp
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckAlleles mm8snp126
+
+# add class and observed using univar_id from SNP table
+# to get class (subsnp_class) and observed (var_str) from UniVariation
+# log errors to snpClassAndObserved.errors
+# errors detected: 
+# class = 0 in UniVariation
+# class > 8 in UniVariation
+# univar_id = 0 in SNP
+# no row in SNP for snp_id in chrN_snpTmp
+# This run we got:
+# 3 class = 0 in UniVariation
+# 0 class > 8 in UniVariation
+# 2890606 univar_id = 0 in SNP (strange, but okay)
+# 0 no row in SNP for snp_id in chrN_snpTmp 
+# dbSNP has class = 'in-del'
+# we promote this to 'deletion' for locType 1&2 and to 'insertion' for locType 3
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpClassAndObserved mm8snp126
+
+# morph chrN_snpTmp
+#  +--------------------+---------------+------+-----+---------+-------+
+#  | Field              | Type          | Null | Key | Default | Extra |
+#  +--------------------+---------------+------+-----+---------+-------+
+#  | snp_id             | int(11)       | NO   |     |         |       |
+#  | chromStart         | int(11)       | NO   |     |         |       |
+#  | chromEnd           | int(11)       | NO   |     |         |       |
+#  | loc_type           | tinyint(4)    | NO   |     |         |       |
+#  | class              | varchar(255)  | NO   |     |         |       |
+#  | orientation        | tinyint(4)    | NO   |     |         |       |
+#  | allele             | blob          | YES  |     | NULL    |       |
+#  | refUCSC            | blob          | YES  |     | NULL    |       |
+#  | refUCSCReverseComp | blob          | YES  |     | NULL    |       |
+#  | observed           | blob          | YES  |     | NULL    |       |
+#  +--------------------+---------------+------+-----+---------+-------+
+
+# generate exceptions for class and observed
+
+# SingleClassBetweenLocType
+# SingleClassRangeLocType
+# NamedClassWrongLocType
+
+# ObservedWrongFormat
+# ObservedWrongSize 
+# ObservedMismatch 
+
+# RangeSubstitutionLocTypeExactMatch
+
+# SingleClassTriAllelic
+# SingleClassQuadAllelic
+
+# This will also detect IUPAC symbols in allele
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckClassAndObserved mm8snp126
+
+# add function
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpFunction mm8snp126
+
+# add validation status and heterozygosity
+# log error if validation status > 31 or missing
+# no errors this run
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSNP mm8snp126
+
+# add molType
+# errors detected: missing or duplicate molType
+# 57709 duplicates
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpMoltype mm8snp126
+
+# generate chrN_snp126 and snp126Exceptions tables
+cp snpCheckAlleles.exceptions snpCheckAlleles.tab
+cp snpCheckClassAndObserved.exceptions snpCheckClassAndObserved.tab
+cp snpExpandAllele.exceptions snpExpandAllele.tab
+cp snpLocType.exceptions snpLocType.tab
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpFinalTable mm8snp126 126
+
+# concat into snp126.tab
+# cat chr*_snp126.tab >> snp126.tab
+/bin/sh concat.sh
+
+# check for multiple alignments
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple mm8snp126
+mysql> load data local infile 'snpMultiple.tab' into table snp126Exceptions;
+
+# load on hgwdev
+cp snp126.tab /cluster/home/heather/transfer/snp
+hgsql mm8snp126 -e 'select * from snp126Exceptions' > /cluster/home/heather/transfer/snp/snp126Exceptions.tab
+ssh hgwdev
+mysql> load data local infile 'snp126.tab' into table snp126; 
+mysql> load data local infile 'snp126Exceptions.tab' into table snp126Exceptions; 
+
+# create indexes
+mysql> alter table snp126 add index name (name);
+mysql> alter table snp126 add index chrom (chrom, bin);
+mysql> alter table snp126Exceptions add index name(name);
+
+# create snp126ExceptionDesc table
+cd /cluster/data/dbSNP
+hgsql mm8 < snp126ExceptionDesc.sql
+# add counts to exception.human.126, can start with exception.template
+hgsql -e 'select count(*), exception from snp126Exceptions group by exception' mm8
+mysql> load data local infile 'exception.mouse.126' into table snp126ExceptionDesc;
+
+mysql> select count(*), exception from snp126Exceptions group by exception;
++----------+---------------------------+
+| count(*) | exception                 |
++----------+---------------------------+
+|    97271 | MultipleAlignments        |
+|     1600 | ObservedMismatch          |
+|       27 | ObservedWrongFormat       |
+|      272 | ObservedWrongSize         |
+|     9621 | RefAlleleNotRevComp       |
+|    11169 | SingleClassBetweenLocType |
+|      346 | SingleClassQuadAllelic    |
+|     5023 | SingleClassRangeLocType   |
+|     3905 | SingleClassTriAllelic     |
++----------+---------------------------+
+
 
