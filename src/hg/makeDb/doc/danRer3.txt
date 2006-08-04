@@ -3309,6 +3309,7 @@ if ($found eq "TRUE")
 # (bacEndAlias, bacCloneAlias and bacCloneXRef) (DONE, 2005-10-06, hartera)
 # RECREATE TABLES AFTER REMAKING THE SINGLES AND PAIRS TABLES 
 # (see REDO BACENDS SECTION) (DONE, 2006-06-08, hartera)
+# REPLICATE ROWS IN TABLES SO REMOVE AND RELOAD (DONE, 2006-08-04, hartera)
     # Process data and create bacEndAlias table 
     ssh kkstore02
     cd /cluster/data/danRer3/bed/bacends/bacends.1
@@ -3485,24 +3486,46 @@ close MARKERS;
 # edit trackDb.ra to add bacEnds tracks and searches for the bacEndPairs
 # and bacEndSingles tracks as for danRer1. copy over html from danRer2
 # for bacEndPairs and bacEndSingles tracks.
+    # Replicate rows in table so reload after removing these
+    # (hartera, 2006-08-04)
+    ssh hgwdev 
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
+
+    sort bacAlias.sort.tab | uniq | sort -k2 > bacAlias.sort.tab.uniq
+    sort bacXRef.tab | uniq > bacXRef.tab.uniq
+    wc -l *.tab.uniq
+    # 57656 bacAlias.sort.tab.uniq
+    # 356453 bacXRef.tab.uniq
+ 
+    # Drop old tables and reload:
+    hgsql -e 'drop table bacCloneAlias;' danRer3
+    hgsql -e 'drop table bacCloneXRef;' danRer3
+    
+    hgLoadSqlTab danRer3 bacCloneAlias \
+          $HOME/kent/src/hg/lib/bacCloneAlias.sql bacAlias.sort.tab.uniq
+    hgLoadSqlTab danRer3 bacCloneXRef \
+          $HOME/kent/src/hg/lib/bacCloneXRef.sql bacXRef.tab.uniq
 
 # BACENDS: TESTING OF bacCloneAlias AND bacCloneXRef TABLES
 # (DONE, 2005-10-06, hartera)
 # REDONE AFTER REMAKING bacCloneAlias AND bacCloneXRef TABLES - both ok.
 # (DONE, 2006-06-12, hartera)
+# REDONE AFTER REMAKING bacCloneAlias AND bacCloneXRef TABLES
+# (DONE, 2006-08-04, hartera)
     # The following tests were carried out to check that all the data
     # in the bacCloneAlias and bacCloneXRef tables is correct.
     ssh hgwdev
-    mkdir -p \
-        /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTablesNew
-    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTablesNew
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
+    cp ./testTablesNew/*.pl .
+    rm -r testTablesNew
+    mkdir -p testTablesNew
+    cd testTablesNew
                                                                                 
 # Check that the correct aliases are associated with their Sanger STS names
     awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $3;}' \
         ../markers.27.07.05.txt > sNameandaliases
     # write script to get one Sanger name and one alias on each line
-    cp \
-  /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables/*.pl .
+    cp ../*.pl .
     perl getSangerAndAlias.pl < sNameandaliases > sNameandaliases.format
     sort sNameandaliases.format | uniq > sNameandaliases.sort
     # get Sanger names and aliases from database
@@ -3524,7 +3547,7 @@ close MARKERS;
     wc -l sName.xRef.sort
     # 15522 sName.xRef.sort
     comm -23 sName.alias.sort sName.xRef.sort
-    # nothin unique to alias file so all the Sanger names in the alias table are
+    # nothing unique to alias file so all Sanger names in the alias table are
     # also in the xRef table
     comm -13 sName.alias.sort sName.xRef.sort > sNamexRefNotAlias
     wc -l sNamexRefNotAlias
@@ -3543,9 +3566,9 @@ close MARKERS;
     wc -l sNames.clonemarkersOnly
     # 213 sNames.clonemarkersOnly
     diff sNames.clonemarkersOnly sNamexRefNotAlias
-    # no difference so all the extra Sanger Names in the xRef table are
-    # from the clonemarkers file and these have no aliases in the markers file
-    # so they are not in the alias table so this is all ok.
+    # No difference so all the extra Sanger Names in the xRef 
+    # table are from the clonemarkers file and these have no aliases in 
+    # the markers file so they are not in the alias table so this is all ok.
   
 # Check that Sanger STS names and primers are associated correctly
     cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTablesNew
@@ -3569,7 +3592,7 @@ close MARKERS;
     wc -l sNamesandprimers.fromdb.sort
     # 15309 sNamesandprimers.fromdb.sort
     diff sNamesandprimers.fromdb.sort sNameandPrimers.format.sort
-    # No difference so ok
+    # No difference so ok.
 
 # Check that UniSTS IDs and Sanger STS names are associated correctly
    # get Sanger names and UniSTS IDs from the database
@@ -6879,6 +6902,8 @@ _EOF_
 # REDO BACENDS - bacEndPairs, bacEndSingles, bacEndBadPairs and all_bacends
 # (split as chrN_allBacends) ONLY (DONE, 2006-05-01 - 2006-05-08, hartera) 
 # RELOADED chrN_allBacends TABLES (DONE, 2006-06-08, hartera)
+# RECREATED all_bacends table WITH ONLY RELEVANT PSLS FOR THE LFS BED 
+# TABLES FOR PAIRS, PAIRSBAD AND SINGLES (DONE, 2006-08-04, hartera)
      # NOTE: there are overlapping BAC clone ends for danRer3. Some of these
      # are only a few kb apart (from beginning of one to end of the other)
      # so use stricter pslPairs parameters as for human and mouse.
@@ -7301,9 +7326,104 @@ _EOF_
     cd /cluster/data/danRer3/bed/bacends
     mkdir extractPsl
     cd extractPsl
-    nohup nice /cluster/home/hartera/bin/x86_64/extractPslForLfs \
-      -verbose=1 ../bacEnds.psl bacEndPairsGoodScores.bed bacPairs.psl &  
-    # PID: 5452  Start: Jul 18 16:25
+    # Some scores in bacEndSinglesGoodScoresAndCoords.psl are not integers
+    # so fix these and also for the other bacEnd files just in case.
+cat << '_EOF_' > roundPslScore.pl
+#!/usr/bin/perl -w
+use strict;
+
+my $file = $ARGV[0];
+
+open(FILE, $file) || die "Can not open $file: $!\n";
+while (<FILE>)
+{
+my (@f, $line, $num, $score);
+$line = $_;
+@f = split(/\t/, $line);
+$num = $f[4];
+$score = round($num);
+$line =~ s/$num/$score/;
+print $line;
+}
+
+sub round {
+    my($number) = shift;
+    return int($number + .5);
+}
+'_EOF_'
+    chmod +x roundPslScore.pl
+    set bacDir=/cluster/data/danRer3/bed/bacends
+    perl roundPslScore.pl $bacDir/scoresAndCoords/bacEndPairsGoodScores.bed \
+         > bacEndPairsRoundScore.bed
+    perl roundPslScore.pl $bacDir/scoresAndCoords/bacEndPairsBadGoodScores.bed \
+         > bacEndPairsBadRoundScore.bed
+    perl roundPslScore.pl \
+         $bacDir/scoresAndCoords/bacEndSinglesGoodScoresAndCoords.bed \
+         > bacEndSinglesRoundScore.bed
+    
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+      $bacDir/bacEnds.psl bacEndPairsRoundScore.bed bacPairs.psl   
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+      $bacDir/bacEnds.psl bacEndPairsBadRoundScore.bed bacPairsBad.psl   
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+     $bacDir/bacEnds.psl \
+     bacEndSinglesRoundScore.bed bacSingles.psl   
+    cat bac*.psl > allBacends.load.psl
+    
+    # Now load database tables:
+    # Do not need to reload singles table as it is still the same, the 
+    # scores were rounded to 214 on loading. These are the only scores that
+    # are floats rather than integers. 
+    # Drop old split bacends tables and reload new one with only those psls 
+    # relevant to alignments in the lfs tables. 
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/bacends/extractPsl
+    foreach c (`cat /cluster/data/danRer3/chrom.lst`)
+       hgsql -e "drop table chr${c}_allBacends;" danRer3
+    end
+    # change the bacEnd{Pairs, PairBad, Singles} tables so that the 
+    # pslTable is all_bacends again.
+    foreach b (Pairs PairsBad Singles)
+       hgsql -e "update bacEnd${b} set pslTable = 'all_bacends';" \
+                danRer3
+    end
+    # Then load all_bacends table. Now there are many less alignments than
+    # before, they can all go in one table since the large table size 
+    # was previously slowing down the Browser at zoomed out display levels
+    # due to slow access of the very large all_bacends table.
+    wc -l allBacends.load.psl
+    # 549408 allBacends.load.psl
+    hgLoadPsl danRer3 -table=all_bacends allBacends.load.psl
+    hgsql -e 'select count(*) from all_bacends;' danRer3
+    # 549408
+    # Table contains the correct number of rows.
+    # Get all the lfNames from the bed files and check that these are all
+    # represented in allBacends.load.psl
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/bacends/extractPsl
+    foreach p (*RoundScore.bed)
+        awk '{print $11}' $p >> bedFiles.names
+    end
+    perl -pi.bak -e 's/,/\n/' bedFiles.names
+    sort bedFiles.names | uniq > bedFiles.names.uniq
+    # get psl file names
+    awk '{print $10}' allBacends.load.psl | sort | uniq > pslFile.names.uniq
+    wc -l *.uniq
+    # 512321 bedFiles.names.uniq
+    # 512321 pslFile.names.uniq
+    comm -12 bedFiles.names.uniq pslFile.names.uniq | wc -l
+    # 512321
+    # Therefore all names from BED files are in PSL file.
+    rm bedFiles* pslFile*
+    cd /cluster/data/danRer3/bed/bacends
+    rm -r all_bacends
+    rm ./scoresAndCoords/*.bacEnds.load.psl
+    # Duplicate rows in bacCloneXRef and bacCloneAlias tables so remove
+    # these, reload tables and test - see sections on  
+    # CREATE BAC CLONES ALIAS AND CROSS-REFERENCE TABLES and 
+    # BACENDS: TESTING OF bacCloneAlias AND bacCloneXRef TABLES
+
+#######################################################################
     # RE-DO RH MAP:
     # isPcr of sequences. 
     # 1) Make a list from FASTA file of sequences.
