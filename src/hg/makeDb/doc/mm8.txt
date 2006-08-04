@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.5 2006/08/04 22:46:58 heather Exp $"
+#	"$Id: mm8.txt,v 1.6 2006/08/04 23:38:29 heather Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -6385,7 +6385,7 @@ mysql> desc ContigLocFilter;
 #  | allele        | blob        | YES  |     | NULL    |       |
 #  +---------------+-------------+------+-----+---------+-------+
  
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter mm8snp126 ref_strain
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter mm8snp126 ref_strain C57BL/6J
 # note rowcount
 # ContigLocFilter  7923033
 # how many are positive strand? hopefully 90%
