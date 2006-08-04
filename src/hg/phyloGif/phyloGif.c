@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.11 2006/07/06 20:41:14 kuhn Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.12 2006/08/04 18:20:33 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -91,10 +91,16 @@ void usage(char *msg)
 {
 errAbort(
     "%s\n\n"
-    "phylo - parse and display phylo tree from stdin to stdout\n"
+    "phyloGif - parse and display phyloGenetic tree\n"
     "\n"
-    "Command-line Usage:\n"
-    "   phyloGif [options] > phylo.gif \n"
+    "Command-line Usage Examples:\n"
+    "   phyloGif -phyloGif_tree=tree.nh [options] > phylo.gif \n"
+    "   phyloGif -phyloGif_tree='(A:0.1,B:0.1)' [options] > phylo.gif \n"
+    "CGI Usage Examples:\n"
+    "   Create an interactive form:\n"
+    "     http://someserver.com/cgi-bin/phyloGif\n"
+    "   Create an image dynamically via URL:\n"
+    "     http://someserver.com/cgi-bin/phyloGif?phyloGif_tree=(A:0.1,B:0.1)\n"
     "Options/CGI-vars:\n"
     "  -phyloGif_width=N - width of output GIF, default %d\n"
     "  -phyloGif_height=N - height of output GIF, default %d\n"
@@ -326,6 +332,11 @@ if (onWeb)
     /* this will cause it to kick out the set-cookie: http response header line */
     cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
     }
+else    
+    {
+    if (!cgiOptionalString("phyloGif_tree"))
+    	usage("-phyloGif_tree is a required 'option' or cgi variable.");
+    }
 
 //cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 
@@ -470,7 +481,7 @@ if (useCart)
 	return 0;
 	}
     else	    
-    	usage("-phyloGif_tree is required 'option' or cgi variable.");
+    	usage("-phyloGif_tree is a required 'option' or cgi variable.");
     }
 
 if (htmlPageWrapper)

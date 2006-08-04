@@ -20,9 +20,11 @@ compile: $O
 
 test: compile
 	${HOME}/bin/${MACHTYPE}/phyloGif -phyloGif_tree=17way.nh > test.gif
+	file test.gif
 
 testWeb: compile
 	wget -O testWeb.gif 'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?phyloGif_tree=(A:0.1,B:0.1);'
+	file testWeb.gif
 	
 clean::
 	rm -f test.gif testWeb.gif
