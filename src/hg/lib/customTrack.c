@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.116 2006/08/05 03:44:17 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.117 2006/08/05 04:06:24 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -503,7 +503,6 @@ static char *testData =
 boolean customTrackTest()
 /* Tests module - returns FALSE and prints warning message on failure. */
 {
-struct customTrack *track;
 struct customTrack *trackList = customTracksFromText(cloneString(testData));
 int count = slCount(trackList);
 if (count != 2)
