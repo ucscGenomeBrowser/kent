@@ -215,7 +215,7 @@ static boolean bedRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameString(type, fac->name))
     return FALSE;
-char *line = customPpNextReal(cpp);
+char *line = nextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
 char *dupe = cloneString(line);
@@ -1000,8 +1000,8 @@ if (fac == NULL)
 	errAbort("Unrecognized format %s line %d of %s", 
 		type, lf->lineIx, lf->fileName);
     else
-        errAbort("Unrecognized format line %d of %s",
-		lf->lineIx, lf->fileName);
+        errAbort("Unrecognized format line %d of %s:\n\t%s",
+		lf->lineIx, lf->fileName, emptyForNull(customPpNext(cpp)));
     }
 return fac;
 }
@@ -1020,7 +1020,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &wigFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gffFactory);
-    slAddTail(&factoryList, &bedFactory);
+    slAddTail(&factoryList, &bedFactory); 
     }
 }
 
@@ -1125,7 +1125,30 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    }
 
 	/* Load track from appropriate factory */
-	struct customFactory *fac = customFactoryMustFind(cpp, type, track);
+	struct customFactory *fac = customFactoryFind(cpp, type, track);
+	if (fac == NULL)
+	    {
+	    struct lineFile *lf = cpp->fileStack;
+	    /* Check for case of empty track with no type.  This
+	     * is silently ignored for backwards compatibility */
+	    if (type == NULL)
+	        {
+		char *line = nextRealTilTrack(cpp);
+		customPpReuse(cpp, line);
+		if (line == NULL)
+		    continue;
+		else
+		    {
+		    errAbort("Unrecognized format line %d of %s:\n\t%s",
+			lf->lineIx, lf->fileName, emptyForNull(line));
+		    }
+		}
+	    else
+		{
+		errAbort("Unrecognized format type=%s line %d of %s", 
+			type, lf->lineIx, lf->fileName);
+		}
+	    }
 	if (!fac->loader(fac, chromHash, cpp, track, dbTrack))
 	    continue;
 
