@@ -1091,7 +1091,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	AllocVar(track);
 	track->tdb = customTrackTdbDefault();
 	track->tdb->settingsHash = hashNew(8);
-	slAddTail(&trackList, track);
+        customPpReuse(cpp, line);
 	}
     else
         {
