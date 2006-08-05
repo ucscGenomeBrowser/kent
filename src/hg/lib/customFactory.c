@@ -42,123 +42,6 @@ if (line != NULL && startsWithWord("track", line))
 return line;
 }
 
-static char *hashToRaString(struct hash *hash)
-/* Convert hash to string in ra format. */
-{
-struct hashEl *el, *list = hashElListHash(hash);
-struct dyString *dy = dyStringNew(0);
-slSort(&list, hashElCmp);
-for (el = list; el != NULL; el = el->next)
-   {
-   dyStringAppend(dy, el->name);
-   dyStringAppendC(dy, ' ');
-   dyStringAppend(dy, el->val);
-   dyStringAppendC(dy, '\n');
-   }
-hashElFreeList(&list);
-return dyStringCannibalize(&dy);
-}
-
-static void parseRgb(char *s, int lineIx, 
-	unsigned char *retR, unsigned char *retG, unsigned char *retB)
-/* Turn comma separated list to RGB vals. */
-{
-int wordCount;
-char *row[4];
-wordCount = chopString(s, ",", row, ArraySize(row));
-if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(row[2][0])))
-    errAbort("line %d of custom input, Expecting 3 comma separated numbers in color definition.", lineIx);
-*retR = atoi(row[0]);
-*retG = atoi(row[1]);
-*retB = atoi(row[2]);
-}
-
-struct customTrack *trackLineToTrack(char *line, int lineIx)
-/* Convert a track specification line to a custom track structure. */
-{
-/* Make up basic track with associated tdb.  Fill in settings
- * from var=val pairs in line. */
-line += 6;	/* Skip over 'track ' */
-struct customTrack *track;
-AllocVar(track);
-struct trackDb *tdb = customTrackTdbDefault();	
-track->tdb = tdb;
-struct hash *hash = hashVarLine(line, lineIx);
-track->tdb->settingsHash = hash;
-track->tdb->settings = hashToRaString(hash);
-char *val;
-
-/* Move selected fields from hash into structure proper, doing
- * a bit of checking in the process. */
-if ((val = hashFindVal(hash, "name")) != NULL)
-    {
-    tdb->shortLabel = val;
-    stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
-    stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
-    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
-    /* also use name for description, if not specified */
-    tdb->longLabel = tdb->shortLabel;
-    }
-if ((val = hashFindVal(hash, "description")) != NULL)
-    {
-    tdb->longLabel = val;
-    stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
-    stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
-    }
-tdb->type = hashFindVal(hash, "tdbType");
-track->dbTrackType = hashFindVal(hash, "db");
-track->dbTableName = hashFindVal(hash, "dbTableName");
-if (track->dbTableName)
-    {
-    track->dbDataLoad = TRUE;
-    track->dbTrack = TRUE;
-    }
-if ((val = hashFindVal(hash, "fieldCount")) != NULL)
-    track->fieldCount = sqlUnsigned(val);
-if ((val = hashFindVal(hash, "htmlFile")) != NULL)
-    if (fileExists(val))
-	readInGulp(val, &track->tdb->html, NULL);
-tdb->url = hashFindVal(hash, "url");
-if ((val = hashFindVal(hash, "visibility")) != NULL)
-    {
-    if (isdigit(val[0]))
-	{
-	tdb->visibility = atoi(val);
-	if (tdb->visibility > tvSquish)
-	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
-	}
-    else
-        {
-	tdb->visibility = hTvFromString(val);
-	}
-    }
-if ((val = hashFindVal(hash, "group")) != NULL)
-    tdb->grp = val;
-if ((val = hashFindVal(hash, "useScore")) != NULL)
-    tdb->useScore = !sameString(val, "0");
-if ((val = hashFindVal(hash, "priority")) != NULL)
-    tdb->priority = atof(val);
-if ((val = hashFindVal(hash, "color")) != NULL)
-    parseRgb(val, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
-if ((val = hashFindVal(hash, "altColor")) != NULL)
-    parseRgb(val, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
-else
-    {
-    /* If they don't explicitly set the alt color make it a lighter version
-     * of color. */
-    tdb->altColorR = (tdb->colorR + 255)/2;
-    tdb->altColorG = (tdb->colorG + 255)/2;
-    tdb->altColorB = (tdb->colorB + 255)/2;
-    }
-if ((val = hashFindVal(hash, "offset")) != NULL)
-    track->offset = atoi(val);
-if ((val = hashFindVal(hash, "maxChromName")) != NULL)
-    track->maxChromName = sqlSigned(val);
-else
-    track->maxChromName = hGetMinIndexLength();
-return track;
-}
-
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
@@ -990,24 +873,6 @@ for (fac = factoryList; fac != NULL; fac = fac->next)
 return fac;
 }
 
-struct customFactory *customFactoryMustFind(struct customPp *cpp,
-	char *type, struct customTrack *track)
-/* Like customFactoryFind, but prints error and aborts if a problem */
-{
-struct customFactory *fac = customFactoryFind(cpp, type, track);
-if (fac == NULL)
-    {
-    struct lineFile *lf = cpp->fileStack;
-    if (type)
-	errAbort("Unrecognized format %s line %d of %s", 
-		type, lf->lineIx, lf->fileName);
-    else
-        errAbort("Unrecognized format line %d of %s:\n\t%s",
-		lf->lineIx, lf->fileName, emptyForNull(customPpNext(cpp)));
-    }
-return fac;
-}
-
 void customFactoryAdd(struct customFactory *fac)
 /* Add factory to global custom track factory list. */
 {
@@ -1024,6 +889,123 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory); 
     }
+}
+
+static char *hashToRaString(struct hash *hash)
+/* Convert hash to string in ra format. */
+{
+struct hashEl *el, *list = hashElListHash(hash);
+struct dyString *dy = dyStringNew(0);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+   {
+   dyStringAppend(dy, el->name);
+   dyStringAppendC(dy, ' ');
+   dyStringAppend(dy, el->val);
+   dyStringAppendC(dy, '\n');
+   }
+hashElFreeList(&list);
+return dyStringCannibalize(&dy);
+}
+
+static void parseRgb(char *s, int lineIx, 
+	unsigned char *retR, unsigned char *retG, unsigned char *retB)
+/* Turn comma separated list to RGB vals. */
+{
+int wordCount;
+char *row[4];
+wordCount = chopString(s, ",", row, ArraySize(row));
+if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(row[2][0])))
+    errAbort("line %d of custom input, Expecting 3 comma separated numbers in color definition.", lineIx);
+*retR = atoi(row[0]);
+*retG = atoi(row[1]);
+*retB = atoi(row[2]);
+}
+
+struct customTrack *trackLineToTrack(char *line, int lineIx)
+/* Convert a track specification line to a custom track structure. */
+{
+/* Make up basic track with associated tdb.  Fill in settings
+ * from var=val pairs in line. */
+line += 6;	/* Skip over 'track ' */
+struct customTrack *track;
+AllocVar(track);
+struct trackDb *tdb = customTrackTdbDefault();	
+track->tdb = tdb;
+struct hash *hash = hashVarLine(line, lineIx);
+track->tdb->settingsHash = hash;
+track->tdb->settings = hashToRaString(hash);
+char *val;
+
+/* Move selected fields from hash into structure proper, doing
+ * a bit of checking in the process. */
+if ((val = hashFindVal(hash, "name")) != NULL)
+    {
+    tdb->shortLabel = val;
+    stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
+    stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
+    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    /* also use name for description, if not specified */
+    tdb->longLabel = tdb->shortLabel;
+    }
+if ((val = hashFindVal(hash, "description")) != NULL)
+    {
+    tdb->longLabel = val;
+    stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
+    stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
+    }
+tdb->type = hashFindVal(hash, "tdbType");
+track->dbTrackType = hashFindVal(hash, "db");
+track->dbTableName = hashFindVal(hash, "dbTableName");
+if (track->dbTableName)
+    {
+    track->dbDataLoad = TRUE;
+    track->dbTrack = TRUE;
+    }
+if ((val = hashFindVal(hash, "fieldCount")) != NULL)
+    track->fieldCount = sqlUnsigned(val);
+if ((val = hashFindVal(hash, "htmlFile")) != NULL)
+    if (fileExists(val))
+	readInGulp(val, &track->tdb->html, NULL);
+tdb->url = hashFindVal(hash, "url");
+if ((val = hashFindVal(hash, "visibility")) != NULL)
+    {
+    if (isdigit(val[0]))
+	{
+	tdb->visibility = atoi(val);
+	if (tdb->visibility > tvSquish)
+	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
+	}
+    else
+        {
+	tdb->visibility = hTvFromString(val);
+	}
+    }
+if ((val = hashFindVal(hash, "group")) != NULL)
+    tdb->grp = val;
+if ((val = hashFindVal(hash, "useScore")) != NULL)
+    tdb->useScore = !sameString(val, "0");
+if ((val = hashFindVal(hash, "priority")) != NULL)
+    tdb->priority = atof(val);
+if ((val = hashFindVal(hash, "color")) != NULL)
+    parseRgb(val, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
+if ((val = hashFindVal(hash, "altColor")) != NULL)
+    parseRgb(val, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+else
+    {
+    /* If they don't explicitly set the alt color make it a lighter version
+     * of color. */
+    tdb->altColorR = (tdb->colorR + 255)/2;
+    tdb->altColorG = (tdb->colorG + 255)/2;
+    tdb->altColorB = (tdb->colorB + 255)/2;
+    }
+if ((val = hashFindVal(hash, "offset")) != NULL)
+    track->offset = atoi(val);
+if ((val = hashFindVal(hash, "maxChromName")) != NULL)
+    track->maxChromName = sqlSigned(val);
+else
+    track->maxChromName = hGetMinIndexLength();
+return track;
 }
 
 struct customTrack *customFactoryParse(char *text, boolean isFile,
