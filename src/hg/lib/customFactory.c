@@ -96,6 +96,8 @@ if ((val = hashFindVal(hash, "name")) != NULL)
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    /* also use name for description, if not specified */
+    tdb->longLabel = tdb->shortLabel;
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {

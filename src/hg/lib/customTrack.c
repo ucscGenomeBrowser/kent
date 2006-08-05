@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.115 2006/08/03 18:08:47 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.116 2006/08/05 03:44:17 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -60,15 +60,25 @@ struct trackDb *customTrackTdbDefault()
 /* Return default custom table: black, dense, etc. */
 {
 struct trackDb *tdb;
+static int count = 0;
 char buf[256];
-static int count=0;
+
+count++;
 AllocVar(tdb);
-tdb->longLabel = cloneString("User Supplied Track");
-tdb->shortLabel = cloneString("User Track");
-safef(buf, sizeof(buf), "%s%d", CT_PREFIX, ++count);
-tdb->tableName = cloneString(buf);
+safef(buf, sizeof(buf), "%s %d", CT_DEFAULT_TRACK_NAME, count);
+tdb->shortLabel = cloneString(buf);
+safef(buf, sizeof(buf), "%s %d", CT_DEFAULT_TRACK_DESCR, count);
+tdb->longLabel = cloneString(buf);
+if (count == 1)
+    {
+    /* we don't need sequence count for first unnamed user track */
+    chopSuffixAt(tdb->shortLabel, ' ');
+    chopSuffixAt(tdb->longLabel, ' ');
+    }
+tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
+tdb->type = (char *)NULL;
 return tdb;
 }
 
@@ -482,28 +492,31 @@ return customFactoryParse(text, TRUE, NULL);
 }
 
 static char *testData = 
-"track shortLabel='Colors etc.' undefined=nothing longLabel='Some colors you might use'\n"
+"track name='Colors etc.' description='Some colors you might use'\n"
 "chr2	1	12	rose\n"
 "chr2	22	219	yellow\n"
 "chr2	18	188	green\n"
-"track shortLabel=animals longLabel='Some fuzzy animals'\n"
-"ctgY2	122	219	gorilla	900	+	10	20	30	2	10,4	10,20,\n"
-"ctgY2	128	229	mongoose	620	-	1	2	10	1	1,	1,\n";
+"track name=animals description='Some fuzzy animals'\n"
+"chr3 1000 5000 gorilla 960 + 1100 4700 0 2 1567,1488, 0,2512,\n"
+"chr3 2000 7000 mongoose 200 - 2200 6950 0 4 433,100,550,1500 0,500,2000,3500,\n";
 
 boolean customTrackTest()
 /* Tests module - returns FALSE and prints warning message on failure. */
 {
+struct customTrack *track;
 struct customTrack *trackList = customTracksFromText(cloneString(testData));
-if (slCount(trackList) != 2)
+int count = slCount(trackList);
+if (count != 2)
     {
-    warn("Failed customTrackTest() 1");
+    warn("Failed customTrackTest() 1: expecting 2 tracks, got %d", count);
     return FALSE;
     }
 customTrackSave(trackList, "test.foo");
 trackList = customTracksFromFile("test.foo");
-if (slCount(trackList) != 2)
+count = slCount(trackList);
+if (count != 2)
     {
-    warn("Failed customTrackTest() 2");
+    warn("Failed customTrackTest() 2: expecting 2 tracks, got %d", count);
     return FALSE;
     }
 trackList = customTracksFromText(cloneString(""));
