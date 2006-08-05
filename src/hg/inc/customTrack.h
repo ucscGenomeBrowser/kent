@@ -14,6 +14,8 @@
 #include "portable.h"
 
 #define CT_PREFIX       "ct_"
+#define CT_DEFAULT_TRACK_NAME    "User Track"
+#define CT_DEFAULT_TRACK_DESCR   "User Supplied Track"
 
 struct customTrack
 /* A custom track.  */

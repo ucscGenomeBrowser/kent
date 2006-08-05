@@ -79,6 +79,11 @@ char *hBackgroundImage();
 
 #define EXTENDED_DNA_BUTTON "extended case/color options"
 
+/* Net track option */
+#define NET_OPT_TOP_ONLY  "netTopOnly"
+
+void netUi(struct trackDb *tdb);
+
 struct controlGrid
 /* Keep track of a control grid (table) */
     {
