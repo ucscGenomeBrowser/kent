@@ -11,10 +11,11 @@
 #include "hui.h"
 #include "hCommon.h"
 #include "customTrack.h"
+#include "customFactory.h"
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.23 2006/08/03 16:44:23 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.24 2006/08/05 05:23:00 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,6 +56,18 @@ struct slName *browserLines = NULL;
 char *ctFileName;
 
 
+void makeInitButton(char *label, char *text, char *field)
+/* UI button that initializes a text field */
+{
+char javascript[1024];
+char *form = "mainForm";
+
+safef(javascript, sizeof(javascript), 
+    //"document.%s.%s.value = '%s'; document.%s.submit();\"", 
+    "document.%s.%s.value = '%s';\"", form, field, text);
+cgiMakeOnClickButton(javascript, label);
+}
+
 void addCustom(char *err, char *warn)
 /* display UI for adding custom tracks by URL or pasting data */
 {
@@ -73,54 +86,79 @@ puts("Display custom annotation tracks in the browser"
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
 
-/* first row - label, link for file upload, and submit button*/
+/* first row - label entry for file upload */
 cgiSimpleTableRowStart();
 cgiTableField("Paste URLs or data:");
+#ifndef NEW
+puts("<TD ALIGN='RIGHT'>");
+#else
 puts("<TD COLSPAN=2 ALIGN='RIGHT'>");
+#endif
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-/* second row - text entry box for URL's or data  and clear button */
+/* second row - text entry box for  data, and clear button */
 cgiSimpleTableRowStart();
-puts("<TD COLSPAN=3>");
+puts("<TD COLSPAN=2>");
 cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
+
 cgiSimpleTableFieldStart();
-cgiMakeClearButton("mainForm", hgCtDataText);
+cgiSimpleTableStart();
+
+cgiSimpleTableRowStart();
+makeInitButton("&nbsp; Clear &nbsp;", "", hgCtDataText);
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+makeInitButton("Header", 
+        "track name=\\'My Track\\' description=\\'My Data Track\\'", 
+                        hgCtDataText);
+cgiTableRowEnd();
+
+cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 /* third row - label for description text entry */
 cgiSimpleTableRowStart();
-cgiTableField("Optional HTML for track: ");
-puts("<TD ALIGN='LEFT'>");
-cgiMakeTextVar(hgCtDocTrackName, 
-                cartCgiUsualString(cart, hgCtDocTrackName, ""), 10);
-puts("</TD>");
+cgiTableField("Optional HTML doc: ");
 puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDocFile);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-/* fourth row - text entry for description, and clear button */
+/* fourth row - text entry for description, and clear button(s) */
 cgiSimpleTableRowStart();
-puts("<TD COLSPAN=3>");
+puts("<TD COLSPAN=2>");
 cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
+
 cgiSimpleTableFieldStart();
-cgiMakeClearButton("mainForm", hgCtDocText);
+cgiSimpleTableStart();
+
+cgiSimpleTableRowStart();
+makeInitButton("&nbsp; Clear &nbsp;", "", hgCtDocText);
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+makeInitButton("Header", 
+        "<!-- UCSC_GB_TRACK NAME=\\'My Track\\' -->", hgCtDocText);
+cgiTableRowEnd();
+
+cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 /* fifth row - submit button */
 cgiSimpleTableRowStart();
 printf("<TD><A TARGET=_BLANK HREF='../goldenPath/help/ct_description.txt'>HTML doc template</A></TD>");
-puts("<TD COLSPAN=2 ALIGN='RIGHT'>");
+puts("<TD ALIGN='RIGHT'>");
 cgiMakeSubmitButton();
 cgiTableRowEnd();
 cgiTableEnd();
@@ -150,40 +188,56 @@ void manageCustom()
 /* list custom tracks and display checkboxes so user can select for delete */
 {
 struct customTrack *ct;
-char option[64];
+char buf[64];
+char *pos = NULL;
 
 hTableStart();
 cgiSimpleTableRowStart();
 tableHeaderField("Name", NULL);
 tableHeaderField("Description", NULL);
 tableHeaderField("Type", NULL);
-tableHeaderFieldStart();
-cgiMakeButton(hgCtDoDelete, "Del");
 tableHeaderField("Doc", "HTML track description");
 tableHeaderField("Items", NULL);
 tableHeaderField("Pos"," Default track position or first item");
+tableHeaderFieldStart();
+cgiMakeButton(hgCtDoDelete, "Del");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     printf("<TR><TD>%s</TD><TD>%s</TD><TD>",  
                 ct->tdb->shortLabel, ct->tdb->longLabel);
-    printf("%s", ct->tdb->type ? firstWordInLine(cloneString(ct->tdb->type)) : "");
-    puts("</TD><TD ALIGN=CENTER>");
-    safef(option, sizeof(option), "%s_%s", hgCtDeletePrefix, 
-            ct->tdb->tableName);
-    cgiMakeCheckBox(option, FALSE);
+    printf("%s", ct->tdb->type ? ct->tdb->type : "&nbsp;");
     printf("</TD><TD ALIGN='CENTER'>%s", ct->tdb->html ? "X" : "&nbsp");
     if (ct->bedList)
         {
         printf("</TD><TD ALIGN='CENTER'>%d", slCount(ct->bedList));
-        printf("</TD><TD><A HREF='%s?%s&position=%s:%d-%d'>%s:</A>", 
-            hgTracksName(), cartSidUrlString(cart),
-            ct->bedList->chrom, ct->bedList->chromStart, ct->bedList->chromEnd,
-            ct->bedList->chrom);
         }
     else
-        puts("</TD><TD></TD><TD>&nbsp;");
+        puts("</TD><TD>&nbsp;</TD><TD>&nbsp;");
+    pos = hashFindVal(ct->tdb->settingsHash, "initialPos");
+    if (!pos)
+        {
+        if (ct->bedList)
+            {
+            safef(buf, sizeof(buf), "%s:%d-%d", ct->bedList->chrom,
+                    ct->bedList->chromStart, ct->bedList->chromEnd);
+            pos = buf;
+            }
+        }
+    if (pos)
+        {
+        char *chrom = cloneString(pos);
+        chopSuffixAt(chrom, ':');
+        printf("</TD><TD><A HREF='%s?%s&position=%s'>%s:</A>", 
+                hgTracksName(), cartSidUrlString(cart), pos, chrom);
+        }
+    else
+        puts("</TD><TD>&nbsp;");
+    puts("</TD><TD ALIGN=CENTER>");
+    safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix, 
+            ct->tdb->tableName);
+    cgiMakeCheckBox(buf, FALSE);
     puts("</TD></TR>");
     }
 hTableEnd();
@@ -208,8 +262,9 @@ webIncludeFile("/goldenPath/help/loadingCustomTracks.html");
 webEndSection();
 }
 
-void doBrowserLines(struct slName *browserLines)
-/*  parse variables from browser lines into the cart */
+void doBrowserLines(struct slName *browserLines, char **retInitialPos)
+/*  parse variables from browser lines into the cart.
+    Return browser initial position, if specified */
 {
 struct slName *bl;
 for (bl = browserLines; bl != NULL; bl = bl->next)
@@ -252,6 +307,8 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
             cartSetString(cart, "position", words[2]);
+            if (retInitialPos)
+                *retInitialPos = cloneString(words[2]);
 	    }
 	}
     }
@@ -264,13 +321,14 @@ struct customTrack *addCts = NULL;
 struct customTrack *ct, *oldCt, *next;
 struct errCatch *errCatch = errCatchNew();
 struct dyString *ds = dyStringNew(80);
+char *initialPos = NULL;
 
 *err = NULL;
 *warn = NULL;
 if (errCatchStart(errCatch))
     {
-    addCts = customTracksParse(cartString(cart, var), FALSE, &browserLines);
-    doBrowserLines(browserLines);
+    addCts = customFactoryParse(cartString(cart, var), FALSE, &browserLines);
+    doBrowserLines(browserLines, &initialPos);
     for (ct = addCts; ct != NULL; ct = next)
         {
         if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
@@ -280,6 +338,8 @@ if (errCatchStart(errCatch))
             slRemoveEl(&ctList, oldCt);
             }
         next = ct->next;
+        if (initialPos)
+            hashAdd(ct->tdb->settingsHash, "initialPos", initialPos);
         slAddTail(&ctList, ct); 
         }
     cartRemovePrefix(cart, var);
@@ -364,7 +424,7 @@ cartSaveSession(cart);
 
 /* get existing custom tracks from cart */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
-doBrowserLines(browserLines);
+doBrowserLines(browserLines, NULL);
 ctHash = hashNew(5);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
