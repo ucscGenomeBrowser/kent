@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.24 2006/08/05 05:23:00 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.25 2006/08/05 07:33:41 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -352,44 +352,41 @@ errCatchFree(&errCatch);
 return addCts;
 }
 
-#define DOC_TRACK_PREFIX  "<!-- UCSC_GB_TRACK "
-#define DOC_TRACK_SUFFIX  "-->"
-#define DOC_NAME_TAG    "NAME="
-
 struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
 /* get HTML descriptions from text with special comments to name 
  * and delimit tracks */
 {
-struct hash *docHash = NULL;
+char *line;
+char buf[64];
+struct hash *docHash = hashNew(6);
+char *trackName = defaultTrackName;
+struct lineFile *lf = lineFileOnString("custom HTML", TRUE, text);
+struct dyString *ds = dyStringNew(1000);
 
 if (!text)
     return NULL;
-docHash = hashNew(6);
-char *p, *q;
-char *html = text;
-char *trackName = NULL;
-while ((p = stringIn(DOC_TRACK_PREFIX, html)) != NULL)
+while (lineFileNextReal(lf, &line))
     {
-    if (trackName)
+    if (sscanf(line, "<!-- UCSC_GB_TRACK NAME=%[^-] -->", buf) == 1)
         {
-        *--p = 0;
-        hashAdd(docHash, trackName, html);
-        p++;
+        if (strlen(ds->string))
+            {
+            hashAdd(docHash, trackName, dyStringCannibalize(&ds));
+            }
+        /* remove quotes and surrounding whitespace from track identifier*/
+        trackName = skipLeadingSpaces(cloneString(buf));
+        eraseTrailingSpaces(trackName);
+        stripChar(trackName, '\'');
+        stripChar(trackName, '\"');
+        ds = dyStringNew(1000);
+        continue;
         }
-    q = stringIn(DOC_TRACK_SUFFIX, p);
-    if (!q)
-        errAbort("Badly formatted HTML file: missing TRACK comment end");
-    p = stringIn(DOC_NAME_TAG, p);
-    if (!p)
-        errAbort("Badly formatted HTML file: missing TRACK comment NAME tag");
-    trackName = p + strlen(DOC_NAME_TAG);
-    for (p = trackName; p != q && !isspace(*p); p++);
-    *p = 0;
-    html = q + strlen(DOC_TRACK_SUFFIX);
+    dyStringAppend(ds, line);
     }
-if (!trackName)
-    trackName = defaultTrackName;
-hashAdd(docHash, trackName, html);
+if (strlen(ds->string))
+    {
+    hashAdd(docHash, trackName, dyStringCannibalize(&ds));
+    }
 return docHash;
 }
 
@@ -468,7 +465,7 @@ else
 
     /* get HTML docs */
     char *html = NULL;
-    struct hash *docHash;
+    struct hash *docHash = NULL;
     char *defaultTrackName;
     if (cartNonemptyString(cart, hgCtDocText))
         {
