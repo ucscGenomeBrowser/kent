@@ -104,7 +104,7 @@ build 126, available from
       <UL>
       <LI>Weight can be 0, 1, 2, 3 or 10.   
       <LI>Weight = 0 and weight = 10 are excluded from the data set.
-      <LI>We support a filter on maximum weight value, which defaults to 3.
+      <LI>A filter on maximum weight value is supported, which defaults to 3.
       </UL>
     </LI>
     <LI>
@@ -120,41 +120,42 @@ build 126, available from
 </P>
 <H2>Insertions/Deletions</H2>
 dbSNP uses a class called 'in-del'.   This has been split this into 'insertion' and 
-'deletion', based on location type.
-Location type 'range' and 'exact' are deletions relative to the reference assembly.
-Location type 'between' are insertions relative to the reference assembly.
-For the new location types, the class 'in-del' is preserved.
+'deletion', based on location type.  Location types 'range' and 'exact' are deletions
+relative to the reference assembly.  Location type 'between' are insertions relative
+to the reference assembly.  For the new location types, the class 'in-del' is preserved.
 
 <H2>UCSC Annotations</H2>
 <P>
   In addition to presenting the dbSNP data, the following annotations are provided:
   <UL>
-  <LI>We compare the dbSNP reference allele is compared to our reference allele 
-      and note if the 
+  <LI>The dbSNP reference allele is compared to our reference allele and a note is made if the 
       dbSNP reference allele is the reverse complement of our reference allele.</LI>
-  <LI>For single-base substitutions, we note where the alignments of the
-      flanking sequences are adjacent or have a gap of more than one base.</LI>
-  <LI>We note if the observed alleles have an unexpected format.</LI>
-  <LI>We check that the length of the observed alleles is consistent with the location type.</LI>
-  <LI>For single-base substitutions, we check that one of the observed alleles matches the reference allele.</LI>
-  <LI>For simple deletions, we check that the observed allele matches the reference allele.</LI>
-  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
-  <LI>We note variants that have multiple mappings.</LI>
+  <LI>Single-base substitutions where the alignments of the flanking sequences are adjacent 
+      or have a gap of more than one base are noted.</LI>
+  <LI>Observed alleles with an unexpected format are noted.</LI>
+  <LI>The length of observed alleles is checked for consistency with location types;
+      exceptions are noted.</LI>
+  <LI>For single-base substitutions, the observed alleles are checked to see that at least one matches
+      the reference allele; exceptions are noted.</LI>
+  <LI>Simple deletions are checked to see that the observed allele matches the reference allele;
+      exceptions are noted.</LI>
+  <LI>Tri-allelic and quad-allelic single-base substitutions are noted.</LI>
+  <LI>Variants that have multiple mappings are noted.</LI>
   </UL>
 </P>
 
 <H2>Data Sources</H2>
 <P>
   <UL>
-  <LI>We used b126_SNPContigLoc_36_1.bcp.gz for coordinates, orientation, location type
+  <LI>b126_SNPContigLoc_36_1.bcp.gz was used for coordinates, orientation, location type
       and the dbSNP reference allele.  
-  <LI>We used b126_SNPMapInfo_36_1.bcp.gz for alignment weights, filtering out 
+  <LI>b126_SNPMapInfo_36_1.bcp.gz was used for alignment weights, filtering out 
       alignments with weight = 0 or weight = 10.
-  <LI>We obtained class and observed polymorphism from the shared UniVariation.bcp.gz,
+  <LI>Class and observed polymorphism were obtained from the shared UniVariation.bcp.gz,
       using the univar_id from SNP.bcp.gz as an index.
-  <LI>We obtained functional classification from b126_SNPContigLocusId_36_1.bcp.gz.
-  <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
-  <LI>We used the header line in the rs_fasta files for molecule type.
+  <LI>Functional classification was obtained from b126_SNPContigLocusId_36_1.bcp.gz.
+  <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.
+  <LI>The header lines in the rs_fasta files were used for molecule type.
   </UL>
 </P>
 
