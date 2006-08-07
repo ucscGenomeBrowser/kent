@@ -8,7 +8,7 @@
 #include "linefile.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSortAcc.c,v 1.4 2003/10/10 16:57:18 heather Exp $";
+static char const rcsid[] = "$Id: pslSortAcc.c,v 1.5 2006/08/07 17:04:56 angie Exp $";
 
 
 void usage()
@@ -49,7 +49,6 @@ char *line;
 int lineSize;
 char *words[32];
 int wordCount;
-struct psl *psl;
 
 if (!lineFileNext(lf, &line, &lineSize))
     {
@@ -182,14 +181,9 @@ int chunkSize = 250000;	/* Do this many lines at once. */
 int linesLeftInChunk = chunkSize;
 int i;
 char *inFile;
-char fileName[512];
-int fileCount;
 int totalLineCount = 0;
 int midFileCount = 0;
-FILE *f;
 struct lineFile *lf;
-char *line;
-int lineSize;
 struct psl *psl, *pslList = NULL;
 boolean noHead = (sameWord(command, "nohead"));
 
