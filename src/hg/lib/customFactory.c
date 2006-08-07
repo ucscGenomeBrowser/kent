@@ -18,6 +18,7 @@
 #include "hgConfig.h"
 #include "hdb.h"
 #include "hui.h"
+#include "chromGraph.h"
 #include "customTrack.h"
 #include "customPp.h"
 #include "customFactory.h"
@@ -25,10 +26,20 @@
 
 /*** Utility routines used by many factories. ***/
 
-static void customFactoryInit();
-/* Initialize custom track factory system. */
+char *customFactoryNextTilTrack(struct customPp *cpp)
+/* Return next line.  Return NULL at end of input or at line starting with
+ * "track." */
+{
+char *line = customPpNext(cpp);
+if (line != NULL && startsWithWord("track", line))
+    {
+    customPpReuse(cpp, line);
+    line = NULL;
+    }
+return line;
+}
 
-static char *nextRealTilTrack(struct customPp *cpp)
+char *customFactoryNextRealTilTrack(struct customPp *cpp)
 /* Return next "real" line (not blank, not comment).
  * Return NULL at end of input or at line starting with
  * "track." */
@@ -42,29 +53,15 @@ if (line != NULL && startsWithWord("track", line))
 return line;
 }
 
-static boolean isChromName(char *word)
-/* Return TRUE if it's a contig or chromosome */
+void customFactoryCheckChromName(char *word, struct lineFile *lf)
+/* Make sure it's a chromosome or a contig.  Well, at the moment,
+ * just make sure it's a chromosome. */
 {
-return (hgOfficialChromName(word) != NULL);
+if (!hgOfficialChromName(word))
+    lineFileAbort(lf, "%s not a chromosome", word);
 }
 
-static void checkChromName(char *word, int lineIx)
-/* Make sure it's a chromosome or a contig. */
-{
-if (!isChromName(word))
-    errAbort("line %d of custom input: %s (%d) not a chromosome", 
-    	lineIx, word, word[0]);
-}
-
-static int needNum(char *nums, int lineIx, int wordIx)
-/* Return a number or throw syntax error. */
-{
-if (! (isdigit(nums[0]) || ((nums[0] == '-') && isdigit(nums[1]))))
-    errAbort("line %d word %d of custom input: Expecting number got %s", lineIx, wordIx, nums);
-return atoi(nums);
-}
-
-static char *getCustomDb()
+char *customTrackTempDb()
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 {
@@ -89,7 +86,7 @@ static boolean rowIsBed(char **row, int wordCount)
 /* Return TRUE if row is consistent with BED format. */
 {
 return wordCount >= 3 && wordCount <= bedKnownFields 
-	&& isChromName(row[0])
+	&& hgOfficialChromName(row[0])
 	&& isdigit(row[1][0]) && isdigit(row[2][0]);
 }
 
@@ -100,7 +97,7 @@ static boolean bedRecognizer(struct customFactory *fac,
 {
 if (type != NULL && !sameString(type, fac->name))
     return FALSE;
-char *line = nextRealTilTrack(cpp);
+char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
 char *dupe = cloneString(line);
@@ -117,7 +114,7 @@ return isBed;
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
 /* Set up pipeline that will load wig into database. */
 {
-char *db = getCustomDb();
+char *db = customTrackTempDb();
 /* running the single command:
  *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -tmpDir=../trash/ct
  *		-maxChromNameLength=${nameLength} stdin
@@ -184,8 +181,8 @@ if (dbRequested)
 return TRUE;
 }
 
-struct bed *customTrackBed(char *row[13], int wordCount, 
-	struct hash *chromHash, int lineIx)
+static struct bed *customTrackBed(char *row[13], int wordCount, 
+	struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to a bed. */
 {
 struct bed * bed;
@@ -193,40 +190,43 @@ int count;
 
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, row[0]);
-checkChromName(bed->chrom, lineIx);
+customFactoryCheckChromName(bed->chrom, lf);
 
-bed->chromStart = needNum(row[1], lineIx, 1);
-bed->chromEnd = needNum(row[2], lineIx, 2);
+bed->chromStart = lineFileNeedNum(lf, row, 1);
+bed->chromEnd = lineFileNeedNum(lf, row, 2);
 if (bed->chromEnd < bed->chromStart)
-    errAbort("line %d of custom input: chromStart after chromEnd (%d > %d)", lineIx, bed->chromStart, bed->chromEnd);
+    lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
+    	bed->chromStart, bed->chromEnd);
 
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
 if (wordCount > 4)
-     bed->score = needNum(row[4], lineIx, 4);
+     bed->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
      strncpy(bed->strand, row[5], sizeof(bed->strand));
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
-	  errAbort("line %d of custom input: Expecting + or - in strand", lineIx);
+	  lineFileAbort(lf, "Expecting + or - in strand");
      }
 if (wordCount > 6)
-     bed->thickStart = needNum(row[6], lineIx, 6);
+     bed->thickStart = lineFileNeedNum(lf, row, 6);
 else
      bed->thickStart = bed->chromStart;
 if (wordCount > 7)
      {
-     bed->thickEnd = needNum(row[7], lineIx, 7);
+     bed->thickEnd = lineFileNeedNum(lf, row, 7);
      if (bed->thickEnd < bed->thickStart)
-	 errAbort("line %d of custom input: thickStart after thickEnd", lineIx);
+	 lineFileAbort(lf, "thickStart after thickEnd");
      if ((bed->thickStart != 0) &&
 	 ((bed->thickStart < bed->chromStart) ||
 	  (bed->thickStart > bed->chromEnd)))
-	 errAbort("line %d of custom input: thickStart out of range (chromStart to chromEnd, or 0 if no CDS)", lineIx);
+	 lineFileAbort(lf, 
+	     "thickStart out of range (chromStart to chromEnd, or 0 if no CDS)");
      if ((bed->thickEnd != 0) &&
 	 ((bed->thickEnd < bed->chromStart) ||
 	  (bed->thickEnd > bed->chromEnd)))
-	 errAbort("line %d of custom input: thickEnd out of range (chromStart to chromEnd, or 0 if no CDS)", lineIx);
+	 lineFileAbort(lf, 
+	     "thickEnd out of range (chromStart to chromEnd, or 0 if no CDS)");
      }
 else
      bed->thickEnd = bed->chromEnd;
@@ -239,20 +239,21 @@ if (wordCount > 8)
 	{
 	int rgb = bedParseRgb(row[8]);
 	if (rgb < 0)
-	    errAbort("line %d of custom input, Expecting 3 comma separated numbers for r,g,b bed item color.", lineIx);
+	    lineFileAbort(lf, 
+	        "Expecting 3 comma separated numbers for r,g,b bed item color.");
 	else
 	    bed->itemRgb = rgb;
 	}
     else
-	bed->itemRgb = needNum(row[8], lineIx, 8);
+	bed->itemRgb = lineFileNeedNum(lf, row, 8);
     }
 if (wordCount > 9)
-    bed->blockCount = needNum(row[9], lineIx, 9);
+    bed->blockCount = lineFileNeedNum(lf, row, 9);
 if (wordCount > 10)
     {
     sqlSignedDynamicArray(row[10], &bed->blockSizes, &count);
     if (count != bed->blockCount)
-	errAbort("line %d of custom input: expecting %d elements in array", lineIx, bed->blockCount);
+	lineFileAbort(lf,  "expecting %d elements in array", bed->blockCount);
     }
 if (wordCount > 11)
     {
@@ -260,8 +261,7 @@ if (wordCount > 11)
     int lastEnd, lastStart;
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
     if (count != bed->blockCount)
-	errAbort("line %d of custom input: expecting %d elements in array",
-		 lineIx, bed->blockCount);
+	lineFileAbort(lf, "expecting %d elements in array", bed->blockCount);
     // tell the user if they appear to be using absolute starts rather than 
     // relative... easy to forget!  Also check block order, coord ranges...
     lastStart = -1;
@@ -274,28 +274,29 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 	if (bed->chromStarts[i]+bed->chromStart >= bed->chromEnd)
 	    {
 	    if (bed->chromStarts[i] >= bed->chromStart)
-		errAbort("line %d of custom input: BED chromStarts offsets must be relative to chromStart, not absolute.  Try subtracting chromStart from each offset in chromStarts.",
-			 lineIx);
+		lineFileAbort(lf, 
+		    "BED chromStarts offsets must be relative to chromStart, "
+		    "not absolute.  Try subtracting chromStart from each offset "
+		    "in chromStarts.");
 	    else
-		errAbort("line %d of custom input: BED chromStarts[i]+chromStart must be less than chromEnd.",
-			 lineIx);
+		lineFileAbort(lf, 
+		    "BED chromStarts[i]+chromStart must be less than chromEnd.");
 	    }
 	lastStart = bed->chromStarts[i];
 	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
 	}
     if (bed->chromStarts[0] != 0)
-	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  BED chromStarts[0] must be 0 (==%d) so that (chromStart + chromStarts[0]) equals chromStart.",
-		 lineIx, bed->chromStarts[0]);
+	lineFileAbort(lf, 
+	    "BED blocks must span chromStart to chromEnd.  "
+	    "BED chromStarts[0] must be 0 (==%d) so that (chromStart + "
+	    "chromStarts[0]) equals chromStart.", bed->chromStarts[0]);
     i = bed->blockCount-1;
     if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
 	bed->chromEnd)
 	{
-	printf("chromStart %d + chromStarts[last] %d + blockSizes[last] %d = %d != chromEnd %d<BR>\n",
-		bed->chromStart, bed->chromStarts[i], bed->blockSizes[i],
-		bed->chromStart+bed->chromStarts[i]+bed->blockSizes[i],
-		bed->chromEnd);
-	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  (chromStart + chromStarts[last] + blockSizes[last]) must equal chromEnd.",
-		 lineIx);
+	lineFileAbort(lf, 
+	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
+	    "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
 	}
     }
 return bed;
@@ -306,13 +307,13 @@ static boolean bedLoader(struct customFactory *fac,  struct hash *chromHash,
 /* Load up bed data until get next track line. */
 {
 char *line;
-while ((line = nextRealTilTrack(cpp)) != NULL)
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[bedKnownFields];
     int wordCount = chopLine(line, row);
     struct lineFile *lf = cpp->fileStack;
     lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
-    struct bed *bed = customTrackBed(row, wordCount, chromHash, lf->lineIx);
+    struct bed *bed = customTrackBed(row, wordCount, chromHash, lf);
     slAddHead(&track->bedList, bed);
     }
 slReverse(&track->bedList);
@@ -343,7 +344,7 @@ if (wordCount >= 8 && wordCount <= 9)
         {
 	if (strand[1] == 0)
 	    {
-	    if (isChromName(row[0]))
+	    if (hgOfficialChromName(row[0]))
 	        {
 		if (isdigit(row[3][0]) && isdigit(row[4][0]))
 		    isGff = TRUE;
@@ -462,13 +463,13 @@ static boolean gffLoader(struct customFactory *fac,  struct hash *chromHash,
 /* Load up gff data until get next track line. */
 {
 char *line;
-while ((line = nextRealTilTrack(cpp)) != NULL)
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[9];
     int wordCount = chopTabs(line, row);
     struct lineFile *lf = cpp->fileStack;
-    checkChromName(row[0], lf->lineIx);
-    gffFileAddRow(track->gffHelper, 0, row, wordCount, "custom input", 
+    customFactoryCheckChromName(row[0], lf);
+    gffFileAddRow(track->gffHelper, 0, row, wordCount, lf->fileName, 
     	lf->lineIx);
     }
 track->bedList = gffHelperFinish(track->gffHelper, chromHash);
@@ -559,8 +560,8 @@ customPpReuse(cpp, line);
 return isPsl;
 }
 
-struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
-	struct hash *chromHash, int lineIx)
+static struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
+	struct hash *chromHash, struct lineFile *lf)
 /* Convert a psl format row of strings to a bed. */
 {
 struct psl *psl = pslLoad(row);
@@ -571,9 +572,9 @@ int i, blockCount, *chromStarts, chromStart, *blockSizes;
 if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize 
     || psl->tStart >= psl->tEnd || psl->tEnd > psl->tSize)
     {
-    errAbort("line %d of custom input: mangled psl format", lineIx);
+    lineFileAbort(lf, "mangled psl format");
     }
-checkChromName(psl->tName, lineIx);
+customFactoryCheckChromName(psl->tName, lf);
 
 /* Allocate bed and fill in from psl. */
 AllocVar(bed);
@@ -636,7 +637,7 @@ static boolean pslLoader(struct customFactory *fac,  struct hash *chromHash,
 {
 char *line;
 boolean pslIsProt = FALSE;
-while ((line = nextRealTilTrack(cpp)) != NULL)
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     /* Skip over pslLayout version lines noting if they are
      * protein though */
@@ -645,7 +646,7 @@ while ((line = nextRealTilTrack(cpp)) != NULL)
 	pslIsProt = (stringIn("protein", line) != NULL);
 	int i;
 	for (i=0; i<4; ++i)
-	    nextRealTilTrack(cpp);
+	    customFactoryNextRealTilTrack(cpp);
 	continue;
 	}
     char *row[PSL_NUM_COLS];
@@ -653,7 +654,7 @@ while ((line = nextRealTilTrack(cpp)) != NULL)
     struct lineFile *lf = cpp->fileStack;
     lineFileExpectAtLeast(lf, PSL_NUM_COLS, wordCount);
     struct bed *bed = customTrackPsl(pslIsProt, row, 
-    	wordCount, chromHash, lf->lineIx);
+    	wordCount, chromHash, lf);
     slAddHead(&track->bedList, bed);
     }
 slReverse(&track->bedList);
@@ -690,7 +691,7 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
  *	    -pathPrefix=. ${db} ${table} stdin
  */
-char *db = getCustomDb();
+char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000", 
 	"stdin", "stdout", NULL, NULL};
@@ -783,7 +784,7 @@ else
 
     /* Actually create wigAscii file. */
     f = mustOpen(wigAscii, "w");
-    while ((line = nextRealTilTrack(cpp)) != NULL)
+    while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 	fprintf(f, "%s\n", line);
     carefulClose(&f);
 
@@ -855,9 +856,42 @@ static struct customFactory wigFactory =
     wigLoader,
     };
 
+/*** chromGraph Factory - for chromGraph tracks ***/
+
+#ifdef SOON
+static boolean chromGraphRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a wig track */
+{
+return sameOk(type, fac->name);
+}
+
+static struct customFactory chromGraphFactory = 
+/* Factory for wiggle tracks */
+    {
+    NULL,
+    "chromGraph",
+    chromGraphRecognizer,
+    chromGraphLoader,
+    };
+#endif /* SOON */
+
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
+
+static void customFactoryInit()
+/* Initialize custom track factory system. */
+{
+if (factoryList == NULL)
+    {
+    slAddTail(&factoryList, &wigFactory);
+    slAddTail(&factoryList, &pslFactory);
+    slAddTail(&factoryList, &gffFactory);
+    slAddTail(&factoryList, &bedFactory); 
+    }
+}
 
 struct customFactory *customFactoryFind(struct customPp *cpp,
 	char *type, struct customTrack *track)
@@ -877,18 +911,6 @@ void customFactoryAdd(struct customFactory *fac)
 /* Add factory to global custom track factory list. */
 {
 slAddTail(&factoryList, fac);
-}
-
-static void customFactoryInit()
-/* Initialize custom track factory system. */
-{
-if (factoryList == NULL)
-    {
-    slAddTail(&factoryList, &wigFactory);
-    slAddTail(&factoryList, &pslFactory);
-    slAddTail(&factoryList, &gffFactory);
-    slAddTail(&factoryList, &bedFactory); 
-    }
 }
 
 static char *hashToRaString(struct hash *hash)
@@ -1117,7 +1139,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	     * is silently ignored for backwards compatibility */
 	    if (type == NULL)
 	        {
-		char *line = nextRealTilTrack(cpp);
+		char *line = customFactoryNextRealTilTrack(cpp);
 		customPpReuse(cpp, line);
 		if (line == NULL)
 		    continue;

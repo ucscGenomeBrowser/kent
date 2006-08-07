@@ -41,15 +41,32 @@ struct customFactory
      * Returns FALSE if it couldn't load. */
     };
 
+/*** Some helper functions factories can call. ***/
+
+char *customFactoryNextTilTrack(struct customPp *cpp);
+/* Return next line.  Return NULL at end of input or at line starting with
+ * "track." */
+
+char *customFactoryNextRealTilTrack(struct customPp *cpp);
+/* Return next "real" line (not blank, not comment).
+ * Return NULL at end of input or at line starting with
+ * "track." */
+
+void customFactoryCheckChromName(char *word, struct lineFile *lf);
+/* Make sure it's a chromosome or a contig.  Well, at the moment,
+ * just make sure it's a chromosome. */
+
+char *customTrackTempDb();
+/* Get custom database.  If first time set up some
+ * environment variables that the loaders will need. */
+
+/*** Interface to custom factory system. ***/
+
 struct customFactory *customFactoryFind(struct customPp *cpp,
 	char *type, struct customTrack *track);
 /* Figure out factory that can handle this track.  The track is
  * loaded from the track line if any, and type is the type element
  * if any from that track. */
-
-struct customFactory *customFactoryMustFind(struct customPp *cpp,
-	char *type, struct customTrack *track);
-/* Like customFactoryFind, but prints error and aborts if a problem */
 
 void customFactoryAdd(struct customFactory *fac);
 /* Add factory to global custom track factory list. */

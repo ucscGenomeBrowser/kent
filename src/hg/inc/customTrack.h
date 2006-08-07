@@ -61,14 +61,6 @@ void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash);
 boolean customTrackNeedsLift(struct customTrack *trackList);
 /* Return TRUE if any track in list needs a lift. */
 
-struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx);
-/* Convert a row of strings to a bed. */
-
-struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
-	struct hash *chromHash, int lineIx);
-/* Convert a psl format row of strings to a bed. */
-
-
 char *customTrackTableFromLabel(char *label);
 /* Convert custom track short label to table name. */
 
