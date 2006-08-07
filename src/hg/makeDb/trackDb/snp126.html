@@ -103,7 +103,7 @@ build 126, available from
       <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
       <UL>
       <LI>Weight can be 0, 1, 2, 3 or 10.   
-      <LI>We excluded weight = 0 and weight = 10 from the data set.
+      <LI>Weight = 0 and weight = 10 are excluded from the data set.
       <LI>We support a filter on maximum weight value, which defaults to 3.
       </UL>
     </LI>
@@ -112,22 +112,25 @@ build 126, available from
       <B>Average heterozygosity</B>: Calculated by dbSNP as described 
       <A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target=_blank>here</A>
       <UL>
-      <LI> Average heterozygosity should not exceed .5 for bi-allelic single-base substitutions.
+      <LI> Average heterozygosity should not exceed 0.5 for bi-allelic 
+           single-base substitutions.
       </UL>
     </LI>
   </UL>
 </P>
 <H2>Insertions/Deletions</H2>
-dbSNP uses a class called 'in-del'.   We split this into 'insertion' and 'deletion', based on location type.
+dbSNP uses a class called 'in-del'.   This has been split this into 'insertion' and 
+'deletion', based on location type.
 Location type 'range' and 'exact' are deletions relative to the reference assembly.
 Location type 'between' are insertions relative to the reference assembly.
-For the new location types, we preserve the class 'in-del'.
+For the new location types, the class 'in-del' is preserved.
 
 <H2>UCSC Annotations</H2>
 <P>
-  In addition to presenting the dbSNP data, we provide the following annotations:
+  In addition to presenting the dbSNP data, the following annotations are provided:
   <UL>
-  <LI>We compare the dbSNP reference allele to our reference allele and note if the 
+  <LI>We compare the dbSNP reference allele is compared to our reference allele 
+      and note if the 
       dbSNP reference allele is the reverse complement of our reference allele.</LI>
   <LI>For single-base substitutions, we note where the alignments of the
       flanking sequences are adjacent or have a gap of more than one base.</LI>
