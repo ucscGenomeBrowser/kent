@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1077 2006/08/04 22:43:46 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1078 2006/08/07 10:21:03 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15354,6 +15354,40 @@ for (i = 0; i < enz->size+1; i++)
     }
 }
 
+static void doCuttersEnzymeList(struct sqlConnection *conn, char *getBed, char *c, char *l, char *r)
+/* Print out list of enzymes (BED). This function will exit the program. */
+{
+struct cutter *cut = NULL;
+char query[100];
+struct dnaSeq *winDna;
+struct bed *bedList = NULL, *oneBed;
+int s, e;
+if (!c || !l || !r)
+    errAbort("Bad Range");
+s = atoi(l);
+e = atoi(r);
+winDna = hDnaFromSeq(c, s, e, dnaUpper);
+if (sameString(getBed, "all"))
+    safef(query, sizeof(query), "select * from cutters");
+else
+    safef(query, sizeof(query), "select * from cutters where name=\'%s\'", getBed);    
+cut = cutterLoadByQuery(conn, query);
+bedList = matchEnzymes(cut, winDna, s);
+puts("<HTML>\n<HEAD><TITLE>Enzyme Output</TITLE></HEAD>\n<BODY><PRE><TT>");
+for (oneBed = bedList; oneBed != NULL; oneBed = oneBed->next)
+    {
+    freeMem(oneBed->chrom);
+    oneBed->chrom = cloneString(c);
+    bedTabOutN(oneBed, 6, stdout);
+    }
+puts("</TT></PRE>\n");
+htmlEnd();
+bedFreeList(&bedList);
+cutterFreeList(&cut);
+hFreeOrDisconnect(&conn);
+exit(0);
+}
+
 static void doCutters(char *item)
 /* Print info about a restriction enzyme. */
 {
@@ -15361,14 +15395,18 @@ struct sqlConnection *conn;
 struct cutter *cut = NULL;
 char query[100];
 char helpName[PATH_LEN], *helpBuf;
-
+char *doGetBed = cgiOptionalString("doGetBed");
+char *c = cgiOptionalString("c");
+char *l = cgiOptionalString("l");
+char *r = cgiOptionalString("r");    
 conn = hAllocOrConnect("hgFixed");
+if (doGetBed)
+    doCuttersEnzymeList(conn, doGetBed, c, l, r);
 safef(query, sizeof(query), "select * from cutters where name=\'%s\'", item);
 cut = cutterLoadByQuery(conn, query);  
 cartWebStart(cart, "Restriction Enzymes from REBASE");
 if (cut)
     {
-    char *c = cgiOptionalString("c");
     char *o = cgiOptionalString("o");
     char *t = cgiOptionalString("t");
     struct slName *isoligs = cutterIsoligamers(cut);
@@ -15380,14 +15418,14 @@ if (cut)
 	int right = atoi(t);
 	printPosOnChrom(c, left, right, NULL, FALSE, cut->name);
         }
-    printf("<B>Recognition Sequence: </B>");
+    puts("<B>Recognition Sequence: </B>");
     cutterPrintSite(cut);
-    printf("<BR>\n");
+    puts("<BR>\n");
     printf("<B>Palindromic: </B>%s<BR>\n", (cut->palindromic) ? "YES" : "NO");    
     if (cut->numSciz > 0)
         {
 	int i;
-	printf("<B>Isoschizomers: </B>");
+	puts("<B>Isoschizomers: </B>");
 	for (i = 0; i < cut->numSciz-1; i++)
 	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
 	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
@@ -15395,7 +15433,7 @@ if (cut)
     if (isoligs)
 	{
 	struct slName *cur;
-	printf("<B>Isoligamers: </B>");
+	puts("<B>Isoligamers: </B>");
 	for (cur = isoligs; cur->next != NULL; cur = cur->next)
 	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
 	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
@@ -15406,7 +15444,7 @@ if (cut)
 	int i, count = 1;
 	char **row;
 	struct sqlResult *sr;
-	printf("<B>References:</B><BR>\n");
+	puts("<B>References:</B><BR>\n");
 	safef(query, sizeof(query), "select * from rebaseRefs");
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -15420,6 +15458,9 @@ if (cut)
 	    }
 	sqlFreeResult(&sr);
 	}    
+    puts("<BR><B>Download BED of enzymes in this browser range:</B>&nbsp");
+    printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=all\">all enzymes</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c);
+    printf("<A HREF=\"%s&g=%s&l=%s&r=%s&c=%s&doGetBed=%s\">just %s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, l, r, c, cut->name, cut->name);
     }
 htmlHorizontalLine();
 safef(helpName, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, CUTTERS_TRACK_NAME);
