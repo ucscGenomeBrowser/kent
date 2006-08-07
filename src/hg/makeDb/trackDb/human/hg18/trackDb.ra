@@ -121,6 +121,7 @@ visibility dense
 spectrum on
 type psl .
 cdsDrawOptions enabled
+showDiffBasesAllScales .
 
 track haplotypePos
 shortLabel $Organism hapPos

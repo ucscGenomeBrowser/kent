@@ -677,6 +677,7 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+showDiffBasesAllScales .
 
 track tightMrna
 shortLabel Tight mRNAS

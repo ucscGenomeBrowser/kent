@@ -40,6 +40,8 @@ visibility pack
 spectrum on
 type psl .
 intronGap 30
+cdsDrawOptions enabled
+showDiffBasesAllScales .
 
 track transRegCode
 shortLabel Regulatory Code 

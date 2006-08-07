@@ -51,6 +51,7 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+showDiffBasesAllScales .
 
 track est
 shortLabel $Organism ESTs
