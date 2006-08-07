@@ -20,6 +20,7 @@ set dumpDate=""
 if ($#argv < 1 || $#argv > 2) then
   echo
   echo "  gets the names of all databases that contain a given table."
+  echo "  will accept the MySQL wildcard, %"
   echo "  note: not real-time on RR.  uses nightly TABLE STATUS dump."
   echo
   echo "    usage:  tablename, [machine] defaults to beta"
@@ -99,8 +100,8 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
       endif
     endif
     # seek if not split table
-    set found=`hgsql -N $host -e 'SHOW TABLES LIKE "'$tablename'"' $db | wc -l`
-    if ( $found == 1 ) then
+    set found=`hgsql -N $host -e 'SHOW TABLES LIKE "'${tablename}'"' $db | wc -l`
+    if ( $found > 0 ) then
       echo "$db" >> $machine.$tablename.foundIn
     endif
   end
