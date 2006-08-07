@@ -7,8 +7,9 @@
 #include "localmem.h"
 #include "hash.h"
 #include "obscure.h"
+#include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.32 2006/05/30 20:13:42 aamp Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.33 2006/08/07 23:08:31 kate Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -126,6 +127,24 @@ struct hashEl *hashAdd(struct hash *hash, char *name, void *val)
 /* Add new element to hash table. */
 {
 return hashAddN(hash, name, strlen(name), val);
+}
+
+boolean hashMayRemove(struct hash *hash, char *name)
+/* Remove item of the given name from hash table, if present.
+ * Return true if it was present */
+{
+struct hashEl *hel;
+void *ret;
+struct hashEl **pBucket = &hash->table[hashString(name)&hash->mask];
+for (hel = *pBucket; hel != NULL; hel = hel->next)
+    if (sameString(hel->name, name))
+        break;
+if (hel == NULL)
+    return FALSE;
+ret = hel->val;
+if (slRemoveEl(pBucket, hel))
+    hash->elCount -= 1;
+return TRUE;
 }
 
 void *hashRemove(struct hash *hash, char *name)
@@ -492,3 +511,27 @@ for (i=0; i<hash->size; ++i)
 carefulClose(&fh);
 }
 
+struct hashEl *hashReplace(struct hash *hash, char *name, void *val)
+/* Replace an existing element in hash table, or add it if not present. */
+{
+if (hashLookup(hash, name))
+    hashRemove(hash, name);
+return hashAdd(hash, name, val);
+}
+
+char *hashToRaString(struct hash *hash)
+/* Convert hash to string in ra format. */
+{
+struct hashEl *el, *list = hashElListHash(hash);
+struct dyString *dy = dyStringNew(0);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+   {
+   dyStringAppend(dy, el->name);
+   dyStringAppendC(dy, ' ');
+   dyStringAppend(dy, el->val);
+   dyStringAppendC(dy, '\n');
+   }
+hashElFreeList(&list);
+return dyStringCannibalize(&dy);
+}

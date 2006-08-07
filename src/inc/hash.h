@@ -165,5 +165,15 @@ void hashFreeList(struct hash **pList);
 void hashHisto(struct hash *hash, char *fname);
 /* Output bucket usage counts to a file for producing a histogram  */
 
+struct hashEl *hashReplace(struct hash *hash, char *name, void *val);
+/* Replace an existing element in hash table, or add it if not present. */
+
+boolean hashMayRemove(struct hash *hash, char *name);
+/* Remove item of the given name from hash table, if present.
+ * Return true if it was present */
+
+char *hashToRaString(struct hash *hash);
+/* Convert hash to string in ra format. */
+
 #endif /* HASH_H */
 
