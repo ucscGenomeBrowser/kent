@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.41 2006/08/03 00:52:55 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.42 2006/08/07 17:44:27 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -75,8 +75,8 @@ if (zoomed)
 static void drawDiffBaseTickmarks(struct vGfx *vg, 
 				  int chromStart, int chromEnd,
 				  double scale, int xOff, int y, int height,
-				  char *text, int maxPixels)
-/* Draw 1-pixel wide white vertical lines (tickmarks) where there are 
+				  char *text, int maxPixels, Color *cdsColor)
+/* Draw 1-pixel wide red vertical lines (tickmarks) where there are 
  * differences recorded in text. */
 {
 int x1, x2, w;
@@ -95,7 +95,7 @@ for (i=0; i < strlen(text); i++)
     if (text[i] != ' ')
 	{
 	int thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
-	vgLine(vg, thisX, y+1, thisX, y+height-2, whiteIndex());
+	vgLine(vg, thisX, y+1, thisX, y+height-2, cdsColor[CDS_STOP]);
 	}
     }
 }
@@ -1009,7 +1009,7 @@ if(mrnaS >= 0)
                                     winStart, maxPixels );
 	if (zoomedToCdsColorLevel && !zoomedToBaseLevel)
 	    drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
-				  retStrDy, maxPixels);
+				  retStrDy, maxPixels, cdsColor);
 	}
     else if (displayOption == CDS_DRAW_DIFF_CODONS)
 	{
@@ -1021,7 +1021,7 @@ if(mrnaS >= 0)
                                         cdsColor, winStart, maxPixels );
 	    if (zoomedToCdsColorLevel && !zoomedToCodonLevel)
 		drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
-				      " X ", maxPixels);
+				      " X ", maxPixels, cdsColor);
 	    }
 	else
 	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
