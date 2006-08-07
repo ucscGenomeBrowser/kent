@@ -29,7 +29,7 @@ struct customFactory
      * This routine is allowed to fill in some of track structure if
      * it returns TRUE. */
 
-    boolean (*loader)(struct customFactory *fac, 
+    struct customTrack * (*loader)(struct customFactory *fac, 
     	struct hash *chromHash,  /* Hash to store chrom names, filled in here */
     	struct customPp *cpp, 	 /* Source of input */
 	struct customTrack *track, /* Skeleton of track, filled in here */
@@ -38,8 +38,11 @@ struct customFactory
      * available in the settings hash).  This routine reads from cpp
      * until the next track line or until end of file. If dbRequested is
      * TRUE it will attempt to load track into a MySQL database. 
-     * Returns FALSE if it couldn't load. */
+     * Returns track (or in some cases tracks) that it loads. */
     };
+
+/*** Some externally defined factories. ***/
+extern struct customFactory chromGraphFactory;
 
 /*** Some helper functions factories can call. ***/
 

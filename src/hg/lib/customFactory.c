@@ -18,7 +18,6 @@
 #include "hgConfig.h"
 #include "hdb.h"
 #include "hui.h"
-#include "chromGraph.h"
 #include "customTrack.h"
 #include "customPp.h"
 #include "customFactory.h"
@@ -138,7 +137,8 @@ cmd1[7] = dyStringCannibalize(&tmpDy);
 return pipelineOpen1(cmd1, pipelineWrite, "/dev/null", NULL);
 }
 
-static boolean bedFinish(struct customTrack *track, boolean dbRequested)
+static struct customTrack *bedFinish(struct customTrack *track, 
+	boolean dbRequested)
 /* Finish up bed tracks (and others that create track->bedList). */
 {
 /* Add type based on field count */
@@ -178,7 +178,7 @@ if (dbRequested)
     pipelineWait(dataPipe);
     pipelineFree(&dataPipe);
     }
-return TRUE;
+return track;
 }
 
 static struct bed *customTrackBed(char *row[13], int wordCount, 
@@ -302,7 +302,8 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 return bed;
 }
 
-static boolean bedLoader(struct customFactory *fac,  struct hash *chromHash,
+static struct customTrack *bedLoader(struct customFactory *fac,  
+	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up bed data until get next track line. */
 {
@@ -458,7 +459,8 @@ for (group = gff->groupList; group != NULL; group = group->next)
 return bedList;
 }
 
-static boolean gffLoader(struct customFactory *fac,  struct hash *chromHash,
+static struct customTrack *gffLoader(struct customFactory *fac,  
+	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up gff data until get next track line. */
 {
@@ -631,7 +633,8 @@ pslFree(&psl);
 return bed;
 }
 
-static boolean pslLoader(struct customFactory *fac,  struct hash *chromHash,
+static struct customTrack *pslLoader(struct customFactory *fac,  
+	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up psl data until get next track line. */
 {
@@ -736,7 +739,8 @@ if (span == 0)
 *retSpan = span;
 }
 
-static boolean wigLoader(struct customFactory *fac,  struct hash *chromHash,
+static struct customTrack *wigLoader(struct customFactory *fac,  
+	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
 /* Load up wiggle data until get next track line. */
 {
@@ -747,7 +751,6 @@ struct hash *settings = track->tdb->settingsHash;
 
 track->dbTrackType = cloneString(fac->name);
 track->wiggle = TRUE;
-
 
 /* If wibFile setting already exists, then we are reloading, not loading.
  * Just make sure files still exist. */
@@ -837,14 +840,12 @@ else
 	         "%lld >= 300,000,000<BR>\n", 
 		 track->tdb->shortLabel, options.wibSizeLimit);
 	}
-#ifdef SOON 
     unlink(wigAscii);/* done with this, remove it */
-#endif /* SOON */
     char tdbType[256];
     safef(tdbType, sizeof(tdbType), "wig %g %g", lowerLimit, upperLimit);
     track->tdb->type = cloneString(tdbType);
     }
-return TRUE;
+return track;
 }
 
 static struct customFactory wigFactory = 
@@ -855,27 +856,6 @@ static struct customFactory wigFactory =
     wigRecognizer,
     wigLoader,
     };
-
-/*** chromGraph Factory - for chromGraph tracks ***/
-
-#ifdef SOON
-static boolean chromGraphRecognizer(struct customFactory *fac,
-	struct customPp *cpp, char *type, 
-    	struct customTrack *track)
-/* Return TRUE if looks like we're handling a wig track */
-{
-return sameOk(type, fac->name);
-}
-
-static struct customFactory chromGraphFactory = 
-/* Factory for wiggle tracks */
-    {
-    NULL,
-    "chromGraph",
-    chromGraphRecognizer,
-    chromGraphLoader,
-    };
-#endif /* SOON */
 
 /*** Framework for custom factories. ***/
 
@@ -1106,12 +1086,15 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		line, lf->lineIx, lf->fileName);
 	}
 
+    struct customTrack *oneList = NULL, *oneTrack;
     if (track->dbDataLoad)
     /* Database tracks already mostly loaded, just check that table 
      * still exists (they are removed when not accessed for a while). */
         {
 	if (!sqlTableExists(ctConn, track->dbTableName))
 	    continue;
+	track->wiggle = startsWith("wig ", track->tdb->type);
+	oneList = track;
 	}
     else
     /* Main case - we have to find a track factory that recognizes
@@ -1155,16 +1138,17 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			type, lf->lineIx, lf->fileName);
 		}
 	    }
-	if (!fac->loader(fac, chromHash, cpp, track, dbTrack))
-	    continue;
+	oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
 
 	/* Save a few more settings. */
-	ctAddToSettings(track->tdb, "tdbType %s", track->tdb->type);
-	if (dbTrack)
-	    ctAddToSettings(track->tdb, "db %s", track->dbTrackType);
+	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
+	    {
+	    ctAddToSettings(track->tdb, "tdbType %s", track->tdb->type);
+	    if (dbTrack)
+		ctAddToSettings(track->tdb, "db %s", track->dbTrackType);
+	    }
 	}
-    track->wiggle = startsWith("wig ", track->tdb->type);
-    slAddTail(&trackList, track);
+    trackList = slCat(trackList, oneList);
     }
 
 /* Adjust priorities so tracks are not all on top of each other
