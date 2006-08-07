@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1182 2006/08/07 20:21:55 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1183 2006/08/07 23:48:55 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2936,7 +2936,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
 
     if (drawOptionNum>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
         lf->codons = splitGenePredByCodon(chrom, lf, gp,NULL,
-                gp->optFields >= genePredExonFramesFld);
+                gp->optFields >= genePredExonFramesFld,
+		(drawOptionNum != CDS_DRAW_DIFF_CODONS));
    
     lf->components = sfFromGenePred(gp, grayIx);
 

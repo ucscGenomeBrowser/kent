@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.43 2006/08/07 20:21:55 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.44 2006/08/07 23:48:55 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -317,7 +317,7 @@ return color;
 
 
 static int setColorByCds(DNA *dna, bool codonFirstColor, boolean *foundStart, 
-			                boolean reverse)
+			 boolean reverse, boolean colorStopStart)
 {
 char codonChar;
 
@@ -329,20 +329,40 @@ if (sameString(chromName, "chrM"))
 else
     codonChar = lookupCodon(dna);
 
+if (codonChar == 'M' && foundStart != NULL && !(*foundStart))
+    *foundStart = TRUE;
+
 if (codonChar == 0)
     return(-3);    //stop codon
 else if (codonChar == 'X')
     return(-2);     //bad input to lookupCodon
-else if (codonChar == 'M')
+else if (colorStopStart && codonChar == 'M')
     {
-    if (foundStart != NULL && !(*foundStart))
-        *foundStart = TRUE;
     return(-1);     //start codon
     }
 else if (codonFirstColor)
     return(codonChar - 'A' + 1);
 else
     return(codonChar - 'A' + 1 + 26);
+}
+
+
+static int setColorByDiff(DNA *rna, char genomicCodon, bool codonFirstColor)
+/* Difference ==> red, otherwise keep the alternating shades. */
+{
+char rnaCodon = lookupCodon(rna);
+
+/* Translate lookupCodon stop codon result into what genomicCodon would have 
+ * for a stop codon: */
+if (rnaCodon == '\0')
+    rnaCodon = '*';
+
+if (genomicCodon != 'X' && genomicCodon != rnaCodon)
+    return(-3);    //red (reusing stop codon color)
+else if (codonFirstColor)
+    return(genomicCodon - 'A' + 1);
+else
+    return(genomicCodon - 'A' + 1 + 26);
 }
 
 
@@ -392,7 +412,8 @@ static struct simpleFeature *splitPslByCodon(char *chrom,
 					     struct linkedFeatures *lf, struct 
                                              psl *psl, int sizeMul, boolean 
                                              isXeno, int maxShade, 
-                                             int displayOption)
+                                             int displayOption,
+					     boolean colorStopStart)
 {
 struct simpleFeature *sfList = NULL;
 unsigned *retGaps = NULL;
@@ -428,7 +449,8 @@ else
                                            &cds, insertMergeSize);
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo);
+    sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo,
+				  colorStopStart);
     genePredFree(&gp);
     }
 return(sfList);
@@ -446,8 +468,10 @@ void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf,
  * alter the frame. Therefore this function relies on the mRNA
  * sequence (rather than the genomic) to determine the frame.*/
 {
+boolean colorStopStart = (displayOption != CDS_DRAW_DIFF_CODONS);
 struct simpleFeature *sfList = splitPslByCodon(chromName, lf, psl, sizeMul,
-                                               isXeno, maxShade, displayOption);
+                                               isXeno, maxShade, displayOption,
+					       colorStopStart);
 slReverse(&sfList);
 lf->codons = sfList;
 }
@@ -598,7 +622,7 @@ static void updatePartialCodon(char *retStr, char *chrom, int start,
 }
 
 struct simpleFeature *splitDnaByCodon(int frame, int chromStart,
-                                 int chromEnd, struct dnaSeq *seq, bool reverse)
+	int chromEnd, struct dnaSeq *seq, bool reverse)
 /* Create list of codons from a DNA sequence.
    The DNA sequence passed in must include 3 bases extra at the
    start and the end to allow for creating partial codons */
@@ -634,7 +658,7 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         sf->start = winEnd - sf->start + winStart - 3;
         sf->end = sf->start + 3;
         }
-    sf->grayIx = setColorByCds(codon, sf->start % 6 < 3, NULL, FALSE);
+    sf->grayIx = setColorByCds(codon, sf->start % 6 < 3, NULL, FALSE, TRUE);
     zeroBytes(codon, 4);
     slAddHead(&sfList, sf);
     }
@@ -647,7 +671,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
         unsigned *starts, unsigned *ends, 
         int blockCount, unsigned
         cdsStart, unsigned cdsEnd,
-        unsigned *gaps, int *exonFrames)
+        unsigned *gaps, int *exonFrames, boolean colorStopStart)
 {
     int codon = 0;
     int frame = 0;
@@ -796,7 +820,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
                 sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
                              (!posStrand && currentStart >= cdsStart))?
                              setColorByCds( tempCodonSeq,codon,&foundStart, 
-                             !posStrand):-2;
+                             !posStrand, colorStopStart):-2;
                 slAddHead(&sfList, sf);
                 break;
             }
@@ -811,7 +835,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
                 sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
                              (!posStrand && currentStart >= cdsStart))?
                              setColorByCds(currentCodon,codon,&foundStart, 
-                                     !posStrand):-2;
+                                     !posStrand, colorStopStart):-2;
             }
             /*start of a coding block with less than 3 bases*/
             else if (currentSize < 3)
@@ -820,7 +844,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
                         sf->end,!posStrand,codonDna, base);
                 if (strlen(partialCodonSeq) == 3) 
                     sf->grayIx = setColorByCds(partialCodonSeq,codon,
-                            &foundStart, !posStrand);
+                            &foundStart, !posStrand, colorStopStart);
                 else
                     sf->grayIx = -2;
                 strcpy(partialCodonSeq,"" );
@@ -846,7 +870,8 @@ static struct simpleFeature *splitByCodon( char *chrom,
 }
 
 struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures 
-        *lf, struct genePred *gp, unsigned *gaps, boolean extraInfo)
+        *lf, struct genePred *gp, unsigned *gaps, boolean extraInfo,
+	boolean colorStopStart)
 /*divide a genePred record into a linkedFeature, where each simple
   feature is a 3-base codon (or a partial codon if on a gap boundary).
   It starts at the cdsStarts position on the genome and goes to 
@@ -855,10 +880,11 @@ struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures
 {
     if(extraInfo)
         return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
-                    gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames));
+			    gp->cdsStart,gp->cdsEnd,gaps,gp->exonFrames,
+			    colorStopStart));
     else
         return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
-                    gp->cdsStart,gp->cdsEnd,gaps,NULL));
+                    gp->cdsStart,gp->cdsEnd,gaps,NULL, colorStopStart));
 }
 
 
@@ -955,8 +981,6 @@ if(mrnaS >= 0)
 
     if (e <= lf->tallEnd)
 	{
-        boolean trueBool = TRUE;
-        boolean *nullFoundStart = &trueBool;
         boolean startColor = FALSE;
 
 	//compute mrna codon and get genomic codon
@@ -967,19 +991,27 @@ if(mrnaS >= 0)
         if (isDiff)
 	        genomicColor = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, ixColor);
 
-	if (displayOption == CDS_DRAW_MRNA_CODONS ||
-	    displayOption == CDS_DRAW_DIFF_CODONS)
+	if (displayOption == CDS_DRAW_MRNA_CODONS)
 	    {
 	    /* re-set color of this block based on mrna codons rather than
 	     * genomic, but keep the odd/even cycle of dark/light shades. */
-	    int mrnaGrayIx = setColorByCds(tempStr, (grayIx > 26),
-					   nullFoundStart, FALSE);
+	    int mrnaGrayIx = setColorByCds(tempStr, (grayIx > 26), NULL,
+					   FALSE, TRUE);
 	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
 	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
 					    cdsColor, ixColor);
 	    if (startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
+	    }
+	if (displayOption == CDS_DRAW_DIFF_CODONS)
+	    {
+	    /* Color codons red wherever mrna differs from genomic;
+	     * keep the odd/even cycle of dark/light shades. */
+	    int mrnaGrayIx = setColorByDiff(tempStr, codon[0], (grayIx > 26));
+	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
+					    cdsColor, ixColor);
+	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(tempStr));
 	    }
         if(genomicInsertion)
                 textColor = color = cdsColor[CDS_GENOMIC_INSERTION];
@@ -1014,15 +1046,12 @@ if(mrnaS >= 0)
 	}
     else if (displayOption == CDS_DRAW_DIFF_CODONS)
 	{
-	if (mrnaCodon[0] != codon[0])
+	if (codon[0] != 'X' && mrnaCodon[0] != codon[0])
 	    {
 	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
 					heightPer, color, lf->score, font,
                                         mrnaCodon, zoomedToCodonLevel,
                                         cdsColor, winStart, maxPixels );
-	    if (zoomedToCdsColorLevel && !zoomedToCodonLevel)
-		drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
-				      " X ", maxPixels, cdsColor);
 	    }
 	else
 	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 

@@ -23,7 +23,7 @@
 
 struct simpleFeature *splitGenePredByCodon( char *chrom, 
         struct linkedFeatures *lf, struct genePred *gp, unsigned
-        *gaps, boolean extraInfo);
+        *gaps, boolean extraInfo, boolean colorStopStart);
 /*divide a genePred record into a linkedFeature, where each simple
   feature is a 3-base codon (or a partial codon if on a gap boundary).
   It starts at the cdsStarts position on the genome and goes to 
