@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.42 2006/08/07 17:44:27 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.43 2006/08/07 20:21:55 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -114,13 +114,14 @@ unsigned tStart = 0;
 unsigned thisQStart = 0;
 
 if (psl == NULL)
-    errAbort("Cannot find psl entry associated with gene %s<br>\n",
-	     psl->qName);
+    errAbort("NULL passed to convertCoordUsingPsl<br>\n");
 
 if (s < psl->tStart || s >= psl->tEnd)
     {
-    warn("Position %d is outside of this psl entry q(%d-%d), t(%d-%d).<br>\n",
-	     s,psl->qStart,psl->qEnd, psl->tStart, psl->tEnd);
+    warn("Position %d is outside of this psl entry q(%s:%d-%d), t(%s:%d-%d)."
+	 "<br>\n",
+	 s, psl->qName, psl->qStart, psl->qEnd,
+	 psl->tName, psl->tStart, psl->tEnd);
     return(-1);
     }
 
@@ -527,7 +528,7 @@ static struct psl *genePredLookupPsl(char *db, char *chrom,
     while (!foundPsl && ((row = sqlNextRow(sr)) != NULL))
 	{
         psl = pslLoad(row+rowOffset);
-	if ((psl->tStart < winEnd) && (psl->tEnd > winStart))
+	if ((psl->tStart == lf->start) && (psl->tEnd == lf->end))
 	    {
 	    foundPsl = TRUE;
 	    }
@@ -1007,7 +1008,7 @@ if(mrnaS >= 0)
 				    color, lf->score, font, retStrDy, 
                                     zoomedToBaseLevel, cdsColor, 
                                     winStart, maxPixels );
-	if (zoomedToCdsColorLevel && !zoomedToBaseLevel)
+	if (!zoomedToBaseLevel)
 	    drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
 				  retStrDy, maxPixels, cdsColor);
 	}
@@ -1131,7 +1132,7 @@ if (!cdsColorsMade)
     cdsColorsMade = TRUE;
     }
    
-if(drawOptionNum>0 && zoomedToCdsColorLevel)
+if (drawOptionNum > 0)
     {
     if (startsWith("mrna", tg->mapName) || 
 	sameString(tg->mapName,"xenoMrna") ||

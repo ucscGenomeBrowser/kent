@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1181 2006/08/04 21:20:17 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1182 2006/08/07 20:21:55 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1543,10 +1543,13 @@ int drawOptionNum = 0; //off
 boolean errorColor = FALSE;
 Color saveColor = color;
 boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
+boolean showDiffBasesAllScales =
+    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
+     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_BASES));
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
-if (zoomedToCdsColorLevel && (vis != tvDense))
+if ((zoomedToCdsColorLevel || showDiffBasesAllScales) && (vis != tvDense))
     {
     if (!pslSequenceBases && tg->tdb)
 	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
@@ -1614,7 +1617,7 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 	}
     if (e > s)
 	{
-        if (zoomedToCdsColorLevel && drawOptionNum>0 && vis != tvDense &&
+        if (drawOptionNum>0 && vis != tvDense &&
             e + 6 >= winStart && s - 6 < winEnd &&
 		(e-s <= 3 || pslSequenceBases)) 
                 drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
