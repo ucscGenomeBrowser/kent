@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.117 2006/08/05 04:06:24 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.118 2006/08/07 23:09:29 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -381,7 +381,11 @@ lineFileClose(&lf);
 
 static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
 /* Write 'track' line that save trackDb info.  Only
- * write parts that aren't default. */
+ * write parts that aren't default, then remove from settings
+ * to avoid duplication of output.
+ * NOTE: that there may no longer be any need to write anything
+ * out except for settings, but this is more conservative to 
+ * maintain functionality while custom track work continues */
 {
 struct trackDb *def = customTrackTdbDefault();
 
@@ -391,26 +395,44 @@ fprintf(f, "track");
 stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
 stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
 fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
+hashMayRemove(tdb->settingsHash, "name");
 
-if (!sameString(tdb->longLabel, def->longLabel))
-    {
-    stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
-    stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
-    fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
-    }
+stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
+stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
+fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
+hashMayRemove(tdb->settingsHash, "description");
+    
 if (tdb->url != NULL)
+    {
     fprintf(f, "\t%s='%s'", "url", tdb->url);
+    hashMayRemove(tdb->settingsHash, "url");
+    }
 if (tdb->visibility != def->visibility)
+    {
     fprintf(f, "\t%s='%d'", "visibility", tdb->visibility);
+    hashMayRemove(tdb->settingsHash, "visibility");
+    }
 if (tdb->useScore != def->useScore)
+    {
     fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
+    hashMayRemove(tdb->settingsHash, "useScore");
+    }
 if (tdb->priority != def->priority)
-    fprintf(f, "\t%s='%f'", "priority", tdb->priority);
+    {
+    fprintf(f, "\t%s='%.3f'", "priority", tdb->priority);
+    hashMayRemove(tdb->settingsHash, "priority");
+    }
 if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
+    {
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
+    hashMayRemove(tdb->settingsHash, "color");
+    }
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
 	|| tdb->altColorB != tdb->altColorB)
+    {
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
+    hashMayRemove(tdb->settingsHash, "altColor");
+    }
 if (tdb->html)
     {
     /* write doc file in trash and add reference to the track line*/
@@ -421,9 +443,10 @@ if (tdb->html)
     htmlFile = tn.forCgi;
     writeGulp(htmlFile, tdb->html, strlen(tdb->html));
     fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
+    hashMayRemove(tdb->settingsHash, "htmlFile");
     }
 if (tdb->settings && (strlen(tdb->settings) > 0))
-    saveSettings(f, cloneString(tdb->settings));
+    saveSettings(f, hashToRaString(tdb->settingsHash));
 fputc('\n', f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
@@ -434,6 +457,16 @@ void customTrackSave(struct customTrack *trackList, char *fileName)
 /* Save out custom tracks. */
 {
 FILE *f = mustOpen(fileName, "w");
+
+#ifdef DEBUG
+struct dyString *ds = dyStringNew(100);
+if (!fileExists(fileName))
+    {
+    dyStringPrintf(ds, "chmod 666 %s", fileName);
+    system(ds->string);
+    }
+#endif
+
 struct customTrack *track;
 for (track = trackList; track != NULL; track = track->next)
     {
