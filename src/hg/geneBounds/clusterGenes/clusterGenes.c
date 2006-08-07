@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.33 2006/06/13 05:50:26 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.34 2006/08/07 23:43:02 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -169,6 +169,7 @@ struct track* trackTableNew(char* name,
 struct track* track;
 AllocVar(track);
 track->name = trackNameCreate(name, table);
+track->table = cloneString(table);
 track->isDb = TRUE;
 return track;
 }
