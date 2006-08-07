@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.1 2006/07/17 21:51:11 angie Exp $
+# $Id: makeDownloads.pl,v 1.2 2006/08/07 17:08:30 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -129,10 +129,10 @@ sub compressChromFiles {
   my $agpFudge = 0;
   foreach my $chrRoot (sort keys %chromRoots) {
     foreach my $chr (@{$chromRoots{$chrRoot}}) {
-      my $agpFile = "$topDir/$chrRoot/$chr.agp";
-      my $outFile = "$topDir/$chrRoot/$chr.fa.out";
-      my $trfFile = "$trfRunDir/trfMaskChrom/$chr.bed";
-      if (-e $agpFile) {
+      my $agpFile = "$chrRoot/$chr.agp";
+      my $outFile = "$chrRoot/$chr.fa.out";
+      my $trfFile = "trfMaskChrom/$chr.bed";
+      if (-e "$topDir/$agpFile") {
 	push @chromAgpFiles, $agpFile;
       } elsif ($chr eq 'chrM') {
 	# It is OK to lack AGP for chrM, which we sometimes add to assemblies.
@@ -141,13 +141,13 @@ sub compressChromFiles {
 	warn "Missing AGP $agpFile\n";
 	$problems++;
       }
-      if (-e $outFile) {
+      if (-e "$topDir/$outFile") {
 	push @chromOutFiles, $outFile;
       } else {
 	warn "Missing RepeatMasker $outFile\n";
 	$problems++;
       }
-      if (-e $trfFile) {
+      if (-e "$trfRunDir/$trfFile") {
 	push @chromTrfFiles, $trfFile;
       } else {
 	warn "Missing TRF $trfFile\n";
@@ -164,9 +164,6 @@ sub compressChromFiles {
       (scalar(@chromTrfFiles) != scalar(@chroms))) {
     die "Sorry, can't find the expected set of per-chromosome files.";
   }
-  my $chromAgpFiles = join(" ", @chromAgpFiles);
-  my $chromOutFiles = join(" ", @chromOutFiles);
-  my $chromTrfFiles = join(" ", @chromTrfFiles);
   $bossScript->add(<<_EOF_
 # For the time being, use $chromGz/ to temporarily store uncompressed
 # 2bit-derived .fa and .fa.masked files:
@@ -179,17 +176,19 @@ end
 
 # Make compressed archive files of per-chrom .agp, .out, TRF .bed,
 # soft- and hard-masked .fa:
-cd $runDir/bigZips
+cd $topDir
 
-tar cvzf chromAgp.tar.gz $chromAgpFiles
+tar cvzf $runDir/bigZips/chromAgp.tar.gz @chromAgpFiles
 
-tar cvzf chromOut.tar.gz $chromOutFiles
+tar cvzf $runDir/bigZips/chromOut.tar.gz @chromOutFiles
 
-tar cvzf chromTrf.tar.gz $chromTrfFiles
+cd $runDir/$chromGz
+tar cvzf $runDir/bigZips/chromFa.tar.gz *.fa
 
-tar cvzf chromFa.tar.gz ../$chromGz/*.fa
+tar cvzf $runDir/bigZips/chromFaMasked.tar.gz *.fa.masked
 
-tar cvzf chromFaMasked.tar.gz ../$chromGz/*.fa.masked
+cd $trfRunDir
+tar cvzf $runDir/bigZips/chromTrf.tar.gz @chromTrfFiles
 
 # Now fix $chromGz/ up proper:
 cd $runDir/$chromGz
