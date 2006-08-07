@@ -103,14 +103,14 @@ void lineFileReuse(struct lineFile *lf);
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 /* Seek to read next line from given position. */
 
-void lineFileErrAbort(struct lineFile *lf, char *format, ...)
+void lineFileAbort(struct lineFile *lf, char *format, ...)
 /* Print file name, line number, and error message, and abort. */
 #if defined(__GNUC__) && defined(JK_WARN)
 __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
-void lineFileVaErrAbort(struct lineFile *lf, char *format, va_list args);
+void lineFileVaAbort(struct lineFile *lf, char *format, va_list args);
 /* Print file name, line number, and error message, and abort. */
  
 void lineFileUnexpectedEnd(struct lineFile *lf);

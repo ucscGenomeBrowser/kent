@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.49 2006/08/07 15:48:05 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.50 2006/08/07 15:57:47 kent Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -460,7 +460,7 @@ if (*retStart[0] == '#')
 return TRUE;
 }
 
-void lineFileVaErrAbort(struct lineFile *lf, char *format, va_list args)
+void lineFileVaAbort(struct lineFile *lf, char *format, va_list args)
 /* Print file name, line number, and error message, and abort. */
 {
 struct dyString *dy = dyStringNew(0);
@@ -470,12 +470,12 @@ errAbort("%s", dy->string);
 dyStringFree(&dy);
 }
 
-void lineFileErrAbort(struct lineFile *lf, char *format, ...)
+void lineFileAbort(struct lineFile *lf, char *format, ...)
 /* Print file name, line number, and error message, and abort. */
 {
 va_list args;
 va_start(args, format);
-lineFileVaErrAbort(lf, format, args);
+lineFileVaAbort(lf, format, args);
 va_end(args);
 }
 
