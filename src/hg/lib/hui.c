@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.78 2006/06/30 00:23:47 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.79 2006/08/07 23:41:49 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -509,7 +509,7 @@ static char *cdsColorOptions[] = {
     "OFF",
     "genomic codons",
     "mRNA codons",
-    "different mRNA codons",
+    "nonsynonymous mRNA codons",
     "mRNA bases",
     "different mRNA bases"
     };
@@ -518,6 +518,10 @@ enum cdsColorOptEnum cdsColorStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
 int x = stringIx(string, cdsColorOptions);
+/* Prevent error caused by label change -- old label may be in people's
+ * carts.  */
+if (x < 0 && sameString(string, "different mRNA codons"))
+    x = stringIx("nonsynonymous mRNA codons", cdsColorOptions);
 if (x < 0)
    errAbort("hui::cdsColorOptEnum() - Unknown option %s", string);
 return x;
