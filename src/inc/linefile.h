@@ -102,6 +102,12 @@ void lineFileReuse(struct lineFile *lf);
 
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 /* Seek to read next line from given position. */
+
+void lineFileErrAbort(struct lineFile *lf, char *format, ...);
+/* Print file name, line number, and error message, and abort. */
+
+void lineFileVaErrAbort(struct lineFile *lf, char *format, va_list args);
+/* Print file name, line number, and error message, and abort. */
  
 void lineFileUnexpectedEnd(struct lineFile *lf);
 /* Complain about unexpected end of file. */
