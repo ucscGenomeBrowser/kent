@@ -20,7 +20,7 @@ set dumpDate=""
 if ($#argv < 1 || $#argv > 2) then
   echo
   echo "  gets the names of all databases that contain a given table."
-  echo "  will accept the MySQL wildcard, %"
+  echo "  will accept the MySQL wildcard, %, but not on RR machines"
   echo "  note: not real-time on RR.  uses nightly TABLE STATUS dump."
   echo
   echo "    usage:  tablename, [machine] defaults to beta"
