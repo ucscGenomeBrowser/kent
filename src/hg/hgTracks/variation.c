@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.88 2006/07/04 03:19:23 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.89 2006/08/08 21:33:19 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -682,7 +682,6 @@ int heightPer = tg->heightPer;
 int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 
@@ -702,6 +701,7 @@ if (vis == tvPack || vis == tvSquish)
         char *name = tg->itemName(tg, item);
 	Color itemColor = tg->itemColor(tg, item, vg);
 	Color itemNameColor = tg->itemNameColor(tg, item, vg);
+	boolean drawNameInverted = FALSE;
 	
         y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
@@ -709,20 +709,39 @@ if (vis == tvPack || vis == tvSquish)
             {
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
+	    boolean snapLeft = FALSE;
+	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
-            if (textX < insideX)        /* Snap label to the left. */
+	    snapLeft = (textX < insideX);
+            if (snapLeft)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
 		vgUnclip(vg);
 		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		if (drawNameInverted)
+		    {
+		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+		    vgBox(vg, boxStart, y, nameWidth+1, heightPer - 1, color);
+		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		                MG_WHITE, font, name);
+		    }
+		else
+		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
 		vgUnclip(vg);
 		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		vgTextRight(vg, textX, y, nameWidth, heightPer, 
+	        {
+		if (drawNameInverted)
+		    {
+		    vgBox(vg, textX - 1, y, nameWidth+1, heightPer-1, color);
+		    vgTextRight(vg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
+		    }
+		else
+		    vgTextRight(vg, textX, y, nameWidth, heightPer, 
 			    itemNameColor, font, name);
+		}
             }
         if (!tg->mapsSelf)
             {

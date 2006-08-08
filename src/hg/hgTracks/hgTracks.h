@@ -873,6 +873,9 @@ void affyTxnPhase2Methods(struct track *track);
 void loadGenePred(struct track *tg);
 /* Convert gene pred in window to linked feature. */
 
+boolean highlightItem(struct track *tg, void *item);
+/* Should this item be highlighted? */
+
 #define NEXT_ITEM_ARROW_BUFFER 5
 /* Space around "next item" arrow (in pixels). */
 
