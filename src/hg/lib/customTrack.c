@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.118 2006/08/07 23:09:29 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.119 2006/08/08 00:04:11 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -388,6 +388,10 @@ static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
  * maintain functionality while custom track work continues */
 {
 struct trackDb *def = customTrackTdbDefault();
+
+/* make sure settings hash is up-to-date */
+freeHash(&tdb->settingsHash);
+trackDbHashSettings(tdb);
 
 fprintf(f, "track");
 
