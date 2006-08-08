@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.119 2006/08/08 00:04:11 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.120 2006/08/08 23:03:26 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -138,21 +138,31 @@ if (!checked)
 return enabled;
 }
 
-void ctAddToSettings(struct trackDb *tdb, char *format, ...)
-/*	add a variable to tdb->settings string	*/
+void ctAddToSettings(struct customTrack *ct, char *name, char *val)
+/*	add a variable to tdb settings */
 {
-va_list args;
-struct dyString *settings = newDyString(0);
+struct dyString *ds = newDyString(0);
+struct hashCookie hc;
+struct hashEl *hel;
+struct trackDb *tdb = ct->tdb;
 
-va_start(args, format);
+if (!tdb->settingsHash)
+    trackDbHashSettings(tdb);
 
-/*	get existing settings if any to append to	*/
-if (tdb->settings)
-    dyStringPrintf(settings, "%s\n", tdb->settings);
-dyStringVaPrintf(settings, format, args);
-dyStringPrintf(settings, "\n");
-va_end(args);
-tdb->settings = dyStringCannibalize(&settings);
+/* add or replace if already in hash */
+hashMayRemove(tdb->settingsHash, name);
+hashAdd(tdb->settingsHash, name, val);
+
+/* regenerate settings string */
+hc = hashFirst(tdb->settingsHash);
+while ((hel = hashNext(&hc)) != NULL)
+    {
+    dyStringAppend(ds, name);
+    dyStringAppend(ds, " ");
+    dyStringAppend(ds, val);
+    dyStringAppend(ds, "\n");
+    }
+tdb->settings = dyStringCannibalize(&ds);
 }
 
 char *customTrackTableFromLabel(char *label)
@@ -388,10 +398,6 @@ static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
  * maintain functionality while custom track work continues */
 {
 struct trackDb *def = customTrackTdbDefault();
-
-/* make sure settings hash is up-to-date */
-freeHash(&tdb->settingsHash);
-trackDbHashSettings(tdb);
 
 fprintf(f, "track");
 

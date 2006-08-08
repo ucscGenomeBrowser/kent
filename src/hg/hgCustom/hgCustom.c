@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.28 2006/08/08 05:49:39 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.29 2006/08/08 23:03:26 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -382,16 +382,9 @@ if (errCatchStart(errCatch))
             }
         next = ct->next;
         if (initialPos)
-            {
-            ctAddToSettings(ct->tdb, "initialPos %s", cloneString(initialPos));
-            hashAdd(ct->tdb->settingsHash, "initialPos", 
-                                cloneString(initialPos));
-            }
+            ctAddToSettings(ct, "initialPos", cloneString(initialPos));
         if (startsWith("http://", text))
-            {
-            ctAddToSettings(ct->tdb, "dataUrl %s", cloneString(text));
-            hashAdd(ct->tdb->settingsHash, "dataUrl", cloneString(text));
-            }
+            ctAddToSettings(ct, "dataUrl", cloneString(text));
         slAddHead(&ctList, ct); 
         }
     }
