@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.26 2006/08/07 23:13:59 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.27 2006/08/08 00:03:05 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -233,7 +233,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         printf("</TD><TD ALIGN='CENTER'>%d", slCount(ct->bedList));
         }
     else
-        puts("</TD><TD>&nbsp;</TD><TD>&nbsp;");
+        puts("</TD><TD>&nbsp;");
 
     /* Pos field; indicates initial position for the track, or first element */
     pos = trackDbSetting(ct->tdb, "initialPos");
