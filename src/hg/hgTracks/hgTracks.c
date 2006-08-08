@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1183 2006/08/07 23:48:55 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1184 2006/08/08 00:06:43 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12309,8 +12309,8 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
-boolean hideAllNotCt = cgiVarExists("hgt.hideAllNotCt");
-char *visAll = cgiUsualString("hgt.visAll", NULL);
+boolean hideAllNotCt = cartCgiUsualBoolean(cart, "hgt.hideAllNotCt", FALSE);
+char *visAll = cartCgiUsualString(cart, "hgt.visAll", NULL);
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
