@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.2 2006/08/01 01:35:36 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.3 2006/08/08 00:15:19 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -93,7 +93,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir);
+my ($buildDir, $chromBased);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -124,12 +124,13 @@ sub getSpecies {
 } # getSpecies
 
 #########################################################################
-# * step: cluster [workhorse]
+# * step: cluster [bigClusterHub]
 sub doCluster {
   my $runDir = "$buildDir/run.cluster";
   &HgAutomate::mustMkdir($runDir);
 
-  my $paraHub = &HgAutomate::chooseClusterByBandwidth();
+  my $paraHub = $opt_bigClusterHub ? $opt_bigClusterHub :
+    &HgAutomate::chooseClusterByBandwidth();
   if (! -e $unmaskedSeq) {
     die "Error: required file $unmaskedSeq does not exist.";
   }
@@ -234,7 +235,7 @@ _EOF_
 
 
 #########################################################################
-# * step: cat [workhorse]
+# * step: cat [fileServer]
 sub doCat {
   my $runDir = "$buildDir";
   &HgAutomate::checkExistsUnlessDebug('cluster', 'cat',
@@ -279,16 +280,28 @@ _EOF_
   $bossScript->add(<<_EOF_
 
 # Add header to top-level $db.fa.out:
-cat > $db.fa.out <<EOF
+cat > /tmp/rmskHead.txt <<EOF
    SW  perc perc perc  query      position in query         matching        repeat          position in  repeat
 score  div. del. ins.  sequence    begin    end   (left)   repeat          class/family     begin  end (left)  ID
 
 EOF
 
+cat /tmp/rmskHead.txt > $db.fa.out
 cat $partDir/???/*.out >> $db.fa.out
 cat $partDir/???/*.align >> $db.fa.align
 _EOF_
   );
+  if ($chromBased) {
+    $bossScript->add(<<_EOF_
+
+# Split into per-chrom files for hgdownload.
+tail +4 $db.fa.out \\
+| splitFileByColumn -col=5 stdin /cluster/data/$db -chromDirs \\
+    -ending=.fa.out -head=/tmp/rmskHead.txt
+
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doCat
 
@@ -314,13 +327,11 @@ _EOF_
 
 
 #########################################################################
-# * step: load [workhorse]
+# * step: load [dbHost]
 sub doLoad {
   my $runDir = "$buildDir";
   &HgAutomate::checkExistsUnlessDebug('cat', 'load', "$buildDir/$db.fa.out");
 
-  my $seqCount = `twoBitInfo $unmaskedSeq stdout | wc -l`;
-  my $chromBased = ($seqCount <= $HgAutomate::splitThreshold);
   my $split = $chromBased ? " (split)" : "";
   my $whatItDoes = "It loads $db.fa.out into the$split rmsk table.";
   my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
@@ -374,6 +385,8 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/RepeatMasker.$date";
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
+my $seqCount = `twoBitInfo $unmaskedSeq stdout | wc -l`;
+$chromBased = ($seqCount <= $HgAutomate::splitThreshold);
 
 # Do everything.
 $stepper->execute();
