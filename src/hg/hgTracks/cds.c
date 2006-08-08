@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.44 2006/08/07 23:48:55 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.45 2006/08/08 21:51:59 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -447,6 +447,8 @@ else
     int insertMergeSize = extraInfo ? -1 : 0;
     struct genePred *gp = genePredFromPsl2(psl, genePredCdsStatFld|genePredExonFramesFld,
                                            &cds, insertMergeSize);
+    lf->start = gp->txStart;
+    lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo,
@@ -729,7 +731,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
             slAddHead(&sfList, sf);
             continue;
         }
-        //3' to coding block
+        //UTR to coding block
         else if (thisEnd > cdsLine && thisStart < cdsLine)
         {
             AllocVar(sf);
@@ -754,9 +756,11 @@ static struct simpleFeature *splitByCodon( char *chrom,
                 currentEnd = thisEnd;
 
 
-        /*get dna for entire block. this is faster than
+        /*get dna for entire coding block. this is faster than
           getting it for each codon, but suprisingly not faster
           than getting it for each linked feature*/
+	if (thisStart < cdsStart) thisStart = cdsStart;
+	if (thisEnd > cdsEnd) thisEnd = cdsEnd;
         codonDna = hDnaFromSeq( chrom, thisStart, thisEnd, dnaUpper );
         base = thisStart;
 
@@ -862,6 +866,21 @@ static struct simpleFeature *splitByCodon( char *chrom,
             else
                 currentEnd = currentStart;
         }
+	/* coding block to UTR block */
+	if (posStrand && (thisEnd < ends[i]))
+	    {
+            AllocVar(sf);
+            sf->start = thisEnd;
+            sf->end = ends[i];
+            slAddHead(&sfList, sf);
+	    }
+	else if (!posStrand && (thisStart > starts[i]))
+	    {
+            AllocVar(sf);
+            sf->start = starts[i];
+            sf->end = thisStart;
+            slAddHead(&sfList, sf);
+	    }
     }
 
     if(posStrand)
@@ -962,7 +981,7 @@ if(mrnaS >= 0)
 
             if (!appendAtStart)
             {
-                newIdx = mrnaS+(3-size)-1;
+                newIdx = mrnaS + size;
 	        snprintf(saveStr,4,"%s%s", ds2->string, &mrnaSeq->dna[newIdx]);
             }
             else

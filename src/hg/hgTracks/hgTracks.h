@@ -523,6 +523,9 @@ int linkedFeaturesCmpStart(const void *va, const void *vb);
 void linkedFeaturesBoundsAndGrays(struct linkedFeatures *lf);
 /* Calculate beginning and end of lf from components, etc. */
 
+int lfCalcGrayIx(struct linkedFeatures *lf);
+/* Calculate gray level from components. */
+
 void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);

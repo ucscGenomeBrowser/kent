@@ -274,17 +274,21 @@ lf->orientation = orientFromChar(psl->strand[0]);
 if (rcTarget)
     lf->orientation = -lf->orientation;
 
+sfList = sfFromPslX(psl, grayIx, sizeMul);
+slReverse(&sfList);
+lf->components = sfList;
 /*if we are coloring by codon and zoomed in close 
   enough, then split simple feature by the psl record
   and the mRNA sequence. Otherwise do the default conversion
   from psl to simple feature.*/
 if (drawOptionNum>0 && zoomedToCdsColorLevel)
-        lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade, drawOptionNum);
-sfList = sfFromPslX(psl, grayIx, sizeMul);
-slReverse(&sfList);
-lf->components = sfList;
-linkedFeaturesBoundsAndGrays(lf);
-
+    {
+    lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade,
+			   drawOptionNum);
+    lf->grayIx = lfCalcGrayIx(lf);
+    }
+else
+    linkedFeaturesBoundsAndGrays(lf);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 
