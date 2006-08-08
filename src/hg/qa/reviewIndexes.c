@@ -65,10 +65,7 @@ void addRowcount()
 /* get the size of each table */
 {
 struct table *table1 = NULL;
-char query[512];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
 
 for (table1 = tableList; table1 != NULL; table1 = table1->next)
     {
