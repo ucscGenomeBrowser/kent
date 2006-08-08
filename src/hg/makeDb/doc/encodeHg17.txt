@@ -1957,8 +1957,11 @@ cat > load.csh << 'EOF'
 
 ##########################################################################
 # SANGER CHIP/CHIP  (2006-03-16 kate)
+# Updated (2006-08-08 kate)
 #  5 histone mods in HFL cells, to be added to existing track
 #  Submitted by Rob Andrews
+#  Data in two additional cell lines (MOLT4 and PTR8) submitted
+#  8/8/08 by Rob -- 8 additional subtracks.
 
     ssh hgwdev
     cd /cluster/data/encode/sanger/chipchip
@@ -1985,6 +1988,39 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log &
     # loaded 23996 elements for 5 tables
+
+    ssh hgwdev
+    cd /cluster/data/encode/sanger/chipchip
+    mkdir -p 2008-08-8/lab
+    cd 2006-08-08
+    cp /var/ftp/encode/*.wig.txt lab
+
+    grep "^chr" lab/H3K4me1_PTR8_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me1Ptr8.bed
+    grep "^chr" lab/H3K4me2_PTR8_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me2Ptr8.bed
+    grep "^chr" lab/H3K4me3_PTR8_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me3Ptr8.bed
+    grep "^chr" lab/H3K4me1_MOLT4_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me1Molt4.bed
+    grep "^chr" lab/H3K4me2_MOLT4_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me2Molt4.bed
+    grep "^chr" lab/H3K4me3_MOLT4_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me3Molt4.bed
+    grep "^chr" lab/H3ac_MOLT4_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3acMolt4.bed
+    grep "^chr" lab/H4ac_MOLT4_1.wig.txt | sort -k1,1 -k2,2n > \
+	H4acMolt4.bed
+cat > load.csh << 'EOF'
+    foreach f (*.bed)
+        set t = $f:r
+        echo $t
+	hgLoadBed -bedGraph=4 hg17 encodeSangerChip$t $t.bed
+    end
+'EOF'
+    csh load.csh >&! load.log &
+    # loaded 23983 elements for 8 tables
+
 
 # ENCODE PSEUDOGENE TRACK (DONE, 2006-03-30, hartera)
     # Yontao reloaded the encodePseudogeneUcsc2 table with shorter 
