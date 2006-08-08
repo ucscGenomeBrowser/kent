@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.85 2006/03/24 02:00:50 braney Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.86 2006/08/08 00:34:31 markd Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -206,7 +206,7 @@ if (! hDbIsActive(db))
     }
 scientificName = hScientificName(db);
 if (hIsMgcServer())
-    cartWebStart(theCart, "MGC %s Genome Browser Gateway \n", organism);
+    cartWebStart(theCart, "MGC/ORFeome %s Genome Browser Gateway \n", organism);
 else
     {
     char buffer[128];
