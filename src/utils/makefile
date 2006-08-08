@@ -117,6 +117,7 @@ DIRS = \
 	scrambleFa \
 	spacedToTab \
 	splitFile \
+	splitFileByColumn \
 	stringify \
 	subChar \
 	subs \
