@@ -893,23 +893,6 @@ void customFactoryAdd(struct customFactory *fac)
 slAddTail(&factoryList, fac);
 }
 
-static char *hashToRaString(struct hash *hash)
-/* Convert hash to string in ra format. */
-{
-struct hashEl *el, *list = hashElListHash(hash);
-struct dyString *dy = dyStringNew(0);
-slSort(&list, hashElCmp);
-for (el = list; el != NULL; el = el->next)
-   {
-   dyStringAppend(dy, el->name);
-   dyStringAppendC(dy, ' ');
-   dyStringAppend(dy, el->val);
-   dyStringAppendC(dy, '\n');
-   }
-hashElFreeList(&list);
-return dyStringCannibalize(&dy);
-}
-
 static void parseRgb(char *s, int lineIx, 
 	unsigned char *retR, unsigned char *retG, unsigned char *retB)
 /* Turn comma separated list to RGB vals. */
