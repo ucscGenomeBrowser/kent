@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1184 2006/08/08 00:06:43 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1185 2006/08/08 00:08:24 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11555,11 +11555,7 @@ struct track *newCustomTrack(struct customTrack *ct)
 struct track *tg;
 boolean useItemRgb = FALSE;
 tg = trackFromTrackDb(ct->tdb);
-/* NOTE: when custom track UI's are working correctly, can
-   remove this if statement so hasUi is always TRUE */
-if (ct->tdb->html)
-    tg->hasUi = TRUE;
-
+tg->hasUi = TRUE;
 if (ct->dbTrack)
     {
     struct sqlConnection *conn = sqlCtConn(FALSE);
