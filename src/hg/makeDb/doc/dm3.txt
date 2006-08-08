@@ -1,0 +1,146 @@
+# for emacs: -*- mode: sh; -*-
+
+# Drosophila melanogaster -- BDGP Release 5.0 (Apr. 2006)
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE 7/7/06 angie)
+    ssh kkstore05
+    mkdir /cluster/store12/dm3
+    ln -s /cluster/store12/dm3 /cluster/data/dm3
+    mkdir /cluster/data/dm3/downloads
+    cd /cluster/data/dm3/downloads
+    wget ftp://ftp.fruitfly.org/pub/download/compressed/dmel_release5-2006-04-16.tgz
+    tar xvzf dmel_release5-2006-04-16.tgz
+    cd Dmel_Release5
+    faSize na*
+#168717020 bases (6368725 N's 162348295 real 162348295 upper 0 lower) in 14 sequences in 14 files
+#Total size: mean 12051215.7 sd 11751902.6 min 204112 (XHet) max 29004656 (ArmUextra) median 10049037
+    # Follow FlyBase's lead on the chromosome names, but still use our 
+    # "chr" prefix:
+    mkdir ../renamedChromFa
+    foreach f (na_*.dmel.RELEASE5)
+      set chr = `echo $f:r:r | sed -r -e 's/^na_(arm)?/chr/;'`
+      echo $chr
+      if (`grep '^>' $f | wc -l` != 1) then
+        echo $f does not have exactly one fasta record\!
+        break
+      endif
+      sed -e 's/^>.*/>'$chr'/' $f > ../renamedChromFa/$chr.fa
+    end
+    cd ../renamedChromFa/
+    faSize *
+#168717020 bases (6368725 N's 162348295 real 162348295 upper 0 lower) in 14 sequences in 14 files
+#Total size: mean 12051215.7 sd 11751902.6 min 204112 (chrXHet) max 29004656 (chrUextra) median 10049037
+
+
+#########################################################################
+# MAKE GENOME DB (DONE 7/10/06 angie)
+    ssh kkstore05
+    cd /cluster/data/dm3
+    cat > dm3.config.ra <<EOF
+# Config parameters for makeGenomeDb.pl:
+db dm3
+clade insect
+scientificName Drosophila melanogaster
+assemblyDate Apr. 2006
+assemblyLabel BDGP Release 5
+orderKey 50
+mitoAcc 5835233
+fastaFiles /cluster/data/dm3/downloads/renamedChromFa/*.fa
+dbDbSpeciesDir drosophila
+fakeAgpMinContigGap 20
+fakeAgpMinScaffoldGap 50000
+EOF
+
+    ~/kent/src/utils/makeGenomeDb.pl dm3.config.ra \
+      >& makeGenomeDb.log & tail -f makeGenomeDb.log
+
+
+#########################################################################
+# REPEATMASKER (DONE 7/31/06 angie)
+    ssh kkstore05
+    # Run -debug to create the dir structure and preview the scripts:
+    ~/kent/src/utils/doRepeatMasker.pl dm3 -verbose 3 -debug
+    # Run it for real and tail the log:
+    ~/kent/src/utils/doRepeatMasker.pl dm3 -verbose 3 \
+      >& /cluster/data/dm3/bed/RepeatMasker.2006-07-31/do.log &
+    tail -f /cluster/data/dm3/bed/RepeatMasker.2006-07-31/do.log
+    # RepeatMasker and lib version from do.log:
+#    March 20 2006 (open-3-1-5) version of RepeatMasker
+#CC   RELEASE 20060315;                                            *
+    # Compare coverage to previous assembly:
+    featureBits dm3 rmsk
+#11409617 bases of 162367812 (7.027%) in intersection
+    featureBits dm2 rmsk
+#16178239 bases of 131698467 (12.284%) in intersection
+
+#TODO... DEBUG THE COVERAGE DROP!
+
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 8/1/06 angie)
+    ssh kolossus
+    nice tcsh
+    mkdir /cluster/data/dm3/bed/simpleRepeat
+    cd /cluster/data/dm3/bed/simpleRepeat
+    twoBitToFa ../../dm3.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+      -bedAt=simpleRepeat.bed -tempDir=/tmp \
+    >& trf.log & tail -f trf.log
+    # Only about 20 minutes, but dm3 is only 168Mbp...
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed dm3 simpleRepeat \
+      /cluster/data/dm3/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    # Compare coverage to previous assembly:
+    featureBits dm3 simpleRepeat
+#6837416 bases of 162367812 (4.211%) in intersection
+    featureBits dm2 simpleRepeat
+#1597029 bases of 131698467 (1.213%) in intersection
+    # Looks like the increase is due to chrUextra:
+    featureBits dm3 simpleRepeat -chrom=chrUextra
+#3871170 bases of 25541756 (15.156%) in intersection
+    featureBits dm3 simpleRepeat -chrom=chr2L
+#225239 bases of 23011344 (0.979%) in intersection
+
+
+#########################################################################
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 8/1/06 angie)
+    ssh kolossus
+    cd /cluster/data/dm3
+    time twoBitMask dm3.rmsk.2bit -add bed/simpleRepeat/trfMask.bed dm3.2bit
+    # This warning is OK -- the extra fields are not block coordinates.
+#Warning: BED file bed/simpleRepeat/trfMask.bed has 10 fields which means it might contain block coordinates, but this program uses only the first three fields (the entire span -- no support for blocks).
+#0.136u 0.272s 0:01.98 20.2%     0+0k 0+0io 3pf+0w
+    # Link to it from /gbdb:
+    ssh hgwdev
+    ln -s /cluster/data/dm3/dm3.2bit /gbdb/dm3/dm3.2bit
+
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 8/4/06 angie)
+    cd /cluster/data/dm3
+    ~/kent/src/utils/makeDownloads.pl dm3 -verbose=2 >& jkStuff/downloads.log &
+    tail -f jkStuff/downloads.log
+    # Edit README.txt files when done:
+# *** Edit each README.txt to resolve any notes marked with "***":
+#     /cluster/data/dm3/goldenPath/database/README.txt
+#     /cluster/data/dm3/goldenPath/bigZips/README.txt
+#     /cluster/data/dm3/goldenPath/chromosomes/README.txt
+
+
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
+#########################################################################
