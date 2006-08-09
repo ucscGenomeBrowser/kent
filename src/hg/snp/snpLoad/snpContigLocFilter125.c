@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter125.c,v 1.2 2006/08/09 01:01:32 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter125.c,v 1.3 2006/08/09 01:58:37 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -157,6 +157,8 @@ if (loc_type == 1)
 /* between */
 if (loc_type == 3)
     return start;
+
+return end;
 }
 
 void filterSnps()
@@ -207,7 +209,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         end = getEnd(loc_type, start, row[4]);
 	if (end == -1) continue;
 
-	fprintf(f, "%s\t%s\tchr%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
+	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
 	            row[0], row[1], (char *)el1->val, row[2], start, end, row[6], row[7], (char *)el2->val);
 	}
     }
