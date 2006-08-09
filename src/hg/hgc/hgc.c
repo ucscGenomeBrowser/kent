@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1078 2006/08/07 10:21:03 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1079 2006/08/09 19:01:09 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12582,7 +12582,7 @@ boolean foundStsResult = FALSE;
 /* primers and print out */  
 if (hTableExists("bacCloneXRef"))
     {
-    sprintf(query, "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
+    safef(query, sizeof(query), "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
     sr1 = sqlMustGetResult(conn1, query);
     }
 
@@ -12592,7 +12592,7 @@ if (sr1 == NULL)
     /* get aliases from bacCloneAlias and print */
     if (hTableExists("bacCloneAlias"))
         {
-        sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
+        safef(query, sizeof(query), "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
         printf("<TR><TH ALIGN=left>BAC Clone Aliases:</TH><TD WIDTH=75%%>"); 
         while ((row = sqlNextRow(sr)))
             {
@@ -12654,7 +12654,7 @@ if (sr1 != NULL)
         else
             printf("n/a</TD>");
         /* get BAC clone and STS aliases for this Sanger Name */
-        sprintf(query, "SELECT alias FROM bacCloneAlias WHERE sangerName = '%s'", sName);
+        safef(query, sizeof(query), "SELECT alias FROM bacCloneAlias WHERE sangerName = '%s'", sName);
         sr2 = sqlMustGetResult(conn, query);
         if (sr2 != NULL)
             printf("<TD>"); 
