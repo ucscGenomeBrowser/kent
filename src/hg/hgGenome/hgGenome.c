@@ -25,7 +25,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.38 2006/07/24 16:19:06 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.39 2006/08/09 20:40:13 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -77,6 +77,7 @@ if (fileName != NULL && fileExists(fileName))
 	    if (gg->longLabel == NULL) gg->longLabel = name;
 	    gg->binFileName = binaryFile;
 	    gg->settings = chromGraphSettingsGet(name, NULL, NULL, NULL);
+	    gg->settings->minVal = gg->settings->maxVal = 0; /* Force recalc */
 	    chromGraphSettingsFillFromHash(gg->settings, ra, name);
 	    slAddHead(&list, gg);
 	    }
@@ -485,11 +486,6 @@ if (gg != NULL)
 	int spaceWidth = tl.nWidth;
 	int tickWidth = spaceWidth*2/3;
 	int fontPixelHeight = mgFontPixelHeight(gl->font);
-	for (j=0; j<cgs->linesAtCount; ++j)
-	     {
-	    double lineAt = cgs->linesAt[j];
-	    int y = (height - ((lineAt - gMin)*gScale));
-	     }
 	for (i=0; i<gl->lineCount; ++i)
 	    {
 	    for (j=0; j< cgs->linesAtCount; ++j)
@@ -591,7 +587,6 @@ return NULL;
 void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal)
 /* Make a drop-down with available chrom graphs */
 {
-struct genoGraph *gg;
 int totalCount = 1 + slCount(ggList);
 char **menu, **values;
 int i = 0;
@@ -760,10 +755,12 @@ else if (cartVarExists(cart, hggUpload))
     {
     uploadPage();
     }
+#ifdef OLD
 else if (cartVarExists(cart, hggSubmitUpload))
     {
     submitUpload(conn);
     }
+#endif /* OLD */
 else if (cartVarExists(cart, hggSubmitUpload2))
     {
     submitUpload2(conn);
