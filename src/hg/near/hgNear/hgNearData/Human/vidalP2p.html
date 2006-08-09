@@ -1,35 +1,35 @@
-<h3>Description</h3>
-This column shows the neighborhood of protein interactions surrounding the selected gene.
-The neighborhood is computed from a genome-wide protein-protein interaction network.
-The network connects genes if the proteins they encode have been detected to physically interact in high-throughput experiments.
-<br>
-<br>
-The interaction data was created by Marc Vidal.  
-<br>
-<br>
-"Towards a proteome-scale map of the human protein-protein interaction network"
-<br>
-<br>
-Jean-Fran&ccedil;ois Rual, Kavitha Venkatesan, Tong Hao, Tomoko Hirozane-Kishikawa, Am&eacute;lie Dricot, Ning Li, Gabriel F. Berriz, Francis D. Gibbons, Matija Dreze, Nono Ayivi-Guedehoussou, Niels Klitgord, Christophe Simon, Mike Boxem, Stuart Milstein, Jennifer Rosenberg, Debra S. Goldberg, Lan V. Zhang, Sharyl L. Wong, Giovanni Franklin, Siming Li, Joanna S. Albala, Janghoo Lim, Carlene Fraughton, Estelle Llamosas, Sebiha Cevik, Camille Bex, Philippe Lamesch, Robert S. Sikorski, Jean Vandenhaute, Huda Y. Zoghbi, Alex Smolyar, Stephanie Bosak, Reynaldo Sequerra, Lynn Doucette-Stamm, Michael E. Cusick, David E. Hill, Frederick P. Roth and Marc Vidal 
-<br>
-Nature 437, 1173-1178 (20 October 2005)
-<br>
-<pre>
-8100 ORFs   (human ORFeome v1.1 [ref 17])
-7200 coding proteins
-7200x7200 (52 million) potential interactions
-2754 interactions found (78% verified)
-1549 proteins involved
-300 new interactions to 100 known-disease-related proteins.
-</pre>
-<br>
-The network distance listed in the column shows the number of interactions between a gene and the selected gene.
-For example, genes whose protein products have been detected to directly interact are listed with a network distance of one.
-Genes that share a direct interaction with a protein that also directly interacts with the selected gene are listed with a distance of 2.  
-For examle, if the protein of gene X interacts with the protein of gene Y (but not the protein of the selected gene), 
-and Y's protein interacts with the selected gene, then gene X will have a distance of 2.
-<br>
-<br>
-Because the protein interaction network is highly connected (i.e. most genes are connected to one another by some distance), 
-we limited the size of the neighborhood to contain only those genes within a pre-specified distance (2 by default).
+<H3>Description</H3>
+<P>
+This column shows the neighborhood of protein interactions surrounding the 
+selected gene. The neighborhood is computed from a genome-wide protein-protein 
+interaction network. The network connects genes if the proteins they encode 
+have been detected to physically interact in high-throughput experiments.</P>
 
+<P>
+The network distance listed in the column shows the number of interactions 
+between a gene and the selected gene. For example, genes whose protein 
+products have been detected to directly interact are listed with a network 
+distance of one. Genes that share a direct interaction with a protein that 
+also directly interacts with the selected gene are listed with a distance of 
+2. For examle, if the protein of gene X interacts with the protein of gene 
+Y (but not the protein of the selected gene), and Y's protein interacts with 
+the selected gene, then gene X will have a distance of 2.</P>
+
+<P>
+Because the protein interaction network is highly connected (i.e. most genes 
+are connected to one another by some distance), we limited the size of the 
+neighborhood to contain only those genes within a pre-specified distance 
+(2 by default).</P>
+
+<H3>Credits</H3>
+<P>
+The interaction data were created by the <A HREF="http://ccsb.dfci.harvard.edu/" TARGET=_blank>Marc Vidal laboratory</A>, 
+Center for Cancer Systems Biology and Department of Cancer Biology, 
+Dana-Farber Cancer Institute and Department of Genetics, Harvard Medical 
+School.</P>
+
+<H3>References</H3>
+<P>
+Rual, J-F. et al. <A HREF="http://www.nature.com/nature/journal/v437/n7062/abs/nature04209.html" TARGET=_blank>Towards a 
+proteome-scale map of the human protein-protein interaction network.</A> 
+Nature <B>437</B>, 1173-78 (2005).
