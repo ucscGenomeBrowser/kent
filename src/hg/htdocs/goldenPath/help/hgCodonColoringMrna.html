@@ -55,14 +55,15 @@
 				rather than the genomic sequence to which it 
 				aligns.
 				<P>
-                                <em>different mRNA codons</em> - Similar to the 
-				<em>mRNA codons</em> option, the frame and
-                                color are based on the mRNA itself. However, only 
-				those mRNA codons that differ between the mRNA and
-				the target genomic sequence are labeled.
+                                <em>nonsynonymous mRNA codons</em> - Similar to
+				the <em>mRNA codons</em> option, the frame 
+                                is based on the mRNA itself. However, only 
+				those mRNA codons that translate to different
+				amino acids than the target genomic sequence 
+				are colored and labeled.  
 				<P>
                                 <em>mRNA bases</em> - The frame and coloring are 
-				based on the mRNA, but the mRNAs bases are
+				based on the mRNA, but the mRNA bases are
 				shown rather than the amino acids.
 				<P>
                                 <em>different mRNA bases</em> - Same as the 
@@ -79,15 +80,17 @@
 				colored similarly, except in <em>mRNA bases</em> 
 				and <em>different mRNA bases</em> mode where the 
 				bases are always shown with respect to the 
-				positive strand. 
+				strand displayed in the Base Position track at
+				the top of the image.  The strand can be toggled by 
+				clicking on the arrow to the left of the base values. 
                                 <P>
-				Start codons (the first methionine) are indicated 
+				When coloring genomic or mRNA codons,
+				start codons and methionine codons are indicated 
 				in green, stop codons are shown in red, and 
 				insertions are colored orange. All 
 				other codons are shown in the original track 
 				color, with codon boundaries indicated by 
 				alternating lighter and darker shades. 
-
                                 <P>
 				Codons are labeled by the amino acid they 
 				represent or the bases comprising the codon,
@@ -101,8 +104,12 @@
 			 	errors are represented by 'X' (e.g. a truncated 
 				last codon).
                                 <P>
+				When coloring nonsynonymous codons, nonsynonymous codons are
+				colored red and insertions are colored orange.  Only 
+				nonsynonymous codons and insertions are labeled.
+                                <P>
                                 <B>When are the mRNAs colored?</B><BR>
-                                To view codon coloring, the option must be is 
+				To view codon coloring, the option must be 
 				turned on, the track must be in squish, pack, or
 				full display mode, and the browser must be 
 				zoomed-in to a level at which there is at least 
@@ -110,17 +117,24 @@
 				varies with the image width of the browser.
 				At the default <em>image width</em> value of 620 
 				pixels, the annotation tracks window must be
-				zoomed-in to at least 1400 bp or fewer to view the
+				zoomed-in to at most 1500 bp or fewer to view the
 				codon coloring. To view the labeling, the
 				tracks image must be zoomed to within 3 times 
 				the base level. A gene prediction with an 
 				invalid CDS (such as 0,0) will not be colored,
-                                except in <em>mRNA bases</em> or <em>different 
+				except in <em>mRNA bases</em> or <em>different 
 				mRNA bases</em> display mode where labeling 
 				occurs only at the base level. 
-                                An mRNA with an incomplete GenBank CDS at either 
+				An mRNA with an incomplete GenBank CDS at either 
 				end, an invalid GenBank CDS (such as 0,0), or no 
 				CDS will not be colored or labeled.
+                                <P>
+				When viewing native mRNAs in <em>different mRNA bases</em> or 
+				<em>nonsynonymous mRNA codons</em> display mode, the browser 
+				does not have to be zoomed-in as closely as for other 
+				tracks.  Red tickmarks are still drawn even when the 
+				browser is zoomed-out beyond the level of one pixel per
+				base.
 			        </TD>
 			        <TD WIDTH=15></TD>
 			    </TR>
