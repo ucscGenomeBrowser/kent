@@ -11,6 +11,7 @@
 #include "web.h"
 #include "chromInfo.h"
 #include "chromGraph.h"
+#include "chromGraphFactory.h"
 #include "errCatch.h"
 #include "hgGenome.h"
 
@@ -30,45 +31,27 @@ struct labeledFile
     struct chromGraph *cgList;	/* List of associated chrom graphs */
     };
 
-/* Symbolic defines for types of markers we support. */
-#define hggIdBestGuess "best guess"
-#define hggIdGenomic "chromosome base"
-#define hggIdSts "STS marker"
-#define hggIdSnp "dbSNP rsID"
-#define hggIdAffy100 "(Affymetrix 100K Gene Chip)"
-#define hggIdAffy500 "(Affymetrix 500k Gene Chip)"
-#define hggIdHumanHap300 "(Illumina HumanHap300 BeadChip)"
-
-static char *locNames[] = {
-    // hggIdBestGuess,
-    hggIdGenomic,
-    hggIdSts,
-    hggIdSnp,
-    hggIdAffy100,
-    hggIdAffy500,
-    hggIdHumanHap300,
+static char *markerNames[] = {
+    // cgfMarkerBestGuess,
+    cgfMarkerGenomic,
+    cgfMarkerSts,
+    cgfMarkerSnp,
+    cgfMarkerAffy100,
+    cgfMarkerAffy500,
+    cgfMarkerHumanHap300,
     };
-
-#define hggFormatGuess "best guess"
-#define hggFormatTab "tab delimited"
-#define hggFormatComma "comma delimited"
-#define hggFormatSpace "whitespace separated"
 
 char *formatNames[] = {
-    hggFormatGuess,
-    hggFormatTab,
-    hggFormatComma,
-    hggFormatSpace,
+    cgfFormatGuess,
+    cgfFormatTab,
+    cgfFormatComma,
+    cgfFormatSpace,
     };
 
-#define hggColLabelGuess	"best guess"
-#define hggColLabelNumbered	"numbered"
-#define hggColLabelFirstRow	"first row"
-
 char *colLabelNames[] = {
-    hggColLabelGuess,
-    hggColLabelNumbered,
-    hggColLabelFirstRow,
+    cgfColLabelGuess,
+    cgfColLabelNumbered,
+    cgfColLabelFirstRow,
     };
 
 void uploadPage()
@@ -96,8 +79,8 @@ hPrintf(" <i>Guess is usually accurate, override if problems.</i> ");
 hPrintf("<BR>\n");
 
 hPrintf(" Markers are: ");
-cgiMakeDropList(hggLocType, locNames, ArraySize(locNames), 
-    	cartUsualString(cart, hggLocType, locNames[0]));
+cgiMakeDropList(hggMarkerType, markerNames, ArraySize(markerNames), 
+    	cartUsualString(cart, hggMarkerType, markerNames[0]));
 hPrintf("<i> This says how values are mapped to chromosomes.</i>");
 hPrintf("<BR>\n");
 
@@ -205,11 +188,11 @@ typedef int (*chopper)(char *line, char **cols, int maxCol);
 static chopper getChopper(char *formatType)
 /* Get appropriate chopper function for format type */
 {
-if (sameString(formatType, hggFormatTab))
+if (sameString(formatType, cgfFormatTab))
     return tabChopper;
-else if (sameString(formatType, hggFormatComma))
+else if (sameString(formatType, cgfFormatComma))
     return commaChopper;
-else if (sameString(formatType, hggFormatSpace))
+else if (sameString(formatType, cgfFormatSpace))
     return chopByWhite;
 else
     {
@@ -353,7 +336,7 @@ struct hash *hash = tableToChromPosHash(conn, table, query);
 struct hash *aliasHash = NULL;
 char **row;
 int match = 0, total = 0;
-struct chromGraph *list = NULL, *cg;
+struct chromGraph *cg;
 struct chromPos *pos;
 hPrintf("Loaded %d elements from %s table for mapping.<BR>", hash->elCount,
 	table);
@@ -521,6 +504,7 @@ else
     allRaHash = raReadAll(fileName, "name");
     }
 
+uglyf("updateUploadRa %s<BR>\n", fileName);
 for (el = list; el != NULL; el = el->next)
     {
     if (el->label[0] != 0)
@@ -537,8 +521,8 @@ for (el = list; el != NULL; el = el->next)
     hashAdd(ra, "name", cloneString(graphName));
     hashAdd(ra, "description", 
 	    cartUsualString(cart, hggDataSetDescription, graphName));
-    hashAdd(ra, "locType",
-	    cartUsualString(cart, hggLocType, locNames[0]));
+    hashAdd(ra, "markerType",
+	    cartUsualString(cart, hggMarkerType, markerNames[0]));
     hashAdd(ra, "binaryFile", el->fileName);
     addIfNonempty(ra, hggMinVal, "minVal");
     addIfNonempty(ra, hggMaxVal, "maxVal");
@@ -561,26 +545,25 @@ void updateUploadRaOne(char *binFileName)
 updateUploadRa(labeledFileNew(binFileName, ""));
 }
 
-static int locCols(char *locType)
+static int markerCols(char *markerType)
 /* The number of columns used for location. */
 {
-if (sameString(locType, hggIdGenomic))
+if (sameString(markerType, cgfMarkerGenomic))
     return 2;
 else
     return 1;
 }
 
 void processUpload(char *text, int colCount, 
-	char *formatType, char *locType,  boolean firstLineLabels, 
+	char *formatType, char *markerType,  boolean firstLineLabels, 
 	struct sqlConnection *conn)
 /* Parse uploaded text.  If it looks good then make a 
  * binary chromGraph file out of it, and save information
  * about it in the upload ra file. */
 {
-char *binFile;
 boolean ok = FALSE;
 struct lineFile *lf = lineFileOnString("uploaded data", TRUE, text);
-int posColCount = locCols(locType);
+int posColCount = markerCols(markerType);
 /* NB - do *not* lineFileClose this or a double free can happen. */
 struct labeledFile *fileList = NULL, *fileEl;
 int i;
@@ -599,15 +582,15 @@ for (i=posColCount; i<colCount; ++i)
 slReverse(&fileList);
 
 
-if (sameString(locType, hggIdGenomic))
+if (sameString(markerType, cgfMarkerGenomic))
     ok = mayProcessGenomic(conn, lf, colCount, formatType, 
     	firstLineLabels, fileList);
-else if (sameString(locType, hggIdSts))
+else if (sameString(markerType, cgfMarkerSts))
     ok = mayProcessDb(conn, lf, colCount, formatType, 
     	firstLineLabels, fileList, "stsMap",
     	"select chrom,round((chromStart+chromEnd)*0.5),name from %s",
 	"stsAlias", "select alias,trueName from %s");
-else if (sameString(locType, hggIdSnp))
+else if (sameString(markerType, cgfMarkerSnp))
     {
     char *query = "select chrom,chromStart,name from %s";
     if (sqlTableExists(conn, "snp126"))
@@ -625,15 +608,15 @@ else if (sameString(locType, hggIdSnp))
     else
         warn("Couldn't find SNP table");
     }
-else if (sameString(locType, hggIdAffy100))
+else if (sameString(markerType, cgfMarkerAffy100))
     {
     warn("Support for Affy 100k chip coming soon.");
     }
-else if (sameString(locType, hggIdAffy500))
+else if (sameString(markerType, cgfMarkerAffy500))
     {
     warn("Support for Affy 500k chip coming soon.");
     }
-else if (sameString(locType, hggIdHumanHap300))
+else if (sameString(markerType, cgfMarkerHumanHap300))
     {
     warn("Support for Illumina HumanHap300 coming soon.");
     }
@@ -648,6 +631,7 @@ if (ok)
     }
 }
 
+#ifdef OLD
 void submitUpload(struct sqlConnection *conn)
 /* Called when they've submitted from uploads page */
 {
@@ -661,11 +645,11 @@ if (rawText == NULL || rawText[0] == 0)
 else
     {
     int rawTextSize = strlen(rawText);
-    char *locType = cartUsualString(cart, hggLocType, hggIdGenomic);
+    char *markerType = cartUsualString(cart, hggMarkerType, cgfMarkerGenomic);
     cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);
     hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
     cartSaveSession(cart);
-    processUpload(rawText, 1 + locCols(locType), hggFormatSpace, locType,
+    processUpload(rawText, 1 + markerCols(markerType), cgfFormatSpace, markerType,
     	FALSE, conn);
     cartRemove(cart, hggUploadFile);
     hPrintf("<CENTER>");
@@ -675,6 +659,7 @@ else
     cartWebEnd();
     }
 }
+#endif /* OLD */
 
 char *findNthUseOfChar(char *s, char c, int n)
 /* Return the nth occurence of c in s, or NULL if not that many. */
@@ -814,24 +799,24 @@ boolean analyseText(char *text, char **retType, int *retCols)
 {
 char *sampleText = dupeLines(text, 10);
 int colCount, rowCount;
-char *type = hggFormatGuess;
+char *type = cgfFormatGuess;
 boolean ok = TRUE;
 
 if (delimitedTableSize(sampleText, '\t', '\n', &colCount, &rowCount))
     {
-    type = hggFormatTab;
+    type = cgfFormatTab;
     }
 else if (spaceDelimitedTableSize(sampleText, &colCount, &rowCount))
     {
-    type = hggFormatSpace;
+    type = cgfFormatSpace;
     }
 else if (delimitedTableSize(sampleText, ',', '\n', &colCount, &rowCount))
     {
-    type = hggFormatComma;
+    type = cgfFormatComma;
     }
 else 
     {
-    type = hggFormatGuess;
+    type = cgfFormatGuess;
     ok = FALSE;
     }
 *retType = type;
@@ -859,17 +844,17 @@ for (i=0; i<sampleSize; ++i)
     oneColCount = 0;
     if (!allWhite(line))
 	{
-	if (sameString(formatType, hggFormatTab))
+	if (sameString(formatType, cgfFormatTab))
 	    {
 	    oneColCount = chopByChar(line, '\t', cols, colCount);
 	    break;
 	    }
-	else if (sameString(formatType, hggFormatComma))
+	else if (sameString(formatType, cgfFormatComma))
 	    {
 	    oneColCount = chopByChar(line, ',', cols, colCount);
 	    break;
 	    }
-	else if (sameString(formatType, hggFormatSpace))
+	else if (sameString(formatType, cgfFormatSpace))
 	    {
 	    oneColCount = chopByWhite(line, cols, colCount);
 	    break;
@@ -919,17 +904,17 @@ for (i=0; i<sampleSize; ++i)
     char *line = rows[0];
     if (!allWhite(line))
         {
-	if (sameString(formatType, hggFormatTab))
+	if (sameString(formatType, cgfFormatTab))
 	    {
 	    count = countChars(line, '\t') + 1;
 	    break;
 	    }
-	else if (sameString(formatType, hggFormatComma))
+	else if (sameString(formatType, cgfFormatComma))
 	    {
 	    count = countChars(line, ',') + 1;
 	    break;
 	    }
-	else if (sameString(formatType, hggFormatSpace))
+	else if (sameString(formatType, cgfFormatSpace))
 	    {
 	    count = chopByWhite(line, NULL, 0);
 	    break;
@@ -948,21 +933,21 @@ void trySubmitUpload2(struct sqlConnection *conn, char *rawText)
 int colCount = 0;
 char *formatType = cartUsualString(cart, hggFormatType, formatNames[0]);
 fixLineEndings(rawText);
-if (sameString(formatType, hggFormatGuess))
+if (sameString(formatType, cgfFormatGuess))
     if (!analyseText(rawText, &formatType, &colCount))
 	errAbort("Sorry, can't figure out this file's format. Please go back and try another file.");
 colCount = countColumns(rawText, formatType);
 char *labelType = cartUsualString(cart, hggColumnLabels, colLabelNames[0]);
-if (sameString(labelType, hggColLabelGuess))
+if (sameString(labelType, cgfColLabelGuess))
     {
     if (firstRowConsistentWithData(rawText, formatType, colCount))
-        labelType = hggColLabelNumbered;
+        labelType = cgfColLabelNumbered;
     else
-        labelType = hggColLabelFirstRow;
+        labelType = cgfColLabelFirstRow;
     }
-char *locType = cartUsualString(cart, hggLocType, hggIdGenomic);
-processUpload(rawText, colCount, formatType, locType,
-    sameString(labelType, hggColLabelFirstRow), conn);
+char *markerType = cartUsualString(cart, hggMarkerType, cgfMarkerGenomic);
+processUpload(rawText, colCount, formatType, markerType,
+    sameString(labelType, cgfColLabelFirstRow), conn);
 cartRemove(cart, hggUploadFile);
 hPrintf("<CENTER>");
 cgiMakeButton("submit", "OK");
