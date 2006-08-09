@@ -12,6 +12,8 @@
 #include "net.h"
 #include "customPp.h"
 
+static char const rcsid[] = "$Id: customPp.c,v 1.5 2006/08/09 21:44:17 kate Exp $";
+
 struct customPp *customPpNew(struct lineFile *lf)
 /* Return customPp on lineFile */
 {

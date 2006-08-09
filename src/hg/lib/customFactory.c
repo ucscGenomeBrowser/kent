@@ -22,6 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
+static char const rcsid[] = "$Id: customFactory.c,v 1.11 2006/08/09 21:43:15 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
