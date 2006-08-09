@@ -4,22 +4,25 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = snpContigLocFilter.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
+O = snpContigLocFilter.o snpContigLocFilter125.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
     snpSplitByChrom.o snpLocType.o snpExpandAllele.o snpSort.o snpRefUCSC.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
-    snpPAR.o snpExceptionCheck.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
+    snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
     snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o
 
-all: snpContigLocFilter snpContigLocusIdFilter snpContigLocusIdCondense \
+all: snpContigLocFilter snpContigLocFilter125 snpContigLocusIdFilter snpContigLocusIdCondense \
      snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
-     snpPAR snpExceptionCheck illuminaLookup snpCompareWeight subSnpCondense \
+     snpPAR illuminaLookup snpCompareWeight subSnpCondense \
      snpClassAndObserved snpMoltype affyLookup cnpLookup
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
+
+snpContigLocFilter125: snpContigLocFilter125.o ${MYLIBS}
+	${CC} -O -o snpContigLocFilter125 snpContigLocFilter125.o ${MYLIBS} $L
 
 snpContigLocusIdFilter: snpContigLocusIdFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocusIdFilter snpContigLocusIdFilter.o ${MYLIBS} $L
@@ -74,9 +77,6 @@ snpMissing: snpMissing.o ${MYLIBS}
 
 snpPAR: snpPAR.o ${MYLIBS}
 	${CC} -O -o snpPAR snpPAR.o ${MYLIBS} $L
-
-snpExceptionCheck: snpExceptionCheck.o ${MYLIBS}
-	${CC} -O -o snpExceptionCheck snpExceptionCheck.o ${MYLIBS} $L
 
 illuminaLookup: illuminaLookup.o ${MYLIBS}
 	${CC} -O -o illuminaLookup illuminaLookup.o ${MYLIBS} $L
