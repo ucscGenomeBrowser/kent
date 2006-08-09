@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.295 2006/08/01 18:40:53 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.296 2006/08/09 21:12:34 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -825,6 +825,7 @@ radioButton(ETHNIC_GROUP_EXCINC,
 	"exclude");
 puts("<B>this ethnic group</B><BR>\n");
 
+#ifdef HAS_NO_MEANING
 menuSize = 10;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 i = 0;
@@ -845,7 +846,6 @@ if (freqLow < freqHi)
 else
     cgiMakeDropList(ALLELE_FREQ_LOW, menu, menuSize, menu[0]);
 
-
 i = 0;
 menu[i++] = "0.1"; menu[i++] = "0.2"; menu[i++] = "0.3"; menu[i++] = "0.4";
 menu[i++] = "0.5"; menu[i++] = "0.6"; menu[i++] = "0.7"; menu[i++] = "0.8";
@@ -858,6 +858,7 @@ if (freqLow < freqHi)
 else
     cgiMakeDropList(ALLELE_FREQ_HI, menu, menuSize, menu[9]);
 freez(&menu);
+#endif	/*	HAS_NO_MEANING	*/
 
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
