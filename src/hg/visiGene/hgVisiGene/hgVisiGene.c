@@ -656,7 +656,10 @@ void doInitialPage()
  * some good things to search on. */
 {
 char *listSpec = NULL;
-webStartWrapper(cart, "VisiGene Image Browser", NULL, FALSE, FALSE);
+
+webStartWrapperDetailedNoArgs(cart, "", "VisiGene Image Browser",
+        FALSE, FALSE, FALSE, TRUE);
+
 printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 puts("<P>VisiGene is a virtual microscope for viewing <em>in situ</em> images. \n"

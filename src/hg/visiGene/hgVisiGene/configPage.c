@@ -14,7 +14,9 @@
 void configPage()
 /* Put up configuration page. */
 {
-webStartWrapper(cart, "VisiGene Configure", NULL, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, "", "VisiGene Configure",
+        FALSE, FALSE, FALSE, TRUE);
+
 printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 
