@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.296 2006/08/09 21:12:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.297 2006/08/09 23:03:23 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -176,6 +176,7 @@ cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
 
 printf("<BR><BR>\n");
 printf("Any type of data can be excluded from view by deselecting the checkbox below.\n");
+printf("Not all assemblies include values in all categories.\n");
 printf("<BR><BR>\n");
 
 printf("<B>Location Type</B>: ");
