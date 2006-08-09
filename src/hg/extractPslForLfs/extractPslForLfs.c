@@ -19,7 +19,7 @@
 
 #define MAXFILES 100
 
-static char const rcsid[] = "$Id: extractPslForLfs.c,v 1.2 2006/08/09 18:55:08 hartera Exp $";
+static char const rcsid[] = "$Id: extractPslForLfs.c,v 1.3 2006/08/09 19:07:40 hartera Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -182,7 +182,7 @@ int verb = 0;
 
 verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
-if (argc != 4)
+if (argc != 4 & argc != 5)
     {
 fprintf(stdout, "USAGE: extractPslForLfs [-verbose=<level>] psl lfsBed outputPsl\n");
     return 1;
