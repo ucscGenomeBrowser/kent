@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1186 2006/08/09 17:47:19 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1187 2006/08/09 22:23:33 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2611,7 +2611,9 @@ else
     }
 
 hAddBinToQuery(winStart, winEnd, query);
-dyStringPrintf(query, "chrom=\"%s\"", chromName);
+dyStringPrintf(query,
+    "chrom=\"%s\" AND chromStart<%d AND chromEnd>%d ",
+    chromName, winEnd, winStart);
 
 option = cartCgiUsualString(cart, GENO_REGION, GENO_REGION_DEFAULT);
 
@@ -4772,6 +4774,7 @@ static void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 {
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
+
 genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
 	font, color, vis);
 }
