@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter125.c,v 1.1 2006/08/09 00:59:29 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter125.c,v 1.2 2006/08/09 01:01:32 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -32,7 +32,7 @@ void usage()
 errAbort(
     "snpContigLocFilter125 - filter the ContigLoc table\n"
     "usage:\n"
-    "    snpContigLocFilter snpDb contigGroup mapGroup\n");
+    "    snpContigLocFilter125 snpDb contigGroup mapGroup\n");
 }
 
 
