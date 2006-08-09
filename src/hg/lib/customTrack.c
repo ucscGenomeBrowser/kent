@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.120 2006/08/08 23:03:26 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.121 2006/08/09 18:56:29 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -399,6 +399,9 @@ static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
 {
 struct trackDb *def = customTrackTdbDefault();
 
+if (!tdb->settingsHash)
+    trackDbHashSettings(tdb);
+
 fprintf(f, "track");
 
 /* these names might be coming in from hgTables, make the names safe */
@@ -488,6 +491,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    bedOutputN(bed, track->fieldCount, f, '\t', '\n');
 	}
     }
+carefulClose(&f);
 }
 
 boolean isCustomTrack(char *track)
