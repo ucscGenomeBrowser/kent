@@ -254,6 +254,9 @@ int grayIx = pslGrayIx(psl, isXeno, maxShade);
 int drawOptionNum;
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
+boolean showDiffCodonsAllScales =
+    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
+     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
 
 drawOptionNum = getCdsDrawOptionNum(tg);
 AllocVar(lf);
@@ -281,7 +284,7 @@ lf->components = sfList;
   enough, then split simple feature by the psl record
   and the mRNA sequence. Otherwise do the default conversion
   from psl to simple feature.*/
-if (drawOptionNum>0 && zoomedToCdsColorLevel)
+if (drawOptionNum>0 && (zoomedToCdsColorLevel || showDiffCodonsAllScales))
     {
     lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade,
 			   drawOptionNum);

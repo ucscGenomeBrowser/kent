@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1185 2006/08/08 00:08:24 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1186 2006/08/09 17:47:19 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1545,7 +1545,8 @@ Color saveColor = color;
 boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 boolean showDiffBasesAllScales =
     (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
-     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_BASES));
+     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_BASES ||
+      getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
@@ -1700,6 +1701,16 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 			 lf->orientation, bColor, FALSE);
 	    }
 	}
+    }
+/* If showing different codons when zoomed way out, must do another pass 
+ * so that different codons aren't overdrawn by same codons.  The whole 
+ * item was drawn in the above loop, and now we just make some red marks 
+ * on top of it if necessary. */
+if (showDiffBasesAllScales && vis != tvDense &&
+    drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
+    {
+    drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
+			  mrnaSeq, psl, winStart);
     }
 }
 
