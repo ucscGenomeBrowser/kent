@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocusIdFilter.c,v 1.4 2006/03/11 03:57:47 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdFilter.c,v 1.5 2006/08/09 01:06:04 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -35,10 +35,11 @@ int count = 0;
 
 ret = newHash(0);
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select ctg_id, group_term from ContigInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (!sameString(row[1], contigGroup)) continue;
     hashAdd(ret, cloneString(row[0]), NULL);
     count++;
     }
