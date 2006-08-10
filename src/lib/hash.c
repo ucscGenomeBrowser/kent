@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.33 2006/08/07 23:08:31 kate Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.34 2006/08/10 01:02:16 kent Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -243,6 +243,16 @@ struct hashEl *hel = hashLookup(hash, name);
 if (hel == NULL)
     return NULL;
 return hel->val;
+}
+
+void *hashOptionalVal(struct hash *hash, char *name, void *usual)
+/* Look up name in hash and return val, or usual if not found. */
+{
+struct hashEl *hel = hashLookup(hash, name);
+if (hel == NULL)
+    return usual;
+else
+    return hel->val;
 }
 
 char *hashMustFindName(struct hash *hash, char *name)
