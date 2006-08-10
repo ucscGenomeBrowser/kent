@@ -15,7 +15,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chicken13kInfo.o chromBins.o chr18deletions.o \
-    chromGraph.o chromInfo.o chromInserts.o chromKeeper.o \
+    chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cnpIafrate.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
