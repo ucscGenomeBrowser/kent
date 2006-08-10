@@ -4,15 +4,19 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = snpContigLocFilter.o snpContigLocFilter125.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
-    snpSplitByChrom.o snpLocType.o snpExpandAllele.o snpSort.o snpRefUCSC.o \
+O = snpContigLocFilter.o snpContigLocFilter125.o \
+    snpContigLocusIdFilter.o snpContigLocusIdFilter125.o snpContigLocusIdCondense.o \
+    snpSplitByChrom.o snpLocType.o snpLocType125.o \
+    snpExpandAllele.o snpSort.o snpRefUCSC.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
     snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
     snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o
 
-all: snpContigLocFilter snpContigLocFilter125 snpContigLocusIdFilter snpContigLocusIdCondense \
-     snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
+all: snpContigLocFilter snpContigLocFilter125 \
+     snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
+     snpSplitByChrom snpLocType snpLocType125 \
+     snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
      snpPAR illuminaLookup snpCompareWeight subSnpCondense \
@@ -27,6 +31,9 @@ snpContigLocFilter125: snpContigLocFilter125.o ${MYLIBS}
 snpContigLocusIdFilter: snpContigLocusIdFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocusIdFilter snpContigLocusIdFilter.o ${MYLIBS} $L
 
+snpContigLocusIdFilter125: snpContigLocusIdFilter125.o ${MYLIBS}
+	${CC} -O -o snpContigLocusIdFilter125 snpContigLocusIdFilter125.o ${MYLIBS} $L
+
 snpContigLocusIdCondense: snpContigLocusIdCondense.o ${MYLIBS}
 	${CC} -O -o snpContigLocusIdCondense snpContigLocusIdCondense.o ${MYLIBS} $L
 
@@ -35,6 +42,9 @@ snpSplitByChrom: snpSplitByChrom.o ${MYLIBS}
 
 snpLocType: snpLocType.o ${MYLIBS}
 	${CC} -O -o snpLocType snpLocType.o ${MYLIBS} $L
+
+snpLocType125: snpLocType125.o ${MYLIBS}
+	${CC} -O -o snpLocType125 snpLocType125.o ${MYLIBS} $L
 
 snpExpandAllele: snpExpandAllele.o ${MYLIBS}
 	${CC} -O -o snpExpandAllele snpExpandAllele.o ${MYLIBS} $L
