@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.13 2006/08/10 08:28:29 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.14 2006/08/10 18:03:16 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1095,6 +1095,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	AllocVar(track);
 	track->tdb = customTrackTdbDefault();
 	track->tdb->settingsHash = hashNew(8);
+	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
         customPpReuse(cpp, line);
 	}
     else
