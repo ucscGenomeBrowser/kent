@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.38 2006/08/10 06:40:33 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.39 2006/08/10 18:05:19 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -470,7 +470,7 @@ showItemRgb=bedItemRgb(ct->tdb);	/* should we expect itemRgb */
 /* Find named custom track. */
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
-hPrintf("On loading all custom tracks are converted to ");
+hPrintf("On loading, all custom tracks are converted to ");
 hPrintf("<A HREF=\"/goldenPath/help/customTrack.html#BED\">BED</A> ");
 hPrintf("format.");
 
