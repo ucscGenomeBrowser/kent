@@ -22,6 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
+static char const rcsid[] = "$Id: customFactory.c,v 1.11 2006/08/09 21:43:15 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -146,7 +147,8 @@ char buf[20];
 safef(buf, sizeof(buf), "bed %d .", track->fieldCount);
 track->tdb->type = cloneString(buf);
 track->dbTrackType = cloneString(buf);
-ctAddToSettings(track->tdb, "fieldCount %d", track->fieldCount);
+safef(buf, sizeof(buf), "%d", track->fieldCount);
+ctAddToSettings(track, "fieldCount", cloneString(buf));
 
 /* If necessary add track offsets. */
 int offset = track->offset;
@@ -778,7 +780,7 @@ else
     /* Make up wib file name and add to settings. */
     customTrackTrashFile(&tn, ".wib");
     track->wibFile = cloneString(tn.forCgi);
-    ctAddToSettings(track->tdb, "wibFile %s", track->wibFile);
+    ctAddToSettings(track, "wibFile", track->wibFile);
 
     /* Don't add wigAscii to settings - not needed. */
     char *wigAscii = cloneString(track->wibFile);
@@ -814,10 +816,12 @@ else
 
 	/* Figure out lower and upper limits with db query */
 	struct sqlConnection *ctConn = sqlCtConn(TRUE);
+        char buf[64];
 	wigDbGetLimits(ctConn, track->dbTableName, 
 		&upperLimit, &lowerLimit, &span);
 	sqlDisconnect(&ctConn);
-	ctAddToSettings(track->tdb, "spanList %d", span);
+        safef(buf, sizeof(buf), "%d", span);
+	ctAddToSettings(track, "spanList", cloneString(buf));
 	}
     else
         {
@@ -826,7 +830,7 @@ else
 	track->wigFile = cloneString(track->wibFile);
 	chopSuffix(track->wigFile);
 	strcat(track->wigFile, ".wig");
-	ctAddToSettings(track->tdb, "wigFile %s", track->wigFile);
+	ctAddToSettings(track, "wigFile", track->wigFile);
 
 	struct wigEncodeOptions options;
 	ZeroVar(&options);	/*	all is zero	*/
@@ -950,8 +954,22 @@ if (track->dbTableName)
 if ((val = hashFindVal(hash, "fieldCount")) != NULL)
     track->fieldCount = sqlUnsigned(val);
 if ((val = hashFindVal(hash, "htmlFile")) != NULL)
+    {
     if (fileExists(val))
 	readInGulp(val, &track->tdb->html, NULL);
+    }
+if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
+    {
+    struct dyString *ds = NULL;
+    int sd = netUrlOpen(val);
+    if (sd >= 0)
+        {
+        netSkipHttpHeaderLines(sd, val);
+        ds = netSlurpFile(sd);
+        close(sd);
+        track->tdb->html = dyStringCannibalize(&ds);
+        }
+    }
 tdb->url = hashFindVal(hash, "url");
 if ((val = hashFindVal(hash, "visibility")) != NULL)
     {
@@ -1091,7 +1109,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    ++dbTrackCount;
 	    safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 	    track->dbTableName = sqlTempTableName(ctConn, prefix);
-	    ctAddToSettings(track->tdb, "dbTableName %s", track->dbTableName);
+	    ctAddToSettings(track, "dbTableName", track->dbTableName);
 	    track->dbDataLoad = TRUE;	
 	    track->dbTrack = TRUE;
 	    }
@@ -1126,9 +1144,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	/* Save a few more settings. */
 	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
 	    {
-	    ctAddToSettings(track->tdb, "tdbType %s", track->tdb->type);
+	    ctAddToSettings(track, "tdbType", track->tdb->type);
 	    if (dbTrack)
-		ctAddToSettings(track->tdb, "db %s", track->dbTrackType);
+		ctAddToSettings(track, "db", track->dbTrackType);
 	    }
 	}
     trackList = slCat(trackList, oneList);

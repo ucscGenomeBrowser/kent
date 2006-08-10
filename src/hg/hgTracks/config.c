@@ -101,11 +101,14 @@ for (group = groupList; group != NULL; group = group->next)
 	   configDefaultAll, "default", configGroupTarget, group->name);
     hPrintf(" ");
     cgiMakeButton("submit", "submit");
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-    hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-    hPrintf(wrapWhiteFont(" Track Order: "));
+    if (withPriorityOverride)
+        {
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        hPrintf(wrapWhiteFont(" Track Order: "));
+        }
     hPrintf("</TH>\n");
     if (withPriorityOverride)
         {

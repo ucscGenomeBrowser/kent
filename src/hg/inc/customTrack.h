@@ -78,8 +78,8 @@ boolean ctDbAvailable(char *tableName);
 boolean ctDbUseAll();
 /* check if hg.conf says to try DB loaders for all incoming data tracks */
 
-void ctAddToSettings(struct trackDb *tdb, char *format, ...);
-/*	add a variable to tdb->settings string	*/
+void ctAddToSettings(struct customTrack *ct, char *name, char *val);
+/*	add a variable to tdb settings */
 
 void customTrackTrashFile(struct tempName *tn, char *suffix);
 /*	obtain a customTrackTrashFile name	*/

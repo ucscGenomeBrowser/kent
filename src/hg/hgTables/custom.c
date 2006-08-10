@@ -692,7 +692,6 @@ getCustomTracks();
 if (ctFileName != NULL && theCtList != NULL)
     {
     removeNamedCustom(&theCtList, curTable);
-    customTrackSave(theCtList, ctFileName);
     if (theCtList == NULL)
         remove(ctFileName);
     else
