@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.37 2006/07/21 23:54:50 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.38 2006/08/10 06:40:33 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -450,6 +450,13 @@ hPrintf("<B>Wiggle Custom Track ID:</B> %s<BR>\n", table);
 hPrintf("Wiggle custom tracks are stored in a dense binary format.");
 }
 
+static void showSchemaCtChromGraph(char *table, struct customTrack *ct)
+/* Show schema on wiggle format custom track. */
+{
+hPrintf("<B>ChromGraph Custom Track ID:</B> %s<BR>\n", table);
+hPrintf("ChromGraph custom tracks are stored in a dense binary format.");
+}
+
 static void showSchemaCtBed(char *table, struct customTrack *ct)
 /* Show schema on bed format custom track. */
 {
@@ -496,10 +503,15 @@ static void showSchemaCt(char *table)
 /* Show schema on custom track. */
 {
 struct customTrack *ct = lookupCt(table);
-if (ct->wiggle)
+char *type = ct->tdb->type;
+if (startsWithWord("wig", type))
     showSchemaCtWiggle(table, ct);
-else
+else if (startsWithWord("chromGraph", type))
+    showSchemaCtChromGraph(table, ct);
+else if (startsWithWord("bed", type))
     showSchemaCtBed(table, ct);
+else
+    errAbort("Unrecognized customTrack type %s", type);
 }
 
 static void showSchema(char *db, struct trackDb *tdb, char *table)

@@ -10,7 +10,7 @@ A = hgTables
 
 T = tstbug.o
 
-O = $A.o asObj.o bedList.o compositeTrack.o custom.o filterFields.o \
+O = $A.o asObj.o bedList.o chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
     javascript.o joining.o maf.o mainPage.o rangeHistogram.o schema.o \
     seqOut.o sumStats.o usage.o wiggle.o gala.o galaxy.o

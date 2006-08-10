@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.19 2005/04/05 18:18:38 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.20 2006/08/10 06:40:33 kent Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -239,7 +239,7 @@ hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%s</TD></TR>\n", label, val);
 }
 
 
-static void doSummaryStatsBed(struct sqlConnection *conn)
+void doSummaryStatsBed(struct sqlConnection *conn)
 /* Put up page showing summary stats for track that is in database
  * or that is bed-format custom. */
 {
@@ -365,6 +365,8 @@ void doSummaryStats(struct sqlConnection *conn)
 hgBotDelay();
 if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
+else if (isChromGraph(curTrack))
+    doSummaryStatsChromGraph(conn);
 else
     doSummaryStatsBed(conn);
 }
