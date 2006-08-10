@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.297 2006/08/09 23:03:23 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.298 2006/08/10 06:51:36 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1707,8 +1707,10 @@ void chromGraphUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
 char varName[chromGraphVarNameMaxSize];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = NULL;
 char *track = tdb->tableName;
+if (!isCustomTrack(track))
+    conn = hAllocConn();
 double minVal,maxVal;
 struct chromGraphSettings *cgs = chromGraphSettingsGet(track,
 	conn, tdb, cart);
@@ -1725,7 +1727,16 @@ cgiMakeDoubleVar(varName, cgs->minVal, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 chromGraphVarName(track, "maxVal", varName);
 cgiMakeDoubleVar(varName, cgs->maxVal, 6);
-chromGraphDataRange(track, conn, &minVal, &maxVal);
+if (conn)
+    chromGraphDataRange(track, conn, &minVal, &maxVal);
+else
+    {
+    char *fileName = trackDbRequiredSetting(tdb, "binaryFile");
+    struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
+    minVal = cgb->minVal;
+    maxVal = cgb->maxVal;
+    chromGraphBinFree(&cgb);
+    }
 printf("\n&nbsp; &nbsp;(range: &nbsp;%g&nbsp;to&nbsp;%g)<BR>",
     minVal, maxVal);
 
