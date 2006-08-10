@@ -41,33 +41,35 @@ if (vis == tvFull && cgs->linesAtCount != 0)
 if (binFileName)
     {
     struct chromGraphBin *cgb = chromGraphBinOpen(binFileName);
-    chromGraphBinSeekToChrom(cgb, chromName);
-    int seqStartMinus = seqStart - cgs->maxGapToFill;
-    while (chromGraphBinNextVal(cgb))
-        {
-	int pos = cgb->chromStart;
-	if (pos >= seqStartMinus)
+    if (chromGraphBinSeekToChrom(cgb, chromName))
+	{
+	int seqStartMinus = seqStart - cgs->maxGapToFill;
+	while (chromGraphBinNextVal(cgb))
 	    {
-	    double val = cgb->val;
-	    x = (pos - seqStart)*xScale + xOff;
-	    y = height - 1 - (val - minVal)*yScale + yOff;
-	    if (x >= xOff)
+	    int pos = cgb->chromStart;
+	    if (pos >= seqStartMinus)
 		{
-		if (pos - lastPos <= maxGapToFill)
+		double val = cgb->val;
+		x = (pos - seqStart)*xScale + xOff;
+		y = height - 1 - (val - minVal)*yScale + yOff;
+		if (x >= xOff)
 		    {
-		    if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
-			vgLine(vg, lastX, lastY, x, y, color);
+		    if (pos - lastPos <= maxGapToFill)
+			{
+			if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
+			    vgLine(vg, lastX, lastY, x, y, color);
+			}
+		    else
+			vgDot(vg, x, y, color);
 		    }
-		else
-		    vgDot(vg, x, y, color);
+		llastX = lastX;
+		llastY = lastY;
+		lastX = x;
+		lastY = y;
+		lastPos = pos;
+		if (pos >= seqEnd)
+		    break;
 		}
-	    llastX = lastX;
-	    llastY = lastY;
-	    lastX = x;
-	    lastY = y;
-	    lastPos = pos;
-	    if (pos >= seqEnd)
-		break;
 	    }
 	}
     }
