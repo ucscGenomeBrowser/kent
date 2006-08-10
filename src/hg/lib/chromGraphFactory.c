@@ -688,6 +688,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     tdb->longLabel = cloneString(longLabel);
     tdb->type = "chromGraph";
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    track->dbTableName = NULL;
 
     /* Create settings */
     struct dyString *dy = dyStringNew(0);
@@ -733,7 +734,7 @@ return chromGraphParser(cpp,
     trackDbSettingOrDefault(tdb, "columnLabels", cgfColLabelGuess),
     trackDbSetting(tdb, "name"),
     trackDbSetting(tdb, "description"),
-    tdb->settingsHash, TRUE);
+    tdb->settingsHash, FALSE);
 }
 
 struct customFactory chromGraphFactory = 

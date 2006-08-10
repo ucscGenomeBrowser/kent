@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.12 2006/08/10 01:10:55 kent Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.13 2006/08/10 08:28:29 kent Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -78,6 +78,21 @@ if (firstTime)
     firstTime = FALSE;
     }
 return cfgOptionDefault("customTracks.db", NULL);
+}
+
+void customFactorySetupDbTrack(struct customTrack *track)
+/* Fill in fields most database-resident custom tracks need. */
+{
+char prefix[16];
+static int dbTrackCount = 0;
+struct sqlConnection *ctConn = sqlCtConn(TRUE);
+++dbTrackCount;
+safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
+track->dbTableName = sqlTempTableName(ctConn, prefix);
+ctAddToSettings(track, "dbTableName", track->dbTableName);
+track->dbDataLoad = TRUE;	
+track->dbTrack = TRUE;
+sqlDisconnect(&ctConn);
 }
 
 /*** BED Factory ***/
@@ -172,6 +187,7 @@ if (offset != 0)
 /* If necessary load database */
 if (dbRequested)
     {
+    customFactorySetupDbTrack(track);
     struct pipeline *dataPipe = bedLoaderPipe(track);
     FILE *out = pipelineFile(dataPipe);
     struct bed *bed;
@@ -802,6 +818,7 @@ else
     if (dbRequested)
 	{
 	/* TODO: see if can avoid extra file copy in this case. */
+	customFactorySetupDbTrack(track);
 
 	/* Load ascii file into database via pipeline. */
 	struct pipeline *dataPipe = wigLoaderPipe(track);
@@ -1025,7 +1042,6 @@ struct sqlConnection *ctConn = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
     ctConn = sqlCtConn(TRUE);
-int dbTrackCount = 0;
 
 /* Figure out input source, and ultimately wrap a
  * customPp object around it. */
@@ -1103,17 +1119,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * this track, and call it.  Also we may need to do some work
      * to load track into database. */
 	{
-	if (dbTrack)
-	/* Set up database table name if it's a database track */
-	    {
-	    char prefix[16];
-	    ++dbTrackCount;
-	    safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
-	    track->dbTableName = sqlTempTableName(ctConn, prefix);
-	    ctAddToSettings(track, "dbTableName", track->dbTableName);
-	    track->dbDataLoad = TRUE;	
-	    track->dbTrack = TRUE;
-	    }
 
 	/* Load track from appropriate factory */
 	struct customFactory *fac = customFactoryFind(cpp, type, track);
