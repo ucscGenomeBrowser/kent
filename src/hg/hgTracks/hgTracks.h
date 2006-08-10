@@ -658,8 +658,10 @@ void bedGraphMethods(struct track *track, struct trackDb *tdb,
 /* Make track group for wig - wiggle tracks. */
 
 void chromGraphMethods(struct track *tg);
-/* Fill in methods for chromGraph tracks. */
+/* Fill in chromGraph methods for built in track. */
 
+void chromGraphMethodsCt(struct track *tg);
+/* Fill in chromGraph methods for custom track. */
 
 void wigMafMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);

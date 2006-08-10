@@ -11,16 +11,13 @@
 #include "vGfx.h"
 #include "chromGraph.h"
 
-static void cgDrawItems(struct track *tg, int seqStart, int seqEnd,
+static void cgDrawEither(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw chromosome graph. */
+        MgFont *font, Color color, enum trackVisibility vis,
+	char *binFileName)
+/* Draw chromosome graph - either built in or not. */
 {
 struct chromGraphSettings *cgs = tg->customPt;
-struct sqlConnection *conn = hAllocConn();
-char query[512];
-struct sqlResult *sr;
-char **row;
 int x,y,lastX=0,lastY=0, llastX = 0, llastY = 0;
 int height = tg->height;
 int maxGapToFill = cgs->maxGapToFill;
@@ -41,43 +38,83 @@ if (vis == tvFull && cgs->linesAtCount != 0)
 	}
     }
 
-/* Construct query.  Set up a little more than window so that
- * we can draw connecting lines. */
-safef(query, sizeof(query), 
-    "select chromStart,val from %s "
-    "where chrom='%s' and chromStart>=%d and chromStart<%d",
-    tg->mapName, chromName, 
-    seqStart - cgs->maxGapToFill, seqEnd + cgs->maxGapToFill);
-sr = sqlGetResult(conn, query);
-
-/* Loop through drawing lines from one point to another unless
- * the points are too far apart. */
-while ((row = sqlNextRow(sr)) != NULL)
+if (binFileName)
     {
-    int pos = sqlUnsigned(row[0]);
-    double val = atof(row[1]);
-    x = (pos - seqStart)*xScale + xOff;
-    y = height - (val - minVal)*yScale + yOff;
-    if (x >= xOff)
+    struct chromGraphBin *cgb = chromGraphBinOpen(binFileName);
+    chromGraphBinSeekToChrom(cgb, chromName);
+    int seqStartMinus = seqStart - cgs->maxGapToFill;
+    while (chromGraphBinNextVal(cgb))
         {
-	if (pos - lastPos <= maxGapToFill)
+	int pos = cgb->chromStart;
+	if (pos >= seqStartMinus)
 	    {
-	    if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
-		vgLine(vg, lastX, lastY, x, y, color);
+	    double val = cgb->val;
+	    x = (pos - seqStart)*xScale + xOff;
+	    y = height - (val - minVal)*yScale + yOff;
+	    if (x >= xOff)
+		{
+		if (pos - lastPos <= maxGapToFill)
+		    {
+		    if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
+			vgLine(vg, lastX, lastY, x, y, color);
+		    }
+		else
+		    vgDot(vg, x, y, color);
+		}
+	    llastX = lastX;
+	    llastY = lastY;
+	    lastX = x;
+	    lastY = y;
+	    lastPos = pos;
+	    if (pos >= seqEnd)
+		break;
 	    }
-	else
-	    vgDot(vg, x, y, color);
 	}
-    llastX = lastX;
-    llastY = lastY;
-    lastX = x;
-    lastY = y;
-    lastPos = pos;
-    if (pos >= seqEnd)
-        break;
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+else
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    /* Construct query.  Set up a little more than window so that
+     * we can draw connecting lines. */
+    safef(query, sizeof(query), 
+	"select chromStart,val from %s "
+	"where chrom='%s' and chromStart>=%d and chromStart<%d",
+	tg->mapName, chromName, 
+	seqStart - cgs->maxGapToFill, seqEnd + cgs->maxGapToFill);
+    sr = sqlGetResult(conn, query);
+
+    /* Loop through drawing lines from one point to another unless
+     * the points are too far apart. */
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	int pos = sqlUnsigned(row[0]);
+	double val = atof(row[1]);
+	x = (pos - seqStart)*xScale + xOff;
+	y = height - (val - minVal)*yScale + yOff;
+	if (x >= xOff)
+	    {
+	    if (pos - lastPos <= maxGapToFill)
+		{
+		if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
+		    vgLine(vg, lastX, lastY, x, y, color);
+		}
+	    else
+		vgDot(vg, x, y, color);
+	    }
+	llastX = lastX;
+	llastY = lastY;
+	lastX = x;
+	lastY = y;
+	lastPos = pos;
+	if (pos >= seqEnd)
+	    break;
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
 
 /* Do map box */
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
@@ -85,6 +122,25 @@ hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
 hPrintf("HREF=\"../cgi-bin/hgTrackUi?%s&c=%s&g=%s\">\n",
 	cartSidUrlString(cart), chromName, tg->mapName);
 }
+
+static void cgDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chromosome graph for built-in track. */
+{
+cgDrawEither(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+	font, color, vis, NULL);
+}
+
+static void cgDrawItemsCt(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw chromosome graph for customTrack. */
+{
+cgDrawEither(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+	font, color, vis, trackDbRequiredSetting(tg->tdb, "binaryFile"));
+}
+
 
 int cgTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
@@ -169,18 +225,32 @@ else
     }
 }
 
-void chromGraphMethods(struct track *tg)
-/* Return track with methods filled in */
+static void chromGraphMethodsCommon(struct track *tg)
+/* Get chromGraph methods common to built in and custom tracks. */
 {
-struct sqlConnection *conn = hAllocConn();
 tg->loadItems = tgLoadNothing;
-tg->drawItems = cgDrawItems;
 tg->totalHeight = cgTotalHeight;
 tg->freeItems = tgFreeNothing;
 tg->drawLeftLabels = cgLeftLabels;
+tg->mapsSelf = TRUE;
+}
+
+void chromGraphMethods(struct track *tg)
+/* Fill in chromGraph methods for built in track. */
+{
+chromGraphMethodsCommon(tg);
+tg->drawItems = cgDrawItems;
+struct sqlConnection *conn = hAllocConn();
 tg->customPt = chromGraphSettingsGet(tg->mapName, conn,
 	tg->tdb, cart);
-tg->mapsSelf = TRUE;
 hFreeConn(&conn);
+}
+
+void chromGraphMethodsCt(struct track *tg)
+/* Fill in chromGraph methods for custom track. */
+{
+tg->drawItems = cgDrawItemsCt;
+chromGraphMethodsCommon(tg);
+tg->customPt = chromGraphSettingsGet(tg->mapName, NULL, tg->tdb, cart);
 }
 

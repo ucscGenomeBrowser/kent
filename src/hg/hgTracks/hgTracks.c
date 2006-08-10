@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1187 2006/08/09 22:23:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1188 2006/08/10 04:28:46 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11566,10 +11566,14 @@ char *ctMapItemName(struct track *tg, void *item)
 struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
-struct track *tg;
+struct track *tg = NULL;
+struct trackDb *tdb = ct->tdb;
 boolean useItemRgb = FALSE;
-tg = trackFromTrackDb(ct->tdb);
-tg->hasUi = TRUE;
+char *typeOrig = tdb->type;
+char *typeDupe = cloneString(typeOrig);
+char *typeParam = typeDupe;
+char *type = nextWord(&typeParam);
+
 if (ct->dbTrack)
     {
     struct sqlConnection *conn = sqlCtConn(FALSE);
@@ -11579,17 +11583,20 @@ if (ct->dbTrack)
 	hFreeOrDisconnect(&conn);
     }
 
-useItemRgb = bedItemRgb(ct->tdb);
+useItemRgb = bedItemRgb(tdb);
 
-if (ct->wiggle)
+if (sameString(type, "wig"))
     {
+    tg = trackFromTrackDb(tdb);
     if (ct->dbTrack)
 	tg->loadItems = wigLoadItems;
     else
 	tg->loadItems = ctWigLoadItems;
+    tg->customPt = ct;
     }
-else
+else if (sameString(type, "bed"))
     {
+    tg = trackFromTrackDb(tdb);
     if (ct->fieldCount < 8)
 	{
 	tg->loadItems = ctLoadSimpleBed;
@@ -11608,8 +11615,21 @@ else
 	}
     tg->mapItemName = ctMapItemName;
     tg->canPack = TRUE;
+    tg->customPt = ct;
     }
-tg->customPt = ct;
+else if (sameString(type, "chromGraph"))
+    {
+    tdb->type = NULL;	/* Swap out type for the moment. */
+    tg = trackFromTrackDb(tdb);
+    chromGraphMethodsCt(tg);
+    tdb->type = typeOrig;
+    }
+else
+    {
+    errAbort("Unrecognized custom graph type %s", type);
+    }
+tg->hasUi = TRUE;
+freez(&typeDupe);
 return tg;
 }
 
