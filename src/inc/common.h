@@ -941,6 +941,9 @@ char *naForEmpty(char *s);
 char *emptyForNull(char *s);
 /* Return "" if s is NULL, otherwise s. */
 
+char *nullIfAllSpace(char *s);
+/* Return NULL if s is all spaces, otherwise s. */
+
 char *trueFalseString(boolean b);
 /* Return "true" or "false" */
 
