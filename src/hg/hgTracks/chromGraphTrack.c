@@ -50,7 +50,7 @@ if (binFileName)
 	    {
 	    double val = cgb->val;
 	    x = (pos - seqStart)*xScale + xOff;
-	    y = height - (val - minVal)*yScale + yOff;
+	    y = height - 1 - (val - minVal)*yScale + yOff;
 	    if (x >= xOff)
 		{
 		if (pos - lastPos <= maxGapToFill)
@@ -93,7 +93,7 @@ else
 	int pos = sqlUnsigned(row[0]);
 	double val = atof(row[1]);
 	x = (pos - seqStart)*xScale + xOff;
-	y = height - (val - minVal)*yScale + yOff;
+	y = height - 1 - (val - minVal)*yScale + yOff;
 	if (x >= xOff)
 	    {
 	    if (pos - lastPos <= maxGapToFill)
