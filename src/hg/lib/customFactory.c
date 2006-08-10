@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.11 2006/08/09 21:43:15 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.12 2006/08/10 01:10:55 kent Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -871,6 +871,7 @@ static void customFactoryInit()
 if (factoryList == NULL)
     {
     slAddTail(&factoryList, &wigFactory);
+    slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory); 
@@ -1144,9 +1145,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	/* Save a few more settings. */
 	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
 	    {
-	    ctAddToSettings(track, "tdbType", track->tdb->type);
-	    if (dbTrack)
-		ctAddToSettings(track, "db", track->dbTrackType);
+	    ctAddToSettings(track, "tdbType", oneTrack->tdb->type);
+	    if (dbTrack && oneTrack->dbTrackType != NULL)
+		ctAddToSettings(track, "db", oneTrack->dbTrackType);
 	    }
 	}
     trackList = slCat(trackList, oneList);
