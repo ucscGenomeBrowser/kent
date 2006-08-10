@@ -146,8 +146,8 @@ Find the location of your <em>cgi-bin</em> directory. It should be under
 the parent directory of the WEBROOT directory. For example, on
 a Redhat Linux system using a stock apache RPM, the path of
 the <em>cgi-bin</em> directory is <em>/var/www/cgi-bin</em>. We will refer to
-this directory as CGIBIN in this document and you should substitute your
-real path for CGIBIN whenever you see that.
+this directory as CGI_BIN in this document and you should substitute your
+real path for CGI_BIN whenever you see that.
 <BR>
 <LI>
 Next, find the location of your MySQL data. For example, on a
@@ -611,21 +611,21 @@ database is restricted to read-only.
 
 <LI>Pre-compiled Red-Hat (2.6.12-1.1381_FC3smp) AMD Opteron x86_64 64-bit
 binaries can be fetched with the rsync command:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGIBIN/ </TT><BR><BR>
+<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
 There are a number of data files that are also used in this directory.
 This rsync will fetch them all.  If you need i386 (x86) 32-bit binaries, please
 use the following rsync in addition to and after the above rsync,
 to replace the 64 bit binaries:<BR><BR>
-<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGIBIN/ </TT>
+<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGI_BIN/ </TT>
 <BR><BR>
 
-<LI>In the CGIBIN directory, make a <A HREF="sample.html">hg.conf</A> file, in which, $USERNAME,$HOSTNAME and $PASSWORD used for the "$DBVERSION" database should be specified. Remember, variables should not be used in this file.
+<LI>In the CGI_BIN directory, make a <A HREF="sample.html">hg.conf</A> file, in which, $USERNAME,$HOSTNAME and $PASSWORD used for the "$DBVERSION" database should be specified. Remember, variables should not be used in this file.
 <BR><BR>
 
 <LI>Set up environment variables needed by the Makefile to install the binaries for the website in the correct place.
 <PRE>
-setenv GLOBAL_CONFIG_FILE $CGIBIN/hg.conf
-setenv HGCGI $CGIBIN
+setenv GLOBAL_CONFIG_FILE $CGI_BIN/hg.conf
+setenv HGCGI $CGI_BIN
 </PRE>
 <LI>Download the released zipped version of the source files from 
 <A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">here</A>.
