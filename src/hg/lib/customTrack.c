@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.121 2006/08/09 18:56:29 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.122 2006/08/10 01:09:46 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -141,28 +141,16 @@ return enabled;
 void ctAddToSettings(struct customTrack *ct, char *name, char *val)
 /*	add a variable to tdb settings */
 {
-struct dyString *ds = newDyString(0);
-struct hashCookie hc;
-struct hashEl *hel;
 struct trackDb *tdb = ct->tdb;
 
 if (!tdb->settingsHash)
     trackDbHashSettings(tdb);
 
 /* add or replace if already in hash */
-hashMayRemove(tdb->settingsHash, name);
-hashAdd(tdb->settingsHash, name, val);
+hashReplace(tdb->settingsHash, name, val);
 
 /* regenerate settings string */
-hc = hashFirst(tdb->settingsHash);
-while ((hel = hashNext(&hc)) != NULL)
-    {
-    dyStringAppend(ds, name);
-    dyStringAppend(ds, " ");
-    dyStringAppend(ds, val);
-    dyStringAppend(ds, "\n");
-    }
-tdb->settings = dyStringCannibalize(&ds);
+tdb->settings = hashToRaString(tdb->settingsHash);
 }
 
 char *customTrackTableFromLabel(char *label)
