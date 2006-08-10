@@ -238,6 +238,14 @@ type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
+track snp125
+shortLabel SNPs 
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
+group varRep
+priority 143.1
+visibility dense 
+type bed 6 +
+
 searchTable bacEndPairs
 searchMethod exact
 searchType bed
@@ -249,4 +257,22 @@ searchMethod exact
 searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
+
+searchName snp125Short
+searchTable snp125
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName snp125Long
+searchTable snp125
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16
+padding 250
 
