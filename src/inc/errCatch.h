@@ -47,5 +47,10 @@ boolean errCatchPushHandlers(struct errCatch *errCatch);
 
 void errCatchEnd(struct errCatch *errCatch);
 /* Restore error handlers and pop self off of catching stack. */
+
+boolean errCatchFinish(struct errCatch **pErrCatch);
+/* Finish up error catching.  Report error if there is a
+ * problem and return FALSE.  If no problem return TRUE.
+ * This handles errCatchEnd and errCatchFree. */
 #endif /* ERRCATCH_H */
 

@@ -19,7 +19,7 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: errCatch.c,v 1.1 2004/03/03 20:52:07 kent Exp $";
+static char const rcsid[] = "$Id: errCatch.c,v 1.2 2006/08/10 01:02:47 kent Exp $";
 
 
 struct errCatch *errCatchNew()
@@ -75,5 +75,25 @@ popAbortHandler();
 if (errCatch != errCatchStack)
    errAbort("Mismatch betweene errCatch and errCatchStack");
 errCatchStack = errCatch->next;
+}
+
+boolean errCatchFinish(struct errCatch **pErrCatch)
+/* Finish up error catching.  Report error if there is a
+ * problem and return FALSE.  If no problem return TRUE.
+ * This handles errCatchEnd and errCatchFree. */
+{
+struct errCatch *errCatch = *pErrCatch;
+boolean ok = TRUE;
+if (errCatch != NULL)
+    {
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	ok = FALSE;
+	warn(errCatch->message->string);
+	}
+    errCatchFree(pErrCatch);
+    }
+return ok;
 }
 
