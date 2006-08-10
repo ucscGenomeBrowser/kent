@@ -23,9 +23,10 @@
 #include "cytoBand.h"
 #include "hCytoBand.h"
 #include "chromGraph.h"
+#include "customTrack.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.39 2006/08/09 20:40:13 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.40 2006/08/10 01:27:25 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -57,30 +58,19 @@ struct genoGraph *getUserGraphs()
 /* Get list of all user graphs */
 {
 struct genoGraph *list = NULL, *gg;
-char *fileName = cartOptionalString(cart, hggUploadRa);
-if (fileName != NULL && fileExists(fileName))
+struct customTrack *ct, *ctList = customTracksParseCart(cart, NULL, NULL);
+for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    struct hash *ra;
-    struct lineFile *lf = lineFileOpen(fileName, TRUE);
-    while ((ra = raNextRecord(lf)) != NULL)
+    struct trackDb *tdb = ct->tdb;
+    if (sameString(tdb->type, "chromGraph"))
         {
-	char *name = hashFindVal(ra, "name");
-	char *binaryFile = hashFindVal(ra, "binaryFile");
-	if (name != NULL && binaryFile != NULL && fileExists(binaryFile))
-	    {
-	    char nameBuf[256];
-	    safef(nameBuf, sizeof(nameBuf), "%s%s", hggUserTag, name);
-	    AllocVar(gg);
-	    gg->name = cloneString(nameBuf);
-	    gg->shortLabel = name;
-	    gg->longLabel = hashFindVal(ra, "description");
-	    if (gg->longLabel == NULL) gg->longLabel = name;
-	    gg->binFileName = binaryFile;
-	    gg->settings = chromGraphSettingsGet(name, NULL, NULL, NULL);
-	    gg->settings->minVal = gg->settings->maxVal = 0; /* Force recalc */
-	    chromGraphSettingsFillFromHash(gg->settings, ra, name);
-	    slAddHead(&list, gg);
-	    }
+	AllocVar(gg);
+	gg->name = tdb->tableName;
+	gg->shortLabel = tdb->shortLabel;
+	gg->longLabel = tdb->longLabel;
+	gg->binFileName = trackDbRequiredSetting(tdb, "binaryFile");
+	gg->settings = chromGraphSettingsGet(gg->name, NULL, tdb, cart);
+	slAddHead(&list, gg);
 	}
     }
 slReverse(&list);
@@ -755,12 +745,6 @@ else if (cartVarExists(cart, hggUpload))
     {
     uploadPage();
     }
-#ifdef OLD
-else if (cartVarExists(cart, hggSubmitUpload))
-    {
-    submitUpload(conn);
-    }
-#endif /* OLD */
 else if (cartVarExists(cart, hggSubmitUpload2))
     {
     submitUpload2(conn);

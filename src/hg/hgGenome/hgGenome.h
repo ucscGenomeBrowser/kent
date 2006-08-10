@@ -37,9 +37,6 @@
 #define hggSort hggDo "Sort"
 #define hggCorrelate hggDo "Correlate"
 #define hggUpload hggDo "Upload"
-#ifdef OLD
-#define hggSubmitUpload hggDo "SubmitUpload"
-#endif /* OLD */
 #define hggClick hggDo "Click"
 #define hggClickX hggClick ".x"
 #define hggClickY hggClick ".y"
