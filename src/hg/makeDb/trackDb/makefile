@@ -12,6 +12,11 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
+# FIXME: the execution of commands with $$cmd broken on the mgc
+# machine and required using eval $$cmd; I am not sure why this
+# is working other places. 
+
+
 include ../../../inc/common.mk
 
 DBS = 	hg13 hg15 hg16 hg17 hg18\
@@ -214,7 +219,7 @@ checkbeta:
 
 beta: checkbeta clean strict
 
-# This target adds trackDbLocal to the mgc-specific server.  Also
+# This target adds trackDbMgc to the mgc-specific server.  Also
 # loads the grpMgc table.
 mgc:
 	ln -sf  human/hg17/exoniphy.html exoniphy.html
