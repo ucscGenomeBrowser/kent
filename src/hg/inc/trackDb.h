@@ -5,6 +5,10 @@
 #ifndef TRACKDB_H
 #define TRACKDB_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
 #define TRACKDB_NUM_COLS 21
 
 struct trackDb
