@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.12 2006/06/30 20:35:27 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.13 2006/08/10 01:06:49 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -375,9 +375,10 @@ slReverse(&ciList);
 return ciList;
 }
 
-void chromGraphToBin(struct chromGraph *list, char *fileName)
+void chromGraphToBinGetMinMax(struct chromGraph *list, char *fileName,
+	double *retMin, double *retMax)
 /* Create binary representation of chromGraph list, which should
- * be sorted. */
+ * be sorted.  Also return min/max values seen in data*/
 {
 struct chromGraph *el;
 FILE *f = mustOpen(fileName, "wb");
@@ -435,6 +436,18 @@ for (ci = ciList; ci != NULL; ci = ci->next)
     }
 carefulClose(&f);
 slFreeList(&ciList);
+
+/* Save return variables */
+*retMin = minVal;
+*retMax = maxVal;
+}
+
+void chromGraphToBin(struct chromGraph *list, char *fileName)
+/* Create binary representation of chromGraph list, which should
+ * be sorted. */
+{
+double minVal,maxVal;
+chromGraphToBinGetMinMax(list, fileName, &minVal, &maxVal);
 }
 	  
 
