@@ -20,7 +20,7 @@
 #include "correlate.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.48 2006/07/15 00:09:33 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.49 2006/08/11 20:58:14 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -442,7 +442,7 @@ if (doCt)
 	ctNew->wigAscii = cloneString(tn.forCgi);
 	ctNew->wiggle = TRUE;
 	dyStringPrintf(wigSettings,
-		       "type='wiggle_0'\twigFile='%s'\twibFile='%s'",
+		       "type wiggle_0\nwigFile %s\nwibFile=%s\n",
 		       ctNew->wigFile, ctNew->wibFile);
 	ctNew->tdb->settings = dyStringCannibalize(&wigSettings);
 	}
