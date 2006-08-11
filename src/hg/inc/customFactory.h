@@ -63,6 +63,9 @@ char *customTrackTempDb();
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 
+void customFactorySetupDbTrack(struct customTrack *track);
+/* Fill in fields most database-resident custom tracks need. */
+
 /*** Interface to custom factory system. ***/
 
 struct customFactory *customFactoryFind(struct customPp *cpp,
