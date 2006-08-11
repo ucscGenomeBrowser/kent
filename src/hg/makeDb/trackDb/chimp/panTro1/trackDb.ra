@@ -107,6 +107,14 @@ visibility hide
 type bed 4 .
 otherDb hg16
 
+track snp125
+shortLabel SNPs 
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
+group varRep
+priority 143.1
+visibility dense 
+type bed 6 +
+
 track canHg4Maf
 shortLabel Ancestor Maf
 longLabel CanHg4 14-way tba alignment with ancestor reconstruction
@@ -143,3 +151,22 @@ shortCircuit 1
 termRegex (scaffold_)[0-9]+
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s'
 searchPriority 5
+
+searchName snp125Short
+searchTable snp125
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName snp125Long
+searchTable snp125
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16
+padding 250
+
