@@ -1233,3 +1233,17 @@ grep -v protein_coding ensAll.gtf |grep -v pseudo > ensRna.gtf
     rhesus/rheMac2/nscanGene.html   (copy from panTro2 and edit)
     rhesus/rheMac2/trackDb.ra
 
+    # QA found:
+     Checking keys on database rheMac2
+     rheMac2.nscanPep.name - hits 22192 of 24608
+     Error: 2416 of 24608 elements of rheMac2.nscanPep.name are not in key nscanGene.name line 524 of all.joiner
+     Example miss: CHR1.5.052.A
+     # due to WUStL giving us a mismatched protein file.
+
+    # 2006-08-11 markd - obtained new protein sequences
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/rheMac2/proteins
+    hgPepPred -suffix=.a rheMac2 generic nscanPep proteins/chr*.fa.gz
+
+    joinerCheck -keys -database=rheMac2 -identifier=nscanName  ~/compbio/kent/src/hg/makeDb/schema/all.joiner
+    Checking keys on database rheMac2
+     rheMac2.nscanPep.name - hits 22003 of 22003 ok
