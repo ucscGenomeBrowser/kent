@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.11 2006/08/11 20:58:13 hiram Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.12 2006/08/11 20:59:36 hiram Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -181,7 +181,7 @@ for (region = regionList; region != NULL; region = region->next)
             ctNew->wigAscii = cloneString(tn.forCgi);
             ctNew->wiggle = TRUE;
             dyStringPrintf(wigSettings,
-                        "type wiggle_0\nwigFile %s\nwibFile=%s\n",
+                        "type wiggle_0\nwigFile %s\nwibFile %s\n",
                         ctNew->wigFile, ctNew->wibFile);
             ctNew->tdb->settings = dyStringCannibalize(&wigSettings);
             }
