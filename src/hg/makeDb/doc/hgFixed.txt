@@ -721,6 +721,11 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # the strain plus time point for the name otherwise the average is taken
 # over all time points for a strain for the track display 
 # when Tissue Averages is selected. (DONE, 2006-07-30, hartera) 
+# Changed so that the extras column for the MedianExps table has the 
+# developmental stage so that an average is taken across all strains for 
+# each stage when Tissue Averages is selected (DONE, 2006-08-11, harter)
+# (Jim recommended displaying it this way and then it also fits in with the
+# current framework for this type of track).
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
    cd /projects/compbio/data/microarray/zebrafishWT
@@ -791,9 +796,10 @@ perl -pi.bak -e 's/,//' zfishWTExps
 # alter script so that name for each experiment in column 2 is not just the 
 # strain but the strain plus time point (same as first column). This goes into
 # the extras column for zebrafishWTMedianExps and is used for Tissue Averages
-# display for the arry data track. Otherwise an average is taken for the 
+# display for the array data track. Otherwise an average is taken for the 
 # strain (hartera, 2006-07-30).
-
+# change so that column 2 is the time point so that an average of time points
+# is taken for the "Tissue Averages" Display (hartera, 2006-08-11)
 cat << 'EOF' > cnvToMedian
 #!/usr/bin/awk -f
 
@@ -808,7 +814,8 @@ BEGIN {
 
 END {
     for (id in data) {
-        print id, id, substr(data[id], 2);
+        split(id, a, "\\-");
+        print id, a[2]a[3], substr(data[id], 2);
     }
 }
 'EOF'
@@ -816,7 +823,8 @@ END {
 chmod +x cnvToMedian
 cnvToMedian zfishWTExps > zfishZonWTMedian.ra
 # re-order the *.ra file as this determines the order of display
-sort zfishZonWTMedian.ra | grep "somites" > tmp.ra
+sort zfishZonWTMedian.ra | grep "14somites" > tmp.ra
+sort zfishZonWTMedian.ra | grep "15somites" >> tmp.ra
 sort zfishZonWTMedian.ra | grep "hpf" >> tmp.ra
 mv tmp.ra zfishZonWTMedian.ra
 cp zfishZonWTMedian.ra ~/kent/src/hg/makeDb/hgMedianMicroarray
@@ -840,6 +848,8 @@ hgsql -e 'drop table zebrafishZonWTMedianExps;' hgFixed
 
 # Reload table using new table names. (hartera, 2006-07-30)
 # Take the median value over multiple replicants and put in this table:
+# Reloaded again after changing the .ra file so that the developmental 
+# stage will show up in the extras (hartera, 2006-08-11)
 hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedianLog \
   zebrafishZonWTMedianExps -minExps=1
