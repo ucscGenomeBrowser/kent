@@ -1246,4 +1246,8 @@ grep -v protein_coding ensAll.gtf |grep -v pseudo > ensRna.gtf
 
     joinerCheck -keys -database=rheMac2 -identifier=nscanName  ~/compbio/kent/src/hg/makeDb/schema/all.joiner
     Checking keys on database rheMac2
-     rheMac2.nscanPep.name - hits 22003 of 22003 ok
+    rheMac2.nscanPep.name - hits 22003 of 22003 ok
+
+    # 2006-08-11 markd - N-SCAN track has UTR only predictions, reload discarding
+    # these
+    ldHgGene -bin -gtf -requireCDS -genePredExt rheMac2 nscanGene chr_gtf/chr*.gtf.gz
