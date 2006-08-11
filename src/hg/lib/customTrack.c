@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.122 2006/08/10 01:09:46 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.123 2006/08/11 23:42:51 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -278,11 +278,9 @@ if (customText != NULL && customText[0] != 0)
 else if (ctFileNameFromCart != NULL)
     {
     if (!fileExists(ctFileNameFromCart))	/* Cope with expired tracks. */
-        {
 	cartRemove(cart, "ct");
-	}
     else
-        {
+	{
 	ctList = customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
 	ctFileName = ctFileNameFromCart;
 	}
@@ -471,6 +469,15 @@ if (!fileExists(fileName))
 struct customTrack *track;
 for (track = trackList; track != NULL; track = track->next)
     {
+    /* may be coming in here from the table browser.  It has wiggle
+     *	ascii data waiting to be encoded into .wib and .wig
+     */
+    if (track->wigAscii)
+	{
+	/* HACK ALERT - calling private method function in customFactory.c */
+	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
+	ctAddToSettings(track, "tdbType", track->tdb->type);
+	}
     saveTdbLine(f, fileName, track->tdb);
     if (!track->dbTrack)
 	{

@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.14 2006/08/10 18:03:16 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.15 2006/08/11 23:42:51 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -757,6 +757,74 @@ if (span == 0)
 *retSpan = span;
 }
 
+/*  HACK ALERT - The table browser needs to be able to encode its wiggle
+ *	data.  This function is temporarily global until a proper method
+ *	is used to work this business into the table browser custom
+ *	tracks.  Currently this is also called from customSaveTracks()
+ *	in customTrack.c in violation of this object's hidden methods.
+ */
+void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
+	boolean dbRequested)
+/* encode wigAscii file into .wig and .wib files */
+{
+/* Need to figure upper and lower limits. */
+double lowerLimit = 0.0;
+double upperLimit = 100.0;
+int span = 1;
+
+/* Load database if requested */
+if (dbRequested)
+    {
+    /* TODO: see if can avoid extra file copy in this case. */
+    customFactorySetupDbTrack(track);
+
+    /* Load ascii file into database via pipeline. */
+    struct pipeline *dataPipe = wigLoaderPipe(track);
+    FILE *in = mustOpen(wigAscii, "r");
+    FILE *out = pipelineFile(dataPipe);
+    copyOpenFile(in, out);
+    carefulClose(&in);
+    pipelineWait(dataPipe);
+    pipelineFree(&dataPipe);
+    track->wigFile = NULL;
+
+    /* Figure out lower and upper limits with db query */
+    struct sqlConnection *ctConn = sqlCtConn(TRUE);
+    char buf[64];
+    wigDbGetLimits(ctConn, track->dbTableName, 
+	    &upperLimit, &lowerLimit, &span);
+    sqlDisconnect(&ctConn);
+    safef(buf, sizeof(buf), "%d", span);
+    ctAddToSettings(track, "spanList", cloneString(buf));
+    }
+else
+    {
+    /* Make up wig file name (by replacing suffix of wib file name)
+     * and add to settings. */
+    track->wigFile = cloneString(track->wibFile);
+    chopSuffix(track->wigFile);
+    strcat(track->wigFile, ".wig");
+    ctAddToSettings(track, "wigFile", track->wigFile);
+
+    struct wigEncodeOptions options;
+    ZeroVar(&options);	/*	all is zero	*/
+    options.lift = 0;
+    options.noOverlap = FALSE;
+    options.wibSizeLimit = 300000000; /* 300Mb limit*/
+    wigAsciiToBinary(wigAscii, track->wigFile,
+	track->wibFile, &upperLimit, &lowerLimit, &options);
+    if (options.wibSizeLimit >= 300000000)
+	warn("warning: reached data limit for wiggle track '%s' "
+	     "%lld >= 300,000,000<BR>\n", 
+	     track->tdb->shortLabel, options.wibSizeLimit);
+    }
+unlink(wigAscii);/* done with this, remove it */
+freeMem(track->wigAscii);
+char tdbType[256];
+safef(tdbType, sizeof(tdbType), "wig %g %g", lowerLimit, upperLimit);
+track->tdb->type = cloneString(tdbType);
+}
+
 static struct customTrack *wigLoader(struct customFactory *fac,  
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -793,6 +861,7 @@ if (hashFindVal(settings, "wibFile"))
 /* WibFile setting doesn't exist, so we are loading from ascii stream. */
 else
     {
+
     /* Make up wib file name and add to settings. */
     customTrackTrashFile(&tn, ".wib");
     track->wibFile = cloneString(tn.forCgi);
@@ -809,62 +878,7 @@ else
 	fprintf(f, "%s\n", line);
     carefulClose(&f);
 
-    /* Need to figure upper and lower limits. */
-    double lowerLimit = 0.0;
-    double upperLimit = 100.0;
-    int span = 1;
-
-    /* Load database if requested */
-    if (dbRequested)
-	{
-	/* TODO: see if can avoid extra file copy in this case. */
-	customFactorySetupDbTrack(track);
-
-	/* Load ascii file into database via pipeline. */
-	struct pipeline *dataPipe = wigLoaderPipe(track);
-	FILE *in = mustOpen(wigAscii, "r");
-	FILE *out = pipelineFile(dataPipe);
-	copyOpenFile(in, out);
-	carefulClose(&in);
-	pipelineWait(dataPipe);
-	pipelineFree(&dataPipe);
-	track->wigFile = NULL;
-
-
-	/* Figure out lower and upper limits with db query */
-	struct sqlConnection *ctConn = sqlCtConn(TRUE);
-        char buf[64];
-	wigDbGetLimits(ctConn, track->dbTableName, 
-		&upperLimit, &lowerLimit, &span);
-	sqlDisconnect(&ctConn);
-        safef(buf, sizeof(buf), "%d", span);
-	ctAddToSettings(track, "spanList", cloneString(buf));
-	}
-    else
-        {
-	/* Make up wig file name (by replacing suffix of wib file name)
-	 * and add to settings. */
-	track->wigFile = cloneString(track->wibFile);
-	chopSuffix(track->wigFile);
-	strcat(track->wigFile, ".wig");
-	ctAddToSettings(track, "wigFile", track->wigFile);
-
-	struct wigEncodeOptions options;
-	ZeroVar(&options);	/*	all is zero	*/
-	options.lift = 0;
-	options.noOverlap = FALSE;
-	options.wibSizeLimit = 300000000; /* 300Mb limit*/
-	wigAsciiToBinary(wigAscii, track->wigFile,
-	    track->wibFile, &upperLimit, &lowerLimit, &options);
-	if (options.wibSizeLimit >= 300000000)
-	    warn("warning: reached data limit for wiggle track '%s' "
-	         "%lld >= 300,000,000<BR>\n", 
-		 track->tdb->shortLabel, options.wibSizeLimit);
-	}
-    unlink(wigAscii);/* done with this, remove it */
-    char tdbType[256];
-    safef(tdbType, sizeof(tdbType), "wig %g %g", lowerLimit, upperLimit);
-    track->tdb->type = cloneString(tdbType);
+    wigLoaderEncoding(track, wigAscii, dbRequested);
     }
 return track;
 }
