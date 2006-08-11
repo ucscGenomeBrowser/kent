@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.12 2006/08/11 20:59:36 hiram Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.13 2006/08/11 23:45:39 hiram Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -173,17 +173,18 @@ for (region = regionList; region != NULL; region = region->next)
             {
             struct dyString *wigSettings = newDyString(0);
             struct tempName tn;
-            makeTempName(&tn, hgtaCtTempNamePrefix, ".wig");
-            ctNew->wigFile = cloneString(tn.forCgi);
-            makeTempName(&tn, hgtaCtTempNamePrefix, ".wib");
-            ctNew->wibFile = cloneString(tn.forCgi);
-            makeTempName(&tn, hgtaCtTempNamePrefix, ".wia");
-            ctNew->wigAscii = cloneString(tn.forCgi);
+	    makeTempName(&tn, hgtaCtTempNamePrefix, ".wib");
+	    ctNew->wibFile = cloneString(tn.forCgi);
+	    char *wiggleFile = cloneString(ctNew->wibFile);
+	    chopSuffix(wiggleFile);
+	    strcat(wiggleFile, ".wia");
+	    ctNew->wigAscii = cloneString(wiggleFile);
+	    chopSuffix(wiggleFile);
             ctNew->wiggle = TRUE;
             dyStringPrintf(wigSettings,
-                        "type wiggle_0\nwigFile %s\nwibFile %s\n",
-                        ctNew->wigFile, ctNew->wibFile);
+                        "type wiggle_0\nwibFile %s\n", ctNew->wibFile);
             ctNew->tdb->settings = dyStringCannibalize(&wigSettings);
+	    freeMem(wiggleFile);
             }
         }
 
