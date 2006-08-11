@@ -2496,6 +2496,12 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel NHGRI DNaseI-Hypersensitive Sites Raw (CD4+ T-Cells)
     priority 2
 
+    track encodeNhgriDnaseHsChipRawHela
+    subTrack encodeNhgriDnaseHsChipRaw
+    shortLabel DNase HeLa Chip
+    longLabel NHGRI DNaseI-Hypersensitive Sites Raw (HeLaS3 Cells)
+    priority 3
+
 track encodeNhgriDnaseHsChip
 compositeTrack on
 shortLabel NHGRI DNaseI-HS
