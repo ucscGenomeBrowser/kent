@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.298 2006/08/10 06:51:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.299 2006/08/11 15:34:56 donnak Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1757,7 +1757,7 @@ char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 char *motifString = cartCgiUsualString(cart, BASE_MOTIFS, "");
 safef(titleVar,sizeof(titleVar),"%s_%s",BASE_TITLE,database);
 title = cartUsualString(cart, titleVar, "");
-puts("<P><B>Zoom in:&nbsp;</B>");
+puts("<P><B>Zoom factor:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
 cgiMakeTextVar(BASE_MOTIFS, motifString, 20);
