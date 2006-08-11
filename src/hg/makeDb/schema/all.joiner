@@ -2416,6 +2416,7 @@ tablesIgnored $hg
     encodeUcsdNgValChipTaf
     encodeUncFaireSignal
     encodeUncFairePeaks
+    encodeUncFairePeaksChipotle
     encodeUvaDnaRep%
     pseudoYale
     wgRna
