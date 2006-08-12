@@ -26,5 +26,5 @@ CREATE TABLE orthoAlleles (
     ortho2ChromStart int unsigned not null,  # Start position in species 2
     ortho2ChromEnd int unsigned not null,    # End position in species 2
     ortho2Strand char(1) not null,           # + or - or .
-    ortho2State varchar(255) not null,       # A, C, G, T, a, c, g, t, or .
+    ortho2State varchar(255) not null        # A, C, G, T, a, c, g, t, or .
 );
