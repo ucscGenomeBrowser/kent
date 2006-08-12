@@ -5,6 +5,7 @@
 
 #SNP data with orthologous alleles
 CREATE TABLE orthoAlleles (
+    bin smallint unsigned not null,          # To speed up searches
     chrom varchar(255) not null,             # Reference sequence chromosome or scaffold
     chromStart int unsigned not null,        # Start position in chrom
     chromEnd int unsigned not null,          # End position in chrom
