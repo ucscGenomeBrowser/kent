@@ -1,9 +1,7 @@
 #!/usr/bin/env perl
 
-#
-#	$Id: ex.cvsup.pl,v 1.3 2005/03/07 18:31:56 hiram Exp $
-#
 # cvsup - do a cvs update, report results concisely
+#	This file last updated: $Date: 2006/08/12 22:18:06 $
 
 use warnings;
 use strict;
@@ -48,9 +46,11 @@ my @modifieds;
 my @removals;
 my @patches;
 my @conflicts;
+my @removed;
 my @noncvsInteresting;
 my @noncvs;
 my @unrecognized;
+my $aborted;
 while (<CVSUP>) {
   if      (/^A (\S+)/) {
     push @additions, $1;
@@ -73,10 +73,27 @@ while (<CVSUP>) {
     }
   } elsif (/^(\S \S+)/) {
     push @unrecognized, $1;
+  } elsif (/^cvs update: (\S+) is no longer in the repository/) {
+    push @removed, $1;
+  } elsif (/^cvs (update|server): Updating/ ||
+	   /^RCS file: / ||
+	   /^retrieving revision / ||
+	   /^rcsmerge: warning: conflicts during merge/ ||
+	   /^cvs update: conflicts found in/ ||
+	   /^Merging differences between/) {
+    next;
+  } else {
+    print $_;
+    if (/^cvs \[update aborted\]:/) {
+      $aborted = $_;
+    }
   }
 }
 
 # Report them.
+if (defined $aborted) {
+  print "\nABORTED:\n$aborted\n";
+}
 if (scalar(@unrecognized) > 0) {
   print "Unrecognized update types:\n";
   foreach my $f (@unrecognized) {
@@ -126,6 +143,13 @@ if (scalar(@updates) > 0) {
   }
   print "\n";
 }
+if (scalar(@removed) > 0) {
+  print "Files removed by others:\n";
+  foreach my $f (@removed) {
+    print "  $f\n";
+  }
+  print "\n";
+}
 if (scalar(@noncvsInteresting) > 0) {
   print "Files/directories not checked in to CVS that look like source:\n";
   foreach my $f (@noncvsInteresting) {
@@ -147,3 +171,13 @@ if (scalar(@conflicts) > 0) {
   }
   print "\n";
 }
+if (defined $aborted) {
+  print "ABORTED:\n$aborted\n";
+}
+
+close(CVSUP);
+# Unfortunately $? actually doesn't pass cvs up's exit status... maybe because 
+# of sh's handling of exit statuses in pipes??  Oh well, hopefully error 
+# messages will be clear enough.  
+exit $?;
+
