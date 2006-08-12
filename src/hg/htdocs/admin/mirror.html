@@ -196,6 +196,15 @@ rsync -avzP rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/
 
 <OL type="a">
 
+<LI>Get Human March 2006 full data set (hg18: 13.0 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/hg18/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg18/database/ \
+  $WEBROOT/goldenPath/hg18/database/
+</PRE>
+
 <LI>Get Human May, 2004 full data set (hg17: 7.5 Gb) by doing:
 <P>
 <PRE>
@@ -223,6 +232,15 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/10april2003/database/
 </PRE>
 
+<LI>Get Chimp March, 2006 full data set (panTro2: 6.0 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/panTro2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/panTro2/database/ \
+  $WEBROOT/goldenPath/panTro2/database/
+</PRE>
+
 <LI>Get Chimp November, 2003 full data set (panTro1: 3.0 Gb) by doing:
 <P>
 <PRE>
@@ -230,6 +248,24 @@ mkdir -p $WEBROOT/goldenPath/panTro1/database/
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/panTro1/database/ \
   $WEBROOT/goldenPath/panTro1/database/
+</PRE>
+
+<LI>Get Rhesus January, 2006 full data set (rheMac2: 3.2 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/rheMac2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rheMac2/database/ \
+  $WEBROOT/goldenPath/rheMac2/database/
+</PRE>
+
+<LI>Get Dog May, 2005 full data set (canFam2: 3.4 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/canFam2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/canFam2/database/ \
+  $WEBROOT/goldenPath/canFam2/database/
 </PRE>
 
 <LI>Get Dog July, 2004 full data set (canFam1: 2.3 Gb) by doing:
@@ -241,7 +277,16 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/canFam1/database/
 </PRE>
 
-<LI>Get Cow September 2004 full data set (bosTau1: x.x Gb) by doing:
+<LI>Get Cow March 2005 full data set (bosTau2: 2.1 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/bosTau2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/bosTau2/database/ \
+  $WEBROOT/goldenPath/bosTau2/database/
+</PRE>
+
+<LI>Get Cow September 2004 full data set (bosTau1: 1.8 Gb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/bosTau1/database/
@@ -250,7 +295,25 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/bosTau1/database/
 </PRE>
 
-<LI>Get Mouse March, 2005 full data set (mm6: 124 Gb) by doing:
+<LI>Get Mouse February, 2006 full data set (mm8: 8.5 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/mm8/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm8/database/ \
+  $WEBROOT/goldenPath/mm8/database/
+</PRE>
+
+<LI>Get Mouse August, 2005 full data set (mm7: 7.5 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/mm7/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm7/database/ \
+  $WEBROOT/goldenPath/mm7/database/
+</PRE>
+
+<LI>Get Mouse March, 2005 full data set (mm6: 15 Gb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/mm6/database/
@@ -268,7 +331,16 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/mm5/database/
 </PRE>
 
-<LI>Get Rat June, 2003 full data set (rn3: 3.7 Gb) by doing:
+<LI>Get Rat November, 2004 full data set (rn4: 7.1 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/rn4/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rn4/database/ \
+  $WEBROOT/goldenPath/rn4/database/
+</PRE>
+
+<LI>Get Rat June, 2003 full data set (rn3: 8.4 Gb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/rnJun2003/database/
@@ -286,16 +358,16 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
 
-<LI>Get Opossum October, 2004 full data set (monDom1: x.x Gb) by doing:
+<LI>Get Chicken May, 2006 full data set (galGal3: 1.4 Gb) by doing:
 <P>
 <PRE>
-mkdir -p $WEBROOT/goldenPath/monDom1/database/
+mkdir -p $WEBROOT/goldenPath/galGal3/database/
 rsync -avzP --delete --max-delete=20 \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/monDom1/database/ \
-  $WEBROOT/goldenPath/monDom1/database/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/galGal3/database/ \
+  $WEBROOT/goldenPath/galGal3/database/
 </PRE>
 
-<LI>Get Chicken February, 2004 full data set (galGal2: 755 Mb) by doing:
+<LI>Get Chicken February, 2004 full data set (galGal2: 989 Mb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/galGal2/database/
@@ -304,7 +376,34 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/galGal2/database/
 </PRE>
 
-<LI>Get X. tropicalis October, 2004 full data set (xenTro1: x.x Gb) by doing:
+<LI>Get Opossum January, 2006 full data set (monDom1: 5.4 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/monDom4/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/monDom4/database/ \
+  $WEBROOT/goldenPath/monDom4/database/
+</PRE>
+
+<LI>Get Opossum October, 2004 full data set (monDom1: 1.9 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/monDom1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/monDom1/database/ \
+  $WEBROOT/goldenPath/monDom1/database/
+</PRE>
+
+<LI>Get X. tropicalis August, 2005 full data set (xenTro2: 3.2 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/xenTro2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/xenTro2/database/ \
+  $WEBROOT/goldenPath/xenTro2/database/
+</PRE>
+
+<LI>Get X. tropicalis October, 2004 full data set (xenTro1: 1.8 Gb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/xenTro1/database/
@@ -313,7 +412,25 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/xenTro1/database/
 </PRE>
 
-<LI>Get Zebrafish June, 2004 full data set (danRer2: x.x Gb) by doing:
+<LI>Get Zebrafish March, 2006 full data set (danRer4: 1.9 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/danRer4/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/danRer4/database/ \
+  $WEBROOT/goldenPath/danRer4/database/
+</PRE>
+
+<LI>Get Zebrafish May, 2005 full data set (danRer3: 3.1 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/danRer3/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/danRer3/database/ \
+  $WEBROOT/goldenPath/danRer3/database/
+</PRE>
+
+<LI>Get Zebrafish June, 2004 full data set (danRer2: 1.2 Gb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/danRer2/database/
@@ -322,16 +439,7 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/danRer2/database/
 </PRE>
 
-<LI>Get Zebrafish November, 2003 full data set (danRer1: 1.2 Gb) by doing:
-<P>
-<PRE>
-mkdir -p $WEBROOT/goldenPath/danRer1/database/
-rsync -avzP --delete --max-delete=20 \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/danRer1/database/ \
-  $WEBROOT/goldenPath/danRer1/database/
-</PRE>
-
-<LI>Get Tetraodon February, 2004 full data set (tetNig1: 315 Mb) by doing:
+<LI>Get Tetraodon February, 2004 full data set (tetNig1: 694 Mb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/tetNig1/database/
@@ -340,13 +448,22 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/tetNig1/database/
 </PRE>
 
-<LI>Get Fugu August, 2003 full data set (fr1: 149 Mb) by doing:
+<LI>Get Fugu August, 2002 full data set (fr1: 449 Mb) by doing:
 <P>
 <PRE>
 mkdir -p $WEBROOT/goldenPath/fr1/database/
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/fr1/database/ \
   $WEBROOT/goldenPath/fr1/database/
+</PRE>
+
+<LI>Get C. intestinalis March, 2005 full data set (ci2: 217 Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/ci2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci2/database/ \
+  $WEBROOT/goldenPath/ci2/database/
 </PRE>
 
 <LI>Get C. intestinalis December, 2002 full data set (ci1: 179 Mb) by doing:
@@ -356,6 +473,15 @@ mkdir -p $WEBROOT/goldenPath/ci1/database/
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci1/database/ \
   $WEBROOT/goldenPath/ci1/database/
+</PRE>
+
+<LI>Get S. purpuratus April, 2005 full data set (strPur1: 723 Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/strPur1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/strPur1/database/ \
+  $WEBROOT/goldenPath/strPur1/database/
 </PRE>
 
 <LI>Get Fruitfly January, 2003 full data set (dm2: 299 Mb) by doing:
@@ -519,23 +645,35 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> hg18        </TD><TD></TD><TD> hg18        </TD></TR>
 <TR><TD> hg17        </TD><TD></TD><TD> hg17        </TD></TR>
 <TR><TD> hg16        </TD><TD></TD><TD> hg16        </TD></TR>
 <TR><TD> 10april2003 </TD><TD></TD><TD> hg15        </TD></TR>
+<TR><TD> panTro2     </TD><TD></TD><TD> panTro2     </TD></TR>
 <TR><TD> panTro1     </TD><TD></TD><TD> panTro1     </TD></TR>
+<TR><TD> canFam2     </TD><TD></TD><TD> canFam2     </TD></TR>
 <TR><TD> canFam1     </TD><TD></TD><TD> canFam1     </TD></TR>
+<TR><TD> bosTau2     </TD><TD></TD><TD> bosTau2     </TD></TR>
 <TR><TD> bosTau1     </TD><TD></TD><TD> bosTau1     </TD></TR>
+<TR><TD> mm8         </TD><TD></TD><TD> mm8         </TD></TR>
+<TR><TD> mm7         </TD><TD></TD><TD> mm7         </TD></TR>
 <TR><TD> mm6         </TD><TD></TD><TD> mm6         </TD></TR>
 <TR><TD> mm5         </TD><TD></TD><TD> mm5         </TD></TR>
 <!--
 <TR><TD> mm4         </TD><TD></TD><TD> mm4         </TD></TR>
 <TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
 -->
+<TR><TD> rn4         </TD><TD></TD><TD> rn4         </TD></TR>
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
-<TR><TD> monDom1     </TD><TD></TD><TD> monDom1     </TD></TR>
+<TR><TD> galGal3     </TD><TD></TD><TD> galGal3     </TD></TR>
 <TR><TD> galGal2     </TD><TD></TD><TD> galGal2     </TD></TR>
+<TR><TD> monDom4     </TD><TD></TD><TD> monDom4     </TD></TR>
+<TR><TD> monDom1     </TD><TD></TD><TD> monDom1     </TD></TR>
+<TR><TD> xenTro2     </TD><TD></TD><TD> xenTro2     </TD></TR>
 <TR><TD> xenTro1     </TD><TD></TD><TD> xenTro1     </TD></TR>
+<TR><TD> danRer4     </TD><TD></TD><TD> danRer4     </TD></TR>
+<TR><TD> danRer3     </TD><TD></TD><TD> danRer3     </TD></TR>
 <TR><TD> danRer2     </TD><TD></TD><TD> danRer2     </TD></TR>
 <TR><TD> danRer1     </TD><TD></TD><TD> danRer1     </TD></TR>
 <TR><TD> tetNig1     </TD><TD></TD><TD> tetNig1     </TD></TR>
