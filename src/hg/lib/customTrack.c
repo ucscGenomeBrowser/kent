@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.123 2006/08/11 23:42:51 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.124 2006/08/12 00:17:40 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -475,6 +475,7 @@ for (track = trackList; track != NULL; track = track->next)
     if (track->wigAscii)
 	{
 	/* HACK ALERT - calling private method function in customFactory.c */
+	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
 	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
 	ctAddToSettings(track, "tdbType", track->tdb->type);
 	}
