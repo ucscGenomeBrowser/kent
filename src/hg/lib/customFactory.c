@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.15 2006/08/11 23:42:51 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.16 2006/08/12 01:34:21 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1182,6 +1182,7 @@ for (track = trackList; track != NULL; track = track->next)
 	 prio += 0.001;
 	 track->tdb->priority = prio;
 	 }
+     trackDbPolish(track->tdb);
      }
 
 /* Save return variables, clean up,  and go home. */

@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.124 2006/08/12 00:17:40 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.125 2006/08/12 01:34:21 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -79,6 +79,7 @@ tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
 tdb->type = (char *)NULL;
+tdb->canPack = 2;       /* unknown -- fill in later when type is known */
 return tdb;
 }
 
