@@ -1207,7 +1207,9 @@ cat > load.csh << 'EOF'
 # NHGRI DNaseI HS (2005-10-24 kate)
 #       Submitter: Greg Crawford
 #       2 datasets:  CD4, GM06690 with different methodology from previous
-#       Additional (raw) data for both cell types submitted 12/6
+#       Additional (raw) data for both cell types submitted 12/6/05
+
+# Additional data submitted 8/10/06: Raw & Pval for HelaS3 and GM cells
 
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
@@ -1218,6 +1220,7 @@ cat > load.csh << 'EOF'
     ln -s lab/Crawford_DNase_chip_CD4_hg16.txt Cd4.hg16.bed
     awk '{printf "%s\t%s\t%s\t%s\t%s\n", $1,$2,$3,$4,$6}' \
         lab/Crawford_DNase_chip_GM06990_hg16.txt > Gm06990.hg16.bed
+    # oops - mistakenly deleted lab/Crawford*txt files
 cat > load.csh << 'EOF'
     foreach f (Cd4.hg16.bed Gm06990.hg16.bed)
         set cell = $f:r:r
@@ -1248,6 +1251,36 @@ cat > loadRaw.csh << 'EOF'
     end
 'EOF'
     csh loadRaw.csh >&! loadRaw.log
+    # Loaded 382713 elements of size 4
+
+    # 8/10/06 Data submission
+    cd /cluster/data/encode/NHGRI/crawford
+    mkdir -p 2006-08-10/lab
+    cd 2006-08-10/lab
+    cp -p /var/ftp/encode/Crawford* .
+    ls
+# Crawford_DNase-chip_GM06990_PVAL_hg17.bed
+# Crawford_DNase-chip_GM06990_RAW_HG17.bed
+# Crawford_DNase-chip_HeLaS3_PVAL_HG17.bed
+# Crawford_DNase-chip_HeLaS3_RAW_hg17.bed
+
+    # NOTE: the GM Raw data is identical to that submitted on 10/11/05
+    set cell = Gm06990
+    awk '{print $1, $2, $3, $5}' lab/Crawford_DNase-chip_GM06990_RAW_HG17.bed \
+        > $cell.raw.hg17.bed
+    hgLoadBed -strict -bedGraph=4 hg17 \
+                encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
+    # Loaded 382713 elements of size 4
+    set cell = Hela
+    awk '{print $1, $2, $3, $5}' lab/Crawford_DNase-chip_HeLaS3_RAW_hg17.bed \
+        > $cell.raw.hg17.bed
+    hgLoadBed -strict -bedGraph=4 hg17 \
+                encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
+    # Loaded 385149 elements of size 4
+    # Note: different item count from data for CD4 and GM
+
+
+
 
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)
