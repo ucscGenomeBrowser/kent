@@ -2465,43 +2465,6 @@ chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr2
     type bed5FloatScore
     priority 2
 
-track encodeNhgriDnaseHsChipRaw
-compositeTrack on
-shortLabel NHGRI DNaseI-HS Raw
-longLabel NHGRI DNaseI-Hypersensitive Raw Chip
-group encodeChrom
-priority 61.0
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bedGraph 4
-altColor 80,50,80
-color 120,10,120
-maxHeightPixels 128:16:16
-minLimit -2.252
-maxLimit 4.243
-viewLimits 0:1
-windowingFunction mean
-autoScale Off
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeNhgriDnaseHsChipRawGm06990
-    subTrack encodeNhgriDnaseHsChipRaw
-    shortLabel DNase GM069 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Raw Chip (GM06990 cells)
-    priority 1
-
-    track encodeNhgriDnaseHsChipRawCd4
-    subTrack encodeNhgriDnaseHsChipRaw
-    shortLabel DNase CD4 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites Raw (CD4+ T-Cells)
-    priority 2
-
-    track encodeNhgriDnaseHsChipRawHela
-    subTrack encodeNhgriDnaseHsChipRaw
-    shortLabel DNase HeLa Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites Raw (HeLaS3 Cells)
-    priority 3
-
 track encodeNhgriDnaseHsChip
 compositeTrack on
 shortLabel NHGRI DNaseI-HS
@@ -2512,8 +2475,6 @@ chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr2
 visibility hide
 type bed 5 .
 useScore 1
-altColor 80,50,80
-color 120,10,120
 dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeNhgriDnaseHsChipGm06990
@@ -2521,6 +2482,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     shortLabel DNase GM069 Chip
     longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990, Chip method)
     dataVersion ENCODE Oct 2005 Freeze
+    color 80,50,80
     priority 1
 
     track encodeNhgriDnaseHsChipCd4
@@ -2528,6 +2490,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     shortLabel DNase CD4 Chip
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
     dataVersion ENCODE Oct 2005 Freeze
+    color 120,10,120
     priority 2
 
     track encodeNhgriDnaseHsMpssCd4
@@ -2535,6 +2498,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     shortLabel DNase CD4 MS
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
     dataVersion ENCODE June 2005 Freeze
+    color 120,10,120
     priority 3
 
     track encodeNhgriDnaseHsMpssCd4Act
@@ -2543,6 +2507,78 @@ dataVersion ENCODE June & Oct 2005 Freezes
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
     dataVersion ENCODE June 2005 Freeze
     priority 4
+
+track encodeNhgriDnaseHsChipRaw
+compositeTrack on
+shortLabel NHGRI DNaseI-HS Raw
+longLabel NHGRI DNaseI-Hypersensitive Chip Raw
+group encodeChrom
+priority 61.0
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -2.259
+maxLimit 4.243
+viewLimits 0:1
+windowingFunction mean
+autoScale Off
+
+    track encodeNhgriDnaseHsChipRawGm06990
+    subTrack encodeNhgriDnaseHsChipRaw
+    shortLabel DNase GM069 Raw
+    longLabel NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
+    color 80,50,80
+    dataVersion ENCODE Oct 2005 Freeze
+    priority 1
+
+    track encodeNhgriDnaseHsChipRawCd4
+    subTrack encodeNhgriDnaseHsChipRaw
+    shortLabel DNase CD4 Raw
+    longLabel NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
+    color 120,10,120
+    priority 2
+    dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeNhgriDnaseHsChipRawHela
+    subTrack encodeNhgriDnaseHsChipRaw
+    shortLabel DNase HeLa Raw
+    longLabel NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
+    color 220,12,132
+    priority 3
+    dataVersion August 2006
+
+    track encodeNhgriDnaseHsChipPvalGm06990
+    subTrack encodeNhgriDnaseHsChipRaw
+    shortLabel DNase GM069 Pval
+    longLabel NHGRI DNaseI-Hypersensitivity P-Value (GM06990 cells)
+    noInherit on
+    type bedGraph 4
+    maxHeightPixels 128:16:16
+    autoScale off
+    windowingFunction mean
+    minLimit 3.1
+    maxLimit 24.5
+    viewLimits 3.1:24.5
+    color 80,50,80
+    priority 4
+    dataVersion August 2006
+
+    track encodeNhgriDnaseHsChipPvalHela
+    subTrack encodeNhgriDnaseHsChipRaw
+    noInherit on
+    shortLabel DNase HeLa Pval
+    longLabel NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3 Cells)
+    type bedGraph 4
+    maxHeightPixels 128:16:16
+    autoScale off
+    windowingFunction mean
+    minLimit 3.1
+    maxLimit 24.5
+    viewLimits 3.1:24.5
+    color 220,12,132
+    priority 5
+    dataVersion August 2006
 
 track encodeTbaAlign
 shortLabel TBA Alignment
