@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1079 2006/08/09 19:01:09 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1080 2006/08/14 18:56:19 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14537,7 +14537,13 @@ else
     {
     if (ct->fieldCount < 4)
 	{
-	printf("<H3>Item information is not available for bed 3 type data</H3>\n");
+	for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	    if (bed->chromStart == start)
+		break;
+	printf("<H3>bed 3 type data has no item name</H3>\n");
+	if (bed)
+	    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
+		TRUE, NULL);
 	return;
 	}
     if (ct->dbTrack)
