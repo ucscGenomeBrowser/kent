@@ -442,7 +442,7 @@ type bed 4 .
 
 track orthoAlleles
 compositeTrack on
-shortLabel HapMap SNPs 2 
+shortLabel HapMap SNPs
 longLabel HapMap SNPs with Orthologous Alleles
 group varRep
 priority 144.1
@@ -451,40 +451,40 @@ type bed 6 +
 
     track orthoAllelesYRI
     subTrack orthoAlleles
-    shortLabel SNPs AD
-    longLabel  SNPs from African Descent
+    shortLabel SNPs YRI
+    longLabel  SNPs from the YRI population
     color 200,100,0
     altColor 0,100,200
     priority 1
 
     track orthoAllelesCEU
     subTrack orthoAlleles
-    shortLabel SNPs ED
-    longLabel  SNPs from European Descent
+    shortLabel SNPs CEU
+    longLabel  SNPs from the CEU population
     color 200,100,0
     altColor 0,100,200
     priority 2
 
     track orthoAllelesCHB
     subTrack orthoAlleles
-    shortLabel SNPs XD
-    longLabel  SNPs from Chinese Descent
+    shortLabel SNPs CHB
+    longLabel  SNPs from the CHB population
     color 200,100,0
     altColor 0,100,200
     priority 3
 
     track orthoAllelesJPT
     subTrack orthoAlleles
-    shortLabel SNPs JD
-    longLabel  SNPs from Japanese Descent
+    shortLabel SNPs JPT
+    longLabel  SNPs from the JPT population
     color 200,100,0
     altColor 0,100,200
     priority 4
 
     track orthoAllelesJPT_CHB
     subTrack orthoAlleles
-    shortLabel SNPs Asian
-    longLabel  SNPs from Japanese or Chinese Descent
+    shortLabel SNPs JPT+CHB
+    longLabel  SNPs from the combined JPT+CHB population
     color 200,100,0
     altColor 0,100,200
     priority 5
