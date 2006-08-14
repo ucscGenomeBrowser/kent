@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: stageMultiz.c,v 1.10 2004/02/23 09:07:23 kent Exp $";
+static char const rcsid[] = "$Id: stageMultiz.c,v 1.11 2006/08/14 15:42:14 angie Exp $";
 
 int winSize = 1010000;
 int overlapSize = 10000;
@@ -314,7 +314,6 @@ for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
 	    struct axt *axt = humanEl->val;
 	    int start = axt->qStart, end = axt->qEnd;
 	    int mouseChromSize = hashIntVal(mSizeHash, axt->qName);
-	    struct binElement *list, *el;
 	    if (axt->qStrand == '-')
 	        reverseIntRange(&start, &end, mouseChromSize);
 	    writeMousePartsAsMaf(f, mouseHash, ratMouseDir, axt->qName, 
