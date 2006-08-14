@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.29 2006/08/08 23:03:26 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.30 2006/08/14 16:55:28 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -226,7 +226,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
                 ct->tdb->shortLabel, ct->tdb->longLabel);
     printf("%s", ct->tdb->type ? ct->tdb->type : "&nbsp;");
     /* Doc field */
-    printf("</TD><TD ALIGN='CENTER'>%s", ct->tdb->html ? "X" : "&nbsp");
+    printf("</TD><TD ALIGN='CENTER'>%s", ct->tdb->html &&
+                                    ct->tdb->html[0] != 0 ? "X" : "&nbsp");
     /* Items field */
     if (ct->bedList)
         {
