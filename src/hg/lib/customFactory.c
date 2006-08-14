@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.17 2006/08/14 18:58:17 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.18 2006/08/14 19:23:14 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -977,6 +977,9 @@ if ((val = hashFindVal(hash, "description")) != NULL)
     stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
     }
 tdb->type = hashFindVal(hash, "tdbType");
+/* might be an old-style wigType track */
+if (NULL == tdb->type)
+    tdb->type = hashFindVal(hash, "wigType");
 track->dbTrackType = hashFindVal(hash, "db");
 track->dbTableName = hashFindVal(hash, "dbTableName");
 if (track->dbTableName)
