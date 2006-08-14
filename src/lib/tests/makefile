@@ -77,10 +77,13 @@ pipelineExitCode: ${BIN_DIR}/pipelineTester
 	${BIN_DIR}/pipelineTester -exitCode=1 false
 
 # test redirecting stderr, see that two process can write stderr, but only
-# the second's stdout should make it to the end of the pipe
+# the second's stdout should make it to the end of the pipe.  Since order
+# of writes to stderr is determined by process scheduling, sort the output
+# before comparing.
 pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
-	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
+	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.raw.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
 	diff expected/$@.out output/$@.out
+	sort output/$@.raw.err > output/$@.err
 	diff expected/$@.err output/$@.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
