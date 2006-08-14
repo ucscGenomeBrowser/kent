@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.16 2006/08/12 01:34:21 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.17 2006/08/14 18:58:17 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -182,6 +182,7 @@ if (offset != 0)
 	    }
 	}
     track->offset = 0;	/*	so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
     }
 
 /* If necessary load database */
