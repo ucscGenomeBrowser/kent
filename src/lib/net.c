@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.51 2006/08/15 22:01:20 baertsch Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.52 2006/08/15 22:05:50 baertsch Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -684,7 +684,6 @@ while(TRUE)
     	    buf[i++] = c;
 	if (i >= maxbuf)
 	    {
-	    warn("http header line too long > %d chars.",maxbuf);
 	    return -1;
 	    }
 	}
@@ -701,7 +700,6 @@ while(TRUE)
 	code = nextWord(&line);
 	if (code == NULL)
 	    {
-	    warn("Strange http header on %s\n", url);
 	    return -2;
 	    }
 	if (startsWith("30", code) && isdigit(code[2]) && code[3] == 0)
@@ -710,7 +708,6 @@ while(TRUE)
 	    }
 	else if (!sameString(code, "200"))
 	    {
-	    warn("%s: %s %s\n", url, code, line);
 	    return atoi(code);
 	    }
 	line = buf;  /* restore it */
