@@ -254,10 +254,14 @@ int grayIx = pslGrayIx(psl, isXeno, maxShade);
 int drawOptionNum;
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
-boolean showDiffCodonsAllScales =
+boolean showDiffCodonsAllScales = FALSE;
+
+if (tg)
+    showDiffCodonsAllScales =
     (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
      (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
 
+/* this will check for NULL tg */
 drawOptionNum = getCdsDrawOptionNum(tg);
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
