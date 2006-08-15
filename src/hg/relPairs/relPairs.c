@@ -6,7 +6,7 @@
 #include "psl.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: relPairs.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: relPairs.c,v 1.3 2006/08/15 17:45:57 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -104,10 +104,6 @@ struct hash *refHash = newHash(12);
 struct pairRef *refList = NULL, *ref;
 struct psl *psl;
 struct lineFile *lf;
-int lineSize;
-char *line;
-int wordCount;
-char *words[32];
 
 printf("Processing pairs from %s to %s\n", inPslName, outPairName);
 lf = pslFileOpen(inPslName);
