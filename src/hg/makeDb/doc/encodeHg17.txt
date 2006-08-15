@@ -1270,16 +1270,25 @@ cat > loadRaw.csh << 'EOF'
         > $cell.raw.hg17.bed
     hgLoadBed -strict -bedGraph=4 hg17 \
                 encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
-    # Loaded 382713 elements of size 4
+        # Loaded 382713 elements of size 4
+    awk '{printf ("%s\t%d\t%d\t%.3f\n", $1, $2, $3, $5)}' \
+        lab/Crawford_DNase-chip_GM06990_PVAL_hg17.bed | grep -v track \
+                > $cell.pval.hg17.bed
+    hgLoadBed -strict -bedGraph=4 hg17 \
+                encodeNhgriDnaseHsChipPval$cell $cell.pval.hg17.bed
+        # Loaded 988 elements of size 4
+
     set cell = Hela
     awk '{print $1, $2, $3, $5}' lab/Crawford_DNase-chip_HeLaS3_RAW_hg17.bed \
         > $cell.raw.hg17.bed
     hgLoadBed -strict -bedGraph=4 hg17 \
                 encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
-    # Loaded 385149 elements of size 4
-    # Note: different item count from data for CD4 and GM
-
-
+    # strip trailing garbage line  (verified with Greg Crawford)
+    awk '/^chr/ {printf ("%s\t%d\t%d\t%.3f\n", $1, $2, $3, $5)}' \
+        lab/Crawford_DNase-chip_HeLaS3_PVAL_HG17.bed > $cell.pval.hg17.bed
+    hgLoadBed -strict -bedGraph=4 hg17 \
+                encodeNhgriDnaseHsChipPval$cell $cell.pval.hg17.bed
+        # Loaded 1042 elements of size 4
 
 
 ##########################################################################
