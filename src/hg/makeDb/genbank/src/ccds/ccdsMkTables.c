@@ -6,12 +6,13 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hash.h"
+#include "binRange.h"
 #include "ccdsInfo.h"
 #include "verbose.h"
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.5 2006/08/15 21:03:02 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.6 2006/08/15 21:46:05 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -369,7 +370,10 @@ slSort(&genes, genePredCmp);
 
 genesFh = mustOpen(ccdsGeneFile, "w");
 for (gp = genes; gp != NULL; gp = gp->next)
+    {
+    fprintf(genesFh, "%d\t", binFromRange(gp->txStart, gp->txEnd));
     genePredTabOut(gp, genesFh);
+    }
 carefulClose(&genesFh);
 genePredFreeList(&genes);
 }
@@ -390,7 +394,7 @@ sqlLoadTabFile(conn, ccdsInfoFile, ccdsInfoTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
 safef(ccdsGeneTmpTbl, sizeof(ccdsGeneTmpTbl), "%s_tmp", ccdsGeneTbl);
 ccdsGeneSql = genePredGetCreateSql(ccdsGeneTmpTbl, genePredAllFlds,
-                                   genePredBasicSql, hGetMinIndexLength());
+                                   genePredWithBin, hGetMinIndexLength());
 sqlRemakeTable(conn, ccdsGeneTmpTbl, ccdsGeneSql);
 freeMem(ccdsInfoSql);
 freeMem(ccdsGeneSql);
