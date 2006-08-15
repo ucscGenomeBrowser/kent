@@ -9,7 +9,7 @@
 #include "hgRelate.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.3 2005/08/22 19:55:34 markd Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.4 2006/08/15 03:10:24 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,7 +18,7 @@ static struct optionSpec optionSpecs[] = {
 };
 boolean keep = FALSE;  /* keep tab files after load */
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -39,112 +39,11 @@ errAbort(
   );
 }
 
-static void delimErr(char expectDel, int pos)
-/* generate an error about an expected delimiter inside of a column value */
-{
-if (expectDel == ' ')
-    errAbort("expected space at character %d of column", pos);
-else
-    errAbort("expected '%c' at character %d of column", expectDel, pos);
-}
-
-static void delimStr(char *colVal, char expectDel, int pos)
-/* replace a delimiter with a zero byte, validating the delimiter */
-{
-if (colVal[pos] != expectDel)
-    delimErr(' ', pos);
-colVal[pos] = '\0';
-}
-
-int convertInt(char *colVal)
-/* convert an integer, ignoring leading white space */
-{
-return sqlSigned(skipLeadingSpaces(colVal));
-}
-
-int convertMonth(char *monthStr, char *colVal)
-/* convert a month string */
-{
-char *months[] = {
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", NULL
-};
-int i;
-
-for (i = 0; months[i] != NULL; i++)
-    {
-    if (sameString(monthStr, months[i]))
-        return i+1;
-    }
-
-errAbort("invalid month \"%s\"", monthStr);
-return 0;
-}
-
-void convertDateTimeCol(char *colVal, char *sep, FILE *loadFh)
-/* convert and output a datetime column */
-{
-/* sybase format: Feb  8 2005  3:35:01:270PM
- * mysql format: YYYY-MM-DD HH:MM:SS */
-#define IMPORT_DATETIME_LEN 
-char colCp[27]; /* fix length of string, plus one */
-struct tm tm;
-ZeroVar(&tm);
-
-/* don't corrupt original for error messages */
-if (strlen(colVal) != sizeof(colCp)-1)
-    errAbort("expected date/time strlen of %lld, got %lld", (long long)sizeof(colCp)-1, (long long)strlen(colVal));
-strcpy(colCp, colVal);
-
-/* Feb  8 2005  3:35:01:270PM
- * 01234567890123456789012345
- * 0         1         2      */
-
-/* month */
-delimStr(colCp, ' ', 3);
-tm.tm_mon = convertMonth(colCp+0, colVal);
-
-/* day */
-delimStr(colCp, ' ', 6);
-tm.tm_mday = convertInt(colCp+4);
-
-/* year */
-delimStr(colCp, ' ', 11);
-tm.tm_year = convertInt(colCp+7);
-
-/* hour */
-delimStr(colCp, ':', 14);
-tm.tm_hour = convertInt(colCp+12);
-
-/* minute */
-delimStr(colCp, ':', 17);
-tm.tm_min = convertInt(colCp+15);
-
-/* seconds */
-delimStr(colCp, ':', 20);
-tm.tm_sec = convertInt(colCp+18);
-
-/* AM/PM, convert to 24hr */
-if (sameString(colCp+24, "PM"))
-    {
-    if (tm.tm_hour < 12)
-        tm.tm_hour += 12;
-    }
-else if (!sameString(colCp+24, "AM"))
-    errAbort("expected \"AM\" or \"PM\", got \"%s\"",colCp+24);
-
-/* write as mysql time  */
-fprintf(loadFh, "%s%04d-%02d-%02d %02d:%02d:%02d", sep,
-        tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min,tm.tm_sec);
-}
-
-void doConvertCol(char *colVal, struct sqlFieldInfo *fi, char *sep, FILE *loadFh)
+static void doConvertCol(char *colVal, struct sqlFieldInfo *fi, char *sep, FILE *loadFh)
 /* convert one column and output to file */
 {
 if (fi->allowsNull && (colVal[0] == '\0'))
     fprintf(loadFh, "%s\\N", sep);
-else if (sameString(fi->type, "datetime"))
-    convertDateTimeCol(colVal, sep, loadFh);
 else
     {
     char *escVal = needMem(2*strlen(colVal)+1);
@@ -153,7 +52,7 @@ else
     }
 }
 
-void convertCol(char *colVal, struct sqlFieldInfo *fi, char *sep, struct lineFile *dumpLf, FILE *loadFh)
+static void convertCol(char *colVal, struct sqlFieldInfo *fi, char *sep, char *dumpFile, FILE *loadFh)
 /* convert one column and output to file. Catch errors and add more info  */
 {
 struct errCatch *except = errCatchNew();
@@ -162,15 +61,15 @@ if (errCatchStart(except))
 errCatchEnd(except);
 /* FIXME: memory leak if we actually continued */
 if (except->gotError)
-    errAbort("%s:%d: error converting column %s: \"%s\": %s",
-             dumpLf->fileName, dumpLf->lineIx, fi->field, colVal, except->message->string);
+    errAbort("%s: error converting column %s: \"%s\": %s",
+             dumpFile, fi->field, colVal, except->message->string);
 
 errCatchFree(&except); 
 }
 
 
-void convertRow(char **row, int numCols, struct sqlFieldInfo *fieldInfoList,
-                struct lineFile* dumpLf, char *table, FILE *loadFh)
+static void convertRow(char **row, int numCols, struct sqlFieldInfo *fieldInfoList,
+                char *dumpFile, char *table, FILE *loadFh)
 /* convert one row and output to file */
 {
 int iCol;
@@ -180,51 +79,133 @@ struct sqlFieldInfo *fi;
 /* for some reason, the dump files have an extra tab at the end, so we 
  * skip this bogus column */
 if (row[numCols-1][0] != '\0')
-    errAbort("%s:%d: expected empty column at end of row",
-             dumpLf->fileName, dumpLf->lineIx);
+    errAbort("%s: expected empty column at end of row", dumpFile);
 numCols--;
 
 if (slCount(fieldInfoList) != numCols)
-    errAbort("%s:%d: table %s has %d columns, import file has %d columns",
-             dumpLf->fileName, dumpLf->lineIx, table, slCount(fieldInfoList),
-             numCols);
+    errAbort("%s: table %s has %d columns, import file has %d columns",
+             dumpFile, table, slCount(fieldInfoList), numCols);
 
 /* field info parallels columns */
 for (iCol = 0, fi = fieldInfoList; iCol < numCols; iCol++, fi = fi->next)
     {
-    convertCol(row[iCol], fi, sep, dumpLf, loadFh);
+    convertCol(row[iCol], fi, sep, dumpFile, loadFh);
     sep = "\t";
     }
 fprintf(loadFh, "\n");
 assert(fi == NULL); /* should have reached end of list */
 }
 
-void importTable(struct sqlConnection *conn, char *dumpFile)
+static int readLogical(FILE *fh, char *dumpFile, struct dyString *rowBuf)
+/* read a line into rowBuf, handling quotes and escapes. Mark end of columns
+ * with zero bytes in the rowBuf.  Can't save pointers until the whole line is
+ * read as it rowBuf might resize */
 {
-char table[128], *row[128];
-struct lineFile *dumpLf;
-FILE *loadFh;
-int numCols;
-struct sqlFieldInfo *fieldInfoList;
+boolean inQuotes = FALSE;
+char prevChar = '\0';  /* used to find escapes */
+int colCnt = 0;
+int c;
 
+/* when a new column is found, add a zero byte to the row buffer. Can't
+ * save pointers in row until the whole line is read as it might resize */
+dyStringClear(rowBuf);
+while ((c = fgetc_unlocked(fh)) != EOF)
+    {
+    if ((c == '\n') && !inQuotes && (prevChar != '\\'))
+        break;  /* reached end of line */
+    else if (prevChar == '\\')
+        {
+        if (c == 't')
+            dyStringAppendC(rowBuf, '\t');
+        else 
+            dyStringAppendC(rowBuf, c);
+        }
+    else if (c == '\\')
+        prevChar = c; /* escape next */
+    else if ((c == '\t') && !inQuotes)
+        {
+        colCnt++;
+        dyStringAppendC(rowBuf, '\0');
+        }
+    else if (c == '"')
+        inQuotes = !inQuotes;
+    else
+        dyStringAppendC(rowBuf, c);
+    prevChar = c;
+    }
+if (inQuotes)
+    errAbort("EOF in quoted string in %s", dumpFile);
+if (rowBuf->stringSize > 0)
+    {
+    /* got at least on column, so count and flag last */
+    colCnt++;
+    dyStringAppendC(rowBuf, '\0');
+    }
+return colCnt;
+}
+
+static void saveColumns(struct dyString *rowBuf, char **row, int colCnt)
+/* save pointers to each column in row array */
+{
+/* column values are all zero terminated now */
+char *p = rowBuf->string;
+int i;
+for (i = 0; i < colCnt; i++)
+    {
+    row[i] = p;
+    p += strlen(p)+1;
+    }
+}
+
+static int readRow(FILE *fh, char *dumpFile, struct dyString *rowBuf, char **row, int maxCols)
+/* read and parse a row, this handles quoted columns, including those with
+ * with newlines.  Quotes are removed and the next line is read if a newline
+ * is in the quotes. */
+{
+int colCnt = readLogical(fh, dumpFile, rowBuf);
+if (colCnt > 0)
+    {
+    if (colCnt > maxCols)
+        errAbort("%d columns exceeeds max of %d in %s", colCnt, maxCols, dumpFile);
+    saveColumns(rowBuf, row, colCnt);
+    }
+return colCnt;
+}
+
+static void convertDumpFile(char *dumpFile, struct sqlFieldInfo *fieldInfoList, char *table, FILE *loadFh)
+/* convert a dump file to a tab file suitable for loading by MySQL */
+{
+char *row[128];
+FILE *dumpFh = mustOpen(dumpFile, "r");
+struct dyString *rowBuf = dyStringNew(0);
+int numCols;
+while ((numCols = readRow(dumpFh, dumpFile, rowBuf, row, ArraySize(row))) > 0)
+    convertRow(row, numCols, fieldInfoList, dumpFile, table, loadFh);
+
+carefulClose(&dumpFh);
+dyStringFree(&rowBuf);
+}
+
+static void importTable(struct sqlConnection *conn, char *dumpFile)
+/* import a table from sybase dumps */
+{
+char table[128], query[128];
 splitPath(dumpFile, NULL, table, NULL);
 verbose(1, "loading table %s\n", table);
 
-fieldInfoList = sqlFieldInfoGet(conn, table);
-dumpLf = lineFileOpen(dumpFile, TRUE);
-loadFh = hgCreateTabFile(".", table);
+struct sqlFieldInfo *fieldInfoList = sqlFieldInfoGet(conn, table);
+FILE *loadFh = hgCreateTabFile(".", table);
 
-while ((numCols = lineFileChopTab(dumpLf, row)) > 0)
-    convertRow(row, numCols, fieldInfoList, dumpLf, table, loadFh);
+convertDumpFile(dumpFile, fieldInfoList, table, loadFh);
     
-lineFileClose(&dumpLf);
-
+safef(query, sizeof(query), "truncate table %s", table);
+sqlUpdate(conn, query);
 hgLoadTabFileOpts(conn, ".", table, SQL_TAB_FILE_ON_SERVER, &loadFh);
 if (!keep)
     hgRemoveTabFile(".", table);
 }
 
-void ccdsImport(char *db, int numDumpFiles, char **dumpFiles)
+static void ccdsImport(char *db, int numDumpFiles, char **dumpFiles)
 /* import NCBI CCDS DB table dumps into a MySQL database */
 {
 struct sqlConnection *conn = sqlConnect(db);

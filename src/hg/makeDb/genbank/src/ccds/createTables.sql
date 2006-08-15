@@ -16,7 +16,7 @@ CREATE TABLE Accessions (
 	prot_version int NULL ,
 	prot_gi int NULL ,
 	organization_uid int NOT NULL ,
-	alive bit NOT NULL 
+	alive tinyint(1) NOT NULL 
 ) 
 ;
 
@@ -25,7 +25,8 @@ CREATE TABLE Accessions_GroupVersions (
 	accession_uid int NOT NULL ,
 	group_version_uid int NOT NULL ,
 	ccds_status_val_uid int NOT NULL ,
-	original_member bit NOT NULL 
+	original_member tinyint(1) NOT NULL ,
+	was_public tinyint(1) NOT NULL 
 ) 
 ;
 
@@ -66,7 +67,7 @@ CREATE TABLE GroupVersions (
 	location_count int NOT NULL ,
 	ccds_status_val_uid int NOT NULL ,
 	ccds_version int NULL ,
-	was_public bit NOT NULL 
+	was_public tinyint(1) NOT NULL 
 ) 
 ;
 
@@ -120,7 +121,8 @@ CREATE TABLE Interpretations (
 	interpretation_subtype_uid int NULL ,
 	acc_rejection_uid int NULL ,
 	interpreter_uid int NOT NULL ,
-	program_uid int NULL 
+	program_uid int NULL ,
+	reftrack_uid int NULL 
 ) 
 ;
 
@@ -160,7 +162,7 @@ DROP TABLE IF EXISTS Organizations;
 CREATE TABLE Organizations (
 	organization_uid int PRIMARY KEY NOT NULL ,
 	name varchar (128) NOT NULL ,
-	approval_authority bit NOT NULL 
+	approval_authority tinyint(1) NOT NULL 
 ) 
 ;
 

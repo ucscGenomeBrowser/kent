@@ -22,7 +22,8 @@ CREATE TABLE [dbo].[Accessions_GroupVersions] (
 	[accession_uid] [int] NOT NULL ,
 	[group_version_uid] [int] NOT NULL ,
 	[ccds_status_val_uid] [int] NOT NULL ,
-	[original_member] [bit] NOT NULL 
+	[original_member] [bit] NOT NULL ,
+	[was_public] [bit] NOT NULL 
 ) ON [PRIMARY]
 GO
 
@@ -108,7 +109,8 @@ CREATE TABLE [dbo].[Interpretations] (
 	[interpretation_subtype_uid] [int] NULL ,
 	[acc_rejection_uid] [int] NULL ,
 	[interpreter_uid] [int] NOT NULL ,
-	[program_uid] [int] NULL 
+	[program_uid] [int] NULL ,
+	[reftrack_uid] [int] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
@@ -155,3 +157,6 @@ CREATE TABLE [dbo].[Programs] (
 ) ON [PRIMARY]
 GO
 
+ALTER TABLE [dbo].[Interpretations] ADD 
+	CONSTRAINT [DF_Interpretations_reftrack_uid] DEFAULT (0) FOR [reftrack_uid]
+GO
