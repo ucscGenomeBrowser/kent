@@ -22014,3 +22014,25 @@ mkdir -p ${blatDir}/{over,net}
     hgAddLiftOverChain hg17 hg15 
 
 ############################################################################
+
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2006-08-15 markd)
+    cd /cluster/data/genbank/data/ccds/hg17
+    ftp ftp-private.ncbi.nih.gov (user ccds, needs password)
+    ftp> get CCDS.20060815.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf  /cluster/data/genbank/data/ccds/hg17/CCDS.20060815.tar.gz
+
+    # import ccds database tables
+    hgsql -e 'create database ccds'
+    hgsql ccds </cluster/data/genbank/etc/createTables.sql 
+    hgsql ccds </cluster/data/genbank/etc/createKeys.sql 
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+    checkTableCoords hg17 -verbose=2 ccdsGene
+
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+    rm -rf /scratch/tmp/ccds
