@@ -21735,28 +21735,31 @@ hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withoutGaps.bed
     #	data sets:
 zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
+chromStart=$6
+chromStart -= 1
 chromEnd=$7
-if ($6 == $7) { chromEnd += 1 }
 if (match($1,"^RIP_SVA_.*")) {
-printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, chromStart, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
 }
 }' | sort -k1,1 -k2,2n > dbRIP.SVA.txt
 
 zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
+chromStart=$6
+chromStart -= 1
 chromEnd=$7
-if ($6 == $7) { chromEnd += 1 }
 if (match($1,"^RIP_L1_.*")) {
-printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, chromStart, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
 }
 }' | sort -k1,1 -k2,2n > dbRIP.L1.txt
 
 zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
+chromStart=$6
+chromStart -= 1
 chromEnd=$7
-if ($6 == $7) { chromEnd += 1 }
 if (match($1,"^RIP_Alu_.*")) {
-printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, chromStart, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
 }
 }' | sort -k1,1 -k2,2n > dbRIP.Alu.txt
 
