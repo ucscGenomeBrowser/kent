@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.125 2006/08/12 01:34:21 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.126 2006/08/15 17:30:51 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -433,7 +433,7 @@ if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
     hashMayRemove(tdb->settingsHash, "altColor");
     }
-if (tdb->html)
+if (tdb->html && tdb->html[0])
     {
     /* write doc file in trash and add reference to the track line*/
     char *htmlFile;
