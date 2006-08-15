@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "ccdsLocationsJoin.h"
 
-static char const rcsid[] = "$Id: ccdsLocationsJoin.c,v 1.2 2005/03/18 07:20:02 markd Exp $";
+static char const rcsid[] = "$Id: ccdsLocationsJoin.c,v 1.3 2006/08/15 21:03:01 markd Exp $";
 
 void ccdsLocationsJoinStaticLoad(char **row, struct ccdsLocationsJoin *ret)
 /* Load a row from ccdsLocationsJoin table into ret.  The contents of ret will
@@ -16,7 +16,7 @@ void ccdsLocationsJoinStaticLoad(char **row, struct ccdsLocationsJoin *ret)
 {
 
 ret->ccds_uid = sqlSigned(row[0]);
-ret->lastest_version = sqlSigned(row[1]);
+ret->ccds_version = sqlSigned(row[1]);
 strcpy(ret->chrom, row[2]);
 strcpy(ret->strand, row[3]);
 ret->start = sqlSigned(row[4]);
@@ -31,7 +31,7 @@ struct ccdsLocationsJoin *ret;
 
 AllocVar(ret);
 ret->ccds_uid = sqlSigned(row[0]);
-ret->lastest_version = sqlSigned(row[1]);
+ret->ccds_version = sqlSigned(row[1]);
 strcpy(ret->chrom, row[2]);
 strcpy(ret->strand, row[3]);
 ret->start = sqlSigned(row[4]);
@@ -85,7 +85,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->ccds_uid = sqlSignedComma(&s);
-ret->lastest_version = sqlSignedComma(&s);
+ret->ccds_version = sqlSignedComma(&s);
 sqlFixedStringComma(&s, ret->chrom, sizeof(ret->chrom));
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->start = sqlSignedComma(&s);
@@ -122,7 +122,7 @@ void ccdsLocationsJoinOutput(struct ccdsLocationsJoin *el, FILE *f, char sep, ch
 {
 fprintf(f, "%d", el->ccds_uid);
 fputc(sep,f);
-fprintf(f, "%d", el->lastest_version);
+fprintf(f, "%d", el->ccds_version);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
