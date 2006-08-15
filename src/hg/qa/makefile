@@ -6,10 +6,11 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = apacheMonitor.o checkCardinality.o countNib.o \
     dumpNib.o gbSeqCheck.o reviewIndexes.o seqCheck.o \
-    getChroms.o
+    getChroms.o checkChain.o
 
 all: apacheMonitor checkCardinality countNib \
-    dumpNib gbSeqCheck reviewIndexes seqCheck getChroms
+    dumpNib gbSeqCheck reviewIndexes seqCheck \
+    getChroms checkChain
 
 apacheMonitor: apacheMonitor.o ${MYLIBS}
 	${CC} -O -o apacheMonitor apacheMonitor.o ${MYLIBS} $L
@@ -34,3 +35,6 @@ seqCheck: seqCheck.o ${MYLIBS}
 
 getChroms: getChroms.o ${MYLIBS}
 	${CC} -O -o getChroms getChroms.o ${MYLIBS} $L
+
+checkChain: checkChain.o ${MYLIBS}
+	${CC} -O -o checkChain checkChain.o ${MYLIBS} $L
