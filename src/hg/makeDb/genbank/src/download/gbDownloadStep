@@ -17,7 +17,7 @@
 # -genbank - only update genbank
 # -refseq - only update refseq
 #
-# $Id: gbDownloadStep,v 1.8 2004/12/14 23:16:38 markd Exp $
+# $Id: gbDownloadStep,v 1.9 2006/08/16 23:09:38 markd Exp $
 #
 
 use strict;
@@ -156,7 +156,7 @@ sub updateGenBank() {
     my($version) = getGenBankVer();
     my $fullRE = qr/(^gb.*\.seq\.gz$)|(^.*\.txt$)|(^README.*$)|(^gb*\.txt\.gz$)|(^gbacc\.idx\.gz$)/;
     my $dailyRE = qr/^nc.*\.flat\.gz$/;
-    my $fullExcludeRE = qr/(^gbgss.*\.seq\.gz$)/;
+    my $fullExcludeRE = undef;
 
     ftpOpen();
 
