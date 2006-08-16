@@ -472,7 +472,7 @@ compositeTrack on
 subGroup1 celltype Cell_Type gm06990=GM06990 k562=K562 hela=HeLa hfl1=HFL-1 molt4=MOLT4 ptr8=PTR8
 subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
 shortLabel Sanger ChIP
-longLabel Sanger ChIP/Chip (histones H3,H4 ab in GM06990, K562, HeLa, HFL-1, MOLT4 and PTR8 cells) 
+longLabel Sanger ChIP/Chip (histones H3,H4 ab in GM06990, K562, HeLa, HFL-1, MOLT4, and PTR8 cells) 
 group encodeChip
 priority 54.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -668,7 +668,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     track encodeSangerChipH3K4me1Molt4
     release alpha
     subTrack encodeSangerChip
-    shortLabel SI H3K4m1 MOLT4
+    shortLabel SI H3K4me1 MOLT4
     subGroups celltype=molt4 factor=h3k4me1
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, MOLT4 cells) 
     dataVersion August 2006
@@ -678,7 +678,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     track encodeSangerChipH3K4me2Molt4
     release alpha
     subTrack encodeSangerChip
-    shortLabel SI H3K4m2 MOLT4
+    shortLabel SI H3K4me2 MOLT4
     subGroups celltype=molt4 factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, MOLT4 cells)
     dataVersion August 2006
@@ -688,7 +688,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     track encodeSangerChipH3K4me3Molt4
     release alpha
     subTrack encodeSangerChip
-    shortLabel SI H3K4m3 MOLT4
+    shortLabel SI H3K4me3 MOLT4
     subGroups celltype=molt4 factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, MOLT4 cells)
     dataVersion August 2006
