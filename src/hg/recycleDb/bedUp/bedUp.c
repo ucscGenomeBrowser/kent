@@ -5,7 +5,7 @@
 #include "psl.h"
 #include "clonePos.h"
 
-static char const rcsid[] = "$Id: bedUp.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: bedUp.c,v 1.3 2006/08/16 22:42:30 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,7 +52,7 @@ void unpackPslName(struct lineFile *lf, char *pslName, char **retName, char **re
 {
 static char buf[128];
 char *words[8];
-int i, wordCount;
+int i;
 char *e;
 
 strncpy(buf, pslName, sizeof(buf));
@@ -224,7 +224,6 @@ int bestScore = 0, score;
 struct psl *psl, *bestPsl = NULL;
 int milliBad;
 struct clonePos *clonePos;
-int oldStart;
 
 /* Find best psl in list. */
 for (psl = bed->pslList; psl != NULL; psl = psl->next)
@@ -277,7 +276,7 @@ void bedUp(char *oldDb, char *oldTable, char *newDb, char *tableFile, char *pslF
 	char *missing)
 /* bedUp - Load bed submissions after conversion back into new database.. */
 {
-struct bedExt *bedList = NULL, *bed;
+struct bedExt *bedList = NULL;
 struct hash *bedHash = newHash(0);
 struct hash *chromHash = newHash(5);
 struct hash *cloneHash = newHash(0);
