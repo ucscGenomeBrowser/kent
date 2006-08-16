@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.98 2006/08/11 18:26:22 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.99 2006/08/16 18:39:57 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -728,7 +728,7 @@ printf("%s",
 "The index is used to find areas of probable homology, which are then\n"
 "loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
 "manner, except with 4-mers rather than 11-mers.  The protein index takes a little\n"
-"more than 2 gigabytes</P>\n"
+"more than 2 gigabytes.</P>\n"
 "<P>BLAT was written by <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim Kent</A>.\n"
 "Like most of Jim's software, interactive use on this web server is free to all.\n"
 "Sources and executables to run batch jobs on your own server are available free\n"
