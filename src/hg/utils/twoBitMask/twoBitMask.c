@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: twoBitMask.c,v 1.2 2006/07/31 22:37:02 angie Exp $";
+static char const rcsid[] = "$Id: twoBitMask.c,v 1.3 2006/08/16 18:46:19 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -157,15 +157,15 @@ void maskWithBed(char *bedName, struct hash *tbHash, struct hash *bitmapHash)
 {
 struct lineFile *lf = lineFileOpen(bedName, TRUE);
 int wordCount;
-char *words[10];
+char *words[13];
 boolean alreadyWarned = FALSE;
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     struct bed bed;
-    /* warn if bed has more than 9 fields -- no support for blocks */
-    if (wordCount > 9 && !alreadyWarned)
+    /* warn if bed has at least 12 fields -- no support for blocks */
+    if (wordCount >= 12 && !alreadyWarned)
 	{
-	warn("Warning: BED file %s has %d fields which means it might "
+	warn("Warning: BED file %s has >=%d fields which means it might "
 	     "contain block coordinates, but this program uses only the "
 	     "first three fields (the entire span -- no support for blocks).",
 	     bedName, wordCount);
