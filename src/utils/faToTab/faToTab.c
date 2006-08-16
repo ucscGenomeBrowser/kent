@@ -1,4 +1,4 @@
-/* hgFaToTab - convert fa file into tab separated file */
+/* faToTab - convert fa file into tab separated file */
 
 #include "common.h"
 #include "options.h"
@@ -12,9 +12,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgFaToTab - convert fa file to tab separted file\n"
+  "faToTab - convert fa file to tab separted file\n"
   "usage:\n"
-  "   hgFaToTab infileName outFileName\n"
+  "   faToTab infileName outFileName\n"
   "options:\n"
   "     -type=seqType   sequence type, dna or protein, default is dna\n"
   "     -keepAccSuffix - don't strip dot version off of sequence id, keep as is\n");
