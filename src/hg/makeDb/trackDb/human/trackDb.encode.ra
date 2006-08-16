@@ -2644,27 +2644,41 @@ spanList 38
 maxHeightPixels 128:16:16
 autoScale off
 windowingFunction mean
-viewLimits .2:2.6
+viewLimits -0.6:0.7
 color 20,150,20
 altColor 50,100,50
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUncFaireSignal
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE Signal
-    longLabel UNC FAIRE Signal (Formaldehyde Assisted Isolation of Regulatory Elements)
+    shortLabel FAIRE Signal
+    longLabel University of North Carolina FAIRE Signal
     priority 1
 
     track encodeUncFairePeaks
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE PeakFinder
-    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (PeakFinder)
+    shortLabel FAIRE PeakFinder
+    longLabel University of North Carolina FAIRE Peaks (PeakFinder)
+    noInherit on
+    type bedGraph 4
+    spanList 38
+    maxHeightPixels 128:16:16
+    viewLimits 0.4:3.6
+    autoScale off
+    windowingFunction mean
     priority 2
     
     track encodeUncFairePeaksChipotle
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE ChIPOTle
-    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (ChIPOTle)
+    shortLabel FAIRE ChIPOTle
+    longLabel University of North Carolina FAIRE Peaks (ChIPOTle)
+    noInherit on
+    type bedGraph 4
+    spanList 38
+    maxHeightPixels 128:16:16
+    viewLimits 0.4:3.6
+    autoScale off
+    windowingFunction mean
     color 0,0,255
     priority 3
 
