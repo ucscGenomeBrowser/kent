@@ -33,26 +33,38 @@ endif
 echo
 
 # make sure this is a valid database name
-set dbs=`hgsql -e "select name from dbDb" hgcentraltest | grep $db`
-if ( $dbs != $db ) then
+set dbs=`hgsql -e "SELECT name FROM dbDb" hgcentraltest | grep $db`
+if ( "$dbs" != $db ) then
   echo "   Invalid database name.  Try again."
   echo
   exit
 endif
 
+# check trackDb for db/table combination 
+hgsql -N -e 'SHOW TABLES' $db | grep -qw $tableName
 
-###########################################
+if ($status) then
+  echo "\n  no such database/table combination: $db $tableName.\n"
+  exit
+endif
+
+##########################################
 # find which trackDb.ra file the track is mentioned in
 # start at the assembly level
-cd ~/trackDb/*/$db
+
+if (! -e ~/trackDb/) then
+  echo "\n  this program presumes you have a symlink to trackDb \
+    in your home dir\n"
+  exit
+else
+  cd ~/trackDb/*/$db 
+endif
 set currDir=`pwd`
 
 grep -xq track.$tableName trackDb.ra
 
 if (! $status ) then
   # the track is mentioned in the assembly-level trackDb.ra file
-  echo " * the $tableName track is located here: \
-        `echo $currDir | sed 's^.*makeDb^~^'`/trackDb.ra"
 
 else
   # the track is not at the assembly-level, go up to the organism level
@@ -62,8 +74,6 @@ else
 
   if (! $status ) then
     # the track is mentioned in the organism-level trackDb.ra file
-    echo " * the $tableName track is located here: \
-        `echo $currDir | sed 's^.*makeDb^~^'`/trackDb.ra"
 
   else
     # the track is not at the organism level, go up to the top level
@@ -73,14 +83,16 @@ else
    
     if (! $status ) then
       # the track is mentioned in the top-level trackDb.ra file
-      echo " * the $tableName track is located here: \
-        `echo $currDir | sed 's^.*makeDb^~^'`/trackDb.ra"
-
     else 
        # the track is not at the top level either - it does not exist
        echo " * the $tableName track does not exist in any level trackDb.ra file"
+       set currDir=""
     endif
   endif
+endif
+if ($currDir != "") then
+  echo " * the $db $tableName track is located here: \
+    `echo $currDir | sed 's^.*makeDb^~^'`/trackDb.ra"
 endif
 echo
 
@@ -91,38 +103,31 @@ echo
 cd ~/trackDb/*/$db
 set currDir=`pwd`
 
-find $tableName.html >& /dev/null
-
-if (! $status ) then
+if (-e $tableName.html) then
   # the .html file is found at the assembly-level
-  echo " * the $tableName.html file is located here: \
-        `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
 
 else
   # the .html is not found at the assembly-level, go up to the organism level
   cd ..
   set currDir=`pwd`
-  find $tableName.html >& /dev/null
-
-  if (! $status ) then
+  if (-e $tableName.html) then
     # the .html file is found at the organism-level
-    echo " * the $tableName.html file is located here: \
-        `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
 
   else
     # the .html file is not found at the organism level, go up to the top level
     cd ..
     set currDir=`pwd`
-    find $tableName.html >& /dev/null
-
-    if (! $status ) then
+    if (-e $tableName.html) then
       # the .html file is found at the top-level
-      echo " * the $tableName.html file is located here: \
-        `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
     else
       # the .html file is not at the top level either - it does not exist
       echo " * the $tableName.html file does not exist at any level"
+      set currDir=""
     endif
   endif
+endif
+if ($currDir != "") then
+  echo " * the $db $tableName.html file is located here: \
+    `echo $currDir | sed 's^.*makeDb^~^'`/$tableName.html"
 endif
 echo
