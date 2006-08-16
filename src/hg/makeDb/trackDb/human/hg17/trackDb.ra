@@ -1409,7 +1409,7 @@ visibility hide
 thickDrawItem on
 type bed 6 .
 
-    track dbRIP_Alu 
+    track dbRIPAlu 
     subTrack retroposons 
     shortLabel Polymorphic Alu 
     longLabel Alu Retrotransposon Insertion Polymorphisms in Humans
@@ -1417,7 +1417,7 @@ type bed 6 .
     altColor 255,0,0
     priority 1 
 
-    track dbRIP_L1 
+    track dbRIPL1 
     subTrack retroposons 
     shortLabel Polymorphic L1 
     longLabel L1 Retrotransposon Insertion Polymorphisms in Humans
@@ -1425,7 +1425,7 @@ type bed 6 .
     altColor 255,0,0
     priority 2 
 
-    track dbRIP_SVA 
+    track dbRIPSVA 
     subTrack retroposons 
     shortLabel Polymorphic SVA 
     longLabel SVA Retrotransposon Insertion Polymorphisms in Humans
@@ -2330,7 +2330,7 @@ searchPriority 16
 padding 250
 
 searchName dbRIPAlu
-searchTable dbRIP_Alu
+searchTable dbRIPAlu
 searchMethod exact
 searchType bed
 termRegex RIP_Alu_chr[0-9XY]+_[0-9]+_[0-9]+
@@ -2338,7 +2338,7 @@ searchPriority 18
 padding 400
 
 searchName dbRIPL1
-searchTable dbRIP_L1
+searchTable dbRIPL1
 searchMethod exact
 searchType bed
 termRegex RIP_L1_chr[0-9XY]+_[0-9]+_[0-9]+
@@ -2346,14 +2346,14 @@ searchPriority 18
 padding 400
 
 searchName dbRIPSVA
-searchTable dbRIP_SVA
+searchTable dbRIPSVA
 searchMethod exact
 searchType bed
 termRegex RIP_SVA_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
 padding 400
 
-searchTable dbRIP_Alu
+searchTable dbRIPAlu
 searchType bed
 searchMethod fuzzy
 query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
@@ -2361,7 +2361,7 @@ searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 400
 
-searchTable dbRIP_L1
+searchTable dbRIPL1
 searchType bed
 searchMethod fuzzy
 query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
@@ -2369,7 +2369,7 @@ searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 400
 
-searchTable dbRIP_SVA
+searchTable dbRIPSVA
 searchType bed
 searchMethod fuzzy
 query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
