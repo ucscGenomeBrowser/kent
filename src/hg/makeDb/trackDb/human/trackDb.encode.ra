@@ -2641,9 +2641,11 @@ priority 63.0
 chromosomes chr1,chr4,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chr10,chrX
 type bedGraph 4
 spanList 38
-maxHeightPixels 128:16:16
+maxHeightPixels 128:24:16
 autoScale off
 windowingFunction mean
+minLimit -2.61
+maxLimit 3.63
 viewLimits -0.6:0.7
 color 20,150,20
 altColor 50,100,50
@@ -2662,8 +2664,8 @@ dataVersion ENCODE Oct 2005 Freeze
     noInherit on
     type bedGraph 4
     spanList 38
-    maxHeightPixels 128:16:16
-    viewLimits 0.4:3.6
+    maxHeightPixels 128:24:16
+    viewLimits 0.4:3.7
     autoScale off
     windowingFunction mean
     priority 2
@@ -2675,8 +2677,8 @@ dataVersion ENCODE Oct 2005 Freeze
     noInherit on
     type bedGraph 4
     spanList 38
-    maxHeightPixels 128:16:16
-    viewLimits 0.4:3.6
+    maxHeightPixels 128:24:16
+    viewLimits 0.4:3.7
     autoScale off
     windowingFunction mean
     color 0,0,255
