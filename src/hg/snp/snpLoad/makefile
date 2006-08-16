@@ -11,7 +11,8 @@ O = snpContigLocFilter.o snpContigLocFilter125.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
     snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
-    snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o
+    snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o \
+    snpGetSimple.o 
 
 all: snpContigLocFilter snpContigLocFilter125 \
      snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
@@ -20,7 +21,8 @@ all: snpContigLocFilter snpContigLocFilter125 \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
      snpPAR illuminaLookup snpCompareWeight subSnpCondense \
-     snpClassAndObserved snpMoltype affyLookup cnpLookup
+     snpClassAndObserved snpMoltype affyLookup cnpLookup \
+     snpGetSimple 
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -108,3 +110,6 @@ affyLookup: affyLookup.o ${MYLIBS}
 
 cnpLookup: cnpLookup.o ${MYLIBS}
 	${CC} -O -o cnpLookup cnpLookup.o ${MYLIBS} $L
+
+snpGetSimple: snpGetSimple.o ${MYLIBS}
+	${CC} -O -o snpGetSimple snpGetSimple.o ${MYLIBS} $L
