@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: reviewSanity.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: reviewSanity.c,v 1.3 2006/08/17 15:45:51 angie Exp $";
 
 FILE *missLog;
 
@@ -54,8 +54,6 @@ boolean faSpeedReadNextKeepCase(struct lineFile *lf,
 int c;
 int bufIx = 0;
 static char name[256];
-int nameIx = 0;
-boolean gotSpace = FALSE;
 int lineSize, i;
 char *line;
 
