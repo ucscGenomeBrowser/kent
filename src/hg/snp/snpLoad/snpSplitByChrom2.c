@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom2.c,v 1.2 2006/08/17 21:03:31 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom2.c,v 1.3 2006/08/17 21:11:05 heather Exp $";
 
 static struct hash *chromHash = NULL;
 
@@ -34,6 +34,7 @@ char *chromName1 = NULL;
 char *chromName2 = NULL;
 
 chromHash = newHash(0);
+// okay to use 3 args here?
 safef(query, sizeof(query), "select chrom from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
