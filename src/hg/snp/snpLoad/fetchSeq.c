@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.2 2006/08/17 22:30:19 heather Exp $";
+static char const rcsid[] = "$Id: fetchSeq.c,v 1.3 2006/08/17 22:35:48 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -77,6 +77,7 @@ int end = 0;
 int chromSize = 0;
 char allele[2];
 int count = 0;
+char *snpId = NULL;
 
 safef(tableName, sizeof(tableName), "%s_snp126hg18ortho", chromName);
 if (!hTableExists(tableName)) return;
@@ -99,6 +100,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     // if (count == 10) return;
     start = sqlUnsigned(row[0]);
     end = sqlUnsigned(row[1]);
+    snpId = cloneString(row[2]);
     if (end != start + 1)
 	{
         fprintf(errorFileHandle, "rs%s has size %d\n", row[0], end - start);
@@ -113,8 +115,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(allele, sizeof(allele), "%c", seqPtr[start]);
     if (sameString(row[3], "-"))
         reverseComplement(allele, 1);
-    fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
-        snpDb, chromName, start, end, row[2], row[3], allele);
+    fprintf(f, "%s\t%s\t%s\t%d\t%d\t%s\t%s\n", 
+        snpDb, snpId, chromName, start, end, row[3], allele);
 
     }
 sqlFreeResult(&sr);
