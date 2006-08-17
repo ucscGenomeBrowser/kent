@@ -1,5 +1,4 @@
 <H2>Description</H2>
-
 <P>
 This track contains
 <A HREF=" http://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
@@ -17,7 +16,6 @@ build 125, available from
   of a single base, and multiple nucleotide variants are represented by a 
   block that spans two or more bases.
 </P>
-
 <P>
   The configuration categories reflect the following definitions (not all categories apply
   to this assembly):
@@ -118,10 +116,12 @@ build 125, available from
     </LI>
   </UL>
 </P>
+
 <H2>Insertions/Deletions</H2>
-dbSNP uses a class called 'in-del'.   This has been split into 'insertion' and 'deletion', based on location type.
-Location types 'range' and 'exact' are deletions relative to the reference assembly.
-Location type 'between' are insertions relative to the reference assembly.
+<P>
+dbSNP uses a class called 'in-del'. This has been split into the 'insertion' and 'deletion' categories, based on location type.
+The location types 'range' and 'exact' are deletions relative to the reference assembly.
+The location type 'between' indicates insertions relative to the reference assembly.
 For the new location types, the class 'in-del' is preserved.
 
 <H2>UCSC Annotations</H2>
@@ -132,14 +132,14 @@ For the new location types, the class 'in-del' is preserved.
       span; exceptions are noted.</LI>
   <LI>The dbSNP reference allele is compared to the UCSC reference allele, and a note is made
       if the dbSNP reference allele is the reverse complement of the UCSC reference allele.</LI>
-  <LI>Single-base substitutions where the alignments of the
-      flanking sequences are adjacent or have a gap of more than one base are noted.</LI>
+  <LI>Single-base substitutions are noted where the alignments of the
+      flanking sequences are adjacent or have a gap of more than one base.</LI>
   <LI>A note is made if the observed alleles are not available from the rs_fasta files.</LI>
   <LI>Observed alleles with an unexpected format are noted.</LI>
   <LI>The length of the observed alleles is checked for consistency with location types;
       exceptions are noted.</LI>
   <LI>Single-base substitutions are checked to see that one of the observed alleles matches
-      the reference allele; excpetions are noted.</LI>
+      the reference allele; exceptions are noted.</LI>
   <LI>Simple deletions are checked to see that the observed allele matches the reference allele;
       exceptions are noted.</LI>
   <LI>Tri-allelic and quad-allelic single-base substitutions are noted.</LI>
@@ -150,11 +150,11 @@ For the new location types, the class 'in-del' is preserved.
 <H2>Data Sources</H2>
 <P>
   <UL>
-  <LI>b125_SNPContigLoc.bcp.gz was used for coordinates, orientation, location type
-      and the dbSNP reference allele.  
-  <LI>b125_SNPMapInfo.bcp.gz was used for alignment weights, filtering out 
-      alignments with weight = 10.
-  <LI>Functional classification was obtained from b125_SNPContigLocusId.bcp.gz.
+  <LI>Coordinates, orientation, location type and dbSNP reference allele 
+      data were obtained from b125_SNPContigLoc.bcp.gz.  
+  <LI>b125_SNPMapInfo.bcp.gz provided the alignment weights; alignments with 
+      weight = 10 were filtered out.
+  <LI>Functional classification information was obtained from b125_SNPContigLocusId.bcp.gz.
   <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.
   <LI>The header lines in the rs_fasta files were used for class, 
       observed polymorphism and molecule type.

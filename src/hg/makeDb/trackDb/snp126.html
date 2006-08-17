@@ -119,11 +119,14 @@ build 126, available from
     </LI>
   </UL>
 </P>
+
 <H2>Insertions/Deletions</H2>
-dbSNP uses a class called 'in-del'.   This has been split this into 'insertion' and 
-'deletion', based on location type.  Location types 'range' and 'exact' are deletions
-relative to the reference assembly.  Location type 'between' are insertions relative
-to the reference assembly.  For the new location types, the class 'in-del' is preserved.
+<P>
+dbSNP uses a class called 'in-del'.   This has been split into the 'insertion' and 
+'deletion' categories, based on location type.  The location types 'range' and 'exact' are deletions
+relative to the reference assembly.  The location type 'between' indicates 
+insertions relative
+to the reference assembly.  For the new location types, the class 'in-del' is preserved.</P>
 
 <H2>UCSC Annotations</H2>
 <P>
@@ -148,10 +151,10 @@ to the reference assembly.  For the new location types, the class 'in-del' is pr
 <H2>Data Sources</H2>
 <P>
   <UL>
-  <LI>b126_SNPContigLoc_36_1.bcp.gz was used for coordinates, orientation, location type
-      and the dbSNP reference allele.  
-  <LI>b126_SNPMapInfo_36_1.bcp.gz was used for alignment weights, filtering out 
-      alignments with weight = 0 or weight = 10.
+  <LI>Coordinates, orientation, location type and dbSNP reference allele data
+      were obtained from b126_SNPContigLoc_36_1.bcp.gz.  
+  <LI>b126_SNPMapInfo_36_1.bcp.gz provided the alignment weights; alignments with
+      weight = 0 or weight = 10 were filtered out.
   <LI>Class and observed polymorphism were obtained from the shared UniVariation.bcp.gz,
       using the univar_id from SNP.bcp.gz as an index.
   <LI>Functional classification was obtained from b126_SNPContigLocusId_36_1.bcp.gz.
@@ -159,6 +162,3 @@ to the reference assembly.  For the new location types, the class 'in-del' is pr
   <LI>The header lines in the rs_fasta files were used for molecule type.
   </UL>
 </P>
-
-
-
