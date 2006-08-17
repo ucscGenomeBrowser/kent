@@ -6,7 +6,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = snpContigLocFilter.o snpContigLocFilter125.o \
     snpContigLocusIdFilter.o snpContigLocusIdFilter125.o snpContigLocusIdCondense.o \
-    snpSplitByChrom.o snpLocType.o snpLocType125.o \
+    snpSplitByChrom.o snpSplitByChrom2.o snpLocType.o snpLocType125.o \
     snpExpandAllele.o snpSort.o snpRefUCSC.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
@@ -16,7 +16,7 @@ O = snpContigLocFilter.o snpContigLocFilter125.o \
 
 all: snpContigLocFilter snpContigLocFilter125 \
      snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
-     snpSplitByChrom snpLocType snpLocType125 \
+     snpSplitByChrom snpSplitByChrom2 snpLocType snpLocType125 \
      snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
@@ -41,6 +41,9 @@ snpContigLocusIdCondense: snpContigLocusIdCondense.o ${MYLIBS}
 
 snpSplitByChrom: snpSplitByChrom.o ${MYLIBS}
 	${CC} -O -o snpSplitByChrom snpSplitByChrom.o ${MYLIBS} $L
+
+snpSplitByChrom2: snpSplitByChrom2.o ${MYLIBS}
+	${CC} -O -o snpSplitByChrom2 snpSplitByChrom2.o ${MYLIBS} $L
 
 snpLocType: snpLocType.o ${MYLIBS}
 	${CC} -O -o snpLocType snpLocType.o ${MYLIBS} $L
