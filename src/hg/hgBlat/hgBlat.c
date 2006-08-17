@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.99 2006/08/16 18:39:57 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.100 2006/08/17 00:21:59 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -737,7 +737,7 @@ printf("%s",
 "<A HREF=\"http://www.kentinformatics.com\" TARGET=_blank>Kent Informatics</A>\n"
 "website for details.</P>\n"
 "\n"
-"<P>For more information on this graphical version of BLAT, click the Help \n"
+"<P>For more information on the graphical version of BLAT, click the Help \n"
 "button on the top menu bar or see the Genome Browser \n"
 "<A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
 }
