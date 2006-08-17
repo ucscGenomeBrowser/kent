@@ -2249,3 +2249,138 @@ TMPDIR=/scratch/tmp
 
     # 2006-07-24 markd: reloaded without -suffix
     hgPepPred canFam2 generic nscanPep canFam2.nscan.pep.fa.gz
+
+##########################################################################
+# MAKE Human Proteins (hg18) track (DONE braney 2006-08-17)
+    ssh pk
+    destDir=/san/sanvol1/scratch/canFam2/blastDb
+    mkdir -p /cluster/data/canFam2/bed/tblastn.hg18KG
+    cd /cluster/data/canFam2/bed/tblastn.hg18KG
+    find $destDir -name "*.nsq" | sed "s/\.nsq//" > target.lst        
+
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(500000/`wc target.lst | awk "{print \\\$1}"`\)
+# 36727/(500000/6149) = 451.668646
+    split -l 452 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    rm -rf  /cluster/bluearc/canFam2/bed/tblastn.hg18KG/blastOut
+    mkdir -p /cluster/bluearc/canFam2/bed/tblastn.hg18KG/blastOut
+    ln -s  /cluster/bluearc/canFam2/bed/tblastn.hg18KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast2211x86_64/bin/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $f.3 /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.2
+	liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/canFam2/jkStuff/subChr.lft carry $f.3
+	liftUp -nosort -type=".psl" -nohead $3.tmp /cluster/data/canFam2/jkStuff/liftAll.lft carry $f.4
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    exit
+    chmod +x blastSome
+    gensub2 target.lst kg.lst blastGsub blastSpec
+
+    para create blastSpec
+    para push
+
+# Completed: 504218 of 504218 jobs
+# CPU time in finished jobs:   28268903s  471148.38m  7852.47h  327.19d  0.896 y
+# IO & Wait Time:               5565118s   92751.97m  1545.87h   64.41d  0.176 y
+# Average job time:                  67s       1.12m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             710s      11.83m     0.20h    0.01d
+# Submission to last job:         91362s    1522.70m    25.38h    1.06d
+
+    ssh kki
+    cd /cluster/data/canFam2/bed/tblastn.hg18KG
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1) $(path2)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.$2_*.psl | /cluster/home/braney/bin/i386/simpleChain -chrom=$2 -prot -outPsl -maxGap=250000 stdin ../c.$2.`bas
+ename $1`.psl)
+'_EOF_'
+
+    chmod +x chainSome
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst ../../chrom.lst chainGsub chainSpec 
+    para create chainSpec
+    para push
+
+# Completed: 3335 of 3335 jobs
+# CPU time in finished jobs:    1056945s   17615.76m   293.60h   12.23d  0.034 y
+# IO & Wait Time:                 75548s    1259.13m    20.99h    0.87d  0.002 y
+# Average job time:                 340s       5.66m     0.09h    0.00d
+# Longest finished job:           25716s     428.60m     7.14h    0.30d
+# Submission to last job:         61450s    1024.17m    17.07h    0.71d
+
+    ssh kkstore04
+    cd /cluster/data/canFam2/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.*.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -k 14,14 -k 16,16n -k 18,18n u.*.psl m60* | uniq  > /cluster/data/canFam2/bed/tblastn.hg18KG/blastHg18KG.psl
+    cd ..
+    wc blastHg18KG.psl
+# 62741  1317561 12491782 blastHg18KG.psl
+# hg17  64343 1351203 10913814 blastHg18KG.psl
+    pslUniq blastHg18KG.psl stdout | wc                                                                                    
+# 36272  761712 8427975
+#  hg17 18827  395367 2992653
+    cat kgfa/*fa | grep ">" | wc                                                                                  
+#  303516  303516 4739313
+# hg17 309494  309494 4810327
+
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/tblastn.hg18KG
+    hgLoadPsl canFam2 blastHg18KG.psl
+    featureBits canFam2 blastHg18KG
+# 32565727 bases of 2384996543 (1.365%) in intersection
+# hg17  35781547 bases of 2384996543 (1.500%) in intersection
+
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
