@@ -448,26 +448,6 @@ urlLabel Yale DART Link:
     subGroups celltype=nb4
 
 track encodeSangerChip
-release beta
-compositeTrack on
-subGroup1 celltype Cell_Type gm06990=GM06990 k562=K562 hela=HeLa hfl1=HFL-1
-subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
-shortLabel Sanger ChIP
-longLabel Sanger ChIP/Chip (histones H3,H4 ab in GM06990, K562, HeLa, and HFL-1 cells) 
-group encodeChip
-priority 54.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bedGraph 4
-maxHeightPixels 128:16:16
-minLimit -46.1
-maxLimit 75
-viewLimits 0:10
-autoScale Off
-dataVersion ENCODE June & Oct 2005 Freezes
-
-track encodeSangerChip
-release alpha
 compositeTrack on
 subGroup1 celltype Cell_Type gm06990=GM06990 k562=K562 hela=HeLa hfl1=HFL-1 molt4=MOLT4 ptr8=PTR8
 subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
@@ -666,7 +646,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,10
 
     track encodeSangerChipH3K4me1Molt4
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3K4me1 MOLT4
     subGroups celltype=molt4 factor=h3k4me1
@@ -676,7 +655,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,130
 
     track encodeSangerChipH3K4me2Molt4
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3K4me2 MOLT4
     subGroups celltype=molt4 factor=h3k4me2
@@ -686,7 +664,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,130
 
     track encodeSangerChipH3K4me3Molt4
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3K4me3 MOLT4
     subGroups celltype=molt4 factor=h3k4me3
@@ -696,7 +673,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,130
 
     track encodeSangerChipH3acMolt4
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3ac MOLT4
     subGroups celltype=molt4 factor=h3ac
@@ -706,7 +682,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,130
 
     track encodeSangerChipH4acMolt4
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H4ac MOLT4
     subGroups celltype=molt4 factor=h4ac
@@ -716,7 +691,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,130
 
     track encodeSangerChipH3K4me1Ptr8
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3K4me1 PTR8
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, PTR8 cells) 
@@ -726,7 +700,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,10
 
     track encodeSangerChipH3K4me2Ptr8
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3K4me2 PTR8
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, PTR8 cells)
@@ -736,7 +709,6 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     color 10,10,10
 
     track encodeSangerChipH3K4me3Ptr8
-    release alpha
     subTrack encodeSangerChip
     shortLabel SI H3K4me3 PTR8
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, PTR8 cells)
