@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.24 2006/07/08 18:27:59 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.25 2006/08/18 22:15:17 angie Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -52,8 +52,9 @@ errAbort(
   "hgGcPercent - Calculate GC Percentage in 20kb windows\n"
   "usage:\n"
   "   hgGcPercent [options] database nibDir\n"
-  "     If nibDir/database.2bit file exists, uses that; otherwise uses \n"
-  "     nibDir/*.nib.  Loads gcPercent table with counts from sequence.\n"
+  "     nibDir can be a .2bit file, a directory that contains a\n"
+  "     database.2bit file, or a directory that contains *.nib files.\n"
+  "     Loads gcPercent table with counts from sequence.\n"
   "options:\n"
   "   -win=<size> - change windows size (default %d)\n"
   "   -noLoad - do not load mysql table - create bed file\n"
@@ -62,7 +63,7 @@ errAbort(
   "   -noRandom - ignore randome chromosomes from the nibDir\n"
   "   -noDots - do not display ... progress during processing\n"
   "   -doGaps - process gaps correctly (default: gaps are not counted as GC)\n"
-  "   -wigOut - output wiggle ascii data ready to pipe to wigBedToBinary\n"
+  "   -wigOut - output wiggle ascii data ready to pipe to wigEncode\n"
   "   -overlap=N - overlap windows by N bases (default 0)\n"
   "   -verbose=N - display details to stderr during processing\n"
   "   -bedRegionIn=input.bed   Read in a bed file for GC content in specific regions and write to bedRegionsOut\n"
@@ -324,7 +325,10 @@ if (bedRegionInName)
     lineFileClose(&lf);
     slReverse(bedRegionList);
     }
-sprintf(twoBitFile, "%s/%s.2bit", nibDir, database);
+if (twoBitIsFile(nibDir))
+    safef(twoBitFile, sizeof(twoBitFile), "%s", nibDir);
+else
+    safef(twoBitFile, sizeof(twoBitFile), "%s/%s.2bit", nibDir, database);
 if (fileExists(twoBitFile))
     {
     verbose(1, "#\tUsing twoBit: %s\n", twoBitFile);
@@ -333,6 +337,7 @@ if (fileExists(twoBitFile))
 else
     {
     struct fileInfo *nibList, *nibEl;
+    boolean gotNib = FALSE;
     nibList = listDirX(nibDir, "*.nib", TRUE);
     for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
         {
@@ -348,8 +353,12 @@ else
 	    }
 	verbose(1, "#\tProcessing %s\n", nibEl->name);
 	makeGcTabFromNib(nibEl->name, chrom, bedRegionOutFile, bedRegionList);
+	gotNib = TRUE;
         }
     slFreeList(&nibList);
+    if (! gotNib)
+	warn("Warning: nibDir argument (%s) did not expand to any sequence "
+	     "files.", nibDir);
     }
 carefulClose(&tabFile);
 verbose(1, "#\tFile %s created\n", tabFileName);
