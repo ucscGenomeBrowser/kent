@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.2 2006/08/07 17:08:30 angie Exp $
+# $Id: makeDownloads.pl,v 1.3 2006/08/18 18:40:34 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -127,6 +127,7 @@ sub compressChromFiles {
   my @chromTrfFiles = ();
   my $problems = 0;
   my $agpFudge = 0;
+  my $rmFudge = 0;
   foreach my $chrRoot (sort keys %chromRoots) {
     foreach my $chr (@{$chromRoots{$chrRoot}}) {
       my $agpFile = "$chrRoot/$chr.agp";
@@ -143,6 +144,9 @@ sub compressChromFiles {
       }
       if (-e "$topDir/$outFile") {
 	push @chromOutFiles, $outFile;
+      } elsif ($chr eq 'chrM') {
+	# It is OK to lack RepeatMasker output for chrM too.
+	$rmFudge++;
       } else {
 	warn "Missing RepeatMasker $outFile\n";
 	$problems++;
@@ -160,7 +164,7 @@ sub compressChromFiles {
     }
   }
   if (((scalar(@chromAgpFiles) + $agpFudge) != scalar(@chroms)) ||
-      (scalar(@chromOutFiles) != scalar(@chroms)) ||
+      ((scalar(@chromOutFiles) + $rmFudge) != scalar(@chroms)) ||
       (scalar(@chromTrfFiles) != scalar(@chroms))) {
     die "Sorry, can't find the expected set of per-chromosome files.";
   }
