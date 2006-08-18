@@ -6,9 +6,11 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetSimple.c,v 1.1 2006/08/16 23:49:45 heather Exp $";
+static char const rcsid[] = "$Id: snpGetSimple.c,v 1.2 2006/08/18 00:01:07 heather Exp $";
 
 static struct hash *chromHash = NULL;
+static struct hash *annotationsHash = NULL;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +18,7 @@ void usage()
 errAbort(
     "snpGetSimple - get simple SNPs, divided by chrom\n"
     "usage:\n"
-    "    snpGetSimple database table\n");
+    "    snpGetSimple database snpTable annotationsTable\n");
 }
 
 void loadChroms()
@@ -48,6 +50,32 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void loadMultiples(char *tableName)
+/* create a hash of SNPs that align more than once, so we can exclude these */
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+FILE *f;
+struct hashEl *hel = NULL;
+char *snpId = NULL;
+char *annotation = NULL;
+
+annotationsHash = newHash(0);
+safef(query, sizeof(query), "select name, exception from %s", tableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    annotation = cloneString(row[1]);
+    if (!sameString(annotation, "MultipleAlignments")) continue;
+    snpId = cloneString(row[0]);
+    hel = hashLookup(annotationsHash, snpId);
+    if (hel == NULL)
+        hashAdd(annotationsHash, snpId, NULL);
+    }
+}
+
 boolean triAllelic(char *observed)
 {
 if (sameString(observed, "A/C/G")) return TRUE;
@@ -60,6 +88,7 @@ return FALSE;
 void getSnps(char *tableName)
 /* spew out simple SNPs */
 /* exclude SNPs on random chroms */
+/* exclude SNPs that align multiple places */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -80,6 +109,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!sameString(row[8], "exact")) continue;
     if (triAllelic(row[6])) continue;
     if (sameString(row[6], "A/C/G/T")) continue;
+    hel = hashLookup(annotationsHash, row[0]);
+    if (hel != NULL) continue;
     hel = hashLookup(chromHash, row[1]);
     if (hel == NULL)
         verbose(1, "%s not found\n", row[1]);
@@ -100,7 +131,7 @@ int main(int argc, char *argv[])
 char *snpDb = NULL;
 char *snpTableName = NULL;
 
-if (argc != 3)
+if (argc != 4)
     usage();
 
 snpDb = argv[1];
@@ -115,6 +146,7 @@ if (!hTableExists("chromInfo"))
     errAbort("no chromInfo table in %s\n", snpDb);
 
 loadChroms();
+loadMultiples(argv[2]);
 getSnps(snpTableName);
 
 return 0;
