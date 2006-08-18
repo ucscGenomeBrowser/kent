@@ -5,7 +5,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: qacToWig.c,v 1.5 2005/08/11 17:21:23 angie Exp $";
+static char const rcsid[] = "$Id: qacToWig.c,v 1.6 2006/08/18 22:14:33 angie Exp $";
 
 static char *name = NULL;
 static bool fixed = FALSE;
@@ -104,7 +104,7 @@ carefulClose(&in);
 if (fixed)
     carefulClose(&out);
 if (name == NULL)
-    printf("Made %d .wig files in %s\n", outFileCount, outDir);
+    verbose(1, "Made %d .wig files in %s\n", outFileCount, outDir);
 else if (outFileCount < 1)
     warn("Found no sequences with name \"%s\"\n", name);
 }
