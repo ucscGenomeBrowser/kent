@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-static char const rcsid[] = "$Id: semiNorm.c,v 1.7 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: semiNorm.c,v 1.8 2006/08/18 15:17:50 angie Exp $";
 
 #include "common.h"
 
@@ -52,9 +52,7 @@ bgPoint* loadBackground(char* filename, long* numberOfWindows) {
     char c[16];
     long chromStart;
     long chromEnd;
-    double percentId;
     long number;
-    long invalid;
     long AA;
     long AC;
     long AG;
@@ -228,7 +226,6 @@ int main(int argc, char* argv[]) {
     long chromEnd;
     double percentId;
     long number;
-    long invalid;
 
     double backgroundPercentId;
     long backgroundNumber;
