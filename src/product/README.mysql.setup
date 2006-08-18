@@ -92,17 +92,21 @@ access and the "readwrite" user for hgcentral database access:
 #
 # the format is in the form of name/value pairs
 # written 'name=value' (note that there is no space between
-# the name and its value. Also, no blank lines should be in
-# this file
+# the name and its value.
+#
+#	$Id: README.mysql.setup,v 1.9 2006/08/18 18:10:48 hiram Exp $
+#
 ###########################################################
 # db.host is the name of the MySQL host to connect to
+#  high-volume sites will want a separate database server from the web server
 db.host=localhost
-# db.user is the username in use when connecting to the host
+# db.user is the username is use when connecting to the specified db.host
+#	it needs read-only access.  The browser CGIs do not need
+#	read-write access to the database tables
 db.user=readonly
-# this is the password to use with the above hostname
+# db.password is the password to use with the specified db.user
 db.password=access
 db.trackDb=trackDb
-
 # central.host is the name of the host of the central MySQL
 # database where stuff common to all versions of the genome
 # and the user database is stored.
@@ -111,12 +115,19 @@ central.host=localhost
 #
 # Be sure this user has UPDATE AND INSERT privs for hgcentral
 #	The central.domain will allow the browser cookie-cart
-#	function to work.
+#	function to work.  Set it to your domain.  It can be
+#	central.domain=local
+#	when the same machine is used for MySQL and the Apache
+#	WEB server.  Depends upon how your DNS is configured.
 #
 central.user=readwrite
 central.password=update
 central.domain=.cse.ucsc.edu
-
+#	personalize the background of the browser with a specified jpg
+#	floret.jpg is the standard UCSC default
+browser.background=/images/floret.jpg
+#  new option for track reording functions, August 2006
+hgTracks.trackReordering=on
 #	in case of failure of the above central.host machine,
 #	the following settings will be used to access a secondary
 #	mirror of the database
@@ -125,7 +136,6 @@ backupcentral.host=localhost
 backupcentral.user=readwrite
 backupcentral.password=update
 backupcentral.domain=.cse.ucsc.edu
-
 #	archivecentral settings are used for archived assemblies
 #	that have been moved to a different machine.
 archivecentral.db=hgcentral
@@ -165,4 +175,4 @@ To test this access with your ~/.hg.conf file in place:
 $ hgsql -e "show tables;" hgcentral
 
 ====================================================================
-This file last updated: $Date: 2006/01/19 17:46:30 $
+This file last updated: $Date: 2006/08/18 18:10:48 $
