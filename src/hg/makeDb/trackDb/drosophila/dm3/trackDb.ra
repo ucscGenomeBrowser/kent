@@ -18,7 +18,7 @@ color 0,100,180
 type genePred flyBaseLiftGenePep
 otherDb dm2
 
-track flyBaseLiftNonCoding
+track flyBaseLiftNoncoding
 shortLabel FB 4.2 Noncoding
 longLabel $o_Organism ($o_date/$o_db) FlyBase 4.2 Noncoding Genes Mapped to Release 5 ($date/$db)
 group genes
