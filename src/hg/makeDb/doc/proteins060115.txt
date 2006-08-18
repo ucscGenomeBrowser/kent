@@ -394,3 +394,36 @@ hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,pr
 
 # Email the above 3 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
 
+#########################################################
+# UPDATE REACTOME TABLES (DONE, Fan 8/18/06)
+
+# Obtain the ucsc_events18.dat.txt and ucsc_entity18.dat from Reactome.
+# Contact: Gopinathrao, Gopal [gopinath@cshl.edu]
+
+ssh hgwdev
+mkdir /cluster/store10/reactome/reactome060818
+rm /cluster/data/reactome
+ln -s /cluster/store10/reactome/reactome060818 /cluster/data/reactome
+cd /cluster/data/reactome
+
+# save these two .dat files to this subdirectory.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events18.dat" into table spReactomeEvent ignore 4 lines'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity18.dat" into table spReactomeId ignore 6 lines'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg18 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg18.lis
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+hgsql mm8 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm8.lis
+
+hgsql mm7 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm7.lis
+
+# Email the above 4 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
