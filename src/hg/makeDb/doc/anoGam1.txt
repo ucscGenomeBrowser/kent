@@ -1125,7 +1125,7 @@ chainSome $(path1)
 	echo $i
     done
 
-    sort -u -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > /cluster/data/anoGam1/bed/tblastn.dm2FB/blastDm2FB.psl
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/anoGam1/bed/tblastn.dm2FB/blastDm2FB.psl
     cd ..
 
     ssh hgwdev
