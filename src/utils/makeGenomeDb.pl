@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.2 2006/07/17 21:51:59 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.3 2006/08/18 18:39:42 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -360,7 +360,7 @@ if (`ls $fastaFiles | grep \.gz | wc -l`) then
 else
   set fcat = cat
 endif
-set fastaIds = `mktmp -p /tmp makeGenomeDb.fastaIds.XXXXXX`
+set fastaIds = `mktemp -p /tmp makeGenomeDb.fastaIds.XXXXXX`
 \$fcat $fastaFiles | grep '^>' | perl -wpe 's/^>(\\S+).*/\$1/' | sort \\
   > \$fastaIds
 
@@ -370,11 +370,11 @@ if (`ls $agpFiles | grep \.gz | wc -l`) then
 else
   set acat = cat
 endif
-set agpBigIds = `mktmp -p /tmp makeGenomeDb.agpIds.XXXXXX`
+set agpBigIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
 \$acat $agpFiles | awk '{print \$1;}' | sort -u \\
   > \$agpBigIds
-set agpLittleIds = `mktmp -p /tmp makeGenomeDb.agpIds.XXXXXX`
-\$acat $agpFiles | awk '{print \$6;}' | sort -u \\
+set agpLittleIds = `mktemp -p /tmp makeGenomeDb.agpIds.XXXXXX`
+\$acat $agpFiles | awk '\$5 != "N" {print \$6;}' | sort -u \\
   > \$agpLittleIds
 
 # Compare fasta IDs to first and sixth columns of AGP:
@@ -384,15 +384,21 @@ set diffLittleCount = `comm -3 \$fastaIds \$agpLittleIds | wc -l`
 # If AGP "big" IDs match sequence IDs, use sequence as-is.
 # If AGP "little" IDs match sequence IDs, assemble sequence with agpToFa.
 if (\$diffLittleCount == 0) then
-  set allFasta = `mktemp -p /tmp makeGenomeDb.fa.XXXXXX`
-  \$fcat $fastaFiles > \$allFasta
-  # If this runs out of memory, and there happen to be per-chrom .fa and .agp
-  # with filenames that are easy to pair up, you could try adding a foreach
-  # loop to do this one chrom at a time:
+  # agpToFa must be called with per-chrom AGP, so split (hope we don't
+  # have to do this for assemblies with >1000 sequences!):
+  set agpSplitDir = `mktemp -d -p /tmp makeGenomeDb.agp.XXXXXX`
   \$acat $agpFiles \\
-  | agpToFa -simpleMultiMasked stdin all stdout \$allFasta \\
-  | faToTwoBit stdin $chrM $db.unmasked.2bit
-  rm -f \$allFasta
+  | splitFileByColumn -col=1 -ending=.agp stdin \$agpSplitDir
+  set allLittleFasta = `mktemp -p /tmp makeGenomeDb.fa.XXXXXX`
+  \$fcat $fastaFiles > \$allLittleFasta
+  set allBigFasta = `mktemp -p /tmp makeGenomeDb.fa.XXXXXX`
+  foreach f (\$agpSplitDir/*)
+    set chr = \$f:t:r
+    agpToFa -simpleMultiMixed \$f \$chr stdout \$allLittleFasta \\
+      >> \$allBigFasta
+  end
+  faToTwoBit \$allBigFasta $chrM $db.unmasked.2bit
+  rm -rf \$agpSplitDir \$allLittleFasta \$allBigFasta
 else if (\$diffBigCount == 0) then
   faToTwoBit $fastaFiles $chrM $db.unmasked.2bit
 else
@@ -415,6 +421,7 @@ faToTwoBit $fastaFiles $chrM $db.unmasked.2bit
 _EOF_
     );
   }
+
   # Having made the unmasked .2bit, make chrom.sizes and chromInfo.tab:
   $bossScript->add(<<_EOF_
 
@@ -424,9 +431,21 @@ rm -rf $HgAutomate::trackBuild/chromInfo
 mkdir $HgAutomate::trackBuild/chromInfo
 awk '{print \$1 "\t" \$2 "\t$HgAutomate::gbdb/$db/$db.2bit";}' chrom.sizes \\
   > $HgAutomate::trackBuild/chromInfo/chromInfo.tab
+
+if (`wc -l < chrom.sizes` < 1000) then
+  # Install per-chrom .agp files for download.
+  \$acat $agpFiles \\
+  | splitFileByColumn -col=1 -ending=.agp stdin $topDir -chromDirs
+endif
 _EOF_
     );
   $bossScript->execute();
+
+  # Now that we have created chrom.sizes (unless we're in -debug mode),
+  # re-evaluate $chromBased for subsequent steps:
+  if (-e "$topDir/chrom.sizes") {
+    $chromBased = (`wc -l < $topDir/chrom.sizes` < $HgAutomate::splitThreshold);
+  }
 } # makeUnmasked2bit
 
 sub makeBuildDir {
@@ -486,38 +505,39 @@ sub checkAgp {
     my $bossScript = new HgRemoteScript("$scriptDir/checkAgpAndFa.csh",
 					$workhorse, $topDir, $whatItDoes,
 					$CONFIG);
+    my $allAgp = "$topDir/$db.agp";
+    # If we added chrM from GenBank, exclude it from fasta:
+    my $seqListCmd = 'set seqList = ""';
+    if ($mitoAcc ne 'none') {
+      $seqListCmd=<<_EOF_
+set seqList = `twoBitInfo $db.unmasked.2bit stdout \\
+  | awk '{print \$1;}' | grep -vw chrM | sed -e 's/\$/,/'`
+set seqList = -seq=`echo \$seqList | sed -e 's/ //g'`
+_EOF_
+      ;
+    }
     $bossScript->add(<<_EOF_
 # When per-chrom AGP and fasta files are given, it would be much more
 # efficient to run this one chrom at a time.  However, since the filenames
 # are arbitrary, I'm not sure how to identify the pairings of AGP and fa
 # files.  So cat 'em all together and check everything at once:
 
-if (`ls $fastaFiles | grep \.gz | wc -l`) then
-  set fcat = zcat
-else
-  set fcat = cat
-endif
-set allFasta = `mktemp -p /tmp makeGenomeDb.fa.XXXXXX`
-\$fcat $fastaFiles > \$allFasta
-
 if (`ls $agpFiles | grep \.gz | wc -l`) then
-  set fcat = zcat
+  set acat = zcat
 else
-  set fcat = cat
+  set acat = cat
 endif
-\$acat $agpFiles > $topDir/$db.agp
+\$acat $agpFiles | sort -k1,1 -k2n,2n > $allAgp
 
-set result = `checkAgpAndFa \$allAgp \$allFasta | tail -1`
+$seqListCmd
+set result = `twoBitToFa \$seqList $db.unmasked.2bit stdout \\
+              | checkAgpAndFa $allAgp stdin | tail -1`
 
-if (\$result != 'All AGP and FASTA entries agree - both files are valid') then
+if ("\$result" != 'All AGP and FASTA entries agree - both files are valid') then
   echo "Error: checkAgpAndFa failed\\!"
   echo "Last line of output: \$result"
-  echo "Please inspect and remove this temporary file, after comparing with"
-  echo "$topDir/$db.agp:"
-  echo "  \$allFasta -- concatenation of $fastaFiles"
   exit 1
 endif
-rm -f \$allFasta
 _EOF_
     );
     $bossScript->execute();
@@ -549,11 +569,54 @@ _EOF_
 
 sub makeDb {
   # Create a database on hgwdev, grp, chromInfo, gold/gap.
+  my $qual = (defined $qualFiles) ? " qual" : "";
   my $whatItDoes =
 "It creates the genome database ($db) and loads the most basic tables:
-chromInfo, grp, gap and gold.";
+chromInfo, grp, gap, gold,$qual and gc5Base.";
   my $bossScript = new HgRemoteScript("$scriptDir/makeDb.csh", $dbHost,
 				      $topDir, $whatItDoes, $CONFIG);
+
+  # Actually, build some basic track files on $workhorse, then load.
+  $qual = (defined $qualFiles) ? " qual and" : "";
+  $whatItDoes = "It generates$qual gc5Base track files for loading.";
+  my $workhorse = &HgAutomate::chooseWorkhorse();
+  my $horseScript = new HgRemoteScript("$scriptDir/makeTrackFiles.csh",
+				       $workhorse,
+				       $topDir, $whatItDoes, $CONFIG);
+  # Build qual files (if provided).
+  if (defined $qualFiles) {
+    $horseScript->add(<<_EOF_
+# Translate qual files to wiggle encoding.  If there is a problem with
+# sequence names, you may need to tweak the original qual sequence names
+# and/or lift using qacAgpLft.
+mkdir -p $bedDir/qual
+cd $bedDir/qual
+if (`ls $qualFiles | grep \.gz | wc -l`) then
+  set qcat = zcat
+else
+  set qcat = cat
+endif
+\$qcat $qualFiles \\
+| qaToQac stdin stdout \\
+| qacToWig -fixed stdin stdout \\
+| wigEncode stdin qual.{wig,wib}
+
+_EOF_
+      );
+  }
+
+  # Build gc5Base files.
+  $horseScript->add(<<_EOF_
+# Make gc5Base wiggle files.
+mkdir -p $bedDir/gc5Base
+cd $bedDir/gc5Base
+hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 $db \\
+  $topDir/$db.unmasked.2bit \\
+| wigEncode stdin gc5Base.{wig,wib}
+_EOF_
+  );
+
+  # Now start the database creation and loading commands.
   $bossScript->add (<<_EOF_
 hgsql '' -e 'create database $db'
 df -h /var/lib/mysql
@@ -583,17 +646,32 @@ _EOF_
   } else {
     $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
   }
-  if ($gotAgp && $gotMito) {
-    $bossScript->add(<<_EOF_
-# Make an empty placeholder chrM_gap table so featureBits doesn't complain.
-sed -e 's/ gap / chrM_gap /' $ENV{HOME}/kent/src/hg/lib/gap.sql | hgsql $db
+
+  $bossScript->add(<<_EOF_
+
+# Load gc5base
+mkdir -p $HgAutomate::gbdb/$db/wib
+rm -f $HgAutomate::gbdb/$db/wib/gc5Base.wib
+ln -s $bedDir/gc5Base/gc5Base.wib $HgAutomate::gbdb/$db/wib
+hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
+  $db gc5Base $bedDir/gc5Base/gc5Base.wig
 _EOF_
     );
+  if (defined $qualFiles) {
+  $bossScript->add(<<_EOF_
+
+# Load qual
+cd $bedDir/qual
+rm -f $HgAutomate::gbdb/$db/wib/qual.wib
+ln -s $bedDir/qual/qual.wib $HgAutomate::gbdb/$db/wib/
+hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
+  $db quality qual.wig
+_EOF_
+    );
+
   }
 
-  #*** do qual if provided
-  #*** do gc5base
-
+  $horseScript->execute();
   $bossScript->execute();
 } # makeDb
 
@@ -644,7 +722,8 @@ sub makeDbDb {
 # - create hgcentraltest entry, (if necessary) defaultDb and genomeClade
   my $genome = &getGenome();
   my $defaultPos;
-  my ($seq, $size) = split(/\s/, `head -1 "$topDir/chrom.sizes"`);
+  my ($seq, $size) = $opt_debug ? ("chr1", 1000) :
+    split(/\s/, `head -1 "$topDir/chrom.sizes"`);
   my $start = int($size / 2);
   $size = ($start + 9999) if ($size > ($start + 9999));
   $defaultPos = "$seq:$start-$size";
@@ -1114,9 +1193,12 @@ files used for a previous assembly might make a better template):
 
 Then cd ../.. (to trackDb/) and
  - edit makefile to add $db to DBS.
- - cvs add $dbDbSpeciesDir if necessary
+ - (if necessary) cvs add $dbDbSpeciesDir
  - cvs add $dbDbSpeciesDir/$db
  - cvs add $dbDbSpeciesDir/$db/*.{ra,html}
+ - cvs ci -m "Added $db to DBS." makefile
+ - cvs ci -m "Initial descriptions for $db." $dbDbSpeciesDir/$db
+ - (if necessary) cvs ci $dbDbSpeciesDir
  - Run make update DBS=$db and make alpha when done.
  - (optional) Clean up $runDir
  - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
