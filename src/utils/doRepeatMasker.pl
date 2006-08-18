@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.3 2006/08/08 00:15:19 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.4 2006/08/18 18:34:17 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -25,6 +25,7 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
+    $opt_species
     $opt_unmaskedSeq
     /;
 
@@ -44,6 +45,7 @@ my $defaultSmallClusterHub = 'n/a';
 my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
 my $unmaskedSeq = "\$db.unmasked.2bit";
+my $defaultSpecies = 'scientificName from dbDb';
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -61,6 +63,9 @@ options:
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/RepeatMasker.\$date
                           (necessary when continuing at a later date).
+    -species sp           Use sp (which can be quoted genus and species, or
+                          a common name that RepeatMasker recognizes.
+                          Default: $defaultSpecies.
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
 _EOF_
@@ -99,6 +104,7 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
+		      'species=s',
 		      'unmaskedSeq=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -141,7 +147,7 @@ sub doCluster {
   my $clusterSeqDir = "$okIn[0]/$db";
   my $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
   my $partDir .= "$okOut[0]/$db/RMPart";
-  my $species = &getSpecies($dbHost, $db);
+  my $species = $opt_species ? $opt_species : &getSpecies($dbHost, $db);
 
   # Script to do a dummy run of RepeatMasker, to test our invocation and
   # unpack library files before kicking off a large cluster run.
@@ -199,7 +205,7 @@ _EOF_
   close($fh);
 
   &HgAutomate::makeGsub($runDir,
-      "./RMRun.csh {check out line+ $partDir/\$(path1).out}");
+      "./RMRun.csh {check out line $partDir/\$(path1).out}");
 
   my $whatItDoes = 
 "It computes a logical partition of unmasked 2bit into 500k chunks
