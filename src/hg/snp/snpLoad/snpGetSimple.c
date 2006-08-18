@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetSimple.c,v 1.2 2006/08/18 00:01:07 heather Exp $";
+static char const rcsid[] = "$Id: snpGetSimple.c,v 1.3 2006/08/18 20:42:48 heather Exp $";
 
 static struct hash *chromHash = NULL;
 static struct hash *annotationsHash = NULL;
@@ -146,7 +146,7 @@ if (!hTableExists("chromInfo"))
     errAbort("no chromInfo table in %s\n", snpDb);
 
 loadChroms();
-loadMultiples(argv[2]);
+loadMultiples(argv[3]);
 getSnps(snpTableName);
 
 return 0;
