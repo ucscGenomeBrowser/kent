@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.126 2006/08/15 17:30:51 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.127 2006/08/19 01:32:03 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -154,6 +154,20 @@ hashReplace(tdb->settingsHash, name, val);
 tdb->settings = hashToRaString(tdb->settingsHash);
 }
 
+void ctRemoveFromSettings(struct customTrack *ct, char *name)
+/*	remove a variable from tdb settings */
+{
+struct trackDb *tdb = ct->tdb;
+
+if (!tdb->settingsHash)
+    trackDbHashSettings(tdb);
+
+hashMayRemove(tdb->settingsHash, name);
+
+/* regenerate settings string */
+tdb->settings = hashToRaString(tdb->settingsHash);
+}
+
 char *customTrackTableFromLabel(char *label)
 /* Convert custom track short label to table name. */
 {
@@ -163,7 +177,7 @@ tmp = cloneString(label);
 eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
 stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
 stripChar(tmp,'-');	/*	since that's the Invalid table */
-safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText	*/
+safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText */ 
 freeMem(tmp);
 return cloneString(buf);
 }
@@ -178,7 +192,8 @@ for (track = trackList; track != NULL; track = track->next)
 return FALSE;
 }
 
-void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash)
+void customTrackLift(struct customTrack *trackList, 
+                                struct hash *ctgPosHash)
 /* Lift tracks based on hash of ctgPos. */
 {
 struct hash *chromHash = newHash(8);
@@ -200,6 +215,30 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
+void customTrackHandleLift(struct customTrack *ctList)
+/* lift any tracks with contig coords */
+{
+if (!customTrackNeedsLift(ctList))
+    return;
+
+/* Load up hash of contigs and lift up tracks. */
+struct hash *ctgHash = newHash(0);
+struct ctgPos *ctg, *ctgList = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+   {
+   ctg = ctgPosLoad(row);
+   slAddHead(&ctgList, ctg);
+   hashAdd(ctgHash, ctg->contig, ctg);
+   }
+customTrackLift(ctList, ctgHash);
+ctgPosFreeList(&ctgList);
+hashFree(&ctgHash);
+hFreeConn(&conn);
+}
+
 boolean bogusMacEmptyChars(char *s)
 /* Return TRUE if it looks like this is just a buggy
  * Mac browser putting in bogus chars into empty text box. */
@@ -208,47 +247,107 @@ char c = *s;
 return (c != '_') && (c != '#') && !isalnum(c);
 }
 
-static struct customTrack *customTracksParseCartOrDie(struct cart *cart,
-					  struct slName **retBrowserLines,
-					  char **retCtFileName)
-/* Parse custom tracks or die trying. */
+struct customTrack *customTrackAddToList(struct customTrack *ctList,
+                                         struct customTrack *addCts,
+                                         struct customTrack **retReplacedCts)
+/* add new tracks to the custom track list, removing older versions,
+ * and saving the replaced tracks in a list for the caller */
 {
-/* This was originally part of loadCustomTracks in hgTracks.  It was pulled
- * back here so that hgText could use it too. */
-struct customTrack *ctList = NULL;
-char *customText = cartOptionalString(cart, "hgt.customText");
-char *ctFileNameFromCart = cartOptionalString(cart, "ct");
-char *ctFileName = NULL;
+struct hash *ctHash = hashNew(5);
+struct customTrack *newCtList = NULL, *replacedCts = NULL;
+struct customTrack *ct = NULL, *nextCt = NULL;
 
-/*	the *fileName from cart "ct" is either from here, re-using an
- *	existing .bed file, or it is an incoming file name from
- *	hgText which also re-read any existing file and added its
- *	sequences to the file.
- */
+/* process new tracks first --
+ * go in reverse order and use first encountered (most recent version) */
+slReverse(&addCts);
+for (ct = addCts; ct != NULL; ct = nextCt)
+    {
+    nextCt = ct->next;
+    if (hashLookup(ctHash, ct->tdb->tableName))
+        freeMem(ct);
+    else
+        {
+        slAddTail(&newCtList, ct);
+        hashAdd(ctHash, ct->tdb->tableName, ct);
+        }
+    }
+/* add in older tracks that haven't been replaced by newer */
+for (ct = ctList; ct != NULL; ct = nextCt)
+    {
+    nextCt = ct->next;
+    if (hashLookup(ctHash, ct->tdb->tableName))
+        slAddTail(&replacedCts, ct);
+    else
+        {
+        slAddTail(&newCtList, ct);
+        hashAdd(ctHash, ct->tdb->tableName, ct);
+        }
+    }
+hashFree(&ctHash);
+if (retReplacedCts)
+    *retReplacedCts = replacedCts;
+return newCtList;
+}
 
+struct customTrack *customTracksParseCartDetailed(struct cart *cart,
+					  struct slName **retBrowserLines,
+					  char **retCtFileName,
+                                          struct customTrack **retReplacedCts,
+                                          char **retErr)
+/* Figure out from cart variables where to get custom track text/file.
+ * Parse text/file into a custom set of tracks.  Lift if necessary.  
+ * If retBrowserLines is non-null then it will return a list of lines 
+ * starting with the word "browser".  If retCtFileName is non-null then  
+ * it will return the custom track filename.  If any existing custom tracks
+ * are replaced with new versions, they are included in replacedCts.
+ *
+ * If there is a syntax error in the custom track this will report the
+ * error */
+{
+#define CT_CUSTOM_FILE_BIN_VAR  CT_CUSTOM_FILE_VAR "__binary"
+char *err = NULL;
+
+/* the hgt.customText and hgt.customFile variables contain new custom
+ * tracks that have not yet been parsed */
+
+char *customText = cartOptionalString(cart, CT_CUSTOM_TEXT_VAR);
+/* parallel CGI variable, used by hgCustom, to allow javascript */
+if (!customText)
+    customText = cartOptionalString(cart, CT_CUSTOM_TEXT_ALT_VAR);
+
+struct slName *browserLines = NULL;
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && bogusMacEmptyChars(customText))
     customText = NULL;
 if (customText == NULL || customText[0] == 0)
     {
-    char *fileName = cartOptionalString(cart, "hgt.customFile__filename");
+    /* handle file input, optionally with compression */
+    char *fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
+    char *fileNameVar = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
+    if (fileName != NULL && *fileName && (!fileNameVar || !*fileNameVar))
+        {
+        struct dyString *ds = dyStringNew(0);
+        dyStringPrintf(ds, "Error reading file: %s", 
+                            cartString(cart, CT_CUSTOM_FILE_NAME_VAR));
+        err = dyStringCannibalize(&ds);
+        }
     if (fileName != NULL && (
     	endsWith(fileName,".gz") ||
 	endsWith(fileName,".Z")  ||
     	endsWith(fileName,".bz2")))
 	{
 	char buf[256];
-    	char *cFBin = cartOptionalString(cart, "hgt.customFile__binary");
+    	char *cFBin = cartOptionalString(cart, CT_CUSTOM_FILE_BIN_VAR);
 	if (cFBin)
 	    {
-	    safef(buf,sizeof(buf),"compressed://%s %s",
-		fileName,  cFBin);
-		/* cgi functions preserve binary data, cart vars have been cloneString-ed
-		 * which is bad for a binary stream that might contain 0s  */
+	    safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
+            /* cgi functions preserve binary data, cart vars have been 
+             *  cloneString-ed  which is bad for a binary stream that might 
+             * contain 0s  */
 	    }
 	else
 	    {
-	    char *cF = cartOptionalString(cart, "hgt.customFile");
+	    char *cF = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
 	    safef(buf,sizeof(buf),"compressed://%s %lu %lu",
 		fileName, (unsigned long) cF, (unsigned long) strlen(cF));
 	    }
@@ -256,27 +355,47 @@ if (customText == NULL || customText[0] == 0)
 	}
     else
 	{
-    	customText = cartOptionalString(cart, "hgt.customFile");
+    	customText = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
 	}
     }
-
 customText = skipLeadingSpaces(customText);
 
+struct customTrack *newCts = NULL;
 if (customText != NULL && customText[0] != 0)
     {
-    static struct tempName tn;
-
-    customTrackTrashFile(&tn, ".bed");
-    ctList = customFactoryParse(customText, FALSE, retBrowserLines);
-    ctFileName = tn.forCgi;
-    customTrackSave(ctList, tn.forCgi);
-    cartSetString(cart, "ct", tn.forCgi);
-    cartRemove(cart, "hgt.customText");
-    cartRemove(cart, "hgt.customFile");
-    cartRemove(cart, "hgt.customFile__filename");
-    cartRemove(cart, "hgt.customFile__binary");
+    /* protect against format errors in input from user */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        newCts = customFactoryParse(customText, FALSE, &browserLines);
+        customTrackHandleLift(newCts);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        err = cloneString(errCatch->message->string);
+    errCatchFree(&errCatch); 
     }
-else if (ctFileNameFromCart != NULL)
+
+/* the 'ct' variable contains a filename from the trash directory.
+ * The file is created by hgCustom or hgTables after the custom track list
+ * is created.  The filename may be reused.  The file contents are
+ * custom tracks in "internal format" that have already been parsed */
+char *ctFileNameFromCart = cartOptionalString(cart, "ct");
+char *ctFileName = NULL;
+struct customTrack *ctList = NULL, *replacedCts = NULL;
+struct customTrack *ct = NULL, *nextCt = NULL;
+
+/* load existing custom tracks from trash file */
+
+/* TODO: when hgCustom is ready for release, these ifdef's can be
+ * be retired.  It's only here to preserve old behavior during testing */
+#ifdef CT_APPEND_DEFAULT
+if (ctFileNameFromCart != NULL)
+#else
+if (ctFileNameFromCart != NULL && 
+        (cartVarExists(cart, CT_APPEND_OK_VAR) || 
+            (customText == NULL || customText[0] == 0)))
+#endif
     {
     if (!fileExists(ctFileNameFromCart))	/* Cope with expired tracks. */
 	cartRemove(cart, "ct");
@@ -284,63 +403,91 @@ else if (ctFileNameFromCart != NULL)
 	{
 	ctList = customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
 	ctFileName = ctFileNameFromCart;
-	}
-    }
-if (customTrackNeedsLift(ctList))
-    {
-    /* Load up hash of contigs and lift up tracks. */
-    struct hash *ctgHash = newHash(0);
-    struct ctgPos *ctg, *ctgList = NULL;
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-       {
-       ctg = ctgPosLoad(row);
-       slAddHead(&ctgList, ctg);
-       hashAdd(ctgHash, ctg->contig, ctg);
-       }
-    customTrackLift(ctList, ctgHash);
-    ctgPosFreeList(&ctgList);
-    hashFree(&ctgHash);
-    hFreeConn(&conn);
-    }
 
-if (retCtFileName != NULL)
+        /* remove a track if requested, e.g. by hgTrackUi */
+        char *remove = NULL;
+        if (cartVarExists(cart, CT_DO_REMOVE_VAR) &&
+            (remove = cartOptionalString(cart, CT_REMOVE_VAR)) != NULL)
+            {
+            for (ct = ctList; ct != NULL; ct = nextCt)
+                {
+                nextCt = ct->next;
+                if (sameString(remove, ct->tdb->tableName))
+                    {
+                    slRemoveEl(&ctList, ct);
+                    break;
+                    }
+                }
+            /* remove control variables */
+            cartRemove(cart, CT_DO_REMOVE_VAR);
+            cartRemove(cart, CT_REMOVE_VAR);
+            /* remove configuration variables */
+            char buf[128];
+            safef(buf, sizeof buf, "%s.", remove); 
+            cartRemovePrefix(cart, buf);
+            /* remove visibility variable */
+            cartRemove(cart, remove);
+            }
+        }
+    }
+#ifdef CT_APPEND_DEFAULT
+    /* merge new and old tracks */
+    ctList = customTrackAddToList(ctList, newCts, &replacedCts);
+#else
+if (cartVarExists(cart, CT_APPEND_OK_VAR))
+    {
+    /* merge new and old tracks */
+    ctList = customTrackAddToList(ctList, newCts, &replacedCts);
+    }
+else 
+    {
+    /* discard old custom tracks and use new, if any */
+    if (newCts)
+        ctList = newCts;
+    }
+cartRemove(cart, CT_APPEND_OK_VAR);
+#endif
+
+if (ctList)
+    {
+    /* save custom tracks to file */
+    if (!ctFileName)
+        {
+        static struct tempName tn;
+        customTrackTrashFile(&tn, ".bed");
+        ctFileName = tn.forCgi;
+        cartSetString(cart, "ct", ctFileName);
+        }
+    /* consider saving only if a track has been added or removed */
+    customTrackSave(ctList, ctFileName);
+    }
+else
+    cartRemove(cart, "ct");
+
+cartRemove(cart, CT_CUSTOM_TEXT_VAR);
+cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
+cartRemove(cart, CT_CUSTOM_FILE_VAR);
+cartRemove(cart, CT_CUSTOM_FILE_NAME_VAR);
+cartRemove(cart, CT_CUSTOM_FILE_BIN_VAR);
+
+if (retCtFileName)
     *retCtFileName = ctFileName;
+if (retBrowserLines)
+    *retBrowserLines = browserLines;
+if (retReplacedCts)
+    *retReplacedCts = replacedCts;
+if (retErr)
+    *retErr = err;
 return ctList;
 }
 
 struct customTrack *customTracksParseCart(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName)
-/* Figure out from cart variables where to get custom track text/file.
- * Parse text/file into a custom set of tracks.  Lift if necessary.  
- * If retBrowserLines is non-null then it will return a list of lines 
- * starting with the word "browser".  If retCtFileName is non-null then  
- * it will return the custom track filename. 
- *
- * If there is a syntax error in the custom track this will report the
- * error, clear the custom track from the cart,  and return NULL.  It 
- * will also leak memory. */
+/* Parse custom tracks from cart variables */
 {
-struct errCatch *errCatch = errCatchNew();
-struct customTrack *ctList;
-if (errCatchStart(errCatch))
-    {
-    ctList = customTracksParseCartOrDie(cart, retBrowserLines, retCtFileName);
-    }
-else
-    {
-    ctList = NULL;
-    cartRemove(cart, "hgt.customText");
-    cartRemove(cart, "ct");
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    warn("%s", errCatch->message->string);
-errCatchFree(&errCatch); 
-return ctList;
+return customTracksParseCartDetailed(cart, retBrowserLines, retCtFileName, 
+                                        NULL, NULL);
 }
 
 /*	settings string is a set of lines

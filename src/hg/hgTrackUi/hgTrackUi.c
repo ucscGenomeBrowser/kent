@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.299 2006/08/11 15:34:56 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.300 2006/08/19 01:32:03 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2400,6 +2400,12 @@ hTvDropDown(tdb->tableName,
     hTvFromString(cartUsualString(cart,tdb->tableName, vis)), tdb->canPack);
 printf(" ");
 cgiMakeButton("Submit", "Submit");
+if (isCustomTrack(tdb->tableName))
+    {
+    puts("&nbsp;");
+    cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
+    cgiMakeHiddenVar(CT_REMOVE_VAR, tdb->tableName);
+    }
 printf("<BR>\n");
 
 specificUi(tdb);

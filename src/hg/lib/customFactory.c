@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.18 2006/08/14 19:23:14 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.19 2006/08/19 01:32:03 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -963,6 +963,8 @@ char *val;
  * a bit of checking in the process. */
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
+    if (!*val)
+        val = cloneString("My Track");
     tdb->shortLabel = val;
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
@@ -972,6 +974,8 @@ if ((val = hashFindVal(hash, "name")) != NULL)
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {
+    if (!*val)
+        val = cloneString("My Custom Track");
     tdb->longLabel = val;
     stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
@@ -1005,6 +1009,7 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
         close(sd);
         track->tdb->html = dyStringCannibalize(&ds);
         }
+    ctRemoveFromSettings(track, "htmlUrl");
     }
 tdb->url = hashFindVal(hash, "url");
 if ((val = hashFindVal(hash, "visibility")) != NULL)
@@ -1047,6 +1052,22 @@ else
 return track;
 }
 
+static char *browserLinePosition(struct slName *browserLines)
+/* return position from browser lines, or NULL if not found */
+{
+struct slName *bl;
+int wordCt;
+char *words[64];
+
+for (bl = browserLines; bl != NULL; bl = bl->next)
+    {
+    wordCt = chopLine(cloneString(bl->name), words);
+    if (wordCt == 3 && sameString("position", words[1]))
+        return words[2];
+    }
+return NULL;
+}
+
 struct customTrack *customFactoryParse(char *text, boolean isFile,
 	struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
@@ -1057,6 +1078,7 @@ char *line = NULL;
 struct hash *chromHash = newHash(8);
 float prio = 0.0;
 struct sqlConnection *ctConn = NULL;
+char *loadedFromUrl = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
     ctConn = sqlCtConn(TRUE);
@@ -1088,6 +1110,9 @@ else
 	lf = lineFileOnString("custom track", TRUE, text);
 	}
     }
+if (startsWith("http://", text))
+    loadedFromUrl = cloneString(text);
+
 struct customPp *cpp = customPpNew(lf);
 lf = NULL;
 
@@ -1172,12 +1197,18 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    ctAddToSettings(track, "tdbType", oneTrack->tdb->type);
 	    if (dbTrack && oneTrack->dbTrackType != NULL)
 		ctAddToSettings(track, "db", oneTrack->dbTrackType);
+            if (!ctInputType(track))
+                ctAddToSettings(track, "inputType", fac->name);
 	    }
 	}
     trackList = slCat(trackList, oneList);
     }
 
-/* Adjust priorities so tracks are not all on top of each other
+struct slName *browserLines = customPpTakeBrowserLines(cpp);
+char *initialPos = browserLinePosition(browserLines);
+
+/* Finish off tracks -- add auxiliary settings, fill in some defaults,
+ * and adjust priorities so tracks are not all on top of each other
  * if no priority given. */
 for (track = trackList; track != NULL; track = track->next)
      {
@@ -1186,13 +1217,35 @@ for (track = trackList; track != NULL; track = track->next)
 	 prio += 0.001;
 	 track->tdb->priority = prio;
 	 }
+    if (loadedFromUrl)
+        ctAddToSettings(track, "dataUrl", loadedFromUrl);
+    if (initialPos)
+        ctAddToSettings(track, "initialPos", initialPos);
      trackDbPolish(track->tdb);
      }
 
 /* Save return variables, clean up,  and go home. */
 if (retBrowserLines != NULL)
-    *retBrowserLines = customPpTakeBrowserLines(cpp);
+    *retBrowserLines = browserLines;
 customPpFree(&cpp);
 sqlDisconnect(&ctConn);
 return trackList;
+}
+
+char *ctInitialPosition(struct customTrack *ct)
+/* return initial position plucked from browser lines, or NULL if none */
+{
+    return trackDbSetting(ct->tdb, "initialPos");
+}
+
+char *ctDataUrl(struct customTrack *ct)
+/* return URL where data can be reloaded, if any */
+{
+    return trackDbSetting(ct->tdb, "dataUrl");
+}
+
+char *ctInputType(struct customTrack *ct)
+/* return type of input */
+{
+    return trackDbSetting(ct->tdb, "inputType");
 }

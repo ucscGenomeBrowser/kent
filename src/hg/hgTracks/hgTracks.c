@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1188 2006/08/10 04:28:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1189 2006/08/19 01:32:03 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12565,7 +12565,12 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
-    hButton("customTrackPage", "custom tracks");
+/* TODO: remove when hgCustom is ready to be released */
+#ifndef CT_APPEND_DEFAULT
+    hButton("customTrackPage", "add custom tracks");
+    hPrintf(" ");
+#endif
+    hButton("customTrackCgi", "manage custom tracks");
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
@@ -13073,8 +13078,22 @@ else
     doTrackForm(NULL);
 }
 
+void customTrackCgi()
+/* Put up CGI that lets user manage custom tracks. */
+{
+puts("<HTML>");
+/* javascript redirect to hgCustom */
+#ifndef META_REDIRECT
+puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
+#else
+puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
+puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
+#endif
+puts("</HTML>"); 
+}
 
-
+/* TODO: remove when hgCustom is ready for release */
+#ifndef CT_APPEND_DEFAULT
 void customTrackPage()
 /* Put up page that lets user upload custom tracks. */
 {
@@ -13156,6 +13175,7 @@ puts(
 
 puts("</FORM>");
 }
+#endif
 
 
 void chromInfoTotalRow(long long total)
@@ -13344,11 +13364,19 @@ hDefaultConnect();
 initTl();
 
 /* Do main display. */
-if (cartVarExists(cart, "customTrackPage"))
+if (cartVarExists(cart, "customTrackCgi"))
+    {
+    cartRemove( cart, "customTrackCgi");
+    customTrackCgi();
+    }
+/* TODO: remove when hgCustom is ready for release */
+#ifndef CT_APPEND_DEFAULT
+else if (cartVarExists(cart, "customTrackPage"))
     {
     cartRemove( cart, "customTrackPage");
     customTrackPage();
     }
+#endif
 else if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
