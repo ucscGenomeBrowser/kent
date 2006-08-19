@@ -7370,6 +7370,9 @@ blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
     #	the given connection
     #	This may be a lurking error in this program, because the
     #	resulting file seems to have the correct number of lines:
+    hgsql hg18 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastKGRef04" | hgsql hg18
+    echo "load data local infile 'blastKGRef04' into table blastKGRef04" | hgsql hg18
      wc -l kgName.lst blastKGRef04 hg18KG.psl
     #	 36727 kgName.lst
     #	 36727 blastKGRef04
