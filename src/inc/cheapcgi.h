@@ -119,6 +119,9 @@ char *cgiEncode(char *inString);
  * and all other characters translated to %hexVal. 
  * You can free return value with freeMem(). */
 
+void cgiMakeButtonWithMsg(char *name, char *value, char *msg);
+/* Make 'submit' type button. Display msg on mouseover, if present*/
+
 void cgiMakeButton(char *name, char *value);
 /* Make 'submit' type button. */
 
@@ -139,6 +142,11 @@ void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
  *  A group of radio buttons should have the
  * same name but different values.   The default selection should be
  * sent with checked on. */
+
+void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg);
+/* Make check box. Also make a shadow hidden variable so we
+ * can distinguish between variable not present and
+ * variable set to false. Use msg as mousever if present */
 
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */

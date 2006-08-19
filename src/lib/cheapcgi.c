@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.81 2006/07/27 21:36:59 hiram Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.82 2006/08/19 04:52:55 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -715,10 +715,18 @@ safef(javascript, sizeof(javascript),
 cgiMakeOnClickButton(javascript, " Clear  ");
 }
 
-void cgiMakeButton(char *name, char *value)
-/* Make 'submit' type button. */
+void cgiMakeButtonWithMsg(char *name, char *value, char *msg)
+/* Make 'submit' type button. Display msg on mouseover, if present*/
 {
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" %s%s%s>", 
+        name, value, 
+        (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ));
+}
+
+void cgiMakeButton(char *name, char *value)
+/* Make 'submit' type button */
+{
+cgiMakeButtonWithMsg(name, value, NULL);
 }
 
 void cgiMakeOnClickButton(char *command, char *value)
@@ -826,17 +834,24 @@ safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
-void cgiMakeCheckBox(char *name, boolean checked)
+void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
 /* Make check box. Also make a shadow hidden variable so we
  * can distinguish between variable not present and
- * variable set to false. */
+ * variable set to false. Use msg as mousever if present */
 {
 char buf[256];
 
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
-    (checked ? " CHECKED" : "") );
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on %s%s%s %s>", name,
+    (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ), 
+    (checked ? " CHECKED" : ""));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
+}
+
+void cgiMakeCheckBox(char *name, boolean checked)
+/* Make check box. */
+{
+cgiMakeCheckBoxWithMsg(name, checked, NULL);
 }
 
 void cgiMakeHiddenBoolean(char *name, boolean on)
