@@ -92,6 +92,15 @@ void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
 	boolean dbRequested);
 /* encode wigAscii file into .wig and .wib files */
 
+char *ctInitialPosition(struct customTrack *ct);
+/* return initial position plucked from browser lines, or NULL if none */
+
+char *ctDataUrl(struct customTrack *ct);
+/* return URL where data can be reloaded, if any */
+
+char *ctInputType(struct customTrack *ct);
+/* return type of input */
+
 #endif /* CUSTOMFACTORY_H */
 
 
