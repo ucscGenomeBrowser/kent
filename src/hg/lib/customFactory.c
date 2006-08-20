@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.19 2006/08/19 01:32:03 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.20 2006/08/20 17:50:51 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1235,17 +1235,20 @@ return trackList;
 char *ctInitialPosition(struct customTrack *ct)
 /* return initial position plucked from browser lines, or NULL if none */
 {
-    return trackDbSetting(ct->tdb, "initialPos");
+return trackDbSetting(ct->tdb, "initialPos");
 }
 
 char *ctDataUrl(struct customTrack *ct)
 /* return URL where data can be reloaded, if any */
 {
-    return trackDbSetting(ct->tdb, "dataUrl");
+return trackDbSetting(ct->tdb, "dataUrl");
 }
 
 char *ctInputType(struct customTrack *ct)
 /* return type of input */
 {
-    return trackDbSetting(ct->tdb, "inputType");
+char *type = trackDbSetting(ct->tdb, "inputType");
+if (type == NULL)
+    type = trackDbSetting(ct->tdb, "tdbType");
+return type;
 }
