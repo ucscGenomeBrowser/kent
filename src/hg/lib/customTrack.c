@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.127 2006/08/19 01:32:03 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.128 2006/08/20 16:59:31 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -486,8 +486,13 @@ struct customTrack *customTracksParseCart(struct cart *cart,
 					  char **retCtFileName)
 /* Parse custom tracks from cart variables */
 {
-return customTracksParseCartDetailed(cart, retBrowserLines, retCtFileName, 
-                                        NULL, NULL);
+char *err = NULL;
+struct customTrack *ctList = 
+    customTracksParseCartDetailed(cart, retBrowserLines, retCtFileName, 
+                                        NULL, &err);
+if (err)
+    warn("%s", err);
+return ctList;
 }
 
 /*	settings string is a set of lines
