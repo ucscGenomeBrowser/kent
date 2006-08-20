@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.86 2006/08/08 00:34:31 markd Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.87 2006/08/20 16:33:35 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -159,7 +159,12 @@ puts(
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
-cgiMakeButton("customTrackPage", "add your own custom tracks");
+/* TODO: remove ifdef after hgCustom is ready for release */
+#ifndef CT_APPEND_DEFAULT
+cgiMakeButton("customTrackPage", "add custom tracks");
+printf(" ");
+#endif
+cgiMakeButton("customTrackCgi", "manage custom tracks");
 printf(" ");
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 printf(" ");
