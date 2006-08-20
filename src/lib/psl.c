@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.73 2006/06/18 23:14:31 kate Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.74 2006/08/20 16:31:36 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1369,6 +1369,91 @@ pslRecalcBounds(newPsl);
 return newPsl;
 }
 
+struct psl *pslTrimToQueryRange(struct psl *oldPsl, int qMin, int qMax)
+/* Return psl trimmed to fit inside qMin/qMax.  Note this does not
+ * update the match/misMatch and related fields. */
+{
+int newSize;
+int oldBlockCount = oldPsl->blockCount;
+boolean qIsRc = (oldPsl->strand[0] == '-');
+int newBlockCount = 0, completeBlockCount = 0;
+int i;
+struct psl *newPsl = NULL;
+int qMn = qMin, qMx = qMax;   /* qMin/qMax adjusted for strand. */
+
+/* Deal with case where we're completely trimmed out quickly. */
+newSize = rangeIntersection(oldPsl->qStart, oldPsl->qEnd, qMin, qMax);
+if (newSize <= 0)
+    return NULL;
+
+if (qIsRc)
+    reverseIntRange(&qMn, &qMx, oldPsl->qSize);
+
+/* Count how many blocks will survive trimming. */
+oldBlockCount = oldPsl->blockCount;
+for (i=0; i<oldBlockCount; ++i)
+    {
+    int s = oldPsl->qStarts[i];
+    int e = s + oldPsl->blockSizes[i];
+    int sz = e - s;
+    int overlap;
+    if ((overlap = rangeIntersection(s, e, qMn, qMx)) > 0)
+        ++newBlockCount;
+    if (overlap == sz)
+        ++completeBlockCount;
+    }
+
+if (newBlockCount == 0)
+    return NULL;
+
+/* Allocate new psl and fill in what we already know. */
+AllocVar(newPsl);
+strcpy(newPsl->strand, oldPsl->strand);
+newPsl->qName = cloneString(oldPsl->qName);
+newPsl->qSize = oldPsl->qSize;
+newPsl->tName = cloneString(oldPsl->tName);
+newPsl->tSize = oldPsl->tSize;
+newPsl->blockCount = newBlockCount;
+AllocArray(newPsl->blockSizes, newBlockCount);
+AllocArray(newPsl->qStarts, newBlockCount);
+AllocArray(newPsl->tStarts, newBlockCount);
+
+/* Fill in blockSizes, qStarts, tStarts with real data. */
+newBlockCount = completeBlockCount = 0;
+for (i=0; i<oldBlockCount; ++i)
+    {
+    int oldSz = oldPsl->blockSizes[i];
+    int sz = oldSz;
+    int qS = oldPsl->qStarts[i];
+    int qE = qS + sz;
+    int tS = oldPsl->tStarts[i];
+    int tE = tS + sz;
+    if (rangeIntersection(qS, qE, qMn, qMx) > 0)
+        {
+	int diff;
+	if ((diff = (qMn - qS)) > 0)
+	    {
+	    tS += diff;
+	    qS += diff;
+	    sz -= diff;
+	    }
+	if ((diff = (qE - qMx)) > 0)
+	    {
+	    tE -= diff;
+	    qE -= diff;
+	    sz -= diff;
+	    }
+	newPsl->qStarts[newBlockCount] = qS;
+	newPsl->tStarts[newBlockCount] = tS;
+	newPsl->blockSizes[newBlockCount] = sz;
+	++newBlockCount;
+	if (sz == oldSz)
+	    ++completeBlockCount;
+	}
+    }
+pslRecalcBounds(newPsl);
+return newPsl;
+}
 char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen)
 /* Get SQL required to create PSL table.  Options is a bit set consisting
  * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT.  tNameIdxLen is
