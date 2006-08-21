@@ -6,6 +6,19 @@
 # Agencourt's 1 August 2005 assembly
 #
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+---------------------------------+
+#  | tableName   | type                            |
+#  +-------------+---------------------------------+
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna |
+#  | geneMapper  | genePred                        |
+#  | genscan     | genePred genscanPep             |
+#  +-------------+---------------------------------+
+
 
 # DOWNLOAD SEQUENCE (DONE 8/4/05 angie)
     ssh kkstore02
