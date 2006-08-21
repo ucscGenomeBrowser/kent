@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.128 2006/08/20 16:59:31 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.129 2006/08/21 18:35:45 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -555,36 +555,24 @@ fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
 hashMayRemove(tdb->settingsHash, "description");
     
 if (tdb->url != NULL)
-    {
     fprintf(f, "\t%s='%s'", "url", tdb->url);
-    hashMayRemove(tdb->settingsHash, "url");
-    }
+hashMayRemove(tdb->settingsHash, "url");
 if (tdb->visibility != def->visibility)
-    {
     fprintf(f, "\t%s='%d'", "visibility", tdb->visibility);
-    hashMayRemove(tdb->settingsHash, "visibility");
-    }
+hashMayRemove(tdb->settingsHash, "visibility");
 if (tdb->useScore != def->useScore)
-    {
     fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
-    hashMayRemove(tdb->settingsHash, "useScore");
-    }
+hashMayRemove(tdb->settingsHash, "useScore");
 if (tdb->priority != def->priority)
-    {
     fprintf(f, "\t%s='%.3f'", "priority", tdb->priority);
-    hashMayRemove(tdb->settingsHash, "priority");
-    }
+hashMayRemove(tdb->settingsHash, "priority");
 if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
-    {
     fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
-    hashMayRemove(tdb->settingsHash, "color");
-    }
+hashMayRemove(tdb->settingsHash, "color");
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
 	|| tdb->altColorB != tdb->altColorB)
-    {
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
-    hashMayRemove(tdb->settingsHash, "altColor");
-    }
+hashMayRemove(tdb->settingsHash, "altColor");
 if (tdb->html && tdb->html[0])
     {
     /* write doc file in trash and add reference to the track line*/
@@ -595,8 +583,8 @@ if (tdb->html && tdb->html[0])
     htmlFile = tn.forCgi;
     writeGulp(htmlFile, tdb->html, strlen(tdb->html));
     fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
-    hashMayRemove(tdb->settingsHash, "htmlFile");
     }
+hashMayRemove(tdb->settingsHash, "htmlFile");
 if (tdb->settings && (strlen(tdb->settings) > 0))
     saveSettings(f, hashToRaString(tdb->settingsHash));
 fputc('\n', f);
