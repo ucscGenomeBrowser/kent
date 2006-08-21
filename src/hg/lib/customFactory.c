@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.20 2006/08/20 17:50:51 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.21 2006/08/21 18:10:56 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1032,9 +1032,11 @@ if ((val = hashFindVal(hash, "useScore")) != NULL)
 if ((val = hashFindVal(hash, "priority")) != NULL)
     tdb->priority = atof(val);
 if ((val = hashFindVal(hash, "color")) != NULL)
-    parseRgb(val, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    parseRgb(cloneString(val), lineIx, 
+            &tdb->colorR, &tdb->colorG, &tdb->colorB);
 if ((val = hashFindVal(hash, "altColor")) != NULL)
-    parseRgb(val, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    parseRgb(cloneString(val), lineIx, 
+            &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
 else
     {
     /* If they don't explicitly set the alt color make it a lighter version
