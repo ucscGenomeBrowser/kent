@@ -4,6 +4,20 @@
 # This file describes how we made the browser database on the 
 # Dog (Canis familiaris) May 2005 release.
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+---------------------------------+
+#  | tableName   | type                            |
+#  +-------------+---------------------------------+
+#  | refGene     | genePred refPep refMrna         |
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna |
+#  | nscanGene   | genePred nscanPep               |
+#  | genscan     | genePred genscanPep             |
+#  +-------------+---------------------------------+
+
 
 # CREATE BUILD DIRECTORY (DONE 6/1/05 angie)
     ssh kkstore01

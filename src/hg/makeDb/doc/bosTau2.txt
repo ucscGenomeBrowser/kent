@@ -13,6 +13,22 @@
 # agp format: http://www.ncbi.nlm.nih.gov/Genbank/WGS.agpformat.html
 #  also old page here: http://bioinfo.hku.hk/ucsc/goldenPath/datorg.html
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+# mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+---------------------------------+
+#  | tableName   | type                            |
+#  +-------------+---------------------------------+
+#  | refGene     | genePred refPep refMrna         |
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna |
+#  | sgpGene     | genePred sgpPep                 |
+#  | geneid      | genePred geneidPep              |
+#  | genscan     | genePred genscanPep             |
+#  +-------------+---------------------------------+
+
+
 # Create storage area on store11 (DONE Jul. 18, 2005 galt)
     ssh kkstore02
     mkdir /cluster/store11/bosTau2
