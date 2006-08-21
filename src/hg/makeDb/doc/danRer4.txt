@@ -8,6 +8,20 @@
 #    http://www.sanger.ac.uk/Projects/D_rerio/
 #    ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_assembl_information.shmtl
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-----------+-------------------------+
+#  | tableName | type                    |
+#  +-----------+-------------------------+
+#  | refGene   | genePred refPep refMrna |
+#  | mgcGenes  | genePred                |
+#  | genscan   | genePred genscanPep     |
+#  +-----------+-------------------------+
+
+
 ###########################################################################
 # DOWNLOAD SEQUENCE (DONE, 2006-03-29, hartera)
 # CHANGED NAME OF SCAFFOLDS AGP FILE (DONE, 2006-04-13, hartera)

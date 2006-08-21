@@ -4,6 +4,20 @@
 # This file describes how we made the browser database on the 
 # Chicken (Gallus gallus) May 2006 release.
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+---------------------------------+
+#  | tableName   | type                            |
+#  +-------------+---------------------------------+
+#  | refGene     | genePred refPep refMrna         |
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna |
+#  | genscan     | genePred genscanPep             |
+#  +-------------+---------------------------------+
+
+
 
 #########################################################################
 # CREATE BUILD DIRECTORY (DONE 5/14/06 angie)
