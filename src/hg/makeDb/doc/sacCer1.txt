@@ -7,6 +7,18 @@
 # 10/1/2003 on the Stanford FTP site.  The previous version of the
 # genomic sequence is dated Nov. 2002.  I don't see version numbers.
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-----------+-----------------+
+#  | tableName | type            |
+#  +-----------+-----------------+
+#  | sgdGene   | genePred sgdPep |
+#  +-----------+-----------------+
+
+
 # Create the directory structure and download sequence from the SGD
 # site at Stanford.
     mkdir /cluster/store6/sacCer1
