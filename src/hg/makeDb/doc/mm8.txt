@@ -4,8 +4,26 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.6 2006/08/04 23:38:29 heather Exp $"
+#	"$Id: mm8.txt,v 1.7 2006/08/21 18:38:31 archanat Exp $"
 #
+
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+-------------------------------------+
+#  | tableName   | type                                |
+#  +-------------+-------------------------------------+
+#  | knownGene   | genePred knownGenePep knownGeneMrna |
+#  | refGene     | genePred refPep refMrna             |
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna     |
+#  | mgcGenes    | genePred                            |
+#  | ensGene     | genePred ensPep                     |
+#  | genscan     | genePred genscanPep                 |
+#  +-------------+-------------------------------------+
+
+
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
 #
