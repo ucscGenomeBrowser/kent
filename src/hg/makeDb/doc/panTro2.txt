@@ -1,10 +1,25 @@
 # for emacs: -*- mode: sh; -*-
 
-
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.5 2006/08/01 18:43:11 archanat Exp $"
+#	"$Id: panTro2.txt,v 1.6 2006/08/21 18:03:19 archanat Exp $"
 #
+
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+-------------------------+
+#  | tableName   | type                    |
+#  +-------------+-------------------------+
+#  | refGene     | genePred refPep refMrna |
+#  | xenoRefGene | genePred                |
+#  | nscanGene   | genePred nscanPep       |
+#  | genscan     | genePred genscanPep     |
+#  +-------------+-------------------------+
+
+
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
 #
