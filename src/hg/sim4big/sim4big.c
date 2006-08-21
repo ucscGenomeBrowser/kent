@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: sim4big.c,v 1.4 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: sim4big.c,v 1.5 2006/08/21 15:45:23 angie Exp $";
 
 char *exePath = "sim4";	/*  executable name. */
 char *tempDir = NULL;	/* Temporary dir. */
@@ -204,9 +204,6 @@ char *line, *words[10];
 boolean gotAli = FALSE;
 int wordCount;
 struct block *blockList = NULL, *block;
-int matchOne, match = 0, mismatch = 0, bases;
-double scale;
-int id;
 boolean isRc = FALSE;
 
 /* Check header. */
