@@ -5,6 +5,20 @@
 # 
 # ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/
 
+#  NOTE:  this doc may have genePred loads that fail to include
+#  the bin column.  Please correct that for the next build by adding
+#  a bin column when you make any of these tables:
+#
+#  mysql> SELECT tableName, type FROM trackDb WHERE type LIKE "%Pred%";
+#  +-------------+---------------------------------+
+#  | tableName   | type                            |
+#  +-------------+---------------------------------+
+#  | refGene     | genePred refPep refMrna         |
+#  | xenoRefGene | genePred xenoRefPep xenoRefMrna |
+#  | genscan     | genePred genscanPep             |
+#  +-------------+---------------------------------+
+
+
 # DOWNLOAD SEQUENCE (DONE 4/4/05 Andy) -- REDONE 4/17/2005, see below
     mkdir -p /cluster/store5/strPur1/downloads
     ln -s /cluster/store5/strPur1 /cluster/data/strPur1
