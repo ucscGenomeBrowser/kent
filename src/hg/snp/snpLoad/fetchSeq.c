@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.3 2006/08/17 22:35:48 heather Exp $";
+static char const rcsid[] = "$Id: fetchSeq.c,v 1.4 2006/08/21 22:44:42 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -74,6 +74,7 @@ struct dnaSeq *seq;
 char *seqPtr = NULL;
 int start = 0;
 int end = 0;
+int bin = 0;
 int chromSize = 0;
 char allele[2];
 int count = 0;
@@ -112,11 +113,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
+    bin = hFindBin(start, end);
     safef(allele, sizeof(allele), "%c", seqPtr[start]);
     if (sameString(row[3], "-"))
         reverseComplement(allele, 1);
-    fprintf(f, "%s\t%s\t%s\t%d\t%d\t%s\t%s\n", 
-        snpDb, snpId, chromName, start, end, row[3], allele);
+    fprintf(f, "%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n", 
+        bin, chromName, start, end, snpId, snpDb, row[3], allele);
 
     }
 sqlFreeResult(&sr);
