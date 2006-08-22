@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.300 2006/08/19 01:32:03 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.301 2006/08/22 21:06:27 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -724,12 +724,12 @@ int i;
 char *tableList[3];
 
 i = 0;
-tableList[i++] = "dbRIP_Alu";
-tableList[i++] = "dbRIP_L1";
-tableList[i++] = "dbRIP_SVA";
+tableList[i++] = "dbRIPAlu";
+tableList[i++] = "dbRIPL1";
+tableList[i++] = "dbRIPSVA";
 
 safef(query, sizeof(query),
-"SELECT genoRegion FROM dbRIP_Alu GROUP BY genoRegion ORDER BY genoRegion DESC");
+"SELECT genoRegion FROM dbRIPAlu GROUP BY genoRegion ORDER BY genoRegion DESC");
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
