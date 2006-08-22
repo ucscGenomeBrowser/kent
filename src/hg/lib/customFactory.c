@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.22 2006/08/22 16:12:11 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.23 2006/08/22 22:22:34 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -970,7 +970,7 @@ if ((val = hashFindVal(hash, "name")) != NULL)
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
     /* also use name for description, if not specified */
-    tdb->longLabel = tdb->shortLabel;
+    tdb->longLabel = cloneString(tdb->shortLabel);
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {
@@ -1199,7 +1199,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    ctAddToSettings(track, "tdbType", oneTrack->tdb->type);
 	    if (dbTrack && oneTrack->dbTrackType != NULL)
 		ctAddToSettings(track, "db", oneTrack->dbTrackType);
-            if (!ctInputType(track))
+            if (!trackDbSetting(track->tdb, "inputType"))
                 ctAddToSettings(track, "inputType", fac->name);
 	    }
 	}
