@@ -9,7 +9,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: qacAgpLift.c,v 1.2 2006/04/27 00:30:37 kate Exp $";
+static char const rcsid[] = "$Id: qacAgpLift.c,v 1.3 2006/08/22 23:12:15 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -69,7 +69,7 @@ for (;;)
     ++count;
     }
 carefulClose(&f);
-printf("Read %d qacs from %s\n", count, fileName);
+verbose(1, "Read %d qacs from %s\n", count, fileName);
 return hash;
 }
 
@@ -139,7 +139,7 @@ for (;;)
 slReverse(&chromList);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     slReverse(&chrom->list);
-printf("Got %d chroms in %s\n", slCount(chromList), lf->fileName);
+verbose(1, "Got %d chroms in %s\n", slCount(chromList), lf->fileName);
 lineFileClose(&lf);
 hashFree(&chromHash);
 return chromList;
@@ -167,7 +167,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     /* Set up qa to hold uncompressed quals for whole chrom. */
     qa.name = chrom->list->chrom;
-    printf("    %s size=%d\n", chrom->list->chrom, chrom->size);
+    verbose(1, "    %s size=%d\n", chrom->list->chrom, chrom->size);
     qa.size = chrom->size;
     if (qaMaxSize < qa.size)
 	{
