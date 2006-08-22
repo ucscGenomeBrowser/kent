@@ -153,6 +153,10 @@ foreach table (`cat $tablelist`)
       set third=`getRRtableStatus.csh $db $table update_time $machine`
       echo "."$third
     end
+    echo
+    set machine="mgc"
+    set third=`getRRtableStatus.csh $db $table update_time $machine`
+    echo "."$third
   endif
 end
 echo
