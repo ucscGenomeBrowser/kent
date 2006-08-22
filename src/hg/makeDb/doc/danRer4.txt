@@ -4538,8 +4538,10 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 # BACENDS TRACK (in progress, 2006-05-10, hartera)
    # Obtain these from the NCBI Trace archive
    ssh kolossus
-   mkdir -p /cluster/data/danRer4/bed/bacEnds/sequences
-   cd /cluster/data/danRer4/bed/bacEnds/sequences
+   mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/sequences
+   cd /cluster/data/danRer4/bed/bacEnds/
+   ln -s /san/sanvol1/scratch/danRer4/bacEnds/sequences .
+   cd sequences
    # go to NCBI Trace Archive
    # http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?
    cat << '_EOF_' > query_tracedb
@@ -4565,24 +4567,26 @@ die "Couldn't connect to TRACE server\n" if ! $res->is_success;
    # count number of entries for zebrafish
    query_tracedb "query count species_code='DANIO RERIO' AND trace_type_code = 'CLONEEND'"
    # 473060
-   # Therefore this is 12 files of 40000 results each.
+   # 428904 (08-16-06)
+   # Therefore this is 11 files of 40000 results each.
    # so get from ftp site:
    
    cat << '_EOF_' > getZfishSeqs.csh
 #!/bin/csh -fe
-foreach n (0 1 2 3 4 5 6 7 8 9 10 11)
+foreach n (0 1 2 3 4 5 6 7 8 9 10)
    echo "Fetching page $n ..."
    (echo -n "retrieve_tgz all 0b"; query_tracedb "query page_size 40000 page_number $n binary species_code='DANIO RERIO' AND trace_type_code = 'CLONEEND'") | query_tracedb > data${n}.tgz
 end
 '_EOF_'
    chmod +x getZfishSeqs.csh
-   mkdir -p /cluster/bluearc/danRer4/bacEnds/downloads
-   ln -s /cluster/bluearc/danRer4/bacEnds/downloads
+   mkdir -p downloads
    cp query_tracedb getZfishSeqs.csh ./downloads
    cd downloads
    nohup nice getZfishSeqs.csh >& zfishSeqs.log &
-   # Took 5 hours 14 minutes.
-   # Start: Wed May 10 09:57 Finished: 14:51
+   # PID: 21897
+   # Start: Wed Aug 16 15:18
+   # #Took 5 hours 14 minutes.
+   ##  Start: Wed May 10 09:57 Finished: 14:51
    # Start: May  2 21:43 Finish: May 3 03:08
    ssh kkstore04
    # unzip and untar the downloads
@@ -4693,7 +4697,10 @@ end
    rm otherFiles/xml.*
    # get list of libraries:
    grep "LIBRARY_ID" cloneEnds.xml | sort | uniq > libraries.xml.txt
-
+   
+   grep "TRACE_NAME" cloneEnds.xml | wc -l
+   # 985980
+   grep "TRACE_NAME" cloneEnds.xml | sort | uniq -c > traceName.xml.count
    # TRACE_TYPE_CODE = CLONEEND AND LIBRARY_ID = 
 #####
    ssh kkstore04
@@ -4726,19 +4733,45 @@ end
    # check for multiple occurrences of same sequence ID
    grep trace_name *.xml | sort | uniq -c | sort -nr > traceNames.count
    # top of list has count of 1 so the end names are unique.
+   grep clone_id *.xml | sort | uniq -c | sort -nr > cloneIds.count
+   # top of list has count of 4. All those clone IDs that appear 3 or 4 times
+   # do so in the CHORI-1073 library - this is the fosmid library.
+   # move CHORI-1073 out of the way
+   mkdir fosmids
+   mv sanger-zfish-CHORI-1073-cloneEnd* ./fosmids
+   
    # FASTA files have clone end names as sequence names
-   # concatenate the 19 fasta files
+   # concatenate the 18 fasta files
    cat *.fasta > Zv6BacEnds.fa    
    grep '>' Zv6BacEnds.fa | wc -l
-   # 1031375
+   # 694170
    # Zv5 had 729101 but these were not unique reads for each sequence. 
    faSize Zv6BacEnds.fa >& Zv6.faSize.txt
    # there are 31 sequence names with no sequence.
    awk '{print $10}' Zv6.faSize.txt > cloneEnds.noSeq
-   grep -f cloneEnds.noSeq *.fasta > cloneEnds.noSeqs.files
+   # remove extra lines at end of file 
+   # list of FASTA files that they are in. 
+   grep -f cloneEnds.noSeq *.fasta > cloneEnds.noSeq.files
    # sent this list of sequence names and files to Kerstin Howe
-   # at Sanger: kj2@sanger.ac.uk
+   # at Sanger: kj2@sanger.ac.uk . Sanger said that these are just missing
+   # sequences due to poor quality.
    # invalid FASTA file format
+   # remove these from FASTA file:
+   grep -v -f cloneEnds.noSeq Zv6BacEnds.fa > tmp.fa
+   grep '>' tmp.fa | wc -l
+   # 694139
+   mv tmp.fa Zv6BacEnds.fa
+   faSize Zv6BacEnds.fa
+   # 728424771 bases (11822219 N's 716602552 real 716602552 upper 0 lower) in
+   # 694139 sequences in 1 files
+   # Total size: mean 1049.4 sd 277.3 min 4 (zKp108D7.za) max 5403 (zC259G13.zb)
+   # median 982
+   # N count: mean 17.0 sd 42.1
+   # U count: mean 1032.4 sd 265.3
+   # L count: mean 0.0 sd 0.0
+   
+   # Blat these BAC ends vs the danRer4 genome assembly:
+   
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM OTHER DANRER ASSEMBLIES
 # (DONE, 2006-06-27, hartera)
@@ -5157,3 +5190,245 @@ CREATE TABLE affyToHg16Orthologs (
     cd /cluster/data/danRer4/bed
     ln -s blastz.rn4.swap blastz.rn4
     # Check README.txt for downloads. 
+
+#######################################################################
+# VEGA GENES (in progress, 2006-08-14 - 2006-08-20, hartera)
+# Data provided by Kerstin Howe from Sanger: kj2@sanger.ac.uk
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/vega
+    cd /cluster/data/danRer4/bed/vega
+    wget --timestamping \
+         ftp://ftp.sanger.ac.uk/pub/kj2/gff/vega_in_ensembl.gff
+    wget --timestamping \
+         ftp://ftp.sanger.ac.uk/pub/kj2/ZFIN/genes_for_tom_new.txt
+    # checked format for VEGA genes in hg17. Includes an alternate name.
+    cd /cluster/data/hg17/bed/vega30
+    # to look at human VEGA
+    # vegaInfo is transcriptId, otterId, geneId, method and geneDesc
+    awk '{if ((($9 ~ /^ID=OTTDART/) && ($9 ~ /Parent=OTTDARG/)) || \
+        (($9 ~ /^ID=OTTDART/) && ($9 ~ /Parent=OTTDART/))) print $9;}' \
+        vega_in_ensembl.gff | sort | uniq > vegaIDs.txt
+    perl -pi.bak -e 's/ID=//' vegaIDs.txt
+    # list of transcript ID and corresponding gene ID for Vega
+    perl -pi.bak -e 's/;Parent=/\t/' vegaIDs.txt
+    perl -pi.bak -e 's/;Note=Only//' vegaIDs.txt
+
+    # write a script to reformat the GFF3 file to GFF format.
+    # some exon and CDS items belong to more than one transcript ID so these
+    # lines can just be duplicated. Those items that are labelled as mRNA or
+    # gene can be ignored and not added to the GFF file. Some of these lines
+    # have an extra comment e.g. Note="   . These will be ignored anyway as
+    # they are on the lines with mRNA or gene in them so they will not be in
+    # the final GFF file.  
+cat << '_EOF_' > formatGff3ToGff.pl
+#!/usr/bin/perl -w
+use strict;
+
+my (%idsHash, $gffFile, $idsFile);
+$gffFile = $ARGV[0];
+open(GFF, $gffFile) || die "Can not open $gffFile\n";
+
+while (<GFF>)
+{
+my ($line, @f, $t, @trans, $r, $chr);
+$line = $_;
+if ($line !~ /^#/)
+   {
+   @f = split(/\t/, $line);
+   $chr = "chr" . $f[0];
+   if (($f[2] ne "gene") && ($f[2] ne "mRNA"))
+      {
+      $f[8] =~ /Parent=(OTTDART[0-9]+[A-Z0-9,]+)/;
+      $t = $1;
+      @trans = split(/,/, $t);
+      foreach $r (@trans)
+         {
+         print "$chr\t$f[1]\t$f[2]\t$f[3]\t$f[4]\t$f[5]\t$f[6]\t$f[7]\t$r\n";
+         }
+      }
+   }
+else 
+   {
+   # print lines beginning with "#"
+   print $line;
+   }
+}
+close GFF;
+'_EOF_'
+    chmod +x formatGff3ToGff.pl
+    # Use script to format the GFF3 file to GFF format in order to load 
+    # using ldHgGene
+    perl formatGff3ToGff.pl vega_in_ensembl.gff > vega.gff
+    # then use the info file to grab those genes that are pseudogenes, get the
+    # transcript ID from the vegaIDs.txt file. Then grep out the pseudogenes
+    # to a separate file. Create an info file. Remove the .NOVEL or .PUTATIVE 
+    # or .KNOWN or .NOVEL from the method column and add as a separate 
+    # confidence column. 
+    # check number of items on each line: there are 4 or 6.
+cat << '_EOF_' > formatVegaInfo.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($idsFile, $infoFile, %idsHash);
+$idsFile = $ARGV[0];
+$infoFile = $ARGV[1];
+
+open (IDS, $idsFile) || die "Can not open $idsFile: $!\n";
+open (INFO, $infoFile) || die "Can not open $infoFile: $!\n";
+open (STDERR, ">info.log") || die "Can not create info.log: $!\n";
+
+while (<IDS>)
+{
+my ($line, @f);
+chomp;
+$line = $_;
+@f = split(/\t/, $line);
+
+$idsHash{$f[1]} = $f[0];
+}
+close IDS;
+
+while (<INFO>)
+{
+my ($line, @fi, $id, $gene, $trans, @transIds, $tr, @t, $method, $conf);
+chomp;
+$gene = "";
+$line = $_;
+@fi = split(/\t/, $line);
+$id = $gene = $fi[1];
+# get all the transcript IDs for a gene
+while (exists($idsHash{$id}))
+   {
+   $trans = $idsHash{$id};
+   push(@transIds, $trans);
+   $id = $trans;
+   }
+@t = split(/\./, $fi[3]);
+$method = $t[0];
+if ($#t > 0)
+{
+$conf = $t[1];
+}
+elsif ($#t == 0)
+   {
+   $conf = "";
+   }
+else
+   {
+   print STDERR "Should be 4 or 6 items per row, found $#fi \n";
+   }
+foreach $tr (@transIds)
+   {
+   if ($#fi == 5)
+       {
+       print "$tr\t$fi[1]\t$fi[0]\t$fi[4]\t$fi[5]\t$fi[2]\t$method\t\t$conf\n";
+       }
+   elsif ($#fi == 3)
+       {
+       print "$tr\t$fi[1]\t$fi[0]\t\t\t$fi[2]\t$method\t\t$conf\n";
+       }
+   }
+if($gene && !exists($idsHash{$gene})) 
+   {
+   print STDERR "$gene\n";
+   }
+}
+close INFO;
+close STDERR;
+'_EOF_'
+    chmod +x formatVegaInfo.pl 
+    perl formatVegaInfo.pl vegaIDs.txt genes_for_tom_new.txt \
+         > vegaInfoZfish.txt
+    # info.log contains genes for which are not in the gff file of VEGA
+    # genes. There are 789 of these genes.
+    wc -l genes_for_tom_new.txt
+    # 4822 genes_for_tom_new.txt
+    awk '{print $2}' genes_for_tom_new.txt | sort | uniq > genesWithInfo.txt
+    awk '{if ($2 ~ /OTTDARG/) print $2;}' vegaIDs.txt \
+        | sort | uniq > genesFromGff.txt
+    wc -l genesFromGff.txt
+    # 4947 genesFromGff.txt
+    comm -12 genesWithInfo.txt genesFromGff.txt | wc -l
+    # 4033 
+    comm -13 genesWithInfo.txt genesFromGff.txt | wc -l
+    # 914
+    comm -13 genesWithInfo.txt genesFromGff.txt > genesWithNoInfo.txt
+    # send this list to Sanger to ask about getting additional information
+    # for these genes.
+    comm -23 genesWithInfo.txt genesFromGff.txt | wc -l
+    # 789
+    # Next step is to find which transcripts are pseudogenes.
+    grep pseudogene vegaInfoZfish.txt | wc -l
+    # There are only 49. This is too sparse for a separate track, but
+    # a subtrack could be created.
+    # Get transcript IDs for pseudogenes.
+    grep pseudogene vegaInfoZfish.txt | awk '{print $1}' > pseudogenes.ids 
+    grep -f pseudogenes.ids vega.gff > vegaPseudoGene.gff 
+    awk '{print $9}' vegaPseudoGene.gff |sort | uniq | wc -l
+    # 49   - correct number of transcripts in file
+    grep -v -f pseudogenes.ids vega.gff > vegaGene.gff
+    wc -l vega*ff
+    #  98170 vega.gff
+    #  98004 vegaGene.gff
+    #    166 vegaPseudoGene.gff
+    
+    # load gff files:
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega
+    ldHgGene danRer4 vegaGene vegaGene.gff
+    ldHgGene danRer4 vegaPseudoGene vegaPseudoGene.gff
+
+    # Then create SQL table for adding the zebrafish-specific information
+cat << '_EOF_' > ~/kent/src/hg/lib/vegaInfoZfish.as
+table vegaInfoZfish
+"Vega Genes track additional information"
+    (
+    string transcriptId;	"Vega transcript ID"
+    string geneId;		"Vega gene ID (OTTER ID)"
+    string sangerName;		"Sanger gene name"
+    string zfinId;		"ZFIN ID"
+    string zfinSymbol;		"ZFIN gene symbol"
+    string cloneId;		"clone ID"
+    string method;		"GTF method field"
+    string geneDesc; 		"Vega gene description"
+    string confidence;		"Status (KNOWN, NOVEL, PUTATIVE, PREDICTED)"
+    )
+'_EOF_'
+    cd ~/kent/src/hg/lib/
+    autoSql vegaInfoZfish.as vegaInfoZfish
+    mv vegaInfoZfish.h ../inc/
+    # commit vegaInfoZfish{.h,.c,.as,.sql} files to CVS
+    cd /cluster/data/danRer4/bed/vega
+    # Need to reload table after getting information for Vega Genes with
+    # no information.
+    hgsql -e 'drop table vegaInfoZfish;' danRer4
+    hgLoadSqlTab danRer4 vegaInfoZfish ~/kent/src/hg/lib/vegaInfoZfish.sql \
+                 vegaInfoZfish.txt
+    # Add code to hgc.c so that this works for Zebrafish and creates the
+    # relevant links. 
+# Added entry in zebrafish/trackDb.ra to create these tracks as subtracks of
+# a Vega Genes track.
+# track vegaGeneZfish
+# compositeTrack on
+# shortLabel Vega Genes 
+# longLabel Vega Annotations 
+# group genes
+# priority 37
+# visibility hide
+# chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
+# type genePred
+# url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
+    
+#    track vegaGene
+#    subTrack vegaGeneZfish
+#    shortLabel Vega Genes
+#    longLabel Vega Gene Annotations
+#    priority 1
+#    color 0,100,180
+    
+#    track vegaPseudoGene
+#    subTrack vegaGeneZfish
+#    shortLabel Vega Pseudogenes
+#    longLabel Vega Annotated Pseudogenes
+#    priority 2
+#    color 155,0,125
