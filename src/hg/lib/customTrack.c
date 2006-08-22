@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.130 2006/08/22 16:13:38 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.131 2006/08/22 22:09:23 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -366,26 +366,29 @@ char *customText = cartOptionalString(cart, CT_CUSTOM_TEXT_VAR);
 if (!customText)
     customText = cartOptionalString(cart, CT_CUSTOM_TEXT_ALT_VAR);
 
+char *fileName = NULL;
 struct slName *browserLines = NULL;
 customText = skipLeadingSpaces(customText);
-if (customText != NULL && bogusMacEmptyChars(customText))
+if (customText && bogusMacEmptyChars(customText))
     customText = NULL;
-if (customText == NULL || customText[0] == 0)
+if (!customText || !customText[0])
     {
     /* handle file input, optionally with compression */
-    char *fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
-    char *fileNameVar = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-    if (fileName != NULL && *fileName && (!fileNameVar || !*fileNameVar))
+    fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
+    char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
+    if (fileContents && !fileContents[0])
         {
+        /* non-existent or unreadable file */
         struct dyString *ds = dyStringNew(0);
-        dyStringPrintf(ds, "Error reading file: %s", 
-                            cartString(cart, CT_CUSTOM_FILE_NAME_VAR));
+        dyStringAppend(ds, "Can't read file");
+        if (fileName && *fileName)
+            dyStringPrintf(ds, ": %s", fileName);
         err = dyStringCannibalize(&ds);
         }
     if (fileName != NULL && (
     	endsWith(fileName,".gz") ||
 	endsWith(fileName,".Z")  ||
-    	endsWith(fileName,".bz2")))
+        endsWith(fileName,".bz2")))
 	{
 	char buf[256];
     	char *cFBin = cartOptionalString(cart, CT_CUSTOM_FILE_BIN_VAR);
@@ -423,7 +426,17 @@ if (customText != NULL && customText[0] != 0)
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
-        err = cloneString(errCatch->message->string);
+        {
+        char *msg = cloneString(errCatch->message->string);
+        if (fileName)
+            {
+            char buf[128];
+            safef(buf, sizeof buf, "File '%s' - %s", fileName, msg);
+            err = cloneString(buf);
+            }
+        else
+            err = msg;
+        }
     errCatchFree(&errCatch); 
     }
 
