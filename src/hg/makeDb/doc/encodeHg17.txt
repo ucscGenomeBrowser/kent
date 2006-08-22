@@ -1046,10 +1046,19 @@ cat > loadChipWig.csh << 'EOF'
 #       Peaks data updated (2006-04-13 kate and 2006-05-01, hartera)
 # Added description for updated Peaks data - provided by 
 # Paul Giresi (paulg@email.unc.edu) (2006-06-13, hartera)
+# Finished data update for ChIPOTle peaks track and updatd the downloads
+# and changed the original Signal and Peaks subtracks to a BED graph
+# so that data in tables looks more like the raw data (on request of 
+# Paul Giresi) (DONE, 2006-08-16, hartera)
     # submitted by Paul Giresi, from Jason Lieb's lab
     # later, Paul submitted an "averages" file for the
     # raw data (but doesn't include the "peaks")
     # On 10/24, submitted peaks averages.
+    # The averages files are:
+    # FAIREavg_data.gff (for Signal, averages of all four replicates)
+    # FAIREavg_peaks.gff (for Peaks, data after running peak-finding software
+    # on the Signal averages data above).
+    # Both of these files are in wiggle format. 
     cd /cluster/data/encode
     mkdir UNC/2005-10-10/lab
     cd UNC/2005-10-10/lab
@@ -1085,6 +1094,10 @@ cat > loadChipWig.csh << 'EOF'
     ln -s /cluster/data/encode/UNC/2005-10-10/download $dir/UncFaire
 
     # averages 
+    # Probes are 50 bp with 12 bp overlap and the start of each spot on 
+    # the chromosomes were listed. Changing the span to 38 bp removed the
+    # overlap. This should only have been done for the Signal and not Peaks
+    # data (from e-mail from Paul Giresi, 2006-08-08)  
     sed 's/span=50/span=38/' lab/FAIREavg_data.gff > Signal.wig
     sed 's/span=50/span=38/' lab/FAIREavg_peaks.gff > Peaks.wig
     #_data.gff:  -2.61 to 3.63
@@ -1146,6 +1159,83 @@ cat > load.csh << 'EOF'
     # Description update added (2006-06-13, hartera).
     # Add new description for new Peaks data subtrack from 
     # FAIRE_peaks_DESC.htm to trackDb/human/encodeUncFaire.html 
+    # Data is not correct so reload the Peaks data sent by Paul Giresi
+    # FAIRE_peaks1e-025_feat_track.gff in lab directory
+    ssh hgwdev
+    mkdir -p /cluster/data/encode/UNC/2006-05/lab
+    cd /cluster/data/encode/UNC/2006-05
+    # remove first line
+    tail +2 lab/FAIRE_peaks1e-025_feat_track.gff > peaks.bedGraph
+    # and then load as bedGraph
+    hgLoadBed -strict -bedGraph=4 hg17 \
+              encodeUncFairePeaksChipotle peaks.bedGraph
+    # edit human/trackDb.encode.ra entry above to use May2006 table.
+    # edit these lines too:
+    # track encodeUncFairePeaksChipotle
+    # longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory
+    # Elements) (ChIPOTle)
+    # viewLimits 0.0:2.7
+    # color 0,0,255
+
+    # Reload the original Peaks and Signal data as BED graph so that the 
+    # table downloads look more like the original data so that the number
+    # of lines in the table is the same as the number of peaks for the Peaks
+    # track. Used original data with span=50. This is the size of the probes.
+    cd /cluster/data/encode/UNC/2005-10-10
+    mkdir -p bedGraphFormat
+    cd bedGraphFormat
+    /cluster/bin/scripts/varStepToBedGraph.pl ../lab/FAIREavg_data.gff \
+           > signal.bedGraph
+    # Processed 385194 lines input, 385149 data lines, 44 variable step
+    # declarations 
+    /cluster/bin/scripts/varStepToBedGraph.pl ../lab/FAIREavg_peaks.gff \
+           > peaksOriginal.bedGraph
+    # Processed 845 lines input, 800 data lines, 44 variable step declarations
+    # Reload the Signals and Peaks tables with this data.
+    hgsql -e "drop table encodeUncFaireSignal;" hg17
+    hgsql -e "drop table encodeUncFairePeaks;" hg17
+    
+    hgLoadBed -strict -bedGraph=4 hg17 \
+              encodeUncFaireSignal signal.bedGraph
+    hgLoadBed -strict -bedGraph=4 hg17 \
+              encodeUncFairePeaks peaksOriginal.bedGraph
+    # update human/trackDb.encode.ra so that type is
+    # type bedGraph 4
+    # for the parent track.
+    cd /cluster/data/encode/UNC/2005-10-10/lab
+    cp FAIREavg_data.gff ../download/FAIREavg_data.wig
+    cp FAIREavg_peaks.gff ../download/FAIREavg_peaks.wig
+    cd ../download
+    gzip *.wig
+    # change the Signal files to wig extension as these are wiggle format
+    foreach f (*CHR.bed.gz)
+       set g=$f:r:r
+       mv $f ${g}.wig.gz
+    end
+    # Add ChIPOTle data to downloads. 
+    cp /cluster/data/encode/UNC/2006-05/lab/FAIRE_peaks1e-025_feat_track.gff \
+       FAIRE_peaks1e-025_feat_track.bed
+    gzip FAIRE_peaks1e-025_feat_track.bed 
+    # Add description of these files to README.txt and update the md5sum.txt
+    rm md5sum.txt
+    md5sum *.gz > md5sum.txt
+   
+    # Look at data using histogram to help decide viewLimit:
+    cd /cluster/data/encode/UNC/2005-10-10/bedGraphFormat
+    textHistogram -binSize=0.1 -maxBinCount=65 -col=4 -minVal=-2.7 -real \
+                  signal.bedGraph > signal.hist
+    textHistogram -binSize=0.1 -maxBinCount=40 -col=4 -real \
+                  peaksOriginal.bedGraph > peaksOriginal.hist
+    textHistogram -binSize=0.1 -maxBinCount=40 -col=4 -real \
+                  ../../2006-05/peaks.bedGraph > peaksChipotle.hist
+    # set minLimit, maxLimit, viewLimit and increased default pixel size for 
+    # subtrack so that y axis scale is shown, in human/trackDb.encode.ra:
+    # maxHeightPixels 128:24:16
+    # minLimit -2.61
+    # maxLimit 3.63
+    # viewLimits -0.6:0.7
+    # for the Peaks subtracks, the viewLimits were set as:
+    # viewLimits 0.4:3.7
 
 ##########################################################################
 # Gencode Genes (2005-10-10 kate)
@@ -1270,25 +1360,16 @@ cat > loadRaw.csh << 'EOF'
         > $cell.raw.hg17.bed
     hgLoadBed -strict -bedGraph=4 hg17 \
                 encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
-        # Loaded 382713 elements of size 4
-    awk '{printf ("%s\t%d\t%d\t%.3f\n", $1, $2, $3, $5)}' \
-        lab/Crawford_DNase-chip_GM06990_PVAL_hg17.bed | grep -v track \
-                > $cell.pval.hg17.bed
-    hgLoadBed -strict -bedGraph=4 hg17 \
-                encodeNhgriDnaseHsChipPval$cell $cell.pval.hg17.bed
-        # Loaded 988 elements of size 4
-
+    # Loaded 382713 elements of size 4
     set cell = Hela
     awk '{print $1, $2, $3, $5}' lab/Crawford_DNase-chip_HeLaS3_RAW_hg17.bed \
         > $cell.raw.hg17.bed
     hgLoadBed -strict -bedGraph=4 hg17 \
                 encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
-    # strip trailing garbage line  (verified with Greg Crawford)
-    awk '/^chr/ {printf ("%s\t%d\t%d\t%.3f\n", $1, $2, $3, $5)}' \
-        lab/Crawford_DNase-chip_HeLaS3_PVAL_HG17.bed > $cell.pval.hg17.bed
-    hgLoadBed -strict -bedGraph=4 hg17 \
-                encodeNhgriDnaseHsChipPval$cell $cell.pval.hg17.bed
-        # Loaded 1042 elements of size 4
+    # Loaded 385149 elements of size 4
+    # Note: different item count from data for CD4 and GM
+
+
 
 
 ##########################################################################
