@@ -5,7 +5,7 @@
 #include "genePred.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: bedToGenePred.c,v 1.3 2006/08/22 00:05:25 markd Exp $";
+static char const rcsid[] = "$Id: bedToGenePred.c,v 1.4 2006/08/22 16:14:18 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -22,7 +22,7 @@ errAbort("%s:\n"
     "usage:\n"
     "   bedToGenePred bedFile genePredFile\n"
     "\n"
-    "Convert a bed file to a genePred file. If BED has at least 12 columns,\n",
+    "Convert a bed file to a genePred file. If BED has at least 12 columns,\n"
     "then a genePred with blocks is created. Otherwise single-exon genePreds are\n"
     "created.\n", msg);
 }
