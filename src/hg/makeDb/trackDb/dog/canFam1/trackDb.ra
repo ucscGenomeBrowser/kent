@@ -244,6 +244,7 @@ longLabel Simple Nucleotide Polymorphisms (dbSNP build 125)
 group varRep
 priority 143.1
 visibility dense 
+chromosomes chr1, chr10, chr11, chr12, chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr2, chr20, chr21, chr22, chr23, chr24, chr25, chr26, chr27, chr28, chr29, chr3, chr30, chr31, chr32, chr33, chr34, chr35, chr36, chr37, chr38, chr4, chr5, chr6, chr7, chr8, chr9, chrX
 type bed 6 +
 
 searchTable bacEndPairs
