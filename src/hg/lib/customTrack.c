@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.129 2006/08/21 18:35:45 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.130 2006/08/22 16:13:38 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -53,6 +53,8 @@ if (firstTime)
     firstTime = FALSE;
     }
 safef(prefix, sizeof(prefix), "ct/%s", CT_PREFIX);
+/* remove extra trailing underscore, as makeTempName will append one */
+chopSuffixAt(prefix, '_');
 makeTempName(tn, prefix, suffix);
 }
 
@@ -60,21 +62,11 @@ struct trackDb *customTrackTdbDefault()
 /* Return default custom table: black, dense, etc. */
 {
 struct trackDb *tdb;
-static int count = 0;
-char buf[256];
 
-count++;
 AllocVar(tdb);
-safef(buf, sizeof(buf), "%s %d", CT_DEFAULT_TRACK_NAME, count);
-tdb->shortLabel = cloneString(buf);
-safef(buf, sizeof(buf), "%s %d", CT_DEFAULT_TRACK_DESCR, count);
-tdb->longLabel = cloneString(buf);
-if (count == 1)
-    {
-    /* we don't need sequence count for first unnamed user track */
-    chopSuffixAt(tdb->shortLabel, ' ');
-    chopSuffixAt(tdb->longLabel, ' ');
-    }
+tdb->shortLabel = cloneString(CT_DEFAULT_TRACK_NAME);
+tdb->longLabel = cloneString(CT_DEFAULT_TRACK_DESCR);
+
 tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
@@ -247,6 +239,60 @@ char c = *s;
 return (c != '_') && (c != '#') && !isalnum(c);
 }
 
+static int ct_nextDefaultTrackNum = 1;
+
+static boolean isDefaultTrack(struct customTrack *ct)
+/* determine if this ia an unnamed track */
+{
+return startsWith(CT_DEFAULT_TRACK_NAME, ct->tdb->shortLabel);
+}
+
+static void nextUniqueDefaultTrack(struct customTrack *ctList)
+/* find sequence number to assure uniqueness of default track,
+ * by determining highest sequence number in existing track list */
+{
+struct customTrack *ct;
+int seqNum = 0, maxFound = 0;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    if (isDefaultTrack(ct))
+        {
+        char *p = skipToNumeric(ct->tdb->shortLabel);
+        if (*p)
+            seqNum = sqlSigned(skipToNumeric(ct->tdb->shortLabel));
+        else
+            seqNum = 1;
+        maxFound = max(seqNum, maxFound);
+        }
+    }
+ct_nextDefaultTrackNum = maxFound + 1;
+}
+
+static void makeUniqueDefaultTrack(struct customTrack *ct)
+/* add sequence number to track labels */
+{
+char *prev;
+char buf[256];
+
+if (ct_nextDefaultTrackNum == 1)
+    /* no need for suffix for first unnamed track */
+    return;
+
+prev = ct->tdb->shortLabel;
+safef(buf, sizeof(buf), "%s %d", prev, ct_nextDefaultTrackNum);
+ct->tdb->shortLabel = cloneString(buf);
+freeMem(prev);
+
+prev = ct->tdb->longLabel;
+safef(buf, sizeof(buf), "%s %d", prev, ct_nextDefaultTrackNum);
+ct->tdb->longLabel = cloneString(buf);
+freeMem(prev);
+
+prev = ct->tdb->tableName;
+ct->tdb->tableName = customTrackTableFromLabel(ct->tdb->shortLabel);
+freeMem(prev);
+}
+
 struct customTrack *customTrackAddToList(struct customTrack *ctList,
                                          struct customTrack *addCts,
                                          struct customTrack **retReplacedCts)
@@ -256,6 +302,9 @@ struct customTrack *customTrackAddToList(struct customTrack *ctList,
 struct hash *ctHash = hashNew(5);
 struct customTrack *newCtList = NULL, *replacedCts = NULL;
 struct customTrack *ct = NULL, *nextCt = NULL;
+
+/* determine next sequence number for default tracks */
+nextUniqueDefaultTrack(ctList);
 
 /* process new tracks first --
  * go in reverse order and use first encountered (most recent version) */
@@ -267,6 +316,8 @@ for (ct = addCts; ct != NULL; ct = nextCt)
         freeMem(ct);
     else
         {
+        if (isDefaultTrack(ct))
+            makeUniqueDefaultTrack(ct);
         slAddTail(&newCtList, ct);
         hashAdd(ctHash, ct->tdb->tableName, ct);
         }
