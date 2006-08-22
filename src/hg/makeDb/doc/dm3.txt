@@ -136,10 +136,438 @@ EOF
 
 
 #########################################################################
+# BLASTZ/CHAIN/NET DP3 (DONE 8/14/06 angie)
+    mkdir /cluster/data/dm3/bed/blastz.dp3.2006-08-14
+    cd /cluster/data/dm3/bed/blastz.dp3.2006-08-14
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. pseudoobscura
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm3/dm3.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. pseudoobscura
+SEQ2_DIR=/iscratch/i/dp3/nib
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/dp3/chrom.sizes
+
+BASE=/cluster/data/dm3/bed/blastz.dp3.2006-08-14
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /cluster/bluearc/dm3dp3 >& do.log &
+    tail -f do.log
+    featureBits dm3 -chrom=chr2L chainDp3Link
+#17523073 bases of 23011344 (76.150%) in intersection
+#dm2: 74.901%
+    ln -s blastz.dp3.2006-08-14 /cluster/data/dm3/bed/blastz.dp3
+
+
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE 8/18/06 angie)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # conservative).
+    ssh kolossus
+    blat /cluster/data/dm3/dm3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/dm3/11.ooc -repMatch=100
+#Wrote 7657 overused 11-mers to /cluster/bluearc/dm3/11.ooc
+    # More than twice as many as dm2... probably due to chrUextra.
+
+
 #########################################################################
+# GENBANK AUTO UPDATE (IN PROGRESS 8/18/06 angie)
+    # Make a liftAll.lft that specifies 5M chunks for genbank:
+    ssh kkstore05
+    cd /cluster/data/dm3
+    ~/kent/src/utils/simplePartition.pl dm3.2bit 5000000 /tmp/dm3P
+    cat /tmp/dm3P/*/*.lft > jkStuff/liftAll.lft
+    rm -r /tmp/dm3P
+
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add dm3 just after dm2...
+
+# dm3 (D. melanogaster)
+dm3.serverGenome = /cluster/data/dm3/dm3.2bit
+dm3.clusterGenome = /iscratch/i/dm3/dm3.2bit
+dm3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+dm3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+dm3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+dm3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+dm3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+dm3.ooc = /cluster/bluearc/dm3/11.ooc
+dm3.lift = /cluster/data/dm3/jkStuff/liftAll.lft
+dm3.genbank.mrna.xeno.load = yes
+dm3.downloadDir = dm3
+
+    cvs ci -m "Added dm3." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial dm3 &
+#TODO
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad dm3 &
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/makeDb/genbank
+    cvsup
+    # add dm3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs 
+    cvs commit
+    make etc-update
+
+
 #########################################################################
+# BACEND PAIRS TRACK (DONE 8/18/06 angie)
+    ssh kkstore05
+    # Plenty of room at the moment:
+    df -h /cluster/data/dm3
+#                      4.5T  2.1T  2.4T  47% /cluster/store12
+    mkdir -p /cluster/data/dm3/bed/cloneend/ncbi
+    cd /cluster/data/dm3/bed/cloneend/ncbi
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/drosophila_melanogaster/\*
+    # Wow... the directory exists, but contains no files.
+
+    # Use the libs that Roger Hoskins pointed us to for dm2.
+    mkdir /cluster/data/dm3/bed/bacends
+    cd /cluster/data/dm3/bed/bacends
+    wget http://www.genoscope.cns.fr/externe/sequences/banque_Projet_AL
+    wget http://www.genoscope.cns.fr/externe/sequences/banque_Projet_AM
+    faSize *
+#40016446 bases (3778317 N's 36238129 real 33260718 upper 2977391 lower) in 41500 sequences in 2 files
+#Total size: mean 964.3 sd 202.7 min 1 (AL0AA030DD12A1) max 1373 (AM0AA015AE07BP1) median 1009
+#N count: mean 91.0 sd 80.8
+#U count: mean 801.5 sd 207.4
+#L count: mean 71.7 sd 45.5
+    cat banque_Projet_A* > bacends.fa
+    # Edit the <!DOCTYPE.../HTML> part out of bacends.fa.
+
+    # In dm2, we parsed bacEndPairs.txt out of sequence headers.
+    # The sequences have not changed since then, so just copy over 
+    # bacEndPairs.txt.
+    cp /cluster/data/dm2/bed/bacends/bacEndPairs.txt .
+
+    # Fly is much smaller than human so we can get away with one job 
+    # per chrom, no splitting...
+    ssh kki
+    mkdir /cluster/bluearc/dm3/bacends
+    cd /cluster/bluearc/dm3/bacends
+    cp /cluster/data/dm3/bed/bacends/bacends.fa .
+    mkdir out
+    echo bacends.fa > bacends.lst
+    awk '{print "/iscratch/i/dm3/dm3.2bit:" $1}' /cluster/data/dm3/chrom.sizes \
+      > dm3.lst
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/x86_64/blat -noHead $(path1) $(path2) -ooc=/cluster/bluearc/dm3/11.ooc {check out exists out/$(file1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    # << for emacs
+    gensub2 dm3.lst bacends.lst gsub jobList
+    para make jobList
+    para time
+#Completed: 15 of 15 jobs
+#CPU time in finished jobs:       1721s      28.68m     0.48h    0.02d  0.000 y
+#IO & Wait Time:                    23s       0.39m     0.01h    0.00d  0.000 y
+#Average job time:                 116s       1.94m     0.03h    0.00d
+#Longest finished job:             744s      12.40m     0.21h    0.01d
+#Submission to last job:           744s      12.40m     0.21h    0.01d
+
+    # Back on kolossus:
+    cd /cluster/bluearc/dm3/bacends
+    cat out/*.psl \
+    | pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+        stdin bacEnds.unpaired.psl /dev/null
+    # Roger's suggested 50kb-250kb range lost some (especially on the short 
+    # side) in dm2, so I ended up going with Terry's range for human, 35kb-350kb:
+    pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
+             -slopval=10000 -hardMax=500000 \
+             -slop -short -long -orphan -mismatch -verbose \
+      bacEnds.unpaired.psl /cluster/data/dm3/bed/bacends/bacEndPairs.txt \
+      all_bacends bacEnds
+    wc -l bacEnds.*
+#      17 bacEnds.long
+#      96 bacEnds.mismatch
+#    6935 bacEnds.orphan
+#   11957 bacEnds.pairs
+#      28 bacEnds.short
+#     120 bacEnds.slop
+#  186593 bacEnds.unpaired.psl
+
+    # Filter by score and sort by {chrom,chromStart}:
+    awk '$5 >= 300 {print;}' bacEnds.pairs | sort -k1,2n > bacEndPairs.bed
+    cat bacEnds.{slop,short,long,mismatch,orphan} \
+    | awk '$5 >= 300 {print;}' | sort -k1,2n > bacEndPairsBad.bed
+    wc -l *.bed
+#  11938 bacEndPairs.bed
+#   4824 bacEndPairsBad.bed
+
+    # Filter the alignments into those we'll need in the all_bacends table:
+    extractPslLoad -noBin bacEnds.unpaired.psl \
+      bacEndPairs.bed bacEndPairsBad.bed \
+    | sorttbl tname tstart | headchg -del \
+    > bacEnds.load.psl
+    mv * /cluster/data/dm3/bed/bacends/
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/dm3/bed/bacends
+    # load BAC end sequences
+    mkdir -p /gbdb/dm3/bacends
+    ln -s /cluster/data/dm3/bed/bacends/bacends.fa /gbdb/dm3/bacends/
+    hgLoadSeq dm3 /gbdb/dm3/bacends/bacends.fa
+    hgLoadBed dm3 bacEndPairs bacEndPairs.bed \
+      -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql 
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed dm3 bacEndPairsBad bacEndPairsBad.bed \
+      -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    hgLoadPsl dm3 -table=all_bacends bacEnds.load.psl
+
+    # Compares favorably to previous release? (good cov up, bad cov down):
+    # Well, this is way up:
+    featureBits dm3 all_bacends
+#32765057 bases of 162367812 (20.180%) in intersection
+    featureBits dm2 all_bacends
+#22221379 bases of 131698467 (16.873%) in intersection
+    # The percentage dropped but I think that's because of the increase in 
+    # assembly size (yep, once again blame it on chrUextra :).  The absolute
+    # count is up which seems good.
+    featureBits dm3 bacEndPairs
+#15484492 bases of 162367812 (9.537%) in intersection
+    featureBits dm2 bacEndPairs
+#14771250 bases of 131698467 (11.216%) in intersection
+
+    # Clean up.
+    rm bed.tab
+    rm -r out
+    rm -r /cluster/bluearc/dm3/bacends/
+
+# end BACEND PAIRS TRACK
+
+
 #########################################################################
+# GC5BASE (DONE 8/18/06 angie)
+# In the future this will be included in the makeGenomeDb.pl run.
+    # Make gc5Base wiggle files.
+    ssh kolossus
+    mkdir -p /cluster/data/dm3/bed/gc5Base
+    cd /cluster/data/dm3/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 dm3 \
+      /cluster/data/dm3/dm3.unmasked.2bit \
+    | wigEncode stdin gc5Base.{wig,wib}
+
+    ssh hgwdev
+    # Load gc5base
+    mkdir -p /gbdb/dm3/wib
+    rm -f /gbdb/dm3/wib/gc5Base.wib
+    ln -s /cluster/data/dm3/bed/gc5Base.wib /gbdb/dm3/wib
+    hgLoadWiggle -pathPrefix=/gbdb/dm3/wib \
+      dm3 gc5Base /cluster/data/dm3/bed/gc5Base/gc5Base.wig
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET DROSIM1 (IN PROGRESS 8/18/06 angie)
+    mkdir /cluster/data/dm3/bed/blastz.droSim1.2006-08-18
+    cd /cluster/data/dm3/bed/blastz.droSim1.2006-08-18
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. simulans
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/san/sanvol1/scratch/dm3/dm3.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. simulans
+SEQ2_DIR=/san/sanvol1/scratch/droSim1/droSim1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droSim1/chrom.sizes
+
+BASE=/cluster/data/dm3/bed/blastz.droSim1.2006-08-18
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -bigClusterHub=pk -smallClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/dm3droSim1 >& do.log &
+    tail -f do.log
+    featureBits dm3 -chrom=chr2L chainDroSim1Link
+#21667700 bases of 23011344 (94.161%) in intersection
+# dm2: 91.756%
+    rm -f /cluster/data/dm3/bed/blastz.droSim1
+    ln -s blastz.droSim1.2006-08-18 /cluster/data/dm3/bed/blastz.droSim1
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET DROYAK2 (DONE 8/18/06 angie)
+    mkdir /cluster/data/dm3/bed/blastz.droYak2.2006-08-18
+    cd /cluster/data/dm3/bed/blastz.droYak2.2006-08-18
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. yakuba
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/san/sanvol1/scratch/dm3/dm3.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. yakuba
+SEQ2_DIR=/san/sanvol1/scratch/droYak2/droYak2.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droYak2/chrom.sizes
+
+BASE=/cluster/data/dm3/bed/blastz.droYak2.2006-08-18
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -bigClusterHub=pk -smallClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/dm3droYak2 >& do.log &
+    tail -f do.log
+    featureBits dm3 -chrom=chr2L chainDroYak2Link
+#21965072 bases of 23011344 (95.453%) in intersection
+# dm2: 91.943%
+    rm -f /cluster/data/dm3/bed/blastz.droYak2
+    ln -s blastz.droYak2.2006-08-18 /cluster/data/dm3/bed/blastz.droYak2
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET DROSEC1 (DONE 8/21/06 angie)
+    mkdir /cluster/data/dm3/bed/blastz.droSec1.2006-08-18
+    cd /cluster/data/dm3/bed/blastz.droSec1.2006-08-18
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. sechellia
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/san/sanvol1/scratch/dm3/dm3.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. sechellia
+SEQ2_DIR=/san/sanvol1/scratch/droSec1/droSec1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droSec1/chrom.sizes
+
+BASE=/cluster/data/dm3/bed/blastz.droSec1.2006-08-18
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -bigClusterHub=pk -smallClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/dm3droSec1 >& do.log &
+    tail -f do.log
+    featureBits dm3 -chrom=chr2L chainDroSec1Link
+#21913800 bases of 23011344 (95.230%) in intersection
+# dm2: 92.860%
+    rm -f /cluster/data/dm3/bed/blastz.droSec1
+    ln -s blastz.droSec1.2006-08-18 /cluster/data/dm3/bed/blastz.droSec1
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET DROERE1 (IN PROGRESS 8/21/06 angie)
+    mkdir /cluster/data/dm3/bed/blastz.droEre1.2006-08-21
+    cd /cluster/data/dm3/bed/blastz.droEre1.2006-08-21
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. sechellia
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/san/sanvol1/scratch/dm3/dm3.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. sechellia
+SEQ2_DIR=/san/sanvol1/scratch/droEre1/droEre1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droEre1/chrom.sizes
+
+BASE=/cluster/data/dm3/bed/blastz.droEre1.2006-08-21
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -bigClusterHub=pk -smallClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/dm3droEre1 >& do.log &
+    tail -f do.log
+#TODO
+    featureBits dm3 -chrom=chr2L chainDroEre1Link
+#
+# dm2: 91.103%
+    rm -f /cluster/data/dm3/bed/blastz.droEre1
+    ln -s blastz.droEre1.2006-08-21 /cluster/data/dm3/bed/blastz.droEre1
+
+
+#########################################################################
+# LIFTOVER FLYBASE 4.2 ANNOTATIONS FROM DM1 (TEMPORARY) (DONE 8/18/06 angie)
+    # Until FlyBase releases Release 5 annotations, liftOver'd 4.2 genes 
+    # will be better than nothing.
+    ssh hgwdev
+    mkdir /cluster/data/dm3/bed/flybase4.2.liftOver
+    cd /cluster/data/dm3/bed/flybase4.2.liftOver
+    hgsql dm2 -N -e 'select * from flyBaseGene' > dm2.flyBaseGene.tab
+    hgsql dm2 -N -e 'select * from flyBaseNoncoding' > dm2.flyBaseNoncoding.tab
+    liftOver -genePred dm2.flyBaseGene.tab \
+      /cluster/data/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
+      flyBaseLiftGene.tab flyBaseLiftGene.unmapped.tab
+    liftOver -bedPlus=12 -hasBin dm2.flyBaseNoncoding.tab \
+      /cluster/data/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
+      flyBaseLiftNoncoding.tab flyBaseLiftNoncoding.unmapped.tab
+    # Not quite perfect but not bad:
+    wc -l *.tab
+#  19178 dm2.flyBaseGene.tab
+#    727 dm2.flyBaseNoncoding.tab
+#  19173 flyBaseLiftGene.tab
+#     10 flyBaseLiftGene.unmapped.tab
+#    727 flyBaseLiftNoncoding.tab
+#      0 flyBaseLiftNoncoding.unmapped.tab
+    ldHgGene -predTab dm3 flyBaseLiftGene flyBaseLiftGene.tab
+    hgLoadBed -hasBin dm3 flyBaseLiftNoncoding flyBaseLiftNoncoding.tab
+    # Copy pep table from dm2:
+    hgPepPred dm3 tab flyBaseLiftGenePep \
+      /cluster/data/dm2/bed/flybase4.2/flyBasePep.tab
+
+
 #########################################################################
 #########################################################################
 #########################################################################
