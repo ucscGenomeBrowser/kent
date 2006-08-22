@@ -126,6 +126,7 @@
 #include "stsMapMouseNew.h"
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
+#include "vegaInfoZfish.h"
 #include "scoredRef.h"
 #include "blastTab.h"
 #include "hdb.h"
@@ -188,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1081 2006/08/14 18:57:38 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1082 2006/08/22 01:22:22 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8133,6 +8134,48 @@ geneShowCommon(geneName, tdb, pepTable);
 printTrackHtml(tdb);
 }
 
+void doVegaGeneZfish(struct trackDb *tdb, char *geneName)
+/* Handle click on Vega gene track for zebrafish. */
+{
+struct vegaInfoZfish *vif = NULL;
+
+genericHeader(tdb, geneName);
+if (hTableExists("vegaInfoZfish"))
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+
+    safef(query, sizeof(query),
+	  "select * from vegaInfoZfish where transcriptId = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	AllocVar(vif);
+	vegaInfoZfishStaticLoad(row, vif);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+
+printCustomUrl(tdb, geneName, TRUE); 
+if (vif != NULL)
+    {
+    printf("<B>VEGA Gene Type:</B> %s<BR>\n", vif->method);
+    printf("<B>VEGA Sanger Gene Name:</B> %s<BR>\n", vif->sangerName);
+    if (differentString(vif->geneDesc, "NULL"))
+        printf("<B>VEGA Gene Description:</B> %s<BR>\n", vif->geneDesc);
+    printf("<B>VEGA Gene Id:</B> %s<BR>\n", vif->geneId);
+    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", geneName);
+    printf("<B>ZFIN Id:</B> ");
+    printf("<A HREF=\"http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s\" TARGET=_blank>%s</A><BR>\n", vif->zfinId, vif->zfinId);
+    printf("<B>Official ZFIN Gene Symbol:</B> %s<BR>\n", vif->zfinSymbol);
+    printf("<B>Clone Id:</B> %s<BR>\n", vif->cloneId);
+    }
+geneShowCommon(geneName, tdb, "vegaPep");
+printTrackHtml(tdb);
+}
 
 void doVegaGene(struct trackDb *tdb, char *geneName)
 /* Handle click on Vega gene track. */
@@ -16951,6 +16994,10 @@ else if (sameWord(track, "sanger20"))
 else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists("vegaInfo"))
     {
     doVegaGene(tdb, item);
+    }
+else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists("vegaInfoZfish"))
+    {
+    doVegaGeneZfish(tdb, item);
     }
 else if (sameWord(track, "genomicDups"))
     {
