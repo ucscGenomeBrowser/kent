@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1083 2006/08/22 19:35:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1084 2006/08/22 21:05:34 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17625,7 +17625,7 @@ else if (sameString("igtc", track))
     {
     doIgtc(tdb, item);
     }
-else if (startsWith("dbRIP_", track))
+else if (startsWith("dbRIP", track))
     {
     dbRIP(tdb, item, NULL);
     }
