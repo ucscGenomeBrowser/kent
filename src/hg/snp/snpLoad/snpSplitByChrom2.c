@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom2.c,v 1.4 2006/08/17 23:33:04 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom2.c,v 1.5 2006/08/22 00:00:40 heather Exp $";
 
 static struct hash *chromHash = NULL;
 
@@ -20,7 +20,6 @@ errAbort(
 
 void loadChroms()
 /* hash chromNames, create file handles */
-/* skip random and hap chroms */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -28,22 +27,12 @@ struct sqlResult *sr;
 char **row;
 FILE *f;
 char fileName[64];
-char *randomString = NULL;
-char *hapString = NULL;
-char *chromName1 = NULL;
-char *chromName2 = NULL;
 
 chromHash = newHash(0);
 safef(query, sizeof(query), "select chrom from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chromName1 = cloneString(row[0]);
-    randomString = strstr(chromName1, "random");
-    if (randomString != NULL) continue;
-    chromName2 = cloneString(row[0]);
-    hapString = strstr(chromName2, "hap");
-    if (hapString != NULL) continue;
     safef(fileName, sizeof(fileName), "%s_snp126hg18ortho.tab", row[0]);
     f = mustOpen(fileName, "w");
     verbose(1, "chrom = %s\n", row[0]);
