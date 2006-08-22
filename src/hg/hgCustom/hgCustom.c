@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.33 2006/08/22 17:19:26 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.34 2006/08/22 22:49:15 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -97,9 +97,9 @@ puts("Display your own data as custom annotation tracks in the browser."
 );
 
 if (err)
-    printf("<BR><FONT COLOR='RED'><B>&nbsp; &nbsp; &nbsp; &nbsp; %s</B></FONT>", err);
+    printf("<BR><B>&nbsp; &nbsp; &nbsp; &nbsp; <I>Error</I>&nbsp;<FONT COLOR='RED'> %s </FONT></B>", err);
 if (warn)
-    printf("<BR><FONT COLOR='GREEN'><B>&nbsp; &nbsp; &nbsp; &nbsp; %s</B></FONT>", warn);
+    printf("<BR><B>&nbsp; &nbsp; &nbsp; &nbsp; <I>Warning</I>&nbsp;<FONT COLOR='GREEN'> %s </FONT></B>", warn);
 
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
@@ -443,6 +443,13 @@ cartSaveSession(cart);
 #ifndef CT_APPEND_OK
 cartSetBoolean(cart, CT_APPEND_OK_VAR, TRUE);
 #endif
+
+if (cartVarExists(cart, hgCtDoDelete) || cartVarExists(cart, hgCtDoRefresh))
+    {
+    /* suppress parsing of new tracks */
+    cartRemove(cart, hgCtDataText);
+    cartRemove(cart, hgCtDataFile);
+    }
 char *customText = cloneString(cartUsualString(cart, hgCtDataText, ""));
 ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
                                         &replacedCts, &err);
@@ -454,7 +461,7 @@ doBrowserLines(browserLines);
 if (slCount(replacedCts) != 0)
     {
     struct dyString *dsWarn = dyStringNew(0);
-    dyStringAppend(dsWarn, "Replacing: &nbsp;");
+    dyStringAppend(dsWarn, "Replacing custom tracks: &nbsp;");
     for (ct = replacedCts; ct != NULL; ct = ct->next)
         {
         if (ct != replacedCts)
