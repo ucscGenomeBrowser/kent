@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.32 2006/08/19 01:32:03 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.33 2006/08/22 17:19:26 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -53,18 +53,17 @@ char *excludeVars[] = {"Submit", "submit", "SubmitFile",
 char *database;
 char *organism;
 struct customTrack *ctList = NULL;
-struct hash *ctHash;
 struct slName *browserLines = NULL;
 char *ctFileName;
 
 
-void makeAppendButton(char *label, char *text, char *field)
+void makeInsertButton(char *label, char *text, char *field)
 /* UI button that adds to  a text field */
 {
 char javascript[1024];
 safef(javascript, sizeof javascript, 
-  "document.mainForm.%s.value = document.mainForm.%s.value + '\\n' + '%s';\"", 
-        field, field, text);
+  "document.mainForm.%s.value = '%s' + '\\n' + document.mainForm.%s.value;\"", 
+        field, text, field);
 cgiMakeOnClickButton(javascript, label);
 }
 
@@ -80,9 +79,6 @@ cgiMakeOnClickButton(javascript, "Clear");
 void addCustom(char *err, char *warn)
 /* display UI for adding custom tracks by URL or pasting data */
 {
-#ifdef HAS_INCLUDE
-puts("<!--#include virtual='/goldenPath/help/hgCustomHelp.html'-->");
-#else
 puts("Display your own data as custom annotation tracks in the browser." 
      " Data must be formatted in"
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#BED'>BED</A>,"
@@ -99,7 +95,11 @@ puts("Display your own data as custom annotation tracks in the browser."
   " Publicly available custom tracks are listed"
   " <A HREF='/goldenPath/customTracks/custTracks.html'>here</A>."
 );
-#endif
+
+if (err)
+    printf("<BR><FONT COLOR='RED'><B>&nbsp; &nbsp; &nbsp; &nbsp; %s</B></FONT>", err);
+if (warn)
+    printf("<BR><FONT COLOR='GREEN'><B>&nbsp; &nbsp; &nbsp; &nbsp; %s</B></FONT>", warn);
 
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
@@ -110,6 +110,9 @@ cgiTableField("Paste URLs or data:");
 puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
+cgiTableFieldEnd();
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeSubmitButton();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -131,7 +134,7 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-makeAppendButton("&nbsp; Set &nbsp;", 
+makeInsertButton("&nbsp; Set &nbsp;", 
         "track name=\\'\\' description=\\'\\' color=0,0,255", 
                         hgCtDataText);
 cgiTableFieldEnd();
@@ -168,7 +171,7 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-makeAppendButton("&nbsp; Set &nbsp;", 
+makeInsertButton("&nbsp; Set &nbsp;", 
         "<!-- UCSC_GB_TRACK NAME=\\'\\' -->", hgCtDocText);
 cgiTableFieldEnd();
 cgiTableRowEnd();
@@ -177,18 +180,11 @@ cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-/* fifth row - submit button */
+/* fifth row - link for HTML description template */
 cgiSimpleTableRowStart();
 printf("<TD><A TARGET=_BLANK HREF='../goldenPath/help/ct_description.txt'>HTML doc template</A></TD>");
-puts("<TD ALIGN='RIGHT'>");
-cgiMakeSubmitButton();
 cgiTableRowEnd();
 cgiTableEnd();
-
-if (err)
-    printf("<BR><FONT COLOR='RED'><B>%s</B></FONT>", err);
-if (warn)
-    printf("<BR><FONT COLOR='GREEN'><B>%s</B></FONT>", warn);
 }
 
 void tableHeaderFieldStart()
@@ -214,61 +210,86 @@ char buf[64];
 char *pos = NULL;
 char *dataUrl;
 
+/* determine which columns to display (avoid empty columns) */
+int updateCt = 0, itemCt = 0, posCt = 0;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    if (ctDataUrl(ct))
+        updateCt++;
+    if (ct->bedList)
+        itemCt++;
+    if (ctInitialPosition(ct))
+        posCt++;
+    }
+
 hTableStart();
 cgiSimpleTableRowStart();
 tableHeaderField("Name", "Short track identifier");
 tableHeaderField("Description", "Long track identifier");
 tableHeaderField("Type", "Data format of track");
 tableHeaderField("Doc", "HTML track description");
-tableHeaderField("Items", "Count of discrete items in track");
-tableHeaderField("Pos"," Default track position or first item");
+if (itemCt)
+    tableHeaderField("Items", "Count of discrete items in track");
+if (posCt)
+    tableHeaderField("Pos"," Default track position or first item");
 tableHeaderFieldStart();
 cgiMakeButtonWithMsg(hgCtDoDelete, "Delete", "Remove custom track");
 cgiTableFieldEnd();
-tableHeaderFieldStart();
-cgiMakeButtonWithMsg(hgCtDoRefresh, "Update", "Refresh from data URL");
 
-cgiTableFieldEnd();
+/* add column wiht Update button if any custom tracks are updateable */
+if (updateCt)
+    {
+    tableHeaderFieldStart();
+    cgiMakeButtonWithMsg(hgCtDoRefresh, "Update", "Refresh from data URL");
+    cgiTableFieldEnd();
+    }
+
 cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    /* Name, Description, Type fields */
-    printf("<TR><TD>%s</TD><TD>%s</TD><TD>",  
-                ct->tdb->shortLabel, ct->tdb->longLabel);
-    //printf("%s", ct->tdb->type ? ct->tdb->type : "&nbsp;");
-    printf("%s", ctInputType(ct));
+    /* Name  field */
+    printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
+    /* Description field */
+    printf("<TD>%s</TD>", ct->tdb->longLabel);
+    /* Type field */
+    printf("<TD>%s</TD>", ctInputType(ct));
     /* Doc field */
-    printf("</TD><TD ALIGN='CENTER'>%s", ct->tdb->html &&
+    printf("<TD ALIGN='CENTER'>%s</TD>", ct->tdb->html &&
                                     ct->tdb->html[0] != 0 ? "X" : "&nbsp;");
     /* Items field */
-    if (ct->bedList)
-        {
-        printf("</TD><TD ALIGN='CENTER'>%d", slCount(ct->bedList));
-        }
-    else
-        puts("</TD><TD>&nbsp;");
-
-    /* Pos field; indicates initial position for the track, or first element */
-    pos = ctInitialPosition(ct);
-    if (!pos)
+    if (itemCt)
         {
         if (ct->bedList)
             {
-            safef(buf, sizeof(buf), "%s:%d-%d", ct->bedList->chrom,
-                    ct->bedList->chromStart, ct->bedList->chromEnd);
-            pos = buf;
+            printf("<TD ALIGN='CENTER'>%d</TD>", slCount(ct->bedList));
             }
+        else
+            puts("<TD>&nbsp;</TD>");
         }
-    if (pos)
+    /* Pos field; indicates initial position for the track, 
+     * or first element */
+    if (posCt)
         {
-        char *chrom = cloneString(pos);
-        chopSuffixAt(chrom, ':');
-        printf("</TD><TD><A HREF='%s?%s&position=%s'>%s:</A>", 
-                hgTracksName(), cartSidUrlString(cart), pos, chrom);
+        pos = ctInitialPosition(ct);
+        if (!pos)
+            {
+            if (ct->bedList)
+                {
+                safef(buf, sizeof(buf), "%s:%d-%d", ct->bedList->chrom,
+                        ct->bedList->chromStart, ct->bedList->chromEnd);
+                pos = buf;
+                }
+            }
+        if (pos)
+            {
+            char *chrom = cloneString(pos);
+            chopSuffixAt(chrom, ':');
+            printf("<TD><A HREF='%s?%s&position=%s'>%s:</A></TD>", 
+                    hgTracksName(), cartSidUrlString(cart), pos, chrom);
+            }
+        else
+            puts("<TD>&nbsp;</TD>");
         }
-    else
-        puts("</TD><TD>&nbsp;");
-
     /* Delete checkboxes */
     puts("</TD><TD ALIGN=CENTER>");
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix, 
@@ -276,13 +297,16 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     cgiMakeCheckBox(buf, FALSE);
 
     /* Update checkboxes */
-    puts("</TD><TD ALIGN=CENTER>");
-    safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix, 
-            ct->tdb->tableName);
-    if ((dataUrl = ctDataUrl(ct)) != NULL)
-        cgiMakeCheckBoxWithMsg(buf, FALSE, dataUrl);
-    else
-        puts("&nbsp;");
+    if (updateCt)
+        {
+        puts("</TD><TD ALIGN=CENTER>");
+        safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix, 
+                ct->tdb->tableName);
+        if ((dataUrl = ctDataUrl(ct)) != NULL)
+            cgiMakeCheckBoxWithMsg(buf, FALSE, dataUrl);
+        else
+            puts("&nbsp;");
+        }
     puts("</TD></TR>");
     }
 hTableEnd();
