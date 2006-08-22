@@ -721,6 +721,15 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # the strain plus time point for the name otherwise the average is taken
 # over all time points for a strain for the track display 
 # when Tissue Averages is selected. (DONE, 2006-07-30, hartera) 
+# Changed so that the extras column for the MedianExps table has the 
+# developmental stage so that an average is taken across all strains for 
+# each stage when Tissue Averages is selected.
+# (Jim recommended displaying it this way and then it also fits in with the
+# current framework for this type of track).
+# Also added the strain name and stage to the extra column for the 
+# Experiments tables (AllExps and MedianExps) so that when Chip ID is 
+# selected then all of these are shown. (DONE, 2006-08-11, hartera)
+
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
    cd /projects/compbio/data/microarray/zebrafishWT
@@ -782,6 +791,37 @@ hgGnfMicroarray zebrafishZonWTAllExps zebrafishZonWTAll \
      zebrafishWildType.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a
    # this makes two tables: zebrafishZonWildType and zebrafishZonWildTypeExps
    # then create a table of medians for this data. make a .ra file of medians
+# Change the zebrafishZonWTAllExps table so that the second fied of the extras
+# table is the name.
+
+hgsql -N -e 'select name, extras from zebrafishZonWTAllExps;' hgFixed \
+      > zfishWTExps.extras
+
+cat << 'EOF' > cnvExtras.pl
+#!/usr/bin/perl -w
+use strict;
+
+while (<STDIN>) {
+my ($line, @extras);
+$line = $_;
+@extras = split(/,/, $line);
+$line =~ s/n\/a/$extras[2]/;
+print $line;
+}
+'EOF'
+chmod +x cnvExtras.pl
+cnvExtras.pl < zfishWTExps.extras > zfishWTExps.extras.new 
+# create set of mySQL statements from this to update the AllExps table
+# to include the name in the second field of extras - same as in the third
+# field. This is used for display when Chip ID is selected from the track
+# controls on the description page (hartera, 2006-08-11)
+
+awk 'BEGIN {FS = "\t"} {print "update zebrafishZonWTAllExps set extras = \"
+"$2 "\"" " where name = \""$1"\";";}' zfishWTExps.extras.new \
+    > zfishWTExpsNewExtras.sql
+hgsql hgFixed < zfishWTExpsNewExtras.sql
+
+# create the .ra file for the Median tables
 hgsql -N -e 'select extras, id from zebrafishZonWTAllExps;' hgFixed \
       > zfishWTExps
 # remove extra information and leave experiment name
@@ -791,9 +831,10 @@ perl -pi.bak -e 's/,//' zfishWTExps
 # alter script so that name for each experiment in column 2 is not just the 
 # strain but the strain plus time point (same as first column). This goes into
 # the extras column for zebrafishWTMedianExps and is used for Tissue Averages
-# display for the arry data track. Otherwise an average is taken for the 
+# display for the array data track. Otherwise an average is taken for the 
 # strain (hartera, 2006-07-30).
-
+# change so that column 2 is the time point so that an average of time points
+# is taken for the "Tissue Averages" Display (hartera, 2006-08-11)
 cat << 'EOF' > cnvToMedian
 #!/usr/bin/awk -f
 
@@ -808,7 +849,8 @@ BEGIN {
 
 END {
     for (id in data) {
-        print id, id, substr(data[id], 2);
+        split(id, a, "\\-");
+        print id, a[2]a[3], substr(data[id], 2);
     }
 }
 'EOF'
@@ -816,7 +858,8 @@ END {
 chmod +x cnvToMedian
 cnvToMedian zfishWTExps > zfishZonWTMedian.ra
 # re-order the *.ra file as this determines the order of display
-sort zfishZonWTMedian.ra | grep "somites" > tmp.ra
+sort zfishZonWTMedian.ra | grep "14somites" > tmp.ra
+sort zfishZonWTMedian.ra | grep "15somites" >> tmp.ra
 sort zfishZonWTMedian.ra | grep "hpf" >> tmp.ra
 mv tmp.ra zfishZonWTMedian.ra
 cp zfishZonWTMedian.ra ~/kent/src/hg/makeDb/hgMedianMicroarray
@@ -840,6 +883,10 @@ hgsql -e 'drop table zebrafishZonWTMedianExps;' hgFixed
 
 # Reload table using new table names. (hartera, 2006-07-30)
 # Take the median value over multiple replicants and put in this table:
+# Reloaded again after changing the .ra file so that the developmental 
+# stage will show up in the extras and the AllExps table had the strain 
+# and stage added to the second field of the extras column. 
+# (hartera, 2006-08-11)
 hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedianLog \
   zebrafishZonWTMedianExps -minExps=1

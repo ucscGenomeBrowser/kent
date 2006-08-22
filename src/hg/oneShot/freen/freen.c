@@ -10,7 +10,7 @@
 #include "customTrack.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.71 2006/08/07 15:47:45 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.72 2006/08/10 01:04:05 kent Exp $";
 
 void usage()
 {
@@ -20,17 +20,18 @@ errAbort("freen - test some hairbrained thing.\n"
 
 int level = 0;
 
-
-void freen(char *inFile)
+void freen(char *inFile, char *outFile)
 /* Test some hair-brained thing. */
 {
-struct lineFile *lf = lineFileOpen(inFile, TRUE);
-char *line;
-while (lineFileNext(lf, &line, NULL))
+hSetDb("hg18");
+struct slName *browserLines = NULL;
+struct customTrack *trackList = customFactoryParse(inFile, TRUE, &browserLines);
+struct customTrack *track;
+customTrackSave(trackList, outFile);
+for (track = trackList; track != NULL; track = track->next)
     {
-    int len =strlen(line);
-    if (len > 80)
-	lineFileErrAbort(lf, "line too long (%d chars):\n%s", len, line);
+    printf("track %s %s %s\n", track->tdb->shortLabel, track->tdb->tableName,
+    	track->tdb->type);
     }
 }
 
@@ -38,8 +39,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 pushCarefulMemHandler(1000000*1024L);
-if (argc != 2)
+if (argc != 3)
    usage();
-freen(argv[1]);
+freen(argv[1], argv[2]);
 return 0;
 }

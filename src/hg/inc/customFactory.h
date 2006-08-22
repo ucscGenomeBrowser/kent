@@ -63,6 +63,9 @@ char *customTrackTempDb();
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 
+void customFactorySetupDbTrack(struct customTrack *track);
+/* Fill in fields most database-resident custom tracks need. */
+
 /*** Interface to custom factory system. ***/
 
 struct customFactory *customFactoryFind(struct customPp *cpp,
@@ -78,6 +81,16 @@ struct customTrack *customFactoryParse(char *text, boolean isFile,
 	struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.*/
+
+/*  HACK ALERT - The table browser needs to be able to encode its wiggle
+ *	data.  This function is temporarily global until a proper method
+ *	is used to work this business into the table browser custom
+ *	tracks.  Currently this is also called from customSaveTracks()
+ *	in customTrack.c in violation of this object's hidden methods.
+ */
+void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
+	boolean dbRequested);
+/* encode wigAscii file into .wig and .wib files */
 
 #endif /* CUSTOMFACTORY_H */
 

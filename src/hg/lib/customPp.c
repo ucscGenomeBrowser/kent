@@ -12,6 +12,8 @@
 #include "net.h"
 #include "customPp.h"
 
+static char const rcsid[] = "$Id: customPp.c,v 1.5 2006/08/09 21:44:17 kate Exp $";
+
 struct customPp *customPpNew(struct lineFile *lf)
 /* Return customPp on lineFile */
 {
@@ -30,18 +32,32 @@ if (cpp)
     {
     lineFileCloseList(&cpp->fileStack);
     slFreeList(&cpp->browserLines);
+    slFreeList(&cpp->reusedLines);
+    freeMem(cpp->inReuse);
     }
 }
 
 char *customPpNext(struct customPp *cpp)
 /* Return next line. */
 {
-struct lineFile *lf;
+/* Check first for line to reuse. */
+struct slName *reused = cpp->reusedLines;
+if (reused)
+    {
+    /* We need to keep line actually reusing in memory until next
+     * call to customPpNext, so we move it to inReuse rather than
+     * immediately freeing it. */
+    freeMem(cpp->inReuse);   
+    cpp->reusedLines = reused->next;
+    cpp->inReuse = reused;
+    return reused->name;
+    }
 
 /* Get next line from file on top of stack.  If at EOF
  * go to next file in stack.  If get a http:// or ftp:// line
  * open file this references and push it onto stack. Meanwhile
  * squirrel away 'browser' lines. */
+struct lineFile *lf;
 while ((lf = cpp->fileStack) != NULL)
     {
     char *line;
@@ -89,9 +105,11 @@ for (;;)
 }
 
 void customPpReuse(struct customPp *cpp, char *line)
-/* Reuse line.  May be called only once before next customPpNext/NextReal */
+/* Reuse line.  May be called many times before next customPpNext/NextReal.
+ * Should be called with last line to be reused first if called multiply. */
 {
-lineFileReuse(cpp->fileStack);
+struct slName *s = slNameNew(line);
+slAddHead(&cpp->reusedLines, s);
 }
 
 struct slName *customPpTakeBrowserLines(struct customPp *cpp)

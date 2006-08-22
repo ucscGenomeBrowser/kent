@@ -523,6 +523,9 @@ int linkedFeaturesCmpStart(const void *va, const void *vb);
 void linkedFeaturesBoundsAndGrays(struct linkedFeatures *lf);
 /* Calculate beginning and end of lf from components, etc. */
 
+int lfCalcGrayIx(struct linkedFeatures *lf);
+/* Calculate gray level from components. */
+
 void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
@@ -655,8 +658,10 @@ void bedGraphMethods(struct track *track, struct trackDb *tdb,
 /* Make track group for wig - wiggle tracks. */
 
 void chromGraphMethods(struct track *tg);
-/* Fill in methods for chromGraph tracks. */
+/* Fill in chromGraph methods for built in track. */
 
+void chromGraphMethodsCt(struct track *tg);
+/* Fill in chromGraph methods for custom track. */
 
 void wigMafMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
@@ -872,6 +877,9 @@ void affyTxnPhase2Methods(struct track *track);
 
 void loadGenePred(struct track *tg);
 /* Convert gene pred in window to linked feature. */
+
+boolean highlightItem(struct track *tg, void *item);
+/* Should this item be highlighted? */
 
 #define NEXT_ITEM_ARROW_BUFFER 5
 /* Space around "next item" arrow (in pixels). */

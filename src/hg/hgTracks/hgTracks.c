@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1185 2006/08/08 00:08:24 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1188 2006/08/10 04:28:46 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1545,7 +1545,8 @@ Color saveColor = color;
 boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 boolean showDiffBasesAllScales =
     (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
-     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_BASES));
+     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_BASES ||
+      getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
@@ -1700,6 +1701,16 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 			 lf->orientation, bColor, FALSE);
 	    }
 	}
+    }
+/* If showing different codons when zoomed way out, must do another pass 
+ * so that different codons aren't overdrawn by same codons.  The whole 
+ * item was drawn in the above loop, and now we just make some red marks 
+ * on top of it if necessary. */
+if (showDiffBasesAllScales && vis != tvDense &&
+    drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
+    {
+    drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
+			  mrnaSeq, psl, winStart);
     }
 }
 
@@ -2600,7 +2611,9 @@ else
     }
 
 hAddBinToQuery(winStart, winEnd, query);
-dyStringPrintf(query, "chrom=\"%s\"", chromName);
+dyStringPrintf(query,
+    "chrom=\"%s\" AND chromStart<%d AND chromEnd>%d ",
+    chromName, winEnd, winStart);
 
 option = cartCgiUsualString(cart, GENO_REGION, GENO_REGION_DEFAULT);
 
@@ -4761,6 +4774,7 @@ static void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 {
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
+
 genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
 	font, color, vis);
 }
@@ -11552,10 +11566,14 @@ char *ctMapItemName(struct track *tg, void *item)
 struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
-struct track *tg;
+struct track *tg = NULL;
+struct trackDb *tdb = ct->tdb;
 boolean useItemRgb = FALSE;
-tg = trackFromTrackDb(ct->tdb);
-tg->hasUi = TRUE;
+char *typeOrig = tdb->type;
+char *typeDupe = cloneString(typeOrig);
+char *typeParam = typeDupe;
+char *type = nextWord(&typeParam);
+
 if (ct->dbTrack)
     {
     struct sqlConnection *conn = sqlCtConn(FALSE);
@@ -11565,17 +11583,20 @@ if (ct->dbTrack)
 	hFreeOrDisconnect(&conn);
     }
 
-useItemRgb = bedItemRgb(ct->tdb);
+useItemRgb = bedItemRgb(tdb);
 
-if (ct->wiggle)
+if (sameString(type, "wig"))
     {
+    tg = trackFromTrackDb(tdb);
     if (ct->dbTrack)
 	tg->loadItems = wigLoadItems;
     else
 	tg->loadItems = ctWigLoadItems;
+    tg->customPt = ct;
     }
-else
+else if (sameString(type, "bed"))
     {
+    tg = trackFromTrackDb(tdb);
     if (ct->fieldCount < 8)
 	{
 	tg->loadItems = ctLoadSimpleBed;
@@ -11594,8 +11615,21 @@ else
 	}
     tg->mapItemName = ctMapItemName;
     tg->canPack = TRUE;
+    tg->customPt = ct;
     }
-tg->customPt = ct;
+else if (sameString(type, "chromGraph"))
+    {
+    tdb->type = NULL;	/* Swap out type for the moment. */
+    tg = trackFromTrackDb(tdb);
+    chromGraphMethodsCt(tg);
+    tdb->type = typeOrig;
+    }
+else
+    {
+    errAbort("Unrecognized custom graph type %s", type);
+    }
+tg->hasUi = TRUE;
+freez(&typeDupe);
 return tg;
 }
 

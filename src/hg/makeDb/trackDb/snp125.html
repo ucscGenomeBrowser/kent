@@ -19,7 +19,8 @@ build 125, available from
 </P>
 
 <P>
-  The configuration categories reflect the following definitions:
+  The configuration categories reflect the following definitions (not all categories apply
+  to this assembly):
   <UL>
 
     <LI>
@@ -99,61 +100,63 @@ build 125, available from
       </UL>
     </LI>
     <LI>
-      <A name="Weight"></A>
-      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
-      <UL>
-      <LI>Weight can be 1, 2, 3 or 10.   
-      <LI>We excluded weight = 10 from the data set.
-      <LI>We support a filter on maximum weight value, which defaults to 3.
-      </UL>
-    </LI>
-    <LI>
       <A name="AvHet"></A>
       <B>Average heterozygosity</B>: Calculated by dbSNP as described 
       <A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target=_blank>here</A>
       <UL>
-      <LI> Average heterozygosity should not exceed .5 for bi-allelic single-base substitutions.
+      <LI> Average heterozygosity should not exceed 0.5 for bi-allelic single-base substitutions.
+      </UL>
+    </LI>
+    <LI>
+      <A name="Weight"></A>
+      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
+      <UL>
+      <LI>Weight can be 1, 2, 3 or 10.   
+      <LI>Weight = 10 is excluded from the data set.
+      <LI>A filter on maximum weight value is supported, which defaults to 3.
       </UL>
     </LI>
   </UL>
 </P>
 <H2>Insertions/Deletions</H2>
-dbSNP uses a class called 'in-del'.   We split this into 'insertion' and 'deletion', based on location type.
-Location type 'range' and 'exact' are deletions relative to the reference assembly.
+dbSNP uses a class called 'in-del'.   This has been split into 'insertion' and 'deletion', based on location type.
+Location types 'range' and 'exact' are deletions relative to the reference assembly.
 Location type 'between' are insertions relative to the reference assembly.
-For the new location types, we preserve the class 'in-del'.
+For the new location types, the class 'in-del' is preserved.
 
 <H2>UCSC Annotations</H2>
 <P>
-  In addition to presenting the dbSNP data, we provide the following annotations:
+  In addition to presenting the dbSNP data, the following annotations are provided:
   <UL>
-  <LI>We check that the size of the dbSNP reference allele matches the coordinate span.</LI>
-
-  <LI>We compare the dbSNP reference allele to our reference allele and note if the 
-      dbSNP reference allele is the reverse complement of our reference allele.</LI>
-      
-  <LI>For single-base substitutions, we note where the alignments of the
-      flanking sequences are adjacent or have a gap of more than one base.</LI>
-  <LI>We note if the observed alleles are not available from the rs_fasta files.</LI>
-  <LI>We note if the observed alleles have an unexpected format.</LI>
-  <LI>We check that the length of the observed alleles is consistent with the location type.</LI>
-  <LI>For simple deletions, we check that the observed allele matches the reference allele.</LI>
-  <LI>For single-base substitutions, we check that one of the observed alleles matches the reference allele.</LI>
-  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
-  <LI>We note variants that have multiple mappings.</LI>
+  <LI>The size of the dbSNP reference allele is checked to see if it matches the coordinate
+      span; exceptions are noted.</LI>
+  <LI>The dbSNP reference allele is compared to the UCSC reference allele, and a note is made
+      if the dbSNP reference allele is the reverse complement of the UCSC reference allele.</LI>
+  <LI>Single-base substitutions where the alignments of the
+      flanking sequences are adjacent or have a gap of more than one base are noted.</LI>
+  <LI>A note is made if the observed alleles are not available from the rs_fasta files.</LI>
+  <LI>Observed alleles with an unexpected format are noted.</LI>
+  <LI>The length of the observed alleles is checked for consistency with location types;
+      exceptions are noted.</LI>
+  <LI>Single-base substitutions are checked to see that one of the observed alleles matches
+      the reference allele; excpetions are noted.</LI>
+  <LI>Simple deletions are checked to see that the observed allele matches the reference allele;
+      exceptions are noted.</LI>
+  <LI>Tri-allelic and quad-allelic single-base substitutions are noted.</LI>
+  <LI>Variants that have multiple mappings are noted.</LI>
   </UL>
 </P>
 
 <H2>Data Sources</H2>
 <P>
   <UL>
-  <LI>We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, location type
+  <LI>b125_SNPContigLoc.bcp.gz was used for coordinates, orientation, location type
       and the dbSNP reference allele.  
-  <LI>We used b125_SNPMapInfo.bcp.gz for alignment weights, filtering out 
+  <LI>b125_SNPMapInfo.bcp.gz was used for alignment weights, filtering out 
       alignments with weight = 10.
-  <LI>We obtained functional classification from b125_SNPContigLocusId.bcp.gz.
-  <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
-  <LI>We used the header line in the rs_fasta files for class, 
+  <LI>Functional classification was obtained from b125_SNPContigLocusId.bcp.gz.
+  <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.
+  <LI>The header lines in the rs_fasta files were used for class, 
       observed polymorphism and molecule type.
   </UL>
 </P>

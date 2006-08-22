@@ -15,7 +15,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chicken13kInfo.o chromBins.o chr18deletions.o \
-    chromGraph.o chromInfo.o chromInserts.o chromKeeper.o \
+    chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cnpIafrate.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
@@ -50,7 +50,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     llaInfo.o mafFrames.o mafSummary.o mapSts.o \
     mcnBreakpoints.o metaChromGraph.o microarray.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
-    netAlign.o omimTitle.o ooUtils.o \
+    netAlign.o omimTitle.o ooUtils.o orthoAlleles.o \
     pbStamp.o pepPred.o plasEndPairs.o polyGenotype.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
@@ -74,9 +74,10 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackLayout.o trackTable.o \
     transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o vegaInfo.o visiGene.o vntr.o wabAli.o web.o wgRna.o \
-    wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
-    wikiLink.o zdobnovSynt.o landmark.o landmarkUi.o gvUi.o gv.o
+    transRegCodeProbe.o vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
+    wabAli.o web.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
+    wiggleCart.o wiggleUtils.o wikiLink.o zdobnovSynt.o landmark.o \
+    landmarkUi.o gvUi.o gv.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

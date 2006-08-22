@@ -4853,6 +4853,7 @@ cat > template << 'EOF'
 
 # LIFTOVER CHAINS TO DANRER2 (DONE, 2005-07-20, hartera)
 # Added path for makeLo scripts (DONE, 2005-07-28, hartera)
+# CLEAN UP OF DIRECTORIES AND FILES (DONE, 2006-08-11, hartera)
 # Create liftOver for only chr1-25 because chrFinished, chrUn and chrNA 
 # will cause too many false alignments.
 
@@ -5011,7 +5012,21 @@ cat > template << 'EOF'
     echo 'select * from liftOverChain where fromDb = "danRer1";' \
          | hgsql hgcentraltest
     # add an entry to the pushQ in the liftOver subqueue - liftOverQueue
-   
+    # clean up, remove old directories for blat to danRer2 
+    # (hartera, 2006-08-11)
+    ssh kkstore03
+    cd /cluster/data/danRer1/bed
+    rm -r blat.danRer2.2005-05-24 
+    rm -r blat.danRer2.2005-05-31
+    cd blat.danRer2.2005-05-18
+    rm -r chainRaw chainRun raw run
+    rm lift.log
+    gzip chain/*.chain
+    gzip net/*.net
+    gzip psl/*.psl
+    gzip over/*.chain
+    gzip danRer1ToDanRer2.over.chain 
+
 #########################################################################
 # ARCHIVING danRer1 (in progress, 2006-05-03, hartera)
    ssh hgwdev

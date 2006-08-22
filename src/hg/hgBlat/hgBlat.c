@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.97 2006/07/03 17:07:20 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.98 2006/08/11 18:26:22 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -736,7 +736,10 @@ printf("%s",
 "licenses are also available. See the \n"
 "<A HREF=\"http://www.kentinformatics.com\" TARGET=_blank>Kent Informatics</A>\n"
 "website for details.</P>\n"
-"\n");
+"\n"
+"<P>For more information on this graphical version of BLAT, click the Help \n"
+"button on the top menu bar or see the Genome Browser \n"
+"<A HREF=\"../FAQ/FAQblat.html\">FAQ</A>. </P> \n");
 }
 
 void doMiddle(struct cart *theCart)

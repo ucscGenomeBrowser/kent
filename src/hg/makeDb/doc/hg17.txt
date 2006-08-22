@@ -21735,28 +21735,31 @@ hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withoutGaps.bed
     #	data sets:
 zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
+chromStart=$6
+chromStart -= 1
 chromEnd=$7
-if ($6 == $7) { chromEnd += 1 }
 if (match($1,"^RIP_SVA_.*")) {
-printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, chromStart, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
 }
 }' | sort -k1,1 -k2,2n > dbRIP.SVA.txt
 
 zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
+chromStart=$6
+chromStart -= 1
 chromEnd=$7
-if ($6 == $7) { chromEnd += 1 }
 if (match($1,"^RIP_L1_.*")) {
-printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, chromStart, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
 }
 }' | sort -k1,1 -k2,2n > dbRIP.L1.txt
 
 zcat dbRIP.2006-08-01.txt.gz | headRest 1 stdin | awk -F'\t' '
 {
+chromStart=$6
+chromStart -= 1
 chromEnd=$7
-if ($6 == $7) { chromEnd += 1 }
 if (match($1,"^RIP_Alu_.*")) {
-printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, $6, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
+printf "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $5, chromStart, chromEnd, $1, $12, $2, $3, $4, $8, $9, $10, $11, $15, $13, $14, $16, $17, $18, $19, $20, $21
 }
 }' | sort -k1,1 -k2,2n > dbRIP.Alu.txt
 
@@ -22011,3 +22014,25 @@ mkdir -p ${blatDir}/{over,net}
     hgAddLiftOverChain hg17 hg15 
 
 ############################################################################
+
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2006-08-15 markd)
+    cd /cluster/data/genbank/data/ccds/hg17
+    ftp ftp-private.ncbi.nih.gov (user ccds, needs password)
+    ftp> get CCDS.20060815.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf  /cluster/data/genbank/data/ccds/hg17/CCDS.20060815.tar.gz
+
+    # import ccds database tables
+    hgsql -e 'create database ccds'
+    hgsql ccds </cluster/data/genbank/etc/createTables.sql 
+    hgsql ccds </cluster/data/genbank/etc/createKeys.sql 
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+    checkTableCoords hg17 -verbose=2 ccdsGene
+
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+    rm -rf /scratch/tmp/ccds

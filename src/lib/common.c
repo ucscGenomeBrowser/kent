@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.102 2006/08/02 20:10:11 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.103 2006/08/10 01:03:14 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1882,6 +1882,16 @@ char *emptyForNull(char *s)
 {
 if (s == NULL)
    s = emptyStr;
+return s;
+}
+
+char *nullIfAllSpace(char *s)
+/* Return NULL if s is all spaces, otherwise s. */
+{
+s = skipLeadingSpaces(s);
+if (s != NULL)
+    if (s[0] == 0)
+        s = NULL;
 return s;
 }
 

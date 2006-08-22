@@ -51,8 +51,8 @@ if ( $status ) then
   exit 1
 endif
 
-set dbs=`getAssemblies.csh trackDb hgwbeta \
-  | egrep -v "checking|get all|found|^qa_|^zoo" | egrep "."`
+set dbs=`getAssemblies.csh trackDb hgwbeta quiet \
+  | egrep -v "getting|found" | egrep "."`
  
 # set file paths and URLs
 set today=`date +%Y-%m-%d`
@@ -81,7 +81,7 @@ foreach db ( $dbs )
     echo '<A HREF ="'$dbSummaryOut'">'$db'</A> error \n\n' \
         >> $summaryFile
   else
-    set diffs=`cat $outfile | egrep "Diff|The diff" | wc -l` 
+    set diffs=`cat $outfile | egrep " Diff|The diff" | wc -l` 
     echo "$db $diffs" | gawk '{printf "%7s %2d", $1, $2}'
     echo
     if ( $diffs == 0 ) then

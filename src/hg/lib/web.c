@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.94 2006/08/03 18:40:59 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.95 2006/08/09 21:38:06 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -78,7 +78,7 @@ webPushErrHandlers();
 }
 
 static void webStartWrapperDetailedInternal(struct cart *theCart,
-	char *headerText, char *format, char *textOutBuf,
+	char *headerText, char *textOutBuf,
 	boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader,
 	boolean withHtmlHeader)
 /* output a CGI and HTML header with the given title in printf format */
@@ -341,7 +341,7 @@ va_copy(argscp,args);
 vasafef(textOutBuf, sizeof(textOutBuf), format, argscp);
 va_end(argscp);
 
-webStartWrapperDetailedInternal(theCart, headerText, format, textOutBuf,
+webStartWrapperDetailedInternal(theCart, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 
@@ -353,7 +353,7 @@ void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
 char textOutBuf[512];
 
 safef(textOutBuf, sizeof(textOutBuf), format);
-webStartWrapperDetailedInternal(theCart, headerText, format, textOutBuf,
+webStartWrapperDetailedInternal(theCart, headerText, textOutBuf,
 	withHttpHeader, withLogo, skipSectionHeader, withHtmlHeader);
 }
 

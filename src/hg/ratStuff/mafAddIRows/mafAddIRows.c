@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.13 2006/07/28 16:56:04 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.14 2006/08/10 16:15:16 angie Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -116,7 +116,6 @@ while((maf = mafNext(mf)) != NULL)
 
     for(mc= masterMc->next; mc; mc = mc->next)
 	{
-	struct hash *strandHash;
 	struct linkBlock *linkBlock;
 	struct subSpecies *subSpecies = NULL;
 
@@ -171,7 +170,6 @@ void chainStrands(struct strandHead *strandHead, struct hash *bedHash)
 for(; strandHead ; strandHead = strandHead->next)
     {
     struct linkBlock *link, *prevLink;
-    int lastEnd;
     struct hashEl *hel = hashLookup(bedHash, strandHead->species);
     struct hash *chromHash = (hel != NULL) ? hel->val : NULL;
     struct binKeeper *bk = (chromHash != NULL) ? hashFindVal(chromHash, strandHead->qName): NULL;
@@ -294,7 +292,6 @@ void fillHoles(struct mafAli *mafList, struct subSpecies *speciesList, struct tw
 int lastEnd = 100000000;
 struct mafAli *prevMaf = NULL, *maf, *nextMaf;
 struct subSpecies *species;
-struct blockStatus *blockStatus;
 
 /*
 for(species = speciesList; species; species = species->next)
@@ -355,7 +352,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    miniMasterMc->start = lastEnd;
 			    miniMasterMc->size =  masterMc->start - lastEnd;
 
-			    if (seqName = strchr(miniMasterMc->src, '.'))
+			    if ((seqName = strchr(miniMasterMc->src, '.')) != NULL)
 				seqName++;
 			    else 
 			    	seqName = miniMasterMc->src;
@@ -451,7 +448,6 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			if  (addN && (blockStatus->mc->rightStatus ==  MAF_MISSING_STATUS))
 			    {
 			    char buffer[256];
-			    int ii;
 
 			    safef(buffer, sizeof(buffer), "%s.N",species->name);
 			    mc->src = cloneString(buffer);
@@ -490,11 +486,8 @@ struct hash *readSize(char *fileName)
 {
 char *row[2];
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct binKeeper *bk;
 struct hash *hash = newHash(6);
 struct hashEl *hel;
-struct bed3 *bed;
-int size;
 
 while (lineFileRow(lf, row))
     {
@@ -622,7 +615,6 @@ for(maf = mafList; maf ; maf = maf->next)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int totalCount;
 char *nBedFile;
 char *sizeFile;
 

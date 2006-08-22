@@ -83,4 +83,13 @@ void drawGenomicCodons(struct vGfx *vg, struct simpleFeature *sfList,
 /* Draw amino acid translation of genomic sequence based on a list
    of codons. Used for browser ruler in full mode*/
 
+void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
+			   Color *cdsColor, struct vGfx *vg, int xOff,
+			   int y, double scale, int heightPer,
+			   struct dnaSeq *mrnaSeq, struct psl *psl,
+			   int winStart);
+/* Draw red boxes only where mRNA codons differ from genomic.  This assumes
+ * that lf has been drawn already, we're zoomed out past zoomedToCdsColorLevel,
+ * we're not in dense mode etc. */
+
 #endif /* CDS_H */

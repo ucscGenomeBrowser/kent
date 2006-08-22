@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.11 2006/08/09 21:43:15 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.18 2006/08/14 19:23:14 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -78,6 +78,21 @@ if (firstTime)
     firstTime = FALSE;
     }
 return cfgOptionDefault("customTracks.db", NULL);
+}
+
+void customFactorySetupDbTrack(struct customTrack *track)
+/* Fill in fields most database-resident custom tracks need. */
+{
+char prefix[16];
+static int dbTrackCount = 0;
+struct sqlConnection *ctConn = sqlCtConn(TRUE);
+++dbTrackCount;
+safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
+track->dbTableName = sqlTempTableName(ctConn, prefix);
+ctAddToSettings(track, "dbTableName", track->dbTableName);
+track->dbDataLoad = TRUE;	
+track->dbTrack = TRUE;
+sqlDisconnect(&ctConn);
 }
 
 /*** BED Factory ***/
@@ -167,11 +182,13 @@ if (offset != 0)
 	    }
 	}
     track->offset = 0;	/*	so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
     }
 
 /* If necessary load database */
 if (dbRequested)
     {
+    customFactorySetupDbTrack(track);
     struct pipeline *dataPipe = bedLoaderPipe(track);
     FILE *out = pipelineFile(dataPipe);
     struct bed *bed;
@@ -741,6 +758,74 @@ if (span == 0)
 *retSpan = span;
 }
 
+/*  HACK ALERT - The table browser needs to be able to encode its wiggle
+ *	data.  This function is temporarily global until a proper method
+ *	is used to work this business into the table browser custom
+ *	tracks.  Currently this is also called from customSaveTracks()
+ *	in customTrack.c in violation of this object's hidden methods.
+ */
+void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
+	boolean dbRequested)
+/* encode wigAscii file into .wig and .wib files */
+{
+/* Need to figure upper and lower limits. */
+double lowerLimit = 0.0;
+double upperLimit = 100.0;
+int span = 1;
+
+/* Load database if requested */
+if (dbRequested)
+    {
+    /* TODO: see if can avoid extra file copy in this case. */
+    customFactorySetupDbTrack(track);
+
+    /* Load ascii file into database via pipeline. */
+    struct pipeline *dataPipe = wigLoaderPipe(track);
+    FILE *in = mustOpen(wigAscii, "r");
+    FILE *out = pipelineFile(dataPipe);
+    copyOpenFile(in, out);
+    carefulClose(&in);
+    pipelineWait(dataPipe);
+    pipelineFree(&dataPipe);
+    track->wigFile = NULL;
+
+    /* Figure out lower and upper limits with db query */
+    struct sqlConnection *ctConn = sqlCtConn(TRUE);
+    char buf[64];
+    wigDbGetLimits(ctConn, track->dbTableName, 
+	    &upperLimit, &lowerLimit, &span);
+    sqlDisconnect(&ctConn);
+    safef(buf, sizeof(buf), "%d", span);
+    ctAddToSettings(track, "spanList", cloneString(buf));
+    }
+else
+    {
+    /* Make up wig file name (by replacing suffix of wib file name)
+     * and add to settings. */
+    track->wigFile = cloneString(track->wibFile);
+    chopSuffix(track->wigFile);
+    strcat(track->wigFile, ".wig");
+    ctAddToSettings(track, "wigFile", track->wigFile);
+
+    struct wigEncodeOptions options;
+    ZeroVar(&options);	/*	all is zero	*/
+    options.lift = 0;
+    options.noOverlap = FALSE;
+    options.wibSizeLimit = 300000000; /* 300Mb limit*/
+    wigAsciiToBinary(wigAscii, track->wigFile,
+	track->wibFile, &upperLimit, &lowerLimit, &options);
+    if (options.wibSizeLimit >= 300000000)
+	warn("warning: reached data limit for wiggle track '%s' "
+	     "%lld >= 300,000,000<BR>\n", 
+	     track->tdb->shortLabel, options.wibSizeLimit);
+    }
+unlink(wigAscii);/* done with this, remove it */
+freeMem(track->wigAscii);
+char tdbType[256];
+safef(tdbType, sizeof(tdbType), "wig %g %g", lowerLimit, upperLimit);
+track->tdb->type = cloneString(tdbType);
+}
+
 static struct customTrack *wigLoader(struct customFactory *fac,  
 	struct hash *chromHash,
     	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
@@ -777,6 +862,7 @@ if (hashFindVal(settings, "wibFile"))
 /* WibFile setting doesn't exist, so we are loading from ascii stream. */
 else
     {
+
     /* Make up wib file name and add to settings. */
     customTrackTrashFile(&tn, ".wib");
     track->wibFile = cloneString(tn.forCgi);
@@ -793,61 +879,7 @@ else
 	fprintf(f, "%s\n", line);
     carefulClose(&f);
 
-    /* Need to figure upper and lower limits. */
-    double lowerLimit = 0.0;
-    double upperLimit = 100.0;
-    int span = 1;
-
-    /* Load database if requested */
-    if (dbRequested)
-	{
-	/* TODO: see if can avoid extra file copy in this case. */
-
-	/* Load ascii file into database via pipeline. */
-	struct pipeline *dataPipe = wigLoaderPipe(track);
-	FILE *in = mustOpen(wigAscii, "r");
-	FILE *out = pipelineFile(dataPipe);
-	copyOpenFile(in, out);
-	carefulClose(&in);
-	pipelineWait(dataPipe);
-	pipelineFree(&dataPipe);
-	track->wigFile = NULL;
-
-
-	/* Figure out lower and upper limits with db query */
-	struct sqlConnection *ctConn = sqlCtConn(TRUE);
-        char buf[64];
-	wigDbGetLimits(ctConn, track->dbTableName, 
-		&upperLimit, &lowerLimit, &span);
-	sqlDisconnect(&ctConn);
-        safef(buf, sizeof(buf), "%d", span);
-	ctAddToSettings(track, "spanList", cloneString(buf));
-	}
-    else
-        {
-	/* Make up wig file name (by replacing suffix of wib file name)
-	 * and add to settings. */
-	track->wigFile = cloneString(track->wibFile);
-	chopSuffix(track->wigFile);
-	strcat(track->wigFile, ".wig");
-	ctAddToSettings(track, "wigFile", track->wigFile);
-
-	struct wigEncodeOptions options;
-	ZeroVar(&options);	/*	all is zero	*/
-	options.lift = 0;
-	options.noOverlap = FALSE;
-	options.wibSizeLimit = 300000000; /* 300Mb limit*/
-	wigAsciiToBinary(wigAscii, track->wigFile,
-	    track->wibFile, &upperLimit, &lowerLimit, &options);
-	if (options.wibSizeLimit >= 300000000)
-	    warn("warning: reached data limit for wiggle track '%s' "
-	         "%lld >= 300,000,000<BR>\n", 
-		 track->tdb->shortLabel, options.wibSizeLimit);
-	}
-    unlink(wigAscii);/* done with this, remove it */
-    char tdbType[256];
-    safef(tdbType, sizeof(tdbType), "wig %g %g", lowerLimit, upperLimit);
-    track->tdb->type = cloneString(tdbType);
+    wigLoaderEncoding(track, wigAscii, dbRequested);
     }
 return track;
 }
@@ -871,6 +903,7 @@ static void customFactoryInit()
 if (factoryList == NULL)
     {
     slAddTail(&factoryList, &wigFactory);
+    slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory); 
@@ -944,6 +977,9 @@ if ((val = hashFindVal(hash, "description")) != NULL)
     stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
     }
 tdb->type = hashFindVal(hash, "tdbType");
+/* might be an old-style wigType track */
+if (NULL == tdb->type)
+    tdb->type = hashFindVal(hash, "wigType");
 track->dbTrackType = hashFindVal(hash, "db");
 track->dbTableName = hashFindVal(hash, "dbTableName");
 if (track->dbTableName)
@@ -1024,7 +1060,6 @@ struct sqlConnection *ctConn = NULL;
 boolean dbTrack = ctDbUseAll();
 if (dbTrack)
     ctConn = sqlCtConn(TRUE);
-int dbTrackCount = 0;
 
 /* Figure out input source, and ultimately wrap a
  * customPp object around it. */
@@ -1078,6 +1113,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	AllocVar(track);
 	track->tdb = customTrackTdbDefault();
 	track->tdb->settingsHash = hashNew(8);
+	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
         customPpReuse(cpp, line);
 	}
     else
@@ -1102,17 +1138,6 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * this track, and call it.  Also we may need to do some work
      * to load track into database. */
 	{
-	if (dbTrack)
-	/* Set up database table name if it's a database track */
-	    {
-	    char prefix[16];
-	    ++dbTrackCount;
-	    safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
-	    track->dbTableName = sqlTempTableName(ctConn, prefix);
-	    ctAddToSettings(track, "dbTableName", track->dbTableName);
-	    track->dbDataLoad = TRUE;	
-	    track->dbTrack = TRUE;
-	    }
 
 	/* Load track from appropriate factory */
 	struct customFactory *fac = customFactoryFind(cpp, type, track);
@@ -1144,9 +1169,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	/* Save a few more settings. */
 	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
 	    {
-	    ctAddToSettings(track, "tdbType", track->tdb->type);
-	    if (dbTrack)
-		ctAddToSettings(track, "db", track->dbTrackType);
+	    ctAddToSettings(track, "tdbType", oneTrack->tdb->type);
+	    if (dbTrack && oneTrack->dbTrackType != NULL)
+		ctAddToSettings(track, "db", oneTrack->dbTrackType);
 	    }
 	}
     trackList = slCat(trackList, oneList);
@@ -1161,6 +1186,7 @@ for (track = trackList; track != NULL; track = track->next)
 	 prio += 0.001;
 	 track->tdb->priority = prio;
 	 }
+     trackDbPolish(track->tdb);
      }
 
 /* Save return variables, clean up,  and go home. */

@@ -90,6 +90,9 @@ void *hashMustFindVal(struct hash *hash, char *name);
 void *hashFindVal(struct hash *hash, char *name);
 /* Look up name in hash and return val or NULL if not found. */
 
+void *hashOptionalVal(struct hash *hash, char *name, void *usual);
+/* Look up name in hash and return val, or usual if not found. */
+
 struct hashEl *hashAddInt(struct hash *hash, char *name, int val);
 /* Store integer value in hash */
 

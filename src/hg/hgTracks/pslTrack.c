@@ -254,7 +254,14 @@ int grayIx = pslGrayIx(psl, isXeno, maxShade);
 int drawOptionNum;
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
+boolean showDiffCodonsAllScales = FALSE;
 
+if (tg)
+    showDiffCodonsAllScales =
+    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
+     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
+
+/* this will check for NULL tg */
 drawOptionNum = getCdsDrawOptionNum(tg);
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
@@ -274,17 +281,21 @@ lf->orientation = orientFromChar(psl->strand[0]);
 if (rcTarget)
     lf->orientation = -lf->orientation;
 
+sfList = sfFromPslX(psl, grayIx, sizeMul);
+slReverse(&sfList);
+lf->components = sfList;
 /*if we are coloring by codon and zoomed in close 
   enough, then split simple feature by the psl record
   and the mRNA sequence. Otherwise do the default conversion
   from psl to simple feature.*/
-if (drawOptionNum>0 && zoomedToCdsColorLevel)
-        lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade, drawOptionNum);
-sfList = sfFromPslX(psl, grayIx, sizeMul);
-slReverse(&sfList);
-lf->components = sfList;
-linkedFeaturesBoundsAndGrays(lf);
-
+if (drawOptionNum>0 && (zoomedToCdsColorLevel || showDiffCodonsAllScales))
+    {
+    lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade,
+			   drawOptionNum);
+    lf->grayIx = lfCalcGrayIx(lf);
+    }
+else
+    linkedFeaturesBoundsAndGrays(lf);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 

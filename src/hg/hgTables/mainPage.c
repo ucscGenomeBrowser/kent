@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.97 2006/07/26 23:29:19 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.99 2006/08/14 23:17:22 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -213,21 +213,10 @@ char *unsplitTableName(char *table)
 {
 if (startsWith("chr", table))
     {
-    char *s = strchr(table, '_');
+    char *s = strrchr(table, '_');
     if (s != NULL)
         {
-	char *hap;
-	if (startsWith("_random_", s))
-	    table = s+8;
-	else
-	    table = s+1;
-	hap = stringIn("_hap", table);
-	if (hap != NULL && hap - table <= 6)
-	    {
-	    s = strchr(hap+4, '_');
-	    if (s != NULL)
-	        table = s+1;
-	    }
+	table = s + 1;
 	}
     }
 return table;
@@ -465,10 +454,13 @@ struct outputType otWigBed = { NULL,
 struct outputType otMaf = { NULL,
      outMaf,
      "MAF - multiple alignment format", };
+struct outputType otChromGraphData = { NULL, 
+     outChromGraphData, 
+    "data points", };
 
 
 static void showOutputTypeRow(boolean isWig, boolean isPositional,
-	boolean isMaf)
+	boolean isMaf, boolean isChromGraphCt)
 /* Print output line. */
 {
 struct outputType *otList = NULL;
@@ -490,6 +482,10 @@ else if (isMaf)
     {
     slAddTail(&otList, &otMaf);
     slAddTail(&otList, &otAllFields);
+    }
+else if (isChromGraphCt)
+    {
+    slAddTail(&otList, &otChromGraphData);
     }
 else if (isPositional)
     {
@@ -526,7 +522,8 @@ void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
 struct grp *selGroup;
-boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE;
+boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
+	isChromGraphCt = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 hPrintf("<TABLE BORDER=0>\n");
@@ -573,11 +570,10 @@ hPrintf("<TABLE BORDER=0>\n");
     isWig = isWiggle(database, curTable);
     isMaf = isMafTable(database, curTrack, curTable);
     isBedGr = isBedGraph(curTable);
-    if (isWig)
-	isPositional = TRUE;
     nbSpaces(1);
     if (isCustomTrack(curTable))
 	{
+	isChromGraphCt = isChromGraph(curTrack);
 	cgiMakeButton(hgtaDoRemoveCustomTrack, "remove custom track");
         hPrintf(" ");
 	}
@@ -749,7 +745,7 @@ if (curTrack && curTrack->type)		/*	dbg	*/
     }
 
 /* Print output type line. */
-showOutputTypeRow((isWig || isBedGr), isPositional, isMaf);
+showOutputTypeRow((isWig || isBedGr), isPositional, isMaf, isChromGraphCt);
 
 /* Print output destination line. */
     {

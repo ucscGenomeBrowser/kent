@@ -1401,7 +1401,7 @@ otherDb hg17
 
 track retroposons
 compositeTrack on 
-shortLabel Retrotransposon Polymorphisms
+shortLabel RIPs
 longLabel Retrotransposon Insertion Polymorphisms in Humans
 group varRep
 priority 149.5
@@ -2335,7 +2335,7 @@ searchMethod exact
 searchType bed
 termRegex RIP_Alu_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
-padding 250
+padding 400
 
 searchName dbRIPL1
 searchTable dbRIP_L1
@@ -2343,7 +2343,7 @@ searchMethod exact
 searchType bed
 termRegex RIP_L1_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
-padding 250
+padding 400
 
 searchName dbRIPSVA
 searchTable dbRIP_SVA
@@ -2351,7 +2351,7 @@ searchMethod exact
 searchType bed
 termRegex RIP_SVA_chr[0-9XY]+_[0-9]+_[0-9]+
 searchPriority 18
-padding 250
+padding 400
 
 searchTable dbRIP_Alu
 searchType bed
@@ -2359,7 +2359,7 @@ searchMethod fuzzy
 query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
 searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
-padding 100
+padding 400
 
 searchTable dbRIP_L1
 searchType bed
@@ -2367,7 +2367,7 @@ searchMethod fuzzy
 query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
 searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
-padding 100
+padding 400
 
 searchTable dbRIP_SVA
 searchType bed
@@ -2375,4 +2375,4 @@ searchMethod fuzzy
 query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%'
 searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
-padding 100
+padding 400

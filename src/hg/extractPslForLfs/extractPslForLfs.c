@@ -19,7 +19,7 @@
 
 #define MAXFILES 100
 
-static char const rcsid[] = "$Id: extractPslForLfs.c,v 1.1 2006/08/04 22:54:45 hartera Exp $";
+static char const rcsid[] = "$Id: extractPslForLfs.c,v 1.3 2006/08/09 19:07:40 hartera Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -145,7 +145,7 @@ struct bed *bedList = NULL;
 struct psl *pslList = NULL;
 
 fprintf(stdout,"NOTE: Program assumes that chrom, chromStart and chromEnd \n");
-fprintf(stdout, "unique for each item in the lfs file so only one PSL \n"); 
+fprintf(stdout, "are unique for each item in the lfs file so only one PSL \n"); 
 fprintf(stdout, "alignment will be picked for each specific item and \n");
 fprintf(stdout, "genomic location.\n\n");
 
@@ -182,7 +182,7 @@ int verb = 0;
 
 verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
-if (argc != 4 )
+if (argc != 4 & argc != 5)
     {
 fprintf(stdout, "USAGE: extractPslForLfs [-verbose=<level>] psl lfsBed outputPsl\n");
     return 1;

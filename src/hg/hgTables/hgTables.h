@@ -566,6 +566,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outHyperlinks "hyperlinks"
 #define outWigData "wigData"
 #define outWigBed "wigBed"
+#define outChromGraphData "chromGraphData"
 #define outGala "galaQuery"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
@@ -603,6 +604,16 @@ void floatStatRow(char *label, double x);
 
 void stringStatRow(char *label, char *val);
 /* Print label, string value. */
+
+/* ----------- ChromGraph stuff in chromGraph.c. */
+boolean isChromGraph(struct trackDb *track);
+/* Return TRUE if it's a chromGraph track */
+
+void doOutChromGraphDataCt(struct trackDb *track, char *table);
+/* Print out data points in region for chromGraph custom track. */
+
+void doSummaryStatsChromGraph(struct sqlConnection *conn);
+/* Put up page showing summary stats for chromGraph track. */
 
 /* ----------- Maf stuff in maf.c ------------------------------*/
 
@@ -868,6 +879,10 @@ void doGetCustomTrackFile(struct sqlConnection *conn);
 
 void doRemoveCustomTrack(struct sqlConnection *conn);
 /* Remove custom track file. */
+
+void doSummaryStatsBed(struct sqlConnection *conn);
+/* Put up page showing summary stats for track that is in database
+ * or that is bed-format custom. */
 
 /* --------------- GALA functions --------------- */
 #define galaCmdBufferSize 160

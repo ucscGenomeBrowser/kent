@@ -1,14 +1,15 @@
 #!/usr/bin/awk -f
 #
-# Convert NCBI createKeys.sql (which maybe sybase) to mysql.
+# Convert NCBI createKeys.sql (sybase) to mysql.
 #
 {
     $0 = gensub("\\[dbo\\]\\.", "", "g", $0);
     $0 = gensub("\\[([^\\[]+)\\]", "\\1", "g", $0);
+    $0 = gensub(" WITH NOCHECK", "", "g", $0);
 }
 
 # get keys from sql commands like
-#  ALTER TABLE Accessions ADD 
+#  ALTER TABLE AccessionRejectionCriteria ADD 
 
 ($1=="ALTER") && ($2=="TABLE") && ($4=="ADD") {
     # beginning of new table
@@ -16,13 +17,24 @@
     inAlter = 1;
 }
 
-inConstr && /REFERENCES/ {
+inConstr && (/REFERENCES/ || /WITH/) {
     # end of constraints
     inConstr = 0;
 }
 
+($1=="GO") {
+    # end of sql command
+    inAlter = 0;
+    inConstr = 0;
+    if (startedAlter) {
+        printf ";\n";
+    }
+    startedAlter = 0;
+}
+
 inConstr && /[a-zA-Z_]+/ {
-    field = $1;
+    # found a key in constraints 
+    field = gensub(",","","g",$1);
     if (!startedAlter) {
         printf "ALTER TABLE %s ADD INDEX (%s)", table, field;
         startedAlter = 1
@@ -36,10 +48,3 @@ inAlter && /CONSTRAINT/ {
     inConstr = 1;
 }
 
-($1=="GO") {
-    inAlter = 0;
-    if (startedAlter) {
-        printf ";\n";
-    }
-    startedAlter = 0;
-}

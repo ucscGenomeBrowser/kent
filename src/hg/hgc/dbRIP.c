@@ -11,7 +11,7 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.6 2006/07/18 20:06:52 hiram Exp $";
+static char const rcsid[] = "$Id: dbRIP.c,v 1.7 2006/08/09 21:19:19 hiram Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)
@@ -208,7 +208,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	printf("<B>PCR Product Size (Empty):</B>&nbsp;NA<BR>\n");
     printf("<B>Ascertaining Method:</B>&nbsp;%s<BR>\n", loadItem->ascertainingMethod);
-    printf("<B>Genome Source:</B>&nbsp;%s<BR>\n", loadItem->polySource);
+    printf("<B>Insertion found in reference sequence:</B>&nbsp;%s<BR>\n",
+	startsWith("UCSC",loadItem->polySource) ? "yes" : "no");
     printf("<B>Remarks:</B>&nbsp;%s<BR>\n", loadItem->remarks);
     if (strlen(loadItem->genoRegion) > 0)
 	printf("<B>Gene Context:</B>&nbsp;%s<BR>\n", loadItem->genoRegion);

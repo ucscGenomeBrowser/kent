@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.121 2006/08/09 18:56:29 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.126 2006/08/15 17:30:51 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -79,6 +79,7 @@ tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
 tdb->type = (char *)NULL;
+tdb->canPack = 2;       /* unknown -- fill in later when type is known */
 return tdb;
 }
 
@@ -141,28 +142,16 @@ return enabled;
 void ctAddToSettings(struct customTrack *ct, char *name, char *val)
 /*	add a variable to tdb settings */
 {
-struct dyString *ds = newDyString(0);
-struct hashCookie hc;
-struct hashEl *hel;
 struct trackDb *tdb = ct->tdb;
 
 if (!tdb->settingsHash)
     trackDbHashSettings(tdb);
 
 /* add or replace if already in hash */
-hashMayRemove(tdb->settingsHash, name);
-hashAdd(tdb->settingsHash, name, val);
+hashReplace(tdb->settingsHash, name, val);
 
 /* regenerate settings string */
-hc = hashFirst(tdb->settingsHash);
-while ((hel = hashNext(&hc)) != NULL)
-    {
-    dyStringAppend(ds, name);
-    dyStringAppend(ds, " ");
-    dyStringAppend(ds, val);
-    dyStringAppend(ds, "\n");
-    }
-tdb->settings = dyStringCannibalize(&ds);
+tdb->settings = hashToRaString(tdb->settingsHash);
 }
 
 char *customTrackTableFromLabel(char *label)
@@ -290,11 +279,9 @@ if (customText != NULL && customText[0] != 0)
 else if (ctFileNameFromCart != NULL)
     {
     if (!fileExists(ctFileNameFromCart))	/* Cope with expired tracks. */
-        {
 	cartRemove(cart, "ct");
-	}
     else
-        {
+	{
 	ctList = customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
 	ctFileName = ctFileNameFromCart;
 	}
@@ -446,7 +433,7 @@ if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
     hashMayRemove(tdb->settingsHash, "altColor");
     }
-if (tdb->html)
+if (tdb->html && tdb->html[0])
     {
     /* write doc file in trash and add reference to the track line*/
     char *htmlFile;
@@ -483,6 +470,16 @@ if (!fileExists(fileName))
 struct customTrack *track;
 for (track = trackList; track != NULL; track = track->next)
     {
+    /* may be coming in here from the table browser.  It has wiggle
+     *	ascii data waiting to be encoded into .wib and .wig
+     */
+    if (track->wigAscii)
+	{
+	/* HACK ALERT - calling private method function in customFactory.c */
+	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
+	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
+	ctAddToSettings(track, "tdbType", track->tdb->type);
+	}
     saveTdbLine(f, fileName, track->tdb);
     if (!track->dbTrack)
 	{

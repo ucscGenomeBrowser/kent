@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.44 2006/08/07 23:48:55 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.46 2006/08/09 17:47:19 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -447,6 +447,8 @@ else
     int insertMergeSize = extraInfo ? -1 : 0;
     struct genePred *gp = genePredFromPsl2(psl, genePredCdsStatFld|genePredExonFramesFld,
                                            &cds, insertMergeSize);
+    lf->start = gp->txStart;
+    lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo,
@@ -729,7 +731,7 @@ static struct simpleFeature *splitByCodon( char *chrom,
             slAddHead(&sfList, sf);
             continue;
         }
-        //3' to coding block
+        //UTR to coding block
         else if (thisEnd > cdsLine && thisStart < cdsLine)
         {
             AllocVar(sf);
@@ -754,9 +756,11 @@ static struct simpleFeature *splitByCodon( char *chrom,
                 currentEnd = thisEnd;
 
 
-        /*get dna for entire block. this is faster than
+        /*get dna for entire coding block. this is faster than
           getting it for each codon, but suprisingly not faster
           than getting it for each linked feature*/
+	if (thisStart < cdsStart) thisStart = cdsStart;
+	if (thisEnd > cdsEnd) thisEnd = cdsEnd;
         codonDna = hDnaFromSeq( chrom, thisStart, thisEnd, dnaUpper );
         base = thisStart;
 
@@ -862,6 +866,21 @@ static struct simpleFeature *splitByCodon( char *chrom,
             else
                 currentEnd = currentStart;
         }
+	/* coding block to UTR block */
+	if (posStrand && (thisEnd < ends[i]))
+	    {
+            AllocVar(sf);
+            sf->start = thisEnd;
+            sf->end = ends[i];
+            slAddHead(&sfList, sf);
+	    }
+	else if (!posStrand && (thisStart > starts[i]))
+	    {
+            AllocVar(sf);
+            sf->start = starts[i];
+            sf->end = thisStart;
+            slAddHead(&sfList, sf);
+	    }
     }
 
     if(posStrand)
@@ -888,6 +907,73 @@ struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures
 }
 
 
+static void getMrnaBases(struct psl *psl, struct dnaSeq *mrnaSeq,
+			 int mrnaS, int s, int e, boolean isRc,
+			 char retMrnaBases[4], boolean *retGenomicInsertion)
+/* Get mRNA bases for the current mRNA codon triplet.  If this is a split
+ * codon, retrieve the adjacent mRNA bases to make a full triplet. */
+{
+int size = e - s;
+if(size < 3)
+    {
+    if (mrnaSeq != NULL && mrnaS-(3-size) > 0)
+        {
+	int i=0;
+	int idx = -1;
+	int newIdx = -1;
+	int *gaps = NULL;
+	boolean appendAtStart = FALSE;
+	AllocArray(gaps, psl->blockCount+2);
+
+	for(i=0; i<psl->blockCount; i++)
+	    {
+	    unsigned tStart = psl->tStarts[i];
+	    unsigned tEnd = tStart + psl->blockSizes[i];
+	    if (psl->strand[1] == '-') 
+		reverseIntRange(&tStart, &tEnd, psl->tSize);
+
+	    if (s == tStart)
+		{
+		idx = i;
+		appendAtStart = TRUE;
+		break;
+		}
+	    else if (e == tEnd)
+		{
+		idx = i+1;
+		appendAtStart = FALSE;
+		break;
+		}
+	    }
+
+	getHiddenGaps(psl, gaps);
+	if(idx >= 0 && gaps[idx] > 0 && retGenomicInsertion != NULL)
+	    *retGenomicInsertion = TRUE;
+
+	if (!appendAtStart)
+            {
+	    newIdx = mrnaS + size;
+	    strncpy(retMrnaBases, &mrnaSeq->dna[mrnaS], size);
+	    strncpy(retMrnaBases+size, &mrnaSeq->dna[newIdx], 3-size);
+            }
+	else
+            {
+	    newIdx = mrnaS - (3 - size);
+	    strncpy(retMrnaBases, &mrnaSeq->dna[newIdx], 3);
+            }
+        }
+    else
+	{
+	strncpy(retMrnaBases, "NNN", 3);
+	}
+    }
+else
+    strncpy(retMrnaBases, &mrnaSeq->dna[mrnaS], 3);
+retMrnaBases[3] = '\0';
+if (isRc)
+    reverseComplement(retMrnaBases, strlen(retMrnaBases));
+}
+
 static void drawDiffTextBox(struct vGfx *vg, int xOff, int y, 
         double scale, int heightPer, MgFont *font, Color color, 
         char *chrom, unsigned s, unsigned e, struct psl *psl, 
@@ -895,107 +981,29 @@ static void drawDiffTextBox(struct vGfx *vg, int xOff, int y,
         int grayIx, boolean *foundStart, int displayOption, int
         maxPixels, Color *trackColors, Color ixColor)
 {
-struct dyString *ds = newDyString(256);
-struct dyString *ds2 = newDyString(256);
-char *retStrDy = NULL; 
-int mrnaS;
-int size, i;
-unsigned *ends = needMem(sizeof(unsigned)*psl->blockCount);
-static char saveStr[4];
-char tempStr[4];
-char codon[4];
-char mrnaCodon[4]; 
-int genomicColor;
-Color textColor = whiteIndex();
-boolean isDiff = (displayOption == CDS_DRAW_DIFF_CODONS ||
-                  displayOption == CDS_DRAW_DIFF_BASES );
-
-if (isDiff)
-    dyStringAppend( ds, (char*)hDnaFromSeq(chromName,s,e,dnaUpper)->dna);
-mrnaS = convertCoordUsingPsl( s, psl ); 
+int mrnaS = convertCoordUsingPsl( s, psl ); 
 if(mrnaS >= 0)
     {
+    struct dyString *dyMrnaSeq = newDyString(256);
+    unsigned *ends = needMem(sizeof(unsigned)*psl->blockCount);
+    char mrnaBases[4];
+    char genomicCodon[2];
+    char mrnaCodon[2]; 
+    Color textColor = whiteIndex();
     boolean genomicInsertion = FALSE;
-    dyStringAppendN( ds2, (char*)&mrnaSeq->dna[mrnaS], e-s );
-    if(isDiff)
-        retStrDy = needMem(sizeof(char)*(ds->stringSize+1));
 
-    //get rest of mrna bases if we are on a block boundary
-    //so we can determine if codons are different
-    size = e-s;
-    if(size < 3)
-	{
-
-        if( mrnaSeq != NULL && mrnaS-(3-size)>0 )
-        {
-
-            int idx = -1;
-            int newIdx = -1;
-            int *gaps = NULL;
-            boolean appendAtStart = FALSE;
-            AllocArray(gaps, psl->blockCount+2);
-
-            for(i=0; i<psl->blockCount; i++)
-                {
-                unsigned tStart = psl->tStarts[i];
-                unsigned tEnd = tStart + psl->blockSizes[i];
-                if (psl->strand[1] == '-') 
-                        reverseIntRange(&tStart, &tEnd, psl->tSize);
-
-                if (s == tStart)
-                        {
-                        idx = i;
-                        appendAtStart = TRUE;
-                        break;
-                        }
-                else if (e == tEnd)
-                        {
-                        idx = i+1;
-                        appendAtStart = FALSE;
-                        break;
-                        }
-                }
-
-            getHiddenGaps( psl, gaps);
-            if(idx >= 0 && gaps[idx] > 0)
-                genomicInsertion = TRUE;
-
-            if (!appendAtStart)
-            {
-                newIdx = mrnaS+(3-size)-1;
-	        snprintf(saveStr,4,"%s%s", ds2->string, &mrnaSeq->dna[newIdx]);
-            }
-            else
-            {
-                newIdx = mrnaS-(3-size);
-	        snprintf(saveStr,4,"%s%s", &mrnaSeq->dna[newIdx], ds2->string);
-            }
-        }
-	strncpy(tempStr,saveStr,4);
-        }
-    else
-	strncpy(tempStr,ds2->string,4);
-
-    if(isDiff)
-        maskDiffString(retStrDy, ds2->string, ds->string,  ' ' );
+    getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
+		 mrnaBases, &genomicInsertion);
 
     if (e <= lf->tallEnd)
 	{
         boolean startColor = FALSE;
 
-	//compute mrna codon and get genomic codon
-	//by decoding grayIx.
-	if (lf->orientation == -1)
-	    reverseComplement(tempStr,strlen(tempStr));
-
-        if (isDiff)
-	        genomicColor = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, ixColor);
-
 	if (displayOption == CDS_DRAW_MRNA_CODONS)
 	    {
 	    /* re-set color of this block based on mrna codons rather than
 	     * genomic, but keep the odd/even cycle of dark/light shades. */
-	    int mrnaGrayIx = setColorByCds(tempStr, (grayIx > 26), NULL,
+	    int mrnaGrayIx = setColorByCds(mrnaBases, (grayIx > 26), NULL,
 					   FALSE, TRUE);
 	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
@@ -1008,22 +1016,26 @@ if(mrnaS >= 0)
 	    {
 	    /* Color codons red wherever mrna differs from genomic;
 	     * keep the odd/even cycle of dark/light shades. */
-	    int mrnaGrayIx = setColorByDiff(tempStr, codon[0], (grayIx > 26));
+	    colorAndCodonFromGrayIx(vg, genomicCodon, grayIx, cdsColor,
+				    ixColor);
+	    int mrnaGrayIx = setColorByDiff(mrnaBases, genomicCodon[0],
+					    (grayIx > 26));
 	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
 					    cdsColor, ixColor);
-	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(tempStr));
+	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(mrnaBases));
 	    }
-        if(genomicInsertion)
-                textColor = color = cdsColor[CDS_GENOMIC_INSERTION];
+        if (genomicInsertion)
+	    textColor = color = cdsColor[CDS_GENOMIC_INSERTION];
 	}
 
+    dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS], e-s);
 
     if (displayOption == CDS_DRAW_MRNA_BASES)
 	{
-	if ( cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
-	    complement(ds2->string, strlen(ds2->string));
+	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score, font, ds2->string,
+				    color, lf->score, font, dyMrnaSeq->string,
 				    zoomedToBaseLevel, cdsColor,
 				    winStart, maxPixels );
 	}
@@ -1034,19 +1046,27 @@ if(mrnaS >= 0)
 				    winStart, maxPixels );
     else if (displayOption == CDS_DRAW_DIFF_BASES)
 	{
+        char *diffStr = NULL;
+	struct dyString *dyGenoSeq = newDyString(256);
+	dyStringAppend(dyGenoSeq,
+		       (char*)hDnaFromSeq(chromName, s, e, dnaUpper)->dna);
+	diffStr = needMem(sizeof(char)*(dyGenoSeq->stringSize+1));
+        maskDiffString(diffStr, dyMrnaSeq->string, dyGenoSeq->string, ' ');
 	if ( cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
-	    complement(retStrDy, strlen(retStrDy));
+	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score, font, retStrDy, 
+				    color, lf->score, font, diffStr, 
                                     zoomedToBaseLevel, cdsColor, 
                                     winStart, maxPixels );
 	if (!zoomedToBaseLevel)
 	    drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
-				  retStrDy, maxPixels, cdsColor);
+				  diffStr, maxPixels, cdsColor);
+        freeMem(diffStr);
+	dyStringFree(&dyGenoSeq);
 	}
     else if (displayOption == CDS_DRAW_DIFF_CODONS)
 	{
-	if (codon[0] != 'X' && mrnaCodon[0] != codon[0])
+	if (genomicCodon[0] != 'X' && mrnaCodon[0] != genomicCodon[0])
 	    {
 	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
 					heightPer, color, lf->score, font,
@@ -1060,9 +1080,8 @@ if(mrnaS >= 0)
     else
         errAbort("Unknown displayOption: %d<br>\n", displayOption);
 
-    if(isDiff)        
-        freeMem(retStrDy);
     freeMem(ends);
+    dyStringFree(&dyMrnaSeq);
     }
 else
     {
@@ -1070,9 +1089,6 @@ else
     drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
 			MG_YELLOW, lf->score );
     }
-
-dyStringFree(&ds);
-dyStringFree(&ds2);
 }
 
 void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, 
@@ -1135,6 +1151,63 @@ else
 			color, lf->score );
 }
 
+
+void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
+			   Color *cdsColor, struct vGfx *vg, int xOff,
+			   int y, double scale, int heightPer,
+			   struct dnaSeq *mrnaSeq, struct psl *psl,
+			   int winStart)
+/* Draw red boxes only where mRNA codons differ from genomic.  This assumes
+ * that lf has been drawn already, we're zoomed out past zoomedToCdsColorLevel,
+ * we're not in dense mode etc. */
+{
+struct simpleFeature *sf = NULL;
+Color dummyColor = 0;
+
+if (lf->codons == NULL)
+    errAbort("drawCdsDiffCodonsOnly: lf->codons is NULL");
+
+for (sf = lf->codons; sf != NULL; sf = sf->next)
+    {
+    int s = sf->start;
+    int e = sf->end;
+    if (s < lf->tallStart)
+	s = lf->tallStart;
+    if (e > lf->tallEnd)
+	e = lf->tallEnd;
+    if (s > winEnd || e < winStart)
+      continue;
+    if (e > s)
+	{
+	int mrnaS = convertCoordUsingPsl( s, psl ); 
+	if (mrnaS >= 0)
+	    {
+	    char mrnaBases[4];
+	    char genomicCodon[2], mrnaCodon;
+	    boolean genomicInsertion = FALSE;
+	    Color color = cdsColor[CDS_STOP];
+	    getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
+			 mrnaBases, &genomicInsertion);
+	    if (genomicInsertion)
+		color = cdsColor[CDS_GENOMIC_INSERTION];
+	    mrnaCodon = lookupCodon(mrnaBases);
+	    if (mrnaCodon == '\0')
+		mrnaCodon = '*';
+	    colorAndCodonFromGrayIx(vg, genomicCodon, sf->grayIx,
+				    cdsColor, dummyColor);
+	    if (genomicInsertion || mrnaCodon != genomicCodon[0])
+		drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+				    color, lf->score);
+	    }
+	else
+	    {
+	    /*show we have an error by coloring entire exon block yellow*/
+	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+				MG_YELLOW, lf->score );
+	    }
+	}
+    }
+}
 
 int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor, 
 		  struct dnaSeq **mrnaSeq, struct psl **psl, boolean *errorColor, 

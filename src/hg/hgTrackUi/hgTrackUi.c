@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.295 2006/08/01 18:40:53 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.299 2006/08/11 15:34:56 donnak Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -176,6 +176,7 @@ cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
 
 printf("<BR><BR>\n");
 printf("Any type of data can be excluded from view by deselecting the checkbox below.\n");
+printf("Not all assemblies include values in all categories.\n");
 printf("<BR><BR>\n");
 
 printf("<B>Location Type</B>: ");
@@ -825,6 +826,7 @@ radioButton(ETHNIC_GROUP_EXCINC,
 	"exclude");
 puts("<B>this ethnic group</B><BR>\n");
 
+#ifdef HAS_NO_MEANING
 menuSize = 10;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 i = 0;
@@ -845,7 +847,6 @@ if (freqLow < freqHi)
 else
     cgiMakeDropList(ALLELE_FREQ_LOW, menu, menuSize, menu[0]);
 
-
 i = 0;
 menu[i++] = "0.1"; menu[i++] = "0.2"; menu[i++] = "0.3"; menu[i++] = "0.4";
 menu[i++] = "0.5"; menu[i++] = "0.6"; menu[i++] = "0.7"; menu[i++] = "0.8";
@@ -858,6 +859,7 @@ if (freqLow < freqHi)
 else
     cgiMakeDropList(ALLELE_FREQ_HI, menu, menuSize, menu[9]);
 freez(&menu);
+#endif	/*	HAS_NO_MEANING	*/
 
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
@@ -1705,8 +1707,10 @@ void chromGraphUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
 char varName[chromGraphVarNameMaxSize];
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = NULL;
 char *track = tdb->tableName;
+if (!isCustomTrack(track))
+    conn = hAllocConn();
 double minVal,maxVal;
 struct chromGraphSettings *cgs = chromGraphSettingsGet(track,
 	conn, tdb, cart);
@@ -1723,7 +1727,16 @@ cgiMakeDoubleVar(varName, cgs->minVal, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 chromGraphVarName(track, "maxVal", varName);
 cgiMakeDoubleVar(varName, cgs->maxVal, 6);
-chromGraphDataRange(track, conn, &minVal, &maxVal);
+if (conn)
+    chromGraphDataRange(track, conn, &minVal, &maxVal);
+else
+    {
+    char *fileName = trackDbRequiredSetting(tdb, "binaryFile");
+    struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
+    minVal = cgb->minVal;
+    maxVal = cgb->maxVal;
+    chromGraphBinFree(&cgb);
+    }
 printf("\n&nbsp; &nbsp;(range: &nbsp;%g&nbsp;to&nbsp;%g)<BR>",
     minVal, maxVal);
 
@@ -1744,7 +1757,7 @@ char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 char *motifString = cartCgiUsualString(cart, BASE_MOTIFS, "");
 safef(titleVar,sizeof(titleVar),"%s_%s",BASE_TITLE,database);
 title = cartUsualString(cart, titleVar, "");
-puts("<P><B>Zoom in:&nbsp;</B>");
+puts("<P><B>Zoom factor:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
 cgiMakeTextVar(BASE_MOTIFS, motifString, 20);

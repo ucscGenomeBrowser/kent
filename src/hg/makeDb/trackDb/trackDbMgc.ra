@@ -502,6 +502,7 @@ noInherit on
     type psl .
     exonArrows on
     cdsDrawOptions enabled
+    cdsDrawDefault mRNA\ bases
 
 track gscMgc2
 compositeTrack on
@@ -536,6 +537,7 @@ noInherit on
     type psl .
     exonArrows on
     cdsDrawOptions enabled
+    cdsDrawDefault mRNA\ bases
 
 track gscMgc3
 compositeTrack on
@@ -570,6 +572,7 @@ noInherit on
     type psl .
     exonArrows on
     cdsDrawOptions enabled
+    cdsDrawDefault mRNA\ bases
 
 track gscMgc4
 compositeTrack on
@@ -604,6 +607,7 @@ noInherit on
     type psl .
     exonArrows on
     cdsDrawOptions enabled
+    cdsDrawDefault mRNA\ bases
 
 track gscMgc6
 compositeTrack on
@@ -638,6 +642,7 @@ noInherit on
     type psl .
     exonArrows on
     cdsDrawOptions enabled
+    cdsDrawDefault mRNA\ bases
 
 searchName mgcWUPcrConfirmed
 searchTable mgcWUPcrConfirmed

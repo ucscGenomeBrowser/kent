@@ -2639,40 +2639,47 @@ longLabel UNC FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)
 group encodeChrom
 priority 63.0
 chromosomes chr1,chr4,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chr10,chrX
-type wig -2.61 3.63
+type bedGraph 4
 spanList 38
 maxHeightPixels 128:16:16
 autoScale off
 windowingFunction mean
-viewLimits .2:2.6
+viewLimits -0.6:0.7
 color 20,150,20
 altColor 50,100,50
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUncFaireSignal
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE Signal
-    longLabel UNC FAIRE Signal (Formaldehyde Assisted Isolation of Regulatory Elements)
+    shortLabel FAIRE Signal
+    longLabel University of North Carolina FAIRE Signal
     priority 1
 
     track encodeUncFairePeaks
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE PeakFinder
-    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (PeakFinder)
+    shortLabel FAIRE PeakFinder
+    longLabel University of North Carolina FAIRE Peaks (PeakFinder)
+    noInherit on
+    type bedGraph 4
+    spanList 38
+    maxHeightPixels 128:16:16
+    viewLimits 0.4:3.6
+    autoScale off
+    windowingFunction mean
     priority 2
     
     track encodeUncFairePeaksChipotle
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE ChIPOTle
-    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (ChIPOTle)
+    shortLabel FAIRE ChIPOTle
+    longLabel University of North Carolina FAIRE Peaks (ChIPOTle)
     noInherit on
     type bedGraph 4
+    spanList 38
     maxHeightPixels 128:16:16
+    viewLimits 0.4:3.6
     autoScale off
     windowingFunction mean
-    viewLimits 0.0:2.7
     color 0,0,255
-    altColor 50,100,50
     priority 3
 
 track encodeUvaDnaRep

@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafOrder.c,v 1.2 2005/07/27 18:30:02 braney Exp $";
+static char const rcsid[] = "$Id: mafOrder.c,v 1.3 2006/08/14 15:41:20 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +34,7 @@ void mafOrder(char *mafIn, char *listFile,  char *mafOut)
 FILE *f = mustOpen(mafOut, "w");
 struct lineFile *lf = lineFileOpen(listFile, TRUE);
 struct mafFile *mf = mafOpen(mafIn);
-struct mafAli *mafList, *maf;
+struct mafAli *maf;
 char *row[1];
 struct slName *elemList = NULL, *elem;
 
@@ -54,7 +54,7 @@ while((maf = mafNext(mf)) != NULL)
 
     for(elem = elemList; elem ; elem = elem->next)
 	{
-	if (comp = mafMayFindComponentDb(maf, elem->name))
+	if ((comp = mafMayFindComponentDb(maf, elem->name)) != NULL)
 	    {
 	    compHolders[numComps++] = comp;
 	    }
@@ -72,7 +72,6 @@ while((maf = mafNext(mf)) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int totalCount;
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();

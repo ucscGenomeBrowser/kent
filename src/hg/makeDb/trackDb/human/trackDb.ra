@@ -440,6 +440,55 @@ priority 144
 visibility hide
 type bed 4 .
 
+track orthoAlleles
+compositeTrack on
+shortLabel HapMap SNPs
+longLabel HapMap SNPs with Orthologous Alleles
+group varRep
+priority 144.1
+visibility hide
+type bed 6 + 
+
+    track orthoAllelesYRI
+    subTrack orthoAlleles
+    shortLabel SNPs YRI
+    longLabel  SNPs from the YRI population
+    color 200,100,0
+    altColor 0,100,200
+    priority 1
+
+    track orthoAllelesCEU
+    subTrack orthoAlleles
+    shortLabel SNPs CEU
+    longLabel  SNPs from the CEU population
+    color 200,100,0
+    altColor 0,100,200
+    priority 2
+
+    track orthoAllelesCHB
+    subTrack orthoAlleles
+    shortLabel SNPs CHB
+    longLabel  SNPs from the CHB population
+    color 200,100,0
+    altColor 0,100,200
+    priority 3
+
+    track orthoAllelesJPT
+    subTrack orthoAlleles
+    shortLabel SNPs JPT
+    longLabel  SNPs from the JPT population
+    color 200,100,0
+    altColor 0,100,200
+    priority 4
+
+    track orthoAllelesJPT_CHB
+    subTrack orthoAlleles
+    shortLabel SNPs JPT+CHB
+    longLabel  SNPs from the combined JPT+CHB population
+    color 200,100,0
+    altColor 0,100,200
+    priority 5
+
 track hapmapLdHotspot
 compositeTrack on
 shortLabel HapMap LD Hotspots
@@ -581,14 +630,6 @@ priority 145.9
 visibility hide
 type bed 6 +
 url https://www.affymetrix.com/LinkServlet?probeset=$$
-
-track illumina
-shortLabel Illumina Hap300
-longLabel Illumina HumanHap300 Array
-group varRep
-priority 145.8
-visibility hide
-type bed 4 +
 
 track chainSelf
 shortLabel Self Chain 

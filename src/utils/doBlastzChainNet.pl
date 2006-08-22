@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.47 2006/07/25 01:13:29 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.48 2006/08/14 23:50:36 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -846,7 +846,7 @@ chainPreNet $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net $chain stdout \\
-| chainSort stdin stdout | gzip -c > $altOver
+| chainStitchId stdin stdout | gzip -c > $altOver
 mkdir -p $liftOverDir
 cp -p $altOver $liftOverDir/$over
 

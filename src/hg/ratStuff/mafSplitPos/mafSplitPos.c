@@ -12,7 +12,7 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.3 2006/03/06 17:07:18 angie Exp $";
+static char const rcsid[] = "$Id: mafSplitPos.c,v 1.4 2006/08/14 15:39:44 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -81,7 +81,7 @@ safef(where, sizeof where,
         desiredPos, minRepeat);
 sr = hExtendedChromQuery(conn, "rmsk", chrom, where, FALSE,
         "genoStart, genoEnd", NULL);
-if (row = sqlNextRow(sr))
+if ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlSigned(row[0]);
     end = sqlSigned(row[1]);

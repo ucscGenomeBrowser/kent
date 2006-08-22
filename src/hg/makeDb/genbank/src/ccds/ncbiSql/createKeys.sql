@@ -1,19 +1,18 @@
-
-ALTER TABLE [dbo].[AccessionRejectionCriteria] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[AccessionRejectionCriteria] ADD 
 	CONSTRAINT [PK_AccessionRejectionCriteria] PRIMARY KEY  CLUSTERED 
 	(
 		[acc_rejection_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Accessions] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Accessions] ADD 
 	CONSTRAINT [PK_members] PRIMARY KEY  CLUSTERED 
 	(
 		[accession_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Accessions_GroupVersions] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Accessions_GroupVersions] ADD 
 	CONSTRAINT [PK_members_groupVersions] PRIMARY KEY  CLUSTERED 
 	(
 		[accession_uid],
@@ -21,35 +20,35 @@ ALTER TABLE [dbo].[Accessions_GroupVersions] WITH NOCHECK ADD
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[CcdsStatusVals] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[CcdsStatusVals] ADD 
 	CONSTRAINT [PK_review_category_vals] PRIMARY KEY  CLUSTERED 
 	(
 		[ccds_status_val_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[CcdsUids] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[CcdsUids] ADD 
 	CONSTRAINT [PK_ccdsIds] PRIMARY KEY  CLUSTERED 
 	(
 		[ccds_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[ChromosomeAccessions] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[ChromosomeAccessions] ADD 
 	CONSTRAINT [PK_chromosome_identities] PRIMARY KEY  CLUSTERED 
 	(
 		[chromosome_accession_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[GroupVersions] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[GroupVersions] ADD 
 	CONSTRAINT [PK_group_versions] PRIMARY KEY  CLUSTERED 
 	(
 		[group_version_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[GroupVersions_ChromosomeAccessions] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[GroupVersions_ChromosomeAccessions] ADD 
 	CONSTRAINT [PK_chromosomes] PRIMARY KEY  CLUSTERED 
 	(
 		[group_version_uid],
@@ -57,49 +56,49 @@ ALTER TABLE [dbo].[GroupVersions_ChromosomeAccessions] WITH NOCHECK ADD
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Groups] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Groups] ADD 
 	CONSTRAINT [PK_cds_groups] PRIMARY KEY  CLUSTERED 
 	(
 		[group_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[InterpretationSubtypes] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[InterpretationSubtypes] ADD 
 	CONSTRAINT [PK_InterpretationSubtypes] PRIMARY KEY  CLUSTERED 
 	(
 		[interpretation_subtype_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[InterpretationTypes] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[InterpretationTypes] ADD 
 	CONSTRAINT [PK_interpretationTypeVals] PRIMARY KEY  CLUSTERED 
 	(
 		[interpretation_type_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Interpretations] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Interpretations] ADD 
 	CONSTRAINT [PK_interpretations] PRIMARY KEY  CLUSTERED 
 	(
 		[interpretation_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Interpreters] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Interpreters] ADD 
 	CONSTRAINT [PK_Interpreters] PRIMARY KEY  CLUSTERED 
 	(
 		[interpreter_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Locations] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Locations] ADD 
 	CONSTRAINT [PK_locations] PRIMARY KEY  CLUSTERED 
 	(
 		[location_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Locations_GroupVersions] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Locations_GroupVersions] ADD 
 	CONSTRAINT [PK_locations_groupVersions] PRIMARY KEY  CLUSTERED 
 	(
 		[location_uid],
@@ -107,21 +106,21 @@ ALTER TABLE [dbo].[Locations_GroupVersions] WITH NOCHECK ADD
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[NextIds] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[NextIds] ADD 
 	CONSTRAINT [next_id_table] PRIMARY KEY  CLUSTERED 
 	(
 		[table_name]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Organizations] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Organizations] ADD 
 	CONSTRAINT [PK_member_type_vals] PRIMARY KEY  CLUSTERED 
 	(
 		[organization_uid]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
-ALTER TABLE [dbo].[Programs] WITH NOCHECK ADD 
+ALTER TABLE [dbo].[Programs] ADD 
 	CONSTRAINT [PK_Programs] PRIMARY KEY  CLUSTERED 
 	(
 		[program_uid]

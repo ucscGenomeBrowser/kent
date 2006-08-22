@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.17 2006/08/01 19:02:56 angie Exp $";
+static char const rcsid[] = "$Id: pslReps.c,v 1.18 2006/08/14 22:18:49 galt Exp $";
 
 /* command line */
 static struct optionSpec optionSpecs[] = {
@@ -65,7 +65,7 @@ errAbort(
     "    -nearTop=0.N how much can deviate from top and be taken\n"
     "               default is 0.01\n"
     "    -minNearTopSize=N  Minimum size of alignment that is near top\n"
-    "               for aligmnent to be kept.  Default 30.\n"
+    "               for alignment to be kept.  Default 30.\n"
     "    -coverQSizes=file Tab-separate file with effective query sizes.\n"
     "                     When used with -minCover, this allows polyAs\n"
     "                     to be excluded from the coverage calculation\n");

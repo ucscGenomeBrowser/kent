@@ -10358,5 +10358,24 @@ hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
     | hgLoadBed hg18 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
-
 ############################################################################
+# GENE BOUNDS (RNACLUSTER) (DONE 08-09-2006 Fan)
+# Create rnaCluster table (depends on {est,mrna}OrientInfo)
+
+cd /cluster/data/hg18/bed
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+
+# Create a list of accessions that come from RAGE libraries and need to be excluded.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg18 rage.libs
+foreach f (/cluster/data/hg18/nib/chr*.nib)
+    set c = $f:t:r
+    set out = chrom/$c.bed
+    # Exclude accesions in the RAGE file
+    echo clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
+    clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c
+end
+hgLoadBed hg18 rnaCluster chrom/*.bed
+############################################################################
+

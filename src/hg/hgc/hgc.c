@@ -126,6 +126,7 @@
 #include "stsMapMouseNew.h"
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
+#include "vegaInfoZfish.h"
 #include "scoredRef.h"
 #include "blastTab.h"
 #include "hdb.h"
@@ -188,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1078 2006/08/07 10:21:03 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1084 2006/08/22 21:05:34 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8133,6 +8134,48 @@ geneShowCommon(geneName, tdb, pepTable);
 printTrackHtml(tdb);
 }
 
+void doVegaGeneZfish(struct trackDb *tdb, char *geneName)
+/* Handle click on Vega gene track for zebrafish. */
+{
+struct vegaInfoZfish *vif = NULL;
+
+genericHeader(tdb, geneName);
+if (hTableExists("vegaInfoZfish"))
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+
+    safef(query, sizeof(query),
+	  "select * from vegaInfoZfish where transcriptId = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	AllocVar(vif);
+	vegaInfoZfishStaticLoad(row, vif);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+
+printCustomUrl(tdb, geneName, TRUE); 
+if (vif != NULL)
+    {
+    printf("<B>VEGA Gene Type:</B> %s<BR>\n", vif->method);
+    printf("<B>VEGA Sanger Gene Name:</B> %s<BR>\n", vif->sangerName);
+    if (differentString(vif->geneDesc, "NULL"))
+        printf("<B>VEGA Gene Description:</B> %s<BR>\n", vif->geneDesc);
+    printf("<B>VEGA Gene Id:</B> %s<BR>\n", vif->geneId);
+    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", geneName);
+    printf("<B>ZFIN Id:</B> ");
+    printf("<A HREF=\"http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s\" TARGET=_blank>%s</A><BR>\n", vif->zfinId, vif->zfinId);
+    printf("<B>Official ZFIN Gene Symbol:</B> %s<BR>\n", vif->zfinSymbol);
+    printf("<B>Clone Id:</B> %s<BR>\n", vif->cloneId);
+    }
+geneShowCommon(geneName, tdb, "vegaPep");
+printTrackHtml(tdb);
+}
 
 void doVegaGene(struct trackDb *tdb, char *geneName)
 /* Handle click on Vega gene track. */
@@ -12582,7 +12625,7 @@ boolean foundStsResult = FALSE;
 /* primers and print out */  
 if (hTableExists("bacCloneXRef"))
     {
-    sprintf(query, "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
+    safef(query, sizeof(query), "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
     sr1 = sqlMustGetResult(conn1, query);
     }
 
@@ -12592,7 +12635,7 @@ if (sr1 == NULL)
     /* get aliases from bacCloneAlias and print */
     if (hTableExists("bacCloneAlias"))
         {
-        sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
+        safef(query, sizeof(query), "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
         printf("<TR><TH ALIGN=left>BAC Clone Aliases:</TH><TD WIDTH=75%%>"); 
         while ((row = sqlNextRow(sr)))
             {
@@ -12654,7 +12697,7 @@ if (sr1 != NULL)
         else
             printf("n/a</TD>");
         /* get BAC clone and STS aliases for this Sanger Name */
-        sprintf(query, "SELECT alias FROM bacCloneAlias WHERE sangerName = '%s'", sName);
+        safef(query, sizeof(query), "SELECT alias FROM bacCloneAlias WHERE sangerName = '%s'", sName);
         sr2 = sqlMustGetResult(conn, query);
         if (sr2 != NULL)
             printf("<TD>"); 
@@ -14537,7 +14580,15 @@ else
     {
     if (ct->fieldCount < 4)
 	{
-	printf("<H3>Item information is not available for bed 3 type data</H3>\n");
+	if (! ct->dbTrack)
+	    {
+	    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+		if (bed->chromStart == start)
+		    break;
+	    if (bed)
+		printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
+		    TRUE, NULL);
+	    }
 	return;
 	}
     if (ct->dbTrack)
@@ -16943,6 +16994,10 @@ else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && h
     {
     doVegaGene(tdb, item);
     }
+else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists("vegaInfoZfish"))
+    {
+    doVegaGeneZfish(tdb, item);
+    }
 else if (sameWord(track, "genomicDups"))
     {
     doGenomicDups(tdb, item);
@@ -17570,7 +17625,7 @@ else if (sameString("igtc", track))
     {
     doIgtc(tdb, item);
     }
-else if (startsWith("dbRIP_", track))
+else if (startsWith("dbRIP", track))
     {
     dbRIP(tdb, item, NULL);
     }

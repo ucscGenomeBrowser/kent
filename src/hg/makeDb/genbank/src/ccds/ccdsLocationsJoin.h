@@ -12,7 +12,7 @@ struct ccdsLocationsJoin
     {
     struct ccdsLocationsJoin *next;  /* Next in singly linked list. */
     int ccds_uid;	/* CcdsUids.ccds_uid */
-    int lastest_version;	/* CcdsUids.latest_version */
+    int ccds_version;	/* GroupVersions.ccds_version */
     char chrom[3];	/* Locations_GroupVersions.chromosome, maybe XY */
     char strand[2];	/* Groups.orientation */
     int start;	/* Locations.chr_start */

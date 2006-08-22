@@ -13,6 +13,8 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
+static char const rcsid[] = "$Id: custom.c,v 1.28 2006/08/09 21:39:12 kate Exp $";
+
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
 

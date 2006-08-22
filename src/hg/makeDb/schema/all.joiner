@@ -1915,20 +1915,20 @@ identifier gvSrcId
     hgFixed.gv.srcId
 
 # retroposon track, dbRIP_* and polyGenotype table link
-identifier dbRIPNameAlu
+identifier dbRIPNameAlu fuzzy
 "Retroposon, dbRIP database name id to polymorphism statistics link"
-    hg17.polyGenotype.name dupeOk
     hg17.dbRIP_Alu.name unique
+    hg17.polyGenotype.name
 
-identifier dbRIPNameL1
+identifier dbRIPNameL1 fuzzy
 "Retroposon, dbRIP database name id to polymorphism statistics link"
-    hg17.polyGenotype.name dupeOk
     hg17.dbRIP_L1.name unique
+    hg17.polyGenotype.name
 
-identifier dbRIPNameSVA
+identifier dbRIPNameSVA fuzzy
 "Retroposon, dbRIP database name id to polymorphism statistics link"
-    hg17.polyGenotype.name dupeOk
     hg17.dbRIP_SVA.name unique
+    hg17.polyGenotype.name
 
 # Dependencies not already captured in identifiers
 
@@ -2416,6 +2416,7 @@ tablesIgnored $hg
     encodeUcsdNgValChipTaf
     encodeUncFaireSignal
     encodeUncFairePeaks
+    encodeUncFairePeaksChipotle
     encodeUvaDnaRep%
     pseudoYale
     wgRna

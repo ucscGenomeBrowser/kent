@@ -121,6 +121,11 @@ void chromGraphToBin(struct chromGraph *list, char *fileName);
 /* Create binary representation of chromGraph list, which should
  * be sorted. */
 
+void chromGraphToBinGetMinMax(struct chromGraph *list, char *fileName,
+	double *retMin, double *retMax);
+/* Create binary representation of chromGraph list, which should
+ * be sorted.  Also return min/max values seen in data*/
+
 /* chromGraphBin interface.  The general calling sequence is:
  *   struct chromGraphBin *cgb = chromGraphBinOpen(path);
  *   while (chromGraphBinNextChrom(cgb))

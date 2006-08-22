@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.132 2006/08/03 18:17:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.133 2006/08/10 06:40:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -882,7 +882,8 @@ else
 boolean htiIsPositional(struct hTableInfo *hti)
 /* Return TRUE if hti looks like it's from a positional table. */
 {
-return ((hti->startField[0] && hti->endField[0]) &&
+return isCustomTrack(hti->rootName) ||
+    ((hti->startField[0] && hti->endField[0]) &&
 	(hti->chromField[0] || sameString(hti->rootName, "gl")));
 }
 
@@ -1363,6 +1364,8 @@ else if (sameString(output, outGalaxy))
     doOutGalaxyQuery(track, table, cartUserId(cart));
 else if (sameString(output, outMaf))
     doOutMaf(track, table, conn);
+else if (sameString(output, outChromGraphData))
+    doOutChromGraphDataCt(track, table);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
