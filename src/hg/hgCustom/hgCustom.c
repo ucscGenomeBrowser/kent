@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.35 2006/08/23 00:09:06 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.36 2006/08/23 22:55:54 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -62,7 +62,7 @@ void makeInsertButton(char *label, char *text, char *field)
 {
 char javascript[1024];
 safef(javascript, sizeof javascript, 
-  "document.mainForm.%s.value = '%s' + '\\n' + document.mainForm.%s.value;\"", 
+  "document.mainForm.%s.value = '%s' + '\\n' + document.mainForm.%s.value;", 
         field, text, field);
 cgiMakeOnClickButton(javascript, label);
 }
@@ -72,7 +72,7 @@ void makeClearButton(char *field)
 {
 char javascript[1024];
 safef(javascript, sizeof javascript, 
-        "document.mainForm.%s.value = '';\"", field);
+        "document.mainForm.%s.value = '';", field);
 cgiMakeOnClickButton(javascript, "Clear");
 }
 
