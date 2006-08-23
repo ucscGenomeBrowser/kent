@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.25 2006/05/08 21:17:47 aamp Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.26 2006/08/23 23:53:11 markd Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -53,7 +53,12 @@ errAbort(
   "oldFile and newFile are in bed format by default, but can be in GFF and\n"
   "maybe eventually others with the appropriate flags below.\n"
   "The map.chain file has the old genome as the target and the new genome\n"
-  "as the query.\n"
+  "as the query.\n\n"
+  "***********************************************************************\n"
+  "WARNING: liftOver was only designed to work between different\n"
+  "         assemblies of the same organism, it may not do what you want\n"
+  "         if you are lifting between different organisms.\n"
+  "***********************************************************************\n\n"
   "options:\n"
   "   -minMatch=0.N Minimum ratio of bases that must remap. Default %3.2f\n"
   "   -gff  File is in gff/gtf format.  Note that the gff lines are converted\n"
