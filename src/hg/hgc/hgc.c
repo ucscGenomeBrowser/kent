@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1084 2006/08/22 21:05:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1085 2006/08/23 22:01:35 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6422,139 +6422,132 @@ void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 struct trackDb *tdbSf;
 char *shortItemName;
 char *url = tdb->url;
+char supfamURL[512];
+char *genomeStr = "";
+char *genomeStrEnsembl = "";
+struct sqlConnection *conn = hAllocConn();
+char cond_str[256], cond_str2[256];
+char *proteinID = NULL;
+char *ans;
+char *ensPep;
+char *chp;
 
-if (url != NULL && url[0] != 0)
+/* shortItemName is the name without the "." + version */ 
+shortItemName = cloneString(itemName);
+chp = strstr(shortItemName, ".");
+if (chp != NULL) 
+    *chp = '\0';
+genomeStrEnsembl = ensOrgNameFromScientificName(scientificName);
+if (genomeStrEnsembl == NULL)
     {
-    char supfamURL[512];
-    char *genomeStr = "";
-    char *genomeStrEnsembl = "";
-    struct sqlConnection *conn = hAllocConn();
-    char cond_str[256], cond_str2[256];
-    char *proteinID = NULL;
-    char *ans;
-    char *ensPep;
-    char *chp;
-
-
-    /* shortItemName is the name without the "." + version */ 
-    shortItemName = cloneString(itemName);
-    chp = strstr(shortItemName, ".");
-    if (chp != NULL) 
-	*chp = '\0';
-
-    genomeStrEnsembl = ensOrgNameFromScientificName(scientificName);
-    if (genomeStrEnsembl == NULL)
-	{
-	warn("Organism %s not found!", organism); fflush(stdout);
-	return;
-	}
-
-    if (stringIn("pre.ensembl.org", url))
-	printCustomUrl(tdb, itemName, TRUE);
-    else
-	{
-	printf("<B>Ensembl Gene Link: </B>");
-	printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" "
+    warn("Organism %s not found!", organism); fflush(stdout);
+    return;
+    }
+/* print URL that links to Ensembl transcript details */
+if (url != NULL && url[0] != 0)
+    printCustomUrl(tdb, itemName, TRUE);
+else
+    {
+    printf("<B>Ensembl Gene Link: </B>");
+    printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" "
 	       "target=_blank>", 
 	       genomeStrEnsembl,shortItemName);
-	printf("%s</A><br>", itemName);
+    printf("%s</A><br>", itemName);
+    }
+
+if (hTableExists("superfamily"))
+    {
+    sprintf(cond_str, "transcript_name='%s'", shortItemName);    
+
+    /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
+    proteinID = NULL;
+
+    if (hTableExists("ensemblXref3"))
+    	{
+    	/* use ensemblXref3 for Ensembl data release after ensembl34d */
+    	safef(cond_str, sizeof(cond_str), "transcript='%s'", shortItemName);
+    	ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+	if (ensPep != NULL) proteinID = ensPep;
 	}
 
-
-    if (hTableExists("superfamily"))
+    if (hTableExists("ensTranscript") && (proteinID == NULL))
 	{
-    	sprintf(cond_str, "transcript_name='%s'", shortItemName);    
-
-        /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
-    	proteinID = NULL;
-
-	if (hTableExists("ensemblXref3"))
-    	    {
-    	    /* use ensemblXref3 for Ensembl data release after ensembl34d */
-    	    safef(cond_str, sizeof(cond_str), "transcript='%s'", shortItemName);
-    	    ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
-	    if (ensPep != NULL) proteinID = ensPep;
-	    }
-
-	if (hTableExists("ensTranscript") && (proteinID == NULL))
+	proteinID = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
+  	}
+    else
+	{
+    	if (hTableExists("ensemblXref2"))
 	    {
-	    proteinID = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
+	    proteinID = sqlGetField(conn, database, "ensemblXref2","translation_name", cond_str);
   	    }
 	else
 	    {
-    	    if (hTableExists("ensemblXref2"))
+	    if (hTableExists("ensemblXref"))
 	    	{
-	    	proteinID = sqlGetField(conn, database, "ensemblXref2","translation_name", cond_str);
+	    	proteinID=sqlGetField(conn,database,"ensemblXref","translation_name",cond_str);
   	    	}
-	    else
-		{
-		if (hTableExists("ensemblXref"))
-	    	    {
-	    	    proteinID=sqlGetField(conn,database,"ensemblXref","translation_name",cond_str);
-  	    	    }
-		}
 	    }
-	if (proteinID != NULL)
-	    { 
-            printf("<B>Ensembl Protein: </B>");
-            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-		   genomeStrEnsembl,proteinID);
-            printf("%s</A><BR>\n", proteinID);
-	    }
+	}
+    if (proteinID != NULL)
+        { 
+        printf("<B>Ensembl Protein: </B>");
+        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+        genomeStrEnsembl,proteinID);
+        printf("%s</A><BR>\n", proteinID);
+	}
 
-    	/* get genomeStr to be used in Superfamily URL */ 
-    	if (sameWord(organism, "human"))
+    /* get genomeStr to be used in Superfamily URL */ 
+    if (sameWord(organism, "human"))
+	{
+	genomeStr = "hs";
+	}
+    else
+	{
+    	if (sameWord(organism, "mouse"))
 	    {
-	    genomeStr = "hs";
+	    genomeStr = "mm";
 	    }
-    	else
-	    {
-    	    if (sameWord(organism, "mouse"))
-	    	{
-		genomeStr = "mm";
-	    	}
+        else
+            {
+	    if (sameWord(organism, "rat"))
+                {
+                genomeStr = "rn";
+                }
             else
                 {
-	        if (sameWord(organism, "rat"))
-                    {
-                    genomeStr = "rn";
-                    }
-                else
-                    {
-                    warn("Organism %s not found!", organism);
-                    return;
-                    }
+                warn("Organism %s not found!", organism);
+                return;
                 }
             }
-    	sprintf(cond_str, "name='%s'", shortItemName);    
-    	ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
-    	if (ans != NULL)
+        }
+    sprintf(cond_str, "name='%s'", shortItemName);    
+    ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
+    if (ans != NULL)
+	{
+	/* double check to make sure trackDb is also updated to be in sync with existence of supfamily table */
+	tdbSf = hashFindVal(trackHash, "superfamily");
+        if (tdbSf != NULL)
 	    {
-	    /* double check to make sure trackDb is also updated to be in sync with existence of supfamily table */
-	    tdbSf = hashFindVal(trackHash, "superfamily");
-            if (tdbSf != NULL)
-	    	{
-		printf("<B>Superfamily Link: </B>");
-            	safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
+	    printf("<B>Superfamily Link: </B>");
+            safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
 	    	      tdbSf->url, genomeStr, proteinID);
-            	printf("%s", supfamURL);
-            	printf("%s</A><BR>\n", proteinID);
-		}
-            }
-    	}
-    if (hTableExists("ensGtp") && (proteinID == NULL))
-        {
-    	sprintf(cond_str2, "transcript='%s'", shortItemName);  
-        proteinID=sqlGetField(conn, database, "ensGtp","protein",cond_str2);
-	if (proteinID != NULL)
-	    { 
-            printf("<B>Ensembl Protein: </B>");
-            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
+            printf("%s", supfamURL);
             printf("%s</A><BR>\n", proteinID);
 	    }
         }
-    freeMem(shortItemName);
     }
+if (hTableExists("ensGtp") && (proteinID == NULL))
+    {
+    sprintf(cond_str2, "transcript='%s'", shortItemName);  
+    proteinID=sqlGetField(conn, database, "ensGtp","protein",cond_str2);
+    if (proteinID != NULL)
+	{ 
+        printf("<B>Ensembl Protein: </B>");
+        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
+        printf("%s</A><BR>\n", proteinID);
+	}
+    }
+freeMem(shortItemName);
 }
 
 void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
