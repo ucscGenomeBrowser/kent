@@ -22036,3 +22036,15 @@ mkdir -p ${blatDir}/{over,net}
 
     /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
     rm -rf /scratch/tmp/ccds
+
+    # 2006-08-23 - found bug with some source genes missing from ccdsInfo, fixed ccdsMkTables
+    # and reload
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+    checkTableCoords hg17 -verbose=2 ccdsGene
+    joinerCheck -database=hg17 -identifier=ccdsGeneId ~/compbio/kent/src/hg/makeDb/schema/all.joiner
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
