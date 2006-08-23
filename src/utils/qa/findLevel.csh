@@ -41,7 +41,7 @@ if ( "$dbs" != $db ) then
 endif
 
 # check trackDb for db/table combination 
-hgsql -N -e 'SHOW TABLES' $db | grep -qw $tableName
+hgsql -N -e 'SHOW TABLES' $db | grep -qi $tableName
 
 if ($status) then
   echo "\n  no such database/table combination: $db $tableName.\n"
