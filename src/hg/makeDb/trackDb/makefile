@@ -70,7 +70,8 @@ MGC_DBS = \
 	mm5 mm6 mm7 mm8 \
 	rn3 rn4 \
 	danRer1	danRer2 danRer3 danRer4 \
-	xenTro1 xenTro2
+	xenTro1 xenTro2 \
+	bosTau2
 
 ARCH_DBS = \
 	pyrAer1 aerPer1\
