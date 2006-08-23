@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.34 2006/08/22 22:49:15 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.35 2006/08/23 00:09:06 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -450,7 +450,15 @@ if (cartVarExists(cart, hgCtDoDelete) || cartVarExists(cart, hgCtDoRefresh))
     cartRemove(cart, hgCtDataText);
     cartRemove(cart, hgCtDataFile);
     }
-char *customText = cloneString(cartUsualString(cart, hgCtDataText, ""));
+/* append a newline to incoming data, to keep custom preprocessor happy */
+char *customText = cartUsualString(cart, hgCtDataText, "");
+if (customText[0])
+    {
+    struct dyString *ds = dyStringNew(0);
+    dyStringPrintf(ds, "%s\n", customText);
+    customText = dyStringCannibalize(&ds);
+    cartSetString(cart, hgCtDataText, customText);
+    }
 ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
                                         &replacedCts, &err);
 if (err)
