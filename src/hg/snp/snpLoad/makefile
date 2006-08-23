@@ -12,7 +12,7 @@ O = snpContigLocFilter.o snpContigLocFilter125.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
     snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
     snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o \
-    snpGetSimple.o fetchSeq.o
+    snpGetSimple.o fetchSeq.o snpOrthoStats.o
 
 all: snpContigLocFilter snpContigLocFilter125 \
      snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
@@ -22,7 +22,7 @@ all: snpContigLocFilter snpContigLocFilter125 \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
      snpPAR illuminaLookup snpCompareWeight subSnpCondense \
      snpClassAndObserved snpMoltype affyLookup cnpLookup \
-     snpGetSimple fetchSeq
+     snpGetSimple fetchSeq snpOrthoStats
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -119,3 +119,6 @@ fetchSeq: fetchSeq.o ${MYLIBS}
 
 snpGetSimple: snpGetSimple.o ${MYLIBS}
 	${CC} -O -o snpGetSimple snpGetSimple.o ${MYLIBS} $L
+
+snpOrthoStats: snpOrthoStats.o ${MYLIBS}
+	${CC} -O -o snpOrthoStats snpOrthoStats.o ${MYLIBS} $L
