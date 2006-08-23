@@ -2393,8 +2393,8 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
     encodeRegulomeDnaseGM06990%
-    encodeStanfordPromoters%
     encodeSangerChip%
+    encodeStanfordPromoters%
     encodeUcsdChipAch3Imr90
     encodeUcsdChipMeh3k4Imr90
     encodeUcsdChipRnapHct116
