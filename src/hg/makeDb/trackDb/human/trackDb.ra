@@ -563,6 +563,7 @@ defaultViewLimits -2.5:3
 minLimit -4
 maxLimit 5
 autoScaleDefault Off
+maxHeightPixels 128:64:11
 priority 144.65
 type bedGraph 4 
 
