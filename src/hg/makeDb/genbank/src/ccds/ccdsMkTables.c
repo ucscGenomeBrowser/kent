@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.6 2006/08/15 21:46:05 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.7 2006/08/23 18:23:47 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -42,7 +42,7 @@ errAbort(
   "  -loadDb - load tables into hgdb\n"
   "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
-  "     1 - show selects against CCDS database\n"
+  "     2 - show selects against CCDS database\n"
   );
 }
 
@@ -77,16 +77,31 @@ errAbort("don't know how to load ccds into %s, supported databases: hg17",
 return NULL;
 }
 
-static void gotCcdsSave(struct hash *gotCcds, int ccdsId, int ccdsVersion)
+static struct hashEl *gotCcdsSave(struct hash *gotCcds, int ccdsId, int ccdsVersion)
 /* save a ccds id in a hash table for sanity check purposes */
 {
 char id[32];
 safef(id, sizeof(id), "ccds%d.%d", ccdsId, ccdsVersion);
-hashReplace(gotCcds, id, NULL);
+return hashStore(gotCcds, id);
 }
 
-static int gotCccdsCheck(char *name1, struct hash *got1,
-                         char *name2, struct hash *got2)
+static void gotCcdsSaveSrcDb(struct hash *gotCcds, int ccdsId, int ccdsVersion,
+                             char *srcDb)
+/* save a ccds id and source database in a hash table created while build the
+ * ccdsInfo table. srcDb is `N' or `H' */
+{
+struct hashEl *hel = gotCcdsSave(gotCcds, ccdsId, ccdsVersion);
+if (hel->val == NULL)
+    hel->val = needMem(3);  /* max 2 database characters in string */
+if (strchr((char*)hel->val, srcDb[0]) == NULL)
+    {
+    strcat((char*)hel->val, srcDb);
+    assert(strlen((char*)hel->val) <= 2);
+    }
+}
+
+static int gotCcdsCheck(char *name1, struct hash *got1,
+                        char *name2, struct hash *got2)
 /* check that CCDSs in the first set were found in the second set */
 {
 int errCnt = 0;
@@ -104,15 +119,42 @@ while ((hel = hashNext(&cookie)) != NULL)
 return errCnt;
 }
 
+static int gotCcdsCheckSrcDb(struct hashEl *infoEl)
+/* check that both hinxton and ncbi are in the source database, return 1
+ * if they are not matched. */
+{
+if ((infoEl->val == NULL) || (strchr((char*)infoEl->val, 'N') == NULL)
+    || (strchr((char*)infoEl->val, 'H') == NULL))
+    {
+    fprintf(stderr, "CCDS %s does not have entries for both NCBI and Hinxton in the cdsInfo table, got: %s\n", infoEl->name,
+            (char*)infoEl->val);
+    return 1;
+    }
+else
+    return 0;
+}
+
+static void gotCcdsCheckInfo(struct hash *infoCcds)
+/* check source databases added to ccdsInof table */
+{
+int errCnt = 0;
+struct hashCookie cookie = hashFirst(infoCcds);
+struct hashEl* hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    errCnt += gotCcdsCheckSrcDb(hel);
+if (errCnt > 0)
+    errAbort("Error: not all CCDSs have both NCBI and Hinxton genes in ccdsInfo table");
+}
 static void gotCcdsValidate(struct hash *infoCcds, struct hash *geneCcds)
 /* check that the same set of CCDS ids were found for the info and gene selects */
 {
 int errCnt = 0;
 
-errCnt += gotCccdsCheck("ccdsInfo", infoCcds, "ccdsGene", geneCcds);
-errCnt += gotCccdsCheck("ccdsGene", geneCcds, "ccdsInfo", infoCcds);
+errCnt += gotCcdsCheck("ccdsInfo", infoCcds, "ccdsGene", geneCcds);
+errCnt += gotCcdsCheck("ccdsGene", geneCcds, "ccdsInfo", infoCcds);
 if (errCnt > 0)
     errAbort("Error: mismatch between CCDS ids added to ccdsInfo and ccdsGene tables");
+gotCcdsCheckInfo(infoCcds);
 }
 
 static char *mkGroupVersionClause(struct genomeInfo *genome)
@@ -157,8 +199,7 @@ safef(select, sizeof(select),
       "WHERE %s "
       "AND (Accessions.accession_uid = Accessions_GroupVersions.accession_uid) "
       "AND (Accessions_GroupVersions.group_version_uid = GroupVersions.group_version_uid) "
-      "AND (Organizations.organization_uid = Accessions.organization_uid) "
-      "AND (Accessions.alive = 1)",
+      "AND (Organizations.organization_uid = Accessions.organization_uid)",
       mkGroupVersionClause(genome));
 return select;
 }
@@ -169,6 +210,7 @@ static void processCcdsInfoRow(char **row, FILE *outFh, struct hash *gotCcds)
 int ccdsId = sqlSigned(row[0]);
 int ccdsVersion = sqlSigned(row[1]);
 struct ccdsInfo ci;
+char *srcDb;
 safef(ci.ccds, sizeof(ci.ccds), "CCDS%d.%d", ccdsId, ccdsVersion);
 if (sameString(row[2], "NCBI"))
     {
@@ -176,15 +218,17 @@ if (sameString(row[2], "NCBI"))
     ci.srcDb = ccdsInfoNcbi;
     safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s.%s", row[3], row[4]);
     safef(ci.protAcc, sizeof(ci.protAcc), "%s.%s", row[5], row[6]);
+    srcDb = "N";
     }
 else
     {
     ci.srcDb = (startsWith("OTT", ci.mrnaAcc) ? ccdsInfoVega : ccdsInfoEnsembl);
     safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s", row[3]);
     safef(ci.protAcc, sizeof(ci.protAcc), "%s", row[5]);
+    srcDb = "H";
     }
 ccdsInfoTabOut(&ci, outFh);
-gotCcdsSave(gotCcds, ccdsId, ccdsVersion);
+gotCcdsSaveSrcDb(gotCcds, ccdsId, ccdsVersion, srcDb);
 }
 
 static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
@@ -414,7 +458,7 @@ sqlDisconnect(&conn);
 static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ccdsInfoOut, char *ccdsGeneOut)
 /* create tables for hg db from imported CCDS database */
 {
-if (verboseLevel() >= 1)
+if (verboseLevel() >= 2)
     sqlMonitorEnable(JKSQL_TRACE);
 struct sqlConnection *conn = sqlConnect(ccdsDb);
 char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
