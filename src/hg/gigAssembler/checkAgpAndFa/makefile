@@ -6,10 +6,14 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = checkAgpAndFa.o
+A = ${BINDIR}/checkAgpAndFa
 
 checkAgpAndFa: $O 
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa $O $(MYLIBS) $L
-	cp $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa .
+	${CC} ${COPT} ${CFLAGS} -o $A $O $(MYLIBS) $L
+	${STRIP} $A${EXE}
+
+test:
+	./doTest.sh $A
 
 clean:
-	rm *.o $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa ./checkAgpAndFa
+	rm -rf *.o ./checkAgpAndFa tests/output
