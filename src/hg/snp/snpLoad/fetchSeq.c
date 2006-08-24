@@ -1,5 +1,5 @@
 /* fetchSeq -- get sequences for ortho pipeline. */
-/* Write to chrN_snp126hg18orthoAllele.tab. */
+/* Write to chrN_snp126hg18orthoPrelim.tab. */
 
 #include "common.h"
 
@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.4 2006/08/21 22:44:42 heather Exp $";
+static char const rcsid[] = "$Id: fetchSeq.c,v 1.5 2006/08/24 20:49:23 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -74,15 +74,13 @@ struct dnaSeq *seq;
 char *seqPtr = NULL;
 int start = 0;
 int end = 0;
-int bin = 0;
 int chromSize = 0;
 char allele[2];
-int count = 0;
 char *snpId = NULL;
 
 safef(tableName, sizeof(tableName), "%s_snp126hg18ortho", chromName);
 if (!hTableExists(tableName)) return;
-safef(fileName, ArraySize(fileName), "%s_snp126hg18orthoAllele.tab", chromName);
+safef(fileName, ArraySize(fileName), "%s_snp126hg18orthoPrelim.tab", chromName);
 chromSize = getChromSize(chromName);
 
 f = mustOpen(fileName, "w");
@@ -90,15 +88,13 @@ seq = hFetchSeq(sequenceFile, chromName, 0, chromSize-1);
 touppers(seq->dna);
 seqPtr = seq->dna;
 
-// not getting humanAllele or humanObserved
+/* humanAllele and humanObserved are available here, but not human position. */
+/* later in the pipeline we'll get all of those using snpOrthoLookup */
 safef(query, sizeof(query), "select chromStart, chromEnd, name, strand from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    // short-circuit
-    // count++;
-    // if (count == 10) return;
     start = sqlUnsigned(row[0]);
     end = sqlUnsigned(row[1]);
     snpId = cloneString(row[2]);
@@ -113,12 +109,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
-    bin = hFindBin(start, end);
     safef(allele, sizeof(allele), "%c", seqPtr[start]);
     if (sameString(row[3], "-"))
         reverseComplement(allele, 1);
-    fprintf(f, "%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n", 
-        bin, chromName, start, end, snpId, snpDb, row[3], allele);
+    fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\n", chromName, start, end, snpId, snpDb, row[3], allele);
 
     }
 sqlFreeResult(&sr);
