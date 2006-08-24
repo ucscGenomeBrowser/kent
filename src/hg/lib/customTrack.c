@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.131 2006/08/22 22:09:23 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.132 2006/08/24 00:18:26 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -376,13 +376,11 @@ if (!customText || !customText[0])
     /* handle file input, optionally with compression */
     fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
     char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-    if (fileContents && !fileContents[0])
+    if (fileContents && !fileContents[0] && fileName && *fileName)
         {
-        /* non-existent or unreadable file */
+        /* unreadable file */
         struct dyString *ds = dyStringNew(0);
-        dyStringAppend(ds, "Can't read file");
-        if (fileName && *fileName)
-            dyStringPrintf(ds, ": %s", fileName);
+        dyStringPrintf(ds, "Can't read file: %s", fileName);
         err = dyStringCannibalize(&ds);
         }
     if (fileName != NULL && (
