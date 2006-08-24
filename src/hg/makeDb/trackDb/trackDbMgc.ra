@@ -498,11 +498,13 @@ noInherit on
     longLabel BCGSC MGC RT-PCR clones set 1
     priority 2
     visibility hide
-    color 155,0,125
+    color 0,75,120
     type psl .
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
+    pslSequenceBases all
+    showDiffBasesAllScales on
 
 track gscMgc2
 compositeTrack on
@@ -515,11 +517,11 @@ visibility hide
 noInherit on
 
     track gscMgcTargets2
-    noInherit on
-    subTrack gscMgc2
+#    noInherit on
+#    subTrack gscMgc2
     shortLabel BCGSC targets set 2
     longLabel BCGSC MGC RT-PCR targets set 2
-    priority 1
+    priority 3
     visibility hide
     color 200,0,50
     type genePred
@@ -527,17 +529,19 @@ noInherit on
     cdsDrawDefault genomic\ codons
 
     track gscMgcClones2
-    noInherit on
-    subTrack gscMgc2
+#    noInherit on
+#    subTrack gscMgc2
     shortLabel BCGSC clones set 2
     longLabel BCGSC MGC RT-PCR clones set 2
-    priority 2
+    priority 4
     visibility hide
-    color 155,0,125
+    color 0,75,120
     type psl .
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
+    pslSequenceBases all
+    showDiffBasesAllScales on
 
 track gscMgc3
 compositeTrack on
@@ -550,11 +554,11 @@ visibility hide
 noInherit on
 
     track gscMgcTargets3
-    noInherit on
-    subTrack gscMgc3
+#    noInherit on
+#    subTrack gscMgc3
     shortLabel BCGSC targets set 3
     longLabel BCGSC MGC RT-PCR targets set 3
-    priority 1
+    priority 5
     visibility hide
     color 200,0,50
     type genePred
@@ -562,17 +566,19 @@ noInherit on
     cdsDrawDefault genomic\ codons
 
     track gscMgcClones3
-    noInherit on
-    subTrack gscMgc3
+#    noInherit on
+#    subTrack gscMgc3
     shortLabel BCGSC clones set 3
     longLabel BCGSC MGC RT-PCR clones set 3
-    priority 2
+    priority 6
     visibility hide
-    color 155,0,125
+    color 0,75,120
     type psl .
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
+    pslSequenceBases all
+    showDiffBasesAllScales on
 
 track gscMgc4
 compositeTrack on
@@ -589,7 +595,7 @@ noInherit on
     subTrack gscMgc4
     shortLabel BCGSC targets sets 4,5 
     longLabel BCGSC MGC RT-PCR targets set 4,5
-    priority 1
+    priority 7
     visibility hide
     color 200,0,50
     type genePred
@@ -601,13 +607,15 @@ noInherit on
     subTrack gscMgc4
     shortLabel BCGSC clones sets 4,5
     longLabel BCGSC MGC RT-PCR clones set 4,5
-    priority 2
+    priority 7
     visibility hide
-    color 155,0,125
+    color 0,75,120
     type psl .
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
+    pslSequenceBases all
+    showDiffBasesAllScales on
 
 track gscMgc6
 compositeTrack on
@@ -638,11 +646,13 @@ noInherit on
     longLabel BCGSC MGC RT-PCR clones set 6
     priority 2
     visibility pack
-    color 155,0,125
+    color 0,75,120
     type psl .
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
+    pslSequenceBases all
+    showDiffBasesAllScales on
 
 searchName mgcWUPcrConfirmed
 searchTable mgcWUPcrConfirmed
