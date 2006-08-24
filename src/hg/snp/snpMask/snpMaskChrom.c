@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.4 2005/09/01 23:24:44 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.5 2006/08/24 16:21:11 angie Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -106,7 +106,7 @@ strcpy(obsComp, ret->observed);
 for (i = 0; i < obsLen; i = i+2)
     {
     char c = ret->observed[i];
-    obsComp[obsLen-i-1] = ntCompTable[c];
+    obsComp[obsLen-i-1] = ntCompTable[(int)c];
     }
 
 verbose(2, "negative strand detected for snp %s\n", ret->name);
@@ -180,7 +180,7 @@ boolean isComplex(char mychar)
 /* helper function: distinguish bases from IUPAC */
 {
     if (mychar == 'N' || mychar == 'n') return TRUE;
-    if (ntChars[mychar] == 0) return TRUE;
+    if (ntChars[(int)mychar] == 0) return TRUE;
     return FALSE;
 }
 
