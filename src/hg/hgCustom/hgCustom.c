@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.36 2006/08/23 22:55:54 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.37 2006/08/24 00:12:40 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -84,8 +84,8 @@ puts("Display your own data as custom annotation tracks in the browser."
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#BED'>BED</A>,"
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#GFF'>GFF</A>,"
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#GTF'>GTF</A>,"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/wiggle.html'>WIG</A>,"
-  " or <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#PSL'>PSL</A>,"
+  " <A TARGET=_BLANK HREF='/goldenPath/help/wiggle.html'>WIG</A>"
+  " or <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#PSL'>PSL</A>"
   " formats. To configure the display, set"
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#TRACK'>track</A>"
   " and"
@@ -255,7 +255,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     printf("<TD>%s</TD>", ctInputType(ct));
     /* Doc field */
     printf("<TD ALIGN='CENTER'>%s</TD>", ct->tdb->html &&
-                                    ct->tdb->html[0] != 0 ? "X" : "&nbsp;");
+                                    ct->tdb->html[0] != 0 ? "Y" : "&nbsp;");
     /* Items field */
     if (itemCt)
         {
