@@ -1300,6 +1300,7 @@ cat > load.csh << 'EOF'
 #       Additional (raw) data for both cell types submitted 12/6/05
 
 # Additional data submitted 8/10/06: Raw & Pval for HelaS3 and GM cells
+# Submitted new PVAL (3 cell lines) data on 8/11
 
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
@@ -1369,13 +1370,37 @@ cat > loadRaw.csh << 'EOF'
     # Loaded 385149 elements of size 4
     # Note: different item count from data for CD4 and GM
 
+# Submitted new PVAL data on 8/11
+#Crawford_DNase-chip_CD4_PVAL_hg17.bed10
+#Crawford_DNase-chip_GM06990_PVAL_hg17.bed10
+#Crawford_DNase-chip_HeLaS3_PVAL_hg17.bed12
 
+  ln -s lab/Crawford_DNase-chip_GM06990_PVAL_hg17.bed10 Gm06990.pval.hg17.bed
+  ln -s lab/Crawford_DNase-chip_HeLaS3_PVAL_hg17.bed12 Hela.pval.hg17.bed
+  ln -s lab/Crawford_DNase-chip_CD4_PVAL_hg17.bed10 Cd4.pval.hg17.bed
 
+cat > loadPval.csh << 'EOF'
+    foreach cell (Cd4 Gm06990 Cd4)
+        awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
+            $cell.pval.hg17.bed | \
+                hgLoadBed -strict -bedGraph=4 hg17 \
+                        encodeNhgriDnaseHsChipPval$cell stdin
+    end
+'EOF'
+
+#Loaded 1262 elements of size 4
+#  encodeNhgriDnaseHsChipPvalCd4
+#Loaded 1098 elements of size 4
+#  encodeNhgriDnaseHsChipPvalGm06990
+#Loaded 1262 elements of size 4
+#  encodeNhgriDnaseHsChipPvalCd4
+
+# min = 3.13 max  = 24.513
 
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)
-    # From Paul Flicek, at EBI 
-    # 14 files (3 cells, most with 5 factors), each file having
+# From Paul Flicek, at EBI 
+# 14 files (3 cells, most with 5 factors), each file having
     # 3 tracks:  chip/chip, HMM regions, HMM centers
     # Christoph says to just display the HMM regions & centers tracks
     # from Paul's files. These were generated from June freeze
