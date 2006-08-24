@@ -286,7 +286,7 @@ if (trackReordering != NULL && sameString(trackReordering,"on"))
     hPrintf("<TR><TD>");
     hCheckBox(configPriorityOverride , cartUsualBoolean(cart, configPriorityOverride , FALSE));
     hPrintf("</TD><TD>");
-    hPrintf("Enable Track re-ordering");
+    hPrintf("Enable track re-ordering");
     hPrintf("</TD></TR>\n");
     }
 hTableEnd();
