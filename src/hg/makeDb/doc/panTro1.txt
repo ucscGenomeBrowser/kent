@@ -2259,6 +2259,7 @@ mysql> desc chr1_snpTmp;
 # RefAlleleWrongSize
 # 43 alleles expanded
 # Couldn't handle 4 that had N(100)
+# Fixed with revision 1.26 of snpExpandAllele.c and data edit.
 
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpExpandAllele panTro1snp125 ref_assembly
 
