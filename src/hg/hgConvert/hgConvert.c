@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.18 2006/06/09 05:17:53 galt Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.19 2006/08/24 00:10:30 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -316,6 +316,8 @@ hSetDb(db);
 
 liftOverList = liftOverChainListFiltered();
 choice = defaultChoices(liftOverList, organism, db);
+if (choice == NULL)
+   errAbort("Sorry, no conversions available from this assembly.");
 
 dbList = hDbDbList();
 fromDb = matchingDb(dbList, choice->fromDb);
