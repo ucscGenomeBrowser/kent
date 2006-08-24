@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.37 2006/08/24 00:12:40 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.38 2006/08/24 18:53:51 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -216,9 +216,9 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     if (ctDataUrl(ct))
         updateCt++;
-    if (ct->bedList)
+    if (ctItemCount(ct) > 0)
         itemCt++;
-    if (ctInitialPosition(ct))
+    if (ctInitialPosition(ct) || ctFirstItemPos(ct))
         posCt++;
     }
 
@@ -259,10 +259,10 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     /* Items field */
     if (itemCt)
         {
-        if (ct->bedList)
-            {
-            printf("<TD ALIGN='CENTER'>%d</TD>", slCount(ct->bedList));
-            }
+        int count = ctItemCount(ct);
+        if (count > 0)
+            printf("<TD ALIGN='CENTER'>%d</TD>", count);
+
         else
             puts("<TD>&nbsp;</TD>");
         }
@@ -272,14 +272,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         {
         pos = ctInitialPosition(ct);
         if (!pos)
-            {
-            if (ct->bedList)
-                {
-                safef(buf, sizeof(buf), "%s:%d-%d", ct->bedList->chrom,
-                        ct->bedList->chromStart, ct->bedList->chromEnd);
-                pos = buf;
-                }
-            }
+            pos = ctFirstItemPos(ct);
         if (pos)
             {
             char *chrom = cloneString(pos);

@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.24 2006/08/24 00:13:16 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.25 2006/08/24 18:53:51 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1223,6 +1223,17 @@ for (track = trackList; track != NULL; track = track->next)
         ctAddToSettings(track, "dataUrl", loadedFromUrl);
     if (initialPos)
         ctAddToSettings(track, "initialPos", initialPos);
+    if (track->bedList)
+        {
+        /* save item count and first item because if track is 
+         * loaded to the database, the bedList will be available next time */
+        char buf[32];
+        safef(buf, sizeof buf, "%d", slCount(track->bedList));
+        ctAddToSettings(track, "itemCount", cloneString(buf));
+        safef(buf, sizeof buf, "%s:%d-%d", track->bedList->chrom,
+                track->bedList->chromStart, track->bedList->chromEnd);
+        ctAddToSettings(track, "firstItemPos", cloneString(buf));
+        }
      trackDbPolish(track->tdb);
      }
 
@@ -1240,6 +1251,7 @@ char *ctInitialPosition(struct customTrack *ct)
 {
 char buf[128];
 char *pos = trackDbSetting(ct->tdb, "initialPos");
+if (!pos)
 if (!pos && ct->bedList)
     {
     safef(buf, sizeof(buf), "%s:%d-%d", ct->bedList->chrom,
@@ -1264,4 +1276,24 @@ char *type = trackDbSetting(ct->tdb, "inputType");
 if (type == NULL)
     type = trackDbSetting(ct->tdb, "tdbType");
 return type;
+}
+
+int ctItemCount(struct customTrack *ct)
+/* return number of 'items' in track, or -1 if unknown */
+{
+if (ct->bedList)
+    {
+    return (slCount(ct->bedList));
+    }
+char *val = trackDbSetting(ct->tdb, "itemCount");
+if (val)
+    return (sqlUnsigned(val));
+return -1;
+} 
+
+char *ctFirstItemPos(struct customTrack *ct)
+/* return position of first item in track, or NULL if wiggle or
+ * other "non-item" track */
+{
+return trackDbSetting(ct->tdb, "firstItemPos");
 }

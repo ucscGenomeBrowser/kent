@@ -93,13 +93,21 @@ void wigLoaderEncoding(struct customTrack *track, char *wigAscii,
 /* encode wigAscii file into .wig and .wib files */
 
 char *ctInitialPosition(struct customTrack *ct);
-/* return initial position plucked from browser lines, or NULL if none */
+/* return initial position plucked from browser lines, or
+ * first item in track, or NULL if no items or browser line */
 
 char *ctDataUrl(struct customTrack *ct);
 /* return URL where data can be reloaded, if any */
 
 char *ctInputType(struct customTrack *ct);
 /* return type of input */
+
+int ctItemCount(struct customTrack *ct);
+/* return number of 'items' in track, or -1 if unknown */
+
+char *ctFirstItemPos(struct customTrack *ct);
+/* return position of first item in track, or NULL if wiggle or
+ * other "non-item" track */
 
 #endif /* CUSTOMFACTORY_H */
 
