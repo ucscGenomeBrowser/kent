@@ -6,11 +6,11 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetSimple.c,v 1.3 2006/08/18 20:42:48 heather Exp $";
+static char const rcsid[] = "$Id: snpGetSimple.c,v 1.4 2006/08/24 01:33:00 heather Exp $";
 
 static struct hash *chromHash = NULL;
 static struct hash *annotationsHash = NULL;
-
+FILE *tabFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -115,7 +115,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (hel == NULL)
         verbose(1, "%s not found\n", row[1]);
     else
+        {
         fprintf(hel->val, "%s %s %s %s 0 %s %s %s\n", row[1], row[2], row[3], row[0], row[4], row[5], row[6]);
+        fprintf(tabFileHandle, "%s\t%s\t%s\t%s\t0\t%s\t%s\t%s\n", row[1], row[2], row[3], row[0], row[4], row[5], row[6]);
+	}
     }
 sqlFreeResult(&sr);
 cookie = hashFirst(chromHash);
@@ -123,6 +126,41 @@ while (hel = hashNext(&cookie))
     fclose(hel->val);
 }
 
+void createTable(char *tableName)
+/* create simple SNP table */
+{
+struct sqlConnection *conn = hAllocConn();
+char *createString =
+"CREATE TABLE %s (\n"
+"    chrom varchar(15) not null default '',\n"
+"    chromStart int(10) not null default '0',\n"
+"    chromEnd int(10) not null default '0',\n"
+"    name varchar(15) not null default '',\n"
+"    score smallint(5) not null default '0',\n"
+"    strand enum('?','+','-') not null default '?',\n"
+"    refUCSC enum('A','C','G','T'),\n"
+"    observed varchar(255)\n"
+");\n";
+
+struct dyString *dy = newDyString(1024);
+
+dyStringPrintf(dy, createString, tableName);
+sqlRemakeTable(conn, tableName, dy->string);
+dyStringFree(&dy);
+hFreeConn(&conn);
+}
+
+void loadDatabase(char *tableName, char *fileName)
+/* load tab file into database */
+/* This little wrapper is a good candidate for a library. */
+{
+FILE *f; 
+struct sqlConnection *conn = hAllocConn(); 
+
+f = mustOpen(fileName, "r");
+hgLoadTabFile(conn, ".", tableName, &f);
+hFreeConn(&conn);
+}
 
 
 int main(int argc, char *argv[])
@@ -130,6 +168,8 @@ int main(int argc, char *argv[])
 
 char *snpDb = NULL;
 char *snpTableName = NULL;
+char simpleTableName[64];
+char simpleFileName[64];
 
 if (argc != 4)
     usage();
@@ -138,6 +178,8 @@ snpDb = argv[1];
 hSetDb(snpDb);
 
 snpTableName = argv[2];
+safef(simpleTableName, ArraySize(simpleTableName), "%ssimple", snpTableName);
+safef(simpleFileName, ArraySize(simpleFileName), "%s.tab", simpleTableName);
 
 /* check that tables exist */
 if (!hTableExists(snpTableName))
@@ -147,7 +189,11 @@ if (!hTableExists("chromInfo"))
 
 loadChroms();
 loadMultiples(argv[3]);
+tabFileHandle = mustOpen(simpleFileName, "w");
 getSnps(snpTableName);
+carefulClose(&tabFileHandle);
+createTable(simpleTableName);
+loadDatabase(simpleTableName, simpleFileName);
 
 return 0;
 }
