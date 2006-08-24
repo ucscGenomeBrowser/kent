@@ -408,6 +408,8 @@ cd /cluster/data/reactome
 
 # save these two .dat files to this subdirectory.
 
+# First run rmLf on these two files to remove extra CRs.
+
 hgsql proteome -e 'drop table spReactomeEvent'
 hgsql proteome < ~/hg/lib/spReactomeEvent.sql
 hgsql proteome -e 'load data local infile "ucsc_events18.dat" into table spReactomeEvent ignore 4 lines'
@@ -426,4 +428,7 @@ hgsql mm8 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,pro
 
 hgsql mm7 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm7.lis
 
-# Email the above 4 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
+hgsql rn4 -N -e 'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where
+kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >rn4.lis
+
+# Email the above 5 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
