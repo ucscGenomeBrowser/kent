@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.132 2006/08/24 00:18:26 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.133 2006/08/24 22:12:13 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -325,9 +325,27 @@ for (ct = addCts; ct != NULL; ct = nextCt)
 /* add in older tracks that haven't been replaced by newer */
 for (ct = ctList; ct != NULL; ct = nextCt)
     {
+    struct customTrack *newCt;
     nextCt = ct->next;
-    if (hashLookup(ctHash, ct->tdb->tableName))
+    if ((newCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
+        {
         slAddTail(&replacedCts, ct);
+        /* retain HTML from older track if there's none attached
+         * to the newer. Do this by swapping new and old */
+        if ((!newCt->tdb->html || !newCt->tdb->html[0]) &&
+                (ct->tdb->html && ct->tdb->html[0]))
+            {
+            /* swap text */
+            char *html = newCt->tdb->html;
+            newCt->tdb->html = ct->tdb->html;
+            ct->tdb->html = html;
+            /* swap filename */
+            html = newCt->htmlFile;
+            newCt->htmlFile = ct->htmlFile;
+            ct->htmlFile = html;
+            }
+        }
+
     else
         {
         slAddTail(&newCtList, ct);
@@ -638,14 +656,18 @@ hashMayRemove(tdb->settingsHash, "altColor");
 if (tdb->html && tdb->html[0])
     {
     /* write doc file in trash and add reference to the track line*/
-    char *htmlFile;
+    char *htmlFile = NULL;
     static struct tempName tn;
 
-    customTrackTrashFile(&tn, ".html");
-    htmlFile = tn.forCgi;
+    if ((htmlFile = hashFindVal(tdb->settingsHash, "htmlFile")) == NULL)
+        {
+        customTrackTrashFile(&tn, ".html");
+        htmlFile = tn.forCgi;
+        }
     writeGulp(htmlFile, tdb->html, strlen(tdb->html));
     fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
     }
+
 hashMayRemove(tdb->settingsHash, "htmlFile");
 if (tdb->settings && (strlen(tdb->settings) > 0))
     saveSettings(f, hashToRaString(tdb->settingsHash));
@@ -682,6 +704,8 @@ for (track = trackList; track != NULL; track = track->next)
 	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
 	ctAddToSettings(track, "tdbType", track->tdb->type);
 	}
+    if (track->htmlFile)
+        ctAddToSettings(track, "htmlFile", track->htmlFile);
     saveTdbLine(f, fileName, track->tdb);
     if (!track->dbTrack)
 	{

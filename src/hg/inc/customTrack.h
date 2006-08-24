@@ -41,6 +41,7 @@ struct customTrack
     char *wigFile;		/* name of .wig file in trash */
     char *wibFile;		/* name of .wib file in trash */
     char *wigAscii;		/* wiggle ascii data file name in trash .wia */
+    char *htmlFile;             /* name of .html file in trash */
     struct gffFile *gffHelper;	/* Used while processing GFF files. */
     int offset;			/* Base offset. */
     char *groupName;		/* Group name if any. */

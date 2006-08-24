@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.25 2006/08/24 18:53:51 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.26 2006/08/24 22:12:13 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -996,7 +996,10 @@ if ((val = hashFindVal(hash, "fieldCount")) != NULL)
 if ((val = hashFindVal(hash, "htmlFile")) != NULL)
     {
     if (fileExists(val))
+        {
 	readInGulp(val, &track->tdb->html, NULL);
+        track->htmlFile = cloneString(val);
+        }
     }
 if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
     {
