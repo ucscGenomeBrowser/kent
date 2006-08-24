@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpOrthoLookup.c,v 1.1 2006/08/24 06:42:33 heather Exp $";
+static char const rcsid[] = "$Id: snpOrthoLookup.c,v 1.2 2006/08/24 20:05:28 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -45,10 +45,10 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct snpSubset *subsetElement = NULL;
-// default size fast enough?
-struct hash *ret = newHash(0);
+struct hash *ret = newHash(16);
 int count = 0;
 
+verbose(1, "get base snp data\n");
 safef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, strand, refUCSC, observed from %s", tableName);
 sr = sqlGetResult(conn, query);
@@ -58,6 +58,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     subsetElement->chrom = cloneString(row[0]);
     subsetElement->start = sqlUnsigned(row[1]);
     subsetElement->end = sqlUnsigned(row[2]);
+    subsetElement->strand = cloneString(row[4]);
     subsetElement->refUCSC = cloneString(row[5]);
     subsetElement->observed = cloneString(row[6]);
     hashAdd(ret, cloneString(row[3]), subsetElement);
@@ -83,6 +84,7 @@ int bin = 0;
 int start = 0;
 int end = 0;
 
+verbose(1, "write results...\n");
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, species, strand, allele from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
