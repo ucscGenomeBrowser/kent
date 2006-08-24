@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpOrthoLookup.c,v 1.2 2006/08/24 20:05:28 heather Exp $";
+static char const rcsid[] = "$Id: snpOrthoLookup.c,v 1.3 2006/08/24 21:54:05 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -95,7 +95,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     start = subsetElement->start;
     end = subsetElement->end;
     bin = hFindBin(start, end);
-    fprintf(outputFileHandle, "%d\t%s\t%d\t%d\t%s\t", bin, row[0], start, end, row[3]); 
+    fprintf(outputFileHandle, "%d\t%s\t%d\t%d\t%s\t", bin, subsetElement->chrom, start, end, row[3]); 
     fprintf(outputFileHandle, "0\t%s\t%s\t%s\t", subsetElement->strand, subsetElement->refUCSC, subsetElement->observed);
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\n", row[4], row[0], row[1], row[2], row[5], row[6]);
     }
