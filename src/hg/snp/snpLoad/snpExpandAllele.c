@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.25 2006/04/22 00:32:06 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.26 2006/08/24 22:50:23 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -172,8 +172,10 @@ while (oldAllele != NULL)
     verbose(5, "repeatCount = %d\n", repeatCount);
     if (repeatCount <= 9)
         oldAllele = oldAllele + 1;
-    else
+    else if (repeatCount <= 99)
         oldAllele = oldAllele + 2;
+    else
+        oldAllele = oldAllele + 3;
     repeatString = generateRepeatString(nucleotide, repeatCount);
     verbose(5, "repeatString = %s\n", repeatString);
     dyStringAppend(newAllele, repeatString);
