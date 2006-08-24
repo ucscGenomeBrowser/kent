@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.38 2006/08/24 18:53:51 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.39 2006/08/24 20:56:31 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -156,7 +156,7 @@ cgiTableRowEnd();
 /* fourth row - text entry for description, and clear button(s) */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 
+cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""), 
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 cgiTableFieldEnd();
 
@@ -551,6 +551,7 @@ else
                 }
             }
         }
+    cartRemove(cart, hgCtDocText);
     }
 /* display header and first section header */
 cartWebStart(cart, firstSectionMsg);
