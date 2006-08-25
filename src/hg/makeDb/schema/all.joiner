@@ -30,7 +30,7 @@ set apiMel apiMel1,apiMel2
 set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1,xenTro2
-set monDom monDom1,monDom2,monDom4
+set monDom monDom1,monDom4
 set bosTau bosTau1,bosTau2
 set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
@@ -1796,7 +1796,6 @@ identifier blastHg17KGPep02Id
      $hg.blastKGPep02.name
      $hg.knownGene.name  minCheck=0.95
      $hg.blastKGRef02.acc
-     monDom2.blastHg17KG.qName
      danRer3.blastHg17KG.qName
      danRer4.blastHg17KG.qName
      $bosTau,!bosTau1.blastHg17KG.qName
