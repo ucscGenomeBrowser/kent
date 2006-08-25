@@ -6,7 +6,6 @@ table vegaInfoZfish
     string sangerName;          "Sanger gene name"
     string zfinId;              "ZFIN ID"
     string zfinSymbol;          "ZFIN gene symbol"
-    string cloneId;             "clone ID"
     string method;              "GTF method field"
     string geneDesc;            "Vega gene description"
     string confidence;          "Status (KNOWN, NOVEL, PUTATIVE, PREDICTED)"

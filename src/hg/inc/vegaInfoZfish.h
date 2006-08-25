@@ -5,7 +5,7 @@
 #ifndef VEGAINFOZFISH_H
 #define VEGAINFOZFISH_H
 
-#define VEGAINFOZFISH_NUM_COLS 9
+#define VEGAINFOZFISH_NUM_COLS 8
 
 struct vegaInfoZfish
 /* Vega Genes track additional information */
@@ -16,7 +16,6 @@ struct vegaInfoZfish
     char *sangerName;	/* Sanger gene name */
     char *zfinId;	/* ZFIN ID */
     char *zfinSymbol;	/* ZFIN gene symbol */
-    char *cloneId;	/* clone ID */
     char *method;	/* GTF method field */
     char *geneDesc;	/* Vega gene description */
     char *confidence;	/* Status (KNOWN, NOVEL, PUTATIVE, PREDICTED) */

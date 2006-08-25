@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "vegaInfoZfish.h"
 
-static char const rcsid[] = "$Id: vegaInfoZfish.c,v 1.1 2006/08/19 02:10:18 hartera Exp $";
+static char const rcsid[] = "$Id: vegaInfoZfish.c,v 1.2 2006/08/25 18:51:09 hartera Exp $";
 
 void vegaInfoZfishStaticLoad(char **row, struct vegaInfoZfish *ret)
 /* Load a row from vegaInfoZfish table into ret.  The contents of ret will
@@ -20,10 +20,9 @@ ret->geneId = row[1];
 ret->sangerName = row[2];
 ret->zfinId = row[3];
 ret->zfinSymbol = row[4];
-ret->cloneId = row[5];
-ret->method = row[6];
-ret->geneDesc = row[7];
-ret->confidence = row[8];
+ret->method = row[5];
+ret->geneDesc = row[6];
+ret->confidence = row[7];
 }
 
 struct vegaInfoZfish *vegaInfoZfishLoad(char **row)
@@ -38,10 +37,9 @@ ret->geneId = cloneString(row[1]);
 ret->sangerName = cloneString(row[2]);
 ret->zfinId = cloneString(row[3]);
 ret->zfinSymbol = cloneString(row[4]);
-ret->cloneId = cloneString(row[5]);
-ret->method = cloneString(row[6]);
-ret->geneDesc = cloneString(row[7]);
-ret->confidence = cloneString(row[8]);
+ret->method = cloneString(row[5]);
+ret->geneDesc = cloneString(row[6]);
+ret->confidence = cloneString(row[7]);
 return ret;
 }
 
@@ -51,7 +49,7 @@ struct vegaInfoZfish *vegaInfoZfishLoadAll(char *fileName)
 {
 struct vegaInfoZfish *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -69,7 +67,7 @@ struct vegaInfoZfish *vegaInfoZfishLoadAllByChar(char *fileName, char chopper)
 {
 struct vegaInfoZfish *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -95,7 +93,6 @@ ret->geneId = sqlStringComma(&s);
 ret->sangerName = sqlStringComma(&s);
 ret->zfinId = sqlStringComma(&s);
 ret->zfinSymbol = sqlStringComma(&s);
-ret->cloneId = sqlStringComma(&s);
 ret->method = sqlStringComma(&s);
 ret->geneDesc = sqlStringComma(&s);
 ret->confidence = sqlStringComma(&s);
@@ -115,7 +112,6 @@ freeMem(el->geneId);
 freeMem(el->sangerName);
 freeMem(el->zfinId);
 freeMem(el->zfinSymbol);
-freeMem(el->cloneId);
 freeMem(el->method);
 freeMem(el->geneDesc);
 freeMem(el->confidence);
@@ -156,10 +152,6 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->zfinSymbol);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->cloneId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
