@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.39 2006/08/10 18:05:19 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.40 2006/08/25 23:16:18 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -265,7 +265,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	else
 	    {
-	    if (strlen(row[i]) > 128)
+	    if (row[i] == NULL)
+		{
+		hPrintf("<TD></TD>");
+		}
+	    else if (strlen(row[i]) > 128)
 		{
 		char *s = cloneStringZ(row[i],128);
 		char *r;
