@@ -18,7 +18,8 @@ test:   pslSelectTests \
 	protTests \
 	idMatchTests \
 	rangeTests \
-	cds_id_out_gp
+	cds_id_out_gp \
+	wideTest
 
 ###
 # selecting PSLs
@@ -599,6 +600,11 @@ range_strand_gp_nonover_gp: mkout
 cds_id_out_gp: mkout
 	${OVERSEL} -selectCds -idOutput -strand -excludeSelf input/cdsIdBugSelect.gp input/cdsIdBugIn.gp output/$@.ids
 	${DIFF} expected/$@.ids output/$@.ids
+
+# 34 column bed causing segv
+wideTest: mkout
+	${OVERSEL} input/wideSelect.bed input/wideIn.bed stdout > output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 mkout:
 	@${MKDIR} output
