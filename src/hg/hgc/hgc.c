@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1085 2006/08/23 22:01:35 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1086 2006/08/25 20:10:19 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8127,21 +8127,21 @@ geneShowCommon(geneName, tdb, pepTable);
 printTrackHtml(tdb);
 }
 
-void doVegaGeneZfish(struct trackDb *tdb, char *geneName)
+void doVegaGeneZfish(struct trackDb *tdb, char *name)
 /* Handle click on Vega gene track for zebrafish. */
 {
 struct vegaInfoZfish *vif = NULL;
+char query[256];
+struct sqlResult *sr;
+char **row;
 
-genericHeader(tdb, geneName);
+genericHeader(tdb, name);
 if (hTableExists("vegaInfoZfish"))
     {
-    char query[256];
     struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
 
     safef(query, sizeof(query),
-	  "select * from vegaInfoZfish where transcriptId = '%s'", geneName);
+	  "select * from vegaInfoZfish where transcriptId = '%s'", name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8152,7 +8152,7 @@ if (hTableExists("vegaInfoZfish"))
     hFreeConn(&conn);
     }
 
-printCustomUrl(tdb, geneName, TRUE); 
+printCustomUrl(tdb, name, TRUE); 
 if (vif != NULL)
     {
     printf("<B>VEGA Gene Type:</B> %s<BR>\n", vif->method);
@@ -8160,13 +8160,28 @@ if (vif != NULL)
     if (differentString(vif->geneDesc, "NULL"))
         printf("<B>VEGA Gene Description:</B> %s<BR>\n", vif->geneDesc);
     printf("<B>VEGA Gene Id:</B> %s<BR>\n", vif->geneId);
-    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", geneName);
+    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", name);
     printf("<B>ZFIN Id:</B> ");
     printf("<A HREF=\"http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s\" TARGET=_blank>%s</A><BR>\n", vif->zfinId, vif->zfinId);
     printf("<B>Official ZFIN Gene Symbol:</B> %s<BR>\n", vif->zfinSymbol);
-    printf("<B>Clone Id:</B> %s<BR>\n", vif->cloneId);
+    /* get information for the cloneId from */
+    
+    printf("<B>Clone Id:</B> \n");
+    struct sqlConnection *conn2 = hAllocConn();
+    safef(query, sizeof(query),
+	 "select cloneId from vegaToCloneId where geneId = '%s'", vif->geneId);
+    sr = sqlGetResult(conn2, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        printf("%s", row[0]);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf(" ,%s, ", row[0]);
+        }
+    printf("<BR>\n");
+    sqlFreeResult(&sr);
+    hFreeConn(&conn2);
     }
-geneShowCommon(geneName, tdb, "vegaPep");
+geneShowCommon(name, tdb, "vegaPep");
 printTrackHtml(tdb);
 }
 
