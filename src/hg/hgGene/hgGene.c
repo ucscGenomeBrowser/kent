@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.77 2006/07/26 15:30:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.78 2006/08/25 16:14:25 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -520,6 +520,7 @@ if (summaryTables != NULL)
     }
 /* print genome position and size */
 hPrintf("<BR><B>Position:</B> %s:%d-%d</A>\n", curGeneChrom, curGeneStart+1, curGeneEnd);
+hPrintf("<BR><B>Strand:</B> %s</A>\n", curGenePred->strand);
 hPrintf("<BR><B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
 
 /* print exon count(s) */
