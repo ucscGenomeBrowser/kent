@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.3 2006/08/18 18:39:42 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.4 2006/08/25 15:42:23 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -138,9 +138,11 @@ agpFiles /path/to/downloaded.agp
   - A complete path, possibly with wildcard characters, to AGP files
     which have already been downloaded from the sequencing center.
 
-qualFiles /path/to/downloaded.qual
+qualFiles [/path/to/downloaded.qual | /path/to/qacAgpLift-ed.qac]
   - A complete path, possibly with wildcard characters, to quality score
-    files which have already been downloaded from the sequencing center.
+    files which have already been downloaded from the sequencing center,
+    or a complete path to a single .qac file (in case you need to pre-process
+    qual files with qaToQac | qacAgpLift, for example).
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -507,15 +509,7 @@ sub checkAgp {
 					$CONFIG);
     my $allAgp = "$topDir/$db.agp";
     # If we added chrM from GenBank, exclude it from fasta:
-    my $seqListCmd = 'set seqList = ""';
-    if ($mitoAcc ne 'none') {
-      $seqListCmd=<<_EOF_
-set seqList = `twoBitInfo $db.unmasked.2bit stdout \\
-  | awk '{print \$1;}' | grep -vw chrM | sed -e 's/\$/,/'`
-set seqList = -seq=`echo \$seqList | sed -e 's/ //g'`
-_EOF_
-      ;
-    }
+    my $exclude = ($mitoAcc eq 'none') ? "" : "-exclude=chrM";
     $bossScript->add(<<_EOF_
 # When per-chrom AGP and fasta files are given, it would be much more
 # efficient to run this one chrom at a time.  However, since the filenames
@@ -529,9 +523,7 @@ else
 endif
 \$acat $agpFiles | sort -k1,1 -k2n,2n > $allAgp
 
-$seqListCmd
-set result = `twoBitToFa \$seqList $db.unmasked.2bit stdout \\
-              | checkAgpAndFa $allAgp stdin | tail -1`
+set result = `checkAgpAndFa $exclude $allAgp $db.unmasked.2bit | tail -1`
 
 if ("\$result" != 'All AGP and FASTA entries agree - both files are valid') then
   echo "Error: checkAgpAndFa failed\\!"
@@ -583,7 +575,7 @@ chromInfo, grp, gap, gold,$qual and gc5Base.";
   my $horseScript = new HgRemoteScript("$scriptDir/makeTrackFiles.csh",
 				       $workhorse,
 				       $topDir, $whatItDoes, $CONFIG);
-  # Build qual files (if provided).
+  # Build quality wiggle track files (if provided).
   if (defined $qualFiles) {
     $horseScript->add(<<_EOF_
 # Translate qual files to wiggle encoding.  If there is a problem with
@@ -591,6 +583,17 @@ chromInfo, grp, gap, gold,$qual and gc5Base.";
 # and/or lift using qacAgpLft.
 mkdir -p $bedDir/qual
 cd $bedDir/qual
+_EOF_
+      );
+    if ($qualFiles =~ /^\S+\.qac$/) {
+      # Single .qac file:
+      $horseScript->add(<<_EOF_
+qacToWig -fixed $qualFiles stdout \\
+_EOF_
+        );
+    } else {
+      # Possible wildcard of qual file(s):
+      $horseScript->add(<<_EOF_
 if (`ls $qualFiles | grep \.gz | wc -l`) then
   set qcat = zcat
 else
@@ -599,10 +602,14 @@ endif
 \$qcat $qualFiles \\
 | qaToQac stdin stdout \\
 | qacToWig -fixed stdin stdout \\
+_EOF_
+      );
+    }
+    $horseScript->add(<<_EOF_
 | wigEncode stdin qual.{wig,wib}
 
 _EOF_
-      );
+    );
   }
 
   # Build gc5Base files.
@@ -656,9 +663,9 @@ ln -s $bedDir/gc5Base/gc5Base.wib $HgAutomate::gbdb/$db/wib
 hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
   $db gc5Base $bedDir/gc5Base/gc5Base.wig
 _EOF_
-    );
+  );
   if (defined $qualFiles) {
-  $bossScript->add(<<_EOF_
+    $bossScript->add(<<_EOF_
 
 # Load qual
 cd $bedDir/qual
@@ -668,9 +675,13 @@ hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
   $db quality qual.wig
 _EOF_
     );
-
   }
 
+  $bossScript->add(<<_EOF_
+rm -f wiggle.tab
+
+_EOF_
+  );
   $horseScript->execute();
   $bossScript->execute();
 } # makeDb
@@ -758,7 +769,7 @@ _EOF_
   # they will have to manually add it.
   $sql = "'select count(*) from genomeClade where genome = \"$genome\"'";
   if (`echo $sql | $centDbSql` == 0) {
-    &requireCladeAndPriority();
+    &requireCladeAndPriority($genome);
     $sql = "'INSERT INTO genomeClade (genome, clade, priority) " .
       "VALUES (\"$genome\", \"$clade\", $genomeCladePriority)'";
     &HgAutomate::run("echo $sql | $centDbSql");
