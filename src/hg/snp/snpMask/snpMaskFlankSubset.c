@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.6 2006/06/14 23:12:41 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.7 2006/08/25 15:47:50 angie Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -117,7 +117,7 @@ strcpy(obsComp, ret->observed);
 for (i = 0; i < obsLen; i = i+2)
     {
     char c = ret->observed[i];
-    obsComp[obsLen-i-1] = ntCompTable[c];
+    obsComp[obsLen-i-1] = ntCompTable[(int)c];
     }
 
 verbose(2, "negative strand detected for snp %s\n", ret->name);
@@ -244,7 +244,7 @@ boolean isComplex(char mychar)
 /* helper function: distinguish bases from IUPAC */
 {
     if (mychar == 'N' || mychar == 'n') return TRUE;
-    if (ntChars[mychar] == 0) return TRUE;
+    if (ntChars[(int)mychar] == 0) return TRUE;
     return FALSE;
 }
 
@@ -495,7 +495,7 @@ while (exonPos < endExon)
     assert (exonSize <= exonSeqArray[exonPos]->size);
     memcpy(newSeq->dna+seqPos, exonSeqArray[exonPos]->dna, exonSize);
     seqPos = seqPos + exonSize;
-    exonPos = exonPos++;
+    exonPos++;
     }
 
 exonSize = end - gene->exonStarts[endExon];
@@ -548,14 +548,11 @@ struct snpSimple *thisSnp = NULL;
 struct binKeeper *snps = NULL;
 struct binElement *el, *elList = NULL;
 struct dnaSeq *seqOrig, *seqMasked, *seqFlank;
-struct dnaSeq *seqOrig2, *seqMasked2, *seqFlank2;
 char *ptr;
 int snpPos = 0;
 int flankStart = 0, flankEnd = 0, flankSize = 0;
 struct dnaSeq *exonSequence[MAX_EXONS];
 struct binElement *snpLists[MAX_EXONS];
-boolean gotCoord = FALSE;
-int startExon = 0, endExon = 0, snpExon = 0;
 // for short circuit
 int geneCount = 0;
 char *nibFile2;
@@ -627,7 +624,6 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	for (el = elList; el != NULL; el = el->next)
 	    {
             char *snpName = needMem(64);
-	    char referenceAllele;
 
 	    thisSnp = (struct snpSimple *)el->val;
 	    snpPos = thisSnp->chromStart;

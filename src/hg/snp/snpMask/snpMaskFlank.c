@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.9 2005/10/18 12:33:00 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.10 2006/08/25 15:47:49 angie Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -115,7 +115,7 @@ strcpy(obsComp, ret->observed);
 for (i = 0; i < obsLen; i = i+2)
     {
     char c = ret->observed[i];
-    obsComp[obsLen-i-1] = ntCompTable[c];
+    obsComp[obsLen-i-1] = ntCompTable[(int)c];
     }
 
 verbose(2, "negative strand detected for snp %s\n", ret->name);
@@ -232,7 +232,7 @@ boolean isComplex(char mychar)
 /* helper function: distinguish bases from IUPAC */
 {
     if (mychar == 'N' || mychar == 'n') return TRUE;
-    if (ntChars[mychar] == 0) return TRUE;
+    if (ntChars[(int)mychar] == 0) return TRUE;
     return FALSE;
 }
 
@@ -484,7 +484,7 @@ while (exonPos < endExon)
     assert (exonSize <= exonSeqArray[exonPos]->size);
     memcpy(newSeq->dna+seqPos, exonSeqArray[exonPos]->dna, exonSize);
     seqPos = seqPos + exonSize;
-    exonPos = exonPos++;
+    exonPos++;
     }
 
 exonSize = end - gene->exonStarts[endExon];
@@ -509,8 +509,6 @@ char *ptr;
 int snpPos = 0;
 int flankStart = 0, flankEnd = 0, flankSize = 0;
 struct dnaSeq *exonSequence[MAX_EXONS];
-boolean gotCoord = FALSE;
-int startExon = 0, endExon = 0, snpExon = 0;
 
 // for short circuit
 int geneCount = 0;
@@ -565,7 +563,6 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	for (snp = snps; snp != NULL; snp = snp->next)
 	    {
             char *snpName = needMem(64);
-	    char referenceAllele;
 
 	    snpPos = snp->chromStart;
 
