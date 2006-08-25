@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.5 2006/08/24 16:21:11 angie Exp $";
+static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.6 2006/08/25 21:30:45 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -20,7 +20,7 @@ void usage()
 errAbort(
     "snpMaskChrom - print chromosome sequence using IUPAC codes for single base substitutions\n"
     "usage:\n"
-    "    snpMaskChrom database chrom nib output\n");
+    "    snpMaskChrom database snpTable chrom nib output\n");
 }
 
 struct iupacTable
@@ -143,29 +143,29 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct snpSimple *readSnpsFromChrom(char *chrom)
+struct snpSimple *readSnpsFromChrom(char *tableName, char *chrom)
 /* Slurp in the snpSimple rows for one chrom */
+/* strict option is used to check size */
 {
 struct snpSimple *list=NULL, *el;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
+int start = 0;
+int end = 0;
 
-if (strict)
-    {
-    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
-    "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact'", chrom);
-    }
-else
-    {
-    /* this includes snps that are larger than one base */
-    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
-    "where chrom='%s' and class = 'snp'", chrom);
-    }
+safef(query, sizeof(query), 
+    "select name, chromStart, strand, observed, chrom, chromEnd, class, locType from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (!sameString(row[4], chrom)) continue;
+    if (!sameString(row[6], "single")) continue;
+    if (!sameString(row[7], "exact")) continue;
+    start = sqlUnsigned(row[1]);
+    end = sqlUnsigned(row[5]);
+    if (strict && end != start + 1) continue;
     el = snpSimpleLoad(row);
     slAddHead(&list,el);
     }
@@ -255,7 +255,7 @@ char iupac(char *name, char *observed, char orig)
 
 
 
-void snpMaskChrom(char *nibFile, char *outFile)
+void snpMaskChrom(char *tableName, char *nibFile, char *outFile)
 /* snpMaskChrom - Print a nib file as a fasta file, using IUPAC codes for single base substitutions. */
 {
 struct dnaSeq *seq;
@@ -266,7 +266,7 @@ boolean inRep = FALSE;
 
 seq = nibLoadAllMasked(NIB_MASK_MIXED, nibFile);
 ptr = seq->dna;
-snps = readSnpsFromChrom(chromName);
+snps = readSnpsFromChrom(tableName, chromName);
 
 /* do all substitutions */
 
@@ -289,19 +289,22 @@ dnaSeqFree(&seq);
 int main(int argc, char *argv[])
 /* Check args and call snpMaskChrom. */
 {
-if (argc != 5)
+char *tableName;
+
+if (argc != 6)
     usage();
 database = argv[1];
 if(!hDbExists(database))
     errAbort("%s does not exist\n", database);
 hSetDb(database);
-if(!hTableExistsDb(database, "snp"))
-    errAbort("no snp table in %s\n", database);
-chromName = argv[2];
+tableName = argv[2];
+if(!hTableExistsDb(database, tableName))
+    errAbort("no %s table in %s\n", tableName, database);
+chromName = argv[3];
 if(hgOfficialChromName(chromName) == NULL)
     errAbort("no such chromosome %s in %s\n", chromName, database);
 // check that nib file exists
 // or, use hNibForChrom from hdb.c
-snpMaskChrom(argv[3], argv[4]);
+snpMaskChrom(argv[2], argv[4], argv[5]);
 return 0;
 }
