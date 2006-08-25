@@ -12,7 +12,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "faToTab - convert fa file to tab separted file\n"
+  "faToTab - convert fa file to tab separated file\n"
   "usage:\n"
   "   faToTab infileName outFileName\n"
   "options:\n"
