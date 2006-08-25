@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1086 2006/08/25 20:10:19 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1087 2006/08/25 22:50:13 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8169,7 +8169,7 @@ if (vif != NULL)
     printf("<B>Clone Id:</B> \n");
     struct sqlConnection *conn2 = hAllocConn();
     safef(query, sizeof(query),
-	 "select cloneId from vegaToCloneId where geneId = '%s'", vif->geneId);
+	 "select cloneId from vegaToCloneId where transcriptId = '%s'", name);
     sr = sqlGetResult(conn2, query);
     if ((row = sqlNextRow(sr)) != NULL)
         printf("%s", row[0]);
