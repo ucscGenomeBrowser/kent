@@ -4535,7 +4535,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 
 ###########################################################################
-# BACENDS TRACK (in progress, 2006-05-10, hartera)
+# BACENDS TRACK (DONE, 2006-08-25, hartera)
    # Obtain these from the NCBI Trace archive
    ssh kolossus
    mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/sequences
@@ -4583,9 +4583,7 @@ end
    cp query_tracedb getZfishSeqs.csh ./downloads
    cd downloads
    nohup nice getZfishSeqs.csh >& zfishSeqs.log &
-   # PID: 21897
-   # Start: Wed Aug 16 15:18
-   # #Took 5 hours 14 minutes.
+   # Took 5 hours 14 minutes.
    ##  Start: Wed May 10 09:57 Finished: 14:51
    # Start: May  2 21:43 Finish: May 3 03:08
    ssh kkstore04
@@ -4600,8 +4598,6 @@ end
 '_EOF_'
    chmod +x unTarBacs.csh
    nohup unTarBacs.csh >& unTarBacs.log &
-   # PID: 26198 Start: Wed May 10 17:19
-   # PID: 12235	Start: Tue May  9 22:30
 foreach d (2006*)
    echo "Processing $d"
    nice cat ${d}/TRACEINFO.xml >> allTraceInfo.xml
@@ -4609,26 +4605,6 @@ foreach d (2006*)
    # The last archive obtained is empty so try downloading from the ftp site
    # to be sure to get everything.
 
-   ssh kolossus
-   # grab just the ftp link for each file.
-   grep "anc" index.html > ancillary.lst
-   perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' ancillary.lst
-   rm *.bak
-   # this contains just the ftp link for each file
-cat << '_EOF_' > getFtpFiles.csh
-#!/bin/csh -fe
-set s=$1
-foreach f (`cat "${s}"`)
-   echo $f
-   nice wget --timestamping $f 
-end
-'_EOF_'
-   chmod +x getFtpFiles.csh 
-   getFtpFiles.csh ancillary.lst >& ancillary.log &
-   # PID: 29247     Start: Sat May 13 23:48
-   # from the list, can find out which files are needed to get the CLONEENDS
-   # and the library names: need CHORI-211, DKEY, DKEYP, CHORI-73,  RPCI-71
-   # and BUSM1 PAC. 
    # get BAC end sequences from NBCI Trace archive ftp site:
    ssh kkstore04
    mkdir /cluster/data/danRer4/bed/bacEnds/sequences2
@@ -4701,8 +4677,10 @@ end
    grep "TRACE_NAME" cloneEnds.xml | wc -l
    # 985980
    grep "TRACE_NAME" cloneEnds.xml | sort | uniq -c > traceName.xml.count
-   # TRACE_TYPE_CODE = CLONEEND AND LIBRARY_ID = 
-#####
+   # Hard to tell which are the BAC clone end sequences. These ftp files
+   # contain a mixture of sequences from different sources
+   # Try downloading sequences from Sanger instead. Not all of the sequences
+   # may have been submitted to NCBI anyway yet. 
    ssh kkstore04
    cd /cluster/data/danRer4/bed/bacEnds
    mkdir -p /san/sanvol1/danRer4/bacEnds/ensemblSeqs
@@ -4770,8 +4748,403 @@ end
    # U count: mean 1032.4 sd 265.3
    # L count: mean 0.0 sd 0.0
    
-   # Blat these BAC ends vs the danRer4 genome assembly:
-   
+   # Blat these BAC ends vs the danRer4 genome assembly. Gaps between
+   # scaffolds in the NA_random and Un_random chroms are 50,000 so 
+   # alignments of BAC ends across adjacent scaffolds are unlikely, 
+   # but alignments done separately just in case:
+   ssh pk
+   mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/sequences
+   cd /cluster/data/danRer4/bed/bacEnds/ensemblSeqs
+   cp Zv6BacEnds.fa /san/sanvol1/scratch/danRer4/bacEnds/sequences
+   mkdir -p /cluster/data/danRer4/bed/bacEnds/chromsRun
+   cd /cluster/data/danRer4/bed/bacEnds/chromsRun
+   ls -1S /san/sanvol1/scratch/danRer4/bacEnds/sequences/Zv6BacEnds.fa \
+          > bacends.lst 
+   ls -1S /san/sanvol1/scratch/danRer4/trfFa/chr[0-9M]*.fa > seqs.lst
+   # create out dir
+   mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/chromsPsl
+   # use Blat parameters as for mm5 and hg17
+cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/danRer4/danRer4_11.ooc {check out line+ /san/sanvol1/scratch/danRer4/bacEnds/chromsPsl/$(root1)_$(root2).psl}
+#ENDLOOP 
+'_EOF_'
+# << this line keeps emacs coloring happy
+    gensub2 seqs.lst bacends.lst template jobList
+    para create jobList
+    para try, check, push, check, ...
+# para time
+# Completed: 271 of 271 jobs
+# CPU time in finished jobs:    1063126s   17718.77m   295.31h   12.30d  0.034 y
+# IO & Wait Time:                  2531s      42.18m     0.70h    0.03d  0.000 y
+# Average job time:                3932s      65.54m     1.09h    0.05d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            9404s     156.73m     2.61h    0.11d
+# Submission to last job:          9891s     164.85m     2.75h    0.11d
+
+   # Repeat for random chroms, but use separate scaffolds:
+   mkdir -p /cluster/data/danRer4/bed/bacEnds/randomsRun
+   cd /cluster/data/danRer4/bed/bacEnds/randomsRun
+   ls -1S /san/sanvol1/scratch/danRer4/bacEnds/sequences/Zv6BacEnds.fa \
+          > bacends.lst 
+   foreach f (/san/sanvol1/scratch/danRer4/scaffoldsSoftMask/Zv6*.fa)
+      ls -1S $f >> seqs.lst
+   end
+   # create out dir
+   mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/randomsPsl
+   # use Blat parameters as for mm5 and hg17
+cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/danRer4/danRer4_11.ooc {check out line+ /san/sanvol1/scratch/danRer4/bacEnds/randomsPsl/$(root1)_$(root2).psl}
+#ENDLOOP 
+'_EOF_'
+# << this line keeps emacs coloring happy
+    gensub2 seqs.lst bacends.lst template jobList
+    para create jobList
+    para try, check, push, check, ...
+# para time 
+# Completed: 2966 of 2966 jobs
+# CPU time in finished jobs:     240259s    4004.31m    66.74h    2.78d  0.008 y
+# IO & Wait Time:                 84042s    1400.71m    23.35h    0.97d  0.003 y
+# Average job time:                 109s       1.82m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             997s      16.62m     0.28h    0.01d
+# Submission to last job:         11925s     198.75m     3.31h    0.14d
+    # lift chrom alignments and randoms alignments and then merge and filter.
+    ssh kolossus
+    cd /cluster/data/danRer4/bed/bacEnds/
+    nice pslSort dirs rawChroms.psl tmp \
+         /san/sanvol1/scratch/danRer4/bacEnds/chromsPsl >& chromSort.log 
+    # Took 2 hours
+    # very large output so do the randoms on the san
+    cd /san/sanvol1/scratch/danRer4/bacEnds/
+    nice pslSort dirs rawRandoms.psl tmp randomsPsl >& randomsSort.log
+    # Took 12 minutes
+    # move the rawChroms.psl over to the san
+    mv /cluster/data/danRer4/bed/bacEnds/rawChroms.psl \
+       /san/sanvol1/scratch/danRer4/bacEnds/
+    cd /san/sanvol1/scratch/danRer4/bacEnds/
+    # for danRer3, hg18 etc.:
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                rawChroms.psl bacEndsChroms.psl /dev/null
+    # Took about 1 hour.
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                rawRandoms.psl bacEndsRandoms.psl /dev/null
+    # Took 2 minutes.
+    # merge files. There is a single liftOver file that works for both the
+    # pseudocontigs and the scaffolds.
+    # remove header for bacEndsRandoms.psl
+    tail +6 bacEndsRandoms.psl > tmp.psl 
+    cat bacEndsChroms.psl tmp.psl > bacEndsNoLift.psl
+    # liftUp file to chrom coordinates.
+    liftUp bacEnds.psl \
+           /cluster/data/danRer4/jkStuff/liftAll.lft warn bacEndsNoLift.psl 
+    # Took 2 minutes
+    # Now put togehter the pairs information:
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/bacEnds
+    mv /san/sanvol1/danRer4/bacEnds/bacEnds.psl .
+    # cat together the xml files of BAC clone end information
+    cat ensemblSeqs/*.xml > danRerBacEnds.xml
+    # get mate-pair information from xml, forward is SP6, reverse is T7
+    # edit getBacInfo.pl used for canFam1 and adapt for use with zebrafish
+    # BAC ends. Not all entries in the xml file have clone_id or trace_end
+    # but sometimes they have trace_direction instead of trace_end.
+cat << '_EOF_' > getZfishBacInfo.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($file, $outFile, $name, $clone, $library, $dir);
+$file = $ARGV[0];
+$outFile = $ARGV[1];
+
+open (FILE, $file) || die "Can not open $file : $!\n";
+open (OUT, ">$outFile") || die "Can not create $outFile : $!\n";
+open (STDERR, ">error.log") || die "Can not create error.log : $!\n";
+my %cloneHash = qw {
+   zC   CH211-
+   zK  DKEY-
+   zKp DKEYP-
+   bZ  RP71-
+   dZ  BUSM1-
+   CHORI73_ CH73-
+};
+
+$name = "";
+$clone = "";
+$dir = "";
+while (<FILE>)
+{
+chomp;
+my $l = $_;
+if ($l =~ /<trace_name>([A-Za-z0-9\_\.]+)/)
+   {
+   $name = $1;
+   }
+elsif ($l =~ /<clone_id>([A-Z0-9]+\-[0-9A-Z]+)/)
+   {
+   $clone = $1;
+   }
+elsif ($l =~ /<library_id>([A-Z0-9a-z\s]+\-?[0-9A-Z]*)<\/library_id>/)
+   {
+   $library = $1;
+   if ($library eq "Daniokey Pilot")
+      {
+      $library = "DKEYP";
+      }
+   }
+elsif ($l =~ /<trace_end>(F|R)/)
+   {
+   $dir = $1;
+   }
+elsif ($l =~ /<trace_direction>(F|R)/)
+   {
+   $dir = $1;
+   }
+# find end of record and print out end information
+if ($l =~ /^\s+<\/trace>/)
+   {
+   printInfo($name, $clone, $library, $dir);
+   $name = $clone = $dir = $library = "";
+   }
+}
+close FILE;
+close OUT;
+close STDERR;
+
+sub printInfo  {
+   my ($name, $clone, $lib, $d) = @_; 
+   # if no clone name read from file then create from trace name
+   if ($clone  eq "")
+      {
+      foreach my $c (keys(%cloneHash))
+         {
+         if ($name =~ /$c/)
+             {
+             if (exists($cloneHash{$c})) 
+                {
+                my $prefix = $cloneHash{$c};
+                $clone = $name;
+                # change to clone name
+                $clone =~ s/$c/$prefix/;
+                # remove suffix
+                $clone =~ s/\.[a-z]+|SP6|T7//;
+                }
+             }
+         }
+      }
+   # convert forward or reverse direction to SP6 or T7
+   if ($d ne "")
+      {
+      if ($d eq "F")
+         {
+         $d = "SP6";
+         }
+      elsif ($d eq "R")
+         {
+         $d = "T7";
+         }
+      }
+   else 
+      {
+      print STDERR "No direction for $name found\n";
+      }
+   # print clone end information
+   print OUT "$clone\t$name\t0\t$lib\t0\t$d\n";
+}
+'_EOF_'
+    # << for emacs
+    chmod +x getZfishBacInfo.pl
+    perl getZfishBacInfo.pl danRerBacEnds.xml bacEndInfo.txt
+    # check all the names are there 
+    grep '>' ./ensemblSeqs/Zv6BacEnds.fa > names
+    perl -pi.bak -e 's/>//' names
+    sort names | uniq > names.sort
+    awk '{print $2}' bacEndInfo.txt  | sort | uniq > bacEndInfo.names.sort
+    comm -13 bacEndInfo.names.sort names.sort
+    # no difference so all clone ends in the FASTA file are also 
+    # in the xml file.
+    rm *.bak *.sort names  
+    # create mate-pair information
+    cp /cluster/bin/scripts/convertBacEndPairInfo convertZfishBacEndInfo
+    # comment out line 43 as this removes the suffix after a . from the
+    # trace names. In this case, we need to keep those. 
+    # line 43:  ($acc, $ver) = split(/\./,$acc);
+    convertBacEndPairInfo bacEndInfo.txt
+    # 312901 pairs and 35479 singles
+    mkdir -p /cluster/data/danRer4/bed/bacEnds/pairs
+    cd /cluster/data/danRer4/bed/bacEnds/pairs
+    set dir = /cluster/data/danRer4/bed/bacEnds
+    # use parameters from REDO of danRer3 BAC ends
+    /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose $dir/bacEnds.psl $dir/bacEndPairs.txt all_bacends bacEnds
+    wc -l *
+#   1714 bacEnds.long
+#  14889 bacEnds.mismatch
+# 109213 bacEnds.orphan
+# 105294 bacEnds.pairs
+#    347 bacEnds.short
+#    782 bacEnds.slop
+
+    # create header required by "rdb" tools
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' \
+         > ../header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> ../header
+    # edit header to make sure \t is/become tab character
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairs.bed
+    # create bad BAC ends set
+    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        bacEnds.orphan | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBad.bed
+    # Also create a bad BAC ends set with no orphans since orphans are
+    # already added to the singles track and do not want to add these orphans
+    # twice when extracting PSL. Use this bacEndPairsBadNoOrphans.bed
+    # file when extracting PSLs for adding to the all_bacends table.
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBadNoOrphans.bed
+    # To create singles set:
+    # also need to process bacEndSingles.txt into a database table
+    # for singles in bacEndSingles.txt, create a dummy file where they
+    # are given zJA11B12T7 as dummy sequence pair. If the single is a forward
+    # sequence, put the dummy sequence in the second column, if the single is
+    # a reverse sequence put in first column. use a perl script to do this.
+    cd /cluster/data/danRer4/bed/bacends
+    set bacDir = /cluster/data/danRer4/bed/bacEnds
+    mkdir singles
+    cd singles
+    cp /cluster/data/danRer2/bed/ZonLab/bacends/singles/formatSingles.pl .
+    perl formatSingles.pl $bacDir/bacEndSingles.txt > \
+                           $bacDir/bacEndSingles.format
+    # then run pslPairs on this formatted file
+    /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+     -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+     -mismatch -verbose ../bacEnds.psl $bacDir/bacEndSingles.format \
+     all_bacends bacEnds
+    wc -l bacEnds.*
+    #     0 bacEnds.long
+    #     0 bacEnds.mismatch
+    # 22036 bacEnds.orphan
+    #     0 bacEnds.pairs
+    #     0 bacEnds.short
+    #     0 bacEnds.slop
+    cat bacEnds.orphan ../pairs/bacEnds.orphan > bacEnds.singles 
+    wc -l bacEnds.singles
+    # 131249 bacEnds.singles
+    # Of these, 109213 are from pair analysis and 22036 from singles.
+    # For danRer3: there are 11439 orphans from singles and 242235 from 
+    # pair analysis so a total of 253674 orphans so this has improved.
+    # Although for danRer3, some of these could be replicate reads for the
+    # same BAC clone end.
+    # make singles bed file
+    cat ../header bacEnds.singles | row score ge 300 | sorttbl chr start \
+                  | headchg -del > bacEndSingles.bed
+
+    # check if there are any overlapping alignments that can be removed.
+    cd /cluster/data/danRer4/bed/bacEnds
+    mkdir -p duplicates/overlapRun
+    cd duplicates/overlapRun
+    sort -k1,2 /cluster/data/danRer4/bed/bacEnds/pairs/bacEndPairs.bed \
+         > bacEndPairs.lfs 
+    wc -l *.lfs
+    # 104546 bacEndPairs.lfs
+    nice /cluster/bin/x86_64/lfsOverlap bacEndPairs.lfs bacEndPairs.bed \
+         -name -minOverlap=0.999 -notBlocks
+    # Loaded 104546 elements of size 11
+    # only 5 lines removed
+    sort -k1,2 /cluster/data/danRer4/bed/bacEnds/singles/bacEndSingles.bed \
+         > bacEndSingles.lfs
+    nice /cluster/bin/x86_64/lfsOverlap bacEndSingles.lfs bacEndSingles.bed \
+        -name -minOverlap=0.999 -notBlocks
+    # Loaded 125695 elements of size 11
+    # No lines removed.
+    sort -k1,2 \
+         /cluster/data/danRer4/bed/bacEnds/pairs/bacEndPairsBadNoOrphans.bed \
+         > bacEndPairsBadNoOrphans.lfs 
+    wc -l *.lfs
+    # 17611 bacEndPairsBadNoOrphans.lfs
+    nice /cluster/bin/x86_64/lfsOverlap bacEndPairsBadNoOrphans.lfs \
+         bacEndPairsBadNoOrphans.bed -name -minOverlap=0.999 -notBlocks
+    # Loaded 17611 elements of size 11
+    # Saving 17608 records to bacEndPairsBadNoOrphans.bed
+    # Only 3 alignments were removed. 
+    # Therefore no point in doing using these files. Use the original bed 
+    # files for pairs and singles. No further processing of BED files is 
+    # needed as they have not been changed in any way.
+    # Remove duplicates directory.
+    rm -r /cluster/data/danRer4/bed/bacEnds/duplicates
+    # use new extract program that extracts PSLs using name and position:
+    ssh kkstore04
+    set bacDir=/cluster/data/danRer4/bed/bacEnds
+    cd $bacDir/pairs
+
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+        $bacDir/bacEnds.psl bacEndPairs.bed bacPairs.psl
+    # for this, use bacEndPairsBadNoOrphans since pairs orphans are already
+    # included in bacEndSingles
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+      $bacDir/bacEnds.psl bacEndPairsBadNoOrphans.bed bacPairsBadNoOrphans.psl
+    # then for singles
+    cd $bacDir/singles
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+      $bacDir/bacEnds.psl bacEndSingles.bed bacSingles.psl
+    cd $bacDir
+    cat pairs/*.psl singles/bacSingles.psl > allBacends.load.psl
+    # try old program and compare
+    extractPslLoad -noBin bacEnds.psl pairs/bacEndPairs.bed \
+        pairs/bacEndPairsBadNoOrphans.bed singles/bacEndSingles.bed \
+        | sorttbl tname tstart | headchg -del > bacEnds.load.psl
+    wc -l *.load.psl
+    # 364457 allBacends.load.psl
+    # 4568907 bacEnds.load.psl
+    # Much reduced by using only BAC end alignments that are in BED files.
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/bacEnds/pairs
+    hgLoadBed danRer4 bacEndPairs bacEndPairs.bed -notItemRgb \
+               -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # Loaded 104546 elements of size 11
+    # note - this next track isn't pushed to RR, just used for assembly QA
+    hgLoadBed danRer4 bacEndPairsBad bacEndPairsBad.bed -notItemRgb \
+              -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 121728 elements of size 11
+    cd /cluster/data/danRer4/bed/bacEnds/singles
+    cp /cluster/data/danRer3/bed/bacends/singles/bacEndSingles.sql .
+    hgLoadBed danRer4 bacEndSingles bacEndSingles.bed -notItemRgb \
+              -sqlTable=bacEndSingles.sql
+    # Loaded 125695 elements of size 11
+    cd /cluster/data/danRer4/bed/bacEnds
+    hgLoadPsl danRer4 -table=all_bacends allBacends.load.psl
+    # All alignments were loaded into the table - no problems.
+    # load BAC end sequences into seq table so alignments may be viewed
+    # symlink to FASTA sequence file in ncbi directory
+    # move BAC ends to the ncbi directory
+    mkdir -p /cluster/data/ncbi/bacends/zebrafish/bacends.1
+    # remove some files
+    cd ensemblSeqs 
+    rm tmp clone* index.html
+    cd /cluster/data/danRer4/bed/bacEnds
+    mv /cluster/data/danRer4/bed/bacEnds/ensemblSeqs/* \
+       /cluster/data/ncbi/bacends/zebrafish/bacends.1
+    rm -r ensemblSeqs
+    mkdir -p /gbdb/danRer4/bacends
+    ln -s /cluster/data/ncbi/bacends/zebrafish/bacends.1/Zv6BacEnds.fa \
+          /gbdb/danRer4/bacends/Zv6BacEnds.fa
+    hgLoadSeq danRer4 /gbdb/danRer4/bacends/Zv6BacEnds.fa
+    # check trackDb.ra entry and description
+    # cleanup:
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/bacEnds/
+    rm -r sequences
+    rm -r /san/sanvol1/scratch/danRer4/bacEnds/sequences
+    rm -r sequences2
+    rm changes.txt bacEnds.load.psl *.log
+    du -sh /cluster/data/danRer4/bed/bacEnds
+    # 2.4G    /cluster/data/danRer4/bed/bacEnds
+    gzip *.psl *.txt danRerBacEnds.xml
+    du -sh /cluster/data/danRer4/bed/bacEnds
+    # 599M    /cluster/data/danRer4/bed/bacEnds
+ 
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM OTHER DANRER ASSEMBLIES
 # (DONE, 2006-06-27, hartera)
@@ -5192,7 +5565,7 @@ CREATE TABLE affyToHg16Orthologs (
     # Check README.txt for downloads. 
 
 #######################################################################
-# VEGA GENES (in progress, 2006-08-14 - 2006-08-20, hartera)
+# VEGA GENES (DONE, 2006-08-14 - 2006-08-25, hartera)
 # Data provided by Kerstin Howe from Sanger: kj2@sanger.ac.uk
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/vega
@@ -5201,6 +5574,13 @@ CREATE TABLE affyToHg16Orthologs (
          ftp://ftp.sanger.ac.uk/pub/kj2/gff/vega_in_ensembl.gff
     wget --timestamping \
          ftp://ftp.sanger.ac.uk/pub/kj2/ZFIN/genes_for_tom_new.txt
+    # checked list of genes found in vega_in_ensembl.gff but not in 
+    # genes_for_tom_new.txt against this file
+    grep -f genesWithNoInfo.txt genes_for_tom_20060725.txt
+    # got a list of 20 that were not in this file: genesWithNoInfo2.txt
+    # e-mailed Kerstin at Sanger and got the information for these 20 genes:
+    # moreInfo.txt
+    # Need to rewrite this file using tabs:
     # checked format for VEGA genes in hg17. Includes an alternate name.
     cd /cluster/data/hg17/bed/vega30
     # to look at human VEGA
@@ -5265,16 +5645,29 @@ close GFF;
     # or .KNOWN or .NOVEL from the method column and add as a separate 
     # confidence column. 
     # check number of items on each line: there are 4 or 6.
+    # Some genes have more than one clone ID in a comma separated list
+    # so create two files for loading into two tables. 
+    # Found that some of the clone ID fields have comma separated lists 
+    # and for OTTDARG00000006367, there are 30. Therefore create two info 
+    # tables where one is just for clone IDs.  
 cat << '_EOF_' > formatVegaInfo.pl
 #!/usr/bin/perl -w
 use strict;
 
-my ($idsFile, $infoFile, %idsHash);
+# format Vega additional information into one file for vegaInfoZfish table
+# and another for the vegaToCloneIdZfish table which contains the
+# geneId and cloneId for each gene since there are multiple clone IDs for
+# some of the genes.
+my ($idsFile, $infoFile, $outFile1, $outFile2, %idsHash);
 $idsFile = $ARGV[0];
 $infoFile = $ARGV[1];
+$outFile1 = $ARGV[2];
+$outFile2 = $ARGV[3];
 
 open (IDS, $idsFile) || die "Can not open $idsFile: $!\n";
 open (INFO, $infoFile) || die "Can not open $infoFile: $!\n";
+open (OUT1, ">$outFile1") || die "Can not create $outFile1: $!\n";
+open (OUT2, ">$outFile2") || die "Can not create $outFile2: $!\n";
 open (STDERR, ">info.log") || die "Can not create info.log: $!\n";
 
 while (<IDS>)
@@ -5290,7 +5683,7 @@ close IDS;
 
 while (<INFO>)
 {
-my ($line, @fi, $id, $gene, $trans, @transIds, $tr, @t, $method, $conf);
+my ($line,@fi,$id,$gene,$trans,@transIds, $tr,@clones, $c,@t, $method, $conf);
 chomp;
 $gene = "";
 $line = $_;
@@ -5303,6 +5696,8 @@ while (exists($idsHash{$id}))
    push(@transIds, $trans);
    $id = $trans;
    }
+# push clone IDs into an array:
+@clones = split(/,/, $fi[2]);
 @t = split(/\./, $fi[3]);
 $method = $t[0];
 if ($#t > 0)
@@ -5319,28 +5714,33 @@ else
    }
 foreach $tr (@transIds)
    {
+   print OUT1 "$tr\t$fi[1]\t$fi[0]";
    if ($#fi == 5)
-       {
-       print "$tr\t$fi[1]\t$fi[0]\t$fi[4]\t$fi[5]\t$fi[2]\t$method\t\t$conf\n";
-       }
+      {
+      print OUT1 "\t$fi[4]\t$fi[5]\t$method\t\t$conf\n";
+      }
    elsif ($#fi == 3)
-       {
-       print "$tr\t$fi[1]\t$fi[0]\t\t\t$fi[2]\t$method\t\t$conf\n";
-       }
+      {
+      print OUT1 "\t\t\t$method\t\t$conf\n";
+      }
+   # print out clone IDs for each transcript
+   foreach $c (@clones)
+      {
+      print OUT2 "$tr\t$c\n";
+      }
    }
 if($gene && !exists($idsHash{$gene})) 
    {
    print STDERR "$gene\n";
    }
 }
+close IDS;
 close INFO;
+close OUT1;
+close OUT2;
 close STDERR;
 '_EOF_'
     chmod +x formatVegaInfo.pl 
-    perl formatVegaInfo.pl vegaIDs.txt genes_for_tom_new.txt \
-         > vegaInfoZfish.txt
-    # info.log contains genes for which are not in the gff file of VEGA
-    # genes. There are 789 of these genes.
     wc -l genes_for_tom_new.txt
     # 4822 genes_for_tom_new.txt
     awk '{print $2}' genes_for_tom_new.txt | sort | uniq > genesWithInfo.txt
@@ -5353,32 +5753,100 @@ close STDERR;
     comm -13 genesWithInfo.txt genesFromGff.txt | wc -l
     # 914
     comm -13 genesWithInfo.txt genesFromGff.txt > genesWithNoInfo.txt
-    # send this list to Sanger to ask about getting additional information
+    # sent this list to Sanger to ask about getting additional information
     # for these genes.
     comm -23 genesWithInfo.txt genesFromGff.txt | wc -l
     # 789
+    # got another file from Sanger that should contain the information 
+    # for the 914 genes missing information above.
+    ftp://ftp.sanger.ac.uk/pub/kj2/ZFIN/060725/genes_for_tom_20060725.txt
+    # check if this contains all of the list missing before
+    sort genesWithNoInfo.txt | uniq > genesWithNoInfo.sort
+    awk '{print $2}' genes_for_tom_20060725.txt | sort | uniq > genes.txt
+    comm -13 genes.txt genesWithNoInfo.uniq > genesWithNoInfo2.txt
+    # there are 20 of these. Sent these to Sanger and received 
+    # information for these. Copied and pasted these from e-mail into
+    # moreInfo.txt. Write script to reformat: addTabs.pl
+    perl addTabs.pl < moreInfo.txt > geneInfo3.txt
+    grep -f genesWithInfo.txt genes_for_tom_20060725.txt > tmp
+    wc -l tmp
+    # 4738
+    wc -l genesWithInfo.txt
+    # 4822 genesWithInfo.txt
+    # Not all of these are in genes_for_tom_20060725.txt so merge all the 
+    # info files and uniq:
+    cat genes_for_tom_new.txt genes_for_tom_20060725.txt geneInfo3.txt \
+        | sort | uniq > allGeneInfo.txt
+    awk '{print $2}' allGeneInfo.txt | sort | uniq -c | sort -nr > count
+    # counts gene names - often occur twice but with more information in 
+    # one case than the other. Seems like newer file has most information for
+    # each gene.
+    grep -f genesFromGff.txt genes_for_tom_20060725.txt > info1.txt
+    # then list genes in info1.txt
+    comm -13 genesInInfo1.sort genesFromGff.txt > genes1
+    wc -l genes1
+    # 55 genes1
+    grep -f genes1 genes_for_tom_new.txt > info2.txt
+    awk '{print $2}' info2.txt | sort | uniq > genesInInfo2.txt
+    comm -13 genesInInfo2.sort genes1 > genes2
+    wc -l genes2
+    # 20 genes2
+    # genes2 is list of genes not found in either file. Should be 20 left.
+    awk '{print $2}' geneInfo3.txt | sort | uniq > genes3
+    comm -12 genes2 genes3 | wc -l
+    # 20 - so these are the same 20 that are in geneInfo3.txt
+    # These are in geneInfo3.txt. cat all these files together
+    cat info1.txt info2.txt geneInfo3.txt > allGeneInfo2.txt
+    # Recreate the tab file for loading into the vegaInfoZfish table:
+    rm vegaInfoZfish.txt
+    # Use new version that prints out one row for each accession in field 3.
+    perl formatVegaInfo.pl vegaIDs.txt allGeneInfo2.txt vegaInfoZfish.txt \  
+         vegaToCloneId.txt
+    # info.log contains genes for which are not in the gff file of VEGA
+    # and this is empty as it should be.
+    wc -l vegaInfoZfish.txt
+    # 6606 vegaInfoZfish.txt
+    wc -l vegaToCloneId.txt
+    # 7245 vegaToCloneId.txt
+    awk '{print $1}' vegaInfoZfish.txt | sort | uniq -c | sort -nr > out2
+    # transcripts only have 1 entry
+    awk '{print $2}' vegaInfoZfish.txt | sort | uniq > infogenes.txt
+    comm -13 infogenes.txt genesFromGff.txt 
+    # There are no genes in the GFF file that are not in vegaInfoZfish.txt
+    # Then remake the pseudogenes track from this.
     # Next step is to find which transcripts are pseudogenes.
-    grep pseudogene vegaInfoZfish.txt | wc -l
-    # There are only 49. This is too sparse for a separate track, but
+    grep pseudogene vegaInfoZfish.txt | sort | uniq | wc -l
+    # There are only 51 in the info file, and all of these are in the GFF
+    # file. Anyway, this is too sparse for a separate track, but
     # a subtrack could be created.
     # Get transcript IDs for pseudogenes.
     grep pseudogene vegaInfoZfish.txt | awk '{print $1}' > pseudogenes.ids 
     grep -f pseudogenes.ids vega.gff > vegaPseudoGene.gff 
     awk '{print $9}' vegaPseudoGene.gff |sort | uniq | wc -l
-    # 49   - correct number of transcripts in file
+    # 51 
     grep -v -f pseudogenes.ids vega.gff > vegaGene.gff
     wc -l vega*ff
     #  98170 vega.gff
-    #  98004 vegaGene.gff
-    #    166 vegaPseudoGene.gff
+    #  97999 vegaGene.gff
+    #    171 vegaPseudoGene.gff
     
     # load gff files:
     ssh hgwdev
     cd /cluster/data/danRer4/bed/vega
+    hgsql -e 'drop table vegaGene;' danRer4
+    hgsql -e 'drop table vegaPseudoGene;' danRer4
     ldHgGene danRer4 vegaGene vegaGene.gff
+    # Read 6555 transcripts in 88104 lines in 1 files
+    # 6555 groups 25 seqs 1 sources 2 feature types
+    # 6555 gene predictions
+ 
     ldHgGene danRer4 vegaPseudoGene vegaPseudoGene.gff
+    # Read 51 transcripts in 171 lines in 1 files
+    # 51 groups 9 seqs 1 sources 1 feature types
+    # 51 gene predictions
 
     # Then create SQL table for adding the zebrafish-specific information
+    # Add clone_id to a separate table instead of this one. 
 cat << '_EOF_' > ~/kent/src/hg/lib/vegaInfoZfish.as
 table vegaInfoZfish
 "Vega Genes track additional information"
@@ -5388,7 +5856,6 @@ table vegaInfoZfish
     string sangerName;		"Sanger gene name"
     string zfinId;		"ZFIN ID"
     string zfinSymbol;		"ZFIN gene symbol"
-    string cloneId;		"clone ID"
     string method;		"GTF method field"
     string geneDesc; 		"Vega gene description"
     string confidence;		"Status (KNOWN, NOVEL, PUTATIVE, PREDICTED)"
@@ -5398,14 +5865,42 @@ table vegaInfoZfish
     autoSql vegaInfoZfish.as vegaInfoZfish
     mv vegaInfoZfish.h ../inc/
     # commit vegaInfoZfish{.h,.c,.as,.sql} files to CVS
+    # add INDEX(geneId) to vegaInfoZfish.sql
+    # create a second table for the cloneId accessions since there
+    # are multiple ids for some VEGA genes. Otherwise, there would be 
+    # a comma separated list in this field or many rows repeated but just
+    # different in the cloneId field. Associate transcript ID to clone IDs.  
+    grep ',' allGeneInfo2.txt | wc -l
+    # 378
+cat << '_EOF_' > ~/kent/src/hg/lib/vegaToCloneId.as
+table vegaToCloneId
+"Vega Genes track cloneId information"
+    (
+    string transcriptId;        "Vega transcript ID"
+    string cloneId;             "clone ID"
+    )
+'_EOF_'
+    cd ~/kent/src/hg/lib/
+    autoSql vegaToCloneId.as vegaToCloneId
+    # replace PRIMARY KEY(transcriptId) with Indices on genId and cloneId:
+    perl -pi.bak -e \
+    's/PRIMARY KEY\(transcriptId\)/INDEX\(transcriptId\),\nINDEX\(cloneId\)/' \
+       vegaToCloneId.sql
+    rm *.bak
+  #  mv vegaInfoZfish.h ../inc/
+    
     cd /cluster/data/danRer4/bed/vega
-    # Need to reload table after getting information for Vega Genes with
-    # no information.
     hgsql -e 'drop table vegaInfoZfish;' danRer4
     hgLoadSqlTab danRer4 vegaInfoZfish ~/kent/src/hg/lib/vegaInfoZfish.sql \
                  vegaInfoZfish.txt
+    hgsql -e 'drop table vegaToCloneId;' danRer4
+    hgLoadSqlTab danRer4 vegaToCloneId ~/kent/src/hg/lib/vegaToCloneId.sql \
+                 vegaToCloneId.txt
+
     # Add code to hgc.c so that this works for Zebrafish and creates the
-    # relevant links. 
+    # relevant links. Add seraches by vega transcript ID, ZFIN ID and 
+    # clone ID.  Add a Vega zebrafish-specific description to
+    # trackDb/zebrafish. 
 # Added entry in zebrafish/trackDb.ra to create these tracks as subtracks of
 # a Vega Genes track.
 # track vegaGeneZfish
@@ -5432,3 +5927,4 @@ table vegaInfoZfish
 #    longLabel Vega Annotated Pseudogenes
 #    priority 2
 #    color 155,0,125
+
