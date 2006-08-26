@@ -7,6 +7,31 @@ visibility pack
 color 34,139,34
 type genePred
 
+track vegaGeneZfish
+compositeTrack on
+shortLabel Vega Genes 
+longLabel Vega Annotations 
+group genes
+priority 37
+visibility hide
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
+type genePred
+url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
+    
+    track vegaGene
+    subTrack vegaGeneZfish
+    shortLabel Vega Genes
+    longLabel Vega Gene Annotations
+    priority 1
+    color 0,100,180
+    
+    track vegaPseudoGene
+    subTrack vegaGeneZfish
+    shortLabel Vega Pseudogenes
+    longLabel Vega Annotated Pseudogenes
+    priority 2
+    color 155,0,125
+
 track wz_ests
 shortLabel Zfish WZ EST Clusters
 longLabel $Organism WZ EST Clusters from Washington University
@@ -413,3 +438,82 @@ xrefTable affyToHg16Orthologs
 xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
 searchPriority 20
 
+searchName vegaGene2
+searchTable vegaGene
+searchMethod exact
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,geneId from %s where geneId like '%s'
+searchPriority 50
+
+searchName vegaPseudoGene2
+searchTable vegaPseudoGene
+searchMethod exact
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,geneId from %s where geneId like '%s'
+searchPriority 50
+
+searchName vegaGeneZfin
+searchTable vegaGene
+searchMethod exact
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,zfinId from %s where zfinId like '%s'
+searchPriority 50
+
+searchName vegaPseudoGeneZfin
+searchTable vegaPseudoGene
+searchMethod exact
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,zfinId from %s where zfinId like '%s'
+searchPriority 50
+
+searchName vegaGeneZfinSymbol
+searchTable vegaGene
+searchMethod exact
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,zfinSymbol from %s where zfinSymbol like '%s'
+searchPriority 50
+
+searchName vegaPseudoGeneZfinSymbol
+searchTable vegaPseudoGene
+searchMethod exact
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,zfinSymbol from %s where zfinSymbol like '%s'
+searchPriority 50
+
+searchName vegaGeneSanger
+searchTable vegaGene
+searchMethod prefix
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,sangerName from %s where sangerName like '%s%%'
+searchPriority 50
+
+searchName vegaPseudoGeneSanger
+searchTable vegaPseudoGene
+searchMethod prefix
+searchType genePred
+xrefTable vegaInfoZfish
+xrefQuery select transcriptId,sangerName from %s where sangerName like '%s%%'
+searchPriority 50
+
+searchName vegaGeneClone
+searchTable vegaGene
+searchMethod prefix
+searchType genePred
+xrefTable vegaToCloneId
+xrefQuery select transcriptId,cloneId from %s where cloneId like '%s%%'
+searchPriority 50
+
+searchName vegaPseudoGeneClone
+searchTable vegaPseudoGene
+searchMethod prefix
+searchType genePred
+xrefTable vegaToCloneId
+xrefQuery select transcriptId,cloneId from %s where cloneId like '%s%%'
+searchPriority 50
