@@ -1011,7 +1011,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb.knownToRefSeq.value minCheck=0.98
+    $kgDb,!hg16.knownToRefSeq.value minCheck=0.98
+    hg16.knownToRefSeq.value minCheck=0.96
     $kgDb.refSeqKg.refseq minCheck=0.60
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
@@ -1610,9 +1611,13 @@ identifier cgapId
 
 identifier cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
-    $gbd.cgapBiocDesc.mapID
+    $gbd,!hg15.cgapBiocDesc.mapID
     $gbd.cgapBiocPathway.mapID
 
+identifier cgapMapIdHg15
+"NCI Cancer Genome Annotation Project Map ID for hg15"
+    hg15.cgapBiocDesc.mapID dupeOk
+    hg15.cgapBiocPathway.mapID
 
 
 # SNP (Simple Nucleotide Polymorphism) Stuff
