@@ -17,6 +17,9 @@
 #define CT_DEFAULT_TRACK_NAME    "User Track"
 #define CT_DEFAULT_TRACK_DESCR   "User Supplied Track"
 
+#define CT_DOC_HEADER_PREFIX     "<!-- UCSC_GB_TRACK NAME="
+#define CT_DOC_HEADER_SUFFIX     " -->"
+
 /* TODO: Remove this when hgCustom is ready for release. This cart variable is
  * only used to preserve old behavior during testing */
 #ifndef CT_APPEND_DEFAULT
@@ -53,8 +56,8 @@ struct customTrack
 #define CT_CUSTOM_FILE_VAR      "hgt.customFile"
 #define CT_CUSTOM_FILE_NAME_VAR "hgt.customFile__filename"
 
-#define CT_REMOVE_VAR           "hgct_remove"
 #define CT_DO_REMOVE_VAR        "hgct_doRemoveCustomTrack"
+#define CT_SELECTED_TABLE_VAR   "hgct_table"
 
 struct customTrack *customTracksParseCart(struct cart *cart,
 					  struct slName **retBrowserLines,

@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.133 2006/08/24 22:12:13 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.134 2006/08/28 22:11:39 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -477,17 +477,22 @@ if (ctFileNameFromCart != NULL &&
             (customText == NULL || customText[0] == 0)))
 #endif
     {
-    if (!fileExists(ctFileNameFromCart))	/* Cope with expired tracks. */
+    if (!fileExists(ctFileNameFromCart)) /* Cope with expired tracks. */
+        {
 	cartRemove(cart, "ct");
+	cartRemovePrefix(cart, "ct_");
+        }
     else
 	{
-	ctList = customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
+	ctList = 
+            customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
 	ctFileName = ctFileNameFromCart;
 
         /* remove a track if requested, e.g. by hgTrackUi */
         char *remove = NULL;
         if (cartVarExists(cart, CT_DO_REMOVE_VAR) &&
-            (remove = cartOptionalString(cart, CT_REMOVE_VAR)) != NULL)
+            (remove = cartOptionalString(
+                            cart, CT_SELECTED_TABLE_VAR)) != NULL)
             {
             for (ct = ctList; ct != NULL; ct = nextCt)
                 {
@@ -498,15 +503,15 @@ if (ctFileNameFromCart != NULL &&
                     break;
                     }
                 }
-            /* remove control variables */
-            cartRemove(cart, CT_DO_REMOVE_VAR);
-            cartRemove(cart, CT_REMOVE_VAR);
+            /* remove visibility variable */
+            cartRemove(cart, remove);
             /* remove configuration variables */
             char buf[128];
             safef(buf, sizeof buf, "%s.", remove); 
             cartRemovePrefix(cart, buf);
-            /* remove visibility variable */
-            cartRemove(cart, remove);
+            /* remove control variables */
+            cartRemove(cart, CT_DO_REMOVE_VAR);
+            cartRemove(cart, CT_SELECTED_TABLE_VAR);
             }
         }
     }

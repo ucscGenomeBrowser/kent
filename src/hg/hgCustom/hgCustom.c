@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.39 2006/08/24 20:56:31 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.40 2006/08/28 22:11:39 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,6 +37,7 @@ errAbort(
 #define hgCtDataText      CT_CUSTOM_TEXT_ALT_VAR
 #define hgCtDataFile      CT_CUSTOM_FILE_VAR
 #define hgCtDataFileName  CT_CUSTOM_FILE_NAME_VAR
+#define hgCtTable         CT_SELECTED_TABLE_VAR
 #define hgCtDocText      "hgct_docText"
 #define hgCtDocFile      "hgct_docFile"
 #define hgCtDocTrackName "hgct_docTrackName"
@@ -156,8 +157,25 @@ cgiTableRowEnd();
 /* fourth row - text entry for description, and clear button(s) */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""), 
+
+char *docText = "";
+char *selectedTable = cartUsualString(cart, hgCtTable, "");
+struct customTrack *ct;
+if (selectedTable[0] != 0)
+    /* fill doc text box with HTML for selected table */
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        if (sameString(ct->tdb->tableName, selectedTable) && 
+                ct->tdb->html && ct->tdb->html[0])
+                    {
+                    struct dyString *ds = dyStringNew(0);
+                    dyStringPrintf(ds, "%s\'%s\'%s\n%s", CT_DOC_HEADER_PREFIX, 
+                            chopPrefixAt(cloneString(selectedTable), '_'),
+                            CT_DOC_HEADER_SUFFIX, ct->tdb->html);
+                    docText = dyStringCannibalize(&ds);
+                    }
+cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, docText), 
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
+
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -171,8 +189,10 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-makeInsertButton("&nbsp; Set &nbsp;", 
-        "<!-- UCSC_GB_TRACK NAME=\\'\\' -->", hgCtDocText);
+char buf[128];
+safef(buf, sizeof buf, "%s\\'\\'%s", CT_DOC_HEADER_PREFIX, 
+                                        CT_DOC_HEADER_SUFFIX);
+makeInsertButton("&nbsp; Set &nbsp;", buf, hgCtDocText);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
