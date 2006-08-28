@@ -1266,15 +1266,15 @@ identifier stsName fuzzy
  
 identifier stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
-    $gbd,!hg16.stsInfo2.name
+    $gbd,!hg16,!hg15.stsInfo2.name
     $gbd.stsAlias.trueName
     $gbd.stsMap.name
 
 identifier stsTrueNameHg16 typeOf=stsName
-"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16"
-    hg16.stsInfo2.name dupeOk
-    hg16.stsAlias.trueName
-    hg16.stsMap.name
+"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16, hg15"
+    hg16,hg15.stsInfo2.name dupeOk
+    hg16,hg15.stsAlias.trueName
+    hg16,hg15.stsMap.name
 
 identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
