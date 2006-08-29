@@ -93,6 +93,8 @@ else if (startsWith("mm", database))
     mgcDb.organism = "Mm";
 else if (startsWith("rn", database))
     mgcDb.organism = "Rn";
+else if (startsWith("bosTau", database))
+    mgcDb.organism = "Bt";
 else if (startsWith("danRer", database))
     {
     mgcDb.name = "ZGC";
