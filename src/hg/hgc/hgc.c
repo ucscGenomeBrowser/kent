@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1089 2006/08/29 01:13:26 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1090 2006/08/29 01:24:45 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2173,22 +2173,24 @@ char seqFile[512];
 struct sqlConnection *conn = sqlConnect(db);
 char query[256];
 char *res = NULL;
+boolean exists = FALSE;
 
 safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
 res = sqlQuickQuery(conn, query, seqFile, 512);
 sqlDisconnect(&conn);
-/* if there is no table or no information in the table then return false */
-if (res == NULL)
-    return FALSE;
-else
+
+/* if there is not table or no information in the table or if the table */
+/* exists but the file can not be opened return false, otherwise sequence */
+/* file exists and return true */
+if (res != NULL)
     {
     /* chromInfo table exists so check that sequence file can be opened */
     FILE *f = fopen(seqFile, "rb");
-    if (f == NULL)
-        return FALSE;
-    else 
-        return TRUE;
+    if (f != NULL)
+        exists = TRUE;
+    fclose(f);
     }
+return exists;
 }
 
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
