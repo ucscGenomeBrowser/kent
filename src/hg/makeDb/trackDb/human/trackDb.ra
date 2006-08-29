@@ -1311,6 +1311,7 @@ expScale 3.0
 expStep 0.5
 expProbeTable affyHumanExonProbeAnnot
 expTable affyHumanExonExps
+groupings affyHumanExonGroups
 
 track xTBAmaf
 shortLabel xTBAmaf

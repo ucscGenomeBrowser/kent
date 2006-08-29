@@ -808,6 +808,7 @@ shortLabel poly(A) DB
 longLabel PolyA_DB Polyadenylation Sites
 group rna
 priority 79
+origAssembly hg16
 visibility hide
 type bed 4 .
 
