@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.134 2006/08/28 22:11:39 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.135 2006/08/29 22:33:32 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -446,9 +446,9 @@ if (customText != NULL && customText[0] != 0)
         char *msg = cloneString(errCatch->message->string);
         if (fileName)
             {
-            char buf[128];
-            safef(buf, sizeof buf, "File '%s' - %s", fileName, msg);
-            err = cloneString(buf);
+            struct dyString *ds = dyStringNew(0);
+            dyStringPrintf(ds, "File '%s' - %s", fileName, msg);
+            err = dyStringCannibalize(&ds);
             }
         else
             err = msg;
