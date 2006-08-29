@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1088 2006/08/29 01:08:06 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1089 2006/08/29 01:13:26 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2311,6 +2311,9 @@ if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
+/* Show alignment either if other database is active in dbDb or */
+/* if there is a chromInfo table for that database and the sequence */
+/* file exists. This latter case occurs on the archives server. */
 if ((hDbIsActive(otherDb)) || (chromSeqFileExists(otherDb, chain->qName)))
     {
     if (chainWinSize < 1000000) 
@@ -2442,7 +2445,10 @@ if (net->chainId != 0)
     {
     netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
     printf("<BR>\n");
-    if (hDbIsActive(otherDb))
+    /* Show alignment either if other database is active in dbDb or */
+    /* if there is a chromInfo table for that database and the sequence */
+    /* file exists. This latter case occurs on the archives server. */
+    if ((hDbIsActive(otherDb)) || (chromSeqFileExists(otherDb, chain->qName)))
         {
         if (netWinSize < 1000000)
 	    {
