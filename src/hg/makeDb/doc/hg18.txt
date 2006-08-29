@@ -9857,7 +9857,7 @@ get b126_SNPContigLocusId_36_1.bcp.gz
 get b126_ContigInfo_36_1.bcp.gz
 # MapInfo has alignment weights
 get b126_SNPMapInfo_36_1.bcp.gz
-# SNP has validation status and heterozygosity
+# SNP has univar_id, validation status and heterozygosity
 get SNP.bcp.gz
 
 # Get schema from NCBI
