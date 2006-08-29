@@ -803,6 +803,14 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
+track polyaDB
+shortLabel poly(A) DB
+longLabel PolyA_DB Polyadenylation Sites
+group rna
+priority 79
+visibility hide
+type bed 4 .
+
 searchTable wgRna
 searchMethod fuzzy
 searchType bed

@@ -10404,3 +10404,21 @@ end
 hgLoadBed hg18 rnaCluster chrom/*.bed
 ############################################################################
 
+############################################################################
+# POLYA_DB TRACK (DONE 08-28-2006 Andy)
+
+mkdir /cluster/data/hg18/bed/polyaDB
+cd /cluster/data/hg18/bed/polyaDB
+wget http://polya.umdnj.edu/download/polyAsite.gz
+gunzip polyAsite.gz 
+find /cluster/data/hg16/ -name 'ordered.lft' | xargs cat > hg16.lft
+sed 's/\(\s\).*\//\1/; s/chr/hg16.chr/' hg16.lft > tmp
+mv tmp hg16.lft
+cut -f2 hg16.lft > hg16.lft.names
+grep -F -f hg16.lft.names polyAsite > hg16.polyAsite
+awk '{printf("%s\t%d\t%d\t%s\n", $3, ($5-1), $5, $1);}' hg16.polyAsite > hg16.polyAsite.bed
+liftUp lifted.bed hg16.lft warn hg16.polyAsite.bed 
+sed 's/hg16\.//' lifted.bed > final.bed
+liftOver final.bed /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz hg18.bed unmapped 
+hgLoadBed hg18 polyaDB hg18.bed
+# trackDb entry/html in human/hg18
