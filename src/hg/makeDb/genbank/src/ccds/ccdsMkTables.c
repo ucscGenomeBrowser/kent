@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.8 2006/08/29 00:05:30 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.9 2006/08/29 06:24:38 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -57,7 +57,7 @@ errAbort(
   "      \"Reviewed, update pending\",\n"
   "      \"Under review, withdrawal\",\n"
   "      \"Reviewed, withdrawal pending\"\n"  
-  "  -loadDb - load tables into hgdb\n"
+  "  -loadDb - load tables into hgdb, bin column is added to genePred\n"
   "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
   "     2 - show selects against CCDS database\n"
@@ -458,7 +458,8 @@ slSort(&genes, genePredCmp);
 genesFh = mustOpen(ccdsGeneFile, "w");
 for (gp = genes; gp != NULL; gp = gp->next)
     {
-    fprintf(genesFh, "%d\t", binFromRange(gp->txStart, gp->txEnd));
+    if (loadDb)
+        fprintf(genesFh, "%d\t", binFromRange(gp->txStart, gp->txEnd));
     genePredTabOut(gp, genesFh);
     }
 carefulClose(&genesFh);
