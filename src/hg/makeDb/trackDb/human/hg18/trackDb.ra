@@ -144,6 +144,15 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
+track augustusAbinitio
+shortLabel Augustus Ab Initio
+longLabel Augustus Ab Initio Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred
+
 track nscanGene
 shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
