@@ -12,4 +12,11 @@ void ccdsGetTblFileNames(char *tblFile, char *table, char *tabFile);
 void ccdsRenameTable(struct sqlConnection *conn, char *oldTable, char *newTable);
 /* rename a database table */
 
+struct hash *ccdsStatusValLoad(struct sqlConnection *conn);
+/* load values from the imported ccdsStatusVals table.  Table hashes
+ * status name to uid.  Names are loaded both as-is and lower-case */
+
+void ccdsStatusValCheck(struct hash *statusVals, char *stat);
+/* check if a status value is valid, in a case-insensitive manner */
+
 #endif

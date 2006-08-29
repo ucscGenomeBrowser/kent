@@ -34,3 +34,38 @@ sqlDropTable(conn, newTable);
 sqlUpdate(conn, query);
 }
 
+struct hash *ccdsStatusValLoad(struct sqlConnection *conn)
+/* load values from the imported ccdsStatusVals table.  Table hashes
+ * status name to uid.  Names are loaded both as-is and lower-case */
+{
+struct hash *statusVals = hashNew(0);
+struct sqlResult *sr = sqlGetResult(conn, 
+                                    "SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int uid = sqlSigned(row[0]);
+    char *stat = row[1];
+    hashAddInt(statusVals, stat, uid);
+    tolowers(stat);
+    hashAddInt(statusVals, stat, uid);
+    }
+sqlFreeResult(&sr);
+return statusVals;
+}
+
+void ccdsStatusValCheck(struct hash *statusVals, char *stat)
+/* check if a status value is valid, in a case-insensitive manner */
+{
+char statLower[64];
+boolean isValid = (strlen(stat) < sizeof(statLower));
+if (isValid)
+    {
+    strcpy(statLower, stat);
+    tolowers(statLower);
+    isValid = (hashLookup(statusVals, statLower) != NULL);
+    }
+if (!isValid)
+    errAbort("unknown CCDS status: \"%s\"", stat);
+
+}

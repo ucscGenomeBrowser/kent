@@ -12,18 +12,29 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.7 2006/08/23 18:23:47 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.8 2006/08/29 00:05:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"stat", OPTION_STRING|OPTION_MULTI},
     {"loadDb", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {NULL, 0}
 };
-boolean keep = FALSE;    /* keep tab files after load */
-boolean loadDb = FALSE;  /* load database */
+static boolean keep = FALSE;    /* keep tab files after load */
+static boolean loadDb = FALSE;  /* load database */
+static struct slName *statVals = NULL;  /* ccds status values to load */
 
-void usage()
+static char *statValDefaults[] = {
+    "Public",
+    "Under review, update",
+    "Reviewed, update pending",
+    "Under review, withdrawal",
+    "Reviewed, withdrawal pending",
+    NULL
+};
+
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -39,6 +50,13 @@ errAbort(
   "are files for the data.\n"
   "\n"
   "Options:\n"
+  "  -stat=statVal - only include CCDS with the specified status values,\n"
+  "   which are cases-insensitive.  This option maybe repeated.  Defaults to:\n"
+  "      \"Public\",\n"
+  "      \"Under review, update\",\n"
+  "      \"Reviewed, update pending\",\n"
+  "      \"Under review, withdrawal\",\n"
+  "      \"Reviewed, withdrawal pending\"\n"  
   "  -loadDb - load tables into hgdb\n"
   "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
@@ -58,8 +76,10 @@ struct genomeInfo
 /* table of mapping UCSC db to NCBI build information */
 static struct genomeInfo genomeInfoTbl[] = 
 {
-    {"hg17", 9606, 35, 1},
-    {NULL,      0,  0, 0}
+    {"hg17",  9606, 35, 1},
+    {"hg18",  9606, 36, 1},
+    {"mm8",  10090, 36, 1},
+    {NULL,       0,  0, 0}
 };
 
 
@@ -157,7 +177,30 @@ if (errCnt > 0)
 gotCcdsCheckInfo(infoCcds);
 }
 
-static char *mkGroupVersionClause(struct genomeInfo *genome)
+static char *mkStatusValSet(struct sqlConnection *conn)
+/* Generate set of CCDS status values to use, based on cmd options or
+ * defaults.  WARNING: static return. */
+{
+static char *statValSet = NULL;
+if (statValSet != NULL)
+    return statValSet;
+struct dyString *buf = dyStringNew(0);
+struct slName *val;
+struct hash *validStats = ccdsStatusValLoad(conn);
+
+for (val = statVals; val != NULL; val = val->next)
+    {
+    ccdsStatusValCheck(validStats, val->name);
+    if (buf->stringSize > 0)
+        dyStringAppendC(buf, ',');
+    dyStringPrintf(buf, "\"%s\"", val->name);
+    }
+hashFree(&validStats);
+statValSet = dyStringCannibalize(&buf);
+return statValSet;
+}
+
+static char *mkGroupVersionClause(struct genomeInfo *genome, struct sqlConnection *conn)
 /* get part of where clause that selects GroupVersions and CcdsUids that are currently
  * public.  WARNING: static return. */
 {
@@ -168,16 +211,16 @@ safef(clause, sizeof(clause),
       "AND (GroupVersions.first_ncbi_build_version <= %d) "
       "AND (%d <= GroupVersions.last_ncbi_build_version) "
       "AND (GroupVersions.group_uid = Groups.group_uid) "
-      "AND (GroupVersions.was_public = 1) "
       "AND (CcdsStatusVals.ccds_status_val_uid = GroupVersions.ccds_status_val_uid) "
-      "AND (CcdsStatusVals.ccds_status in (\"Public\", \"Under review, update\", \"Reviewed, update pending\",\"Under review, withdrawal\",\"Reviewed, withdrawal pending\")) "
+      "AND (CcdsStatusVals.ccds_status in (%s)) "
       "AND (CcdsUids.group_uid = Groups.group_uid))",
       genome->taxonId, genome->ncbiBuild,
-      genome->ncbiBuildVersion, genome->ncbiBuildVersion);
+      genome->ncbiBuildVersion, genome->ncbiBuildVersion,
+      mkStatusValSet(conn));
 return clause;
 }
 
-static char *mkCcdsInfoSelect(struct genomeInfo *genome)
+static char *mkCcdsInfoSelect(struct genomeInfo *genome, struct sqlConnection *conn)
 /* Construct select to get data for ccdsInfo table.  WARNING: static
  * return. */
 {
@@ -200,7 +243,7 @@ safef(select, sizeof(select),
       "AND (Accessions.accession_uid = Accessions_GroupVersions.accession_uid) "
       "AND (Accessions_GroupVersions.group_version_uid = GroupVersions.group_version_uid) "
       "AND (Organizations.organization_uid = Accessions.organization_uid)",
-      mkGroupVersionClause(genome));
+      mkGroupVersionClause(genome, conn));
 return select;
 }
 
@@ -235,7 +278,7 @@ static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
                            struct genomeInfo *genome, struct hash *gotCcds)
 /* create ccdsInfo table file */
 {
-char *query = mkCcdsInfoSelect(genome);
+char *query = mkCcdsInfoSelect(genome, conn);
 struct sqlResult *sr = sqlGetResult(conn, query);
 FILE *outFh = mustOpen(ccdsInfoFile, "w");
 char **row;
@@ -245,7 +288,7 @@ carefulClose(&outFh);
 sqlFreeResult(&sr);
 }
 
-static char *mkCcdsGeneSelect(struct genomeInfo *genome)
+static char *mkCcdsGeneSelect(struct genomeInfo *genome, struct sqlConnection *conn)
 /* Construct select to get data for ccdsGene table.  WARNING: static
  * return. */
 {
@@ -267,7 +310,7 @@ safef(select, sizeof(select),
       "WHERE %s "
       "AND (Locations.location_uid = Locations_GroupVersions.location_uid) "
       "AND (Locations_GroupVersions.group_version_uid = GroupVersions.group_version_uid)",
-      mkGroupVersionClause(genome));
+      mkGroupVersionClause(genome, conn));
 return select;
 }
 
@@ -309,7 +352,7 @@ static struct ccdsLocationsJoin *loadLocations(struct sqlConnection *conn,
 /* load all exon locations into a list, sort by ccds id, and then
  * chrom and start */
 {
-char *query = mkCcdsGeneSelect(genome);
+char *query = mkCcdsGeneSelect(genome, conn);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct ccdsLocationsJoin *locs = NULL;
 char **row;
@@ -489,6 +532,13 @@ if (argc != 5)
     usage();
 keep = optionExists("keep");
 loadDb = optionExists("loadDb");
+statVals = optionMultiVal("stat", NULL);
+if (statVals == NULL)
+    {
+    int i;
+    for (i = 0; statValDefaults[i] != NULL; i++)
+        slSafeAddHead(&statVals, slNameNew(statValDefaults[i]));
+    }
 ccdsMkTables(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
