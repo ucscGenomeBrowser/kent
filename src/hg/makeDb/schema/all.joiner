@@ -150,6 +150,8 @@ identifier UniProtAccession external=UniProt
      uniProt.protein.acc unique full
      proteome.spOldNew.acc minCheck=0.8
      proteome.uniProtAlias.acc minCheck=0.9
+     proteome.spReactomeId.spID minCheck=0.9
+     proteome.spReactomeEvent.spID minCheck=0.9
      $kgDb.kgProtAlias.alias  minCheck=0.2
      $kgDb.kgSpAlias.spId  minCheck=0.2
      $kgDb.kgProtMap.qName minCheck=0.9
