@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# $Id: updateBed.pl,v 1.2 2006/08/29 18:49:49 hiram Exp $
+# $Id: updateBed.pl,v 1.3 2006/08/29 23:09:03 hiram Exp $
 
 ##Author: Yontao Lu
 ##Date  06/29/03
@@ -16,6 +16,8 @@
 use warnings;
 use strict;
 
+my $verbose = 0;
+
 #  global variables used everywhere
 my %leftPrimer;		# key is a primer identifier from PRB_PrimerSeq.rpt
 my %rightPrimer;	# key is a primer identifier from PRB_PrimerSeq.rpt
@@ -24,6 +26,7 @@ my %uniName;		# key is a UniSTS Id sequence # from UniSTS_mouse.sts
 			# value is the UniSTS name
 my %uniId;		# key is a UniSTS name from UniSTS_mouse.sts
 			# value is the UniSTS Id sequence #
+			#  !* NOT USED FOR ANYTHING *!
 my %mgiId;		# key is a marker name, value is the MGI:number
 			# from MRK_Dump2.rpt or PRB_PrimerSeq.rpt
 my %mgiName;		# key is MGI:number value is marker name
@@ -207,7 +210,6 @@ my $rhFile = "";
 my $genetic = 0;
 my $geneticFile = "";
 my @files = ();
-my $verbose = 0;
 
 while(my $arg = shift)
 {
@@ -254,7 +256,6 @@ if($genetic)
     open(GEN, "<$geneticFile") || die "can't open genetic map: $geneticFile\n\t$!";
 }
 
-
 if ($verbose) {print STDERR "reading mgd marker file $mgdMarkerF\n";}
 while(my $line = <MGDM>)
 {
@@ -264,6 +265,7 @@ while(my $line = <MGDM>)
     next if($eles[3] < 0);	# there are over 32,000 items < 0.0
     next if ($eles[4] =~ m/UN/);	#	we don't do chrUN
     next if ($eles[4] =~ m/XY/);	#	we don't do chrXY
+
     #  check if we are stomping on existing mgiName entries
     if (exists($mgiName{$eles[0]}) ) {
 	if ($mgiName{$eles[0]} ne $eles[1]) {
@@ -284,7 +286,7 @@ while(my $line = <MGDM>)
 	} else {
 	    $eles[4] =~ s/MT/M/;	# chrom name change MT to M
 	    $eles[3] =~ s/\s//g;	# remove white space from cm
-	    if ($eles[3] =~ m/0.00/) { $eles[3] = 0.0; }
+	    if ($eles[3] =~ m/^0.00$/) { $eles[3] = 0.0; }
 	    $mgiName{$eles[0]} = $eles[1];  # eles[0] is the MGI:Id number
 	    $mgiId{$eles[1]} = $eles[0];  # eles[1] is the Name field
 	    $chr{$eles[0]} = $eles[4];	# eles[4] is the chrom number
@@ -303,9 +305,6 @@ while(my $line = <MGDS>)
     next if($eles[9] < 0);
     next if ($eles[8] =~ m/UN/);	#	we don't do chrUN
     next if ($eles[8] =~ m/XY/);	#	we don't do chrXY
-    $leftPrimer{$eles[0]} = $eles[5];
-    $rightPrimer{$eles[0]} = $eles[6];
-    $productSize{$eles[0]} = $eles[7]; 
     #  check if we are stomping on existing mgiId entries
     if (exists($mgiId{$eles[0]})) {
 	if ($mgiId{$eles[0]} ne $eles[3]) {
@@ -326,11 +325,14 @@ while(my $line = <MGDS>)
 	} else {
 	    $eles[8] =~ s/MT/M/;	#	chr name change MT to M
 	    $eles[9] =~ s/\s//g;	# remove white space from cm
-	    if ($eles[9] =~ m/0.00/) { $eles[9] = 0.0; }
+	    if ($eles[9] =~ m/^0.00$/) { $eles[9] = 0.0; }
 	    $mgiId{$eles[0]} = $eles[3];
 	    $mgiName{$eles[3]} = $eles[0];
 	    $chr{$eles[0]} = $eles[8];
 	    $cm{$eles[0]} = $eles[9];
+	    $leftPrimer{$eles[0]} = $eles[5];
+	    $rightPrimer{$eles[0]} = $eles[6];
+	    $productSize{$eles[0]} = $eles[7]; 
 	}
     }
 }
@@ -389,10 +391,37 @@ while(my $line = <UNIS>)
     chomp($line);
     $line = uc($line);
     my @eles = split(/\t/, $line);
+    if (exists($leftPrimer{$eles[0]})) {
+	if ($leftPrimer{$eles[0]} ne $eles[1]) {
+	    if ($verbose) {
+	    printf STDERR "ERROR: duplicate uniSTS key $eles[0] different leftPrimer line $.\n";
+	    }
+	next
+	}
+    }
+#  The uniId hash is UNUSED for anything
+if (1 == 0) {
+    if (exists($uniId{$eles[4]})) {
+	if ($uniId{$eles[4]} ne $eles[0]) {
+	    if ($verbose) {
+	    printf STDERR "ERROR: duplicate uniSTS Id key '$eles[4]' (values $uniId{$eles[4]} $eles[0]) line $.\n";
+	    }
+	next
+	}
+    }
+    $uniId{$eles[4]} = $eles[0];
+}
     $leftPrimer{$eles[0]} = $eles[1];
     $rightPrimer{$eles[0]} = $eles[2];
     $productSize{$eles[0]} = $eles[3];
-    $uniId{$eles[4]} = $eles[0];
+    if (exists($uniName{$eles[0]})) {
+	if ($uniName{$eles[0]} ne $eles[4]) {
+	    if ($verbose) {
+	    printf STDERR "ERROR: duplicate uniName key $eles[0] (values $uniName{$eles[0]} $eles[4]) line $.\n";
+	    }
+	next
+	}
+    }
     $uniName{$eles[0]} = $eles[4];
 }
 close(UNIS);
@@ -433,6 +462,7 @@ if($genetic)
 
 ##udate current bed 
 my $lastId = 0;
+if ($verbose) {print STDERR "reading previous bed $bedF\n";}
 while(my $line = <BED>)
 {
     chomp($line);
@@ -589,12 +619,17 @@ close(BED);
  
 my $id = $lastId+1;
 
+if ($verbose) {print STDERR "adding new markers starting at # $id\n";}
+
+if ($verbose) {print STDERR "cleaning leftPrimers of blanks\n";}
 foreach my $key (keys(%leftPrimer)) {
     if($leftPrimer{$key} eq "") { &removePrimerFromHash($key); }
 }
 
 my @allkeys = (keys(%leftPrimer));
+my $keyCount = scalar(@allkeys);
 
+if ($verbose) {print STDERR "working on $keyCount leftPrimers\n";}
 while(my $key = shift(@allkeys))
 {
     if (!exists($leftPrimer{$key})) { next; }
@@ -696,13 +731,12 @@ while(my $key = shift(@allkeys))
     if (!defined($RHMap)) { $RHMap = ""; }
 
     &removePrimerFromHash(@allNames);
-    if (defined($sId) && (length($sId) > 0)) {
-	$sId =~ s/MGI\://;
+    if (defined($sId) && (length($sId) > 0)) { $sId =~ s/MGI\://; }
 
 if (!defined($id)) { print STDERR "ERROR: not defined: id\n"; }
 if (!defined($name)) { print STDERR "ERROR: not defined: name\n"; }
-if (!defined($sId)) { print STDERR "ERROR: not defined: sId\n"; }
-if (!defined($sname)) { print STDERR "ERROR: not defined: sname\n"; }
+if (!defined($sId)) { $sId = ""; }
+if (!defined($sname)) { $sname = ""; }
 if (!defined($uistsid)) { print STDERR "ERROR: not defined: uistsid\n"; }
 if (!defined($aliasCount)) { print STDERR "ERROR: not defined: aliasCount\n"; }
 if (!defined($alias)) { print STDERR "ERROR: not defined: alias\n"; }
@@ -714,9 +748,9 @@ if (!defined($organism)) { print STDERR "ERROR: not defined: organism\n"; }
 if (!defined($geneticMap)) { print STDERR "ERROR: not defined: geneticMap line $.\n"; }
 if (!defined($gChr)) { print STDERR "ERROR: not defined: gChr line $.\n"; }
 if (!defined($gPosi)) { print STDERR "ERROR: not defined: gPosi line $.\n"; }
-if (!defined($generalMap)) { print STDERR "ERROR: not defined: generalMap line $.\n"; }
+if (!defined($generalMap)) { $generalMap = ""; }
 if (!defined($uChr)) { print STDERR "ERROR: not defined: uChr line $.\n"; }
-if (!defined($uPosi)) { print STDERR "ERROR: not defined: uPosi line $.\n"; }
+if (!defined($uPosi)) { $uPosi = ""; }
 if (!defined($RHMap)) { print STDERR "ERROR: not defined: RHMap line $.\n"; }
 if (!defined($rhChr)) { print STDERR "ERROR: not defined: rhChr line $.\n"; }
 if (!defined($rhPosi)) { print STDERR "ERROR: not defined: rhPosi line $.\n"; }
@@ -728,5 +762,4 @@ if (!defined($rhPosi)) { print STDERR "ERROR: not defined: rhPosi line $.\n"; }
 	}
 #	@allkeys = (keys(%leftPrimer));
 	#print STDERR "$#allkeys\n";
-    }
 }
