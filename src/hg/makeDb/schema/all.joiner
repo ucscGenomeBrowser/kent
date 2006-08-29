@@ -531,6 +531,27 @@ identifier vegaGeneName typeOf=vegaName dependency
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
     $gbd.vegaPep.name full unique
+    $gbd.vegaInfo.transcriptId minCheck=0.78
+
+identifier vegaZfishName
+"Link together various VEGA zebrafish curated gene annotation"
+    $gbd.vegaInfoZfish.transcriptId
+
+identifier vegaGeneZfishName typeOf=vegaZfishName dependency
+"Link together Zebrafish VEGA predicted gene structure additional information"
+    danRer4.vegaGene.name
+    danRer4.vegaInfoZfish.transcriptId minCheck=0.99
+    danRer4.vegaToCloneId.transcriptId minCheck=0.99
+
+identifier vegaPseudoZfishName typeOf=vegaZfishName
+"Link together VEGA pseudogene and other info."
+    danRer4.vegaPseudoGene.name
+
+identifier vegaPseudoGeneZfishName typeOf=vegaPseudoZfishName dependency
+"Link together Zebrafish VEGA predicted gene structure additional information"
+    danRer4.vegaPseudoGene.name
+    danRer4.vegaInfoZfish.transcriptId minCheck=0.007
+    danRer4.vegaToCloneId.transcriptId minCheck=0.007
 
 identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info."
