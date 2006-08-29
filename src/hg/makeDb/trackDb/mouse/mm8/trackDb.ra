@@ -29,6 +29,18 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
+track miRNA
+shortLabel miRNA
+longLabel MicroRNAs from miRBase
+group genes
+priority 63
+visibility full
+useScore 1
+color 255,64,64
+type bed 6 .
+url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+urlLabel miRBase:
+
 track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
