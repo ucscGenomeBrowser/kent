@@ -44,6 +44,24 @@ color 12,12,120
 type genePred
 cdsDrawDefault genomic\ codons
 
+track augustusAbinitio
+shortLabel Augustus Ab Initio
+longLabel Augustus Ab Initio Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred
+
+track augustusHints
+shortLabel Augustus using Hints
+longLabel Augustus using transMapped RefSeqs
+group genes
+priority 51.7
+visibility dense
+color 186,85,211
+type genePred
+
 track nscanGene
 shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
