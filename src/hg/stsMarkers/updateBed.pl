@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# $Id: updateBed.pl,v 1.1 2006/08/28 17:36:05 hiram Exp $
+# $Id: updateBed.pl,v 1.2 2006/08/29 18:49:49 hiram Exp $
 
 ##Author: Yontao Lu
 ##Date  06/29/03
@@ -92,8 +92,10 @@ sub updateAlias()
 	last if(exists($alias{$curNames[$i]}) && ${$alias{$curNames[$i]}} ne "");
     }
     my $newAliasList = "";
-    if (exists($alias{$curNames[$i]})) {
-	$newAliasList = ${$alias{$curNames[$i]}};
+    if (defined($curNames[$i])) {
+	if (exists($alias{$curNames[$i]})) {
+	    $newAliasList = ${$alias{$curNames[$i]}};
+	}
     }
     my @all = split(/\;/, $newAliasList);
     my $newUniId = shift(@all);
@@ -145,11 +147,14 @@ sub searchPrimer()
     my $left = ""; my $right = ""; my $size="";
     for(my $i = 0; $i < @names; $i++)
     {
-	if($leftPrimer{$names[$i]} ne "")
-	{
-	    $left = $leftPrimer{$names[$i]};
-	    $right = $rightPrimer{$names[$i]};
-	    $size = $productSize{$names[$i]};
+	if (defined($names[$i])) {
+	    if(exists($leftPrimer{$names[$i]}) &&
+		($leftPrimer{$names[$i]} ne ""))
+	    {
+		$left = $leftPrimer{$names[$i]};
+		$right = $rightPrimer{$names[$i]};
+		$size = $productSize{$names[$i]};
+	    }
 	}
     }
     &removePrimerFromHash(@names);
@@ -234,12 +239,20 @@ my $uniAliasF = shift(@files);
 my $uniSeqF = shift(@files);
 
 
-open(BED, "<$bedF") || die "Can't open original bed file. $!";
-open(MGDM, "<$mgdMarkerF") || die "Can't open mgd marker file. $!";
-open(MGDS, "<$mgdSeqF") || die "Can't open mgd primer seq file. $!";
-open(MGDA, "<$mgdAlias") || die "Can't opem mgd seq info file $!";
-open(UNIA, "<$uniAliasF") || die "Can't open uni alias file. $!";
-open(UNIS, "<$uniSeqF") || die "Can't open uni primer seq file. $!";
+open(BED, "<$bedF") || die "Can't open original bed file: $bedF\n\t$!";
+open(MGDM, "<$mgdMarkerF") || die "Can't open mgd marker file: $mgdMarkerF\n\t$!";
+open(MGDS, "<$mgdSeqF") || die "Can't open mgd primer seq file: $mgdSeqF\n\t$!";
+open(MGDA, "<$mgdAlias") || die "Can't opem mgd seq info file: $mgdAlias\n\t$!";
+open(UNIA, "<$uniAliasF") || die "Can't open uni alias file: $uniAliasF\n\t$!";
+open(UNIS, "<$uniSeqF") || die "Can't open uni primer seq file: $uniSeqF\n\t$!";
+if($rh)
+{
+    open(RH, "<$rhFile") || die "can't open rh map: $rhFile\n\t$!";
+}
+if($genetic)
+{
+    open(GEN, "<$geneticFile") || die "can't open genetic map: $geneticFile\n\t$!";
+}
 
 
 if ($verbose) {print STDERR "reading mgd marker file $mgdMarkerF\n";}
@@ -323,6 +336,7 @@ while(my $line = <MGDS>)
 }
 close(MGDS);
 
+if (1 == 0) {
 if ($verbose) {print STDERR "reading mgd seq info file $mgdAlias\n";}
 while(my $line = <MGDA>)
 {
@@ -347,6 +361,12 @@ while(my $line = <MGDA>)
 	}
     }
 }    
+} else {
+    if ($verbose) {
+    print STDERR "not reading mgd seq info file $mgdAlias since it is not used\n";
+    }
+}
+close(MGDA);
 
 if ($verbose) {print STDERR "reading uni alias file $uniAliasF\n";}
 while(my $line = <UNIA>)
@@ -379,7 +399,6 @@ close(UNIS);
 
 if($rh)
 {
-    open(RH, "<$rhFile") || die "can't open rh map. $!";
     if ($verbose) {print STDERR "reading rh map file $rhFile\n";}
     while(my $line = <RH>)
     {
@@ -397,7 +416,6 @@ if($rh)
 
 if($genetic)
 {
-    open(GEN, "<$geneticFile") || die "can't open genetic map $geneticFile. $!";
     if ($verbose) {print STDERR "reading genetic map file $geneticFile\n";}
     while(my $line = <GEN>)
     {
@@ -560,23 +578,30 @@ if (!defined($rhPosi)) { print STDERR "ERROR: not defined: rhPosi line $.\n"; }
     if ((length($gPosi)>0) && ($gPosi < 0)) { $gPosi = ""; }
     if ((length($uPosi)>0) && ($uPosi < 0)) { $uPosi = ""; }
     if ((length($rhPosi)>0) && ($rhPosi < 0)) { $rhPosi = ""; }
-    my $newline = join("\t", ($id, $name, $sId, $sname, $uistsid, $aliasCount, $alias, $primer1, $primer2, $distance, $isSeq, $organism, $geneticMap, $gChr, $gPosi, $generalMap, $uChr, $uPosi, $RHMap, $rhChr, $rhPosi));
-    print "$newline\n";
+    if (length($name)>0) {
+	my $newline = join("\t", ($id, $name, $sId, $sname, $uistsid, $aliasCount, $alias, $primer1, $primer2, $distance, $isSeq, $organism, $geneticMap, $gChr, $gPosi, $generalMap, $uChr, $uPosi, $RHMap, $rhChr, $rhPosi));
+	print "$newline\n";
+    }
 }
 close(BED);
 
 ## add markers that have primer info to the bed.
  
 my $id = $lastId+1;
+
+foreach my $key (keys(%leftPrimer)) {
+    if($leftPrimer{$key} eq "") { &removePrimerFromHash($key); }
+}
+
 my @allkeys = (keys(%leftPrimer));
 
 while(my $key = shift(@allkeys))
 {
-    if($leftPrimer{$key} eq "")
+    if (!exists($leftPrimer{$key})) { next; }
+    if ($leftPrimer{$key} eq "")
     {
-	&removePrimerFromHash($key);
-	@allkeys = (keys(%leftPrimer));
-	next;
+    printf STDERR "ERROR: key $key should have been removed from leftPrimer\n";
+	exit 255
     }
     my @allNames = ();
     my ($name, $sId, $sname, $uistsid, $aliasCount, $alias, $primer1, $primer2, $distance, $isSeq, $organism, $geneticMap, $gChr, $gPosi, $generalMap, $uChr, $uPosi, $RHMap, $rhChr, $rhPosi) =();
@@ -696,10 +721,12 @@ if (!defined($RHMap)) { print STDERR "ERROR: not defined: RHMap line $.\n"; }
 if (!defined($rhChr)) { print STDERR "ERROR: not defined: rhChr line $.\n"; }
 if (!defined($rhPosi)) { print STDERR "ERROR: not defined: rhPosi line $.\n"; }
 
-	my $newline = join("\t", ($id, $name, $sId, $sname, $uistsid, $aliasCount, $alias, $primer1, $primer2, $distance, $isSeq, $organism, $geneticMap, $gChr, $gPosi, $generalMap, $uChr, $uPosi, $RHMap, $rhChr, $rhPosi));
-	print "$newline\n";
-	$id++;
-	@allkeys = (keys(%leftPrimer));
+	if (length($name)>0) {
+	    my $newline = join("\t", ($id, $name, $sId, $sname, $uistsid, $aliasCount, $alias, $primer1, $primer2, $distance, $isSeq, $organism, $geneticMap, $gChr, $gPosi, $generalMap, $uChr, $uPosi, $RHMap, $rhChr, $rhPosi));
+	    print "$newline\n";
+	    $id++;
+	}
+#	@allkeys = (keys(%leftPrimer));
 	#print STDERR "$#allkeys\n";
     }
 }
