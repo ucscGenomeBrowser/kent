@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1087 2006/08/25 22:50:13 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1088 2006/08/29 01:08:06 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2165,6 +2165,32 @@ if (subChain != NULL && otherOrg != NULL)
 chainFree(&toFree);
 }
 
+boolean chromSeqFileExists(char *db, char *chrom)
+/* check whether chromInfo exists for a database, find the path of the */
+/* sequence file for this chromosome and check if the file exists. */
+{
+char seqFile[512];
+struct sqlConnection *conn = sqlConnect(db);
+char query[256];
+char *res = NULL;
+
+safef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
+res = sqlQuickQuery(conn, query, seqFile, 512);
+sqlDisconnect(&conn);
+/* if there is no table or no information in the table then return false */
+if (res == NULL)
+    return FALSE;
+else
+    {
+    /* chromInfo table exists so check that sequence file can be opened */
+    FILE *f = fopen(seqFile, "rb");
+    if (f == NULL)
+        return FALSE;
+    else 
+        return TRUE;
+    }
+}
+
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		       char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
@@ -2285,7 +2311,7 @@ if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
-if (hDbIsActive(otherDb))
+if ((hDbIsActive(otherDb)) || (chromSeqFileExists(otherDb, chain->qName)))
     {
     if (chainWinSize < 1000000) 
         {
