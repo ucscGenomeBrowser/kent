@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.44 2006/08/30 01:49:23 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.45 2006/08/30 02:02:39 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -408,7 +408,7 @@ if (!text)
 lf = lineFileOnString("custom HTML", TRUE, text);
 while (lineFileNextReal(lf, &line))
     {
-    if (sscanf(line, "<!-- UCSC_GB_TRACK NAME=%[^-] -->", buf) == 1)
+    if (sscanf(line, "<!-- UCSC_GB_TRACK NAME=%s -->", buf) == 1)
         {
         if (strlen(ds->string))
             {
