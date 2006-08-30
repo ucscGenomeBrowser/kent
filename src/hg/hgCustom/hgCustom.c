@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.45 2006/08/30 02:02:39 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.46 2006/08/30 20:48:36 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -169,7 +169,7 @@ if (selectedTable[0] != 0)
                     {
                     struct dyString *ds = dyStringNew(0);
                     dyStringPrintf(ds, "%s\'%s\'%s\n%s", CT_DOC_HEADER_PREFIX, 
-                            chopPrefixAt(cloneString(selectedTable), '_'),
+                            ct->tdb->shortLabel,
                             CT_DOC_HEADER_SUFFIX, ct->tdb->html);
                     docText = dyStringCannibalize(&ds);
                     }
@@ -397,7 +397,6 @@ struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
  * and delimit tracks */
 {
 char *line;
-char buf[64];
 struct hash *docHash = hashNew(6);
 char *trackName = defaultTrackName;
 struct lineFile *lf = NULL;
@@ -408,14 +407,22 @@ if (!text)
 lf = lineFileOnString("custom HTML", TRUE, text);
 while (lineFileNextReal(lf, &line))
     {
-    if (sscanf(line, "<!-- UCSC_GB_TRACK NAME=%s -->", buf) == 1)
+    if (startsWithWord("<!--", line) && stringIn("-->", line) &&
+            containsStringNoCase(line, "UCSC_GB_TRACK"))
         {
+        /* allow double quotes in doc header comment */
+        subChar(line, '"', '\'');
+        line = replaceChars(line, "name=", "NAME=");
+        trackName = stringBetween("NAME='", "'", line);
+        if (!trackName)
+            trackName = defaultTrackName;
         if (strlen(ds->string))
             {
+            /* starting a new track -- save doc from previous */
             hashAdd(docHash, trackName, dyStringCannibalize(&ds));
             }
         /* remove quotes and surrounding whitespace from track identifier*/
-        trackName = skipLeadingSpaces(cloneString(buf));
+        trackName = skipLeadingSpaces(trackName);
         eraseTrailingSpaces(trackName);
         stripChar(trackName, '\'');
         stripChar(trackName, '\"');
