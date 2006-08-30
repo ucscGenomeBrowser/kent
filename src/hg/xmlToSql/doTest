@@ -1,7 +1,0 @@
-#!/bin/csh -ef
-xmlToSql -verbose=0 test/hotnews/in.xml test/hotnews/in.dtd test/hotnews/in.stats test/hotnews/out
-diff --exclude=CVS test/hotnews/expected test/hotnews/out
-xmlToSql -verbose=0 test/chado/in.xml test/chado/in.dtd test/chado/in.stats test/chado/out
-diff --exclude=CVS test/chado/expected test/chado/out
-xmlToSql -verbose=0 test/snp/in.xml test/snp/in.dtd test/snp/in.stats test/snp/out
-diff --exclude=CVS test/snp/expected test/snp/out

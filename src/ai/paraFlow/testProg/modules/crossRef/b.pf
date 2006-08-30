@@ -1,8 +1,0 @@
-include 'a'
-
-global to printB()
-{
-print("Hello from module B");
-}
-
-printA();
