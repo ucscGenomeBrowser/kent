@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1094 2006/08/30 00:10:39 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1095 2006/08/30 21:56:51 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2332,10 +2332,10 @@ if (sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
         printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
         }
-    if (! sameWord(otherDb, "seq"))
-        {
-        chainToOtherBrowser(chain, otherDb, otherOrg);
-        }
+    }
+if (! sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+    {
+    chainToOtherBrowser(chain, otherDb, otherOrg);
     }
 chainFree(&chain);
 }
