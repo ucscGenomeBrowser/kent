@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.103 2006/08/10 01:03:14 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.104 2006/08/30 20:55:07 kate Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -885,6 +885,27 @@ for (pos = haystack + strlen(haystack) - nSize; pos >= haystack; pos -= 1)
     {
     if (memcmp(needle, pos, nSize) == 0)
         return pos;
+    }
+return NULL;
+}
+
+char *stringBetween(char *start, char *end, char *haystack)
+/* Return string between start and end strings, or NULL if
+ * none found.  The first such instance is returned. 
+ * String must be freed by caller. */
+{
+char *pos, *p;
+int len;
+if ((p = stringIn(start, haystack)) != NULL)
+    {
+    pos = p + strlen(start);
+    if ((p = stringIn(end, pos)) != NULL)
+        {
+        len = p - pos;
+        pos = cloneMem(pos, len + 1);
+        pos[len] = 0;
+        return pos;
+        }
     }
 return NULL;
 }
@@ -1966,4 +1987,3 @@ char *splitOffNumber(char *db)
 {
 return cloneString(skipToNumeric(db));
 }
-

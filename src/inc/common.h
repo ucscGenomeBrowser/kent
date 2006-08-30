@@ -624,6 +624,11 @@ boolean startsWithWord(char *firstWord, char *line);
 char *rStringIn(char *needle, char *haystack);
 /* Return last position of needle in haystack, or NULL if it's not there. */
 
+char *stringBetween(char *start, char *end, char *haystack);
+/* Return string between start and end strings, or NULL if
+ * none found.  The first such instance is returned. 
+ * String must be freed by caller. */
+
 boolean endsWith(char *string, char *end);
 /* Returns TRUE if string ends with end. */
 
