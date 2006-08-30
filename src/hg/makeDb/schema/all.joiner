@@ -1909,9 +1909,9 @@ identifier jaxPhenotypeName external=MGI
 identifier hgMutMutId
 "Human Mutation track mutation identifier for attributes and links"
     hg17.hgMut.mutId dupeOk
-    hg17.hgMutAlias.mutId
-    hg17.hgMutExtLink.mutId
-    hg17.hgMutAttr.mutId
+    hg17.hgMutAlias.mutId minCheck=0.98
+    hg17.hgMutExtLink.mutId minCheck=0.75
+    hg17.hgMutAttr.mutId minCheck=0.78
 
 identifier hgMutSrcId
 "Human Mutation track source ID"
@@ -1931,7 +1931,7 @@ identifier hgMutAttrNameId
 identifier hgMutLinkId
 "Human Mutation track link ID: links from mutations to data sources +"
     hg17.hgMutLink.linkId
-    hg17.hgMutExtLink.linkId
+    hg17.hgMutExtLink.linkId minCheck=0.98
 
 #links between gv (the new Human Mutation) and related tables 
 
