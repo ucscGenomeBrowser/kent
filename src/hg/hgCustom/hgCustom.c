@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.46 2006/08/30 20:48:36 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.47 2006/08/30 21:11:30 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -430,6 +430,7 @@ while (lineFileNextReal(lf, &line))
         continue;
         }
     dyStringAppend(ds, line);
+    dyStringAppend(ds, "\n");
     }
 if (strlen(ds->string))
     {
