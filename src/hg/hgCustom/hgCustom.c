@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.43 2006/08/30 00:44:53 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.44 2006/08/30 01:49:23 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -333,10 +333,11 @@ webIncludeFile("/goldenPath/help/loadingCustomTracks.html");
 webEndSection();
 }
 
-void doBrowserLines(struct slName *browserLines)
+void doBrowserLines(struct slName *browserLines, char **retErr)
 /*  parse variables from browser lines into the cart.
     Return browser initial position, if specified */
 {
+char *err = NULL;
 struct slName *bl;
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -374,13 +375,21 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	else if (sameString(command, "position"))
 	    {
 	    if (wordCount < 3)
-	        errAbort("Expecting 3 words in browser position line");
+                {
+	        err = "Expecting 3 words in browser position line";
+                break;
+                }
 	    if (!hgIsChromRange(words[2])) 
-	        errAbort("browser position needs to be in chrN:123-456 format");
+                {
+	        err ="Invalid browser position (use chrN:123-456 format)";
+                break;
+                }
             cartSetString(cart, "position", words[2]);
 	    }
 	}
     }
+if (retErr)
+    *retErr = err;
 }
 
 struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
@@ -474,14 +483,22 @@ if (customText[0])
     }
 ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
                                         &replacedCts, &err);
-if (err)
+doBrowserLines(browserLines, &warn);
+if (err || warn)
     /* restore customText data to fill text area */
     cartSetString(cart, hgCtDataText, customText);
 
-doBrowserLines(browserLines);
+struct dyString *dsWarn = NULL;
+if (warn)
+    {
+    dsWarn = dyStringNew(0);
+    dyStringPrintf(dsWarn, "%s. ", warn); 
+    }
+
 if (slCount(replacedCts) != 0)
     {
-    struct dyString *dsWarn = dyStringNew(0);
+    if (!dsWarn)
+        dsWarn = dyStringNew(0);
     dyStringAppend(dsWarn, "Replacing custom tracks: &nbsp;");
     for (ct = replacedCts; ct != NULL; ct = ct->next)
         {
@@ -490,8 +507,10 @@ if (slCount(replacedCts) != 0)
             dyStringAppend(dsWarn, ",&nbsp;");
         dyStringAppend(dsWarn, ct->tdb->shortLabel);
         }
-    warn = dyStringCannibalize(&dsWarn);
     }
+if (dsWarn)
+    warn = dyStringCannibalize(&dsWarn);
+
 if (cartVarExists(cart, hgCtDoDelete))
     {
     /* delete tracks */
