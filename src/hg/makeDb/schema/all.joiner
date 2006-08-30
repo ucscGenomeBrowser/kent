@@ -1090,7 +1090,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.scBlastTab.query
     $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
     rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName exclude=noKg
+    $kgDb,!hg15,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
+    hg15,hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
@@ -1149,7 +1150,11 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
-    $kgDb.knownGene.alignID
+    $kgDb,!hg18,!mm8.knownGene.alignID
+
+identifier knownAlignIdWithNull
+"Which (of sometimes multiple) mapping of a known gene (allow null values)"
+    hg18,mm8.knownGene.alignID exclude=  
 
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
