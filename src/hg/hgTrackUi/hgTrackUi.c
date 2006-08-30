@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.304 2006/08/30 21:02:43 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.305 2006/08/30 21:34:49 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2407,8 +2407,8 @@ if (isCustomTrack(tdb->tableName))
 #ifdef NEW
     puts("&nbsp;");
     cgiMakeButton("customTrackCgi", "Manage custom tracks");
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
 #endif
+    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
     }
 printf("<BR>\n");
 
