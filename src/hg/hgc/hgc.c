@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1093 2006/08/29 20:12:36 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1094 2006/08/30 00:10:39 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8215,7 +8215,7 @@ if (vif != NULL)
         printf("%s", row[0]);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        printf(" ,%s, ", row[0]);
+        printf(" ,%s ", row[0]);
         }
     printf("<BR>\n");
     sqlFreeResult(&sr);
