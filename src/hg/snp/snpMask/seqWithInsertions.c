@@ -5,11 +5,10 @@
 #include "common.h"
 
 #include "chromInfo.h"
-#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.1 2006/08/30 21:10:32 heather Exp $";
+static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.2 2006/08/30 23:50:33 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -67,18 +66,18 @@ int pos = 0;
 
 assert (size > 0);
 verbose(5, "getSubstring from %d to %d\n", startPos, endPos);
-newSequence = needMem(size);
+newSequence = needMem(size + 1);
 for (pos = 0; pos <= size - 1; pos++)
     newSequence[pos] = sequence[pos+startPos];
 newSequence[size] = '\0';
-verbose(5, "left flank = %s\n", newSequence);
+verbose(5, "substring = %s\n", newSequence);
 return newSequence;
 }
 
 
 void getSeq(char *sequenceFile, char *chromName)
 /* get sequence for each chrom */
-/* assumes insertions are sorted by position -- add errAbort if not true */
+/* assumes insertions are sorted by position -- errAbort if not true */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -89,7 +88,6 @@ char fileName[64];
 FILE *f;
 
 struct dnaSeq *seq;
-struct dyString *newSeq = newDyString(1048576);
 char *seqPtr = NULL;
 char *leftFlank = NULL;
 char *rightFlank = NULL;
@@ -109,12 +107,16 @@ char *subString = NULL;
 
 int slashCount = 0;
 int seqPos = 0;
+int snpCount = 0;
 
 chromSize = getChromSize(chromName);
 verbose(1, "chromSize = %d\n", chromSize);
-seq = hFetchSeq(sequenceFile, chromName, 0, chromSize-1);
+seq = hFetchSeq(sequenceFile, chromName, 1, chromSize-1);
 touppers(seq->dna);
 seqPtr = seq->dna;
+
+safef(fileName, ArraySize(fileName), "%s.fat", chromName);
+f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, strand, class, locType, observed, name from %s", snpTable);
 
@@ -147,6 +149,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (start < seqPos)
         errAbort("candidate SNPs are not in sorted order.\n");
 
+    snpCount++;
+
     subString = cloneString(observed);
     subString = subString + 2;
     if (sameString(strand, "-"))
@@ -154,23 +158,29 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* add the left flank */
     leftFlank = getSubstring(seqPos, start-1, seq->dna);
-    dyStringAppend(newSeq, leftFlank);
+    writeSeqWithBreaks(f, leftFlank, strlen(leftFlank), 50);
+
     /* add the observed string */
-    dyStringAppend(newSeq, subString);
+    writeSeqWithBreaks(f, subString, strlen(subString), 50);
+
     /* increment the position */
     seqPos = start;
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 
+if (snpCount == 0)
+   {
+   verbose(1, "no matching SNPs\n");
+   return;
+   }
+
 /* add the final (right) flank */
 rightFlank = getSubstring(seqPos, chromSize + 1, seq->dna);
-dyStringAppend(newSeq, rightFlank);
+writeSeqWithBreaks(f, rightFlank, strlen(rightFlank), 50);
 
-safef(fileName, ArraySize(fileName), "%s.fat", chromName);
-f = mustOpen(fileName, "w");
-writeSeqWithBreaks(f, newSeq->string, newSeq->stringSize, 50);
 carefulClose(&f);
+
 }
 
 
