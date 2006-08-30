@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# $Id: updateBed.pl,v 1.3 2006/08/29 23:09:03 hiram Exp $
+# $Id: updateBed.pl,v 1.4 2006/08/30 00:04:06 hiram Exp $
 
 ##Author: Yontao Lu
 ##Date  06/29/03
@@ -583,6 +583,23 @@ if ($verbose > 1) {
 
     $sId =~ s/MGI\://;
     if (!defined($sname)) { $sname = ""; }
+    my @distanceList = split(',\s*|-',$distance);
+    my $distanceSum = 0;
+    for (my $j = 0; $j < scalar(@distanceList); ++$j)
+	{
+	$distanceList[$j] =~ s/\~//g;
+	$distanceList[$j] =~ s/BP//i;
+	if ($distanceList[$j] =~ m/KB/) {
+	    $distanceList[$j] =~ s/\s*KB\s*//i;
+	    $distanceList[$j] *= 1000;
+	}
+	$distanceSum += $distanceList[$j];
+	}
+    if (scalar(@distanceList) > 0) {
+	$distance = $distanceSum / scalar(@distanceList);
+    } else {
+	$distance = $distanceSum;
+    }
 
 if (!defined($id)) { print STDERR "ERROR: not defined: id\n"; }
 if (!defined($name)) { print STDERR "ERROR: not defined: name\n"; }
@@ -732,6 +749,24 @@ while(my $key = shift(@allkeys))
 
     &removePrimerFromHash(@allNames);
     if (defined($sId) && (length($sId) > 0)) { $sId =~ s/MGI\://; }
+
+    my @distanceList = split(',\s*|-',$distance);
+    my $distanceSum = 0;
+    for (my $j = 0; $j < scalar(@distanceList); ++$j)
+	{
+	$distanceList[$j] =~ s/\~//g;
+	$distanceList[$j] =~ s/BP//i;
+	if ($distanceList[$j] =~ m/KB/) {
+	    $distanceList[$j] =~ s/\s*KB\s*//i;
+	    $distanceList[$j] *= 1000;
+	}
+	$distanceSum += $distanceList[$j];
+	}
+    if (scalar(@distanceList) > 0) {
+	$distance = $distanceSum / scalar(@distanceList);
+    } else {
+	$distance = $distanceSum;
+    }
 
 if (!defined($id)) { print STDERR "ERROR: not defined: id\n"; }
 if (!defined($name)) { print STDERR "ERROR: not defined: name\n"; }
