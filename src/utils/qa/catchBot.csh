@@ -60,6 +60,7 @@ set max=0
 # write header to file
 rm -f $output
 echo "\nfrom apachelogs.access_log covering the last $hitSpan hours" >> $output
+echo "\nUsage limit: 1 hit every 15 seconds & no more than 5,000 hits per day" >> $output
 echo "\ntotal hits: $totalHits" >> $output
 echo "users with the most hits:" >> $output
 echo "                                                                   per    per" >> $output
