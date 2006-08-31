@@ -1106,8 +1106,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.affyGnfU74CDistance.target
     $kgDb.humanNormalDistance.query
     $kgDb.humanNormalDistance.target
-    $kgDb.mouseLandscapeDistance.query
-    $kgDb.mouseLandscapeDistance.target
+    $kgDb.mouseLandscapeDistance.query minCheck=0.94
+    $kgDb.mouseLandscapeDistance.target minCheck=0.94
     $kgDb.gladHumESDistance.query
     $kgDb.gladHumESDistance.target
     $kgDb.keggPathway.kgID
