@@ -6,10 +6,12 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 #CFLAGS=-ggdb
 
 O = snpMapToExon.o snpMaskChrom.o snpMaskFlank.o \
-    snpMaskFlankSubset.o snpMaskGenes.o
+    snpMaskFlankSubset.o snpMaskGenes.o \
+    seqWithInsertions.o seqWithoutDeletions.o
 
 all: snpMapToExon snpMaskChrom snpMaskFlank \
-    snpMaskFlankSubset snpMaskGenes
+    snpMaskFlankSubset snpMaskGenes \
+    seqWithInsertions seqWithoutDeletions
 
 snpMapToExon: snpMapToExon.o ${MYLIBS}
 	${CC} ${COPT} -O -o snpMapToExon snpMapToExon.o ${MYLIBS} $L
@@ -25,4 +27,10 @@ snpMaskFlankSubset: snpMaskFlankSubset.o ${MYLIBS}
 
 snpMaskGenes: snpMaskGenes.o ${MYLIBS}
 	${CC} ${COPT} -O -o snpMaskGenes snpMaskGenes.o ${MYLIBS} $L
+
+seqWithInsertions: seqWithInsertions.o ${MYLIBS}
+	${CC} ${COPT} -O -o seqWithInsertions seqWithInsertions.o ${MYLIBS} $L
+
+seqWithoutDeletions: seqWithoutDeletions.o ${MYLIBS}
+	${CC} ${COPT} -O -o seqWithoutDeletions seqWithoutDeletions.o ${MYLIBS} $L
 
