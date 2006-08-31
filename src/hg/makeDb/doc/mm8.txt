@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.9 2006/08/31 00:39:07 markd Exp $"
+#	"$Id: mm8.txt,v 1.10 2006/08/31 00:43:26 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7176,7 +7176,7 @@ XXXX - running 2006-08-29
     #	1107    <- 1,107 unique to mm7 list
 
 ##########################################################################
-# N-SCAN gene predictions (nscanGene) - (DDD markd)
+# N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
     cd /cluster/data/mm8/bed/nscan/
 
     # obtained NSCAN predictions from michael brent's group
