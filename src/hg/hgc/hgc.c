@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1095 2006/08/30 21:56:51 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1096 2006/08/31 18:37:09 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2187,8 +2187,10 @@ if (res != NULL)
     /* chromInfo table exists so check that sequence file can be opened */
     FILE *f = fopen(seqFile, "rb");
     if (f != NULL)
+        {
         exists = TRUE;
-    fclose(f);
+        fclose(f);
+        }
     }
 return exists;
 }
