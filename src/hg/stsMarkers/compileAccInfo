@@ -1,4 +1,5 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
+
 # File: compileAccInfo
 # Author: Terry Furey
 # Date: 4/13/01
@@ -6,26 +7,33 @@
 # Description: Create a file listing all of the
 # contig and accession information
 
-# $Id: compileAccInfo,v 1.1 2006/08/30 23:36:33 hiram Exp $
+# $Id: compileAccInfo,v 1.2 2006/08/31 22:16:47 hiram Exp $
+
+use strict;
+use warnings;
 
 # Usage message
 if ($#ARGV < 1) {
-  print stderr "USAGE: compileAccInfo [-pre <golden_pos.rdb> -nb -ncbi -mouse -rat] <ctg dir> <seq inf>\n";
+  print STDERR "USAGE: compileAccInfo [-pre <golden_pos.rdb> -nb -ncbi -mouse -rat] <ctg dir> <seq inf>\n";
   exit(1);
 }
 
+# global variables
+my %ntacc;
+my $randomStart;
+
 # Read parameters
-$pre = 0;
-$nb = 0;
-$done = 0;
-$ncbi = 0;
-$mouse = 0;
-$rat = 0;
+my $pre = 0;
+my $nb = 0;
+my $done = 0;
+my $ncbi = 0;
+my $mouse = 0;
+my $rat = 0;
 while ($#ARGV > 1) {
-  $arg = shift(@ARGV);
+  my $arg = shift(@ARGV);
   if ($arg eq "-pre") {
     $pre = 1;
-    $gp = shift(@ARGV);
+    my $gp = shift(@ARGV);
     open(GP, "<$gp") || die("Could not open $gp\n");
   } elsif ($arg eq "-ncbi") {
     $ncbi = 1;
@@ -37,31 +45,33 @@ while ($#ARGV > 1) {
     $nb = 1;
   }
 }
-$dir = shift(@ARGV);
-$seqinfo = shift(@ARGV);
+my $dir = shift(@ARGV);
+my $seqinfo = shift(@ARGV);
 if (!-e $dir) {
   die("$dir does not exist\n");
 }
 
+my @chroms;
+
 # Set the chromosomes being processed
 if ($ncbi) {
-  @chroms = (1..22,X,Y,M,qw(Un));
+  @chroms = (1..22,qw(X),qw(Y),qw(M),qw(Un));
 } elsif ($mouse) {
-  @chroms = (1..19,X,Y,M,Un);
+  @chroms = (1..19,qw(X),qw(Y),qw(M),qw(Un));
 } elsif ($rat) {
-  @chroms = (1..20,X,M,qw(Un));
+  @chroms = (1..20,qw(X),qw(M),qw(Un));
 } else {
-  @chroms = (1..22,X,Y,NA,UL);
+  @chroms = (1..22,qw(X),qw(Y),qw(NA),qw(UL));
 }
 
 # Read in the phases of the accessions (human)
-my @phase;
+my %phase;
 if ((!$mouse) && (!$rat)) {
   open(SEQ, "<$seqinfo") || die("Could not open $seqinfo\n");
-  while ($line = <SEQ>) {
+  while (my $line = <SEQ>) {
     chomp($line);
-    ($thisacc, $gi, $bases, $phase, $draft, $chr, $FISH, $lab, $clone) = split(' ',$line);
-    ($acc, $vers) = split(/\./, $thisacc);
+    my ($thisacc, $gi, $bases, $phase, $draft, $chr, $FISH, $lab, $clone) = split(' ',$line);
+    my ($acc, $vers) = split(/\./, $thisacc);
     $phase{$acc} = $phase;
   }
   close(SEQ);
@@ -73,9 +83,9 @@ my %allordered;
 my %allstart;
 my %allend;
 if ($pre) {
-  while ($line = <GP>) {
+  while (my $line = <GP>) {
     chomp($line);
-    ($chr, $ord, $acc, $start, $end, $mid, $size) = split("\t", $line);
+    my ($chr, $ord, $acc, $start, $end, $mid, $size) = split("\t", $line);
     $accchr{$acc} = $chr;
     $allordered{$acc} = $ord;
     $allstart{$acc} = $start;
@@ -87,15 +97,38 @@ if ($pre) {
 open(OUT, ">accession_info.rdb");
 print OUT "Chr\tOrd\tStart\tEnd\tMiddle\tContig\tCtgIdx\tBargeIdx\tClone\tAcc\tBridged\tNT\tPhase\n";
 print OUT "5S\t2N\t10N\t10N\t10N\t10S\t5N\t5N\t10S\t10S\t5S\t20S\t5N\n";
-$count = 0;
-foreach $chr (@chroms) {
-  print stderr "Processing chrom $chr\n";
+my $count = 0;
+my @contig;
+my @ctgstart;
+my @ctgend;
+foreach my $chr (@chroms) {
+  my $border = 0;	#	for barge reading
+  my @btype;	#	barge types
+  my @ctgidx;	#	for barge reading, apparently unused
+  my @bctg;	#	for barge reading, apparently unused
+  my @bargeidx;	#	for barge reading
+  my @bacc;	#	for barge reading, apparently unused
+  my %accbarge;	#	accessions in barge
+  my %clone;	#	accession barge info
+  my %ntname;	#	accession barge info
+  my %accExists;	#	accession barge info, apparently unused
+  my %accctg;
+  my %accctgidx;
+  my $start;
+  my $thisctg;
+  my $ctglength;
+  my $thischr;
+  my $chrlength;
+  my $ctg;
+
+  print STDERR "Processing chrom $chr\n";
 
   # First, read in ordering information for the contigs
-  $numctg = 0;
+  my $numctg = 0;
   if (!$pre) {
     if (open(LIFT, "$dir/$chr/lift/ordered.lft")) {
-      while ($line = <LIFT>) {
+    print STDERR "reading contig information from $chr/lift/ordered.lft\n";
+      while (my $line = <LIFT>) {
 	chomp($line);
 	($start, $thisctg, $ctglength, $thischr, $chrlength) = split(' ',$line);
 	($thischr, $ctg) = split(/\//,$thisctg);
@@ -110,9 +143,10 @@ foreach $chr (@chroms) {
     close(LIFT);
     $randomStart = $numctg;
     if (open(LIFT, "$dir/$chr/lift/random.lft")) {
-      while ($line = <LIFT>) {
+    print STDERR "reading contig information from $chr/lift/random.lft\n";
+      while (my $line = <LIFT>) {
 	chomp($line);
-	($start, $thisctg, $ctglength, $thischr, $chrlength) = split(' ',$line);
+	my ($start, $thisctg, $ctglength, $thischr, $chrlength) = split(' ',$line);
 	($thischr, $ctg) = split(/\//,$thisctg);
 	if ($ctglength != 0) {
 	  $contig[$numctg] = $ctg;
@@ -125,9 +159,9 @@ foreach $chr (@chroms) {
     close(LIFT);
   } else {
     @contig = split(' ',`ls -d $dir/$chr/ctg*`);
-    $numctg = $#contig + 1;
-    for ($i = 0; $i < $numctg; $i++) {
-      @subdir = split(/\//, $contig[$i]);
+    my $numctg = $#contig + 1;
+    for (my $i = 0; $i < $numctg; $i++) {
+      my @subdir = split(/\//, $contig[$i]);
       $contig[$i] = $subdir[$#subdir];
       $contig[$i] =~ s/\///;
     }
@@ -135,11 +169,11 @@ foreach $chr (@chroms) {
 
   # Read in NT contig information, if necessary
   if ((!$mouse) && (!$rat)) {
-    for ($i = 0; $i < $numctg; $i++) {
+    for (my $i = 0; $i < $numctg; $i++) {
       if (open(NT, "<$dir/$chr/$contig[$i]/nt.noNt")) {
-	$currnt = "";
-	while ($line = <NT>) {
-	  ($nt, $ntacc, $start, $direction, $length) = split(' ',$line);
+	my $currnt = "";
+	while (my $line = <NT>) {
+	  my ($nt, $ntacc, $start, $direction, $length) = split(' ',$line);
 	  if ($nt eq $currnt) {
 	    $ntacc{$nt} .= ";$ntacc";
 	  } else {
@@ -152,18 +186,18 @@ foreach $chr (@chroms) {
   }
 
   # Next, check if the barge information is available
-  for ($i = 0; $i <= $border; $i++) {
+  for (my $i = 0; $i <= $border; $i++) {
     $btype[$border] = "";
   }
   $border = -1;
-  for ($i = 0; $i < $numctg; $i++) {
+  for (my $i = 0; $i < $numctg; $i++) {
     if (open(BARGE, "<$dir/$chr/$contig[$i]/mmBarge")) {
-      print stderr "Processing $contig[$i]\n";
+      print STDERR "Processing $contig[$i]\n";
+      my $line = <BARGE>;
       $line = <BARGE>;
-      $line = <BARGE>;
-      $firstacc = 1;
+      my $firstacc = 1;
       $border++;
-      $bidx = 0;
+      my $bidx = 0;
       while ($line = <BARGE>) {
 	chomp($line);
 	
@@ -172,17 +206,17 @@ foreach $chr (@chroms) {
 	  if (!($line =~ /weak/)) {
 	    if ($line =~ /bridged/) {
 	      $btype[$border] = "true";
-	      #print stderr "Barge $border bridged\n";
+	      #print STDERR "Barge $border bridged\n";
 	    } else {
 	      $btype[$border] = "false";
-	      #print stderr "Barge $border open\n";
+	      #print STDERR "Barge $border open\n";
 	    }
 	    $border++;
 	    $firstacc = 1;
 	  }
 	} else {
-	  ($start, $name, $phase, $clone, $direction, $size, $before, $after, 
-	   $center, $plc, $mappos) = split(' ',$line);
+	  my ($start, $name, $phase, $clone, $direction, $size, $before,
+	    $after, $center, $plc, $mappos) = split(' ',$line);
 	  # Record contig info
 	  if ($firstacc) {
 	    $ctgidx[$border] = $i;
@@ -196,22 +230,22 @@ foreach $chr (@chroms) {
 	  # Create a list of accessions for the barge
 	  if ($name =~ /NT/) {
 	    $bacc[$border] .= "$ntacc{$name};";
-	    @accs = split(";",$ntacc{$name});
-	    $ntcount = 0;
-	    for ($j = 0; $j <= $#accs; $j++) {
+	    my @accs = split(";",$ntacc{$name});
+	    my $ntcount = 0;
+	    for (my $j = 0; $j <= $#accs; $j++) {
 	      $accbarge{$accs[$j]} = $border;
 	      $clone{$accs[$j]} = $clone;
 	      $ntcount++;
 	      $ntname{$accs[$j]} = "${name}_$ntcount";
-	      $exists{$accs[$j]} = 1;
-	      # print stderr "ntname for $accs[$j] is $ntname{$accs[$j]}\n";
+	      $accExists{$accs[$j]} = 1;
+	      # print STDERR "ntname for $accs[$j] is $ntname{$accs[$j]}\n";
 	    }
 	  } else {
 	    $bacc[$border] .= "$name;";
 	    $accbarge{$name} = $border;
 	    $clone{$name} = $clone;
 	    $ntname{$name} = "";
-	    $exists{$name} = 1;
+	    $accExists{$name} = 1;
 	  }
 	}
       }
@@ -227,15 +261,23 @@ foreach $chr (@chroms) {
   my %start;
   my %end;
   if (!$pre) {
-    `cat $dir/$chr/chr$chr.agp $dir/$chr/chr${chr}_random.agp > $$.agp`;
-    open(AGP, "$$.agp");
-    while ($line = <AGP>) {
+    my $agp = "$dir/$chr/chr$chr.agp";
+    my $ranAgp = "$dir/$chr/chr" . $chr . "_random.agp";
+    if ( -f $ranAgp && -f $agp ) {
+	`cat $agp $ranAgp > $$.agp`;
+    } elsif ( -f $ranAgp ) {
+	`cat $ranAgp > $$.agp`;
+    } else {
+	`cat $agp > $$.agp`;
+    }
+    open(AGP, "$$.agp") or die "Can not open created file $$.agp:$!";
+    while (my $line = <AGP>) {
       chomp($line);
-      ($thischr, $start, $end, $index, $type, $accession) = split(' ',$line);
+      my ($thischr, $start, $end, $index, $type, $accession) = split(' ',$line);
       if ($type eq "N") {
 	next;
       }
-      ($acc, $version) = split(/\./,$accession);
+      my ($acc, $version) = split(/\./,$accession);
       if ($thischr =~ /random/) {
 	$ordered{$acc} = 0;
       } else {
@@ -255,39 +297,51 @@ foreach $chr (@chroms) {
       }
       $accctg{$acc} = $contig[$index];
       $accctgidx{$acc} = $index;
+      $count++;
     }
     close(AGP);
     `rm $$.agp`;
   } else {
-    foreach $acc (keys %accchr) {
+    foreach my $acc (keys %accchr) {
       if ($accchr{$acc} eq $chr) {
 	$count++;
 	$ordered{$acc} = $allordered{$acc};
 	$start{$acc} = $allstart{$acc};
 	$end{$acc} = $allend{$acc};
-	$exists{$acc} = 1;
+	$accExists{$acc} = 1;
       }
     }
   }
 
   # Print it all out for each accession
-  foreach $acc (keys %start) {
-    $middle = int(($start{$acc} + $end{$acc})/2);
-    $border = $accbarge{$acc};
-    if (!$btype[$border]) {
-      $btype[$border] = "false";
+  foreach my $acc (keys %start) {
+    my $middle = int(($start{$acc} + $end{$acc})/2);
+    my $bargeidx = 0;
+    my $btype = "false";
+    if (exists($accbarge{$acc})) {
+	$border = $accbarge{$acc};
+	if (defined($btype[$border]) && (!$btype[$border])) {
+	  $btype[$border] = "false";
+	}
+	$btype = $btype[$border];
+	$bargeidx = $bargeidx[$border];
     }
-    if ($phase{$acc} =~ /0|1|2|3/) {
+    my $phase = -1;
+    if (exists($phase{$acc}) && ($phase{$acc} =~ /0|1|2|3/)) {
       $phase = $phase{$acc};
-    } else {
-      $phase = -1;
     }
+    my $clone = "";
+    if (exists($clone{$acc})){$clone=$clone{$acc};}
+    my $ntname = "";
+    if (exists($ntname{$acc})){$ntname=$ntname{$acc};}
+    if (!exists($ordered{$acc})){print STDERR "ordered{$acc} does not exist\n";}
+    if (!exists($accctgidx{$acc})){print STDERR "accctgidx{$acc} does not exist\n";}
     if (!$nb) {
-      print OUT "chr$chr\t$ordered{$acc}\t$start{$acc}\t$end{$acc}\t$middle\t$accctg{$acc}\t$accctgidx{$acc}\t$bargeidx[$border]\t$clone{$acc}\t$acc\t$btype[$border]\t$ntname{$acc}\t$phase\n";
+      print OUT "chr$chr\t$ordered{$acc}\t$start{$acc}\t$end{$acc}\t$middle\t$accctg{$acc}\t$accctgidx{$acc}\t$bargeidx\t$clone\t$acc\t$btype\t$ntname\t$phase\n";
     } else {
-      print OUT "chr$chr\t$ordered{$acc}\t$start{$acc}\t$end{$acc}\t$middle\t$accctg{$acc}\t$accctgidx{$acc}\t0\t$clone{$acc}\t$acc\tfalse\t$ntname{$acc}\t$phase\n";
+      print OUT "chr$chr\t$ordered{$acc}\t$start{$acc}\t$end{$acc}\t$middle\t$accctg{$acc}\t$accctgidx{$acc}\t0\t$clone\t$acc\tfalse\t$ntname\t$phase\n";
     }
   }
 }
-print stderr "$count processed\n";
+print STDERR "$count processed\n";
 close(OUT);
