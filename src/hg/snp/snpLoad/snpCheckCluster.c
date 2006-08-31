@@ -11,7 +11,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.1 2006/08/31 23:10:59 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.2 2006/08/31 23:27:22 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -27,9 +27,10 @@ errAbort(
 }
 
 
-void checkCluster(char *chromName)
+int checkCluster(char *chromName)
 /* detect if more than one insertion at the same location */
 /* detect if all the observed strings match or not */
+/* return error count */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -40,6 +41,7 @@ boolean clusterFound = FALSE;
 boolean observedMismatch = FALSE;
 
 int pos = 0;
+int posPrevious = 0;
 int start = 0;
 int end = 0;
 int errors = 0;
@@ -76,7 +78,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    errors++;
 	    clusterFound = FALSE;
-            fprintf(outputFileHandle, "   multiple insertions at position %d\n", start);
+            fprintf(outputFileHandle, "   multiple insertions at position %d\n", posPrevious);
 	    /* print list of all observed */
 	    for (element = observedList; element !=NULL; element = element->next)
 	        fprintf(outputFileHandle, "   observed = %s\n", element->name);
@@ -97,6 +99,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	/* if first time through, pick up previous values */
 	if (!clusterFound)
 	    {
+	    posPrevious = pos;
 	    clusterFound = TRUE;
 	    element = slNameNew(observedPrevious);
 	    slAddHead(&observedList, element);
@@ -110,9 +113,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
 
     }
+if (clusterFound)
+{
+    errors++;
+    fprintf(outputFileHandle, "   multiple insertions at position %d\n", start);
+    /* print list of all observed */
+    for (element = observedList; element !=NULL; element = element->next)
+        fprintf(outputFileHandle, "   observed = %s\n", element->name);
+    for (element = nameList; element !=NULL; element = element->next)
+        fprintf(outputFileHandle, "   rsId = %s\n", element->name);
+    }
+
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 verbose(1, "  %d clustered positions detected\n", errors);
+return errors;
 }
 
 
@@ -121,6 +136,7 @@ int main(int argc, char *argv[])
 {
 struct slName *chromList = NULL;
 struct slName *chromPtr = NULL;
+int totalErrors = 0;
 
 if (argc != 3)
     usage();
@@ -140,9 +156,10 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     if (sameString(chromPtr->name, "chrY")) continue;
     verbose(1, "chrom = %s\n", chromPtr->name);
     fprintf(outputFileHandle, "chrom = %s\n", chromPtr->name);
-    checkCluster(chromPtr->name);
+    totalErrors = totalErrors + checkCluster(chromPtr->name);
     }
 
 carefulClose(&outputFileHandle);
+verbose(1, "TOTAL errors = %d\n", totalErrors);
 return 0;
 }
