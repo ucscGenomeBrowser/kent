@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.2 2006/08/30 23:50:33 heather Exp $";
+static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.3 2006/08/31 00:42:59 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -88,7 +88,6 @@ char fileName[64];
 FILE *f;
 
 struct dnaSeq *seq;
-char *seqPtr = NULL;
 char *leftFlank = NULL;
 char *rightFlank = NULL;
 
@@ -111,9 +110,8 @@ int snpCount = 0;
 
 chromSize = getChromSize(chromName);
 verbose(1, "chromSize = %d\n", chromSize);
-seq = hFetchSeq(sequenceFile, chromName, 1, chromSize-1);
+seq = hFetchSeq(sequenceFile, chromName, 0, chromSize);
 touppers(seq->dna);
-seqPtr = seq->dna;
 
 safef(fileName, ArraySize(fileName), "%s.fat", chromName);
 f = mustOpen(fileName, "w");
