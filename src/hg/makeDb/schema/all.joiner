@@ -636,10 +636,10 @@ identifier affyMOE430
     $mm.knownToMOE430.value
     $mm.knownToMOE430A.value
     $mm.rinnSex.name
-    hgFixed.mouseRinnSex.name
-    hgFixed.mouseRinnSexMedian.name
-    hgFixed.mouseRinnSexRatio.name
-    hgFixed.mouseRinnSexMedianRatio.name
+    hgFixed.mouseRinnSex.name minCheck=0.96
+    hgFixed.mouseRinnSexMedian.name minCheck=0.96
+    hgFixed.mouseRinnSexRatio.name minCheck=0.97
+    hgFixed.mouseRinnSexMedianRatio.name minCheck=0.97
 
 identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
