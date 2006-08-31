@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1090 2006/08/29 01:24:45 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1096 2006/08/31 18:37:09 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2187,8 +2187,10 @@ if (res != NULL)
     /* chromInfo table exists so check that sequence file can be opened */
     FILE *f = fopen(seqFile, "rb");
     if (f != NULL)
+        {
         exists = TRUE;
-    fclose(f);
+        fclose(f);
+        }
     }
 return exists;
 }
@@ -2313,10 +2315,13 @@ if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
-/* Show alignment either if other database is active in dbDb or */
+/* Show alignment if the database exists and */
 /* if there is a chromInfo table for that database and the sequence */
-/* file exists. This latter case occurs on the archives server. */
-if ((hDbIsActive(otherDb)) || (chromSeqFileExists(otherDb, chain->qName)))
+/* file exists. This means that alignments can be shown on the archive */
+/* server (or in other cases) if there is a database with a chromInfo table, */
+/* the sequences are available and there is an entry added to dbDb for */
+/* the otherDb. */
+if (sqlDatabaseExists(otherDb) && chromSeqFileExists(otherDb, chain->qName))
     {
     if (chainWinSize < 1000000) 
         {
@@ -2329,10 +2334,10 @@ if ((hDbIsActive(otherDb)) || (chromSeqFileExists(otherDb, chain->qName)))
         printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
         }
-    if (! sameWord(otherDb, "seq"))
-        {
-        chainToOtherBrowser(chain, otherDb, otherOrg);
-        }
+    }
+if (! sameWord(otherDb, "seq") && (hDbIsActive(otherDb)))
+    {
+    chainToOtherBrowser(chain, otherDb, otherOrg);
     }
 chainFree(&chain);
 }
@@ -2447,10 +2452,13 @@ if (net->chainId != 0)
     {
     netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
     printf("<BR>\n");
-    /* Show alignment either if other database is active in dbDb or */
+    /* Show alignment if the database exists and */
     /* if there is a chromInfo table for that database and the sequence */
-    /* file exists. This latter case occurs on the archives server. */
-    if ((hDbIsActive(otherDb)) || (chromSeqFileExists(otherDb, chain->qName)))
+    /* file exists. This means that alignments can be shown on the archive */
+    /* server (or in other cases) if there is a database with a chromInfo */
+    /* table, the sequences are available and there is an entry added to */
+    /* dbDb for the otherDb. */
+    if ((sqlDatabaseExists(otherDb)) && (chromSeqFileExists(otherDb, net->qName)))
         {
         if (netWinSize < 1000000)
 	    {
@@ -8209,7 +8217,7 @@ if (vif != NULL)
         printf("%s", row[0]);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        printf(" ,%s, ", row[0]);
+        printf(" ,%s ", row[0]);
         }
     printf("<BR>\n");
     sqlFreeResult(&sr);
