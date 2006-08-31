@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.47 2006/08/30 21:11:30 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.47.2.1 2006/08/31 19:45:25 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +45,22 @@ errAbort(
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtDoRefresh    "hgct_do_refresh"
 #define hgCtRefreshPrefix "hgct_refresh"
+
+#ifndef NO_EDIT
+#define hgCtDoEdit       "hgct_do_edit"
+#define hgCtName         "hgct_name"
+#define hgCtDescription  "hgct_description"
+#define hgCtItemUrl      "hgct_itemUrl"
+#define hgCtInitialPos   "hgct_initialPos"
+#define hgCtTrackLine    "hgct_trackLine"
+#define hgCtColorChoice  "hgct_colorChoice"
+#define hgCtDocChoice    "hgct_docChoice"
+#define hgCtColorRed     "hgct_colorRed"
+#define hgCtColorGreen   "hgct_colorGreen"
+#define hgCtColorBlue    "hgct_colorBlue"
+#define hgCtUpdateColor  "hgct_updateColor"
+#define hgCtEditDoc      "hgct_do_edit_doc"
+#endif
 
 /* Global variables */
 struct cart *cart;
@@ -189,6 +205,7 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
+
 char buf[128];
 safef(buf, sizeof buf, "%s\\'\\'%s", CT_DOC_HEADER_PREFIX, 
                                         CT_DOC_HEADER_SUFFIX);
@@ -268,7 +285,12 @@ cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
+#ifndef NO_EDIT
+    printf("<TR><TD><A HREF=\"/cgi-bin/hgCustom?%s=%s\">%s</A></TD>", 
+            hgCtDoEdit, ct->tdb->tableName, ct->tdb->shortLabel);
+#else
     printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
+#endif
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
     /* Type field */
@@ -282,7 +304,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         int count = ctItemCount(ct);
         if (count > 0)
             printf("<TD ALIGN='CENTER'>%d</TD>", count);
-
         else
             puts("<TD>&nbsp;</TD>");
         }
@@ -323,14 +344,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     puts("</TD></TR>");
     }
 hTableEnd();
-}
-
-void helpCustom()
-/* display documentation */
-{
-webNewSection("Loading Custom Tracks");
-webIncludeFile("/goldenPath/help/loadingCustomTracks.html");
-webEndSection();
 }
 
 void doBrowserLines(struct slName *browserLines, char **retErr)
@@ -452,6 +465,296 @@ void endCustomForm()
 puts("</FORM>\n");
 }
 
+#ifndef NO_EDIT
+
+void changeCustomTrack(char *track)
+/* modify custom track with values from edit form */
+{
+struct customTrack *ct = NULL;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (sameString(ct->tdb->tableName, track))
+        break;
+if (!ct)
+    errAbort("can't find custom track: %s", track);
+ct->tdb->shortLabel = cloneString(cartUsualString(cart, hgCtName,
+                                        ct->tdb->shortLabel));
+ct->tdb->tableName = customTrackTableFromLabel(ct->tdb->shortLabel);
+ct->tdb->longLabel = cloneString(cartUsualString(cart, hgCtDescription,
+                                        ct->tdb->longLabel));
+//cartRemove(cart, hgCtName);
+cartRemove(cart, hgCtDescription);
+}
+
+void editCustomDoc(char *track)
+/* put up form for editing custom track HTML doc */
+{
+struct customTrack *ct = NULL;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (sameString(ct->tdb->tableName, track))
+        break;
+if (!ct)
+    errAbort("can't find custom track: %s", track);
+cartWebStart(cart, "Edit HTML track documentation:  %s ", 
+                        ct->tdb->shortLabel);
+puts("<FORM ACTION=\"/cgi-bin/hgCustom\" METHOD=\"POST\" "
+               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgCtTable, ct->tdb->tableName);
+
+cgiSimpleTableStart();
+
+/* description */
+cgiSimpleTableRowStart();
+cgiTableField("Description");
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeTextArea(hgCtTrackLine, "", 3, 70);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* methods */
+cgiSimpleTableRowStart();
+cgiTableField("Methods");
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeTextArea(hgCtTrackLine, "", 3, 70);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* references */
+cgiSimpleTableRowStart();
+cgiTableField("References");
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeTextArea(hgCtTrackLine, "", 3, 70);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* credits */
+cgiSimpleTableRowStart();
+cgiTableField("Credits");
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+cgiMakeTextArea(hgCtTrackLine, "", 3, 70);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+#ifdef NEW
+cgiSimpleTableRowStart();
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeSubmitButton();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+cgiTableEnd();
+#endif
+
+puts("</FORM>\n");
+cartWebEnd();
+exit(0);
+}
+
+void editCustomTrack(char *track)
+/* put up form for editing custom track */
+{
+struct customTrack *ct = NULL;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (sameString(ct->tdb->tableName, track))
+        break;
+if (!ct)
+    errAbort("can't find custom track: %s", track);
+cartWebStart(cart, "Configure custom track:  %s ", 
+                        ct->tdb->shortLabel);
+puts("<FORM ACTION=\"/cgi-bin/hgCustom\" METHOD=\"POST\" "
+               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar(hgCtTable, ct->tdb->tableName);
+
+puts("<TABLE CELLSPACING=4>");
+
+cgiSimpleTableRowStart();
+cgiTableFieldWithMsg("Name", "Short (left) label");
+
+cgiSimpleTableFieldStart();
+cgiMakeTextVar(hgCtName, ct->tdb->shortLabel, 16);
+cgiTableFieldEnd();
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeSubmitButton();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableFieldWithMsg("Description", "Long (center) label");
+puts("<TD COLSPAN=2>");
+cgiMakeTextVar(hgCtDescription, ct->tdb->longLabel, 55);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiTableFieldWithMsg("Position", "Initial position displayed in browser");
+puts("<TD COLSPAN=2>");
+char *initialPos = ctInitialPosition(ct);
+if (!initialPos)
+    initialPos = "";
+cgiMakeTextVar(hgCtInitialPos, initialPos, 25);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* color chooser */
+cgiSimpleTableRowStart();
+puts("<TD COLSPAN=10>");
+puts("<TABLE CELLSPACING=4>");
+cgiSimpleTableRowStart();
+cgiTableField("Color:");
+
+/* fixed color */
+cgiTableField("Fixed");
+cgiSimpleTableFieldStart();
+cgiMakeRadioButton(hgCtColorChoice, "fixed", TRUE);
+cgiTableFieldEnd();
+puts("<TD WIDTH=30 VSPACE=20 BGCOLOR=#000000>&nbsp;</TD>");
+
+/* red */
+puts("<TD ALIGN='RIGHT'>R</B>");
+cgiSimpleTableFieldStart();
+cgiMakeTextVar(hgCtColorRed, "0", 3);
+cgiTableFieldEnd();
+
+/* green */
+puts("<TD ALIGN='RIGHT'>G</B>");
+cgiSimpleTableFieldStart();
+cgiMakeTextVar(hgCtColorGreen, "0", 3);
+cgiTableFieldEnd();
+
+/* blue */
+puts("<TD ALIGN='RIGHT'>B</B>");
+cgiSimpleTableFieldStart();
+cgiMakeTextVar(hgCtColorBlue, "0", 3);
+cgiTableFieldEnd();
+
+/* preview button */
+cgiSimpleTableFieldStart();
+cgiMakeOnClickButton("", "Update");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* by score */
+cgiSimpleTableRowStart();
+cgiTableField("");
+cgiTableField("By score");
+
+/* gray */
+cgiSimpleTableFieldStart();
+cgiMakeRadioButton(hgCtColorChoice, "grayScored", FALSE);
+cgiTableFieldEnd();
+puts("<TD WIDTH=30 VSPACE=20 BGCOLOR=#909090>&nbsp;</TD>");
+
+/* blue */
+cgiSimpleTableFieldStart();
+cgiMakeRadioButton(hgCtColorChoice, "blueScored", FALSE);
+cgiTableFieldEnd();
+puts("<TD WIDTH=30 VSPACE=20 BGCOLOR=#003C78>&nbsp;</TD>");
+
+/* brown */
+cgiSimpleTableFieldStart();
+cgiMakeRadioButton(hgCtColorChoice, "brownScored", FALSE);
+cgiTableFieldEnd();
+puts("<TD WIDTH=30 VSPACE=20 BGCOLOR=#643200>&nbsp;</TD>");
+
+cgiTableRowEnd();
+
+/* by item */
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;");
+cgiTableField("By item");
+cgiSimpleTableFieldStart();
+cgiMakeRadioButton(hgCtColorChoice, "colorByItem", FALSE);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiTableEnd();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* HTML doc */
+cgiSimpleTableRowStart();
+cgiTableFieldWithMsg("Doc:", "HTML documentation for track");
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeRadioButton(hgCtDocChoice, "url", FALSE);
+puts("URL");
+cgiTableFieldEnd();
+cgiSimpleTableFieldStart();
+cgiMakeTextVar(hgCtItemUrl, "", 55);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeRadioButton(hgCtDocChoice, "local", TRUE);
+puts("Local");
+cgiTableFieldEnd();
+cgiSimpleTableFieldStart();
+cgiMakeButton(hgCtEditDoc, "Edit");
+puts("&nbsp; Or upload:");
+cgiMakeFileEntry(hgCtDocFile);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* item URL */
+cgiSimpleTableRowStart();
+cgiTableFieldWithMsg("Item URL", "External link for item details page");
+puts("<TD COLSPAN=2>");
+char *itemUrl = trackDbSetting(ct->tdb, "url");
+if (!itemUrl)
+    itemUrl = "";
+cgiMakeTextVar(hgCtItemUrl, itemUrl, 55);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* track line display */
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp;");
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiTableRowEnd();
+cgiTableField("Track line:");
+puts("<TD ALIGN='RIGHT'>");
+//char *javascript = "document.mainForm.hgCtTrackLine = 'track name = document.mainForm.hgCtName description = document.mainForm.hgCtDescription color = document.mainForm.hgCtColorRed'";
+char javascript[2048];
+safef(javascript, sizeof javascript, 
+"document.mainForm.%s.value = 'track name=' + document.mainForm.%s.value + ' description=' + document.mainForm.%s.value + ' color=' + document.mainForm.%s.value + ',' + document.mainForm.%s.value + ',' + document.mainForm.%s.value", 
+        hgCtTrackLine, hgCtName, hgCtDescription,
+        hgCtColorRed, hgCtColorGreen, hgCtColorBlue);
+cgiMakeOnClickButton(javascript, "Update");
+cgiTableFieldEnd();
+puts("<TD ALIGN='LEFT'>");
+cgiMakeOnClickButton("", "Apply");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+puts("<TD COLSPAN=10>");
+char trackLine[256];
+safef(trackLine, sizeof trackLine, "track name=\"%s\" description=\"%s\"",
+        ct->tdb->shortLabel, ct->tdb->longLabel);
+cgiMakeTextArea(hgCtTrackLine, trackLine, 3, 70);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiTableEnd();
+puts("</FORM>\n");
+cartWebEnd();
+exit(0);
+}
+
+#endif
+
 void doMiddle(struct cart *theCart)
 /* create web page */
 {
@@ -480,6 +783,7 @@ if (cartVarExists(cart, hgCtDoDelete) || cartVarExists(cart, hgCtDoRefresh))
     cartRemove(cart, hgCtDataText);
     cartRemove(cart, hgCtDataFile);
     }
+
 /* append a newline to incoming data, to keep custom preprocessor happy */
 char *customText = cartUsualString(cart, hgCtDataText, "");
 if (customText[0])
@@ -489,6 +793,7 @@ if (customText[0])
     customText = dyStringCannibalize(&ds);
     cartSetString(cart, hgCtDataText, customText);
     }
+
 ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
                                         &replacedCts, &err);
 doBrowserLines(browserLines, &warn);
@@ -500,7 +805,7 @@ struct dyString *dsWarn = NULL;
 if (warn)
     {
     dsWarn = dyStringNew(0);
-    dyStringPrintf(dsWarn, "%s. ", warn); 
+    dyStringPrintf(dsWarn, "%s. ", warn);
     }
 
 if (slCount(replacedCts) != 0)
@@ -519,6 +824,26 @@ if (slCount(replacedCts) != 0)
 if (dsWarn)
     warn = dyStringCannibalize(&dsWarn);
 
+#ifndef NO_EDIT
+if (cartVarExists(cart, hgCtDoEdit))
+    {
+    editCustomTrack(cartString(cart, hgCtDoEdit));
+    cartRemove(cart, hgCtDoEdit);
+    }
+else if (cartVarExists(cart, hgCtEditDoc))
+    {
+    editCustomDoc(cartString(cart, hgCtTable));
+    cartRemove(cart, hgCtEditDoc);
+    cartRemove(cart, hgCtTable);
+    }
+/*
+else if (cartVarExists(cart, hgCtTable))
+    {
+    changeCustomTrack(cartString(cart, hgCtTable));
+    //cartRemove(cart, hgCtTable);
+    }
+    */
+#endif
 if (cartVarExists(cart, hgCtDoDelete))
     {
     /* delete tracks */
@@ -636,7 +961,6 @@ else
 addCustom(err, warn);
 endCustomForm();
 
-helpCustom();
 cartRemovePrefix(cart, "hgct_");
 cartWebEnd(cart);
 }
