@@ -1,18 +1,15 @@
-/* seqWithInsertions -- for each chrom, generate "fat" sequence: that is, include insertions. */
+/* seqWithInsertions -- for a given chrom, generate "fat" sequence: that is, include insertions. */
 /* sequence file is separate input -- could also get from chromInfo */
 /* write to chrom.fat */
 
 #include "common.h"
-
-#include "chromInfo.h"
-#include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.3 2006/08/31 00:42:59 heather Exp $";
+static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.4 2006/08/31 03:19:12 heather Exp $";
 
 static char *database = NULL;
+static char *chromName = NULL;
 static char *snpTable = NULL;
-static struct hash *chromHash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,42 +17,9 @@ void usage()
 errAbort(
     "seqWithInsertions - generate sequence that includes insertions\n"
     "usage:\n"
-    "    seqWithInsertions database sequenceFile snpTable\n");
+    "    seqWithInsertions database chrom sequenceFile snpTable\n");
 }
 
-
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct chromInfo *el;
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
-
-unsigned getChromSize(char *chrom)
-/* Return size of chrom.  */
-{
-struct hashEl *el = hashLookup(chromHash,chrom);
-
-if (el == NULL)
-    errAbort("Couldn't find size of chrom %s", chrom);
-return *(unsigned *)el->val;
-}
 
 char *getSubstring(int startPos, int endPos, char *sequence)
 /* I'm hoping this is a safe and fast strncat */
@@ -108,9 +72,12 @@ int slashCount = 0;
 int seqPos = 0;
 int snpCount = 0;
 
-chromSize = getChromSize(chromName);
+verbose(1, "sequence file = %s\n", sequenceFile);
+verbose(1, "chrom = %s\n", chromName);
+chromSize = hChromSize(chromName);
 verbose(1, "chromSize = %d\n", chromSize);
 seq = hFetchSeq(sequenceFile, chromName, 0, chromSize);
+// seq = hLoadChrom(chromName);
 touppers(seq->dna);
 
 safef(fileName, ArraySize(fileName), "%s.fat", chromName);
@@ -157,6 +124,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* add the left flank */
     leftFlank = getSubstring(seqPos, start-1, seq->dna);
     writeSeqWithBreaks(f, leftFlank, strlen(leftFlank), 50);
+    freeMem(leftFlank);
 
     /* add the observed string */
     writeSeqWithBreaks(f, subString, strlen(subString), 50);
@@ -165,7 +133,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     seqPos = start;
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 
 if (snpCount == 0)
    {
@@ -185,35 +153,19 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* read snpTable, generate fat sequence for each chrom */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
 
-if (argc != 4)
+if (argc != 5)
     usage();
 
 database = argv[1];
 hSetDb(database);
+chromName = argv[2];
 
-snpTable = argv[3];
+snpTable = argv[4];
 if (!hTableExists(snpTable)) 
     errAbort("no %s table\n", snpTable);
 
-if (!hTableExists("chromInfo")) 
-    errAbort("no chromInfo table\n");
-chromHash = loadChroms();
-if (chromHash == NULL) 
-    {
-    verbose(1, "couldn't get chrom info\n");
-    return 1;
-    }
-
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
-    {
-    verbose(1, "chrom = %s\n", chromName);
-    getSeq(argv[2], chromName);
-    }
+getSeq(argv[3], chromName);
 
 return 0;
 }
