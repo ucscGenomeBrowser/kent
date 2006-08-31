@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.10 2006/08/31 00:43:26 markd Exp $"
+#	"$Id: mm8.txt,v 1.11 2006/08/31 18:40:13 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7203,5 +7203,6 @@ XXXX - running 2006-08-29
     # update trackDb; need a mm8-specific page to describe informants
     mouse/mm8/nscanGene.html   (copy from hg18 and edit)
     mouse/mm8/trackDb.ra
-
+    # changed search regex to
+        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 
