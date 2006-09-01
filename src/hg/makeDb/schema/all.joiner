@@ -1625,7 +1625,7 @@ identifier superfamilyId external=SCOP
 identifier bioCycMapId external=BioCyc
 "BioCyc Pathway Map ID"
     $gbd.bioCycMapDesc.mapID
-    $gbd.bioCycPathway.mapID
+    $gbd.bioCycPathway.mapID minCheck=0.78
 
 identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
