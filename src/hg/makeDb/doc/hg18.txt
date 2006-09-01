@@ -10254,6 +10254,25 @@ hgsql hg18 -e 'load data local infile "snp126.tab" into table snp126'
 hgsql hg18 -e 'alter table snp126 add index name (name)'
 hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
 
+################################################################
+# SNP126 edit: detect clustering errors 
+# for locType = 'between' (class = 'insertion')
+# 1,393,040 candidates
+# exceptions: 
+#   DuplicatedObserved (3020 of these) 
+#   MixedObserved (1312 of these)
+
+# create and populate a simple table snp126insertions
+mysql> insert into snp126insertions 
+       select chrom, chromStart, chromEnd, name, score, strand, observed from snp126 
+       where locType = 'between' and class = 'insertion';
+
+# generate and load data
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+./snpCheckCluster hg18 snp126insertions
+mysql> load data local infile 'snpCheckCluster.tab' into table snp126Exceptions;
+
+# update snp126ExceptionDesc
 
 ################################################################
 ### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
