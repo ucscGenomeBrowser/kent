@@ -1,8 +1,6 @@
 /* snpCheckCluster -- check for clustering errors. */
 /* First version checks insertions only. */
 /* assuming input already filtered on locType = 'between' and class = 'insertion' */
-/* write to standard out */
-
 /* assert insertions in sorted order */
 /* assert end == start */
 
@@ -12,7 +10,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.4 2006/09/01 09:09:56 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.5 2006/09/01 09:20:47 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -45,6 +43,22 @@ if (slashCount > 2)
     return FALSE;
 
 return TRUE;
+}
+
+char *reverseComplementObserved(char *observed)
+{
+char *subString = NULL;
+struct dyString *myDy = NULL;
+
+subString = cloneString(observed);
+subString = subString + 2;
+reverseComplement(subString, strlen(subString));
+
+myDy = newDyString(1024);
+dyStringAppend(myDy, "-/");
+dyStringAppend(myDy, subString);
+
+return myDy->string;
 }
 
 boolean listAllEqual(struct slName *list)
@@ -91,7 +105,6 @@ struct sqlResult *sr;
 char **row;
 
 boolean clusterFound = FALSE;
-boolean observedMismatch = FALSE;
 
 int pos = 0;
 int posPrevious = 0;
@@ -104,8 +117,6 @@ char *rsIdPrevious = NULL;
 char *strand = NULL;
 char *observed = NULL;
 char *observedPrevious = NULL;
-char *subString = NULL;
-struct dyString *newObserved = NULL;
 
 struct slName *observedList = NULL;
 struct slName *nameList = NULL;
@@ -126,15 +137,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!isValidObserved(observed)) continue;
 
     if (sameString(strand, "-"))
-        {
-	subString = cloneString(observed);
-	subString = subString + 2;
-        reverseComplement(subString, strlen(subString));
-        newObserved = newDyString(1024);
-	dyStringAppend(newObserved, "-/");
-	dyStringAppend(newObserved, subString);
-	observed = cloneString(newObserved->string);
-	}
+	observed = reverseComplementObserved(observed);
 
     /* end must equal start */
     assert (end == start);
