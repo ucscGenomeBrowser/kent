@@ -2538,6 +2538,22 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     priority 4
     dataVersion August 2006
 
+    track encodeNhgriDnaseHsChipPvalCd4
+    subTrack encodeNhgriDnaseHsChipRaw
+    noInherit on
+    shortLabel DNase CD4 Pval
+    longLabel NHGRI DNaseI-Hypersensitivity P-Value (CD4+ Cells)
+    type bedGraph 4
+    maxHeightPixels 128:16:16
+    autoScale off
+    windowingFunction mean
+    minLimit 3.1
+    maxLimit 24.5
+    viewLimits 3.1:24.5
+    color 120,10,120
+    priority 5
+    dataVersion August 2006
+
     track encodeNhgriDnaseHsChipPvalHela
     subTrack encodeNhgriDnaseHsChipRaw
     noInherit on
@@ -2551,7 +2567,7 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     maxLimit 24.5
     viewLimits 3.1:24.5
     color 220,12,132
-    priority 5
+    priority 6
     dataVersion August 2006
 
 track encodeTbaAlign
