@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetSimple.c,v 1.4 2006/08/24 01:33:00 heather Exp $";
+static char const rcsid[] = "$Id: snpGetSimple.c,v 1.5 2006/09/01 20:54:01 heather Exp $";
 
 static struct hash *chromHash = NULL;
 static struct hash *annotationsHash = NULL;
@@ -57,7 +57,6 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-FILE *f;
 struct hashEl *hel = NULL;
 char *snpId = NULL;
 char *annotation = NULL;
