@@ -812,7 +812,7 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
-track polyaDB
+track polyaDb
 shortLabel poly(A) DB
 longLabel PolyA_DB Polyadenylation Sites
 group rna
