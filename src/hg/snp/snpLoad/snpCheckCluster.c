@@ -12,12 +12,11 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.3 2006/09/01 08:34:18 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.4 2006/09/01 09:09:56 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
-static FILE *outputFileHandle1 = NULL;
-static FILE *outputFileHandle2 = NULL;
+static FILE *exceptionFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -65,6 +64,20 @@ for (element = list; element !=NULL; element = element->next)
         return FALSE;
   
 return TRUE;
+}
+
+void printException(char *chromName, int pos, struct slName *observedList, struct slName *nameList)
+{
+char exception[32];
+struct slName *element = NULL;
+
+if (listAllEqual(observedList))
+    safef(exception, sizeof(exception), "DuplicateObserved");
+else
+    safef(exception, sizeof(exception), "MixedObserved");
+
+for (element = nameList; element !=NULL; element = element->next)
+    fprintf(exceptionFileHandle, "%s\t%d\t%d\t%s\t%s\n", chromName, pos, pos, element->name, exception);
 }
 
 int checkCluster(char *chromName)
@@ -135,20 +148,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    errors++;
 	    clusterFound = FALSE;
-	    if (listAllEqual(observedList))
-	        {
-		fprintf(outputFileHandle1, "%s %d ", chromName, posPrevious);
-	        for (element = nameList; element !=NULL; element = element->next)
-	            fprintf(outputFileHandle1, "%s ", element->name);
-		fprintf(outputFileHandle1, "\n");
-		}
-	    else
-	        {
-		fprintf(outputFileHandle2, "%s %d ", chromName, posPrevious);
-	        for (element = observedList; element !=NULL; element = element->next)
-	            fprintf(outputFileHandle2, "%s ", element->name);
-		fprintf(outputFileHandle2, "\n");
-		}
+            printException(chromName, posPrevious, observedList, nameList);
 	    }
         pos = start;
 	observedPrevious = cloneString(observed);
@@ -181,26 +181,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 if (clusterFound)
     {
-        errors++;
-        if (listAllEqual(observedList))
-        {
-           fprintf(outputFileHandle1, "%s %d ", chromName, posPrevious);
-           for (element = nameList; element !=NULL; element = element->next)
-               fprintf(outputFileHandle1, "%s ", element->name);
-           fprintf(outputFileHandle1, "\n");
-        }
-        else
-        {
-           fprintf(outputFileHandle2, "%s %d ", chromName, posPrevious);
-           for (element = observedList; element !=NULL; element = element->next)
-               fprintf(outputFileHandle2, "%s ", element->name);
-	   fprintf(outputFileHandle2, "\n");
-        }
+    errors++;
+    printException(chromName, posPrevious, observedList, nameList);
     }
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-verbose(1, "  %d clustered positions detected\n", errors);
+if (errors > 0)
+    verbose(1, "  %d clustered positions detected\n", errors);
 return errors;
 }
 
@@ -224,8 +212,7 @@ if (!hTableExists(snpTable))
 
 chromList = hAllChromNames();
 
-outputFileHandle1 = mustOpen("snpCheckCluster1.out", "w");
-outputFileHandle2 = mustOpen("snpCheckCluster2.out", "w");
+exceptionFileHandle = mustOpen("snpCheckCluster.tab", "w");
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     if (sameString(chromPtr->name, "chrY")) continue;
@@ -233,8 +220,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     totalErrors = totalErrors + checkCluster(chromPtr->name);
     }
 
-carefulClose(&outputFileHandle1);
-carefulClose(&outputFileHandle2);
+carefulClose(&exceptionFileHandle);
 verbose(1, "TOTAL errors = %d\n", totalErrors);
 return 0;
 }
