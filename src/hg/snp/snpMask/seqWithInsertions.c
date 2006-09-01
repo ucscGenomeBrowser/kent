@@ -1,11 +1,14 @@
 /* seqWithInsertions -- for a given chrom, generate "fat" sequence: that is, include insertions. */
 /* sequence file is separate input -- could also get from chromInfo */
 /* write to chrom.fat */
+/* no input filtering in this program */
+/* assert that coords don't exceed chrom size */
 
 #include "common.h"
 #include "hdb.h"
+#include "twoBit.h"
 
-static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.4 2006/08/31 03:19:12 heather Exp $";
+static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.5 2006/09/01 22:45:16 heather Exp $";
 
 static char *database = NULL;
 static char *chromName = NULL;
@@ -21,69 +24,42 @@ errAbort(
 }
 
 
-char *getSubstring(int startPos, int endPos, char *sequence)
-/* I'm hoping this is a safe and fast strncat */
-{
-char *newSequence = NULL;
-int size = endPos - startPos + 1;
-int pos = 0;
-
-assert (size > 0);
-verbose(5, "getSubstring from %d to %d\n", startPos, endPos);
-newSequence = needMem(size + 1);
-for (pos = 0; pos <= size - 1; pos++)
-    newSequence[pos] = sequence[pos+startPos];
-newSequence[size] = '\0';
-verbose(5, "substring = %s\n", newSequence);
-return newSequence;
-}
-
-
 void getSeq(char *sequenceFile, char *chromName)
-/* get sequence for each chrom */
-/* assumes insertions are sorted by position -- errAbort if not true */
+/* interleave chrom sequence with observed sequence */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 
+struct twoBitFile *tbf;
+
 char fileName[64];
 FILE *f;
 
-struct dnaSeq *seq;
-char *leftFlank = NULL;
-char *rightFlank = NULL;
+struct dnaSeq *leftFlank = NULL;
+struct dnaSeq *rightFlank = NULL;
 
 int start = 0;
 int end = 0;
 int chromSize = 0;
 
 char *snpChrom = NULL;
-char *strand = NULL;
-char *snpClass = NULL;
-char *locType = NULL;
-char *observed = NULL;
 char *rsId = NULL;
-
+char *strand = NULL;
+char *observed = NULL;
 char *subString = NULL;
 
-int slashCount = 0;
 int seqPos = 0;
-int snpCount = 0;
 
-verbose(1, "sequence file = %s\n", sequenceFile);
-verbose(1, "chrom = %s\n", chromName);
 chromSize = hChromSize(chromName);
-verbose(1, "chromSize = %d\n", chromSize);
-seq = hFetchSeq(sequenceFile, chromName, 0, chromSize);
-// seq = hLoadChrom(chromName);
-touppers(seq->dna);
 
 safef(fileName, ArraySize(fileName), "%s.fat", chromName);
 f = mustOpen(fileName, "w");
 
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, strand, class, locType, observed, name from %s", snpTable);
+tbf = twoBitOpen(sequenceFile);
+
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed from %s", snpTable);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -91,62 +67,42 @@ while ((row = sqlNextRow(sr)) != NULL)
     snpChrom = cloneString(row[0]);
     start = sqlUnsigned(row[1]);
     end = sqlUnsigned(row[2]);
-    strand = cloneString(row[3]);
-    snpClass = cloneString(row[4]);
-    locType = cloneString(row[5]);
-    observed = cloneString(row[6]);
-    rsId = cloneString(row[7]);
+    rsId = cloneString(row[3]);
+    strand = cloneString(row[4]);
+    observed = cloneString(row[5]);
 
-    /* input filters */
-    if (!sameString(snpClass, "insertion")) continue;
     if (!sameString(snpChrom, chromName)) continue;
-    if (end != start) continue;
-    if (start > chromSize) continue;
-    if (strlen(observed) < 2) continue;
-    /* First char should be dash, second char should be forward slash. */
-    if (observed[0] != '-') continue;
-    if (observed[1] != '/') continue;
-    /* Only one forward slash. */
-    int slashCount = chopString(observed, "/", NULL, 0);
-    if (slashCount > 2) continue;
-    /* skip clustering errors */
+
+    assert (start < chromSize);
+
+    /* skip duplicates (we've already check that the observed matches) */
     if (start == seqPos) continue;
-    if (start < seqPos)
-        errAbort("candidate SNPs are not in sorted order.\n");
 
-    snpCount++;
+    /* add the left flank */
+    leftFlank = twoBitReadSeqFrag(tbf, chromName, seqPos, start);
+    touppers(leftFlank->dna);
+    writeSeqWithBreaks(f, leftFlank->dna, leftFlank->size, 50);
+    dnaSeqFree(&leftFlank);
+    seqPos = start;
 
+    /* add the observed string */
     subString = cloneString(observed);
     subString = subString + 2;
     if (sameString(strand, "-"))
         reverseComplement(subString, strlen(subString));
-
-    /* add the left flank */
-    leftFlank = getSubstring(seqPos, start-1, seq->dna);
-    writeSeqWithBreaks(f, leftFlank, strlen(leftFlank), 50);
-    freeMem(leftFlank);
-
-    /* add the observed string */
     writeSeqWithBreaks(f, subString, strlen(subString), 50);
-
-    /* increment the position */
-    seqPos = start;
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
-if (snpCount == 0)
-   {
-   verbose(1, "no matching SNPs\n");
-   return;
-   }
-
 /* add the final (right) flank */
-rightFlank = getSubstring(seqPos, chromSize + 1, seq->dna);
-writeSeqWithBreaks(f, rightFlank, strlen(rightFlank), 50);
+/* if no snps were found, this just writes the full sequence */
+rightFlank = twoBitReadSeqFrag(tbf, chromName, seqPos, chromSize);
+touppers(rightFlank->dna);
+writeSeqWithBreaks(f, rightFlank->dna, rightFlank->size, 50);
+dnaSeqFree(&rightFlank);
 
 carefulClose(&f);
-
 }
 
 
