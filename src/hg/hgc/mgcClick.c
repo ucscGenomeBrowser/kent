@@ -488,8 +488,8 @@ webEndSection();
 static void prMethodsLink(struct sqlConnection *conn, char *track)
 {
 webNewSection("Description and Methods");
-printf("Click <A HREF=\"%s&g=htcTrackHtml&table=%s\">here</A> for details",
-       hgcPathAndSettings(), track);
+printf("Click <A HREF=\"%s&g=htcTrackHtml&table=%s&c=%s&l=%d&r=%d\">here</A> for details",
+       hgcPathAndSettings(), track, seqName, winStart, winEnd);
 webEndSection();
 }
 
