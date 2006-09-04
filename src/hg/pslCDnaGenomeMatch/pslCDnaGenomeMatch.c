@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.13 2006/07/25 20:13:36 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.14 2006/09/04 09:28:15 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -673,6 +673,8 @@ char *chrom;           /* best alignment */
 int chromStart;
 int chromEnd;
 //int prevLoc = misMatchList->mrnaLoc;
+if (misMatchList == NULL) 
+    return FALSE;
 AllocArray(missCount,seqCount);
 AllocArray(goodCount,seqCount);
 AllocArray(gapCount,seqCount);
@@ -1309,16 +1311,19 @@ for (align = alignList; align != NULL ; align = align->next)
         buildMisMatches(&misMatchList, align, lociList);
     }
 slReverse(&misMatchList);
-if (misMatchList != NULL && !computeSS )
+if (!computeSS )
     {
-    /* sort list by mrna position */
-    slSort(&misMatchList, misMatchCmpMrnaLoc);
-    for (align = alignList; align != NULL ; align = align->next)
-        /* check for matches or indels in other loci */
-        fillinMatches(&misMatchList, align, lociList);
-    verbose(4, "compile %s mismatchList %d lociList %d of %d alist %d\n",
-            name, slCount(misMatchList), seqCount, slCount(lociList), slCount(alignList));
-    /* compute mismatches and dump input alignments if nothting found */
+    if (misMatchList != NULL)
+        {
+        /* sort list by mrna position */
+        slSort(&misMatchList, misMatchCmpMrnaLoc);
+        for (align = alignList; align != NULL ; align = align->next)
+            /* check for matches or indels in other loci */
+            fillinMatches(&misMatchList, align, lociList);
+        verbose(4, "compile %s mismatchList %d lociList %d of %d alist %d\n",
+                name, slCount(misMatchList), seqCount, slCount(lociList), slCount(alignList));
+        }
+    /* compute mismatches and dump input alignments if nothing found */
     if (!compileOutput(name, misMatchList, seqCount, lociList) &&  passthru)
         for (align = alignList; align != NULL ; align = align->next)
             {
