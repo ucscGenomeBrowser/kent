@@ -19,7 +19,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetInsertions.c,v 1.1 2006/09/01 23:20:16 heather Exp $";
+static char const rcsid[] = "$Id: snpGetInsertions.c,v 1.2 2006/09/05 23:37:25 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -94,6 +94,7 @@ char **row;
 
 int start = 0;
 int end = 0;
+int weight = 0;
 int slashCount = 0;
 int pos = 0;
 int candidateCount = 0;
@@ -107,7 +108,7 @@ char *observed = NULL;
 struct hashEl *hel;
 
 safef(query, sizeof(query), 
-    "select chrom, chromStart, chromEnd, name, strand, observed from %s", snpTable);
+    "select chrom, chromStart, chromEnd, name, strand, observed, weight from %s", snpTable);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -119,6 +120,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     rsId = cloneString(row[3]);
     strand = cloneString(row[4]);
     observed = cloneString(row[5]);
+    weight = sqlUnsigned(row[6]);
+
+    if (weight != 1) continue;
 
     assert (end == start);
 
