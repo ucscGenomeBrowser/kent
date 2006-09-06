@@ -1507,10 +1507,10 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdToSwissProt.name minCheck=0.85
     $sacCer.sgdToSgd.name
     $sacCer.sgdToSgd.value
-    $sacCer.sgdToName.name
-    $sacCer.esRegGeneToModule.gene
-    $sacCer.esRegGeneToMotif.gene
-    $sacCer.esRegUpstreamRegion.name
+    $sacCer.sgdToName.name minCheck=0.86
+    $sacCer.esRegGeneToModule.gene minCheck=0.94
+    $sacCer.esRegGeneToMotif.gene minCheck=0.97
+    $sacCer.esRegUpstreamRegion.name minCheck=0.96
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
