@@ -1040,7 +1040,7 @@ identifier refSeqId typeOf=mrnaAccession
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!hg15,!bosTau1,!bosTau2,!canFam1,!canFam2,!droSim1,!droYak1,!panTro1,!rheMac1,!rheMac2.mrnaOrientInfo.name minCheck=0.01
+    $gbd,!hg15,!bosTau1,!bosTau2,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2.mrnaOrientInfo.name minCheck=0.01
     $gbd.refFlat.name
     $gbd.refGene.name
     $gbd.refMrna.name
