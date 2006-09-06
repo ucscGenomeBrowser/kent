@@ -1,8 +1,0 @@
-dir of float prices = (eggs@2.20, milk@1.95, coffee@9.95);
-for (key@val in prices)
-    print("$key $val");
-array of string a = ("zero", "one", "two", "three", "four");
-for (key@val in a)
-    print("$key $val");
-for (key@val in "0123456789")
-    print("$key $val");

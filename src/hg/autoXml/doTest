@@ -1,5 +1,0 @@
-#!/bin/csh
-foreach t (polygon dasGff)
-    autoXml test/$t/$t.dtd test/$t/out/$t
-    diff -x CVS test/$t/expected test/$t/out
-end
