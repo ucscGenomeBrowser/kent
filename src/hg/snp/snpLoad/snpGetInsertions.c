@@ -1,5 +1,6 @@
 /* snpGetInsertions -- generate a filtered set of insertions. */
 /* hash in exceptions for mixed observed and multiple alignments */
+/* filtering on exceptions and weight */
 /* write to insertions.tab */
 /* use a zero score column to preserve BED 6 */
 
@@ -12,14 +13,13 @@
 
 /* not splitting by chrom */
 /* not generating a bin */
-/* not filtering on weight */
 
 /* not checking for position < chromSize; seqWithInsertions does this */
 
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetInsertions.c,v 1.2 2006/09/05 23:37:25 heather Exp $";
+static char const rcsid[] = "$Id: snpGetInsertions.c,v 1.3 2006/09/06 19:14:35 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
