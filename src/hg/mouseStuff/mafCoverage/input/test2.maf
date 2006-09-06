@@ -1,7 +1,0 @@
-##maf version=1 scoring=humor.v4
-# humor.v4 R=30 M=10 /cluster/data/hg15/bed/blastz.mm3/axtNet25/chr8_random.maf /cluster/data/hg15/bed/blastz.rn3/axtNet25/chr8_random.maf
-a score=8264.0
-s hg15.chr8_random   427621 95 +    427716 tatcaagagatctgcagcaaataaaatttcaaaggc---tatatatcaggaagaaagaaTTTAACCCAAAAGCTGATCTCAGAGTCAACTTGGAATTC
-s mm3.chr14        53614396 82 + 115844145 ------------ATCAAGAGAGAAAATCCTAAAGAATAGTATTTGT--GGAGAAAACAATGTAGTTGGGATG--GACTTCAGAGCCAAGTTAAAATTC
-s rn3.chr15        42266658 91 + 109774626 AAACAAAACATCATTAAGAAAGAAAATCCTAAAGAA---CATTTAT--GGAGGAAACAATGTAGTGGAGATG--GACTTCAGATTCAAGTTAAAATTC
-
