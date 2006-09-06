@@ -1,11 +1,13 @@
 /* seqWithoutDeletions -- for a given chrom, generate "skinny" sequence: that is, exclude deletions. */
 /* sequence file is separate input -- could also get from chromInfo */
-/* write to chrom.fat */
+/* write to chrom.skinny */
+/* no input filtering in this program */
+/* assert that coords don't exceed chrom size */
 
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: seqWithoutDeletions.c,v 1.1 2006/08/31 04:18:06 heather Exp $";
+static char const rcsid[] = "$Id: seqWithoutDeletions.c,v 1.2 2006/09/06 22:22:34 heather Exp $";
 
 static char *database = NULL;
 static char *chromName = NULL;
@@ -23,7 +25,6 @@ errAbort(
 
 struct dnaSeq *getSkinnySeq(char *sequenceFile, char *chromName)
 /* mark deletions with '-' */
-/* could filter out ObservedWrongSize and ObservedMismatch */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -37,14 +38,9 @@ int pos = 0;
 int start = 0;
 int end = 0;
 int chromSize = 0;
-int slashCount = 0;
 int snpCount = 0;
 
 char *snpChrom = NULL;
-char *strand = NULL;
-char *snpClass = NULL;
-char *locType = NULL;
-char *observed = NULL;
 char *rsId = NULL;
 
 verbose(1, "sequence file = %s\n", sequenceFile);
@@ -56,7 +52,7 @@ seq = hFetchSeq(sequenceFile, chromName, 0, chromSize);
 touppers(seq->dna);
 seqPtr = seq->dna;
 
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, strand, class, locType, observed, name from %s", snpTable);
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from %s", snpTable);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -64,26 +60,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     snpChrom = cloneString(row[0]);
     start = sqlUnsigned(row[1]);
     end = sqlUnsigned(row[2]);
-    strand = cloneString(row[3]);
-    snpClass = cloneString(row[4]);
-    locType = cloneString(row[5]);
-    observed = cloneString(row[6]);
-    rsId = cloneString(row[7]);
+    rsId = cloneString(row[3]);
 
-    /* input filters */
-    if (!sameString(snpClass, "deletion")) continue;
     if (!sameString(snpChrom, chromName)) continue;
-    if (sameString(locType, "between")) continue;
-    if (end <= start) continue;
-    if (start > chromSize) continue;
-    if (end > chromSize) continue;
-    if (strlen(observed) < 2) continue;
-    /* First char should be dash, second char should be forward slash. */
-    if (observed[0] != '-') continue;
-    if (observed[1] != '/') continue;
-    /* Only one forward slash. */
-    int slashCount = chopString(observed, "/", NULL, 0);
-    if (slashCount > 2) continue;
+
+    assert (end < chromSize);
+    assert (end > start);
 
     snpCount++;
 
@@ -119,9 +101,10 @@ if (!hTableExists(snpTable))
     errAbort("no %s table\n", snpTable);
 
 skinnySeq = getSkinnySeq(argv[3], chromName);
-safef(fileName, ArraySize(fileName), "%s.fat", chromName);
+stripChar(skinnySeq->dna, '-');
+safef(fileName, ArraySize(fileName), "%s.skinny", chromName);
 f = mustOpen(fileName, "w");
-/* read through to each mark, printing and consuming */
+writeSeqWithBreaks(f, skinnySeq->dna, skinnySeq->size, 50);
 carefulClose(&f);
 
 return 0;
