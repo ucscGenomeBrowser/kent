@@ -1,8 +1,0 @@
-#a52a2a brown
-#ff0000	red
-#ffa500	orange
-#ffff00	yellow
-#00ff00	green
-#0000ff	blue
-#a020f0	purple
-#ee82ee	violet

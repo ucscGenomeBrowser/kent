@@ -1,7 +1,0 @@
-badChrom	0	1000	badChrom	0	+	0	0
-chrFake	2	1	endLTStart	0	-	1	2
-chrFake	30	3000	endGTChrom	.	.	0	0
-chrFake 20	200	cdsSLTStart	.	?	10	21
-chrFake 20	200	cdsELTCS	0	+	25	21
-chrFake 20	200	cdsEGTEnd	20	-	25	205
-chrFake 20	200	cdsOnlySZ	999	+	0	40
