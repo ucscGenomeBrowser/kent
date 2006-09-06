@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.85 2006/06/14 23:25:44 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.86 2006/09/06 20:57:24 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3274,7 +3274,6 @@ printf(" This page contains track and table release information for the followin
 safef(query,sizeof(query),
     "select * from dbDb "
     "where active=1 "
-    "and name not like 'zoo%%' "
     "order by orderKey, name desc");
 sr = sqlGetResult(betaconn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3283,14 +3282,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&kiList, ki);
     }
 sqlFreeResult(&sr);
-
-AllocVar(dbDbTemp);
-dbDbTemp->name        = cloneString("zoo1");
-dbDbTemp->description = cloneString("Jun. 2002");
-dbDbTemp->organism    = cloneString("NISC (Zoo)");
-dbDbTemp->genome      = cloneString("NISC (Zoo)");
-dbDbTemp->sourceName  = cloneString("Comparative Sequencing Program Target 1");
-slAddHead(&kiList, dbDbTemp);
 
 slReverse(&kiList);
 sqlDisconnect(&betaconn);
