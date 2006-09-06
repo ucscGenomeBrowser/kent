@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.5 2006/09/01 22:45:16 heather Exp $";
+static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.6 2006/09/06 21:49:02 heather Exp $";
 
 static char *database = NULL;
 static char *chromName = NULL;
@@ -74,8 +74,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!sameString(snpChrom, chromName)) continue;
 
     assert (start < chromSize);
+    assert (end == start);
 
-    /* skip duplicates (we've already check that the observed matches) */
+    /* skip duplicates (we've already checked that the observed matches) */
     if (start == seqPos) continue;
 
     /* add the left flank */
