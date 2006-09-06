@@ -1,9 +1,0 @@
-string boss = "Jim";
-string verb = "sleep";
-float twoCents =  0.02;
-string bye = "bye";
-
-print("Hello $boss, are you $(verb)ing? Cool. Thats my $$$twoCents");
-print("$bye$bye");
-print("$$1.25");
-print("$$");

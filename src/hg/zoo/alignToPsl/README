@@ -1,6 +1,0 @@
-alignToPsl creates a psl file from a pairwise alignment.  
-It has options to add a given fixed size of the sequence 
-(if the sequence present is only part of a bigger sequence), 
-as well as beginning offsets.  These two options make sense 
-if the alignment is of coordinates 10-20 in a sequence which 
-has an actual size of 1000.
