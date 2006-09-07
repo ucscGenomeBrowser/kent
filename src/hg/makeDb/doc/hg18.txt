@@ -10255,7 +10255,7 @@ hgsql hg18 -e 'alter table snp126 add index name (name)'
 hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
 
 ################################################################
-# SNP126 edit: detect clustering errors 
+# SNP126 edit: detect clustering errors  (Heather, Sept. 2006)
 # for locType = 'between' (class = 'insertion')
 # 1,393,040 candidates
 # exceptions: 
@@ -10273,6 +10273,78 @@ cd /cluster/home/heather/kent/src/hg/snp/snpLoad
 mysql> load data local infile 'snpCheckCluster.tab' into table snp126Exceptions;
 
 # update snp126ExceptionDesc
+
+################################################################
+# generate snpMasked sequence (Heather, Sept. 2006)
+
+# 3 steps: simple filtering, advanced filtering, generate sequence
+
+# simple filtering: create and populate tables
+# insertions: 1,393,040
+# deletions: 783,454
+ssh hgwdev
+mysql> insert into snp126insertions select * from snp126
+       where locType = 'between' and class = 'insertion';
+mysql> insert into snp126deletions select * from snp126
+       where class = 'deletion';
+
+# advanced filtering -- insertions
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+# this removes SNPs with weight != 1
+# this removes SNPs that align to more than one position
+# this removes SNPs that cluster together with conflicting observations
+# (these should be class = 'mixed')
+# this removes SNPs with invalid observed string
+# this asserts end == start
+# final count 1,352,380
+# written to insertions.tab
+./snpGetInsertions hg18 snp126insertions snp126Exceptions
+
+# advanced filtering -- deletions
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+# this removes SNPs with weight != 1
+# this removes SNPs that align to more than one position
+# this removes SNPs with invalid observed string
+# this asserts end > start
+# final count 621,024
+# written to deletions.tab
+./snpGetDeletions hg18 snp126deletions snp126Exceptions
+
+# Note: the advanced filtering pretty much removes all SNPs from chrN_random
+       
+# generate sequence -- insertions
+# use kent/src/hg/snp/snpMask/seqWithInsertions.c
+# this asserts that position doesn't exceed chromSize
+# this will reverse complement observed if strand is negative
+# if no SNPs found, output sequence == input sequence
+# write to chrN.fat
+ssh kkr5u00
+mysql> load data local infile
+"/cluster/home/heather/kent/src/hg/snp/snpLoad/insertions.tab" into table
+snp126insertionsClean;
+cd /scratch/snp126/human/fat
+/bin/sh fat.sh
+cp *.fat /cluster/data/hg18/snpMask/insertions
+
+# generate sequence -- deletions
+# use kent/src/hg/snp/snpMask/seqWithoutDeletions.c
+# this asserts that position doesn't exceed chromSize
+# if no SNPs found, output sequence == input sequence
+# write to chrN.skinny
+ssh kkr5u00
+mysql> load data local infile
+"/cluster/home/heather/kent/src/hg/snp/snpLoad/deletions.tab" into table
+snp126deletionsClean;
+cd /scratch/snp126/human/skinny
+/bin/sh skinny.sh
+cp *.skinny /cluster/data/hg18/snpMask/deletions
+
+# create links on hgwdev
+ssh hgwdev
+cd /usr/local/apache/htdocs/goldenPath/hg18/seqWithInsertions
+/bin/sh link.sh
+cd /usr/local/apache/htdocs/goldenPath/hg18/seqWithoutDeletions
+/bin/sh link.sh
 
 ################################################################
 ### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
