@@ -10305,6 +10305,7 @@ cd /cluster/home/heather/kent/src/hg/snp/snpLoad
 # this removes SNPs with weight != 1
 # this removes SNPs that align to more than one position
 # this removes SNPs with invalid observed string
+# this removes SNPs with exception ObservedWrongSize
 # this asserts end > start
 # final count 621,024
 # written to deletions.tab
