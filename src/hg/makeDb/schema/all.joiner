@@ -1801,7 +1801,6 @@ identifier blastHg16KGPepId
      $cioSav.blastHg16KG.qName
      $danRer.blastHg16KG.qName
      $dm.blastHg16KG.qName
-     $fr.blastHg16KG.qName
      $galGal.blastHg16KG.qName
 
 # identifier blastHg17KGPep00Id  (knownGene upgraded)
