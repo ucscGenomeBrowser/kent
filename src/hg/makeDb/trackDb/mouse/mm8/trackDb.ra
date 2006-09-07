@@ -34,7 +34,7 @@ shortLabel miRNA
 longLabel MicroRNAs from miRBase
 group genes
 priority 63
-visibility full
+visibility hide
 useScore 1
 color 255,64,64
 type bed 6 .
