@@ -10324,8 +10324,10 @@ mysql> load data local infile
 snp126insertionsClean;
 cd /scratch/snp126/human/fat
 /bin/sh fat.sh
-gzip *.fat
-cp *.fat.gz /cluster/data/hg18/snpMask/insertions
+cp *.fat /cluster/data/hg18/snpMask/insertions
+ssh kkstore02
+cd /cluster/data/hg18/snpMask/insertions
+nice gzip *.fat
 
 # generate sequence -- deletions
 # use kent/src/hg/snp/snpMask/seqWithoutDeletions.c
@@ -10338,14 +10340,16 @@ mysql> load data local infile
 snp126deletionsClean;
 cd /scratch/snp126/human/skinny
 /bin/sh skinny.sh
-gzip *.skinny
-cp *.skinny.gz /cluster/data/hg18/snpMask/deletions
+cp *.skinny /cluster/data/hg18/snpMask/deletions
+ssh kkstore02
+cd /cluster/data/hg18/snpMask/deletions
+nice gzip *.skinny
 
 # create links on hgwdev
 ssh hgwdev
-cd /usr/local/apache/htdocs/goldenPath/hg18/seqWithInsertions
+cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/insertions
 /bin/sh link.sh
-cd /usr/local/apache/htdocs/goldenPath/hg18/seqWithoutDeletions
+cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/deletions
 /bin/sh link.sh
 
 ################################################################
