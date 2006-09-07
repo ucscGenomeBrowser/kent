@@ -458,7 +458,7 @@ slSort(&pslList, pslCmpMatch);
 // come from another details page
 webNewSection("Alignments");
 if ((pslList->next != NULL) && (winStart < winEnd))
-    printf("<font size=-3><em>The alignment you clicked on is shown first.</em></font>\n");
+    printf("<font size=-1><em>The alignment you clicked on is shown first.</em></font>\n");
 
 webPrintLinkTableStart();
 webPrintLabelCell("genomic (browser)");
