@@ -10324,7 +10324,8 @@ mysql> load data local infile
 snp126insertionsClean;
 cd /scratch/snp126/human/fat
 /bin/sh fat.sh
-cp *.fat /cluster/data/hg18/snpMask/insertions
+gzip *.fat
+cp *.fat.gz /cluster/data/hg18/snpMask/insertions
 
 # generate sequence -- deletions
 # use kent/src/hg/snp/snpMask/seqWithoutDeletions.c
@@ -10337,7 +10338,8 @@ mysql> load data local infile
 snp126deletionsClean;
 cd /scratch/snp126/human/skinny
 /bin/sh skinny.sh
-cp *.skinny /cluster/data/hg18/snpMask/deletions
+gzip *.skinny
+cp *.skinny.gz /cluster/data/hg18/snpMask/deletions
 
 # create links on hgwdev
 ssh hgwdev
