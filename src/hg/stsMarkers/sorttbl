@@ -1,5 +1,9 @@
-#! /usr/local/bin/perl
-$RCS_ID = '$Id: sorttbl,v 1.1 2006/08/31 22:21:32 hiram Exp $' ;
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $RCS_ID = '$Id: sorttbl,v 1.2 2006/09/07 18:47:00 hiram Exp $' ;
 $0 =~ s-.*/-- ;
 
 # Modified by markd@cse.ucsc.edu to use gsort -g
@@ -8,7 +12,7 @@ $0 =~ s-.*/-- ;
 use English;
 use File::Basename;
 
-$HelpInfo = <<EOH ;
+my $HelpInfo = <<EOH ;
 
 	    RDB operator: $0
 
@@ -41,6 +45,16 @@ to support scientific notation.
 
 $RCS_ID
 EOH
+
+my $CHK = 0;
+my $sarg = "";
+my $XBUG = 0;
+my $cf = "";
+
+if (scalar(@ARGV) < 1) {
+    print $HelpInfo; exit 255;
+}
+
 while ( $ARGV[0] =~ /^-/ ){				# Get args
     $_ = shift ;
     if( /-c.*/ ){
@@ -69,7 +83,14 @@ while ( $ARGV[0] =~ /^-/ ){				# Get args
 if( @ARGV ){
     $sarg =~ s/\-r// ; }	# unless reverse sort by entire rows
 $|++ ;		# to force out 1st 2 lines (in pipe)
+
+#  global variables
+my @H;
+my @F;
+my $lln = 0;
+
 while(<STDIN>){
+    my $ADDCOL = 0;
     if( $lln < 2 ){
 	print unless $CHK ;
 	if( /^\s*#/ ){ next ; }		# comment
@@ -80,11 +101,11 @@ while(<STDIN>){
 	    &get_col_x ; }  	# chk column names
 	else{				# definition line
 	    $| = 0 ;
-	    for $arg ( @ARGV ){
+	    for my $arg ( @ARGV ){
 		if( $arg =~ /^-r.*/ ){
 		    $cf .= 'r' ;
 		    next ; }
-		for( $f=0, $g=1 ; $f <= $#F ; $f++, $g++ ){
+		for( my $f=0, my $g=1 ; $f <= $#F ; $f++, $g++ ){
 		    if( $arg eq $F[$f] ){
 			if( $H[$f] =~ /(\S+)/ && $1 =~ /N/i ){ # numeric
 			    $cf .= 'g' ; }
@@ -97,11 +118,11 @@ while(<STDIN>){
 	    }
 	    if( $CHK && $sarg =~ /\+/ ){
 		$ADDCOL++ ;
-		$f = @H ;
-		$g = $f +1 ;
+		my $f = @H ;
+		my $g = $f +1 ;
 		$cf = 'g' ;
 		$sarg .= "+$f -$g$cf " ; }
-	    print "sort arg:  -t\"\t\" $sarg\n" if $XBUG ;
+	    print STDERR "sort arg:  -t\"\t\" $sarg\n" if $XBUG ;
 	    
             # try gsort first for non-linux systems without GNU sort
 	    my $arch = `uname -m`;
@@ -128,12 +149,17 @@ close( SS ) || die("sort failed");
 sub get_col_x {		# get, chk column indexes, inc -v, die if bad column
 			# uses @H, $INV, put indexes in @n.
 			# modified for sorttbl.
-    local( $f, $ok, @nn ) ;
-    for $arg (@ARGV){
+    my $f;
+    my $ok;
+    my @nn;
+    my $INV = 0;
+    my @n;
+    for my $arg (@ARGV){
 	next if $arg =~ /^-/ ;
 	for( $ok=$f=0 ; $f < @H ; $f++ ){
 	    if( $arg eq $H[$f] ){	# match existing column
 		$ok++ ;
+print STDERR "$arg\n";
 		push( @n, $f );
 		last ; }
 	}
@@ -141,7 +167,7 @@ sub get_col_x {		# get, chk column indexes, inc -v, die if bad column
     }
     if( $INV ){					# inverse option
 	loop: for( $f=0 ; $f < @H ; $f++ ){
-	    for $i (@n){
+	    for my $i (@n){
 		next loop if $i eq $f ; }
 	    push( @nn, $f ); }
 	@n = @nn ;
