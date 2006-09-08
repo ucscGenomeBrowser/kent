@@ -1365,8 +1365,10 @@ identifier wormBaseId external=WormBase dependency
     #$ce.kimExpDistance.query
     #$ce.kimExpDistance.target
     $ce.orfToGene.name
-    $ce.sangerBlastTab.query
-    $ce.sangerBlastTab.target
+    $ce,!ce1.sangerBlastTab.query
+    $ce,!ce1.sangerBlastTab.target
+    ce1.sangerBlastTab.query minCheck=0.96
+    ce1.sangerBlastTab.target minCheck=0.96
     $ce.sangerCanonical.transcript
     $ce.sangerIsoforms.transcript
     $ce.sangerLinks.orfName minCheck=0.96
