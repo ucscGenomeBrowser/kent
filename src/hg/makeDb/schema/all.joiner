@@ -1492,7 +1492,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdBlastTab.target
     $sacCer.ceBlastTab.query
     $sacCer.dmBlastTab.query
-    $sacCer.drBlastTab.query
+    $sacCer,!sacCer1.drBlastTab.query
     $sacCer.hgBlastTab.query
     $sacCer.mmBlastTab.query
     $sacCer.rnBlastTab.query
