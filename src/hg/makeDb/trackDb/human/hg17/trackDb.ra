@@ -1442,15 +1442,6 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-track gvPos
-shortLabel $Organism Mutation v2
-longLabel Compilation of $Organism Disease Variants and Other Mutations v2
-group phenDis
-priority 144.7
-visibility hide
-color 150,0,150
-type bed 4 +
-
 track landmark
 shortLabel Landmarks
 longLabel Compilation of Landmarks from ORegAnno and Locus Experts
@@ -2269,25 +2260,6 @@ searchTable hgMut
 query select chrom, chromStart, chromEnd, mutId from %s where mutId = '%s'
 xrefTable hgMut
 xrefQuery select mutId, name from %s where name like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
-searchName gvNameSearch
-searchTable gvPos
-query select chrom, chromStart, chromEnd, name from %s where name = '%s'
-xrefTable gv
-xrefQuery select id, name from %s where name like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
-searchName gvAliasSearch
-searchTable gvPos
-query select chrom, chromStart, chromEnd, name from %s where name = '%s'
-dontCheckXrefQueryFormat on
-xrefTable gvAttr
-xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
 searchMethod fuzzy
 padding 1000
 searchPriority 51

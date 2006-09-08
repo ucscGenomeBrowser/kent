@@ -181,15 +181,15 @@
 #include "hgMut.h"
 #include "gv.h"
 #include "gvUi.h"
-#include "landmark.h"
-#include "landmarkUi.h"
+#include "oreganno.h"
+#include "oregannoUi.h"
 #include "ec.h"
 #include "transMapClick.h"
 #include "mgcClick.h"
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1096 2006/08/31 18:37:09 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1097 2006/09/08 22:17:29 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16056,119 +16056,126 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void printLandmarkAttrLink (int linkId)
-/* this prints the link for a landmark attribute */
+void printOregannoLink (struct oregannoLink *link)
+/* this prints a link for oreganno */
 {
-struct landmarkAttrLink *link = NULL;
 struct hash *linkInstructions = NULL;
 struct hash *thisLink = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
 char *linktype, *label = NULL;
-int started = 0;
 
 hgReadRa(database, organism, rootDir, "links.ra", &linkInstructions);
-safef(query, sizeof(query), "select * from landmarkAttrLink "
-    "where attrId = %d", linkId);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+/* determine how to do link from .ra file */
+thisLink = hashFindVal(linkInstructions, link->raKey);
+if (thisLink == NULL)
+    return; /* no link found */
+/* type determined by fields eg url */
+linktype = hashFindVal(thisLink, "url");
+label = hashFindVal(thisLink, "label");
+if (linktype != NULL)
     {
-    link = landmarkAttrLinkLoad(row);
-    if (link == NULL)
-        continue; /* no link found */
-    /* determine how to do link from .ra file */
-    thisLink = hashFindVal(linkInstructions, link->raKey);
-    if (thisLink == NULL)
-        continue; /* no link found */
-    /* type determined by fields eg url */
-    linktype = hashFindVal(thisLink, "url");
-    label = hashFindVal(thisLink, "label");
-    if (linktype != NULL)
-        {
-        char url[256];
-        char *accFlag = hashFindVal(thisLink, "acc");
-        if (accFlag == NULL) 
-            safef(url, sizeof(url), linktype);
-        else 
-            safef(url, sizeof(url), linktype, link->attrAcc);
-        if (started != 0)
-            printf("<BR />\n");
-        if (label == NULL)
-            label = "";  /* no label */
-        if (link->displayVal == NULL || sameString(link->displayVal, "")) 
-            printf("%s - <A HREF=\"%s\" TARGET=\"_BLANK\">%s</A>\n", label, url, link->attrAcc);
-        else 
-            printf("%s - <A HREF=\"%s\" TARGET=\"_BLANK\">%s</A>\n", label, url, link->displayVal);
-        }
-        started++;
-    } /* else add code for other types here */
+    char url[256];
+    char *accFlag = hashFindVal(thisLink, "acc");
+    if (accFlag == NULL) 
+        safef(url, sizeof(url), linktype);
+    else 
+        safef(url, sizeof(url), linktype, link->attrAcc);
+    if (label == NULL)
+        label = "";  /* no label */
+    printf("%s - <A HREF=\"%s\" TARGET=\"_BLANK\">%s</A>\n", label, url, link->attrAcc);
+    }
 }
 
-void doLandmark (struct trackDb *tdb, char *itemName) 
+void doOreganno (struct trackDb *tdb, char *itemName) 
 {
 char *table = tdb->tableName;
-struct landmark *r = NULL;
+struct oreganno *r = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
 char *escName = NULL;
+char *prevLabel = NULL;
 int i = 0, listStarted = 0;
 
-int start = cartInt(cart, "o");
+//int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
 /* postion, band, genomic size */
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, escName);
+      "select * from %s where name = '%s'", table, escName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    r = landmarkLoad(row);
-    printf("<B>Landmark name:</B> %s <BR />\n", r->name);
+    r = oregannoLoad(row);
+    printf("<B>ORegAnno ID:</B> %s <BR />\n", r->id);
+    printf("<B>ORegAnno name:</B> %s <BR />\n", r->name);
     bedPrintPos((struct bed *)r, 3);
-    printf("<B>Landmark type:</B> %s <BR />\n", r->landmarkType);
     /* start html list for attributes */
     printf("<DL>");
     }
 sqlFreeResult(&sr);
 
 /* fetch and print the attributes */
-for (i=0; i < landmarkAttrSize; i++)
+for (i=0; i < oregannoAttrSize; i++)
     {
     int used = 0;
-    /* names are quote safe, come from landmarkUi.c */
-    safef(query, sizeof(query), "select * from landmarkAttr where landmarkId = %d and attribute = '%s'", r->landmarkId, landmarkAttributes[i]);
+    /* names are quote safe, come from oregannoUi.c */
+    safef(query, sizeof(query), "select * from hgFixed.oregannoAttr where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        struct landmarkAttr attr;
+        struct oregannoAttr attr;
         used++;
         if (used == 1) 
             {
-            if (listStarted == 0)
-                listStarted = 1;
-            else 
-                printf("</DD>");
-               
-            printf("<DT><b>%s:</b></DT><DD>\n", landmarkAttributes[i]);
+            if (!prevLabel || differentString(prevLabel, oregannoAttrLabel[i]))
+                {
+                if (listStarted == 0)
+                    listStarted = 1;
+                else 
+                    printf("</DD>");
+                   
+                printf("<DT><b>%s:</b></DT><DD>\n", oregannoAttrLabel[i]);
+                freeMem(prevLabel);
+                prevLabel = cloneString(oregannoAttrLabel[i]);
+                }
             }
-        landmarkAttrStaticLoad(row, &attr);
+        oregannoAttrStaticLoad(row, &attr);
         printf("%s ", attr.attrVal);
-        if (attr.linkId != 0)
-            printLandmarkAttrLink(attr.linkId);
+        printf("<BR />\n");
+        }
+    safef(query, sizeof(query), "select * from hgFixed.oregannoLink where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct oregannoLink link;
+        used++;
+        if (used == 1) 
+            {
+            if (!prevLabel || differentString(prevLabel, oregannoAttrLabel[i]))
+                {
+                if (listStarted == 0)
+                    listStarted = 1;
+                else 
+                    printf("</DD>");
+                   
+                printf("<DT><b>%s:</b></DT><DD>\n", oregannoAttrLabel[i]);
+                freeMem(prevLabel);
+                prevLabel = cloneString(oregannoAttrLabel[i]);
+                }
+            }
+        oregannoLinkStaticLoad(row, &link);
+        printOregannoLink(&link);
         printf("<BR />\n");
         }
     }
 if (listStarted > 0)
     printf("</DD></DL>");
 
-landmarkFree(&r);
+oregannoFree(&r);
+freeMem(prevLabel);
 freeMem(escName);
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -17659,9 +17666,9 @@ else if (sameString("gvPos", track))
     {
     doGv(tdb, item);
     }
-else if (sameString("landmark", track))
+else if (sameString("oreganno", track))
     {
-    doLandmark(tdb, item);
+    doOreganno(tdb, item);
     }
 else if (sameString("allenBrainAli", track))
     {

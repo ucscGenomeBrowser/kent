@@ -24,7 +24,7 @@
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
 #include "gvUi.h"
-#include "landmarkUi.h"
+#include "oregannoUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.305 2006/08/30 21:34:49 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.306 2006/09/08 22:17:29 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -502,16 +502,16 @@ if (startsWith("hapmapLd", tdb->tableName))
     printf("<BR><B>Populations:</B>\n");
 }
 
-void landmarkUi (struct trackDb *tdb)
+void oregannoUi (struct trackDb *tdb)
 /* print the controls */
 {
 int i = 0; /* variable to walk through array */
 
 printf("<BR /><B>Exclude region type</B><BR />");
-for (i = 0; i < landmarkTypeSize; i++)
+for (i = 0; i < oregannoTypeSize; i++)
     {
-    cartMakeCheckBox(cart, landmarkTypeString[i], FALSE);
-    printf (" %s<BR />", landmarkTypeLabel[i]);
+    cartMakeCheckBox(cart, oregannoTypeString[i], FALSE);
+    printf (" %s<BR />", oregannoTypeLabel[i]);
     }
 }
 
@@ -2331,8 +2331,8 @@ else if (sameString(track, "hgMut"))
     hgMutUi(tdb);
 else if (sameString(track, "gvPos"))
     gvUi(tdb);
-else if (sameString(track, "landmark"))
-    landmarkUi(tdb);
+else if (sameString(track, "oreganno"))
+    oregannoUi(tdb);
 else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
 else if (startsWith("retroposons", track))

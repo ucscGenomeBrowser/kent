@@ -440,6 +440,15 @@ priority 144
 visibility hide
 type bed 4 .
 
+track gvPos
+shortLabel Locus Variants
+longLabel Compilation of $Organism Disease Variants and Other Mutations
+group phenDis
+priority 144.7
+visibility hide
+color 150,0,150
+type bed 4 +
+
 track orthoAlleles
 compositeTrack on
 shortLabel HapMap SNPs
@@ -1648,3 +1657,23 @@ searchType genePred
 shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
+ 
+searchName gvNameSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+xrefTable gv
+xrefQuery select id, name from %s where name like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+
+searchName gvAliasSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+dontCheckXrefQueryFormat on
+xrefTable gvAttr
+xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+

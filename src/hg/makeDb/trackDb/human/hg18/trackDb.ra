@@ -825,3 +825,13 @@ searchTable wgRna
 searchMethod fuzzy
 searchType bed
 searchPriority 10
+
+track oreganno
+shortLabel ORegAnno
+longLabel Regulatory elements from ORegAnno
+group regulation
+priority 97
+visibility hide
+color 102,102,0
+type bed 4 +
+

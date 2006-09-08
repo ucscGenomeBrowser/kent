@@ -5,6 +5,11 @@ url http://www.oreganno.org/oregano/recordview.action?recid=%s
 label ORegAnno
 acc yes
 
+name PubMed
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&query_hl=1&list_uids=%s
+label PubMED
+acc yes
+
 name HbVar
 url http://globin.bx.psu.edu/cgi-bin/hbvar/query_vars3?mode=output&display_format=page&id=%s
 label HbVar
@@ -63,6 +68,7 @@ dataId spId
 name MPlink
 label Mammalian Phenotype (MP)
 url http://www.informatics.jax.org/searches/Phat.cgi?id=%s
+acc yes
 
 name omimTitle2
 label OMIM title
@@ -71,3 +77,7 @@ dataId mrna
 dataLink OMIM
 dataLinkCol 2
 
+name BTKbase
+label BTKbase
+url http://bioihttp://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=brief;%s
+acc yes

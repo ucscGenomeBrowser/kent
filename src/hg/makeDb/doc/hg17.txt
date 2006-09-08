@@ -21445,6 +21445,10 @@ end
 #set conserved variants that are null to likely
 computeDiseaseAssocCons > gvAttrConservedDisease.txt
 
+#Belinda Giardine Sept 2006
+#reload tables, removed ones with sequence mismatches, added label and strand
+#added new lsbd BTKbase
+
 
 #############################################################
 # Illumina Hap300 (Heather, July 2006)

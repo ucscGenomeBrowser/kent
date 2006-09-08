@@ -17,6 +17,8 @@ table gvPos
     uint    chromStart;     "Start position in chrom"
     uint    chromEnd;       "End position in chrom"
     string  name;           "ID for this mutation"
+    char[1] strand;         "+ or -"
+    string  label;          "short official name for this mutation"
     )
 
 table gvSrc

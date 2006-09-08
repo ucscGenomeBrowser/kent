@@ -10570,3 +10570,8 @@ hgLoadBed hg18 snpArrayIllumina300 illumina.bed -sqlTable=snpArrayIllumina300.sq
 rm hg17.data hg17.data.sort hg18.data.sort bed.tab join.out
 gzip illumina.bed
 
+##########################################################################
+# Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
+# This uses the gv* tables in hgFixed for the related data.  The track has
+# been on hg17, just added to hg18.  Most variants were mapped directly to
+# hg18 only the LSDB BGMUT was lifted using liftOver.
