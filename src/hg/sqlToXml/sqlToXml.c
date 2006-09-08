@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.13 2005/12/25 04:19:16 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.14 2006/09/08 15:04:24 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -366,8 +366,6 @@ struct sqlConnection *conn = sqlAllocConnection(cc);
 struct sqlResult *sr;
 char **row;
 struct typedField *col, *colList = hashMustFindVal(tableHash, table);
-boolean subObjects = FALSE;
-int rowCount = 0;
 
 verbose(2, "%s\n", query);
 sr = sqlGetResult(conn, query);
@@ -428,7 +426,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        ;
 	    else if (!sameString(target, "hide"))
 		{
-		char query[512];
 		struct dyString *sql = dyStringNew(0);
 		int newDepth = depth;
 		if (!tree->hideTable)
