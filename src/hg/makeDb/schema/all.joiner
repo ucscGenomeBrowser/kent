@@ -1372,7 +1372,7 @@ identifier wormBaseId external=WormBase dependency
     $ce.sangerCanonical.transcript
     $ce.sangerIsoforms.transcript
     $ce.sangerLinks.orfName minCheck=0.96
-    $ce.sangerPep.name
+    $ce.sangerPep.name minCheck=0.96
     $ce.sangerToKim.name
     $ce.sangerToPfam.name
     $ce.sangerToRefSeq.name
