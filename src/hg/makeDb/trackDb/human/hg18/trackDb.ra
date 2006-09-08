@@ -812,14 +812,27 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
-track polyaDb
-shortLabel poly(A) DB
-longLabel PolyA_DB Polyadenylation Sites
+track polyA
+compositeTrack on
+shortLabel Poly(A)
+longLabel PolyA sites, both reported and predicted
 group rna
 priority 79
-origAssembly hg16
 visibility hide
-type bed 4 .
+type bed 8 .
+
+    track polyaDb
+    subTrack polyA
+    shortLabel polyA_DB
+    longLabel Reported poly(A) sites from polyA_DB
+    priority 1
+
+    track polyaPredict
+    subTrack polyA
+    shortLabel Poly(A) SVM
+    longLabel Predicted poly(A) sites using an SVM
+    color 102,0,153
+    priority 2
 
 searchTable wgRna
 searchMethod fuzzy
