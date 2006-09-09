@@ -5,43 +5,46 @@
 # Description:  Combines placemnets of STS by full sequence and primers
 # into a single, unified file
 
-# $Id: combineSeqPrimerPos,v 1.1 2006/09/09 22:15:25 hiram Exp $
+# $Id: combineSeqPrimerPos,v 1.2 2006/09/09 22:30:57 hiram Exp $
 
 # Usage message
 if ($#ARGV < 1) {
-  print stderr "USAGE: combineSeqPrimerPos <seq file> <primers file>\n";
+  print STDERR "USAGE: combineSeqPrimerPos <seq file> <primers file>\n";
   exit(1);
 }
 
 # Read in parameters
-$seq = shift(@ARGV);
-if (!-e "$seq") { die("Could not open $seq\n"); }
-$primers = shift(@ARGV);
-if (!-e"$primers") { die("Could not open $primers\n"); }
+my $seq = shift(@ARGV);
+if (!-e "$seq") { die("Can not open $seq: $!"); }
+my $primers = shift(@ARGV);
+if (!-e"$primers") { die("Can not open $primers: $!"); }
 
 # Set maximum number of placements to consider
-$MAX_PLACE = 50;
+my $MAX_PLACE = 50;
 
 # Make sure they are sorted by UCSC ID number
-open(TEMP, ">$$.header");
+open(TEMP, ">$$.header") or die "Can not write to $$.header: $!";
 print TEMP "chr\tstart\tend\tidentNo\tacc\n";
 print TEMP "25S\t10N\t10N\t10N\t25S\n";
 close(TEMP);
 `cat $$.header $seq | sorttbl identNo chr start | headchg -del > $$.seq`;
 `cat $$.header $primers | sorttbl identNo chr start | headchg -del > $$.primers`;
-open(SEQ, "<$$.seq");
-open(PRIMER, "<$$.primers");
+open(SEQ, "<$$.seq") or die "Can not read from $$.seq: $!";
+open(PRIMER, "<$$.primers") or die "Can not read from $$.primers: $!";
 
 # Read in sequence and primers files and create initial output file
-open(TEMP, ">$$.temp");
+open(TEMP, ">$$.temp") or die "Can not write to $$.temp: $!";
 print TEMP "chr\tstart\tend\tidentNo\tplace\tacc\totherAcc\n";
 print TEMP "15S\t10N\t10N\t10N\t5N\t15S\t666S\n";
-$currid = 1;
-$seqid = 1;
-$schr = "";
-$primid = 1;
-$pchr = "";
-$done = 0;
+my $currid = 1;
+my $seqid = 1;
+my $schr = "";
+my $primid = 1;
+my $pchr = "";
+my $done = 0;
+my $sstart = 0;
+my $send = 0;
+my $sacc = 0;
 while (!$done) {
   # Record sequence info, if matches current ID
   my @seqchr;
@@ -68,7 +71,7 @@ while (!$done) {
 
   # Get all sequence lines for this ID
   while ($seqid == $currid) {
-    if ($line = <SEQ>) {
+    if (my $line = <SEQ>) {
       chomp($line);
       ($schr, $sstart, $send, $seqid, $scov, $sid, $sacc) = split("\t",$line);
       if ($seqid == $currid) {
@@ -84,7 +87,7 @@ while (!$done) {
 
   # Get all primers lines for this ID
   while ($primid == $currid) {
-    if ($line = <PRIMER>) {
+    if (my $line = <PRIMER>) {
       chomp($line);
       ($pchr, $pstart, $pend, $primid, $pcov, $pid, $pacc) = split("\t",$line);
       if ($primid == $currid) {
@@ -104,8 +107,8 @@ while (!$done) {
   my @end;
   my @acc;
   if (($#primchr >=0) || ($#seqchr >=0)) {
-    $sindex = 0;
-    $pindex = 0;
+    my $sindex = 0;
+    my $pindex = 0;
     # Process all lines
     while ((($sindex <= $#seqchr) || ($pindex <= $#primchr)) && ($#chr <= $MAX_PLACE)) {
       # If no sequence placements left
@@ -176,9 +179,9 @@ while (!$done) {
     $place = $#chr + 1;
     # Compile a list of other accessions this marker is placed on
     if ($place <= $MAX_PLACE) {
-      for ($i = 0; $i < $place; $i++) {
-	$oacc = "";
-	for ($j = 0; $j <= $#acc; $j++) {
+      for (my $i = 0; $i < $place; $i++) {
+	my $oacc = "";
+	for (my $j = 0; $j <= $#acc; $j++) {
 	  if ($acc[$i] ne $acc[$j]) {
 	    if ($oacc) {
 	      $oacc .= ";$acc[$j]";
