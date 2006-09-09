@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.12 2006/09/09 23:35:28 hiram Exp $"
+#	"$Id: mm8.txt,v 1.13 2006/09/09 23:50:24 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7044,25 +7044,21 @@ set out = $3
     wc -l ../STSmarkers/stsMapMouse.bed
     #	29888  stsMapMouse.bed
 
-XXXX done to here 2006-09-09 16:35
-
     #  loading STS markers tables
     ssh hgwdev
     cd /cluster/data/mm8/bed/STSmarkers
-    cp -p /cluster/data/mm7/bed/STSmarkers/ucscAlias.pl .
-    ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
+    ~/kent/src/hg/stsMarkers/ucscAlias.pl \
+	mm8.stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
     #	this does leave messages in ucscStsAlias.warnings but they seem
     #	to be very similar to Mm6 with just a few new ones
      
-    wc ucscStsAlias.tab  (after applying filter to primers.psl above)
-    #	144570  433667 3366815 ucscStsAlias.tab
-    wc ucscStsAlias.tab  (before applying filter to primers.psl above)
-    #	144570  433667 3366815 ucscStsAlias.tab
-    wc /cluster/data/mm7/bed/STSmarkers/ucscStsAlias.tab
-    #	141585  424725 3284106 ucscStsAlias.tab
-    wc /cluster/store6/mm5/bed/STSmarkers/ucscStsAlias.tab
-    # 126624  379859 3037850 /cluster/store6/mm5/bed/STSmarkers/ucscStsAlias.tab
+    wc -l ucscStsAlias.tab
+    #	146583  ucscStsAlias.tab
+    wc -l ../STSmarkers/ucscStsAlias.tab
+    #	146064  ucscStsAlias.tab
      
+XXXX done to here 2006-09-09 16:35
+XXXX Need to check name lists and see what is in and what is now out
     #	Use the drop tables if reloading
     #	hgsql -e "drop table stsAlias;" mm8
     hgsql mm8 < ~/kent/src/hg/lib/stsAlias.sql
