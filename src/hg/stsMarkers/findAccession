@@ -1,52 +1,57 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
+
 # File: findAccession
 # Author: Terry Furey
 # Date: 5/17/01
 # Project: Human
 # Description:  Finds the accession for a marker on the golden path
 
-# $Id: findAccession,v 1.1 2006/09/09 04:19:43 hiram Exp $
+# $Id: findAccession,v 1.2 2006/09/09 21:50:58 hiram Exp $
+
+use strict;
+use warnings;
 
 # Usage message
 if ($#ARGV < 1) {
-  print stderr "USAGE: findAccession [-agp -ncbi -mouse -rat -chicken -all] <file> <accession_info>\n";
+  print STDERR "USAGE: findAccession [-agp -ncbi -mouse -rat -chicken -all] <file> <accession_info>\n";
   exit(1);
 }
 
 # Read parameters
-$agp = 0;
-$ncbi = 0;
-$mouse = 0;
-$rat = 0;
-$chicken = 0;
-$all = 0;
-@chroms = (1..22,X,Y,M,NA,UL);
+my $agp = 0;
+my $ncbi = 0;
+my $mouse = 0;
+my $rat = 0;
+my $chicken = 0;
+my $all = 0;
+my @chroms = (1..22,'X','Y','M','NA','UL');
 while ($#ARGV > 1) {
-  $arg = shift(@ARGV);
+  my $arg = shift(@ARGV);
   if ($arg eq "-agp") {
     $agp = 1;
  } elsif ($arg eq "-ncbi") {
     $ncbi = 1;
-    @chroms = (1..22,X,Y,M,Un);
+    @chroms = (1..22,'X','Y','M','Un');
   } elsif ($arg eq "-mouse") {
     $mouse = 1;
-    @chroms = (1..19,X,Y,Un,M);
+    @chroms = (1..19,'X','Y','Un','M');
   } elsif ($arg eq "-rat") {
     $rat = 1;
-    @chroms = (1..20,X,Un,M);
+    @chroms = (1..20,'X','Un','M');
   } elsif ($arg eq '-chicken') {
     $chicken = 1;
     @chroms = (1..24,26..28,32,'E22C19W28','E26C13','E50C23','W','Z','Un');
   } elsif ($arg eq "-all") {
     $all = 1;
   } else {
-    print stderr "$arg is not a valid parameter\n";
+    print STDERR "$arg is not a valid parameter\n";
   }
 }
-$file = shift(@ARGV);
-$info = shift(@ARGV);
-open(FILE, "<$file") || die("Could not open $file\n");
-open(OUT, ">$file.acc");
+my $file = shift(@ARGV);
+my $inFile = $file;
+my $info = shift(@ARGV);
+open(FILE, "<$file") || die("Can not open $file: $!");
+open(OUT, ">$file.acc") || die "Can not open > $file.acc: $!";
 
 # Get chromosomes from agp directory, if possible
 if (($agp) && (-e "$info/chrom_names")) {
@@ -54,18 +59,25 @@ if (($agp) && (-e "$info/chrom_names")) {
 }
 
 # Read in the positions of the accessions
-print stderr "Reading in accession_info\n";
+print STDERR "Reading in accession_info\n";
 # Either read from accession_info.rdb file
+my @acc;
+my $acc;
+my @chr;
+my @start;
+my @end;
+
+my $index = 0;
+
 if (!$agp) {
   if (! -e $info) { die("$info does not exist\n"); }
   `sorttbl Chr -r Ord Start < $info > $$.sort`;
   open(INFO, "<$$.sort") || die("Count not open $$.sort\n");
+  my $line = <INFO>;
   $line = <INFO>;
-  $line = <INFO>;
-  $index = 0;
   while ($line = <INFO>) {
     chomp($line);
-    ($chr, $ord, $start, $end, $mid, $ctg, $ctgIdx, $bargeIdx, $clone, $acc, @rest) = split("\t",$line);
+    my ($chr, $ord, $start, $end, $mid, $ctg, $ctgIdx, $bargeIdx, $clone, $acc, @rest) = split("\t",$line);
     $acc[$index] = $acc;
     if ($ord == 1) {
       $chr[$index] = $chr;
@@ -80,42 +92,44 @@ if (!$agp) {
 # Or read directly from agp file
 } else {
   $index = -1;
-  foreach $chr (@chroms) {
-    print stderr "Loading chr$chr agp info\n";
-    for ($ord = 0; $ord <=1; $ord++) {
+  foreach my $chr (@chroms) {
+    for (my $ord = 0; $ord <=1; $ord++) {
       if ($ord == 0) {
 	$file = "chr${chr}_random.agp";
       } else {
 	$file = "chr$chr.agp";
       }
-      if (open(AGP, "<$info/$chr/$file")) {
-	$prevacc = "";
-	while ($line = <AGP>) {
-	  chomp($line);
-	  ($thischr, $start, $end, $idx, $type, $acc, @rest) = split(' ',$line);
-	  next if ($type eq "N");
+	  if (-e "$info/$chr/$file") {
+	    if (open(AGP, "<$info/$chr/$file")) {
+	    print STDERR "Reading chr$chr agp info $info/$chr/$file\n";
+	    my $prevacc = "";
+	    while (my $line = <AGP>) {
+	      chomp($line);
+	      my ($thischr, $start, $end, $idx, $type, $acc, @rest) = split(' ',$line);
+	      next if ($type eq "N");
 
-	  if (! $chicken) {
-	      ($acc, $vers) = split(/\./,$acc);
-	  }
-	  if ($acc ne $prevacc) {
-	    $index++;
-	    $acc[$index] = $acc;
-	    if ($ord == 1) {
-	      $chr[$index] = "chr$chr";
-	    } else {
-	      $chr[$index] = "chr${chr}_random";
+	      if (! $chicken) {
+		  ($acc, my $vers) = split(/\./,$acc);
+	      }
+	      if ($acc ne $prevacc) {
+		$index++;
+		$acc[$index] = $acc;
+		if ($ord == 1) {
+		  $chr[$index] = "chr$chr";
+		} else {
+		  $chr[$index] = "chr${chr}_random";
+		}
+		$start[$index] = $start;
+		$end[$index] = $end;
+	      } else {
+		$end[$index] = $end;
+	      }
+	      $prevacc = $acc;
 	    }
-	    $start[$index] = $start;
-	    $end[$index] = $end;
+	    close(AGP);
 	  } else {
-	    $end[$index] = $end;
+	    print STDERR ("Could not open $info/$chr/$file\n");
 	  }
-	  $prevacc = $acc;
-	}
-	close(AGP);
-      } else {
-	print stderr ("Could not open $info/$chr/$file\n");
       }
     }
   }
@@ -123,21 +137,23 @@ if (!$agp) {
 }
 
 # Process each line in the position file
-$i = 0;
-$count = 0;
-print stderr "Starting processing\n";
-while($line = <FILE>) {
+my $i = 0;
+my $count = 0;
+my $firsti = 0;
+my $largest = 0;
+my $largesti = 0;
+print STDERR "processing $inFile\n";
+while(my $line = <FILE>) {
   chomp($line);
-  ($chr, $start, $end, @rest) = split(' ',$line);
+  my ($chr, $start, $end, @rest) = split(' ',$line);
   $count++;
   if ($count%10000 == 0) {
-    print stderr "$count\n";
+    print STDERR "$count\n";
   }
 
   # Make sure at current chromosome
   if ($chr ne $chr[$i]) {
     $i = 0;
-    print stderr "Processing $chr\n";
     while ($chr[$i] ne $chr) {
       $i++;
       if ($i > $#chr) {
@@ -152,7 +168,7 @@ while($line = <FILE>) {
   # Find a range that overlaps the placement
   $acc = "";
   $i = $largesti;
-  $reset = 0;
+  my $reset = 0;
   # If want all accessions, make sure start with first accession that overlaps
   if ($all) {
     while (($end[$i] > $start) && ($i > $firsti)) {
@@ -175,8 +191,8 @@ while($line = <FILE>) {
       if (($start >= $start[$i]) && ($end <= $end[$i])) {
 	# Check if this is a very long accession and is contained in next accession
 	if (($end[$i] - $start[$i]) >= 500000) {
-	  $diffi = $end[$i] - $start[$i];
-	  $j = $i + 1;
+	  my $diffi = $end[$i] - $start[$i];
+	  my $j = $i + 1;
 	  while (($start <= $end[$j]) && ($chr[$j] eq $chr)) {
 	    if (($start >= $start[$j]) && ($end <= $end[$j]) && (($end[$j] - $start[$j]) < $diffi)) {
 	      $i = $j;
@@ -201,7 +217,7 @@ while($line = <FILE>) {
 	  $largesti = $i;
 	}
 	if ($chr ne $chr[$i]) {
-	  die("1 - Out of chrom - $chr $start $end - $chr[$i] $start[$i] $end[$i] $i\n");
+	  die("1 - Out of chrom - $chr $start $end - $chr[$i] $start[$i] $end[$i] $i line: $.\n");
 	}
       # Check if accession really does contain feature
       } elsif ($start[$i] > $end)  {
@@ -226,10 +242,10 @@ while($line = <FILE>) {
 	} 
 	$i++;
 	# Find largest overlap
-	$overlap = 0;
+	my $overlap = 0;
 	$acc = "";
 	while (($start[$i] < $end) && ($chr eq $chr[$i]) && ($i < $index)) {
-	  $test = $end - $start + 1;
+	  my $test = $end - $start + 1;
 	  if ($start < $start[$i]) {
 	    $test -= ($start[$i] - $start);
 	  }
