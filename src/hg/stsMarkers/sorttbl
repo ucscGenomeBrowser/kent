@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-my $RCS_ID = '$Id: sorttbl,v 1.2 2006/09/07 18:47:00 hiram Exp $' ;
+my $RCS_ID = '$Id: sorttbl,v 1.3 2006/09/09 22:31:11 hiram Exp $' ;
 $0 =~ s-.*/-- ;
 
 # Modified by markd@cse.ucsc.edu to use gsort -g
@@ -159,7 +159,6 @@ sub get_col_x {		# get, chk column indexes, inc -v, die if bad column
 	for( $ok=$f=0 ; $f < @H ; $f++ ){
 	    if( $arg eq $H[$f] ){	# match existing column
 		$ok++ ;
-print STDERR "$arg\n";
 		push( @n, $f );
 		last ; }
 	}
