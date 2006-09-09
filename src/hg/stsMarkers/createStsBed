@@ -1,0 +1,144 @@
+#!/usr/bin/perl
+
+##Author: Yontao Lu
+##Date Jan, 31 03
+##Des: This script will create stsMapRat.bed file. It will read stsInfoRat.bed 
+##and stsMarkers_pos.rdb file and then output the Map.bed file.
+##The map.bed contains marker aligning postion in chr and different map location.
+
+# $Id: createStsBed,v 1.1 2006/09/09 22:36:31 hiram Exp $
+
+ use Text::ParseWords;
+
+if(@ARGV < 3)
+{
+    print STDERR "Usage: createStsBed infobed markerfile threshold.
+Working for both rat and Mouse.\n";
+    exit(1);
+}
+
+$name = shift(@ARGV);
+$pos = shift(@ARGV);
+$threshold = shift(@ARGV);
+
+open(IF1, "<$name") || die "Can not open info_bed $name.\n"; #Using the mgi.newconvert.tx
+
+# Read in info from info file
+while (my $line = <IF1>) 
+{
+  chomp($line);
+  my @fields = split(/\t/,$line);
+  my $id = $fields[0];
+  
+  $ids{$id} = $id;
+  $names{$id} = $fields[1];
+
+  $RHCHR{$id} = $fields[19];
+  $RHPOS{$id} = $fields[20];
+  $RHLod{$id} = $fields[21];
+
+  $FHHChr{$id} = $fields[13];
+  $FHHPos{$id} = $fields[14];
+  
+  $SHRChr{$id} = $fields[16];
+  $SHRPos{$id} = $fields[17];
+}
+
+
+close(IF1);
+
+open(IF2, "<$pos") || die "can not open $pos\n"; #get stsMarkerPos.rdb
+open(OF, ">stsMap.error");
+open(OF2, ">ttemp");
+
+#get rid of the header of rdb
+for($i = 0; $i<2; $i++)
+{
+    my $line =<IF2>;
+}
+
+
+
+while(my $line = <IF2>)
+{#read rdb and add markerId and name to each line for outputing.
+    chomp($line);
+    my ($chr, $start, $end, $id, $times, $acc, @rest) = split("\t", $line);
+    
+    $score = 1000;
+    if(defined $ids{$id})
+    {
+	print OF2 "$chr\t$start\t$end\t$names{$id}\t$score\t$id\t$acc\t@rest\t$RHCHR{$id}\t$RHPOS{$id}\t$RHLod{$id}\t $FHHChr{$id}\t$FHHPos{$id}\t$SHRChr{$id}\t$SHRPos{$id}\t$times\n";
+    }
+    else
+    {
+	print OF "Can not find $id\n";
+	
+    }
+    
+}
+
+close(OF2);
+close(OF);
+
+#sort the file so all items with same markerId will together. Help to count hits.
+
+`sort -k 6  -g ttemp > tttemp`;
+`rm ttemp`; 
+
+open(IF2, "<tttemp");
+
+
+#count hits for each marker and then cal score for it. Get the those passing the threshold to bed file. 
+$line = <IF2>;
+chomp($line);
+(@items) = split(/\t/, $line);
+$lines[0] = $line;
+$preId = $items[5];
+$time = 1;
+while(my $line = <IF2>)
+{
+    chomp($line);
+    (@item) = split(/\t/, $line);
+    if($item[5] == $preId)
+    {
+	$lines[$time] = $line;
+	$time ++;
+	
+    }
+    else
+    {
+	if( ($time + $item[-1])== 2)
+	{
+	    
+	    
+	    my (@eles) = split(/\t/,$lines[0]);
+	    $eles[4] = $score;
+	    my @temp = @eles[0..14];
+	    my $newline = join("\t", @temp);
+	    print "$newline\n";
+	    $preId = $item[5];
+	    $lines[0] = $line;
+	
+	}
+	else
+	{
+	    my $score = (int(1000 - (($time + $item[-1]) - 2) * 250 > 0) ? int(1000 - ($time - 1) * 250) : 0);
+	    if($score >= $threshold)
+	    {
+		for(my $i = 0; $i < $time; $i++)
+		{
+		    my (@eles) = split(/\t/,$lines[$i]);
+	            $eles[4] = $score;
+		    my @temp = @eles[0..14];
+		    my $newline = join("\t", @temp);
+		    print "$newline\n";
+		}
+	    }
+	    $lines[0] = $line;
+	    $time = 1;
+	    $preId = $item[5];
+	}
+    }
+}
+
+close(IF2);
