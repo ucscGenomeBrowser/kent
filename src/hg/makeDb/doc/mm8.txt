@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.11 2006/08/31 18:40:13 markd Exp $"
+#	"$Id: mm8.txt,v 1.12 2006/09/09 23:35:28 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -6789,22 +6789,19 @@ set out = $3
     gensub2 primers.list chr.list template jobList
     para create jobList
     para try ... check ... push ... etc ...
-XXXX - running 2006-08-29
 # Completed: 12104 of 12104 jobs
-# CPU time in finished jobs:    1075037s   17917.28m   298.62h   12.44d  0.034 y
-# IO & Wait Time:               7444257s  124070.95m  2067.85h   86.16d  0.236 y
-# Average job time:                 704s      11.73m     0.20h    0.01d
-# Longest finished job:           61869s    1031.15m    17.19h    0.72d
-# Submission to last job:        168538s    2808.97m    46.82h    1.95d
-    #	some of the jobs got stuck for unknown reasons.  Had to find
-    #	them and kill them on their nodes.  Their blat.2 process was
-    #	stuck and would not kill.  Don't know what happened there.
+# CPU time in finished jobs:    1077752s   17962.54m   299.38h   12.47d  0.034 y
+# IO & Wait Time:              13834421s  230573.68m  3842.89h  160.12d  0.439 y
+# Average job time:                1232s      20.53m     0.34h    0.01d
+# Longest finished job:           20039s     333.98m     5.57h    0.23d
+# Submission to last job:         20664s     344.40m     5.74h    0.24d
 
     # on the file server
-    ssh kkstore01
-    cd /cluster/data/mm8/bed/STSmarkers/primer
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer
     time pslSort dirs primers.raw.psl temp out/chr*
-    #	-rw-rw-r--   1 586124177 Feb 26 21:28 primers.raw.psl
+    #	real    1m15.764s
+    #	-rw-rw-r--   1 586317529 Aug 30 09:56 primers.raw.psl
 
     #	filter alignments for (qEnd-qStart) vs. (tEnd-tStart)
     #	should not be more than 100 bases different.
@@ -6819,25 +6816,17 @@ XXXX - running 2006-08-29
     rmdir temp
 
     wc -l *.100 *.psl
-    #	5445367 primers.raw.psl
-    #	4500528 primers.psl.100
-    #	 944839 difference
+    #	5447517 primers.raw.psl
+    #	4502639 primers.psl.100
+    #	 944878 difference
 
     # a rough comparison with previous results:
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.100
-    #	4893510  102763628  510563575 primers.psl.100
-    wc primers.psl  (unfiltered, Mm7)
-    #	5921712 124355891 636898117 primers.psl
-    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.psl
-    #	5724127 120206606 615248041
-    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl
-    #	5719969 120119288 590806241
-    wc /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
-    #	5745617 120657896 592135728 
+    wc -l /cluster/data/mm8/bed/STSmarkers/primer/primers.psl.100
+    #	4500528 /cluster/data/mm8/bed/STSmarkers/primer/primers.psl.100
 
     # another kluster run for the ePCR
     ssh pk
-    cd /cluster/data/mm8/bed/STSmarkers/ePCR
+    cd /cluster/data/mm8/bed/STSmarkers.2006-08-29/ePCR
     ls -1S /cluster/bluearc/mm8/stsMarkers/chroms > chr.list
 
     #	pick up e-PCR source from
@@ -6852,7 +6841,8 @@ XXXX - running 2006-08-29
     mkdir out
     cat << '_EOF_' > runPCR
 #!/bin/csh -fe
-/cluster/bin/x86_64/e-PCR /cluster/data/mm8/bed/STSmarkers/mouseP.info \
+/cluster/bin/x86_64/e-PCR \
+	/cluster/data/mm8/bed/STSmarkers.2006-08-29/mouseP.info \
 	/cluster/bluearc/mm8/stsMarkers/chroms/$1 N=1 M=50 W=5 > $2
 '_EOF_'
     # << happy emacs
@@ -6870,7 +6860,6 @@ XXXX - running 2006-08-29
     para check
     para push
     ... etc ...
-    # STARTED 2006-02-27 16:24
     #	There is a single job that produces no output:
     ./runPCR chrX_random.fa out/30.epcr
     #	WARNING: 96 STSs have primer shorter than W
@@ -6878,34 +6867,29 @@ XXXX - running 2006-08-29
     #	Not sure what's up with that
 # Completed: 33 of 34 jobs
 # Crashed: 1 jobs
-# CPU time in finished jobs:      67601s    1126.69m    18.78h    0.78d  0.002 y
-# IO & Wait Time:                  1028s      17.13m     0.29h    0.01d  0.000 y
-# Average job time:                2080s      34.66m     0.58h    0.02d
-# Longest finished job:            5134s      85.57m     1.43h    0.06d
-# Submission to last job:          5134s      85.57m     1.43h    0.06d
+# CPU time in finished jobs:      67174s    1119.56m    18.66h    0.78d  0.002 y
+# IO & Wait Time:                  2199s      36.65m     0.61h    0.03d  0.000 y
+# Average job time:                2102s      35.04m     0.58h    0.02d
+# Longest finished job:            4780s      79.67m     1.33h    0.06d
+# Submission to last job:          4780s      79.67m     1.33h    0.06d
 
-    ssh kkstore01
-    cd /cluster/data/mm8/bed/STSmarkers/ePCR
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/STSmarkers.2006-08-29/ePCR
     # all those results become all.epcr
     cat out/*.epcr > all.epcr
 
     # comparing to previous results:
     wc -l all.epcr
+    #	58098 all.epcr
+    wc -l /cluster/data/mm8/bed/STSmarkers/ePCR/all.epcr
     #	58088 all.epcr
-    wc -l /cluster/data/mm7/bed/STSmarkers/ePCR/all.epcr
-    #	57709 /cluster/data/mm7/bed/STSmarkers/ePCR/all.epcr
-    wc -l /cluster/data/mm6/bed/STSmarkers/ePCR/all.epcr
-    #	55871 /cluster/data/mm6/bed/STSmarkers/ePCR/all.epcr
-    wc /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
-    #	55677  222708 2945623 /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
-    wc /cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
-    #	74705  298820 3971712 /cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
-    #	Mm4 seems to be out of whack
 
-    cd /cluster/data/mm8/bed/STSmarkers/primer
+    cd /cluster/data/mm8/bed/STSmarkers.2006-08-29/primer
 
     /cluster/bin/scripts/filterSTSPrimers \
-    -mouse ../stsInfoMouse.bed primers.psl.100 \
+
+    ~/kent/src/hg/stsMarkers/filterSTSPrimers \
+    -mouse ../mm8.stsInfoMouse.bed primers.psl.100 \
         ../mouseP.info ../ePCR/all.epcr > primers.psl.filter.blat
 
     #  The output should show an increasing count:
@@ -6920,25 +6904,20 @@ XXXX - running 2006-08-29
     #	Determining ePCR not found
     #
     wc -l primers.psl.filter.blat
+    #	33961 primers.psl.filter.blat
+    wc -l /cluster/data/mm8/bed/STSmarkers/primer/primers.psl.filter.blat
     #	34026 primers.psl.filter.blat
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.blat
-    #	33986 /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.blat
-    wc -l /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.blat
-    #	33128 /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.blat
-    wc -l /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.blat
-    #	33476 /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.blat
 
-    # create accession_info.rdb
+    # create file accession_info.rdb
     touch empty_sequence.inf
-    /cluster/bin/scripts/compileAccInfo -mouse \
+    ~/kent/src/hg/stsMarkers/compileAccInfo -mouse \
 	/cluster/data/mm8 empty_sequence.inf
-    # works with errors on missing randoms, etc...:
-    # cat: /cluster/data/mm5/11/chr11_random.agp: No such file or directory
-    # cat: /cluster/data/mm5/M/chrM_random.agp: No such file or directory
+    #	20502 processed
     mv accession_info.rdb accession_info.rdb.tmp
-    /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp > \
-	accession_info.rdb
+    ~/kent/src/hg/stsMarkers/sorttbl -x Chr Ord Start \
+	< accession_info.rdb.tmp > accession_info.rdb
     rm accession_info.rdb.tmp
+
     # comparing results to previous
     #	Continuing the trend that began with Mm7, the numbers in
     #	accession_info.rdb continue to decrease.  Even Mm8 has much less
@@ -6953,33 +6932,23 @@ XXXX - running 2006-08-29
 
     wc -l accession_info.rdb
     #	20385 accession_info.rdb
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/accession_info.rdb
-    #	44046  484510 3112816 accession_info.rdb
-    wc /cluster/data/mm7/bed/STSmarkers/primer/accession_info.rdb
-    #	93052 1023576 6824900 accession_info.rdb
-    wc /cluster/data/mm5/bed/STSmarkers/primer/accession_info.rdb
-    #	131845 1450299 9681940
-    wc /cluster/data/mm4/bed/STSmarkers/primer/accession_info.rdb
-    #	86935  956289 6374930 
+    wc -l ../../STSmarkers/primer/accession_info.rdb
+    #	20385 ../../STSmarkers/primer/accession_info.rdb
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
-    #	/cluster/bin/scripts/epcrToPsl
-    #	Fixed this script (in mm7) to make it not look for contigs in the usual
-    #	manner, we don't have those for this assembly	
-    sed -e "s/mm7/mm8/g" /cluster/data/mm7/bed/STSmarkers/primer/epcrToPsl \
-	> ./epcrToPsl
-    chmod +x epcrToPsl
-    ./epcrToPsl -mouse \
+    ~/kent/src/hg/stsMarkers/epcrToPsl -mouse \
 	epcr.not.found ../mouseP.info \
 	accession_info.rdb /cluster/data/mm8
 
     # Comparing results to previous:
     wc -l epcr*
-    #	 501 epcr.not.found
-    #	   0 epcr.not.found.nomatch
-    #	 501 epcr.not.found.psl
-    #	 158 epcrToPsl
-    #	1160 total
+    #	519 epcr.not.found
+    #	  0 epcr.not.found.nomatch
+    #	519 epcr.not.found.psl
+    wc -l ../../STSmarkers/primer/epcr*
+    #	501 ../../STSmarkers/primer/epcr.not.found
+    #	  0 ../../STSmarkers/primer/epcr.not.found.nomatch
+    #	501 ../../STSmarkers/primer/epcr.not.found.psl
 
     # Mm7 wc epcr*
     wc -l /cluster/data/mm7/bed/STSmarkers/primer/epcr*
@@ -6999,6 +6968,8 @@ XXXX - running 2006-08-29
 
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
     wc -l primers.psl.filter
+    #	34480 primers.psl.filter
+    wc -l ../../STSmarkers/primer/primers.psl.filter
     #	34527 primers.psl.filter
 
     wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter
@@ -7011,12 +6982,17 @@ XXXX - running 2006-08-29
     # 33691 /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted
 
     # create primers.psl.filter.lifted.initial
-    #	if you do not run with scripts in your path, add the PATH business
-    PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/extractPslInfo \
-	primers.psl.filter
-    wc -l  primers.psl.filter.initial
-    #	34513 primers.psl.filter.initial
+    PATH=~/kent/src/hg/stsMarkers:$PATH \
+	~/kent/src/hg/stsMarkers/extractPslInfo primers.psl.filter
 
+    wc -l *.initial
+    #	34462 primers.psl.filter.initial
+    wc -l ../../STSmarkers/primer/*.initial
+    #	34513 ../../STSmarkers/primer/primers.psl.filter.initial
+    wc -l *.initial
+    #	34462 primers.psl.filter.initial
+    wc -l ../../STSmarkers/primer/*.initial
+    #	34513 ../../STSmarkers/primer/primers.psl.filter.initial
     wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial
     #	34443 /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial
     wc -l /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.initial
@@ -7026,59 +7002,49 @@ XXXX - running 2006-08-29
     # 33689 
 
     # create primers.psl.filter.lifted.initial.acc
-    /cluster/bin/scripts/findAccession -agp \
+    PATH=~/kent/src/hg/stsMarkers:$PATH \
+    ~/kent/src/hg/stsMarkers/findAccession -agp \
 	-mouse primers.psl.filter.initial /cluster/data/mm8
-    #	it complains about missing _random items, it is OK
     wc -l primers.psl.filter.initial.acc
+    #	34462 primers.psl.filter.initial.acc
+    wc -l ../../STSmarkers/primer/primers.psl.filter.initial.acc
     #	34513 primers.psl.filter.initial.acc
 
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial.acc
-    #	34443
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
-    /cluster/bin/scripts/getStsId -rat \
-	../stsInfoMouse.bed  primers.psl.filter.initial.acc \
+    # it is not clear what -mouse would mean to this script, some other file
+    # format perhaps from the stsInfoMouse.bed format.
+    ~/kent/src/hg/stsMarkers/getStsId -rat \
+	../mm8.stsInfoMouse.bed  primers.psl.filter.initial.acc \
 	| sort -k4,4n > primers.final
     wc -l primers.final
+    #	34462 primers.final
+    wc -l ../STSmarkers/primer/primers.final
     #	34513 primers.final
-    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.final
-    #	34443 /cluster/data/mm7/bed/STSmarkers/primer/primers.final
 
     cd /cluster/data/mm8/bed/STSmarkers
     # stsMarkers.final is empty for mouse
     touch stsMarkers.final dummy
-    #	if you do not run with scripts in your path, add the PATH business
-    PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/combineSeqPrimerPos \
+    PATH=~/kent/src/hg/stsMarkers:$PATH \
+    ~/kent/src/hg/stsMarkers/combineSeqPrimerPos \
 	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
     wc -l stsMarkers_pos.rdb
+    #	32965 stsMarkers_pos.rdb
+    wc -l ../STSmarkers/stsMarkers_pos.rdb
     #	33075 stsMarkers_pos.rdb
-    wc -l /cluster/data/mm7/bed/STSmarkers/stsMarkers_pos.rdb
-    #	32869 /cluster/data/mm7/bed/STSmarkers/stsMarkers_pos.rdb
 
-    wc -l /cluster/data/mm6/bed/STSmarkers/stsMarkers_pos.rdb
-    #	31889 /cluster/data/mm6/bed/STSmarkers/stsMarkers_pos.rdb
-    wc -l /cluster/data/mm5/bed/STSmarkers/stsMarkers_pos.rdb
-    #	32085 /cluster/data/mm5/bed/STSmarkers/stsMarkers_pos.rdb
-    wc -l /cluster/data/mm4/bed/STSmarkers/stsMarkers_pos.rdb
-    #	31270 /cluster/data/mm4/bed/STSmarkers/stsMarkers_pos.rdb
-
-    /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
-	stsInfoMouse.bed  stsMarkers_pos.rdb 500 \
+    PATH=~/kent/src/hg/stsMarkers:$PATH \
+    ~/kent/src/hg/stsMarkers/createStsBed \
+	mm8.stsInfoMouse.bed  stsMarkers_pos.rdb 500 \
 	| sort -k1,1 -k2,2n > stsMapMouse.bed
-    #	Fixup --- 2006-04-12 - Hiram - it was found that column 12 had blanks
-    #	as the first character of the field.  This isn't what is needed
-    #	here.  Let's take those blanks out, turns out these were the
-    #	only blanks in the file:
-    mv stsMapMouse.bed stsMapMouse_withBlanks.bed
-    sed -e "s/ //" stsMapMouse_withBlanks.bed > stsMapMouse.bed
 
-    wc stsMapMouse.bed
-    #	29888  308263 2087726 stsMapMouse.bed
-    wc /cluster/data/mm7/bed/STSmarkers/stsMapMouse.bed
-    #	29079  301678 2097544 stsMapMouse.bed
-    wc /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
-    #	29069  301535 2123622 /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
+    wc -l stsMapMouse.bed
+    #	29818  stsMapMouse.bed
+    wc -l ../STSmarkers/stsMapMouse.bed
+    #	29888  stsMapMouse.bed
+
+XXXX done to here 2006-09-09 16:35
 
     #  loading STS markers tables
     ssh hgwdev
@@ -7181,10 +7147,6 @@ XXXX - running 2006-08-29
 
     # obtained NSCAN predictions from michael brent's group
     # at WUSTL
-    wget -nv -r -np http://ardor.wustl.edu/jeltje/mouse/chr_gtf
-    wget -nv -r -np http://ardor.wustl.edu/jeltje/mouse/chr_ptx
-    # clean up and rename downloaded directorys:
-    mv ardor.wustl.edu/jeltje/mm8/chr_gtf .
     mv ardor.wustl.edu/jeltje/mm8/chr_ptx .
     rm -rf ardor.wustl.edu
     rm chr_*/index.html*
