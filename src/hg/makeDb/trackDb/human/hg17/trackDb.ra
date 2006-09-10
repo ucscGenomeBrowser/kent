@@ -2348,3 +2348,20 @@ query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%
 searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 400
+
+track ha_elements
+shortLabel Human Accelerated
+longLabel Human Accelerated Elements
+group compGeno
+priority 104.7055
+visibility hide
+exonArrows off
+color 0,0,150
+type bed 6 .
+
+searchTable ha_elements
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex ha\.[0-9]+
+

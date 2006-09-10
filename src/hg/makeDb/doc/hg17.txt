@@ -22052,3 +22052,15 @@ mkdir -p ${blatDir}/{over,net}
         ccdsInfo
         ccdsKgMap
 
+    # << emacs
+##########################################################################
+#  har elements 1 to 202  Sol 09/10/2006
+
+    set bedDir = /gbdb/hg17/haseq/bed
+    mkdir -p $bedDir/ha_elements
+    pushd /projects/hg/wet/Sol/hars1to49
+    cp -p har_element_1to202.hg17.bed  $bedDir/ha_elements/ha_1to202.bed
+    hgLoadBed hg17 ha_elements         $bedDir/ha_elements/ha_1to202.bed
+    rm -f                              $bedDir/ha_elements/ha_1to202.bed
+    popd
+
