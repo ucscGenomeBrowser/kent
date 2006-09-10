@@ -1,5 +1,8 @@
 /* variation.h - hgTracks routines that are specific to the SNP and haplotype tracks */
 
+#ifndef VARIATION_H
+#define VARIATION_H
+
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -21,6 +24,7 @@
 #include "cnpSharp.h"
 #include "cnpSharpSample.h"
 #include "cnpSharpCutoff.h"
+#include "hgTracks.h"
 
 /****** snpMap *******/
 
@@ -42,6 +46,33 @@ Color snpMapColor(struct track *tg, void *item, struct vGfx *vg);
 void snpMapDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
 		      double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single snpMap item at position. */
+
+void drawDiamond(struct vGfx *vg, 
+		 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
+		 Color fillColor, Color outlineColor);
+/* Draw diamond shape. */
+
+void mapDiamondUi(int xl, int yl, int xt, int yt, 
+			 int xr, int yr, int xb, int yb, 
+			 char *name, char *shortLabel);
+/* Print out image map rectangle that invokes hgTrackUi. */
+
+Color getOutlineColor(struct track *tg, int itemCount);
+/* get outline color from cart and set outlineColor*/
+
+void mapTrackBackground(struct track *tg, int xOff, int yOff);
+/* Print out image map rectangle that invokes hgTrackUi. */
+
+void initColorLookup(struct track *tg, struct vGfx *vg, boolean isDprime);
+
+void ldAddToDenseValueHash(struct hash *ldHash, unsigned a, char charValue);
+/* Add new values to LD hash or update existing values.
+   Values are averaged along the diagonals. */
+
+void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+			  double scale, Color outlineColor, struct hash *ldHash);
+/* Draw all dense LD values */
+
 
 void snpMapMethods(struct track *tg);
 /* Make track for snps. */
@@ -207,3 +238,5 @@ Color delHindsColor(struct track *tg, void *item, struct vGfx *vg);
 
 void delHindsMethods(struct track *tg);
 /* methods for delHinds */
+
+#endif

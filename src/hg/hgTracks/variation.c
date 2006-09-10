@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.89 2006/08/08 21:33:19 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.90 2006/09/10 06:33:11 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -961,7 +961,7 @@ count = slCount((struct sList *)(tg->items));
 tg->canPack = FALSE;
 }
 
-static void mapDiamondUi(int xl, int yl, int xt, int yt, 
+void mapDiamondUi(int xl, int yl, int xt, int yt, 
 			 int xr, int yr, int xb, int yb, 
 			 char *name, char *shortLabel)
 /* Print out image map rectangle that invokes hgTrackUi. */
@@ -976,7 +976,7 @@ mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
 }
 
-static void mapTrackBackground(struct track *tg, int xOff, int yOff)
+void mapTrackBackground(struct track *tg, int xOff, int yOff)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 struct dyString *name = newDyString(32);
