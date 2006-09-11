@@ -22064,3 +22064,43 @@ mkdir -p ${blatDir}/{over,net}
     rm -f                              $bedDir/ha_elements/ha_1to202.bed
     popd
 
+# BUILD HPRD DATA FOR KNOWN GENE DETAILS PAGE LINKS (DONE 9/11/06)
+
+# First, build hprdToCdna.tab and hprdToUniProt.tab. 
+# See hg18.txt for details.
+
+    cd ~/data/hprd
+    mkdir hg17
+    cd hg17
+
+    hgsql hg17 -e 'drop table hprdToCdna'
+    hgsql hg17 <~/src/hg/lib/hprdToCdna.sql
+    hgsql hg17 -e 'load data local infile "../hprdToCdna.tab" into table hprdToCdna'
+
+    hgsql hg17 -e 'drop table hprdToUniProt'
+    hgsql hg17 <~/src/hg/lib/hprdToUniProt.sql
+    hgsql hg17 -e 'load data local infile "../hprdToUniProt.tab" into table hprdToUniProt'
+
+# build knownToHprd table
+
+    hgsql hg17 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=kgId' >j.kg1
+    hgsql hg17 -N -e 'select kgId,hprdId from hprdToUniProt, kgXref where uniProtId=spId' >j.kg2
+
+    cat j.kg1 j.kg2 |sort -u >knownToHprd.tab
+    wc knownToHprd.tab
+
+    hgsql hg17 -e 'drop table knownToHprd'
+    hgsql hg17 <~/src/hg/lib/knownToHprd.sql
+
+    hgsql hg17 -e 'load data local infile "knownToHprd.tab" into table knownToHprd'
+    hgsql hg17 -e 'select count(*) from knownToHprd'
+
+# 19,345 records created.
+
+# remove temporary files.
+
+    rm j*
+
+# Do the same for hg17.  See hg17.txt for details.
+
+

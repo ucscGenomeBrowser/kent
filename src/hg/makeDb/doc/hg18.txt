@@ -10588,3 +10588,74 @@ gzip illumina.bed
     rm -f                              $bedDir/ha_elements/ha_1to202.bed
     popd
 
+# BUILD HPRD DATA FOR KNOWN GENE DETAILS PAGE LINKS (DONE 9/11/06)
+
+# Download HPRD_XML_060106.tar.gz from www.hprd.org
+
+    gzip -d HPRD_XML_060106.tar.gz
+    tar -xvf HPRD_XML_060106.tar.gz
+
+# This will create 18838 xxxx.xml files under HPRD_XML_060106
+
+# Create hprdToCdna table
+
+    echo 'grep -H entry_cdna  HPRD_XML_060106/$1.xml' >do1Cdna
+
+    ls  HPRD_XML_060106 >j
+    cat j |sed -e 's/.xml/\tdo1Cdna/g' >jj
+    cut -f 1 jj >j.2
+    cut -f 2 jj >j.1
+    paste j.1 j.2 >doAllCdna
+    chmod +x do*
+
+    ./doAllCdna >j.cdna
+    cat j.cdna| sed -e 's/\//\t/' | sed -e 's/.xml/\t/' |\
+    sed -e 's/<entry_cdna>/\t/' | sed -e 's/<\//\t/'| sed -e 's/\./\t/'| cut -f 2,4|\
+    grep -v None >hprdToCdna.tab
+
+    hgsql hg18 -e 'drop table hprdToCdna'
+    hgsql hg18 <~/src/hg/lib/hprdToCdna.sql
+    hgsql hg18 -e 'load data local infile "hprdToCdna.tab" into table hprdToCdna'
+
+# Create hprdToUniProt table
+
+    echo 'fgrep -H Swiss  HPRD_XML_060106/$1.xml' >do1
+
+    ls HPRD_XML_060106 >j
+    cat j |sed -e 's/.xml/\tdo1/g' >jj
+    cut -f 1 jj >j.2
+    cut -f 2 jj >j.1
+    paste j.1 j.2 >doall
+    chmod +x do*
+
+    ./doall >j.out
+    cat j.out|grep SwissProt | sed -e 's/\//\t/' | sed -e 's/.xml/\t/' | \
+    sed -e 's/Prot>/\t/' | sed -e 's/<\//\t/'| cut -f 2,4|grep -v None >hgrdToUniProt.tab
+
+    hgsql hg18 -e 'drop table hprdToUniProt'
+    hgsql hg18 <~/src/hg/lib/hprdToUniProt.sql
+    hgsql hg18 -e 'load data local infile "hprdToUniProt.tab" into table hprdToUniProt'
+
+# build knownToHprd table
+
+    hgsql hg18 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=kgId' >j.kg1
+    hgsql hg18 -N -e 'select kgId,hprdId from hprdToUniProt, kgXref where uniProtId=spId' >j.kg2
+
+    cat j.kg1 j.kg2 |sort -u >knownToHprd.tab
+    wc knownToHprd.tab
+
+    hgsql hg18 -e 'drop table knownToHprd'
+    hgsql hg18 <~/src/hg/lib/knownToHprd.sql
+
+    hgsql hg18 -e 'load data local infile "knownToHprd.tab" into table knownToHprd'
+    hgsql hg18 -e 'select count(*) from knownToHprd'
+
+# 19,646 records created.
+
+# remove temporary files.
+
+    rm j*
+
+# Do the same for hg17.  See hg17.txt for details.
+
+
