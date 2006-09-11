@@ -1172,6 +1172,9 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     ldHgGene -gtf -genePredExt bosTau1 geneid bosTau1.gtf 
     hgPepPred bosTau1 generic geneidPep geneid.fa
 
+# QA NOTE [ASZ: 9-11-2006]: mytouch for geneidPep
+# sudo mytouch bosTau1 geneidPep 200504081400.00
+
 
 # SWAP CHAINS FROM MM5, BUILD NETS ETC. (DONE 2/26/05 angie)
     ssh kksilo
