@@ -674,6 +674,8 @@
   featureBits bosTau1 genscan
   # 49346362 bases of 2261116798 (2.182%) in intersection
 
+# QA NOTE [ASZ: 9-11-2006]: used mytouch on genscanPep.
+# sudo mytouch bosTau1 genscanPep 200504081400.00
 
 
 # RE-INDEX TABLES TO ACCOMODATE LONG SCAFFOLD NAMES
