@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1098 2006/09/11 22:29:05 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1099 2006/09/11 22:53:44 daryl Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11426,11 +11426,12 @@ strand  = cloneString(snp.strand);
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
-printf("\n<PRE><B>dbSnp (Observed alleles and flanking sequences):&nbsp;</B><BR>");
+printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
+printf("\n<PRE><B>dbSnp (Observed alleles and flanking sequences):</B><BR>");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 50);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 50);
 writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 50);
-printf("</PRE>\n<PRE><B>Genomic Sequence:&nbsp;</B><BR>");
+printf("</PRE>\n<PRE><B>Genomic Sequence:</B><BR>");
 writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 50);
 printf("</PRE>\n");
 
@@ -11993,7 +11994,7 @@ safef(query, sizeof(query),
 count = sqlQuickNum(conn, query);
 if (count == 0) return;
 
-printf("<BR><BR>Annotations:\n");
+printf("<BR><BR><B>Annotations:</B>\n");
 
 safef(query, sizeof(query), 
       "select * from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
@@ -12090,6 +12091,7 @@ struct sqlResult *sr;
 char **row;
 char   query[256];
 int    rowOffset=hOffsetPastBin(seqName, group);
+int    snpCount=0;
 
 cartWebStart(cart, "dbSNP build 125");
 printf("<H2>dbSNP build 125 %s</H2>\n", itemName);
@@ -12109,6 +12111,23 @@ doSnpEntrezGeneLink(tdb, itemName);
 
 if (hTableExists("snp125Exceptions") && hTableExists("snp125ExceptionDesc"))
     writeSnp125Exception(itemName);
+
+sqlFreeResult(&sr);
+ZeroVar(query);
+safef(query, sizeof(query), "select * from %s where name='%s'", group, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snp125StaticLoad(row+rowOffset, &snp);
+    if (snp.chromStart!=start || differentString(snp.chrom,seqName))
+	{
+	printf("<BR>");
+	if (snpCount==0)
+	    printf("<BR><B>This SNP maps to these addtional locations:</B><BR>");
+	bedPrintPos((struct bed *)&snp, 3);
+	}
+    }
+
 printSnpAlignment(snpAlign);
 
 printTrackHtml(tdb);
