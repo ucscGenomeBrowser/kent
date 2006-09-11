@@ -1130,6 +1130,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToPfam.name
     $kgDb.knownToRefSeq.name
     $kgDb.knownToSuper.gene
+    $kgDb.knownToHprd.name
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
@@ -1599,6 +1600,12 @@ identifier ensemblEstTranscriptId external=Ensembl dependency
     $gbd.ensEstGene.name chopAfter=.
     $gbd.ensEstGtp.transcript chopAfter=.
     $gbd.ensEstPep.name chopAfter=.
+
+# HPRD Identifiers
+
+identifier hprdId external=HPRD dependency
+"HPRD ID"
+    $hg.knownToHprd.value
 
 # H-Invitational Database Identifiers
 
