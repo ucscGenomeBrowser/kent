@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.14 2004/06/29 19:47:47 kent Exp $";
+static char const rcsid[] = "$Id: trfBig.c,v 1.15 2006/09/11 16:36:47 angie Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
@@ -187,7 +187,6 @@ else if (!endsWith(input, ".nib") && !endsWith(output, ".nib"))
     {
     struct lineFile *lf = lineFileOpen(input, TRUE);
     struct dnaSeq seq;
-    FILE *f = mustOpen(output, "w");
     FILE *out = mustOpen(output, "w");
 
     ZeroVar(&seq);
