@@ -7709,6 +7709,8 @@ mkdir -p ${blatDir}/{over,net}
     human/hg18/nscanGene.html    
     human/hg18/trackDb.ra
 
+# QA NOTE [ASZ 9-11-2006]: mytouch nscanPep 200603271900.00
+
 ##########################################################################
 # UPDATED hg18.knownToVisiGene (2006-04-05 galt)
 #  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
@@ -9478,6 +9480,13 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 
 # Create knownToEnsembl column
     hgMapToGene hg17 ensGene knownGene knownToEnsembl
+
+# QA NOTE [ASZ: 9-11-2006]: mytouch on ensGtp and ensPep.  This is because 
+# ensGene was updated later than they were.  Ensembl treats hap chroms 
+# differently than we do.  So the ensGene table was reloaded.
+# sudo mytouch hg18 ensGtp 200605241000.00
+# sudo mytouch hg18 ensPep 200605241000.00
+
 
 # SGP GENES (DONE 5/3/06 Fan)
     ssh hgwdev 
