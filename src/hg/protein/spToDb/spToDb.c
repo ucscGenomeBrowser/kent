@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.12 2006/07/14 16:32:17 angie Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.13 2006/09/11 18:15:09 giardine Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -397,6 +397,7 @@ if (type != NULL)
     /* Looks like multi-line type. */
     dyStringClear(dy);
     dyStringAppend(dy, type);
+    dyStringAppend(dy, " ");  /* space between lines */
     while (lineFileNext(lf, &line, NULL))
 	{
 	char *sig = "FT    ";	/* Extra space after FT */
@@ -416,8 +417,10 @@ if (type != NULL)
         else
 	    {
 	    dyStringAppend(dy, line);
+            dyStringAppend(dy, " "); /* space between lines */
 	    }
 	}
+    eraseTrailingSpaces(dy->string); /* remove last space */
     stripLastPeriod(dy->string);
     feat->type = lmCloneString(lm, dy->string);
     }
