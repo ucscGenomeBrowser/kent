@@ -1,5 +1,0 @@
-http%3A%2F%2Fwww.ncbi.nlm.nih.gov%2FSNP%2Fsnp_ref.cgi%3Frs%3D	1	RefSNP	snp_id
-http%3A%2F%2Fwww.ncbi.nlm.nih.gov%2FSNP%2Fsnp_retrieve.cgi%3Fsubsnp_id%3D	2	SubSNP	subsnp_id
-http%3A%2F%2Fwww.ncbi.nlm.nih.gov%2FLocusLink%2FLocRpt.cgi%3Fl%3D	3	LocusLink	locus_id
-http%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fgenome%2Fsts%2Fsts.cgi%3Fuid%3D	4	dbSTS	uid
-http%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fentrez%2Fquery.fcgi%3Fcmd%3DSearch%26db%3DPubMed%26term%3D	5	PubMed	pmid
