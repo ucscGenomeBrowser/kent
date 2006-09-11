@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1097 2006/09/08 22:17:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1098 2006/09/11 22:29:05 daryl Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11214,7 +11214,7 @@ while ((id=tokenizerNext(tkz))!=NULL)
     {
     if (firstException)
 	{
-	printf("<B><font color=%s>Note(s):</font></B><BR>\n",noteColor);
+	printf("<BR><B><font color=%s>Note(s):</font></B><BR>\n",noteColor);
 	firstException=FALSE;
 	}
     if (sameString(id,",")) /* is there a tokenizer that doesn't return separators? */
@@ -11312,6 +11312,25 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
+void hvPrintf(char *format, va_list args)
+/* Print out some html.  Check for write error so we can
+ * terminate if http connection breaks. */
+{
+vprintf(format, args);
+if (ferror(stdout))
+    noWarnAbort();
+}
+
+void hPrintf(char *format, ...)
+/* Print out some html.  Check for write error so we can
+ * terminate if http connection breaks. */
+{
+va_list(args);
+va_start(args, format);
+hvPrintf(format, args);
+va_end(args);
+}
+
 void printSnpAlignment(struct snp snp)
 /* Fetch flanking sequences from dbSnp html page and from nib file; align and print */
 {
@@ -11328,6 +11347,9 @@ struct dyString      *seqDbSnp5    = newDyString(512);
 struct dyString      *seqDbSnpO    = newDyString(64);
 struct dyString      *seqDbSnp3    = newDyString(512);
 struct dyString      *seqDbSnpTemp = newDyString(512);
+struct dnaSeq        *dnaSeqDbSnp5 = NULL;
+struct dnaSeq        *dnaSeqDbSnpO = NULL;
+struct dnaSeq        *dnaSeqDbSnp3 = NULL;
 struct dnaSeq        *seqDbSnp     = NULL;
 struct dnaSeq        *seqNib       = NULL;
 struct sqlConnection *conn         = hAllocConn();
@@ -11347,27 +11369,28 @@ lf = lineFileOnString("web page", TRUE, page->htmlText);
 while (lineFileNext(lf,&line,NULL) && !haveSeq)
     if ((line=stringIn("allelePos",line))!=NULL && 
 	(line=stringIn("totalLen", line))!=NULL && 
-	(line=stringIn("courier",  line))!=NULL)
+	(line=stringIn("courier",  line))!=NULL && 
+	(line=stringIn("> ",  line))!=NULL)
 	{
-	dyStringAppend(seqDbSnp5,line+10);
+	dyStringAppend(seqDbSnp5,line+2);
 	while (!haveObserved && lineFileNext(lf,&line,NULL))
-	    if(!startsWith("</",line)) /* get 5' flank */
+	    if(!startsWith("</FONT",line)) /* get 5' flank */
 		dyStringAppend(seqDbSnp5,line);
 	    else
 		{ /* get observed */
 		line=stringIn("green",line)+7;
-		while(!startsWith("</",line))
+		while(!startsWith("</FONT",line))
 		    dyStringAppendN(seqDbSnpO,line++,1);
 		haveObserved=TRUE;
 		}
 	while (lineFileNext(lf,&line,NULL) && !haveSeq)
 	    {
-	    if(startsWith("<FONT",line)) /* get 5' flank; first line */
+	    if(startsWith("<FONT",line)) /* get start position for 3' flank */
 		{
-		line=stringIn("courier",line)+10;
-		dyStringAppend(seqDbSnp3,line);
+		line=stringIn("courier",line);
+		line=stringIn("> ",line)+2;
 		}
-	    if(!startsWith("</FONT",line)) /* get 5' flank; additional lines */
+	    if(!startsWith("</FONT",line)) /* get 3' flank */
 		dyStringAppend(seqDbSnp3,line);
 	    else
 		haveSeq=TRUE;
@@ -11383,9 +11406,9 @@ seqDbSnp3len=strlen(seqDbSnp3->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnp5->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnpO->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnp3->string);
-freeDyString(&seqDbSnp5);
-freeDyString(&seqDbSnpO);
-freeDyString(&seqDbSnp3);
+dnaSeqDbSnp5 = newDnaSeq(seqDbSnp5->string,strlen(seqDbSnp5->string),"dbSnp seq 5");
+dnaSeqDbSnpO = newDnaSeq(seqDbSnpO->string,strlen(seqDbSnpO->string),"dbSnp seq O");
+dnaSeqDbSnp3 = newDnaSeq(seqDbSnp3->string,strlen(seqDbSnp3->string),"dbSnp seq 3");
 seqDbSnp = newDnaSeq(seqDbSnpTemp->string,strlen(seqDbSnpTemp->string),"dbSnp seq");
 if (seqDbSnp==NULL)
     return;
@@ -11403,11 +11426,51 @@ strand  = cloneString(snp.strand);
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
-printf("<font face=courier><BR><B>dbSnp:&nbsp;</B>%s    </font>", seqDbSnp->dna);
-printf("<font face=courier><BR><B>nib:&nbsp;&nbsp;&nbsp;</B>%s</font>", seqNib->dna);
+printf("\n<PRE><B>dbSnp (Observed alleles and flanking sequences):&nbsp;</B><BR>");
+writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 50);
+writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 50);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 50);
+printf("</PRE>\n<PRE><B>Genomic Sequence:&nbsp;</B><BR>");
+writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 50);
+printf("</PRE>\n");
 
-// This is a good place to do the alignment and print it!
-// showDnaAlignment(psl, seqDbSnp, body, cdsS, cdsE);
+freeDyString(&seqDbSnp5);
+freeDyString(&seqDbSnpO);
+freeDyString(&seqDbSnp3);
+
+if (seqNib != NULL && seqDbSnp != NULL)
+    {
+    int matchScore = 100;
+    int misMatchScore = 100;
+    int gapOpenPenalty = 400;  
+    int gapExtendPenalty = 20; /* was 50, reducing for new snp version. */
+    struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
+    struct axt *axt = axtAffine(seqNib, seqDbSnp, ss), *axtBlock=axt;
+
+    hPrintf("<TT><PRE>");
+    if (axt == NULL)
+	printf("%s and %s don't align\n", seqNib->name, seqDbSnp->name);
+    else
+	{
+	axtBlock=axt;
+	while (axtBlock !=NULL)
+	    {
+	    printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%, score %d\n",
+		   axtIdWithGaps(axtBlock)*100, 
+		   axtCoverage(axtBlock, seqNib->size, seqDbSnp->size)*100, 
+		   axtBlock->score);
+	    printf("Alignment between genome (%s; %d bp) and ", seqNib->name, seqNib->size);
+	    printf("flanking sequence (%s; %d bp)\n", seqDbSnp->name, seqDbSnp->size);
+	    printf("\n");
+	    axtPrintTraditional(axtBlock, 60, ss, stdout);
+	    axtBlock=axtBlock->next;
+	    }
+	axtFree(&axt);
+	hPrintf("</PRE></TT>");
+	}
+    }
+else
+    warn("Couldn't get sequences, database out of sync?");
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -11440,12 +11503,10 @@ while ((row = sqlNextRow(sr))!=NULL)
 	chrom = cloneString(snp.chrom);
 	chromStart = snp.chromStart;
 	bedPrintPos((struct bed *)&snp, 3);
-	/*printSnpAlignment(snp);*/
 	printf("<BR>\n");
 	firstOne=0;
 	}
     printSnpInfo(snp);
-    printf("<BR>\n");
     }
 if (startsWith("rs",itemName))
     {
@@ -11456,6 +11517,7 @@ if (startsWith("rs",itemName))
 printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
+printSnpAlignment(snp);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12003,11 +12065,25 @@ for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNam
 hFreeConn(&conn);
 }
 
+struct snp snp125ToSnp(struct snp125 *snp125)
+{
+struct snp snp;
+//AllocVar(snp);
+snp.chrom=cloneString(snp125->chrom);
+snp.chromStart=snp125->chromStart;
+snp.chromEnd=snp125->chromEnd;
+snp.name=cloneString(snp125->name);
+snp.score=snp125->score;
+snp.observed=cloneString(snp125->observed);
+return snp;
+}
+
 void doSnp125(struct trackDb *tdb, char *itemName)
 /* Process SNP details. */
 {
 char   *group = tdb->tableName;
 struct snp125 snp;
+struct snp snpAlign;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -12023,7 +12099,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 snp125StaticLoad(row+rowOffset, &snp);
 bedPrintPos((struct bed *)&snp, 3);
-/*printSnpAlignment(snp);*/
+snpAlign=snp125ToSnp(&snp);
 printf("<BR>\n");
 printSnp125Info(snp);
 printf("<BR>\n");
@@ -12033,6 +12109,7 @@ doSnpEntrezGeneLink(tdb, itemName);
 
 if (hTableExists("snp125Exceptions") && hTableExists("snp125ExceptionDesc"))
     writeSnp125Exception(itemName);
+printSnpAlignment(snpAlign);
 
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -12045,6 +12122,7 @@ void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 {
 char   *group = tdb->tableName;
 struct snp125 snp;
+struct snp snpAlign;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -12064,7 +12142,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 snp125StaticLoad(row+rowOffset, &snp);
 bedPrintPos((struct bed *)&snp, 3);
-/*printSnpAlignment(snp);*/
+snpAlign=snp125ToSnp(&snp);
 printf("<BR>\n");
 printSnp125Info(snp);
 printf("<BR>\n");
@@ -12076,6 +12154,7 @@ safef(tableName1, sizeof(tableName1), "snp%dExceptions", version);
 safef(tableName2, sizeof(tableName2), "snp%dExceptionDesc", version);
 if (hTableExists(tableName1) && hTableExists(tableName2))
     writeSnpExceptionWithVersion(itemName, version);
+printSnpAlignment(snpAlign);
 
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
