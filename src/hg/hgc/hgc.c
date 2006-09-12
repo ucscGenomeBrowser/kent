@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1100 2006/09/12 15:21:57 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1101 2006/09/12 18:25:45 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12123,7 +12123,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	printf("<BR>");
 	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these addtional locations:</B><BR>");
+	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
