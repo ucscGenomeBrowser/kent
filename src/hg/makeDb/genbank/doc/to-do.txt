@@ -996,3 +996,16 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - MGC tracks build with strict, means that new genome requires trackDbLocal
   to be reloaded (rename this to trackDbMgc).
+
+- MGC Cow generates No CDS defined: no protein translation for BC119821
+  when clicking on "Reference genome protein".  This is due to trying to
+  generate proteins for both alignments, one is partial.  Should only generate
+  alignment of current protein.
+
+- alignments that join tandem gene dups:
+    mm8:NM_178882.2
+
+- dropped by repeat masking.  Keep alignments to repeats only if there are
+  just a small number of them
+    hg18:AA309293
+
