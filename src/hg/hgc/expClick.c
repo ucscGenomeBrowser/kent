@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "affyAllExonProbe.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.12 2006/07/21 16:14:04 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.13 2006/09/12 00:08:05 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -894,7 +894,9 @@ genericHeader(tdb, itemName);
 bedList = loadMsBed(tableName, seqName, winStart, winEnd);
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
-else 
+else if (sameString(expName, "zoomInMore"))
+    printf("<b>Too much data to display in detail in this range.</b>\n");
+else
     {
     char varName[128];
     char *affyAllExonMap;
