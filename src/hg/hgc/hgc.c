@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1101 2006/09/12 18:25:45 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1102 2006/09/12 23:29:18 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11421,7 +11421,7 @@ row     = sqlNextRow(sr);
 nibFile = cloneString(row[2]);
 start   = snp.chromStart - seqDbSnp5len;
 end     = snp.chromEnd   + seqDbSnp3len;
-seqNib  = nibLoadPartMasked(0, nibFile, start, end-start);
+seqNib  = hFetchSeqMixed(nibFile, snp.chrom, start, end);
 strand  = cloneString(snp.strand);
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
