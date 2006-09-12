@@ -1956,6 +1956,13 @@ identifier gvSrcId
     hgFixed.gvSrc.srcId
     hgFixed.gv.srcId
 
+#links between oreganno (regulatory annotation) and related tables
+identifier oregId
+"ORegAnno track identifier: links annotations to attributes and external links"
+    hg18.oreganno.id
+    hgFixed.oregannoAttr.id
+    hgFixed.oregannoLink.id
+
 # retroposon track, dbRIP_* and polyGenotype table link
 identifier dbRIPNameAlu fuzzy
 "Retroposon, dbRIP database name id to polymorphism statistics link"
