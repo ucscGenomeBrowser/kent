@@ -825,6 +825,7 @@ type bed 8 .
     subTrack polyA
     shortLabel polyA_DB
     longLabel Reported poly(A) sites from polyA_DB
+    color 51,153,51
     priority 1
 
     track polyaPredict
