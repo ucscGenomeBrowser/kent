@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define OREGANNO_NUM_COLS 6
+#define OREGANNO_NUM_COLS 7
 
 struct oreganno
 /* track for regulatory regions from ORegAnno */
@@ -19,6 +19,7 @@ struct oreganno
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
     char *id;	/* unique ID to identify this regulatory region */
+    char strand[2];	/* + or - */
     char *name;	/* name of regulatory region */
     unsigned short bin; /* A field to speed indexing */
     };
