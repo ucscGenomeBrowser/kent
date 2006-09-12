@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "gv.h"
 
-static char const rcsid[] = "$Id: gv.c,v 1.2 2006/06/30 19:56:46 giardine Exp $";
+static char const rcsid[] = "$Id: gv.c,v 1.3 2006/09/08 22:17:30 giardine Exp $";
 
 void gvStaticLoad(char **row, struct gv *ret)
 /* Load a row from gv table into ret.  The contents of ret will
@@ -226,6 +226,8 @@ ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = row[4];
 ret->id = NULL;
+strcpy(ret->strand, row[5]);
+ret->label = row[6];
 }
 
 struct gvPos *gvPosLoad(char **row)
@@ -241,6 +243,8 @@ ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = cloneString(row[4]);
 ret->id = NULL;
+strcpy(ret->strand, row[5]);
+ret->label = cloneString(row[6]);
 return ret;
 }
 
@@ -250,7 +254,7 @@ struct gvPos *gvPosLoadAll(char *fileName)
 {
 struct gvPos *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -268,7 +272,7 @@ struct gvPos *gvPosLoadAllByChar(char *fileName, char chopper)
 {
 struct gvPos *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -312,8 +316,8 @@ void gvPosSaveToDb(struct sqlConnection *conn, struct gvPos *el, char *tableName
  * If worried about this use gvPosSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->strand,  el->label);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -328,16 +332,20 @@ void gvPosSaveToDbEscaped(struct sqlConnection *conn, struct gvPos *el, char *ta
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name;
+char  *chrom, *name, *strand, *label;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
+strand = sqlEscapeString(el->strand);
+label = sqlEscapeString(el->label);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  strand,  label);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&name);
+freez(&strand);
+freez(&label);
 }
 
 struct gvPos *gvPosCommaIn(char **pS, struct gvPos *ret)
@@ -354,7 +362,8 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->id = NULL;
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->label = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -368,6 +377,7 @@ struct gvPos *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->label);
 freeMem(el->id);
 freez(pEl);
 }
@@ -400,6 +410,14 @@ fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->label);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

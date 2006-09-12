@@ -5928,3 +5928,33 @@ table vegaToCloneId
 #    priority 2
 #    color 155,0,125
 
+##########################################################################
+# N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
+    cd /cluster/data/danRer4/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/zebrafish/chr_gtf
+    wget -nv -r -np http://ardor.wustl.edu/jeltje/zebrafish/chr_ptx
+    # clean up and rename downloaded directorys:
+    mv ardor.wustl.edu/jeltje/zebrafish/chr_gtf .
+    mv ardor.wustl.edu/jeltje/zebrafish/chr_ptx .
+    rm -rf ardor.wustl.edu
+    rm chr_*/index.html*
+    gzip chr_*/*
+    chmod a-w chr_*/*.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt danRer4 nscanGene chr_gtf/chr*.gtf.gz
+
+    # load protein, add .1 suffix to match transcript id
+    hgPepPred -suffix=.1 danRer4 generic nscanPep chr_ptx/chr*.fa.gz
+    rm *.tab
+
+    # update trackDb; need a danRer4-specific page to describe informants
+    zebrafish/danRer4/nscanGene.html   (copy from mm8 and edit)
+    zebrafish/danRer4/trackDb.ra
+    # changed search regex to
+        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]

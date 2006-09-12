@@ -82,6 +82,9 @@ char *hBackgroundImage();
 /* Net track option */
 #define NET_OPT_TOP_ONLY  "netTopOnly"
 
+/* Microarray default setting. */
+#define MICROARRAY_CLICK_LIMIT 200
+
 void netUi(struct trackDb *tdb);
 
 struct controlGrid

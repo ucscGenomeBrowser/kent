@@ -125,7 +125,6 @@ bed_nonover_NM_015110bed_split: mkout
 excludeSelfTests: exludeself_over_mrna1 exludeself_nonover_mrna1 \
 		exludeself_over_mrna2 exludeself_nonover_mrna2
 
-
 # Test -excludeSelf option with file containing two non-overlaping mRNAs.
 # Neither should be selected.
 exludeself_over_mrna1: mkout
@@ -277,7 +276,8 @@ bed_over_NM_015110bedStatsOutput: mkout
 ###
 thresholdTests: psl_gp_threshold  psl_gp_non_threshold \
 	gp_gp_threshold95 gp_gp_threshold75 gp_gp_threshold100 \
-	gp_gp_thresholdCds95 gp_gp_thresholdCds75 gp_gp_thresholdCds100
+	gp_gp_thresholdCds95 gp_gp_thresholdCds75 gp_gp_thresholdCds100 \
+	psl_gp_threshold_ceil
 
 # select psls overlaping NM_015110 with gp and overlapThreshold
 psl_gp_threshold: mkout
@@ -333,12 +333,19 @@ gp_gp_thresholdCds100: mkout
 	${DIFF} expected/$@.ids output/$@.ids
 	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
+# select psls overlaping NM_015110 with gp, overlapThreshold, overlapThresholdCeil
+psl_gp_threshold_ceil: mkout
+	${OVERSEL} -overlapThreshold=0.4 -overlapThresholdCeil=0.6 -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
 ###
 # similarity tests
 ###
 similarityTests: psl_gp_similarity  psl_gp_non_similarity \
 	gp_gp_similarity95 gp_gp_similarity75 gp_gp_similarity100 \
-	gp_gp_similarityCds95 gp_gp_similarityCds75 gp_gp_similarityCds100
+	gp_gp_similarityCds95 gp_gp_similarityCds75 gp_gp_similarityCds100 \
+	psl_gp_similarity_ceil
 
 # select psls overlaping NM_015110 with gp and overlapSimilarity
 psl_gp_similarity: mkout
@@ -393,6 +400,12 @@ gp_gp_similarityCds100: mkout
 	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
 	${DIFF} expected/$@.ids output/$@.ids
 	${DIFF} expected/$@Rev.ids output/$@Rev.ids
+
+# select psls overlaping NM_015110 with gp, overlapSimilarity, and  overlapSimilarityCeil
+psl_gp_similarity_ceil: mkout
+	${OVERSEL} -overlapSimilarity=0.4 -overlapSimilarityCeil=0.75 -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 ###
 # -overlapBases tests

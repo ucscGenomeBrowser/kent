@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.13 2006/07/25 20:13:36 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.15 2006/09/05 12:31:15 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -672,7 +672,10 @@ int maxIndex = -1;      /* index in loci list of best aligment */
 char *chrom;           /* best alignment */
 int chromStart;
 int chromEnd;
+int i = 0;
 //int prevLoc = misMatchList->mrnaLoc;
+if (misMatchList == NULL) 
+    return FALSE;
 AllocArray(missCount,seqCount);
 AllocArray(goodCount,seqCount);
 AllocArray(gapCount,seqCount);
@@ -769,7 +772,7 @@ for (l = lociList ; l != NULL; l=l->next)
     {
     int z = l->index;
     int score = goodCount[z]-missCount[z] - indel ;
-
+    verbose(5,"loop %d\n",i++);
     if (maxScore == score)
         {
         maxCount ++;
@@ -777,32 +780,38 @@ for (l = lociList ; l != NULL; l=l->next)
         verbose(5,"score == maxScore %s score %d nextBestScore %d maxScore %d\n",
                 name, score, nextBestScore, maxScore);
         }
-    else if (score > maxScore)
+    else 
         {
-        maxCount = 1;
-        maxIndex = z;
-        nextBestScore = maxScore;
-        verbose(5,"score > maxScore %s score %d nextBestScore %d maxScore %d\n",
-                name, score, nextBestScore, maxScore);
-        }
-    else if (score > nextBestScore);
-        {
-        nextBestScore = score;
-        verbose(5,"score > maxScore %s score %d nextBestScore %d maxScore %d\n",
-                name, score, nextBestScore, maxScore);
+        if (score > maxScore)
+            {
+            maxCount = 1;
+            maxIndex = z;
+            nextBestScore = maxScore;
+            verbose(5,"score > maxScore %s score %d nextBestScore %d maxScore %d\n",
+                    name, score, nextBestScore, maxScore);
+            }
+        else 
+            {
+            if (score > nextBestScore);
+                {
+                verbose(5,"score > nextBestScore %s score %d nextBestScore %d maxScore %d\n",
+                        name, score, nextBestScore, maxScore);
+                nextBestScore = score;
+                }
+            }
         }
     maxScore = max(maxScore, score); 
     if (scoreFile != NULL)
         fprintf(scoreFile, "## %s %s:%d [%d] mismatch %d good %d neither %d indel %d \
-                gaps %d snpCount[%d] %d total %d diff %d score %d nextBestScore %d index %d \n",
+                gaps %d snpCount[%d] %d total %d diff %d score %d nextBestScore %d index %d maxCnt %d \n",
             name, l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
             missCount[z]+ goodCount[z]+ neither[z]+ indel, gapCount[z], z, snpCount[z],
-            seqCount - slCount(lociList), score, nextBestScore, l->index);
+            seqCount - slCount(lociList), score, nextBestScore, l->index, maxCount);
     verbose(3, "%s %s:%d [%d] mismatch %d good %d neither %d indel %d \
-            gaps %d snpCount[%d] %d total %d diff %d score %d nextBestScore %d index %d \n",
+            gaps %d snpCount[%d] %d total %d diff %d score %d nextBestScore %d index %d maxCnt %d\n",
             name, l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
             missCount[z]+ goodCount[z]+ neither[z]+ indel, gapCount[z], z, snpCount[z],
-            seqCount - slCount(lociList), score, nextBestScore, l->index);
+            seqCount - slCount(lociList), score, nextBestScore, l->index, maxCount);
     }
 if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
     {
@@ -1285,6 +1294,12 @@ struct loci *lociList = NULL;
 
 mrnaCount++;
 lociCounter = 0;
+if (seqCount == 1)
+    {
+    pslTabOut(alignList->psl, outFile);
+    outputCount++;
+    return;
+    }
 /* one loci for each place the mrna alignments to the genome */
 for (align = alignList ; align != NULL ; align= align->next)
     {
@@ -1294,6 +1309,7 @@ for (align = alignList ; align != NULL ; align= align->next)
 
 verbose(5, "name %s alignList %d loci %d \n",
         name, slCount(alignList), slCount(lociList));
+
 //addOtherAlignments(&alignList, species1Hash, name, nibDir1, mrna1);
 //addOtherAlignments(&alignList, species2Hash, name, nibDir2, mrna2);
 if (alignList != NULL) 
@@ -1309,16 +1325,19 @@ for (align = alignList; align != NULL ; align = align->next)
         buildMisMatches(&misMatchList, align, lociList);
     }
 slReverse(&misMatchList);
-if (misMatchList != NULL && !computeSS )
+if (!computeSS )
     {
-    /* sort list by mrna position */
-    slSort(&misMatchList, misMatchCmpMrnaLoc);
-    for (align = alignList; align != NULL ; align = align->next)
-        /* check for matches or indels in other loci */
-        fillinMatches(&misMatchList, align, lociList);
-    verbose(4, "compile %s mismatchList %d lociList %d of %d alist %d\n",
-            name, slCount(misMatchList), seqCount, slCount(lociList), slCount(alignList));
-    /* compute mismatches and dump input alignments if nothting found */
+    if (misMatchList != NULL)
+        {
+        /* sort list by mrna position */
+        slSort(&misMatchList, misMatchCmpMrnaLoc);
+        for (align = alignList; align != NULL ; align = align->next)
+            /* check for matches or indels in other loci */
+            fillinMatches(&misMatchList, align, lociList);
+        verbose(4, "compile %s mismatchList %d lociList %d of %d alist %d\n",
+                name, slCount(misMatchList), seqCount, slCount(lociList), slCount(alignList));
+        }
+    /* compute mismatches and dump input alignments if nothing found */
     if (!compileOutput(name, misMatchList, seqCount, lociList) &&  passthru)
         for (align = alignList; align != NULL ; align = align->next)
             {

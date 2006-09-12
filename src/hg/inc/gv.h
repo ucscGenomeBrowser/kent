@@ -89,7 +89,7 @@ void gvOutput(struct gv *el, FILE *f, char sep, char lastSep);
 #define gvCommaOut(el,f) gvOutput(el,f,',',',');
 /* Print out gv as a comma separated list including final comma. */
 
-#define GVPOS_NUM_COLS 5
+#define GVPOS_NUM_COLS 7
 
 struct gvPos
 /* location of mutation */
@@ -99,6 +99,8 @@ struct gvPos
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* ID for this mutation */
+    char strand[2];	/* + or - */
+    char *label;	/* short official name for this mutation */
     char *id;   /* Added field to hold ID if change name */
     unsigned short bin; /* A field to speed indexing */
     };

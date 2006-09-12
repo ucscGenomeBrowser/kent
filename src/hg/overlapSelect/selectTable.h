@@ -18,9 +18,11 @@ enum selectOpts
 struct overlapCriteria
 /* criteria for selecting */
 {
-    float threshold;    // threshold fraction
-    float similarity;   // bidirectional threshold
-    int bases;          // number of bases
+    float threshold;        // threshold fraction
+    float thresholdCeil;    // threshold must be less than this value
+    float similarity;       // bidirectional threshold
+    float similarityCeil;   // similarity must be less than this value
+    int bases;              // number of bases
 };
 
 struct overlapAggStats

@@ -24,7 +24,7 @@
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
 #include "gvUi.h"
-#include "landmarkUi.h"
+#include "oregannoUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
 #include "customTrack.h"
@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.305 2006/08/30 21:34:49 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.307 2006/09/12 00:02:03 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -502,16 +502,16 @@ if (startsWith("hapmapLd", tdb->tableName))
     printf("<BR><B>Populations:</B>\n");
 }
 
-void landmarkUi (struct trackDb *tdb)
+void oregannoUi (struct trackDb *tdb)
 /* print the controls */
 {
 int i = 0; /* variable to walk through array */
 
 printf("<BR /><B>Exclude region type</B><BR />");
-for (i = 0; i < landmarkTypeSize; i++)
+for (i = 0; i < oregannoTypeSize; i++)
     {
-    cartMakeCheckBox(cart, landmarkTypeString[i], FALSE);
-    printf (" %s<BR />", landmarkTypeLabel[i]);
+    cartMakeCheckBox(cart, oregannoTypeString[i], FALSE);
+    printf (" %s<BR />", oregannoTypeLabel[i]);
     }
 }
 
@@ -973,6 +973,54 @@ cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
+}
+
+void expRatioCombineDropDown(char *trackName, char *groupSettings, struct hash *allGroupings)
+/* Make a drop-down of all the main combinations. */
+{
+int size = 0;
+int i;
+char **menuArray;
+char **valArray;
+char dropDownName[512];
+struct hash *groupGroup = hashMustFindVal(allGroupings, groupSettings);
+char *combineList = hashFindVal(groupGroup, "combine");
+char *allSetting = hashMustFindVal(groupGroup, "all");
+char *defaultSetting = hashFindVal(groupGroup, "default");
+char *cartSetting = NULL;
+struct slName *combineNames = slNameListFromComma(combineList);
+struct slName *aName;
+safef(dropDownName, sizeof(dropDownName), "%s.combine", trackName);
+size = slCount(combineNames) + 1;
+AllocArray(menuArray, size);
+AllocArray(valArray, size);
+slNameAddHead(&combineNames, allSetting);
+for (i = 0, aName = combineNames; i < size && aName != NULL; i++, aName = aName->next)
+    {
+    struct hash *oneGroupSetting = hashMustFindVal(allGroupings, aName->name);
+    char *descrip = hashMustFindVal(oneGroupSetting, "description");
+    menuArray[i] = descrip;
+    valArray[i] = aName->name;
+    }
+if (defaultSetting == NULL)
+    defaultSetting = allSetting;
+cartSetting = cartUsualString(cart, dropDownName, defaultSetting);
+printf(" <b>Combine arrays</b>: ");
+cgiMakeDropListWithVals(dropDownName, menuArray, valArray, 
+                         size, cartSetting);
+}
+
+void expRatioUi(struct trackDb *tdb)
+/* UI options for the expRatio tracks. */
+{
+char *groupings = trackDbRequiredSetting(tdb, "groupings");
+struct hash *gHashOfHashes = NULL;
+struct hash *ret =
+    hgReadRa(hGenome(database), database, "hgCgiData",
+	     "microarrayGroups.ra", &gHashOfHashes);
+if ((ret == NULL) && (gHashOfHashes == NULL))
+    errAbort("Could not get group settings for track.");
+expRatioCombineDropDown(tdb->tableName, groupings, gHashOfHashes);
 }
 
 void affyAllExonUi(struct trackDb *tdb)
@@ -2285,8 +2333,8 @@ else if (startsWith("chromGraph", tdb->type))
         chromGraphUi(tdb);
 else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") || sameString(track, "affyZonWildType"))
         affyUi(tdb);
-else if (sameString(track, "affyHumanExon"))
-        affyAllExonUi(tdb);
+/* else if (sameString(track, "affyHumanExon")) */
+/*         affyAllExonUi(tdb); */
 else if (sameString(track, "ancientR"))
         ancientRUi(tdb);
 else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
@@ -2331,8 +2379,8 @@ else if (sameString(track, "hgMut"))
     hgMutUi(tdb);
 else if (sameString(track, "gvPos"))
     gvUi(tdb);
-else if (sameString(track, "landmark"))
-    landmarkUi(tdb);
+else if (sameString(track, "oreganno"))
+    oregannoUi(tdb);
 else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
 else if (startsWith("retroposons", track))
@@ -2356,9 +2404,12 @@ else if (tdb->type != NULL)
             if (! sameString(track, "tigrGeneIndex"))
 	        cdsColorOptions(tdb, 2);
             }
-	
+	else if (sameWord(words[0], "expRatio"))
+	    {
+	    expRatioUi(tdb);
+	    }	
 	/* if bed has score then show optional filter based on score */
-	if (sameWord(words[0], "bed") && wordCount == 3)
+	else if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
 	    /* Note: jaxQTL3 is a bed 8 format track because of thickStart/thickStart, 
 	      	     but there is no valid score.

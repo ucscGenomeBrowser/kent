@@ -229,7 +229,13 @@ while (<$fh>) {
        my $a = $1;
        print $outFh2 "$v[4]\tlinks\tdbSNP\t$a\t\n";
     }elsif ($v[3] !~ /in allele/ && $v[3] =~ /\((.*)\)/) {
-       print $outFh3 "$v[4]\tcomment\t$1\n";
+       my $c = $1;
+       if (length $c <= 254) {
+          print $outFh3 "$v[4]\tcomment\t$c\n";
+       }else {
+          #print "Warning comment is too long for $v[4]\n";
+          print $outFh6 "$v[4]\tcomment\t$c\n";
+       }
     }
 }
 close $fh or die "Couldn't close $spFile, $!\n";

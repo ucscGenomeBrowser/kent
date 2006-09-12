@@ -162,6 +162,7 @@ static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAn
 {
 boolean anyCriteria = FALSE;
 boolean overlapped = FALSE;
+boolean notOverlapped = FALSE;  // negative crieria (ceiling)
 unsigned overBases = selectOverlapBases(inCa, selCa);
 if (criteria->similarity > 0.0)
     {
@@ -171,11 +172,26 @@ if (criteria->similarity > 0.0)
         overlapped = TRUE;
     anyCriteria = TRUE;
     }
-else if (criteria->threshold > 0.0)
+if (criteria->similarityCeil <= 1.0)
+    {
+    // bi-directional ceiling
+    if ((selectFracOverlap(inCa, overBases) >= criteria->similarityCeil)
+        && (selectFracOverlap(selCa, overBases) >= criteria->similarityCeil))
+        notOverlapped = TRUE;
+    anyCriteria = TRUE;
+    }
+if (criteria->threshold > 0.0)
     {
     // uni-directional
     if (selectFracOverlap(inCa, overBases) >= criteria->threshold)
         overlapped = TRUE;
+    anyCriteria = TRUE;
+    }
+if (criteria->thresholdCeil <= 1.0)
+    {
+    // uni-directional ceiling
+    if (selectFracOverlap(inCa, overBases) >= criteria->thresholdCeil)
+        notOverlapped = TRUE;
     anyCriteria = TRUE;
     }
 if (criteria->bases >= 0)
@@ -192,7 +208,7 @@ if (!anyCriteria)
     if (overBases > 0)
         overlapped = TRUE;
     }
-return overlapped;
+return overlapped && !notOverlapped;
 }
 
 static void addOverlapRecs(struct slRef **overlappingRecs, struct slRef *newRecs)

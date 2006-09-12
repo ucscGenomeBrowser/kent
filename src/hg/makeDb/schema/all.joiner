@@ -150,6 +150,8 @@ identifier UniProtAccession external=UniProt
      uniProt.protein.acc unique full
      proteome.spOldNew.acc minCheck=0.8
      proteome.uniProtAlias.acc minCheck=0.9
+     proteome.spReactomeId.spID minCheck=0.9
+     proteome.spReactomeEvent.spID minCheck=0.9
      $kgDb.kgProtAlias.alias  minCheck=0.2
      $kgDb.kgSpAlias.spId  minCheck=0.2
      $kgDb.kgProtMap.qName minCheck=0.9
@@ -634,10 +636,10 @@ identifier affyMOE430
     $mm.knownToMOE430.value
     $mm.knownToMOE430A.value
     $mm.rinnSex.name
-    hgFixed.mouseRinnSex.name
-    hgFixed.mouseRinnSexMedian.name
-    hgFixed.mouseRinnSexRatio.name
-    hgFixed.mouseRinnSexMedianRatio.name
+    hgFixed.mouseRinnSex.name minCheck=0.96
+    hgFixed.mouseRinnSexMedian.name minCheck=0.96
+    hgFixed.mouseRinnSexRatio.name minCheck=0.97
+    hgFixed.mouseRinnSexMedianRatio.name minCheck=0.97
 
 identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
@@ -1032,13 +1034,13 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb,!hg16.knownToRefSeq.value minCheck=0.98
-    hg16.knownToRefSeq.value minCheck=0.96
+    $kgDb,!hg16,!hg17,!mm5.knownToRefSeq.value minCheck=0.98
+    hg16,hg17,mm5.knownToRefSeq.value minCheck=0.96
     $kgDb.refSeqKg.refseq minCheck=0.60
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!hg15,!bosTau1,!bosTau2,!canFam1,!canFam2,!droSim1,!droYak1,!panTro1,!rheMac1,!rheMac2.mrnaOrientInfo.name minCheck=0.01
+    $gbd,!hg15,!bosTau1,!bosTau2,!canFam1,!canFam2,!droSim1,!droYak1,!droYak2,!panTro1,!rheMac1,!rheMac2.mrnaOrientInfo.name minCheck=0.01
     $gbd.refFlat.name
     $gbd.refGene.name
     $gbd.refMrna.name
@@ -1046,14 +1048,14 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     dm1.bdgpToRefSeq.value minCheck=0.95
     $dm,!dm1.flyBaseToRefSeq.value
+    $mm,!mm6,!mm5.mrnaRefseq.mrna minCheck=0.03
+    $mm,!mm6,!mm5.spMrna.mrnaID minCheck=0.40
+    $mm,!mm6,!mm5.dupSpMrna.mrnaID minCheck=0.60
+    $mm,!mm6,!mm5.dupSpMrna.dupMrnaID minCheck=0.20
     mm6.mrnaRefseq.mrna minCheck=0.10
     mm6.spMrna.mrnaID minCheck=0.50
     mm6.dupSpMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.dupMrnaID minCheck=0.20
-    $mm,!mm6.mrnaRefseq.mrna minCheck=0.03
-    $mm,!mm6.spMrna.mrnaID minCheck=0.40
-    $mm,!mm6.dupSpMrna.mrnaID minCheck=0.60
-    $mm,!mm6.dupSpMrna.dupMrnaID minCheck=0.20
     hg17.mrnaRefseq.mrna minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.50
     hg17.dupSpMrna.mrnaID minCheck=0.40
@@ -1088,7 +1090,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.scBlastTab.query
     $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
     rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName exclude=noKg
+    $kgDb,!hg15,!hg16,!hg17.pseudoGeneLink.kgName exclude=noKg
+    hg15,hg16,hg17.pseudoGeneLink.kgName minCheck=0.18 exclude=noKg
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
@@ -1103,8 +1106,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.affyGnfU74CDistance.target
     $kgDb.humanNormalDistance.query
     $kgDb.humanNormalDistance.target
-    $kgDb.mouseLandscapeDistance.query
-    $kgDb.mouseLandscapeDistance.target
+    $kgDb.mouseLandscapeDistance.query minCheck=0.94
+    $kgDb.mouseLandscapeDistance.target minCheck=0.94
     $kgDb.gladHumESDistance.query
     $kgDb.gladHumESDistance.target
     $kgDb.keggPathway.kgID
@@ -1127,6 +1130,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToPfam.name
     $kgDb.knownToRefSeq.name
     $kgDb.knownToSuper.gene
+    $kgDb.knownToHprd.name
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
@@ -1147,7 +1151,11 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
-    $kgDb.knownGene.alignID
+    $kgDb,!hg18,!mm8.knownGene.alignID
+
+identifier knownAlignIdWithNull
+"Which (of sometimes multiple) mapping of a known gene (allow null values)"
+    hg18,mm8.knownGene.alignID exclude=  
 
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
@@ -1358,12 +1366,14 @@ identifier wormBaseId external=WormBase dependency
     #$ce.kimExpDistance.query
     #$ce.kimExpDistance.target
     $ce.orfToGene.name
-    $ce.sangerBlastTab.query
-    $ce.sangerBlastTab.target
+    $ce,!ce1.sangerBlastTab.query
+    $ce,!ce1.sangerBlastTab.target
+    ce1.sangerBlastTab.query minCheck=0.96
+    ce1.sangerBlastTab.target minCheck=0.96
     $ce.sangerCanonical.transcript
     $ce.sangerIsoforms.transcript
     $ce.sangerLinks.orfName minCheck=0.96
-    $ce.sangerPep.name
+    $ce.sangerPep.name minCheck=0.96
     $ce.sangerToKim.name
     $ce.sangerToPfam.name
     $ce.sangerToRefSeq.name
@@ -1397,7 +1407,7 @@ identifier flyBaseGeneId external=FlyBase
     $dm.fbSynonym.geneId
     $dm.fbTranscript.geneId minCheck=0.95
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!rn3,!rn4,!ce2,!sacCer1.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm5,!mm6,!mm7,!mm8,!rn3,!rn4,!ce2,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1485,7 +1495,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdBlastTab.target
     $sacCer.ceBlastTab.query
     $sacCer.dmBlastTab.query
-    $sacCer.drBlastTab.query
+    $sacCer,!sacCer1.drBlastTab.query
     $sacCer.hgBlastTab.query
     $sacCer.mmBlastTab.query
     $sacCer.rnBlastTab.query
@@ -1500,10 +1510,10 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdToSwissProt.name minCheck=0.85
     $sacCer.sgdToSgd.name
     $sacCer.sgdToSgd.value
-    $sacCer.sgdToName.name
-    $sacCer.esRegGeneToModule.gene
-    $sacCer.esRegGeneToMotif.gene
-    $sacCer.esRegUpstreamRegion.name
+    $sacCer.sgdToName.name minCheck=0.86
+    $sacCer.esRegGeneToModule.gene minCheck=0.94
+    $sacCer.esRegGeneToMotif.gene minCheck=0.97
+    $sacCer.esRegUpstreamRegion.name minCheck=0.96
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -1591,6 +1601,12 @@ identifier ensemblEstTranscriptId external=Ensembl dependency
     $gbd.ensEstGtp.transcript chopAfter=.
     $gbd.ensEstPep.name chopAfter=.
 
+# HPRD Identifiers
+
+identifier hprdId external=HPRD dependency
+"HPRD ID"
+    $hg.knownToHprd.value
+
 # H-Invitational Database Identifiers
 
 identifier hinvTranscriptId external=H-INV dependency
@@ -1618,7 +1634,7 @@ identifier superfamilyId external=SCOP
 identifier bioCycMapId external=BioCyc
 "BioCyc Pathway Map ID"
     $gbd.bioCycMapDesc.mapID
-    $gbd.bioCycPathway.mapID
+    $gbd.bioCycPathway.mapID minCheck=0.78
 
 identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
@@ -1794,7 +1810,6 @@ identifier blastHg16KGPepId
      $cioSav.blastHg16KG.qName
      $danRer.blastHg16KG.qName
      $dm.blastHg16KG.qName
-     $fr.blastHg16KG.qName
      $galGal.blastHg16KG.qName
 
 # identifier blastHg17KGPep00Id  (knownGene upgraded)
@@ -1902,9 +1917,9 @@ identifier jaxPhenotypeName external=MGI
 identifier hgMutMutId
 "Human Mutation track mutation identifier for attributes and links"
     hg17.hgMut.mutId dupeOk
-    hg17.hgMutAlias.mutId
-    hg17.hgMutExtLink.mutId
-    hg17.hgMutAttr.mutId
+    hg17.hgMutAlias.mutId minCheck=0.98
+    hg17.hgMutExtLink.mutId minCheck=0.75
+    hg17.hgMutAttr.mutId minCheck=0.78
 
 identifier hgMutSrcId
 "Human Mutation track source ID"
@@ -1924,20 +1939,20 @@ identifier hgMutAttrNameId
 identifier hgMutLinkId
 "Human Mutation track link ID: links from mutations to data sources +"
     hg17.hgMutLink.linkId
-    hg17.hgMutExtLink.linkId
+    hg17.hgMutExtLink.linkId minCheck=0.98
 
-#links between gv (the new Human Mutation) and related tables 
+#links between gv (the new Locus Variants) and related tables 
 
 identifier gvId
-"Human Mutation track mutation identifier for attributes and links"
-    hg17.gvPos.name dupeOk
+"Locus Variants track mutation identifier for attributes and links"
+    hg17,hg18.gvPos.name dupeOk
     hgFixed.gv.id
     hgFixed.gvLink.id
     hgFixed.gvAttr.id
     hgFixed.gvAttrLong.id
 
 identifier gvSrcId
-"Human Mutation track source ID"     
+"Locus Variants track source ID"     
     hgFixed.gvSrc.srcId
     hgFixed.gv.srcId
 
@@ -1970,17 +1985,19 @@ dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
 dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
 dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
-dependency $pbDb.pbAnomLimit $pbDb.kgProtMap
-dependency $pbDb.pbResAvgStd $pbDb.kgProtMap
-dependency $pbDb.pepCCntDist $pbDb.kgProtMap
-dependency $pbDb.pepExonCntDist $pbDb.kgProtMap
-dependency $pbDb.pepHydroDist $pbDb.kgProtMap
-dependency $pbDb.pepIPCntDist $pbDb.kgProtMap
-dependency $pbDb.pepMolWtDist $pbDb.kgProtMap
+
+# FAN says: the following hg17 tables are an exception
+dependency $pbDb,!hg17.pbAnomLimit $pbDb.kgProtMap
+dependency $pbDb,!hg17.pbResAvgStd $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepCCntDist $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepExonCntDist $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepHydroDist $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepIPCntDist $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepMolWtDist $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepPi $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepPiDist $pbDb.kgProtMap
+dependency $pbDb,!hg17.pepResDist $pbDb.kgProtMap
 dependency $pbDb.pepMwAaDist $pbDb.kgProtMap
-dependency $pbDb.pepPi $pbDb.kgProtMap
-dependency $pbDb.pepPiDist $pbDb.kgProtMap
-dependency $pbDb.pepResDist $pbDb.kgProtMap
 dependency $pbDb.pbAaDistA $pbDb.kgProtMap
 dependency $pbDb.pbAaDistC $pbDb.kgProtMap
 dependency $pbDb.pbAaDistD $pbDb.kgProtMap

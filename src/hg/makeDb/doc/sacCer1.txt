@@ -1390,3 +1390,8 @@ _EOF_
 # *** hgBlastTab mmBlastTab dmBlastTab 
 
 
+##########################################################################
+# RELOAD GENBANK (DONE 2006-09-06 markd)
+# reloaded due to xenos track being dropped confusing joinerCheck
+
+nice bin/gbDbLoadStep -drop -initialLoad sacCer1

@@ -1,0 +1,33 @@
+<H2>Description</H2>
+<P>
+There are two subtracks on the Poly(A) composite tracks.  One is the 
+<B>PolyA_DB subtrack</B>, which are reported poly(A) sites.  The other 
+is the <B>Poly(A) prediction subtrack</B>. 
+</P> 
+<P>
+The PolyA_DB database is a set of $organism mRNA polyadenlyation sites based
+on EST/cDNA evidence.  The track has 28,857 annotated poly(A) cleavage sites.  
+This is a single base denoting the beginning of a poly(A) tail in a nascent
+mRNA transcript and is typically 10-30 nucleotides downstream of a PAS 
+(polyadenylation signal), the most common being AAUAAA (or AATAAA on the 
+DNA).  The PolyA_DB web server is found at 
+<A HREF="http://polya.umdnj.edu/polyadb">http://polya.umdnj.edu/polyadb</A>.
+</P>
+<P>
+The Poly(A) predictions are made using 1500 base DNA sequences centered at 
+the end of each RefSeq gene.  The sequences are then inputted into the support 
+vector machine described in <em>Cheng, et. al</em>.  The SVM scores each base
+based on a model using 15 different cis elements.  High-scoring regions are 
+highlighted with the highest-scoring base getting a thicker line.  The 
+median length of these regions is 48 bases.
+</P>
+<H2>References</H2>
+<P>
+<UL><LI>
+<A HREF="http://nar.oxfordjournals.org/cgi/content/abstract/33/suppl_1/D116">PolyA_DB:
+a database for mammalian mRNA polyadenylation.</A>
+<em>Nucleic Acids Researc</em> <B>33(Database issue)</B>, D116-120 (2005).
+</LI><LI>
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=16870936&query_hl=1&itool=pubmed_docsum">Prediction of mRNA polyadenylation sites by support vector machine.</A>
+<em>Bioinformatics</em> Jul 26 (2006).
+</LI></P>

@@ -20,7 +20,7 @@ CREATE TABLE hgFixed.gv (
 	'exon', 
 	'5'' UTR', 
 	'3'' UTR', 
-	'not within known transcription unit') not null,
+	'not within known transcription unit') not null, 
     coordinateAccuracy tinyint unsigned not null,	# 0=estimated, 1=definite, others?
               #Indices
     PRIMARY KEY(id)
@@ -33,9 +33,11 @@ CREATE TABLE gvPos (
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
     name varchar(48) not null,	# ID for this mutation
+    strand char(1) not null,	# + or -
+    label varchar(64) not null,	# short official name for this mutation
               #Indices
     INDEX(bin),
-    UNIQUE KEY (chrom(12), chromStart, chromEnd, name)
+    UNIQUE KEY (chrom(12), chromStart, chromEnd, name, label)
 );
 
 #sources for mutation track

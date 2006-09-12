@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.3 2006/03/05 01:53:13 kate Exp $";
+static char const rcsid[] = "$Id: mafsInRegion.c,v 1.4 2006/09/01 18:33:13 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,6 +39,8 @@ struct hash *regionHash = newHash(6);
 struct bed *regions;
 
 regions = bedLoadNAll(file, outDir ? 4 : 3);
+/* order by chrom, start */
+slSort(&regions, bedCmp);
 verbose(2, "found %d regions\n", slCount(regions));
 for (bed = regions; bed != NULL; bed = nextBed)
     {

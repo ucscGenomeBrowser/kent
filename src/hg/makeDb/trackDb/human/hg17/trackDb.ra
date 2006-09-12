@@ -1442,15 +1442,6 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-track gvPos
-shortLabel $Organism Mutation v2
-longLabel Compilation of $Organism Disease Variants and Other Mutations v2
-group phenDis
-priority 144.7
-visibility hide
-color 150,0,150
-type bed 4 +
-
 track landmark
 shortLabel Landmarks
 longLabel Compilation of Landmarks from ORegAnno and Locus Experts
@@ -2273,25 +2264,6 @@ searchMethod fuzzy
 padding 1000
 searchPriority 51
 
-searchName gvNameSearch
-searchTable gvPos
-query select chrom, chromStart, chromEnd, name from %s where name = '%s'
-xrefTable gv
-xrefQuery select id, name from %s where name like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
-searchName gvAliasSearch
-searchTable gvPos
-query select chrom, chromStart, chromEnd, name from %s where name = '%s'
-dontCheckXrefQueryFormat on
-xrefTable gvAttr
-xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
 searchName illuminaShort
 searchTable snpArrayIllumina300
 searchMethod exact
@@ -2376,3 +2348,20 @@ query select chrom,chromStart,chromEnd,name from %s where reference like '%%%s%%
 searchDescription Retrotransposon Insertion Polymorphisms in Humans
 searchPriority 6
 padding 400
+
+track ha_elements
+shortLabel Human Accelerated
+longLabel Human Accelerated Elements
+group compGeno
+priority 104.7055
+visibility hide
+exonArrows off
+color 0,0,150
+type bed 6 .
+
+searchTable ha_elements
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex ha\.[0-9]+
+

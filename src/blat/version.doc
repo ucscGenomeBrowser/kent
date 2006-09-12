@@ -7,6 +7,8 @@
        DNA alignments in gfClient (not blat) in some frames when the
        alignment extended all the way to the end of the DNA.
      o (in 33x4) Support .nib and .2bit:seq[:start-end] file types for query.
+     o (in 33x5) Making polyA trimming leave two bases so as not to mess up
+       stop codon in rna's that just contain coding region.
 
 33:
      o Fixed problem with out=blast8 and out=blast9 output using

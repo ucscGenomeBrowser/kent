@@ -46,13 +46,17 @@ Options:
       must be overlapped by a single select record to be considered
       overlapping.  Note that this is only coverage by a single select
       record, not total coverage.
+  -overlapThresholdCeil=1.1 - select only inFile records with less than
+      this amount of overlap with a single record.
   -overlapSimilarity=0.0 - minimun fraction of inFile and select records that
       Note that this is only coverage by a single select record and this
       is; bidirectional inFile and selectFile must overlap by this
       amount.  A value of 1.0 will select identical records (or CDS if
       both CDS options are specified.  Not currently supported with
       -aggregate.
-  -overlapBases=- - minimum number of bases of overlap, < 0 disables.
+  -overlapSimilarityCeil=1.1 - select only inFile records with less than
+      this amount of similarity with a single record.
+  -overlapBases=-1 - minimum number of bases of overlap, < 0 disables.
   -statsOutput - output overlap statistics instead of selected records. 
       If no overlap criteria is specified, all overlapping entries are
       reported, Otherwise only the pairs passing the citeria are

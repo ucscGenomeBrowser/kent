@@ -101,12 +101,12 @@
 #include "hgMutUi.h"
 #include "gv.h"
 #include "gvUi.h"
-#include "landmark.h"
-#include "landmarkUi.h"
+#include "oreganno.h"
+#include "oregannoUi.h"
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1190 2006/08/29 00:04:45 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1192 2006/09/12 00:17:54 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7953,7 +7953,7 @@ return ((trackDbSetting(track->tdb, "subTrack") != NULL) ||
 	 !sameString(track->mapName, track->tdb->tableName)));
 }
 
-static boolean isWithCenterLabels(struct track *track)
+boolean isWithCenterLabels(struct track *track)
 /* Special cases: inhibit center labels of subtracks in dense mode, and 
  * of composite track in non-dense mode.
  * BUT if track->tdb has a centerLabelDense setting, let subtracks go with 
@@ -10458,44 +10458,7 @@ for (el = tg->items; el != NULL; el = el->next)
     labelStarted = FALSE; /* reset for each item */
     if (useHgvs) 
         {
-        char query[256];
-        char *escId = sqlEscapeString(el->name);
-        char *hgvs = NULL;
-        safef(query, sizeof(query), "select name from hgFixed.gv where id = '%s'", escId);
-        hgvs = sqlQuickString(conn, query);
-        if (strlen(hgvs) > 30)
-            {
-            char *sN = NULL;
-            struct sqlResult *sr;
-            char **row;
-            char pos[128];
-            safef(pos, sizeof(pos), "%s:%d-%d ", el->chrom, el->chromStart, el->chromEnd);
-
-            /* long name check to see if there is a shorter one */
-            safef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = '%s'", escId, "shortName");
-            sr = sqlGetResult(conn, query);
-            while ((row = sqlNextRow(sr)) != NULL)
-                 {
-                 if (startsWith(pos, row[0]))
-                     {
-                     char *n = row[0];
-                     n+= strlen(pos); /* go to first letter in short name */
-                     sN = cloneString(n);
-                     break;
-                     }
-                 }
-            sqlFreeResult(&sr);
-            if (sN != NULL)
-                {
-                freeMem(hgvs);
-                hgvs = sN;
-                }
-            }
-        freeMem(escId);
-        if (hgvs != NULL)
-            dyStringAppend(name, hgvs);
-        else
-            dyStringAppend(name, " ");
+        dyStringAppend(name, el->label);
         labelStarted = TRUE;
         }
     if (useCommon)
@@ -10681,27 +10644,59 @@ if (vis != tvDense)
     }
 }
 
-boolean landmarkFilterType (struct landmark *el) 
-/* filter landmarks on landmarkType field */
+//boolean oregannoFilterType (struct oreganno *el) 
+/* filter oregannos on oregannoType field */
+//{
+//int cnt = 0;
+//for (cnt = 0; cnt < oregannoTypeSize; cnt++)
+    //{
+    //if (cartVarExists(cart, oregannoTypeString[cnt]) &&
+        //cartString(cart, oregannoTypeString[cnt]) != NULL &&
+        //differentString(cartString(cart, oregannoTypeString[cnt]), "0") &&
+        //sameString(oregannoTypeDbValue[cnt], el->oregannoType))
+        //{
+        //return FALSE;
+        //}
+    //}
+//return TRUE;
+//}
+boolean oregannoFilterType (struct oreganno *el)
+/* filter of the type of region from the oregannoAttr table */
 {
 int cnt = 0;
-for (cnt = 0; cnt < landmarkTypeSize; cnt++)
+struct oregannoAttr *attr = NULL;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+
+safef(query, sizeof(query), "select * from hgFixed.oregannoAttr where id = '%s' and attribute = 'type'", el->id);
+attr = oregannoAttrLoadByQuery(conn, query);
+hFreeConn(&conn);
+if (attr == NULL) 
     {
-    if (cartVarExists(cart, landmarkTypeString[cnt]) &&
-        cartString(cart, landmarkTypeString[cnt]) != NULL &&
-        differentString(cartString(cart, landmarkTypeString[cnt]), "0") &&
-        sameString(landmarkTypeDbValue[cnt], el->landmarkType))
+    AllocVar(attr);
+    attr->attrVal = cloneString("NULL");
+    attr->id = NULL; /* so free will work */
+    attr->attribute = NULL;
+    }
+for (cnt = 0; cnt < oregannoTypeSize; cnt++)
+    {
+    if (cartVarExists(cart, oregannoTypeString[cnt]) &&        
+        cartString(cart, oregannoTypeString[cnt]) != NULL &&        
+        differentString(cartString(cart, oregannoTypeString[cnt]), "0") && 
+        sameString(oregannoTypeDbValue[cnt], attr->attrVal))
         {
+        oregannoAttrFree(&attr);
         return FALSE;
         }
     }
+oregannoAttrFree(&attr);
 return TRUE;
 }
 
-void loadLandmark (struct track *tg)
-/* loads the landmark track */
+void loadOreganno (struct track *tg)
+/* loads the oreganno track */
 {
-struct landmark *list = NULL;
+struct oreganno *list = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -10711,9 +10706,9 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
                  NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct landmark *el = landmarkLoad(row);
-    if (!landmarkFilterType(el)) 
-        landmarkFree(&el);
+    struct oreganno *el = oregannoLoad(row);
+    if (!oregannoFilterType(el)) 
+        oregannoFree(&el);
     else
         slAddHead(&list, el);
     }
@@ -10771,10 +10766,10 @@ tg->itemName = hgMutName;
 tg->mapItemName = hgMutMapName;
 }
 
-void landmarkMethods (struct track *tg)
+void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
-tg->loadItems = loadLandmark;
+tg->loadItems = loadOreganno;
 }
 
 void loadBed12Source(struct track *tg)
@@ -12185,7 +12180,6 @@ registerTrackHandler("affyHumanExon", affyAllExonMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
 registerTrackHandler("gnfAtlas2", affyRatioMethods);
-registerTrackHandler("affyZonWildType", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );
@@ -12261,7 +12255,7 @@ registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("hgMut", hgMutMethods);
 registerTrackHandler("gvPos", gvMethods);
-registerTrackHandler("landmark", landmarkMethods);
+registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("encodeDless", dlessMethods);

@@ -12,7 +12,8 @@ O = snpContigLocFilter.o snpContigLocFilter125.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
     snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
     snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o \
-    snpGetSimple.o fetchSeq.o snpOrthoLookup.o snpOrthoStats.o
+    snpGetSimple.o snpGetInsertions.o snpGetDeletions.o \
+    fetchSeq.o snpOrthoLookup.o snpOrthoCheck.o snpCheckCluster.o snpCheckCluster2.o
 
 all: snpContigLocFilter snpContigLocFilter125 \
      snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
@@ -22,7 +23,8 @@ all: snpContigLocFilter snpContigLocFilter125 \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
      snpPAR illuminaLookup snpCompareWeight subSnpCondense \
      snpClassAndObserved snpMoltype affyLookup cnpLookup \
-     snpGetSimple fetchSeq snpOrthoLookup snpOrthoStats
+     snpGetSimple snpGetInsertions snpGetDeletions \
+     fetchSeq snpOrthoLookup snpOrthoCheck snpCheckCluster snpCheckCluster2
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -120,8 +122,21 @@ fetchSeq: fetchSeq.o ${MYLIBS}
 snpGetSimple: snpGetSimple.o ${MYLIBS}
 	${CC} -O -o snpGetSimple snpGetSimple.o ${MYLIBS} $L
 
+snpGetInsertions: snpGetInsertions.o ${MYLIBS}
+	${CC} -O -o snpGetInsertions snpGetInsertions.o ${MYLIBS} $L
+
+snpGetDeletions: snpGetDeletions.o ${MYLIBS}
+	${CC} -O -o snpGetDeletions snpGetDeletions.o ${MYLIBS} $L
+
 snpOrthoLookup: snpOrthoLookup.o ${MYLIBS}
 	${CC} -O -o snpOrthoLookup snpOrthoLookup.o ${MYLIBS} $L
 
-snpOrthoStats: snpOrthoStats.o ${MYLIBS}
-	${CC} -O -o snpOrthoStats snpOrthoStats.o ${MYLIBS} $L
+snpOrthoCheck: snpOrthoCheck.o ${MYLIBS}
+	${CC} -O -o snpOrthoCheck snpOrthoCheck.o ${MYLIBS} $L
+
+snpCheckCluster: snpCheckCluster.o ${MYLIBS}
+	${CC} -O -o snpCheckCluster snpCheckCluster.o ${MYLIBS} $L
+
+snpCheckCluster2: snpCheckCluster2.o ${MYLIBS}
+	${CC} -O -o snpCheckCluster2 snpCheckCluster2.o ${MYLIBS} $L
+

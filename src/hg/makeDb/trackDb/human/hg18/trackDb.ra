@@ -812,16 +812,91 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
-track polyaDB
-shortLabel poly(A) DB
-longLabel PolyA_DB Polyadenylation Sites
+track polyA
+compositeTrack on
+shortLabel Poly(A)
+longLabel PolyA sites, both reported and predicted
 group rna
 priority 79
-origAssembly hg16
 visibility hide
-type bed 4 .
+type bed 8 .
+
+    track polyaDb
+    subTrack polyA
+    shortLabel polyA_DB
+    longLabel Reported poly(A) sites from polyA_DB
+    priority 1
+
+    track polyaPredict
+    subTrack polyA
+    shortLabel Poly(A) SVM
+    longLabel Predicted poly(A) sites using an SVM
+    color 102,0,153
+    priority 2
 
 searchTable wgRna
 searchMethod fuzzy
 searchType bed
 searchPriority 10
+
+track oreganno
+shortLabel ORegAnno
+longLabel Regulatory elements from ORegAnno
+group regulation
+priority 97
+visibility hide
+color 102,102,0
+type bed 4 +
+
+track uc16
+shortLabel Ultra Conserved
+longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+group compGeno
+priority 104.605
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
+searchTable uc16
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex uc\.[0-9]+
+
+track ux16
+shortLabel Extended Ultras
+longLabel Extended Ultraconserved Elements (Until 5 Bases Below 85%)
+group compGeno
+priority 104.6055
+visibility hide
+exonArrows off
+color 200,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
+searchTable ux16
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex ux\.[0-9]+
+
+track ha_elements
+shortLabel Human Accelerated
+longLabel Human Accelerated Elements
+group compGeno
+priority 104.7055
+visibility hide
+exonArrows off
+color 0,0,150
+type bed 6 .
+
+searchTable ha_elements
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex ha\.[0-9]+
+

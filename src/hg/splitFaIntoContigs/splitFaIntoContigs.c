@@ -13,7 +13,7 @@ and split each chromosomes into subdirs and files for each supercontig.
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.21 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.22 2006/09/07 17:14:57 angie Exp $";
 
 /* Default array size for file paths */
 #define DEFAULT_PATH_SIZE 1024
@@ -252,11 +252,7 @@ param filename - The file name to which to write.
 param sequenceNum - The 1-based number of this clone supercontig in the chromsome.
  */
 {
-int startOffset = startAgpData->data.pGap->chromStart;
-int endOffset = endAgpData->data.pGap->chromEnd;
-
 printf("Writing supercontig agp file %s\n", filename);
-//starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 writeAgpFile( endAgpData->data.pGap->chrom, startAgpData, filename);
 }
 
@@ -337,7 +333,7 @@ if (line[0] == '#' || line[0] == '\n')
     continue;
     }
 
-curAgpData = AllocVar(curAgpData);
+AllocVar(curAgpData);
 curAgpData->endOfContig = FALSE;
 curAgpData->isGap = FALSE;
 curAgpData->prev = NULL;

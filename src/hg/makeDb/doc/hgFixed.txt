@@ -891,4 +891,12 @@ hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedianLog \
   zebrafishZonWTMedianExps -minExps=1
 
+##########################################################################
+# Updated gv* tables for the Locus Variants tracks 
+# (Belinda Giardine Sept 2006)
+# This track is now available for hg17 and hg18, only the gvPos table needs to
+# be redone for each build unless new mutations are added.  This load changes
+# the schema (strand, label for gvPos) and adds a new LSDB (BTKbase) and more
+# sanity checks on all the data causing some mismapped variants to be
+# discarded.
 

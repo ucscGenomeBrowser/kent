@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.12 2006/08/04 18:20:33 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.13 2006/09/08 17:30:46 kuhn Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -74,7 +74,7 @@ boolean onWeb = FALSE;
 
 int width=240,height=512;
 boolean branchLengths = FALSE;  /* branch lengths */
-boolean lengthLegend = FALSE;   /* length legend */
+boolean lengthLegend = FALSE;   /* length ruler*/
 boolean branchLabels = FALSE;   /* labelled branch lengths */
 boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
 boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
@@ -108,7 +108,7 @@ errAbort(
     "     If running at the command-line, can put filename here or stdin\n"
     "     (this is actually required)\n"
     "  -phyloGif_branchLengths - use branch lengths for layout\n"
-    "  -phyloGif_lengthLegend - show length legend at bottom\n"
+    "  -phyloGif_lengthLegend - show length ruler at bottom\n"
     "  -phyloGif_branchLabels - show length of branch as label\n"
     "     (used with -phyloGif_branchLengths)\n"
     "  -phyloGif_branchDecimals=N - show length of branch to N decimals, default %d\n"
@@ -392,7 +392,7 @@ if (useCart)
 	puts("<tr><td>Width:</td><td>"); cartMakeIntVar(cart, "phyloGif_width", width, 4); puts("</td></tr>");
 	puts("<tr><td>Height:</td><td>"); cartMakeIntVar(cart, "phyloGif_height", height, 4); puts("</td></tr>");
 	puts("<tr><td>Use branch lengths?</td><td>"); cartMakeCheckBox(cart, "phyloGif_branchLengths", branchLengths); puts("</td></tr>");
-	puts("<tr><td>&nbsp; Show length legend?</td><td>"); cartMakeCheckBox(cart, "phyloGif_lengthLegend", lengthLegend); puts("</td></tr>");
+	puts("<tr><td>&nbsp; Show length ruler?</td><td>"); cartMakeCheckBox(cart, "phyloGif_lengthLegend", lengthLegend); puts("</td></tr>");
 	puts("<tr><td>&nbsp; Show length values?</td><td>"); cartMakeCheckBox(cart, "phyloGif_branchLabels", branchLabels); puts("</td></tr>");
 	puts("<tr><td>&nbsp; How many decimal places?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchDecimals", branchDecimals,1); puts("</td></tr>");
 	puts("<tr><td>Preserve Underscores?</td><td>"); cartMakeCheckBox(cart, "phyloGif_underscores", preserveUnderscores); puts("</td></tr>");
@@ -434,7 +434,7 @@ if (useCart)
 	webNewSection("Notes");
     	puts(
 "\n"
-"1. Length-legend and length-values cannot be shown unless use-branch-lengths is also checked.<br>\n"
+"1. Length-ruler and length-values cannot be shown unless use-branch-lengths is also checked.<br>\n"
 "<br>\n"
 "2. Underscores and anything following them are automatically stripped from node labels\n"
 "unless the preserve-underscores checkbox is checked, in which case they are converted to spaces.<br>\n"

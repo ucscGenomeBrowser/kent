@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.40 2006/08/28 22:11:39 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.47 2006/08/30 21:11:30 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -169,7 +169,7 @@ if (selectedTable[0] != 0)
                     {
                     struct dyString *ds = dyStringNew(0);
                     dyStringPrintf(ds, "%s\'%s\'%s\n%s", CT_DOC_HEADER_PREFIX, 
-                            chopPrefixAt(cloneString(selectedTable), '_'),
+                            ct->tdb->shortLabel,
                             CT_DOC_HEADER_SUFFIX, ct->tdb->html);
                     docText = dyStringCannibalize(&ds);
                     }
@@ -297,8 +297,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             {
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
-            printf("<TD><A HREF='%s?%s&position=%s'>%s:</A></TD>", 
-                    hgTracksName(), cartSidUrlString(cart), pos, chrom);
+            printf("<TD><A HREF='%s?%s&position=%s' TITLE=%s>%s:</A></TD>", 
+                hgTracksName(), cartSidUrlString(cart), pos, pos, chrom);
             }
         else
             puts("<TD>&nbsp;</TD>");
@@ -333,10 +333,11 @@ webIncludeFile("/goldenPath/help/loadingCustomTracks.html");
 webEndSection();
 }
 
-void doBrowserLines(struct slName *browserLines)
+void doBrowserLines(struct slName *browserLines, char **retErr)
 /*  parse variables from browser lines into the cart.
     Return browser initial position, if specified */
 {
+char *err = NULL;
 struct slName *bl;
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -374,13 +375,21 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	else if (sameString(command, "position"))
 	    {
 	    if (wordCount < 3)
-	        errAbort("Expecting 3 words in browser position line");
+                {
+	        err = "Expecting 3 words in browser position line";
+                break;
+                }
 	    if (!hgIsChromRange(words[2])) 
-	        errAbort("browser position needs to be in chrN:123-456 format");
+                {
+	        err ="Invalid browser position (use chrN:123-456 format)";
+                break;
+                }
             cartSetString(cart, "position", words[2]);
 	    }
 	}
     }
+if (retErr)
+    *retErr = err;
 }
 
 struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
@@ -388,7 +397,6 @@ struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
  * and delimit tracks */
 {
 char *line;
-char buf[64];
 struct hash *docHash = hashNew(6);
 char *trackName = defaultTrackName;
 struct lineFile *lf = NULL;
@@ -399,14 +407,22 @@ if (!text)
 lf = lineFileOnString("custom HTML", TRUE, text);
 while (lineFileNextReal(lf, &line))
     {
-    if (sscanf(line, "<!-- UCSC_GB_TRACK NAME=%[^-] -->", buf) == 1)
+    if (startsWithWord("<!--", line) && stringIn("-->", line) &&
+            containsStringNoCase(line, "UCSC_GB_TRACK"))
         {
+        /* allow double quotes in doc header comment */
+        subChar(line, '"', '\'');
+        line = replaceChars(line, "name=", "NAME=");
+        trackName = stringBetween("NAME='", "'", line);
+        if (!trackName)
+            trackName = defaultTrackName;
         if (strlen(ds->string))
             {
+            /* starting a new track -- save doc from previous */
             hashAdd(docHash, trackName, dyStringCannibalize(&ds));
             }
         /* remove quotes and surrounding whitespace from track identifier*/
-        trackName = skipLeadingSpaces(cloneString(buf));
+        trackName = skipLeadingSpaces(trackName);
         eraseTrailingSpaces(trackName);
         stripChar(trackName, '\'');
         stripChar(trackName, '\"');
@@ -414,6 +430,7 @@ while (lineFileNextReal(lf, &line))
         continue;
         }
     dyStringAppend(ds, line);
+    dyStringAppend(ds, "\n");
     }
 if (strlen(ds->string))
     {
@@ -474,14 +491,22 @@ if (customText[0])
     }
 ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
                                         &replacedCts, &err);
-if (err)
+doBrowserLines(browserLines, &warn);
+if (err || warn)
     /* restore customText data to fill text area */
     cartSetString(cart, hgCtDataText, customText);
 
-doBrowserLines(browserLines);
+struct dyString *dsWarn = NULL;
+if (warn)
+    {
+    dsWarn = dyStringNew(0);
+    dyStringPrintf(dsWarn, "%s. ", warn); 
+    }
+
 if (slCount(replacedCts) != 0)
     {
-    struct dyString *dsWarn = dyStringNew(0);
+    if (!dsWarn)
+        dsWarn = dyStringNew(0);
     dyStringAppend(dsWarn, "Replacing custom tracks: &nbsp;");
     for (ct = replacedCts; ct != NULL; ct = ct->next)
         {
@@ -490,8 +515,10 @@ if (slCount(replacedCts) != 0)
             dyStringAppend(dsWarn, ",&nbsp;");
         dyStringAppend(dsWarn, ct->tdb->shortLabel);
         }
-    warn = dyStringCannibalize(&dsWarn);
     }
+if (dsWarn)
+    warn = dyStringCannibalize(&dsWarn);
+
 if (cartVarExists(cart, hgCtDoDelete))
     {
     /* delete tracks */

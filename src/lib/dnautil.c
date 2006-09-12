@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.40 2005/11/10 03:38:56 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.41 2006/09/10 19:10:35 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -780,12 +780,12 @@ while (lettersLeft > 0)
 
 int maskTailPolyA(DNA *dna, int size)
 /* Convert PolyA at end to n.  This allows a few non-A's as noise to be 
- * trimmed too.  Returns number of bases trimmed.  */
+ * trimmed too.  Returns number of bases trimmed.  Leaves very last a. */
 {
 int i;
 int score = 10;
 int bestScore = 10;
-int pastPoly = 0;
+int bestPos = -1;
 int trimSize = 0;
 
 for (i=size-1; i>=0; --i)
@@ -797,8 +797,11 @@ for (i=size-1; i>=0; --i)
     if (b == 'a' || b == 'A')
 	{
         score += 1;
-	if (score > bestScore)
+	if (score >= bestScore)
+	    {
 	    bestScore = score;
+	    bestPos = i;
+	    }
 	}
     else
 	{
@@ -806,26 +809,19 @@ for (i=size-1; i>=0; --i)
 	}
     if (score < 0)
 	{
-	pastPoly = i;
         break;
 	}
     }
-if (bestScore > 10)
+if (bestPos >= 0)
     {
-    pastPoly += 5;
-    if (pastPoly > size-1) pastPoly = size-1;
-    while (pastPoly >= 0)
+    trimSize = size - bestPos - 2;	// Leave two for aa in taa stop codon
+    if (trimSize > 0)
         {
-	DNA b = dna[pastPoly];
-	if (b != 'a' && b != 'A')
-	    break;
-	pastPoly -= 1;
+	for (i=size - trimSize; i<size; ++i)
+	    dna[i] = 'n';
 	}
-    for (i=pastPoly+1; i<size; ++i)
-	{
-        dna[i] = 'n';
-	++trimSize;
-	}
+    else
+        trimSize = 0;
     }
 return trimSize;
 }
@@ -837,6 +833,7 @@ int maskHeadPolyT(DNA *dna, int size)
 int i;
 int score = 10;
 int bestScore = 10;
+int bestPos = -1;
 int pastPoly = 0;
 int trimSize = 0;
 
@@ -849,8 +846,11 @@ for (i=0; i<size; ++i)
     if (b == 't' || b == 'T')
 	{
         score += 1;
-	if (score > bestScore)
+	if (score >= bestScore)
+	    {
 	    bestScore = score;
+	    bestPos = i;
+	    }
 	}
     else
 	{
@@ -862,19 +862,13 @@ for (i=0; i<size; ++i)
         break;
 	}
     }
-if (bestScore > 10)
+if (bestPos >= 0)
     {
-    pastPoly -= 5;
-    if (pastPoly < 0) pastPoly = 0;
-    while (pastPoly < size)
-        {
-	DNA b = dna[pastPoly];
-	if (b != 't' && b != 'T')
-	    break;
-	pastPoly += 1;
-	}
-    trimSize = pastPoly;
-    memset(dna, 'n', trimSize);
+    trimSize = bestPos - 2;	// Leave two for aa in taa stop codon
+    if (trimSize > 0)
+	memset(dna, 'n', trimSize);
+    else
+        trimSize = 0;
     }
 return trimSize;
 }

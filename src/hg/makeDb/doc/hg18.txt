@@ -7709,6 +7709,8 @@ mkdir -p ${blatDir}/{over,net}
     human/hg18/nscanGene.html    
     human/hg18/trackDb.ra
 
+# QA NOTE [ASZ 9-11-2006]: mytouch nscanPep 200603271900.00
+
 ##########################################################################
 # UPDATED hg18.knownToVisiGene (2006-04-05 galt)
 #  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
@@ -9479,6 +9481,13 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 # Create knownToEnsembl column
     hgMapToGene hg17 ensGene knownGene knownToEnsembl
 
+# QA NOTE [ASZ: 9-11-2006]: mytouch on ensGtp and ensPep.  This is because 
+# ensGene was updated later than they were.  Ensembl treats hap chroms 
+# differently than we do.  So the ensGene table was reloaded.
+# sudo mytouch hg18 ensGtp 200605241000.00
+# sudo mytouch hg18 ensPep 200605241000.00
+
+
 # SGP GENES (DONE 5/3/06 Fan)
     ssh hgwdev 
     mkdir /cluster/data/hg18/bed/sgp
@@ -9857,7 +9866,7 @@ get b126_SNPContigLocusId_36_1.bcp.gz
 get b126_ContigInfo_36_1.bcp.gz
 # MapInfo has alignment weights
 get b126_SNPMapInfo_36_1.bcp.gz
-# SNP has validation status and heterozygosity
+# SNP has univar_id, validation status and heterozygosity
 get SNP.bcp.gz
 
 # Get schema from NCBI
@@ -10254,6 +10263,104 @@ hgsql hg18 -e 'load data local infile "snp126.tab" into table snp126'
 hgsql hg18 -e 'alter table snp126 add index name (name)'
 hgsql hg18 -e 'alter table snp126 add index chrom (chrom, bin)'
 
+################################################################
+# SNP126 edit: detect clustering errors  (Heather, Sept. 2006)
+# for locType = 'between' (class = 'insertion')
+# 1,393,040 candidates
+# exceptions: 
+#   DuplicatedObserved (3020 of these) 
+#   MixedObserved (1312 of these)
+
+# create and populate a simple table snp126insertions
+mysql> insert into snp126insertions 
+       select chrom, chromStart, chromEnd, name, score, strand, observed from snp126 
+       where locType = 'between' and class = 'insertion';
+
+# generate and load data
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+./snpCheckCluster hg18 snp126insertions
+mysql> load data local infile 'snpCheckCluster.tab' into table snp126Exceptions;
+
+# update snp126ExceptionDesc
+
+################################################################
+# generate snpMasked sequence (Heather, Sept. 2006)
+
+# 3 steps: simple filtering, advanced filtering, generate sequence
+
+# simple filtering: create and populate tables
+# insertions: 1,393,040
+# deletions: 783,454
+ssh hgwdev
+mysql> insert into snp126insertions select * from snp126
+       where locType = 'between' and class = 'insertion';
+mysql> insert into snp126deletions select * from snp126
+       where class = 'deletion';
+
+# advanced filtering -- insertions
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+# this removes SNPs with weight != 1
+# this removes SNPs that align to more than one position
+# this removes SNPs that cluster together with conflicting observations
+# (these should be class = 'mixed')
+# this removes SNPs with invalid observed string
+# this asserts end == start
+# final count 1,352,380
+# written to insertions.tab
+./snpGetInsertions hg18 snp126insertions snp126Exceptions
+
+# advanced filtering -- deletions
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+# this removes SNPs with weight != 1
+# this removes SNPs that align to more than one position
+# this removes SNPs with invalid observed string
+# this removes SNPs with exception ObservedWrongSize
+# this asserts end > start
+# final count 621,024
+# written to deletions.tab
+./snpGetDeletions hg18 snp126deletions snp126Exceptions
+
+# Note: the advanced filtering pretty much removes all SNPs from chrN_random
+       
+# generate sequence -- insertions
+# use kent/src/hg/snp/snpMask/seqWithInsertions.c
+# this asserts that position doesn't exceed chromSize
+# this will reverse complement observed if strand is negative
+# if no SNPs found, output sequence == input sequence
+# write to chrN.fat
+ssh kkr5u00
+mysql> load data local infile
+"/cluster/home/heather/kent/src/hg/snp/snpLoad/insertions.tab" into table
+snp126insertionsClean;
+cd /scratch/snp126/human/fat
+/bin/sh fat.sh
+cp *.fat /cluster/data/hg18/snpMask/insertions
+ssh kkstore02
+cd /cluster/data/hg18/snpMask/insertions
+nice gzip *.fat
+
+# generate sequence -- deletions
+# use kent/src/hg/snp/snpMask/seqWithoutDeletions.c
+# this asserts that position doesn't exceed chromSize
+# if no SNPs found, output sequence == input sequence
+# write to chrN.skinny
+ssh kkr5u00
+mysql> load data local infile
+"/cluster/home/heather/kent/src/hg/snp/snpLoad/deletions.tab" into table
+snp126deletionsClean;
+cd /scratch/snp126/human/skinny
+/bin/sh skinny.sh
+cp *.skinny /cluster/data/hg18/snpMask/deletions
+ssh kkstore02
+cd /cluster/data/hg18/snpMask/deletions
+nice gzip *.skinny
+
+# create links on hgwdev
+ssh hgwdev
+cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/insertions
+/bin/sh link.sh
+cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/deletions
+/bin/sh link.sh
 
 ################################################################
 ### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
@@ -10422,3 +10529,142 @@ sed 's/hg16\.//' lifted.bed > final.bed
 liftOver final.bed /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz hg18.bed unmapped 
 hgLoadBed hg18 polyaDB hg18.bed
 # trackDb entry/html in human/hg18
+
+############################################################################
+# Translate SNP Array data from hg17 (Heather August 2006)
+
+# Affy500
+cd /cluster/data/hg18/bed/snp/affy
+# get rsId/affy name pairs from hg17 where rsId != 'unknown'
+# 500,568 candidates from hg17 
+# 8,020 have unknown rsId
+hgsql hg17 getHg17.sql > hg17.data
+# get name, chrom, chromStart, chromEnd, strand, observed from snp126simple 
+# snp126simple contains only class = "simple", locType = "exact", 
+# chromEnd = chromStart + 1, biallelic, singly-aligning
+hgsql hg18 getHg18.sql > hg18.data
+# sort and join
+# 485,601 in join.out
+# 6,948 in join.missing
+sort hg17.data > hg17.data.sort
+sort hg18.data > hg18.data.sort
+join hg17.data.sort hg18.data.sort > join.out
+join -v 1 hg17.data.sort hg18.data.sort > join.missing
+# fix column order
+awk '{print $3, $4, $5, $2, 0, $6, $7, $1}' join.out > affy.bed
+# load
+hgsql hg18 < snpArrayAffy500.sql
+hgLoadBed hg18 snpArrayAffy500 affy.bed -sqlTable=snpArrayAffy500.sql
+# cleanup
+rm hg17.data hg17.data.sort hg18.data bed.tab join.out
+mv hg18.data.sort ../illumina
+gzip affy.bed
+
+# Illumina300
+cd /cluster/data/hg18/bed/snp/illumina
+# 317,100 candidates from hg17
+hgsql -e 'select name from snpArrayIllumina300' hg17 >  hg17.data
+# sort and join
+# 314,093 in join.out
+# 3,007 in join.missing
+sort hg17.data > hg17.data.sort
+join hg17.data.sort hg18.data.sort > join.out
+join -v 1 hg17.data.sort hg18.data.sort > join.missing
+# fix column order
+awk '{print $2, $3, $4, $1}' join.out > illumina.bed
+# load
+hgsql hg18 < snpArrayIllumina300.sql
+hgLoadBed hg18 snpArrayIllumina300 illumina.bed -sqlTable=snpArrayIllumina300.sql
+# cleanup
+rm hg17.data hg17.data.sort hg18.data.sort bed.tab join.out
+gzip illumina.bed
+
+##########################################################################
+# Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
+# This uses the gv* tables in hgFixed for the related data.  The track has
+# been on hg17, just added to hg18.  Most variants were mapped directly to
+# hg18 only the LSDB BGMUT was lifted using liftOver.
+
+    # << emacs
+##########################################################################
+#  har elements 1 to 202  Sol 09/10/2006
+
+    set bedDir = /gbdb/hg18/haseq/bed
+    mkdir -p $bedDir/ha_elements
+    pushd /projects/hg/wet/Sol/hars1to49
+    cp -p har_element_1to202.hg18.bed  $bedDir/ha_elements/ha_1to202.bed
+    hgLoadBed hg18 ha_elements         $bedDir/ha_elements/ha_1to202.bed
+    rm -f                              $bedDir/ha_elements/ha_1to202.bed
+    popd
+
+# BUILD HPRD DATA FOR KNOWN GENE DETAILS PAGE LINKS (DONE 9/11/06)
+
+# Download HPRD_XML_060106.tar.gz from www.hprd.org
+
+    gzip -d HPRD_XML_060106.tar.gz
+    tar -xvf HPRD_XML_060106.tar.gz
+
+# This will create 18838 xxxx.xml files under HPRD_XML_060106
+
+# Create hprdToCdna table
+
+    echo 'grep -H entry_cdna  HPRD_XML_060106/$1.xml' >do1Cdna
+
+    ls  HPRD_XML_060106 >j
+    cat j |sed -e 's/.xml/\tdo1Cdna/g' >jj
+    cut -f 1 jj >j.2
+    cut -f 2 jj >j.1
+    paste j.1 j.2 >doAllCdna
+    chmod +x do*
+
+    ./doAllCdna >j.cdna
+    cat j.cdna| sed -e 's/\//\t/' | sed -e 's/.xml/\t/' |\
+    sed -e 's/<entry_cdna>/\t/' | sed -e 's/<\//\t/'| sed -e 's/\./\t/'| cut -f 2,4|\
+    grep -v None >hprdToCdna.tab
+
+    hgsql hg18 -e 'drop table hprdToCdna'
+    hgsql hg18 <~/src/hg/lib/hprdToCdna.sql
+    hgsql hg18 -e 'load data local infile "hprdToCdna.tab" into table hprdToCdna'
+
+# Create hprdToUniProt table
+
+    echo 'fgrep -H Swiss  HPRD_XML_060106/$1.xml' >do1
+
+    ls HPRD_XML_060106 >j
+    cat j |sed -e 's/.xml/\tdo1/g' >jj
+    cut -f 1 jj >j.2
+    cut -f 2 jj >j.1
+    paste j.1 j.2 >doall
+    chmod +x do*
+
+    ./doall >j.out
+    cat j.out|grep SwissProt | sed -e 's/\//\t/' | sed -e 's/.xml/\t/' | \
+    sed -e 's/Prot>/\t/' | sed -e 's/<\//\t/'| cut -f 2,4|grep -v None >hgrdToUniProt.tab
+
+    hgsql hg18 -e 'drop table hprdToUniProt'
+    hgsql hg18 <~/src/hg/lib/hprdToUniProt.sql
+    hgsql hg18 -e 'load data local infile "hprdToUniProt.tab" into table hprdToUniProt'
+
+# build knownToHprd table
+
+    hgsql hg18 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=kgId' >j.kg1
+    hgsql hg18 -N -e 'select kgId,hprdId from hprdToUniProt, kgXref where uniProtId=spId' >j.kg2
+
+    cat j.kg1 j.kg2 |sort -u >knownToHprd.tab
+    wc knownToHprd.tab
+
+    hgsql hg18 -e 'drop table knownToHprd'
+    hgsql hg18 <~/src/hg/lib/knownToHprd.sql
+
+    hgsql hg18 -e 'load data local infile "knownToHprd.tab" into table knownToHprd'
+    hgsql hg18 -e 'select count(*) from knownToHprd'
+
+# 19,646 records created.
+
+# remove temporary files.
+
+    rm j*
+
+# Do the same for hg17.  See hg17.txt for details.
+
+

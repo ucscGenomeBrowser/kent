@@ -29,6 +29,18 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
+track miRNA
+shortLabel miRNA
+longLabel MicroRNAs from miRBase
+group genes
+priority 63
+visibility hide
+useScore 1
+color 255,64,64
+type bed 6 .
+url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+urlLabel miRBase:
+
 track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
@@ -114,8 +126,23 @@ spectrum on
 type netAlign mm8 chainSelf
 otherDb mm8
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred nscanPep
+cdsDrawDefault genomic\ codons
+
 searchTable genscan
 searchMethod prefix
 searchType genePred
 termRegex [[:alnum:]_]+(\.[0-9]+)?
+searchPriority 50
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 searchPriority 50

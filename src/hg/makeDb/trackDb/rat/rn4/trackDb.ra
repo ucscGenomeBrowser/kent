@@ -177,6 +177,20 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility pack
+color 34,139,34
+type genePred nscanPep
+cdsDrawDefault genomic\ codons
+
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.a
+searchPriority 50
 
 searchTable gold
 searchMethod prefix

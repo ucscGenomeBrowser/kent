@@ -8,6 +8,7 @@
 #include "hgTracks.h"
 #include "cheapcgi.h"
 #include "expRecord.h"
+#include "microarray.h"
 
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
 	char *track, char *item1, char *item2, char *statusLine)
@@ -361,11 +362,7 @@ bedList = tg->items;
 safef(varName, sizeof(varName), "%s.%s", tg->mapName, "type");
 affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
 affyAllExonType = affyAllExonStringToEnum(affyAllExonMap);
-if(tg->limitedVis == tvDense)
-    {
-    tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
-    }
-else if(affyAllExonType == affyAllExonTissue)
+if(affyAllExonType == affyAllExonTissue)
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, 2, NULL, -1);
     slSort(&tg->items,lfsSortByName);
@@ -378,8 +375,6 @@ else
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, 2, NULL, -1);
     slSort(&tg->items,lfsSortByName);
-/*     tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonAllData, affyAllExonMap, 1); */
-/*     slSort(&tg->items,lfsSortByName); */
     }
 bedFreeList(&bedList);
 }
@@ -698,7 +693,6 @@ else
 }
 
 
-
 Color expressionScoreColor(struct track *tg, float val, struct vGfx *vg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
@@ -725,8 +719,8 @@ if(val <= -10000)
    thus to bring us back to right scale divide by 1000.
    i.e. 1.27 was stored as 1270 and needs to be converted to 1.27 */
  
-if(tg->limitedVis == tvDense)
-    absVal = absVal/1000;
+/* if(tg->limitedVis == tvDense) */
+/*     absVal = absVal/1000; */
  
 if(!exprBedColorsMade)
     makeRedGreenShades(vg);
@@ -1102,6 +1096,211 @@ for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
     }
 }
 
+void expRatioDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	boolean withCenterLabels, MgFont *font,
+	Color color, enum trackVisibility vis)
+/* Because I want the labels to appear in pack mode, and make the display */
+/* identical to full mode, there's this custom leftLabels function. */
+{
+int y = yOff;
+if (isWithCenterLabels(tg))
+    y += mgFontLineHeight(font);
+if ((vis == tvFull) || (vis == tvPack))
+    {
+    struct slList *item;
+    /* for some probably good reason the clipping is different in pack */
+    /* mode.  This resets it to being the same as full mode. */
+    if (vis == tvPack)
+	{
+	vgUnclip(vg);
+	vgSetClip(vg, xOff, yOff, width, height);
+	}
+    /* Go through and print each label, no mystery here. */
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	char *name = tg->itemName(tg, item);	
+	int itemHeight = tg->itemHeight(tg, item);
+	vgTextRight(vg, leftLabelX, y, width - 1, itemHeight, color, font, name);
+	y += itemHeight;
+	}
+    }
+else if (vis == tvDense)
+    /* In dense mode it's just the shortLabel. */
+    {
+    vgTextRight(vg, leftLabelX, y, width - 1, tg->lineHeight, color, font, tg->shortLabel);
+    }
+}
+
+static void expRatioMapBoxes(struct track *tg, int seqStart, int seqEnd, int xOff, int yOff, int width)
+/* This function makes clickable mapboxes on the browser window for a */
+/* microarray track.  */
+{
+struct linkedFeaturesSeries *marrays;
+struct linkedFeatures *probes;
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int lineHeight = tg->lineHeight;
+int y = yOff;
+int nExps;
+int nProbes;
+int totalHeight;
+marrays = tg->items;
+if (!marrays || !marrays->features)
+    errAbort("Somethings wrong with making the mapboxes for a microarray track.");
+probes = marrays->features;
+nProbes = slCount(probes);
+nExps = slCount(marrays);
+totalHeight = nExps * lineHeight;
+if (nProbes > MICROARRAY_CLICK_LIMIT)
+    {
+    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, y, xOff+insideWidth, y+totalHeight);
+    hPrintf("HREF=\"%s&g=%s&c=%s&l=%d&r=%d&db=%s&i=zoomInMore\" ", 
+	    hgcNameAndSettings(), tg->mapName, chromName, winStart, winEnd, database);
+    hPrintf("TITLE=\"zoomInMore\">\n");
+    }
+else
+    {
+    struct linkedFeatures *probe;
+    for (probe = probes; probe != NULL; probe = probe->next)
+	{
+	int x1 = round((double)((int)probe->start-winStart)*scale);
+	int x2 = round((double)((int)probe->end-winStart)*scale);
+	int w;
+	if (x1 < 0)
+	    x1 = 0;
+	if (x2 > insideWidth-1) 
+	    x2 = insideWidth-1;
+	w = x2 - x1 + 1;
+	mapBoxHcTwoItems(probe->start, probe->end, x1+xOff, y, w, totalHeight, tg->mapName, probe->name, probe->name, probe->name);
+	}
+    }
+}
+
+static void expRatioSetupPixelArrays(struct track *tg, int **pPixCountArray, 
+				     float ***pPixScoreArray, double scale)
+/* This makes an array that keeps track of how many items there are at */
+/* a given pixel on the track. This is important technique for speeding */
+/* up the track when it's zoomed out far and there's a lot of stuff */
+/* being drawn. */
+{
+int **pixCountArray;
+float **pixScoreArray;
+/* Make 2 two-dimensional arrays.  Both are M x N, where M is the number */
+/* of tissues or arrays, and N is the number of pixels in the window.    */
+struct linkedFeaturesSeries *expLfs;
+int nExps = slCount(tg->items);
+int i;
+if (nExps < 0)
+    return;
+AllocArray(pixScoreArray, nExps);
+AllocArray(pixCountArray, nExps);
+for (i = 0, expLfs = tg->items; (i < nExps) && (expLfs != NULL); i++, expLfs = expLfs->next)
+    /* Go through each "row" in the display.  For each feature in the row, */
+    /* calculate the value in the corresponding pixel and add another tally */
+    /* to that pixel too. */ 
+    {
+    struct linkedFeatures *lfProbe;
+    AllocArray(pixScoreArray[i], insideWidth);
+    AllocArray(pixCountArray[i], insideWidth);
+    for (lfProbe = expLfs->features; lfProbe != NULL; lfProbe = lfProbe->next)
+	{
+	int x1 = round((double)((int)lfProbe->start-winStart)*scale);
+	int x2 = round((double)((int)lfProbe->end-winStart)*scale);
+	int w, j;
+	if (x1 < 0)
+	    x1 = 0;
+	if (x2 > insideWidth-1) 
+	    x2 = insideWidth-1;
+	w = x2 - x1;
+	for (j = 0; j <= w; j++)
+	    {
+	    if ((pixCountArray[i][x1+j] == 0) || 
+		(pixScoreArray[i][x1+j] == MICROARRAY_MISSING_DATA) ||
+		((fabs(lfProbe->score) > fabs(pixScoreArray[i][x1+j])) && 
+		 (lfProbe->score != MICROARRAY_MISSING_DATA)))
+		pixScoreArray[i][x1+j] = lfProbe->score;
+	    pixCountArray[i][x1+j]++;
+	    }
+	}
+    }
+/* Clean up.  I guess it's not really necessary to have all the rows of that */
+/* count array since they're all the same. */
+*pPixCountArray = pixCountArray[0];
+for (i = 1; i < nExps; i++)
+    freeMem(pixCountArray[i]);
+freeMem(pixCountArray);
+*pPixScoreArray = pixScoreArray;
+}
+
+void expRatioDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw the microarray measurements, and do it a lot faster than */
+/* genericDrawItems would. */
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int lineHeight = tg->lineHeight;
+int y = yOff;
+int heightPer = tg->heightPer;
+float **pixScoreArray;
+int *pixCountArray;
+int nExps;
+struct linkedFeaturesSeries *marrayList = tg->items;
+int i, j;
+/* Create an array as large as the browser window (in pixels). */
+/* Draw the array with all the rows in pack, full, or squish. */
+if ((marrayList == NULL) || (marrayList->features == NULL))
+    return;
+nExps = slCount(marrayList);
+expRatioSetupPixelArrays(tg, &pixCountArray, &pixScoreArray, scale);
+if (vis == tvDense)
+    {
+    /* Average the pixel scores together. */
+    for (i = 0; i < insideWidth; i++)
+	{
+	if (pixCountArray[i] > 0)
+	    {
+	    float biggest = 0;
+	    int goodMeasures = 0;
+	    Color theColor;
+	    for (j = 0; j < nExps; j++)
+		if ((pixScoreArray[j][i] != MICROARRAY_MISSING_DATA)
+		    && (fabs(pixScoreArray[j][i]) > fabs(biggest)))
+		    {
+		    goodMeasures++;
+		    biggest = pixScoreArray[j][i];
+		    }
+	    if (goodMeasures == 0)
+		biggest = MICROARRAY_MISSING_DATA;
+	    theColor = expressionScoreColor(tg, biggest, vg, tg->expScale, tg->expScale);
+	    vgLine(vg, xOff + i, y, xOff + i, y + heightPer - 1, theColor);
+	    }
+	}
+    }
+else
+    {
+    for (i = 0; i < nExps; i++)
+	{
+	for (j = 0; j < insideWidth; j++)
+	    {
+	    if (pixCountArray[j] > 0)
+		{
+		Color theColor = expressionScoreColor(tg, pixScoreArray[i][j], vg, tg->expScale, tg->expScale);
+		vgLine(vg, xOff + j, y, xOff + j, y + heightPer - 1, theColor);
+		}
+	    }
+	y += lineHeight;
+	}
+    }
+/* Make the clickable mapboxes in full or pack. */
+if ((vis == tvFull) || (vis == tvPack))
+    expRatioMapBoxes(tg, seqStart, seqEnd, xOff, yOff, width);
+for (i = 0; i < nExps; i++)
+    freeMem(pixScoreArray[i]);
+freeMem(pixScoreArray);
+freeMem(pixCountArray);
+}
+
 void rosettaMethods(struct track *tg)
 /* methods for Rosetta track using bed track */
 {
@@ -1195,5 +1394,7 @@ void affyAllExonMethods(struct track *tg)
 /* Special methods for the affy all exon chips. */
 {
 expRatioMethods(tg);
+tg->drawItems = expRatioDrawItems;
+tg->drawLeftLabels = expRatioDrawLeftLabels;
 tg->trackFilter = lfsFromAffyAllExonBed;
 }

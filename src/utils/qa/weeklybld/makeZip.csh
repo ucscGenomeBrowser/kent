@@ -13,7 +13,7 @@ endif
 mkdir -p $dir
 cd $dir
 echo "Checking out branch $BRANCHNN."
-cvs -d hgwdev:$CVSROOT co -r "v"$BRANCHNN"_branch"  kent >& /dev/null
+cvs -d hgwdev:$CVSROOT export -r "v"$BRANCHNN"_branch"  kent >& /dev/null
 set err = $status
 if ( $err ) then
  echo "error running cvs co kent: $err" 

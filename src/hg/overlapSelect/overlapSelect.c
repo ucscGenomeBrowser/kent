@@ -29,7 +29,9 @@ static struct optionSpec optionSpecs[] = {
     {"idMatch", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
     {"overlapThreshold", OPTION_FLOAT},
+    {"overlapThresholdCeil", OPTION_FLOAT},
     {"overlapSimilarity", OPTION_FLOAT},
+    {"overlapSimilarityCeil", OPTION_FLOAT},
     {"overlapBases", OPTION_INT},
     {"merge", OPTION_BOOLEAN},
     {"mergeOutput", OPTION_BOOLEAN},
@@ -42,7 +44,7 @@ static struct optionSpec optionSpecs[] = {
 /* incompatible with aggregate */
 static char *aggIncompatible[] =
 {
-    "overlapSimilarity", "overlapBases", "merge", "mergeOutput", "idMatch", NULL
+    "overlapSimilarity", "overlapSimilarityCeil", "overlapThresholdCeil", "overlapBases", "merge", "mergeOutput", "idMatch", NULL
 };
 
 /* file format constants */
@@ -65,7 +67,7 @@ boolean mergeOutput = FALSE;
 boolean idOutput = FALSE;
 boolean statsOutput = FALSE;
 boolean outputAll = FALSE;
-struct overlapCriteria criteria = {0.0, 0.0, -1};
+struct overlapCriteria criteria = {0.0, 1.1, 0.0, 1.1, -1};
 
 struct ioFiles
 /* object containing input files */
@@ -418,10 +420,10 @@ if (optionExists("idMatch"))
     selectOpts |= selIdMatch;
 
 criteria.threshold = optionFloat("overlapThreshold", 0.0);
+criteria.thresholdCeil = optionFloat("overlapThresholdCeil", 1.1);
 criteria.similarity = optionFloat("overlapSimilarity", 0.0);
+criteria.similarityCeil = optionFloat("overlapSimilarityCeil", 1.1);
 criteria.bases = optionInt("overlapBases", -1);
-if ((criteria.threshold != 0.0) && (criteria.similarity != 0.0))
-    errAbort("can't specify both -overlapThreshold and -overlapSimilarity");
 
 /* output options */
 mergeOutput = optionExists("mergeOutput");

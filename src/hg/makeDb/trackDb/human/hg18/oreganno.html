@@ -1,0 +1,74 @@
+<H2>Description</H2>
+<P>
+This annotation displays literature-curated regulatory regions,
+transcription factor binding sites, and regulatory polymorphisms from
+<b><font color="666600">O</font><font color="CC0033">Reg</font><font color="BBBB55">Anno</font></b> (Open Regulatory Annotation).
+</P>
+
+<!--
+<H2>Display Conventions and Configuration</H2>
+<P>
+The display may be filtered to show regulatory, promoter, enhancer, or 
+hypersensitive sites. To exclude certain types of regions from the display, 
+check the appropriate boxes in the "Exclude region type" list at the top of 
+the description page. 
+</P>
+-->
+
+<H2>Methods</H2>
+<P>
+An ORegAnno record describes an experimentally proven and published regulatory region (promoter, enhancer, etc), transcription factor binding site, or regulatory polymorphism.  Each annotation must have the following attributes:
+<ol>
+<li>A stable ORegAnno identifier.
+<li>A valid taxonomy id from the NCBI Taxonomy database.
+<li>A valid PubMed reference.  
+<li>A target gene which is either user-defined, in Entrez Gene or in EnsEMBL.
+<li>A sequence with at least 40 flanking bases (preferably more) to allow the site to be mapped to any release of an associated genome.
+<li>At least one piece of specific experimental evidence describing the biological technique used to discover the regulatory sequence (currently, only the evidence subtypes are supplied with the UCSC track).
+<li>A positive, neutral or negative outcome based on the experimental results from the primary reference (only records with positive outcome are currently included in the UCSC track).
+</ol>
+The following attributes are optionally included:
+<ol>
+<li>A target transcription factor which is either user-defined, in Entrez Gene or in EnsEMBL.
+<li>A specific cell type for each piece of experimental evidence using the eVOC cell type ontology (Kelso, et al., 2003).
+<li>A specific dataset identifier (e.g. the REDfly dataset) allowing external curators to manage particular sets of annotation using ORegAnno.s curation tools.
+<li>A search space sequence, specifying the region that was assayed, not just the regulatory sequence.  
+<li>A dbSNP identifier and type of variant (germline, somatic or artificial) for regulatory polymorphisms.
+</ol>
+Mapping to genome coordinates is performed periodically to current genome builds by BLAST sequence alignment.  The information provided in this track represents an abbreviated summary of the details for each ORegAnno record.  Please visit the official ORegAnno entry for the complete details such as evidence descriptions, comments, validation score history, etc.
+</P>
+
+<H2>Credits</H2>
+<P>
+<DL>
+<DT>The ORegAnno community (please see individual citations for various features) 
+<DD><a href="http://www.oreganno.org/" target="_blank">ORegAnno</a>
+<DT>Belinda Giardine, Ross Hardison, Webb Miller, Cathy Riemer
+<DD>Center for Comparative Genomics and Bioinformatics, Penn State University, University Park, PA
+<DT>Fan Hsu, Jim Kent, Andrew Kern, Robert Kuhn, Heather Trumbower
+<DD>Center for Biomolecular Science and Engineering, University of California, Santa Cruz, CA
+<!--
+<DT>Laura Elnitski
+<DD>National Human Genome Research Institute, Rockville, MD
+<DT>Richard Gibbons, Doug Higgs, Jim Hughes
+<DD>Weatherall Institute of Molecular Medicine, Oxford UK
+<DT>Garry Cutting, Andrew P. Feinberg
+<DD>Johns Hopkins University School of Medicine, Baltimore, MD
+-->
+</DL> 
+
+<H2>Reference</H2>
+<!--
+<P>
+Elnitski, L., Hardison, R.C., Li, J., Yang, S., Kolbe, D., Eswara, P., 
+O'Connor, M.J., Schwartz, S., Miller, W. and Chiaromonte, F. 
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/64" 
+TARGET=_blank>Distinguishing regulatory DNA from neutral sites</A>.
+<em>Genome Res.</em> <B>13</B>(1):64-72 (2003).</P>
+-->
+<P>
+Montgomery S.B., Griffith O.L., Sleumer M.C., Bergman C.M., Bilenky M., 
+Pleasance E.D., Prychyna Y., Zhang X., Jones S.J.M. 
+<A HREF="http://bioinformatics.oxfordjournals.org/cgi/content/full/22/5/637" TARGET=_blank>ORegAnno: An open access database and curation system for literature-derived promoters, transcription factor binding sites, and regulatory variation</A>.
+<em>Bioinformatics.</em> <B>22</B>(5):637-40 (2006).
+</P>

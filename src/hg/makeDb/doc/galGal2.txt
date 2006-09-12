@@ -1594,6 +1594,9 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     ldHgGene -gtf galGal2 geneid download/*.gtf
     hgPepPred galGal2 generic geneidPep download/*-fixed.prot
 
+# QA NOTE [ASZ: 9-11-2006]: mytouch for geneidPep
+# sudo mytouch galGal2 geneidPep 200403162100.00
+
 
 # BUILD BLAST DATABASES
     cd /cluster/data/galGal2

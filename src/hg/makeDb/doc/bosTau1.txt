@@ -674,6 +674,8 @@
   featureBits bosTau1 genscan
   # 49346362 bases of 2261116798 (2.182%) in intersection
 
+# QA NOTE [ASZ: 9-11-2006]: used mytouch on genscanPep.
+# sudo mytouch bosTau1 genscanPep 200504081400.00
 
 
 # RE-INDEX TABLES TO ACCOMODATE LONG SCAFFOLD NAMES
@@ -1169,6 +1171,9 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /cluster/data/bosTau1/bed/geneid
     ldHgGene -gtf -genePredExt bosTau1 geneid bosTau1.gtf 
     hgPepPred bosTau1 generic geneidPep geneid.fa
+
+# QA NOTE [ASZ: 9-11-2006]: mytouch for geneidPep
+# sudo mytouch bosTau1 geneidPep 200504081400.00
 
 
 # SWAP CHAINS FROM MM5, BUILD NETS ETC. (DONE 2/26/05 angie)

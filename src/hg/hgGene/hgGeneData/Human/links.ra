@@ -31,6 +31,13 @@ priority 81
 name cgap
 url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
 
+name hprd
+shortLabel HPRD
+tables hprdToUniProt kgXref
+idSql select value from knownToHprd where name = '%s';
+url http://www.hprd.org/protein/%s 
+priority 87
+
 name reactome
 shortLabel Reactome
 tables proteome.spReactomeEvent kgXref
