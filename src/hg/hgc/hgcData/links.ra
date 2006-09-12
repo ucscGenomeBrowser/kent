@@ -79,5 +79,20 @@ dataLinkCol 2
 
 name BTKbase
 label BTKbase
-url http://bioihttp://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=brief;%s
+url http://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=brief;%s
+acc yes
+
+name EntrezGene
+label Entrez Gene
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
+acc yes
+
+name EnsemblHumanGene
+label Ensembl Human GeneView
+url http://www.ensembl.org/Homo_sapiens/geneview?gene=%s
+acc yes
+
+name EnsemblMouseGene
+label Ensembl Mouse GeneView
+url http://www.ensembl.org/Mus_musculus/geneview?db=core;gene=%s
 acc yes
