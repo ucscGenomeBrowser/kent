@@ -2,8 +2,9 @@
 <P>
 This annotation consolidates mutations from locus-specific databases and a 
 genome-wide mutation database into a single track.
-The prototype version includes entries from the few locus-specific databases
-listed in the Methods section below. 
+This version includes entries from the databases
+listed in the Methods section below.  Work is in progress to add more 
+locus-specific databases.
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -56,9 +57,11 @@ The data shown in this track were obtained from the following variant sources:
 <UL>
 <LI>
 <A HREF="http://www.androgendb.mcgill.ca/" TARGET=_blank>Androgen Receptor Gene Mutations Database</A> (ARdb) - mutations in the AR gene.
+<!--
 <LI>
 <A HREF="http://research.nhgri.nih.gov/projects/bic/" TARGET=_blank>BIC</A>
 Breast Cancer Information Core.
+-->
 <LI>
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/mhc/xslcgi.fcgi?cmd=bgmut/home" TARGET=_blank>Blood Group Antigen Gene Mutation Database</A> (BGMUT) -
 mutations in many genes.
@@ -75,6 +78,8 @@ database</A> - variants and thalassemia mutations in the globin loci.
 <A HREF="http://www.pahdb.mcgill.ca/" TARGET=_blank>PAHdb</A> - mutations 
 in the phenylalanine hydroxylase (PAH) gene.
 <LI>
+SRD5A2 - mutations in the steroid-5-alpha-reductase, alpha polypeptide 2 (3-oxo-5 alpha-steroid delta 4-dehydrogenase alpha 2) gene.
+<LI>
 <A HREF="http://www.expasy.org/sprot/" TARGET=_blank>UniProt 
 (Swiss-Prot/TrEMBL)</A> - 
 genome-wide data on variants within coding regions.  Only those that are from
@@ -85,15 +90,23 @@ A possible connection with <A HREF="http://www.centralmutations.org"
 TARGET=_blank>WayStation</A>, the HGVS community-wide database.
 -->
 </UL>
-<p>The disease association is determined by a database curator listing the
-mutations that are "known to be disease-associated" or "not disease-associated".
+<p>The HGVS style name was pulled directly or indirectly from the source
+data.  This in combination with alignments of the reference sequence against
+the genome sequence was used to position the variants.  The source may have
+additional variants that could not mapped to the genome.  Additional 
+attributes displayed for each variant varies with what is available from the
+source database.  If the source has web accessible entries for the variants
+links are provided back to the source.
+</p>
+<p>The phenotype association is determined by a database curator listing the
+mutations that are "phenotype-associated" or "not phenotype-associated".
 Of the remaining mutations those that are insertions or deletions or 
 non-synonymous substitutions in coding regions are considered to be
 "likely to be phenotype-associated", as well as known splicing mutations.
 Also mutations that intersect with 
 regions in the most conserved track are considered to be 
-"likely to be phenotype-associated".  The remaining entries are not known and
-left blank (gray by default).
+"likely to be phenotype-associated".  For the remaining mutations the 
+phenotype association is unknown.
 
 <H2>Credits</H2>
 
@@ -116,8 +129,10 @@ left blank (gray by default).
 Lady Davis Institute for Medical Research,
 Sir Mortimer B. Davis-Jewish General Hospital
 Montreal, Quebec, Canada
+<!--
 <DT>BIC:
 <DD>Breast Cancer Information Core, An International Collaborative Effort hosted by NHGRI
+-->
 <DT>BGMUT:
 <DD>Olga O. Blumenfeld, Ph.D., Professor <br>
 Santosh K. Patnaik<br>
