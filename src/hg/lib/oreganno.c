@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "oreganno.h"
 
-static char const rcsid[] = "$Id: oreganno.c,v 1.1 2006/09/10 16:43:50 hiram Exp $";
+static char const rcsid[] = "$Id: oreganno.c,v 1.2 2006/09/12 15:23:05 giardine Exp $";
 
 void oregannoStaticLoad(char **row, struct oreganno *ret)
 /* Load a row from oreganno table into ret.  The contents of ret will
@@ -20,7 +20,8 @@ ret->chrom = row[1];
 ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->id = row[4];
-ret->name = row[5];
+strcpy(ret->strand, row[5]);
+ret->name = row[6];
 }
 
 struct oreganno *oregannoLoad(char **row)
@@ -35,7 +36,8 @@ ret->chrom = cloneString(row[1]);
 ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->id = cloneString(row[4]);
-ret->name = cloneString(row[5]);
+strcpy(ret->strand, row[5]);
+ret->name = cloneString(row[6]);
 return ret;
 }
 
@@ -45,7 +47,7 @@ struct oreganno *oregannoLoadAll(char *fileName)
 {
 struct oreganno *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -63,7 +65,7 @@ struct oreganno *oregannoLoadAllByChar(char *fileName, char chopper)
 {
 struct oreganno *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -107,8 +109,8 @@ void oregannoSaveToDb(struct sqlConnection *conn, struct oreganno *el, char *tab
  * If worried about this use oregannoSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->id,  el->name);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->id,  el->strand,  el->name);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -123,17 +125,19 @@ void oregannoSaveToDbEscaped(struct sqlConnection *conn, struct oreganno *el, ch
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *id, *name;
+char  *chrom, *id, *strand, *name;
 chrom = sqlEscapeString(el->chrom);
 id = sqlEscapeString(el->id);
+strand = sqlEscapeString(el->strand);
 name = sqlEscapeString(el->name);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  id,  name);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s')", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  id,  strand,  name);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&id);
+freez(&strand);
 freez(&name);
 }
 
@@ -151,6 +155,7 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->id = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->name = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -197,6 +202,10 @@ fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->id);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

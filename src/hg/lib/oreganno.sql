@@ -9,18 +9,18 @@ CREATE TABLE oreganno (
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
-    id varchar(255) not null,	# unique ID to identify this regulatory region
+    id varchar(48) not null,	# unique ID to identify this regulatory region
+    strand char(1) not null,	# + or -
     name varchar(255) not null,	# name of regulatory region
               #Indices
     INDEX(bin),
     PRIMARY KEY(id)
 );
 
-#put these in hgFixed so can be used for all builds
 #attributes associated with an ORegAnno regulatory region
 CREATE TABLE hgFixed.oregannoAttr (
-    id varchar(255) not null,	# key into the oreganno table
-    attribute varchar(255) not null,	# name of attribute being listed
+    id varchar(48) not null,	# key into the oreganno table
+    attribute varchar(48) not null,	# name of attribute being listed
     attrVal varchar(255) not null,	# value of this oreganno attribute
               #Indices
     INDEX(id)
@@ -28,9 +28,9 @@ CREATE TABLE hgFixed.oregannoAttr (
 
 #links for ORegAnno regulatory region
 CREATE TABLE hgFixed.oregannoLink (
-    id varchar(255) not null,	# key into the oreganno table
-    attribute varchar(255) not null,	# name of attribute being listed
-    raKey varchar(255) not null,	# key into RA file, tells how to link
+    id varchar(48) not null,	# key into the oreganno table
+    attribute varchar(48) not null,	# name of attribute being listed
+    raKey varchar(48) not null,	# key into RA file, tells how to link
     attrAcc varchar(255) not null,	# accession used by link
               #Indices
     INDEX(id)

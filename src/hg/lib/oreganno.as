@@ -6,6 +6,7 @@ table oreganno
     uint    chromStart;     "Start position in chrom"
     uint    chromEnd;       "End position in chrom"
     string  id;             "unique ID to identify this regulatory region"
+    char[1] strand;         "+ or -"
     string  name;           "name of regulatory region"
     )
 
