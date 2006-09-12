@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: uniqSize.c,v 1.8 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: uniqSize.c,v 1.9 2006/09/12 16:49:52 angie Exp $";
 
 boolean stretch = FALSE;
 
@@ -130,9 +130,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int lineSize, wordCount;
 char *line, *words[16];
 int start=0,end=0,size;
-int u = 0, n = 0;
 struct chromInfo *ci;
-struct intList *il;
 int contigStart = 0, scaffoldStart = 0;
 boolean inContig = FALSE, inScaffold = FALSE;
 
@@ -342,8 +340,6 @@ void uniqSize(char *ooDir, char *agpFile, char *glFile, char *altFile)
 struct fileInfo *chromDirs, *chromEl;
 struct fileInfo *contigDirs, *contigEl;
 char subDir[512];
-unsigned long total = 0;
-unsigned long totalN = 0;
 struct chromInfo *ciList = NULL, *ci, *ciTotal;
 
 chromDirs = listDirX(ooDir, "*", FALSE);
