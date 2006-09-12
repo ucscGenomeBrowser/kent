@@ -2926,7 +2926,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMsaElements
 compositeTrack on
 shortLabel Consens Elements
-longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Consensus Conserved Elements
+longLabel MSA Consensus Constrained Elements
 group encodeCompGeno
 priority 70.0
 visibility hide
@@ -2937,7 +2937,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMsaElUnion
     shortLabel Loose
-    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Loose Conserved Elements
+    longLabel MSA Consensus Loose Constrained Elements
     subTrack encodeMsaElements
     priority 1
     color 80,70,180
@@ -2945,14 +2945,14 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeMsaElModerate
     subTrack encodeMsaElements
     shortLabel Moderate
-    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Moderate Conserved Elements
+    longLabel MSA Consensus Moderate Constrained Elements
     priority 2
     color 80,105,148
 
     track encodeMsaElIntersect
     subTrack encodeMsaElements
     shortLabel Strict
-    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    longLabel MSA Consensus Strict Consrained Elements
     priority 3
     color 80,145,105
 
