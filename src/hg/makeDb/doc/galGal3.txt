@@ -1799,8 +1799,41 @@ doPhast.csh $(root1) $(file1) 12 .05 .20
 
 
 #########################################################################
+# SELF CHAINS (DONE 9/11/06 angie)
+    # requested by user
+    ssh kk
+    mkdir /cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
+    cd /cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
+    cat << '_EOF_' > DEF
+# chicken vs chicken
+
+BLASTZ=/cluster/bin/penn/i386/blastz
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: chicken galGal3
+SEQ1_DIR=/scratch/hg/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: chicken galGal3
+SEQ2_DIR=/scratch/hg/galGal3/nib
+SEQ2_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -chainMinScore=10000 -chainLinearGap=medium \
+      -blastzOutRoot=/cluster/bluearc/galGal3Self \
+      -bigClusterHub=kk -workhorse=kkr7u00 DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.galGal3.2006-09-08 /cluster/data/galGal3/bed/blastz.galGal3
+
+
+#########################################################################
 # STS?
 #########################################################################
 #########################################################################
-
-
