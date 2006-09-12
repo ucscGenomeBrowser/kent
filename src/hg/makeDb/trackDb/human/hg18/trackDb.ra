@@ -884,9 +884,9 @@ searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
 
-track ha_elements
+track hars
 shortLabel Human Accelerated
-longLabel Human Accelerated Elements
+longLabel Human Accelerated Regions
 group compGeno
 priority 104.7055
 visibility hide
@@ -894,9 +894,9 @@ exonArrows off
 color 0,0,150
 type bed 6 .
 
-searchTable ha_elements
+searchTable hars
 searchMethod exact
 searchType bed
 searchPriority 10
-termRegex ha\.[0-9]+
+termRegex har[0-9]+
 

@@ -10587,14 +10587,14 @@ gzip illumina.bed
 
     # << emacs
 ##########################################################################
-#  har elements 1 to 202  Sol 09/10/2006
+#  hars 1 to 202  Sol 09/10/2006
 
     set bedDir = /gbdb/hg18/haseq/bed
-    mkdir -p $bedDir/ha_elements
+    mkdir -p $bedDir/hars
     pushd /projects/hg/wet/Sol/hars1to49
-    cp -p har_element_1to202.hg18.bed  $bedDir/ha_elements/ha_1to202.bed
-    hgLoadBed hg18 ha_elements         $bedDir/ha_elements/ha_1to202.bed
-    rm -f                              $bedDir/ha_elements/ha_1to202.bed
+    cp -p hars_1to202.hg18.bed  $bedDir/hars/hars_1to202.bed
+    hgLoadBed hg18 hars         $bedDir/hars/hars_1to202.bed
+    rm -f                       $bedDir/hars/hars_1to202.bed
     popd
 
 # BUILD HPRD DATA FOR KNOWN GENE DETAILS PAGE LINKS (DONE 9/11/06)
