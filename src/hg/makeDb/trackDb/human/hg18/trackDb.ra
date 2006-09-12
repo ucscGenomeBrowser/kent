@@ -900,3 +900,10 @@ searchType bed
 searchPriority 10
 termRegex har[0-9]+
 
+searchName oreg
+searchTable oreganno
+searchMethod exact
+query select chrom, chromStart, chromEnd, id from %s where id = '%s'
+padding 500
+searchPriority 55
+
