@@ -1264,3 +1264,52 @@ grep -v protein_coding ensAll.gtf |grep -v pseudo > ensRna.gtf
     # 2006-08-11 markd - N-SCAN track has UTR only predictions, reload discarding
     # these
     ldHgGene -bin -gtf -requireCDS -genePredExt rheMac2 nscanGene chr_gtf/chr*.gtf.gz
+# CPGISLANDS (DONE - 2006-09-12 - Robert)
+    ssh hgwdev
+    mkdir -p /cluster/data/rheMac2/bed/cpgIsland
+    cd /cluster/data/rheMac2/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #	gcc readseq.c cpg_lh.c -o cpglh.exe
+    mv cpglh.exe /cluster/data/rheMac2/bed/cpgIsland/
+    
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    ssh kkstore02
+    cd /cluster/data/rheMac2/bed/cpgIsland
+    foreach f (../../*/chr*.fa.masked)
+      set fout=$f:t:r:r.cpg
+      echo running cpglh on $f to $fout
+      ./cpglh.exe $f > $fout
+    end
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+/* Input columns: */
+/* chrom, start, end, len, CpG: cpgNum, perGc, cpg:gpc, observed:expected */
+/* chr1\t 41776\t 42129\t 259\t CpG: 34\t 65.8\t 0.92\t 0.94 */
+/* Output columns: */
+/* chrom, start, end, name, length, cpgNum, gcNum, perCpg, perGc, obsExp */
+/* chr1\t41775\t42129\tCpG: 34\t354\t34\t233\t19.2\t65.8\to0.94 */
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/rheMac2/bed/cpgIsland
+    hgLoadBed rheMac2 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+#Loaded 24226 elements of size 10
+#Sorted
+#Saving bed.tab
+#Loading rheMac2
