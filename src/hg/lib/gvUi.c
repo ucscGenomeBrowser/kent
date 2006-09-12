@@ -90,10 +90,10 @@ unsigned gvAccuracyDbValue[] = {
 int gvAccuracySize = ArraySize(gvAccuracyLabel);
 
 char *gvFilterDALabel[] = {
-    "known to be disease-associated",
+    "phenotype-associated",
     "likely to be phenotype-associated",
-    "not disease-associated",
-    "remaining mutations",
+    "not phenotype-associated",
+    "phenotype association unknown",
 };
 
 char *gvFilterDAString[] = {
@@ -104,9 +104,9 @@ char *gvFilterDAString[] = {
 };
 
 char *gvFilterDADbValue[] = {
-    "known to be disease-associated",
+    "phenotype-associated",
     "likely to be phenotype-associated",
-    "not disease-associated",
+    "not phenotype-associated",
     "NULL",
 };
 

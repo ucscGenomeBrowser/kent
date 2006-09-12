@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.307 2006/09/12 00:02:03 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.308 2006/09/12 18:27:07 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -591,7 +591,7 @@ for (i = 0; i < gvLocationSize; i++)
     printf (" %s<BR />", gvLocationLabel[i]);
     }
 
-printf("<BR /><B>Exclude disease association</B><BR />");
+printf("<BR /><B>Exclude phenotype association</B><BR />");
 for (i = 0; i < gvFilterDASize; i++)
     {
     cartMakeCheckBox(cart, gvFilterDAString[i], FALSE);
@@ -616,7 +616,7 @@ for (i = 0; i < gvSrcSize; i++)
 
 printf("<BR />");
 cartMakeRadioButton(cart, "gvPos.filter.colorby", "disease", "disease");
-printf("<B>Color mutations by disease-association</B><BR />");
+printf("<B>Color mutations by phenotype-association</B><BR />");
 for (i = 0; i < gvColorDASize; i++)
     {
     char *defaultVal = cartUsualString(cart, gvColorDAStrings[i], gvColorDADefault[i]);
