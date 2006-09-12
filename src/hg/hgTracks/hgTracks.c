@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1191 2006/09/08 22:17:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1192 2006/09/12 00:17:54 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7953,7 +7953,7 @@ return ((trackDbSetting(track->tdb, "subTrack") != NULL) ||
 	 !sameString(track->mapName, track->tdb->tableName)));
 }
 
-static boolean isWithCenterLabels(struct track *track)
+boolean isWithCenterLabels(struct track *track)
 /* Special cases: inhibit center labels of subtracks in dense mode, and 
  * of composite track in non-dense mode.
  * BUT if track->tdb has a centerLabelDense setting, let subtracks go with 
@@ -12180,7 +12180,6 @@ registerTrackHandler("affyHumanExon", affyAllExonMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
 registerTrackHandler("gnfAtlas2", affyRatioMethods);
-registerTrackHandler("affyZonWildType", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );

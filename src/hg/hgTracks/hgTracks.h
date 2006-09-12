@@ -386,6 +386,9 @@ void mapStatusMessage(char *format, ...);
 /* Write out stuff that will cause a status message to
  * appear when the mouse is over this box. */
 
+double scaleForWindow(double width, int seqStart, int seqEnd);
+/* Return the scale for the window. */
+
 double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
@@ -461,6 +464,10 @@ void tgDrawNothing(struct track *tg);
 void tgFreeNothing(struct track *tg);
 int tgItemNoStart(struct track *tg, void *item);
 int tgItemNoEnd(struct track *tg, void *item);
+
+void itemPixelPos(struct track *tg, void *item, int xOff, double scale, 
+		  int *retS, int *retE, int *retX1, int *retX2);
+/* Figure out pixel position of item. */
 
 int tgFixedItemHeight(struct track *tg, void *item);
 /* Return item height for fixed height track. */
@@ -871,6 +878,13 @@ void bedMethods(struct track *tg);
 
 bool isSubtrackVisible(struct track *tg);
 /* Should this subtrack be displayed? */
+
+boolean isWithCenterLabels(struct track *track);
+/* Special cases: inhibit center labels of subtracks in dense mode, and 
+ * of composite track in non-dense mode.
+ * BUT if track->tdb has a centerLabelDense setting, let subtracks go with 
+ * the default and inhibit composite track center labels in all modes.
+ * Otherwise use the global boolean withCenterLabels. */
 
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */
