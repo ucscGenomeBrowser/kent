@@ -10667,4 +10667,9 @@ gzip illumina.bed
 
 # Do the same for hg17.  See hg17.txt for details.
 
-
+##########################################################################
+# ORegAnno: oreganno, hgFixed.oregannoAttr, hgFixed.oregannoLink
+# Belinda Giardine Sept 2006
+# This has regulatory annotations from ORegAnno.
+# Parse flat file received from Obi Griffith, into 3 tables, load.
+# Has other species but only Human has enough entries for now.
