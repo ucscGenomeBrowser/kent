@@ -1993,17 +1993,17 @@ dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio
 dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 
-# FAN says: the following hg17 tables are an exception
-dependency $pbDb,!hg17.pbAnomLimit $pbDb.kgProtMap
-dependency $pbDb,!hg17.pbResAvgStd $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepCCntDist $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepExonCntDist $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepHydroDist $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepIPCntDist $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepMolWtDist $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepPi $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepPiDist $pbDb.kgProtMap
-dependency $pbDb,!hg17.pepResDist $pbDb.kgProtMap
+# FAN says: the following hg17 and mm6 tables are an exception
+dependency $pbDb,!hg17,!mm6.pbAnomLimit $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pbResAvgStd $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepCCntDist $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepExonCntDist $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepHydroDist $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepIPCntDist $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepMolWtDist $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepPi $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepPiDist $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pepResDist $pbDb.kgProtMap
 dependency $pbDb.pepMwAaDist $pbDb.kgProtMap
 dependency $pbDb.pbAaDistA $pbDb.kgProtMap
 dependency $pbDb.pbAaDistC $pbDb.kgProtMap
