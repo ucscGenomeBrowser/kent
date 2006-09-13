@@ -79,7 +79,7 @@ dataLinkCol 2
 
 name BTKbase
 label BTKbase
-url http://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=brief;%s
+url http://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=full;mut=%s
 acc yes
 
 name EntrezGene
