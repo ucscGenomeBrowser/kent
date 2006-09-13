@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1102 2006/09/12 23:29:18 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1103 2006/09/13 23:06:57 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11428,11 +11428,11 @@ if (sameString(strand,"-"))
 
 printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
 printf("\n<PRE><B>dbSnp (Observed alleles and flanking sequences):</B><BR>");
-writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 50);
-writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 50);
-writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 50);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
+writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
 printf("</PRE>\n<PRE><B>Genomic Sequence:</B><BR>");
-writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 50);
+writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
 printf("</PRE>\n");
 
 freeDyString(&seqDbSnp5);
@@ -12076,6 +12076,21 @@ snp.chromEnd=snp125->chromEnd;
 snp.name=cloneString(snp125->name);
 snp.score=snp125->score;
 snp.observed=cloneString(snp125->observed);
+if (sameString(snp125->strand, "+"))
+    {
+    snp.strand[0] = '+';
+    snp.strand[1] = '\0';
+    }
+else if (sameString(snp125->strand, "-"))
+    {
+    snp.strand[0] = '-';
+    snp.strand[1] = '\0';
+    }
+else
+    {
+    snp.strand[0] = '?';
+    snp.strand[1] = '\0';
+    }
 return snp;
 }
 
