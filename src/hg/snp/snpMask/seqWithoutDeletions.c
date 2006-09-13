@@ -7,7 +7,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: seqWithoutDeletions.c,v 1.2 2006/09/06 22:22:34 heather Exp $";
+static char const rcsid[] = "$Id: seqWithoutDeletions.c,v 1.3 2006/09/13 21:36:12 heather Exp $";
 
 static char *database = NULL;
 static char *chromName = NULL;
@@ -104,7 +104,9 @@ skinnySeq = getSkinnySeq(argv[3], chromName);
 stripChar(skinnySeq->dna, '-');
 safef(fileName, ArraySize(fileName), "%s.skinny", chromName);
 f = mustOpen(fileName, "w");
-writeSeqWithBreaks(f, skinnySeq->dna, skinnySeq->size, 50);
+// faWriteNext(f, chromName, skinnySeq->dna, strlen(skinnySeq->dna));
+fprintf(f, ">%s\n", chromName);
+writeSeqWithBreaks(f, skinnySeq->dna, strlen(skinnySeq->dna), 50);
 carefulClose(&f);
 
 return 0;
