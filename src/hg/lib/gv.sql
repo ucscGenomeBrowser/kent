@@ -36,8 +36,7 @@ CREATE TABLE gvPos (
     strand char(1) not null,	# + or -
     label varchar(64) not null,	# short official name for this mutation
               #Indices
-    INDEX(bin),
-    UNIQUE KEY (chrom(12), chromStart, chromEnd, name, label)
+    INDEX(bin)
 );
 
 #sources for mutation track

@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1192 2006/09/12 00:17:54 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1193 2006/09/13 17:15:29 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10205,7 +10205,7 @@ struct hgMut *el = item;
     else if (sameString(el->baseChangeType, "insertion"))
         return vgFindColorIx(vg, 0, 153, 0); /* dark green */
     else if (sameString(el->baseChangeType, "complex"))
-        return vgFindColorIx(vg, 100, 50, 0); /* brown */ //return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+        return vgFindColorIx(vg, 100, 50, 0); /* brown */ 
     else if (sameString(el->baseChangeType, "duplication"))
         return vgFindColorIx(vg, 255, 153, 0);
     else
@@ -10483,7 +10483,6 @@ for (el = tg->items; el != NULL; el = el->next)
         dyStringAppend(name, el->name);
         }
     el->id = el->name; /* reassign ID */
-    //freeMem(el->name); /* free old name */
     el->name = dyStringCannibalize(&name);
     }
 hFreeConn(&conn);
@@ -10644,22 +10643,6 @@ if (vis != tvDense)
     }
 }
 
-//boolean oregannoFilterType (struct oreganno *el) 
-/* filter oregannos on oregannoType field */
-//{
-//int cnt = 0;
-//for (cnt = 0; cnt < oregannoTypeSize; cnt++)
-    //{
-    //if (cartVarExists(cart, oregannoTypeString[cnt]) &&
-        //cartString(cart, oregannoTypeString[cnt]) != NULL &&
-        //differentString(cartString(cart, oregannoTypeString[cnt]), "0") &&
-        //sameString(oregannoTypeDbValue[cnt], el->oregannoType))
-        //{
-        //return FALSE;
-        //}
-    //}
-//return TRUE;
-//}
 boolean oregannoFilterType (struct oreganno *el)
 /* filter of the type of region from the oregannoAttr table */
 {
