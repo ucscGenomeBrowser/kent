@@ -1442,15 +1442,6 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-track landmark
-shortLabel Landmarks
-longLabel Compilation of Landmarks from ORegAnno and Locus Experts
-group regulation
-priority 97
-visibility hide
-color 30,130,210
-type bed 4 +
-
 track chainRheMac2
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
