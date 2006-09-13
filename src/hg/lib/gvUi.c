@@ -232,10 +232,10 @@ int gvColorTypeSize = ArraySize(gvColorTypeStrings);
 
 /* color by disease association */
 char *gvColorDALabels[] = {
-    "known to be disease-associated",
+    "phenotype-associated",
     "likely to be phenotype-associated",
-    "not disease-associated",
-    "remaining mutations",
+    "not phenotype-associated",
+    "phenotype association unknown",
 };
 
 char *gvColorDAStrings[] = {
@@ -253,9 +253,9 @@ char *gvColorDADefault[] = {
 };
 
 char *gvColorDAAttrVal[] = {
-    "known to be disease-associated",
+    "phenotype-associated",
     "likely to be phenotype-associated",
-    "not disease-associated",
+    "not phenotype-associated",
     "NULL",
 };
 
