@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.52 2006/08/15 22:05:50 baertsch Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.53 2006/09/13 21:22:57 hiram Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -539,8 +539,11 @@ sd = netMustConnect(npu.host, atoi(npu.port));
 /* Ask remote server for a file. */
 dyStringPrintf(dy, "%s %s %s\r\n", method, npu.file, protocol);
 dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
-dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
-dyStringPrintf(dy, "Accept: */*\r\n");
+/* do not need the 80 since it is the default */
+if (sameString("80",npu.port))
+    dyStringPrintf(dy, "Host: %s\r\n", npu.host);
+else
+    dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
 if (!sameString(npu.user,""))
     {
     char up[256];
