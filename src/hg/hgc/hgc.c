@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1099 2006/09/11 22:53:44 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1099.2.1 2006/09/13 00:27:15 galt Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11421,7 +11421,7 @@ row     = sqlNextRow(sr);
 nibFile = cloneString(row[2]);
 start   = snp.chromStart - seqDbSnp5len;
 end     = snp.chromEnd   + seqDbSnp3len;
-seqNib  = nibLoadPartMasked(0, nibFile, start, end-start);
+seqNib  = hFetchSeqMixed(nibFile, snp.chrom, start, end);
 strand  = cloneString(snp.strand);
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
@@ -12123,7 +12123,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	printf("<BR>");
 	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these addtional locations:</B><BR>");
+	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
