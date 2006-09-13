@@ -1,6 +1,6 @@
 #!/usr/bin/env perl 
 
-# $Id: updateBed.pl,v 1.4 2006/08/30 00:04:06 hiram Exp $
+# $Id: updateBed.pl,v 1.5 2006/09/13 23:16:55 hiram Exp $
 
 ##Author: Yontao Lu
 ##Date  06/29/03
@@ -262,7 +262,8 @@ while(my $line = <MGDM>)
     chomp($line);
     $line = uc($line);
     my (@eles) = split(/\t/, $line);
-    next if($eles[3] < 0);	# there are over 32,000 items < 0.0
+    #	What do the minus cM numbers mean ?
+#    next if($eles[3] < 0);	# there are over 32,000 items < 0.0
     next if ($eles[4] =~ m/UN/);	#	we don't do chrUN
     next if ($eles[4] =~ m/XY/);	#	we don't do chrXY
 
@@ -302,7 +303,8 @@ while(my $line = <MGDS>)
     chomp($line);
     $line = uc($line);
     my (@eles) = split(/\t/, $line);
-    next if($eles[9] < 0);
+    #	What do the minus cM numbers mean ?
+#    next if($eles[9] < 0);
     next if ($eles[8] =~ m/UN/);	#	we don't do chrUN
     next if ($eles[8] =~ m/XY/);	#	we don't do chrXY
     #  check if we are stomping on existing mgiId entries
@@ -313,28 +315,28 @@ while(my $line = <MGDS>)
 	    }
 	next;
 	}
-    } else {
-	#  check if we are stomping on existing mgiName entries
-	if (exists($mgiName{$eles[3]}) ) {
-	    if ($mgiName{$eles[3]} ne $eles[0]) {
-		if ($verbose) {
-		printf STDERR "ERROR: duplicate mgiName key $eles[0] (values $mgiName{$eles[3]} $eles[0]) in $mgdSeqF at line $.\n";
-		}
-	    next
+    }
+
+    #  check if we are stomping on existing mgiName entries
+    if (exists($mgiName{$eles[3]}) ) {
+	if ($mgiName{$eles[3]} ne $eles[0]) {
+	    if ($verbose) {
+	    printf STDERR "ERROR: duplicate mgiName key $eles[0] (values $mgiName{$eles[3]} $eles[0]) in $mgdSeqF at line $.\n";
 	    }
-	} else {
-	    $eles[8] =~ s/MT/M/;	#	chr name change MT to M
-	    $eles[9] =~ s/\s//g;	# remove white space from cm
-	    if ($eles[9] =~ m/^0.00$/) { $eles[9] = 0.0; }
-	    $mgiId{$eles[0]} = $eles[3];
-	    $mgiName{$eles[3]} = $eles[0];
-	    $chr{$eles[0]} = $eles[8];
-	    $cm{$eles[0]} = $eles[9];
-	    $leftPrimer{$eles[0]} = $eles[5];
-	    $rightPrimer{$eles[0]} = $eles[6];
-	    $productSize{$eles[0]} = $eles[7]; 
+	next
 	}
     }
+
+    $eles[8] =~ s/MT/M/;	#	chr name change MT to M
+    $eles[9] =~ s/\s//g;	# remove white space from cm
+    if ($eles[9] =~ m/^0.00$/) { $eles[9] = 0.0; }
+    $mgiId{$eles[0]} = $eles[3];
+    $mgiName{$eles[3]} = $eles[0];
+    $chr{$eles[0]} = $eles[8];
+    $cm{$eles[0]} = $eles[9];
+    $leftPrimer{$eles[0]} = $eles[5];
+    $rightPrimer{$eles[0]} = $eles[6];
+    $productSize{$eles[0]} = $eles[7]; 
 }
 close(MGDS);
 
@@ -584,19 +586,21 @@ if ($verbose > 1) {
     $sId =~ s/MGI\://;
     if (!defined($sname)) { $sname = ""; }
     my @distanceList = split(',\s*|-',$distance);
+    my $kbMultiplier = 1;
+    if (($distance =~ m/BP/i) && ($distance =~ m/KB/i)) {
+	printf STDERR "ERROR: illegal use of BP and KB in distance spec at line $. in $bedF\n";
+    }
+    if ($distance =~ m/KB/i) { $kbMultiplier = 1000; }
     my $distanceSum = 0;
     for (my $j = 0; $j < scalar(@distanceList); ++$j)
 	{
 	$distanceList[$j] =~ s/\~//g;
-	$distanceList[$j] =~ s/BP//i;
-	if ($distanceList[$j] =~ m/KB/) {
-	    $distanceList[$j] =~ s/\s*KB\s*//i;
-	    $distanceList[$j] *= 1000;
-	}
+	$distanceList[$j] =~ s/BP|\s*KB\s*//i;
+	$distanceList[$j] *= $kbMultiplier;
 	$distanceSum += $distanceList[$j];
 	}
     if (scalar(@distanceList) > 0) {
-	$distance = $distanceSum / scalar(@distanceList);
+	$distance = int($distanceSum / scalar(@distanceList));
     } else {
 	$distance = $distanceSum;
     }
@@ -667,7 +671,6 @@ while(my $key = shift(@allkeys))
     $aliasCount = 0;
     $alias = "";
     $organism = "MUS MUSCULUS";
-
     ## find as many names info as possible
     if(defined($uniName{$key}))
     {
@@ -751,15 +754,17 @@ while(my $key = shift(@allkeys))
     if (defined($sId) && (length($sId) > 0)) { $sId =~ s/MGI\://; }
 
     my @distanceList = split(',\s*|-',$distance);
+    my $kbMultiplier = 1;
+    if (($distance =~ m/BP/i) && ($distance =~ m/KB/i)) {
+	printf STDERR "ERROR: illegal use of BP and KB in distance spec at line $. in $bedF\n";
+    }
+    if ($distance =~ m/KB/i) { $kbMultiplier = 1000; }
     my $distanceSum = 0;
     for (my $j = 0; $j < scalar(@distanceList); ++$j)
 	{
 	$distanceList[$j] =~ s/\~//g;
-	$distanceList[$j] =~ s/BP//i;
-	if ($distanceList[$j] =~ m/KB/) {
-	    $distanceList[$j] =~ s/\s*KB\s*//i;
-	    $distanceList[$j] *= 1000;
-	}
+	$distanceList[$j] =~ s/BP|\s*KB\s*//i;
+	$distanceList[$j] *= $kbMultiplier;
 	$distanceSum += $distanceList[$j];
 	}
     if (scalar(@distanceList) > 0) {
