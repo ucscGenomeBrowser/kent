@@ -203,7 +203,6 @@ struct customTrack *trackList = chromGraphParser(cpp,
 	nullIfAllSpace(cartUsualString(cart, hggDataSetName, NULL)),
 	nullIfAllSpace(cartUsualString(cart, hggDataSetDescription, NULL)),
 	settings, TRUE);
-cartRemove(cart, hggUploadFile);
 updateCustomTracks(trackList);
 
 hPrintf("<CENTER>");
@@ -216,13 +215,14 @@ void submitUpload2(struct sqlConnection *conn)
 {
 char *rawText = cartUsualString(cart, hggUploadFile, NULL);
 int rawTextSize = strlen(rawText);
-// struct errCatch *errCatch = errCatchNew();
+struct errCatch *errCatch = errCatchNew();
 cartWebStart(cart, "Data Upload2 Complete (%d bytes)", rawTextSize);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
-// if (errCatchStart(errCatch))
+if (errCatchStart(errCatch))
      trySubmitUpload2(conn, rawText);
-// errCatchFinish(&errCatch);
+errCatchFinish(&errCatch);
+cartRemove(cart, hggUploadFile);
 hPrintf("</FORM>");
 cartWebEnd();
 }

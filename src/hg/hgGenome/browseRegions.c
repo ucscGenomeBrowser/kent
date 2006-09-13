@@ -12,16 +12,9 @@
 static void quotedBrowserUrl(FILE *f, struct bed3 *bed, struct genoGraph *gg)
 /* Print URL that will open browser at bed position with genoGraph track on */
 {
-char nameBuf[256];
-if (startsWith(hggUserTag, gg->name))
-    safef(nameBuf, sizeof(nameBuf), "ct_%s", gg->name + strlen(hggUserTag));
-else if (startsWith(hggDbTag, gg->name))
-    safef(nameBuf, sizeof(nameBuf), "%s", gg->name + strlen(hggDbTag));
-else
-    internalErr();
 fprintf(f, "\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full\"",
         database, bed->chrom, bed->chromStart+1, bed->chromEnd,
-	nameBuf);
+	gg->name);
 }
 
 void browseRegions(struct sqlConnection *conn)
