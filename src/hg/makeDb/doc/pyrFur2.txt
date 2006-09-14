@@ -367,3 +367,23 @@ hgLoadBed -sqlTable=easyGene.sql pyrFur2 easyGene easyGene.bed
     mkdir kegg
     cd kegg
     ~/kent/src/hg/protein/KGpath.sh pyrFur2  pyrFur2  051019
+
+### RNA LP FOLD (Daryl Thomas and Matthias Hoechsmann; September 7, 2006)
+
+    set workDir = /cluster/data/pyrFur2/bed/rnaLpFold
+    mkdir -p $workDir
+    cd $workDir
+
+    set file = pyrFur2_dna.bed
+    sed 's/chr1/chr/' ~mhoechsm/transfer/${file} >! ${file}
+#    cp ~mhoechsm/transfer/${file} ${file}
+    awk '{if ($3-$2>max) max=$3-$2} END {print max}' ${file}
+
+    set db = pyrFur2
+    hgsql ${db} -e "drop table rnaLpFold"
+    hgsql ${db} < ${HOME}/kent/src/hg/lib/rnaLpFold.sql
+    hgLoadBed -noSort -oldTable -strict ${db} rnaLpFold ${file}
+    rm -f bed.tab
+
+    ###
+
