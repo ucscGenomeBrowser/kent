@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1105 2006/09/14 13:46:54 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1106 2006/09/14 16:14:51 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11444,7 +11444,7 @@ if (seqNib != NULL && seqDbSnp != NULL)
     int matchScore = 100;
     int misMatchScore = 100;
     int gapOpenPenalty = 400;  
-    int gapExtendPenalty = 20; /* was 50, reducing for new snp version. */
+    int gapExtendPenalty = 50; 
     struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
     struct axt *axt = axtAffine(seqNib, seqDbSnp, ss), *axtBlock=axt;
 
