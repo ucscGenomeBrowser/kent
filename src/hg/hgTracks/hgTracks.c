@@ -106,7 +106,7 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1193 2006/09/13 17:15:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1194 2006/09/14 20:45:48 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12026,6 +12026,7 @@ registerTrackHandler("delMccarroll", delMccarrollMethods);
 registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
+registerTrackHandler("rnaLpFold", rnaLpFoldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);

@@ -661,4 +661,253 @@ tg->colorShades = shadesOfGray;
 tg->drawItemAt = tigrOperonDrawAt;
 }
 
+
+
+/* ------ BEGIN RNA LP FOLD ------ */
+
+
+void bedLoadRnaLpFoldItemByQuery(struct track *tg, char *table, 
+			char *query, ItemLoader loader)
+/* RNALPFOLD specific tg->item loader, as we need to load items beyond
+   the current window to load the chromEnd positions for RNALPFOLD values. */
+{
+struct sqlConnection *conn = hAllocConn();
+int rowOffset = 0;
+int chromEndOffset = min(winEnd-winStart, 250000); /* extended chromEnd range */
+struct sqlResult *sr = NULL;
+char **row = NULL;
+struct slList *itemList = NULL, *item = NULL;
+
+if(query == NULL)
+    sr = hRangeQuery(conn, table, chromName, winStart, winEnd+chromEndOffset, NULL, &rowOffset);
+else
+    sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    item = loader(row + rowOffset);
+    slAddHead(&itemList, item);
+    }
+slSort(&itemList, bedCmp);
+sqlFreeResult(&sr);
+tg->items = itemList;
+hFreeConn(&conn);
+}
+
+void bedLoadRnaLpFoldItem(struct track *tg, char *table, ItemLoader loader)
+/* RNALPFOLD specific tg->item loader. */
+{
+bedLoadRnaLpFoldItemByQuery(tg, table, NULL, loader);
+}
+
+void rnaLpFoldLoadItems(struct track *tg)
+/* loadItems loads up items for the chromosome range indicated.   */
+{
+int count = 0;
+
+bedLoadRnaLpFoldItem(tg, tg->mapName, (ItemLoader)rnaLpFoldLoad);
+count = slCount((struct sList *)(tg->items));
+tg->canPack = FALSE;
+}
+
+int rnaLpFoldTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Return total height. Called before and after drawItems. 
+ * Must set height, lineHeight, heightPer */ 
+{
+tg->lineHeight = tl.fontHeight + 1;
+tg->heightPer  = tg->lineHeight - 1;
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+    tg->height = tg->lineHeight;
+else
+    tg->height = max((int)(insideWidth*(70.0/2.0)/(winEnd-winStart)),tg->lineHeight);
+return tg->height;
+}
+
+void rnaLpFoldDrawDiamond(struct vGfx *vg, struct track *tg, int width, 
+		   int xOff, int yOff, int a, int b, int c, int d, 
+		   Color shade, Color outlineColor, double scale, 
+		   boolean drawMap, char *name, enum trackVisibility vis,
+		   boolean trim)
+/* Draw and map a single pairwise RNALPFOLD box */
+{
+int yMax = rnaLpFoldTotalHeight(tg, vis)+yOff;
+/* convert from genomic coordinates to vg coordinates */
+a*=10;
+b*=10;
+c*=10;
+d*=10;
+int xl = round((double)(scale*((c+a)/2-winStart*10)))/10 + xOff;
+int xt = round((double)(scale*((d+a)/2-winStart*10)))/10 + xOff;
+int xr = round((double)(scale*((d+b)/2-winStart*10)))/10 + xOff;
+int xb = round((double)(scale*((c+b)/2-winStart*10)))/10 + xOff;
+int yl = round((double)(scale*(c-a)/2))/10 + yOff;
+int yt = round((double)(scale*(d-a)/2))/10 + yOff;
+int yr = round((double)(scale*(d-b)/2))/10 + yOff;
+int yb = round((double)(scale*(c-b)/2))/10 + yOff;
+boolean rnaLpFoldInv;
+struct dyString *dsRnaLpFoldInv = newDyString(32);
+
+dyStringPrintf(dsRnaLpFoldInv, "%s_inv", tg->mapName);
+rnaLpFoldInv = cartUsualBoolean(cart, dsRnaLpFoldInv->string, rnaLpFoldInvDefault);
+if (!rnaLpFoldInv)
+    {
+    yl = yMax - yl + yOff;
+    yt = yMax - yt + yOff;
+    yr = yMax - yr + yOff;
+    yb = yMax - yb + yOff;
+    }
+/* correct bottom coordinate if necessary */
+if (yb<=0)
+    yb=1;
+if (yt>yMax && trim)
+    yt=yMax;
+drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
+return; /* mapDiamondUI is working well, but there is a bug with 
+	   AREA=POLY on the Mac browsers, so this will be 
+	   postponed for now by not using this code */
+if (drawMap && xt-xl>5 && xb-xl>5)
+    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
+}
+
+void rnaLpFoldAddToDenseValueHash(struct hash *rnaLpFoldHash, unsigned a, char rnaLpFoldVal)
+/* Add new values to rnaFoldLp hash or update existing values.
+   Values are averaged along the diagonals. */
+{
+ldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal);
+}
+
+void rnaLpFoldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+			  double scale, Color outlineColor, struct hash *ldHash)
+{
+ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
+}
+
+
+/* rnaLpFoldDrawItems -- lots of disk and cpu optimizations here.  
+ * Based on rnaLpFoldDrawItems */
+void rnaLpFoldDrawItems(struct track *tg, int seqStart, int seqEnd,
+		 struct vGfx *vg, int xOff, int yOff, int width,
+		 MgFont *font, Color color, enum trackVisibility vis)
+/* Draw item list, one per track. */
+{
+struct rnaLpFold *dPtr = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
+double       scale     = scaleForPixels(insideWidth);
+int          itemCount = slCount((struct slList *)tg->items);
+Color        shade     = 0, outlineColor = getOutlineColor(tg, itemCount), oc=0;
+int          a=0, b, c, d=0, i; /* chromosome coordinates and counter */
+boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
+struct hash *rnaLpFoldHash    = newHash(20);
+Color        yellow    = vgFindRgb(vg, &undefinedYellowColor);
+char        *rnaLpFoldVal     = NULL;
+boolean      rnaLpFoldTrm     = FALSE;
+struct dyString *dsRnaLpFoldTrm = newDyString(32);
+
+outlineColor=oc=0;
+dyStringPrintf(dsRnaLpFoldTrm, "%s_trm", tg->mapName);
+/* rnaLpFoldTrm = cartUsualBoolean(cart, dsRnaLpFoldTrm->string, rnaLpFoldTrmDefault); */
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+    vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
+mapTrackBackground(tg, xOff, yOff);
+if (tg->items==NULL)
+    return;
+
+/* initialize arrays to convert from ascii encoding to color values */
+initColorLookup(tg, vg, FALSE);
+
+/* Loop through all items to get values and initial coordinates (a and b) */
+for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
+    {
+    a = dPtr->chromStart;
+    b = dPtr->next->chromStart;
+    i = 0;
+    rnaLpFoldVal = dPtr->colorIndex;
+    /* Loop through all items again to get end coordinates (c and d): used to be 'drawNecklace' */
+    for ( sPtr=dPtr; i<dPtr->score && sPtr!=NULL && sPtr->next!=NULL; sPtr=sPtr->next )
+	{
+	c = sPtr->chromStart;
+	d = sPtr->next->chromStart;
+	shade = colorLookup[(int)rnaLpFoldVal[i]];
+	if (a%5==0 && d%5==0)
+	    oc=outlineColor;
+	else
+	    oc=0;
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, oc, scale, drawMap, "", vis, rnaLpFoldTrm);
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	    {
+	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[i]);
+	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, d, rnaLpFoldVal[i]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the RNALPFOLD track yet.", hStringFromTv(vis));
+	i++;
+	}
+    /* reached end of chromosome, so sPtr->next is null; draw last diamond in list */
+    if (sPtr->next==NULL)
+	{
+	a = dPtr->chromStart;
+	b = dPtr->chromEnd;
+	c = sPtr->chromStart;
+	d = sPtr->chromEnd;
+	shade = colorLookup[(int)rnaLpFoldVal[i]];
+	if (a%5==0 && d%5==0)
+	    oc=outlineColor;
+	else
+	    oc=0;
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, oc, scale, drawMap, "", vis, rnaLpFoldTrm);
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	    {
+	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[i]);
+	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, d, rnaLpFoldVal[i]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the RNALPFOLD track yet.", hStringFromTv(vis));
+	}
+    }
+/* starting at last snp on chromosome, so dPtr->next is null; draw this diamond */
+if (dPtr->next==NULL)
+    {
+    a = dPtr->chromStart;
+    b = dPtr->chromEnd;
+	rnaLpFoldVal = dPtr->colorIndex;
+	shade = colorLookup[(int)rnaLpFoldVal[0]];
+	if (a%5==0 && d%5==0)
+	    oc=outlineColor;
+	else
+	    oc=0;
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, oc, scale, drawMap, "", vis, rnaLpFoldTrm);
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	    {
+	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[0]);
+	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, b, rnaLpFoldVal[0]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the RNALPFOLD track yet.", hStringFromTv(vis));
+    }
+if (a%5==0 && d%5==0)
+    oc=outlineColor;
+else
+    oc=0;
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+    rnaLpFoldDrawDenseValueHash(vg, tg, xOff, yOff, scale, oc, rnaLpFoldHash);
+}
+
+void rnaLpFoldMethods(struct track *tg)
+/* setup special methods for the RNA LP FOLD track */
+{
+ldMethods(tg);
+tg->loadItems      = rnaLpFoldLoadItems;
+tg->totalHeight    = rnaLpFoldTotalHeight;
+tg->drawItems      = rnaLpFoldDrawItems;
+tg->freeItems      = ldFreeItems;
+tg->mapsSelf       = TRUE;
+tg->canPack        = FALSE;
+}
+
+/* ------ END RNA LP FOLD ------ */
+
+
 /**** End of Lowe lab additions ****/
+
