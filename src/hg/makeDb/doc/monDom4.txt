@@ -3055,4 +3055,34 @@ BASE=/cluster/data/monDom4/bed/blastzGalGal3.2006-05-25
 
     hgPepPred monDom4 tab ensPep ensGene.fa.tab
 
-###########################################################################
+##########################################################################
+# N-SCAN gene predictions (nscanGene, nscanPep) - (2006-09-13 markd)
+    cd /cluster/data/monDom4/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv -r -l 1 -np --accept=gtf http://ardor.wustl.edu/predictions/possum/monDom4/chr_gtf
+    wget -nv -r -l 1 -np --accept=fa http://ardor.wustl.edu/predictions/possum/monDom4/chr_ptx
+
+    # clean up downloaded directorys and compress files.
+    mv ardor.wustl.edu/predictions/opossum/monDom4/* .
+    rm -rf ardor.wustl.edu
+    gzip chr_*/*
+    chmod a-w chr_*/*.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt monDom4 nscanGene chr_gtf/chr*.gtf.gz
+
+    # load protein, add .a suffix to match transcript id
+    hgPepPred -suffix=.a monDom4 generic nscanPep chr_ptx/chr*.fa.gz
+    rm *.tab
+
+    # update trackDb; need a monDom4-specific page to describe informants
+    opossum/monDom4/nscanGene.html   (copy from rn4 and edit)
+    opossum/monDom4/trackDb.ra
+
+    # verify that the search spec matches the naming convention, sometimes
+    # transcripts end with .a othertimes .0
+    OK!
