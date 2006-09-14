@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.3 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.4 2006/09/14 21:08:24 braney Exp $";
 
 struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret)
 /* Create a dnaMotif out of a comma separated string. 
@@ -287,7 +287,7 @@ static double uncertainty(struct dnaMotif *motif, int pos)
  * to the H function in logo.pm */
 {
 return -( u1(motif->aProb[pos]) + u1(motif->cProb[pos])
-	+ u1(motif->gProb[pos]) +u1(motif->gProb[pos]) );
+	+ u1(motif->gProb[pos]) +u1(motif->tProb[pos]) );
 }
 
 double dnaMotifBitsOfInfo(struct dnaMotif *motif, int pos)
@@ -453,3 +453,70 @@ sysRet = system(dy->string);
 remove(psName);
 }
 
+void dnaMotifToLogoPsW(struct dnaMotif *motif, double widthPerBase, double width, double height, char *fileName)
+/* Write logo corresponding to motif to postScript file. */
+{
+FILE *f = mustOpen(fileName, "w");
+int i;
+int xStart = 0;
+int w, h;
+char *s = 
+#include "dnaMotif.pss"
+;
+
+dnaMotifDims(motif, widthPerBase, height, &w, &h);
+fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
+fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n\n", w, h);
+fprintf(f, "%s", s);
+
+fprintf(f, "%s", "% Start of code for this specific logo\n");
+
+for (i=0; i<motif->columnCount; ++i)
+    {
+    double infoScale = 0.9 ; 
+    xStart = i * width / motif->columnCount;
+    psOneColumn(motif, i, xStart, 0, widthPerBase, infoScale * height, f);
+    }
+fprintf(f, "showpage\n");
+carefulClose(&f);
+}
+
+void dnaMotifToLogoPGM(
+	struct dnaMotif *motif,	/* Motif to draw. */
+	double widthPerBase, 	/* Width of each base. */
+	double width, 		/* Max width. */
+	double height, 		/* Max height. */
+	char *gsExe, 		/* ghostscript executable, NULL for default */
+	char *tempDir,          /* temp dir , NULL for default */
+	char *fileName)		/* output png file name. */
+/* Write logo corresponding to motif to pgm file. */
+{
+char *psName = rTempName(tempDir, "dnaMotif", ".ps");
+struct dyString *dy = dyStringNew(0);
+int w, h;
+int sysRet;
+
+if (gsExe == NULL) gsExe = "gs";
+if (tempDir == NULL) tempDir = "/tmp";
+dnaMotifToLogoPsW(motif, widthPerBase, width, height, psName);
+dnaMotifDims(motif, widthPerBase, height, &w, &h);
+dyStringAppend(dy, gsExe);
+dyStringAppend(dy, " -sDEVICE=pgmraw -sOutputFile=");
+dyStringAppend(dy, fileName);
+dyStringAppend(dy, " -dBATCH -dNOPAUSE -q ");
+dyStringPrintf(dy, "-g%dx%d ", (int) ceil(width), h);
+dyStringAppend(dy, psName);
+sysRet = system(dy->string);
+if (sysRet != 0)
+    errAbort("System call returned %d for:\n  %s", sysRet, dy->string);
+
+/* Clean up. */
+dyStringFree(&dy);
+
+/* change permisssions so the webserver can access the file */
+dy = newDyString(0);
+dyStringPrintf(dy, "chmod 666 %s ", fileName);
+sysRet = system(dy->string);
+
+remove(psName);
+}
