@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1107 2006/09/14 18:43:12 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1108 2006/09/14 22:53:25 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11414,14 +11414,27 @@ if (seqDbSnp==NULL)
 seqDbSnp->size=strlen(seqDbSnp->dna);
 
 /* get nib sequence */
+/* get filename */
 safef(query, sizeof(query), "select * from chromInfo where chrom='%s'", snp.chrom);
 sr      = sqlGetResult(conn, query);
 row     = sqlNextRow(sr);
 nibFile = cloneString(row[2]);
-start   = snp.chromStart - seqDbSnp5len;
-end     = snp.chromEnd   + seqDbSnp3len;
-seqNib  = hFetchSeqMixed(nibFile, snp.chrom, start, end);
+
+/* get coords */
 strand  = cloneString(snp.strand);
+if (sameString(strand,"+") || sameString(strand,"?"))
+    {
+    start   = snp.chromStart - seqDbSnp5len;
+    end     = snp.chromEnd   + seqDbSnp3len;
+    }
+else 
+    {
+    start   = snp.chromStart - seqDbSnp3len;
+    end     = snp.chromEnd   + seqDbSnp5len;
+    }
+
+/* do the lookup */
+seqNib  = hFetchSeqMixed(nibFile, snp.chrom, start, end);
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
