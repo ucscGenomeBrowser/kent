@@ -6,6 +6,14 @@ priority 25
 visibility dense
 type wig 4 9
 
+track baseProbs
+shortLabel baseProbs
+longLabel baseProbs
+group map
+priority 25
+visibility pack
+type logo
+
 track correct
 shortLabel Correctness
 longLabel Correctness
@@ -86,24 +94,24 @@ type psl protein
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 
-track blatzMm8KG
-shortLabel Mouse mRNAs
-longLabel Mouse(mm8) Known Gene mRNAs Mapped by BLATZ
-group rna
-priority 54.5
-visibility pack
-type psl xeno
-spectrum on
+# track blatzMm8KG
+# shortLabel Mouse mRNAs
+# longLabel Mouse(mm8) Known Gene mRNAs Mapped by BLATZ
+# group rna
+# priority 54.5
+# visibility pack
+# type psl xeno
+# spectrum on
 # blastRef hg17.blastKGRef01
 
-track blatzHg18KG
-shortLabel Human mRNAs
-longLabel Human(hg18) Known Gene mRNAs Mapped by BLATZ
-group rna
-priority 54.5
-visibility pack
-type psl xeno
-spectrum on
+# track blatzHg18KG
+# shortLabel Human mRNAs
+# longLabel Human(hg18) Known Gene mRNAs Mapped by BLATZ
+# group rna
+# priority 54.5
+# visibility pack
+# type psl xeno
+# spectrum on
 # blastRef hg17.blastKGRef01
 
 track testMaf
