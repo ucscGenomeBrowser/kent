@@ -2,9 +2,13 @@
 <P>
 This track displays literature-curated regulatory regions,
 transcription factor binding sites, and regulatory polymorphisms from
+<a href="http://www.oreganno.org/oregano/Index.jsp" target="_blank">ORegAnno</a> (Open Regulatory Annotation).
+<!--
 <b><font color="666600">O</font><font color="CC0033">Reg</font><font color="BBBB55">Anno</font></b> (Open Regulatory Annotation).
+-->
+
 For more detailed information on the regulatory element follow the link to 
-ORegAnno above.
+ORegAnno from the details page.
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -14,30 +18,35 @@ regulatory regions, regulatory polymorphisms, and
 transcription factor binding sites.
 To exclude certain types of regions from the display, 
 check the appropriate boxes in the "Exclude region type" list at the top of 
-the description page. 
+the Track Settings page. 
 </P>
 
 <H2>Methods</H2>
 <P>
-An ORegAnno record describes an experimentally proven and published regulatory region (promoter, enhancer, etc), transcription factor binding site, or regulatory polymorphism.  Each annotation must have the following attributes:
+An ORegAnno record describes an experimentally proven and published regulatory region (promoter, enhancer, etc.), transcription factor binding site, or regulatory polymorphism.  Each annotation must have the following attributes:
 <ol>
 <li>A stable ORegAnno identifier.
 <li>A valid taxonomy id from the NCBI Taxonomy database.
 <li>A valid PubMed reference.  
 <li>A target gene which is either user-defined, in Entrez Gene or in EnsEMBL.
 <li>A sequence with at least 40 flanking bases (preferably more) to allow the site to be mapped to any release of an associated genome.
-<li>At least one piece of specific experimental evidence describing the biological technique used to discover the regulatory sequence (currently, only the evidence subtypes are supplied with the UCSC track).
+<li>At least one piece of specific experimental evidence, including the biological technique used to discover the regulatory sequence (currently, only the evidence subtypes are supplied with the UCSC track).
 <li>A positive, neutral or negative outcome based on the experimental results from the primary reference (only records with positive outcome are currently included in the UCSC track).
 </ol>
 The following attributes are optionally included:
 <ol>
 <li>A target transcription factor which is either user-defined, in Entrez Gene or in EnsEMBL.
-<li>A specific cell type for each piece of experimental evidence using the eVOC cell type ontology (Kelso, et al., 2003).
-<li>A specific dataset identifier (e.g. the REDfly dataset) allowing external curators to manage particular sets of annotation using ORegAnno.s curation tools.
+<li>A specific cell type for each piece of experimental evidence, using the eVOC cell type ontology (Kelso et al., 2003).
+<li>A specific dataset identifier (e.g. the REDfly dataset) allowing external curators to manage particular sets of annotations using ORegAnno's curation tools.
 <li>A search space sequence, specifying the region that was assayed, not just the regulatory sequence.  
 <li>A dbSNP identifier and type of variant (germline, somatic or artificial) for regulatory polymorphisms.
 </ol>
-Mapping to genome coordinates is performed periodically to current genome builds by BLAST sequence alignment.  The information provided in this track represents an abbreviated summary of the details for each ORegAnno record.  Please visit the official ORegAnno entry for the complete details such as evidence descriptions, comments, validation score history, etc.
+Mapping to genome coordinates is performed periodically to current genome builds by BLAST sequence alignment.  
+The information provided in this track represents an abbreviated summary of the 
+details for each ORegAnno record.  Please visit the official ORegAnno entry 
+(e.g. by clicking on the ORegAnno link on the details page) for the complete 
+details such as evidence 
+descriptions, comments, validation score history, etc.
 </P>
 
 <H2>Credits</H2>

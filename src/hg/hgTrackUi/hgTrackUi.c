@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.308 2006/09/12 18:27:07 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.309 2006/09/14 13:46:53 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -507,7 +507,8 @@ void oregannoUi (struct trackDb *tdb)
 {
 int i = 0; /* variable to walk through array */
 
-printf("<BR /><B>Exclude region type</B><BR />");
+printf("<BR /><B>Exclude region type</B> ");
+printf("<A HREF=\"http://www.oreganno.org/oregano/help/records.html\" target=\"_blank\">detailed information on these element types</A><BR />");
 for (i = 0; i < oregannoTypeSize; i++)
     {
     cartMakeCheckBox(cart, oregannoTypeString[i], FALSE);

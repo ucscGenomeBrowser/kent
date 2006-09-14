@@ -91,22 +91,22 @@ int gvAccuracySize = ArraySize(gvAccuracyLabel);
 
 char *gvFilterDALabel[] = {
     "phenotype-associated",
-    "likely to be phenotype-associated",
     "not phenotype-associated",
+    "likely to be phenotype-associated",
     "phenotype association unknown",
 };
 
 char *gvFilterDAString[] = {
     "gvPos.filter.da.known",
-    "gvPos.filter.da.likely",
     "gvPos.filter.da.not",
+    "gvPos.filter.da.likely",
     "gvPos.filter.da.null",
 };
 
 char *gvFilterDADbValue[] = {
     "phenotype-associated",
-    "likely to be phenotype-associated",
     "not phenotype-associated",
+    "likely to be phenotype-associated",
     "NULL",
 };
 
@@ -233,29 +233,29 @@ int gvColorTypeSize = ArraySize(gvColorTypeStrings);
 /* color by disease association */
 char *gvColorDALabels[] = {
     "phenotype-associated",
-    "likely to be phenotype-associated",
     "not phenotype-associated",
+    "likely to be phenotype-associated",
     "phenotype association unknown",
 };
 
 char *gvColorDAStrings[] = {
     "gvColorDAKnown",
-    "gvColorDALikely",
     "gvColorDANot",
+    "gvColorDALikely",
     "gvColorDARest",
 };
 
 char *gvColorDADefault[] = {
     "red",
-    "orange",
     "green",
+    "orange",
     "gray",
 };
 
 char *gvColorDAAttrVal[] = {
     "phenotype-associated",
-    "likely to be phenotype-associated",
     "not phenotype-associated",
+    "likely to be phenotype-associated",
     "NULL",
 };
 

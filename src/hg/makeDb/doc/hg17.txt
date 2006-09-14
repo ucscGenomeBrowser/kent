@@ -21448,6 +21448,10 @@ computeDiseaseAssocCons > gvAttrConservedDisease.txt
 #Belinda Giardine Sept 2006
 #reload tables, removed ones with sequence mismatches, added label and strand
 #added new lsbd BTKbase
+#Sequence mismatches were determined by using the position in the reference
+#sequence to fetch the sequence affected by the variant.  Then for substitions
+#and deletions with the nts deleted listed, the sequence was compared.
+#Insertions and large deletions could not be checked.
 
 
 #############################################################
