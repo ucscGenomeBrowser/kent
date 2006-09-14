@@ -14,13 +14,19 @@ use strict;
         #[last aa in orig->3letter][start+len-1]delins[variant->3letter]
 
 #several variable changes to switch usage (kgProtMap,psl,converter)
+my $build = 'hg18';
 my $kgProtMap = 'kgProtMapUniq.txt'; #if set use, otherwise run blat
 my $customTrack = 1; #flag whether want custom track with names
-my $psl = 'kgProtMapUniq.txt'; #'tmp.psl';
+my $psl = "kgProtMapUniq.$build.txt"; #'tmp.psl';
 my $psl2; #my $psl2 = 'protBlatUniq.txt';
+#the one below needs the feature ID as part of spVars
+my $fixFeatures = 'featureType2.txt'; #features with fix for run togethers
+#had to adust IDs, runs didn't match exactly
+my %feature;
 #skip for now too many errors, better way of chosing alignment?
 my $spSeq = 'tmp.fa';
 #build controlled by path of nibs
+#not currently used
 my $nibList = 'nibsFullPath.list';
 #version 2 for protBlat, version 3 for kgProtMap
 my $converter = './convert_prot_coors3'; #pslFile mRNA pos
@@ -30,10 +36,17 @@ my %aa1To3;
 my $aaFile = 'aminoInfoDump';
 #format:3letterAbrev 1letterAbrev LongName
 my $spFile = 'spVars.txt'; #'arVars.txt'; 'spVars.txt';
+#disease associations
+my $disFile = 'SwissProtDiseaseAssoc.txt';
+my %disAssoc;
+my %gene;
+my %omim;
 my %varIdToMutName;
+my %codon;
 my $pslLine;
 my $coordinateAccuracy = 1;
-my $outGV = 'gvPosSP.txt';
+my $strand; #filled in when get PSL
+my $outGV = "gvPosSP.$build.txt";
 my $outGV2 = 'gvLinkSP.txt';
 my $outGV3 = 'gvAttrSP.txt';
 my $outGV4 = 'gvSP.txt';
@@ -41,6 +54,7 @@ my $outGV5 = 'sp.ct';
 my $outGV6 = 'gvAttrLongSP.txt';
 
 #load hashes used in conversion
+loadCodons();
 my $fh;
 open($fh, '<', $aaFile) or die "Couldn't open $aaFile, $!\n";
 while (<$fh>) {
@@ -49,6 +63,11 @@ while (<$fh>) {
     $aa1To3{$v[1]} = $v[0];
 }
 close $fh or die "Couldn't close $aaFile, $!\n";
+
+#load disease associations
+loadDisease();
+
+if ($fixFeatures) { loadFeatureFix(); }
 
 #generate coordinates and print here
 #read the spFile and generate the mutation name
@@ -71,19 +90,37 @@ while (<$fh>) {
     chomp;
     $cnt++;
     my @v = split(/\t/);
-    #format:spId startCodon len variant varId
-    my $status = 'likely to be disease-associated';
-    if ($v[3] =~ /polymorphism/ && $v[3] =~ /cancer|disease/i) { undef $status; }
-    elsif ($v[3] =~ /polymorphism/) { $status = 'not disease-associated'; }
-    elsif ($v[3] =~ /unknown\s*pathological\s*significance/) { undef $status; }
-    elsif ($v[3] =~ /pathological\s*significance\s*unknown/) { undef $status; }
-    elsif ($v[3] =~ /effect not known/) { undef $status; }
+    #format:spId startCodon len variant varId [featureId]
+    if ($fixFeatures && scalar @v != 6) { die "Incompatible run, need IDs to run with feature fix\n"; }
+    if ($fixFeatures && exists $feature{$v[5]}) {
+       $v[3] = $feature{$v[5]};
+    }
+    my $status;
+    my $phenotype;
+    if (exists $disAssoc{$v[4]}) {
+       if ($disAssoc{$v[4]} ne 'Polymorphism') {
+          $status = 'known to be disease-associated';
+          $phenotype = $disAssoc{$v[4]};
+       }else {
+          $status = 'not disease-associated';
+       }
+    }
+    if (!$status) {
+       $status = 'likely to be disease-associated';
+       if ($v[3] =~ /polymorphism/ && $v[3] =~ /cancer|disease/i) { undef $status; }
+       elsif ($v[3] =~ /polymorphism/) { $status = 'not disease-associated'; }
+       elsif ($v[3] =~ /unknown\s*pathological\s*significance/) { undef $status; }
+       elsif ($v[3] =~ /pathological\s*significance\s*unknown/) { undef $status; }
+       elsif ($v[3] =~ /effect not known/) { undef $status; }
+    }
     my $n;
+    my $oldAA;
     if ($v[2] == 1) {
         if (!$v[4]) { die "undefined varId\n"; }
         $n = "$v[0]:p.";
         if ($v[3] =~ /(\w) -> (\w)/) {
             my $aaf = $1;
+            $oldAA = $aaf;
             my $aat = $2;
             if ($aaf eq $aat) { undef $status; }
             $n .= $aa1To3{$aaf};
@@ -99,6 +136,7 @@ while (<$fh>) {
         $n = "$v[0]:p.";
         if ($v[3] =~ /(\w+) -> (\w+)/) {
             my $aaf = $1;
+            $oldAA = $aaf;
             my $aat = $2;
             $aaf =~ /^(\w)/;
             my $firstAA = $1;
@@ -129,13 +167,10 @@ while (<$fh>) {
         }
     }else { die "ERROR invalid len $v[2]\n"; }
     #make sure name isn't too long
+    #long names are placed in separate attribute table with larger field
     if (length $n > 255) {
        my $full = $n;
-       #substr EXPR,OFFSET,LENGTH,REPLACEMENT
-       #$n = substr($n, 0, 250);
-       #$n .= "..";
        $n =~ s/delins.*/delins/;
-       #print $outFh3 "$v[4]\t"; #print to long attr table/file
        print $outFh6 "$v[4]\tlongName\t$full\n";
     }
     $varIdToMutName{$v[4]} = $n;
@@ -167,9 +202,9 @@ while (<$fh>) {
        $chr2[1] = $4;
        $chr2[2] = $5;
     }
-    if (!@chr or $chr[0] =~ /ERROR/) { 
+    if (!@chr or !$chr[0] or $chr[0] =~ /ERROR/) { 
         print "no coordinates for $n\n"; 
-        if (@chr) { print $chr[0], "\n"; }
+        if (@chr && $chr[0]) { print $chr[0], "\n"; }
         next; 
     }
     my $type = 'substitution';
@@ -206,17 +241,35 @@ while (<$fh>) {
        $type = 'deletion';
     }
     $chr[1]--; #UCSC coordinates
-    if (!$chr[0]) { die "Bad coordinates for $v[4] $n $v[3]\n"; }
-    print $outFh "$chr[0]\t$chr[1]\t$chr[2]\t$v[4]\n";
+    if (!$chr[0]) { die "ERROR Bad coordinates for $v[4] $n $v[3]\n"; }
+    if (!@chr or !$chr[0] or $chr[0] =~ /ERROR/) {
+        print "no coordinates for $n\n";
+        if (@chr && $chr[0]) { print $chr[0], "\n"; }
+        next;
+    }
+    if ($oldAA && !@chr2 && !checkSequence($oldAA, $strand, $chr[0], $chr[1], $chr[2])) {
+        print "sequence mismatch for $n\n";
+        next;
+    }elsif ($oldAA && !checkSequence($oldAA, $strand, $chr[0], $chr[1], $chr[2], $chr2[1], $chr2[2])) {
+        print "sequence mismatch for $n\n";
+        next;
+    }
+
+    my $short = $n;
+    if (length $n > 64) {
+       $short =~ s/delins.*/delins/;
+       if (length $short > 64) { die "Couldn't shorten name $n.\n"; }
+    }
+    print $outFh "$chr[0]\t$chr[1]\t$chr[2]\t$v[4]\t$strand\t$short\n";
     if (@chr2) {
-       print $outFh "$chr[0]\t$chr2[1]\t$chr2[2]\t$v[4]\n";
-       if ($customTrack) { print $outFh5 "$chr[0]\t$chr2[1]\t$chr2[2]\t$n\n"; }
+       print $outFh "$chr[0]\t$chr2[1]\t$chr2[2]\t$v[4]\t$strand\t$short\n";
+       if ($customTrack) { print $outFh5 "$chr[0]\t$chr2[1]\t$chr2[2]\t$short\n"; }
     }
     print $outFh4 "$v[4]\t$n\tSP\t$type\texon\t$coordinateAccuracy\n";
     if ($status) {
        print $outFh3 "$v[4]\tdisease\t$status\n";
     }
-    if ($customTrack) { print $outFh5 "$chr[0]\t$chr[1]\t$chr[2]\t$n\n"; }
+    if ($customTrack) { print $outFh5 "$chr[0]\t$chr[1]\t$chr[2]\t$short\n"; }
     #gvAttr:mutId attrKey attrValue [outFh3]
     #gvLink: id attrType raKey acc displayValue [outFh2]
     #print SwissProt links
@@ -229,14 +282,15 @@ while (<$fh>) {
        my $a = $1;
        print $outFh2 "$v[4]\tlinks\tdbSNP\t$a\t\n";
     }elsif ($v[3] !~ /in allele/ && $v[3] =~ /\((.*)\)/) {
-       my $c = $1;
-       if (length $c <= 254) {
-          print $outFh3 "$v[4]\tcomment\t$c\n";
-       }else {
-          #print "Warning comment is too long for $v[4]\n";
-          print $outFh6 "$v[4]\tcomment\t$c\n";
-       }
+       print $outFh3 "$v[4]\tcomment\t$1\n";
     }
+    if ($phenotype) {
+       print $outFh3 "$v[4]\tphenoCommon\t$phenotype\n"; 
+    }
+    #in OMIM title links?
+    #if (exists $omim{$v[4]}) {
+       #print $outFh2 "$v[4]\tlinks\tOMIM\t$omim{$v[4]}\t\n";
+    #}
 }
 close $fh or die "Couldn't close $spFile, $!\n";
 close $outFh or die "couldn't close outFh, $!\n";
@@ -315,6 +369,7 @@ sub getPslLine {
       elsif (scalar @f > 22) { die "ERROR bad psl file format $_\n"; }
       if ($f[9] eq $seq) { $rv = join("\t", @f); last; }
    }
+   $strand = $f[8];
    close $pfh or die "ERROR reading psl file, $psl $!\n";
    if ($rv) { 
       $coordinateAccuracy = 1;
@@ -341,3 +396,92 @@ sub getPslLine {
    return $rv;
 }
 ####End
+
+sub loadCodons {
+   open (COD, "codon_amino_info") or die "Couldn't open codon_amino_info, $!\n";
+   while (<COD>) {
+      chomp;
+      my @t = split(/\t/);
+      $t[1] =~ s/\s+//g;
+      $t[0] =~ s/\s+//g;
+      $codon{$t[0]} = $t[1];
+   }
+   close (COD);
+}
+####End 
+
+sub loadDisease {
+   open (DIS, $disFile) or die "Couldn't open $disFile, $!\n";
+   my $c = 0;
+   while (<DIS>) {
+      chomp;
+      my @t = split(/\s+/, $_, 10);
+      #gene gene? SPGeneId VarID position oldAA -> newAA diseaseAssoc disease
+      if ($t[8] eq 'Polymorphism') {
+         $disAssoc{$t[3]} = $t[8];
+      }elsif ($t[8] eq 'Disease') {
+         $disAssoc{$t[3]} = $t[9];
+         if ($disAssoc{$t[3]} =~ /\[MIM:(\d+)\]/) {
+            $omim{$t[3]} = $1;
+         }
+      }
+      #$gene{$t[3]} = "$t[0]($t[2])";
+      $c++;
+   }
+   close (DIS) or die "Couldn't finish loading $disFile, $!\n";
+   print STDERR "Found $c variants with disease-association data\n";
+}
+####End
+
+sub checkSequence {
+   my $aa = shift;
+   my $strand = shift;
+   my $chr = shift;
+   my $st = shift;
+   my $end = shift;
+   my $st2 = shift;
+   my $end2 = shift;
+   my @a = split(/ */, $aa);
+   my $checked = 0;
+   if ($strand eq '-') { $strand = 'm'; } #switch to nibFrag format
+   open (NIB, "nibFrag -upper /cluster/data/$build/nib/${chr}.nib $st $end $strand stdout |") or die "Couldn't run nibFrag, $!\n";
+   my $seq = '';
+   while (<NIB>) {
+      chomp;
+      if (/^>/) { next; } #header
+      $seq .= $_;
+   }
+   close NIB or die "Couldn't finish nibFrag, $!\n";
+   if ($st2) {
+      open (NIB, "nibFrag -upper /cluster/data/$build/nib/${chr}.nib $st2 $end2 $strand stdout |") or die "Couldn't run nibFrag, $!\n";
+      while (<NIB>) {
+         chomp;
+         if (/^>/) { next; } #header
+         $seq .= $_;
+      }  
+      close NIB or die "Couldn't finish nibFrag, $!\n";
+   }
+   if ($seq eq '') { return 0; }
+   my @s = split(/ */, $seq);
+   foreach $aa (@a) {
+      my $codon = join("", splice(@s, 0, 3));
+      if (!$codon or !exists $codon{$codon} or $codon{$codon} ne $aa1To3{$aa}) {
+         print "ERROR mismatch $codon != $aa\n";
+         return 0;
+      }
+      $checked = 1;
+   }
+   return $checked;
+}
+####End
+
+sub loadFeatureFix {
+   open(FIX, $fixFeatures) or die "Couldn't open $fixFeatures, $!\n";
+   while (<FIX>) {
+      chomp;
+      my @t = split(/\t/);
+      $feature{$t[0]} = $t[1];
+   }
+   close (FIX) or die "Couldn't finish $fixFeatures, $!\n";
+}
+####End 
