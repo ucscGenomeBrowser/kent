@@ -14,7 +14,7 @@
 #include "rename.h"
 #include "tables.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.27 2005/12/16 20:24:03 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.28 2006/09/14 16:44:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -362,7 +362,6 @@ void *startHandler(struct xap *xap, char *tagName, char **atts)
 struct table *table = hashFindVal(xmlTableHash, tagName);
 struct field *field;
 int i;
-boolean uniq = FALSE;
 
 contentStack -= table->fieldCount;
 if (contentStack < contentBuf)
@@ -594,7 +593,6 @@ if (table->isAssoc)
 else
     {
     struct field *primaryKey = table->primaryKey;
-    char *keyName = primaryKey->name;
     if (primaryKey->isString)
 	fprintf(f, "    PRIMARY KEY(%s(12))\n", table->primaryKey->mixedCaseName);
     else
@@ -612,7 +610,6 @@ void dtdRenameMixedCase(struct dtdElement *dtdList)
 {
 struct hash *elHash = newHash(0);
 struct dtdElement *el;
-struct dtdElChild *child;
 renameAddSqlWords(elHash);
 renameAddCWords(elHash);
 
