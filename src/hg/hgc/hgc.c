@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1108 2006/09/14 22:53:25 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1109 2006/09/14 23:32:09 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11439,9 +11439,9 @@ if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
 printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
-printf("<PRE><B>Genomic Sequence:</B><BR>");
-writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
-printf("</PRE>\n");
+// printf("<PRE><B>Genomic Sequence:</B><BR>");
+// writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
+// printf("</PRE>\n");
 printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
