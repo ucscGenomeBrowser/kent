@@ -4,12 +4,12 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* fuzzyFind.h - This is the interface to the fuzzyFind
- * DNA sequence alligner.  This just returns a single
- * allignment - the one the algorithm thinks is best.
+ * DNA sequence aligner.  This just returns a single
+ * alignment - the one the algorithm thinks is best.
  * The algorithm is heuristic, but pretty good.  (See
  * comments in the fuzzyFind.c file for more details.) It
  * is not good for finding distant homologies, but it
- * will fairly reliably allign a somewhat noisy cDNA
+ * will fairly reliably align a somewhat noisy cDNA
  * sequence with genomic sequence.
  *
  * The main data structure is the ffAli - which is
@@ -22,11 +22,11 @@
  * Generally you're best off using "ffTight".  "ffLoose"
  * will allow for more distant matches, but at the 
  * expense of very often taking several seconds to
- * return a garbage allignment.  "ffExact" requires
+ * return a garbage alignment.  "ffExact" requires
  * an exact match - which is quick, but in the
  * real world not so often useful.
  *
- * If you want to compare allignments use ffScore.
+ * If you want to compare alignments use ffScore.
  */
 
 #ifndef FUZZYFIND_H
@@ -50,7 +50,7 @@
 
 struct ffAli
 /* Node of a doubly linked list that will contain one
- * allignment. Contains information on a matching
+ * alignment. Contains information on a matching
  * set of DNA between needle and haystack. */
     {
     struct ffAli *left;   /* Neighboring intervals. */
@@ -115,7 +115,7 @@ int ffScoreMatch(DNA *a, DNA *b, int size);
  * neither hurt nor help score. */
 
 int ffScoreCdna(struct ffAli *ali);
-/* Return score of alignment.  A perfect allignment score will
+/* Return score of alignment.  A perfect alignment score will
  * be the number of bases in needle. */
 
 int ffScore(struct ffAli *ali, enum ffStringency stringency);
@@ -197,8 +197,8 @@ int ffCmpHitsNeedleFirst(const void *va, const void *vb);
 
 struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEnd,
     enum ffStringency stringency);
-/* Return an allignment of needle in haystack. (Returns left end of doubly
- * linked allignment list.) The input DNA is all expected to be lower case
+/* Return an alignment of needle in haystack. (Returns left end of doubly
+ * linked alignment list.) The input DNA is all expected to be lower case
  * characters - a, c, g, t, or n. */
 
 boolean ffFindEitherStrand(DNA *needle, DNA *haystack, enum ffStringency stringency,
@@ -209,12 +209,12 @@ boolean ffFindEitherStrand(DNA *needle, DNA *haystack, enum ffStringency stringe
 
 boolean ffFindEitherStrandN(DNA *needle, int needleSize, DNA *haystack, int haySize,
     enum ffStringency stringency, struct ffAli **pAli, boolean *pRcNeedle);
-/* Return TRUE if find an allignment using needle, or reverse complement of 
+/* Return TRUE if find an alignment using needle, or reverse complement of 
  * needle to search haystack. DNA must be lower case. */
 
 boolean ffFindAndScore(DNA *needle, int needleSize, DNA *haystack, int haySize,
     enum ffStringency stringency, struct ffAli **pAli, boolean *pRcNeedle, int *pScore);
-/* Return TRUE if find an allignment using needle, or reverse complement of 
+/* Return TRUE if find an alignment using needle, or reverse complement of 
  * needle to search haystack. DNA must be lower case. If pScore is non-NULL returns
  * score of alignment. */
 
@@ -243,7 +243,7 @@ void ffShowAli(struct ffAli *aliList,
     char *needleName, DNA *needle, int needleNumOffset,
     char *haystackName, DNA *haystack, int hayNumOffset,
     boolean rcNeedle);
-/* Display allignment on html page to stdout. */
+/* Display alignment on html page to stdout. */
 
 #endif /* FUZZYFIND_H */
 
