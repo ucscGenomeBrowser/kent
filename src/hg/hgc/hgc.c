@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1106 2006/09/14 16:14:51 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1107 2006/09/14 18:43:12 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12156,6 +12156,7 @@ struct sqlResult *sr;
 char **row;
 char   query[256];
 int    rowOffset=hOffsetPastBin(seqName, group);
+int    snpCount=0;
 char title[64];
 char tableName1[64];
 char tableName2[64];
@@ -12181,6 +12182,23 @@ safef(tableName1, sizeof(tableName1), "snp%dExceptions", version);
 safef(tableName2, sizeof(tableName2), "snp%dExceptionDesc", version);
 if (hTableExists(tableName1) && hTableExists(tableName2))
     writeSnpExceptionWithVersion(itemName, version);
+
+sqlFreeResult(&sr);
+ZeroVar(query);
+safef(query, sizeof(query), "select * from %s where name='%s'", group, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snp125StaticLoad(row+rowOffset, &snp);
+    if (snp.chromStart!=start || differentString(snp.chrom,seqName))
+	{
+	printf("<BR>");
+	if (snpCount==0)
+	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
+	bedPrintPos((struct bed *)&snp, 3);
+	}
+    }
+
 printSnpAlignment(snpAlign);
 
 printTrackHtml(tdb);
