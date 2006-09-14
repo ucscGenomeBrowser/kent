@@ -65,6 +65,7 @@ extern struct mgcStatusType MGC_LIBRARY_ARTIFACTS;
 extern struct mgcStatusType MGC_NO_POLYA_TAIL;
 extern struct mgcStatusType MGC_CANT_SEQUENCE;
 extern struct mgcStatusType MGC_INCONSISTENT_WITH_GENE;
+extern struct mgcStatusType MGC_PLATE_CONTAMINATED;
 
 struct mgcStatus
 /* A row in the mgcStatus table.  None of the fields are unique, am image id

@@ -35,6 +35,7 @@ static char *mgcStatusDesc[][2] =
     {"noPolyATail", "no polyA-tail"},
     {"cantSequence", "unable to sequence"},
     {"inconsistentWithGene", "inconsistent with known gene structure"},
+    {"plateContaminated", "plate contaminated"},
     {NULL, NULL}
 };
 

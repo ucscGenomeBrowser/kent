@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.14 2006/04/14 23:38:34 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.15 2006/09/14 16:42:42 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -72,6 +72,8 @@ struct mgcStatusType MGC_CANT_SEQUENCE = {
     "cantSequence", 21, "unable to sequence", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_INCONSISTENT_WITH_GENE = {
     "inconsistentWithGene", 22, "inconsistent with known gene structure", MGC_STATE_PROBLEM};
+struct mgcStatusType MGC_PLATE_CONTAMINATED = {
+    "plateContaminated", 22, "plate contaminated", MGC_STATE_PROBLEM};
 
 /* null terminated, ordered list of mgcStatusType constants */
 static struct mgcStatusType *mgcStatusList[] = {
@@ -97,6 +99,7 @@ static struct mgcStatusType *mgcStatusList[] = {
     &MGC_NO_POLYA_TAIL,
     &MGC_CANT_SEQUENCE,
     &MGC_INCONSISTENT_WITH_GENE,
+    &MGC_PLATE_CONTAMINATED,
     NULL
 };
 
