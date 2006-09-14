@@ -105,8 +105,10 @@
 #include "oregannoUi.h"
 #include "bed12Source.h"
 #include "dbRIP.h"
+#include "dnaMotif.h"
+#include "baseProbs.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1194 2006/09/14 20:45:48 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1195 2006/09/14 21:45:44 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4699,6 +4701,7 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 bedLoadItemByQuery(tg, table, NULL, loader);
 }
 
+
 void bedDrawSimpleAt(struct track *tg, void *item, 
 	struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -4765,6 +4768,58 @@ if (tg->subType == lfWithBarbs || tg->exonArrows)
 		dir, textColor, TRUE);
 	}
     }
+}
+
+static void logoDrawSimple(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw sequence logo */
+{
+struct dnaMotif *motif; 
+int count = seqEnd - seqStart;
+int ii;
+FILE *f;
+struct tempName pngTn;
+unsigned char *buf;;
+
+if (tg->items == NULL)
+	return;
+
+motif = tg->items;
+buf = needMem(width + 1);;
+dnaMotifNormalize(motif);
+makeTempName(&pngTn, "logo", ".pgm");
+dnaMotifToLogoPGM(motif, width / count, width  , 50, NULL, "../trash", pngTn.forCgi);
+
+f = mustOpen(pngTn.forCgi, "r");
+
+/* get rid of header */
+for(ii=0; ii < 4; ii++)
+    while(fgetc(f) != '\n')
+	;
+
+vgSetClip(vg, xOff, yOff, width*2 , 52);
+
+/* map colors from PGM to browser colors */
+for(ii=0; ii < 52; ii++)
+    {
+    int jj;
+    fread(buf, 1, width, f);
+
+    for(jj=0; jj < width + 2; jj++)
+	{
+	if (buf[jj] == 255) buf[jj] = 0;
+	else if (buf[jj] == 0x44)buf[jj] = MG_RED;
+	else if (buf[jj] == 0x69)buf[jj] = greenColor;
+	else if (buf[jj] == 0x5e)buf[jj] = blueColor;
+	}
+
+    vgVerticalSmear(vg,xOff,yOff+ii,width ,1,buf,TRUE);
+    }
+vgUnclip(vg);
+
+fclose(f);
+remove(pngTn.forCgi);
 }
 
 static void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
@@ -10953,6 +11008,115 @@ tg->itemColor = igtcColor;
 tg->itemNameColor = igtcColor;
 }
 
+void logoLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+{
+}
+
+/* load data for a sequence logo */
+static void logoLoad(struct track *tg)
+{
+struct dnaMotif *motif; 
+int count = winEnd - winStart;
+int ii;
+char query[256];
+struct sqlResult *sr;
+long long offset = 0;
+char *fileName = NULL;
+struct sqlConnection *conn;
+char **row;
+FILE *f;
+unsigned short *mem, *p;
+boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+
+if (!zoomedToBaseLevel)
+	return;
+
+conn = hAllocConn();
+safef(query, sizeof(query), 
+	"select offset,fileName from %s where chrom = '%s'", tg->mapName,chromName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    offset = sqlLongLong(row[0]);
+    fileName = cloneString(row[1]);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+if (offset == 0)
+    return; /* we should have found a non-zero offset  */
+
+AllocVar(motif);
+motif->name = NULL;
+motif->columnCount = count;
+motif->aProb = needMem(sizeof(float) * motif->columnCount);
+motif->cProb = needMem(sizeof(float) * motif->columnCount);
+motif->gProb = needMem(sizeof(float) * motif->columnCount);
+motif->tProb = needMem(sizeof(float) * motif->columnCount);
+
+/* get data from data file specified in db */
+f = mustOpen(fileName, "r");
+offset += winStart * 2; /* file has 2 bytes per base */
+fseek(f, offset, 0);
+
+p = mem = needMem(count * 2);
+
+/* read in probability data from file */
+fread(mem, sizeof(unsigned short), count, f);
+fclose(f);
+
+/* translate 5 bits for A,C,and G into real numbers for all bases */
+for(ii=0; ii < motif->columnCount; ii++, p++)
+    {
+    motif->gProb[ii] = *p & 0x1f;
+    motif->cProb[ii] = (*p >> 5)  & 0x1f;
+    motif->aProb[ii] = (*p >> 10) & 0x1f;
+    motif->tProb[ii] = 31 - motif->aProb[ii] - motif->cProb[ii] - motif->gProb[ii];
+    }
+
+if (complementBases) /* if bases are on '-' strand */
+    {
+    float *temp = motif->aProb;
+
+    motif->aProb = motif->tProb;
+    motif->tProb = temp;
+
+    temp = motif->cProb;
+    motif->cProb = motif->gProb;
+    motif->gProb = temp;
+    }
+
+tg->items = motif;
+}
+
+
+int logoHeight(struct track *tg, enum trackVisibility vis)
+/* set up size of sequence logo */
+{
+if (tg->items == NULL)
+    tg->height = tg->lineHeight;
+else
+    tg->height = 52;
+
+return tg->height;
+}
+
+void logoMethods(struct track *track, struct trackDb *tdb, 
+	int argc, char *argv[])
+/* Load up logo type methods. */
+{
+track->loadItems = logoLoad;
+track->drawLeftLabels = logoLeftLabels;
+
+track->drawItems = logoDrawSimple;
+track->totalHeight = logoHeight; 
+track->mapsSelf = TRUE;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -11023,6 +11187,10 @@ else if (sameWord(type, "genePred"))
         track->itemColor = genePredItemAttrColor;
     else if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
+    }
+else if (sameWord(type, "logo"))
+    {
+    logoMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "psl"))
     {
