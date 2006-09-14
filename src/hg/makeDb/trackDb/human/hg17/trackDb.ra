@@ -2216,6 +2216,19 @@ priority 75
     color 0,0,0  
     priority 8  
   
+
+track rnaLpFold
+shortLabel RNA LP Fold
+longLabel RNA LP Fold
+group map
+priority 12
+visibility hide
+canPack off
+dataVersion development test
+type bed 3 +
+
+
+
 searchTable bacendsCow
 searchMethod exact
 searchType bed
