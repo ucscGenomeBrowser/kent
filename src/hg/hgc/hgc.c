@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1103 2006/09/13 23:06:57 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1104 2006/09/14 02:13:48 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11397,7 +11397,6 @@ while (lineFileNext(lf,&line,NULL) && !haveSeq)
 	    }
 	}
 
-/* strip strings; get sizes, and concatenate */
 stripChar(seqDbSnp5->string,' ');
 stripChar(seqDbSnpO->string,' ');
 stripChar(seqDbSnp3->string,' ');
@@ -11406,10 +11405,10 @@ seqDbSnp3len=strlen(seqDbSnp3->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnp5->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnpO->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnp3->string);
-dnaSeqDbSnp5 = newDnaSeq(seqDbSnp5->string,strlen(seqDbSnp5->string),"dbSnp seq 5");
-dnaSeqDbSnpO = newDnaSeq(seqDbSnpO->string,strlen(seqDbSnpO->string),"dbSnp seq O");
-dnaSeqDbSnp3 = newDnaSeq(seqDbSnp3->string,strlen(seqDbSnp3->string),"dbSnp seq 3");
-seqDbSnp = newDnaSeq(seqDbSnpTemp->string,strlen(seqDbSnpTemp->string),"dbSnp seq");
+dnaSeqDbSnp5 = newDnaSeq(seqDbSnp5->string,strlen(seqDbSnp5->string),"dbSNP seq 5");
+dnaSeqDbSnpO = newDnaSeq(seqDbSnpO->string,strlen(seqDbSnpO->string),"dbSNP seq O");
+dnaSeqDbSnp3 = newDnaSeq(seqDbSnp3->string,strlen(seqDbSnp3->string),"dbSNP seq 3");
+seqDbSnp = newDnaSeq(seqDbSnpTemp->string,strlen(seqDbSnpTemp->string),"dbSNP seq");
 if (seqDbSnp==NULL)
     return;
 seqDbSnp->size=strlen(seqDbSnp->dna);
@@ -11427,12 +11426,13 @@ if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
 printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
-printf("\n<PRE><B>dbSnp (Observed alleles and flanking sequences):</B><BR>");
+printf("<PRE><B>Genomic Sequence:</B><BR>");
+writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
+printf("</PRE>\n");
+printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
-printf("</PRE>\n<PRE><B>Genomic Sequence:</B><BR>");
-writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
 printf("</PRE>\n");
 
 freeDyString(&seqDbSnp5);
@@ -12039,7 +12039,7 @@ safef(query, sizeof(query),
 count = sqlQuickNum(conn, query);
 if (count == 0) return;
 
-printf("<BR><BR>Annotations:\n");
+printf("<BR><BR><B>Annotations:</B>\n");
 
 safef(query, sizeof(query), 
       "select * from snp%dExceptions where chrom='%s' and chromStart=%d and name='%s'", 
@@ -12063,6 +12063,7 @@ for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNam
         printf("<BR>%s\n", row[0]);
     sqlFreeResult(&sr);
     }
+printf("<BR>\n");
 hFreeConn(&conn);
 }
 
@@ -12077,20 +12078,12 @@ snp.name=cloneString(snp125->name);
 snp.score=snp125->score;
 snp.observed=cloneString(snp125->observed);
 if (sameString(snp125->strand, "+"))
-    {
     snp.strand[0] = '+';
-    snp.strand[1] = '\0';
-    }
 else if (sameString(snp125->strand, "-"))
-    {
     snp.strand[0] = '-';
-    snp.strand[1] = '\0';
-    }
 else
-    {
     snp.strand[0] = '?';
-    snp.strand[1] = '\0';
-    }
+snp.strand[1] = '\0';
 return snp;
 }
 
