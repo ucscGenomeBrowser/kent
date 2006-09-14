@@ -79,6 +79,12 @@ void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height
 	char *fileName);
 /* Write logo corresponding to motif to postScript file. */
 
+void dnaMotifToLogoPsW(struct dnaMotif *motif, double widthPerBase, double width,
+	double height, char *fileName);
+/* Write logo corresponding to motif to postScript file. 
+ * use the whole window width, rather than just incrementing
+ * by widthPerBase */
+
 void dnaMotifToLogoPng(
 	struct dnaMotif *motif,	/* Motif to draw. */
 	double widthPerBase, 	/* Width of each base. */
@@ -87,6 +93,16 @@ void dnaMotifToLogoPng(
 	char *tempDir,          /* temp dir , NULL for default */
 	char *fileName);	/* output png file name. */
 /* Write logo corresponding to motif to png file. */
+
+void dnaMotifToLogoPGM(
+	struct dnaMotif *motif,	/* Motif to draw. */
+	double widthPerBase, 	/* Width of each base. */
+	double width, 		/* Max width. */
+	double height, 		/* Max height. */
+	char *gsExe, 		/* ghostscript executable, NULL for default */
+	char *tempDir,          /* temp dir , NULL for default */
+	char *fileName);	/* output png file name. */
+/* Write logo corresponding to motif to PGM file. */
 
 #endif /* DNAMOTIF_H */
 
