@@ -1842,6 +1842,21 @@ identifier blastHg17KGPep01Id
      monDom1.blastHg17KG.qName
      danRer2.blastHg17KG.qName
      bosTau1.blastHg17KG.qName
+     ce1.blastHg17KG.qName
+     fr1.blastHg17KG.qName
+     tetNig1.blastHg17KG.qName
+     xenTro1.blastHg17KG.qName
+
+identifier blastHg17KGRef01Id 
+"hg17 ref 01"
+     hg17.blastKGRef01.acc
+     monDom1.blastHg17KG.qName
+     danRer2.blastHg17KG.qName
+     bosTau1.blastHg17KG.qName
+     ce1.blastHg17KG.qName
+     fr1.blastHg17KG.qName
+     tetNig1.blastHg17KG.qName
+     xenTro1.blastHg17KG.qName
 
 identifier blastHg17KGPep02Id 
 "hg17 peptides 02"
@@ -1851,6 +1866,19 @@ identifier blastHg17KGPep02Id
      danRer3.blastHg17KG.qName
      bosTau2.blastHg17KG.qName
      canFam2.blastHg17KG.qName
+     apiMel2.blastHg17KG.qName
+     dm2.blastHg17KG.qName
+     strPur1.blastHg17KG.qName
+
+identifier blastHg17KGRef02Id 
+"hg17 ref 02"
+     hg17.blastKGRef02.acc
+     danRer3.blastHg17KG.qName
+     bosTau2.blastHg17KG.qName
+     canFam2.blastHg17KG.qName
+     apiMel2.blastHg17KG.qName
+     dm2.blastHg17KG.qName
+     strPur1.blastHg17KG.qName
 
 identifier blastHg18KGPep04Id 
 "hg18 peptides 04"
