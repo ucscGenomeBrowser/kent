@@ -1852,6 +1852,16 @@ identifier blastHg18KGPep04Id
      danRer4.blastHg18KG.qName
      canFam2.blastHg18KG.qName
 
+identifier blastHg18KGRef04Id 
+"hg18 ref 04"
+     hg18.blastKGRef04.acc
+     hg18.knownGene.name  minCheck=0.95
+     monDom4.blastHg18KG.qName
+     galGal3.blastHg18KG.qName
+     xenTro2.blastHg18KG.qName
+     danRer4.blastHg18KG.qName
+     canFam2.blastHg18KG.qName
+
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
      $hg.blastKGRef01.extra1 dupeOk
