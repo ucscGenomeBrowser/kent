@@ -106,9 +106,8 @@
 #include "bed12Source.h"
 #include "dbRIP.h"
 #include "dnaMotif.h"
-#include "baseProbs.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1195 2006/09/14 21:45:44 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1196 2006/09/15 14:37:06 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
