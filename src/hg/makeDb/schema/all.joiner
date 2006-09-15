@@ -1825,22 +1825,20 @@ identifier blastKG01
 
 identifier blastHg17KGPep01Id 
 "hg17 peptides 01"
-     $hg.blastKGPep01.name
-     $hg.knownGene.name  minCheck=0.30
-     $hg.blastKGRef01.acc
+     hg17.blastKGPep01.name
+     hg17.knownGene.name  minCheck=0.30
+     hg17.blastKGRef01.acc full
      monDom1.blastHg17KG.qName
      danRer2.blastHg17KG.qName
      bosTau1.blastHg17KG.qName
-     canFam1.blastHg17KG.qName
 
 identifier blastHg17KGPep02Id 
 "hg17 peptides 02"
-     $hg.blastKGPep02.name
-     $hg.knownGene.name  minCheck=0.95
-     $hg.blastKGRef02.acc
+     hg17.blastKGPep02.name
+     hg17.knownGene.name  minCheck=0.95
+     hg17.blastKGRef02.acc full
      danRer3.blastHg17KG.qName
-     danRer4.blastHg17KG.qName
-     $bosTau,!bosTau1.blastHg17KG.qName
+     bosTau2.blastHg17KG.qName
      canFam2.blastHg17KG.qName
 
 identifier blastHg18KGPep04Id 
