@@ -1804,13 +1804,13 @@ identifier blastDm2FBPepId dependency
 identifier blastHg16KGPepId
 "hg16 proteins"
      hg16.blastKGPep00.name
-     $sacCer.blastHg16KG.qName
-     $ce.blastHg16KG.qName
-     $ci.blastHg16KG.qName
-     $cioSav.blastHg16KG.qName
-     $danRer.blastHg16KG.qName
-     $dm.blastHg16KG.qName
-     $galGal.blastHg16KG.qName
+     sacCer1.blastHg16KG.qName
+     ce2.blastHg16KG.qName
+     ci1.blastHg16KG.qName
+     cioSav1.blastHg16KG.qName
+     danRer1.blastHg16KG.qName
+     dm1.blastHg16KG.qName
+     galGal2.blastHg16KG.qName
 
 # identifier blastHg17KGPep00Id  (knownGene upgraded)
 # "hg17 proteins 00"
