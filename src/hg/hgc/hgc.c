@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1109 2006/09/14 23:32:09 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1110 2006/09/16 01:22:01 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11443,6 +11443,7 @@ printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic 
 // writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
 // printf("</PRE>\n");
 printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
+printf("\n<B>(Alignment to genomic may be a subset of dbSNP Sequence)</B><BR>");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
@@ -11531,7 +11532,7 @@ if (startsWith("rs",itemName))
 printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
-printSnpAlignment(snp);
+// printSnpAlignment(snp);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12100,6 +12101,36 @@ snp.strand[1] = '\0';
 return snp;
 }
 
+void printSnpOrthos(char *rsId)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+int count = 0;
+
+if (sameString("hg18", database) && hTableExists("snp126orthoMixed"))
+    {
+    safef(query, sizeof(query),
+          "select count(*) from snp126orthoMixed where name='%s'", rsId);
+    count = sqlQuickNum(conn, query);
+    if (count != 1) return;
+    
+    safef(query, sizeof(query),
+          "select chimpAllele, chimpStrand, macaqueAllele, macaqueStrand "
+	  "from snp126orthoMixed where name='%s'", rsId);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+
+    printf("<BR><B>Chimp Allele = </B>%s\n", row[0]);
+    printf("<BR><B>Chimp Strand = </B>%s\n", row[1]);
+    printf("<BR><B>Macaque Allele = </B>%s\n", row[2]);
+    printf("<BR><B>Macaque Strand = </B>%s\n", row[3]);
+    printf("<BR>\n");
+    sqlFreeResult(&sr);
+    }
+}
+
 void doSnp125(struct trackDb *tdb, char *itemName)
 /* Process SNP details. */
 {
@@ -12125,6 +12156,7 @@ bedPrintPos((struct bed *)&snp, 3);
 snpAlign=snp125ToSnp(&snp);
 printf("<BR>\n");
 printSnp125Info(snp);
+printSnpOrthos(itemName);
 printf("<BR>\n");
 printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
@@ -12149,7 +12181,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 
-printSnpAlignment(snpAlign);
+// printSnpAlignment(snpAlign);
 
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -12186,6 +12218,7 @@ bedPrintPos((struct bed *)&snp, 3);
 snpAlign=snp125ToSnp(&snp);
 printf("<BR>\n");
 printSnp125Info(snp);
+printSnpOrthos(itemName);
 printf("<BR>\n");
 printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
@@ -12212,7 +12245,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 
-printSnpAlignment(snpAlign);
+// printSnpAlignment(snpAlign);
 
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
