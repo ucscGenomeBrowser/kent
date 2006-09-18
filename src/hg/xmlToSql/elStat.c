@@ -13,7 +13,7 @@ struct elStat *elStatLoadAll(char *fileName)
 struct elStat *list = NULL, *el = NULL;
 struct attStat *att;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *row[6];
+char *row[6];
 int wordCount;
 
 for (;;)
