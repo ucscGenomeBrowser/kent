@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1110 2006/09/16 01:22:01 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1111 2006/09/18 22:58:12 daryl Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11336,6 +11336,7 @@ void printSnpAlignment(struct snp snp)
 {
 char                  url[128];
 char                 *line;
+char                 *lineEnd;
 char                  query[256];
 char                **row;
 char                 *strand;
@@ -11359,6 +11360,7 @@ int                   start;
 int                   end;
 boolean               haveSeq      = FALSE;
 boolean               haveObserved = FALSE;
+boolean               merged       = FALSE;
 
 /* get details page for snp from NCBI/dbSnp */
 safef(url, sizeof(url), "http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?rs=%s",snp.name);
@@ -11379,7 +11381,7 @@ while (lineFileNext(lf,&line,NULL) && !haveSeq)
 	    else
 		{ /* get observed */
 		line=stringIn("green",line)+7;
-		while(!startsWith("</FONT",line))
+		while(!startsWith("</FONT",line) && line!=NULL)
 		    dyStringAppendN(seqDbSnpO,line++,1);
 		haveObserved=TRUE;
 		}
@@ -11396,12 +11398,38 @@ while (lineFileNext(lf,&line,NULL) && !haveSeq)
 		haveSeq=TRUE;
 	    }
 	}
+if (haveSeq==FALSE)
+    {
+    lineFileClose(&lf);
+    page = htmlPageGet(url);
+    lf = lineFileOnString("web page", TRUE, page->htmlText);
+    while (lineFileNext(lf,&line,NULL))
+	if ((line=stringIn("id was merged into ", line))!=NULL && 
+	    (line=stringIn(">rs", line))!=NULL && line++ && 
+	    (lineEnd=stringIn("</a>",line))!=NULL)
+	    {
+	    lineEnd[0]='\0';
+	    printf("<BR>%s was merged into %s.&nbsp;&nbsp;%s is an invalid rsId.<BR>", snp.name, line, snp.name);
+	    merged=TRUE;
+	    }
+    if (merged==FALSE)
+	printf("<BR>Alignments between %s and the genome are not possible as the flanking sequences were not found at dbSnp.<BR>\n",snp.name);
+    return;
+    }
 
 stripChar(seqDbSnp5->string,' ');
 stripChar(seqDbSnpO->string,' ');
 stripChar(seqDbSnp3->string,' ');
 seqDbSnp5len=strlen(seqDbSnp5->string);/* spaces made the string size incorrect */
 seqDbSnp3len=strlen(seqDbSnp3->string);
+
+if (seqDbSnp5len==0||seqDbSnp3len==0)
+    {
+    printf("<BR>Zero length flanking sequences<BR>");
+    printf("5': %s<BR>", seqDbSnp5->string);
+    printf("3': %s<BR>", seqDbSnp3->string);
+    return;
+    }
 dyStringAppend(seqDbSnpTemp,seqDbSnp5->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnpO->string);
 dyStringAppend(seqDbSnpTemp,seqDbSnp3->string);
@@ -11439,11 +11467,10 @@ if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
 printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
-// printf("<PRE><B>Genomic Sequence:</B><BR>");
-// writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
-// printf("</PRE>\n");
+printf("<PRE><B>Genomic Sequence:</B><BR>");
+writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
+printf("</PRE>\n");
 printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
-printf("\n<B>(Alignment to genomic may be a subset of dbSNP Sequence)</B><BR>");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
@@ -11532,7 +11559,7 @@ if (startsWith("rs",itemName))
 printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
-// printSnpAlignment(snp);
+printSnpAlignment(snp);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12180,9 +12207,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-
-// printSnpAlignment(snpAlign);
-
+printSnpAlignment(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12244,9 +12269,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-
-// printSnpAlignment(snpAlign);
-
+printSnpAlignment(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
