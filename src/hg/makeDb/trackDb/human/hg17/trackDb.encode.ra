@@ -2952,7 +2952,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeMsaElIntersect
     subTrack encodeMsaElements
     shortLabel Strict
-    longLabel MSA Consensus Strict Consrained Elements
+    longLabel MSA Consensus Strict Constrained Elements
     priority 3
     color 80,145,105
 
