@@ -3,7 +3,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyLookup.c,v 1.2 2006/07/08 01:04:55 heather Exp $";
+static char const rcsid[] = "$Id: affyLookup.c,v 1.3 2006/09/19 20:47:35 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;
@@ -46,9 +46,10 @@ safef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType f
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    /* this is specific to snp124 */
     class = cloneString(row[3]);
-    if (!sameString(class, "snp")) continue;
+    if (!sameString(class, "single")) continue;
+    /* this is specific to snp124 */
+    // if (!sameString(class, "snp")) continue;
     locType = cloneString(row[4]);
     if (!sameString(locType, "exact")) continue;
     start = sqlUnsigned(row[1]);
@@ -77,25 +78,26 @@ int end = 0;
 
 snps = readSnps(chromName);
 
-safef(query, sizeof(query), "select * from %s where chrom='%s' ", affyTable, chromName);
+safef(query, sizeof(query), "select chromStart, chromEnd, name, score, strand, observed from %s where chrom='%s' ", 
+      affyTable, chromName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    start = sqlUnsigned(row[2]);
-    end = sqlUnsigned(row[3]);
+    start = sqlUnsigned(row[0]);
+    end = sqlUnsigned(row[1]);
     elList = binKeeperFind(snps, start, end);
     if (elList == NULL)
         {
 	missCount++;
-        fprintf(errorFileHandle, "Missing rsId for affy SNP %s\n", row[4]);
-        fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
-        fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
+        fprintf(errorFileHandle, "Missing rsId for affy SNP %s\n", row[2]);
+        fprintf(outputFileHandle, "%s\t%s\t%s\t", chromName, row[0], row[1]);
+        fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[2], row[3], row[4], row[5]);
         fprintf(outputFileHandle, "%s\n", "unknown");
 	continue;
 	}
      /* just use the first one found */
-     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
-     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
+     fprintf(outputFileHandle, "%s\t%s\t%s\t", chromName, row[0], row[1]);
+     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[2], row[3], row[4], row[5]);
      fprintf(outputFileHandle, "%s\n", (char *)elList->val);
      /* check for extras */
      if (elList->next != NULL)
