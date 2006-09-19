@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.135 2006/08/29 22:33:32 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.136 2006/09/19 00:51:54 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -722,6 +722,16 @@ for (track = trackList; track != NULL; track = track->next)
 carefulClose(&f);
 }
 
+char *customTrackCgiButtonLabel(struct cart *cart)
+/* determine button label to launch hgCustom based on whether 
+ * user currently has any custom tracks */
+{
+if (cartVarExists(cart, "ct"))
+    return "manage custom tracks";
+else
+    return "add custom tracks (new)";
+}
+
 boolean isCustomTrack(char *track)
 /* determine if track name refers to a custom track */
 {
@@ -765,6 +775,7 @@ static struct customTrack *customTracksFromFile(char *text)
 {
 return customFactoryParse(text, TRUE, NULL);
 }
+
 
 static char *testData = 
 "track name='Colors etc.' description='Some colors you might use'\n"

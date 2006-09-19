@@ -17,6 +17,8 @@
 #define CT_DEFAULT_TRACK_NAME    "User Track"
 #define CT_DEFAULT_TRACK_DESCR   "User Supplied Track"
 
+#define CT_CGI_VAR		 "hgct_doHgCustom"
+
 #define CT_DOC_HEADER_PREFIX     "<!-- UCSC_GB_TRACK NAME="
 #define CT_DOC_HEADER_SUFFIX     " -->"
 
@@ -25,6 +27,7 @@
 #ifndef CT_APPEND_DEFAULT
 #define CT_APPEND_OK_VAR        "hgct_appendOk"
 #endif
+
 
 struct customTrack
 /* A custom track.  */
@@ -136,4 +139,7 @@ struct customTrack *customTrackAddToList(struct customTrack *ctList,
 void customTrackHandleLift(struct customTrack *ctList);
 /* lift any tracks with contig coords */
 
+char *customTrackCgiButtonLabel(struct cart *cart);
+/* determine button label to launch hgCustom based on whether 
+ * user currently has any custom tracks */
 #endif

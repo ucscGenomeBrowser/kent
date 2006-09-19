@@ -107,7 +107,7 @@
 #include "dbRIP.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1196 2006/09/15 14:37:06 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1197 2006/09/19 00:51:54 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12715,10 +12715,8 @@ if (!hideControls)
     hButton("customTrackPage", "add custom tracks");
     hPrintf(" ");
 #endif
-    /*
-    hButton("customTrackCgi", "manage custom tracks");
+    hButton(CT_CGI_VAR, customTrackCgiButtonLabel(cart));
     hPrintf(" ");
-    */
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
     hButton("submit", "refresh");
@@ -13511,9 +13509,9 @@ hDefaultConnect();
 initTl();
 
 /* Do main display. */
-if (cartVarExists(cart, "customTrackCgi"))
+if (cartVarExists(cart, CT_CGI_VAR))
     {
-    cartRemove( cart, "customTrackCgi");
+    cartRemove(cart, CT_CGI_VAR);
     customTrackCgi();
     }
 /* TODO: remove when hgCustom is ready for release */
