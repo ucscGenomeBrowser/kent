@@ -323,6 +323,20 @@ match.  If no shortCircuit search produces a match, then hgFind
 performs all other (additive/non-shortCircuit) searches.  
 </P>
 
+<A NAME="semiShortCircuit"></A>
+<P>
+A slight twist to this mechanism is the semiShortCircuit setting:
+
+<TT><PRE>
+semiShortCircuit 1
+</PRE></TT>
+
+That allows other shortCircuit or semiShortCircuit searches to be 
+performed even if a match is found for this search, and is for use 
+when we need the speed but are not absolutely sure that this track 
+contains the only correct result for the search term.
+</P>
+
 
 <A NAME="searchPriority"></A>
 <H3>5. Decide on a searchPriority</H3>
@@ -509,6 +523,11 @@ Here is a description of currently supported settings:
         a string found at the beginning of the user's search term (and
 	termRegex) for this search, but not at the beginning of items
 	in the table.
+    </LI>
+    <LI><TT><A HREF="#semiShortCircuit">semiShortCircuit</A></TT>: 
+        if a match is found, don't halt immediately (like shortCircuit
+        would) but instead allow other shortCircuit or semiShortCircuit
+        searches to be performed before halting.
     </LI>
 </UL>
 
