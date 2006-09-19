@@ -30,8 +30,8 @@ endif
 echo
 if ($ip == "all") then
   rm -f ipFile
-  ssh hgwbeta /etc/init.d/bottleneck status | egrep "current"
-  ssh hgwbeta /etc/init.d/bottleneck status | grep -w -v "0" \
+  /etc/init.d/bottleneck status | egrep "current"
+  /etc/init.d/bottleneck status | grep -w -v "0" \
      | grep -v "current" | sort -nr -k5 > ipFile
   set allIPs=`cat ipFile | awk '{print $1}'`
   set worst=`echo $allIPs | awk '{print $1}'`
@@ -44,7 +44,7 @@ if ($ip == "all") then
     echo "$ip\t\t$current\t  $orgName"
   end
 else
-  ssh hgwbeta /etc/init.d/bottleneck status | egrep "$ip|current"
+  /etc/init.d/bottleneck status | egrep "$ip|current"
 endif
 
 
@@ -54,7 +54,8 @@ echo "  time    = last seen hit was N seconds ago"
 echo "  max     = the most delay time slapped on this source IP"
 echo "  current = the current delay in milliseconds."
 echo
-echo "  delay decays at the rate of 10 miliseconds per second"
+echo "  delay decays at the rate of 10 milliseconds per second"
+echo '  each new hit adds 150 milliseconds to "current"'
 echo
 echo "  current shows the number of milliseconds they would "
 echo "  be delayed if they hit us with a query now.  "
