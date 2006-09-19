@@ -1661,7 +1661,7 @@ searchPriority 50
 searchName gvNameSearch
 searchTable gvPos
 query select chrom, chromStart, chromEnd, name from %s where name = '%s'
-xrefTable gv
+xrefTable hgFixed.gv
 xrefQuery select id, name from %s where name like '%%%s%%'
 searchMethod fuzzy
 padding 1000
@@ -1671,7 +1671,7 @@ searchName gvAliasSearch
 searchTable gvPos
 query select chrom, chromStart, chromEnd, name from %s where name = '%s'
 dontCheckXrefQueryFormat on
-xrefTable gvAttr
+xrefTable hgFixed.gvAttr
 xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
 searchMethod fuzzy
 padding 1000
