@@ -21484,6 +21484,7 @@ hgsql -e "alter table snpArrayIllumina300 add index chrom (chrom, bin)" hg17
 
 #############################################################
 # Affy 500K (Heather, July 2006)
+# look up rsId using position
 
 ssh hgwdev
 cd /cluster/data/hg17/bed/snp/affyData/500K
@@ -21493,11 +21494,56 @@ cat Mapping250K_Sty.bed >> all.bed
 hgsql hg17 < affyTmp.sql
 hgsql -e "load data local infile 'all.bed' into table affyTmp" hg17
 # get dbSNP rsIDs
-/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affyTmp snp124
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affyTmp snp125
 hgsql hg17 < snpArrayAffy500.sql
 hgsql -e "load data local infile 'affyLookup.out' into table snpArrayAffy500" hg17
 hgsql -e "alter table snpArrayAffy500 add index name (name)" hg17
 hgsql -e "alter table snpArrayAffy500 add index chrom (chrom, bin)" hg17
+
+
+#############################################################
+# Affy 10K (Sept. 2006, Heather)
+# look up rsId using position
+
+ssh hgwdev
+cd /cluster/data/hg17/bed/snp/affyData/10K100Kagain
+
+# affy10
+# 14 missing, 807 multiple
+cp affy10K.txt affy10Temp.bed
+hgLoadBed hg17 affy10Temp affy10Temp.bed -sqlTable=affy10Temp.sql -tab -noBin
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affy10Temp snp125
+mv affyLookup.out affy10.bed
+mv affyLookup.err affy10.err
+hgLoadBed hg17 snpArrayAffy10 affy10.bed -sqlTable=snpArrayAffy10.sql -tab
+
+# affy10v2
+# 12 missing, 716 multiple
+hgLoadBed hg17 affy10v2Temp affy10v2Temp.bed -sqlTable=affy10v2Temp.sql -tab -noBin
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affy10v2Temp snp125
+mv affyLookup.out affy10v2.bed
+mv affyLookup.err affy10.errv2
+hgLoadBed hg17 snpArrayAffy10v2 affy10v2.bed -sqlTable=snpArrayAffy10v2.sql -tab
+
+# affy50HindIII
+# 156 missing, 1396 multiple
+hgLoadBed hg17 affy50HindIIITemp affy50HindIII.bed -sqlTable=affy50HindIIITemp.sql -tab -noBin
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affy50HindIIITemp snp125
+mv affyLookup.out affy50HindIII.bed
+mv affyLookup.err affy50HindIII.err
+hgLoadBed hg17 snpArrayAffy50HindIII affy50HindIII.bed -sqlTable=snpArrayAffy50HindIII.sql -tab
+hgsql -e "alter table snpArrayAffy50HindIII add index name (name)" hg17
+hgsql -e "alter table snpArrayAffy50HindIII add index chrom (chrom, bin)" hg17
+
+# affy50XbaI
+# 115 missing, 1745 multiple
+hgLoadBed hg17 affy50XbaITemp affy50XbaI.bed -sqlTable=affy50XbaITemp.sql -tab -noBin
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affy50XbaI snp125
+mv affyLookup.out affy50XbaI.bed
+mv affyLookup.err affy50XbaI.err
+hgLoadBed hg17 snpArrayAffy50XbaI affy50XbaI.bed -sqlTable=snpArrayAffy50XbaI.sql -tab
+hgsql -e "alter table snpArrayAffy50XbaI add index name (name)" hg17
+hgsql -e "alter table snpArrayAffy50XbaI add index chrom (chrom, bin)" hg17
 
 
 #########################################################################
