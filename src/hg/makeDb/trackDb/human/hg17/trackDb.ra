@@ -605,12 +605,40 @@ type bed 4 .
     type bed 6 +
     priority 1
 
+    track snpArrayAffy50HindIII
+    subTrack snpArray
+    shortLabel Affy 50KHindIII
+    longLabel Affymetrix GeneChip Human Mapping 50K HindIII
+    type bed 6 +
+    priority 2
+
+    track snpArrayAffy50XbaI
+    subTrack snpArray
+    shortLabel Affy 50KXbaI
+    longLabel Affymetrix GeneChip Human Mapping 50K XbaI
+    type bed 6 +
+    priority 3
+
+    track snpArrayAffy10
+    subTrack snpArray
+    shortLabel Affy 10K
+    longLabel Affymetrix GeneChip Human Mapping 10K
+    type bed 6 +
+    priority 4
+
+    track snpArrayAffy10v2
+    subTrack snpArray
+    shortLabel Affy 10Kv2
+    longLabel Affymetrix GeneChip Human Mapping 10K v2 
+    type bed 6 +
+    priority 5
+
     track snpArrayIllumina300
     subTrack snpArray
     shortLabel Illumina 300K
     longLabel Illumina HumanHap300 BeadChip
     type bed 4 .
-    priority 2
+    priority 6
 
 track cnp
 compositeTrack on
