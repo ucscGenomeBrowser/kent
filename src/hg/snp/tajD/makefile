@@ -8,8 +8,9 @@ A = tajD
 O = ${A}.o
 
 ${A}:	${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L} -lm
-	mv ${AOUT} ${HOME}/bin/${MACHTYPE}/${A}
+	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L} -lm -g
+	cp ${AOUT} ${HOME}/bin/${MACHTYPE}/${A}
+	mv ${AOUT} ${A}
 
 tags:	
 	ctags *.c *.h ../../lib/*.c ../../inc/*.h

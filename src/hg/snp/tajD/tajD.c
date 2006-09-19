@@ -14,7 +14,7 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: tajD.c,v 1.2 2006/03/15 23:01:03 daryl Exp $";
+static char const rcsid[] = "$Id: tajD.c,v 1.3 2006/09/19 21:45:23 daryl Exp $";
 
 boolean strictSnp=FALSE;
 boolean strictBiallelic=FALSE;
@@ -523,11 +523,10 @@ stDev = sqrt( e1*s + e2*s*(s-1) );
 return d/stDev;
 }
 
-//double tajimasD(struct region *region)
 void calculateTajD(struct region *region)
 {
 int s = region->S, n;
-double a1, e1, e2, d, stDev;
+double a1, e1, e2, d=0.0, stDev=0.0;
 double k = tajimasKhat(region), Dsum=0.0;
 struct site *site = NULL;
 
