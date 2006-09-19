@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1111 2006/09/18 22:58:12 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1112 2006/09/19 20:57:15 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16438,7 +16438,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void doAffy500K (struct trackDb *tdb, char *itemName)
+void doAffySnpArray (struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
@@ -17846,9 +17846,13 @@ else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
     }
-else if (sameString("snpArrayAffy500", track))
+else if (sameString("snpArrayAffy500", track) ||
+         sameString("snpArrayAffy10", track) ||
+         sameString("snpArrayAffy10v2", track) ||
+         sameString("snpArrayAffy50HindIII", track) ||
+         sameString("snpArrayAffy50XbaI", track))
     {
-    doAffy500K(tdb, item);
+    doAffySnpArray(tdb, item);
     }
 else if (sameString("snpArrayIllumina300", track))
     {
