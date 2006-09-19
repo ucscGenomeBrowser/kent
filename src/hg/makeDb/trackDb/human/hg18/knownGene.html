@@ -8,12 +8,15 @@ Each Known Gene is represented by an mRNA and a protein.
 <P>
 This track follows the display conventions for 
 <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction 
-tracks</A>. Black coloring indicates features that have corresponding entries 
-in the Protein Databank (PDB). Blue indicates features associated with
-mRNAs from NCBI RefSeq or (dark blue) items having associated proteins in 
-the UniProt database. The variation in blue shading of RefSeq items
-corresponds to the level of review the RefSeq record has undergone: 
-predicted (light), provisional (medium), or reviewed (dark). </P>
+tracks</A> with the following color scheme:
+
+<UL>
+<LI>Black: indicates the gene has a corresponding entry
+in the Protein Databank (PDB). 
+<LI>Dark Blue: indicates the gene has either a corresponding RefSeq mRNA that is "Reviewed" or "Validated" or a corresponding Swiss-Prot protein.
+<LI>Medium Blue: indicates the gene has a corresponding RefSeq mRNA that is not "Reviewed" nor "Validated".
+<LI>Light Blue: Everything else.
+</UL>
 <P>
 This track contains an optional codon coloring 
 feature that allows users to quickly validate and compare gene predictions.
