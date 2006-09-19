@@ -10,7 +10,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.13 2006/03/21 16:45:47 angie Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.14 2006/09/19 03:05:54 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,33 +72,45 @@ struct element
 struct hash *typeHash;	/* Keyed by struct type */
 struct type *topType;	/* Highest level type */
 
-boolean isAllInt(char *s)
-/* Return true if it looks like an integer */
+boolean hasLeftPaddedZero(char *s)
+/* does the string have a leading zero */
+{
+if (strlen(s) < 2)
+    return FALSE;
+return s[0]=='0';
+}
+
+boolean isAllUInt(char *s)
+/* Return true if it looks like an unsigned integer */
 {
 char c;
-if (*s == '-')
-   ++s;
 while ((c = *s++) != 0)
     if (!isdigit(c))
         return FALSE;
 return TRUE;
 }
 
-boolean isAllFloat(char *s)
-/* Return true if it looks like an floating point */
+boolean isAllInt(char *s)
+/* Return true if it looks like an integer */
 {
 char c;
 if (*s == '-')
    ++s;
-while ((c = *s++) != 0)
-    if (!isdigit(c))
-	break;
-if (c == 0)
-    return TRUE;
-else if (c == '.')
+return isAllUInt(s) && !hasLeftPaddedZero(s);
+}
+
+boolean isAllFloat(char *s)
+/* Return true if it looks like an floating point */
+{
+char *point = strchr(s,'.');
+if (!point)
     return isAllInt(s);
-else
+if (!isAllUInt(point+1))
     return FALSE;
+char *temp=cloneStringZ(s,point-s);
+boolean result = isAllInt(temp);
+freeMem(temp);
+return result;
 }
 
 
@@ -143,7 +155,7 @@ for (i=0; atts[i] != NULL; i += 2)
     if (valLen > att->maxLen)
         att->maxLen = valLen;
     if (!att->nonInt)
-	if (!isAllInt(val))
+	if (!isAllInt(val) || hasLeftPaddedZero(val))
 	    att->nonInt = TRUE;
     if (!att->nonFloat)
 	if (!isAllFloat(val))
@@ -210,7 +222,7 @@ else
     hashStore(att->values, text);
     att->count += 1;
     if (!att->nonInt)
-	if (!isAllInt(text))
+	if (!isAllInt(text) || hasLeftPaddedZero(text))
 	    att->nonInt = TRUE;
     if (!att->nonFloat)
 	if (!isAllFloat(text))
