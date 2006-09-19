@@ -500,7 +500,6 @@ void doFrame(struct sqlConnection *conn, boolean forceImageToList)
 int imageId = cartUsualInt(cart, hgpId, 0);
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
-struct slName *geneList, *gene;
 struct tempName matchTempName;
 char *matchFile = NULL;
 struct visiMatch *matchList = visiSearch(conn, listSpec);
@@ -529,19 +528,6 @@ printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");
 printf("%s ", hgVisiGeneShortName());
-if (imageId != 0)
-    {
-    geneList = visiGeneGeneName(conn, imageId);
-    for (gene = geneList; gene != NULL; gene = gene->next)
-	{
-	printf("%s", gene->name);
-	if (gene->next != NULL)
-	    printf(",");
-	}
-    printf(" %s %s",
-	    visiGeneStage(conn, imageId, FALSE),
-	    shortOrgName(visiGeneOrganism(conn, imageId)));
-    }
 printf("%s",titleMessage);    
 printf("</TITLE>\n");
 printf("</HEAD>\n");
