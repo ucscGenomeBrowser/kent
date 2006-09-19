@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.53 2006/09/13 21:22:57 hiram Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.54 2006/09/19 05:51:28 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -80,7 +80,6 @@ int netAcceptingSocketFrom(int port, int queueSize, char *host)
 struct sockaddr_in sai;
 int sd;
 int flag = 1;
-socklen_t len;
 
 netBlockBrokenPipes();
 if ((sd = netStreamSocket()) < 0)
@@ -89,8 +88,6 @@ if (!internetFillInAddress(host, port, &sai))
     return -1;
 if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(int)))
     return -1;
-if (getsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, &len))
-    warn("getsockopt error\n");
 if (bind(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
     {
     warn("Couldn't bind socket to %d: %s", port, strerror(errno));
