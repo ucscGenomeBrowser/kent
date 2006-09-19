@@ -12,8 +12,9 @@
 #include "hgFind.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.88 2006/08/29 00:04:45 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.89 2006/09/19 01:00:21 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -159,15 +160,11 @@ puts(
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
-/* TODO: remove ifdef after hgCustom is ready for release */
-#ifndef CT_APPEND_DEFAULT
+/* TODO: remove button for old page after hgCustom is ready for release */
 cgiMakeButton("customTrackPage", "add custom tracks");
 printf(" ");
-#endif
-/*
-cgiMakeButton("customTrackCgi", "manage custom tracks");
+cgiMakeButton(CT_CGI_VAR, customTrackCgiButtonLabel(cart));
 printf(" ");
-*/
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 printf(" ");
 cgiMakeOnClickButton("document.mainForm.position.value=''","clear position");
