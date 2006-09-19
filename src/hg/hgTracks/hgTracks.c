@@ -107,7 +107,7 @@
 #include "dbRIP.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1197 2006/09/19 00:51:54 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1198 2006/09/19 16:16:13 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3373,7 +3373,8 @@ Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
 struct linkedFeatures *lf = item;
 int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
-struct rgbColor lighter, lightest;
+struct rgbColor lighter;
+struct rgbColor lightest;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -3388,20 +3389,25 @@ char *refAcc = NULL;
 
 	Black: 		If the gene has a corresponding PDB entry
 	Dark blue: 	If the gene has a corresponding SWISS-PROT entry
-			or has a corresponding "reviewed" RefSeq entry
-	Lighter blue:  	If the gene has a corresponding "provisional" RefSeq entry
+			or has a corresponding "Reviewed" or "Validated" RefSeq entry
+	Lighter blue:  	If the gene has a corresponding RefSeq entry
 	Lightest blue: 	Eveything else
 */
 
-// set default to the lightest color
+lighter.r = (6*normal->r + 4*255) / 10;
+lighter.g = (6*normal->g + 4*255) / 10;
+lighter.b = (6*normal->b + 4*255) / 10;
+
 lightest.r = (1*normal->r + 2*255) / 3;
 lightest.g = (1*normal->g + 2*255) / 3;
 lightest.b = (1*normal->b + 2*255) / 3;
+
+/* set default to the lightest color */
 col = vgFindColorIx(vg, lightest.r, lightest.g, lightest.b);
 
-// set color first according to RefSeq status (if there is a corresponding RefSeq)
-sprintf(cond_str, "mrna='%s' ", lf->name);
-refAcc = sqlGetField(conn, database, "mrnaRefseq", "refseq", cond_str);
+/* set color first according to RefSeq status (if there is a corresponding RefSeq) */
+sprintf(cond_str, "name='%s' ", lf->name);
+refAcc = sqlGetField(conn, database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
     if (hTableExists("refSeqStatus"))
@@ -3410,38 +3416,21 @@ if (refAcc != NULL)
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
-	    if (startsWith("Reviewed", row[0]))
+	    if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
 	    	{
 	    	/* Use the usual color */
 	    	col = tg->ixColor;
 	    	}
 	    else
 		{ 
-	    	if (startsWith("Provisional", row[0]))
-	    	    {
-	    	    lighter.r = (6*normal->r + 4*255) / 10;
-	    	    lighter.g = (6*normal->g + 4*255) / 10;
-	    	    lighter.b = (6*normal->b + 4*255) / 10;
-	    	    col = vgFindColorIx(vg, lighter.r, lighter.g, lighter.b);
-	    	    }
+	    	col = vgFindColorIx(vg, lighter.r, lighter.g, lighter.b);
 		}	   
 	    }
 	sqlFreeResult(&sr);
 	}
     }
-
-/* if a corresponding SWISS-PROT entry exists, set it
-	    	if (startsWith("Provisional", row[0]))
-	    	    {
-	    	    lighter.r = (6*normal->r + 4*255) / 10;
-	    	    lighter.g = (6*normal->g + 4*255) / 10;
-	    	    lighter.b = (6*normal->b + 4*255) / 10;
-	    	    col = vgFindColorIx(vg, lighter.r, lighter.g, lighter.b);
-	    	    }
-		}	   
-	    }
-	sqlFreeResult(&sr);
-	} to dark blue */
+    
+/* set to dark blue if there is a corresponding Swiss-Prot protein */
 sprintf(cond_str, "name='%s'", (char *)(lf->name));
 proteinID= sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
@@ -3460,6 +3449,7 @@ if (protDbName != NULL)
     sprintf(cond_str, "sp='%s'", proteinID);
     pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
     }
+
 if (pdbID != NULL) 
     {
     col = MG_BLACK;
@@ -3468,8 +3458,6 @@ if (pdbID != NULL)
 hFreeConn(&conn);
 return(col);
 }
-
-
 
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
