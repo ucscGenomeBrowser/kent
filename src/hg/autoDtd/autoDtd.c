@@ -10,7 +10,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.14 2006/09/19 03:05:54 galt Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.15 2006/09/19 14:59:56 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -93,7 +93,6 @@ return TRUE;
 boolean isAllInt(char *s)
 /* Return true if it looks like an integer */
 {
-char c;
 if (*s == '-')
    ++s;
 return isAllUInt(s) && !hasLeftPaddedZero(s);
