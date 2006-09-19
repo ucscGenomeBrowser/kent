@@ -729,6 +729,7 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # Also added the strain name and stage to the extra column for the 
 # Experiments tables (AllExps and MedianExps) so that when Chip ID is 
 # selected then all of these are shown. (DONE, 2006-08-11, hartera)
+# Added absolute data (before logs were taken). (DONE, 2006-09-19, hartera)
 
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
@@ -891,6 +892,33 @@ hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedianLog \
   zebrafishZonWTMedianExps -minExps=1
 
+# Received Absolute expression values for the WT microarray data,
+# wtr.txt.gz, and add to /projects/compbio/data/microarray/zebrafishWT:
+# (2006-08-31)
+gunzip wtr.txt.gz
+# Process data (2006-09-19)
+# Remove Probe column heading
+sed -e 's/Probe//' wtr.txt > wtAbs.txt
+# then process as before to reformat column headings.
+# remove the quotes on the experiment names
+perl -pi.bak -e 's/"//g' wtAbs.txt
+perl format.pl < wtAbs.txt > zebrafishWTAbs.txt
+
+# Create the main expRecord table and the expData table for
+# the absolute measurements as so:
+hgGnfMicroarray zfishWTAllExps zebrafishZonWTAll
+/projects/compbio/data/microarray/zebrafishWT/zebrafishWTAbs.txt
+-chip=Zebrafish
+
+# The zfishWTAllExps table can be removed as there is already the
+# zebrafishZonWTAllExps table that has been created for all the replicates.
+# Check that these have the same id/name pairs in each table.
+hgsql -e 'drop table zfishWTAllExps;' hgFixed
+
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps zfishZonWTMedian.ra zebrafishZonWTMedian zebrafishZonWTMedianExps -minExps=1
+
+#The Mouse GNF Expression Atlas 2 (2004)
 ##########################################################################
 # Updated gv* tables for the Locus Variants tracks 
 # (Belinda Giardine Sept 2006)
