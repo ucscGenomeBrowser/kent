@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.91 2006/09/19 03:11:58 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.92 2006/09/19 04:19:56 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -244,7 +244,7 @@ char                 *table     = cloneString("snp126ortho"); /* could be a trac
 char                 *orthoName = NULL;
 char                 *chimpBase = NULL;
 struct sqlResult     *sr        = NULL;
-
+return;
 if(!sqlTableExists(conn, table))
     return;
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -259,7 +259,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* reset the pointer to start at the top of the list, then find relevant entry */
     item = itemList;
-    while(differentString(((struct snp125 *)item)->name,orthoName))
+    while(item!=NULL && differentString(((struct snp125 *)item)->name, orthoName))
 	item=item->next;
 
     /* if it is found, update the name with the new information */
