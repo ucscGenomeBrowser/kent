@@ -1521,6 +1521,14 @@ searchMethod fuzzy
 searchType bed
 searchPriority 10
 
+searchName wgRnaExact
+searchTable wgRna
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [A-Z0-9\(\)/-]+
+searchPriority 20
+
 searchTable cnpSharp
 searchMethod exact
 searchType bed
