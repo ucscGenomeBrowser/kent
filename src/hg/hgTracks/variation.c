@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.90 2006/09/10 06:33:11 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.91 2006/09/19 03:11:58 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -232,6 +232,51 @@ for (i=0; i<snp125LocTypeLabelsSize; i++)
 return TRUE;
 }
 
+void appendAllelesToSnpNames(struct track *tg)
+/* return the SNP name with rsId and ortho alleles */
+{
+struct sqlConnection *conn      = hAllocConn();
+int                   rowOffset = 0;
+char                **row       = NULL;      /* list of orthologous state info */
+struct slList        *itemList  = tg->items; /* list of SNPs */
+struct slList        *item      = itemList;
+char                 *table     = cloneString("snp126ortho"); /* could be a trackDb option */
+char                 *orthoName = NULL;
+char                 *chimpBase = NULL;
+struct sqlResult     *sr        = NULL;
+
+if(!sqlTableExists(conn, table))
+    return;
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+
+/* walk through the list of orthologous allele information */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* get the name of the SNP and the chimp state */
+    /* fix this to use library functions once the schema has stabilized */
+    orthoName=cloneString(row[4]);
+    chimpBase=cloneString(row[14]);
+
+    /* reset the pointer to start at the top of the list, then find relevant entry */
+    item = itemList;
+    while(differentString(((struct snp125 *)item)->name,orthoName))
+	item=item->next;
+
+    /* if it is found, update the name with the new information */
+    if(item!=NULL)
+	{
+	struct dyString *extra = newDyString(256);
+	dyStringPrintf(extra, "%s %s>%s", 
+		       ((struct snp125 *)item)->name, chimpBase,
+		       ((struct snp125 *)item)->observed);
+	((struct snp125*)item)->name=cloneString(extra->string);
+	freeDyString(&extra);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void loadSnpMap(struct track *tg)
 /* Load up snpMap from database table to track items. */
 {
@@ -248,6 +293,7 @@ if (!startsWith("hg",database))
     return;
 filterSnpMapItems(tg, snpMapSourceFilterItem);
 filterSnpMapItems(tg, snpMapTypeFilterItem);
+appendAllelesToSnpNames(tg);
 }
 
 void loadSnp(struct track *tg)
@@ -288,6 +334,7 @@ filterSnpItems(tg, snpClassFilterItem);
 filterSnpItems(tg, snpValidFilterItem);
 filterSnpItems(tg, snpFuncFilterItem);
 filterSnpItems(tg, snpLocTypeFilterItem);
+appendAllelesToSnpNames(tg);
 }
 
 void loadSnp125(struct track *tg)
@@ -340,6 +387,7 @@ filterSnpItems(tg, snp125ValidFilterItem);
 filterSnpItems(tg, snp125FuncFilterItem);
 filterSnpItems(tg, snp125LocTypeFilterItem);
 
+appendAllelesToSnpNames(tg);
 }
 
 void freeSnpMap(struct track *tg)
@@ -389,7 +437,6 @@ switch (thisSnpColor)
  	break;
     }
 }
-
 
 Color snp125Color(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snp track item. */
@@ -793,9 +840,9 @@ void snp125Methods(struct track *tg)
 {
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
-tg->loadItems = loadSnp125;
+tg->loadItems     = loadSnp125;
 tg->freeItems     = freeSnp125;
-tg->itemColor = snp125Color;
+tg->itemColor     = snp125Color;
 tg->itemNameColor = snp125Color;
 }
 
