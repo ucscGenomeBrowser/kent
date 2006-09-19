@@ -2296,42 +2296,59 @@ searchMethod fuzzy
 padding 1000
 searchPriority 51
 
-searchName illuminaShort
+searchName illumina
 searchTable snpArrayIllumina300
 searchMethod exact
 searchType bed
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+termRegex (rs[0-9]+)
 searchPriority 12
 padding 250
 
-searchName affy500Short
+searchName affy500
 searchTable snpArrayAffy500
 searchMethod exact
 searchType bed
-shortCircuit 1
 termRegex (SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
 padding 250
 
-searchName illuminaLong
-searchTable snpArrayIllumina300
+searchName affy50HindIII
+searchTable snpArrayAffy50HindIII
 searchMethod exact
 searchType bed
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
 padding 250
 
-searchName affy500Long
-searchTable snpArrayAffy500
+searchName affy50XbaI
+searchTable snpArrayAffy50XbaI
 searchMethod exact
 searchType bed
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (SNP_A-[0-9]+(_[0-9]+)?)
-searchPriority 16
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
 padding 250
+
+searchName affy10
+searchTable snpArrayAffy10
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName affy10v2
+searchTable snpArrayAffy10v2
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
 
 searchName dbRIPAlu
 searchTable dbRIPAlu
