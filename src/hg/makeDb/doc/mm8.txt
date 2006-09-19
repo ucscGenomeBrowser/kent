@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.14 2006/09/15 23:30:27 hiram Exp $"
+#	"$Id: mm8.txt,v 1.15 2006/09/19 00:09:47 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7041,6 +7041,15 @@ set out = $3
 	mm8.stsInfoMouse.bed  stsMarkers_pos.rdb 500 \
 	| sort -k1,1 -k2,2n | sed -e "s/ //g" > stsMapMouse.bed
     #	The sed removes unneeded blanks
+    #	verify score profile remains similar
+    awk -F'\t' '{print $5}' stsMapMouse.bed | sort -n | uniq -c
+    #	  546 500
+    #	 1650 750
+    #	27705 1000
+    awk -F'\t' '{print $5}' ../STSmarkers/stsMapMouse.bed | sort -n | uniq -c
+    #	  546 500
+    #	 1648 750
+    #	27692 1000
 
     wc -l stsMapMouse.bed
     #	29901  stsMapMouse.bed
@@ -7087,6 +7096,21 @@ set out = $3
     hgLoadPsl -nobin -table=all_sts_primer mm8 primer/primers.psl.filter
     # load of all_sts_primer did not go as planned: 34563 record(s), 0
     # row(s) skipped, 1 warning(s) loading primer/primers.psl.filter
+    #	After warnings, checkTableCoords to find problems:
+    checkTableCoords -verboseBlocks mm8 all_sts_primer
+# mm8.all_sts_primer item 61999 chr10:62418012-62418048: blocks 0 and 1 overlap.
+# mm8.all_sts_primer has 1 records with overlapping blocks.
+    #	Strip the offending item from the load:
+    #	Verify the grep takes out only one item:
+    wc -l primer/primers.psl.filter
+    #	34563 primer/primers.psl.filter
+    grep -P "\t61999\t" primer/primers.psl.filter | wc -l
+    #	1
+    #	and thus leaves the rest
+    grep -v -P "\t61999\t" primer/primers.psl.filter | wc -l
+    #	34562
+    grep -v -P "\t61999\t" primer/primers.psl.filter > fixed.primers.psl.filter
+    hgLoadPsl -nobin -table=all_sts_primer mm8 fixed.primers.psl.filter
 
     # load primer sequences	
     rm /gbdb/mm8/stsMarker/mouseP.fa
@@ -7113,6 +7137,8 @@ set out = $3
     featureBits mm6 all_sts_primer
     #	3677372 bases of 2597150411 (0.142%) in intersection
     featureBits mm8 stsMapMouseNew
+    #	4812616 bases of 2567283971 (0.187%) in intersection
+    featureBits mm8 stsMapMouseNewFeb2006
     #	4801964 bases of 2567283971 (0.187%) in intersection
     featureBits mm7 stsMapMouseNew
     #	4805958 bases of 2583394090 (0.186%) in intersection
