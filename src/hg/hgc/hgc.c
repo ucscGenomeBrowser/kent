@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1112 2006/09/19 20:57:15 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1113 2006/09/20 14:30:01 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16505,7 +16505,7 @@ if (gvPrevCat == NULL)
     /* if need to print category layer, here is where print first */
     printf("<DT><B>%s:</B></DT><DD>\n", gvAttrTypeDisplay[i]);
     gvPrevCat = cloneString(gvAttrCategory[i]);
-    gvPrevType = cloneString(gvAttrTypeKey[i]);
+    gvPrevType = cloneString(gvAttrTypeDisplay[i]);
     }
 else if (differentString(gvPrevCat, gvAttrCategory[i]))
     {
@@ -16514,18 +16514,18 @@ else if (differentString(gvPrevCat, gvAttrCategory[i]))
     /* if/when add category here is where to print next */
     printf("<DT><B>%s:</B></DT><DD>\n", gvAttrTypeDisplay[i]);
     freeMem(gvPrevType);
-    gvPrevType = cloneString(gvAttrTypeKey[i]);
+    gvPrevType = cloneString(gvAttrTypeDisplay[i]);
     freeMem(gvPrevCat);
     gvPrevCat = cloneString(gvAttrCategory[i]);
     }
 else if (sameString(gvPrevCat, gvAttrCategory[i]) &&
-        differentString(gvPrevType, gvAttrTypeKey[i]))
+        differentString(gvPrevType, gvAttrTypeDisplay[i]))
     {
     /* print new name */
     printf("</DD>");
     printf("<DT><B>%s:</B></DT><DD>\n", gvAttrTypeDisplay[i]);
     freeMem(gvPrevType);
-    gvPrevType = cloneString(gvAttrTypeKey[i]);
+    gvPrevType = cloneString(gvAttrTypeDisplay[i]);
     }
 /* else don't need type or category */
 }
