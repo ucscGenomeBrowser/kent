@@ -24,10 +24,6 @@
 
 /* TODO: Remove this when hgCustom is ready for release. This cart variable is
  * only used to preserve old behavior during testing */
-#ifndef CT_APPEND_DEFAULT
-#define CT_APPEND_OK_VAR        "hgct_appendOk"
-#endif
-
 
 struct customTrack
 /* A custom track.  */

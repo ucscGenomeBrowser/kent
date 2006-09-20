@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.49 2006/09/20 00:16:52 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.50 2006/09/20 01:30:30 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -663,12 +663,6 @@ cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 saveDbAndGenome(cart, database, organism);
 hSetDb(database);
-
-/* TODO: remove ifdef when hgCustom is released.  It's just
- * used to preserve old behavior during testing */
-#ifndef CT_APPEND_OK
-cartSetBoolean(cart, CT_APPEND_OK_VAR, TRUE);
-#endif
 
 if (cartVarExists(cart, hgCtDoGenomeBrowser))
     {

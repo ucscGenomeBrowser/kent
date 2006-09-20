@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.136 2006/09/19 00:51:54 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.137 2006/09/20 01:30:30 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -330,6 +330,7 @@ for (ct = ctList; ct != NULL; ct = nextCt)
     if ((newCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
         {
         slAddTail(&replacedCts, ct);
+#ifdef OLD
         /* retain HTML from older track if there's none attached
          * to the newer. Do this by swapping new and old */
         if ((!newCt->tdb->html || !newCt->tdb->html[0]) &&
@@ -344,6 +345,7 @@ for (ct = ctList; ct != NULL; ct = nextCt)
             newCt->htmlFile = ct->htmlFile;
             ct->htmlFile = html;
             }
+#endif
         }
 
     else
@@ -467,15 +469,7 @@ struct customTrack *ct = NULL, *nextCt = NULL;
 
 /* load existing custom tracks from trash file */
 
-/* TODO: when hgCustom is ready for release, these ifdef's can be
- * be retired.  It's only here to preserve old behavior during testing */
-#ifdef CT_APPEND_DEFAULT
 if (ctFileNameFromCart != NULL)
-#else
-if (ctFileNameFromCart != NULL && 
-        (cartVarExists(cart, CT_APPEND_OK_VAR) || 
-            (customText == NULL || customText[0] == 0)))
-#endif
     {
     if (!fileExists(ctFileNameFromCart)) /* Cope with expired tracks. */
         {
@@ -515,23 +509,8 @@ if (ctFileNameFromCart != NULL &&
             }
         }
     }
-#ifdef CT_APPEND_DEFAULT
-    /* merge new and old tracks */
-    ctList = customTrackAddToList(ctList, newCts, &replacedCts);
-#else
-if (cartVarExists(cart, CT_APPEND_OK_VAR))
-    {
-    /* merge new and old tracks */
-    ctList = customTrackAddToList(ctList, newCts, &replacedCts);
-    }
-else 
-    {
-    /* discard old custom tracks and use new, if any */
-    if (newCts)
-        ctList = newCts;
-    }
-cartRemove(cart, CT_APPEND_OK_VAR);
-#endif
+/* merge new and old tracks */
+ctList = customTrackAddToList(ctList, newCts, &replacedCts);
 
 if (ctList)
     {
@@ -549,8 +528,12 @@ if (ctList)
 else
     cartRemove(cart, "ct");
 
-cartRemove(cart, CT_CUSTOM_TEXT_VAR);
-cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
+if (!err)
+    {
+    /* leave text if there's an error, so user can correct */
+    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
+    cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
+    }
 cartRemove(cart, CT_CUSTOM_FILE_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_NAME_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_BIN_VAR);
@@ -639,7 +622,7 @@ stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
 fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
 hashMayRemove(tdb->settingsHash, "description");
     
-if (tdb->url != NULL)
+if (tdb->url != NULL && tdb->url[0])
     fprintf(f, "\t%s='%s'", "url", tdb->url);
 hashMayRemove(tdb->settingsHash, "url");
 if (tdb->visibility != def->visibility)
