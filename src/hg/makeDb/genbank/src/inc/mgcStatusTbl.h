@@ -26,6 +26,9 @@ struct mgcStatusType
 {
     char *dbValue;    /* value used for database field (which is an enum) */
     int dbIndex;      /* database enum index for value */
+    int ncbiCode;     /* code used in fullength.full_length column of NCBI MGC
+                       * tracking table; -1 for status that don't correspond
+                       * to fullength code */
     char *desc;       /* natural language description */
     enum mgcState state; /* state this status maps to */
 };
@@ -65,6 +68,7 @@ extern struct mgcStatusType MGC_LIBRARY_ARTIFACTS;
 extern struct mgcStatusType MGC_NO_POLYA_TAIL;
 extern struct mgcStatusType MGC_CANT_SEQUENCE;
 extern struct mgcStatusType MGC_INCONSISTENT_WITH_GENE;
+extern struct mgcStatusType MGC_MANUALLY_SUPPRESSED;
 extern struct mgcStatusType MGC_PLATE_CONTAMINATED;
 
 struct mgcStatus
@@ -103,6 +107,9 @@ struct mgcStatusTbl
 char *mgcOrganismNameToCode(char *organism, char *whereFound);
 /* convert a MGC organism name to a two-letter code.  An error with
  * whereFound is generated if it can't be mapped */
+
+struct mgcStatusType *mgcStatusFindByNcbiCode(int ncbiCode);
+/* lookup a status by NCBI code, or NULL if not found */
 
 void mgcStatusTblCreate(struct sqlConnection *conn, char *tblName);
 /* create/recreate an MGC status table */

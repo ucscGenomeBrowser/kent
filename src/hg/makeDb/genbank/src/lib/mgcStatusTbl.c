@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.15 2006/09/14 16:42:42 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.16 2006/09/20 23:53:14 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -22,58 +22,60 @@ static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.15 2006/09/14 16:42:42 mark
  */
 /** has not been picked status */
 struct mgcStatusType MGC_UNPICKED = {
-    "unpicked", 1, "not picked", MGC_STATE_UNPICKED};
+    "unpicked", 1, -1, "not picked", MGC_STATE_UNPICKED};
 
 /*** these are in-progress status ***/
 struct mgcStatusType MGC_CANDIDATE = {
-    "candidate", 2, "candidate pick", MGC_STATE_PENDING};
+    "candidate", 2, -1, "candidate pick", MGC_STATE_PENDING};
 struct mgcStatusType MGC_PICKED = {
-    "picked", 3, "picked", MGC_STATE_PENDING};
+    "picked", 3, -1, "picked", MGC_STATE_PENDING};
 struct mgcStatusType MGC_NOT_BACK = {
-    "notBack", 4, "not back", MGC_STATE_PENDING};
+    "notBack", 4, 0, "not back", MGC_STATE_PENDING};
 struct mgcStatusType MGC_NO_DECISION = {
-    "noDecision", 5, "no decision yet", MGC_STATE_PENDING};
+    "noDecision", 5, 0, "no decision yet", MGC_STATE_PENDING};
 
 /*** these are full-length status ***/
 struct mgcStatusType MGC_FULL_LENGTH = {
-    "fullLength", 6, "full length", MGC_STATE_FULL_LENGTH};
+    "fullLength", 6, 2, "full length", MGC_STATE_FULL_LENGTH};
 struct mgcStatusType MGC_FULL_LENGTH_SYNTHETIC = {
-    "fullLengthSynthetic", 7, "full length (synthetic, expression ready, no stop)", MGC_STATE_FULL_LENGTH};
+    "fullLengthSynthetic", 7, 9, "full length (synthetic, expression ready, no stop)", MGC_STATE_FULL_LENGTH};
 
 /*** these are error status ***/
 /* MGC_FULL_LENGTH_SHORT was moved to error status due to confusion about meaning */
 struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
-    "fullLengthShort", 8, "full length (short isoform)", MGC_STATE_PROBLEM};
+    "fullLengthShort", 8, 8, "full length (short isoform)", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_INCOMPLETE = {
-    "incomplete", 9, "incomplete", MGC_STATE_PROBLEM};
+    "incomplete", 9, 1, "incomplete", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CHIMERIC = {
-    "chimeric", 10, "chimeric", MGC_STATE_PROBLEM};
+    "chimeric", 10, 3, "chimeric", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_FRAME_SHIFTED = {
-    "frameShift", 11, "frame shifted", MGC_STATE_PROBLEM};
+    "frameShift", 11, 4, "frame shifted", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CONTAMINATED = {
-    "contaminated", 12, "contaminated", MGC_STATE_PROBLEM};
+    "contaminated", 12, 5, "contaminated", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_RETAINED_INTRON = {
-    "retainedIntron", 13, "retained intron", MGC_STATE_PROBLEM};
+    "retainedIntron", 13, 6, "retained intron", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MIXED_WELLS = {
-    "mixedWells", 14, "mixed wells", MGC_STATE_PROBLEM};
+    "mixedWells", 14, 100, "mixed wells", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_GROWTH = {
-    "noGrowth", 15, "no growth", MGC_STATE_PROBLEM};
+    "noGrowth", 15, 101, "no growth", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_INSERT = {
-    "noInsert", 16, "no insert", MGC_STATE_PROBLEM};
+    "noInsert", 16, 102, "no insert", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_5_EST_MATCH = {
-    "no5est", 17, "no 5' EST match", MGC_STATE_PROBLEM};
+    "no5est", 17, 103, "no 5' EST match", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MICRODELETION = {
-    "microDel", 18, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
+    "microDel", 18, 104, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_LIBRARY_ARTIFACTS = {
-    "artifact", 19, "library artifacts", MGC_STATE_PROBLEM};
+    "artifact", 19, 105, "library artifacts", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_POLYA_TAIL = {
-    "noPolyATail", 20, "no polyA-tail", MGC_STATE_PROBLEM};
+    "noPolyATail", 20, 106, "no polyA-tail", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CANT_SEQUENCE = {
-    "cantSequence", 21, "unable to sequence", MGC_STATE_PROBLEM};
+    "cantSequence", 21, 107, "unable to sequence", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_INCONSISTENT_WITH_GENE = {
-    "inconsistentWithGene", 22, "inconsistent with known gene structure", MGC_STATE_PROBLEM};
+    "inconsistentWithGene", 22, 108, "inconsistent with known gene structure", MGC_STATE_PROBLEM};
+struct mgcStatusType MGC_MANUALLY_SUPPRESSED = {
+    "manuallySupressed", 22, 109, "manually supressed", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_PLATE_CONTAMINATED = {
-    "plateContaminated", 22, "plate contaminated", MGC_STATE_PROBLEM};
+    "plateContaminated", 22, 110, "plate contaminated", MGC_STATE_PROBLEM};
 
 /* null terminated, ordered list of mgcStatusType constants */
 static struct mgcStatusType *mgcStatusList[] = {
@@ -100,6 +102,7 @@ static struct mgcStatusType *mgcStatusList[] = {
     &MGC_CANT_SEQUENCE,
     &MGC_INCONSISTENT_WITH_GENE,
     &MGC_PLATE_CONTAMINATED,
+    &MGC_MANUALLY_SUPPRESSED,
     NULL
 };
 
@@ -239,6 +242,17 @@ if (statusHash == NULL)
 return hashFindVal(statusHash, statusName);
 }
 
+struct mgcStatusType *mgcStatusFindByNcbiCode(int ncbiCode)
+/* lookup a status by NCBI code, or NULL if not found */
+{
+int i;
+for (i = 0; mgcStatusList[i] != NULL; i++)
+    {
+    if (mgcStatusList[i]->ncbiCode == ncbiCode)
+        return mgcStatusList[i];
+    }
+return NULL;
+}
 
 struct mgcStatusTbl *mgcStatusTblNew(unsigned opts)
 /* Create an mgcStatusTbl object */

@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.9 2006/09/14 16:42:42 markd Exp $";
+static char const rcsid[] = "$Id: mgcImport.c,v 1.10 2006/09/20 23:53:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -40,55 +40,23 @@ struct mgcStatusType *fullengthToStatus(struct mgcFullength *fullength)
 /* convert the value in the full_length column of the fullength table to a
  * mgcStatusType */
 {
-switch (fullength->full_length)
+if (fullength->full_length == 0)
     {
-    case 0:
-        if (strlen(fullength->seq_back) == 0)
-            return &MGC_NOT_BACK;
-        else
-            return &MGC_NO_DECISION;
-    case 1:
-        return &MGC_INCOMPLETE;
-    case 2:
-        return &MGC_FULL_LENGTH;
-    case 3:
-        return &MGC_CHIMERIC;
-    case 4:
-        return &MGC_FRAME_SHIFTED;
-    case 5:
-        return &MGC_CONTAMINATED;
-    case 6:
-        return &MGC_RETAINED_INTRON;
-    case 8:
-        return &MGC_FULL_LENGTH_SHORT;
-    case 9:
-        return &MGC_FULL_LENGTH_SYNTHETIC;
-    case 100 :
-        return &MGC_MIXED_WELLS;
-    case 101 :
-        return &MGC_NO_GROWTH;
-    case 102 :
-        return &MGC_NO_INSERT;
-    case 103 :
-        return &MGC_NO_5_EST_MATCH;
-    case 104 :
-        return &MGC_MICRODELETION;
-    case 105 :
-        return &MGC_LIBRARY_ARTIFACTS;
-    case 106 :
-        return &MGC_NO_POLYA_TAIL;
-    case 107 :
-        return &MGC_CANT_SEQUENCE;
-    case 108 :
-        return &MGC_INCONSISTENT_WITH_GENE;
-    case 110 :
-        return &MGC_PLATE_CONTAMINATED;
-    default  :
+    /* special case */
+    if (strlen(fullength->seq_back) == 0)
+        return &MGC_NOT_BACK;
+    else
+        return &MGC_NO_DECISION;
+    }
+else
+    {
+    struct mgcStatusType *stat = mgcStatusFindByNcbiCode(fullength->full_length);
+    if (stat == NULL)
         errAbort("unknown value for column full_length: \"%d\" in fullength "
                  "table for id_image %d",
-                 fullength->full_length, fullength->id_parent); 
+                 fullength->full_length, fullength->id_parent);
+    return stat;
     }
-return NULL;
 }
 
 boolean haveErrorStatus(struct mgcStatus *mgcStatus)
