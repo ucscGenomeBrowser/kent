@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.95 2006/08/09 21:38:06 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.96 2006/09/20 23:27:12 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -263,6 +263,13 @@ else
 	       uiState);
 	puts("           PCR</A> &nbsp;&nbsp;&nbsp;");
 	}
+    if (wikiLinkEnabled())
+	{
+	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
+	       "class=\"topbar\">Session</A>",
+	       uiState);
+	puts("&nbsp;&nbsp;&nbsp;");
+	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
 	 );
@@ -281,20 +288,6 @@ else
     puts("           Help</A> ");
     }
     
-if (wikiLinkEnabled())
-    {
-    char *wikiUser = wikiLinkUserName();
-    puts("&nbsp;&nbsp;&nbsp;");
-    if (wikiUser)
-	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
-	       "class=\"topbar\">User: %s</A>\n",
-	       uiState, wikiUser);
-    else
-	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
-	       "class=\"topbar\">Log in</A>",
-	       uiState);
-    }
-
 puts("&nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
