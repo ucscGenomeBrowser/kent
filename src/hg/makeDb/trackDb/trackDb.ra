@@ -712,6 +712,15 @@ type psl est
 pslSequenceBases no
 maxItems 300
 
+track interPro
+shortLabel InterPro
+longLabel InterPro Domains
+group genes
+priority 34.6
+visibility pack
+color 12,12,120
+type psl
+
 track protBlat
 shortLabel Protein BLAT
 longLabel Protein Blatted against genome
