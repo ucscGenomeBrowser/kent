@@ -33,7 +33,7 @@
 added these
 lines */
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.87 2006/09/20 21:39:00 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.88 2006/09/20 21:40:15 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -56,6 +56,10 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
+
+/* DUMMY revision 1.88
+added these
+lines */
 
 
 #define TITLE "Push Queue v"CGI_VERSION
