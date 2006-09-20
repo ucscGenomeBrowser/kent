@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1114 2006/09/20 17:16:02 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1115 2006/09/20 22:52:12 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16167,6 +16167,30 @@ putaInfoFree(&info);
 hFreeConn(&conn);
 }
 
+void doInterPro(struct trackDb *tdb, char *itemName)
+{
+char condStr[255];
+char *desc;
+struct sqlConnection *conn;
+
+genericHeader(tdb, itemName);
+
+conn = hAllocConn();
+sprintf(condStr, "interProId='%s'", itemName);
+desc = sqlGetField(conn, "proteome", "interProXref", "description", condStr);
+
+printf("<B>Item:</B> %s <BR>\n", itemName);
+printf("<B>Description:</B> %s <BR>\n", desc);
+printf("<B>Outside Link:</B> ");
+printf("<A HREF=");
+
+printf("http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=%s", itemName);
+printf(" Target=_blank> %s </A> <BR>\n", itemName);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doDv(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
@@ -17837,6 +17861,10 @@ else if (sameString("cutters", track))
 else if (sameString("anoEstTcl", track))
     {
     doAnoEstTcl(tdb, item);
+    }
+else if (sameString("interPro", track))
+    {
+    doInterPro(tdb, item);
     }
 else if (sameString("dvBed", track))
     {
