@@ -52,6 +52,7 @@ SCRIPT_FILES = \
 	makeGenomeDb.pl \
 	makePushQSql.pl \
 	mkMafFrames.pl \
+	simplePartition.pl \
 	partitionSequence.pl
 
 # List of directories to build
