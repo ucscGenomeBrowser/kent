@@ -22161,3 +22161,34 @@ mkdir -p ${blatDir}/{over,net}
 # Do the same for hg17.  See hg17.txt for details.
 
 
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2006-09-20 markd)
+# Reloaded due to bug that results in multiple versions of the same accession
+# in the ccdsInfo table.
+
+    cd /cluster/data/genbank/data/ccds/hg17
+    ftp ftp-private.ncbi.nih.gov (user ccds, needs password)
+    get CCDS.20060920.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf  /cluster/data/genbank/data/ccds/hg17/CCDS.20060920.tar.gz
+
+    # import ccds database tables
+    hgsql -e 'drop database ccds; create database ccds'
+    hgsql ccds </cluster/data/genbank/etc/createTables.sql 
+    hgsql ccds </cluster/data/genbank/etc/createKeys.sql 
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+    checkTableCoords hg17 -verbose=2 ccdsGene
+    joinerCheck -database=hg17 -identifier=ccdsGeneId ~/compbio/kent/src/hg/makeDb/schema/all.joiner
+    rm -rf /scratch/tmp/ccds
+
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+
+    # << emacs
