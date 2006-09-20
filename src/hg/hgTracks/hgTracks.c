@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1199 2006/09/20 23:00:30 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1200 2006/09/20 23:17:19 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13487,22 +13487,6 @@ char *debugTmp = NULL;
 /* struct dyString *state = NULL; */
 /* Initialize layout and database. */
 cart = theCart;
-/* Uncomment this to see parameters for debugging. */
-/* Be careful though, it breaks if custom track
- * is more than 4k */
-/*state = cgiUrlString(); printf("State: %s\n", state->string);   */
-getDbAndGenome(cart, &database, &organism);
-saveDbAndGenome(cart, database, organism);
-hSetDb(database);
-protDbName = hPdbFromGdb(database);
-debugTmp = cartUsualString(cart, "hgDebug", "off");
-if(sameString(debugTmp, "on"))
-    hgDebug = TRUE;
-else
-    hgDebug = FALSE;
-
-hDefaultConnect();
-initTl();
 
 /* If we have been passed hgSession loading instructions, apply those to 
  * cart before proceeding. */
@@ -13521,6 +13505,23 @@ else if (cartVarExists(cart, hgsDoLoadUrl))
     loadSettings(lf, cart);
     lineFileClose(&lf);
     }
+
+/* Uncomment this to see parameters for debugging. */
+/* Be careful though, it breaks if custom track
+ * is more than 4k */
+/*state = cgiUrlString(); printf("State: %s\n", state->string);   */
+getDbAndGenome(cart, &database, &organism);
+saveDbAndGenome(cart, database, organism);
+hSetDb(database);
+protDbName = hPdbFromGdb(database);
+debugTmp = cartUsualString(cart, "hgDebug", "off");
+if(sameString(debugTmp, "on"))
+    hgDebug = TRUE;
+else
+    hgDebug = FALSE;
+
+hDefaultConnect();
+initTl();
 
 /* Do main display. */
 if (cartVarExists(cart, CT_CGI_VAR))
