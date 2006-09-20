@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.6 2006/09/20 23:00:31 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.7 2006/09/20 23:31:27 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,9 +40,9 @@ char *wikiHost = wikiLinkHost();
 cartWebStart(cart, "Welcome %s", wikiUserName);
 printf("If you are not %s (on the wiki at "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
-       "and would like to log out or change identity, \n",
+       "and would like to sign out or change identity, \n",
        wikiUserName, wikiHost, wikiHost);
-printf("<A HREF=\"%s\"><B>click here to log out.</B></A>\n",
+printf("<A HREF=\"%s\"><B>click here to sign out.</B></A>\n",
        wikiLinkUserLogoutUrl(cartSessionId(cart)));
 }
 
@@ -52,15 +52,15 @@ void offerLogin()
 {
 char *wikiHost = wikiLinkHost();
 
-cartWebStart(cart, "Log in to UCSC Genome Bioinformatics");
-printf("Logging in enables you to save current settings into a "
+cartWebStart(cart, "Sign in to UCSC Genome Bioinformatics");
+printf("Signing in enables you to save current settings into a "
        "named session, and then restore settings from the session later.\n"
        "If you wish, you can share named sessions with other users.\n"
        "The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n");
-printf("<P>The log in page is handled by our "
+printf("<P>The sign in page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
-printf("<A HREF=\"%s\"><B>click here to log in.</B></A>\n",
+printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
        wikiLinkUserLoginUrl(cartSessionId(cart)));
 printf("</P>\n");
 }
@@ -77,6 +77,118 @@ printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Reset session</A>"
        session, cgiEncode(returnAddress));
 }
 
+
+char *destAppScriptName()
+/* Return the complete path (/cgi-bin/... on our systems) of the destination
+ * CGI for share-able links.  Currently hardcoded; there might be a way to 
+ * offer the user a choice. */
+{
+static char *thePath = NULL;
+if (thePath == NULL)
+    {
+    char path[512];
+    char buf[512];
+    char *ptr = NULL;
+    safef(path, sizeof(path), "%s", cgiScriptName());
+    ptr = strrchr(path, '/');
+    if (ptr == NULL)
+	path[0] = '\0';
+    else
+	*(ptr+1) = '\0';
+    safef(buf, sizeof(buf), "%s%s", path, "hgTracks");
+    thePath = cloneString(buf);
+    }
+return thePath;
+}
+
+void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
+		    boolean encode)
+/* Add to dy an URL that tells hgSession to load a saved session.  
+ * If encode, cgiEncode the URL. */
+{
+struct dyString *dyTmp = dyStringNew(1024);
+dyStringPrintf(dyTmp, "http://%s%s?hgS_doOtherUser=submit&"
+	       "hgS_otherUserName=%s&hgS_otherUserSessionName=%s",
+	       cgiServerName(), destAppScriptName(), userName, sessionName);
+if (encode)
+    {
+    dyStringPrintf(dy, "%s", cgiEncode(dyTmp->string));
+    }
+else
+    {
+    dyStringPrintf(dy, "%s", dyTmp->string);
+    }
+dyStringFree(&dyTmp);
+}
+
+char *getSessionLink(char *userName, char *sessionName)
+/* Form a link that will take the user to a bookmarkable page that 
+ * will load the given session. */
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy, "<A HREF=\"");
+addSessionLink(dy, userName, sessionName, FALSE);
+dyStringPrintf(dy, "\">Link</A>\n");
+return dyStringCannibalize(&dy);
+}
+
+char *getSessionEmailLink(char *userName, char *sessionName)
+/* Invoke mailto: with a cgi-encoded link that will take the user to a 
+ * bookmarkable page that will load the given session. */
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session %s&"
+	       "body=This is my new favorite UCSC browser session:%%20",
+	       sessionName);
+addSessionLink(dy, userName, sessionName, TRUE);
+dyStringPrintf(dy, "\">Email</A>\n");
+return dyStringCannibalize(&dy);
+}
+
+void addUrlLink(struct dyString *dy, char *url, boolean encode)
+/* Add to dy an URL that tells hgSession to load settings from the given url. 
+ * If encode, cgiEncode the whole thing. */
+{
+struct dyString *dyTmp = dyStringNew(1024);
+char *encodedUrl = cgiEncode(url);
+dyStringPrintf(dyTmp, "http://%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
+	       cgiServerName(), destAppScriptName(), encodedUrl);
+if (encode)
+    {
+    dyStringPrintf(dy, "%s", cgiEncode(dyTmp->string));
+    }
+else
+    {
+    dyStringPrintf(dy, "%s", dyTmp->string);
+    }
+freeMem(encodedUrl);
+dyStringFree(&dyTmp);
+}	       
+
+char *getUrlLink(char *url)
+/* Form a link that will take the user to a bookmarkable page that 
+ * will load the given url. */
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy, "<A HREF=\"");
+addUrlLink(dy, url, FALSE);
+dyStringPrintf(dy, "\">Link</A>\n");
+return dyStringCannibalize(&dy);
+}
+
+char *getUrlEmailLink(char *url)
+/* Invoke mailto: with a cgi-encoded link that will take the user to a 
+ * bookmarkable page that will load the given url. */
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session&"
+	       "body=This is my new favorite UCSC browser session:%%20");
+addUrlLink(dy, url, TRUE);
+dyStringPrintf(dy, "\">Email</A>\n");
+return dyStringCannibalize(&dy);
+}
+
+
 void showExistingSessions(char *userName)
 /* Print out a table with buttons for sharing/unsharing/loading/deleting 
  * previously saved sessions. */
@@ -88,7 +200,7 @@ char query[512];
 boolean foundAny = FALSE;
 
 printf("<TABLE BORDERWIDTH=0>\n");
-printf("<TR><TD colspan=5>Previously saved sessions:</TD></TR>\n");
+printf("<TR><TD colspan=7>Previously saved sessions:</TD></TR>\n");
 safef(query, sizeof(query), "SELECT sessionName, shared from %s "
       "WHERE userName = '%s';",
       namedSessionTable, userName);
@@ -96,6 +208,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *sessionName = row[0];
+    char *link = NULL;
     boolean shared = atoi(row[1]);
     char buf[512];
     printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>%s</TD><TD>", sessionName);
@@ -115,13 +228,18 @@ while ((row = sqlNextRow(sr)) != NULL)
 	safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, sessionName);
 	cgiMakeButton(buf, "share");
 	}
-    printf("</TD></TR>\n");
+    link = getSessionLink(userName, sessionName);
+    printf("</TD><TD>%s</TD>\n", link);
+    freez(&link);
+    link = getSessionEmailLink(userName, sessionName);
+    printf("<TD>%s</TD></TR>\n", link);
+    freez(&link);
     foundAny = TRUE;
     }
 if (!foundAny)
     printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>(none)</TD>"
-	   "<TD colspan=3></TD></TR>\n");
-printf("<TR><TD colspan=5></TD></TR>\n");
+	   "<TD colspan=5></TD></TR>\n");
+printf("<TR><TD colspan=7></TD></TR>\n");
 printf("</TABLE>\n");
 printf("<P></P>\n");
 sqlFreeResult(&sr);
@@ -248,9 +366,50 @@ cartSaveSession(cart);
 
 if (isNotEmpty(userName))
     showExistingSessions(userName);
+else
+    printf("If you <A HREF=\"%s\">sign in</A>, "
+	   "you will also have the option to save named sessions.<P>\n",
+	   wikiLinkUserLoginUrl(cartSessionId(cart)));
 showLoadingOptions(userName, savedSessionsSupported);
 showSavingOptions(userName);
 printf("</FORM>\n");
+}
+
+void showLinkingTemplates(char *userName)
+/* Explain how to create links to us for sharing sessions. */
+{
+struct dyString *dyUrl = dyStringNew(1024);
+webNewSection("Sharing Sessions");
+printf("There are several ways to share saved sessions with others.\n");
+printf("<UL>\n");
+if (userName != NULL)
+    {
+    printf("<LI>Each previously saved named session appears with "
+	   "Link and Email options.  Link takes you to a page with "
+	   "a static link to the session which you can bookmark in your "
+	   "web browser.  Email is for sending the link to others.</LI>\n");
+    }
+else
+    {
+    printf("<LI>If you sign in, you will be able to save named sessions "
+	   "which will be displayed with Link and Email options.</LI>\n");
+    }
+dyStringPrintf(dyUrl, "http://%s%s", cgiServerName(), cgiScriptName());
+
+printf("<LI>If you have saved your settings to a local file, you can send "
+       "email to others with the file as an attachment and direct them to "
+       "<A HREF=\"%s\">%s</A> .</LI>\n",
+       dyUrl->string, dyUrl->string);
+dyStringPrintf(dyUrl, "?hgS_doLoadUrl=submit&hgS_loadUrlName="
+	       "http://www.mysite.edu/~me/mySession.txt");
+printf("<LI>If a saved settings file is available from a web server, "
+       "you can send email to others with a link such as "
+       "<A HREF=\"%s\">%s</A> .  In this type of link, you can replace "
+       "\"hgSession\" with \"hgTracks\" in order to proceed directly to "
+       "the Genome Browser.</LI>\n",
+       dyUrl->string, dyUrl->string);
+printf("</UL>\n");
+dyStringFree(&dyUrl);
 }
 
 void doMainPage(char *message)
@@ -270,6 +429,7 @@ if (wikiLinkEnabled())
 	puts(message);
 	}
     showSessionControls(wikiUserName, TRUE, TRUE);
+    showLinkingTemplates(wikiUserName);
     }
 else
     {
@@ -281,6 +441,7 @@ else
 	}
     else
 	showSessionControls(NULL, FALSE, FALSE);
+    showLinkingTemplates(NULL);
     }
 cartWebEnd();
 }
@@ -290,7 +451,7 @@ char *doNewSession()
 /* Save current settings in a new named session.  
  * Return a message confirming what we did. */
 {
-char message[1024];
+struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = cartString(cart, hgsNewSessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
 char *userName = wikiLinkUserName();
@@ -338,19 +499,22 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringPrintf(dy, "%s, now(), %d);", firstUse, useCount);
     sqlUpdate(conn, dy->string);
 
-    safef(message, sizeof(message),
-	  "Added a new session <B>%s</B> that %s be shared with other users.",
-	  sessionName, (shareSession ? "may" : "may not"));
+    dyStringPrintf(dyMessage,
+	  "Added a new session <B>%s</B> that %s be shared with other users.  "
+	  "%s %s",
+	  sessionName, (shareSession ? "may" : "may not"),
+	  getSessionLink(userName, sessionName),
+	  getSessionEmailLink(userName, sessionName));
     dyStringFree(&dy);
     }
 else
-    safef(message, sizeof(message),
+    dyStringPrintf(dyMessage,
 	  "Sorry, required table %s does not exist yet in the central "
 	  "database (%s).  Please ask a developer to create it using "
 	  "kent/src/hg/lib/namedSessionDb.sql .",
 	  namedSessionTable, sqlGetDatabase(conn));
 hDisconnectCentral(&conn);
-return cloneString(message);
+return dyStringCannibalize(&dyMessage);
 }
 
 char *doUpdateSessions()
@@ -463,27 +627,26 @@ char *doLoad(boolean fromUrl)
 /* Load settings from a file or URL sent by the user.  
  * Return a message confirming what we did. */
 {
-char message[1024];
+struct dyString *dyMessage = dyStringNew(1024);
 struct lineFile *lf = NULL;
 webPushErrHandlersCart(cart);
 if (fromUrl)
     {
     char *url = cartString(cart, hgsLoadUrlName);
     lf = netLineFileOpen(url);
-    safef(message, sizeof(message),
-	  "Loaded settings from URL %s .", url);
+    dyStringPrintf(dyMessage, "Loaded settings from URL %s .  %s %s",
+		   url, getUrlLink(url), getUrlEmailLink(url));
     }
 else
     {
     char *settings = cartString(cart, hgsLoadLocalFileName);
     lf = lineFileOnString("settingsFromFile", TRUE, settings);
-    safef(message, sizeof(message),
-	  "Loaded settings from local file length %lu.",
-	  (unsigned long)strlen(settings));
+    dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
+		   (unsigned long)strlen(settings));
     }
 loadSettings(lf, cart);
 lineFileClose(&lf);
-return cloneString(message);
+return dyStringCannibalize(&dyMessage);
 }
 
 
