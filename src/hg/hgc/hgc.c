@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1113 2006/09/20 14:30:01 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1114 2006/09/20 17:16:02 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17468,7 +17468,7 @@ else if (sameWord(track, "affy10K"))
     }
 else if (sameWord(track, "affyHumanExon"))
     {
-    doAffyHumanExon(tdb, item);
+    doExpRatio(tdb, item);
     }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {

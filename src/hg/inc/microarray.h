@@ -8,6 +8,10 @@
 #include "expRecord.h"
 #endif
 
+#ifndef TRACKDB_H
+#include "trackDb.h"
+#endif
+
 #define MICROARRAY_MISSING_DATA -10000
 /* This is an important constant.  Often zero and negative numbers are valid */
 /* microarray data.  -10000 is often used then. */
@@ -84,5 +88,51 @@ void maExpDataDoLogRatioClumpExpRecord(struct expData *exps, struct expRecord *e
 void maExpDataDoLogRatioGivenMedSpec(struct expData *exps, struct maMedSpec *specList, enum maCombineMethod method);
 /* Same as maExpDataDoLogRatioClumpExpRecord except use the maMedSpec as the */
 /* thing to base the groupings off of. */
+
+struct maGrouping
+/* Store the vital information for one of the "paragraphs" in the */
+/* microarrayGroups.ra file. */
+    {
+    struct maGrouping *next;
+    char *name;
+    char *type;
+    char *description;
+    int size;
+    int numGroups;
+    int *expIds;
+    int *groupSizes;
+    char **names;
+    };
+
+struct microarrayGroups
+/* Store all the vital info for a set of groupings in a microarrayGroups.ra */
+/* file. */
+    {
+    int numCombinations;
+    int numSubsets;
+    struct maGrouping *allArrays;
+    struct maGrouping *combineSettings;
+    struct maGrouping *subsetSettings;
+    struct maGrouping *defaultCombine;
+    };
+
+void maGroupingFree(struct maGrouping **pMag);
+/* free up a maGrouping */
+
+void maGroupingFreeList(struct maGrouping **pList);
+/* Free up a list of maGroupings. */
+
+void microarrayGroupsFree(struct microarrayGroups **pGroups);
+/* Free up the microarrayGroups struct. */
+
+struct microarrayGroups *maGetTrackGroupings(char *database, struct trackDb *tdb);
+/* Get the settings from the .ra files and put them in a convenient struct. */
+
+struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings, 
+					     struct cart *cart, char *trackName);
+/* Determine which grouping to use based on the cart status or lack thereof. */
+
+void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping);
+/* Clump (mean/median) a bed 15 given the grouping kind. */
 
 #endif

@@ -15,7 +15,7 @@ void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 {
-char *encodedItem1 = cgiEncode(item1);
+  char *encodedItem1 = cgiEncode(item1);
 char *encodedItem2 = cgiEncode(item2);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
@@ -241,7 +241,6 @@ expRecordMapTypes(expIndexesToNames, indexes, &numIndexes, erList, expIndex, fil
 if(numIndexes == 0)
     errAbort("hgTracks::msBedGroupByIndex() - numIndexes can't be 0");
 lfsArray = needMem(sizeof(struct linkedFeaturesSeries*) * numIndexes);
-
 /* initialize our different tissue linkedFeatureSeries) */
 for(i=0;i<numIndexes;i++)
     {    
@@ -348,35 +347,40 @@ else
 bedFreeList(&bedList);
 }
 
-static void lfsFromAffyAllExonBed(struct track *tg)
-/* filters the bedList stored at tg->items
-into a linkedFeaturesSeries as determined by
-filter type */
+static void lfsFromBedAndGrouping(struct track *tg)
+/* This is sort of a replacement of msBedGroupByIndex. */
+/* It's meant to be the default microarray track filter */
+/* for tracks using the new microarrayGroups.ra scheme. */
 {
-struct bed *bedList = NULL;
-char varName[128];
-char *affyAllExonMap;
-enum affyAllExonOptEnum affyAllExonType;
-
-bedList = tg->items;
-safef(varName, sizeof(varName), "%s.%s", tg->mapName, "type");
-affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
-affyAllExonType = affyAllExonStringToEnum(affyAllExonMap);
-if(affyAllExonType == affyAllExonTissue)
+struct linkedFeaturesSeries *lfsList = NULL;
+struct bed *bedList = tg->items;
+struct microarrayGroups *groupings = maGetTrackGroupings(database, tg->tdb);
+struct maGrouping *combineGroup = maCombineGroupingFromCart(groupings, cart, tg->mapName);
+int i;
+int numRows = combineGroup->numGroups;
+char newLongLabel[512];
+maBedClumpGivenGrouping(bedList, combineGroup);
+/* Initialize the lfs array first. */
+for (i = 0; i < numRows; i++)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, 2, NULL, -1);
-    slSort(&tg->items,lfsSortByName);
+    struct linkedFeaturesSeries *lfs;
+    struct bed *bed;
+    AllocVar(lfs);
+    lfs->name = cloneString(combineGroup->names[i]);
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	struct linkedFeatures *lf = lfFromBed(bed);
+	lf->score = bed->expScores[i];
+	slAddHead(&lfs->features, lf);
+	}
+    slReverse(&lfs->features);
+    slAddHead(&lfsList, lfs);
     }
-else if(affyAllExonType == affyAllExonChip)
-    {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, -1, NULL, -1);
-    }
-else
-    {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, 2, NULL, -1);
-    slSort(&tg->items,lfsSortByName);
-    }
-bedFreeList(&bedList);
+slReverse(&lfsList);
+tg->items = lfsList;
+/* Change the longLabel */
+safef(newLongLabel, sizeof(newLongLabel), "%s - %s", tg->longLabel, combineGroup->description);
+tg->longLabel = cloneString(newLongLabel);
 }
 
 void lfsFromAffyUclaNormBed(struct track *tg)
@@ -1396,5 +1400,5 @@ void affyAllExonMethods(struct track *tg)
 expRatioMethods(tg);
 tg->drawItems = expRatioDrawItems;
 tg->drawLeftLabels = expRatioDrawLeftLabels;
-tg->trackFilter = lfsFromAffyAllExonBed;
+tg->trackFilter = lfsFromBedAndGrouping;
 }

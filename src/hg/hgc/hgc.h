@@ -158,6 +158,10 @@ void nci60Details(struct trackDb *tdb, char *item);
 void doAffyHumanExon(struct trackDb *tdb, char *item);
 /* Details for affyHumanExon all exon arrays. */
 
+void doExpRatio(struct trackDb *tdb, char *item);
+/* Generic expression ratio deatils using microarrayGroups.ra file */
+/* and not the expRecord tables. */
+
 void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all);
 /* Create tab-delimited output to download */
  

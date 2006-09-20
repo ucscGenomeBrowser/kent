@@ -5,8 +5,10 @@
 #include "options.h"
 #include "jksql.h"
 #include "bed.h"
+#include "cart.h"
 #include "expData.h"
 #include "expRecord.h"
+#include "hdb.h"
 #include "microarray.h"
 
 /* Make a 2D array out of the list of expDatas' expScores. */
@@ -226,6 +228,28 @@ freeMem(mat->data);
 freez(&mat);
 freez(&combinedMat);
 return newList;
+}
+
+struct mapArray *maMappingFromGrouping(struct maGrouping *grouping)
+/* Convert a microarrayGroups.ra style grouping to the array. */
+{
+struct mapArray *ret;
+int i, offset = 0;
+AllocVar(ret);
+ret->nrow = grouping->numGroups;
+ret->ncol = grouping->size + 1;
+AllocArray(ret->data, ret->ncol);
+for (i = 0; i < ret->nrow; i++)
+    {
+    int j; /* Iterator for grouping->groupSizes */
+    int k = 1; /* Iterator for ret->data[i][] */
+    AllocArray(ret->data[i], ret->ncol);
+    ret->data[i][0] = grouping->groupSizes[i];
+    for (j = offset; j < offset+grouping->groupSizes[i]; j++)
+	ret->data[i][k++] = grouping->expIds[j];
+    offset += grouping->groupSizes[i];
+    }
+return ret;
 }
 
 struct mapArray *mappingFromExpRecords(struct expRecord *erList, int extrasIndex)
@@ -563,4 +587,257 @@ mapping = mappingFromMedSpec(specList);
 maExpDataDoLogRatioClumping(exps, mapping, method);
 freeMem(mapping->data);
 freez(&mapping);
+}
+
+struct expData *maExpDataClumpGivenGrouping(struct expData *exps, struct maGrouping *grouping)
+/* Clump expDatas from a grouping from a .ra file. */
+{
+struct mapArray *mapping;
+struct expData *ret = NULL;
+enum maCombineMethod combine = useMedian;
+char *combType;
+if (!grouping->type || sameWord(grouping->type, "all"))
+    return NULL;
+combType = cloneString(grouping->type);
+eraseWhiteSpace(combType);
+if (sameWord(combType, "combinemean"))
+    combine = useMean;
+mapping = maMappingFromGrouping(grouping);
+ret = maExpDataCombineCols(exps, mapping, combine, 0);
+freeMem(mapping->data);
+freez(&mapping);
+freeMem(combType);
+return ret;
+}
+
+/* Functions for getting information from the microarrayGroups.ra files */
+/* that are in the hgCgiData/<org>/<database> .ra tree. */
+
+void maGroupingFree(struct maGrouping **pMag)
+/* free up a maGrouping */
+{
+int i, size;
+struct maGrouping *mag;
+if (!pMag || !*pMag)
+    return;
+mag = *pMag;
+size = sameString(mag->type, "all") ? mag->size : mag->numGroups;
+freeMem(mag->name);
+freeMem(mag->description);
+freeMem(mag->expIds);
+freeMem(mag->groupSizes);
+freeMem(mag->type);
+for (i = 0; i < size; i++)
+    freeMem(mag->names[i]);
+freeMem(mag->names);
+freez(pMag);
+}
+
+void maGroupingFreeList(struct maGrouping **pList)
+/* Free up a list of maGroupings. */
+{
+struct maGrouping *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    maGroupingFree(&el);
+    }
+*pList = NULL;
+}
+
+void microarrayGroupsFree(struct microarrayGroups **pGroups)
+/* Free up the microarrayGroups struct. */
+{
+struct microarrayGroups *groups;
+if (!pGroups || ((groups = *pGroups) == NULL))
+    return;
+maGroupingFree(&groups->allArrays);
+maGroupingFreeList(&groups->combineSettings);
+maGroupingFreeList(&groups->subsetSettings);
+freez(pGroups);
+}
+
+struct maGrouping *maHashToMaGrouping(struct hash *oneGroup)
+/* This converts a single "stanza" of the microarrayGroups.ra file to a */
+/* maGrouping struct. */
+{
+struct maGrouping *ret;
+char *s;
+struct slName *wordList = NULL, *oneWord;
+int i = 0;
+AllocVar(ret);
+/* required settings. */
+ret->name = cloneString((char *)hashMustFindVal(oneGroup, "name"));
+ret->type = cloneString((char *)hashMustFindVal(oneGroup, "type"));
+ret->description = cloneString((char *)hashMustFindVal(oneGroup, "description"));
+s = hashMustFindVal(oneGroup, "expIds");
+wordList = slNameListFromComma(s);
+ret->size = slCount(wordList);
+AllocArray(ret->expIds, ret->size);
+for (oneWord = wordList; oneWord != NULL; oneWord = oneWord->next)
+    ret->expIds[i++] = atoi(oneWord->name);
+slNameFreeList(&wordList);
+s = hashMustFindVal(oneGroup, "names");
+wordList = slNameListFromComma(s);
+i = 0;
+ret->numGroups = slCount(wordList);
+AllocArray(ret->names, ret->numGroups);
+for (oneWord = wordList; oneWord != NULL; oneWord = oneWord->next)
+    ret->names[i++] = cloneString(oneWord->name);
+slNameFreeList(&wordList);
+s = hashMustFindVal(oneGroup, "groupSizes");
+wordList = slNameListFromComma(s);
+i = 0;
+AllocArray(ret->groupSizes, ret->numGroups);
+if (ret->numGroups != slCount(wordList))
+    errAbort("Bad format of microarrayGroups.ra in %s, groupSizes size "
+	     "= %d, != to names size = %d", ret->name, slCount(wordList), ret->numGroups);
+for (oneWord = wordList; oneWord != NULL; oneWord = oneWord->next)
+    ret->groupSizes[i++] = atoi(oneWord->name);
+slNameFreeList(&wordList);
+return ret;
+}
+
+struct maGrouping *maGetGroupingsFromList(char *commaList, struct hash *allGroupings)
+/* Load all the maGroupings from a comma-delimited list. */
+{
+struct slName *list = slNameListFromComma(commaList), *oneItem;
+struct maGrouping *retList = NULL;
+for (oneItem = list; oneItem != NULL; oneItem = oneItem->next)
+    {
+    struct hash *oneGrouping = hashMustFindVal(allGroupings, oneItem->name);
+    struct maGrouping *newGroup = maHashToMaGrouping(oneGrouping);
+    slAddHead(&retList, newGroup);
+    }
+slNameFreeList(&list);
+slReverse(&retList);
+return retList;
+}
+
+struct microarrayGroups *maGetTrackGroupings(char *database, struct trackDb *tdb)
+/* Get the settings from the .ra files and put them in a convenient struct. */
+{
+struct microarrayGroups *ret;
+char *groupings = trackDbRequiredSetting(tdb, "groupings");
+char *s = NULL;
+struct hash *allGroups;
+struct hash *mainGroup;
+struct hash *tmpGroup;
+struct hash *hashList = 
+    hgReadRa(hGenome(database), database, "hgCgiData", 
+	     "microarrayGroups.ra", &allGroups);
+if (allGroups == NULL)
+    errAbort("Could not get group settings for track.");
+AllocVar(ret);
+mainGroup = hashMustFindVal(allGroups, groupings);
+s = hashMustFindVal(mainGroup, "all");
+tmpGroup = hashMustFindVal(allGroups, s);
+ret->allArrays = maHashToMaGrouping(tmpGroup);
+s = hashFindVal(mainGroup, "combine");
+if (s)
+    {
+    ret->combineSettings = maGetGroupingsFromList(s, allGroups);
+    s = hashFindVal(mainGroup, "combine.default");
+    if (s)
+	{
+	struct maGrouping *cur;
+	for (cur = ret->combineSettings; cur != NULL; cur = cur->next)
+	    if (sameWord(s, cur->name))
+		{
+		ret->defaultCombine = cur;
+		break;
+		}
+	if (ret->defaultCombine == NULL)
+	    errAbort("$%s$ not a valid combine.default in %s", s, groupings);
+	}
+    }
+s = hashFindVal(mainGroup, "subset");
+if (s)
+    ret->subsetSettings = maGetGroupingsFromList(s, allGroups);
+ret->numCombinations = slCount(ret->combineSettings);
+ret->numSubsets = slCount(ret->subsetSettings);
+hashFreeList(&hashList);
+return ret;
+}
+
+struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings, 
+				    struct cart *cart, char *trackName)
+/* Determine which grouping to use based on the cart status or lack thereof. */
+{
+char *setting = NULL;
+char cartVar[512];
+struct maGrouping *ret = NULL;
+safef(cartVar, sizeof(cartVar), "%s.combine", trackName);
+setting = cartUsualString(cart, cartVar, NULL);
+if (sameWord(groupings->allArrays->name, setting))
+    return groupings->allArrays;
+if (setting)
+    {
+    struct maGrouping *cur;
+    for (cur = groupings->combineSettings; cur != NULL; cur = cur->next)
+	if (sameWord(cur->name, setting))
+	    return cur;
+    }
+if (ret == NULL)
+    ret = groupings->defaultCombine;
+if (ret == NULL)
+    ret = groupings->allArrays;
+return ret;
+}
+
+/********* Dealing with BED. ************/
+
+struct expData *maExpDataFromExpBed(struct bed *oneBed)
+/* Convert a bed record's expScores into an expData. */
+{
+struct expData *ret = NULL;
+AllocVar(ret);
+ret->name = cloneString(oneBed->name);
+ret->expCount = oneBed->expCount;
+if (ret->expCount > 0) 
+    ret->expScores = CloneArray(oneBed->expScores, oneBed->expCount);
+return ret;
+}
+
+struct expData *maExpDataListFromExpBedList(struct bed *bedList)
+/* Convert list of bed 15 records to a list of expDatas. */
+{
+struct expData *newList = NULL;
+struct bed *cur;
+for (cur = bedList; cur != NULL; cur = cur->next)
+    {
+    struct expData *addMe = maExpDataFromExpBed(cur);
+    slAddHead(&newList, addMe);
+    }
+slReverse(&newList);
+return newList;
+}
+
+void maBedClumpGivenGrouping(struct bed *bedList, struct maGrouping *grouping)
+/* Clump (mean/median) a bed 15 given the grouping kind. */
+{
+struct expData *exps = maExpDataListFromExpBedList(bedList);
+struct expData *clumpedExps = maExpDataClumpGivenGrouping(exps, grouping);
+struct bed *bed;
+struct expData *exp;
+expDataFreeList(&exps);
+if (!clumpedExps)
+    return;
+/* Go through each bed and copy over the new expDatas */
+/* and free up what was there. */
+for (bed = bedList, exp = clumpedExps; (bed != NULL) && (exp != NULL); 
+     bed = bed->next, exp = exp->next)
+    {
+    int i;
+    bed->expCount = exp->expCount;
+    if (bed->expScores)
+	freeMem(bed->expScores);
+    if (bed->expIds)
+	freeMem(bed->expIds);
+    bed->expScores = CloneArray(exp->expScores, exp->expCount);
+    AllocArray(bed->expIds, bed->expCount);
+    for (i = 0; i < bed->expCount; i++)
+	bed->expIds[i] = i;
+    }
+expDataFreeList(&clumpedExps);
 }

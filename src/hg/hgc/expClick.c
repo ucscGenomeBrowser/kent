@@ -10,8 +10,9 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 #include "affyAllExonProbe.h"
+#include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.13 2006/09/12 00:08:05 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.14 2006/09/20 17:16:02 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -1248,4 +1249,55 @@ char *expStep = trackDbRequiredSetting(tdb, "expStep");
 double maxScore = atof(expScale);
 double stepSize = atof(expStep);
 affyAllExonDetails(tdb, item, tdb->tableName, expTable, NULL, stepSize, maxScore);
+}
+
+void erHashElFree(struct hashEl *el)
+/* Frees up expRecord hash head. */
+{
+struct expRecord *er = el->val;
+expRecordFree(&er);
+}
+
+void doExpRatio(struct trackDb *tdb, char *item)
+/* Generic expression ratio deatils using microarrayGroups.ra file */
+/* and not the expRecord tables. */
+{
+char *expScale = trackDbRequiredSetting(tdb, "expScale");
+char *expStep = trackDbRequiredSetting(tdb, "expStep");
+double maxScore = atof(expScale);
+double stepSize = atof(expStep);
+struct bed *bedList;
+char *itemName = cgiUsualString("i2","none");
+char *expName = item;
+genericHeader(tdb, itemName);
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else if (sameString(expName, "zoomInMore"))
+    printf("<b>Too much data to display in detail in this range.</b>\n");
+else
+    {
+    struct microarrayGroups *groupings = maGetTrackGroupings(database, tdb);
+    struct maGrouping *combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->tableName);
+    struct hash *erHash = newHash(6);
+    int i;
+    maBedClumpGivenGrouping(bedList, combineGroup);    
+    for (i = 0; i < combineGroup->numGroups; i++)
+	{
+	/* make stupid exprecord hash.perhaps eventually this won't be needed */
+	char id[16];
+	struct expRecord *er = basicExpRecord(combineGroup->names[i], i, 2);
+	safef(id, sizeof(id), "%d", i);
+	hashAdd(erHash, id, er);
+	}
+    puts("<h2></h2><p>\n");
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2, 
+		     msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    hashTraverseEls(erHash, erHashElFree);
+    hashFree(&erHash);
+    microarrayGroupsFree(&groupings);
+    }
+puts("<h2></h2><p>\n");
+printf("%s", tdb->html);
+bedFreeList(&bedList);
 }
