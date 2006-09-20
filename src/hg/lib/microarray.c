@@ -769,7 +769,8 @@ char cartVar[512];
 struct maGrouping *ret = NULL;
 safef(cartVar, sizeof(cartVar), "%s.combine", trackName);
 setting = cartUsualString(cart, cartVar, NULL);
-if (sameWord(groupings->allArrays->name, setting))
+
+if (setting && sameWord(groupings->allArrays->name, setting))
     return groupings->allArrays;
 if (setting)
     {
