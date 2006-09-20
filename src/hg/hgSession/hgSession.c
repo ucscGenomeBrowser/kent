@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.5 2006/05/09 03:01:31 galt Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.6 2006/09/20 23:00:31 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,8 +29,6 @@ errAbort(
 /* Global variables. */
 struct cart *cart;
 char *excludeVars[] = {"Submit", "submit", NULL};
-
-#define namedSessionTable "namedSessionDb"
 
 
 void welcomeUser(char *wikiUserName)
@@ -355,41 +353,6 @@ hDisconnectCentral(&conn);
 return cloneString(message);
 }
 
-void loadUserSession(struct sqlConnection *conn, char *sessionOwner,
-		     char *sessionName)
-/* If permitted, load the contents of the given user's session. */
-{
-struct sqlResult *sr = NULL;
-char **row = NULL;
-char *userName = wikiLinkUserName();
-char query[512];
-
-safef(query, sizeof(query), "SELECT shared, contents FROM %s "
-      "WHERE userName = '%s' AND sessionName = '%s';",
-      namedSessionTable, sessionOwner, sessionName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    boolean shared = atoi(row[0]);
-    if (shared ||
-	(userName && sameString(sessionOwner, userName)))
-	{
-	char *sessionVar = cartSessionVarName();
-	unsigned hgsid = cartSessionId(cart);
-	cartRemoveLike(cart, "*");
-	cartParseOverHash(cart, row[1]);
-	cartSetInt(cart, sessionVar, hgsid);
-	}
-    else
-	errAbort("Sharing has not been enabled for user %s's session %s.",
-		 sessionOwner, sessionName);
-    }
-else
-    errAbort("Could not find session %s for user %s.",
-	     sessionName, userName);
-sqlFreeResult(&sr);
-}
-
 char *doUpdateSessions()
 /* Look for cart variables matching prefixes for sharing/unsharing, 
  * loading or deleting a previously saved session.  
@@ -438,7 +401,7 @@ if (hel != NULL)
     dyStringPrintf(dyMessage,
 		   "Loaded settings from session <B>%s</B>.<BR>\n",
 		   sessionName);
-    loadUserSession(conn, userName, sessionName);
+    loadUserSession(conn, userName, sessionName, cart);
     didSomething = TRUE;
     }
 
@@ -478,7 +441,7 @@ char *sessionName = cartString(cart, hgsOtherUserSessionName);
 safef(message, sizeof(message),
       "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
       otherUser, sessionName);
-loadUserSession(conn, otherUser, sessionName);
+loadUserSession(conn, otherUser, sessionName, cart);
 hDisconnectCentral(&conn);
 return cloneString(message);
 }
@@ -494,39 +457,6 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType);
 cartDump(cart);
 
 textOutClose(&compressPipe);
-}
-
-void loadSettings(struct lineFile *lf)
-/* Load settings (cartDump output) into current session. */
-{
-char *line = NULL;
-int size = 0;
-char *words[2];
-int wordCount = 0;
-char *sessionVar = cartSessionVarName();
-unsigned hgsid = cartSessionId(cart);
-
-cartRemoveLike(cart, "*");
-cartSetInt(cart, sessionVar, hgsid);
-while (lineFileNext(lf, &line, &size))
-    {
-    wordCount = chopString(line, " ", words, ArraySize(words));
-    if (sameString(words[0], sessionVar))
-	continue;
-    else
-	{
-	if (wordCount == 2)
-	    {
-	    struct dyString *dy = dyStringSub(words[1], "\\n", "\n");
-	    cartSetString(cart, words[0], dy->string);
-	    dyStringFree(&dy);
-	    }
-	else if (wordCount == 1)
-	    {
-	    cartSetString(cart, words[0], "");
-	    }
-	} /* not hgsid */
-    } /* each line */
 }
 
 char *doLoad(boolean fromUrl)
@@ -551,7 +481,7 @@ else
 	  "Loaded settings from local file length %lu.",
 	  (unsigned long)strlen(settings));
     }
-loadSettings(lf);
+loadSettings(lf, cart);
 lineFileClose(&lf);
 return cloneString(message);
 }

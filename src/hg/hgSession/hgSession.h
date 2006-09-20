@@ -3,9 +3,12 @@
 #ifndef HGSESSION_H
 #define HGSESSION_H
 
-/* hgSession form inputs */
-#define hgSessionPrefix "hgS_"
+/* NOTE: some of the original contents have been moved up to hui.h for 
+ * sharing with hgTracks. */
 
+#include "hui.h"
+
+/* hgSession form inputs */
 #define hgsNewSessionName hgSessionPrefix "newSessionName"
 #define hgsNewSessionShare hgSessionPrefix "newSessionShare"
 #define hgsDoNewSession hgSessionPrefix "doNewSession"
@@ -14,10 +17,6 @@
 #define hgsSharePrefix hgSessionPrefix "share_"
 #define hgsLoadPrefix hgSessionPrefix "load_"
 #define hgsDeletePrefix hgSessionPrefix "delete_"
-
-#define hgsOtherUserName hgSessionPrefix "otherUserName"
-#define hgsOtherUserSessionName hgSessionPrefix "otherUserSessionName"
-#define hgsDoOtherUser hgSessionPrefix "doOtherUser"
 
 #define hgsSaveLocalFileName hgSessionPrefix "saveLocalFileName"
 #define hgsSaveLocalFileCompress hgSessionPrefix "saveLocalFileCompress"

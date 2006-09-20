@@ -75,6 +75,7 @@
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
+#include "net.h"
 #include "web.h"
 #include "grp.h"
 #include "chromColors.h"
@@ -105,9 +106,10 @@
 #include "oregannoUi.h"
 #include "bed12Source.h"
 #include "dbRIP.h"
+#include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1198 2006/09/19 16:16:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1199 2006/09/20 23:00:30 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11976,6 +11978,12 @@ if (sameString(database, "ce2"))
     }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" class=\"topbar\">%s</A></TD>\n",cartSessionVarName(),
        cartSessionId(cart), "PDF/PS");
+if (wikiLinkEnabled())
+    {
+    printf("<TD ALIGN=CENTER><A HREF=\"/cgi-bin/hgSession?%s=%u"
+	   "&hgS_doMainPage=1\" class=\"topbar\">Session</A></TD>",
+	   cartSessionVarName(), cartSessionId(cart));
+    }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
@@ -13495,6 +13503,24 @@ else
 
 hDefaultConnect();
 initTl();
+
+/* If we have been passed hgSession loading instructions, apply those to 
+ * cart before proceeding. */
+if (cartVarExists(cart, hgsDoOtherUser))
+    {
+    char *otherUser = cartString(cart, hgsOtherUserName);
+    char *sessionName = cartString(cart, hgsOtherUserSessionName);
+    struct sqlConnection *conn = hConnectCentral();
+    loadUserSession(conn, otherUser, sessionName, cart);
+    hDisconnectCentral(&conn);
+    }
+else if (cartVarExists(cart, hgsDoLoadUrl))
+    {
+    char *url = cartString(cart, hgsLoadUrlName);
+    struct lineFile *lf = netLineFileOpen(url);
+    loadSettings(lf, cart);
+    lineFileClose(&lf);
+    }
 
 /* Do main display. */
 if (cartVarExists(cart, CT_CGI_VAR))
