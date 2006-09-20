@@ -29,7 +29,11 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.86 2006/09/06 20:57:24 galt Exp $";
+/* DUMMY revision 1.87
+added these
+lines */
+
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.87 2006/09/20 21:39:00 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
