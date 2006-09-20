@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.48 2006/09/19 00:51:55 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.49 2006/09/20 00:16:52 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -435,9 +435,13 @@ struct dyString *ds = dyStringNew(1000);
 
 if (!text)
     return NULL;
-lf = lineFileOnString("custom HTML", TRUE, text);
+/* linefile routines require terminal newline */
+dyStringPrintf(ds, "%s\n", text);
+lf = lineFileOnString("custom HTML", TRUE, dyStringCannibalize(&ds));
+ds = dyStringNew(1000);
 while (lineFileNextReal(lf, &line))
     {
+    fprintf(stderr, "<BR>line=%s</BR>", line);
     if (startsWithWord("<!--", line) && stringIn("-->", line) &&
             containsStringNoCase(line, "UCSC_GB_TRACK"))
         {
