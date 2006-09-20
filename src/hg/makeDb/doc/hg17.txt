@@ -13820,6 +13820,7 @@ SEQ2_LEN=$BASE/S2.len
 # END BLASTZ BOREOEUTHERIAN
 
 
+##########################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE braney 1/15/05)
 # Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
 
@@ -13849,12 +13850,18 @@ para push
 ssh kksilo (or hgwdev, or whatever)
 nice ./getBedFile.pl &
 
-hgLoadBed -noSort hg17 tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
-hgLoadBed -noSort hg17 tfbsConsFactors -sqlTable=$HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed -tab
+hgLoadBed -noSort hg17 tfbsConsSites \
+	-sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql \
+	tfbsConsSites.bed -tab
+hgLoadBed -noSort hg17 tfbsConsFactors \
+	-sqlTable=$HOME/kent/src/hg/lib/tfbsConsFactors.sql \
+	tfbsConsFactors.bed -tab
 
-# Feel free to delete or gzip anything in ./tmp (particularly the huge .maf and .bed files) after the final two bed files are sucessfully loaded
+# Feel free to delete or gzip anything in ./tmp
+#  (particularly the huge .maf and .bed files)
+#   after the final two bed files are sucessfully loaded
 
-
+##########################################################################
 # CHICKEN RECIPROCAL-BEST NET FOR STRINGENT LIFTOVER (DONE 2/3/05 angie)
     ssh kolossus
     cd /cluster/data/hg17/bed/blastz.galGal2/axtChain
