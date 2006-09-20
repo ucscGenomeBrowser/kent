@@ -75,6 +75,9 @@ char *ccdsInfoGetCreateSql(char *table);
 void ccdsInfoMRnaSort(struct ccdsInfo **ccdsInfos);
 /* Sort list by mrnaAcc */
 
+void ccdsInfoCcdsMRnaSort(struct ccdsInfo **ccdsInfos);
+/* Sort list by CCDS id and mrnaAcc */
+
 struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
                                       enum ccdsInfoSrcDb srcDb);
 /* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is

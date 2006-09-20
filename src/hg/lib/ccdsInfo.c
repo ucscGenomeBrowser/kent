@@ -43,7 +43,7 @@ switch (srcDb)
  return "?";
 }
 
-static char const rcsid[] = "$Id: ccdsInfo.c,v 1.5 2005/04/13 06:25:50 markd Exp $";
+static char const rcsid[] = "$Id: ccdsInfo.c,v 1.6 2006/09/20 22:48:53 markd Exp $";
 
 void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 /* Load a row from ccdsInfo table into ret.  The contents of ret will
@@ -192,7 +192,7 @@ return cloneString(sql);
 }
 
 static int cmpMRna(const void *va, const void *vb)
-/* Compare to sort based mrnaAcc. */
+/* Compare to sort based on mrnaAcc. */
 {
 const struct ccdsInfo *a = *((struct ccdsInfo **)va);
 const struct ccdsInfo *b = *((struct ccdsInfo **)vb);
@@ -203,6 +203,25 @@ void ccdsInfoMRnaSort(struct ccdsInfo **ccdsInfos)
 /* Sort list by mrnaAcc */
 {
 slSort(ccdsInfos, cmpMRna);
+}
+
+static int cmpCcdsMRna(const void *va, const void *vb)
+/* Compare to sort based on CCDS id and mrnaAcc. */
+{
+const struct ccdsInfo *a = *((struct ccdsInfo **)va);
+const struct ccdsInfo *b = *((struct ccdsInfo **)vb);
+
+
+int dif = strcmp(a->ccds, b->ccds);
+if (dif == 0)
+    dif = strcmp(a->mrnaAcc, b->mrnaAcc);
+return dif;
+}
+
+void ccdsInfoCcdsMRnaSort(struct ccdsInfo **ccdsInfos)
+/* Sort list by CCDS id and mrnaAcc */
+{
+slSort(ccdsInfos, cmpCcdsMRna);
 }
 
 static char *getSrcDbWhere(enum ccdsInfoSrcDb srcDb)
@@ -269,8 +288,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     slSafeAddHead(&ccdsInfo, ccdsInfoLoad(row));
 sqlFreeResult(&sr);
 
- if ((ccdsInfo != NULL) && (ccdsInfo->next != NULL))
-     errAbort("obtained multiple CCDSs for mRNA %s", mrnaAcc);
+if ((ccdsInfo != NULL) && (ccdsInfo->next != NULL))
+    errAbort("obtained multiple CCDSs for mRNA %s", mrnaAcc);
 
 return ccdsInfo;
 }

@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.9 2006/08/29 06:24:38 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.10 2006/09/20 22:48:53 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -247,31 +247,77 @@ safef(select, sizeof(select),
 return select;
 }
 
-static void processCcdsInfoRow(char **row, FILE *outFh, struct hash *gotCcds)
-/* process a row from ccdsInfoSelect */
+static void processCcdsInfoRow(char **row, struct ccdsInfo **ccdsInfoList, struct hash *gotCcds)
+/* Process a row from ccdsInfoSelect and add to the list of ccdsInfo rows.
+ * Buffering the rows is necessary since there maybe multiple versions of 
+ * an accession returned.  While only one accession will be alive, we can't filter
+ * on Accessions.alive due to the update time lag between RefSeq and CCDS.
+ */
 {
 int ccdsId = sqlSigned(row[0]);
 int ccdsVersion = sqlSigned(row[1]);
-struct ccdsInfo ci;
+struct ccdsInfo *ci;
 char *srcDb;
-safef(ci.ccds, sizeof(ci.ccds), "CCDS%d.%d", ccdsId, ccdsVersion);
+
+AllocVar(ci);
+
+safef(ci->ccds, sizeof(ci->ccds), "CCDS%d.%d", ccdsId, ccdsVersion);
 if (sameString(row[2], "NCBI"))
     {
     /* NCBI has separate version numbers */
-    ci.srcDb = ccdsInfoNcbi;
-    safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s.%s", row[3], row[4]);
-    safef(ci.protAcc, sizeof(ci.protAcc), "%s.%s", row[5], row[6]);
+    ci->srcDb = ccdsInfoNcbi;
+    safef(ci->mrnaAcc, sizeof(ci->mrnaAcc), "%s.%s", row[3], row[4]);
+    safef(ci->protAcc, sizeof(ci->protAcc), "%s.%s", row[5], row[6]);
     srcDb = "N";
     }
 else
     {
-    ci.srcDb = (startsWith("OTT", ci.mrnaAcc) ? ccdsInfoVega : ccdsInfoEnsembl);
-    safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s", row[3]);
-    safef(ci.protAcc, sizeof(ci.protAcc), "%s", row[5]);
+    ci->srcDb = (startsWith("OTT", ci->mrnaAcc) ? ccdsInfoVega : ccdsInfoEnsembl);
+    safef(ci->mrnaAcc, sizeof(ci->mrnaAcc), "%s", row[3]);
+    safef(ci->protAcc, sizeof(ci->protAcc), "%s", row[5]);
     srcDb = "H";
     }
-ccdsInfoTabOut(&ci, outFh);
+slSafeAddHead(ccdsInfoList, ci);
 gotCcdsSaveSrcDb(gotCcds, ccdsId, ccdsVersion, srcDb);
+}
+
+static int lenLessVer(char *acc)
+/* get the length of an accession, less a dot version extension, if any */
+{
+char *dot = strchr(acc, '.');
+return (dot == NULL) ? strlen(acc) : (dot-acc);
+}
+
+static boolean sameAccession(char *acc1, char *acc2)
+/* test if an accessions is the same, ignoring optional versions */
+{
+int len1 = lenLessVer(acc1);
+int len2 = lenLessVer(acc2);
+return (len1 != len2) ? FALSE : sameStringN(acc1, acc2, len1);
+}
+
+static boolean keepCcdsInfo(struct ccdsInfo *ci, struct ccdsInfo *nextCi)
+/* determine if an ccds info entry should be kept, or if the next entry in
+ * a sorted list has a new version */
+{
+return (nextCi == NULL) || (ci->srcDb != ccdsInfoNcbi) || !sameAccession(ci->mrnaAcc, nextCi->mrnaAcc);
+}
+
+static void ccdsFilterDupAccessions(struct ccdsInfo **ccdsInfoList)
+/* remove duplicate accessions (see processCcdsInfoRow for why we have them),
+ * keeping only the latest version.  Also sort the list in CCDS order. */
+{
+struct ccdsInfo *newList = NULL, *ci;
+ccdsInfoCcdsMRnaSort(ccdsInfoList);
+while ((ci = slPopHead(ccdsInfoList)) != NULL)
+    {
+    if (keepCcdsInfo(ci, *ccdsInfoList))
+        slAddHead(&newList, ci);
+    else
+        ccdsInfoFree(&ci);
+    }
+slReverse(&newList);
+*ccdsInfoList = newList;
 }
 
 static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
@@ -280,12 +326,19 @@ static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
 {
 char *query = mkCcdsInfoSelect(genome, conn);
 struct sqlResult *sr = sqlGetResult(conn, query);
-FILE *outFh = mustOpen(ccdsInfoFile, "w");
+struct ccdsInfo *ccdsInfoList = NULL, *ci;
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    processCcdsInfoRow(row, outFh, gotCcds);
-carefulClose(&outFh);
+    processCcdsInfoRow(row, &ccdsInfoList, gotCcds);
 sqlFreeResult(&sr);
+
+ccdsFilterDupAccessions(&ccdsInfoList);
+
+FILE *fh = mustOpen(ccdsInfoFile, "w");
+for (ci = ccdsInfoList; ci != NULL; ci = ci->next)
+    ccdsInfoTabOut(ci, fh);
+carefulClose(&fh);
+ccdsInfoFreeList(&ccdsInfoList);
 }
 
 static char *mkCcdsGeneSelect(struct genomeInfo *genome, struct sqlConnection *conn)
