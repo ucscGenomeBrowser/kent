@@ -33,7 +33,7 @@
 added these
 lines */
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.92 2006/09/20 21:43:55 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.93 2006/09/21 01:40:33 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3790,9 +3790,6 @@ else
     }
 
 return 0;
-
-/* DUMMY revision 1.91
-lines */
 
 }
 
