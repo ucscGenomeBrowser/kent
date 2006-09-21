@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1115 2006/09/20 22:52:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1116 2006/09/21 13:36:59 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16326,10 +16326,10 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     r = oregannoLoad(row);
-    printf("<B>ORegAnno ID:</B> %s <BR />\n", r->id);
+    printf("<B>ORegAnno ID:</B> %s <BR>\n", r->id);
     // all the same as the ID for now
-    //printf("<B>ORegAnno name:</B> %s <BR />\n", r->name);
-    printf("<B>Strand:</B> %s<BR />\n", r->strand);
+    //printf("<B>ORegAnno name:</B> %s <BR>\n", r->name);
+    printf("<B>Strand:</B> %s<BR>\n", r->strand);
     bedPrintPos((struct bed *)r, 3);
     /* start html list for attributes */
     printf("<DL>");
@@ -16363,7 +16363,7 @@ for (i=0; i < oregannoAttrSize; i++)
             }
         oregannoAttrStaticLoad(row, &attr);
         printf("%s ", attr.attrVal);
-        printf("<BR />\n");
+        printf("<BR>\n");
         }
     safef(query, sizeof(query), "select * from hgFixed.oregannoLink where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
     sr = sqlGetResult(conn, query);
@@ -16387,7 +16387,7 @@ for (i=0; i < oregannoAttrSize; i++)
             }
         oregannoLinkStaticLoad(row, &link);
         printOregannoLink(&link);
-        printf("<BR />\n");
+        printf("<BR>\n");
         }
     }
 if (listStarted > 0)
@@ -16443,7 +16443,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             if (row2[0] != NULL)
                 {
                 /* print label and result */
-                printf("%s - %s<BR />\n", label, row2[0]);
+                printf("%s - %s<BR>\n", label, row2[0]);
                 }
             }
         sqlFreeResult(&sr2);
@@ -16455,7 +16455,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             {
             char url[256];
             safef(url, sizeof(url), linktype, link->mutAttrAcc);
-            printf("%s - <A HREF=\"%s\">%s</A><BR />\n", label, url, link->mutAttrAcc);
+            printf("%s - <A HREF=\"%s\">%s</A><BR>\n", label, url, link->mutAttrAcc);
             }
         }
     }
@@ -16481,7 +16481,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
     if (differentString(row[1],"?")) {printf("<B>Strand: </B>%s\n", row[1]);}
-    printf("<BR><B>Polymorphism:</B> %s <BR />\n", row[2]);
+    printf("<BR><B>Polymorphism:</B> %s <BR>\n", row[2]);
     printf("<BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
     if (!sameString(row[3], "unknown"))
         {
@@ -16621,7 +16621,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                     printf(" - <A HREF=\"%s\" TARGET=_blank>%s</A>\n",
                         url, row2[colNum - 1]);
                     }
-                printf("<BR />\n");
+                printf("<BR>\n");
                 }
             }
         sqlFreeResult(&sr2);
@@ -16635,9 +16635,9 @@ while ((row = sqlNextRow(sr)) != NULL)
             char *encodedAcc = cgiEncode(link->acc);
             safef(url, sizeof(url), linktype, encodedAcc);
             if (sameString(link->displayVal, ""))
-                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR />\n", label, url, link->acc);
+                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->acc);
             else
-                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR />\n", label, url, link->displayVal);
+                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->displayVal);
             }
         }
     }
@@ -16672,9 +16672,9 @@ safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escName)
 details = gvLoadByQuery(conn, query); 
 /* change label based on species */
 if (sameString(organism, "Human"))
-    printf("<B>HGVS name:</B> %s <BR />\n", details->name);
+    printf("<B>HGVS name:</B> %s <BR>\n", details->name);
 else
-    printf("<B>Official name:</B> %s <BR />\n", details->name);
+    printf("<B>Official name:</B> %s <BR>\n", details->name);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, escName);
@@ -16698,17 +16698,17 @@ if ((row = sqlNextRow(sr)) != NULL)
         {
         printf("; %s", src->lsdb);
         }
-    printf("<BR />\n");
+    printf("<BR>\n");
     }
 sqlFreeResult(&sr);
 
 /* print location and mutation type fields */
-printf("<B>location:</B> %s<BR />\n", details->location);
-printf("<B>type:</B> %s<BR />\n", details->baseChangeType);
+printf("<B>location:</B> %s<BR>\n", details->location);
+printf("<B>type:</B> %s<BR>\n", details->baseChangeType);
 /* add note here about exactness of coordinates */
 if (details->coordinateAccuracy == 0) 
     {
-    printf("<B>note:</B> The coordinates for this mutation are only estimated.<BR />\n");
+    printf("<B>note:</B> The coordinates for this mutation are only estimated.<BR>\n");
     }
 
 printf("<DL>");
@@ -16727,7 +16727,7 @@ for(i=0; i<gvAttrSize; i++)
         gvAttrLongStaticLoad(row, &attrLong);
         printGvAttrCatType(i); /* only print header, if data */
         /* print value */
-        printf("%s<BR />", attrLong.attrVal);
+        printf("%s<BR>", attrLong.attrVal);
         }
     sqlFreeResult(&sr);
     safef(query, sizeof(query),
@@ -16741,7 +16741,7 @@ for(i=0; i<gvAttrSize; i++)
         gvAttrStaticLoad(row, &attr);
         printGvAttrCatType(i); /* only print header, if data */
         /* print value */
-        printf("%s<BR />", attr.attrVal);
+        printf("%s<BR>", attr.attrVal);
         }
     sqlFreeResult(&sr);
     hasAttr += printGvLink(escName, i);
@@ -16789,7 +16789,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     mut = hgMutLoad(row);
-    printf("<B>HGVS name:</B> %s <BR />\n", mut->name);
+    printf("<B>HGVS name:</B> %s <BR>\n", mut->name);
     bedPrintPos((struct bed *)mut, 3);
     }
 sqlFreeResult(&sr);
@@ -16806,13 +16806,13 @@ if ((row = sqlNextRow(sr)) != NULL)
         {
         printf("; %s", src->details);
         }
-    printf("<BR />\n");
+    printf("<BR>\n");
     }
 sqlFreeResult(&sr);
 
 /* print location and mutation type fields */
-printf("<B>location:</B> %s<BR />\n", mut->location);
-printf("<B>type:</B> %s<BR />\n", mut->baseChangeType);
+printf("<B>location:</B> %s<BR>\n", mut->location);
+printf("<B>type:</B> %s<BR>\n", mut->baseChangeType);
 /* add note here about exactness of coordinates */
 
 printf("<DL><DT><B>Outside Link(s):</B></DT>\n<DD> ");
@@ -16831,7 +16831,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         url = replaceChars(link->url, "$$", row[1]);
         printf("%s <A HREF=%s", link->linkDisplayName, url);
-        printf(" Target=_blank> %s </A> <BR />\n", row[1]);
+        printf(" Target=_blank> %s </A> <BR>\n", row[1]);
         freeMem(url);
         }
     }
@@ -16850,12 +16850,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("%s", alias.name);
     if (alias.nameType != NULL && sameString(alias.nameType, "common"))
         printf(" (common name)");
-    printf("<BR />\n");
+    printf("<BR>\n");
     }
 sqlFreeResult(&sr);
 printf("</DD>");
 if (i == 0) 
-    printf("Not available<BR />\n");
+    printf("Not available<BR>\n");
 
 /* loop through attributes */
 safef(query, sizeof(query),
@@ -16895,7 +16895,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         prevName = cloneString(name->mutAttrName);
         printf("</DD><DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
         }
-    printf("%s<BR />\n", attr.mutAttrVal);
+    printf("%s<BR>\n", attr.mutAttrVal);
     if (attr.mutAttrLinkId != 0) 
         {
         /* indent attrLinks */

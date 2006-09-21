@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.310 2006/09/19 00:51:54 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.311 2006/09/21 13:36:59 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -507,12 +507,12 @@ void oregannoUi (struct trackDb *tdb)
 {
 int i = 0; /* variable to walk through array */
 
-printf("<BR /><B>Exclude region type</B> ");
-printf("<A HREF=\"http://www.oreganno.org/oregano/help/records.html\" target=\"_blank\">detailed information on these element types</A><BR />");
+printf("<BR><B>Exclude region type</B> ");
+printf("<A HREF=\"http://www.oreganno.org/oregano/help/records.html\" target=\"_blank\">detailed information on these element types</A><BR>");
 for (i = 0; i < oregannoTypeSize; i++)
     {
     cartMakeCheckBox(cart, oregannoTypeString[i], FALSE);
-    printf (" %s<BR />", oregannoTypeLabel[i]);
+    printf (" %s<BR>", oregannoTypeLabel[i]);
     }
 }
 
@@ -538,7 +538,7 @@ safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
 option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
-printf("<BR />\n");
+printf("<BR>\n");
 }
 
 void hgMutIdControls (struct trackDb *tdb) 
@@ -562,7 +562,7 @@ safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
 option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
-printf("<BR />\n");
+printf("<BR>\n");
 }
 
 void gvUi(struct trackDb *tdb)
@@ -571,69 +571,69 @@ void gvUi(struct trackDb *tdb)
 int i = 0; /* variable to walk through arrays */
 
 gvIdControls(tdb);
-printf("<BR /><B>Exclude</B><BR />");
+printf("<BR><B>Exclude</B><BR>");
 for (i = 0; i < gvAccuracySize; i++)
     {
     cartMakeCheckBox(cart, gvAccuracyString[i], FALSE);
-    printf (" %s<BR />", gvAccuracyLabel[i]);
+    printf (" %s<BR>", gvAccuracyLabel[i]);
     }
 
-printf("<BR /><B>Exclude mutation type</B><BR />");
+printf("<BR><B>Exclude mutation type</B><BR>");
 for (i = 0; i < gvTypeSize; i++)
     {
     cartMakeCheckBox(cart, gvTypeString[i], FALSE);
-    printf (" %s<BR />", gvTypeLabel[i]);
+    printf (" %s<BR>", gvTypeLabel[i]);
     }
 
-printf("<BR /><B>Exclude mutation location</B><BR />");
+printf("<BR><B>Exclude mutation location</B><BR>");
 for (i = 0; i < gvLocationSize; i++)
     {
     cartMakeCheckBox(cart, gvLocationString[i], FALSE);
-    printf (" %s<BR />", gvLocationLabel[i]);
+    printf (" %s<BR>", gvLocationLabel[i]);
     }
 
-printf("<BR /><B>Exclude phenotype association</B><BR />");
+printf("<BR><B>Exclude phenotype association</B><BR>");
 for (i = 0; i < gvFilterDASize; i++)
     {
     cartMakeCheckBox(cart, gvFilterDAString[i], FALSE);
-    printf (" %s<BR />", gvFilterDALabel[i]);
+    printf (" %s<BR>", gvFilterDALabel[i]);
     }
 
 /* exclude Swiss-Prot data by default, can be misleading */
-printf("<BR /><B>Exclude data source</B><BR />");
+printf("<BR><B>Exclude data source</B><BR>");
 for (i = 0; i < gvSrcSize; i++)
     {
     if (differentString(gvSrcDbValue[i], "LSDB"))
         {
         cartMakeCheckBox(cart, gvSrcString[i], TRUE);
-        printf (" %s<BR />", gvSrcDbValue[i]); /* label with db value */
+        printf (" %s<BR>", gvSrcDbValue[i]); /* label with db value */
         }
     else 
         {
         cartMakeCheckBox(cart, gvSrcString[i], FALSE);
-        printf (" Locus Specific Databases<BR />");
+        printf (" Locus Specific Databases<BR>");
         }
     }
 
-printf("<BR />");
+printf("<BR>");
 cartMakeRadioButton(cart, "gvPos.filter.colorby", "disease", "disease");
-printf("<B>Color mutations by phenotype-association</B><BR />");
+printf("<B>Color mutations by phenotype-association</B><BR>");
 for (i = 0; i < gvColorDASize; i++)
     {
     char *defaultVal = cartUsualString(cart, gvColorDAStrings[i], gvColorDADefault[i]);
     printf (" %s ", gvColorDALabels[i]);
     cgiMakeDropList(gvColorDAStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
     }
-printf("<BR />");
+printf("<BR>");
 cartMakeRadioButton(cart, "gvPos.filter.colorby", "type", "disease");
-printf("<B>Color mutations by type</B><BR />");
+printf("<B>Color mutations by type</B><BR>");
 for (i = 0; i < gvColorTypeSize; i++)
     {
     char *defaultVal = cartUsualString(cart, gvColorTypeStrings[i], gvColorTypeDefault[i]);
     printf (" %s ", gvColorTypeLabels[i]);
     cgiMakeDropList(gvColorTypeStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
     }
-printf("<BR />");
+printf("<BR>");
 }
 
 void hgMutUi(struct trackDb *tdb)
@@ -646,21 +646,21 @@ struct sqlConnection *conn = hAllocConn();
 char srcButton[128];
 
 hgMutIdControls(tdb);
-printf("<BR /><B>Exclude mutation type</B><BR />");
+printf("<BR><B>Exclude mutation type</B><BR>");
 for (i = 0; i < variantTypeSize; i++)
     {
     cartMakeCheckBox(cart, variantTypeString[i], FALSE);
-    printf (" %s<BR />", variantTypeLabel[i]);
+    printf (" %s<BR>", variantTypeLabel[i]);
     }
 
-printf("<BR /><B>Exclude mutation location</B><BR />");
+printf("<BR><B>Exclude mutation location</B><BR>");
 for (i = 0; i < variantLocationSize; i++)
     {
     cartMakeCheckBox(cart, variantLocationString[i], FALSE);
-    printf (" %s<BR />", variantLocationLabel[i]);
+    printf (" %s<BR>", variantLocationLabel[i]);
     }
 
-printf("<BR /><B>Exclude data source</B><BR />");
+printf("<BR><B>Exclude data source</B><BR>");
 sr = sqlGetResult(conn, "select distinct(src) from hgMutSrc order by src");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -668,12 +668,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (differentString(row[0], "LSDB")) 
         {
         cartMakeCheckBox(cart, srcButton, TRUE);
-        printf (" %s<BR />", row[0]);
+        printf (" %s<BR>", row[0]);
         }
     else 
         {
         cartMakeCheckBox(cart, srcButton, FALSE);
-        printf (" Locus Specific Databases<BR />");
+        printf (" Locus Specific Databases<BR>");
         }
 
     }
@@ -685,31 +685,31 @@ void humanPhenotypeUi(struct trackDb *tdb)
 /* print UI for human phenotype filters */
 {
 int i = 0; /* variable to walk through arrays */
-printf("<BR /><B>Exclude mutation type</B><BR />");
+printf("<BR><B>Exclude mutation type</B><BR>");
 for (i = 0; i < variantTypeSize; i++)
     {
     cartMakeCheckBox(cart, variantTypeString[i], FALSE);
-    printf (" %s<BR />", variantTypeLabel[i]);
+    printf (" %s<BR>", variantTypeLabel[i]);
     }
 
-printf("<BR /><B>Exclude mutation location</B><BR />");
+printf("<BR><B>Exclude mutation location</B><BR>");
 for (i = 0; i < variantLocationSize; i++)
     {
     cartMakeCheckBox(cart, variantLocationString[i], FALSE);
-    printf (" %s<BR />", variantLocationLabel[i]);
+    printf (" %s<BR>", variantLocationLabel[i]);
     }
 
 /* print key for colors */
-printf("<BR /><B>Color key (by mutation type)</B><BR />");
-printf("substitution = purple<BR />");
-printf("insertion = green<BR />");
-printf("deletion = blue<BR />");
-printf("duplication = orange<BR />");
-printf("complex = red<BR />");
-printf("unknown = black<BR />\n");
-printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR />\n");
+printf("<BR><B>Color key (by mutation type)</B><BR>");
+printf("substitution = purple<BR>");
+printf("insertion = green<BR>");
+printf("deletion = blue<BR>");
+printf("duplication = orange<BR>");
+printf("complex = red<BR>");
+printf("unknown = black<BR>\n");
+printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR>\n");
 
-printf("<BR /><B>Include subtracks</B>");
+printf("<BR><B>Include subtracks</B>");
 }
 
 void retroposonsUi(struct trackDb *tdb) 
