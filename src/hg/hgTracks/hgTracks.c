@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1200 2006/09/20 23:17:19 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1201 2006/09/21 17:30:21 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6075,6 +6075,26 @@ void mrnaMethods(struct track *tg)
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 if (isNewChimp(database))
     tg->itemName = xenoMrnaName;
+}
+
+char *interProName(struct track *tg, void *item)
+{
+char condStr[255];
+char *desc;
+struct linkedFeatures *lf = item;
+struct sqlConnection *conn;
+
+conn = hAllocConn();
+sprintf(condStr, "interProId='%s' limit 1", lf->name);
+desc = sqlGetField(conn, "proteome", "interProXref", "description", condStr);
+hFreeConn(&conn);
+return(desc);
+}
+
+void interProMethods(struct track *tg)
+/* Make track of InterPro methods. */
+{
+tg->itemName    = interProName;
 }
 
 void estMethods(struct track *tg)
@@ -12280,6 +12300,7 @@ registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);
 registerTrackHandler("all_est", estMethods);
 registerTrackHandler("all_mrna", mrnaMethods);
+registerTrackHandler("interPro", interProMethods);
 registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
