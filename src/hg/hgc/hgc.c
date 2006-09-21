@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1116 2006/09/21 13:36:59 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1117 2006/09/21 13:39:39 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16327,8 +16327,9 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     r = oregannoLoad(row);
     printf("<B>ORegAnno ID:</B> %s <BR>\n", r->id);
-    // all the same as the ID for now
-    //printf("<B>ORegAnno name:</B> %s <BR>\n", r->name);
+    #if 0 // all the same as the ID for now
+        printf("<B>ORegAnno name:</B> %s <BR>\n", r->name);
+    #endif
     printf("<B>Strand:</B> %s<BR>\n", r->strand);
     bedPrintPos((struct bed *)r, 3);
     /* start html list for attributes */
