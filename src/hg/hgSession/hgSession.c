@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.8 2006/09/21 23:03:32 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.9 2006/09/21 23:21:00 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -129,7 +129,7 @@ char *getSessionLink(char *userName, char *sessionName)
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"");
 addSessionLink(dy, userName, sessionName, FALSE);
-dyStringPrintf(dy, "\">Link</A>\n");
+dyStringPrintf(dy, "\">Browser</A>\n");
 return dyStringCannibalize(&dy);
 }
 
@@ -173,7 +173,7 @@ char *getUrlLink(char *url)
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"");
 addUrlLink(dy, url, FALSE);
-dyStringPrintf(dy, "\">Link</A>\n");
+dyStringPrintf(dy, "\">Browser</A>\n");
 return dyStringCannibalize(&dy);
 }
 
