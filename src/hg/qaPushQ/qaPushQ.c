@@ -29,7 +29,11 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.86 2006/09/06 20:57:24 galt Exp $";
+/* DUMMY revision 1.87
+added these
+lines */
+
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.86.2.1 2006/09/21 00:15:01 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -52,6 +56,10 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
+
+/* DUMMY revision 1.88
+added these
+lines */
 
 
 #define TITLE "Push Queue v"CGI_VERSION
