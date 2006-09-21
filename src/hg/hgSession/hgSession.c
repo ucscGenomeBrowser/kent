@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.7 2006/09/20 23:31:27 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.8 2006/09/21 23:03:32 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,7 +72,8 @@ char *session = cartSidUrlString(cart);
 char returnAddress[512];
 
 safef(returnAddress, sizeof(returnAddress), "/cgi-bin/hgSession?%s", session);
-printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Reset session</A>"
+printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Click here to "
+       "reset</A> the browser user interface settings to their defaults."
        "</P>\n",
        session, cgiEncode(returnAddress));
 }
@@ -200,7 +201,7 @@ char query[512];
 boolean foundAny = FALSE;
 
 printf("<TABLE BORDERWIDTH=0>\n");
-printf("<TR><TD colspan=7>Previously saved sessions:</TD></TR>\n");
+printf("<H3>My Sessions</H3>\n");
 safef(query, sizeof(query), "SELECT sessionName, shared from %s "
       "WHERE userName = '%s';",
       namedSessionTable, userName);
@@ -271,6 +272,7 @@ void showLoadingOptions(char *userName, boolean savedSessionsSupported)
 /* Show options for loading settings from another user's session, a file 
  * or URL. */
 {
+printf("<H3>Load Settings</H3>\n");
 if (savedSessionsSupported)
     showOtherUserOptions();
 
@@ -282,7 +284,8 @@ cgiMakeButton(hgsDoLoadLocal, "submit");
 printf("</TD></TR>\n");
 printf("<TR><TD colspan=2></TD></TR>\n");
 
-printf("<TR><TD colspan=2>Load settings from a URL:</TD>\n");
+printf("<TR><TD colspan=2>Load settings from a URL (http://..., ftp://...):"
+       "</TD>\n");
 printf("<TD>\n");
 cgiMakeTextVar(hgsLoadUrlName,
 	       cartUsualString(cart, hgsLoadUrlName, ""),
@@ -301,6 +304,7 @@ static char *textOutCompressMenu[] = textOutCompressMenuContents;
 static char *textOutCompressValues[] = textOutCompressValuesContents;
 static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
 
+printf("<H3>Save Settings</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 
 if (isNotEmpty(userName))
@@ -367,7 +371,7 @@ cartSaveSession(cart);
 if (isNotEmpty(userName))
     showExistingSessions(userName);
 else
-    printf("If you <A HREF=\"%s\">sign in</A>, "
+    printf("<P>If you <A HREF=\"%s\">sign in</A>, "
 	   "you will also have the option to save named sessions.<P>\n",
 	   wikiLinkUserLoginUrl(cartSessionId(cart)));
 showLoadingOptions(userName, savedSessionsSupported);
@@ -391,8 +395,9 @@ if (userName != NULL)
     }
 else
     {
-    printf("<LI>If you sign in, you will be able to save named sessions "
-	   "which will be displayed with Link and Email options.</LI>\n");
+    printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able to save "
+	   "named sessions which will be displayed with Link and Email "
+	   "options.</LI>\n", wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
 dyStringPrintf(dyUrl, "http://%s%s", cgiServerName(), cgiScriptName());
 
@@ -633,6 +638,11 @@ webPushErrHandlersCart(cart);
 if (fromUrl)
     {
     char *url = cartString(cart, hgsLoadUrlName);
+    if (isEmpty(url))
+	errAbort("Please go back and enter the URL (http://..., ftp://...) "
+		 "of a file that contains "
+		 "previously saved browser settings, and then click "
+		 "\"submit\" again.");
     lf = netLineFileOpen(url);
     dyStringPrintf(dyMessage, "Loaded settings from URL %s .  %s %s",
 		   url, getUrlLink(url), getUrlEmailLink(url));
