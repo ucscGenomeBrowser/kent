@@ -5,6 +5,7 @@
 
 #include "cart.h"
 #include "trackDb.h"
+struct lineFile;
 
 char *hUserCookie();
 /* Return our cookie name. */
