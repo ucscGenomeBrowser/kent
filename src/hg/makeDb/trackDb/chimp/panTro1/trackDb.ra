@@ -157,6 +157,7 @@ searchName snp125Short
 searchTable snp125
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
@@ -166,6 +167,7 @@ searchName snp125Long
 searchTable snp125
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
 searchPriority 16

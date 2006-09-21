@@ -2653,7 +2653,7 @@ searchName snpMapShort
 searchTable snpMap
 searchMethod exact
 searchType bed
-shortCircuit 1
+semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
@@ -2663,7 +2663,7 @@ searchName snpShort
 searchTable snp
 searchMethod exact
 searchType bed
-shortCircuit 1
+semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
@@ -2673,6 +2673,7 @@ searchName snp125Short
 searchTable snp125
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
@@ -2682,7 +2683,7 @@ searchName snp126Short
 searchTable snp126
 searchMethod exact
 searchType bed
-shortCircuit 1
+semiShortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
@@ -2853,6 +2854,7 @@ searchName snpMapLong
 searchTable snpMap
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16
@@ -2862,6 +2864,7 @@ searchName snpLong
 searchTable snp
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16
@@ -2871,6 +2874,7 @@ searchName snp125Long
 searchTable snp125
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
 searchPriority 16
@@ -2880,6 +2884,7 @@ searchName snp126Long
 searchTable snp126
 searchMethod exact
 searchType bed
+semiShortCircuit 1
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+)
 searchPriority 16
