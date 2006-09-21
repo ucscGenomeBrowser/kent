@@ -1,20 +1,22 @@
 #!/bin/tcsh
+#
+# Patch files based on PatchBranchFiles.conf
+#
 cd $WEEKLYBLD
 
-echo "This script has not been updated to handle the new separate 64/32 bit sandboxes yet."
-echo "Do not use this script."
-exit 1
-
 if ( "$HOST" != "hgwbeta" ) then
- echo "error: you must run this script on hgwbeta!"
+ echo "error: you must run this script on beta!"
  exit 1
 endif
 
-set table=~/PatchBranchFiles.conf
+set table=PatchBranchFiles.conf
 if ( ! -e $table ) then
     echo "$table not found."
     exit 1
 endif
+
+echo
+echo "BRANCHNN=$BRANCHNN"
 
 set dir="${BUILDDIR}/v${BRANCHNN}_branch/kent/src"
 
@@ -25,36 +27,39 @@ echo "Verifying files exist in $dir"
 set list = (`cat {$table}`)
 set files = ()
 set revs = ()
+set prevs = ()
 while ( $#list > 0 )
     set f = $list[1]
     shift list
     set r = "HEAD"
+    set p = "none"
     if ( $#list > 0 ) then
     	if ( $list[1] =~ [0123456789.]* ) then
     	    set r = $list[1]
     	    shift list
 	endif
     endif
-    if ( ! -e $dir/$f ) then
-	echo "$f not found on $dir"
-	set err=1
-    endif 
-    echo "$f $r"
+    if ( "$r" == "HEAD" ) then
+	echo "Error: a single specific revision for patching in must be specified for each file, but none was specified. Correct the input."
+	exit 1
+    endif	    
+    
+    # check for the previous revision (which must exist - use moveBranchTag for new files)
+    if ( -e $dir/$f ) then
+    	set filter = "\/$f:t\/"
+	#echo "filter=$filter" 
+    	grep $filter  $dir/$f:h/CVS/Entries | awk -F '/' '{print $3}' > $WEEKLYBLD/tempver
+	set p = `cat $WEEKLYBLD/tempver`
+    	rm -f $WEEKLYBLD/tempver
+    else	    
+	echo "Error: $f not found on $dir.  \nEither input path was misspelled, or use moveBranchTag.csh for brand-new files."
+	exit 1
+    endif
+    echo "$f $p :  patch-in $r"
     set files = ($files $f)
     set revs = ($revs $r)
+    set prevs = ($prevs $p)
 end
-if ( "$err" == "1" ) then
- echo "some files not found."
- # this may be a problem for brand-new files???-rare
- if ( "$2" != "override" ) then
-	echo
-	echo "No override.   To override, specify after real on cmdline parm."
-	echo
-	exit 1
- else
-    echo "All files specified found."
- endif 
-endif
 
 if ( "$1" != "real" ) then
 	echo
@@ -67,49 +72,87 @@ endif
 cd $dir
 set err=0
 echo
-echo "Moving tag to target rev and updating ..."
+echo "Patching-in target revs  ..."
 set i = 1
 while ( $i <= $#files )
     echo
     set f = $files[$i]
     set r = $revs[$i]
-    cd $dir/$f:h
+    set p = $prevs[$i]
+
+    # Get previous revision (so we can limit change range to just one revision 
+    #  while patching:
+
+    echo "$r" | sed -e 's/[.][0-9]*//' > $WEEKLYBLD/tempver
+    set prevInt = `cat $WEEKLYBLD/tempver`
+    rm -f $WEEKLYBLD/tempver
+
+    echo "$r" | sed -e "s/${prevInt}[.]//" | gawk '{print ($1 - 1)}' > $WEEKLYBLD/tempver
+    set prev = `cat $WEEKLYBLD/tempver`
+    rm -f $WEEKLYBLD/tempver
+
+    set prev = "${prevInt}.${prev}"
+
+    #debug
+    #echo "prev = $prev and r=$r"
+
+    # patch the file in branch sandbox.
+    if (! -d $dir/$f:h ) then
+	echo "unexpected error. directory $dif/$f:h does not exist."
+	exit 1
+    endif
+    cd $dir/$f:h    # just dir and update one file
     pwd
-    # merge in the specified rev into this week's branch.
-    set cmd = "cvs update -kk -j${r} $f:t"
+    set cmd = "cvs up -kk -j${prev} -j${r} $f:t"
     echo $cmd
-    $cmd
+    $cmd  #debug restore: >& /dev/null
     if ( $status ) then 
-	echo "error moving cvs branch tag for $dir/$f"
-	set err=1
-	break
+	echo "error $status in cvs update patch of $f with $r in 64-bit branch sandbox."
+	echo "error patching."
+    	exit 1
     endif
-    # remove next line soon
-    #echo $f >> ~/pb-merge.txt
-    # commit the update to the branch sandbox.
-    set commsg = '"'"merge rev $r into branch"'"'
-    set cmd = "cvs commit -m "$commsg" $f:t"
-    echo $cmd
-    $cmd
-    if ( $status ) then 
+    
+    # commit the patch to the branch sandbox.
+    set commsg = "'patched-in rev $r into branch'"
+    #echo "debug: $commsg" 
+    
+    #set cmd = "cvs commit -m $commsg $f:t"
+    #echo "$cmd"
+    #set verbose
+
+    set echo
+    cvs commit -m "$commsg" $f:t
+    set stat = $status
+    unset echo
+    if ( $stat ) then 
 	echo "error in cvs commit of merge $r into $dir/$f"
-	set err=1
-	break
+	exit 1
     endif
-    # remove next line soon
-    #echo $f >> ~/pb-commit.txt  
-    set msg = "$msg $f $p --> $r\n"
+    
+    # get rid of nasty sticky bit for kk left over from the patch
+    set echo
+    cvs up -A -rv${BRANCHNN}_branch $f:t
+    set stat = $status
+    unset echo
+    if ( $stat ) then 
+	echo "error in cvs commit of merge $r into $dir/$f"
+	exit 1
+    endif
+
+    # update 32-bit sandbox on $BOX32 too
+    set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up $f:t"
+    echo "$cmd32"
+    ssh $BOX32 "$cmd32"
+    
+    set msg = "$msg $f $p : patched-in $r\n"
     @ i++
 end
-if ( "$err" == "1" ) then
- echo "some error updating."
- exit 1
-endif
 
-set msg = "The v${BRANCHNN} branch has been merged for the following:\n $msg"
-set subject = '"'"Branch merge complete."'"'
-echo "$msg" | mail -s "$subject" galt heather ann
+set mailMsg = "The v${BRANCHNN} branch has been patched as follows:\n$msg"
+set subject = '"'"Branch patch complete."'"'
+echo "$mailMsg" | mail -s "$subject" galt heather kuhn ann
+
 date +%Y-%m-%d   >> $BUILDDIR/v${BRANCHNN}_branch/branchPatches.log
-echo "$msg"      >> $BUILDDIR/v${BRANCHNN}_branch/branchPatches.log
+echo "$msg"    >> $BUILDDIR/v${BRANCHNN}_branch/branchPatches.log
 exit 0
 

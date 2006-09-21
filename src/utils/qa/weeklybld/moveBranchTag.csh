@@ -85,6 +85,24 @@ while ( $i <= $#files )
     set r = $revs[$i]
     set p = $prevs[$i]
 
+# I MIGHT NOT NEED THIS
+#    if ( "$r" == "$p" ) then
+#	# if moving to where it already is, 
+#	# we have to remove it first to establish a new branch,
+#	# otherwise it does nothing and you are left with the old branch
+#	# including any failed patches, which is not good,
+#	# so we must remove it, so that when it gets added back,
+#	# it will get a new branch revision number.
+#	set cmd = "cvs rtag -dB v${BRANCHNN}_branch kent/src/$f"
+#	echo $cmd
+#	$cmd
+#	if ( $status ) then 
+#	    echo "error moving cvs branch tag for $f"
+#	    set err=1
+#	    break
+#	endif
+#    endif
+
     # move the tag in cvs for this week's branch.
     set cmd = "cvs rtag -r${r} -F -B -b v${BRANCHNN}_branch kent/src/$f"
     echo $cmd
@@ -94,8 +112,6 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    # delete the following line soon
-    #echo "$f $p --> $r" >> $WEEKLYBLD/mbt-tag.txt 
     # move the beta tag in cvs to track the change to this week's branch.
     set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
     echo $cmd
@@ -110,16 +126,16 @@ while ( $i <= $#files )
 	cd $dir/$f:h    # just dir and update one file
     	set cmd = "cvs up -dP $f:t"
 	# update 32-bit sandbox too
-	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up -dP $f:t"
+	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up $f:t"
     else
 	cd $dir/$f:h:h   # just go to parent and update because dir does not exist yet
 	set cmd = "cvs up -dP $f:h:t"
 	# update 32-bit sandbox too
-	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h:h;cvs up -dP $f:h:t"
+	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h:h;cvs up $f:h:t"
     endif
     pwd
     echo $cmd
-    $cmd >& /dev/null
+    $cmd # restore: >& /dev/null
     if ( $status ) then 
 	echo "error in cvs update of $f"
 	set err=1
@@ -128,8 +144,6 @@ while ( $i <= $#files )
     # update 32bit sandbox on $BOX32 too
     echo "$cmd32"
     ssh $BOX32 "$cmd32"
-    # delete the following line soon
-    #echo "$f $p --> $r" >> $WEEKLYBLD/mbt-up.txt  
     set msg = "$msg $f $p --> $r\n"
     @ i++
 end

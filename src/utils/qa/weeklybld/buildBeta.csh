@@ -71,7 +71,9 @@ endif
 echo "buildTableDescriptions.pl."
 echo "see buildDescr.log for output"
 cd $BUILDDIR/$dir
-kent/src/test/buildTableDescriptions.pl -kentSrc kent/src -gbdDPath /usr/local/apache/htdocs/goldenPath/gbdDescriptions.html >& /cluster/bin/build/scripts/buildDescr.log
+# !!!! REMOVING THIS IS TAKING FOREVER
+echo skipping buildTableDescriptions.pl for now, was hanging.
+#kent/src/test/buildTableDescriptions.pl -kentSrc kent/src -gbdDPath /usr/local/apache/htdocs/goldenPath/gbdDescriptions.html >& /cluster/bin/build/scripts/buildDescr.log
 set err = $status
 if ( $err ) then
     echo "buildTableDescriptions.pl returned error $err"

@@ -2,7 +2,9 @@
 cd $WEEKLYBLD
 
 # ------------------------------------
-# Note - this script can NOT be launched from beta
+# Note - this script assumes you have your ssh key in
+# qateam@hgdownload:.ssh/authorized_keys. Without it,
+#  this script can NOT be launched from beta
 #  using something like ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
 #  because when scp needs the password typed in, apparently
 #  the stdin is not available from the terminal.
@@ -63,7 +65,7 @@ if (-e hgSession) then
     rm hgSession
 endif    
 
-echo "the hgSession and hgCustom cgi is to be released soon, then remove the next line:"
+echo "the hgCustom cgi is to be released soon, then remove the next line:"
 if (-e hgCustom) then
     rm hgCustom
 endif    
