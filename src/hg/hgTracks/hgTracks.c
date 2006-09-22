@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1206 2006/09/22 21:17:25 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1207 2006/09/22 22:33:56 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3626,6 +3626,98 @@ tg->itemEnd 	= superfamilyItemEnd;
 tg->drawName 	= FALSE;
 }
 
+struct hash *gdHash;
+
+int gadInit()
+/* initialize data needed for GAD */
+{
+struct sqlConnection *conn2;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+
+char *diseaseClass, *diseaseClassCode;
+
+gdHash = newHash(6);
+
+conn2= hAllocConn();
+
+sprintf(query2, "select * from %s.gadDiseaseClass", database);
+sr2 = sqlMustGetResult(conn2, query2);
+row2 = sqlNextRow(sr2);
+while (row2 != NULL)
+    {
+    diseaseClass     = strdup(row2[0]);
+    diseaseClassCode = strdup(row2[1]);
+    hashAdd(gdHash, diseaseClass, diseaseClassCode);
+    row2=sqlNextRow(sr2);
+    }
+sqlFreeResult(&sr2);
+hFreeConn(&conn2);
+return(0);
+}
+
+/* reserve space no more than 20 unique gad disease entries */
+char gadDiseaseClassBuffer[2000];
+
+char *gadDiseaseClassList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a GAD entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+char *diseaseClassCode;
+
+int i=0;
+static int gadInitDone = 0;
+
+if (!gadInitDone)
+    {
+    gadInit();
+    gadInitDone = 1;
+    }
+
+conn = hAllocConn();
+
+sprintf(query, "select distinct diseaseClass from gadAll where geneSymbol='%s';", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = gadDiseaseClassBuffer;
+while ((row != NULL) && i<20)
+    {
+    if (i != 0)
+	{
+	sprintf(chp, ",");
+	chp++;
+	}
+    diseaseClassCode = (char*)hashFindVal(gdHash, row[0]);
+    
+    /* in case the disease class code list is not complete */
+    if (diseaseClassCode == NULL) diseaseClassCode = strdup(row[0]);
+    
+    sprintf(chp, "%s", diseaseClassCode);
+    chp = chp+strlen(diseaseClassCode);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    sprintf(chp, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(gadDiseaseClassBuffer);
+}
+
 /* reserve space no more than 100 unique gad disease entries */
 char gadBuffer[25600];
 
@@ -3680,12 +3772,14 @@ static void gadDrawAt(struct track *tg, void *item,
 {
 struct bed *bed = item;
 char *sDiseases;
+char *sDiseaseClasses;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
 sDiseases = gadDiseaseList(tg, item);
+sDiseaseClasses = gadDiseaseClassList(tg, item);
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
 else
@@ -3702,9 +3796,9 @@ if (color)
     
     if (vis == tvFull)
         {
-        vgTextRight(vg, x1-mgFontStringWidth(font, sDiseases)-2, y, 
-		    mgFontStringWidth(font, sDiseases),
-                    heightPer, MG_BLACK, font, sDiseases);
+        vgTextRight(vg, x1-mgFontStringWidth(font, sDiseaseClasses)-2, y, 
+		    mgFontStringWidth(font, sDiseaseClasses),
+                    heightPer, MG_BLACK, font, sDiseaseClasses);
         }
     if (tg->drawName && vis != tvSquish)
 	{
