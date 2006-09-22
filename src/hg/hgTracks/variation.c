@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.92 2006/09/19 04:19:56 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.93 2006/09/22 09:12:59 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -244,7 +244,10 @@ char                 *table     = cloneString("snp126ortho"); /* could be a trac
 char                 *orthoName = NULL;
 char                 *chimpBase = NULL;
 struct sqlResult     *sr        = NULL;
+
+/* this function currently breaks hgc, so it is turned off until it is rewritten */
 return;
+
 if(!sqlTableExists(conn, table))
     return;
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -350,33 +353,26 @@ for (i=0; i < snp125MolTypeCartSize; i++)
     snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
     snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
     }
-
 for (i=0; i < snp125ClassCartSize; i++)
     {
     snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
     snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
     }
-
 for (i=0; i < snp125ValidCartSize; i++)
-   {
+    {
     snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
     snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
     }
-
 for (i=0; i < snp125FuncCartSize; i++)
     {
     snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
     snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
     }
-
 for (i=0; i < snp125LocTypeCartSize; i++)
     {
     snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
-    snp125LocTypeIncludeCart[i] = 
-        cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
+    snp125LocTypeIncludeCart[i] = cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
     }
-
-
 bedLoadItem(tg, tg->mapName, (ItemLoader)snp125Load);
 
 filterSnpItems(tg, snp125AvHetFilterItem);
@@ -413,13 +409,8 @@ Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snpMap track item. */
 {
 struct snpMap *el = item;
-enum   snpColorEnum thisSnpColor = \
-    stringArrayIx(snpMapSourceCart[
-		     stringArrayIx(el->source,
-				   snpMapSourceDataName,
-				   snpMapSourceDataNameSize
-				   )],
-		  snpColorLabel,snpColorLabelSize);
+enum   snpColorEnum thisSnpColor = stringArrayIx( snpMapSourceCart[stringArrayIx(el->source,snpMapSourceDataName,snpMapSourceDataNameSize)],
+						  snpColorLabel,snpColorLabelSize);
 
 switch (thisSnpColor)
     {
@@ -443,8 +434,7 @@ Color snp125Color(struct track *tg, void *item, struct vGfx *vg)
 {
 struct snp125 *el = item;
 enum   snp125ColorEnum thisSnpColor = snp125ColorBlack;
-char  *snpColorSource = cartUsualString(cart, 
-			snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
+char  *snpColorSource = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
 char  *validString = NULL;
 char  *funcString = NULL;
 int    snpValid = 0;
@@ -465,14 +455,14 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
 	if (index2 < 0) index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
-    /* validity is a set */
+	/* valid is a set */
     case snp125ColorSourceValid:
 	validString = cloneString(el->valid);
 	for (snpValid=0; snpValid<snp125ValidCartSize; snpValid++)
 	    if (containsStringNoCase(validString, snp125ValidDataName[snpValid]))
 		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorLabelSize);
 	break;
-    /* func is a set */
+	/* func is a set */
     case snp125ColorSourceFunc:
         funcString = cloneString(el->func);
 	for (snpFunc=0; snpFunc<snp125FuncCartSize; snpFunc++)
@@ -509,15 +499,12 @@ switch (thisSnpColor)
     }
 }
 
-
-
 Color snpColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snp track item. */
 {
 struct snp *el = item;
 enum   snpColorEnum thisSnpColor = snpColorBlack;
-char  *snpColorSource = cartUsualString(cart, 
-			snpColorSourceDataName[0], snpColorSourceDefault[0]);
+char  *snpColorSource = cartUsualString(cart, snpColorSourceDataName[0], snpColorSourceDefault[0]);
 char  *validString = NULL;
 char  *funcString = NULL;
 int    snpValid = 0;
@@ -579,8 +566,7 @@ switch (thisSnpColor)
     }
 }
 
-void snpMapDrawItemAt(struct track *tg, void *item, 
-	struct vGfx *vg, int xOff, int y, 
+void snpMapDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snpMap item at position. */
 {
@@ -596,12 +582,10 @@ if ( w<1 )
 vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
-    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, w, heightPer,
-	     tg->mapName, tg->mapItemName(tg, sm), NULL);
+    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, w, heightPer, tg->mapName, tg->mapItemName(tg, sm), NULL);
 }
 
-void snpDrawItemAt(struct track *tg, void *item, 
-	struct vGfx *vg, int xOff, int y, 
+void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp item at position. */
 {
@@ -621,8 +605,7 @@ if (tg->drawName && vis != tvSquish)
 	     tg->mapName, tg->mapItemName(tg, s), NULL);
 }
 
-void snp125DrawItemAt(struct track *tg, void *item, 
-	struct vGfx *vg, int xOff, int y, 
+void snp125DrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single snp125 item at position. */
 {
@@ -1305,7 +1288,7 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 char  label[16];
 char *ldVal = cartUsualString(cart, "hapmapLd_val", ldValDefault);
 char *pop         = tg->mapName;
-int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer );
+int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer + height/2 );
 struct dyString *dsLdVal = newDyString(32);
 if (!startsWith("hapmapLd", tg->mapName))
     {
@@ -1607,13 +1590,9 @@ Color cnpFosmidItemColor(struct track *tg, void *item, struct vGfx *vg)
 struct bed *cnpFo = item;
 
 if (cnpFo->name[0] == 'I')
-    {
     return MG_GREEN;
-    }
 if (cnpFo->name[0] == 'D')
-    {
     return MG_RED;
-    }
 return MG_BLACK;
 }
 
