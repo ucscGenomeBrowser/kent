@@ -6,6 +6,8 @@
 
 #ifndef EXPRECORD_H
 #include "expRecord.h"
+#include "cart.h"
+#include "bed.h"
 #endif
 
 #ifndef TRACKDB_H
