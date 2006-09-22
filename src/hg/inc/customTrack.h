@@ -19,9 +19,6 @@
 
 #define CT_CGI_VAR		 "hgct_doHgCustom"
 
-#define CT_DOC_HEADER_PREFIX     "<!-- UCSC_GB_TRACK NAME="
-#define CT_DOC_HEADER_SUFFIX     " -->"
-
 /* TODO: Remove this when hgCustom is ready for release. This cart variable is
  * only used to preserve old behavior during testing */
 

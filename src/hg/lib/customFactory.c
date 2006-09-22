@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.26 2006/08/24 22:12:13 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.27 2006/09/22 05:48:09 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1012,7 +1012,6 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
         close(sd);
         track->tdb->html = dyStringCannibalize(&ds);
         }
-    ctRemoveFromSettings(track, "htmlUrl");
     }
 tdb->url = hashFindVal(hash, "url");
 if ((val = hashFindVal(hash, "visibility")) != NULL)

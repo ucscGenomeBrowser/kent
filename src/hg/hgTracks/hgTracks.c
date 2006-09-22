@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1202 2006/09/22 00:26:33 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1203 2006/09/22 05:48:09 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12726,11 +12726,6 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
-/* TODO: remove when hgCustom is ready to be released */
-#ifndef CT_APPEND_DEFAULT
-    hButton("customTrackPage", "add custom tracks");
-    hPrintf(" ");
-#endif
     hButton(CT_CGI_VAR, customTrackCgiButtonLabel(cart));
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
@@ -13253,92 +13248,6 @@ puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
 puts("</HTML>"); 
 }
 
-/* TODO: remove when hgCustom is ready for release */
-#ifndef CT_APPEND_DEFAULT
-void customTrackPage()
-/* Put up page that lets user upload custom tracks. */
-{
-puts("<H2>Add Your Own Custom Track</H2>");
-puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
-cartSaveSession(cart);
-
-puts(
-"<P>Display your own custom annotation tracks in the browser using the \n"
-"procedure described in the custom tracks \n"
-"<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>user's \n"
-"guide</A>. For information on upload procedures and supported formats, see \n"
-"the \"Loading Custom Annotation Tracks\" section below.</P> \n"
-
-"	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\">\n"
-);
-
-cgiMakeButton("Submit", "Submit");
-
-cgiSimpleTableStart();
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiMakeTextArea("hgt.customText", "", 14, 80);
-cgiTableFieldEnd();
-cgiTableRowEnd();
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiMakeResetButton();
-cgiMakeButton("Submit", "Submit");
-cgiTableFieldEnd();
-cgiTableRowEnd();
-cgiTableEnd();
-
-#if defined(NOT)	/*	NOT YET	*/
-puts("<BR>\n");
-cgiMakeCheckBox("hgt.customAppend", cgiBooleanDefined("hgt.customAppend"));
-puts("Check box to add this sequence to existing custom tracks.<BR>If unchecked, all existing custom tracks will be cleared.</FORM>\n");
-#endif
-
-puts(
-"<BR>\n"
-"Click \n"
-"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
-"to view a collection of custom annotation tracks contributed by other Genome \n"
-"Browser users.</P> \n"
-"\n"
-"<HR> \n"
-"<H2>Loading Custom Annotation Tracks</H2> \n"
-"<P>A data file in one of the supported custom track \n"
-"<A HREF=\"../goldenPath/help/customTrack.html#format\" \n"
-"TARGET=_blank>formats</A> may be uploaded \n"
-"by any of the following methods: \n"
-"<UL> \n"
-"<LI>Pasting the custom annotation text directly into the large text box above\n"
-"<LI>Clicking the &quot;browse&quot; button and choosing a custom annotation \n"
-"located on your computer\n"
-"<LI>Entering a URL for the custom annotation in the large text box above \n"
-"</UL></P>\n"
-"<P>Multiple URLs may be entered into the text box, one per line.\n"
-"The Genome Browser supports the HTTP and FTP (passive only) URL protocols.\n"
-"</P> \n"
-"<P>Data compressed by any of the following programs may be loaded: \n"
-"gzip (<em>.gz</em>), compress (<em>.Z</em>) or bzip2 (<em>.bz2</em>). \n"
-"The filename must include the extension indicated. </P>\n"
-"<P>If a login and password is required to access data loaded through \n"
-"a URL, this information can be included in the URL using the format \n"
-"<em>protocol://user:password@server.com/somepath</em>. Only Basic \n"
-"Authentication is \n"
-"supported for HTTP. Note that passwords included in URLs are <B>not</B> \n"
-"protected. If a password contains a non-alphanumeric character, such as \n"
-"@, the character must be replaced by the hexidecimal \n"
-"representation for that character. For example, in the password \n"
-"<em>mypwd@wk</em>, the @ character should be replaced by \n"
-"%40, resulting in the modified password <em>mypwd%40wk</em>. \n"
-"</P>\n"
-"<P>\n"
-);
-
-
-puts("</FORM>");
-}
-#endif
-
-
 void chromInfoTotalRow(long long total)
 /* Make table row with total size from chromInfo. */
 {
@@ -13531,14 +13440,6 @@ if (cartVarExists(cart, CT_CGI_VAR))
     cartRemove(cart, CT_CGI_VAR);
     customTrackCgi();
     }
-/* TODO: remove when hgCustom is ready for release */
-#ifndef CT_APPEND_DEFAULT
-else if (cartVarExists(cart, "customTrackPage"))
-    {
-    cartRemove( cart, "customTrackPage");
-    customTrackPage();
-    }
-#endif
 else if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");

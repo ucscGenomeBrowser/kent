@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.50 2006/09/20 01:30:30 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.51 2006/09/22 05:48:09 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,6 +37,7 @@ errAbort(
 #define hgCtDataFile      CT_CUSTOM_FILE_VAR
 #define hgCtDataFileName  CT_CUSTOM_FILE_NAME_VAR
 #define hgCtTable         CT_SELECTED_TABLE_VAR
+#define hgCtUpdatedTable "hgct_updatedTable"
 #define hgCtDocText      "hgct_docText"
 #define hgCtDocFile      "hgct_docFile"
 #define hgCtDocTrackName "hgct_docTrackName"
@@ -89,7 +90,7 @@ puts("Display your own data as custom annotation tracks in the browser."
 );
 
 if (err)
-    printf("<BR><B>&nbsp; &nbsp; &nbsp; &nbsp; <I>Error</I>&nbsp;<FONT COLOR='RED'> %s </FONT></B>", err);
+    printf("<P><B>&nbsp; &nbsp; &nbsp; &nbsp; <I><FONT COLOR='RED'>Error</I></FONT>&nbsp; %s </B>", err);
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
 
@@ -139,22 +140,7 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
 
-char *docText = "";
-#ifdef OLD
-char *selectedTable = cartUsualString(cart, hgCtTable, "");
-if (selectedTable[0] != 0)
-    {
-    struct customTrack *ct;
-    ctList = customTracksParseCart(cart, NULL, NULL);
-    /* fill doc text box with HTML for selected table */
-    for (ct = ctList; ct != NULL; ct = ct->next)
-        if (sameString(ct->tdb->tableName, selectedTable) && 
-                ct->tdb->html && ct->tdb->html[0])
-		    docText = ct->tdb->html;
-    }
-#endif
-
-cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, docText), 
+cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""),
         TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
 
 cgiTableFieldEnd();
@@ -174,7 +160,18 @@ cgiTableRowEnd();
 
 /* fifth row - link for HTML description template */
 cgiSimpleTableRowStart();
-printf("<TD><A TARGET=_BLANK HREF='../goldenPath/help/ct_description.txt'>HTML doc template</A></TD>");
+puts("<TD COLSPAN=3>");
+char *htmlUrl = NULL;
+if ((htmlUrl = cartOptionalString(cart, "hgct_htmlUrl")) != NULL)
+    {
+    printf("<EM><B><FONT COLOR=GREEN>Warning</FONT></EM></B>: Changes here will diverge from url: %s", htmlUrl);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    cgiSimpleTableRowStart();
+    puts("<TD COLSPAN=3>");
+    }
+printf("<A TARGET=_BLANK HREF='../goldenPath/help/ct_description.txt'>HTML doc template</A></TD>");
+cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
 }
@@ -214,13 +211,9 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         posCt++;
     }
 
-cgiMakeButton(hgCtDoGenomeBrowser, "view in genome browser");
-puts("&nbsp;");
-cgiMakeButton(hgCtDoTableBrowser, "access in table browser");
-puts("<BR>&nbsp;");
 
 if (warn && warn[0])
-    printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; <I>Warning</I>&nbsp;<FONT COLOR='GREEN'> %s </FONT></B><BR>", warn);
+    printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
 
 puts("<TABLE><TR><TD>");
 
@@ -233,7 +226,7 @@ tableHeaderField("Doc", "HTML track description");
 if (itemCt)
     tableHeaderField("Items", "Count of discrete items in track");
 if (posCt)
-    tableHeaderField("Pos"," Default track position or first item");
+    tableHeaderField("Pos"," Go to genome browser at default track position or first item");
 tableHeaderFieldStart();
 cgiMakeButtonWithMsg(hgCtDoDelete, "delete", "Remove custom track");
 cgiTableFieldEnd();
@@ -251,8 +244,9 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
     //printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
-    printf("<TR><TD><A HREF='/cgi-bin/hgCustom?%s=%s'>%s</A></TD>", 
-                hgCtTable, ct->tdb->tableName, ct->tdb->shortLabel);
+    printf("<TR><TD><A TITLE='Update custom track: %s' HREF='/cgi-bin/hgCustom?%s=%s'>%s</A></TD>", 
+            ct->tdb->shortLabel, hgCtTable, ct->tdb->tableName, 
+            ct->tdb->shortLabel);
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
     /* Type field */
@@ -307,32 +301,20 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     puts("</TD></TR>");
     }
 hTableEnd();
+
 cgiTableFieldEnd(); 
-
 cgiSimpleTableFieldStart();
-cgiSimpleTableStart();
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiMakeButton(hgCtDoAdd, "add custom tracks");
+cgiMakeButton(hgCtDoAdd, "add custom tracks &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;");
+puts("</FORM>");
+printf("<FORM ACTION=\"%s?%s\" METHOD=\"POST\" "
+               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
+               hgTracksName(), cartSidUrlString(cart));
+cgiMakeButton("Submit", "view in genome browser");
+puts("</FORM>");
 cgiTableFieldEnd();
 cgiTableRowEnd();
-
-#ifdef OLD
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiMakeButton(hgCtDoGenomeBrowser, "view in genome browser");
-cgiTableFieldEnd();
-cgiTableRowEnd();
-
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiMakeButton(hgCtDoTableBrowser, "access in table browser &nbsp; ");
-cgiTableFieldEnd();
-cgiTableRowEnd();
-cgiTableEnd();
-cgiTableFieldEnd();
-cgiTableRowEnd();
-#endif
+puts("</TABLE>");
+cartSetString(cart, "hgta_group", "user");
 }
 
 void doGenomeBrowser()
@@ -341,17 +323,6 @@ void doGenomeBrowser()
 char url[256];
 safef(url, sizeof url, "%s?%s", 
 			hgTracksName(), cartSidUrlString(cart));
-puts("<HTML>");
-printf("<BODY onload=\"try {self.location.href='%s' } catch(e) {}\"><a href=\"%s\">Redirect </a></BODY>", url, url);
-puts("</HTML>");
-}
-
-void doTableBrowser()
-/* Redirect to table browser */
-{
-char url[256];
-safef(url, sizeof url, "%s?%s&hgta_group=user&hgta_doMainPage=1", 
-			hgTablesName(), cartSidUrlString(cart));
 puts("<HTML>");
 printf("<BODY onload=\"try {self.location.href='%s' } catch(e) {}\"><a href=\"%s\">Redirect </a></BODY>", url, url);
 puts("</HTML>");
@@ -423,80 +394,31 @@ if (retErr)
     *retErr = err;
 }
 
-struct hash *getCustomTrackDocs(char *text, char *defaultTrackName)
-/* get HTML descriptions from text with special comments to name 
- * and delimit tracks */
-{
-char *line;
-struct hash *docHash = hashNew(6);
-char *trackName = defaultTrackName;
-struct lineFile *lf = NULL;
-struct dyString *ds = dyStringNew(1000);
-
-if (!text)
-    return NULL;
-/* linefile routines require terminal newline */
-dyStringPrintf(ds, "%s\n", text);
-lf = lineFileOnString("custom HTML", TRUE, dyStringCannibalize(&ds));
-ds = dyStringNew(1000);
-while (lineFileNextReal(lf, &line))
-    {
-    fprintf(stderr, "<BR>line=%s</BR>", line);
-    if (startsWithWord("<!--", line) && stringIn("-->", line) &&
-            containsStringNoCase(line, "UCSC_GB_TRACK"))
-        {
-        /* allow double quotes in doc header comment */
-        subChar(line, '"', '\'');
-        line = replaceChars(line, "name=", "NAME=");
-        trackName = stringBetween("NAME='", "'", line);
-        if (!trackName)
-            trackName = defaultTrackName;
-        if (strlen(ds->string))
-            {
-            /* starting a new track -- save doc from previous */
-            hashAdd(docHash, trackName, dyStringCannibalize(&ds));
-            }
-        /* remove quotes and surrounding whitespace from track identifier*/
-        trackName = skipLeadingSpaces(trackName);
-        eraseTrailingSpaces(trackName);
-        stripChar(trackName, '\'');
-        stripChar(trackName, '\"');
-        ds = dyStringNew(1000);
-        continue;
-        }
-    dyStringAppend(ds, line);
-    dyStringAppend(ds, "\n");
-    }
-if (strlen(ds->string))
-    {
-    hashAdd(docHash, trackName, dyStringCannibalize(&ds));
-    }
-return docHash;
-}
-
-void addCustomDocs()
-/* get HTML docs */
+void addCustomDoc(char *selectedTrack)
+/* get HTML doc from cgi/cart variables */
 {
 char *html = NULL;
-struct hash *docHash = NULL;
-char *defaultTrackName;
-struct customTrack *ct;
+struct customTrack *ct = NULL;
 
 if (cartNonemptyString(cart, hgCtDocText))
     html = cartString(cart, hgCtDocText);
 else if (cartNonemptyString(cart, hgCtDocFile))
     html = cartString(cart, hgCtDocFile);
-defaultTrackName = ctList->tdb->shortLabel;
-docHash = getCustomTrackDocs(html, defaultTrackName);
-if (docHash)
+if (!selectedTrack)
+    {
+    /* attach doc to first ct in the list */
+    ct = ctList;
+    }
+else
     {
     for (ct = ctList; ct != NULL; ct = ct->next)
-	{
-	if ((html = hashFindVal(docHash, ct->tdb->shortLabel)) != NULL)
-	    ct->tdb->html = cloneString(html);
-	}
+        {
+        if (sameString(selectedTrack, ct->tdb->tableName))
+            break;
+        }
     }
-//cartRemove(cart, hgCtDocText);
+if (ct)
+    ct->tdb->html = cloneString(html);
 }
 
 void startCustomForm()
@@ -534,7 +456,12 @@ cartWebStart(cart, "Update Custom Track: %s", ct->tdb->shortLabel);
 cartSaveSession(cart);
 startCustomForm();
 cartSetString(cart, hgCtDocText, ct->tdb->html);
+cartSetString(cart, hgCtDataText, "# Paste in new data here to update the data in this track");
+char *htmlUrl = NULL;
+if ((htmlUrl = trackDbSetting(ct->tdb, "htmlUrl")) != NULL)
+    cartSetString(cart, "hgct_htmlUrl", htmlUrl);
 addCustomForm(NULL);
+cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
 endCustomForm();
 helpCustom();
 cartWebEnd(cart);
@@ -548,7 +475,6 @@ cartWebStart(cart, "Manage Custom Tracks");
 cartSaveSession(cart);
 startCustomForm();
 manageCustomForm(warn);
-endCustomForm();
 cartWebEnd(cart);
 }
 
@@ -664,29 +590,21 @@ getDbAndGenome(cart, &database, &organism);
 saveDbAndGenome(cart, database, organism);
 hSetDb(database);
 
-if (cartVarExists(cart, hgCtDoGenomeBrowser))
-    {
-    doGenomeBrowser();
-    }
-else if (cartVarExists(cart, hgCtDoTableBrowser))
-    {
-    doTableBrowser();
-    }
-else if (cartVarExists(cart, hgCtDoAdd))
+if (cartVarExists(cart, hgCtDoAdd))
     {
     doAddCustom(NULL);
     }
 else if (cartVarExists(cart, hgCtTable))
     {
+    /* update track */
     struct customTrack *ct = NULL;
     char *selectedTable = cartString(cart, hgCtTable);
     if (selectedTable[0] != 0)
         {
         ctList = customTracksParseCart(cart, NULL, NULL);
-        /* fill doc text box with HTML for selected table */
         for (ct = ctList; ct != NULL; ct = ct->next)
             if (sameString(ct->tdb->tableName, selectedTable))
-                    break;
+                break;
         }
     if (ct)
         doUpdateCustom(ct);
@@ -695,9 +613,8 @@ else if (cartVarExists(cart, hgCtTable))
     }
 else
     {
+    /* get new and existing custom tracks from cart and decide what to do */
     struct dyString *dsWarn = dyStringNew(0);
-
-    /* get new and existing custom tracks from cart */
     fixNewData(cart);
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
 					    &replacedCts, &err);
@@ -720,10 +637,10 @@ else
     warn = dyStringCannibalize(&dsWarn);
     if (ctList)
 	{
-	addCustomDocs();
-	/* remove doc and data vars */
-	saveCustom(ctFileName);
-	doManageCustom(warn);
+        char *updatedTable = cartOptionalString(cart, hgCtUpdatedTable);
+	addCustomDoc(updatedTable);
+        saveCustom(ctFileName);
+        doManageCustom(warn);
 	}
     else
 	{
@@ -737,155 +654,6 @@ else
 cartRemovePrefix(cart, hgCt);
 }
 
-#ifdef OLD
-if (err || warn)
-    /* restore customText data to fill text area */
-    cartSetString(cart, hgCtDataText, customText);
-
-struct dyString *dsWarn = NULL;
-if (warn)
-    {
-    dsWarn = dyStringNew(0);
-    dyStringPrintf(dsWarn, "%s. ", warn); 
-    }
-
-if (slCount(replacedCts) != 0)
-    {
-    if (!dsWarn)
-        dsWarn = dyStringNew(0);
-    dyStringAppend(dsWarn, "Replacing custom tracks: &nbsp;");
-    for (ct = replacedCts; ct != NULL; ct = ct->next)
-        {
-        if (ct != replacedCts)
-            /* not the first */
-            dyStringAppend(dsWarn, ",&nbsp;");
-        dyStringAppend(dsWarn, ct->tdb->shortLabel);
-        }
-    }
-if (dsWarn)
-    warn = dyStringCannibalize(&dsWarn);
-
-if (cartVarExists(cart, hgCtDoDelete))
-    {
-    /* delete tracks */
-    for (ct = ctList; ct != NULL; ct = ct->next)
-        {
-        char var[64];
-        safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->tableName);
-        if (cartBoolean(cart, var))
-            slRemoveEl(&ctList, ct);
-        }
-    }
-
-else if (cartVarExists(cart, hgCtDoRefresh))
-    {
-    /* refresh tracks  from URL */
-    struct customTrack *refreshCts = NULL;
-    for (ct = ctList; ct != NULL; ct = ct->next)
-        {
-        char var[64];
-        safef(var, sizeof var, "%s_%s", hgCtRefreshPrefix, ct->tdb->tableName);
-        if (cartUsualBoolean(cart, var, FALSE))
-            {
-            struct customTrack *nextCt = NULL, *urlCt = NULL;
-            struct customTrack *urlCts = 
-                customFactoryParse(ctDataUrl(ct), FALSE, NULL);
-            for (urlCt = urlCts; urlCt != NULL; urlCt = nextCt)
-                {
-                nextCt = urlCt->next;
-                if (sameString(ct->tdb->tableName, urlCt->tdb->tableName))
-                    slAddHead(&refreshCts, urlCt);
-                }
-            }
-        }
-    ctList = customTrackAddToList(ctList, refreshCts, &replacedCts);
-    if (slCount(replacedCts) != 0)
-        {
-        struct dyString *dsWarn = dyStringNew(0);
-        dyStringAppend(dsWarn, "Replaced: &nbsp;");
-        for (ct = replacedCts; ct != NULL; ct = ct->next)
-            {
-            if (ct != replacedCts)
-                /* not the first */
-                dyStringAppend(dsWarn, ",&nbsp;");
-            dyStringAppend(dsWarn, ct->tdb->shortLabel);
-            }
-        warn = dyStringCannibalize(&dsWarn);
-    }
-    customTrackHandleLift(ctList);
-    }
-
-if (ctList == NULL)
-    firstSectionMsg = SECTION_ADD_MSG;
-else
-    {
-    firstSectionMsg = SECTION_MANAGE_MSG;
-
-    /* get HTML docs */
-    char *html = NULL;
-    struct hash *docHash = NULL;
-    char *defaultTrackName;
-    if (cartNonemptyString(cart, hgCtDocText))
-        {
-        html = cartString(cart, hgCtDocText);
-        }
-    else if (cartNonemptyString(cart, hgCtDocFile))
-        {
-        html = cartString(cart, hgCtDocFile);
-        }
-    defaultTrackName = (addCts != NULL ?
-                        addCts->tdb->shortLabel: ctList->tdb->shortLabel);
-    docHash = getCustomTrackDocs(html, defaultTrackName);
-    if (docHash)
-        {
-        for (ct = ctList; ct != NULL; ct = ct->next)
-            {
-            if ((html = hashFindVal(docHash, ct->tdb->shortLabel)) != NULL)
-                {
-                ct->tdb->html = cloneString(html);
-                }
-            }
-        }
-    //cartRemove(cart, hgCtDocText);
-    }
-
-/* display header and first section header */
-cartWebStart(cart, firstSectionMsg);
-
-/* create form for input */
-startCustomForm();
-
-if (ctList != NULL)
-    {
-    /* display list of custom tracks, with checkboxes to select for delete */
-    manageCustom();
-    endCustomForm();
-
-    /* create custom track file in trash dir, if needed */
-    if (ctFileName == NULL)
-        {
-        static struct tempName tn;
-	customTrackTrashFile(&tn, ".bed");
-        ctFileName = tn.forCgi;
-        cartSetString(cart, "ct", ctFileName);
-        }
-    /* save custom tracks to file */
-    customTrackSave(ctList, ctFileName);
-
-    cartSetString(cart, "hgta_group", "user");
-    }
-else
-    {
-    /* clean up cart.  File cleanup handled by trash cleaner */
-    cartRemove(cart, "ct");
-    /* display form to add custom tracks -- either URL-based or file-based */
-    addCustom(err, warn);
-    endCustomForm();
-    helpCustom();
-    }
-cartWebEnd(cart);
-}
-#endif
 
 int main(int argc, char *argv[])
 /* Process command line. */

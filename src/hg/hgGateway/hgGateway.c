@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.89 2006/09/19 01:00:21 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.90 2006/09/22 05:48:09 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -160,9 +160,6 @@ puts(
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
-/* TODO: remove button for old page after hgCustom is ready for release */
-cgiMakeButton("customTrackPage", "add custom tracks");
-printf(" ");
 cgiMakeButton(CT_CGI_VAR, customTrackCgiButtonLabel(cart));
 printf(" ");
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
