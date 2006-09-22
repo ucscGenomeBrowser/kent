@@ -26,6 +26,7 @@ DIRS = \
 	hgFindSpec \
 	hgGcPercent \
 	hgGeneBands \
+	hgGenericMicroarray \
 	hgGoldGapGl \
 	hgKgGetText \
 	hgKgMrna \
