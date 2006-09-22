@@ -1,3 +1,5 @@
+/* Lowe lab tracks */
+
 #include "common.h"
 #include "hash.h"
 #include "localmem.h"
@@ -13,7 +15,6 @@
 #include "expRatioTracks.h"
 #include "loweLabTracks.h"
 
-
 /* Declare our color gradients and the the number of colors in them */
 #define LL_EXPR_DATA_SHADES 16
 Color LLshadesOfGreen[LL_EXPR_DATA_SHADES];
@@ -26,34 +27,34 @@ Color LLshadesOfCOGS[LL_COG_SHADES];
 /**** Lowe lab additions ***/
 
 void initializeColors(struct vGfx *vg)
-    {
-    LLshadesOfCOGS['J'-'A']=vgFindColorIx(vg, 252, 204,252);
-    LLshadesOfCOGS['A'-'A']=vgFindColorIx(vg, 252, 220,252);
-    LLshadesOfCOGS['K'-'A']=vgFindColorIx(vg, 252, 220,236);
-    LLshadesOfCOGS['L'-'A']=vgFindColorIx(vg, 252, 220,220);
-    LLshadesOfCOGS['B'-'A']=vgFindColorIx(vg, 252, 220,204);
-    LLshadesOfCOGS['D'-'A']=vgFindColorIx(vg, 252, 252,220);
-    LLshadesOfCOGS['Y'-'A']=vgFindColorIx(vg, 252, 252,204);
-    LLshadesOfCOGS['V'-'A']=vgFindColorIx(vg, 252, 252,188);
-    LLshadesOfCOGS['T'-'A']=vgFindColorIx(vg, 252, 252,172);
-    LLshadesOfCOGS['M'-'A']=vgFindColorIx(vg, 236, 252,172);
-    LLshadesOfCOGS['N'-'A']=vgFindColorIx(vg, 220, 252,172);
-    LLshadesOfCOGS['Z'-'A']=vgFindColorIx(vg, 204, 252,172);
-    LLshadesOfCOGS['W'-'A']=vgFindColorIx(vg, 188, 252,172);
-    LLshadesOfCOGS['U'-'A']=vgFindColorIx(vg, 172, 252,172);
-    LLshadesOfCOGS['O'-'A']=vgFindColorIx(vg, 156, 252,172);
-    LLshadesOfCOGS['C'-'A']=vgFindColorIx(vg, 188, 252,252);  /* light blue  133, 233,204);  */
-    LLshadesOfCOGS['G'-'A']=vgFindColorIx(vg, 204, 252,252);
-    LLshadesOfCOGS['E'-'A']=vgFindColorIx(vg, 220, 252,252);
-    LLshadesOfCOGS['F'-'A']=vgFindColorIx(vg, 220, 236,252);
-    LLshadesOfCOGS['H'-'A']=vgFindColorIx(vg, 220, 220,252);
-    LLshadesOfCOGS['I'-'A']=vgFindColorIx(vg, 220, 204,252);
-    LLshadesOfCOGS['P'-'A']=vgFindColorIx(vg, 204, 204,252);
-    LLshadesOfCOGS['Q'-'A']=vgFindColorIx(vg, 188, 204,252);
-    LLshadesOfCOGS['R'-'A']=vgFindColorIx(vg, 224, 224,224); /* general function prediction */
-    LLshadesOfCOGS['S'-'A']=vgFindColorIx(vg, 204, 204,204);
-    LLshadesOfCOGS['-'-'A']=vgFindColorIx(vg, 224, 224,224);/* no cog - same as R (general function prediction) */
-    }
+{
+LLshadesOfCOGS['J'-'A']=vgFindColorIx(vg, 252, 204,252);
+LLshadesOfCOGS['A'-'A']=vgFindColorIx(vg, 252, 220,252);
+LLshadesOfCOGS['K'-'A']=vgFindColorIx(vg, 252, 220,236);
+LLshadesOfCOGS['L'-'A']=vgFindColorIx(vg, 252, 220,220);
+LLshadesOfCOGS['B'-'A']=vgFindColorIx(vg, 252, 220,204);
+LLshadesOfCOGS['D'-'A']=vgFindColorIx(vg, 252, 252,220);
+LLshadesOfCOGS['Y'-'A']=vgFindColorIx(vg, 252, 252,204);
+LLshadesOfCOGS['V'-'A']=vgFindColorIx(vg, 252, 252,188);
+LLshadesOfCOGS['T'-'A']=vgFindColorIx(vg, 252, 252,172);
+LLshadesOfCOGS['M'-'A']=vgFindColorIx(vg, 236, 252,172);
+LLshadesOfCOGS['N'-'A']=vgFindColorIx(vg, 220, 252,172);
+LLshadesOfCOGS['Z'-'A']=vgFindColorIx(vg, 204, 252,172);
+LLshadesOfCOGS['W'-'A']=vgFindColorIx(vg, 188, 252,172);
+LLshadesOfCOGS['U'-'A']=vgFindColorIx(vg, 172, 252,172);
+LLshadesOfCOGS['O'-'A']=vgFindColorIx(vg, 156, 252,172);
+LLshadesOfCOGS['C'-'A']=vgFindColorIx(vg, 188, 252,252);  /* light blue  133, 233,204);  */
+LLshadesOfCOGS['G'-'A']=vgFindColorIx(vg, 204, 252,252);
+LLshadesOfCOGS['E'-'A']=vgFindColorIx(vg, 220, 252,252);
+LLshadesOfCOGS['F'-'A']=vgFindColorIx(vg, 220, 236,252);
+LLshadesOfCOGS['H'-'A']=vgFindColorIx(vg, 220, 220,252);
+LLshadesOfCOGS['I'-'A']=vgFindColorIx(vg, 220, 204,252);
+LLshadesOfCOGS['P'-'A']=vgFindColorIx(vg, 204, 204,252);
+LLshadesOfCOGS['Q'-'A']=vgFindColorIx(vg, 188, 204,252);
+LLshadesOfCOGS['R'-'A']=vgFindColorIx(vg, 224, 224,224); /* general function prediction */
+LLshadesOfCOGS['S'-'A']=vgFindColorIx(vg, 204, 204,204);
+LLshadesOfCOGS['-'-'A']=vgFindColorIx(vg, 224, 224,224);/* no cog - same as R (general function prediction) */
+}
 
 void loadBed6(struct track *tg)
 /* Load the items in one custom track - just move beds in
@@ -75,7 +76,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&list);
 tg->items = list;
-
 }
 
 Color gbGeneColor(struct track *tg, void *item, struct vGfx *vg)
@@ -89,33 +89,29 @@ struct COG *COG=NULL;
 char *temparray[160];
 char **row;
 
-if(hTableExists("COG")){
+if(hTableExists("COG"))
+    {
     sprintf(query, "select * from COG where name = '%s'", bed->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-    	{
    	    COG = COGLoad(row);
-  	}
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     initializeColors(vg);
-    if(COG!=NULL){
+    if(COG!=NULL)
+	{
         chopString(COG->code, "," , temparray, 9999);
         return LLshadesOfCOGS[(temparray[0][0]-'A')];
-    }
+	}
     else
-        {
         return blackIndex();
-        }
     }
 else
     {
-        hFreeConn(&conn);
-
-	return blackIndex();
+    hFreeConn(&conn);
+    return blackIndex();
     }
 slFreeList(&bed);
-
 }
 
 void gbGeneMethods(struct track *tg)
@@ -136,41 +132,32 @@ struct COG *COG=NULL;
 char *temparray[160];
 char **row;
 if (lf == NULL)
-    {
     return shadesOfGray[9];
-    }
 if (lf->name == NULL)
-    {
     return shadesOfGray[9];
-    }
-
-if(hTableExists("COG")){
+if(hTableExists("COG"))
+    {
     sprintf(query, "select * from COG where name = '%s'", lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-    	{
-   	    COG = COGLoad(row);
-  	}
+	COG = COGLoad(row);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     initializeColors(vg);
-    if(COG!=NULL){
-        chopString(COG->code, "," , temparray, 9999);
-        return LLshadesOfCOGS[(temparray[0][0]-'A')];
-    }
+    if(COG!=NULL)
+	{
+	chopString(COG->code, "," , temparray, 9999);
+	return LLshadesOfCOGS[(temparray[0][0]-'A')];
+	}
     else
-        {
-        return shadesOfGray[9];
-        }
+	return shadesOfGray[9];
     }
 else
     {
-        hFreeConn(&conn);
-
-	return shadesOfGray[9];
+    hFreeConn(&conn);
+    return shadesOfGray[9];
     }
 slFreeList(&lf);
-
 }
 
 Color gpGeneNameColor(struct track *tg, void *item, struct vGfx *vg)
@@ -209,9 +196,7 @@ else if (lf->score > 200)
 else if (lf->score > 100)
     return shadesOfGray[3];
 else return shadesOfGray[2];
-
 }
-
 
 void sargassoSeaMethods(struct track *tg)
 /* Track group for genbank gene tracks */
@@ -278,7 +263,7 @@ return lf;
 }
 
 struct linkedFeatures *lfFromBed6(struct codeBlast *bed, int scoreMin, 
-	int scoreMax)
+				  int scoreMax)
 /* Return a linked feature from a (full) bed. */
 {
 struct linkedFeatures *lf;
@@ -298,7 +283,6 @@ lf->tallStart = bed->chromStart;
 lf->tallEnd = bed->chromEnd;
 return lf;
 }
-
 
 void loadCodeBlast(struct track *tg)
 /* from the bed 6+1 codeBlast table, make a linkedFeaturesSeries and load it.  */
@@ -321,12 +305,14 @@ int cutoff;
 char cMode[64];
 
 /*The most common names used to display method*/
-char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", 
-"eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anaerobe or aerobe"}; int i;
+char *codeNames[18] = {"within genus", "\t", "crenarchaea", "euryarchaea", "\t", "bacteria", 
+		       "\t", "eukarya", "\t", "thermophile", "hyperthermophile","acidophile",
+		       "alkaliphile", "halophile", "methanogen", "strict aerobe",
+		       "strict anaerobe", "anaerobe or aerobe"}; int i;
 safef(cMode, sizeof(cMode), "%s.scoreFilter", tg->tdb->tableName);
- cutoff=cartUsualInt(cart, cMode,0 );
+cutoff=cartUsualInt(cart, cMode,0 );
 sr=hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, 0);
-   
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cb = codeBlastLoad(row);
@@ -335,198 +321,162 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&list);
-
 if(list == NULL)
     return;
-
 for(cb = list; cb != NULL; cb = cb->next)
     {
     AllocVar(lfs);
     AllocVar(lf);
     lfs->name = cloneString(cb->name);
     lf = lfFromBed6(cb,0,1000);
-   
     lf->score = cb->score;
     tempstring=cloneString(cb->code);
- 
-    chopString(tempstring, "," , temparray, ArraySize(temparray));
-    if(sameWord(database, "pyrFur2")){
-    temparray3=(char**)calloc(19*8,sizeof(char**));
-    for(x=0; x<19; x++){
-    	
-        temparray3[x]=(char *)calloc(256, sizeof(char*));
-	//Fix to cloneString problem when both patricia and my track
-	//was showing at the same time	
-	if(temparray[x]!=NULL){
-	    if(atoi(temparray[x])==1000){
-		temparray3[x]="1000";
-	    }
-	    else if(atoi(temparray[x])==900){
-		temparray3[x]="900";
-	    }
-	    else if(atoi(temparray[x])==800){
-		temparray3[x]="800";
-            }
-	    else if(atoi(temparray[x])==700){
-		temparray3[x]="700";
-	    }
-	    else if(atoi(temparray[x])==600){
-		temparray3[x]="600";
-	    }
-	    else if(atoi(temparray[x])==500){
-		temparray3[x]="500";
-	    }
-	    else if(atoi(temparray[x])==400){
-		temparray3[x]="400";
-	    }
-	    else if(atoi(temparray[x])==300){
-		temparray3[x]="300";
-	    }
-	    else if(atoi(temparray[x])==200){
-		temparray3[x]="200";
-	    }
-	    else if(atoi(temparray[x])==100){
-		temparray3[x]="100";
-	    }
-	    else{
-		temparray3[x]="0";
- 	    }
-        }
-	
-    }
-    }
-    else{
-    temparray3=(char**)calloc(18*8,sizeof(char**));
-    for(x=0; x<18; x++){
-        temparray3[x]=(char *)calloc(256, sizeof(char*));
-	//Fix to cloneString problem when both patricia and my track
-	//was showing at the same time	
-	if(temparray[x]!=NULL){
-	    if(atoi(temparray[x])==1000){
-		temparray3[x]="1000";
-	    }
-	    else if(atoi(temparray[x])==900){
-		temparray3[x]="900";
-	    }
-	    else if(atoi(temparray[x])==800){
-		temparray3[x]="800";
-            }
-	    else if(atoi(temparray[x])==700){
-		temparray3[x]="700";
-	    }
-	    else if(atoi(temparray[x])==600){
-		temparray3[x]="600";
-	    }
-	    else if(atoi(temparray[x])==500){
-		temparray3[x]="500";
-	    }
-	    else if(atoi(temparray[x])==400){
-		temparray3[x]="400";
-	    }
-	    else if(atoi(temparray[x])==300){
-		temparray3[x]="300";
-	    }
-	    else if(atoi(temparray[x])==200){
-		temparray3[x]="200";
-	    }
-	    else if(atoi(temparray[x])==100){
-		temparray3[x]="100";
-	    }
-	    else{
-		temparray3[x]="0";
- 	    }
-        }
-	
-    }
-    }
-    lf->extra = temparray3;
     
+    chopString(tempstring, "," , temparray, ArraySize(temparray));
+    if(sameWord(database, "pyrFur2"))
+	{
+	temparray3=(char**)calloc(19*8,sizeof(char**));
+	for(x=0; x<19; x++)
+	    {
+	    temparray3[x]=(char *)calloc(256, sizeof(char*));
+	    /* Fix to cloneString problem when both patricia and my track was showing at the same time */
+	    if(temparray[x]!=NULL)
+		{
+		if(atoi(temparray[x])==1000)
+		    temparray3[x]="1000";
+		else if(atoi(temparray[x])==900)
+		    temparray3[x]="900";
+		else if(atoi(temparray[x])==800)
+		    temparray3[x]="800";
+		else if(atoi(temparray[x])==700)
+		    temparray3[x]="700";
+		else if(atoi(temparray[x])==600)
+		    temparray3[x]="600";
+		else if(atoi(temparray[x])==500)
+		    temparray3[x]="500";
+		else if(atoi(temparray[x])==400)
+		    temparray3[x]="400";
+		else if(atoi(temparray[x])==300)
+		    temparray3[x]="300";
+		else if(atoi(temparray[x])==200)
+		    temparray3[x]="200";
+		else if(atoi(temparray[x])==100)
+		    temparray3[x]="100";
+		else
+		    temparray3[x]="0";
+		}
+	    }
+	}
+    else
+	{
+	temparray3=(char**)calloc(18*8,sizeof(char**));
+	for(x=0; x<18; x++)
+	    {
+	    temparray3[x]=(char *)calloc(256, sizeof(char*));
+	    /* Fix to cloneString problem when both patricia and my track was showing at the same time */
+	    if(temparray[x]!=NULL)
+		{
+		if(atoi(temparray[x])==1000)
+		    temparray3[x]="1000";
+		else if(atoi(temparray[x])==900)
+		    temparray3[x]="900";
+		else if(atoi(temparray[x])==800)
+		    temparray3[x]="800";
+		else if(atoi(temparray[x])==700)
+		    temparray3[x]="700";
+		else if(atoi(temparray[x])==600)
+		    temparray3[x]="600";
+		else if(atoi(temparray[x])==500)
+		    temparray3[x]="500";
+		else if(atoi(temparray[x])==400)
+		    temparray3[x]="400";
+		else if(atoi(temparray[x])==300)
+		    temparray3[x]="300";
+		else if(atoi(temparray[x])==200)
+		    temparray3[x]="200";
+		else if(atoi(temparray[x])==100)
+		    temparray3[x]="100";
+		else
+		    temparray3[x]="0";
+		}
+	    }
+	}
+    lf->extra = temparray3;
     lfs->start = lf->start;
     lfs->end = lf->end;
     lfs->features= lf;  
     slAddHead(&lfsList, lfs);
-   
- 
-   }
+    }
 
 tg->items=lfsList;
 bedList=tg->items;
 lfsList=NULL;
 
 if(tg->limitedVis != tvDense)
-{
-	 originalLfs = tg->items;
-	
-	if(sameWord(database, "pyrFur2")){
- 	    for (i = 0; i < 19; i++)
+    {
+    originalLfs = tg->items;
+    if(sameWord(database, "pyrFur2"))
+	{
+	for (i = 0; i < 19; i++)
             {
-		struct linkedFeatures *lfList = NULL;
-        	AllocVar(codeLfs);
-		/*When doing abyssi displays differnt names at the begining*/
-		
-		if(i == 0)
-		    codeLfs->name="within Pho";
-		else if (i==1)
-		    codeLfs->name="within Pab";
-		else if (i==2)
-		    codeLfs->name="\t";
-		else
-        	    codeLfs->name = cloneString(codeNames[i-1]);
-        	    codeLfs->noLine = TRUE;
-		for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
+	    struct linkedFeatures *lfList = NULL;
+	    AllocVar(codeLfs);
+	    /*When doing abyssi displays differnt names at the begining*/
+	    if(i == 0)
+		codeLfs->name="within Pho";
+	    else if (i==1)
+		codeLfs->name="within Pab";
+	    else if (i==2)
+		codeLfs->name="\t";
+	    else
+		codeLfs->name = cloneString(codeNames[i-1]);
+	    codeLfs->noLine = TRUE;
+	    for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
             	{
-	    	    lf = lfsToLf(lfs);
-		    if(i>2)
+		lf = lfsToLf(lfs);
+		if(i>2)
             	    temparray2=((char**)(lfs->features->extra))[i-0];
-		    else temparray2=((char**)(lfs->features->extra))[i];
-	   	    if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)>-9997 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
+		else temparray2=((char**)(lfs->features->extra))[i];
+		if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)>-9997 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
                     {
-			lf->score=atoi(temparray2);
-                	slAddHead(&lfList,lf);
-
+		    lf->score=atoi(temparray2);
+		    slAddHead(&lfList,lf);
 		    }
                 }
-        	slReverse(&lfList);
-        	codeLfs->features = lfList;   
-        	slAddHead(&lfsList,codeLfs);
+	    slReverse(&lfList);
+	    codeLfs->features = lfList;   
+	    slAddHead(&lfsList,codeLfs);
             }
 	}
-	else
+    else
 	{   
-   	    for (i = 0; i < 18; i++)
+	for (i = 0; i < 18; i++)
             {
-		struct linkedFeatures *lfList = NULL;
-        	AllocVar(codeLfs);
-        	codeLfs->name = cloneString(codeNames[i]);
-        	codeLfs->noLine = TRUE;
-		for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
+	    struct linkedFeatures *lfList = NULL;
+	    AllocVar(codeLfs);
+	    codeLfs->name = cloneString(codeNames[i]);
+	    codeLfs->noLine = TRUE;
+	    for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
                 {
-		    lf = lfsToLf(lfs);
-        	    temparray2=((char**)(lfs->features->extra))[i];
-		    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)>-9997 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
+		lf = lfsToLf(lfs);
+		temparray2=((char**)(lfs->features->extra))[i];
+		if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)>-9997 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
         	    {
-			lf->score=atoi(temparray2);
-        	        slAddHead(&lfList,lf);
-
-
+		    lf->score=atoi(temparray2);
+		    slAddHead(&lfList,lf);
 	      	    }
                 }
-        	slReverse(&lfList);
-        	codeLfs->features = lfList;   
-        	slAddHead(&lfsList,codeLfs);
+	    slReverse(&lfList);
+	    codeLfs->features = lfList;   
+	    slAddHead(&lfsList,codeLfs);
             }
-	   }
-    	freeLinkedFeaturesSeries(&originalLfs);
-    	slReverse(&lfsList);
-    	tg->items=lfsList;
-    
-}
-
+	}
+    freeLinkedFeaturesSeries(&originalLfs);
+    slReverse(&lfsList);
+    tg->items=lfsList;
+    }
 slFreeList(&track);
-
 slFreeList(&scores);
-//slFreeList(&tg);
-
 slFreeList(&codes);
 codeBlastFree(&list);
 }
@@ -551,13 +501,14 @@ else if (lf->score > 200)
     return shadesOfGray[3];
 else if (lf->score > 100)
     return shadesOfGray[3];
-else if (lf->score != 0) return shadesOfGray[2];
-else return shadesOfGray[0];
+else if (lf->score != 0) 
+    return shadesOfGray[2];
+else 
+    return shadesOfGray[0];
 }
 
 void codeBlastMethods(struct track *tg)
 {
-
 linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadCodeBlast;
 tg->mapItem = lfsMapItemName;
@@ -570,11 +521,16 @@ Color rgGeneColor(struct track *tg, void *item, struct vGfx *vg)
 {
 struct rnaGenes *lf=item;
 makeRedGreenShades(vg);
-if (lf->score ==100) {return shadesOfGreen[15];}
-if (lf->score == 300) {return shadesOfRed[15];}
-if (lf->score == 200){return shadesOfBlue[15];}
-else {return shadesOfGray[9];}
+if (lf->score ==100) 
+    return shadesOfGreen[15];
+if (lf->score == 300) 
+    return shadesOfRed[15];
+if (lf->score == 200)
+    return shadesOfBlue[15];
+else 
+    return shadesOfGray[9];
 }
+
 void rnaGenesMethods(struct track *tg)
 {
 tg->itemColor=rgGeneColor;
@@ -610,7 +566,7 @@ for (bed = list; bed != NULL; bed = bed->next)
     for (i = 0; i < bed->expCount; i++) 
         {
 	if (sf == NULL)
-           break;
+	    break;
         sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
         sf = sf->next;
         }
@@ -620,8 +576,8 @@ tg->items = lfList;
 }
 
 void tigrOperonDrawAt(struct track *tg, void *item,
-	struct vGfx *vg, int xOff, int y, double scale, 
-	MgFont *font, Color color, enum trackVisibility vis)
+		      struct vGfx *vg, int xOff, int y, double scale, 
+		      MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the operon at position. */
 {
 struct linkedFeatures *lf = item; 
@@ -639,17 +595,13 @@ x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
 innerLine(vg, x1, midY, w, color);
 if (vis == tvFull || vis == tvPack)
-    {
-    clippedBarbs(vg, x1, midY, w, 2, 5, 
-		 lf->orientation, color, FALSE);
-    }
+    clippedBarbs(vg, x1, midY, w, 2, 5, lf->orientation, color, FALSE);
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
     /* shade ORF (exon) based on the grayIx value of the sf */
     color = shades[sf->grayIx];
-    drawScaledBox(vg, s, e, scale, xOff, y, heightPer,
-			color );
+    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color );
     }
 }
 
@@ -665,9 +617,8 @@ tg->drawItemAt = tigrOperonDrawAt;
 
 /* ------ BEGIN RNA LP FOLD ------ */
 
-
 void bedLoadRnaLpFoldItemByQuery(struct track *tg, char *table, 
-			char *query, ItemLoader loader)
+				 char *query, ItemLoader loader)
 /* RNALPFOLD specific tg->item loader, as we need to load items beyond
    the current window to load the chromEnd positions for RNALPFOLD values. */
 {
@@ -682,7 +633,6 @@ if(query == NULL)
     sr = hRangeQuery(conn, table, chromName, winStart, winEnd+chromEndOffset, NULL, &rowOffset);
 else
     sr = sqlGetResult(conn, query);
-
 while ((row = sqlNextRow(sr)) != NULL)
     {
     item = loader(row + rowOffset);
@@ -723,15 +673,30 @@ else
 return tg->height;
 }
 
+void lpDrawDiamond(struct vGfx *vg, 
+		   int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
+		   Color fillColor, Color outlineColor)
+/* Draw diamond shape. */
+{
+struct gfxPoly *poly = gfxPolyNew();
+gfxPolyAddPoint(poly, xl, yl);
+gfxPolyAddPoint(poly, xt, yt);
+gfxPolyAddPoint(poly, xr, yr);
+gfxPolyAddPoint(poly, xb, yb);
+vgDrawPoly(vg, poly, fillColor, TRUE);
+gfxPolyFree(&poly);
+}
+
 void rnaLpFoldDrawDiamond(struct vGfx *vg, struct track *tg, int width, 
-		   int xOff, int yOff, int a, int b, int c, int d, 
-		   Color shade, Color outlineColor, double scale, 
-		   boolean drawMap, char *name, enum trackVisibility vis,
-		   boolean trim)
+			  int xOff, int yOff, int a, int b, int c, int d, 
+			  Color shade, Color outlineColor, double scale, 
+			  boolean drawMap, char *name, enum trackVisibility vis,
+			  boolean trim)
 /* Draw and map a single pairwise RNALPFOLD box */
 {
 int yMax = rnaLpFoldTotalHeight(tg, vis)+yOff;
 /* convert from genomic coordinates to vg coordinates */
+/* multiple coordinates by 10 to avoid integer division rounding errors */
 a*=10;
 b*=10;
 c*=10;
@@ -761,7 +726,12 @@ if (yb<=0)
     yb=1;
 if (yt>yMax && trim)
     yt=yMax;
-drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
+lpDrawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, 0);
+/* draw guidelines every 10 bases */
+if (a%100==0)
+    vgLine(vg, xl, yl, xt, yt, outlineColor);
+if (d%100==0)
+    vgLine(vg, xl, yl, xb, yb, outlineColor);
 return; /* mapDiamondUI is working well, but there is a bug with 
 	   AREA=POLY on the Mac browsers, so this will be 
 	   postponed for now by not using this code */
@@ -777,7 +747,7 @@ ldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal);
 }
 
 void rnaLpFoldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
-			  double scale, Color outlineColor, struct hash *ldHash)
+				 double scale, Color outlineColor, struct hash *ldHash)
 {
 ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
 }
@@ -786,14 +756,14 @@ ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
 /* rnaLpFoldDrawItems -- lots of disk and cpu optimizations here.  
  * Based on rnaLpFoldDrawItems */
 void rnaLpFoldDrawItems(struct track *tg, int seqStart, int seqEnd,
-		 struct vGfx *vg, int xOff, int yOff, int width,
-		 MgFont *font, Color color, enum trackVisibility vis)
+			struct vGfx *vg, int xOff, int yOff, int width,
+			MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
 struct rnaLpFold *dPtr = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
 double       scale     = scaleForPixels(insideWidth);
 int          itemCount = slCount((struct slList *)tg->items);
-Color        shade     = 0, outlineColor = getOutlineColor(tg, itemCount), oc=0;
+Color        shade     = 0, outlineColor = getOutlineColor(tg, itemCount);
 int          a=0, b, c, d=0, i; /* chromosome coordinates and counter */
 boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *rnaLpFoldHash    = newHash(20);
@@ -802,7 +772,6 @@ char        *rnaLpFoldVal     = NULL;
 boolean      rnaLpFoldTrm     = FALSE;
 struct dyString *dsRnaLpFoldTrm = newDyString(32);
 
-outlineColor=oc=0;
 dyStringPrintf(dsRnaLpFoldTrm, "%s_trm", tg->mapName);
 /* rnaLpFoldTrm = cartUsualBoolean(cart, dsRnaLpFoldTrm->string, rnaLpFoldTrmDefault); */
 if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
@@ -827,12 +796,8 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	c = sPtr->chromStart;
 	d = sPtr->next->chromStart;
 	shade = colorLookup[(int)rnaLpFoldVal[i]];
-	if (a%5==0 && d%5==0)
-	    oc=outlineColor;
-	else
-	    oc=0;
 	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
-	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, oc, scale, drawMap, "", vis, rnaLpFoldTrm);
+	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, "", vis, rnaLpFoldTrm);
 	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
 	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[i]);
@@ -850,12 +815,8 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	c = sPtr->chromStart;
 	d = sPtr->chromEnd;
 	shade = colorLookup[(int)rnaLpFoldVal[i]];
-	if (a%5==0 && d%5==0)
-	    oc=outlineColor;
-	else
-	    oc=0;
 	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
-	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, oc, scale, drawMap, "", vis, rnaLpFoldTrm);
+	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, "", vis, rnaLpFoldTrm);
 	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
 	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[i]);
@@ -870,38 +831,49 @@ if (dPtr->next==NULL)
     {
     a = dPtr->chromStart;
     b = dPtr->chromEnd;
-	rnaLpFoldVal = dPtr->colorIndex;
-	shade = colorLookup[(int)rnaLpFoldVal[0]];
-	if (a%5==0 && d%5==0)
-	    oc=outlineColor;
-	else
-	    oc=0;
-	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
-	    rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, oc, scale, drawMap, "", vis, rnaLpFoldTrm);
-	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
-	    {
-	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[0]);
-	    rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, b, rnaLpFoldVal[0]);
-	    }
-	else
-	    errAbort("Visibility '%s' is not supported for the RNALPFOLD track yet.", hStringFromTv(vis));
+    rnaLpFoldVal = dPtr->colorIndex;
+    shade = colorLookup[(int)rnaLpFoldVal[0]];
+    if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	rnaLpFoldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, "", vis, rnaLpFoldTrm);
+    else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	{
+	rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, a, rnaLpFoldVal[0]);
+	rnaLpFoldAddToDenseValueHash(rnaLpFoldHash, b, rnaLpFoldVal[0]);
+	}
+    else
+	errAbort("Visibility '%s' is not supported for the RNALPFOLD track yet.", hStringFromTv(vis));
     }
-if (a%5==0 && d%5==0)
-    oc=outlineColor;
-else
-    oc=0;
 if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
-    rnaLpFoldDrawDenseValueHash(vg, tg, xOff, yOff, scale, oc, rnaLpFoldHash);
+    rnaLpFoldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, rnaLpFoldHash);
+}
+
+void rnaLpFoldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+			     struct vGfx *vg, int xOff, int yOff, int width, int height, 
+			     boolean withCenterLabels, MgFont *font,
+			     Color color, enum trackVisibility vis)
+/* Draw left labels. */
+{
+char  label[16];
+int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer + height/2 );
+
+safef(label, sizeof(label), "RNA Lp Fold");
+vgUnclip(vg);
+vgSetClip(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
+vgTextRight(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
+vgUnclip(vg);
+vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 }
 
 void rnaLpFoldMethods(struct track *tg)
 /* setup special methods for the RNA LP FOLD track */
 {
-ldMethods(tg);
+if(tg->subtracks != 0) /* Only load subtracks, not top level track. */
+    return;
 tg->loadItems      = rnaLpFoldLoadItems;
 tg->totalHeight    = rnaLpFoldTotalHeight;
 tg->drawItems      = rnaLpFoldDrawItems;
 tg->freeItems      = ldFreeItems;
+tg->drawLeftLabels = rnaLpFoldDrawLeftLabels;
 tg->mapsSelf       = TRUE;
 tg->canPack        = FALSE;
 }
