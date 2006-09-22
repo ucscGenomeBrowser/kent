@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1117 2006/09/21 13:39:39 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1118 2006/09/22 08:26:54 daryl Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11310,25 +11310,6 @@ if (hTableExists("lsSnpFunction"))
     sqlFreeResult(&sr2);
     }
 hFreeConn(&conn);
-}
-
-void hvPrintf(char *format, va_list args)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-vprintf(format, args);
-if (ferror(stdout))
-    noWarnAbort();
-}
-
-void hPrintf(char *format, ...)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-va_list(args);
-va_start(args, format);
-hvPrintf(format, args);
-va_end(args);
 }
 
 void printSnpAlignment(struct snp snp)

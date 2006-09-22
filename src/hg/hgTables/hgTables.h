@@ -35,6 +35,11 @@
 #ifndef JOINER_H
 #include "joiner.h"
 #endif
+
+#ifndef HTMLPRINTHELPER_H
+#include "htmlPrintHelper.h"
+#endif
+
 struct region
 /* A part (or all) of a chromosome. */
     {
@@ -60,10 +65,6 @@ extern char *curTable;	/* Current selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
 
 /* --------------- HTML Helpers ----------------- */
-
-void hPrintf(char *format, ...);
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
 
 void hPrintSpaces(int count);
 /* Print a number of non-breaking spaces. */

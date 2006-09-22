@@ -1,4 +1,3 @@
-
 /* hgTracks - Human Genome browser main cgi script. */
 #include "common.h"
 #include "hCommon.h"
@@ -15,6 +14,7 @@
 #include "vGfx.h"
 #include "browserGfx.h"
 #include "cheapcgi.h"
+#include "htmlPrintHelper.h"
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1203 2006/09/22 05:48:09 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1204 2006/09/22 08:26:53 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -219,10 +219,6 @@ struct hgPositions *hgp = NULL;
 
 struct trackLayout tl;
 
-boolean suppressHtml = FALSE;	
-	/* If doing PostScript output we'll suppress most
-         * of HTML output. */
-
 static void ideoTrashFile(struct tempName *tn, char *suffix)
 /*	obtain a trash file name for the ideogram	*/
 {
@@ -249,107 +245,6 @@ if (firstTime)
     }
 safef(prefix, sizeof(prefix), "hgt/hgt");
 makeTempName(tn, prefix, suffix);
-}
-
-void hvPrintf(char *format, va_list args)
-/* Suppressable variable args printf. */
-{
-if (!suppressHtml)
-    vprintf(format, args);
-}
-
-void hPrintf(char *format, ...)
-/* Printf that can be suppressed if not making
- * html. */
-{
-va_list(args);
-va_start(args, format);
-hvPrintf(format, args);
-va_end(args);
-}
-
-void hPuts(char *string)
-/* Puts that can be suppressed if not making
- * html. */
-{
-if (!suppressHtml)
-    puts(string);
-}
-
-void hPutc(char c)
-/* putc that can be suppressed if not making html. */
-{
-if (!suppressHtml)
-    fputc(c, stdout);
-}
-
-void hWrites(char *string)
-/* Write string with no '\n' if not suppressed. */
-{
-if (!suppressHtml)
-    fputs(string, stdout);
-}
-
-void hButton(char *name, char *label)
-/* Write out button if not suppressed. */
-{
-if (!suppressHtml)
-    cgiMakeButton(name, label);
-}
-
-void hOnClickButton(char *command, char *label)
-/* Write out push button if not suppressed. */
-{
-if (!suppressHtml)
-    cgiMakeOnClickButton(command, label);
-}
-
-void hTextVar(char *varName, char *initialVal, int charSize)
-/* Write out text entry field if not suppressed. */
-{
-if (!suppressHtml)
-    cgiMakeTextVar(varName, initialVal, charSize);
-}
-
-void hIntVar(char *varName, int initialVal, int maxDigits)
-/* Write out numerical entry field if not supressed. */
-{
-if (!suppressHtml)
-    cgiMakeIntVar(varName, initialVal, maxDigits);
-}
-
-void hDoubleVar(char *varName, double initialVal, int maxDigits)
-/* Write out numerical entry field if not supressed. */
-{
-if (!suppressHtml)
-    cgiMakeDoubleVar(varName, initialVal, maxDigits);
-}
-
-void hCheckBox(char *varName, boolean checked)
-/* Make check box if not suppressed. */
-{
-if (!suppressHtml)
-    cgiMakeCheckBox(varName, checked);
-}
-
-void hDropList(char *name, char *menu[], int menuSize, char *checked)
-/* Make a drop-down list with names if not suppressed. */
-{
-if (!suppressHtml)
-    cgiMakeDropList(name, menu, menuSize, checked);
-}
-
-void printHtmlComment(char *format, ...)
-/* Function to print output as a comment so it is not seen in the HTML
- * output but only in the HTML source. */
-{
-va_list(args);
-va_start(args, format);
-hWrites("\n<!-- DEBUG: ");
-hvPrintf(format, args);
-hWrites(" -->\n");
-fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
-va_end(args);
 }
 
 
@@ -704,7 +599,7 @@ void mapStatusMessage(char *format, ...)
 va_list(args);
 va_start(args, format);
 hPrintf(" TITLE=\"");
-hvPrintf(format, args);
+hPrintf(format, args);
 hPutc('"');
 va_end(args);
 }
@@ -12514,7 +12409,7 @@ zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
 
 if (psOutput != NULL)
    {
-   suppressHtml = TRUE;
+   hPrintEnable();
    hideControls = TRUE;
    withNextItemArrows = FALSE;
    hgFindMatches = NULL;

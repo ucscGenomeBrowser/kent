@@ -73,10 +73,6 @@ struct genoGraph
 
 /*** Routines from hgGenome.h ***/
 
-void hPrintf(char *format, ...);
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-
 int graphHeight();
 /* Return height of graph. */
 

@@ -84,10 +84,6 @@ char *genomeSetting(char *name);
 char *genomeOptionalSetting(char *name);
 /* Returns genome setting value or NULL if not found. */
 
-void hPrintf(char *format, ...);
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-
 struct hash *readRa(char *rootName, struct hash **retHashOfHash);
 /* Read in ra in root, root/org, and root/org/database. */
 

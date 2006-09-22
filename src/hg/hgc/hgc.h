@@ -20,6 +20,10 @@
 #include "hdb.h"
 #endif 
 
+#ifndef HTMLPRINTHELPER_H
+#include "htmlPrintHelper.h"
+#endif
+
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */

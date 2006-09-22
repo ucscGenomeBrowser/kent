@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.133 2006/08/10 06:40:33 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.134 2006/09/22 08:26:53 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,25 +55,6 @@ struct joiner *allJoiner;	/* Info on how to join tables. */
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 
 /* --------------- HTML Helpers ----------------- */
-
-void hvPrintf(char *format, va_list args)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-vprintf(format, args);
-if (ferror(stdout))
-    noWarnAbort();
-}
-
-void hPrintf(char *format, ...)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-va_list(args);
-va_start(args, format);
-hvPrintf(format, args);
-va_end(args);
-}
 
 void hPrintSpaces(int count)
 /* Print a number of non-breaking spaces. */

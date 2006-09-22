@@ -26,7 +26,7 @@
 #include "customTrack.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.40 2006/08/10 01:27:25 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.41 2006/09/22 08:26:53 daryl Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -209,26 +209,6 @@ for (i=0; i<cgs->linesAtCount; ++i)
         minLabelWidth = labelWidth;
     }
 return minLabelWidth;
-}
-
-/* ---- Some html helper routines. ---- */
-
-void hvPrintf(char *format, va_list args)
-/* Print out some html. */
-{
-vprintf(format, args);
-if (ferror(stdout))
-    noWarnAbort();
-}
-
-void hPrintf(char *format, ...)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-va_list(args);
-va_start(args, format);
-hvPrintf(format, args);
-va_end(args);
 }
 
 /* Routines to fetch cart variables. */

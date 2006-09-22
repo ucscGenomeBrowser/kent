@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.78 2006/08/25 16:14:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.79 2006/09/22 08:26:53 daryl Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -140,41 +140,6 @@ while ((word = nextWord(&s)) != NULL)
      }
 freeMem(dupe);
 return ok;
-}
-
-
-/* --------------- HTML Helpers ----------------- */
-
-void hvPrintf(char *format, va_list args)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-vprintf(format, args);
-if (ferror(stdout))
-    noWarnAbort();
-}
-
-void hPrintf(char *format, ...)
-/* Print out some html.  Check for write error so we can
- * terminate if http connection breaks. */
-{
-va_list(args);
-va_start(args, format);
-hvPrintf(format, args);
-va_end(args);
-}
-
-void hPrintNonBreak(char *s)
-/* Print out string but replace spaces with &nbsp; */
-{
-char c;
-while ((c = *s++) != '\0')
-    {
-    if (c == ' ')
-	fputs("&nbsp;", stdout);
-    else
-        putchar(c);
-    }
 }
 
 
