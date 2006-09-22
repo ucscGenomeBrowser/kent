@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-# Bos Taurus -- Baylor Release 3.0 (August 2006)
+# Bos Taurus -- Baylor Release 3.1 (August 2006)
 
 
 #########################################################################
@@ -30,7 +30,7 @@ db bosTau3
 clade vertebrate
 scientificName Bos Taurus
 assemblyDate August 2006
-assemblyLabel Baylor Release 3
+assemblyLabel Baylor Release 3.1
 orderKey 19
 dbDbSpeciesDir cow
 mitoAcc none
