@@ -1711,6 +1711,7 @@ identifier snpAnnotations126
 "SNP annotations"
     hg18.snp126.name dupeOk
     hg18.snp126Exceptions.name 
+    hg18.snp126orthoMixed.name
 
 # Other NCBI Identifiers
 
