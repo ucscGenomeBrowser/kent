@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.139 2006/09/22 06:13:02 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.140 2006/09/22 23:58:47 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -392,43 +392,43 @@ struct slName *browserLines = NULL;
 customText = skipLeadingSpaces(customText);
 if (customText && bogusMacEmptyChars(customText))
     customText = NULL;
-if (!customText || !customText[0])
+
+fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
+char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
+if (fileName && fileName[0])
     {
     /* handle file input, optionally with compression */
-    fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
-    char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-    if (fileContents && !fileContents[0] && fileName && *fileName)
-        {
-        /* unreadable file */
-        struct dyString *ds = dyStringNew(0);
-        dyStringPrintf(ds, "Can't read file: %s", fileName);
-        err = dyStringCannibalize(&ds);
-        }
-    if (fileName != NULL && (
-    	endsWith(fileName,".gz") ||
-	endsWith(fileName,".Z")  ||
-        endsWith(fileName,".bz2")))
-	{
-	char buf[256];
-    	char *cFBin = cartOptionalString(cart, CT_CUSTOM_FILE_BIN_VAR);
-	if (cFBin)
-	    {
-	    safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
-            /* cgi functions preserve binary data, cart vars have been 
-             *  cloneString-ed  which is bad for a binary stream that might 
-             * contain 0s  */
-	    }
-	else
-	    {
-	    char *cF = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-	    safef(buf,sizeof(buf),"compressed://%s %lu %lu",
-		fileName, (unsigned long) cF, (unsigned long) strlen(cF));
-	    }
-    	customText = cloneString(buf);
-	}
+    if (fileContents && fileContents[0])
+        customText = fileContents;
     else
-	{
-    	customText = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
+        {
+        if (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
+            endsWith(fileName,".bz2"))
+            {
+            char buf[256];
+            char *cFBin = cartOptionalString(cart, CT_CUSTOM_FILE_BIN_VAR);
+            if (cFBin)
+                {
+                safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
+                /* cgi functions preserve binary data, cart vars have been 
+                 *  cloneString-ed  which is bad for a binary stream that might 
+                 * contain 0s  */
+                }
+            else
+                {
+                char *cF = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
+                safef(buf,sizeof(buf),"compressed://%s %lu %lu",
+                    fileName, (unsigned long) cF, (unsigned long) strlen(cF));
+                }
+            customText = cloneString(buf);
+            }
+        else
+            {
+            /* unreadable file */
+            struct dyString *ds = dyStringNew(0);
+            dyStringPrintf(ds, "Can't read file: %s", fileName);
+            err = dyStringCannibalize(&ds);
+            }
 	}
     }
 customText = skipLeadingSpaces(customText);
@@ -447,7 +447,7 @@ if (customText != NULL && customText[0] != 0)
     if (errCatch->gotError)
         {
         char *msg = cloneString(errCatch->message->string);
-        if (fileName)
+        if (fileName && fileName[0])
             {
             struct dyString *ds = dyStringNew(0);
             dyStringPrintf(ds, "File '%s' - %s", fileName, msg);
