@@ -57,25 +57,22 @@ if ($#argv == 3) then
     set rr3="true"
     set mach3="hgw1"
   else
-    echo
-    echo '  third parameter must be "3" or "all"'
-    echo
-    exit 1
+    set mach1=$argv[3]
+    set mach2=""
+    checkMachineName.csh $mach1
+    if ($status) then
+      exit 1
+    endif
   endif
 endif
 
 if ( $#argv == 4  || $#argv == 5) then
   set mach1=$argv[3]
   set mach2=$argv[4]
-  checkMachineName.csh $mach1 $mach2
-  if ( $status ) then
-    exit 1
+  if ( $#argv == 5) then
+    set mach3=$argv[5]
   endif
-endif
-
-if ($#argv == 5) then
-  set mach3=$argv[5]
-  checkMachineName.csh $mach3
+  checkMachineName.csh $mach1 $mach2 $mach3
   if ( $status ) then
     exit 1
   endif
@@ -107,7 +104,8 @@ if ( $mach3 != "hgwdev" &&  $mach3 != "hgwbeta" ) then
 endif
 
 # make a file for single-table queries
-if (! -e $tablelist) then
+file $tablelist | egrep "ASCII text" > /dev/null
+if ($status) then
   echo $argv[2] > xxtablelistxx
   set tablelist="xxtablelistxx"
 endif
@@ -141,7 +139,9 @@ foreach table (`cat $tablelist`)
   endif
 
   echo "."$first
-  echo "."$second
+  if ( $mach2 != "" ) then
+    echo "."$second
+  endif
   if ($allThree == 3 || ($mach3 != "" && $allThree != "all")) then
     echo "."$third
   else
@@ -160,7 +160,5 @@ foreach table (`cat $tablelist`)
   endif
 end
 echo
-
-
 
 rm -f xxtablelistxx
