@@ -91,7 +91,7 @@ while (n = lineFileChopTab(lf,strings))
     oneGene->expCount = ncols - 1;
     AllocArray(oneGene->expScores, oneGene->expCount);
     for (i = 1; i < ncols; i++)
-	oneGene->expScores[i-1] = atof(strings[i]);
+	oneGene->expScores[i-1] = sqlFloat(strings[i]);
     slAddHead(&data, oneGene);
     }
 if ((n != ncols) && (n > 0))
