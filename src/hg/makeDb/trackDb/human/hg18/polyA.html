@@ -17,17 +17,18 @@ DNA).  The PolyA_DB web server is found at
 The Poly(A) predictions are made using 1500 base DNA sequences centered at 
 the end of each RefSeq gene.  The sequences are then inputted into the support 
 vector machine described in <em>Cheng, et. al</em>.  The SVM scores each base
-based on a model using 15 different cis elements.  High-scoring regions are 
-highlighted with the highest-scoring base getting a thicker line.  The 
+based on a model using 15 different cis elements and reports an E-value for
+a region of DNA between 0 (excellent) and 0.5 (worse).  This E-value is then
+normalized to an integer value between 0 (worse) and 1000 (excellent).  High-scoring 
+regions are highlighted with the highest-scoring base getting a thicker line.  The 
 median length of these regions is 48 bases.
 </P>
 <H2>References</H2>
 <P>
-<UL><LI>
-<A HREF="http://nar.oxfordjournals.org/cgi/content/abstract/33/suppl_1/D116">PolyA_DB:
+Zhang H, Hu J, Recce M, Tian B. <A HREF="http://nar.oxfordjournals.org/cgi/content/abstract/33/suppl_1/D116">PolyA_DB:
 a database for mammalian mRNA polyadenylation.</A>
-<em>Nucleic Acids Researc</em> <B>33(Database issue)</B>, D116-120 (2005).
-</LI><LI>
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=16870936&query_hl=1&itool=pubmed_docsum">Prediction of mRNA polyadenylation sites by support vector machine.</A>
+<em>Nucleic Acids Research</em> <B>33(Database issue)</B>, D116-120 (2005).</P>
+<P>
+Cheng Y, Miura RM, Tian B. <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=pubmed&cmd=Retrieve&dopt=AbstractPlus&list_uids=16870936&query_hl=1&itool=pubmed_docsum">Prediction of mRNA polyadenylation sites by support vector machine.</A>
 <em>Bioinformatics</em> Jul 26 (2006).
-</LI></P>
+</P>
