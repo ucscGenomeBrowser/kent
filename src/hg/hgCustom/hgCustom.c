@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.51 2006/09/22 05:48:09 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.52 2006/09/22 05:55:36 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -645,10 +645,11 @@ else
     else
 	{
 	cartRemove(cart, "ct");
-	if (cartVarExists(cart, hgCtDoCancel))
-	    doGenomeBrowser();
-	else
-	    doAddCustom(NULL);
+        if (cartVarExists(cart, hgCtDoCancel) ||
+            cartVarExists(cart, hgCtDoDelete))
+                doGenomeBrowser();
+        else
+            doAddCustom(NULL);
 	}
     }
 cartRemovePrefix(cart, hgCt);
