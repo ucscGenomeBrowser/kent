@@ -41,7 +41,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o hapmapSnps.o hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o \
-    hgGene.o hgMaf.o hgMut.o hgMutUi.o hgRelate.o hgSeq.o \
+    hgGene.o hgMaf.o hgMut.o hgMutUi.o hgRelate.o hgSeq.o htmlPrintHelper.o \
     HInv.o hui.o humanParalog.o humPhen.o \
     imageClone.o isochores.o itemAttr.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o \
