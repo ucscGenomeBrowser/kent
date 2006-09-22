@@ -1,0 +1,61 @@
+# for emacs: -*- mode: sh; -*-
+
+# Bos Taurus -- Baylor Release 3.0 (August 2006)
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE Sept. 21, 2006 heather)
+    ssh kkstore05
+    mkdir /cluster/store12/bosTau3
+    ln -s /cluster/store12/bosTau3 /cluster/data/bosTau3
+    mkdir /cluster/data/bosTau3/downloads
+    cd /cluster/data/bosTau3/downloads
+
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/ReadMeBovine.3.1.txt
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/contigs/*
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/markers/*
+
+    mkdir chroms
+    cd chroms
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/linearScaffolds/*
+
+
+#########################################################################
+# MAKE GENOME DB (Initial attempt Sept. 21, 2006 Heather)
+    ssh kkstore05
+    cd /cluster/data/bosTau3
+    cat > bosTau3.config.ra <<EOF
+# Config parameters for makeGenomeDb.pl:
+db bosTau3
+clade vertebrate
+scientificName Bos Taurus
+assemblyDate August 2006
+assemblyLabel Baylor Release 3
+orderKey 19
+dbDbSpeciesDir cow
+mitoAcc none
+agpFiles /cluster/data/bosTau3/downloads/Btau20060815.agp
+fastaFiles /cluster/data/bosTau3/downloads/Btau20060815.contigs.fa.gz
+qualFiles /cluster/data/bosTau3/downloads/Btau20060815.contigs.fa.qual.gz
+EOF
+
+    ~/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra \
+      >& makeGenomeDb.log & tail -f makeGenomeDb.log
+
+# Log file:
+
+# Error: IDs in fastaFiles
+# (/cluster/data/bosTau3/downloads/Btau20060815.contigs.fa.gz)
+# do not perfectly match IDs in either the first or sixth columns of
+# agpFiles (/cluster/data/bosTau3/downloads/Btau20060815.agp)
+# Please examine and then remove these temporary files:
+  # /tmp/makeGenomeDb.fastaIds.W10474 -- fasta IDs
+  # /tmp/makeGenomeDb.agpIds.E10485 -- AGP first column IDs ('big' sequences)
+  # /tmp/makeGenomeDb.agpIds.T10489 -- AGP sixth column IDs ('little' sequences)
+# Command failed:
+  # ssh -x kkr6u00 nice /cluster/data/bosTau3/jkStuff/makeUnmasked2bit.csh
+
+# Move tmp files to kkr6u00:/scratch/heather/bosTau3
+# Create diff.clean which has 108 IDs
+# Write to Kim Worley (kworley@bcm.tmc.edu)
+
