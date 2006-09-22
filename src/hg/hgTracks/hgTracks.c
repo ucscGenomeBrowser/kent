@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1205 2006/09/22 09:56:45 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1206 2006/09/22 21:17:25 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -599,7 +599,7 @@ void mapStatusMessage(char *format, ...)
 va_list(args);
 va_start(args, format);
 hPrintf(" TITLE=\"");
-hPrintf(format, args);
+hvPrintf(format, args);
 hPutc('"');
 va_end(args);
 }

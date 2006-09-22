@@ -14,6 +14,10 @@ boolean suppressHtml;
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. */
 
+void hvPrintf(char *format, va_list args);
+/* Suppressable variable args printf. Check for write error so we can
+ * terminate if http connection breaks. */
+
 void hPrintDisable();
 /* turn html printing off */
 
