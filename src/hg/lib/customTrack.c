@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.138 2006/09/22 05:48:09 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.139 2006/09/22 06:13:02 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -295,7 +295,8 @@ freeMem(prev);
 
 struct customTrack *customTrackAddToList(struct customTrack *ctList,
                                          struct customTrack *addCts,
-                                         struct customTrack **retReplacedCts)
+                                         struct customTrack **retReplacedCts,
+                                         boolean makeDefaultUnique)
 /* add new tracks to the custom track list, removing older versions,
  * and saving the replaced tracks in a list for the caller */
 {
@@ -316,7 +317,7 @@ for (ct = addCts; ct != NULL; ct = nextCt)
         freeMem(ct);
     else
         {
-        if (isDefaultTrack(ct))
+        if (isDefaultTrack(ct) && makeDefaultUnique)
             makeUniqueDefaultTrack(ct);
         slAddTail(&newCtList, ct);
         hashAdd(ctHash, ct->tdb->tableName, ct);
@@ -510,7 +511,7 @@ if (ctFileNameFromCart != NULL)
         }
     }
 /* merge new and old tracks */
-ctList = customTrackAddToList(ctList, newCts, &replacedCts);
+ctList = customTrackAddToList(ctList, newCts, &replacedCts, TRUE);
 
 if (ctList)
     {

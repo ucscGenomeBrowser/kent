@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.52 2006/09/22 05:55:36 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.53 2006/09/22 06:13:02 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -547,7 +547,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	    }
 	}
     }
-ctList = customTrackAddToList(ctList, refreshCts, &replacedCts);
+ctList = customTrackAddToList(ctList, refreshCts, &replacedCts, FALSE);
 if (warn)
     *warn = replacedTracksMsg(replacedCts);
 customTrackHandleLift(ctList);

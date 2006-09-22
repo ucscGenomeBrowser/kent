@@ -125,7 +125,8 @@ void  customTrackDump(struct customTrack *track);
 
 struct customTrack *customTrackAddToList(struct customTrack *ctList,
                                          struct customTrack *addCts,
-                                         struct customTrack **retReplacedCts);
+                                         struct customTrack **retReplacedCts,
+                                         boolean makeDefaultUnique);
 /* add new tracks to the custom track list, removing older versions,
  * and saving the replaced tracks in a list for the caller */
 
