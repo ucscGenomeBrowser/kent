@@ -36,8 +36,8 @@
 #include "joiner.h"
 #endif
 
-#ifndef HTMLPRINTHELPER_H
-#include "htmlPrintHelper.h"
+#ifndef HPRINT_H
+#include "hPrint.h"
 #endif
 
 struct region

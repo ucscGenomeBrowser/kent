@@ -1,7 +1,7 @@
-/* htmlPrintHelper - turning html printing on and off, which is useful
+/* hPrint - turning html printing on and off, which is useful
  * when postscript and PDF images are being drawn  */
 
-#include "htmlPrintHelper.h"
+#include "hPrint.h"
 
 boolean suppressHtml = FALSE;
 /* If doing PostScript output we'll suppress most of HTML output. */

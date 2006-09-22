@@ -20,8 +20,8 @@
 #include "hdb.h"
 #endif 
 
-#ifndef HTMLPRINTHELPER_H
-#include "htmlPrintHelper.h"
+#ifndef HPRINT_H
+#include "hPrint.h"
 #endif
 
 extern struct cart *cart;	/* User's settings. */

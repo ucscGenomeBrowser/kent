@@ -1,8 +1,8 @@
-/* htmlPrintHelper - turning html printing on and off, which is useful
+/* hPrint - turning html printing on and off, which is useful
  * when postscript and PDF images are being drawn  */
 
-#ifndef HTMLPRINTHELPER_H
-#define HTMLPRINTHELPER_H
+#ifndef HPRINT_H
+#define HPRINT_H
 
 #include "common.h"
 #include "errabort.h"
@@ -58,4 +58,4 @@ void printHtmlComment(char *format, ...);
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
 
-#endif /* HTMLPRINTHELPER_H */
+#endif /* HPRINT_H */

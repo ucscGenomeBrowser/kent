@@ -28,6 +28,10 @@
 #include "trackLayout.h"
 #endif /* TRACKLAYOUT_H */
 
+#ifndef HPRINT_H
+#include "hPrint.h"
+#endif /* HPRINT_H */
+
 struct itemAttr;
 struct itemAttrTbl;
 
@@ -321,39 +325,6 @@ struct track *getTrackList(struct group **pGroupList);
 
 void removeTrackFromGroup(struct track *track);
 /* Remove track from group it is part of. */
-
-void hPrintf(char *format, ...);
-/* Printf that can be suppressed if not making html. 
- * All cgi output should go through here, hPuts, hPutc
- * or hWrites. */
-
-void hPuts(char *string);
-/* Puts that can be suppressed if not making html. */
-
-void hPutc(char c);
-/* putc than can be suppressed if not makeing html. */
-
-void hWrites(char *string);
-/* Write string with no '\n' if not suppressed. */
-
-void hTextVar(char *varName, char *initialVal, int charSize);
-/* Write out text entry field if not suppressed. */
-
-void hIntVar(char *varName, int initialVal, int maxDigits);
-/* Write out numerical entry field if not supressed. */
-
-void hDoubleVar(char *varName, double initialVal, int maxDigits);
-/* Write out numerical entry field if not supressed. */
-
-void hCheckBox(char *varName, boolean checked);
-/* Make check box if not suppressed. */
-
-void hDropList(char *name, char *menu[], int menuSize, char *checked);
-/* Make a drop-down list with names if not suppressed. */
-
-void printHtmlComment(char *format, ...);
-/* Function to print output as a comment so it is not seen in the HTML
- * output but only in the HTML source. */
 
 int orientFromChar(char c);
 /* Return 1 or -1 in place of + or - */
