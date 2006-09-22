@@ -1,6 +1,3 @@
-<!-- UCSC_GB_TRACK NAME='xx' -->
-<!-- Substitute your track name for xx, in the line above -->
-
 <H2>Description</H2>
 <P>
 Replace this text with a summary describing the
