@@ -1,0 +1,108 @@
+# for emacs: -*- mode: sh; -*-
+
+# Drosophila virilis -- Agencourt "CAF1" via Eisen's 12-fly site
+
+# THIS IS ONLY TO GET MASKED SEQUENCE -- NOT A BROWSER AT THIS POINT
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE 9/21/06 angie)
+    ssh kkstore05
+    mkdir /cluster/store12/droVir3
+    ln -s /cluster/store12/droVir3 /cluster/data/droVir3
+    mkdir /cluster/data/droVir3/downloads
+    cd /cluster/data/droVir3/downloads
+    wget http://rana.lbl.gov/drosophila/caf1/dvir_caf1.tar.gz
+    tar xvzf dvir_caf1.tar.gz
+    cd dvir
+    faSize scaffolds.bases
+#206026697 bases (16820834 N's 189205863 real 189205863 upper 0 lower) in 13530 sequences in 1 files
+#Total size: mean 15227.4 sd 412436.0 min 43 (scaffold_474) max 25233164 (scaffold_13049) median 1215
+#N count: mean 1243.2 sd 14416.5
+#U count: mean 13984.2 sd 405263.9
+#L count: mean 0.0 sd 0.0
+
+
+#########################################################################
+# MAKE GENOME DB *UP TO DB STEP ONLY* (DONE 9/21/06 angie)
+    ssh kkstore05
+    cd /cluster/data/droVir3
+    cat > droVir3.config.ra <<EOF
+# Config parameters for makeGenomeDb.pl:
+db droVir3
+clade insect
+scientificName Drosophila virilis
+assemblyDate Feb. 2006
+assemblyLabel Agencourt CAF1
+orderKey 57
+mitoAcc none
+fastaFiles /cluster/data/droVir3/downloads/dvir/scaffolds.bases
+agpFiles /cluster/data/droVir3/downloads/dvir/assembly.agp
+dbDbSpeciesDir drosophila
+EOF
+
+    # Stop at db step so we can use featureBits, but don't do dbDb and trackDb
+    # because we're not building an actual browser for now.
+    makeGenomeDb.pl droVir3.config.ra -stop=db \
+      >& makeGenomeDb.log & tail -f makeGenomeDb.log
+
+
+#########################################################################
+# REPEATMASKER (DONE 9/21/06 angie)
+    ssh kkstore05
+    # Run -debug to create the dir structure and preview the scripts:
+    doRepeatMasker.pl droVir3 -verbose 3 -debug
+    # Run it for real and tail the log:
+    doRepeatMasker.pl droVir3 -species drosophila -verbose 3 \
+      >& /cluster/data/droVir3/bed/RepeatMasker.2006-09-21/do.log &
+    tail -f /cluster/data/droVir3/bed/RepeatMasker.2006-09-21/do.log
+    # RepeatMasker and lib version from do.log:
+#    March 20 2006 (open-3-1-5) version of RepeatMasker
+#CC   RELEASE 20060315;                                            *
+    # Compare coverage to previous assembly:
+    featureBits -chrom=scaffold_13049 droVir3 rmsk
+#2148620 bases of 24930185 (8.619%) in intersection
+    featureBits -chrom=scaffold_13049 droVir2 rmsk
+#2157147 bases of 24956889 (8.643%) in intersection
+
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 9/21/06 angie)
+    ssh kolossus
+    nice tcsh
+    mkdir /cluster/data/droVir3/bed/simpleRepeat
+    cd /cluster/data/droVir3/bed/simpleRepeat
+    twoBitToFa ../../droVir3.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+      -bedAt=simpleRepeat.bed -tempDir=/tmp \
+    >& trf.log & tail -f trf.log
+    # ~100 minutes (longer than D. mel, must be because of the scaffolds)
+
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed droVir3 simpleRepeat \
+      /cluster/data/droVir3/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    # Compare coverage to previous assembly:
+    featureBits -chrom=scaffold_13049 droVir3 simpleRepeat
+#935315 bases of 24930185 (3.752%) in intersection
+    featureBits -chrom=scaffold_13049 droVir2 simpleRepeat
+#933182 bases of 24956889 (3.739%) in intersection
+
+
+#########################################################################
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 9/21/06 angie)
+    ssh kolossus
+    cd /cluster/data/droVir3
+    time twoBitMask droVir3.rmsk.2bit -add bed/simpleRepeat/trfMask.bed droVir3.2bit
+    # This warning is OK -- the extra fields are not block coordinates.
+#Warning: BED file bed/simpleRepeat/trfMask.bed has >=13 fields which means it might contain block coordinates, but this program uses only the first three fields (the entire span -- no support for blocks).
+#0.301u 0.301s 0:01.91 31.4%     0+0k 0+0io 0pf+0w
+
+    # Because this is a no-browser build (just masking for alignment)
+    # I did not make the usual /gbdb/$db/$db.2bit link.
+
+
