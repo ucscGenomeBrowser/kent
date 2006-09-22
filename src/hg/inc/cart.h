@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "errabort.h"
 #include "dystring.h"
+#include "linefile.h"
 
 typedef struct sqlConnection *(*DbConnector)();  
 /* funtion type used to get a connection to database */
@@ -275,6 +276,27 @@ void cartSetDbConnector(DbConnector connector);
 void cartSetDbDisconnector(DbDisconnect disconnector);
 /* Set the connector that will be used by the cart to disconnect from the
  * database. Default disconnector is hDisconnectCart */
+
+
+/* Libified constants and code that originally belonged only to hgSession 
+ * (now hgTracks uses them too): */
+#define hgSessionPrefix "hgS_"
+
+#define hgsOtherUserName hgSessionPrefix "otherUserName"
+#define hgsOtherUserSessionName hgSessionPrefix "otherUserSessionName"
+#define hgsDoOtherUser hgSessionPrefix "doOtherUser"
+
+#define hgsLoadUrlName hgSessionPrefix "loadUrlName"
+#define hgsDoLoadUrl hgSessionPrefix "doLoadUrl"
+
+#define namedSessionTable "namedSessionDb"
+
+void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+			 char *sessionName, struct cart *cart);
+/* If permitted, load the contents of the given user's session. */
+
+void cartLoadSettings(struct lineFile *lf, struct cart *cart);
+/* Load settings (cartDump output) into current session. */
 
 
 #endif /* CART_H */

@@ -8,11 +8,13 @@
 #include "htmshell.h"
 #include "hgConfig.h"
 #include "cart.h"
+#include "net.h"
 #include "web.h"
 #include "hdb.h"
 #include "jksql.h"
+#include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.57 2006/07/02 18:56:27 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.58 2006/09/22 00:26:34 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -140,6 +142,75 @@ void cartExclude(struct cart *cart, char *var)
 hashAdd(cart->exclude, var, NULL);
 }
 
+
+void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
+			 char *sessionName, struct cart *cart)
+/* If permitted, load the contents of the given user's session. */
+{
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char *userName = wikiLinkUserName();
+char query[512];
+
+safef(query, sizeof(query), "SELECT shared, contents FROM %s "
+      "WHERE userName = '%s' AND sessionName = '%s';",
+      namedSessionTable, sessionOwner, sessionName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    boolean shared = atoi(row[0]);
+    if (shared ||
+	(userName && sameString(sessionOwner, userName)))
+	{
+	char *sessionVar = cartSessionVarName();
+	unsigned hgsid = cartSessionId(cart);
+	cartRemoveLike(cart, "*");
+	cartParseOverHash(cart, row[1]);
+	cartSetInt(cart, sessionVar, hgsid);
+	}
+    else
+	errAbort("Sharing has not been enabled for user %s's session %s.",
+		 sessionOwner, sessionName);
+    }
+else
+    errAbort("Could not find session %s for user %s.",
+	     sessionName, userName);
+sqlFreeResult(&sr);
+}
+
+void cartLoadSettings(struct lineFile *lf, struct cart *cart)
+/* Load settings (cartDump output) into current session. */
+{
+char *line = NULL;
+int size = 0;
+char *words[2];
+int wordCount = 0;
+char *sessionVar = cartSessionVarName();
+unsigned hgsid = cartSessionId(cart);
+
+cartRemoveLike(cart, "*");
+cartSetInt(cart, sessionVar, hgsid);
+while (lineFileNext(lf, &line, &size))
+    {
+    wordCount = chopString(line, " ", words, ArraySize(words));
+    if (sameString(words[0], sessionVar))
+	continue;
+    else
+	{
+	if (wordCount == 2)
+	    {
+	    struct dyString *dy = dyStringSub(words[1], "\\n", "\n");
+	    cartSetString(cart, words[0], dy->string);
+	    dyStringFree(&dy);
+	    }
+	else if (wordCount == 1)
+	    {
+	    cartSetString(cart, words[0], "");
+	    }
+	} /* not hgsid */
+    } /* each line */
+}
+
 struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
 	char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -154,7 +225,7 @@ int booSize = strlen(booShadow);
 struct hash *booHash = newHash(8);
 
 AllocVar(cart);
-cart->hash = newHash(8);
+cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
@@ -191,6 +262,28 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
 	        hashAdd(oldVars, cv->name, cloneString(s));
 	    }
 	cartSetString(cart, cv->name, cv->val);
+	}
+    }
+
+/* If some CGI other than hgSession been passed hgSession loading instructions,
+ * apply those to cart before we do anything else.  (If this is hgSession,
+ * let it handle the settings so it can display feedback to the user.) */
+if (!endsWith(cgiScriptName(), "hgSession"))
+    {
+    if (cartVarExists(cart, hgsDoOtherUser))
+	{
+	char *otherUser = cartString(cart, hgsOtherUserName);
+	char *sessionName = cartString(cart, hgsOtherUserSessionName);
+	struct sqlConnection *conn = hConnectCentral();
+	cartLoadUserSession(conn, otherUser, sessionName, cart);
+	hDisconnectCentral(&conn);
+	}
+    else if (cartVarExists(cart, hgsDoLoadUrl))
+	{
+	char *url = cartString(cart, hgsLoadUrlName);
+	struct lineFile *lf = netLineFileOpen(url);
+	cartLoadSettings(lf, cart);
+	lineFileClose(&lf);
 	}
     }
 

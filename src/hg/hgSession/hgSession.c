@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.9 2006/09/21 23:21:00 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.10 2006/09/22 00:26:33 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -570,7 +570,7 @@ if (hel != NULL)
     dyStringPrintf(dyMessage,
 		   "Loaded settings from session <B>%s</B>.<BR>\n",
 		   sessionName);
-    loadUserSession(conn, userName, sessionName, cart);
+    cartLoadUserSession(conn, userName, sessionName, cart);
     didSomething = TRUE;
     }
 
@@ -610,7 +610,7 @@ char *sessionName = cartString(cart, hgsOtherUserSessionName);
 safef(message, sizeof(message),
       "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
       otherUser, sessionName);
-loadUserSession(conn, otherUser, sessionName, cart);
+cartLoadUserSession(conn, otherUser, sessionName, cart);
 hDisconnectCentral(&conn);
 return cloneString(message);
 }
@@ -654,7 +654,7 @@ else
     dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
 		   (unsigned long)strlen(settings));
     }
-loadSettings(lf, cart);
+cartLoadSettings(lf, cart);
 lineFileClose(&lf);
 return dyStringCannibalize(&dyMessage);
 }

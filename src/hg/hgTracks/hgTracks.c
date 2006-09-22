@@ -75,7 +75,6 @@
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
 #include "celeraCoverage.h"
-#include "net.h"
 #include "web.h"
 #include "grp.h"
 #include "chromColors.h"
@@ -109,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1201 2006/09/21 17:30:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1202 2006/09/22 00:26:33 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13508,24 +13507,6 @@ char *debugTmp = NULL;
 /* struct dyString *state = NULL; */
 /* Initialize layout and database. */
 cart = theCart;
-
-/* If we have been passed hgSession loading instructions, apply those to 
- * cart before proceeding. */
-if (cartVarExists(cart, hgsDoOtherUser))
-    {
-    char *otherUser = cartString(cart, hgsOtherUserName);
-    char *sessionName = cartString(cart, hgsOtherUserSessionName);
-    struct sqlConnection *conn = hConnectCentral();
-    loadUserSession(conn, otherUser, sessionName, cart);
-    hDisconnectCentral(&conn);
-    }
-else if (cartVarExists(cart, hgsDoLoadUrl))
-    {
-    char *url = cartString(cart, hgsLoadUrlName);
-    struct lineFile *lf = netLineFileOpen(url);
-    loadSettings(lf, cart);
-    lineFileClose(&lf);
-    }
 
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track

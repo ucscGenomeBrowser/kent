@@ -696,25 +696,4 @@ void hCompositeUi(struct cart *cart, struct trackDb *tdb,
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
  * var with that name so it looks like it was pressed. */
 
-/* Libified constants and code that originally belonged only to hgSession 
- * (now hgTracks uses them too): */
-#define hgSessionPrefix "hgS_"
-
-#define hgsOtherUserName hgSessionPrefix "otherUserName"
-#define hgsOtherUserSessionName hgSessionPrefix "otherUserSessionName"
-#define hgsDoOtherUser hgSessionPrefix "doOtherUser"
-
-#define hgsLoadUrlName hgSessionPrefix "loadUrlName"
-#define hgsDoLoadUrl hgSessionPrefix "doLoadUrl"
-
-#define namedSessionTable "namedSessionDb"
-
-void loadUserSession(struct sqlConnection *conn, char *sessionOwner,
-		     char *sessionName, struct cart *cart);
-/* If permitted, load the contents of the given user's session. */
-
-void loadSettings(struct lineFile *lf, struct cart *cart);
-/* Load settings (cartDump output) into current session. */
-
-
 #endif /* HUI_H */

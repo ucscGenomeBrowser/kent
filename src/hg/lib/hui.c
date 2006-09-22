@@ -11,9 +11,8 @@
 #include "hCommon.h"
 #include "hgConfig.h"
 #include "chainCart.h"
-#include "wikiLink.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.80 2006/09/20 23:00:30 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.81 2006/09/22 00:26:34 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1533,74 +1532,5 @@ if (displayAll)
     compositeUiAllSubtracks(cart, tdb, primarySubtrack);
 else
     compositeUiSelectedSubtracks(cart, tdb, primarySubtrack);
-}
-
-
-void loadUserSession(struct sqlConnection *conn, char *sessionOwner,
-		     char *sessionName, struct cart *cart)
-/* If permitted, load the contents of the given user's session. */
-{
-struct sqlResult *sr = NULL;
-char **row = NULL;
-char *userName = wikiLinkUserName();
-char query[512];
-
-safef(query, sizeof(query), "SELECT shared, contents FROM %s "
-      "WHERE userName = '%s' AND sessionName = '%s';",
-      namedSessionTable, sessionOwner, sessionName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    boolean shared = atoi(row[0]);
-    if (shared ||
-	(userName && sameString(sessionOwner, userName)))
-	{
-	char *sessionVar = cartSessionVarName();
-	unsigned hgsid = cartSessionId(cart);
-	cartRemoveLike(cart, "*");
-	cartParseOverHash(cart, row[1]);
-	cartSetInt(cart, sessionVar, hgsid);
-	}
-    else
-	errAbort("Sharing has not been enabled for user %s's session %s.",
-		 sessionOwner, sessionName);
-    }
-else
-    errAbort("Could not find session %s for user %s.",
-	     sessionName, userName);
-sqlFreeResult(&sr);
-}
-
-void loadSettings(struct lineFile *lf, struct cart *cart)
-/* Load settings (cartDump output) into current session. */
-{
-char *line = NULL;
-int size = 0;
-char *words[2];
-int wordCount = 0;
-char *sessionVar = cartSessionVarName();
-unsigned hgsid = cartSessionId(cart);
-
-cartRemoveLike(cart, "*");
-cartSetInt(cart, sessionVar, hgsid);
-while (lineFileNext(lf, &line, &size))
-    {
-    wordCount = chopString(line, " ", words, ArraySize(words));
-    if (sameString(words[0], sessionVar))
-	continue;
-    else
-	{
-	if (wordCount == 2)
-	    {
-	    struct dyString *dy = dyStringSub(words[1], "\\n", "\n");
-	    cartSetString(cart, words[0], dy->string);
-	    dyStringFree(&dy);
-	    }
-	else if (wordCount == 1)
-	    {
-	    cartSetString(cart, words[0], "");
-	    }
-	} /* not hgsid */
-    } /* each line */
 }
 
