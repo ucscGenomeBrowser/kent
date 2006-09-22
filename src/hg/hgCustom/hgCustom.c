@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.53 2006/09/22 06:13:02 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.54 2006/09/22 23:58:04 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +43,7 @@ errAbort(
 #define hgCtDocTrackName "hgct_docTrackName"
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtRefreshPrefix "hgct_refresh"
+#define hgCtHtmlUrl      "hgct_htmlUrl"
 
 #define hgCtDo		  hgCt   "do_"	  /* prefix for all commands */
 #define hgCtDoAdd	  hgCtDo "add"
@@ -162,7 +163,7 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=3>");
 char *htmlUrl = NULL;
-if ((htmlUrl = cartOptionalString(cart, "hgct_htmlUrl")) != NULL)
+if ((htmlUrl = cartOptionalString(cart, hgCtHtmlUrl)) != NULL)
     {
     printf("<EM><B><FONT COLOR=GREEN>Warning</FONT></EM></B>: Changes here will diverge from url: %s", htmlUrl);
     cgiTableFieldEnd();
@@ -459,7 +460,7 @@ cartSetString(cart, hgCtDocText, ct->tdb->html);
 cartSetString(cart, hgCtDataText, "# Paste in new data here to update the data in this track");
 char *htmlUrl = NULL;
 if ((htmlUrl = trackDbSetting(ct->tdb, "htmlUrl")) != NULL)
-    cartSetString(cart, "hgct_htmlUrl", htmlUrl);
+    cartSetString(cart, hgCtHtmlUrl, htmlUrl);
 addCustomForm(NULL);
 cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
 endCustomForm();
