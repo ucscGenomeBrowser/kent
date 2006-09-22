@@ -6,7 +6,13 @@
 
 #ifndef EXPRECORD_H
 #include "expRecord.h"
+#endif
+
+#ifndef CART_H
 #include "cart.h"
+#endif
+
+#ifndef BED_H
 #include "bed.h"
 #endif
 
