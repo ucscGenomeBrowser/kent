@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1118 2006/09/22 08:26:54 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1119 2006/09/22 22:31:15 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11952,6 +11952,36 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void printSnpOrthos(char *rsId)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+int count = 0;
+
+if (sameString("hg18", database) && hTableExists("snp126orthoMixed"))
+    {
+    safef(query, sizeof(query),
+          "select count(*) from snp126orthoMixed where name='%s'", rsId);
+    count = sqlQuickNum(conn, query);
+    if (count != 1) return;
+    
+    safef(query, sizeof(query),
+          "select chimpAllele, chimpStrand, macaqueAllele, macaqueStrand "
+	  "from snp126orthoMixed where name='%s'", rsId);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+
+    printf("<BR><B>Chimp Allele: </B>%s\n", row[0]);
+    // printf("<BR><B>Chimp Strand = </B>%s\n", row[1]);
+    printf("<BR><B>Macaque Allele: </B>%s\n", row[2]);
+    // printf("<BR><B>Macaque Strand = </B>%s\n", row[3]);
+    printf("<BR>\n");
+    sqlFreeResult(&sr);
+    }
+}
+
 
 void printSnp125Info(struct snp125 snp)
 /* print info on a snp125 */
@@ -11987,6 +12017,7 @@ if (!sameString(snp.class, "insertion"))
     }
 
 
+printSnpOrthos(snp.name);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",          snp.locType);
 printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
 printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
@@ -12109,36 +12140,6 @@ snp.strand[1] = '\0';
 return snp;
 }
 
-void printSnpOrthos(char *rsId)
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char   query[256];
-int count = 0;
-
-if (sameString("hg18", database) && hTableExists("snp126orthoMixed"))
-    {
-    safef(query, sizeof(query),
-          "select count(*) from snp126orthoMixed where name='%s'", rsId);
-    count = sqlQuickNum(conn, query);
-    if (count != 1) return;
-    
-    safef(query, sizeof(query),
-          "select chimpAllele, chimpStrand, macaqueAllele, macaqueStrand "
-	  "from snp126orthoMixed where name='%s'", rsId);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-
-    printf("<BR><B>Chimp Allele = </B>%s\n", row[0]);
-    printf("<BR><B>Chimp Strand = </B>%s\n", row[1]);
-    printf("<BR><B>Macaque Allele = </B>%s\n", row[2]);
-    printf("<BR><B>Macaque Strand = </B>%s\n", row[3]);
-    printf("<BR>\n");
-    sqlFreeResult(&sr);
-    }
-}
-
 void doSnp125(struct trackDb *tdb, char *itemName)
 /* Process SNP details. */
 {
@@ -12164,7 +12165,6 @@ bedPrintPos((struct bed *)&snp, 3);
 snpAlign=snp125ToSnp(&snp);
 printf("<BR>\n");
 printSnp125Info(snp);
-printSnpOrthos(itemName);
 printf("<BR>\n");
 printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
@@ -12185,6 +12185,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<BR>");
 	if (snpCount==0)
 	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
+	snpCount++;
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
@@ -12224,7 +12225,6 @@ bedPrintPos((struct bed *)&snp, 3);
 snpAlign=snp125ToSnp(&snp);
 printf("<BR>\n");
 printSnp125Info(snp);
-printSnpOrthos(itemName);
 printf("<BR>\n");
 printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
@@ -12247,6 +12247,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("<BR>");
 	if (snpCount==0)
 	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
+	snpCount++;
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
