@@ -6,6 +6,9 @@
 /* Cheapcgi.h - turns variables passed from the web form into 
  * something that C understands. */
 
+#ifndef CHEAPCGI_H
+#define CHEAPCGI_H
+
 #ifndef DYSTRING_H
 #include "dystring.h"
 #endif 
@@ -282,3 +285,6 @@ void cgiTableField(char *text);
 
 void cgiParagraph(char *text);
 /* Make text paragraph */
+
+
+#endif /* CHEAPCGI_H */
