@@ -83,7 +83,7 @@ for (i = 1; i < ncols; i++)
     }
 slReverse(&exps);
 /* Other lines have the data. */
-while (n = lineFileChopTab(lf,strings))
+while ((n = lineFileChopTab(lf,strings)) > 0)
     {
     struct expData *oneGene = NULL;
     AllocVar(oneGene);
