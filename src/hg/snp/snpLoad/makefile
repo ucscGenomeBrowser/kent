@@ -13,7 +13,8 @@ O = snpContigLocFilter.o snpContigLocFilter125.o \
     snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
     snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o \
     snpGetSimple.o snpGetInsertions.o snpGetDeletions.o \
-    fetchSeq.o snpOrthoLookup.o snpOrthoCheck.o snpCheckCluster.o snpCheckCluster2.o
+    fetchSeq.o snpOrthoLookup.o snpOrthoCheck.o snpCheckCluster.o snpCheckCluster2.o \
+    snpReadSeq.o
 
 all: snpContigLocFilter snpContigLocFilter125 \
      snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
@@ -24,7 +25,8 @@ all: snpContigLocFilter snpContigLocFilter125 \
      snpPAR illuminaLookup snpCompareWeight subSnpCondense \
      snpClassAndObserved snpMoltype affyLookup cnpLookup \
      snpGetSimple snpGetInsertions snpGetDeletions \
-     fetchSeq snpOrthoLookup snpOrthoCheck snpCheckCluster snpCheckCluster2
+     fetchSeq snpOrthoLookup snpOrthoCheck snpCheckCluster snpCheckCluster2 \
+     snpReadSeq
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -139,4 +141,7 @@ snpCheckCluster: snpCheckCluster.o ${MYLIBS}
 
 snpCheckCluster2: snpCheckCluster2.o ${MYLIBS}
 	${CC} -O -o snpCheckCluster2 snpCheckCluster2.o ${MYLIBS} $L
+
+snpReadSeq: snpReadSeq.o ${MYLIBS}
+	${CC} -O -o snpReadSeq snpReadSeq.o ${MYLIBS} $L
 
