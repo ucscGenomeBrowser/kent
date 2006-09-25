@@ -194,10 +194,12 @@ struct sqlConnection *conn2 = sqlConnect(database);
 struct sqlConnection *conn3 = sqlConnect(database);
 int probeCount=0, vgPrbCount=0;
 
-dyStringAppend(dy, "select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac,g.taxon from probe p, gene g");
-dyStringAppend(dy, " left join vgPrbMap m on m.probe = p.id");
-dyStringAppend(dy, " where g.id = p.gene");
-dyStringAppend(dy, "   and m.probe is NULL");
+dyStringAppend(dy, 
+"select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac,g.taxon"
+" from probe p join gene g"
+" left join vgPrbMap m on m.probe = p.id"
+" where g.id = p.gene"
+"   and m.probe is NULL");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1491,7 +1493,7 @@ struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
 dyStringPrintf(dy, 
 "select distinct concat('vgPrb_',e.id), e.seq"
-" from vgPrb e, %s.%s v"
+" from vgPrb e join %s.%s v"
 " left join %s.seq s on s.acc = v.qName"
 " where concat('vgPrb_',e.id) = v.qName"
 " and s.acc is NULL"

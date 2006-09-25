@@ -411,7 +411,7 @@ char query[512], **row;
 struct sqlResult *sr;
 safef(query, sizeof(query),
    "select bodyPart.name,expressionLevel.level,expressionPattern.description "
-   "from expressionLevel,bodyPart,imageProbe "
+   "from expressionLevel join bodyPart join imageProbe "
    "left join expressionPattern on expressionLevel.expressionPattern = expressionPattern.id "
    "where imageProbe.image = %d "
    "and imageProbe.probe = %d "
