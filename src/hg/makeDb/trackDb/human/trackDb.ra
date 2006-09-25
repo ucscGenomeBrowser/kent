@@ -213,7 +213,7 @@ type bed 12 .
 
 track gladHumES
 shortLabel Gstone Arrays
-longLabel Gladstone microarray data including stem cell tissue
+longLabel Gladstone Microarray Data
 group regulation
 priority 79
 visibility hide
@@ -221,7 +221,6 @@ type expRatio
 expScale 4.0
 expStep 0.5
 expTable gladHumESExps
-chip GNF1M
 
 track gnfAtlas2
 shortLabel GNF Atlas 2
@@ -232,8 +231,9 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
+expDrawExons on
 expTable gnfHumanAtlas2MedianExps
-chip GNF1M
+groupings gnfHumanAtlas2Groups
 
 track affyUcla
 shortLabel UCLA GeneChip
@@ -280,12 +280,13 @@ longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
 group regulation
 priority 86
 visibility hide
-type bed 15 +
+type expRatio
 expScale 3.0
 expStep 0.5
+expDrawExons on
+groupings affyRatioGroups
 expTable affyExps
-chip U95
-canPack off
+# (expTable is obselete)
 
 track cghNci60
 shortLabel CGH NCI60

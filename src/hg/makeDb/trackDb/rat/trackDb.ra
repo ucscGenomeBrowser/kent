@@ -295,7 +295,7 @@ type expRatio
 expScale 4.0
 expStep 0.5
 expTable gnfRatAtlas2MedianExps
-chip U34A
+groupings gnfRatAtlas2Groups
 
 searchTable gold
 searchMethod exact

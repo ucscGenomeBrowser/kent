@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.312 2006/09/25 18:32:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.313 2006/09/25 22:45:28 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1011,6 +1011,21 @@ cgiMakeDropListWithVals(dropDownName, menuArray, valArray,
                          size, cartSetting);
 }
 
+void expRatioDrawExonOption(struct trackDb *tdb)
+/* Add option to show exons if possible. */
+{
+char checkBoxName[512];
+char *drawExons = trackDbSetting(tdb, "expDrawExons");
+boolean checked = FALSE;
+if (!drawExons || differentWord(drawExons, "on"))
+    return;
+safef(checkBoxName, sizeof(checkBoxName), "%s.expDrawExons", tdb->tableName);
+checked = cartCgiUsualBoolean(cart, checkBoxName, FALSE);
+puts("<B>Draw intron lines/arrows and exons: </B> ");
+cgiMakeCheckBox(checkBoxName, checked);
+puts("<BR>\n");
+}
+
 void expRatioUi(struct trackDb *tdb)
 /* UI options for the expRatio tracks. */
 {
@@ -1021,6 +1036,7 @@ struct hash *ret =
 	     "microarrayGroups.ra", &gHashOfHashes);
 if ((ret == NULL) && (gHashOfHashes == NULL))
     errAbort("Could not get group settings for track.");
+expRatioDrawExonOption(tdb);
 expRatioCombineDropDown(tdb->tableName, groupings, gHashOfHashes);
 }
 
@@ -2332,8 +2348,6 @@ else if (startsWith("wig", tdb->type))
         }
 else if (startsWith("chromGraph", tdb->type))
         chromGraphUi(tdb);
-else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") || sameString(track, "affyZonWildType"))
-        affyUi(tdb);
 /* else if (sameString(track, "affyHumanExon")) */
 /*         affyAllExonUi(tdb); */
 else if (sameString(track, "ancientR"))

@@ -1236,6 +1236,25 @@ freeMem(pixCountArray);
 *pPixScoreArray = pixScoreArray;
 }
 
+void expRatioDrawItemsWithExons(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw the microarray measurements and show exons.  A cart var should be */
+/* on to access this function instead of directly. */
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+int lineHeight = tg->lineHeight;
+int y = yOff;
+struct slList *item;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(tg->itemColor != NULL) 
+	color = tg->itemColor(tg, item, vg);
+    linkedFeaturesSeriesDrawAt(tg, item, vg, xOff, y, scale, font, color, vis);
+    y += lineHeight;
+    } 
+}
+
 void expRatioDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -1251,58 +1270,71 @@ int *pixCountArray;
 int nExps;
 struct linkedFeaturesSeries *marrayList = tg->items;
 int i, j;
-/* Create an array as large as the browser window (in pixels). */
-/* Draw the array with all the rows in pack, full, or squish. */
-if ((marrayList == NULL) || (marrayList->features == NULL))
-    return;
-nExps = slCount(marrayList);
-expRatioSetupPixelArrays(tg, &pixCountArray, &pixScoreArray, scale);
-if (vis == tvDense)
+char exonDrawCartName[512];
+char *drawExons = trackDbSetting(tg->tdb, "expDrawExons");
+boolean drawExonChecked = FALSE;
+safef(exonDrawCartName, sizeof(exonDrawCartName), "%s.expDrawExons", tg->mapName);
+drawExonChecked = cartCgiUsualBoolean(cart, exonDrawCartName, FALSE);
+if (drawExons && sameWord(drawExons, "on") && drawExonChecked)
     {
-    /* Average the pixel scores together. */
-    for (i = 0; i < insideWidth; i++)
-	{
-	if (pixCountArray[i] > 0)
-	    {
-	    float biggest = 0;
-	    int goodMeasures = 0;
-	    Color theColor;
-	    for (j = 0; j < nExps; j++)
-		if ((pixScoreArray[j][i] != MICROARRAY_MISSING_DATA)
-		    && (fabs(pixScoreArray[j][i]) > fabs(biggest)))
-		    {
-		    goodMeasures++;
-		    biggest = pixScoreArray[j][i];
-		    }
-	    if (goodMeasures == 0)
-		biggest = MICROARRAY_MISSING_DATA;
-	    theColor = expressionScoreColor(tg, biggest, vg, tg->expScale, tg->expScale);
-	    vgLine(vg, xOff + i, y, xOff + i, y + heightPer - 1, theColor);
-	    }
-	}
+    expRatioDrawItemsWithExons(tg, seqStart, seqEnd, vg, xOff, yOff, width,
+			       font, color, vis);
     }
 else
     {
-    for (i = 0; i < nExps; i++)
+    /* Create an array as large as the browser window (in pixels). */
+    /* Draw the array with all the rows in pack, full, or squish. */
+    if ((marrayList == NULL) || (marrayList->features == NULL))
+	return;
+    nExps = slCount(marrayList);
+    expRatioSetupPixelArrays(tg, &pixCountArray, &pixScoreArray, scale);
+    if (vis == tvDense)
 	{
-	for (j = 0; j < insideWidth; j++)
+	/* Average the pixel scores together. */
+	for (i = 0; i < insideWidth; i++)
 	    {
-	    if (pixCountArray[j] > 0)
+	    if (pixCountArray[i] > 0)
 		{
-		Color theColor = expressionScoreColor(tg, pixScoreArray[i][j], vg, tg->expScale, tg->expScale);
-		vgLine(vg, xOff + j, y, xOff + j, y + heightPer - 1, theColor);
+		float biggest = 0;
+		int goodMeasures = 0;
+		Color theColor;
+		for (j = 0; j < nExps; j++)
+		    if ((pixScoreArray[j][i] != MICROARRAY_MISSING_DATA)
+			&& (fabs(pixScoreArray[j][i]) > fabs(biggest)))
+			{
+			goodMeasures++;
+			biggest = pixScoreArray[j][i];
+			}
+		if (goodMeasures == 0)
+		    biggest = MICROARRAY_MISSING_DATA;
+		theColor = expressionScoreColor(tg, biggest, vg, tg->expScale, tg->expScale);
+		vgLine(vg, xOff + i, y, xOff + i, y + heightPer - 1, theColor);
 		}
 	    }
-	y += lineHeight;
 	}
-    }
+    else
+	{
+	for (i = 0; i < nExps; i++)
+	    {
+	    for (j = 0; j < insideWidth; j++)
+		{
+		if (pixCountArray[j] > 0)
+		    {
+		    Color theColor = expressionScoreColor(tg, pixScoreArray[i][j], vg, tg->expScale, tg->expScale);
+		    vgLine(vg, xOff + j, y, xOff + j, y + heightPer - 1, theColor);
+		    }
+		}
+	    y += lineHeight;
+	    }
+	}
 /* Make the clickable mapboxes in full or pack. */
-if ((vis == tvFull) || (vis == tvPack))
-    expRatioMapBoxes(tg, seqStart, seqEnd, xOff, yOff, width);
-for (i = 0; i < nExps; i++)
-    freeMem(pixScoreArray[i]);
-freeMem(pixScoreArray);
-freeMem(pixCountArray);
+    if ((vis == tvFull) || (vis == tvPack))
+	expRatioMapBoxes(tg, seqStart, seqEnd, xOff, yOff, width);
+    for (i = 0; i < nExps; i++)
+	freeMem(pixScoreArray[i]);
+    freeMem(pixScoreArray);
+    freeMem(pixCountArray);
+    }
 }
 
 void rosettaMethods(struct track *tg)
@@ -1355,11 +1387,9 @@ void expRatioMethods(struct track *tg)
 {
 struct trackDb *tdb = tg->tdb;
 char *expScale = trackDbRequiredSetting(tdb, "expScale");
-char *expTable = trackDbRequiredSetting(tdb, "expTable");
 
 linkedFeaturesSeriesMethods(tg);
 tg->expScale = atof(expScale);
-tg->expTable = expTable;
 tg->itemColor = expRatioColor;
 tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromAffyGenericBed;
@@ -1394,8 +1424,8 @@ tg->itemColor = loweRatioColor;
 
 }
 
-void affyAllExonMethods(struct track *tg)
-/* Special methods for the affy all exon chips. */
+void expRatioMethodsFromDotRa(struct track *tg)
+/* Special methods for tracks using new microarrayGroups.ra files. */
 {
 expRatioMethods(tg);
 tg->drawItems = expRatioDrawItems;

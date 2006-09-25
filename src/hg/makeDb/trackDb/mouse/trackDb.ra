@@ -177,8 +177,8 @@ type expRatio
 expScale 4.0
 expStep 0.5
 expTable gnfMouseAtlas2MedianExps
-chip GNF1M
-
+# (expTable is kind of obselete)
+groupings gnfMouseAtlas2Groups
 
 track rinnSex
 shortLabel Rinn Sex Exp
@@ -190,7 +190,8 @@ type expRatio
 expScale 8.0
 expStep 1.0
 expTable mouseRinnSexMedianExps
-chip MOE430A
+# (expTable is kind of obselete)
+groupings rinnSexGroups
 
 track affyGnfU74A
 shortLabel GNF U74A
@@ -201,10 +202,9 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-#expTable affyGnfU74AExps
 expTable gnfMouseU74aAllExps
-chip U74
-canPack off
+# (expTable is kind of obselete)
+groupings gnfMouseU74aGroups
 
 track affyGnfU74B
 shortLabel GNF U74B
@@ -215,10 +215,9 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-#expTable affyGnfU74BExps
 expTable gnfMouseU74bAllExps
-chip U74
-canPack off
+# (expTable is kind of obselete)
+groupings gnfMouseU74bGroups
 
 track affyGnfU74C
 shortLabel GNF U74C
@@ -229,10 +228,9 @@ visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
-#expTable affyGnfU74CExps
 expTable gnfMouseU74cAllExps
-chip U74
-canPack off
+# (expTable is kind of obselete)
+groupings gnfMouseU74cGroups
 
 track affyGnf1m
 shortLabel Affy GNF1M

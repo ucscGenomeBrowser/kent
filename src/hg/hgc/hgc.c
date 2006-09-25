@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1119 2006/09/22 22:31:15 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1120 2006/09/25 22:45:33 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2969,7 +2969,7 @@ if (wordCount > 0)
 	}
     else if (sameString(type, "expRatio"))
         {
-	genericExpRatio(conn, tdb, item, start);
+	doExpRatio(tdb, item);
 	}
     else if (sameString(type, "wig"))
         {
@@ -17473,10 +17473,6 @@ else if (sameWord(track, "affy10K"))
     {
     doAffy10K(tdb, item);
     }
-else if (sameWord(track, "affyHumanExon"))
-    {
-    doExpRatio(tdb, item);
-    }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item, tdb);
@@ -17609,16 +17605,9 @@ else if(sameWord(track, "affy"))
     {
     affyDetails(tdb, item);
     }
-else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
-	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") 
-	|| sameWord(track, "affyUclaNorm") || sameWord(track, "zonWildType") )
-    {
-    gnfExpRatioDetails(tdb, item);
-    }
 else if(sameWord(track, "llaPfuPrintC2"))
     {
-   loweExpRatioDetails(tdb, item);
-  
+    loweExpRatioDetails(tdb, item);
     }
 else if(sameWord(track, "affyUcla"))
     {

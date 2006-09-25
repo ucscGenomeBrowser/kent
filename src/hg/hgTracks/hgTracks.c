@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1210 2006/09/25 21:42:46 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1211 2006/09/25 22:45:51 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1632,7 +1632,7 @@ if (start != -1 && !lfs->noLine)
 }
 	
 
-static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
+void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
         struct vGfx *vg, int xOff, int y, double scale,
 	    MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a linked features series item at position. */
@@ -11234,7 +11234,7 @@ else if (sameWord(type, "axt"))
     }
 else if (sameWord(type, "expRatio"))
     {
-    expRatioMethods(track);
+    expRatioMethodsFromDotRa(track);
     }
 else if (sameWord(type, "bed5FloatScore"))
     {
@@ -12353,10 +12353,6 @@ registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
-registerTrackHandler("affyHumanExon", affyAllExonMethods);
-registerTrackHandler("affyRatio", affyRatioMethods);
-registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
-registerTrackHandler("gnfAtlas2", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("altGraphXCon", altGraphXMethods );

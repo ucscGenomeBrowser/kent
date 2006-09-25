@@ -48,10 +48,9 @@ group regulation
 priority 80
 visibility hide
 type expRatio
-expScale 6.0
-expStep 0.5
-expTable zebrafishZonWTMedianExps
-chip Zebrafish
+expScale 2.0
+expStep 0.20
+groupings affyZonWildTypeGroups
 
 track affyZebrafish
 shortLabel Affy Zebrafish

@@ -702,8 +702,8 @@ void affyMethods(struct track *tg);
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 
-void affyAllExonMethods(struct track *tg);
-/* Special methods for the affy all exon chips. */
+void expRatioMethodsFromDotRa(struct track *tg);
+/* Special methods for tracks using new microarrayGroups.ra files. */
 
 void affyRatioMethods(struct track *tg);
 /* set up special methods for NCI60 track and tracks with multiple
@@ -865,6 +865,11 @@ void loadGenePred(struct track *tg);
 
 boolean highlightItem(struct track *tg, void *item);
 /* Should this item be highlighted? */
+
+void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
+        struct vGfx *vg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis);
+/* Draw a linked features series item at position. */
 
 #define NEXT_ITEM_ARROW_BUFFER 5
 /* Space around "next item" arrow (in pixels). */
