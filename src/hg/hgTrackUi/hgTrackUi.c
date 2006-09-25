@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.313 2006/09/25 22:45:28 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.314 2006/09/25 23:27:49 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -987,7 +987,7 @@ char dropDownName[512];
 struct hash *groupGroup = hashMustFindVal(allGroupings, groupSettings);
 char *combineList = hashFindVal(groupGroup, "combine");
 char *allSetting = hashMustFindVal(groupGroup, "all");
-char *defaultSetting = hashFindVal(groupGroup, "default");
+char *defaultSetting = hashFindVal(groupGroup, "combine.default");
 char *cartSetting = NULL;
 struct slName *combineNames = slNameListFromComma(combineList);
 struct slName *aName;
