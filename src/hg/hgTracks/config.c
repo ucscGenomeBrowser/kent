@@ -166,9 +166,13 @@ for (group = groupList; group != NULL; group = group->next)
 	/* If track is not on this chrom print an informational
 	   message for the user. */
 	if(hTrackOnChrom(track->tdb, chromName)) 
-	    hTvDropDownClass(track->mapName, track->visibility, track->canPack,
-			     (track->visibility == tvHide) ? 
-			     "hiddenText" : "normalText" );
+	    {
+	    /* check for option of limiting visibility to one mode */
+	    char *onlyVisibility = trackDbSetting(track->tdb, "onlyVisibility");
+	    hTvDropDownClassVisOnly(track->mapName, track->visibility,
+		track->canPack, (track->visibility == tvHide) ? 
+		     "hiddenText" : "normalText", onlyVisibility );
+	    }
 	else 
 	    hPrintf("[No data-%s]", chromName);
 	hPrintf("</TD>");

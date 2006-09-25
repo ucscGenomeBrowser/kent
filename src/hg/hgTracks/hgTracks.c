@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1208 2006/09/25 08:27:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1209 2006/09/25 18:27:21 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12792,9 +12792,14 @@ if (showTrackControls)
 	    /* If track is not on this chrom print an informational
 	       message for the user. */
 	    if(hTrackOnChrom(track->tdb, chromName)) 
-		hTvDropDownClass(track->mapName, track->visibility, track->canPack,
-                                 (track->visibility == tvHide) ? 
-				 "hiddenText" : "normalText" );
+		{
+		/* check for option of limiting visibility to one mode */
+		char *onlyVisibility =
+			trackDbSetting(track->tdb, "onlyVisibility");
+		hTvDropDownClassVisOnly(track->mapName, track->visibility,
+		    track->canPack, (track->visibility == tvHide) ? 
+			 "hiddenText" : "normalText", onlyVisibility );
+		}
 	    else 
 		hPrintf("[No data-%s]", chromName);
 	    controlGridEndCell(cg);
