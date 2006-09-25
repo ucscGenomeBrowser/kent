@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.40 2006/08/25 23:16:18 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.41 2006/09/25 19:09:13 heather Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -445,6 +445,7 @@ if (jpList != NULL)
 webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
 printTrackHtml(tdb);
+sqlDisconnect(&conn);
 }
 
 static void showSchemaCtWiggle(char *table, struct customTrack *ct)
