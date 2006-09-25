@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.311 2006/09/21 13:36:59 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.312 2006/09/25 18:32:27 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2443,18 +2443,21 @@ void trackUi(struct trackDb *tdb)
 /* Put up track-specific user interface. */
 {
 char *vis = hStringFromTv(tdb->visibility);
+char *onlyVisibility = trackDbSetting(tdb, "onlyVisibility");
+
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 printf("<H1>%s</H1>\n", tdb->longLabel);
-printf("<B>Display mode: </B>");
-hTvDropDown(tdb->tableName, 
-    hTvFromString(cartUsualString(cart,tdb->tableName, vis)), tdb->canPack);
-printf(" ");
+printf("<B>Display&nbsp;mode:&nbsp;</B>");
+hTvDropDownClassVisOnly(tdb->tableName,
+    hTvFromString(cartUsualString(cart,tdb->tableName, vis)),
+    tdb->canPack, "normalText", onlyVisibility );
+printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
 if (isCustomTrack(tdb->tableName))
     {
-    puts("&nbsp; &nbsp; &nbsp;");
+    puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
     cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
     puts("&nbsp;");
     cgiMakeButton(CT_CGI_VAR, "Update custom track");
