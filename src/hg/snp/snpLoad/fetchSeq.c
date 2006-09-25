@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.5 2006/08/24 20:49:23 heather Exp $";
+static char const rcsid[] = "$Id: fetchSeq.c,v 1.6 2006/09/25 19:15:45 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -117,7 +117,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-sqlDisconnect(&conn);
 carefulClose(&f);
 }
 
