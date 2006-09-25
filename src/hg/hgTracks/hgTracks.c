@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1207 2006/09/22 22:33:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1208 2006/09/25 08:27:30 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12503,7 +12503,7 @@ zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
 
 if (psOutput != NULL)
    {
-   hPrintEnable();
+   hPrintDisable();
    hideControls = TRUE;
    withNextItemArrows = FALSE;
    hgFindMatches = NULL;
