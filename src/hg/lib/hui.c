@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.81 2006/09/22 00:26:34 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.82 2006/09/25 18:25:51 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -170,6 +170,75 @@ if (canPack)
 else
     cgiMakeDropListClass(varName, noPack, ArraySize(noPack), noPack[vis], class);
 }
+
+void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
+	boolean canPack, char *class, char *visOnly)
+/* Make track visibility drop down for varName with style class,
+	and potentially limited to visOnly */
+{
+static char *denseOnly[] = 
+    {
+    "hide",
+    "dense",
+    };
+static char *squishOnly[] = 
+    {
+    "hide",
+    "squish",
+    };
+static char *packOnly[] = 
+    {
+    "hide",
+    "pack",
+    };
+static char *fullOnly[] = 
+    {
+    "hide",
+    "full",
+    };
+static char *noPack[] = 
+    {
+    "hide",
+    "dense",
+    "full",
+    };
+static char *pack[] = 
+    {
+    "hide",
+    "dense",
+    "squish",
+    "pack",
+    "full",
+    };
+static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
+if (visOnly != NULL)
+    {
+    int visIx = (vis > 0) ? 1 : 0;
+    if (sameWord(visOnly,"dense"))
+	cgiMakeDropListClass(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class);
+    else if (sameWord(visOnly,"squish"))
+	cgiMakeDropListClass(varName, squishOnly, ArraySize(squishOnly),
+		squishOnly[visIx], class);
+    else if (sameWord(visOnly,"pack"))
+	cgiMakeDropListClass(varName, packOnly, ArraySize(packOnly),
+		packOnly[visIx], class);
+    else if (sameWord(visOnly,"full"))
+	cgiMakeDropListClass(varName, fullOnly, ArraySize(fullOnly),
+		fullOnly[visIx], class);
+    else			/* default when not recognized */
+	cgiMakeDropListClass(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class);
+    }
+    else
+    {
+    if (canPack)
+	cgiMakeDropListClass(varName, pack, ArraySize(pack), pack[packIx[vis]], class);
+    else
+	cgiMakeDropListClass(varName, noPack, ArraySize(noPack), noPack[vis], class);
+    }
+}
+
 
 /****** Some stuff for stsMap related controls *******/
 
