@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1209 2006/09/25 18:27:21 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1210 2006/09/25 21:42:46 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8652,11 +8652,20 @@ if (rulerMode != tvHide)
         }
     }
 
+boolean safeHeight = TRUE;
+/* firefox on Linux worked almost up to 34,000 at the default 620 width	*/
+#define maxSafeHeight	32000
 /* Hash tracks/subtracks, limit visibility and calculate total image height: */
 for (track = trackList; track != NULL; track = track->next)
     {
     hashAddUnique(trackHash, track->mapName, track);
     limitVisibility(track);
+    if (!safeHeight)
+	{
+	track->limitedVis = tvHide;
+	track->limitedVisSet = TRUE;
+	continue;
+	}
     if (track->limitedVis != tvHide)
 	{
         if (isCompositeTrack(track))
@@ -8676,7 +8685,19 @@ for (track = trackList; track != NULL; track = track->next)
 		    }
                 }
 	    }
-	pixHeight += trackPlusLabelHeight(track, fontHeight);
+	if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
+	    {
+	    char numBuf[64];
+	    sprintLongWithCommas(numBuf, maxSafeHeight);
+	    printf("warning: image is over %s pixels high at "
+		"track '%s',<BR>remaining tracks set to hide "
+		"for this view.<BR>\n", numBuf, track->tdb->shortLabel);
+	    safeHeight = FALSE;
+	    track->limitedVis = tvHide;
+	    track->limitedVisSet = TRUE;
+	    }
+	else
+	    pixHeight += trackPlusLabelHeight(track, fontHeight);
 	}
     }
 
