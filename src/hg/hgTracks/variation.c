@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.98 2006/09/26 19:28:38 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.99 2006/09/26 19:38:37 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -324,7 +324,7 @@ if (ca==MG_BLACK)
     return 1;
 if (cb==MG_BLACK)
     return -1;
-errAbort("<BR>SNP track: colors %s and %s not known", ca, cb);
+errAbort("<BR>SNP track: colors %d and %d not known", ca, cb);
 return 0;
 }
 
@@ -792,8 +792,11 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-setSnp125ExtendedColors(tg, vg);
-sortSnp125ExtendedByColor(tg);
+if(vis==tvDense)
+    {
+    setSnp125ExtendedColors(tg, vg);
+    sortSnp125ExtendedByColor(tg);
+    }
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
