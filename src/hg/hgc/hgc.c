@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1124 2006/09/26 22:50:38 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1125 2006/09/26 22:51:20 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8197,7 +8197,9 @@ if (hTableExists("vegaInfoZfish"))
 printCustomUrl(tdb, name, TRUE); 
 if (vif != NULL)
     {
-    printf("<B>VEGA Gene Type:</B> %s<BR>\n", vif->method);
+    /* change confidence to lower case and display with method for gene type */
+    tolowers(vif->confidence);
+    printf("<B>VEGA Gene Type:</B> %s %s<BR>\n", vif->confidence, vif->method);
     printf("<B>VEGA Sanger Gene Name:</B> %s<BR>\n", vif->sangerName);
     if (differentString(vif->geneDesc, "NULL"))
         printf("<B>VEGA Gene Description:</B> %s<BR>\n", vif->geneDesc);
