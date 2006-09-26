@@ -14,7 +14,7 @@
 #include "jksql.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.58 2006/09/22 00:26:34 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.59 2006/09/26 00:58:17 kate Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -268,7 +268,7 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
-if (!endsWith(cgiScriptName(), "hgSession"))
+if (cgiScriptName() && !endsWith(cgiScriptName(), "hgSession"))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
 	{
