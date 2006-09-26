@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.95 2006/09/26 08:09:54 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.96 2006/09/26 08:53:54 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -280,6 +280,67 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void loadSnp125Extended(struct track *tg)
+/* load snps from snp125 table, ortho alleles from snpXXXortho table,
+ * and return in extended struct */
+{
+struct sqlConnection *conn       = hAllocConn();
+int                   rowOffset  = 0;
+char                **row        = NULL;      /* list of orthologous state info */
+struct slList        *itemList   = tg->items; /* list of SNPs */
+struct slList        *item       = itemList;
+char                 *orthoTable = cloneString("snp126ortho"); /* could be a trackDb option */
+char                 *orthoName  = NULL;
+char                 *chimpBase  = NULL;
+struct sqlResult     *sr         = NULL;
+
+/* load SNPs */
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    item = (struct slList *)snpExtendedLoad(row + rowOffset);
+    slAddHead(&itemList, item);
+    }
+slSort(&itemList, bedCmp);
+sqlFreeResult(&sr);
+
+/* calculate colors */
+/* sort by colors */
+
+tg->items = itemList;
+
+if(!sqlTableExists(conn,orthoTable))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+/* walk through the list of orthologous allele information */
+sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* get the name of the SNP and the chimp state */
+    /* fix this to use library functions once the schema has stabilized */
+    orthoName=cloneString(row[4]);
+    chimpBase=cloneString(row[14]);
+
+    /* reset the pointer to start at the top of the list, then find relevant entry */
+    item = itemList;
+    while(item!=NULL && differentString(((struct snp125Extended *)item)->name, orthoName))
+	item=item->next;
+
+    /* if it is found, update the name with the new information */
+    if(item!=NULL)
+	{
+	struct dyString *extra = newDyString(256);
+	dyStringPrintf(extra, " %s>%s", chimpBase, ((struct snp125Extended *)item)->observed);
+	((struct snp125Extended *)item)->nameExtra=cloneString(extra->string);
+	freeDyString(&extra);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void loadSnpMap(struct track *tg)
 /* Load up snpMap from database table to track items. */
 {
@@ -297,6 +358,20 @@ if (!startsWith("hg",database))
 filterSnpMapItems(tg, snpMapSourceFilterItem);
 filterSnpMapItems(tg, snpMapTypeFilterItem);
 appendAllelesToSnpNames(tg);
+}
+
+char *snp125ExtendedName(struct track *tg, void *item)
+{
+struct dyString *ds = newDyString(256);
+struct snp125Extended *se = item;
+char *ret = NULL;
+
+dyStringPrintf(ds, "%s", se->name);
+if (se!=NULL && se->nameExtra != NULL)
+    dyStringAppend(ds, se->nameExtra);
+ret = cloneString(ds->string);
+freeDyString(&ds);
+return ret;
 }
 
 void loadSnp(struct track *tg)
@@ -629,7 +704,7 @@ static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
 double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int y, w;
+int w, y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
 if (!tg->drawItemAt)
@@ -700,7 +775,7 @@ static void snpDrawItems(struct track *tg, int seqStart, int seqEnd,
 double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int w, y;
+int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
 if (!tg->drawItemAt)
@@ -809,9 +884,10 @@ void snp125Methods(struct track *tg)
 {
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
-tg->loadItems     = loadSnp125;
+tg->loadItems     = loadSnp125Extended;
 tg->freeItems     = freeSnp125;
 tg->itemColor     = snp125Color;
+tg->itemName      = snp125ExtendedName;
 tg->itemNameColor = snp125Color;
 }
 
