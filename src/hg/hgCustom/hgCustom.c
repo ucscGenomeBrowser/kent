@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.55 2006/09/26 19:48:37 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.56 2006/09/26 20:39:46 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -267,7 +267,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     /* Name  field */
     //printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
     printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s=%s'>%s</A></TD>", 
-            hgCustomName(), ct->tdb->shortLabel, hgCtTable, ct->tdb->tableName, 
+            ct->tdb->shortLabel, hgCustomName(), hgCtTable, ct->tdb->tableName, 
             ct->tdb->shortLabel);
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
