@@ -48,6 +48,7 @@ struct customTrack
 
 /* cart/cgi variables */
 #define CT_CUSTOM_TEXT_VAR      "hgt.customText"
+    /* alternate variable, compatible with javascript */
 #define CT_CUSTOM_TEXT_ALT_VAR  "hgct_customText"
 #define CT_CUSTOM_FILE_VAR      "hgt.customFile"
 #define CT_CUSTOM_FILE_NAME_VAR "hgt.customFile__filename"

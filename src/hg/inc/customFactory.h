@@ -99,6 +99,9 @@ char *ctInitialPosition(struct customTrack *ct);
 char *ctDataUrl(struct customTrack *ct);
 /* return URL where data can be reloaded, if any */
 
+char *ctHtmlUrl(struct customTrack *ct);
+/* return URL where doc can be reloaded, if any */
+
 char *ctInputType(struct customTrack *ct);
 /* return type of input */
 
