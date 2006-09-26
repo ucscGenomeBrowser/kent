@@ -26,7 +26,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.140 2006/09/22 23:58:47 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.141 2006/09/26 19:46:33 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -382,11 +382,10 @@ char *err = NULL;
 /* the hgt.customText and hgt.customFile variables contain new custom
  * tracks that have not yet been parsed */
 
-char *customText = cartOptionalString(cart, CT_CUSTOM_TEXT_VAR);
+char *customText = cartOptionalString(cart, CT_CUSTOM_TEXT_ALT_VAR);
 /* parallel CGI variable, used by hgCustom, to allow javascript */
 if (!customText)
-    customText = cartOptionalString(cart, CT_CUSTOM_TEXT_ALT_VAR);
-
+    customText = cartOptionalString(cart, CT_CUSTOM_TEXT_VAR);
 char *fileName = NULL;
 struct slName *browserLines = NULL;
 customText = skipLeadingSpaces(customText);
@@ -433,6 +432,11 @@ if (fileName && fileName[0])
     }
 customText = skipLeadingSpaces(customText);
 
+/* retain unmunged copy of input for use by hgCustom on error */
+char *savedCustomText = NULL;
+if (customText && cartVarExists(cart, CT_CUSTOM_TEXT_ALT_VAR))
+    savedCustomText = cloneString(customText);
+
 struct customTrack *newCts = NULL;
 if (customText != NULL && customText[0] != 0)
     {
@@ -447,6 +451,7 @@ if (customText != NULL && customText[0] != 0)
     if (errCatch->gotError)
         {
         char *msg = cloneString(errCatch->message->string);
+
         if (fileName && fileName[0])
             {
             struct dyString *ds = dyStringNew(0);
@@ -529,11 +534,16 @@ if (ctList)
 else
     cartRemove(cart, "ct");
 
-if (!err)
+if (err && savedCustomText)
     {
-    /* leave text if there's an error, so user can correct */
-    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
+    /* for hgCustom, save text if there's an error, so user can correct */
+    cartSetString(cart, CT_CUSTOM_TEXT_ALT_VAR, savedCustomText);
+    cartSetString(cart, CT_CUSTOM_TEXT_VAR, savedCustomText);
+    }
+else
+    {
     cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
+    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
     }
 cartRemove(cart, CT_CUSTOM_FILE_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_NAME_VAR);
