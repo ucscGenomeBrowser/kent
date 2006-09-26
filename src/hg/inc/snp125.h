@@ -79,5 +79,38 @@ void snp125TableCreate(struct sqlConnection *conn, char *tableName);
 
 int snp125Cmp(const void *va, const void *vb);
 
+
+
+struct snp125Extended
+/* Polymorphism data from dbSnp database or genotyping arrays */
+    {
+    struct snp125 *next;  /* Next in singly linked list. */
+    char *chrom;	/* Reference sequence chromosome or scaffold */
+    unsigned chromStart;	/* Start position in chrom */
+    unsigned chromEnd;	/* End position in chrom */
+    char *name;	/* Reference SNP identifier or Affy SNP name */
+    unsigned score;	/* Not used */
+    char *strand;	/* Which DNA strand contains the observed alleles */
+    char *refNCBI;	/* Reference genomic from dbSNP */
+    char *refUCSC;	/* Reference genomic from nib lookup */
+    char *observed;	/* The sequences of the observed alleles from rs-fasta files */
+    char *molType;	/* Sample type from exemplar ss */
+    char *class;	/* The class of variant (simple, insertion, deletion, range, etc.) */
+    char *valid;	/* The validation status of the SNP */
+    float avHet;	/* The average heterozygosity from all observations */
+    float avHetSE;	/* The Standard Error for the average heterozygosity */
+    char *func;	/* The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.) */
+    char *locType;	/* How the variant affects the reference sequence */
+	/*  extra fields */
+    unsigned weight;	/* The quality of the alignment */
+    char *nameExtra;    /* additional text to be drawn with name in image */
+    struct Color *color;       /* color for drawing in hgTracks */
+    };
+
+struct snp125Extended *snpExtendedLoad(char **row);
+/* Load a snp125 from row fetched with select * from snp125 from
+ * database.  Additional fields are for run-time drawing and
+ * calculations */
+
 #endif /* SNP125_H */
 

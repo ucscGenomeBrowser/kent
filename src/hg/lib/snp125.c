@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.17 2006/04/22 00:32:49 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.18 2006/09/26 08:52:30 daryl Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -273,3 +273,38 @@ if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
 }
+
+
+/*  Additional function for extended processing */
+
+
+struct snp125Extended *snpExtendedLoad(char **row)
+/* Load a snp125 from row fetched with select * from snp125
+ * from database.  Additional fields are for run-time calculations */
+{
+struct snp125Extended *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+ret->strand = cloneString(row[5]);
+ret->refNCBI = cloneString(row[6]);
+ret->refUCSC = cloneString(row[7]);
+ret->observed = cloneString(row[8]);
+ret->molType = cloneString(row[9]);
+ret->class = cloneString(row[10]);
+ret->valid = cloneString(row[11]);
+ret->avHet = atof(row[12]);
+ret->avHetSE = atof(row[13]);
+ret->func = cloneString(row[14]);
+ret->locType = cloneString(row[15]);
+ret->weight = sqlUnsigned(row[16]);
+ret->nameExtra = cloneString("");
+ret->color = 0;
+
+return ret;
+}
+
