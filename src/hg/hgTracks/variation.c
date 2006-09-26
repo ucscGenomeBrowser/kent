@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.93 2006/09/22 09:12:59 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.94 2006/09/26 04:46:57 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -302,32 +302,23 @@ appendAllelesToSnpNames(tg);
 void loadSnp(struct track *tg)
 /* Load up snp from database table to track items. */
 {
-int  snpSource  = 0;
-int  snpMolType = 0;
-int  snpClass   = 0;
-int  snpValid   = 0;
-int  snpFunc    = 0;
-int  snpLocType = 0;
+int  i = 0;
 
 snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0.0"));
-for (snpSource=0;  snpSource  < snpSourceCartSize; snpSource++)
-    snpSourceCart[snpSource] = cartUsualString(cart, 
-       snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
-for (snpMolType=0; snpMolType < snpMolTypeCartSize; snpMolType++)
-    snpMolTypeCart[snpMolType] = cartUsualString(cart, 
-       snpMolTypeStrings[snpMolType], snpMolTypeDefault[snpMolType]);
-for (snpClass=0;   snpClass   < snpClassCartSize; snpClass++)
-    snpClassCart[snpClass] = cartUsualString(cart, 
-       snpClassStrings[snpClass], snpClassDefault[snpClass]);
-for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
-    snpValidCart[snpValid] = cartUsualString(cart, 
-       snpValidStrings[snpValid], snpValidDefault[snpValid]);
-for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
-    snpFuncCart[snpFunc] = cartUsualString(cart, 
-       snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
-for (snpLocType=0; snpLocType < snpLocTypeCartSize; snpLocType++)
-    snpLocTypeCart[snpLocType] = cartUsualString(cart, 
-       snpLocTypeStrings[snpLocType], snpLocTypeDefault[snpLocType]);
+
+for (i=0; i < snpSourceCartSize;  i++)
+    snpSourceCart[i]  = cartUsualString(cart, snpSourceStrings[i],  snpSourceDefault[i]);
+for (i=0; i < snpMolTypeCartSize; i++)
+    snpMolTypeCart[i] = cartUsualString(cart, snpMolTypeStrings[i], snpMolTypeDefault[i]);
+for (i=0; i < snpClassCartSize;   i++)
+    snpClassCart[i]   = cartUsualString(cart, snpClassStrings[i],   snpClassDefault[i]);
+for (i=0; i < snpValidCartSize;   i++)
+    snpValidCart[i]   = cartUsualString(cart, snpValidStrings[i],   snpValidDefault[i]);
+for (i=0; i < snpFuncCartSize;    i++)
+    snpFuncCart[i]    = cartUsualString(cart, snpFuncStrings[i],    snpFuncDefault[i]);
+for (i=0; i < snpLocTypeCartSize; i++)
+    snpLocTypeCart[i] = cartUsualString(cart, snpLocTypeStrings[i], snpLocTypeDefault[i]);
+
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
 
 filterSnpItems(tg, snpAvHetFilterItem);
@@ -337,6 +328,7 @@ filterSnpItems(tg, snpClassFilterItem);
 filterSnpItems(tg, snpValidFilterItem);
 filterSnpItems(tg, snpFuncFilterItem);
 filterSnpItems(tg, snpLocTypeFilterItem);
+
 appendAllelesToSnpNames(tg);
 }
 
@@ -373,6 +365,7 @@ for (i=0; i < snp125LocTypeCartSize; i++)
     snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
     snp125LocTypeIncludeCart[i] = cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
     }
+
 bedLoadItem(tg, tg->mapName, (ItemLoader)snp125Load);
 
 filterSnpItems(tg, snp125AvHetFilterItem);
@@ -447,12 +440,14 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
     {
     case snp125ColorSourceMolType:
 	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeDataNameSize);
-	if (index2 < 0) index2 = 0;
+	if (index2 < 0) 
+	    index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125MolTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     case snp125ColorSourceClass:
 	index2 = stringArrayIx(el->class,snp125ClassDataName,snp125ClassDataNameSize);
-	if (index2 < 0) index2 = 0;
+	if (index2 < 0) 
+	    index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
 	/* valid is a set */
@@ -471,7 +466,8 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
 	break;
     case snp125ColorSourceLocType:
 	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
-	if (index2 < 0) index2 = 0;
+	if (index2 < 0) 
+	    index2 = 0;
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     default:
@@ -633,7 +629,7 @@ static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
 double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int y;
+int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
 if (!tg->drawItemAt)
@@ -677,13 +673,8 @@ if (vis == tvPack || vis == tvSquish)
 		vgTextRight(vg, textX, y, nameWidth, heightPer, 
 			    itemNameColor, font, name);
             }
-        if (!tg->mapsSelf)
-            {
-            int w = x2-textX;
-            if (w > 0)
-                mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, NULL, FALSE);
-            }
+        if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ))
+	    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE);
         }
     vgUnclip(vg);
     }
@@ -773,13 +764,8 @@ if (vis == tvPack || vis == tvSquish)
 			    itemNameColor, font, name);
 		}
             }
-        if (!tg->mapsSelf)
-            {
-            int w = x2-textX;
-            if (w > 0)
-                mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, NULL, FALSE);
-            }
+        if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ) )
+	    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, tg->mapItemName(tg, item), name, NULL, FALSE);
         }
     vgUnclip(vg);
     }
@@ -992,8 +978,8 @@ tg->canPack = FALSE;
 }
 
 void mapDiamondUi(int xl, int yl, int xt, int yt, 
-			 int xr, int yr, int xb, int yb, 
-			 char *name, char *shortLabel)
+		  int xr, int yr, int xb, int yb, 
+		  char *name, char *shortLabel)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
 hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
