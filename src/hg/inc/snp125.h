@@ -5,6 +5,7 @@
 #ifndef SNP125_H
 #define SNP125_H
 
+#include "memgfx.h"
 #define SNP125_NUM_COLS 17
 
 struct snp125
@@ -84,7 +85,7 @@ int snp125Cmp(const void *va, const void *vb);
 struct snp125Extended
 /* Polymorphism data from dbSnp database or genotyping arrays */
     {
-    struct snp125 *next;  /* Next in singly linked list. */
+    struct snp125Extended *next;  /* Next in singly linked list. */
     char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
@@ -104,7 +105,7 @@ struct snp125Extended
 	/*  extra fields */
     unsigned weight;	/* The quality of the alignment */
     char *nameExtra;    /* additional text to be drawn with name in image */
-    struct Color *color;       /* color for drawing in hgTracks */
+    Color color;       /* color for drawing in hgTracks */
     };
 
 struct snp125Extended *snpExtendedLoad(char **row);
