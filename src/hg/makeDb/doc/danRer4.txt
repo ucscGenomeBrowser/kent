@@ -550,7 +550,7 @@ if (exists($scafsHash{$prev}))
    }
 }
 '_EOF_'
-   # <<< happy emacs   
+   # << happy emacs   
    chmod +x jkStuff/checkSizesInAgps.pl
    foreach c (NA_random Un_random)
       perl /cluster/data/danRer4/jkStuff/checkSizesInAgps.pl \
@@ -5566,7 +5566,9 @@ CREATE TABLE affyToHg16Orthologs (
 
 #######################################################################
 # VEGA GENES (DONE, 2006-08-14 - 2006-08-25, hartera)
+# ADD DESCRIPTIONS FOR VEGA GENES (DONE, 2006-09-25 - 2006-09-26, hartera)
 # Data provided by Kerstin Howe from Sanger: kj2@sanger.ac.uk
+# and also Mario Caccamo: mc2@sanger.ac.uk 
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/vega
     cd /cluster/data/danRer4/bed/vega
@@ -5650,6 +5652,9 @@ close GFF;
     # Found that some of the clone ID fields have comma separated lists 
     # and for OTTDARG00000006367, there are 30. Therefore create two info 
     # tables where one is just for clone IDs.  
+    # NOTE: in future, make sure each row of vegaInfoZfish.txt output has 
+    # 8 fields. The pseudogene entries are missing an entry in the 
+    # confidence field so this should be an empty field.
 cat << '_EOF_' > formatVegaInfo.pl
 #!/usr/bin/perl -w
 use strict;
@@ -5866,6 +5871,12 @@ table vegaInfoZfish
     mv vegaInfoZfish.h ../inc/
     # commit vegaInfoZfish{.h,.c,.as,.sql} files to CVS
     # add INDEX(geneId) to vegaInfoZfish.sql
+    # Need to change geneDesc to longblob type because some descriptions
+    # are long (2006-09-26, hartera)
+    cd ~/kent/src/hg/lib
+    perl -pi.bak -e 's/geneDesc varchar\(255\)/geneDesc longblob/' \
+         vegaInfoZfish.sql
+    
     # create a second table for the cloneId accessions since there
     # are multiple ids for some VEGA genes. Otherwise, there would be 
     # a comma separated list in this field or many rows repeated but just
@@ -5898,9 +5909,10 @@ table vegaToCloneId
                  vegaToCloneId.txt
 
     # Add code to hgc.c so that this works for Zebrafish and creates the
-    # relevant links. Add seraches by vega transcript ID, ZFIN ID and 
+    # relevant links. Add searches by vega transcript ID, ZFIN ID and 
     # clone ID.  Add a Vega zebrafish-specific description to
-    # trackDb/zebrafish. 
+    # trackDb/zebrafish. The Pseudogenes are a subtrack of the Genes track
+    # because it is too sparse to show as a separate track. 
 # Added entry in zebrafish/trackDb.ra to create these tracks as subtracks of
 # a Vega Genes track.
 # track vegaGeneZfish
@@ -5927,6 +5939,133 @@ table vegaToCloneId
 #    longLabel Vega Annotated Pseudogenes
 #    priority 2
 #    color 155,0,125
+
+    # ADD Descriptions for Vega Genes (2006-09-25 - 2006-09-26, hartera)
+    # Looked into using description from BioMart for VEGA genes but easier
+    # to get them all directly from Sanger. Kerstin sent a list of 
+    # descriptions: for_rachel.txt
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/vega/description
+    # copy file here and rename
+    cd /cluster/data/danRer4/bed/vega/description
+    mv for_rachel.txt vegaDesc.txt
+    # get list of VEGA gene IDs in vegaInfoZfish
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega/description
+    hgsql -e 'select distinct(geneId) from vegaInfoZfish;' danRer4 | sort \
+          > geneIdsFromInfo.sort
+    # get sorted list of gene IDs from description file:
+    awk '{print $2;}' vegaDesc.txt | sort | uniq > vegaDesc.ids.sort
+    wc -l *.sort
+    comm -12 geneIdsFromInfo.sort vegaDesc.ids.sort | wc
+    # 4892
+    comm -23 geneIdsFromInfo.sort vegaDesc.ids.sort > genesNoDesc.txt
+    # 55 with no description. sent this list to Sanger and got the
+    # descriptions for these too: descriptions_for_Rachel.txt
+    awk '{print $1}' descriptions_for_Rachel.txt | sort | uniq \
+        > geneIds.newDesc.sort
+    comm -12 genesNoDesc.txt geneIds.newDesc.sort | wc
+    # 55 gene names in common
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega/description
+    cat vegaDesc.txt descriptions_for_Rachel.txt > vegaAllDesc.txt
+    wc -l vegaAllDesc.txt 
+    # 6440 vegaAllDesc.txt
+    # clean up
+    rm genesNoDesc.txt geneIds* vegaDesc.ids.sort
+    # Then add these to the vegaInfoZish table
+cat << 'EOF' > addDesc.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($infoFile, $descFile, %descHash);
+$infoFile = $ARGV[0]; # vegaInfoZfish.txt file
+$descFile = $ARGV[1]; # file of descriptions
+
+open(INFO, $infoFile) || die "Can not open $infoFile : $!\n";
+open(DESC, $descFile) || die "Can not open $descFile : $!\n";
+
+while (<DESC>)
+{
+my($line, @f, $id, $desc);
+chomp;
+$line = $_;
+@f = split(/\t/, $line);
+if ($#f > 0 && $f[1] =~ /^OTTDARG/)
+  {
+  $id = $f[1];
+  $desc = $f[2];
+  }
+elsif ($f[0] =~ /^(OTTDARG[0-9]+)\s*(.+)/)
+  {
+  # some lines have just id and description with only a space between
+  $id = $1;
+  $desc = $2;
+  }
+else 
+  {
+  print "OTTDARG ID not found \n";
+  }
+$descHash{$id} = $desc;
+}
+close DESC;
+
+while (<INFO>) 
+{
+my ($li, @fi, $de, $i, $last);
+$de = "";
+chomp;
+$li = $_;
+@fi = split(/\t/, $li);
+if ($fi[1] =~ /OTTDARG/)
+   {
+   if (exists($descHash{$fi[1]}))
+      {
+      $de = $descHash{$fi[1]};
+      }
+   else
+      {
+      print "There is no description for $fi[1] available.\n";
+      }
+   
+   }
+$last = $#fi;
+for ($i = 0; $i <= 5; $i++ )
+   {
+   print "$fi[$i]\t";
+   }
+print "$de\t";
+if ($last == 5)
+   {
+   # if there are only 5 fields, the last one is missing so add extra tab
+   print "\t\n";
+   }
+else 
+   {
+   print "$fi[$last]\n";
+   }
+}
+close INFO;
+'EOF'
+     chmod +x addDesc.pl
+     # add new descriptions to vegaInfoZfish.txt file
+     perl addDesc.pl ../vegaInfoZfish.txt vegaAllDesc.txt \
+          > vegaInfoZfishWithDesc.txt
+    # Reload vegaInfoZfish table 
+    ssh hgwdev  
+    cd /cluster/data/danRer4/bed/vega/description
+    # 105 warnings when loading the table
+    # remove "\N" from desc
+    perl -pi.bak -e 's/\\N//' vegaInfoZfishWithDesc.txt
+    # this removed 3 warnings
+    # after dumping the contents of the table and diffing with the input
+    # file, found that the pseudogenes are missing the confidence field
+    # and so there is a tab missing from the file. Modified addDesc.pl to
+    # add the extra tab when only 7 tabbed fields instead of 8 is found
+    # in a row.
+    hgsql -e 'drop table vegaInfoZfish;' danRer4
+    hgLoadSqlTab danRer4 vegaInfoZfish ~/kent/src/hg/lib/vegaInfoZfish.sql \
+                 vegaInfoZfishWithDesc.txt
 
 ##########################################################################
 # N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
