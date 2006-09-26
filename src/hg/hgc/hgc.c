@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1122 2006/09/26 22:05:38 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1123 2006/09/26 22:35:20 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16453,7 +16453,10 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 int start = cartInt(cart, "o");
+int end = 0;
 // char *chrom = cartString(cart, "c");
+char nibName[HDB_MAX_PATH_STRING];
+struct dnaSeq *seq;
 
 genericHeader(tdb, itemName);
 
@@ -16462,8 +16465,19 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
-    if (differentString(row[1],"?")) {printf("<B>Strand: </B>%s\n", row[1]);}
+    end = sqlUnsigned(row[0]);
+    printPosOnChrom(seqName, start, end, row[1], FALSE, NULL);
+
+    if (end == start + 1)
+        {
+        hNibForChrom(seqName, nibName);
+        seq = hFetchSeq(nibName, seqName, start, end);
+	touppers(seq->dna);
+        if (sameString(row[1], "-"))
+           reverseComplement(seq->dna, 1);
+        printf("<B>Reference allele:</B> %s \n", seq->dna);
+        }
+
     printf("<BR><B>Polymorphism:</B> %s <BR>\n", row[2]);
     printf("<BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
     if (!sameString(row[3], "unknown"))
@@ -16485,6 +16499,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 int start = cartInt(cart, "o");
+int end = 0;
 // char *chrom = cartString(cart, "c");
 
 genericHeader(tdb, itemName);
@@ -16493,7 +16508,11 @@ safef(query, sizeof(query),
       "select chromEnd from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
+    {
+    end = sqlUnsigned(row[0]);
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
+    }
+
 printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
 sqlFreeResult(&sr);
