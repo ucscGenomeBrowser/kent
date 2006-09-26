@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.27 2006/09/22 05:48:09 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.28 2006/09/26 23:34:48 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1269,6 +1269,12 @@ char *ctDataUrl(struct customTrack *ct)
 /* return URL where data can be reloaded, if any */
 {
 return trackDbSetting(ct->tdb, "dataUrl");
+}
+
+char *ctHtmlUrl(struct customTrack *ct)
+/* return URL where doc can be reloaded, if any */
+{
+return trackDbSetting(ct->tdb, "htmlUrl");
 }
 
 char *ctInputType(struct customTrack *ct)
