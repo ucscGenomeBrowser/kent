@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1211 2006/09/25 22:45:51 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1212 2006/09/26 16:49:55 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3628,35 +3628,6 @@ tg->drawName 	= FALSE;
 
 struct hash *gdHash;
 
-int gadInit()
-/* initialize data needed for GAD */
-{
-struct sqlConnection *conn2;
-char query2[256];
-struct sqlResult *sr2;
-char **row2;
-
-char *diseaseClass, *diseaseClassCode;
-
-gdHash = newHash(6);
-
-conn2= hAllocConn();
-
-sprintf(query2, "select * from %s.gadDiseaseClass", database);
-sr2 = sqlMustGetResult(conn2, query2);
-row2 = sqlNextRow(sr2);
-while (row2 != NULL)
-    {
-    diseaseClass     = strdup(row2[0]);
-    diseaseClassCode = strdup(row2[1]);
-    hashAdd(gdHash, diseaseClass, diseaseClassCode);
-    row2=sqlNextRow(sr2);
-    }
-sqlFreeResult(&sr2);
-hFreeConn(&conn2);
-return(0);
-}
-
 /* reserve space no more than 20 unique gad disease entries */
 char gadDiseaseClassBuffer[2000];
 
@@ -3671,17 +3642,9 @@ char *chp;
 char *diseaseClassCode;
 
 int i=0;
-static int gadInitDone = 0;
-
-if (!gadInitDone)
-    {
-    gadInit();
-    gadInitDone = 1;
-    }
-
 conn = hAllocConn();
 
-sprintf(query, "select distinct diseaseClass from gadAll where geneSymbol='%s';", item->name);
+sprintf(query, "select distinct diseaseClassCode from gadAll where geneSymbol='%s';", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -3694,10 +3657,7 @@ while ((row != NULL) && i<20)
 	sprintf(chp, ",");
 	chp++;
 	}
-    diseaseClassCode = (char*)hashFindVal(gdHash, row[0]);
-    
-    /* in case the disease class code list is not complete */
-    if (diseaseClassCode == NULL) diseaseClassCode = strdup(row[0]);
+    diseaseClassCode = row[0];
     
     sprintf(chp, "%s", diseaseClassCode);
     chp = chp+strlen(diseaseClassCode);
