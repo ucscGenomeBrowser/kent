@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.54 2006/09/22 23:58:04 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.55 2006/09/26 19:48:37 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -88,6 +88,8 @@ puts("Display your own data as custom annotation tracks in the browser."
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html'>user's guide</A>."
   " Publicly available custom tracks are listed"
   " <A HREF='/goldenPath/customTracks/custTracks.html'>here</A>."
+  " Examples are"
+  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#EXAMPLE1'>here</A>."
 );
 
 if (err)
@@ -104,6 +106,8 @@ cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
 puts("<TD ALIGN='RIGHT'>");
 cgiMakeSubmitButton();
+puts("&nbsp;");
+
 cgiMakeButton(hgCtDoCancel, "Cancel");
 cgiTableFieldEnd();
 cgiTableRowEnd();
@@ -171,7 +175,7 @@ if ((htmlUrl = cartOptionalString(cart, hgCtHtmlUrl)) != NULL)
     cgiSimpleTableRowStart();
     puts("<TD COLSPAN=3>");
     }
-printf("<A TARGET=_BLANK HREF='../goldenPath/help/ct_description.txt'>HTML doc template</A></TD>");
+puts("An HTML document template used for Genome Browser track descriptions is <A HREF='../goldenPath/help/ct_description.txt' TARGET=_BLANK>here</A>.</TD>");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
@@ -216,8 +220,25 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (warn && warn[0])
     printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
 
-puts("<TABLE><TR><TD>");
+puts("<TABLE BORDER=0>");
+cgiSimpleTableRowStart();
+puts("<TD VALIGN='TOP'>");
+puts("</FORM>");
+printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
+           hgTracksName(), cartSidUrlString(cart));
+cgiMakeButton("Submit", "view in genome browser");
+puts("</FORM></TD>");
+puts("<TD VALIGN='TOP'>");
+printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
+           hgTablesName(), cartSidUrlString(cart));
+cgiMakeButton("Submit", "access in table browser");
+puts("</FORM></TD>");
+cgiTableRowEnd();
+puts("</TABLE>");
 
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
+puts("<TD VALIGN=\"TOP\">");
 hTableStart();
 cgiSimpleTableRowStart();
 tableHeaderField("Name", "Short track identifier");
@@ -245,8 +266,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
     //printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
-    printf("<TR><TD><A TITLE='Update custom track: %s' HREF='/cgi-bin/hgCustom?%s=%s'>%s</A></TD>", 
-            ct->tdb->shortLabel, hgCtTable, ct->tdb->tableName, 
+    printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s=%s'>%s</A></TD>", 
+            hgCustomName(), ct->tdb->shortLabel, hgCtTable, ct->tdb->tableName, 
             ct->tdb->shortLabel);
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
@@ -303,18 +324,15 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 hTableEnd();
 
-cgiTableFieldEnd(); 
-cgiSimpleTableFieldStart();
-cgiMakeButton(hgCtDoAdd, "add custom tracks &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;");
-puts("</FORM>");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"POST\" "
-               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
-               hgTracksName(), cartSidUrlString(cart));
-cgiMakeButton("Submit", "view in genome browser");
-puts("</FORM>");
-cgiTableFieldEnd();
+/* add button */
+puts("<TD VALIGN=\"TOP\">");
+printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
+           hgCustomName(),  cartSidUrlString(cart));
+cgiMakeButton(hgCtDoAdd, "add custom tracks");
+puts("</FORM></TD>");
+
 cgiTableRowEnd();
-puts("</TABLE>");
+cgiTableEnd();
 cartSetString(cart, "hgta_group", "user");
 }
 
@@ -425,8 +443,9 @@ if (ct)
 void startCustomForm()
 {
 /* create form for adding/managing custom tracks */
-puts("<FORM ACTION=\"/cgi-bin/hgCustom\" METHOD=\"POST\" "
-               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
+               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
+               hgCustomName());
 }
 
 void endCustomForm()
@@ -457,7 +476,7 @@ cartWebStart(cart, "Update Custom Track: %s", ct->tdb->shortLabel);
 cartSaveSession(cart);
 startCustomForm();
 cartSetString(cart, hgCtDocText, ct->tdb->html);
-cartSetString(cart, hgCtDataText, "# Paste in new data here to update the data in this track");
+cartSetString(cart, hgCtDataText, "# Paste in new data here to update the contents of this track");
 char *htmlUrl = NULL;
 if ((htmlUrl = trackDbSetting(ct->tdb, "htmlUrl")) != NULL)
     cartSetString(cart, hgCtHtmlUrl, htmlUrl);
@@ -578,6 +597,42 @@ if (ds->string[0])
 dyStringAppend(ds, msg);
 }
 
+char *saveLines(char *text, int max)
+/* save lines from input, up to 'max'.
+ * Prepend with comment, if truncated */
+{
+if (!text)
+    return NULL;
+
+char buf[128];
+int count = 0;
+char *line;
+boolean truncated = FALSE;
+struct dyString *ds = dyStringNew(0);
+
+safef(buf, sizeof buf, "# Displaying first %d lines of data", max);
+struct lineFile *lf = lineFileOnString("saved custom text", TRUE, text);
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (startsWith(buf, line))
+        continue;
+    if (++count > max)
+        {
+        truncated = TRUE;
+        break;
+        }
+    dyStringAppend(ds, line);
+    dyStringAppend(ds, "\n");
+    }
+if (truncated)
+    {
+    struct dyString *dsNew = dyStringNew(0);
+    dyStringPrintf(dsNew, "%s\n%s", buf, dyStringCannibalize(&ds));
+    return dyStringCannibalize(&dsNew);
+    }
+return (dyStringCannibalize(&ds));
+}
+
 void doMiddle(struct cart *theCart)
 /* create web page */
 {
@@ -615,8 +670,11 @@ else if (cartVarExists(cart, hgCtTable))
 else
     {
     /* get new and existing custom tracks from cart and decide what to do */
-    struct dyString *dsWarn = dyStringNew(0);
     fixNewData(cart);
+    struct dyString *dsWarn = dyStringNew(0);
+#define SAVED_LINE_COUNT  50
+    char *savedCustomText = cartOptionalString(cart, hgCtDataText);
+    savedCustomText = saveLines(cloneString(savedCustomText), SAVED_LINE_COUNT);
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
 					    &replacedCts, &err);
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
@@ -624,6 +682,7 @@ else
     addWarning(dsWarn, warn);
     if (err)
 	{
+        cartSetString(cart, hgCtDataText, savedCustomText);
 	doAddCustom(err);
        	cartRemovePrefix(cart, hgCt);
 	return;
