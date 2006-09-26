@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.94 2006/09/26 04:46:57 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.95 2006/09/26 08:09:54 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -700,7 +700,7 @@ static void snpDrawItems(struct track *tg, int seqStart, int seqEnd,
 double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int y;
+int w, y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
 if (!tg->drawItemAt)
