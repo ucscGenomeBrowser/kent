@@ -46,12 +46,10 @@ char c;
 if (suppressHtml)
     return;
 while ((c = *s++) != '\0')
-    {
     if (c == ' ')
 	fputs("&nbsp;", stdout);
     else
         putchar(c);
-    }
 }
 
 void hPuts(char *string)
@@ -137,4 +135,3 @@ hWrites(" -->\n");
 fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 va_end(args);
 }
-
