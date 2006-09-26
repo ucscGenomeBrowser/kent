@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.97 2006/09/26 16:53:17 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.98 2006/09/26 19:28:38 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -232,9 +232,8 @@ for (i=0; i<snp125LocTypeLabelsSize; i++)
 return TRUE;
 }
 
-void loadSnp125Extended(struct track *tg)
-/* load snps from snp125 table, ortho alleles from snpXXXortho table,
- * and return in extended struct */
+void setSnp125ExtendedNameExtra(struct track *tg)
+/* add extra text to be drawn in snp name field  */
 {
 struct sqlConnection *conn       = hAllocConn();
 int                   rowOffset  = 0;
@@ -246,21 +245,6 @@ char                 *orthoName  = NULL;
 char                 *chimpBase  = NULL;
 struct sqlResult     *sr         = NULL;
 
-/* load SNPs */
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    item = (struct slList *)snpExtendedLoad(row + rowOffset);
-    slAddHead(&itemList, item);
-    }
-slSort(&itemList, bedCmp);
-sqlFreeResult(&sr);
-
-/* calculate colors */
-/* sort by colors */
-
-tg->items = itemList;
-
 if(!sqlTableExists(conn,orthoTable))
     {
     hFreeConn(&conn);
@@ -271,7 +255,7 @@ sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, NULL, &rowOffset
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* get the name of the SNP and the chimp state */
-    /* fix this to use library functions once the schema has stabilized */
+    /* change this to use library functions once the schema has stabilized */
     orthoName=cloneString(row[4]);
     chimpBase=cloneString(row[14]);
 
@@ -291,6 +275,89 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+}
+
+Color snp125ExtendedColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of snp track item. */
+{
+return ((struct snp125Extended *)item)->color;
+}
+
+void setSnp125ExtendedColors(struct track *tg, struct vGfx *vg)
+/* Calculate color to be used for drawing the SNP */
+{
+struct snp125Extended *se = tg->items;
+
+while ( se != NULL )
+    {
+    se->color = snp125Color(tg, se, vg);
+    se = se->next;
+    }
+}
+
+int snp125ExtendedColorCmp(const void *va, const void *vb)
+/* Compare to sort based on color -- black first, red last */
+{
+const struct snp125Extended *a = *((struct snp125Extended **)va);
+const struct snp125Extended *b = *((struct snp125Extended **)vb);
+const Color ca = a->color;
+const Color cb = b->color;
+
+/* order is important here */
+if (ca==MG_RED)
+    return 1;
+if (cb==MG_RED)
+    return -1;
+if (ca==MG_GREEN)
+    return 1;
+if (cb==MG_GREEN)
+    return -1;
+if (ca==MG_BLUE)
+    return 1;
+if (cb==MG_BLUE)
+    return -1;
+if (ca==MG_GRAY)
+    return 1;
+if (cb==MG_GRAY)
+    return -1;
+if (ca==MG_BLACK)
+    return 1;
+if (cb==MG_BLACK)
+    return -1;
+errAbort("<BR>SNP track: colors %s and %s not known", ca, cb);
+return 0;
+}
+
+void sortSnp125ExtendedByColor(struct track *tg)
+/* Sort snps so that more functional snps (non-synonymous, splice site) are printed last.
+ * Color calculation is used as an intermediate step to represent severity. */
+{
+slSort(&tg->items, snp125ExtendedColorCmp);
+}
+
+void loadSnp125Extended(struct track *tg)
+/* load snps from snp125 table, ortho alleles from snpXXXortho table,
+ * and return in extended struct */
+{
+struct sqlConnection *conn       = hAllocConn();
+int                   rowOffset  = 0;
+char                **row        = NULL;
+struct slList        *itemList   = tg->items;
+struct slList        *item       = itemList;
+struct sqlResult     *sr         = NULL;
+
+/* load SNPs */
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    item = (struct slList *)snpExtendedLoad(row + rowOffset);
+    slAddHead(&itemList, item);
+    }
+slSort(&itemList, bedCmp);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tg->items = itemList;
+setSnp125ExtendedNameExtra(tg);
 }
 
 void loadSnpMap(struct track *tg)
@@ -433,7 +500,7 @@ switch (thisSnpColor)
  	return MG_RED;
  	break;
     case snpColorGreen:
- 	return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
+ 	return MG_GREEN;
  	break;
     case snpColorBlue:
  	return MG_BLUE;
@@ -572,7 +639,7 @@ switch (thisSnpColor)
  	return MG_RED;
  	break;
     case snpColorGreen:
- 	return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
+ 	return MG_GREEN;
  	break;
     case snpColorBlue:
  	return MG_BLUE;
@@ -725,6 +792,9 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
+setSnp125ExtendedColors(tg, vg);
+sortSnp125ExtendedByColor(tg);
+
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 
@@ -829,13 +899,19 @@ tg->itemNameColor = snpColor;
 
 void snp125Methods(struct track *tg)
 {
+struct sqlConnection *conn = hAllocConn();
+
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
-tg->loadItems     = loadSnp125Extended;
+tg->loadItems     = loadSnp125;
 tg->freeItems     = freeSnp125;
 tg->itemColor     = snp125Color;
-tg->itemName      = snp125ExtendedName;
 tg->itemNameColor = snp125Color;
+tg->loadItems     = loadSnp125Extended;
+tg->itemNameColor = snp125ExtendedColor;
+tg->itemColor     = snp125ExtendedColor;
+if (sqlTableExists(conn,"snp126ortho"))
+    tg->itemName      = snp125ExtendedName;
 }
 
 char *perlegenName(struct track *tg, void *item)
