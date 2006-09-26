@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1123 2006/09/26 22:35:20 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1124 2006/09/26 22:50:38 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16467,6 +16467,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     end = sqlUnsigned(row[0]);
     printPosOnChrom(seqName, start, end, row[1], FALSE, NULL);
+    printf("<BR><B>Polymorphism:</B> %s <BR>\n", row[2]);
 
     if (end == start + 1)
         {
@@ -16478,7 +16479,6 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<B>Reference allele:</B> %s \n", seq->dna);
         }
 
-    printf("<BR><B>Polymorphism:</B> %s <BR>\n", row[2]);
     printf("<BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
     if (!sameString(row[3], "unknown"))
         {
