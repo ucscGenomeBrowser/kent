@@ -21490,22 +21490,38 @@ hgsql -e "alter table snpArrayIllumina300 add index name (name)" hg17
 hgsql -e "alter table snpArrayIllumina300 add index chrom (chrom, bin)" hg17
 
 #############################################################
-# Affy 500K (Heather, July 2006)
+# Affy 500K (Heather, September 2006)
 # look up rsId using position
 
 ssh hgwdev
 cd /cluster/data/hg17/bed/snp/affyData/500K
+# awk to create bed format from tsv files
 /bin/csh cmds.csh
-cp Mapping250K_Nsp.bed all.bed
-cat Mapping250K_Sty.bed >> all.bed
-hgsql hg17 < affyTmp.sql
-hgsql -e "load data local infile 'all.bed' into table affyTmp" hg17
-# get dbSNP rsIDs
-/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affyTmp snp125
-hgsql hg17 < snpArrayAffy500.sql
-hgsql -e "load data local infile 'affyLookup.out' into table snpArrayAffy500" hg17
-hgsql -e "alter table snpArrayAffy500 add index name (name)" hg17
-hgsql -e "alter table snpArrayAffy500 add index chrom (chrom, bin)" hg17
+hgsql hg17 < affy250Nsp.sql
+hgsql hg17 < affy250Sty.sql
+hgsql -e "load data local infile 'Mapping250K_Nsp.bed' into table affy250Nsp" hg17
+hgsql -e "load data local infile 'Mapping250K_Sty.bed' into table affy250Sty" hg17
+
+# look up dbSNP rsIDs using position
+# affy250Nsp
+# 4311 missing, 7276 multiple
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affy250Nsp snp125
+mv affyLookup.out affy250Nsp.bed
+mv affyLookup.err affy250Nsp.err
+hgsql hg17 < snpArrayAffy250Nsp.sql
+hgLoadBed hg17 snpArrayAffy250Nsp affy250Nsp.bed -sqlTable=snpArray250Nsp.sql -tab
+hgsql -e "alter table snpArrayAffy250Nsp add index name (name)" hg17
+hgsql -e "alter table snpArrayAffy250Nsp add index chrom (chrom, bin)" hg17
+
+# affy250Sty
+# 3540 missing, 6901 multiple
+/cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg17 affy250Sty snp125
+mv affyLookup.out affy250Sty.bed
+mv affyLookup.err affy250Sty.err
+hgsql hg17 < snpArrayAffy250Sty.sql
+hgLoadBed hg17 snpArrayAffy250Sty affy250Sty.bed -sqlTable=snpArray250Sty.sql -tab
+hgsql -e "alter table snpArrayAffy250Sty add index name (name)" hg17
+hgsql -e "alter table snpArrayAffy250Sty add index chrom (chrom, bin)" hg17
 
 
 #############################################################
