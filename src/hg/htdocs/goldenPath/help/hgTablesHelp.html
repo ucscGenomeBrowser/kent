@@ -37,7 +37,7 @@
         	<LI><A CLASS="toc" HREF="#Tables">About the Table Browser databases and tables</A>
 	   	  <UL>
                   <LI><A CLASS="toc" HREF="#NonPositional">Non-positional tables</A>
-                  <LI><A CLASS="toc" HREF="#Positional">Positional tables</A>
+                  <LI><A CLASS="toc" HREF="#Positional">Position-oriented tables</A>
 	  	  </UL
                 <LI><A CLASS="toc" HREF="#GettingStarted">Getting started - simple queries</A>
 	   	  <UL>
@@ -111,7 +111,8 @@
 		apply a filter to set constraints on field values included in 
 		the output
 		<LI>
-		generate a <A HREF="/goldenPath/help/customTrack.html">custom
+		generate a 
+		<A HREF="/goldenPath/help/hgTracksHelp.html#CustomTracks">custom
 		track</A> and automatically add it to your session so that it 
 		can be graphically displayed in the Genome Browser
 		<LI>
@@ -174,9 +175,9 @@
 		databases, one for each genome assembly.  
 		<P>
 		Tables within the databases may be differentiated by whether the
-		data are based on genome start-stop coordinates or are independent
-		of position. The Table Browser divides the tables into two 
-		categories: <em>non-positional</em> and <em>positional</em>.  
+		data are based on genome start-stop coordinates 
+		(positional tables) or are independent of position
+		(non-positional tables). 
 		Some output formats and query options are applicable only to 
 		positional tables, hence the distinction.
 		<P>
@@ -974,8 +975,8 @@
 	      <FONT SIZE="3" COLOR="#0000FF"><B>Saving query results in GTF or BED format</B> (positional tables only)</FONT></B>
 	      <P>
 	      To format the query results using 
-	      <A HREF="/goldenPath/help/customTrack.html#GTF">GTF</A> or 
-	      <A HREF="/goldenPath/help/customTrack.html#BED">BED</A> conventions,
+	      <A HREF="http://genome.ucsc.edu/FAQ/FAQformat#format4">GTF</A> or 
+	      <A HREF="http://genome.ucsc.edu/FAQ/FAQformat#format1">BED</A> conventions,
 	      select the corresponding option in the <TT><B>output 
 	      format</B></TT> list. If you select BED format, you will be
 	      presented with the option to include and configure a custom track
@@ -1005,7 +1006,9 @@
 	      Query output may be saved in a format that can be displayed as
 	      a custom annotation track in the Genome Browser. Custom tracks
 	      created during a Table Browser session may also be used for 
-	      subsequent queries and intersections in the same session.
+	      subsequent queries and intersections in the same session. For 
+	      more information on custom tracks, see the Genome Browser
+	      <A HREF="hgTracksHelp.html#CustomTracks">User's Guide</A>.
 	      <P>
 	      To save query data in custom track format, select the <em>custom
   	      track</em> option in the <TT><B>output format</B></TT> list. When
