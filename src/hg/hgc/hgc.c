@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1121 2006/09/26 22:01:12 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1122 2006/09/26 22:05:38 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16469,7 +16469,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (!sameString(row[3], "unknown"))
         {
         printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", row[3]);
+        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", row[3], row[3]);
 	}
     }
 sqlFreeResult(&sr);
@@ -16495,7 +16495,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
 printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
 hFreeConn(&conn);
