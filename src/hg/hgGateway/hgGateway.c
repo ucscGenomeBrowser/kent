@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.90 2006/09/22 05:48:09 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.91 2006/09/26 19:41:55 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -160,11 +160,19 @@ puts(
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
-cgiMakeButton(CT_CGI_VAR, customTrackCgiButtonLabel(cart));
-printf(" ");
+
+puts("<TABLE BORDER=\"0\">");
+puts("<TR><TD VALIGN=\"TOP\">");
+printf(
+ "</FORM><FORM ACTION=\"/cgi-bin/hgCustom\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\"></FORM>",
+        customTrackCgiButtonLabel(cart));
+puts("</TD><TD VALIGN=\"TOP\">");
+puts("<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
-printf(" ");
+puts("</TD><TD VALIGN=\"TOP\">");
 cgiMakeOnClickButton("document.mainForm.position.value=''","clear position");
+puts("</TD></TR>");
+puts("</TABLE>");
 puts("</center>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
@@ -172,10 +180,10 @@ puts("</center>\n"
 );
 puts("</center>");
 if (isPrivateHost)
-    puts("<P>This is just our test site.  It usually works, but it is filled with tracks in various "
-         "stages of construction, and others of little interest to people outside of our local group. "
-	 "It is usually slow because we are building databases on it. The documentation is poor. "
-	 "More data than usual is flat out wrong.  Maybe you want to go to "
+puts("<P>This is just our test site.  It usually works, but it is filled with tracks in various "
+"stages of construction, and others of little interest to people outside of our local group. "
+"It is usually slow because we are building databases on it. The documentation is poor. "
+ "More data than usual is flat out wrong.  Maybe you want to go to "
 	 "<A HREF=\"http://genome.ucsc.edu\">genome.ucsc.edu</A> instead.");
 
 hgPositionsHelpHtml(organism, db);
