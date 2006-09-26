@@ -1711,6 +1711,13 @@ identifier snpAnnotations125
 "SNP annotations"
     hg17.snp125.name dupeOk
     hg17.snp125Exceptions.name 
+    hg17.snpArrayAffy10.rsId
+    hg17.snpArrayAffy10v2.rsId
+    hg17.snpArrayAffy250Nsp.rsId
+    hg17.snpArrayAffy250Sty.rsId
+    hg17.snpArrayAffy50HindIII.rsId
+    hg17.snpArrayAffy50XbaI.rsId
+    hg17.snpArrayIllumina300.name
 
 identifier snpAnnotations126
 "SNP annotations"
