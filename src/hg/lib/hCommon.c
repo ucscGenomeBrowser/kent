@@ -6,14 +6,14 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.30 2006/09/26 19:43:36 kate Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.31 2006/09/26 22:36:38 kate Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
 static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui program. */
 static char *_hgTextName = "/cgi-bin/hgText"; /* Path back to the text browser. */
 static char *_hgTablesName = "/cgi-bin/hgTables"; /* Path back to the table browser. */
-static char *_hgCustomName = "..//cgi-bin/hgCustom"; /* Path back to the custom tracks manager. */
+static char *_hgCustomName = "../cgi-bin/hgCustom"; /* Path back to the custom tracks manager. */
 
 char *hgcName()
 /* Relative URL to click processing program. */
