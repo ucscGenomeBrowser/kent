@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1120 2006/09/25 22:45:33 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1121 2006/09/26 22:01:12 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17846,7 +17846,8 @@ else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
     }
-else if (sameString("snpArrayAffy500", track) ||
+else if (sameString("snpArrayAffy250Nsp", track) ||
+         sameString("snpArrayAffy250Sty", track) ||
          sameString("snpArrayAffy10", track) ||
          sameString("snpArrayAffy10v2", track) ||
          sameString("snpArrayAffy50HindIII", track) ||
