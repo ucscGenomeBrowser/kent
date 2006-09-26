@@ -22,6 +22,9 @@ char *hgTextName();
 char *hgTablesName();
 /* Relative URL to table browser. */
 
+char *hgCustomName();
+/* Relative URL to custom tracks manager. */
+
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */
 

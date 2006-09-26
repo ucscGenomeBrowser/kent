@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.91 2006/09/26 19:41:55 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.92 2006/09/26 19:43:36 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -164,8 +164,8 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR><TD VALIGN=\"TOP\">");
 printf(
- "</FORM><FORM ACTION=\"/cgi-bin/hgCustom\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\"></FORM>",
-        customTrackCgiButtonLabel(cart));
+ "</FORM><FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\"></FORM>",
+        hgCustomName(), customTrackCgiButtonLabel(cart));
 puts("</TD><TD VALIGN=\"TOP\">");
 puts("<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
