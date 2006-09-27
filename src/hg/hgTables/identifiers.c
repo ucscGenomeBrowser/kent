@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.8 2005/06/07 14:04:09 giardine Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.9 2006/09/27 00:20:30 angie Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -116,6 +116,7 @@ else
 	while ((word = nextWord(&line)) != NULL)
 	    hashAdd(hash, word, NULL);
 	}
+    lineFileClose(&lf);
     return hash;
     }
 }
