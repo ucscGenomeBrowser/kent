@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.64 2006/09/27 18:42:54 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.65 2006/09/27 23:14:39 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -442,10 +442,19 @@ if (cartNonemptyString(cart, hgCtDocText))
     html = cartString(cart, hgCtDocText);
 else if (cartNonemptyString(cart, hgCtDocFile))
     html = cartString(cart, hgCtDocFile);
-for (ct = ctList; ct != NULL; ct = ct->next)
+if (selectedTrack)
     {
-    if (sameString(selectedTrack, ct->tdb->tableName))
-        break;
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        {
+        if (sameString(selectedTrack, ct->tdb->tableName))
+            break;
+        }
+    }
+else if (!ctHtmlUrl(ctList))
+    {
+    /* attach doc to newest added (first ct in the list)
+     * unless it's got it's own doc assigned via URL */
+    ct = ctList;
     }
 if (ct)
     ct->tdb->html = cloneString(html);
@@ -654,6 +663,7 @@ void doMiddle(struct cart *theCart)
 char *ctFileName = NULL;
 struct slName *browserLines = NULL;
 struct customTrack *replacedCts = NULL;
+int numAdded = 0;
 char *err = NULL, *warn = NULL;
 
 cart = theCart;
@@ -691,7 +701,7 @@ else
     savedCustomText = saveLines(cloneString(savedCustomText), SAVED_LINE_COUNT);
 
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
-					    &replacedCts, &err);
+					    &replacedCts, &numAdded, &err);
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warn);
     addWarning(dsWarn, warn);
@@ -723,7 +733,7 @@ else
     if (ctList)
 	{
         char *updatedTable = cartOptionalString(cart, hgCtUpdatedTable);
-        if (updatedTable)
+        if (updatedTable || numAdded)
             addCustomDoc(updatedTable);
         saveCustom(ctFileName);
         doManageCustom(warn);
