@@ -20,7 +20,7 @@
 #include "correlate.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.51 2006/08/11 23:29:38 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.52 2006/09/27 00:21:47 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -253,9 +253,9 @@ else
 	}
     freez(&fields);
     sqlFreeResult(&sr);
-    sqlDisconnect(&conn);
     slReverse(&bedList);
     }
+sqlDisconnect(&conn);
 if (retFieldCount)
     *retFieldCount = fieldCount;
 return(bedList);
