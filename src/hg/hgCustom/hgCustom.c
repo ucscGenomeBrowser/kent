@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.63 2006/09/27 05:40:42 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.64 2006/09/27 18:42:54 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -442,18 +442,10 @@ if (cartNonemptyString(cart, hgCtDocText))
     html = cartString(cart, hgCtDocText);
 else if (cartNonemptyString(cart, hgCtDocFile))
     html = cartString(cart, hgCtDocFile);
-if (!selectedTrack)
+for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    /* attach doc to first ct in the list */
-    ct = ctList;
-    }
-else
-    {
-    for (ct = ctList; ct != NULL; ct = ct->next)
-        {
-        if (sameString(selectedTrack, ct->tdb->tableName))
-            break;
-        }
+    if (sameString(selectedTrack, ct->tdb->tableName))
+        break;
     }
 if (ct)
     ct->tdb->html = cloneString(html);
@@ -731,7 +723,8 @@ else
     if (ctList)
 	{
         char *updatedTable = cartOptionalString(cart, hgCtUpdatedTable);
-	addCustomDoc(updatedTable);
+        if (updatedTable)
+            addCustomDoc(updatedTable);
         saveCustom(ctFileName);
         doManageCustom(warn);
 	}
