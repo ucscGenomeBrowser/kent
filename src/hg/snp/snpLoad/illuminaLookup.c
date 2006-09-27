@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.4 2006/07/06 23:00:56 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.5 2006/09/27 18:23:03 heather Exp $";
 
 struct snpSubset 
     {
@@ -140,8 +140,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, row[0]);
 
     bin = hFindBin(subsetElement->start, subsetElement->end);
-    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\n", 
-        bin, subsetElement->chrom, subsetElement->start, subsetElement->end, row[0]);
+    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\t0\t%c\t%s\n", 
+        bin, subsetElement->chrom, subsetElement->start, subsetElement->end, row[0], subsetElement->strand, subsetElement->observed);
     }
 
 carefulClose(&fileHandle);
