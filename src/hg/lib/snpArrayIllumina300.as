@@ -6,4 +6,7 @@ TABLE snpArrayIllumina300
     uint chromStart;  "Start position in chrom"
     uint chromEnd;    "End position in chrom"
     string name;      "Identifier"
+    uint score;       "Not used"
+    char[1] strand;   "Strand: +, - or ?"
+    lstring observed; "Observed alleles"
     )
