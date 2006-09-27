@@ -16,6 +16,7 @@ USE_DIRS = $(DIRS)
 DIRS = \
 	hgAar \
 	hgAddLiftOverChain \
+	hgCgiData \
 	hgClonePos \
 	hgCountAlign \
 	hgCtgPos \
