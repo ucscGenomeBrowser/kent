@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.60 2006/09/27 00:39:53 donnak Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.61 2006/09/27 00:41:29 donnak Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -86,7 +86,7 @@ puts("Display your own data as custom annotation tracks in the browser."
   " and"
   " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#BROWSER'>browser</A>"
   " line attributes as described in the "
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html'>user's guide</A>."
+  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html'>User's Guide</A>."
   " Publicly available custom tracks are listed"
   " <A HREF='/goldenPath/customTracks/custTracks.html'>here</A>."
   " Examples are"
