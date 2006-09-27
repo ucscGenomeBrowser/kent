@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.82 2006/08/19 04:52:55 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.83 2006/09/27 00:26:35 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -711,7 +711,7 @@ void cgiMakeClearButton(char *form, char *field)
 char javascript[1024];
 
 safef(javascript, sizeof(javascript), 
-    "document.%s.%s.value = ''; document.%s.submit();\"", form, field, form);
+    "document.%s.%s.value = ''; document.%s.submit();", form, field, form);
 cgiMakeOnClickButton(javascript, " Clear  ");
 }
 
@@ -793,6 +793,14 @@ void cgiTableField(char *text)
 printf("<TD> %s </TD>\n", text);
 }
 
+void cgiTableFieldWithMsg(char *text, char *msg)
+/* Make table field entry with mouseover */
+{
+printf("<TD %s%s%s> %s </TD>\n", 
+        (msg ? " TITLE=\"" : ""), (msg ? msg : ""), (msg ? "\"" : "" ),
+        text);
+}
+
 void cgiParagraph(char *text)
 /* Make text paragraph */
 {
@@ -868,8 +876,16 @@ cgiMakeHiddenVar(buf, "1");
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount)
 /* Make a text area with area rowCount X columnCount and with text: intialVal */
 {
-printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d>%s</TEXTAREA>", varName,
-       rowCount, columnCount, (initialVal != NULL ? initialVal : ""));
+cgiMakeTextAreaDisableable(varName, initialVal, rowCount, columnCount, FALSE);
+}
+
+void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled)
+/* Make a text area that can be disabled. The rea has rowCount X 
+ * columnCount and with text: intialVal */
+{
+printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d %s>%s</TEXTAREA>", varName,
+       rowCount, columnCount, disabled ? "DISABLED" : "",
+       (initialVal != NULL ? initialVal : ""));
 }
 
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)

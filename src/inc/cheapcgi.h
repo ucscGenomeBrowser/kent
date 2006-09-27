@@ -157,6 +157,10 @@ void cgiMakeCheckBox(char *name, boolean checked);
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount);
 /* Make a text area with area rowCount X columnCount and with text: intialVal. */
 
+void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled);
+/* Make a text area that can be disabled. The rea has rowCount X 
+ * columnCount and with text: intialVal */
+
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
@@ -282,6 +286,9 @@ void cgiTableFieldEnd();
 
 void cgiTableField(char *text);
 /* Make table field entry */
+
+void cgiTableFieldWithMsg(char *text, char *msg);
+/* Make table field entry with mouseover */
 
 void cgiParagraph(char *text);
 /* Make text paragraph */
