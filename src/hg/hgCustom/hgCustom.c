@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.62 2006/09/27 00:50:02 donnak Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.63 2006/09/27 05:40:42 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -249,6 +249,8 @@ puts("</TABLE>");
 if (warn && warn[0])
     printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
 
+printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
+           hgCustomName(),  cartSidUrlString(cart));
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 puts("<TD VALIGN=\"TOP\">");
@@ -344,13 +346,12 @@ hTableEnd();
 
 /* add button */
 puts("<TD VALIGN=\"TOP\">");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
-           hgCustomName(),  cartSidUrlString(cart));
 cgiMakeButton(hgCtDoAdd, "add custom tracks");
-puts("</FORM></TD>");
+puts("</TD>");
 
 cgiTableRowEnd();
 cgiTableEnd();
+puts("</FORM>");
 cartSetString(cart, "hgta_group", "user");
 }
 
