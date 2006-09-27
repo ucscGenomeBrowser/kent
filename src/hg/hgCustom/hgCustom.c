@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.59 2006/09/27 00:22:54 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.60 2006/09/27 00:39:53 donnak Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -150,7 +150,7 @@ cgiTableRowEnd();
 
 /* third row - label for description text entry */
 cgiSimpleTableRowStart();
-cgiTableField("Optional HTML doc: ");
+cgiTableField("Optional track documentation: ");
 puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDocFile);
@@ -189,7 +189,7 @@ cgiTableRowEnd();
 /* fifth row - link for HTML description template */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=3>");
-puts("An HTML document template used for Genome Browser track descriptions is <A HREF='../goldenPath/help/ct_description.txt' TARGET=_BLANK>here</A>.</TD>");
+puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.</TD>");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
