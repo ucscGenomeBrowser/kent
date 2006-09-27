@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.99 2006/09/26 19:38:37 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.100 2006/09/27 08:05:18 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -232,47 +232,91 @@ for (i=0; i<snp125LocTypeLabelsSize; i++)
 return TRUE;
 }
 
+struct orthoBed *orthoBedLoad(char **row)
+/* Load a bed from row fetched with select * from bed
+ * from database.  Dispose of this with bedFree(). */
+{
+struct orthoBed *ret;
+AllocVar(ret);
+ret->chrom      = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd   = sqlUnsigned(row[2]);
+ret->name       = cloneString(row[3]);
+ret->chimp      = cloneString(row[13]);
+return ret;
+}
+
+int snpOrthoCmp(const void *va, const void *vb)
+/* Compare for sort based on bed4 */
+{
+struct snp125Extended *a = *((struct snp125Extended **)va);
+struct orthoBed       *b = *((struct orthoBed       **)vb);
+int dif;
+
+if(a==0||b==0)
+    return 0;
+dif = differentWord(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+if (dif == 0)
+    dif = a->chromEnd - b->chromEnd;
+if (dif == 0)
+    dif = differentWord(a->name, b->name);
+return dif;
+}
+
 void setSnp125ExtendedNameExtra(struct track *tg)
 /* add extra text to be drawn in snp name field  */
 {
-struct sqlConnection *conn       = hAllocConn();
-int                   rowOffset  = 0;
-char                **row        = NULL;      /* list of orthologous state info */
-struct slList        *itemList   = tg->items; /* list of SNPs */
-struct slList        *item       = itemList;
-char                 *orthoTable = cloneString("snp126ortho"); /* could be a trackDb option */
-char                 *orthoName  = NULL;
-char                 *chimpBase  = NULL;
-struct sqlResult     *sr         = NULL;
+struct sqlConnection *conn          = hAllocConn();
+int                   rowOffset     = 0;
+char                **row           = NULL;      
+struct slList        *snpItemList   = tg->items; /* list of SNPs */
+struct slList        *snpItem       = snpItemList;
+struct slList        *orthoItemList = NULL;      /* list of orthologous state info */
+struct slList        *orthoItem     = orthoItemList;
+char                 *orthoTable    = cloneString("snp126ortho"); /* could be a trackDb option */
+struct sqlResult     *sr            = NULL;
+int                   cmp           = 0;
 
 if(!sqlTableExists(conn,orthoTable))
     {
     hFreeConn(&conn);
     return;
     }
-/* walk through the list of orthologous allele information */
+/* get list of orthologous alleles */
 sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    /* get the name of the SNP and the chimp state */
-    /* change this to use library functions once the schema has stabilized */
-    orthoName=cloneString(row[4]);
-    chimpBase=cloneString(row[14]);
-
-    /* reset the pointer to start at the top of the list, then find relevant entry */
-    item = itemList;
-    while(item!=NULL && differentString(((struct snp125Extended *)item)->name, orthoName))
-	item=item->next;
-
-    /* if it is found, update the name with the new information */
-    if(item!=NULL)
-	{
-	struct dyString *extra = newDyString(256);
-	dyStringPrintf(extra, " %s>%s", chimpBase, ((struct snp125Extended *)item)->observed);
-	((struct snp125Extended *)item)->nameExtra=cloneString(extra->string);
-	freeDyString(&extra);
-	}
+    orthoItem = (struct slList *)orthoBedLoad(row + rowOffset);
+    slAddHead(&orthoItemList, orthoItem);
     }
+
+/* Sort list of SNPs and list of Ortho info, then walk through both together */
+slSort(&snpItemList, bedCmp);
+slSort(&orthoItemList, bedCmp);
+
+snpItem=snpItemList;
+orthoItem=orthoItemList;
+while(snpItem!=NULL && orthoItem!=NULL)
+    {
+    struct dyString *extra = newDyString(256);
+    while ( snpItem!=NULL && orthoItem!=NULL && (cmp = snpOrthoCmp(snpItem, orthoItem))!=0 )
+	if (cmp<0)
+	    snpItem=snpItem->next;
+	else if (cmp>0)
+	    orthoItem=orthoItem->next;
+    if (snpItem==NULL || orthoItem==NULL)
+	continue;
+    dyStringPrintf(extra, " %s>%s", ((struct orthoBed *)orthoItem)->chimp, ((struct snp125Extended *)snpItem)->observed);
+    ((struct snp125Extended *)snpItem)->nameExtra=cloneString(extra->string);
+    freeDyString(&extra);
+    if (snpItem!=NULL)
+	snpItem=snpItem->next;
+    if (orthoItem!=NULL)
+	orthoItem=orthoItem->next;
+    }    
+tg->items=snpItemList;
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -281,18 +325,6 @@ Color snp125ExtendedColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snp track item. */
 {
 return ((struct snp125Extended *)item)->color;
-}
-
-void setSnp125ExtendedColors(struct track *tg, struct vGfx *vg)
-/* Calculate color to be used for drawing the SNP */
-{
-struct snp125Extended *se = tg->items;
-
-while ( se != NULL )
-    {
-    se->color = snp125Color(tg, se, vg);
-    se = se->next;
-    }
 }
 
 int snp125ExtendedColorCmp(const void *va, const void *vb)
@@ -339,25 +371,30 @@ void loadSnp125Extended(struct track *tg)
 /* load snps from snp125 table, ortho alleles from snpXXXortho table,
  * and return in extended struct */
 {
-struct sqlConnection *conn       = hAllocConn();
-int                   rowOffset  = 0;
-char                **row        = NULL;
-struct slList        *itemList   = tg->items;
-struct slList        *item       = itemList;
-struct sqlResult     *sr         = NULL;
+struct sqlConnection   *conn      = hAllocConn();
+int                     rowOffset = 0;
+char                  **row       = NULL;
+struct slList          *itemList  = tg->items;
+struct slList          *item      = itemList;
+struct sqlResult       *sr        = NULL;
+struct snp125Extended  *se        = NULL;
+enum   trackVisibility  vis       = tg->visibility;
+enum   trackVisibility  visLim    = tg->limitedVis;
 
 /* load SNPs */
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     item = (struct slList *)snpExtendedLoad(row + rowOffset);
+    se = (struct snp125Extended *)item;
+    se->color = snp125Color(tg, se, NULL);
     slAddHead(&itemList, item);
     }
-slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = itemList;
-setSnp125ExtendedNameExtra(tg);
+if( withLeftLabels && (vis==tvPack||vis==tvFull) && !(visLim==tvDense||visLim==tvSquish) )
+    setSnp125ExtendedNameExtra(tg);
 }
 
 void loadSnpMap(struct track *tg)
@@ -793,10 +830,7 @@ int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
 if(vis==tvDense)
-    {
-    setSnp125ExtendedColors(tg, vg);
     sortSnp125ExtendedByColor(tg);
-    }
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
@@ -906,15 +940,12 @@ struct sqlConnection *conn = hAllocConn();
 
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
-tg->loadItems     = loadSnp125;
 tg->freeItems     = freeSnp125;
-tg->itemColor     = snp125Color;
-tg->itemNameColor = snp125Color;
 tg->loadItems     = loadSnp125Extended;
 tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
 if (sqlTableExists(conn,"snp126ortho"))
-    tg->itemName      = snp125ExtendedName;
+    tg->itemName  = snp125ExtendedName;
 }
 
 char *perlegenName(struct track *tg, void *item)
