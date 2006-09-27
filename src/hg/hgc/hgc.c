@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1126 2006/09/26 22:53:03 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1127 2006/09/27 18:39:36 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16447,7 +16447,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void doAffySnpArray (struct trackDb *tdb, char *itemName)
+void doSnpArray (struct trackDb *tdb, char *itemName, char *dataSource)
 {
 char *table = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
@@ -16462,8 +16462,13 @@ struct dnaSeq *seq;
 
 genericHeader(tdb, itemName);
 
-safef(query, sizeof(query),
-      "select chromEnd, strand, observed, rsId from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+/* Affy uses their own identifiers */
+if (sameString(dataSource, "Affy"))
+    safef(query, sizeof(query),
+        "select chromEnd, strand, observed, rsId from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+else
+    safef(query, sizeof(query), "select chromEnd, strand, observed from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -16481,11 +16486,19 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("<BR><B>Reference allele:</B> %s \n", seq->dna);
         }
 
-    printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
-    if (!sameString(row[3], "unknown"))
+    if (sameString(dataSource, "Affy"))
+        {
+        printf("<BR><BR><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=%s\" TARGET=_blank>NetAffx</A>\n", itemName);
+        if (!sameString(row[3], "unknown"))
+            {
+            printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+            printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", row[3], row[3]);
+	    }
+	}
+    else
         {
         printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", row[3], row[3]);
+        printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
 	}
     }
 sqlFreeResult(&sr);
@@ -16493,35 +16506,6 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doIllumina300K (struct trackDb *tdb, char *itemName)
-{
-char *table = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-int start = cartInt(cart, "o");
-int end = 0;
-// char *chrom = cartString(cart, "c");
-
-genericHeader(tdb, itemName);
-
-safef(query, sizeof(query),
-      "select chromEnd from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    end = sqlUnsigned(row[0]);
-    printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
-    }
-
-printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP (%s)</A>\n", itemName, itemName);
-sqlFreeResult(&sr);
-printTrackHtml(tdb);
-hFreeConn(&conn);
-
-}
 
 void printGvAttrCatType (int i)
 /* prints new category and type labels for attributes as needed */
@@ -17874,11 +17858,11 @@ else if (sameString("snpArrayAffy250Nsp", track) ||
          sameString("snpArrayAffy50HindIII", track) ||
          sameString("snpArrayAffy50XbaI", track))
     {
-    doAffySnpArray(tdb, item);
+    doSnpArray(tdb, item, "Affy");
     }
 else if (sameString("snpArrayIllumina300", track))
     {
-    doIllumina300K(tdb, item);
+    doSnpArray(tdb, item, "Illumina");
     }
 else if (sameString("hgMut", track))
     {
