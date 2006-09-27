@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.100 2006/09/27 08:05:18 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.101 2006/09/27 08:12:46 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -829,8 +829,11 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
+/* commented out until tested more completely */
+/*
 if(vis==tvDense)
     sortSnp125ExtendedByColor(tg);
+*/
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
@@ -936,16 +939,24 @@ tg->itemNameColor = snpColor;
 
 void snp125Methods(struct track *tg)
 {
+/* commented out new code until it is tested further */
+/*
 struct sqlConnection *conn = hAllocConn();
+*/
 
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
 tg->freeItems     = freeSnp125;
+tg->loadItems     = loadSnp125;
+tg->itemNameColor = snp125Color;
+tg->itemColor     = snp125Color;
+/*
 tg->loadItems     = loadSnp125Extended;
 tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
 if (sqlTableExists(conn,"snp126ortho"))
     tg->itemName  = snp125ExtendedName;
+*/
 }
 
 char *perlegenName(struct track *tg, void *item)
