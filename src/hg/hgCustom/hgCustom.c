@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.57 2006/09/26 23:36:00 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.58 2006/09/27 00:10:45 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -230,10 +230,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         posCt++;
     }
 
-
-if (warn && warn[0])
-    printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
-
 puts("<TABLE BORDER=0>");
 cgiSimpleTableRowStart();
 puts("<TD VALIGN='TOP'>");
@@ -249,6 +245,9 @@ cgiMakeButton("Submit", "access in table browser");
 puts("</FORM></TD>");
 cgiTableRowEnd();
 puts("</TABLE>");
+
+if (warn && warn[0])
+    printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
 
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
