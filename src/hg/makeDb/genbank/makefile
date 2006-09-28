@@ -58,7 +58,6 @@ install-etc: check-prefix
 	${MKDIR} ${PREFIX}/etc
 	test -e ${PREFIX}/etc/CVS || cp -r etc/CVS ${PREFIX}/etc
 	(cd ${PREFIX}/etc && cvs update -d)
-	cp -f src/ccds/createTables.sql src/ccds/createKeys.sql ${PREFIX}/etc
 
 check-prefix:
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)

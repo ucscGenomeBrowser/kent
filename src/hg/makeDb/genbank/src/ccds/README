@@ -34,7 +34,6 @@ The program ccdsImport imports the table dumps into a database ccds,
 which is then used to generate the tables that are loaded into
 the hgdb..
 
-
 hgdb tables created are:
        ccdsGene - genePred track for CCDS
        ccdsInfo - cross-reference information for CCDS.

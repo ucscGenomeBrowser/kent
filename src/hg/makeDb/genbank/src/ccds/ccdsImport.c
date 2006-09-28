@@ -9,7 +9,11 @@
 #include "hgRelate.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.4 2006/08/15 03:10:24 markd Exp $";
+/* global variables defined in C files generated from sql file */
+extern char *createTablesSql;
+extern char *createKeysSql;
+
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.5 2006/09/28 04:54:52 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -25,18 +29,57 @@ errAbort(
   "ccdsImport - import NCBI CCDS DB table dumps into a MySQL database.\n"
   "\n"
   "Usage:\n"
-  "   ccdsImport [options] db dumpFiles\n"
+  "   ccdsImport [options] ccdsDb dumpFiles\n"
   "\n"
-  "The database should have been created  aand createTables.sql and\n"
-  "createKeys.sql (normally from /cluster/data/genbank/etc/ should\n"
-  "have already been run. The root file name of each dump file should\n"
-  "specify the table name.  This handles reformating the dump files\n"
+  "The will create database and drop and recreate tables.\n"
+  "The root file name of each dump file should specify the\n"
+  "table name.  This handles reformating the dump files\n"
   "to deal with NULL columns and date format differences.\n"
   "\n"
   "Options:\n"
   "  -keep - keep tmp tab file used to load database\n"
   "  -verbose=n\n"
   );
+}
+
+static struct sqlConnection *openOrCreateDb(char *db)
+/* open database, creating if it doesn't exist */
+{
+struct sqlConnection *conn = sqlMayConnect(db);
+if (conn == NULL)
+    {
+    char sql[256];
+    verbose(1, "creating databases %s\n", db);
+    safef(sql, sizeof(sql), "create database %s", db);
+    conn = sqlConnect(NULL);
+    sqlUpdate(conn, sql);
+    sqlDisconnect(&conn);
+    conn = sqlConnect(db);
+    }
+return conn;
+}
+
+static void sqlExecCmdStr(struct sqlConnection *conn, char *sqls)
+/* execute sql from string containing semi-colon separate commands */
+{
+char *sqlsCp = cloneString(sqls);  /* copy due to being in read-only mem */
+char *sql = sqlsCp, *next;
+while ((next = strchr(sql, ';')) != NULL)
+    {
+    *next = '\0';
+    sqlUpdate(conn, sql);
+    sql = next+1;
+    }
+freeMem(sqlsCp);
+}
+
+static void createCcdsTables(struct sqlConnection *conn)
+/* create databases and indices */
+{
+verbose(1, "creating tables\n");
+sqlExecCmdStr(conn, createTablesSql);
+verbose(1, "creating indices\n");
+sqlExecCmdStr(conn, createKeysSql);
 }
 
 static void doConvertCol(char *colVal, struct sqlFieldInfo *fi, char *sep, FILE *loadFh)
@@ -66,7 +109,6 @@ if (except->gotError)
 
 errCatchFree(&except); 
 }
-
 
 static void convertRow(char **row, int numCols, struct sqlFieldInfo *fieldInfoList,
                 char *dumpFile, char *table, FILE *loadFh)
@@ -208,9 +250,10 @@ if (!keep)
 static void ccdsImport(char *db, int numDumpFiles, char **dumpFiles)
 /* import NCBI CCDS DB table dumps into a MySQL database */
 {
-struct sqlConnection *conn = sqlConnect(db);
-int i;
+struct sqlConnection *conn = openOrCreateDb(db);
+createCcdsTables(conn);
 
+int i;
 for (i = 0; i < numDumpFiles; i++)
     importTable(conn, dumpFiles[i]);
 
