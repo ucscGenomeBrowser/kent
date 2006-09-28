@@ -10673,3 +10673,33 @@ gzip illumina.bed
 # This has regulatory annotations from ORegAnno.
 # Parse flat file received from Obi Griffith, into 3 tables, load.
 # Has other species but only Human has enough entries for now.
+
+##########################################################################
+# LIFT ACEMBLY FROM HG17 TO HG18 (DONE, Fan, 9/28/06)
+
+# get acembly data from hg17
+
+    hgsql hg17 -N -e 'select * from acembly' >hg17Acembly.gp
+
+# lift to hg18
+
+    zcat /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz | \
+    liftOver hg17Acembly.gp stdin acembly.gp  unMapped.gp -genePred
+
+# load the genePred table
+
+   ldHgGene hg18 acembly -predTab acembl.gp
+
+# get acemblyPep and acemblyClass table from hg17 and load them into hg18.
+
+    hgsql hg17 -N -e 'select * from acemblyPep' >acemblyPep.tab
+    hgsql hg18 -e 'drop table acemblyPep'
+    hgsql hg18 < ~/src/hg/lib/acemblyPep.sql
+    hgsql hg18 -e 'load data local infile "acemblyPep.tab" into table acemblyPep'
+
+    hgsql hg17 -N -e 'select * from acemblyClass' >acemblyClass.tab
+    hgsql hg18 -e 'drop table acemblyClass'
+    hgsql hg18 < ~/src/hg/lib/acemblyClass.sql
+    hgsql hg18 -e 'load data local infile "acemblyClass.tab" into table acemblyClass'
+
+##########################################################################
