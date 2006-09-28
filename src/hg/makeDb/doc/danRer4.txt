@@ -1449,10 +1449,11 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
  
 ###########################################################################
 # AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2006-04-24, hartera)
+# UPDATED (2006-09-28) - see separate section, UPDATE AFFY ZEBRAFISH TRACK.
 # NOTE: Jim recommends that, in the future, all AFFY blat alignments should drop
 # -mask=lower for blat and drop -minIdentity=95 to -minIdentity=90 as the
 # higher minIdentity is causing alignments to be dropped that should not be. 
-# e.g.  /cluster/bin/i386/blat -fine -minIdentity=90 -ooc=11.ooc  
+# e.g.  blat -fine -minIdentity=90 -ooc=11.ooc  
 # $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
 # pslReps can be used to handle filtering at a later step. Blat's minIdentity 
 # seems to be more severe than that for pslReps as it takes insertions and 
@@ -6096,4 +6097,142 @@ close INFO;
     zebrafish/danRer4/nscanGene.html   (copy from mm8 and edit)
     zebrafish/danRer4/trackDb.ra
     # changed search regex to
-        termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
+    termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
+
+#######################################################################
+# UPDATE AFFY ZEBRAFISH TRACK USING BLAT WITHOUT -mask OPTION AND
+# USING -repeats OPTION AND DIFFERENT FILTERING TO REMOVE SHORT
+# ALIGNMENTS (DONE, 2006-09-27 - 2006-09-28, hartera)
+# With the previous version of this track, QA found a number of short
+# alignments of <= 30 bp and there are a number in the <= 50bp range.
+# These do not seem to be meaningful so filtering was changed to try to
+# remove these alignments while retaining meaningful alignments.
+# pslCDnaFilter was used with the same settings as used for the
+# Genbank EST alignments for zebrafish.
+# Also use -minIdentity=90 for Blat instead of -minIdentity=95 since as the
+# higher minIdentity is causing alignments to be dropped that should not be.
+# Blat's minIdentity seems to be more severe than that for pslReps or
+# pslCDnaFilter as it takes insertions and deletions into account.
+# These are Jim's recommendations.
+# NOTE: Also added alignments for NA_random and Un_random, these had not 
+# been done for the original affyZebrafish track but should have been. 
+
+    # Array chip sequences already downloaded for danRer1
+    ssh hgwdev
+    cd /projects/compbio/data/microarray/affyZebrafish
+    mkdir -p /san/sanvol1/scratch/affy
+   cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+       /san/sanvol1/scratch/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer3
+    mkdir -p /cluster/data/danRer4/bed/affyZebrafish.2006-09-27
+    # remove old link and create new one
+    rm /cluster/data/danRer4/bed/affyZebrafish
+    ln -s /cluster/data/danRer4/bed/affyZebrafish.2006-09-27 \
+          /cluster/data/danRer4/bed/affyZebrafish
+    # Align sequences on the pitakluster. Scaffolds were aligned for NA_random
+    # and Un_random and lifted to chrom level afterwards. Chroms 1-25 and M
+    # were aligned as ~5 Mb chunks.
+    ssh pk
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    ls -1 /san/sanvol1/scratch/affy/Zebrafish_consensus.fa > affy.lst
+    ls -1 /san/sanvol1/scratch/danRer4/trfFa/chr[0-9M]*.fa > genome.lst
+    foreach f (/san/sanvol1/scratch/danRer4/scaffoldsSoftMask/*.fa)
+       ls -1 $f >> genome.lst
+    end
+    wc -l genome.lst 
+    # 3237 genome.lst
+    # for output:
+    mkdir -p /san/sanvol1/scratch/danRer4/affy/psl
+    # use -repeats option to report matches to repeat bases separately
+    # to other matches in the PSL output.
+    echo '#LOOP\n/cluster/bin/x86_64/blat -fine -repeats=lower -minIdentity=90
+-ooc=/san/sanvol1/scratch/danRer4/danRer4_11.ooc $(path1) $(path2) {check out
+line+ /san/sanvol1/scratch/danRer4/affy/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
+> template.sub
+
+    gensub2 genome.lst affy.lst template.sub para.spec
+    para create para.spec
+    para try, check, push ... etc.
+    para time
+# Completed: 3237 of 3237 jobs
+#CPU time in finished jobs:      19319s     321.98m     5.37h    0.22d  0.001 y
+#IO & Wait Time:                  9297s     154.95m     2.58h    0.11d  0.000 y
+#Average job time:                   9s       0.15m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              98s       1.63m     0.03h    0.00d
+#Submission to last job:          3135s      52.25m     0.87h    0.04d
+    
+    # need to do pslSort and lift up
+    ssh pk
+    cd /san/sanvol1/scratch/danRer4/affy
+    # Do sort, liftUp and then best in genome filter.
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # Previously did not use minCover since a lot of sequence is in
+    # Un and NA so genes may be split up so good to see all alignments.
+    # However, found a number of short alignments of <= 50 bp. These are
+    # not meaningful so maybe need to use minCover. If increased too much,
+    # then hits on poor parts of the assembly will be missed.
+    # use pslCDnaFilter with the same parameters as used for zebrafish
+    # Genbank EST alignments.
+    pslSort dirs raw.psl tmp psl
+    pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
+       -ignoreNs -bestOverlap -minId=0.95 -minCover=0.15 raw.psl contig.psl
+#                         seqs    aligns
+#             total:     15272   828202
+#drop minNonRepSize:     2763    741674
+#     drop minIdent:     2656    39188
+#     drop minCover:     2550    10784
+#        weird over:     359     1439
+#        kept weird:     277     347
+#    drop localBest:     2830    17737
+#              kept:     14952   18819
+# Kept 97.9% of alignments. There are 15502 Affy sequences originally
+# aligned so there are now 96.5% remaining.
+     
+    # lift up the coordinates to chrom level
+    liftUp affyZebrafish.psl \
+           /cluster/data/danRer4/jkStuff/liftAll.lft warn contig.psl
+    # Got 6247 lifts in /cluster/data/danRer4/jkStuff/liftAll.lft
+    # Lifting contig.psl
+    
+    # rsync these psl files
+    rsync -a --progress /san/sanvol1/scratch/danRer4/affy/*.psl \
+         /cluster/data/danRer4/bed/affyZebrafish/
+    
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.tmp
+    mv affyZebrafish.psl.tmp affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    hgsql -e 'drop table affyZebrafish;' danRer4
+    hgLoadPsl danRer4 affyZebrafish.psl
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+    /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /gbdb/hgFixed/affyProbes
+    # these sequences were loaded previously so no need to reload.
+    hgLoadSeq -abbr=Zebrafish: danRer3 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # check number of short alignments:
+    hgsql -e \
+     'select count(*) from affyZebrafish where (qEnd - qStart) <= 50;' danRer4
+    # 7
+    # for previous filtered set, there were 1272 alignments of <= 50 bp so
+    # this has improved.
+    hgsql -e 'select count(distinct(qName)) from affyZebrafish;' danRer4
+    # 14952
+    # Previously, there were 14819 so more sequences have aligned but less
+    # short alignments are retained. Many of the short alignments may also 
+    # have longer alignments to different regions of the genome that are good.
+
+
