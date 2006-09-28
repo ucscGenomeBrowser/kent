@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.65 2006/09/27 23:14:39 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.66 2006/09/28 23:10:09 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -675,6 +675,18 @@ if (cartVarExists(cart, hgCtDoAdd))
     {
     doAddCustom(NULL);
     }
+else if (cartVarExists(cart, hgCtDoCancel))
+    {
+    /* remove cart variables now so text in input
+     * boxes isn't parsed */
+    cartRemovePrefix(cart, hgCt);
+    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
+    ctList = customTracksParseCart(cart, NULL, NULL);
+    if (ctList)
+        doManageCustom(NULL);
+    else
+        doGenomeBrowser();
+    }
 else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */
@@ -741,14 +753,14 @@ else
     else
 	{
 	cartRemove(cart, "ct");
-        if (cartVarExists(cart, hgCtDoCancel) ||
-            cartVarExists(cart, hgCtDoDelete))
+        if (cartVarExists(cart, hgCtDoDelete))
                 doGenomeBrowser();
         else
             doAddCustom(NULL);
 	}
     }
 cartRemovePrefix(cart, hgCt);
+cartRemove(cart, CT_CUSTOM_TEXT_VAR);
 }
 
 
