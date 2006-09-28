@@ -6,7 +6,7 @@
 // needed for makeDir
 #include "portable.h"
 
-static char const rcsid[] = "$Id: snpReadSeq.c,v 1.3 2006/09/28 19:35:52 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq.c,v 1.4 2006/09/28 20:17:56 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +22,7 @@ void splitSeqFile(char *inputFileName, char *outputDirBasename, int filesPerDir)
 {
 FILE *inputFileHandle = mustOpen(inputFileName, "r");
 FILE *outputFileHandle = NULL;
+FILE *logFileHandle = mustOpen("snpReadSeq.log", "w");
 char outputFileName[64];
 char dirName[64];
 int fileCount = 0;
@@ -57,6 +58,7 @@ while (lineFileNext(lf, &line, &lineSize))
         safef(outputFileName, sizeof(outputFileName), "%s/%s", dirName, rsId[0]);
         outputFileHandle = mustOpen(outputFileName, "w");
 	// fprintf(outputFileHandle, ">%s\n", rsId[0]);
+        fprintf(logFileHandle, "%s\t%s/%s\n", rsId[0], dirName, rsId[0]);
 	}
     else
        fprintf(outputFileHandle, "%s\n", line);
@@ -65,6 +67,7 @@ while (lineFileNext(lf, &line, &lineSize))
 // does order matter?
 carefulClose(&inputFileHandle);
 carefulClose(&outputFileHandle);
+carefulClose(&logFileHandle);
 lineFileClose(&lf);
 }
 
