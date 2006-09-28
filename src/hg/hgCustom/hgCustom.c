@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.66 2006/09/28 23:10:09 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.67 2006/09/28 23:58:46 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -234,12 +234,12 @@ puts("<TABLE BORDER=0>");
 cgiSimpleTableRowStart();
 puts("<TD VALIGN='TOP'>");
 puts("</FORM>");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
+printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
            hgTracksName(), cartSidUrlString(cart));
 cgiMakeButton("Submit", "view in genome browser");
 puts("</FORM></TD>");
 puts("<TD VALIGN='TOP'>");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
+printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
            hgTablesName(), cartSidUrlString(cart));
 cgiMakeButton("Submit", "access in table browser");
 puts("</FORM></TD>");
