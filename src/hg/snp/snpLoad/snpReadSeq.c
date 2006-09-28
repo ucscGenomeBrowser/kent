@@ -2,12 +2,11 @@
 /* Split into individual files with a limit of files per directory. */
 
 #include "common.h"
-#include "dystring.h"
 #include "linefile.h"
 // needed for makeDir
 #include "portable.h"
 
-static char const rcsid[] = "$Id: snpReadSeq.c,v 1.1 2006/09/23 11:07:52 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq.c,v 1.2 2006/09/28 18:47:16 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -33,34 +32,39 @@ int lineSize;
 boolean firstLine = TRUE;
 char *row[9], *rsId[2];
 
-safef(dirName, sizeof(dirName), "%s%d", outputDirBasename, dirCount);
+safef(dirName, sizeof(dirName), "%s-%d", outputDirBasename, dirCount);
 makeDir(dirName);
-safef(outputFileName, sizeof(outputFileName), "%s/split%d", dirName, fileCount);
-outputFileHandle = mustOpen(outputFileName, "w");
 
 while (lineFileNext(lf, &line, &lineSize))
     {
-    if (line[0] == '>' && !firstLine)
+    if (line[0] == '>')
         {
-	carefulClose(&outputFileHandle);
+	if (!firstLine)
+	    carefulClose(&outputFileHandle);
+	else
+	    firstLine = FALSE;
         fileCount++;
 	if (fileCount == filesPerDir)
 	    {
 	    fileCount = 0;
 	    dirCount++;
-            safef(dirName, sizeof(dirName), "%s%d", outputDirBasename, dirCount);
+            safef(dirName, sizeof(dirName), "%s-%d", outputDirBasename, dirCount);
             makeDir(dirName);
 	}
-        safef(outputFileName, sizeof(outputFileName), "%s/split%d", dirName, fileCount);
+	/* use rsId for filename */
+	chopString(line, "|", row, ArraySize(row));
+	chopString(row[2], " ", rsId, ArraySize(rsId));
+        safef(outputFileName, sizeof(outputFileName), "%s/%s%d", dirName, rsId[0], fileCount);
         outputFileHandle = mustOpen(outputFileName, "w");
+	// fprintf(outputFileHandle, ">%s\n", rsId[0]);
 	}
-    if (firstLine)
-        firstLine = FALSE;
-    fprintf(outputFileHandle, "%s\n", line);
+    else
+       fprintf(outputFileHandle, "%s\n", line);
     }
 
 // does order matter?
 carefulClose(&inputFileHandle);
+carefulClose(&outputFileHandle);
 lineFileClose(&lf);
 }
 
