@@ -17,6 +17,21 @@ color 150,0,0
 type genePred ensPep
 url http://apr2006.archive.ensembl.org/Homo_sapiens/transview?transcript=$$
 
+track acembly
+shortLabel AceView Genes
+longLabel AceView Gene Models With Alt-Splicing (lifted from hg17)
+group genes
+priority 41
+visibility hide
+color 155,0,125
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
+itemClassTbl acemblyClass
+geneClasses main putative
+gClass_main 128,0,125
+gClass_putative 200,0,125
+urlLabel Transcript ID:
+
 track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
