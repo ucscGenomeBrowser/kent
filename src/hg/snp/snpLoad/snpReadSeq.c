@@ -6,7 +6,7 @@
 // needed for makeDir
 #include "portable.h"
 
-static char const rcsid[] = "$Id: snpReadSeq.c,v 1.2 2006/09/28 18:47:16 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq.c,v 1.3 2006/09/28 19:35:52 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,7 +54,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	/* use rsId for filename */
 	chopString(line, "|", row, ArraySize(row));
 	chopString(row[2], " ", rsId, ArraySize(rsId));
-        safef(outputFileName, sizeof(outputFileName), "%s/%s%d", dirName, rsId[0], fileCount);
+        safef(outputFileName, sizeof(outputFileName), "%s/%s", dirName, rsId[0]);
         outputFileHandle = mustOpen(outputFileName, "w");
 	// fprintf(outputFileHandle, ">%s\n", rsId[0]);
 	}
