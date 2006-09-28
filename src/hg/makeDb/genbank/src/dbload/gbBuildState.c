@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.19 2006/03/11 00:07:57 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.20 2006/09/28 15:43:13 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -240,7 +240,7 @@ struct hashEl* seqAccEl = hashLookup(ssData->seqHash, tmpStatus->acc);
 /* check if in seq table, record if found */
 if (seqAccEl == NULL)
     {
-    fprintf(stderr, "Error: %s is in gbStatus but not in gbSeq table",
+    fprintf(stderr, "Error: %s is in gbStatus but not in gbSeq table\n",
             tmpStatus->acc);
     gErrorCnt++;
     }
