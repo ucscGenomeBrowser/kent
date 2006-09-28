@@ -6,7 +6,7 @@
 // needed for makeDir
 #include "portable.h"
 
-static char const rcsid[] = "$Id: snpReadSeq.c,v 1.4 2006/09/28 20:17:56 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq.c,v 1.5 2006/09/28 20:46:27 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,15 +14,15 @@ void usage()
 errAbort(
   "snpReadSeq - Read dbSNP fasta files and split into directories.\n"
   "usage:\n"
-  "  snpReadSeq inputfile outputdir filesPerDirectory \n");
+  "  snpReadSeq inputfile logfile outputdir filesPerDirectory \n");
 }
 
 
-void splitSeqFile(char *inputFileName, char *outputDirBasename, int filesPerDir)
+void splitSeqFile(char *inputFileName, char *logFileName, char *outputDirBasename, int filesPerDir)
 {
 FILE *inputFileHandle = mustOpen(inputFileName, "r");
 FILE *outputFileHandle = NULL;
-FILE *logFileHandle = mustOpen("snpReadSeq.log", "w");
+FILE *logFileHandle = mustOpen(logFileName, "w");
 char outputFileName[64];
 char dirName[64];
 int fileCount = 0;
@@ -74,17 +74,19 @@ lineFileClose(&lf);
 int main(int argc, char *argv[])
 {
 char *inputFileName = NULL;
+char *logFileName = NULL;
 char *outputDirBasename = NULL;
 int filesPerDir = 0;
 
-if (argc != 4)
+if (argc != 5)
     usage();
 
 inputFileName = argv[1];
-outputDirBasename = argv[2];
-filesPerDir = atoi(argv[3]);
+logFileName = argv[2];
+outputDirBasename = argv[3];
+filesPerDir = atoi(argv[4]);
 
-splitSeqFile(inputFileName, outputDirBasename, filesPerDir);
+splitSeqFile(inputFileName, logFileName, outputDirBasename, filesPerDir);
 
 return 0;
 }
