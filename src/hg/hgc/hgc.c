@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1129 2006/09/29 00:22:06 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1130 2006/09/29 04:14:33 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11323,6 +11323,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char *fileName = NULL;
 
+if (!hTableExists("snp126Seq"))
+    return "ERROR";
 safef(query, sizeof(query), "select file from snp126Seq where name='%s'", snp.name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
