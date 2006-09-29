@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.67 2006/09/28 23:58:46 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.68 2006/09/29 00:57:32 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -691,7 +691,9 @@ else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */
     struct customTrack *ct = NULL;
-    char *selectedTable = cartString(cart, hgCtTable);
+    /* need to clone the hgCtTable value, as the ParseCart will remove
+       the variable */
+    char *selectedTable = cloneString(cartString(cart, hgCtTable));
     if (selectedTable[0] != 0)
         {
         ctList = customTracksParseCart(cart, NULL, NULL);
