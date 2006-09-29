@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1130 2006/09/29 04:14:33 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1131 2006/09/29 18:37:32 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2064,6 +2064,9 @@ void printTrackHtml(struct trackDb *tdb)
 {
 char *tableName;
 
+/* XXX TODO: This data update time could be obtained for custom tracks
+ * that are in the customTrash database.
+ */
 if (! isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
@@ -14977,6 +14980,7 @@ else
 		printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
 		    TRUE, NULL);
 	    }
+	printTrackHtml(ct->tdb);
 	return;
 	}
     if (ct->dbTrack)
