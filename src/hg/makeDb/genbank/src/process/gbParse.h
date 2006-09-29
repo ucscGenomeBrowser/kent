@@ -69,6 +69,20 @@ extern struct gbField *gbRefSeqSummaryField;
 extern struct gbField *gbRefSeqCompletenessField;
 extern struct gbField *gbRefSeqDerivedField;
 
+
+struct gbMiscDiff
+/* object used to hold one misc diff value */
+{
+    struct gbMiscDiff *next;
+    char *loc;     /* location in cDNA */
+    char *note;    /* /note= field */
+    char *gene;    /* /gene= field */
+    char *replace; /* /replace= field */
+};
+
+/* list of misc diffs in current record */
+extern struct gbMiscDiff *gbMiscDiffVals;
+
 char *skipLeadingNonSpaces(char *s);
 /* Return first non-white space or NULL. */
 

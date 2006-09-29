@@ -61,3 +61,8 @@ translExcept - space-seperated list of /transl_except= values.
 exception - space separated list /exception= values, with spaces in
     individual values replaces by '_'.
 selenocysteine - set to "yes" if the /selenocysteine attribute is specified.
+mdiff.n -  misc_difference fields, where n is a zero based count of the occurance
+           of the fields.  Value is the location.
+mdiff.n.note - note field for misc_difference number n.
+mdiff.n.gene - gene field for misc_difference number n.
+mdiff.n.replace - replace field for misc_difference number n.
