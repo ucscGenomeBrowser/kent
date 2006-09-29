@@ -22,11 +22,10 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 #include "hgConfig.h"
-#include "pipeline.h"
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.144 2006/09/29 00:56:57 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.145 2006/09/29 18:06:18 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
