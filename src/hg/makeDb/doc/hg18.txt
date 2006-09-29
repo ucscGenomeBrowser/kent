@@ -10363,6 +10363,19 @@ cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/deletions
 /bin/sh link.sh
 
 ################################################################
+# split rs_fasta files for new hgc feature: displaying SNP alignments
+# Heather, Sept. 2006
+
+ssh kkstore02
+cd /cluster/data/dbSNP/126/human/rs_fasta
+/bin/csh split.csh
+ssh hgwdev
+/bin/csh link.csh
+hgsql hg18 < snp126Seq.sql
+/bin/csh load.csh
+hgsql hg18 -e 'alter table snp126Seq add index name (name)'
+
+################################################################
 ### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
     # Make file/table of high quality single base pair differences
     # between hg18 and panTro2
