@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1127 2006/09/27 18:39:36 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1128 2006/09/29 00:20:08 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11314,6 +11314,161 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
+char *getSnpSeqFile(struct snp snp)
+/* tablename hard-coded */
+{
+char query[256];
+char **row;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char *fileName = NULL;
+
+safef(query, sizeof(query), "select file from snp126Seq where name='%s'", snp.name);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+fileName = cloneString(row[0]);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return fileName;
+}
+
+void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2)
+{
+int matchScore = 100;
+int misMatchScore = 100;
+int gapOpenPenalty = 400;  
+int gapExtendPenalty = 50; 
+struct axtScoreScheme *ss = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
+struct axt *axt = axtAffine(seq1, seq2, ss), *axtBlock=axt;
+
+hPrintf("<TT><PRE>");
+if (axt == NULL)
+   {
+   printf("%s and %s don't align\n", seq1->name, seq2->name);
+   return;
+   }
+
+axtBlock=axt;
+while (axtBlock !=NULL)
+    {
+    printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%, score %d\n",
+           axtIdWithGaps(axtBlock)*100, 
+	   axtCoverage(axtBlock, seq1->size, seq2->size)*100, 
+	   axtBlock->score);
+    printf("Alignment between genome (%s; %d bp) and ", seq1->name, seq1->size);
+    printf("flanking sequence (%s; %d bp)\n", seq2->name, seq2->size);
+    printf("\n");
+    axtPrintTraditional(axtBlock, 60, ss, stdout);
+    axtBlock=axtBlock->next;
+    }
+
+axtFree(&axt);
+hPrintf("</PRE></TT>");
+}
+
+void printSnpAlignment2(struct snp snp)
+/* Get flanking sequences from table; align and print */
+/* Tablename hard-coded for now */
+{
+char *fileName = NULL;
+char *variation = NULL;
+char *strand = NULL;
+char nibFile[HDB_MAX_PATH_STRING];
+
+char *line;
+struct lineFile *lf = NULL;
+int lineSize;
+
+boolean gotVar = FALSE;
+
+struct dyString *seqDbSnp5 = newDyString(512);
+struct dyString *seqDbSnp3 = newDyString(512);
+struct dyString *seqDbSnpTemp = newDyString(512);
+
+struct dnaSeq *dnaSeqDbSnp5 = NULL;
+struct dnaSeq *dnaSeqDbSnpO = NULL;
+struct dnaSeq *dnaSeqDbSnp3 = NULL;
+struct dnaSeq *seqDbSnp = NULL;
+struct dnaSeq *seqNib = NULL;
+
+int len5 = 0;
+int len3 = 0;
+int start = 0;
+int end = 0;
+
+fileName = getSnpSeqFile(snp);
+lf = lineFileOpen(fileName, TRUE);
+
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    stripString(line, " ");
+    if (lineSize > 2 && gotVar)
+        dyStringAppend(seqDbSnp3,line);
+    else if (lineSize > 2 && !gotVar)
+        dyStringAppend(seqDbSnp5,line);
+    else if (lineSize == 2)
+        {
+	gotVar = TRUE;
+	variation = cloneString(line);
+	}
+    }
+lineFileClose(&lf);
+
+/* get coords */
+len5 = strlen(seqDbSnp5->string);
+len3 = strlen(seqDbSnp3->string);
+strand  = cloneString(snp.strand);
+if (sameString(strand,"+") || sameString(strand,"?"))
+    {
+    start = snp.chromStart - len5;
+    end = snp.chromEnd + len3;
+    }
+else 
+    {
+    start = snp.chromStart - len3;
+    end = snp.chromEnd + len5;
+    }
+
+/* do the lookup */
+hNibForChrom(snp.chrom, nibFile);
+seqNib = hFetchSeqMixed(nibFile, snp.chrom, start, end);
+if (sameString(strand,"-"))
+    reverseComplement(seqNib->dna, seqNib->size);
+
+printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
+
+printf("<PRE><B>Genomic Sequence:</B><BR>");
+writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
+printf("</PRE>\n");
+
+printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
+dnaSeqDbSnp5 = newDnaSeq(seqDbSnp5->string, len5, "dbSNP seq 5");
+dnaSeqDbSnpO = newDnaSeq(variation, strlen(variation),"dbSNP seq O");
+dnaSeqDbSnp3 = newDnaSeq(seqDbSnp3->string, len3, "dbSNP seq 3");
+writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
+writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
+printf("</PRE>\n");
+
+/* create seqDbSnp */
+dyStringAppend(seqDbSnpTemp, seqDbSnp5->string);
+dyStringAppend(seqDbSnpTemp, variation);
+dyStringAppend(seqDbSnpTemp, seqDbSnp3->string);
+seqDbSnp = newDnaSeq(seqDbSnpTemp->string, strlen(seqDbSnpTemp->string), "dbSNP seq");
+if (seqDbSnp==NULL)
+    return;
+seqDbSnp->size=strlen(seqDbSnp->dna);
+freeDyString(&seqDbSnp5);
+freeDyString(&seqDbSnp3);
+
+if (seqNib != NULL && seqDbSnp != NULL)
+    generateAlignment(seqNib, seqDbSnp);
+else
+    warn("Couldn't get sequences, database out of sync?");
+
+}
+
+
 void printSnpAlignment(struct snp snp)
 /* Fetch flanking sequences from dbSnp html page and from nib file; align and print */
 {
@@ -12191,7 +12346,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment(snpAlign);
+printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12253,7 +12408,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment(snpAlign);
+printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
