@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1131 2006/09/29 18:37:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1132 2006/09/29 23:03:38 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11317,7 +11317,7 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
-char *getSnpSeqFile(struct snp snp)
+char *getSnpSeqFile(struct snp snp, int version)
 /* tablename hard-coded */
 {
 char query[256];
@@ -11325,10 +11325,12 @@ char **row;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char *fileName = NULL;
+char tableName[64];
 
-if (!hTableExists("snp126Seq"))
+safef(tableName, sizeof(tableName), "snp%dSeq", version);
+if (!hTableExists(tableName))
     return "ERROR";
-safef(query, sizeof(query), "select file from snp126Seq where name='%s'", snp.name);
+safef(query, sizeof(query), "select file from %s where name='%s'", tableName, snp.name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11373,7 +11375,7 @@ axtFree(&axt);
 hPrintf("</PRE></TT>");
 }
 
-void printSnpAlignment2(struct snp snp)
+void printSnpAlignment2(struct snp snp, int version)
 /* Get flanking sequences from table; align and print */
 /* Tablename hard-coded for now */
 {
@@ -11403,7 +11405,7 @@ int len3 = 0;
 int start = 0;
 int end = 0;
 
-fileName = getSnpSeqFile(snp);
+fileName = getSnpSeqFile(snp, version);
 if (sameString(fileName, "ERROR"))
     return;
 lf = lineFileOpen(fileName, TRUE);
@@ -12355,7 +12357,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12417,7 +12418,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment2(snpAlign);
+printSnpAlignment2(snpAlign, version);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
