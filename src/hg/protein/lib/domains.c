@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.7 2005/08/05 21:21:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.8 2006/09/29 20:40:03 fanhsu Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -132,7 +132,7 @@ if (list != NULL)
 	hPrintf("<TD>");
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
 	if (rowCount < 1)
-	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/cgi/pdbImage.cgi/%sx150.jpg\"><BR>", row[0]);
+	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpe\"><BR>", row[0]);
 	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	hPrintf("</TD>");
 	}
