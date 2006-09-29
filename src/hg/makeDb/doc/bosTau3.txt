@@ -59,3 +59,62 @@ EOF
 # Create diff.clean which has 108 IDs
 # Write to Kim Worley (kworley@bcm.tmc.edu)
 
+# Response from Kim on Sept. 22, 2006:
+
+# Those are sequences that were intentionally omitted from the AGP, because they
+# were deemed to be contaminants after they were accessioned.
+# Please omit them from your assembly.   
+
+# Also realized that I have to adjust the header lines in the contig.fa file.
+# An example line:
+# >gi|112123023|gb|AAFC03055291.1| Bos taurus Ctg58.CH240-395G16, whole genome shotgun sequence
+# We need just 
+# >AAFC03055291
+
+# Generate /cluster/data/bosTau3/downloads/trimHeader.out using a simple C
+# program:
+
+#include "common.h"
+#include "linefile.h"
+
+void doTrimHeader(char *inputFileName)
+{
+FILE *outputFileHandle = mustOpen("trimHeader.out", "w");
+struct lineFile *lf = lineFileOpen(inputFileName, TRUE);
+char *line;
+int lineSize;
+char *row[5], *contigId[2];
+
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] != '>')
+        {
+	fprintf(outputFileHandle, "%s\n", line);
+	continue;
+	}
+    chopString(line, "|", row, ArraySize(row));
+    chopString(row[3], ".", contigId, ArraySize(contigId));
+    fprintf(outputFileHandle, ">%s\n", contigId[0]);
+    }
+
+carefulClose(&outputFileHandle);
+lineFileClose(&lf);
+}
+
+# Next run faSomeRecords to get rid of the bad IDs:
+
+cd /cluster/data/bosTau3
+mkdir fixup
+faSomeRecords downloads/trimHeader.out fixup/3.agp fixup/UCSC.bosTau3.fa  
+gzip fixup/UCSC.bosTau3.fa
+
+# Edit bosTau3.config.ra
+
+# fastaFiles /cluster/data/bosTau3/fixup/UCSC.bosTau3.fa.gz
+
+# Rotate log files and rerun with test script (and new agpToFa)
+mv makeGenomeDb.log.2 makeGenomeDb.log.3
+mv makeGenomeDb.log.1 makeGenomeDb.log.2
+mv makeGenomeDb.log makeGenomeDb.log.1
+/cluster/home/angie/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra > & makeGenomeDb.log &
+
