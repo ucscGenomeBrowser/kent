@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.68 2006/09/29 00:57:32 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.69 2006/09/29 01:15:55 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,7 +42,6 @@ errAbort(
 #define hgCtUpdatedTrack "hgct_updatedTrack"
 #define hgCtDocText      "hgct_docText"
 #define hgCtDocFile      "hgct_docFile"
-#define hgCtDocTrackName "hgct_docTrackName"
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtRefreshPrefix "hgct_refresh"
 
@@ -438,10 +437,10 @@ void addCustomDoc(char *selectedTrack)
 char *html = NULL;
 struct customTrack *ct = NULL;
 
-if (cartNonemptyString(cart, hgCtDocText))
-    html = cartString(cart, hgCtDocText);
-else if (cartNonemptyString(cart, hgCtDocFile))
+if (cartNonemptyString(cart, hgCtDocFile))
     html = cartString(cart, hgCtDocFile);
+else if (cartNonemptyString(cart, hgCtDocText))
+    html = cartString(cart, hgCtDocText);
 if (selectedTrack)
     {
     for (ct = ctList; ct != NULL; ct = ct->next)
