@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1128 2006/09/29 00:20:08 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1129 2006/09/29 00:22:06 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11326,6 +11326,8 @@ char *fileName = NULL;
 safef(query, sizeof(query), "select file from snp126Seq where name='%s'", snp.name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
+if (row == NULL)
+   return "ERROR";
 fileName = cloneString(row[0]);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -11397,6 +11399,8 @@ int start = 0;
 int end = 0;
 
 fileName = getSnpSeqFile(snp);
+if (sameString(fileName, "ERROR"))
+    return;
 lf = lineFileOpen(fileName, TRUE);
 
 while (lineFileNext(lf, &line, &lineSize))
