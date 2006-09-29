@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.4 2006/08/25 15:42:23 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.5 2006/09/29 21:05:57 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -386,21 +386,12 @@ set diffLittleCount = `comm -3 \$fastaIds \$agpLittleIds | wc -l`
 # If AGP "big" IDs match sequence IDs, use sequence as-is.
 # If AGP "little" IDs match sequence IDs, assemble sequence with agpToFa.
 if (\$diffLittleCount == 0) then
-  # agpToFa must be called with per-chrom AGP, so split (hope we don't
-  # have to do this for assemblies with >1000 sequences!):
-  set agpSplitDir = `mktemp -d -p /tmp makeGenomeDb.agp.XXXXXX`
-  \$acat $agpFiles \\
-  | splitFileByColumn -col=1 -ending=.agp stdin \$agpSplitDir
-  set allLittleFasta = `mktemp -p /tmp makeGenomeDb.fa.XXXXXX`
-  \$fcat $fastaFiles > \$allLittleFasta
-  set allBigFasta = `mktemp -p /tmp makeGenomeDb.fa.XXXXXX`
-  foreach f (\$agpSplitDir/*)
-    set chr = \$f:t:r
-    agpToFa -simpleMultiMixed \$f \$chr stdout \$allLittleFasta \\
-      >> \$allBigFasta
-  end
-  faToTwoBit \$allBigFasta $chrM $db.unmasked.2bit
-  rm -rf \$agpSplitDir \$allLittleFasta \$allBigFasta
+  set agpTmp = `mktemp -p /tmp makeGenomeDb.agp.XXXXXX`
+  \$acat $agpFiles > \$agpTmp
+  \$fcat $fastaFiles \\
+  | agpToFa -simpleMultiMixed \$agpTmp all stdout stdin \\
+  | faToTwoBit stdin $chrM $db.unmasked.2bit
+  rm -f \$agpTmp
 else if (\$diffBigCount == 0) then
   faToTwoBit $fastaFiles $chrM $db.unmasked.2bit
 else
