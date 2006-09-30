@@ -10005,6 +10005,7 @@ mysql> select count(*), loc_type from ContigLocFilter group by loc_type;
 
 # create chrN_snpFasta tables from *.gnl files
 # we are just using molType, but also storing class and observed
+# 266,366 duplicates detected in snpMoltype.errors
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta hg18snp126 
 
 # (could start using pipeline.csh here)
@@ -10365,6 +10366,9 @@ cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/deletions
 ################################################################
 # split rs_fasta files for new hgc feature: displaying SNP alignments
 # Heather, Sept. 2006
+# Note: 266,366 sequences are duplicated (in both rs_chN.fas.gz and also rs_Multi.fas.gz)
+# as detected by snpMoltype.c above
+# hgc will just take the first match
 
 ssh kkstore02
 cd /cluster/data/dbSNP/126/human/rs_fasta
