@@ -4,18 +4,20 @@
 The Genome Browser provides dozens of aligned annotation tracks that have been
 computed at UCSC or have been provided by outside collaborators. In addition to 
 these standard tracks, it is also possible for users to upload their own 
-annotations for temporary display in the browser. These custom annotation tracks
-are viewable only on the machine from which they were uploaded and are only
-kept for eight hours after the last time they were accessed. Optionally, users 
-can make custom annotations viewable by others as well.
+annotation data for temporary display in the browser. These custom annotation 
+tracks are viewable only on the machine from which they were uploaded and are 
+automatically discarded 24 hours after the last time they are accessed. 
+Optionally, users can make custom annotations viewable by others as well.
 <P>
-Custom tracks are an important research feature of the Genome Browser. Because
-space is limited in the Genome Browser track window, many excellent genome-wide 
-tracks cannot be included in the set of tracks packaged with the Genome Browser.
+Custom tracks are a wonderful tool for research scientists using the Genome 
+Browser. Because space is limited in the Genome Browser track window, many 
+excellent genome-wide tracks cannot be included in the standard set of tracks 
+packaged with the browser.
 Other tracks of interest may be excluded from distribution because the 
 annotation track data is too specific to be of general interest or can't be 
-shared until journal publication. To view a list of custom annotation tracks 
-submitted by Genome Browser users, click the 
+shared until journal publication. Many individuals and labs have contributed
+custom tracks to the Genome Browser website for use by others. To view a list 
+of these custom annotation tracks, click the 
 <A HREF="/goldenPath/customTracks/custTracks.html">Custom Tracks</A> link on 
 the Genome Browser home page.
 <P>
@@ -28,11 +30,10 @@ can also be completely unrelated to the data. For example, a track can be
 displayed under a long sequence consisting of millions of <em>N</em>s.
 <P>
 Genome Browser annotation tracks are based on files in line-oriented format. 
-Each line in the file defines a display characteristic for the annotation 
-track or defines a data item within the track. 
-Annotation files contain 3 types of lines: browser lines, track lines, 
-and data lines. Empty lines and lines starting with # in the 
-annotation file are ignored. 
+Each line in the file defines a display characteristic for the track or defines 
+a data item within the track. 
+Annotation files contain three types of lines: browser lines, track lines, 
+and data lines. Empty lines and those starting with &quot;#&quot; are ignored. 
 
 <P>To construct an annotation file and display it in the Genome 
 Browser, follow these steps:
@@ -47,7 +48,7 @@ for the Human Genome Project or UCSC Genome Browser, including
 or <A HREF="wiggle.html">WIG</A>. 
 GFF and GTF files <I>must</I> be tab-delimited rather than
 space-delimited to display correctly. You may include more than one data
-set in your annotation file. These data sets need not be in the same
+set in your annotation file; these need not be in the same
 format.
 
 <P><B>Step 2. Define the Genome Browser display characteristics</B><BR>
@@ -67,14 +68,12 @@ appropriate position for viewing the annotation track.
 Following the browser lines - and immediately preceding the formatted 
 data - add a <A HREF="#TRACK">track line</A> to 
 define the display attributes for your annotation data set. Track lines 
-allow you to define annotation track characteristics 
+enable you to define annotation track characteristics 
 such as the name, description, colors, initial display mode, use score,
 etc. If you have included more than one data set in your annotation
 file, insert a track line at the beginning of each new set of data.
 
-<P>
-<A NAME="#EXAMPLE1"></A>
-<B><I>Example 1:</I></B></BR>
+<P><B><I>Example 1:</I></B><BR>
 Here is an example of a simple annotation file that contains a list of
 chromosome coordinates. 
 <PRE><TT>browser position chr22:20100000-20100900
@@ -136,13 +135,54 @@ To view your annotation data in the Genome Browser, open the
 Genome Browser home page <A HREF="../../index.html"
 TARGET=_blank>(http://genome.ucsc.edu/)</a> and click the Genome 
 Browser link in the top menu bar. On the Genome Browser Gateway page that
-displays, select the genome and assembly on which your
-annotation data is based, then click the <em>add your own custom tracks</em> button. Upload 
-your annotation file by entering the name of your file in the Annotation File 
-box or by pasting the contents of your file into the large edit
-box. Click the <em>submit</em> button to
+displays, select the genome and assembly on which your annotation data is based,
+then click the &quot;add custom tracks&quot; button. Upload 
+<P>
+The Add Custom Tracks page contains two large text boxes: a data text box for 
+loading annotation data and a documentation text box for loading an optional 
+track description text file.
+The annotation data may be loaded in one of three ways:
+<UL>
+<LI>
+Enter one or more URL for custom tracks (one per line) in the data text box. The
+Genome Browser supports both the HTTP and FTP (passive-only) protocols.
+<LI>
+Click the &quot;Browse&quot; button directly above the data text box, then 
+choose a custom track file from your local computer, or type the pathname of the
+file into the &quot;upload&quot; text box adjacent to the &quot;Browser&quot;
+button. The custom track data may be compressed by any of the following 
+programs: gzip (<em>.gz</em>), compress (<em>.Z</em>), or bzip2 (<em>.bz2</em>).
+Files containing compressed data must include the appropriate suffix in their 
+names.
+<LI>
+Paste or type the custom track data directly into the data box. Because the text
+in this box will not be saved to a file, this method is not recommended unless
+you have a copy of the data elsewhere.
+</UL>
+<P>
+Optionally, you can submit text (in plain or HTML format) to accompany your 
+custom track. This text will be displayed when a user clicks the track 
+description button on the Genome Browser annotation tracks page. Descriptive 
+text may be loaded by one of the following methods:
+<UL>
+<LI>
+Click the &quot;Browse&quot; button directly above the documentation text box, 
+then choose a text file from your local computer, or type the pathname of the
+file into the &quot;upload&quot; text box adjacent to the &quot;Browser&quot;
+button.
+<LI>
+Paste or type the custom track data directly into the data box. Note that the 
+text in this box will not be saved to a file; therefore, this method is 
+not recommended except for temporary documentation purposes.
+</UL>
+<P>
+To format your description page in a style that is consistent with standard
+Genome Browser tracks, click the template link below the documentation text
+box for an HTML template that may be copied and pasted into a file for editing.
+<P>
+Click the <em>Submit</em> button to
 display the Genome Browser track window with your annotation. If you
-encounter difficulties in displaying your annotation, read the section 
+encounter difficulties displaying your annotation, read the section 
 <A HREF="#TROUBLE">Troubleshooting Annotation Display Problems</A>.</P> 
 <P>
 To upload a custom annotation track from another machine or web 
@@ -166,6 +206,45 @@ features.  The Genome Browser automatically creates a default details page for
 each feature in the track containing the feature's name, position information,
 and a link to the corresponding DNA sequence. To view the details page for a
 feature in your custom annotation track (in full, pack, or squish display
+mode), click on the item's label in the annotation track window. 
+<P>
+You can add a link from a details page to an external web page containing
+additional information about the feature by using the track line <I>url</I> attribute. 
+In the annotation file, set the <I>url</I> attribute in the track line to point
+to a publicly available page on a web server. The <I>url</I> attribute 
+substitutes each occurrence of '$$' in the URL string with the name defined by the 
+<I>name</I> attribute. You can take advantage of this feature to provide 
+individualized information for each feature in your track by creating HTML anchors 
+that correspond to the feature names in your web page.
+
+<P><B><I>Example 4:</I></B><BR>
+Here is an example of a file in which the <I>url</I> attribute has been set to
+point to the file <A HREF="clones.html"
+TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
+appended to the end of the file name in the example points to the HTML NAME tag 
+within the file that matches the name of the feature (cloneA, cloneB, etc.). 
+NOTE: The track line in this example has been split over 2 lines for 
+documentation purposes. If you paste this example into
+the browser, you must remove the line break to display the track successfully.
+Click <A HREF ="ct_example4.txt" TARGET=_blank>here</A> for a copy of this 
+example that can be pasted into the browser without editing. 
+<BR>
+<PRE><TT>browser position chr22:10000000-10020000
+browser hide all
+track name=clones description="Clones" visibility=2
+color=0,128,0 useScore=1 
+url="http://genome.ucsc.edu/goldenPath/help/clones.html#$$"
+chr22 10000000 10004000 cloneA 960 
+chr22 10002000 10006000 cloneB 200 
+chr22 10005000 10009000 cloneC 700 
+chr22 10006000 10010000 cloneD 600
+chr22 10011000 10015000 cloneE 300
+chr22 10012000 10017000 cloneF 100 
+</TT></PRE>
+Click 
+<A HREF="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ct_example4.txt" 
+TARGET=_blank>here</A> to display this track in the Genome Browser.
+<P>
 mode), click on the item's label in the annotation track window. 
 <P>
 You can add a link from a details page to an external web page containing
@@ -749,45 +828,6 @@ http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 TARGET=_BLANK><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&amp;position=chr22&amp;<br>hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
 
 <P><B>Step 3.</B> Provide the URL to others. To upload a custom annotation
-pointed to by a URL into the Genome Browser, paste the URL into the large text edit 
-box in the Add Your Own Tracks section of the Genome Browser Gateway page, then click 
-the <em>submit</em> button. 
-<P>If you'd like to share your annotation track with a broader 
-audience, send the URL for your track - along with a description of 
-the format, methods, and data used - to the UCSC Genome mailing list 
-<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;</A>.
-<!-- above address is genome at soe.ucsc.edu -->
-</P>
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<br></TD></TR></TABLE>
-	</TD></TR></TABLE>
-	
-	<BR>
-
-
-  	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><a name="TROUBLE"></a><b>&nbsp;  Troubleshooting Annotation Display Problems</b></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-<P>Occasionally users encounter problems when uploading 
-annotation files to the Genome Browser. In most cases, these problems
-are caused by errors in the format of the annotation file and 
-can be tracked down using the information displayed in the error
-message. This section contains suggestions for resolving common 
-display problems. If you are still unable to successfully
-display your annotation data after reading this section, contact
-the genome mailing list at 
-<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;</A>
-<!-- above address is genome at soe.ucsc.edu -->
-for further assistance.
-
-<P><B><I>Problem:</I></B> When I try one of your examples by cutting and pasting
-it into the Genome Browser, I get an error message.<BR> 
 <B><I>Solution:</I></B> Check that none of the browser lines, track lines, or data 
 lines in your annotation file contains a line break. If the example contains GFF
 or GTF data lines, check that all the fields are tab-separated rather than
