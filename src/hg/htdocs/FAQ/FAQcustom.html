@@ -67,18 +67,27 @@
 			"How do I display my own personal annotation data in the Genome Browser?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			To create an annotation track that will display on the Genome Browser, you 
-			must first organize your data into one of the four formats supported by the 
-			browser: GTF, GFF, BED, or PSL. The formatted data is then pasted in or uploaded into 
-			the
-			Genome Browser. Once you've created your annotation track, you can share it with 
-			others over the internet by putting your annotation file on your website, then 
-			creating a custom URL that will allow others to directly start the browser with your 
-			track displayed. </P>
+			To create an annotation track that will display on the 
+			Genome Browser, you must first organize your data into 
+			one of the formats supported by the 
+			browser custom track feature: 
+			<A HREF="FAQformat.html#format4">GTF</A>, 
+			<A HREF="FAQformat.html#format3">GFF</A>, 
+			<A HREF="FAQformat.html#format1">BED</A>, 
+			<A HREF="FAQformat.html#format6">WIG</A>, 
+			or <A HREF="FAQformat.html#format2">PSL</A>. 
+		 	Then, upload your data into the Genome Browser on
+			the <A HREF="../cgi-bin/hgCustom">Add Custom Tracks</A> 
+		 	page. Once you've created your annotation track, you can
+			share it with others over the internet by putting your 
+			annotation file on your website, then creating a custom 
+			URL that allows others to directly start the browser 
+			with your track displayed. </P>
 			<P>
-			Read <A HREF="../goldenPath/help/customTrack.html" TARGET=_blank>Displaying Your Own Annotations in the Genome Browser</A> 
-			for a step-by-step description of how to 
-			format and display a custom annotation track, and how to create a custom URL. 
+			Read the <A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks">Creating custom annotation tracks</A>
+			section in the Genome Browser User's Guide for 
+			a step-by-step description of how to format and display 
+		 	a custom annotation track and create a custom URL. 
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
@@ -201,6 +210,7 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+<!--FIXME - add itemRGB stuff -->
 			"When designing a custom track, is there a way to assign specific colors 
 			to each segment, as is done in the mouse/rat synteny tracks? Is there a way
 			to assign 
@@ -232,7 +242,7 @@
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; Contructing a Genome Browser URL</b></FONT></TD> 
+	   	    <FONT SIZE="4"><b>&nbsp; Constructing a Genome Browser URL</b></FONT></TD> 
 		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
@@ -250,8 +260,8 @@
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			One way to determine how to construct a correct URL is to open a Genome Browser link 
 			in which you are interested and examine how the Genome Browser constructs the URL. 
-			See the <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">Custom 
-			Annotation Track documentation</A> for a discussion of the basic
+			See the <A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks">User's Guide</A>
+			for a discussion of the basic
 			components of a Genome Browser URL. Note that the <em>c</em> parameter that appears 
 			in some URLs specifies the chromosome name or the chromosome name and position. 
 		    </TD><TD WIDTH=15></TD>
@@ -290,7 +300,7 @@
 			"Should I use the hgsid parameter in my URL?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			You should try to avoid using hgsid. It is a temporary identifier, 
+			Avoid using hgsid -- it is a temporary identifier, 
 			and will typically stop working after a day.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
@@ -330,6 +340,8 @@
 			details page for a custom track customizable?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			
+<!--FIXME -->
 			This feature is not currently implemented.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
