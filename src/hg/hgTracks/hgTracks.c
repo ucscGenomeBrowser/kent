@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1212 2006/09/26 16:49:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1213 2006/10/02 06:36:56 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11794,6 +11794,27 @@ struct customTrack *ct;
 struct track *tg;
 struct slName *bl;
 
+/* build up browser lines from cart variables set by hgCustom */
+char *visAll = cartCgiUsualString(cart, "hgt.visAllFromCt", NULL);
+if (visAll)
+    {
+    char buf[64];
+    safef(buf, sizeof buf, "browser %s %s", visAll, "all");
+    slAddTail(&browserLines, slNameNew(buf));
+    }
+struct hashEl *visEl;
+struct hashEl *visList = cartFindPrefix(cart, "hgtct.");
+for (visEl = visList; visEl != NULL; visEl = visEl->next)
+    {
+    char buf[128];
+    safef(buf, sizeof buf, "browser %s %s", cartString(cart, visEl->name), 
+                chopPrefix(cloneString(visEl->name)));
+    slAddTail(&browserLines, slNameNew(buf));
+    cartRemove(cart, visEl->name);
+    }
+hashElFreeList(&visList);
+
+
 /* The loading is now handled by getPositionFromCustomTracks(). */
 /* Process browser commands in custom track. */
 for (bl = browserLines; bl != NULL; bl = bl->next)
@@ -12466,8 +12487,6 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
-boolean hideAllNotCt = cartCgiUsualBoolean(cart, "hgt.hideAllNotCt", FALSE);
-char *visAll = cartCgiUsualString(cart, "hgt.visAll", NULL);
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
@@ -12513,18 +12532,6 @@ if(hideAll || defaultTracks)
     int vis = (hideAll ? tvHide : -1);
     changeTrackVis(groupList, NULL, vis, FALSE);
     }
-else if (hideAllNotCt)
-    {  
-    struct group *group;
-    for (group = groupList; group != NULL; group = group->next)
-        {
-        if (sameString("user", group->name))
-            continue;
-        changeTrackVis(groupList, group->name, tvHide, FALSE);
-        }
-    }
-else if (visAll)
-    changeTrackVis(groupList, NULL, hTvFromString(visAll), TRUE);
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
 if (cgiVarExists("hgt.nextItem"))       
@@ -13461,8 +13468,8 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.tui", "hgt.hideAll", "hgt.visAll", 
-                        "hgt.hideAllNotCt", "hgt.psOutput", "hideControls",
+			"hgt.tui", "hgt.hideAll", "hgt.visAllFromCt", 
+                        "hgt.psOutput", "hideControls",
 			NULL };
 
 int main(int argc, char *argv[])

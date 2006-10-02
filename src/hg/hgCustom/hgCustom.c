@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.69 2006/09/29 01:15:55 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.70 2006/10/02 06:36:56 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -401,13 +401,14 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    char *s = words[i];
 		    if (sameWord(s, "all"))
                         {
-                        if (sameString(command, "hide"))
-                            cartSetBoolean(cart, "hgt.hideAllNotCt", TRUE);
-                        else
-                            cartSetString(cart, "hgt.visAll", command);
+                        cartSetString(cart, "hgt.visAllFromCt", command);
                         }
                     else
-                        cartSetString(cart, s, command);
+                        {
+                        char buf[128];
+                        safef(buf, sizeof buf, "hgtct.%s", s);
+                        cartSetString(cart, buf, command);
+                        }
 		    }
 		}
 	    }
