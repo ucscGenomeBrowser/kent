@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.101 2006/09/27 08:12:46 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.102 2006/10/02 05:21:02 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -118,7 +118,8 @@ int i;
 
 for (i=0; i<snp125MolTypeLabelsSize; i++)
     {
-    if (!sameString(snp125MolTypeDataName[i], el->molType)) continue;
+    if (!sameString(snp125MolTypeDataName[i], el->molType)) 
+	continue;
     return snp125MolTypeIncludeCart[i];
     }
 return TRUE;
@@ -145,7 +146,8 @@ int i;
 
 for (i=0; i<snp125ClassLabelsSize; i++)
     {
-    if (!sameString(snp125ClassDataName[i], el->class)) continue;
+    if (!sameString(snp125ClassDataName[i], el->class)) 
+	continue;
     return snp125ClassIncludeCart[i];
     }
 return TRUE;
@@ -172,7 +174,8 @@ int i;
 
 for (i=0; i<snp125ValidLabelsSize; i++)
     {
-    if (!containsStringNoCase(el->valid, snp125ValidDataName[i])) continue;
+    if (!containsStringNoCase(el->valid, snp125ValidDataName[i])) 
+	continue;
     return snp125ValidIncludeCart[i];
     }
 return TRUE;
@@ -199,7 +202,8 @@ int i;
 
 for (i=0; i<snp125FuncLabelsSize; i++)
     {
-    if (!containsStringNoCase(el->func, snp125FuncDataName[i])) continue;
+    if (!containsStringNoCase(el->func, snp125FuncDataName[i])) 
+	continue;
     return snp125FuncIncludeCart[i];
     }
 return TRUE;
@@ -226,7 +230,8 @@ int i;
 
 for (i=0; i<snp125LocTypeLabelsSize; i++)
     {
-    if (!sameString(snp125LocTypeDataName[i], el->locType)) continue;
+    if (!sameString(snp125LocTypeDataName[i], el->locType)) 
+	continue;
     return snp125LocTypeIncludeCart[i];
     }
 return TRUE;
@@ -276,8 +281,10 @@ struct slList        *snpItem       = snpItemList;
 struct slList        *orthoItemList = NULL;      /* list of orthologous state info */
 struct slList        *orthoItem     = orthoItemList;
 char                 *orthoTable    = cloneString("snp126ortho"); /* could be a trackDb option */
+char                 *orthoWhere    = cloneString("species='panTro2'"); /* could be a trackDb option */
 struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
+struct dyString      *extra         = newDyString(256);
 
 if(!sqlTableExists(conn,orthoTable))
     {
@@ -285,7 +292,7 @@ if(!sqlTableExists(conn,orthoTable))
     return;
     }
 /* get list of orthologous alleles */
-sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, NULL, &rowOffset);
+sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, orthoWhere, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     orthoItem = (struct slList *)orthoBedLoad(row + rowOffset);
@@ -296,27 +303,27 @@ while ((row = sqlNextRow(sr)) != NULL)
 slSort(&snpItemList, bedCmp);
 slSort(&orthoItemList, bedCmp);
 
-snpItem=snpItemList;
-orthoItem=orthoItemList;
+snpItem   = snpItemList;
+orthoItem = orthoItemList;
 while(snpItem!=NULL && orthoItem!=NULL)
     {
-    struct dyString *extra = newDyString(256);
     while ( snpItem!=NULL && orthoItem!=NULL && (cmp = snpOrthoCmp(snpItem, orthoItem))!=0 )
 	if (cmp<0)
-	    snpItem=snpItem->next;
+	    snpItem = snpItem->next;
 	else if (cmp>0)
-	    orthoItem=orthoItem->next;
+	    orthoItem = orthoItem->next;
     if (snpItem==NULL || orthoItem==NULL)
-	continue;
+	break;
+    dyStringClear(extra);
     dyStringPrintf(extra, " %s>%s", ((struct orthoBed *)orthoItem)->chimp, ((struct snp125Extended *)snpItem)->observed);
-    ((struct snp125Extended *)snpItem)->nameExtra=cloneString(extra->string);
-    freeDyString(&extra);
+    ((struct snp125Extended *)snpItem)->nameExtra = cloneString(extra->string);
     if (snpItem!=NULL)
-	snpItem=snpItem->next;
+	snpItem = snpItem->next;
     if (orthoItem!=NULL)
-	orthoItem=orthoItem->next;
+	orthoItem = orthoItem->next;
     }    
 tg->items=snpItemList;
+freeDyString(&extra);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -700,7 +707,7 @@ int w = x2-x1;
 Color itemColor = tg->itemColor(tg, sm, vg);
 
 if ( w<1 )
-    w=1;
+    w = 1;
 vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
@@ -719,7 +726,7 @@ int w = x2-x1;
 Color itemColor = tg->itemColor(tg, s, vg);
 
 if ( w<1 )
-    w=1;
+    w = 1;
 vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
@@ -739,7 +746,7 @@ int w = x2-x1;
 Color itemColor = tg->itemColor(tg, s, vg);
 
 if ( w<1 )
-    w=1;
+    w = 1;
 vgBox(vg, x1, y, w, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
@@ -829,15 +836,10 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-/* commented out until tested more completely */
-/*
 if(vis==tvDense)
     sortSnp125ExtendedByColor(tg);
-*/
-
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
-
 if (vis == tvPack || vis == tvSquish)
     {
     struct spaceSaver *ss = tg->ss;
@@ -939,24 +941,16 @@ tg->itemNameColor = snpColor;
 
 void snp125Methods(struct track *tg)
 {
-/* commented out new code until it is tested further */
-/*
 struct sqlConnection *conn = hAllocConn();
-*/
 
 tg->drawItems     = snpDrawItems;
 tg->drawItemAt    = snp125DrawItemAt;
 tg->freeItems     = freeSnp125;
-tg->loadItems     = loadSnp125;
-tg->itemNameColor = snp125Color;
-tg->itemColor     = snp125Color;
-/*
 tg->loadItems     = loadSnp125Extended;
 tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
 if (sqlTableExists(conn,"snp126ortho"))
     tg->itemName  = snp125ExtendedName;
-*/
 }
 
 char *perlegenName(struct track *tg, void *item)
@@ -1187,7 +1181,6 @@ colorLookup[(int)'j'] = ldShadesPos[9];
 colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
 colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 }
-
 
 void drawDiamond(struct vGfx *vg, 
 	 int xl, int yl, int xt, int yt, int xr, int yr, int xb, int yb, 
@@ -1549,7 +1542,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	if (notInWindow(a, b, c, d, ldTrm)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    {
 	    if ((c-b)/2 >= winEnd-winStart || (ldTrm&&d>=winEnd) || (!ldTrm&&c>=winEnd+(winEnd-winStart)))
-		i=dPtr->score;
+		i = dPtr->score;
 	    continue;
 	    }
 	if ( d-a > 250000 ) /* Check to see if we are trying to reach across a window that is too wide (centromere) */
