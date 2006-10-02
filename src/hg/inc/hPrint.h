@@ -28,8 +28,7 @@ void hPrintNonBreak(char *s);
 /* Print out string but replace spaces with &nbsp; */
 
 void hPuts(char *string);
-/* Puts that can be suppressed if not making
- * html. */
+/* Puts that can be suppressed if not making html. */
 
 void hPutc(char c);
 /* putc that can be suppressed if not making html. */
@@ -58,7 +57,7 @@ void hCheckBox(char *varName, boolean checked);
 void hDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names if not suppressed. */
 
-void printHtmlComment(char *format, ...);
+void hPrintComment(char *format, ...);
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
 

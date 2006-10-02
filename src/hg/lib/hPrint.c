@@ -53,8 +53,7 @@ while ((c = *s++) != '\0')
 }
 
 void hPuts(char *string)
-/* Puts that can be suppressed if not making
- * html. */
+/* Puts that can be suppressed if not making html. */
 {
 if (!suppressHtml)
     puts(string);
@@ -123,7 +122,7 @@ if (!suppressHtml)
     cgiMakeDropList(name, menu, menuSize, checked);
 }
 
-void printHtmlComment(char *format, ...)
+void hPrintComment(char *format, ...)
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
 {
