@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.102 2006/10/02 05:21:02 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.103 2006/10/02 06:15:28 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -400,7 +400,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = itemList;
-if( withLeftLabels && (vis==tvPack||vis==tvFull) && !(visLim==tvDense||visLim==tvSquish) )
+snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
+if( withLeftLabels && snp125ExtendedNames && (vis==tvPack||vis==tvFull) && !(visLim==tvDense||visLim==tvSquish) )
     setSnp125ExtendedNameExtra(tg);
 }
 

@@ -4,6 +4,8 @@
 #ifndef SNP125UI_H
 #define SNP125UI_H
 
+extern boolean snp125ExtendedNames;
+
 enum snp125ColorEnum {
     snp125ColorRed,
     snp125ColorBlue,

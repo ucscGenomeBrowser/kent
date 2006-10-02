@@ -2,7 +2,9 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.22 2006/06/28 22:17:16 heather Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.23 2006/10/02 06:15:28 daryl Exp $";
+
+boolean snp125ExtendedNames = FALSE;
 
 float snp125AvHetCutoff = 0.0;
 int snp125WeightCutoff = 3;
