@@ -1610,7 +1610,7 @@ identifier ensemblEstTranscriptId external=Ensembl dependency
 
 identifier hprdId external=HPRD dependency
 "HPRD ID"
-    $hg.knownToHprd.value
+    $hg.knownToHprd.value dupeOk
 
 # H-Invitational Database Identifiers
 
