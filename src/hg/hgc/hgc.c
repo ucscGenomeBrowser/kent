@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1132 2006/09/29 23:03:38 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1133 2006/10/03 23:08:05 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12128,16 +12128,16 @@ char **row;
 char   query[256];
 int count = 0;
 
-if (sameString("hg18", database) && hTableExists("snp126orthoMixed"))
+if (sameString("hg18", database) && hTableExists("snp126orthoPanTro2RheMac2"))
     {
     safef(query, sizeof(query),
-          "select count(*) from snp126orthoMixed where name='%s'", rsId);
+          "select count(*) from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
     count = sqlQuickNum(conn, query);
     if (count != 1) return;
     
     safef(query, sizeof(query),
           "select chimpAllele, chimpStrand, macaqueAllele, macaqueStrand "
-	  "from snp126orthoMixed where name='%s'", rsId);
+	  "from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
 
