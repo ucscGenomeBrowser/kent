@@ -4845,7 +4845,7 @@ cat  << 'EOF' > spec
     ln -s multiz15way.2006-09-28 /cluster/data/dm2/bed/multiz15way
 
 
-# MULTIZ15WAY DOWNLOADABLES (UNANNOTATED) (IN PROGRESS 9/29/2006 angie)
+# MULTIZ15WAY DOWNLOADABLES (UNANNOTATED) (DONE 10/3/2006 angie)
     # Annotated MAF is now documented, so use anno/maf for downloads.
     ssh hgwdev
     mkdir /cluster/data/dm2/bed/multiz15way.2006-09-28/mafDownloads
@@ -4885,14 +4885,12 @@ cat > downloads.csh << 'EOF'
 #325.699u 4.199s 5:34.17 98.7%   0+0k 0+0io 1pf+0w
     nice gzip up*.maf
     nice md5sum up*.maf.gz >> md5sum.txt
+    # Make a README.txt .
 
     ssh hgwdev
     set dir = /usr/local/apache/htdocs/goldenPath/dm2/multiz15way
     mkdir $dir
-    ln -s /cluster/data/dm2/bed/multiz15way.2006-09-28/mafDownloads/{*.gz,md5sum.txt} $dir
-#TODO
-    cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
-    # edit README.txt
+    ln -s /cluster/data/dm2/bed/multiz15way.2006-09-28/mafDownloads/*.{gz,txt} $dir
 
 
 # MULTIZ15WAY MAF FRAMES (DONE 9/29/2006 angie)
@@ -4959,7 +4957,7 @@ cat > downloads.csh << 'EOF'
     hgLoadMafFrames dm2 multiz15wayFrames multiz15way.mafFrames.gz
 
 
-# PHASTCONS 15WAY WITH METHODS FROM PAPER (IN PROGRESS 9/29/06 angie)
+# PHASTCONS 15WAY WITH METHODS FROM PAPER (DONE 10/3/06 angie)
 # (((((((((dm2,(droSim1,droSec1)),(droYak2,droEre2)),droAna3),(dp4,droPer1)),droWil1),((droVir3,droMoj3),droGri2)),anoGam1),apiMel2),triCas2)
     ssh kkstore04
     mkdir -p /san/sanvol1/scratch/dm2/chrom
@@ -5093,12 +5091,13 @@ zcat $1 \
       echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobList
     end
     para make jobList
-#TODO
     para time
 #Completed: 139 of 139 jobs
-#Average job time:                6022s     100.37m     1.67h    0.07d
-#Longest finished job:           14397s     239.95m     4.00h    0.17d
-#Submission to last job:         14419s     240.32m     4.01h    0.17d
+#CPU time in finished jobs:    1771638s   29527.30m   492.12h   20.51d  0.056 y
+#IO & Wait Time:                  1154s      19.23m     0.32h    0.01d  0.000 y
+#Average job time:               12754s     212.56m     3.54h    0.15d
+#Longest finished job:           18435s     307.25m     5.12h    0.21d
+#Submission to last job:         26561s     442.68m     7.38h    0.31d
 
     # Now combine parameter estimates.  We can average the .mod files
     # using phyloBoot.  This must be done separately for the conserved
@@ -5113,12 +5112,9 @@ zcat $1 \
       --output-average ave.noncons.mod > noncons_summary.txt
     grep TREE ave*.mod
     # FIRST ITERATION:
-#ave.cons.mod:TREE: ((((((((dm2:0.015283,droSim1:0.028475):0.004064,(droYak1:0.031904,droEre1:0.033703):0.024654):0.021822,droAna2:0.128599):0.008507,dp3:0.135654):0.003923,((droVir2:0.064832,droMoj2:0.074814):0.064856,droGri1:0.130122):0.056057):0.035045,anoGam1:0.225562):0.032118,apiMel2:0.207067):0.100280,triCas1:0.100280);
-#ave.noncons.mod:TREE: ((((((((dm2:0.049188,droSim1:0.086476):0.013855,(droYak1:0.101928,droEre1:0.105461):0.080386):0.076467,droAna2:0.435801):0.030536,dp3:0.463395):0.014225,((droVir2:0.218767,droMoj2:0.254568):0.225537,droGri1:0.443544):0.200405):0.126301,anoGam1:0.786660):0.117326,apiMel2:0.720501):0.348402,triCas1:0.348402);
+#ave.cons.mod:TREE: (((((((((dm2:0.017975,(droSim1:0.012862,droSec1:0.012586):0.011123):0.012087,(droYak2:0.031478,droEre2:0.032714):0.015973):0.033568,droAna3:0.107755):0.019847,(dp4:0.008814,droPer1:0.009578):0.104435):0.016369,droWil1:0.150471):0.005457,((droVir3:0.056362,droMoj3:0.072079):0.020331,droGri2:0.083731):0.092042):0.049021,anoGam1:0.218175):0.046658,apiMel2:0.187335):0.106621,triCas2:0.106621);
+#ave.noncons.mod:TREE: (((((((((dm2:0.059235,(droSim1:0.039799,droSec1:0.039025):0.035598):0.041349,(droYak2:0.104304,droEre2:0.106715):0.054017):0.119983,droAna3:0.377089):0.071962,(dp4:0.028079,droPer1:0.031175):0.369228):0.060569,droWil1:0.536488):0.019784,((droVir3:0.195542,droMoj3:0.254453):0.073077,droGri2:0.290773):0.336972):0.180643,anoGam1:0.783559):0.174661,apiMel2:0.670401):0.382291,triCas2:0.382291);
     # SECOND ITERATION:
-#ave.cons.mod:TREE: ((((((((dm2:0.015261,droSim1:0.028419):0.004049,(droYak1:0.031866,droEre1:0.033655):0.024630):0.021816,droAna2:0.128628):0.008503,dp3:0.135728):0.003923,((droVir2:0.064840,droMoj2:0.074832):0.064900,droGri1:0.130188):0.056115):0.035117,anoGam1:0.225895):0.032170,apiMel2:0.207375):0.100397,triCas1:0.100397);
-#ave.noncons.mod:TREE: ((((((((dm2:0.049200,droSim1:0.086486):0.013823,(droYak1:0.101982,droEre1:0.105514):0.080420):0.076507,droAna2:0.436376):0.030537,dp3:0.464200):0.014233,((droVir2:0.219076,droMoj2:0.254936):0.225862,droGri1:0.444226):0.200721):0.126658,anoGam1:0.788468):0.117561,apiMel2:0.722456):0.349173,triCas1:0.349173);
-# THIRD ITERATION:
 
     cat cons_summary.txt 
     # look over the files cons_summary.txt and noncons_summary.txt.
@@ -5138,14 +5134,8 @@ zcat $1 \
     # available cluster nodes) should be more than adequate for
     # parameter estimation.  If pressed for time, use this strategy.
 
-    # FIRST ITERATION ONLY:
-    # Check the total entropy figure to see if we're way off.
-    # This takes an hour for 12way (exponential in #species) and has never 
-    # produced a different answer from the input after the first iteration,
-    # so do this for the first iteration only:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.398 24.1 ave.{cons,noncons}.mod
-#Recommended expected length: omega=24.095425 sites (for L_min*H=9.783400)
-    # ==> use 24.1 instead of 24.3 below.
+    # No consEntropy check because it runs out of mem on an 8G-mem small 
+    # cluster node and has not completed in a day on 16G-mem kolossus.
 
     # Now we are ready to set up the cluster job for computing the
     # conservation scores and predicted elements.  The we measure the 
@@ -5181,9 +5171,11 @@ rm $tmpfile
     para make jobList
     para time
 #Completed: 139 of 139 jobs
-#Average job time:                  15s       0.25m     0.00h    0.00d
-#Longest finished job:              19s       0.32m     0.01h    0.00d
-#Submission to last job:            45s       0.75m     0.01h    0.00d
+#CPU time in finished jobs:       1388s      23.14m     0.39h    0.02d  0.000 y
+#IO & Wait Time:                   402s       6.70m     0.11h    0.00d  0.000 y
+#Average job time:                  13s       0.21m     0.00h    0.00d
+#Longest finished job:              17s       0.28m     0.00h    0.00d
+#Submission to last job:           170s       2.83m     0.05h    0.00d
 
     # back on kolossus:
     # combine predictions and transform scores to be in 0-1000 interval
@@ -5197,13 +5189,8 @@ rm $tmpfile
     # We want the "cover" figure to be close to 68.9%.
     cd /cluster/data/dm2/bed/multiz15way/phastCons
     featureBits -enrichment dm2 flyBaseGene:cds all.bed
-    # FIRST ITERATION: just a bit too high, reduce target-coverage a bit:
-#flyBaseGene:cds 16.567%, all.bed 35.522%, both 11.442%, cover 69.07%, enrich 1.94x
-    # SECOND ITERATION: OK, this is the first time I've seen a reduction in 
-    # target-coverage result in an increase in CDS coverage.  Dang.  Well, 
-    # I'll take it as a sign that we're close enough (esp. since each iteration 
-    # take a half-day now).
-#flyBaseGene:cds 16.567%, all.bed 35.514%, both 11.446%, cover 69.09%, enrich 1.95x
+    # FIRST ITERATION: 68.9'll do!
+#flyBaseGene:cds 16.649%, all.bed 37.421%, both 11.471%, cover 68.90%, enrich 1.84x
 
     # Having met the CDS coverage target, load up the results.
     hgLoadBed dm2 phastConsElements15way all.bed
@@ -5232,9 +5219,11 @@ zcat `ls -1 /san/sanvol1/scratch/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     para make jobList
     para time
 #Completed: 13 of 13 jobs
-#Average job time:                  10s       0.16m     0.00h    0.00d
-#Longest finished job:              24s       0.40m     0.01h    0.00d
-#Submission to last job:            99s       1.65m     0.03h    0.00d
+#CPU time in finished jobs:         71s       1.18m     0.02h    0.00d  0.000 y
+#IO & Wait Time:                    28s       0.47m     0.01h    0.00d  0.000 y
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest finished job:              17s       0.28m     0.00h    0.00d
+#Submission to last job:           101s       1.68m     0.03h    0.00d
 
     # back on kkstore04, copy wibs, wigs and POSTPROBS (people sometimes want 
     # the raw scores) from san/sanvol1
@@ -5273,12 +5262,11 @@ zcat `ls -1 /san/sanvol1/scratch/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     cd /usr/local/apache/htdocs/goldenPath/dm2/phastCons15way
     ln -s /cluster/data/dm2/bed/multiz15way/phastCons/postprobsDownload/* .
 
-
     # make a tree picture using phyloGif.
-
-    /cluster/bin/phast/all_dists 15way.nh > 15way.distances.txt
-    grep dm2 15way.distances.txt | sort -k3,3n | \
-        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
-    cat distances.txt
+    cd /cluster/data/dm2/bed/multiz15way
+    /usr/local/apache/cgi-bin/phyloGif -phyloGif_tree=tree-commas.nh \
+      -phyloGif_width=260 -phyloGif_height=480 > dm2_15way.gif
+    ln -s /cluster/data/dm2/bed/multiz15way/dm2_15way.gif \
+      /usr/local/apache/htdocs/images/phylo/dm2_15way.gif
 
 
