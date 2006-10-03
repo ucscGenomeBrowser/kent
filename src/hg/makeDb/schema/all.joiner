@@ -1724,7 +1724,7 @@ identifier snpAnnotations126
     hg18.snp126.name dupeOk
     hg18.snp126Exceptions.name 
     hg18.snp126orthoMixed.name
-    hg18.snp126Seq.name dupeOk
+    hg18.snp126Seq.name minCheck=0.98
 
 # Other NCBI Identifiers
 
