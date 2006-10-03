@@ -278,9 +278,9 @@ Others</A>.</P>
         <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
         <P><BR>The Custom Track Management screens consist of two parts,
-               "Add Custom Tracks" and "Manage Custom Tracks"  The 
-                management screen becomes available only after a custom
-                track has been loaded.<BR>
+               &quot;Add Custom Tracks&quot; and &quot;Manage Custom Tracks&quot;.
+               The management screen becomes available only after a custom
+               track has been loaded.<BR>
 
          <P><BR><B>Add Custom Tracks</B>
          <P>This page has two sections, the data section and the html section. 
@@ -288,49 +288,49 @@ Others</A>.</P>
           <LI> The <B>upper</B> or <B>data</B> section is used to provide
 annotation data and track configuration <A HREF = "#lines">information</A>. 
 Data may be in a number of <A HREF = "#format">formats</A>.  The data are 
-pasted into the textbox, or uploaded from a local file using the "Browse" 
+pasted into the textbox, or uploaded from a local file using the &quot;Browse&quot; 
 button, or via an http: or ftp: URL pasted into the textbox.
           <LI>The <B>lower</B> or <B>html</B> section is used to provide 
 &quot;description page&quot; information in html, which is displayed 
-whenever a user clicks on an annotation in the Genome Browser view.  
+whenever a user clicks on the custom track in the Genome Browser view.  
 Html input is via the same three routes as the data input above.
          </UL>
          <P>The Add Custom Tracks page also provides links to examples
 for both data and html input types.
 
          <P><BR><B>Manage Custom Tracks</B>
-         <P>This page becomes available after a Custom Track has
+         <P>This page becomes available after a custom track has
 been loaded, either via the Add Custom Tracks page or via the 
-Table Browser.  From this page, Custom Tracks can be added or existing
-tracks deleted or modified.  Existing Custom Tracks are listed in a 
+Table Browser.  From this page, custom tracks can be added or existing
+tracks deleted or modified.  Existing custom tracks are listed in a 
 table with the following fields:
         <UL>
          <LI>The <B>Names</B> of the tracks are listed as links to an
 update page which allows the user to replace the data in either the
 data or html areas, similar to the Add Custom Tracks page.
          <LI>The <B>Description</B> field is supplied by the user in
-the input file via the "description" attribute.
+the input file via the &quot;description&quot; attribute. If no description is
+included in the input file, this field contains the track name.
          <LI>The track <B>Type</B> is determined by the Browser
 depending on the format of the data.
-         <LI>The <B>Doc</B> column displays a "Y" for "Yes" if the
-track has been supplied html data.
+         <LI>The <B>Doc</B> column displays a &quot;Y&quot; for &quot;Yes&quot; 
+if the track has been supplied html data.  It is empty if there is no html
+associated with the track.
          <LI>The <B>Items</B> column shows the number of data lines
-in the file (except for wiggle format).
-         <LI>The <B>Pos</B> column shows chromosome of the default
+in the file (unless the data are in  wiggle format).
+         <LI>The <B>Pos</B> column shows the chromosome of the default
 position provided by the user in the data file using the position 
 attribute.  Clicking this link takes the user to the Genome Browser at 
 the specified position (note:  Only the chromosome name is shown in the
-Pos column).
-         <LI>The <B>Delete</B> button with delete any track checked
-in the column.
+Pos column).  If there is no default position, this column show the chromosome
+of the first data line.
         </UL>
+        
+        <P><BR><B>Update a Custom Track</B>
+        <P>From this page, you can update the data and html page of an existing 
+        track. Access this page from the Manage Custom Tracks page, or from 
+        the custom track details page in the Browser.</P>
 
-[above still needs editting.  the buttons are obvious and need not be mentioned.]
-<BR><BR>
-	FIXME:  
-         <LI> Update an Existing Custom Track -- this one is going to be BIG, 
-[I don't think it need be very big, really.  bk]
-it will include things like:<BR><BR>
             - the fact that your existing track data does not show up in the box<BR>
             - the fact that you are really just *replacing* data 
                 [mentioned above now]<BR>
@@ -338,9 +338,7 @@ it will include things like:<BR><BR>
 methods: URL, text, and file upload [his should be explained a little:  fix the
 file and relace using same method.]<BR>
             - what does it mean when a box is grayed out?<BR>
-            - what does the 'clear' button mean? [obvious?]<BR>
             - if there is a problem, then only the first 50 lines is displayed
-[is this working?  I don't see any lines on mine - bk]
 
         </P>
 
