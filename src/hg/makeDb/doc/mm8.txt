@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.15 2006/09/19 00:09:47 hiram Exp $"
+#	"$Id: mm8.txt,v 1.16 2006/10/03 18:49:44 fanhsu Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7203,3 +7203,28 @@ set out = $3
     # changed search regex to
         termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 
+#####################################################################
+## NIA Mouse Gene Index - (DONE, Fan, 10/6/06)
+#       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+    ssh hgwdev 
+    mkdir -p /cluster/data/mm8/bed/NIAGene061003
+    cd /cluster/data/mm8/bed
+    ln -s NIAGene061003 NIAGene
+    cd NIAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex/mm8/download/T-fasta.ff.gz
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex/mm8/download/T-psl.txt.gz
+    gzip -d *.gz
+    
+    cut -f 1-21 T-psl.txt >NIAGene.tab
+    hgLoadPsl mm8 NIAGene.tab
+
+    mkdir /gbdb/mm8/NIAGene
+    ln -s /cluster/data/mm8/bed/NIAGene/T-fasta.fa /gbdb/mm8/NIAGene/T-fasta.fa
+    
+    hgLoadSeq mm8 /gbdb/mm8/NIAGene/T-fasta.fa
+
+# Create/edit/check in NIAGene.html and trackDb.ra under
+    
+        kent/src/hg/makeDb/trackDb/mouse/mm8
+
+#####################################################################
