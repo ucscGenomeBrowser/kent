@@ -31,7 +31,7 @@ cdsDrawDefault genomic\ codons
 
 track NIAGene
 shortLabel NIA Gene Index
-longLabel NIA Mouse Gene Index Version 5
+longLabel NIA Mouse Gene Index
 group genes
 priority 54
 visibility hide
