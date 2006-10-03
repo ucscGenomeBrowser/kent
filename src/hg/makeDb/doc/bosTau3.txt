@@ -21,58 +21,25 @@
 
 
 #########################################################################
-# MAKE GENOME DB (Initial attempt Sept. 21, 2006 Heather)
+# MAKE GENOME DB (September 2006 Heather)
+# I got this right after a few attempts.
+# There were 3 things I needed to change in the files from Baylor:
+# I put the edits into /cluster/data/bosTau3/fixup.
+#
+# 1) Their AGP file used capitalized "Chr".  This is not recommended for us.
     ssh kkstore05
     cd /cluster/data/bosTau3
-    cat > bosTau3.config.ra <<EOF
-# Config parameters for makeGenomeDb.pl:
-db bosTau3
-clade vertebrate
-scientificName Bos Taurus
-assemblyDate August 2006
-assemblyLabel Baylor Release 3.1
-orderKey 19
-dbDbSpeciesDir cow
-mitoAcc none
-agpFiles /cluster/data/bosTau3/downloads/Btau20060815.agp
-fastaFiles /cluster/data/bosTau3/downloads/Btau20060815.contigs.fa.gz
-qualFiles /cluster/data/bosTau3/downloads/Btau20060815.contigs.fa.qual.gz
-EOF
-
-    ~/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra \
-      >& makeGenomeDb.log & tail -f makeGenomeDb.log
-
-# Log file:
-
-# Error: IDs in fastaFiles
-# (/cluster/data/bosTau3/downloads/Btau20060815.contigs.fa.gz)
-# do not perfectly match IDs in either the first or sixth columns of
-# agpFiles (/cluster/data/bosTau3/downloads/Btau20060815.agp)
-# Please examine and then remove these temporary files:
-  # /tmp/makeGenomeDb.fastaIds.W10474 -- fasta IDs
-  # /tmp/makeGenomeDb.agpIds.E10485 -- AGP first column IDs ('big' sequences)
-  # /tmp/makeGenomeDb.agpIds.T10489 -- AGP sixth column IDs ('little' sequences)
-# Command failed:
-  # ssh -x kkr6u00 nice /cluster/data/bosTau3/jkStuff/makeUnmasked2bit.csh
-
-# Move tmp files to kkr6u00:/scratch/heather/bosTau3
-# Create diff.clean which has 108 IDs
-# Write to Kim Worley (kworley@bcm.tmc.edu)
-
-# Response from Kim on Sept. 22, 2006:
-
-# Those are sequences that were intentionally omitted from the AGP, because they
-# were deemed to be contaminants after they were accessioned.
-# Please omit them from your assembly.   
-
-# Also realized that I have to adjust the header lines in the contig.fa file.
-# An example line:
-# >gi|112123023|gb|AAFC03055291.1| Bos taurus Ctg58.CH240-395G16, whole genome shotgun sequence
-# We need just 
-# >AAFC03055291
-
-# Generate /cluster/data/bosTau3/downloads/trimHeader.out using a simple C
-# program:
+    sed -e 's/Chr/chr/' downloads/Btau20060815.agp > fixup/UCSC.agp
+# 2) Their quality scores were reported by scaffold, not by chrom.
+#    Convert to qac (UCSC compressed qual score format) and lift from AGP.
+    zcat downloads/Btau20060815.contigs.fa.qual.gz | qaToQac stdin fixup/scaffolds.qac
+    qacAgpLift fixup/UCSC.agp fixup/scaffolds.qac fixup/chrom.qac
+# 3) They used a ".1" suffix in the contig and quality files.
+#    An example line from the contig.fa file:
+#    >gi|112123023|gb|AAFC03055291.1| Bos taurus Ctg58.CH240-395G16, whole genome shotgun sequence
+#    We need just 
+#    >AAFC03055291
+#    Fix this with variations on a simple C program:
 
 #include "common.h"
 #include "linefile.h"
@@ -92,29 +59,84 @@ while (lineFileNext(lf, &line, &lineSize))
 	fprintf(outputFileHandle, "%s\n", line);
 	continue;
 	}
-    chopString(line, "|", row, ArraySize(row));
-    chopString(row[3], ".", contigId, ArraySize(contigId));
-    fprintf(outputFileHandle, ">%s\n", contigId[0]);
+    if (fileType == "contig")
+        {
+        chopString(line, "|", row, ArraySize(row));
+        chopString(row[3], ".", contigId, ArraySize(contigId));
+        fprintf(outputFileHandle, ">%s\n", contigId[0]);
+	}
+    else // qual scores
+        {
+        chopString(line, ".", contigId, ArraySize(row));
+	fprintf(outputFileHandle, "%s\n", contigId[0]);
+        }
     }
 
 carefulClose(&outputFileHandle);
 lineFileClose(&lf);
 }
 
-# Next run faSomeRecords to get rid of the bad IDs:
+# At this point, attempt to run makeGenomeDb.pl:
 
-cd /cluster/data/bosTau3
-mkdir fixup
-faSomeRecords downloads/trimHeader.out fixup/3.agp fixup/UCSC.bosTau3.fa  
+    cat > bosTau3.config.ra <<EOF
+# Config parameters for makeGenomeDb.pl:
+db bosTau3
+clade vertebrate
+scientificName Bos Taurus
+assemblyDate August 2006
+assemblyLabel Baylor Release 3.1
+orderKey 19
+dbDbSpeciesDir cow
+mitoAcc none
+agpFiles /cluster/data/bosTau3/fixup/UCSC.agp
+fastaFiles /cluster/data/bosTau3/fixup/trimHeader.contigs.fa.gz
+qualFiles /cluster/data/bosTau3/fixup/trimHeader.qual.gz
+EOF
+
+    ~/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra \
+      >& makeGenomeDb.log & tail -f makeGenomeDb.log
+
+# This fails as described in the log file:
+
+# Error: IDs in fastaFiles
+# do not perfectly match IDs in either the first or sixth columns of agpFiles 
+# Please examine and then remove these temporary files:
+  # /tmp/makeGenomeDb.fastaIds.W10474 -- fasta IDs
+  # /tmp/makeGenomeDb.agpIds.E10485 -- AGP first column IDs ('big' sequences)
+  # /tmp/makeGenomeDb.agpIds.T10489 -- AGP sixth column IDs ('little' sequences)
+# Command failed:
+  # ssh -x kkr6u00 nice /cluster/data/bosTau3/jkStuff/makeUnmasked2bit.csh
+
+# Move tmp files to kkr6u00:/scratch/heather/bosTau3
+# Create diff.clean which has 108 IDs
+# Write to Kim Worley (kworley@bcm.tmc.edu)
+
+# Response from Kim on Sept. 22, 2006:
+
+# Those are sequences that were intentionally omitted from the AGP, because they
+# were deemed to be contaminants after they were accessioned.
+# Please omit them from your assembly.   
+
+# We can use faSomeRecords to get rid of the bad IDs.
+# First generate a sorted list of just the IDs in fixup/3.agp
+
+cd /cluster/data/bosTau3/fixup
+zcat trimHeader.contigs.fa.gz | faSomeRecords stdin 3.agp UCSC.bosTau3.fa  
 gzip fixup/UCSC.bosTau3.fa
+zcat trimHeader.qual.gz | faSomeRecords stdin 3.agp UCSC.qual
+gzip fixup/UCSC.qual
 
 # Edit bosTau3.config.ra
-
 # fastaFiles /cluster/data/bosTau3/fixup/UCSC.bosTau3.fa.gz
+# qualFiles /cluster/data/bosTau3/fixup/UCSC.qual.gz
 
-# Rotate log files and rerun with test script (and new agpToFa)
-mv makeGenomeDb.log.2 makeGenomeDb.log.3
-mv makeGenomeDb.log.1 makeGenomeDb.log.2
+# Drop database
+ssh hgwdev
+hgsql -e 'drop database bosTau3' mysql
+# Backup files and rerun 
+ssh kkstore02
+cd /cluster/data/bosTau3
+mv chrom.sizes chrom.sizes.1
+mv bosTau3.agp bosTau3.agp.1
 mv makeGenomeDb.log makeGenomeDb.log.1
 /cluster/home/angie/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra > & makeGenomeDb.log &
-
