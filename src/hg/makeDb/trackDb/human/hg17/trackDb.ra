@@ -2311,8 +2311,17 @@ termRegex (rs[0-9]+)
 searchPriority 12
 padding 250
 
-searchName affy500
-searchTable snpArrayAffy500
+searchName affy250Nsp
+searchTable snpArrayAffy250Nsp
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
+searchName affy250Sty
+searchTable snpArrayAffy250Sty
 searchMethod exact
 searchType bed
 termRegex (SNP_A-[0-9]+(_[0-9]+)?)
