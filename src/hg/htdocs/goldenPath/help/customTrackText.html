@@ -266,6 +266,7 @@ Others</A>.</P>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
 
+        <A NAME="manage"></A>
 	<BR>
 
         <!--outer table is for border purposes-->
@@ -277,25 +278,72 @@ Others</A>.</P>
         <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
         <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-        <P>FIXME:  information about the management screen.<BR><BR>
-             <LI> what is the "Y" in the doc column
-             <LI> from this page you can add, delete and update existing tracks
-             <LI> the track name is a link back to the update page
-             <LI> the chrom number is a link to the browser
-             <LI> 'items' column lists the number of items in your CT (except wiggle tracks)
-             <LI> two buttons: "view in GB", "access in TB" 
+        <P><BR>The Custom Track Management screens consist of two parts,
+               "Add Custom Tracks" and "Manage Custom Tracks"  The 
+                management screen becomes available only after a Custom
+                Track has been loaded.<BR>
+
+         <P><BR><B>Add Custon Tracks</B>
+         <P>This page has two sections, the data section and the html section. 
+         <UL>
+          <LI> The <B>upper</B> or <B>data</B> section is used to provide
+annotation data and track configuration informaion (see <A HREF = 
+"#lines">Browser Lines</A> below).  Data may be in a number of 
+<A HREF = "#format">formats</A>.  The data are pasted into the textbox,
+or uploaded from a local file using the "Browse" button, or via  
+an http: or ftp: URL pasted into the textbox.
+          <LI>The <B>lower</B> or <B>html</B> section is used to provide 
+"details page" information
+in html, which is displayed whenever a user clicks on an annotation in the 
+Genome Browser view.  Html input is via the same three routes as the
+data input above.
+         </UL>
+         <P>The Add Custom Tracks page also provides links to examples
+for both data and html input types.
+
+         <P><BR><B>Manage Custon Tracks</B>
+         <P>This page becomes available after a Custom Track has
+been loaded, either via the Add Custom Tracks page or via the 
+Table Browser.  From this page, Custom Tracks can be added or existing
+tracks deleted or modified.  Existing Custom Tracks are listed in a 
+table with the following fields:
+        <UL>
+         <LI>The <B>Names</B> of the tracks are listed as links to an
+update page which allows the user to replace the data in either the
+data or html areas, similar to the Add Custom Tracks page.
+         <LI>The <B>Description</B> field is supplied by the user in
+the input file via the "description" attribute.
+         <LI>The track <B>Type</B> is deteremined by the Browser
+depending on the format of the data.
+         <LI>The <B>Doc</B> column displays a "Y" for "Yes" if the
+track has been supplied html data.
+         <LI>The <B>Items</B> column shows the number of data lines
+in the file (except for wiggle format).
+         <LI>The <B>Pos</B> column shows chromosome of the default
+position provided by the user in the data file using the position 
+attribute.  Clicking this link takes the user to the Genome Browser at 
+the specified position (note:  Only the chromosome name is shown in the
+Pos column).
+         <LI>The <B>Delete</B> button with delete any track checked
+in the column.
+        </UL>
+
+[above still needs editting.  the buttons are obvious and need not be mentioned.]
 <BR><BR>
-	FIXME:  we need section headings here for: 
-         <LI> Add a New Custom Track
-         <LI> Delete an Existing Custom Track
-         <LI> Update an Existing Custom Track -- this one is going to be BIG, it will 
-		include things like:<BR><BR>
+	FIXME:  
+         <LI> Update an Existing Custom Track -- this one is going to be BIG, 
+[I don't think it need be very big, really.  bk]
+it will include things like:<BR><BR>
             - the fact that your existing track data does not show up in the box<BR>
-            - the fact that you are really just *replacing* data<BR>
-            - how to do this for data and the description for all three methods: URL, text, and file upload<BR>
+            - the fact that you are really just *replacing* data 
+                [mentioned above now]<BR>
+            - how to do this for data and the description for all three 
+methods: URL, text, and file upload [his should be explained a little:  fix the
+file and relace using same method.]<BR>
             - what does it mean when a box is grayed out?<BR>
-            - what does the 'clear' button mean?<BR>
+            - what does the 'clear' button mean? [obvious?]<BR>
             - if there is a problem, then only the first 50 lines is displayed
+[is this working?  I don't see any lines on mine - bk]
 
         </P>
 
@@ -303,6 +351,7 @@ Others</A>.</P>
         <br></TD></TR></TABLE>
         </TD></TR></TABLE>
 
+        <A NAME="lines"></A>
         <BR>
 
   	<!--outer table is for border purposes-->
