@@ -10370,10 +10370,11 @@ cd /usr/local/apache/htdocs/goldenPath/hg18/snpMask/deletions
 # as detected by snpMoltype.c above
 # hgc will just take the first match
 
-ssh kkstore02
-cd /cluster/data/dbSNP/126/human/rs_fasta
+ssh kkstore05
+cd /cluster/store12/snp/126/human/rs_fasta
 /bin/csh split.csh
 ssh hgwdev
+cd /cluster/store12/snp/126/human/rs_fasta
 /bin/csh link.csh
 hgsql hg18 < snp126Seq.sql
 /bin/csh load.csh
