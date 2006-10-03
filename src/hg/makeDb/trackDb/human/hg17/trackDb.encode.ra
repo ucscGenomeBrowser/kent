@@ -2449,6 +2449,7 @@ visibility hide
 type bed 5 .
 useScore 1
 dataVersion ENCODE June & Oct 2005 Freezes
+release beta
 
     track encodeNhgriDnaseHsChipGm06990
     subTrack encodeNhgriDnaseHsChip
@@ -2457,6 +2458,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
     color 80,50,80
     priority 1
+release beta
 
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDnaseHsChip
@@ -2465,6 +2467,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
     color 120,10,120
     priority 2
+release beta
 
     track encodeNhgriDnaseHsMpssCd4
     subTrack encodeNhgriDnaseHsChip
@@ -2473,20 +2476,22 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
     color 120,10,120
     priority 3
+release beta
 
     track encodeNhgriDnaseHsMpssCd4Act
-    subTrack encodeNhgriDnaseHsChip
+    subTrack encodeNhgriDnaseHsChip 
     shortLabel DNase CD4-act MS
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
     dataVersion ENCODE June 2005 Freeze
     priority 4
+release beta
 
-track encodeNhgriDnaseHsChipRaw
+track encodeNhgriDukeDnaseHs
 compositeTrack on
-shortLabel NHGRI DNaseI-HS Raw
-longLabel NHGRI DNaseI-Hypersensitive Chip Raw
+shortLabel Duke/NHGRI Dnase
+longLabel Duke/NHGRI DNaseI-Hypersensitivity
 group encodeChrom
-priority 61.0
+priority 61.1
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -2496,36 +2501,54 @@ maxLimit 4.243
 viewLimits 0:1
 windowingFunction mean
 autoScale Off
-dataVersion ENCODE Oct 2005 Freeze and August 2006
+dataVersion ENCODE June & Oct 2005 Freezes and August 2006
+subGroup1 group Group newChip=New_Chip oldChip=Old_Chip mpss=MPSS
+release alpha
 
     track encodeNhgriDnaseHsChipRawGm06990
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Raw
-    longLabel NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
     color 80,50,80
     dataVersion ENCODE Oct 2005 Freeze
+    subGroups group=newChip
     priority 1
+release alpha
 
     track encodeNhgriDnaseHsChipRawCd4
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase CD4 Raw
-    longLabel NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
     color 120,10,120
-    priority 2
+    subGroups group=newChip
     dataVersion ENCODE Oct 2005 Freeze
+    priority 2
+release alpha
 
     track encodeNhgriDnaseHsChipRawHela
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase HeLa Raw
-    longLabel NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
-    color 220,12,132
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
+    color 180,12,140
+    dataVersion Aug 2006
+    subGroups group=newChip
     priority 3
-    dataVersion August 2006
+release alpha
+
+    track encodeNhgriDnaseHsChipRawHepG2
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase HepG2 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2 Cells)
+    color 240,12,132
+    dataVersion Sept 2006
+    subGroups group=newChip
+    priority 4
+release alpha
 
     track encodeNhgriDnaseHsChipPvalGm06990
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Pval
-    longLabel NHGRI DNaseI-Hypersensitivity P-Value (GM06990 cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990 cells)
     noInherit on
     type bedGraph 4
     maxHeightPixels 128:16:16
@@ -2535,14 +2558,16 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     maxLimit 24.5
     viewLimits 3.1:24.5
     color 80,50,80
-    priority 4
-    dataVersion August 2006
+    priority 5
+    subGroups group=newChip
+    dataVersion Aug 2006
+release alpha
 
     track encodeNhgriDnaseHsChipPvalCd4
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase CD4 Pval
-    longLabel NHGRI DNaseI-Hypersensitivity P-Value (CD4+ Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+ Cells)
     type bedGraph 4
     maxHeightPixels 128:16:16
     autoScale off
@@ -2551,14 +2576,16 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     maxLimit 24.5
     viewLimits 3.1:24.5
     color 120,10,120
-    priority 5
-    dataVersion August 2006
+    priority 6
+    subGroups group=newChip
+    dataVersion Aug 2006
+release alpha
 
     track encodeNhgriDnaseHsChipPvalHela
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HeLa Pval
-    longLabel NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3 Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3 Cells)
     type bedGraph 4
     maxHeightPixels 128:16:16
     autoScale off
@@ -2566,9 +2593,80 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     minLimit 3.1
     maxLimit 24.5
     viewLimits 3.1:24.5
-    color 220,12,132
-    priority 6
-    dataVersion August 2006
+    color 180,12,140
+    priority 7
+    subGroups group=newChip
+    dataVersion Aug 2006
+release alpha
+
+    track encodeNhgriDnaseHsChipPvalHepG2
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase HepG2 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2 Cells)
+    type bedGraph 4
+    maxHeightPixels 128:16:16
+    autoScale off
+    windowingFunction mean
+    minLimit 3.1
+    maxLimit 24.5
+    viewLimits 3.1:24.5
+    color 240,12,132
+    priority 8
+    subGroups group=newChip
+    dataVersion Sept 2006
+release alpha
+
+    track encodeNhgriDnaseHsChipGm06990
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase GM069 Chip
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (GM06990, Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
+    color 80,50,80
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=oldChip
+    priority 9
+release alpha
+
+    track encodeNhgriDnaseHsChipCd4
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4 Chip
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
+    color 120,10,120
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=oldChip
+    priority 10
+release alpha
+
+    track encodeNhgriDnaseHsMpssCd4
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4 MS
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
+    color 120,10,120
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=mpss
+    priority 11
+release alpha
+
+    track encodeNhgriDnaseHsMpssCd4Act
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4-act MS
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=mpss
+    priority 12
+release alpha
 
 track encodeTbaAlign
 shortLabel TBA Alignment
