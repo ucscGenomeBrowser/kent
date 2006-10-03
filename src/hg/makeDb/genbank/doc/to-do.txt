@@ -1007,5 +1007,12 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - dropped by repeat masking.  Keep alignments to repeats only if there are
   just a small number of them
-    hg18:AA309293
+    hg18:AA309293,CX783937
 
+   - Perhaps you could add that the alignment extends over
+     the vast majority of the cDNA as well?   (JK)
+
+- create problem library table, and color cDNAs and provide details
+  based on it
+   - Athersys RAGE Library
+   - Invitrogen CR mRNAs
