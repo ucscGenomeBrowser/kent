@@ -1,7 +1,0 @@
-<!------------Description---------->
-This histogram shows the number of predicted InterPro domains contained in the
-selected protein relative to the number of domains found in proteins
-genome-wide. The number of domains is shown at the top of the histogram, and
-is plotted on the genome-wide distribution as a vertical dark blue line.
-
-

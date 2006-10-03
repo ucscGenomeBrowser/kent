@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.14 2006/09/20 17:16:02 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.15 2006/09/28 17:39:52 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -1298,6 +1298,5 @@ else
     microarrayGroupsFree(&groupings);
     }
 puts("<h2></h2><p>\n");
-printf("%s", tdb->html);
 bedFreeList(&bedList);
 }

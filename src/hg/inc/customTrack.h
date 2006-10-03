@@ -67,6 +67,7 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
+                                          int *retNumAdded,
                                           char **retErr);
 /* Figure out from cart variables where to get custom track text/file.
  * Parse text/file into a custom set of tracks.  Lift if necessary.  

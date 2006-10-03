@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.62 2006/09/27 00:50:02 donnak Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.70 2006/10/02 06:36:56 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,7 +42,6 @@ errAbort(
 #define hgCtUpdatedTrack "hgct_updatedTrack"
 #define hgCtDocText      "hgct_docText"
 #define hgCtDocFile      "hgct_docFile"
-#define hgCtDocTrackName "hgct_docTrackName"
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtRefreshPrefix "hgct_refresh"
 
@@ -234,12 +233,12 @@ puts("<TABLE BORDER=0>");
 cgiSimpleTableRowStart();
 puts("<TD VALIGN='TOP'>");
 puts("</FORM>");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
+printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
            hgTracksName(), cartSidUrlString(cart));
 cgiMakeButton("Submit", "view in genome browser");
 puts("</FORM></TD>");
 puts("<TD VALIGN='TOP'>");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
+printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
            hgTablesName(), cartSidUrlString(cart));
 cgiMakeButton("Submit", "access in table browser");
 puts("</FORM></TD>");
@@ -249,6 +248,8 @@ puts("</TABLE>");
 if (warn && warn[0])
     printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
 
+printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
+           hgCustomName(),  cartSidUrlString(cart));
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 puts("<TD VALIGN=\"TOP\">");
@@ -344,13 +345,12 @@ hTableEnd();
 
 /* add button */
 puts("<TD VALIGN=\"TOP\">");
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
-           hgCustomName(),  cartSidUrlString(cart));
 cgiMakeButton(hgCtDoAdd, "add custom tracks");
-puts("</FORM></TD>");
+puts("</TD>");
 
 cgiTableRowEnd();
 cgiTableEnd();
+puts("</FORM>");
 cartSetString(cart, "hgta_group", "user");
 }
 
@@ -401,13 +401,14 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    char *s = words[i];
 		    if (sameWord(s, "all"))
                         {
-                        if (sameString(command, "hide"))
-                            cartSetBoolean(cart, "hgt.hideAllNotCt", TRUE);
-                        else
-                            cartSetString(cart, "hgt.visAll", command);
+                        cartSetString(cart, "hgt.visAllFromCt", command);
                         }
                     else
-                        cartSetString(cart, s, command);
+                        {
+                        char buf[128];
+                        safef(buf, sizeof buf, "hgtct.%s", s);
+                        cartSetString(cart, buf, command);
+                        }
 		    }
 		}
 	    }
@@ -437,22 +438,23 @@ void addCustomDoc(char *selectedTrack)
 char *html = NULL;
 struct customTrack *ct = NULL;
 
-if (cartNonemptyString(cart, hgCtDocText))
-    html = cartString(cart, hgCtDocText);
-else if (cartNonemptyString(cart, hgCtDocFile))
+if (cartNonemptyString(cart, hgCtDocFile))
     html = cartString(cart, hgCtDocFile);
-if (!selectedTrack)
-    {
-    /* attach doc to first ct in the list */
-    ct = ctList;
-    }
-else
+else if (cartNonemptyString(cart, hgCtDocText))
+    html = cartString(cart, hgCtDocText);
+if (selectedTrack)
     {
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
         if (sameString(selectedTrack, ct->tdb->tableName))
             break;
         }
+    }
+else if (!ctHtmlUrl(ctList))
+    {
+    /* attach doc to newest added (first ct in the list)
+     * unless it's got it's own doc assigned via URL */
+    ct = ctList;
     }
 if (ct)
     ct->tdb->html = cloneString(html);
@@ -661,6 +663,7 @@ void doMiddle(struct cart *theCart)
 char *ctFileName = NULL;
 struct slName *browserLines = NULL;
 struct customTrack *replacedCts = NULL;
+int numAdded = 0;
 char *err = NULL, *warn = NULL;
 
 cart = theCart;
@@ -672,11 +675,25 @@ if (cartVarExists(cart, hgCtDoAdd))
     {
     doAddCustom(NULL);
     }
+else if (cartVarExists(cart, hgCtDoCancel))
+    {
+    /* remove cart variables now so text in input
+     * boxes isn't parsed */
+    cartRemovePrefix(cart, hgCt);
+    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
+    ctList = customTracksParseCart(cart, NULL, NULL);
+    if (ctList)
+        doManageCustom(NULL);
+    else
+        doGenomeBrowser();
+    }
 else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */
     struct customTrack *ct = NULL;
-    char *selectedTable = cartString(cart, hgCtTable);
+    /* need to clone the hgCtTable value, as the ParseCart will remove
+       the variable */
+    char *selectedTable = cloneString(cartString(cart, hgCtTable));
     if (selectedTable[0] != 0)
         {
         ctList = customTracksParseCart(cart, NULL, NULL);
@@ -698,7 +715,7 @@ else
     savedCustomText = saveLines(cloneString(savedCustomText), SAVED_LINE_COUNT);
 
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
-					    &replacedCts, &err);
+					    &replacedCts, &numAdded, &err);
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warn);
     addWarning(dsWarn, warn);
@@ -730,21 +747,22 @@ else
     if (ctList)
 	{
         char *updatedTable = cartOptionalString(cart, hgCtUpdatedTable);
-	addCustomDoc(updatedTable);
+        if (updatedTable || numAdded)
+            addCustomDoc(updatedTable);
         saveCustom(ctFileName);
         doManageCustom(warn);
 	}
     else
 	{
 	cartRemove(cart, "ct");
-        if (cartVarExists(cart, hgCtDoCancel) ||
-            cartVarExists(cart, hgCtDoDelete))
+        if (cartVarExists(cart, hgCtDoDelete))
                 doGenomeBrowser();
         else
             doAddCustom(NULL);
 	}
     }
 cartRemovePrefix(cart, hgCt);
+cartRemove(cart, CT_CUSTOM_TEXT_VAR);
 }
 
 

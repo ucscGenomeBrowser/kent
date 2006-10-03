@@ -22,11 +22,10 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 #include "hgConfig.h"
-#include "pipeline.h"
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.142 2006/09/26 23:34:48 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.146 2006/10/03 17:21:46 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -331,24 +330,7 @@ for (ct = ctList; ct != NULL; ct = nextCt)
     if ((newCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
         {
         slAddTail(&replacedCts, ct);
-#ifdef OLD
-        /* retain HTML from older track if there's none attached
-         * to the newer. Do this by swapping new and old */
-        if ((!newCt->tdb->html || !newCt->tdb->html[0]) &&
-                (ct->tdb->html && ct->tdb->html[0]))
-            {
-            /* swap text */
-            char *html = newCt->tdb->html;
-            newCt->tdb->html = ct->tdb->html;
-            ct->tdb->html = html;
-            /* swap filename */
-            html = newCt->htmlFile;
-            newCt->htmlFile = ct->htmlFile;
-            ct->htmlFile = html;
-            }
-#endif
         }
-
     else
         {
         slAddTail(&newCtList, ct);
@@ -365,6 +347,7 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
                                           struct customTrack **retReplacedCts,
+                                          int *retNumAdded,
                                           char **retErr)
 /* Figure out from cart variables where to get custom track text/file.
  * Parse text/file into a custom set of tracks.  Lift if necessary.  
@@ -377,6 +360,7 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
  * error */
 {
 #define CT_CUSTOM_FILE_BIN_VAR  CT_CUSTOM_FILE_VAR "__binary"
+int numAdded = 0;
 char *err = NULL;
 
 /* the hgt.customText and hgt.customFile variables contain new custom
@@ -516,6 +500,7 @@ if (ctFileNameFromCart != NULL)
         }
     }
 /* merge new and old tracks */
+numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
 
 if (ctList)
@@ -555,6 +540,8 @@ if (retBrowserLines)
     *retBrowserLines = browserLines;
 if (retReplacedCts)
     *retReplacedCts = replacedCts;
+if (retNumAdded)
+    *retNumAdded = numAdded;
 if (retErr)
     *retErr = err;
 return ctList;
@@ -568,9 +555,10 @@ struct customTrack *customTracksParseCart(struct cart *cart,
 char *err = NULL;
 struct customTrack *ctList = 
     customTracksParseCartDetailed(cart, retBrowserLines, retCtFileName, 
-                                        NULL, &err);
+                                        NULL, NULL, &err);
 if (err)
     warn("%s", err);
+cartRemove(cart, CT_SELECTED_TABLE_VAR);
 return ctList;
 }
 
@@ -719,11 +707,21 @@ carefulClose(&f);
 char *customTrackCgiButtonLabel(struct cart *cart)
 /* determine button label to launch hgCustom based on whether 
  * user currently has any custom tracks */
+/* TODO: make function of duplicated logic in ParseCart() */
 {
-if (cartVarExists(cart, "ct"))
-    return "manage custom tracks";
-else
-    return "add custom tracks";
+char *ctFileName = NULL;
+if ((ctFileName = cartOptionalString(cart, "ct")) != NULL)
+    {
+    if (fileExists(ctFileName)) 
+        return "manage custom tracks";
+    else
+        {
+        /* expired custom tracks file */
+	cartRemove(cart, "ct");
+	cartRemovePrefix(cart, "ct_");
+        }
+    }
+return "add custom tracks";
 }
 
 boolean isCustomTrack(char *track)

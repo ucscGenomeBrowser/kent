@@ -116,6 +116,17 @@ void snpMethods(struct track *tg);
 void snp125Methods(struct track *tg);
 /* Make track for snps. */
 
+struct orthoBed
+/* Browser extensible data - first four fields plus a chimp allele */
+    {
+    struct orthoBed *next;       /* Next in singly linked list. */
+    char            *chrom;      /* Human chromosome or FPC contig */
+    unsigned         chromStart; /* Start position in chromosome */
+    unsigned         chromEnd;   /* End position in chromosome */
+    char            *name;       /* Name of item */
+    char            *chimp;      /* Chimp allele */
+    };
+
 /***** haplotypes *****/
 
 char *perlegenName(struct track *tg, void *item);
