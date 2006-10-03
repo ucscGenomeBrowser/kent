@@ -10527,6 +10527,16 @@ mysql> alter table snp126ortho add index chrom (chrom, bin);
 
 # create alternate format with both alleles in same row
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpOrthoLoad hg18 snp126simple snp126ortho
+
+# 8517465 rows in hash for panTro2
+# 7321537 rows in hash for rheMac2
+# humanCount =       9106617
+# chimpOnlyCount =   1417951
+# macaqueOnlyCount =  222373
+# missingCount =      367937
+# bothCount =        7098356
+# confirm that chimpOnly + macaqueOnly + missing + both = human
+
 hgsql hg18 < snp126orthoPanTro2RheMac2.sql
 hgsql -e "load data local infile 'snpOrthoJoin.tab' into table snp126orthoPanTro2RheMac2" hg18
 alter table snp126orthoPanTro2RheMac2 add index name (name);
