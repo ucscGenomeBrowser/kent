@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.104 2006/10/03 05:15:09 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.105 2006/10/03 18:47:40 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -387,6 +387,37 @@ struct sqlResult       *sr        = NULL;
 struct snp125Extended  *se        = NULL;
 enum   trackVisibility  vis       = tg->visibility;
 enum   trackVisibility  visLim    = tg->limitedVis;
+int                     i         = 0;
+
+snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
+snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
+snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
+
+for (i=0; i < snp125MolTypeCartSize; i++)
+    {
+    snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
+    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
+    }
+for (i=0; i < snp125ClassCartSize; i++)
+    {
+    snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
+    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
+    }
+for (i=0; i < snp125ValidCartSize; i++)
+    {
+    snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
+    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
+    }
+for (i=0; i < snp125FuncCartSize; i++)
+    {
+    snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
+    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
+    }
+for (i=0; i < snp125LocTypeCartSize; i++)
+    {
+    snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
+    snp125LocTypeIncludeCart[i] = cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
+    }
 
 /* load SNPs */
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -399,10 +430,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+
 slSort(&itemList, bedCmp);
 tg->items = itemList;
-snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
-if( withLeftLabels && snp125ExtendedNames && (vis==tvPack||vis==tvFull) && !(visLim==tvDense||visLim==tvSquish) )
+
+filterSnpItems(tg, snp125AvHetFilterItem);
+filterSnpItems(tg, snp125WeightFilterItem);
+filterSnpItems(tg, snp125MolTypeFilterItem);
+filterSnpItems(tg, snp125ClassFilterItem);
+filterSnpItems(tg, snp125ValidFilterItem);
+filterSnpItems(tg, snp125FuncFilterItem);
+filterSnpItems(tg, snp125LocTypeFilterItem);
+
+if(withLeftLabels && snp125ExtendedNames && (vis==tvPack||vis==tvFull) && !(visLim==tvDense||visLim==tvSquish) )
     setSnp125ExtendedNameExtra(tg);
 }
 
