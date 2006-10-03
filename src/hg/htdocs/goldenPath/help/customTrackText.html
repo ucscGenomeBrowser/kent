@@ -136,7 +136,7 @@ Genome Browser home page <A HREF="../../index.html"
 TARGET=_blank>(http://genome.ucsc.edu/)</a> and click the Genome 
 Browser link in the top menu bar. On the Genome Browser Gateway page that
 displays, select the genome and assembly on which your annotation data is based,
-then click the &quot;add custom tracks&quot; button. Upload 
+then click the &quot;add custom tracks&quot; button. 
 <P>
 The Add Custom Tracks page contains two large text boxes: a data text box for 
 loading annotation data and a documentation text box for loading an optional 
@@ -149,7 +149,7 @@ Genome Browser supports both the HTTP and FTP (passive-only) protocols.
 <LI>
 Click the &quot;Browse&quot; button directly above the data text box, then 
 choose a custom track file from your local computer, or type the pathname of the
-file into the &quot;upload&quot; text box adjacent to the &quot;Browser&quot;
+file into the &quot;upload&quot; text box adjacent to the &quot;Browse&quot;
 button. The custom track data may be compressed by any of the following 
 programs: gzip (<em>.gz</em>), compress (<em>.Z</em>), or bzip2 (<em>.bz2</em>).
 Files containing compressed data must include the appropriate suffix in their 
@@ -168,8 +168,14 @@ text may be loaded by one of the following methods:
 <LI>
 Click the &quot;Browse&quot; button directly above the documentation text box, 
 then choose a text file from your local computer, or type the pathname of the
-file into the &quot;upload&quot; text box adjacent to the &quot;Browser&quot;
+file into the &quot;upload&quot; text box adjacent to the &quot;Browse&quot;
 button.
+<LI>
+If your descriptive text is located on a website, you can include a reference 
+to it in your custom track description. Add an htmlUrl attribute to the 
+track line of your custom track: <B>htmlUrl=<<I>external_url</I>></B>. 
+In this case, there is no need to insert anything into the documentation text 
+box.
 <LI>
 Paste or type the custom track data directly into the data box. Note that the 
 text in this box will not be saved to a file; therefore, this method is 
@@ -181,9 +187,12 @@ Genome Browser tracks, click the template link below the documentation text
 box for an HTML template that may be copied and pasted into a file for editing.
 <P>
 Click the <em>Submit</em> button to
-display the Genome Browser track window with your annotation. If you
+display the Genome Browser track window with your annotation. 
+<!-- If you
 encounter difficulties displaying your annotation, read the section 
-<A HREF="#TROUBLE">Troubleshooting Annotation Display Problems</A>.</P> 
+<A HREF="#TROUBLE">Troubleshooting Annotation Display Problems</A>.
+-->
+</P> 
 <P>
 To upload a custom annotation track from another machine or web 
 site, paste the URL of the track into the large edit box. Custom tracks can 
@@ -244,46 +253,6 @@ chr22 10012000 10017000 cloneF 100
 Click 
 <A HREF="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ct_example4.txt" 
 TARGET=_blank>here</A> to display this track in the Genome Browser.
-<P>
-mode), click on the item's label in the annotation track window. 
-<P>
-You can add a link from a details page to an external web page containing
-additional information about the feature by using the track line <I>url</I> attribute. 
-In the annotation file, set the <I>url</I> attribute in the track line to point
-to a publicly available page on a web server. The <I>url</I> attribute 
-substitutes each occurrence of '$$' in the URL string with the name defined by the 
-<I>name</I> attribute. You can take advantage of this feature to provide 
-individualized information for each feature in your track by creating HTML anchors 
-that correspond to the feature names in your web page.
-
-<P><B><I>Example 4:</I></B><BR>
-Here is an example of a file in which the <I>url</I> attribute has been set to
-point to the file <A HREF="clones.html"
-TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
-appended to the end of the file name in the example points to the HTML NAME tag 
-within the file that matches the name of the feature (cloneA, cloneB, etc.). 
-NOTE: The track line in this example has been split over 2 lines for 
-documentation purposes. If you paste this example into
-the browser, you must remove the line break to display the track successfully.
-Click <A HREF ="ct_example4.txt" TARGET=_blank>here</A> for a copy of this 
-example that can be pasted into the browser without editing. 
-<BR>
-<PRE><TT>browser position chr22:10000000-10020000
-browser hide all
-track name=clones description="Clones" visibility=2
-color=0,128,0 useScore=1 
-url="http://genome.ucsc.edu/goldenPath/help/clones.html#$$"
-chr22 10000000 10004000 cloneA 960 
-chr22 10002000 10006000 cloneB 200 
-chr22 10005000 10009000 cloneC 700 
-chr22 10006000 10010000 cloneD 600
-chr22 10011000 10015000 cloneE 300
-chr22 10012000 10017000 cloneF 100 
-</TT></PRE>
-Click 
-<A HREF="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/ct_example4.txt" 
-TARGET=_blank>here</A> to display this track in the Genome Browser.
-<P>
 <P><B>Step 6. (Optional) Share your annotation track with others</B><BR>
 The previous steps showed you how to upload annotation data for your own use 
 on your own machine. However, many users would like to 
@@ -298,6 +267,43 @@ Others</A>.</P>
 	</TD></TR></TABLE>
 
 	<BR>
+
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+                <FONT SIZE="4"><a name="MANAGING"></a><b>&nbsp; Managing Your Custom Tracks in the Genome Browser</b></FONT>
+        </TD></TR></TABLE>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+        <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+        <P>FIXME:  information about the management screen.<BR><BR>
+             <LI> what is the "Y" in the doc column
+             <LI> from this page you can add, delete and update existing tracks
+             <LI> the track name is a link back to the update page
+             <LI> the chrom number is a link to the browser
+             <LI> 'items' column lists the number of items in your CT (except wiggle tracks)
+             <LI> two buttons: "view in GB", "access in TB" 
+<BR><BR>
+	FIXME:  we need section headings here for: 
+         <LI> Add a New Custom Track
+         <LI> Delete an Existing Custom Track
+         <LI> Update an Existing Custom Track -- this one is going to be BIG, it will 
+		include things like:<BR><BR>
+            - the fact that your existing track data does not show up in the box<BR>
+            - the fact that you are really just *replacing* data<BR>
+            - how to do this for data and the description for all three methods: URL, text, and file upload<BR>
+            - what does it mean when a box is grayed out?<BR>
+            - what does the 'clear' button mean?<BR>
+            - if there is a problem, then only the first 50 lines is displayed
+
+        </P>
+
+        </TD><TD WIDTH=15></TD></TR></TABLE>
+        <br></TD></TR></TABLE>
+        </TD></TR></TABLE>
+
+        <BR>
 
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
@@ -450,7 +456,7 @@ Genome Browser:</P>
 	description page to be displayed with this track. 
 	There is no default for this attribute.  A template for a standard 
         format HTML track description is 
-        <A TARGET=_BLANK HREF="/ENCODE/descriptionPg.html">
+        <A TARGET=_BLANK HREF="http://genome.ucsc.edu/goldenPath/help/ct_description.txt">
         here</A>.
 
 </UL>
@@ -762,6 +768,24 @@ exon_number 1</tt>
 <P>The Genome Browser groups together GTF lines that have the same
 <I>transcript_id</I> value.  It only looks at <I>EXON</I> and <I>CDS</I>
 type features.</P>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	<br></TD></TR></TABLE>
+	</TD></TR></TABLE>
+
+	<BR>
+
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
+        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+        <FONT SIZE="4"><a name="TROUBLE"></a><b>&nbsp; Troubleshooting Annotation Display Problems</b></FONT>
+        </TD></TR></TABLE>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+        <TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+        FIXME!!
+
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
