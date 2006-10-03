@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.145 2006/09/29 18:06:18 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.146 2006/10/03 17:21:46 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -707,11 +707,21 @@ carefulClose(&f);
 char *customTrackCgiButtonLabel(struct cart *cart)
 /* determine button label to launch hgCustom based on whether 
  * user currently has any custom tracks */
+/* TODO: make function of duplicated logic in ParseCart() */
 {
-if (cartVarExists(cart, "ct"))
-    return "manage custom tracks";
-else
-    return "add custom tracks";
+char *ctFileName = NULL;
+if ((ctFileName = cartOptionalString(cart, "ct")) != NULL)
+    {
+    if (fileExists(ctFileName)) 
+        return "manage custom tracks";
+    else
+        {
+        /* expired custom tracks file */
+	cartRemove(cart, "ct");
+	cartRemovePrefix(cart, "ct_");
+        }
+    }
+return "add custom tracks";
 }
 
 boolean isCustomTrack(char *track)
