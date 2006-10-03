@@ -280,20 +280,23 @@ Others</A>.</P>
         <P><BR>The Custom Track Management screens consist of two parts,
                &quot;Add Custom Tracks&quot; and &quot;Manage Custom Tracks&quot;.
                The management screen becomes available only after a custom
-               track has been loaded.<BR>
+               track has been loaded. The Custom Tracks Manager is invoked via
+               the &quot;manage custom tracks&quot; button on the main
+               Browser page or on the Gateway page.<BR>
 
          <P><BR><B>Add Custom Tracks</B>
          <P>This page has two sections, the data section and the html section. 
          <UL>
-          <LI> The <B>upper</B> or <B>data</B> section is used to provide
+          <LI> The <B>upper</B> or <EM>data</EM> section is used to provide
 annotation data and track configuration <A HREF = "#lines">information</A>. 
 Data may be in a number of <A HREF = "#format">formats</A>.  The data are 
 pasted into the textbox, or uploaded from a local file using the &quot;Browse&quot; 
 button, or via an http: or ftp: URL pasted into the textbox.
-          <LI>The <B>lower</B> or <B>html</B> section is used to provide 
-&quot;description page&quot; information in html or plain text, which is 
+          <LI>The <B>lower</B> or <EM>track description</EM> section is used to provide 
+description page information in html or plain text, which is 
 displayed whenever a user clicks on the custom track in the Genome Browser 
-view. Html input is via the same three routes as the data input above.
+view. Html can be used for formatting purposes, but plain text is also accepted.
+Input is via the same three routes as the data input above.
          </UL>
          <P>The Add Custom Tracks page also provides links to examples
 for both data and html input types.
@@ -317,10 +320,11 @@ depending on the format of the data.
 if the track has been supplied html data.  It is empty if there is no html
 associated with the track.
          <LI>The <B>Items</B> column shows the number of data lines
-in the file (unless the data are in  wiggle format).
+in the file (unless the data are in wiggle format).
          <LI>The <B>Pos</B> column shows the chromosome of the default
 position provided by the user in the data file using the position 
-attribute.  Clicking this link takes the user to the Genome Browser at 
+attribute (unless the data are in wiggle format).  Clicking this 
+link takes the user to the Genome Browser at 
 the specified position (note:  Only the chromosome name is shown in the
 Pos column).  If there is no default position, this column shows the chromosome
 of the first data line.
@@ -329,7 +333,8 @@ of the first data line.
         <P><BR><B>Update Custom Tracks</B>
         <P>From this page, the data and html of an existing custom
         track can be modified. Access this page from the Manage Custom 
-        Tracks page, or from the custom track details page in the Browser.</P>
+        Tracks page, or from the custom track details page in the Browser.
+        This page is very similar to the Add Custom Tracks page.</P>
 
         <P>On this page, you can update the data and/or the html for 
 the custom track you clicked on to reach this page.  The data will not show up
