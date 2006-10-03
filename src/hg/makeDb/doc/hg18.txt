@@ -10380,6 +10380,157 @@ hgsql hg18 < snp126Seq.sql
 /bin/csh load.csh
 hgsql hg18 -e 'alter table snp126Seq add index name (name)'
 
+
+############################################################################
+# Lift simple bi-allelic SNPs to rheMac2 and panTro2 (Heather, August 2006)
+
+ssh hgwdev
+cd /cluster/data/dbSNP/ortho/hg18/snpDump
+
+# dump raw data -- this creates snpGetSimple.chr*
+# exceptions table is used to skip SNPs that align in multiple places
+# We also skip SNPs on chrN_random
+# This yields 9,092,533 SNPs
+# This data is also stored into hg18.snp126simple for later use
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpGetSimple hg18 snp126 snp126Exceptions
+
+# split up into just under 200 files to make for an efficient pk run
+# using file size of 60K lines
+# this creates /cluster/data/dbSNP/ortho/hg18/split/chr1-01, chr1-02, chr1-03, etc.
+# 165 files created
+# 140 files have 60k lines
+/bin/csh split.csh
+
+# prepare cluster runs
+# I didn't use -bedPlus=6, didn't seem to need it
+cp /cluster/data/dbSNP/ortho/hg18/split/* /san/sanvol1/snp/liftOver/hg18/rheMac2/input
+cp /cluster/data/dbSNP/ortho/hg18/split/* /san/sanvol1/snp/liftOver/hg18/panTro2/input
+cd /san/sanvol1/snp/liftOver/hg18/rheMac2
+/bin/csh makeJobList.csh
+
+    rm -f jobList
+    foreach fileName (`ls input/chr*`)
+        set baseName = $fileName:t
+        echo liftOver $fileName /cluster/data/hg18/bed/liftOver/hg18ToRheMac2.over.chain.gz output/$baseName.out unmapped/$baseName.unmapped >> jobList
+    end
+
+cd /san/sanvol1/snp/liftOver/hg18/panTro2
+/bin/csh makeJobList.csh
+
+    rm -f jobList
+    foreach fileName (`ls input/chr*`)
+        set baseName = $fileName:t
+        echo liftOver $fileName /cluster/data/hg18/bed/liftOver/hg18ToPanTro2.over.chain.gz output/$baseName.out unmapped/$baseName.unmapped >> jobList
+    end
+
+
+# do cluster runs
+# this only took a few minutes
+# got 7321537 lifts for rheMac2
+# got 8517465 lifts for panTro2
+ssh pk
+cd /san/sanvol1/snp/liftOver/hg18/rheMac2
+para create jobList
+para try; para check; para push; para check; etc.
+cd /san/sanvol1/snp/liftOver/hg18/panTro2
+para create jobList
+para try; para check; para push; para check; etc.
+
+# concatenate output files into all.out
+cd /san/sanvol1/snp/liftOver/hg18/rheMac2/output
+/bin/csh concat.csh
+cd /san/sanvol1/snp/liftOver/hg18/panTro2/output
+/bin/csh concat.csh
+
+# load into hg18
+# Doing the load and split so I can easily load sequence for a full chrom
+ssh hgwdev
+cp /san/sanvol1/snp/liftOver/hg18/rheMac2/output/all.out /cluster/data/dbSNP/ortho/hg18/rheMac2Lift
+cd /cluster/data/dbSNP/ortho/hg18/rheMac2Lift
+hgsql rheMac2 < snp126hg18ortho.sql
+hgsql -e 'load data local infile "all.out" into table snp126hg18ortho' rheMac2
+cp /san/sanvol1/snp/liftOver/hg18/panTro2/output/all.out /cluster/data/dbSNP/ortho/hg18/panTro2Lift
+cd /cluster/data/dbSNP/ortho/hg18/panTro2Lift
+hgsql panTro2 < snp126hg18ortho.sql
+hgsql -e 'load data local infile "all.out" into table snp126hg18ortho' panTro2
+
+# split by chrom 
+# this creates tables chrN_snp126hg18ortho and can be run from anywhere
+# it will create chrN_snp126hg18ortho.tab files which can be deleted
+cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom2 rheMac2 snp126hg18ortho 
+rm chr*.tab
+# rm snp126ortho.tab
+cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom2 panTro2 snp126hg18ortho 
+rm chr*.tab
+# rm snp126ortho.tab
+
+# get sequence 
+# this creates chrN_snp126hg18orthoPrelim.tab files
+# random chroms are okay here
+# note we are including Ns 
+# This will log to fetchSeq.errors any examples where chromEnd != chromStart + 1
+# It will also check for coordinates past the end of the chrom.
+# No errors for rheMac2 or panTro2.
+
+cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
+/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq rheMac2 /cluster/data/rheMac2/rheMac2.2bit
+# ssh kkstore02
+# cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
+/bin/csh concat.csh
+# cleanup; remove split tables from rheMac2, keep snp126hg18orthoPrelim
+hgsql rheMac2 < drop.sql
+rm chr*.tab
+
+cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
+/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq panTro2 /cluster/data/panTro2/panTro2.2bit
+# ssh kkstore02
+# cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
+/bin/sh concat.sh
+# cleanup; remove split tables from panTro2, keep snp126hg18orthoPrelim
+hgsql panTro2 < drop.sql
+rm chr*.tab
+
+# do a preliminary load
+cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
+hgsql hg18 < snp126orthoPrelim.sql
+hgsql -e 'load data local infile "snp126orthoPrelim.tab" into table snp126orthoPrelim' hg18
+cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
+hgsql -e 'load data local infile "snp126orthoPrelim.tab" into table snp126orthoPrelim' hg18
+
+# add human chrom, chromStart, chromEnd, allele, variant
+# liftOver loses the chrom, chromStart and chromEnd
+# liftOver does retain the allele and variant
+cd /cluster/data/dbSNP/ortho/hg18/integrate
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpOrthoLookup hg18 snp126simple snp126orthoPrelim
+
+# load final table with separate rows for chimp and macaque
+# drop snp126orthoPrelim because it has non-human coords
+# rm tab file because it is huge
+hgsql hg18 < snp126ortho.sql
+load data local infile "snpOrthoLookup.tab" into table snp126ortho
+drop table snp126orthoPrelim
+rm snpOrthoLookup.tab
+
+# create indices
+mysql> alter table snp126ortho add index name (name);
+mysql> alter table snp126ortho add index chrom (chrom, bin);
+
+# manually validate a few examples on various chroms, various strands
+# I used rheMac2:
+# rs533274, hg18 chr1 +, rheMac2 chr18 -
+# rs1690550, hg18 chr1 -, rheMac2 chr19 +
+# rs3121568, hg18 chr1 -, rheMac2 chr19 -
+# rs28709562, hg18 chr1 +, rheMac2 chr19 +
+# rs34675838, also hg18 chr1 +, rheMac2 chr19 +
+
+# create alternate format with both alleles in same row
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpOrthoLoad hg18 snp126simple snp126ortho
+hgsql hg18 < snp126orthoPanTro2RheMac2.sql
+hgsql -e "load data local infile 'snpOrthoJoin.tab' into table snp126orthoPanTro2RheMac2" hg18
+alter table snp126orthoPanTro2RheMac2 add index name (name);
+
 ################################################################
 ### CREATE chimpHiQualDiff -- panTro2 (Daryl; May 1, 2006)
     # Make file/table of high quality single base pair differences
