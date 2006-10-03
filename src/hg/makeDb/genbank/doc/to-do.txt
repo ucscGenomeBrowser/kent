@@ -1016,3 +1016,5 @@ Warning: NR_001874: malformed RefSeq CDS:
   based on it
    - Athersys RAGE Library
    - Invitrogen CR mRNAs
+   - JK: The ORESTES libraries (which I think, like the RAGE are
+     just ESTs) should be taken with a large grain of salt.
