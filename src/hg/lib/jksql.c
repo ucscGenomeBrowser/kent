@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.91 2006/08/03 18:03:34 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.92 2006/10/04 18:51:20 galt Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -521,10 +521,10 @@ MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
 
-monitorEnter();
 if (monitorFlags & JKSQL_TRACE)
     monitorPrintQuery(sc, query);
 
+monitorEnter();
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
     if (abort)
