@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.105 2006/10/03 18:47:40 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.106 2006/10/04 04:49:22 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -247,7 +247,7 @@ ret->chrom      = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd   = sqlUnsigned(row[2]);
 ret->name       = cloneString(row[3]);
-ret->chimp      = cloneString(row[13]);
+ret->chimp      = cloneString(row[10]);
 return ret;
 }
 
@@ -280,8 +280,7 @@ struct slList        *snpItemList   = tg->items; /* list of SNPs */
 struct slList        *snpItem       = snpItemList;
 struct slList        *orthoItemList = NULL;      /* list of orthologous state info */
 struct slList        *orthoItem     = orthoItemList;
-char                 *orthoTable    = cloneString("snp126ortho"); /* could be a trackDb option */
-char                 *orthoWhere    = cloneString("species='panTro2'"); /* could be a trackDb option */
+char                 *orthoTable    = cloneString("snp126orthoPanTro2RheMac2"); /* could be a trackDb option */
 struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
 struct dyString      *extra         = newDyString(256);
@@ -292,7 +291,7 @@ if(!sqlTableExists(conn,orthoTable))
     return;
     }
 /* get list of orthologous alleles */
-sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, orthoWhere, &rowOffset);
+sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     orthoItem = (struct slList *)orthoBedLoad(row + rowOffset);
@@ -991,7 +990,7 @@ tg->freeItems     = freeSnp125;
 tg->loadItems     = loadSnp125Extended;
 tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
-if (sqlTableExists(conn,"snp126ortho"))
+if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
     tg->itemName  = snp125ExtendedName;
 }
 
