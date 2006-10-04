@@ -10390,6 +10390,8 @@ cd /cluster/data/dbSNP/ortho/hg18/snpDump
 # dump raw data -- this creates snpGetSimple.chr*
 # exceptions table is used to skip SNPs that align in multiple places
 # We also skip SNPs on chrN_random
+# We also skip triallelic and quadallelic
+# We don't filter on weight
 # This yields 9,092,533 SNPs
 # This data is also stored into hg18.snp126simple for later use
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpGetSimple hg18 snp126 snp126Exceptions
