@@ -184,7 +184,7 @@ void usage()
 errAbort(
   "chainScore - score chains\n"
   "usage:\n"
-  "   chainScore in.axt tNibDir qNibDir out.chain\n"
+  "   chainScore in.chain tNibDir qNibDir out.chain\n"
   "options:\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
