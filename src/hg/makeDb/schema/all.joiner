@@ -1606,12 +1606,6 @@ identifier ensemblEstTranscriptId external=Ensembl dependency
     $gbd.ensEstGtp.transcript chopAfter=.
     $gbd.ensEstPep.name chopAfter=.
 
-# HPRD Identifiers
-
-identifier hprdId external=HPRD dependency
-"HPRD ID"
-    $hg.knownToHprd.value dupeOk
-
 # H-Invitational Database Identifiers
 
 identifier hinvTranscriptId external=H-INV dependency
