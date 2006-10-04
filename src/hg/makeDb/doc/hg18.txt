@@ -10884,3 +10884,10 @@ gzip illumina.bed
     hgsql hg18 -e 'load data local infile "acemblyClass.tab" into table acemblyClass'
 
 ##########################################################################
+# LIFT RNAGENE FROM HG17 TO HG18 (DONE, Robert, 10/3/06)
+mkdir /cluster/data/hg18/bed/rnaGene
+cd /cluster/data/hg18/bed/rnaGene
+hgsql hg18 < rnaGene.sql
+liftOver ~/hg17/rnaGene/rnaGenes.tab  /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz rnaGenes.bed unmapped -bedPlus=10 -tab
+hgLoadBed hg18 rnaGene rnaGenes.bed -oldTable -tab -noBin
+##########################################################################
