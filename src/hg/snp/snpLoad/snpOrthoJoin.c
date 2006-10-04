@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpOrthoJoin.c,v 1.1 2006/10/03 21:36:58 heather Exp $";
+static char const rcsid[] = "$Id: snpOrthoJoin.c,v 1.2 2006/10/04 04:29:00 heather Exp $";
 
 static char *database = NULL;
 static char *snpSimpleTable = NULL;
@@ -90,6 +90,9 @@ int chimpOnlyCount = 0;
 int macaqueOnlyCount = 0;
 int missingCount = 0;
 int bothCount = 0;
+int chromStart = 0;
+int chromEnd = 0;
+int binVal = 0;
 
 AllocVar(missingData);
 missingData->chrom = cloneString("?");
@@ -98,14 +101,16 @@ missingData->end = 0;
 missingData->strand = cloneString("?");
 missingData->allele = cloneString("?");
 
-safef(query, sizeof(query), "select name, strand, refUCSC, observed from %s", tableName);
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refUCSC, observed from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    snpId = cloneString(row[0]);
-    humanStrand = cloneString(row[1]);
-    humanAllele = cloneString(row[2]);
-    humanObserved = cloneString(row[3]);
+    chromStart = sqlUnsigned(row[1]);
+    chromEnd = sqlUnsigned(row[2]);
+    snpId = cloneString(row[3]);
+    humanStrand = cloneString(row[4]);
+    humanAllele = cloneString(row[5]);
+    humanObserved = cloneString(row[6]);
     humanCount++;
 
     helChimp = hashLookup(chimpHash, snpId);
@@ -136,6 +141,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (helChimp && !helMacaque)
 	chimpOnlyCount++;
 
+    binVal = hFindBin(chromStart, chromEnd);
+    fprintf(outputFileHandle, "%d\t%s\t%s\t%s\t", binVal, row[0], row[1], row[2]);
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", snpId, humanObserved, humanAllele, humanStrand);
     fprintf(outputFileHandle, "%s\t%d\t%d\t", chimpData->chrom, chimpData->start, chimpData->end);
     fprintf(outputFileHandle, "%s\t%s\t", chimpData->allele, chimpData->strand);
