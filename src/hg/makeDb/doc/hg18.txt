@@ -10532,11 +10532,11 @@ mysql> alter table snp126ortho add index chrom (chrom, bin);
 
 # 8517465 rows in hash for panTro2
 # 7321537 rows in hash for rheMac2
-# humanCount =       9106617
-# chimpOnlyCount =   1417951
-# macaqueOnlyCount =  222373
-# missingCount =      367937
-# bothCount =        7098356
+# humanCount =       9092533
+# chimpOnlyCount =   1418324
+# macaqueOnlyCount =  222396
+# missingCount =      352672
+# bothCount =        7098141
 # confirm that chimpOnly + macaqueOnly + missing + both = human
 
 hgsql hg18 < snp126orthoPanTro2RheMac2.sql
