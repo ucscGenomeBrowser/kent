@@ -10526,7 +10526,7 @@ mysql> alter table snp126ortho add index chrom (chrom, bin);
 # rs34675838, also hg18 chr1 +, rheMac2 chr19 +
 
 # create alternate format with both alleles in same row
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpOrthoLoad hg18 snp126simple snp126ortho
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpOrthoJoin hg18 snp126simple snp126ortho
 
 # 8517465 rows in hash for panTro2
 # 7321537 rows in hash for rheMac2
