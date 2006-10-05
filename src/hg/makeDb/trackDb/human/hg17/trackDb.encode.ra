@@ -2507,7 +2507,7 @@ viewLimits 0:1
 windowingFunction mean
 autoScale Off
 dataVersion ENCODE June & Oct 2005 Freezes and August 2006
-subGroup1 group Group newChip=New_Chip oldChip=Old_Chip mpss=MPSS
+subGroup1 group Group raw=New_Chip_Raw pval=New_Chip_Pval oldChip=Old_Chip mpss=MPSS
 release alpha
 
     track encodeNhgriDnaseHsChipRawGm06990
@@ -2516,7 +2516,7 @@ release alpha
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
     color 80,50,80
     dataVersion ENCODE Oct 2005 Freeze
-    subGroups group=newChip
+    subGroups group=raw
     priority 1
 release alpha
 
@@ -2525,7 +2525,7 @@ release alpha
     shortLabel DNase CD4 Raw
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
     color 120,10,120
-    subGroups group=newChip
+    subGroups group=raw
     dataVersion ENCODE Oct 2005 Freeze
     priority 2
 release alpha
@@ -2536,7 +2536,7 @@ release alpha
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
     color 180,12,140
     dataVersion Aug 2006
-    subGroups group=newChip
+    subGroups group=raw
     priority 3
 release alpha
 
@@ -2546,7 +2546,7 @@ release alpha
     longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2 Cells)
     color 240,12,132
     dataVersion Sept 2006
-    subGroups group=newChip
+    subGroups group=raw
     priority 4
 release alpha
 
@@ -2564,7 +2564,7 @@ release alpha
     viewLimits 3.1:24.5
     color 80,50,80
     priority 5
-    subGroups group=newChip
+    subGroups group=pval
     dataVersion Aug 2006
 release alpha
 
@@ -2582,7 +2582,7 @@ release alpha
     viewLimits 3.1:24.5
     color 120,10,120
     priority 6
-    subGroups group=newChip
+    subGroups group=pval
     dataVersion Aug 2006
 release alpha
 
@@ -2600,7 +2600,7 @@ release alpha
     viewLimits 3.1:24.5
     color 180,12,140
     priority 7
-    subGroups group=newChip
+    subGroups group=pval
     dataVersion Aug 2006
 release alpha
 
@@ -2618,7 +2618,7 @@ release alpha
     viewLimits 3.1:24.5
     color 240,12,132
     priority 8
-    subGroups group=newChip
+    subGroups group=pval
     dataVersion Sept 2006
 release alpha
 
