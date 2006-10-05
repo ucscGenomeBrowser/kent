@@ -29,6 +29,7 @@ longLabel Gencode Intron Validation (Jun 2005)
 dataVersion ENCODE June 2005 Freeze
 group encodeGenes
 priority 10.2
+# NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
 type bed 6 +
@@ -40,6 +41,7 @@ shortLabel GIS PET RNA
 dataVersion ENCODE Oct 2005 Freeze
 longLabel Genome Institute of Singapore PET of PolyA+ RNA
 group encodeGenes
+# NOTE: genome-wide, except randoms and chrY
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 priority 49.2
 visibility hide
@@ -1398,6 +1400,7 @@ shortLabel Yale STAT1 Sites
 longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Binding Sites
 group encodeChip
 priority 65.2
+# NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 dataVersion ENCODE June 2005 Freeze
@@ -1546,6 +1549,7 @@ shortLabel Yale ChIP Sites
 longLabel Yale ChIP/Chip (HeLa cells) Sites 
 group encodeChip
 priority 65.23
+# NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 type bed5FloatScore
@@ -1641,6 +1645,7 @@ shortLabel UW/Reg QCP DNaseI Sens
 longLabel ENCODE UW/Regulome QCP DNaseI Sensitivity
 group encodeChrom
 priority 66.05
+# NOTE: Missing regions
 chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
 visibility hide
 maxHeightPixels 128:16:16
@@ -2444,7 +2449,7 @@ shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites
 group encodeChrom
 priority 61.1
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 5 .
 useScore 1
@@ -2492,7 +2497,7 @@ shortLabel Duke/NHGRI Dnase
 longLabel Duke/NHGRI DNaseI-Hypersensitivity
 group encodeChrom
 priority 61.1
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
