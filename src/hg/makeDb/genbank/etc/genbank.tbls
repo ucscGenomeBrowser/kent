@@ -22,6 +22,7 @@
 ^gbExtFile$
 ^gbStatus$
 ^gbLoaded$
+^gbMiscDiff$
 ^all_mrna$
 ^chr.+_mrna$
 ^xenoMrna$
