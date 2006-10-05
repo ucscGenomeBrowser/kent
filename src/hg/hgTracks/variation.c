@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.106 2006/10/04 04:49:22 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.107 2006/10/05 05:52:49 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -271,7 +271,10 @@ return dif;
 }
 
 void setSnp125ExtendedNameExtra(struct track *tg)
-/* add extra text to be drawn in snp name field  */
+/* add extra text to be drawn in snp name field.  This works by
+   walking through two sorted lists and updating the nameExtra value
+   for the SNP list with data from a table of orthologous state
+   information */
 {
 struct sqlConnection *conn          = hAllocConn();
 int                   rowOffset     = 0;
@@ -285,6 +288,7 @@ struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
 struct dyString      *extra         = newDyString(256);
 
+/* if orthologous info is not available, don't add it! */
 if(!sqlTableExists(conn,orthoTable))
     {
     hFreeConn(&conn);
@@ -298,29 +302,33 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&orthoItemList, orthoItem);
     }
 
-/* List of SNPs is already sorted, so sort list of Ortho info then
- * walk through both together */
+/* List of SNPs is already sorted, so sort list of Ortho info */
 slSort(&orthoItemList, bedCmp);
 
+/* Walk through two sorted lists together */
 snpItem   = snpItemList;
 orthoItem = orthoItemList;
 while(snpItem!=NULL && orthoItem!=NULL)
     {
+    /* check to see that we're not at the end of either list and that
+     * the two list elements represent the same human position */
     while ( snpItem!=NULL && orthoItem!=NULL && (cmp = snpOrthoCmp(snpItem, orthoItem))!=0 )
 	if (cmp<0)
 	    snpItem = snpItem->next;
 	else if (cmp>0)
 	    orthoItem = orthoItem->next;
+    /* either one of the lists is null or the two items refer to the
+     * same human position */
     if (snpItem==NULL || orthoItem==NULL)
 	break;
-    dyStringClear(extra);
+    /* update the snp->extraName with the ortho data */
     dyStringPrintf(extra, " %s>%s", ((struct orthoBed *)orthoItem)->chimp, ((struct snp125Extended *)snpItem)->observed);
     ((struct snp125Extended *)snpItem)->nameExtra = cloneString(extra->string);
-    if (snpItem!=NULL)
-	snpItem = snpItem->next;
-    if (orthoItem!=NULL)
-	orthoItem = orthoItem->next;
-    }    
+    dyStringClear(extra);
+    /* increment the list pointers */
+    snpItem = snpItem->next;
+    orthoItem = orthoItem->next;
+    }
 tg->items=snpItemList;
 freeDyString(&extra);
 sqlFreeResult(&sr);
