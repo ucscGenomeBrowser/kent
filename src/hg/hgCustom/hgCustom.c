@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.70 2006/10/02 06:36:56 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.71 2006/10/05 16:41:48 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -67,36 +67,36 @@ void makeClearButton(char *field)
 char javascript[1024];
 safef(javascript, sizeof javascript, 
         "document.mainForm.%s.value = '';", field);
-cgiMakeOnClickButton(javascript, "&nbsp; Clear &nbsp;");
+cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
 }
 
 void addCustomForm(struct customTrack *ct, char *err)
 /* display UI for adding custom tracks by URL or pasting data */
 {
 puts("Display your own data as custom annotation tracks in the browser." 
-     " Data must be formatted in"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#BED'>BED</A>,"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#GFF'>GFF</A>,"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#GTF'>GTF</A>,"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/wiggle.html'>WIG</A>"
-  " or <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#PSL'>PSL</A>"
-  " formats. To configure the display, set"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#TRACK'>track</A>"
+     " Data must be formatted in\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
+  " or <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#PSL'>PSL</A>\n"
+  " formats. To configure the display, set\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
   " and"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#BROWSER'>browser</A>"
-  " line attributes as described in the "
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html'>User's Guide</A>."
-  " Publicly available custom tracks are listed"
-  " <A HREF='/goldenPath/customTracks/custTracks.html'>here</A>."
-  " Examples are"
-  " <A TARGET=_BLANK HREF='/goldenPath/help/customTrack.html#EXAMPLE1'>here</A>."
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
+  " line attributes as described in the \n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
+  " Publicly available custom tracks are listed\n"
+  " <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"
+  " Examples are\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
 );
 
 char *url = NULL;
     char buf[1024];
 
 if (err)
-    printf("<P><B>&nbsp; &nbsp; &nbsp; &nbsp; <I><FONT COLOR='RED'>Error</I></FONT>&nbsp; %s </B>", err);
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT COLOR='RED'>Error</I></FONT>&nbsp;%s</B>", err);
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
 
@@ -188,8 +188,8 @@ cgiTableRowEnd();
 /* fifth row - link for HTML description template */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=3>");
-puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.</TD>");
-cgiTableFieldEnd();
+puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.");
+puts("</TD>");
 cgiTableRowEnd();
 cgiTableEnd();
 }
@@ -246,7 +246,7 @@ cgiTableRowEnd();
 puts("</TABLE>");
 
 if (warn && warn[0])
-    printf("<B>&nbsp; &nbsp; &nbsp; &nbsp; %s", warn);
+    printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
 
 printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
            hgCustomName(),  cartSidUrlString(cart));
@@ -339,7 +339,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         else
             puts("&nbsp;");
         }
-    puts("</TD></TR>");
+    puts("</TD></TR>\n");
     }
 hTableEnd();
 
@@ -543,7 +543,7 @@ struct customTrack *ct;
 if (!slCount(replacedCts))
     return NULL;
 struct dyString *dsWarn = dyStringNew(0);
-dyStringAppend(dsWarn, "Replaced: &nbsp;");
+dyStringAppend(dsWarn, "Replaced:&nbsp;");
 for (ct = replacedCts; ct != NULL; ct = ct->next)
     {
     if (ct != replacedCts)
