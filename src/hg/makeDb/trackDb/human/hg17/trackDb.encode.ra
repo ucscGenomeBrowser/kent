@@ -2493,7 +2493,7 @@ release beta
 
 track encodeNhgriDukeDnaseHs
 compositeTrack on
-shortLabel Duke/NHGRI Dnase
+shortLabel Duke/NHGRI DNase
 longLabel Duke/NHGRI DNaseI-Hypersensitivity
 group encodeChrom
 priority 61.1
@@ -2507,7 +2507,7 @@ viewLimits 0:1
 windowingFunction mean
 autoScale Off
 dataVersion ENCODE June & Oct 2005 Freezes and August 2006
-subGroup1 group Group raw=New_Chip_Raw pval=New_Chip_Pval oldChip=Old_Chip mpss=MPSS
+subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Old_DNase-chip mpss=MPSS
 release alpha
 
     track encodeNhgriDnaseHsChipRawGm06990
