@@ -22,7 +22,7 @@ inConstr && (/REFERENCES/ || /WITH/) {
     inConstr = 0;
 }
 
-($1=="GO") {
+($1=="GO") || ($1=="go") {
     # end of sql command
     inAlter = 0;
     inConstr = 0;

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS AccessionRejectionCriteria;
 CREATE TABLE AccessionRejectionCriteria (
-	acc_rejection_uid int PRIMARY KEY NOT NULL ,
+	acc_rejection_uid int PRIMARY KEY  NOT NULL ,
 	name varchar (64) NOT NULL ,
 	description text NULL 
 ) 
@@ -8,7 +8,7 @@ CREATE TABLE AccessionRejectionCriteria (
 
 DROP TABLE IF EXISTS Accessions;
 CREATE TABLE Accessions (
-	accession_uid int PRIMARY KEY NOT NULL ,
+	accession_uid int PRIMARY KEY  NOT NULL ,
 	nuc_acc varchar (64) NOT NULL ,
 	nuc_version int NULL ,
 	nuc_gi int NULL ,
@@ -32,7 +32,7 @@ CREATE TABLE Accessions_GroupVersions (
 
 DROP TABLE IF EXISTS CcdsStatusVals;
 CREATE TABLE CcdsStatusVals (
-	ccds_status_val_uid int PRIMARY KEY NOT NULL ,
+	ccds_status_val_uid int PRIMARY KEY  NOT NULL ,
 	ccds_status varchar (50) NOT NULL 
 ) 
 ;
@@ -47,7 +47,7 @@ CREATE TABLE CcdsUids (
 
 DROP TABLE IF EXISTS ChromosomeAccessions;
 CREATE TABLE ChromosomeAccessions (
-	chromosome_accession_uid int PRIMARY KEY NOT NULL ,
+	chromosome_accession_uid int PRIMARY KEY  NOT NULL ,
 	organization_uid int NOT NULL ,
 	acc varchar (64) NOT NULL ,
 	version int NULL ,
@@ -57,7 +57,7 @@ CREATE TABLE ChromosomeAccessions (
 
 DROP TABLE IF EXISTS GroupVersions;
 CREATE TABLE GroupVersions (
-	group_version_uid int PRIMARY KEY NOT NULL ,
+	group_version_uid int PRIMARY KEY  NOT NULL ,
 	group_uid int NOT NULL ,
 	version int NOT NULL ,
 	ncbi_build_number int NOT NULL ,
@@ -90,7 +90,7 @@ CREATE TABLE Groups (
 
 DROP TABLE IF EXISTS InterpretationSubtypes;
 CREATE TABLE InterpretationSubtypes (
-	interpretation_subtype_uid int PRIMARY KEY NOT NULL ,
+	interpretation_subtype_uid int PRIMARY KEY  NOT NULL ,
 	interpretation_type_uid int NOT NULL ,
 	interpretation_subtype varchar (128) NOT NULL 
 ) 
@@ -98,14 +98,14 @@ CREATE TABLE InterpretationSubtypes (
 
 DROP TABLE IF EXISTS InterpretationTypes;
 CREATE TABLE InterpretationTypes (
-	interpretation_type_uid int PRIMARY KEY NOT NULL ,
+	interpretation_type_uid int PRIMARY KEY  NOT NULL ,
 	interpretation_type varchar (128) NOT NULL 
 ) 
 ;
 
 DROP TABLE IF EXISTS Interpretations;
 CREATE TABLE Interpretations (
-	interpretation_uid int PRIMARY KEY NOT NULL ,
+	interpretation_uid int PRIMARY KEY  NOT NULL ,
 	ccds_uid int NULL ,
 	group_uid int NULL ,
 	group_version_uid int NULL ,
@@ -128,7 +128,7 @@ CREATE TABLE Interpretations (
 
 DROP TABLE IF EXISTS Interpreters;
 CREATE TABLE Interpreters (
-	interpreter_uid int PRIMARY KEY NOT NULL ,
+	interpreter_uid int PRIMARY KEY  NOT NULL ,
 	organization_uid int NOT NULL ,
 	name varchar (128) NULL ,
 	email text NULL 
@@ -137,7 +137,7 @@ CREATE TABLE Interpreters (
 
 DROP TABLE IF EXISTS Locations;
 CREATE TABLE Locations (
-	location_uid int PRIMARY KEY NOT NULL ,
+	location_uid int PRIMARY KEY  NOT NULL ,
 	chr_start int NOT NULL ,
 	chr_stop int NOT NULL 
 ) 
@@ -160,7 +160,7 @@ CREATE TABLE NextIds (
 
 DROP TABLE IF EXISTS Organizations;
 CREATE TABLE Organizations (
-	organization_uid int PRIMARY KEY NOT NULL ,
+	organization_uid int PRIMARY KEY  NOT NULL ,
 	name varchar (128) NOT NULL ,
 	approval_authority tinyint(1) NOT NULL 
 ) 
@@ -168,10 +168,48 @@ CREATE TABLE Organizations (
 
 DROP TABLE IF EXISTS Programs;
 CREATE TABLE Programs (
-	program_uid int PRIMARY KEY NOT NULL ,
+	program_uid int PRIMARY KEY  NOT NULL ,
 	organization_uid int NOT NULL ,
 	name text NOT NULL ,
 	version text NULL 
+) 
+;
+
+
+DROP TABLE IF EXISTS StatisticsTypes;
+CREATE TABLE StatisticsTypes (
+        statistics_type_uid int PRIMARY KEY  NOT NULL ,
+        statistics_type varchar (20) NOT NULL 
+) 
+;
+
+DROP TABLE IF EXISTS CcdsStatistics;
+CREATE TABLE CcdsStatistics (
+        statistics_uid int PRIMARY KEY NOT NULL ,
+        statistics_type_uid int NOT NULL ,
+        tax_id int NOT NULL ,
+        ncbi_build_number int NOT NULL ,
+        ncbi_build_version int NOT NULL ,
+        statistics_html text NULL
+) 
+;
+
+DROP TABLE IF EXISTS Builds;
+CREATE TABLE Builds (
+        build_uid int PRIMARY KEY NOT NULL ,
+        tax_id int NOT NULL ,
+        ncbi_build_number int NOT NULL ,
+        ncbi_build_version int NOT NULL
+) 
+;
+
+DROP TABLE IF EXISTS BuildQualityTests;
+CREATE TABLE BuildQualityTests (
+        build_uid int NOT NULL ,
+        qa_analysis_id int NOT NULL ,
+        is_required tinyint(1) NOT NULL ,
+        acc_rejection_uid int NOT NULL ,
+        val_description varchar (64) NULL
 ) 
 ;
 
