@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.97 2006/10/06 23:03:58 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.98 2006/10/06 23:19:18 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -184,9 +184,7 @@ if (NULL != theCart)
     }
 else
     {
-    uiState[0] = 0;
-    uiState[1] = 0;
-    //debug: proposed change: safef(uiState, sizeof(uiState), "?cart=none");
+    safef(uiState, sizeof(uiState), "?cart=none");
     }
 
 puts(
@@ -246,9 +244,9 @@ else
 	trackDbFree(&tdb);
 	}
     else
-	printf("       <A HREF=\"/cgi-bin/hgTables?hgta_doMainPage=1%s\" "
+	printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
 	       "class=\"topbar\">\n",
-	       uiState+1);
+	       uiState);
     }
     puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
@@ -266,9 +264,9 @@ else
 	}
     if (wikiLinkEnabled())
 	{
-	printf("<A HREF=\"/cgi-bin/hgSession&hgS_doMainPage=1%s\" "
+	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
-	       uiState+1);
+	       uiState);
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
