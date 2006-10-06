@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.54 2006/09/19 05:51:28 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.55 2006/10/06 22:17:38 hiram Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -275,7 +275,10 @@ if (u == NULL)
    strcpy(parsed->file, "/");
 else
    {
-   strncpy(parsed->file, u, sizeof(parsed->file));
+   /* need to encode spaces, but not ! other characters */
+   char *t=replaceChars(u," ","%20");
+   strncpy(parsed->file, t, sizeof(parsed->file));
+   freeMem(t);
    *u = 0;
    }
 
@@ -335,8 +338,6 @@ else
 /* What's left is the host. */
 strncpy(parsed->host, s, sizeof(parsed->host));
 }
-
-
 
 /* this was cloned from rudp.c - move it later for sharing */
 static boolean readReadyWait(int sd, int microseconds)
