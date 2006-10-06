@@ -23,7 +23,34 @@ group map
 visibility dense
 type bed 3 +
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+                                                                                
+track bacEndSingles
+shortLabel BAC End Singles
+longLabel BAC End Singles
+group map
+priority 16
+visibility hide
+type bed 6 +
+exonArrows off
+                                                                                
+track bacEndPairsBad
+shortLabel Incorrect BAC End Pairs
+longLabel Orphan, Short, Long and Incorrectly Oriented BAC End Pairs
+group map
+priority 17
+visibility hide
+type bed 6 +
+exonArrows off
 track multiz7way
+
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
