@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.28 2006/09/26 23:34:48 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.29 2006/10/06 23:38:40 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -149,8 +149,11 @@ cmd1[7] = dyStringCannibalize(&tmpDy);
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
+ *	The /dev/stderr will get stderr messages from hgLoadBed into the
+ *	Apache error log
  */
-return pipelineOpen1(cmd1, pipelineWrite, "/dev/null", NULL);
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
+	"/dev/null", "/dev/stderr");
 }
 
 static struct customTrack *bedFinish(struct customTrack *track, 
@@ -194,7 +197,10 @@ if (dbRequested)
     struct bed *bed;
     for (bed = track->bedList; bed != NULL; bed = bed->next)
 	bedOutputN(bed, track->fieldCount, out, '\t', '\n');
-    pipelineWait(dataPipe);
+    if(pipelineWait(dataPipe))
+	{
+	errAbort("internal error, bedLoader failed, please notify UCSC<BR>");
+	}
     pipelineFree(&dataPipe);
     }
 return track;
@@ -731,7 +737,15 @@ cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 cmd2[5] = "-pathPrefix=.";
 cmd2[6] = db;
 cmd2[7] = track->dbTableName;
-return pipelineOpen(cmds, pipelineWrite, "/dev/null", NULL);
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The /dev/stderr will get stderr messages from hgLoadBed into the
+ *	Apache error log
+ */
+return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
+	"/dev/null", "/dev/stderr");
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,
@@ -785,7 +799,10 @@ if (dbRequested)
     FILE *out = pipelineFile(dataPipe);
     copyOpenFile(in, out);
     carefulClose(&in);
-    pipelineWait(dataPipe);
+    if (pipelineWait(dataPipe))
+	{
+	errAbort("internal error, wigLoader failed, please notify UCSC<BR>");
+	}
     pipelineFree(&dataPipe);
     track->wigFile = NULL;
 
