@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.107 2006/10/05 05:52:49 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.108 2006/10/06 23:47:39 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -885,8 +885,8 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-if(vis==tvDense)
-    sortSnp125ExtendedByColor(tg);
+// if(vis==tvDense)
+    // sortSnp125ExtendedByColor(tg);
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 if (vis == tvPack || vis == tvSquish)
@@ -1000,6 +1000,7 @@ tg->itemNameColor = snp125ExtendedColor;
 tg->itemColor     = snp125ExtendedColor;
 if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
     tg->itemName  = snp125ExtendedName;
+hFreeConn(&conn);
 }
 
 char *perlegenName(struct track *tg, void *item)
