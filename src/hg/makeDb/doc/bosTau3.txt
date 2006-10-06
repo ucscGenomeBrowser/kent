@@ -140,3 +140,24 @@ mv chrom.sizes chrom.sizes.1
 mv bosTau3.agp bosTau3.agp.1
 mv makeGenomeDb.log makeGenomeDb.log.1
 /cluster/home/angie/kent/src/utils/makeGenomeDb.pl bosTau3.config.ra > & makeGenomeDb.log &
+
+#########################################################################
+# REPEATMASKER (DONE Oct 5, 2006 heather)
+    ssh kkstore05
+    cd /cluster/data/bosTau3/bed
+    # Run -debug to create the dir structure and preview the scripts:
+    ~/kent/src/utils/doRepeatMasker.pl bosTau3 -verbose 3 -debug
+    # Run it for real and tail the log:
+    ~/kent/src/utils/doRepeatMasker.pl bosTau3 -verbose 3 \
+        >& RepeatMasker.2006-10-05/do.log &
+    tail -f RepeatMasker.2006-10-05/do.log
+    # RepeatMasker and lib version from do.log:
+    #    March 20 2006 (open-3-1-5) version of RepeatMasker
+    #CC   RELEASE 20060315;                                            *
+    # Compare coverage to previous assembly:
+    featureBits bosTau3 rmsk
+    # 1200525422 bases of 2731807384 (43.946%) in intersection
+    featureBits bosTau2 rmsk
+    # 1291561904 bases of 2812203870 (45.927%) in intersection
+
+
