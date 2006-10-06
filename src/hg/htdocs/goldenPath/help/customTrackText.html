@@ -201,8 +201,9 @@ To upload a custom annotation track from another machine or web
 site, paste the URL of the track into the large edit box. Custom tracks can 
 be displayed in conjunction with ordinary BLAT tracks.</P>
 <P>
-If you wish to display more than one custom track at a time in the Genome
-Browser, load the tracks simultaneously using one of the following methods:
+You may wish to display more than one custom track at a time in the Genome 
+Browser.  They may be loaded from separate files, or you may load the tracks 
+simultaneously using one of the following methods:
 <UL>
 <LI>
 Put all the tracks into the same file (rather than separate files), then
@@ -210,7 +211,11 @@ load the file using the above steps.
 <LI>
 Place your track files in a web-accessible location on your server, then 
 load them into the Genome Browser via their URLs as described above.
-</UL></P>
+</UL>
+If you load more than one file at a time, only the last-loaded file can
+be loaded with a track decription, unless you load the description using
+the htmlUrl method.
+</P>
 <P><B>Step 5. (Optional) Add details pages for individual track features</B><BR>
 After you've constructed your track and have successfully displayed it in the
 Genome Browser, you may wish to customize the details pages for individual track
