@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1133 2006/10/03 23:08:05 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1134 2006/10/06 19:38:39 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11443,6 +11443,11 @@ else
 /* do the lookup */
 hNibForChrom(snp.chrom, nibFile);
 seqNib = hFetchSeqMixed(nibFile, snp.chrom, start, end);
+if (seqNib == NULL)
+    {
+    warn("Couldn't get sequences");
+    return;
+    }
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
@@ -11466,17 +11471,16 @@ dyStringAppend(seqDbSnpTemp, seqDbSnp5->string);
 dyStringAppend(seqDbSnpTemp, variation);
 dyStringAppend(seqDbSnpTemp, seqDbSnp3->string);
 seqDbSnp = newDnaSeq(seqDbSnpTemp->string, strlen(seqDbSnpTemp->string), "dbSNP seq");
-if (seqDbSnp==NULL)
+if (seqDbSnp == NULL)
+    {
+    warn("Couldn't get sequences");
     return;
-seqDbSnp->size=strlen(seqDbSnp->dna);
+    }
+seqDbSnp->size = strlen(seqDbSnp->dna);
 freeDyString(&seqDbSnp5);
 freeDyString(&seqDbSnp3);
 
-if (seqNib != NULL && seqDbSnp != NULL)
-    generateAlignment(seqNib, seqDbSnp);
-else
-    warn("Couldn't get sequences, database out of sync?");
-
+generateAlignment(seqNib, seqDbSnp);
 }
 
 
