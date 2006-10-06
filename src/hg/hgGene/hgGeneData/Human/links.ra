@@ -33,7 +33,7 @@ url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
 
 name hprd
 shortLabel HPRD
-tables hprdToUniProt kgXref
+tables knownToHprd 
 idSql select value from knownToHprd where name = '%s';
 url http://www.hprd.org/protein/%s 
 priority 87
