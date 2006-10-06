@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.71 2006/10/05 16:41:48 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.72 2006/10/06 23:48:31 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -97,6 +97,7 @@ char *url = NULL;
 
 if (err)
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT COLOR='RED'>Error</I></FONT>&nbsp;%s</B>", err);
+
 cgiParagraph("&nbsp;");
 cgiSimpleTableStart();
 
@@ -232,15 +233,18 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 puts("<TABLE BORDER=0>");
 cgiSimpleTableRowStart();
 puts("<TD VALIGN='TOP'>");
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM>");
-printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
-           hgTracksName(), cartSidUrlString(cart));
+printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
+           hgTracksName());
 cgiMakeButton("Submit", "view in genome browser");
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM></TD>");
 puts("<TD VALIGN='TOP'>");
-printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
-           hgTablesName(), cartSidUrlString(cart));
+printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
+           hgTablesName());
 cgiMakeButton("Submit", "access in table browser");
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM></TD>");
 cgiTableRowEnd();
 puts("</TABLE>");
@@ -248,8 +252,8 @@ puts("</TABLE>");
 if (warn && warn[0])
     printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
 
-printf("<FORM ACTION=\"%s?%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
-           hgCustomName(),  cartSidUrlString(cart));
+printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
+           hgCustomName());
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 puts("<TD VALIGN=\"TOP\">");
@@ -314,8 +318,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
             if (hgOfficialChromName(chrom))
-                printf("<TD><A HREF='%s?%s&position=%s' TITLE=%s>%s:</A></TD>", 
-                    hgTracksName(), cartSidUrlString(cart), pos, pos, chrom);
+                printf("<TD><A HREF='%s?position=%s' TITLE=%s>%s:</A></TD>", 
+                    hgTracksName(), pos, pos, chrom);
             else
                 puts("<TD>&nbsp;</TD>");
             }
@@ -350,6 +354,7 @@ puts("</TD>");
 
 cgiTableRowEnd();
 cgiTableEnd();
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM>");
 cartSetString(cart, "hgta_group", "user");
 }
@@ -358,8 +363,7 @@ void doGenomeBrowser()
 {
 /* Redirect to table browser */
 char url[256];
-safef(url, sizeof url, "%s?%s", 
-			hgTracksName(), cartSidUrlString(cart));
+safef(url, sizeof url, "%s", hgTracksName());
 puts("<HTML>");
 printf("<BODY onload=\"try {self.location.href='%s' } catch(e) {}\"><a href=\"%s\">Redirect </a></BODY>", url, url);
 puts("</HTML>");
@@ -369,7 +373,7 @@ void helpCustom()
 /* display documentation */
 {
 webNewSection("Loading Custom Tracks");
-webIncludeFile("/goldenPath/help/customTrackLoad.html");
+webIncludeFile("../goldenPath/help/customTrackLoad.html");
 webEndSection();
 }
 
@@ -460,14 +464,6 @@ if (ct)
     ct->tdb->html = cloneString(html);
 }
 
-void startCustomForm()
-{
-/* create form for adding/managing custom tracks */
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
-               " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
-               hgCustomName());
-}
-
 void endCustomForm()
 /* end form for adding new custom tracks */
 {
@@ -479,8 +475,6 @@ void doAddCustom(char *err)
  * Include error message, if any */
 {
 cartWebStart(cart, "Add Custom Tracks");
-cartSaveSession(cart);
-startCustomForm();
 addCustomForm(NULL, err);
 endCustomForm();
 helpCustom();
@@ -492,8 +486,6 @@ void doUpdateCustom(struct customTrack *ct, char *err)
  * Include error message, if any */
 {
 cartWebStart(cart, "Update Custom Track: %s", ct->tdb->longLabel);
-cartSaveSession(cart);
-startCustomForm();
 cartSetString(cart, hgCtDocText, ct->tdb->html);
 addCustomForm(ct, err);
 cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
@@ -511,8 +503,6 @@ void doManageCustom(char *warn)
  * Include warning message, if any */
 {
 cartWebStart(cart, "Manage Custom Tracks");
-cartSaveSession(cart);
-startCustomForm();
 manageCustomForm(warn);
 cartWebEnd(cart);
 }
