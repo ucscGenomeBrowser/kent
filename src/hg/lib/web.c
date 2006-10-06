@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.98 2006/10/06 23:19:18 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.99 2006/10/06 23:46:09 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -184,7 +184,9 @@ if (NULL != theCart)
     }
 else
     {
-    safef(uiState, sizeof(uiState), "?cart=none");
+    uiState[0] = 0;
+    uiState[1] = 0;
+    //safef(uiState, sizeof(uiState), "?cart=none");
     }
 
 puts(
@@ -206,7 +208,7 @@ else
     printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
     puts("           Home</A> &nbsp;&nbsp;&nbsp;");
     printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
-	   uiState);
+	       uiState);
     puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
@@ -219,7 +221,8 @@ else
 	}
     if (!endsWith(scriptName, "hgBlat"))
 	{
-    	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">", uiState+1);
+    	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
+		uiState[1]==0 ? "" : "&", uiState+1 );
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
     {
@@ -236,17 +239,17 @@ else
 	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
 		   "class=\"topbar\">\n",
-		   uiState, tdb->grp, table, table);
+	       uiState, tdb->grp, table, table);
 	else
-	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+	    printf("       <A HREF=\"/cgi-bin/hgTables%shgta_doMainPage=1\" "
 		   "class=\"topbar\">\n",
-		   uiState);
+		uiState);
 	trackDbFree(&tdb);
 	}
     else
-	printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+	printf("       <A HREF=\"/cgi-bin/hgTables%s%shgta_doMainPage=1\" "
 	       "class=\"topbar\">\n",
-	       uiState);
+		uiState, uiState[0]==0 ? "?" : "&" );
     }
     puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
@@ -264,9 +267,9 @@ else
 	}
     if (wikiLinkEnabled())
 	{
-	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
+	printf("<A HREF=\"/cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
-	       uiState);
+	       uiState, uiState[0]==0 ? "?" : "&" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
