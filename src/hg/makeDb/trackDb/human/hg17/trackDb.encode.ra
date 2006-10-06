@@ -2675,7 +2675,7 @@ release alpha
 
 track encodeTbaAlign
 shortLabel TBA Alignment
-longLabel NHGRI/PSU TBA Alignments
+longLabel TBA Alignments
 group encodeCompGeno
 priority 70.1
 visibility hide
@@ -2695,7 +2695,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeTbaAlignAnno
 shortLabel TBA Alignment Anno
-longLabel NHGRI/PSU TBA Alignments Anno
+longLabel TBA Alignments Anno
 group x
 priority 70.1
 visibility hide
@@ -2718,7 +2718,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeTbaCons
 compositeTrack on
 shortLabel TBA Cons
-longLabel  NHGRI/PSU/UCSC TBA Conservation
+longLabel  TBA Conservation
 group encodeCompGeno
 priority 70.2
 type wig 0.0 1.0
@@ -2760,7 +2760,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeTbaElements
 compositeTrack on
 shortLabel TBA Elements
-longLabel NHGRI/PSU/UCSC TBA Conserved Elements
+longLabel TBA Conserved Elements
 group encodeCompGeno
 priority 70.3
 visibility hide
@@ -2799,7 +2799,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMlaganAlign
 shortLabel MLAGAN Alignment
-longLabel Stanford MLAGAN Alignments
+longLabel MLAGAN Alignments
 group encodeCompGeno
 priority 72.0
 visibility hide
@@ -2819,7 +2819,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMlaganAlignAnno
 shortLabel MLAGAN Alignment Anno
-longLabel Stanford MLAGAN Alignments Anno
+longLabel MLAGAN Alignments Anno
 group x
 priority 72.0
 visibility hide
@@ -2842,7 +2842,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMlaganCons
 compositeTrack on
 shortLabel MLAGAN Cons
-longLabel Stanford MLAGAN Conservation
+longLabel MLAGAN Conservation
 group encodeCompGeno
 priority 72.1
 visibility hide
@@ -2882,7 +2882,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMlaganElements
 compositeTrack on
 shortLabel MLAGAN Elements
-longLabel Stanford MLAGAN Conserved Elements
+longLabel MLAGAN Conserved Elements
 group encodeCompGeno
 priority 72.3
 visibility hide
@@ -2914,7 +2914,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMavidAlign
 shortLabel MAVID Alignment
-longLabel UC Berkeley MAVID Alignments
+longLabel MAVID Alignments
 group encodeCompGeno
 priority 74.1
 visibility hide
@@ -2934,7 +2934,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMavidAlignAnno
 shortLabel MAVID Alignment Anno
-longLabel UC Berkeley MAVID Alignments Anno
+longLabel MAVID Alignments Anno
 group x
 priority 74.1
 visibility hide
@@ -2956,7 +2956,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMavidCons
 compositeTrack on
 shortLabel MAVID Cons
-longLabel UC Berkeley MAVID Conservation
+longLabel MAVID Conservation
 group encodeCompGeno
 priority 74.2
 visibility hide
@@ -2996,7 +2996,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMavidElements
 compositeTrack on
 shortLabel MAVID Elements
-longLabel UC Berkeley MAVID Conserved Elements
+longLabel MAVID Conserved Elements
 group encodeCompGeno
 priority 74.3
 visibility hide
