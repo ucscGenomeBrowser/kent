@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.96 2006/09/20 23:27:12 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.97 2006/10/06 23:03:58 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -186,6 +186,7 @@ else
     {
     uiState[0] = 0;
     uiState[1] = 0;
+    //debug: proposed change: safef(uiState, sizeof(uiState), "?cart=none");
     }
 
 puts(
@@ -245,9 +246,9 @@ else
 	trackDbFree(&tdb);
 	}
     else
-	printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+	printf("       <A HREF=\"/cgi-bin/hgTables?hgta_doMainPage=1%s\" "
 	       "class=\"topbar\">\n",
-	       uiState);
+	       uiState+1);
     }
     puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
@@ -265,9 +266,9 @@ else
 	}
     if (wikiLinkEnabled())
 	{
-	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
+	printf("<A HREF=\"/cgi-bin/hgSession&hgS_doMainPage=1%s\" "
 	       "class=\"topbar\">Session</A>",
-	       uiState);
+	       uiState+1);
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
