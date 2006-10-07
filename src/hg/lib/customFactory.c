@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.30 2006/10/07 00:55:12 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.31 2006/10/07 03:22:06 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -153,7 +153,7 @@ cmd1[7] = dyStringCannibalize(&tmpDy);
  *	Apache error log
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", "/dev/stderr");
+	"/dev/null", NULL);
 }
 
 static struct customTrack *bedFinish(struct customTrack *track, 
@@ -745,7 +745,7 @@ cmd2[7] = track->dbTableName;
  *	Apache error log
  */
 return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
-	"/dev/null", "/dev/stderr");
+	"/dev/null", NULL);
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,
