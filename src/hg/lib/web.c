@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.99 2006/10/06 23:46:09 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.100 2006/10/07 20:32:43 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -970,11 +970,20 @@ void webPrintLinkCellEnd()
 printf("</TD>");
 }
 
-void webPrintLinkCell(char *label)
-/* Print label cell in our colors. */
+void webPrintLinkCell(char *link)
+/* Print link cell in our colors, if links is null, print empty cell */
 {
 webPrintLinkCellStart();
-printf(label);
+if (link != NULL)
+    puts(link);
+webPrintLinkCellEnd();
+}
+
+void webPrintIntCell(int val)
+/* Print right-justified int cell in our colors. */
+{
+webPrintLinkCellRightStart();
+printf("%d", val);
 webPrintLinkCellEnd();
 }
 

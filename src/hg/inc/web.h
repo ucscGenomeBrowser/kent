@@ -206,8 +206,11 @@ void webPrintLinkCellRightStart();
 void webPrintLinkCellEnd();
 /* Print link cell end in our colors. */
 
-void webPrintLinkCell(char *label);
-/* Print label cell in our colors. */
+void webPrintLinkCell(char *link);
+/* Print link cell in our colors, if links is null, print empty cell */
+
+void webPrintIntCell(int val);
+/* Print right-justified int cell in our colors. */
 
 void webPrintLabelCell(char *label);
 /* Print label cell in our colors. */
