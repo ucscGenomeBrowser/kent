@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.92 2006/09/26 19:43:36 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.93 2006/10/07 16:20:35 hiram Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -71,7 +71,7 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
 puts(
-"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
+"<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
@@ -147,7 +147,7 @@ position = NULL;
 
 puts("<td align=center>\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
-cartSaveSession(cart);
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 printf("</td>\n");
 printf("<td align=center>");
 cgiMakeButton("Submit", "submit");
@@ -163,11 +163,13 @@ puts(
 
 puts("<TABLE BORDER=\"0\">");
 puts("<TR><TD VALIGN=\"TOP\">");
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 printf(
- "</FORM><FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\"></FORM>",
+ "</FORM><FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
         hgCustomName(), customTrackCgiButtonLabel(cart));
-puts("</TD><TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+puts("</FORM></TD><TD VALIGN=\"TOP\">");
+puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 puts("</TD><TD VALIGN=\"TOP\">");
 cgiMakeOnClickButton("document.mainForm.position.value=''","clear position");
@@ -188,15 +190,16 @@ puts("<P>This is just our test site.  It usually works, but it is filled with tr
 
 hgPositionsHelpHtml(organism, db);
 
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM>\n"
 );
 
-puts("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">");
+puts("<FORM ACTION=\"../cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">");
 if (gotClade)
     printf("<input type=\"hidden\" name=\"clade\" value=\"%s\">\n", clade);
 printf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
-cartSaveSession(cart);
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM><BR>");
 }
 
