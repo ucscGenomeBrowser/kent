@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.73 2006/10/07 03:13:44 hiram Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.74 2006/10/07 16:14:09 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -289,8 +289,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     if (ctDataUrl(ct) && ctHtmlUrl(ct))
         printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
     else
-        printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s=%s'>%s</A></TD>", 
-            ct->tdb->shortLabel, hgCustomName(), hgCtTable, ct->tdb->tableName, 
+        printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?hgsid=%d&%s=%s'>%s</A></TD>", 
+            ct->tdb->shortLabel, hgCustomName(),cartSessionId(cart),hgCtTable, ct->tdb->tableName, 
             ct->tdb->shortLabel);
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
@@ -321,8 +321,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
             if (hgOfficialChromName(chrom))
-                printf("<TD><A HREF='%s?position=%s' TITLE=%s>%s:</A></TD>", 
-                    hgTracksName(), pos, pos, chrom);
+                printf("<TD><A HREF='%s?hgsid=%d&position=%s' TITLE=%s>%s:</A></TD>", 
+                    hgTracksName(),cartSessionId(cart),pos, pos, chrom);
             else
                 puts("<TD>&nbsp;</TD>");
             }
@@ -376,7 +376,7 @@ void helpCustom()
 /* display documentation */
 {
 webNewSection("Loading Custom Tracks");
-webIncludeFile("../goldenPath/help/customTrackLoad.html");
+webIncludeFile("goldenPath/help/customTrackLoad.html");
 webEndSection();
 }
 
