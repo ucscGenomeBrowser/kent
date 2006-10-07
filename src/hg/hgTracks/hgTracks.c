@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1214 2006/10/07 00:00:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1215 2006/10/07 00:04:16 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13227,12 +13227,12 @@ else
 #else
 if (hgsid)
     {
-    printf("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"8; URL=/cgi-bin/hgCustom?hgsid=%d\"",hgsid);
+    printf("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom?hgsid=%d\"",hgsid);
     printf("<BODY><A HREF='/cgi-bin/hgCustom?hgsid=%d'>Redirect</A></BODY>",hgsid);
     }
 else
     {
-    puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"8; URL=/cgi-bin/hgCustom\"");
+    puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
     puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
     }
 #endif
