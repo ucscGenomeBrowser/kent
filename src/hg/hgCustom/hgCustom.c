@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.72 2006/10/06 23:48:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.73 2006/10/07 03:13:44 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,6 +73,9 @@ cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
 void addCustomForm(struct customTrack *ct, char *err)
 /* display UI for adding custom tracks by URL or pasting data */
 {
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
+    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
+    hgCustomName());
 puts("Display your own data as custom annotation tracks in the browser." 
      " Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
