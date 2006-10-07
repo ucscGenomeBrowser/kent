@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.36 2006/06/02 05:46:01 markd Exp $
+# $Id: gbDbLoadStep,v 1.37 2006/10/07 20:47:15 markd Exp $
 #
 use strict;
 use warnings;
@@ -16,9 +16,9 @@ use gbCommon;
 my $usage = 
     " gbDbLoadStep [options] database ...\n"
     . "\n"
-    . " Load databases on the current server.\n"
+    . "Load databases on the current server.\n"
     . "\n"
-    . " Options:\n"
+    . "Options:\n"
     . "   -workdir=work/\$host/dbload\n"
     . "   -allowLargeDeletes - override check for deleting large number of\n"
     . "    entries.\n"

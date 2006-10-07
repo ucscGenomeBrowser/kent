@@ -10,9 +10,10 @@
 #include "gbDefs.h"
 #include "gbVerb.h"
 #include "gbFileOps.h"
+#include "gbMiscDiff.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.8 2006/07/19 18:06:02 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.9 2006/10/07 20:47:15 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -43,6 +44,9 @@ off_t raProtFaOff;
 unsigned raProtFaSize;
 struct dyString* raLocusTag = NULL;
 unsigned raGi;
+struct gbMiscDiff *raMiscDiffs = NULL;
+static struct hash *raMiscDiffTbl = NULL; /* hash of raMiscDiff objects, keyed
+                                           * by misc.n */
 
 struct raField
 /* Entry for a ra field.  New values are buffered until we decide that
@@ -203,6 +207,115 @@ else
 return NULL; /* don't make it here */
 }
 
+static void parseMdiffStart(char *val, struct gbMiscDiff *mdiff)
+/* parse start of mdiff location, setting flags */
+{
+if (val[0] == '<')
+    val++;
+mdiff->mrnaStart = sqlSigned(val);
+}
+
+static void parseMdiffEnd(char *val, struct gbMiscDiff *mdiff)
+/* parse end of mdiff location, setting flags */
+{
+if (val[0] == '>')
+    val++;
+mdiff->mrnaEnd = sqlSigned(val);
+}
+
+static void parseMdiffLoc(char *tag, char *val, struct gbMiscDiff *mdiff)
+/* parse the location line of an mdiff row */
+{
+/* either a single number, start..end, or 2903^2904 for inbetween,
+ * start/end can have partial modifiers <start..>end.  Can have a complement()
+ * and order().  Don't handle order(), just drop by setting start/end to -1.
+ */
+if (startsWith("order(", val))
+    {
+    mdiff->mrnaStart = mdiff->mrnaEnd = -1;
+    return;
+    }
+static char *cmpl = "complement(";
+if (startsWith(cmpl, val))
+    {
+    val[strlen(val)-1] = '\0';  /* drop ) */
+    val += strlen(cmpl);
+    }
+char *dot = strchr(val, '.');
+char *caret = strchr(val, '^');
+char *sep = (dot != NULL) ? dot : caret;
+
+if (sep == NULL)
+    {
+    /* single number */
+    mdiff->mrnaStart = mdiff->mrnaEnd = sqlSigned(val);
+    }
+else
+    {
+    /* two numbers */
+    *sep = '\0';
+    char *val2 = sep + ((dot != NULL) ? 2 : 1);
+    parseMdiffStart(val, mdiff);
+    parseMdiffEnd(val2, mdiff);
+    }
+}
+
+void parseMdiffRow(char *tag, char *val)
+/* parse a mdiff.n[.*] row */
+{
+if (raMiscDiffTbl == NULL)
+    raMiscDiffTbl = hashNew(0);
+
+/* get misc.n without any suffix */
+char *ndot = strchr(tag, '.');
+char *suffix = strchr(ndot+1, '.');  /* might be NULL */
+int prelen = (suffix != NULL) ? (suffix-tag) : strlen(tag);
+char miscName[32];
+safef(miscName, sizeof(miscName), "%.*s", prelen, tag);
+
+/* get or create object to this misc_difference */
+struct hashEl *hel = hashStore(raMiscDiffTbl, miscName);
+struct gbMiscDiff *mdiff = hel->val;
+if (mdiff == NULL)
+    {
+    AllocVar(mdiff);
+    hel->val = mdiff;
+    slAddHead(&raMiscDiffs, mdiff);
+    }
+
+/* add data based on suffix */
+if (suffix == NULL)
+    parseMdiffLoc(tag, val, mdiff);
+else if (sameString(suffix, ".note"))
+    mdiff->notes = cloneString(val);
+else if (sameString(suffix, ".gene"))
+    mdiff->gene = cloneString(val);
+else if (sameString(suffix, ".replace"))
+    mdiff->replacement = cloneString(val);
+else
+    errAbort("don't know how to parse %s", tag);
+}
+
+int gbMiscDiffCmp(const void *va, const void *vb)
+/* compare two gbMiscDiff objects */
+{
+const struct gbMiscDiff *a = *((struct gbMiscDiff **)va);
+const struct gbMiscDiff *b = *((struct gbMiscDiff **)vb);
+int diff = a->mrnaStart- b->mrnaStart;
+if (diff == 0)
+    diff = a->mrnaEnd- b->mrnaEnd;
+return diff;
+}
+
+void parseMdiffFinish()
+/* finish parsing of mdiff records */
+{
+slSort(&raMiscDiffs, gbMiscDiffCmp);
+struct gbMiscDiff *gmd;
+for (gmd = raMiscDiffs; gmd != NULL; gmd = gmd->next)
+    safef(gmd->acc, sizeof(gmd->acc), "%s", raAcc);
+}
+
 char* gbMDParseEntry()
 /* Parse the next record from a ra file into current metadata state.
  * Returns accession or NULL on EOF. */
@@ -236,6 +349,8 @@ raProtFaSize = 0;
 if (raLocusTag == NULL)
     raLocusTag = dyStringNew(128);
 dyStringClear(raLocusTag);
+hashFree(&raMiscDiffTbl);
+gbMiscDiffFreeList(&raMiscDiffs);
 raGi = 0;
 
 for (;;)
@@ -302,6 +417,8 @@ for (;;)
         }
     else if (sameString(tag, "ngi"))
         raGi = gbParseUnsigned(gRaLf, val);
+    else if (startsWith("mdiff.", tag))
+        parseMdiffRow(tag, val);
     else
         {
         /* save under hashed name */
@@ -329,6 +446,7 @@ if (raFaOff == NULL_OFFSET)
     errAbort("No fasta offset for %s in %s\n", raAcc, gRaLf->fileName);
 if (raFaSize == 0)
     errAbort("No fasta size for %s in %s\n", raAcc, gRaLf->fileName);
+parseMdiffFinish();
 
 return raAcc;
 }

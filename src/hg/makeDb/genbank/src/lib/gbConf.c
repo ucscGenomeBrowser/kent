@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.4 2006/03/11 00:07:59 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.5 2006/10/07 20:47:15 markd Exp $";
 
 /* standard conf file */
 char *GB_CONF_FILE = "etc/genbank.conf";
@@ -129,6 +129,43 @@ if (val != NULL)
     errAbort("configuration parameters %s not found", name);
 return val;
 }
+
+char* gbConfMustGetDb(struct gbConf* conf, char* db, char* baseName)
+/* parse an option for a database; check for database-specific value and
+ * default */
+{
+char name[256];
+char* value;
+safef(name, sizeof(name), "%s.%s", db, baseName);
+
+value = gbConfGet(conf, name);
+if (value == NULL)
+    {
+    safef(name, sizeof(name), "default.%s", baseName);
+    value = gbConfGet(conf, name);
+    if (value == NULL)
+        errAbort("can't find conf entry for %s.%s or default.%s",
+                 db, baseName, baseName);
+    }
+return value;
+}
+
+boolean gbConfMustGetDbBoolean(struct gbConf* conf, char* db, char* baseName)
+/* parse boolean option for a database; check for database-specific value and
+ * default */
+{
+char* value = gbConfMustGetDb(conf, db, baseName);
+if (sameString(value, "yes") || sameString(value, "true"))
+    return TRUE;
+else if (sameString(value, "no") || sameString(value, "false"))
+    return FALSE;
+else
+    errAbort("invalid boolean conf value for %s.%s or default.%s, "
+             "expected yes, no, true, or false: %s",
+             db, baseName, baseName, value);
+return FALSE;
+}
+
 
 /*
  * Local Variables:

@@ -1,7 +1,10 @@
 GBROOT = ../../..
 include ${GBROOT}/common.mk
 
-PROCESS = ${BINARCH}/gbProcess
+VG=
+#VG=valgrind --tool=memcheck --num-callers=100 --leak-check=full --leak-resolution=high --show-reachable=yes 
+
+PROCESS = ${VG}${BINARCH}/gbProcess
 
 all:
 

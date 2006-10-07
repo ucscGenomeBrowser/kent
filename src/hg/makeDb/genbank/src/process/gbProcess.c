@@ -49,7 +49,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.16 2006/09/29 00:19:20 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.17 2006/10/07 20:47:16 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1246,15 +1246,32 @@ else
     gbfSkipSequence(lf);
 }
 
-void procOneGbFile(char *inName, struct hash *estAuthorHash,
-                   struct filter *filter)
-/* Process one genBank file into fa and ra files. */
+void procOneGbffFile(char *inName, struct hash *estAuthorHash,
+                     struct filter *filter)
+/* Process one genBank file in flat-file format into fa and ra files. */
 {
 struct lineFile *lf = gzLineFileOpen(inName);
 
 while (gbfReadFields(lf))
     procGbEntry(lf, estAuthorHash, filter);
 gzLineFileClose(&lf);
+}
+
+void procOneAsnFile(char *inName, struct hash *estAuthorHash,
+                    struct filter *filter)
+/* Process one genBank file in ASN.1 format into fa and ra files. */
+{
+errAbort("processing of ASN.1 files not implemented");
+}
+
+void procOneGbFile(char *inName, struct hash *estAuthorHash,
+                   struct filter *filter)
+/* Process one genBank file into fa and ra files. */
+{
+if (endsWith(inName, ".aso.gz") || endsWith(inName, ".bna.gz"))
+    procOneAsnFile(inName, estAuthorHash, filter);
+else
+    procOneGbffFile(inName, estAuthorHash, filter);
 }
 
 int cmpUse(const void *va, const void *vb)
@@ -1331,7 +1348,7 @@ else if (filterExpr != NULL)
 else
     filter = makeFilterEmpty();
 estAuthorHash = newHash(10);
-kvt = newKvt(128);
+kvt = newKvt(5*1024);
 gbfInit();
 
 if (pepFa != NULL)

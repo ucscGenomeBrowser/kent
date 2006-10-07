@@ -32,6 +32,7 @@ extern off_t raProtFaOff;
 extern unsigned raProtFaSize;
 extern struct dyString* raLocusTag;
 extern unsigned raGi;
+extern struct gbMiscDiff *raMiscDiffs;
 
 char* gbMDParseEntry();
 /* Parse the next record from a ra file into current metadata state.
