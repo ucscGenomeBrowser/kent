@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.29 2006/10/06 23:38:40 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.30 2006/10/07 00:55:12 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -199,7 +199,7 @@ if (dbRequested)
 	bedOutputN(bed, track->fieldCount, out, '\t', '\n');
     if(pipelineWait(dataPipe))
 	{
-	errAbort("internal error, bedLoader failed, please notify UCSC<BR>");
+	errAbort("internal error, bedLoader failed, please notify UCSC<BR>\nwe will want a mailto link here with an informative subject line already constructed<BR>\n");
 	}
     pipelineFree(&dataPipe);
     }
@@ -801,7 +801,7 @@ if (dbRequested)
     carefulClose(&in);
     if (pipelineWait(dataPipe))
 	{
-	errAbort("internal error, wigLoader failed, please notify UCSC<BR>");
+	errAbort("internal error, wigLoader failed, please notify UCSC<BR>\nwe will want a mailto link here with an informative subject line already constructed<BR>\n");
 	}
     pipelineFree(&dataPipe);
     track->wigFile = NULL;
