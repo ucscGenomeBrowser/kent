@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1135 2006/10/06 20:51:29 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1136 2006/10/07 00:01:19 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11628,6 +11628,10 @@ printf("<PRE><B>Genomic Sequence:</B><BR>");
 writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
 printf("</PRE>\n");
 printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
+printf("(Uses ");
+printf("<A HREF=\" http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1 \"" );
+printf("TARGET=_BLANK>IUPAC ambiguity codes</A>");
+printf(")\n");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
