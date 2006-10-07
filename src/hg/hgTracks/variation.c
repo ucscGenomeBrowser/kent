@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.108 2006/10/06 23:47:39 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.109 2006/10/07 06:47:34 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -370,7 +370,7 @@ if (ca==MG_BLACK)
     return 1;
 if (cb==MG_BLACK)
     return -1;
-errAbort("<BR>SNP track: colors %d and %d not known", ca, cb);
+hPrintComment("SNP track: colors %d (%s) and %d (%s) not known", ca, a->name, cb, b->name);
 return 0;
 }
 
@@ -378,7 +378,10 @@ void sortSnp125ExtendedByColor(struct track *tg)
 /* Sort snps so that more functional snps (non-synonymous, splice site) are printed last.
  * Color calculation is used as an intermediate step to represent severity. */
 {
-slSort(&tg->items, snp125ExtendedColorCmp);
+/* snp and snpMap have different loaders that do not support the color
+ * attribute of the snp125Extended struct */
+if(differentString(tg->mapName,"snp") && differentString(tg->mapName,"snpMap"))
+    slSort(&tg->items, snp125ExtendedColorCmp);
 }
 
 void loadSnp125Extended(struct track *tg)
@@ -885,8 +888,8 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-// if(vis==tvDense)
-    // sortSnp125ExtendedByColor(tg);
+if(vis==tvDense)
+    sortSnp125ExtendedByColor(tg);
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 if (vis == tvPack || vis == tvSquish)
