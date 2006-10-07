@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1213 2006/10/02 06:36:56 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1214 2006/10/07 00:00:11 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13215,13 +13215,26 @@ else
 void customTrackCgi()
 /* Put up CGI that lets user manage custom tracks. */
 {
+int hgsid = cartSessionId(cart);
+
 puts("<HTML>");
 /* javascript redirect to hgCustom */
 #ifndef META_REDIRECT
-puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
+if (hgsid)
+    printf("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom?hgsid=%d' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom?hgsid=%d\">Redirect </a></BODY>",hgsid,hgsid);
+else
+    puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
 #else
-puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
-puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
+if (hgsid)
+    {
+    printf("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"8; URL=/cgi-bin/hgCustom?hgsid=%d\"",hgsid);
+    printf("<BODY><A HREF='/cgi-bin/hgCustom?hgsid=%d'>Redirect</A></BODY>",hgsid);
+    }
+else
+    {
+    puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"8; URL=/cgi-bin/hgCustom\"");
+    puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
+    }
 #endif
 puts("</HTML>"); 
 }
