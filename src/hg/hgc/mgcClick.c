@@ -4,6 +4,7 @@
 #include "mgcClick.h"
 #include "ccdsClick.h"
 #include "ccdsGeneMap.h"
+#include "gbMiscDiff.h"
 #include "web.h"
 #include "genbank.h"
 #include "htmshell.h"
@@ -487,7 +488,80 @@ webPrintLinkTableEnd();
 webEndSection();
 }
 
+enum gbMiscDiffFields
+/* optional fields in gbMiscDiff table */
+{
+    gbMiscDiffNotes = 0x01,
+    gbMiscDiffGene = 0x02,
+    gbMiscDiffReplace = 0x04
+};
+
+static unsigned getMiscDiffFields(struct gbMiscDiff *gmds)
+/* find which fields are present */
+{
+struct gbMiscDiff *gmd;
+unsigned flds = 0;
+for (gmd = gmds; gmd != NULL; gmd = gmd->next)
+    {
+    if (gmd->notes != NULL)
+        flds |= gbMiscDiffNotes;
+    if (gmd->gene != NULL)
+        flds |=gbMiscDiffGene;
+    if (gmd->replacement != NULL)
+        flds |= gbMiscDiffReplace;
+    }
+return flds;
+}
+
+static void prMiscDiffHdr(unsigned miscDiffFlds)
+/* print a header row for miscDiffs table */
+{
+webPrintLabelCell("mRNA start");
+webPrintLabelCell("mRNA end");
+if (miscDiffFlds & gbMiscDiffGene)
+    webPrintLabelCell("Gene");
+if (miscDiffFlds & gbMiscDiffReplace)
+    webPrintLabelCell("Replace");
+if (miscDiffFlds & gbMiscDiffNotes)
+    webPrintLabelCell("Notes");
+}
+
+static void prMiscDiff(struct gbMiscDiff *gmd, unsigned miscDiffFlds)
+/* print any gbMiscDiff row */
+{
+webPrintLinkTableNewRow();
+webPrintIntCell(gmd->mrnaStart);
+webPrintIntCell(gmd->mrnaEnd);
+if (miscDiffFlds & gbMiscDiffGene)
+    webPrintLinkCell(gmd->gene);
+if (miscDiffFlds & gbMiscDiffReplace)
+    webPrintLinkCell(gmd->replacement);
+if (miscDiffFlds & gbMiscDiffNotes)
+    webPrintLinkCell(gmd->notes);
+}
+
+static void prMiscDiffs(struct sqlConnection *conn, char *acc)
+/* print any gbMiscDiff rows for the accession */
+{
+struct gbMiscDiff *gmds = NULL, *gmd;
+if (sqlTableExists(conn, "gbMiscDiff"))
+    gmds = sqlQueryObjs(conn, (sqlLoadFunc)gbMiscDiffLoad, sqlQueryMulti,
+                        "select * from gbMiscDiff where acc=\"%s\"", acc);
+if (gmds != NULL)
+    {
+    unsigned miscDiffFlds = getMiscDiffFields(gmds);
+    webNewSection("NCBI Clone Validation");
+    webPrintLinkTableStart();
+    prMiscDiffHdr(miscDiffFlds);
+    for (gmd = gmds; gmd != NULL; gmd = gmd->next)
+        prMiscDiff(gmd, miscDiffFlds);
+    webPrintLinkTableEnd();
+    webEndSection();
+    }
+}
+
 static void prMethodsLink(struct sqlConnection *conn, char *track)
+/* generate link to methods page */
 {
 webNewSection("Description and Methods");
 printf("Click <A HREF=\"%s&g=htcTrackHtml&table=%s&c=%s&l=%d&r=%d\">here</A> for details",
@@ -515,6 +589,7 @@ if (mi->refSeqSum != NULL)
 prInfoLinks(conn, acc, &mgcDb, mi);
 prSeqLinks(conn, tdb->tableName, acc);
 prAligns(conn, acc, start);
+prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 
 webEnd();
