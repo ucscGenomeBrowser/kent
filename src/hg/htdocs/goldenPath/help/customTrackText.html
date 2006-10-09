@@ -337,14 +337,13 @@ depending on the format of the data.
 if the track has been supplied a description page.  It is empty if there is no 
 track description associated with the track.
          <LI>The <B>Items</B> column shows the number of data lines
-in the file (unless the data are in wiggle format).
+in the file (unless the data are in wiggle format; then it is empty).
          <LI>The <B>Pos</B> column shows the chromosome of the default
 position provided by the user in the data file using the position 
-attribute (unless the data are in wiggle format).  Clicking this 
-link takes the user to the Genome Browser at 
-the specified position (note:  Only the chromosome name is shown in the
+attribute.  Clicking this link takes the user to the Genome Browser at 
+the specified position (note: only the chromosome name is shown in the
 Pos column).  If there is no default position, this column shows the chromosome
-of the first data line.
+of the first data line (unless the data are in wiggle format; then it is empty).
         </UL>
         
         <P><BR><B>Update Custom Tracks</B>
