@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.316 2006/10/04 04:55:16 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.317 2006/10/09 20:36:22 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -59,6 +59,15 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 radioButton(filterTypeVar, filterTypeVal, "include");
 if (none)
     radioButton(filterTypeVar, filterTypeVal, "none");
+}
+
+void tfbsConsSitesUi(struct trackDb *tdb)
+{
+float tfbsConsSitesCutoff;
+printf("<BR><B>Z score cutoff (default 2.33, minimum 1.64):&nbsp;");
+tfbsConsSitesCutoff =
+    sqlFloat(cartUsualString(cart, "tfbsConsSitesCutoff", "2.33"));
+cgiMakeDoubleVar("tfbsConsSitesCutoff",tfbsConsSitesCutoff,5);
 }
 
 void stsMapUi(struct trackDb *tdb)
@@ -2406,6 +2415,8 @@ else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
 else if (startsWith("retroposons", track))
     retroposonsUi(tdb);
+else if (sameString(track, "tfbsConsSites"))
+    tfbsConsSitesUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
