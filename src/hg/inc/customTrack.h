@@ -37,6 +37,7 @@ struct customTrack
     char *dbTableName;		/* name of table in trash database */
     char *dbTrackType;		/* type of data in this db table */
     boolean dbDataLoad;		/* FALSE == failed loading */
+    char *dbStderrFile;		/* trash file to receive stderr of loaders */
     char *wigFile;		/* name of .wig file in trash */
     char *wibFile;		/* name of .wib file in trash */
     char *wigAscii;		/* wiggle ascii data file name in trash .wia */
