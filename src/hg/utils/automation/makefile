@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-include ../inc/common.mk
+include ../../../inc/common.mk
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
