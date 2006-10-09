@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.16 2006/10/03 18:49:44 fanhsu Exp $"
+#	"$Id: mm8.txt,v 1.17 2006/10/09 16:13:37 fanhsu Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7228,3 +7228,38 @@ set out = $3
         kent/src/hg/makeDb/trackDb/mouse/mm8
 
 #####################################################################
+# LOAD GENEID GENES (DONE - 2006-10-09 - Fan)
+    ssh hgwdev
+    mkdir -p /cluster/data/mm8/bed/geneid/download
+    cd /cluster/data/mm8/bed/geneid/download
+
+    bash
+    awk '{print $1}' ../../../chrom.sizes | while read C
+    do
+      echo $C
+      wget --timestamping \
+      http://genome.imim.es/genepredictions/M.musculus/mmMar2006/geneid_v1.2/$C.gtf
+      wget --timestamping \
+      http://genome.imim.es/genepredictions/M.musculus/mmMar2006/geneid_v1.2/$C.prot
+    done
+    exit
+
+    # Add missing .1 to protein id's
+
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene -genePredExt -gtf mm8 geneid download/*.gtf
+
+#Read 35954 transcripts in 284585 lines in 34 files
+# 35954 groups 34 seqs 1 sources 3 feature types
+# 35954 gene predictions
+
+    hgPepPred mm8 generic geneidPep download/*-fixed.prot
+    featureBits mm8 -enrichment refGene geneid
+# refGene 1.842%, geneid 1.592%, both 0.883%, cover 47.95%, enrich 30.13x
+    featureBits mm7 -enrichment refGene geneid
+# refGene 1.835%, geneid 1.579%, both 0.866%, cover 47.18%, enrich 29.88x
+
+##############################################################################
