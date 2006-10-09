@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.317 2006/10/09 20:36:22 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.318 2006/10/09 20:45:00 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -64,7 +64,7 @@ if (none)
 void tfbsConsSitesUi(struct trackDb *tdb)
 {
 float tfbsConsSitesCutoff;
-printf("<BR><B>Z score cutoff (default 2.33, minimum 1.64):&nbsp;");
+printf("<BR><B>Z score cutoff (default 2.33, minimum 1.64):&nbsp;</B>");
 tfbsConsSitesCutoff =
     sqlFloat(cartUsualString(cart, "tfbsConsSitesCutoff", "2.33"));
 cgiMakeDoubleVar("tfbsConsSitesCutoff",tfbsConsSitesCutoff,5);
