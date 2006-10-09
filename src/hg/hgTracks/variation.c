@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.109 2006/10/07 06:47:34 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.110 2006/10/09 03:10:19 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -431,13 +431,25 @@ for (i=0; i < snp125LocTypeCartSize; i++)
 
 /* load SNPs */
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    item = (struct slList *)snpExtendedLoad(row + rowOffset);
-    se = (struct snp125Extended *)item;
-    se->color = snp125Color(tg, se, NULL);
-    slAddHead(&itemList, item);
-    }
+
+if(differentString(tg->mapName,"snp") && differentString(tg->mapName,"snpMap"))
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	/* use loader for snp125 table format */
+	item = (struct slList *)snp125ExtendedLoad(row + rowOffset);
+	se = (struct snp125Extended *)item;
+	se->color = snp125Color(tg, se, NULL);
+	slAddHead(&itemList, item);
+	}
+else
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	/* use loader for pre-snp125 table format */
+	item = (struct slList *)snpExtendedLoad(row + rowOffset);
+	se = (struct snp125Extended *)item;
+	se->color = snp125Color(tg, se, NULL);
+	slAddHead(&itemList, item);
+	}
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
