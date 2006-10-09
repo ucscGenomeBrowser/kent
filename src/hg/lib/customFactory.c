@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.31 2006/10/07 03:22:06 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.32 2006/10/09 19:27:25 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -83,6 +83,7 @@ return cfgOptionDefault("customTracks.db", NULL);
 void customFactorySetupDbTrack(struct customTrack *track)
 /* Fill in fields most database-resident custom tracks need. */
 {
+struct tempName tn;
 char prefix[16];
 static int dbTrackCount = 0;
 struct sqlConnection *ctConn = sqlCtConn(TRUE);
@@ -90,6 +91,8 @@ struct sqlConnection *ctConn = sqlCtConn(TRUE);
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
 ctAddToSettings(track, "dbTableName", track->dbTableName);
+customTrackTrashFile(&tn, ".err");
+track->dbStderrFile = cloneString(tn.forCgi);
 track->dbDataLoad = TRUE;	
 track->dbTrack = TRUE;
 sqlDisconnect(&ctConn);
@@ -153,7 +156,29 @@ cmd1[7] = dyStringCannibalize(&tmpDy);
  *	Apache error log
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
-	"/dev/null", NULL);
+	"/dev/null", track->dbStderrFile);
+}
+
+static void pipelineFailExit(struct customTrack *track)
+/* show up to three lines of error message to stderr and errAbort */
+{
+struct dyString *errDy = newDyString(0);
+struct lineFile *lf;
+char *line;
+int i;
+dyStringPrintf(errDy, "track load error:<BR>\n");
+lf = lineFileOpen(track->dbStderrFile, TRUE);
+i = 0;
+while( (i < 3) && lineFileNext(lf, &line, NULL))
+    {
+    dyStringPrintf(errDy, "%s<BR>\n", line);
+    ++i;
+    }
+lineFileClose(&lf);
+if (i < 1)
+    dyStringPrintf(errDy, "unknown failure<BR>\n");
+unlink(track->dbStderrFile);
+errAbort("%s",dyStringCannibalize(&errDy));
 }
 
 static struct customTrack *bedFinish(struct customTrack *track, 
@@ -198,9 +223,8 @@ if (dbRequested)
     for (bed = track->bedList; bed != NULL; bed = bed->next)
 	bedOutputN(bed, track->fieldCount, out, '\t', '\n');
     if(pipelineWait(dataPipe))
-	{
-	errAbort("internal error, bedLoader failed, please notify UCSC<BR>\nwe will want a mailto link here with an informative subject line already constructed<BR>\n");
-	}
+	pipelineFailExit(track);	/* prints error and exits */
+    unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
     }
 return track;
@@ -745,7 +769,7 @@ cmd2[7] = track->dbTableName;
  *	Apache error log
  */
 return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
-	"/dev/null", NULL);
+	"/dev/null", track->dbStderrFile);
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,
@@ -800,9 +824,8 @@ if (dbRequested)
     copyOpenFile(in, out);
     carefulClose(&in);
     if (pipelineWait(dataPipe))
-	{
-	errAbort("internal error, wigLoader failed, please notify UCSC<BR>\nwe will want a mailto link here with an informative subject line already constructed<BR>\n");
-	}
+	pipelineFailExit(track);	/* prints error and exits */
+    unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
     track->wigFile = NULL;
 
