@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1217 2006/10/09 20:41:30 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1218 2006/10/09 20:57:09 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4959,12 +4959,13 @@ tg->tdb = tdb;
 return tg;
 }
 
-boolean tfbsConsSitesWeightFilterItem(struct track *tg, void *item)
+boolean tfbsConsSitesWeightFilterItem(struct track *tg, void *item,
+	float cutoff)
 /* Return TRUE if item passes filter. */
 {
 struct tfbsConsSites *el = item;
 
-if (el->zScore < atof(cartUsualString(cart, "tfbsConsSitesCutoff", "5")))
+if (el->zScore < cutoff)
     return FALSE;
 return TRUE;
 }
@@ -4980,13 +4981,13 @@ struct tfbsConsSites *ro, *list = NULL;
 float tfbsConsSitesCutoff; /* Cutoff used for conserved binding site track. */
 
 tfbsConsSitesCutoff =
-    sqlFloat(cartUsualString(cart,"tfbsConsSitesCutoff","2.33"));
+    sqlFloat(cartUsualString(cart,TFBS_SITES_CUTOFF,TFBS_SITES_CUTOFF_DEFAULT));
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ro = tfbsConsSitesLoad(row+rowOffset);
-    if (tfbsConsSitesWeightFilterItem(tg,ro))
+    if (tfbsConsSitesWeightFilterItem(tg,ro,tfbsConsSitesCutoff))
         slAddHead(&list, ro);
     }
 
