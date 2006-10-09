@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/makeGenomeDb.pl instead.
+# edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.5 2006/09/29 21:05:57 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
 
 use Getopt::Long;
 use warnings;

@@ -1,11 +1,11 @@
 #!/usr/bin/tclsh
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/blastz-make-joblist instead.
+# edit ~/kent/src/hg/utils/automation/blastz-make-joblist instead.
 
 # Written by Scott Schwartz
 
-# $Id: blastz-make-joblist,v 1.1 2004/08/27 23:56:14 angie Exp $
+# $Id: blastz-make-joblist,v 1.1 2006/10/09 20:44:33 angie Exp $
 
 
 lappend argv DEF

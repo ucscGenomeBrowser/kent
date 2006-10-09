@@ -3,9 +3,9 @@
 #                of a process, with support for -continue and -stop options.
 #
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/HgStepManager.pm instead.
+# edit ~/kent/src/hg/utils/automation/HgStepManager.pm instead.
 
-# $Id: HgStepManager.pm,v 1.1 2006/06/27 23:03:26 angie Exp $
+# $Id: HgStepManager.pm,v 1.1 2006/10/09 20:44:34 angie Exp $
 package HgStepManager;
 
 use warnings;

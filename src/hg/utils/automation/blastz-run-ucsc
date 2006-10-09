@@ -1,13 +1,13 @@
 #!/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/blastz-run-ucsc instead.
+# edit ~/kent/src/hg/utils/automation/blastz-run-ucsc instead.
 
 # Based on Scott Schwartz's bash script blastz-run;
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.18 2006/07/25 17:39:18 angie Exp $
+# $Id: blastz-run-ucsc,v 1.1 2006/10/09 20:44:33 angie Exp $
 
 use Getopt::Long;
 use strict;

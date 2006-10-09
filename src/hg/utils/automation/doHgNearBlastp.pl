@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/doHgNearBlastp.pl instead.
+# edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.7 2006/07/14 18:44:03 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.1 2006/10/09 20:44:33 angie Exp $
 
 use Getopt::Long;
 use warnings;

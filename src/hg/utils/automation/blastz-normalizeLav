@@ -1,9 +1,9 @@
 #!/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/blastz-normalizeLav instead.
+# edit ~/kent/src/hg/utils/automation/blastz-normalizeLav instead.
 
-# $Id: blastz-normalizeLav,v 1.2 2005/08/31 16:46:59 hiram Exp $
+# $Id: blastz-normalizeLav,v 1.1 2006/10/09 20:44:33 angie Exp $
 
 my $from0 = 0;
 my $from1 = 0;

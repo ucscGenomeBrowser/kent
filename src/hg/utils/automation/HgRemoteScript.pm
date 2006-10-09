@@ -3,9 +3,9 @@
 #                 machine using ssh.
 #
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/HgRemoteScript.pm instead.
+# edit ~/kent/src/hg/utils/automation/HgRemoteScript.pm instead.
 
-# $Id: HgRemoteScript.pm,v 1.2 2006/07/10 19:43:53 angie Exp $
+# $Id: HgRemoteScript.pm,v 1.1 2006/10/09 20:44:34 angie Exp $
 package HgRemoteScript;
 
 use warnings;

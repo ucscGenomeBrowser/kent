@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/simplePartition.pl instead.
+# edit ~/kent/src/hg/utils/automation/simplePartition.pl instead.
 
-# $Id: simplePartition.pl,v 1.1 2006/07/25 00:07:31 angie Exp $
+# $Id: simplePartition.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
 
 use Getopt::Long;
 use warnings;
