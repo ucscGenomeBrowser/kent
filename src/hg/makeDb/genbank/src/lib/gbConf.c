@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.5 2006/10/07 20:47:15 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.6 2006/10/09 16:17:29 markd Exp $";
 
 /* standard conf file */
 char *GB_CONF_FILE = "etc/genbank.conf";
@@ -130,9 +130,9 @@ if (val != NULL)
 return val;
 }
 
-char* gbConfMustGetDb(struct gbConf* conf, char* db, char* baseName)
-/* parse an option for a database; check for database-specific value and
- * default */
+char* gbConfGetDb(struct gbConf* conf, char* db, char* baseName)
+/* parse an option for a database; check for database-specific value or
+ * default value, NULL if not found */
 {
 char name[256];
 char* value;
@@ -143,10 +143,18 @@ if (value == NULL)
     {
     safef(name, sizeof(name), "default.%s", baseName);
     value = gbConfGet(conf, name);
-    if (value == NULL)
-        errAbort("can't find conf entry for %s.%s or default.%s",
-                 db, baseName, baseName);
     }
+return value;
+}
+
+char* gbConfMustGetDb(struct gbConf* conf, char* db, char* baseName)
+/* parse an option for a database; check for database-specific value or
+ * default value, error if not found */
+{
+char* value = gbConfGetDb(conf, db, baseName);
+if (value == NULL)
+    errAbort("can't find conf entry for %s.%s or default.%s",
+             db, baseName, baseName);
 return value;
 }
 
