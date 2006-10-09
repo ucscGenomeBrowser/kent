@@ -867,6 +867,19 @@ searchMethod fuzzy
 searchType bed
 searchPriority 10
 
+track tfbsConsSites
+shortLabel TFBS Conserved
+longLabel HMR Conserved Transcription Factor Binding Sites
+priority 94
+group regulation
+visibility hide
+type bed 6 +
+scoreMin 711
+scoreMax 1000
+spectrum on
+urlLabel Transfac matrix link:
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
+
 track oreganno
 shortLabel ORegAnno
 longLabel Regulatory elements from ORegAnno
