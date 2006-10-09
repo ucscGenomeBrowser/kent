@@ -63,5 +63,9 @@ void tfbsConsSitesOutput(struct tfbsConsSites *el, FILE *f, char sep, char lastS
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+/*	For trackUi cart variable	*/
+#define TFBS_SITES_CUTOFF	"tfbsConsSitesCutoff"
+#define TFBS_SITES_CUTOFF_DEFAULT	"2.33"
+
 #endif /* TFBSCONSSITES_H */
 
