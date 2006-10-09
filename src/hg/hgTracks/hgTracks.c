@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1216 2006/10/09 20:36:01 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1217 2006/10/09 20:41:30 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11859,7 +11859,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
 		        {
 			if (toAll || sameString(s, tg->mapName))
-			    cartSetString(cart, tg->mapName, command);
+                            {
+                            if (hTvFromString(command) == tg->tdb->visibility)
+                                /* remove if setting to default vis */
+                                cartRemove(cart, tg->mapName);
+                            else
+                                cartSetString(cart, tg->mapName, command);
+                            }
 			}
 		    }
 		}
@@ -11888,14 +11894,9 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	}
     }
-
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    char *vis;
     tg = newCustomTrack(ct);
-    vis = cartOptionalString(cart, tg->mapName);
-    if (vis != NULL)
-	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
 }
