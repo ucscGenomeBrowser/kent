@@ -7,7 +7,7 @@
 #include "chainNet.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: netSyntenic.c,v 1.9 2006/06/20 16:44:18 angie Exp $";
+static char const rcsid[] = "$Id: netSyntenic.c,v 1.10 2006/10/10 23:00:17 angie Exp $";
 
 struct lm *lm;
 struct rbTreeNode **rbStack;
@@ -24,6 +24,10 @@ errAbort(
   );
 }
 
+/* Use empty optionSpec so we can use verbose() later. */
+struct optionSpec options[] = {
+   {NULL, 0},
+};
 
 struct chrom 
 /* Info on one chromosome */
@@ -212,7 +216,7 @@ if (lineFileNext(lf, &line, NULL))
     {
     wordCount = chopLine(line, words);
     if (wordCount >= 23)
-        printf("memory usage %s, utime %s s/100, stime %s\n", 
+        verbose(1, "memory usage %s, utime %s s/100, stime %s\n", 
 		words[22], words[13], words[14]);
     }
 lineFileClose(&lf);
@@ -269,7 +273,7 @@ void netSyntenic(char *inFile, char *outFile)
 {
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
-struct chainNet *netList, *net;
+struct chainNet *netList = NULL, *net;
 struct hash *qChromHash = newHash(21);
 
 lineFileSetMetaDataOutput(lf, f);
@@ -300,7 +304,7 @@ for (net = netList; net != NULL; net = net->next)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 netSyntenic(argv[1], argv[2]);
