@@ -77,7 +77,7 @@ set pbDb3 hg16,hg17,hg18
 set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 # Define databases that support CCDS
-set ccdsDb hg17 mm8
+set ccdsDb hg17,mm8
 
 # Magic for tables split between chromosomes
 set split splitPrefix=chr%_
