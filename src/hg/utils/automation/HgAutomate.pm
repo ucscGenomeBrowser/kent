@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.1 2006/10/09 20:44:34 angie Exp $
+# $Id: HgAutomate.pm,v 1.2 2006/10/10 22:55:53 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -507,7 +507,7 @@ sub checkExistsUnlessDebug {
 	"network/filesystem delays -- wait a minute and restart with " .
 	"-continue $step.\n" .
 	"If it really doesn't exist, either fix things manually or " .
-	"try -continue $prevStep";
+	"try -continue $prevStep\n";
       $problem = 1;
     }
   }
