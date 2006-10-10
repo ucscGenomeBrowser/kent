@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/doTemplate.pl instead.
+# edit ~/kent/src/hg/utils/automation/doTemplate.pl instead.
 
-# $Id: doTemplate.pl,v 1.2 2006/07/14 20:54:47 angie Exp $
+# $Id: doTemplate.pl,v 1.1 2006/10/10 17:22:16 angie Exp $
 
 # HOW TO USE THIS TEMPLATE:
 # 1. Global-replace doTemplate.pl with your actual script name.
