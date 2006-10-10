@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.74 2006/10/07 16:14:09 hiram Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.75 2006/10/10 00:21:52 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -507,6 +507,10 @@ void doManageCustom(char *warn)
 {
 cartWebStart(cart, "Manage Custom Tracks");
 manageCustomForm(warn);
+endCustomForm();
+webNewSection("Help for Managing Custom Tracks");
+webIncludeFile("goldenPath/help/customTrackManage.html");
+webEndSection();
 cartWebEnd(cart);
 }
 
