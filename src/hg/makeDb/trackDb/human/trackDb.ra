@@ -55,16 +55,6 @@ color 200,0,0
 type bed 4
 url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
-track ccdsGene
-shortLabel CCDS
-longLabel Consensus CDS
-group genes
-priority 34.5
-visibility hide
-color 12,120,12
-type genePred
-cdsDrawDefault genomic\ codons
-
 track xenoRefGene
 shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
@@ -1543,10 +1533,6 @@ searchType bed
 termRegex (AC|AL|AP|CI|CT|IH|II|RP|c1|co|na).*
 shortCircuit 1
 searchPriority 50
-
-searchTable ccdsGene
-searchType genePred
-searchPriority 1.1
 
 searchTable affyGnf
 searchMethod exact
