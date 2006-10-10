@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.3 2006/08/18 18:40:34 angie Exp $
+# $Id: makeDownloads.pl,v 1.1 2006/10/10 22:26:02 angie Exp $
 
 use Getopt::Long;
 use warnings;
