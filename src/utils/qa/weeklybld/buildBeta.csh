@@ -59,22 +59,6 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 
-# hgCgiData: do make alpha
-echo "making hgCgiData"
-cd $BUILDDIR/$dir/kent/src/hg/makeDb/hgCgiData
-make alpha >& make.alpha.log
-sed -i -e "s/-DJK_WARN//g" make.alpha.log
-sed -i -e "s/-Werror//g" make.alpha.log
-#-- report any compiler warnings, fix any errors (shouldn't be any)
-#-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.alpha.log`
-set wc = `echo "$res" | wc -w` 
-if ( "$wc" != "0" ) then
- echo "alpha errs found:"
- echo "$res"
- exit 1
-endif
-
 # MAKE STRICT BETA TRACKDB
 cd $WEEKLYBLD
 ./makeStrictBeta.csh
