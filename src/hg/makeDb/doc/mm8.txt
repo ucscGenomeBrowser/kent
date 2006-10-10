@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.18 2006/10/10 18:59:26 markd Exp $"
+#	"$Id: mm8.txt,v 1.19 2006/10/10 21:28:15 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7283,6 +7283,10 @@ set out = $3
     checkTableCoords mm8 -verbose=2 ccdsGene
     joinerCheck -database=mm8 -identifier=ccdsGeneId ~/compbio/kent/src/hg/makeDb/schema/all.joiner
     rm -rf /scratch/tmp/ccds
+
+    # build initial version of ccdsMgcMap table
+    ./x86_64/mkCcdsGeneMap -loadDb -db=mm8 -loadDb ccdsGene mgcGenes ccdsMgcMap
+
     
     # load trackDb
     cd kent/src/hg/makeDb/trackDb
