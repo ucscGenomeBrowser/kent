@@ -303,6 +303,16 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
+track ccdsGene
+shortLabel CCDS
+longLabel Consensus CDS
+group genes
+priority 34.5
+visibility hide
+color 12,120,12
+type genePred
+cdsDrawDefault genomic\ codons
+
 track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
