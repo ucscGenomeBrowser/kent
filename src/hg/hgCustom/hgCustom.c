@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.75 2006/10/10 00:21:52 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.76 2006/10/10 19:01:02 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -76,6 +76,7 @@ void addCustomForm(struct customTrack *ct, char *err)
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
     " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
     hgCustomName());
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("Display your own data as custom annotation tracks in the browser." 
      " Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
@@ -236,18 +237,17 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 puts("<TABLE BORDER=0>");
 cgiSimpleTableRowStart();
 puts("<TD VALIGN='TOP'>");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM>");
 printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
            hgTracksName());
-cgiMakeButton("Submit", "view in genome browser");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+cgiMakeButton("Submit", "view in genome browser");
 puts("</FORM></TD>");
 puts("<TD VALIGN='TOP'>");
 printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
            hgTablesName());
-cgiMakeButton("Submit", "access in table browser");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+cgiMakeButton("Submit", "access in table browser");
 puts("</FORM></TD>");
 cgiTableRowEnd();
 puts("</TABLE>");
@@ -257,6 +257,7 @@ if (warn && warn[0])
 
 printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
            hgCustomName());
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 puts("<TD VALIGN=\"TOP\">");
@@ -289,8 +290,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     if (ctDataUrl(ct) && ctHtmlUrl(ct))
         printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
     else
-        printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?hgsid=%d&%s=%s'>%s</A></TD>", 
-            ct->tdb->shortLabel, hgCustomName(),cartSessionId(cart),hgCtTable, ct->tdb->tableName, 
+        printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s&%s=%s'>%s</A></TD>", 
+            ct->tdb->shortLabel, hgCustomName(),cartSidUrlString(cart),hgCtTable, ct->tdb->tableName, 
             ct->tdb->shortLabel);
     /* Description field */
     printf("<TD>%s</TD>", ct->tdb->longLabel);
@@ -321,8 +322,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             char *chrom = cloneString(pos);
             chopSuffixAt(chrom, ':');
             if (hgOfficialChromName(chrom))
-                printf("<TD><A HREF='%s?hgsid=%d&position=%s' TITLE=%s>%s:</A></TD>", 
-                    hgTracksName(),cartSessionId(cart),pos, pos, chrom);
+                printf("<TD><A HREF='%s?%s&position=%s' TITLE=%s>%s:</A></TD>", 
+                    hgTracksName(), cartSidUrlString(cart),pos, pos, chrom);
             else
                 puts("<TD>&nbsp;</TD>");
             }
@@ -357,7 +358,6 @@ puts("</TD>");
 
 cgiTableRowEnd();
 cgiTableEnd();
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM>");
 cartSetString(cart, "hgta_group", "user");
 }
