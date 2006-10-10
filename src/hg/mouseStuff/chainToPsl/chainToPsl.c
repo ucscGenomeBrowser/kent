@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.16 2006/06/20 15:30:07 angie Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.17 2006/10/10 22:58:03 angie Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {
@@ -115,6 +115,7 @@ for(name = names;name;name = name->next)
     AllocVar(sfp);
     hashAddSaveName(seqHash, name->name, sfp, &sfp->name);
     sfp->file = rFile;
+    sfp->isTwoBit = TRUE;
     sfp->pos = 0;
     }
 slFreeList(&names);
