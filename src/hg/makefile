@@ -1,8 +1,8 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.115 2006/08/08 05:53:48 kate Exp $
+# 	$Id: makefile,v 1.116 2006/10/10 04:39:06 galt Exp $
 
-BROWSER_BINS=cartReset das hgBlat hgConvert \
+BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
