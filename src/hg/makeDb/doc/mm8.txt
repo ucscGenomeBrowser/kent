@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.17 2006/10/09 16:13:37 fanhsu Exp $"
+#	"$Id: mm8.txt,v 1.18 2006/10/10 18:59:26 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7263,3 +7263,36 @@ set out = $3
 # refGene 1.835%, geneid 1.579%, both 0.866%, cover 47.18%, enrich 29.88x
 
 ##############################################################################
+
+############################################################################
+# Load CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2006-10-10 markd)
+
+    cd /cluster/data/genbank/data/ccds/
+    ftp ftp-private.ncbi.nih.gov (user ccds, needs password)
+    get CCDS.20061010.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf /cluster/data/genbank/data/ccds/CCDS.20061010.tar.gz
+
+    # import ccds database tables
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds mm8 ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=mm8 -loadDb ccdsGene knownGene ccdsKgMap
+    checkTableCoords mm8 -verbose=2 ccdsGene
+    joinerCheck -database=mm8 -identifier=ccdsGeneId ~/compbio/kent/src/hg/makeDb/schema/all.joiner
+    rm -rf /scratch/tmp/ccds
+    
+    # load trackDb
+    cd kent/src/hg/makeDb/trackDb
+    make alpha
+
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+
+    # << emacs
+
+
