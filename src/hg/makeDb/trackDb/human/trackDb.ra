@@ -53,7 +53,7 @@ priority 29.5
 visibility pack
 color 200,0,0
 type bed 4
-url http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=gene=
+url http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=
 
 track ccdsGene
 shortLabel CCDS

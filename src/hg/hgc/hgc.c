@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1136 2006/10/07 00:01:19 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1137 2006/10/10 16:18:42 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6879,7 +6879,7 @@ if (url != NULL && url[0] != 0)
 	printf("<BR><B>Positive Disease Associations:  </B>");
 	
 	printf("<A HREF=\"%s",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
+	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25");
 	printf("%s", cgiEncode(upperDisease));
 	printf("%s%s%s\" target=_blank>", "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	
@@ -6892,7 +6892,7 @@ if (url != NULL && url[0] != 0)
 	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
 	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);

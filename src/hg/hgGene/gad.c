@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.4 2006/08/02 16:00:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: gad.c,v 1.5 2006/10/10 16:11:07 fanhsu Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -44,7 +44,7 @@ struct dyString *currentCgiUrl;
 char *upperDisease;
 
 char *url = 
-cloneString("http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=gene=");
+cloneString("http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=");
 char *itemName;
 
 if (url != NULL && url[0] != 0)
@@ -86,7 +86,7 @@ if (url != NULL && url[0] != 0)
 	touppers(upperDisease);
 	printf("<BR><B>Positive Disease Associations:  </B>");
 	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
 	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
@@ -96,7 +96,7 @@ if (url != NULL && url[0] != 0)
 	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/CDC/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
+	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
 	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
