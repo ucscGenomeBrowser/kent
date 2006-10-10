@@ -3,7 +3,7 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.1 2006/10/10 20:58:14 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.2 2006/10/10 21:00:46 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -11,13 +11,13 @@ void usage()
 errAbort(
   "snpReadSeq2 - Read dbSNP fasta file and log rsId offset.\n"
   "usage:\n"
-  "  snpReadSeq2 inputfile \n");
+  "  snpReadSeq2 inputfile outputfile\n");
 }
 
 
-void getOffset(char *inputFileName)
+void getOffset(char *inputFileName, char *outputFileName)
 {
-FILE *outputFileHandle = mustOpen("snpReadSeq2.out", "w");
+FILE *outputFileHandle = mustOpen(outputFileName, "w");
 struct lineFile *lf = lineFileOpen(inputFileName, TRUE);
 char *line;
 int lineSize;
@@ -42,12 +42,14 @@ lineFileClose(&lf);
 int main(int argc, char *argv[])
 {
 char *inputFileName = NULL;
+char *outputFileName = NULL;
 
-if (argc != 2)
+if (argc != 3)
     usage();
 
 inputFileName = argv[1];
-getOffset(inputFileName);
+outputFileName = argv[2];
+getOffset(inputFileName, outputFileName);
 
 return 0;
 }
