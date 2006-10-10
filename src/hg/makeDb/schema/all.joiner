@@ -1717,7 +1717,6 @@ identifier snpAnnotations126
 "SNP annotations"
     hg18.snp126.name dupeOk
     hg18.snp126Exceptions.name 
-    hg18.snp126orthoMixed.name
     hg18.snp126Seq.name minCheck=0.98
     hg18.snp126orthoPanTro2RheMac2.name 
 
