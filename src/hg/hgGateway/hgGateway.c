@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.94 2006/10/10 19:04:53 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.95 2006/10/10 21:06:12 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -72,7 +72,6 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
 
 puts(
 "<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
@@ -85,6 +84,7 @@ cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 "</CENTER>\n"
 "</FONT></TD></TR></TABLE></CENTER>\n"
 );
+cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 
 puts(
 "<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n"
