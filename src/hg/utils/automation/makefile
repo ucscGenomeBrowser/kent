@@ -18,11 +18,13 @@ SCRIPT_FILES = \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
 	doHgNearBlastp.pl \
+	doRecipBest.pl \
 	doRepeatMasker.pl \
 	doSameSpeciesLiftOver.pl \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
+	makeDownloads.pl \
 	makeGenomeDb.pl \
 	makePushQSql.pl \
 	simplePartition.pl \
