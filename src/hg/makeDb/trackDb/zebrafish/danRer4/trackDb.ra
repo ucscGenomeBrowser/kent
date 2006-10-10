@@ -49,8 +49,8 @@ priority 17
 visibility hide
 type bed 6 +
 exonArrows off
-track multiz7way
 
+track multiz7way
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
