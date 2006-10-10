@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.76 2006/10/10 19:01:02 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.77 2006/10/10 22:35:56 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -255,7 +255,7 @@ puts("</TABLE>");
 if (warn && warn[0])
     printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"customForm\">\n",
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"customForm\">\n",
            hgCustomName());
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiSimpleTableStart();
