@@ -855,7 +855,7 @@ proc genUserReports {outDir userTableVar numChangedFiles} {
 
     #added by galt
     #set title2 "[fmtDate $::gStartDate] to [fmtDate $::gEndDate]"
-    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate)"
+    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate) $::gBranchVersion"
     
     puts $fh "<html><head><title>$title</title></head><body>"
     puts $fh "<h1>$title</h1>"
@@ -937,7 +937,7 @@ proc genFileReports {outDir fileTableVar lineChgCount} {
 
     #added by galt
     #set title2 "[fmtDate $::gStartDate] to [fmtDate $::gEndDate]"
-    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate)"
+    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate) $::gBranchVersion"
     
     puts $fh "<html><head><title>$title</title></head><body>"
     puts $fh "<h1>$title</h1>"
@@ -1018,12 +1018,14 @@ proc isRevSelected {fileInfo rev} {
     # the parent trunk revs instead, to use those for comparison
     set ftr [$fileInfo getTag $::gFromTag] 
     set ttr [$fileInfo getTag $::gToTag]   
-   
-    if {$::gWhichReport=="branch"} { 
-	set ttr [$fileInfo getRevisionParent $ttr ]
-    } else {
-	set ftr [$fileInfo getRevisionParent $ftr ] 
-    }
+  
+    # since we use non-branch-tag tag "branch" now, we don't need this:
+    #if {$::gWhichReport=="branch"} { 
+	#set ttr [$fileInfo getRevisionParent $ttr ]
+    #} else {
+	#set ftr [$fileInfo getRevisionParent $ftr ] 
+    #}
+    
     ##used to be ftr,ttr were only x.x.x.x branch revisions
     ##but now they can be just trunk/tip x.x revisions also
     ## this compensates for those
@@ -1237,7 +1239,7 @@ proc makeIndexPage {outDir} {
 
     #added by galt
     #set title2 "[fmtDate $::gStartDate] to [fmtDate $::gEndDate]"
-    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate)"
+    set title2 "$::gFromTag to $::gToTag ($::gFromTagDate to $::gToTagDate) $::gBranchVersion"
     
     puts $fh "<html><head><title></title></head><body>"
     puts $fh "<h1>$title</h1>"
@@ -1274,7 +1276,7 @@ so the change count is the larger of the delete count and add count.
 
 <!-- #added by galt -->
 <!-- #<blockquote><CODE>cvs-reports-build <em>startDate</em></CODE></blockquote> -->
-<blockquote><CODE>cvs-reports-delta <em>FromTag ToTag FromTagDate ToTagDate mode</em></CODE></blockquote>
+<blockquote><CODE>cvs-reports-delta <em>FromTag ToTag FromTagDate ToTagDate mode branchVersion</em></CODE></blockquote>
 
 </body>
 </html>
@@ -1308,9 +1310,10 @@ proc genReports {outDir infoList} {
 
 # added by galt
 # these will be calculated from value(s) passed in
-set gToTag   "v66_branch"
-set gFromTag "v65_branch"
+set gToTag   "branch"
+set gFromTag "review"
 set gWhichReport "none"
+set gBranchVersion "none"
 
 set gStartDate 0
 set gCgiProgress 0
@@ -1354,6 +1357,12 @@ while {[string match -* [lindex $argv 0]]} {
                 usage "-whichReport requires an argument"
             }
             set gWhichReport [lvarpop argv]
+	}
+        -branchVersion {  #added by galt
+            if {[lempty $argv]} {
+                usage "-branchVersion requires an argument"
+            }
+            set gBranchVersion [lvarpop argv]
 	}
         -start {
             if {[lempty $argv]} {
@@ -1415,6 +1424,7 @@ progress "  ending   to-tag $gToTag"
 progress "starting from-tag-date $gFromTagDate"
 progress "  ending   to-tag-date $gToTagDate"
 progress " which report: $gWhichReport"
+progress " branch version: $gBranchVersion"
 
 # update the working directory (if rdiff supported -U, we wouldn't need
 # a working dir

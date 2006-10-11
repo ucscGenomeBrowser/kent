@@ -28,10 +28,10 @@ proc cnvDateTime {dateStr} {
     return [clock scan $dateStr]
 }
 
-proc buildReports {fromTag toTag fromTagDate toTagDate} {
+proc buildReports {fromTag toTag fromTagDate toTagDate whichReport branchVersion} {
     set pid [fork]
     if {$pid == 0} {
-        execl $::CVS_REPORTS [list -verbose -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
+        execl $::CVS_REPORTS [list -verbose -from $fromTag -to $toTag -fromDate $fromTagDate -toDate $toTagDate -whichReport $whichReport -branchVersion $branchVersion $::CVS_WORK_DIR $::CVS_REPORTS_DIR]
     } else {
         set status [wait $pid]
         if {[lrange $status 1 2] != "EXIT 0"} {
@@ -40,11 +40,12 @@ proc buildReports {fromTag toTag fromTagDate toTagDate} {
     }
 }
 
-if {$argc != 5} {
-    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport"
+if {$argc != 6} {
+    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport branchVersion"
     puts stderr "   fromTag and toTag are in the form: vNN_branch "
     puts stderr "   fromTagDate and toTagDate are in the form: 2004-06-07 "
     puts stderr "   whichReport is either 'branch' or 'Review' (no quotes)"
+    puts stderr "   branchVersion is v${BRANCHNN} e.g. v144"
     exit 1
 }
 
@@ -54,13 +55,15 @@ set   toTag [lindex $argv 1]
 set fromTagDate [lindex $argv 2]
 set   toTagDate [lindex $argv 3]
 set  whichReport [lindex $argv 4]
+set  branchVersion [lindex $argv 5]
 umask 0002
 
 if {($whichReport != "branch") && ($whichReport != "review")} {
-    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport"
+    puts stderr "wrong \# args: cvs-reports-delta fromTag toTag fromTagDate toTagDate whichReport branchVersion"
     puts stderr "   fromTag and toTag are in the form: vNN_branch "
     puts stderr "   fromTagDate and toTagDate are in the form: 2004-06-07 "
     puts stderr "   whichReport is either 'branch' or 'review' (no quotes)"
+    puts stderr "   branchVersion is v${BRANCHNN} e.g. v144"
     exit 1
 }
 #dont use
@@ -78,7 +81,7 @@ set CVS_REPORTS $CVS_REPORTS_DIR/cvs-reports-d
 
 set lockFile [mkLock]
 try_eval {
-    buildReports $fromTag $toTag $fromTagDate $toTagDate
+    buildReports $fromTag $toTag $fromTagDate $toTagDate $whichReport $branchVersion
 } {
     file delete $lockFile
     puts "Error: $errorResult"
