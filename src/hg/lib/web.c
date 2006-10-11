@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.100 2006/10/07 20:32:43 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.101 2006/10/11 22:25:35 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -168,7 +168,7 @@ if (withLogo)
     puts("</TH></TR>" "\n"
     	 "" "\n" );
     }
-if (NULL != theCart)
+if (theCart)
     {
     char *theDb = NULL;
     char *theGenome = NULL;
@@ -186,7 +186,6 @@ else
     {
     uiState[0] = 0;
     uiState[1] = 0;
-    //safef(uiState, sizeof(uiState), "?cart=none");
     }
 
 puts(
@@ -222,7 +221,7 @@ else
     if (!endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
-		uiState[1]==0 ? "" : "&", uiState+1 );
+		theCart ? "&" : "", uiState+1 );
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
     {
@@ -230,7 +229,7 @@ else
 		   (endsWith(scriptName, "hgGene") ?
 		    cartOptionalString(theCart, "hgg_type") :
 		    cartOptionalString(theCart, "g")));
-    if (table != NULL &&
+    if (table && theCart &&
 	(endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
 	 endsWith(scriptName, "hgGene")))
 	{
@@ -239,9 +238,9 @@ else
 	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
 		   "class=\"topbar\">\n",
-	       uiState, tdb->grp, table, table);
+		uiState, tdb->grp, table, table);
 	else
-	    printf("       <A HREF=\"/cgi-bin/hgTables%shgta_doMainPage=1\" "
+	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
 		   "class=\"topbar\">\n",
 		uiState);
 	trackDbFree(&tdb);
@@ -249,7 +248,7 @@ else
     else
 	printf("       <A HREF=\"/cgi-bin/hgTables%s%shgta_doMainPage=1\" "
 	       "class=\"topbar\">\n",
-		uiState, uiState[0]==0 ? "?" : "&" );
+	       uiState, theCart ? "&" : "?" );
     }
     puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
@@ -269,7 +268,7 @@ else
 	{
 	printf("<A HREF=\"/cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
-	       uiState, uiState[0]==0 ? "?" : "&" );
+	       uiState, theCart ? "&" : "?" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
