@@ -97,7 +97,7 @@ yLineOnOff Off
 autoScaleDefault Off
 windowingFunction mean
 summary multiz15waySummary
-frames multiz9wayFrames
+frames multiz15wayFrames
 irows on
 speciesCodonDefault dm2
 speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas1
