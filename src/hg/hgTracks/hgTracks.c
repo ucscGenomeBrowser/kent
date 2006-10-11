@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1218 2006/10/09 20:57:09 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1219 2006/10/11 05:42:53 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8484,6 +8484,44 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
 return ct;
 }
 
+enum trackVisibility estimateVisibility(struct track *tg)
+/* Return estimate of what visibility will be without actually setting it. */ 
+{
+enum trackVisibility vis = tg->visibility;
+int h = 0;
+int maxHeight = 0;
+
+if (tg->limitedVisSet)
+    return tg->limitedVis;
+if (vis == tvHide)
+    return tvHide;
+maxHeight = maximumTrackHeight(tg);
+if (isCompositeTrack(tg))
+    maxHeight = maxHeight * subtrackCount(tg->subtracks);
+h = tg->totalHeight(tg, vis);
+if (h > maxHeight)
+    {
+    if (vis == tvFull && tg->canPack)
+        vis = tvPack;
+    else if (vis == tvPack)
+        vis = tvSquish;
+    else
+        vis = tvDense;
+    h = tg->totalHeight(tg, vis);
+    if (h > maxHeight && vis == tvPack)
+        {
+        vis = tvSquish;
+        h = tg->totalHeight(tg, vis);
+        }
+    if (h > maxHeight)
+        {
+        vis = tvDense;
+        h = tg->totalHeight(tg, vis);
+        }
+    }
+return vis;
+}
+
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items. 
  * This also sets tg->height. */
@@ -8596,6 +8634,7 @@ int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
 boolean rulerCds = zoomedToCdsColorLevel;
+
 /* Start a global track hash. */
 trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
