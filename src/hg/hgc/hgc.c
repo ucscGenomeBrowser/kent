@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1137 2006/10/10 16:18:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1138 2006/10/11 16:34:39 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14982,20 +14982,6 @@ if (ct->wiggle)
     }
 else
     {
-    if (ct->fieldCount < 4)
-	{
-	if (! ct->dbTrack)
-	    {
-	    for (bed = ct->bedList; bed != NULL; bed = bed->next)
-		if (bed->chromStart == start)
-		    break;
-	    if (bed)
-		printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
-		    TRUE, NULL);
-	    }
-	printTrackHtml(ct->tdb);
-	return;
-	}
     if (ct->dbTrack)
 	{
 	char where[512];
@@ -15005,7 +14991,10 @@ else
 	struct sqlResult *sr = NULL;
 	int rcCount = 0;
 
-	safef(where, sizeof(where), "name = '%s'", itemName);
+	if (ct->fieldCount < 4)
+	    safef(where, sizeof(where), "chromStart = '%d'", start);
+	else
+	    safef(where, sizeof(where), "name = '%s'", itemName);
 	sr = hRangeQuery(conn, ct->dbTableName, seqName, winStart, winEnd,
                      where, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
@@ -15015,12 +15004,29 @@ else
 	    ++rcCount;
 	    }
 	}
+    if (ct->fieldCount < 4)
+	{
+	if (! ct->dbTrack)
+	    {
+	    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+		if (bed->chromStart == start && sameString(seqName, bed->chrom))
+		    break;
+	    }
+	if (bed)
+	    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
+		TRUE, NULL);
+	printTrackHtml(ct->tdb);
+	return;
+	}
     else
 	{
-	for (bed = ct->bedList; bed != NULL; bed = bed->next)
-	    if (bed->chromStart == start && sameString(seqName, bed->chrom))
-		if (bed->name == NULL || sameString(itemName, bed->name) )
-		    break;
+	if (! ct->dbTrack)
+	    {
+	    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+		if (bed->chromStart == start && sameString(seqName, bed->chrom))
+		    if (bed->name == NULL || sameString(itemName, bed->name) )
+			break;
+	    }
 	}
     if (bed == NULL)
 	errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName,
