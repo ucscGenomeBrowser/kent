@@ -15,3 +15,6 @@ beta::
 	rsync -ar --exclude=CVS/ --exclude=makefile --delete ../hgCgiData ${CGI_BIN}-beta/
 	chmod -R g+w ${CGI_BIN}-beta/hgCgiData
 	chmod -R a+rX ${CGI_BIN}-beta/hgCgiData
+
+clean::
+	# do nothing -- placeholder target so we don't get a warning from make
