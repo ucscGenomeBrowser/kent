@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.110 2006/10/09 03:10:19 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.111 2006/10/11 06:00:30 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -453,7 +453,6 @@ else
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
-slSort(&itemList, bedCmp);
 tg->items = itemList;
 
 filterSnpItems(tg, snp125AvHetFilterItem);
@@ -464,8 +463,15 @@ filterSnpItems(tg, snp125ValidFilterItem);
 filterSnpItems(tg, snp125FuncFilterItem);
 filterSnpItems(tg, snp125LocTypeFilterItem);
 
-if(withLeftLabels && snp125ExtendedNames && (vis==tvPack||vis==tvFull) && !(visLim==tvDense||visLim==tvSquish) )
-    setSnp125ExtendedNameExtra(tg);
+vis = estimateVisibility(tg);
+if(vis==tvDense || visLim==tvDense)
+    sortSnp125ExtendedByColor(tg);
+else
+    {
+    slSort(&tg->items, bedCmp);
+    if(snp125ExtendedNames)
+        setSnp125ExtendedNameExtra(tg);
+    }
 }
 
 void loadSnpMap(struct track *tg)
@@ -900,8 +906,6 @@ int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 
-if(vis==tvDense)
-    sortSnp125ExtendedByColor(tg);
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
 if (vis == tvPack || vis == tvSquish)
