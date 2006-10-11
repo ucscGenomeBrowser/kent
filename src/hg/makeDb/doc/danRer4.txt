@@ -4841,16 +4841,18 @@ cat << '_EOF_' > template
     liftUp bacEnds.psl \
            /cluster/data/danRer4/jkStuff/liftAll.lft warn bacEndsNoLift.psl 
     # Took 2 minutes
-    # Now put togehter the pairs information:
+    # REPROCESS BACENDS - see section at end (2006-10-06 - 2006-10-11, hartera)
+    # Now put together the pairs information:
     ssh kkstore04
     cd /cluster/data/danRer4/bed/bacEnds
     mv /san/sanvol1/danRer4/bacEnds/bacEnds.psl .
     # cat together the xml files of BAC clone end information
     cat ensemblSeqs/*.xml > danRerBacEnds.xml
-    # get mate-pair information from xml, forward is SP6, reverse is T7
+    # get mate-pair information from xml, forward is SP6, reverse is T7 
     # edit getBacInfo.pl used for canFam1 and adapt for use with zebrafish
     # BAC ends. Not all entries in the xml file have clone_id or trace_end
     # but sometimes they have trace_direction instead of trace_end.
+    # correct directions:
 cat << '_EOF_' > getZfishBacInfo.pl
 #!/usr/bin/perl -w
 use strict;
@@ -4934,16 +4936,16 @@ sub printInfo  {
              }
          }
       }
-   # convert forward or reverse direction to SP6 or T7
+   # convert forward or reverse direction to T7 or SP6
    if ($d ne "")
       {
       if ($d eq "F")
          {
-         $d = "SP6";
+         $d = "T7";
          }
       elsif ($d eq "R")
          {
-         $d = "T7";
+         $d = "SP6";
          }
       }
    else 
@@ -4971,8 +4973,24 @@ sub printInfo  {
     # comment out line 43 as this removes the suffix after a . from the
     # trace names. In this case, we need to keep those. 
     # line 43:  ($acc, $ver) = split(/\./,$acc);
-    convertBacEndPairInfo bacEndInfo.txt
+    # here used wrong script - used old one.
+    ./convertZfishBacEndInfo bacEndInfo.txt
+    # creates pairs and singles files
     # 312901 pairs and 35479 singles
+    # looks like pairs were made for both DKEY-32B21A and DKEY-32B21
+    # need to find singles that could be used in pairs. 
+    awk '{print $2}' bacEndSingles.txt > singles.names
+    perl -pi.bak -e 's/(DKEY\-[0-9]+[A-Z][0-9]+)W/$1/' singles.names
+    perl -pi.bak -e 's/(DKEY\-[0-9]+[A-Z][0-9]+)A/$1/' singles.names
+    sort singles.names | uniq -c | sort -nr > singles.names.count
+    # 209 have 2 ends for the BAC clone.
+    # some are duplicates of the same end e.g. .ya and .yb but these
+    # have the same BAC clone name.
+    head -209 singles.names.count | awk '{print $2}' > singles.withPairs.names
+    awk '{print $2}' bacEndPairs.txt > pairs.names
+    perl -pi.bak -e 's/(DKEY\-[0-9]+[A-Z][0-9]+)W/$1/' pairs.names
+    perl -pi.bak -e 's/(DKEY\-[0-9]+[A-Z][0-9]+)A/$1/' pairs.names
+  
     mkdir -p /cluster/data/danRer4/bed/bacEnds/pairs
     cd /cluster/data/danRer4/bed/bacEnds/pairs
     set dir = /cluster/data/danRer4/bed/bacEnds
@@ -5145,7 +5163,1084 @@ sub printInfo  {
     gzip *.psl *.txt danRerBacEnds.xml
     du -sh /cluster/data/danRer4/bed/bacEnds
     # 599M    /cluster/data/danRer4/bed/bacEnds
+    # (hartera, 2006-10-02)
+    # NOTE: Some BAC clones have duplicate reads and these end in the 
+    # suffixes SP6A, T7A, SP6W and T7W. The names of the BAC clones 
+    # are also suffixed with A or W for these reads. e.g There is a BAC
+    # clone called DKEY-32M8. DKEY-32M8A is the same one sequenced with
+    # different read ending in SP6A and T7A. The BAC ends names are 
+    # zK32M8SP6A and zK32M8T7A. 
+    # Check if there are any cases where both the version without the W or A 
+    # suffix and the version with it are in the same track:
+    ssh hgwdev 
+    cd /cluster/data/danRer4/bed/bacEnds
+    mkdir duplicates
+    cd duplicates
+    # found that there are some alignments in all_bacends where there 
+    # is SP6W, SP6A, T7W, T7A suffixes for BAC ends. These are duplicate
+    # reads, there is a corresponding read name without the W or A suffix.
+# Suffix Alignments Unique Names
+# SP6W	179	153
+# SP6A	254	245
+# T7W 	53	48
+# T7A	247	238
+    hgsql -e 'select count(*) from bacEndPairs where lfNames like "%SP6A%";' \
+      danRer4
+    # 126 were found
+    hgsql -e \
+ 'select count(distinct(name)) from bacEndPairs where lfNames like "%SP6A%";' \
+      danRer4
+    # 122 with distinct names
+    hgsql -N -e \
+     'select name, lfNames from bacEndPairs where lfNames like "%SP6A%";' \
+     danRer4 | sort > names.SP6A.txt
+    awk '{print $1}' names.SP6A.txt | sed -e 's/A$//' > names.SP6.txt
+    hgsql -N -e \
+    'select name, lfNames from bacEndPairs where lfNames not like "%SP6A%";' \
+     danRer4 | sort > pairs.nameswithoutA.txt
+    grep -w -f names.SP6.txt pairs.nameswithoutA.txt | sort | uniq \
+         > pairs.withAandwithout.txt
+    # there are 23 BAC clones in the bacEndPairs table where there are
+    # entries for both the clone names ending in A and that without the A.
+    hgsql -N -e 'select name, lfNames from bacEndSingles where (lfNames like
+"%SP6A%") or (lfNames like "%SP6W%") or (lfNames like "%T7A%") or (lfNames
+like "%T7W%");' danRer4 | sort | uniq > singles.names.sort
+    awk '{print $1}' singles.names.sort | sed -e 's/A$//' | sed -e 's/W$//' \
+        > names.SP6andT7.txt
+    wc -l names.SP6andT7.txt
+    # 372 names.SP6andT7.txt
+    sort names.SP6andT7.txt | uniq > names.SP6andT7.uniq
+    wc -l names.SP6andT7.uniq
+    # 309 names.SP6andT7.uniq
+    # Some may have both names ending in W and in A or could those 
+    # where the SP6 and T7 end are both present.
+    hgsql -N -e 'select name, lfNames from bacEndSingles;' danRer4 \
+          > singles.names.txt
+    grep -w -f names.SP6andT7.uniq singles.names.txt | sort | uniq \
+         > singles.withAorWandwithout.txt
+    wc -l singles.withAorWandwithout.txt
+    # 212 singles.withAandwithout.txt
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/bacEnds/duplicates/tmp/singles
+    # Check to see if any pairs can be made that do not have the same 
+    # suffix: A, W or without. Only for cases where there is not a pair 
+    # already.
+    awk '{print $2}' singles.names.sort | sort | uniq > bacEnds.namesAorW.sort
+    # also add the BAC ends for those with the same name but withour A or W
+    awk '{print $2}' singles.withAorWandwithout.txt | sort | uniq \
+        > singles.withAorWandwithout.ends
+    cat bacEnds.namesAorW.sort singles.withAorWandwithout.ends \
+        | sort | uniq > bacEnds.namesAorWorwithout.sort
+    # make pairs where there is none with the same ending already. If an end
+    # has W and/or A suffix and/or no suffix, use just one and discard others.
+    # use a script to do this.
+    wc -l *.txt
+    # 93 diffSuffix.txt
+    # 69 sameSuffix.txt
+    # 212 singles.withAorWandwithout.txt
+    # 92 singlesEnds.txt
+    # changed program to do second pass using the extra ends.
+    # 76 diffSuffix.txt
+    # 78 extraEnds.txt
+    # 39 extraEnds2.txt
+    # 86 sameSuffix.txt
+    # 92 singlesEnds.txt
+    
+    # /cluster/data/danRer4/bed/bacEnds/duplicates/tmp/singles/test2
+    # now check to see if any of the BACs represented by singles or pairs
+    # are already in the original file created.  
+    # extraEnds2.txt are those to be removed
+    # diffSuffix.txt, sameSuffix.txt and singlesEnds.txt should all
+    # be checked against the entries in the bacEndPairs table since
+    # these are sequences that already passed all the criteria for 
+    # being in the BAC end pairs track.
+    mkdir /cluster/data/danRer4/bed/bacEnds/duplicates/remove
+    cd /cluster/data/danRer4/bed/bacEnds/duplicates/remove 
+    cp /cluster/data/danRer4/bed/bacEnds/pairs/bacEndPairs.bed .
+    # those that have the same suffix will have already been paired. It is
+    # the ones that are different that should be put into the pairs file 
+    # and those that are singles should go into the singles file before
+    # processing the BAC ends. 
+
+    # first remove the 23 that are duplicated in the bacEndPairs table.
+    cp ../pairs.withAandwithout.txt .
+   # cd /cluster/data/danRer4/bed/bacEnds/duplicates/remove
+    awk '{print $1"A"}' pairs.withAandwithout.txt > bacsToRemove.txt
+    # remove these from the BAC end pairs file
+    grep -wv -f bacsToRemove.txt bacEndPairs.bed > bacEndPairsRemBacA.bed 
+    wc -l *.bed
+    # 104546 bacEndPairs.bed
+    # 104523 bacEndPairsRemBacA.bed
+    
+    # then find out if there are any BACs with more than one set of pairs
+    # in each of the lists: sameSuffix.txt and diffSuffix.txt
+    cp ../*Suffix.txt .
+    #  the first column has the stem of the BAC end names without the 
+    #  SP6 or T7 part of the suffix.
+    awk '{print $1;}' sameSuffix.txt | sort | uniq -c | sort -nr \
+        > sameSuff.count
+    # no duplicates within the file
+    awk '{print $1;}' diffSuffix.txt | sort | uniq -c | sort -nr \
+        > diffSuff.count
+    # no duplicates within the file
+    cat sameSuffix.txt diffSuffix.txt > allSuff.txt
+    awk '{print $1;}' allSuff.txt | sort | uniq -c | sort -nr \
+        > allSuff.count
+    # no duplicates between files
+    rm *.count
+    # then check if any of these are represented in the pairs table:
+    # All of these BAC end names begin with zK, these are DKEY- BAC clones
+    # translate names in column 1 to BAC clone names
+    awk '{print $1}' allSuff.txt | sed -e 's/zK/DKEY\-/' | sort \
+        > allSuff.BACclones.txt
+    grep -w -f allSuff.BACclones.txt bacEndPairsRemBacA.bed \
+         > newPairsDupsInPairsBed.txt
+    # only one is found: DKEY-32B21: zK32B21T7,zK32B21SP6
+    awk '{print $4}' newPairsDupsInPairsBed.txt \
+        > newPairsDupsInPairsBed.name
+    grep "zK32B21" *.txt
+    # found in sameSuffix.txt so delete from this file and from allSuff.txt
+    grep -wv "zK32B21" sameSuffix.txt > sameSuffix2.txt
+    grep -wv "zK32B21" allSuff.txt > allSuff2.txt
+    # in this case the zK32B21T7A alignment is much better than the
+    # zK32B21T7 alignment, also zK32B21SP6A is better than the zK32B21SP6
+    # alignment therefore it should be replaced with the SP6A and T7A
+    # versions.
+
+    cp /cluster/data/danRer4/bed/bacEnds/singles/bacEndSingles.bed .
+    grep "zK32B21" bacEndSingles.bed 
+    # then repeat this for the singles and see if any of those already
+    # have pairs in the bacEndPairsRemBacA.bed file.
+    cp ../singlesEnds.txt .
+    cp ../extraEnds2.txt .
+    # all these ends begin with "zK" so from "DKEY-" library.
+    # get BAC end prefixes and conver to DKEY BAC clone names.
+    awk '{print $1}' singlesEnds.txt | sed -e 's/zK/DKEY\-/' | sort \
+        > singles.BACclones.txt
+    grep -w -f singles.BACclones.txt bacEndPairsRemBacA.bed \
+        > singlesInPairsBed.txt
+    wc -l singlesInPairsBed.txt
+    # 40 singlesInPairsBed.txt
+    # get those names from the clone name in bacEndPairsRemBacA.bed
+    awk '{print $4}' singlesInPairsBed.txt | sed -e 's/DKEY\-/zK/' \
+        | sort | uniq > singlesDupsInPairs.txt
+    wc -l singlesDupsInPairs.txt
+    # 37 singlesDupsInPairs.txt
+    # All of these versions are in Genbank.
+    cat newPairsDupsInPairsBed.name singlesDupsInPairs.txt \
+        | sed -e 's/zK/DKEY\-/' > allDupsInPairs.txt
+    # BEST WAY FORWARD IS TO START AGAIN WITH PROCESSING THE BAC ENDS AND
+    # PROCESS DUPLICATES AS FOR danRer3.
+
+##############################################################################
+# REPROCESS BAC ENDS TO DEAL WITH DUPLICATES AND REDO BACENDS TRACKS
+# (2006-10-06 - 2006-10-11, hartera)
+    # The bacEnds.psl from the first BACENDS TRACK section is used so all 
+    # processing is the same up to that point.
+    # Now put together the pairs information:
+    ssh kkstore04
+    # move old bacends dir out the way
+    mv /cluster/data/danRer4/bed/bacEnds /cluster/data/danRer4/bed/bacEndsOld
+    mkdir /cluster/data/danRer4/bed/bacEnds
+    cd /cluster/data/danRer4/bed/bacEnds
+   # mv /cluster/data/danRer4/bed/bacEndsOld/bacEnds.psl .
+    # cat together the xml files of BAC clone end information
+    cat ensemblSeqs/*.xml > danRerBacEnds.xml
+    # get mate-pair information from xml, 
+    # in convertBacEndInfo, forward is T7, reverse is SP6. Use this 
+    # although before used the other way round. Arbitrary really as long 
+    # as use the same in the same library. CHORI73 library has it the opposite 
+    # way round to above.  
+    # edit getBacInfo.pl used for canFam1 and adapt for use with zebrafish
+    # BAC ends. Not all entries in the xml file have clone_id or trace_end
+    # but sometimes they have trace_direction instead of trace_end.
+    # correct directions:
+cat << '_EOF_' > getZfishBacInfo.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($file, $outFile, $name, $clone, $library, $dir);
+$file = $ARGV[0];
+$outFile = $ARGV[1];
+
+open (FILE, $file) || die "Can not open $file : $!\n";
+open (OUT, ">$outFile") || die "Can not create $outFile : $!\n";
+open (STDERR, ">error.log") || die "Can not create error.log : $!\n";
+my %cloneHash = qw {
+   zC   CH211-
+   zK  DKEY-
+   zKp DKEYP-
+   bZ  RP71-
+   dZ  BUSM1-
+   CHORI73_ CH73-
+};
+
+$name = "";
+$clone = "";
+$dir = "";
+while (<FILE>)
+{
+chomp;
+my $l = $_;
+if ($l =~ /<trace_name>([A-Za-z0-9\_\.]+)/)
+   {
+   $name = $1;
+   }
+elsif ($l =~ /<clone_id>([A-Z0-9]+\-[0-9A-Z]+)/)
+   {
+   $clone = $1;
+   }
+elsif ($l =~ /<library_id>([A-Z0-9a-z\s]+\-?[0-9A-Z]*)<\/library_id>/)
+   {
+   $library = $1;
+   if ($library eq "Daniokey Pilot")
+      {
+      $library = "DKEYP";
+      }
+   }
+elsif ($l =~ /<trace_end>(F|R)/)
+   {
+   $dir = $1;
+   }
+elsif ($l =~ /<trace_direction>(F|R)/)
+   {
+   $dir = $1;
+   }
+# find end of record and print out end information
+if ($l =~ /^\s+<\/trace>/)
+   {
+   printInfo($name, $clone, $library, $dir);
+   $name = $clone = $dir = $library = "";
+   }
+}
+close FILE;
+close OUT;
+close STDERR;
+
+sub printInfo  {
+   my ($name, $clone, $lib, $d) = @_; 
+   # if no clone name read from file then create from trace name
+   if ($clone  eq "")
+      {
+      foreach my $c (keys(%cloneHash))
+         {
+         if ($name =~ /$c/)
+             {
+             if (exists($cloneHash{$c})) 
+                {
+                my $prefix = $cloneHash{$c};
+                $clone = $name;
+                # change to clone name
+                $clone =~ s/$c/$prefix/;
+                # remove suffix
+                $clone =~ s/\.[a-z]+|SP6|T7//;
+                }
+             }
+         }
+      }
+   # convert forward or reverse direction to T7 or SP6
+   if ($d ne "")
+      {
+      if ($d eq "F")
+         {
+         $d = "T7";
+         }
+      elsif ($d eq "R")
+         {
+         $d = "SP6";
+         }
+      }
+   else 
+      {
+      print STDERR "No direction for $name found\n";
+      }
+   # print clone end information
+   print OUT "$clone\t$name\t0\t$lib\t0\t$d\n";
+}
+'_EOF_'
+    # << for emacs
+    chmod +x getZfishBacInfo.pl
+    perl getZfishBacInfo.pl danRerBacEnds.xml bacEndInfo.txt
+    # check all the names are there 
+    grep '>' ./ensemblSeqs/Zv6BacEnds.fa > names
+    perl -pi.bak -e 's/>//' names
+    sort names | uniq > names.sort
+    awk '{print $2}' bacEndInfo.txt  | sort | uniq > bacEndInfo.names.sort
+    comm -13 bacEndInfo.names.sort names.sort
+    # no difference so all clone ends in the FASTA file are also 
+    # in the xml file.
+    rm *.bak *.sort names  
+    # create mate-pair information
+    # convertBacEndPairInfo does not deal with replicate names. These can 
+    # be in a comma separated list in the pairs and singles files.
+    # edit the script so that it does this and parses the bacEndInfo.txt file.
+    cp /cluster/bin/scripts/convertBacEndPairInfo convertZfishBacEndInfo
+    # comment out line 43 as this removes the suffix after a . from the
+    # trace names. In this case, we need to keep those. 
+    # line 43:  ($acc, $ver) = split(/\./,$acc);
+cat << 'EOF' > convertZfishBacEndInfo
+#!/usr/local/bin/perl
+# File: convertBacEndPairZfishInfo
+# Date: 10/2006
+# Description: Converts bacends.cl_acc_gi_len_primer format file to 
+# bacEnds.pair file used for creating BAC End Pairs tracks
+
+# Usage message
+if ($#ARGV < 0) {
+  print stderr "USAGE: convertBacEndPairInfo <cl_acc_gi_len_primer>\n";
+  exit(1);
+}
+
+$file = shift(@ARGV);
+open(FILE, "$file") || die("Could not open $file\n");
+
+$pair = $single = 0;
+
+# Read in and record end info
+print stderr "Reading in end info\n";
+while ($line = <FILE>) {
+  chomp($line);
+  ($clone, $acc, $gi, $center, $length, $end) = split('\t',$line);
+ # ($acc, $ver) = split(/\./,$acc);
+  $end =~ tr/a-z/A-Z/;
+  $found{$clone} = 1;
+  $clone{$acc} = $clone;
+  $printa{$acc} = 0;
+  $print{$clone} = 0;
+  $end{$acc} = $end;
+  if (&isForward($end)) {
+   #  print "Adding $acc for $clone as $end \n";
+    $t7{$clone} .= "$acc,";
+   # print "The entry for $clone is $t7{$clone}\n";
+  } elsif (&isReverse($end)) {
+    $sp6{$clone} .= "$acc,";
+  } elsif ($end) {
+    print stderr "End $end for $acc / $clone\n";
+  }
+}
+close(OUT);
+
+# Print out pairs
+open(OUT, ">bacEndPairs.txt");
+print stderr "Writing out pair info\n";
+foreach $clone (keys %found) {
+  if ($t7{$clone} && $sp6{$clone}) {
+    print OUT "$t7{$clone}\t$sp6{$clone}\t$clone\n";
+    $print{$clone} = 1;
+    @acc = split(/\,/,$t7{$clone});
+    for ($i = 0; $i <= $#acc; $i++) {
+       $printa{$acc[$i]} = 1;
+    }
+    @acc = split(/\,/,$sp6{$clone});
+    for ($i = 0; $i <= $#acc; $i++) {
+       $printa{$acc[$i]} = 1;
+    }
+    $pair++;
+  }
+}
+close(OUT);
+
+# Print out singletons
+print stderr "Writing out singleton info\n";
+open(OUT, ">bacEndSingles.txt");
+%sp6Singles;
+%t7Singles;
+
+foreach $acc (keys %printa) {
+  $clone = $clone{$acc};
+  # if not printed already then add to a new hash for singles
+  if (!$printa{$acc}) {
+     if (&isForward($end{$acc})) {
+        $t7Singles{$clone} .= "$acc,";
+     }
+     elsif (&isReverse($end{$acc})) {
+        $sp6Singles{$clone} .="$acc,";
+     }
+     else {
+        print stderr "$acc has unknown end\n";
+     }
+  }
+}
+# then print out the singles:
+foreach $cl (keys %t7Singles) {
+   print OUT "$t7Singles{$cl}\t$cl\tT7\n";
+   $single++;
+}
+foreach $cl (keys %sp6Singles) {
+   print OUT "$sp6Singles{$cl}\t$cl\tSP6\n";
+   $single++;
+}
+
+close(OUT);
+print stderr "$pair pairs and $single singles\n";
+
+sub isForward {
+    $end = shift(@_);
+    if (($end =~ /FORWARD/) || ($end =~ /^T7/) || ($end eq "F") ||
+	($end eq "M13-21") || ($end eq "1") || ($end =~ /^TK/) ||
+	($end =~ /^EC1/) || ($end =~ /^RM1/)) {
+	return 1;
+    } else {
+	return 0;
+    }
+}
+
+
+sub isReverse {
+    if (($end =~ /REVERSE/) || ($end =~ /^SP6/) || ($end eq "R") ||
+	($end =~ /^TJ/)) {
+	return 1;
+    } else {
+	return 0;
+    }
+}
+'EOF'
+    # remove all W and A suffixes from the end of bacEndInfo.txt clone names
+    cp bacEndInfo.txt bacEndInfo2.txt 
+    perl -pi.bak -e 's/(DKEY\-[0-9]+[A-Z][0-9]+)W/$1/' bacEndInfo2.txt
+    perl -pi.bak -e 's/(DKEY\-[0-9]+[A-Z][0-9]+)A/$1/' bacEndInfo2.txt
+    ./convertZfishBacEndInfo bacEndInfo2.txt
+    # creates pairs and singles files
+    # 312850 pairs and 34935 singles
+  
+    mkdir -p /cluster/data/danRer4/bed/bacEnds/pairs
+    cd /cluster/data/danRer4/bed/bacEnds/pairs
+    set dir = /cluster/data/danRer4/bed/bacEnds
+    # use parameters from REDO of danRer3 BAC ends
+    /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose $dir/bacEnds.psl $dir/bacEndPairs.txt all_bacends bacEnds
+    wc -l *
+#    2724 bacEnds.long
+#   22959 bacEnds.mismatch
+#  179405 bacEnds.orphan
+#  156241 bacEnds.pairs
+#     565 bacEnds.short
+#    1196 bacEnds.slop
+
+    # create header required by "rdb" tools
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' \
+         > ../header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> ../header
+    # edit header to make sure \t is/become tab character
+    cat ../header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairs.bed
+    # create bad BAC ends set
+    cat ../header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        bacEnds.orphan | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBad.bed
+    # Also create a bad BAC ends set with no orphans since orphans are
+    # already added to the singles track and do not want to add these orphans
+    # twice when extracting PSL. Use this bacEndPairsBadNoOrphans.bed
+    # file when extracting PSLs for adding to the all_bacends table.
+    cat ../header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBadNoOrphans.bed
+    # To create singles set:
+    # also need to process bacEndSingles.txt into a database table
+    # for singles in bacEndSingles.txt, create a dummy file where they
+    # are given zJA11B12T7 as dummy sequence pair. If the single is a forward
+    # sequence, put the dummy sequence in the second column, if the single is
+    # a reverse sequence put in first column. use a perl script to do this.
+    cd /cluster/data/danRer4/bed/bacEnds
+    set bacDir = /cluster/data/danRer4/bed/bacEnds
+    mkdir singles
+    cd singles
+    cp /cluster/data/danRer2/bed/ZonLab/bacends/singles/formatSingles.pl .
+    perl formatSingles.pl $bacDir/bacEndSingles.txt > \
+                           $bacDir/bacEndSingles.format
+    # then run pslPairs on this formatted file
+    /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+     -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+     -mismatch -verbose ../bacEnds.psl $bacDir/bacEndSingles.format \
+     all_bacends bacEnds
+    wc -l bacEnds.*
+    #     0 bacEnds.long
+    #     0 bacEnds.mismatch
+    # 23398 bacEnds.orphan
+    #     0 bacEnds.pairs
+    #     0 bacEnds.short
+    #     0 bacEnds.slop
+    cat bacEnds.orphan ../pairs/bacEnds.orphan > bacEnds.singles 
+    wc -l bacEnds.singles
+    # 202803 bacEnds.singles
+    # Of these, 179405 are from pair analysis and 23398 from singles.
+    # For danRer3: there are 11439 orphans from singles and 242235 from 
+    # pair analysis so a total of 253674 orphans so this has improved.
+    # Although for danRer3, some of these could be more replicate reads for the
+    # same BAC clone end.
+    # make singles bed file
+    cat ../header bacEnds.singles | row score ge 300 | sorttbl chr start \
+                  | headchg -del > bacEndSingles.bed
+
+    # check if there are any overlapping alignments that can be removed.
+    cd /cluster/data/danRer4/bed/bacEnds
+    mkdir -p duplicates/overlapRun
+    cd duplicates/overlapRun
+    sort -k1,2 /cluster/data/danRer4/bed/bacEnds/pairs/bacEndPairs.bed \
+         > bacEndPairs.lfs 
+    wc -l *.lfs
+    # 154732 bacEndPairs.lfs
+    nice /cluster/bin/x86_64/lfsOverlap bacEndPairs.lfs bacEndPairs.bed \
+         -name -minOverlap=0.999 -notBlocks
+    # Loaded 154732 elements of size 11
+    # Took about 2.5 hours.
+    wc -l bacEndPairs*
+    # 154634 bacEndPairs.bed
+    # 154732 bacEndPairs.lfs
+
+    sort -k1,2 /cluster/data/danRer4/bed/bacEnds/singles/bacEndSingles.bed \
+         > bacEndSingles.lfs
+    nice /cluster/bin/x86_64/lfsOverlap bacEndSingles.lfs bacEndSingles.bed \
+        -name -minOverlap=0.999 -notBlocks
+    # Loaded 187638 elements of size 11
+    # Took about 4.5 hours
+    sort -k1,2 \
+         /cluster/data/danRer4/bed/bacEnds/pairs/bacEndPairsBadNoOrphans.bed \
+         > bacEndPairsBadNoOrphans.lfs 
+    wc -l *.lfs
+    # 27301 bacEndPairsBadNoOrphans.lfs
+    nice /cluster/bin/x86_64/lfsOverlap bacEndPairsBadNoOrphans.lfs \
+         bacEndPairsBadNoOrphans.bed -name -minOverlap=0.999 -notBlocks
+    # Loaded 27301 elements of size 11
+    # Took 5 minutes
+     
+    # check the numbers of lines are correct
+
+    foreach f (bacEndPairs bacEndPairsBadNoOrphans bacEndSingles)
+         awk 'BEGIN {OFS="\t"} {print $1,$2,$3,$4,$5}' ${f}.lfs \
+             | sort | uniq -c | sort -nr > ${f}.uniqCount
+    end
+    wc -l *
+#  154634 bacEndPairs.bed
+#  154732 bacEndPairs.lfs
+#  154656 bacEndPairs.uniqCount
+#   27282 bacEndPairsBadNoOrphans.bed
+#   27301 bacEndPairsBadNoOrphans.lfs
+#   27293 bacEndPairsBadNoOrphans.uniqCount
+#  187601 bacEndSingles.bed
+#  187638 bacEndSingles.lfs
+#  187624 bacEndSingles.uniqCount
+    # different numbers for unique count since some of these alignments
+    # were not identical but very close to identical (>0.999 overlap)
+    rm *.uniqCount
+    cd /cluster/data/danRer4/bed/bacEnds/duplicates 
+    mv ./overlapRun/* .
+    rm -r overlapRun
+    # copy perl script used for danRer3 to choose 2 BAC ends to represent
+    # each BAC clone since there are often more than one read for each BAC end
+    # in this set,  2 were chosen for each BAC pair or 1 for the singles. This
+    # was based on the ones that had the largest region aligned (using lfSizes).
+    cp /cluster/data/danRer3/bed/bacends/duplicatesNew/pickLfNamesv2.pl .
+
+    # need to sort by chrom, chromStart
+    foreach f (bacEndPairs bacEndPairsBadNoOrphans bacEndSingles)
+         sort -k1 -k2 -k3 ${f}.bed > ${f}Sort.bed
+    end
+    # run perl script: input bed file, pairs or singles, name of output file
+    perl pickLfNamesv2.pl bacEndPairsSort.bed pairs pairs2lfNames.bed
+    mv error.log log.pairs
+
+    perl pickLfNamesv2.pl bacEndSinglesSort.bed singles singles1lfName.bed
+    mv error.log log.singles
+
+    perl pickLfNamesv2.pl bacEndPairsBadNoOrphansSort.bed pairs \
+          badPairs2lfNames.bed
+    mv error.log log.badPairs
+    wc -l log*
+    # 1 log.badPairs
+    # 3 log.pairs
+    # 13 log.singles
+    # In future, could pick which set of alignments to pick based on the 
+    # Blat score computed by pslScore. 
+    # For badPairs, CH211-115F14 has 2 sets of pairs: zC115F14.zb,zC115F14.ya
+    # has a longer region between ends than for zC115F14.za,zC115F14.ya.
+    # so the latter was removed.
+    # for Pairs, CH211-74D17: the alignment with zC74D17.zb,zC74D17.yb was
+    # removed but there is also one with zC74D17.zb,zC74D17.yb to the same 
+    # region that was retained so remove this one as zC74D17.zb,zC74D17.ya
+    # covers a longer region.
+    # CH211-98O15 has zC98O15.ya,zC98O15.za aligning to chr3 and 
+    # zC98O15.yb,zC98O15.zb align to chr17. There is no similarity between
+    # zC98O15.ya and zC98O15.yb by bl2seq.
+    # CH211-98E22 has zC98E22.ya,zC98E22.za aligning to chr3 and 
+    # zC98E22.yb,zC98E22.zb aligning to chr14. zC98E22.ya and zC98E22.yb
+    # has no similarity by bl2seq.
+    # For singles, there are 13 will alignments to more than 1 read for a 
+    # BAC end:
+    # CH211-66E17: remove zC66E17.za as it has more mismatches and inserts.
+    # CH211-74O5: remove zC74O5.ya as is has more mismatches. 
+    # CH211-42B4: remove zC42B4.yb as it has a shorter alignment. Not much
+    # difference in mismatches or inserts between this and zC42B4.ya.
+    # CH211-98O3: zC98O3.yb aligns to chr13 and zC98O3.ya aligns to chr16 and
+    # they have no similarity to each other.
+    # CH211-89J7: remove zC89J7.zb as it has more mismatches and inserts.
+    # CH211-97A18: remove zC97A18.yb has more mismatches and inserts.
+    # CH211-48O20: zC48O20.zb aligns to chr22 and zC48O20.za aligns twice
+    # to chr16. No similarity by bl2seq.
+    # CH211-60H17: remove zC60H17.ya as it has a more mismatches.
+    # CH211-189J23: remove zC189J23.yb as it has a large tNumInsert.
+    # CH211-124G12: remove zC124G12.za as it has more mismatches and inserts.
+    # CH211-60P6: remove zC60P6.ya as it has more inserts. 
+    # CH211-42A6: remove zC42A6.za as it has more inserts.
+    # CH211-69K2: remove zC69K22.za as it has more inserts.
+
+    # NOTE: For some singles, the lfStart does not equal the chromStart.
+    # Also chromStart - chromEnd should equal lfSizes.
+    # pslPairs has added min/2 to the end or subtracted min/2 from the start
+    # depending on whether it is a left or a right BAC end and the
+    # alignment orientation. min used here was 25000.
+    # That is ok. This is what gives the display where the aligning block is
+    # shown with a line with arrows on it showing the direction.
+
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/bacEnds/duplicates 
+    # create remove lists for each set of alignments.
+cat << 'EOF' > pairsToRemove
+zC74D17.zb,zC74D17.yb
+zC98O15.ya,zC98O15.za
+zC98O15.yb,zC98O15.zb
+zC98E22.ya,zC98E22.za
+zC98E22.yb,zC98E22.zb
+'EOF'
  
+cat << 'EOF' > singlesToRemove
+zC66E17.za
+zC74O5.ya 
+zC42B4.yb
+zC98O3.yb
+zC98O3.ya
+zC89J7.zb
+zC97A18.yb
+zC48O20.zb 
+zC48O20.za
+zC60H17.ya
+zC189J23.yb
+zC124G12.za
+zC60P6.ya 
+zC42A6.za
+'EOF'
+    mv pairs2lfNames.bed pairs2lfNamesOld.bed
+    mv singles1lfName.bed singles1lfNameOld.bed
+    # recreate these files removing alignments for ends in lists above
+    grep -wv -f pairsToRemove bacEndPairsSort.bed > pairs2lfNames.bed
+    grep -wv -f singlesToRemove bacEndSinglesSort.bed > singles1lfName.bed
+ 
+    # for each of these new bed files, checks were made that there are
+    # only 2 BAC ends per alignments for pairs and 1 for singles.
+    # For each pair, there should only be 2 ends which can appear either
+    # way round depending on the orientation and there should be 1 end for
+    # the beginning (suffix T7, t7 or z) and one end for the end
+    # (suffix SP6, sp6 or y) for each BAC clone. These can appear as e.g.
+    # either zK7B23T7,zK7B23SP6 or zK7B23SP6,zK7B23T7 for the opposite
+    # orientation. For singles, there should be a single BAC end for each
+    # alignment and for each BAC clone, a sequence for either or both types
+    # of ends may appear e.g. zK153P14SP6 and zK153P14T7 appear in separate
+    # alignments.
+
+    e.g. 
+    wc -l pairs2lfNames.bed
+    # 154631 pairs2lfNames.bed
+    grep ',' pairs2lfNames.bed | wc -l
+    # 154631
+    # should be the same number, every line should have a comma
+    # should be twice the number of above, just 2 end names per line
+    awk '{print $11}' pairs2lfNames.bed | sort | uniq > pairs.ends
+    wc -l pairs.ends
+    # 147667 pairs.ends
+    sed -e 's/,/\n/g' pairs.ends > pairs.ends2
+    wc -l pairs.ends2
+    # 295334 pairs.ends2
+    # should be twice the number of above, just 2 end names per lines so
+    # correct.
+    perl -pi.bak -e \
+'s/.+(SP6|T7|ya|za|Za|yb|zb|yc|zc|yt|yd|zd)[A-Za-z]?,?.+(SP6|T7|ya|za|Za|yb|zb|yc|zc|yt|yd|zd)[A-Za-z]?/$1,$2/g' pairs.ends
+    sort pairs.ends | uniq > pairs.ends.uniq
+    # check that these have the right combination of ends - one forward and
+    # one reverse. all ok.
+    # repeat for badPairs and singles
+    # badPairs:
+    wc -l badPairs2lfNames.bed
+    # 27281 badPairs2lfNames.bed
+    grep ',' badPairs2lfNames.bed | wc -l
+    # 27281
+    # should be the same number, every line should have a comma
+    # should be twice the number of above, just 2 end names per line
+    awk '{print $11}' badPairs2lfNames.bed | sort | uniq > badPairs.ends
+    wc -l badPairs.ends
+    # 25795 badPairs.ends
+    sed -e 's/,/\n/g' badPairs.ends > badPairs.ends2
+    wc -l badPairs.ends2
+    # 51590 badPairs.ends2
+    # should be twice the number of above, just 2 end names per lines so
+    # correct.
+    perl -pi.bak -e \
+'s/.+(SP6|T7|ya|za|Za|yb|zb|yc|zc|yt|yd|zd)[A-Za-z]?,?.+(SP6|T7|ya|za|Za|yb|zb|yc|zc|yt|yd|zd)[A-Za-z]?/$1,$2/g' badPairs.ends
+    sort badPairs.ends | uniq > badPairs.ends.uniq
+    # check that these have the right combination of ends - one forward and
+    # one reverse. all ok.
+    # for singles
+    wc -l singles1lfName.bed
+    # 187585 singles1lfName.bed
+    grep ',' singles1lfName.bed | wc -l
+    # 0
+    # should be 0 as there should only be one BAC end name per line.
+    awk '{print $11}' singles1lfName.bed | sort | uniq > singles.ends
+    wc -l singles.ends
+    # 172980 singles.ends
+    # some singles have more than 1 alignment so appear more than once.
+    perl -pi.bak -e \
+'s/.+(SP6|T7|ya|za|Za|yb|zb|yc|zc|yt|yd|zd)[A-Za-z]?/$1/g' singles.ends
+    sort singles.ends | uniq > singles.ends.uniq
+    # check that these have the the right suffixes for the BAC ends. all ok.
+    # clean up
+    rm *.bak *.ends *.ends2 *.uniq
+
+    # Finally overlaps in BAC clone names were checked. All BAC clones
+    # represented in each of the pairs, badPairs and singles bed files are
+    # unique to that file. Between all three bed files, 302606 BAC clones
+    # have alignments. 
+    foreach f (pairs2lfNames.bed badPairs2lfNames.bed singles1lfName.bed)
+        awk '{print $4}' $f | sort | uniq > ${f}.names
+    end
+    wc -l *.names
+    # 25421 badPairs2lfNames.bed.names
+    # 147501 pairs2lfNames.bed.names
+    # 129684 singles1lfName.bed.names
+    # 302606 total
+
+    comm -12 pairs2lfNames.bed.names badPairs2lfNames.bed.names
+    comm -12 pairs2lfNames.bed.names singles1lfName.bed.names
+    comm -12 badPairs2lfNames.bed.names singles1lfName.bed.names
+
+    # None of these files should have any BAC clone names in common and
+    # they do not so they are ok.
+    # NOTE: using sort and uniq on hgwdev produces tab delimited output
+    # after merging rows with the same BAC name, the scoring is now
+    # wrong in the bed files.
+    # Scores should be 1000 if there is 1 row for that name, else
+    # 1500/number of rows for that sequence name - calculated by pslPairs.
+    # Correct the scores. 
+    ssh kkstore04
+    mkdir -p /cluster/data/danRer4/bed/bacEnds/scoresAndCoords
+    cd /cluster/data/danRer4/bed/bacEnds/scoresAndCoords
+    # copy over correctScores2.pl and checkscores.pl scripts from danRer3 and
+    # scripts were edited so that hits file is split on space,not on tabs
+    cp \
+     /cluster/data/danRer3/bed/bacends/scoresAndCoords/correctScores2.pl .
+     cp \
+     /cluster/data/danRer3/bed/bacends/scoresAndCoords/checkScores.pl .
+    awk '{print $4}' ../duplicates/pairs2lfNames.bed \
+                 | sort | uniq -c > pairs.hits
+    perl correctScores2.pl ../duplicates/pairs2lfNames.bed pairs.hits \
+          noBin > bacEndPairsGoodScores.bed
+    # same for singles
+    awk '{print $4}' ../duplicates/singles1lfName.bed \
+                 | sort | uniq -c > singles.hits
+    perl correctScores2.pl ../duplicates/singles1lfName.bed singles.hits \
+                 noBin > bacEndSinglesGoodScores.bed
+    # and for badPairs
+    awk '{print $4}' ../duplicates/badPairs2lfNames.bed \
+                 | sort | uniq -c > badPairs.hits
+    perl correctScores2.pl ../duplicates/badPairs2lfNames.bed \
+          badPairs.hits noBin > bacEndPairsBadGoodScores.bed
+
+    # check that the scores are now correct
+    awk '{print $4, $5}' bacEndPairsGoodScores.bed \
+         | sort | uniq -c > pairs.count
+    perl checkScores.pl < pairs.count
+    # all the BAC clones should be in good.txt and none in bad.txt
+    # wc -l should give same number of lines in good.txt as in pairs.hits
+    # and therefore bad.txt should be empty.
+    # repeat for other bed files
+    awk '{print $4, $5}' bacEndPairsBadGoodScores.bed \
+         | sort | uniq -c > badPairs.count
+    perl checkScores.pl < badPairs.count
+    awk '{print $4, $5}' bacEndSinglesGoodScores.bed \
+         | sort | uniq -c > singles.count
+    perl checkScores.pl < singles.count
+    # for the singles, 6 ended up in bad.txt because their scores are
+    # 214.285714285714 which is correct for 7 alignments. Rounding the score
+    # caused the discrepancy.
+    # round these values otherwise get a loading error when loading database:
+    perl -pi.bak -e 's/214\.285714285714/214/' bacEndSinglesGoodScores.bed
+    # clean up
+    rm error.log *.txt *.count *.hits
+
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/bacEnds/scoresAndCoords
+    # copy over table definition from danRer3
+    cp /cluster/data/danRer3/bed/bacends/singles/bacEndSingles.sql \
+        ../singles
+    
+    # Now load database tables:
+    hgsql -e 'drop table bacEndPairs;' danRer4
+    hgLoadBed danRer4 bacEndPairs bacEndPairsGoodScores.bed \
+               -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql -notItemRgb
+    # Loaded 154631 elements of size 11
+    hgsql -e 'drop table bacEndSingles;' danRer4
+    hgLoadBed danRer4 bacEndSingles bacEndSinglesGoodScores.bed \
+               -sqlTable=../singles/bacEndSingles.sql -notItemRgb
+    # Loaded 187585 elements of size 11
+    hgsql -e 'drop table bacEndPairsBad;' danRer4
+    hgLoadBed danRer4 bacEndPairsBad bacEndPairsBadGoodScores.bed \
+               -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql -notItemRgb
+    # Loaded 27281 elements of size 11
+    # clean up
+    rm *.tab *.bak error.log 
+    # The Zv6 BAC end sequences are already in /gbdb/danRer4/bacends/ and 
+    # they have been loaded into the seq table - this is from the first section 
+    # on BACENDS tracks. No need to repeat this here.
+    # loaded BAC end sequences into seq table so alignments may be viewed
+    # moved BAC ends to the ncbi directory previously
+    # symlink to FASTA sequence file in ncbi directory
+    mkdir -p /gbdb/danRer4/bacends
+    ln -s /cluster/data/ncbi/bacends/zebrafish/bacends.1/Zv6BacEnds.fa \
+          /gbdb/danRer4/bacends/Zv6BacEnds.fa
+    hgLoadSeq danRer4 /gbdb/danRer4/bacends/Zv6BacEnds.fa
+    # use new extract program that extracts PSLs using name and position:
+    ssh kkstore04
+    set bacDir=/cluster/data/danRer4/bed/bacEnds
+    cd $bacDir/scoresAndCoords
+
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+        $bacDir/bacEnds.psl bacEndPairsGoodScores.bed bacPairs.psl
+    # for this, use bacEndPairsGoodScores.bed which was derived from 
+    # bacEndPairsBadNoOrphans since pairs orphans are already
+    # included in bacEndSingles
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+      $bacDir/bacEnds.psl bacEndPairsBadGoodScores.bed bacPairsBad.psl
+    # then for singles
+    nice /cluster/home/hartera/bin/x86_64/extractPslForLfs -verbose=1 \
+      $bacDir/bacEnds.psl bacEndSinglesGoodScores.bed bacSingles.psl
+    cd $bacDir
+    cat $bacDir/scoresAndCoords/*.psl > allBacends.load.psl
+    wc -l *.load.psl
+    # 542721 allBacends.load.psl
+    # load PSL file into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/bacEnds/
+    hgsql -e 'drop table all_bacends;' danRer4
+    hgLoadPsl danRer4 -table=all_bacends allBacends.load.psl
+    # All alignments were loaded into the table - no problems.
+    # check trackDb.ra entry and description
+
+###########################################################################
+# CREATE BAC CLONES ALIAS AND CROSS-REFERENCE TABLES
+# (bacEndAlias, bacCloneAlias and bacCloneXRef) (in progress, 2006-09-29, hartera)
+    # Process data and create bacEndAlias table
+    ssh kkstore04
+    # create a list of BAC end names and their accessions
+    # Downloaded BAC ends accessions from SRS
+    # SRS at Sanger is no longer available.
+    # Go to http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=nucgss
+    # This is dbGSS at NCBI: GSS is Genomic Sequence Survey
+    # Search: Danio rerio[Organism] AND BAC
+    # There are 159020 entries. This is the same as for the BACEndAccs.txt
+    # for danRer3 in: /cluster/data/danRer3/bed/bacends/bacends.1
+    # getBacEndInfo.pl and extToIntNames.pl was used to create 
+    # BACEnd_accessions.txt. Use this from danRer3 to load table.
+    cd /cluster/data/danRer4/bed/bacEnds
+    cp /cluster/data/danRer3/bed/bacends/bacends.1/BACEnd_accessions.txt .
+    grep '>' /cluster/data/ncbi/bacends/zebrafish/bacends.1/Zv6BacEnds.fa \
+         | sed -e 's/>//' > allBacEnds.names
+    # copy over getBacEndInfov2.pl - this produces the bacEndAccs.aliases file
+    cp /cluster/data/danRer3/bed/bacends/bacends.1/getBacEndInfov2.pl .
+    # edit to remove section that creates pairs and singles files 
+    # and rename to getBacEndAliases.pl
+cat << 'EOF' > getBacEndAliases.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+my $file = $ARGV[0]; # list of BAC end sequence read Sanger names
+my $file2 = $ARGV[1]; # list of BAC ends and GenBank accessions
+# translation for sequence prefixes from Sanger internal names to external names
+my %cloneHash = qw {  
+   zC   CH211-
+   ZC   CH211-
+   zK   DKEY-
+   zKp  DKEYP-
+   bZ   RP71-
+   dZ   BUSM1-
+   CHORI73_   CH73-
+};
+# need to get bacends into pairs and singles
+# find duplicates also
+
+# Get and store BAC ends and accessions
+my %bacEnds;
+
+open (BACENDS, $file2) || die "Can not open $file2: $!";
+while (<BACENDS>) {
+   chomp;
+   my ($be, $a) = split(/\t/);
+   print "bac end $be and acc is $a\n";
+   $bacEnds{$be} = $a;
+}
+close BACENDS;
+
+my %bacs;
+my %bacAccs;
+
+open(FILE, $file) || die "Can not open $file: $!";
+open(STDERR, ">bacs.log") || die "Can not create bacs.log: $!"; 
+open(OUT, ">direction.txt") || die "Can not create direction.txt:$!";
+open(ACCS, ">bacEndAccs.aliases") || die "Can not create bacEndsAccs.aliases: $!";                                                                               
+while (<FILE>) {
+   chomp;
+   my $seqName = $_;
+   print "seqName is $seqName here\n";
+   $seqName =~ /^([CHORI73]*[|z|Z|b|d]?[C|K|Z|_]p?)([0-9]+[A-Z][0-9]+)\.?[pq1k]*(SP6|T7|ASP6|AT7|SP6W|T7W|y|z|Z)/;
+
+   my $prefix = $1;
+   my $rest = $2;
+   print "prefix is $prefix, rest is $rest\n";
+   my $dir = $3;
+   print STDERR "dir is $dir\n";
+   print OUT "$dir\n";
+   my $direction;
+   # forward  or reverse direction
+   if (($dir =~ /SP6/) || ($dir =~ /T7/) ) {
+      $direction = $dir;
+   }
+   # forward direction
+   elsif ($dir =~ /(sp6)/i || $dir =~ /y/i) {
+      $direction = "SP6";
+   }
+   # reverse direction
+   elsif ($dir =~ /(t7)/i ||$dir =~ /z/i) {
+      $direction = "T7";
+   }
+   else {
+      print STDERR "seqName is $seqName - direction not found\n";
+   }
+   print "dir is $dir and direction is $direction\n";
+   my $extName = "";
+   my $intName = $prefix.$rest;
+   print "prefix is $prefix\n";
+   my $mid = "";
+   $mid = $rest;
+   $mid =~ s/\-//;
+   $mid =~ tr/a-z/A-Z/;
+   print "after trans, mid is $mid here\n";
+   if ($mid =~ /^([A-Z]*)0*([0-9]+[A-Z]+)0*([0-9]+$)/) {
+      print "matched mid $mid here\n";
+      my $new = $1.$2.$3;
+      $mid = $new;
+      print "new mid is $mid\n";
+   }
+
+   if (exists ($cloneHash{$prefix})) {
+      my $extPrefix = $cloneHash{$prefix};
+      $extName = $extPrefix.$mid;
+      print "External name is $extName\n";
+   }
+   else {
+      $extName = "";
+   }
+   # need to get duplicate clones, if switch to lower case and remove
+   # . and - and use as key to bacs hash
+   # add the internal and external name for BAC to hash
+   my $fullName = $seqName;
+   # my $intNameStem = $intName;
+   my $upDir = $dir;
+   $dir =~ tr/a-z/A-Z/;
+   # preserve prefix and change middle part of name to upper case
+   my $upperIntName = $prefix.$mid;
+   my $upperFullName = $prefix.$mid.$dir;
+
+   print "upper internal name is $upperIntName here\n";
+  # my $newFullName = "";
+   print "internal name is $intName, altered seq name is $upperIntName\n";
+   print "full name is now $upperFullName\n";
+   if (exists($bacEnds{$upperFullName})) {
+      my $ac = $bacEnds{$upperFullName};
+      print "seq is $upperFullName; acc is $ac\n";
+      $bacs{$upperIntName}->{$upperFullName}->{acc} = $ac;
+   }
+   push (@{$bacs{$upperIntName}->{$upperFullName}->{seqs} }, $seqName);
+   $bacs{$upperIntName}->{$upperFullName}->{extName} = $extName; 
+   $bacs{$upperIntName}->{$upperFullName}->{direction} = $direction;
+   if (exists($bacAccs{$upperIntName}) ){
+      my $bacAcc = $bacAccs{$upperIntName};
+      print "bacacc is $bacAcc\n";
+      $bacs{$upperIntName}->{$upperFullName}->{bacAcc} = $bacAcc;
+   }
+   if (exists($bacEnds{$upperFullName} )) {
+      my $bacEndAcc = $bacEnds{$upperFullName};
+      print "bacendacc is $bacEndAcc\n"; 
+      $bacs{$upperIntName}->{$upperFullName}->{bacEndAcc} = $bacEndAcc;
+   }
+}
+close FILE;
+
+# print accessions for BacEnds with BAC end aliases
+my $count = 0;
+print "printing accessions.\n";
+foreach my $a (keys(%bacs)) {
+   print "$a is bac end from bacEnds hash\n";
+   foreach my $f (keys %{ $bacs{$a} } ) {
+      if (exists($bacs{$a}->{$f}->{acc} ) ) {
+      my $acc = $bacs{$a}->{$f}->{acc};
+      my @ids = @{$bacs{$a}->{$f}->{seqs} };
+      foreach my $i (@ids) {
+         $count++;
+         print ACCS "$i\t$count\t$acc\n";
+
+      }
+    }
+  }
+
+}
+'EOF'
+    chmod +x getBacEndAliases.pl
+    perl getBacEndAliases.pl allBacEnds.names BACEnd_accessions.txt \
+         > bacEnds.log
+    wc -l bacEndAccs.aliases
+    # 159370 bacEndAccs.aliases
+    # clean up 
+    rm *.log direction.txt
+    # Only the DKEY- library clone ends have accessions in Genbank
+    # load this alias table and accessions for clone ends
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/bacEnds
+    # found that there are some alignments in all_bacends where there 
+    # is SP6W, SP6A, T7W, T7A suffixes for BAC ends. These are duplicate
+    # reads, there is a corresponding read name without the W or A suffix.
+# Suffix Alignments Unique Names
+# SP6W	179	153
+# SP6A	254	245
+# T7W 	53	48
+# T7A	247	238
+    # These BACs are named differently so DKEY-32M8 is one BAC clone  
+    # and DKEY-32M8A is the same one sequenced with different reads
+    # ending in SP6A and T7A. It is similar for those BAC clone names and
+    # BAC ends ending in "W". There are only ~200 with where both BAC clones
+    # are in the bacEndSingles or bacEndPairs tables. (see main BAC ENDS track
+    # section for details). 
+    # Carry on and process this file into the bacEndAlias table.
+    hgLoadSqlTab danRer4 bacEndAlias ~/kent/src/hg/lib/bacEndAlias.sql \
+          bacEndAccs.aliases
+    # Loaded successfully.
+
+    # get the latest versions of the clonemarkers, contig names and markers
+    # files from Sanger: Provided by Mario Caccamo (mc2@sanger.ac.uk)
+    # at the Sanger Institute.
+    ssh kkstore04
+    mkdir -p /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
+    cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
+    wget --timestamp \
+      ftp://ftp.sanger.ac.uk/pub/human/zebrafish/ZFIN/README
+    wget --timestamp \
+         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/clonemarkers.26.09.06.txt
+    wget --timestamp \
+         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/ctgnames.26.09.06.txt
+    wget --timestamp \
+         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/markers.26.09.06.txt
+    wc -l *26.09.06.txt
+    # 32612 clonemarkers.26.09.06.txt
+    # 168828 ctgnames.26.09.06.txt
+    # 12407 markers.26.09.06.txt
+    
+
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM OTHER DANRER ASSEMBLIES
 # (DONE, 2006-06-27, hartera)
@@ -6234,5 +7329,6 @@ line+ /san/sanvol1/scratch/danRer4/affy/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # Previously, there were 14819 so more sequences have aligned but less
     # short alignments are retained. Many of the short alignments may also 
     # have longer alignments to different regions of the genome that are good.
+
 
 
