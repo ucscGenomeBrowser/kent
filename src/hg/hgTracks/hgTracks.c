@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1219 2006/10/11 05:42:53 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1220 2006/10/11 19:04:26 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -160,6 +160,7 @@ int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
+struct hash *oldVars = NULL;
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
 
 /* These variables persist from one incarnation of this program to the
@@ -12564,8 +12565,8 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
-clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
+clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -13471,13 +13472,25 @@ cart = theCart;
 /*state = cgiUrlString(); printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
 saveDbAndGenome(cart, database, organism);
-hSetDb(database);
+
 protDbName = hPdbFromGdb(database);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
+
+/* dump custom tracks if assembly changes */
+char *oldDb = hashFindVal(oldVars, "db");
+char *oldOrg = hashFindVal(oldVars, "org");
+if ((oldDb    && differentWord(oldDb, database)) ||
+    (oldOrg   && differentWord(oldOrg, organism)))
+    {
+    cartRemove(cart, "ct");
+    cartRemovePrefix(cart, "ct_");
+    }
+
+hSetDb(database);
 
 hDefaultConnect();
 initTl();
@@ -13554,7 +13567,8 @@ htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
-cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
+oldVars = hashNew(8);
+cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     {
     fprintf(stdout, "Overall total time: %ld millis<BR>\n",
