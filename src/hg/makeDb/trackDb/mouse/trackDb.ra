@@ -179,7 +179,6 @@ expStep 0.5
 expTable gnfMouseAtlas2MedianExps
 # (expTable is kind of obselete)
 groupings gnfMouseAtlas2Groups
-chip GNF1M
 
 track rinnSex
 shortLabel Rinn Sex Exp
@@ -193,7 +192,6 @@ expStep 1.0
 expTable mouseRinnSexMedianExps
 # (expTable is kind of obselete)
 groupings rinnSexGroups
-chip MOE430A
 
 track affyGnfU74A
 shortLabel GNF U74A
@@ -207,7 +205,6 @@ expStep 0.5
 expTable gnfMouseU74aAllExps
 # (expTable is kind of obselete)
 groupings gnfMouseU74aGroups
-chip U74
 
 track affyGnfU74B
 shortLabel GNF U74B
@@ -221,7 +218,6 @@ expStep 0.5
 expTable gnfMouseU74bAllExps
 # (expTable is kind of obselete)
 groupings gnfMouseU74bGroups
-chip U74
 
 track affyGnfU74C
 shortLabel GNF U74C
@@ -235,7 +231,6 @@ expStep 0.5
 expTable gnfMouseU74cAllExps
 # (expTable is kind of obselete)
 groupings gnfMouseU74cGroups
-chip U74
 
 track affyGnf1m
 shortLabel Affy GNF1M
