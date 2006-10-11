@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1220 2006/10/11 19:04:26 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1221 2006/10/11 21:47:59 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8496,6 +8496,8 @@ if (tg->limitedVisSet)
     return tg->limitedVis;
 if (vis == tvHide)
     return tvHide;
+if (vis == tvDense)
+    return tvDense;
 maxHeight = maximumTrackHeight(tg);
 if (isCompositeTrack(tg))
     maxHeight = maxHeight * subtrackCount(tg->subtracks);
@@ -8515,10 +8517,7 @@ if (h > maxHeight)
         h = tg->totalHeight(tg, vis);
         }
     if (h > maxHeight)
-        {
         vis = tvDense;
-        h = tg->totalHeight(tg, vis);
-        }
     }
 return vis;
 }
