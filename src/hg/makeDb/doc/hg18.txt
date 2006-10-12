@@ -9925,6 +9925,7 @@ ssh hgwdev
 cd /cluster/store12/snp/126/human/rs_fasta
 # create normalized link names
 # not including chrMulti or chrUn (for now)
+mkdir /gbdb/hg18/snp
 /bin/sh link.sh
 # extFile
 /bin/csh getExtFile.csh > snp126ExtFile.prelim
