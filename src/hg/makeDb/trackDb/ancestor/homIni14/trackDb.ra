@@ -1,8 +1,18 @@
+track entropy 
+shortLabel Entropy 
+longLabel Entropy 
+group map
+priority 25
+visibility dense
+type wig 0.0 2.0
+maxHeightPixels 128:64:11
+autoScaleDefault Off
+
 track present
 shortLabel Presentness
 longLabel Presentness
 group map
-priority 25
+priority 20
 visibility dense
 type wig 33 125
 
@@ -18,7 +28,7 @@ track correct
 shortLabel Correctness
 longLabel Correctness
 group map
-priority 25
+priority 20
 visibility dense
 type wig 35 125
 
