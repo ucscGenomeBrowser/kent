@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1139 2006/10/12 03:58:26 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1140 2006/10/12 20:04:43 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11763,7 +11763,6 @@ if (startsWith("rs",itemName))
 printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
-printSnpAlignment(snp);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
