@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.113 2006/10/12 03:03:36 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.114 2006/10/12 03:34:26 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -242,6 +242,8 @@ struct orthoBed *orthoBedLoad(char **row)
  * from database.  Dispose of this with bedFree(). */
 {
 struct orthoBed *ret;
+if (sameString(row[10], "?"))
+    return NULL;
 AllocVar(ret);
 ret->chrom      = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
@@ -299,7 +301,8 @@ sr = hRangeQuery(conn, orthoTable, chromName, winStart, winEnd, NULL, &rowOffset
 while ((row = sqlNextRow(sr)) != NULL)
     {
     orthoItem = (struct slList *)orthoBedLoad(row + rowOffset);
-    slAddHead(&orthoItemList, orthoItem);
+    if (orthoItem)
+        slAddHead(&orthoItemList, orthoItem);
     }
 
 /* List of SNPs is already sorted, so sort list of Ortho info */
@@ -308,19 +311,21 @@ slSort(&orthoItemList, bedCmp);
 /* Walk through two sorted lists together */
 snpItem   = snpItemList;
 orthoItem = orthoItemList;
-while(snpItem!=NULL && orthoItem!=NULL)
+while (snpItem!=NULL && orthoItem!=NULL)
     {
     /* check to see that we're not at the end of either list and that
      * the two list elements represent the same human position */
-    while ( snpItem!=NULL && orthoItem!=NULL && (cmp = snpOrthoCmp(&snpItem, &orthoItem))!=0 )
-	if (cmp<0)
-	    snpItem = snpItem->next;
-	else if (cmp>0)
-	    orthoItem = orthoItem->next;
-    /* either one of the lists is null or the two items refer to the
-     * same human position */
-    if (snpItem==NULL || orthoItem==NULL)
-	break;
+    cmp = snpOrthoCmp(&snpItem, &orthoItem);
+    if (cmp < 0)
+        {
+	snpItem = snpItem->next;
+	continue;
+	}
+    if (cmp > 0)
+        {
+	orthoItem = orthoItem->next;
+	continue;
+	}
     /* update the snp->extraName with the ortho data */
     dyStringPrintf(extra, " %s>%s", ((struct orthoBed *)orthoItem)->chimp, ((struct snp125Extended *)snpItem)->observed);
     ((struct snp125Extended *)snpItem)->nameExtra = cloneString(extra->string);
