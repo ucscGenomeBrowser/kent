@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.101 2006/10/11 19:04:27 kate Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.102 2006/10/12 18:03:10 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -662,16 +662,9 @@ printf("<TD ALIGN=CENTER>\n");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
 printf("</TD>\n");
 printf("</TR>\n<TR>\n");
-userSeq = cartOptionalString(cart, "userSeq");
+userSeq = cartUsualString(cart, "userSeq", "");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
-if (NULL == userSeq || userSeq[0] == '\0')
-    {
-    puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
-    }
-else 
-    {
-    printf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
-    }
+printf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
 printf("</TD>\n");
 printf("</TR>\n<TR>\n");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
