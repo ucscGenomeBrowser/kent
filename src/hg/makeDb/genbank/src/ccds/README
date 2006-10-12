@@ -27,14 +27,28 @@ to ncbiSql and convert them to MySQL with:
    ncbiSql/convertCreateTables ncbiSql/createTables.sql > createTables.sql
    ncbiSql/convertCreateKeys ncbiSql/createKeys.sql > createKeys.sql
 
-result of the conversion are checked-in to CVS.  These programs may
+result of the conversion are checked-in to CVS.   The sql is compiled
+into the ccdsImport program, so it must be recompiled. These programs may
 have to be modified if the schema changes.
 
 The program ccdsImport imports the table dumps into a database ccds,
 which is then used to generate the tables that are loaded into
-the hgdb..
+the browser databases. For example:
+
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
 
 
-hgdb tables created are:
+The browser tables created are:
        ccdsGene - genePred track for CCDS
        ccdsInfo - cross-reference information for CCDS.
+
+The ccdsMkTables program create the browser database tables from the imported
+ccds database:
+
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+
+to load canidates:
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -stat=Candidate -loadDb ccds mm8 ccdsInfo ccdsGene
+
+  
+

@@ -218,6 +218,29 @@ a make update.
 
 OTHER FIELDS
 
+There are a number of generic attributes that can be used with any track type:
+
+Attribute    -    Possible values             - controls
+=========         ===============               ========
+visibility   -    hide dense squish pack full - default visibility
+onlyVisibility -  dense squish pack full      - only this visibility and hide
+                                              - are possible for this track
+group        - any "name" from the grp table  - used to specify which group
+               e.g.: map, genes, rna, x       - of track controls to place
+               regulation, compGeno, varRep   - this track into
+useScore     -    1                           - use score to shade color items
+spectrum     -    on                          - same effect as useScore
+color        -    r,g,b integer triplet       - specifies primary color
+                                              - for items.
+                                              - red,green,blue values 0 to 255
+altColor     -    r,g,b integer triplet       - specifies secondary color
+                                              - for items
+priority     -    a decimal number            - used to order this track
+                                              - within this track group
+chromosomes  -    comma separated list        - only these chroms have data
+                                              - for this track, this track is
+                                              - not shown on other chroms
+
 The shortLabel and longLabel fields may have the following
 variables, which will be substituted:
      $ORGANISM - all upper case organism, like 'MOUSE'
@@ -239,8 +262,9 @@ is used to set the default value for chromosome coloring
 in affected tracks (type psl xeno <db>).  Without the field,
 the default is "on".
 
-All ra fields that are not explictly handled in trackDbCustom.c:trackDbAddInfo 
-are added to the trackDb->settingsHash table.
+All ra attributes that are not explictly handled in
+	trackDbCustom.c:trackDbAddInfo are added to the
+	trackDb->settingsHash table.
 
 Some settings used by various tracks:
     o exonArrows - if specified to draw strand arrows on exons.
@@ -268,8 +292,8 @@ Some settings used by various tracks:
 	directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
       Note that it is possible to only include the first field or first few
       fields.  The fields must be in the given order if present though.
-    o hgsid - if present the hgsid=XXXXXX CGI variable will be appended to the end
-      of the directUrl string.
+    o hgsid - if present the hgsid=XXXXXX CGI variable will be appended to the
+      end of the directUrl string.
 
 Note: We have a restriction on table names.   We currently do not handle
 table names in the format chrN_table_name.   The 2nd underscore is not allowed.

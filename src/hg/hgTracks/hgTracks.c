@@ -108,7 +108,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1213 2006/10/02 06:36:56 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1220 2006/10/11 19:04:26 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -160,6 +160,7 @@ int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
+struct hash *oldVars = NULL;
 struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
 
 /* These variables persist from one incarnation of this program to the
@@ -4959,19 +4960,36 @@ tg->tdb = tdb;
 return tg;
 }
 
+boolean tfbsConsSitesWeightFilterItem(struct track *tg, void *item,
+	float cutoff)
+/* Return TRUE if item passes filter. */
+{
+struct tfbsConsSites *el = item;
+
+if (el->zScore < cutoff)
+    return FALSE;
+return TRUE;
+}
+
 void loadTfbsConsSites(struct track *tg)
+/* Load conserved binding site track, all items that meet the cutoff. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct tfbsConsSites *ro, *list = NULL;
+float tfbsConsSitesCutoff; /* Cutoff used for conserved binding site track. */
+
+tfbsConsSitesCutoff =
+    sqlFloat(cartUsualString(cart,TFBS_SITES_CUTOFF,TFBS_SITES_CUTOFF_DEFAULT));
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ro = tfbsConsSitesLoad(row+rowOffset);
-    slAddHead(&list, ro);
+    if (tfbsConsSitesWeightFilterItem(tg,ro,tfbsConsSitesCutoff))
+        slAddHead(&list, ro);
     }
 
 sqlFreeResult(&sr);
@@ -8467,6 +8485,44 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
 return ct;
 }
 
+enum trackVisibility estimateVisibility(struct track *tg)
+/* Return estimate of what visibility will be without actually setting it. */ 
+{
+enum trackVisibility vis = tg->visibility;
+int h = 0;
+int maxHeight = 0;
+
+if (tg->limitedVisSet)
+    return tg->limitedVis;
+if (vis == tvHide)
+    return tvHide;
+maxHeight = maximumTrackHeight(tg);
+if (isCompositeTrack(tg))
+    maxHeight = maxHeight * subtrackCount(tg->subtracks);
+h = tg->totalHeight(tg, vis);
+if (h > maxHeight)
+    {
+    if (vis == tvFull && tg->canPack)
+        vis = tvPack;
+    else if (vis == tvPack)
+        vis = tvSquish;
+    else
+        vis = tvDense;
+    h = tg->totalHeight(tg, vis);
+    if (h > maxHeight && vis == tvPack)
+        {
+        vis = tvSquish;
+        h = tg->totalHeight(tg, vis);
+        }
+    if (h > maxHeight)
+        {
+        vis = tvDense;
+        h = tg->totalHeight(tg, vis);
+        }
+    }
+return vis;
+}
+
 enum trackVisibility limitVisibility(struct track *tg)
 /* Return default visibility limited by number of items. 
  * This also sets tg->height. */
@@ -8579,6 +8635,7 @@ int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
 boolean rulerCds = zoomedToCdsColorLevel;
+
 /* Start a global track hash. */
 trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
@@ -11843,7 +11900,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
 		        {
 			if (toAll || sameString(s, tg->mapName))
-			    cartSetString(cart, tg->mapName, command);
+                            {
+                            if (hTvFromString(command) == tg->tdb->visibility)
+                                /* remove if setting to default vis */
+                                cartRemove(cart, tg->mapName);
+                            else
+                                cartSetString(cart, tg->mapName, command);
+                            }
 			}
 		    }
 		}
@@ -11872,14 +11935,9 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	}
     }
-
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    char *vis;
     tg = newCustomTrack(ct);
-    vis = cartOptionalString(cart, tg->mapName);
-    if (vis != NULL)
-	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
 }
@@ -12507,8 +12565,8 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
-clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
+clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -13215,13 +13273,26 @@ else
 void customTrackCgi()
 /* Put up CGI that lets user manage custom tracks. */
 {
+int hgsid = cartSessionId(cart);
+
 puts("<HTML>");
 /* javascript redirect to hgCustom */
 #ifndef META_REDIRECT
-puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
+if (hgsid)
+    printf("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom?hgsid=%d' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom?hgsid=%d\">Redirect </a></BODY>",hgsid,hgsid);
+else
+    puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
 #else
-puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
-puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
+if (hgsid)
+    {
+    printf("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom?hgsid=%d\"",hgsid);
+    printf("<BODY><A HREF='/cgi-bin/hgCustom?hgsid=%d'>Redirect</A></BODY>",hgsid);
+    }
+else
+    {
+    puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
+    puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
+    }
 #endif
 puts("</HTML>"); 
 }
@@ -13401,13 +13472,25 @@ cart = theCart;
 /*state = cgiUrlString(); printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
 saveDbAndGenome(cart, database, organism);
-hSetDb(database);
+
 protDbName = hPdbFromGdb(database);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
+
+/* dump custom tracks if assembly changes */
+char *oldDb = hashFindVal(oldVars, "db");
+char *oldOrg = hashFindVal(oldVars, "org");
+if ((oldDb    && differentWord(oldDb, database)) ||
+    (oldOrg   && differentWord(oldOrg, organism)))
+    {
+    cartRemove(cart, "ct");
+    cartRemovePrefix(cart, "ct_");
+    }
+
+hSetDb(database);
 
 hDefaultConnect();
 initTl();
@@ -13484,7 +13567,8 @@ htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
-cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
+oldVars = hashNew(8);
+cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     {
     fprintf(stdout, "Overall total time: %ld millis<BR>\n",

@@ -35,6 +35,7 @@
 #include "portable.h"
 #include "hash.h"
 #include "linefile.h"
+#include "localmem.h"
 #include "errabort.h"
 #include "dnautil.h"
 #include "dystring.h"
@@ -48,7 +49,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.15 2006/07/06 19:20:00 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.17 2006/10/07 20:47:16 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -77,6 +78,8 @@ static char locusLinkId[64];
 static char geneId[64];
 static char faOffStr[128], faSizeStr[64];
 static char pepSizeStr[64], pepFaOffStr[128], pepFaSizeStr[64];
+static struct lm *kvtMem = NULL;
+
 
 /* Base names for output files */
 static char *faName, *raName, *gbIdxName;
@@ -955,6 +958,35 @@ if (srcOrgBuf->stringSize > 0)
     kvtAdd(kvt, "srcOrg", srcOrgBuf->string);
 }
 
+void addMiscDiff(int iDiff, char *subField, char *val)
+/* add a misc diff to kvt, subField can be empty */
+{
+char name[256];
+safef(name, sizeof(name), "mdiff.%d%s", iDiff, subField);
+kvtAdd(kvt, lmCloneString(kvtMem, name), val);
+}
+
+void parseMiscDiff(struct gbMiscDiff *gmd, int iDiff)
+/* output one misc diff */
+{
+addMiscDiff(iDiff, "", gmd->loc);
+addMiscDiff(iDiff, ".note", gmd->note);
+addMiscDiff(iDiff, ".gene", gmd->gene);
+addMiscDiff(iDiff, ".replace", gmd->replace);
+}
+
+void parseMiscDiffs()
+/* parse and output misc diff fields. */
+{
+if ((kvtMem == NULL) && (gbMiscDiffVals != NULL))
+    kvtMem = lmInit(4096);
+int iDiff = 0;
+struct gbMiscDiff *gmd;
+for (gmd = gbMiscDiffVals; gmd != NULL; gmd = gmd->next, iDiff++)
+    parseMiscDiff(gmd, iDiff);
+
+}
+
 char *findSyntheticTarget()
 /* for a synthetic sequence, attempt to find the targete organism.  This was
  * added to support the ORFeome clones.  In general, there is no simple way to
@@ -977,6 +1009,7 @@ if (synOrgBuf->stringSize > 0)
 else
     return NULL;
 }
+
 
 
 void writePepSeq()
@@ -1033,7 +1066,8 @@ char *com = gbCommentField->val->string;
 if (locus == NULL || accession == NULL)
     errAbort("No LOCUS or no ACCESSION line near %d of %s",
              lf->lineIx, lf->fileName);
-    
+lmCleanup(&kvtMem);
+
 /* Chop off all but first word of accession. */
 s = skipLeadingSpaces(accession);
 if (s != NULL)
@@ -1119,6 +1153,7 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 /* Handle other fields */
 parseDbXrefs();
 parseSourceOrganism();
+parseMiscDiffs();
 
 if (startsWith("synthetic construct", gbOrganismField->val->string))
     synOrg = findSyntheticTarget();
@@ -1211,15 +1246,32 @@ else
     gbfSkipSequence(lf);
 }
 
-void procOneGbFile(char *inName, struct hash *estAuthorHash,
-                   struct filter *filter)
-/* Process one genBank file into fa and ra files. */
+void procOneGbffFile(char *inName, struct hash *estAuthorHash,
+                     struct filter *filter)
+/* Process one genBank file in flat-file format into fa and ra files. */
 {
 struct lineFile *lf = gzLineFileOpen(inName);
 
 while (gbfReadFields(lf))
     procGbEntry(lf, estAuthorHash, filter);
 gzLineFileClose(&lf);
+}
+
+void procOneAsnFile(char *inName, struct hash *estAuthorHash,
+                    struct filter *filter)
+/* Process one genBank file in ASN.1 format into fa and ra files. */
+{
+errAbort("processing of ASN.1 files not implemented");
+}
+
+void procOneGbFile(char *inName, struct hash *estAuthorHash,
+                   struct filter *filter)
+/* Process one genBank file into fa and ra files. */
+{
+if (endsWith(inName, ".aso.gz") || endsWith(inName, ".bna.gz"))
+    procOneAsnFile(inName, estAuthorHash, filter);
+else
+    procOneGbffFile(inName, estAuthorHash, filter);
 }
 
 int cmpUse(const void *va, const void *vb)
@@ -1296,7 +1348,7 @@ else if (filterExpr != NULL)
 else
     filter = makeFilterEmpty();
 estAuthorHash = newHash(10);
-kvt = newKvt(128);
+kvt = newKvt(5*1024);
 gbfInit();
 
 if (pepFa != NULL)

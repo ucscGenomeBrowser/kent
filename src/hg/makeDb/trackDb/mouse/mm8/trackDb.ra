@@ -29,6 +29,18 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
+track NIAGene
+shortLabel NIA Gene Index
+longLabel NIA Mouse Gene Index
+group genes
+priority 54
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+url http://lgsun.grc.nia.nih.gov/geneindex/mm8/bin/giT.cgi?genename=$$
+
 track miRNA
 shortLabel miRNA
 longLabel MicroRNAs from miRBase

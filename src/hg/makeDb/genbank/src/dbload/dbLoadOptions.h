@@ -37,6 +37,7 @@ struct dbLoadOptions
                                                 * to update gbSeq/gbExtFile 
                                                 * data for */
     dbLoadAttrArray loadAttr;                  /* should these be loaded? */
+    struct gbConf *conf;                       /* genbank.conf object */
 };
 
 struct dbLoadOptions dbLoadOptionsParse(char* db);

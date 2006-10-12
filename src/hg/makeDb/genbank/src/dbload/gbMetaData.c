@@ -18,6 +18,7 @@
 #include "imageCloneTbl.h"
 #include "dbLoadOptions.h"
 #include "gbDefs.h"
+#include "gbConf.h"
 #include "gbVerb.h"
 #include "gbIndex.h"
 #include "gbEntry.h"
@@ -30,8 +31,9 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 #include "gbSql.h"
+#include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.32 2006/07/19 18:06:03 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.34 2006/10/09 16:17:28 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -143,6 +145,20 @@ static char *raFieldTables[] =
     NULL
     };
 
+
+/* SQL to create gbMiscDiff table */
+static char* gbMiscDiffCreate = 
+"CREATE TABLE gbMiscDiff (\n"
+"    acc char(12) not null,\n"
+"    mrnaStart int not null,\n"
+"    mrnaEnd int not null,\n"
+"    notes longtext,\n"
+"    gene varchar(255),\n"
+"    replacement varchar(255),\n"
+"    index(acc)\n"
+");\n";
+
+
 /* global configuration */
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static char gTmpDir[PATH_LEN];      /* tmp dir for load file */
@@ -159,12 +175,15 @@ static struct sqlUpdater* gbCdnaInfoUpd = NULL;
 static struct sqlUpdater* refSeqStatusUpd = NULL;
 static struct sqlUpdater* refSeqSummaryUpd = NULL;
 static struct sqlUpdater* refLinkUpd = NULL;
+static struct sqlUpdater* gbMiscDiffUpd = NULL;
 
 /* other state objects */
 static struct extFileTbl* extFiles = NULL;
 
 static boolean haveGi = FALSE; /* does the gbCdnaInfo table have the gi
                                 * column? */
+static boolean haveMgc = FALSE; /* does this organism have MGC tables */
+static boolean loadMiscDiff = FALSE;  /* load gbMiscDiff records */
 
 static void gbWarn(char *format, ...)
 /* issue a warning */
@@ -202,6 +221,16 @@ if (!sqlTableExists(conn, "gbCdnaInfo"))
     }
 else
     haveGi = sqlFieldIndex(conn, "gbCdnaInfo", "gi") >= 0;
+
+/* load gbMiscDiff table only if MGC tables are loaded */
+/* do we have MGC on this ? */
+char *val = gbConfGetDb(options->conf, sqlGetDatabase(conn), "mgcTables.default");
+haveMgc = (val != NULL) && !sameString(val, "no");
+#if 0 /* FIXME disabled until genbank fixes download files */
+loadMiscDiff = haveMgc;
+#endif
+if (loadMiscDiff && !sqlTableExists(conn, "gbMiscDiff"))
+    sqlUpdate(conn, gbMiscDiffCreate);
 
 if (gbCdnaInfoUpd == NULL)
     gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 4), &allUpdaters);
@@ -363,6 +392,23 @@ if (status->stateChg & (GB_NEW|GB_META_CHG))
     }
 }
 
+static void gbMiscDiffUpdate(struct gbStatus* status, struct sqlConnection *conn)
+/* update gbMiscDiff table */
+{
+if (status->stateChg & (GB_NEW|GB_META_CHG))
+    {
+    if (gbMiscDiffUpd == NULL)
+        gbMiscDiffUpd = sqlUpdaterNew("gbMiscDiff", gTmpDir, (gbVerbose >= 4), &allUpdaters);
+    struct gbMiscDiff *gmd;
+    for (gmd = raMiscDiffs; gmd != NULL; gmd = gmd->next)
+        sqlUpdaterAddRow(gbMiscDiffUpd, "%s\t%d\t%d\t%s\t%s\t%s",
+                         gmd->acc, gmd->mrnaStart, gmd->mrnaEnd,
+                         gbSqlStrOrNullTabVar(gmd->notes),
+                         gbSqlStrOrNullTabVar(gmd->gene),
+                         gbSqlStrOrNullTabVar(gmd->replacement));
+    }
+}
+
 static void refSeqStatusUpdate(struct gbStatus* status)
 /* Update the refSeqStatus table for the current entry */
 {
@@ -471,6 +517,8 @@ if (!keepDesc(status))
 seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
 gbCdnaInfoUpdate(status, conn);
 imageCloneUpdate(status, conn);
+if (loadMiscDiff && (raMiscDiffs != NULL))
+    gbMiscDiffUpdate(status, conn);
 
 if (gSrcDb == GB_REFSEQ)
     {
@@ -616,6 +664,8 @@ void gbMetaDataDeleteFromIdTables(struct sqlConnection *conn,
  * deleted and rebuilt even for modification */
 {
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
+if (loadMiscDiff)
+    sqlDeleterDel(deleter, conn, "gbMiscDiff", "acc");
 }
 
 void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
@@ -726,7 +776,7 @@ struct slName* gbMetaDataListTables(struct sqlConnection *conn)
 {
 static char* TABLE_NAMES[] = {
     "gbSeq", "gbExtFile", "gbCdnaInfo", "refSeqStatus", "refSeqSummary", "refLink",
-    "imageClone", NULL
+    "imageClone", "gbMiscDiff", NULL
 };
 struct slName* tables = NULL;
 int i;

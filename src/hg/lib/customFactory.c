@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.28 2006/09/26 23:34:48 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.32 2006/10/09 19:27:25 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -83,6 +83,7 @@ return cfgOptionDefault("customTracks.db", NULL);
 void customFactorySetupDbTrack(struct customTrack *track)
 /* Fill in fields most database-resident custom tracks need. */
 {
+struct tempName tn;
 char prefix[16];
 static int dbTrackCount = 0;
 struct sqlConnection *ctConn = sqlCtConn(TRUE);
@@ -90,6 +91,8 @@ struct sqlConnection *ctConn = sqlCtConn(TRUE);
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
 ctAddToSettings(track, "dbTableName", track->dbTableName);
+customTrackTrashFile(&tn, ".err");
+track->dbStderrFile = cloneString(tn.forCgi);
 track->dbDataLoad = TRUE;	
 track->dbTrack = TRUE;
 sqlDisconnect(&ctConn);
@@ -149,8 +152,33 @@ cmd1[7] = dyStringCannibalize(&tmpDy);
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
+ *	The /dev/stderr will get stderr messages from hgLoadBed into the
+ *	Apache error log
  */
-return pipelineOpen1(cmd1, pipelineWrite, "/dev/null", NULL);
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
+	"/dev/null", track->dbStderrFile);
+}
+
+static void pipelineFailExit(struct customTrack *track)
+/* show up to three lines of error message to stderr and errAbort */
+{
+struct dyString *errDy = newDyString(0);
+struct lineFile *lf;
+char *line;
+int i;
+dyStringPrintf(errDy, "track load error:<BR>\n");
+lf = lineFileOpen(track->dbStderrFile, TRUE);
+i = 0;
+while( (i < 3) && lineFileNext(lf, &line, NULL))
+    {
+    dyStringPrintf(errDy, "%s<BR>\n", line);
+    ++i;
+    }
+lineFileClose(&lf);
+if (i < 1)
+    dyStringPrintf(errDy, "unknown failure<BR>\n");
+unlink(track->dbStderrFile);
+errAbort("%s",dyStringCannibalize(&errDy));
 }
 
 static struct customTrack *bedFinish(struct customTrack *track, 
@@ -194,7 +222,9 @@ if (dbRequested)
     struct bed *bed;
     for (bed = track->bedList; bed != NULL; bed = bed->next)
 	bedOutputN(bed, track->fieldCount, out, '\t', '\n');
-    pipelineWait(dataPipe);
+    if(pipelineWait(dataPipe))
+	pipelineFailExit(track);	/* prints error and exits */
+    unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
     }
 return track;
@@ -731,7 +761,15 @@ cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 cmd2[5] = "-pathPrefix=.";
 cmd2[6] = db;
 cmd2[7] = track->dbTableName;
-return pipelineOpen(cmds, pipelineWrite, "/dev/null", NULL);
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The /dev/stderr will get stderr messages from hgLoadBed into the
+ *	Apache error log
+ */
+return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
+	"/dev/null", track->dbStderrFile);
 }
 
 static void wigDbGetLimits(struct sqlConnection *conn, char *tableName,
@@ -785,7 +823,9 @@ if (dbRequested)
     FILE *out = pipelineFile(dataPipe);
     copyOpenFile(in, out);
     carefulClose(&in);
-    pipelineWait(dataPipe);
+    if (pipelineWait(dataPipe))
+	pipelineFailExit(track);	/* prints error and exits */
+    unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
     track->wigFile = NULL;
 

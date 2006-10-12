@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/doBlastzChainNet.pl instead.
+# edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.48 2006/08/14 23:50:36 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.1 2006/10/09 20:44:33 angie Exp $
 
 # to-do items:
 # - lots of testing

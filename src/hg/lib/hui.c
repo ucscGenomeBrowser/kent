@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.82 2006/09/25 18:25:51 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.83 2006/10/03 22:41:29 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1334,14 +1334,17 @@ for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     char *setting;
 
     safef(option, sizeof(option), "%s_sel", subtrack->tableName);
-    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+    if ((setting = trackDbSetting(subtrack, "subTrack")) != NULL)
+        {
         if (chopLine(cloneString(setting), words) >= 2)
             alreadySet = differentString(words[1], "off");
+        }
     alreadySet = cartUsualBoolean(cart, option, alreadySet);
     isPrimary = (primarySubtrack &&
 		 sameString(subtrack->tableName, primarySubtrack));
     if (selectedOnly && !alreadySet && !isPrimary)
         continue;
+
     puts("<TR><TD>");
     if (primarySubtrack)
 	{

@@ -17,7 +17,7 @@ unfinished genomes.  Global near best in genome keeps alignments
 based on overall score.
 
 Options:
-   -helpAlgo - print message describing the filtering algorithm.
+   -algoHelp - print message describing the filtering algorithm.
 
    -localNearBest=-1.0 - local near best in genome filtering,
     keeping aligments within this fraction of the top score for

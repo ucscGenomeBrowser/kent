@@ -10,7 +10,7 @@
 #include "web.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: wikiLink.c,v 1.2 2006/05/06 00:01:23 angie Exp $";
+static char const rcsid[] = "$Id: wikiLink.c,v 1.3 2006/10/09 21:08:01 angie Exp $";
 
 char *wikiLinkHost()
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
@@ -58,17 +58,27 @@ else
 return NULL;
 }
 
+static char *encodedHgSessionReturnUrl(int hgsid)
+/* Return a CGI-encoded hgSession URL with hgsid.  Free when done. */
+{
+char retBuf[1024];
+safef(retBuf, sizeof(retBuf), "http://%s/cgi-bin/hgSession?hgsid=%d",
+      cgiServerName(), hgsid);
+return cgiEncode(retBuf);
+}
+
 char *wikiLinkUserLoginUrl(int hgsid)
 /* Return the URL for the wiki user login page. */
 {
 char buf[2048];
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
 if (! wikiLinkEnabled())
     errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
 	     "in hg.conf).");
 safef(buf, sizeof(buf),
-      "http://%s/index.php?title=Special:UserloginUCSC"
-      "&returnto=http://%s/cgi-bin/hgSession?hgsid=%d",
-      wikiLinkHost(), cgiServerName(), hgsid);
+      "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
+      wikiLinkHost(), retEnc);
+freez(&retEnc);
 return(cloneString(buf));
 }
 
@@ -76,12 +86,13 @@ char *wikiLinkUserLogoutUrl(int hgsid)
 /* Return the URL for the wiki user logout page. */
 {
 char buf[2048];
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
 if (! wikiLinkEnabled())
     errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
 	     "in hg.conf).");
 safef(buf, sizeof(buf),
-      "http://%s/index.php?title=Special:UserlogoutUCSC"
-      "&returnto=http://%s/cgi-bin/hgSession?hgsid=%d",
-      wikiLinkHost(), cgiServerName(), hgsid);
+      "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+      wikiLinkHost(), retEnc);
+freez(&retEnc);
 return(cloneString(buf));
 }

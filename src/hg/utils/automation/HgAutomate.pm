@@ -2,9 +2,9 @@
 # HgAutomate: common cluster, postprocessing and database loading operations.
 #
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/HgAutomate.pm instead.
+# edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.7 2006/07/16 06:05:34 angie Exp $
+# $Id: HgAutomate.pm,v 1.1 2006/10/09 20:44:34 angie Exp $
 package HgAutomate;
 
 use warnings;

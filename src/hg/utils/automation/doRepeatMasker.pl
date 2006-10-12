@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/doRepeatMasker.pl instead.
+# edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.4 2006/08/18 18:34:17 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.1 2006/10/09 20:44:33 angie Exp $
 
 use Getopt::Long;
 use warnings;

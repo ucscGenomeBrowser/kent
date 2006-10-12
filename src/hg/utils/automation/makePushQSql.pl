@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/makePushQSql.pl instead.
+# edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.3 2006/07/17 23:59:00 angie Exp $
+# $Id: makePushQSql.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
 
 use Getopt::Long;
 use warnings;

@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/doSameSpeciesLiftOver.pl instead.
+# edit ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.3 2006/07/16 06:06:11 angie Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
 
 use Getopt::Long;
 use warnings;

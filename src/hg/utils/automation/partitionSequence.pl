@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/partitionSequence.pl instead.
+# edit ~/kent/src/hg/utils/automation/partitionSequence.pl instead.
 
 # Based on Scott Schwartz's tclsh script make-joblist;
 # rewritten in perl and extended to handle .2bit inputs and 
@@ -9,7 +9,7 @@
 # Actual batch list creation can be done with gensub2 and a spec,
 # using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.8 2006/07/11 00:11:53 angie Exp $
+# $Id: partitionSequence.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
 
 use Getopt::Long;
 use strict;

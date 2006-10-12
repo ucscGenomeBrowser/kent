@@ -4,42 +4,6 @@
 #include "gbConf.h"
 
 
-static char* getConfValue(struct gbConf* conf, char* db, char* baseName)
-/* parse an option for a database; check for database-specific value and
- * default */
-{
-char name[256];
-char* value;
-safef(name, sizeof(name), "%s.%s", db, baseName);
-
-value = gbConfGet(conf, name);
-if (value == NULL)
-    {
-    safef(name, sizeof(name), "default.%s", baseName);
-    value = gbConfGet(conf, name);
-    if (value == NULL)
-        errAbort("can't find conf entry for %s.%s or default.%s",
-                 db, baseName, baseName);
-    }
-return value;
-}
-
-static boolean getConfBoolean(struct gbConf* conf, char* db, char* baseName)
-/* parse boolean option for a database; check for database-specific value and
- * default */
-{
-char* value = getConfValue(conf, db, baseName);
-if (sameString(value, "yes") || sameString(value, "true"))
-    return TRUE;
-else if (sameString(value, "no") || sameString(value, "false"))
-    return FALSE;
-else
-    errAbort("invalid boolean conf value for %s.%s or default.%s, "
-             "expected yes, no, true, or false: %s",
-             db, baseName, baseName, value);
-return FALSE;
-}
-
 static void parseOrgCatAttrs(struct gbConf* conf, char* db,
                              struct dbLoadOptions* options,
                              unsigned srcDb, unsigned type, unsigned orgCat,
@@ -59,13 +23,13 @@ if (((restrictFlags & GB_ORG_CAT_MASK) == 0) || (restrictFlags & orgCat))
     else
         {
         safef(baseName, sizeof(baseName), "%s.%s", typeName, "load");
-        attr->load = getConfBoolean(conf, db, baseName);
+        attr->load = gbConfMustGetDbBoolean(conf, db, baseName);
         }
     /* load description always comes from conf file */
     if (attr->load)
         {
         safef(baseName, sizeof(baseName), "%s.%s", typeName, "loadDesc");
-        attr->loadDesc = getConfBoolean(conf, db, baseName);
+        attr->loadDesc = gbConfMustGetDbBoolean(conf, db, baseName);
         }
     }
 }
@@ -133,10 +97,10 @@ return restrictFlags;
 struct dbLoadOptions dbLoadOptionsParse(char* db)
 /* parse many of the command line options and the options file. */
 {
-struct gbConf* conf = gbConfNew(optionVal("conf", GB_CONF_FILE));
 unsigned restrictFlags;
 struct dbLoadOptions options;
 ZeroVar(&options);
+options.conf = gbConfNew(optionVal("conf", GB_CONF_FILE));
 
 /* parse various command line options */
 options.relRestrict = optionVal("release", NULL);
@@ -164,15 +128,14 @@ if (optionExists("maxExtFileUpdate"))
 
 /* Get restrictions on what to select from the command line, and combine
  * with conf file. */
-restrictFlags = getCmdSelect(conf);
-parseSrcDbAttrs(conf, db, &options, GB_GENBANK, restrictFlags);
-parseSrcDbAttrs(conf, db, &options, GB_REFSEQ, restrictFlags);
+restrictFlags = getCmdSelect(options.conf);
+parseSrcDbAttrs(options.conf, db, &options, GB_GENBANK, restrictFlags);
+parseSrcDbAttrs(options.conf, db, &options, GB_REFSEQ, restrictFlags);
 
 /* other conf file options */
-if (getConfBoolean(conf, db, "perChromTables"))
+if (gbConfMustGetDbBoolean(options.conf, db, "perChromTables"))
     options.flags |= DBLOAD_PER_CHROM_ALIGN;
 
-gbConfFree(&conf);
 return options;
 }
 

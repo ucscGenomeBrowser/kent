@@ -16,6 +16,10 @@ ALTER TABLE Locations_GroupVersions ADD INDEX (location_uid), ADD INDEX (group_v
 ALTER TABLE NextIds ADD INDEX (table_name);
 ALTER TABLE Organizations ADD INDEX (organization_uid);
 ALTER TABLE Programs ADD INDEX (program_uid);
+ALTER TABLE StatisticsTypes ADD INDEX (statistics_type_uid);
+ALTER TABLE CcdsStatistics ADD INDEX (statistics_uid);
+ALTER TABLE Builds ADD INDEX (build_uid);
+ALTER TABLE BuildQualityTests ADD INDEX (build_uid), ADD INDEX (qa_analysis_id);
 ALTER TABLE Accessions ADD INDEX (organization_uid);
 ALTER TABLE Accessions_GroupVersions ADD INDEX (accession_uid), ADD INDEX (ccds_status_val_uid), ADD INDEX (group_version_uid);
 ALTER TABLE CcdsUids ADD INDEX (group_uid);
@@ -27,3 +31,6 @@ ALTER TABLE Interpretations ADD INDEX (acc_rejection_uid), ADD INDEX (accession_
 ALTER TABLE Interpreters ADD INDEX (organization_uid);
 ALTER TABLE Locations_GroupVersions ADD INDEX (group_version_uid), ADD INDEX (location_uid);
 ALTER TABLE Programs ADD INDEX (organization_uid);
+ALTER TABLE CcdsStatistics ADD INDEX (statistics_type_uid);
+ALTER TABLE BuildQualityTests ADD INDEX (build_uid);
+ALTER TABLE BuildQualityTests ADD INDEX (acc_rejection_uid);

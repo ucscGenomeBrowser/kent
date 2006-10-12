@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.15 2006/06/29 05:42:23 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.16 2006/09/29 00:19:20 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -36,6 +36,7 @@ struct gbField *gbGeneDbxField;
 struct gbField *gbCdsDbxField;
 struct gbField *gbProteinIdField;
 struct gbField *gbTranslationField;
+struct gbField *gbMiscDiffField;
 
 /* RefSeq specific data */
 struct gbField *gbRefSeqRoot = NULL;
@@ -45,9 +46,13 @@ struct gbField *gbRefSeqCompletenessField = NULL;
 struct gbField *gbRefSeqDerivedField = NULL;
 
 
+/* list of misc diffs in current record */
+struct gbMiscDiff *gbMiscDiffVals = NULL;;
+
 /* State flag, indicates end-of-record reached on current entry; needed to
  * detect entries that don't have sequences */
 static boolean gReachedEOR = FALSE;
+
 
 static char *getCurAcc()
 /* get current accession field, or "unknown" if no defined yet */
@@ -309,6 +314,16 @@ slAddTail(&c1->children, c2);
 c2 = newField("/selenocysteine", "selenocysteine", GBF_BOOLEAN, 32); 
 slAddTail(&c1->children, c2);
 
+/* FEATURES misc_difference */
+gbMiscDiffField = c1 = newField("misc_difference", NULL, GBF_MULTI_LINE, 128);
+slAddTail(&c0->children, c1);
+c2 = newField("/gene", NULL, GBF_NONE, 128);
+slAddTail(&c1->children, c2);
+c2 = newField("/note", NULL, GBF_MULTI_LINE, 128);
+slAddTail(&c1->children, c2);
+c2 = newField("/replace", NULL, GBF_NONE, 128);
+slAddTail(&c1->children, c2);
+
 /* for refseq, we parse data stuff into comment. */
 gbRefSeqStatusField = newField("refSeqStatus", "rss", GBF_NONE, 128);
 gbRefSeqRoot = gbRefSeqStatusField;
@@ -330,6 +345,60 @@ for (; gbf != NULL; gbf = gbf->next)
         gbfClearVals(gbf->children);
     }
 }
+
+static struct gbMiscDiff *gbMiscDiffNew()
+/* allocate a new gbMiscDiff object */
+{
+struct gbMiscDiff *gmd;
+AllocVar(gmd);
+return gmd;
+}
+
+static void gbMiscDiffFree(struct gbMiscDiff **gmdPtr)
+/* free a gbMiscDiff struct */
+{
+struct gbMiscDiff *gmd = *gmdPtr;
+if (gmd != NULL)
+    {
+    freeMem(gmd->loc);
+    freeMem(gmd->note);
+    freeMem(gmd->gene);
+    freeMem(gmd->replace);
+    freeMem(gmd);
+    }
+}
+
+static void gbMiscDiffFreeList(struct gbMiscDiff **gmdList)
+/* free a list of gbMiscDiff struct */
+{
+struct gbMiscDiff *gmd;
+while ((gmd = slPopHead(gmdList)) != NULL)
+    gbMiscDiffFree(&gmd);
+}
+
+static void processMiscDiff()
+/* process a misc diff field that was just parsed, moving values to list of
+ * gbMiscDiffVals */
+{
+struct gbMiscDiff *gmd = gbMiscDiffNew();
+gmd->loc = cloneString(gbMiscDiffField->val->string);
+struct gbField *gbf;
+for (gbf = gbMiscDiffField->children; gbf != NULL; gbf = gbf->next)
+    {
+    if (gbf->val->stringSize > 0)
+        {
+        if (sameString(gbf->readName,"/gene"))
+            gmd->gene = cloneString(gbf->val->string);
+        else if (sameString(gbf->readName,"/note"))
+            gmd->note = cloneString(gbf->val->string);
+        else if (sameString(gbf->readName,"/replace"))
+            gmd->replace = cloneString(gbf->val->string);
+        }
+    }
+slAddHead(&gbMiscDiffVals, gmd);
+gbfClearVals(gbMiscDiffField);
+}
+
 
 static void readOneField(char *line, struct lineFile *lf, struct gbField *gbf, int subIndent)
 /* Read in a single field. */
@@ -500,7 +569,9 @@ while (lineFileNext(lf, &line, &lineSize))
             else
                 readOneField(s, lf, gbf, subIndent);
             if (gbf->children)
-                recurseReadFields(lf, gbf->children, indent);        
+                recurseReadFields(lf, gbf->children, indent);
+            if (gbf == gbMiscDiffField)
+                processMiscDiff();
             break;
             }
         }
@@ -785,10 +856,12 @@ boolean gbfReadFields(struct lineFile *lf)
 boolean gotRecord;
 gbfClearVals(gbStruct);
 gbfClearVals(gbRefSeqRoot);
+gbMiscDiffFreeList(&gbMiscDiffVals);
 gReachedEOR = FALSE;
 gotRecord = recurseReadFields(lf, gbStruct, -1);
 if (gotRecord && (gbGuessSrcDb(getCurAcc()) == GB_REFSEQ))
     refSeqParse();
+slReverse(&gbMiscDiffVals);
 return gotRecord;
 }
 

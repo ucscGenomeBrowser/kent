@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.10 2006/09/22 00:26:33 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.11 2006/10/06 21:16:52 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -62,7 +62,6 @@ printf("<P>The sign in page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
 printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
        wikiLinkUserLoginUrl(cartSessionId(cart)));
-printf("</P>\n");
 }
 
 void showCartLinks()
@@ -73,8 +72,7 @@ char returnAddress[512];
 
 safef(returnAddress, sizeof(returnAddress), "/cgi-bin/hgSession?%s", session);
 printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Click here to "
-       "reset</A> the browser user interface settings to their defaults."
-       "</P>\n",
+       "reset</A> the browser user interface settings to their defaults.\n",
        session, cgiEncode(returnAddress));
 }
 
@@ -200,8 +198,8 @@ char **row = NULL;
 char query[512];
 boolean foundAny = FALSE;
 
-printf("<TABLE BORDERWIDTH=0>\n");
 printf("<H3>My Sessions</H3>\n");
+printf("<TABLE BORDERWIDTH=0>\n");
 safef(query, sizeof(query), "SELECT sessionName, shared from %s "
       "WHERE userName = '%s';",
       namedSessionTable, userName);
@@ -372,7 +370,7 @@ if (isNotEmpty(userName))
     showExistingSessions(userName);
 else
     printf("<P>If you <A HREF=\"%s\">sign in</A>, "
-	   "you will also have the option to save named sessions.<P>\n",
+	   "you will also have the option to save named sessions.\n",
 	   wikiLinkUserLoginUrl(cartSessionId(cart)));
 showLoadingOptions(userName, savedSessionsSupported);
 showSavingOptions(userName);
@@ -405,14 +403,15 @@ printf("<LI>If you have saved your settings to a local file, you can send "
        "email to others with the file as an attachment and direct them to "
        "<A HREF=\"%s\">%s</A> .</LI>\n",
        dyUrl->string, dyUrl->string);
-dyStringPrintf(dyUrl, "?hgS_doLoadUrl=submit&hgS_loadUrlName="
-	       "http://www.mysite.edu/~me/mySession.txt");
+dyStringPrintf(dyUrl, "?hgS_doLoadUrl=submit&hgS_loadUrlName=");
 printf("<LI>If a saved settings file is available from a web server, "
        "you can send email to others with a link such as "
-       "<A HREF=\"%s\">%s</A> .  In this type of link, you can replace "
+       "%s<B>U</B> where <B>U</B> is the URL of your "
+       "settings file, e.g. http://www.mysite.edu/~me/mySession.txt .  "
+       "In this type of link, you can replace "
        "\"hgSession\" with \"hgTracks\" in order to proceed directly to "
        "the Genome Browser.</LI>\n",
-       dyUrl->string, dyUrl->string);
+       dyUrl->string);
 printf("</UL>\n");
 dyStringFree(&dyUrl);
 }

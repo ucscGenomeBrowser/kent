@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.13 2005/09/23 16:43:37 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.14 2006/10/07 20:46:26 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -369,7 +369,7 @@ void usage()
 {
 errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "\n"
-         "Get sequences or alignments of some partation GenBank or RefSeq.\n"
+         "Get sequences or alignments of some partition GenBank or RefSeq.\n"
          "\n"
          " Options:\n"
          "    -get=what - what is seq, psl, or intronPsl, ra.  Default is\n"

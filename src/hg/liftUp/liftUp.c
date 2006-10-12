@@ -16,7 +16,7 @@
 #include "options.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.39 2006/07/27 22:14:26 hiram Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.40 2006/09/28 02:25:50 markd Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -29,8 +29,8 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .gff, .gtf .bscore \n"
- ".tab .gdup .axt .chain .net, genePred, .wab or .bed files to parent coordinate\n"
- "system.\n"
+ ".tab .gdup .axt .chain .net, genePred, .wab, .bed, or .bed8 files to parent\n"
+ "coordinate system.\n"
  "\n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
@@ -1117,7 +1117,8 @@ void liftTabbed(char *destFile, struct hash *liftHash,
    int ctgWord, int startWord, int endWord, 
    boolean doubleLift, int ctgWord2, int startWord2, int endWord2,
    int startOffset, int strandWord)
-/* Generic lift a tab-separated file with contig, start, and end fields. */
+/* Generic lift a tab-separated file with contig, start, and end fields.
+ * If doubleLift is TRUE, also lift second set of coordinated.*/
 {
 int minFieldCount = max3(startWord, endWord, ctgWord) + 1;
 int wordCount, lineSize;
@@ -1273,6 +1274,13 @@ void liftBed(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
  * seq, start, end.  This also sorts the result. */
 {
 liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, FALSE, 0, 0, 0, 0, 5);
+}
+
+void liftBed8(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift BED8, getting the thickStart, and thickEnd fields. */
+{
+/* uses same contig for both pairs of coords */
+liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, TRUE, 0, 6, 7, 0, 5);
 }
 
 void liftGff(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
@@ -1449,6 +1457,12 @@ else if (endsWith(destType, ".bed"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
+    }
+else if (endsWith(destType, ".bed8"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, TRUE);
+    liftBed8(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".gp") || endsWith(destType, ".genepred"))
     {

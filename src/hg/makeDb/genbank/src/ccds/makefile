@@ -5,16 +5,20 @@ PROGS = ${BINARCH}/ccdsImport \
 	${BINARCH}/ccdsMkTables \
 	${BINARCH}/mkCcdsGeneMap
 
-O = ccdsLocationsJoin.o ccdsCommon.o
+O = createTables.o createKeys.o ccdsLocationsJoin.o ccdsCommon.o
 
 all: ${PROGS}
 
-clean:
-	rm -f ${O} ${PROGS} ccdsImport.o ccdsMkTables.o mkCcdsGeneMap.o
+# generate C code contain SQL for building tables
+%.c: %.sql
+	stringify -var=$*Sql $< >$@
 
-${BINARCH}/ccdsImport:  ccdsImport.o ${LIBGENBANK} ${JKLIBS}
+clean:
+	rm -f ${O} ${PROGS} ccdsImport.o ccdsMkTables.o mkCcdsGeneMap.o createKeys.c createTables.c
+
+${BINARCH}/ccdsImport:  ccdsImport.o ${O} ${LIBGENBANK} ${JKLIBS}
 	@${MKDIR} ${BINARCH}
-	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/ccdsImport ccdsImport.o $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/ccdsImport ccdsImport.o ${O} $(LIBS)
 
 ${BINARCH}/ccdsMkTables:  ccdsMkTables.o ${O} ${LIBGENBANK} ${JKLIBS}
 	@${MKDIR} ${BINARCH}

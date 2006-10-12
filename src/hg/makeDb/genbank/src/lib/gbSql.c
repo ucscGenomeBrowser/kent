@@ -91,6 +91,12 @@ safef(query, sizeof(query), "SELECT RELEASE_LOCK(\"%s.%s\")", db, GB_LOCK_NAME);
 sqlUpdate(conn, query);
 }
 
+char *gbSqlStrOrNullTabVar(char *str)
+/* If str is null, return \N for loading tab file, otherwise str */
+{
+return (str == NULL) ? "\\N" : str;
+}
+
 
 
 /*

@@ -205,6 +205,12 @@ if (mi->desc == NULL)
 else
     printf("<TD>%s<TD>%s", mi->sym, mi->desc);
 printf("</TR>\n");
+printf("<TR CLASS=\"transMapLeft\"><TD>%s",
+       (genbankIsRefSeqAcc(mi->gbAcc) ? "RefSeq" : "Genbank"));
+printf("<TD><a HREF=\"");
+printEntrezNucleotideUrl(stdout, mi->gbAcc);
+printf("\" TARGET=_blank>%s</A><TD COLSPAN=2>&nbsp;", mi->gbAcc);
+printf("</TR>\n");
 printf("</TBODY></TABLE>\n");
 }
 

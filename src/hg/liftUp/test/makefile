@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 all: test
 
 test: chainQ chainT netQ netT genePred pslRc \
-	 missingWarn missingCarry missingDrop  missingError
+	 missingWarn missingCarry missingDrop  missingError bed8
 
 chainQ: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp -chainQ output/testOutQ.chain \
@@ -77,6 +77,10 @@ missingError: output
 	    input/rcTestMissing.lft error input/rcContig.psl >output/missingError.err 2>&1; then false; else true; fi
 	diff expected/missingError.err output/missingError.err
 	diff expected/missingError.psl output/missingError.psl
+
+bed8: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/$@.bed input/contig.lft error input/bed8contig.bed
+	diff expected/$@.bed output/$@.bed
 
 output:
 	${MKDIR} output

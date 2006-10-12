@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.96 2006/09/20 23:27:12 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.101 2006/10/11 22:25:35 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -168,7 +168,7 @@ if (withLogo)
     puts("</TH></TR>" "\n"
     	 "" "\n" );
     }
-if (NULL != theCart)
+if (theCart)
     {
     char *theDb = NULL;
     char *theGenome = NULL;
@@ -207,7 +207,7 @@ else
     printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
     puts("           Home</A> &nbsp;&nbsp;&nbsp;");
     printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
-	   uiState);
+	       uiState);
     puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
@@ -220,7 +220,8 @@ else
 	}
     if (!endsWith(scriptName, "hgBlat"))
 	{
-    	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">", uiState+1);
+    	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
+		theCart ? "&" : "", uiState+1 );
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
     {
@@ -228,7 +229,7 @@ else
 		   (endsWith(scriptName, "hgGene") ?
 		    cartOptionalString(theCart, "hgg_type") :
 		    cartOptionalString(theCart, "g")));
-    if (table != NULL &&
+    if (table && theCart &&
 	(endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
 	 endsWith(scriptName, "hgGene")))
 	{
@@ -237,17 +238,17 @@ else
 	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
 		   "class=\"topbar\">\n",
-		   uiState, tdb->grp, table, table);
+		uiState, tdb->grp, table, table);
 	else
 	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
 		   "class=\"topbar\">\n",
-		   uiState);
+		uiState);
 	trackDbFree(&tdb);
 	}
     else
-	printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+	printf("       <A HREF=\"/cgi-bin/hgTables%s%shgta_doMainPage=1\" "
 	       "class=\"topbar\">\n",
-	       uiState);
+	       uiState, theCart ? "&" : "?" );
     }
     puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
@@ -265,9 +266,9 @@ else
 	}
     if (wikiLinkEnabled())
 	{
-	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
+	printf("<A HREF=\"/cgi-bin/hgSession%s%shgS_doMainPage=1\" "
 	       "class=\"topbar\">Session</A>",
-	       uiState);
+	       uiState, theCart ? "&" : "?" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
@@ -968,11 +969,20 @@ void webPrintLinkCellEnd()
 printf("</TD>");
 }
 
-void webPrintLinkCell(char *label)
-/* Print label cell in our colors. */
+void webPrintLinkCell(char *link)
+/* Print link cell in our colors, if links is null, print empty cell */
 {
 webPrintLinkCellStart();
-printf(label);
+if (link != NULL)
+    puts(link);
+webPrintLinkCellEnd();
+}
+
+void webPrintIntCell(int val)
+/* Print right-justified int cell in our colors. */
+{
+webPrintLinkCellRightStart();
+printf("%d", val);
 webPrintLinkCellEnd();
 }
 

@@ -410,6 +410,9 @@ char *sqlVersion(struct sqlConnection *conn);
 int sqlMajorVersion(struct sqlConnection *conn);
 /* Return major version of database. */
 
+int sqlMinorVersion(struct sqlConnection *conn);
+/* Return minor version of database. */
+
 char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
 /* Return a name for a temporary table. Name will start with
  * prefix.  This call doesn't actually  make table.  (So you should 

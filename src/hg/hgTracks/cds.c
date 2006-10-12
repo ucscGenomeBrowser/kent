@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.46 2006/08/09 17:47:19 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.47 2006/09/27 22:24:43 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -705,7 +705,8 @@ static struct simpleFeature *splitByCodon( char *chrom,
 
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
     {
-        unsigned thisStart, thisEnd, cdsLine;
+        int thisStart, thisEnd;
+	unsigned cdsLine;
         if(exonFrames != NULL)
         {
             if(exonFrames[i] > 0)

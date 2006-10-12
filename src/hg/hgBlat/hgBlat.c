@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.100 2006/08/17 00:21:59 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.101 2006/10/11 19:04:27 kate Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -623,6 +623,16 @@ char *userSeq = NULL;
 
 getDbAndGenome(cart, &db, &organism);
 serve = findServer(db, FALSE);
+
+/* dump custom tracks if assembly changes */
+char *oldDb = hashFindVal(oldVars, "db");
+char *oldOrg = hashFindVal(oldVars, "org");
+if ((oldDb    && differentWord(oldDb, db)) ||
+    (oldOrg   && differentWord(oldOrg, organism)))
+    {
+    cartRemove(cart, "ct");
+    cartRemovePrefix(cart, "ct_");
+    }
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"

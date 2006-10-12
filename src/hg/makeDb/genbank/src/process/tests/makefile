@@ -1,11 +1,14 @@
 GBROOT = ../../..
 include ${GBROOT}/common.mk
 
-PROCESS = ${BINARCH}/gbProcess
+VG=
+#VG=valgrind --tool=memcheck --num-callers=100 --leak-check=full --leak-resolution=high --show-reachable=yes 
+
+PROCESS = ${VG}${BINARCH}/gbProcess
 
 all:
 
-test: refseqTest estTest
+test: refseqTest estTest mgcTest
 
 refseqTest:
 	${MAKE} doTest id=$@ input=refseq
@@ -13,6 +16,10 @@ refseqTest:
 # AA225986 doesn't mention direction in description
 estTest:
 	${MAKE} doTest id=$@ input=ests
+
+# data like misc_difference needed for MGC
+mgcTest:
+	${MAKE} doTest id=$@ input=mgc
 
 # recursive target to run tests; args are: id, input
 doTest:

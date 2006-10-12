@@ -102,13 +102,18 @@ struct snp125Extended
     float avHetSE;	/* The Standard Error for the average heterozygosity */
     char *func;	/* The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.) */
     char *locType;	/* How the variant affects the reference sequence */
-	/*  extra fields */
     unsigned weight;	/* The quality of the alignment */
+	/*  extra fields */
     char *nameExtra;    /* additional text to be drawn with name in image */
     Color color;       /* color for drawing in hgTracks */
     };
 
 struct snp125Extended *snpExtendedLoad(char **row);
+/* Load a snp125 from row fetched with select * from snp125 from
+ * database.  Additional fields are for run-time drawing and
+ * calculations */
+
+struct snp125Extended *snp125ExtendedLoad(char **row);
 /* Load a snp125 from row fetched with select * from snp125 from
  * database.  Additional fields are for run-time drawing and
  * calculations */

@@ -127,6 +127,37 @@ ALTER TABLE [dbo].[Programs] ADD
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 
+ALTER TABLE [dbo].[StatisticsTypes] ADD
+        CONSTRAINT [PK_statisticsTypeVals] PRIMARY KEY  CLUSTERED
+        (
+                [statistics_type_uid]
+        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
+go
+
+ALTER TABLE [dbo].[CcdsStatistics] ADD
+        CONSTRAINT [PK_ccdsStatistics] PRIMARY KEY  CLUSTERED
+        (
+                [statistics_uid]
+        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
+go
+
+ALTER TABLE [dbo].[Builds] ADD
+        CONSTRAINT [PK_builds] PRIMARY KEY  CLUSTERED
+        (
+                [build_uid]
+        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
+go
+
+ALTER TABLE [dbo].[BuildQualityTests] ADD
+        CONSTRAINT [PK_buildQualityTests] PRIMARY KEY  CLUSTERED
+        (
+                [build_uid],
+                [qa_analysis_id]
+        ) WITH  FILLFACTOR = 90  ON [PRIMARY]
+go
+
+---------------------- Foreign keys ------------------------
+
 ALTER TABLE [dbo].[Accessions] ADD 
 	CONSTRAINT [FK_Accessions_Organizations] FOREIGN KEY 
 	(
@@ -309,4 +340,31 @@ ALTER TABLE [dbo].[Programs] ADD
 		[organization_uid]
 	)
 GO
+
+ALTER TABLE [dbo].[CcdsStatistics] ADD
+        CONSTRAINT [FK_CcdsStatistics_StatisticsTypes] FOREIGN KEY
+        (
+                [statistics_type_uid]
+        ) REFERENCES [dbo].[StatisticsTypes] (
+                [statistics_type_uid]
+        )
+go
+
+ALTER TABLE [dbo].[BuildQualityTests] ADD
+        CONSTRAINT [FK_BuildQualityTests_Builds] FOREIGN KEY
+        (
+                [build_uid]
+        ) REFERENCES [dbo].[Builds] (
+                [build_uid]
+        )
+go
+
+ALTER TABLE [dbo].[BuildQualityTests] ADD
+        CONSTRAINT [FK_BuildQualityTests_AccessionRejectionCriteria] FOREIGN KEY
+        (
+                [acc_rejection_uid]
+        ) REFERENCES [dbo].[AccessionRejectionCriteria] (
+                [acc_rejection_uid]
+        )
+go
 

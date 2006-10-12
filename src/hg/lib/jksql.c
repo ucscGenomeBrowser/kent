@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.91 2006/08/03 18:03:34 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.93 2006/10/04 18:58:33 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -521,10 +521,10 @@ MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
 
-monitorEnter();
 if (monitorFlags & JKSQL_TRACE)
     monitorPrintQuery(sc, query);
 
+monitorEnter();
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
     if (abort)
@@ -1654,8 +1654,22 @@ freeMem(s);
 return ver;
 }
 
+int sqlMinorVersion(struct sqlConnection *conn)
+/* Return minor version of database. */
+{
+char *s = sqlVersion(conn);
+char *words[5];
+int wordCount;
+int ver;
 
+wordCount = chopString(s, ".", words, ArraySize(words));
 
+if (!isdigit(*words[1]))
+    errAbort("Unexpected format in version: %s", s);
+ver = atoi(words[1]);           /* NOT sqlUnsigned please! */
+freeMem(s);
+return ver;
+}
 
 char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName)
 /* Get the definitions of a enum column in a table, returning a

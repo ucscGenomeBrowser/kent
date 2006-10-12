@@ -28,6 +28,9 @@ void gbLockDb(struct sqlConnection *conn, char *db);
 void gbUnlockDb(struct sqlConnection *conn, char *db);
 /* free genbank advisory lock on database */
 
+char *gbSqlStrOrNullTabVar(char *str);
+/* If str is null, return \N for loading tab file, otherwise str */
+
 #endif
 
 /*

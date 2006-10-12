@@ -23,7 +23,34 @@ group map
 visibility dense
 type bed 3 +
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+                                                                                
+track bacEndSingles
+shortLabel BAC End Singles
+longLabel BAC End Singles
+group map
+priority 16
+visibility hide
+type bed 6 +
+exonArrows off
+                                                                                
+track bacEndPairsBad
+shortLabel Incorrect BAC End Pairs
+longLabel Orphan, Short, Long and Incorrectly Oriented BAC End Pairs
+group map
+priority 17
+visibility hide
+type bed 6 +
+exonArrows off
 track multiz7way
+
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
@@ -190,3 +217,15 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 searchPriority 50
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+                                                                                
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8

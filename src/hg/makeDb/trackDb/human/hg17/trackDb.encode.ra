@@ -29,6 +29,7 @@ longLabel Gencode Intron Validation (Jun 2005)
 dataVersion ENCODE June 2005 Freeze
 group encodeGenes
 priority 10.2
+# NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
 type bed 6 +
@@ -40,6 +41,7 @@ shortLabel GIS PET RNA
 dataVersion ENCODE Oct 2005 Freeze
 longLabel Genome Institute of Singapore PET of PolyA+ RNA
 group encodeGenes
+# NOTE: genome-wide, except randoms and chrY
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 priority 49.2
 visibility hide
@@ -1398,6 +1400,7 @@ shortLabel Yale STAT1 Sites
 longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Binding Sites
 group encodeChip
 priority 65.2
+# NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 dataVersion ENCODE June 2005 Freeze
@@ -1546,6 +1549,7 @@ shortLabel Yale ChIP Sites
 longLabel Yale ChIP/Chip (HeLa cells) Sites 
 group encodeChip
 priority 65.23
+# NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 type bed5FloatScore
@@ -1641,6 +1645,7 @@ shortLabel UW/Reg QCP DNaseI Sens
 longLabel ENCODE UW/Regulome QCP DNaseI Sensitivity
 group encodeChrom
 priority 66.05
+# NOTE: Missing regions
 chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
 visibility hide
 maxHeightPixels 128:16:16
@@ -2418,7 +2423,7 @@ yLineOnOff Off
 smoothingWindow Off
 windowingFunction maximum
 autoScale Off
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion May 2006
 
     track encodeRegulomeDnaseGM06990Sens
@@ -2444,11 +2449,12 @@ shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites
 group encodeChrom
 priority 61.1
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 5 .
 useScore 1
 dataVersion ENCODE June & Oct 2005 Freezes
+release beta
 
     track encodeNhgriDnaseHsChipGm06990
     subTrack encodeNhgriDnaseHsChip
@@ -2457,6 +2463,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
     color 80,50,80
     priority 1
+release beta
 
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDnaseHsChip
@@ -2465,6 +2472,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE Oct 2005 Freeze
     color 120,10,120
     priority 2
+release beta
 
     track encodeNhgriDnaseHsMpssCd4
     subTrack encodeNhgriDnaseHsChip
@@ -2473,21 +2481,23 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
     color 120,10,120
     priority 3
+release beta
 
     track encodeNhgriDnaseHsMpssCd4Act
-    subTrack encodeNhgriDnaseHsChip
+    subTrack encodeNhgriDnaseHsChip 
     shortLabel DNase CD4-act MS
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
     dataVersion ENCODE June 2005 Freeze
     priority 4
+release beta
 
-track encodeNhgriDnaseHsChipRaw
+track encodeNhgriDukeDnaseHs
 compositeTrack on
-shortLabel NHGRI DNaseI-HS Raw
-longLabel NHGRI DNaseI-Hypersensitive Chip Raw
+shortLabel Duke/NHGRI DNase
+longLabel Duke/NHGRI DNaseI-Hypersensitivity
 group encodeChrom
-priority 61.0
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+priority 61.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -2496,36 +2506,54 @@ maxLimit 4.243
 viewLimits 0:1
 windowingFunction mean
 autoScale Off
-dataVersion ENCODE Oct 2005 Freeze and August 2006
+dataVersion ENCODE June & Oct 2005 Freezes and August 2006
+subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Old_DNase-chip mpss=MPSS
+release alpha
 
     track encodeNhgriDnaseHsChipRawGm06990
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Raw
-    longLabel NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
     color 80,50,80
     dataVersion ENCODE Oct 2005 Freeze
+    subGroups group=raw
     priority 1
+release alpha
 
     track encodeNhgriDnaseHsChipRawCd4
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase CD4 Raw
-    longLabel NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
     color 120,10,120
-    priority 2
+    subGroups group=raw
     dataVersion ENCODE Oct 2005 Freeze
+    priority 2
+release alpha
 
     track encodeNhgriDnaseHsChipRawHela
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase HeLa Raw
-    longLabel NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
-    color 220,12,132
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
+    color 180,12,140
+    dataVersion Aug 2006
+    subGroups group=raw
     priority 3
-    dataVersion August 2006
+release alpha
+
+    track encodeNhgriDnaseHsChipRawHepG2
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase HepG2 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2 Cells)
+    color 240,12,132
+    dataVersion Sept 2006
+    subGroups group=raw
+    priority 4
+release alpha
 
     track encodeNhgriDnaseHsChipPvalGm06990
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Pval
-    longLabel NHGRI DNaseI-Hypersensitivity P-Value (GM06990 cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990 cells)
     noInherit on
     type bedGraph 4
     maxHeightPixels 128:16:16
@@ -2535,14 +2563,16 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     maxLimit 24.5
     viewLimits 3.1:24.5
     color 80,50,80
-    priority 4
-    dataVersion August 2006
+    priority 5
+    subGroups group=pval
+    dataVersion Aug 2006
+release alpha
 
     track encodeNhgriDnaseHsChipPvalCd4
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase CD4 Pval
-    longLabel NHGRI DNaseI-Hypersensitivity P-Value (CD4+ Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+ Cells)
     type bedGraph 4
     maxHeightPixels 128:16:16
     autoScale off
@@ -2551,14 +2581,16 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     maxLimit 24.5
     viewLimits 3.1:24.5
     color 120,10,120
-    priority 5
-    dataVersion August 2006
+    priority 6
+    subGroups group=pval
+    dataVersion Aug 2006
+release alpha
 
     track encodeNhgriDnaseHsChipPvalHela
-    subTrack encodeNhgriDnaseHsChipRaw
+    subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HeLa Pval
-    longLabel NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3 Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3 Cells)
     type bedGraph 4
     maxHeightPixels 128:16:16
     autoScale off
@@ -2566,13 +2598,84 @@ dataVersion ENCODE Oct 2005 Freeze and August 2006
     minLimit 3.1
     maxLimit 24.5
     viewLimits 3.1:24.5
-    color 220,12,132
-    priority 6
-    dataVersion August 2006
+    color 180,12,140
+    priority 7
+    subGroups group=pval
+    dataVersion Aug 2006
+release alpha
+
+    track encodeNhgriDnaseHsChipPvalHepG2
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase HepG2 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2 Cells)
+    type bedGraph 4
+    maxHeightPixels 128:16:16
+    autoScale off
+    windowingFunction mean
+    minLimit 3.1
+    maxLimit 24.5
+    viewLimits 3.1:24.5
+    color 240,12,132
+    priority 8
+    subGroups group=pval
+    dataVersion Sept 2006
+release alpha
+
+    track encodeNhgriDnaseHsChipGm06990
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase GM069 Chip
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (GM06990, Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
+    color 80,50,80
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=oldChip
+    priority 9
+release alpha
+
+    track encodeNhgriDnaseHsChipCd4
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4 Chip
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
+    color 120,10,120
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=oldChip
+    priority 10
+release alpha
+
+    track encodeNhgriDnaseHsMpssCd4
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4 MS
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
+    color 120,10,120
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=mpss
+    priority 11
+release alpha
+
+    track encodeNhgriDnaseHsMpssCd4Act
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4-act MS
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=mpss
+    priority 12
+release alpha
 
 track encodeTbaAlign
 shortLabel TBA Alignment
-longLabel NHGRI/PSU TBA Alignments
+longLabel TBA Alignments
 group encodeCompGeno
 priority 70.1
 visibility hide
@@ -2592,7 +2695,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeTbaAlignAnno
 shortLabel TBA Alignment Anno
-longLabel NHGRI/PSU TBA Alignments Anno
+longLabel TBA Alignments Anno
 group x
 priority 70.1
 visibility hide
@@ -2615,7 +2718,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeTbaCons
 compositeTrack on
 shortLabel TBA Cons
-longLabel  NHGRI/PSU/UCSC TBA Conservation
+longLabel  TBA Conservation
 group encodeCompGeno
 priority 70.2
 type wig 0.0 1.0
@@ -2657,7 +2760,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeTbaElements
 compositeTrack on
 shortLabel TBA Elements
-longLabel NHGRI/PSU/UCSC TBA Conserved Elements
+longLabel TBA Conserved Elements
 group encodeCompGeno
 priority 70.3
 visibility hide
@@ -2696,7 +2799,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMlaganAlign
 shortLabel MLAGAN Alignment
-longLabel Stanford MLAGAN Alignments
+longLabel MLAGAN Alignments
 group encodeCompGeno
 priority 72.0
 visibility hide
@@ -2716,7 +2819,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMlaganAlignAnno
 shortLabel MLAGAN Alignment Anno
-longLabel Stanford MLAGAN Alignments Anno
+longLabel MLAGAN Alignments Anno
 group x
 priority 72.0
 visibility hide
@@ -2739,7 +2842,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMlaganCons
 compositeTrack on
 shortLabel MLAGAN Cons
-longLabel Stanford MLAGAN Conservation
+longLabel MLAGAN Conservation
 group encodeCompGeno
 priority 72.1
 visibility hide
@@ -2779,7 +2882,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMlaganElements
 compositeTrack on
 shortLabel MLAGAN Elements
-longLabel Stanford MLAGAN Conserved Elements
+longLabel MLAGAN Conserved Elements
 group encodeCompGeno
 priority 72.3
 visibility hide
@@ -2811,7 +2914,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMavidAlign
 shortLabel MAVID Alignment
-longLabel UC Berkeley MAVID Alignments
+longLabel MAVID Alignments
 group encodeCompGeno
 priority 74.1
 visibility hide
@@ -2831,7 +2934,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMavidAlignAnno
 shortLabel MAVID Alignment Anno
-longLabel UC Berkeley MAVID Alignments Anno
+longLabel MAVID Alignments Anno
 group x
 priority 74.1
 visibility hide
@@ -2853,7 +2956,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMavidCons
 compositeTrack on
 shortLabel MAVID Cons
-longLabel UC Berkeley MAVID Conservation
+longLabel MAVID Conservation
 group encodeCompGeno
 priority 74.2
 visibility hide
@@ -2893,7 +2996,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeMavidElements
 compositeTrack on
 shortLabel MAVID Elements
-longLabel UC Berkeley MAVID Conserved Elements
+longLabel MAVID Conserved Elements
 group encodeCompGeno
 priority 74.3
 visibility hide

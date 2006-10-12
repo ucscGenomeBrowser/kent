@@ -8,7 +8,7 @@
 #include "agpGap.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.14 2005/08/05 22:52:30 hiram Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.15 2006/09/29 00:02:18 angie Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ errAbort(
   "agpToFa - Convert a .agp file to a .fa file\n"
   "usage:\n"
   "   agpToFa in.agp agpSeq out.fa freezeDir\n"
-  "Where agpSeq matches a sequence name in in.agp\n"
+  "Where agpSeq matches a sequence name in in.agp (or is \"all\")\n"
   "and seqDir is where program looks for sequence.\n"
   "\n"
   "This is currently a fairly limited implementation.\n"
@@ -53,16 +53,23 @@ static void simpleMultiFillInSequence(boolean preserveCase, char *seqFile,
                         struct agpFrag *agpList, DNA *dna, int dnaSize)
 /* Fill in DNA array with sequences from one multi-record fasta file. */
 {
-struct hash *fragHash = newHash(17);
-struct agpFrag *agp;
-struct dnaSeq *seq;
-FILE *f;
+static struct hash *fragHash = NULL;
+struct agpFrag *agp = NULL;
+struct dnaSeq *seq = NULL;
 int illegals = 0;
 
-f = mustOpen(seqFile, "r");
-while (faReadMixedNext(f, preserveCase, "bogus", TRUE, NULL, &seq))
+if (fragHash == NULL)
     {
-    hashAdd(fragHash, seq->name, seq);
+    struct lineFile *lf = lineFileOpen(seqFile, TRUE);
+    struct dnaSeq *seqList = faReadAllMixedInLf(lf);
+    fragHash = newHash(17);
+    for (seq = seqList;  seq != NULL;  seq = seq->next)
+	{
+	if (!preserveCase)
+	    tolowers(seq->dna);
+	hashAdd(fragHash, seq->name, seq);
+	}
+    lineFileClose(&lf);
     }
 
 for (agp = agpList; agp != NULL; agp = agp->next)
@@ -74,11 +81,11 @@ for (agp = agpList; agp != NULL; agp = agp->next)
     size = agp->fragEnd - agp->fragStart;
     if (agp->strand[0] == '-')
 	reverseComplement(seq->dna + agp->fragStart, size);
-/*
-fprintf(stderr, "dna: %lu, start: %u, size: %d, seqDna: %lu, start: %u, size: %d %s %d\n",
-	(unsigned long) dna, agp->chromStart, dnaSize,
-	(unsigned long) seq->dna, agp->fragStart, size, agp->frag, seq->size);
-*/
+    verbose(3, "dna: %lu, start: %u, size: %d, seqDna: %lu, start: %u, "
+	    "size: %d %s %d\n",
+	    (unsigned long) dna, agp->chromStart, dnaSize,
+	    (unsigned long) seq->dna, agp->fragStart,
+	    size, agp->frag, seq->size);
     if ((agp->chromStart + size) > dnaSize)
 	{
 	warn("frag size %d + dest chromStart %u  = %d > %d dest dna size\n",
@@ -262,6 +269,41 @@ for (agp = agpList; agp != NULL; agp = agp->next)
     }
 }
 
+void agpToFaOne(struct agpFrag **pAgpList, char *agpFile, char *agpSeq,
+		char *seqDir, int lastPos, FILE *f)
+/* Given one sequence's worth of AGP in pAgpList, process it into FASTA
+ * and write to f. */
+{
+DNA *dna = NULL;
+
+slReverse(pAgpList);
+if (lastPos == 0)
+    errAbort("%s not found in %s\n", agpSeq, agpFile);
+dna = needHugeMem(lastPos+1);
+memset(dna, 'n', lastPos);
+dna[lastPos] = 0;
+if (optionExists("simpleMulti"))
+    {
+    simpleMultiFillInSequence(0, seqDir, *pAgpList, dna, lastPos);
+    }
+else if (optionExists("simpleMultiMixed"))
+    {
+    simpleMultiFillInSequence(1, seqDir, *pAgpList, dna, lastPos);
+    }
+else if (optionExists("simple"))
+    {
+    simpleFillInSequence(seqDir, *pAgpList, dna, lastPos);
+    }
+else
+    {
+    gsFillInSequence(seqDir, *pAgpList, dna, lastPos);
+    }
+verbose(2,"Writing %s (%d bases)\n", agpSeq, lastPos);
+faWriteNext(f, agpSeq, dna, lastPos);
+agpFragFreeList(pAgpList);
+}
+
+
 static void agpToFa(char *agpFile, char *agpSeq, char *faOut, char *seqDir)
 /* agpToFa - Convert a .agp file to a .fa file. */
 {
@@ -270,7 +312,8 @@ char *line, *words[16];
 int lineSize, wordCount;
 int lastPos = 0;
 struct agpFrag *agpList = NULL, *agp;
-DNA *dna;
+FILE *f = mustOpen(faOut, "w");
+char *prevChrom = NULL;
 
 verbose(2,"#\tprocessing AGP file: %s\n", agpFile);
 while (lineFileNext(lf, &line, &lineSize))
@@ -281,53 +324,40 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount < 5)
         errAbort("Bad line %d of %s: need at least 5 words, got %d\n",
 		 lf->lineIx, lf->fileName, wordCount);
+    if (! (sameWord("all", agpSeq) || sameWord(words[0], agpSeq)))
+	continue;
+    if (prevChrom != NULL && !sameString(prevChrom, words[0]))
+	{
+	agpToFaOne(&agpList, agpFile, prevChrom, seqDir, lastPos, f);
+	lastPos = 0;
+	}
     if (words[4][0] != 'N' && words[4][0] != 'U')
 	{
 	lineFileExpectAtLeast(lf, 9, wordCount);
-	if (sameWord(words[0], agpSeq))
-	    {
-	    agp = agpFragLoad(words);
-	    // file is 1-based but agpFragLoad() now assumes 0-based:
-	    agp->chromStart -= 1;
-	    agp->fragStart  -= 1;
-	    if (agp->chromStart != lastPos)
-		errAbort("Start doesn't match previous end line %d of %s\n", lf->lineIx, lf->fileName);
-	    if (agp->chromEnd - agp->chromStart != agp->fragEnd - agp->fragStart)
-		errAbort("Sizes don't match in %s and %s line %d of %s\n",
-		    agp->chrom, agp->frag, lf->lineIx, lf->fileName);
-	    slAddHead(&agpList, agp);
-	    lastPos = agp->chromEnd;
-	    }
+	agp = agpFragLoad(words);
+	/* file is 1-based but agpFragLoad() now assumes 0-based: */
+	agp->chromStart -= 1;
+	agp->fragStart  -= 1;
+	if (agp->chromStart != lastPos)
+	    errAbort("Start doesn't match previous end line %d of %s\n",
+		     lf->lineIx, lf->fileName);
+	if (agp->chromEnd - agp->chromStart != agp->fragEnd - agp->fragStart)
+	    errAbort("Sizes don't match in %s and %s line %d of %s\n",
+		     agp->chrom, agp->frag, lf->lineIx, lf->fileName);
+	slAddHead(&agpList, agp);
+	lastPos = agp->chromEnd;
 	}
     else
         {
 	lastPos = lineFileNeedNum(lf, words, 2);
 	}
+    if (prevChrom == NULL || !sameString(prevChrom, words[0]))
+	{
+	freeMem(prevChrom);
+	prevChrom = cloneString(words[0]);
+	}
     }
-slReverse(&agpList);
-if (lastPos == 0)
-    errAbort("%s not found in %s\n", agpSeq, agpFile);
-dna = needHugeMem(lastPos+1);
-memset(dna, 'n', lastPos);
-dna[lastPos] = 0;
-if (optionExists("simpleMulti"))
-    {
-    simpleMultiFillInSequence(0, seqDir, agpList, dna, lastPos);
-    }
-else if (optionExists("simpleMultiMixed"))
-    {
-    simpleMultiFillInSequence(1, seqDir, agpList, dna, lastPos);
-    }
-else if (optionExists("simple"))
-    {
-    simpleFillInSequence(seqDir, agpList, dna, lastPos);
-    }
-else
-    {
-    gsFillInSequence(seqDir, agpList, dna, lastPos);
-    }
-verbose(2,"Writing %d bases to %s\n", lastPos, faOut);
-faWrite(faOut, agpSeq, dna, lastPos);
+agpToFaOne(&agpList, agpFile, prevChrom, seqDir, lastPos, f);
 }
 
 int main(int argc, char *argv[])

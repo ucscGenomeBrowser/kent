@@ -84,25 +84,54 @@ visibility hide
 color 100,50,0
 type bed 4 +
 
+track multiz15way
+shortLabel Conservation (15)
+longLabel 12 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons15way
+yLineOnOff Off
+autoScaleDefault Off
+windowingFunction mean
+summary multiz15waySummary
+frames multiz9wayFrames
+irows on
+speciesCodonDefault dm2
+speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3 droMoj3 droGri2 anoGam1 apiMel2 triCas1
+treeImage phylo/dm2_15way.gif
+
+track phastConsElements15way
+shortLabel Most Conserved (15)
+longLabel PhastCons Conserved Elements (12 Flies, Mosquito, Honeybee, Beetle)
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track multiz12way
 shortLabel Conservation
 longLabel 9 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
 group compGeno
-priority 100
+priority 100.001
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons12way
 yLineOnOff Off
 autoScaleDefault Off
-summary multiz9waySummary
+summary multiz12waySummary
 speciesOrder droSim1 droYak1 droEre1 droAna2 dp3 droVir2 droMoj2 droGri1 anoGam1 apiMel2 triCas1
 
 track phastConsElements12way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements (9 Flies, Mosquito, Honeybee, Beetle)
 group compGeno
-priority 105
+priority 105.001
 visibility hide
 exonArrows off
 showTopScorers 200

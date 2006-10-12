@@ -1,23 +1,24 @@
 #!/usr/bin/perl
+my $usage = 
+    "gbDownloadStep [-verbose] [-ftp-verbose] [-genbank] [-refseq]\n"
+    . "\n"
+    . "Download required genbank and refseq data files.  The result will reflect\n"
+    . "the current state of NCBI ftp site, although only a subset of files will be\n"
+    . "retrieved.\n"
+    . "\n"
+    . "It can be run in an empty directory or one where the script has been\n"
+    . "previously run.  It handles rollovers to new genbank releases automatically.\n"
+    . "This uses the built-in ftp module to avoid problems with error reporting\n"
+    . "in other ftp clients and to implement very strict and safe download\n"
+    . "procedures.\n"
+    . "\n"
+    . "Options\n"
+    . "  -verbose - print details\n"
+    . "  -ftp-verbose - print details of interaction with ftp server\n"
+    . "  -genbank - only update genbank\n"
+    . "  -refseq - only update refseq\n";
 #
-# gbDownloadStep [-verbose] [-ftp-verbose] [-genbank] [-refseq]
-#
-# Download required genbank and refseq data files.  The result will reflect
-# the current state of NCBI ftp site, although only a subset of files will be
-# retrieved.
-#
-# It can be run in an empty directory or one where the script has been
-# previously run.  It handles rollovers to new genbank releases automatically.
-# This uses the built-in ftp module to avoid problems with error reporting
-# in other ftp clients and to implement very strict and safe download
-# procedures.
-#
-# -verbose - print details
-# -ftp-verbose - print details of interaction with ftp server
-# -genbank - only update genbank
-# -refseq - only update refseq
-#
-# $Id: gbDownloadStep,v 1.9 2006/08/16 23:09:38 markd Exp $
+# $Id: gbDownloadStep,v 1.10 2006/10/07 20:47:15 markd Exp $
 #
 
 use strict;
@@ -29,41 +30,27 @@ use Net::FTP;
 use gbCommon;
 use gbFtp;
 
+my $useAsn1 = 0;  # download ASN.1 files instead of GBFF
+
 # Constants
 my $FTP_HOST = "ftp.ncbi.nih.gov";
 
 # other globals
 my $tmpDir = "tmp";
 
-# parse the genbank version from the README.genbank file
-#  - readme - file to parse
-sub parseGenBankVer($) {
-    my($readme) = @_;
-
-    open(FH, $readme) || die("can't open $readme");
-    my($line, $version);
-    while (defined($line = <FH>) && !defined($version)) {
-        if ($line =~ /^GenBank Flat File Release ([0-9.]+)/) {
-            $version = $1;
-        }
-    }
-    close(FH) || die("close failed");
-    if (!defined($version)) {
-        die("can't parse GenBank release from $readme");
-    }
-    return $version;
-}
-
-# determine of version of GenBank on the NCBI server by parsing the
-# README file.
+# determine of version of GenBank on the NCBI server from the 
+# GB_Release_Number file.
 sub getGenBankVer() {
     ftpOpen();;
-    my $remReadme = "genbank/README.genbank";
-    my $locReadme = "$tmpDir/README.genbank";
-    unlink $locReadme;
-    ftpSafeGet($remReadme, $locReadme);
-    my $version = parseGenBankVer($locReadme);
-    unlink($locReadme);
+    my $remRelNum = $useAsn1 ? "ncbi-asn1/GB_Release_Number"
+        : "genbank/GB_Release_Number";
+    my $locRelNum = "$tmpDir/GB_Release_Number";
+    unlink $locRelNum;
+    ftpSafeGet($remRelNum, $locRelNum);
+    my $version = readFile($locRelNum);
+    chomp $version;
+    $version .= ".0";
+    unlink($locRelNum);
     return $version;
 }
 
@@ -154,28 +141,32 @@ sub downloadOrCheckDaily($$$) {
 # files.
 sub updateGenBank() {
     my($version) = getGenBankVer();
-    my $fullRE = qr/(^gb.*\.seq\.gz$)|(^.*\.txt$)|(^README.*$)|(^gb*\.txt\.gz$)|(^gbacc\.idx\.gz$)/;
-    my $dailyRE = qr/^nc.*\.flat\.gz$/;
-    my $fullExcludeRE = undef;
-
+    my($fullRE, $dailyRE, $fullExcludeRE, $ftpDir);
+    if ($useAsn1) {
+        $ftpDir = "ncbi-asn1";
+        $fullRE = qr/(^gb.*\.aso\.gz$)|(^README.*$)|(^GB_Release_Number$)/;
+        $dailyRE= qr/^nc.*\.aso\.gz$/;
+    } else {
+        $ftpDir = "genbank";
+        $fullRE = qr/(^gb.*\.seq\.gz$)|(^README.*$)|(^gbacc\.idx\.gz$)|(^GB_Release_Number$)/;
+        $dailyRE= qr/^nc.*\.flat\.gz$/;
+    }
     ftpOpen();
 
     my $genBankDir = "data/download/genbank.$version";
 
-    if (! -e "$genBankDir/full.md5") {
-        # get the full directory.  Check summing the files takes enough
-        # time that the conection may time out, so reopen.
-        downloadOrCheckFull(0, "genbank", $genBankDir, $fullRE, $fullExcludeRE);
+    # Either get or check full release.  Explict get releases notes from flat-file dir,
+    # as they are not in the asn1 directory
+    my $justCheck = -e "$genBankDir/full.md5";
 
-        ftpOpen();  # reopen
-    } else {
-        # just check existance and size
-        downloadOrCheckFull(1, "genbank", $genBankDir, $fullRE, $fullExcludeRE);
-    }
+    downloadOrCheckFull($justCheck, $ftpDir, $genBankDir, $fullRE, $fullExcludeRE);
+    ftpGetOrCheck($justCheck, "genbank/gbrel.txt", "$genBankDir/gbrel.txt");
+
+    # Check summing the files takes enough time that the conection may time out, so reopen.
+    ftpOpen();
 
     # now get or verify dailies
-    downloadOrCheckDaily("genbank/daily-nc", 
-                         "$genBankDir/daily-nc", $dailyRE);
+    downloadOrCheckDaily("$ftpDir/daily-nc", "$genBankDir/daily-nc", $dailyRE);
 
     ftpClose();
     return $version;
@@ -185,24 +176,24 @@ sub updateGenBank() {
 # download the full release. Get new, non-cumulative daily files.  
 sub updateRefSeq() {
     my($version) = getRefSeqVer();
-    my $fullRE = qr/(^complete.+.rna\.gbff\.gz$)/;
-    my $dailyRE = qr/(^rsnc.*\.gbff\.gz$)/;
+    my($fullRE, $dailyRE);
+    if ($useAsn1) {
+        $fullRE = qr/(^complete.+\.bna\.gz$)/;
+        $dailyRE = qr/(^rsnc.*\.bna\.gz$)/;
+    } else {
+        $fullRE = qr/(^complete.+.rna\.gbff\.gz$)/;
+        $dailyRE = qr/(^rsnc.*\.gbff\.gz$)/;
+    }
 
     ftpOpen();
 
     my $refSeqDir = "data/download/refseq.$version";
+    my $justCheck = -e "$refSeqDir/release/complete/full.md5";
 
-    if (! -e "$refSeqDir/release/complete/full.md5") {
-        # get the full directory.  Check summing the files could take enough
-        # time that the conection maybe time out, so reopen.
-        downloadOrCheckFull(0, "refseq/release/complete",
-                            "$refSeqDir/release/complete", $fullRE);
-        ftpOpen(); # reopen
-    } else {
-        # just check existance and size
-        downloadOrCheckFull(1, "refseq/release/complete",
-                            "$refSeqDir/release/complete", $fullRE);
-    }
+    downloadOrCheckFull($justCheck, "refseq/release/complete", "$refSeqDir/release/complete", $fullRE);
+
+    # Check summing the files takes enough time that the conection may time out, so reopen.
+    ftpOpen();
 
     # Get or verify dailies. We just download all dailiess, even if they are
     # before cummulative download.  It's too risky to rely on the times.
@@ -236,7 +227,7 @@ if (!($main::genbankUpd || $main::refseqUpd)) {
 }
 
 if ($#ARGV >= 0) {
-    die("Wrong \# args: gbDownloadStep [-verbose] [-ftp-verbose] [-genbank] [-refseq]");
+    die("Wrong # args: $usage");
 }
 
 beginTask("build", "download");

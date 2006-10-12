@@ -1126,6 +1126,7 @@ getSeqs.csh $(path1)
 
 # AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2005-07-22, hartera)
 # REMAKE THIS TRACK USING chrUn AND chrNA SCAFFOLDS (DONE, 2005-08-19, hartera)
+# UPDATED (2006-09-27) - see separate section, UPDATE AFFY ZEBRAFISH TRACK.
     # array chip sequences already downloaded for danRer1
     ssh hgwdev
     cd /projects/compbio/data/microarray/affyZebrafish
@@ -2711,7 +2712,7 @@ cat << '_EOF_' > template
     pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
             rawNAandUn.psl  bacNAandUnScafs.psl /dev/null >& pslRepsNAandUn.log
     # took 18 minutes
-    # lift results, sort and filter
+    # lift results:
     liftUp bacEnds.liftedChroms.psl /cluster/data/danRer3/jkStuff/liftAll.lft \
            warn bacEndsChroms.psl
     liftUp bacEnds.liftedNAandUn.psl \
@@ -6449,7 +6450,83 @@ CREATE TABLE ens38Zfish (
     # 45 of these left
     # ENSDART00000009971 has only 48% Identity to Q5DTD0. maps to Q58EF8 on
     # Ensembl web page.
-    # Use ensBlastp90.
+    # Check 10 alignmnts with >= 95% and 10 that have >= 90% and < 95%
+    cd /cluster/data/danRer3/bed/ensGenes/blastp/runAll2/out
+    # ens38Blastp.out has the alignments in NCBI format
+    # 95-96% 226
+    # 96-97% 322
+    # 97-98% 526
+    # 98-99% 1333
+    # 99-100% 9503 (both inclusive)
+    # lower score can be due to shorter query and target
+# for >= 95% identity (ensBlastp table in test db). Get BlastP results 
+# and check Ensembl. All Ensembl records show the UniProt ID given below 
+# except where noted. 
+# Query  Target  Identity qLen qAli tLen tAli  E-value  Score  misMatch Comment
+# ENSDART00000012253 Q9W6E8 99.51 609 609 609 609 0   978  3      
+# ENSDART00000013114 Q6NYT1 99.63 267 267 267 267 4e-143 502 1  
+# ENSDART00000067816 Q6NZZ8 95.78  433 433  471 460 0 838 2 query doesn't 
+# begin with Met, no associated UniProt ID in Ensembl
+# ENSDART00000018931 Q9DG41 99.42 346 346 552 346 0 709 2 query is partial, 
+# doesn't begin with Met
+# ENSDART00000023846 Q7ZUQ4 98.33 300 300 625 300 1e-179 624 5 query doesn't
+# begin with Met
+# ENSDART00000006095 Q6P2V4 99.32 443 443 443 443 0 941 3
+# ENSDART00000039597 Q5G9L7 100 146 146 146 146 3e-81 295 0 100% coverage 
+# ENSDART00000028930 Q90442 97.53 84 81 85 81 5e-42 164 2
+# ENSDART00000028255 Q8JHY2 100 63 63 63 63 2e-32 132 0
+# ENSDART00000042947 Q4QRH1 95.22 1849 456 479 452 0 808 10 alignment length =
+# 460 bp, Ensembl doesn't show a UniProt protein ID for this.
+# Maybe there is a coverage criterion.
+# >= 90% and < 95% identity from ensBlastP90 table in test db:
+#  There are 705 of these. 11911 have identity >= 95%
+# Query  Target  Identity qLen qAli tLen tAli  E-value  Score  misMatch Comment
+# ENSDART00000031211 Q6R5A4 94.21 779 779 846 789 0 1266 38  (gapOpen 6) 
+# bases 66-846 of target is aligning. Ensembl does not have a UniProt ID 
+# for this transcript.
+# ENSDART00000028390 Q5TKR3 90.87 241 240 243 241 1e-125 444 21 (gapOpen 1) 
+# ENSDART00000053312 Q5SYD9 92.64 325 325 322 322 8e-175 608 19 (gapOpen 2)
+# ENSDART00000056703 Q5CZR2 91.02 323 323 323 323 7e-124 605 29 (gapOpen 0)
+# Ensembl has no UniProt ID for this transcript. 91 % ID to NP_001013324.1,
+# also 323 bp.
+# ENSDART00000044490 Q3ZMH2 90.74 992 985 1082 994   0  1682 64 (gapOpen 7)
+# Ensembl has no UniProt ID, just InterPro domains.
+# ENSDART00000031487 Q5RHD6 92.81 320 320 319 319 7e-172 598 22 (gapOpen 1)
+# Ensembl has no UniProt ID, just InterPro domain.
+# ENSDART00000020233 Q6DHI1 91.72 298 298 299 299 6e-145 508 18 (gapOpen 2) 
+# ENSDART00000061435 Q6PBV8 93.72 76 76 76 76 2e-33 135 5 (gapOpen 0)
+# ENSDART00000056959 Q4V9F6 94.21 433 426 440 431 0 728 18 (gapOpen 2)
+# only InterPro domain given for Ensembl, no UniProt ID. 
+# ENSDART00000040220 Q504G5 90.12 172 172 174 172 3e-100 358 17 (gapOpen 0)
+# only InterPro domain given for Ensembl, no UniProt ID.
+# ENSDART00000066247 Q58EK5 90.08 767 231 485 251 3e-124 441 3 (gapOpen 3)
+# only InterPro domain given for Ensembl, no UniProt ID.
+    # convert to PSL so can use pslReps to filter on coverage. 
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/ensGenes/blastp/runAll2/out
+    nice blastToPsl ens38Blastp.out ens38vsUniProtBlastp.psl &
+    mkdir test
+    cd test
+    pslReps -singleHit -minAli=0.90 ../ens38vsUniProtBlastp.psl \
+        ens38vsUniProtMinAli90.psl /dev/null
+    # 539 of the Ensembl IDs were not in ensBlastp
+    pslReps -singleHit -nearTop=0 -minAli=0.90 ../ens38vsUniProtBlastp.psl \
+        ens38vsUniProtMinAli90_0.psl /dev/null
+    # 538 of the Ensembl IDs were not in ensBlastp
+    pslReps -singleHit -nearTop=0 -minAli=0.90 -minCover=0.80 \
+            ../ens38vsUniProtBlastp.psl \
+        ens38vsUniProtMinAli90minCov80.psl /dev/null
+    # 357 of the Ensembl IDs were not in ensBlastp90
+    # 747 lost from psl than in ensBlastp90
+    pslReps -singleHit -nearTop=0 -minAli=0.90 -minCover=0.40 \
+            ../ens38vsUniProtBlastp.psl \
+        ens38vsUniProtMinAli90minCov40.psl /dev/null
+    # 459 were not in ensBlastp90
+    # 217 lost from psl but in ensBlastp90
+    ssh hgwdev  # kkstore02
+    cd /cluster/data/danRer3/bed/ensGenes
+    mkdir alignments
+    cd alignments
 # Add a proteinID column to the ensGene table:
     ssh hgwdev
     cd /cluster/data/danRer3/bed/ensGenes
@@ -7692,6 +7769,11 @@ exit 0
     # Loaded 21196 elements of size 15
     # add trackDb.ra entry at trackDb/zebrafish level
 
+    # 2006-08-31 Received Wild Type absolute expression values.
+    # wtr.txt.gz to /projects/compbio array dir.
+    cd /projects/compbio/data/microarray/zebrafishWT
+    gunzip wtr.txt.gz
+    
 ###########################################################################
 # BUILD GENE SORTER TABLES (AKA FAMILY BROWSER) 
 # (DONE, 2006-06-08 - 2006-06-12, hartera)
@@ -7756,3 +7838,140 @@ exit 0
    hgClusterGenes danRer3 ensGene ensIsoforms ensCanonical
    # Got 22877 clusters, from 32143 genes in 28 chromosomes
    # There are also 22877 genes in the ensGtp table so this is in agreement.
+
+#######################################################################
+# UPDATE AFFY ZEBRAFISH TRACK USING BLAT WITHOUT -mask OPTION AND 
+# USING -repeats OPTION AND DIFFERENT FILTERING TO REMOVE SHORT 
+# ALIGNMENTS (DONE, 2006-09-27, hartera)
+# With the previous version of this track, QA found a number of short 
+# alignments of <= 30 bp and there are a number in the <= 50bp range.
+# These do not seem to be meaningful so filtering was changed to try to 
+# remove these alignments while retaining meaningful alignments.
+# pslCDnaFilter was used with the same settings as used for the
+# Genbank EST alignments for zebrafish. 
+# Also use -minIdentity=90 for Blat instead of -minIdentity=95 since as the
+# higher minIdentity is causing alignments to be dropped that should not be.
+# Blat's minIdentity seems to be more severe than that for pslReps or 
+# pslCDnaFilter as it takes insertions and deletions into account.
+# These are Jim's recommendations. 
+    # Array chip sequences already downloaded for danRer1
+    ssh hgwdev
+    cd /projects/compbio/data/microarray/affyZebrafish
+    mkdir -p /san/sanvol1/scratch/affy
+    cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+       /san/sanvol1/scratch/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer3
+    # remove old link and create new one
+    rm /cluster/data/danRer3/bed/affyZebrafish
+    mkdir -p /cluster/data/danRer3/bed/affyZebrafish.2006-09-27
+    ln -s /cluster/data/danRer3/bed/affyZebrafish.2006-09-27 \
+          /cluster/data/danRer3/bed/affyZebrafish
+
+    # Align sequences on the pitakluster. Scaffolds were aligned for NA
+    # and Un and lifted to chrom level afterwards. Chroms 1-25 and M
+    # were aligned as ~5 Mb chunks.
+
+    ssh pk
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    mv /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/scaffold*.fa \
+       /san/sanvol1/scratch/danRer3/
+    ls -1 /san/sanvol1/scratch/affy/Zebrafish_consensus.fa > affy.lst
+    foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/*.fa)
+       ls -1 $f >> genome.lst
+    end
+    wc -l genome.lst
+    # 15149 genome.lst
+    # for output:
+    mkdir -p /san/sanvol1/scratch/danRer3/affy/psl
+    # use -repeats option to report matches to repeat bases separately 
+    # to other matches in the PSL output.
+    echo '#LOOP\n/cluster/bin/x86_64/blat -fine -repeats=lower -minIdentity=90 -ooc=/san/sanvol1/scratch/danRer3/danRer3_11.ooc $(path1) $(path2) {check out line+ /san/sanvol1/scratch/danRer3/affy/psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst affy.lst template.sub para.spec
+    para create para.spec
+    para try, check, push ... etc.
+    para time
+# Completed: 15149 of 15149 jobs
+#CPU time in finished jobs:      34672s     577.87m     9.63h    0.40d  0.001y
+#IO & Wait Time:                 41580s     692.99m    11.55h    0.48d  0.001 y
+#Average job time:                   5s       0.08m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             145s       2.42m     0.04h    0.00d
+#Submission to last job:          1400s      23.33m     0.39h    0.02d
+
+    # need to do pslSort and lift up 
+    ssh pk
+    cd /san/sanvol1/scratch/danRer3/affy
+    # Do sort, liftUp and then best in genome filter. 
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # Previously did not use minCover since a lot of sequence is in 
+    # Un and NA so genes may be split up so good to see all alignments.
+    # However, found a number of short alignments of <= 50 bp. These are
+    # not meaningful so maybe need to use minCover. If increased too much,
+    # then hits on poor parts of the assembly will be missed. 
+    # use pslCDnaFilter with the same parameters as used for zebrafish
+    # Genbank EST alignments. 
+    pslSort dirs raw.psl tmp psl
+    pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
+       -ignoreNs -bestOverlap -minId=0.95 -minCover=0.15 raw.psl contig.psl
+#                         seqs    aligns
+#             total:     14886   830753
+# drop minNonRepSize:     2753    745330
+#     drop minIdent:     2645    38916
+#     drop minCover:     2472    10516
+#        weird over:     384     1529
+#        kept weird:     308     403
+#    drop localBest:     2559    17395
+#              kept:     14494   18596
+# 97.3% were kept. 
+# There are 15502 Affy sequences originally aligned so there are now
+# 93.5% remaining.
+    
+    # lift up the coordinates to chrom level
+    #pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    # lift up chrom contigs to chrom level
+    cat /cluster/data/danRer3/jkStuff/liftAll.lft \
+     /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft \
+     > allLift.lft
+    liftUp affyZebrafish.psl allLift.lft warn contig.psl
+    # Got 30168 lifts in allLift.lft
+    # Lifting contig.psl
+
+    # rsync these psl files 
+    rsync -a --progress /san/sanvol1/scratch/danRer3/affy/*.psl \
+         /cluster/data/danRer3/bed/affyZebrafish/
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.tmp
+    mv affyZebrafish.psl.tmp affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    hgsql -e 'drop table affyZebrafish;' danRer3
+    hgLoadPsl danRer3 affyZebrafish.psl
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+       /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /gbdb/hgFixed/affyProbes
+    # these sequences were loaded previously so no need to reload. 
+    hgLoadSeq -abbr=Zebrafish: danRer3 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # check number of short alignments:
+    hgsql -e \
+     'select count(*) from affyZebrafish where (qEnd - qStart) <= 50;' danRer3
+    # 6 
+    # for previous filtered set, there were 1195 alignments of <= 50 bp so
+    # this has improved. 
+    hgsql -e 'select count(distinct(qName)) from affyZebrafish;' danRer3
+    # 14494
+    # Previously 14335 distinct affy sequences were aligned. Many of the 
+    # short alignments may also have longer alignments to different regions 
+    # of the genome that are good.

@@ -77,7 +77,7 @@ set pbDb3 hg16,hg17,hg18
 set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 # Define databases that support CCDS
-set ccdsDb hg17
+set ccdsDb hg17,mm8
 
 # Magic for tables split between chromosomes
 set split splitPrefix=chr%_
@@ -1412,6 +1412,7 @@ identifier flyBaseGeneId external=FlyBase
     $dm.fbSynonym.geneId
     $dm.fbTranscript.geneId minCheck=0.95
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
+    dm2.flyBase2004Xref.fbgn minCheck=0.90
     $gbd,!hg17,!hg18,!danRer3,!mm5,!mm6,!mm7,!mm8,!rn3,!rn4,!ce2,!sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
@@ -1606,12 +1607,6 @@ identifier ensemblEstTranscriptId external=Ensembl dependency
     $gbd.ensEstGtp.transcript chopAfter=.
     $gbd.ensEstPep.name chopAfter=.
 
-# HPRD Identifiers
-
-identifier hprdId external=HPRD dependency
-"HPRD ID"
-    $hg.knownToHprd.value
-
 # H-Invitational Database Identifiers
 
 identifier hinvTranscriptId external=H-INV dependency
@@ -1723,7 +1718,8 @@ identifier snpAnnotations126
 "SNP annotations"
     hg18.snp126.name dupeOk
     hg18.snp126Exceptions.name 
-    hg18.snp126orthoMixed.name
+    hg18.snp126Seq.name minCheck=0.98
+    hg18.snp126orthoPanTro2RheMac2.name 
 
 # Other NCBI Identifiers
 

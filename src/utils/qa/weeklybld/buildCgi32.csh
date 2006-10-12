@@ -65,11 +65,6 @@ if (-e hgSession) then
     rm hgSession
 endif    
 
-echo "the hgCustom cgi is to be released soon, then remove the next line:"
-if (-e hgCustom) then
-    rm hgCustom
-endif    
-
 #echo "debug: skipping scp"
 scp -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/
 

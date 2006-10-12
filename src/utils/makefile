@@ -36,24 +36,10 @@ clean:
 
 SCRIPT_FILES = \
         agpToLift \
-	blastz-make-joblist \
-	blastz-normalizeLav \
-	blastz-run-ucsc \
-	doBlastzChainNet.pl \
-	doHgNearBlastp.pl \
-	doRepeatMasker.pl \
-	doSameSpeciesLiftOver.pl \
 	dumpDb.pl \
-	HgAutomate.pm \
-	HgRemoteScript.pm \
-	HgStepManager.pm \
         iSync \
         lodToBedScore \
-	makeGenomeDb.pl \
-	makePushQSql.pl \
-	mkMafFrames.pl \
-	simplePartition.pl \
-	partitionSequence.pl
+	mkMafFrames.pl
 
 # List of directories to build
 USE_DIRS = $(DIRS)

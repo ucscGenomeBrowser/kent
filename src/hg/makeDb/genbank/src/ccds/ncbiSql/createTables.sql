@@ -160,3 +160,37 @@ GO
 ALTER TABLE [dbo].[Interpretations] ADD 
 	CONSTRAINT [DF_Interpretations_reftrack_uid] DEFAULT (0) FOR [reftrack_uid]
 GO
+
+CREATE TABLE [dbo].[StatisticsTypes] (
+        [statistics_type_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
+        [statistics_type] [varchar] (20) COLLATE Latin1_General_BIN NOT NULL 
+) ON [PRIMARY]
+go
+
+CREATE TABLE [dbo].[CcdsStatistics] (
+        [statistics_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION NOT NULL ,
+        [statistics_type_uid] [int] NOT NULL ,
+        [tax_id] [int] NOT NULL ,
+        [ncbi_build_number] [int] NOT NULL ,
+        [ncbi_build_version] [int] NOT NULL ,
+        [statistics_html] [text] COLLATE Latin1_General_BIN NULL
+) ON [PRIMARY]
+go
+
+CREATE TABLE [dbo].[Builds] (
+        [build_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION NOT NULL ,
+        [tax_id] [int] NOT NULL ,
+        [ncbi_build_number] [int] NOT NULL ,
+        [ncbi_build_version] [int] NOT NULL
+) ON [PRIMARY]
+go
+
+CREATE TABLE [dbo].[BuildQualityTests] (
+        [build_uid] [int] NOT NULL ,
+        [qa_analysis_id] [int] NOT NULL ,
+        [is_required] [bit] NOT NULL ,
+        [acc_rejection_uid] [int] NOT NULL ,
+        [val_description] [varchar] (64) COLLATE Latin1_General_BIN NULL
+) ON [PRIMARY]
+go
+

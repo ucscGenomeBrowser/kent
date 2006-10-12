@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.314 2006/09/25 23:27:49 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.318 2006/10/09 20:45:00 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -59,6 +59,15 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 radioButton(filterTypeVar, filterTypeVal, "include");
 if (none)
     radioButton(filterTypeVar, filterTypeVal, "none");
+}
+
+void tfbsConsSitesUi(struct trackDb *tdb)
+{
+float tfbsConsSitesCutoff;
+printf("<BR><B>Z score cutoff (default 2.33, minimum 1.64):&nbsp;</B>");
+tfbsConsSitesCutoff =
+    sqlFloat(cartUsualString(cart, "tfbsConsSitesCutoff", "2.33"));
+cgiMakeDoubleVar("tfbsConsSitesCutoff",tfbsConsSitesCutoff,5);
 }
 
 void stsMapUi(struct trackDb *tdb)
@@ -165,6 +174,15 @@ void snp125Ui(struct trackDb *tdb)
  * variables to their defaults. */
 int i = 0;
 char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
+struct sqlConnection *conn = hAllocConn();
+
+if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
+    {
+    snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
+    printf("<BR><B>Include Chimp (panTro2) state and observed alleles in name: </B>&nbsp;");
+    cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
+    printf("<BR>");
+    }
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
 printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
@@ -299,11 +317,8 @@ else if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
                             snp125ColorLabelSize, snp125MolTypeCart[i], autoSubmit);
         }
     }
-
 printf("<BR>\n");
 printf("<HR>\n");
-
-
 }
 
 void snpUi(struct trackDb *tdb)
@@ -2400,6 +2415,8 @@ else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
 else if (startsWith("retroposons", track))
     retroposonsUi(tdb);
+else if (sameString(track, "tfbsConsSites"))
+    tfbsConsSitesUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */

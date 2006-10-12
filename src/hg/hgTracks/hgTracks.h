@@ -332,6 +332,9 @@ int orientFromChar(char c);
 char charFromOrient(int orient);
 /* Return + or - in place of 1 or -1 */
 
+enum trackVisibility estimateVisibility(struct track *tg);
+/* Return estimate of what visibility will be without setting it. */
+
 enum trackVisibility limitVisibility(struct track *tg);
 /* Return default visibility limited by number of items. */
 
