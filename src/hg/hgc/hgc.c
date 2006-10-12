@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1137 2006/10/10 16:18:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1137.2.1 2006/10/12 19:48:46 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11317,8 +11317,34 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
+long getSnpOffset(struct snp snp, int version)
+/* do a lookup in the snpSeq for the offset */
+{
+char query[256];
+char **row;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char tableName[64];
+long offset = 0;
+
+safef(tableName, sizeof(tableName), "snp%dSeq", version);
+if (!hTableExists(tableName))
+    return -1;
+safef(query, sizeof(query), "select file_offset from %s where name='%s' and chrom = '%s'", 
+      tableName, snp.name, snp.chrom);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+   return -1;
+offset = sqlUnsigned(row[0]);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return offset;
+}
+
+
 char *getSnpSeqFile(struct snp snp, int version)
-/* tablename hard-coded */
+/* do a lookup in the snpExtFile for the filename */
 {
 char query[256];
 char **row;
@@ -11327,10 +11353,10 @@ struct sqlResult *sr = NULL;
 char *fileName = NULL;
 char tableName[64];
 
-safef(tableName, sizeof(tableName), "snp%dSeq", version);
+safef(tableName, sizeof(tableName), "snp%dExtFile", version);
 if (!hTableExists(tableName))
     return "ERROR";
-safef(query, sizeof(query), "select file from %s where name='%s'", tableName, snp.name);
+safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, snp.chrom);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11340,6 +11366,11 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return fileName;
 }
+
+
+
+
+
 
 void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2)
 {
@@ -11405,10 +11436,20 @@ int len3 = 0;
 int start = 0;
 int end = 0;
 
+long offset = 0;
+
 fileName = getSnpSeqFile(snp, version);
 if (sameString(fileName, "ERROR"))
     return;
+
+offset = getSnpOffset(snp, version);
+if (offset == -1) 
+    return;
+
 lf = lineFileOpen(fileName, TRUE);
+lineFileSeek(lf, offset, SEEK_SET);
+/* skip the header line */
+lineFileNext(lf, &line, &lineSize);
 
 while (lineFileNext(lf, &line, &lineSize))
     {
@@ -11422,6 +11463,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	gotVar = TRUE;
 	variation = cloneString(line);
 	}
+    else if (lineSize == 1)
+        break;
     }
 lineFileClose(&lf);
 
