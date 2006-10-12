@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.102 2006/10/12 18:03:10 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.103 2006/10/12 22:50:52 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -602,26 +602,23 @@ if(!feelingLucky)
 gfFileCacheFree(&tFileCache);
 }
 
-void askForSeq()
+void askForSeq(char *organism, char *db)
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-char *db = NULL; 
+//char *db = NULL; 
 struct serverTable *serve = NULL; //findServer(db, FALSE);
-char *organism = NULL; 
+//char *organism = NULL; 
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
-char *onChangeText = "onchange=\"document.orgForm.org.value = "
-    " document.mainForm.org.options[document.mainForm.org.selectedIndex].value; "
-    " document.orgForm.seqFile.value = document.mainForm.seqFile.value; "
-    " document.orgForm.userSeq.value = document.mainForm.userSeq.value; "
-    " document.orgForm.db.value = 0; "
-    " document.orgForm.submit();\"";
+char *onChangeText = "onchange=\""
+    " document.mainForm.submit();\"";
+
 char *userSeq = NULL;
 
-getDbAndGenome(cart, &db, &organism);
+//getDbAndGenome(cart, &db, &organism);
 serve = findServer(db, FALSE);
 
 /* dump custom tracks if assembly changes */
@@ -638,6 +635,7 @@ printf(
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
 "<H2>BLAT Search Genome</H2>\n");
 cartSaveSession(cart);
+puts("\n");
 puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
 printf("<TD ALIGN=CENTER>Genome:</TD>");
 printf("<TD ALIGN=CENTER>Assembly:</TD>");
@@ -670,7 +668,7 @@ printf("</TR>\n<TR>\n");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
 printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=submit>\n");
 printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm feeling lucky\">\n");
-printf("<INPUT TYPE=RESET NAME=Reset VALUE=clear>\n");
+printf("<INPUT TYPE=SUBMIT NAME=Clear VALUE=clear>\n");
 printf("</TD>\n");
 printf("</TR>\n<TR>\n"); 
 puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
@@ -700,16 +698,6 @@ puts("</TD></TR></TABLE>\n");
 
 
 printf("</FORM>\n");
-
-printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
-       "<input type=\"hidden\" name=\"db\" value=\"\">\n"
-       "<input type=\"hidden\" name=\"org\" value=\"\">\n"
-       "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
-       "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
-       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n");
-cartSaveSession(cart);
-cartSetString(cart, "db", db);
-puts("</FORM>");
 
 webNewSection("About BLAT");
 printf( 
@@ -750,24 +738,40 @@ void doMiddle(struct cart *theCart)
 {
 char *userSeq;
 char *db, *organism;
-char *showPage = FALSE;
+boolean orgChange = FALSE;
+boolean clearUserSeq = cgiBoolean("Clear");
 
 cart = theCart;
 dnaUtilOpen();
-getDbAndGenome(cart, &db, &organism);
+
+organism = cgiOptionalString("org");
+orgChange = differentStringNullOk(organism, hashFindVal(oldVars, "org"));
+if (orgChange)
+    {
+    db = hDefaultDbForGenome(organism);
+    cartSetString(cart, "db", db);
+    }
+else
+    {
+    getDbAndGenome(cart, &db, &organism);
+    }
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
-userSeq = cartOptionalString(cart, "userSeq");
-if(userSeq != 0 && userSeq[0] == '\0')
+if (clearUserSeq)
+    {
+    cartSetString(cart, "userSeq", "");
+    cartSetString(cart, "seqFile", "");
+    }
+userSeq = cartUsualString(cart, "userSeq", "");
+if (isEmpty(userSeq))
     {
     userSeq = cartOptionalString(cart, "seqFile");
     }
-showPage = cartOptionalString(cart, "showPage");
-if(userSeq == NULL || userSeq[0] == '\0' || showPage)
+if (isEmpty(userSeq) || orgChange)
     {
     cartWebStart(theCart, "%s BLAT Search", organism);
-    askForSeq();
+    askForSeq(organism,db);
     cartWebEnd();
     }
 else 
@@ -778,7 +782,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "type", "userSeq", "seqFile", "showPage", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
