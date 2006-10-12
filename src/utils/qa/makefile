@@ -45,6 +45,7 @@ install:
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
+	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
 	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
