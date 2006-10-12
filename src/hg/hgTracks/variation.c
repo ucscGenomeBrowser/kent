@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.112 2006/10/11 17:54:28 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.113 2006/10/12 03:03:36 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -312,7 +312,7 @@ while(snpItem!=NULL && orthoItem!=NULL)
     {
     /* check to see that we're not at the end of either list and that
      * the two list elements represent the same human position */
-    while ( snpItem!=NULL && orthoItem!=NULL && (cmp = snpOrthoCmp(snpItem, orthoItem))!=0 )
+    while ( snpItem!=NULL && orthoItem!=NULL && (cmp = snpOrthoCmp(&snpItem, &orthoItem))!=0 )
 	if (cmp<0)
 	    snpItem = snpItem->next;
 	else if (cmp>0)
