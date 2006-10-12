@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.318 2006/10/09 20:45:00 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.319 2006/10/12 18:47:53 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -179,7 +179,7 @@ struct sqlConnection *conn = hAllocConn();
 if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
     {
     snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
-    printf("<BR><B>Include Chimp (panTro2) state and observed alleles in name: </B>&nbsp;");
+    printf("<BR><B>Include Chimp (panTro2) state and observed human alleles in name: </B>&nbsp;");
     cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
     printf("<BR>");
     }
