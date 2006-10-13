@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1140 2006/10/12 20:04:43 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1141 2006/10/13 04:49:36 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11352,11 +11352,15 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char *fileName = NULL;
 char tableName[64];
+char *chromName = cloneString(snp.chrom);
 
 safef(tableName, sizeof(tableName), "snp%dExtFile", version);
 if (!hTableExists(tableName))
     return "ERROR";
-safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, snp.chrom);
+
+stripString(chromName, "_random");
+
+safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, chromName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -12411,6 +12415,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
+printSnpAlignment2(snpAlign, 125);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
