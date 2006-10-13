@@ -16,7 +16,7 @@ my $usage =
     . "  -mkOrganismList - update the organism list\n"
     . "  -verbose - print details\n";
 #
-# $Id: gbProcessStep,v 1.9 2006/10/07 20:47:16 markd Exp $
+# $Id: gbProcessStep,v 1.10 2006/10/13 17:24:19 markd Exp $
 #
 use strict;
 use warnings;
@@ -70,7 +70,7 @@ sub renameOutFiles($$@) {
     return @newFiles;
 }
 
-# process a set of sequencesa
+# process a set of sequences
 sub processSeqs($$$@) {
     my($type, $outDir, $srcDb, @gbFiles) = @_;
     prMsg("processing $type $outDir");
@@ -164,9 +164,9 @@ sub processGenBankRel($) {
     if (! -e "$procDir/mrna.md5") {
         # build list of files
         my @gbFiles = ();
-        my $downFiles = (glob("$downDir/gb*.aso.gz"),
+        my @downFiles = (glob("$downDir/gb*.aso.gz"),
                          glob("$downDir/gb*.seq.gz"));
-        foreach my $gbFile ($downFiles) {
+        foreach my $gbFile (@downFiles) {
             if (!($gbFile =~ $gbMRnaSkipRE)) {
                 push(@gbFiles, $gbFile);
             }
@@ -187,9 +187,9 @@ sub processGenBankRel($) {
     }
 
     # genbank daily mRNAs and ESTS
-    my $downFiles = (glob("$downDir/daily-nc/nc*.aso.gz"),
+    my @downFiles = (glob("$downDir/daily-nc/nc*.aso.gz"),
                      glob("$downDir/daily-nc/nc*.flat.gz"));
-    foreach my $gbFile ($downFiles) {
+    foreach my $gbFile (@downFiles) {
         my $update = $gbFile;
         $update =~ s/^.*\/nc(.+)\.(flat|aso)\.gz$/daily.$1/;
         $procDir = "data/processed/$rel/$update";
@@ -220,10 +220,10 @@ sub processRefSeqRel($) {
     }
 
     # daily mRNAs,
-    my $downFiles = (glob("$downDir/daily/rsnc.*.*.aso.gz"),
+    my @downFiles = (glob("$downDir/daily/rsnc.*.*.aso.gz"),
                      glob("$downDir/daily/rsnc.*.*.gbff.Z"),
                      glob("$downDir/daily/rsnc.*.*.gbff.gz"));
-    foreach my $gbFile ($downFiles) {
+    foreach my $gbFile (@downFiles) {
         # switch month-day and year so they sort sanely
         my $update = $gbFile;
         $update =~ s/^.*\/rsnc\.([0-9]+)\.([0-9]+)\.(gbff|aso)\.(Z|gz)$/daily.$2.$1/;
