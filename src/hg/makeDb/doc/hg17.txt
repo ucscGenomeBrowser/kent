@@ -21299,6 +21299,27 @@ hgsql -e 'select count(*), exception from snp125Exceptions group by exception' h
 hgsql -e 'delete from snp125ExceptionDesc' hg17
 hgsql -e 'load data local infile "/cluster/data/dbSNP/exception.template" into table snp125ExceptionDesc' hg17
 
+
+###########################
+
+# generate snpExtFile and snpSeq from rs_fasta (Heather Sept. 2006)
+# use 126 rs_fasta files because I didn't save 125 version
+
+ssh hgwdev
+mkdir /gbdb/hg17/snp
+cd /cluster/store12/snp/126/human/rs_fasta
+# create normalized link names
+# not including chrMulti or chrUn (for now)
+/bin/sh link125.sh
+# extFile
+sed -e 's/hg18/hg17/' snp126ExtFile > snp125ExtFile
+hgLoadSqlTab hg17 snpExtFile /cluster/home/heather/kent/src/hg/lib/snpExtFile.sql snp125ExtFile
+hgsql -e 'rename table snpExtFile to snp125ExtFile' hg17
+# sequence offsets
+hgLoadSqlTab hg17 snpSeq /cluster/home/heather/kent/src/hg/lib/snpSeq.sql seq.concat
+hgsql -e 'rename table snpSeq to snp125Seq' hg17
+hgsql -e 'alter table snp125Seq add index name(name)' hg17
+
 ############
 # UPDATE hg17 knownToVisiGene (2006-04-05 galt)
 # Create table that maps between known genes and visiGene database 
