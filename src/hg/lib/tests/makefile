@@ -1,4 +1,5 @@
 include ../../../inc/common.mk
+
 HG_WARN = ${HG_WARN_ERR}
 
 L = ${MYSQLLIBS} -lm
@@ -8,9 +9,10 @@ BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
-	${BIN_DIR}/binTest
+	${BIN_DIR}/binTest \
+	${BIN_DIR}/customTrackTester 
 
-test: binTest spDbTest hdbTest genePredTest pslReaderTest
+test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
 	rm -r output
 	echo tested all
 
@@ -34,6 +36,9 @@ genePredTest: ${BIN_DIR}/genePredTester mkdirs
 pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 	${MAKE} -f pslReaderTests.mk test
 
+customTrackTest: ${BIN_DIR}/customTrackTester mkdirs
+	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
+
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
 
@@ -46,6 +51,10 @@ ${BIN_DIR}/pslReaderTester: pslReaderTester.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 ${BIN_DIR}/binTest: binTest.o ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
+
+${BIN_DIR}/customTrackTester: customTrackTester.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
