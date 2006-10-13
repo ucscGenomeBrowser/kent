@@ -46,6 +46,10 @@ set wgs $rn,$panTro,$galGal,$canFam,$bosTau
 # Define organism databases for which we build a xenoRefGene track:
 set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom
 
+# Define organism databases for which we build a SNP track:
+set snpDb126 hg18,mm8
+set snpDb125 hg17,panTro1,canFam1,rn4
+
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
 
@@ -1704,8 +1708,19 @@ identifier dbSnpMapInfo external=dbSNP
 
 identifier snpAnnotations125
 "SNP annotations"
+    $snpDb125.snp125.name dupeOk
+    $snpDb125.snp125Exceptions.name 
+    $snpDb125.snp125Seq.name minCheck=0.98
+
+identifier snpAnnotations126
+"SNP annotations"
+    $snpDb126.snp126.name dupeOk
+    $snpDb126.snp126Exceptions.name 
+    $snpDb126.snp126Seq.name minCheck=0.98
+
+identifier snpArrayHg17
+"SNP array track for hg17"
     hg17.snp125.name dupeOk
-    hg17.snp125Exceptions.name 
     hg17.snpArrayAffy10.rsId minCheck=0.98
     hg17.snpArrayAffy10v2.rsId minCheck=0.98
     hg17.snpArrayAffy250Nsp.rsId minCheck=0.98
@@ -1714,11 +1729,10 @@ identifier snpAnnotations125
     hg17.snpArrayAffy50XbaI.rsId minCheck=0.98
     hg17.snpArrayIllumina300.name
 
-identifier snpAnnotations126
-"SNP annotations"
+identifier snpOrtho
+"ortho SNPs for hg18 only"
     hg18.snp126.name dupeOk
-    hg18.snp126Exceptions.name 
-    hg18.snp126Seq.name minCheck=0.98
+    hg18.snp126ortho.name 
     hg18.snp126orthoPanTro2RheMac2.name 
 
 # Other NCBI Identifiers
@@ -2343,6 +2357,8 @@ tablesIgnored $gbd
     sangerGenefinder
     sangamoDnaseHs
     simpleRepeat
+    snp125ExtFile
+    snp126ExtFile
     sgpGene
     tableDescriptions
     tigrGeneIndex
