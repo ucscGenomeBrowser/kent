@@ -2,7 +2,7 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.23 2006/10/02 06:15:28 daryl Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.24 2006/10/13 19:50:04 heather Exp $";
 
 boolean snp125ExtendedNames = FALSE;
 
@@ -343,14 +343,14 @@ char *snp125FuncDataName[] = {
     "exception",
 };
 char *snp125FuncDefault[] = {
-    "gray",   // unknown
-    "blue",   // locus
+    "black",   // unknown
+    "black",   // locus
     "green",  // coding-synon
     "red",    // coding-nonsynon
     "blue",   // untranslated
     "black",  // intron
     "red",    // splice-site
-    "blue",  // cds-reference
+    "black",  // cds-reference
 };
 char *snp125FuncCart[] = {
     "gray",  // unknown
