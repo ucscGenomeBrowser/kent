@@ -222,6 +222,31 @@ hgMedianMicroarray -minExps=1 hgFixed humanNormal humanNormalExps humanNormal.ra
   humanNormalMedian humanNormalMedianExps
 hgMedianMicroarray -minExps=1 hgFixed humanNormalRatio humanNormalExps humanNormal.ra \
   humanNormalMedianRatio humanNormalMedianExps
+#### HUMAN NORMAL DATA FIXING (10/5/2006 Andy)
+ssh hgwdev
+cd /projects/compbio/data/microarray/shyamsundarEtAl
+mv spots/13729.xls .
+tail +23 13729.xls | cut -f8,63 > data.txt
+echo 13729 > arrays.txt
+for array in spots/*; do 
+    echo $array >> arrays.txt
+    tail +23 $array | cut -f63 > newCol.txt
+    paste data.txt newCol.txt > tmp.txt
+    mv tmp.txt data.txt 
+done
+sed '/^[[:space:]]/d' data.txt > tmp.txt
+mv tmp.txt data.txt
+sed 's/spots\///;s/\.xls.*$//' arrays.txt > tmp.txt
+mv tmp.txt arrays.txt
+for id in `cat arrays.txt`; do grep $id -B1 exptset_3130.meta | grep Name | sed 's/.*=//;s/\"//g' >> names.txt; done
+paste arrays.txt names.txt | sort -k2,2 > tmp.txt
+mv tmp.txt arrays.txt
+rm names.txt
+# I changed my mind 
+
+echo "" | cat - names.txt | tr '\n' '\t' > oneLine.txt
+cat oneLine.txt data.txt > tmp.txt
+mv tmp.txt data.
 
 # (copy/paste this into columnDb.ra)
 
@@ -441,6 +466,16 @@ _EOF_
     bedMergeExpData hgFixed.affyHumanExonRatio hg18.affyHumanExonProbes hg18.bed
     hgLoadBed hg17 affyHumanExon hg17.bed
     hgLoadBed hg18 affyHumanExon hg18.bed
+# Copied affyHumanExon to hg16 (DONE 10-12-2006, Andy)
+    cd /cluster/data/hg16/bed/
+    mkdir affyHumanExon
+    cd affyHumanExon/
+    echo "select name,expCount,expScores from affyHumanExon" | hgsql hg17 | tail +2 > expdata.tab
+    cp ~/kent/src/hg/lib/expData.sql .
+    hgLoadSqlTab hgFixed expData expData.sql expdata.tab
+    bedMergeExpData hgFixed.expData hg16.affyHuEx1 hg16.bed
+    hgLoadBed hg16 affyHumanExon hg16.bed 
+    hgsql -e 'drop table expData' hgFixed
 
 # QA push new cutters and rebaseRefs tables (04-06-2006: ASZ).
 
