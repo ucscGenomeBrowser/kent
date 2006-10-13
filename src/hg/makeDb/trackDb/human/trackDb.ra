@@ -1311,7 +1311,7 @@ visibility hide
 url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=$$
 useScore 1
 type bed 6 .
-origAssembly hg17
+origAssembly hg16
 
 track xTBAmaf
 shortLabel xTBAmaf
