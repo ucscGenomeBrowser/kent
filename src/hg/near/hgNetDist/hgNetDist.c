@@ -12,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.7 2006/06/29 16:43:11 angie Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.8 2006/10/13 23:11:25 galt Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;
@@ -58,6 +58,7 @@ char **geneIds;  /* dynamically allocated array of strings */
 
 struct hash *geneHash = NULL;
 struct hash *aliasHash = NULL;
+struct hash *missingHash = NULL;
 
 /* Floyd-Warshall dyn prg arrays */
 float *d;   /* previous d at step k    dynamically allocated array of strings */
@@ -85,6 +86,16 @@ const struct edge *b = *((struct edge **)vb);
 return strcmp(a->geneA, b->geneA);
 }
 
+int slEdgeCmpWeight(const void *va, const void *vb)
+/* Compare two slNames. */
+{
+const struct edge *a = *((struct edge **)va);
+const struct edge *b = *((struct edge **)vb);
+if (a->weight > b->weight) return 1;
+if (a->weight < b->weight) return -1;
+return 0;
+}
+
 struct edge *edgeLoad(char **row)
 /* Load an edge from row fetched from linefile
  * Dispose of this with edgeFree(). */
@@ -95,8 +106,9 @@ AllocVar(ret);
 ret->geneA  = cloneString(row[0]);
 ret->geneB  = cloneString(row[1]);
 ret->weight = weighted ? atof(row[2]) : 1.0;
-if (sameString(ret->geneA,ret->geneB))  /* if self arc, weight must be 0 */
-    ret->weight = 0.0;  
+/* not always true */
+//if (sameString(ret->geneA,ret->geneB))  /* if self arc, weight must be 0 */
+//    ret->weight = 0.0;  
 return ret;
 }
 
@@ -194,7 +206,9 @@ struct edge *edge = NULL;
 int k=0, i=0, j=0;
 float *dij=NULL, *dik=NULL, *dkj=NULL, *ddij=NULL, *tempswap=NULL;
 
-FILE *f=NULL;
+FILE *f=NULL, *missingF=NULL;
+
+int missingCount=0;
 
 char cmd[256];
 int status=-1;
@@ -212,8 +226,11 @@ errAbort("readEdges returned NULL for %s.\n",inTab);
 numEdges = slCount(edges);
 printf("slCount(edges)=%d for %s \n",numEdges,inTab);
 
-//slSort(&edges, slEdgeCmp);
-//printf("slSort done for %s \n",inTab);
+if (weighted)
+    {
+    slSort(&edges, slEdgeCmpWeight);
+    printf("slSort done for %s \n",inTab);
+    }
 
 
 /* for now, default to using numEdges for size estimate since we don't know numGenes at this point */
@@ -223,6 +240,8 @@ geneIds = needMem((numEdges*2)*sizeof(char*));
 if (sqlRemap)
     {
     fetchRemapInfo(db);
+    missingHash = newHash(logBase2(numEdges));  
+    missingF = mustOpen("missing.tab","w");
     }
 
 
@@ -278,10 +297,15 @@ for(edge = edges; edge; edge = edge->next)
     ia = hashIntVal(geneHash,edge->geneA);
     ib = hashIntVal(geneHash,edge->geneB);
     dij = d+(ia*numGenes)+ib;
-    *dij = edge->weight;
-    /* repeat b/c non-directional undirected graph assumption */
-    dij = d+(ib*numGenes)+ia;
-    *dij = edge->weight;
+    /* filter -  initialize each unique pair only once, 
+     * priority least weighted distance due to sort above */
+    if ((*dij == INFINITE) || (*dij==0.0 && ia==ib))
+	{
+	*dij = edge->weight;
+	/* repeat b/c non-directional undirected graph assumption */
+	dij = d+(ib*numGenes)+ia;
+	*dij = edge->weight;
+	}
     }
 
 /* repeat k times through the Floyd-Warshall dyn prg algorithm */
@@ -337,11 +361,35 @@ for(i=0;i<numGenes;++i)
 	    char *gi=NULL, *gj=NULL;
 	    if (sqlRemap)
 		{ /* it is possible for each id to have multiple remap values in hash */
-	    	struct hashEl *hi=NULL, *hj=NULL;
+	    	struct hashEl *hi=NULL, *hj=NULL, *hMissing=NULL, *hij=NULL;
+		int z;
+		char *missingKey = NULL;
 		hi = hashLookup(aliasHash,geneIds[i]);
 		hj = hashLookup(aliasHash,geneIds[j]);
-		if (!hi) printf("%s not found in aliasHash!\n",geneIds[i]);
-		if (!hj) printf("%s not found in aliasHash!\n",geneIds[j]);
+		for(z=0;z<2;z++)  /* do both i and j */
+		    {
+		    if (z==0)
+			{
+			missingKey = geneIds[i];
+			hij = hi;
+			}
+		    else
+			{
+			missingKey = geneIds[j];
+			hij = hj;
+			}
+		    if (!hij) 
+			{
+			hMissing = hashLookup(missingHash,missingKey);
+			if (!hMissing)
+			    {
+			    ++missingCount;
+			    hashAdd(missingHash, missingKey, NULL);
+			    printf("%s not found in aliasHash!\n", missingKey);
+			    fprintf(missingF, "%s\n", missingKey);
+			    }
+			}
+		    }		    
 		for(;hi;hi=hashLookupNext(hi))
 		    {
 	    	    gi = (char *)hi->val;
@@ -363,6 +411,17 @@ for(i=0;i<numGenes;++i)
 	}
     }
 fclose(f);    
+if (sqlRemap)
+    {
+    fclose(missingF);
+    if (missingCount == 0)
+	{
+	unlink("missing.tab");
+	printf("no sqlRemap misses!\n");
+	}
+    else	    
+    	printf("%d sqlRemap misses!  see missing.tab\n", missingCount);
+    }
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'drop table if exists %s; create table %s (query varchar(255), target varchar(255), distance float);'",
