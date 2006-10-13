@@ -2103,6 +2103,32 @@ cd snp/organisms/chimpanzee_9598/rs_fasta
 prompt
 mget *.gz
 
+# generate snpExtFile and snpSeq from rs_fasta
+# work on /cluster/store12 (kkstore05) which has more disk space
+cp rs_ch*.fas.gz /cluster/store12/snp/125/chimp/rs_fasta
+ssh kkstore05
+cd /cluster/store12/snp/125/chimp/rs_fasta
+gunzip *gz
+ssh hgwdev
+cd /cluster/store12/snp/125/chimp/rs_fasta
+# create normalized link names
+# rename chroms as described at beginning of SNP section
+# not including chrMulti or chrUn (for now)
+mkdir /gbdb/panTro1/snp
+/bin/sh link.sh
+# extFile
+/bin/csh getExtFile.csh > snp125ExtFile.prelim
+awk '{printf "%s\t%s\t%s\n", $1, $3, $2}' snp125ExtFile.prelim > snp125ExtFile
+hgLoadSqlTab panTro1 snpExtFile /cluster/home/heather/kent/src/hg/lib/snpExtFile.sql snp125ExtFile
+hgsql -e 'rename table snpExtFile to snp125ExtFile' panTro1
+# sequence offsets
+# possibly faster to do the next 2 steps on kkstore05
+/bin/csh getSeq.csh
+/bin/csh concat.csh
+hgLoadSqlTab panTro1 snpSeq /cluster/home/heather/kent/src/hg/lib/snpSeq.sql seq.concat
+hgsql -e 'rename table snpSeq to snp125Seq' panTro1
+hgsql -e 'alter table snp125Seq add index name(name)' panTro1
+
 # Simplify names of data files
 cd /cluster/data/dbSNP/125/organisms/chimpanzee_9598/data
 mv b125_ContigInfo_1_1.bcp.gz ContigInfo.gz
