@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.79 2006/10/14 19:33:00 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.80 2006/10/14 19:41:16 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -366,18 +366,18 @@ if (slCount(ctList) > 3)
     cgiSimpleTableRowStart();
     puts("<TD COLSPAN=6>All</TD>");
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithMsg(hgCtDoDeleteSet, "set", "Select all for deletion");
+    cgiMakeButtonWithMsg(hgCtDoDeleteSet, "+", "Select all for deletion");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithMsg(hgCtDoDeleteClr, "clr", "Clear all for deletion");
+    cgiMakeButtonWithMsg(hgCtDoDeleteClr, "-", "Clear all for deletion");
     cgiTableFieldEnd();
     if (updateCt)
         {
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithMsg(hgCtDoRefreshSet, "set", "Select all for update");
+        cgiMakeButtonWithMsg(hgCtDoRefreshSet, "+", "Select all for update");
         cgiTableFieldEnd();
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithMsg(hgCtDoRefreshClr, "clr", "Clear all for update");
+        cgiMakeButtonWithMsg(hgCtDoRefreshClr, "-", "Clear all for update");
         cgiTableFieldEnd();
         }
     cgiTableRowEnd();
