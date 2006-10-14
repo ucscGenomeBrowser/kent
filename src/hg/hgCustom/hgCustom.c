@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.78 2006/10/14 00:03:32 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.79 2006/10/14 19:33:00 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,7 +49,11 @@ errAbort(
 #define hgCtDoAdd	  hgCtDo "add"
 #define hgCtDoCancel	  hgCtDo "cancel"
 #define hgCtDoDelete	  hgCtDo "delete"
+#define hgCtDoDeleteSet	  hgCtDo "delete_set"
+#define hgCtDoDeleteClr	  hgCtDo "delete_clr"
 #define hgCtDoRefresh     hgCtDo "refresh"
+#define hgCtDoRefreshSet  hgCtDo "refresh_set"
+#define hgCtDoRefreshClr  hgCtDo "refresh_clr"
 #define hgCtDoGenomeBrowser	  hgCtDo "gb"
 #define hgCtDoTableBrowser	  hgCtDo "tb"
 
@@ -199,10 +203,10 @@ cgiTableRowEnd();
 cgiTableEnd();
 }
 
-void tableHeaderFieldStart()
+void tableHeaderFieldStart(int columns)
 {
 /* print table column header with white text on black background */
-printf("<TD ALIGN='CENTER' BGCOLOR=#536ED3>");
+printf("<TD COLSPAN=%d ALIGN='CENTER' BGCOLOR=#536ED3>", columns);
 }
 
 void tableHeaderField(char *label, char *description)
@@ -221,6 +225,14 @@ struct customTrack *ct;
 char buf[64];
 char *pos = NULL;
 char *dataUrl;
+
+/* handle 'set all' and 'clr all' */
+boolean setAllDelete = FALSE;
+boolean setAllUpdate = FALSE;
+if (cartVarExists(cart, hgCtDoDeleteSet))
+    setAllDelete = TRUE;
+if (cartVarExists(cart, hgCtDoRefreshSet))
+    setAllUpdate = TRUE;
 
 /* determine which columns to display (avoid empty columns) */
 int updateCt = 0, itemCt = 0, posCt = 0;
@@ -271,14 +283,14 @@ if (itemCt)
     tableHeaderField("Items", "Count of discrete items in track");
 if (posCt)
     tableHeaderField("Pos"," Go to genome browser at default track position or first item");
-tableHeaderFieldStart();
+tableHeaderFieldStart(2);
 cgiMakeButtonWithMsg(hgCtDoDelete, "delete", "Remove custom track");
 cgiTableFieldEnd();
 
 /* add column with Update button if any custom tracks are updateable */
 if (updateCt)
     {
-    tableHeaderFieldStart();
+    tableHeaderFieldStart(2);
     cgiMakeButtonWithMsg(hgCtDoRefresh, "update", "Refresh from data URL");
     cgiTableFieldEnd();
     }
@@ -331,23 +343,44 @@ for (ct = ctList; ct != NULL; ct = ct->next)
             puts("<TD>&nbsp;</TD>");
         }
     /* Delete checkboxes */
-    puts("</TD><TD ALIGN=CENTER>");
+    puts("</TD><TD COLSPAN=2 ALIGN=CENTER>");
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix, 
             ct->tdb->tableName);
-    cgiMakeCheckBox(buf, FALSE);
+    cgiMakeCheckBox(buf, setAllDelete);
 
     /* Update checkboxes */
     if (updateCt)
         {
-        puts("</TD><TD ALIGN=CENTER>");
+        puts("</TD><TD COLSPAN=2 ALIGN=CENTER>");
         safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix, 
                 ct->tdb->tableName);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
-            cgiMakeCheckBoxWithMsg(buf, FALSE, dataUrl);
+            cgiMakeCheckBoxWithMsg(buf, setAllUpdate, dataUrl);
         else
             puts("&nbsp;");
         }
     puts("</TD></TR>\n");
+    }
+if (slCount(ctList) > 3)
+    {
+    cgiSimpleTableRowStart();
+    puts("<TD COLSPAN=6>All</TD>");
+    cgiSimpleTableFieldStart();
+    cgiMakeButtonWithMsg(hgCtDoDeleteSet, "set", "Select all for deletion");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    cgiMakeButtonWithMsg(hgCtDoDeleteClr, "clr", "Clear all for deletion");
+    cgiTableFieldEnd();
+    if (updateCt)
+        {
+        cgiSimpleTableFieldStart();
+        cgiMakeButtonWithMsg(hgCtDoRefreshSet, "set", "Select all for update");
+        cgiTableFieldEnd();
+        cgiSimpleTableFieldStart();
+        cgiMakeButtonWithMsg(hgCtDoRefreshClr, "clr", "Clear all for update");
+        cgiTableFieldEnd();
+        }
+    cgiTableRowEnd();
     }
 hTableEnd();
 
