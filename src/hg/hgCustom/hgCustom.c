@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.77 2006/10/10 22:35:56 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.78 2006/10/14 00:03:32 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -109,7 +109,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 if (ct)
     /* update existing */
-    cgiTableField("Paste in new data:");
+    cgiTableField("Paste in replacement data:");
 else
     cgiTableField("Paste URLs or data:");
 puts("<TD ALIGN='RIGHT'>");
