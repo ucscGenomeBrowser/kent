@@ -9,8 +9,10 @@ selection of probes on the Affymetrix Zebrafish genome chip.
 Consensus sequences were downloaded from the
 <A HREF="http://www.affymetrix.com/support/technical/byproduct.affx?product=zebrafish" 
 TARGET=_blank>Affymetrix Product Support</A> web page.
-The sequences were mapped to the genome with blat followed by pslReps using 
-the parameters <TT>-minAli=0.95</TT> and <TT>-nearTop=0.005</TT>.  </P>
+The sequences were mapped to the genome with blat followed by pslCDnaFilter 
+using the parameters <TT>-localNearBest=0.005</TT>,<TT> -minQSize=20</TT>,
+<TT> -minNonRepSize=16</TT>,<TT> -ignoreNs</TT>,<TT> -bestOverlap</TT>,
+<TT> -minId=0.95</TT> and <TT>-minCover=0.15</TT>.  </P>
 
 <H2>Credits</H2>
 <P>
