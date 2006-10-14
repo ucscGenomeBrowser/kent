@@ -59,6 +59,14 @@ group regulation
 priority 89
 visibility hide
 type psl .
+
+track affyZfishOld
+shortLabel Affy Zebrafish Old
+longLabel Old Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+group regulation
+priority 90
+visibility hide
+type psl .
 orthoTable affyToHg16Orthologs
 otherDb hg16
 
