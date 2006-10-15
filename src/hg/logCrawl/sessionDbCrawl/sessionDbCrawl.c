@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: sessionDbCrawl.c,v 1.1 2006/04/28 16:32:10 kent Exp $";
+static char const rcsid[] = "$Id: sessionDbCrawl.c,v 1.2 2006/10/15 19:01:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -147,7 +147,7 @@ while (lineFileRowTab(lf, row))
     contents = row[1];
     char *lastUse = row[4];
     useCount = atoi(row[5]);
-    if (useCount > 1 && startsWith("2006-04", lastUse) && stringIn("db=hg17", contents))
+    if (useCount > 1 && startsWith("2006-10", lastUse) && (stringIn("db=hg18", contents) || stringIn("db=hg17", contents)))
 	{
 	parseContents(contents, varHash, &tvList);
 	}
