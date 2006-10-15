@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.33 2006/10/15 00:54:35 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.34 2006/10/15 01:04:13 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1146,6 +1146,24 @@ else
 return lf;
 }
 
+char *customDocParse(char *text)
+/* Return description text, expanding URLs as for custom track data */
+{
+char *line;
+struct lineFile *lf = customLineFile(text, FALSE);
+if (!lf)
+    return NULL;
+
+/* wrap a doc customPp object around it. */
+struct customPp *cpp = customDocPpNew(lf);
+
+/* extract doc */
+struct dyString *ds = dyStringNew(0);
+while ((line = customPpNextReal(cpp)) != NULL)
+    dyStringAppend(ds, line);
+return dyStringCannibalize(&ds);
+}
+
 struct customTrack *customFactoryParse(char *text, boolean isFile,
                                         struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
@@ -1294,24 +1312,6 @@ if (retBrowserLines != NULL)
 customPpFree(&cpp);
 sqlDisconnect(&ctConn);
 return trackList;
-}
-
-char *customDocParse(char *text)
-/* Return description text, expanding URLs as for custom track data */
-{
-char *line;
-struct lineFile *lf = customLineFile(text, FALSE);
-if (!lf)
-    return NULL;
-
-/* wrap a doc customPp object around it. */
-struct customPp *cpp = customDocPpNew(lf);
-
-/* extract doc */
-struct dyString *ds = dyStringNew(0);
-while ((line = customPpNextReal(cpp)) != NULL)
-    dyStringAppend(ds, line);
-return dyStringCannibalize(&ds);
 }
 
 char *ctInitialPosition(struct customTrack *ct)
