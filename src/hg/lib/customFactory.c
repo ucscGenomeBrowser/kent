@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.32 2006/10/09 19:27:25 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.33 2006/10/15 00:54:35 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1112,23 +1112,12 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 return NULL;
 }
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
-	struct slName **retBrowserLines)
-/* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.*/
+static struct lineFile *customLineFile(char *text, boolean isFile)
+/* Figure out input source, handling URL's and compression */
 {
-struct customTrack *trackList = NULL, *track = NULL;
-char *line = NULL;
-struct hash *chromHash = newHash(8);
-float prio = 0.0;
-struct sqlConnection *ctConn = NULL;
-char *loadedFromUrl = NULL;
-boolean dbTrack = ctDbUseAll();
-if (dbTrack)
-    ctConn = sqlCtConn(TRUE);
+if (!text)
+    return NULL;
 
-/* Figure out input source, and ultimately wrap a
- * customPp object around it. */
 struct lineFile *lf = NULL;
 if (isFile)
     {
@@ -1154,9 +1143,27 @@ else
 	lf = lineFileOnString("custom track", TRUE, text);
 	}
     }
-if (startsWith("http://", text))
-    loadedFromUrl = cloneString(text);
+return lf;
+}
 
+struct customTrack *customFactoryParse(char *text, boolean isFile,
+                                        struct slName **retBrowserLines)
+/* Parse text into a custom set of tracks.  Text parameter is a
+ * file name if 'isFile' is set.*/
+{
+struct customTrack *trackList = NULL, *track = NULL;
+char *line = NULL;
+struct hash *chromHash = newHash(8);
+float prio = 0.0;
+struct sqlConnection *ctConn = NULL;
+char *loadedFromUrl = NULL;
+boolean dbTrack = ctDbUseAll();
+if (dbTrack)
+    ctConn = sqlCtConn(TRUE);
+
+struct lineFile *lf = customLineFile(text, isFile);
+
+/* wrap a customPp object around it. */
 struct customPp *cpp = customPpNew(lf);
 lf = NULL;
 
@@ -1167,6 +1174,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * First time through make up track var from thin air
      * if no track line. Find out explicit type setting if any.
      * Also make sure settingsHash is set up. */
+    lf = cpp->fileStack;
     char *type = NULL;
     if (startsWithWord("track", line))
         {
@@ -1187,11 +1195,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	}
     else
         {
-	struct lineFile *lf = cpp->fileStack;
 	errAbort("Expecting 'track' line, got %s\nline %d of %s",
 		line, lf->lineIx, lf->fileName);
 	}
-
     struct customTrack *oneList = NULL, *oneTrack;
     if (track->dbDataLoad)
     /* Database tracks already mostly loaded, just check that table 
@@ -1206,8 +1212,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* Main case - we have to find a track factory that recognizes
      * this track, and call it.  Also we may need to do some work
      * to load track into database. */
-	{
-
+        {
 	/* Load track from appropriate factory */
 	struct customFactory *fac = customFactoryFind(cpp, type, track);
 	if (fac == NULL)
@@ -1233,8 +1238,10 @@ while ((line = customPpNextReal(cpp)) != NULL)
 			type, lf->lineIx, lf->fileName);
 		}
 	    }
+        char *dataUrl = NULL;
+        if (lf->fileName && startsWith("http://", lf->fileName))
+            dataUrl = cloneString(lf->fileName);
 	oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
-
 	/* Save a few more settings. */
 	for (oneTrack = oneList; oneTrack != NULL; oneTrack = oneTrack->next)
 	    {
@@ -1243,6 +1250,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		ctAddToSettings(track, "db", oneTrack->dbTrackType);
             if (!trackDbSetting(track->tdb, "inputType"))
                 ctAddToSettings(track, "inputType", fac->name);
+            if (dataUrl)
+                ctAddToSettings(track, "dataUrl", dataUrl);
 	    }
 	}
     trackList = slCat(trackList, oneList);
@@ -1285,6 +1294,24 @@ if (retBrowserLines != NULL)
 customPpFree(&cpp);
 sqlDisconnect(&ctConn);
 return trackList;
+}
+
+char *customDocParse(char *text)
+/* Return description text, expanding URLs as for custom track data */
+{
+char *line;
+struct lineFile *lf = customLineFile(text, FALSE);
+if (!lf)
+    return NULL;
+
+/* wrap a doc customPp object around it. */
+struct customPp *cpp = customDocPpNew(lf);
+
+/* extract doc */
+struct dyString *ds = dyStringNew(0);
+while ((line = customPpNextReal(cpp)) != NULL)
+    dyStringAppend(ds, line);
+return dyStringCannibalize(&ds);
 }
 
 char *ctInitialPosition(struct customTrack *ct)

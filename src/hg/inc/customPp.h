@@ -18,6 +18,8 @@ struct customPp
     struct slName *browserLines; /* Lines seen so far that start w/ browser */
     struct slName *reusedLines;  /* Lines pushed back by customPpReuse. */
     struct slName *inReuse;	 /* Line in process of being reused. */
+    boolean ignoreBrowserLines;  /* Flag to suppress removal of browser lines */
+                                 /*   so preprocessor can be used with docs */
     };
 
 struct customPp *customPpNew(struct lineFile *lf);
@@ -38,6 +40,9 @@ void customPpReuse(struct customPp *cpp, char *line);
 
 struct slName *customPpTakeBrowserLines(struct customPp *cpp);
 /* Grab browser lines from cpp, which will no longer have them. */
+
+struct customPp *customDocPpNew(struct lineFile *lf);
+/* Return customPp for doc file that leaves browser lines */
 
 #endif /* CUSTOMPP_H */
 

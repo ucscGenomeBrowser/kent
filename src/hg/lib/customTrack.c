@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.146 2006/10/03 17:21:46 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.147 2006/10/15 00:54:35 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -421,7 +421,15 @@ char *savedCustomText = NULL;
 if (customText && cartVarExists(cart, CT_CUSTOM_TEXT_ALT_VAR))
     savedCustomText = cloneString(customText);
 
-struct customTrack *newCts = NULL;
+/* get track description from cart */
+char *html = NULL;
+if (cartNonemptyString(cart, CT_CUSTOM_DOC_FILE_VAR))
+    html = cartString(cart, CT_CUSTOM_DOC_FILE_VAR);
+else if (cartNonemptyString(cart, CT_CUSTOM_DOC_TEXT_VAR))
+    html = cartString(cart, CT_CUSTOM_DOC_TEXT_VAR);
+html = customDocParse(html);
+
+struct customTrack *newCts = NULL, *ct = NULL;
 if (customText != NULL && customText[0] != 0)
     {
     /* protect against format errors in input from user */
@@ -429,6 +437,13 @@ if (customText != NULL && customText[0] != 0)
     if (errCatchStart(errCatch))
         {
         newCts = customFactoryParse(customText, FALSE, &browserLines);
+        if (html)
+            {
+            for (ct = newCts; ct != NULL; ct = ct->next)
+                if (!ctHtmlUrl(ct))
+                    ct->tdb->html = cloneString(html);
+            freez(&html);
+            }
         customTrackHandleLift(newCts);
         }
     errCatchEnd(errCatch);
@@ -455,7 +470,7 @@ if (customText != NULL && customText[0] != 0)
 char *ctFileNameFromCart = cartOptionalString(cart, "ct");
 char *ctFileName = NULL;
 struct customTrack *ctList = NULL, *replacedCts = NULL;
-struct customTrack *ct = NULL, *nextCt = NULL;
+struct customTrack *nextCt = NULL;
 
 /* load existing custom tracks from trash file */
 
@@ -472,33 +487,45 @@ if (ctFileNameFromCart != NULL)
             customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
 	ctFileName = ctFileNameFromCart;
 
-        /* remove a track if requested, e.g. by hgTrackUi */
-        char *remove = NULL;
-        if (cartVarExists(cart, CT_DO_REMOVE_VAR) &&
-            (remove = cartOptionalString(
-                            cart, CT_SELECTED_TABLE_VAR)) != NULL)
+        /* handle selected tracks -- update doc, remove, etc. */
+        char *selectedTable = NULL;
+        if (cartVarExists(cart, CT_DO_REMOVE_VAR))
+            selectedTable = cartOptionalString(cart, CT_SELECTED_TABLE_VAR);
+        else
+            selectedTable = cartOptionalString(cart, CT_UPDATED_TABLE_VAR);
+        if (selectedTable)
             {
             for (ct = ctList; ct != NULL; ct = nextCt)
                 {
                 nextCt = ct->next;
-                if (sameString(remove, ct->tdb->tableName))
+                if (sameString(selectedTable, ct->tdb->tableName))
                     {
-                    slRemoveEl(&ctList, ct);
+                    if (cartVarExists(cart, CT_DO_REMOVE_VAR))
+                        {
+                        /* remove a track if requested, e.g. by hgTrackUi */
+                        slRemoveEl(&ctList, ct);
+                        /* remove visibility variable */
+                        cartRemove(cart, selectedTable);
+                        /* remove configuration variables */
+                        char buf[128];
+                        safef(buf, sizeof buf, "%s.", selectedTable); 
+                        cartRemovePrefix(cart, buf);
+                        /* remove control variables */
+                        cartRemove(cart, CT_DO_REMOVE_VAR);
+                        }
+                    else
+                        {
+                        if (html)
+                            ct->tdb->html = html;
+                        }
                     break;
                     }
                 }
-            /* remove visibility variable */
-            cartRemove(cart, remove);
-            /* remove configuration variables */
-            char buf[128];
-            safef(buf, sizeof buf, "%s.", remove); 
-            cartRemovePrefix(cart, buf);
-            /* remove control variables */
-            cartRemove(cart, CT_DO_REMOVE_VAR);
             cartRemove(cart, CT_SELECTED_TABLE_VAR);
             }
         }
     }
+
 /* merge new and old tracks */
 numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
@@ -558,7 +585,6 @@ struct customTrack *ctList =
                                         NULL, NULL, &err);
 if (err)
     warn("%s", err);
-cartRemove(cart, CT_SELECTED_TABLE_VAR);
 return ctList;
 }
 
@@ -752,57 +778,5 @@ printf("offset: %d<BR>\n", track->offset);
 printf("gffHelper: %p<BR>\n", track->gffHelper);
 printf("groupName: %s<BR>\n", naForNull(track->groupName));
 printf("tdb->type: %s<BR>\n", naForNull(track->tdb ? track->tdb->type : NULL));
-}
-/*	the following two routines are only referenced from the test
- *	section at the end of this file.  They are unused elsewhere.
- */
-static struct customTrack *customTracksFromText(char *text)
-/* Parse text into a custom set of tracks. */
-{
-return customFactoryParse(text, FALSE, NULL);
-}
-
-static struct customTrack *customTracksFromFile(char *text)
-/* Parse file into a custom set of tracks. */
-{
-return customFactoryParse(text, TRUE, NULL);
-}
-
-
-static char *testData = 
-"track name='Colors etc.' description='Some colors you might use'\n"
-"chr2	1	12	rose\n"
-"chr2	22	219	yellow\n"
-"chr2	18	188	green\n"
-"track name=animals description='Some fuzzy animals'\n"
-"chr3 1000 5000 gorilla 960 + 1100 4700 0 2 1567,1488, 0,2512,\n"
-"chr3 2000 7000 mongoose 200 - 2200 6950 0 4 433,100,550,1500 0,500,2000,3500,\n";
-
-boolean customTrackTest()
-/* Tests module - returns FALSE and prints warning message on failure. */
-{
-struct customTrack *trackList = customTracksFromText(cloneString(testData));
-int count = slCount(trackList);
-if (count != 2)
-    {
-    warn("Failed customTrackTest() 1: expecting 2 tracks, got %d", count);
-    return FALSE;
-    }
-customTrackSave(trackList, "test.foo");
-trackList = customTracksFromFile("test.foo");
-count = slCount(trackList);
-if (count != 2)
-    {
-    warn("Failed customTrackTest() 2: expecting 2 tracks, got %d", count);
-    return FALSE;
-    }
-trackList = customTracksFromText(cloneString(""));
-if (slCount(trackList) != 0)
-    {
-    warn("Failed customTrackTest() 3");
-    return FALSE;
-    }
-warn("Passed customTrackTest()");
-return TRUE;
 }
 

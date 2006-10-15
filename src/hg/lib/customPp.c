@@ -12,7 +12,15 @@
 #include "net.h"
 #include "customPp.h"
 
-static char const rcsid[] = "$Id: customPp.c,v 1.5 2006/08/09 21:44:17 kate Exp $";
+static char const rcsid[] = "$Id: customPp.c,v 1.6 2006/10/15 00:54:35 kate Exp $";
+
+struct customPp *customDocPpNew(struct lineFile *lf)
+/* Return customPp that will ignore browser lines, for doc files */
+{
+struct customPp *cpp = customPpNew(lf);
+cpp->ignoreBrowserLines = TRUE;
+return cpp;
+}
 
 struct customPp *customPpNew(struct lineFile *lf)
 /* Return customPp on lineFile */
@@ -69,7 +77,7 @@ while ((lf = cpp->fileStack) != NULL)
 	    slAddHead(&cpp->fileStack, lf);
 	    continue;
 	    }
-	else if (startsWith("browser", line))
+	else if (!cpp->ignoreBrowserLines && startsWith("browser", line))
 	    {
 	    char afterPattern = line[7];
 	    if (isspace(afterPattern) || afterPattern == 0)

@@ -53,9 +53,12 @@ struct customTrack
 #define CT_CUSTOM_TEXT_ALT_VAR  "hgct_customText"
 #define CT_CUSTOM_FILE_VAR      "hgt.customFile"
 #define CT_CUSTOM_FILE_NAME_VAR "hgt.customFile__filename"
+#define CT_CUSTOM_DOC_TEXT_VAR  "hgct_docText"
+#define CT_CUSTOM_DOC_FILE_VAR  "hgct_docFile"
 
 #define CT_DO_REMOVE_VAR        "hgct_doRemoveCustomTrack"
 #define CT_SELECTED_TABLE_VAR   "hgct_table"
+#define CT_UPDATED_TABLE_VAR    "hgct_updatedTable"
 
 struct customTrack *customTracksParseCart(struct cart *cart,
 					  struct slName **retBrowserLines,
@@ -92,9 +95,6 @@ boolean customTrackNeedsLift(struct customTrack *trackList);
 
 char *customTrackTableFromLabel(char *label);
 /* Convert custom track short label to table name. */
-
-boolean customTrackTest();
-/* Tests module - returns FALSE and prints warning message on failure. */
 
 #define CUSTOM_TRASH	"customTrash"
 /*	custom tracks database name	*/
