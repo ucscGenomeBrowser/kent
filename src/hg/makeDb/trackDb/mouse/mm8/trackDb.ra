@@ -16,6 +16,14 @@ group map
 visibility hide
 type bed 3 +
 
+track wssdCoverage
+shortLabel WSSD Coverage
+longLabel Regions Assayed for SDD
+group map
+priority 29
+visibility hide
+type bed 4 .
+
 track knownGene
 shortLabel Known Genes
 longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
