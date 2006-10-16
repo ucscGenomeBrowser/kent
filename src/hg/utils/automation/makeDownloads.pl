@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.1 2006/10/10 22:26:02 angie Exp $
+# $Id: makeDownloads.pl,v 1.2 2006/10/16 22:05:31 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -72,7 +72,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($topDir, $scriptDir, $trfRunDir);
+my ($topDir, $scriptDir, $trfRunDir, $trfRunDirRel);
 my ($chromBased, @chroms, %chromRoots, $chromGz, $geneTable);
 
 sub checkOptions {
@@ -230,11 +230,13 @@ sub compressScaffoldFiles {
   # Add commands to $bossScript that will create .gz compressed files
   # from each of those categories.
   my ($runDir, $bossScript) = @_;
+  my $hgFakeAgpDir = "$HgAutomate::trackBuild/hgFakeAgp";
   my $agpFile = &mustFindOne("$db.agp", 'scaffolds.agp',
-		       "$HgAutomate::trackBuildDir/hgFakeAgp/$db.agp",
-		       "$HgAutomate::trackBuildDir/hgFakeAgp/scaffolds.agp");
-  my $outFile = &mustFindOne("$db.out", 'scaffolds.out');
-  my $trfFile = &mustFindOne("$trfRunDir/$db.bed", "$trfRunDir/scaffolds.bed");
+			     "$hgFakeAgpDir/$db.agp",
+			     "$hgFakeAgpDir/scaffolds.agp");
+  my $outFile = &mustFindOne("$db.fa.out", 'scaffolds.out');
+  my $trfFile = &mustFindOne("$trfRunDirRel/trfMask.bed",
+			     "$trfRunDirRel/scaffolds.bed");
   $bossScript->add(<<_EOF_
 # Make compressed files of .agp, .out, TRF .bed, soft- and hard-masked .fa:
 cd $runDir/bigZips
@@ -808,7 +810,8 @@ _EOF_
 
 $topDir = "$HgAutomate::clusterData/$db";
 $scriptDir = "$topDir/jkStuff";
-$trfRunDir = "$topDir/$HgAutomate::trackBuild/simpleRepeat";
+$trfRunDirRel = "$HgAutomate::trackBuild/simpleRepeat";
+$trfRunDir = "$topDir/$trfRunDirRel";
 $geneTable = &getGeneTable();
 
 if (! -e "$topDir/$db.2bit") {
