@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.319 2006/10/12 18:47:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.320 2006/10/16 19:01:06 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -548,11 +548,6 @@ safef(varName, sizeof(varName), "%s.label.common", tdb->tableName);
 option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "Common name");
-
-safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
 printf("<BR>\n");
 }
 
