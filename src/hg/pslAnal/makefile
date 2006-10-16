@@ -12,9 +12,8 @@ O = $A.o
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv ${AOUT} $A${EXE}
-	chmod a+rx $A
-	cp -f $A $$HOME/bin/i386/$A
-	#${STRIP} $$HOME/bin/i386/$A${EXE}
+	chmod a+rx $A${EXE}
+	cp -f $A ${HOME}/bin/${MACHTYPE}/$A${EXE}
 
 debug: $O
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L)

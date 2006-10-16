@@ -553,24 +553,30 @@ int snpBase(struct sqlConnection *conn, char *chr, int position)
 struct sqlResult *sr;
 char **row;
 int rowOff;
-int ret = 0;
+int ret = 0, i;
 static boolean checked = FALSE;
 static boolean haveSnp = FALSE;
+static char *snpTable = NULL;
+static char *snpTables[] = {"snp126", "snp125", NULL};
 
 verbose(4, "\tchecking for snp\n");
 if (!checked)
     {
-    haveSnp = sqlTableExists(conn, "snp125");
+    for (i = 0; (snpTables[i] != NULL) && !haveSnp; i++)
+        {
+        snpTable = snpTables[i];
+        haveSnp = sqlTableExists(conn, snpTable);
+        }
     checked = TRUE;
     if (!haveSnp)
-        fprintf(stderr, "warning: no snp table in this databsae\n");
+        fprintf(stderr, "WARNING: no snp table in this databsae\n");
     }
 
 /* the new table is snp, replacing snpTsc and snpNih+hgFixed.dsSnpRS */
 if (haveSnp)
     {
     verbose(4, "\tquerying snp table\n");
-    sr = hRangeQuery(conn, "snp125", chr, position, position+1, NULL, &rowOff);
+    sr = hRangeQuery(conn, snpTable, chr, position, position+1, NULL, &rowOff);
     while ((row = sqlNextRow(sr)) != NULL) 
         {
         struct snp125 snp;
@@ -2077,7 +2083,9 @@ if (argc != 6)
     fprintf(stderr, "\t-genbankCds\n");
     return 1;
     }
-db = optionVal("db", "hg15");
+db = optionVal("db", NULL);
+if (db == NULL)
+    errAbort("must specify -db");
 vfName = optionVal("versions", NULL);
 dfName = optionVal("der", NULL);
 indelReport = optionExists("indels");
