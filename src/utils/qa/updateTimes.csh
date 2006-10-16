@@ -151,12 +151,11 @@ foreach table (`cat $tablelist`)
   if ($allThree == "all") then
     foreach machine (hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc)
       set third=`getRRtableStatus.csh $db $table update_time $machine`
+      if ("mgc" == $machine) then
+       echo
+      endif
       echo "."$third
     end
-    if ("mgc" == $machine) then
-    echo
-    endif
-    echo "."$third
   endif
 end
 echo
