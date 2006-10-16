@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.301 2006/07/31 04:56:34 galt Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.302 2006/10/16 06:04:39 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -387,24 +387,18 @@ char *hDefaultChromDb(char *db)
 {
 static struct hash *hash = NULL;
 struct hashEl *hel = NULL;
-char *chrom = NULL;
 
 if (hash == NULL)
     hash = hashNew(0);
-hel = hashLookup(hash, db);
-if (hel == NULL)
+hel = hashStore(hash, db);
+if (hel->val == NULL)
     {
     struct sqlConnection *conn = hAllocOrConnect(db);
-    char buf[HDB_MAX_CHROM_STRING];
     if (sqlTableExists(conn, "chromInfo"))
-	chrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
-			      buf, sizeof(buf));
+	hel->val = sqlQuickString(conn, "select chrom from chromInfo limit 1");
     hFreeOrDisconnect(&conn);
-    hashAdd(hash, db, cloneString(chrom));
     }
-else
-    chrom = (char *)(hel->val);
-return cloneString(chrom);
+return hel->val;
 }
 
 char *hDefaultChrom()
