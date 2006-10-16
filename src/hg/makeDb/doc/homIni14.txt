@@ -1,0 +1,30 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the human-chimp ancestor
+# genome, October 2006, homIni14
+#
+
+
+
+###
+## ENTROPY (Done, 2006-10-09, bsuh)
+##  Entropy wiggle track
+mkdir /cluster/data/homIni14/bed/entropy
+mkdir /cluster/data/homIni14/bed/entropy/work
+cd /cluster/data/homIni14/bed/entropy/work
+ln -s /cluster/home/bsuh/file/san/rico/vers1/final-results
+compile.exe "probToEntropy.c faProb.c"
+mkdir tmp
+probToBed.pl
+cd tmp
+ln -s ../addChr_nochange.pl
+ln -s ../encode_nochange.pl
+encode_nochange.pl
+mv entropy.* ../..
+cd ..
+rm -rf tmp
+cd /gbdb/homIni14/wib
+ln -s /cluster/data/homIni14/bed/entropy/entropy.*.wib .
+cd /cluster/data/homIni14/bed/entropy
+hgLoadWiggle homIni14 entropy entropy.*.wig
