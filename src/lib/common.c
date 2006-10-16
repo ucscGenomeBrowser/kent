@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.104 2006/08/30 20:55:07 kate Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.105 2006/10/16 06:34:00 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1878,6 +1878,52 @@ sz = vasafef(buffer, bufSize, format, args);
 va_end(args);
 return sz;
 }
+
+void safecpy(char *buf, size_t bufSize, const char *src)
+/* copy a string to a buffer, with bounds checking.*/
+{
+size_t slen = strlen(src);
+if (slen > bufSize-1)
+    errAbort("buffer overflow, size %lld, string size: %lld", (long long)bufSize, (long long)slen);
+strcpy(buf, src);
+}
+
+void safencpy(char *buf, size_t bufSize, const char *src, size_t n)
+/* copy n characters from a string to a buffer, with bounds checking.
+ * Unlike strncpy, always null terminates the result */
+{
+if (n > bufSize-1)
+    errAbort("buffer overflow, size %lld, substring size: %lld", (long long)bufSize, (long long)n);
+size_t slen = strlen(src);
+if (slen > n)
+    slen = n;
+strncpy(buf, src, n);
+buf[slen] = '\0';
+}
+
+void safecat(char *buf, size_t bufSize, const char *src)
+/* Append  a string to a buffer, with bounds checking.*/
+{
+size_t blen = strlen(buf);
+size_t slen = strlen(src);
+if (blen+slen > bufSize-1)
+    errAbort("buffer overflow, size %lld, new string size: %lld", (long long)bufSize, (long long)(blen+slen));
+strcat(buf, src);
+}
+
+void safencat(char *buf, size_t bufSize, const char *src, size_t n)
+/* append n characters from a string to a buffer, with bounds checking. */
+{
+size_t blen = strlen(buf);
+if (blen+n > bufSize-1)
+    errAbort("buffer overflow, size %lld, new string size: %lld", (long long)bufSize, (long long)(blen+n));
+size_t slen = strlen(src);
+if (slen > n)
+    slen = n;
+strncat(buf, src, n);
+buf[blen+slen] = '\0';
+}
+
 
 static char *naStr = "n/a";
 static char *emptyStr = "";

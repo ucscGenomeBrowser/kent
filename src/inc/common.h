@@ -937,6 +937,19 @@ __attribute__((format(printf, 3, 4)))
 #endif
 ;
 
+void safecpy(char *buf, size_t bufSize, const char *src);
+/* copy a string to a buffer, with bounds checking.*/
+
+void safencpy(char *buf, size_t bufSize, const char *src, size_t n);
+/* copy n characters from a string to a buffer, with bounds checking.
+ * Unlike strncpy, always null terminates the result */
+
+void safecat(char *buf, size_t bufSize, const char *src);
+/* Append  a string to a buffer, with bounds checking.*/
+
+void safencat(char *buf, size_t bufSize, const char *src, size_t n);
+/* append n characters from a string to a buffer, with bounds checking. */
+
 char *naForNull(char *s);
 /* Return 'n/a' if s is NULL, otherwise s. */
 

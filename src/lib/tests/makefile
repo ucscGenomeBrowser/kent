@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
-    mimeTests base64Tests quotedPTests
+    mimeTests base64Tests quotedPTests safeTest
 	rm -r output
 	@echo tested all
 
@@ -178,15 +178,18 @@ quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
 	${BIN_DIR}/testQuotedP 'taxes=20are=20quite=20high=20=' > output/$@.out
 	diff expected/$@.out output/$@.out
 
-
-
 ${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS} $L
-
 
 mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
 	${BIN_DIR}/mimeDecodeTest -cid -autoBoundary output < input/$@.txt
 	diff expected/noName1.html output/noName1.html
+
+${BIN_DIR}/safeTester:  mkdirs safeTester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/safeTester safeTester.o ${MYLIBS} $L
+
+safeTest: ${BIN_DIR}/safeTester mkdirs
+	${BIN_DIR}/safeTester
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
