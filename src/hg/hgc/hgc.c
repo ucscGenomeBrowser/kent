@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1141 2006/10/13 04:49:36 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1142 2006/10/16 19:59:55 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16883,12 +16883,13 @@ int hasAttr = 0;
 int i;
 int start = cartInt(cart, "o");
 
-genericHeader(tdb, itemName);
-
-/* postion, band, genomic size */
+/* official name, position, band, genomic size */
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escName);
 details = gvLoadByQuery(conn, query); 
+
+genericHeader(tdb, details->name);
+
 /* change label based on species */
 if (sameString(organism, "Human"))
     printf("<B>HGVS name:</B> %s <BR>\n", details->name);
