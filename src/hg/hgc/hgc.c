@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1142 2006/10/16 19:59:55 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1143 2006/10/16 20:42:31 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4750,6 +4750,68 @@ printf("</TT></PRE>\n");
 sqlDisconnect(&conn);
 
 printTrackHtml(tdb);
+}
+
+void doYaleTars(struct trackDb *tdb, char *item, char *itemForUrl) 
+/* Display information for Affy tracks*/
+
+{
+char *dupe, *type, *words[16], *chrom = NULL, *strand = NULL;
+char *item2 = NULL;
+int wordCount, end = 0;
+int start = cartInt(cart, "o");
+char query[256];
+char **row;
+struct sqlResult *sr = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+
+if (itemForUrl == NULL)
+    {
+    if (startsWith("TAR", item))
+        {
+        /* Remove TAR prefix from item */
+        item2 = strchr(item, 'R');
+        item2++;
+        itemForUrl = item2;
+        }
+     else
+        itemForUrl = item;
+     }
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+safef(query, sizeof(query), "select tName, tEnd, strand from %s where qName='%s' and tStart=%d;", tdb->tableName, item, start);
+ 
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* load PSL into struct */
+if (row != NULL)
+    {
+    chrom = cloneString(row[0]);
+    end = sqlUnsigned(row[1]);
+    strand = cloneString(row[2]);
+    }
+printPos(chrom, start, end, strand, TRUE, item);
+if (wordCount > 0)
+    {
+    type = words[0];
+
+    if (sameString(type, "psl"))
+        {
+	char *subType = ".";
+	if (wordCount > 1)
+	    subType = words[1];
+        printPslFormat(conn2, tdb, item, start, subType);
+	}
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 void doUserPsl(char *track, char *item)
@@ -17629,6 +17691,10 @@ else if (sameWord(track, "stsMap"))
 else if (sameWord(track, "rhMap")) 
     {
     doRHmap(tdb, item);
+    }
+else if (sameWord(track, "yaleBertoneTars"))
+    {
+    doYaleTars(tdb, item, NULL);
     }
 else if (sameWord(track, "recombRate"))
     {
