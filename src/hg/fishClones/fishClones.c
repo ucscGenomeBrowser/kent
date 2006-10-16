@@ -858,8 +858,8 @@ int combinePos(struct place *p, struct position *pos)
 	( ((pos->orien == '+') && ((pos->start - p->start) > 25000)) || 
 	((pos->orien == '-') && ((p->end - pos->end) > 25000)) )) 
       badBE = TRUE;
-    else if (((p->startBE != -1) && ((p->start - pos->start) > 25000)) || 
-	     ((p->endBE != -1) && ((pos->end - p->end) > 25000)) &&
+    else if ((((p->startBE != -1) && ((p->start - pos->start) > 25000)) || 
+	      ((p->endBE != -1) && ((pos->end - p->end) > 25000))) &&
 	     (((!sameString(pos->type, "BAC End Pair")) || (p->bePair == NULL)) && (p->acc == NULL)))
       badBE = TRUE;
     }
