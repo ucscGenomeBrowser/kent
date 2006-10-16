@@ -3700,3 +3700,13 @@ mysql> select count(*), exception from snp125Exceptions group by exception;
 +----------+---------------------------+
 
 
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 10/16/06 angie)
+    # File emailed from Ginger Cheng <ginger2@u.washington.edu>
+    mkdir /cluster/data/canFam1/bed/genomicSuperDups
+    cd /cluster/data/canFam1/bed/genomicSuperDups
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' canFam1_WGAC.tab \
+    | hgLoadBed canFam1 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+
