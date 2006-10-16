@@ -286,6 +286,17 @@ priority 87
 visibility hide
 type bed 15 +
 
+track yaleBertoneTars
+shortLabel Bertone Yale TAR
+longLabel Yale Transcriptionally Active Regions (TAR/TransFrags) (Bertone data)
+group regulation
+priority 87
+visibility hide
+color 50,100,50
+url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+urlLabel Yale DART Link:
+type psl . 
+
 track affyTranscriptome 
 shortLabel Transcriptome
 longLabel Affymetrix Experimentally Derived Transcriptome
