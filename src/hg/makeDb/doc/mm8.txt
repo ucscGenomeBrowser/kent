@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.20 2006/10/13 00:18:20 heather Exp $"
+#	"$Id: mm8.txt,v 1.21 2006/10/16 23:24:01 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -6878,7 +6878,7 @@ set out = $3
 ./runPCR $(path1) {check out line+ out/$(num1).epcr}
 #ENDLOOP
 '_EOF_'
-    # the mouseP.info was created above
+    # << the mouseP.info was created above
     gensub2 chr.list single template jobList
     para create jobList
     para try
@@ -7228,6 +7228,27 @@ set out = $3
     # changed search regex to
         termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 9/18/06 angie)
+    # File emailed from Ginger Cheng <ginger2@u.washington.edu>
+    mkdir /cluster/data/mm8/bed/genomicSuperDups
+    cd /cluster/data/mm8/bed/genomicSuperDups
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm8_WGAC.tab \
+    | hgLoadBed mm8 genomicSuperDups stdin \
+      -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+
+
+#####################################################################
+# CELERA COVERAGE (WSSD -- DEPTH OF COVERAGE) (DONE 10/16/06 angie)
+    # File emailed from Ginger Cheng <ginger2@u.washington.edu>
+    mkdir /cluster/data/mm8/bed/wssd
+    cd /cluster/data/mm8/bed/wssd
+    tail +2 mm8_WSSD_DOC.tab \
+    | hgLoadBed mm8 wssdCoverage stdin
+
+
 #####################################################################
 ## NIA Mouse Gene Index - (DONE, Fan, 10/6/06)
 #       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
@@ -7286,6 +7307,14 @@ set out = $3
 # refGene 1.842%, geneid 1.592%, both 0.883%, cover 47.95%, enrich 30.13x
     featureBits mm7 -enrichment refGene geneid
 # refGene 1.835%, geneid 1.579%, both 0.866%, cover 47.18%, enrich 29.88x
+
+
+#####################################################################
+# RN4 RECIPROCAL BEST CHAINS/NETS (DONE - 2006-10-10 - Angie)
+    doRecipBest.pl mm8 rn4 \
+      >& /cluster/data/mm8/bed/blastz.rn4/axtChain/recipBest.log &
+    tail -f /cluster/data/mm8/bed/blastz.rn4/axtChain/recipBest.log
+
 
 ##############################################################################
 
