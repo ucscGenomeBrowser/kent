@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.1 2006/10/09 20:44:33 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.2 2006/10/17 19:54:14 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -463,14 +463,14 @@ sequence is not performed here, but later on by blastz cluster jobs.";
 				      $runDir, $whatItDoes, $DEF);
   $bossScript->add(<<_EOF_
 $partitionTargetCmd
-$mkOutRoot
 $partitionQueryCmd
 _EOF_
     );
   $bossScript->execute();
   &HgAutomate::nfsNoodge("$outRoot");
 #*** If blastzOutRoot is used, this probably should not be done by $fileServer:
-  &HgAutomate::run("ssh -x $fileServer '(cd $runDir; csh -ef xdir.sh)'");
+  &HgAutomate::run("ssh -x $fileServer " .
+		   "'(cd $runDir; $mkOutRoot; csh -ef xdir.sh)'");
 }
 
 sub doBlastzClusterRun {
