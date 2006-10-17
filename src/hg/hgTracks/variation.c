@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.114 2006/10/12 03:34:26 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.115 2006/10/17 19:11:21 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -472,11 +472,7 @@ vis = estimateVisibility(tg);
 if(vis==tvDense || visLim==tvDense)
     sortSnp125ExtendedByColor(tg);
 else
-    {
     slSort(&tg->items, bedCmp);
-    if(snp125ExtendedNames && vis !=tvSquish && visLim !=tvSquish)
-        setSnp125ExtendedNameExtra(tg);
-    }
 }
 
 void loadSnpMap(struct track *tg)
