@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.323 2006/10/17 19:14:56 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.324 2006/10/17 20:21:27 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -174,7 +174,16 @@ void snp125Ui(struct trackDb *tdb)
  * variables to their defaults. */
 int i = 0;
 char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
+struct sqlConnection *conn = hAllocConn();
 
+if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
+    {
+    snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
+    printf("<BR><B>Include Chimp (panTro2) state and observed human alleles in name: </B>&nbsp;");
+    cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
+    printf("<BR>");
+    }
+hFreeConn(&conn);
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
 printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
