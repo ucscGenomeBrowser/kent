@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.322 2006/10/17 19:10:17 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.323 2006/10/17 19:14:56 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -174,7 +174,6 @@ void snp125Ui(struct trackDb *tdb)
  * variables to their defaults. */
 int i = 0;
 char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
-struct sqlConnection *conn = hAllocConn();
 
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
