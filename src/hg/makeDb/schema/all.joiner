@@ -2015,11 +2015,11 @@ identifier hgMutLinkId
 
 identifier gvId
 "Locus Variants track mutation identifier for attributes and links"
-    hg17,hg18.gvPos.name dupeOk
     hgFixed.gv.id
     hgFixed.gvLink.id
     hgFixed.gvAttr.id
     hgFixed.gvAttrLong.id
+    hg17,hg18.gvPos.name
 
 identifier gvSrcId
 "Locus Variants track source ID"     
