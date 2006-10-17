@@ -688,6 +688,9 @@ void zooMethods( struct track *tg );
 void expRatioMethods(struct track *tg);
 /* Set up methods for expRatio type tracks in general. */
 
+void expRatioMethodsFromCt(struct track *tg);
+/* Set up methods for expRatio type tracks from custom track. */
+
 void loweExpRatioMethods(struct track *tg);
 /* Set up methods for expRatio type tracks in general. */
 

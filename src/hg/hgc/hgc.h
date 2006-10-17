@@ -24,6 +24,10 @@
 #include "hPrint.h"
 #endif
 
+#ifndef CUSTOMTRACK_H
+#include "customTrack.h"
+#endif
+
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
@@ -162,7 +166,7 @@ void nci60Details(struct trackDb *tdb, char *item);
 void doAffyHumanExon(struct trackDb *tdb, char *item);
 /* Details for affyHumanExon all exon arrays. */
 
-void doExpRatio(struct trackDb *tdb, char *item);
+void doExpRatio(struct trackDb *tdb, char *item, struct customTrack *ct);
 /* Generic expression ratio deatils using microarrayGroups.ra file */
 /* and not the expRecord tables. */
 

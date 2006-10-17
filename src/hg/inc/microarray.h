@@ -20,6 +20,10 @@
 #include "trackDb.h"
 #endif
 
+#ifndef CUSTOMTRACK_H
+#include "customTrack.h"
+#endif
+
 #define MICROARRAY_MISSING_DATA -10000
 /* This is an important constant.  Often zero and negative numbers are valid */
 /* microarray data.  -10000 is often used then. */
@@ -135,6 +139,12 @@ void microarrayGroupsFree(struct microarrayGroups **pGroups);
 
 struct microarrayGroups *maGetTrackGroupings(char *database, struct trackDb *tdb);
 /* Get the settings from the .ra files and put them in a convenient struct. */
+
+struct maGrouping *maGetGroupingFromCt(struct customTrack *ct);
+/* Spoof an "all" maGrouping from a customTrack. */
+
+struct bed *ctLoadMultScoresBedDb(struct customTrack *ct, char *chrom, int start, int end);
+/* If the custom track is stored in a database, load it. */
 
 struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings, 
 					     struct cart *cart, char *trackName);

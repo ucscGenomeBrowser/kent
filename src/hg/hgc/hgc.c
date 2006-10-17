@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1143 2006/10/16 20:42:31 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1144 2006/10/17 01:15:34 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2972,7 +2972,7 @@ if (wordCount > 0)
 	}
     else if (sameString(type, "expRatio"))
         {
-	doExpRatio(tdb, item);
+	doExpRatio(tdb, item, NULL);
 	}
     else if (sameString(type, "wig"))
         {
@@ -15067,17 +15067,20 @@ struct customTrack *ctList = getCtList();
 struct customTrack *ct;
 struct bed *bed = (struct bed *)NULL;
 int start = cartInt(cart, "o");
-
+char *type;
 fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
     if (sameString(trackId, ct->tdb->tableName))
 	break;
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
+type = trackDbSetting(ct->tdb, "type");
 cartWebStart(cart, "Custom Track: %s", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
-if (ct->wiggle)
+if (sameWord(type, "expRatio"))
+    doExpRatio(ct->tdb, fileItem, ct);
+else if (ct->wiggle)
     {
     if (ct->dbTrack)
 	{

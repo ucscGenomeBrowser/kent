@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.34 2006/10/15 01:04:13 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.35 2006/10/17 01:15:21 aamp Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -113,7 +113,7 @@ static boolean bedRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
-if (type != NULL && !sameString(type, fac->name))
+if (type != NULL && !sameString(type, fac->name) && !sameWord(type, "expRatio"))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -236,7 +236,6 @@ static struct bed *customTrackBed(char *row[13], int wordCount,
 {
 struct bed * bed;
 int count;
-
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, row[0]);
 customFactoryCheckChromName(bed->chrom, lf);
@@ -246,7 +245,6 @@ bed->chromEnd = lineFileNeedNum(lf, row, 2);
 if (bed->chromEnd < bed->chromStart)
     lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
     	bed->chromStart, bed->chromEnd);
-
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
 if (wordCount > 4)
@@ -347,6 +345,21 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 	    "BED blocks must span chromStart to chromEnd.  (chromStart + "
 	    "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
 	}
+    }
+if (wordCount > 12)
+    // get the microarray expressions
+    {
+    if (wordCount < 15)
+	lineFileAbort(lf, "not enough fields in BED file.");
+    bed->expCount = (int)sqlUnsigned(row[12]);
+    sqlSignedDynamicArray(row[13], &bed->expIds, &count);
+    if (count != bed->expCount)
+	lineFileAbort(lf, "expecting %d elements in expIds array (bed field 14)",
+		      bed->expCount);
+    sqlFloatDynamicArray(row[14], &bed->expScores, &count);
+    if (count != bed->expCount)
+	lineFileAbort(lf, "expecting %d elements in expIds array (bed field 15)",
+		      bed->expCount);	
     }
 return bed;
 }

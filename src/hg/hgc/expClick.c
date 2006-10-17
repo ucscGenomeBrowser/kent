@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.15 2006/09/28 17:39:52 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.16 2006/10/17 01:15:34 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -311,6 +311,7 @@ for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
     }
 printf("</tr></table>\n");
 printf("</td></tr></table>\n");
+uglyf("wtf<BR>\n");
 }
 
 static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
@@ -408,12 +409,10 @@ static void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *item
 int i,featureCount=0;
 if(bedList == NULL)
     errAbort("hgc::msBedPrintTable() - bedList is NULL");
-
 featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
     printKey(minScore, maxScore, stepSize, base, getColor);
-   
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
@@ -421,7 +420,6 @@ printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\
 printHeader(bedList, erHash, itemName);
 for(i=0; i<bedList->expCount; i++)
     {
-     
     printRow(bedList, erHash, i, expName, maxScore);
     }
 printf("</table>");
@@ -1258,7 +1256,22 @@ struct expRecord *er = el->val;
 expRecordFree(&er);
 }
 
-void doExpRatio(struct trackDb *tdb, char *item)
+void spitList(struct bed *list)
+{
+struct bed *bed;
+for (bed = list; bed != NULL; bed = bed->next)
+    {
+    bedTabOutN(bed, 15, stdout);
+    uglyf("<BR>\n");
+    }
+}
+
+char *printMe(void *thing)
+{
+return (thing == NULL) ? "NULL" : "NOT NULL";
+}
+
+void doExpRatio(struct trackDb *tdb, char *item, struct customTrack *ct)
 /* Generic expression ratio deatils using microarrayGroups.ra file */
 /* and not the expRecord tables. */
 {
@@ -1268,20 +1281,34 @@ double maxScore = atof(expScale);
 double stepSize = atof(expStep);
 struct bed *bedList;
 char *itemName = cgiUsualString("i2","none");
-char *expName = item;
-genericHeader(tdb, itemName);
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-if(bedList == NULL)
+char *expName = (item == NULL) ? itemName : item;
+if (!ct)
+    {
+    genericHeader(tdb, itemName);
+    bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+    }
+else if (ct->dbTrack)
+    bedList = ctLoadMultScoresBedDb(ct, seqName, winStart, winEnd);
+else
+    bedList = bedFilterListInRange(ct->bedList, NULL, seqName, winStart, winEnd);
+if (bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
-else if (sameString(expName, "zoomInMore"))
+else if (expName && sameString(expName, "zoomInMore"))
     printf("<b>Too much data to display in detail in this range.</b>\n");
 else
     {
-    struct microarrayGroups *groupings = maGetTrackGroupings(database, tdb);
-    struct maGrouping *combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->tableName);
+    struct microarrayGroups *groupings = NULL;
+    struct maGrouping *combineGroup;
     struct hash *erHash = newHash(6);
     int i;
-    maBedClumpGivenGrouping(bedList, combineGroup);    
+    if (!ct)
+	{
+	groupings = maGetTrackGroupings(database, tdb);
+	combineGroup = maCombineGroupingFromCart(groupings, cart, tdb->tableName);
+	}
+    else
+	combineGroup = maGetGroupingFromCt(ct);
+    maBedClumpGivenGrouping(bedList, combineGroup);
     for (i = 0; i < combineGroup->numGroups; i++)
 	{
 	/* make stupid exprecord hash.perhaps eventually this won't be needed */
@@ -1291,7 +1318,7 @@ else
 	hashAdd(erHash, id, er);
 	}
     puts("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2, 
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
 		     msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
     hashTraverseEls(erHash, erHashElFree);
     hashFree(&erHash);
@@ -1300,3 +1327,4 @@ else
 puts("<h2></h2><p>\n");
 bedFreeList(&bedList);
 }
+

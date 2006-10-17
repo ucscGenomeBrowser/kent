@@ -347,15 +347,13 @@ else
 bedFreeList(&bedList);
 }
 
-static void lfsFromBedAndGrouping(struct track *tg)
+static void lfsFromBedAndGrouping(struct track *tg, struct maGrouping *combineGroup)
 /* This is sort of a replacement of msBedGroupByIndex. */
 /* It's meant to be the default microarray track filter */
 /* for tracks using the new microarrayGroups.ra scheme. */
 {
 struct linkedFeaturesSeries *lfsList = NULL;
 struct bed *bedList = tg->items;
-struct microarrayGroups *groupings = maGetTrackGroupings(database, tg->tdb);
-struct maGrouping *combineGroup = maCombineGroupingFromCart(groupings, cart, tg->mapName);
 int i;
 int numRows = combineGroup->numGroups;
 char newLongLabel[512];
@@ -365,8 +363,13 @@ for (i = 0; i < numRows; i++)
     {
     struct linkedFeaturesSeries *lfs;
     struct bed *bed;
+    char customName[16];
+    safef(customName, sizeof(customName), "Array %d", i+1);
     AllocVar(lfs);
-    lfs->name = cloneString(combineGroup->names[i]);
+    if (combineGroup == NULL)
+	lfs->name = cloneString(customName);
+    else
+	lfs->name = cloneString(combineGroup->names[i]);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	struct linkedFeatures *lf = lfFromBed(bed);
@@ -379,8 +382,26 @@ for (i = 0; i < numRows; i++)
 slReverse(&lfsList);
 tg->items = lfsList;
 /* Change the longLabel */
-safef(newLongLabel, sizeof(newLongLabel), "%s - %s", tg->longLabel, combineGroup->description);
-tg->longLabel = cloneString(newLongLabel);
+if (!sameString(combineGroup->description, "Custom Track"))
+    {
+    safef(newLongLabel, sizeof(newLongLabel), "%s - %s", tg->longLabel, combineGroup->description);
+    tg->longLabel = cloneString(newLongLabel);
+    }
+}
+
+void lfsFromExpRatio(struct track *tg)
+/* Make the lfs out of the track by calling lfsFromBedAndGrouping */
+{
+struct customTrack *ct = tg->customPt;
+struct maGrouping *grouping = NULL;
+if (ct != NULL)
+    grouping = maGetGroupingFromCt(ct);
+else
+    {
+    struct microarrayGroups *groups = maGetTrackGroupings(database, tg->tdb);    
+    grouping = maCombineGroupingFromCart(groups, cart, tg->mapName);
+    }
+lfsFromBedAndGrouping(tg, grouping);
 }
 
 void lfsFromAffyUclaNormBed(struct track *tg)
@@ -568,9 +589,6 @@ else
     }    
 bedFreeList(&bedList);
 }
-
-
-
 
 void lfsFromCghNci60Bed(struct track *tg)
 {
@@ -991,6 +1009,27 @@ else
     }
 }
 
+void fixLfs(struct track *tg)
+/* Little function called at the loadMultScoresBed and the ct one */
+/* to polish the lfs up. */
+{
+struct linkedFeatures *lf;
+struct linkedFeaturesSeries *lfs;
+for(lfs = tg->items; lfs != NULL; lfs = lfs->next) 
+    /* Set the beginning and end of each linkedFeaturesSeries. */
+    {
+    lfs->start = BIGNUM;
+    lfs->end = 0;
+    for(lf = lfs->features; lf != NULL; lf = lf->next) 
+	{
+	if(lf->start < lfs->start)
+	    lfs->start = lf->start;
+	if(lf->end > lfs->end)
+	    lfs->end = lf->end;
+	}
+    }
+}
+
 void loadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -1000,8 +1039,6 @@ char **row;
 int rowOffset;
 int itemCount =0;
 struct bed *bedList = NULL, *bed;
-struct linkedFeatures *lf;
-struct linkedFeaturesSeries *lfs;
 enum trackVisibility vis = tg->visibility;
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -1042,22 +1079,24 @@ else
     tg->items = lfsFromMsBed(tg, bedList);
     bedFreeList(&bedList);
     }
-
-for(lfs = tg->items; lfs != NULL; lfs = lfs->next) 
-    /* Set the beginning and end of each linkedFeaturesSeries. */
-    {
-    lfs->start = BIGNUM;
-    lfs->end = 0;
-    for(lf = lfs->features; lf != NULL; lf = lf->next) 
-	{
-	if(lf->start < lfs->start)
-	    lfs->start = lf->start;
-	if(lf->end > lfs->end)
-	    lfs->end = lf->end;
-	}
-    }
+fixLfs(tg);
 /* Put back our spoofed visibility. */
 tg->visibility = vis;
+}
+
+static void ctLoadMultScoresBed(struct track *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct customTrack *ct = tg->customPt;
+if (ct->dbTrack)
+    {
+    if (ct->fieldCount != 15)
+	errAbort("customTrack->fieldCount != 15");
+    ct->bedList = ctLoadMultScoresBedDb(ct, chromName, winStart, winEnd);
+    }
+tg->items = ct->bedList;
+tg->trackFilter(tg);
+fixLfs(tg);
 }
 
 char *rosettaName(struct track *tg, void *item)
@@ -1387,7 +1426,6 @@ void expRatioMethods(struct track *tg)
 {
 struct trackDb *tdb = tg->tdb;
 char *expScale = trackDbRequiredSetting(tdb, "expScale");
-
 linkedFeaturesSeriesMethods(tg);
 tg->expScale = atof(expScale);
 tg->itemColor = expRatioColor;
@@ -1430,5 +1468,15 @@ void expRatioMethodsFromDotRa(struct track *tg)
 expRatioMethods(tg);
 tg->drawItems = expRatioDrawItems;
 tg->drawLeftLabels = expRatioDrawLeftLabels;
-tg->trackFilter = lfsFromBedAndGrouping;
+tg->trackFilter = lfsFromExpRatio;
+}
+
+void expRatioMethodsFromCt(struct track *tg)
+/* Set up methods for expRatio type tracks from custom track. */
+{
+expRatioMethods(tg);
+tg->drawItems = expRatioDrawItems;
+tg->drawLeftLabels = expRatioDrawLeftLabels;
+tg->loadItems = ctLoadMultScoresBed;
+tg->trackFilter = lfsFromExpRatio;
 }

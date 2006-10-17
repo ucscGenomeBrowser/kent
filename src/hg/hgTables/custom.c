@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.28 2006/08/09 21:39:12 kate Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.29 2006/10/17 01:15:41 aamp Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -173,6 +173,15 @@ if (fieldCount >= 12)
     field = newSlName("chromStarts");
     slAddHead(&fieldList, field);
     }
+if (fieldCount >= 15)
+    {
+    field = newSlName("expCount");
+    slAddHead(&fieldList, field);
+    field = newSlName("expIds");
+    slAddHead(&fieldList, field);
+    field = newSlName("expScores");
+    slAddHead(&fieldList, field);    
+    }
 slReverse(&fieldList);
 return fieldList;
 }
@@ -224,6 +233,20 @@ for (field = fieldList; field != NULL; field = field->next)
 	unsigned i;
 	for (i=0; i<bed->blockCount; ++i)
 	    hPrintf("%u,", bed->chromStarts[i]);
+	}
+    else if (sameString(type, "expCount"))
+        hPrintf("%u", bed->expCount);
+    else if (sameString(type, "expIds"))
+	{
+	unsigned i;
+	for (i=0; i<bed->expCount; ++i)
+	    hPrintf("%u,", bed->expIds[i]);
+	}
+    else if (sameString(type, "expScores"))
+	{
+	unsigned i;
+	for (i=0; i<bed->expCount; ++i)
+	    hPrintf("%f,", bed->expScores[i]);
 	}
     else
         errAbort("Unrecognized bed field %s", type);
@@ -278,6 +301,20 @@ for (field = fieldList; field != NULL; field = field->next)
 	unsigned i;
 	for (i=0; i<bed->blockCount; ++i)
 	    fprintf(f, "%u,", bed->chromStarts[i]);
+	}
+    else if (sameString(type, "expCount"))
+        fprintf(f, "%u", bed->expCount);
+    else if (sameString(type, "expIds"))
+	{
+	unsigned i;
+	for (i=0; i<bed->expCount; ++i)
+	    fprintf(f, "%u,", bed->expIds[i]);
+	}
+    else if (sameString(type, "expScores"))
+	{
+	unsigned i;
+	for (i=0; i<bed->expCount; ++i)
+	    fprintf(f, "%f,", bed->expScores[i]);
 	}
     else
         errAbort("Unrecognized bed field %s", type);

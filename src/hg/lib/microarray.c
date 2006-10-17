@@ -714,16 +714,66 @@ slReverse(&retList);
 return retList;
 }
 
+struct maGrouping *maGetGroupingFromCt(struct customTrack *ct)
+/* Spoof an "all" maGrouping from a customTrack. */
+{
+struct maGrouping *ret;
+char *words = trackDbRequiredSetting(ct->tdb, "expNames");
+struct slName *list = slNameListFromComma(words), *oneItem;
+int i;
+AllocVar(ret);
+/* ret->name not used in custom tracks. */
+ret->type = cloneString("all");
+ret->description = cloneString("Custom Track");
+ret->size = slCount(list);
+ret->numGroups = ret->size;
+AllocArray(ret->expIds, ret->size);
+AllocArray(ret->groupSizes, ret->size);
+AllocArray(ret->names, ret->size);
+for (oneItem = list, i = 0; (oneItem != NULL) && (i < ret->size); oneItem = oneItem->next, i++)
+    {
+    ret->expIds[i] = i;
+    ret->groupSizes[i] = 1;
+    ret->names[i] = cloneString(oneItem->name);
+    }
+slFreeList(&list);
+return ret;
+}
+
+struct bed *ctLoadMultScoresBedDb(struct customTrack *ct, char *chrom, int start, int end)
+/* If the custom track is stored in a database, load it. */
+{
+int rowOffset;
+char **row;
+struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlResult *sr;
+struct bed *bed, *bedList = NULL;
+sr = hRangeQuery(conn, ct->dbTableName, chrom, start, end,
+		 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, ct->fieldCount);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+slReverse(&bedList);
+return bedList;
+}
+
 struct microarrayGroups *maGetTrackGroupings(char *database, struct trackDb *tdb)
 /* Get the settings from the .ra files and put them in a convenient struct. */
 {
 struct microarrayGroups *ret;
-char *groupings = trackDbRequiredSetting(tdb, "groupings");
+char *groupings = trackDbSetting(tdb, "groupings");
 char *s = NULL;
 struct hash *allGroups;
 struct hash *mainGroup;
 struct hash *tmpGroup;
-struct hash *hashList = 
+struct hash *hashList; 
+if (groupings == NULL)
+    return NULL;
+hashList = 
     hgReadRa(hGenome(database), database, "hgCgiData", 
 	     "microarrayGroups.ra", &allGroups);
 if (allGroups == NULL)
@@ -741,6 +791,8 @@ if (s)
     if (s)
 	{
 	struct maGrouping *cur;
+	if (lastChar(s) == ',')
+	    s[strlen(s)-1] = '\0';
 	for (cur = ret->combineSettings; cur != NULL; cur = cur->next)
 	    if (sameWord(s, cur->name))
 		{
@@ -767,9 +819,11 @@ struct maGrouping *maCombineGroupingFromCart(struct microarrayGroups *groupings,
 char *setting = NULL;
 char cartVar[512];
 struct maGrouping *ret = NULL;
+/* Possibly NULL from custom trackness. */
+if (!groupings)
+    return NULL;
 safef(cartVar, sizeof(cartVar), "%s.combine", trackName);
 setting = cartUsualString(cart, cartVar, NULL);
-
 if (setting && sameWord(groupings->allArrays->name, setting))
     return groupings->allArrays;
 if (setting)
