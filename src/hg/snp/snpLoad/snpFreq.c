@@ -10,7 +10,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFreq.c,v 1.2 2006/10/18 19:19:45 heather Exp $";
+static char const rcsid[] = "$Id: snpFreq.c,v 1.3 2006/10/18 21:49:01 heather Exp $";
 
 static char *snpDb = NULL;
 static char *snpTable = NULL;
@@ -102,6 +102,7 @@ struct hashEl *alleleHashEl = NULL;
 struct hashEl *snpHashEl = NULL;
 struct coords *coordsInstance = NULL;
 char snpName[32];
+int bin = 0;
 
 safef(query, sizeof(query), "select snp_id, allele_id, freq from SNPAlleleFreq");
 sr = sqlGetResult(conn, query);
@@ -122,8 +123,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     coordsInstance = (struct coords *)snpHashEl->val;
     /* could add bin here */
-    fprintf(outputFileHandle, "%s\t%d\t%d\t%s\t%s\t%f\n",
-            coordsInstance->chrom, coordsInstance->start, coordsInstance->end,
+    bin = hFindBin(coordsInstance->start, coordsInstance->end);
+    fprintf(outputFileHandle, "%d\t%s\t%d\t%d\t%s\t%s\t%f\n",
+            bin, coordsInstance->chrom, coordsInstance->start, coordsInstance->end,
 	    snpName, (char *)alleleHashEl->val, sqlFloat(row[2]));
     }
 carefulClose(&outputFileHandle);
