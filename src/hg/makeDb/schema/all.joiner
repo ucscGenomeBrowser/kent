@@ -2016,7 +2016,7 @@ identifier hgMutLinkId
 identifier gvId
 "Locus Variants track mutation identifier for attributes and links"
     hgFixed.gv.id
-    hgFixed.gvLink.id minCheck=0.98
+    hgFixed.gvLink.id minCheck=0.95
     hgFixed.gvAttr.id minCheck=0.98
     hgFixed.gvAttrLong.id
     hg17,hg18.gvPos.name minCheck=0.98
