@@ -98,8 +98,8 @@ int sizeOne;
 sqlStringDynamicArray(row[11], &ret->vals, &sizeOne);
 assert(sizeOne == ret->valCount);
 }
-ret->dblVal = atof(row[12]);
-ret->fltVal = atof(row[13]);
+ret->dblVal = sqlDouble(row[12]);
+ret->fltVal = sqlFloat(row[13]);
 {
 int sizeOne;
 sqlDoubleDynamicArray(row[14], &ret->dblArray, &sizeOne);
