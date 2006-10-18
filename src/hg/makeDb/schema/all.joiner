@@ -2024,7 +2024,7 @@ identifier gvId
 identifier gvSrcId
 "Locus Variants track source ID"     
     hgFixed.gvSrc.srcId
-    hgFixed.gv.srcId
+    hgFixed.gv.srcId full
 
 #links between oreganno (regulatory annotation) and related tables
 identifier oregId
