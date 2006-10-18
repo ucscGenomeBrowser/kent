@@ -226,13 +226,13 @@
 			fasta files into a single two-bit 
 			file (.2bit) using the utility <TT>faToTwoBit</TT>:
 			<BLOCKQUOTE>
-			faToTwoBit <em>newGenome</em>.fa <em>newGenome</em>.2bit
+			faToTwoBit <em>newGenome</em>.fa /gbdb/<em>newGenome</em>.2bit
 			</BLOCKQUOTE>
 			For information on the usage options for the
 			faToTwoBit utility, execute the command with no 
 			arguments (this is true for all utilities in the Genome 
 			Browser source tree). The faToTwoBit utility will place 
-			the resulting .2bit file in the directory: 
+			the resulting .2bit file in the directory
 			/gbdb/<em>newGenome</em>/<em>newGenome</em>.2bit.
 			<LI>
 			Create a database for the new assembly using the 
@@ -275,16 +275,26 @@
          		-h localhost hgcentraltest<BR>
 			</BLOCKQUOTE>
 			<LI>
-			Add the new database name to the makefile in 
+			Add the new database name to the DBS variable in the 
+			makefile in 
 			<em>src/hg/makeDb/trackDb/makefile</em>. 
 			You can configure the
 			list of genome databases into which you want to load
 			trackDb tables by editing the list in this makefile.  
 			You may want also want to
 			comment out the 'cvs update' step for the 'alpha' make 
-			target in that file. 
+			target in that file. For the makefile to work correctly,
+			add a subdirectory in 
+			<em>src/hg/makeDb/trackDb/</em> corresponding
+			to the organism name (<em>e.g.</em> opossum), and then a
+			<em>newGenome</em> subdirectory in the organism 
+			directory. Using the opossum example shown in the 
+			previous step, this would result in the directory
+			hierarchy 
+			<em>src/hg/makeDb/trackDb/opossum/monDom1/</em>. 
 			<LI>
-			Create the trackDb and hgFindSpec tables that contain
+			Run "make alpha" in src/hg/makeDb/trackDb/.  This 
+			creates the tables trackDb and hgFindSpec that contain
 			information about the Genome Browser tracks that will 
 			be displayed for the new assembly. For more information
 			about creating these tables, see 
@@ -304,8 +314,7 @@
 			in the Genome Browser source tree (these are plain text
 			files, not MS Word documents). The Gold and Gap 
 			tracks can be created from the genome assembly's AGP 
-			file.  The rmsk and simpleRepeats tables are loaded from
-			the repeatmasking results.
+			file.  
 			<P>
 			If you encounter problems or have questions about this
 			procedure, email the 
