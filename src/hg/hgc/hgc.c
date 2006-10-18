@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1145 2006/10/17 14:53:31 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1146 2006/10/18 22:46:22 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11418,7 +11418,7 @@ char *chromName = cloneString(snp.chrom);
 
 safef(tableName, sizeof(tableName), "snp%dExtFile", version);
 if (!hTableExists(tableName))
-    return "ERROR";
+    return NULL;
 
 stripString(chromName, "_random");
 
@@ -11426,7 +11426,7 @@ safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, c
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
-   return "ERROR";
+   return NULL;
 fileName = cloneString(row[0]);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -11505,7 +11505,7 @@ int end = 0;
 long offset = 0;
 
 fileName = getSnpSeqFile(snp, version);
-if (sameString(fileName, "ERROR"))
+if (!fileName)
     return;
 
 offset = getSnpOffset(snp, version);
