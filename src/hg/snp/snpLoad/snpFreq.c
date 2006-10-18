@@ -10,7 +10,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFreq.c,v 1.1 2006/10/18 19:08:02 heather Exp $";
+static char const rcsid[] = "$Id: snpFreq.c,v 1.2 2006/10/18 19:19:45 heather Exp $";
 
 static char *snpDb = NULL;
 static char *snpTable = NULL;
@@ -59,18 +59,21 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct coords *coordsInstance = NULL;
+int count = 0;
 
 snpHash = newHash(0);
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from '%s'", snpTable);
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name from %s", snpTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    count++;
     AllocVar(coordsInstance);
     coordsInstance->chrom = cloneString(row[0]);
     coordsInstance->start = sqlUnsigned(row[1]);
     coordsInstance->end = sqlUnsigned(row[2]);
     hashAdd(snpHash, cloneString(row[3]), coordsInstance);
     }
+verbose(1, "%d elements in snpHash\n", count);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -90,6 +93,7 @@ return ret;
 void readFreq()
 {
 FILE *outputFileHandle = mustOpen("snpFreq.tab", "w");
+FILE *logFileHandle = mustOpen("snpFreq.log", "w");
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -106,14 +110,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     alleleHashEl = hashLookup(alleleHash, row[1]);
     if (alleleHashEl == NULL)
         {
-        verbose(1, "couldn't find allele_id %s\n", row[1]);
+        fprintf(logFileHandle, "couldn't find allele_id %s\n", row[1]);
 	continue;
 	}
     safef(snpName, sizeof(snpName), "rs%s", row[0]);
     snpHashEl = hashLookup(snpHash, snpName);
     if (snpHashEl == NULL)
         {
-	verbose(1, "skipping snp_id %s\n", row[0]);
+	fprintf(logFileHandle, "skipping snp_id %s\n", row[0]);
 	continue;
 	}
     coordsInstance = (struct coords *)snpHashEl->val;
@@ -123,30 +127,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    snpName, (char *)alleleHashEl->val, sqlFloat(row[2]));
     }
 carefulClose(&outputFileHandle);
+carefulClose(&logFileHandle);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
-void loadDatabase()
-{
-struct sqlConnection *conn = hAllocConn();
-char fileName[64];
-char tableName[64];
-FILE *f;
-
-safef(tableName, ArraySize(tableName), "snpFreq" );
-safef(fileName, ArraySize(fileName), "snpFreq.tab" );
-
-snp125TableCreate(conn, tableName);
-f = mustOpen(fileName, "r");
-hgLoadTabFile(conn, ".", tableName, &f);
 hFreeConn(&conn);
 }
 
 
 int main(int argc, char *argv[])
 {
-if (argc != 4)
+if (argc != 3)
     usage();
 
 snpDb = argv[1];
