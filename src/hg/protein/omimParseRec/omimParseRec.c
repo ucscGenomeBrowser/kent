@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: omimParseRec.c,v 1.2 2006/10/16 16:46:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: omimParseRec.c,v 1.3 2006/10/18 18:04:25 fanhsu Exp $";
 
 FILE *fh2; /* 2nd file handle pointing to the OMIM text file */
 FILE *recFh;
@@ -86,12 +86,20 @@ long bytesRead;
 fprintf(outf, "%s\t%s\t%d\t%d\n", 
        omimFd->omimId, omimFd->type, omimFd->startPos, omimFd->endPos - omimFd->startPos + 1);
        fflush(stdout);
-       //omimFd->omimId, omimFd->type, omimFd->startPos, omimFd->endPos);fflush(stdout);
 	
+if (((omimFd->endPos - omimFd->startPos + 1) + 1) >sizeof(buffer))
+    {
+    fprintf(stderr, 
+    	    "field %s for OMIM record %s needs %d bytes, which exceeded buffer size of %d\n", 
+	    omimFd->type, omimFd->omimId, 
+	    (omimFd->endPos - omimFd->startPos + 1) + 1, (int)sizeof(buffer));
+    exit(1);
+    }
+
 fseek(fh2, (long)(omimFd->startPos), SEEK_SET);
 bytesRead = (long)fread(buffer, (size_t)1, (size_t)(omimFd->endPos - omimFd->startPos + 1), fh2);
 *(buffer+bytesRead) = '\0';
-printf("%s\t%s===>%s<===%s\n", omimFd->omimId, omimFd->type, buffer, omimFd->type); fflush(stdout);
+//printf("%s\t%s===>%s<===%s\n", omimFd->omimId, omimFd->type, buffer, omimFd->type); fflush(stdout);
 }
     
 struct omimRecord *omimRecordNext(struct lineFile *lf, 
