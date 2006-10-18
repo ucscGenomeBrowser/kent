@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.28 2006/07/17 19:35:30 markd Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.29 2006/10/18 23:15:32 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -345,9 +345,10 @@ if (col->isSizeLink == isSizeLink)
 	switch (type)
 	    {
 	    case t_float:
+		fprintf(f, "ret->%s = sqlFloat(row[%d]);\n", col->name, colIx);
+		break;
 	    case t_double:
-		fprintf(f, "ret->%s = atof(row[%d]);\n",
-		    col->name, colIx);
+		fprintf(f, "ret->%s = sqlDouble(row[%d]);\n", col->name, colIx);
 		break;
 	    case t_string:
 	    case t_lstring:
