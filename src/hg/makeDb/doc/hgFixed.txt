@@ -825,9 +825,14 @@ perl format.pl < wildTypeAffy.txt > zebrafishWildType.txt
 # Need to use this program to get 3 extras needed for hgMedianMicroarray
 hgGnfMicroarray zebrafishZonWTAllExps zebrafishZonWTAll \
      zebrafishWildType.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a
-   # this makes two tables: zebrafishZonWildType and zebrafishZonWildTypeExps
+# try adding data again as does not look right:
+hgsql -e 'alter table zebrafishZonWTAllLog rename zebrafishZonWTAllLogOld;' \
+      hgFixed 
+# use hgGenericMicroarray as hgGnfMicroarray is rounding the values
+# keep zebrafishZonWTAllExps from hgGnfMicroarray run.
+hgGenericMicroarray hgFixed zebrafishZonWTAllLog zebrafishWildType.txt
    # then create a table of medians for this data. make a .ra file of medians
-# Change the zebrafishZonWTAllExps table so that the second fied of the extras
+# Change the zebrafishZonWTAllExps table so that the second field of the extras
 # table is the name.
 
 hgsql -N -e 'select name, extras from zebrafishZonWTAllExps;' hgFixed \
@@ -902,27 +907,20 @@ cp zfishZonWTMedian.ra ~/kent/src/hg/makeDb/hgMedianMicroarray
 cd ~/kent/src/hg/makeDb/hgMedianMicroarray
 
 # Take the median value over multiple replicants and put in this table:
-hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
-  zfishZonWTMedian.ra zebrafishZonWTMedian \
+hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
+  zfishZonWTMedian.ra zebrafishZonWTMedianLog \
   zebrafishZonWTMedianExps -minExps=1
 
 # Changed table names to reflect that they are log scaled. They are used
 # in a similar way to the Ratio tables for other data sets since they
 # can be visualiszed using the red/green color scale (hartera, 2006-07-30).
-hgsql -e 'alter table zebrafishZonWTAll rename zebrafishZonWTAllLog;' hgFixed
-
-# Alter zebrafishZonWTMedianExps so that for extras, the time point is shown
-# as well as the strain as in zebrafishZonWTAllExp - see above.
-# Drop old tables and reload:
-hgsql -e 'drop table zebrafishZonWTMedianLog; ' hgFixed
-hgsql -e 'drop table zebrafishZonWTMedianExps;' hgFixed
 
 # Reload table using new table names. (hartera, 2006-07-30)
 # Take the median value over multiple replicants and put in this table:
 # Reloaded again after changing the .ra file so that the developmental 
 # stage will show up in the extras and the AllExps table had the strain 
 # and stage added to the second field of the extras column. 
-# (hartera, 2006-08-11)
+# (hartera, 2006-08-11) (Reloaded again on 2006-09-22, hartera)
 hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedianLog \
   zebrafishZonWTMedianExps -minExps=1
@@ -952,6 +950,8 @@ hgsql -e 'drop table zfishWTAllExps;' hgFixed
 
 # Also make a median version of the absolute measurements
 hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps zfishZonWTMedian.ra zebrafishZonWTMedian zebrafishZonWTMedianExps -minExps=1
+
+##########################################################################
 
 #The Mouse GNF Expression Atlas 2 (2004)
 ##########################################################################
