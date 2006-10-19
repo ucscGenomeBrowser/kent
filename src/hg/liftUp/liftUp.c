@@ -14,13 +14,15 @@
 #include "chainNet.h"
 #include "liftUp.h"
 #include "options.h"
+#include "verbose.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.40 2006/09/28 02:25:50 markd Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.41 2006/10/19 05:11:57 markd Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
+boolean ignoreVersions = FALSE;  /* drop NCBI versions */
 int dots=0;	/* Put out I'm alive dot now and then? */
 int gapsize = 0;        /* optional non-default gap size */
 
@@ -64,6 +66,7 @@ errAbort(
  "   	(waba lifts only work with query side at this time)\n"
  "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
  "   -gapsize change contig gapsize from default\n"
+ "   -ignoreVersions - Ignore NCBI-style version number in sequence ids of input files\n"
  );
 }
 
@@ -85,6 +88,7 @@ static struct optionSpec optionSpecs[] = {
     {"netq", OPTION_BOOLEAN},
     {"wabaQ", OPTION_BOOLEAN},
     {"wabaq", OPTION_BOOLEAN},
+    {"ignoreVersions", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -97,8 +101,6 @@ enum how
     errorMissing  /* error if items are missing */
 };
 enum how how = warnMissing;
-
-boolean pipeOut;	/* True if main output is stdout. */
 
 
 char *rmChromPrefix(char *s)
@@ -124,10 +126,14 @@ for (el = list; el != NULL; el = el->next)
 struct liftSpec *findLift(struct hash *liftHash, char *oldName, struct lineFile *lf)
 /* Find lift or  return NULL.  lf parameter is just for error reporting. */
 {
-struct hashEl *hel;
 static int warnLeft = 10;	/* Only issue 10 warnings. */
-
-if ((hel = hashLookup(liftHash, oldName)) == NULL)
+char *verDot = ignoreVersions ? strrchr(oldName, '.') : NULL;
+if (verDot != NULL)
+    *verDot = '\0';
+struct hashEl *hel = hashLookup(liftHash, oldName);
+if (verDot != NULL)
+    *verDot = '.';
+if (hel == NULL)
     {
     if (how == warnMissing)
 	{
@@ -209,7 +215,7 @@ rmskOutWriteHead(dest);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
-    if (!pipeOut) printf("Lifting %s\n", source);
+    verbose(1, "Lifting %s\n", source);
     if (!fileExists(source))
 	{
 	warn("%s does not exist\n", source);
@@ -288,12 +294,11 @@ else
 void doDots(int *pDotMod)
 /* Output a dot every now and then. */
 {
-if (dots > 0 && !pipeOut)
+if (dots > 0)
     {
     if (--*pDotMod <= 0)
 	{
-	fputc('.', stdout);
-	fflush(stdout);
+        verboseDot();
 	*pDotMod = dots;
 	}
     }
@@ -329,7 +334,7 @@ for (i=0; i<sourceCount; ++i)
 	warn("%s doesn't exist!", source);
 	continue;
 	}
-    if (!pipeOut) printf("Lifting %s\n", source);
+    verbose(1, "Lifting %s\n", source);
     lf = pslFileOpenWithMeta(source, dest);
     for (;;)
         {
@@ -492,6 +497,8 @@ for (i=0; i<sourceCount; ++i)
 	freePslOrXa(psl, isExtended);
 	}
     lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
     }
 if (ferror(dest))
     errAbort("error writing %s", destFile);
@@ -512,7 +519,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
     struct lineFile *lf = lineFileOpen(source, TRUE);
     struct axt *axt;
     lineFileSetMetaDataOutput(lf, f);
-    if (!pipeOut) printf("Lifting %s\n", source);
+    verbose(1, "Lifting %s\n", source);
     while ((axt = axtRead(lf)) != NULL)
         {
 	struct liftSpec *spec;
@@ -562,6 +569,8 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
         doDots(&dotMod);
         }
     lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
     }
 }
 
@@ -579,7 +588,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
     struct lineFile *lf = lineFileOpen(source, TRUE);
     struct chain *chain;
     lineFileSetMetaDataOutput(lf, f);
-    if (!pipeOut) printf("Lifting %s\n", source);
+    verbose(1, "Lifting %s\n", source);
     while ((chain = chainRead(lf)) != NULL)
 	{
 	struct liftSpec *spec;
@@ -681,6 +690,8 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	doDots(&dotMod);
 	}
     lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
     }
 }
 
@@ -745,7 +756,7 @@ void liftNet(char *destFile, struct hash *liftHash,
         struct lineFile *lf = lineFileOpen(source, TRUE);
         struct chainNet *net;
         lineFileSetMetaDataOutput(lf, f);
-        if (!pipeOut) printf("Lifting %s\n", source);
+        verbose(1, "Lifting %s\n", source);
         while ((net = chainNetRead(lf)) != NULL)
             {
             if (querySide)
@@ -779,6 +790,8 @@ void liftNet(char *destFile, struct hash *liftHash,
             doDots(&dotMod);
             }
         lineFileClose(&lf);
+        if (dots)
+            verbose(1, "\n");
         }
 }
 
@@ -885,7 +898,7 @@ void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     for (i=1; i<sourceCount; ++i)
         {
         source = sources[i];
-        if (!pipeOut) printf("Lifting %s\n", source);
+        verbose(1, "Lifting %s\n", source);
         lf = lineFileMayOpen(source, TRUE);
         if (lf != NULL)
             {
@@ -938,6 +951,8 @@ void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
                 fputc('\n', dest);
                 }
             lineFileClose(&lf);
+            if (dots)
+                verbose(1, "\n");
             }
         }
     if (chromInserts != NULL)
@@ -982,7 +997,7 @@ void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     for (i=0; i<sourceCount; ++i)
         {
         source = sources[i];
-        if (!pipeOut) printf("Lifting %s\n", source);
+        verbose(1, "Lifting %s\n", source);
         lf = lineFileMayOpen(source, TRUE);
         if (lf != NULL)
             {
@@ -1022,6 +1037,8 @@ void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
 	    fputc('\n', dest);
 	    }
 	lineFileClose(&lf);
+        if (dots)
+            verbose(1, "\n");
 	}
     }
 if (ferror(dest))
@@ -1066,8 +1083,7 @@ int iSrc;
 
 for (iSrc = 0; iSrc < sourceCount; iSrc++)
     {
-    if (!pipeOut)
-        printf("Lifting %s\n", sources[iSrc]);
+    verbose(1, "Lifting %s\n", sources[iSrc]);
     lf = lineFileOpen(sources[iSrc], TRUE);
     while (lineFileChopNextTab(lf, row, ArraySize(row)))
         {
@@ -1077,6 +1093,8 @@ for (iSrc = 0; iSrc < sourceCount; iSrc++)
         genePredFree(&gp);
         }
     lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
     }
 
 carefulClose(&dest);
@@ -1147,7 +1165,7 @@ for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
     lf = lineFileOpen(source, TRUE);
-    if (!pipeOut) printf("Lifting %s\n", source);
+    verbose(1, "Lifting %s\n", source);
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	if (line[0] == '#')
@@ -1252,6 +1270,8 @@ for (i=0; i<sourceCount; ++i)
             }
 	}
     lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
     }
 if (!nosort)
     {
@@ -1354,7 +1374,7 @@ if (how == carryMissing)
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
-    if (!pipeOut) printf("Processing %s\n", source);
+    verbose(1, "Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
     verbose(2,"#\tcontig: %s, source: %s, dirBuf: %s\n", contig, source, dirBuf);
     if (!startsWith("ctg", contig) &&
@@ -1386,6 +1406,8 @@ for (i=0; i<sourceCount; ++i)
 	fprintf(dest, "%s\t%d\t%d\t%s\n", words[0], s+offset, e+offset, words[3]);
 	}
     lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
     }
 }
 
@@ -1407,9 +1429,8 @@ else if (sameWord(howSpec, "error"))
     how = errorMissing;
 else
     usage();
-pipeOut = sameString(destFile, "stdout");
 lifts = readLifts(liftFile);
-if (!pipeOut) printf("Got %d lifts in %s\n", slCount(lifts), liftFile);
+verbose(1, "Got %d lifts in %s\n", slCount(lifts), liftFile);
 
 if (endsWith(destType, ".out"))
     {
@@ -1532,6 +1553,7 @@ nosort = optionExists("nosort");
 isPtoG = optionExists("isPtoG");
 dots = optionInt("dots", dots);
 gapsize = optionInt("gapsize", gapsize);
+ignoreVersions = optionExists("ignoreVersions");
 if (gapsize !=0)
     chromInsertsSetDefaultGapSize(gapsize);
 if (argc < 5)

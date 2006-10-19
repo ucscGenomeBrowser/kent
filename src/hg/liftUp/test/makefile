@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 all: test
 
 test: chainQ chainT netQ netT genePred pslRc \
-	 missingWarn missingCarry missingDrop  missingError bed8
+	 missingWarn missingCarry missingDrop  missingError bed8 bed8version
 
 chainQ: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp -chainQ output/testOutQ.chain \
@@ -81,6 +81,10 @@ missingError: output
 bed8: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp output/$@.bed input/contig.lft error input/bed8contig.bed
 	diff expected/$@.bed output/$@.bed
+
+bed8version: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp -ignoreVersions output/$@.bed input/contigNoVer.lft error input/bed8contig.bed
+	diff expected/bed8.bed output/$@.bed
 
 output:
 	${MKDIR} output
