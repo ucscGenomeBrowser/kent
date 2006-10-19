@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doRepeatMasker.pl instead.
 
-# $Id: doRepeatMasker.pl,v 1.1 2006/10/09 20:44:33 angie Exp $
+# $Id: doRepeatMasker.pl,v 1.2 2006/10/19 23:04:58 aamp Exp $
 
 use Getopt::Long;
 use warnings;
@@ -27,6 +27,7 @@ use vars qw/
     $opt_buildDir
     $opt_species
     $opt_unmaskedSeq
+    $opt_customLib
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -68,6 +69,7 @@ options:
                           Default: $defaultSpecies.
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
+    -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $defaultWorkhorse,
@@ -106,6 +108,7 @@ sub checkOptions {
 		      'buildDir=s',
 		      'species=s',
 		      'unmaskedSeq=s',
+		      'customLib=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -148,6 +151,17 @@ sub doCluster {
   my $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
   my $partDir .= "$okOut[0]/$db/RMPart";
   my $species = $opt_species ? $opt_species : &getSpecies($dbHost, $db);
+  my $customLib = $opt_customLib;
+  my $repeatLib = "";
+  if ($opt_customLib && $opt_species) {
+     $repeatLib = "-species \'$species\' -lib $customLib";
+  }
+  elsif ($opt_customLib) {
+     $repeatLib = "-lib $customLib";
+  }
+  else {
+     $repeatLib = "-species \'$species\'";
+  }
 
   # Script to do a dummy run of RepeatMasker, to test our invocation and
   # unpack library files before kicking off a large cluster run.
@@ -155,7 +169,7 @@ sub doCluster {
   print $fh <<_EOF_
 #!/bin/csh -ef
 
-$RepeatMasker -species '$species' /dev/null
+$RepeatMasker $repeatLib /dev/null
 _EOF_
   ;
   close($fh);
@@ -184,7 +198,7 @@ foreach spec (`cat \$inLst`)
   # seq:start-end for liftUp's sake:
   twoBitToFa \$spec stdout \\
   | sed -e "s/^>.*/>\$base/" > \$base.fa
-  $RepeatMasker -align -s -species '$species' \$base.fa
+  $RepeatMasker -align -s $repeatLib \$base.fa
 end
 
 # Lift up and use tail +4 to strip the RepeatMasker header for easy
