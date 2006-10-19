@@ -982,3 +982,11 @@ searchType psl
 searchMethod prefix
 searchPriority 50
 termRegex [A-Z0-9\._+-]+
+
+track luNega
+shortLabel UCSC Pseudo
+longLabel UCSC Pseudogenes
+group genes
+priority 54
+type bed 12
+visibility hide

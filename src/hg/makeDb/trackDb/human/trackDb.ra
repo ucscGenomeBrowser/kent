@@ -158,6 +158,14 @@ type genePred
 autoTranslate 0
 url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
 
+track luNega
+shortLabel UCSC Pseudo
+longLabel UCSC Pseudogenes
+group genes
+priority 54
+type bed 12
+visibility hide
+
 track HInvGeneMrna
 shortLabel H-Inv
 longLabel H-Invitational Genes mRNA Alignments
