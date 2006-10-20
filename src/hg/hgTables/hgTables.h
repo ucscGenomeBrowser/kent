@@ -456,12 +456,10 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoGetCustomTrackTb "hgta_doGetCustomTrackTb"
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
 #define hgtaDoRemoveCustomTrack "hgta_doRemoveCustomTrack"
-#define hgtaDoGetGalaQuery "hgta_doGetGalaQuery"
 #define hgtaDoGetGalaxyQuery "hgta_doGetGalaxyQuery"
 #define hgtaDoGalaxyPrintGenomes "hgta_doGalaxyPrintGenomes"
 #define hgtaDoGalaxyPrintPairwiseAligns "hgta_doGalaxyPrintPairwiseAligns"
 #define hgtaDoGalaxyQuery "hgta_doGalaxyQuery"
-#define hgtaDoAllGalaQuery "hgta_doAllGalaQuery"
 #define hgtaDoGetGalaxyQuery "hgta_doGetGalaxyQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 
@@ -568,7 +566,6 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outWigData "wigData"
 #define outWigBed "wigBed"
 #define outChromGraphData "chromGraphData"
-#define outGala "galaQuery"
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 
@@ -812,9 +809,6 @@ void doOutGff(char *table, struct sqlConnection *conn);
 void doOutCustomTrack(char *table, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
 
-void doOutGalaQuery(struct trackDb *track, char *table);
-/* Put up form to select GALA query output format. */
-
 void doOutGalaxyQuery (struct trackDb *track, char *table, unsigned int hguid);
 /* print options page for background query */
 
@@ -884,18 +878,6 @@ void doRemoveCustomTrack(struct sqlConnection *conn);
 void doSummaryStatsBed(struct sqlConnection *conn);
 /* Put up page showing summary stats for track that is in database
  * or that is bed-format custom. */
-
-/* --------------- GALA functions --------------- */
-#define galaCmdBufferSize 160
-
-char* doGetGalaQuery(struct sqlConnection *conn, boolean background);
-/* Get GALA query output */
-
-void doAllGalaQuery(struct sqlConnection *conn);
-/* run query for new GALA, done in the "background" */
-
-boolean galaAvail(char *db);
-/* Check to see if GALA is available for this freeze */
 
 /* --------------- Galaxy functions --------------- */
 void doGalaxyPrintGenomes();

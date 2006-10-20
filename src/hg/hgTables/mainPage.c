@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.99 2006/08/14 23:17:22 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.100 2006/10/20 04:58:40 kate Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -433,9 +433,6 @@ struct outputType otGff = { NULL,
 struct outputType otBed = { NULL, 
     outBed,
     "BED - browser extensible data", };
-struct outputType otGala = { NULL, 
-    outGala,
-    "query results to GALA", };
 struct outputType otGalaxy = { NULL,
     outGalaxy,
     "query results to Galaxy", };
@@ -471,8 +468,6 @@ if (isWig)
     {
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
-    if (galaAvail(database))
-        slAddTail(&otList, &otGala);
     if (cgiServerName() == NULL || startsWith("hgwdev", cgiServerName()) ||
         startsWith("genome-test", cgiServerName()))
         slAddTail(&otList, &otGalaxy);
@@ -494,8 +489,6 @@ else if (isPositional)
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
     slAddTail(&otList, &otBed);
-    if (galaAvail(database))
-	slAddTail(&otList, &otGala);
     if (cgiServerName() == NULL || startsWith("hgwdev", cgiServerName())||
         startsWith("genome-test", cgiServerName()))
         slAddTail(&otList, &otGalaxy);

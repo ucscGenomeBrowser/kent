@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.134 2006/09/22 08:26:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.135 2006/10/20 04:58:40 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1339,8 +1339,6 @@ else if (sameString(output, outWigData))
     doOutWigData(track, table, conn);
 else if (sameString(output, outWigBed))
     doOutWigBed(track, table, conn);
-else if (sameString(output, outGala))
-    doOutGalaQuery(track, table);
 else if (sameString(output, outGalaxy))
     doOutGalaxyQuery(track, table, cartUserId(cart));
 else if (sameString(output, outMaf))
@@ -1447,8 +1445,6 @@ else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
     doSubtrackMergePage(conn);
 else if (cartVarExists(cart, hgtaDoGalaxyQuery))
     doGalaxyQuery(conn);
-else if (cartVarExists(cart, hgtaDoGetGalaQuery))
-    doGetGalaQuery(conn, FALSE);
 else if (cartVarExists(cart, hgtaDoGalaxyPrintGenomes))
     doGalaxyPrintGenomes();
 else if (cartVarExists(cart, hgtaDoGalaxyPrintPairwiseAligns))
