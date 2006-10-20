@@ -5165,7 +5165,8 @@ sub printInfo  {
     # 599M    /cluster/data/danRer4/bed/bacEnds
     # (hartera, 2006-10-02)
     # NOTE: Some BAC clones have duplicate reads and these end in the 
-    # suffixes SP6A, T7A, SP6W and T7W. The names of the BAC clones 
+    # suffixes SP6A, T7A, SP6W and T7W. There is a corresponding read name
+    # without the W or A suffix. The names of the BAC clones 
     # are also suffixed with A or W for these reads. e.g There is a BAC
     # clone called DKEY-32M8. DKEY-32M8A is the same one sequenced with
     # different read ending in SP6A and T7A. The BAC ends names are 
@@ -5783,6 +5784,20 @@ sub isReverse {
     # CH211-42A6: remove zC42A6.za as it has more inserts.
     # CH211-69K2: remove zC69K22.za as it has more inserts.
 
+    # Reported discrepancies to Mario Caccamo at Sanger (mc2@sanger.ac.uk)
+    # Here is his reply:
+    # This looks like a clone swap problem where names where associated to 
+    # the wrong clones. All the examples you mention below are from 
+    # projects sequenced at Max Planck (Germany).
+    # CH211-98O15 - the right place for this one is in chr3. This clone is
+    # currently assigned to ctg247 in chr3.
+    # CH211-98O3 - should go to chr14 (there is a problem in Zv6 most
+    # probably). This clone is assigned to ctg3009. The b ends are correct.
+    # CH211-48O20 - unfortunately this clone is not fingerprinted so I don't
+    # have any independent information to confirm the right placement.
+    # So for pairs, 
+    # CH211-98O15: retain zC98O15.ya,zC98O15.za aligning to chr3
+    # CH211-98O3: retain zC98O3.yb and zC98O3.zb (should go to chr14)
     # NOTE: For some singles, the lfStart does not equal the chromStart.
     # Also chromStart - chromEnd should equal lfSizes.
     # pslPairs has added min/2 to the end or subtracted min/2 from the start
@@ -5796,7 +5811,6 @@ sub isReverse {
     # create remove lists for each set of alignments.
 cat << 'EOF' > pairsToRemove
 zC74D17.zb,zC74D17.yb
-zC98O15.ya,zC98O15.za
 zC98O15.yb,zC98O15.zb
 zC98E22.ya,zC98E22.za
 zC98E22.yb,zC98E22.zb
@@ -5806,7 +5820,6 @@ cat << 'EOF' > singlesToRemove
 zC66E17.za
 zC74O5.ya 
 zC42B4.yb
-zC98O3.yb
 zC98O3.ya
 zC89J7.zb
 zC97A18.yb
@@ -5838,17 +5851,17 @@ zC42A6.za
 
     e.g. 
     wc -l pairs2lfNames.bed
-    # 154631 pairs2lfNames.bed
+    # 154632 pairs2lfNames.bed
     grep ',' pairs2lfNames.bed | wc -l
-    # 154631
+    # 154632
     # should be the same number, every line should have a comma
     # should be twice the number of above, just 2 end names per line
     awk '{print $11}' pairs2lfNames.bed | sort | uniq > pairs.ends
     wc -l pairs.ends
-    # 147667 pairs.ends
+    # 147668 pairs.ends
     sed -e 's/,/\n/g' pairs.ends > pairs.ends2
     wc -l pairs.ends2
-    # 295334 pairs.ends2
+    # 295336 pairs.ends2
     # should be twice the number of above, just 2 end names per lines so
     # correct.
     perl -pi.bak -e \
@@ -5879,13 +5892,13 @@ zC42A6.za
     # one reverse. all ok.
     # for singles
     wc -l singles1lfName.bed
-    # 187585 singles1lfName.bed
+    # 187587 singles1lfName.bed
     grep ',' singles1lfName.bed | wc -l
     # 0
     # should be 0 as there should only be one BAC end name per line.
     awk '{print $11}' singles1lfName.bed | sort | uniq > singles.ends
     wc -l singles.ends
-    # 172980 singles.ends
+    # 172981 singles.ends
     # some singles have more than 1 alignment so appear more than once.
     perl -pi.bak -e \
 's/.+(SP6|T7|ya|za|Za|yb|zb|yc|zc|yt|yd|zd)[A-Za-z]?/$1/g' singles.ends
@@ -5975,11 +5988,11 @@ zC42A6.za
     hgsql -e 'drop table bacEndPairs;' danRer4
     hgLoadBed danRer4 bacEndPairs bacEndPairsGoodScores.bed \
                -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql -notItemRgb
-    # Loaded 154631 elements of size 11
+    # Loaded 154632 elements of size 11
     hgsql -e 'drop table bacEndSingles;' danRer4
     hgLoadBed danRer4 bacEndSingles bacEndSinglesGoodScores.bed \
                -sqlTable=../singles/bacEndSingles.sql -notItemRgb
-    # Loaded 187585 elements of size 11
+    # Loaded 187587 elements of size 11
     hgsql -e 'drop table bacEndPairsBad;' danRer4
     hgLoadBed danRer4 bacEndPairsBad bacEndPairsBadGoodScores.bed \
                -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql -notItemRgb
@@ -6014,7 +6027,7 @@ zC42A6.za
     cd $bacDir
     cat $bacDir/scoresAndCoords/*.psl > allBacends.load.psl
     wc -l *.load.psl
-    # 542721 allBacends.load.psl
+    # 542725 allBacends.load.psl
     # load PSL file into database
     ssh hgwdev
     cd /cluster/data/danRer4/bed/bacEnds/
@@ -6101,11 +6114,11 @@ while (<FILE>) {
    if (($dir =~ /SP6/) || ($dir =~ /T7/) ) {
       $direction = $dir;
    }
-   # forward direction
+   # reverse direction (as in convertZfishBacEndInfo)
    elsif ($dir =~ /(sp6)/i || $dir =~ /y/i) {
       $direction = "SP6";
    }
-   # reverse direction
+   # forward direction (as in convertZfishBacEndInfo)
    elsif ($dir =~ /(t7)/i ||$dir =~ /z/i) {
       $direction = "T7";
    }
@@ -6202,26 +6215,12 @@ foreach my $a (keys(%bacs)) {
     # load this alias table and accessions for clone ends
     ssh hgwdev
     cd /cluster/data/danRer4/bed/bacEnds
-    # found that there are some alignments in all_bacends where there 
-    # is SP6W, SP6A, T7W, T7A suffixes for BAC ends. These are duplicate
-    # reads, there is a corresponding read name without the W or A suffix.
-# Suffix Alignments Unique Names
-# SP6W	179	153
-# SP6A	254	245
-# T7W 	53	48
-# T7A	247	238
-    # These BACs are named differently so DKEY-32M8 is one BAC clone  
-    # and DKEY-32M8A is the same one sequenced with different reads
-    # ending in SP6A and T7A. It is similar for those BAC clone names and
-    # BAC ends ending in "W". There are only ~200 with where both BAC clones
-    # are in the bacEndSingles or bacEndPairs tables. (see main BAC ENDS track
-    # section for details). 
     # Carry on and process this file into the bacEndAlias table.
     hgLoadSqlTab danRer4 bacEndAlias ~/kent/src/hg/lib/bacEndAlias.sql \
           bacEndAccs.aliases
     # Loaded successfully.
 
-    # get the latest versions of the clonemarkers, contig names and markers
+    # Get the latest versions of the clonemarkers, contig names and markers
     # files from Sanger: Provided by Mario Caccamo (mc2@sanger.ac.uk)
     # at the Sanger Institute.
     ssh kkstore04
@@ -6239,8 +6238,293 @@ foreach my $a (keys(%bacs)) {
     # 32612 clonemarkers.26.09.06.txt
     # 168828 ctgnames.26.09.06.txt
     # 12407 markers.26.09.06.txt
-    
+    # get list of BAC end names, lfNames
+    foreach f (../scoresAndCoords/*.bed)
+       echo $f
+       awk '{print $11;}' $f >> allBacEnds.names
+    end
+    wc -l allBacEnds.names
+    # 369500 allBacEnds.names
+    # this is the total number of lines in the *.bed files
+    perl -pi.bak -e 's/,/\n/g' allBacEnds.names
+    sort allBacEnds.names | uniq > allBacEnds.names.uniq
+    # get list of BAC clone names
+    foreach f (bacEndPairs bacEndPairsBad bacEndSingles)
+      awk '{print $4}' \
+      /cluster/data/danRer4/bed/bacEnds/scoresAndCoords/${f}GoodScores.bed \
+          >> bacs.names
+    end
+    sort bacs.names | uniq > bacs.names.uniq
+    wc -l *.uniq
+    # 518827 allBacEnds.names.uniq
+    # 302606 bacs.names.uniq
+   
+    # from psl file
+    awk '{print $10;}' ../bacEnds.psl > bacEndsPsl.names
+    # remove first few lines with no names
+    tail +6 bacEndsPsl.names | sort | uniq > bacEndsPsl.names.uniq
+    wc -l bacEndsPsl.names.uniq
+    # 549034 bacEndsPsl.names.uniq
+    # this is all the BAC ends that originally had alignments
+    # Add an alias table for BAC clones
+    # bacCloneAlias.sql is in $HOME/kent/src/hg/lib - see makeDanRer1.doc
+    # Add a xref table to give external clone registry names, internal names
+    # sanger name, relationship between STS and BAC clone (method of finding
+    # STS), UniSTS ID, chromosomes(s) to which BAC clone is mapped by BLAT,
+    # Genbank accession and STS primer sequences
+    # bacCloneXRef.sql is in $HOME/kent/src/hg/lib - see makeDanRer1.doc
+    set dir=/cluster/data/danRer4/bed/bacEnds/
+    awk 'BEGIN {OFS="\t"}{print $4, $1}' \
+    $dir/scoresAndCoords/bacEndPairsGoodScores.bed > bacClones.namesandchrom
+    awk 'BEGIN {OFS="\t"}{print $4, $1}' \
+    $dir/scoresAndCoords/bacEndSinglesGoodScores.bed >> bacClones.namesandchrom
+    sort bacClones.namesandchrom | uniq > bacClones.namesandchrom.uniq
+    wc -l bacClones.namesandchrom.uniq
+    # 306079 bacClones.namesandchrom.uniq
+    # so created a list of names and chroms for BAC clones only in pairs
+    # and singles, exclude bad Pairs since this track is not shown on RR.
+    # use a list of internal names,Genbank accessions, and BAC clone names
+    # use BACClonesIdsandAccs.txt.
+    # get list of UniSTS IDs using aliases to search alias file
+    # print Sanger name, alias and UniSTS ID, use find_markers3.pl
+cat << '_EOF_' > find_markers3.pl
+    # example:
+# perl find_markers.pl UniSTS.aliases markers.02.12.04.txt
+use strict;
+my $verbose = 0;
+my ($a, $b, $f, $m, $s, $t, $aliases, @alias, @rest);
+my $aliasFile = $ARGV[0];
+my $markersFile = $ARGV[1];
+open(ALIAS, $aliasFile) || die "Can not open $aliasFile\n";
+open(MARKERS, $markersFile) || die "Can not open $markersFile\n";
+# store aliases from aliasFile
+my ($id, $al, @alsArray, %aliasHash);
+while (<ALIAS>)
+{
+   chomp;
+   ($id, $al) = split /\t/;
+   @alsArray = split(/;/, $al);
+   foreach my $as (@alsArray)
+      {
+      push (@{$aliasHash{$as} }, $id);
+      }
+}
+close ALIAS;
 
+while (<MARKERS>) {
+    my @idArray;
+    ($f, $t, $m, $idArray[0]) = 0;
+    my @ids;
+    chomp; ($a, $b, $aliases, @rest) = split /\|/;
+    if ($verbose > 3) { printf "aliases $aliases \n"; }
+    @alias = split /;/, $aliases;
+    ALIAS: foreach $s (@alias) {
+        if ($s =~ /[\D]+/) {
+            if ($verbose > 5) { printf "this $s \n"; }
+            if (exists($aliasHash{$s}))
+               {
+               @idArray = @{$aliasHash{$s}};
+               }
+            if ($idArray[0]) {
+                $f = 1; $t = $s; @ids = @idArray;
+                if ($verbose) { printf "this $s found $m \n"; }
+                last ALIAS;
+            }
+        }
+    }
+    if ($f) 
+     { 
+     my @sNames = split(/;/, $b);
+     foreach my $sn (@sNames)
+        {
+        foreach my $i (@ids)
+           { 
+           printf "$sn\t$i\n"; 
+           }
+        }
+    }
+}
+close MARKERS;
+'_EOF_'
+   chmod +x find_markers3.pl
+   # download latest version of UniSTS
+   ssh kkstore02
+   mkdir -p /cluster/store5/sts.2006-10-11
+   ln -s /cluster/store5/sts.2006-10-11 /cluster/data/ncbi
+   cd /cluster/data/ncbi/sts.2006-10-11
+   wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
+   mkdir -p /cluster/store5/UniSTS.2006-10-11
+   ln -s /cluster/store5/UniSTS.2006-10-11 /cluster/data/ncbi
+   cd /cluster/data/ncbi/UniSTS.2006-10-11
+   wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+   wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+   wget --timestamp -r l1 \
+ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
+   mv
+/cluster/data/ncbi/UniSTS.2006-10-11/ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio
+/cluster/data/ncbi/UniSTS.2006-10-11
+    rm -r /cluster/data/ncbi/UniSTS.2006-10-11/ftp.ncbi.nih.gov
+    # then back to danRer4 BAC ends tables:
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
+    # NOTE: RE-DO THIS FOR MARKERS FILE WHEN GET NEW MARKERS FILE
+    # change internal names in files to have CHORI73 instaed of zH to 
+    # keep names the same as those used in the BAC end tables.
+    perl -pi.bak -e 's/zH([0-9]+)/CHORI73_$1/' *.26.09.06.txt 
+    # NEED TO REDO THIS AS markers FILE IS INCORRECT. ASKED FOR NEW ONE
+    # ON OCT. 12th.
+    perl find_markers3.pl /cluster/data/ncbi/UniSTS.2006-10-11/UniSTS.aliases \
+         markers.26.09.06.txt > sangerandUniSTSId.txt
+
+    # No need to reformat this for zfishBacClonesandSts
+    # FPC contig information (i.e. FPC contig number) from ctgnames file is
+    # not included in the tables as these are dynamic and constantly
+    # changing with the assembly.
+    # bacs.names.uniq has the list of BACS in this track
+    # Get accessions for BAC clones from Genbank (as for danRer3)
+    # go to http://www.ncbi.nlm.nih.gov
+    # 1) select "Nucleotide" as the search database.
+    # 2) Search string: 
+    # Danio rerio[ORGN] AND clone[TITL] NOT survey[TITL]
+    # Including only those with BAC in the record seems to exclude some of the
+    # BAC clones as well as other types of sequence so this "BAC" was not 
+    # used in the search.
+    # Those sequences with "genomic survey" in the title appear to be
+    # BAC clone end accessions. Here, we want only BAC clone accessions.
+    # 3) There are 1148231 sequences. (2006-10-12). Select File from Send To
+    # pulldown menu and name file "BACClones.gbAccs.txt".
+    # use script from danRer3 to parse out clone ID and the accession:
+cat << '_EOF_' > getAccsandIdsFromGb.pl
+#!/usr/bin/perl -w
+use strict;
+
+my @clonePrefixes = ("CH211-", "ch211-", "DKEY-", "DKEYP-", "RP71-", "BUSM1-", "CH73-", "CHORI-");
+my %cloneHash = qw {  
+   CH211-  zC
+   DKEY-   zK
+   DKEYP-  zKp 
+   RP71-   bZ
+   BUSM1-  dZ
+   CH73-   CHORI73_
+};
+
+my $found = "FALSE";
+my $acc = "";
+my $id = "";
+while (<STDIN>)
+{
+my ($l, @f, $intId, $extPref, $intPref);
+$intPref = "";
+$extPref = "";
+
+chomp;
+$l = $_;
+if ($l =~ /^[0-9]+:\s+([A-Z]+[0-9]{3,})/)
+   {
+   $acc = "";
+   $acc = $1;
+   $found = "FALSE";
+   }
+elsif ($l =~ /clone/)
+   {
+   $id = "";
+   # check for clone name in this line
+   foreach my $p (@clonePrefixes)
+      {
+      if ($l =~ /clone:?\s?($p[0-9-A-Za-z]+)/)
+         {
+         $id = $1;
+         # translate to upper case
+         $id =~ tr/a-z/A-Z/;
+         $extPref = $p;
+         $found = "TRUE";
+         }
+      }
+   }
+if ($found eq "TRUE")
+   {
+   if (exists($cloneHash{$extPref}))
+      {
+      $intPref = $cloneHash{$extPref};
+      }
+   $intId = $id;
+   # translate this to internal ID
+   $intId =~ s/$extPref/$intPref/;
+   print "$intId\t$acc\t$id\n";
+   $found = "FALSE";
+   }
+}
+'_EOF_'
+    chmod +x getAccsandIdsFromGb.pl
+    nice perl getAccsandIdsFromGb.pl < BACClones.gbAccs.txt \
+          > BACClonesIdsandAccs.txt &
+    # Took about 1 minute
+    # compare the BAC clones for which accessions were found to those 
+    # for danRer3:
+    awk '{print $3}' BACClonesIdsandAccs.txt | sort | uniq \
+        > clonesWithAccs.dr4
+    awk '{print $3}' \
+      /cluster/data/danRer3/bed/bacends/bacends.1/BACClonesIdsandAccs.txt \
+      | sort | uniq > clonesWithAccs.dr3
+    comm -13 clonesWithAccs.dr4 clonesWithAccs.dr3
+# DKEY-14P13
+# DKEY-188F22
+# DKEY-30O13
+    # Checked these out for searching for each in the Nucleotide database
+    # at Genbank. DKEY-14P13 and DKEY-30O13 only have accessions for the 
+    # end sequences. DKEY-188F22 has an accession for the BAC clone: AP007256
+    # Add this to list:
+    echo "zK188F22\tAP007256\tDKEY-188F22" >> BACClonesIdsandAccs.txt
+
+    # use zfishBacClonesandSts to create tab files for loading into
+    # bacCloneAlias and bacCloneXRef tables
+    # make output directory
+    rm -r /san/sanvol1/danRer4/bacEnds/out
+    mkdir -p /san/sanvol1/danRer4/bacEnds/out
+    mkdir out
+    nice $HOME/bin/x86_64/zfishBacClonesandSts ctgnames.26.09.06.txt \
+      clonemarkers.26.09.06.txt markers.26.09.06.txt \
+      bacClones.namesandchrom.uniq BACClonesIdsandAccs.txt \
+      sangerandUniSTSId.txt ./out > ./out/zfishBacs.out &
+    # output is in /cluster/bluearc/danRer3/bacends/out so copy over
+    # sort alias tab file by sangerName
+    sort -k2 ./out/bacAlias.tab > bacAlias.sort.tab
+    cp ./out/bacXRef.tab .
+    wc -l *.tab
+    # 110961 bacAlias.sort.tab
+    # 540800 bacXRef.tab
+ 
+    ssh hgwdev 
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
+    hgsql -e 'drop table bacCloneAlias;' danRer3
+    hgsql -e 'drop table bacCloneXRef;' danRer3
+     
+    hgLoadSqlTab danRer3 bacCloneAlias \
+          $HOME/kent/src/hg/lib/bacCloneAlias.sql bacAlias.sort.tab
+    hgLoadSqlTab danRer3 bacCloneXRef \
+          $HOME/kent/src/hg/lib/bacCloneXRef.sql bacXRef.tab
+# edit trackDb.ra to add bacEnds tracks and searches for the bacEndPairs
+# and bacEndSingles tracks as for danRer1. copy over html from danRer2
+# for bacEndPairs and bacEndSingles tracks.
+    # Replicate rows in table so reload after removing these
+    # (hartera, 2006-08-04)
+    ssh hgwdev 
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
+
+    sort bacAlias.sort.tab | uniq | sort -k2 > bacAlias.sort.tab.uniq
+    sort bacXRef.tab | uniq > bacXRef.tab.uniq
+    wc -l *.tab.uniq
+    # 57656 bacAlias.sort.tab.uniq
+    # 356453 bacXRef.tab.uniq
+ 
+    # Drop old tables and reload:
+    hgsql -e 'drop table bacCloneAlias;' danRer3
+    hgsql -e 'drop table bacCloneXRef;' danRer3
+    
+    hgLoadSqlTab danRer3 bacCloneAlias \
+          $HOME/kent/src/hg/lib/bacCloneAlias.sql bacAlias.sort.tab.uniq
+    hgLoadSqlTab danRer3 bacCloneXRef \
+          $HOME/kent/src/hg/lib/bacCloneXRef.sql bacXRef.tab.uniq
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM OTHER DANRER ASSEMBLIES
 # (DONE, 2006-06-27, hartera)
@@ -6559,25 +6843,40 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 ###########################################################################
 # CREATE MICROARRAY DATA TRACK BY ADDING MICROARRAY DATA TO AFFY ZEBRAFISH 
 # ALIGNMENTS (DONE, 2006-06-10, hartera)
+# UPDATE ARRAY DATA TRACK AFTER PROCESSING ARRAY DATA DIFFERENTLY AND
+# RELOADING INTO hgFixed (see hgFixed.txt for details). 
+# (DONE, 2006-10-20, hartera)
 # Array data is for whole embryos of five wild type zebrafish strains. 
 # Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
 # Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
-# Zon Lab WT Affy data tables in hgFixed renamed to reflect that the data 
-# is log2 transformed (DONE, 2006-07-30, hartera)
     ssh hgwdev
     mkdir /cluster/data/danRer4/bed/ZonLab/wtArray
     cd /cluster/data/danRer4/bed/ZonLab/wtArray
-    hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTMedian \
+    
+    # use AllRatio table for mapping. There are not many arrays in this 
+    # dataset so using AllRatio will allow the selection of All Arrays
+    # from the track controls on the track description page. Also set up the
+    # Zebrafish microarrayGroups.ra so that the Medians of replicates or
+    # Means of replicates can also be selected for display.
+
+    hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTAllRatio \
          /cluster/data/danRer4/bed/affyZebrafish/affyZebrafish.psl
     # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
-    # Mapped 14819,  multiply-mapped 6667, missed 0, unmapped 798
-    # hgFixed.zebrafishZonWTMedian table renamed as 
-    # hgFixed.zebrafishZonWTMedianLog and hgFixed.zebrafishZonWTAll table
-    # renamed as hgFixed.zebrafishZonWTAllLog (hartera, 2006-07-30)
+    # Mapped 14952,  multiply-mapped 3867, missed 0, unmapped 665
 
     hgLoadBed danRer4 affyZonWildType zebrafishZonWT.bed
-    # Loaded 21486 elements of size 15
+    # Loaded 18819 elements of size 15
     # add trackDb.ra entry at trackDb/zebrafish level
+    # look at range of scores:
+    hgsql -N -e 'select expScores from zebrafishZonWTAllRatio;' hgFixed \
+          > ratioExps.out
+    perl -pi.bak -e 's/,/\n/g' ratioExps.out
+    sort ratioExps.out | uniq -c > ratioExps.uniq.count
+    textHistogram -binSize=0.5 -real -maxBinCount=30 ratioExps.out \
+        > expRatios.hist
+    # Most values are 3.0 and lower. 
+    # Therefore use the following trackDb entry:
+
 # track affyZonWildType
 # shortLabel Wild Type Array
 # longLabel Zon Lab Expression data for Wild Type Zebrafish strains
@@ -6585,10 +6884,15 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 # priority 80
 # visibility hide
 # type expRatio
-# expScale 8.0
-# expStep 1.0
-# expTable zebrafishZonWTMedianExps
-# chip Zebrafish
+# expScale 3.0
+# expStep 0.2
+# groupings affyZonWildTypeGroups
+    # The .ra file in /usr/local/apache/cgi-bin/hgCgiData/Zebrafish
+    # which is microarrayGroups.ra defines how the array data is
+    # displayed and also grouped for the Medians and Means of Replicates.
+    # It also defines the labels for the track controls for showing 
+    # All Arrays, Arrays Grouped By Replicate Means or
+    # Arrays Grouped By Replicate Medians. This is in the description field.
 
 ###########################################################################
 # HUMAN ORTHOLOGS ADDED TO AFFY ZEBRAFISH TRACK DETAILS
@@ -7163,6 +7467,30 @@ close INFO;
     hgLoadSqlTab danRer4 vegaInfoZfish ~/kent/src/hg/lib/vegaInfoZfish.sql \
                  vegaInfoZfishWithDesc.txt
 
+    # Try loading GTF format file (2006-10-19)
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega/new
+    wget ftp://ftp.sanger.ac.uk/pub/is1/vega.gtf
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega/new
+    ldHgGene -bin -genePredExt danRer4 vegaNew vega.gtf
+    # Error: Read 6371 transcripts in 88275 lines in 1 files
+#  6371 groups 25 seqs 4 sources 2 feature types
+# invalid gffGroup detected on line: chr22        NOVEL   exon    6782575
+# 67832400.000000 -       .       gene_id "si:rp71-1i20.2"; transcript_id
+# "si:rp71-1i20.2-001"; 
+# GFF/GTF group si:rp71-1i20.2-001 on chr22+, this line is on chr22-, all group
+# members must be on same seq and strand
+# transcript_id is not unique. otter_transcript_id is unique so switch these.
+    cp vega.gtf vegaNew.gtf
+    # ldHgGene groups by transcript Id so use OTTER IDS instead
+    perl -pi.bak -e 's/transcript_id/other_transcript_id/' vegaNew.gtf
+    perl -pi.bak -e 's/otter_transcript_id/transcript_id/' vegaNew.gtf
+    ldHgGene -bin -genePredExt danRer4 vegaNew vegaNew.gtf
+    # worked ok
+    # Added this as a vegaGeneNew subtrack for Vega Genes
+     
+    # WAITING NOW FOR VEGA GENE UPDATE (2006-10-19)
 ##########################################################################
 # N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
     cd /cluster/data/danRer4/bed/nscan/
@@ -7330,5 +7658,19 @@ line+ /san/sanvol1/scratch/danRer4/affy/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # short alignments are retained. Many of the short alignments may also 
     # have longer alignments to different regions of the genome that are good.
 
-
-
+#########################################################################
+# RADIATION HYBRID (RH) MAP TRACK (in progress, 2006-10-12, hartera)
+# Data from Yi Zhou at Boston Children's Hospital:
+# yzhou@enders.tch.harvard.edu
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/rhMap-2006-10-03
+    cd /cluster/data/danRer4/bed
+    ln -s rhMap-2006-10-03 rhMap
+    # download data files from e-mail:
+    # rhSequenceSubmit100306.zip and rhSequenceSubmitSeq100306.zip
+    unzip rhSequenceSubmit100306.zip
+    unzip rhSequenceSubmitSeq100306.zip
+    dos2unix rhSequenceSubmit100306.txt
+    dos2unix rhSequenceSubmitSeq100306.txt
+   
+    # need to convert format of FASTA file to remove the line numbers 
