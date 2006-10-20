@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.29 2006/10/17 01:15:41 aamp Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.30 2006/10/20 14:35:46 kate Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -21,6 +21,8 @@ struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
 struct customTrack *getCustomTracks()
 /* Get custom track list. */
 {
+//fprintf(stdout,"database %s in cart %s", database, cartString(cart, "db"));
+cartSetString(cart, "db", database);
 if (theCtList == NULL)
     theCtList = customTracksParseCart(cart, &browserLines, NULL);
 return(theCtList);
@@ -726,16 +728,10 @@ slReverse(&newList);
 void doRemoveCustomTrack(struct sqlConnection *conn)
 /* Remove custom track file. */
 {
-char *ctFileName = cartOptionalString(cart, "ct");
 getCustomTracks();
-if (ctFileName != NULL && theCtList != NULL)
-    {
+if (theCtList)
     removeNamedCustom(&theCtList, curTable);
-    if (theCtList == NULL)
-        remove(ctFileName);
-    else
-	customTrackSave(theCtList, ctFileName);
-    }
+customTracksSaveCart(cart, theCtList);
 initGroupsTracksTables(conn);
 doMainPage(conn);
 }
