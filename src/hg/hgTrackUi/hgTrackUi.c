@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.324 2006/10/17 20:21:27 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.325 2006/10/20 20:37:50 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -181,6 +181,7 @@ if (sqlTableExists(conn,"snp126orthoPanTro2RheMac2"))
     snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
     printf("<BR><B>Include Chimp (panTro2) state and observed human alleles in name: </B>&nbsp;");
     cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
+    printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
     printf("<BR>");
     }
 hFreeConn(&conn);
