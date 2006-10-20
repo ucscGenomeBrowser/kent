@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.95 2006/10/10 21:06:12 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.96 2006/10/20 05:01:14 kate Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -22,16 +22,6 @@ struct hash *oldVars = NULL;
 char *clade = NULL;
 char *organism = NULL;
 char *db = NULL;
-
-/*
-  Remove any custom track data from the cart.
-*/
-void removeCustomTrackData()
-{
-cartRemove(cart, "hgt.customText");
-cartRemove(cart, "hgt.customFile");
-cartRemove(cart, "ct");
-}
 
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
@@ -65,7 +55,6 @@ if ((oldDb    && differentWord(oldDb, db)) ||
     (oldClade && differentWord(oldClade, clade)))
     {
     position = defaultPosition;
-    removeCustomTrackData();
     }
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
@@ -166,7 +155,8 @@ puts("<TR><TD VALIGN=\"TOP\">");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 printf(
  "</FORM><FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        hgCustomName(), customTrackCgiButtonLabel(cart));
+        hgCustomName(), customTracksExist(cart, NULL) ? 
+                        CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("</FORM></TD><TD VALIGN=\"TOP\">");
 puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");

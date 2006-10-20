@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.147 2006/10/15 00:54:35 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.148 2006/10/20 05:01:13 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -343,6 +343,181 @@ if (retReplacedCts)
 return newCtList;
 }
 
+static char *customTrackFileVar(char *database)
+/* return CGI var name containing custom track filename for a database */
+{
+char buf[64];
+safef(buf, sizeof buf, "%s%s", CT_FILE_VAR_PREFIX, database);
+return cloneString(buf);
+}
+
+/*	settings string is a set of lines
+ *	the lines need to be output as name='value'
+ *	pairs all on a single line
+ */
+static void saveSettings(FILE *f, char *settings)
+{
+struct lineFile *lf;
+char *line;
+
+lf = lineFileOnString("settings", TRUE, settings);
+while (lineFileNext(lf, &line, NULL))
+    {
+    if ((char)NULL != line[0])
+	{
+	char *blank;
+	blank = strchr(line, ' ');
+	if (blank != (char *)NULL)
+	    {
+	    int nameLen = blank - line;
+	    char name[256];
+
+	    nameLen = (nameLen < 256) ? nameLen : 255;
+	    strncpy(name, line, nameLen);
+	    name[nameLen] = (char)NULL;
+	    fprintf(f, "\t%s='%s'", name, blank+1);
+	    }
+	else
+	    fprintf(f, "\t%s", line);
+	}
+    }
+lineFileClose(&lf);
+}
+
+static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
+/* Write 'track' line that save trackDb info.  Only
+ * write parts that aren't default, then remove from settings
+ * to avoid duplication of output.
+ * NOTE: that there may no longer be any need to write anything
+ * out except for settings, but this is more conservative to 
+ * maintain functionality while custom track work continues */
+{
+struct trackDb *def = customTrackTdbDefault();
+
+if (!tdb->settingsHash)
+    trackDbHashSettings(tdb);
+
+fprintf(f, "track");
+
+/* these names might be coming in from hgTables, make the names safe */
+stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
+stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
+fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
+hashMayRemove(tdb->settingsHash, "name");
+
+stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
+stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
+fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
+hashMayRemove(tdb->settingsHash, "description");
+    
+if (tdb->url != NULL && tdb->url[0])
+    fprintf(f, "\t%s='%s'", "url", tdb->url);
+hashMayRemove(tdb->settingsHash, "url");
+if (tdb->visibility != def->visibility)
+    fprintf(f, "\t%s='%d'", "visibility", tdb->visibility);
+hashMayRemove(tdb->settingsHash, "visibility");
+if (tdb->useScore != def->useScore)
+    fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
+hashMayRemove(tdb->settingsHash, "useScore");
+if (tdb->priority != def->priority)
+    fprintf(f, "\t%s='%.3f'", "priority", tdb->priority);
+hashMayRemove(tdb->settingsHash, "priority");
+if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
+    fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
+hashMayRemove(tdb->settingsHash, "color");
+if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
+	|| tdb->altColorB != tdb->altColorB)
+    fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
+hashMayRemove(tdb->settingsHash, "altColor");
+if (tdb->html && tdb->html[0])
+    {
+    /* write doc file in trash and add reference to the track line*/
+    char *htmlFile = NULL;
+    static struct tempName tn;
+
+    if ((htmlFile = hashFindVal(tdb->settingsHash, "htmlFile")) == NULL)
+        {
+        customTrackTrashFile(&tn, ".html");
+        htmlFile = tn.forCgi;
+        }
+    writeGulp(htmlFile, tdb->html, strlen(tdb->html));
+    fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
+    }
+
+hashMayRemove(tdb->settingsHash, "htmlFile");
+if (tdb->settings && (strlen(tdb->settings) > 0))
+    saveSettings(f, hashToRaString(tdb->settingsHash));
+fputc('\n', f);
+if (ferror(f))
+    errnoAbort("Write error to %s", fileName);
+trackDbFree(&def);
+}
+
+static void customTracksSaveFile(struct customTrack *trackList, char *fileName)
+/* Save out custom tracks. */
+{
+FILE *f = mustOpen(fileName, "w");
+
+#ifdef DEBUG
+struct dyString *ds = dyStringNew(100);
+if (!fileExists(fileName))
+    {
+    dyStringPrintf(ds, "chmod 666 %s", fileName);
+    system(ds->string);
+    }
+#endif
+
+struct customTrack *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    /* may be coming in here from the table browser.  It has wiggle
+     *	ascii data waiting to be encoded into .wib and .wig
+     */
+    if (track->wigAscii)
+	{
+	/* HACK ALERT - calling private method function in customFactory.c */
+	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
+	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
+	ctAddToSettings(track, "tdbType", track->tdb->type);
+	}
+    if (track->htmlFile)
+        ctAddToSettings(track, "htmlFile", track->htmlFile);
+    saveTdbLine(f, fileName, track->tdb);
+    if (!track->dbTrack)
+	{
+	struct bed *bed;
+	for (bed = track->bedList; bed != NULL; bed = bed->next)
+	    bedOutputN(bed, track->fieldCount, f, '\t', '\n');
+	}
+    }
+carefulClose(&f);
+}
+
+void customTracksSaveCart(struct cart *cart, struct customTrack *ctList)
+/* Save custom tracks to trash file for database in cart */
+{
+char *ctFileName = NULL;
+char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
+if (ctList)
+    {
+    if (!customTracksExist(cart, &ctFileName))
+        {
+        /* expired custom tracks file */
+        static struct tempName tn;
+        customTrackTrashFile(&tn, ".bed");
+        ctFileName = tn.forCgi;
+        cartSetString(cart, ctFileVar, ctFileName);
+        }
+    customTracksSaveFile(ctList, ctFileName);
+    }
+else
+    {
+    /* no custom tracks remaining for this assembly */
+    cartRemove(cart, ctFileVar);
+    cartRemovePrefix(cart, CT_PREFIX);
+    }
+}
+
 struct customTrack *customTracksParseCartDetailed(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
@@ -463,88 +638,63 @@ if (customText != NULL && customText[0] != 0)
     errCatchFree(&errCatch); 
     }
 
-/* the 'ct' variable contains a filename from the trash directory.
+/* the 'ctfile_$db' variable contains a filename from the trash directory.
  * The file is created by hgCustom or hgTables after the custom track list
  * is created.  The filename may be reused.  The file contents are
  * custom tracks in "internal format" that have already been parsed */
-char *ctFileNameFromCart = cartOptionalString(cart, "ct");
+
 char *ctFileName = NULL;
 struct customTrack *ctList = NULL, *replacedCts = NULL;
 struct customTrack *nextCt = NULL;
 
 /* load existing custom tracks from trash file */
-
-if (ctFileNameFromCart != NULL)
+if (customTracksExist(cart, &ctFileName))
     {
-    if (!fileExists(ctFileNameFromCart)) /* Cope with expired tracks. */
-        {
-	cartRemove(cart, "ct");
-	cartRemovePrefix(cart, "ct_");
-        }
-    else
-	{
-	ctList = 
-            customFactoryParse(ctFileNameFromCart, TRUE, retBrowserLines);
-	ctFileName = ctFileNameFromCart;
+    ctList = 
+        customFactoryParse(ctFileName, TRUE, retBrowserLines);
 
-        /* handle selected tracks -- update doc, remove, etc. */
-        char *selectedTable = NULL;
-        if (cartVarExists(cart, CT_DO_REMOVE_VAR))
-            selectedTable = cartOptionalString(cart, CT_SELECTED_TABLE_VAR);
-        else
-            selectedTable = cartOptionalString(cart, CT_UPDATED_TABLE_VAR);
-        if (selectedTable)
+    /* handle selected tracks -- update doc, remove, etc. */
+    char *selectedTable = NULL;
+    if (cartVarExists(cart, CT_DO_REMOVE_VAR))
+        selectedTable = cartOptionalString(cart, CT_SELECTED_TABLE_VAR);
+    else
+        selectedTable = cartOptionalString(cart, CT_UPDATED_TABLE_VAR);
+    if (selectedTable)
+        {
+        for (ct = ctList; ct != NULL; ct = nextCt)
             {
-            for (ct = ctList; ct != NULL; ct = nextCt)
+            nextCt = ct->next;
+            if (sameString(selectedTable, ct->tdb->tableName))
                 {
-                nextCt = ct->next;
-                if (sameString(selectedTable, ct->tdb->tableName))
+                if (cartVarExists(cart, CT_DO_REMOVE_VAR))
                     {
-                    if (cartVarExists(cart, CT_DO_REMOVE_VAR))
-                        {
-                        /* remove a track if requested, e.g. by hgTrackUi */
-                        slRemoveEl(&ctList, ct);
-                        /* remove visibility variable */
-                        cartRemove(cart, selectedTable);
-                        /* remove configuration variables */
-                        char buf[128];
-                        safef(buf, sizeof buf, "%s.", selectedTable); 
-                        cartRemovePrefix(cart, buf);
-                        /* remove control variables */
-                        cartRemove(cart, CT_DO_REMOVE_VAR);
-                        }
-                    else
-                        {
-                        if (html)
-                            ct->tdb->html = html;
-                        }
-                    break;
+                    /* remove a track if requested, e.g. by hgTrackUi */
+                    slRemoveEl(&ctList, ct);
+                    /* remove visibility variable */
+                    cartRemove(cart, selectedTable);
+                    /* remove configuration variables */
+                    char buf[128];
+                    safef(buf, sizeof buf, "%s.", selectedTable); 
+                    cartRemovePrefix(cart, buf);
+                    /* remove control variables */
+                    cartRemove(cart, CT_DO_REMOVE_VAR);
                     }
+                else
+                    {
+                    if (html)
+                        ct->tdb->html = html;
+                    }
+                break;
                 }
-            cartRemove(cart, CT_SELECTED_TABLE_VAR);
             }
+        cartRemove(cart, CT_SELECTED_TABLE_VAR);
         }
     }
 
 /* merge new and old tracks */
 numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
-
-if (ctList)
-    {
-    /* save custom tracks to file */
-    if (!ctFileName)
-        {
-        static struct tempName tn;
-        customTrackTrashFile(&tn, ".bed");
-        ctFileName = tn.forCgi;
-        cartSetString(cart, "ct", ctFileName);
-        }
-    /* consider saving only if a track has been added or removed */
-    customTrackSave(ctList, ctFileName);
-    }
-else
-    cartRemove(cart, "ct");
+customTracksSaveCart(cart, ctList);
 
 if (err && savedCustomText)
     {
@@ -588,166 +738,24 @@ if (err)
 return ctList;
 }
 
-/*	settings string is a set of lines
- *	the lines need to be output as name='value'
- *	pairs all on a single line
- */
-static void saveSettings(FILE *f, char *settings)
+boolean customTracksExist(struct cart *cart, char **retCtFileName)
+/* determine if there are any custom tracks.  Cleanup from expired tracks */
 {
-struct lineFile *lf;
-char *line;
-
-lf = lineFileOnString("settings", TRUE, settings);
-while (lineFileNext(lf, &line, NULL))
-    {
-    if ((char)NULL != line[0])
-	{
-	char *blank;
-	blank = strchr(line, ' ');
-	if (blank != (char *)NULL)
-	    {
-	    int nameLen = blank - line;
-	    char name[256];
-
-	    nameLen = (nameLen < 256) ? nameLen : 255;
-	    strncpy(name, line, nameLen);
-	    name[nameLen] = (char)NULL;
-	    fprintf(f, "\t%s='%s'", name, blank+1);
-	    }
-	else
-	    fprintf(f, "\t%s", line);
-	}
-    }
-lineFileClose(&lf);
-}
-
-static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
-/* Write 'track' line that save trackDb info.  Only
- * write parts that aren't default, then remove from settings
- * to avoid duplication of output.
- * NOTE: that there may no longer be any need to write anything
- * out except for settings, but this is more conservative to 
- * maintain functionality while custom track work continues */
-{
-struct trackDb *def = customTrackTdbDefault();
-
-if (!tdb->settingsHash)
-    trackDbHashSettings(tdb);
-
-fprintf(f, "track");
-
-/* these names might be coming in from hgTables, make the names safe */
-stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
-stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
-fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
-hashMayRemove(tdb->settingsHash, "name");
-
-stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
-stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
-fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
-hashMayRemove(tdb->settingsHash, "description");
-    
-if (tdb->url != NULL && tdb->url[0])
-    fprintf(f, "\t%s='%s'", "url", tdb->url);
-hashMayRemove(tdb->settingsHash, "url");
-if (tdb->visibility != def->visibility)
-    fprintf(f, "\t%s='%d'", "visibility", tdb->visibility);
-hashMayRemove(tdb->settingsHash, "visibility");
-if (tdb->useScore != def->useScore)
-    fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
-hashMayRemove(tdb->settingsHash, "useScore");
-if (tdb->priority != def->priority)
-    fprintf(f, "\t%s='%.3f'", "priority", tdb->priority);
-hashMayRemove(tdb->settingsHash, "priority");
-if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != def->colorB)
-    fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
-hashMayRemove(tdb->settingsHash, "color");
-if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
-	|| tdb->altColorB != tdb->altColorB)
-    fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
-hashMayRemove(tdb->settingsHash, "altColor");
-if (tdb->html && tdb->html[0])
-    {
-    /* write doc file in trash and add reference to the track line*/
-    char *htmlFile = NULL;
-    static struct tempName tn;
-
-    if ((htmlFile = hashFindVal(tdb->settingsHash, "htmlFile")) == NULL)
-        {
-        customTrackTrashFile(&tn, ".html");
-        htmlFile = tn.forCgi;
-        }
-    writeGulp(htmlFile, tdb->html, strlen(tdb->html));
-    fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
-    }
-
-hashMayRemove(tdb->settingsHash, "htmlFile");
-if (tdb->settings && (strlen(tdb->settings) > 0))
-    saveSettings(f, hashToRaString(tdb->settingsHash));
-fputc('\n', f);
-if (ferror(f))
-    errnoAbort("Write error to %s", fileName);
-trackDbFree(&def);
-}
-
-void customTrackSave(struct customTrack *trackList, char *fileName)
-/* Save out custom tracks. */
-{
-FILE *f = mustOpen(fileName, "w");
-
-#ifdef DEBUG
-struct dyString *ds = dyStringNew(100);
-if (!fileExists(fileName))
-    {
-    dyStringPrintf(ds, "chmod 666 %s", fileName);
-    system(ds->string);
-    }
-#endif
-
-struct customTrack *track;
-for (track = trackList; track != NULL; track = track->next)
-    {
-    /* may be coming in here from the table browser.  It has wiggle
-     *	ascii data waiting to be encoded into .wib and .wig
-     */
-    if (track->wigAscii)
-	{
-	/* HACK ALERT - calling private method function in customFactory.c */
-	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
-	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
-	ctAddToSettings(track, "tdbType", track->tdb->type);
-	}
-    if (track->htmlFile)
-        ctAddToSettings(track, "htmlFile", track->htmlFile);
-    saveTdbLine(f, fileName, track->tdb);
-    if (!track->dbTrack)
-	{
-	struct bed *bed;
-	for (bed = track->bedList; bed != NULL; bed = bed->next)
-	    bedOutputN(bed, track->fieldCount, f, '\t', '\n');
-	}
-    }
-carefulClose(&f);
-}
-
-char *customTrackCgiButtonLabel(struct cart *cart)
-/* determine button label to launch hgCustom based on whether 
- * user currently has any custom tracks */
-/* TODO: make function of duplicated logic in ParseCart() */
-{
-char *ctFileName = NULL;
-if ((ctFileName = cartOptionalString(cart, "ct")) != NULL)
+char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
+char *ctFileName = cartOptionalString(cart, ctFileVar);
+if (ctFileName)
     {
     if (fileExists(ctFileName)) 
-        return "manage custom tracks";
-    else
         {
-        /* expired custom tracks file */
-	cartRemove(cart, "ct");
-	cartRemovePrefix(cart, "ct_");
+        if (retCtFileName)
+            *retCtFileName = ctFileName;
+        return TRUE;
         }
+    /* expired custom tracks file */
+    cartRemove(cart, ctFileVar);
+    cartRemovePrefix(cart, CT_PREFIX);
     }
-return "add custom tracks";
+return FALSE;
 }
 
 boolean isCustomTrack(char *track)

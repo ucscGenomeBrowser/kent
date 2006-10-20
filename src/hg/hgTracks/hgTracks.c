@@ -63,6 +63,7 @@
 #include "ensPhusionBlast.h"
 #include "knownMore.h"
 #include "customTrack.h"
+#include "customFactory.h"
 #include "trackDb.h"
 #include "pslWScore.h"
 #include "lfs.h"
@@ -108,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1222 2006/10/17 01:15:38 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1223 2006/10/20 05:01:13 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -191,6 +192,7 @@ char *baseTitle = NULL;        /* Title it should display top of base track (opt
  * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
 char *ctFileName = NULL;	/* Custom track file. */
 struct customTrack *ctList = NULL;  /* Custom tracks. */
+boolean hasCustomTracks = FALSE;  /* whether any custom tracks are for this db*/
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
 boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
@@ -11947,6 +11949,10 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     }
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
+    if (differentString(ctGenome(ct), database))
+        /* skip custom tracks for other databases */
+        continue;
+    hasCustomTracks = TRUE;
     tg = newCustomTrack(ct);
     slAddHead(pGroupList, tg);
     }
@@ -12767,7 +12773,8 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
-    hButton(CT_CGI_VAR, customTrackCgiButtonLabel(cart));
+    hButton(CT_CGI_VAR, hasCustomTracks ? 
+                            CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
@@ -13489,16 +13496,6 @@ if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
-
-/* dump custom tracks if assembly changes */
-char *oldDb = hashFindVal(oldVars, "db");
-char *oldOrg = hashFindVal(oldVars, "org");
-if ((oldDb    && differentWord(oldDb, database)) ||
-    (oldOrg   && differentWord(oldOrg, organism)))
-    {
-    cartRemove(cart, "ct");
-    cartRemovePrefix(cart, "ct_");
-    }
 
 hSetDb(database);
 

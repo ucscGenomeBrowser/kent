@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.81 2006/10/15 00:54:35 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.82 2006/10/20 05:01:13 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,8 +65,9 @@ errAbort(
 struct cart *cart;
 struct hash *oldCart = NULL;
 char *excludeVars[] = {"Submit", "submit", "SubmitFile", NULL};
-char *database;
-char *organism;
+char *database = NULL;
+char *organism = NULL;
+char *clade = NULL;
 struct customTrack *ctList = NULL;
 
 void makeClearButton(char *field)
@@ -78,13 +79,9 @@ safef(javascript, sizeof javascript,
 cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
 }
 
-void addCustomForm(struct customTrack *ct, char *err)
-/* display UI for adding custom tracks by URL or pasting data */
+void addIntro()
+/* display overview and help message for "add" screen */
 {
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
-    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
-    hgCustomName());
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("Display your own data as custom annotation tracks in the browser." 
      " Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
@@ -103,14 +100,67 @@ puts("Display your own data as custom annotation tracks in the browser."
   " Examples are\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
 );
+}
 
+void addCustomForm(struct customTrack *ct, char *err)
+/* display UI for adding custom tracks by URL or pasting data */
+{
 char *url = NULL;
     char buf[1024];
 
-if (err)
-    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT COLOR='RED'>Error</I></FONT>&nbsp;%s</B>", err);
+boolean gotClade = FALSE;
+boolean isUpdateForm = FALSE;
+if (ct)
+    isUpdateForm = TRUE;
+else
+    /* add form needs clade for assembly menu */
+    gotClade = hGotClade();
 
-cgiParagraph("&nbsp;");
+/* main form */
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
+    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
+    hgCustomName());
+cartSaveSession(cart);
+
+if (!isUpdateForm)
+    {
+    /* Print clade, genome and assembly  */
+    /* NOTE: this uses an additional, hidden form (orgForm), below */
+    char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
+    char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+    char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+
+    puts("<TABLE BORDER=0>\n");
+    if (gotClade)
+        {
+        puts("<TR><TD>clade\n");
+        printCladeListHtml(hOrganism(database), onChangeClade);
+        puts("&nbsp;&nbsp;&nbsp;");
+        puts("genome\n");
+        printGenomeListForCladeHtml(database, onChangeOrg);
+        }
+    else
+        {
+        puts("<TR><TD>genome\n");
+        printGenomeListHtml(database, onChangeOrg);
+        }
+    puts("&nbsp;&nbsp;&nbsp;");
+    puts("assembly\n");
+    printAssemblyListHtml(database, onChangeDb);
+    puts("&nbsp;&nbsp;&nbsp;");
+    printf("[%s]", database);
+    puts("</TD></TR></TABLE>\n");
+    }
+
+/* intro text */
+puts("<P>");
+addIntro();
+puts("<P>");
+
+/* row for error message */
+if (err)
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT COLOR='RED'>Error</I></FONT>&nbsp;%s</B><P>", err);
+
 cgiSimpleTableStart();
 
 /* first row - label entry for file upload */
@@ -182,7 +232,6 @@ if (ct && (url = ctHtmlUrl(ct)) != NULL)
 else
     cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""),
                                     TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
-
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -205,6 +254,31 @@ puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here
 puts("</TD>");
 cgiTableRowEnd();
 cgiTableEnd();
+
+
+if (isUpdateForm)
+    {
+    /* hidden variables to identify track */
+    cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
+    char buf[256];
+    safef(buf, sizeof buf, "track name='%s' description='%s'",
+                            ct->tdb->shortLabel, ct->tdb->longLabel);
+    cgiMakeHiddenVar(hgCtUpdatedTrack, buf);
+    }
+else
+    {
+    /* hidden form to handle clade/genome/assembly dropdown.
+     * This is at end of page for layout reasons (preserve vertical space) */
+    puts("</FORM>");
+    printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
+    cartSaveSession(cart);
+    if (gotClade)
+        printf("<INPUT TYPE=\"HIDDEN\" NAME=\"clade\" VALUE=\"%s\">\n", clade);
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
+    }
+puts("</FORM>");
 }
 
 void tableHeaderFieldStart(int columns)
@@ -222,8 +296,8 @@ if (description)
 printf("><B>%s</B></TD> ", wrapWhiteFont(label));
 }
 
-void manageCustomForm(char *warn)
-/* list custom tracks and display checkboxes so user can select for delete */
+void showCustomTrackList(struct customTrack *ctList, int numCts)
+/* print table of custom tracks with controls */
 {
 struct customTrack *ct;
 char buf[64];
@@ -249,34 +323,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     if (ctInitialPosition(ct) || ctFirstItemPos(ct))
         posCt++;
     }
-
-puts("<TABLE BORDER=0>");
-cgiSimpleTableRowStart();
-puts("<TD VALIGN='TOP'>");
-puts("</FORM>");
-printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
-           hgTracksName());
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-cgiMakeButton("Submit", "view in genome browser");
-puts("</FORM></TD>");
-puts("<TD VALIGN='TOP'>");
-printf("<FORM style=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
-           hgTablesName());
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-cgiMakeButton("Submit", "access in table browser");
-puts("</FORM></TD>");
-cgiTableRowEnd();
-puts("</TABLE>");
-
-if (warn && warn[0])
-    printf("<B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
-
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"customForm\">\n",
-           hgCustomName());
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-cgiSimpleTableStart();
-cgiSimpleTableRowStart();
-puts("<TD VALIGN=\"TOP\">");
 hTableStart();
 cgiSimpleTableRowStart();
 tableHeaderField("Name", "Short track identifier");
@@ -289,7 +335,7 @@ if (posCt)
     tableHeaderField("Pos"," Go to genome browser at default track position or first item");
 
 boolean showAllButtons = FALSE;
-if (slCount(ctList) > 3)
+if (numCts > 3)
     showAllButtons = TRUE;
 
 tableHeaderFieldStart(showAllButtons ? 2 : 1);
@@ -305,6 +351,7 @@ if (updateCt)
     }
 
 cgiTableRowEnd();
+
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
@@ -327,7 +374,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         int count = ctItemCount(ct);
         if (count > 0)
             printf("<TD ALIGN='CENTER'>%d</TD>", count);
-
         else
             puts("<TD>&nbsp;</TD>");
         }
@@ -392,15 +438,134 @@ if (showAllButtons)
     cgiTableRowEnd();
     }
 hTableEnd();
+}
 
-/* add button */
+struct dbDb *getCustomTrackDatabases()
+/* Get list of databases having custom tracks for this user.
+ * Dispose of this with dbDbFreeList. */
+{
+struct dbDb *dbList = NULL, *dbDb;
+char *db;
+
+/* Get list of assemblies with custom tracks */
+struct hashEl *hels = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
+struct hashEl *hel = NULL;
+for (hel = hels; hel != NULL; hel = hel->next)
+    {
+    /* TODO: chop actual prefix */
+    db = chopPrefixAt(cloneString(hel->name), '_');
+        /* TODO: check if file exists, if not remove ctfile_ var */
+    dbDb = hDbDb(db);
+    if (dbDb)
+        slAddTail(&dbList, dbDb);
+    }
+return dbList;
+}
+
+void manageCustomForm(char *warn)
+/* list custom tracks and display checkboxes so user can select for delete */
+{
+
+struct dbDb *dbList = getCustomTrackDatabases();
+struct dbDb *dbDb = NULL;
+slAddTail(&dbList, hDbDb(database));
+slReverse(&dbList);
+for (dbDb = dbList->next; dbDb != NULL; dbDb = dbDb->next)
+    if (sameString(dbDb->name, database))
+        slRemoveEl(&dbList, dbDb);
+
+boolean assemblyMenu = FALSE;
+if (slCount(dbList) > 1)
+    assemblyMenu = TRUE;
+
+if (assemblyMenu)
+    {
+    /* hidden form to handle genome/assembly dropdown */
+    printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
+    cartSaveSession(cart);
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
+    puts("</FORM>");
+    }
+
+/* the main form contains a table of all tracks, with checkboxes to delete */
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n",
+           hgCustomName());
+cartSaveSession(cart);
+
+if (assemblyMenu)
+    {
+    /* Print clade, genome and assembly  */
+    char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
+    char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+
+    puts("<TABLE BORDER=0>\n");
+    puts("<TR><TD>genome\n");
+    printSomeGenomeListHtml(database, dbList, onChangeOrg);
+    puts("&nbsp;&nbsp;&nbsp;");
+    puts("assembly\n");
+    printSomeAssemblyListHtml(database, dbList, onChangeDb);
+    puts("&nbsp;&nbsp;&nbsp;");
+    printf("[%s]", database);
+    puts("</TD></TR></TABLE><P>\n");
+    }
+else
+    printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n", 
+            organism, hFreezeDate(database), database);
+
+/* place for warning messages to appear */
+if (warn && warn[0])
+    printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
+
+/* count up number of custom tracks for this genome */
+int numCts = slCount(ctList);
+
+cgiSimpleTableStart();
+cgiSimpleTableRowStart();
+if (numCts)
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    showCustomTrackList(ctList, numCts);
+    }
+else
+    puts("<TD VALIGN=\"TOP\"><B><EM>No custom tracks for this genome:<B></EM>&nbsp;&nbsp;");
+puts("</TD>");
+
+/* navigation  buttons */
 puts("<TD VALIGN=\"TOP\">");
+puts("<TABLE BORDER=0>");
+
+/* button to add custom tracks */
+puts("<TR><TD>");
 cgiMakeButton(hgCtDoAdd, "add custom tracks");
+puts("</TD></TR>");
+puts("</FORM>");
+
+/* button for GB navigation */
+puts("<TR><TD>");
+printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
+           hgTracksName());
+cartSaveSession(cart);
+cgiMakeButton("Submit", numCts ? 
+                        "view in genome browser" : "go to genome browser");
+puts("</FORM>");
+puts("</TD></TR>");
+
+/* button for TB navigation */
+puts("<TR><TD>");
+printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
+           hgTablesName());
+cartSaveSession(cart);
+cgiMakeButton("Submit", numCts ? 
+                        "access in table browser": "go to table browser");
+puts("</FORM>");
+puts("</TD></TR>");
+
+puts("</TABLE>");
 puts("</TD>");
 
 cgiTableRowEnd();
 cgiTableEnd();
-puts("</FORM>");
 cartSetString(cart, "hgta_group", "user");
 }
 
@@ -481,19 +646,12 @@ if (retErr)
     *retErr = err;
 }
 
-void endCustomForm()
-/* end form for adding new custom tracks */
-{
-puts("</FORM>\n");
-}
-
 void doAddCustom(char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
 cartWebStart(cart, "Add Custom Tracks");
 addCustomForm(NULL, err);
-endCustomForm();
 helpCustom();
 cartWebEnd(cart);
 }
@@ -502,15 +660,10 @@ void doUpdateCustom(struct customTrack *ct, char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
 {
-cartWebStart(cart, "Update Custom Track: %s", ct->tdb->longLabel);
+cartWebStart(cart, "Update Custom Track: %s [%s]", 
+        ct->tdb->longLabel, database);
 cartSetString(cart, hgCtDocText, ct->tdb->html);
 addCustomForm(ct, err);
-cgiMakeHiddenVar(hgCtUpdatedTable, ct->tdb->tableName);
-char buf[256];
-safef(buf, sizeof buf, "track name='%s' description='%s'",
-                        ct->tdb->shortLabel, ct->tdb->longLabel);
-cgiMakeHiddenVar(hgCtUpdatedTrack, buf);
-endCustomForm();
 helpCustom();
 cartWebEnd(cart);
 }
@@ -605,20 +758,6 @@ ctList = customTrackAddToList(ctList, refreshCts, &replacedCts, FALSE);
 if (warn)
     *warn = replacedTracksMsg(replacedCts);
 customTrackHandleLift(ctList);
-}
-
-void saveCustom(char *ctFileName)
-/* save custom tracks to file */
-{
-/* create custom track file in trash dir, if needed */
-if (ctFileName == NULL)
-    {
-    static struct tempName tn;
-    customTrackTrashFile(&tn, ".bed");
-    ctFileName = tn.forCgi;
-    cartSetString(cart, "ct", ctFileName);
-    }
-customTrackSave(ctList, ctFileName);
 }
 
 void addWarning(struct dyString *ds, char *msg)
@@ -754,15 +893,14 @@ else
 	doRefreshCustom(&warn);
 	addWarning(dsWarn, warn);
 	}
+    customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
-    if (ctList)
+    if (ctList || getCustomTrackDatabases())
 	{
-        saveCustom(ctFileName);
         doManageCustom(warn);
 	}
     else
 	{
-	cartRemove(cart, "ct");
         if (cartVarExists(cart, hgCtDoDelete))
                 doGenomeBrowser();
         else

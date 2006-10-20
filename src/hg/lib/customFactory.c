@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.35 2006/10/17 01:15:21 aamp Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.36 2006/10/20 05:01:13 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1037,7 +1037,7 @@ tdb->type = hashFindVal(hash, "tdbType");
 /* might be an old-style wigType track */
 if (NULL == tdb->type)
     tdb->type = hashFindVal(hash, "wigType");
-track->dbTrackType = hashFindVal(hash, "db");
+track->dbTrackType = hashFindVal(hash, "dbTrackType");
 track->dbTableName = hashFindVal(hash, "dbTableName");
 if (track->dbTableName)
     {
@@ -1177,6 +1177,12 @@ while ((line = customPpNextReal(cpp)) != NULL)
 return dyStringCannibalize(&ds);
 }
 
+char *ctGenome(struct customTrack *ct)
+/* return database setting */
+{
+return trackDbSetting(ct->tdb, "genome");
+}
+
 struct customTrack *customFactoryParse(char *text, boolean isFile,
                                         struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
@@ -1212,6 +1218,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	track = trackLineToTrack(line, cpp->fileStack->lineIx);
 	if (track == NULL)
 	    continue;
+        /* get database for custom track */
+        char *ctDb = ctGenome(track);
+        if (ctDb && differentString(ctDb, hGetDb()))
+            errAbort("can't load %s data into %s custom tracks",
+                                        ctDb, hGetDb());
 	type = hashFindVal(track->tdb->settingsHash, "type");
 	}
     else if (trackList == NULL)
@@ -1278,11 +1289,13 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    {
 	    ctAddToSettings(track, "tdbType", oneTrack->tdb->type);
 	    if (dbTrack && oneTrack->dbTrackType != NULL)
-		ctAddToSettings(track, "db", oneTrack->dbTrackType);
+		ctAddToSettings(track, "dbTrackType", oneTrack->dbTrackType);
             if (!trackDbSetting(track->tdb, "inputType"))
                 ctAddToSettings(track, "inputType", fac->name);
             if (dataUrl)
                 ctAddToSettings(track, "dataUrl", dataUrl);
+            if (!ctGenome(track))
+                ctAddToSettings(track, "genome", hGetDb());
 	    }
 	}
     trackList = slCat(trackList, oneList);

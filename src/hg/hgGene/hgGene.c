@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.80 2006/10/12 04:20:50 kate Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.81 2006/10/20 05:01:14 kate Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -809,16 +809,6 @@ struct sqlConnection *conn = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
-
-/* dump custom tracks if assembly changes */
-char *oldDb = hashFindVal(oldCart, "db");
-char *oldOrg = hashFindVal(oldCart, "org");
-if ((oldDb    && differentWord(oldDb, database)) ||
-    (oldOrg   && differentWord(oldOrg, genome)))
-    {
-    cartRemove(cart, "ct");
-    cartRemovePrefix(cart, "ct_");
-    }
 
 conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);

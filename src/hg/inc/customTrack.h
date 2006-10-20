@@ -14,10 +14,14 @@
 #include "portable.h"
 
 #define CT_PREFIX       "ct_"
+#define CT_FILE_VAR_PREFIX       "ctfile_"
 #define CT_DEFAULT_TRACK_NAME    "User Track"
 #define CT_DEFAULT_TRACK_DESCR   "User Supplied Track"
 
 #define CT_CGI_VAR		 "hgct_doHgCustom"
+
+#define CT_MANAGE_BUTTON_LABEL   "manage custom tracks"
+#define CT_ADD_BUTTON_LABEL      "add custom tracks"
 
 /* TODO: Remove this when hgCustom is ready for release. This cart variable is
  * only used to preserve old behavior during testing */
@@ -84,8 +88,7 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
  * error, clear the custom track from the cart,  and return NULL.  It 
  * will also leak memory. */
 
-void customTrackSave(struct customTrack *trackList, char *fileName);
-/* Save out custom tracks. */
+void customTracksSaveCart(struct cart *cart, struct customTrack *ctList);
 
 void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash);
 /* Lift tracks based on hash of ctgPos. */
@@ -136,7 +139,7 @@ struct customTrack *customTrackAddToList(struct customTrack *ctList,
 void customTrackHandleLift(struct customTrack *ctList);
 /* lift any tracks with contig coords */
 
-char *customTrackCgiButtonLabel(struct cart *cart);
-/* determine button label to launch hgCustom based on whether 
- * user currently has any custom tracks */
+boolean customTracksExist(struct cart *cart, char **retCtFileName);
+/* determine if there are any custom tracks.  Cleanup from expired tracks */
+
 #endif
