@@ -8105,12 +8105,24 @@ cat > makeMaf.csh << 'EOF'
 
 
 # BLASTZ ZEBRAFISH (danRer1) CLEAN UP (DONE, 2004-07-19, hartera)
+# FURTHER CLEANUP (hartera, 2006-09-01, hartera)
      ssh eieio
      cd /cluster/data/hg17/bed/blastz.danRer1.swap
      nice rm axtChain/run1/chain/* &
      nice rm -fr axtChain/n1 axtChain/hNoClass.net &
      nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
-
+     # further cleanup (2006-09-01, hartera)
+     ssh kkstore02
+     cd /cluster/data/hg17/bed/blastz.danRer1.swap
+     rm -r axtNet.old axtNet.unsorted mafNet
+     cd axtChain
+     rm hist*
+     # remove chains and nets directories. These can be reconstructed with
+     # all.chain.gz and zebrafish.net.gz
+     rm -r old chain zebrafishNet preNet
+     rm noClass.net.gz
+     cd ..
+     rm pslChrom/psl.tab.gz
 
 # ZEBRAFISH DANRER1 DOWNLOADS (WORKING 2004-09-17 kate)
     ssh eieio
@@ -22254,4 +22266,98 @@ mkdir -p ${blatDir}/{over,net}
    hgLoadBed hg17 gad gad.bed
 
 #####################################################################
+# YALE TRANSCRIPTIONALLY ACTIVE REGIONS (TARs/TransFrags) TRACK IDENTIFIED 
+# USING A WHOLE GENOME TILING ARRAY (DONE, 2006-10-20, hartera)
+# Data is from the paper: Bertone et al. Science 24 December 2004:
+# Vol. 306. no. 5705, pp. 2242 - 2246. From Mark Gerstein's lab at Yale.
+# Contact at Yale: Joel S. Rozowsky, joel.rozowsky@yale.edu
+# The data consist of Transcriptionally Active Regions (TARs or TransFrags)
+# found using Affymetrix genome tiling arrays. The data is from the lab
+# of Mark Gerstein at Yale.
+     ssh kkstore02
+     mkdir /cluster/data/hg17/bed/yaleBertoneTars/
+     cd /cluster/data/hg17/bed/yaleBertoneTars/
+     # download Bertone et al. data from this URL:
+    #http://dart.gersteinlab.org/cgi-bin/ar/download.cgi?ID=TAR_data_NCBI31.txt
+     # and put it in this directory.
+     # The sequences used to design the microarrays were from
+     # UCSC hg13/NCBI Build 31 so the sequences
+     # should be aligned again using Blat since this is probably better
+     # than using liftOver across so many assemblies.
 
+     # Get sequences from TARs file and put in FASTA format:
+     # Remove characters from Windows:
+     dos2unix TAR_data_NCBI31.txt
+     # The TARs are in order of IDs in the file so the first TAR has ID 1, the
+     # second is 2 up to the last which is 17517. These IDs are used to link
+     # to the DART database of TARs at Yale so use these IDs in the FASTA
+     # header lines. Need to add "TAR" as prefix to ID so that it is unique
+     # in the seq table.
+   awk 'BEGIN {FS="\t";n=0;}{if ($1 ~ /^chr/) print ">TAR"n"\n"$14"\n";n++;}' \
+         TAR_data_NCBI31.txt > yaleBertoneTARSeqs.fa
+     ssh pk
+     mkdir -p /san/sanvol1/scratch/hg17/TARs/
+     cp /cluster/data/hg17/bed/yaleBertoneTars/yaleBertoneTARSeqs.fa \
+        /san/sanvol1/scratch/hg17/TARs/
+     # Set up to Blat the TAR sequences against hg17
+     cd /cluster/data/hg17/bed/yaleBertoneTars
+     ls -1 /san/sanvol1/scratch/hg17/TARs/yaleBertoneTARSeqs.fa > tars.lst
+     ls -1 /san/sanvol1/scratch/hg17/nib/*.nib > genome.lst
+     # output dir
+     mkdir psl
+
+     cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=90 -ooc=/san/sanvol1/scratch/hg17/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << for emacs
+     gensub2 genome.lst tars.lst template.sub para.spec
+     para create para.spec
+     para try, para check, para push ...
+     para time
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:        429s       7.16m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                   153s       2.54m     0.04h    0.00d  0.000 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              38s       0.63m     0.01h    0.00d
+# Submission to last job:           107s       1.78m     0.03h    0.00d
+     # sort and then filter
+     pslSort dirs raw.psl tmp psl
+     # use these parameters as for Genbank alignments of native mRNAs
+     # for finished assemblies.
+     pslCDnaFilter -minId=0.96 -minCover=0.25 -localNearBest=0.001 \
+       -minQSize=20 -minNonRepSize=16 -ignoreNs -bestOverlap \
+       raw.psl yaleBertoneTars.psl
+#                         seqs    aligns
+#             total:     17512   37530
+# drop minNonRepSize:     121     254
+#     drop minIdent:     3827    14532
+#     drop minCover:     571     897
+#       weird over:     232     837
+#        kept weird:     197     201
+#    drop localBest:     2359    3896
+#              kept:     17498   17951
+     
+     # 99.9% were kept. 
+     # check how many aligned
+     grep '>' yaleBertoneTARSeqs.fa | wc -l
+     # 17517
+     # 99.89% of the original set of sequences are in this filtered PSL file.
+     pslCheck yaleBertoneTars.psl
+     # psl is ok
+
+     # load into database
+     ssh hgwdev
+     cd /cluster/data/hg17/bed/yaleBertoneTars
+     hgLoadPsl hg17 yaleBertoneTars.psl
+
+     # Add sequences to /gbdb/hg18 and to seq and extFile tables.
+     mkdir -p /gbdb/hg17/yaleTARs/
+     ln -s /cluster/data/hg17/bed/yaleBertoneTars/yaleBertoneTARSeqs.fa \
+           /gbdb/hg17/yaleTARs/
+     hgLoadSeq hg17 /gbdb/hg17/yaleTARs/yaleBertoneTARSeqs.fa
+    
+     # trackDb.ra entry is in trackDb/human/trackDb.ra and 
+     # a description exist already as this track is also on hg18.
