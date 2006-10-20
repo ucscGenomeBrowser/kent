@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1223 2006/10/20 05:01:13 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1224 2006/10/20 15:03:51 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11949,9 +11949,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     }
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    if (differentString(ctGenome(ct), database))
-        /* skip custom tracks for other databases */
-        continue;
     hasCustomTracks = TRUE;
     tg = newCustomTrack(ct);
     slAddHead(pGroupList, tg);
