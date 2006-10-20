@@ -8,13 +8,19 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.1 2006/07/26 03:59:30 markd Exp $";
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.2 2006/10/20 16:22:48 hartera Exp $";
+
+typedef union dataValue {
+    int dataInt;
+    float dataFloat;
+} DATA;
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
 char *tabDir = ".";
 char *chopName = NULL;
 boolean doLoad;
+boolean noRound;
 int limit = 0;
 char *expUrl = "http://www.affymetrix.com/analysis/index.affx";
 char *expRef = "http://expression.gnf.org";
@@ -37,6 +43,7 @@ errAbort(
   "    -chip=XXXX (default %s)\n"
   "    -tab=dir - Output tab-separated files to directory.\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
+  "    -noRound - If true don't round data values\n"
   "    -limit=N - Only do limit rows of table, for testing\n"
   "    -chopName=XXX (chop off name at XXX)\n"
   "    -url=XXX, default %s\n"
@@ -50,6 +57,7 @@ static struct optionSpec options[] = {
    {"chip", OPTION_STRING},
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
+   {"noRound", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
    {"chopName", OPTION_STRING},
    {"url", OPTION_STRING},
@@ -119,13 +127,19 @@ if (doLoad)
 return count;
 }
 
-void shortDataOut(FILE *f, char *name, int count, int *scores)
+//void shortDataOut(FILE *f, char *name, int count, int *scores)
+void shortDataOut(FILE *f, char *name, int count, DATA *scores)
 /* Do short type output. */
 {
 int i;
 fprintf(f, "%s\t%d\t", name, count);
 for (i=0; i<count; ++i)
-    fprintf(f, "%d,", scores[i]);
+    {
+    if (noRound)
+        fprintf(f, "%0.3f,", scores[i].dataFloat);
+    else 
+        fprintf(f, "%d,", scores[i].dataInt);
+    } 
 fprintf(f, "\n");
 }
 
@@ -136,7 +150,7 @@ struct lineFile *lf = lineFileOpen(atlasFile, TRUE);
 char *line;
 int i, wordCount, expCount;
 char **row;
-int *data;
+DATA *data;
 char *affyId;
 struct hash *hash = newHash(17);
 FILE *f = NULL;
@@ -179,7 +193,12 @@ while (lineFileNextReal(lf, &line))
 	continue;
 	}
     for (i=0; i<expCount; ++i)
-        data[i] = round(atof(row[i]));
+        {
+        if (noRound) 
+            data[i].dataFloat = sqlFloat(row[i]);
+        else
+            data[i].dataInt = round(sqlFloat(row[i]));
+        }
     shortDataOut(f, affyId, expCount, data);
     ++dataCount;
     if (limit != 0 && dataCount >= limit)
@@ -205,6 +224,7 @@ optionInit(&argc, argv, options);
 database = optionVal("database", database);
 chip = optionVal("chip", chip);
 doLoad = !optionExists("noLoad");
+noRound = optionExists("noRound");
 chopName = optionVal("chopName", chopName);
 expUrl = optionVal("url", expUrl);
 expRef = optionVal("ref", expRef);
