@@ -751,7 +751,7 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # Added Zebrafish microarray data (DONE, 2006-06-10, hartera)
 # From Leonard Zon's group at the Children's Hospital, Boston
 # Contact: Tony DiBiase, adibiase@enders.tch.harvard.edu
-# Data is normalized and log2 transformed, centered on mean of 0.
+# Data is normalized and log2 transformed, then centered on mean of 0.
 # Changed table names and reloaded MedianExps table so that the extras has
 # the strain plus time point for the name otherwise the average is taken
 # over all time points for a strain for the track display 
@@ -765,15 +765,30 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # Experiments tables (AllExps and MedianExps) so that when Chip ID is 
 # selected then all of these are shown. (DONE, 2006-08-11, hartera)
 # Added absolute data (before logs were taken). (DONE, 2006-09-19, hartera)
+# The absolute value data was centered on a mean of 0. The log data was
+# the log2 transformed normalized data, centered on a mean of 0.
+# This section now OBSOLETE so removed. See section below on UPDATE of
+# zebrafish microarray data. 
+
+##########################################################################
+# UPDATE the Zebrafish microarray data (DONE, 2006-06-16 - 2006-10-18, hartera)
+# From Leonard Zon's group at the Children's Hospital, Boston
+# Contact: Tony DiBiase, adibiase@enders.tch.harvard.edu
+# Data is Loess normalized absolute values. Then use microarray processing
+# programs to create ratio tables.
+# The new data set was obtained so that the ratios could be calculated 
+# directly from the normalized absolute data. The ratios are calculated as 
+# the value for a probeset in one array to the median value across all arrays
+# for that probset and then a log2 is taken. This allows comparison 
+# between arrays that may differ due to technical or biological differences.
 
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
    cd /projects/compbio/data/microarray/zebrafishWT
    # copy the data here received by e-mail and unzip
-   unzip zmwt2.zip 
-   mv zmwt2.txt wildTypeAffy.txt
-   # remove the quotes and the experiment names
-   perl -pi.bak -e 's/"//g' wildTypeAffy.txt
+   unzip wt34.loessNorm.absval.2006-10-12.zip 
+   mv wt34.loessNorm.absval.2006-10-12.txt wtAffyAbs.txt
+   dos2unix wtAffyAbs.txt 
 cat << 'EOF' > format.pl
 #!/usr/bin/perl -w
 use strict;
@@ -819,21 +834,24 @@ else
 'EOF'
    # << emacs
 chmod +x format.pl
-perl format.pl < wildTypeAffy.txt > zebrafishWildType.txt
+perl format.pl < wtAffyAbs.txt > zebrafishWTAbs.txt
 # Then load the data into hgFixed using hgGnfMicroarrray and use options
 # to set the url, ref, and credit to "n/a" and chip to Zebrafish.
 # Need to use this program to get 3 extras needed for hgMedianMicroarray
+# Added an option to hgGnfMicroarray to preserve the values as floats and not
+# round them which is the default. For these arrays it takes away too much
+# precision from the data values.
+# Create the main expRecord table and the expData table for the 
+# absolute measurements
 hgGnfMicroarray zebrafishZonWTAllExps zebrafishZonWTAll \
-     zebrafishWildType.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a
-# try adding data again as does not look right:
-hgsql -e 'alter table zebrafishZonWTAllLog rename zebrafishZonWTAllLogOld;' \
-      hgFixed 
-# use hgGenericMicroarray as hgGnfMicroarray is rounding the values
-# keep zebrafishZonWTAllExps from hgGnfMicroarray run.
-hgGenericMicroarray hgFixed zebrafishZonWTAllLog zebrafishWildType.txt
-   # then create a table of medians for this data. make a .ra file of medians
-# Change the zebrafishZonWTAllExps table so that the second field of the extras
-# table is the name.
+     zebrafishWTAbs.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a -noRound
+
+# Changed the Exps table so that the extras column for the MedianExps table 
+# has the strain and developmental stage in the second field so that an 
+# average is taken across all strains for each stage when Tissue Averages 
+# is selected.
+# (Jim recommended displaying it this way and then it also fits in with the
+# current framework for this type of track).
 
 hgsql -N -e 'select name, extras from zebrafishZonWTAllExps;' hgFixed \
       > zfishWTExps.extras
@@ -854,19 +872,24 @@ chmod +x cnvExtras.pl
 cnvExtras.pl < zfishWTExps.extras > zfishWTExps.extras.new 
 # create set of mySQL statements from this to update the AllExps table
 # to include the name in the second field of extras - same as in the third
-# field. This is used for display when Chip ID is selected from the track
-# controls on the description page (hartera, 2006-08-11)
+# field. This is used for display when the "Arrays Grouped By Replicate
+# Medians" (or Means) is selected from the track controls on the 
+# description page.
 
 awk 'BEGIN {FS = "\t"} {print "update zebrafishZonWTAllExps set extras = \"
 "$2 "\"" " where name = \""$1"\";";}' zfishWTExps.extras.new \
     > zfishWTExpsNewExtras.sql
 hgsql hgFixed < zfishWTExpsNewExtras.sql
 
-# create the .ra file for the Median tables
+# Convert these to ratios using the median of the absoulute values 
+# across all experiments to be the denominator for each probeset.
+hgRatioMicroarray zebrafishZonWTAll zebrafishZonWTAllRatio -minAbsVal=0 \
+       -minMaxVal=0
+# Create the .ra file for the Median tables
 hgsql -N -e 'select extras, id from zebrafishZonWTAllExps;' hgFixed \
       > zfishWTExps
 # remove extra information and leave experiment name
-perl -pi.bak -e 's/Zebrafish,n\/a,//' zfishWTExps
+perl -pi.bak -e 's/Zebrafish,[A-Za-z]+\-[0-9]+\-[a-z]+,//' zfishWTExps
 perl -pi.bak -e 's/,//' zfishWTExps
 
 # alter script so that name for each experiment in column 2 is not just the 
@@ -907,49 +930,13 @@ cp zfishZonWTMedian.ra ~/kent/src/hg/makeDb/hgMedianMicroarray
 cd ~/kent/src/hg/makeDb/hgMedianMicroarray
 
 # Take the median value over multiple replicants and put in this table:
-hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
-  zfishZonWTMedian.ra zebrafishZonWTMedianLog \
+hgMedianMicroarray hgFixed zebrafishZonWTAllRatio zebrafishZonWTAllExps \
+  zfishZonWTMedian.ra zebrafishZonWTMedianRatio  \
   zebrafishZonWTMedianExps -minExps=1
 
-# Changed table names to reflect that they are log scaled. They are used
-# in a similar way to the Ratio tables for other data sets since they
-# can be visualiszed using the red/green color scale (hartera, 2006-07-30).
-
-# Reload table using new table names. (hartera, 2006-07-30)
-# Take the median value over multiple replicants and put in this table:
-# Reloaded again after changing the .ra file so that the developmental 
-# stage will show up in the extras and the AllExps table had the strain 
-# and stage added to the second field of the extras column. 
-# (hartera, 2006-08-11) (Reloaded again on 2006-09-22, hartera)
-hgMedianMicroarray hgFixed zebrafishZonWTAllLog zebrafishZonWTAllExps \
-  zfishZonWTMedian.ra zebrafishZonWTMedianLog \
-  zebrafishZonWTMedianExps -minExps=1
-
-# Received Absolute expression values for the WT microarray data,
-# wtr.txt.gz, and add to /projects/compbio/data/microarray/zebrafishWT:
-# (2006-08-31)
-gunzip wtr.txt.gz
-# Process data (2006-09-19)
-# Remove Probe column heading
-sed -e 's/Probe//' wtr.txt > wtAbs.txt
-# then process as before to reformat column headings.
-# remove the quotes on the experiment names
-perl -pi.bak -e 's/"//g' wtAbs.txt
-perl format.pl < wtAbs.txt > zebrafishWTAbs.txt
-
-# Create the main expRecord table and the expData table for
-# the absolute measurements as so:
-hgGnfMicroarray zfishWTAllExps zebrafishZonWTAll
-/projects/compbio/data/microarray/zebrafishWT/zebrafishWTAbs.txt
--chip=Zebrafish
-
-# The zfishWTAllExps table can be removed as there is already the
-# zebrafishZonWTAllExps table that has been created for all the replicates.
-# Check that these have the same id/name pairs in each table.
-hgsql -e 'drop table zfishWTAllExps;' hgFixed
-
-# Also make a median version of the absolute measurements
-hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps zfishZonWTMedian.ra zebrafishZonWTMedian zebrafishZonWTMedianExps -minExps=1
+# Make a median version of the absolute experiments:
+hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
+  zfishZonWTMedian.ra zebrafishZonWTMedian zebrafishZonWTMedianExps -minExps=1
 
 ##########################################################################
 
