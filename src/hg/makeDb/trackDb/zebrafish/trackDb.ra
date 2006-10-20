@@ -43,12 +43,12 @@ type psl est
 
 track affyZonWildType
 shortLabel Wild Type Array
-longLabel Zon Lab Expression data for Wild Type Zebrafish strains
+longLabel Zon Lab Expression data for Wild Type Zebrafish 
 group regulation
 priority 80
 visibility hide
 type expRatio
-expScale 2.0
+expScale 3.0
 expStep 0.20
 groupings affyZonWildTypeGroups
 
@@ -59,16 +59,6 @@ group regulation
 priority 89
 visibility hide
 type psl .
-
-track affyZfishOld
-shortLabel Affy Zebrafish Old
-longLabel Old Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
-group regulation
-priority 90
-visibility hide
-type psl .
-orthoTable affyToHg16Orthologs
-otherDb hg16
 
 track blastHg16KG
 shortLabel $o_Organism Proteins
