@@ -409,6 +409,9 @@ struct slName *hDbList();
 /* List of all database versions that are online (database
  * names only).  See also hDbDbList. */
 
+struct dbDb *hDbDb(char *database);
+/* Return dbDb entry for a database */
+
 struct dbDb *hDbDbList();
 /* Return list of databases that are actually online. 
  * The list includes the name, description, and where to

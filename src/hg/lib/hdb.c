@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.302 2006/10/16 06:04:39 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.303 2006/10/20 04:56:54 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2291,6 +2291,24 @@ if (tdb->settings != NULL && tdb->settings[0] != 0)
     }
 }
 
+struct dbDb *hDbDb(char *database)
+/* Return dbDb entry for a database */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+struct dbDb *db = NULL;
+
+struct dyString *ds = dyStringNew(0);
+dyStringPrintf(ds, "select * from dbDb where name='%s'", database);
+sr = sqlGetResult(conn, ds->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    db = dbDbLoad(row);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+dyStringFree(&ds);
+return db;
+}
 
 struct dbDb *hDbDbList()
 /* Return list of databases that are actually online. 
