@@ -23,8 +23,8 @@ synthesized via maskless photolithography at a feature density of
 approximately 390,000 probes per slide. 
 <P>
 Biological samples that were hybridized to the arrays consisted of 
-triple-selected polyadenylated RNA pooled from several individuals (supplied 
-by Ambion). 
+triple-selected poly(A)+ RNA pooled from several individuals (supplied 
+by Ambion). One biological replicate was carried out. 
 
 <P>
 See the following NCBI GEO accession for details of experimental protocols:
@@ -34,8 +34,11 @@ See the following NCBI GEO accession for details of experimental protocols:
 TARGET=_blank>GSE1904</A>
 </UL></P>
 
+The TARs identified for hg13 (NCBI Build 31) were mapped to this
+assembly using Blat.  The program, pslCDnaFilter, was used to filter 
+alignments using the following parameters:
+
 <H2>Display Conventions and Configuration</H2>
-<P>
 TARs are represented by blocks in the graphical display. This composite 
 annotation track consists of several subtracks that are listed at the top of
 the track description page. To display only selected subtracks, uncheck the 
@@ -43,9 +46,38 @@ boxes next to the tracks you wish to hide.</P>
 <P>
 
 <H2>Data Analysis</H2>
+Two groups of TARs were identified - these were "normal" and 
+"poly(A) associated".
+<H3>Normal TARs:</H3> 
+Clusters of transcription units were identified that consisted of at least 
+five consectutive probes whose fluorescence intensities were in the top 
+90th intensity percentile and whose genomic coordinates lay within a 250-nt 
+window. After collecting thse regions genome-wide, their locations were 
+compared relative to those of annotated components of genes. As a result, a
+total of 13,889 transcription units, ranging in size from 209 to 3438 nt, 
+were identified. Under the null hypothesis of zero transcription, only 400
+were expected to be found. Of those regions identified, one-third (4931) 
+correspond to previously annotated exons while the other 8958 are new 
+transribed sequences that are referred to as TARs.
+<P>
+<H3>Poly(A) associated TARs:</H3> 
+Another set of criteria was used to find TARs in which the probe hybridization 
+intensities were correlated with the presence of a polyadenylation signal 3' to the TAR.  Transcription units of five consecutive probes whose fluroscence 
+intensities were in the top 80th intensity percentile and in a window of 250 nt.
+The 3' region also must contain or be close to a polyadenylation signal.
+Transcription units with an associated polyadenylation signal of "AATAAA", were assigned to a type I group while those with "ATTAAA" were type II. Only 100 of 
+these should occur at random in the genome under the null hypothesis of zero
+transcription. The majority (1991) were found to be within annotated exons, and 952 were located more than 10 kb from an annotated gene. A total of 1371 
+type I and 674 type II poly(A) sequences were identified within exons of 
+known genes. 1289 (94%) of type I and 607 (90%) of type II instances were 
+found to be in the 3' exon of the gene. 
 <P>
 
 <H2>Verification</H2>
+The TARs were validated using RT-PCR on human liver poly(A)+ RNA. 48 poly(A) 
+associated and 48 non poly(A) associated TARs were investigated. In 94% (90/96)
+cases, the PCR products were found to be of the expected size in a 
+single-pass assay.
 <P>
 
 <H2>Credits</H2>
