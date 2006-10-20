@@ -12,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.8 2006/10/13 23:11:25 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.9 2006/10/20 20:59:33 galt Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;
@@ -61,8 +61,8 @@ struct hash *aliasHash = NULL;
 struct hash *missingHash = NULL;
 
 /* Floyd-Warshall dyn prg arrays */
-float *d;   /* previous d at step k    dynamically allocated array of strings */
-float *dd;  /* current d at step k+1   dynamically allocated array of strings */
+float *d;   /* previous d at step k    */
+float *dd;  /* current d at step k+1   */
 #define INFINITE -1.0
 
 /* --- the fields needed from input tab file  ---- */
@@ -106,15 +106,11 @@ AllocVar(ret);
 ret->geneA  = cloneString(row[0]);
 ret->geneB  = cloneString(row[1]);
 ret->weight = weighted ? atof(row[2]) : 1.0;
-/* not always true */
-//if (sameString(ret->geneA,ret->geneB))  /* if self arc, weight must be 0 */
-//    ret->weight = 0.0;  
 return ret;
 }
 
 void edgeFree(struct edge **pEl)
-/* Free a single dynamically allocated edge such as created
- * with edgeLoad(). */
+/* Free an edge */
 {
 struct edge *el;
 
@@ -139,7 +135,7 @@ for (el = *pList; el != NULL; el = next)
 
 
 struct edge *readEdges(char *fileName)
-/* Slurp in the flank rows for one chrom */
+/* read edges from file */
 {
 struct lineFile *lf=NULL;
 struct edge *list=NULL, *el;
@@ -164,8 +160,6 @@ while (lineFileNextRowTab(lf, row, rowCount))
     el = edgeLoad(row);
     slAddHead(&list,el);
     }
-/* skipping the reverse is faster.  leaving in for debug */ 
-slReverse(&list);  
 
 lineFileClose(&lf);
 return list;
@@ -234,7 +228,8 @@ if (weighted)
 
 
 /* for now, default to using numEdges for size estimate since we don't know numGenes at this point */
-geneHash = newHash(logBase2((numEdges*2)));  /* estimate numGenes worst case as numEdges*2 as all disjoint pairs edges */
+/* estimate numGenes worst case as numEdges*2 as all disjoint pairs edges */
+geneHash = newHash(logBase2((numEdges*2)));  
 geneIds = needMem((numEdges*2)*sizeof(char*));  
 
 if (sqlRemap)
@@ -385,7 +380,6 @@ for(i=0;i<numGenes;++i)
 			    {
 			    ++missingCount;
 			    hashAdd(missingHash, missingKey, NULL);
-			    printf("%s not found in aliasHash!\n", missingKey);
 			    fprintf(missingF, "%s\n", missingKey);
 			    }
 			}
