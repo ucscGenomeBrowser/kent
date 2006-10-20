@@ -3448,6 +3448,9 @@ close MARKERS;
     # FPC contig information (i.e. FPC contig number) from ctgnames file is
     # not included in the tables as these are dynamic and constantly
     # changing with the assembly.
+    # FILE OF BAC CLONE ACCESSIONS
+    # http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
     # copy over file of BAC internal names, accessions and external names 
     cp /cluster/data/danRer3/bed/bacends/bacends.1/BACClonesIdsandAccs.txt .
     # use zfishBacClonesandSts to create tab files for loading into
@@ -7212,7 +7215,7 @@ _EOF_
      # represented in each of the pairs, badPairs and singles bed files are
      # unique to that file. Between all three bed files, 300323 BAC clones
      # have alignments. 512886 clone ends are aligned in these three bed files. 
-     foreach $f (*.bed)
+     foreach f (*.bed)
         awk '{print $4}' $f | sort | uniq > ${f}.names
      end
      comm -12 pairs2lfNames.bed.names badPairs2lfNames.bed.names
@@ -7304,7 +7307,6 @@ _EOF_
                -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql -notItemRgb
      # Loaded 15293 elements of size 11
      # load BAC end sequences into seq table so alignments may be viewed
-     # symlink to bacends.fa sequences in danRer1 (if not done already)
      mkdir -p /gbdb/danRer3/bacends
      ln -s /cluster/data/danRer3/bed/bacends/bacSeqs/Zv5BACends.fa \
                                 /gbdb/danRer3/bacends/Zv5BACends.fa
@@ -7749,31 +7751,59 @@ exit 0
 ###########################################################################
 # CREATE MICROARRAY DATA TRACK BY ADDING WILD TYPE MICROARRAY DATA TO AFFY 
 # ZEBRAFISH ALIGNMENTS (DONE, 2006-06-10, hartera)
+# UPDATE ARRAY DATA TRACK AFTER PROCESSING ARRAY DATA DIFFERENTLY AND
+# RELOADING INTO hgFixed (see hgFixed.txt for details).
+# (DONE, 2006-10-20, hartera)
 # Array data is for whole embryos of five wild type zebrafish strains. 
 # Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
 # Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
-# Zon Lab WT Affy data tables in hgFixed renamed to reflect that the data 
-# is log2 transformed (DONE, 2006-07-30, hartera)
     ssh hgwdev
     mkdir /cluster/data/danRer3/bed/ZonLab/wtArray
     cd /cluster/data/danRer3/bed/ZonLab/wtArray
-    hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTMedian \
+   
+    # use AllRatio table for mapping. There are not many arrays in this
+    # dataset so using AllRatio will allow the selection of All Arrays
+    # from the track controls on the track description page. Also set up the
+    # Zebrafish microarrayGroups.ra so that the Medians of replicates or
+    # Means of replicates can also be selected for display.
+ 
+    hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTAllRatio \
          /cluster/data/danRer3/bed/affyZebrafish/affyZebrafish.psl
     # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
-    # Mapped 14335,  multiply-mapped 6861, missed 0, unmapped 1282
-    # hgFixed.zebrafishZonWTMedian table renamed as 
-    # hgFixed.zebrafishZonWTMedianLog and hgFixed.zebrafishZonWTAll table
-    # renamed as hgFixed.zebrafishZonWTAllLog (hartera, 2006-07-30)
+    # Mapped 14494,  multiply-mapped 4102, missed 0, unmapped 1123
 
     hgLoadBed danRer3 affyZonWildType zebrafishZonWT.bed
-    # Loaded 21196 elements of size 15
+    # Loaded 18596 elements of size 15
     # add trackDb.ra entry at trackDb/zebrafish level
 
-    # 2006-08-31 Received Wild Type absolute expression values.
-    # wtr.txt.gz to /projects/compbio array dir.
-    cd /projects/compbio/data/microarray/zebrafishWT
-    gunzip wtr.txt.gz
-    
+    # look at range of scores:
+    hgsql -N -e 'select expScores from zebrafishZonWTAllRatio;' hgFixed \
+          > ratioExps.out
+    perl -pi.bak -e 's/,/\n/g' ratioExps.out
+    sort ratioExps.out | uniq -c > ratioExps.uniq.count
+    textHistogram -binSize=0.5 -real -maxBinCount=30 ratioExps.out \
+        > expRatios.hist
+    # Most values are 3.0 and lower.
+    # Therefore use the following trackDb entry:
+
+# track affyZonWildType
+# shortLabel Wild Type Array
+# longLabel Zon Lab Expression data for Wild Type Zebrafish strains
+# group regulation
+# priority 80
+# visibility hide
+# type expRatio
+# expScale 3.0
+# expStep 0.2
+# groupings affyZonWildTypeGroups
+    # The .ra file in /usr/local/apache/cgi-bin/hgCgiData/Zebrafish
+    # (from ~/kent/src/hg/makeDb/hgCgiData/Zebrafish in the source tree)
+    # which is microarrayGroups.ra defines how the array data is
+    # displayed and also grouped for the Medians and Means of Replicates.
+    # It also defines the labels for the track controls for showing
+    # All Arrays, Arrays Grouped By Replicate Means or
+    # Arrays Grouped By Replicate Medians. This is in the description field.
+
 ###########################################################################
 # BUILD GENE SORTER TABLES (AKA FAMILY BROWSER) 
 # (DONE, 2006-06-08 - 2006-06-12, hartera)
@@ -7975,3 +8005,19 @@ exit 0
     # Previously 14335 distinct affy sequences were aligned. Many of the 
     # short alignments may also have longer alignments to different regions 
     # of the genome that are good.
+
+#########################################################################
+# NEW RH MAP SEQUENCES FOR TRACK (in progress, 2006-10-12, hartera)
+# Data from Yi Zhou at Boston Children's Hospital:
+# yzhou@enders.tch.harvard.edu
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/rhMap-2006-10-03
+    cd /cluster/data/danRer3/bed
+    ln -s rhMap-2006-10-03 rhMap
+    # download data files from e-mail:
+    # rhSequenceSubmit100306.zip and rhSequenceSubmitSeq100306.zip
+    unzip rhSequenceSubmit100306.zip
+    unzip rhSequenceSubmitSeq100306.zip
+    dos2unix rhSequenceSubmit100306.txt
+    dos2unix rhSequenceSubmitSeq100306.txt
+    # need to convert format of FASTA file to remove the line numbers
