@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.148 2006/10/20 05:01:13 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.149 2006/10/20 14:50:03 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -453,8 +453,9 @@ if (ferror(f))
 trackDbFree(&def);
 }
 
-static void customTracksSaveFile(struct customTrack *trackList, char *fileName)
-/* Save out custom tracks. */
+void customTracksSaveFile(struct customTrack *trackList, char *fileName)
+/* Save out custom tracks. This is just used by internally 
+and by testing programs */
 {
 FILE *f = mustOpen(fileName, "w");
 

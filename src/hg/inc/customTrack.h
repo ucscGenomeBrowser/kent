@@ -89,6 +89,10 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
  * will also leak memory. */
 
 void customTracksSaveCart(struct cart *cart, struct customTrack *ctList);
+/* Save custom tracks to trash file for database in cart */
+
+void customTracksSaveFile(struct customTrack *trackList, char *fileName);
+/* Save out custom tracks. This is just used by internally  */
 
 void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash);
 /* Lift tracks based on hash of ctgPos. */

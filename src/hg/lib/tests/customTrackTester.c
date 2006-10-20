@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customTrackTester.c,v 1.1 2006/10/13 23:15:01 kate Exp $";
+static char const rcsid[] = "$Id: customTrackTester.c,v 1.2 2006/10/20 14:50:03 kate Exp $";
 
 void usage()
 /* explain usage and exit */
@@ -49,12 +49,12 @@ if (trashFile)
 /* save to new trash file */
 static struct tempName tn;
 makeTempName(&tn, "ctTest", ".bed");
-customTrackSave(ctList, tn.forCgi);
+customTracksSaveFile(ctList, tn.forCgi);
 
 /* reload from new trash file */
 ctList = NULL;
 ctList = customFactoryParse(tn.forCgi, TRUE, NULL);
-customTrackSave(ctList, "stdout");
+customTracksSaveFile(ctList, "stdout");
 
 /* cleanup */
 unlink(tn.forCgi);
