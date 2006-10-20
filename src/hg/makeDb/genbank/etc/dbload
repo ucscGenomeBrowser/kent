@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# dbload [-inclEsts] [-extFileUpdate] gbRoot databases timefile workdir
+# dbload [options] gbRoot databases timefile workdir
 #
 # Load genbank/refseq sequences.  This is a light weight script 
 # that checks for new alignments and for lock files.  This is the
@@ -9,11 +9,12 @@
 # timefile is name of time file to check for a new alignments
 # being ready, relative to gbRoot
 #
-# -inclEsts - do both ESTs and mRNAs, otherwise do just mRNAs.
-# -extFileUpdate - update gbSeq/gbExtFile entries to point to the
-#  latest release.  A limit on the number to update is set in this
-#  file.
-# -allowLargeDeletes - see gbDbLoadStep
+# Options:  
+#   -inclEsts - do both ESTs and mRNAs, otherwise do just mRNAs.
+#   -extFileUpdate - update gbSeq/gbExtFile entries to point to the
+#    latest release.  A limit on the number to update is set in this
+#    file.
+#   -allowLargeDeletes - see gbDbLoadStep
 
 # errors terminate with message
 set -e
@@ -25,6 +26,7 @@ maxExtFileUpdate=10000000
 # parse command line
 inclEsts=NO
 opts=""
+largeDeletes=NO
 while [[ $1 == -* ]] ; do
     opt=$1
     shift
@@ -34,7 +36,9 @@ while [[ $1 == -* ]] ; do
         -extFileUpdate) 
             opts="$opts -maxExtFileUpdate=$maxExtFileUpdate" ;;
         -allowLargeDeletes)
-            opts="$opts $opt" ;;
+            opts="$opts $opt"
+            largeDeletes=YES
+            ;;
         -*) echo "Error: invalid option $opt" >&2
             exit 1 ;;
     esac
@@ -98,6 +102,13 @@ gbMkTimeFile $dbloadTime
 
 # save tables statistics for all databases
 nice dumpTableStats
+
+# issue a reminder if -allowLargeDeletes was used, so we remember to turn it off
+if [ $largeDeletes = YES ] ; then
+    echo "WARNING: -allowLargeDeletes is enabled"
+    echo "WARNING: -allowLargeDeletes is enabled"
+    echo "WARNING: -allowLargeDeletes is enabled"
+fi
 
 echo "`hostname`: dbload completed"
 
