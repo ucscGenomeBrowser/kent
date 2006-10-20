@@ -24,25 +24,22 @@ probe specific correction, and Loess normalization.
 <A HREF "http://bioconductor.org/download" TARGET=_blank">
 Bioconductor's affy</A>
 package was used to perform this processing. CEL files were normalized as
-a single group and log2 transformed with scaling so that the average (mean) 
-value of the expression data is zero for each single experiment.
-The track color denotes the average (median) signal over all replicate 
-experiments for a specific developmental stage and strain on a log base 2 
-scale. Lighter colors correspond to lower signals; darker colors 
-correspond to higher signals. 
+a single group.  
+The track color denotes the signal ratio for a specific 
+developmental stage and strain on a log base 2 scale. The ratio is the 
+expression value for a probeset divided by the median of expression values 
+for that probeset across all experiments. Over-expressed genes are colored red; 
+under-expressed genes are show in green. Black indicates that a gene
+is neither over- nor under-expressed in the tissue. Uncolored boxes
+(white on most browsers) represent missing data. </P>
+
+<P>
 Each row on the track or details page shows gene expression data for a 
 single developmental stage and a single strain (see Strains and Stages table 
 below) from wild type, whole embryo zebrafish. Data was collected by the 
 <A HREF="http://zfrhmaps.tch.harvard.edu/ZonRHmapper/" 
 TARGET=_blank>Children&#8217;s Hospital Boston Zebrafish Genome Initiative</A>. 
 </P>
-<P>
-The rows show the median expression of a gene for a specific developmental 
-stage and strain. Over-expressed genes are colored red; under-expressed genes
-are show in green.
-The values are colored on a logarithmic scale. Black indicates that a gene 
-is neither over- nor under-expressed in the tissue. Uncolored boxes 
-(white on most browsers) represent missing data. </P>
 
 <H2>Track Configuration</H2>
 <P>
@@ -53,13 +50,12 @@ the small button to the left of the track's graphical display or the link
 on the track's control menu.
 <UL>
 <LI><B>Display mode:</B> To change the display mode for the track, select
-the desired display setting from the Display Mode pulldown list.
-<LI><B>Experiment Display:</B> To display the chip type, tissue averages, or
-individual chip identification numbers associated with the track items in
-the current position range, select the corresponding item
-from the Experiment Display pulldown list.
-<LI><B>Color scheme:</B> To change the colors with which the track is
-displayed, click the button in front of the desired color scheme.
+the desired display setting from the Display Mode pulldown list. The default
+display shows all arrays.
+<LI><B>Combine arrays:</B> To display the all arrays, replicate means, or
+replicate medians for each strain and developmental stage, select the 
+corresponding item from the Combine arrays pulldown list. The default
+display shows all arrays.
 </UL></P>
 
 <H2>Strains and Stages Table</H2>
