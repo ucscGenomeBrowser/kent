@@ -7749,8 +7749,8 @@ exit 0
    # the browser, and comparing to blat of the same region
 
 ###########################################################################
-# CREATE MICROARRAY DATA TRACK BY ADDING WILD TYPE MICROARRAY DATA TO AFFY 
-# ZEBRAFISH ALIGNMENTS (DONE, 2006-06-10, hartera)
+# CREATE MICROARRAY DATA TRACK BY ADDING ZON LAB WILD TYPE MICROARRAY DATA TO 
+# AFFY ZEBRAFISH ALIGNMENTS (DONE, 2006-06-10, hartera)
 # UPDATE ARRAY DATA TRACK AFTER PROCESSING ARRAY DATA DIFFERENTLY AND
 # RELOADING INTO hgFixed (see hgFixed.txt for details).
 # (DONE, 2006-10-20, hartera)
@@ -7781,9 +7781,9 @@ exit 0
           > ratioExps.out
     perl -pi.bak -e 's/,/\n/g' ratioExps.out
     sort ratioExps.out | uniq -c > ratioExps.uniq.count
-    textHistogram -binSize=0.5 -real -maxBinCount=30 ratioExps.out \
-        > expRatios.hist
-    # Most values are 3.0 and lower.
+    textHistogram -binSize=0.5 -real -maxBinCount=40 -minVal=-10 \
+        ratioExps.out > expRatios.hist
+    # Most values are between -6 and +3.
     # Therefore use the following trackDb entry:
 
 # track affyZonWildType

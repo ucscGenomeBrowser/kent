@@ -6841,8 +6841,8 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
     ln -s blastz.galGal3.2006-05-30 /cluster/data/danRer4/bed/blastz.galGal3
 
 ###########################################################################
-# CREATE MICROARRAY DATA TRACK BY ADDING MICROARRAY DATA TO AFFY ZEBRAFISH 
-# ALIGNMENTS (DONE, 2006-06-10, hartera)
+# CREATE MICROARRAY DATA TRACK BY ADDING ZON LAB WILD TYPE MICROARRAY DATA TO 
+# AFFY ZEBRAFISH ALIGNMENTS (DONE, 2006-06-10, hartera)
 # UPDATE ARRAY DATA TRACK AFTER PROCESSING ARRAY DATA DIFFERENTLY AND
 # RELOADING INTO hgFixed (see hgFixed.txt for details). 
 # (DONE, 2006-10-20, hartera)
@@ -6872,9 +6872,9 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
           > ratioExps.out
     perl -pi.bak -e 's/,/\n/g' ratioExps.out
     sort ratioExps.out | uniq -c > ratioExps.uniq.count
-    textHistogram -binSize=0.5 -real -maxBinCount=30 ratioExps.out \
-        > expRatios.hist
-    # Most values are 3.0 and lower. 
+    textHistogram -binSize=0.5 -real -maxBinCount=40 -minVal=-10 \
+        ratioExps.out > expRatios.hist
+    # Most values are between -6 and +3.
     # Therefore use the following trackDb entry:
 
 # track affyZonWildType
@@ -6888,6 +6888,7 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 # expStep 0.2
 # groupings affyZonWildTypeGroups
     # The .ra file in /usr/local/apache/cgi-bin/hgCgiData/Zebrafish
+    # (from ~/kent/src/hg/makeDb/hgCgiData/Zebrafish in the source tree)
     # which is microarrayGroups.ra defines how the array data is
     # displayed and also grouped for the Medians and Means of Replicates.
     # It also defines the labels for the track controls for showing 
