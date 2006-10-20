@@ -20,7 +20,7 @@
 #include "correlate.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.52 2006/09/27 00:21:47 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.53 2006/10/20 05:16:10 kate Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -652,8 +652,6 @@ else if (doCt)
     /* Load existing custom tracks and add this new one: */
 	{
 	struct customTrack *ctList = getCustomTracks();
-	char *ctFileName = cartOptionalString(cart, "ct");
-	struct tempName tn;
 	removeNamedCustom(&ctList, ctNew->tdb->tableName);
 	if (doDataPoints)
 	    {
@@ -685,13 +683,7 @@ else if (doCt)
 
 	slAddHead(&ctList, ctNew);
 	/* Save the custom tracks out to file (overwrite the old file): */
-	if (ctFileName == NULL)
-	    {
-	    makeTempName(&tn, hgtaCtTempNamePrefix, ".bed");
-	    ctFileName = cloneString(tn.forCgi);
-	    }
-	customTrackSave(ctList, ctFileName);
-	cartSetString(cart, "ct", ctFileName);
+        customTracksSaveCart(cart, ctList);
 	}
     /*  Put up redirect-to-browser page. */
     if (redirectToGb)
