@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.165 2005/03/04 20:15:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.166 2006/10/20 05:15:39 kate Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -3860,17 +3860,9 @@ if ((ctNew != NULL) && (ctNew->bedList != NULL))
     {
     /* Load existing custom tracks and add this new one: */
     struct customTrack *ctList = getCustomTracks();
-    char *ctFileName = cartOptionalString(cart, "ct");
-    struct tempName tn;
     slAddHead(&ctList, ctNew);
     /* Save the custom tracks out to file (overwrite the old file): */
-    if (ctFileName == NULL)
-	{
-	makeTempName(&tn, "hgtct", ".bed");
-	ctFileName = cloneString(tn.forCgi);
-	}
-    customTrackSave(ctList, ctFileName);
-    cartSetString(cart, "ct", ctFileName);
+    customTracksSaveCart(cart, ctList);
     }
 
 if (! gotResults)

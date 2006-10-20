@@ -831,18 +831,10 @@ if ((ctNew != NULL) && ((ctNew->bedList != NULL) || (ctNew->wigAscii != NULL)))
     {
     /* Load existing custom tracks and add this new one: */
     struct customTrack *ctList = getCustomTracks();
-    char *ctFileName = cartOptionalString(cart, "ct");
-    struct tempName tn;
     slAddHead(&ctList, ctNew);
     carefulClose(&wigAsciiFH);
     /* Save the custom tracks out to file (overwrite the old file): */
-    if (ctFileName == NULL)
-	{
-	makeTempName(&tn, "hgtct", ".bed");
-	ctFileName = cloneString(tn.forCgi);
-	}
-    customTrackSave(ctList, ctFileName);
-    cartSetString(cart, "ct", ctFileName);
+    customTracksSaveCart(cart, ctList);
     }
 
 if (doCt)
