@@ -167,6 +167,40 @@ origAssembly mm5
     priority 2
     color 43,51,109
 
+track jaxRepTranscript
+shortLabel Jax Rep Transcript
+longLabel Jackson Laboratory / Mouse Genome Informatics Representative Transcript
+group phenoAllele
+visibility hide
+color 0,0,150
+priority 70
+type genePred
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
+urlLabel MGI Gene Detail: 
+
+track jaxPhenotype
+shortLabel Jax Phenotype
+longLabel Jackson Laboratory / Mouse Genome Informatics Phenotype
+group phenoAllele
+visibility hide
+color 190,110,0
+priority 71
+type bed 12 +
+url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
+urlLabel MGI Phenotypic Allele(s): 
+
+track jaxAllele
+shortLabel Jax Allele
+longLabel Jackson Laboratory / Mouse Genome Informatics Allele
+group phenoAllele
+visibility hide
+color 200, 0, 110
+altColor 200, 0, 110
+priority 72
+type bed 12 +
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
+urlLabel MGI Phenotypic Allele: 
+
 track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2
