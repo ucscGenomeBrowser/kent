@@ -10899,4 +10899,104 @@ cd /cluster/data/hg18/bed/rnaGene
 hgsql hg18 < rnaGene.sql
 liftOver ~/hg17/rnaGene/rnaGenes.tab  /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz rnaGenes.bed unmapped -bedPlus=10 -tab
 hgLoadBed hg18 rnaGene rnaGenes.bed -oldTable -tab -noBin
+
 ##########################################################################
+# YALE TRANSCRIPTIONALLY ACTIVE REGIONS (TARs/TransFrags) TRACK IDENTIFIED #
+# USING A WHOLE GENOME TILING ARRAY (DONE, 2006-10-12 - 2006-10-13, hartera)
+# Data is from the paper: Bertone et al. Science 24 December 2004:
+# Vol. 306. no. 5705, pp. 2242 - 2246. From Mark Gerstein's lab at Yale.
+# Contact at Yale: Joel S. Rozowsky, joel.rozowsky@yale.edu
+# The data consist of Transcriptionally Active Regions (TARs or TransFrags) 
+# found using Affymetrix genome tiling arrays. The data is from the lab
+# of Mark Gerstein at Yale.
+     ssh kkstore02
+     mkdir /cluster/data/hg18/bed/yaleBertoneTars/
+     cd /cluster/data/hg18/bed/yaleBertoneTars/
+     # download Bertone et al. data from this URL:
+    #http://dart.gersteinlab.org/cgi-bin/ar/download.cgi?ID=TAR_data_NCBI31.txt
+     # and put it in this directory.
+     # The sequences used to design the microarrays were from 
+     # UCSC hg13/NCBI Build 31 so the sequences 
+     # should be aligned again using Blat since this is probably better
+     # than using liftOver across so many assemblies.
+ 
+     # Get sequences from TARs file and put in FASTA format:
+     # Remove characters from Windows:
+     dos2unix TAR_data_NCBI31.txt
+     # The TARs are in order of IDs in the file so the first TAR has ID 1, the
+     # second is 2 up to the last which is 17517. These IDs are used to link
+     # to the DART database of TARs at Yale so use these IDs in the FASTA
+     # header lines. Need to add "TAR" as prefix to ID so that it is unique
+     # in the seq table.
+   awk 'BEGIN {FS="\t";n=0;}{if ($1 ~ /^chr/) print ">TAR"n"\n"$14"\n";n++;}' \
+         TAR_data_NCBI31.txt > yaleBertoneTARSeqs.fa
+     ssh pk
+     mkdir -p /san/sanvol1/scratch/hg18/TARs/
+     cp /cluster/data/hg18/bed/yaleBertoneTars/yaleBertoneTARSeqs.fa \
+        /san/sanvol1/scratch/hg18/TARs/
+     # Set up to Blat the TAR sequences against hg18
+     cd /cluster/data/hg18/bed/yaleBertoneTars
+     ls -1 /san/sanvol1/scratch/hg18/TARs/yaleBertoneTARSeqs.fa > tars.lst
+     ls -1 /san/sanvol1/scratch/hg18/nib/*.nib > genome.lst
+     # output dir
+     mkdir psl
+
+     cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=90 -ooc=/san/sanvol1/scratch/hg18/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+     # << for emacs
+     gensub2 genome.lst tars.lst template.sub para.spec
+     para create para.spec
+     para try, para check, para push ...
+     para time
+# Completed: 49 of 49 jobs
+#CPU time in finished jobs:        396s       6.61m     0.11h    0.00d  0.000y
+#IO & Wait Time:                   198s       3.29m     0.05h    0.00d  0.000 y
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              39s       0.65m     0.01h    0.00d
+#Submission to last job:           253s       4.22m     0.07h    0.00d
+ 
+     # sort and then filter
+     pslSort dirs raw.psl tmp psl
+     # use these parameters as for Genbank alignments of native mRNAs 
+     # for finished assemblies. 
+     pslCDnaFilter -minId=0.96 -minCover=0.25 -localNearBest=0.001 \
+       -minQSize=20 -minNonRepSize=16 -ignoreNs -bestOverlap \
+       raw.psl yaleBertoneTars.psl
+
+#                     seqs    aligns
+#             total:     17512   38243
+# drop minNonRepSize:     159     403
+#     drop minIdent:     3822    14798
+#     drop minCover:     563     895
+#        weird over:     242     832
+#        kept weird:     204     210
+#    drop localBest:     2410    4018
+#              kept:     17469   18129
+
+     # 99.75% were kept.
+     # check how many aligned 
+     grep '>' yaleBertoneTARSeqs.fa | wc -l
+     # 17517   
+     # 99.7% of the original set of sequences are in this filtered PSL file.
+     
+     pslCheck yaleBertoneTars.psl
+     # psl is ok
+
+     # load into database
+     ssh hgwdev
+     cd /cluster/data/hg18/bed/yaleBertoneTars
+     hgLoadPsl hg18 yaleBertoneTars.psl
+     
+     # Add sequences to /gbdb/hg18 and to seq and extFile tables.
+     mkdir -p /gbdb/hg18/yaleTARs/
+     ln -s /cluster/data/hg18/bed/yaleBertoneTars/yaleBertoneTARSeqs.fa \
+           /gbdb/hg18/yaleTARs/
+     hgLoadSeq hg18 /gbdb/hg18/yaleTARs/yaleBertoneTARSeqs.fa
+
+     # Add trackDb.ra entry to trackDb/human/trackDb.ra and create
+     # a description page. 
+
