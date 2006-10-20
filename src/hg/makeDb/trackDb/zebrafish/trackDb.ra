@@ -32,6 +32,17 @@ url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     priority 2
     color 155,0,125
 
+track vegaNew
+shortLabel Vega Genes New
+longLabel Vega Annotations New GTF 
+group genes
+priority 38
+visibility hide
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
+color 0,100,180
+type genePred
+url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
+
 track wz_ests
 shortLabel Zfish WZ EST Clusters
 longLabel $Organism WZ EST Clusters from Washington University
@@ -43,13 +54,13 @@ type psl est
 
 track affyZonWildType
 shortLabel Wild Type Array
-longLabel Zon Lab Expression data for Wild Type Zebrafish 
+longLabel Zon Lab Expression data for Wild Type Zebrafish
 group regulation
 priority 80
 visibility hide
 type expRatio
-expScale 3.0
-expStep 0.20
+expScale 1.0
+expStep 0.10
 groupings affyZonWildTypeGroups
 
 track affyZebrafish
