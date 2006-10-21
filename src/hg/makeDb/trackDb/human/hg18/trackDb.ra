@@ -948,3 +948,82 @@ query select chrom, chromStart, chromEnd, id from %s where id = '%s'
 padding 500
 searchPriority 55
 
+track longSage
+shortLabel LongSAGE
+longLabel LongSAGE
+compositeTrack on
+group regulation
+priority 200
+visibility hide
+type bed 8 .
+
+    track longSageSHE10
+    subTrack longSage
+    shortLabel LongSAGE SHE10
+    longLabel LongSAGE: library SHE10 cell line ES03
+    color 155,33,250
+    priority 1
+
+    track longSageSHE11
+    subTrack longSage
+    shortLabel LongSAGE SHE11
+    longLabel LongSAGE: library SHE11 cell line ES04
+    color 155,33,250
+    priority 2X
+
+    track longSageSHE13
+    subTrack longSage
+    shortLabel LongSAGE SHE13
+    longLabel LongSAGE: library SHE13 cell line WA07
+    color 155,33,250
+    priority 3
+
+    track longSageSHE14
+    subTrack longSage
+    shortLabel LongSAGE SHE14
+    longLabel LongSAGE: library SHE14 cell line WA14
+    color 155,33,250
+    priority 4
+
+    track longSageSHE15
+    subTrack longSage
+    shortLabel LongSAGE SHE15
+    longLabel LongSAGE: library SHE15 cell line WA13
+    color 155,33,250
+    priority 5
+
+    track longSageSHE16
+    subTrack longSage
+    shortLabel LongSAGE SHE16
+    longLabel LongSAGE: library SHE16 cell line WA01
+    color 155,33,250
+    priority 6
+
+    track longSageSHE17
+    subTrack longSage
+    shortLabel LongSAGE SHE17
+    longLabel LongSAGE: library SHE17 cell line WA01
+    color 155,33,250
+    priority 7
+
+    track longSageSHE19
+    subTrack longSage
+    shortLabel LongSAGE SHE19
+    longLabel LongSAGE: library SHE19 cell line BG01
+    color 155,33,250
+    priority 8
+
+    track longSageSHES2
+    subTrack longSage
+    shortLabel LongSAGE SHES2
+    longLabel LongSAGE: library SHES2 cell line WA09
+    color 155,33,250
+    priority 9
+
+    track longSageSHES9
+    subTrack longSage
+    shortLabel LongSAGE SHES9
+    longLabel LongSAGE: library SHES9 cell line UC06
+    color 155,33,250
+    priority 10
+
