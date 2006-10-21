@@ -296,7 +296,7 @@ type bed 15 +
 
 track yaleBertoneTars
 shortLabel Bertone Yale TAR
-longLabel Yale Transcriptionally Active Regions (TAR/TransFrags) (Bertone data)
+longLabel Yale Transcriptionally Active Regions (TARs) (Bertone data)
 group regulation
 priority 87
 visibility hide
