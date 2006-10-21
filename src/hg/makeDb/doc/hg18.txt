@@ -11000,3 +11000,31 @@ hgLoadBed hg18 rnaGene rnaGenes.bed -oldTable -tab -noBin
      # Add trackDb.ra entry to trackDb/human/trackDb.ra and create
      # a description page. 
 
+##############################################################################
+# Update upstream maf files, fixing a problem of RefSeq ID being trucated. (2006-10-20 Fan)
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz17way
+    cd mafDownloads
+    # upstream mafs (mafFrags takes a while)
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits hg18 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+    
+        cat up.bad|sed -e "s/_up_${i}_/\t/" >up.bad2
+	awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, $4, 0, $6)}' up.bad2 > up.bed
+	rm up.bad up.bad2
+	nice mafFrags hg18 multiz17way up.bed upstream$i.maf \
+	   -orgs=/cluster/store11/gs.19/build36/bed/multiz17way.2006-02-18/species.lst
+	rm up.bed
+    end
+    date
+'EOF'
+
+    time csh mafFrags.csh > mafFrags.log 
+    nice gzip up*.maf
+    md5sum up*.gz >> md5sum.txt
+##############################################################################
+
