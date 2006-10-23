@@ -85,6 +85,7 @@ DIRS = \
 	faTrimRead \
 	findMotif \
 	fixCr \
+	gapSplit \
 	gffPeek \
 	gtfToGenePred \
 	headRest \
