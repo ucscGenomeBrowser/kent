@@ -10900,6 +10900,19 @@ hgsql hg18 < rnaGene.sql
 liftOver ~/hg17/rnaGene/rnaGenes.tab  /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz rnaGenes.bed unmapped -bedPlus=10 -tab
 hgLoadBed hg18 rnaGene rnaGenes.bed -oldTable -tab -noBin
 
+
+##########################################################################
+# SWAP/CHAIN/NET GASACU1 (DONE 10/17/06 angie)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.gasAcu1.swap
+    cd /cluster/data/hg18/bed/blastz.gasAcu1.swap
+    doBlastzChainNet.pl -swap /cluster/data/gasAcu1/bed/blastz.hg18/DEF \
+      -chainMinScore=2000 -chainLinearGap=loose >& do.log & tail -f do.log
+    ln -s blastz.gasAcu1.swap /cluster/data/hg18/bed/blastz.gasAcu1
+    nice featureBits hg18 chainGasAcu1Link
+#55424609 bases of 2881515245 (1.923%) in intersection
+
+
 ##########################################################################
 # YALE TRANSCRIPTIONALLY ACTIVE REGIONS (TARs/TransFrags) TRACK IDENTIFIED #
 # USING A WHOLE GENOME TILING ARRAY (DONE, 2006-10-12 - 2006-10-13, hartera)
