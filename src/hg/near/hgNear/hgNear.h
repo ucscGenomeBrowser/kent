@@ -4,13 +4,9 @@
 #ifndef HGNEAR_H
 #define HGNEAR_H
 
-#ifndef CART_H
 #include "cart.h"
-#endif 
 
-#ifndef JKSQL_H
 #include "jksql.h"
-#endif
 
 struct genePos
 /* A gene and optionally a position. */
@@ -67,6 +63,9 @@ struct column
                                  * May be NULL.  Should contain one %s, which
 				 * get's filled in with whatever cellVal
 				 * return. */
+   char *itemUrlQuery;		/* sql query does lookup from cellVal
+    				 * to the desired value to use in itemUrl in
+				 * place of cellVal */
    boolean useHgsid;		/* Add hgsid= to itemUrl? */
    char *urlChromVar;		/* Chromosome var for URL. */
    char *urlStartVar;		/* Start var for URL. */
