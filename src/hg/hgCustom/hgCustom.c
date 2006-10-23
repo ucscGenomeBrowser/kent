@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.82 2006/10/20 05:01:13 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.83 2006/10/23 17:44:13 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -628,12 +628,15 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	else if (sameString(command, "position"))
 	    {
+            char *chrom = NULL;
+            int start = 0, end = 0;
 	    if (wordCount < 3)
                 {
 	        err = "Expecting 3 words in browser position line";
                 break;
                 }
-	    if (!hgIsChromRange(words[2])) 
+	    if (!hgParseChromRange(words[2], &chrom, &start, &end) ||
+                start < 0 || end > hChromSize(chrom)) 
                 {
 	        err ="Invalid browser position (use chrN:123-456 format)";
                 break;
