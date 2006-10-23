@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.83 2006/10/23 17:44:13 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.84 2006/10/23 18:10:07 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -898,7 +898,10 @@ else
 	}
     customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
-    if (ctList || getCustomTrackDatabases())
+    if (ctList || 
+        /* show manage screen if we've just deleted all custom tracks, so
+         * they can pick another assembly having custom tracks */
+        (cartVarExists(cart, hgCtDoDelete) && getCustomTrackDatabases()))
 	{
         doManageCustom(warn);
 	}
