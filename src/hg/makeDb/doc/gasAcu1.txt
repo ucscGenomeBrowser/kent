@@ -176,7 +176,182 @@ EOF
 
 
 #########################################################################
+# BLASTZ/CHAIN/NET DANRER4 (DONE 10/17/06 angie)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.danRer4.2006-10-16
+    cd /cluster/data/gasAcu1/bed/blastz.danRer4.2006-10-16
+    cat << '_EOF_' > DEF
+# Stickleback vs. Zebrafish
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Stickleback gasAcu1
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/gasAcu1/chrom.sizes
+
+# QUERY: Zebrafish danRer4
+SEQ2_DIR=/san/sanvol1/scratch/danRer4/danRer4.2bit
+SEQ2_CTGDIR=/san/sanvol1/scratch/danRer4/danRer4ChrUnNAScafs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/danRer4/liftNAandUnScaffoldsToChrom.lft
+SEQ2_LEN=/cluster/data/danRer4/chrom.sizes
+SEQ2_CTGLEN=/san/sanvol1/scratch/danRer4/chromsUnNAScafs.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/gasAcu1/bed/blastz.danRer4.2006-10-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -chainMinScore=5000 -chainLinearGap=loose \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/gasAcu1danRer4 >& do.log &
+    tail -f do.log
+    ln -s blastz.danRer4.2006-10-16 /cluster/data/gasAcu1/bed/blastz.danRer4
+    nice featureBits gasAcu1 -chrom=chrI chainDanRer4Link
+#9296061 bases of 27557028 (33.734%) in intersection
+
+
 #########################################################################
+# BLASTZ/CHAIN/NET TETNIG1 (DONE 10/17/06 angie)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.tetNig1.2006-10-17
+    cd /cluster/data/gasAcu1/bed/blastz.tetNig1.2006-10-17
+    cat << '_EOF_' > DEF
+# Stickleback vs. Tetraodon
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Stickleback gasAcu1
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/gasAcu1/chrom.sizes
+
+# QUERY: Tetraodon tetNig1
+SEQ2_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
+SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.lft
+SEQ2_LEN=/cluster/data/tetNig1/chrom.sizes
+SEQ2_CTGLEN=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/gasAcu1/bed/blastz.tetNig1.2006-10-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -chainMinScore=5000 -chainLinearGap=loose \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/gasAcu1tetNig1 >& do.log &
+    tail -f do.log
+    ln -s blastz.tetNig1.2006-10-17 /cluster/data/gasAcu1/bed/blastz.tetNig1
+    nice featureBits gasAcu1 -chrom=chrI chainTetNig1Link
+#11175314 bases of 27557028 (40.553%) in intersection
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET HG18 (DONE 10/17/06 angie)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.hg18.2006-10-17
+    cd /cluster/data/gasAcu1/bed/blastz.hg18.2006-10-17
+    cat << '_EOF_' > DEF
+# Stickleback vs. Human
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Stickleback gasAcu1
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/gasAcu1/chrom.sizes
+
+# QUERY: Human hg18
+SEQ2_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ2_LEN=/cluster/data/hg18/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/gasAcu1/bed/blastz.hg18.2006-10-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/gasAcu1hg18 >& do.log &
+    tail -f do.log
+    ln -s blastz.hg18.2006-10-17 /cluster/data/gasAcu1/bed/blastz.hg18
+    nice featureBits gasAcu1 -chrom=chrI chainHg18Link
+#2973001 bases of 27557028 (10.789%) in intersection
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET MM8 (DONE 10/17/06 angie)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.mm8.2006-10-17
+    cd /cluster/data/gasAcu1/bed/blastz.mm8.2006-10-17
+    cat << '_EOF_' > DEF
+# Stickleback vs. Mouse
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Stickleback gasAcu1
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/gasAcu1/chrom.sizes
+
+# QUERY: Mouse mm8
+SEQ2_DIR=/scratch/hg/mm8/mm8.2bit
+SEQ2_LEN=/cluster/data/mm8/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/gasAcu1/bed/blastz.mm8.2006-10-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/gasAcu1mm8 >& do.log &
+    tail -f do.log
+    ln -s blastz.mm8.2006-10-17 /cluster/data/gasAcu1/bed/blastz.mm8
+    nice featureBits gasAcu1 -chrom=chrI chainMm8Link
+#2981604 bases of 27557028 (10.820%) in intersection
+
+
 #########################################################################
 #########################################################################
 #########################################################################
