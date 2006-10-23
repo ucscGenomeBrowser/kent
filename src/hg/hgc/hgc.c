@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1148 2006/10/23 22:17:41 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1149 2006/10/23 22:48:45 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11379,7 +11379,7 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
-off_t getSnpOffset(struct snp snp, int version)
+off_t getSnpOffset(struct snp snp, int version, boolean multipleAlignment)
 /* do a lookup in the snpSeq for the offset */
 /* move this to kent/src/hg/lib/snpSeq.c */
 {
@@ -11388,13 +11388,18 @@ char **row;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char tableName[64];
+char chromName[64];
 long offset = 0;
 
 safef(tableName, sizeof(tableName), "snp%dSeq", version);
 if (!hTableExists(tableName))
     return -1;
+if (multipleAlignment)
+    safef(chromName, sizeof(chromName), "chrMulti");
+else
+    safef(chromName, sizeof(chromName), "%s", snp.chrom);
 safef(query, sizeof(query), "select file_offset from %s where name='%s' and chrom = '%s'", 
-      tableName, snp.name, snp.chrom);
+      tableName, snp.name, chromName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11406,7 +11411,7 @@ return offset;
 }
 
 
-char *getSnpSeqFile(struct snp snp, int version)
+char *getSnpSeqFile(struct snp snp, int version, boolean multipleAlignment)
 /* do a lookup in the snpExtFile for the filename */
 /* move this to kent/src/hg/lib/snpExtFile.c */
 {
@@ -11417,14 +11422,21 @@ struct sqlResult *sr = NULL;
 char *fileName = NULL;
 char tableName[64];
 char *chromName = cloneString(snp.chrom);
+char chromName2[64];
 
 safef(tableName, sizeof(tableName), "snp%dExtFile", version);
 if (!hTableExists(tableName))
     return NULL;
 
-stripString(chromName, "_random");
+if (multipleAlignment)
+    safef(chromName2, sizeof(chromName2), "chrMulti");
+else
+    {
+    stripString(chromName, "_random");
+    safef(chromName2, sizeof(chromName2), "%s", chromName);
+    }
 
-safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, chromName);
+safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, chromName2);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11474,7 +11486,7 @@ axtFree(&axt);
 hPrintf("</PRE></TT>");
 }
 
-void printSnpAlignment2(struct snp snp, int version)
+void printSnpAlignment2(struct snp snp, int version, boolean multipleAlignment)
 /* Get flanking sequences from table; align and print */
 /* Tablename hard-coded for now */
 {
@@ -11506,11 +11518,11 @@ int end = 0;
 
 off_t offset = 0;
 
-fileName = getSnpSeqFile(snp, version);
+fileName = getSnpSeqFile(snp, version, multipleAlignment);
 if (!fileName)
     return;
 
-offset = getSnpOffset(snp, version);
+offset = getSnpOffset(snp, version, multipleAlignment);
 if (offset == -1) 
     return;
 
@@ -12443,6 +12455,7 @@ char **row;
 char   query[256];
 int    rowOffset=hOffsetPastBin(seqName, group);
 int    snpCount=0;
+boolean multipleAlignment = FALSE;
 
 cartWebStart(cart, "dbSNP build 125");
 printf("<H2>dbSNP build 125 %s</H2>\n", itemName);
@@ -12472,6 +12485,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     snp125StaticLoad(row+rowOffset, &snp);
     if (snp.chromStart!=start || differentString(snp.chrom,seqName))
 	{
+	multipleAlignment = TRUE;
 	printf("<BR>");
 	if (snpCount==0)
 	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
@@ -12479,7 +12493,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment2(snpAlign, 125);
+printSnpAlignment2(snpAlign, 125, multipleAlignment);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12502,6 +12516,7 @@ int    snpCount=0;
 char title[64];
 char tableName1[64];
 char tableName2[64];
+boolean multipleAlignment = FALSE;
 
 safef(title, sizeof(title), "dbSNP build %d", version);
 cartWebStart(cart, title);
@@ -12534,6 +12549,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     snp125StaticLoad(row+rowOffset, &snp);
     if (snp.chromStart!=start || differentString(snp.chrom,seqName))
 	{
+	multipleAlignment = TRUE;
 	printf("<BR>");
 	if (snpCount==0)
 	    printf("<BR><B>This SNP maps to these additional locations:</B><BR>");
@@ -12541,7 +12557,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment2(snpAlign, version);
+printSnpAlignment2(snpAlign, version, multipleAlignment);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
