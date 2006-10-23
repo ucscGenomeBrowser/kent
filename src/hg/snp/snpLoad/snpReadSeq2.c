@@ -3,7 +3,7 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.2 2006/10/10 21:00:46 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.3 2006/10/23 22:04:18 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,14 +24,14 @@ int lineSize;
 off_t offset;
 char *row[9], *rsId[2];
 
-while (lineFileNext(lf, &line, &lineSize))
+while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
         {
 	chopString(line, "|", row, ArraySize(row));
         chopString(row[2], " ", rsId, ArraySize(rsId));
 	offset = lineFileTell(lf);
-	fprintf(outputFileHandle, "%s\t%d\n", rsId[0], (int)offset);
+	fprintf(outputFileHandle, "%s\t%ld\n", rsId[0], offset);
 	}
     }
 
