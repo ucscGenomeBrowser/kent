@@ -79,7 +79,7 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 		{
 		fprintf(f,"%c",seq.dna[gapStart++]);
 		++charLineCount;
-		if (!(charLineCount % 60)) { fprintf(f,"\n"); charLineCount = 0; }
+		if (!(charLineCount % 60)) {fprintf(f,"\n"); charLineCount = 0;}
 		}
 	    }
 	}
