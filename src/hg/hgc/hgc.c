@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1147 2006/10/21 00:38:33 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1148 2006/10/23 22:17:41 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11379,8 +11379,9 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
-long getSnpOffset(struct snp snp, int version)
+off_t getSnpOffset(struct snp snp, int version)
 /* do a lookup in the snpSeq for the offset */
+/* move this to kent/src/hg/lib/snpSeq.c */
 {
 char query[256];
 char **row;
@@ -11398,7 +11399,7 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
    return -1;
-offset = sqlUnsigned(row[0]);
+offset = sqlUnsignedLong(row[0]);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return offset;
@@ -11407,6 +11408,7 @@ return offset;
 
 char *getSnpSeqFile(struct snp snp, int version)
 /* do a lookup in the snpExtFile for the filename */
+/* move this to kent/src/hg/lib/snpExtFile.c */
 {
 char query[256];
 char **row;
@@ -11502,7 +11504,7 @@ int len3 = 0;
 int start = 0;
 int end = 0;
 
-long offset = 0;
+off_t offset = 0;
 
 fileName = getSnpSeqFile(snp, version);
 if (!fileName)
