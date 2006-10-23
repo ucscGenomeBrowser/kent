@@ -200,6 +200,10 @@ char *hgOfficialChromName(char *name);
 /* Returns "cannonical" name of chromosome or NULL
  * if not a chromosome. */
 
+boolean hgIsOfficialChromName(char *name);
+/* Determine if name is exact (case-sensitive) match with
+ * a chromosome in the current assembly */
+
 boolean hgNearOk(char *database);
 /* Return TRUE if ok to put up familyBrowser (hgNear) 
  * on this database. */

@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.303 2006/10/20 04:56:54 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.304 2006/10/23 18:41:19 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -143,6 +143,16 @@ if (ci != NULL)
     return cloneString(ci->chrom);
 else
     return NULL;
+}
+
+boolean hgIsOfficialChromName(char *name)
+/* Determine if name is exact (case-sensitive) match with
+ * a chromosome in the current assembly */
+{
+char *chrom;
+if ((chrom = hgOfficialChromName(name)) != NULL && sameString(name, chrom))
+    return TRUE;
+return FALSE;
 }
 
 int hGetMinIndexLength()
