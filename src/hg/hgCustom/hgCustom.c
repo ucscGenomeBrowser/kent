@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.84 2006/10/23 18:10:07 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.85 2006/10/23 23:40:07 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -419,7 +419,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (showAllButtons)
     {
     cgiSimpleTableRowStart();
-    puts("<TD COLSPAN=6>All</TD>");
+    puts("<TD COLSPAN=6>Check All / Clear All</TD>");
     cgiSimpleTableFieldStart();
     cgiMakeButtonWithMsg(hgCtDoDeleteSet, "+", "Select all for deletion");
     cgiTableFieldEnd();
@@ -536,8 +536,10 @@ puts("<TD VALIGN=\"TOP\">");
 puts("<TABLE BORDER=0>");
 
 /* button to add custom tracks */
+int buttonWidth = 12;
 puts("<TR><TD>");
-cgiMakeButton(hgCtDoAdd, "add custom tracks");
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" STYLE=\"width:%dem\">",
+                hgCtDoAdd, "add custom tracks", buttonWidth);
 puts("</TD></TR>");
 puts("</FORM>");
 
@@ -546,8 +548,9 @@ puts("<TR><TD>");
 printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
            hgTracksName());
 cartSaveSession(cart);
-cgiMakeButton("Submit", numCts ? 
-                        "view in genome browser" : "go to genome browser");
+printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
+                numCts ? "view in genome browser" : "go to genome browser",
+                buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
 
@@ -556,8 +559,9 @@ puts("<TR><TD>");
 printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
            hgTablesName());
 cartSaveSession(cart);
-cgiMakeButton("Submit", numCts ? 
-                        "access in table browser": "go to table browser");
+printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
+                numCts ?  "access in table browser": "go to table browser",
+                buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
 
