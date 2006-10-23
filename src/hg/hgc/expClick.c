@@ -12,7 +12,7 @@
 #include "affyAllExonProbe.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.16 2006/10/17 01:15:34 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.17 2006/10/23 22:26:04 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -311,7 +311,6 @@ for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
     }
 printf("</tr></table>\n");
 printf("</td></tr></table>\n");
-uglyf("wtf<BR>\n");
 }
 
 static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
@@ -1254,21 +1253,6 @@ void erHashElFree(struct hashEl *el)
 {
 struct expRecord *er = el->val;
 expRecordFree(&er);
-}
-
-void spitList(struct bed *list)
-{
-struct bed *bed;
-for (bed = list; bed != NULL; bed = bed->next)
-    {
-    bedTabOutN(bed, 15, stdout);
-    uglyf("<BR>\n");
-    }
-}
-
-char *printMe(void *thing)
-{
-return (thing == NULL) ? "NULL" : "NOT NULL";
 }
 
 void doExpRatio(struct trackDb *tdb, char *item, struct customTrack *ct)
