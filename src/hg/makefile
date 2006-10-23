@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.116 2006/10/10 04:39:06 galt Exp $
+# 	$Id: makefile,v 1.117 2006/10/23 20:18:38 angie Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
@@ -31,7 +31,7 @@ hgLib:
 utils:	hgLib
 	@for D in $(USE_DIRS) x; do \
             if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && $(MAKE) ) ;\
+                ( cd $$D && echo $$D && $(MAKE) HG_WARN=${HG_WARN_ERR} ) ;\
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
@@ -55,7 +55,7 @@ BAD_DIRS = \
 
 compile:	hgLib
 	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
-		(cd $${D} && ${MAKE} compile;) \
+		(cd $${D} && ${MAKE} compile HG_WARN=${HG_WARN_ERR};) \
 	done
 
 # Build cgi's
