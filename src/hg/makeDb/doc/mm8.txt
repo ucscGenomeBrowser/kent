@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.21 2006/10/16 23:24:01 angie Exp $"
+#	"$Id: mm8.txt,v 1.22 2006/10/23 19:57:44 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7352,5 +7352,146 @@ set out = $3
         ccdsKgMap
 
     # << emacs
+
+
+############################################################################
+# JAX TRACKS (DONE 10/20/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/mm8/bed/jax
+    # Files sent by Bob Sinclair unpacked there:
+    unzip MGI_Track_Data.zip
+
+    # Jax Rep Transcript track
+    # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
+    # -- names like AK016604_4933401J01Rik, NM_001011874_AY534250
+    # -- aliases ~ MGI:\d+
+    # Use simple perl script to uniquify transcript names and make alias.tab.
+    # Inspired by the mm6 version, but format has changed.
+    parseRepTranscript.pl MGI_Track_Data/SEQ_RepTransGenomic_rpt.gff \
+      > jaxRepTranscript.gff
+   
+
+    # Jax Allele track
+    # AL_*.gff --> jaxAllele{,Info}
+    # -- bed12Source -- add type from filename
+    # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
+    # -- Info: name, mgiID, source {"Gene trapped", ...}
+    rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
+    foreach f (MGI_Track_Data/AL*.gff)
+      set type = `echo $f:t:r \
+        | sed -e 's/AL_//; s/GTRAP/GeneTrapped/; s/IND/Induced/; \
+            s/OTHER/Other/; s/SPON/Spontaneous/; s/TARG/Targeted/; \
+            s/TRANS/Transgenic/;'`
+      parseAllele.pl $f \
+      | ldHgGene mm8 placeholder stdin -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | sed -e 's/$/'"\t$type"'/' \
+      >> jaxAllele.bed
+    end
+    # Most names have a vector(?) in <>'s except these:
+#odd name NM_009309_T
+#odd name NM_015770_a
+#odd name NM_021879_p
+#odd name NM_008415_Jrk
+#odd name NM_008622_Mpv17
+#odd name NM_010241_Fts
+
+    # Jax Phenotype track
+    # MP_*.gff --> jaxPhenotype{,Alias}
+    # -- bed12Source -- add type from filename
+    # -- names like NM_001001488_Atp8b1
+    rm -f jaxPhenotype.bed jaxPhenotypeAlias.tab fixJaxPhenotype.sql
+    foreach f (MGI_Track_Data/MP_*.gff)
+      set type = `echo $f:t:r \
+        | perl -wpe 's/MP_[0-9]*_//; s/[_-](\w)/\u$1/g; s/^(\w)/\u$1/; \
+                    s@AdiposeTissue@Adipose@; \
+                    s@BehaviorNeurological@Behavior@; \
+                    s@CardiovascularSystem@Cardiovascular@; \
+                    s@DigestiveAlimentary@Digestive@; \
+                    s@EndocrineExocrineGland@Gland@; \
+                    s@GrowthSize@Growth Size@; \
+                    s@HearingEar@Hearing/Ear@; \
+                    s@HematopoieticSystem@Hematopoietic@; \
+                    s@HomeostasisMetabolism@Homeostasis@; \
+                    s@ImmuneSystem@Immune@; \
+                    s@LethalityEmbryonicPerinatal@Embryonic Lethal@; \
+                    s@LethalityPostnatal@Postnatal Lethal@; \
+                    s@LifeSpanPostWeaningAging@Life Span@; \
+                    s@LimbsDigitsTail@Limbs and Tail@; \
+                    s@LiverBiliarySystem@Liver and Bile@; \
+                    s@NervousSystem@Nervous System@; \
+                    s@RenalUrinarySystem@Renal/Urinary@; \
+                    s@ReproductiveSystem@Reproductive@; \
+                    s@RespiratorySystem@Respiratory@; \
+                    s@SkinCoatNails@Skin/Coat/Nails@; \
+                    s@TasteOlfaction@Taste/Smell@; \
+                    s@TouchVibrissae@Touch@; \
+                    s@Tumorigenesis@Tumorigenesis@; \
+                    s@VisionEye@Vision/Eye@;'`
+      echo $type
+      parsePhenotype.pl $f \
+      | ldHgGene mm8 placeholder stdin -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | sed -e 's@$@'"\t$type"'@' \
+      >> jaxPhenotype.bed
+    end
+
+    # Jax QTL track
+    # QTL*.gff --> jaxQtl2 (or 3?)... but we're missing MIT SSLP marker
+    # and CM distance for 2, or those plus flanking markers for 3...
+    perl -wpe 'chomp; s/\s*$//; \
+      ($chr, undef, undef, $start, $end, undef, $strand, undef, $info) = \
+        split("\t"); \
+      if ($info =~ /QTL (\w+);  Dbxref "(MGI:\d+)"; Alias .*;  Note "([^"]+)"/) { \
+        ($name, $mgiID, $desc) = ($1, $2, $3); \
+      } else { die "parse\n$info"; } \
+      $start--; \
+      s/^.*$/$chr\t$start\t$end\t$name\t1000\t$strand\t\t$mgiID\t$desc\t0.0\n/;' \
+      MGI_Track_Data/QTL_build36_03_alias.gff > jaxQtl.bed
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/jax
+    # jaxRepTranscript
+    ldHgGene mm8 jaxRepTranscript jaxRepTranscript.gff
+    hgsql mm8 < fixJaxRepTranscript.sql
+    sed -e 's/genericAlias/jaxRepTranscriptAlias/g' \
+      ~/kent/src/hg/lib/genericAlias.sql > jaxRepTranscriptAlias.sql 
+    hgLoadSqlTab mm8 jaxRepTranscriptAlias \
+      jaxRepTranscriptAlias.sql jaxRepTranscriptAlias.tab
+    # jaxAllele
+    sed -e 's/bed12Source/jaxAllele/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxAllele.sql
+    hgLoadBed -sqlTable=jaxAllele.sql mm8 jaxAllele jaxAllele.bed
+    hgsql mm8 < fixJaxAllele.sql
+    hgLoadSqlTab mm8 jaxAlleleInfo \
+      ~/kent/src/hg/lib/jaxAlleleInfo.sql jaxAlleleInfo.tab
+    # jaxPhenotype
+    sed -e 's/bed12Source/jaxPhenotype/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxPhenotype.sql
+    hgLoadBed -tab -sqlTable=jaxPhenotype.sql mm8 jaxPhenotype jaxPhenotype.bed
+    hgsql mm8 < fixJaxPhenotype.sql
+    sed -e 's/genericAlias/jaxPhenotypeAlias/' \
+      ~/kent/src/hg/lib/genericAlias.sql > jaxPhenotypeAlias.sql
+    hgLoadSqlTab mm8 jaxPhenotypeAlias \
+      jaxPhenotypeAlias.sql jaxPhenotypeAlias.tab
+    # jaxQTL
+    hgLoadBed -tab -notItemRgb -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \
+      mm8 jaxQTL jaxQtl.bed
+
+
+##########################################################################
+# SWAP/CHAIN/NET GASACU1 (DONE 10/23/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/mm8/bed/blastz.gasAcu1.swap
+    cd /cluster/data/mm8/bed/blastz.gasAcu1.swap
+    doBlastzChainNet.pl -swap /cluster/data/gasAcu1/bed/blastz.mm8/DEF \
+      -chainMinScore=2000 -chainLinearGap=loose >& do.log & tail -f do.log
+    ln -s blastz.gasAcu1.swap /cluster/data/mm8/bed/blastz.gasAcu1
+    nice featureBits mm8 chainGasAcu1Link
+#52781141 bases of 2567283971 (2.056%) in intersection
+
+
 
 
