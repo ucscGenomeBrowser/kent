@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.36 2006/10/20 05:01:13 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.37 2006/10/23 22:29:51 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -57,7 +57,7 @@ void customFactoryCheckChromName(char *word, struct lineFile *lf)
 /* Make sure it's a chromosome or a contig.  Well, at the moment,
  * just make sure it's a chromosome. */
 {
-if (!hgOfficialChromName(word))
+if (!hgIsOfficialChromName(word))
     lineFileAbort(lf, "%s not a chromosome", word);
 }
 
@@ -104,7 +104,7 @@ static boolean rowIsBed(char **row, int wordCount)
 /* Return TRUE if row is consistent with BED format. */
 {
 return wordCount >= 3 && wordCount <= bedKnownFields 
-	&& hgOfficialChromName(row[0])
+	&& hgIsOfficialChromName(row[0])
 	&& isdigit(row[1][0]) && isdigit(row[2][0]);
 }
 
@@ -407,7 +407,7 @@ if (wordCount >= 8 && wordCount <= 9)
         {
 	if (strand[1] == 0)
 	    {
-	    if (hgOfficialChromName(row[0]))
+	    if (hgIsOfficialChromName(row[0]))
 	        {
 		if (isdigit(row[3][0]) && isdigit(row[4][0]))
 		    isGff = TRUE;
