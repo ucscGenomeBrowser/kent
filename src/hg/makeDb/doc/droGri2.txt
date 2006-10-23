@@ -106,3 +106,51 @@ EOF
     # I did not make the usual /gbdb/$db/$db.2bit link.
 
 
+###########################################################################
+# WINDOWMASKER EXPERIMENT (DONE 10/23/06 angie)
+    # The droVir3-droGri2 blastz run  was just destroyed by mega-output,
+    # even with -chainFilterMinScore=10000 and M=50 (trying M=20 but not
+    # too hopeful)... so let's try a de-novo masker before alignment:
+    ssh kolossus
+    mkdir /cluster/data/droGri2/bed/windowmasker.2006-10-23
+    cd /cluster/data/droGri2/bed/windowmasker.2006-10-23
+    twoBitToFa /cluster/data/droGri2/droGri2.2bit tmp.fa
+    # First, collect counts:
+    time /cluster/bin/x86_64/windowmasker -mk_counts true -input tmp.fa \
+      -output wm.counts
+#109.210u 2.980s 1:54.25 98.1%   0+0k 0+0io 0pf+0w
+    # Then use those counts to mask sequence:
+    time /cluster/bin/x86_64/windowmasker -ustat wm.counts -input tmp.fa \
+      -output wm.intervals 
+#188.383u 1.445s 3:11.42 99.1%   0+0k 0+0io 0pf+0w
+    perl -wpe 'if (s/^>lcl\|(\w+).*\n$//) { $chr = $1; } \
+               if (/^(\d+) - (\d+)/) { \
+                 $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/; \
+               }' wm.intervals > windowmasker.bed
+    # Quick coverage:
+    awk '{print $3 - $2;}' windowmasker.bed | total
+#76056110
+    awk '{print $2;}' ../../chrom.sizes  | total
+#200467819
+    calc 76056110 / 200467819
+#76056110 / 200467819 = 0.379393
+    # Make a masked .2bit:
+    twoBitMask ../../droGri2.2bit windowmasker.bed ../../droGri2.WM.2bit
+    # Now try with -sdust to additionally mask low-complexity sequence:
+    time /cluster/bin/x86_64/windowmasker -ustat wm.counts -sdust true \
+       -input tmp.fa -output wm.sdust.intervals
+#488.269u 1.617s 8:11.81 99.6%   0+0k 0+0io 0pf+0w
+    perl -wpe 'if (s/^>lcl\|(\w+).*\n$//) { $chr = $1; } \
+               if (/^(\d+) - (\d+)/) { \
+                 $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/; \
+               }' wm.sdust.intervals > windowmasker.sdust.bed
+    awk '{print $3 - $2;}' windowmasker.sdust.bed | total
+#92936045
+    calc 92936045 / 200467819
+#92936045 / 200467819 = 0.463596
+    # Make a masked .2bit (even if we don't end up needing it):
+    twoBitMask ../../droGri2.2bit windowmasker.sdust.bed \
+      ../../droGri2.WMSDust.2bit
+    rm tmp.fa
+
+
