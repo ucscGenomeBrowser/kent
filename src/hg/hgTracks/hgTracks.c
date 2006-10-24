@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1225 2006/10/23 22:25:42 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1226 2006/10/24 17:44:42 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10796,7 +10796,7 @@ char *gvName(struct track *tg, void *item)
 /* Get name to use for gv item. */
 {
 struct gvPos *el = item;
-return el->name;
+return el->label;
 }
 
 char *gvPosMapName (struct track *tg, void *item)
@@ -11882,7 +11882,6 @@ for (visEl = visList; visEl != NULL; visEl = visEl->next)
     }
 hashElFreeList(&visList);
 
-
 /* The loading is now handled by getPositionFromCustomTracks(). */
 /* Process browser commands in custom track. */
 for (bl = browserLines; bl != NULL; bl = bl->next)
@@ -11929,7 +11928,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
-
             /*Fix a start window of -1 that is returned when a custom track position
               begins at 0
             */
