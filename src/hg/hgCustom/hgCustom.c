@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.85 2006/10/23 23:40:07 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.86 2006/10/24 00:07:03 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -419,7 +419,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (showAllButtons)
     {
     cgiSimpleTableRowStart();
-    puts("<TD COLSPAN=6>Check All / Clear All</TD>");
+    puts("<TD COLSPAN=6 ALIGN='RIGHT'>check all / clear all&nbsp;</TD>");
     cgiSimpleTableFieldStart();
     cgiMakeButtonWithMsg(hgCtDoDeleteSet, "+", "Select all for deletion");
     cgiTableFieldEnd();
