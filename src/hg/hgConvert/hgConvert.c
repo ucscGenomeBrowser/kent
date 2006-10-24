@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.19 2006/08/24 00:10:30 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.20 2006/10/24 00:23:06 hartera Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -287,12 +287,16 @@ else
 	    qEnd = chain->qEnd;
 	    }
 	blockSize = chainTotalBlockSize(chain);
-	printf("<A HREF=\"%s?%s=%u&db=%s&position=%s:%d-%d\">",
+        /* Check if the toDb has active set to 1. If it is then print position */
+        /* link to browser for toDb, otherwise just print position without link. */
+        if (hDbIsActive(liftOver->toDb)) 
+	    printf("<A HREF=\"%s?%s=%u&db=%s&position=%s:%d-%d\">",
 	       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	       liftOver->toDb,
 	       chain->qName, qStart+1, qEnd);
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
-	printf("</A>");
+        if (hDbIsActive(liftOver->toDb))
+	    printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,  
 	    100.0 * (chain->tEnd - chain->tStart) / origSize);
