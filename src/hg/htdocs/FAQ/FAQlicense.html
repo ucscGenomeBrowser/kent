@@ -226,7 +226,7 @@
 			fasta files into a single two-bit 
 			file (.2bit) using the utility <TT>faToTwoBit</TT>:
 			<BLOCKQUOTE>
-			faToTwoBit <em>newGenome</em>.fa /gbdb/<em>newGenome</em>.2bit
+			faToTwoBit <em>newGenome</em>.fa /gbdb/<em>newGenome</em>/<em>newGenome</em>.2bit
 			</BLOCKQUOTE>
 			For information on the usage options for the
 			faToTwoBit utility, execute the command with no 
@@ -242,10 +242,10 @@
 			</BLOCKQUOTE>
 			<LI>
 			Create a group table for the new database, using any of 
-			the existing UCSC grp.txt SQL dumps:
+			the existing UCSC grp.sql SQL dumps:
 			<BLOCKQUOTE>
-     			hgsql <em>newGenome</em> < grp.txt<BR>
-     			hgsql <em>newGenome</em> -e 'load data local infile "grp.txt" into table grp;'
+     			hgsql <em>newGenome</em> < grp.sql<BR>
+     			hgsql <em>newGenome</em> -e 'load data local infile "grp.sql" into table grp;'
 			</BLOCKQUOTE>
 			<LI>
 			Create a chromInfo table from the .2bit file:
@@ -277,7 +277,7 @@
 			<LI>
 			Add the new database name to the DBS variable in the 
 			makefile in 
-			<em>src/hg/makeDb/trackDb/makefile</em>. 
+			src/hg/makeDb/trackDb/makefile. 
 			You can configure the
 			list of genome databases into which you want to load
 			trackDb tables by editing the list in this makefile.  
@@ -285,24 +285,24 @@
 			comment out the 'cvs update' step for the 'alpha' make 
 			target in that file. For the makefile to work correctly,
 			add a subdirectory in 
-			<em>src/hg/makeDb/trackDb/</em> corresponding
+			src/hg/makeDb/trackDb/ corresponding
 			to the organism name (<em>e.g.</em> opossum), and then a
 			<em>newGenome</em> subdirectory in the organism 
 			directory. Using the opossum example shown in the 
 			previous step, this would result in the directory
 			hierarchy 
-			<em>src/hg/makeDb/trackDb/opossum/monDom1/</em>. 
+			src/hg/makeDb/trackDb/opossum/monDom1/. 
 			<LI>
 			Run "make alpha" in src/hg/makeDb/trackDb/.  This 
 			creates the tables trackDb and hgFindSpec that contain
 			information about the Genome Browser tracks that will 
 			be displayed for the new assembly. For more information
 			about creating these tables, see 
-			<em>src/product/README.trackDb</em> in the source tree. 
+			src/product/README.trackDb in the source tree. 
 			Do not load 
 			the trackDb table manually; instead, use the
 			trackDb.ra file format found in the source tree at
-			<em>src/hg/makeDb/trackDb/</em> and load it with the 
+			src/hg/makeDb/trackDb/ and load it with the 
 			command <TT>'make alpha'</TT>. 
 			</OL>
 			<P>
@@ -310,7 +310,7 @@
 			new assembly, which can then be populated with 
 			annotation tracks, as desired. For examples of how
 			tracks are created for the standard Genome Browser
-			assemblies, see the files <em>src/hg/make*.doc</em>
+			assemblies, see the files src/hg/doc/*.txt
 			in the Genome Browser source tree (these are plain text
 			files, not MS Word documents). The Gold and Gap 
 			tracks can be created from the genome assembly's AGP 
