@@ -59,7 +59,7 @@ group regulation
 priority 80
 visibility hide
 type expRatio
-expScale 1.0
+expScale 2.0
 expStep 0.10
 groupings affyZonWildTypeGroups
 
