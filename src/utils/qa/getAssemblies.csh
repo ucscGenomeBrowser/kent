@@ -16,7 +16,7 @@ set found=0
 set dbs=""
 set rr="false"
 set dumpDate=""
-set quiet=0
+set quiet=1
 
 if ($#argv < 1 || $#argv > 3) then
   echo
@@ -24,8 +24,8 @@ if ($#argv < 1 || $#argv > 3) then
   echo "  will accept the MySQL wildcard, %, but not on RR machines"
   echo "  note: not real-time on RR.  uses nightly TABLE STATUS dump."
   echo
-  echo "    usage:  tablename [machine] [quiet] - defaults to beta"
-  echo '              "quiet" suppresses list of assemblies checked'
+  echo "    usage:  tablename [machine] [verbose] - defaults to beta"
+  echo '              "verbose" prints list of assemblies checked'
   echo
   exit
 else
@@ -37,11 +37,11 @@ set debug=0
 # assign command line arguments
 
 set argNum=$#argv
-if ( $argv[$argNum] == "quiet" ) then
-  set quiet=1
+if ( $argv[$argNum] == "verbose" ) then
+  set quiet=0
 endif
 
-if (($#argv > 1 && $quiet != 1) || $#argv == 3 ) then
+if (($#argv > 1 && $quiet == 1) || $#argv == 3 ) then
   set machine="$argv[2]"
   set host="-h $argv[2]"
   if ($argv[2] == "hgwdev") then
