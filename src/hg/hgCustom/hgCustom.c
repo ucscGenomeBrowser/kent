@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.87 2006/10/25 00:27:29 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.88 2006/10/25 19:07:11 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -278,6 +278,7 @@ else
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_changeDb\" VALUE=\"1\">\n");
     }
 puts("</FORM>");
 }
@@ -541,7 +542,7 @@ puts("<TD VALIGN=\"TOP\">");
 puts("<TABLE BORDER=0>");
 
 /* button to add custom tracks */
-int buttonWidth = 12;
+int buttonWidth = 13;
 puts("<TR><TD>");
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" STYLE=\"width:%dem\">",
                 hgCtDoAdd, "add custom tracks", buttonWidth);
@@ -844,7 +845,6 @@ hSetDb(database);
 
 if (cartVarExists(cart, hgCtDoChangeDb))
     cartSetString(cart, "position", hDefaultPos(database));
-
 if (cartVarExists(cart, hgCtDoAdd))
     {
     doAddCustom(NULL);
