@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1149 2006/10/23 22:48:45 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1150 2006/10/25 21:31:22 ytlu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16323,8 +16323,6 @@ printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
 showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", psl->qStart, psl->qEnd);
 }
 
-
-
 void doPutaFrag(struct trackDb *tdb, char *item)
 /* display the potential pseudo and coding track */
 {
@@ -16334,28 +16332,15 @@ char **row, table[256], query[256], *parts[6];
 struct putaInfo *info = NULL;
 struct psl *psl = NULL;
 int start = cartInt(cart, "o"),  end = cartInt(cart, "t");
+char *db = cgiString("db");
 char *name = cartString(cart, "i"),  *chr = cartString(cart, "c");
 char pslTable[256];
 char otherString[256], *tempName = NULL;
 int partCount;
-boolean isRcnt = FALSE;
 
-/* check which track to display and set parameters */
-if(sameWord(tdb->tableName, "rcntDupGenes"))
-    {
-    isRcnt = TRUE;
-    sprintf(table,"rcntDupGeneInfo");
-    sprintf(pslTable,"rcntPsl");
-    cartWebStart(cart, "Recent Duplicating Gene");
-    }
-else
-    {
-    sprintf(table, "putaInfo");
-    sprintf(pslTable,"potentPsl");
-    cartWebStart(cart, "Putative Coding or Pseudo Fragments");
-    }
-
-
+sprintf(table, "putaInfo");
+sprintf(pslTable,"potentPsl");
+cartWebStart(cart, "Putative Coding or Pseudo Fragments");
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
         "AND chrom = '%s' AND chromStart = %d "
         "AND chromEnd = %d",
@@ -16377,11 +16362,7 @@ sqlFreeResult(&sr);
 tempName = cloneString(name);
 partCount = chopByChar(tempName, '|',parts, 4);
 
-/* print the first line for recent dup or putative element */
-if(isRcnt)
-    printf("<B>%s</B> may be a duplicate of the known gene: <A HREF=\"", name);
-else
-    printf("<B>%s</B> is homologous to the known gene: <A HREF=\"", name);
+printf("<B>%s</B> is homologous to the known gene: <A HREF=\"", name);
 printEntrezNucleotideUrl(stdout, parts[0]);
 printf("\" TARGET=_blank>%s</A><BR>\n", parts[0]);
 printf("<B>%s </B>is aligned here with score : %d<BR><BR>\n", parts[0], info->score);
@@ -16389,17 +16370,16 @@ printf("<B>%s </B>is aligned here with score : %d<BR><BR>\n", parts[0], info->sc
 /* print the info about the stamper gene */
 printf("<B> %s</B><BR>\n", parts[0]);
 printf("<B>Genomic location of the mapped part of %s</B>: <A HREF=\""
-	   "http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:"
-	   "%d-%d&knownGene=full&refGene=full&mgcGenes=full&vegaGene=full\" TARGET=_blank>%s(%s):%d-%d </A> <BR>\n",
-       parts[0], info->oChrom, info->oChromStart, info->oChromEnd, info->oChrom, parts[2],info->oChromStart+1, info->oChromEnd); 
+       "%s?db=%s&position=%s:%d-%d\" TARGET=_blank>%s(%s):%d-%d </A> <BR>\n",
+       parts[0], hgTracksName(), db, info->oChrom, info->oChromStart, info->oChromEnd, info->oChrom, parts[2],info->oChromStart+1, info->oChromEnd); 
 printf("<B>Mapped %s Exons</B>: %d of %d. <BR> <B>Mapped %s CDS exons</B>: %d of %d <BR>\n", parts[0], info->qExons[0], info->qExons[1], parts[0], info->qExons[2], info->qExons[3]);
 
 printf("<b>Aligned %s bases</B>:%d of %d with %f identity. <BR> <B>Aligned %s CDS bases</B>:  %d of %d with %f identity.<BR><BR>\n", parts[0],info->qBases[0], info->qBases[1], info->id[0], parts[0], info->qBases[2], info->qBases[3], info->id[1]);
 
 /* print info about the stamp putative element */
 printf("<B>%s </B><BR> <B>Genomic location: </B>"
-       " <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
-       name,info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
+       " <A HREF=\"%s?db=%s&position=%s:%d-%d\" >%s(%s): %d - %d</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
+       name, hgTracksName(), db, info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
 if(info->repeats[0] > 0)
     {
     printf("Repeats elements inserted into %s <BR>\n", name);
@@ -16419,25 +16399,6 @@ if(info->stop >0)
 	    }
 	}
     printf("<BR>\n");
-    }
-
-
-/* for recent dup provide other locations of the same stamper gene */
-if(isRcnt)
-    {  /* for Rcnt, list all other dups */
-    printf("<BR><BR>Other locations %s might be duplicated to:<BR>\n", parts[0]);
-    sprintf(query, "SELECT * FROM %s WHERE name like '%s%%' ", table, parts[0]);
-    sr = sqlMustGetResult(conn, query);
-    while((row = sqlNextRow(sr)) != NULL)
-	{
-	struct putaInfo *info1 = NULL;
-	info1 = putaInfoLoad(row);
-	printf(" <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR>\n",
-	       info1->chrom, info1->chromStart, info1->chromEnd, info1->chrom, info1->strand, info1->chromStart, info1->chromEnd);
-	putaInfoFree(&info1);
-	}
-    printf("<BR><BR>\n");
-    sqlFreeResult(&sr);
     }
 
 
