@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.88 2006/10/25 19:07:11 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.89 2006/10/25 21:37:25 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -549,25 +549,24 @@ printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" STYLE=\"width:%dem\">",
 puts("</TD></TR>");
 puts("</FORM>");
 
+/* determine if there's a navigation position for this screen */
+char *pos = NULL;
+if (ctList)
+    {
+    pos = ctInitialPosition(ctList);
+    if (!pos)
+        pos = ctFirstItemPos(ctList);
+    }
+
 /* button for GB navigation */
 puts("<TR><TD>");
 printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
            hgTracksName());
 cartSaveSession(cart);
-
-/* determine if there's a navigation position for this screen */
-boolean customTrackPos = FALSE;
-if (ctList)
-    {
-    char *pos = ctInitialPosition(ctList);
-    if (!pos)
-        pos = ctFirstItemPos(ctList);
-    if (pos && sameString(pos, cartString(cart, "position")))
-        customTrackPos = TRUE;
-    }
 printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-        customTrackPos ?  "view in genome browser" : "go to genome browser",
-                buttonWidth);
+        "go to genome browser", buttonWidth);
+if (pos)
+    cgiMakeHiddenVar("position", pos);
 puts("</FORM>");
 puts("</TD></TR>");
 
@@ -577,8 +576,7 @@ printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tab
            hgTablesName());
 cartSaveSession(cart);
 printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-        customTrackPos ?  "access in table browser": "go to table browser",
-                buttonWidth);
+        "go to table browser", buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
 
