@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.86 2006/10/24 00:07:03 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.87 2006/10/25 00:27:29 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,6 +58,7 @@ errAbort(
 #define hgCtDoRefresh     hgCtDo "refresh"
 #define hgCtDoRefreshSet  hgCtDo "refresh_set"
 #define hgCtDoRefreshClr  hgCtDo "refresh_clr"
+#define hgCtDoChangeDb    hgCtDo "changeDb"
 #define hgCtDoGenomeBrowser	  hgCtDo "gb"
 #define hgCtDoTableBrowser	  hgCtDo "tb"
 
@@ -468,8 +469,11 @@ void manageCustomForm(char *warn)
 
 struct dbDb *dbList = getCustomTrackDatabases();
 struct dbDb *dbDb = NULL;
+/* add this database to the list, as it may have no custom 
+ * tracks, but we still want to see it in the menu */
 slAddTail(&dbList, hDbDb(database));
 slReverse(&dbList);
+/* remove duplicate entry for this database, if any */
 for (dbDb = dbList->next; dbDb != NULL; dbDb = dbDb->next)
     if (sameString(dbDb->name, database))
         slRemoveEl(&dbList, dbDb);
@@ -485,6 +489,7 @@ if (assemblyMenu)
     cartSaveSession(cart);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
     printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
+    printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_changeDb\" VALUE=\"1\">\n");
     puts("</FORM>");
     }
 
@@ -548,8 +553,19 @@ puts("<TR><TD>");
 printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
            hgTracksName());
 cartSaveSession(cart);
+
+/* determine if there's a navigation position for this screen */
+boolean customTrackPos = FALSE;
+if (ctList)
+    {
+    char *pos = ctInitialPosition(ctList);
+    if (!pos)
+        pos = ctFirstItemPos(ctList);
+    if (pos && sameString(pos, cartString(cart, "position")))
+        customTrackPos = TRUE;
+    }
 printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-                numCts ? "view in genome browser" : "go to genome browser",
+        customTrackPos ?  "view in genome browser" : "go to genome browser",
                 buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
@@ -560,7 +576,7 @@ printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tab
            hgTablesName());
 cartSaveSession(cart);
 printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-                numCts ?  "access in table browser": "go to table browser",
+        customTrackPos ?  "access in table browser": "go to table browser",
                 buttonWidth);
 puts("</FORM>");
 puts("</TD></TR>");
@@ -825,6 +841,9 @@ cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 saveDbAndGenome(cart, database, organism);
 hSetDb(database);
+
+if (cartVarExists(cart, hgCtDoChangeDb))
+    cartSetString(cart, "position", hDefaultPos(database));
 
 if (cartVarExists(cart, hgCtDoAdd))
     {
