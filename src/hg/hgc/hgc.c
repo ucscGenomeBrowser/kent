@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1150 2006/10/25 21:31:22 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1151 2006/10/25 22:25:02 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2067,7 +2067,7 @@ char *tableName;
 /* XXX TODO: This data update time could be obtained for custom tracks
  * that are in the customTrash database.
  */
-if (!isCustomTrack(tdb->tableName))
+if (! isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
     printDataVersion(tdb);
@@ -6855,6 +6855,99 @@ if (url != NULL && url[0] != 0)
     }
 }
 
+void doOmimAv(struct trackDb *tdb, char *avName)
+/* Process click on an OMIM AV. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *chrom, *chromStart, *chromEnd;
+char *chp;
+char *omimId, *avSubFdId;
+char *avDescStartPos, *avDescLen;
+char *omimTitle = cloneString("");
+char *geneSymbol = NULL;
+int iAvDescStartPos = 0;
+int iAvDescLen = 0;
+
+struct lineFile *lf;
+char *line;
+int lineSize;
+
+safef(query, sizeof(query), "%s (%s)", tdb->longLabel, avName);
+cartWebStart(cart, query);
+
+safef(query, sizeof(query), "select * from omimAv where name = '%s'", avName);
+sr = sqlGetResult(conn, query);
+
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in omimAv table - database inconsistency.", avName);
+else
+    {
+    chrom 	= cloneString(row[1]);
+    chromStart	= cloneString(row[2]);
+    chromEnd    = cloneString(row[3]);
+    }
+sqlFreeResult(&sr);
+
+omimId = strdup(avName);
+chp = strstr(omimId, ".");
+*chp = '\0';
+
+chp++;
+avSubFdId = chp;
+
+safef(query, sizeof(query), "select title, geneSymbol from hgFixed.omimTitle where omimId = %s", omimId);
+sr = sqlGetResult(conn, query);
+
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    omimTitle  = cloneString(row[0]);
+    geneSymbol = cloneString(row[1]);
+    }
+sqlFreeResult(&sr);
+
+printf("<H4>OMIM <A HREF=\"");
+printEntrezOMIMUrl(stdout, atoi(omimId));
+printf("\" TARGET=_blank>%s</A>: %s; %s</H4>\n", omimId, omimTitle, geneSymbol);
+
+safef(query, sizeof(query), 
+"select startPos, length from omimSubField where omimId='%s' and subFieldId='%s' and fieldType='AV'",
+      omimId, avSubFdId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in omimSubField table - database inconsistency.", avName);
+else
+    {
+    avDescStartPos = cloneString(row[0]);
+    avDescLen	   = cloneString(row[1]);
+    iAvDescStartPos = atoi(avDescStartPos);
+    iAvDescLen      = atoi(avDescLen);
+    }
+sqlFreeResult(&sr);
+
+lf = lineFileOpen("/gbdb/hg17/omim/omim.txt", TRUE);
+lineFileSeek(lf,(size_t)(iAvDescStartPos), 0);
+lineFileNext(lf, &line, &lineSize);
+printf("<h4>");
+printf(".%s %s ", avSubFdId, line);fflush(stdout);
+lineFileNext(lf, &line, &lineSize);
+printf("[%s]\n", line);fflush(stdout);
+printf("</h4>");
+
+while ((lf->lineStart + lf->bufOffsetInFile) < (iAvDescStartPos + iAvDescLen))
+    {
+    lineFileNext(lf, &line, &lineSize);
+    printf("%s\n", line);fflush(stdout);
+    }
+
+htmlHorizontalLine();
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doRgdQtl(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Superfamily track info. */
 {
@@ -6914,7 +7007,8 @@ if (url != NULL && url[0] != 0)
     printf("%s</B></A>\n", itemName);
 
     safef(query, sizeof(query), 
-    	  "select distinct omimId from gadAll where geneSymbol='%s';", itemName);
+    	  "select distinct g.omimId, o.title from gadAll g, hgFixed.omimTitle o where g.geneSymbol='%s' and g.omimId <>'.' and g.omimId=o.omimId", 
+	  itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL) printf("<BR><B>OMIM: </B>");
@@ -6922,7 +7016,7 @@ if (url != NULL && url[0] != 0)
     	{
 	printf("<A HREF=\"%s%s\" target=_blank>",
 		"http://www.ncbi.nih.gov/entrez/dispomim.cgi?id=", row[0]);
-	printf("%s</B></A>\n", row[0]);
+	printf("%s</B></A> %s\n", row[0], row[1]);
 	row = sqlNextRow(sr);
         }
     sqlFreeResult(&sr);
@@ -15092,7 +15186,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	break;
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
-type = ct->tdb->type;
+type = trackDbSetting(ct->tdb, "type");
 cartWebStart(cart, "Custom Track: %s", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
@@ -17447,6 +17541,10 @@ else if (sameWord(track, "simpleRepeat"))
 else if (startsWith("cpgIsland", track))
     {
     doCpgIsland(tdb, item);
+    }
+else if (sameWord(track, "omimAv"))
+    {
+    doOmimAv(tdb, item);
     }
 else if (sameWord(track, "rgdGene"))
     {
