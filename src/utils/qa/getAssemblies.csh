@@ -18,6 +18,11 @@ set rr="false"
 set dumpDate=""
 set quiet=1
 
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n error: you must run this script on dev!\n"
+ exit 1
+endif
+
 if ($#argv < 1 || $#argv > 3) then
   echo
   echo "  gets the names of all databases that contain a given table."
@@ -87,7 +92,7 @@ else
   if ( $status == 0 ) then
     echo "  $dbs"
     echo
-    exit
+    exit 1
   endif
 endif
 
@@ -99,7 +104,7 @@ echo "getting all assemblies containing $tablename from $machine"
 rm -f $machine.$tablename.foundIn
 
 set chrom=""
-set split=""
+set isSplit=""
 set isChromInfo=0
 if ( $machine == hgwdev || $machine == hgwbeta ) then
   foreach db ( $dbs )
@@ -109,21 +114,21 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
     # check for chromInfo table
     set isChromInfo=`hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" \
        | wc -l`
+
+    # check if split table
     if ( $isChromInfo > 0 ) then
       set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
-
-      # check if split table
-      set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
+      set isSplit=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
         $db | wc -l`
-      # echo "  split = $split"
-      if ( $split == 1 ) then
-        # echo "$db \t$found\t split = $split" >> $machine.$tablename.foundIn
+      # echo "  split = $isSplit"
+      if ( $isSplit == 1 ) then
+        # echo "$db \t$found\t split = $isSplit" >> $machine.$tablename.foundIn
         echo "$db" >> $machine.$tablename.split.foundIn
         continue
       endif
     endif
-    # seek if not split table
-    set found=`hgsql -N $host -e 'SHOW TABLES LIKE "'${tablename}'"' $db | wc -l`
+    # if no chromInfo or if table not split
+    set found=`hgsql -N $host -e 'SHOW TABLES LIKE "'$tablename'"' $db | wc -l`
     if ( $found > 0 ) then
       echo "$db" >> $machine.$tablename.foundIn
     endif
@@ -133,7 +138,7 @@ else   # not dev or beta
   echo $tablename | grep "%" > /dev/null
   if (! $status ) then
     echo "sorry, wildcard not supported for RR machines at this time\n"
-    exit
+    exit 1
   endif
   foreach db ( $dbs )
   # foreach db ( rn3 hg17 )
@@ -141,20 +146,17 @@ else   # not dev or beta
       echo "checking "$db
     endif
     # check for chromInfo table on dev 
-    #  -- except for one db that is on RR but not dev.
-    set isChromInfo=0
-    if ( $db != proteins092903 ) then
-      hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" > /dev/null
-      if ( $status ) then
-        set isChromInfo=1
-      endif
+    set isChromInfo=1
+    hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" > /dev/null
+    if ( $status ) then
+      set isChromInfo=0
     endif
-    if ( $isChromInfo != 1 ) then
+    if ( $isChromInfo == 1 ) then
       set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db` 
       # check if split table (on dev)
-      set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
+      set isSplit=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
         $db | wc -l`
-      if ( $split == 1 ) then
+      if ( $isSplit == 1 ) then
         set found=`getRRtables.csh $machine $db | grep -w "${chrom}_$tablename" \
           | wc -l`
         if ( $found == 1 ) then
@@ -169,7 +171,7 @@ else   # not dev or beta
     if ( $found == 1 ) then
       echo "$db" >> $machine.$tablename.foundIn
     endif
-  set isChromInfo=""
+    set isChromInfo=""
   end # end foreach db
 endif # end if if/else dev, beta
 echo 
