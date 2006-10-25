@@ -51,7 +51,7 @@ if ( $status ) then
   exit 1
 endif
 
-set dbs=`getAssemblies.csh trackDb hgwbeta quiet \
+set dbs=`getAssemblies.csh trackDb hgwbeta \
   | egrep -v "getting|found" | egrep "."`
  
 # set file paths and URLs
