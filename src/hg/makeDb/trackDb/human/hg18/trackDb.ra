@@ -309,6 +309,17 @@ group map
 visibility hide
 type bed 3 +
 
+track rnaGene
+shortLabel RNA Genes
+longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
+
+
 track chainFr1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
