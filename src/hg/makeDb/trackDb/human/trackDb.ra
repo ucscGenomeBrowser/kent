@@ -1672,8 +1672,8 @@ shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
  
-searchTable gvPos
-searchType gvPos
-padding 1000
-searchPriority 51
+# searchTable gvPos
+# searchType gvPos
+# padding 1000
+# searchPriority 51
 
