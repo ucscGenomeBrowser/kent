@@ -518,3 +518,32 @@ EOF
     ssh hgwdev
     cd /cluster/data/triCas2/bed/tblastn.hg17
     hgLoadPsl triCas2 blastHg17KG.psl
+
+
+###########################################################################
+# FIX UP AGP, RELOAD GOLD (DONE 10/26/06 angie)
+    # The AGP contains a bunch of "ChLG1=X" lines but the sequence name 
+    # is "ChLG1X" -- fix it, reload, and leave the fixed .agp file in a 
+    # place where makeDownloads.pl will find it.
+    ssh hgwdev
+    cd /cluster/data/triCas2
+    sed -e 's/ChLG1=X/ChLG1X/' downloads/nocomments.agp > triCas2.agp
+    hgGoldGapGl -noGl triCas2 triCas2.agp
+
+
+###########################################################################
+# REPLACE trfMask.bed (DONE 10/26/06 angie)
+    # I see trfMask.bed mentioned earlier in the file, but it is no longer
+    # anywhere under /cluster/data/triCas2.  Regenerating:
+    cd /cluster/data/triCas2/bed/simpleRepeat
+    awk '{if ($5 <= 12) print;}' trf.bed > trfMask.bed
+
+
+###########################################################################
+# MAKE DOWNLOADABLE FILES (DONE 10/26/06 angie)
+    ssh kkstore04
+    makeDownloads.pl triCas2
+    # Edit README.txt files as directed by script output (add link to 
+    # Baylor's project page and RepeatMasker version info).
+
+
