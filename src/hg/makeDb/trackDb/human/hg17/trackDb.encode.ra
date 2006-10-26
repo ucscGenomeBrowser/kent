@@ -2625,7 +2625,7 @@ release alpha
     track encodeNhgriDnaseHsChipGm06990
     subTrack encodeNhgriDukeDnaseHs off
     shortLabel DNase GM069 Chip
-    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (GM06990, Chip method)
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (GM06990, Old Chip method)
     dataVersion ENCODE Oct 2005 Freeze
     color 80,50,80
     noInherit on
@@ -2638,7 +2638,7 @@ release alpha
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDukeDnaseHs off
     shortLabel DNase CD4 Chip
-    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Old Chip method)
     dataVersion ENCODE Oct 2005 Freeze
     color 120,10,120
     noInherit on
