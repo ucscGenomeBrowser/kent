@@ -1672,8 +1672,22 @@ shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
  
-# searchTable gvPos
-# searchType gvPos
-# padding 1000
-# searchPriority 51
+searchName gvNameSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+xrefTable hgFixed.gv
+xrefQuery select id, name from %s where name like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+
+searchName gvAliasSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+dontCheckXrefQueryFormat on
+xrefTable hgFixed.gvAttr
+xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
 
