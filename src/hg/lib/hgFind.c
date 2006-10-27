@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.191 2006/10/24 17:44:42 giardine Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.192 2006/10/27 15:04:40 giardine Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2551,8 +2551,6 @@ if (relativeFlag)
 }
 #endif
 
-static boolean findGv(struct hgFindSpec *hfs, char *spec, struct hgPositions *hgp);
-
 static boolean searchSpecial(struct hgFindSpec *hfs, char *term,
 			     struct hgPositions *hgp, boolean relativeFlag,
 			     int relStart, int relEnd, boolean *retFound)
@@ -2617,10 +2615,6 @@ else if (sameString(hfs->searchType, "mrnaKeyword"))
 else if (sameString(hfs->searchType, "sgdGene"))
     {
     found = findYeastGenes(term, hgp);
-    }
-else if (sameString(hfs->searchType, "gvPos"))
-    {
-    found = findGv(hfs, term, hgp);
     }
 else
     {
@@ -3051,77 +3045,4 @@ else
     else
 	printf("\n<!-- Couldn't get contents of %s -->\n", htmlPath);
    } 
-}
-
-static boolean findGv (struct hgFindSpec *hfs, char *spec, struct hgPositions *hgp) 
-/* find matches for names in gv* tables (Locus Variants) */
-{
-struct sqlConnection *conn = hAllocConn();
-char query[256];
-struct sqlResult *sr = NULL;
-char **row;
-struct hash *gvIds = newHash(8);
-struct hashCookie hc;
-struct hashEl *hel = NULL;
-struct hgPosTable *table = NULL;
-boolean gotGvLink = hTableExists("gvPos");
-boolean found = FALSE;
-char *paddingStr = hgFindSpecSetting(hfs, "padding");
-int padding = isEmpty(paddingStr) ? 0 : atoi(paddingStr);
-
-/* put IDs in hash, want list of unique IDs */
-if (gotGvLink)
-    {
-    safef(query, sizeof(query), "select id, name from hgFixed.gv where name like '%%%s%%'", spec);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        hashAdd(gvIds, row[0], cloneString(row[1]));
-        }
-    safef(query, sizeof(query), "select id, attrVal from hgFixed.gvAttr where attrType = 'commonName' and attrVal like '%%%s%%'", spec);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        hashAdd(gvIds, row[0], cloneString(row[1]));
-        }
-    }
-
-/* fill hgPosTable structure */
-hc = hashFirst(gvIds);
-while ((hel = hashNext(&hc)) != NULL)
-    {
-    safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, label from gvPos where name = '%s'", hel->name);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	struct hgPos *pos = NULL;
-	AllocVar(pos);
-	if (table == NULL)
-	    {
-	    AllocVar(table);
-	    table->name = cloneString(hfs->searchTable);
-	    table->description = cloneString("Locus Variants");
-	    slAddHead(&hgp->tableList, table);
-	    }
-	slAddHead(&table->posList, pos);
-	pos->name = cloneString(hel->val);
-	pos->browserName = cloneString(row[3]);
-        if (differentString(row[4], hel->val))
-	    pos->description = cloneString(row[4]);
-        else
-            pos->description = NULL;
-	pos->chrom = cloneString(row[0]);
-	pos->chromStart = atoi(row[1]);
-	pos->chromEnd = atoi(row[2]);
-        if (padding != 0) 
-            {
-            pos->chromStart -= padding;
-            pos->chromEnd += padding;
-            }
-	found = TRUE;
-	}
-    }
-freeHash(&gvIds);
-hFreeConn(&conn);
-return(found);
 }

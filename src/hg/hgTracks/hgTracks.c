@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1227 2006/10/25 20:38:13 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1228 2006/10/27 15:04:40 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10796,7 +10796,7 @@ char *gvName(struct track *tg, void *item)
 /* Get name to use for gv item. */
 {
 struct gvPos *el = item;
-return el->label;
+return el->name;
 }
 
 char *gvPosMapName (struct track *tg, void *item)
