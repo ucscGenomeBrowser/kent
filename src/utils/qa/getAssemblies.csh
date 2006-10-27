@@ -102,6 +102,7 @@ endif
 echo
 echo "getting all assemblies containing $tablename from $machine"
 rm -f $machine.$tablename.foundIn
+rm -f $machine.$tablename.split.foundIn
 
 set chrom=""
 set isSplit=""
@@ -121,7 +122,7 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
       set isSplit=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
         $db | wc -l`
       # echo "  split = $isSplit"
-      if ( $isSplit == 1 ) then
+      if ( $isSplit != 0 ) then
         # echo "$db \t$found\t split = $isSplit" >> $machine.$tablename.foundIn
         echo "$db" >> $machine.$tablename.split.foundIn
         continue
