@@ -50,7 +50,6 @@ return a->ix - b->ix;
 int main(int argc, char *argv[])
 {
 int i;
-struct textLine *lineList = NULL;
 struct textLine *tl;
 int textSize;
 struct hitBag *hitList = NULL;

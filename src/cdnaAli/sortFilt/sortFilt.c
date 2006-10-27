@@ -601,7 +601,6 @@ for (hit = hh->hitList; hit != NULL; hit = endHit)
              * interval. */
             for (h = hit; h != endHit; h = next)
                 {
-                int pieceCount = 0;
                 boolean gotBefore = (rStart - h->qStart >= minSize);
                 boolean gotAfter = (h->qEnd - rEnd >= minSize);
                 next = h->next;
