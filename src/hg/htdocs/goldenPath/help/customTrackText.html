@@ -47,9 +47,12 @@ for the Human Genome Project or UCSC Genome Browser, including
 <A HREF="#GTF">GTF</A>, <A HREF="#PSL">PSL</A>, <A HREF="#BED">BED</A>, 
 or <A HREF="wiggle.html">WIG</A>. 
 GFF and GTF files <I>must</I> be tab-delimited rather than
-space-delimited to display correctly. You may include more than one data
+space-delimited to display correctly. 
+Chromosome references must be of the form <em>chrN</em> (the parsing of 
+chromosome names <em><B>is</B></em> case-sensitive).
+You may include more than one data
 set in your annotation file; these need not be in the same
-format.
+format. 
 
 <P><B>Step 2. Define the Genome Browser display characteristics</B><BR>
 Add one or more optional <A HREF="#lines">browser lines</A> to the 
@@ -234,7 +237,7 @@ manage custom track sets for multiple genome assemblies.
 <P>
 To load a custom track into the Genome Browser:
 <P>
-<B>1. Open the Add Custom Tracks page</B><BR>
+<B>Step 1. Open the Add Custom Tracks page</B><BR>
 Click the &quot;add custom tracks&quot; button on the Genome Browser
 <A HREF="../../cgi-bin/hgGateway">Gateway page</A>. (Note: if one or more tracks
 have already
@@ -245,7 +248,7 @@ automatically direct you to the track management page. See
 <A HREF="#MANAGE_CT">Displaying and Managing Custom Tracks</A> for more 
 information.)</P>
 <P>
-<B>2. Load the custom track data</B><BR>
+<B>Step 2. Load the custom track data</B><BR>
 The Add Custom Tracks page contains separate
 sections for uploading custom track data and optional custom track
 descriptive documentation.
@@ -279,7 +282,7 @@ load the file via the Browse button.
 Place your track files in a web-accessible location on your server, then 
 load them into the Genome Browser by pasting their URLs into the data box. 
 </UL>
-<B>3. (Optional) Load the custom track description page</B><BR>
+<B>Step 3. (Optional) Load the custom track description page</B><BR>
 If desired, you can provide optional descriptive text (in plain or HTML format) to accompany your custom track. This text will be displayed when a user clicks 
 the track's description button on the Genome Browser annotation tracks page. 
 Descriptive text may be loaded by one of the following methods:
@@ -311,7 +314,7 @@ last custom track loaded, unless you upload the descriptive text using the
 track line &quot;htmlUrl&quot; attribute described above.
 </P>
 <P>
-<B>4. Upload the track</B><BR>
+<B>Step 4. Upload the track</B><BR>
 Click the <em>Submit</em> button to load your custom track data and 
 documentation into the Genome Browser. If the track uploads successfully, you
 will be directed to the custom track management page where you can display
