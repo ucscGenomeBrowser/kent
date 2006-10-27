@@ -11079,4 +11079,20 @@ hgLoadBed -noSort hg18 tfbsConsFactors -sqlTable=$HOME/kent/src/hg/lib/tfbsConsF
 hgsql -e "drop index chrom_2 on tfbsConsSites;" hg18
 hgsql -e "drop index chrom_3 on tfbsConsSites;" hg18
 
+# the tfbsConsFactors table had extra names, they were removed:
+for N in `cat extra.tfbsConsFactors.name`
+do
+        echo "delete from tfbsConsFactors where name=\"${N}\";" hg18
+        hgsql -e "delete from tfbsConsFactors where name=\"${N}\";" hg18
+done
+
+# the extra names were:
+# B$CRP_C F$DDE1_B F$STRE_01 P$GBP_Q6 V$ACAAT_B V$APOLYA_B V$ATATA_B
+# V$BARBIE_01 V$BEL1_B V$CAAT_01 V$CAAT_C V$CAP_01 V$DTYPEPA_B V$E2F_Q2
+# V$ETF_Q6 V$ETS_Q6 V$GC_01 V$GEN_INI2_B V$GEN_INI3_B V$GEN_INI_B V$HFH8_01
+# V$HOGNESS_B V$LBP1_Q6 V$LDSPOLYA_B V$LEF1_Q2 V$LPOLYA_B V$MEF3_B V$MINI19_B
+# V$MINI20_B V$MTATA_B V$MUSCLE_INI_B V$PADS_C V$PEA3_Q6 V$POLY_C V$SRY_01
+# V$STAT4_01 V$STAT5A_03 V$STAT5A_04 V$STAT6_02 V$TAACC_B V$TANTIGEN_B
+# V$TEF1_Q6 V$USF2_Q6
+
 ##############################################################################
