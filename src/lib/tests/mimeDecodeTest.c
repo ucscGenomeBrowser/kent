@@ -8,11 +8,12 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "hash.h"
+#include "cheapcgi.h"
 #include "mime.h"
 #include "base64.h"
 #include "quotedP.h"
 
-static char const rcsid[] = "$Id: mimeDecodeTest.c,v 1.2 2006/06/11 20:22:54 galt Exp $";
+static char const rcsid[] = "$Id: mimeDecodeTest.c,v 1.3 2006/10/27 18:52:14 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -75,6 +76,13 @@ if (optionExists("cid") && ctMain && sameWord(ctMain,"text/html"))
 	    *html = new;
 	    }
 	freez(&cid);
+	// support for content-location
+	if (stringIn(el->name,*html))
+	    {
+	    char *new = replaceChars(*html, el->name, el->val);
+	    freez(html);
+	    *html = new;
+	    }
 	}
     hashElFreeList(&list);
     }
@@ -87,7 +95,7 @@ void printMimeInfo(struct mimePart *mp, FILE *out, int level)
 
 char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL, 
  *ct = NULL, *ctMain = NULL, *ctCharset = NULL, *ctName = NULL,
- *ce = NULL, *ceMain = NULL, *cid = NULL, *cidMain = NULL;
+ *ce = NULL, *ceMain = NULL, *cid = NULL, *cidMain = NULL, *cl = NULL, *clMain = NULL;
 char *margin = needMem(level+1);
 int i = 0;
 for(i=0;i<level;++i)
@@ -98,6 +106,7 @@ cd = hashFindVal(mp->hdr,"content-disposition");
 ct = hashFindVal(mp->hdr,"content-type");
 ce = hashFindVal(mp->hdr,"content-transfer-encoding");
 cid = hashFindVal(mp->hdr,"content-id");
+cl = hashFindVal(mp->hdr,"content-location");
 
 if (cd)
     {
@@ -130,6 +139,12 @@ if (cid)
     else    
 	cidMain = cloneString(cid);
     }
+if (cl)
+    {  // this is a url and needs decoding
+    cgiDecode(cl, cl, strlen(cl));
+    dyStringPrintf(dy,"%scontent-location: %s\n",margin,cl);
+    clMain=getMimeHeaderMainVal(cl);
+    }
 
 if (cd)
     {
@@ -143,6 +158,7 @@ if (cd)
 	    mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
     dyStringPrintf(dy,"\n");
     }
+
 
 if (mp->data) /* typical case in ram */
     {
@@ -171,6 +187,8 @@ if (mp->data) /* typical case in ram */
 	{
 	if (cidMain)
     	    hashAdd(cidHash,cidMain,cloneString(outName));
+	if (clMain)
+    	    hashAdd(cidHash,clMain,cloneString(outName));
 	}
     else
 	{
