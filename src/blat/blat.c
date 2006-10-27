@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.109 2006/07/10 16:31:55 angie Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.110 2006/10/27 01:36:04 angie Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -204,7 +204,7 @@ void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *f)
 {
 int hitCount;
 struct lm *lm = lmInit(0);
-struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
+struct gfClump *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gvo);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
@@ -249,7 +249,7 @@ void trimSeq(struct dnaSeq *seq, struct dnaSeq *trimmed)
  * off polyA tail or polyT head. */
 {
 DNA *dna = seq->dna;
-int i, size = seq->size;
+int size = seq->size;
 *trimmed = *seq;
 if (trimT)
     maskHeadPolyT(dna, size);
@@ -317,7 +317,6 @@ void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *out
 {
 int i;
 char *fileName;
-bioSeq *seqList = NULL, *targetSeq;
 int count = 0; 
 unsigned long totalSize = 0;
 
@@ -328,7 +327,6 @@ for (i=0; i<fileCount; ++i)
     if (nibIsFile(fileName))
         {
 	struct dnaSeq *seq;
-	Bits *qMaskBits = NULL;
 
 	if (isProt)
 	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
@@ -443,7 +441,7 @@ int frame, i;
 struct dnaSeq *seq, trimmedSeq;
 struct genoFind *gfs[3];
 aaSeq *dbSeqLists[3];
-struct trans3 *t3List = NULL, *t3;
+struct trans3 *t3List = NULL;
 int isRc;
 struct lineFile *lf = NULL;
 struct hash *t3Hash = NULL;
@@ -584,7 +582,6 @@ if (bothSimpleNuc || bothSimpleProt)
     /* Save away masking info for output. */
     if (repeats != NULL)
 	{
-	int i;
 	maskHash = newHash(0);
 	for (seq = dbSeqList; seq != NULL; seq = seq->next)
 	    {
@@ -627,7 +624,6 @@ freeDnaSeqList(&dbSeqList);
 int main(int argc, char *argv[])
 /* Process command line into global variables and call blat. */
 {
-boolean cmpIsProt;	/* True if comparison takes place in protein space. */
 boolean dIsProtLike, qIsProtLike;
 
 #ifdef DEBUG
