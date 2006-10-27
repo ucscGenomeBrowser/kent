@@ -43,11 +43,11 @@
 
 #define NUMALIASES 250
 #define NUMCHROMS 10
-#define NUMSANGER 5
+#define NUMSANGER 40
 #define NUMPREFIXES 9
-#define MAXSANGER 50
+#define MAXSANGER 60
 
-static char const rcsid[] = "$Id: zfishBacClonesandSts.c,v 1.12 2006/03/30 06:14:42 hartera Exp $";
+static char const rcsid[] = "$Id: zfishBacClonesandSts.c,v 1.13 2006/10/27 20:29:48 hartera Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -137,7 +137,7 @@ return isNumeric;
 void readContigs(struct lineFile *cgf)
 {
 struct bac *b = NULL;
-char *words[4], *name = NULL, *extName = NULL;
+char *words[4], *name = NULL, *extName = NULL, *extName2 = NULL;
 char sep = '|';
 int i;
 
@@ -150,6 +150,7 @@ while (lineFileChopCharNext(cgf, sep, words, 5))
     {
     name = cloneString(words[1]);
     extName = cloneString(words[2]);
+    extName2 = cloneString(words[2]);
     if ((b = hashFindVal(bacHash, extName)) == NULL)
         {
         /* allocate memory for bac struct */
@@ -164,7 +165,7 @@ while (lineFileChopCharNext(cgf, sep, words, 5))
             }
         b->acc = NULL;
         hashAdd(bacHash, extName, b);
-        hashAdd(extNameHash, name, extName);
+        hashAdd(extNameHash, name, extName2);
         }
     else
         fprintf(stderr, "The BAC clone %s is assigned to more than one contig\n", extName);
