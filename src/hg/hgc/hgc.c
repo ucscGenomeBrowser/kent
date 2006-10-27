@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1152 2006/10/27 15:23:46 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1153 2006/10/27 18:14:03 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15186,7 +15186,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	break;
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
-type = trackDbSetting(ct->tdb, "type");
+type = ct->tdb->type;
 cartWebStart(cart, "Custom Track: %s", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
