@@ -11041,3 +11041,38 @@ cat > mafFrags.csh << 'EOF'
     md5sum up*.gz >> md5sum.txt
 ##############################################################################
 
+# MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
+# Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
+
+ssh hgwdev
+mkdir /cluster/data/hg18/bed/tfbsCons
+cd /cluster/data/hg18/bed/tfbsCons
+
+# Define all parameters in 'PARAMS.txt'
+# Define all chromosomes in 'CHROMS.txt'
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+set tarfile=/cluster/data/hg18/bed/tfbsCons/tfbsConsUtils.tar.gz
+tar zxf $tarfile
+
+nice ./getRefseqStats.pl &
+nice ./getBatchQueries.pl &
+
+ssh kk
+mkdir /cluster/bluearc/braney/tfloc
+# Copy ./tmp/ctfbs_batch_list.txt to this dir
+# Copy ./scripts/doit to this dir
+para create ctfbs_batch_list.txt
+para try
+para push
+
+# When the run is done (within a day or so), the results will be in individual dirs, one for each chromosome.
+
+ssh kksilo (or hgwdev, or whatever)
+nice ./getBedFile.pl &
+
+hgLoadBed -noSort hg18 tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed -tab
+hgLoadBed -noSort hg18 tfbsConsFactors -sqlTable=$HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed -tab
+
+# Feel free to delete or gzip anything in ./tmp (particularly the huge .maf and .bed files) after the final two bed files are sucessfully loaded
+
+##############################################################################
