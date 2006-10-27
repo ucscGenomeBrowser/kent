@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1151 2006/10/25 22:25:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1152 2006/10/27 15:23:46 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17037,7 +17037,7 @@ safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, escName);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     mut = gvPosLoad(row);
     bedPrintPos((struct bed *)mut, 3);
