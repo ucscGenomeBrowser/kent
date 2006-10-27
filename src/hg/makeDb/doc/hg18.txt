@@ -11075,4 +11075,8 @@ hgLoadBed -noSort hg18 tfbsConsFactors -sqlTable=$HOME/kent/src/hg/lib/tfbsConsF
 
 # Feel free to delete or gzip anything in ./tmp (particularly the huge .maf and .bed files) after the final two bed files are sucessfully loaded
 
+# fixed up the tfbsConsSites.bed file to remove extra indexes, then:
+hgsql -e "drop index chrom_2 on tfbsConsSites;" hg18
+hgsql -e "drop index chrom_3 on tfbsConsSites;" hg18
+
 ##############################################################################
