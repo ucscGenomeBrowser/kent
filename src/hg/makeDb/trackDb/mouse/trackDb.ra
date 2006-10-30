@@ -171,7 +171,7 @@ origAssembly mm5
     color 43,51,109
 
 track jaxRepTranscript
-shortLabel Jax Rep Transcript
+shortLabel MGI Rep Transcript
 longLabel Jackson Laboratory / Mouse Genome Informatics Representative Transcript
 group phenoAllele
 visibility hide
@@ -182,7 +182,7 @@ url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=
 urlLabel MGI Gene Detail: 
 
 track jaxPhenotype
-shortLabel Jax Phenotype
+shortLabel MGI Phenotype
 longLabel Jackson Laboratory / Mouse Genome Informatics Phenotype
 group phenoAllele
 visibility hide
@@ -193,7 +193,7 @@ url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
 urlLabel MGI Phenotypic Allele(s): 
 
 track jaxAllele
-shortLabel Jax Allele
+shortLabel MGI Allele
 longLabel Jackson Laboratory / Mouse Genome Informatics Allele
 group phenoAllele
 visibility hide
