@@ -39,7 +39,7 @@ bits32 sig;
 if (argc != 3)
     {
     errAbort("This program makes an index file for a .gl file\n"
-             "usage: indexgl file.gl indexFile\n", argv[0]);
+             "usage: %s file.gl indexFile\n", argv[0]);
     }
 inName = argv[1];
 outName = argv[2];
