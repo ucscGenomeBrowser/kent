@@ -179,17 +179,56 @@ echo
 
 # report databases found
 set ok=""
-if ( -e $machine.$tablename.foundIn ) then
-  echo "$tablename found in:\n"
-  cat $machine.$tablename.foundIn
-  echo
-  set ok=1
+
+#check for wildcard and print tables, too, if so
+echo $tablename | grep -v % > /dev/null
+set isWildcard=$status
+if ( $isWildcard == 0 ) then
+  if ( -e $machine.$tablename.foundIn ) then
+    set ok=1
+    echo "$tablename found in:\n"
+    cat $machine.$tablename.foundIn
+    echo
+  endif
+  if ( -e $machine.$tablename.split.foundIn ) then
+    set ok=1
+    echo "split_$tablename found in:\n"
+    cat $machine.$tablename.split.foundIn
+  endif
+else
+  # get tablenames for wildcards
+  # unsplit first
+  if ( -e $machine.$tablename.foundIn ) then
+    set ok=1
+    echo "$tablename found in:\n"
+    foreach db ( `cat $machine.$tablename.foundIn` )
+      set list=`hgsql -N $host -e 'SHOW TABLES LIKE "'$tablename'"' $db`
+      echo $db
+        foreach table ( $list )
+          echo $table | awk '{printf("   %-65s\n", $1)}'
+        end
+      echo
+    end
+    echo
+  endif
+
+  # split 
+  if ( -e $machine.$tablename.split.foundIn ) then
+    set ok=1
+    echo "split_$tablename found in:\n"
+    foreach db ( `cat $machine.$tablename.split.foundIn` )
+      set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
+      set list=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' $db`
+      echo $db
+        foreach table ( $list )
+          echo $table | awk '{printf("   %-65s\n", $1)}'
+        end
+      echo
+    end
+    echo
+  endif
 endif
-if ( -e $machine.$tablename.split.foundIn ) then
-  echo "split_$tablename found in:\n"
-  cat $machine.$tablename.split.foundIn
-  set ok=1
-endif
+
 if ( $ok != 1 ) then
   echo "neither $tablename nor split_$tablename are found on $machine"
 endif
