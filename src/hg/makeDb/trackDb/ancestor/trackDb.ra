@@ -1,3 +1,11 @@
+track xenoRefGene
+shortLabel All RefSeq
+longLabel All Species RefSeq Genes
+group genes
+priority 35.1
+visibility dense
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
 
 track mrnaMapHg17KG
 shortLabel Human mRNAs
@@ -28,6 +36,26 @@ visibility hide
 type psl xeno
 spectrum on
 blastRef hg17.blastKGRef02
+
+track xenoMrna
+shortLabel All mRNAs
+longLabel All Species mRNAs from GenBank
+group rna
+priority 63
+visibility hide
+spectrum on
+type psl xeno
+cdsDrawOptions enabled
+
+track xenoEst
+shortLabel All ESTs
+longLabel All Species ESTs from GenBank 
+group rna
+priority 65
+visibility hide
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track chainSelf
 shortLabel Self Chain 
