@@ -51,11 +51,11 @@ endif
 
 cd $BUILDDIR/cgi-bin-32
 rm all.joiner
-rm galaAvail.tab
 rm -fr hgNearData
 rm -fr hgGeneData
 rm -fr visiGeneData
 rm -fr hgcData
+rm -fr hgCgiData
 
 echo "the customTrack loader is to be released soon, then remove the next line:"
 rm -fr loader
