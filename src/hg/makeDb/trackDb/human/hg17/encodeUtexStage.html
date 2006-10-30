@@ -1,19 +1,22 @@
 <H2>Description</H2>
 <P>
-This track shows putative binding loci of c-myc as determined 
+This track shows putative binding loci of c-Myc and STAT1 as determined 
 by Sequence Tag Analysis of Genomic Enrichment (STAGE). 
-The c-myc (cellular myelocytomatosis) protein is a transcription 
+The c-Myc (cellular myelocytomatosis) protein is a transcription 
 factor associated with cell proliferation, diffentiation, and
-neoplastic disease.</P>
+neoplastic disease. STAT1 is a signal transducer and transcription
+factor that binds to IFN-gamma activating sequence.</P>
 <P>
 STAGE was performed in HeLa cells under normal growth conditions
-(10% Fetal Bovine Serum) using anti-myc antibody. 
+(10% Fetal Bovine Serum) with anti-Myc, or in IFN-gamma stimulated
+cells with anti-STAT1 antibody. 
+
 Cloned STAGE tags were sequenced and mapped to the human genome as described in 
 Kim <em>et al.</em> (2005), referenced below. </P>
 <P>
 The Tags subtrack shows all STAGE tags within the ENCODE region and thus 
 represents the raw data. 
-The Peaks subtrack shows high confidence c-myc binding  
+The Peaks subtrack shows high confidence c-Myc binding  
 regions derived from the STAGE tags.</P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -30,12 +33,13 @@ Each tag was assigned a probability of enrichment calculated
 from the frequency of occurrence of the tag in the 
 STAGE sequencing pool and the number of times the tag is present in 
 the genome, assuming a binomial distribution. 
-Tags having a genomic frequency of more than 10 were discarded. 
+<P>
+For the c-Myc data, tags having a genomic frequency of more than 
+10 were discarded.  For the STAT1 data, a 500 bp window was used to scan across each chromosome. Each window was now assigned a probability based on the tags mapped within that window, and each tag was assigned a score calculated simply as (nocc/nhit)*1000. If the score for a tag exceeded 1000, it was reset to 1000.
+<P>
 In general, a low STAGE pool frequency with a high genomic
 frequency generates a score close to 1, indicating
-a very low probability of enrichment.  For purposes of 
-visualization, these tags were assigned an artificially
-inflated score of 300; however, for analysis, a score of 1 should be used.</P>
+a very low probability of enrichment.  
 <P>
 Peaks were determined by using a 500 bp window to scan across each chromosome. 
 Each window was assigned a probability based on the tags mapped 
@@ -45,16 +49,26 @@ within that window. </P>
 <P>
 Scores generated from the real data were compared to
 simulations where similar numbers of tags were randomly sampled from the genome.
-Calculating probabilities as above, a probability cut-off of 0.8 gave a false 
-positive rate of less than 0.05.</P>
-
+Calculating probabilities as above, for c-Myc data, 
+a probability cut-off of 0.8 gave a false 
+positive rate of less than 0.05, and for STAT1 data, 
+a probability cut-off of 0.95 gave a false positive rate of less than 0.01.
+Additionally, 10 STAGE detected STAT1 binding sites were assayed 
+by qPCR analysis and confirmed 9 out 10 as true positives, so
+the false positive rate is estimated at 10%.
+</P>
 <H2>Credits</H2>
 <P>
 These data were contributed by Jonghwan Kim, Akshay Bhinge, and Vishy Iyer 
 from the <A HREF="http://www.iyerlab.org" TARGET=_blank>Iyer lab</A> at the 
-University of Texas at Austin. </P>
+University of Texas at Austin, and Ghia Euskirchen and Michael Snyder of the 
+<A HREF="http://www.yale.edu/snyder/" TARGET=_BLANK>Snyder lab</A> at
+Yale University </P>
 
 <H2>Reference</H2>
+<P>
+Bhinge A. et al. 
+Mapping the chromosomal targets of STAT1 by Sequence Tag Analysis of Genomic Enrichment (STAGE). Genome Research (accepted).
 <P>
 Kim, J., Bhinge, A., Morgan, X.C. and Iyer, V.R. 
 <A HREF="http://www.nature.com/nmeth/journal/v2/n1/full/nmeth726.html"
