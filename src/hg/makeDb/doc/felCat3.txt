@@ -1,0 +1,287 @@
+# for emacs: -*- mode: sh; -*-
+
+# Felis Catus (domestic cat) -- Broad/Agencourt release 3.0 (March 2006)
+
+# file template copied from dm3.txt
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE Sep. 14, 2006 Heather)
+    ssh kkstore05
+    mkdir /cluster/store12/felCat3
+    ln -s /cluster/store12/felCat3 /cluster/data/felCat3
+    mkdir /cluster/data/felCat3/downloads
+    cd /cluster/data/felCat3/downloads
+
+    wget ftp://ftp.broad.mit.edu/pub/assemblies/mammals/cat/felCat3*"
+
+# trimHeader in fasta and qual files
+
+    mkdir /cluster/data/felCat3/fixup
+    zcat ../downloads/Draft_v3.agp.chromosome.fasta.gz |
+         /cluster/home/heather/kent/src/hg/snp/snpLoad/trimHeader stdin 
+    mv trimHeader.out fasta.fix
+    gzip fasta.fix
+    zcat ../downloads/Draft_v3.agp.chromosome.qual.gz |
+         /cluster/home/heather/kent/src/hg/snp/snpLoad/trimHeader stdin
+    mv trimHeader.out qual.fix
+    gzip qual.fix
+
+
+#########################################################################
+# MAKE GENOME DB (DONE Oct. 5, 2006 heather)
+    ssh kkstore05
+    cd /cluster/data/dm3
+    cat > felCat3.config.ra <<EOF
+# Config parameters for makeGenomeDb.pl:
+db felCat3
+clade vertebrate
+scientificName Felis Catus
+assemblyDate March 2006
+assemblyLabel Broad Release 3
+orderKey 17
+dbDbSpeciesDir cat
+mitoAcc none
+agpFiles /cluster/data/felCat3/downloads/assembly.agp
+fastaFiles /cluster/data/felCat3/fixup/fasta.fix.gz
+qualFiles /cluster/data/felCat3/fixup/qual.fix.gz
+EOF
+
+    ~/kent/src/utils/makeGenomeDb.pl felCat3.config.ra \
+      >& makeGenomeDb.log & tail -f makeGenomeDb.log
+
+
+#########################################################################
+# REPEATMASKER (DONE Oct 2006 Heather)
+    ssh kkstore05
+    # Run -debug to create the dir structure and preview the scripts:
+    ~/kent/src/utils/doRepeatMasker.pl felCat3 -verbose 3 -debug
+    # Run it for real and tail the log:
+    ~/kent/src/utils/doRepeatMasker.pl felCat3 -verbose 3 \
+      >& /cluster/data/felCat3/bed/RepeatMasker.2006-07-31/do.log &
+    tail -f /cluster/data/felCat3/bed/RepeatMasker.2006-07-31/do.log
+    # RepeatMasker and lib version from do.log:
+#    March 20 2006 (open-3-1-5) version of RepeatMasker
+#CC   RELEASE 20060315;                                            *
+
+    # coverage 
+    featureBits felCat3 rmsk
+    618949830 bases of 1642698377 (37.679%) in intersection
+
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE Oct 2006 Heather)
+    ssh kkr1u00
+    mkdir /cluster/data/felCat3/bed/simpleRepeat
+    cd /cluster/data/felCat3/bed/simpleRepeat
+    twoBitToFa ../../felCat3.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+      -bedAt=simpleRepeat.bed -tempDir=/tmp \
+    >& trf.log & tail -f trf.log
+    # 8 hours to run
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed felCat3 simpleRepeat \
+      /cluster/data/felCat3/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    # Coverage 
+    featureBits felCat3 simpleRepeat
+    47819770 bases of 1642698377 (2.911%) in intersection
+
+
+#########################################################################
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE Oct 17, 2006 heather)
+    ssh kolossus
+    cd /cluster/data/felCat3
+    time twoBitMask felCat3.rmsk.2bit -add bed/simpleRepeat/trfMask.bed felCat3.2bit
+    # This warning is OK -- the extra fields are not block coordinates.
+#Warning: BED file bed/simpleRepeat/trfMask.bed has 10 fields which means it might contain block coordinates, but this program uses only the first three fields (the entire span -- no support for blocks).
+#4.857u 5.050s 0:32.63 30.3%     0+0k 0+0io 5pf+0w
+    # Link to it from /gbdb:
+    ssh hgwdev
+    ln -s /cluster/data/felCat3/felCat3.2bit /gbdb/felCat3/felCat3.2bit
+
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE Heather Oct. 20, 2006)
+    cd /cluster/data/felCat3
+    ln -s /cluster/data/felCat3/bed/RepeatMasker.2006-10-16/felCat3.fa.out /cluster/data/felCat3
+    ~/kent/src/utils/makeDownloads.pl felCat3 -verbose=2 >& jkStuff/downloads.log &
+    tail -f jkStuff/downloads.log
+    # Edit README.txt files when done:
+# *** Edit each README.txt to resolve any notes marked with "***":
+#     /cluster/data/felCat3/goldenPath/database/README.txt
+#     /cluster/data/felCat3/goldenPath/bigZips/README.txt
+#     /cluster/data/felCat3/goldenPath/chromosomes/README.txt
+
+#########################################################################
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 8/1/05 angie)
+    # pitakluster (blastz etc):
+    ssh pk
+    mkdir /san/sanvol1/scratch/felCat3
+    cp /cluster/data/felCat3/felCat3.2bit /san/sanvol1/scratch/felCat3/
+    cp /cluster/data/felCat3/chrom.sizes /san/sanvol1/scratch/felCat3/
+
+    mkdir /san/sanvol1/scratch/felCat3/rmsk
+    cp -p /cluster/data/felCat3/felCat3.fa.out /san/sanvol1/scratch/felCat3/rmsk
+
+    # small cluster (chaining etc):
+    ssh kkr1u00
+    mkdir -p /iscratch/i/felCat3
+    cp -p /cluster/data/felCat3/felCat3.2bit .
+    cp -p /cluster/data/felCat3/chrom.sizes .
+    iSync 
+
+    # big cluster
+    # (genbank):
+    ssh kkstore01
+    mkdir
+    /cluster/bluearc/scratch/hg/felCat3
+    rsync -av /cluster/data/canFam2/nib /cluster/bluearc/scratch/hg/canFam2/
+    # ask cluster-admin to rsync that to all big cluster nodes' /scratch/...
+    
+#########################################################################
+# BLASTZ/CHAIN/NET HG18 (RUNNING Oct 20 2006 heather)
+# working in /cluster/data/felCat3 because /cluster/data/hg18 is 96% full
+# make this a link in /cluster/data/hg18
+    mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-10-20
+    cd /cluster/data/felCat3/bed/blastz.hg18.2006-10-20
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+# Can we use 2bit here?
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cat felCat3 
+SEQ2_DIR=/san/sanvol1/scratch/felCat3/felCat3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/felCat3/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/felCat3/bed/blastz.hg18.2006-10-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk
+      -blastzOutRoot /san/sanvol1/scratch/felCat3/blastz.hg18 >& do.log &
+    tail -f do.log
+
+    featureBits felCat3 -chrom=chr2L chainDp3Link
+    ln -s blastz.felCat3.2006-10-20 /cluster/data/hg18/bed/blastz.felCat3
+
+    mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-10-22.swap
+    cd /cluster/data/felCat3/bed/blastz.hg18.2006-10-22.swap
+    doBlastzChainNet.pl /cluster/data/felCat3/bed/blastz.hg18.2006-10-20/DEF -swap >& do.log &
+    # netToAxt took over 4 hours
+
+# TO DO: Adjust directory names based on convention
+
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE Oct 24 2006 heather)
+    # Use -repMatch=600 (based on size -- for human we use 1024, and 
+    # cat size is 57% of human judging by twoBitInfo -noNs)
+    ssh kolossus
+    blat /cluster/data/felCat3/felCat3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/felCat3/11.ooc -repMatch=600
+# Wrote 18561 overused 11-mers to /cluster/bluearc/felCat3/11.ooc
+
+
+#########################################################################
+# GENBANK AUTO UPDATE (IN PROGRESS Oct 30 2006 heather)
+    # Don't need a liftAll.lft file
+    # Guidance from Mark:
+    # Genbank does its own partitioning.  The only think the lift file is used
+    # for is locating gaps.  It optimizes by splitting on largish gaps.      
+    # The current threshold is 3000000.  If you don't any gaps over   
+    # this threshold, you don't need a lift file.  With 200K scaffolds,
+    # you can probably just skip this. 
+
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add felCat3
+
+# felCat3 (cat) 217790 scaffolds
+felCat3.serverGenome = /cluster/data/felCat3/felCat3.2bit
+felCat3.clusterGenome = /iscratch/i/felCat3/felCat3.2bit
+felCat3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+felCat3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+felCat3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+felCat3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+felCat3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+felCat3.ooc = /cluster/bluearc/felCat3/11.ooc
+felCat3.lift = no
+felCat3.refseq.mrna.native.load = no
+felCat3.refseq.mrna.xeno.load = yes
+felCat3.genbank.mrna.xeno.load = yes
+felCat3.downloadDir = felCat3
+felCat3.perChromTables = no
+
+    # edit src/lib/gbGenome.c
+    # static char *felCatNames[] = {"Felis catus", NULL};
+    # static struct dbToSpecies dbToSpeciesMap[] = ... {"felCat", felCatNames, NULL}, ...
+
+    cvs commit -m "Added cat" etc/genbank.conf src/lib/gbGenome.c
+    make install-server
+
+    # Errors:
+
+# rsync -r bin /cluster/data/genbank
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.blat.9Xtxx7" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.ccdsImport.gLqxFG" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.ccdsMkTables.k29RPf" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.extFileUpdate.GLxI1O" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbAlignGet.rYBdfo" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbAlignInstall.pL1DtX" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbConf.u8B8Iw" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbGetSeqs.vc61Y5" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbLoadRna.SojYfF" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbProcess.zlBJye" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbProcessedCheck.Vs73RN" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbSanity.JvYgcn" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.mgcDbLoad.8IcayW" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.mgcImport.FiSDVv" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.mkCcdsGeneMap.KQPZj5" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.polyInfo.luiTJE" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.pslCDnaFilter.sEwMae" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.pslIntronsOnly.ztOkCN" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.repairExtFile.5UMw4m" failed: Permission denied (13)
+# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.selectWithPsl.MLMhyW" failed: Permission denied (13)
+# rsync error: some files could not be transferred (code 23) at main.c(702)
+# make[1]: *** [install-bin] Error 23
+# make[1]: Leaving directory `/cluster/home/heather/kent/src/hg/makeDb/genbank'
+# make: *** [install-server] Error 2
+
+    make install-etc PREFIX=/cluster/data/genbank
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial felCat3 &
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad felCat3 &
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/makeDb/genbank
+    cvsup
+    # add felCat3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs 
+    cvs commit
+    make etc-update
+
+
