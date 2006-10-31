@@ -535,12 +535,13 @@ identifier nscanName dependency
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
+    $gbd.vegaGene.name
+    $gbd.vegaPseudoGene.name
 
 identifier vegaGeneName typeOf=vegaName dependency
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
     $gbd.vegaPep.name full unique
-    $gbd.vegaInfo.transcriptId minCheck=0.78
 
 identifier vegaZfishName
 "Link together various VEGA zebrafish curated gene annotation"
