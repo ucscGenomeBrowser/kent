@@ -35,6 +35,7 @@ install:
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
+	cp -p --remove-destination getConservation.csh     ${SCRIPTS}
 	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
