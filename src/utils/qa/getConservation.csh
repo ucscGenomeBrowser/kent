@@ -14,8 +14,6 @@ set machine="hgwbeta"
 set host="-h hgwbeta"
 set db=""
 set dbs=""
-set rr="false"
-set dumpDate=""
 set all=0
 
 if ( "$HOST" != "hgwdev" ) then
@@ -23,45 +21,53 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-if ($#argv < 1 || $#argv > 3 ) then
+if ( "$HOST" != "hgwbeta" && "$HOST" != "hgwdev"  ) then
+ echo "\n error: only hgwbeta and hgwdev are available\n"
+ exit 1
+endif
+
+if ($#argv < 1 || $#argv > 2 ) then
   echo
   echo "  get the assemblies that use a particular db in the Conservation track."
   echo
-  echo "    usage:  db [machine] [all] - defaults to beta"
-  echo '             where "all" prints species list for all tracks in all dbs'
-  echo "             does not work on RR machines"
+  echo "    usage:  db [machine] OR all [machine] - defaults to beta"
+  echo '             where "all" prints species list for all tracks in all dbs.'
+  echo "             does not work on RR machines."
   echo
   exit
-else
-  set db=$argv[1]
-endif
-
-if ( "$HOST" != "hgwbeta" ) then
- echo "\n error: only hgwbeta and hgwdev are available\n"
- exit 1
 endif
 
 set debug=0
 
 # assign command line arguments
 
-if ($#argv > 1 ) then
-  if ($argv[2] == "all" ) then
-    set all=1
-  else
-    set machine="$argv[2]"
-    set host="-h $argv[2]"
-    if ($argv[2] == "hgwdev") then
-      set host=""
-    endif
+if ($argv[1] == "all" ) then
+  set all=1
+else
+  set db=$argv[1]
+endif
+
+if ($#argv == 2 ) then
+  set machine="$argv[2]"
+  set host="-h $argv[2]"
+  if ($argv[2] == "hgwdev") then
+    set host=""
   endif
 endif
 
-if ($#argv == 3 ) then
-  set all=1
+if ($machine != "hgwdev" && $machine != "hgwbeta" ) then
+  echo "\n  Sorry, only works for hgwdev and hgwbeta \n"
+  exit 1
 endif
 
 # check machine validity
+checkMachineName.csh $machine
+if ( $status ) then
+  echo "${0}:"
+  $0
+  exit 1
+endif
+
 if ($debug == 1) then
   echo "tablename = $tablename"
   echo "machine   = $machine"
@@ -70,14 +76,6 @@ if ($debug == 1) then
   echo "rr        = $rr"
   echo "dumpDate  = $dumpDate"
   echo
-endif
-
-checkMachineName.csh $machine
-
-if ( $status ) then
-  echo "${0}:"
-  $0
-  exit 1
 endif
 
 # -------------------------------------------------
