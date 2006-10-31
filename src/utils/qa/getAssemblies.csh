@@ -4,8 +4,6 @@
 #
 #  04-19-04
 #  gets the names of all databases that contain a given table
-#  logs into proteins to get database list
-#    (proteins should always be there)
 #
 #######################
 
@@ -81,7 +79,6 @@ endif
 # get all databases
 
 if ($machine == hgwdev || $machine == hgwbeta) then
-  # hgsql -N $host -e "SHOW DATABASES"  proteins > $machine.databases
   set dbs=`hgsql -N $host -e "SHOW DATABASES"`
 else
   set host=""
