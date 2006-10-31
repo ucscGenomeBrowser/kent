@@ -198,7 +198,7 @@ LOOP_START:
         linePt = lineBuf;
         while ((c = *linePt++) != 0)
             {
-            if ((base = ntChars[c]) != 0)
+            if ((base = ntChars[(int)c]) != 0)
                 {
                 if (dnaCount >= dnaAllocated)
                     {
