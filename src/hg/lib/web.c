@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.101 2006/10/11 22:25:35 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.102 2006/10/31 03:10:51 heather Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -813,23 +813,6 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
-static char *getGenomeForClade(char *clade, struct cart *cart)
-/* Given a clade, return which genome/organism to default to.  
- * If cart specifies a db or "org"/genome, use that genome, otherwise 
- * just use the default. */
-{
-char *db = cartUsualString(cart, dbCgiName, hGetDb());
-char *genome = cartUsualString(cart, orgCgiName, hGenome(db));
-
-if (!hDbExists(db))
-    genome = hGenome(hDefaultDb());
-
-/* If cart-specified genome differs from passed-in genome, then use default: */
-if (differentWord(clade, hClade(genome)))
-    genome = hDefaultGenomeForClade(clade);
-
-return genome;
-}
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade)
@@ -866,7 +849,7 @@ else if (*retGenome && !sameWord(*retGenome, "0"))
     }
 else if (*retClade && gotClade)
     {
-    *retGenome = getGenomeForClade(*retClade, cart);
+    *retGenome = hDefaultGenomeForClade(*retClade);
     *retDb = getDbForGenome(*retGenome, cart);
     }
 /* If no cgi params passed in then we need to inspect the session */
@@ -886,7 +869,7 @@ else
 	}
     else if (*retClade && gotClade)
 	{
-	*retGenome = getGenomeForClade(*retClade, cart);
+        *retGenome = hDefaultGenomeForClade(*retClade);
 	*retDb = getDbForGenome(*retGenome, cart);
 	}
     /* If no organism in the session then get the default db and organism. */
