@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.100 2006/10/20 04:58:40 kate Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.101 2006/10/31 23:24:02 heather Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -526,7 +526,7 @@ hPrintf("<TABLE BORDER=0>\n");
     if (gotClade)
 	{
 	hPrintf("<TR><TD><B>clade:</B>\n");
-	printCladeListHtml(hOrganism(database), onChangeClade());
+	printCladeListHtml(hGenome(database), onChangeClade());
 	nbSpaces(3);
 	hPrintf("<B>genome:</B>\n");
 	printGenomeListForCladeHtml(database, onChangeOrg());
