@@ -118,33 +118,24 @@ EOF
 #     /cluster/data/felCat3/goldenPath/chromosomes/README.txt
 
 #########################################################################
-# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 8/1/05 angie)
-    # pitakluster (blastz etc):
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE Oct 20, 2006 heather)
+    # pitakluster:
     ssh pk
     mkdir /san/sanvol1/scratch/felCat3
     cp /cluster/data/felCat3/felCat3.2bit /san/sanvol1/scratch/felCat3/
     cp /cluster/data/felCat3/chrom.sizes /san/sanvol1/scratch/felCat3/
-
     mkdir /san/sanvol1/scratch/felCat3/rmsk
     cp -p /cluster/data/felCat3/felCat3.fa.out /san/sanvol1/scratch/felCat3/rmsk
 
-    # small cluster (chaining etc):
+    # small cluster:
     ssh kkr1u00
     mkdir -p /iscratch/i/felCat3
     cp -p /cluster/data/felCat3/felCat3.2bit .
     cp -p /cluster/data/felCat3/chrom.sizes .
     iSync 
 
-    # big cluster
-    # (genbank):
-    ssh kkstore01
-    mkdir
-    /cluster/bluearc/scratch/hg/felCat3
-    rsync -av /cluster/data/canFam2/nib /cluster/bluearc/scratch/hg/canFam2/
-    # ask cluster-admin to rsync that to all big cluster nodes' /scratch/...
-    
 #########################################################################
-# BLASTZ/CHAIN/NET HG18 (RUNNING Oct 20 2006 heather)
+# BLASTZ/CHAIN/NET HG18 (Done Oct 20 2006 heather)
 # working in /cluster/data/felCat3 because /cluster/data/hg18 is 96% full
 # make this a link in /cluster/data/hg18
     mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-10-20
