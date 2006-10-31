@@ -302,6 +302,8 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track ccdsGene
 shortLabel CCDS
@@ -312,6 +314,8 @@ visibility hide
 color 12,120,12
 type genePred
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track refGene
 shortLabel RefSeq Genes
@@ -321,6 +325,7 @@ priority 35
 visibility dense
 color 12,12,120
 type genePred refPep refMrna
+baseColorUseCds given
 
 track augustusAbinitio
 shortLabel Augustus Ab Initio
@@ -401,6 +406,8 @@ type genePred
 priority 36.05
 visibility hide
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
     track transMapRefGene
     subTrack transMap
@@ -411,6 +418,8 @@ cdsDrawDefault genomic\ codons
     color 34,139,34
     noInherit on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
     itemAttrTbl transMapRefAttr
 
     track transMapRefAliGene
@@ -422,6 +431,8 @@ cdsDrawDefault genomic\ codons
     color 120,12,120
     noInherit on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
     itemAttrTbl transMapRefAttr
 
     track transMapMRnaGene
@@ -433,6 +444,8 @@ cdsDrawDefault genomic\ codons
     color 34,139,34
     noInherit on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
     itemAttrTbl transMapMRnaAttr
 
     track transMapMRnaAliGene
@@ -444,6 +457,8 @@ cdsDrawDefault genomic\ codons
     color 134,139,34
     noInherit on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
     itemAttrTbl transMapMRnaAttr
 
 track transMapAnc
@@ -465,6 +480,8 @@ type genePred
     type genePred
     itemAttrTbl transMapAncRefAttr
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track transMapAncRefAliGene
     subTrack transMapAnc off
@@ -477,6 +494,8 @@ type genePred
     type genePred
     itemAttrTbl transMapAncRefAttr
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track transMapAncMRnaGene
     subTrack transMapAnc
@@ -488,6 +507,8 @@ type genePred
     type genePred
     itemAttrTbl transMapAncMRnaAttr
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track transMapAncMRnaAliGene
     subTrack transMapAnc off
@@ -500,6 +521,8 @@ type genePred
     type genePred
     itemAttrTbl transMapAncMRnaAttr
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
 track genieAlt
 shortLabel AltGenie
@@ -687,6 +710,8 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 showDiffBasesAllScales .
 
 track tightMrna
@@ -708,6 +733,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 maxItems 300
 
 track est
@@ -720,6 +746,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 maxItems 300
 
 track interPro
@@ -759,6 +786,8 @@ visibility hide
 spectrum on
 type psl xeno
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
@@ -778,6 +807,7 @@ visibility hide
 spectrum on
 type psl xeno
 pslSequenceBases no
+baseColorUseSequence genbank
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed

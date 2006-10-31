@@ -205,6 +205,8 @@ visibility hide
 color 34,139,34
 type genePred nscanPep
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 searchTable ctgPos2
 searchMethod exact

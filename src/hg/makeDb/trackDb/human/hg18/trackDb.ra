@@ -136,6 +136,8 @@ visibility dense
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 showDiffBasesAllScales .
 
 track haplotypePos
@@ -158,6 +160,8 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track augustusAbinitio
 shortLabel Augustus Ab Initio
@@ -177,6 +181,8 @@ visibility hide
 color 34,139,34
 type genePred nscanPep
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track phastConsElements
 shortLabel Most Conserved

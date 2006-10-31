@@ -18,6 +18,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 
 track xenLaeRna
 shortLabel X. laevis mRNAs

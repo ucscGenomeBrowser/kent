@@ -9,6 +9,8 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 itemClassTbl gencodeGeneClass
 geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
 gClass_Known 33,91,51

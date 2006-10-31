@@ -9,6 +9,8 @@ type genePred . mgcFullMrna
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcIncompleteMrna
 shortLabel MGC Incomplete
@@ -21,6 +23,8 @@ type psl .
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault off
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcPickedEst
 shortLabel MGC In-progress
@@ -31,6 +35,8 @@ visibility pack
 color 12,100,120
 type psl est
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcFailedEst
 shortLabel MGC Failed
@@ -42,6 +48,8 @@ color 120,12,0
 type psl est
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcUnpickedEst
 shortLabel MGC ESTs
@@ -53,6 +61,8 @@ color 120,120,220
 type psl est
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcValidated
 shortLabel MGC Validated
@@ -65,6 +75,8 @@ type genePred
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 url http://genome.cs.wustl.edu/cgi-bin/mgc.cgi?action=cloneRpt&acc=$$
 
 track mgcABListGene
@@ -77,6 +89,8 @@ color 200,0,50
 type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcABListGene20050808
 compositeTrack on
@@ -89,6 +103,8 @@ color 200,0,50
 type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
     track mgcAListGene20050808
     shortLabel A-List
@@ -114,6 +130,8 @@ type psl .
 color 10,100,150
 exonArrows on
 pslSequenceBases all
+baseColorUseSequence seq
+baseColorDefault itemBases
 
 track mgcWUPcrHit
 shortLabel C-List Hit
@@ -125,6 +143,8 @@ type bed 12
 color 10,100,150
 exonArrows on
 #pslSequenceBases all
+#baseColorUseSequence seq
+#baseColorDefault itemBases
 
 track mgcWUPcrPending
 shortLabel C-List Pending
@@ -137,6 +157,8 @@ color 10,100,150
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcWUPcrFail
 shortLabel C-List Fail
@@ -148,6 +170,8 @@ type bed 12
 color 10,150,100
 exonArrows on
 #pslSequenceBases all
+#baseColorUseSequence seq
+#baseColorDefault itemBases
 
 track mgcNovelPcr
 shortLabel C-List Novel PCR
@@ -159,6 +183,7 @@ type bed 12
 color 120,12,12
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseCds given
 
 track mgcNovelPcrStrict
 shortLabel C-List Novel PCR Strict
@@ -170,6 +195,7 @@ type bed 12
 color 12,120,12
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseCds given
 
 track baylorRtPcrGeneA
 shortLabel Baylor GeneA
@@ -180,6 +206,7 @@ visibility hide
 color 10,100,15
 type psl .
 cdsDrawOptions enabled
+baseColorUseSequence seq
 
 track baylorRtPcr
 shortLabel Baylor RT-PCR
@@ -191,6 +218,7 @@ color 10,100,150
 type psl .
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseSequence seq
 
 track exoniphy
 shortLabel Exoniphy
@@ -229,6 +257,7 @@ type psl
 color 12,100,120
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseSequence seq
 
 track mgcExoniphyWashuHits
 shortLabel Exoniphy WashU Hits
@@ -240,6 +269,7 @@ type psl
 color 100,12,120
 exonArrows on
 cdsDrawOptions enabled
+baseColorUseSequence seq
 
 track mgcTwinscan
 shortLabel TWINSCAN
@@ -252,6 +282,8 @@ color 120,12,12
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcTwinscanEst
 shortLabel TWINSCAN EST
@@ -264,6 +296,8 @@ color 12,120,12
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcNScan
 shortLabel N-SCAN
@@ -276,6 +310,8 @@ color 12,12,120
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcNScanEst
 shortLabel N-SCAN EST
@@ -288,6 +324,8 @@ color 12,120,12
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcMm6TransMap
 shortLabel Mouse TransMap
@@ -300,6 +338,8 @@ color 12,12,120
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcMm7TransMap
 compositeTrack on
@@ -312,6 +352,8 @@ visibility pack
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
     track mgcMm7TransMapAll
     subTrack mgcMm7TransMap
@@ -326,6 +368,8 @@ cdsDrawDefault genomic\ codons
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track mgcMm7TransMapCList
     subTrack mgcMm7TransMap
@@ -340,6 +384,8 @@ cdsDrawDefault genomic\ codons
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
 track mgcGreenPcrHit
 shortLabel Green Success 
@@ -352,6 +398,8 @@ color 10,100,150
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcGreenPcrInProgress
 shortLabel Green Pending
@@ -364,6 +412,8 @@ color 10,100,150
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcGreenPcrFail
 shortLabel Green Fail
@@ -376,6 +426,8 @@ color 10,100,150
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcOrthoMmRefGene
 shortLabel ortho mm refGene
@@ -388,6 +440,8 @@ type genePred
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track xmGene
 shortLabel XM Genes
@@ -399,6 +453,8 @@ color 12,12,120
 type genePred . xmMrnaAli
 exonArrows on
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track seg 
 shortLabel Novel SEGs 
@@ -490,6 +546,8 @@ noInherit on
     type genePred
     exonArrows on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track gscMgcClones1
     noInherit on
@@ -504,6 +562,8 @@ noInherit on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
     pslSequenceBases all
+    baseColorUseSequence seq
+    baseColorDefault itemBases
     showDiffBasesAllScales on
 
 track gscMgc2
@@ -527,6 +587,8 @@ noInherit on
     type genePred
     exonArrows on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track gscMgcClones2
 #    noInherit on
@@ -541,6 +603,8 @@ noInherit on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
     pslSequenceBases all
+    baseColorUseSequence seq
+    baseColorDefault itemBases
     showDiffBasesAllScales on
 
 track gscMgc3
@@ -564,6 +628,8 @@ noInherit on
     type genePred
     exonArrows on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track gscMgcClones3
 #    noInherit on
@@ -578,6 +644,8 @@ noInherit on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
     pslSequenceBases all
+    baseColorUseSequence seq
+    baseColorDefault itemBases
     showDiffBasesAllScales on
 
 track gscMgc4
@@ -601,6 +669,8 @@ noInherit on
     type genePred
     exonArrows on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track gscMgcClones4
     noInherit on
@@ -615,6 +685,8 @@ noInherit on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
     pslSequenceBases all
+    baseColorUseSequence seq
+    baseColorDefault itemBases
     showDiffBasesAllScales on
 
 track gscMgc6
@@ -638,6 +710,8 @@ noInherit on
     type genePred
     exonArrows on
     cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
     track gscMgcClones6
     noInherit on
@@ -652,6 +726,8 @@ noInherit on
     cdsDrawOptions enabled
     cdsDrawDefault mRNA\ bases
     pslSequenceBases all
+    baseColorUseSequence seq
+    baseColorDefault itemBases
     showDiffBasesAllScales on
 
 searchName mgcWUPcrConfirmed

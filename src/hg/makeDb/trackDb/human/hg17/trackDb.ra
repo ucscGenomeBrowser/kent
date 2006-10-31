@@ -31,6 +31,8 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track kgProtMap
 shortLabel kgProtMap
@@ -41,6 +43,7 @@ visibility hide
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds given
 release alpha
 
 track ensGene
@@ -105,6 +108,8 @@ priority 45.1
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
     track nscanEstGene
     subTrack nscan
