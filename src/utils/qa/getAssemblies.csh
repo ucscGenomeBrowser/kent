@@ -54,7 +54,6 @@ else
 endif
 
 
-# check machine validity
 if ($debug == 1) then
   echo "tablename = $tablename"
   echo "machine   = $machine"
@@ -67,6 +66,7 @@ if ($debug == 1) then
   echo
 endif
 
+# check machine validity
 checkMachineName.csh $machine
 
 if ( $status ) then
@@ -98,12 +98,12 @@ endif
 
 echo
 echo "getting all assemblies containing $tablename from $machine"
-rm -f $machine.$tablename.foundIn
-rm -f $machine.$tablename.split.foundIn
 
 set chrom=""
 set isSplit=""
 set isChromInfo=0
+set splitlist=""
+set notSplitlist=""
 if ( $machine == hgwdev || $machine == hgwbeta ) then
   foreach db ( $dbs )
     if ( $quiet == 0 ) then
@@ -120,15 +120,14 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
         $db | wc -l`
       # echo "  split = $isSplit"
       if ( $isSplit != 0 ) then
-        # echo "$db \t$found\t split = $isSplit" >> $machine.$tablename.foundIn
-        echo "$db" >> $machine.$tablename.split.foundIn
+        set splitlist=`echo "$splitlist $db"`
         continue
       endif
     endif
     # if no chromInfo or if table not split
     set found=`hgsql -N $host -e 'SHOW TABLES LIKE "'$tablename'"' $db | wc -l`
     if ( $found > 0 ) then
-      echo "$db" >> $machine.$tablename.foundIn
+      set notSplitlist=`echo "$notSplitlist $db"`
     endif
   end
 else   # not dev or beta
@@ -158,7 +157,7 @@ else   # not dev or beta
         set found=`getRRtables.csh $machine $db | grep -w "${chrom}_$tablename" \
           | wc -l`
         if ( $found == 1 ) then
-          echo "$db" >> $machine.$tablename.split.foundIn
+          set splitlist=`echo "$splitlist $db"`
           continue
         endif
       endif
@@ -167,7 +166,7 @@ else   # not dev or beta
     set found=`getRRtables.csh $machine $db | grep -w "$tablename" \
       | wc -l`
     if ( $found == 1 ) then
-      echo "$db" >> $machine.$tablename.foundIn
+      set notSplitlist=`echo "$notSplitlist $db"`
     endif
     set isChromInfo=""
   end # end foreach db
@@ -181,24 +180,24 @@ set ok=""
 echo $tablename | grep -v % > /dev/null
 set isWildcard=$status
 if ( $isWildcard == 0 ) then
-  if ( -e $machine.$tablename.foundIn ) then
+  if ( `echo $notSplitlist | awk '{print $1}'` != "" ) then
     set ok=1
     echo "$tablename found in:\n"
-    cat $machine.$tablename.foundIn
+    echo $notSplitlist | sed -e "s/ /\n/g"
     echo
   endif
-  if ( -e $machine.$tablename.split.foundIn ) then
+  if ( `echo $splitlist | awk '{print $1}'` != "" ) then
     set ok=1
     echo "split_$tablename found in:\n"
-    cat $machine.$tablename.split.foundIn
+    echo $splitlist | sed -e "s/ /\n/g"
   endif
 else
   # get tablenames for wildcards
   # unsplit first
-  if ( -e $machine.$tablename.foundIn ) then
+  if ( `echo $notSplitlist | awk '{print $1}'` != "" ) then
     set ok=1
     echo "$tablename found in:\n"
-    foreach db ( `cat $machine.$tablename.foundIn` )
+    foreach db ( $notSplitlist )
       set list=`hgsql -N $host -e 'SHOW TABLES LIKE "'$tablename'"' $db`
       echo $db
         foreach table ( $list )
@@ -210,10 +209,10 @@ else
   endif
 
   # split 
-  if ( -e $machine.$tablename.split.foundIn ) then
+  if ( `echo $splitlist | awk '{print $1}'` != "" ) then
     set ok=1
     echo "split_$tablename found in:\n"
-    foreach db ( `cat $machine.$tablename.split.foundIn` )
+    foreach db ( $splitlist )
       set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
       set list=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' $db`
       echo $db
@@ -235,8 +234,3 @@ if ( $rr == "true" ) then
   echo 
 endif
 echo
-
-
-# cleanup
-rm -f $machine.$tablename.foundIn
-rm -f $machine.$tablename.split.foundIn
