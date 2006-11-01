@@ -21,11 +21,6 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-if ( "$HOST" != "hgwbeta" && "$HOST" != "hgwdev"  ) then
- echo "\n error: only hgwbeta and hgwdev are available\n"
- exit 1
-endif
-
 if ($#argv < 1 || $#argv > 2 ) then
   echo
   echo "  get the assemblies that use a particular db in the Conservation track."
@@ -79,14 +74,16 @@ if ($debug == 1) then
 endif
 
 # -------------------------------------------------
-# get all assemblies containing multiz%
+# get all assemblies containing multiz% or mz%
 
 set dbs=`getAssemblies.csh multiz% $machine | grep -v "multiz" | egrep "."`
+set dbs2=`getAssemblies.csh mz% $machine | grep -v "mz" | egrep "."`
+set dbs=`echo $dbs $dbs2`
 
 echo
 foreach assembly ( $dbs )
   set multilist=`hgsql $host -N -e "SELECT tableName FROM trackDb \
-     WHERE tableName LIKE 'multiz%'" $assembly` 
+     WHERE tableName LIKE 'multiz%' OR tableName LIKE 'mz%'" $assembly` 
   if ( $all == 1) then
     foreach table ( $multilist )
       echo $assembly $table
@@ -104,13 +101,9 @@ foreach assembly ( $dbs )
          | egrep "^sGroup|speciesOrder" | sed -e "s/ /\n/g" \
          | egrep -v "^sGroup|speciesOrder" | grep $db > /dev/null
       if (! $status ) then
-        # echo "$assembly $table" | egrep "." | awk '{printf("%-7s %-15s", $1, $2)}'
         echo "$assembly $table" | awk '{printf("%-7s  %-25s\n", $1, $2)}'
       endif
     end
   endif
 end
 echo
-exit
-
-
