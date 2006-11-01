@@ -1670,9 +1670,9 @@ identifier dbSnpId external=dbSNP fuzzy
 identifier dbSnpHgId typeOf=dbSnpId 
 "Human dbSNP ID"
     hgFixed.dbSnpRsHg.rsId
-    $hg.snpMap.name
-    hgFixed.affy10KDetails.rsId
-    hgFixed.affy120KDetails.rsId
+    $hg.snpMap.name minCheck=0.90
+    hgFixed.affy10KDetails.rsId minCheck=0.94
+    hgFixed.affy120KDetails.rsId minCheck=0.97
 
 identifier dbSnpMmId typeOf=dbSnpId 
 "Mouse dbSNP ID"
