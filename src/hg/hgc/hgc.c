@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1153 2006/10/27 18:14:03 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1154 2006/11/01 19:17:10 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4213,6 +4213,8 @@ char *version = NULL;
 struct trackDb *tdbRgdEst;
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char srcGeneUrl[1024];
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4365,6 +4367,11 @@ else
     {
     warn("Couldn't find %s in gbCdnaInfo table", acc);
     }
+safef(srcGeneUrl, sizeof(srcGeneUrl),
+  "../cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
+   hGetDb(), chrom,  start, end);
+printf("<B>Location:</b> <A HREF=\"%s\" target=_blank>%s:%d-%d</A><BR>", 
+        srcGeneUrl, chrom, start, end);
 
 sqlFreeResult(&sr);
 freeDyString(&dy);
