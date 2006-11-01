@@ -125,7 +125,7 @@ if (start >= end)
 printf("Reading %s\n", faFileName);
 seq = faReadDna(faFileName);
 if (end > seq->size)
-    errAbort("%s only has %d bases\n", seq->size);
+    errAbort("%s only has %d bases\n", seq->name, seq->size);
 printf("Aligning...\n");
 caList = crudeAliFind(seq->dna + start, end-start, chrom, chromCount, 8, 45);
 if (caList)
