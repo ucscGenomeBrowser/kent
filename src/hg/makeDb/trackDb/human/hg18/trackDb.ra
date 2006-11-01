@@ -897,15 +897,6 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
-track oreganno
-shortLabel ORegAnno
-longLabel Regulatory elements from ORegAnno
-group regulation
-priority 97
-visibility hide
-color 102,102,0
-type bed 4 +
-
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
@@ -957,13 +948,6 @@ searchMethod exact
 searchType bed
 searchPriority 10
 termRegex har[0-9]+
-
-searchName oreg
-searchTable oreganno
-searchMethod exact
-query select chrom, chromStart, chromEnd, id from %s where id = '%s'
-padding 500
-searchPriority 55
 
 track escLongSage
 shortLabel ESC LongSAGE

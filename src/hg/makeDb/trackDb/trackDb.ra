@@ -1064,6 +1064,15 @@ visibility hide
 color 30,130,210
 type bed 4 .
 
+track oreganno
+shortLabel ORegAnno
+longLabel Regulatory elements from ORegAnno
+group regulation
+priority 98
+visibility hide
+color 102,102,0
+type bed 4 +
+
 track rosetta
 shortLabel Rosetta
 longLabel Rosetta Experimental Confirmation of Chr22 Exons
@@ -3037,6 +3046,13 @@ searchMethod exact
 searchType bed
 termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
+
+searchName oreg
+searchTable oreganno
+searchMethod exact
+query select chrom, chromStart, chromEnd, id from %s where id = '%s'
+padding 500
+searchPriority 55
 
 searchTable blastDm2FB
 searchMethod prefix
