@@ -75,8 +75,8 @@ exit
 # Tracks lifted from hg16
 
 ##########################################################################
-# GIS PET (2005-08-23 kate)
-# NOTE: This track will be replaced with a new data submission
+# GIS PET  (2005-08-23 kate)
+# New genome-wide data (cMyc) submitted by Chialin (2006-10-25)
 
     cd  /cluster/data/encode/convertHg17
 
@@ -107,6 +107,22 @@ exit
         # encodeGisRnaPetMCF7     hg16 104304   hg17 104187
     csh $encodeBin/convertBedTable.csh hg16 hg17 encodeGisChipPet 12
         # encodeGisChipPet        hg16 65513   hg17 65510
+
+    # 2006-10-25 cMyc data
+    cd /cluster/data/encode/GIS
+    mkdir -p cMyc/2006-10-25/lab
+    # copy files from ftp dir
+    cd cMyc/2006-10-25
+    # use Angie's methods from hg16 to generate score from cluster count
+    grep '^chr' lab/GIS_c-Myc_P493.bed | \
+        perl -wpe 'chomp; @w = split; \
+                 if ($w[3] =~ /^\d+-(\d+)$/) { \
+                   $w[4] = ($1 >= 4 ? 1000 : ($1 >= 3 ? 800 : 333)); \
+                 } else { die "parse"; } \
+                 $_ = join("\t", @w) . "\n";' > myc.bed
+    hgLoadBed -strict hg17 encodeGisChipPetP493Myc myc.bed
+        # Loaded 276788 elements of size 12
+    checkTableCoords encodeGisChipPetP493Myc
 
 ##########################################################################
 # KNOWN+PRED RNA (2005-08-29 kate)
@@ -776,7 +792,7 @@ cat > doLoad.csh << 'EOF'
     ln -s lab/STAT1+w:o_stimulation.bed NoGif.bed
 
     # Use cluster-count info, now embedded into the name, to make scored BED:
-    # (Angie's methods)
+    # (Angie's methods from hg16)
     foreach f (Gif.bed NoGif.bed)
         set d = $f:r
         echo $d
@@ -877,6 +893,7 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log
     # Created composite track with 8 subtracks
+
     
 ##########################################################################
 # Affy Chip/chip and RNA (kate)
@@ -1301,6 +1318,7 @@ cat > load.csh << 'EOF'
 
 # Additional data submitted 8/10/06: Raw & Pval for HelaS3 and GM cells
 # Submitted new PVAL (3 cell lines) data on 8/11
+# Additional data submission 9/22/06  -- HepG2 cell line
 
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
@@ -1397,6 +1415,24 @@ cat > loadPval.csh << 'EOF'
 
 # min = 3.13 max  = 24.513
 
+# data submission 9/22/06  -- HepG2 cell line
+    cd /cluster/data/encode/NHGRI/crawford
+    mkdir -p 2006-09-22/lab
+    cd 2006-09-22
+    ln -s lab/Crawford_DNase-chip_HepG2_PVAL_HG17.bed HepG2.pval.bed
+    ln -s lab/Crawford_DNase-chip_HepG2_RAW_hg17.bed HepG2.raw.bed
+
+    set cell = HepG2
+    awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
+            $cell.pval.bed | \
+                hgLoadBed -strict -bedGraph=4 hg17 \
+                        encodeNhgriDnaseHsChipPval$cell stdin
+        # Loaded 1885 elements
+    awk '{print $1, $2, $3, $5}' $cell.raw.bed | \
+                hgLoadBed -strict -bedGraph=4 hg17 \
+                        encodeNhgriDnaseHsChipRaw$cell stdin
+        # Loaded 385149 elements
+
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)
 # From Paul Flicek, at EBI 
@@ -1477,6 +1513,8 @@ cat > load.csh << 'EOF'
 ##########################################################################
 # UC Davis Chip/chip (new C-Myc data) (2005-10-29 kate)
 # Add as subtrack to existing track
+# New datafiles for hits (c-Myc and E2F1) submitted 2006-10-24
+# by Mark Bieda <mcbieda@ucdavis.edu>
 
     # convert to bedGraph
     cd /cluster/data/encode/UcDavis/2005-10-12
@@ -1485,6 +1523,34 @@ cat > load.csh << 'EOF'
 	sort -k1,1 -k2,2n > $table.bed
     hgLoadBed -strict -bedGraph=4 hg17 $table $table.bed
         # Loaded 385149 elements
+
+    # hits data
+    # 2 files: E2F1_HelaFIGS_T02P0001S50G2CHR.gff  myc_helafix_hg17_T02P0001S50G2CHR.gff
+    # NOTE: E2F1 data submitted in hg16 coords
+    # Load as bed 5 -- generating item names from <chr>_<start>
+    #  at recommendation of Mark Bieda
+    cd /cluster/data/encode/UcDavis
+    mkdir -p 2006-10-24/lab
+    # copy files from FTP dir
+    cd 2006-10-24
+    awk '{printf "%s\t%d\t%d\t%s_%s\t%d\n", $1,$4,$5,$1,$4,$6}' \
+        lab/E2F1_HelaFIGS_T02P0001S50G2CHR.gff > e2f1.hg16.bed
+    liftOver e2f1.hg16.bed \
+        /cluster/data/encode/convertHg17/hg16ToHg17.over.chain.gz \
+                e2f1.hg17.bed e2f1.unmapped
+    # 1 unmapped (in ENm006)
+    #  chrX    152137876       152138192       chrX_152137876  2
+    hgLoadBed -strict hg17 encodeUcDavisChipHitsE2F1 e2f1.hg17.bed
+        # Loaded 204 elements of size 5 
+    checkTableCoords hg17 encodeUcDavisChipHitsE2F1
+
+    awk '{printf "%s\t%d\t%d\t%s_%s\t%d\n", $1,$4,$5,$1,$4,$6}' \
+        lab/myc_helafix_hg17_T02P0001S50G2CHR.gff > myc.hg17.bed
+    hgLoadBed -strict hg17 encodeUcDavisChipHitsMyc myc.hg17.bed
+        # Loaded 172 elements of size 5
+    checkTableCoords hg17 encodeUcDavisChipHitsMyc
+
+    # NOTE: drop old tables after review
 
 ##########################################################################
 # Yale TAR and TransMap (2005-10-31 kate)
@@ -1605,8 +1671,9 @@ cat > loadSig.csh << 'EOF'
 # range .001 to 1.0.  Peaks restricted to >.8
 # Adjusted data in Tags file:  set score=1 items to 300 so
 # they'll be visible with gray-scale tags requested by Akshay.
-# (This is why it's loaded as blocked bed)
-
+# (This is why it's loaded as blocked bed).  Huh ??
+#
+# New data (raw tags for STAT1 in HeLa) submitted 2006-10-16
     #cd /cluster/data/encode/UTexas/stage/2005-10-15
     cd /cluster/data/encode/UTexas/stage/2005-11-17
     grep '^chr' lab/myc.tag.prob.bed | \
@@ -1620,6 +1687,31 @@ cat > loadSig.csh << 'EOF'
                 encodeUtexStageMycHelaPeaks  stdin
             # 26 elements
     # Created composite track with 2 subtracks
+
+    # 2006-10-30
+    # Reload cMyc data in simple bed w/o score adjustment
+    # and load new data
+
+    cd /cluster/data/encode/UTexas/stage
+    mkdir -p 2006-10-16/lab
+    rm latest; ln -s 2006-10-16 latest
+    cd latest
+    grep '^chr' lab/stat1.tags.ucsc.bed | \
+       awk '{printf("%s\t%d\t%d\t%s\t%d\n",$1,$2,$3,$4,$5)}' | \
+    hgLoadBed -noBin -strict hg17 encodeUtexStageStat1HelaTags stdin
+        # Loaded 937 elements of size 6
+    checkTableCoords hg17 encodeUtexStageStat1HelaTags
+
+    cd ../2005-11-17
+    grep '^chr' lab/myc.tag.prob.bed | \
+       awk '{printf("%s\t%d\t%d\t%s\t%d\n",$1,$2,$3,$4,$5)}' | \
+    hgLoadBed -noBin -strict hg17 encodeUtexStageCMycHelaTags stdin
+
+
+
+# At Submitter's request, do not use score in display
+# So,  
+
     
 ##########################################################################
 # Univ. Uppsala, Sweden Chip/chip
@@ -1801,7 +1893,7 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log &
 
-    # consensus elements
+    # CONSENSUS ELEMENTS
     cd /cluster/data/encode/MSA
     mkdir -p SEP-05/consensus/lab
     cd SEP-05/consensus/lab
