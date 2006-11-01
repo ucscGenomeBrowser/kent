@@ -214,9 +214,12 @@ felCat3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDna
 felCat3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 felCat3.ooc = /cluster/bluearc/felCat3/11.ooc
 felCat3.lift = no
-felCat3.refseq.mrna.native.load = no
+felCat3.refseq.mrna.native.load = yes
 felCat3.refseq.mrna.xeno.load = yes
+felCat3.genbank.mrna.native.load = yes
 felCat3.genbank.mrna.xeno.load = yes
+felCat3.genbank.est.native.load = yes
+felCat3.genbank.est.xeno.load = yes
 felCat3.downloadDir = felCat3
 felCat3.perChromTables = no
 
@@ -226,36 +229,6 @@ felCat3.perChromTables = no
 
     cvs commit -m "Added cat" etc/genbank.conf src/lib/gbGenome.c
     make install-server
-
-    # Errors:
-
-# rsync -r bin /cluster/data/genbank
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.blat.9Xtxx7" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.ccdsImport.gLqxFG" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.ccdsMkTables.k29RPf" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.extFileUpdate.GLxI1O" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbAlignGet.rYBdfo" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbAlignInstall.pL1DtX" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbConf.u8B8Iw" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbGetSeqs.vc61Y5" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbLoadRna.SojYfF" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbProcess.zlBJye" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbProcessedCheck.Vs73RN" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.gbSanity.JvYgcn" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.mgcDbLoad.8IcayW" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.mgcImport.FiSDVv" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.mkCcdsGeneMap.KQPZj5" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.polyInfo.luiTJE" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.pslCDnaFilter.sEwMae" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.pslIntronsOnly.ztOkCN" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.repairExtFile.5UMw4m" failed: Permission denied (13)
-# rsync: mkstemp "/cluster/data/genbank/bin/x86_64/.selectWithPsl.MLMhyW" failed: Permission denied (13)
-# rsync error: some files could not be transferred (code 23) at main.c(702)
-# make[1]: *** [install-bin] Error 23
-# make[1]: Leaving directory `/cluster/home/heather/kent/src/hg/makeDb/genbank'
-# make: *** [install-server] Error 2
-
-    make install-etc PREFIX=/cluster/data/genbank
 
     ssh kkstore02
     cd /cluster/data/genbank
