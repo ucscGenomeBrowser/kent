@@ -144,15 +144,15 @@ identifier UniProtAccession external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) Accession"
      uniProt.displayId.acc
      uniProt.accToKeyword.acc 
-     uniProt.accToTaxon.acc full
+     uniProt.accToTaxon.acc 
      uniProt.citation.acc
      uniProt.comment.acc
-     uniProt.description.acc unique full
+     uniProt.description.acc unique 
      uniProt.extDbRef.acc
      uniProt.feature.acc
      uniProt.gene.acc
      uniProt.geneLogic.acc
-     uniProt.info.acc unique full
+     uniProt.info.acc unique 
      uniProt.otherAcc.acc
      uniProt.protein.acc unique full
      proteome.spOldNew.acc minCheck=0.8
