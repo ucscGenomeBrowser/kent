@@ -11100,6 +11100,15 @@ done
 
 ##############################################################################
 # REWORK PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE
+#	(WORKING - 2006-10-23 - Hiram)
+#	five different cluster runs are described here for different classes
+#	of clones
+#	runPlacedNotSplit - all placed clones split or not split with blat
+#	runFish - 392 fish clones against all 378 contigs, with blat
+#	runUnPlaced - 14,569 clones on known contigs - with psLayout
+#	runUnPlacedChr - 297 clones on known chroms - with psLayout
+#	runLastOnes - 1,877 clones against 378 contigs - with blat
+
 #  The original run of this forgot to split of the BAC clones that were just
 #	a fasta file full of unordered pieces.  They need to be split up
 #	to work properly.
@@ -11215,6 +11224,7 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
         warn cOverlaps.bed
     #	Load up that chrOverlaps.bed as a custom track to see these results
 
+    ##################################################################
     #	The next big group are the FISH clones
     cd /san/sanvol1/scratch/hg18/coverage.2006-10-23
     #	Split or not split depending on gap count >= 100
@@ -11326,3 +11336,248 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     #	can do the same thing as above to look at these results individually
     #	not listed here
 
+    ##################################################################
+    #	The next big group are the unplaced clones.  In the original run, the
+    #	contig location of these items were inferred from Hg17 results, and
+    #	thus many of them can be aligned against their respective contig.  For
+    #	some cases, the contig isn't known, but the chrom is, thus they can be
+    #	aligned to all the contigs for a chrom.  And finally, those completely
+    #	unknown have to be aligned to all contigs.
+    #	There are two sections here, those for which contig details are
+    #	unknown, and those for which contigs are known.  First, those for
+    #	which details are unknown:
+    mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/runUnPlacedChr
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/runUnPlacedChr
+    ls ../unPlacedSplit/*/XX*/*.fa.gz > bac.list
+    cat << '_EOF_' > mkJobList.sh
+#!/bin/sh
+
+cat bac.list | while read F
+do
+    CHR=`echo "${F}" | sed -e "s#.*unPlacedSplit/##; s#/.*##"`
+    CLONE=`basename ${F} | sed -e "s/.fa.gz//"`
+    case $CHR in
+        U|Un)
+        for C in /san/sanvol1/scratch/hg18/coverage/maskedContigs/? \
+            /san/sanvol1/scratch/hg18/coverage/maskedContigs/?? \
+            /san/sanvol1/scratch/hg18/coverage/maskedContigs/?_* \
+            /san/sanvol1/scratch/hg18/coverage/maskedContigs/??_*
+        do
+            CH=`basename ${C}`
+            for CT in /san/sanvol1/scratch/hg18/coverage/maskedContigs/${CH}/*
+            do
+                CONTIG=`basename ${CT} | sed -e "s/.fa.gz//"`
+                echo "./runPsLayout.sh $CH $CLONE $CONTIG {check out line+ psl/$
+CH/$CONTIG/$CLONE.psl}"
+            done
+        done
+        ;;
+        *)
+        for CT in /san/sanvol1/scratch/hg18/coverage/maskedContigs/${CHR}/*
+        do
+            CONTIG=`basename ${CT} | sed -e "s/.fa.gz//"`
+            echo "./runPsLayout.sh $CHR $CLONE $CONTIG {check out line+ psl/$CHR
+/$CONTIG/$CLONE.psl}"
+        done
+        ;;
+    esac
+'_EOF_'
+# << happy emacs
+    chmod +x mkJobList.sh
+
+    ./mkJobList.sh > jobList
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#   runPsLayout.sh <chrom> <clone> <contig>
+#     where <chrom> is the chrom this contig is on
+#      <clone> is one of the .fa.gz files in
+#         /san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/<chrom>/<clone>.fa.gz
+#      <contig> is one of the contigs found in:
+#       /san/sanvol1/scratch/hg18/coverage/maskedContigs/<chrom>/<contig>.fa.gz
+#
+HERE=`pwd`
+CHROM=$1
+CLONE=$2
+CONTIG=$3
+TARGET=/san/sanvol1/scratch/hg18/coverage/maskedContigs/$CHROM/$CONTIG.fa.gz
+CLONESRC=/san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/$CHROM/XX_000000/$CLONE.fa.gz
+OOC=/san/sanvol1/scratch/hg18/coverage/maskedContigs/ooc/$CHROM/$CONTIG.10.ooc
+RESULT="${HERE}/psl/${CHROM}/${CONTIG}/${CLONE}.psl"
+export CHROM CLONE CONTIG TARGET CLONESRC RESULT
+mkdir -p psl/${CHROM}/${CONTIG}
+if [ ! -s ${CLONESRC} ]; then
+    CLONESRC=/san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/U/XX_000000/$CLONE.fa.gz
+    if [ ! -s ${CLONESRC} ]; then
+        CLONESRC=/san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/Un/XX_000000/$CLONE.fa.gz
+        if [ ! -s ${CLONESRC} ]; then
+            echo "Can not find: ${CLONESRC}" 1>/dev/stderr
+            exit 255
+        fi
+    fi
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}" 1>/dev/stderr
+        exit 255
+fi
+WRKDIR="/scratch/tmp/hg18_${CHROM}/${CONTIG}/${CLONE}"
+mkdir -p "${WRKDIR}"
+cd ${WRKDIR}
+zcat ${CLONESRC} > ${CLONE}.fa
+zcat ${TARGET} > ${CONTIG}.fa
+cp -p ${OOC} ./10.ooc
+/cluster/bin/x86_64/psLayout ${CONTIG}.fa ${CLONE}.fa genomic 10.ooc ${RESULT}
+RET=$?
+cd ${HERE}
+rm -fr ${WRKDIR}
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}/${CONTIG}"
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}"
+exit ${RET}
+'_EOF_'
+# << happy emacs
+    chmod +x ./runPsLayout.sh
+
+    mkdir psl
+    para create jobList
+    para try; para check; ... etc ...
+    para time
+# Completed: 40509 of 40509 jobs
+# CPU time in finished jobs:    5354801s   89246.69m  1487.44h   61.98d  0.170 y
+# IO & Wait Time:                115279s    1921.31m    32.02h    1.33d  0.004 y
+# Average job time:                 135s       2.25m     0.04h    0.00d
+# Longest finished job:          164276s    2737.93m    45.63h    1.90d
+# Submission to last job:        187712s    3128.53m    52.14h    2.17d
+
+    # combine into one result file
+    pslSort dirs raw.psl tmp psl/*/*
+
+    ##################################################################
+    #	Now, for those unplaced clones for which contig details are known
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/runUnPlaced
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/runUnPlaced
+    cat << '_EOF_' > mkJobList.sh
+#!/bin/sh
+
+find ../unPlacedSplit -type f | grep -v XX_ | while read F
+do
+    BN=`basename ${F} | sed -e "s/.fa.gz//"`
+    DN=`dirname ${F}`
+    CONTIG=`basename ${DN}`
+    DN=`dirname ${DN}`
+    CHROM=`basename ${DN}`
+    echo "./runPsLayout.sh ${CHROM} ${BN} ${CONTIG} {check out line+ psl/${CHROM
+}/${CONTIG}/${BN}.psl}"
+done
+'_EOF_'
+# << happy emacs
+    chmod +x mkJobList.sh
+
+    ./mkJobList.sh > jobList
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#   runPsLayout.sh <chrom> <clone> <contig>
+#     where <chrom> is the chrom this contig is on
+#      <clone> is one of the .fa.gz files in
+#         /san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/<chrom>/<clone>.fa.gz
+#      <contig> is one of the contigs found in:
+#       /san/sanvol1/scratch/hg18/coverage/maskedContigs/<chrom>/<contig>.fa.gz
+#
+HERE=`pwd`
+CHROM=$1
+CLONE=$2
+CONTIG=$3
+TARGET=/san/sanvol1/scratch/hg18/coverage/maskedContigs/$CHROM/$CONTIG.fa.gz
+CLONESRC=/san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/$CHROM/$CONTIG/$CLONE.fa.gz
+OOC=/san/sanvol1/scratch/hg18/coverage/maskedContigs/ooc/$CHROM/$CONTIG.10.ooc
+RESULT="${HERE}/psl/${CHROM}/${CONTIG}/${CLONE}.psl"
+mkdir -p psl/${CHROM}/${CONTIG}
+if [ ! -s ${CLONESRC} ]; then
+        echo "Can not find: ${CLONESRC}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}" 1>/dev/stderr
+        exit 255
+fi
+WRKDIR="/scratch/tmp/hg18_${CHROM}/${CONTIG}/${CLONE}"
+mkdir -p "${WRKDIR}"
+cd ${WRKDIR}
+zcat ${CLONESRC} > ${CLONE}.fa
+zcat ${TARGET} > ${CONTIG}.fa
+cp -p ${OOC} ./10.ooc
+/cluster/bin/x86_64/psLayout ${CONTIG}.fa ${CLONE}.fa genomic 10.ooc ${RESULT}
+RET=$?
+cd ${HERE}
+rm -fr ${WRKDIR}
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}/${CONTIG}"
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}"
+exit ${RET}
+'_EOF_'
+# << happy emacs
+    chmod +x runPsLayout.sh
+
+    para create jobList
+    para try; para check; ... etc ...
+    para time
+# Completed: 14569 of 14569 jobs
+# CPU time in finished jobs:    4863551s   81059.19m  1350.99h   56.29d  0.154 y
+# IO & Wait Time:                 64196s    1069.93m    17.83h    0.74d  0.002 y
+# Average job time:                 338s       5.64m     0.09h    0.00d
+# Longest finished job:           36681s     611.35m    10.19h    0.42d
+# Submission to last job:         68213s    1136.88m    18.95h    0.79d
+
+    #	combine into a single result
+    pslSort dirs raw.psl tmp psl/*/*
+
+    #######################################################################
+    # and the last bunch are clones that nothing is known about and they have
+    # trouble with the process
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23
+    cat << '_EOF_' > splitLastOnes.sh
+#!/bin/sh
+
+D=lastOnesSplit
+export D
+
+mkdir -p ${D}
+mkdir -p ${D}/pieces
+mkdir -p ${D}/onePiece
+
+find ../coverage/lastOnes/sequence -type f | while read F
+do
+    BN=`basename "${F}"`
+    outSplit="${D}/pieces/${BN}"
+    outNotSplit="${D}/onePiece/${BN}"
+    Ncount=`faSize "${F}" | sed -e "s/N's.*//; s/.* bases (//;"`
+    if [ "${Ncount}" -gt 99 ]; then
+        echo "gapSplit -minGap=100 ${F} ${outSplit}"
+        gapSplit -minGap=100 ${F} stdout | gzip > ${outSplit}
+        faSize "${F}"
+        faSize "${outSplit}"
+    else
+        echo "# N's: ${Ncount} - ${BN}"
+        cp -p ${F} ${outNotSplit}
+    fi
+done
+'_EOF_'
+# << happy emacs
+    chmod +x splitLastOnes.sh
+    ./splitLastOnes.sh > last.out 2>&1
+    cd lastOnesSplit
+    find ./pieces/*.fa.gz ./onePiece/*.fa.gz | while read F
+do
+    zcat "${F}"
+done | gzip > all.fa.gz
+    mkdir split
+    faSplit about all.fa.gz 1000000 split/f_
+
+    mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/runLastOnes
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/runLastOnes
