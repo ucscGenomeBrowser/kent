@@ -1008,10 +1008,34 @@ shortCircuit 1
 searchPriority 20
 termPrefix rikenTC:
 
+searchTable jaxQTL
+searchType bed
+searchMethod fuzzy
+termRegex [[:alpha:]0-9]+
 searchPriority 50
+
 searchTable jaxQTL3
 searchType bed
 searchMethod fuzzy
+termRegex [[:alpha:]0-9]+
+searchPriority 50
+
+searchTable jaxRepTranscript
+searchType genePred
+searchMethod fuzzy
+termRegex [^[:space:]]+
+searchPriority 50
+
+searchTable jaxPhenotype
+searchType bed
+searchMethod fuzzy
+termRegex [^[:space:]]+
+searchPriority 50
+
+searchTable jaxAllele
+searchType bed
+searchMethod fuzzy
+termRegex [^[:space:]]+
 searchPriority 50
 
 searchTable igtc
