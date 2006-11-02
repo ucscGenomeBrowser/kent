@@ -33,7 +33,7 @@ boolean allNt(char *s,int size)
 /* Return TRUE if all chars are DNA type */
 {
 while (--size >= 0)
-    if (ntChars[*s++] == 0) return FALSE;
+    if (ntChars[(int)(*s++)] == 0) return FALSE;
 return TRUE;
 }
 
@@ -165,7 +165,7 @@ void complementDna(DNA *dna)
 {
 DNA b;
 while ((b = *dna) != 0)
-    *dna++ = ntCompTable[b];
+    *dna++ = ntCompTable[(int)b];
 }
 
 void doMiddle()
