@@ -8,12 +8,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.2 2006/10/20 16:22:48 hartera Exp $";
-
-typedef union dataValue {
-    int dataInt;
-    float dataFloat;
-} DATA;
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.3 2006/11/02 17:22:08 hartera Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
@@ -127,18 +122,18 @@ if (doLoad)
 return count;
 }
 
-//void shortDataOut(FILE *f, char *name, int count, int *scores)
-void shortDataOut(FILE *f, char *name, int count, DATA *scores)
+void shortDataOut(FILE *f, char *name, int count, float *scores)
 /* Do short type output. */
 {
 int i;
 fprintf(f, "%s\t%d\t", name, count);
+/* if no rounding, then print as float, otherwise round */
 for (i=0; i<count; ++i)
     {
     if (noRound)
-        fprintf(f, "%0.3f,", scores[i].dataFloat);
+        fprintf(f, "%0.3f,", scores[i]);
     else 
-        fprintf(f, "%d,", scores[i].dataInt);
+        fprintf(f, "%d,", round(scores[i]));
     } 
 fprintf(f, "\n");
 }
@@ -150,7 +145,7 @@ struct lineFile *lf = lineFileOpen(atlasFile, TRUE);
 char *line;
 int i, wordCount, expCount;
 char **row;
-DATA *data;
+float *data;
 char *affyId;
 struct hash *hash = newHash(17);
 FILE *f = NULL;
@@ -194,10 +189,7 @@ while (lineFileNextReal(lf, &line))
 	}
     for (i=0; i<expCount; ++i)
         {
-        if (noRound) 
-            data[i].dataFloat = sqlFloat(row[i]);
-        else
-            data[i].dataInt = round(sqlFloat(row[i]));
+        data[i] = sqlFloat(row[i]);
         }
     shortDataOut(f, affyId, expCount, data);
     ++dataCount;
