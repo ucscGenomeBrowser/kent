@@ -326,8 +326,28 @@ trackDb setting.  This has not been entirely generalized -- use with care.
 For readability, please indent the subtrack entries in trackDb.ra by 4 spaces.
 
 
-Example:
----------------------
+Subtrack Groups
+---------------
+To allow flexibility in user configuration of subtrack
+visibility, subtracks can be grouped.  A subtrack group
+(composite track subgroup) is defined with a trackDb setting,
+in the format:
+
+   subGroup# name label id1=val1 id2=val2 ...
+
+where # is assigned 1-N based on the number of groups.
+The "name" is an identifier for the group; the "label"
+indicates how the group is labeled on the track configuration
+screen.  Similarly, the "id" fields indicate possible
+values for the group, while the "val" fields are how
+they appear on the screen.
+
+Subgroups for a subtrack are set as so:
+
+    subGroups grp1=val1 grp2=val2 ...
+
+Composite track Example
+-------------------------
 track encodeDnaRep
 compositeTrack on
 shortLabel DNA Rep
@@ -337,23 +357,37 @@ priority 50.1
 color 10,130,10 
 altColor 50,50,50
 visibility hide
+subGroup1 celltype Cell_Type gm=GM06990 hela=HeLa
+subGroup2 timepoint Time_Point 0h=0-2hrs 2h=2-4hrs
 type bed 3
 
     track encodeDnaRep0
     subTrack encodeDnaRep
     shortLabel 0-2hr
-    longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+    longLabel Univ. Virginia Temporal Profiling of DNA Replication (GM06990 0-2 hrs) in ENCODE Regions
+    subGroups celltype=gm timepoint=0h
     priority 1
 
     track encodeDnaRep2
     subTrack encodeDnaRep off
     shortLabel 2-4hr
-    longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+    longLabel Univ. Virginia Temporal Profiling of DNA Replication (GM06990 2-4 hrs) in ENCODE Regions
+    subGroups celltype=gm timepoint=2h
     priority 2
 
-    track encodeDnaRep3
+    track encodeDnaRepHela0
     subTrack encodeDnaRep
-    shortLabel 2-4hr
+    shortLabel 0-2hr
+    longLabel Univ. Virginia Temporal Profiling of DNA Replication (HeLa 0-2 hrs) in ENCODE Regions
+    subGroups celltype=hela timepoint=0h
     priority 3
-    ---------------------
+
+    track encodeDnaHelaRep2
+    subTrack encodeDnaRep off
+    shortLabel 2-4hr
+    longLabel Univ. Virginia Temporal Profiling of DNA Replication (HeLa 2-4 hrs) in ENCODE Regions
+    subGroups celltype=hela timepoint=2h
+    priority 4
+
+---------------------
 
