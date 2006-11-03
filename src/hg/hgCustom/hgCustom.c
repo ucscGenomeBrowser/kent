@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.90 2006/10/27 19:41:59 donnak Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.91 2006/11/03 20:53:51 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,7 +51,6 @@ errAbort(
 /* commands */
 #define hgCtDo		  hgCt   "do_"	  /* prefix for all commands */
 #define hgCtDoAdd	  hgCtDo "add"
-#define hgCtDoCancel	  hgCtDo "cancel"
 #define hgCtDoDelete	  hgCtDo "delete"
 #define hgCtDoDeleteSet	  hgCtDo "delete_set"
 #define hgCtDoDeleteClr	  hgCtDo "delete_clr"
@@ -175,11 +174,8 @@ puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
-puts("<TD ALIGN='RIGHT'>");
+puts("<TD>&nbsp;");
 cgiMakeSubmitButton();
-puts("&nbsp;");
-
-cgiMakeButton(hgCtDoCancel, "Cancel");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -588,16 +584,6 @@ cgiTableEnd();
 cartSetString(cart, "hgta_group", "user");
 }
 
-void doGenomeBrowser()
-{
-/* Redirect to table browser */
-char url[256];
-safef(url, sizeof url, "%s", hgTracksName());
-puts("<HTML>");
-printf("<BODY onload=\"try {self.location.href='%s' } catch(e) {}\"><a href=\"%s\">Redirect </a></BODY>", url, url);
-puts("</HTML>");
-}
-
 void helpCustom()
 /* display documentation */
 {
@@ -847,18 +833,6 @@ if (cartVarExists(cart, hgCtDoAdd))
     {
     doAddCustom(NULL);
     }
-else if (cartVarExists(cart, hgCtDoCancel))
-    {
-    /* remove cart variables now so text in input
-     * boxes isn't parsed */
-    cartRemovePrefix(cart, hgCt);
-    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
-    ctList = customTracksParseCart(cart, NULL, NULL);
-    if (ctList)
-        doManageCustom(NULL);
-    else
-        doGenomeBrowser();
-    }
 else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */
@@ -919,20 +893,10 @@ else
 	}
     customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
-    if (ctList || 
-        /* show manage screen if we've just deleted all custom tracks, so
-         * they can pick another assembly having custom tracks */
-        (cartVarExists(cart, hgCtDoDelete) && getCustomTrackDatabases()))
-	{
+    if (ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
-	}
     else
-	{
-        if (cartVarExists(cart, hgCtDoDelete))
-                doGenomeBrowser();
-        else
-            doAddCustom(NULL);
-	}
+        doAddCustom(NULL);
     }
 cartRemovePrefix(cart, hgCt);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);
