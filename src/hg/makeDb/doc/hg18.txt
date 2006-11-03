@@ -11098,6 +11098,22 @@ done
 # V$STAT4_01 V$STAT5A_03 V$STAT5A_04 V$STAT6_02 V$TAACC_B V$TANTIGEN_B
 # V$TEF1_Q6 V$USF2_Q6
 
+# And re-load once again since the above data was based on transfac data that
+# is too new (2006-11-03 - Hiram)
+    cd /cluster/data/hg18/bed/tfbsCons
+    hgLoadBed -tab -strict hg18 tfbsConsSites \
+	-sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql tfbsConsSites.bed
+# And this leads once again to a bunch of extra names in Factors
+    hgsql -N -e "select name from tfbsConsSites;" hg18 | sort -u > names.new
+    hgsql -N -e "select name from tfbsConsFactors;" hg18 \
+	| sort -u > names.factors
+    comm -13 names.new names.factors > names.extra.factors
+for N in `cat names.extra.factors`
+do
+        echo "delete from tfbsConsFactors where name=\"${N}\";" hg18
+        hgsql -e "delete from tfbsConsFactors where name=\"${N}\";" hg18
+done
+
 ##############################################################################
 # REWORK PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE
 #	(WORKING - 2006-10-23 - Hiram)
@@ -11346,6 +11362,34 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     #	There are two sections here, those for which contig details are
     #	unknown, and those for which contigs are known.  First, those for
     #	which details are unknown:
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23
+    cat << '_EOF_' > splitUnplacedClones.sh
+#!/bin/sh
+
+find ../coverage/unPlacedClones -type f | while read F
+do
+    BN=`basename "${F}"`
+    DN=`dirname "${F}"`
+    CONTIG=`basename "${DN}"`
+    DN=`dirname "${DN}"`
+    CHROM=`basename "${DN}"`
+    out="unPlacedSplit/${CHROM}/${CONTIG}/${BN}"
+#    echo "${CHROM}/${CONTIG}/${BN}"
+    mkdir -p unPlacedSplit/${CHROM}/${CONTIG}
+    Ncount=`faSize "${F}" | sed -e "s/N's.*//; s/.* bases (//;"`
+    if [ "${Ncount}" -gt 99 ]; then
+        echo "gapSplit -minGap=100 ${F} ${out}"
+        gapSplit -minGap=100 ${F} stdout | gzip > ${out}
+        faSize "${F}"
+        faSize "${out}"
+    fi
+done
+'_EOF_'
+# << happy emacs
+    chmod +x splitUnplacedClones.sh
+    mkdir unPlacedSplit
+    time ./splitUnplacedClones.sh > unPlaced.out 2>&1
+
     mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/runUnPlacedChr
     cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/runUnPlacedChr
     ls ../unPlacedSplit/*/XX*/*.fa.gz > bac.list
@@ -11578,6 +11622,113 @@ do
 done | gzip > all.fa.gz
     mkdir split
     faSplit about all.fa.gz 1000000 split/f_
+    cd split
+    gzip f_*.fa
 
     mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/runLastOnes
     cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/runLastOnes
+    ls ../lastOnesSplit/split > query.list
+    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/?/* \
+	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
+	> contig.list
+    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/??/* \
+	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
+	>> contig.list
+    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/?_*/* \
+	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
+	>> contig.list
+    ls -1S /san/sanvol1/scratch/hg18/coverage/maskedContigs/??_*/* \
+	| sed -e "s#/san/sanvol1/scratch/hg18/coverage/maskedContigs/##" \
+	>> contig.list
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.csh $(path1) $(root2) {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    cat << '_EOF_' > runBlat.csh
+#!/bin/csh -fe
+set target = /san/sanvol1/scratch/hg18/coverage/maskedContigs/$1.fa.gz
+set query = /san/sanvol1/scratch/hg18/coverage.2006-10-23/lastOnesSplit/split/$2.fa.gz
+set contig = $target:t:r:r
+set targetPiece = $query:t:r:r
+set result = psl/$contig/$targetPiece.psl
+set scrTmp = "/scratch/tmp/$contig/$targetPiece"
+set ooc = /san/sanvol1/scratch/hg18/coverage/contigOoc/$contig.10.ooc
+mkdir -p "$scrTmp"
+zcat $target > $scrTmp/$contig.fa
+zcat $query > $scrTmp/$targetPiece.fa
+cp -p $ooc $scrTmp/10.ooc
+pushd $scrTmp
+pwd
+ls -l
+blat -minIdentity=98 -fastMap -tileSize=10 -t=dna -q=dna -ooc=10.ooc $contig.fa $targetPiece.fa $targetPiece.psl
+popd
+mkdir -p psl/$contig
+cp -p $scrTmp/$targetPiece.psl $result
+rm $scrTmp/*
+rmdir $scrTmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
+'_EOF_'
+# << happy emacs
+
+    gensub2 contig.list query.list template jobList
+    para create jobList
+    para try; para check; para push ... etc ...
+    para time
+# Completed: 709470 of 709506 jobs
+# Crashed: 36 jobs
+# CPU time in finished jobs:   31417237s  523620.61m  8727.01h  363.63d  0.996 y
+# IO & Wait Time:               2093806s   34896.77m   581.61h   24.23d  0.066 y
+# Average job time:                  47s       0.79m     0.01h    0.00d
+# Longest finished job:           55643s     927.38m    15.46h    0.64d
+    #	Some of these jobs just will not complete.  They are huge
+    #	scaffolds from the Celera assembly and they do not align very well at
+    #	all to the contigs.
+
+    #	combine into a single result
+    time pslSort dirs raw.psl tmp psl/*
+    #	real    550m57.744s
+    #	user    324m56.251s
+    #	sys     10m15.358s
+    ls -og raw.psl
+    #	-rw-rw-r--  1 39273644954 Nov  2 20:23 raw.psl
+    #	Wow ...
+    time pslReps -nohead -nearTop=0.001 -singleHit \
+	raw.psl repsSingle.psl /dev/null
+    #	real    15m14.462s
+    #	user    13m6.580s
+    #	sys     1m50.304s
+    ls -og repsSingle.psl
+    #	-rw-rw-r--    1    73403317 Nov  3 09:44 repsSingle.psl
+
+    ###########################################################
+    #  And now, combining all results together
+    mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/finalPsl
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/finalPsl
+    ln -s ../runLastOnes/repsSingle.psl lastOnes.psl 
+    ln -s ../runFish/raw.psl fish.psl 
+    ln -s ../runUnPlaced/raw.psl unPlaced.psl 
+    ln -s ../runUnPlacedChr/raw.psl unPlacedChr.psl 
+    ln -s ../runPlacedNotSplit/raw.psl placed.psl 
+    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23
+    time pslSort dirs raw.psl tmp finalPsl
+    #	real    18m53.770s
+    #	user    12m19.002s
+    #	sys     1m17.504s
+    ls -og raw.psl
+    #	-rw-rw-r--   1 7742802124 Nov  3 10:10 raw.psl
+    time pslReps -nohead -nearTop=0.001 -singleHit \
+        raw.psl repsSingle.psl /dev/null
+    clusterClone -allowDuplicates -agp -minCover=80 \
+        -maxGap=60000 repsSingle.psl > single.agp 2> single.out
+    sort -k1,1 -k2,2n single.agp | ../coverage/fixPhase.pl \
+        /cluster/data/hg18/bed/coverage/phase.txt > contig_overlaps.agp \
+        2> singleToOverlaps.out
+    awk -F'\t' '{printf "%s\t%s\t%s\t%s\t0\t%s\n", $1,$2,$3,$6,$9}' \
+        contig_overlaps.agp > cOverlaps.bed
+    liftUp chrOverlaps.bed /san/sanvol1/scratch/hg18/bacends/liftContigs.lft \
+        warn cOverlaps.bed
+    #	Load up that chrOverlaps.bed as a custom track to see these results

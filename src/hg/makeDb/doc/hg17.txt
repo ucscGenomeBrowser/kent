@@ -13835,6 +13835,8 @@ SEQ2_LEN=$BASE/S2.len
 ##########################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE braney 1/15/05)
 # Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
+#	tfbsConsSites table reloaded 2006-11-03 - Hiram - see below:
+## reload tfbsCons table - it was based on a newer version of tfbs names that
 
 ssh hgwdev
 mkdir /cluster/data/hg17/bed/tfbsCons
@@ -22361,3 +22363,23 @@ mkdir -p ${blatDir}/{over,net}
     
      # trackDb.ra entry is in trackDb/human/trackDb.ra and 
      # a description exist already as this track is also on hg18.
+
+######################################################################
+## reload tfbsCons table - it was based on a newer version of tfbs names that
+#	are not yet public domain (2006-11-03 - Hiram)
+    mkdir /cluster/data/hg17/bed/tfbsCons
+    cd /cluster/data/hg17/bed/tfbsCons
+    cp -p /cluster/store6/weirauch/TFLOC/hg17/tfbsConsSites.bed .
+    hgLoadBed -strict hg17 tfbsConsSites \
+	-sqlTable=$HOME/kent/src/hg/lib/tfbsConsSites.sql \
+	tfbsConsSites.bed -tab
+# this leads to a bunch of extra names in Factors
+    hgsql -N -e "select name from tfbsConsSites;" hg17 | sort -u > names.new
+    hgsql -N -e "select name from tfbsConsFactors;" hg17 \
+	| sort -u > names.factors
+    comm -13 names.new names.factors > names.extra.factors
+for N in `cat extra.names.factors`
+do
+        echo "delete from tfbsConsFactors where name=\"${N}\";" hg17
+        hgsql -e "delete from tfbsConsFactors where name=\"${N}\";" hg17
+done
