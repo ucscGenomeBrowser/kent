@@ -1535,7 +1535,7 @@ identifier rgdEstId external=RGD
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
     $rn,hg17.rgdQtl.name
-    $rn,hg17.rgdQtlLink.name
+    $rn,hg17.rgdQtlLink.name minCheck=0.89
 
 identifier rgdSslpId external=RGD
 "RGD SSLP ID"
