@@ -1564,7 +1564,7 @@ for (xa = xaList; xa != NULL; xa = xa->next)
         nt = tSym[i];
         if (nt != '-')
             {
-            ok = okTable[hSym[i]];
+            ok = okTable[(int)hSym[i]];
             if (ok && !lastOk)
                 {
                 startNtIx = curNtIx;
