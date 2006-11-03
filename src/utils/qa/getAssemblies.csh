@@ -121,7 +121,6 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
       # echo "  split = $isSplit"
       if ( $isSplit != 0 ) then
         set splitlist=`echo "$splitlist $db"`
-        continue
       endif
     endif
     # if no chromInfo or if table not split
@@ -138,7 +137,6 @@ else   # not dev or beta
     exit 1
   endif
   foreach db ( $dbs )
-  # foreach db ( rn3 hg17 )
     if ( $quiet == 0 ) then
       echo "checking "$db
     endif
@@ -158,7 +156,6 @@ else   # not dev or beta
           | wc -l`
         if ( $found == 1 ) then
           set splitlist=`echo "$splitlist $db"`
-          continue
         endif
       endif
     endif
