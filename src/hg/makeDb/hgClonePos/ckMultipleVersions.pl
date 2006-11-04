@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-#	"$Id: ckMultipleVersions.pl,v 1.1 2006/11/03 23:31:21 hiram Exp $";
+#	"$Id: ckMultipleVersions.pl,v 1.2 2006/11/04 00:30:01 hiram Exp $";
 
 use warnings;
 use strict;
@@ -16,11 +16,12 @@ my %cloneAcc;	#	key is clone accession major number, value is version
 while (my $clone = <FH>) {
     chomp $clone;
     my ($major, $version) = split('\.', $clone);
+    $version =~ s/_.*//;
     if (exists($cloneAcc{$major})) {
 	my $previousVersion = $cloneAcc{$major};
-	if ($previousVersion >= $version) {
+	if ($previousVersion > $version) {
 	    printf STDERR "$major.$version -> $major.$previousVersion\n";
-	} else {
+	} elsif ($previousVersion < $version) {
 	    printf STDERR "$major.$previousVersion -> $major.$version\n";
 	    $cloneAcc{$major} = $version;
 	}
