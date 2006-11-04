@@ -2509,19 +2509,7 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
-    encodeNhgriDnaseHsChipCd4
-    encodeNhgriDnaseHsChipGm06990
-    encodeNhgriDnaseHsChipPvalCd4
-    encodeNhgriDnaseHsChipPvalGm06990
-    encodeNhgriDnaseHsChipPvalHela
-    encodeNhgriDnaseHsChipPvalHepG2
-    encodeNhgriDnaseHsChipRawCd4
-    encodeNhgriDnaseHsChipRawGm06990
-    encodeNhgriDnaseHsChipRawHela
-    encodeNhgriDnaseHsChipRawHepG2
-    encodeNhgriDnaseHsMpssCd4
-    encodeNhgriDnaseHsMpssCd4Act
-
+    encodeNhgriDnaseHs%
     encodeRegulomeDnaseGM06990%
     encodeSangerChip%
     encodeStanfordPromoters%
