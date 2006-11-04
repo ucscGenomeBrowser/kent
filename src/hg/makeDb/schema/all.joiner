@@ -1450,8 +1450,8 @@ identifier bdgpNonCodingId external=BDGP
     dm1.bdgpNonCoding.name chopAfter=- dupeOk
     dm1.bdgpNonCodingInfo.bdgpName minCheck=0.89
 
-identifier flyBase2004Id external=FlyBase
-"FlyBase Xref as of 2004"
+identifier flyBase2004IdDm external=FlyBase
+"FlyBase Xref as of 2004 for dm"
     $dm.flyBase2004Xref.name
     $dm,!dm1.flyBaseGene.name minCheck=0.99
     $dm,!dm1.flyBasePep.name
@@ -1475,9 +1475,12 @@ identifier flyBase2004Id external=FlyBase
     $dm,!dm1.flyBaseToDescription.name
     $dm,!dm1.flyP2P.query
     $dm,!dm1.flyP2P.target
+    hg17,hg18,danRer3,mm7,mm8,rn3,rn4,ce2,sacCer1.dmBlastTab.target minCheck=0.90
+
+identifier flyBase2004IdDp external=FlyBase
+"FlyBase Xref as of 2004 for dp3"
     dp3.flyBase2004Xref.name
     dp3.flyBaseGene.name
-    hg17,hg18,danRer3,mm7,mm8,rn3,rn4,ce2,sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier sgdIsoformCluster
 "Overlapping (after splicing) SGD (Yeast) transcripts"
