@@ -11732,3 +11732,30 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     liftUp chrOverlaps.bed /san/sanvol1/scratch/hg18/bacends/liftContigs.lft \
         warn cOverlaps.bed
     #	Load up that chrOverlaps.bed as a custom track to see these results
+
+    #	And back to the original business of eliminating obsolete clones
+    awk '{print $6}' contig_overlaps.agp | sort -u > clone.coverage.list
+    time $HOME/kent/src/hg/makeDb/hgClonePos/ckMultipleVersions.pl \
+	clone.coverage.list > /dev/null 2> obsolete.clones
+    
+    time $HOME/kent/src/hg/makeDb/hgClonePos/removeObsoleteClones.sh \
+	contig_overlaps.agp obsolete.clones > clean_overlaps.agp
+    #	looks like it removes 295 lines
+    wc -l contig_overlaps.agp clean_overlaps.agp
+    #	613577 contig_overlaps.agp
+    #	613507 clean_overlaps.agp
+    mv contig_overlaps.agp contig_overlapsWithObsoletes.agp
+    mv clean_overlaps.agp contig_overlaps.agp
+
+
+    cd /cluster/data/hg18
+    #	save all existing .gl files before we overwrite them all
+    tar cvzf ./save.glFiles.tgz ./?/*.gl ./??/*.gl ./?_*/*.gl \
+	./??_*/*.gl ./?/*/*.gl ./??/*/*.gl ./?_*/*/*.gl ./??_*/*/*.gl
+    time agpToGl contig_overlaps.agp . -md=seq_contig.md
+    #	real    1m4.253s
+    time ./jkStuff/liftGl.csh contig.gl
+    #	saw some errors such as: NT_113974/contig.gl doesn't exist, skipping
+    #	capture these new .gl files for future reference
+    tar cvzf ./new.glFiles.tgz ./?/*.gl ./??/*.gl ./?_*/*.gl \
+	./??_*/*.gl ./?/*/*.gl ./??/*/*.gl ./?_*/*/*.gl ./??_*/*/*.gl
