@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.91 2006/11/03 20:53:51 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.92 2006/11/06 20:36:59 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -174,9 +174,10 @@ puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
-puts("<TD>&nbsp;");
+puts("<TD ALIGN='RIGHT'>");
 cgiMakeSubmitButton();
 cgiTableFieldEnd();
+cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 /* second row - text entry box for  data, and clear button */
