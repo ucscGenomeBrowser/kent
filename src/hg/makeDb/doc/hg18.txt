@@ -11756,6 +11756,54 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     #	real    1m4.253s
     time ./jkStuff/liftGl.csh contig.gl
     #	saw some errors such as: NT_113974/contig.gl doesn't exist, skipping
+    #	I'm guessing they were contigs with no alignment results
     #	capture these new .gl files for future reference
     tar cvzf ./new.glFiles.tgz ./?/*.gl ./??/*.gl ./?_*/*.gl \
 	./??_*/*.gl ./?/*/*.gl ./??/*/*.gl ./?_*/*/*.gl ./??_*/*/*.gl
+    #	now reload all the _gold, _gap and _gl tables
+    #	Tested this load on a dummy database and found that the contents of
+    #	the gold and gap tables do not change
+    hgGoldGapGl -chromLst=chrom.lst hg18 /cluster/store11/gs.19 build36
+    #   Then hgClonePos uses those tables to create the Coverage track
+    #	table: clonePos
+    hgClonePos  -maxErr=600 -maxWarn=50000 -chromLst=chrom.lst \
+        hg18 /cluster/data/hg18 ./cleanedSequence.inf /cluster/store11/gs.19 \
+        > updated.clone.pos.errors 2>&1
+    #	Now let's check for clones that are excessively wrong
+    cd /tmp
+    hgsql -N -e \
+"select chrom,chromStart,chromEnd,name,chromEnd-chromStart,seqSize from clonePos;" \
+	hg18 > clonePos.hg18.lengths
+    awk '{if ($6 > 0) { printf "%.2f\t%s\n", 100.0*$5/$6,$0}}' \
+	clonePos.hg18.lengths | sort -n > clonePos.hg18.deviations
+    #	Looking at that list of deviations, there are still a number of them
+    #	that are extreme deviants, but there are a lot less than there were
+    #	before. Previously:
+    ave clonePos.hg18.deviations
+    #	Q1 100.000000
+    #	median 100.000000
+    #	Q3 109.172500
+    #	average 350.043843
+    #	min 80.000000
+    #	max 23574.310000
+    #	count 44978
+    #	total 15744271.980000
+    #	standard deviation 851.762186
+    #	Over 3,500 of them larger than 10 times too large:
+    awk '{if ($1 > 1000) {print}}' clonePos.hg18.deviations | wc
+    #	3881   27167  223039
+
+    # This new lot:
+    ave clonePos.hg18.deviations
+    #	Q1 100.000000
+    #	median 100.000000
+    #	Q3 100.360000
+    #	average 140.353820
+    #	min 0.250000
+    #	max 40838.840000
+    #	count 43734
+    #	total 6138233.960000
+    #	standard deviation 381.871589
+    #	Only 277 are larger than 10 times too big:
+    awk '{if ($1 > 1000) {print}}' clonePos.hg18.deviations | wc
+    #	277    1939   15747
