@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.158 2006/10/12 04:20:50 kate Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.159 2006/11/06 23:57:47 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -401,6 +401,14 @@ safef(query, sizeof(query), "select %s from %s where %s = '%s'",
 return sqlQuickString(conn, query);
 }
 
+char *lookupItemUrlVal(struct column *col, char *sVal,
+        struct sqlConnection *conn)
+{
+char query[512];
+safef(query, sizeof(query), col->itemUrlQuery, sVal);
+return sqlQuickString(conn, query);
+}
+
 void cellSimplePrintExt(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn, boolean lookupForUrl)
 /* This just prints one field from table. */
@@ -422,10 +430,14 @@ else
     else if (col->itemUrl != NULL)
         {
 	hPrintf("<A HREF=\"");
+	char *sVal = gp->name;
 	if (lookupForUrl)
-	    hPrintf(col->itemUrl, s);
-	else
-	    hPrintf(col->itemUrl, gp->name);
+	    sVal = s;
+	if (col->itemUrlQuery)
+	    sVal = lookupItemUrlVal(col, sVal, conn);
+	hPrintf(col->itemUrl, sVal);
+	if (col->itemUrlQuery)
+	    freez(&sVal);
 	if (col->useHgsid)
 	    hPrintf("&%s", cartSidUrlString(cart));
 	if (col->urlChromVar)
@@ -1396,6 +1408,7 @@ col->on = col->defaultOn =
 	sameString(mustFindInRaHash(fileName, settings, "visibility"), "on");
 col->type = mustFindInRaHash(fileName, settings, "type");
 col->itemUrl = hashFindVal(settings, "itemUrl");
+col->itemUrlQuery = hashFindVal(settings, "itemUrlQuery");
 col->useHgsid = columnSettingExists(col, "hgsid");
 col->urlChromVar = hashFindVal(settings, "urlChromVar");
 col->urlStartVar = hashFindVal(settings, "urlStartVar");
