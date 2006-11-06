@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.47 2006/09/27 22:24:43 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.48 2006/11/06 22:16:24 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -71,35 +71,6 @@ if (zoomed)
         }
     }
 }
-
-static void drawDiffBaseTickmarks(struct vGfx *vg, 
-				  int chromStart, int chromEnd,
-				  double scale, int xOff, int y, int height,
-				  char *text, int maxPixels, Color *cdsColor)
-/* Draw 1-pixel wide red vertical lines (tickmarks) where there are 
- * differences recorded in text. */
-{
-int x1, x2, w;
-int i;
-
-x1 = round((double)(chromStart-winStart)*scale) + xOff;
-x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-if (x2 >= maxPixels)
-    x2 = maxPixels - 1;
-w = x2 - x1;
-if (w < 1)
-    w = 1;
-
-for (i=0; i < strlen(text); i++)
-    {
-    if (text[i] != ' ')
-	{
-	int thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
-	vgLine(vg, thisX, y+1, thisX, y+height-2, cdsColor[CDS_STOP]);
-	}
-    }
-}
-
 
 static int convertCoordUsingPsl( int s, struct psl *psl )
 /*return query position corresponding to target position in one 
@@ -246,6 +217,45 @@ else   /*negative strand*/
     }
 }
 
+
+
+void drawCdsDiffBaseTickmarksOnly(struct track *tg,  struct linkedFeatures *lf,
+				  Color *cdsColor, struct vGfx *vg, int xOff,
+				  int y, double scale, int heightPer,
+				  struct dnaSeq *mrnaSeq, struct psl *psl,
+				  int winStart)
+/* Draw 1-pixel wide red lines only where mRNA bases differ from genomic.  
+ * This assumes that lf has been drawn already, we're zoomed out past 
+ * zoomedToBaseLevel, we're not in dense mode etc. */
+{
+struct simpleFeature *sf = NULL;
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    int s = sf->start;
+    int e = sf->end;
+    if (s > winEnd || e < winStart)
+      continue;
+    if (e > s)
+	{
+	int mrnaS = convertCoordUsingPsl(s, psl);
+	if(mrnaS >= 0)
+	    {
+	    struct dnaSeq *genoSeq = hDnaFromSeq(chromName, s, e, dnaUpper);
+	    int i;
+	    for (i=0; i < (e - s); i++)
+		{
+		if (mrnaSeq->dna[mrnaS+i] != genoSeq->dna[i])
+		    {
+		    int thisX = round((double)(s+i-winStart)*scale) + xOff;
+		    vgLine(vg, thisX, y+1, thisX, y+heightPer-2,
+			   cdsColor[CDS_STOP]);
+		    }
+		}
+	    dnaSeqFree(&genoSeq);
+	    }
+	}
+    }
+}
 
 
 static void maskDiffString( char *retStr, char *s1, char *s2, char mask )
@@ -1059,9 +1069,6 @@ if(mrnaS >= 0)
 				    color, lf->score, font, diffStr, 
                                     zoomedToBaseLevel, cdsColor, 
                                     winStart, maxPixels );
-	if (!zoomedToBaseLevel)
-	    drawDiffBaseTickmarks(vg, s, e, scale, xOff, y, heightPer,
-				  diffStr, maxPixels, cdsColor);
         freeMem(diffStr);
 	dyStringFree(&dyGenoSeq);
 	}

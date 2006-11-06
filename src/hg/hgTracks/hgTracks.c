@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1229 2006/11/06 18:54:17 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1230 2006/11/06 22:16:24 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -636,7 +636,7 @@ static void mapBoxToggleComplement(int x, int y, int width, int height,
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement=%d",
-	hgTracksName(), !cartUsualBoolean(cart,"complement",FALSE));
+	hgTracksName(), !cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE));
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 if (message != NULL)
@@ -1605,12 +1605,20 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 /* If showing different codons when zoomed way out, must do another pass 
  * so that different codons aren't overdrawn by same codons.  The whole 
  * item was drawn in the above loop, and now we just make some red marks 
- * on top of it if necessary. */
-if (showDiffBasesAllScales && vis != tvDense &&
-    drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
+ * on top of it if necessary.  Similarly, when showing different bases, 
+ * draw tickmarks now so other exons don't overdraw. */
+if (showDiffBasesAllScales && vis != tvDense)
     {
-    drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
-			  mrnaSeq, psl, winStart);
+    if (drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
+	{
+	drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
+			      mrnaSeq, psl, winStart);
+	}
+    if (drawOptionNum == CDS_DRAW_DIFF_BASES && !zoomedToBaseLevel)
+	{
+	drawCdsDiffBaseTickmarksOnly(tg, lf, cdsColor, vg, xOff, y, scale,
+				     heightPer, mrnaSeq, psl, winStart);
+	}
     }
 }
 
@@ -7805,7 +7813,7 @@ void drawComplementArrow( struct vGfx *vg, int x, int y,
                                 int width, int height, MgFont *font)
 /* Draw arrow and create clickbox for complementing ruler bases */
 {
-if(cartUsualBoolean(cart, "complement", FALSE))
+if(cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
     vgTextRight(vg, x, y, width, height, MG_GRAY, font, "<---");
 else
     vgTextRight(vg, x, y, width, height, MG_BLACK, font, "--->");
