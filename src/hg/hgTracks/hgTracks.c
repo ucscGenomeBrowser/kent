@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1230 2006/11/06 22:16:24 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1231 2006/11/06 23:15:57 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7662,6 +7662,122 @@ int spreadStringCharWidth(int width, int count)
     return width/count;
 }
 
+void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
+		       Color color, MgFont *font, char *text, 
+		       char *match, int count, bool dots, bool isCodon)
+/* Draw evenly spaced letters in string.  For multiple alignments,
+ * supply a non-NULL match string, and then matching letters will be colored
+ * with the main color, mismatched letters will have alt color (or 
+ * matching letters with a dot, and mismatched bases with main color if this
+ * option is selected).
+ * Draw a vertical bar in orange where sequence lacks gaps that
+ * are in reference sequence (possible insertion) -- this is indicated
+ * by an escaped insert count in the sequence.  The escape char is backslash.
+ * The count param is the number of bases to print, not length of
+ * the input line (text) */
+{
+char cBuf[2] = "";
+int i,j,textPos=0;
+int x1, x2;
+char *motifString = cartOptionalString(cart,BASE_MOTIFS);
+boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
+char **motifs = NULL;
+boolean *inMotif = NULL;
+int motifCount = 0;
+Color noMatchColor = lighterColor(vg, color);
+Color clr;
+int textLength = strlen(text);
+bool selfLine = (match == text);
+cBuf[1] = '\0';  
+
+/* If we have motifs, look for them in the string. */
+if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
+    {
+    touppers(motifString);
+    eraseWhiteSpace(motifString);
+    motifString = cloneString(motifString);
+    motifCount = chopString(motifString, ",", NULL, 0);
+    if (complementsToo)
+	AllocArray(motifs, motifCount*2);	/* twice as many */
+    else
+	AllocArray(motifs, motifCount);
+    chopString(motifString, ",", motifs, motifCount);
+    if (complementsToo)
+	{
+	for(i = 0; i < motifCount; i++)
+	    {
+	    int comp = i + motifCount;
+	    motifs[comp] = cloneString(motifs[i]);
+	    reverseComplement(motifs[comp],strlen(motifs[comp]));
+	    }
+	motifCount *= 2;	/* now we have this many	*/
+	}
+	
+    AllocArray(inMotif, textLength);
+    for(i = 0; i < motifCount; i++)
+	{
+	char *mark = text;
+	while((mark = stringIn(motifs[i], mark)) != NULL)
+	    {
+	    int end = mark-text + strlen(motifs[i]);
+	    for(j = mark-text; j < end && j < textLength ; j++)
+		{
+		inMotif[j] = TRUE;
+		}
+	    mark++;
+	    }
+	}
+    freez(&motifString);
+    freez(&motifs);
+    }
+
+for (i=0; i<count; i++, text++, textPos++)
+    {
+    x1 = i * width/count;
+    x2 = (i+1) * width/count - 1;
+    if (match != NULL && *text == '|')
+        {
+        /* insert count follows -- replace with a colored vertical bar */
+        text++;
+	textPos++;
+        i--;
+        vgBox(vg, x+x1, y, 1, height, getOrangeColor());
+        continue;
+        }
+    cBuf[0] = *text;
+    clr = color;
+    if (dots)
+        {
+        /* display bases identical to reference as dots */
+        /* suppress for first line (self line) */
+        if (!selfLine && match != NULL && match[i])
+            if ((*text != ' ') && (toupper(*text) == toupper(match[i])))
+                cBuf[0] = '.';
+        }
+    else
+        {
+        /* display bases identical to reference in main color, mismatches
+         * in alt color */
+        if (match != NULL && match[i])
+            if ((*text != ' ') && (toupper(*text) != toupper(match[i])))
+                clr = noMatchColor;
+        }
+    if(inMotif != NULL && textPos < textLength && inMotif[textPos])
+	{
+	vgBox(vg, x1+x, y, x2-x1, height, clr);
+	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, cBuf);
+	}
+    else
+        {
+        /* restore char for unaligned sequence to lower case */
+        if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
+            cBuf[0] = UNALIGNED_SEQ;
+        /* display bases */
+        if ((textPos % 3) == 1) vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
+        }
+    }
+freez(&inMotif);
+}
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
 		       char *match, int count, bool dots, bool isCodon)
@@ -11217,6 +11333,10 @@ else if (sameWord(type, "wig"))
 else if (sameWord(type, "wigMaf"))
     {
     wigMafMethods(track, tdb, wordCount, words);
+    }
+else if (sameWord(type, "wigMafP"))
+    {
+    wigMafPMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "sample"))
     {

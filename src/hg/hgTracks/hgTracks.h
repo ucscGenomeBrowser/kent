@@ -553,6 +553,12 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
  * by an escaped ('/') insert count in the sequence.
  * If "dots" is set, matching bases are displayed as a dot. */
 
+void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
+                        Color color, MgFont *font, char *s, 
+                        char *match, int count, bool dots, bool isCodon);
+/* similar to spreadAlignString, but it is used for protein sequences.  
+Draw 1 for every 3 AAs*/
+
 void contigMethods(struct track *tg);
 /* Make track for contig */
 
@@ -644,6 +650,8 @@ void chromGraphMethods(struct track *tg);
 void chromGraphMethodsCt(struct track *tg);
 /* Fill in chromGraph methods for custom track. */
 
+void wigMafPMethods(struct track *track, struct trackDb *tdb, 
+                                int wordCount, char *words[]);
 void wigMafMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
 int wigTotalHeight(struct track *tg, enum trackVisibility vis);
