@@ -2509,6 +2509,7 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeGisChip%
     encodeNhgriDnaseHs%
     encodeRegulomeDnaseGM06990%
     encodeSangerChip%
