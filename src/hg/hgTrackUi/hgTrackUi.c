@@ -35,7 +35,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.325 2006/10/20 20:37:50 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.326 2006/11/06 23:32:24 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2488,16 +2488,23 @@ if (isCustomTrack(tdb->tableName))
     puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
     cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
     puts("&nbsp;");
-    cgiMakeButton(CT_CGI_VAR, "Update custom track");
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
+    cgiMakeOnClickButton("document.customTrackForm.submit();return false;",
+                                "Update custom track");
     }
 printf("<BR>\n");
 
 specificUi(tdb);
-
 puts("</FORM>");
 
-if (!isCustomTrack(tdb->tableName))
+if (isCustomTrack(tdb->tableName))
+    {
+    /* hidden form for custom tracks CGI */
+    printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+    cartSaveSession(cart);
+    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
+    puts("</FORM>\n");
+    }
+else
     {
     /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
     if (hTableOrSplitExists(tdb->tableName))
