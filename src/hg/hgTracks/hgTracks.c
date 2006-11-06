@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1228 2006/10/27 15:04:40 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1229 2006/11/06 18:54:17 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12768,7 +12768,8 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
-    hButton(CT_CGI_VAR, hasCustomTracks ? 
+    hOnClickButton("document.customTrackForm.submit();return false;",
+                        hasCustomTracks ? 
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
@@ -12921,7 +12922,12 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     }
 #endif /* SLOW */
-hPrintf("</FORM>");
+hPrintf("</FORM>\n");
+
+/* hidden form for custom tracks CGI */
+hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
 }
 
 void zoomToSize(int newSize)
@@ -13282,33 +13288,6 @@ else
     doTrackForm(NULL);
 }
 
-void customTrackCgi()
-/* Put up CGI that lets user manage custom tracks. */
-{
-int hgsid = cartSessionId(cart);
-
-puts("<HTML>");
-/* javascript redirect to hgCustom */
-#ifndef META_REDIRECT
-if (hgsid)
-    printf("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom?hgsid=%d' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom?hgsid=%d\">Redirect </a></BODY>",hgsid,hgsid);
-else
-    puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
-#else
-if (hgsid)
-    {
-    printf("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom?hgsid=%d\"",hgsid);
-    printf("<BODY><A HREF='/cgi-bin/hgCustom?hgsid=%d'>Redirect</A></BODY>",hgsid);
-    }
-else
-    {
-    puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
-    puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
-    }
-#endif
-puts("</HTML>"); 
-}
-
 void chromInfoTotalRow(long long total)
 /* Make table row with total size from chromInfo. */
 {
@@ -13498,12 +13477,7 @@ hDefaultConnect();
 initTl();
 
 /* Do main display. */
-if (cartVarExists(cart, CT_CGI_VAR))
-    {
-    cartRemove(cart, CT_CGI_VAR);
-    customTrackCgi();
-    }
-else if (cartVarExists(cart, "chromInfoPage"))
+if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();
