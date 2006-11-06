@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.13 2006/09/08 17:30:46 kuhn Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.14 2006/11/06 23:37:24 galt Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -257,6 +257,8 @@ if (phyloTree->numEdges == 2)
     phyloTreeGif(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
     mgDrawLine(mg, hr-this->depth*deltaH, that0->vPos*vdelta+fHeight/2+MARGIN, 
                    hr-this->depth*deltaH, that1->vPos*vdelta+fHeight/2+MARGIN, MG_BLACK);
+    if (phyloTree->ident->name)
+	mgText(mg, h, v, MG_BLACK, font, phyloTree->ident->name);
     }
 else if (phyloTree->numEdges == 0)  
     {
@@ -300,6 +302,8 @@ if (phyloTree->numEdges == 2)
     phyloTreeGifBL(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, TRUE);
     mgDrawLine(mg, MARGIN+this->hPos*minMaxFactor, that0->vPos*vdelta+fHeight/2+MARGIN, 
                    MARGIN+this->hPos*minMaxFactor, that1->vPos*vdelta+fHeight/2+MARGIN, MG_BLACK);
+    if (phyloTree->ident->name)
+    	mgText(mg, MARGIN+this->hPos*minMaxFactor+MARGIN, v, MG_BLACK, font, phyloTree->ident->name);
     }
 else if (phyloTree->numEdges == 0)  
     {
@@ -445,10 +449,17 @@ if (useCart)
 "Parents must have two children. Length is not required if use-branch-lengths is not checked.\n"
 "The length of the root branch is usually not specified.<br>\n"
 "Examples:<br>\n"
-"<table cellpadding=10><tr><td><PRE>\n"
+"<table cellpadding=10>\n"
+"<tr><td><PRE>\n"
 "((A:0.1,B:0.1):0.2,C:0.15);\n"
 "</PRE></td><td>\n"
 "<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((A:0.1,B:0.1):0.2,C:0.15);\">\n"
+"</td></tr>\n"
+"<tr><td><PRE>\n"
+"((A:0.1,B:0.1)D:0.2,C:0.15)E;\n"
+"</PRE></td><td>\n"
+"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((A:0.1,B:0.1)D:0.2,C:0.15)E;\">\n"
+"<br>(internal or ancestral node labels)\n"
 "</td></tr>\n"
 "<tr><td><PRE>\n"
 "  ((((\n"
@@ -462,7 +473,8 @@ if (useCart)
 "    (tetraodon,zebrafish));\n"
 "</PRE></td><td>\n"
 "<IMG SRC=\"?phyloGif_width=200&phyloGif_height=200&phyloGif_tree=(((((((mouse,rat),human),(dog,cow)),opossum),chicken),xenopus),(tetraodon,zebrafish));\">\n"
-"</td></tr></table>\n"
+"</td></tr>\n"
+"</table>\n"
 "5. PhastCons branch lengths are expected substitutions per site, allowing for\n"
 "multiple hits.  So a branch length of 0.5 means an average of one\n"
 "substitution every two nucleotide sites, but the percent id will be\n"
