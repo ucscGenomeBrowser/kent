@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1154 2006/11/01 19:17:10 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1155 2006/11/06 17:53:00 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11554,6 +11554,7 @@ return fileName;
 
 
 void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2)
+/* seq1 is target (using a chromosome), seq2 is query */
 {
 int matchScore = 100;
 int misMatchScore = 100;
