@@ -1,3 +1,12 @@
+track clonePos
+priority 14
+shortLabel Coverage
+longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180 
+type clonePos
+
 track geneid
 shortLabel Geneid Genes
 longLabel Geneid Gene Predictions
