@@ -2,17 +2,31 @@
 <P>
 This track shows the locations of transcriptionally active regions 
 (TARs)/transcribed fragments (transfrags) hybridized to an oligonucleotide 
-microarray whose design was based on human assembly hg13 (NCBI Build 31).</P>
+microarray whose design was based on human assembly hg13 (NCBI Build 31)
+(Bertone et al., 2004).</P>
 
 <H2>Methods</H2>
 <P>
 Microarrays were designed using sequence from the human hg13 assembly. The
 genome sequence was screened for repetitive elements and low-complexity DNA
 using RepeatMasker in the sensitive mode. Additional low-complexity filtering
-was performed using the NSEG program using a minimum segment length of 21
-nucleotides. After filtering, 1.5 Gb of nonrepetitive DNA remained and 
-microarray probes were chosen using the NASA Oligonucleotide Probe Selection
-Algorithm (NOPSA). This resulted in probes chosen based on several criteria:
+was performed using the NSEG (segment sequence(s) by local complexity) 
+program using a minimum segment length of 21 nucleotides to determine 
+low complexity segments of lowest probability. After filtering, 1.5 Gb of 
+nonrepetitive DNA remained and microarray probes were chosen using the NASA 
+Oligonucleotide Probe Selection Algorithm (NOPSA).</P>
+
+<P>
+NOPSA is designed to find the optimal probes for hybridization. A
+database of the frequency of every 18-mer in the genome is created using a
+hash algorithm. Chaining was used to resolve collisions. Average frequencies
+of 36-mers in the genome was determined from the frequencies of each 18-mer
+subsequence in the 36-mer and its reverse complement. 36-mer oligonucletides
+with a frequency equal to one are selected as potential probes for the
+microarray (from Supporting online material for Stolc et al., 2004) </P>
+
+<P>
+ This resulted in probes chosen based on several criteria:
 1) Every 36-mer in the genome is unique; 2) Sequences that could form a loop
 with a stem of &gt; 7 bp were excluded; 3) Factors such as sequence length, 
 extent of complementarity and base composition were also considered. A total 
@@ -25,8 +39,8 @@ approximately 390,000 probes per slide.</P>
 
 <P>
 Biological samples that were hybridized to the arrays consisted of 
-triple-selected poly(A)+ RNA pooled from several individuals (supplied 
-by Ambion). One biological replicate was carried out.</P>
+triple-selected human liver poly(A)+ RNA pooled from several individuals 
+(supplied by Ambion). One biological replicate was carried out.</P>
 
 <P>
 See the following NCBI 
@@ -108,3 +122,13 @@ Rinn, J.L., Tongprasit, W. <em>et al</em>.
 TARGET=_blank>Global identification of human transcribed sequences with 
 genome tiling arrays</A>. 
 <i>Science</i> <B>306</B>(5705), 2242-6 (2004).</P>
+<P>
+Stolc, V., Gauhar, Z., Mason, C., Halasz, G., van Batenburg, M.F.,
+Rifkin, S.A., Hua, S., Herreman, T., Tongprasit, W., Barbano, P.E.,
+Bussemaker, H.J. and White, K.P. 
+<A HREF="http://www.sciencemag.org/cgi/content/abstract/306/5696/655" 
+TARGET=_blank>
+A gene expression map for the euchromatic genome of Drosophila melanogaster
+</A>.
+<i>Science</i> <B>306</B>(5696), 655-60 (2004).</P>
+
