@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1233 2006/11/07 22:55:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1234 2006/11/07 23:01:04 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7664,7 +7664,7 @@ int spreadStringCharWidth(int width, int count)
 
 void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
-		       char *match, int count, bool dots, bool isCodon, int initialColor)
+		       char *match, int count, bool dots, bool isCodon, int initialColorIndex)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color (or 
@@ -7821,15 +7821,15 @@ for (i=0; i<count; i++, text++, textPos++)
 	    {
 	    if (*cBuf != ' ')
 	    	{
-	    	if (initialColor == 0)
+	    	if (initialColorIndex == 0)
 		    {
 	            vgBox(vg, xx1+x, y, xx2-xx1, height, color1);
-		    initialColor ++;
+		    initialColorIndex ++;
 		    }
 	    	else
 		    {
 	            vgBox(vg, xx1+x, y, xx2-xx1, height, color2);
-		    initialColor = 0;
+		    initialColorIndex = 0;
 		    }
 		}
 	    vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
