@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1231 2006/11/06 23:15:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1232 2006/11/07 00:04:37 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7678,6 +7678,9 @@ void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
 {
 char cBuf[2] = "";
 int i,j,textPos=0;
+int matchLen, trMax, trIndex, trCount[3];
+char *chp, chOld;
+
 int x1, x2;
 char *motifString = cartOptionalString(cart,BASE_MOTIFS);
 boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
@@ -7690,6 +7693,36 @@ int textLength = strlen(text);
 bool selfLine = (match == text);
 cBuf[1] = '\0';  
 
+/* figure out which one of the 3 bases is the central position of the codon */
+
+for (i=0; i<3; i++) trCount[i] = 0;
+
+matchLen = strlen(match);
+chOld = *match;
+chp = match;
+trIndex = -1;
+trMax = 0;
+for (i=0; i<matchLen; i++)
+    {
+    /* increment count if a transition is detected */
+    if (chOld != *chp) 
+	{
+	trCount[i%3]++;
+	if (trCount[i%3] > trMax) trMax = trCount[i%3];
+	chOld = *chp;
+	}
+    chp++;
+    }
+
+/* tease out the higest transition position and add 1 to it */
+for (i=0; i<3; i++)
+    {
+    if (trMax == trCount[i]) 
+	{
+	trIndex = (i+1)%3;
+	break;
+	}
+    }
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
     {
@@ -7772,12 +7805,13 @@ for (i=0; i<count; i++, text++, textPos++)
         /* restore char for unaligned sequence to lower case */
         if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
             cBuf[0] = UNALIGNED_SEQ;
-        /* display bases */
-        if ((textPos % 3) == 1) vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
+        /* display bases (only at the central base position of a codon)*/
+        if ((textPos % 3) == trIndex) vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
         }
     }
 freez(&inMotif);
 }
+
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
 		       char *match, int count, bool dots, bool isCodon)
