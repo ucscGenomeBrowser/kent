@@ -182,7 +182,7 @@ static boolean isInMBLabValidDb(char *acc)
 {
 boolean inMBLabValidDb = FALSE;
 struct sqlConnection *fconn = sqlMayConnect("hgFixed");
-if (fconn != NULL)
+if ((fconn != NULL) && sqlTableExists(fconn, "mgcMBLabValid"))
     {
     char query[64], buf[32];
     safef(query, sizeof(query), "select acc from mgcMBLabValid where acc=\"%s\"",
