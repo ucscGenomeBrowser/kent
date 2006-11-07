@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.150 2006/11/07 00:36:44 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.151 2006/11/07 01:04:52 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -85,12 +85,13 @@ dyStringPrintf(dy, "lastUse datetime not null,\n");
 dyStringPrintf(dy, "PRIMARY KEY(name)\n");
 dyStringPrintf(dy, ")\n");
 sqlUpdate(conn,dy->string);
+dyStringFree(&dy);
 }
 
-static void touchLastUse(struct sqlConnection *conn, char *tableName,
+static void touchLastUse(struct sqlConnection *conn, char *table,
 	boolean status)
-/* for status==TRUE - update metaInfo information for tableName
- * for status==FALSE - delete entry for tableName from metaInfo table
+/* for status==TRUE - update metaInfo information for table
+ * for status==FALSE - delete entry for table from metaInfo table
  */
 {
 static boolean exists = FALSE;
@@ -99,6 +100,36 @@ if (!exists)
     if (!sqlTableExists(conn, CT_META_INFO))
 	createMetaInfo(conn);
     exists = TRUE;
+    }
+char query[1024];
+if (status)
+    {
+    struct sqlResult *sr = NULL;
+    char **row = NULL;
+    safef(query, sizeof(query), "SELECT useCount FROM %s WHERE name=\"%s\"",
+	CT_META_INFO, table);
+    sr = sqlGetResult(conn,query);
+    row = sqlNextRow(sr);
+    if (row)
+	{
+	int useCount = sqlUnsigned(row[0]);
+	sqlFreeResult(&sr);
+	safef(query, sizeof(query), "UPDATE %s SET useCount=%d,lastUse=now() where name=\"%s\"",
+	    CT_META_INFO, useCount+1, table);
+	sqlUpdate(conn,query);
+	}
+    else
+	{
+	safef(query, sizeof(query), "INSERT %s VALUES(\"%s\",1,now())",
+	    CT_META_INFO, table);
+	sqlUpdate(conn,query);
+	}
+    }
+else
+    {
+    safef(query, sizeof(query), "delete from %s where name=\"%s\"",
+	CT_META_INFO, table);
+    sqlUpdate(conn,query);
     }
 }
 
