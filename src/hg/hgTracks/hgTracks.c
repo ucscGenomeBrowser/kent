@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1232 2006/11/07 00:04:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1233 2006/11/07 22:55:39 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7664,7 +7664,7 @@ int spreadStringCharWidth(int width, int count)
 
 void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
-		       char *match, int count, bool dots, bool isCodon)
+		       char *match, int count, bool dots, bool isCodon, int initialColor)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color (or 
@@ -7681,7 +7681,7 @@ int i,j,textPos=0;
 int matchLen, trMax, trIndex, trCount[3];
 char *chp, chOld;
 
-int x1, x2;
+int x1, x2, xx1, xx2;
 char *motifString = cartOptionalString(cart,BASE_MOTIFS);
 boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 char **motifs = NULL;
@@ -7693,10 +7693,18 @@ int textLength = strlen(text);
 bool selfLine = (match == text);
 cBuf[1] = '\0';  
 
+/* get lighter and even lighter blue colors */
+Color color1, color2;
+
+color1 = vgFindColorIx(vg, 12, 12, 120);
+color1 = lighterColor(vg, color1);
+color1 = lighterColor(vg, color1);
+
+color2 = lighterColor(vg, color1);
+
 /* figure out which one of the 3 bases is the central position of the codon */
 
 for (i=0; i<3; i++) trCount[i] = 0;
-
 matchLen = strlen(match);
 chOld = *match;
 chp = match;
@@ -7704,7 +7712,7 @@ trIndex = -1;
 trMax = 0;
 for (i=0; i<matchLen; i++)
     {
-    /* increment count if a transition is detected */
+    /* increment count if a transition of AA is detected */
     if (chOld != *chp) 
 	{
 	trCount[i%3]++;
@@ -7714,7 +7722,7 @@ for (i=0; i<matchLen; i++)
     chp++;
     }
 
-/* tease out the higest transition position and add 1 to it */
+/* pick the higest transition position and add 1 to it */
 for (i=0; i<3; i++)
     {
     if (trMax == trCount[i]) 
@@ -7723,6 +7731,7 @@ for (i=0; i<3; i++)
 	break;
 	}
     }
+
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
     {
@@ -7768,6 +7777,8 @@ for (i=0; i<count; i++, text++, textPos++)
     {
     x1 = i * width/count;
     x2 = (i+1) * width/count - 1;
+    xx1 = (i-1) * width/count;
+    xx2 = (i+2) * width/count - 1;
     if (match != NULL && *text == '|')
         {
         /* insert count follows -- replace with a colored vertical bar */
@@ -7806,8 +7817,24 @@ for (i=0; i<count; i++, text++, textPos++)
         if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
             cBuf[0] = UNALIGNED_SEQ;
         /* display bases (only at the central base position of a codon)*/
-        if ((textPos % 3) == trIndex) vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
-        }
+        if ((textPos % 3) == trIndex) 
+	    {
+	    if (*cBuf != ' ')
+	    	{
+	    	if (initialColor == 0)
+		    {
+	            vgBox(vg, xx1+x, y, xx2-xx1, height, color1);
+		    initialColor ++;
+		    }
+	    	else
+		    {
+	            vgBox(vg, xx1+x, y, xx2-xx1, height, color2);
+		    initialColor = 0;
+		    }
+		}
+	    vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
+	    }
+	}
     }
 freez(&inMotif);
 }
