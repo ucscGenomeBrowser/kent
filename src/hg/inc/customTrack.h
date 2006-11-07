@@ -105,6 +105,11 @@ char *customTrackTableFromLabel(char *label);
 
 #define CUSTOM_TRASH	"customTrash"
 /*	custom tracks database name	*/
+#define CT_META_INFO	"metaInfo"
+/*	table name in customTrash for last accessed memory and other data */
+
+boolean ctDbTableExists(struct sqlConnection *conn, char *table);
+/* verify if custom trash db table exists, touch access stats */
 
 boolean ctDbAvailable(char *tableName);
 /*	determine if custom tracks database is available
