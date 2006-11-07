@@ -555,7 +555,7 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 
 void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s, 
-                        char *match, int count, bool dots, bool isCodon);
+                        char *match, int count, bool dots, bool isCodon, int seqStart);
 /* similar to spreadAlignString, but it is used for protein sequences.  
 Draw 1 for every 3 AAs*/
 
