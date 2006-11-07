@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.92 2006/11/06 20:36:59 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.93 2006/11/07 18:55:47 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -174,10 +174,9 @@ puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
-puts("<TD ALIGN='RIGHT'>");
+cgiSimpleTableFieldStart();
 cgiMakeSubmitButton();
 cgiTableFieldEnd();
-cgiTableField("&nbsp;");
 cgiTableRowEnd();
 
 /* second row - text entry box for  data, and clear button */
@@ -244,15 +243,10 @@ cgiTableRowEnd();
 cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
-
-/* fifth row - link for HTML description template */
-cgiSimpleTableRowStart();
-puts("<TD COLSPAN=3>");
-puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.");
-puts("</TD>");
-cgiTableRowEnd();
 cgiTableEnd();
 
+/* help text at bottom of screen - link for HTML description template */
+puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.");
 
 if (isUpdateForm)
     {
