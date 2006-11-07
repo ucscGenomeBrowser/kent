@@ -5269,4 +5269,34 @@ zcat `ls -1 /san/sanvol1/scratch/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     ln -s /cluster/data/dm2/bed/multiz15way/dm2_15way.gif \
       /usr/local/apache/htdocs/images/phylo/dm2_15way.gif
 
+#########################################################################
+# ORegAnno Open Regulatory Annotation 		Belinda Giardine Nov 2006
+# 
+#custom code is in place for details page
+#trackDb is at top level
+#parser for dump from Obi Griffith is at PSU.
+#cp data to UCSC and load
+hgsql dm2
+show tables like 'oreg%'; #make sure name not used
+#create positional table, cut and paste as others are done
+CREATE TABLE oreganno (
+    bin smallint unsigned not null,     # A field to speed indexing
+    chrom varchar(255) not null,        # Chromosome
+    chromStart int unsigned not null,   # Start position in chrom
+    chromEnd int unsigned not null,     # End position in chrom
+    id varchar(48) not null,    # unique ID to identify this regulatory region
+    strand char(1) not null,    # + or -
+    name varchar(255) not null, # name of regulatory region
+              #Indices
+    INDEX(bin),
+    PRIMARY KEY(id)
+);
+
+#load the tables
+hgsql hgFixed
+    load data local infile "oregannoAttr.dm2.txt" into table oregannoAttr;
+    load data local infile "oregannoLink.dm2.txt" into table oregannoLink;
+grep "^chr" oreganno.dm2.txt | sort -k1,1 -k2,2n > oreganno.bed
+hgLoadBed dm2 oreganno oreganno.bed -noSort -oldTable -tab
+rm oreganno.bed
 
