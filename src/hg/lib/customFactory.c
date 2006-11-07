@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.37 2006/10/23 22:29:51 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.38 2006/11/07 00:36:44 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1245,7 +1245,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* Database tracks already mostly loaded, just check that table 
      * still exists (they are removed when not accessed for a while). */
         {
-	if (!sqlTableExists(ctConn, track->dbTableName))
+	if (!ctDbTableExists(ctConn, track->dbTableName))
 	    continue;
 	track->wiggle = startsWith("wig ", track->tdb->type);
 	oneList = track;

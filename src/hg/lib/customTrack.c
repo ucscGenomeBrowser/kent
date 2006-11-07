@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.149 2006/10/20 14:50:03 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.150 2006/11/07 00:36:44 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -74,6 +74,42 @@ tdb->canPack = 2;       /* unknown -- fill in later when type is known */
 return tdb;
 }
 
+static void createMetaInfo(struct sqlConnection *conn)
+/*	create the metaInfo table in customTrash db	*/
+{
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy, "CREATE TABLE %s (\n", CT_META_INFO);
+dyStringPrintf(dy, "name varchar(255) not null,\n");
+dyStringPrintf(dy, "useCount int not null,\n");
+dyStringPrintf(dy, "lastUse datetime not null,\n");
+dyStringPrintf(dy, "PRIMARY KEY(name)\n");
+dyStringPrintf(dy, ")\n");
+sqlUpdate(conn,dy->string);
+}
+
+static void touchLastUse(struct sqlConnection *conn, char *tableName,
+	boolean status)
+/* for status==TRUE - update metaInfo information for tableName
+ * for status==FALSE - delete entry for tableName from metaInfo table
+ */
+{
+static boolean exists = FALSE;
+if (!exists)
+    {
+    if (!sqlTableExists(conn, CT_META_INFO))
+	createMetaInfo(conn);
+    exists = TRUE;
+    }
+}
+
+boolean ctDbTableExists(struct sqlConnection *conn, char *table)
+/* verify if custom trash db table exists, touch access stats */
+{
+boolean status = sqlTableExists(conn, table);
+touchLastUse(conn, table, status);
+return status;
+}
+
 boolean ctDbAvailable(char *tableName)
 /*	determine if custom tracks database is available
  *	and if tableName non-NULL, verify table exists
@@ -96,7 +132,7 @@ if (! checked)
 	dbExists = TRUE;
 	if (tableName)
 	    {
-	    status = sqlTableExists(conn, tableName);
+	    status = ctDbTableExists(conn, tableName);
 	    }
 	sqlDisconnect(&conn);
 	}
@@ -104,7 +140,7 @@ if (! checked)
 else if (dbExists && ((char *)NULL != tableName))
     {
     struct sqlConnection *conn = sqlCtConn(TRUE);
-    status = sqlTableExists(conn, tableName);
+    status = ctDbTableExists(conn, tableName);
     sqlDisconnect(&conn);
     }
 
