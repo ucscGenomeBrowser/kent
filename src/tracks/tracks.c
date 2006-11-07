@@ -417,10 +417,6 @@ struct trackGroup
                                 * to share code. */
     };
 
-static boolean tgLoadNothing(){return TRUE;}
-static void tgDrawNothing(){}
-static void tgFreeNothing(){}
-static char *tgNoName(){return"";}
 
 static int tgUsualHeight(struct trackGroup *tg, MgFont *font)
 /* Most track groups will use this to figure out the height they use. */
