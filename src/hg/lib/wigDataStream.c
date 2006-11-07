@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.76 2006/05/30 19:59:26 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.77 2006/11/07 22:09:34 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -1854,8 +1854,7 @@ if (bedList && *bedList)
 		}
 	    /*	record dataRange for resolution accounting	*/
 	    if (doAscii && wigAscii->count)
-		wigAscii->dataRange = (upperLimit - lowerLimit) /
-			(MAX_WIG_VALUE+1);
+		wigAscii->dataRange = (upperLimit - lowerLimit);
 	    if (doBed)	/*	there may be one last element	*/
 		{
 		if (bedElEnd > bedElStart)
