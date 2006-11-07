@@ -453,7 +453,6 @@ urlLabel Yale DART Link:
 
 track encodeGisChipPetAll
 compositeTrack on
-release alpha
 shortLabel GIS ChIP-PET
 longLabel Genome Institute of Singapore ChIP-PET
 group encodeChip
@@ -464,7 +463,6 @@ type bed 12
 
     track encodeGisChipPet
     subTrack encodeGisChipPetAll
-    release alpha
     shortLabel p53 HCT116 +5FU
     longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
     color 158,35,135
@@ -473,7 +471,6 @@ type bed 12
     priority 1
 
     track encodeGisChipPetStat1Gif
-release alpha
     subTrack encodeGisChipPetAll
     shortLabel STAT1 HeLa +gIF
     longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
@@ -482,7 +479,6 @@ release alpha
     priority 2
 
     track encodeGisChipPetStat1NoGif
-release alpha
     subTrack encodeGisChipPetAll
     shortLabel STAT1 HeLa -gIF
     longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
@@ -491,54 +487,12 @@ release alpha
     priority 3
 
     track encodeGisChipPetMycP493
-release alpha
     subTrack encodeGisChipPetAll
     shortLabel cMyc P493
     longLabel Genome Institute of Singapore ChIP-PET: c-Myc Ab on P493 B cells
     color 158,35,135
     dataVersion Oct 2006
     priority 4
-
-track encodeGisChipPet
-release beta
-shortLabel GIS p53 5FU HCT116
-longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
-group encodeChip
-color 158,35,135
-priority 47.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-visibility hide
-useScore 1
-type bed 12
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
-
-track encodeGisChipPetStat1
-release beta
-compositeTrack on
-shortLabel GIS STAT1 HeLa
-longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on (+/-)gIF HeLa cells
-group encodeChip
-color 125,140,35
-altColor 67,79,35
-priority 47.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-visibility hide
-useScore 1
-type bed 12
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeGisChipPetStat1Gif
-release beta
-    subTrack encodeGisChipPetStat1
-    shortLabel GIS STAT1 +gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
-
-    track encodeGisChipPetStat1NoGif
-release beta
-    subTrack encodeGisChipPetStat1
-    shortLabel GIS STAT1 -gIF
-    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
 
 track encodeSangerChip
 compositeTrack on
