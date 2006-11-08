@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.34 2006/08/04 23:37:45 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.35 2006/11/08 21:44:46 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -212,9 +212,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (el1 != NULL)
         {
 	el2 = hashLookup(weightHash, row[0]);
+	if (!el2) 
+	    {
+	    verbose(1, "missing weight for %s\n", row[0]);
+	    continue;
+	    }
 	if (sameString(el2->val, "10")) continue;
 	if (sameString(el2->val, "0")) continue;
 
+        /* I think we already have cel as el1 */
 	cel = hashFindVal(contigCoords, row[1]);
 
 	loc_type = sqlUnsigned(row[2]);
