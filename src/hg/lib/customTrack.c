@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.151 2006/11/07 01:04:52 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.152 2006/11/08 00:22:35 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -88,7 +88,7 @@ sqlUpdate(conn,dy->string);
 dyStringFree(&dy);
 }
 
-static void touchLastUse(struct sqlConnection *conn, char *table,
+void ctTouchLastUse(struct sqlConnection *conn, char *table,
 	boolean status)
 /* for status==TRUE - update metaInfo information for table
  * for status==FALSE - delete entry for table from metaInfo table
@@ -137,7 +137,7 @@ boolean ctDbTableExists(struct sqlConnection *conn, char *table)
 /* verify if custom trash db table exists, touch access stats */
 {
 boolean status = sqlTableExists(conn, table);
-touchLastUse(conn, table, status);
+ctTouchLastUse(conn, table, status);
 return status;
 }
 

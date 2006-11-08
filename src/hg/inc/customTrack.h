@@ -108,6 +108,12 @@ char *customTrackTableFromLabel(char *label);
 #define CT_META_INFO	"metaInfo"
 /*	table name in customTrash for last accessed memory and other data */
 
+void ctTouchLastUse(struct sqlConnection *conn, char *table,
+	boolean status);
+/* for status==TRUE - update metaInfo information for table
+ * for status==FALSE - delete entry for table from metaInfo table
+ */
+
 boolean ctDbTableExists(struct sqlConnection *conn, char *table);
 /* verify if custom trash db table exists, touch access stats */
 
