@@ -1709,7 +1709,7 @@ identifier snpAnnotations125
 "SNP annotations"
     $snpDb125.snp125.name dupeOk
     $snpDb125.snp125Exceptions.name 
-    $snpDb125.snp125Seq.name minCheck=0.98
+    $snpDb125.snp125Seq.name minCheck=0.8
 
 identifier snpAnnotations126
 "SNP annotations"
