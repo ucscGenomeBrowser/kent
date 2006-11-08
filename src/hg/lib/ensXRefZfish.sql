@@ -8,15 +8,17 @@ CREATE TABLE ensXRefZfish (
     ensGeneId varchar(255) not null,	# Ensembl Transcript ID
     zfinId varchar(255) not null,	# ZFIN ID
     uniProtId varchar(255) not null,	# Unified UniProt protein accession
-    geneId varchar(255) not null,	# NCBI Entrez Gene (formerly LocusLink) ID
-    geneSymbol varchar(255) not null,	# NCBI Entrez Gene (formerly LocusLink) Symbol
+    spDisplayId varchar(255) not null,	# UniProt Display ID
+    geneId varchar(255) not null,	# ZFIN Gene Symbol (formerly LocusLink) ID
+    geneSymbol varchar(255) not null,	# Official ZFIN Gene Symbol
     refSeq varchar(255) not null,	# RefSeq DNA Accession
     protAcc varchar(255) not null,	# RefSeq Protein Accession
     description varchar(255) not null,	# Description
               #Indices
     PRIMARY KEY(ensGeneId),
-    KEY(zfinId), 
+    KEY(zfinId),
     KEY(uniProtId),
+    KEY(spDisplayId),
     KEY(geneId),
     KEY(geneSymbol),
     KEY(refSeq),

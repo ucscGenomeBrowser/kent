@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "ensXRefZfish.h"
 
-static char const rcsid[] = "$Id: ensXRefZfish.c,v 1.1 2006/03/06 18:40:21 hartera Exp $";
+static char const rcsid[] = "$Id: ensXRefZfish.c,v 1.2 2006/11/08 22:21:54 hartera Exp $";
 
 void ensXRefZfishStaticLoad(char **row, struct ensXRefZfish *ret)
 /* Load a row from ensXRefZfish table into ret.  The contents of ret will
@@ -18,11 +18,12 @@ void ensXRefZfishStaticLoad(char **row, struct ensXRefZfish *ret)
 ret->ensGeneId = row[0];
 ret->zfinId = row[1];
 ret->uniProtId = row[2];
-ret->geneId = row[3];
-ret->geneSymbol = row[4];
-ret->refSeq = row[5];
-ret->protAcc = row[6];
-ret->description = row[7];
+ret->spDisplayId = row[3];
+ret->geneId = row[4];
+ret->geneSymbol = row[5];
+ret->refSeq = row[6];
+ret->protAcc = row[7];
+ret->description = row[8];
 }
 
 struct ensXRefZfish *ensXRefZfishLoad(char **row)
@@ -35,11 +36,12 @@ AllocVar(ret);
 ret->ensGeneId = cloneString(row[0]);
 ret->zfinId = cloneString(row[1]);
 ret->uniProtId = cloneString(row[2]);
-ret->geneId = cloneString(row[3]);
-ret->geneSymbol = cloneString(row[4]);
-ret->refSeq = cloneString(row[5]);
-ret->protAcc = cloneString(row[6]);
-ret->description = cloneString(row[7]);
+ret->spDisplayId = cloneString(row[3]);
+ret->geneId = cloneString(row[4]);
+ret->geneSymbol = cloneString(row[5]);
+ret->refSeq = cloneString(row[6]);
+ret->protAcc = cloneString(row[7]);
+ret->description = cloneString(row[8]);
 return ret;
 }
 
@@ -49,7 +51,7 @@ struct ensXRefZfish *ensXRefZfishLoadAll(char *fileName)
 {
 struct ensXRefZfish *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -67,7 +69,7 @@ struct ensXRefZfish *ensXRefZfishLoadAllByChar(char *fileName, char chopper)
 {
 struct ensXRefZfish *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -91,6 +93,7 @@ if (ret == NULL)
 ret->ensGeneId = sqlStringComma(&s);
 ret->zfinId = sqlStringComma(&s);
 ret->uniProtId = sqlStringComma(&s);
+ret->spDisplayId = sqlStringComma(&s);
 ret->geneId = sqlStringComma(&s);
 ret->geneSymbol = sqlStringComma(&s);
 ret->refSeq = sqlStringComma(&s);
@@ -110,6 +113,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->ensGeneId);
 freeMem(el->zfinId);
 freeMem(el->uniProtId);
+freeMem(el->spDisplayId);
 freeMem(el->geneId);
 freeMem(el->geneSymbol);
 freeMem(el->refSeq);
@@ -144,6 +148,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->uniProtId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->spDisplayId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

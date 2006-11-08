@@ -5,7 +5,7 @@
 #ifndef ENSXREFZFISH_H
 #define ENSXREFZFISH_H
 
-#define ENSXREFZFISH_NUM_COLS 8
+#define ENSXREFZFISH_NUM_COLS 9
 
 struct ensXRefZfish
 /* Link from an Ensembl Transcript ID to other database IDs and description. */
@@ -14,8 +14,9 @@ struct ensXRefZfish
     char *ensGeneId;	/* Ensembl Transcript ID */
     char *zfinId;	/* ZFIN ID */
     char *uniProtId;	/* Unified UniProt protein accession */
-    char *geneId;	/* NCBI Entrez Gene (formerly LocusLink) ID */
-    char *geneSymbol;	/* NCBI Entrez Gene (formerly LocusLink) Symbol */
+    char *spDisplayId;	/* UniProt Display ID */
+    char *geneId;	/* ZFIN Gene Symbol (formerly LocusLink) ID */
+    char *geneSymbol;	/* Official ZFIN Gene Symbol */
     char *refSeq;	/* RefSeq DNA Accession */
     char *protAcc;	/* RefSeq Protein Accession */
     char *description;	/* Description */
