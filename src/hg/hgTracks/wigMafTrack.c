@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.101 2006/11/06 23:15:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.102 2006/11/08 01:00:09 fanhsu Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1890,18 +1890,8 @@ tryagain:
 
     if (startSub2)
 	{
-	/* call spreadAlignString3rd if it is a protein wig MAF track */
-	if (strstr(track->tdb->type, "wigMafP"))
-	    {
-	    spreadAlignString3rd(vg, x, y, width, mi->height-1, color,
-                        font, &line[2], &selfLine[2], winBaseCount, dots, FALSE);
-            }
-	else
-	    {
-	    spreadAlignString(vg, x, y, width, mi->height-1, color,
-                        font, &line[2], &selfLine[2], winBaseCount, dots, FALSE);
-            }
-
+	spreadAlignString(vg, x, y, width, mi->height-1, color,
+        		font, &line[2], &selfLine[2], winBaseCount, dots, FALSE);
 	}
     else
 	spreadAlignString(vg, x, y, width, mi->height-1, color,
