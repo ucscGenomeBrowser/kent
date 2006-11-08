@@ -187,6 +187,10 @@ TMPDIR=/scratch/tmp
     blat /cluster/data/felCat3/felCat3.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=/cluster/bluearc/felCat3/11.ooc -repMatch=600
 # Wrote 18561 overused 11-mers to /cluster/bluearc/felCat3/11.ooc
+    ssh kkr1u00
+    cd /iscratch/i/felCat3
+    cp -p /cluster/bluearc/felCat3/11.ooc .
+    iSync 
 
 
 #########################################################################
