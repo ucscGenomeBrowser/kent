@@ -215,4 +215,7 @@ int maskHeadPolyT(DNA *dna, int size);
 boolean isDna(char *poly, int size);
 /* Return TRUE if letters in poly are at least 90% ACGTU */
 
+boolean isAllDna(char *poly, int size);
+/* Return TRUE if letters in poly are 100% ACGTU */
+
 #endif /* DNAUTIL_H */

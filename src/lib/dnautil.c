@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.41 2006/09/10 19:10:35 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.42 2006/11/08 00:24:11 heather Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -886,6 +886,27 @@ for (i=0; i<size; ++i)
 	dnaCount += 1;
     }
 return (dnaCount >= round(0.9 * size));
+}
+
+boolean isAllDna(char *poly, int size)
+/* Return TRUE if letters in poly are 100% ACGTU */
+{
+int i;
+
+if (size <= 1)
+    return FALSE;
+fprintf(stderr, "isAllDna for %s ", poly);
+dnaUtilOpen();
+for (i=0; i<size-1; ++i)
+    {
+    if (ntChars[(int)poly[i]] == 0) 
+        {
+        fprintf(stderr, "returning FALSE\n");
+	return FALSE;
+	}
+    }
+fprintf(stderr, "returning TRUE\n");
+return TRUE;
 }
 
 
