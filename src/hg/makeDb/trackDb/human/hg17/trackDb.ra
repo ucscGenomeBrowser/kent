@@ -134,6 +134,15 @@ visibility hide
 color 180,0,0
 type genePred
 
+track augustusHints
+shortLabel Augustus using Hints
+longLabel Augustus Gene Predictions using Hints
+group genes
+priority 51.7
+visibility dense
+color 139,0,0
+type genePred
+
 track pseudoExpressed
 shortLabel Expressed Retro
 longLabel Expressed retroGenes with orf 
