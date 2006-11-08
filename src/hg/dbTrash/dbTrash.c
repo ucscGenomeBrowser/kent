@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.8 2006/11/06 23:08:00 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.9 2006/11/08 00:19:24 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,7 +23,7 @@ errAbort(
 	CUSTOM_TRASH ".\n"
   "   -historyToo - also consider the table called 'history' for deletion.\n"
   "               - default is to leave 'history' alone no matter how old.\n"
-  "               - this applies to the table 'lastAccessed' also.\n"
+  "               - this applies to the table 'metaInfo' also.\n"
   "   -verbose=N - 2 == show arguments, dates, and dropped tables,\n"
   "              - 3 == show date information for all tables."
   );
@@ -38,19 +38,18 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 
-static double age = 0.0;	/*	must be specified	*/
+static double ageHours = 0.0;	/*	must be specified	*/
 static boolean drop = FALSE;		/*	optional	*/
 static char *db = CUSTOM_TRASH;		/*	optional	*/
 static boolean historyToo = FALSE;	/*	optional	*/
 
 static time_t timeNow = 0;
-static time_t ageTime = 0;
 static time_t dropTime = 0;
 
 void dbTrash(char *db)
 /* dbTrash - drop tables from a database older than specified N hours. */
 {
-struct sqlConnection *conn = sqlCtConn(TRUE);
+struct sqlConnection *conn = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -62,12 +61,22 @@ int nameIx;
 int timeIxUsed;
 unsigned long long totalSize = 0;
 struct slName *tableNames = NULL;	/*	subject to age limits	*/
+struct hash *expiredHash = newHash(10);
 
 if (differentWord(db,CUSTOM_TRASH))
-    {
-    sqlDisconnect(&conn);
     conn = sqlConnect(db);
-    }
+else
+    conn = sqlCtConn(TRUE);
+
+time_t ageSeconds = (time_t)(ageHours * 3600);	/*	age in seconds	*/
+safef(query,sizeof(query),"select name from metaInfo WHERE "
+    "lastUse < DATE_SUB(NOW(), INTERVAL %ld SECOND);", ageSeconds);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAddInt(expiredHash, row[0], 1);
+sqlFreeResult(&sr);
+
+/*	run through the table status business to get table size information */
 safef(query,sizeof(query),"show table status");
 sr = sqlGetResult(conn, query);
 nameIx = sqlFieldColumn(sr, "Name");
@@ -83,8 +92,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* if not doing history too, and this is the history table, next row */
     if ((!historyToo) && (sameWord(row[nameIx],"history")))
 	continue;
-    /* also skip the lastAccessed table */
-    if ((!historyToo) && (sameWord(row[nameIx],"lastAccessed")))
+    /* also skip the metaInfo table */
+    if ((!historyToo) && (sameWord(row[nameIx],"metaInfo")))
 	continue;
 
     /*	Update_time is sometimes NULL on MySQL 5
@@ -106,11 +115,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		row[createTimeIx], row[updateTimeIx], row[nameIx]);
 	    }
 	}
-    tm.tm_year -= 1900;
-    tm.tm_mon -= 1;
-    tm.tm_isdst = -1;	/*	do not know timezone, figure it out */
-    timep = mktime(&tm);
-    if (timep < dropTime)
+
+    if (hashLookup(expiredHash,row[nameIx]))
 	{
 	slNameAddHead(&tableNames, row[nameIx]);
 	verbose(3,"%s %ld drop %s\n",row[timeIxUsed], (unsigned long)timep,
@@ -125,7 +131,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	verbose(3,"%s %ld   OK %s\n",row[timeIxUsed], (unsigned long)timep,
 		row[nameIx]);
     }
-sqlDisconnect(&conn);
+sqlFreeResult(&sr);
 
 if (drop)
     {
@@ -134,11 +140,11 @@ if (drop)
 	char comment[256];
 	struct slName *el;
 	int droppedCount = 0;
-	conn = sqlConnect(db);
 	for (el = tableNames; el != NULL; el = el->next)
 	    {
 	    verbose(2,"# drop %s\n", el->name);
 	    sqlDropTable(conn, el->name);
+	    ctTouchLastUse(conn, el->name, FALSE); /* removes metaInfo row */
 	    ++droppedCount;
 	    }
 	/* add a comment to the history table and finish up connection */
@@ -146,9 +152,9 @@ if (drop)
 	    "Dropped %d tables with total size %llu", droppedCount, totalSize);
 	verbose(2,"# %s\n", comment);
 	hgHistoryComment(conn, comment);
-	sqlDisconnect(&conn);
 	}
     }
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
@@ -168,13 +174,13 @@ if (!optionExists("age"))
 if (time(&timeNow) < 1)
     errAbort("can not obtain current time via time() function\n");
 tm = localtime(&timeNow);
-age = optionFloat("age", 0.0);
-ageTime = (time_t)(age * 60 * 60);	/*	age in seconds	*/
-dropTime = timeNow - ageTime;
-if (age > 0.0)
+ageHours = optionFloat("age", 0.0);
+time_t ageSeconds = (time_t)(ageHours * 3600);	/*	age in seconds	*/
+dropTime = timeNow - ageSeconds;
+if (ageHours > 0.0)
     {
-    verbose(2,"#	specified age = %f hours = %ld seconds\n", age,
-	(unsigned long)ageTime);
+    verbose(2,"#	specified age = %f hours = %ld seconds\n", ageHours,
+	(unsigned long)ageSeconds);
     verbose(2,"#	current time: %d-%02d-%02d %02d:%02d:%02d %ld\n",
 	1900+tm->tm_year, 1+tm->tm_mon, tm->tm_mday,
         tm->tm_hour, tm->tm_min, tm->tm_sec, (unsigned long)timeNow);
@@ -185,7 +191,7 @@ if (age > 0.0)
     }
 else
     {
-    verbose(1,"ERROR: specified age %.f must be greater than 0.0\n", age);
+    verbose(1,"ERROR: specified age %.f must be greater than 0.0\n", ageHours);
     usage();
     }
 drop = optionExists("drop");
