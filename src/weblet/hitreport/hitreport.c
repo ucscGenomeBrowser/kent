@@ -74,7 +74,6 @@ void doMiddle()
 {
 FILE *f = mustOpen(fileName, "rb");
 long count;
-int userCount = 0;
 time_t time;
 char ipNameBuf[80];
 char whenceNameBuf[256];
@@ -147,7 +146,7 @@ printf("\n\nTop %d users:\n\n", topCount);
 printList(userList, topCount);
 }
 
-int main(int argc, char *argv)
+int main(int argc, char **argv)
 {
 fileName = cgiString("file");
 readWhence = cgiBoolean("whence");
