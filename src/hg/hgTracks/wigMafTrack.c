@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.103 2006/11/08 22:31:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.104 2006/11/08 23:20:23 fanhsu Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1499,15 +1499,8 @@ for (i=1; i<lineCount; ++i)
 
 /* Give nice names to first two. */
 insertLine = lines[0];
-if (strstr(track->tdb->type, "wigMafP"))
-    {
-    selfLine = lines[2];
-    printf("<br>selfLine set as%s\n", selfLine);fflush(stdout);
-    }
-else
-    {
-    selfLine = lines[1];
-    }
+selfLine = lines[1];
+
 /* Allocate a line for recording gap sizes in reference */
 AllocArray(insertCounts, alignLineLength);
 
