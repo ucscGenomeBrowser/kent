@@ -67,6 +67,15 @@ void printGenomeListHtml(char *db, char *onChangeText);
  * onChange javascript.
  */
 
+void printBlatGenomeListHtml(char *db, char *onChangeText);
+/* Prints to stdout the HTML to render a dropdown list containing 
+ * a list of the possible genomes to choose from.  
+ * param db - The database whose genome will be selected by default. 
+ * If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in any 
+ * onChange javascript.
+ */
+
 void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *OnChangeText);
 
 void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText);

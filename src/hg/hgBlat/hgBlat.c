@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.105 2006/11/07 22:44:21 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.106 2006/11/08 21:48:24 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -632,7 +632,7 @@ printf("<TD ALIGN=CENTER>Output type:</TD>");
 printf("<TD ALIGN=CENTER>&nbsp</TD>");
 printf("</TR>\n<TR>\n");
 printf("<TD ALIGN=CENTER>\n");
-printGenomeListHtml(db, onChangeText);
+printBlatGenomeListHtml(db, onChangeText);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 printBlatAssemblyListHtml(db);
