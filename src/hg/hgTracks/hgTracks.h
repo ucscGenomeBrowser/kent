@@ -553,6 +553,11 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
  * by an escaped ('/') insert count in the sequence.
  * If "dots" is set, matching bases are displayed as a dot. */
 
+void spreadAlignStringProt(struct vGfx *vg, int x, int y, int width, int height,
+                        Color color, MgFont *font, char *s,
+                        char *match, int count, bool dots, bool isCodon, int initialColorIndex);
+/* similar to spreadAlignString, but it is used for protein sequences. */
+
 void contigMethods(struct track *tg);
 /* Make track for contig */
 
