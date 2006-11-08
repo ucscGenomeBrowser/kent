@@ -9998,7 +9998,7 @@ mysql> desc ContigLocFilter;
 #  | allele        | blob        | YES  |     | NULL    |       |
 #  +---------------+-------------+------+-----+---------+-------+
  
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter hg18snp126 ref_assembly
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter hg18snp126 ref_assembly reference
 # note rowcount
 # ContigLocFilter  12368145
 # how many are positive strand? hopefully 90%
