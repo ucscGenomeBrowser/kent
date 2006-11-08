@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.159 2006/11/06 23:57:47 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.160 2006/11/08 21:39:25 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1578,12 +1578,14 @@ hPrintf("<TT><PRE>");
 hPrintf("#");
 for (col = colList; col != NULL; col = col->next)
     {
-    if (first)
-	first = FALSE;
-    else
-	hPrintf("\t");
     if (col->on)
+	{
+	if (first)
+	    first = FALSE;
+	else
+	    hPrintf("\t");
 	hPrintf("%s", col->name);
+	}
     }
 hPrintf("\n");
 for (gene = geneList; gene != NULL; gene = gene->next)
