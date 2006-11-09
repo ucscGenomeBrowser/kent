@@ -1968,18 +1968,18 @@ identifier allenBrainProbe
 
 identifier jaxRepTranscriptName external=MGI
 "Jackson Labs/MGI Allele name: representative transcript ID"
-    mm6.jaxRepTranscript.name dupeOk
-    mm6.jaxRepTranscriptAlias.name
+    mm6,mm8.jaxRepTranscript.name dupeOk
+    mm6,mm8.jaxRepTranscriptAlias.name
 
 identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
-    mm6.jaxAllele.name dupeOk
-    mm6.jaxAlleleInfo.name
+    mm6,mm8.jaxAllele.name dupeOk
+    mm6,mm8.jaxAlleleInfo.name
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
-    mm6.jaxPhenotype.name dupeOk
-    mm6.jaxPhenotypeAlias.name
+    mm6,mm8.jaxPhenotype.name dupeOk
+    mm6,mm8.jaxPhenotypeAlias.name
 
 # links between Human Mutation and related tables (hgMut)
 
