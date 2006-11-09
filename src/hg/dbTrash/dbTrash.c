@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.9 2006/11/08 00:19:24 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.10 2006/11/09 20:09:25 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -62,6 +62,7 @@ int timeIxUsed;
 unsigned long long totalSize = 0;
 struct slName *tableNames = NULL;	/*	subject to age limits	*/
 struct hash *expiredHash = newHash(10);
+struct hash *notExpiredHash = newHash(10);
 
 if (differentWord(db,CUSTOM_TRASH))
     conn = sqlConnect(db);
@@ -74,6 +75,12 @@ safef(query,sizeof(query),"select name from metaInfo WHERE "
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(expiredHash, row[0], 1);
+sqlFreeResult(&sr);
+safef(query,sizeof(query),"select name from metaInfo WHERE "
+    "lastUse >= DATE_SUB(NOW(), INTERVAL %ld SECOND);", ageSeconds);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAddInt(notExpiredHash, row[0], 1);
 sqlFreeResult(&sr);
 
 /*	run through the table status business to get table size information */
@@ -115,6 +122,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 		row[createTimeIx], row[updateTimeIx], row[nameIx]);
 	    }
 	}
+    tm.tm_year -= 1900;
+    tm.tm_mon -= 1;
+    tm.tm_isdst = -1;   /*      do not know timezone, figure it out */
+    timep = mktime(&tm);
 
     if (hashLookup(expiredHash,row[nameIx]))
 	{
@@ -126,12 +137,43 @@ while ((row = sqlNextRow(sr)) != NULL)
 		((char *)NULL != row[indexLengthIx]) )
 	    totalSize += sqlLongLong(row[dataLengthIx])
 		+ sqlLongLong(row[indexLengthIx]);
+	hashRemove(expiredHash, row[nameIx]);
 	}
     else
-	verbose(3,"%s %ld   OK %s\n",row[timeIxUsed], (unsigned long)timep,
+	{
+	if (hashLookup(notExpiredHash,row[nameIx]))
+	    verbose(3,"%s %ld   OK %s\n",row[timeIxUsed], (unsigned long)timep,
 		row[nameIx]);
+	else
+	    {	/* table exists, but not in metaInfo, is it old enough ? */
+	    if (timep < dropTime)
+		{
+		slNameAddHead(&tableNames, row[nameIx]);
+		verbose(2,"%s %ld dropt %s\n",
+		    row[timeIxUsed], (unsigned long)timep, row[nameIx]);
+		/*       If sizes are non-NULL, add them up     */
+		if ( ((char *)NULL != row[dataLengthIx]) &&
+		    ((char *)NULL != row[indexLengthIx]) )
+			totalSize += sqlLongLong(row[dataLengthIx])
+			    + sqlLongLong(row[indexLengthIx]);
+		}
+	    else
+		verbose(3,"%s %ld  OKt %s\n",row[timeIxUsed],
+		    (unsigned long)timep, row[nameIx]);
+	    }
+	}
     }
 sqlFreeResult(&sr);
+
+/*	perhaps the table was already dropped, but not from the metaInfo */
+struct hashEl *elList = hashElListHash(expiredHash);
+struct hashEl *el;
+for (el = elList; el != NULL; el = el->next)
+    {
+    verbose(2,"%s exists in metaInfo only\n", el->name);
+    if (drop)
+	ctTouchLastUse(conn, el->name, FALSE); /* removes metaInfo row */
+    }
 
 if (drop)
     {
