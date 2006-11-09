@@ -332,19 +332,19 @@ typedef int Mark2[5][5][5];
 inline int prob0(Mark0 m, DNA base)
 /* Return probability of base considering 0 before */
 {
-return m[ntVal[base]+1];
+return m[ntVal[(int)base]+1];
 }
 
 inline int prob1(Mark1 m, DNA *dna)
 /* Return probability of base considering 1 before */
 {
-return m[ntVal[dna[-1]]+1][ntVal[dna[0]]+1];
+return m[ntVal[(int)dna[-1]]+1][ntVal[(int)dna[0]]+1];
 }
 
 inline int prob2(Mark2 m, DNA *dna)
 /* Return probability of base considering 2 before */
 {
-return m[ntVal[dna[-2]]+1][ntVal[dna[-1]]+1][ntVal[dna[0]]+1];
+return m[ntVal[(int)dna[-2]]+1][ntVal[(int)dna[-1]]+1][ntVal[(int)dna[0]]+1];
 }
 
 void makeM2Ig(Mark2 m, int unlikely)
@@ -396,7 +396,7 @@ void mark0Exclusive(Mark0 m, DNA base, int unlikely)
 int i;
 for (i=0; i<5; ++i)
     m[i] = unlikely;
-m[ntVal[base]+1] = scaledLog(1.0);
+m[ntVal[(int)base]+1] = scaledLog(1.0);
 }
 
 void mark1GcRich(Mark1 m, double gcRatio, int unlikely)
@@ -443,13 +443,13 @@ while ((seq = faReadOneDnaSeq(f, NULL, TRUE)) != NULL)
     dna = seq->dna;
     if (size > 0)
         {
-        val = ntVal[dna[0]]+1;
+        val = ntVal[(int)dna[0]]+1;
         hist0[val] += 1;
         }
     if (size > 1)
         {
         lastVal = val;
-        val = ntVal[dna[1]]+1;
+        val = ntVal[(int)dna[1]]+1;
         hist0[val] += 1;
         hist1[lastVal][val] += 1;
         }
@@ -457,7 +457,7 @@ while ((seq = faReadOneDnaSeq(f, NULL, TRUE)) != NULL)
         {
         lastLastVal = lastVal;
         lastVal = val;
-        val = ntVal[dna[i]]+1;
+        val = ntVal[(int)dna[i]]+1;
         hist0[val] += 1;
         hist1[lastVal][val] += 1;
         hist2[lastLastVal][lastVal][val] += 1;
@@ -512,7 +512,6 @@ int hist0[3][5], hist1[3][5][5], hist2[3][5][5][5];
 Mark1 *m[3];
 int i, size;
 DNA *dna;
-int total = 0;
 int frame;
 
 m[0] = c0;
@@ -530,9 +529,9 @@ while ((seq = faReadOneDnaSeq(f, NULL, TRUE)) != NULL)
     frame = 2;
     for (i=0; i<size; ++i)
         {
-        int v1 = ntVal[dna[i]]+1;
-        int v2 = ntVal[dna[i+1]]+1;
-        int v3 = ntVal[dna[i+2]]+1;
+        int v1 = ntVal[(int)dna[i]]+1;
+        int v2 = ntVal[(int)dna[i+1]]+1;
+        int v3 = ntVal[(int)dna[i+2]]+1;
         hist0[frame][v3] += 1;
         hist1[frame][v2][v3] += 1;
         hist2[frame][v1][v2][v3] += 1;
