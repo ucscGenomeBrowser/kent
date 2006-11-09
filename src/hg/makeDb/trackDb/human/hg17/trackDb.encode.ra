@@ -1670,7 +1670,7 @@ longLabel Yale ChIP/Chip Regulatory Factor Binding Regions Analysis
 group encodeChip
 priority 65.24
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE Dec 2005 Freeze
+dataVersion Dec 2005 Freeze
 type bed 4 .
 url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
 urlLabel Yale DART Link:
@@ -1679,14 +1679,14 @@ urlLabel Yale DART Link:
     subTrack encodeYaleChipRfbr
     shortLabel Yale RFBR Clusters
     longLabel Yale ChIP/Chip Regulatory Factor Binding Regions (RFBR) Clusters
-    color 120,30,50
+    color 50,50,150
     priority 1
 
     track encodeYaleChipRfbrDeserts
     subTrack encodeYaleChipRfbr
     shortLabel Yale RFBR Deserts
     longLabel Yale ChIP/Chip Regulatory Factor Binding Regions (RFBR) Deserts
-    color 120,30,50
+    color 200,50,50
     priority 2
     
 track encodeBu_ORChID1
