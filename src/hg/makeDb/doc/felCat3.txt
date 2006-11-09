@@ -214,17 +214,14 @@ TMPDIR=/scratch/tmp
 # 345 native refseq
 felCat3.serverGenome = /cluster/data/felCat3/felCat3.2bit
 felCat3.clusterGenome = /iscratch/i/felCat3/felCat3.2bit
-felCat3.ooc = /cluster/bluearc/felCat3/11.ooc
+felCat3.ooc = /iscratch/i/felCat3/11.ooc
 felCat3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 felCat3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 felCat3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 felCat3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+felCat3.genbank.est.native.pslCDnaFilter   = ${lowCover.genbank.est.native.pslCDnaFilter}
 felCat3.lift = no
-felCat3.refseq.mrna.native.load = yes
 felCat3.refseq.mrna.xeno.load = yes
-felCat3.genbank.mrna.native.align = yes
-felCat3.genbank.mrna.native.load = no
-felCat3.genbank.mrna.xeno.load = yes
 felCat3.downloadDir = felCat3
 felCat3.perChromTables = no
 
