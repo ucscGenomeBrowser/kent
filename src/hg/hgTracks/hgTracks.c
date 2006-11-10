@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1236 2006/11/08 22:29:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1237 2006/11/10 00:48:39 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7873,14 +7873,15 @@ for (i=0; i<count; i++, text++, textPos++)
         vgBox(vg, x+x1, y, 1, height, getOrangeColor());
         continue;
         }
-    cBuf[0] = *text;
+    cBuf[0] = lookupCodon(text-1);
+    if (cBuf[0] == 'X') cBuf[0] = '-';
     clr = color;
     if (dots)
         {
         /* display bases identical to reference as dots */
         /* suppress for first line (self line) */
         if (!selfLine && match != NULL && match[i])
-            if ((*text != ' ') && (toupper(*text) == toupper(match[i])))
+            if ((*text != ' ') && (lookupCodon(text-1) ==  lookupCodon(match+textPos-1)))
                 cBuf[0] = '.';
         }
     else
@@ -7917,10 +7918,6 @@ for (i=0; i<count; i++, text++, textPos++)
                     vgBox(vg, xx1+x, y, xx2-xx1, height, color2);
                     }
 
-		/* look up AA */
-	    	cBuf[0] = lookupCodon(text-1);
-	    	if (cBuf[0] == 'X') cBuf[0] = '-';
-		
 		/* display AA */
 	    	vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
 	    	}
