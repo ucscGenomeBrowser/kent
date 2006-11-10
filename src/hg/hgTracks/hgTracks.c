@@ -98,8 +98,6 @@
 #include "humPhen.h"
 #include "liftOver.h"
 #include "hgConfig.h"
-#include "hgMut.h"
-#include "hgMutUi.h"
 #include "gv.h"
 #include "gvUi.h"
 #include "oreganno.h"
@@ -109,7 +107,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1238 2006/11/10 01:00:01 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1239 2006/11/10 16:22:37 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10443,25 +10441,6 @@ else
     return gvColorByDisease(tg, item, vg);
 }
 
-Color hgMutColor(struct track *tg, void *item, struct vGfx *vg)
-/* color items by type */
-{
-struct hgMut *el = item;
-
-    if (sameString(el->baseChangeType, "substitution"))
-        return vgFindColorIx(vg, 204, 0, 255);
-    else if (sameString(el->baseChangeType, "deletion"))
-        return MG_BLUE;
-    else if (sameString(el->baseChangeType, "insertion"))
-        return vgFindColorIx(vg, 0, 153, 0); /* dark green */
-    else if (sameString(el->baseChangeType, "complex"))
-        return vgFindColorIx(vg, 100, 50, 0); /* brown */ 
-    else if (sameString(el->baseChangeType, "duplication"))
-        return vgFindColorIx(vg, 255, 153, 0);
-    else
-        return MG_BLACK;
-}
-
 boolean gvFilterAccuracy(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
@@ -10516,54 +10495,6 @@ for (cnt = 0; cnt < gvSrcSize; cnt++)
         return FALSE;
         }
     }
-return TRUE;
-}
-
-boolean hgMutFilterSrc(struct hgMut *el, struct hgMutSrc *srcList)
-/* Check to see if this element should be excluded. */
-{
-struct hashEl *filterList = NULL;
-struct hashEl *hashel = NULL;
-char *srcTxt = NULL;
-struct hgMutSrc *src = NULL;
-
-for (src = srcList; src != NULL; src = src->next)
-    {
-    if (el->srcId == src->srcId) 
-        {
-        srcTxt = cloneString(src->src);
-        break;
-        }
-    }
-filterList = cartFindPrefix(cart, "hgMut.filter.src.");
-if (srcTxt == NULL) 
-    return TRUE;
-else if (filterList == NULL)
-    {
-    /* by default filter out the Swiss-Prot */
-    if (sameString(srcTxt, "Swiss-Prot"))
-        {
-        char filter[128];
-        safef(filter, sizeof(filter), "hgMut.filter.src.%s", srcTxt);
-        /* add to cart so it will show up as excluded */
-        cartSetInt(cart, filter, 1);
-        return FALSE;
-        }
-    else 
-        return TRUE;
-    }
-for (hashel = filterList; hashel != NULL; hashel = hashel->next)
-    {
-    if (endsWith(hashel->name, srcTxt) && 
-        differentString(hashel->val, "0")) 
-        {
-        freeMem(srcTxt);
-        hashElFreeList(&filterList);
-        return FALSE;
-        }
-    }
-hashElFreeList(&filterList);
-freeMem(srcTxt);
 return TRUE;
 }
 
@@ -10623,23 +10554,6 @@ for (cnt = 0; cnt < gvTypeSize; cnt++)
 return TRUE;
 }
 
-boolean hgMutFilterType(struct hgMut *el)
-/* Check to see if this element should be excluded. */
-{
-int cnt = 0;
-for (cnt = 0; cnt < variantTypeSize; cnt++)
-    {
-    if (cartVarExists(cart, variantTypeString[cnt]) &&
-        cartString(cart, variantTypeString[cnt]) != NULL &&
-        differentString(cartString(cart, variantTypeString[cnt]), "0") &&
-        sameString(variantTypeDbValue[cnt], el->baseChangeType))
-        {
-        return FALSE;
-        }
-    }
-return TRUE;
-}
-
 boolean gvFilterLoc(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
@@ -10650,23 +10564,6 @@ for (cnt = 0; cnt < gvLocationSize; cnt++)
         cartString(cart, gvLocationString[cnt]) != NULL &&
         differentString(cartString(cart, gvLocationString[cnt]), "0") &&
         sameString(gvLocationDbValue[cnt], el->location))
-        {
-        return FALSE;
-        }
-    }
-return TRUE;
-}
-
-boolean hgMutFilterLoc(struct hgMut *el)
-/* Check to see if this element should be excluded. */
-{
-int cnt = 0;
-for (cnt = 0; cnt < variantLocationSize; cnt++)
-    {
-    if (cartVarExists(cart, variantLocationString[cnt]) &&
-        cartString(cart, variantLocationString[cnt]) != NULL &&
-        differentString(cartString(cart, variantLocationString[cnt]), "0") &&
-        sameString(variantLocationDbValue[cnt], el->location))
         {
         return FALSE;
         }
@@ -10738,70 +10635,6 @@ for (el = tg->items; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
-void lookupHgMutName(struct track *tg) 
-/* give option on which name to display */
-{
-struct hgMut *el;
-struct sqlConnection *conn = hAllocConn();
-boolean useHgvs = FALSE;
-boolean useId = FALSE;
-boolean useCommon = FALSE;
-boolean labelStarted = FALSE;
-
-struct hashEl *hgMutLabels = cartFindPrefix(cart, "hgMut.label");
-struct hashEl *label;
-if (hgMutLabels == NULL)
-    {
-    useHgvs = TRUE; /* default to gene name */
-    /* set cart to match what is being displayed */
-    cartSetBoolean(cart, "hgMut.label.hgvs", TRUE);
-    }
-for (label = hgMutLabels; label != NULL; label = label->next)
-    {
-    if (endsWith(label->name, "hgvs") && differentString(label->val, "0"))
-        useHgvs = TRUE;
-    else if (endsWith(label->name, "common") && differentString(label->val, "0"))
-        useCommon = TRUE;
-    else if (endsWith(label->name, "dbid") && differentString(label->val, "0"))
-        useId = TRUE;
-    }
-
-for (el = tg->items; el != NULL; el = el->next)
-    {
-    struct dyString *name = dyStringNew(64);
-    labelStarted = FALSE; /* reset for each item */
-    if (useHgvs) 
-        {
-        dyStringAppend(name, el->name);
-        labelStarted = TRUE;
-        }
-    if (useCommon)
-        {
-        char query[256];
-        char *commonName = NULL;
-        char *escId = sqlEscapeString(el->mutId);
-        safef(query, sizeof(query), "select name from hgMutAlias where mutId = '%s' and nameType = 'common'", escId);
-        commonName = sqlQuickString(conn, query);
-        freeMem(escId);
-        if (labelStarted) dyStringAppendC(name, '/');
-        else labelStarted = TRUE;
-        if (commonName != NULL)
-            dyStringAppend(name, commonName);
-        else
-            dyStringAppend(name, " ");
-        }
-    if (useId)
-        {
-        if (labelStarted) dyStringAppendC(name, '/');
-        else labelStarted = TRUE;
-        dyStringAppend(name, el->mutId);
-        }
-    freeMem(el->name); /* free old name */
-    el->name = dyStringCannibalize(&name);
-    }
-hFreeConn(&conn);
-}
-
 void loadGV(struct track *tg)
 /* Load human mutation with filter */
 {
@@ -10852,45 +10685,6 @@ if (vis != tvDense)
     }
 hFreeConn(&conn);
 hFreeConn(&conn2);
-}
-
-void loadHgMut(struct track *tg)
-/* Load human mutation with filter */
-{
-struct hgMut *list = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-struct hgMutSrc *srcList = NULL;
-char **row;
-int rowOffset;
-enum trackVisibility vis = tg->visibility;
-
-/* load as linked list once, outside of loop */
-srcList = hgMutSrcLoadByQuery(conn, "select * from hgMutSrc");
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-                 NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hgMut *el = hgMutLoad(row);
-    if (!hgMutFilterType(el))
-        hgMutFree(&el);
-    else if (!hgMutFilterLoc(el))
-        hgMutFree(&el);
-    else if (!hgMutFilterSrc(el, srcList))
-        hgMutFree(&el);
-    else
-        slAddHead(&list, el);
-    }
-sqlFreeResult(&sr);
-slReverse(&list);
-hgMutSrcFreeList(&srcList);
-tg->items = list;
-/* change names here so not affected if change filters later 
-   and no extra if when viewing dense                        */
-if (vis != tvDense)
-    {
-    lookupHgMutName(tg);
-    }
 }
 
 boolean oregannoFilterType (struct oreganno *el)
@@ -10965,20 +10759,6 @@ struct gvPos *el = item;
 return el->id;
 }
 
-char *hgMutName(struct track *tg, void *item)
-/* Get name to use for hgMut item. */
-{
-struct hgMut *el = item;
-return el->name;
-}
-
-char *hgMutMapName (struct track *tg, void *item)
-/* Return unique identifier for item */
-{
-struct hgMut *el = item;
-return el->mutId;
-}
-
 void gvMethods (struct track *tg)
 /* Simple exclude/include filtering on human mutation items and color. */
 {
@@ -10987,16 +10767,6 @@ tg->itemColor = gvColor;
 tg->itemNameColor = gvColor;
 tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
-}
-
-void hgMutMethods (struct track *tg)
-/* Simple exclude/include filtering on human mutation items and color. */
-{
-tg->loadItems = loadHgMut;
-tg->itemColor = hgMutColor;
-tg->itemNameColor = hgMutColor;
-tg->itemName = hgMutName;
-tg->mapItemName = hgMutMapName;
 }
 
 void oregannoMethods (struct track *tg)
@@ -12639,7 +12409,6 @@ registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
-registerTrackHandler("hgMut", hgMutMethods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("oreganno", oregannoMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
