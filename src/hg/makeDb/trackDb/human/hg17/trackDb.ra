@@ -2230,24 +2230,6 @@ searchType genePred
 termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
 searchPriority 50
 
-searchName hgMutAliasSearch
-searchTable hgMut
-query select chrom, chromStart, chromEnd, mutId from %s where mutId = '%s'
-xrefTable hgMutAlias
-xrefQuery select mutId, name from %s where name like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
-searchName hgMutHgvsSearch
-searchTable hgMut
-query select chrom, chromStart, chromEnd, mutId from %s where mutId = '%s'
-xrefTable hgMut
-xrefQuery select mutId, name from %s where name like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
 searchName illumina
 searchTable snpArrayIllumina300
 searchMethod exact
