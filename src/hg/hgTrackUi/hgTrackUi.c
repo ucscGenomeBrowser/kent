@@ -22,7 +22,6 @@
 #include "chainDb.h"
 #include "phyloTree.h"
 #include "humanPhenotypeUi.h"
-#include "hgMutUi.h"
 #include "gvUi.h"
 #include "oregannoUi.h"
 #include "chromGraph.h"
@@ -35,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.327 2006/11/08 00:30:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.328 2006/11/10 16:24:55 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -553,30 +552,6 @@ printf(" %s&nbsp;&nbsp;&nbsp;", "Common name");
 printf("<BR>\n");
 }
 
-void hgMutIdControls (struct trackDb *tdb) 
-/* print the controls for the label choice */
-{
-char varName[64];
-boolean option = FALSE;
-
-printf("<B>Label:</B> ");
-safef(varName, sizeof(varName), "%s.label.hgvs", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "HGVS name");
-
-safef(varName, sizeof(varName), "%s.label.common", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "Common name");
-
-safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
-printf("<BR>\n");
-}
-
 void gvUi(struct trackDb *tdb)
 /* print UI for human mutation filters */
 {
@@ -646,51 +621,6 @@ for (i = 0; i < gvColorTypeSize; i++)
     cgiMakeDropList(gvColorTypeStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
     }
 printf("<BR>");
-}
-
-void hgMutUi(struct trackDb *tdb)
-/* print UI for human mutation filters */
-{
-int i = 0; /* variable to walk through arrays */
-char **row;
-struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
-char srcButton[128];
-
-hgMutIdControls(tdb);
-printf("<BR><B>Exclude mutation type</B><BR>");
-for (i = 0; i < variantTypeSize; i++)
-    {
-    cartMakeCheckBox(cart, variantTypeString[i], FALSE);
-    printf (" %s<BR>", variantTypeLabel[i]);
-    }
-
-printf("<BR><B>Exclude mutation location</B><BR>");
-for (i = 0; i < variantLocationSize; i++)
-    {
-    cartMakeCheckBox(cart, variantLocationString[i], FALSE);
-    printf (" %s<BR>", variantLocationLabel[i]);
-    }
-
-printf("<BR><B>Exclude data source</B><BR>");
-sr = sqlGetResult(conn, "select distinct(src) from hgMutSrc order by src");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    safef(srcButton, sizeof(srcButton), "hgMut.filter.src.%s", row[0]);
-    if (differentString(row[0], "LSDB")) 
-        {
-        cartMakeCheckBox(cart, srcButton, TRUE);
-        printf (" %s<BR>", row[0]);
-        }
-    else 
-        {
-        cartMakeCheckBox(cart, srcButton, FALSE);
-        printf (" Locus Specific Databases<BR>");
-        }
-
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 void humanPhenotypeUi(struct trackDb *tdb) 
@@ -2402,8 +2332,6 @@ else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
 else if (sameString(track, "transRegCode"))
     transRegCodeUi(tdb);
-else if (sameString(track, "hgMut"))
-    hgMutUi(tdb);
 else if (sameString(track, "gvPos"))
     gvUi(tdb);
 else if (sameString(track, "oreganno"))
