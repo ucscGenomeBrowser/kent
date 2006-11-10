@@ -1,10 +1,13 @@
 #!/usr/bin/perl -w
+$ENV{'PATH'} = '/usr/bin:/cluster/home/giardine/bin/x86_64/';
 
 use strict;
 
 #this reads the inputs from files, generates the HGVS name for the variant
 #and computes coordinates using blat and perl script convert_prot_coors2
-#requires uniProt database tables: features*, protein, extDb, extDbRef
+#requires uniProt database tables: protein, comment, commentType
+#requires protDb table: spXref2
+#set variables build, protDb, disFile, spFile, kgProtMap below
 
 #Notes on how name is derived from uniProt features
 #for len=1
@@ -15,12 +18,13 @@ use strict;
 
 #several variable changes to switch usage (kgProtMap,psl,converter)
 my $build = 'hg18';
-my $kgProtMap = 'kgProtMapUniq.txt'; #if set use, otherwise run blat
+my $protDb = 'proteins060115';
+my $kgProtMap = 'kgProtMapUniq.txt'; #must set, blat too slow
 my $customTrack = 1; #flag whether want custom track with names
 my $psl = "kgProtMapUniq.$build.txt"; #'tmp.psl';
 my $psl2; #my $psl2 = 'protBlatUniq.txt';
 #the one below needs the feature ID as part of spVars
-my $fixFeatures = 'featureType2.txt'; #features with fix for run togethers
+my $fixFeatures; # = 'featureType2.txt'; #features with fix for run togethers
 #had to adust IDs, runs didn't match exactly
 my %feature;
 #skip for now too many errors, better way of chosing alignment?
@@ -29,20 +33,22 @@ my $spSeq = 'tmp.fa';
 #not currently used
 my $nibList = 'nibsFullPath.list';
 #version 2 for protBlat, version 3 for kgProtMap
-my $converter = './convert_prot_coors3'; #pslFile mRNA pos
-my $converter2 = './convert_prot_coors2'; 
+my $converter = './convert_prot_coors3';  #lengths in nts
+my $converter2 = './convert_prot_coors2'; #lengths in codons
 my %varIdToSpId;
 my %aa1To3;
 my $aaFile = 'aminoInfoDump';
 #format:3letterAbrev 1letterAbrev LongName
-my $spFile = 'spVars.txt'; #'arVars.txt'; 'spVars.txt';
+my $spFile = 'spVars061002.txt'; #'arVars.txt'; 'spVars.txt';
 #disease associations
 my $disFile = 'SwissProtDiseaseAssoc.txt';
 my %disAssoc;
 my %gene;
 my %omim;
+my %omimId;
 my %varIdToMutName;
 my %codon;
+my %uniProt; #for uniProt disease or polymorphism associations
 my $pslLine;
 my $coordinateAccuracy = 1;
 my $strand; #filled in when get PSL
@@ -66,6 +72,9 @@ close $fh or die "Couldn't close $aaFile, $!\n";
 
 #load disease associations
 loadDisease();
+
+loadUniprotDisease();
+loadOmimTitles();
 
 if ($fixFeatures) { loadFeatureFix(); }
 
@@ -108,7 +117,7 @@ while (<$fh>) {
     if (!$status) {
        $status = 'likely to be disease-associated';
        if ($v[3] =~ /polymorphism/ && $v[3] =~ /cancer|disease/i) { undef $status; }
-       elsif ($v[3] =~ /polymorphism/) { $status = 'not disease-associated'; }
+       elsif ($v[3] =~ /polymorphism/) { undef $status; }
        elsif ($v[3] =~ /unknown\s*pathological\s*significance/) { undef $status; }
        elsif ($v[3] =~ /pathological\s*significance\s*unknown/) { undef $status; }
        elsif ($v[3] =~ /effect not known/) { undef $status; }
@@ -184,11 +193,11 @@ while (<$fh>) {
        #print "TESTING starting new protein $v[0]\n";
        $pslLine = getPslLine($v[0]);
        if (!$pslLine) { 
-          print "no coordinates for $n\n";
+          print "no alignment for $n\n";
           next;
        }
     }elsif ($kgProtMap && !$pslLine) {
-       print "no coordinates still for $n\n";
+       #print "no alignment still for $n\n";
        next;
     }
 
@@ -248,10 +257,10 @@ while (<$fh>) {
         next;
     }
     if ($oldAA && !@chr2 && !checkSequence($oldAA, $strand, $chr[0], $chr[1], $chr[2])) {
-        print "sequence mismatch for $n\n";
+        #print "sequence mismatch for $n\n";
         next;
     }elsif ($oldAA && !checkSequence($oldAA, $strand, $chr[0], $chr[1], $chr[2], $chr2[1], $chr2[2])) {
-        print "sequence mismatch for $n\n";
+        #print "sequence mismatch for $n\n";
         next;
     }
 
@@ -287,10 +296,16 @@ while (<$fh>) {
     if ($phenotype) {
        print $outFh3 "$v[4]\tphenoCommon\t$phenotype\n"; 
     }
-    #in OMIM title links?
-    #if (exists $omim{$v[4]}) {
-       #print $outFh2 "$v[4]\tlinks\tOMIM\t$omim{$v[4]}\t\n";
-    #}
+    if (exists $uniProt{$v[0]}) { #uniProt disease/polymorphism links
+       foreach my $k (@{$uniProt{$v[0]}}) {
+          print $outFh2 "$v[4]\tgenesDisVars\t$k\t$v[0]\t\n";
+       }
+    }
+    if (exists $omimId{$v[0]}) { #omim title links
+       foreach my $o (@{$omimId{$v[0]}}) {
+          print $outFh2 "$v[4]\tgenesDisVars\tomimTitle2\t$o\t\n";
+       }
+    }
 }
 close $fh or die "Couldn't close $spFile, $!\n";
 close $outFh or die "couldn't close outFh, $!\n";
@@ -483,5 +498,51 @@ sub loadFeatureFix {
       $feature{$t[0]} = $t[1];
    }
    close (FIX) or die "Couldn't finish $fixFeatures, $!\n";
+}
+####End 
+
+sub loadOmimTitles {
+   my $sql = 'select accession, extAC from spXref2 where division = "9606" and extDB = "MIM"';
+   open(FH, "-|", "hgsql -NB $protDb -e '$sql'") 
+	or die "Couldn't fetch omim IDs from db, $!\n";
+   while (<FH>) {
+       chomp;
+       my @t = split(/\s+/);
+       push(@{$omimId{$t[0]}}, $t[1]);
+   }
+   close(FH) or die "Couldn't finish omim IDs, $!\n";
+}
+####End
+
+sub loadUniprotDisease {
+   #get polymorphism and disease IDs
+   my $sql = "select id, val from commentType where val in ('DISEASE', 'POLYMORPHISM')";
+   my %type;
+   my $dis;
+   my $poly;
+   open(FH, "-|", "hgsql -NB uniProt -e \"$sql\"")
+        or die "Couldn't fetch uniProt type IDs from db, $!\n";
+   while (<FH>) {
+       chomp;
+       my @t = split(/\s+/);
+       if ($t[1] eq 'DISEASE') {
+          $dis = $t[0];
+          $type{$t[0]} = 'uniProtDis';
+       }else {
+          $poly = $t[0];
+          $type{$t[0]} = 'uniProtPoly';
+       }
+   }
+   close(FH) or die "Couldn't finish uniProt type IDs, $!\n";
+   #now get which IDs go with with which spIDs
+   $sql = "select acc, commentType from comment where commentType in ($dis, $poly)";
+   open(FH, "-|", "hgsql -NB uniProt -e \"$sql\"")
+        or die "Couldn't fetch uniProt comment types from db, $!\n";
+   while (<FH>) {
+       chomp;
+       my @t = split(/\s+/);   
+       push(@{$uniProt{$t[0]}}, $type{$t[1]});
+   }
+   close(FH) or die "Couldn't finish uniProt comment types, $!\n";
 }
 ####End 

@@ -27,7 +27,6 @@ select protBlat.* from protBlat, uniProt.feature where protBlat.qname = uniProt.
 end
 uniqueRows < protBlatDump.txt > protBlatUniq.txt
 rm protBlatDump.txt
-
 #rerun computeSpVars
 #found 24339 after using protBlat
 #remaining errors are gaps, off end of sequence or edges of blat exons
@@ -44,3 +43,22 @@ convertDisPoly > gvLinkSPuni.txt
 
 cat gvLinkSPuni.txt gvLinkSPomim.txt > gvLinkSp.txt
 cp gvLinkSp.txt ../../../gv/gvData/
+
+##########################################################################
+# rewrote script to do attrs with rest, so no attrs when no coors
+# this makes convertDisPoly, convertOmimTitle, *.sql files obsolete
+# Oct 2, 2006
+#get disease association (disFile) from 
+http://www.expasy.org/cgi-bin/lists?humsavar.txt
+#get psl file
+hgsql -N hg18 > kgProtMapDump.txt <<end
+select kgProtMap.* from kgProtMap, uniProt.feature where kgProtMap.qName = uniProt.feature.acc;
+end
+#table join duplicates; perl script to throw out extra before use
+uniqueRows < kgProtMapDump.txt > kgProtMapUniq.txt
+#get updated Swiss-Prot data
+wget ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+#use scripts to prep for loading then
+#use createJoinFromFiles to get file for computeSpVars
+#set variable for input files etc, then
+computeSpVars > errors.out

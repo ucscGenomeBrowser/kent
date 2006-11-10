@@ -12,6 +12,8 @@ use strict;
 my $psl = shift @ARGV;
 my $seq = shift @ARGV;
 my $input = shift @ARGV;
+my $pslLine;
+if (@ARGV) { $pslLine = shift @ARGV; }
 if (!$psl or !$input or !$seq) { 
    print "USAGE: convert_coors file.psl seqName_qName_in_file 999[-99,+99]\n";
    print "Where the 9's are replaced by the coding sequence position or genomic position\n";
@@ -21,26 +23,36 @@ if ($input =~ /![0-9+-]/) {
    print "ERROR needs a integer with possibly a + or - into the intron to convert\n";
 }
 my $offset = '';
-if ($input =~ /\d+([+-]\d+)/) {
+if ($input =~ /\d+([+*-]\d+)/) {
    $offset = $1;
-   $input =~ s/[+-]\d+//;
+   $input =~ s/[+*-]\d+//;
+   if ($offset =~ /\*/) { $offset =~ s/\*/+/; }
+}
+if ($input < 0 && $offset ne '') {
+   print "ERROR can't have offset outside of exon pos=$input offset=$offset\n";
 }
 my $fh;
 my @f; #fields in psl file that correspond to origin seq
-open($fh, '<', $psl) or die "ERROR couldn't open gene decription file, $psl, $!\n";
-while (<$fh>) {
-   #format: bin,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert
-   #tBaseInsert,strand  qName   qSize   qStart  qEnd    tName   tSize   tStart  tEnd    blockCount
-   #blockSizes      qStarts tStarts
-   chomp;
-   if (!defined or $_ eq '') { next; }
-   if (/\s*#/) { next; } #comment
-   @f = split(/\s+/);
-   if (scalar @f < 21) { die "ERROR bad psl file format $_\n"; }
+if (!$pslLine) {
+   open($fh, '<', $psl) or die "ERROR couldn't open gene decription file, $psl, $!\n";
+   while (<$fh>) {
+      #format: bin,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert
+      #tBaseInsert,strand  qName   qSize   qStart  qEnd    tName   tSize   tStart  tEnd    blockCount
+      #blockSizes      qStarts tStarts
+      chomp;
+      if (!defined or $_ eq '') { next; }
+      if (/\s*#/) { next; } #comment
+      @f = split(/\s+/);
+      if (scalar @f < 21) { die "ERROR bad psl file format $_\n"; }
+      elsif (scalar @f == 22) { shift @f; } #remove bin, not in downloads
+      if ($f[9] eq $seq) { last; }
+   }
+   close $fh or die "ERROR reading psl file, $psl $!\n";
+}else {
+   @f = split(/\s+/, $pslLine);   
+   if (scalar @f < 21) { die "ERROR bad pslLine format $pslLine\n"; }
    elsif (scalar @f == 22) { shift @f; } #remove bin, not in downloads
-   if ($f[9] eq $seq) { last; }
 }
-close $fh or die "ERROR reading psl file, $psl $!\n";
 
 if ($f[9] ne $seq) {
    print "ERROR couldn't find $seq in $psl have $f[9]\n";
@@ -110,7 +122,7 @@ if ($f[8] =~ /^\+/) { #plus strand
    }
 }
 
-if (!$chromPos) { print "ERROR couldn't find chr position for $input $offset in $seq\n"; exit; }
+if (!defined $chromPos) { print "ERROR couldn't find chr position for $input $offset in $seq\n"; exit; }
 $chromPos++; #switch to 1 based number
 if ($offset) {
    if ($f[8] =~ /^\+/) { #plus strand
@@ -119,6 +131,6 @@ if ($offset) {
       $chromPos -= $offset;
    }
 }
-print "$input $offset is mapped to $chr $chromPos\n";
+print "$input $offset is mapped to $chr $chromPos $f[8]\n";
 
 exit;

@@ -1,17 +1,19 @@
 #!/usr/bin/perl -w
-$ENV{'PATH'} = '/usr/local/bin:/bin';
 
 use strict;
 
 #PAH uses HGVS nomenclature except 3' end, where numbers just continue
 #CHECK compound entries to see if need type to be complex (1)
+my $build = 'hg18';
 my $genomeVarFile = 'gvPah.txt';
-my $posFile = 'gvPosPah.txt';
+my $posFile = "gvPosPah.$build.txt";
 my $linkFile = 'gvLinkPah.txt'; 
 my $attrFile = 'gvAttrPah.txt'; 
 my $badFile = 'unparsedPah.txt';
-my $converter = '../convert_coors genesPAHhg17.txt';
-my $script = '../parseHgvsName genesPAHhg17.txt';
+my $script = "../parseHgvsName2 U49897.$build.psl U49897.1";
+my $faFile = 'U49897.cds.fa';
+my $genomicFile = 'AF404777.fa';
+my $genomicOffset = 27778; #nts before ATG, where PAH starts 1
 
 my $fh;
 my $fh2;
@@ -25,11 +27,54 @@ open($fh4, ">", $linkFile) or die "Couldn't open output file4, $!\n";
 open($bfh, ">", $badFile) or die "Couldn't open output fileb, $!\n";
 my $fcnt = 0;
 my $bcnt = 0;
+my $verCnt = 0;
+my %pkey; #IDs are primary key in gv table
+my %intron = ( #numbers form PAHdb website
+#  '1'=>'61-4232',
+   #codingNt=>firstIntronNt(genomic)
+   60=>61,
+   61=>4232,
+#  '2'=>'4341-22214',
+   168=>4341,
+   169=>22214,
+#  '3'=>'22399-39585',
+   352=>22399,
+   353=>39585,
+#  '4'=>'39675-50549',
+   441=>39675,
+   442=>50549,
+#  '5'=>'50618-61889',
+   509=>50618,
+   510=>61889,
+#  '6'=>'62087-64271',
+   706=>62087,
+   707=>64271,
+#  '7'=>'64408-65465',
+   842=>64408,
+   843=>65465,
+#  '8'=>'65536-70272',
+   912=>65536,
+   913=>70272,
+#  '9'=>'70330-72792',
+   969=>70330,
+   970=>72792,
+#  '10'=>'72889-73444',
+   1065=>72889,
+   1066=>73444,
+#  '11'=>'73579-76708',
+   1199=>73579,
+   1200=>76708,
+#  '12'=>'76825-78005',
+   1315=>76825,
+   1316=>78005,
+);
+
 
 print "Writing files $genomeVarFile, $posFile, $attrFile and $badFile\n";
 #genomeVar format
 #chrom start stop name mutId srcId baseChangeType location accuracy
 my $srcId = 'PAHdb';
+my $strand;
 
 my %names;  #parse data from hgvs style name
 my $r = 0;
@@ -53,6 +98,7 @@ close $fh4 or die "Couldn't close outfile4, $!\n";
 close $bfh or die "Couldn't close outfileb, $!\n";
 
 print "found numbers for $fcnt entries\n",
+      "verified sequence for $verCnt entries\n",
       "found $bcnt entries that couldn't parse\n";
 exit;
 
@@ -67,13 +113,13 @@ sub parse_hgvs_name {
    my $n = $name; #escape for shell
    $n =~ s/'/\\'/;
    open ($fh2, "$script '$n' 2>&1 |") 
-      or die "Couldn't run parseHgvsName, $!\n";
+      or die "Couldn't run parseHgvsName2, $!\n";
    while (<$fh2>) {
       chomp;
       if (/ERROR/) { $chr = $_; next; }
       my $t; #extra throw out
       if (!$chr) {
-         ($chr, $st, $end, $t, $type) = split(/\t/);
+         ($chr, $st, $end, $t, $type, $strand) = split(/\t/);
       }
    }
    close $fh2 or die "Couldn't finish parseHgvsName run for $name, $!\n";
@@ -139,11 +185,23 @@ sub parseDataLine {
    $f[1] =~ s/^\s+//;
    $f[1] =~ s/\s+$//;
    if ($f[1] !~ /;/) { 
+      #check sequence based on hgvs style name
+      my $ch = sequenceCheck($f[1]);
+      if (!$ch) {
+         print $bfh $line, "\n";
+         $bcnt++;
+         return;
+      }elsif ($ch == 2) { $verCnt++; }
       @chr = parse_hgvs_name($f[1]);
       if (@chr && $chr[0] !~ /ERROR/) {
          $loc = loc_from_region($f[4]);
+         if (exists $pkey{"PAH_$f[1]"}) {
+            print "WARNING duplicate ID PAH_$f[1]\n";
+         }else {
+            $pkey{"PAH_$f[1]"} = 1;
+         }
          if (!$loc) { $loc = loc_from_name($f[1]); }
-         print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tPAH_$f[1]\n";
+         print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tPAH_$f[1]\t$strand\tPAH $chr[3]\n";
          print $fh "PAH_$f[1]\tPAH $chr[3]\t$srcId\t$chr[4]\t$loc\t1\n";
          #print aliases to a file also
          $f[2] =~ s/^\s+//;
@@ -154,7 +212,7 @@ sub parseDataLine {
          $f[0] =~ s/\s+$//;
          print $fh3 "PAH_$f[1]\tcommonName\t$f[2]\n";
          print $fh3 "PAH_$f[1]\talias\t$f[3]\n";
-         print $fh4 "PAH_$f[1]\tlinks\tPAHdb\t$f[0]\t\n";
+         print $fh4 "PAH_$f[1]\tsrcLink\tPAHdb\t$f[0]\t\n";
          if ($f[5] && $f[5] ne '') {
             $f[5] =~ s/^\s+//;
             $f[5] =~ s/\s+$//;
@@ -184,11 +242,23 @@ sub parseDataLine {
       #only print once for gv file
       $loc = loc_from_region($f[4]);
       if (!$loc) { $loc = loc_from_name($f[1]); }
-      print $fh "PAH_$f[1]\t$f[1]\t$srcId\t$f[1]\t$loc\t1\n";
+      if (exists $pkey{"PAH_$f[1]"}) {
+         print "WARNING duplicate ID PAH_$f[1]\n";
+      }else {
+         $pkey{"PAH_$f[1]"} = 1;
+      }
+      print $fh "PAH_$f[1]\t$f[1]\t$srcId\tcomplex\t$loc\t1\n";
       foreach my $t (@t) {
+         #check sequence based on hgvs style name
+         my $ch = sequenceCheck($t);
+         if (!$ch) {
+            print $bfh $line, "\n";
+            $bcnt++;
+            return;
+         }elsif ($ch == 2) { $verCnt++; }
          @chr = parse_hgvs_name($t);
          if (@chr && $chr[0] !~ /ERROR/) {
-            print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tPAH_$f[1]\n";
+            print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tPAH_$f[1]\t$strand\tPAH:c.[..$t..]\n";
             #print aliases to a file also
             $do_alias = 1;
          }else {
@@ -210,7 +280,7 @@ sub parseDataLine {
          $f[0] =~ s/\s+$//;
          print $fh3 "PAH_$f[1]\tcommonName\t$f[2]\n";
          print $fh3 "PAH_$f[1]\talias\t$f[3]\n";
-         print $fh4 "PAH_$f[1]\tlinks\tPAHdb\t$f[0]\t\n";
+         print $fh4 "PAH_$f[1]\tsrcLink\tPAHdb\t$f[0]\t\n";
          if ($f[5] && $f[5] ne '') {
             $f[5] =~ s/^\s+//;
             $f[5] =~ s/\s+$//;
@@ -218,8 +288,7 @@ sub parseDataLine {
             #status based on type? check intersect with conserved later?
             if ($f[5] =~ /missense|nonsense|splice/i or
                 ($f[5] =~ /deletion|insertion/i && $chr[4] eq 'exon')) {
-                print $fh3 "PAH_$f[1]\tdisease\tlikely to be phenotype-associated\
-n";
+                print $fh3 "PAH_$f[1]\tdisease\tlikely to be phenotype-associated\n";
             }
          }
          if ($f[5] && $f[5] =~ /missense|nonsense/) {
@@ -232,6 +301,84 @@ n";
    }
 }
 ####End 
+
+sub sequenceCheck {
+   my $name = shift @_;
+   my $verified = 0;
+   my $bad;
+   my $file = $faFile;
+   if ($name =~ /(\d+[+-]\d+_*\d*[+-]*\d*)/) { #intron
+      #change to genomic so can check
+      my $pos = $1;
+      my $st;
+      my $end;
+      if ($pos =~ /(\d+[+-]\d+)_(\d+[+-]\d+)/) { 
+         $st = $1;
+         $end = $2;
+      }else { $st = $pos; }
+      $st =~ /(\d+)([+-]\d+)/;
+      my $x = $1;
+      my $off = $2;
+      if ($off > 0) {
+         $st = $genomicOffset + $intron{$x} + $off - 1;
+      }else {
+         $st = $genomicOffset + $intron{$x} + $off + 1;
+      }
+      if ($end) {
+         $end =~ /(\d+)([+-]\d+)/;
+         my $x = $1;
+         my $off = $2;
+         if ($off > 0) {
+            $end = $genomicOffset + $intron{$x} + $off - 1;
+         }else {
+            $end = $genomicOffset + $intron{$x} + $off + 1;
+         }
+         $name =~ s/c\.$pos/g\.${st}_$end/;
+      }else {
+         $pos =~ s/\+/\\+/; #why do I need this here and not above?
+         $name =~ s/c\.$pos/g\.$st/g;
+      }
+      $file = $genomicFile;
+   }elsif ($name =~ /c\.(-\d+_*-*\d*)/) { #utr
+      my $pos = $1;
+      my $st = $pos;
+      my $end;
+      if ($pos =~ /(-\d+)_(-*\d+)/) {
+         $end = $2;
+         $st = $1;
+      }
+      $st = $st + $genomicOffset + 1;
+      if ($end) { 
+         $end = $end + $genomicOffset + 1; 
+         $name =~ s/c\.$pos/g\.${st}_$end/;
+      }else {
+         $name =~ s/c\.$pos/g\.$st/;
+      }
+      $file = $genomicFile;
+   }
+   if ($name =~ /'/) { return undef; } #illegal char can't check
+   open(CFH, "../sequenceCheck $file '$name' 2>&1 |")
+      or die "Couldn't run sequenceCheck, $!\n";
+   my $test;
+   while (<CFH>) {
+      chomp;
+      if (/Sequence doesn't match/) { $bad = $_; }
+      elsif (/Sequence matched$/) { $verified++; }
+      else { $test = $_; }
+   }
+   close(CFH)
+      or die "Couldn't finish sequenceCheck with ../sequenceCheck $faFile '$name', $!:exit status $?\n";
+   if ($bad) {
+      print $bfh "#$bad\n";
+      return 0;
+   }elsif ($verified) {
+      return 2;
+   }else {
+      #print $fh "#TESTING not checked sequence for $name got $test\n";
+      return 1;
+   }
+}
+####End
 
 #how to do links:
 #by id (per author?)

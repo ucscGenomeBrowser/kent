@@ -1,17 +1,25 @@
 #!/usr/bin/perl -w
-$ENV{'PATH'} = '/usr/local/bin:/bin';
+
+#use POSIX;
+#use POSIX qw(setsid);
+#use POSIX qw(:errno_h :fcntl_h);
 
 use strict;
+use LWP::Simple;
 
 #should have 605 mutations?
+my $build = 'hg18';
 my $genomeVarFile = 'gvARdb.txt';
-my $posFile = 'gvPosARdb.txt';
+my $posFile = "gvPosARdb.$build.txt";
 my $linkFile = 'gvLinkARdb.txt';
 my $attFile = 'gvAttrARdb.txt';
 my $badFile = 'unparsedARdb.txt';
 my $converter = '../convert_coors2';
 
-my $geneFile = 'M20132.psl';
+#my $geneFile = 'M20132.psl';
+my $geneFile = "M20132.$build.psl";
+my $faFile = 'M20132.fa';
+my $strand;
 my %aa = (
 'Ala' => 'A',
 'Val' => 'V',
@@ -48,6 +56,7 @@ open($fh4, ">", $attFile) or die "Couldn't open output file4, $!\n";
 open($bfh, ">", $badFile) or die "Couldn't open output fileb, $!\n";
 my $fcnt = 0;
 my $bcnt = 0;
+my $verCnt = 0;
 my %pheno;
 my %phenoId; #phenotype and ID to make unique?
 my %disease;  #only set disease-associated once
@@ -57,6 +66,7 @@ print "Writing files $genomeVarFile, $posFile, $attFile and $badFile\n";
 #ACC    Phenotype       Mutation type   exon    pathogenicity   CpG     PositionFrom amino acid Toamino acid    nucleotide position     From nucleotide To nucleotide   Bmax    kD      k       Thermolabile    comments        Domain  External genitalia      Family history  Reference       Exon 1 tracts   Poly Gln #     Poly Gly #       Poly Gly
 my $srcId = 'ARdb';
 
+my %pkey; #IDs are primary key in gv table
 my %name;
 my %id; #use first id as ID for mutation, data per patient
 while (<>) {
@@ -84,18 +94,21 @@ close $bfh or die "Couldn't close outfileb, $!\n";
 my $unicnt = scalar (keys %name);
 print "found numbers for $fcnt entries\n",
       "found $unicnt unique mutation names\n",
-      "found $bcnt entries that couldn't parse\n";
+      "found $bcnt entries that couldn't parse\n",
+      "verified sequence on $verCnt names\n";
 print "Found unique phenotypes:\n",
       join(", ", keys %pheno), "\n";
-exit;
+exit 0;
 
 sub parseDataLine {
    my $line = shift @_;
    my @f = split(/\t/, $line);
    foreach (@f) { s/^\s+//; s/\s+$//; }
    #0=id, 1=phenotype, 2=mutations type, 3=location, 9=base, 10=oldnts 11=new
+   #4=disease association?
    #protein: 6=position, 7=from amino acid, 8=to amino acid
    my @chr;
+   my $disease;
    if ($f[9] && ($f[10] or $f[11])) { 
       $f[2] = lc $f[2];
       if ($f[2] =~ /subst/) { $f[2] = 'substitution'; } #abrev 
@@ -109,6 +122,13 @@ sub parseDataLine {
       else { $f[3] = 'unknown' . $f[3] . '?'; }
       #build hgvs protein name? cols 6-8
       my $pname;
+      if ($f[4]) { 
+         $f[4] =~ s/^\s+//;
+         $f[4] =~ s/\s+$//;
+         if ($f[4] eq '*') { 
+            $disease{"ARdb_$f[0]"} = 'phenotype-associated';
+         }#else treat as unknown
+      }
       if (!$f[6] or !$f[7] or !defined $f[8]) {
          print $bfh $line, "\n";
          $bcnt++;
@@ -157,11 +177,22 @@ sub parseDataLine {
       #adjust to ucsc numbers?
       $chr[1]--;
       if ($name{$pname} == 1) {
-         print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tARdb_$f[0]\n";
+         #check sequence based on hgvs style name
+         my $ch = sequenceCheck($pname);
+         if (!$ch) {
+            print $bfh $line, "\n";
+            $bcnt++;
+            return;
+         }elsif ($ch == 2) { $verCnt++; }
+         if (exists $pkey{"ARdb_$f[0]"}) {
+            print "WARNING duplicate ID ARdb_$f[0] for $pname\n";
+         }else {
+            $pkey{"ARdb_$f[0]"} = 1;
+         }
+         print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tARdb_$f[0]\t$strand\t$pname\n";
          print $fh "ARdb_$f[0]\t$pname\t$srcId\t$f[2]\t$f[3]\t1\n";
-         #if ($f[0] <= 515) { #SRS only has first 515 entries
-            #print $fh3 "ARdb_$f[0]\t$f[0]\t$srcId\n";
-         #}
+         #test and add only valid links
+         addLink($f[0]);
          $id{$pname} = "ARdb_$f[0]";
          #attr table id, classId, nameId, value (255chars)
          #phenotype=class 6, 
@@ -207,7 +238,12 @@ sub parseDataLine {
          #adjust to ucsc numbers
          $chr[1]--;
          if ($name{$pname} == 1) {
-            print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tARdb_$f[0]\n";
+            if (exists $pkey{"ARdb_$f[0]"}) {
+               print "WARNING duplicate ID ARdb_$f[0] for $pname\n";
+            }else {
+               $pkey{"ARdb_$f[0]"} = 1;
+            }
+            print $fh2 "$chr[0]\t$chr[1]\t$chr[2]\tARdb_$f[0]\t$strand\t$pname\n";
             print $fh "ARdb_$f[0]\t$pname\t$srcId\t$f[2]\t$f[3]\t1\n";
             $id{$pname} = "ARdb_$f[0]";
             print $fh3 "ARdb_$f[0]\tgeneVarsDis\tomimTitle2\t313700\n";
@@ -232,9 +268,10 @@ sub convert_number {
       or die "ERROR Couldn't run convert_coors, $!\n";
    while (<$myfh>) {
       if (/ERROR/) { $c[0] = $_; last; }
-      /is mapped to (\w+\d*) (\d+)/;
+      /is mapped to (\w+\d*) (\d+) (\+|\-)/;
       $c[1] = $2;
       $c[0] = $1;
+      $strand = $3;
    }
    if (!$c[0]) { close $myfh; return("ERROR couldn't convert '$pos'", undef); }
    close $myfh or die "ERROR Couldn't finish convert_coors run on $pos got $c[0], $!\n";
@@ -389,6 +426,7 @@ sub add_phenotype {
    my $id = shift;
    my $ph = shift;
    #clean up phenotypes
+   if (!defined $id) { return; }
    $ph =~ s/>/ /g;
    $ph =~ s/\s+/ /g;
    $ph =~ s/\s+$//;
@@ -405,6 +443,7 @@ sub add_phenotype {
    }
    #attr table id, classId, nameId, value (255chars)
    foreach my $t (@p) {
+      if (!$t) { next; }
       if ($t =~ /\?/) { next; }
       if (!exists $phenoId{$id . $t}) {
          $phenoId{$id . $t}++;
@@ -413,24 +452,80 @@ sub add_phenotype {
          if ($t eq 'Normal') { 
             print $fh4 "$id\tphenoOfficial\tno phenotype detected [MP:0002169]\n";
          }
-         if ($t eq 'Normal' && (!exists $disease{$id} or
-             $disease{$id} =~ /likely/)) {
-            $disease{$id} = 'not disease-associated';
-         }elsif ($t eq 'Normal' && $disease{$id} =~ /known/) {
-            $disease{$id} = 'both';
-         }elsif ($t ne 'Normal' && (!exists $disease{$id} or
-             $disease{$id} =~ /likely/)) {
-            $disease{$id} = 'known to be disease-associated';
-         }elsif ($t ne 'Normal' && $disease{$id} =~ /not disease-associated/) {
-            $disease{$id} = 'both';
-         }
+         #phenotype of 1 patient doesn't prove association
+         #if ($t eq 'Normal' && (!exists $disease{$id} or
+             #$disease{$id} =~ /likely/)) {
+            #$disease{$id} = 'not phenotype-associated';
+         #}elsif ($t eq 'Normal' && $disease{$id} eq 'phenotype-associated') {
+            #$disease{$id} = 'both';
+         #}elsif ($t ne 'Normal' && (!exists $disease{$id} or
+             #$disease{$id} =~ /likely/)) {
+            #$disease{$id} = 'phenotype-associated';
+         #}elsif ($t ne 'Normal' && $disease{$id} =~ /not phenotype-associated/) {
+            #$disease{$id} = 'both';
+         #}
       }
       $pheno{$t}++;
    }
 }
 ####End
 
+sub sequenceCheck {
+   my $name = shift @_;
+   my $verified = 0;
+   my $bad;
+
+   if ($name =~ /'/) { return undef; } #illegal char can't check
+   open(CFH, "../sequenceCheck $faFile '$name' 2>&1 |")
+      or die "Couldn't run sequenceCheck, $!\n";
+   while (<CFH>) {
+      chomp;
+      if (/Sequence doesn't match/) { $bad = $_; }
+      elsif (/Sequence matched$/) { $verified++; }
+   }
+
+##	close(CFH);
+##
+##	my $status = $?;
+##
+##	if (WIFEXITED($status)) {
+##		print "\$? = $status; exited, status=", WEXITSTATUS($status), "\n";
+##	} elsif (WIFSIGNALED($status)) {
+##		print "\$? = $status; signalled, signal=", WTERMSIG($status), "\n";
+##	} elsif (WIFSTOPPED($status)) {
+##		print "\$? = $status; stopped, signal=", WSTOPSIG($status), "\n";
+##	} else {
+##		die "Too bad.  I don't know what's going on\n";
+##	}
+	
+
+
+
+   close(CFH) 
+      or die "Couldn't finish sequenceCheck with ../sequenceCheck $faFile '$name', $!:exit status $?\n";
+   if ($bad) {
+      print $bfh "#$bad\n";
+      return 0;
+   }elsif ($verified) {
+      return 2;
+   }else {
+      return 1;
+   }
+}
+####End
+
+sub addLink {
+   my $id = shift;
+   my $url = "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+sessionId+-e+[ANDROGENR:'ARID']+-enum+1";
+   $url =~ s/ARID/$id/;
+   my $page = get($url);
+   if ($page && $page !~ /error/i) {
+      print $fh3 "ARdb_$id\tsrcLink\t$srcId\t$id\t\n";
+   }
+}
+####End
+
 #how to do links:
-#http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+4Flds1F1PA4+-e+[ANDROGENR:'0002']+-qnum+3572+-enum+1???
-#not all entries (<= 0515), good later or only temp?
+#http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+sessionId+-e+[ANDROGENR:'0002']+-enum+1
+#not all entries (<= 0515)
 
