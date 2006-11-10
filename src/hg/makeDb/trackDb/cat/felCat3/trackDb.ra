@@ -24,14 +24,13 @@ shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank
 group rna
 priority 54
-visibility pack
+visibility hide
 spectrum on
 type psl .
 cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
 showDiffBasesAllScales .
-
 
 track all_est
 shortLabel $Organism ESTs
