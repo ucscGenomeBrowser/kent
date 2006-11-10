@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1237 2006/11/10 00:48:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1238 2006/11/10 01:00:01 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7873,7 +7873,10 @@ for (i=0; i<count; i++, text++, textPos++)
         vgBox(vg, x+x1, y, 1, height, getOrangeColor());
         continue;
         }
-    cBuf[0] = lookupCodon(text-1);
+    if (*text != ' ')
+	cBuf[0] = lookupCodon(text-1);
+    else 
+	cBuf[0] = ' ';
     if (cBuf[0] == 'X') cBuf[0] = '-';
     clr = color;
     if (dots)
