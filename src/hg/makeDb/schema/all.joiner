@@ -1981,35 +1981,6 @@ identifier jaxPhenotypeName external=MGI
     mm6,mm8.jaxPhenotype.name dupeOk
     mm6,mm8.jaxPhenotypeAlias.name
 
-# links between Human Mutation and related tables (hgMut)
-
-identifier hgMutMutId
-"Human Mutation track mutation identifier for attributes and links"
-    hg17.hgMut.mutId dupeOk
-    hg17.hgMutAlias.mutId minCheck=0.98
-    hg17.hgMutExtLink.mutId minCheck=0.75
-    hg17.hgMutAttr.mutId minCheck=0.78
-
-identifier hgMutSrcId
-"Human Mutation track source ID"
-    hg17.hgMutSrc.srcId
-    hg17.hgMut.srcId
-
-identifier hgMutAttrClassId
-"Human Mutation track mutAttrClassId: controlled vocab for attribute categories"
-    hg17.hgMutAttrClass.mutAttrClassId
-    hg17.hgMutAttr.mutAttrClassId
-
-identifier hgMutAttrNameId
-"Human Mutation track mutAttrNameId: controlled vocab for attribute names"
-    hg17.hgMutAttrName.mutAttrNameId
-    hg17.hgMutAttr.mutAttrNameId
-
-identifier hgMutLinkId
-"Human Mutation track link ID: links from mutations to data sources +"
-    hg17.hgMutLink.linkId
-    hg17.hgMutExtLink.linkId minCheck=0.98
-
 #links between gv (the new Locus Variants) and related tables 
 identifier gvId
 "Locus Variants track mutation identifier for attributes and links"
