@@ -17,7 +17,7 @@ shortLabel MGC Incomplete
 longLabel Mammalian Gene Collection Incomplete mRNAs
 group mgc
 priority 11
-visibility pack
+visibility hide
 color 120,12,12
 type psl .
 exonArrows on
@@ -31,7 +31,7 @@ shortLabel MGC In-progress
 longLabel Mammalian Gene Collection ESTs in Sequencing Pipeline
 group mgc
 priority 12
-visibility pack
+visibility dense
 color 12,100,120
 type psl est
 cdsDrawOptions enabled
@@ -43,7 +43,7 @@ shortLabel MGC Failed
 longLabel Mammalian Gene Collection Failed ESTs
 group mgc
 priority 13
-visibility pack
+visibility hide
 color 120,12,0
 type psl est
 exonArrows on
@@ -56,7 +56,7 @@ shortLabel MGC ESTs
 longLabel Mammalian Gene Collection EST Libraries
 group mgc
 priority 14
-visibility pack
+visibility hide
 color 120,120,220
 type psl est
 exonArrows on
@@ -69,7 +69,7 @@ shortLabel MGC Validated
 longLabel Mammalian Gene Collection Validated Clones
 group mgc
 priority 14.5
-visibility pack
+visibility hide
 color 34,139,34
 type genePred
 exonArrows on
@@ -80,11 +80,24 @@ baseColorDefault genomicCodons
 url http://genome.cs.wustl.edu/cgi-bin/mgc.cgi?action=cloneRpt&acc=$$
 
 track mgcABListGene
+shortLabel A/B-List 2006-11-09
+longLabel MGC AB-List Genes 2006-10-27 list, 2006-11-09 build
+group mgc
+priority 100
+visibility hide
+color 200,0,50
+type genePred
+exonArrows on
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+track mgcABListGene20060801
 shortLabel A/B-List 2006-08-01
 longLabel MGC AB-List Genes 2006-04-16 list, 2006-08-01 build
 group mgc
 priority 100
-visibility pack
+visibility hide
 color 200,0,50
 type genePred
 exonArrows on
@@ -125,7 +138,7 @@ shortLabel C-List Confirmed
 longLabel  MGC C-List RT-PCR: Confirmed
 group mgcCList
 priority 101.05
-visibility pack
+visibility hide
 type psl .
 color 10,100,150
 exonArrows on
@@ -138,7 +151,7 @@ shortLabel C-List Hit
 longLabel  MGC C-List RT-PCR: Hit
 group mgcCList
 priority 101.1
-visibility pack
+visibility hide
 type bed 12
 color 10,100,150
 exonArrows on
@@ -151,7 +164,7 @@ shortLabel C-List Pending
 longLabel MGC C-List RT-PCR: Pending
 group mgcCList
 priority 101.2
-visibility pack
+visibility hide
 type genePred
 color 10,100,150
 exonArrows on
@@ -165,7 +178,7 @@ shortLabel C-List Fail
 longLabel MGC C-ListRT-PCR: Failed
 group mgcCList
 priority 101.3
-visibility pack
+visibility hide
 type bed 12
 color 10,150,100
 exonArrows on
@@ -178,7 +191,7 @@ shortLabel C-List Novel PCR
 longLabel Novel RT-PCR hits (excludes Refseq, MGC genes, A-list, B-list)
 group mgcCList
 priority 104.5
-visibility pack
+visibility hide
 type bed 12
 color 120,12,12
 exonArrows on
@@ -190,7 +203,7 @@ shortLabel C-List Novel PCR Strict
 longLabel Novel RT-PCR strict hits (excludes Refseq, MGC genes, A-list, B-list, spliced ESTs)
 group mgcCList
 priority 104.6
-visibility pack
+visibility hide
 type bed 12
 color 12,120,12
 exonArrows on
@@ -348,7 +361,7 @@ longLabel Human TransMap Genes
 group mgcCList
 priority 112.5
 type genePred
-visibility pack
+visibility hide
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
@@ -361,10 +374,10 @@ baseColorDefault genomicCodons
     shortLabel All Human TransMap
     longLabel  All Mapped Human TransMap Genes
     priority 1
-    visibility pack
+    visibility hide
     type genePred
     color 12,12,120
-    visibility pack
+    visibility hide
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault genomic\ codons
@@ -377,10 +390,10 @@ baseColorDefault genomicCodons
     shortLabel C-List Human TransMap
     longLabel  C-List Human TransMap Genes
     priority 2
-    visibility pack
+    visibility hide
     type genePred
     color 12,120,12
-    visibility pack
+    visibility hide
     exonArrows on
     cdsDrawOptions enabled
     cdsDrawDefault genomic\ codons
@@ -536,8 +549,9 @@ visibility hide
 noInherit on
 
     track gscMgcTargets1
-    noInherit on
-    subTrack gscMgc1
+    #noInherit on
+    #subTrack gscMgc1
+    group mgcBCGSC
     shortLabel BCGSC targets set 1
     longLabel BCGSC MGC RT-PCR targets set 1
     priority 1
@@ -550,8 +564,9 @@ noInherit on
     baseColorDefault genomicCodons
 
     track gscMgcClones1
-    noInherit on
-    subTrack gscMgc1
+    #noInherit on
+    #subTrack gscMgc1
+    group mgcBCGSC
     shortLabel BCGSC clones set 1
     longLabel BCGSC MGC RT-PCR clones set 1
     priority 2
@@ -579,6 +594,7 @@ noInherit on
     track gscMgcTargets2
 #    noInherit on
 #    subTrack gscMgc2
+    group mgcBCGSC
     shortLabel BCGSC targets set 2
     longLabel BCGSC MGC RT-PCR targets set 2
     priority 3
@@ -593,6 +609,7 @@ noInherit on
     track gscMgcClones2
 #    noInherit on
 #    subTrack gscMgc2
+    group mgcBCGSC
     shortLabel BCGSC clones set 2
     longLabel BCGSC MGC RT-PCR clones set 2
     priority 4
@@ -620,6 +637,7 @@ noInherit on
     track gscMgcTargets3
 #    noInherit on
 #    subTrack gscMgc3
+    group mgcBCGSC
     shortLabel BCGSC targets set 3
     longLabel BCGSC MGC RT-PCR targets set 3
     priority 5
@@ -634,6 +652,7 @@ noInherit on
     track gscMgcClones3
 #    noInherit on
 #    subTrack gscMgc3
+    group mgcBCGSC
     shortLabel BCGSC clones set 3
     longLabel BCGSC MGC RT-PCR clones set 3
     priority 6
@@ -659,8 +678,9 @@ visibility hide
 noInherit on
 
     track gscMgcTargets4
-    noInherit on
-    subTrack gscMgc4
+    #noInherit on
+    #subTrack gscMgc4
+    group mgcBCGSC
     shortLabel BCGSC targets sets 4,5 
     longLabel BCGSC MGC RT-PCR targets set 4,5
     priority 7
@@ -673,8 +693,9 @@ noInherit on
     baseColorDefault genomicCodons
 
     track gscMgcClones4
-    noInherit on
-    subTrack gscMgc4
+    #noInherit on
+    #subTrack gscMgc4
+    group mgcBCGSC
     shortLabel BCGSC clones sets 4,5
     longLabel BCGSC MGC RT-PCR clones set 4,5
     priority 7
@@ -696,16 +717,17 @@ longLabel BCGSC RT-PCR for MGC set 6
 group mgcBCGSC
 priority 2105.6
 type bed
-visibility pack
+visibility hide
 noInherit on
 
     track gscMgcTargets6
-    noInherit on
-    subTrack gscMgc6
+    #noInherit on
+    #subTrack gscMgc6
+    group mgcBCGSC
     shortLabel BCGSC targets sets 6
     longLabel BCGSC MGC RT-PCR targets set 6
     priority 1
-    visibility pack
+    visibility hide
     color 200,0,50
     type genePred
     exonArrows on
@@ -715,11 +737,12 @@ noInherit on
 
     track gscMgcClones6
     noInherit on
-    subTrack gscMgc6
-    shortLabel BCGSC clones sets 6
+    #subTrack gscMgc6
+    #shortLabel BCGSC clones sets 6
+    group mgcBCGSC
     longLabel BCGSC MGC RT-PCR clones set 6
     priority 2
-    visibility pack
+    visibility hide
     color 0,75,120
     type psl .
     exonArrows on
