@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.10 2006/11/09 20:09:25 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.11 2006/11/10 00:35:57 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -70,14 +70,14 @@ else
     conn = sqlCtConn(TRUE);
 
 time_t ageSeconds = (time_t)(ageHours * 3600);	/*	age in seconds	*/
-safef(query,sizeof(query),"select name from metaInfo WHERE "
-    "lastUse < DATE_SUB(NOW(), INTERVAL %ld SECOND);", ageSeconds);
+safef(query,sizeof(query),"select name from %s WHERE "
+    "lastUse < DATE_SUB(NOW(), INTERVAL %ld SECOND);", CT_META_INFO,ageSeconds);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(expiredHash, row[0], 1);
 sqlFreeResult(&sr);
-safef(query,sizeof(query),"select name from metaInfo WHERE "
-    "lastUse >= DATE_SUB(NOW(), INTERVAL %ld SECOND);", ageSeconds);
+safef(query,sizeof(query),"select name from %s WHERE "
+    "lastUse >= DATE_SUB(NOW(), INTERVAL %ld SECOND);",CT_META_INFO,ageSeconds);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(notExpiredHash, row[0], 1);
@@ -100,7 +100,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if ((!historyToo) && (sameWord(row[nameIx],"history")))
 	continue;
     /* also skip the metaInfo table */
-    if ((!historyToo) && (sameWord(row[nameIx],"metaInfo")))
+    if ((!historyToo) && (sameWord(row[nameIx],CT_META_INFO)))
 	continue;
 
     /*	Update_time is sometimes NULL on MySQL 5
@@ -170,7 +170,7 @@ struct hashEl *elList = hashElListHash(expiredHash);
 struct hashEl *el;
 for (el = elList; el != NULL; el = el->next)
     {
-    verbose(2,"%s exists in metaInfo only\n", el->name);
+    verbose(2,"%s exists in %s only\n", el->name, CT_META_INFO);
     if (drop)
 	ctTouchLastUse(conn, el->name, FALSE); /* removes metaInfo row */
     }
