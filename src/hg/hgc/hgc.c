@@ -178,7 +178,6 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 #include "dless.h"
-#include "hgMut.h"
 #include "gv.h"
 #include "gvUi.h"
 #include "oreganno.h"
@@ -189,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1158 2006/11/08 18:59:03 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1159 2006/11/10 16:32:11 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16770,68 +16769,6 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void printHgMutAttrLink (int attrLinkId)
-/* this prints the link for a hgMut attribute, internal or external */
-{
-struct hgMutAttrLink *link = NULL;
-struct hash *linkInstructions = NULL;
-struct hash *thisLink = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-char *linktype, *label;
-
-hgReadRa(database, organism, rootDir, "hgMutAttr.ra", &linkInstructions);
-safef(query, sizeof(query), "select * from hgMutAttrLink "
-    "where mutAttrLinkId = %d", attrLinkId);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct sqlResult *sr2;
-    char **row2;
-
-    link = hgMutAttrLinkLoad(row);
-    if (link == NULL) 
-        continue; /* no link found */
-    /* determine how to do link from .ra file */
-    thisLink = hashFindVal(linkInstructions, link->mutAttrLink);
-    if (thisLink == NULL) 
-        continue; /* no link found */
-    /* link->mutAttrAcc - accession for link */
-    /* type determined by fields: url = external, dataSql = internal, others added later? */
-    linktype = hashFindVal(thisLink, "dataSql");
-    label = hashFindVal(thisLink, "label");
-    if (linktype != NULL) 
-        {
-        safef(query, sizeof(query), linktype, link->mutAttrAcc);
-        sr2 = sqlGetResult(conn2, query);
-        while ((row2 = sqlNextRow(sr2)) != NULL)
-            {
-            /* should this print more than 1 column, how know how many? */
-            if (row2[0] != NULL)
-                {
-                /* print label and result */
-                printf("%s - %s<BR>\n", label, row2[0]);
-                }
-            }
-        sqlFreeResult(&sr2);
-        }
-    else 
-        {
-        linktype = hashFindVal(thisLink, "url");
-        if (linktype != NULL)
-            {
-            char url[256];
-            safef(url, sizeof(url), linktype, link->mutAttrAcc);
-            printf("%s - <A HREF=\"%s\">%s</A><BR>\n", label, url, link->mutAttrAcc);
-            }
-        }
-    }
-sqlFreeResult(&sr);
-}
-
 void doSnpArray (struct trackDb *tdb, char *itemName, char *dataSource)
 {
 char *table = tdb->tableName;
@@ -17130,167 +17067,6 @@ gvPosFree(&mut);
 freeMem(escName);
 freeMem(gvPrevCat);
 freeMem(gvPrevType);
-printTrackHtml(tdb);
-hFreeConn(&conn);
-}
-
-void doHgMut (struct trackDb *tdb, char *itemName)
-/* this prints the detail page for the Human Mutation track */
-{
-char *table = tdb->tableName;
-struct hgMut *mut;
-struct hgMutLink *link;
-struct hgMutAlias alias;
-struct hgMutAttr attr;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-char *escName;
-
-int i;
-char *prevClass = NULL, *prevName = NULL;
-
-int start = cartInt(cart, "o");
-
-genericHeader(tdb, itemName);
-
-/* postion, band, genomic size */
-escName = sqlEscapeString(itemName);
-safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and "
-      "chromStart=%d and mutId = '%s'", table, seqName, start, escName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    mut = hgMutLoad(row);
-    printf("<B>HGVS name:</B> %s <BR>\n", mut->name);
-    bedPrintPos((struct bed *)mut, 3);
-    }
-sqlFreeResult(&sr);
-
-/* fetch and print the source */
-safef(query, sizeof(query),
-      "select * from hgMutSrc where srcId = %d", mut->srcId);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hgMutSrc *src = hgMutSrcLoad(row);
-    printf("<B>source:</B> %s", src->src);
-    if (src->details != NULL && differentString(src->details, "")) 
-        {
-        printf("; %s", src->details);
-        }
-    printf("<BR>\n");
-    }
-sqlFreeResult(&sr);
-
-/* print location and mutation type fields */
-printf("<B>location:</B> %s<BR>\n", mut->location);
-printf("<B>type:</B> %s<BR>\n", mut->baseChangeType);
-/* add note here about exactness of coordinates */
-
-printf("<DL><DT><B>Outside Link(s):</B></DT>\n<DD> ");
-safef(query, sizeof(query),
-      "select * from hgMutExtLink where mutId = '%s'", mut->mutId);
-sr = sqlGetResult(conn, query);
-i = 0;  /* count lines, print message if none */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *url;
-    i++;
-    safef(query, sizeof(query),
-          "select * from hgMutLink where linkId = '%s'", row[2]);
-    link = hgMutLinkLoadByQuery(conn2, query);
-    if (link != NULL) 
-        {
-        url = replaceChars(link->url, "$$", row[1]);
-        printf("%s <A HREF=%s", link->linkDisplayName, url);
-        printf(" Target=_blank> %s </A> <BR>\n", row[1]);
-        freeMem(url);
-        }
-    }
-sqlFreeResult(&sr);
-printf("</DD>");
-
-printf("<DT><B>Aliases:</B></DT><DD>\n ");
-safef(query, sizeof(query),
-      "select * from hgMutAlias where mutId = '%s'", mut->mutId);
-sr = sqlGetResult(conn, query);
-i = 0;  /* count lines, print message if none */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    i++;
-    hgMutAliasStaticLoad(row, &alias);
-    printf("%s", alias.name);
-    if (alias.nameType != NULL && sameString(alias.nameType, "common"))
-        printf(" (common name)");
-    printf("<BR>\n");
-    }
-sqlFreeResult(&sr);
-printf("</DD>");
-if (i == 0) 
-    printf("Not available<BR>\n");
-
-/* loop through attributes */
-safef(query, sizeof(query),
-      "select hgMutAttr.* from hgMutAttr, hgMutAttrClass where hgMutAttr.mutAttrClassId = hgMutAttrClass.mutAttrClassId AND mutId = '%s' ORDER BY hgMutAttrClass.displayOrder", mut->mutId);
-sr = sqlGetResult(conn, query);
-i = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hgMutAttrClass *class;
-    struct hgMutAttrName *name;
-    i++;
-    hgMutAttrStaticLoad(row, &attr);
-    safef(query, sizeof(query), "select * from hgMutAttrClass where mutAttrClassId = %d", attr.mutAttrClassId);
-    class = hgMutAttrClassLoadByQuery(conn2, query);
-    if (class == NULL)
-        continue; /* skip this one if invalid classId */
-    safef(query, sizeof(query), "select * from hgMutAttrName where mutAttrNameId = %d", attr.mutAttrNameId);
-    name = hgMutAttrNameLoadByQuery(conn2, query);
-    if (name == NULL) 
-        continue;
-    /* only print name and class if different */
-    if (prevClass == NULL || differentString(prevClass, class->mutAttrClass))
-        {
-        if (prevClass != NULL)
-            printf("</DD></DL>");
-        freeMem(prevClass);
-        prevClass = cloneString(class->mutAttrClass);
-        freeMem(prevName);
-        prevName = cloneString(name->mutAttrName);
-        printf("<DT><B>%s:</B></DT><DD>\n", class->mutAttrClass);
-        printf("<DL>");
-        printf("<DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
-        }
-    else if (differentString(prevName, name->mutAttrName))
-        {
-        freeMem(prevName);
-        prevName = cloneString(name->mutAttrName);
-        printf("</DD><DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
-        }
-    printf("%s<BR>\n", attr.mutAttrVal);
-    if (attr.mutAttrLinkId != 0) 
-        {
-        /* indent attrLinks */
-        printf("<DL><DT></DT><DD>\n");
-        printHgMutAttrLink(attr.mutAttrLinkId);
-        printf("</DD></DL>");
-        }
-    }
-sqlFreeResult(&sr);
-if (prevClass != NULL)
-    {
-    printf("</DD></DL>");
-    freeMem(prevClass);
-    freeMem(prevName);
-    }
-printf("</DD></DL>\n");
-
-hgMutFree(&mut);
-freeMem(escName);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -18259,10 +18035,6 @@ else if (sameString("snpArrayAffy250Nsp", track) ||
 else if (sameString("snpArrayIllumina300", track))
     {
     doSnpArray(tdb, item, "Illumina");
-    }
-else if (sameString("hgMut", track))
-    {
-    doHgMut(tdb, item);
     }
 else if (sameString("gvPos", track))
     {
