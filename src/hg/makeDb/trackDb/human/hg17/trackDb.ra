@@ -1422,15 +1422,6 @@ type bed 6 .
     altColor 255,0,0
     priority 3 
 
-track hgMut
-shortLabel Human Mutation
-longLabel Compilation of Human Disease Variants and Other Mutations
-group phenDis
-priority 144.7
-visibility hide
-color 150,0,150
-type bed 4 +
-
 track chainRheMac2
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
