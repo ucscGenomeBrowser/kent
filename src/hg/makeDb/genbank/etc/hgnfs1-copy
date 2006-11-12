@@ -18,7 +18,7 @@ databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
 gbdb=/export/gbdb
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=eieio
+gbBuildServer=kkstore02
 rsyncPort="ssh"
 gbBuildRoot=/cluster/data/genbank
 
