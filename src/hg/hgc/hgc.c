@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1160 2006/11/13 21:03:50 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1161 2006/11/13 22:41:55 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14533,7 +14533,9 @@ sgList = loadSageData("sage", bedList);
 slSort(&sgList,sortSageByBedOrder);
 
 printSageReference(sgList, tdb);
+/* temporarily disable this link until debugged and fixed.  Fan
 printSageGraphUrl(sgList);
+*/
 printf("<BR>\n");
 for(sg=sgList; sg != NULL; sg = sg->next)
     {
