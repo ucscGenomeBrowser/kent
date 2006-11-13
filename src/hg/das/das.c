@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.34 2006/03/06 17:34:25 angie Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.35 2006/11/13 22:57:33 donnak Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -60,8 +60,8 @@ if ((rhost != NULL && sameWord(rhost, hogHost)) ||
     dasHead(200);
     printf("Your host, %s, has been sending too many requests lately and is "
 	   "unfairly loading our site, impacting performance for other users. "
-	   "Please contact genome@cse.ucsc.edu to ask for your site to "
-	   "be reenabled.  Also please consider downloading sequence and/or "
+	   "Please contact genome@cse.ucsc.edu to ask that your site "
+	   "be reenabled.  Also, please consider downloading sequence and/or "
 	   "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
 	   hogHost);
     exit(0);
@@ -91,8 +91,8 @@ dasHelp("UCSC DAS Server.\n"
     "all types of annotation in our database.  We recommend you\n"
     "access the UCSC database by downloading the tab-separated files in\n"
     "the downloads section (http://hgdownload.cse.ucsc.edu/downloads.html)\n"
-    "or by using the table browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
-    "instead of using DAS in most circumstances.");
+    "or by using the Table Browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
+    "instead of DAS in most circumstances.");
 exit(0);
 }
 
