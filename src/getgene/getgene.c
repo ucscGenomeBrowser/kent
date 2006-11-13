@@ -150,7 +150,7 @@ int countUpper(char *s)
 {
 char c;
 int count = 0;
-while (c = *s++)
+while ((c = *s++) != '\0')
     if (isupper(c)) ++count;
 return count;
 }
@@ -163,7 +163,7 @@ char *d;
 char *upper;
 int upSize = countUpper(s);
 upper = d = needMem(upSize+1);
-while (c = *s++)
+while ((c = *s++) != '\0')
     {
     if (isupper(c))
         *d++ = c;
@@ -185,7 +185,6 @@ struct dnaSeq *cdnaSeq;
 boolean isChromRange = FALSE;
 DNA *dna;
 char *translation = NULL;
-boolean showTitle = FALSE;
 
 seqName = cgiString("geneName");
 seqName = trimSpaces(seqName);
@@ -222,7 +221,6 @@ else if (getWormGeneDna(seqName, &dna, TRUE))
     if (cgiBoolean("litLink"))
         {
         char nameBuf[64];
-        int nameLen;
         char *geneName = NULL;
         char *productName = NULL;
         char *coding;
