@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.11 2006/11/10 00:35:57 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.12 2006/11/13 18:36:57 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -182,6 +182,16 @@ if (drop)
 	char comment[256];
 	struct slName *el;
 	int droppedCount = 0;
+	/* customTrash DB user permissions do not have permissions to
+ 	 * drop tables.  Must use standard special user that has all
+ 	 * permissions.  If we are not using the standard user at this
+ 	 * point, then switch to it.
+	 */
+	if (sameWord(db,CUSTOM_TRASH))
+	    {
+	    sqlDisconnect(&conn);
+	    conn = sqlConnect(db);
+	    }
 	for (el = tableNames; el != NULL; el = el->next)
 	    {
 	    verbose(2,"# drop %s\n", el->name);
