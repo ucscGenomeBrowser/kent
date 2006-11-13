@@ -21,7 +21,6 @@
 #include "chainCart.h"
 #include "chainDb.h"
 #include "phyloTree.h"
-#include "humanPhenotypeUi.h"
 #include "gvUi.h"
 #include "oregannoUi.h"
 #include "chromGraph.h"
@@ -34,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.328 2006/11/10 16:24:55 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.329 2006/11/13 15:14:29 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -621,37 +620,6 @@ for (i = 0; i < gvColorTypeSize; i++)
     cgiMakeDropList(gvColorTypeStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
     }
 printf("<BR>");
-}
-
-void humanPhenotypeUi(struct trackDb *tdb) 
-/* print UI for human phenotype filters */
-{
-int i = 0; /* variable to walk through arrays */
-printf("<BR><B>Exclude mutation type</B><BR>");
-for (i = 0; i < variantTypeSize; i++)
-    {
-    cartMakeCheckBox(cart, variantTypeString[i], FALSE);
-    printf (" %s<BR>", variantTypeLabel[i]);
-    }
-
-printf("<BR><B>Exclude mutation location</B><BR>");
-for (i = 0; i < variantLocationSize; i++)
-    {
-    cartMakeCheckBox(cart, variantLocationString[i], FALSE);
-    printf (" %s<BR>", variantLocationLabel[i]);
-    }
-
-/* print key for colors */
-printf("<BR><B>Color key (by mutation type)</B><BR>");
-printf("substitution = purple<BR>");
-printf("insertion = green<BR>");
-printf("deletion = blue<BR>");
-printf("duplication = orange<BR>");
-printf("complex = red<BR>");
-printf("unknown = black<BR>\n");
-printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR>\n");
-
-printf("<BR><B>Include subtracks</B>");
 }
 
 void retroposonsUi(struct trackDb *tdb) 
@@ -2336,8 +2304,6 @@ else if (sameString(track, "gvPos"))
     gvUi(tdb);
 else if (sameString(track, "oreganno"))
     oregannoUi(tdb);
-else if (sameString(track, "humanPhenotype"))
-    humanPhenotypeUi(tdb);
 else if (startsWith("retroposons", track))
     retroposonsUi(tdb);
 else if (sameString(track, "tfbsConsSites"))
