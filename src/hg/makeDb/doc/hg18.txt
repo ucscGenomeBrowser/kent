@@ -11807,6 +11807,13 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     awk '{if ($1 > 1000) {print}}' clonePos.hg18.deviations | wc
     #	277    1939   15747
 
+# QA NOTE: ran mytouch on the *gold and *gap tables because the values were
+# unachaged, but they got a new date/time in the above process (ASZ
+# 11-14-2006):
+# sudo mytouch hg18 'chr*_gold' 200604060800.00
+# sudo mytouch hg18 'chr*_gap' 200604060800.00
+
+
 ##############################################################################
 # LongSAGE                                  (2006-10-20 markd)
 # Load LongSAGE composite tag with genomo mappings of tag clusters
