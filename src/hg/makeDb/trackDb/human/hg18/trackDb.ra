@@ -868,7 +868,7 @@ type bed 8 +
 track polyA
 compositeTrack on
 shortLabel Poly(A)
-longLabel PolyA sites, both reported and predicted
+longLabel Poly(A) Sites, Both Reported and Predicted
 group rna
 priority 79
 visibility hide
@@ -876,15 +876,15 @@ type bed 8 .
 
     track polyaDb
     subTrack polyA
-    shortLabel polyA_DB
-    longLabel Reported poly(A) sites from polyA_DB
+    shortLabel PolyA_DB
+    longLabel Reported Poly(A) Sites from PolyA_DB
     color 51,153,51
     priority 1
 
     track polyaPredict
     subTrack polyA
     shortLabel Poly(A) SVM
-    longLabel Predicted poly(A) sites using an SVM
+    longLabel Predicted Poly(A) Sites Using an SVM
     color 102,0,153
     priority 2
 
