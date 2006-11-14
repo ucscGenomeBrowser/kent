@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.307 2006/11/14 19:06:00 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.308 2006/11/14 22:20:47 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3231,12 +3231,14 @@ return FALSE;
 static struct trackDb *loadTrackDb(struct sqlConnection *conn, char *where)
 /* Load each trackDb table. */
 {
+boolean trackDbNotFound = TRUE;
 struct trackDb *tdbList = NULL;
 struct slName *tableList = hTrackDbList(), *one;
 while ((one = (struct slName *)slPopHead(&tableList)) != NULL)
     {
     if (sqlTableExists(conn, one->name))
         {
+	trackDbNotFound = FALSE;
         struct trackDb *oneTable = trackDbLoadWhere(conn, one->name, where), *oneRow;
 	while ((oneRow = slPopHead(&oneTable)) != NULL)
 	    {
@@ -3248,11 +3250,7 @@ while ((one = (struct slName *)slPopHead(&tableList)) != NULL)
         }
     slNameFree(&one);
     }
-#ifdef NOT
-/* this doesn't work.  It seems to be hit on every browser click
- * for some reason ?
- */
-if (NULL == tdbList)
+if (trackDbNotFound)
     {
     struct dyString *tableNames = newDyString(256);
     struct slName *tableList = hTrackDbList(), *one;
@@ -3261,10 +3259,9 @@ if (NULL == tdbList)
         dyStringPrintf(tableNames,"%s,", one->name);
         slNameFree(&one);
         }
-    warn("can not find %s.%s or perhaps no rows",
+    errAbort("can not find %s.%s check db.trackDb specification in hg.conf",
         hGetDb(),dyStringCannibalize(&tableNames));
     }
-#endif
 return tdbList;
 }
 
