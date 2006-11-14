@@ -135,11 +135,11 @@ color 180,0,0
 type genePred
 
 track augustusHints
-shortLabel Augustus Using Hints
+shortLabel Augustus Hints
 longLabel Augustus Gene Predictions Using Hints
 group genes
 priority 51.7
-visibility dense
+visibility hide
 color 139,0,0
 type genePred
 
