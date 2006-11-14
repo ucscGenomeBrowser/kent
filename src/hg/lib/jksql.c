@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.94 2006/11/06 23:51:08 galt Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.95 2006/11/14 19:33:40 heather Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -260,6 +260,10 @@ if (sc != NULL)
 char* sqlGetDatabase(struct sqlConnection *sc)
 /* Get the database associated with an connection. */
 {
+if (!sc)
+    return NULL;
+if (!sc->conn)
+    return NULL;
 return sc->conn->db;
 }
 
