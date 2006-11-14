@@ -23,7 +23,7 @@ int i;
 char c;
 for (i=0; i<size; ++i)
     {
-    c = ntChars[*dna++];
+    c = ntChars[(int)(*dna++)];
     if (c == 'a' || c == 't')
 	res += 2;
     else if (c == 'g' || c == 'c')
@@ -51,7 +51,7 @@ for (startIx = 0; startIx <= dnaSize-pinSize*2; startIx += 1)
 	     "Please reduce the sequence size and try again.");
 	for (i=0; i<pinSize; i+=1)
 	    {
-	    if (dna[startIx+i] != ntCompTable[dna[endIx-i-1]])
+	    if (dna[startIx+i] != ntCompTable[(int)dna[endIx-i-1]])
 		{
 		gotPin = FALSE;
 		break;
@@ -74,7 +74,6 @@ int i;
 long score = 0;
 long contigScore = 0;
 long bestContigScore = 0;
-int contigCount = 0;
 int baseScore = 0;
 boolean inMatch = FALSE;
 char a,b;
@@ -94,7 +93,7 @@ for (i=0; i<size; ++i)
 	}
     else
 	{
-	if (a == 'g' && b == 't' || a == 't' && b == 'u') /* Wobble */
+	if ((a == 'g' && b == 't') || (a == 't' && b == 'u')) /* Wobble */
 	    score += 1;
 	else
 	    score += -4;
@@ -314,7 +313,7 @@ filter['('] = '(';
 filter[')'] = ')';
 while ((c = *in++) != 0)
     {
-    if ((c = filter[c]) != 0)
+    if ((c = filter[(int)c]) != 0)
         *out++ = c;
     }
 *out++ = 0;
