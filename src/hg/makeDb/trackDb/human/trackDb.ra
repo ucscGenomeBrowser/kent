@@ -1070,7 +1070,7 @@ useScore 1
 origAssembly hg16
 
 track regPotential7X
-shortLabel Reg Potential 7X 
+shortLabel 7X Reg Potential
 longLabel ESPERR Regulatory Potential (7 Species)
 group regulation
 priority 101
