@@ -154,7 +154,7 @@ type genePred
 
 track RfamSeedFolds
 shortLabel Rfam seed folds
-longLabel Secondary structure annotation of ncRNAs from Rfam seed
+longLabel Secondary Structure Annotation of ncRNAs from Rfam Seed
 group genes
 priority 61	
 visibility hide
@@ -165,7 +165,7 @@ mafTrack multiz17way
 
 track rnafold
 shortLabel RNAfold
-longLabel RNAfold predictions of RNA secondary structure (id_strand_score)
+longLabel RNAfold predictions of RNA Secondary Structure (id_strand_score)
 group genes
 priority 63.3
 visibility hide
@@ -204,7 +204,7 @@ type bed 9 .
 track picTar
 compositeTrack on
 shortLabel PicTar miRNA
-longLabel MicroRNA target sites in 3' UTRs as predicted by PicTar
+longLabel MicroRNA Target Sites in 3' UTRs Predicted by PicTar
 group regulation
 priority 102
 visibility hide
@@ -213,14 +213,14 @@ type bed 9
     track picTarMiRNA4Way
     subTrack picTar
     shortLabel PicTar 4 Species
-    longLabel PicTar microRNA sites, 4 species conservation constraint: Human/Mouse/Rat/Dog
+    longLabel PicTar microRNA Sites, 4 Species Conservation Constraint: Human/Mouse/Rat/Dog
     color 128,0,128
     priority 1
 
     track picTarMiRNA5Way
     subTrack picTar
     shortLabel PicTar 5 Species
-    longLabel PicTar microRNA sites, 5 species conservation constraint: Human/Mouse/Rat/Dog/Chicken
+    longLabel PicTar microRNA Sites, 5 species Conservation Constraint: Human/Mouse/Rat/Dog/Chicken
     color 128,0,128
     priority 2
 
@@ -537,7 +537,7 @@ type bed 5 .
 
 track snp
 shortLabel snp124
-longLabel Simple Nucleotide Polymorphisms (dbSNP build 124)
+longLabel Simple Nucleotide Polymorphisms (dbSNP Build 124)
 group varRep
 priority 143
 visibility hide 
@@ -880,7 +880,7 @@ otherDb monDom2
 
 track rabbitMaf
 shortLabel Rabbit NISC/2X
-longLabel Rabbit NISC and 2X sequence blastz reciprocal best
+longLabel Rabbit NISC and 2X Sequence Blastz Reciprocal Best
 group x
 priority 165
 visibility hide
@@ -2101,7 +2101,7 @@ otherDb mm7
 
 track blastMm6KG
 shortLabel Mouse Proteins
-longLabel Mouse(mm6) proteins mapped by chained tBLASTn
+longLabel Mouse(mm6) Proteins Mapped by Chained tBLASTn
 group x
 priority 30
 visibility hide

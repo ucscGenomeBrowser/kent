@@ -151,7 +151,7 @@ showDiffBasesAllScales .
 
 track haplotypePos
 shortLabel $Organism hapPos
-longLabel $Organism Haplotype Posistion
+longLabel $Organism Haplotype Position
 group varRep
 priority 54.5
 visibility hide
@@ -908,7 +908,7 @@ url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$
 
 track uc16
 shortLabel Ultra Conserved
-longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
 group compGeno
 priority 104.605
 visibility hide
