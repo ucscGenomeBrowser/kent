@@ -202,7 +202,7 @@ type bed 4 .
 
 track orthoMrna
 shortLabel Mouse mRNAs
-longLabel Mouse mRNAs Mapped from mm3 via nets/chains
+longLabel Mouse mRNAs Mapped from mm3 via Nets/Chains
 group rna
 color 16,107,44
 priority 77
@@ -235,7 +235,7 @@ groupings gnfHumanAtlas2Groups
 
 track affyUcla
 shortLabel UCLA GeneChip
-longLabel UCLA Affymetrix U133 GeneChip data
+longLabel UCLA Affymetrix U133 GeneChip Data
 group regulation
 priority 81
 visibility hide
@@ -460,7 +460,7 @@ type bed 6 +
     track orthoAllelesYRI
     subTrack orthoAlleles
     shortLabel SNPs YRI
-    longLabel  SNPs from the YRI population
+    longLabel  SNPs from the YRI Population
     color 200,100,0
     altColor 0,100,200
     priority 1
@@ -468,7 +468,7 @@ type bed 6 +
     track orthoAllelesCEU
     subTrack orthoAlleles
     shortLabel SNPs CEU
-    longLabel  SNPs from the CEU population
+    longLabel  SNPs from the CEU Population
     color 200,100,0
     altColor 0,100,200
     priority 2
@@ -476,7 +476,7 @@ type bed 6 +
     track orthoAllelesCHB
     subTrack orthoAlleles
     shortLabel SNPs CHB
-    longLabel  SNPs from the CHB population
+    longLabel  SNPs from the CHB Population
     color 200,100,0
     altColor 0,100,200
     priority 3
@@ -484,7 +484,7 @@ type bed 6 +
     track orthoAllelesJPT
     subTrack orthoAlleles
     shortLabel SNPs JPT
-    longLabel  SNPs from the JPT population
+    longLabel  SNPs from the JPT Population
     color 200,100,0
     altColor 0,100,200
     priority 4
@@ -492,7 +492,7 @@ type bed 6 +
     track orthoAllelesJPT_CHB
     subTrack orthoAlleles
     shortLabel SNPs JPT+CHB
-    longLabel  SNPs from the combined JPT+CHB population
+    longLabel  SNPs from the Combined JPT+CHB Population
     color 200,100,0
     altColor 0,100,200
     priority 5
@@ -1070,8 +1070,8 @@ useScore 1
 origAssembly hg16
 
 track regPotential7X
-shortLabel Reg Potential 7 species
-longLabel ESPERR Regulatory Potential (7 species)
+shortLabel Reg Potential 7X 
+longLabel ESPERR Regulatory Potential (7 Species)
 group regulation
 priority 101
 visibility hide
@@ -1387,13 +1387,13 @@ origAssembly hg16
     track snpRecombRateHapmap
     subTrack snpRecombRate
     shortLabel HapMap
-    longLabel Oxford Recombination Rates from HapMap Phase I release 16c.1
+    longLabel Oxford Recombination Rates from HapMap Phase I Release 16c.1
     priority 1
 
     track snpRecombRatePerlegen
     subTrack snpRecombRate
     shortLabel Perlegen
-    longLabel Oxford Recombination Rates from Perlegen data
+    longLabel Oxford Recombination Rates from Perlegen Data
     priority 2
 
 track snpRecombHotspot
@@ -1409,18 +1409,18 @@ origAssembly hg16
     track snpRecombHotspotHapmap
     subTrack snpRecombHotspot
     shortLabel HapMap
-    longLabel Oxford Recombination Hotspots from HapMap Phase I release 16c.1
+    longLabel Oxford Recombination Hotspots from HapMap Phase I Release 16c.1
     priority 1
 
     track snpRecombHotspotPerlegen
     subTrack snpRecombHotspot
     shortLabel Perlegen
-    longLabel Oxford Recombination Hotspots from Perlegen data
+    longLabel Oxford Recombination Hotspots from Perlegen Data
     priority 2
 
 #track perlegenRecombColdpots
 #shortLabel Perlegen Recomb Coldspots
-#longLabel Oxford Recombination Coldspots from Perlegen data
+#longLabel Oxford Recombination Coldspots from Perlegen Data
 #group varRep
 #priority 145.6
 #visibility hide
