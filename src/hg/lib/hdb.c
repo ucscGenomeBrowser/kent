@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.305 2006/11/14 18:39:13 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.306 2006/11/14 18:59:01 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3254,10 +3254,10 @@ if (NULL == tdbList)
     struct slName *tableList = hTrackDbList(), *one;
     while ((one = (struct slName *)slPopHead(&tableList)) != NULL)
         {
-        dyStringPrintf(tableNames,"%s", one->name);
+        dyStringPrintf(tableNames,"%s,", one->name);
         slNameFree(&one);
         }
-    errAbort("can not find %s.%s table or perhaps no rows in it",
+    errAbort("can not find %s.%s or perhaps no rows",
         hGetDb(),dyStringCannibalize(&tableNames));
     }
 return tdbList;
