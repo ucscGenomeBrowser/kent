@@ -11043,7 +11043,6 @@ cat > mafFrags.csh << 'EOF'
     nice gzip up*.maf
     md5sum up*.gz >> md5sum.txt
 ##############################################################################
-
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
 # Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
 
@@ -11807,3 +11806,18 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     #	Only 277 are larger than 10 times too big:
     awk '{if ($1 > 1000) {print}}' clonePos.hg18.deviations | wc
     #	277    1939   15747
+
+##############################################################################
+# LongSAGE                                  (2006-10-20 markd)
+# Load LongSAGE composite tag with genomo mappings of tag clusters
+# obtained from "Martin Hirst" <mhirst@bcgsc.ca>
+
+    ftp ftp2.bcgsc.ca
+    user: ucsc
+    <password from martin >
+
+    download SHE*_u.map
+    chmod a-w *.map
+
+    ~/compbio/kent/src/hg/makeDb/outside/bcgscSage/bcgscSageLoad hg18 *_u.map
+
