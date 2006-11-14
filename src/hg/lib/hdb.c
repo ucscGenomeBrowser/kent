@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.306 2006/11/14 18:59:01 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.307 2006/11/14 19:06:00 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3248,6 +3248,10 @@ while ((one = (struct slName *)slPopHead(&tableList)) != NULL)
         }
     slNameFree(&one);
     }
+#ifdef NOT
+/* this doesn't work.  It seems to be hit on every browser click
+ * for some reason ?
+ */
 if (NULL == tdbList)
     {
     struct dyString *tableNames = newDyString(256);
@@ -3257,9 +3261,10 @@ if (NULL == tdbList)
         dyStringPrintf(tableNames,"%s,", one->name);
         slNameFree(&one);
         }
-    errAbort("can not find %s.%s or perhaps no rows",
+    warn("can not find %s.%s or perhaps no rows",
         hGetDb(),dyStringCannibalize(&tableNames));
     }
+#endif
 return tdbList;
 }
 
