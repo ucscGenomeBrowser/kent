@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.41 2006/05/26 21:52:28 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.42 2006/11/14 19:33:16 heather Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -172,19 +172,6 @@ int *tdbSpanList = (int *)NULL;
 /*	Check if we have done this before via trackDb entry	*/
 if (tdb && (prevTdb == tdb) && prevTdbSpanList)
     return(prevMin);
-
-/*	Check if we have done this before not via a trackDb entry */
-if  ( prevTable && prevChrom && prevConn &&
-	(sameWord(sqlGetDatabase(prevConn), sqlGetDatabase(conn))) &&
-	(sameWord(prevTable,table)) &&
-	(sameWord(prevChrom,chrom)) &&
-	(prevWinStart == winStart) &&
-	(prevWinEnd == winEnd) &&
-	(prevCart == cart)
-    )
-    {
-    return(prevMin);
-    }
 
 spans = newHash(0);	/* list of spans in this table */
 
