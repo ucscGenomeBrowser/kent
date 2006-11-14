@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1161 2006/11/13 22:41:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1162 2006/11/14 05:36:38 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11477,7 +11477,7 @@ if (hTableExists("lsSnpFunction"))
 hFreeConn(&conn);
 }
 
-off_t getSnpOffset(struct snp snp, int version, boolean multipleAlignment)
+off_t getSnpOffset(struct snp snp)
 /* do a lookup in the snpSeq for the offset */
 /* move this to kent/src/hg/lib/snpSeq.c */
 {
@@ -11485,19 +11485,9 @@ char query[256];
 char **row;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
-char tableName[64];
-char chromName[64];
 long offset = 0;
 
-safef(tableName, sizeof(tableName), "snp%dSeq", version);
-if (!hTableExists(tableName))
-    return -1;
-if (multipleAlignment)
-    safef(chromName, sizeof(chromName), "chrMulti");
-else
-    safef(chromName, sizeof(chromName), "%s", snp.chrom);
-safef(query, sizeof(query), "select file_offset from %s where name='%s' and chrom = '%s'", 
-      tableName, snp.name, chromName);
+safef(query, sizeof(query), "select file_offset from seq where acc='%s'", snp.name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11509,32 +11499,15 @@ return offset;
 }
 
 
-char *getSnpSeqFile(struct snp snp, int version, boolean multipleAlignment)
-/* do a lookup in the snpExtFile for the filename */
-/* move this to kent/src/hg/lib/snpExtFile.c */
+char *getSnpSeqFile()
 {
 char query[256];
 char **row;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char *fileName = NULL;
-char tableName[64];
-char *chromName = cloneString(snp.chrom);
-char chromName2[64];
 
-safef(tableName, sizeof(tableName), "snp%dExtFile", version);
-if (!hTableExists(tableName))
-    return NULL;
-
-if (multipleAlignment)
-    safef(chromName2, sizeof(chromName2), "chrMulti");
-else
-    {
-    stripString(chromName, "_random");
-    safef(chromName2, sizeof(chromName2), "%s", chromName);
-    }
-
-safef(query, sizeof(query), "select path from %s where chrom='%s'", tableName, chromName2);
+safef(query, sizeof(query), "select path from extFile where name='snp.fa'");
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11544,9 +11517,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return fileName;
 }
-
-
-
 
 
 
@@ -11619,11 +11589,11 @@ int end = 0;
 
 off_t offset = 0;
 
-fileName = getSnpSeqFile(snp, version, multipleAlignment);
+fileName = getSnpSeqFile();
 if (!fileName)
     return;
 
-offset = getSnpOffset(snp, version, multipleAlignment);
+offset = getSnpOffset(snp);
 if (offset == -1) 
     return;
 
