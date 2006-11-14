@@ -573,6 +573,9 @@ for (exp = exps; exp != NULL; exp = exp->next)
 }
 
 void maExpDataDoLogRatioTranspose(struct expData *exps, boolean mean)
+/* For the M x N sized expression matrix, change each value to be the ratio */
+/* of that value to the mean or median of values in that value's column (probe). */
+/* This involves no clumping of experiments to calculate the median/mean. */
 {
 struct expData *transpose = maExpDataTranspose(exps);
 maExpDataDoLogRatioMeanOrMedian(transpose, mean);
@@ -675,10 +678,10 @@ for (exp = exps; exp != NULL; exp = exp->next)
     int i;
     for (i = 0; i < exp->expCount; i++)
 	{
-	double newVal = exp->expScores[i] + c;
 	if (c <= MICROARRAY_MISSING_DATA)
 	    errAbort("error: Constant used caused expData value to fall into the NA range");
-	exp->expScores[i] = newVal;
+	if (exp->expScores[i] > MICROARRAY_MISSING_DATA)
+	    exp->expScores[i] = exp->expScores[i] + c;
 	}
     }
 }

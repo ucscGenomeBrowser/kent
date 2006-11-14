@@ -1,15 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/hg/utils/automation/doTemplate.pl instead.
+# edit ~/kent/src/hg/utils/automation/doWindowMasker.pl instead.
 
-# $Id: doWindowMasker.pl,v 1.1 2006/11/14 02:00:55 aamp Exp $
-
-# HOW TO USE THIS TEMPLATE:
-# 1. Global-replace doWindowMasker.pl with your actual script name.
-# 2. Search for template and replace each instance with something appropriate.
-#    Add steps and subroutines as needed.  Other do*.pl or make*.pl may have
-#    useful example code -- this is just a skeleton.
+# $Id: doWindowMasker.pl,v 1.2 2006/11/14 23:17:46 aamp Exp $
 
 use Getopt::Long;
 use warnings;
@@ -211,7 +205,7 @@ sub doTwoBit {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 twoBitMask $unmaskedSeq windowmasker.bed $db.wmsk.2bit
-twoBitMask $unmaskedSeq windowmasker.bed $db.wmsk.sdust.2bit
+twoBitMask $unmaskedSeq windowmasker.sdust.bed $db.wmsk.sdust.2bit
 _EOF_
   );
   $bossScript->execute();

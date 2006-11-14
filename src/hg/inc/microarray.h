@@ -93,6 +93,9 @@ void maExpDataDoLogRatioMeanOrMedian(struct expData *exps, boolean mean);
 /* This involves no clumping of experiments to calculate the median/mean. */
 
 void maExpDataDoLogRatioTranspose(struct expData *exps, boolean mean);
+/* For the M x N sized expression matrix, change each value to be the ratio */
+/* of that value to the mean or median of values in that value's column (probe). */
+/* This involves no clumping of experiments to calculate the median/mean. */
 
 void maExpDataDoLogRatioClumpExpRecord(struct expData *exps, struct expRecord *erList, int extrasIndex, enum maCombineMethod method);
 /* Log ratio the expData list.  The ratio of the denominator is the median of */
