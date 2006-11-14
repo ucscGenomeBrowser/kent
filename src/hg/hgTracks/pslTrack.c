@@ -244,6 +244,37 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int sizeMul)
 
 
 
+/* If useful elsewhere someday, could libify: */
+static struct psl *pslClone(struct psl *pslIn)
+/* Return a newly allocated copy of pslIn's contents. */
+{
+struct psl *pslOut = cloneMem(pslIn, sizeof(*pslIn));
+pslOut->next = NULL;
+pslOut->tName = cloneString(pslIn->tName);
+pslOut->qName = cloneString(pslIn->qName);
+pslOut->blockSizes = cloneMem(pslIn->blockSizes, sizeof(pslIn->blockSizes[0]) *
+			      pslIn->blockCount);
+pslOut->qStarts = cloneMem(pslIn->qStarts, sizeof(pslIn->qStarts[0]) *
+			   pslIn->blockCount);
+pslOut->tStarts = cloneMem(pslIn->tStarts, sizeof(pslIn->tStarts[0]) *
+			   pslIn->blockCount);
+if (pslIn->qSequence != NULL)
+    {
+    int i;
+    pslOut->qSequence = needMem(sizeof(pslIn->qSequence[0]) *
+				       pslIn->blockCount);
+    pslOut->tSequence = needMem(sizeof(pslIn->qSequence[0]) *
+				       pslIn->blockCount);
+    for (i = 0;  i < pslIn->blockCount;  i++)
+	{
+	pslOut->qSequence[i] = cloneString(pslIn->qSequence[i]);
+	pslOut->tSequence[i] = cloneString(pslIn->tSequence[i]);
+	}
+    }
+return pslOut;
+}
+
+
 struct linkedFeatures *lfFromPslx(struct psl *psl, 
 	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg)
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
@@ -251,18 +282,10 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
 {
 struct simpleFeature *sfList = NULL;
 int grayIx = pslGrayIx(psl, isXeno, maxShade);
-int drawOptionNum;
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
-boolean showDiffCodonsAllScales = FALSE;
+enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
 
-if (tg)
-    showDiffCodonsAllScales =
-    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
-     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
-
-/* this will check for NULL tg */
-drawOptionNum = getCdsDrawOptionNum(tg);
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
 lf->grayIx = grayIx;
@@ -284,18 +307,24 @@ if (rcTarget)
 sfList = sfFromPslX(psl, grayIx, sizeMul);
 slReverse(&sfList);
 lf->components = sfList;
+
 /*if we are coloring by codon and zoomed in close 
   enough, then split simple feature by the psl record
   and the mRNA sequence. Otherwise do the default conversion
   from psl to simple feature.*/
-if (drawOptionNum>0 && (zoomedToCdsColorLevel || showDiffCodonsAllScales))
+if (drawOpt == baseColorDrawItemCodons ||
+    drawOpt == baseColorDrawDiffCodons ||
+    drawOpt == baseColorDrawGenomicCodons)
     {
-    lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade,
-			   drawOptionNum);
+    baseColorCodonsFromPsl(chromName, lf, psl, sizeMul, isXeno, maxShade,
+			   drawOpt);
     lf->grayIx = lfCalcGrayIx(lf);
     }
 else
     linkedFeaturesBoundsAndGrays(lf);
+/* If we are drawing anything special, stash psl for use in drawing phase: */
+if (drawOpt != baseColorDrawOff)
+    lf->original = pslClone(psl);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 

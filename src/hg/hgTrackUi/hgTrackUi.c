@@ -14,7 +14,6 @@
 #include "snpUi.h"
 #include "snp125Ui.h"
 #include "sample.h"
-#include "cdsColors.h"
 #include "wiggle.h"
 #include "hgMaf.h"
 #include "obscure.h"
@@ -33,7 +32,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.329 2006/11/13 15:14:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.330 2006/11/14 00:30:24 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -988,22 +987,6 @@ cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
-void baseColorOptions(struct trackDb *tdb)
-/*base coloring options*/
-{
-char *drawOption;
-char *baseDrawDefault;
-char baseColorVar[128];
-
-printf("<p><b>Show sequence for&nbsp;</b>");
-safef(baseColorVar, 128, "%s.%s", tdb->tableName, PSL_SEQUENCE_BASES );
-baseDrawDefault = trackDbSettingOrDefault(tdb, PSL_SEQUENCE_BASES, PSL_SEQUENCE_DEFAULT);
-drawOption = cartUsualString(cart, baseColorVar, baseDrawDefault);
-baseColorDropDown(baseColorVar, drawOption);
-printf("&nbsp;<b>bases.</b>\n");
-printf("<BR><BR><a href=%s>Help on EST base labeling</a><br>",CDS_BASE_HELP_PAGE);
-}
-
 void nmdFilterOptions(struct trackDb *tdb)
 /* Filter out NMD targets. */
 {
@@ -1018,34 +1001,6 @@ printf("<p><b>Filter out NMD targets.</b>");
 cgiMakeCheckBox(buff, nmdDefault);
 }
 
-void cdsColorOptions(struct trackDb *tdb, int numValues)
-/*Codon coloring options*/
-{
-    char *drawOption;
-    char *drawOptionsDefault;
-    char *cdsDrawDefault;
-    char cdsColorVar[128];
-
-    boolean isGenePred = (numValues >= 0);
-    
-    if (isGenePred)
-        drawOptionsDefault = "enabled";
-    else
-        drawOptionsDefault = "disabled";
-    if(sameString(trackDbSettingOrDefault(tdb,
-                  "cdsDrawOptions", drawOptionsDefault), "disabled"))
-        return;
-    
-    printf("<p><b>Color track by codons: </b>");
-    safef(cdsColorVar, 128, "%s.cds.draw", tdb->tableName );
-    cdsDrawDefault = trackDbSettingOrDefault(tdb, "cdsDrawDefault", CDS_DRAW_DEFAULT);
-    drawOption = cartUsualString(cart, cdsColorVar, cdsDrawDefault);
-    cdsColorDropDown(cdsColorVar, drawOption, numValues);
-    if(numValues > 0)
-        printf("<BR><BR><a href=%s>Help on codon coloring</a><br>",CDS_HELP_PAGE);
-    else
-        printf("<BR><BR><a href=%s>Help on mRNA coloring</a><br>",CDS_MRNA_HELP_PAGE);
-}
 
 void blastSGUi(struct trackDb *tdb)
 {
@@ -1088,8 +1043,9 @@ printf("SwissProt ID ");
 cgiMakeCheckBox(posName, usePos);
 printf("Yeast Position");
 
-cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
+
 void blastFBUi(struct trackDb *tdb)
 {
 char geneName[64];
@@ -1127,8 +1083,9 @@ printf("D. melanogaster mRNA ");
 cgiMakeCheckBox(posName, usePos);
 printf("D. melanogaster Position");
 
-cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
+
 void blastUi(struct trackDb *tdb)
 {
 char geneName[64];
@@ -1170,10 +1127,7 @@ printf("UniProt(Swiss-Prot/TrEMBL) ID ");
 cgiMakeCheckBox(posName, usePos);
 printf("Human Position");
 
-if (startsWith("mrna", tdb->tableName))
-    cdsColorOptions(tdb, 5);
-else
-    cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
 
 void hg17KgIdConfig(struct trackDb *tdb)
@@ -1194,7 +1148,7 @@ void hg17KgUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
 hg17KgIdConfig(tdb);
-cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
 
 void knownGeneIdConfig(struct trackDb *tdb)
@@ -1239,7 +1193,7 @@ void knownGeneUI(struct trackDb *tdb)
 {
 /* This is incompatible with adding Protein ID to lf->extra */
 knownGeneIdConfig(tdb); 
-cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
 
 void geneIdConfig(struct trackDb *tdb)
@@ -1311,14 +1265,14 @@ void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
 geneIdConfig2(tdb);
-cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
 
 void retroGeneUI(struct trackDb *tdb)
 /* Put up retroGene-specifc controls */
 {
 geneIdConfig(tdb);
-cdsColorOptions(tdb, 2);
+baseColorDrawOptDropDown(cart, tdb);
 }
 
 void gencodeUI(struct trackDb *tdb)
@@ -1346,8 +1300,6 @@ char *filterTypeVar = mud->filterTypeVar;
 char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
 char *logicTypeVar = mud->logicTypeVar;
 char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
-boolean pslSequenceBases = (cartVarExists(cart, PSL_SEQUENCE_BASES) ||
-    ((char *) NULL != trackDbSetting(tdb, PSL_SEQUENCE_BASES)));
 
 /* Define type of filter. */
 filterButtons(filterTypeVar, filterTypeVal, FALSE);
@@ -1362,10 +1314,7 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
-if (pslSequenceBases)
-    baseColorOptions(tdb);
-else
-    cdsColorOptions(tdb, -1);
+baseColorDrawOptDropDown(cart, tdb);
 }
 
 void bedUi(struct trackDb *tdb)
@@ -2325,7 +2274,7 @@ else if (tdb->type != NULL)
                 gencodeUI(tdb);
             nmdFilterOptions(tdb);
             if (! sameString(track, "tigrGeneIndex"))
-	        cdsColorOptions(tdb, 2);
+		baseColorDrawOptDropDown(cart, tdb);
             }
 	else if (sameWord(words[0], "expRatio"))
 	    {
@@ -2351,7 +2300,7 @@ else if (tdb->type != NULL)
 	    if (wordCount == 3)
 		if (sameWord(words[1], "xeno"))
 		    crossSpeciesUi(tdb);
-	    cdsColorOptions(tdb, -1);
+	    baseColorDrawOptDropDown(cart, tdb);
 	    }
 	}
     freeMem(typeLine);

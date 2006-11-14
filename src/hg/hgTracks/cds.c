@@ -1,4 +1,4 @@
-/* cds - codon coloring */
+/* cds.c - code for coloring of bases, codons, or alignment differences. */
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -12,20 +12,63 @@
 #include "hdb.h"
 #include "psl.h"
 #include "genePred.h"
-#include "cdsColors.h"
 #include "cds.h"
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.48 2006/11/06 22:16:24 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.49 2006/11/14 00:30:24 angie Exp $";
+
+/* Definitions of cds colors for coding coloring display */
+#define CDS_ERROR   0
+
+#define CDS_ODD     1
+#define	CDS_ODD_R	0x00
+#define	CDS_ODD_G	0x00
+#define	CDS_ODD_B	0x9e
+
+#define CDS_EVEN    2
+#define	CDS_EVEN_R	0x00
+#define	CDS_EVEN_G	0x00
+#define	CDS_EVEN_B	0xdc
+
+#define CDS_START   3
+#define	CDS_START_R	0x00
+#define	CDS_START_G	0xf0
+#define	CDS_START_B	0x00
+
+#define CDS_STOP    4
+#define	CDS_STOP_R	0xe1
+#define	CDS_STOP_G	0x00
+#define	CDS_STOP_B	0x00
+
+#define CDS_SPLICE      5
+#define	CDS_SPLICE_R	0xa0
+#define	CDS_SPLICE_G	0xa0
+#define	CDS_SPLICE_B	0xd9
+
+#define CDS_PARTIAL_CODON	6
+#define CDS_PARTIAL_CODON_R	0x0
+#define CDS_PARTIAL_CODON_G 0xc0
+#define CDS_PARTIAL_CODON_B	0xc0
+
+#define CDS_GENOMIC_INSERTION   7
+#define CDS_GENOMIC_INSERTION_R 220
+#define CDS_GENOMIC_INSERTION_G 128
+#define CDS_GENOMIC_INSERTION_B 0
+
+#define CDS_NUM_COLORS 8
+
+/* Array of colors used in drawing codons/bases/differences: */
+Color cdsColor[CDS_NUM_COLORS];
+boolean cdsColorsMade = FALSE;
+
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
                                         MgFont *font, char *text, bool zoomed,
-                                        Color *cdsColor, int winStart, 
-                                        int maxPixels)
+                                        int winStart, int maxPixels)
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
@@ -218,12 +261,12 @@ else   /*negative strand*/
 }
 
 
-
-void drawCdsDiffBaseTickmarksOnly(struct track *tg,  struct linkedFeatures *lf,
-				  Color *cdsColor, struct vGfx *vg, int xOff,
-				  int y, double scale, int heightPer,
-				  struct dnaSeq *mrnaSeq, struct psl *psl,
-				  int winStart)
+static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
+	struct linkedFeatures *lf,
+	struct vGfx *vg, int xOff,
+	int y, double scale, int heightPer,
+	struct dnaSeq *mrnaSeq, struct psl *psl,
+	int winStart)
 /* Draw 1-pixel wide red lines only where mRNA bases differ from genomic.  
  * This assumes that lf has been drawn already, we're zoomed out past 
  * zoomedToBaseLevel, we're not in dense mode etc. */
@@ -286,8 +329,8 @@ Color lighterShade(struct vGfx *vg, Color color, double percentLess)
 
 
 
-Color colorAndCodonFromGrayIx(struct vGfx *vg, char *codon, int grayIx, 
-                                        Color *cdsColor, Color ixColor)
+static Color colorAndCodonFromGrayIx(struct vGfx *vg, char *codon, int grayIx, 
+			      Color ixColor)
 /*convert grayIx value to color and codon which
  * are both encoded in the grayIx*/
 {
@@ -422,12 +465,12 @@ static struct simpleFeature *splitPslByCodon(char *chrom,
 					     struct linkedFeatures *lf, struct 
                                              psl *psl, int sizeMul, boolean 
                                              isXeno, int maxShade, 
-                                             int displayOption,
+                                             enum baseColorDrawOpt drawOpt,
 					     boolean colorStopStart)
 {
 struct simpleFeature *sfList = NULL;
 unsigned *retGaps = NULL;
-boolean extraInfo = (displayOption != CDS_DRAW_GENOMIC_CODONS);
+boolean extraInfo = (drawOpt != baseColorDrawGenomicCodons);
 struct genbankCds cds;
 
 if (pslIsProtein(psl))
@@ -447,7 +490,9 @@ else
 
 /* if cds not in genbank or not parsable - revert to normal*/
 /* if showing bases we don't want to have thin bars ala genePred format */
-if ((displayOption > 3) || (cds.start == cds.end))
+if (drawOpt == baseColorDrawItemBases ||
+    drawOpt == baseColorDrawDiffBases ||
+    (cds.start == cds.end))
     {
     int grayIx = pslGrayIx(psl, isXeno, maxShade);
     sfList = sfFromPslX(psl, grayIx, sizeMul);
@@ -461,7 +506,7 @@ else
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo,
+    sfList = baseColorCodonsFromGenePred(chrom, lf, gp, retGaps, extraInfo,
 				  colorStopStart);
     genePredFree(&gp);
     }
@@ -470,9 +515,10 @@ return(sfList);
 
 
 
-void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf, 
+void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf, 
 			    struct psl *psl, int sizeMul, boolean
-                            isXeno, int maxShade, int displayOption)
+                            isXeno, int maxShade,
+			    enum baseColorDrawOpt drawOpt)
 /*divide a pslX record into a linkedFeature, where each simple feature
  * is a 3-base codon (or a partial codon if on a boundary). Uses
  * GenBank to get the CDS start/stop of the psl record and also grabs
@@ -480,139 +526,80 @@ void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf,
  * alter the frame. Therefore this function relies on the mRNA
  * sequence (rather than the genomic) to determine the frame.*/
 {
-boolean colorStopStart = (displayOption != CDS_DRAW_DIFF_CODONS);
+boolean colorStopStart = (drawOpt != baseColorDrawDiffCodons);
 struct simpleFeature *sfList = splitPslByCodon(chromName, lf, psl, sizeMul,
-                                               isXeno, maxShade, displayOption,
+                                               isXeno, maxShade, drawOpt,
 					       colorStopStart);
 slReverse(&sfList);
 lf->codons = sfList;
 }
 
 
-int getCdsDrawOptionNum(struct track *tg)
-    /*query the cart for the current track's CDS coloring option. See
-     * cdsColors.h for return value meanings*/
+enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg)
+/* Determine what base/codon coloring option (if any) has been selected 
+ * in trackDb/cart, and gate with zoom level. */
 {
-int ret = 0;
-char *defaultDrawOption;
-char optionStr[128];
-boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
+enum baseColorDrawOpt ret = baseColorDrawOff;
+boolean showDiffBasesAllScales = FALSE;
 
-if(tg == NULL) return(ret);
+if (cart == NULL || tg == NULL || tg->tdb == NULL)
+    return ret ;
 
-if (!pslSequenceBases && tg->tdb)
-	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
-		PSL_SEQUENCE_BASES));
+ret = baseColorDrawOptEnabled(cart, tg->tdb);
+showDiffBasesAllScales =
+    (trackDbSetting(tg->tdb, "showDiffBasesAllScales") != NULL);
+
+/* Gate with zooming constraints: */
+if (!zoomedToCdsColorLevel && (ret == baseColorDrawGenomicCodons ||
+			       ret == baseColorDrawItemCodons))
+    ret = baseColorDrawOff;
+if (!zoomedToBaseLevel && (ret == baseColorDrawItemBases))
+    ret = baseColorDrawOff;
+if (!(zoomedToCdsColorLevel || showDiffBasesAllScales) &&
+    ret == baseColorDrawDiffCodons)
+    ret = baseColorDrawOff;
+if (!(zoomedToBaseLevel || showDiffBasesAllScales) &&
+    ret == baseColorDrawDiffBases)
+    ret = baseColorDrawOff;
+
+return ret;
+}
 
 
-if (pslSequenceBases)
-    {
-    enum baseColorOptEnum bcEnum;
-    if (tg->tdb != NULL)
-	defaultDrawOption = trackDbSettingOrDefault(tg->tdb, PSL_SEQUENCE_BASES,
-	    PSL_SEQUENCE_DEFAULT);
-    else
-	defaultDrawOption = PSL_SEQUENCE_DEFAULT;
-    safef(optionStr, 128, "%s.%s", tg->mapName, PSL_SEQUENCE_BASES);
-    defaultDrawOption = cartUsualString(cart, optionStr, defaultDrawOption);
-    bcEnum = baseColorStringToEnum(defaultDrawOption);
-    /* translate 1 and 2 to be 4 and 5 to be equivalent meaning as
-     *	cdsColorOptEnum below
-     */
-    if (bcEnum > 0)
-	ret = bcEnum + 3;
-    }
+static struct dnaSeq *maybeGetSeqUpper(char *name, char *tableName)
+/* Look up the sequence in genbank tables (hGenBankGetMrna also searches 
+ * seq if it can't find it in GB tables), uppercase and return it if we find 
+ * it, return NULL if we don't find it. */
+{
+struct dnaSeq *mrnaSeq = NULL;
+if (sameString(tableName,"refGene"))
+    mrnaSeq = hGenBankGetMrna(name, "refMrna");
 else
-    {
-    enum cdsColorOptEnum cdEnum;
-    if (tg->tdb != NULL)
-	defaultDrawOption = trackDbSettingOrDefault(tg->tdb, "cdsDrawDefault", 
-						CDS_DRAW_DEFAULT);
-    else
-	defaultDrawOption = CDS_DRAW_DEFAULT;
-    safef(optionStr, 128,"%s.cds.draw", tg->mapName);
-    cdEnum = cdsColorStringToEnum(cartUsualString(cart, optionStr,
-					    defaultDrawOption));
-    ret = cdEnum;
-    }
-return(ret);
-}
+    mrnaSeq = hGenBankGetMrna(name, NULL);
 
-
-static struct psl *genePredLookupPsl(char *db, char *chrom, 
-        struct linkedFeatures* lf, char *pslTable ) 
-/*get the psl entry associated with this genePred entry (NOT a
-  conversion, must be in pslTable. Complains if psl cannot be
-  found but it doesn't abort.*/
-{
-    char rest[64];
-    char **row;
-    int rowOffset;
-    struct psl *psl = NULL;
-    struct sqlResult *sr = NULL;
-    struct sqlConnection *conn2 = sqlConnect(db);
-    boolean foundPsl = FALSE;
-
-    safef(rest, 64, "qName='%s'", lf->name );
-    sr = hRangeQuery(conn2, pslTable, chromName, lf->start, lf->end, 
-            rest, &rowOffset);
-    /*	fixing RT 1177 - the range query matches several items in some
-     *	cases, the old code here merely took the first one.  It was
-     *	sometimes out of the view window.  Now examine the results and
-     *	select the first one that is in the window of view.
-     */
-    while (!foundPsl && ((row = sqlNextRow(sr)) != NULL))
-	{
-        psl = pslLoad(row+rowOffset);
-	if ((psl->tStart == lf->start) && (psl->tEnd == lf->end))
-	    {
-	    foundPsl = TRUE;
-	    }
-	else
-	    {
-	    pslFree(&psl);
-	    }
-	}
-    sqlFreeResult(&sr);
-    sqlDisconnect(&conn2);
-
-    if (psl == NULL)
-        uglyf("Cannot Find psl for %s\n<br>", lf->name );
-    return psl;
-}
-
-
-static struct dnaSeq *mustGetSeqUpper(char *name, char *tableName)
-{
-    struct dnaSeq *mrnaSeq = NULL;
-    if (sameString(tableName,"refGene"))
-        mrnaSeq = hGenBankGetMrna(name, "refMrna");
-    else
-        mrnaSeq = hGenBankGetMrna(name, NULL);
-
-    if (mrnaSeq != NULL)
-	touppers(mrnaSeq->dna);
-    return mrnaSeq;
+if (mrnaSeq != NULL)
+    touppers(mrnaSeq->dna);
+return mrnaSeq;
 }
 
 
 
-void makeCdsShades(struct vGfx *vg, Color *cdsColor)
+static void makeCdsShades(struct vGfx *vg, Color *cdsColor)
 /* setup CDS colors */
 {
-    cdsColor[CDS_ERROR] = vgFindColorIx(vg,0,0,0); 
-    cdsColor[CDS_ODD] = vgFindColorIx(vg,CDS_ODD_R,CDS_ODD_G,CDS_ODD_B);
-    cdsColor[CDS_EVEN] = vgFindColorIx(vg,CDS_EVEN_R,CDS_EVEN_G,CDS_EVEN_B);
-    cdsColor[CDS_START] = vgFindColorIx(vg,CDS_START_R,CDS_START_G,CDS_START_B);
-    cdsColor[CDS_STOP] = vgFindColorIx(vg,CDS_STOP_R,CDS_STOP_G,CDS_STOP_B);
-    cdsColor[CDS_SPLICE] = vgFindColorIx(vg,CDS_SPLICE_R,CDS_SPLICE_G,
-                                         CDS_SPLICE_B);
-    cdsColor[CDS_PARTIAL_CODON] = vgFindColorIx(vg,CDS_PARTIAL_CODON_R,
-                                                CDS_PARTIAL_CODON_G, 
-                                                CDS_PARTIAL_CODON_B);
-    cdsColor[CDS_GENOMIC_INSERTION] = vgFindColorIx(vg,CDS_GENOMIC_INSERTION_R, 
-                                                       CDS_GENOMIC_INSERTION_G,
-                                                       CDS_GENOMIC_INSERTION_B);
+cdsColor[CDS_ERROR] = vgFindColorIx(vg,0,0,0); 
+cdsColor[CDS_ODD] = vgFindColorIx(vg,CDS_ODD_R,CDS_ODD_G,CDS_ODD_B);
+cdsColor[CDS_EVEN] = vgFindColorIx(vg,CDS_EVEN_R,CDS_EVEN_G,CDS_EVEN_B);
+cdsColor[CDS_START] = vgFindColorIx(vg,CDS_START_R,CDS_START_G,CDS_START_B);
+cdsColor[CDS_STOP] = vgFindColorIx(vg,CDS_STOP_R,CDS_STOP_G,CDS_STOP_B);
+cdsColor[CDS_SPLICE] = vgFindColorIx(vg,CDS_SPLICE_R,CDS_SPLICE_G,
+				     CDS_SPLICE_B);
+cdsColor[CDS_PARTIAL_CODON] = vgFindColorIx(vg,CDS_PARTIAL_CODON_R,
+					    CDS_PARTIAL_CODON_G, 
+					    CDS_PARTIAL_CODON_B);
+cdsColor[CDS_GENOMIC_INSERTION] = vgFindColorIx(vg,CDS_GENOMIC_INSERTION_R, 
+						CDS_GENOMIC_INSERTION_G,
+						CDS_GENOMIC_INSERTION_B);
 }
 
 
@@ -633,7 +620,7 @@ static void updatePartialCodon(char *retStr, char *chrom, int start,
     strncpy( retStr, tmpStr, 4 );
 }
 
-struct simpleFeature *splitDnaByCodon(int frame, int chromStart,
+struct simpleFeature *baseColorCodonsFromDna(int frame, int chromStart,
 	int chromEnd, struct dnaSeq *seq, bool reverse)
 /* Create list of codons from a DNA sequence.
    The DNA sequence passed in must include 3 bases extra at the
@@ -899,14 +886,14 @@ static struct simpleFeature *splitByCodon( char *chrom,
     return(sfList);
 }
 
-struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures 
-        *lf, struct genePred *gp, unsigned *gaps, boolean extraInfo,
-	boolean colorStopStart)
-/*divide a genePred record into a linkedFeature, where each simple
-  feature is a 3-base codon (or a partial codon if on a gap boundary).
-  It starts at the cdsStarts position on the genome and goes to 
-  cdsEnd. It only relies on the genomic sequence to determine the
-  frame so it works with any gene prediction track*/
+struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
+	struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps,
+	boolean extraInfo, boolean colorStopStart)
+/* Given an lf and the genePred from which the lf was constructed, 
+ * return a list of simpleFeature elements, one per codon (or partial 
+ * codon if the codon falls on a gap boundary.  If extraInfo is true, 
+ * use the frames portion of gp (which should be from a genePredExt);
+ * otherwise determine frame from genomic sequence. */
 {
     if(extraInfo)
         return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
@@ -988,15 +975,14 @@ if (isRc)
 static void drawDiffTextBox(struct vGfx *vg, int xOff, int y, 
         double scale, int heightPer, MgFont *font, Color color, 
         char *chrom, unsigned s, unsigned e, struct psl *psl, 
-        struct dnaSeq *mrnaSeq, struct linkedFeatures *lf, Color *cdsColor,
-        int grayIx, boolean *foundStart, int displayOption, int
-        maxPixels, Color *trackColors, Color ixColor)
+        struct dnaSeq *mrnaSeq, struct linkedFeatures *lf,
+        int grayIx, enum baseColorDrawOpt drawOpt,
+        int maxPixels, Color *trackColors, Color ixColor)
 {
 int mrnaS = convertCoordUsingPsl( s, psl ); 
 if(mrnaS >= 0)
     {
     struct dyString *dyMrnaSeq = newDyString(256);
-    unsigned *ends = needMem(sizeof(unsigned)*psl->blockCount);
     char mrnaBases[4];
     char genomicCodon[2];
     char mrnaCodon[2]; 
@@ -1010,7 +996,7 @@ if(mrnaS >= 0)
 	{
         boolean startColor = FALSE;
 
-	if (displayOption == CDS_DRAW_MRNA_CODONS)
+	if (drawOpt == baseColorDrawItemCodons)
 	    {
 	    /* re-set color of this block based on mrna codons rather than
 	     * genomic, but keep the odd/even cycle of dark/light shades. */
@@ -1019,20 +1005,19 @@ if(mrnaS >= 0)
 	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
 	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
-					    cdsColor, ixColor);
+					    ixColor);
 	    if (startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
 	    }
-	if (displayOption == CDS_DRAW_DIFF_CODONS)
+	if (drawOpt == baseColorDrawDiffCodons)
 	    {
 	    /* Color codons red wherever mrna differs from genomic;
 	     * keep the odd/even cycle of dark/light shades. */
-	    colorAndCodonFromGrayIx(vg, genomicCodon, grayIx, cdsColor,
-				    ixColor);
+	    colorAndCodonFromGrayIx(vg, genomicCodon, grayIx, ixColor);
 	    int mrnaGrayIx = setColorByDiff(mrnaBases, genomicCodon[0],
 					    (grayIx > 26));
 	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
-					    cdsColor, ixColor);
+					    ixColor);
 	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(mrnaBases));
 	    }
         if (genomicInsertion)
@@ -1041,54 +1026,49 @@ if(mrnaS >= 0)
 
     dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS], e-s);
 
-    if (displayOption == CDS_DRAW_MRNA_BASES)
+    if (drawOpt == baseColorDrawItemBases)
 	{
 	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
-				    zoomedToBaseLevel, cdsColor,
-				    winStart, maxPixels );
+				    zoomedToBaseLevel, winStart, maxPixels);
 	}
-    else if (displayOption == CDS_DRAW_MRNA_CODONS)
+    else if (drawOpt == baseColorDrawItemCodons)
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, mrnaCodon,
-				    zoomedToCodonLevel, cdsColor,
-				    winStart, maxPixels );
-    else if (displayOption == CDS_DRAW_DIFF_BASES)
+				    zoomedToCodonLevel, winStart, maxPixels);
+    else if (drawOpt == baseColorDrawDiffBases)
 	{
-        char *diffStr = NULL;
-	struct dyString *dyGenoSeq = newDyString(256);
-	dyStringAppend(dyGenoSeq,
-		       (char*)hDnaFromSeq(chromName, s, e, dnaUpper)->dna);
-	diffStr = needMem(sizeof(char)*(dyGenoSeq->stringSize+1));
-        maskDiffString(diffStr, dyMrnaSeq->string, dyGenoSeq->string, ' ');
-	if ( cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	char *diffStr = NULL;
+	struct dnaSeq *genoSeq = hDnaFromSeq(chromName, s, e, dnaUpper);
+	diffStr = needMem(sizeof(char) * (e - s + 1));
+	maskDiffString(diffStr, dyMrnaSeq->string, (char *)genoSeq->dna,
+		       ' ');
+	if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
-                                    zoomedToBaseLevel, cdsColor, 
-                                    winStart, maxPixels );
-        freeMem(diffStr);
-	dyStringFree(&dyGenoSeq);
+				    zoomedToBaseLevel, winStart, maxPixels);
+	freeMem(diffStr);
+	dnaSeqFree(&genoSeq);
 	}
-    else if (displayOption == CDS_DRAW_DIFF_CODONS)
+    else if (drawOpt == baseColorDrawDiffCodons)
 	{
 	if (genomicCodon[0] != 'X' && mrnaCodon[0] != genomicCodon[0])
 	    {
 	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
 					heightPer, color, lf->score, font,
                                         mrnaCodon, zoomedToCodonLevel,
-                                        cdsColor, winStart, maxPixels );
+                                        winStart, maxPixels );
 	    }
 	else
 	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
 				color, lf->score );
 	}
     else
-        errAbort("Unknown displayOption: %d<br>\n", displayOption);
+        errAbort("Unknown drawOpt: %d<br>\n", drawOpt);
 
-    freeMem(ends);
     dyStringFree(&dyMrnaSeq);
     }
 else
@@ -1099,69 +1079,43 @@ else
     }
 }
 
-void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, 
-		       int grayIx, Color *cdsColor, struct vGfx *vg, int xOff, 
+void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf, 
+		       int grayIx, struct vGfx *vg, int xOff, 
                        int y, double scale, MgFont *font, int s, int e, 
                        int heightPer, boolean zoomedToCodonLevel, 
                        struct dnaSeq *mrnaSeq, struct psl *psl, 
-		       int drawOptionNum, boolean errorColor, 
-                       boolean *foundStart, int maxPixels, int winStart, 
+		       enum baseColorDrawOpt drawOpt,
+                       int maxPixels, int winStart, 
                        Color originalColor)
-/*draw a box that is colored by the bases inside it and its
- * orientation. Stop codons are red, start are green, otherwise they
- * alternate light/dark blue colors. These are defined in
- * cdsColors.h*/
+/* Draw codon/base-colored item. */
 {
-boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 char codon[2] = " ";
-Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, 
-                                                originalColor);
+Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, originalColor);
+/* When we are zoomed out far enough so that multiple bases/codons share the 
+ * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
+ * so don't waste time drawing the differences here: */
+boolean zoomedOutToPostProcessing =
+    ((drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel) ||
+     (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel));
 
-if (!pslSequenceBases && tg->tdb)
-	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
-		PSL_SEQUENCE_BASES));
-
-if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
-    /*any track in the genes category, with the genomic
-     * coloring turned on in the options menu*/
+if (drawOpt == baseColorDrawGenomicCodons)
     drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
-                                zoomedToCodonLevel, cdsColor,
-                                winStart, maxPixels );
-else if (startsWith("mrna", tg->mapName) || 
-	 sameString(tg->mapName,"xenoMrna")||
-	 sameString(tg->mapName,"mgcIncompleteMrna")||
-	 sameString(tg->mapName,"mgcPickedEst")||
-	 sameString(tg->mapName,"mgcFailedEst")||
-	 sameString(tg->mapName,"mgcUnpickedEst")||
-	 sameString(tg->mapName,"baylorRtPcrGeneA")||
-	 sameString(tg->mapName,"baylorRtPcr")||
-	 pslSequenceBases )
-    /*one of the chosen psl tracks with associated
-     * sequences in a database*/
-
-    if (errorColor == TRUE)
-	/*make it yellow to show we have a problem*/
-	drawScaledBoxSample(vg, s, e, scale, xOff, y, 
-                            heightPer, MG_YELLOW, lf->score );
-    else if (mrnaSeq != NULL && psl != NULL)
-	drawDiffTextBox(vg, xOff, y, scale, heightPer, font, 
-			color, chromName, s, e, psl, mrnaSeq, lf, cdsColor,
-			grayIx, foundStart, drawOptionNum, maxPixels,
-                        tg->colorShades, originalColor);
-    else
-	/*revert to normal coloring*/
-	drawScaledBoxSample(vg, s, e, scale, xOff, y,
-                            heightPer, color, lf->score );
+                                zoomedToCodonLevel, winStart, maxPixels);
+else if (mrnaSeq != NULL && psl != NULL && !zoomedOutToPostProcessing)
+    drawDiffTextBox(vg, xOff, y, scale, heightPer, font, 
+		    color, chromName, s, e, psl, mrnaSeq, lf,
+		    grayIx, drawOpt, maxPixels,
+		    tg->colorShades, originalColor);
 else
-    /*again revert to normal coloring*/
+    /* revert to normal coloring */
     drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
 			color, lf->score );
 }
 
 
-void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
-			   Color *cdsColor, struct vGfx *vg, int xOff,
+static void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
+			   struct vGfx *vg, int xOff,
 			   int y, double scale, int heightPer,
 			   struct dnaSeq *mrnaSeq, struct psl *psl,
 			   int winStart)
@@ -1201,8 +1155,7 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    mrnaCodon = lookupCodon(mrnaBases);
 	    if (mrnaCodon == '\0')
 		mrnaCodon = '*';
-	    colorAndCodonFromGrayIx(vg, genomicCodon, sf->grayIx,
-				    cdsColor, dummyColor);
+	    colorAndCodonFromGrayIx(vg, genomicCodon, sf->grayIx, dummyColor);
 	    if (genomicInsertion || mrnaCodon != genomicCodon[0])
 		drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score);
@@ -1217,75 +1170,122 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
     }
 }
 
-int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor, 
-		  struct dnaSeq **mrnaSeq, struct psl **psl, boolean *errorColor, 
-		  struct linkedFeatures *lf, boolean cdsColorsMade)
-/*gets the CDS coloring option, allocates colors, and returns the
- * sequence and psl record for the given lf->name (only returns
- * sequence and psl for mRNA, EST, or xenoMrna.
- * returns drawOptionNum, mrnaSeq, psl, errorColor*/
+void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
+			   struct vGfx *vg, int xOff,
+			   int y, double scale, int heightPer,
+			   struct dnaSeq *mrnaSeq, struct psl *psl,
+			   int winStart, enum baseColorDrawOpt drawOpt)
+/* If we're drawing different bases/codons, and zoomed out past base/codon 
+ * level, draw 1-pixel wide red lines only where bases/codons differ from 
+ * genomic.  This tests drawing mode and zoom level but assumes that lf itself 
+ * has been drawn already and we're not in dense mode etc. */
 {
-boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
-//get coloring options
-int drawOptionNum;
-drawOptionNum = getCdsDrawOptionNum(tg);
-if(drawOptionNum == 0) return(0);
+boolean showDiffBasesAllScales =
+    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales"));
+if (showDiffBasesAllScales)
+    {
+    if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel)
+	{
+	drawCdsDiffCodonsOnly(tg, lf, vg, xOff, y, scale,
+			      heightPer, mrnaSeq, psl, winStart);
+	}
+    if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel)
+	{
+	drawCdsDiffBaseTickmarksOnly(tg, lf, vg, xOff, y, scale,
+				     heightPer, mrnaSeq, psl, winStart);
+	}
+    }
+}
 
-if (!pslSequenceBases && tg->tdb)
-	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
-		PSL_SEQUENCE_BASES));
 
-/*allocate colors for coding coloring*/
+enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
+			struct linkedFeatures *lf,
+			struct dnaSeq **retMrnaSeq, struct psl **retPsl)
+/* Returns the CDS coloring option, allocates colors if necessary, and 
+ * returns the sequence and psl record for the given item if applicable. */
+{
+enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
+
+if (drawOpt == baseColorDrawOff)
+    return drawOpt;
+
+/* allocate colors for coding coloring */
 if (!cdsColorsMade)
     { 
-    makeCdsShades(vg,cdsColor);
+    makeCdsShades(vg, cdsColor);
     cdsColorsMade = TRUE;
     }
    
-if (drawOptionNum > 0)
+/* If we are using item sequence, fetch alignment and sequence: */
+if (drawOpt != baseColorDrawOff && startsWith("psl", tg->tdb->type))
     {
-    if (startsWith("mrna", tg->mapName) || 
-	sameString(tg->mapName,"xenoMrna") ||
-	 sameString(tg->mapName,"mgcIncompleteMrna")||
-	pslSequenceBases )
+    *retPsl = (struct psl *)(lf->original);
+    if (*retPsl == NULL)
+	return baseColorDrawOff;
+    }
+if (drawOpt == baseColorDrawItemBases ||
+    drawOpt == baseColorDrawDiffBases ||
+    drawOpt == baseColorDrawItemCodons ||
+    drawOpt == baseColorDrawDiffCodons)
+    {
+    *retMrnaSeq = maybeGetSeqUpper(lf->name, tg->mapName);
+    if (*retMrnaSeq != NULL && *retPsl != NULL)
 	{
-        char *database = cartUsualString(cart, "db", hGetDb());
-	*mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
-	*psl = genePredLookupPsl(database, chromName, lf, tg->mapName);
-	if (*mrnaSeq != NULL && *psl != NULL)
-                {
-                if ((*psl)->strand[0] == '-' || (*psl)->strand[1] == '-')
-	                reverseComplement((*mrnaSeq)->dna,strlen((*mrnaSeq)->dna));
-                }
-        else
-                return(0);
-
+	if ((*retPsl)->strand[0] == '-' || (*retPsl)->strand[1] == '-')
+	    reverseComplement((*retMrnaSeq)->dna, strlen((*retMrnaSeq)->dna));
 	}
+    else
+	return baseColorDrawOff;
     }
 
-return(drawOptionNum);
+return drawOpt;
 }
 
-void drawGenomicCodons(struct vGfx *vg, struct simpleFeature *sfList,
+void baseColorDrawRulerCodons(struct vGfx *vg, struct simpleFeature *sfList,
                 double scale, int xOff, int y, int height, MgFont *font, 
-                Color *cdsColor, int winStart, int maxPixels, bool zoomedToText)
+                int winStart, int maxPixels, bool zoomedToText)
 /* Draw amino acid translation of genomic sequence based on a list
    of codons. Used for browser ruler in full mode*/
 {
 struct simpleFeature *sf;
 
+if (!cdsColorsMade)
+    {
+    makeCdsShades(vg, cdsColor);
+    cdsColorsMade = TRUE;
+    }
+
 for (sf = sfList; sf != NULL; sf = sf->next)
     {
     char codon[4];
-    Color color = colorAndCodonFromGrayIx(vg, codon, sf->grayIx, 
-                                                cdsColor, MG_GRAY);
+    Color color = colorAndCodonFromGrayIx(vg, codon, sf->grayIx, MG_GRAY);
     if (zoomedToText)
         drawScaledBoxSampleWithText(vg, sf->start, sf->end, scale, insideX, y,
-                                height, color, 1.0, font, codon, TRUE,
-                                cdsColor, winStart, maxPixels);
+				    height, color, 1.0, font, codon, TRUE,
+				    winStart, maxPixels);
     else
         /* zoomed in just enough to see colored boxes */
         drawScaledBoxSample(vg, sf->start, sf->end, scale, xOff, y, height, 
 		                color, 1.0);
     }
 }
+
+
+void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
+			  struct psl **pPsl)
+/* Free structures allocated just for base/cds coloring. */
+{
+if (lf->original != NULL)
+    {
+    /* Currently, lf->original is used only for coloring PSL's.  If it is 
+     * used to color some other type in the future, this will remind the 
+     * programmer to free it here. */
+    assert(pPsl != NULL);
+    assert(lf->original == *pPsl);
+    }
+if (pPsl != NULL)
+    pslFree(pPsl);
+if (pMrnaSeq != NULL)
+    dnaSeqFree(pMrnaSeq);
+}
+

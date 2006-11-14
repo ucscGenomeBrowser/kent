@@ -237,6 +237,8 @@ struct linkedFeatures
     struct simpleFeature *components;   /* List of component simple features. */
     struct simpleFeature *codons;       /* If zoomed to CDS or codon level.*/
     void *extra;			/* Extra info that varies with type. */
+    void *original;			/* The structure that was converted 
+					   into this (when needed later).  */
     struct itemAttr *itemAttr;          /* itemAttr object for this lf, or NULL */
     char popUp[128];			/* text for popup */
     };

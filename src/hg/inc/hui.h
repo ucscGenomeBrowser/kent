@@ -456,39 +456,56 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-/*** for base labeling of EST like track related controls *****/
 
-enum baseColorOptEnum {
-   baseColorOff = 0,
-   baseColorAllBases = 1,
-   baseColorDifferentBases = 2,
-};
+/*** Control of base/codon coloring code: ***/
 
-enum baseColorOptEnum baseColorStringToEnum(char *string);
-/* Convert from string to enum representation. */
+/* Drawing modes: */
+enum baseColorDrawOpt
+    {
+    baseColorDrawOff = 0,
+    baseColorDrawGenomicCodons = 1,
+    baseColorDrawItemCodons = 2,
+    baseColorDrawDiffCodons = 3,
+    baseColorDrawItemBases = 4,
+    baseColorDrawDiffBases = 5,
+    };
 
-char *baseColorEnumToString(enum baseColorOptEnum x);
-/* Convert from enum to string representation. */
+/* Drawing mode select box labels: */
+#define BASE_COLOR_DRAW_OFF_LABEL "OFF"
+#define BASE_COLOR_DRAW_GENOMIC_CODONS_LABEL "genomic codons"
+#define BASE_COLOR_DRAW_ITEM_CODONS_LABEL "mRNA codons"
+#define BASE_COLOR_DRAW_DIFF_CODONS_LABEL "nonsynonymous mRNA codons"
+#define BASE_COLOR_DRAW_ITEM_BASES_LABEL "mRNA bases"
+#define BASE_COLOR_DRAW_DIFF_BASES_LABEL "different mRNA bases"
 
-void baseColorDropDown(char *var, char *curVal);
-/* Make drop down of options.*/
+/* Drawing mode select box values: */
+#define BASE_COLOR_DRAW_OFF "none"
+#define BASE_COLOR_DRAW_GENOMIC_CODONS "genomicCodons"
+#define BASE_COLOR_DRAW_ITEM_CODONS "itemCodons"
+#define BASE_COLOR_DRAW_DIFF_CODONS "diffCodons"
+#define BASE_COLOR_DRAW_ITEM_BASES "itemBases"
+#define BASE_COLOR_DRAW_DIFF_BASES "diffBases"
+
+/* Drawing mode per-track cart variable suffix: */
+#define BASE_COLOR_VAR_SUFFIX "baseColorDrawOpt"
+
+/* trackDb settings: */
+#define BASE_COLOR_USE_CDS "baseColorUseCds"
+#define BASE_COLOR_USE_SEQUENCE "baseColorUseSequence"
+#define BASE_COLOR_DEFAULT "baseColorDefault"
+
+/* Coloring help pages: */
+#define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
+#define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
 
 
-/*** Some Stuff for the cdsColor track ***/
+void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb);
+/* Make appropriately labeled drop down of options if any are applicable.*/
 
-enum cdsColorOptEnum {
-   cdsColorNoInterpolation = 0,
-   cdsColorLinearInterpolation = 1,
-};
+enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
+					      struct trackDb *tdb);
+/* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
 
-enum cdsColorOptEnum cdsColorStringToEnum(char *string);
-/* Convert from string to enum representation. */
-
-char *cdsColorEnumToString(enum cdsColorOptEnum x);
-/* Convert from enum to string representation. */
-
-void cdsColorDropDown(char *var, char *curVal, int numValues);
-/* Make drop down of options.*/
 
 /*** Some Stuff for the base position (ruler) controls ***/
 

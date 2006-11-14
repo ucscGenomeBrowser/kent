@@ -79,7 +79,6 @@
 #include "web.h"
 #include "grp.h"
 #include "chromColors.h"
-#include "cdsColors.h"
 #include "cds.h"
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
@@ -107,7 +106,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1239 2006/11/10 16:22:37 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1240 2006/11/14 00:30:24 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -117,7 +116,6 @@ char *protDbName;               /* Name of proteome database for this genome. */
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
-#define CDS_COLORS 6
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -144,12 +142,6 @@ Color chromColor[CHROM_COLORS+1];
 
 /* Have the 3 shades of 8 chromosome colors been allocated? */
 boolean chromosomeColorsMade = FALSE; 
-
-/* Declare colors for each CDS coloring possibility
- * {start,stop,splice,alternate codons} */
-Color cdsColor[CDS_COLORS+1];
-boolean cdsColorsMade = FALSE;
-
 
 int z;
 int maxCount;
@@ -1435,30 +1427,16 @@ boolean exonArrows = (tg->exonArrows &&
 //variables for genePred cds coloring
 struct psl *psl = NULL;
 struct dnaSeq *mrnaSeq = NULL;
-boolean foundStart = FALSE;
-boolean *foundStartPtr = &foundStart;
-int drawOptionNum = 0; //off
-boolean errorColor = FALSE;
+enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 Color saveColor = color;
-boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
-boolean showDiffBasesAllScales =
-    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales") &&
-     (getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_BASES ||
-      getCdsDrawOptionNum(tg) == CDS_DRAW_DIFF_CODONS));
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
-if ((zoomedToCdsColorLevel || showDiffBasesAllScales) && (vis != tvDense))
+if (vis != tvDense)
     {
-    if (!pslSequenceBases && tg->tdb)
-	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
-		PSL_SEQUENCE_BASES));
-    drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
-            &errorColor, lf, cdsColorsMade);
-    if (drawOptionNum > 0)
+    drawOpt = baseColorDrawSetup(vg, tg, lf, &mrnaSeq, &psl);
+    if (drawOpt != baseColorDrawOff)
 	exonArrows = FALSE;
-    if (drawOptionNum > 3)
-	pslSequenceBases=TRUE;
     }
 
 if ((tg->tdb != NULL) && (vis != tvDense))
@@ -1516,14 +1494,14 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 	}
     if (e > s)
 	{
-        if (drawOptionNum>0 && vis != tvDense &&
+        if (drawOpt != baseColorDrawOff &&
             e + 6 >= winStart && s - 6 < winEnd &&
-		(e-s <= 3 || pslSequenceBases)) 
-                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
-                                    scale, font, s, e, heightPer, 
-                                    zoomedToCodonLevel, mrnaSeq, psl, 
-                                    drawOptionNum, errorColor, foundStartPtr,
-                                    MAXPIXELS, winStart, color);
+	    (e-s <= 3 || psl != NULL)) 
+                baseColorDrawItem(tg, lf, sf->grayIx, vg, xOff, y, 
+				  scale, font, s, e, heightPer, 
+				  zoomedToCodonLevel, mrnaSeq, psl, 
+				  drawOpt,
+				  MAXPIXELS, winStart, color);
         else
             {
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
@@ -1600,23 +1578,16 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 	    }
 	}
     }
-/* If showing different codons when zoomed way out, must do another pass 
- * so that different codons aren't overdrawn by same codons.  The whole 
- * item was drawn in the above loop, and now we just make some red marks 
- * on top of it if necessary.  Similarly, when showing different bases, 
- * draw tickmarks now so other exons don't overdraw. */
-if (showDiffBasesAllScales && vis != tvDense)
+if (vis != tvDense)
     {
-    if (drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
-	{
-	drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
-			      mrnaSeq, psl, winStart);
-	}
-    if (drawOptionNum == CDS_DRAW_DIFF_BASES && !zoomedToBaseLevel)
-	{
-	drawCdsDiffBaseTickmarksOnly(tg, lf, cdsColor, vg, xOff, y, scale,
-				     heightPer, mrnaSeq, psl, winStart);
-	}
+    /* If showing different codons when zoomed way out, must do another pass 
+     * so that different codons aren't overdrawn by same codons.  The whole 
+     * item was drawn in the above loop, and now we just make some red marks 
+     * on top of it if necessary.  Similarly, when showing different bases, 
+     * draw tickmarks now so other exons don't overdraw. */
+    baseColorOverdrawDiff(tg, lf, vg, xOff, y, scale, heightPer,
+			  mrnaSeq, psl, winStart, drawOpt);
+    baseColorDrawCleanup(lf, &mrnaSeq, &psl);
     }
 }
 
@@ -2824,7 +2795,7 @@ struct genePred *gp = NULL;
 boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
 boolean doNmd = FALSE;
 char buff[256];
-int drawOptionNum = 0; //off
+enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 safef(buff, sizeof(buff), "hgt.%s.nmdFilter",  tg->mapName);
 
 /* Should we remove items that appear to be targets for nonsense
@@ -2833,7 +2804,7 @@ if(nmdTrackFilter)
     doNmd = cartUsualBoolean(cart, buff, FALSE);
 
 if (table != NULL)
-    drawOptionNum = getCdsDrawOptionNum(tg);
+    drawOpt = baseColorGetDrawOpt(tg);
 
 if (tg->itemAttrTbl != NULL)
     itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
@@ -2853,10 +2824,10 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->extra = cloneString(gp->name2);
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if (drawOptionNum>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
-        lf->codons = splitGenePredByCodon(chrom, lf, gp,NULL,
-                gp->optFields >= genePredExonFramesFld,
-		(drawOptionNum != CDS_DRAW_DIFF_CODONS));
+    if (drawOpt>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
+        lf->codons = baseColorCodonsFromGenePred(chrom, lf, gp, NULL,
+                (gp->optFields >= genePredExonFramesFld),
+		(drawOpt != baseColorDrawDiffCodons));
    
     lf->components = sfFromGenePred(gp, grayIx);
 
@@ -4179,7 +4150,7 @@ char cMode[64];
 int colorMode;
 char *blastRef;
 
-if (getCdsDrawOptionNum(tg)>0 && zoomedToCdsColorLevel)
+if (baseColorGetDrawOpt(tg) != baseColorDrawOff)
     return tg->ixColor;
 
 safef(cMode, sizeof(cMode), "%s.cmode", tg->tdb->tableName);
@@ -8894,12 +8865,6 @@ darkBlueColor = vgFindColorIx(vg, 0,70,140);
 greenColor = vgFindColorIx(vg, 28,206,40);
 darkGreenColor = vgFindColorIx(vg, 28,140,40);
 
-if (rulerCds && !cdsColorsMade)
-    {
-    makeCdsShades(vg, cdsColor);
-    cdsColorsMade = TRUE;
-    }
-
 /* Start up client side map. */
 hPrintf("<MAP Name=%s>\n", mapName);
 
@@ -9220,11 +9185,11 @@ if (rulerMode != tvHide)
                 int refFrame = (firstFrame + frame) % 3;
 
                 /* create list of codons in the specified coding frame */
-                sfList = splitDnaByCodon(refFrame, winStart, winEnd,
+                sfList = baseColorCodonsFromDna(refFrame, winStart, winEnd,
                                              extraSeq, complementRulerBases); 
                 /* draw the codons in the list, with alternating colors */
-                drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
-                                    font, cdsColor, winStart, MAXPIXELS,
+                baseColorDrawRulerCodons(vg, sfList, scale, insideX, y,
+                                    codonHeight, font, winStart, MAXPIXELS,
                                     zoomedToCodonLevel);
                 }
             }

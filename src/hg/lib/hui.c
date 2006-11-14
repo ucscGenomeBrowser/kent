@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.83 2006/10/03 22:41:29 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.84 2006/11/14 00:30:25 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -543,74 +543,162 @@ cgiMakeDropList(var, nci60Options, ArraySize(nci60Options),
 	curVal);
 }
 
-/****** Some stuff for base labeling of EST like track related controls *****/
 
-static char *baseColorOptions[] = {
-    "no",
-    "all",
-    "different"
+/*** Control of base/codon coloring code: ***/
+
+/* All options (parallel to enum baseColorDrawOpt): */
+static char *baseColorDrawAllOptionLabels[] =
+    {
+    BASE_COLOR_DRAW_OFF_LABEL,
+    BASE_COLOR_DRAW_GENOMIC_CODONS_LABEL,
+    BASE_COLOR_DRAW_ITEM_CODONS_LABEL,
+    BASE_COLOR_DRAW_DIFF_CODONS_LABEL,
+    BASE_COLOR_DRAW_ITEM_BASES_LABEL,
+    BASE_COLOR_DRAW_DIFF_BASES_LABEL,
+    };
+static char *baseColorDrawAllOptionValues[] =
+    {
+    BASE_COLOR_DRAW_OFF,
+    BASE_COLOR_DRAW_GENOMIC_CODONS,
+    BASE_COLOR_DRAW_ITEM_CODONS,
+    BASE_COLOR_DRAW_DIFF_CODONS,
+    BASE_COLOR_DRAW_ITEM_BASES,
+    BASE_COLOR_DRAW_DIFF_BASES,
     };
 
-enum baseColorOptEnum baseColorStringToEnum(char *string)
+/* Subset of options for tracks with CDS info but not item sequence: */
+static char *baseColorDrawGenomicOptionLabels[] =
+    {
+    BASE_COLOR_DRAW_OFF_LABEL,
+    BASE_COLOR_DRAW_GENOMIC_CODONS_LABEL,
+    };
+static char *baseColorDrawGenomicOptionValues[] =
+    {
+    BASE_COLOR_DRAW_OFF,
+    BASE_COLOR_DRAW_GENOMIC_CODONS,
+    };
+
+/* Subset of options for tracks with aligned item sequence but not CDS: */
+static char *baseColorDrawItemOptionLabels[] =
+    {
+    BASE_COLOR_DRAW_OFF_LABEL,
+    BASE_COLOR_DRAW_ITEM_BASES_LABEL,
+    BASE_COLOR_DRAW_DIFF_BASES_LABEL,
+    };
+static char *baseColorDrawItemOptionValues[] =
+    {
+    BASE_COLOR_DRAW_OFF,
+    BASE_COLOR_DRAW_ITEM_BASES,
+    BASE_COLOR_DRAW_DIFF_BASES,
+    };
+
+enum baseColorDrawOpt baseColorDrawOptStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
-int x = stringIx(string, baseColorOptions);
+int x = stringIx(string, baseColorDrawAllOptionValues);
 if (x < 0)
-   errAbort("hui::baseColorOptEnum() - Unknown option %s", string);
+   errAbort("hui::baseColorDrawOptStringToEnum() - Unknown option %s", string);
 return x;
 }
 
-char *baseColorEnumToString(enum baseColorOptEnum x)
-/* Convert from enum to string representation. */
+static boolean baseColorGotCds(struct trackDb *tdb)
+/* Return true if this track has CDS info according to tdb (or is genePred). */
 {
-return baseColorOptions[x];
+boolean gotIt = FALSE;
+char *setting = trackDbSetting(tdb, BASE_COLOR_USE_CDS);
+if (isNotEmpty(setting))
+    {
+    if (sameString(setting, "all") || sameString(setting, "given") ||
+	sameString(setting, "genbank"))
+	gotIt = TRUE;
+    else if (! sameString(setting, "none"))
+	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
+		 "must be one of {none,all,given,genbank}.",
+		 tdb->tableName, BASE_COLOR_USE_CDS, setting);
+    }
+else if (startsWith("genePred", tdb->type))
+    gotIt = TRUE;
+return gotIt;
 }
 
-void baseColorDropDown(char *var, char* curVal)
-/* Make drop down of options for coloring mRNAs and printing bases. */
+static boolean baseColorGotSequence(struct trackDb *tdb)
+/* Return true if this track has aligned sequence according to tdb. */
 {
-cgiMakeDropList(var, baseColorOptions, ArraySize(baseColorOptions), curVal);
+boolean gotIt = FALSE;
+char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+if (isNotEmpty(setting))
+    {
+    if (sameString(setting, "genbank") || sameString(setting, "seq"))
+	gotIt = TRUE;
+    else if (! sameString(setting, "none"))
+	errAbort("trackDb for %s, setting %s: unrecognized value \"%s\".  "
+		 "must be one of {none,genbank,seq}.",
+		 tdb->tableName, BASE_COLOR_USE_SEQUENCE, setting);
+    }
+return gotIt;
 }
 
-/****** Some stuff for cdsColoring of mrna track related controls *******/
-
-static char *cdsColorOptions[] = {
-    "OFF",
-    "genomic codons",
-    "mRNA codons",
-    "nonsynonymous mRNA codons",
-    "mRNA bases",
-    "different mRNA bases"
-    };
-
-enum cdsColorOptEnum cdsColorStringToEnum(char *string)
-/* Convert from string to enum representation. */
+void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
+/* Make appropriately labeled drop down of options if any are applicable.*/
 {
-int x = stringIx(string, cdsColorOptions);
-/* Prevent error caused by label change -- old label may be in people's
- * carts.  */
-if (x < 0 && sameString(string, "different mRNA codons"))
-    x = stringIx("nonsynonymous mRNA codons", cdsColorOptions);
-if (x < 0)
-   errAbort("hui::cdsColorOptEnum() - Unknown option %s", string);
-return x;
+enum baseColorDrawOpt curOpt = baseColorDrawOptEnabled(cart, tdb);
+char *curLabel = baseColorDrawAllOptionLabels[curOpt];
+char var[512];
+boolean gotCds = baseColorGotCds(tdb);
+boolean gotSeq = baseColorGotSequence(tdb);
+
+safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->tableName);
+if (gotCds && gotSeq)
+    {
+    puts("<P><B>Color track by codons or bases:</B>");
+    cgiMakeDropListFull(var, baseColorDrawAllOptionLabels,
+			baseColorDrawAllOptionValues,
+			ArraySize(baseColorDrawAllOptionLabels),
+			curLabel, NULL);
+    printf("<BR><BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+	   CDS_MRNA_HELP_PAGE);
+    }
+else if (gotCds)
+    {
+    puts("<P><B>Color track by codons:</B>");
+    cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
+			baseColorDrawGenomicOptionValues,
+			ArraySize(baseColorDrawGenomicOptionLabels),
+			curLabel, NULL);
+    printf("<BR><BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
+	   CDS_HELP_PAGE);
+    }
+else if (gotSeq)
+    {
+    puts("<P><B>Color track by bases:</B>");
+    cgiMakeDropListFull(var, baseColorDrawItemOptionLabels,
+			baseColorDrawItemOptionValues,
+			ArraySize(baseColorDrawItemOptionLabels),
+			curLabel, NULL);
+    printf("<BR><BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+	   CDS_MRNA_HELP_PAGE);
+    }
 }
 
-char *cdsColorEnumToString(enum cdsColorOptEnum x)
-/* Convert from enum to string representation. */
+enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
+					      struct trackDb *tdb)
+/* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
 {
-return cdsColorOptions[x];
+char *stringVal = NULL;
+char optionStr[256];
+assert(cart);
+assert(tdb);
+
+/* trackDb can override default of OFF; cart can override trackDb. */
+stringVal = trackDbSettingOrDefault(tdb, BASE_COLOR_DEFAULT,
+				    BASE_COLOR_DRAW_OFF);
+safef(optionStr, sizeof(optionStr), "%s." BASE_COLOR_VAR_SUFFIX,
+      tdb->tableName);
+stringVal = cartUsualString(cart, optionStr, stringVal);
+
+return baseColorDrawOptStringToEnum(stringVal);
 }
 
-void cdsColorDropDown(char *var, char* curVal, int size)
-/* Make drop down of options for coloring mRNAs and printing bases. */
-{
-if(size<0)
-    cgiMakeDropList(var, cdsColorOptions, ArraySize(cdsColorOptions), curVal);
-else
-    cgiMakeDropList(var, cdsColorOptions, size, curVal);
-
-}
 
 /****** base position (ruler) controls *******/
 
