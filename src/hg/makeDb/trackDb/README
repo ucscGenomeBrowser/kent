@@ -294,6 +294,10 @@ Some settings used by various tracks:
       fields.  The fields must be in the given order if present though.
     o hgsid - if present the hgsid=XXXXXX CGI variable will be appended to the
       end of the directUrl string.
+    o dataVersion - prints out as the Data version on the details page
+        (used chiefly by ENCODE)
+    o origAssembly - prints out a message on the details page, indicating
+        that the data was lifted from this assembly (used chiefly by ENCODE)
 
 Note: We have a restriction on table names.   We currently do not handle
 table names in the format chrN_table_name.   The 2nd underscore is not allowed.
