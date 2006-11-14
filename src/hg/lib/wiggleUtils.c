@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.43 2006/11/14 20:03:39 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.44 2006/11/14 20:23:38 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -175,12 +175,12 @@ if (tdb && (prevTdb == tdb) && prevTdbSpanList)
 
 /*	Check if we have done this before not via a trackDb entry */
 if  ( prevTable && prevChrom && prevDb &&
-	(sameWord(prevDb, sqlGetDatabase(conn))) &&
-	(sameWord(prevTable,table)) &&
 	(sameWord(prevChrom,chrom)) &&
+	(sameWord(prevTable,table)) &&
 	(prevWinStart == winStart) &&
 	(prevWinEnd == winEnd) &&
-	(prevCart == cart)
+	(prevCart == cart) &&
+	(sameWord(prevDb, sqlGetDatabase(conn)))
     )
     {
     return(prevMin);
