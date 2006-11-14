@@ -10,17 +10,19 @@
 #include "hgRelate.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.5 2006/07/21 21:57:10 aamp Exp $";
+static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.6 2006/11/14 02:04:46 aamp Exp $";
 
 /* Command line overridable options. */
 char *database = "hgFixed";
 float minAbsVal = 20;
 int minMaxVal = 50;
 boolean doAverage = FALSE;
+boolean transpose = FALSE;
 char *clump = NULL;
 char *tabDir = ".";
 boolean doLoad;
 int limit = 0;
+double c = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -36,12 +38,15 @@ errAbort(
   "options:\n"
   "   -database=XX Database name, default %s\n"
   "   -average Do average rather than median\n"
+  "   -transpose Median/average over arrays instead of genes\n"
   "   -minAbsVal=N Minimum absolute value considered meaningful\n"
   "                Anything less will be considered to be minAbsVal/2\n"
   "                Default %f\n"
   "   -minMaxVal   Minimum max value before throw away gene data\n"
   "                Must be expressed at least this much in one tissue\n"
   "                Default %d\n"
+  "   -addConst=c  Add a constant c to data prior to log-ratio.  This may\n"
+  "                result in less noise in the ratio data.\n"
   "   -clump=clump.ra - Since some tissues may be overrepresented\n"
   "                This lets you clump together related tissues\n"
   "                Only the median within each clump will be used\n"
@@ -51,7 +56,8 @@ errAbort(
   "                which is the same format hgMedianMicroarray uses\n"
   "                The 'name' and 'group' columns are ignored in this\n"
   "                program.  The ix1 ... ixN contain the indices of\n"
-  "                all mRNA samples to clump together\n"
+  "                all mRNA samples to clump together. This option\n"
+  "                is incompatible with -transpose"
   "   -tab=dir - Output tab-separated files to directory.\n"
   "   -noLoad  - If true don't load database and don't clean up tab files\n"
   "   -limit=N - Only do limit rows of table, for testing\n"
@@ -62,12 +68,14 @@ errAbort(
 static struct optionSpec options[] = {
    {"database", OPTION_STRING},
    {"average", OPTION_BOOLEAN},
+   {"transpose", OPTION_BOOLEAN},
    {"minAbsVal", OPTION_FLOAT},
    {"minMaxVal", OPTION_INT},
    {"clump", OPTION_STRING},
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
+   {"addConst", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -101,7 +109,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&expList);
 maExpDataClipMin(expList, minAbsVal, minAbsVal * 0.5);
-maExpDataDoLogRatioGivenMedSpec(expList, clumpList, (doAverage) ? useMean : useMedian);
+maExpDataAddConstant(expList, c);
+if (transpose)
+    maExpDataDoLogRatioTranspose(expList, doAverage);
+else
+    maExpDataDoLogRatioGivenMedSpec(expList, clumpList, (doAverage) ? useMean : useMedian);
 for (ex = expList; ex != NULL; ex = ex->next)
     expDataTabOut(ex, f);
 if (doLoad)
@@ -122,8 +134,10 @@ if (argc != 3)
     usage();
 database = optionVal("database", database);
 doAverage = optionExists("average");
+transpose = optionExists("transpose");
 minAbsVal = optionFloat("minAbsVal", minAbsVal);
 minMaxVal = optionInt("minMaxVal", minMaxVal);
+c = optionDouble("addConst", c);
 clump = optionVal("clump", clump);
 doLoad = !optionExists("noLoad");
 if (optionExists("tab"))

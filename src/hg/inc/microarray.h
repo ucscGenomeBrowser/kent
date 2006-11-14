@@ -92,6 +92,8 @@ void maExpDataDoLogRatioMeanOrMedian(struct expData *exps, boolean mean);
 /* of that value to the mean or median of values in that value's row (gene). */
 /* This involves no clumping of experiments to calculate the median/mean. */
 
+void maExpDataDoLogRatioTranspose(struct expData *exps, boolean mean);
+
 void maExpDataDoLogRatioClumpExpRecord(struct expData *exps, struct expRecord *erList, int extrasIndex, enum maCombineMethod method);
 /* Log ratio the expData list.  The ratio of the denominator is the median of */
 /* medians or the mean of means of each group of experiments.  This grouping */
@@ -100,6 +102,10 @@ void maExpDataDoLogRatioClumpExpRecord(struct expData *exps, struct expRecord *e
 void maExpDataDoLogRatioGivenMedSpec(struct expData *exps, struct maMedSpec *specList, enum maCombineMethod method);
 /* Same as maExpDataDoLogRatioClumpExpRecord except use the maMedSpec as the */
 /* thing to base the groupings off of. */
+
+void maExpDataAddConstant(struct expData *exps, double c);
+/* Add a constant c to all of the microarray data. Ensure that NA values */
+/* aren't inadvertantly created. */
 
 struct maGrouping
 /* Store the vital information for one of the "paragraphs" in the */

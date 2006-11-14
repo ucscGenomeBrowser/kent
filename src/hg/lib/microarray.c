@@ -495,6 +495,53 @@ for (exp = exps; exp != NULL; exp = exp->next)
     }
 }
 
+struct expData *maExpDataTranspose(struct expData *exps)
+/* Return a transposed copy of the expData. */
+{
+struct expData *transposed = NULL;
+int probeCount, expCount, i;
+if (!exps)
+    errAbort("Tried to transpose empty expData");
+expCount = exps->expCount;
+probeCount = slCount(exps);
+for (i = 0; i < expCount; i++)
+    {
+    struct expData *newProbe, *cur;
+    char name[256];
+    int j;
+    AllocVar(newProbe);
+    safef(name, sizeof(name), "array-%d", i);
+    newProbe->name = cloneString(name);
+    newProbe->expCount = probeCount;
+    AllocArray(newProbe->expScores, newProbe->expCount);
+    for (j = 0, cur = exps; (cur != NULL) && (j < probeCount); cur = cur->next, j++)
+	{
+	if (i >= cur->expCount)
+	    errAbort("There needs to be a uniform expCount in given expData in order to transpose");
+	newProbe->expScores[j] = cur->expScores[i];
+	}
+    slAddHead(&transposed, newProbe);
+    }
+slReverse(&transposed);
+return transposed;
+}
+
+void maExpDataUntranspose(struct expData *exps, struct expData *transpose)
+/* Copy values over from the transposed expData. */
+{
+int expCount = transpose->expCount;
+int probeCount = exps->expCount;
+int i; 
+struct expData *exp;
+for (exp = exps, i = 0; (exp != NULL) && (i < expCount); exp = exp->next, i++)
+    {
+    struct expData *trans;
+    int j;
+    for (j = 0, trans = transpose; (j < probeCount) && (trans != NULL); j++, trans = trans->next)
+	exp->expScores[j] = trans->expScores[i];
+    }
+}
+
 void maExpDataDoLogRatioMeanOrMedian(struct expData *exps, boolean mean)
 /* For the M x N sized expression matrix, change each value to be the ratio */
 /* of that value to the mean or median of values in that value's row (gene). */
@@ -523,6 +570,14 @@ for (exp = exps; exp != NULL; exp = exp->next)
 		exp->expScores[i] = logBase2(exp->expScores[i] * invQ);
 	}
     }
+}
+
+void maExpDataDoLogRatioTranspose(struct expData *exps, boolean mean)
+{
+struct expData *transpose = maExpDataTranspose(exps);
+maExpDataDoLogRatioMeanOrMedian(transpose, mean);
+maExpDataUntranspose(exps, transpose);
+expDataFreeList(&transpose);
 }
 
 void maExpDataDoLogRatioClumping(struct expData *exps, struct mapArray *mapping, enum maCombineMethod method)
@@ -608,6 +663,24 @@ freeMem(mapping->data);
 freez(&mapping);
 freeMem(combType);
 return ret;
+}
+
+void maExpDataAddConstant(struct expData *exps, double c)
+/* Add a constant c to all of the microarray data. Ensure that NA values */
+/* aren't inadvertantly created. */
+{
+struct expData *exp;
+for (exp = exps; exp != NULL; exp = exp->next)
+    {
+    int i;
+    for (i = 0; i < exp->expCount; i++)
+	{
+	double newVal = exp->expScores[i] + c;
+	if (c <= MICROARRAY_MISSING_DATA)
+	    errAbort("error: Constant used caused expData value to fall into the NA range");
+	exp->expScores[i] = newVal;
+	}
+    }
 }
 
 /* Functions for getting information from the microarrayGroups.ra files */
