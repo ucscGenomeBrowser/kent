@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.2 2006/10/10 22:55:53 angie Exp $
+# $Id: HgAutomate.pm,v 1.3 2006/11/14 23:29:55 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -601,7 +601,7 @@ sub run {
   confess "Must have exactly 1 argument" if (scalar(@_) != 1);
   confess "undef input" if (! defined $cmd);
   if ($main::opt_debug) {
-    print "# $cmd\n";
+    print "#DEBUG# $cmd\n";
   } else {
     verbose(1, "# $cmd\n");
     system($cmd) == 0 || die "Command failed:\n$cmd\n";
