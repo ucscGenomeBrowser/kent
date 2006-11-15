@@ -55,6 +55,8 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track hg17Kg
 shortLabel Known Genes II
@@ -65,6 +67,8 @@ visibility pack
 color 12,12,120
 type genePred
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 url http://genome.ucsc.edu/cgi-bin/hgGene?db=hg17&hgg_gene=$$&hgg_chrom=none&hgg_type=knownGene
 
 track vegaGene2

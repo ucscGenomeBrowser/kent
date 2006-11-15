@@ -144,15 +144,15 @@ identifier UniProtAccession external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) Accession"
      uniProt.displayId.acc
      uniProt.accToKeyword.acc 
-     uniProt.accToTaxon.acc full
+     uniProt.accToTaxon.acc 
      uniProt.citation.acc
      uniProt.comment.acc
-     uniProt.description.acc unique full
+     uniProt.description.acc unique 
      uniProt.extDbRef.acc
      uniProt.feature.acc
      uniProt.gene.acc
      uniProt.geneLogic.acc
-     uniProt.info.acc unique full
+     uniProt.info.acc unique 
      uniProt.otherAcc.acc
      uniProt.protein.acc unique full
      proteome.spOldNew.acc minCheck=0.8
@@ -535,12 +535,13 @@ identifier nscanName dependency
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
+    $gbd.vegaGene.name
+    $gbd.vegaPseudoGene.name
 
 identifier vegaGeneName typeOf=vegaName dependency
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
     $gbd.vegaPep.name full unique
-    $gbd.vegaInfo.transcriptId minCheck=0.78
 
 identifier vegaZfishName
 "Link together various VEGA zebrafish curated gene annotation"
@@ -657,17 +658,6 @@ identifier affyU34A
 "Affymetrix Rat U34A chip identifiers"
     $rn.affyU34A.qName dupeOk
     $rn.knownToU34A.value
-
-identifier affyHumanExonProbeId
-"Affy Human All Exon 1.0 chip probe identifiers"
-    $hg.affyHumanExon.name
-    hgFixed.affyHumanExonProbeAnnot.name
-
-identifier affyHumanExonSampleId
-"Affy Human All Exon 1.0 chip sample identifiers"
-    hgFixed.affyHumanExonExps.id
-    $hg.affyHumanExon.expIds comma full
-    $hg.affyHumanExon.expScores comma indexOf full
 
 identifier kimWormGeneId
 "Identifiers for Kim-lab worm genes"
@@ -1041,8 +1031,8 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb,!hg16,!hg17,!mm5.knownToRefSeq.value minCheck=0.98
-    hg16,hg17,mm5.knownToRefSeq.value minCheck=0.96
+    $kgDb,!hg16,!hg17,!hg18,!mm5.knownToRefSeq.value minCheck=0.98
+    hg16,hg17,hg18,mm5.knownToRefSeq.value minCheck=0.96
     $kgDb.refSeqKg.refseq minCheck=0.60
     $ccdsDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
@@ -1156,6 +1146,12 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.pPsiBlast.kgId2
     $kgDb.knownToVisiGene.name
     $ccdsDb.ccdsKgMap.geneId
+
+identifier knownToHprdName
+"Dependencies on knownToHprd.name"
+    $kgDb.knownToHprd.name dupeOk
+    $kgDb.humanHprdP2P.target
+
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
@@ -1460,8 +1456,8 @@ identifier bdgpNonCodingId external=BDGP
     dm1.bdgpNonCoding.name chopAfter=- dupeOk
     dm1.bdgpNonCodingInfo.bdgpName minCheck=0.89
 
-identifier flyBase2004Id external=FlyBase
-"FlyBase Xref as of 2004"
+identifier flyBase2004IdDm external=FlyBase
+"FlyBase Xref as of 2004 for dm"
     $dm.flyBase2004Xref.name
     $dm,!dm1.flyBaseGene.name minCheck=0.99
     $dm,!dm1.flyBasePep.name
@@ -1485,9 +1481,12 @@ identifier flyBase2004Id external=FlyBase
     $dm,!dm1.flyBaseToDescription.name
     $dm,!dm1.flyP2P.query
     $dm,!dm1.flyP2P.target
+    hg17,hg18,danRer3,mm7,mm8,rn3,rn4,ce2,sacCer1.dmBlastTab.target minCheck=0.90
+
+identifier flyBase2004IdDp external=FlyBase
+"FlyBase Xref as of 2004 for dp3"
     dp3.flyBase2004Xref.name
     dp3.flyBaseGene.name
-    hg17,hg18,danRer3,mm7,mm8,rn3,rn4,ce2,sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier sgdIsoformCluster
 "Overlapping (after splicing) SGD (Yeast) transcripts"
@@ -1545,7 +1544,7 @@ identifier rgdEstId external=RGD
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
     $rn,hg17.rgdQtl.name
-    $rn,hg17.rgdQtlLink.name
+    $rn,hg17.rgdQtlLink.name minCheck=0.89
 
 identifier rgdSslpId external=RGD
 "RGD SSLP ID"
@@ -1680,9 +1679,9 @@ identifier dbSnpId external=dbSNP fuzzy
 identifier dbSnpHgId typeOf=dbSnpId 
 "Human dbSNP ID"
     hgFixed.dbSnpRsHg.rsId
-    $hg.snpMap.name
-    hgFixed.affy10KDetails.rsId
-    hgFixed.affy120KDetails.rsId
+    $hg.snpMap.name minCheck=0.90
+    hgFixed.affy10KDetails.rsId minCheck=0.94
+    hgFixed.affy120KDetails.rsId minCheck=0.97
 
 identifier dbSnpMmId typeOf=dbSnpId 
 "Mouse dbSNP ID"
@@ -2012,14 +2011,13 @@ identifier hgMutLinkId
     hg17.hgMutExtLink.linkId minCheck=0.98
 
 #links between gv (the new Locus Variants) and related tables 
-
 identifier gvId
 "Locus Variants track mutation identifier for attributes and links"
     hgFixed.gv.id
     hgFixed.gvLink.id minCheck=0.95
     hgFixed.gvAttr.id minCheck=0.98
     hgFixed.gvAttrLong.id
-    hg17,hg18.gvPos.name minCheck=0.98
+    hg17,hg18.gvPos.name
 
 identifier gvSrcId
 "Locus Variants track source ID"     
@@ -2517,6 +2515,8 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeGisChip%
+    encodeNhgriDnaseHs%
     encodeRegulomeDnaseGM06990%
     encodeSangerChip%
     encodeStanfordPromoters%

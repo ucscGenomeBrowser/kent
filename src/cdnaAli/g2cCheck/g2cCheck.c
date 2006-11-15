@@ -125,7 +125,7 @@ while (fgets(lineBuf, sizeof(lineBuf), f) != NULL)
     lineLen = strlen(lineBuf);
     if (lineLen >= sizeof(lineBuf) - 1)
         {
-        errAbort("%s\nLine %d of %s too long, can only handle %d chars\n",
+        errAbort("%s\nLine %d of %s too long, can only handle %ld chars\n",
             lineBuf, lineCount, fileName, sizeof(lineBuf)-1);
         }
     wordCount = chopString(lineBuf, whiteSpaceChopper, words, ArraySize(words));

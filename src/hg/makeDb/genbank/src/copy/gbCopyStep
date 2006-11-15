@@ -19,7 +19,7 @@
 #   - buildRoot - gbRoot directory on buildServer
 #   - db1 - List of databses to update
 #
-# $Id: gbCopyStep,v 1.13 2005/09/06 23:51:01 genbank Exp $
+# $Id: gbCopyStep,v 1.14 2006/10/25 17:25:32 markd Exp $
 #
 use strict;
 use warnings;
@@ -69,38 +69,6 @@ sub checkBuildTime($$) {
     return (loadTimeFile($buildTimeTmp) > loadTimeFile($lastBuildTime));
 }
 
-# rsync the processed and aligned files with the local directory
-sub rsyncBuildFiles($$$@) {
-    my($rsyncPort, $buildServer, $buildRoot, @databases) = @_;
-
-    # dereference symlinks. so can't use --archive
-    my $baseCmd = "rsync --copy-links --recursive --perms "
-        . "--group --times " . getRSyncPortOpt($rsyncPort);
-    if ($gbCommon::verbose) {
-        $baseCmd .= " -v";
-    }
-    if ($checksum) {
-        $baseCmd .= " -c";
-    }
-    makeDir("data");
-
-    # get ignore.idx
-    my $cmd = $baseCmd . " $buildServer:$buildRoot/etc/ignore.idx etc";
-    runProg($cmd);
-
-    # get processed
-    $cmd = $baseCmd . " $buildServer:$buildRoot/data/processed data";
-    runProg($cmd);
-
-    # get aligned for each database
-    makeDir("data/aligned");
-    foreach my $db (@databases) {
-        $cmd = $baseCmd .
-            " --include='/*/$db/' --exclude='/*/*'"
-            . " $buildServer:$buildRoot/data/aligned/ data/aligned";
-        runProg($cmd);
-    }
-}
 
 # check if the /gbdb/genbank/processed  directory is on the same file system
 # as the local genbank root.  Create directory if it doesn't exist.
@@ -121,8 +89,52 @@ sub linkProcessedFastas($) {
     # create links
     runPipe("find data/processed -name '*.fa' | cpio -pduml $gbdbDir/genbank");
 
-    # cpio doesn't set the permission on created directories, os force them
+    # cpio doesn't set the permission on created directories, so force them
     runPipe("find $gbdbDir/genbank/data -follow -type d | xargs chmod a+rx");
+}
+
+# rsync the processed and aligned files with the local directory
+sub rsyncBuildFiles($$$$@) {
+    my($rsyncPort, $buildServer, $buildRoot, $gbdbDir, @databases) = @_;
+
+    # dereference symlinks. so can't use --archive
+    my $baseCmd = "rsync --copy-links --recursive --perms "
+        . "--group --times " . getRSyncPortOpt($rsyncPort);
+    if ($gbCommon::verbose) {
+        $baseCmd .= " -v";
+    }
+    if ($checksum) {
+        $baseCmd .= " -c";
+    }
+    makeDir("data");
+
+    # get ignore.idx
+    my $cmd = $baseCmd . " $buildServer:$buildRoot/etc/ignore.idx etc";
+    runProg($cmd);
+
+    # get processed
+    $cmd = $baseCmd . " $buildServer:$buildRoot/data/processed data";
+    runProg($cmd);
+
+    # link processed files before rsyncing aligned.  This prevents
+    # window where load started before fastas are in place.
+    if (($gbdbDir ne "no") && ($gbdbDir ne "")) {
+        if (checkIfGbdbLinkable($gbdbDir)) {
+            linkProcessedFastas($gbdbDir);
+        } else {
+            # haven't implemented copying with local rsync
+            gbError("can't link, not on same filesystem: data/processed and $gbdbDir/genbank/data/Processed");
+        }
+    }
+
+    # get aligned for each database
+    makeDir("data/aligned");
+    foreach my $db (@databases) {
+        $cmd = $baseCmd .
+            " --include='/*/$db/' --exclude='/*/*'"
+            . " $buildServer:$buildRoot/data/aligned/ data/aligned";
+        runProg($cmd);
+    }
 }
 
 # Entry
@@ -162,16 +174,7 @@ if (defined($buildTimeTmp)
     # build time has changed
     beginTask("copy", "copy");
 
-    rsyncBuildFiles($rsyncPort, $buildServer, $buildRoot, @databases);
-
-    if (($gbdbDir ne "no") && ($gbdbDir ne "")) {
-        if (checkIfGbdbLinkable($gbdbDir)) {
-            linkProcessedFastas($gbdbDir);
-        } else {
-            # haven't implemented copying with local rsync
-            gbError("can link, not on same filesystem: data/processed and $gbdbDir/genbank/data/Processed");
-        }
-    }
+    rsyncBuildFiles($rsyncPort, $buildServer, $buildRoot, $gbdbDir, @databases);
 
     # install time files.
     makeTimeFile($copyTime);

@@ -1,3 +1,12 @@
+track clonePos
+priority 14
+shortLabel Coverage
+longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180 
+type clonePos
+
 track geneid
 shortLabel Geneid Genes
 longLabel Geneid Gene Predictions
@@ -136,6 +145,8 @@ visibility dense
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 showDiffBasesAllScales .
 
 track haplotypePos
@@ -158,6 +169,8 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track augustusAbinitio
 shortLabel Augustus Ab Initio
@@ -177,6 +190,8 @@ visibility hide
 color 34,139,34
 type genePred nscanPep
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track phastConsElements
 shortLabel Most Conserved
@@ -308,6 +323,17 @@ priority 11
 group map
 visibility hide
 type bed 3 +
+
+track rnaGene
+shortLabel RNA Genes
+longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
+
 
 track chainFr1
 shortLabel $o_Organism Chain
@@ -733,7 +759,7 @@ type chain homIni13
 otherDb homIni13
 
 track chainMm7
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 270.2
@@ -745,7 +771,7 @@ type chain mm7
 otherDb mm7
 
 track netMm7
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 270.3
@@ -880,15 +906,6 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
-track oreganno
-shortLabel ORegAnno
-longLabel Regulatory elements from ORegAnno
-group regulation
-priority 97
-visibility hide
-color 102,102,0
-type bed 4 +
-
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
@@ -941,89 +958,82 @@ searchType bed
 searchPriority 10
 termRegex har[0-9]+
 
-searchName oreg
-searchTable oreganno
-searchMethod exact
-query select chrom, chromStart, chromEnd, id from %s where id = '%s'
-padding 500
-searchPriority 55
-
-track longSage
-shortLabel LongSAGE
-longLabel LongSAGE
+track escLongSage
+shortLabel ESC LongSAGE
+longLabel Embryonic Stem Cell LongSAGE
 compositeTrack on
 group regulation
 priority 200
 visibility hide
 type bed 8 .
 
-    track longSageSHE10
-    subTrack longSage
-    shortLabel LongSAGE SHE10
-    longLabel LongSAGE: library SHE10 cell line ES03
+    track escLongSageSHE10
+    subTrack escLongSage
+    shortLabel SHE10
+    longLabel Embryonic Stem Cell LongSAGE: library SHE10, cell line ES03
     color 155,33,250
     priority 1
 
-    track longSageSHE11
-    subTrack longSage
-    shortLabel LongSAGE SHE11
-    longLabel LongSAGE: library SHE11 cell line ES04
+    track escLongSageSHE11
+    subTrack escLongSage
+    shortLabel SHE11
+    longLabel Embryonic Stem Cell LongSAGE: library SHE11, cell line ES04
     color 155,33,250
     priority 2X
 
-    track longSageSHE13
-    subTrack longSage
-    shortLabel LongSAGE SHE13
-    longLabel LongSAGE: library SHE13 cell line WA07
+    track escLongSageSHE13
+    subTrack escLongSage
+    shortLabel SHE13
+    longLabel Embryonic Stem Cell LongSAGE: library SHE13, cell line WA07
     color 155,33,250
     priority 3
 
-    track longSageSHE14
-    subTrack longSage
-    shortLabel LongSAGE SHE14
-    longLabel LongSAGE: library SHE14 cell line WA14
+    track escLongSageSHE14
+    subTrack escLongSage
+    shortLabel SHE14
+    longLabel Embryonic Stem Cell LongSAGE: library SHE14, cell line WA14
     color 155,33,250
     priority 4
 
-    track longSageSHE15
-    subTrack longSage
-    shortLabel LongSAGE SHE15
-    longLabel LongSAGE: library SHE15 cell line WA13
+    track escLongSageSHE15
+    subTrack escLongSage
+    shortLabel SHE15
+    longLabel Embryonic Stem Cell LongSAGE: library SHE15, cell line WA13
     color 155,33,250
     priority 5
 
-    track longSageSHE16
-    subTrack longSage
-    shortLabel LongSAGE SHE16
-    longLabel LongSAGE: library SHE16 cell line WA01
+    track escLongSageSHE16
+    subTrack escLongSage
+    shortLabel SHE16
+    longLabel Embryonic Stem Cell LongSAGE: library SHE16, cell line WA01
     color 155,33,250
     priority 6
 
-    track longSageSHE17
-    subTrack longSage
-    shortLabel LongSAGE SHE17
-    longLabel LongSAGE: library SHE17 cell line WA01
+    track escLongSageSHE17
+    subTrack escLongSage
+    shortLabel SHE17
+    longLabel Embryonic Stem Cell LongSAGE: library SHE17, cell line WA01
     color 155,33,250
     priority 7
 
-    track longSageSHE19
-    subTrack longSage
-    shortLabel LongSAGE SHE19
-    longLabel LongSAGE: library SHE19 cell line BG01
+    track escLongSageSHE19
+    subTrack escLongSage
+    shortLabel SHE19
+    longLabel Embryonic Stem Cell LongSAGE: library SHE19, cell line BG01
     color 155,33,250
     priority 8
 
-    track longSageSHES2
-    subTrack longSage
-    shortLabel LongSAGE SHES2
-    longLabel LongSAGE: library SHES2 cell line WA09
+    track escLongSageSHES2
+    subTrack escLongSage
+    shortLabel SHES2
+    longLabel Embryonic Stem Cell LongSAGE: library SHES2, cell line WA09
     color 155,33,250
     priority 9
 
-    track longSageSHES9
-    subTrack longSage
-    shortLabel LongSAGE SHES9
-    longLabel LongSAGE: library SHES9 cell line UC06
+    track escLongSageSHES9
+    subTrack escLongSage
+    shortLabel SHES9
+    longLabel Embryonic Stem Cell LongSAGE: library SHES9, cell line UC06
     color 155,33,250
     priority 10
 

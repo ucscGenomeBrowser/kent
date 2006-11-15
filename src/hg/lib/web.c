@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.102 2006/10/31 03:10:51 heather Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.103 2006/11/08 21:46:55 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -590,6 +590,18 @@ void printGenomeListHtml(char *db, char *onChangeText)
 {
 printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
 }
+
+void printBlatGenomeListHtml(char *db, char *onChangeText)
+/* Prints to stdout the HTML to render a dropdown list 
+ * containing a list of the possible genomes to choose from.
+ * param db - a database whose genome will be the default genome.
+ *                       If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in 
+ *                              any onChange javascript. */
+{
+printSomeGenomeListHtml(db, hGetBlatIndexedDatabases(), onChangeText);
+}
+
 
 void printGenomeListForCladeHtml(char *db, char *onChangeText)
 /* Prints to stdout the HTML to render a dropdown list containing 

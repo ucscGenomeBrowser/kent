@@ -115,6 +115,10 @@ visibility dense
 color 34,139,34
 type genePred nscanPep
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+
 
 searchTable nscanGene
 searchType genePred

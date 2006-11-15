@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.7 2006/06/02 18:18:15 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.8 2006/11/06 23:08:00 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,7 @@ errAbort(
 	CUSTOM_TRASH ".\n"
   "   -historyToo - also consider the table called 'history' for deletion.\n"
   "               - default is to leave 'history' alone no matter how old.\n"
+  "               - this applies to the table 'lastAccessed' also.\n"
   "   -verbose=N - 2 == show arguments, dates, and dropped tables,\n"
   "              - 3 == show date information for all tables."
   );
@@ -81,6 +82,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* if not doing history too, and this is the history table, next row */
     if ((!historyToo) && (sameWord(row[nameIx],"history")))
+	continue;
+    /* also skip the lastAccessed table */
+    if ((!historyToo) && (sameWord(row[nameIx],"lastAccessed")))
 	continue;
 
     /*	Update_time is sometimes NULL on MySQL 5

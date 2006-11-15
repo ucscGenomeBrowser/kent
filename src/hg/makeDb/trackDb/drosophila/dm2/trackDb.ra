@@ -17,6 +17,8 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 showDiffBasesAllScales .
 
 track est
@@ -29,6 +31,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 
 track flyFeepComposite
 compositeTrack on
@@ -442,6 +445,8 @@ visibility hide
 color 34,139,34
 type genePred
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 searchTable nscanGene
 searchType genePred

@@ -109,7 +109,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1225 2006/10/23 22:25:42 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1232 2006/11/07 00:04:37 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -636,7 +636,7 @@ static void mapBoxToggleComplement(int x, int y, int width, int height,
 struct dyString *ui = uiStateUrlPart(toggleGroup);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?complement=%d",
-	hgTracksName(), !cartUsualBoolean(cart,"complement",FALSE));
+	hgTracksName(), !cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE));
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 if (message != NULL)
@@ -1605,12 +1605,20 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
 /* If showing different codons when zoomed way out, must do another pass 
  * so that different codons aren't overdrawn by same codons.  The whole 
  * item was drawn in the above loop, and now we just make some red marks 
- * on top of it if necessary. */
-if (showDiffBasesAllScales && vis != tvDense &&
-    drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
+ * on top of it if necessary.  Similarly, when showing different bases, 
+ * draw tickmarks now so other exons don't overdraw. */
+if (showDiffBasesAllScales && vis != tvDense)
     {
-    drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
-			  mrnaSeq, psl, winStart);
+    if (drawOptionNum == CDS_DRAW_DIFF_CODONS && !zoomedToCdsColorLevel)
+	{
+	drawCdsDiffCodonsOnly(tg, lf, cdsColor, vg, xOff, y, scale, heightPer,
+			      mrnaSeq, psl, winStart);
+	}
+    if (drawOptionNum == CDS_DRAW_DIFF_BASES && !zoomedToBaseLevel)
+	{
+	drawCdsDiffBaseTickmarksOnly(tg, lf, cdsColor, vg, xOff, y, scale,
+				     heightPer, mrnaSeq, psl, winStart);
+	}
     }
 }
 
@@ -7654,6 +7662,156 @@ int spreadStringCharWidth(int width, int count)
     return width/count;
 }
 
+void spreadAlignString3rd(struct vGfx *vg, int x, int y, int width, int height,
+		       Color color, MgFont *font, char *text, 
+		       char *match, int count, bool dots, bool isCodon)
+/* Draw evenly spaced letters in string.  For multiple alignments,
+ * supply a non-NULL match string, and then matching letters will be colored
+ * with the main color, mismatched letters will have alt color (or 
+ * matching letters with a dot, and mismatched bases with main color if this
+ * option is selected).
+ * Draw a vertical bar in orange where sequence lacks gaps that
+ * are in reference sequence (possible insertion) -- this is indicated
+ * by an escaped insert count in the sequence.  The escape char is backslash.
+ * The count param is the number of bases to print, not length of
+ * the input line (text) */
+{
+char cBuf[2] = "";
+int i,j,textPos=0;
+int matchLen, trMax, trIndex, trCount[3];
+char *chp, chOld;
+
+int x1, x2;
+char *motifString = cartOptionalString(cart,BASE_MOTIFS);
+boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
+char **motifs = NULL;
+boolean *inMotif = NULL;
+int motifCount = 0;
+Color noMatchColor = lighterColor(vg, color);
+Color clr;
+int textLength = strlen(text);
+bool selfLine = (match == text);
+cBuf[1] = '\0';  
+
+/* figure out which one of the 3 bases is the central position of the codon */
+
+for (i=0; i<3; i++) trCount[i] = 0;
+
+matchLen = strlen(match);
+chOld = *match;
+chp = match;
+trIndex = -1;
+trMax = 0;
+for (i=0; i<matchLen; i++)
+    {
+    /* increment count if a transition is detected */
+    if (chOld != *chp) 
+	{
+	trCount[i%3]++;
+	if (trCount[i%3] > trMax) trMax = trCount[i%3];
+	chOld = *chp;
+	}
+    chp++;
+    }
+
+/* tease out the higest transition position and add 1 to it */
+for (i=0; i<3; i++)
+    {
+    if (trMax == trCount[i]) 
+	{
+	trIndex = (i+1)%3;
+	break;
+	}
+    }
+/* If we have motifs, look for them in the string. */
+if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
+    {
+    touppers(motifString);
+    eraseWhiteSpace(motifString);
+    motifString = cloneString(motifString);
+    motifCount = chopString(motifString, ",", NULL, 0);
+    if (complementsToo)
+	AllocArray(motifs, motifCount*2);	/* twice as many */
+    else
+	AllocArray(motifs, motifCount);
+    chopString(motifString, ",", motifs, motifCount);
+    if (complementsToo)
+	{
+	for(i = 0; i < motifCount; i++)
+	    {
+	    int comp = i + motifCount;
+	    motifs[comp] = cloneString(motifs[i]);
+	    reverseComplement(motifs[comp],strlen(motifs[comp]));
+	    }
+	motifCount *= 2;	/* now we have this many	*/
+	}
+	
+    AllocArray(inMotif, textLength);
+    for(i = 0; i < motifCount; i++)
+	{
+	char *mark = text;
+	while((mark = stringIn(motifs[i], mark)) != NULL)
+	    {
+	    int end = mark-text + strlen(motifs[i]);
+	    for(j = mark-text; j < end && j < textLength ; j++)
+		{
+		inMotif[j] = TRUE;
+		}
+	    mark++;
+	    }
+	}
+    freez(&motifString);
+    freez(&motifs);
+    }
+
+for (i=0; i<count; i++, text++, textPos++)
+    {
+    x1 = i * width/count;
+    x2 = (i+1) * width/count - 1;
+    if (match != NULL && *text == '|')
+        {
+        /* insert count follows -- replace with a colored vertical bar */
+        text++;
+	textPos++;
+        i--;
+        vgBox(vg, x+x1, y, 1, height, getOrangeColor());
+        continue;
+        }
+    cBuf[0] = *text;
+    clr = color;
+    if (dots)
+        {
+        /* display bases identical to reference as dots */
+        /* suppress for first line (self line) */
+        if (!selfLine && match != NULL && match[i])
+            if ((*text != ' ') && (toupper(*text) == toupper(match[i])))
+                cBuf[0] = '.';
+        }
+    else
+        {
+        /* display bases identical to reference in main color, mismatches
+         * in alt color */
+        if (match != NULL && match[i])
+            if ((*text != ' ') && (toupper(*text) != toupper(match[i])))
+                clr = noMatchColor;
+        }
+    if(inMotif != NULL && textPos < textLength && inMotif[textPos])
+	{
+	vgBox(vg, x1+x, y, x2-x1, height, clr);
+	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, cBuf);
+	}
+    else
+        {
+        /* restore char for unaligned sequence to lower case */
+        if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
+            cBuf[0] = UNALIGNED_SEQ;
+        /* display bases (only at the central base position of a codon)*/
+        if ((textPos % 3) == trIndex) vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
+        }
+    }
+freez(&inMotif);
+}
+
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
 		       char *match, int count, bool dots, bool isCodon)
@@ -7805,7 +7963,7 @@ void drawComplementArrow( struct vGfx *vg, int x, int y,
                                 int width, int height, MgFont *font)
 /* Draw arrow and create clickbox for complementing ruler bases */
 {
-if(cartUsualBoolean(cart, "complement", FALSE))
+if(cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
     vgTextRight(vg, x, y, width, height, MG_GRAY, font, "<---");
 else
     vgTextRight(vg, x, y, width, height, MG_BLACK, font, "--->");
@@ -11210,6 +11368,10 @@ else if (sameWord(type, "wigMaf"))
     {
     wigMafMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "wigMafP"))
+    {
+    wigMafPMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "sample"))
     {
     sampleMethods(track, tdb, wordCount, words);
@@ -11793,7 +11955,8 @@ else if (sameString(type, "bed"))
 	}
     else if (ct->fieldCount == 15)
 	{
-	if (sameString(typeOrig, "expRatio"))
+	char *theType = trackDbSetting(tdb, "type");
+	if (sameString(theType, "expRatio"))
 	    {
 	    tg = trackFromTrackDb(tdb);
 	    expRatioMethodsFromCt(tg);	    
@@ -11882,7 +12045,6 @@ for (visEl = visList; visEl != NULL; visEl = visEl->next)
     }
 hashElFreeList(&visList);
 
-
 /* The loading is now handled by getPositionFromCustomTracks(). */
 /* Process browser commands in custom track. */
 for (bl = browserLines; bl != NULL; bl = bl->next)
@@ -11929,7 +12091,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
-
             /*Fix a start window of -1 that is returned when a custom track position
               begins at 0
             */
@@ -12769,7 +12930,8 @@ if (!hideControls)
 	}
 
     hPrintf(" ");
-    hButton(CT_CGI_VAR, hasCustomTracks ? 
+    hOnClickButton("document.customTrackForm.submit();return false;",
+                        hasCustomTracks ? 
                             CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
@@ -12922,7 +13084,12 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     }
 #endif /* SLOW */
-hPrintf("</FORM>");
+hPrintf("</FORM>\n");
+
+/* hidden form for custom tracks CGI */
+hPrintf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+cartSaveSession(cart);
+hPrintf("</FORM>\n");
 }
 
 void zoomToSize(int newSize)
@@ -13283,33 +13450,6 @@ else
     doTrackForm(NULL);
 }
 
-void customTrackCgi()
-/* Put up CGI that lets user manage custom tracks. */
-{
-int hgsid = cartSessionId(cart);
-
-puts("<HTML>");
-/* javascript redirect to hgCustom */
-#ifndef META_REDIRECT
-if (hgsid)
-    printf("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom?hgsid=%d' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom?hgsid=%d\">Redirect </a></BODY>",hgsid,hgsid);
-else
-    puts("<BODY onload=\"try {self.location.href='/cgi-bin/hgCustom' } catch(e) {}\"><a href=\"/cgi-bin/hgCustom\">Redirect </a></BODY>");
-#else
-if (hgsid)
-    {
-    printf("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom?hgsid=%d\"",hgsid);
-    printf("<BODY><A HREF='/cgi-bin/hgCustom?hgsid=%d'>Redirect</A></BODY>",hgsid);
-    }
-else
-    {
-    puts("<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0; URL=/cgi-bin/hgCustom\"");
-    puts("<BODY><A HREF='/cgi-bin/hgCustom'>Redirect</A></BODY>");
-    }
-#endif
-puts("</HTML>"); 
-}
-
 void chromInfoTotalRow(long long total)
 /* Make table row with total size from chromInfo. */
 {
@@ -13499,12 +13639,7 @@ hDefaultConnect();
 initTl();
 
 /* Do main display. */
-if (cartVarExists(cart, CT_CGI_VAR))
-    {
-    cartRemove(cart, CT_CGI_VAR);
-    customTrackCgi();
-    }
-else if (cartVarExists(cart, "chromInfoPage"))
+if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();

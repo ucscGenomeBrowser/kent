@@ -106,3 +106,94 @@ EOF
     # I did not make the usual /gbdb/$db/$db.2bit link.
 
 
+###########################################################################
+# WINDOWMASKER EXPERIMENT (DONE 10/23/06 angie)
+    # The droVir3-droGri2 blastz run  was just destroyed by mega-output,
+    # even with -chainFilterMinScore=10000 and M=50 (trying M=20 but not
+    # too hopeful)... so let's try a de-novo masker before alignment:
+    ssh kolossus
+    mkdir /cluster/data/droVir3/bed/windowmasker.2006-10-23
+    cd /cluster/data/droVir3/bed/windowmasker.2006-10-23
+    twoBitToFa /cluster/data/droVir3/droVir3.2bit tmp.fa
+    # First, collect counts:
+    time /cluster/bin/x86_64/windowmasker -mk_counts true -input tmp.fa \
+      -output wm.counts
+#116.091u 3.329s 2:01.89 97.9%   0+0k 0+0io 115pf+0w
+    # Then use those counts to mask sequence:
+    time /cluster/bin/x86_64/windowmasker -ustat wm.counts -input tmp.fa \
+      -output wm.intervals 
+#194.555u 1.303s 3:17.49 99.1%   0+0k 0+0io 0pf+0w
+    perl -wpe 'if (s/^>lcl\|(\w+).*\n$//) { $chr = $1; } \
+               if (/^(\d+) - (\d+)/) { \
+                 $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/; \
+               }' wm.intervals > windowmasker.bed
+    # Quick coverage:
+    awk '{print $3 - $2;}' windowmasker.bed | total
+#66922828
+    awk '{print $2;}' ../../chrom.sizes  | total
+#206026697
+    calc 66922828 / 206026697
+#66922828 / 206026697 = 0.324826
+    # Make a masked .2bit:
+    twoBitMask ../../droVir3.2bit windowmasker.bed ../../droVir3.WM.2bit
+
+    # Now try with -sdust to additionally mask low-complexity sequence:
+    time /cluster/bin/x86_64/windowmasker -ustat wm.counts -sdust true \
+       -input tmp.fa -output wm.sdust.intervals
+#545.704u 1.433s 9:09.64 99.5%   0+0k 0+0io 0pf+0w
+    perl -wpe 'if (s/^>lcl\|(\w+).*\n$//) { $chr = $1; } \
+               if (/^(\d+) - (\d+)/) { \
+                 $s=$1; $e=$2+1; s/(\d+) - (\d+)/$chr\t$s\t$e/; \
+               }' wm.sdust.intervals > windowmasker.sdust.bed
+    awk '{print $3 - $2;}' windowmasker.sdust.bed | total
+#86036805
+    calc 86036805 / 206026697
+#86036805 / 206026697 = 0.417600
+    # Make a masked .2bit (even if we don't end up needing it):
+    twoBitMask ../../droVir3.2bit windowmasker.sdust.bed \
+      ../../droVir3.WMSDust.2bit
+    rm tmp.fa
+
+
+###########################################################################
+# BLASTZ/CHAIN/NET DROGRI2 (DONE 10/23/06 angie)
+    # Using WindowMasker'd sequence since prior runs died due to massive 
+    # output (netChainSubset out of memory), even with chainMinScore=10000
+    # or chainMinScore=8000 + M=20.
+    ssh kkstore05
+    mkdir /cluster/data/droVir3/bed/blastz.droGri2.2006-10-23
+    cd /cluster/data/droVir3/bed/blastz.droGri2.2006-10-23
+    cat << '_EOF_' > DEF
+# D. virilis vs. D. grimshawi
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. virilis
+SEQ1_DIR=/san/sanvol1/scratch/droVir3/droVir3.WM.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/san/sanvol1/scratch/droVir3/chrom.sizes
+SEQ1_LIMIT=50
+
+# QUERY - D. grimshawi
+SEQ2_DIR=/san/sanvol1/scratch/droGri2/droGri2.WM.2bit
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LEN=/san/sanvol1/scratch/droGri2/chrom.sizes
+SEQ2_LIMIT=200
+
+BASE=/cluster/data/droVir3/bed/blastz.droGri2.2006-10-23
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/droVir3droGri2 >& do.log &
+    tail -f do.log
+    ln -s blastz.droGri2.2006-10-23 /cluster/data/droVir3/bed/blastz.droGri2
+
+

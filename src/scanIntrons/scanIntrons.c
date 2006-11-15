@@ -21,7 +21,7 @@ int val;
 
 for (i=0; i<hisSize; ++i)
     {
-    if ((val = ntVal[dna[i]]) >= 0)
+    if ((val = ntVal[(int)dna[i]]) >= 0)
         his[i][val] += 1;
     }
 }
@@ -41,7 +41,7 @@ return a[0]+a[1]+a[2]+a[3];
 
 void printLineOfHis(int his[hisSize][4], DNA base)
 {
-int baseVal = ntVal[base];
+int baseVal = ntVal[(int)base];
 int i;
 long millis;
 
@@ -82,7 +82,7 @@ printHis(postHis);
 
 void printLineOfProbs(int his[hisSize][4], DNA base)
 {
-int baseVal = ntVal[base];
+int baseVal = ntVal[(int)base];
 int i;
 double ratio;
 
@@ -319,8 +319,6 @@ printf("</PRE></TT>\n");
 void doMiddle()
 {
 char *preIntron, *startIntron, *endIntron, *postIntron;
-int count = 0;
-int matchCount = 0;
 int maxCount;
 struct nameOff *matchList;
 boolean invert = cgiVarExists("Invert");

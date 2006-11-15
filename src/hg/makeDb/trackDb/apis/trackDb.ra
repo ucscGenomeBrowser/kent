@@ -79,6 +79,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 
 track all_est
 shortLabel A. mel. ESTs

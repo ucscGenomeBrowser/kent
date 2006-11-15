@@ -6034,11 +6034,15 @@ zC42A6.za
     hgsql -e 'drop table all_bacends;' danRer4
     hgLoadPsl danRer4 -table=all_bacends allBacends.load.psl
     # All alignments were loaded into the table - no problems.
-    # check trackDb.ra entry and description
+    # check trackDb.ra entry and modify description.
+    # Moved the searches up to the top level zebrafish trackDb.ra file
+    # in trackDb/zebrafish/ since the searches are common to all zebrafish
+    # assemblies. Deleted searches from each assembly trackDb.ra.
 
 ###########################################################################
 # CREATE BAC CLONES ALIAS AND CROSS-REFERENCE TABLES
-# (bacEndAlias, bacCloneAlias and bacCloneXRef) (in progress, 2006-09-29, hartera)
+# (bacEndAlias, bacCloneAlias and bacCloneXRef) 
+# (DONE, 2006-09-29 - 2006-10-27, hartera)
     # Process data and create bacEndAlias table
     ssh kkstore04
     # create a list of BAC end names and their accessions
@@ -6226,18 +6230,24 @@ foreach my $a (keys(%bacs)) {
     ssh kkstore04
     mkdir -p /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
     cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
+    # Problem with the markers file - generated incorrectly. Contacted
+    # Sanger to ask for new markers file on 10/12/06 and new set of files 
+    # were put up for ftp on 10/26/06. Another problem with markers file
+    # was found - there was a number in the second field instead of the 
+    # sanger sts name which is an ID beginning with "et" or "st". Notified'
+    # Sanger and new files put out for ftp on 10/27/06.
     wget --timestamp \
       ftp://ftp.sanger.ac.uk/pub/human/zebrafish/ZFIN/README
     wget --timestamp \
-         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/clonemarkers.26.09.06.txt
+         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/clonemarkers.27.10.06.txt
     wget --timestamp \
-         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/ctgnames.26.09.06.txt
+         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/ctgnames.27.10.06.txt
     wget --timestamp \
-         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/markers.26.09.06.txt
-    wc -l *26.09.06.txt
-    # 32612 clonemarkers.26.09.06.txt
-    # 168828 ctgnames.26.09.06.txt
-    # 12407 markers.26.09.06.txt
+         ftp://ftp.sanger.ac.uk/pub/mc2/webfpc_dump/markers.27.10.06.txt
+    wc -l *27.10.06.txt
+    # 32612 clonemarkers.27.10.06.txt
+    # 168828 ctgnames.27.10.06.txt
+    # 12407 markers.27.10.06.txt
     # get list of BAC end names, lfNames
     foreach f (../scoresAndCoords/*.bed)
        echo $f
@@ -6347,35 +6357,35 @@ while (<MARKERS>) {
 close MARKERS;
 '_EOF_'
    chmod +x find_markers3.pl
-   # download latest version of UniSTS
+   # download latest version of UniSTS (2006-10-26)
    ssh kkstore02
-   mkdir -p /cluster/store5/sts.2006-10-11
-   ln -s /cluster/store5/sts.2006-10-11 /cluster/data/ncbi
-   cd /cluster/data/ncbi/sts.2006-10-11
+   mkdir -p /cluster/store5/sts.2006-10-26
+   ln -s /cluster/store5/sts.2006-10-26 /cluster/data/ncbi
+   cd /cluster/data/ncbi/sts.2006-10-26
    wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
-   mkdir -p /cluster/store5/UniSTS.2006-10-11
-   ln -s /cluster/store5/UniSTS.2006-10-11 /cluster/data/ncbi
-   cd /cluster/data/ncbi/UniSTS.2006-10-11
+   mkdir -p /cluster/store5/UniSTS.2006-10-26
+   ln -s /cluster/store5/UniSTS.2006-10-26 /cluster/data/ncbi
+   cd /cluster/data/ncbi/UniSTS.2006-10-26
    wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
    wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
    wget --timestamp -r l1 \
 ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
    mv
-/cluster/data/ncbi/UniSTS.2006-10-11/ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio
-/cluster/data/ncbi/UniSTS.2006-10-11
-    rm -r /cluster/data/ncbi/UniSTS.2006-10-11/ftp.ncbi.nih.gov
+/cluster/data/ncbi/UniSTS.2006-10-26/ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio
+/cluster/data/ncbi/UniSTS.2006-10-26
+    rm -r /cluster/data/ncbi/UniSTS.2006-10-26/ftp.ncbi.nih.gov
     # then back to danRer4 BAC ends tables:
     ssh kkstore04
     cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
-    # NOTE: RE-DO THIS FOR MARKERS FILE WHEN GET NEW MARKERS FILE
-    # change internal names in files to have CHORI73 instaed of zH to 
+    # change internal names in files to have CHORI73 instead of zH to 
     # keep names the same as those used in the BAC end tables.
-    perl -pi.bak -e 's/zH([0-9]+)/CHORI73_$1/' *.26.09.06.txt 
-    # NEED TO REDO THIS AS markers FILE IS INCORRECT. ASKED FOR NEW ONE
-    # ON OCT. 12th.
-    perl find_markers3.pl /cluster/data/ncbi/UniSTS.2006-10-11/UniSTS.aliases \
-         markers.26.09.06.txt > sangerandUniSTSId.txt
-
+    perl -pi.bak -e 's/zH([0-9]+)/CHORI73_$1/' *.27.10.06.txt 
+    perl find_markers3.pl /cluster/data/ncbi/UniSTS.2006-10-26/UniSTS.aliases \
+         markers.27.10.06.txt > sangerandUniSTSId.txt
+    # Need to sort and uniq this file since the UniSTS IDs are being
+    # replicated for each instance of the sanger name in field 2 of the
+    # markers file. In some cases the sanger name is replicated.
+    sort sangerandUniSTSId.txt | uniq > sangerandUniSTSId.uniq
     # No need to reformat this for zfishBacClonesandSts
     # FPC contig information (i.e. FPC contig number) from ctgnames file is
     # not included in the tables as these are dynamic and constantly
@@ -6391,7 +6401,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
     # used in the search.
     # Those sequences with "genomic survey" in the title appear to be
     # BAC clone end accessions. Here, we want only BAC clone accessions.
-    # 3) There are 1148231 sequences. (2006-10-12). Select File from Send To
+    # 3) There are 1148560 sequences. (2006-10-27). Select File from Send To
     # pulldown menu and name file "BACClones.gbAccs.txt".
     # use script from danRer3 to parse out clone ID and the accession:
 cat << '_EOF_' > getAccsandIdsFromGb.pl
@@ -6467,64 +6477,390 @@ if ($found eq "TRUE")
       /cluster/data/danRer3/bed/bacends/bacends.1/BACClonesIdsandAccs.txt \
       | sort | uniq > clonesWithAccs.dr3
     comm -13 clonesWithAccs.dr4 clonesWithAccs.dr3
-# DKEY-14P13
 # DKEY-188F22
 # DKEY-30O13
     # Checked these out for searching for each in the Nucleotide database
-    # at Genbank. DKEY-14P13 and DKEY-30O13 only have accessions for the 
+    # at Genbank. DKEY-30O13 only has accessions for the 
     # end sequences. DKEY-188F22 has an accession for the BAC clone: AP007256
+    # For some reason this was not found by the search.
     # Add this to list:
     echo "zK188F22\tAP007256\tDKEY-188F22" >> BACClonesIdsandAccs.txt
 
     # use zfishBacClonesandSts to create tab files for loading into
     # bacCloneAlias and bacCloneXRef tables
     # make output directory
-    rm -r /san/sanvol1/danRer4/bacEnds/out
-    mkdir -p /san/sanvol1/danRer4/bacEnds/out
     mkdir out
-    nice $HOME/bin/x86_64/zfishBacClonesandSts ctgnames.26.09.06.txt \
-      clonemarkers.26.09.06.txt markers.26.09.06.txt \
+    # Asked Sanger for another version of the file with the Sanger sts aliases
+    # instead of these numbers in the second field of the markers file.
+    # (2006-10-26). Received new file (2006-10-27)
+    # Increased NUMSANGER from 5 to 40 and MAXSANGER from 50 to 60
+    # because there are multiple occurrences of Sanger names in the second
+    # field of the markers file and this can be quite a long list.
+    # clonemarkers file now has 0 for relationship where before it was blank.
+    # change this to blank again otherwise processed incorrectly.
+    perl -pi.bak -e 's/\|0/\|/' clonemarkers.27.10.06.txt
+    nice $HOME/bin/x86_64/zfishBacClonesandSts ctgnames.27.10.06.txt \
+      clonemarkers.27.10.06.txt markers.27.10.06.txt \
       bacClones.namesandchrom.uniq BACClonesIdsandAccs.txt \
-      sangerandUniSTSId.txt ./out > ./out/zfishBacs.out &
-    # output is in /cluster/bluearc/danRer3/bacends/out so copy over
+      sangerandUniSTSId.uniq ./out > ./out/zfishBacs.out &
+    # output is in out directory so copy over
+    cp ./out/*.tab .
     # sort alias tab file by sangerName
-    sort -k2 ./out/bacAlias.tab > bacAlias.sort.tab
-    cp ./out/bacXRef.tab .
     wc -l *.tab
-    # 110961 bacAlias.sort.tab
-    # 540800 bacXRef.tab
- 
-    ssh hgwdev 
-    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
-    hgsql -e 'drop table bacCloneAlias;' danRer3
-    hgsql -e 'drop table bacCloneXRef;' danRer3
-     
-    hgLoadSqlTab danRer3 bacCloneAlias \
-          $HOME/kent/src/hg/lib/bacCloneAlias.sql bacAlias.sort.tab
-    hgLoadSqlTab danRer3 bacCloneXRef \
-          $HOME/kent/src/hg/lib/bacCloneXRef.sql bacXRef.tab
-# edit trackDb.ra to add bacEnds tracks and searches for the bacEndPairs
-# and bacEndSingles tracks as for danRer1. copy over html from danRer2
-# for bacEndPairs and bacEndSingles tracks.
-    # Replicate rows in table so reload after removing these
-    # (hartera, 2006-08-04)
-    ssh hgwdev 
-    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
-
-    sort bacAlias.sort.tab | uniq | sort -k2 > bacAlias.sort.tab.uniq
+    # 120211 bacAlias.tab
+    # 507274 bacXRef.tab
+    # make sure there are no replicate lines:
+    # also sort alias tab file by sangerName
+    sort bacAlias.tab | uniq | sort -k2 > bacAlias.sort.tab.uniq
     sort bacXRef.tab | uniq > bacXRef.tab.uniq
-    wc -l *.tab.uniq
-    # 57656 bacAlias.sort.tab.uniq
-    # 356453 bacXRef.tab.uniq
- 
-    # Drop old tables and reload:
-    hgsql -e 'drop table bacCloneAlias;' danRer3
-    hgsql -e 'drop table bacCloneXRef;' danRer3
-    
-    hgLoadSqlTab danRer3 bacCloneAlias \
+    wc -l bac*.tab.uniq
+    # 58758 bacAlias.sort.tab.uniq
+    # 353042 bacXRef.tab.uniq
+
+    ssh hgwdev 
+    cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
+    hgsql -e 'drop table bacCloneAlias;' danRer4
+    hgsql -e 'drop table bacCloneXRef;' danRer4
+     
+    hgLoadSqlTab danRer4 bacCloneAlias \
           $HOME/kent/src/hg/lib/bacCloneAlias.sql bacAlias.sort.tab.uniq
-    hgLoadSqlTab danRer3 bacCloneXRef \
+    hgLoadSqlTab danRer4 bacCloneXRef \
           $HOME/kent/src/hg/lib/bacCloneXRef.sql bacXRef.tab.uniq
+
+###########################################################################
+# BACENDS: TESTING OF bacCloneAlias AND bacCloneXRef TABLES
+# (DONE, 2006-10-27, hartera)
+    # The following tests were carried out to check that all the data
+    # in the bacCloneAlias and bacCloneXRef tables is correct.
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases
+    mkdir -p testTables
+    cd testTables
+    # copy scripts over from danRer3:
+    cp /cluster/data/danRer3/bed/bacends/cloneandStsAliases/getName*.pl .  
+    cp /cluster/data/danRer3/bed/bacends/cloneandStsAliases/getSanger*.pl . 
+    cp /cluster/data/danRer3/bed/bacends/cloneandStsAliases/formatUniSts.pl . 
+    # scripts were created for danRer2 - see danRer2.txt
+
+# Check that the correct aliases are associated with their Sanger STS names
+    awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $3;}' \
+        ../markers.27.10.06.txt > sNameandaliases
+    # use script to get one Sanger name and one alias on each line
+    perl getSangerAndAlias.pl < sNameandaliases > sNameandaliases.format
+    sort sNameandaliases.format | uniq > sNameandaliases.sort
+    # get Sanger names and aliases from database
+    hgsql -N -e 'select sangerName, alias from bacCloneAlias;' danRer4 \
+          | sort | uniq > alias.db.sort
+    wc -l alias.db.sort
+    # 58758 alias.db.sort
+    diff sNameandaliases.sort alias.db.sort
+    # No difference between data file and data from database so ok
+    # Check Sanger STS names correspond in bacAlias and bacCloneXRef tables
+    # get Sanger names from alias table
+    hgsql -N -e 'select sangerName from bacCloneAlias;' danRer4 \
+             | sort | uniq > sName.alias.sort
+    wc -l sName.alias.sort
+    # 15595 sName.alias.sort
+    # get Sanger names from xRef table
+    hgsql -N -e 'select sangerName from bacCloneXRef where sangerName \
+          is not null;' danRer4 | sort | uniq > sName.xRef.sort
+    wc -l sName.xRef.sort
+    # 15946 sName.xRef.sort
+    comm -23 sName.alias.sort sName.xRef.sort
+    # nothing unique to alias file so all Sanger names in the alias table are
+    # also in the xRef table
+    comm -13 sName.alias.sort sName.xRef.sort > sNamexRefNotAlias
+    wc -l sNamexRefNotAlias
+    # 351 sNamexRefNotAlias
+    awk 'BEGIN {FS="|"}{print $2}' ../clonemarkers.27.10.06.txt | sort | uniq \
+        > clonemarkers.sNames.sort
+    # get Sanger names from markers file
+    awk 'BEGIN {FS="|"}{print $2}' ../markers.27.10.06.txt > markers.sNames
+    # remove semi-colons and sort
+    sed -e 's/;/\n/g' markers.sNames | sort | uniq > markers.sNames.sort
+    # sanger names unique to markers file
+    comm -13 clonemarkers.sNames.sort markers.sNames.sort
+    # there are none
+    comm -23 clonemarkers.sNames.sort markers.sNames.sort \
+         > sNames.clonemarkersOnly
+    wc -l sNames.clonemarkersOnly
+    # 351 sNames.clonemarkersOnly
+    diff sNames.clonemarkersOnly sNamexRefNotAlias
+    # No difference so all the extra Sanger Names in the xRef 
+    # table are from the clonemarkers file and these have no aliases in 
+    # the markers file so they are not in the alias table so this is all ok.
+  
+# Check that Sanger STS names and primers are associated correctly
+    cd /cluster/data/danRer4/bed/bacEnds/cloneandStsAliases/testTables
+    # get sanger names and primers from markers file
+    awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $4, $5;}' \
+        ../markers.27.10.06.txt > sNameandPrimers
+    # use script to reformat and write with one Sanger name per line
+    chmod +x getSangerandPrimers.pl
+    perl getSangerandPrimers.pl < sNameandPrimers > sNameandPrimers.format
+    # Need to sort and uniq due to multiple occurrences of the same 
+    # Sanger name in some lines of the markers file.
+    sort sNameandPrimers.format | uniq > sNameandPrimers.format.sort
+    wc -l sNameandPrim*
+    # 12407 sNameandPrimers
+    # 32098 sNameandPrimers.format
+    # 15595 sNameandPrimers.format.sort
+
+    # get Sanger names and primers from database
+    hgsql -N -e \
+      'select sangerName, leftPrimer, rightPrimer from bacCloneXRef \
+      where sangerName is not null and leftPrimer is not null and \
+      rightPrimer is not null;' danRer4 | sort | uniq \
+      > sNamesandprimers.fromdb.sort
+    wc -l sNamesandprimers.fromdb.sort
+    # 15595 sNamesandprimers.fromdb.sort
+    diff sNamesandprimers.fromdb.sort sNameandPrimers.format.sort
+    # No difference so ok.
+
+# Check that UniSTS IDs and Sanger STS names are associated correctly
+   # get Sanger names and UniSTS IDs from the database
+   hgsql -N -e 'select sangerName, uniStsId from bacCloneXRef where \
+       uniStsId is not null;' danRer4 | sort | uniq > sNameUniSTS.fromdb.sort
+   wc -l sNameUniSTS.fromdb.sort
+   # 5699 sNameUniSTS.fromdb.sort
+   # Need to reformat the sNameUniSTS.fromdb.sort
+   chmod +x formatUniSts.pl
+   perl formatUniSts.pl < sNameUniSTS.fromdb.sort | sort \
+        > sNameUniSTS.fromdb.format.sort
+   # get Sanger names from data file and see how many UniSTS IDs there are
+   # for each name
+   awk '{print $1}' ../sangerandUniSTSId.txt | sort | uniq -c | sort -nr \
+       > sangerandUniSTSId.count
+   # the most is 160 - this is high due to replicate occurrences of sanger
+   # STS names (sangerName) in the markers file. Replicates are removed
+   # during processing.
+#   160 etID9511.14
+#   132 etID8743.18
+#    124 etID9682.15
+#    124 etID9681.15
+#     96 etID10372.18
+#     84 etID8170.14
+#     76 etID10495.5
+#     66 etID9328.14
+#     56 etID9708.3
+
+   # use uniq'd file used to create database tables.
+   sort ../sangerandUniSTSId.uniq > sangerandUniSTSId.txt.sort
+   diff sangerandUniSTSId.txt.sort sNameUniSTS.fromdb.format.sort 
+   # No difference between data from original file and that in database so ok
+
+# Check that chrom mappings and external BAC clone names are correct
+   # get extNames and chroms they map to from the database
+   hgsql -N -e 'select name, chroms from bacCloneXRef where \
+         chroms is not null;' danRer4 | sort | uniq \
+         > nameandchromsfromdb.sort
+   # reformat nameandchromsfromdb.sort
+   perl formatUniSts.pl < nameandchromsfromdb.sort | sort \
+        > nameandchromsfromdb.format.sort
+   # compare extNames and chroms from db to those in data file
+   cp ../bacClones.namesandchrom .
+   sort -u bacClones.namesandchrom > bacClones.namesandchrom.uniq
+   diff bacClones.namesandchrom.uniq nameandchromsfromdb.format.sort
+   # no difference - all ok
+
+# Check Genbank accessions and internal BAC clone names
+   hgsql -N -e 'select intName,genbank from bacCloneXRef where \
+         genbank is not null;' danRer4 | sort | uniq \
+         > intNamesandAccs.fromdb.sort
+   # this should be a subset of zfish_accsMerged.txt - not all BAC clones
+   # listed here appear in either our BAC ends tracks or the markers files.
+   awk 'BEGIN {OFS="\t"} {print $1,$2}' ../BACClonesIdsandAccs.txt \
+       | sort -u > BACClonesIntandAccs.sort
+   comm -23 intNamesandAccs.fromdb.sort BACClonesIntandAccs.sort
+   # there is nothing in the database that is not in BACClonesIntandAccs.sort
+   comm -13 intNamesandAccs.fromdb.sort BACClonesIntandAccs.sort \
+            > onlyinzfishAccs
+   wc -l onlyinzfishAccs
+   # 86 onlyinzfishAccs
+   hgsql -N -e 'select intName from bacCloneXRef where genbank is null;' \
+         danRer4 | sort | uniq > intNamesNoAcc.fromdb.sort
+   awk '{print $1;}' BACClonesIntandAccs.sort > intNames.withAccs.sort
+   comm -12 intNamesNoAcc.fromdb.sort intNames.withAccs.sort \
+        > indbNoAccsandAccs.out
+   # none of these names are common to both so all accessions from
+   # BACClonesIdsandAccs.txt are in the database for the internal names stored
+   # where there are accessions available.
+
+# Test Sanger STS names, internal names and external names are all correct
+# Test Sanger STS name and internal BAC clone names are associated correctly
+   # get internal names and Sanger names from data file
+   awk 'BEGIN {FS="|"} {OFS="\t"} {print $1,$2}' ../clonemarkers.27.10.06.txt \
+       | sort | uniq > intNameandSanger.sort
+   hgsql -N -e 'select intName, sangerName from bacCloneXRef \
+       where sangerName is not null;' danRer4 \
+       | sort | uniq > intNameandSanger.fromdb.sort
+   diff intNameandSanger.sort intNameandSanger.fromdb.sort
+   # No difference between data from file and that from database so ok
+
+# Check BAC clone internal name and relationship fields
+   # get internal names and relationships from data file
+   awk 'BEGIN {FS="|"} {OFS="\t"} {print $1,$3}' ../clonemarkers.27.10.06.txt \
+       | sort | uniq > intNameandRelation.sort
+   # get internal names and relationships from database, some internal names
+   # may have different relationships associated with each internal name
+   # and Sanger sts name pair
+   hgsql -N -e 'select intName, relationship from bacCloneXRef \
+       where relationship != 0;' danRer4 \
+       | sort | uniq > intNameandrelation.fromdb.sort
+   # differences unique to database file
+   comm -13 intNameandRelation.sort intNameandrelation.fromdb.sort \
+       > intNameRelation.indbonly
+   # differences unique to data file
+   comm -23 intNameandRelation.sort intNameandrelation.fromdb.sort \
+       > intNameRelation.incloneMarkersonly
+   wc -l intNameRelation*
+   # 5051 intNameRelation.incloneMarkersonly
+   # 5051 intNameRelation.indbonly
+  
+   awk '{print $1}' intNameRelation.indbonly > intNameRelation.indbonly.names
+   awk '{print $1}' intNameRelation.incloneMarkersonly \
+       > intNameRelation.incloneMarkersonly.names
+   diff intNameRelation.indbonly.names intNameRelation.incloneMarkersonly.names
+   # there is no difference in the internal names with relationship fields
+   # no difference in names and the only places these should differ is that
+   # the second column should all be 3 in the data from the database only.
+   # this is because all the relationship entries that were blank were
+   # in the clonemarkers file were changed to 3 when entered into the database.
+   awk '{print $2}' intNameRelation.indbonly | sort | uniq
+   # 3 - correct so all ok
+   # all the differences should be that those that are blank in clonemarkers
+   # are 3 in the database.
+   # check that those that have 0 in the database bacCloneXRef relationshipe
+   # field are not in the list from cloneMarkers
+   # select these internal names with 0 relationship from the database
+   hgsql -N -e 'select intName from bacCloneXRef where relationship = 0;' \
+         danRer4 | sort | uniq > intNameNoRelation.fromdb.sort
+   # get all the internal names from the data file
+   awk 'BEGIN {FS="|"} {print $1}' ../clonemarkers.27.10.06.txt \
+       | sort | uniq > intNamefromCloneMarkers.sort
+   comm -12 intNameNoRelation.fromdb.sort intNamefromCloneMarkers.sort
+   # nothing in common between these two files as expected so there are
+   # no internal names in the db with 0 in the relationship field that
+   # appear in the clonemarkers file.
+
+# Check all BAC clone internal names and external names from the
+# ctgnames file are in the database
+   # get intName and extName from ctgnames file
+   awk 'BEGIN {FS="|"} {OFS="\t"} {print $2,$3}' ../ctgnames.27.10.06.txt \
+       | sort | uniq > intNameandextNamefromCtgNames.sort
+   # get intName and extName from database
+   hgsql -N -e 'select intName,name from bacCloneXRef;' danRer4 \
+       | sort | uniq > intNameandextName.fromdb.sort
+   wc -l intNameandextName*
+   # 334890 intNameandextName.fromdb.sort
+   # 168828 intNameandextNamefromCtgNames.sort
+
+   comm -12 intNameandextName.fromdb.sort intNameandextNamefromCtgNames.sort \
+        > intandextindbAndCtgNames
+   wc -l intandextindbAndCtgNames
+   # 168828 intandextindbAndCtgNames
+   # there are 168828 name pairs common between the file and the database
+   # and this is the same number of name pairs as in the data file
+   diff intandextindbAndCtgNames intNameandextNamefromCtgNames.sort
+   # no difference between those name pairs from the data file and those that
+   # are common between the data file and the database so all internal and
+   # external names from ctgNames file are in the database
+   # get the list of extra ones from db
+   comm -23 intNameandextName.fromdb.sort intNameandextNamefromCtgNames.sort \
+        > intandextNamesindbNotinCtgNames
+   wc -l intandextNamesindbNotinCtgNames
+   # 166062 intandextNamesindbNotinCtgNames
+   # get list of internal names from the clonemarkers file
+   awk 'BEGIN {FS="|"} {print $1}' ../clonemarkers.27.10.06.txt | sort | uniq \
+       > clonemarkers.intName.sort
+   wc -l clonemarkers.intName.sort
+   # 14460 clonemarkers.intName.sort
+   # compare these intNames to those from the database not in the ctgnames file
+   comm -12 clonemarkers.intName.sort intandextNamesindbNotinCtgNames
+   # none of these clone markers internal names are in this list so they
+   # must all be in the ctgnames file too. These extra internal names will be
+   # translations of external names found in the list of mappings of BAC clones
+   # to chroms.
+
+# Check that all the BAC clone external names from the list of chromosome
+# mappings and from the ctgnames file are in the database.
+   # get all extNames from baclones.namesandchrom.uniq and from ctgnames
+   awk '{print $1}' ../bacClones.namesandchrom.uniq > \
+       extNames.ctgnamesandbacClones
+   awk 'BEGIN {FS="|"} {print $3;}' ../ctgnames.27.10.06.txt \
+       >> extNames.ctgnamesandbacClones
+   wc -l extNames.ctgnamesandbacClones
+   # 474907 extNames.ctgnamesandbacClones
+   sort extNames.ctgnamesandbacClones | uniq \
+        > extNames.ctgnamesandbacClones.sort
+   wc -l extNames.ctgnamesandbacClones.sort
+   # 334890 extNames.ctgnamesandbacClones.sort
+   # get extNames from the database
+   hgsql -N -e 'select name from bacCloneXRef;' danRer4 | sort | uniq \
+         > extNames.fromdb.sort
+   wc -l extNames.fromdb.sort
+   # 334890 extNames.fromdb.sort
+   comm -12 extNames.fromdb.sort extNames.ctgnamesandbacClones.sort \
+         > extNames.fromdbandfiles
+   wc -l extNames.fromdbandfiles
+   # 334890 extNames.fromdbandfiles
+   # find extNames in common from data files and database
+   diff extNames.fromdb.sort extNames.fromdbandfiles
+   # no difference, all extNames from files are in db
+
+# Check that all BAC clone internal names from the ctgnames and clonemarkers
+# files are in the database
+   # get internal names from ctgnames and clonemarkers files
+   awk 'BEGIN {FS="|"} {print $2;}' ../ctgnames.27.10.06.txt \
+       > intNames.ctgnamesandclonemarkers
+   awk 'BEGIN {FS="|"} {print $1;}' ../clonemarkers.27.10.06.txt \
+       >> intNames.ctgnamesandclonemarkers
+   wc -l intNames.ctgnamesandclonemarkers
+   # 201440 intNames.ctgnamesandclonemarkers
+   sort intNames.ctgnamesandclonemarkers | uniq \
+        > intNames.ctgnamesandclonemarkers.sort
+   wc -l intNames.ctgnamesandclonemarkers.sort
+   # 168828 intNames.ctgnamesandclonemarkers.sort
+   # get internal names from database
+   hgsql -N -e 'select intName from bacCloneXRef;' danRer4 | sort | uniq \
+        > intNames.fromdb.sort
+   wc -l intNames.fromdb.sort
+   # 334890 intNames.fromdb.sort
+   # some of these intNames are derived from the corresponding extNames
+   # all of the intNames from the file should be in the db
+   comm -12 intNames.fromdb.sort intNames.ctgnamesandclonemarkers.sort \
+        > intNames.fromdbandfiles
+   wc -l intNames.fromdbandfiles
+   # 168828 intNames.fromdbandfiles
+   comm -13 intNames.fromdbandfiles intNames.ctgnamesandclonemarkers.sort 
+   comm -23 intNames.fromdbandfiles intNames.ctgnamesandclonemarkers.sort
+   # no difference, all intNames from files are in db
+                                                                                
+# Check that all translations are correct between BAC clone
+# external and internal names.
+   # write script to get the prefixes from internal and external names
+   chmod +x getNamePrefixes.pl
+   hgsql -N -e 'select name, intName from bacCloneXRef;' danRer4 \
+         | sort | uniq > extandintNames.fromdb.sort
+   perl getNamePrefixes.pl < extandintNames.fromdb.sort \
+         > extandintNames.prefixes
+   sort extandintNames.prefixes | uniq > extandintNames.prefixes.uniq
+   # these all look good
+   # BUSM1   dZ
+   # CH211   zC
+   # CH211   zc
+   # CH73    CHORI
+   # CT7     bP
+   # DKEY    zK
+   # DKEY    zk
+   # DKEYP   zKp
+   # RP71    bZ
+   # XX      bY
+   # zk is a internal name prefix for the external name prefix, DKEY-. There
+   # is only one example where this is used (DKEY-81G7) and this in the
+   # ctgnames file and is in the bacCloneXRef table so that is ok.
+   # All data looks good in these tables now.
+
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM OTHER DANRER ASSEMBLIES
 # (DONE, 2006-06-27, hartera)
@@ -7490,8 +7826,29 @@ close INFO;
     ldHgGene -bin -genePredExt danRer4 vegaNew vegaNew.gtf
     # worked ok
     # Added this as a vegaGeneNew subtrack for Vega Genes
-     
+
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega/new
+    # find genes that has same transcript Ids for different OTTER gene_ids
+    awk 'BEGIN {FS="\t"} {print $9}' vega.gtf > vegaAttributes
+    awk 'BEGIN {FS=";"} {print $2, $5}' vegaAttributes \
+        > vegaAttrib.transIdandotterId
+    sort vegaAttrib.transIdandotterId | uniq \
+         > vegaAttrib.transIdandotterId.uniq
+    awk '{print $2}' vegaAttrib.transIdandotterId.uniq | sed -e 's/\s//' \
+        | sort | uniq -c | sort -nr > vegaAttrib.transId.count 
+    # 88 of these transcripts have more than one entry in gtf file. Need
+    # to check if they have different OTTER gene ids in each case.
+    head -88 vegaAttrib.transId.count | awk '{print $2}' > transIds.morethan1
+    grep -w -f transIds.morethan1 vegaAttrib.transIdandotterId.uniq \
+         > transIdswithDiffOtterGeneIds.txt
+    awk '{print $2}' transIdswithDiffOtterGeneIds.txt | sort | uniq \
+        > transIds.diffOtterGeneIds.txt
+    # send transIdswithDiffOtterGeneIds.txt to Kerstin at Sanger. List
+    # of transcript Ids with different instances of OTTER gene ids.
+
     # WAITING NOW FOR VEGA GENE UPDATE (2006-10-19)
+
 ##########################################################################
 # N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
     cd /cluster/data/danRer4/bed/nscan/
@@ -7659,6 +8016,73 @@ line+ /san/sanvol1/scratch/danRer4/affy/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # short alignments are retained. Many of the short alignments may also 
     # have longer alignments to different regions of the genome that are good.
 
+#########################################################################
+# COMPUGEN ZEBRAFISH OLIGOS TRACK (in progress, 2006-10-20, hartera)
+# Align the zebrafish oligos from Compugen used to create the arrays
+# used by GIS to study expression at different developmental stages.
+    ssh hgwdev
+    mkdir -p /projects/compbio/data/microarray/compugen/zebrafish
+    # save Compugen oligos FASTA file here. obtained from 
+    # Sinnakaruppan Mathavan <mathavans@gis.a-star.edu.sg> at the 
+    # Genome Institute of Singapore (GIS).
+    # Permission was obtained from Compugen to display the sequences 
+    # along with a disclaimer. see README.txt
+    cd /projects/compbio/data/microarray/compugen/zebrafish
+    unzip Zebrafish\ Oligos_Compugen_XEBLIB96_pov_070704.zip
+    # this gives an Excel file, XEBLIB96_pov_070704.xls
+    # save as a tab separated text file using Excel: XEBLIB96_pov_070704.txt
+    # Remove quotation marks
+    sed -e 's/"//g' XEBLIB96_pov_070704.txt > GISArray.txt
+    awk 'BEGIN{FS="\t"} {if ($2 !~ /Serial/) print ">"$2"\n"$4}' \
+        GISArray.txt > GISZfishArray.fa
+    grep '>' GISZfishArray.fa | wc -l
+    # 16413
+    # align sequences to the zebrafish genome on pk
+    mkdir -p /san/sanvol1/scratch/compugen
+   cp /projects/compbio/data/microarray/compugen/zebrafish/GISZfishArray.fa \
+       /san/sanvol1/scratch/compugen
+    # Set up cluster job to align Zebrafish consensus sequences to danRer3
+    mkdir -p /cluster/data/danRer4/bed/compugenZebrafish.2006-10-23
+    ln -s /cluster/data/danRer4/bed/compugenZebrafish.2006-10-23 \
+          /cluster/data/danRer4/bed/compugenZebrafish
+    # Align sequences on the pitakluster. Scaffolds were aligned for NA_random
+    # and Un_random and lifted to chrom level afterwards. Chroms 1-25 and M
+    # were aligned as ~5 Mb chunks.
+    ssh pk
+    cd /cluster/data/danRer4/bed/compugenZebrafish
+    ls -1 /san/sanvol1/scratch/compugen/GISZfishArray.fa > oligos.lst
+    ls -1 /san/sanvol1/scratch/danRer4/trfFa/chr[0-9M]*.fa > genome.lst
+    foreach f (/san/sanvol1/scratch/danRer4/scaffoldsSoftMask/*.fa)
+       ls -1 $f >> genome.lst
+    end
+    wc -l genome.lst 
+    # 3237 genome.lst
+    # oligos are 65 bp in length.
+    # for output:
+    mkdir -p /san/sanvol1/scratch/danRer4/compugen/psl
+    # use -repeats option to report matches to repeat bases separately
+    # to other matches in the PSL output.
+    echo '#LOOP\n/cluster/bin/x86_64/blat -fine -repeats=lower -minIdentity=90
+-ooc=/san/sanvol1/scratch/danRer4/danRer4_11.ooc $(path1) $(path2) {check out
+line+ /san/sanvol1/scratch/danRer4/compugen/psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst oligos.lst template.sub para.spec
+    para create para.spec
+    para try, check, push ... etc.
+    para time
+# Completed: 3237 of 3237 jobs
+# CPU time in finished jobs:       1999s      33.32m     0.56h    0.02d  0.000 y
+# IO & Wait Time:                  8346s     139.10m     2.32h    0.10d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             108s       1.80m     0.03h    0.00d
+# Submission to last job:           441s       7.35m     0.12h    0.01d
+ 
+    # need to do pslSort and lift up
+    ssh pk
+    cd /san/sanvol1/scratch/danRer4/compugen
+    # CHECK SEQUENCE NAMES - SOME IN raw.psl HAVE NO NAME
+    
 #########################################################################
 # RADIATION HYBRID (RH) MAP TRACK (in progress, 2006-10-12, hartera)
 # Data from Yi Zhou at Boston Children's Hospital:

@@ -437,7 +437,7 @@ int goodNts(DNA *dna, int size)
 int count = 0;
 while (--size >= 0)
     {
-    if (ntVal[*dna++] >= 0)
+    if (ntVal[(int)(*dna++)] >= 0)
         ++count;
     }
 return count;

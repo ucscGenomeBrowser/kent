@@ -9,22 +9,13 @@
 #
 ################################
 
-# single indent means not changed, but checked.
-# multi-indent means changed
 set tablelist=""
 set db=""
-set mach1="hgwdev"
-set mach2="hgwbeta"
-    set mach3="hgw1"
 set host1=""
-    set host2="-h hgwbeta"
- set rr1="false"
- set rr2="false"
-    set rr3="true"
+set host2="-h hgwbeta"
 set first=""
 set second=""
 set third=""
-    set allThree="all"
 
 if ( $#argv != 2 ) then
   echo
@@ -67,14 +58,14 @@ foreach table (`cat $tablelist`)
   foreach machine (hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc)
     # find out version of mysql running 
     # (v 5 has different signature for TABLE STATUS output)
-    set sqlVersion=`ssh -x qateam@$machine mysql $db -A -N -e '"'SELECT @@version'"' \
-      | awk -F. '{print $1}'`
+    set sqlVersion=`ssh -x qateam@$machine mysql $db -A -N \
+      -e '"'SELECT @@version'"' | awk -F. '{print $1}'`
     if (4 == $sqlVersion) then
-      set third=`ssh -x qateam@$machine mysql $db -A -N -e '"'SHOW TABLE STATUS'"' \
-        | grep -w ^$table | awk '{print $11, $12}'`
+      set third=`ssh -x qateam@$machine mysql $db -A -N \
+        -e '"'SHOW TABLE STATUS'"' | grep -w ^$table | awk '{print $13, $14}'`
     else
-      set third=`ssh -x qateam@$machine mysql $db -A -N -e '"'SHOW TABLE STATUS'"' \
-        | grep -w ^$table | awk '{print $12, $13}'`
+      set third=`ssh -x qateam@$machine mysql $db -A -N \
+        -e '"'SHOW TABLE STATUS'"' | grep -w ^$table | awk '{print $14, $15}'`
     endif
     if ("mgc" == $machine ) then
       echo

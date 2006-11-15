@@ -43,6 +43,8 @@ visibility pack
 color 12,12,120
 type genePred
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track augustusAbinitio
 shortLabel Augustus Ab Initio
@@ -71,6 +73,8 @@ visibility dense
 color 34,139,34
 type genePred nscanPep
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track multiz6waySyn
 shortLabel Conservation 

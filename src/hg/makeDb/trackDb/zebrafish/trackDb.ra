@@ -59,7 +59,7 @@ group regulation
 priority 80
 visibility hide
 type expRatio
-expScale 1.0
+expScale 2.0
 expStep 0.10
 groupings affyZonWildTypeGroups
 
@@ -446,13 +446,79 @@ xrefTable affyToHg16Orthologs
 xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
 searchPriority 20
 
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+                                                                                
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+                                                                                
+searchName bacPairsIntName
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,intName from %s where intName like '%s'
+termRegex (zC|zK|bZ|dZ|bY|zH|bP|CHORI73_)[[:alnum:]]+
+searchPriority 8.5
+                                                                                
+searchName bacSinglesIntName
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,intName from %s where intName like '%s'
+termRegex (zC|zK|bZ|dZ|bY|zH|bP|CHORI73_)[[:alnum:]]+
+searchPriority 8.5
+                                                                                
+searchName bacPairsAliases
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneAlias
+dontCheckXrefQueryFormat .
+xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName
+searchPriority 9
+                                                                                
+searchName bacSinglesAliases
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneAlias
+dontCheckXrefQueryFormat .
+xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName
+searchPriority 9
+                                                                                
+searchName bacPairsSangerSts
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,sangerName from %s where sangerName like '%s'
+termRegex (et|st)ID[0-9\.]+
+searchPriority 10
+                                                                                
+searchName bacSinglesSangerSts
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,sangerName from %s where sangerName like '%s'
+termRegex (et|st)ID[0-9\.]+
+searchPriority 10
+
 searchName vegaGene2
 searchTable vegaGene
 searchMethod exact
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,geneId from %s where geneId like '%s'
-searchPriority 50
+searchPriority 10
 
 searchName vegaPseudoGene2
 searchTable vegaPseudoGene
@@ -460,7 +526,7 @@ searchMethod exact
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,geneId from %s where geneId like '%s'
-searchPriority 50
+searchPriority 10
 
 searchName vegaGeneZfin
 searchTable vegaGene
@@ -468,7 +534,7 @@ searchMethod exact
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,zfinId from %s where zfinId like '%s'
-searchPriority 50
+searchPriority 10
 
 searchName vegaPseudoGeneZfin
 searchTable vegaPseudoGene
@@ -476,7 +542,7 @@ searchMethod exact
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,zfinId from %s where zfinId like '%s'
-searchPriority 50
+searchPriority 10
 
 searchName vegaGeneZfinSymbol
 searchTable vegaGene
@@ -484,7 +550,7 @@ searchMethod exact
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,zfinSymbol from %s where zfinSymbol like '%s'
-searchPriority 50
+searchPriority 10
 
 searchName vegaPseudoGeneZfinSymbol
 searchTable vegaPseudoGene
@@ -492,7 +558,7 @@ searchMethod exact
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,zfinSymbol from %s where zfinSymbol like '%s'
-searchPriority 50
+searchPriority 10
 
 searchName vegaGeneSanger
 searchTable vegaGene
@@ -500,7 +566,7 @@ searchMethod prefix
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,sangerName from %s where sangerName like '%s%%'
-searchPriority 50
+searchPriority 10
 
 searchName vegaPseudoGeneSanger
 searchTable vegaPseudoGene
@@ -508,7 +574,7 @@ searchMethod prefix
 searchType genePred
 xrefTable vegaInfoZfish
 xrefQuery select transcriptId,sangerName from %s where sangerName like '%s%%'
-searchPriority 50
+searchPriority 10
 
 searchName vegaGeneClone
 searchTable vegaGene
@@ -516,7 +582,7 @@ searchMethod prefix
 searchType genePred
 xrefTable vegaToCloneId
 xrefQuery select transcriptId,cloneId from %s where cloneId like '%s%%'
-searchPriority 50
+searchPriority 10
 
 searchName vegaPseudoGeneClone
 searchTable vegaPseudoGene
@@ -524,4 +590,28 @@ searchMethod prefix
 searchType genePred
 xrefTable vegaToCloneId
 xrefQuery select transcriptId,cloneId from %s where cloneId like '%s%%'
-searchPriority 50
+searchPriority 10
+
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+                                                                                
+searchName affyZebrafishAbbrev
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+
+searchName affyZebrafishHg16Ortholog
+searchTable affyZebrafish
+searchMethod prefix
+searchType psl
+xrefTable affyToHg16Orthologs
+xrefQuery select name,geneSymbol from %s where geneSymbol like '%s%%'
+searchPriority 20

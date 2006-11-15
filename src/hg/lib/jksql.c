@@ -14,13 +14,14 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.93 2006/10/04 18:58:33 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.94 2006/11/06 23:51:08 galt Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
 static unsigned monitorFlags = 0;           /* flags indicating what is traced */
 static long monitorEnterTime = 0;           /* time current tasked started */
 static long long sqlTotalTime = 0;          /* total real milliseconds */
+static long sqlTotalQueries = 0;            /* total number of queries */
 static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
 static unsigned traceIndent = 0;            /* how much to indent */
 static char * indentStr = "                                                       ";
@@ -61,13 +62,14 @@ static void monitorInit()
 unsigned flags = 0;
 char *val;
 
+/* there is special code in cheap.cgi to pass these from cgiOption to env */
+
 val = getenv("JKSQL_TRACE");
 if ((val != NULL) && sameString(val, "on"))
     flags |= JKSQL_TRACE;
 val = getenv("JKSQL_PROF");
 if ((val != NULL) && sameString(val, "on"))
     flags |= JKSQL_PROF;
-
 if (flags != 0)
     sqlMonitorEnable(flags);
 
@@ -132,6 +134,8 @@ if (monitorFlags & JKSQL_PROF)
     {
     fprintf(stderr, "%.*sSQL_TOTAL_TIME %0.3fs\n", traceIndent, indentStr,
             ((double)sqlTotalTime)/1000.0);
+    fprintf(stderr, "%.*sSQL_TOTAL_QUERIES %ld\n", traceIndent, indentStr,
+            sqlTotalQueries);
     }
 }
 
@@ -186,6 +190,7 @@ if (monitorFlags & JKSQL_PROF)
 
 monitorFlags = 0;
 sqlTotalTime = 0;  /* allow reenabling */
+sqlTotalQueries = 0; 
 }
 
 void sqlFreeResult(struct sqlResult **pRes)
@@ -213,6 +218,7 @@ void sqlDisconnect(struct sqlConnection **pSc)
 /* Close down connection. */
 {
 struct sqlConnection *sc = *pSc;
+long deltaTime;
 if (sc != NULL)
     {
     MYSQL *conn = sc->conn;
@@ -237,7 +243,10 @@ if (sc != NULL)
             monitorPrintInfo(sc, "SQL_DISCONNECT");
         monitorEnter();
 	mysql_close(conn);
-        monitorLeave();
+
+	deltaTime = monitorLeave();
+	if (monitorFlags & JKSQL_TRACE)
+	    monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
 	}
     if (node != NULL)
 	{
@@ -377,6 +386,7 @@ struct sqlConnection *sqlConnRemote(char *host,
 {
 struct sqlConnection *sc;
 MYSQL *conn;
+long deltaTime;
 
 sqlInitTracking();
 
@@ -409,7 +419,9 @@ if (mysql_real_connect(
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
 
-monitorLeave();
+deltaTime = monitorLeave();
+if (monitorFlags & JKSQL_TRACE)
+    monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
 return sc;
 }
 
@@ -520,6 +532,8 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
 MYSQL *conn = sc->conn;
 struct sqlResult *res = NULL;
 long deltaTime;
+
+++sqlTotalQueries; 
 
 if (monitorFlags & JKSQL_TRACE)
     monitorPrintQuery(sc, query);

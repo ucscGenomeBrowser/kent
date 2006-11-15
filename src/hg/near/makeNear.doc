@@ -555,7 +555,7 @@ cat nature04209-s17.xls | gawk '{print $1 "\t" $3 "\t" "1.0"}' > humanVidal.p2p
 
 hgNetDist humanVidal.p2p hg18 humanVidalP2P -threshold=2 -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
 
-#Added to hgNearData/Human/hg18/columbDb.ra
+#Added to hgNearData/Human/hg18/columnDb.ra
 #-------------
 name vidalP2p
 type distance humanVidalP2P query target distance
@@ -600,3 +600,119 @@ select count(*) from humanVidalP2P v, humanWankerP2P w where v.query=w.query and
 #+----------+
 
 
+#----------------------------------------------------------
+
+## (galt 2006-09-15 thru 2006-11-06) 
+# HPRD p2p
+# Human p2p Protein-to-protein network - P2P column and sort order
+# I used the hgNetDist program to calculate network-distances for all gene pairs from 
+# gene-to-gene edges in input data.
+# I extended hgNetDist to handle two situations better:
+#  One is duplicate pairs.  I have now made it sort the input by distance
+#  so that priority is given to the record for the pair with the shortest distance.
+#  When further records for the same pair occur, they are ignored.
+#  Two is supporting explicit values for self.  Until now, these did
+#  not occur in the data, and an automatic self distance of 0 was put out
+#  simply to make GS slightly easier to use.  Now I can preserve the distance
+#  if any given in the input for self-self interactions.
+# Fan Hsu first downloaded the "single" xml to /cluster/store12/hprd/060906/
+!! TODO !!
+# I have also deposited copies of the .tab files used in /cluster/data/$db/p2p/hprd,
+# and I also put the source code for hprdRun there.
+# added entries to hgNearData/Human/{orderDb,columbDb}.ra
+# added hgNearData/Human/hprdP2p.html
+#  
+#hprd
+
+
+#Manually repaired the single.xml file as approved by HPRD
+#to remove one unneeded tag and one invalid interaction.
+#Also had to remove the colon in the names like xmlns:xsi 
+#in the second line
+mv HPRD_SINGLE_PSIMI_060106.xml single-fixed.xml
+
+#autoDtd had a bug in that it thinks "02995" is an integer
+# when it is clearly better handled as an id.  
+# this causes it to truncate leading zeros (atoi)
+# which are lost.  But since knownToHprd has leading zeros,
+# this causes failure of some records. 
+# To compensate, pad leading zeros in p2p ids.
+# Jim said I could fix it so I did and checked it in.
+
+autoDtd single-fixed.xml out.dtd out.stats -tree=out.tree -atree=out.atree
+
+#Counts from stats: interaction 34109
+
+# create parser with autoXml code generator
+autoXml out.dtd hprd
+
+#I wrote hprdRun.c using hprd.c,h
+#and I ran it to create p2p file (distance 1.5 for complex) and a separate complex table
+#as jim requested for later use.
+
+hprdRun single-fixed.xml hprd.p2p hprdComplex.tab
+# participant count=1 which is < 2 for participant id = 66942
+# this is a known problem with their .xml confirmed by HPRD, ignore it.
+
+hgNetDist hprd.p2p hg18 humanHprdP2P -weighted -threshold=2 -sqlRemap="select distinct value, name from knownToHprd"
+
+#inTab=hprd.p2p db=hg18 table=humanHprdP2P
+#reading edges hprd.p2p
+#slCount(edges)=43567 for hprd.p2p
+#beginning processing sqlRemap query [select distinct value, name from knownToHprd]
+#beginning processing data hprd.p2p ...
+#number of nodes=8898
+
+#412 sqlRemap misses!  see missing.tab
+
+#e.g. id 6257 not found in aliasHash!
+# other testing shows that 8486 out of 8898 hprid's match hit in knownToHprd
+#  so that is sufficient coverage. 
+
+#hgsql hg18 -e 'drop table if exists humanHprdP2P; create table humanHprdP2P (query varchar(255), target varchar(255), distance float);'
+#hgsql hg18 -e 'load data local infile "hgNetDist.tmp.tab" into table humanHprdP2P ignore 1 lines;'
+#hgsql hg18 -e 'create index query on humanHprdP2P (query(8));'
+
+
+
+
+#Added to hgNearData/Human/hg18/columnDb.ra
+#-------------
+name hprdP2p
+type distance humanHprdP2P query target distance
+visibility off
+shortLabel HPRD P2P
+longLabel Human Protein-Protein Interaction Network from the Human Reference Protein Database
+priority 12.2
+itemUrl http://www.hprd.org/protein/%s
+itemUrlQuery select value from knownToHprd where name='%s'
+
+#Added to hgNearData/Human/hg18/orderDb.ra
+#-----------
+name hprdP2p
+shortLabel HRPD Protein-to-Protein
+longLabel P2P Network Distance to Selected Gene from the Human Reference Protein Database
+type pair humanHprdP2P query target distance 1
+priority 9.2
+
+#Did exactly the same for hg17 also.
+
+# made hgNear/hgNearData/Human/hprdP2p.html description page
+# added to cvs
+
+#cvs committed hgNear changes requested by HPRD
+# to support linking from the Interaction pair to protein
+# page on their site.  see itemUrlQuery in GS.
+
+# HPRD requested an illustration describing the network distances.
+#  Mike Long helped me do the artwork with illustrator and other
+#  software.  The final .png is checked into browser/images/,
+#  and copied to hgwdev:/usr/local/apache/images/
+#  The image is referred to by hprdP2p.html mentioned above.
+
+# checked in changes to .ra config files
+
+# committed changes
+# added pushQ entry
+
+---

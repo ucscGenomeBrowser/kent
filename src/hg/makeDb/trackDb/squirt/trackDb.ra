@@ -16,6 +16,8 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 showDiffBasesAllScales .
 
 track est
@@ -28,6 +30,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 
 track intronEst
 shortLabel Spliced ESTs
@@ -39,6 +42,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 
 track xenoMrna
 shortLabel Other mRNAs
@@ -49,6 +53,8 @@ visibility dense
 spectrum on
 type psl xeno
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track rmsk
 shortLabel RepeatMasker

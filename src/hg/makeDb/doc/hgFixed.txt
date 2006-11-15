@@ -950,3 +950,14 @@ hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
 # sanity checks on all the data causing some mismapped variants to be
 # discarded.
 
+##########################################################################
+# mgcMBLabValid - Load of Genbank accession that are in the Brent lab clone
+# validation database.  This contains both human and mouse clones.  Since
+# the Brent lab is no longer doing MGC validations, this set is fixed
+# and shared by all mouse and human assemblies. (2006-10-26 markd)
+    mkdir -p /cluster/data/genbank/data/download/mgcMBLab
+    cd /cluster/data/genbank/data/download/mgcMBLab
+    # save list of 41805 accessions received from brent lab as
+    # mgcMBLabValid.2006-10-25.acc
+    hgLoadSqlTab hgFixed mgcMBLabValid ~/compbio/genbank/kent/src/hg/lib/mgcMBLabValid.sql mgcMBLabValid.2006-10-25.acc
+    gzip mgcMBLabValid.2006-10-25.acc

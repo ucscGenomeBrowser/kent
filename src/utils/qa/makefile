@@ -35,6 +35,7 @@ install:
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
+	cp -p --remove-destination getConservation.csh     ${SCRIPTS}
 	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
@@ -43,6 +44,8 @@ install:
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
+	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
+	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}

@@ -25,6 +25,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+baseColorUseSequence genbank
 
 track all_mrna
 shortLabel $Organism mRNAs
@@ -35,6 +36,8 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track intronEst
 shortLabel Spliced ESTs
@@ -45,6 +48,7 @@ visibility dense
 spectrum on
 intronGap 30
 pslSequenceBases no
+baseColorUseSequence genbank
 type psl est
 
 track snapGene

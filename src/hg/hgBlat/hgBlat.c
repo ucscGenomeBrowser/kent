@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.104 2006/10/20 05:01:14 kate Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.106 2006/11/08 21:48:24 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -606,9 +606,7 @@ void askForSeq(char *organism, char *db)
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-//char *db = NULL; 
-struct serverTable *serve = NULL; //findServer(db, FALSE);
-//char *organism = NULL; 
+struct serverTable *serve = NULL;
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
@@ -618,7 +616,6 @@ char *onChangeText = "onchange=\""
 
 char *userSeq = NULL;
 
-//getDbAndGenome(cart, &db, &organism);
 serve = findServer(db, FALSE);
 
 printf( 
@@ -635,7 +632,7 @@ printf("<TD ALIGN=CENTER>Output type:</TD>");
 printf("<TD ALIGN=CENTER>&nbsp</TD>");
 printf("</TR>\n<TR>\n");
 printf("<TD ALIGN=CENTER>\n");
-printGenomeListHtml(db, onChangeText);
+printBlatGenomeListHtml(db, onChangeText);
 printf("</TD>\n");
 printf("<TD ALIGN=CENTER>\n");
 printBlatAssemblyListHtml(db);

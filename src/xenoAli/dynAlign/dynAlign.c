@@ -228,7 +228,6 @@ FILE *in = mustOpen(inName, "r");
 char line[512];
 char *words[64];
 int lineCount = 0, wordCount;
-struct dnaSeq *probe = NULL;
 char *probeFileName = "";
 int aliCount = 0;
 int totalAliCount;

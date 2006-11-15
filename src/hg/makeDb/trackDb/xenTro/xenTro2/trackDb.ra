@@ -15,6 +15,7 @@ visibility hide
 spectrum on
 intronGap 30
 type psl est
+baseColorUseSequence genbank
 
 track all_mrna
 shortLabel $Organism mRNAs
@@ -25,6 +26,9 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
+showDiffBasesAllScales .
 
 track multiz7way
 shortLabel Conservation 

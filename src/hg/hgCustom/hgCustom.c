@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.89 2006/10/25 21:37:25 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.93 2006/11/07 18:55:47 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,7 +51,6 @@ errAbort(
 /* commands */
 #define hgCtDo		  hgCt   "do_"	  /* prefix for all commands */
 #define hgCtDoAdd	  hgCtDo "add"
-#define hgCtDoCancel	  hgCtDo "cancel"
 #define hgCtDoDelete	  hgCtDo "delete"
 #define hgCtDoDeleteSet	  hgCtDo "delete_set"
 #define hgCtDoDeleteClr	  hgCtDo "delete_clr"
@@ -175,11 +174,8 @@ puts("<TD ALIGN='RIGHT'>");
 puts("Or upload: ");
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
-puts("<TD ALIGN='RIGHT'>");
+cgiSimpleTableFieldStart();
 cgiMakeSubmitButton();
-puts("&nbsp;");
-
-cgiMakeButton(hgCtDoCancel, "Cancel");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -247,15 +243,10 @@ cgiTableRowEnd();
 cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
-
-/* fifth row - link for HTML description template */
-cgiSimpleTableRowStart();
-puts("<TD COLSPAN=3>");
-puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.");
-puts("</TD>");
-cgiTableRowEnd();
 cgiTableEnd();
 
+/* help text at bottom of screen - link for HTML description template */
+puts("Click <A HREF=\"../goldenPath/help/ct_description.txt\" TARGET=_blank>here</A> for an HTML document template that may be used for Genome Browser track descriptions.");
 
 if (isUpdateForm)
     {
@@ -588,16 +579,6 @@ cgiTableEnd();
 cartSetString(cart, "hgta_group", "user");
 }
 
-void doGenomeBrowser()
-{
-/* Redirect to table browser */
-char url[256];
-safef(url, sizeof url, "%s", hgTracksName());
-puts("<HTML>");
-printf("<BODY onload=\"try {self.location.href='%s' } catch(e) {}\"><a href=\"%s\">Redirect </a></BODY>", url, url);
-puts("</HTML>");
-}
-
 void helpCustom()
 /* display documentation */
 {
@@ -696,7 +677,7 @@ void doManageCustom(char *warn)
 {
 cartWebStart(cart, "Manage Custom Tracks");
 manageCustomForm(warn);
-webNewSection("Help for Managing Custom Tracks");
+webNewSection("Managing Custom Tracks");
 webIncludeFile("goldenPath/help/customTrackManage.html");
 webEndSection();
 cartWebEnd(cart);
@@ -847,18 +828,6 @@ if (cartVarExists(cart, hgCtDoAdd))
     {
     doAddCustom(NULL);
     }
-else if (cartVarExists(cart, hgCtDoCancel))
-    {
-    /* remove cart variables now so text in input
-     * boxes isn't parsed */
-    cartRemovePrefix(cart, hgCt);
-    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
-    ctList = customTracksParseCart(cart, NULL, NULL);
-    if (ctList)
-        doManageCustom(NULL);
-    else
-        doGenomeBrowser();
-    }
 else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */
@@ -919,20 +888,10 @@ else
 	}
     customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
-    if (ctList || 
-        /* show manage screen if we've just deleted all custom tracks, so
-         * they can pick another assembly having custom tracks */
-        (cartVarExists(cart, hgCtDoDelete) && getCustomTrackDatabases()))
-	{
+    if (ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
-	}
     else
-	{
-        if (cartVarExists(cart, hgCtDoDelete))
-                doGenomeBrowser();
-        else
-            doAddCustom(NULL);
-	}
+        doAddCustom(NULL);
     }
 cartRemovePrefix(cart, hgCt);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);

@@ -92,4 +92,13 @@ void drawCdsDiffCodonsOnly(struct track *tg,  struct linkedFeatures *lf,
  * that lf has been drawn already, we're zoomed out past zoomedToCdsColorLevel,
  * we're not in dense mode etc. */
 
+void drawCdsDiffBaseTickmarksOnly(struct track *tg,  struct linkedFeatures *lf,
+				  Color *cdsColor, struct vGfx *vg, int xOff,
+				  int y, double scale, int heightPer,
+				  struct dnaSeq *mrnaSeq, struct psl *psl,
+				  int winStart);
+/* Draw 1-pixel wide red lines only where mRNA bases differ from genomic.  
+ * This assumes that lf has been drawn already, we're zoomed out past 
+ * zoomedToBaseLevel, we're not in dense mode etc. */
+
 #endif /* CDS_H */

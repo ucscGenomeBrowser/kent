@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1149 2006/10/23 22:48:45 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1156 2006/11/06 17:53:22 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2067,7 +2067,7 @@ char *tableName;
 /* XXX TODO: This data update time could be obtained for custom tracks
  * that are in the customTrash database.
  */
-if (!isCustomTrack(tdb->tableName))
+if (! isCustomTrack(tdb->tableName))
     {
     printTBSchemaLink(tdb);
     printDataVersion(tdb);
@@ -4213,6 +4213,8 @@ char *version = NULL;
 struct trackDb *tdbRgdEst;
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char srcGeneUrl[1024];
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4365,6 +4367,11 @@ else
     {
     warn("Couldn't find %s in gbCdnaInfo table", acc);
     }
+safef(srcGeneUrl, sizeof(srcGeneUrl),
+  "../cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
+   hGetDb(), chrom,  start, end);
+printf("<B>Location:</b> <A HREF=\"%s\" target=_blank>%s:%d-%d</A><BR>", 
+        srcGeneUrl, chrom, start, end);
 
 sqlFreeResult(&sr);
 freeDyString(&dy);
@@ -6855,6 +6862,99 @@ if (url != NULL && url[0] != 0)
     }
 }
 
+void doOmimAv(struct trackDb *tdb, char *avName)
+/* Process click on an OMIM AV. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *chrom, *chromStart, *chromEnd;
+char *chp;
+char *omimId, *avSubFdId;
+char *avDescStartPos, *avDescLen;
+char *omimTitle = cloneString("");
+char *geneSymbol = NULL;
+int iAvDescStartPos = 0;
+int iAvDescLen = 0;
+
+struct lineFile *lf;
+char *line;
+int lineSize;
+
+safef(query, sizeof(query), "%s (%s)", tdb->longLabel, avName);
+cartWebStart(cart, query);
+
+safef(query, sizeof(query), "select * from omimAv where name = '%s'", avName);
+sr = sqlGetResult(conn, query);
+
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in omimAv table - database inconsistency.", avName);
+else
+    {
+    chrom 	= cloneString(row[1]);
+    chromStart	= cloneString(row[2]);
+    chromEnd    = cloneString(row[3]);
+    }
+sqlFreeResult(&sr);
+
+omimId = strdup(avName);
+chp = strstr(omimId, ".");
+*chp = '\0';
+
+chp++;
+avSubFdId = chp;
+
+safef(query, sizeof(query), "select title, geneSymbol from hgFixed.omimTitle where omimId = %s", omimId);
+sr = sqlGetResult(conn, query);
+
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    omimTitle  = cloneString(row[0]);
+    geneSymbol = cloneString(row[1]);
+    }
+sqlFreeResult(&sr);
+
+printf("<H4>OMIM <A HREF=\"");
+printEntrezOMIMUrl(stdout, atoi(omimId));
+printf("\" TARGET=_blank>%s</A>: %s; %s</H4>\n", omimId, omimTitle, geneSymbol);
+
+safef(query, sizeof(query), 
+"select startPos, length from omimSubField where omimId='%s' and subFieldId='%s' and fieldType='AV'",
+      omimId, avSubFdId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in omimSubField table - database inconsistency.", avName);
+else
+    {
+    avDescStartPos = cloneString(row[0]);
+    avDescLen	   = cloneString(row[1]);
+    iAvDescStartPos = atoi(avDescStartPos);
+    iAvDescLen      = atoi(avDescLen);
+    }
+sqlFreeResult(&sr);
+
+lf = lineFileOpen("/gbdb/hg17/omim/omim.txt", TRUE);
+lineFileSeek(lf,(size_t)(iAvDescStartPos), 0);
+lineFileNext(lf, &line, &lineSize);
+printf("<h4>");
+printf(".%s %s ", avSubFdId, line);fflush(stdout);
+lineFileNext(lf, &line, &lineSize);
+printf("[%s]\n", line);fflush(stdout);
+printf("</h4>");
+
+while ((lf->lineStart + lf->bufOffsetInFile) < (iAvDescStartPos + iAvDescLen))
+    {
+    lineFileNext(lf, &line, &lineSize);
+    printf("%s\n", line);fflush(stdout);
+    }
+
+htmlHorizontalLine();
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doRgdQtl(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Superfamily track info. */
 {
@@ -6914,7 +7014,8 @@ if (url != NULL && url[0] != 0)
     printf("%s</B></A>\n", itemName);
 
     safef(query, sizeof(query), 
-    	  "select distinct omimId from gadAll where geneSymbol='%s';", itemName);
+    	  "select distinct g.omimId, o.title from gadAll g, hgFixed.omimTitle o where g.geneSymbol='%s' and g.omimId <>'.' and g.omimId=o.omimId", 
+	  itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL) printf("<BR><B>OMIM: </B>");
@@ -6922,7 +7023,7 @@ if (url != NULL && url[0] != 0)
     	{
 	printf("<A HREF=\"%s%s\" target=_blank>",
 		"http://www.ncbi.nih.gov/entrez/dispomim.cgi?id=", row[0]);
-	printf("%s</B></A>\n", row[0]);
+	printf("%s</B></A> %s\n", row[0], row[1]);
 	row = sqlNextRow(sr);
         }
     sqlFreeResult(&sr);
@@ -11453,6 +11554,7 @@ return fileName;
 
 
 void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2)
+/* seq1 is target (usually a chromosome), seq2 is query */
 {
 int matchScore = 100;
 int misMatchScore = 100;
@@ -16323,8 +16425,6 @@ printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
 showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", psl->qStart, psl->qEnd);
 }
 
-
-
 void doPutaFrag(struct trackDb *tdb, char *item)
 /* display the potential pseudo and coding track */
 {
@@ -16334,28 +16434,15 @@ char **row, table[256], query[256], *parts[6];
 struct putaInfo *info = NULL;
 struct psl *psl = NULL;
 int start = cartInt(cart, "o"),  end = cartInt(cart, "t");
+char *db = cgiString("db");
 char *name = cartString(cart, "i"),  *chr = cartString(cart, "c");
 char pslTable[256];
 char otherString[256], *tempName = NULL;
 int partCount;
-boolean isRcnt = FALSE;
 
-/* check which track to display and set parameters */
-if(sameWord(tdb->tableName, "rcntDupGenes"))
-    {
-    isRcnt = TRUE;
-    sprintf(table,"rcntDupGeneInfo");
-    sprintf(pslTable,"rcntPsl");
-    cartWebStart(cart, "Recent Duplicating Gene");
-    }
-else
-    {
-    sprintf(table, "putaInfo");
-    sprintf(pslTable,"potentPsl");
-    cartWebStart(cart, "Putative Coding or Pseudo Fragments");
-    }
-
-
+sprintf(table, "putaInfo");
+sprintf(pslTable,"potentPsl");
+cartWebStart(cart, "Putative Coding or Pseudo Fragments");
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
         "AND chrom = '%s' AND chromStart = %d "
         "AND chromEnd = %d",
@@ -16377,11 +16464,7 @@ sqlFreeResult(&sr);
 tempName = cloneString(name);
 partCount = chopByChar(tempName, '|',parts, 4);
 
-/* print the first line for recent dup or putative element */
-if(isRcnt)
-    printf("<B>%s</B> may be a duplicate of the known gene: <A HREF=\"", name);
-else
-    printf("<B>%s</B> is homologous to the known gene: <A HREF=\"", name);
+printf("<B>%s</B> is homologous to the known gene: <A HREF=\"", name);
 printEntrezNucleotideUrl(stdout, parts[0]);
 printf("\" TARGET=_blank>%s</A><BR>\n", parts[0]);
 printf("<B>%s </B>is aligned here with score : %d<BR><BR>\n", parts[0], info->score);
@@ -16389,17 +16472,16 @@ printf("<B>%s </B>is aligned here with score : %d<BR><BR>\n", parts[0], info->sc
 /* print the info about the stamper gene */
 printf("<B> %s</B><BR>\n", parts[0]);
 printf("<B>Genomic location of the mapped part of %s</B>: <A HREF=\""
-	   "http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:"
-	   "%d-%d&knownGene=full&refGene=full&mgcGenes=full&vegaGene=full\" TARGET=_blank>%s(%s):%d-%d </A> <BR>\n",
-       parts[0], info->oChrom, info->oChromStart, info->oChromEnd, info->oChrom, parts[2],info->oChromStart+1, info->oChromEnd); 
+       "%s?db=%s&position=%s:%d-%d\" TARGET=_blank>%s(%s):%d-%d </A> <BR>\n",
+       parts[0], hgTracksName(), db, info->oChrom, info->oChromStart, info->oChromEnd, info->oChrom, parts[2],info->oChromStart+1, info->oChromEnd); 
 printf("<B>Mapped %s Exons</B>: %d of %d. <BR> <B>Mapped %s CDS exons</B>: %d of %d <BR>\n", parts[0], info->qExons[0], info->qExons[1], parts[0], info->qExons[2], info->qExons[3]);
 
 printf("<b>Aligned %s bases</B>:%d of %d with %f identity. <BR> <B>Aligned %s CDS bases</B>:  %d of %d with %f identity.<BR><BR>\n", parts[0],info->qBases[0], info->qBases[1], info->id[0], parts[0], info->qBases[2], info->qBases[3], info->id[1]);
 
 /* print info about the stamp putative element */
 printf("<B>%s </B><BR> <B>Genomic location: </B>"
-       " <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
-       name,info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
+       " <A HREF=\"%s?db=%s&position=%s:%d-%d\" >%s(%s): %d - %d</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
+       name, hgTracksName(), db, info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
 if(info->repeats[0] > 0)
     {
     printf("Repeats elements inserted into %s <BR>\n", name);
@@ -16419,25 +16501,6 @@ if(info->stop >0)
 	    }
 	}
     printf("<BR>\n");
-    }
-
-
-/* for recent dup provide other locations of the same stamper gene */
-if(isRcnt)
-    {  /* for Rcnt, list all other dups */
-    printf("<BR><BR>Other locations %s might be duplicated to:<BR>\n", parts[0]);
-    sprintf(query, "SELECT * FROM %s WHERE name like '%s%%' ", table, parts[0]);
-    sr = sqlMustGetResult(conn, query);
-    while((row = sqlNextRow(sr)) != NULL)
-	{
-	struct putaInfo *info1 = NULL;
-	info1 = putaInfoLoad(row);
-	printf(" <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR>\n",
-	       info1->chrom, info1->chromStart, info1->chromEnd, info1->chrom, info1->strand, info1->chromStart, info1->chromEnd);
-	putaInfoFree(&info1);
-	}
-    printf("<BR><BR>\n");
-    sqlFreeResult(&sr);
     }
 
 
@@ -16982,7 +17045,7 @@ safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, escName);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     mut = gvPosLoad(row);
     bedPrintPos((struct bed *)mut, 3);
@@ -17486,6 +17549,10 @@ else if (sameWord(track, "simpleRepeat"))
 else if (startsWith("cpgIsland", track))
     {
     doCpgIsland(tdb, item);
+    }
+else if (sameWord(track, "omimAv"))
+    {
+    doOmimAv(tdb, item);
     }
 else if (sameWord(track, "rgdGene"))
     {

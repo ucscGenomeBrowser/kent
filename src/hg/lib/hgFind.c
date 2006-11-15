@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.190 2006/08/04 06:00:19 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.192 2006/10/27 15:04:40 giardine Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -3046,4 +3046,3 @@ else
 	printf("\n<!-- Couldn't get contents of %s -->\n", htmlPath);
    } 
 }
-

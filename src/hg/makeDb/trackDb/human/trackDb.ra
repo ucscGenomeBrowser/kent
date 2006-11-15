@@ -1639,6 +1639,13 @@ termRegex (SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 17
 padding 250
 
+searchName yaleBertoneTars
+searchTable yaleBertoneTars
+searchMethod exact
+searchType psl
+termRegex (TAR[0-9]+)
+searchPriority 18
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix

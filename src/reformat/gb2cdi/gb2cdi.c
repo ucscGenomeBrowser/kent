@@ -305,7 +305,7 @@ while (lineFileNext(lf, &line, &lineSize))
             if (baseCount <= 0)
                 {
                 errAbort("Expecting positive number of base pairs, got %s line %d of %s",
-                    lf->lineIx, inName, words[2]);
+                    words[2], lf->lineIx, inName);
                 }
             if (sameString(words[4], "mRNA"))
                 AllocVar(cdi);

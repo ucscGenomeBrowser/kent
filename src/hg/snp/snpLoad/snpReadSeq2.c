@@ -3,7 +3,7 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.3 2006/10/23 22:04:18 heather Exp $";
+static char const rcsid[] = "$Id: snpReadSeq2.c,v 1.4 2006/10/24 23:55:28 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -11,19 +11,21 @@ void usage()
 errAbort(
   "snpReadSeq2 - Read dbSNP fasta file and log rsId offset.\n"
   "usage:\n"
-  "  snpReadSeq2 inputfile outputfile\n");
+  "  snpReadSeq2 directory chrom outputfile\n");
 }
 
 
-void getOffset(char *inputFileName, char *outputFileName)
+void getOffset(char *directoryName, char *chromName, char *outputFileName)
 {
 FILE *outputFileHandle = mustOpen(outputFileName, "w");
-struct lineFile *lf = lineFileOpen(inputFileName, TRUE);
+struct lineFile *lf = NULL;
 char *line;
-int lineSize;
 off_t offset;
 char *row[9], *rsId[2];
+char inputFileName[64];
 
+safef(inputFileName, sizeof(inputFileName), "%s/%s.fa", directoryName, chromName);
+lf = lineFileOpen(inputFileName, TRUE);
 while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
@@ -31,7 +33,7 @@ while (lineFileNext(lf, &line, NULL))
 	chopString(line, "|", row, ArraySize(row));
         chopString(row[2], " ", rsId, ArraySize(rsId));
 	offset = lineFileTell(lf);
-	fprintf(outputFileHandle, "%s\t%ld\n", rsId[0], offset);
+	fprintf(outputFileHandle, "%s\t%s\t%ld\n", rsId[0], chromName, offset);
 	}
     }
 
@@ -41,15 +43,17 @@ lineFileClose(&lf);
 
 int main(int argc, char *argv[])
 {
-char *inputFileName = NULL;
+char *directoryName = NULL;
+char *chromName = NULL;
 char *outputFileName = NULL;
 
-if (argc != 3)
+if (argc != 4)
     usage();
 
-inputFileName = argv[1];
-outputFileName = argv[2];
-getOffset(inputFileName, outputFileName);
+directoryName = argv[1];
+chromName = argv[2];
+outputFileName = argv[3];
+getOffset(directoryName, chromName, outputFileName);
 
 return 0;
 }

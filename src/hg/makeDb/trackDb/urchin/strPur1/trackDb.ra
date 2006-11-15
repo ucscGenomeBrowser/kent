@@ -15,6 +15,9 @@ visibility pack
 spectrum on
 type psl .
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
+showDiffBasesAllScales .
 
 track blastHg17KG
 shortLabel Hg17  Proteins

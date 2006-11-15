@@ -1018,3 +1018,35 @@ Warning: NR_001874: malformed RefSeq CDS:
    - Invitrogen CR mRNAs
    - JK: The ORESTES libraries (which I think, like the RAGE are
      just ESTs) should be taken with a large grain of salt.
+
+
+- MGC details page like to CCDS shouldn't have error if ccdsMgcMap
+  not built (or maybe a more informative message, nice to have link).
+    - if one goes from CCDS details to mgc, there is no link back to    
+      ccds.
+
+- Include TPA data
+
+- from Kim on RefSeq suppressed:
+    Also, glad you mentioned the suppressed/replaced tracking --we are
+    reporting suppressed and secondary accessions in two locations:
+
+    1. reported per refseq release cycle in refseq/release/release-catalog/
+    release19.removed-records.gz
+
+    2. reported for a smaller subset of taxids (those in my pipeline) on a
+    weekly basis in the refseq/special_requests/ directory. I think this is
+    pretty close to a comprehensive report (for NMs) for these taxids.
+
+    a) taxid2speciesname --the taxids in scope for this weekly reporting
+    b) secondary_public --secondary accessions; secondary to primary
+    accession correspondence (secondary data listed first)
+    c) secondary_suppressed_final --secondary to primary correspondence,
+    where the primary accession has been permanently suppressed and is not
+    likely to become public again
+    d) secondary_suppressed_temporary --secondary to primary correspondence,
+    where the primary record has been temporarily suppressed and may be
+    reinstated at a future date
+    e) suppressed_final  --permanently suppressed
+    f) suppressed_temporary --temporarily suppressed, may become public
+    again

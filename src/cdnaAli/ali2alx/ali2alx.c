@@ -65,7 +65,6 @@ struct cdaInfo *readInfo(char *fileName)
 FILE *f = mustOpen(fileName, "rb");
 bits32 sig;
 struct cdaInfo *list = NULL, *el;
-int i = 0;
 
 mustReadOne(f, sig);
 if (sig != aliSig)

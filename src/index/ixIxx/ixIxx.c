@@ -6,7 +6,7 @@
 #include "options.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: ixIxx.c,v 1.3 2006/01/25 22:02:45 kent Exp $";
+static char const rcsid[] = "$Id: ixIxx.c,v 1.4 2006/10/30 17:15:59 angie Exp $";
 
 /* Variables that can be set from command line. */
 int prefixSize = trixPrefixSize;
@@ -73,7 +73,7 @@ while ((c = *s) != 0)
         break;
     s += 1;
     }
-while (s > start && !wordBeginChars[s[-1]])
+while (s > start && !wordBeginChars[(int)(s[-1])])
     s -= 1;
 return s;
 }
@@ -165,7 +165,7 @@ char *line;
 initCharTables();
 while (lineFileNextReal(lf, &line))
      {
-     char *track, *source, *id, *text;
+     char *id, *text;
      id = nextWord(&line);
      text = skipLeadingSpaces(line);
      indexWords(wordHash, id, text, itemIdHash);

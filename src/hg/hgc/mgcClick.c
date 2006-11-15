@@ -150,6 +150,13 @@ printf("../cgi-bin/hgc?%s&g=mgcGenes&i=%s&l=0&r=0&db=%s",
        cartSidUrlString(cart), acc, database);
 }
 
+static void printMBLabValidDbUrl(char *acc)
+/* print out an URL to link to Brent lab validation database */
+{
+printf("http://mblab.wustl.edu/cgi-bin/mgc.cgi?acc=%s&action=cloneRpt&alignment=Submit", acc);
+}
+
+
 struct mgcInfo
 /* information on a MGC clone collected from various tables */
 {
@@ -169,6 +176,23 @@ struct mgcInfo
     char refSeqAcc[GENBANK_ACC_BUFSZ];
     char *refSeqSum;
 };
+
+static boolean isInMBLabValidDb(char *acc)
+/* check if an accession is in the Brent lab validation database */
+{
+boolean inMBLabValidDb = FALSE;
+struct sqlConnection *fconn = sqlMayConnect("hgFixed");
+if ((fconn != NULL) && sqlTableExists(fconn, "mgcMBLabValid"))
+    {
+    char query[64], buf[32];
+    safef(query, sizeof(query), "select acc from mgcMBLabValid where acc=\"%s\"",
+          acc);
+    if (sqlQuickQuery(fconn, query, buf, sizeof(buf)) != NULL)
+        inMBLabValidDb = TRUE;
+    sqlDisconnect(&fconn);
+    }
+return inMBLabValidDb;
+}
 
 static struct mgcInfo *mgcInfoLoad(struct sqlConnection *conn, char *acc)
 /* load various piece information for a clone from various tables. Done
@@ -230,6 +254,7 @@ sqlFreeResult(&sr);
 // if there is a RefSeq acc, get summary if available
 if (mi->refSeqAccv != NULL)
     mi->refSeqSum = getRefSeqSummary(conn, mi->refSeqAcc);
+
 return mi;
 }      
 
@@ -290,13 +315,13 @@ static void prCloneLinks(struct sqlConnection *conn, char *acc, struct mgcDb *mg
 /* print table of clone links */
 {
 int imageId = getImageId(conn, acc);
-int gi = getGI(conn, acc);
 
 webPrintLinkTableStart();
 webPrintLabelCell("Links");
 webPrintLinkTableNewRow();
 
 // link to NCBI clone order CGI
+int gi = getGI(conn, acc);
 if (gi > 0)
     {
     webPrintLinkCellStart();
@@ -356,6 +381,17 @@ if (ccdsGenes != NULL)
         printCcdsUrlForMappedGene(conn, gene);
         printf("\">%s</A>", gene->ccdsId);
         }
+    webPrintLinkCellEnd();
+    }
+
+// Brent lab validation database
+if (isInMBLabValidDb(acc))
+    {
+    webPrintLinkTableNewRow();
+    webPrintLinkCellStart();
+    printf("<a href=\"");
+    printMBLabValidDbUrl(acc);
+    printf("\" TARGET=_blank>Brent Lab Clone Validation</a>");
     webPrintLinkCellEnd();
     }
 

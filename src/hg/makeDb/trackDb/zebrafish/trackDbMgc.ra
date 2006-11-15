@@ -8,6 +8,8 @@ color 34,139,34
 type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track mgcIncompleteMrna
 shortLabel ZGC Incomplete
@@ -19,6 +21,8 @@ color 120,12,12
 type psl .
 exonArrows on
 cdsDrawDefault off
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcPickedEst
 shortLabel ZGC In-progress
@@ -29,6 +33,8 @@ visibility pack
 color 12,100,120
 type psl est
 cdsDrawDefault off
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcFailedEst
 shortLabel ZGC Failed
@@ -40,6 +46,8 @@ color 120,12,0
 type psl est
 exonArrows on
 cdsDrawDefault off
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track mgcUnpickedEst
 shortLabel ZGC ESTs
@@ -51,3 +59,5 @@ color 120,120,220
 type psl est
 exonArrows on
 cdsDrawDefault off
+baseColorUseCds genbank
+baseColorUseSequence genbank

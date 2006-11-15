@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.158 2006/10/12 04:20:50 kate Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.161 2006/11/15 20:41:47 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -401,6 +401,14 @@ safef(query, sizeof(query), "select %s from %s where %s = '%s'",
 return sqlQuickString(conn, query);
 }
 
+char *lookupItemUrlVal(struct column *col, char *sVal,
+        struct sqlConnection *conn)
+{
+char query[512];
+safef(query, sizeof(query), col->itemUrlQuery, sVal);
+return sqlQuickString(conn, query);
+}
+
 void cellSimplePrintExt(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn, boolean lookupForUrl)
 /* This just prints one field from table. */
@@ -422,10 +430,14 @@ else
     else if (col->itemUrl != NULL)
         {
 	hPrintf("<A HREF=\"");
+	char *sVal = gp->name;
 	if (lookupForUrl)
-	    hPrintf(col->itemUrl, s);
-	else
-	    hPrintf(col->itemUrl, gp->name);
+	    sVal = s;
+	if (col->itemUrlQuery)
+	    sVal = lookupItemUrlVal(col, sVal, conn);
+	hPrintf(col->itemUrl, sVal);
+	if (col->itemUrlQuery)
+	    freez(&sVal);
 	if (col->useHgsid)
 	    hPrintf("&%s", cartSidUrlString(cart));
 	if (col->urlChromVar)
@@ -895,18 +907,28 @@ hashFree(&passHash);
 return list;
 }
 
-
 struct genePos *distanceAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on distance type. */
 {
 char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
+char *name = NULL;
+
+if (curGeneId)
+    {
+    name = curGeneId->name;
+    }
+else
+    {
+    name = cartString(cart, searchVarName);
+    }
+
 if (minString != NULL || maxString != NULL)
     {
     struct dyString *dy = newDyString(512);
     dyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
-    dyStringPrintf(dy, " %s='%s'", col->curGeneField, curGeneId->name);
+    dyStringPrintf(dy, " %s='%s'", col->curGeneField, name);
     if (minString)
          dyStringPrintf(dy, " and %s >= %s", col->valField, minString);
     if (maxString)
@@ -1396,6 +1418,7 @@ col->on = col->defaultOn =
 	sameString(mustFindInRaHash(fileName, settings, "visibility"), "on");
 col->type = mustFindInRaHash(fileName, settings, "type");
 col->itemUrl = hashFindVal(settings, "itemUrl");
+col->itemUrlQuery = hashFindVal(settings, "itemUrlQuery");
 col->useHgsid = columnSettingExists(col, "hgsid");
 col->urlChromVar = hashFindVal(settings, "urlChromVar");
 col->urlStartVar = hashFindVal(settings, "urlStartVar");
@@ -1565,12 +1588,14 @@ hPrintf("<TT><PRE>");
 hPrintf("#");
 for (col = colList; col != NULL; col = col->next)
     {
-    if (first)
-	first = FALSE;
-    else
-	hPrintf("\t");
     if (col->on)
+	{
+	if (first)
+	    first = FALSE;
+	else
+	    hPrintf("\t");
 	hPrintf("%s", col->name);
+	}
     }
 hPrintf("\n");
 for (gene = geneList; gene != NULL; gene = gene->next)

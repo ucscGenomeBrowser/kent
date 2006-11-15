@@ -24,7 +24,7 @@ writeOne(file, seq->size);
 printf("Writing %d bases in %d bytes\n", seq->size, ((seq->size+15)/16) * 4);
 for (i=0; i<size; ++i)
     {
-    if ((dVal = ntVal[dna[i]]) < 0)
+    if ((dVal = ntVal[(int)dna[i]]) < 0)
         {
         ++nCount;
         dVal = T_BASE_VAL;  /* N's etc. get almost silently converted to Ts */

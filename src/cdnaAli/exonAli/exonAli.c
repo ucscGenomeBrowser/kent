@@ -247,7 +247,7 @@ if (memMatch(dna, tileSize, repeater, 2*tileSize-1) != NULL)
 /* Make sure no N's in tile */
 for (i=0; i<tileSize; ++i)
     {
-    if (ntVal[dna[i]] < 0)
+    if (ntVal[(int)dna[i]] < 0)
         return FALSE;
     }
 
@@ -442,8 +442,6 @@ int findCrudeGenes(struct fastProber *fp, struct nt4Seq *target,
 struct crudeHit *hits;
 struct crudeExon *exons;
 int hitCount, exonCount, geneCount = 0;
-int targetSize = target->baseCount;
-int winMinHitIx = 0;
 
 if (fp == NULL)
     return 0;
@@ -835,7 +833,6 @@ char *command;
 struct dnaSeq *cdna = NULL;
 struct nt4Seq **nt4s;
 int nt4Count;
-long baseCount = 0;
 int i;
 char *reportFileName;
 

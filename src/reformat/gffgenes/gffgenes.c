@@ -116,7 +116,6 @@ writeOne(gl, pointCount);
 for (exon = gene->exons; exon != NULL; exon = exon->next)
     {
     int start = exon->start - 1;
-    int end = exon->end;
     writeOne(gl, start);
     writeOne(gl, exon->end);
     }

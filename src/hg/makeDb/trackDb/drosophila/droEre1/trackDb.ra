@@ -14,6 +14,7 @@ priority 57
 visibility hide
 spectrum on
 type psl est
+baseColorUseSequence genbank
 
 track all_mrna
 shortLabel D. ere. mRNAs
@@ -23,6 +24,9 @@ priority 54
 visibility dense
 spectrum on
 type psl mrna
+baseColorUseCds genbank
+baseColorUseSequence genbank
+showDiffBasesAllScales .
 
 track xenoMrna
 shortLabel Other mRNAs
@@ -33,6 +37,8 @@ visibility hide
 spectrum on
 type psl xeno
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 
 track blastDm2FB
 shortLabel D. mel. Proteins

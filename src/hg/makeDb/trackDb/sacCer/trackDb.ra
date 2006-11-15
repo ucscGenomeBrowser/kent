@@ -41,6 +41,8 @@ spectrum on
 type psl .
 intronGap 30
 cdsDrawOptions enabled
+baseColorUseCds genbank
+baseColorUseSequence genbank
 showDiffBasesAllScales .
 
 track transRegCode

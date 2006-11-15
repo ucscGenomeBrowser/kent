@@ -248,7 +248,6 @@ void collapseFeatures(struct feature *featureList)
 /* Merge duplicate introns. */
 {
 struct feature *feat, *uniq;
-int dupeCount = 1;
 
 if ((uniq = featureList) == NULL)
     return;

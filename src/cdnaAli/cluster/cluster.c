@@ -317,7 +317,6 @@ int mitoCount = 0;
 int nCount;
 struct feature *cosmid;
 char *baseName;
-struct feature *newList = NULL;
 char nameBuf[64];
 
 /* Load up hash for c2c. */

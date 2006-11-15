@@ -71,6 +71,8 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
 track ensGene
 release beta
@@ -295,72 +297,6 @@ shortCircuit 1
 termRegex (ctg|BX|AL|Zv5_scaffold)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
-
-searchTable bacEndPairs
-searchMethod exact
-searchType bed
-termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
-searchPriority 8
-                                                                                
-searchTable bacEndSingles
-searchMethod exact
-searchType bed
-termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
-searchPriority 8
-                                                                                
-searchName bacPairsIntName
-searchTable bacEndPairs
-searchMethod exact
-searchType bed
-xrefTable bacCloneXRef
-xrefQuery select name,intName from %s where intName like '%s'
-termRegex (zC|zK|bZ|dZ|bY|zH|bP|CHORI73_)[[:alnum:]]+
-searchPriority 8.5
-                                                                                
-searchName bacSinglesIntName
-searchTable bacEndSingles
-searchMethod exact
-searchType bed
-xrefTable bacCloneXRef
-xrefQuery select name,intName from %s where intName like '%s'
-termRegex (zC|zK|bZ|dZ|bY|zH|bP|CHORI73_)[[:alnum:]]+
-searchPriority 8.5
-                                                                                
-searchName bacPairsAliases
-searchTable bacEndPairs
-searchMethod exact
-searchType bed
-xrefTable bacCloneAlias
-dontCheckXrefQueryFormat .
-xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName
-searchPriority 9
-                                                                                
-searchName bacSinglesAliases
-searchTable bacEndSingles
-searchMethod exact
-searchType bed
-xrefTable bacCloneAlias
-dontCheckXrefQueryFormat .
-xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName
-searchPriority 9
-                                                                                
-searchName bacPairsSangerSts
-searchTable bacEndPairs
-searchMethod exact
-searchType bed
-xrefTable bacCloneXRef
-xrefQuery select name,sangerName from %s where sangerName like '%s'
-termRegex (et|st)ID[0-9\.]+
-searchPriority 10
-                                                                                
-searchName bacSinglesSangerSts
-searchTable bacEndSingles
-searchMethod exact
-searchType bed
-xrefTable bacCloneXRef
-xrefQuery select name,sangerName from %s where sangerName like '%s'
-termRegex (et|st)ID[0-9\.]+
-searchPriority 10
 
 searchTable rhMap
 searchMethod prefix
