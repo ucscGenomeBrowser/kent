@@ -12,7 +12,7 @@
 #include "net.h"
 #include "customPp.h"
 
-static char const rcsid[] = "$Id: customPp.c,v 1.6 2006/10/15 00:54:35 kate Exp $";
+static char const rcsid[] = "$Id: customPp.c,v 1.7 2006/11/15 19:25:33 kate Exp $";
 
 struct customPp *customDocPpNew(struct lineFile *lf)
 /* Return customPp that will ignore browser lines, for doc files */
@@ -73,7 +73,7 @@ while ((lf = cpp->fileStack) != NULL)
         {
 	if (startsWith("http://", line) || startsWith("ftp://", line))
 	    {
-	    struct lineFile *lf = netLineFileOpen(line);
+	    lf = netLineFileOpen(line);
 	    slAddHead(&cpp->fileStack, lf);
 	    continue;
 	    }
