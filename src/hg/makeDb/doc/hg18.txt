@@ -9917,30 +9917,34 @@ get dbSNP_main_table.sql.gz
 cd /cluster/data/dbSNP/126/human/rs_fasta
 /bin/csh gnl.csh
 
-# generate snpExtFile and snpSeq from rs_fasta
+# add rs_fasta to seq/extFile
+# 2 edits first: strip header to just rsId, and remove duplicates
 # work on /cluster/store12 (kkstore05) which has more disk space
+# also for human, don't include chrUn
 cp rs_ch*.fas.gz /cluster/store12/snp/126/human/rs_fasta
 ssh kkstore05
 cd /cluster/store12/snp/126/human/rs_fasta
-gunzip *gz
+mkdir unarchive
+mv rs_chUn.fas.gz unarchive
+# concat into rsAll.fas
+cat << '_EOF_' > concat.csh
+#!/bin/csh -ef
+rm -f rsAll.fas
+foreach file (rs_ch*.fas)
+    echo $file
+    cat $file >> rsAll.fas
+end
+'_EOF_' 
+# snpCleanSeq strips the header and skips duplicates
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCleanSeq rsAll.fas snp.fa
+rm rsAll.fas
+# load on hgwdev
 ssh hgwdev
-cd /cluster/store12/snp/126/human/rs_fasta
-# create normalized link names
-# not including chrMulti or chrUn (for now)
 mkdir /gbdb/hg18/snp
-/bin/sh link.sh
-# extFile
-/bin/csh getExtFile.csh > snp126ExtFile.prelim
-awk '{printf "%s\t%s\t%s\n", $1, $3, $2}' snp126ExtFile.prelim > snp126ExtFile
-hgLoadSqlTab hg18 snpExtFile /cluster/home/heather/kent/src/hg/lib/snpExtFile.sql snp126ExtFile
-hgsql -e 'rename table snpExtFile to snp126ExtFile' hg18
-# sequence offsets
-/bin/csh getSeq.csh
-/bin/csh concat.csh
-hgLoadSqlTab hg18 snpSeq /cluster/home/heather/kent/src/hg/lib/snpSeq.sql seq.concat
-hgsql -e 'rename table snpSeq to snp126Seq' hg18
-hgsql -e 'alter table snp126Seq add index name(name)' hg18
-
+ln -s /cluster/store12/snp/126/human/rs_fasta/snp.fa /gbdb/hg18/snp/snp.fa
+hgLoadSeq hg18 /gbdb/hg18/snp/snp.fa
+# clean up after hgLoadSeq
+rm seq.tab
 
 # load on kkr5u00
 ssh kkr5u00
