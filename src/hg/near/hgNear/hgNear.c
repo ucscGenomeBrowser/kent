@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.160 2006/11/08 21:39:25 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.161 2006/11/15 20:41:47 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -907,18 +907,28 @@ hashFree(&passHash);
 return list;
 }
 
-
 struct genePos *distanceAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on distance type. */
 {
 char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
+char *name = NULL;
+
+if (curGeneId)
+    {
+    name = curGeneId->name;
+    }
+else
+    {
+    name = cartString(cart, searchVarName);
+    }
+
 if (minString != NULL || maxString != NULL)
     {
     struct dyString *dy = newDyString(512);
     dyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
-    dyStringPrintf(dy, " %s='%s'", col->curGeneField, curGeneId->name);
+    dyStringPrintf(dy, " %s='%s'", col->curGeneField, name);
     if (minString)
          dyStringPrintf(dy, " and %s >= %s", col->valField, minString);
     if (maxString)
