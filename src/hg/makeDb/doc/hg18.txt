@@ -9932,7 +9932,7 @@ cat << '_EOF_' > concat.csh
 rm -f rsAll.fas
 foreach file (rs_ch*.fas)
     echo $file
-    cat $file >> rsAll.fas
+    zcat $file >> rsAll.fas
 end
 '_EOF_' 
 # snpCleanSeq strips the header and skips duplicates

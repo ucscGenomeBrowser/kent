@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.23 2006/11/15 23:03:32 heather Exp $"
+#	"$Id: mm8.txt,v 1.24 2006/11/15 23:10:17 heather Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -6329,7 +6329,7 @@ cat << '_EOF_' > concat.csh
 rm -f rsAll.fas
 foreach file (rs_ch*.fas)
     echo $file
-    cat $file >> rsAll.fas
+    zcat $file >> rsAll.fas
 end
 '_EOF_' 
 # snpCleanSeq strips the header and skips duplicates
