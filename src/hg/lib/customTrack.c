@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.152 2006/11/08 00:22:35 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.153 2006/11/15 19:30:54 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -442,7 +442,7 @@ while (lineFileNext(lf, &line, NULL))
 	    nameLen = (nameLen < 256) ? nameLen : 255;
 	    strncpy(name, line, nameLen);
 	    name[nameLen] = (char)NULL;
-	    fprintf(f, "\t%s='%s'", name, blank+1);
+	    fprintf(f, "\t%s='%s'", name, makeEscapedString(blank+1, '\''));
 	    }
 	else
 	    fprintf(f, "\t%s", line);
@@ -521,8 +521,8 @@ trackDbFree(&def);
 }
 
 void customTracksSaveFile(struct customTrack *trackList, char *fileName)
-/* Save out custom tracks. This is just used by internally 
-and by testing programs */
+/* Save out custom tracks. This is just used internally 
+ * and by testing programs */
 {
 FILE *f = mustOpen(fileName, "w");
 
@@ -536,28 +536,30 @@ if (!fileExists(fileName))
 #endif
 
 struct customTrack *track;
+struct dyString *ds = dyStringNew(0);
 for (track = trackList; track != NULL; track = track->next)
     {
     /* may be coming in here from the table browser.  It has wiggle
      *	ascii data waiting to be encoded into .wib and .wig
      */
     if (track->wigAscii)
-	{
-	/* HACK ALERT - calling private method function in customFactory.c */
-	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
-	wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
-	ctAddToSettings(track, "tdbType", track->tdb->type);
-	}
+        {
+        /* HACK ALERT - calling private method function in customFactory.c */
+        track->maxChromName = hGetMinIndexLength(); /* for the loaders */
+        wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
+        ctAddToSettings(track, "tdbType", track->tdb->type);
+        }
     if (track->htmlFile)
         ctAddToSettings(track, "htmlFile", track->htmlFile);
     saveTdbLine(f, fileName, track->tdb);
     if (!track->dbTrack)
-	{
-	struct bed *bed;
-	for (bed = track->bedList; bed != NULL; bed = bed->next)
-	    bedOutputN(bed, track->fieldCount, f, '\t', '\n');
-	}
+        {
+        struct bed *bed;
+        for (bed = track->bedList; bed != NULL; bed = bed->next)
+            bedOutputN(bed, track->fieldCount, f, '\t', '\n');
+        }
     }
+dyStringFree(&ds);
 carefulClose(&f);
 }
 
@@ -659,11 +661,6 @@ if (fileName && fileName[0])
     }
 customText = skipLeadingSpaces(customText);
 
-/* retain unmunged copy of input for use by hgCustom on error */
-char *savedCustomText = NULL;
-if (customText && cartVarExists(cart, CT_CUSTOM_TEXT_ALT_VAR))
-    savedCustomText = cloneString(customText);
-
 /* get track description from cart */
 char *html = NULL;
 if (cartNonemptyString(cart, CT_CUSTOM_DOC_FILE_VAR))
@@ -764,17 +761,8 @@ numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
 customTracksSaveCart(cart, ctList);
 
-if (err && savedCustomText)
-    {
-    /* for hgCustom, save text if there's an error, so user can correct */
-    cartSetString(cart, CT_CUSTOM_TEXT_ALT_VAR, savedCustomText);
-    cartSetString(cart, CT_CUSTOM_TEXT_VAR, savedCustomText);
-    }
-else
-    {
-    cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
-    cartRemove(cart, CT_CUSTOM_TEXT_VAR);
-    }
+cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
+cartRemove(cart, CT_CUSTOM_TEXT_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_NAME_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_BIN_VAR);

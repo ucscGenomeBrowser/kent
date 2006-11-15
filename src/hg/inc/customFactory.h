@@ -115,6 +115,24 @@ char *ctFirstItemPos(struct customTrack *ct);
 /* return position of first item in track, or NULL if wiggle or
  * other "non-item" track */
 
+char *ctGenome(struct customTrack *ct);
+/* return database setting */
+
+char *ctOrigTrackLine(struct customTrack *ct);
+/* return initial setting by user for track line */
+
+void customTrackUpdateFromSettings(struct customTrack *track, 
+                                        char *line, int lineIx);
+/* replace settings in track with those from new track line */
+
+void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
+                                struct slName **retBrowserLines);
+/* update custom track from config containing track line and browser lines 
+ * Return browser lines */
+
+char *customTrackUserConfig(struct customTrack *ct);
+/* return user-defined track line and browser lines */
+
 #endif /* CUSTOMFACTORY_H */
 
 

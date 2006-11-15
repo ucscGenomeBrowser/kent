@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.38 2006/11/07 00:36:44 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.39 2006/11/15 19:30:53 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -997,23 +997,22 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 *retB = atoi(row[2]);
 }
 
-struct customTrack *trackLineToTrack(char *line, int lineIx)
-/* Convert a track specification line to a custom track structure. */
+void customTrackUpdateFromSettings(struct customTrack *track, 
+                                        char *line, int lineIx)
+/* replace settings in track with those from new track line */
 {
-/* Make up basic track with associated tdb.  Fill in settings
- * from var=val pairs in line. */
-line += 6;	/* Skip over 'track ' */
-struct customTrack *track;
-AllocVar(track);
-struct trackDb *tdb = customTrackTdbDefault();	
-track->tdb = tdb;
-struct hash *hash = hashVarLine(line, lineIx);
-track->tdb->settingsHash = hash;
-track->tdb->settings = hashToRaString(hash);
-char *val;
+char *pLine = line;
+nextWord(&pLine);
+line = skipLeadingSpaces(pLine);
+struct hash *newSettings = hashVarLine(line, lineIx);
+struct hashCookie hc = hashFirst(newSettings);
+struct hashEl *hel = NULL;
+while ((hel = hashNext(&hc)) != NULL)
+    ctAddToSettings(track, hel->name, hel->val);
 
-/* Move selected fields from hash into structure proper, doing
- * a bit of checking in the process. */
+struct trackDb *tdb = track->tdb;
+struct hash *hash = tdb->settingsHash;
+char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
     if (!*val)
@@ -1054,6 +1053,7 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
         track->htmlFile = cloneString(val);
         }
     }
+
 if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
     {
     struct dyString *ds = NULL;
@@ -1106,7 +1106,41 @@ if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
 else
     track->maxChromName = hGetMinIndexLength();
-return track;
+//uglyf("<BR>track: %s</BR>", line);
+if (!strstr(line, "tdbType"))
+    {
+    /* for "external" (user-typed) track lines, save for later display
+     * in the manager CGI */
+//uglyf("<BR>user track line before: %s</BR>", line);
+    struct dyString *ds = dyStringNew(0);
+    dyStringPrintf(ds, "track %s", line);
+//uglyf("<BR>user track line after: %s</BR>", ds->string);
+    ctAddToSettings(track, "origTrackLine", dyStringCannibalize(&ds));
+    }
+}
+
+char *browserLinesToSetting(struct slName *browserLines)
+/* Create a setting with browser lines separated by semi-colons */
+{
+if (!browserLines)
+    return NULL;
+struct dyString *ds = dyStringNew(0);
+struct slName *bl = NULL;
+for (bl = browserLines; bl != NULL; bl = bl->next)
+    {
+    dyStringAppend(ds, bl->name);
+    dyStringAppend(ds, ";");
+    }
+return dyStringCannibalize(&ds);
+}
+
+struct slName *ctBrowserLines(struct customTrack *ct)
+/* retrieve browser lines from setting */
+{
+char *setting;
+if ((setting = trackDbSetting(ct->tdb, "browserLines")) == NULL)
+    return NULL;
+return slNameListFromString(setting, ';');
 }
 
 static char *browserLinePosition(struct slName *browserLines)
@@ -1115,7 +1149,6 @@ static char *browserLinePosition(struct slName *browserLines)
 struct slName *bl;
 int wordCt;
 char *words[64];
-
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
     wordCt = chopLine(cloneString(bl->name), words);
@@ -1123,6 +1156,68 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
         return words[2];
     }
 return NULL;
+}
+
+void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
+                                struct slName **retBrowserLines)
+/* update custom track from config containing track line and browser lines 
+ * Return browser lines */
+{
+if (!config)
+    return;
+struct lineFile *lf = lineFileOnString("config", TRUE, config);
+char *line;
+struct slName *browserLines = NULL;
+while (lineFileNextReal(lf, &line))
+    if (startsWithWord("track", line))
+        customTrackUpdateFromSettings(ct, line, 1);
+    else if (startsWithWord("browser", line))
+        slNameAddTail(&browserLines, line);
+    else
+        errAbort("expecting track or browser line, got: %s", line);
+char *setting = browserLinesToSetting(browserLines);
+if (setting)
+    {
+    ctAddToSettings(ct, "browserLines", setting);
+    char *initialPos = browserLinePosition(browserLines);
+    if (initialPos)
+        ctAddToSettings(ct, "initialPos", initialPos);
+    }
+lineFileClose(&lf);
+if (retBrowserLines)
+    *retBrowserLines = browserLines;
+}
+
+char *customTrackUserConfig(struct customTrack *ct)
+/* return user-defined track line and browser lines */
+{
+struct dyString *ds = dyStringNew(0);
+char *userTrackLine = ctOrigTrackLine(ct);
+if (userTrackLine)
+    {
+    dyStringAppend(ds, userTrackLine);
+    dyStringAppend(ds, "\n");
+    }
+struct slName *bl = NULL;
+for (bl = ctBrowserLines(ct); bl != NULL; bl = bl->next)
+    {
+    dyStringAppend(ds, bl->name);
+    dyStringAppend(ds, "\n");
+    }
+return (dyStringCannibalize(&ds));
+}
+
+struct customTrack *trackLineToTrack(char *line, int lineIx)
+/* Convert a track specification line to a custom track structure. */
+{
+/* Make up basic track with associated tdb.  Fill in settings
+ * from var=val pairs in line. */
+struct customTrack *track;
+AllocVar(track);
+struct trackDb *tdb = customTrackTdbDefault();	
+track->tdb = tdb;
+customTrackUpdateFromSettings(track, line, lineIx);
+return track;
 }
 
 static struct lineFile *customLineFile(char *text, boolean isFile)
@@ -1212,27 +1307,20 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * if no track line. Find out explicit type setting if any.
      * Also make sure settingsHash is set up. */
     lf = cpp->fileStack;
-    char *type = NULL;
+    //char *type = NULL;
     if (startsWithWord("track", line))
         {
 	track = trackLineToTrack(line, cpp->fileStack->lineIx);
-	if (track == NULL)
-	    continue;
-        /* get database for custom track */
-        char *ctDb = ctGenome(track);
-        if (ctDb && differentString(ctDb, hGetDb()))
-            errAbort("can't load %s data into %s custom tracks",
-                                        ctDb, hGetDb());
-	type = hashFindVal(track->tdb->settingsHash, "type");
-	}
+        }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
      * and no track line. */
         {
-	AllocVar(track);
-	track->tdb = customTrackTdbDefault();
-	track->tdb->settingsHash = hashNew(8);
-	track->maxChromName = hGetMinIndexLength(); /* for the loaders */
+        char defaultLine[256];
+        safef(defaultLine, sizeof defaultLine, 
+                        "track name='%s' description='%s'",
+                        CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
+        track = trackLineToTrack( defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else
@@ -1240,7 +1328,15 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	errAbort("Expecting 'track' line, got %s\nline %d of %s",
 		line, lf->lineIx, lf->fileName);
 	}
+    if (!track)
+        continue;
+
+    /* verify database for custom track */
+    char *ctDb = ctGenome(track);
+    if (ctDb && differentString(ctDb, hGetDb()))
+        errAbort("can't load %s data into %s custom tracks", ctDb, hGetDb());
     struct customTrack *oneList = NULL, *oneTrack;
+
     if (track->dbDataLoad)
     /* Database tracks already mostly loaded, just check that table 
      * still exists (they are removed when not accessed for a while). */
@@ -1256,6 +1352,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * to load track into database. */
         {
 	/* Load track from appropriate factory */
+        char *type = trackDbSetting(track->tdb, "type");
 	struct customFactory *fac = customFactoryFind(cpp, type, track);
 	if (fac == NULL)
 	    {
@@ -1329,8 +1426,11 @@ for (track = trackList; track != NULL; track = track->next)
                 track->bedList->chromStart, track->bedList->chromEnd);
         ctAddToSettings(track, "firstItemPos", cloneString(buf));
         }
-     trackDbPolish(track->tdb);
-     }
+    char *setting = browserLinesToSetting(browserLines);
+    if (setting)
+        ctAddToSettings(track, "browserLines", setting);
+    trackDbPolish(track->tdb);
+    }
 
 /* Save return variables, clean up,  and go home. */
 if (retBrowserLines != NULL)
@@ -1346,7 +1446,6 @@ char *ctInitialPosition(struct customTrack *ct)
 {
 char buf[128];
 char *pos = trackDbSetting(ct->tdb, "initialPos");
-if (!pos)
 if (!pos && ct->bedList)
     {
     safef(buf, sizeof(buf), "%s:%d-%d", ct->bedList->chrom,
@@ -1397,4 +1496,10 @@ char *ctFirstItemPos(struct customTrack *ct)
  * other "non-item" track */
 {
 return trackDbSetting(ct->tdb, "firstItemPos");
+}
+
+char *ctOrigTrackLine(struct customTrack *ct)
+/* return initial setting by user for track line */
+{
+return trackDbSetting(ct->tdb, "origTrackLine");
 }
