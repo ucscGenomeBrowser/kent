@@ -18,8 +18,6 @@
 #define CT_DEFAULT_TRACK_NAME    "User Track"
 #define CT_DEFAULT_TRACK_DESCR   "User Supplied Track"
 
-#define CT_CGI_VAR		 "hgct_doHgCustom"
-
 #define CT_MANAGE_BUTTON_LABEL   "manage custom tracks"
 #define CT_ADD_BUTTON_LABEL      "add custom tracks"
 
