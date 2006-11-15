@@ -15,7 +15,7 @@ O = snpContigLocFilter.o snpContigLocFilter125.o \
     snpGetSimple.o snpGetInsertions.o snpGetDeletions.o \
     fetchSeq.o snpOrthoLookup.o snpOrthoCheck.o snpCheckCluster.o snpCheckCluster2.o \
     snpReadSeq.o snpReadSeq2.o trimHeader.o snpOrthoJoin.o snpFreq.o \
-    snpCleanSeq.o 
+    snpCleanSeq.o snpGetSeqDup.o
 
 all: snpContigLocFilter snpContigLocFilter125 \
      snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
@@ -28,7 +28,7 @@ all: snpContigLocFilter snpContigLocFilter125 \
      snpGetSimple snpGetInsertions snpGetDeletions \
      fetchSeq snpOrthoLookup snpOrthoCheck snpCheckCluster snpCheckCluster2 \
      snpReadSeq snpReadSeq2 trimHeader snpOrthoJoin snpFreq \
-     snpCleanSeq 
+     snpCleanSeq snpGetSeqDup
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -161,4 +161,7 @@ snpFreq: snpFreq.o ${MYLIBS}
 
 snpCleanSeq: snpCleanSeq.o ${MYLIBS}
 	${CC} -O -o snpCleanSeq snpCleanSeq.o ${MYLIBS} $L
+
+snpGetSeqDup: snpGetSeqDup.o ${MYLIBS}
+	${CC} -O -o snpGetSeqDup snpGetSeqDup.o ${MYLIBS} $L
 
