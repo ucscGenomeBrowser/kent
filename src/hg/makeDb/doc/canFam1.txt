@@ -3339,31 +3339,31 @@ cd snp/organisms/dog_9615/rs_fasta
 prompt
 mget *.gz
 
-# generate snpExtFile and snpSeq from rs_fasta
+# add rs_fasta to seq/extFile
+# 2 edits first: strip header to just rsId, and remove duplicates
 # work on /cluster/store12 (kkstore05) which has more disk space
-mv rs_ch*.fas.gz /cluster/store12/snp/125/dog/rs_fasta
+cp rs_ch*.fas.gz /cluster/store12/snp/125/dog/rs_fasta
 ssh kkstore05
 cd /cluster/store12/snp/125/dog/rs_fasta
-gunzip *gz
+# concat into rsAll.fas
+cat << '_EOF_' > concat.csh
+#!/bin/csh -ef
+rm -f rsAll.fas
+foreach file (rs_ch*.fas)
+    echo $file
+    zcat $file >> rsAll.fas
+end
+'_EOF_' 
+# snpCleanSeq strips the header and skips duplicates
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCleanSeq rsAll.fas snp.fa
+rm rsAll.fas
+# load on hgwdev
 ssh hgwdev
-cd /cluster/store12/snp/125/dog/rs_fasta
-# create normalized link names
-# rename chroms
-# not including chrMulti or chrUn (for now)
 mkdir /gbdb/canFam1/snp
-/bin/sh link.sh
-# extFile
-/bin/csh getExtFile.csh > snp125ExtFile.prelim
-awk '{printf "%s\t%s\t%s\n", $1, $3, $2}' snp125ExtFile.prelim > snp125ExtFile
-hgLoadSqlTab canFam1 snpExtFile /cluster/home/heather/kent/src/hg/lib/snpExtFile.sql snp125ExtFile
-hgsql -e 'rename table snpExtFile to snp125ExtFile' canFam1
-# sequence offsets
-# possibly faster to do the next 2 steps on kkstore05
-/bin/csh getSeq.csh
-/bin/csh concat.csh
-hgLoadSqlTab canFam1 snpSeq /cluster/home/heather/kent/src/hg/lib/snpSeq.sql seq.concat
-hgsql -e 'rename table snpSeq to snp125Seq' canFam1
-hgsql -e 'alter table snp125Seq add index name(name)' canFam1
+ln -s /cluster/store12/snp/125/dog/rs_fasta/snp.fa /gbdb/canFam1/snp/snp.fa
+hgLoadSeq canFam1 /gbdb/canFam1/snp/snp.fa
+# clean up after hgLoadSeq
+rm seq.tab
 
 # Simplify names of data files
 cd /cluster/data/dbSNP/125/organisms/dog_9615/data
