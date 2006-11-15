@@ -9,7 +9,7 @@
 #include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.33 2005/12/06 18:28:51 kent Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.34 2006/11/15 15:20:59 angie Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"prot", OPTION_BOOLEAN},
@@ -90,7 +90,6 @@ void gfClient(char *hostName, char *portName, char *tSeqDir, char *inName,
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 static bioSeq seq;
-struct ssBundle *bundleList;
 FILE *out = mustOpen(outName, "w");
 enum gfType qType = gfTypeFromName(qTypeName);
 enum gfType tType = gfTypeFromName(tTypeName);
