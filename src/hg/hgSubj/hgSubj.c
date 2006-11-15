@@ -14,10 +14,11 @@
 #include "spDb.h"
 #include "genePred.h"
 #include "hgColors.h"
+#include "hPrint.h"
 #include "hgSubj.h"
 //#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgSubj.c,v 1.2 2006/09/22 08:26:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgSubj.c,v 1.3 2006/11/15 18:42:52 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */

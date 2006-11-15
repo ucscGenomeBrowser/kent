@@ -9,8 +9,9 @@
 #include "hgSubj.h"
 #include "hdb.h"
 #include "net.h"
+#include "hPrint.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.1 2006/08/21 22:06:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.2 2006/11/15 18:43:17 fanhsu Exp $";
 
 static boolean sequenceExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
