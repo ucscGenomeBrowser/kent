@@ -7,8 +7,9 @@
 #include "portable.h"
 #include "hgColors.h"
 #include "obscure.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.77 2006/11/07 22:09:34 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.78 2006/11/16 21:52:23 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -395,7 +396,12 @@ else
 
     verbose(VERBOSE_SQL_ROW_LEVEL, "#\t%s\n", query->string);
     if (!wds->conn)
-	wds->conn = sqlConnect(wds->db);
+	{
+	if (sameString(CUSTOM_TRASH,wds->db) && ctDbAvailable(wds->tblName))
+	    wds->conn = sqlCtConn(TRUE);
+	else
+	    wds->conn = sqlConnect(wds->db);
+	}
     wds->sr = sqlGetResult(wds->conn,query->string);
     }
 }
