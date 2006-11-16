@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.52 2005/12/15 16:38:23 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.53 2006/11/16 16:19:00 angie Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"canStop", OPTION_BOOLEAN},
@@ -486,7 +486,7 @@ struct genoFind *gf = NULL;
 static struct genoFind *transGf[2][3];
 char buf[256];
 char *line, *command;
-int fromLen, readSize, res;
+int fromLen, readSize;
 int socketHandle = 0, connectionHandle = 0;
 int port = atoi(portName);
 time_t curtime;
@@ -604,7 +604,6 @@ for (;;)
     else if (sameString("query", command) || 
     	sameString("protQuery", command) || sameString("transQuery", command))
         {
-	int querySize;
 	boolean queryIsProt = sameString(command, "protQuery");
 	char *s = nextWord(&line);
 	if (s == NULL || !isdigit(s[0]))
@@ -615,7 +614,6 @@ for (;;)
 	else
 	    {
 	    struct dnaSeq seq;
-	    char *type = NULL;
             ZeroVar(&seq);
 
 	    if (queryIsProt && !doTrans)
@@ -711,7 +709,6 @@ for (;;)
 	}
     else if (sameString("files", command))
         {
-	struct gfSeqSource *ss;
 	int i;
 	sprintf(buf, "%d", fileCount);
 	netSendString(connectionHandle, buf);
@@ -749,11 +746,7 @@ int statusServer(char *hostName, char *portName)
 /* Send status message to server arnd report result. */
 {
 char buf[256];
-char *line, *command;
-int fromLen, readSize;
 int sd = 0;
-int fileCount;
-int i;
 int ret = 0;
 
 /* Put together command. */
@@ -783,8 +776,6 @@ void queryServer(char *type,
 /* Send simple query to server and report results. */
 {
 char buf[256];
-char *line, *command;
-int fromLen, readSize;
 int sd = 0;
 bioSeq *seq = faReadSeq(faName, !isProt);
 int matchCount = 0;
@@ -872,8 +863,6 @@ void getFileList(char *hostName, char *portName)
 /* Get and display input file list. */
 {
 char buf[256];
-char *line, *command;
-int fromLen, readSize;
 int sd = 0;
 int fileCount;
 int i;
