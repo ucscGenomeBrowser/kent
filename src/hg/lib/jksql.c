@@ -13,8 +13,9 @@
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hgConfig.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.96 2006/11/14 20:06:04 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.97 2006/11/16 23:45:10 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -435,12 +436,12 @@ return sqlConnRemote(host, user, password, database, TRUE);
 struct sqlConnection *sqlCtConn(boolean abort)
 /* Connect to customTrash database, optionally abort on failure */
 {
-char *database = cfgOptionDefault("customTracks.db", NULL);
 char *host = cfgOptionDefault("customTracks.host", NULL);
 char *user = cfgOptionDefault("customTracks.user", NULL);
 char *password = cfgOptionDefault("customTracks.password", NULL);
-if (database && host && user && password)
-    return sqlConnRemote(host, user, password, database, abort);
+
+if (host && user && password)
+    return sqlConnRemote(host, user, password, CUSTOM_TRASH, abort);
 else
     {
     if (abort)
