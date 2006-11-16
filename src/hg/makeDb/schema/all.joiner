@@ -1793,6 +1793,7 @@ identifier extFileId
     #$gbd.multiz10way.extFile
     #$gbd.multiz11way.extFile
     #$gbd.multiz12way.extFile
+    #$gbd.multiz15way.extFile
     #$gbd.multiz17way.extFile
 
 identifier gbExtFileId
@@ -2353,6 +2354,8 @@ tablesIgnored $gbd
     multiz10waySummary
     multiz11waySummary
     multiz12waySummary
+    multiz15waySummary
+    multiz15wayFrames
     multiz17waySummary
     multiz17wayFrames
     phastCons4way
@@ -2373,6 +2376,8 @@ tablesIgnored $gbd
     phastConsElements11way
     phastCons12way
     phastConsElements12way
+    phastCons15way
+    phastConsElements15way
     phastCons17way
     phastConsElements17way
 
