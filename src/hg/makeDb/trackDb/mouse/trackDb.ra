@@ -180,6 +180,7 @@ priority 70
 type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail: 
+cdsDrawOptions disabled
 baseColorUseCds none
 
 track jaxPhenotype
