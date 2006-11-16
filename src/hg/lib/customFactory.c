@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.39 2006/11/15 19:30:53 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.40 2006/11/16 23:55:45 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -77,7 +77,7 @@ if (firstTime)
     envUpdate("HGDB_PASSWORD", pass);
     firstTime = FALSE;
     }
-return cfgOptionDefault("customTracks.db", NULL);
+return (CUSTOM_TRASH);
 }
 
 void customFactorySetupDbTrack(struct customTrack *track)
