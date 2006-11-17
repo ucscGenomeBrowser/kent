@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.44 2006/11/14 20:23:38 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.45 2006/11/17 00:09:06 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -191,7 +191,7 @@ spans = newHash(0);	/* list of spans in this table */
 /*	Not here before with this one, seems to be new
  *	Does not work for customTrash database
  */
-if (differentWord(sqlGetDatabase(conn),CUSTOM_TRASH))
+if (differentString(sqlGetDatabase(conn),CUSTOM_TRASH))
     {
     freeMem(prevDb);
     prevDb = cloneString(sqlGetDatabase(conn));
