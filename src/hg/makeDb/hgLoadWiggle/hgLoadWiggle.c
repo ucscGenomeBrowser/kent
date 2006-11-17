@@ -11,8 +11,9 @@
 #include "wiggle.h"
 #include "hdb.h"
 #include "portable.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.18 2006/06/19 19:11:25 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.19 2006/11/17 00:25:49 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -67,12 +68,19 @@ errAbort(
 static struct hash *loadAllChromInfo(char *database)
 /* Load up all chromosome infos. */
 {
+char* host = cfgVal("db.host");		/* can not trust environment for */
+char* user = cfgVal("db.user");		/* these items since we may be in */
+char* password = cfgVal("db.password");	/* a customTrack db loader pipeline */
 struct chromInfo *el;
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 struct hash *ret;
 char **row;
 
+/*	be wary of customTrack db loader pipeline which has special
+ *	environment variables for HGDB_HOST and so forth
+ */
+conn = sqlConnectRemote(host, user, password, database);
 ret = newHash(0);
 
 sr = sqlGetResult(conn, "select * from chromInfo");
