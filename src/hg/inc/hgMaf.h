@@ -16,6 +16,7 @@
 #define BASE_COLORS_VAR         "baseColors"
 #define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"
 #define CONS_WIGGLE             "wiggle"
+#define ITEM_FIRST_CHAR_CASE	"itemFirstCharCase"
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
