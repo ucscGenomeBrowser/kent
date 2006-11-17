@@ -32,8 +32,9 @@
 #include "twoBit.h"
 #include "genbank.h"
 #include "chromInfo.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.308 2006/11/14 22:20:47 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.309 2006/11/17 00:21:46 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -573,7 +574,9 @@ void hFreeOrDisconnect(struct sqlConnection **pConn)
 /* Free cached or non-cached connection. */
 {
 char *db = sqlGetDatabase(*pConn);
-if (sameString(db, hGetDbUsual(db)))
+if (sameString(CUSTOM_TRASH,db))
+    sqlDisconnect(pConn);
+else if (sameString(db, hGetDbUsual(db)))
     hFreeConn(pConn);
 else if (sameString(db, hGetDb2Usual(db)))
     hFreeConn2(pConn);
@@ -704,10 +707,21 @@ static struct hash *buildTableListHash(char *db)
  * lots of tables. */
 {
 struct hash *hash = hashNew(14);
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct slName *allTables = sqlListTables(conn);
+struct sqlConnection *conn = NULL;
+struct slName *allTables = NULL;
+boolean ordinaryDb = TRUE;
 
-if (hCanHaveSplitTables(db))
+if (sameString(CUSTOM_TRASH,db) && ctDbAvailable(NULL))
+    {
+    conn = sqlCtConn(TRUE);
+    ordinaryDb = FALSE;
+    }
+else
+    conn = hAllocOrConnect(db);
+
+allTables = sqlListTables(conn);
+
+if (ordinaryDb && hCanHaveSplitTables(db))
     {
     /* Consolidate split tables into one list per track: */
     struct slName *tbl = NULL, *nextTbl = NULL;
@@ -2576,9 +2590,18 @@ char **row;
 struct hash *hash = newHash(5);
 boolean gotIt = TRUE, binned = FALSE;
 
-if (! hTableExistsDb(db, table))
-    return FALSE;
-conn = hAllocOrConnect(db);
+if (sameString(CUSTOM_TRASH,db))
+    {
+    if(! ctDbAvailable(table))
+	return FALSE;
+    conn = sqlCtConn(TRUE);
+    }
+else
+    {
+    if (! hTableExistsDb(db, table))
+	return FALSE;
+    conn = hAllocOrConnect(db);
+    }
 
 /* Set field names to empty strings */
 retEnd[0] = 0;
