@@ -1,5 +1,6 @@
 <H2>Description</H2>
-<p>This track displays the 3-way regulatory potential (RP) score, computed from
+
+<p>This track displays the 3-way regulatory potential (RP) score computed from
 alignments of human (hg16, Jul. '03), mouse (mm3, Feb. '03) and rat (rn3, Jun.
 '03). A 2-way RP score, computed from alignments of human and mouse only is
 also available on this browser.</p>
@@ -10,11 +11,11 @@ investigating sensitivity and specificity of 3-way RP scores on the hemoglobin
 beta gene cluster suggest the use of a threshold ~0.0006 for identifying new
 putative regulatory elements. </p>
 
-<p>The default viewing range for this track is from 0 to 0.01
-(score values below the 0 default indicate resemblance to alignment patterns
+<p>The default viewing range for this track is from 0.00 to 0.01
+(score values below the 0.00 default indicate resemblance to alignment patterns
 typical of neutral DNA, while score values above the 0.01 default indicate very
 marked resemblance to alignment patterns typical of regulatory elements in the
-training set). The range of RP scores from 0 to 0.01 contains the prediction
+training set). The range of RP scores from 0.00 to 0.01 contains the prediction
 threshold suggested by calibration studies, and provides an effective
 visualization of the score for most genomic loci. However, the user can specify
 different viewing ranges if desired. Note: Absence of a score value at a given
@@ -26,6 +27,7 @@ aspects of the displayed information. Click the
 configuration help</A> link for an explanation of the configuration options.</P>
 
 <H2>Methods</H2>
+
 <p>The comparison employs log-ratios of transitions probabilities from two
 Markov models. Training the score entails selecting appropriate alphabet
 (alignment column symbols) and order (length of the patterns = order + 1) for
@@ -51,15 +53,17 @@ Genome Bioinformatics group. </p>
 
 <H2>References</H2>
 
-
 <p>Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AFA, Roskin KM, Baertsch
-R, Rosenbloom K, Clawson H, Green ED, Haussler D, Miller W. (2004). <a
-href="http://www.genome.org/cgi/content/abstract/14/4/708" target="_blank">Aligning
-Multiple Genomic Sequences with the Threaded Blockset Aligner</a>. <em>Genome
-Res.</em> 14(4):708-15. </p>
+R, Rosenbloom K, Clawson H, Green ED, Haussler D, Miller W. 
+<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708" 
+TARGET="_blank">Aligning Multiple Genomic Sequences with the Threaded Blockset 
+Aligner</A>. 
+<em>Genome Res.</em> 2004 Apr;14(4):708-15. </p>
 
-<p>Kolbe D, Taylor J, Elnitski L, Eswara P, Li J, Miller W, Hardison RC and
-Chiaromonte F. (2004). <a href="http://www.genome.org/cgi/content/full/14/4/700"
-target="_blank">Regulatory potential scores from genome-wide three-way
-alignments of human, mouse, and rat</a>. <em>Genome Res.</em> 14(4):700-707. </p>
+<P>Kolbe D, Taylor J, Elnitski L, Eswara P, Li J, Miller W, Hardison RC,
+Chiaromonte F.
+<A HREF="http://www.genome.org/cgi/content/full/14/4/700"
+TARGET="_BLANK">Regulatory potential scores from genome-wide three-way
+alignments of human, mouse, and rat</A>.
+<em>Genome Res.</em> 2004 Apr;<B>14</B>(4):700-7. </P>
 
