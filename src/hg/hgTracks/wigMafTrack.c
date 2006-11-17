@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.104 2006/11/08 23:20:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.105 2006/11/17 01:03:08 fanhsu Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -78,7 +78,7 @@ struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn,
     return mafLoadInRegion(conn, table, chrom, start, end);
 }
 
-static struct wigMafItem *newMafItem(char *s, int g)
+static struct wigMafItem *newMafItem(char *s, int g, boolean lowerFirstChar)
 /* Allocate and initialize a maf item. Species param can be a db or name */
 {
 struct wigMafItem *mi;
@@ -97,7 +97,8 @@ else
     mi->name = cloneString(s);
     }
 mi->name = hgDirForOrg(mi->name);
-*mi->name = tolower(*mi->name);
+if (lowerFirstChar)
+    *mi->name = tolower(*mi->name);
 mi->height = tl.fontHeight;
 mi->group = g;
 return mi;
@@ -128,6 +129,15 @@ struct phyloTree *tree = NULL;
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(track->tdb, SPECIES_GROUP_VAR);
 char *speciesOff = trackDbSetting(track->tdb, SPECIES_DEFAULT_OFF_VAR);
+
+bool lowerFirstChar = TRUE;
+char *firstCase;
+
+firstCase = trackDbSetting(track->tdb, ITEM_FIRST_CHAR_CASE);
+if (firstCase != NULL)
+    {
+    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
+    }
 
 safef(buffer, sizeof(buffer), "%s.vis",track->mapName);
 if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
@@ -214,7 +224,7 @@ for (group = 0; group < groupCt; group++)
 	    if (!cartUsualBoolean(cart, option, TRUE))
 		continue;
 	    }
-        mi = newMafItem(species[i], group);
+        mi = newMafItem(species[i], group, lowerFirstChar);
         slAddHead(&miList, mi);
         }
     }
@@ -262,6 +272,15 @@ static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 struct wigMafItem *miList = NULL, *speciesList = NULL, *mi;
 int scoreHeight = 0;
 
+bool lowerFirstChar = TRUE;
+char *firstCase;
+
+firstCase = trackDbSetting(track->tdb, ITEM_FIRST_CHAR_CASE);
+if (firstCase != NULL)
+    {
+    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
+    }
+
 loadMafsToTrack(track);
 
 /* Add item for score wiggle base alignment */
@@ -281,7 +300,7 @@ mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
 /* Make up item for this organism. */
-mi = newMafItem(database, 0);
+mi = newMafItem(database, 0, lowerFirstChar);
 slAddHead(&miList, mi);
 
 /* Make items for other species */
