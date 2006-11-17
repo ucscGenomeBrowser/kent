@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1162 2006/11/14 05:36:38 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1163 2006/11/17 01:01:54 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11555,7 +11555,7 @@ axtFree(&axt);
 hPrintf("</PRE></TT>");
 }
 
-void printSnpAlignment2(struct snp snp, int version, boolean multipleAlignment)
+void printSnpAlignment2(struct snp snp)
 /* Get flanking sequences from table; align and print */
 /* Tablename hard-coded for now */
 {
@@ -11639,6 +11639,8 @@ else
     start = snp.chromStart - len3;
     end = snp.chromEnd + len5;
     }
+if (start < 0) start = 0;
+if (end > hChromSize(snp.chrom)) end = hChromSize(snp.chrom);
 
 /* do the lookup */
 hNibForChrom(snp.chrom, nibFile);
@@ -12570,7 +12572,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment2(snpAlign, 125, multipleAlignment);
+printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -12634,7 +12636,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
-printSnpAlignment2(snpAlign, version, multipleAlignment);
+printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
