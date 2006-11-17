@@ -160,4 +160,13 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     featureBits bosTau2 rmsk
     # 1291561904 bases of 2812203870 (45.927%) in intersection
 
-
+#########################################################################
+# WINDOWMASKER (TESTING Nov 16, 2006 Andy)
+    ssh hgwdev
+    screen 
+    time ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+         -workhorse kolossus bosTau3 >& bosTau3.wmsk.log
+    # Note: windowmasker uses the internet so -workhorse is basically a 
+    # required option.
+    # Cntrl+A+D then tail -f on the bosTau3.wmsk.log and keep an eye on it.
+    # Log into kolossus and run top.  Again, keep an eye on it.
