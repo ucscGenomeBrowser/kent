@@ -1,0 +1,100 @@
+#This file contains definitions of hiv1 table view columns.
+# main table is gsSubjInfo table (hivQuan,cd4 are in gsClinicRec table)
+#  the name must also be the fieldname in the table
+#
+name subjId
+shortLabel Subject
+longLabel GSID identification number
+priority 1
+visibility on
+type string
+
+name immunStatus
+shortLabel vac
+longLabel Immunization Status
+priority 2
+visibility on
+type remap "Vaccine"="+" "Placebo"="-"
+
+#(not in main table gsSubjInfo)
+name hivQuan
+shortLabel HIV
+longLabel HIV Quantity
+priority 3
+visibility on
+type integer
+query select hivQuan from gsClinicRec where subjId='%s' order by daysCollection desc limit 1;
+
+#(not in main table gsSubjInfo)
+name cd4Count
+shortLabel CD4
+longLabel CD4 Count
+priority 4
+visibility on
+type integer
+query select cd4Count from gsClinicRec where subjId='%s' order by daysCollection desc limit 1;
+
+name daysInfectL
+shortLabel Th1
+longLabel Days of infection relative to last negative date
+priority 5
+visibility on
+type integer
+
+name daysInfectF
+shortLabel Th2
+longLabel Days of infection relative to first injection date
+priority 6
+visibility on
+type integer
+
+
+name gender
+shortLabel sex
+longLabel Gender at birth
+priority 7
+visibility on
+type remap "Male"="M" "Female"="F"
+
+name age
+shortLabel age
+longLabel Age
+priority 8
+visibility on
+type integer
+
+name weight
+shortLabel weight
+longLabel Weight in kilograms
+priority 9
+visibility on
+type double
+
+name race
+shortLabel race
+longLabel Race
+priority 10
+visibility on
+type string
+
+name geography
+shortLabel geography
+longLabel Geographic location
+priority 11
+visibility on
+type string
+
+name riskFactor
+shortLabel risk
+longLabel Risk Group
+priority 12
+visibility on
+type string
+
+name seqAvail
+shortLabel seq
+longLabel Sequence is Available?
+priority 13
+visibility on
+type remap "y"="yes" "No Sequence data"="no"
+
