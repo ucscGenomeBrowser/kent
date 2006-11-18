@@ -25,7 +25,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.1 2006/11/17 23:13:22 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.2 2006/11/18 00:37:10 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -619,10 +619,10 @@ struct subjInfo *intAdvFilter(struct column *col,
 {
 char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
-if (minString && maxString)
+if (minString || maxString)
     {
-    int min = sqlSigned(minString);
-    int max = sqlSigned(maxString);
+    int min = minString ? sqlSigned(minString) : 0;
+    int max = maxString ? sqlSigned(maxString) : 0;
     struct subjInfo *newList = NULL, *next, *si;
     for (si = list; si != NULL; si = next)
         {
@@ -630,7 +630,7 @@ if (minString && maxString)
 	int val = sqlSigned(cell);
 	freez(&cell);
 	next = si->next;
-	if ((val >= min) && (val <= max))
+	if (!((minString && (val < min)) || (maxString && (val > max))))
 	    {
 	    slAddHead(&newList, si);
 	    }
@@ -648,18 +648,19 @@ struct subjInfo *doubleAdvFilter(struct column *col,
 {
 char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
-if (minString && maxString)
+if (minString || maxString)
     {
-    double min = sqlDouble(minString);
-    double max = sqlDouble(maxString);
+    double min = minString ? sqlDouble(minString) : 0.0;
+    double max = maxString ? sqlDouble(maxString) : 0.0;
     struct subjInfo *newList = NULL, *next, *si;
     for (si = list; si != NULL; si = next)
         {
 	char *cell = col->cellVal(col, si, conn);
-	double val = sqlDouble(col->cellVal(col, si, conn));
+	boolean invalid = sameString(cell,".");
+	double val = invalid ? 0.0 : sqlDouble(cell);
 	freez(&cell);
 	next = si->next;
-	if ((val >= min) && (val <= max))
+	if (!invalid && !((minString && (val < min)) || (maxString && (val > max))))
 	    {
 	    slAddHead(&newList, si);
 	    }
