@@ -11832,3 +11832,69 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
 
     ~/compbio/kent/src/hg/makeDb/outside/bcgscSage/bcgscSageLoad hg18 *_u.map
 
+####################################################################
+# MAKE UNIGENE/SAGE TRACK (DONE - 2006-11-20 Fan)
+
+# Create the uniGene alignments 
+# /cluster/data/hg18/uniGene/hg18.uniGene.lifted.pslReps.psl
+
+    # Download of the latest UniGene version is now automated by a 
+    # cron job -- see /cluster/home/angie/crontab , 
+    # /cluster/home/angie/unigeneVers/unigene.csh .  
+    # If hgwdev gets rebooted, that needs to be restarted... maybe there's 
+    # a more stable place to set up that cron job.  
+
+    ssh hgwdev
+    cd /cluster/store11/gs.19/build36/bed
+    mkdir uniGene
+    cd uniGene
+
+    set Version = 196		
+
+    zcat /cluster/store7/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh pk
+    set Version = 196
+    mkdir -p /san/sanvol1/scratch/hg18/uniGene/
+    cd /san/sanvol1/scratch/hg18/uniGene/
+    cp -p /cluster/store11/gs.19/build36/bed/uniGene/Hs.seq.uniq.simpleHeader.fa .
+    ls -1 /san/sanvol1/scratch/hg18/nib/*.nib > genome.lst
+    ls -1S \
+    /cluster/store11/gs.19/build36/bed/uniGene/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/san/sanvol1/scratch/hg18/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+# Completed: 49 of 49 jobs
+# CPU time in finished jobs:      46855s     780.92m    13.02h    0.54d  0.001 y
+# IO & Wait Time:                   240s       3.99m     0.07h    0.00d  0.000 y
+# Average job time:                 961s      16.02m     0.27h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3629s      60.48m     1.01h    0.04d
+# Submission to last job:          4337s      72.28m     1.20h    0.05d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg18.uniGene.pslReps.psl /dev/null
+
+# Processed 553470 alignments 
+    gzip raw.psl
+    gzip Hs.seq.uniq.simpleHeader.fa
+
+    ssh hgwdev
+    cd /cluster/store11/gs.19/build36/bed/uniGene
+    cp -p /san/sanvol1/scratch/hg18/uniGene/hg18.uniGene.pslReps.psl .
+
+    hgLoadPsl -table=uniGene_3 hg18 hg18.uniGene.pslReps.psl
+####################################################################
