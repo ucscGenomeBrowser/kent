@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1164 2006/11/18 00:17:22 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1165 2006/11/20 21:52:05 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6950,7 +6950,7 @@ hFreeConn(&conn);
 }
 
 void doRgdQtl(struct trackDb *tdb, char *item, char *itemForUrl)
-/* Put up Superfamily track info. */
+/* Put up RGD QTL info. */
 {
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -7161,6 +7161,32 @@ if (url != NULL && url[0] != 0)
  
     hFreeConn(&conn);
     }
+}
+
+void doUniGene3(struct trackDb *tdb, char *item)
+/* Put up UniGene info. */
+{
+char *url = tdb->url;
+char *id;
+struct sqlConnection *conn = hAllocConn();
+char *aliTbl = tdb->tableName;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+
+id = strstr(item, "Hs.")+strlen("Hs.");
+printf("<H3>%s UniGene: ", organism);
+printf("<A HREF=\"%s%s\" target=_blank>", url, id);
+printf("%s</B></A>\n", item);
+printf("</H3>\n");
+
+/* print alignments that track was based on */
+struct psl *pslList = getAlignments(conn, aliTbl, item);
+printf("<H3>Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", aliTbl, item);
+hFreeConn(&conn);
+
+printTrackHtml(tdb);
 }
 
 void doRgdSslp(struct trackDb *tdb, char *item, char *itemForUrl)
@@ -17631,6 +17657,10 @@ else if (sameWord(track, "affy10K"))
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item, tdb);
+    }
+else if (sameWord(track, "uniGene_3")) 
+    {
+    doUniGene3(tdb, item);
     }
 else if (sameWord(track, "tigrGeneIndex"))
     {
