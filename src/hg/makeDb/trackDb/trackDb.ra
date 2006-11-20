@@ -850,6 +850,16 @@ visibility hide
 spectrum on
 type bed 12 .
 
+track uniGene_3
+shortLabel UniGene
+longLabel UniGene Alignments
+group rna
+priority 69
+visibility pack
+url http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?ORG=Hs&CID=
+spectrum on
+type psl
+
 track orthoIntrons
 shortLabel orthoIntrons
 longLabel Bed version of AltGraphX Mapped Inrons from Mouse
