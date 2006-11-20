@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.97 2006/11/20 17:08:02 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.98 2006/11/20 20:13:08 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,6 +49,8 @@ errAbort(
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtRefreshPrefix "hgct_refresh"
 #define hgCtConfigLines   "hgct_configLines"
+#define hgCtSaveDataFile  "hgct_saveDataFile"
+#define hgCtSaveDocFile   "hgct_saveDocFile"
 
 /* commands */
 #define hgCtDo		  hgCt   "do_"	  /* prefix for all commands */
@@ -104,6 +106,13 @@ puts("Display your own data as custom annotation tracks in the browser."
 );
 }
 
+void fileSaveControl(char *var, char *msg)
+/* add text entry box for filename and a save button to form */
+{
+puts(msg);
+cgiMakeTextVar(var, cartUsualString(cart, var, ""), 20);
+}
+
 void addCustomForm(struct customTrack *ct, char *err)
 /* display UI for adding custom tracks by URL or pasting data */
 {
@@ -112,12 +121,10 @@ char *url = NULL;
 
 boolean gotClade = FALSE;
 boolean isUpdateForm = FALSE;
-boolean fromUrl = FALSE;
 if (ct)
     {
     isUpdateForm = TRUE;
-    if (ctDataUrl(ct))
-        fromUrl = TRUE;
+    url = ctDataUrl(ct);
     }
 else
     /* add form needs clade for assembly menu */
@@ -175,15 +182,18 @@ if (isUpdateForm)
     {
     /* row for instructions */
     cgiSimpleTableRowStart();
-    cgiSimpleTableFieldStart();
-    if (fromUrl)
-        puts("Configuration:");
+    if (url)
+        {
+        cgiTableField("Configuration:");
+        cgiTableField("&nbsp;");
+        }
     else
         {
-        puts("Edit configuration:");
+        cgiTableField("Edit configuration:");
+        puts("<TD ALIGN='RIGHT'>");
+        fileSaveControl(hgCtSaveDataFile, "Save config and data to file:");
+        cgiTableFieldEnd();
         }
-    cgiTableFieldEnd();
-    cgiTableField("&nbsp;");
     puts("<TD ALIGN='RIGHT'>");
     cgiMakeSubmitButton();
     cgiTableFieldEnd();
@@ -193,7 +203,7 @@ if (isUpdateForm)
     /* row for text entry box */
     cgiSimpleTableRowStart();
     puts("<TD COLSPAN=2>");
-    if (fromUrl)
+    if (url)
         {
         /* can't update via pasting if loaded from URL */
         cgiMakeTextAreaDisableable(hgCtConfigLines, 
@@ -230,7 +240,7 @@ if (isUpdateForm)
     cgiSimpleTableRowStart();
     puts("<TD STYLE='padding-top:9';\"></TD>");
     cgiTableRowEnd();
-    if (fromUrl)
+    if (url)
         cgiTableField("Data:");
     else
         cgiTableField("Paste in replacement data:");
@@ -238,7 +248,7 @@ if (isUpdateForm)
 else
     cgiTableField("Paste URLs or data:");
 
-if (isUpdateForm && fromUrl)
+if (isUpdateForm && url)
     cgiTableField("&nbsp");
 else
     {
@@ -258,7 +268,7 @@ cgiTableRowEnd();
 /* next row - text entry box for  data, and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-if (fromUrl)
+if (url)
     {
     /* can't update via pasting if loaded from URL */
     safef(buf, sizeof buf, "Replace data at URL: %s", ctDataUrl(ct));
@@ -280,7 +290,7 @@ cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-if (!(isUpdateForm && fromUrl))
+if (!(isUpdateForm && url))
     makeClearButton(hgCtDataText);
 cgiTableFieldEnd();
 cgiTableRowEnd();
@@ -296,11 +306,27 @@ cgiTableRowEnd();
 
 /* next row - label for description text entry */
 cgiSimpleTableRowStart();
-cgiTableField("Optional track documentation: ");
-puts("<TD ALIGN='RIGHT'>");
-puts("Or upload: ");
-cgiMakeFileEntry(hgCtDocFile);
-cgiTableFieldEnd();
+cgiTableField("Optional track documentation:");
+
+if (isUpdateForm)
+    {
+    url = ctHtmlUrl(ct);
+    if (url)
+        cgiTableField("&nbsp;");
+    else
+        {
+        puts("<TD ALIGN='RIGHT'>");
+        fileSaveControl(hgCtSaveDocFile, "Save doc to file:");
+        cgiTableFieldEnd();
+        }
+    }
+else
+    {
+    puts("<TD ALIGN='RIGHT'>");
+    puts("Or upload: ");
+    cgiMakeFileEntry(hgCtDocFile);
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 
 /* next row - text entry for description, and clear button(s) */
