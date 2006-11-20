@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.94 2006/11/15 19:30:54 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.95 2006/11/20 15:50:08 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -175,11 +175,15 @@ if (isUpdateForm)
     {
     /* row for instructions */
     cgiSimpleTableRowStart();
-    puts("<TD COLSPAN=2>");
+    cgiSimpleTableFieldStart();
     if (fromUrl)
         puts("Configuration:");
     else
+        {
         puts("Edit configuration:");
+        }
+    cgiTableFieldEnd();
+    cgiTableField("&nbsp;");
     puts("<TD ALIGN='RIGHT'>");
     cgiMakeSubmitButton();
     cgiTableFieldEnd();
@@ -222,6 +226,10 @@ cgiSimpleTableRowStart();
 if (isUpdateForm)
     {
     /* update existing */
+    /* extra space */
+    cgiSimpleTableRowStart();
+    puts("<TD STYLE='padding-top:5';\"></TD>");
+    cgiTableRowEnd();
     if (fromUrl)
         cgiTableField("Data:");
     else
@@ -279,6 +287,11 @@ cgiTableRowEnd();
 
 cgiTableEnd();
 cgiTableFieldEnd();
+cgiTableRowEnd();
+
+/* extra space */
+cgiSimpleTableRowStart();
+puts("<TD STYLE='padding-top:5';\"></TD>");
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
