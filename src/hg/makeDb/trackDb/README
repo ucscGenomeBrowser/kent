@@ -230,6 +230,9 @@ group        - any "name" from the grp table  - used to specify which group
                regulation, compGeno, varRep   - this track into
 useScore     -    1                           - use score to shade color items
 spectrum     -    on                          - same effect as useScore
+thickDrawItem  -  on                          - keep width of bed item at least
+                                              - 3 pixels wide even at great
+                                              - zoom levels
 color        -    r,g,b integer triplet       - specifies primary color
                                               - for items.
                                               - red,green,blue values 0 to 255
