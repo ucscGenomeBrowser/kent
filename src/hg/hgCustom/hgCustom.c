@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.96 2006/11/20 16:36:13 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.97 2006/11/20 17:08:02 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -228,7 +228,7 @@ if (isUpdateForm)
     /* update existing */
     /* extra space */
     cgiSimpleTableRowStart();
-    puts("<TD STYLE='padding-top:7';\"></TD>");
+    puts("<TD STYLE='padding-top:9';\"></TD>");
     cgiTableRowEnd();
     if (fromUrl)
         cgiTableField("Data:");
@@ -291,7 +291,7 @@ cgiTableRowEnd();
 
 /* extra space */
 cgiSimpleTableRowStart();
-puts("<TD STYLE='padding-top:7';\"></TD>");
+puts("<TD STYLE='padding-top:10';\"></TD>");
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
