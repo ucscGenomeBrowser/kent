@@ -17,13 +17,12 @@ if ( $err ) then
     echo "error running buildzip.csh: $err" 
     exit 1
 endif
-cp $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" /usr/local/apache/htdocs/admin/jksrc.zip
-echo
-echo "Zip Done. Make Push Request:"
-echo
-echo "Please push hgwbeta --> hgdownload, "
-echo "   /usr/local/apache/htdocs/admin/jksrc.zip"
-echo "Thanks!"
-echo
-exit 0
+
+echo "removing old jksrc zip and symlink"
+ssh qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/jksrc.zip"
+ssh qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/jksrc.v*.zip"
+echo "scp-ing jksrc.v${BRANCHNN}.zip to hgdownload"
+scp -p $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" qateam@hgdownload:/mirrordata/apache/htdocs/admin/
+echo "updating jksrc.zip symlink"
+ssh qateam@hgdownload "cd /mirrordata/apache/htdocs/admin/;ln -s jksrc.v${BRANCHNN}.zip jksrc.zip"
 
