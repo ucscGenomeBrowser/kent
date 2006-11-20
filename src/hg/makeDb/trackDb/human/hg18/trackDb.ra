@@ -913,7 +913,7 @@ priority 94
 group regulation
 visibility hide
 type bed 6 +
-scoreMin 711
+scoreMin 685
 scoreMax 1000
 spectrum on
 urlLabel Transfac matrix link:
