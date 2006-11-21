@@ -161,6 +161,44 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # 1291561904 bases of 2812203870 (45.927%) in intersection
 
 #########################################################################
+# SIMPLE REPEATS (TRF) (DONE October 6, 2006 heather)
+    # look for an idle small cluster machine
+    ssh -x kki parasol list machines | grep idle
+    ssh kkr1u00
+    nice tcsh
+    mkdir /cluster/data/bosTau3/bed/simpleRepeat
+    cd /cluster/data/bosTau3/bed/simpleRepeat
+    twoBitToFa ../../bosTau3.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+      -bedAt=simpleRepeat.bed -tempDir=/tmp \
+    >& trf.log & tail -f trf.log
+
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed bosTau3 simpleRepeat \
+      /cluster/data/bosTau3/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    # 878 warnings
+    # Compare coverage to previous assembly:
+    featureBits bosTau3 simpleRepeat
+    featureBits bosTau2 simpleRepeat
+
+    # try again, spliting the fa files first this time
+    ssh kkstore05
+    cd /cluster/data/bosTau3/fixup
+    mkdir split
+    cd split
+    # this took about 5 minutes
+    zcat ../UCSC.bosTau3.fa.gz | faSplit byname stdin . -outDirDepth=3
+    cd /cluster/data/bosTau3/bed/simpleRepeat3
+    /bin/csh makeJoblist-trf.csh
+    tcsh trf-run.csh >&! trf.log &
+
+#########################################################################
 # WINDOWMASKER (TESTING Nov 16, 2006 Andy)
     ssh hgwdev
     screen 
@@ -170,3 +208,13 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # required option.
     # Cntrl+A+D then tail -f on the bosTau3.wmsk.log and keep an eye on it.
     # Log into kolossus and run top.  Again, keep an eye on it.
+
+#########################################################################
+# ooc file
+# use same repMatch value as bosTau2
+    ssh kkr3u00
+    cd /cluster/data/bosTau3
+    mkdir bed/ooc
+    cd bed/ooc
+    blat nib.lst /dev/null /dev/null -tileSize=11 -makeOoc=/cluster/bluearc/bosTau3/11.ooc -repMatch=1005
+
