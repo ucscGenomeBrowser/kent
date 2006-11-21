@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.153 2006/11/15 19:30:54 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.154 2006/11/21 00:33:08 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -114,7 +114,7 @@ if (status)
 	{
 	int useCount = sqlUnsigned(row[0]);
 	sqlFreeResult(&sr);
-	safef(query, sizeof(query), "UPDATE %s SET useCount=%d,lastUse=now() where name=\"%s\"",
+	safef(query, sizeof(query), "UPDATE %s SET useCount=%d,lastUse=now() WHERE name=\"%s\"",
 	    CT_META_INFO, useCount+1, table);
 	sqlUpdate(conn,query);
 	}
@@ -127,7 +127,7 @@ if (status)
     }
 else
     {
-    safef(query, sizeof(query), "delete from %s where name=\"%s\"",
+    safef(query, sizeof(query), "DELETE FROM %s WHERE name=\"%s\"",
 	CT_META_INFO, table);
     sqlUpdate(conn,query);
     }
