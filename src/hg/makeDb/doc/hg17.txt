@@ -17896,6 +17896,7 @@ hgPepPred hg17 generic acemblyPep \
 # there are AceView genes (~10,000) without corresponding 
 # protein sequences.  They will fix it next time.
 
+###########################################################################
 # LOADING AFFYTXNPHASE2 TRACK (sugnet)
 
 # cd to where data is downloaded.
@@ -17934,6 +17935,35 @@ cd ../transfrags
 
 # End of affyTxnPhase2
 
+###########################################################################
+#  Creating download files for the affyTxnPhase2 data
+#		(DONE - 2006-11-20 - Hiram)
+    #	Copy all of the data above to a temporary /san/sanvol1/scratch/
+    #	location, and run the following script:
+#!/bin/sh
+
+mkdir -p rawData/hg17
+
+TOP=`pwd`
+export TOP
+for dir in `find ./ -type d | grep '_' | grep -v A375_cytosolic_polyAPlus | grep -v FHs738Lu_cytosolic_polyAPlus | grep -v HepG2_CytosolVsNucleusDifferenceGraphs | grep -v HepG2_cytosolic_polyAPlus | grep -v HepG2_cytosolic_polyAMinus | sed -e "s#^./##"`; do
+base=`echo $dir | sed -e 's/\.\///; s/\//_/g' | sed -e 's/polyA-/polyAMinus/g' | sed -e 's/-/_/g' | sed -e 's/\+/Plus/g' | $TOP/changeName.pl`
+RAW=$TOP/rawData/hg17/$base.data
+echo $RAW
+   cd $dir;
+   zcat `ls -1 *hg17.bed.gz` | bedSort stdin stdout | cut -f 1,2,3,4 | grep chr | $TOP/avgerizeBed.pl > $RAW
+   cd $TOP;
+done
+
+    #	Then copy the rawData/hg17/ results directory back to:
+    /cluster/data/hg17/bed/affyTxnPhase2/rawResults/
+    #	And deliver to hgdownloads via symlinks on hgwdev:
+    cd /usr/local/apache/htdocs/goldenPath/hg17/affyTxnPhase2/
+    # to:
+    ln -s /cluster/data/hg17/bed/affyTxnPhase2/rawData/*.data.gz .
+    #	Remove the san scratch data
+
+###########################################################################
 # ALTGRAPHX TRACK (sugnet)
 
 /cluster/store1/sugnet/altSplice
