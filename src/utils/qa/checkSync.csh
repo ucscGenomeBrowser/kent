@@ -53,6 +53,11 @@ if ( $#argv == 3 || $#argv == 4 ) then
   set mach2=$argv[3]
 endif
 
+checkMachineName.csh $mach1 $mach2
+if ($status) then
+  exit 1
+endif
+
 if ( $#argv == 4 ) then
   if ( $argv[4] == "times" ) then
     set times=1
@@ -102,8 +107,8 @@ endif
 
 rm -f $mach1.tables
 rm -f $mach2.tables
-rm -f $mach1*status*
-rm -f $mach2*status*
+rm -f "$mach1*status*"
+rm -f "$mach2*status*"
 rm -f "$mach1*Only"
 rm -f "$mach2*Only"
 rm -f trioFile
