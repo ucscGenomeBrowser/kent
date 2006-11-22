@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.78 2006/11/16 21:52:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.79 2006/11/22 00:07:36 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -208,6 +208,23 @@ else
 return TRUE;
 }
 
+static void findWibFile(struct wiggleDataStream *wds, char *file)
+/* look for file in full pathname given, or in same directory */
+{
+wds->wibFile = cloneString(file);
+wds->wibFH = open(wds->wibFile, O_RDONLY);
+if (wds->wibFH == -1)
+    {
+    char *baseName = strrchr(wds->wibFile, '/');
+    if (baseName)
+	{
+	wds->wibFH = open(baseName+1, O_RDONLY);
+	}
+    if ((NULL == baseName) || (wds->wibFH == -1))
+	errAbort("openWibFile: failed to open %s", wds->wibFile);
+    }
+}
+
 static void openWibFile(struct wiggleDataStream *wds, char *file)
 {
 if (wds->wibFile)
@@ -217,19 +234,12 @@ if (wds->wibFile)
 	if (wds->wibFH > 0)
 	    close(wds->wibFH);
 	freeMem(wds->wibFile);
-	wds->wibFile = cloneString(file);
-	wds->wibFH = open(wds->wibFile, O_RDONLY);
-	if (wds->wibFH == -1)
-	    errAbort("openWibFile: failed to open %s", wds->wibFile);
+	findWibFile(wds, file);
 	}
     }
 else
-    {
-    wds->wibFile = cloneString(file);	/* first time */
-    wds->wibFH = open(wds->wibFile, O_RDONLY);
-    if (wds->wibFH == -1)
-	errAbort("openWibFile: failed to open %s", wds->wibFile);
-    }
+    findWibFile(wds, file);
+
 verbose(VERBOSE_HIGHEST, "#\topened wib file: %s\n", wds->wibFile);
 }
 
