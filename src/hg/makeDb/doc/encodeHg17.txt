@@ -120,9 +120,12 @@ exit
                    $w[4] = ($1 >= 4 ? 1000 : ($1 >= 3 ? 800 : 333)); \
                  } else { die "parse"; } \
                  $_ = join("\t", @w) . "\n";' > myc.bed
-    hgLoadBed -strict hg17 encodeGisChipPetP493Myc myc.bed
+    hgLoadBed -strict hg17 encodeGisChipPetMycP493 myc.bed
         # Loaded 276788 elements of size 12
-    checkTableCoords encodeGisChipPetP493Myc
+    checkTableCoords encodeGisChipPetMycP493
+
+    # Create a composite track and merge in P53 and STAT1 data
+    # as subtracks
 
 ##########################################################################
 # KNOWN+PRED RNA (2005-08-29 kate)
@@ -1401,17 +1404,19 @@ cat > loadPval.csh << 'EOF'
     foreach cell (Cd4 Gm06990 Cd4)
         awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
             $cell.pval.hg17.bed | \
-                hgLoadBed -strict -bedGraph=4 hg17 \
+                hgLoadBed -strict -noBin -sqlTable=~/kent/src/hg/lib/bed5FloatScore.sql hg17 \
                         encodeNhgriDnaseHsChipPval$cell stdin
     end
 'EOF'
 
-#Loaded 1262 elements of size 4
-#  encodeNhgriDnaseHsChipPvalCd4
-#Loaded 1098 elements of size 4
-#  encodeNhgriDnaseHsChipPvalGm06990
-#Loaded 1262 elements of size 4
-#  encodeNhgriDnaseHsChipPvalCd4
+cat > loadPval.csh << 'EOF'
+# bed 5+ chr start end name score pVal
+    foreach cell (Cd4 Gm06990 Hela)
+        set lcell `echo $cell | sed 's/\(.*\)/\u\1/'`
+awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t\U%s.%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR, $5 * 35 + 100, $5)}' $cell.pval.hg17.bed | \
+        hgLoadBed -strict -noBin -sqlTable=~/kent/src/hg/lib/bed5FloatScore.sql hg17 \
+                        encodeNhgriDnaseHsChipPval$cell stdin
+'EOF'
 
 # min = 3.13 max  = 24.513
 
@@ -1706,11 +1711,6 @@ cat > loadSig.csh << 'EOF'
     grep '^chr' lab/myc.tag.prob.bed | \
        awk '{printf("%s\t%d\t%d\t%s\t%d\n",$1,$2,$3,$4,$5)}' | \
     hgLoadBed -noBin -strict hg17 encodeUtexStageCMycHelaTags stdin
-
-
-
-# At Submitter's request, do not use score in display
-# So,  
 
     
 ##########################################################################
