@@ -71,7 +71,6 @@ int cmpSeqName(char *a, char *b)
 {
 char cA, cB;
 int cSame = countSame(a, b);
-int diff;
 
 a += cSame;
 b += cSame;
@@ -276,10 +275,8 @@ int i;
 struct lineFile *lf = pslFileOpen(pslFileName);
 struct dnaSeq *qSeq = NULL, *tSeq = NULL;
 char *tFileName, *tSeqName;
-struct ffAli *ffAli;
 int blockCount;
 int tStart, tEnd;
-boolean tIsRc = FALSE;
 boolean protQuery = sameWord(type, "Protein");
 char *bodyName = cloneString(rTempName(cfg->tempDir, "body", ".html"));
 char *indexName = cloneString(rTempName(cfg->tempDir, "index", ".html"));
@@ -353,7 +350,6 @@ bioSeq *seqList, *seq;
 char *type = NULL;
 boolean txServer = FALSE, protQuery = FALSE;
 struct gfServerAt *server;
-int i;
 int conn;
 FILE *f;
 struct gfOutput *gvo;
