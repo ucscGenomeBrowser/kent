@@ -78,46 +78,45 @@ if ( 1 == $times) then
     -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' > $mach2.status
   cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
     > genbank.local
-  cat $mach1.status | egrep -v -f genbank.local > $mach1.status2
-  cat $mach2.status | egrep -v -f genbank.local > $mach2.status2
-  commTrio.csh $mach1.status2 $mach2.status2 > trioFile
-  echo
-  cat trioFile
-
-  # process the times of those tables that do not match
-  set firstOnly=`cat trioFile | sed -n '1p' | awk '{print $1}'`
-  set secondOnly=`cat trioFile | sed -n '2p' | awk '{print $1}'`
-  rm -f outFile
-  if ( 0 != $firstOnly || 0 !=  $secondOnly ) then
-    cat $mach1.status2.Only | sed -e "s/^/$mach1\t/" >> outFile
-    cat $mach2.status2.Only | sed -e "s/^/$mach2\t/" >> outFile
-    sort -k2 outFile 
-    echo
-  endif
+  cat $mach1.status | egrep -v -f genbank.local > $mach1.out
+  cat $mach2.status | egrep -v -f genbank.local > $mach2.out
 else
   ssh -x qateam@$mach1 mysql $db -A -N \
-    -e '"'SHOW TABLES'"' > $mach1.tables
+    -e '"'SHOW TABLES'"' > $mach1.out
   ssh -x qateam@$mach2 mysql $db -A -N \
-    -e '"'SHOW TABLES'"' > $mach2.tables
-  echo
-  commTrio.csh $mach1.tables $mach2.tables
+    -e '"'SHOW TABLES'"' > $mach2.out
 endif
 
-# allow files to pile up:
+echo
+commTrio.csh $mach1.out $mach2.out | sed -e "s/\.out//g" \
+   | sed -e "s/Only/only/" > trioFile
+echo
+cat trioFile
+
+# process the times or table names of tables that do not match
+set firstOnly=`cat trioFile | sed -n '1p' | awk '{print $1}'`
+set secondOnly=`cat trioFile | sed -n '2p' | awk '{print $1}'`
+rm -f outFile
+if ( 0 != $firstOnly || 0 !=  $secondOnly ) then
+  cat $mach1.out.Only | sed -e "s/^/$mach1\t/" >> outFile
+  cat $mach2.out.Only | sed -e "s/^/$mach2\t/" >> outFile
+  sort -k2 outFile 
+  echo
+endif
+
+# to allow files to pile up stop here:
 # exit
 
 # couldn't make wildcards work, e.g.:
 # rm -f "$mach1*Only"
 
-rm -f $mach1.tables
-rm -f $mach2.tables
 rm -f $mach1.status
 rm -f $mach2.status
-rm -f $mach1.status2
-rm -f $mach2.status2
-rm -f $mach1.status2.Only
-rm -f $mach2.status2.Only
-rm -f $mach1.status2.$mach2.status2.Only
+rm -f $mach1.out
+rm -f $mach2.out
+rm -f $mach1.out.Only
+rm -f $mach2.out.Only
+rm -f $mach1.out.$mach2.out.Only
 rm -f trioFile
 rm -f outFile
 rm -f genbank.local
