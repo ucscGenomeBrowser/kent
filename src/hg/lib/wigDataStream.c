@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.79 2006/11/22 00:07:36 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.80 2006/11/22 00:25:50 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -217,9 +217,7 @@ if (wds->wibFH == -1)
     {
     char *baseName = strrchr(wds->wibFile, '/');
     if (baseName)
-	{
 	wds->wibFH = open(baseName+1, O_RDONLY);
-	}
     if ((NULL == baseName) || (wds->wibFH == -1))
 	errAbort("openWibFile: failed to open %s", wds->wibFile);
     }
@@ -358,8 +356,9 @@ if (wds->isFile)
     {
     struct dyString *fileName = dyStringNew(256);
     lineFileClose(&wds->lf);	/*	possibly a previous file */
-    /*	don't add .wig if it is already there	*/
-    if (endsWith(wds->tblName,".wig"))
+    /*	don't add .wig if it is already there, or use whatever filename
+     *	was given	*/
+    if (fileExists(wds->tblName))
 	dyStringPrintf(fileName, "%s", wds->tblName);
     else
 	dyStringPrintf(fileName, "%s.wig", wds->tblName);
@@ -425,8 +424,8 @@ struct dyString *fileName = dyStringNew(256);
 if (!table)
     errAbort("setDbTable: table specification missing");
 
-/*	Check to see if there is a .wig file	*/
-if (endsWith(table, ".wig"))
+/*	Check to see if there is a .wig file, or whatever name was given */
+if (fileExists(table))
     dyStringPrintf(fileName, "%s", table);
 else
     dyStringPrintf(fileName, "%s.wig", table);
