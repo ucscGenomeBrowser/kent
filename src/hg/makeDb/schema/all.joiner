@@ -1714,13 +1714,11 @@ identifier snpAnnotations125
 "SNP annotations"
     $snpDb125.snp125.name dupeOk
     $snpDb125.snp125Exceptions.name 
-    $snpDb125.snp125Seq.name minCheck=0.8
 
 identifier snpAnnotations126
 "SNP annotations"
     $snpDb126.snp126.name dupeOk
     $snpDb126.snp126Exceptions.name 
-    $snpDb126.snp126Seq.name minCheck=0.98
 
 identifier snpArrayHg17
 "SNP array track for hg17"
@@ -2335,8 +2333,6 @@ tablesIgnored $gbd
     sangerGenefinder
     sangamoDnaseHs
     simpleRepeat
-    snp125ExtFile
-    snp126ExtFile
     sgpGene
     tableDescriptions
     tigrGeneIndex
