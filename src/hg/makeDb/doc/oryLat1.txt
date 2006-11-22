@@ -1,0 +1,13 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Medaka
+# genome, Oryzias latipes, October 2005, MEDAKA1 from
+#	Institute of Genetics (NIG) and the University of Tokyo
+#	NIG: http://dolphin.lab.nig.ac.jp/medaka/
+#	UTGB: http://medaka.utgenome.org/o
+#	Data release policy: http://medaka.utgenome.org/#policy
+#	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
+#
+#	"$Id: oryLat1.txt,v 1.1 2006/11/22 17:15:52 hiram Exp $"
+#
