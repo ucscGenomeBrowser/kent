@@ -15,6 +15,7 @@ install:
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
 	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
+	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination commTrio.csh            ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
