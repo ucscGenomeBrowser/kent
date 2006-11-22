@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1166 2006/11/22 21:30:08 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1167 2006/11/22 21:39:23 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11502,7 +11502,6 @@ hFreeConn(&conn);
 
 off_t getSnpOffset(struct snp snp)
 /* do a lookup in the snpSeq for the offset */
-/* move this to kent/src/hg/lib/snpSeq.c */
 {
 char query[256];
 char **row;
@@ -11523,6 +11522,7 @@ return offset;
 
 
 char *getSnpSeqFile()
+/* find location of snp.fa */
 {
 char query[256];
 char **row;
@@ -11580,7 +11580,6 @@ hPrintf("</PRE></TT>");
 
 void printSnpAlignment2(struct snp snp)
 /* Get flanking sequences from table; align and print */
-/* Tablename hard-coded for now */
 {
 char *fileName = NULL;
 char *variation = NULL;
@@ -11590,7 +11589,7 @@ char nibFile[HDB_MAX_PATH_STRING];
 char *line;
 struct lineFile *lf = NULL;
 int lineSize;
-static int maxFlank = 5000;
+static int maxFlank = 1000;
 
 boolean gotVar = FALSE;
 boolean isNucleotide = TRUE;
@@ -11672,8 +11671,7 @@ if (len5 > maxFlank)
     }
 if (len3 > maxFlank) 
     {
-    skipCount = len3 - maxFlank;
-    rightFlank = rightFlank + skipCount;
+    rightFlank[maxFlank] = '\0';
     rightFlankTrimmed = TRUE;
     len3 = strlen(rightFlank);
     }
