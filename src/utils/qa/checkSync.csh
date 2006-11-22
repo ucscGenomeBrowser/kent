@@ -81,6 +81,7 @@ if ( 1 == $times) then
   cat $mach1.status | egrep -v -f genbank.local > $mach1.status2
   cat $mach2.status | egrep -v -f genbank.local > $mach2.status2
   commTrio.csh $mach1.status2 $mach2.status2 > trioFile
+  echo
   cat trioFile
 
   # process the times of those tables that do not match
@@ -105,12 +106,18 @@ endif
 # allow files to pile up:
 # exit
 
+# couldn't make wildcards work, e.g.:
+# rm -f "$mach1*Only"
+
 rm -f $mach1.tables
 rm -f $mach2.tables
-rm -f "$mach1*status*"
-rm -f "$mach2*status*"
-rm -f "$mach1*Only"
-rm -f "$mach2*Only"
+rm -f $mach1.status
+rm -f $mach2.status
+rm -f $mach1.status2
+rm -f $mach2.status2
+rm -f $mach1.status2.Only
+rm -f $mach2.status2.Only
+rm -f $mach1.status2.$mach2.status2.Only
 rm -f trioFile
 rm -f outFile
 rm -f genbank.local
