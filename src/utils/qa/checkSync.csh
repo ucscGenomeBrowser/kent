@@ -98,7 +98,7 @@ else
 endif
 
 # allow files to pile up:
-exit
+# exit
 
 rm -f $mach1.tables
 rm -f $mach2.tables
