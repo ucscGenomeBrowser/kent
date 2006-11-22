@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1165 2006/11/20 21:52:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1166 2006/11/22 21:30:08 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11590,13 +11590,19 @@ char nibFile[HDB_MAX_PATH_STRING];
 char *line;
 struct lineFile *lf = NULL;
 int lineSize;
+static int maxFlank = 5000;
 
 boolean gotVar = FALSE;
 boolean isNucleotide = TRUE;
+boolean leftFlankTrimmed = FALSE;
+boolean rightFlankTrimmed = FALSE;
 
 struct dyString *seqDbSnp5 = newDyString(512);
 struct dyString *seqDbSnp3 = newDyString(512);
 struct dyString *seqDbSnpTemp = newDyString(512);
+
+char *leftFlank = NULL;
+char *rightFlank = NULL;
 
 struct dnaSeq *dnaSeqDbSnp5 = NULL;
 struct dnaSeq *dnaSeqDbSnpO = NULL;
@@ -11609,6 +11615,7 @@ int len5 = 0;
 int len3 = 0;
 int start = 0;
 int end = 0;
+int skipCount = 0;
 
 off_t offset = 0;
 
@@ -11648,9 +11655,30 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 lineFileClose(&lf);
 
+/* trim */
+/* axtAffine has a limit of 100,000,000 bases for query x target */
+leftFlank = cloneString(seqDbSnp5->string);
+rightFlank = cloneString(seqDbSnp3->string);
+freeDyString(&seqDbSnp5);
+freeDyString(&seqDbSnp3);
+len5 = strlen(leftFlank);
+len3 = strlen(rightFlank);
+if (len5 > maxFlank) 
+    {
+    skipCount = len5 - maxFlank;
+    leftFlank = leftFlank + skipCount;
+    leftFlankTrimmed = TRUE;
+    len5 = strlen(leftFlank);
+    }
+if (len3 > maxFlank) 
+    {
+    skipCount = len3 - maxFlank;
+    rightFlank = rightFlank + skipCount;
+    rightFlankTrimmed = TRUE;
+    len3 = strlen(rightFlank);
+    }
+
 /* get coords */
-len5 = strlen(seqDbSnp5->string);
-len3 = strlen(seqDbSnp3->string);
 strand  = cloneString(snp.strand);
 if (sameString(strand,"+") || sameString(strand,"?"))
     {
@@ -11687,18 +11715,22 @@ printf("(Uses ");
 printf("<A HREF=\" http://www.chem.qmul.ac.uk/iubmb/misc/naseq.html#tab1 \"" );
 printf("TARGET=_BLANK>IUPAC ambiguity codes</A>");
 printf(")\n");
-dnaSeqDbSnp5 = newDnaSeq(seqDbSnp5->string, len5, "dbSNP seq 5");
+if (leftFlankTrimmed)
+    printf("Left flank trimmed to %d bases.\n", maxFlank);
+if (rightFlankTrimmed)
+    printf("Right flank trimmed to %d bases.\n", maxFlank);
+dnaSeqDbSnp5 = newDnaSeq(leftFlank, len5, "dbSNP seq 5");
 dnaSeqDbSnpO = newDnaSeq(variation, strlen(variation),"dbSNP seq O");
-dnaSeqDbSnp3 = newDnaSeq(seqDbSnp3->string, len3, "dbSNP seq 3");
+dnaSeqDbSnp3 = newDnaSeq(rightFlank, len3, "dbSNP seq 3");
 writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
 writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
 printf("</PRE>\n");
 
 /* create seqDbSnp */
-dyStringAppend(seqDbSnpTemp, seqDbSnp5->string);
+dyStringAppend(seqDbSnpTemp, leftFlank);
 dyStringAppend(seqDbSnpTemp, variation);
-dyStringAppend(seqDbSnpTemp, seqDbSnp3->string);
+dyStringAppend(seqDbSnpTemp, rightFlank);
 seqDbSnp = newDnaSeq(seqDbSnpTemp->string, strlen(seqDbSnpTemp->string), "dbSNP seq");
 if (seqDbSnp == NULL)
     {
@@ -11706,8 +11738,6 @@ if (seqDbSnp == NULL)
     return;
     }
 seqDbSnp->size = strlen(seqDbSnp->dna);
-freeDyString(&seqDbSnp5);
-freeDyString(&seqDbSnp3);
 
 generateAlignment(seqNib, seqDbSnp);
 }
