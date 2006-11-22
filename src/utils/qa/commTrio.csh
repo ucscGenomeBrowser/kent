@@ -94,6 +94,4 @@ if ($#argv == 3) then
   endif
 endif
 
-echo
-
 
