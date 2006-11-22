@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: demog.c,v 1.1 2006/11/18 00:18:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: demog.c,v 1.2 2006/11/22 22:39:30 fanhsu Exp $";
 
 static boolean demogExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -33,11 +33,11 @@ char *location;
 char query[256];
 struct sqlResult *sr;
 char **row;
-char *riskFactor;
+char *weight, *riskFactor;
 
 printf("<TABLE>");
 safef(query, sizeof(query), 
-      "select gender, age, race, geography, riskFactor from gsSubjInfo where subjId='%s'", 
+      "select gender, age, race, geography, riskFactor, weight from gsSubjInfo where subjId='%s'", 
       subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -49,6 +49,7 @@ if (row != NULL)
     race       = row[2];
     location   = row[3];
     riskFactor = row[4];
+    weight     = row[5];
     
     printf("<TR>");
     printf("<TD>");
@@ -65,6 +66,9 @@ if (row != NULL)
     printf("<TR>");
     printf("<TD>");
     printf("<B>race:</B> %s%s\n", race, GSBLANKS);
+    printf("</TD>");
+    printf("<TD>");
+    printf("<B>weight(kg):</B> %s\n", weight);
     printf("</TD>");
     printf("<TD>");
     printf("<B>location:</B> %s\n", location);
