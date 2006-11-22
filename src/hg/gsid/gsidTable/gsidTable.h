@@ -31,6 +31,7 @@ struct column
     char *type;                 /* type of column */
     struct hash* remap;         /* hash for substitutes if type="remap" */
     char *query;                /* query if not in gsSubjInfo main table */
+    boolean filterDropDown;	/* True if filter uses dropdown list. */
 
     int colNo;                  /* index into subjInfo string array or -1 if not in gsSubjInfo table */
 
@@ -212,6 +213,8 @@ void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn);
 void minMaxAdvFilterControls(struct column *col, struct sqlConnection *conn);
 /* Print out controls for min/max advanced filter. */
 
+void dropDownAdvFilterControls(struct column *col, struct sqlConnection *conn);
+/* Print out controls for dropdown list filter. */
 
 struct subjInfo *readAllSubjInfo(struct sqlConnection *conn, struct column *columns);
 /* Get all main table gsSubjInfo columns in use. */

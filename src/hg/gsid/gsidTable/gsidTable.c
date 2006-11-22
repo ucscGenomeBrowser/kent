@@ -9,7 +9,7 @@
 #include "obscure.h"
 //#include "portable.h"
 #include "cheapcgi.h"
-//#include "memalloc.h"
+#include "memalloc.h"
 #include "jksql.h"
 #include "htmshell.h"
 //#include "subText.h"
@@ -25,7 +25,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.2 2006/11/18 00:37:10 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.3 2006/11/22 22:01:28 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -423,6 +423,7 @@ col->on = col->defaultOn =
 col->filterOn = FALSE; 
 col->type = mustFindInRaHash(fileName, settings, "type");
 col->query = hashFindVal(settings, "query");
+col->filterDropDown = sameOk(hashFindVal(settings, "filterDropDown"), "on");
 col->colNo = -1;  
 }
 
@@ -513,6 +514,7 @@ void cellSimplePrint(struct column *col, struct subjInfo *si,
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, si, conn);
+boolean needsLink = sameString(col->name,"subjId");
 hPrintf("<TD>");
 if (s == NULL)
     {
@@ -520,7 +522,11 @@ if (s == NULL)
     }
 else
     {
+    if (needsLink)
+	hPrintf("<A HREF=\"gsidSubj?hgs_subj=%s&submit=Go%21\">",s);
     hPrintNonBreak(s);
+    if (needsLink)
+	hPrintf("</A>");
     freeMem(s);
     }
 hPrintf("</TD>");
@@ -718,7 +724,9 @@ hashFree(&keyHash);
 return list;
 }
 
-
+/* forward reference */
+void showListOfFilterValues(struct column *col, struct sqlConnection *conn);
+/* Print out list of values availabe for filter. */
 
 
 void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn)
@@ -756,6 +764,9 @@ if (!columnSetting(col, "noKeys", NULL))
             }
        }
     }
+if (col->filterDropDown)
+    showListOfFilterValues(col, conn);
+
 }
 
 
@@ -769,6 +780,7 @@ col->sortCmp = sortCmpString;
 col->cellPrint = cellSimplePrint;
 col->labelPrint = labelSimplePrint;
 col->tableColumns = oneColumn;
+//col->filterControls = col->filterDropDown ? dropDownAdvFilterControls : lookupAdvFilterControls;
 col->filterControls = lookupAdvFilterControls;
 col->advFilter = stringAdvFilter;
 }
@@ -825,6 +837,94 @@ freeMem(s);
 hPrintf("<TD align=right>");
 hPrintf("%s", buf);
 hPrintf("</TD>");
+}
+
+
+/* TODO:
+    assuming we want to keep this approach,
+    for cleanup need to rename struct col member filterDropDown
+    to something like showAvailableValues.
+    Then remove dropDownAdvFilterControls()
+    and rename showListOfFilterValues() to showListOfAvailableValues()
+*/
+
+void showListOfFilterValues(struct column *col, struct sqlConnection *conn)
+/* Print out list of values availabe for filter. */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct slName *list=NULL, *el;
+
+safef(query, sizeof(query),
+    "select distinct %s from gsSubjInfo", col->name);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *val = row[0];
+    if (col->remap)
+    	val = hashFindVal(col->remap,val);
+    slNameAddHead(&list, val);
+    }
+sqlFreeResult(&sr);
+
+slNameSort(&list);
+
+hPrintf("<BR>\n");
+hPrintf("<B>Available Values:</B><BR>\n");
+hPrintf("<TABLE>\n");
+
+for (el = list; el; el = el->next)
+    {
+    hPrintf("<TR><TD>%s</TD></TR>\n", el->name);
+    }
+    
+hPrintf("</TABLE>\n");
+
+slFreeList(&list);
+
+}
+
+
+void dropDownAdvFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for dropdown list filter. */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct slName *list=NULL, *el;
+
+safef(query, sizeof(query),
+    "select distinct %s from gsSubjInfo", col->name);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *val = row[0];
+    if (col->remap)
+    	val = hashFindVal(col->remap,val);
+    slNameAddHead(&list, val);
+    }
+sqlFreeResult(&sr);
+
+slNameSort(&list);
+
+hPrintf("choose: ");
+hPrintf("<SELECT NAME=\"%s\"", "countVarName");
+hPrintf(">\n");
+hPrintf("<OPTION VALUE=\"\">");
+
+for (el = list; el; el = el->next)
+    {
+    hPrintf("<OPTION VALUE=\"%s\"", el->name);
+    if (sameString(el->name, "displayCountString"))
+	hPrintf(" SELECTED");
+    hPrintf(">%s\n", el->name);
+    }
+    
+hPrintf("</SELECT>\n");
+
+slFreeList(&list);
+
 }
 
 void minMaxAdvFilterControls(struct column *col, struct sqlConnection *conn)
@@ -1040,10 +1140,7 @@ for (raHash = raList; raHash != NULL; raHash = raHash->next)
     if (!hashFindVal(raHash, "hide"))
         {
         setupColumnType(col);
-        //if (col->exists(col, conn))
-            //{
-            slAddHead(&colList, col);
-            //}
+	slAddHead(&colList, col);
         }
     }
 
@@ -1103,8 +1200,6 @@ for (ord = ordList; ord != NULL; ord = ord->next)
     if (!ordDefault && ord->on)
 	ordDefault = ord;
     }
-//if (ordDefault == NULL)
-//    errAbort("No orderings available");
 return ordDefault;
 }
 
@@ -1162,9 +1257,9 @@ struct subjInfo *subjList = NULL;
 struct column *ordList = colList;
 struct column *ord = curOrder(ordList);
 
-if (ord == NULL)  // no columns are visible, go to back to configure page
+if (ord == NULL)  /* no columns are visible, go to back to configure page */
     {
-    doConfigure(conn, colList); //, NULL);
+    doConfigure(conn, colList); 
     return;
     };  
 
@@ -1179,13 +1274,6 @@ else if (cartVarExists(cart, getSeqVarName))
     subjList = getOrderedList(ord, colList, conn, BIGNUM);
     doGetSeq(conn, subjList, cartString(cart, getSeqHowVarName));
     }
-/*
-else if (cartVarExists(cart, getGenomicSeqVarName))
-    {
-    subjList = getOrderedList(ord, colList, conn, BIGNUM);
-    doGetGenomicSeq(conn, colList, subjList);
-    }
-*/
 else
     {
     subjList = getOrderedList(ord, colList, conn, displayCount);
@@ -1271,7 +1359,7 @@ errAbort(
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-// pushCarefulMemHandler(100000000);
+pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);

@@ -15,7 +15,7 @@
 //#include "genePred.h"
 //#include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.1 2006/11/17 23:13:22 galt Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.2 2006/11/22 22:01:28 galt Exp $";
 
 
 static void getSeqFromBlob(struct sqlConnection *conn,
@@ -33,9 +33,9 @@ hPrintf("<TT><PRE>");
 for (si = siList; si != NULL; si = si->next)
     {
     char *s = skipToNumeric(si->fields[0]);
-    ++s;  /* skip over leading '3' */
-    
-    safef(pattern,sizeof(pattern),template,s);
+    char type = *s++;  /* save type, currently just 3 Thailand or 4 US */
+    type = (type == '3') ? 'T' : 'U';
+    safef(pattern,sizeof(pattern),template,type,s);
     safef(query, sizeof(query),
         "select id, seq from %s where id like '%s'", tableName, pattern);
     sr = sqlGetResult(conn, query);
@@ -57,13 +57,13 @@ hFreeConn(&conn2);
 static void getProtein( struct sqlConnection *conn, struct subjInfo *siList)
 /* Print out proteins. */
 {
-getSeqFromBlob(conn, siList, "aaSeq", "p1._-%s%%");
+getSeqFromBlob(conn, siList, "aaSeq", "p1.%c-%s%%");
 }
 
 static void getGenomic( struct sqlConnection *conn, struct subjInfo *siList)
 /* Print out dna. */
 {
-getSeqFromBlob(conn, siList, "dnaSeq", "ss._-%s%%");
+getSeqFromBlob(conn, siList, "dnaSeq", "ss.%c-%s%%");
 }
 
 
@@ -74,10 +74,6 @@ void doGetSeq(struct sqlConnection *conn,
 {
 if (sameString(how, "protein"))
     getProtein(conn, siList);
-//else if (sameString(how, "mRNA"))
-//    getMrna(conn, colList, siList);
-//else if (sameString(how, "promoter"))
-//    getPromoter(conn, colList, siList);
 else if (sameString(how, "genomic"))
     getGenomic(conn, siList);
 else

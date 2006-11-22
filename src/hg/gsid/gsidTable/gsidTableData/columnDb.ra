@@ -15,6 +15,7 @@ longLabel Immunization Status
 priority 2
 visibility on
 type remap "Vaccine"="+" "Placebo"="-"
+filterDropDown on
 
 #(not in main table gsSubjInfo)
 name hivQuan
@@ -35,15 +36,15 @@ type integer
 query select cd4Count from gsClinicRec where subjId='%s' order by daysCollection desc limit 1;
 
 name daysInfectL
-shortLabel Th1
+shortLabel DILN
 longLabel Days of infection relative to last negative date
 priority 5
 visibility on
 type integer
 
 name daysInfectF
-shortLabel Th2
-longLabel Days of infection relative to first injection date
+shortLabel DIFI
+longLabel The day of infection relative to first injection date
 priority 6
 visibility on
 type integer
@@ -55,6 +56,7 @@ longLabel Gender at birth
 priority 7
 visibility on
 type remap "Male"="M" "Female"="F"
+filterDropDown
 
 name age
 shortLabel age
@@ -76,6 +78,7 @@ longLabel Race
 priority 10
 visibility on
 type string
+filterDropDown on
 
 name geography
 shortLabel geography
@@ -83,6 +86,7 @@ longLabel Geographic location
 priority 11
 visibility on
 type string
+filterDropDown on
 
 name riskFactor
 shortLabel risk
@@ -90,6 +94,7 @@ longLabel Risk Group
 priority 12
 visibility on
 type string
+filterDropDown on
 
 name seqAvail
 shortLabel seq
@@ -97,4 +102,5 @@ longLabel Sequence is Available?
 priority 13
 visibility on
 type remap "y"="yes" "No Sequence data"="no"
+filterDropDown on
 
