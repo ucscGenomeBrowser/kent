@@ -1535,7 +1535,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     # load into database:
     ssh hgwdev
-    cd /cluster/data/bosTau1/bed/cpgIsland
+    cd /cluster/data/bosTau2/bed/cpgIsland
     hgLoadBed bosTau2 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
     #Loaded 108010 elements of size 10
