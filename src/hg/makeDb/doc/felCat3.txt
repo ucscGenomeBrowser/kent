@@ -333,9 +333,66 @@ felCat3.perChromTables = no
     hgPepPred felCat3 generic genscanPep genscan.pep
     hgLoadBed felCat3 genscanSubopt genscanSubopt.bed
 
-    # featureBits felCat3 genscan
+    featureBits felCat3 genscan
     # 46616293 bases of 1642698377 (2.838%) in intersection
-    # featureBits felCat3 genscanSubopt
-
+    featureBits felCat3 genscanSubopt
+    # 53124220 bases of 1642698377 (3.234%) in intersection
     # Should be zero intersection with rmsk
-    # featureBits -chrom=chr1 felCat3 genscan rmsk
+    featureBits felCat3 genscan rmsk
+    # 3334 bases of 1642698377 (0.000%) in intersection
+
+
+#########################################################################
+# CpG Islands (DONE Nov 22, 2006 Heather)
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed
+    mkdir cgpIsland
+    cd cgpIsland
+    zcat ../../goldenPath/bigZips/felCat3.fa.masked.gz | faSplit about stdin 2000000 split
+
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/cgpIsland
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    mv cpglh.exe /cluster/data/felCat3/bed/cpgIsland/
+    
+    ssh kkstore05
+    # could also have used kolossus
+    cd /cluster/data/felCat3/bed/cpgIsland
+    cat << '_EOF_' > run.csh
+#!/bin/csh -ef
+foreach f (split/*)
+    set fout=$f:t:r:r.cgp
+    echo $fout
+    ./cpglh.exe $f > $fout
+end
+'_EOF_'
+    # << this line makes emacs coloring happy
+    run.csh
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk x*.cpg > cpgIsland.bed
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/cpgIsland
+    hgLoadBed felCat3 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    # Loaded 45262 elements of size 10
+    wc -l cpgIsland.bed 
+    # 45262 cpgIsland.bed
+    featureBits felCat3 cpgIslandExt
+    # 30893611 bases of 1642698377 (1.881%) in intersection
+
