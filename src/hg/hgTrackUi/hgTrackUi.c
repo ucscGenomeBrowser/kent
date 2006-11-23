@@ -32,7 +32,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.332 2006/11/14 05:55:53 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.333 2006/11/23 00:31:38 rhead Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1369,7 +1369,7 @@ char tempScore[256];
  * overridden by the scoreFilter setting in the track */
 if (scoreValString != NULL)
     scoreVal = atoi(scoreValString);
-printf("<p><b>Show only items with unnormalized score at or above:</b> ");
+printf("<p><b>Show only items with score at or above:</b> ");
 snprintf(option, sizeof(option), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  option,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
