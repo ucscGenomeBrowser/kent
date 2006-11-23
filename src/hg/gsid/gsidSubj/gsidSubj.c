@@ -18,13 +18,13 @@
 #include "gsidSubj.h"
 //#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.1 2006/11/18 00:18:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.2 2006/11/23 00:53:14 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldCart;	/* Old cart hash. */
 char *genome;           /* Name of genome - mouse, human, etc. */
-
+char organism[20] = {"hiv"};
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *curSubjId = NULL;	/* Current Subject ID */
 void usage()
@@ -191,6 +191,32 @@ for (section = sectionList; section != NULL; section = section->next)
     }
 }
 
+void hotLinks()
+/* Put up the hot links bar. */
+{
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+
+/* Home */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+//, orgEnc);
+
+/* Blat */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+
+/* Sequence View */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?db=%s\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>", database);
+
+/* Table View */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
+
+/* Help */
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\"><FONT COLOR=\"#FFFFFF\"%s</FONT></A></TD>\n", "Help");
+
+hPuts("</TR></TABLE>");
+hPuts("</TD></TR></TABLE>\n");
+}
+
 void webMain(struct sqlConnection *conn)
 /* Set up fancy web page with hotlinks bar and
  * sections. */
@@ -206,6 +232,9 @@ puts("<FORM ACTION=\"/cgi-bin/gsidSubj\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 
 /* display GSID logo image here */
 printf("<img src=\"/images/gsid_header.jpg\" alt=\"\" name=\"gsid_header\" width=\"800\" height=\"86\" border=\"1\" usemap=\"#gsid_headerMap\">");
+
+hPrintf("<br><br>");
+hotLinks();
 
 printf("<font size=\"5\"><BR><B>HIV Vaccine Subject View   </B></font>");
 
