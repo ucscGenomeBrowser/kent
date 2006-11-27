@@ -1,4 +1,5 @@
 /* snpCleanSeq - clean fasta header lines to be compatible with hgLoadSeq. */
+/* Log duplicates. */
 
 #include "common.h"
 
@@ -6,7 +7,9 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpCleanSeq.c,v 1.1 2006/11/14 20:25:07 heather Exp $";
+static char const rcsid[] = "$Id: snpCleanSeq.c,v 1.2 2006/11/27 19:31:07 heather Exp $";
+
+static struct hash *snpHash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +27,8 @@ FILE *outputFileHandle = NULL;
 struct lineFile *lf;
 char *line;
 char *row[9], *rsId[2];
+struct hashEl *hel = NULL;
+boolean skipping = FALSE;
 
 outputFileHandle = mustOpen(outputFileName, "w");
 lf = lineFileOpen(inputFileName, TRUE);
@@ -32,11 +37,19 @@ while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
         {
+	skipping = FALSE;
         chopString(line, "|", row, ArraySize(row));
         chopString(row[2], " ", rsId, ArraySize(rsId));
-        fprintf(outputFileHandle, ">%s\n", rsId[0]);
+        hel = hashLookup(snpHash, rsId[0]);
+	if (hel)
+	    skipping = TRUE;
+	else
+	    {
+	    hashAdd(snpHash, cloneString(rsId[0]), NULL);
+            fprintf(outputFileHandle, ">%s\n", rsId[0]);
+	    }
 	}
-    else
+    else if (!skipping)
         fprintf(outputFileHandle, "%s\n", line);
     }
 carefulClose(&outputFileHandle);
@@ -44,11 +57,13 @@ lineFileClose(&lf);
 }
 
 
+
 int main(int argc, char *argv[])
 {
 if (argc != 3)
     usage();
 
+snpHash = newHash(16);
 doCleanSeq(argv[1], argv[2]);
 
 return 0;
