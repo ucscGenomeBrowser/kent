@@ -101,7 +101,7 @@ ZeroVar(&lSeq);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct dnaSeq *seq = clump->target->seq;
-    struct gfPcrOutput *gfoList = NULL, *gfo;
+    struct gfPcrOutput *gfoList = NULL;
     int tStart = clump->tStart - maxPrimerSize;
     int tEnd = clump->tEnd + maxPrimerSize;
     if (tStart < 0)
@@ -123,9 +123,9 @@ gfClumpFreeList(&clumpList);
 void isPcr(char *dbFile, char *queryFile, char *outFile)
 /* isPcr - Standalone In-Situ PCR Program. */
 {
-char **dbFiles, **queryFiles;
-int dbCount, queryCount;
-struct dnaSeq *dbSeqList, *seq;
+char **dbFiles;
+int dbCount;
+struct dnaSeq *dbSeqList;
 FILE *f = mustOpen(outFile, "w");
 boolean showStatus = (f != stdout);
 struct genoFind *gf;
