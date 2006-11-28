@@ -353,6 +353,112 @@ TMPDIR=/scratch/tmp
 
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE 11/14/06 angie)
+    # Use -repMatch=200 (based on size -- for human we use 1024, and 
+    # stickleback size is ~15% of human judging by gapless gasAcu1 vs. hg18 
+    # genome sizes from featureBits.  Bump it up a bit to be conservative.
+    ssh kolossus
+    blat /cluster/data/gasAcu1/gasAcu1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/gasAcu1/11.ooc -repMatch=200
+#Wrote 5700 overused 11-mers to /cluster/bluearc/gasAcu1/11.ooc
+
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE 11/15/06 angie)
+    # Make a liftAll.lft that specifies 5M chunks for genbank:
+    ssh kkstore05
+    cd /cluster/data/gasAcu1
+    simplePartition.pl gasAcu1.2bit 5000000 /tmp/gasAcu1P
+    cat /tmp/gasAcu1P/*/*.lft > jkStuff/liftAll.lft
+    rm -r /tmp/gasAcu1P
+
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add gasAcu1 just after dm2...
+
+# gasAcu1 (G. Aculeatus)
+gasAcu1.serverGenome = /cluster/data/gasAcu1/gasAcu1.2bit
+gasAcu1.clusterGenome = /iscratch/i/gasAcu1/gasAcu1.2bit
+gasAcu1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+gasAcu1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+gasAcu1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+gasAcu1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+gasAcu1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+gasAcu1.ooc = /cluster/bluearc/gasAcu1/11.ooc
+gasAcu1.lift = /cluster/data/gasAcu1/jkStuff/liftAll.lft
+gasAcu1.genbank.mrna.xeno.load = yes
+gasAcu1.downloadDir = gasAcu1
+
+    cvs ci -m "Added gasAcu1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added G. aculeatus (stickleback)." src/lib/gbGenome.c
+    make install-server
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial gasAcu1 &
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad gasAcu1 &
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add gasAcu1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added gasAcu1." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+
+#########################################################################
+# ENSEMBL GENES (DONE 11/27/06 angie)
+    mkdir /cluster/data/gasAcu1/bed/ensembl
+    cd /cluster/data/gasAcu1/bed/ensembl
+    # Get the ensembl gene data from 
+    # http://www.ensembl.org/Gasterosteus_aculeatus/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Gasterosteus_aculeatus choice is selected. Hit next.
+    # Page 2) Make sure nothing is selected on the Filter page.
+    # Page 3) Choose the "Structures" box (under "Select the Attributes Page").
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensembl.gff.gz
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    gunzip -c ensembl.gff.gz \
+    | grep -v ^scaffold \
+    | sed -e 's/^group/chr/; s/^MT/chrM/;' \
+    > ensGene.gtf
+    ssh hgwdev
+    ldHgGene -gtf -genePredExt gasAcu1 ensGene \
+      /cluster/data/gasAcu1/bed/ensembl/ensGene.gtf
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgLoadSqlTab gasAcu1 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.txt
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip -c ensemblPep.fa.gz \
+    | perl -wpe 's/^>.*\|(ENSGACT\d+\.\d+).*/>$1/' \
+    > ensPep.fa
+    hgPepPred gasAcu1 generic ensPep ensPep.fa
+
+
 #########################################################################
 #########################################################################
 #########################################################################
