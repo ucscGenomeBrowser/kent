@@ -87,7 +87,7 @@ while ((seq = dnaLoadNext(dl)) != NULL)
 	{
 	if (seqIsLower(seq))
 	    warn("Sequence %s is all lower case, and thus ignored. Use -unmask "
-	         "flag to unmask lower case sequence.");
+	         "flag to unmask lower case sequence.", seq->name);
 	}
     netSendString(sd, "seq");
     netSendString(sd, seq->name);
@@ -110,7 +110,6 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *command;
 bzpTime(NULL);
 dnaUtilOpen();
 optionInit(&argc, argv, options);
