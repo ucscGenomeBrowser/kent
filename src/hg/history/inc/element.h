@@ -31,6 +31,7 @@ struct genome
     struct phyloTree *node;
     char *name;
     struct element *elements;
+    void *priv;
 };
 
 struct distance
@@ -69,6 +70,7 @@ struct element
     int numEdges;
     struct element *parent;
     struct element **edges;
+    void *priv;
 } ;
 
 extern void setElementDist(struct element *e1, struct element *e2, double dist,
