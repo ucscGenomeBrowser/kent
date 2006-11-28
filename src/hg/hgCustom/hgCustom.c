@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.99 2006/11/28 22:26:01 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.100 2006/11/28 22:44:07 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -84,8 +84,7 @@ cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
 void addIntro()
 /* display overview and help message for "add" screen */
 {
-puts("Display your own data as custom annotation tracks in the browser." 
-     " Data must be formatted in\n"
+puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
@@ -161,6 +160,10 @@ if (!isUpdateForm)
 
 /* intro text */
 puts("<P>");
+if (isUpdateForm)
+    puts("Update your custom track configuration, data, and/or documentation.");
+else
+    puts("Display your own data as custom annotation tracks in the browser.");
 addIntro();
 puts("<P>");
 
