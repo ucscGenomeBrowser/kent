@@ -1789,7 +1789,6 @@ priority 66.05
 chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
 visibility hide
 maxHeightPixels 128:16:16
-type bedGraph 0.0 3.0
 minLimit -5.45
 maxLimit 6.33
 viewLimits 0.5:3
