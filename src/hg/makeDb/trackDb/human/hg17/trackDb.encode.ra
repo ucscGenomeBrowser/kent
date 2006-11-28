@@ -2653,7 +2653,7 @@ release alpha
     track encodeNhgriDnaseHsChipRawGm06990
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990 cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990, New Chip method)
     color 80,50,80
     dataVersion ENCODE Oct 2005 Freeze
     subGroups group=raw
@@ -2663,7 +2663,7 @@ release alpha
     track encodeNhgriDnaseHsChipRawCd4
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase CD4 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+ T-Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+, New Chip method)
     color 120,10,120
     subGroups group=raw
     dataVersion ENCODE Oct 2005 Freeze
@@ -2673,7 +2673,7 @@ release alpha
     track encodeNhgriDnaseHsChipRawHela
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase HeLa Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3 Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3, New Chip method)
     color 180,12,140
     dataVersion Aug 2006
     subGroups group=raw
@@ -2683,7 +2683,7 @@ release alpha
     track encodeNhgriDnaseHsChipRawHepG2
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase HepG2 Raw
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2 Cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2, New Chip method)
     color 240,12,132
     dataVersion Sept 2006
     subGroups group=raw
@@ -2693,15 +2693,10 @@ release alpha
     track encodeNhgriDnaseHsChipPvalGm06990
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990 cells)
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990, New Chip method)
     noInherit on
-    type bedGraph 4
-    maxHeightPixels 128:16:16
-    autoScale off
-    windowingFunction mean
-    minLimit 3.1
-    maxLimit 24.5
-    viewLimits 3.1:24.5
+    type bed 5+
+    useScore 1
     color 80,50,80
     priority 5
     subGroups group=pval
@@ -2712,14 +2707,9 @@ release alpha
     subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase CD4 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+ Cells)
-    type bedGraph 4
-    maxHeightPixels 128:16:16
-    autoScale off
-    windowingFunction mean
-    minLimit 3.1
-    maxLimit 24.5
-    viewLimits 3.1:24.5
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+, New Chip method)
+    type bed 5+
+    useScore 1
     color 120,10,120
     priority 6
     subGroups group=pval
@@ -2730,14 +2720,9 @@ release alpha
     subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HeLa Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3 Cells)
-    type bedGraph 4
-    maxHeightPixels 128:16:16
-    autoScale off
-    windowingFunction mean
-    minLimit 3.1
-    maxLimit 24.5
-    viewLimits 3.1:24.5
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3, New Chip method)
+    type bed 5+
+    useScore 1
     color 180,12,140
     priority 7
     subGroups group=pval
@@ -2748,14 +2733,9 @@ release alpha
     subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HepG2 Pval
-    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2 Cells)
-    type bedGraph 4
-    maxHeightPixels 128:16:16
-    autoScale off
-    windowingFunction mean
-    minLimit 3.1
-    maxLimit 24.5
-    viewLimits 3.1:24.5
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2, New Chip method)
+    type bed 5+
+    useScore 1
     color 240,12,132
     priority 8
     subGroups group=pval

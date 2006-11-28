@@ -1400,25 +1400,31 @@ cat > loadRaw.csh << 'EOF'
   ln -s lab/Crawford_DNase-chip_HeLaS3_PVAL_hg17.bed12 Hela.pval.hg17.bed
   ln -s lab/Crawford_DNase-chip_CD4_PVAL_hg17.bed10 Cd4.pval.hg17.bed
 
+# load Pval data as bed5floatscore, with pval mapped to integer score (0-1000)
+# for display purposes
+# format: chr start end name score pVal
 cat > loadPval.csh << 'EOF'
-    foreach cell (Cd4 Gm06990 Cd4)
-        awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
-            $cell.pval.hg17.bed | \
-                hgLoadBed -strict -noBin -sqlTable=~/kent/src/hg/lib/bed5FloatScore.sql hg17 \
-                        encodeNhgriDnaseHsChipPval$cell stdin
-    end
-'EOF'
-
-cat > loadPval.csh << 'EOF'
-# bed 5+ chr start end name score pVal
     foreach cell (Cd4 Gm06990 Hela)
-        set lcell `echo $cell | sed 's/\(.*\)/\u\1/'`
-awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t\U%s.%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR, $5 * 35 + 100, $5)}' $cell.pval.hg17.bed | \
-        hgLoadBed -strict -noBin -sqlTable=~/kent/src/hg/lib/bed5FloatScore.sql hg17 \
-                        encodeNhgriDnaseHsChipPval$cell stdin
+        set lcell = `echo $cell | sed 's/\(.*\)/\L\1/'`
+        awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t%s_%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR-1, $5 * 35 + 100, $5)}' $cell.pval.hg17.bed > $cell.pval.bed5+
+        set table = encodeNhgriDnaseHsChipPval$cell
+        sed "s/bed5FloatScore/$table/" ~/kent/src/hg/lib/bed5FloatScore.sql > \
+                $table.sql
+        hgsql hg17 -e "DROP TABLE IF EXISTS $table"
+        hgsql hg17 < $table.sql
+        hgLoadBed -strict -sqlTable=$table.sql hg17 \
+                $table $cell.pval.bed5+
+        checkTableCoords hg17 $table
+        end
 'EOF'
-
+    csh loadPval.csh >&! loadPval.log 
 # min = 3.13 max  = 24.513
+    # Reading Cd4.pval.bed5+
+    #Loaded 1262 elements of size 6
+    #Reading Gm06990.pval.bed5+
+    #Loaded 1098 elements of size 6
+    #Reading Hela.pval.bed5+
+    #Loaded 1042 elements of size 6
 
 # data submission 9/22/06  -- HepG2 cell line
     cd /cluster/data/encode/NHGRI/crawford
@@ -1428,15 +1434,24 @@ awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t\U%s.%d\t%d\t%.3f\n", $1, $2, $3
     ln -s lab/Crawford_DNase-chip_HepG2_RAW_hg17.bed HepG2.raw.bed
 
     set cell = HepG2
-    awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
-            $cell.pval.bed | \
-                hgLoadBed -strict -bedGraph=4 hg17 \
-                        encodeNhgriDnaseHsChipPval$cell stdin
-        # Loaded 1885 elements
+
+    # load RAW
     awk '{print $1, $2, $3, $5}' $cell.raw.bed | \
                 hgLoadBed -strict -bedGraph=4 hg17 \
                         encodeNhgriDnaseHsChipRaw$cell stdin
         # Loaded 385149 elements
+
+    # load PVAL
+    set lcell = hepg2
+    awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t%s_%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR, $5 * 35 + 100, $5)}' $cell.pval.bed > $cell.pval.bed5+
+    set table = encodeNhgriDnaseHsChipPval$cell
+    sed "s/bed5FloatScore/$table/" ~/kent/src/hg/lib/bed5FloatScore.sql > \
+            $table.sql
+    hgsql hg17 -e "DROP TABLE IF EXISTS $table"
+    hgsql hg17 < $table.sql
+    hgLoadBed -strict -sqlTable=$table.sql hg17 \
+            $table $cell.pval.bed5+
+    checkTableCoords hg17 $table
 
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)

@@ -24,14 +24,20 @@ The subtracks within this track are grouped in 4 sections:
 <B>New Chip Pval</B> subtracks show significant regions that likely 
 represent valid DNaseI-hypersensitive sites, based on the Raw data.
 The higher the score for the region, the more likely the site
-is to be hypersensitive.
+is to be hypersensitive.  
+Regions have unique identifiers that are prefixed with
+the cell type.
+For display purposes, the p-value scores were mapped
+to integer scores in the range 0-100.
+Regions are displayed in the range light
+gray to black, based on score.
 <LI>
 <B>Old Chip</B> subtracks also display likely hypersensitive sites
 based on DNase-chip experiments.
 Unlike the New Chip tracks, this track has identified significant
 signal from one, two, or three DNase concentrations.
-The items in these subtracks have unique identifiers, visible
-when the track is displayed in full or packed mode. The first part of
+The items in these subtracks have unique identifiers.
+The first part of
 the identifier describes the cell type from which the data was derived.
 The last number of each identifier indicates the percent of
 regions with this score that represent valid DNase hypersensitive sites.
@@ -39,7 +45,12 @@ Sites are displayed in the range light gray to black,  based on score.
 <LI>
 <B>MPSS</B> subtracks show hypersensitive sites determined by MPSS 
 sequencing.  
-Sites are displayed in the range light gray to black, 
+Each cluster has a unique identifier.
+The last digit of each identifier represents the 
+number of sequences that map within that particular cluster. The sequence number
+is also reflected in the score, <em>e.g.</em> a cluster of two sequences scores 
+500, three sequences scores 750 and four or more sequences scores 1000. 
+Sites are displayed in the range light gray to black,
 based on score.
 </UL>
 To display only selected subtracks, uncheck the boxes next to the tracks 
@@ -76,11 +87,6 @@ and sequenced using massively parallel signature sequencing
 (Brenner <em>et al</em>., 2000; Crawford <em>et al</em>., 2006). 
 Only those clusters of multiple DNaseI library sequences that map within 500 
 bases of each other are displayed.
-Each cluster has a unique identifier, visible when the track is displayed
-in full or packed mode. The last digit of each identifier represents the 
-number of sequences that map within that particular cluster. The sequence number
-is also reflected in the score, <em>e.g.</em> a cluster of two sequences scores 
-500, three sequences scores 750 and four or more sequences scores 1000.  </P>
 
 <H2>Verification</H2>
 <H3> DNase-Chip </H3>
