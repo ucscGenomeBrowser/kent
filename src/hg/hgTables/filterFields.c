@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.46 2006/06/13 00:11:10 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.47 2006/11/28 00:57:42 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -747,6 +747,7 @@ if (isWig)
 else
     {
     int fieldNum = 0;
+    int noBinBedGraphColumn = bedGraphColumn;
     safef(query, sizeof(query), "describe %s", table);
     sr = sqlGetResult(conn, query);
     hPrintf("<TABLE BORDER=0>\n");
@@ -756,6 +757,8 @@ else
 	char *type = row[1];
 	char *logic = "";
 
+	if ((0 == fieldNum) && (!sameWord(field,"bin")))
+		noBinBedGraphColumn -= 1;
 	if (!sameWord(type, "longblob"))
 	    {
 	    if (!gotFirst)
@@ -763,7 +766,7 @@ else
 	    else if (!isBedGr)
 		logic = " AND ";
 	    }
-	if (!isBedGr || (bedGraphColumn == fieldNum))
+	if (!isBedGr || (noBinBedGraphColumn == fieldNum))
 	    {
 	    if (isSqlStringType(type))
 		{
