@@ -121,7 +121,7 @@ static struct cBlock *extendInRegion(struct bzp *bzp,
 /* Do banded extension in region and return as a list of blocks. */
 {
 int maxExtend = bzp->maxExtend;
-int symCount, i;
+int symCount;
 int qSize = qEnd - qStart;
 int tSize = tEnd - tStart;
 int qs, ts, qExtStart, tExtStart;
@@ -161,7 +161,6 @@ static void chainBandExtend(struct bzp *bzp, struct chain *chain,
 struct cBlock *oldFirst, *mid, *block, *nextBlock, *newList, *endNewList;
 int symAlloc = 2 * bzp->maxExtend;
 char *qSym, *tSym;
-int solidQ, solidT;
 
 qSym = needMem(symAlloc);
 tSym = needMem(symAlloc);
@@ -239,7 +238,6 @@ static void shrinkBlocks(struct chain *chain, struct dnaSeq *query,
  * by over-aggressive unbanded extension. */
 {
 struct cBlock *block, *lastBlock = NULL;
-int winSize = 30;
 
 for (block = chain->blockList; block != NULL; block = block->next)
     {
@@ -293,7 +291,6 @@ static void chainsToBlocks(struct chain **pChainList,
         struct cBlock **pBlockList)
 /* Convert chains to just a list of blocks.  Free chains. */
 {
-struct cBlock *block, *nextBlock;
 struct chain *chain;
 for (chain = *pChainList; chain != NULL; chain = chain->next)
     addBlocksToList(pBlockList, &chain->blockList);
@@ -323,10 +320,11 @@ static void blatzChainAndExtend(struct bzp *bzp,
         struct cBlock **pBlockList, struct chain **retChainList)
 /* Process msp block list into chains. */
 {
-struct cBlock *block, *blockList = NULL;
+struct cBlock *blockList = NULL;
 struct chain *chain, *chainList = NULL, *next;
 
 #ifdef DEBUG
+struct cBlock *block;
     {
     for (block = *pBlockList; block != NULL; block = block->next)
         fprintf(uglyOut, "block: %s %d-%d, %s %d-%d\n",
@@ -410,7 +408,6 @@ static struct chain *blatzChainAgainstIndex(struct bzp *bzp,
 {
 struct cBlock *blockList = NULL;
 struct chain *chainList = NULL;              /* Chains here. */
-int i;
 
 /* Collect MSPs. */
 bzpTime("Before index");
@@ -565,7 +562,7 @@ static struct boxClump *clumpGapsAndEnds(struct bzp *bzp,
  * together. */
 {
 struct chain *chain;
-struct boxIn *box, *boxList = NULL;
+struct boxIn *boxList = NULL;
 struct cBlock *b1, *b2;
 struct boxClump *clumpList = NULL;
 int winSize = bzp->expandWindow;
@@ -802,8 +799,7 @@ static struct chain *blatzAlignOne(struct bzp *bzp, struct blatzIndex *index,
         struct dnaSeq *query, char strand)
 /* Align query sequence against indexed target sequence. */
 {
-struct chain *chain, *chainList, *nextChain;
-struct chain *fullChainList = NULL;
+struct chain *chain, *chainList;
 struct dnaSeq *target = index->target;
 struct cBlock *blockList = NULL;
 
