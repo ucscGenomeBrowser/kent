@@ -16,6 +16,17 @@ if (lineFileNext(lf, &ptr, &len) && (len > 0))
 return tree;
 }
 
+struct phyloTree *phyloOpenTree(char *fileName)
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct phyloTree *tree = phyloReadTree(lf);
+
+lineFileClose(&lf);
+
+return tree;
+}
+
+
 static struct phyloName *parseIdent(char **ptrPtr)
 /* read a node name with possibile branch length */
 {
@@ -26,8 +37,8 @@ char *ptr = *ptrPtr;
 AllocVar(pName);
 /* legal id's are alphanumeric */
 while(isalpha(*ptr) || isdigit(*ptr) || (*ptr == '/')
-    || (*ptr == '[') || (*ptr == ']') || (*ptr == '\'')
-    || (*ptr == '.')) 
+     || (*ptr == '\'')
+    || (*ptr == '.') || (*ptr == '_')) 
     ptr++;
 
 /* did we read something? */
@@ -46,7 +57,7 @@ if (*ptr == ':')
     {
     ptr++;
     sscanf(ptr, "%lg", &pName->length);
-    while ((*ptr != ')') && (*ptr != ',') && (*ptr != ';'))
+    while ((*ptr != '[') && (*ptr != ')') && (*ptr != ',') && (*ptr != ';'))
 	ptr++;
     }
 
@@ -108,12 +119,25 @@ if (*ptr == '(')
     }
 else 
     if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)) 
-	|| (*ptr == '[') || (*ptr == ']') || (*ptr == '\'') || (*ptr == '.'))
+	 || (*ptr == '\'') || (*ptr == '.'))
 	node->ident = parseIdent(&ptr);
 else
     errAbort("illegal char '%c' in phyloString",*ptr);
 
+if (*ptr == '[')
+    {
+    if (startsWith("[&&NHX:D=Y]",ptr))
+	node->isDup = TRUE;
+
+    while(*ptr != ']')
+	ptr++;
+
+    ptr++;
+
+    }
+
 *ptrPtr = ptr;
+
 
 return node;
 }
@@ -143,37 +167,51 @@ static void tabOut(FILE *f)
 int i;
 
 for(i=0; i < recurseCount; i++)
-    fputc('\t',f);
+    fputc(' ',f);
 }
 
-static void pTree( struct phyloTree *tree,FILE *f)
+static void pTree( struct phyloTree *tree,FILE *f, boolean noDups)
 /* print out phylogenetic tree in Newick format */
 {
 if (tree)
     {
     int ii;
-    if (tree->numEdges)
+    if (noDups && (tree->numEdges == 1))
+	pTree(tree->edges[0], f, noDups);
+    else 
 	{
-	fprintf(f,"(");
-	for (ii= 0; ii < tree->numEdges; ii++)
+	if (tree->numEdges)
 	    {
-	    pTree(tree->edges[ii], f);
-	    if (ii + 1 < tree->numEdges)
-		fprintf(f,",");
+	    fprintf(f,"(");
+	    for (ii= 0; ii < tree->numEdges; ii++)
+		{
+		pTree(tree->edges[ii], f, noDups);
+		if (ii + 1 < tree->numEdges)
+		    fprintf(f,",");
+		}
+	    fprintf(f,")");
 	    }
-	fprintf(f,")");
+	if (tree->ident->name)
+	    fprintf(f,"%s",tree->ident->name);
+	//if (tree->ident->length != 0.0)
+	    fprintf(f,":%0.04g", tree->ident->length);
+	if (tree->isDup)
+	    fprintf(f,"[&&NHX:D=Y]");
 	}
-    if (tree->ident->name)
-	fprintf(f,"%s",tree->ident->name);
-    if (tree->ident->length != 0.0)
-	fprintf(f,":%g", tree->ident->length);
     }
+}
+
+void phyloPrintTreeNoDups( struct phyloTree *tree,FILE *f)
+/* print out phylogenetic tree in Newick format (only speciation nodes) */
+{
+pTree(tree, f, TRUE);
+fprintf(f, ";\n");
 }
 
 void phyloPrintTree( struct phyloTree *tree,FILE *f)
 /* print out phylogenetic tree in Newick format */
 {
-pTree(tree, f);
+pTree(tree, f, FALSE);
 fprintf(f, ";\n");
 }
 
@@ -351,4 +389,17 @@ for (ii=0; ii < tree->numEdges; ii++)
 	}
 
 errAbort("tried to delete non-existant edge");
+}
+
+int phyloCountLeaves(struct phyloTree *tree)
+{
+int ii, count = 0;
+
+if (tree->numEdges == 0)
+    return 1;
+
+for (ii=0; ii < tree->numEdges; ii++)
+    count += phyloCountLeaves(tree->edges[ii]);
+
+return count;
 }
