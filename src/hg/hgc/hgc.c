@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1167 2006/11/22 21:39:23 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1168 2006/11/28 21:42:33 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8685,7 +8685,9 @@ if (xref != NULL)
 	int last = strlen(xref->synonyms) - 1;
 	if (xref->synonyms[last] == ',')
 	    xref->synonyms[last] = 0;
-	printf("<B>Synonyms:</B> %s<BR>\n", xref->synonyms);
+	printf("<B>Synonyms:</B> ");
+	htmlTextOut(xref->synonyms);
+	printf("<BR>\n");
 	}
     if (fbsp != NULL)
 	{
