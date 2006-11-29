@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.100 2006/11/28 22:44:07 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.101 2006/11/29 21:58:00 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -107,16 +107,14 @@ void addCustomForm(struct customTrack *ct, char *err)
 /* display UI for adding custom tracks by URL or pasting data */
 {
 char *url = NULL;
-    char buf[1024];
+char buf[1024];
 
 boolean gotClade = FALSE;
 boolean isUpdateForm = FALSE;
-boolean fromUrl = FALSE;
 if (ct)
     {
     isUpdateForm = TRUE;
-    if (ctDataUrl(ct))
-        fromUrl = TRUE;
+    url = ctDataUrl(ct);
     }
 else
     /* add form needs clade for assembly menu */
@@ -179,7 +177,7 @@ if (isUpdateForm)
     /* row for instructions */
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    if (fromUrl)
+    if (url)
         puts("Configuration:");
     else
         {
@@ -196,7 +194,7 @@ if (isUpdateForm)
     /* row for text entry box */
     cgiSimpleTableRowStart();
     puts("<TD COLSPAN=2>");
-    if (fromUrl)
+    if (url)
         {
         /* can't update via pasting if loaded from URL */
         cgiMakeTextAreaDisableable(hgCtConfigLines, 
@@ -233,7 +231,7 @@ if (isUpdateForm)
     cgiSimpleTableRowStart();
     puts("<TD STYLE='padding-top:9';\"></TD>");
     cgiTableRowEnd();
-    if (fromUrl)
+    if (url)
         cgiTableField("Data:");
     else
         cgiTableField("Paste in replacement data:");
@@ -241,7 +239,7 @@ if (isUpdateForm)
 else
     cgiTableField("Paste URLs or data:");
 
-if (isUpdateForm && fromUrl)
+if (isUpdateForm && url)
     cgiTableField("&nbsp");
 else
     {
@@ -261,7 +259,7 @@ cgiTableRowEnd();
 /* next row - text entry box for  data, and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-if (fromUrl)
+if (url)
     {
     /* can't update via pasting if loaded from URL */
     safef(buf, sizeof buf, "Replace data at URL: %s", ctDataUrl(ct));
@@ -283,7 +281,7 @@ cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-if (!(isUpdateForm && fromUrl))
+if (!(isUpdateForm && url))
     makeClearButton(hgCtDataText);
 cgiTableFieldEnd();
 cgiTableRowEnd();
@@ -300,10 +298,15 @@ cgiTableRowEnd();
 /* next row - label for description text entry */
 cgiSimpleTableRowStart();
 cgiTableField("Optional track documentation: ");
-puts("<TD ALIGN='RIGHT'>");
-puts("Or upload: ");
-cgiMakeFileEntry(hgCtDocFile);
-cgiTableFieldEnd();
+if (isUpdateForm)
+    cgiTableField("&nbsp;");
+else
+    {
+    puts("<TD ALIGN='RIGHT'>");
+    puts("Or upload: ");
+    cgiMakeFileEntry(hgCtDocFile);
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 
 /* next row - text entry for description, and clear button(s) */
@@ -950,26 +953,24 @@ else
     char *savedCustomText = saveLines(cloneString(customText), 
                                 SAVED_LINE_COUNT);
     char *trackConfig = cartOptionalString(cart, hgCtConfigLines);
+    char *savedConfig = cloneString(trackConfig);
 
     struct dyString *dsWarn = dyStringNew(0);
-    boolean hasData = isNotEmpty(customText);
+    #ifdef OLD
+    boolean hasData = (isNotEmpty(customText) || isNotEmpty(fileName));
     if (cartVarExists(cart, hgCtUpdatedTrack) && hasData)
         {
         /* from 'update' screen */
-        /* prepend track line and browser lines to data for parser */
-        struct dyString *dsTrack = dyStringNew(0);
         if (!trackConfig)
             trackConfig = cartOptionalString(cart, hgCtUpdatedTrack);
-        dyStringPrintf(dsTrack, "%s\n%s\n", trackConfig, customText);
-        customText = dyStringCannibalize(&dsTrack);
-        cartSetString(cart, hgCtDataText, customText);
+        cartSetString(cart, hgCtConfigLines, trackConfig);
         }
+    #endif
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
 					    &replacedCts, NULL, &err);
-    if (cartVarExists(cart, hgCtUpdatedTrack) && !hasData)
+    if (cartVarExists(cart, hgCtUpdatedTrack) && isNotEmpty(trackConfig))
         {
-        /* handle case when there is no update to data -- just config or doc */
-        /* update custom track config in memory */
+        /* update custom track config */
         selectedTable = cartOptionalString(cart, hgCtUpdatedTable);
         if (selectedTable)
             {
@@ -993,6 +994,7 @@ else
 	{
         char *selectedTable = NULL;
         cartSetString(cart, hgCtDataText, savedCustomText);
+        cartSetString(cart, hgCtConfigLines, savedConfig);
         if ((selectedTable= cartOptionalString(cart, hgCtUpdatedTable)) != NULL)
             {
             ct = ctFromList(ctList, selectedTable);
