@@ -20,10 +20,11 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.106 2006/11/08 21:48:24 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.107 2006/11/29 00:19:37 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
+boolean orgChange = FALSE;
 
 struct serverTable
 /* Information on a server. */
@@ -608,9 +609,7 @@ void askForSeq(char *organism, char *db)
 {
 struct serverTable *serve = NULL;
 
-/* JavaScript to copy input data on the change genome button to a hidden form
-This was done in order to be able to flexibly arrange the UI HTML
-*/
+/* JavaScript to update form when org changes */
 char *onChangeText = "onchange=\""
     " document.mainForm.submit();\"";
 
@@ -725,23 +724,12 @@ void doMiddle(struct cart *theCart)
 {
 char *userSeq;
 char *db, *organism;
-boolean orgChange = FALSE;
 boolean clearUserSeq = cgiBoolean("Clear");
 
 cart = theCart;
 dnaUtilOpen();
 
-organism = cgiOptionalString("org");
-orgChange = differentStringNullOk(organism, hashFindVal(oldVars, "org"));
-if (orgChange)
-    {
-    db = hDefaultDbForGenome(organism);
-    cartSetString(cart, "db", db);
-    }
-else
-    {
-    getDbAndGenome(cart, &db, &organism);
-    }
+getDbAndGenome(cart, &db, &organism);
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
@@ -776,6 +764,19 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
+
+/* org has precedence over db when they don't match */
+char *cgiDb = cgiUsualString("db", "0");
+char *cgiOrg = hOrganism(cgiDb);
+char *organism = cgiOptionalString("org");
+orgChange = (differentStringNullOk(organism, cgiOrg));
+if (orgChange)
+    {
+    char *db = hDefaultDbForGenome(organism);
+    cgiVarSet("db", db);
+    }
+
+
 htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
