@@ -1667,6 +1667,11 @@ searchType bed
 termRegex Hs\.[0-9]+
 searchPriority 20
 
+searchTable uniGene_3
+searchType psl
+termRegex Hs\.[0-9]+
+searchPriority 20
+
 searchTable HInvGeneMrna
 searchMethod exact
 searchType psl
