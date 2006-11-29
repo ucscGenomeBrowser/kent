@@ -108,9 +108,7 @@ if (setsockopt(sd, IPPROTO_IP, IP_MULTICAST_TTL, &ttl, sizeof(ttl)) != 0)
 int openBroadcastSocket(int port)
 /* Open up a datagram socket that can broadcast. */
 {
-int sd, err;
-int boolVal = 1;
-int boolLen = sizeof(boolVal);
+int sd;
 
 /* Make sure header shortcuts don't trip us up. */
 assert(sizeof(struct bdMessage) == bdHeaderSize + bdMaxDataSize);
@@ -215,7 +213,7 @@ struct machine *nextLivingMachine(struct dlList *machineList, struct dlList *dea
 /* Return next machine on list that is not dead, rotating list in process
  * and weeding out dead machines.  Returns NULL if nothing alive. */
 {
-struct dlNode *mNode, *nextNode;
+struct dlNode *mNode;
 struct machine *machine;
 
 while ((mNode = dlPopHead(machineList)) != NULL)
@@ -265,14 +263,14 @@ struct dlNode *mNode, *nextNode;
 struct machine *machine;
 int tryIx, maxTry = 4, maxBroadTry = maxTry*10;
 int fileId = 0;
-int messageIx = 0, lastReceivedMessageIx = 0;
+int messageIx = 0;
 int firstOpenMessage = messageIx + 1;
 int firstCloseMessage;
 bits32 ip;
 char *fileDataArea = m->data + 3 * sizeof(bits32);
 int readSize;
 int firstCheckMessage, rescueCount = 0;
-int sectionIx, subIx, subBlockIx, blockIx, blockCount, subBlockCount = 0, lastBlockSize;
+int sectionIx, subIx, subBlockIx, blockIx, blockCount, subBlockCount = 0;
 int err;
 FILE *f;
 boolean allDone;
@@ -389,7 +387,7 @@ else
 		readSize = fread(fileDataArea, 1, bdBlockSize, f);
 		++statBlocks;
 		if (readSize < 0)
-		    errAbort("Read error on %s", fileName, machine->name);
+		    errAbort("Read error on host %s, file %s", machine->name, fileName);
 		md5_update(&ctx, (uint8 *)fileDataArea, readSize);
 		bdMakeBlockMessage(m, machine->ip, ++messageIx, fileId, sectionIx, 
 		    blockIx, readSize, fileDataArea);
@@ -597,11 +595,9 @@ void test2(char *machineFile, char *transferFile)
 {
 int i;
 int timeCount = 100000;
-struct timeval tv;
 long t1,t2;
 int inSd, outSd, err = 0;
 int messageIx = 0;
-bits32 ip;
 struct bdMessage *m = NULL;
 struct dlList *machineList = getMachines(machineFile);
 struct dlList *deadList = newDlList();
@@ -661,7 +657,6 @@ void test(char *machineFile, char *transferFile)
 /* do a little testing. */
 {
 int i,j;
-long t1,t2;
 int inSd, outSd, err = 0;
 int messageIx = 0;
 bits32 ip;
@@ -702,7 +697,6 @@ int broadHub(char *machineFile, char *transferFile)
 {
 int inSd, outSd;
 int err = 0;
-bits32 nodeIp = 0;
 struct dlList *machineList = getMachines(machineFile);
 struct dlList *deadList = newDlList();
 struct dlNode *mNode;
