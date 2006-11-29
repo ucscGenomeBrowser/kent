@@ -44,7 +44,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hPrint.o \
     HInv.o hui.o humanParalog.o \
     imageClone.o isochores.o itemAttr.o jalview.o \
-    jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o \
+    jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o \
     kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mafFrames.o mafSummary.o mapSts.o \

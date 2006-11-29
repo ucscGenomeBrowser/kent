@@ -15,12 +15,13 @@
 #include "obscure.h"
 #include "wiggle.h"
 #include "customTrack.h"
+#include "jsHelper.h"
 #include "hgTables.h"
 #define INCL_HELP_TEXT
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.53 2006/07/28 21:35:53 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.54 2006/11/29 19:50:08 kent Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -141,8 +142,7 @@ return dyStringCannibalize(pDy);
 static struct dyString *onChangeStart()
 /* Start up a javascript onChange command */
 {
-struct dyString *dy = dyStringNew(1024);
-dyStringAppend(dy, "onChange=\"");
+struct dyString *dy = jsOnChangeStart();
 jsDropDownCarryOver(dy, hgtaNextCorrelateGroup);
 jsDropDownCarryOver(dy, hgtaNextCorrelateTrack);
 /*jsTrackedVarCarryOver(dy, hgtaNextCorrelateOp, "op");*/
@@ -2382,7 +2382,7 @@ hPrintf("%s", corrHelpText);
     int varCount = ArraySize(nextVars);
     memcpy(saveVars, nextVars, varCount * sizeof(saveVars[0]));
     saveVars[varCount] = hgtaDoCorrelateMore;
-    jsCreateHiddenForm(saveVars, varCount+1);
+    jsCreateHiddenForm(cart, getScriptName(), saveVars, varCount+1);
     }
 
 htmlClose();

@@ -15,8 +15,8 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "cart.h"
-#include "hgTables.h"
-
+#include "hPrint.h"
+#include "jsHelper.h"
 
 void jsWriteFunctions()
 /* Write out Javascript functions. */
@@ -40,6 +40,14 @@ hPrintf("%s\n",
 "}\n"
 );
 hPrintf("</SCRIPT>\n");
+}
+
+struct dyString *jsOnChangeStart()
+/* Start up an onChange string */
+{
+struct dyString *dy = dyStringNew(1024);
+dyStringAppend(dy, "onChange=\"");
+return dy;
 }
 
 char *jsOnChangeEnd(struct dyString **pDy)
@@ -87,7 +95,8 @@ if (sameString(val, selVal))
 hPrintf(">");
 }
 
-void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal)
+void jsMakeTrackingCheckBox(struct cart *cart,
+	char *cgiVar, char *jsVar, boolean usualVal)
 /* Make a check box filling in with existing value and
  * putting a javascript tracking variable on it. */
 {
@@ -109,9 +118,11 @@ void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar)
 dyStringPrintf(dy, "document.hiddenForm.%s.value=%s; ", cgiVar, jsVar);
 }
 
-char *jsOnRangeChange(char *cgiVar, char *jsVar, char *val)
-/* Make a little javascript to set the range radio button when
- * they type in the range text box. */
+char *jsRadioUpdate(char *cgiVar, char *jsVar, char *val)
+/* Make a little javascript to check and uncheck radio buttons
+ * according to new value.  To use this you must have called
+ * jsWriteFunctions somewhere, and also must use jsMakeTrackingRadioButton
+ * to make the buttons. */
 {
 static char buf[256];
 safef(buf, sizeof(buf),
@@ -119,13 +130,14 @@ safef(buf, sizeof(buf),
 return buf;
 }
 
-void jsCreateHiddenForm(char **vars, int varCount)
+void jsCreateHiddenForm(struct cart *cart, char *scriptName,
+	char **vars, int varCount)
 /* Create a hidden form with the given variables */
 {
 int i;
 hPrintf(
     "<FORM ACTION=\"..%s\" "
-    "METHOD=\"GET\" NAME=\"hiddenForm\">\n", getScriptName());
+    "METHOD=\"GET\" NAME=\"hiddenForm\">\n", scriptName);
 cartSaveSession(cart);
 for (i=0; i<varCount; ++i)
     hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", vars[i]);
