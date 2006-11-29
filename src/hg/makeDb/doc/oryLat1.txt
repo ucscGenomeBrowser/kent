@@ -9,5 +9,219 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.1 2006/11/22 17:15:52 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.2 2006/11/29 23:51:01 hiram Exp $"
 #
+
+##########################################################################
+###  Fetch sequence
+    ssh kkstore04
+    mkdir /cluster/store8/oryLat1
+    ln -s /cluster/store8/oryLat1 /cluster/data/oryLat1
+    cd /cluster/data/oryLat1
+    mkdir rawData
+    cd rawData
+    cat << '_EOF_' > fetch.sh
+#!/bin/sh
+
+for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+do
+    wget --timestamping \
+"ftp://ftp.ensembl.org/pub/current_oryzias_latipes/data/fasta/dna/Oryzias_latipes.MEDAKA1.41.dna.chromosome.${C}.fa.gz" \
+-O chr${C}.fa.gz
+done
+
+wget --timestamping \
+"ftp://ftp.ensembl.org/pub/current_oryzias_latipes/data/fasta/dna/Oryzias_latipes.MEDAKA1.41.dna.nonchromosomal.fa.gz" \
+-O chrUn.fa.gz
+
+wget --timestamping \
+"ftp://ftp.ensembl.org/pub/current_oryzias_latipes/data/fasta/dna/Oryzias_latipes.MEDAKA1.41.dna.seqlevel.fa.gz" \
+-O seqlevel.fa.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x fetch.sh
+    ./fetch.sh
+    #	There is also repeat masked sequence there too
+    cat << '_EOF_' > fetchRM.sh
+#!/bin/sh
+
+for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+do
+    wget --timestamping \
+"ftp://ftp.ensembl.org/pub/current_oryzias_latipes/data/fasta/dna/Oryzias_latipes.MEDAKA1.41.dna_rm.chromosome.${C}.fa.gz" \
+-O chr${C}.rm.fa.gz
+done
+
+wget --timestamping \
+"ftp://ftp.ensembl.org/pub/current_oryzias_latipes/data/fasta/dna/Oryzias_latipes.MEDAKA1.41.dna_rm.nonchromosomal.fa.gz" \
+-O chrUn.rm.fa.gz
+
+wget --timestamping \
+"ftp://ftp.ensembl.org/pub/current_oryzias_latipes/data/fasta/dna/Oryzias_latipes.MEDAKA1.41.dna_rm.seqlevel.fa.gz" \
+-O seqlevel.rm.fa.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x fetchRM.sh
+    ./fetchRM.sh
+
+    #	Looks like we might be able to make an AGP file from the seqlevel.fa
+    #	file.  Its fasta headers have position information, e.g.:
+# >scaffold605_contig102266 dna:contig chromosome:MEDAKA1:12:103214:103945:-1
+# >scaffold605_contig102265 dna:contig chromosome:MEDAKA1:12:103956:105102:-1
+# >scaffold605_contig102264 dna:contig chromosome:MEDAKA1:12:105113:107631:-1
+# ... etc
+
+    #	Extract the headers out of the seqlevel.fa.gz file:
+    zcat seqlevel.fa.gz | grep "^>" > seqlevel.fa.headers.txt
+
+    #	use the following perl script on those headers to generate an agp file:
+
+cat << '_EOF_' > allSeqLevel.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my %chrStartOrdered;
+
+open (FH,"<seqlevel.fa.headers.txt") or die "can not open seqlevel.fa.headers.txt";
+my $seqCount = 1;
+my $unLen = 0;
+my $unStart = 1;
+my $unEnd = 1;
+my $unGapSize = 100;
+my $prevScaf = "";
+while (my $line = <FH>) {
+    chomp $line;
+    my @a = split('\s',$line);
+    #   first word on the line is a scaffold_contig identification
+    $a[0] =~ s/^>//;
+    #   third word on the line is the chrom position indication
+    my @b = split(':',$a[2]);
+    #   length of this scaffold_contig
+    my $len = $b[4] - $b[3] + 1;
+    my $strand = "+";
+    #   a -1 indicates negative strand orientation for this scaffold_contig
+    $strand = "-" if (-1 == $b[5]);
+    my $key = "";       # key will be chrom.start
+    if (($b[2] =~ m/^[0-9]+$/) && ($b[3] =~ m/^[0-9]+$/)) {
+        $key = sprintf("%03d.%09d", $b[2], $b[3]);
+    } else {
+        my @scafContig = split('_',$a[0]);
+        if (length($prevScaf) > 0) {
+            if ($scafContig[0] =~ m/^$prevScaf$/) {
+                $unGapSize = 10;
+            } else {
+                $unGapSize = 100;
+            }
+        } else {
+            $unGapSize = 0;     # first contig seen, no gap yet.
+        }
+        $prevScaf = $scafContig[0];
+        $unStart += $unGapSize;
+        $key = sprintf("Un.%09d", $unStart);
+        $unEnd = $unStart + $len - 1;
+    $chrStartOrdered{$key} = sprintf "chrUn\t%d\t%d\t%d\tW\t%s\t1\t%d\t%s",
+        $unStart,$unEnd, $seqCount++, $a[0], $len, $strand;
+        $unStart = $unEnd + 1;
+        next;
+    }
+    if ($b[4] =~ m/^[0-9]+$/) {
+    $chrStartOrdered{$key} = sprintf "chr%s\t%d\t%d\t%d\tW\t%s\t1\t%d\t%s",
+        $b[2],$b[3],$b[4], $seqCount++, $a[0], $len, $strand;
+    } else {
+        printf STDERR "non-numeric 4 ? '$line'\n";
+        next;
+    }
+}
+
+close(FH);
+
+my $startChr = "chr1";
+my $lastEnd = 0;
+$seqCount = 1;
+$prevScaf = "";
+foreach my $key (sort keys(%chrStartOrdered)) {
+    my ($chr, $start, $end, $seqNum, $type, $name, $one, $len, $strand) =
+        split('\t',$chrStartOrdered{$key});
+    if ($chr !~ m/^$startChr$/) {
+        $lastEnd = 0;
+        $startChr = $chr;
+    }
+    my @scafContig = split('_',$name);
+    my $gapType = "contig";
+    my $bridged = "yes";
+    if (length($prevScaf) > 0) {
+        if ($prevScaf !~ m/^$scafContig[0]$/) {
+            $gapType = "scaffold";
+            $bridged = "no";
+        }
+    }
+    $prevScaf = $scafContig[0];
+    if (1 == ($lastEnd+1)) {
+        $gapType = "telomere";
+        $bridged = "no";
+    }
+    if (($lastEnd +1) < $start) {
+        my $gapLen = $start - $lastEnd - 1;
+        if ($chr =~ m/chrUn/) {
+            if (10 == $gapLen) {
+                $gapType = "contig";
+                $bridged = "yes";
+            } else {
+                $gapType = "scaffold";
+                $bridged = "no";
+            }
+        }
+        printf "%s\t%d\t%d\t%d\tN\t%d\t%s\t%s\n",
+            $chr, $lastEnd+1, $start-1, $seqCount++, $gapLen, $gapType, $bridged;
+    }
+    printf "%s\t%d\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n", $chr, $start, $end,
+        $seqCount++, $type, $name, $one, $len, $strand;
+    $lastEnd = $end;
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x allSeqLevel.pl
+    ./allSeqLevel.pl > allSeqLevel.agp 2> err
+
+    # prepare for the makeGenomeDb.pl script:
+    ssh hgwdev
+    cd /cluster/data/oryLat1
+    #	the config.ra script pretty much specifies everything
+    cat << '_EOF_' >  config.ra
+db oryLat1
+scientificName Oryzias latipes
+assemblyDate Oct. 2005
+assemblyLabel MEDAKA1
+#       Same order key as tetNig1
+orderKey 40
+#       NC_004387
+mitoAcc 25057156
+fastaFiles /cluster/data/oryLat1/useSequence/seq*.fa.gz
+dbDbSpeciesDir medaka
+agpFiles /cluster/data/oryLat1/useSequence/oryLat1.agp
+commonName Medaka
+clade Vertebrate
+genomeCladePriority 105
+'_EOF_'
+    # << happy emacs
+
+    #	create a special useSequence directory to collect the essentials into
+    #	one single place
+    mkdir useSequence
+    cd useSequence
+    ln -s ../rawData/seqlevel.fa.gz .
+    ln -s ../rawData/allSeqLevel.agp ./oryLat1.agp
+
+    cd /cluster/data/oryLat1
+    #	run the script one step at a time in case there are difficulties
+    #	(there were problems until I figured out how to synchronize the agp
+    #	file with the sequence file)
+    makeGenomeDb.pl config.ra -stop=seq -workhorse=hgwdev
+    makeGenomeDb.pl config.ra -continue=agp -stop=agp -workhorse=hgwdev
+    makeGenomeDb.pl config.ra -continue=db -stop=db -workhorse=hgwdev
+    makeGenomeDb.pl config.ra -continue=dbDb -stop=dbDb -workhorse=hgwdev
+    makeGenomeDb.pl config.ra -continue=trackDb -stop=trackDb -workhorse=hgwdev
+    #	The trackDb step displays instructions on what to do to get the
+    #	generated source checked into the source tree.
