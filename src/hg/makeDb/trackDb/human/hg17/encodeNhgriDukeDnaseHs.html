@@ -23,7 +23,7 @@ The higher the score for the region, the more likely the site
 is to be hypersensitive.  
 Regions have unique identifiers that are prefixed with
 the cell type.
-For display purposes, the p-value scores were mapped
+For display purposes, the p value scores were mapped
 to integer scores in the range 0-1000.
 Regions are displayed in a range of light
 gray to black, based on score.
@@ -63,12 +63,14 @@ three different DNase concentrations as well as three biological replicates.
 This material was amplified, labeled, and hybridized to NimbleGen 
 ENCODE tiled microarrays.
 <P>
-For the New Chip experiments, the raw data was averaged from nine
+For the New Chip experiments, the raw data were averaged from nine
 hybridizations per cell type. The Pval scores represent -log10 p values as
 determined by the ACME (Algorithm for Capturing Microarray Enrichment) program
-(Scacheri, Crawford, and Davis, 2006). Only regions that have p value &lt;
-0.001 are included.  -Log10 p values can be viewed in the floatScore section
-of the table viewer.
+(Scacheri, Crawford, and Davis, 2006). Only regions that had p value &lt;
+0.001 were included. For display in the Genome Browser, the p value scores were
+mapped to integer scores in the range 0-1000 using the following formula: score
+= (pVal * 35) + 100. -Log10 p values can be viewed in the floatScore field of
+the table using the Table Browser.
 
 <P>
 For the Old Chip experiments, significant signal was identified separately
