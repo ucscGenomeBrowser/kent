@@ -7,7 +7,7 @@
 #include "hui.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: cartReset.c,v 1.8 2004/10/12 20:28:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: cartReset.c,v 1.9 2006/11/30 20:51:42 galt Exp $";
 
 
 static char *defaultDestination = "/cgi-bin/hgGateway";
@@ -31,8 +31,10 @@ struct dyString *headText = newDyString(512);
 char *destination = cgiUsualString("destination", defaultDestination);
 
 dyStringPrintf(headText,
-	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"2;URL=%s\">",
-	       destination);
+	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"2;URL=%s\">"
+	       "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
+	       "<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
+	       ,destination);
 htmShellWithHead("Reset Cart", headText->string, doMiddle, NULL);
 dyStringFree(&headText);
 return 0;
