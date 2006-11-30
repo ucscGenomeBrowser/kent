@@ -106,7 +106,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1241 2006/11/30 11:07:31 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1242 2006/11/30 18:58:27 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -982,28 +982,36 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	bigExon = TRUE;
     if (next && (exon->end > winEnd))
 	{
-	int theEnd = ((lf->tallEnd > winEnd) && (lf->tallEnd > exon->start)) ? lf->tallEnd : exon->end;
 	if (exon->start < winEnd)
+	    {
 	    /* not an intron hanging over edge. */
-	    linkedFeaturesMoveWinEnd(theEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    if ((lf->tallEnd > winEnd) && (lf->tallEnd < exon->end) && (lf->tallEnd > exon->start))
+		linkedFeaturesMoveWinEnd(lf->tallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    else
+		linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    }
 	else if (bigExon)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
-	    linkedFeaturesMoveWinEnd(theEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	safef(mouseOverText, sizeof(mouseOverText), "Next Feature (%d/%d)", exonIx+1, numExons);
 	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
 	{
-	int theStart = ((lf->tallStart < winStart) && (lf->tallStart < exon->end)) ? lf->tallStart : exon->start;
 	if (exon->end > winStart)
+	    {
 	    /* not an inron hanging over the edge. */
-	    linkedFeaturesMoveWinStart(theStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    if ((lf->tallStart < winStart) && (lf->tallStart > exon->start) && (lf->tallStart < exon->end))
+		linkedFeaturesMoveWinStart(lf->tallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    else
+		linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    }
 	else if (bigExon)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
-	    linkedFeaturesMoveWinStart(theStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	safef(mouseOverText, sizeof(mouseOverText), "Prev Feature (%d/%d)", numExons-exonIx, numExons);
 	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
