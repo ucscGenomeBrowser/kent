@@ -340,9 +340,9 @@ Annotation Display Problems</A> for help in diagnosing custom track problems.
         <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 After a custom track has been successfully loaded into the Genome Browser,
-you can display it, as well as manage your entire custom track set, via the 
+you can display it -- as well as manage your entire custom track set -- via the 
 options on the Manage Custom Tracks page. This page automatically displays when 
-a track has been successfully uploaded into the Genome Browser (see 
+a track has been uploaded into the Genome Browser (see 
 <A HREF="#ADD_CT">Loading a Custom Track into the Genome Browser</A>). 
 Alternatively, you can access the track 
 management page by clicking the &quot;manage custom tracks&quot; button on the
@@ -356,11 +356,12 @@ custom tracks for the genome and assembly specified at the top of the page. If
 tracks have been loaded for more than one genome assembly, pulldown lists are
 displayed; to view the uploaded tracks for a different assembly, select the
 desired genome and assembly option from the lists.  
-<P>The following track information is displayed in the Manage Custom Tracks 
+<P>
+The following track information is displayed in the Manage Custom Tracks 
 table:
 <UL>
 <LI><B>Name: </B> a hyperlink to the Update Custom Track page where you can 
-update your track data. 
+update your track configuration and data. 
 <LI><B>Description: </B>the value of the "description" attribute from the track 
 line, if present. If no description is included in the input file, this field 
 contains the track name. 
@@ -411,13 +412,17 @@ page. Note: removing the track from the Genome Browser does not
 delete the track file from your server or local disk.
 <P>
 <B>Updating a custom track</B><BR>
-To update the data or descriptive text for a loaded custom track, click the 
+To update the stored information for a loaded custom track, click the 
 track's link in the &quot;Name&quot; column in the Manage Custom Tracks table. 
 A custom track may also be updated by clicking the &quot;Update custom 
 track&quot; button on the track's description page. 
 <P>
-The Update Custom Track page is similar in functionality to the Add Custom 
-Tracks page. In the current implementation of this page, the existing track 
+The Update Custom Track page provides sections for modifying the track
+configuration information (the browser lines and track lines), the annotation
+data, and the descriptive documentation that accompanies the track. Existing
+track configuration lines are displayed in the top &quot;Edit 
+configuration&quot; text box. In the current implementation of this page, the 
+existing annotation
 data is not displayed. Because of this, the data cannot be incrementally 
 edited through this interface, but instead must be fully replaced using one of 
 the data entry methods described in <A HREF="#ADD_CT">Loading a Custom Track 
@@ -999,7 +1004,6 @@ Genome Browser. In most cases, these problems are caused by errors in the
 format of the annotation file and can be tracked down using the information 
 displayed in the error message. This section contains suggestions for resolving 
 common display problems. If you are still unable to successfully display your 
-annotation data after reading this section, contact the genome mailing list at 
 <A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A> for further 
 assistance. </P>
 
