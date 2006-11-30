@@ -9,11 +9,11 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.2 2006/11/29 23:51:01 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.3 2006/11/30 00:49:56 hiram Exp $"
 #
 
 ##########################################################################
-###  Fetch sequence
+###  Fetch sequence	(DONE - 2006-11-22 - Hiram)
     ssh kkstore04
     mkdir /cluster/store8/oryLat1
     ln -s /cluster/store8/oryLat1 /cluster/data/oryLat1
@@ -64,6 +64,9 @@ wget --timestamping \
     chmod +x fetchRM.sh
     ./fetchRM.sh
 
+##########################################################################
+##  Create AGP file from these sequence files
+##	(DONE - 2006-11-28 - Hiram)
     #	Looks like we might be able to make an AGP file from the seqlevel.fa
     #	file.  Its fasta headers have position information, e.g.:
 # >scaffold605_contig102266 dna:contig chromosome:MEDAKA1:12:103214:103945:-1
@@ -185,6 +188,8 @@ foreach my $key (sort keys(%chrStartOrdered)) {
     chmod +x allSeqLevel.pl
     ./allSeqLevel.pl > allSeqLevel.agp 2> err
 
+##########################################################################
+#  Run the makeGenomeDb.pl script (DONE - 2006-11-28 - Hiram)
     # prepare for the makeGenomeDb.pl script:
     ssh hgwdev
     cd /cluster/data/oryLat1
@@ -225,3 +230,77 @@ genomeCladePriority 105
     makeGenomeDb.pl config.ra -continue=trackDb -stop=trackDb -workhorse=hgwdev
     #	The trackDb step displays instructions on what to do to get the
     #	generated source checked into the source tree.
+
+########################################################################
+##  Verify the generated source is correct and matches the chrom source
+##  obtained from Ensembl	(DONE - 2006-11-29 - Hiram)
+    #	Extract the source from the 2bit file
+    ssh kkstore04
+    cd /cluster/data/oryLat1
+    for C in ? ??
+do
+    echo $C
+twoBitToFa -seq=chr${C} oryLat1.unmasked.2bit stdout | gzip > ${C}/chr${C}.fa.gz
+done
+    #	Compare extracted source to the rawData/chr*.fa.gz files
+for C in ? ??
+do
+    echo -n "${C}: "
+    faSize ${C}/chr${C}.fa.gz
+    echo -n "${C}: "
+    faSize rawData/chr${C}.fa.gz
+done > checkFa.out
+    #	Each faSize output line should be duplicated
+    grep sequence checkFa.out | wc
+    #	51     867    4876
+    #	It is an odd number because there is a M/chrM.fa.gz
+    #	but no rawData/chrM.fa.gz
+    grep sequence checkFa.out | sort -u | wc
+    #	27     459    2579
+    #	the chrUn count is different in each case because the
+    #	Ensembl chrUn.fa.gz is different that what was put together
+    #	here with the seqlevel.fa.gz source.  They have the same sequence,
+    #	just a different size of gaps between scaffolds, and Ensemble
+    #	doesn't assemble it into a chrUn, they leave it as separate sequences:
+    faSize Un/chrUn.fa.gz
+    #	119265241 bases (1021750 N's 118243491 real 118243491 upper 0 lower)
+    #	in 1 sequences in 1 files
+    faSize rawData/chrUn.fa.gz
+    #	144764649 bases (26521158 N's 118243491 real 118243491 upper 0 lower)
+    #	in 7164 sequences in 1 files
+
+#########################################################################
+# REPEATMASKER (DONE - 2006-11-29 - Hiram)
+    ssh kkstore04
+    cd /cluster/data/oryLat1/bed
+    # Run -debug to create the dir structure and preview the scripts:
+    #	kk and kki currently down at this run, specify pk
+    ~/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	oryLat1 -verbose=3 -debug -workhorse=hgwdev -bigClusterHub=pk \
+	-smallClusterHub=pk > rmRun.debug.log 2>&1
+    # Run it for real and tail the log to follow progress:
+    ~/kent/src/hg/utils/automation/doRepeatMasker.pl \
+	oryLat1 -verbose=3 -workhorse=hgwdev -bigClusterHub=pk \
+	-smallClusterHub=pk > RepeatMasker.2006-11-29/do.log 2>&1 &
+    tail -f RepeatMasker.2006-11-29/do.log
+    #	When this finished, it created a masked 2bit:
+    # 214145351 Nov 29 16:33 /cluster/data/oryLat1/oryLat1.rmsk.2bit
+    #	But it did not change the /gbdb/oryLat1/oryLat1.2bit symlink
+
+    # RepeatMasker and lib version from do.log:
+    #    October 6 2006 (open-3-1-6) version of RepeatMasker
+    #	CC   RELEASE 20061006;  
+
+    # Calculate coverage to compare with other masking efforts
+    featureBits oryLat1 rmsk
+    #	21095035 bases of 700386597 (3.012%) in intersection
+    #	It appears the Ensemble chr*.RM.fa.gz files have been hard masked.
+
+#########################################################################
+## WINDOWMASKER (WORKING - 2006-11-29 - Hiram)
+    #	Trying different repeat mask process to see if we get significant
+    #	different masking
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed	    
+    ~/kent/src/hg/utils/automation/doWindowMasker.pl oryLat1 \
+	-workhorse=kolossus > wmRun.log 2>&1 &
