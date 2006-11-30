@@ -20,11 +20,12 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.107 2006/11/29 00:19:37 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.108 2006/11/30 23:55:22 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 boolean orgChange = FALSE;
+boolean dbChange = FALSE;
 
 struct serverTable
 /* Information on a server. */
@@ -723,13 +724,20 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *userSeq;
-char *db, *organism;
+char *db, *organism, *oldDb;
 boolean clearUserSeq = cgiBoolean("Clear");
 
 cart = theCart;
 dnaUtilOpen();
 
 getDbAndGenome(cart, &db, &organism);
+/* stomp cart vars dependent on old db */
+oldDb = hashFindVal(oldVars, "db");
+dbChange = differentStringNullOk(db, oldDb);
+if (dbChange && oldDb)
+    {
+    cartRemove(cart, "position");
+    }
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
