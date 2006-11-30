@@ -1,47 +1,43 @@
 <H2>Description</H2>
 <P>
-This track displays DNaseI-hypersensitive sites identified using two 
-methods (DNase-chip and MPSS sequencing) in four human cell 
-types (primary CD4+ T cells, GM06990 lymphoblastoid, HeLa S3 cervical
- carcinoma, and HepG2 liver carcinoma cell lines). 
-Experiments were performed in unactivated and activated CD4+ T cells.
-CD4+ T cells, also known as helper or inducer T cells, are
-involved in generating an immune response.  CD4+ T cells are also
-one of the primary targets of the HIV virus.
+This track displays DNaseI-hypersensitive sites identified using two methods
+(DNase-chip and MPSS sequencing) in four human cell types: 1) primary
+unactivated and activated CD4+ T cells, 2) GM06990 lymphoblastoid, 3) HeLa S3
+cervical carcinoma, and 4) HepG2 liver carcinoma cell lines.
 <P>
 DNaseI-hypersensitive sites are associated with all types of gene 
 regulatory regions, including promoters, enhancers, silencers, insulators, and 
-locus control regions
+locus control regions.
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The subtracks within this track are grouped in 4 sections:
+The subtracks within this track are grouped into four sections:
 <UL>
 <LI>
 <B>New Chip Raw</B> subtracks display log2 ratio data averaged from
-3 biological replicates and 3 DNase concentrations.
+three biological replicates and three DNase concentrations.
 <LI>
 <B>New Chip Pval</B> subtracks show significant regions that likely 
-represent valid DNaseI-hypersensitive sites, based on the Raw data.
+represent valid DNaseI-hypersensitive sites based on the raw data.
 The higher the score for the region, the more likely the site
 is to be hypersensitive.  
 Regions have unique identifiers that are prefixed with
 the cell type.
 For display purposes, the p-value scores were mapped
-to integer scores in the range 0-100.
-Regions are displayed in the range light
+to integer scores in the range 0-1000.
+Regions are displayed in a range of light
 gray to black, based on score.
 <LI>
 <B>Old Chip</B> subtracks also display likely hypersensitive sites
 based on DNase-chip experiments.
-Unlike the New Chip tracks, this track has identified significant
+Unlike the New Chip subtracks, these subtracks identify significant
 signal from one, two, or three DNase concentrations.
 The items in these subtracks have unique identifiers.
 The first part of
-the identifier describes the cell type from which the data was derived.
-The last number of each identifier indicates the percent of
+the identifier describes the cell type from which the data were derived.
+The last number of the identifier indicates the percent of
 regions with this score that represent valid DNase hypersensitive sites.
-Sites are displayed in the range light gray to black,  based on score.
+Sites are displayed in a range of light gray to black, based on score.
 <LI>
 <B>MPSS</B> subtracks show hypersensitive sites determined by MPSS 
 sequencing.  
@@ -50,11 +46,12 @@ The last digit of each identifier represents the
 number of sequences that map within that particular cluster. The sequence number
 is also reflected in the score, <em>e.g.</em> a cluster of two sequences scores 
 500, three sequences scores 750 and four or more sequences scores 1000. 
-Sites are displayed in the range light gray to black,
+Sites are displayed in a range of light gray to black, 
 based on score.
 </UL>
-To display only selected subtracks, uncheck the boxes next to the tracks 
-you wish to hide.
+The &quot;New Chip Raw&quot; and &quot;New Chip Pval&quot; subtracks are
+displayed by default. Use the checkboxes on the Track Settings page to change
+the subtracks displayed.
 
 <H2>Methods</H2>
 <H3> DNase-Chip</H3>
@@ -66,14 +63,16 @@ three different DNase concentrations as well as three biological replicates.
 This material was amplified, labeled, and hybridized to NimbleGen 
 ENCODE tiled microarrays.
 <P>
-For the New Chip experiments, the raw data was averaged from 
-9 hybridizations per cell type.  The Pval scores represent -log10 p values as 
-determined by the ACME (Algorithm for Capturing Microarray Enrichment) 
-program (Scacheri, Crawford, and Davis, 2006).  
-Only regions that have p value &lt; 0.001 are included.
+For the New Chip experiments, the raw data was averaged from nine
+hybridizations per cell type. The Pval scores represent -log10 p values as
+determined by the ACME (Algorithm for Capturing Microarray Enrichment) program
+(Scacheri, Crawford, and Davis, 2006). Only regions that have p value &lt;
+0.001 are included.  -Log10 p values can be viewed in the floatScore section
+of the table viewer.
+
 <P>
 For the Old Chip experiments, significant signal was identified separately
-from each of the 3 different DNase concentrations. The regions
+from each of the three different DNase concentrations. The regions
 were assigned scores based on the number of DNase concentrations for which
 the region exhibited significant signal.
 
@@ -101,10 +100,10 @@ For the Old DNase-chip, significant signal was detected in one,
 two, or three DNase concentrations.
 Approximately 20-30% of regions detected 
 in only a single DNase concentration are valid. 
-50-80% of regions detected in 2 out of 3 DNase concentrations are valid
-(the exact percentage depends on which 2 DNase concentrations had
+50-80% of regions detected in two out of three DNase concentrations are valid
+(the exact percentage depends on which two DNase concentrations had
 significant signal).
-90% of regions detected in all 3 DNase concentrations are valid
+90% of regions detected in all three DNase concentrations are valid
 <P>
 This data set includes elements for all 44 ENCODE regions.</P>
 
