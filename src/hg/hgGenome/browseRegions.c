@@ -7,6 +7,7 @@
 #include "hui.h"
 #include "web.h"
 #include "chromGraph.h"
+#include "hPrint.h"
 #include "hgGenome.h"
 
 static void quotedBrowserUrl(FILE *f, struct bed3 *bed, struct genoGraph *gg)

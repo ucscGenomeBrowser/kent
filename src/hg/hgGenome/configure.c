@@ -5,9 +5,10 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "web.h"
+#include "hPrint.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.3 2006/07/01 09:24:37 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.4 2006/11/30 00:56:53 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */

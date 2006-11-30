@@ -13,6 +13,7 @@
 #include "chromGraph.h"
 #include "chromGraphFactory.h"
 #include "errCatch.h"
+#include "hPrint.h"
 #include "hgGenome.h"
 
 
@@ -178,7 +179,7 @@ else
     }
 
 uglyf("Saving customTrack to %s<BR>\n", fileName);
-customTrackSave(outList, fileName);
+customTracksSaveFile(outList, fileName);
 cartSetString(cart, "ct", fileName);
 
 hPrintf("This data is now available in the drop down menus on the ");

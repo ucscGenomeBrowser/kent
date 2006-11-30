@@ -11,6 +11,7 @@
 #include "chromGraph.h"
 #include "binRange.h"
 #include "hdb.h"
+#include "hPrint.h"
 #include "../near/hgNear/hgNear.h"
 #include "hgGenome.h"
 

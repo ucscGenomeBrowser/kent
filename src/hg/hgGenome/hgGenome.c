@@ -24,9 +24,11 @@
 #include "hCytoBand.h"
 #include "chromGraph.h"
 #include "customTrack.h"
+#include "hPrint.h"
+#include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.41 2006/09/22 08:26:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.42 2006/11/30 00:56:53 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -352,7 +354,7 @@ else
 
 void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
 	struct genoLay *gl, char *chromGraph, int yOff, int height, Color color,
-	boolean leftLabel, boolean rightLabel)
+	boolean leftLabel, boolean rightLabel, boolean firstInRow)
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
@@ -363,10 +365,12 @@ if (gg != NULL)
     struct chromGraphBin *cgb = gg->cgb;
     struct chromGraphSettings *cgs = gg->settings;
     int maxGapToFill = cgs->maxGapToFill;
+    static struct rgbColor missingDataColor = { 200, 200, 100};
+    Color missingColor = vgFindRgb(vg, &missingDataColor);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
     gScale = height/(gMax-gMin);
-    uglyf("chromGraph %s, gMin %f, gMax %f, Height %d, gScale %f\n<BR>\n", chromGraph, gMin, gMax, height, gScale);
+    // uglyf("chromGraph %s, gMin %f, gMax %f, Height %d, gScale %f\n<BR>\n", chromGraph, gMin, gMax, height, gScale);
 
     /* Draw significance threshold as a light blue line */
     if (leftLabel)
@@ -431,7 +435,15 @@ if (gg != NULL)
 			if (start - lastStart <= maxGapToFill)
 			    vgLine(vg, lastX, lastY, x, y, color);
 			else
+			    {
+			    if (firstInRow)
+			        {
+				int width = x - lastX - 1;
+				if (width > 0)
+				    vgBox(vg, lastX+1, minY, width, height, missingColor);
+				}
 			    vgDot(vg, x, y, color);
+			    }
 			}
 		    lastX = x;
 		    lastY = y;
@@ -527,6 +539,7 @@ genoLayDrawBandedChroms(gl, vg, database, conn,
 /* Draw chromosome graphs. */
 for (i=0; i<graphRows; ++i)
     {
+    boolean firstInRow = TRUE;
     for (j=graphCols-1; j>=0; --j)
 	{
 	char *graph = graphSourceAt(i,j);
@@ -535,7 +548,8 @@ for (i=0; i<graphRows; ++i)
 	    Color color = colorFromAscii(vg, graphColorAt(i,j));
 	    drawChromGraph(vg, conn, gl, graph, 
 		    gl->betweenChromOffsetY + yOffset, 
-		    innerHeight,  color, j==0, j==1);
+		    innerHeight,  color, j==0, j==1, firstInRow);
+	    firstInRow = FALSE;
 	    }
 	}
     yOffset += oneRowHeight;
@@ -633,6 +647,54 @@ return genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
 	minLeftLabelWidth, minRightLabelWidth);
 }
 
+
+static struct dyString *onChangeStart(int graphRows, int graphCols)
+/* Return common prefix to onChange javascript string */
+{
+struct dyString *dy = jsOnChangeStart();
+jsTextCarryOver(dy, hggThreshold);
+int i,j;
+for (i=0; i<graphRows; ++i)
+    for (j=0; j<graphCols; ++j)
+        {
+	jsDropDownCarryOver(dy, graphVarName(i,j));
+	jsDropDownCarryOver(dy, graphColorVarName(i,j));
+	}
+#ifdef SOON
+#endif /* SOON */
+return dy;
+}
+
+static char *onChangeClade(int graphRows, int graphCols)
+/* Return javascript executed when they change clade. */
+{
+struct dyString *dy = onChangeStart(graphRows, graphCols);
+jsDropDownCarryOver(dy, "clade");
+dyStringAppend(dy, " document.hiddenForm.org.value=0;");
+dyStringAppend(dy, " document.hiddenForm.db.value=0;");
+return jsOnChangeEnd(&dy);
+}
+
+static char *onChangeOrg(int graphRows, int graphCols)
+/* Return javascript executed when they change organism. */
+{
+struct dyString *dy = onChangeStart(graphRows, graphCols);
+jsDropDownCarryOver(dy, "clade");
+jsDropDownCarryOver(dy, "org");
+dyStringAppend(dy, " document.hiddenForm.db.value=0;");
+return jsOnChangeEnd(&dy);
+}
+
+static char *onChangeDb(int graphRows, int graphCols)
+/* Return javascript executed when they change database. */
+{
+struct dyString *dy = onChangeStart(graphRows, graphCols);
+jsDropDownCarryOver(dy, "clade");
+jsDropDownCarryOver(dy, "org");
+jsDropDownCarryOver(dy, "db");
+return jsOnChangeEnd(&dy);
+}
+
 void mainPage(struct sqlConnection *conn)
 /* Do main page of application:  hotlinks bar, controls, graphic. */
 {
@@ -641,12 +703,38 @@ int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
 int realCount = 0;
+char *scriptName = "/cgi-bin/hgGenome";
 
 cartWebStart(cart, "%s Genome Graphs", genome);
 
 /* Start form and save session var. */
-hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
+jsWriteFunctions();
 cartSaveSession(cart);
+
+/* Print clade, genome and assembly line. */
+boolean gotClade = hGotClade();
+    {
+    hPrintf("<TABLE>");
+    if (gotClade)
+	{
+	hPrintf("<TR><TD><B>clade:</B>\n");
+	printCladeListHtml(hGenome(database), onChangeClade(graphRows, graphCols));
+	htmlNbSpaces(3);
+	hPrintf("<B>genome:</B>\n");
+	printGenomeListForCladeHtml(database, onChangeOrg(graphRows, graphCols));
+	}
+    else
+	{
+	hPrintf("<TR><TD><B>genome:</B>\n");
+	printGenomeListHtml(database, onChangeOrg(graphRows, graphCols));
+	}
+    htmlNbSpaces(3);
+    hPrintf("<B>assembly:</B>\n");
+    printAssemblyListHtml(database, onChangeDb(graphRows, graphCols));
+    hPrintf("</TD></TR>\n");
+    hPrintf("</TABLE>");
+    }
 
 /* Draw graph controls. */
 hPrintf("<TABLE>");
@@ -675,7 +763,9 @@ for (i=0; i<graphRows; ++i)
     if (i == 0)
 	{
 	hPrintf("<TD>");
-	cgiMakeButton("submit", "Go!");
+	/* Call button "Submit" rather than "submit" to avoid
+	 * conflict with Javascript "submit" method. */
+	cgiMakeButton("Submit", "Go!"); 
 	hPrintf("</TD>");
 	}
     hPrintf("</TR>");
@@ -709,6 +799,32 @@ hPrintf("</TD></TR></TABLE>\n");
 hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
 
 hPrintf("</FORM>\n");
+
+/* Hidden form - fo the benefit of javascript. */
+    {
+    /* Copy over both the regular, non-changing variables, and
+    * also all the source/color pairs that depend on the 
+    * configuration. */
+    static char *regularVars[] = {
+      "clade", "org", "db", hggThreshold,
+      };
+    int regularCount = ArraySize(regularVars);
+    int varCount = regularCount + 2 * graphRows + graphCols;
+    int varIx = regularCount;
+    char **allVars;
+    AllocArray(allVars, varCount);
+    CopyArray(regularVars, allVars, regularCount);
+    for (i=0; i<graphRows; ++i)
+        {
+	for (j=0; j<graphCols; ++j)
+	    {
+	    allVars[varIx++] = cloneString(graphVarName(i,j));
+	    allVars[varIx++] = cloneString(graphColorVarName(i,j));
+	    }
+	}
+    jsCreateHiddenForm(cart, scriptName, allVars, varCount);
+    }
+
 cartWebEnd();
 }
 
