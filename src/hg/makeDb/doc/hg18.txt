@@ -9942,7 +9942,14 @@ rm rsAll.fas
 ssh hgwdev
 mkdir /gbdb/hg18/snp
 ln -s /cluster/store12/snp/126/human/rs_fasta/snp.fa /gbdb/hg18/snp/snp.fa
+cd /cluster/store12/snp/126/human/rs_fasta
 hgLoadSeq hg18 /gbdb/hg18/snp/snp.fa
+# look up id in extFile
+# move into separate table
+hgsql hg18 < snpSeq.sql
+hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 15200238' hg18
+hgsql -e 'delete from seq where extFile = 15200238' hg18
+hgsql -e 'alter table snpSeq add index acc (acc)' hg18
 # clean up after hgLoadSeq
 rm seq.tab
 

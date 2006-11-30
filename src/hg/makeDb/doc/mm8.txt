@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.24 2006/11/15 23:10:17 heather Exp $"
+#	"$Id: mm8.txt,v 1.25 2006/11/30 00:02:52 heather Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -6339,7 +6339,16 @@ rm rsAll.fas
 ssh hgwdev
 mkdir /gbdb/mm8/snp
 ln -s /cluster/store12/snp/126/mouse/rs_fasta/snp.fa /gbdb/mm8/snp/snp.fa
+cd /cluster/store12/snp/126/mouse/rs_fasta
 hgLoadSeq mm8 /gbdb/mm8/snp/snp.fa
+
+# look up id in extFile
+# move into separate table
+hgsql mm8 < snpSeq.sql
+hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 9642470' mm8
+hgsql -e 'delete from seq where extFile = 9642470' mm8
+hgsql -e 'alter table snpSeq add index acc (acc)' mm8
+
 # clean up after hgLoadSeq
 rm seq.tab
 

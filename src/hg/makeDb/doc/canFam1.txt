@@ -3361,7 +3361,16 @@ rm rsAll.fas
 ssh hgwdev
 mkdir /gbdb/canFam1/snp
 ln -s /cluster/store12/snp/125/dog/rs_fasta/snp.fa /gbdb/canFam1/snp/snp.fa
+cd /clsuter/store12/snp/125/dog/rs_fasta
 hgLoadSeq canFam1 /gbdb/canFam1/snp/snp.fa
+
+# look up id in extFile
+# move into separate table
+hgsql canFam1 < snpSeq.sql
+hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 455951' canFam1
+hgsql -e 'delete from seq where extFile = 455951' canFam1
+hgsql -e 'alter table snpSeq add index acc (acc)' canFam1
+
 # clean up after hgLoadSeq
 rm seq.tab
 
