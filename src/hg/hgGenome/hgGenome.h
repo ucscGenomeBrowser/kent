@@ -49,7 +49,10 @@ extern char *database;
 extern char *genome;
 extern struct genoGraph *ggUserList;	/* List of user graphs */
 extern struct genoGraph *ggDbList;	/* List of graphs in database. */
+extern struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
 extern struct slRef *ggList; /* List of active genome graphs */
+extern struct hash *ggHash;	  /* Hash of active genome graphs */
+extern boolean withLabels;	/* Draw labels? */
 
 /*** Name prefixes to separate user from db graphs. */
 #define hggUserTag "user: "
@@ -125,6 +128,9 @@ void mainPage(struct sqlConnection *conn);
 /* Do main page of application:  hotlinks bar, controls, graphic. */
 
 /*** Functions imported from other modules. ***/
+
+void mainPage(struct sqlConnection *conn);
+/* Do main page of application:  hotlinks bar, controls, graphic. */
 
 void uploadPage();
 /* Put up initial upload page. */

@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = hgGenome
 
 O = browseRegions.o clickOnImage.o configure.o correlate.o \
-    hgGenome.o sortGenes.o upload.o
+    hgGenome.o mainPage.o sortGenes.o upload.o
 
 include ../../inc/cgi_build_rules.mk
 
