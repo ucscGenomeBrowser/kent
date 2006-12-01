@@ -22,13 +22,14 @@
 #include "genoLay.h"
 #include "cytoBand.h"
 #include "hCytoBand.h"
+#include "errCatch.h"
 #include "chromGraph.h"
 #include "customTrack.h"
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.42 2006/11/30 00:56:53 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.43 2006/12/01 19:22:50 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -786,17 +787,27 @@ cgiMakeOptionalButton(hggSort, "Sort Genes",
 hPrintf("<BR>");
 
 
-/* Get genome layout. */
-gl = ggLayout(conn, graphRows, graphCols);
+/* Get genome layout.  This can fail so it is wrapped in an error
+ * catcher. */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    gl = ggLayout(conn, graphRows, graphCols);
 
-/* Draw picture. Enclose in table to add a couple of pixels between
- * it and controls on IE. */
-hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
-genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
-hPrintf("</TD></TR></TABLE>\n");
+    /* Draw picture. Enclose in table to add a couple of pixels between
+     * it and controls on IE. */
+    hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
+    genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
+    hPrintf("</TD></TR></TABLE>\n");
 
-/* Write a little click-on-help */
-hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
+    /* Write a little click-on-help */
+    hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
+
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+     warn(errCatch->message->string);
+errCatchFree(&errCatch); 
 
 hPrintf("</FORM>\n");
 
@@ -889,6 +900,7 @@ void dispatchLocation()
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
+cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn();
 getGenoGraphs(conn);
