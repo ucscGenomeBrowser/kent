@@ -14,6 +14,7 @@
 #include "chromGraphFactory.h"
 #include "errCatch.h"
 #include "hPrint.h"
+#include "customTrack.h"
 #include "hgGenome.h"
 
 
@@ -142,10 +143,11 @@ void updateCustomTracks(struct customTrack *upList)
 {
 struct customTrack *outList = NULL;
 struct tempName tempName;
-char *fileName = cartOptionalString(cart, "ct");
+char *varName = customTrackFileVar(database);
+char *fileName = cartOptionalString(cart, varName);
 if (fileName == NULL || !fileExists(fileName))
     {
-    makeTempName(&tempName, "hggUp", ".ra");
+    makeTempName(&tempName, "hggUp", ".bed");
     fileName = tempName.forCgi;
     outList = upList;
     }
@@ -180,7 +182,7 @@ else
 
 uglyf("Saving customTrack to %s<BR>\n", fileName);
 customTracksSaveFile(outList, fileName);
-cartSetString(cart, "ct", fileName);
+cartSetString(cart, varName, fileName);
 
 hPrintf("This data is now available in the drop down menus on the ");
 hPrintf("main page for graphing.<BR>");
