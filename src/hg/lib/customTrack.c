@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.154 2006/11/21 00:33:08 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.155 2006/12/01 22:48:14 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -623,13 +623,14 @@ if (customText && bogusMacEmptyChars(customText))
 
 fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
 char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-if (fileName && fileName[0])
+if (isNotEmpty(fileName))
     {
     /* handle file input, optionally with compression */
-    if (fileContents && fileContents[0])
+    if (isNotEmpty(fileContents))
         customText = fileContents;
     else
         {
+        /* file contents not available -- check for compressed */
         if (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
             endsWith(fileName,".bz2"))
             {
@@ -670,7 +671,7 @@ else if (cartNonemptyString(cart, CT_CUSTOM_DOC_TEXT_VAR))
 html = customDocParse(html);
 
 struct customTrack *newCts = NULL, *ct = NULL;
-if (customText != NULL && customText[0] != 0)
+if (isNotEmpty(customText))
     {
     /* protect against format errors in input from user */
     struct errCatch *errCatch = errCatchNew();
@@ -752,8 +753,8 @@ if (customTracksExist(cart, &ctFileName))
                 break;
                 }
             }
-        cartRemove(cart, CT_SELECTED_TABLE_VAR);
         }
+    cartRemove(cart, CT_SELECTED_TABLE_VAR);
     }
 
 /* merge new and old tracks */
