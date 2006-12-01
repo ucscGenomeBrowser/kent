@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1167 2006/11/22 21:39:23 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1169 2006/11/29 21:53:41 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8685,7 +8685,9 @@ if (xref != NULL)
 	int last = strlen(xref->synonyms) - 1;
 	if (xref->synonyms[last] == ',')
 	    xref->synonyms[last] = 0;
-	printf("<B>Synonyms:</B> %s<BR>\n", xref->synonyms);
+	printf("<B>Synonyms:</B> ");
+	htmlTextOut(xref->synonyms);
+	printf("<BR>\n");
 	}
     if (fbsp != NULL)
 	{
@@ -11501,7 +11503,7 @@ hFreeConn(&conn);
 }
 
 off_t getSnpOffset(struct snp snp)
-/* do a lookup in the snpSeq for the offset */
+/* do a lookup in snpSeq for the offset */
 {
 char query[256];
 char **row;
@@ -11509,7 +11511,9 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 long offset = 0;
 
-safef(query, sizeof(query), "select file_offset from seq where acc='%s'", snp.name);
+if (!hTableExists("snpSeq"))
+    return -1;
+safef(query, sizeof(query), "select file_offset from snpSeq where acc='%s'", snp.name);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -11543,7 +11547,7 @@ return fileName;
 
 
 
-void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2)
+void generateAlignment(struct dnaSeq *seq1, struct dnaSeq *seq2, int displayLength)
 /* seq1 is target (usually a chromosome), seq2 is query */
 {
 int matchScore = 100;
@@ -11570,7 +11574,7 @@ while (axtBlock !=NULL)
     printf("Alignment between genome (%s; %d bp) and ", seq1->name, seq1->size);
     printf("flanking sequence (%s; %d bp)\n", seq2->name, seq2->size);
     printf("\n");
-    axtPrintTraditional(axtBlock, 60, ss, stdout);
+    axtPrintTraditional(axtBlock, displayLength, ss, stdout);
     axtBlock=axtBlock->next;
     }
 
@@ -11590,6 +11594,7 @@ char *line;
 struct lineFile *lf = NULL;
 int lineSize;
 static int maxFlank = 1000;
+static int displayLength = 100;
 
 boolean gotVar = FALSE;
 boolean isNucleotide = TRUE;
@@ -11705,7 +11710,7 @@ if (sameString(strand,"-"))
 printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
 
 printf("<PRE><B>Genomic Sequence:</B><BR>");
-writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, 60);
+writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, displayLength);
 printf("</PRE>\n");
 
 printf("\n<PRE><B>dbSNP Sequence (Flanking sequences and observed alleles):</B><BR>");
@@ -11720,9 +11725,9 @@ if (rightFlankTrimmed)
 dnaSeqDbSnp5 = newDnaSeq(leftFlank, len5, "dbSNP seq 5");
 dnaSeqDbSnpO = newDnaSeq(variation, strlen(variation),"dbSNP seq O");
 dnaSeqDbSnp3 = newDnaSeq(rightFlank, len3, "dbSNP seq 3");
-writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, 60);
-writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, 60);
-writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, 60);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp5->dna, dnaSeqDbSnp5->size, displayLength);
+writeSeqWithBreaks(stdout, dnaSeqDbSnpO->dna, dnaSeqDbSnpO->size, displayLength);
+writeSeqWithBreaks(stdout, dnaSeqDbSnp3->dna, dnaSeqDbSnp3->size, displayLength);
 printf("</PRE>\n");
 
 /* create seqDbSnp */
@@ -11737,7 +11742,7 @@ if (seqDbSnp == NULL)
     }
 seqDbSnp->size = strlen(seqDbSnp->dna);
 
-generateAlignment(seqNib, seqDbSnp);
+generateAlignment(seqNib, seqDbSnp, displayLength);
 }
 
 
