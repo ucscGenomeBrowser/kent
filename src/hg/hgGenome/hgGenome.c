@@ -30,7 +30,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.44 2006/12/01 22:30:12 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.45 2006/12/01 22:40:45 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -289,8 +289,8 @@ int i,j;
 for (i=0; i<graphRows; ++i)
    for (j=0; j<graphCols; ++j)
        if ((gg = ggAt(i,j)) != NULL)
-           break;
-return gg;
+           return gg;
+return NULL;
 }
 
 struct slRef *ggAllVisible()
