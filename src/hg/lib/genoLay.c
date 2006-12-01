@@ -80,7 +80,7 @@ char **row;
 struct genoLayChrom *chrom, *chromList = NULL;
 int count = sqlQuickNum(conn, "select count(*) from chromInfo");
 if (count > 500)
-    errAbort("Sorry, hgGenome only works on assemblies mapped to chromosomes.");
+    errAbort("Sorry, can only do genome layout on assemblies mapped to chromosomes. This one has %d contigs. Please select another organism or assembly.", count);
 sr = sqlGetResult(conn, "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
