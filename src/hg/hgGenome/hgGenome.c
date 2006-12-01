@@ -26,11 +26,12 @@
 #include "errCatch.h"
 #include "chromGraph.h"
 #include "customTrack.h"
+#include "hCommon.h"
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.45 2006/12/01 22:40:45 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.46 2006/12/01 23:28:25 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -320,6 +321,7 @@ int minLeftLabelWidth = 0, minRightLabelWidth = 0;
 
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
+tl.picWidth = cartUsualInt(cart, hggImageWidth, hgDefaultPixWidth);
 
 /* Refine all graphs actually used, and calculate label
  * widths if need be. */

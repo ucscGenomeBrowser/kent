@@ -30,6 +30,7 @@
 #define hggMaxGapToFill hggPrefix "maxGapToFill"
 #define hggUploadFile hggPrefix "uploadFile"
 #define hggUploadRa hggPrefix "uploadRa"
+#define hggImageWidth hggPrefix "imageWidth"
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"

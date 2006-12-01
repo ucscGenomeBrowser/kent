@@ -8,7 +8,7 @@
 #include "hPrint.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.4 2006/11/30 00:56:53 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.5 2006/12/01 23:28:25 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -37,7 +37,7 @@ hPrintf("<TABLE>\n");
 hPrintf("<TR>\n");
 hPrintf("<TD>\n");
 hPrintf("image width: ");
-cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+cgiMakeIntVar(hggImageWidth, cartUsualInt(cart, hggImageWidth, hgDefaultPixWidth), 4);
 hPrintf("</TD>\n");
 hPrintf("<TD>\n");
 hPrintf("graph height: ");
