@@ -150,7 +150,7 @@ public class QADBLibrary {
   * Get all genome databases.
   */
   public static ArrayList getGenomeDatabases(HGDBInfo metadbinfo) {
-     return getColumn(metadbinfo, "dbDb", "name", false);
+     return getColumnMatchingCondition(metadbinfo, "dbDb", "name", "active = 1");
   }
  
  /**
@@ -515,10 +515,13 @@ public class QADBLibrary {
 
       rs = stmt.executeQuery(query);
     
+      System.out.println("database list: \n");
       while (rs.next()) {
         id = rs.getString(column);
         dblist.add(id);
+	System.out.println(id);
       }
+      System.out.println();
 
       stmt.close();
       con.close();
