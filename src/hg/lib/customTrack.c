@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.155 2006/12/01 22:48:14 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.156 2006/12/01 23:15:26 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -410,7 +410,7 @@ if (retReplacedCts)
 return newCtList;
 }
 
-static char *customTrackFileVar(char *database)
+char *customTrackFileVar(char *database)
 /* return CGI var name containing custom track filename for a database */
 {
 char buf[64];

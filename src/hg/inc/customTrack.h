@@ -92,6 +92,9 @@ void customTracksSaveCart(struct cart *cart, struct customTrack *ctList);
 void customTracksSaveFile(struct customTrack *trackList, char *fileName);
 /* Save out custom tracks. This is just used by internally  */
 
+char *customTrackFileVar(char *database);
+/* return CGI var name containing custom track filename for a database */
+
 void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash);
 /* Lift tracks based on hash of ctgPos. */
 
