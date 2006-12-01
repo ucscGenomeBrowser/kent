@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.46 2006/12/01 23:28:25 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.47 2006/12/01 23:57:02 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -218,10 +218,22 @@ return minLabelWidth;
 
 /* Routines to fetch cart variables. */
 
+double getThreshold()
+/* Return user-set threshold */
+{
+return cartUsualDouble(cart, hggThreshold, defaultThreshold);
+}
+
 int graphHeight()
 /* Return height of graph. */
 {
 return cartUsualIntClipped(cart, hggGraphHeight, 27, 5, 200);
+}
+
+int regionPad()
+/* Number of bases to pad regions by. */
+{
+return cartUsualIntClipped(cart, hggRegionPad, hggRegionPadDefault, 0, 10000000);
 }
 
 int graphsPerLine()
@@ -230,7 +242,6 @@ int graphsPerLine()
 return cartUsualIntClipped(cart, hggGraphsPerLine,
 	defaultGraphsPerLine, minGraphsPerLine, maxGraphsPerLine);
 }
-
 
 int linesOfGraphs()
 /* Return number of lines of graphs */
@@ -357,6 +368,32 @@ return genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
 	minLeftLabelWidth, minRightLabelWidth);
 }
 
+static void addPadToBed3(struct bed3 *bedList, int atStart, int atEnd)
+/* Add padding to bed3 list */
+{
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    bed->chromStart += atStart;
+    bed->chromEnd += atEnd;
+    }
+}
+
+struct bed3 *regionsOverThreshold(struct genoGraph *gg)
+/* Get list of regions over threshold */
+{
+/* Get list of regions. */
+if (gg == NULL)
+    errAbort("Please go back and select a graph.");
+double threshold = getThreshold();
+struct bed3 *bedList = chromGraphBinToBed3(gg->binFileName, threshold);
+if (bedList == NULL)
+    errAbort("No regions over %g, please go back and set a lower threshold",
+    	threshold);
+int pad = regionPad();
+addPadToBed3(bedList, -pad, pad);
+return bedList;
+}
 
 void dispatchPage()
 /* Look at command variables in cart and figure out which

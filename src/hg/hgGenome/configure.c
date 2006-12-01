@@ -8,7 +8,7 @@
 #include "hPrint.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.5 2006/12/01 23:28:25 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.6 2006/12/01 23:57:02 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -57,12 +57,19 @@ hPrintf("<TD>\n");
 cgiMakeButton("submit", "Submit");
 hPrintf("</TD>\n");
 hPrintf("</TR>\n");
-hPrintf("<TR>\n");
-hPrintf("<TD>\n");
-cartMakeCheckBox(cart, hggLabels, TRUE);
-hPrintf("numerical labels");
-hPrintf("</TD>\n");
 hPrintf("</TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("numerical labels: ");
+cartMakeCheckBox(cart, hggLabels, TRUE);
+hPrintf(" <I>Label axis on left for first graph and on right for last graph</I>");
+hPrintf("</TD></TR></TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("region pad: ");
+cgiMakeIntVar(hggRegionPad, regionPad(), 6);
+hPrintf(" <I>Number of bases to add to either side of regions over threshold</I>");
+hPrintf("</TD></TR></TABLE>\n");
+int regionPad();
+
 hPrintf("</FORM>\n");
 cartWebEnd();
 }

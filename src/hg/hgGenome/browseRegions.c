@@ -22,15 +22,9 @@ void browseRegions(struct sqlConnection *conn)
 /* Put up a frame with a list of links on the left and the
  * first link selected on the right. */
 {
-/* Get list of regions. */
 struct genoGraph *gg = ggFirstVisible();
-if (gg == NULL)
-    errAbort("Please go back and select a graph.");
-double threshold = cartUsualDouble(cart, hggThreshold, defaultThreshold);
-struct bed3 *bed, *bedList = chromGraphBinToBed3(gg->binFileName, threshold);
-if (bedList == NULL)
-    errAbort("No regions over %g, please go back and set a lower threshold",
-    	threshold);
+double threshold = getThreshold();
+struct bed3 *bed, *bedList = regionsOverThreshold(gg);
 
 /* Define names of our two frames. */
 char *browserFrame = "browser";

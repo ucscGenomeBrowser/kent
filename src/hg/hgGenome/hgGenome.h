@@ -31,6 +31,9 @@
 #define hggUploadFile hggPrefix "uploadFile"
 #define hggUploadRa hggPrefix "uploadRa"
 #define hggImageWidth hggPrefix "imageWidth"
+#define hggRegionPad hggPrefix "regionPad"
+
+#define hggRegionPadDefault 50000
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"
@@ -76,6 +79,15 @@ struct genoGraph
 
 
 /*** Routines from hgGenome.h ***/
+
+int regionPad();
+/* Number of bases to pad regions by. */
+
+double getThreshold();
+/* Return user-set threshold */
+
+struct bed3 *regionsOverThreshold();
+/* Get list of regions over threshold */
 
 int graphHeight();
 /* Return height of graph. */
@@ -124,9 +136,6 @@ struct slRef *ggAllVisible();
 void hggDoUsualHttp();
 /* Wrap html page dispatcher with code that writes out
  * HTTP header and write cart back to database. */
-
-void mainPage(struct sqlConnection *conn);
-/* Do main page of application:  hotlinks bar, controls, graphic. */
 
 /*** Functions imported from other modules. ***/
 
