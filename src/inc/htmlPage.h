@@ -5,7 +5,7 @@
  *   htmlPageValidateOrAbort(page);
  *   var = htmlPageGetVar(page, page->forms, "org");
  *   if (var != NULL)
- *      printf("Organism = var->org);
+ *      printf("Organism = %s\n", var->curVal);
  *   htmlPageSetVar(page, page->forms, "org", "Human");
  *   newPage = htmlPageFromForm(page, page->forms, "submit", "Go");
  */
