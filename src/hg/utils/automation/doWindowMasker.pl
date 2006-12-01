@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doWindowMasker.pl instead.
 
-# $Id: doWindowMasker.pl,v 1.3 2006/11/29 23:44:48 aamp Exp $
+# $Id: doWindowMasker.pl,v 1.4 2006/12/01 20:07:00 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -118,7 +118,7 @@ set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
 chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 pushd \$tmpDir
-twoBitToFa $unmaskedSeq \$fa
+twoBitToFa \$inputTwoBit \$fa
 \$windowMasker -mk_counts true -input \$fa -output windowmasker.counts
 popd 
 cp \$tmpDir/windowmasker.counts .
@@ -147,7 +147,7 @@ chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 cp windowmasker.counts \$tmpDir
 pushd \$tmpDir
-twoBitToFa $unmaskedSeq \$fa
+twoBitToFa \$inputTwoBit \$fa
 \$windowMasker -ustat windowmasker.counts -input \$fa -output windowmasker.intervals
 perl -wpe \'if \(s\/^\>lcl\\\|\(\.\*\)\\n\$\/\/\) { \$chr = \$1\; } \\
    if \(\/^\(\\d+\) \- \(\\d+\)\/\) { \\
@@ -180,7 +180,7 @@ chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 cp windowmasker.counts \$tmpDir
 pushd \$tmpDir
-twoBitToFa $unmaskedSeq \$fa
+twoBitToFa \$inputTwoBit \$fa
 \$windowMasker -ustat windowmasker.counts -sdust true -input \$fa -output windowmasker.intervals
 perl -wpe \'if \(s\/^\>lcl\\\|\(\.\*\)\\n\$\/\/\) { \$chr = \$1\; } \\
    if \(\/^\(\\d+\) \- \(\\d+\)\/\) { \\
@@ -204,7 +204,7 @@ sub doTwoBit {
   &HgAutomate::checkExistsUnlessDebug('mask', 'sdust', ("$runDir/windowmasker.counts", 
            "$runDir/windowmasker.bed", "$runDir/windowmasker.sdust.bed"));
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = new HgRemoteScript("$runDir/doTwoBit.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 twoBitMask $unmaskedSeq windowmasker.bed $db.wmsk.2bit
