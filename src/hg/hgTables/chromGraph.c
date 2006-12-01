@@ -11,7 +11,10 @@
 boolean isChromGraph(struct trackDb *track)
 /* Return TRUE if it's a chromGraph track */
 {
-return startsWithWord("chromGraph", track->type);
+if (track && track->type)
+    return startsWithWord("chromGraph", track->type);
+else
+    return FALSE;
 }
 
 void doOutChromGraphDataCt(struct trackDb *track, char *table)
