@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.1 2006/12/01 22:30:12 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.2 2006/12/01 22:36:27 kent Exp $";
 
 
 static char *allColors[] = {
@@ -487,7 +487,7 @@ hPrintf("</FORM>\n");
       "clade", "org", "db", hggThreshold,
       };
     int regularCount = ArraySize(regularVars);
-    int varCount = regularCount + 2 * graphRows + graphCols;
+    int varCount = regularCount + 2 * graphRows * graphCols;
     int varIx = regularCount;
     char **allVars;
     AllocArray(allVars, varCount);
