@@ -5,6 +5,7 @@
 
 #Scored BED with P-value floating point values and integer scores (0-1000) for display.
 CREATE TABLE bed5Pval (
+    bin smallint not null,      # Index field
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -12,5 +13,7 @@ CREATE TABLE bed5Pval (
     score int not null,	# 0-1000 score for useScore shading
     pValue float not null,	# -log10 P-value
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(chrom(16),bin),
+    INDEX(chrom(16),chromStart),
+    INDEX(name(16))
 );
