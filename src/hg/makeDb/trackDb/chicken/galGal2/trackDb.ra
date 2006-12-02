@@ -463,12 +463,6 @@ termRegex Contig[0-9]+
 dontCheck Contig[0-9]+ \\([0-9-]+\\)
 searchPriority 8.5
 
-searchTable bgiSnp
-searchType bed
-shortCircuit 1
-termRegex snp\.[0-9]+\.[0-9]+\.[0-9]+\.[IDS]\.[1-3]
-searchPriority 20
-
 searchTable bgiGene
 searchType genePred
 shortCircuit 1
