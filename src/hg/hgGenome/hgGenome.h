@@ -34,7 +34,7 @@
 #define hggRegionPad hggPrefix "regionPad"
 #define hggYellowMissing hggPrefix "yellowMissing"
 
-#define hggRegionPadDefault 50000
+#define hggRegionPadDefault 25000
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"

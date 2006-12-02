@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.49 2006/12/02 22:02:29 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.50 2006/12/02 22:04:51 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -380,9 +380,9 @@ static void addPadToBed3(struct bed3 *bedList, int atStart, int atEnd)
 struct bed3 *bed;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    bed->chromStart += atStart;
-    if (bed->chromStart < 0)
-        bed->chromStart = 0;
+    int start = bed->chromStart + atStart;
+    if (start < 0) start = 0;
+    bed->chromStart = start;
     bed->chromEnd += atEnd;
     }
 }
