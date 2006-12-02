@@ -22,8 +22,8 @@ extern struct customFactory chromGraphFactory;
 #define cgfMarkerSts "STS marker"
 #define cgfMarkerSnp "dbSNP rsID"
 #define cgfMarkerAffy100 "(Affymetrix 100K Gene Chip)"
-#define cgfMarkerAffy500 "(Affymetrix 500k Gene Chip)"
-#define cgfMarkerHumanHap300 "(Illumina HumanHap300 BeadChip)"
+#define cgfMarkerAffy500 "Affymetrix 500k Gene Chip"
+#define cgfMarkerHumanHap300 "Illumina HumanHap300 BeadChip"
 
 /* Symbolic defines for type of format we support. */
 #define cgfFormatGuess "best guess"
