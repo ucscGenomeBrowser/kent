@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.2 2006/12/01 22:36:27 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.3 2006/12/02 01:32:49 kent Exp $";
 
 
 static char *allColors[] = {
@@ -81,6 +81,7 @@ void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn,
 /* Draw chromosome graph on all chromosomes in layout at given
  * y offset and height. */
 {
+boolean yellowMissing = getYellowMissing();
 struct genoGraph *gg = hashFindVal(ggHash, chromGraph);
 if (gg != NULL)
     {
@@ -159,7 +160,7 @@ if (gg != NULL)
 			    vgLine(vg, lastX, lastY, x, y, color);
 			else
 			    {
-			    if (firstInRow)
+			    if (yellowMissing && firstInRow)
 			        {
 				int width = x - lastX - 1;
 				if (width > 0)

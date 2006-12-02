@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.47 2006/12/01 23:57:02 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.48 2006/12/02 01:32:49 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -222,6 +222,12 @@ double getThreshold()
 /* Return user-set threshold */
 {
 return cartUsualDouble(cart, hggThreshold, defaultThreshold);
+}
+
+boolean getYellowMissing()
+/* Return draw background in yellow for missing data flag. */
+{
+return cartUsualBoolean(cart, hggYellowMissing, FALSE);
 }
 
 int graphHeight()

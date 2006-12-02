@@ -32,6 +32,7 @@
 #define hggUploadRa hggPrefix "uploadRa"
 #define hggImageWidth hggPrefix "imageWidth"
 #define hggRegionPad hggPrefix "regionPad"
+#define hggYellowMissing hggPrefix "yellowMissing"
 
 #define hggRegionPadDefault 50000
 
@@ -85,6 +86,9 @@ int regionPad();
 
 double getThreshold();
 /* Return user-set threshold */
+
+boolean getYellowMissing();
+/* Return draw background in yellow for missing data flag. */
 
 struct bed3 *regionsOverThreshold();
 /* Get list of regions over threshold */

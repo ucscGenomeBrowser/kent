@@ -8,7 +8,7 @@
 #include "hPrint.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.6 2006/12/01 23:57:02 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.7 2006/12/02 01:32:49 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -62,6 +62,11 @@ hPrintf("<TABLE><TR><TD>\n");
 hPrintf("numerical labels: ");
 cartMakeCheckBox(cart, hggLabels, TRUE);
 hPrintf(" <I>Label axis on left for first graph and on right for last graph</I>");
+hPrintf("</TD></TR></TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("hilight missing: ");
+cartMakeCheckBox(cart, hggYellowMissing, FALSE);
+hPrintf(" <I>Highlight graph background where there is missing data</I>");
 hPrintf("</TD></TR></TABLE>\n");
 hPrintf("<TABLE><TR><TD>\n");
 hPrintf("region pad: ");
