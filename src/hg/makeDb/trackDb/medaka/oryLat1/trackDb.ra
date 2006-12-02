@@ -18,3 +18,10 @@ group map
 visibility dense
 type bed 3 +
 
+track repeats
+shortLabel WMasker
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+priority 149.26
+visibility hide
+type bed 3
