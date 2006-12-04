@@ -106,7 +106,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1242 2006/11/30 18:58:27 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1243 2006/12/04 17:56:07 jsp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12364,10 +12364,15 @@ registerTrackHandler("altGraphXPsb2004", altGraphXMethods );
 registerTrackHandler("altGraphXT6Con", altGraphXMethods ); 
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("RfamSeedFolds", rnaSecStrMethods);
+registerTrackHandler("RfamFullFolds", rnaSecStrMethods);
 registerTrackHandler("rfamTestFolds", rnaSecStrMethods);
 registerTrackHandler("rnaTestFolds", rnaSecStrMethods);
+registerTrackHandler("rnaTestFoldsV2", rnaSecStrMethods);
+registerTrackHandler("rnaTestFoldsV3", rnaSecStrMethods);
 registerTrackHandler("evofold", rnaSecStrMethods);
+registerTrackHandler("evofoldRaw", rnaSecStrMethods);
 registerTrackHandler("encode_tba23EvoFold", rnaSecStrMethods);
+registerTrackHandler("encodeEvoFold", rnaSecStrMethods);
 registerTrackHandler("rnafold", rnaSecStrMethods);
 registerTrackHandler("mcFolds", rnaSecStrMethods);
 registerTrackHandler("rnaEditFolds", rnaSecStrMethods);
