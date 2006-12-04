@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.309 2006/11/17 00:21:46 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.310 2006/12/04 17:56:49 hartera Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -639,6 +639,22 @@ if (conn == NULL)
     {
     centralArchiveCc = getCentralCcFromCfg("archivebackup");
     conn = sqlAllocConnection(centralArchiveCc);
+    }
+return(conn);
+}
+
+struct sqlConnection *hMaybeConnectArchiveCentral()
+/* Connect to central database for archives.
+ * Free this up with hDisconnectCentralArchive(). */
+{
+struct sqlConnection *conn = NULL;
+if (centralArchiveCc == NULL)
+    centralArchiveCc = getCentralCcFromCfg("archivecentral");
+conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
+if (conn == NULL)
+    {
+    centralArchiveCc = getCentralCcFromCfg("archivebackup");
+    conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
     }
 return(conn);
 }
@@ -2397,7 +2413,7 @@ struct dbDb *dbList = NULL, *db;
 char *assembly;
 char *next;
 
-conn = hConnectArchiveCentral();
+conn = hMaybeConnectArchiveCentral();
 if (conn)
     {
     /* NOTE: archive orderKey convention is opposite of production server! */
@@ -2420,6 +2436,9 @@ if (conn)
     hDisconnectArchiveCentral(&conn);
     slReverse(&dbList);
     }
+else
+    /* dbList is NULL if can not connect to archive database */
+    dbList = NULL;
 return dbList;
 }
 
@@ -3836,6 +3855,25 @@ slReverse(&liftOverDbList);
 return liftOverDbList;
 }
 
+boolean liftOverChainFileExists(struct liftOverChain *chain)
+/* check whether a liftOver chain file exists in gbdb */
+{
+boolean exists = FALSE;
+/* get liftOver chain file name from the liftOver chain table */
+char *chainFile = liftOverChainFile(chain->fromDb, chain->toDb);
+FILE *f = NULL;
+
+/* check existence of the file by trying to open it */
+if (chainFile != NULL)
+      {
+      f = fopen(chainFile, "r");
+      if (f != NULL)
+         exists = TRUE;
+      fclose(f);
+      }
+return exists;
+}
+
 struct dbDb *hGetLiftOverToDatabases(char *fromDb)
 /* Get list of databases for which there are liftOver chain files 
  * to convert from the fromDb assembly.
@@ -3850,8 +3888,10 @@ struct hash *dbNameHash = newHash(3);
 chainList = liftOverChainListFiltered();
 
 /* Create hash of databases having liftOver chains from the fromDb */
+/* Also check to see if the liftOver chains exist in /gbdb/ */
+chain=chainList;
 for (chain = chainList; chain != NULL; chain = chain->next)
-    if (sameString(chain->fromDb,fromDb))
+    if (sameString(chain->fromDb,fromDb) && liftOverChainFileExists(chain))
 	hashAdd(hash, chain->toDb, chain->toDb);
 
 /* Get list of all current databases */
