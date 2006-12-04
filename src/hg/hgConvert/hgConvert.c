@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.21 2006/12/04 18:00:04 hartera Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.22 2006/12/04 18:02:25 hartera Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -65,7 +65,7 @@ puts("\n<TABLE WIDTH=\"100%%\">\n");
 conn = hMaybeConnectArchiveCentral();
 if (conn == NULL)
     cgiParagraph(
-        "Can not connect to the archive hgcentral. Drop down menus contain"
+        "No archived databases available. Drop down menus contain"
         " only databases not on the archive server.""");
 cgiSimpleTableRowStart();
 cgiTableField("Old Genome: ");
