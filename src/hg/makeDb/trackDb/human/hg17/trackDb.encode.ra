@@ -1744,6 +1744,7 @@ type bed 5
     dataVersion ENCODE Oct 2005 Freeze
 
 track encodeUWRegulomeBase
+release alpha
 compositeTrack on
 shortLabel UW/Reg QCP DNaseI Sens
 longLabel ENCODE UW/Regulome QCP DNaseI Sensitivity
@@ -1763,6 +1764,7 @@ smoothingWindow 2
 dataVersion ENCODE June 2006
 
     track encodeUWRegulomeBaseCD4
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel CD4
     longLabel CD4 DNaseI Sensitivity
@@ -1770,6 +1772,7 @@ dataVersion ENCODE June 2006
     priority 1
 
     track encodeUWRegulomeBaseCaCo2
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel CaCo2
     longLabel CaCo2 DNaseI Sensitivity
@@ -1777,6 +1780,7 @@ dataVersion ENCODE June 2006
     priority 2
 
     track encodeUWRegulomeBaseCaLU3
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel CaLU3
     longLabel CaLU3 DNaseI Sensitivity
@@ -1784,6 +1788,7 @@ dataVersion ENCODE June 2006
     priority 3
 
     track encodeUWRegulomeBaseEryAdult
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel EryAdult
     longLabel EryAdult DNaseI Sensitivity
@@ -1791,6 +1796,7 @@ dataVersion ENCODE June 2006
     priority 4
 
     track encodeUWRegulomeBaseEryFetal
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel EryFetal
     longLabel EryFetal DNaseI Sensitivity
@@ -1798,6 +1804,7 @@ dataVersion ENCODE June 2006
     priority 5
 
     track encodeUWRegulomeBaseGM
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel GM
     longLabel GM DNaseI Sensitivity
@@ -1805,6 +1812,7 @@ dataVersion ENCODE June 2006
     priority 6
 
     track encodeUWRegulomeBaseHMEC
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel HMEC
     longLabel HMEC DNaseI Sensitivity
@@ -1812,6 +1820,7 @@ dataVersion ENCODE June 2006
     priority 7
 
     track encodeUWRegulomeBaseHRE
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel HRE
     longLabel HRE DNaseI Sensitivity
@@ -1819,6 +1828,7 @@ dataVersion ENCODE June 2006
     priority 8
 
     track encodeUWRegulomeBaseHeLa
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel HeLa
     longLabel HeLa DNaseI Sensitivity
@@ -1826,6 +1836,7 @@ dataVersion ENCODE June 2006
     priority 9
 
     track encodeUWRegulomeBaseHepG2
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel HepG2
     longLabel HepG2 DNaseI Sensitivity
@@ -1833,6 +1844,7 @@ dataVersion ENCODE June 2006
     priority 10
 
     track encodeUWRegulomeBaseHuh7
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel Huh7
     longLabel Huh7 DNaseI Sensitivity
@@ -1840,6 +1852,7 @@ dataVersion ENCODE June 2006
     priority 11
 
     track encodeUWRegulomeBaseK562
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel K562
     longLabel K562 DNaseI Sensitivity
@@ -1847,6 +1860,7 @@ dataVersion ENCODE June 2006
     priority 12
 
     track encodeUWRegulomeBaseNHBE
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel NHBE
     longLabel NHBE DNaseI Sensitivity
@@ -1854,6 +1868,7 @@ dataVersion ENCODE June 2006
     priority 13
 
     track encodeUWRegulomeBasePANC
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel PANC
     longLabel PANC DNaseI Sensitivity
@@ -1861,6 +1876,7 @@ dataVersion ENCODE June 2006
     priority 14
 
     track encodeUWRegulomeBaseSAEC
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel SAEC
     longLabel SAEC DNaseI Sensitivity
@@ -1868,6 +1884,7 @@ dataVersion ENCODE June 2006
     priority 15
 
     track encodeUWRegulomeBaseSKnSH
+release alpha
     subTrack encodeUWRegulomeBase
     shortLabel SKnSH
     longLabel SKnSH DNaseI Sensitivity
