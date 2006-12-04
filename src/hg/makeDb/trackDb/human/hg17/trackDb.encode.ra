@@ -2164,7 +2164,8 @@ shortLabel UW/Reg DNaseI HSs
 longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
 group encodeChrom
 priority 66.2
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrXtype bedGraph 4
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bedGraph 4
 minLimit 1.1
 maxLimit 3.0
 viewLimits 1:2
@@ -2321,7 +2322,8 @@ shortLabel UW/Reg Q/A
 longLabel ENCODE UW/Regulome Plate Quality Score
 group encodeChrom
 priority 66.3
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrXtype bed 5 .
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bed 5 .
 useScore 1
 dataVersion ENCODE June 2005 Freeze
 origAssembly hg16
