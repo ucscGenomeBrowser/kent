@@ -2968,17 +2968,17 @@ dataVersion ENCODE Oct 2005 Freeze
     color 110,40,30
     priority 3
 
-track encode_tba23EvoFold
-shortLabel TBA23 EvoFold
-longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+track encodeEvoFold
+shortLabel UCSC EvoFold
+longLabel UCSC, RNA secondary structure predicted by EvoFold (id_strand_score)
 group encodeGenes
-priority 63.1
+priority 63.11
 visibility hide
-color 20,90,0
+color 30,120,0
 type bed 6 +
-mafTrack multiz17way
+mafTrack encodeTbaAlign
 origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
+dataVersion May 2006
 
 track encodeDless
 shortLabel DLESS
