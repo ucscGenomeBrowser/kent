@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1170 2006/12/04 17:58:54 jsp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1171 2006/12/04 22:32:22 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12389,7 +12389,33 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void printSnpOrthoSummary(char *rsId, char *observed)
+/* helper function for printSnp125Info */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int count = 0;
+
+if (sameString("hg18", database) && hTableExists("snp126orthoPanTro2RheMac2"))
+    {
+    safef(query, sizeof(query),
+          "select count(*) from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
+    count = sqlQuickNum(conn, query);
+    if (count != 1) return;
+    
+    safef(query, sizeof(query),
+          "select chimpAllele from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    printf("<B>Summary: </B>%s>%s (chimp allele displayed first, then '>', then human alleles)<br>\n", row[0], observed);
+    sqlFreeResult(&sr);
+    }
+}
+
 void printSnpOrthos(char *rsId)
+/* helper function for printSnp125Info */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -12426,6 +12452,7 @@ void printSnp125Info(struct snp125 snp)
 int alleleLen = strlen(snp.refUCSC);
 char refUCSCRevComp[1024];
 
+printSnpOrthoSummary(snp.name, snp.observed);
 if (sameString(snp.strand,"-"))
     {
     safef(refUCSCRevComp, ArraySize(refUCSCRevComp), "%s", snp.refUCSC);
