@@ -1875,6 +1875,7 @@ dataVersion ENCODE June 2006
     priority 16
 
 track encodeRegulomeBase
+release alpha
 compositeTrack on
 shortLabel UW/Reg DNaseI Sens
 longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
@@ -1890,6 +1891,7 @@ type bedGraph 5
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeBaseCACO2
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel CACO2
@@ -1898,6 +1900,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeRegulomeBaseGM
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel GM06990
@@ -1906,6 +1909,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeRegulomeBaseSKNSH
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel SKNSH
@@ -1914,6 +1918,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeRegulomeBaseHuh7
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel Huh7
@@ -1922,6 +1927,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeRegulomeBaseHepG2
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel HepG2
@@ -1930,6 +1936,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeRegulomeBaseK562
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel K562
@@ -1938,6 +1945,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
 
     track encodeRegulomeBaseCD34
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel CD34
@@ -1946,6 +1954,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 7
 
     track encodeRegulomeBaseHeLa
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeBase
     shortLabel HeLa
@@ -1954,6 +1963,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 8
 
 track encodeRegulomeProb
+release alpha
 compositeTrack on
 shortLabel UW/Reg DNaseI HSs
 longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
@@ -1969,6 +1979,7 @@ maxHeightPixels 128:16:16
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbCACO2
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel CACO2 
@@ -1977,6 +1988,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeRegulomeProbGM
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel GM06990
@@ -1986,6 +1998,7 @@ dataVersion ENCODE Oct 2005 Freeze
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbSKNSH
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel SKNSH
@@ -1994,6 +2007,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeRegulomeProbHuh7
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel Huh7
@@ -2002,6 +2016,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeRegulomeProbHepG2
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel HepG2
@@ -2010,6 +2025,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeRegulomeProbK562
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel K562
@@ -2018,6 +2034,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
     
     track encodeRegulomeProbERY
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel ERY
@@ -2026,6 +2043,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 7
 
     track encodeRegulomeProbCD34
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel CD34
@@ -2035,6 +2053,7 @@ dataVersion ENCODE Oct 2005 Freeze
     dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbHeLa
+release alpha
    type bedGraph 5
     subTrack encodeRegulomeProb
     shortLabel HeLa
@@ -2043,6 +2062,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 8
 
 track encodeRegulomeQuality
+release alpha
 compositeTrack on
 shortLabel UW/Reg Q/A
 longLabel ENCODE UW/Regulome Plate Quality Score
@@ -2054,6 +2074,7 @@ useScore 1
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeQualityCACO2
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel CACO2 
@@ -2062,6 +2083,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeRegulomeQualityGM
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel GM06990 
@@ -2070,6 +2092,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeRegulomeQualitySKNSH
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel SKNSH 
@@ -2078,6 +2101,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeRegulomeQualityHuh7
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel Huh7
@@ -2086,6 +2110,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeRegulomeQualityHepG2
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel HepG2
@@ -2094,6 +2119,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeRegulomeQualityK562
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel K562 
@@ -2102,6 +2128,7 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
 
     track encodeRegulomeQualityCD34
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel CD34
@@ -2111,6 +2138,7 @@ dataVersion ENCODE Oct 2005 Freeze
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeQualityHeLa
+release alpha
    type bed 5 .
     subTrack encodeRegulomeQuality
     shortLabel HeLa
