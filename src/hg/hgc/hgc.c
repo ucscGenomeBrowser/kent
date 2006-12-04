@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1169 2006/11/29 21:53:41 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1170 2006/12/04 17:58:54 jsp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17564,11 +17564,16 @@ else if (sameWord(track, "rnaGene"))
     doRnaGene(tdb, item);
     }
 else if (sameWord(track, "RfamSeedFolds") 
+	 || sameWord(track, "RfamFullFolds") 
 	 || sameWord(track, "rfamTestFolds") 
 	 || sameWord(track, "evofold") 
+	 || sameWord(track, "evofoldRaw") 
 	 || sameWord(track, "encode_tba23EvoFold") 
+	 || sameWord(track, "encodeEvoFold") 
 	 || sameWord(track, "rnafold") 
 	 || sameWord(track, "rnaTestFolds") 
+	 || sameWord(track, "rnaTestFoldsV2") 
+	 || sameWord(track, "rnaTestFoldsV3") 
 	 || sameWord(track, "mcFolds") 
 	 || sameWord(track, "rnaEditFolds")
 	 || sameWord(track, "altSpliceFolds"))
