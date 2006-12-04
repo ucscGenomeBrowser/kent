@@ -4,8 +4,10 @@ Disallow: /cgi-bin/
 Disallow: //cgi-bin/
 Disallow: /admin/
 Disallow: /qa/
-User-agent: GoogleBot
+
+User-agent: Googlebot
 Disallow: /*
+
 User-agent: htdig
 Disallow: /admin/
 Disallow: /goldenPath/
