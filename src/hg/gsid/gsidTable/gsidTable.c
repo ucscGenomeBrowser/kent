@@ -25,7 +25,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.4 2006/12/05 01:33:37 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.5 2006/12/05 01:54:38 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -41,6 +41,7 @@ char *displayCountString; /* Ascii version of display count, including 'all'. */
 struct hash *oldCart;	/* Old cart hash. */
 //struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 struct hash *columnHash;  /* Hash of active columns keyed by name. */
+int passedFilterCount;  /* number of subjects passing filter */
 
 void controlPanelStart()
 /* Put up start of tables around a control panel. */ {
@@ -187,7 +188,8 @@ for (si = siList; si != NULL; si = si->next)
 hPrintf("<!-- End Rows -->");
 
 hPrintf("</TABLE>\n");
-hPrintf("<BR>Subjects Displayed: %d",slCount(siList));
+hPrintf("<BR>Displayed %d out of %d subjects passing filter.",
+    slCount(siList), passedFilterCount);
 hPrintf("</CENTER>");
 }
 
@@ -1193,6 +1195,7 @@ struct subjInfo *getOrderedList(struct column *ord,
 {
 struct subjInfo *subjList = advFilterResults(colList, conn);
 struct subjInfo *si;
+passedFilterCount = slCount(subjList);
 
 for (si=subjList;si;si=si->next)
     {
