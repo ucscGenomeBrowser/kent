@@ -450,7 +450,7 @@ type bed 4 +
 
 track orthoAlleles
 compositeTrack on
-shortLabel HapMap SNPs
+shortLabel HapMap SNPs + Ortho
 longLabel HapMap SNPs with Orthologous Alleles
 group varRep
 priority 144.1
@@ -612,12 +612,62 @@ spectrum on
 type bed 12 .
 
 track hapmapSnps
-shortLabel HapMap SNPs
+shortLabel HapMap SNPs (Old)
 longLabel HapMap Genotyped SNPs, Primate Alleles, and Derived Allele Frequencies
 group varRep
 priority 144.48
 visibility hide
 type bed 6 +
+
+track hapmapAlleleFreq
+compositeTrack on
+shortLabel HapMap SNPs
+longLabel HapMap SNPs
+group varRep
+priority 144.48
+visibility hide
+type bed 6 + 
+
+    track hapmapAlleleFreqYRI
+    subTrack hapmapAlleleFreq
+    shortLabel SNPs YRI
+    longLabel SNPs from the YRI Population
+    color 200,100,0
+    altColor 0,100,200
+    priority 1
+
+    track hapmapAlleleFreqCEU
+    subTrack hapmapAlleleFreq
+    shortLabel SNPs CEU
+    longLabel SNPs from the CEU Population
+    color 200,100,0
+    altColor 0,100,200
+    priority 2
+
+    track hapmapAlleleFreqCHB
+    subTrack hapmapAlleleFreq
+    shortLabel SNPs CHB
+    longLabel SNPs from the CHB Population
+    color 200,100,0
+    altColor 0,100,200
+    priority 3
+
+    track hapmapAlleleFreqJPT
+    subTrack hapmapAlleleFreq
+    shortLabel SNPs JPT
+    longLabel SNPs from the JPT Population
+    color 200,100,0
+    altColor 0,100,200
+    priority 4
+
+    track hapmapAlleleFreqCHBandJPT
+    subTrack hapmapAlleleFreq
+    shortLabel SNPs CHB+JPT
+    longLabel SNPs from the Combined CHB+JPT Population
+    color 200,100,0
+    altColor 0,100,200
+    priority 5
+
 
 track haplotype
 shortLabel Haplotype Blocks
