@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1244 2006/12/05 17:28:30 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1245 2006/12/05 17:46:49 ann Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11912,15 +11912,14 @@ if (liftOverChainForDb(database) != NULL)
 
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
-if (sameString(database, "hg17")
-            || sameString(database, "mm6")
-            || sameString(database, "rn3") 
+if (sameString(database, "hg18")
+            || sameString(database, "mm8")
+            || sameString(database, "rn4") 
             || sameString(database, "anoGam1") 
-            || sameString(database, "apiMel2") 
             || sameString(database, "canFam1") 
             || sameString(database, "dm2") 
             || sameString(database, "galGal2")
-            || sameString(database, "panTro1")
+            || sameString(database, "panTro2")
             || sameString(database, "tetNig1"))
     {
     hPuts("<TD ALIGN=CENTER>");
