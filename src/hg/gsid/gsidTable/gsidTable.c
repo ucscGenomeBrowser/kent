@@ -25,7 +25,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.3 2006/11/22 22:01:28 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.4 2006/12/05 01:33:37 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -83,15 +83,7 @@ controlPanelStart();
     static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
     hPrintf(" display ");
     hPrintf("<SELECT NAME=\"%s\"", countVarName);
-    hPrintf(" onchange=\""
-        "document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
-        "document.orgForm.submit();"
-        "\"",
-        countVarName,
-        countVarName,
-        countVarName);
-    hPrintf(">\n");
-
+    hPrintf(" onchange=\"document.mainForm.submit();\">\n");
     for (i = 0; i < ArraySize(menu); ++i)
         {
         hPrintf("<OPTION VALUE=\"%s\"", menu[i]);
@@ -268,16 +260,6 @@ mainControlPanel();
 if (subjList != NULL)
     bigTable(conn, colList,subjList);
 hPrintf("</FORM>\n");
-/* hidden form */
-hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" METHOD=\"GET\" NAME=\"orgForm\">\n");
-hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
-hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orderVarName,
-        cartUsualString(cart, orderVarName, ""));
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", countVarName,
-        cartUsualString(cart, countVarName, ""));
-cartSaveSession(cart);
-puts("</FORM>");
 }
 
 
