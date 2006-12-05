@@ -10465,7 +10465,7 @@ cd /san/sanvol1/snp/liftOver/hg18/rheMac2/output
 cd /san/sanvol1/snp/liftOver/hg18/panTro2/output
 /bin/csh concat.csh
 
-# load into hg18
+# load into panTro2 and rheMac2
 # Doing the load and split so I can easily load sequence for a full chrom
 ssh hgwdev
 cp /san/sanvol1/snp/liftOver/hg18/rheMac2/output/all.out /cluster/data/dbSNP/ortho/hg18/rheMac2Lift
