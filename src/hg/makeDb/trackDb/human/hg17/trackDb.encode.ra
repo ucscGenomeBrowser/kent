@@ -2561,54 +2561,6 @@ dataVersion May 2006
     type bed5FloatScore
     priority 2
 
-track encodeNhgriDnaseHsChip
-compositeTrack on
-shortLabel NHGRI DNaseI-HS
-longLabel NHGRI DNaseI-Hypersensitive Sites
-group encodeChrom
-priority 61.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 5 .
-useScore 1
-dataVersion ENCODE June & Oct 2005 Freezes
-release beta
-
-    track encodeNhgriDnaseHsChipGm06990
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase GM069 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990, Chip method)
-    dataVersion ENCODE Oct 2005 Freeze
-    color 80,50,80
-    priority 1
-release beta
-
-    track encodeNhgriDnaseHsChipCd4
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
-    dataVersion ENCODE Oct 2005 Freeze
-    color 120,10,120
-    priority 2
-release beta
-
-    track encodeNhgriDnaseHsMpssCd4
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4 MS
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
-    dataVersion ENCODE June 2005 Freeze
-    color 120,10,120
-    priority 3
-release beta
-
-    track encodeNhgriDnaseHsMpssCd4Act
-    subTrack encodeNhgriDnaseHsChip 
-    shortLabel DNase CD4-act MS
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
-    dataVersion ENCODE June 2005 Freeze
-    priority 4
-release beta
-
 track encodeNhgriDukeDnaseHs
 compositeTrack on
 shortLabel Duke/NHGRI DNase
@@ -2626,7 +2578,6 @@ windowingFunction mean
 autoScale Off
 dataVersion ENCODE June & Oct 2005 Freezes and August 2006
 subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Old_DNase-chip mpss=MPSS
-release alpha
 
     track encodeNhgriDnaseHsChipRawGm06990
     subTrack encodeNhgriDukeDnaseHs
@@ -2636,7 +2587,6 @@ release alpha
     dataVersion ENCODE Oct 2005 Freeze
     subGroups group=raw
     priority 1
-release alpha
 
     track encodeNhgriDnaseHsChipRawCd4
     subTrack encodeNhgriDukeDnaseHs
@@ -2646,7 +2596,6 @@ release alpha
     subGroups group=raw
     dataVersion ENCODE Oct 2005 Freeze
     priority 2
-release alpha
 
     track encodeNhgriDnaseHsChipRawHela
     subTrack encodeNhgriDukeDnaseHs
@@ -2656,7 +2605,6 @@ release alpha
     dataVersion Aug 2006
     subGroups group=raw
     priority 3
-release alpha
 
     track encodeNhgriDnaseHsChipRawHepG2
     subTrack encodeNhgriDukeDnaseHs
@@ -2666,7 +2614,6 @@ release alpha
     dataVersion Sept 2006
     subGroups group=raw
     priority 4
-release alpha
 
     track encodeNhgriDnaseHsChipPvalGm06990
     subTrack encodeNhgriDukeDnaseHs
@@ -2679,7 +2626,6 @@ release alpha
     priority 5
     subGroups group=pval
     dataVersion Aug 2006
-release alpha
 
     track encodeNhgriDnaseHsChipPvalCd4
     subTrack encodeNhgriDukeDnaseHs
@@ -2692,7 +2638,6 @@ release alpha
     priority 6
     subGroups group=pval
     dataVersion Aug 2006
-release alpha
 
     track encodeNhgriDnaseHsChipPvalHela
     subTrack encodeNhgriDukeDnaseHs
@@ -2705,7 +2650,6 @@ release alpha
     priority 7
     subGroups group=pval
     dataVersion Aug 2006
-release alpha
 
     track encodeNhgriDnaseHsChipPvalHepG2
     subTrack encodeNhgriDukeDnaseHs
@@ -2718,7 +2662,6 @@ release alpha
     priority 8
     subGroups group=pval
     dataVersion Sept 2006
-release alpha
 
     track encodeNhgriDnaseHsChipGm06990
     subTrack encodeNhgriDukeDnaseHs off
@@ -2731,7 +2674,6 @@ release alpha
     useScore 1
     subGroups group=oldChip
     priority 9
-release alpha
 
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDukeDnaseHs off
@@ -2744,7 +2686,6 @@ release alpha
     useScore 1
     subGroups group=oldChip
     priority 10
-release alpha
 
     track encodeNhgriDnaseHsMpssCd4
     subTrack encodeNhgriDukeDnaseHs off
@@ -2757,7 +2698,6 @@ release alpha
     useScore 1
     subGroups group=mpss
     priority 11
-release alpha
 
     track encodeNhgriDnaseHsMpssCd4Act
     subTrack encodeNhgriDukeDnaseHs off
@@ -2769,7 +2709,6 @@ release alpha
     useScore 1
     subGroups group=mpss
     priority 12
-release alpha
 
 track encodeTbaAlign
 shortLabel TBA Alignment
