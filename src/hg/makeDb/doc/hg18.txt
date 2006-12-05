@@ -10515,7 +10515,7 @@ cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
 hgsql panTro2 < drop.sql
 rm chr*.tab
 
-# do a preliminary load
+# do a preliminary load -- combine chimp and macaque
 cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
 hgsql hg18 < snp126orthoPrelim.sql
 hgsql -e 'load data local infile "snp126orthoPrelim.tab" into table snp126orthoPrelim' hg18
