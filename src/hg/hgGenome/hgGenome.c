@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.50 2006/12/02 22:04:51 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.51 2006/12/05 01:52:23 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -382,8 +382,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     {
     int start = bed->chromStart + atStart;
     if (start < 0) start = 0;
+    int end = bed->chromEnd + atEnd;
+    int chromEnd = hChromSize(bed->chrom);
+    if (end > chromEnd) end = chromEnd;
     bed->chromStart = start;
-    bed->chromEnd += atEnd;
+    bed->chromEnd = end;
     }
 }
 
