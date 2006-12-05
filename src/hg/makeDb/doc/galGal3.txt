@@ -1834,6 +1834,53 @@ BASE=/cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
 
 
 #########################################################################
+# SNP & GENES FROM BEIJING GENOME INST. (DONE 12/4/06 angie)
+    ssh kkstore03
+    mkdir /cluster/data/galGal3/bed/bgi
+    cd /cluster/data/galGal3/bed/bgi
+    wget --timestamping \
+      'ftp://61.50.158.101/BGI/snps_by_strain/2006-11-28/*'
+    # (username & password in email from Yong Zhang 11/29)
+    # Each .tar.gz unpacks into identical sets of files so they will 
+    # overwrite each other if unpacked into the same directory.  So create
+    # a subdir for each strain, and unpack its files in the subdir:
+    foreach f (*.tar.gz)
+      set strain = `echo $f:r:r:r | perl -wpe 's/^(\w)/\u$1/'`
+      mkdir -p $strain
+      pushd $strain
+      tar -xvzf ../$f
+      popd
+    end
+    # Make coverage bed4:
+    cp /dev/null bgiCov.bed
+    foreach strain (Broiler Layer Silkie)
+      foreach f ($strain/ContigCov/ContigCov-chr*.txt)
+        set chr = `echo $f:t:r | sed -e 's/ContigCov-//'`
+        grep -v ^Covered $f \
+        | perl -wpe 'if (/^(\d+)\s+(\d+)\s*$/) { \
+              $s = $1-1;  $_ = "'$chr'\t$s\t$2\t'$strain'.'$chr'.$1.$2\n"; \
+            } else {die};' \
+          >> bgiCov.bed
+      end
+    end
+    # Make bgiSnp bed+:
+    ~/kent/src/hg/snp/bgi/bgiSnp.pl */SNPtables/*.txt
+    # The Layer files had the wrong strain ID code (last digit) --  the
+    # script substituted in the correct strain ID (Yong Zhang's suggestion).
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/bgi
+    hgLoadBed galGal3 bgiCov bgiCov.bed
+    hgLoadBed galGal3 bgiSnp bgiSnp.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/bgiSnp.sql
+    # Got this warning but I think it's because the final column is always 
+    # empty so bed.tab doesn't have the final column... table looks OK.
+#load of bgiSnp did not go as planned: 3306633 record(s), 0 row(s) skipped, 3306633 warning(s) loading bed.tab
+
+
+
+#########################################################################
 # STS?
 #########################################################################
 #########################################################################
