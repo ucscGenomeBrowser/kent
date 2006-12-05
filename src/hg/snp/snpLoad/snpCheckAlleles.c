@@ -12,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.11 2006/09/01 07:32:23 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.12 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -96,7 +96,6 @@ int main(int argc, char *argv[])
 /* read chrN_snpTmp, log exceptions */
 {
 struct slName *chromList, *chromPtr;
-char tableName[64];
 
 if (argc != 2)
     usage();

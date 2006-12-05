@@ -17,7 +17,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.12 2006/06/16 22:50:37 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.13 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -196,7 +196,6 @@ int main(int argc, char *argv[])
 /* read chrN_snpTmp, look up sequence, rewrite to individual chrom tables */
 {
 struct hashCookie cookie;
-struct hashEl *hel;
 char *chromName;
 char tableName[64];
 

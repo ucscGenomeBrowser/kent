@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.6 2006/09/25 19:15:45 heather Exp $";
+static char const rcsid[] = "$Id: fetchSeq.c,v 1.7 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -125,7 +125,6 @@ int main(int argc, char *argv[])
 /* read chrN_snp126hg18ortho, look up sequence */
 {
 struct hashCookie cookie;
-struct hashEl *hel;
 char *chromName;
 char tableName[64];
 

@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.4 2006/06/20 23:35:35 heather Exp $";
+static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.5 2006/12/05 17:59:28 heather Exp $";
 
 struct snpSubsetList
     {
@@ -112,7 +112,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashEl *helName = NULL;
-struct snpSubsetList *list = NULL;
 struct snpSubsetList *el = NULL;
 int count = 0;
 struct hash *duplicateNameHash = getDuplicateNameHash(tableName);

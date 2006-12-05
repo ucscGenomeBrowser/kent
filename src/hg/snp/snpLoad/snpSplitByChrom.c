@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.6 2006/09/25 19:16:41 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.7 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -73,7 +73,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashEl *hel;
-char *chromName;
 
 verbose(1, "reading ContigLocFilter...\n");
 
@@ -174,7 +173,7 @@ writeSplitTables();
 
 verbose(1, "closing files...\n");
 cookie = hashFirst(chromHash);
-while (hel = hashNext(&cookie))
+while ((hel = hashNext(&cookie)))
     fclose(hel->val);
 
 verbose(1, "creating tables...\n");

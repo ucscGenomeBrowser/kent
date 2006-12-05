@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocusIdFilter125.c,v 1.1 2006/08/10 18:29:25 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdFilter125.c,v 1.2 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -60,7 +60,6 @@ struct sqlResult *sr;
 char **row;
 struct hashEl *el1;
 FILE *f;
-char *chromName;
 
 f = hgCreateTabFile(".", "ContigLocusIdFilter");
 

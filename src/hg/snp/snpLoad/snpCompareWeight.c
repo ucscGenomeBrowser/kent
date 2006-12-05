@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompareWeight.c,v 1.2 2006/06/21 17:50:58 heather Exp $";
+static char const rcsid[] = "$Id: snpCompareWeight.c,v 1.3 2006/12/05 17:59:28 heather Exp $";
 
 struct weightList
     {
@@ -90,7 +90,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashEl *helName = NULL;
-struct weightList *list = NULL;
 struct weightList *el = NULL;
 int count = 0;
 struct hash *duplicateNameHash = getDuplicateNameHash(tableName);

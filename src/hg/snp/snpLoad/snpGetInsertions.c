@@ -19,7 +19,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetInsertions.c,v 1.3 2006/09/06 19:14:35 heather Exp $";
+static char const rcsid[] = "$Id: snpGetInsertions.c,v 1.4 2006/12/05 17:59:28 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -95,8 +95,6 @@ char **row;
 int start = 0;
 int end = 0;
 int weight = 0;
-int slashCount = 0;
-int pos = 0;
 int candidateCount = 0;
 int matchCount = 0;
 
@@ -115,6 +113,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     candidateCount++;
     snpChrom = cloneString(row[0]);
+    if (!sameString(snpChrom, "chrY")) continue;
     start = sqlUnsigned(row[1]);
     end = sqlUnsigned(row[2]);
     rsId = cloneString(row[3]);
@@ -145,7 +144,6 @@ int main(int argc, char *argv[])
 /* read snpTable, output insertions that pass input filtering */
 {
 struct slName *chromList = NULL;
-struct slName *chromPtr = NULL;
 
 if (argc != 4)
     usage();
@@ -166,7 +164,7 @@ getExceptions();
 
 chromList = hAllChromNames();
 
-outputFileHandle = mustOpen("insertions.tab", "w");
+outputFileHandle = mustOpen("insertionsChrY.tab", "w");
 getInsertions();
 carefulClose(&outputFileHandle);
 

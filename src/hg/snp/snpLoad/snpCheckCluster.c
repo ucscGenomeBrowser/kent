@@ -10,7 +10,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.5 2006/09/01 09:20:47 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckCluster.c,v 1.6 2006/12/05 17:59:28 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -143,6 +143,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     assert (end == start);
 
     /* SNPs per chrom must be sorted */
+    if (start < pos)
+        verbose(1, "out of order at %d (pos = %d)\n", start, pos);
+
     assert (start >= pos);
 
     if (start > pos)
@@ -199,10 +202,6 @@ return errors;
 int main(int argc, char *argv[])
 /* read snpTable, report positions with more than one insertion */
 {
-struct slName *chromList = NULL;
-struct slName *chromPtr = NULL;
-int totalErrors = 0;
-
 if (argc != 3)
     usage();
 
@@ -213,17 +212,19 @@ snpTable = argv[2];
 if (!hTableExists(snpTable)) 
     errAbort("no %s table\n", snpTable);
 
-chromList = hAllChromNames();
+// chromList = hAllChromNames();
 
-exceptionFileHandle = mustOpen("snpCheckCluster.tab", "w");
-for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    {
-    if (sameString(chromPtr->name, "chrY")) continue;
-    verbose(1, "chrom = %s\n", chromPtr->name);
-    totalErrors = totalErrors + checkCluster(chromPtr->name);
-    }
+// exceptionFileHandle = mustOpen("snpCheckCluster.tab", "w");
+// for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    // {
+    // if (sameString(chromPtr->name, "chrY")) continue;
+    // verbose(1, "chrom = %s\n", chromPtr->name);
+    // totalErrors = totalErrors + checkCluster(chromPtr->name);
+    // }
 
+exceptionFileHandle = mustOpen("snpCheckClusterChrY.tab", "w");
+checkCluster("chrY");
 carefulClose(&exceptionFileHandle);
-verbose(1, "TOTAL errors = %d\n", totalErrors);
+// verbose(1, "TOTAL errors = %d\n", totalErrors);
 return 0;
 }

@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom2.c,v 1.5 2006/08/22 00:00:40 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom2.c,v 1.6 2006/12/05 17:59:28 heather Exp $";
 
 static struct hash *chromHash = NULL;
 
@@ -33,7 +33,7 @@ safef(query, sizeof(query), "select chrom from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    safef(fileName, sizeof(fileName), "%s_snp126hg18ortho.tab", row[0]);
+    safef(fileName, sizeof(fileName), "%s_snp125hg17ortho.tab", row[0]);
     f = mustOpen(fileName, "w");
     verbose(1, "chrom = %s\n", row[0]);
     hashAdd(chromHash, cloneString(row[0]), f);
@@ -49,11 +49,10 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashCookie cookie;
-char *randomString = NULL;
 struct hashEl *hel = NULL;
 
 safef(query, sizeof(query), 
-    "select chrom, chromStart, chromEnd, name, strand, humanAllele, humanObserved from %s", 
+    "select chrom, chromStart, chromEnd, name, strand from %s", 
     tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -66,12 +65,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 cookie = hashFirst(chromHash);
-while (hel = hashNext(&cookie))
+while ((hel = hashNext(&cookie)))
     fclose(hel->val);
 }
 
 void createTable(char *chromName)
-/* create a chrN_snp126hg18ortho table */
+/* create a chrN_snp125hg17ortho table */
 {
 struct sqlConnection *conn = hAllocConn();
 char tableName[64];
@@ -82,14 +81,12 @@ char *createString =
 "    chromEnd int(10) not null default '0',\n"
 "    name varchar(15) not null default '',\n"
 "    score smallint(5) not null default '0',\n"
-"    strand enum('?','+','-') not null default '?',\n"
-"    humanAllele enum('A','C','G','T'),\n"
-"    humanObserved varchar(255)\n"
+"    strand enum('?','+','-') not null default '?'\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);
 
-safef(tableName, ArraySize(tableName), "%s_snp126hg18ortho", chromName);
+safef(tableName, ArraySize(tableName), "%s_snp125hg17ortho", chromName);
 dyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
@@ -103,8 +100,8 @@ FILE *f;
 struct sqlConnection *conn = hAllocConn();
 char tableName[64], fileName[64];
 
-safef(tableName, ArraySize(tableName), "%s_snp126hg18ortho", chromName);
-safef(fileName, ArraySize(fileName), "%s_snp126hg18ortho.tab", chromName);
+safef(tableName, ArraySize(tableName), "%s_snp125hg17ortho", chromName);
+safef(fileName, ArraySize(fileName), "%s_snp125hg17ortho.tab", chromName);
 
 f = mustOpen(fileName, "r");
 hgLoadTabFile(conn, ".", tableName, &f);

@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.12 2006/06/24 00:21:20 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.13 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *functionHash = NULL;
@@ -60,7 +60,6 @@ struct hashEl *el1;
 FILE *f;
 char fileName[64];
 char tableName[64];
-int count = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
