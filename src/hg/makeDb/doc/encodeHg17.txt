@@ -2777,3 +2777,28 @@ EOF
     awk '{ if (($6 == "conserved" && $8 < 0.05) || ($6 == "gain" && $8 < 0.05 && $9 > 0.05 && $10 < 0.05) || ($6 == "loss" && $8 > 0.05 && $9 < 0.05 && $11 < 0.05)) print $0}' dless.dat > dless.filtered.dat
     sed 's/dless/encodeDless/g' ~/kent/src/hg/lib/dless.sql | hgsql hg17
     echo "load data local infile 'dless.filtered.dat' into table encodeDless" | hgsql hg17
+
+
+################################################################
+# EvoFold ENCODE track, Jakob Skou Pedersen 12.03.2006 
+
+# This is an update of the existing TBA23 EvoFold track (table:
+# encode_tba23EvoFold), but a new track is made because of naming,
+# etc.
+
+# These are one time predictions accompanying the encode paper, so we
+# start by fetching the data from the web and modify the element
+# scores and names.
+
+ssh hgwdev
+cd  /cluster/data/encode/Evofold
+wget http://www.soe.ucsc.edu/~jsp/encFolds/bed/nativeTop100perc.bed
+cat nativeTop100perc.bed | awk 'BEGIN{OFS="\t"} {$5=int(100*$5); $4=$4 "_" $6 "_" $5; print}' > encodeEvoFold.bed
+
+# encodeEvoFold.bed is a 9-column bed file: column 1-6 contain standard
+# information, column 7 is element length, column 8 is the RNA
+# secondary structure in parentheses format, and column is9 a
+# commaseparated list of position specific confidence scores (floats).
+
+cat /cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql | sed -e 's/evofold/encodeEvoFold/' > tmp.sql
+hgLoadBed -notItemRgb -sqlTable=tmp.sql hg17 encodeEvoFold encodeEvoFold.bed
