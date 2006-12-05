@@ -94,7 +94,6 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 #include "dless.h"
-#include "humPhen.h"
 #include "liftOver.h"
 #include "hgConfig.h"
 #include "gv.h"
@@ -106,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1243 2006/12/04 17:56:07 jsp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1244 2006/12/05 17:28:30 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
