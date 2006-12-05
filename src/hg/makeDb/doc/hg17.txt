@@ -21517,6 +21517,9 @@ computeDiseaseAssocCons > gvAttrConservedDisease.txt
 #and deletions with the nts deleted listed, the sequence was compared.
 #Insertions and large deletions could not be checked.
 
+#Belinda Giardine Dec 2006
+#reload tables, additions to previous sources and more IDbases
+#details in hg18 doc
 
 #############################################################
 # Illumina Hap300 (Heather, July 2006)

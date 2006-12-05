@@ -10788,6 +10788,45 @@ gzip illumina.bed
 # been on hg17, just added to hg18.  Most variants were mapped directly to
 # hg18 only the LSDB BGMUT was lifted using liftOver.
 
+# Update, reloaded table Dec 2006	Belinda Giardine
+# new entries for previous sources and more IDbases
+#concat and sort gvPos data
+cd /cluster/store6/giardine/gvNov2006/
+cat *hg17.txt > gvPos.Hg17.txt
+cat *hg18.txt > gvPos.Hg18.txt
+grep "^chr" gvPos.Hg18.txt | sort -k1,1 -k2,2n > gvPosSorted.Hg18.bed
+grep "^chr" gvPos.Hg17.txt | sort -k1,1 -k2,2n > gvPosSorted.Hg17.bed
+#make loadHgFixed.sql file by:
+##start with ls -1 of data, delete pos and .sql file(s),
+##edit to make load commands
+#delete old
+cd ~giardine/gv/
+hgsql hgFixed < dropTables.sql
+cd ~giardine/humPhen/kent/src/hg/lib/
+hgsql hg17 < gv.sql
+#cut and paste gvPos table into hg18 as well
+cd /cluster/store6/giardine/gvNov2006/
+#create a file with load statements
+#load like below or cut and paste if want to watch for warnings
+hgsql hgFixed < loadHgFixed.sql
+hgLoadBed hg17 gvPos gvPosSorted.Hg17.bed -noSort -oldTable -tab
+hgLoadBed hg18 gvPos gvPosSorted.Hg18.bed -noSort -oldTable -tab
+#check counts to verify loads succeeded
+#get disease association predictions for conserved variants
+#featureBits doesn't keep bed fields, must load and use hgTables to do intersect
+#get list a variants that are already done
+hgsql -N hgFixed > gvWithDiseaseStatus.txt <<end
+select id from gvAttr where attrType = 'disease';
+end
+#use table browser to get variants that intersect most conserved track
+#for each build with attributes in hgFixed
+#set conserved variants that are null to likely
+~kent/src/hg/utils/gvParsers/computeDiseaseAssocCons
+conservedVariants.hg17.txt conservedVariants.hg18.txt >
+gvAttrConservedDisease.txt
+hgsql hgFixed
+        load data local infile "gvAttrConservedDisease.txt" into table gvAttr;
+
     # << emacs
 ##########################################################################
 #  hars 1 to 202  Sol 09/10/2006
