@@ -18186,6 +18186,70 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
     paste hg17.panTro1.rheMac1.sort.txt daf.sort.txt | awk '{printf "%s\t%d\t%d\t%s\t0\t%c\t%c\t%c\t%c\t%c\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n",$1,$2,$3,$4,$6,$7,$8,$11,$15,$12,$16,$29,$30,$31,$32,$33}' >! hapmapSnps.bed
     hgLoadBed hg17 hapmapSnps -sqlTable=hapmapSnps.sql hapmapSnps.bed
 
+############################################
+# HapMap SNPs (updated Nov. 2006, Heather)
+ssh kkstore05
+cd /cluster/store12/snp/hapmap/rel21/frequencies/2006-07/rs_strand/non-redundant/zips
+wget http://www.hapmap.org/downloads/frequencies/2006-07/rs_strand/non-redundant/* 
+cd ..
+# create 5 pop.all files, combining chroms, taking only the columns we need
+getData.csh
+cat << '_EOF_' > getData.csh
+#!/bin/csh -ef
+rm -rf YRI.all
+foreach file (zips/*_YRI_*)
+    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> YRI.all
+end
+
+rm -rf CEU.all
+foreach file (zips/*_CEU_*)
+    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> CEU.all
+end
+
+rm -rf JPTandCHB.all
+foreach file (zips/*_JPT+CHB_*)
+    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> JPTandCHB.all
+end
+
+rm -rf CHB.all
+foreach file (zips/*_CHB_*)
+    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> CHB.all
+end
+
+rm -rf JPT.all
+foreach file (zips/*_JPT_*)
+    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> JPT.all
+end
+'_EOF_'
+# format (includes calculate score)
+format.pl < CEU.all > CEU.bed
+format.pl < CHB.all > CHB.bed
+format.pl < JPT.all > JPT.bed
+format.pl < JPTandCHB.all > JPTandCHB.bed
+format.pl < YRI.all > YRI.bed
+
+# load
+ssh hgwdev
+cd /cluster/store12/snp/hapmap/rel21/frequencies/2006-07/rs_strand/non-redundant
+hgLoadBed hg17 hapmapAlleleFreqCEU CEU.bed -sqlTable=hapmapAlleleFreqCEU.sql -tab
+hgLoadBed hg17 hapmapAlleleFreqCHB CHB.bed -sqlTable=hapmapAlleleFreqCHB.sql -tab
+hgLoadBed hg17 hapmapAlleleFreqJPT JPT.bed -sqlTable=hapmapAlleleFreqJPT.sql -tab
+hgLoadBed hg17 hapmapAlleleFreqJPTandCHB.bed -sqlTable=hapmapAlleleFreqCHBandJPT.sql -tab
+hgLoadBed hg17 hapmapAlleleFreqYRI YRI.bed -sqlTable=hapmapAlleleFreqYRI.sql -tab
+
+# index
+hgsql -e 'alter table hapmapAlleleFreqCEU add index name (name)' hg17
+hgsql -e 'alter table hapmapAlleleFreqCHB add index name (name)' hg17
+hgsql -e 'alter table hapmapAlleleFreqJPT add index name (name)' hg17
+hgsql -e 'alter table hapmapAlleleFreqJPTandCHB add index name (name)' hg17
+hgsql -e 'alter table hapmapAlleleFreqYRI add index name (name)' hg17
+hgsql -e 'alter table hapmapAlleleFreqCEU add index chrom (chrom, bin)' hg17
+hgsql -e 'alter table hapmapAlleleFreqCHB add index chrom (chrom, bin)' hg17
+hgsql -e 'alter table hapmapAlleleFreqJPT add index chrom (chrom, bin)' hg17
+hgsql -e 'alter table hapmapAlleleFreqJPTandCHB add index chrom (chrom, bin)' hg17
+hgsql -e 'alter table hapmapAlleleFreqYRI add index chrom (chrom, bin)' hg17
+
+
 ### HapMap LD (Daryl; February 11, 2006)
     ## start from the genotypes files, run Haploview, reformat, and load
     mkdir -p /san/sanvol1/hg17/bed/hapmap/genotypes/2006-01/non-redundant/para
@@ -21351,9 +21415,17 @@ hgsql -e 'load data local infile "/cluster/data/dbSNP/exception.template" into t
 ssh hgwdev
 mkdir /gbdb/hg17/snp
 ln -s /cluster/store12/snp/126/human/rs_fasta/snp.fa /gbdb/hg17/snp/snp.fa
+cd /cluster/store12/snp/126/human/rs_fasta
 hgLoadSeq hg17 /gbdb/hg18/snp/snp.fa
 # clean up after hgLoadSeq
 rm seq.tab
+
+# look up id in extFile
+# move into separate table
+hgsql hg17 < snpSeq.sql
+hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 33852294' hg17
+hgsql -e 'delete from seq where extFile = 33852294' hg17
+hgsql -e 'alter table snpSeq add index acc (acc)' hg17
 
 
 ############
