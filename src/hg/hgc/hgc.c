@@ -188,7 +188,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1171 2006/12/04 22:32:22 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1172 2006/12/05 18:27:20 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17056,10 +17056,10 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
+    char *strand = NULL;
     mut = gvPosLoad(row);
-    bedPrintPos((struct bed *)mut, 3);
-    if (mut->strand != NULL) 
-       printf("<B>strand:</B> %s<BR>\n", mut->strand);
+    strand = mut->strand;
+    printPos(mut->chrom, mut->chromStart, mut->chromEnd, strand, TRUE, mut->name);
     }
 sqlFreeResult(&sr);
 
