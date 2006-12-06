@@ -666,6 +666,14 @@ type bed 4 +
     type bed 4 .
     priority 7
 
+    track cnpHurles
+    subTrack cnp
+    shortLabel Hurles CNPs
+    longLabel Copy Number Polymorphisms (Hurles) 
+    noInherit on
+    type bed 6 .
+    priority 8
+
 track varMultizHMRDEC
 shortLabel varMultiz6Way
 longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
