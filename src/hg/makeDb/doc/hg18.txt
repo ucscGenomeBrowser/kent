@@ -11943,4 +11943,13 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     cp -p /san/sanvol1/scratch/hg18/uniGene/hg18.uniGene.pslReps.psl .
 
     hgLoadPsl -table=uniGene_3 hg18 hg18.uniGene.pslReps.psl
+
+####################################################################
+# EXONIPHY (2006-12-05 acs)
+
+    # predictions provided by Brona Brejova in Siepel Lab (bb248@cornell.edu).
+    # stored in /cluster/data/hg18/bed/exoniphy/exoniphy.gff
+
+    ldHgGene -genePredExt -gtf hg18 exoniphy exoniphy.gff
+
 ####################################################################
