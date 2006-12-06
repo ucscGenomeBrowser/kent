@@ -21427,6 +21427,61 @@ hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 33
 hgsql -e 'delete from seq where extFile = 33852294' hg17
 hgsql -e 'alter table snpSeq add index acc (acc)' hg17
 
+#############################################################
+# Get panTro2 and rheMac2 allele for all SNPs
+
+ssh hgwdev
+cd /san/sanvol1/snp/liftOver/hg17
+mkdir panTro2All
+mkdir rheMac2All
+mkdir input
+cd input
+hgsql -N -e 'select chrom, chromStart, chromEnd, name, score, strand from snp125' hg17 > snp125.bed
+lineFileSplit snp.bed lines 100000 snp-
+ln -s /san/sanvol1/snp/liftOver/hg17/input /san/sanvol1/snp/liftOver/hg17/panTro2All/input
+ln -s /san/sanvol1/snp/liftOver/hg17/input /san/sanvol1/snp/liftOver/hg17/rheMac2All/input
+cd ../panTro2
+./makeJobList.csh
+mkdir output
+mkdir unmapped
+cd ../rheMac2
+./makeJobList.csh
+mkdir output
+mkdir unmapped
+
+# cluster run
+ssh pk
+cd /san/sanvol1/snp/liftOver/hg17/panTro2All
+para create jobList; para try; para check; para push
+
+# concat output (bed 6), preliminary load, split by chrom, get sequence, reload
+ssh hgwdev
+
+cd /san/sanvol1/snp/liftOver/hg17/panTro2All/output
+./concat.csh
+hgsql panTro2 < snp125hg17ortho.sql
+hgsql panTro2 -e 'load data local infile "all.out" into table snp125hg17ortho"
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom2 panTro2 snp125hg17ortho
+hgsql panTro2 -e 'drop table snp125hg17ortho'
+/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq panTro2 /gbdb/panTro2/panTro2.2bit
+./concat2.csh
+hgsql panTro2 < snp125hg17orthoAllele.sql
+hgLoadSqlTab panTro2 snp125hg17orthoAllele snp125hg17orthoAllele.sql snp125hg17orthoAllele.tab
+hgsql panTro2 -e 'alter table snp125hg17orthoAllele add index name(name)'
+rm *tab
+
+cd ../rheMac2All/output
+./concat.csh
+hgsql rheMac2 -e 'load data local infile "all.out" into table snp125hg17ortho"
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom2 rheMac2 snp125hg17ortho
+hgsql rheMac2 -e 'drop table snp125hg17ortho'
+/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq rheMac2 /gbdb/rheMac2/rheMac2.2bit
+./concat2.csh
+hgsql rheMac2 < snp125hg17orthoAllele.sql
+hgLoadSqlTab rheMac2 snp125hg17orthoAllele snp125hg17orthoAllele.sql snp125hg17orthoAllele.tab
+hgsql rheMac2 -e 'alter table snp125hg17orthoAllele add index name(name)'
+rm *tab
+
 
 ############
 # UPDATE hg17 knownToVisiGene (2006-04-05 galt)
