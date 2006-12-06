@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.35 2006/01/21 07:42:50 markd Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.36 2006/12/06 15:43:02 angie Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -292,7 +292,7 @@ struct dnaSeq *faReadAa(char *fileName)
 return faReadSeq(fileName, FALSE);
 }
 
-static int faFastBufSize = 0;
+static unsigned faFastBufSize = 0;
 static DNA *faFastBuf;
 
 static void expandFaFastBuf(int bufPos, int minExp)
@@ -308,9 +308,15 @@ if (faFastBufSize == 0)
 else
     {
     DNA *newBuf;
-    int newBufSize = faFastBufSize + faFastBufSize;
+    unsigned newBufSize = faFastBufSize + faFastBufSize;
     while (newBufSize < minExp)
+	{
         newBufSize <<= 1;
+	if (newBufSize <= 0)
+	    errAbort("expandFaFastBuf: integer overflow when trying to "
+		     "increase buffer size from %u to a min of %u.",
+		     faFastBufSize, minExp);
+	}
     newBuf = needHugeMem(newBufSize);
     memcpy(newBuf, faFastBuf, bufPos);
     freeMem(faFastBuf);
