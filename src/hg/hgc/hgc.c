@@ -148,6 +148,7 @@
 #include "encodeIndels.h"
 #include "encodeHapMapAlleleFreq.h"
 #include "hapmapSnps.h"
+#include "hapmapAlleleFreq.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -188,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1172 2006/12/05 18:27:20 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1173 2006/12/06 00:46:27 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -14957,6 +14958,7 @@ if(cgiVarExists("agxPrintEdges"))
 printf("</center>\n");
 printTrackHtml(tdb);
 hFreeConn(&conn);
+// hFreeConn(&orthoConn);
 }
 
 
@@ -16016,6 +16018,76 @@ printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+
+void printSnpAllele(char *orthoDb, int snpVersion, char *rsId)
+/* check whether snpAlleles exists for a database */
+/* if found, print value */
+{
+char tableName[512];
+struct sqlConnection *conn = sqlConnect(orthoDb);
+char query[256];
+struct sqlResult *sr;
+char **row = NULL;
+
+safef(tableName, sizeof(tableName), "snp%d%sorthoAllele", snpVersion, database);
+fprintf(stderr, "checking for %s.%s\n", orthoDb, tableName);
+if (!hTableExistsDb(orthoDb, tableName)) 
+    {
+    fprintf(stderr, "%s.%s not found\n", orthoDb, tableName);
+    sqlDisconnect(&conn);
+    return;
+    }
+
+safef(query, sizeof(query), "select allele from %s where name = '%s'", tableName, rsId);
+sr = sqlGetResult(conn, query);
+fprintf(stderr, "query = %s\n", query);
+row = sqlNextRow(sr);
+if (!row) 
+    {
+    sqlDisconnect(&conn);
+    return;
+    }
+printf("<B>%s Allele:</B> %s<BR>\n", orthoDb, row[0]);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+}
+
+void doHapmapAlleleFreq(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct hapmapAlleleFreq hms;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hapmapAlleleFreqStaticLoad(row+rowOffset, &hms);
+    bedPrintPos((struct bed *)&hms, 3);
+    printf("<BR>\n");
+    printf("<B>Strand:</B> %s<BR>\n", hms.strand);
+    printf("<B>Center:</B> %s<BR>\n", hms.center);
+    printf("<B>Ref Allele:</B> %s<BR>\n", hms.refAllele);
+    printf("<B>Other Allele:</B> %s<BR>\n", hms.otherAllele);
+    printf("<B>Ref Allele Frequency:</B> %f<BR>\n", hms.refAlleleFreq);
+    printf("<B>Other Allele Frequency:</B> %f<BR>\n", hms.otherAlleleFreq);
+    printSnpAllele("panTro2", 125, hms.name);
+    printSnpAllele("rheMac2", 125, hms.name);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 
 static void doPscreen(struct trackDb *tdb, char *item)
@@ -18091,6 +18163,10 @@ else if (sameString("interPro", track))
 else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
+    }
+else if (startsWith("hapmapAlleleFreq", track))
+    {
+    doHapmapAlleleFreq(tdb, item);
     }
 else if (startsWith("hapmapSnps", track))
     {
