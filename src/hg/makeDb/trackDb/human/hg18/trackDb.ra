@@ -41,6 +41,15 @@ gClass_main 128,0,125
 gClass_putative 200,0,125
 urlLabel Transcript ID:
 
+track exoniphy
+shortLabel Exoniphy
+longLabel Exoniphy Human/Mouse/Rat/Dog
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
