@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.2 2006/10/17 19:54:14 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.3 2006/12/06 00:49:32 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -49,6 +49,8 @@ use vars qw/
     $opt_swap
     $opt_chainMinScore
     $opt_chainLinearGap
+    $opt_tRepeats
+    $opt_qRepeats
     $opt_readmeOnly
     /;
 
@@ -73,6 +75,8 @@ my $dbHost = 'hgwdev';
 my $workhorse = 'kolossus';
 my $defaultChainLinearGap = "loose";
 my $defaultChainMinScore = "1000";	# from axtChain itself
+my $defaultTRepeats = "";		# for netClass option tRepeats
+my $defaultQRepeats = "";		# for netClass option qRepeats
 
 sub usage {
   # Usage / help / self-documentation:
@@ -101,6 +105,8 @@ print STDERR <<_EOF_
                                   axtChain command.
     -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
                                   axtChain command.  (default: loose)
+    -tRepeats table       Add -tRepeats=table to netClass (default: none)
+    -qRepeats table       Add -qRepeats=table to netClass (default: none)
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $workhorse,
@@ -257,6 +263,8 @@ sub checkOptions {
 		      "swap",
 		      "chainMinScore=i",
 		      "chainLinearGap=s",
+		      "tRepeats=s",
+		      "qRepeats=s",
 		      "readmeOnly",
 		     );
   &usage(1) if (!$ok);
@@ -945,11 +953,17 @@ _EOF_
       );
   }
   if (! $isSelf) {
+  my $tRepeats = $opt_tRepeats ? "-tRepeats=$opt_tRepeats" : $defaultTRepeats;
+  my $qRepeats = $opt_qRepeats ? "-qRepeats=$opt_qRepeats" : $defaultQRepeats;
+  if ($opt_swap) {
+    $tRepeats = $opt_qRepeats ? "-tRepeats=$opt_qRepeats" : $defaultQRepeats;
+    $qRepeats = $opt_tRepeats ? "-qRepeats=$opt_tRepeats" : $defaultTRepeats;
+  }
     $bossScript->add(<<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
 cd $runDir
-netClass -verbose=0 -noAr noClass.net $tDb $qDb $tDb.$qDb.net
+netClass -verbose=0 $tRepeats $qRepeats -noAr noClass.net $tDb $qDb $tDb.$qDb.net
 
 # Load nets:
 netFilter -minGap=10 $tDb.$qDb.net \\
