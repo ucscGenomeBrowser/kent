@@ -21960,6 +21960,15 @@ hgsql hg17 -e "select * from cnpFosmid" > cnpFosmid_withoutGaps.bed
 /bin/csh liftIafrate.csh
 
 ##############################################################################
+# Add HapMap CNVRs from Matt Hurles (Heather Dec 2006)
+ssh hgwdev
+cd /cluster/data/hg17/bed/svRedon
+# File from Matthew Hurles (meh@sanger.ac.uk) was essentially bed 4
+# I decided to use bed 6 with score always 0 and strand always +
+awk '{printf "%st%d\t%d\tcnp%s\t0\t%s\n", $1, $4, $5, $3, $7}' input.gff > input.bed
+hgLoadBed hg17 cnpRedon input.bed
+
+##############################################################################
 #  dbRIP POLYALUL1SVA track added (2006-07-14 - DONE - Hiram)
 #  dbRIP polyAluL1SVA
 #	Data provider: Dr. Liang at the Liang lab:
