@@ -22,6 +22,7 @@
 #include "cnpIafrate.h"
 #include "cnpSebat.h"
 #include "cnpSharp.h"
+#include "cnpRedon.h"
 #include "cnpSharpSample.h"
 #include "cnpSharpCutoff.h"
 #include "hgTracks.h"
@@ -220,7 +221,6 @@ Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
 void cnpSharpMethods(struct track *tg);
 /* methods for cnpSharp */
 
-
 void cnpFosmidLoadItems(struct track *tg);
 /* loader for cnpFosmid table */
 
@@ -231,6 +231,17 @@ Color cnpFosmidColor(struct track *tg, void *item, struct vGfx *vg);
 
 void cnpFosmidMethods(struct track *tg);
 /* methods for cnpFosmid */
+
+void cnpRedonLoadItems(struct track *tg);
+/* loader for cnpRedon table */
+
+void cnpRedonFreeItems(struct track *tg);
+
+Color cnpRedonColor(struct track *tg, void *item, struct vGfx *vg);
+/* always gray */
+
+void cnpRedonMethods(struct track *tg);
+/* methods for cnpRedon */
 
 Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
 /* always red */

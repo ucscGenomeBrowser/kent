@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1245 2006/12/05 17:46:49 ann Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1246 2006/12/07 22:19:07 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12170,6 +12170,7 @@ registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpIafrate", cnpIafrateMethods);
 registerTrackHandler("cnpSebat", cnpSebatMethods);
 registerTrackHandler("cnpFosmid", cnpFosmidMethods);
+registerTrackHandler("cnpRedon", cnpRedonMethods);
 registerTrackHandler("delConrad", delConradMethods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
 registerTrackHandler("delHinds", delHindsMethods);

@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.116 2006/10/17 20:22:22 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.117 2006/12/07 22:19:07 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -240,6 +240,7 @@ return TRUE;
 struct orthoBed *orthoBedLoad(char **row)
 /* Load a bed from row fetched with select * from bed
  * from database.  Dispose of this with bedFree(). */
+/* This should be moved to kent/src/hg/lib. */
 {
 struct orthoBed *ret;
 if (sameString(row[10], "?"))
@@ -1723,6 +1724,11 @@ void cnpFosmidLoadItems(struct track *tg)
 bedLoadItem(tg, "cnpFosmid", (ItemLoader)bedLoad);
 }
 
+void cnpRedonLoadItems(struct track *tg)
+{
+bedLoadItem(tg, "cnpRedon", (ItemLoader)bedLoad);
+}
+
 void cnpSharpFreeItems(struct track *tg)
 {
 cnpSharpFreeList((struct cnpSharp**)&tg->items);
@@ -1739,6 +1745,11 @@ cnpSebatFreeList((struct cnpSebat**)&tg->items);
 }
 
 void cnpFosmidFreeItems(struct track *tg)
+{
+bedFreeList((struct bed**)&tg->items);
+}
+
+void cnpRedonFreeItems(struct track *tg)
 {
 bedFreeList((struct bed**)&tg->items);
 }
@@ -1793,6 +1804,11 @@ if (cnpFo->name[0] == 'D')
 return MG_BLACK;
 }
 
+Color cnpRedonItemColor (struct track *tg, void *item, struct vGfx *vg)
+{
+return MG_GRAY;
+}
+
 Color delConradItemColor (struct track *tg, void *item, struct vGfx *vg)
 {
 return MG_RED;
@@ -1839,6 +1855,14 @@ tg->loadItems = cnpFosmidLoadItems;
 tg->freeItems = cnpFosmidFreeItems;
 tg->itemColor = cnpFosmidItemColor;
 tg->itemNameColor = cnpFosmidItemColor;
+}
+
+void cnpRedonMethods(struct track *tg)
+{
+tg->loadItems = cnpRedonLoadItems;
+tg->freeItems = cnpRedonFreeItems;
+tg->itemColor = cnpRedonItemColor;
+tg->itemNameColor = cnpRedonItemColor;
 }
 
 void delConradMethods(struct track *tg)
