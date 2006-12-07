@@ -1759,10 +1759,6 @@ identifier unigeneId fuzzy
     $hg.uniGene_2.name chopBefore=.
     $hg.sage.uni
 
-identifier unigeneId3 fuzzy
-"NCBI UniGene Cluster ID"
-    $hg.uniGene_3.qName chopBefore=.
-
 identifier unigeneId2 external=UniGene
 "NCBI UniGene Cluster ID for databases with UniGene seq table entry"
     $gbd.seq.acc
