@@ -11953,3 +11953,9 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     ldHgGene -genePredExt -gtf hg18 exoniphy exoniphy.gff
 
 ####################################################################
+# HapMap CNVRs (copy number variable regions) from Matt Hurles (Heather Dec. 2006)
+# Change bed3 to bed6 to match hg17
+
+cd /cluster/data/hg18/bed/sv
+redon.pl < cnpRedon.hg18 > redon.bed
+hgLoadBed hg18 cnpRedon cnpRedon.bed
