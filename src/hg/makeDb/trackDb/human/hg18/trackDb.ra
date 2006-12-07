@@ -928,6 +928,14 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
+track cnpRedon
+shortLabel Redon CNPs
+longLabel Copy Number Polymorphisms from SNP and BAC microarrays 
+priority 146
+group varRep
+visibility hide
+type bed 6 .
+
 track uc16
 shortLabel Ultra Conserved
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
