@@ -666,10 +666,10 @@ type bed 4 +
     type bed 4 .
     priority 7
 
-    track cnpHurles
+    track cnpRedon
     subTrack cnp
-    shortLabel Hurles CNPs
-    longLabel Copy Number Polymorphisms (Hurles) 
+    shortLabel Redon CNPs
+    longLabel Copy Number Polymorphisms from SNP and BAC microarrays (Redon) 
     noInherit on
     type bed 6 .
     priority 8
