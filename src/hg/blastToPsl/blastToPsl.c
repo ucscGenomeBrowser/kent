@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.17 2006/07/18 06:03:32 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.18 2006/12/07 23:42:37 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -55,6 +55,15 @@ errAbort(
   );
 }
 
+char *wackAfterWhite(char *s)
+/* end string at first whitespare */
+{
+char *w = skipToSpaces(s);
+if (w != NULL)
+    *w = '\0';
+return s;
+}
+
 struct psl* createPsl(struct blastBlock *bb, int pslSpace)
 /* create PSL for a blast block */
 {
@@ -65,8 +74,12 @@ strand[0] = (bb->qStrand > 0) ? '+' : '-';
 strand[1] = (bb->tStrand > 0) ? '+' : '-';
 strand[2] = '\0';
 
-return pslNew(ba->query->query, ba->query->queryBaseCount, 0, 0,
-              ba->targetName, ba->targetSize, 0, 0,
+/* white space in query or target name breaks some psl software (like pslOpen()),
+ * so only keep up to first whitespace.
+ */
+
+return pslNew(wackAfterWhite(ba->query->query), ba->query->queryBaseCount, 0, 0,
+              wackAfterWhite(ba->targetName), ba->targetSize, 0, 0,
               strand, pslSpace, (pslxFmt ? PSL_XA_FORMAT : 0));
 }
 
