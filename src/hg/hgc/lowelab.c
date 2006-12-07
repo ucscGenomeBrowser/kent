@@ -36,6 +36,7 @@
 #include "minGeneInfo.h"
 #include "rnaGene.h"
 #include "tRNAs.h"
+#include "snoRNAs.h"
 #include "gbRNAs.h"
 #include "hgMaf.h"
 #include "maf.h"
@@ -723,7 +724,7 @@ while ((row = sqlNextRow(sr)) != NULL)
   {
     trna = tRNAsLoad(row+rowOffset);
     
-    printf("<img align=right src=\"http://archaea.ucsc.edu/tRNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+    printf("<img align=right src=\"/RNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
 	   database,database,trna->chrom,trna->name,trna->name);
     
     printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
@@ -735,8 +736,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR><B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
     printf("<B>Position:</B> "
 	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, trna->chrom, trna->chromStart, trna->chromEnd);
-    printf("%s:%d-%d</A><BR>\n", trna->chrom, trna->chromStart, trna->chromEnd);
+	   hgTracksPathAndSettings(), database, trna->chrom, trna->chromStart+1, trna->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", trna->chrom, trna->chromStart+1, trna->chromEnd);
     printf("<B>Strand:</B> %s<BR>\n", trna->strand);
     
     if (trna->next != NULL)
@@ -746,6 +747,51 @@ while ((row = sqlNextRow(sr)) != NULL)
  hFreeConn(&conn);
  printTrackHtml(tdb);
  tRNAsFree(&trna);
+}
+
+void doSnornaGenes(struct trackDb *tdb, char *snornaName)
+{
+char *track = tdb->tableName;
+struct snoRNAs *snorna;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *dupe, *words[16];
+char **row;
+int wordCount;
+int rowOffset;
+
+genericHeader(tdb,snornaName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+
+rowOffset = hOffsetPastBin(seqName, track);
+sprintf(query, "select * from %s where name = '%s'", track, snornaName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+  {
+    snorna = snoRNAsLoad(row+rowOffset);
+    
+    printf("<B>sRNA name: </B> %s<BR>\n",snorna->name);
+    printf("<B>Snoscan score: </B> %.2f<BR>\n",snorna->snoScore);    
+    printf("<B>Predicted targets: </B> %s<BR>\n",snorna->targetList);
+    printf("<B>Predicted guide interactions:</B><pre>%s</pre>\n",snorna->guideStr);
+    printf("<B>Possible sRNA homolog(s): </B> %s<BR>\n",snorna->orthologs);
+
+    printf("<BR><B>Genomic size: </B> %d nt<BR>\n",snorna->chromEnd-snorna->chromStart);
+    printf("<B>Position:</B> "
+	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, snorna->chrom, snorna->chromStart+1, snorna->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", snorna->chrom, snorna->chromStart+1, snorna->chromEnd);
+    printf("<B>Strand:</B> %s<BR><BR>\n", snorna->strand);
+    printf("<B>Snoscan program output: </B><BR><pre> %s</pre><BR>\n",snorna->snoscanOutput);
+    if (snorna->next != NULL)
+      printf("<hr>\n");
+  }
+ sqlFreeResult(&sr);
+ hFreeConn(&conn);
+ printTrackHtml(tdb);
+ snoRNAsFree(&snorna);
 }
 
 void doGbRnaGenes(struct trackDb *tdb, char *gbRnaName)
@@ -782,8 +828,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR><B>Genomic size: </B> %d nt<BR>\n",gbRna->chromEnd-gbRna->chromStart);
     printf("<B>Position:</B> "
 	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, gbRna->chrom, gbRna->chromStart, gbRna->chromEnd);
-    printf("%s:%d-%d</A><BR>\n", gbRna->chrom, gbRna->chromStart, gbRna->chromEnd); 
+	   hgTracksPathAndSettings(), database, gbRna->chrom, gbRna->chromStart+1, gbRna->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", gbRna->chrom, gbRna->chromStart+1, gbRna->chromEnd); 
     printf("<B>Strand:</B> %s<BR>\n", gbRna->strand);
      
     if (gbRna->next != NULL)
@@ -1425,6 +1471,10 @@ else if (sameWord(track,"gbRNAs"))
 else if (sameWord(track,"tRNAs"))
     {
     doTrnaGenes(tdb, item);
+    }
+else if (sameWord(track,"snoRNAs"))
+    {
+    doSnornaGenes(tdb, item);
     }
 else if (sameWord(track,"easyGene"))
     {
