@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.108 2006/11/30 23:55:22 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.109 2006/12/07 21:54:45 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -612,7 +612,8 @@ struct serverTable *serve = NULL;
 
 /* JavaScript to update form when org changes */
 char *onChangeText = "onchange=\""
-    " document.mainForm.submit();\"";
+    "document.mainForm.changeInfo.value='orgChange';"
+    "document.mainForm.submit();\"";
 
 char *userSeq = NULL;
 
@@ -623,6 +624,7 @@ printf(
 "<H2>BLAT Search Genome</H2>\n");
 cartSaveSession(cart);
 puts("\n");
+puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
 puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
 printf("<TD ALIGN=CENTER>Genome:</TD>");
 printf("<TD ALIGN=CENTER>Assembly:</TD>");
@@ -765,7 +767,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -773,17 +775,12 @@ int main(int argc, char *argv[])
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 
-/* org has precedence over db when they don't match */
-char *cgiDb = cgiUsualString("db", "0");
-char *cgiOrg = hOrganism(cgiDb);
-char *organism = cgiOptionalString("org");
-orgChange = (differentStringNullOk(organism, cgiOrg));
+/* org has precedence over db when changeInfo='orgChange' */
+orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
 if (orgChange)
     {
-    char *db = hDefaultDbForGenome(organism);
-    cgiVarSet("db", db);
+    cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
     }
-
 
 htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
