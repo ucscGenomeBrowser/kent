@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.103 2006/12/07 23:20:41 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.104 2006/12/07 23:21:30 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -106,7 +106,7 @@ puts(" Data must be formatted in\n"
 void addCustomForm(struct customTrack *ct, char *err)
 /* display UI for adding custom tracks by URL or pasting data */
 {
-char *url = NULL;
+char *dataUrl = NULL, *docUrl = NULL;
 char buf[1024];
 
 boolean gotClade = FALSE;
@@ -114,7 +114,7 @@ boolean isUpdateForm = FALSE;
 if (ct)
     {
     isUpdateForm = TRUE;
-    url = ctDataUrl(ct);
+    dataUrl = ctDataUrl(ct);
     }
 else
     /* add form needs clade for assembly menu */
@@ -177,7 +177,7 @@ if (isUpdateForm)
     /* row for instructions */
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    if (url)
+    if (dataUrl)
         puts("Configuration:");
     else
         {
@@ -194,7 +194,7 @@ if (isUpdateForm)
     /* row for text entry box */
     cgiSimpleTableRowStart();
     puts("<TD COLSPAN=2>");
-    if (url)
+    if (dataUrl)
         {
         /* can't update via pasting if loaded from URL */
         cgiMakeTextAreaDisableable(hgCtConfigLines, 
@@ -231,7 +231,7 @@ if (isUpdateForm)
     cgiSimpleTableRowStart();
     puts("<TD STYLE='padding-top:9';\"></TD>");
     cgiTableRowEnd();
-    if (url)
+    if (dataUrl)
         cgiTableField("Data:");
     else
         cgiTableField("Paste in replacement data:");
@@ -239,7 +239,7 @@ if (isUpdateForm)
 else
     cgiTableField("Paste URLs or data:");
 
-if (isUpdateForm && url)
+if (isUpdateForm && dataUrl)
     cgiTableField("&nbsp");
 else
     {
@@ -259,7 +259,7 @@ cgiTableRowEnd();
 /* next row - text entry box for  data, and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-if (url)
+if (dataUrl)
     {
     /* can't update via pasting if loaded from URL */
     safef(buf, sizeof buf, "Replace data at URL: %s", ctDataUrl(ct));
@@ -281,7 +281,7 @@ cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-if (!(isUpdateForm && url))
+if (!(isUpdateForm && dataUrl))
     makeClearButton(hgCtDataText);
 cgiTableFieldEnd();
 cgiTableRowEnd();
@@ -296,9 +296,10 @@ puts("<TD STYLE='padding-top:10';\"></TD>");
 cgiTableRowEnd();
 
 /* next row - label for description text entry */
+docUrl = ctHtmlUrl(ct);
 cgiSimpleTableRowStart();
 cgiTableField("Optional track documentation: ");
-if (isUpdateForm)
+if (isUpdateForm && docUrl)
     cgiTableField("&nbsp;");
 else
     {
@@ -313,9 +314,9 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
 
-if (ct && (url = ctHtmlUrl(ct)) != NULL)
+if (ct && docUrl)
     {
-    safef(buf, sizeof buf, "Replace doc at URL: %s", url);
+    safef(buf, sizeof buf, "Replace doc at URL: %s", dataUrl);
     cgiMakeTextAreaDisableable(hgCtDocText, buf,
                                     TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
     }
