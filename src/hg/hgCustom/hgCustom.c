@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.102 2006/12/01 01:20:04 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.103 2006/12/07 23:20:41 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +29,7 @@ errAbort(
 
 #define TEXT_ENTRY_ROWS 7
 #define TEXT_ENTRY_COLS 73
+#define CONFIG_ENTRY_ROWS 3
 #define SAVED_LINE_COUNT  50
 
 /* CGI variables */
@@ -47,6 +48,7 @@ errAbort(
 #define hgCtUpdatedTrack "hgct_updatedTrack"
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtRefreshPrefix "hgct_refresh"
+#define hgCtConfigLines   "hgct_configLines"
 
 /* commands */
 #define hgCtDo		  hgCt   "do_"	  /* prefix for all commands */
@@ -82,8 +84,7 @@ cgiMakeOnClickButton(javascript, "&nbsp;Clear&nbsp;");
 void addIntro()
 /* display overview and help message for "add" screen */
 {
-puts("Display your own data as custom annotation tracks in the browser." 
-     " Data must be formatted in\n"
+puts(" Data must be formatted in\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BED'>BED</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GFF'>GFF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#GTF'>GTF</A>,\n"
@@ -106,12 +107,15 @@ void addCustomForm(struct customTrack *ct, char *err)
 /* display UI for adding custom tracks by URL or pasting data */
 {
 char *url = NULL;
-    char buf[1024];
+char buf[1024];
 
 boolean gotClade = FALSE;
 boolean isUpdateForm = FALSE;
 if (ct)
+    {
     isUpdateForm = TRUE;
+    url = ctDataUrl(ct);
+    }
 else
     /* add form needs clade for assembly menu */
     gotClade = hGotClade();
@@ -154,6 +158,10 @@ if (!isUpdateForm)
 
 /* intro text */
 puts("<P>");
+if (isUpdateForm)
+    puts("Update your custom track configuration, data, and/or documentation.");
+else
+    puts("Display your own data as custom annotation tracks in the browser.");
 addIntro();
 puts("<P>");
 
@@ -163,35 +171,109 @@ if (err)
 
 cgiSimpleTableStart();
 
-/* first row - label entry for file upload */
+/* first rows for update form are for track and browser line entry */
+if (isUpdateForm)
+    {
+    /* row for instructions */
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    if (url)
+        puts("Configuration:");
+    else
+        {
+        puts("Edit configuration:");
+        }
+    cgiTableFieldEnd();
+    cgiTableField("&nbsp;");
+    puts("<TD ALIGN='RIGHT'>");
+    cgiMakeSubmitButton();
+    cgiTableFieldEnd();
+    cgiTableField("&nbsp;");
+    cgiTableRowEnd();
+
+    /* row for text entry box */
+    cgiSimpleTableRowStart();
+    puts("<TD COLSPAN=2>");
+    if (url)
+        {
+        /* can't update via pasting if loaded from URL */
+        cgiMakeTextAreaDisableable(hgCtConfigLines, 
+            cartUsualString(cart, hgCtConfigLines, customTrackUserConfig(ct)),
+                            CONFIG_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
+        }
+    else
+        {
+        cgiMakeTextArea(hgCtConfigLines, 
+                cartUsualString(cart, hgCtConfigLines, customTrackUserConfig(ct)),
+                            CONFIG_ENTRY_ROWS, TEXT_ENTRY_COLS);
+        }
+    cgiTableFieldEnd();
+
+    cgiSimpleTableFieldStart();
+    cgiSimpleTableStart();
+
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+
+    cgiTableEnd();
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    }
+
+/* next row - label entry for file upload */
 cgiSimpleTableRowStart();
-if (ct)
+if (isUpdateForm)
+    {
     /* update existing */
-    cgiTableField("Paste in replacement data:");
+    /* extra space */
+    cgiSimpleTableRowStart();
+    puts("<TD STYLE='padding-top:9';\"></TD>");
+    cgiTableRowEnd();
+    if (url)
+        cgiTableField("Data:");
+    else
+        cgiTableField("Paste in replacement data:");
+    }
 else
     cgiTableField("Paste URLs or data:");
-puts("<TD ALIGN='RIGHT'>");
-puts("Or upload: ");
-cgiMakeFileEntry(hgCtDataFile);
-cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
-cgiMakeSubmitButton();
-cgiTableFieldEnd();
+
+if (isUpdateForm && url)
+    cgiTableField("&nbsp");
+else
+    {
+    puts("<TD ALIGN='RIGHT'>");
+    puts("Or upload: ");
+    cgiMakeFileEntry(hgCtDataFile);
+    cgiTableFieldEnd();
+    }
+if (!isUpdateForm)
+    {
+    cgiSimpleTableFieldStart();
+    cgiMakeSubmitButton();
+    cgiTableFieldEnd();
+    }
 cgiTableRowEnd();
 
-/* second row - text entry box for  data, and clear button */
+/* next row - text entry box for  data, and clear button */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
-if (ct && (url = ctDataUrl(ct)) != NULL)
+if (url)
     {
     /* can't update via pasting if loaded from URL */
-    safef(buf, sizeof buf, "Replace data at URL: %s", url);
+    safef(buf, sizeof buf, "Replace data at URL: %s", ctDataUrl(ct));
     cgiMakeTextAreaDisableable(hgCtDataText, buf,
                                 TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
     }
 else
+    {
+    int rows = (isUpdateForm ? TEXT_ENTRY_ROWS - CONFIG_ENTRY_ROWS :
+                                TEXT_ENTRY_ROWS);
     cgiMakeTextArea(hgCtDataText, cartUsualString(cart, hgCtDataText, ""),
-                                    TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
+                                    rows, TEXT_ENTRY_COLS);
+    }
+
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -199,7 +281,8 @@ cgiSimpleTableStart();
 
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-makeClearButton(hgCtDataText);
+if (!(isUpdateForm && url))
+    makeClearButton(hgCtDataText);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -207,16 +290,26 @@ cgiTableEnd();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-/* third row - label for description text entry */
+/* extra space */
 cgiSimpleTableRowStart();
-cgiTableField("Optional track documentation: ");
-puts("<TD ALIGN='RIGHT'>");
-puts("Or upload: ");
-cgiMakeFileEntry(hgCtDocFile);
-cgiTableFieldEnd();
+puts("<TD STYLE='padding-top:10';\"></TD>");
 cgiTableRowEnd();
 
-/* fourth row - text entry for description, and clear button(s) */
+/* next row - label for description text entry */
+cgiSimpleTableRowStart();
+cgiTableField("Optional track documentation: ");
+if (isUpdateForm)
+    cgiTableField("&nbsp;");
+else
+    {
+    puts("<TD ALIGN='RIGHT'>");
+    puts("Or upload: ");
+    cgiMakeFileEntry(hgCtDocFile);
+    cgiTableFieldEnd();
+    }
+cgiTableRowEnd();
+
+/* next row - text entry for description, and clear button(s) */
 cgiSimpleTableRowStart();
 puts("<TD COLSPAN=2>");
 
@@ -255,7 +348,8 @@ if (isUpdateForm)
     char buf[256];
     safef(buf, sizeof buf, "track name='%s' description='%s'",
                             ct->tdb->shortLabel, ct->tdb->longLabel);
-    cgiMakeHiddenVar(hgCtUpdatedTrack, buf);
+    char *trackLine = ctOrigTrackLine(ct);
+    cgiMakeHiddenVar(hgCtUpdatedTrack, trackLine ? trackLine : buf);
     }
 else
     {
@@ -348,7 +442,8 @@ cgiTableRowEnd();
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     /* Name  field */
-    if (ctDataUrl(ct) && ctHtmlUrl(ct))
+    if ((ctDataUrl(ct) && ctHtmlUrl(ct)) || 
+            sameString(ct->tdb->type, "chromGraph"))
         printf("<TR><TD>%s</A></TD>", ct->tdb->shortLabel);
     else
         printf("<TR><TD><A TITLE='Update custom track: %s' HREF='%s?%s&%s=%s'>%s</A></TD>", 
@@ -359,8 +454,8 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     /* Type field */
     printf("<TD>%s</TD>", ctInputType(ct));
     /* Doc field */
-    printf("<TD ALIGN='CENTER'>%s</TD>", ct->tdb->html &&
-                                    ct->tdb->html[0] != 0 ? "Y" : "&nbsp;");
+    printf("<TD ALIGN='CENTER'>%s</TD>", 
+                isNotEmpty(ct->tdb->html) ? "Y" : "&nbsp;");
     /* Items field */
     if (itemCt)
         {
@@ -511,7 +606,7 @@ else
             organism, hFreezeDate(database), database);
 
 /* place for warning messages to appear */
-if (warn && warn[0])
+if (isNotEmpty(warn))
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;%s", warn);
 
 /* count up number of custom tracks for this genome */
@@ -683,22 +778,18 @@ webEndSection();
 cartWebEnd(cart);
 }
 
-void fixNewData(struct cart *cart)
+char *fixNewData(struct cart *cart)
 /* append a newline to incoming data, to keep custom preprocessor happy */
 {
 char *customText = cartUsualString(cart, hgCtDataText, "");
-char *updatedTrackLine = NULL;
-if (customText[0])
+if (isNotEmpty(customText))
     {
     struct dyString *ds = dyStringNew(0);
-    if ((updatedTrackLine = cartOptionalString(cart, hgCtUpdatedTrack)) != NULL)
-        if (!startsWith("track", customText))
-            dyStringPrintf(ds, "%s\n", updatedTrackLine);
-    dyStringAppend(ds, customText);
-    dyStringPrintf(ds, "\n");
+    dyStringPrintf(ds, "%s\n", customText);
     customText = dyStringCannibalize(&ds);
     cartSetString(cart, hgCtDataText, customText);
     }
+return customText;
 }
 
 char *replacedTracksMsg(struct customTrack *replacedCts)
@@ -768,7 +859,7 @@ void addWarning(struct dyString *ds, char *msg)
 {
 if (!msg)
     return;
-if (ds->string[0])
+if (isNotEmpty(ds->string))
     dyStringAppend(ds, ". ");
 dyStringAppend(ds, msg);
 }
@@ -809,6 +900,16 @@ if (truncated)
 return (dyStringCannibalize(&ds));
 }
 
+struct customTrack *ctFromList(struct customTrack *ctList, char *tableName)
+/* return custom track from list */
+{
+struct customTrack *ct = NULL;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (sameString(tableName, ct->tdb->tableName))
+        return ct;
+return NULL;
+}
+
 void doMiddle(struct cart *theCart)
 /* create web page */
 {
@@ -816,6 +917,8 @@ char *ctFileName = NULL;
 struct slName *browserLines = NULL;
 struct customTrack *replacedCts = NULL;
 char *err = NULL, *warn = NULL;
+char *selectedTable = NULL;
+struct customTrack *ct = NULL;
 
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
@@ -825,22 +928,17 @@ hSetDb(database);
 if (cartVarExists(cart, hgCtDoChangeDb))
     cartSetString(cart, "position", hDefaultPos(database));
 if (cartVarExists(cart, hgCtDoAdd))
-    {
     doAddCustom(NULL);
-    }
 else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */
-    struct customTrack *ct = NULL;
     /* need to clone the hgCtTable value, as the ParseCart will remove
        the variable */
-    char *selectedTable = cloneString(cartString(cart, hgCtTable));
-    if (selectedTable[0] != 0)
+    selectedTable = cloneString(cartString(cart, hgCtTable));
+    if (isNotEmpty(selectedTable))
         {
         ctList = customTracksParseCart(cart, NULL, NULL);
-        for (ct = ctList; ct != NULL; ct = ct->next)
-            if (sameString(ct->tdb->tableName, selectedTable))
-                break;
+        ct = ctFromList(ctList, selectedTable);
         }
     if (ct)
         doUpdateCustom(ct, NULL);
@@ -850,15 +948,45 @@ else if (cartVarExists(cart, hgCtTable))
 else
     {
     /* get new and existing custom tracks from cart and decide what to do */
-    fixNewData(cart);
-    struct dyString *dsWarn = dyStringNew(0);
-    char *savedCustomText = cartOptionalString(cart, hgCtDataText);
-
+    char *customText = fixNewData(cart);
     /* save input so we can display if there's an error */
-    savedCustomText = saveLines(cloneString(savedCustomText), SAVED_LINE_COUNT);
+    char *savedCustomText = saveLines(cloneString(customText), 
+                                SAVED_LINE_COUNT);
+    char *trackConfig = cartOptionalString(cart, hgCtConfigLines);
+    char *savedConfig = cloneString(trackConfig);
 
+    struct dyString *dsWarn = dyStringNew(0);
+    #ifdef OLD
+    boolean hasData = (isNotEmpty(customText) || isNotEmpty(fileName));
+    if (cartVarExists(cart, hgCtUpdatedTrack) && hasData)
+        {
+        /* from 'update' screen */
+        if (!trackConfig)
+            trackConfig = cartOptionalString(cart, hgCtUpdatedTrack);
+        cartSetString(cart, hgCtConfigLines, trackConfig);
+        }
+    #endif
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
 					    &replacedCts, NULL, &err);
+    if (cartVarExists(cart, hgCtUpdatedTrack) && isNotEmpty(trackConfig))
+        {
+        /* update custom track config */
+        selectedTable = cartOptionalString(cart, hgCtUpdatedTable);
+        if (selectedTable)
+            {
+            ct = ctFromList(ctList, selectedTable);
+            if (ct)
+                {
+                struct errCatch *catch = errCatchNew();
+                if (errCatchStart(catch))
+                    customTrackUpdateFromConfig(ct, trackConfig, &browserLines);
+                errCatchEnd(catch);
+                if (catch->gotError)
+                    addWarning(dsWarn, catch->message->string);
+                errCatchFree(&catch);
+                }
+            }
+        }
     addWarning(dsWarn, replacedTracksMsg(replacedCts));
     doBrowserLines(browserLines, &warn);
     addWarning(dsWarn, warn);
@@ -866,12 +994,10 @@ else
 	{
         char *selectedTable = NULL;
         cartSetString(cart, hgCtDataText, savedCustomText);
+        cartSetString(cart, hgCtConfigLines, savedConfig);
         if ((selectedTable= cartOptionalString(cart, hgCtUpdatedTable)) != NULL)
             {
-            struct customTrack *ct = NULL;
-            for (ct = ctList; ct != NULL; ct = ct->next)
-                if (sameString(selectedTable, ct->tdb->tableName))
-                        break;
+            ct = ctFromList(ctList, selectedTable);
             doUpdateCustom(ct, err);
             }
         else
