@@ -14,7 +14,7 @@
 #include "jksql.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.59 2006/09/26 00:58:17 kate Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.60 2006/12/08 21:21:07 kate Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -863,13 +863,13 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
  * and optionally content-type part HTTP preamble to web page.  Don't 
  * write any HTML though. */
 {
-struct cart *cart = cartForSession(cookieName, exclude, oldVars);
-cartWriteCookie(cart, cookieName);
 if (doContentType)
     {
     puts("Content-Type:text/html");
     puts("\n");
     }
+struct cart *cart = cartForSession(cookieName, exclude, oldVars);
+cartWriteCookie(cart, cookieName);
 return cart;
 }
 
@@ -975,7 +975,9 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 {
+pushWarnHandler(cartEarlyWarningHandler);
 struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
+popWarnHandler();
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
