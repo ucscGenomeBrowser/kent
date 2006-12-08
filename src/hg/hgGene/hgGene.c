@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.81 2006/10/20 05:01:14 kate Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.82 2006/12/08 16:44:07 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -170,8 +170,8 @@ return name;
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
-fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
-    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneStart,
+fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&o=%d&t=%d&l=%d&r=%d&db=%s",
+    cartSidUrlString(cart), accession, curGeneChrom, curGeneStart, curGeneEnd, curGeneStart,
     curGeneEnd, database);
 }
 static void printOurRefseqUrl(FILE *f, char *accession)
