@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1246 2006/12/07 22:19:07 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1247 2006/12/08 23:48:44 ann Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11928,13 +11928,13 @@ if (sameString(database, "hg18")
     }
 
 /* Print NCBI MapView anchor */
-if (sameString(database, "hg17"))
+if (sameString(database, "hg18"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "mm6"))
+if (sameString(database, "mm8"))
     {
     hPrintf("<TD ALIGN=CENTER>");
     hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
