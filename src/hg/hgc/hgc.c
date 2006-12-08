@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1174 2006/12/08 20:55:50 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1175 2006/12/08 21:10:11 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4363,7 +4363,7 @@ else
     {
     warn("Couldn't find %s in gbCdnaInfo table", acc);
     }
-if (end != 0 && atoi(chrom) != 0)
+if (end != 0 && differentString(chrom,"0") && isNotEmpty(chrom))
     {
     printf("<B>Position:</B> "
            "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
