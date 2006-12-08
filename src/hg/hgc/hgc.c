@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1173 2006/12/06 00:46:27 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1174 2006/12/08 20:55:50 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4210,7 +4210,7 @@ char *version = NULL;
 struct trackDb *tdbRgdEst;
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
+int end = cartUsualInt(cart, "t",0);
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4363,10 +4363,13 @@ else
     {
     warn("Couldn't find %s in gbCdnaInfo table", acc);
     }
-printf("<B>Position:</B> "
-               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-                      hgTracksPathAndSettings(), database, chrom, start+1, end);
-printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
+if (end != 0 && atoi(chrom) != 0)
+    {
+    printf("<B>Position:</B> "
+           "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), database, chrom, start+1, end);
+    printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
+    }
 
 sqlFreeResult(&sr);
 freeDyString(&dy);
