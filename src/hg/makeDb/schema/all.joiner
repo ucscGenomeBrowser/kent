@@ -495,7 +495,8 @@ identifier acemblyName dependency
     $hg.acembly.name
     $hg,!hg18,!hg17.acemblyPep.name unique minCheck=0.90
     hg18,hg17.acemblyPep.name unique minCheck=0.63
-    $hg.acemblyClass.name full unique
+    $hg,!hg18.acemblyClass.name full unique
+    hg18.acemblyClass.name minCheck=0.99
 
 identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
