@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1247 2006/12/08 23:48:44 ann Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1248 2006/12/11 17:57:59 ann Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11948,7 +11948,7 @@ if (sameString(database, "danRer2"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "galGal2"))
+if (sameString(database, "galGal3"))
     {
     hPrintf("<TD ALIGN=CENTER>");
     hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
