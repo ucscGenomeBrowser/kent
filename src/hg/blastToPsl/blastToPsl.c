@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.18 2006/12/07 23:42:37 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.19 2006/12/11 18:56:37 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -26,6 +26,8 @@ struct block
 /* Internally used bit flags */
 #define PROT_DNA_ALIGN 0x01
 
+/* score file header */
+static char *scoreHdr = "#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal\n";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -301,7 +303,10 @@ unsigned flags = 0;
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
+    {
     scoreFh = mustOpen(scoreFile, "w");
+    fputs(scoreHdr, scoreFh);
+    }
 
 if (strstr(bf->program, "TBLASTN") != NULL)
     flags |= PROT_DNA_ALIGN;
