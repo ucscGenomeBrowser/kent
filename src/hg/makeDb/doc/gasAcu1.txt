@@ -564,7 +564,40 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/gasAcu1Fr1 > do.log 2>&1 &
-    #	
+    #	real    272m33.395s
+    #	user    0m0.189s
+    #	sys     0m0.163s
+
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed
+    ln -s blastz.fr1.2006-12-08 blastz.fr1
+    cd blastz.fr1
+    time nice -n 19 featureBits gasAcu1 chainFr1Link \
+	> fb.gasAcu1.chainFr1Link.txt 2>&1 &
+    #	146655780 bases of 446627861 (32.836%) in intersection
+
+    mkdir /cluster/data/fr1/bed/blastz.gasAcu1.swap
+    cd /cluster/data/fr1/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr1.2006-12-08/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > do.log 2>&1 &
+
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr1.2006-12-08/DEF \
+	-continue=net -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > net.log 2>&1 &
+    #	real    24m33.761s
+    #	user    0m0.125s
+    #	sys     0m0.080s
+
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.gasAcu1.swap
+    time nice -n 19 featureBits fr1 chainGasAcu1Link \
+	> fb.fr1.chainGasAcu1Link.txt 2>&1 &
+    #	148005715 bases of 315518167 (46.909%) in intersection
 
 #######################################################################
 ## Swap of oryLat1 alignments to gasAcu1 (DONE - 2006-12-08 - Hiram)
@@ -596,7 +629,7 @@ TMPDIR=/scratch/tmp
 #    distance                      on gasAcu1    on other   minScore
 #  1  0.xxxx - tetraodon tetNig1   (% 42.044) (% 50.004)       5000     loose
 #  3  0.xxxx - zebrafish danRer4   (% 35.163) (% 13.104)       5000     loose
-#  4  0.xxxx - fugu fr1            (% xx.379) (% xx.994)       2000     loose
+#  4  0.xxxx - fugu fr1            (% 32.836) (% 46.909)       2000     loose
 #  5  0.xxxx - human hg18          (% 11.353) (%  1.923)       2000     loose
 #  6  0.xxxx - mouse mm8           (% 11.070) (%  x.923)       2000
 # from oryLat1.txt:
@@ -608,3 +641,5 @@ hg18 #	50705450 bases of 446627861 (11.353%) in intersection
 on hg18 #	55424609 bases of 2881515245 (1.923%) in intersection
 on tetNig1 #	171216660 bases of 342403326 (50.004%) in intersection
 on danRer4 #	213083380 bases of 1626093931 (13.104%) in intersection
+fr1 #	146655780 bases of 446627861 (32.836%) in intersection
+on fr1 #	148005715 bases of 315518167 (46.909%) in intersection
