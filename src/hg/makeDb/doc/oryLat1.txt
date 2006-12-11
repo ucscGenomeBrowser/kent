@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.5 2006/12/09 01:04:31 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.6 2006/12/11 17:46:28 hiram Exp $"
 #
 
 ##########################################################################
@@ -835,15 +835,21 @@ on hg18 #	57908796 bases of 2881515245 (2.010%) in intersection
 ######
 ## Second time around, without the randoms and chrUn sequences:
 #  1  0.xxxx - stickleback gasAcu1 (% 28.110) (% 37.899)       2000     loose
-#  2  0.xxxx - fugu fr1            (% xx.379) (% xx.994)       2000     loose
+#  2  0.xxxx - fugu fr1            (% 24.764) (% 40.018)       2000     loose
 #  3  0.xxxx - tetraodon tetNig1   (% 17.585) (% 39.552)       2000     loose
-#  4  0.xxxx - zebrafish danRer4   (% xx.029) (% xx.084)       2000     loose
-#  5  0.xxxx - human hg18          (%  x.898) (%  x.010)       2000     loose
+#  4  0.xxxx - zebrafish danRer4   (% 22.755) (% 12.192)       2000     loose
+#  5  0.xxxx - human hg18          (%  6.896) (%  1.791)       2000     loose
 intersection
 gasAcu1 #	163640802 bases of 582143106 (28.110%) in intersection
 on gasAcu1 #	148335558 bases of 391398261 (37.899%) in intersection
 tetNig1 #	102368873 bases of 582143106 (17.585%) in intersection
 on tetNig1 #	81227466 bases of 205367312 (39.552%) in intersection
+fr1 #	173441855 bases of 700386597 (24.764%) in intersection
+on fr1 #	126265137 bases of 315518167 (40.018%) in intersection
+danRer4 #	159369670 bases of 700386597 (22.755%) in intersection
+on danRer4 #	188598788 bases of 1546950119 (12.192%) in intersection
+hg18 #	48299069 bases of 700386597 (6.896%) in intersection
+on hg18 #	51598883 bases of 2881515245 (1.791%) in intersection
 
 #########################################################################
 # BLASTZ/CHAIN/NET FR1 (WORKING - 2006-12-08 - Hiram)
@@ -890,58 +896,36 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/oryLat1Fr1 > do.log 2>&1 &
-    #	real    832m8.618s
-    #	user    0m0.165s
-    #	sys     0m0.109s
-XXX - RUNNING 2006-12-04 16:09
-    #	failed during the netClass operation in loadUp.csh due to missing
-    #	rmsk table in oryLat1 - added options to netClass to allow
-    #	specification of repeat table, and rerun the two commands here to
-    #	finish off the loadUp.csh step:
-    ssh hgwdev
-    cd /cluster/data/oryLat1/bed/blastz.fr1.2006-12-04/axtChain
-    netClass -verbose=2 -noAr -tRepeats=repeats -qRepeats=windowmaskerSdust \
-        noClass.net oryLat1 fr1 oryLat1.fr1.net
-    netFilter -minGap=10 oryLat1.fr1.net \
-	| hgLoadNet -verbose=0 oryLat1 netFr1 stdin
-    #	Then, continuing:
-    ssh kkstore04
-    cd /cluster/data/oryLat1/bed/blastz.fr1.2006-12-04
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-continue=download \
-	-blastzOutRoot /cluster/bluearc/oryLat1Fr1 > download.log 2>&1 &
-
+    #	real    424m7.567s
+    #	user    0m0.199s
+    #	sys     0m0.160s
 
     cd /cluster/data/oryLat1/bed
-    ln -s blastz.fr1.2006-12-04 blastz.fr1
+    rm blastz.fr1
+    ln -s blastz.fr1.2006-12-08 blastz.fr1
     ssh hgwdev
     cd /cluster/data/oryLat1/bed/blastz.fr1
     nice -n 19 featureBits oryLat1 chainFr1Link > fb.oryLat1.fr1.txt 2>&1
-    #	170744130 bases of 700386597 (24.379%) in intersection
+    #	173441855 bases of 700386597 (24.764%) in intersection
 
     # Let's try a swap and see what happens
     ssh kkstore04
     mkdir /cluster/data/fr1/bed/blastz.oryLat1.swap
     cd /cluster/data/fr1/bed/blastz.oryLat1.swap
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-04/DEF \
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-08/DEF \
 	-chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-swap \
-	-blastzOutRoot /cluster/bluearc/oryLat1Fr1 > swap.log 2>&1 &
-    # fails at:
-    # HgStepManager: executing step 'net'.
-    # netChains: looks like previous stage was not successful
-    #	(can't find [fr1.oryLat1.]all.chain[.gz]).
+	-swap > swap.log 2>&1 &
+    #	real    32m7.742s
+    #	user    0m0.148s
+    #	sys     0m0.097s
 
-    # it will continue at net after this:
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-04/DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-continue=net -swap > net_swap.log 2>&1 &
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.oryLat1.swap
+    time nice -n 19 featureBits fr1 chainOryLat1Link \
+	> fb.fr1.chainOryLat1Link.txt 2>&1
+    #	126265137 bases of 315518167 (40.018%) in intersection
 
 #########################################################################
 # BLASTZ/CHAIN/NET gasAcu1 (DONE - 2006-12-08 - Hiram)
@@ -1122,31 +1106,38 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/oryLat1DanRer4 > do.log 2>&1 &
+    #	real    290m39.870s
+    #	user    0m0.193s
+    #	sys     0m0.164s
+
 
     cd /cluster/data/oryLat1/bed
-    ln -s blastz.danRer4.2006-12-04 blastz.danRer4
+    rm blastz.danRer4
+    ln -s blastz.danRer4.2006-12-08 blastz.danRer4
     ssh hgwdev
     cd /cluster/data/oryLat1/bed/blastz.danRer4
     nice -n 19 featureBits oryLat1 chainDanRer4Link >fb.oryLat1.danRer4.txt 2>&1
-    #	XXX 161293587 bases of 700386597 (23.029%) in intersection
+    #	159369670 bases of 700386597 (22.755%) in intersection
 
     # Let's try a swap and see what happens
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/blastz.oryLat1.swap
     cd /cluster/data/danRer4/bed/blastz.oryLat1.swap
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.danRer4.2006-12-04/DEF \
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.danRer4.2006-12-08/DEF \
 	-chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-swap \
-	-blastzOutRoot /cluster/bluearc/oryLat1DanRer4 > swap.log 2>&1 &
+	-swap > swap.log 2>&1 &
+    #	real    84m39.497s
+    #	user    0m0.148s
+    #	sys     0m0.086s
 
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.danRer4.2006-12-04/DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-continue=net -swap > swap.log 2>&1 &
-
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/blastz.oryLat1.swap
+    time nice -n 19 featureBits -noRandom danRer4 chainOryLat1Link \
+	> fb.danRer4.chainOryLat1Link.txt 2>&1
+    #	188598788 bases of 1546950119 (12.192%) in intersection
+    
 #########################################################################
 # BLASTZ/CHAIN/NET HG18 (WORKING - 2006-12-08 - Hiram)
 #  second time without the randoms and chrUn
@@ -1187,60 +1178,36 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/oryLat1Hg18 > do.log 2>&1 &
-    #	real    312m34.518s
-    #	user    0m0.151s
-    #	sys     0m0.123s
-XXX - RUNNING 2006-12-04 15:55
-    #	failed during the netClass operation in loadUp.csh due to missing
-    #	rmsk table in oryLat1 - added options to netClass to allow
-    #	specification of repeat table, and rerun the two commands here to
-    #	finish off the loadUp.csh step:
-    ssh hgwdev
-    cd /cluster/data/oryLat1/bed/blastz.hg18.2006-12-04/axtChain
-    netClass -verbose=2 -noAr -tRepeats=repeats -qRepeats=windowmaskerSdust \
-        noClass.net oryLat1 hg18 oryLat1.hg18.net
-    netFilter -minGap=10 oryLat1.hg18.net \
-	| hgLoadNet -verbose=0 oryLat1 netHg18 stdin
-    #	Then, continuing:
-    ssh kkstore04
-    cd /cluster/data/oryLat1/bed/blastz.hg18.2006-12-04
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-continue=download \
-	-blastzOutRoot /cluster/bluearc/oryLat1Hg18 > download.log 2>&1 &
+    #	real    353m18.317s
+    #	user    0m0.199s
+    #	sys     0m0.170s
 
     cd /cluster/data/oryLat1/bed
-    ln -s blastz.hg18.2006-12-04 blastz.hg18
+    rm -f blastz.hg18
+    ln -s blastz.hg18.2006-12-08 blastz.hg18
     ssh hgwdev
     cd /cluster/data/oryLat1/bed/blastz.hg18
-    nice featureBits oryLat1 chainHg18Link > fb.oryLat1.hg18.txt 2>&1
-    #	48309237 bases of 700386597 (6.898%) in intersection
+    time nice -n 19 featureBits -noRandom oryLat1 chainHg18Link \
+	> fb.oryLat1.hg18.txt 2>&1 &
+    #	48299069 bases of 700386597 (6.896%) in intersection
+    #	40936335 bases of 582143106 (7.032%) in intersection
 
     # Let's try a swap and see what happens
     ssh kkstore04
     mkdir /cluster/data/hg18/bed/blastz.oryLat1.swap
     cd /cluster/data/hg18/bed/blastz.oryLat1.swap
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.hg18.2006-12-04/DEF \
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.hg18.2006-12-08/DEF \
 	-chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-swap \
-	-blastzOutRoot /cluster/bluearc/oryLat1Hg18 > swap.log 2>&1 &
-    # fails at:
-    # HgStepManager: executing step 'net'.
-    # netChains: looks like previous stage was not successful
-    #	(can't find [hg18.oryLat1.]all.chain[.gz]).
+	-swap > swap.log 2>&1 &
+    #	real    39m35.656s
+    #	user    0m0.147s
+    #	sys     0m0.100s
 
-    # it will continue at net after this:
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.hg18.2006-12-04/DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-continue=net -swap \
-	-blastzOutRoot /cluster/bluearc/oryLat1Hg18 > net_swap.log 2>&1 &
-    #	failed on cleanUp because /cluster/bluearc/oryLat1Hg18 did not exist
+    time nice -n 19 featureBits -noRandom hg18 chainOryLat1Link \
+	> fb.hg18.oryLat1.txt 2>&1 &
+    #	51598883 bases of 2881515245 (1.791%) in intersection
+    #	51259072 bases of 2868834265 (1.787%) in intersection
 
-    nice -n 19 featureBits hg18 chainOryLat1Link > fb.hg18.oryLat1.txt 2>&1
-    #	57908796 bases of 2881515245 (2.010%) in intersection
 
