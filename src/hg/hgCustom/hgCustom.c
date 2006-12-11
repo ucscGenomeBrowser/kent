@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.106 2006/12/11 19:59:53 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.107 2006/12/11 21:41:20 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -974,6 +974,9 @@ else
                 fileContents = cartOptionalString(cart, hgCtDataFile);
             customText = fileContents;
             }
+        if (startsWith("track ", customText) &&
+            startsWith("track ", trackConfig))
+                customText = "Duplicate track configuration found - remove track and browser lines from Configuration box or from Data";
         dyStringPrintf(dsTrack, "%s\n%s\n", trackConfig, customText);
         customText = dyStringCannibalize(&dsTrack);
         cartSetString(cart, hgCtDataText, customText);
