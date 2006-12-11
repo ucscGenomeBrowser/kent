@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.105 2006/12/07 23:57:37 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.106 2006/12/11 19:59:53 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -956,21 +956,39 @@ else
     char *savedConfig = cloneString(trackConfig);
 
     struct dyString *dsWarn = dyStringNew(0);
-    #ifdef OLD
+    char *fileName = cartOptionalString(cart, hgCtDataFileName);
     boolean hasData = (isNotEmpty(customText) || isNotEmpty(fileName));
     if (cartVarExists(cart, hgCtUpdatedTrack) && hasData)
         {
         /* from 'update' screen */
+        /* prepend config to data for parser */
+        struct dyString *dsTrack = dyStringNew(0);
         if (!trackConfig)
             trackConfig = cartOptionalString(cart, hgCtUpdatedTrack);
-        cartSetString(cart, hgCtConfigLines, trackConfig);
+        char *fileContents = NULL;
+        if (isNotEmpty(fileName))
+            {
+            if (customTrackIsCompressed(fileName))
+                fileContents = "Compressed files not supported for data update";
+            else
+                fileContents = cartOptionalString(cart, hgCtDataFile);
+            customText = fileContents;
+            }
+        dyStringPrintf(dsTrack, "%s\n%s\n", trackConfig, customText);
+        customText = dyStringCannibalize(&dsTrack);
+        cartSetString(cart, hgCtDataText, customText);
+        if (isNotEmpty(fileContents))
+            {
+            /* already handled file */
+            cartRemove(cart, hgCtDataFile);
+            cartRemove(cart, hgCtDataFileName);
+            }
         }
-    #endif
     ctList = customTracksParseCartDetailed(cart, &browserLines, &ctFileName,
 					    &replacedCts, NULL, &err);
-    if (cartVarExists(cart, hgCtUpdatedTrack) && isNotEmpty(trackConfig))
+    if (cartVarExists(cart, hgCtUpdatedTrack) && !hasData)
         {
-        /* update custom track config */
+        /* update custom track config and doc, but not data*/
         selectedTable = cartOptionalString(cart, hgCtUpdatedTable);
         if (selectedTable)
             {

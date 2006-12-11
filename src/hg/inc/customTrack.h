@@ -142,6 +142,9 @@ struct trackDb *customTrackTdbDefault();
 boolean isCustomTrack(char *track);
 /* determine if track name refers to a custom track */
 
+boolean customTrackIsCompressed(char *fileName);
+/* test for file suffix indicating compression */
+
 void  customTrackDump(struct customTrack *track);
 /* Write out info on custom track to stdout */
 

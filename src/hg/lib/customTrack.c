@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.156 2006/12/01 23:15:26 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.157 2006/12/11 19:59:53 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -588,6 +588,13 @@ else
     }
 }
 
+boolean customTrackIsCompressed(char *fileName)
+/* test for file suffix indicating compression */
+{
+    return (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
+            endsWith(fileName,".bz2"));
+}
+
 struct customTrack *customTracksParseCartDetailed(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
@@ -631,8 +638,7 @@ if (isNotEmpty(fileName))
     else
         {
         /* file contents not available -- check for compressed */
-        if (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
-            endsWith(fileName,".bz2"))
+        if (customTrackIsCompressed(fileName))
             {
             char buf[256];
             char *cFBin = cartOptionalString(cart, CT_CUSTOM_FILE_BIN_VAR);
