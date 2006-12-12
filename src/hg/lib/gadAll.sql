@@ -16,7 +16,6 @@ CREATE TABLE gadAll (
 	alleleFunEffect	varchar(255), #	Allele Functional Effects
 	polymClass	varchar(40),  #	Polymophism Class
 	geneName	varchar(255), #	Gene Name
-	geneComment	varchar(255), #	Gene Comments
 	population	varchar(255), #	Population
 	comment		varchar(255), #	Comments
 	submitter	varchar(255), #	Submitter
