@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1248 2006/12/11 17:57:59 ann Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1249 2006/12/12 21:53:00 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1017,6 +1017,132 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	}
     }    
 slFreeList(&exonList);
+}
+
+void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next)
+/* Default next-gene function for linkedFeatures.  Changes winStart/winEnd. */
+{
+int start = winStart;
+int end = winEnd;
+int size = winBaseCount;
+int sizeWanted = size;
+int bufferToEdge;
+/* If there's stuff on the screen, skip past it. */
+/* If not, skip to the edge of the window. */
+struct bed *items = hGetBedRange(tg->mapName, chromName, winStart, winEnd, NULL);
+if (next)
+    {
+    if (items)
+	{
+	slSort(&items, bedCmpEnd);
+	slReverse(&items);
+	if (items->chromEnd > end)
+	    start = items->chromEnd;
+	else
+	    start = end;
+	}
+    else
+	start = end;
+    end = start + size;
+    if (end > seqBaseCount)
+	end = seqBaseCount;
+    }
+else
+    {
+    if (items)
+	{
+	slSort(&items, bedCmp);
+	if (items->chromStart < start)
+	    end = items->chromStart;
+	else 
+	    end = start;
+	}
+    else
+	end = start;
+    start = end - size;
+    if (start < 0)
+	start = 0;
+    }
+size = end - start;
+if (items)
+    bedFreeList(&items);
+/* Now it's time to do the search. */
+for (;;)
+    {
+    items = hGetBedRange(tg->mapName, chromName, start, end, NULL);
+    /* If we got something, or weren't able to search as big as we wanted to */
+    /* (in case we're at the end of the chrom).  */
+    if ((items != NULL) || (size < sizeWanted))
+	break;
+    sizeWanted *= 2;
+    if (next)
+	{
+	start = end;
+	end += sizeWanted;
+	if (end > seqBaseCount)
+	    end = seqBaseCount;
+	}
+    else
+	{
+	end = start;
+	start -= sizeWanted;
+	if (start < 0)
+	    start = 0;
+	}
+    size = end - start;
+    }
+/* Finally, we got something. */
+sizeWanted = winEnd - winStart;
+bufferToEdge = (int)(0.05 * (float)sizeWanted);
+if (items)
+    {
+    if (next)
+	{
+	slSort(&items, bedCmp);
+	if (items->chromEnd + bufferToEdge - sizeWanted < winEnd)
+	    {
+	    winEnd = items->chromEnd + bufferToEdge;
+	    winStart = winEnd - sizeWanted;
+	    }
+	else if (items->chromStart + bufferToEdge - sizeWanted < winEnd)
+	    {
+	    winEnd = items->chromStart + bufferToEdge;
+	    winStart = winEnd - sizeWanted;
+	    }
+	else
+	    {
+	    winStart = items->chromStart - bufferToEdge;
+	    winEnd = winStart + sizeWanted;
+	    }
+	}
+    else
+	{
+	slSort(&items, bedCmpEnd);
+	slReverse(&items);
+	if (items->chromStart - bufferToEdge + sizeWanted > winStart)
+	    {
+	    winStart = items->chromStart - bufferToEdge;
+	    winEnd = winStart + sizeWanted;
+	    }
+        else if (items->chromEnd - bufferToEdge + sizeWanted > winStart)
+	    {
+	    winStart = items->chromEnd - bufferToEdge;
+	    winEnd = winStart + sizeWanted;
+	    }
+	else 
+	    {
+	    winEnd = items->chromEnd + bufferToEdge;
+	    winStart = winEnd - sizeWanted;
+	    }
+	}
+    if (winEnd > seqBaseCount) 
+	winEnd = seqBaseCount;
+    if (winStart < 0)
+	winStart = 0;
+    bedFreeList(&items);
+    }
+else 
+    warn("Sorry, no item found");
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
@@ -2244,6 +2370,7 @@ tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
 tg->nextPrevItem = linkedFeaturesNextPrevItem;
+tg->labelNextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
@@ -8412,7 +8539,7 @@ if (track->limitedVis != tvHide)
                         track->labelColor : track->ixColor);
     vgTextCentered(vg, insideX, y+1, insideWidth, insideHeight, 
                         labelColor, font, track->longLabel);
-    if (withNextItemArrows && track->nextItemButtonable && track->labelNextPrevItem)
+    if (withNextItemArrows && track->labelNextItemButtonable && track->labelNextPrevItem)
 	doLabelNextItemButtons(track, parentTrack, vg, font, y, trackPastTabX,
 			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
     else
@@ -11404,6 +11531,7 @@ track->exonArrows = sameString(exonArrows, "on");
 track->nextItemButtonable = TRUE;
 if (nextItem && sameString(nextItem, "off"))
     track->nextItemButtonable = FALSE;
+track->labelNextItemButtonable = track->nextItemButtonable;
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
@@ -11729,6 +11857,7 @@ else
     {
     errAbort("Unrecognized custom graph type %s", type);
     }
+tg->labelNextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 freez(&typeDupe);
 return tg;

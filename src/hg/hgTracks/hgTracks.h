@@ -151,7 +151,8 @@ struct track
     char *expTable;	/* Expression table in hgFixed. */
 
     boolean exonArrows;	/* Draw arrows on exons? */
-    boolean nextItemButtonable; /* Use the next-item buttons? */ 
+    boolean nextItemButtonable; /* Use the next-exon buttons? */ 
+    boolean labelNextItemButtonable; /* Use the next-gene buttons? */ 
     struct itemAttrTbl *itemAttrTbl;  /* relational attributes for specific
                                          items (color) */
 

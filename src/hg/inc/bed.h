@@ -101,6 +101,9 @@ void bedOutput(struct bed *el, FILE *f, char sep, char lastSep);
 int bedCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 
+int bedCmpEnd(const void *va, const void *vb);
+/* Compare to sort based on chrom,chromEnd. */
+
 int bedCmpExtendedChr(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart.  Use extended
  * chrom name comparison, that strip prefixes and does numeric compare */
