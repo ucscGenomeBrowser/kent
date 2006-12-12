@@ -18,7 +18,7 @@ else
     HG_WARN_ERR = -DJK_WARN -Wall -Werror
   endif
 endif
-HG_WARN=${HG_WARN_ERR}
+# HG_WARN=${HG_WARN_ERR}
 
 ifeq (${SCRIPTS},)
     SCRIPTS=/cluster/bin/scripts
