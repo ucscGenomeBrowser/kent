@@ -207,7 +207,6 @@ char *groupTarget = NULL;
 struct track *trackList =  NULL;
 struct track *ideoTrack = NULL;
 struct group *groupList = NULL;
-char *trackReordering = cfgOption("hgTracks.trackReordering");
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 
 /* Get track list and group them. */
@@ -285,14 +284,11 @@ hCheckBox("nextItemArrows", cartUsualBoolean(cart, "nextItemArrows", FALSE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous item navigation");
 hPrintf("</TD></TR>\n");
-if (trackReordering != NULL && sameString(trackReordering,"on"))
-    {
-    hPrintf("<TR><TD>");
-    hCheckBox(configPriorityOverride , cartUsualBoolean(cart, configPriorityOverride , FALSE));
-    hPrintf("</TD><TD>");
-    hPrintf("Enable track re-ordering");
-    hPrintf("</TD></TR>\n");
-    }
+hPrintf("<TR><TD>");
+hCheckBox(configPriorityOverride , cartUsualBoolean(cart, configPriorityOverride , FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Enable track re-ordering");
+hPrintf("</TD></TR>\n");
 hTableEnd();
 
 webNewSection("Configure Tracks");
