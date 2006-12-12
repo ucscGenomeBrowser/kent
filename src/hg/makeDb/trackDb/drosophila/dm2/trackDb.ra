@@ -88,7 +88,7 @@ color 100,50,0
 type bed 4 +
 
 track multiz15way
-shortLabel Conservation (15)
+shortLabel Conservation
 longLabel 12 Flies, Mosquito, Honeybee, Beetle Multiz Alignments & phastCons Scores
 group compGeno
 priority 100
@@ -107,7 +107,7 @@ speciesOrder droSim1 droSec1 droYak2 droEre2 droAna3 dp4 droPer1 droWil1 droVir3
 treeImage phylo/dm2_15way.gif
 
 track phastConsElements15way
-shortLabel Most Conserved (15)
+shortLabel Most Conserved
 longLabel PhastCons Conserved Elements (12 Flies, Mosquito, Honeybee, Beetle)
 group compGeno
 priority 105
@@ -141,7 +141,7 @@ showTopScorers 200
 type bed 5 .
 
 track multiz9way
-shortLabel Conservation
+shortLabel Conservation (9)
 longLabel 7 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
 group compGeno
 priority 100.01
@@ -155,7 +155,7 @@ summary multiz9waySummary
 speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel2
 
 track phastConsElements9way
-shortLabel Most Conserved
+shortLabel Most Conserved (9)
 longLabel PhastCons Conserved Elements (7 Flies, Mosquito and Honeybee)
 group compGeno
 priority 105.01
