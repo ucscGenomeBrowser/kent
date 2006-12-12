@@ -11959,3 +11959,28 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
 cd /cluster/data/hg18/bed/sv
 redon.pl < cnpRedon.hg18 > redon.bed
 hgLoadBed hg18 cnpRedon cnpRedon.bed
+
+#########################################################
+# BUILD GAD TRACK (Done, 12/12/06, Fan)
+
+   mkdir /cluster/store12/gad061211
+   rm /cluster/data/gad
+   ln -s /cluster/store12/gad061211 /cluster/data/gad
+
+# Receive "GAD-Hg18DATA.txt" from GAD/NIA 
+# contact person: Shenoy, Narmada, shenoyn@grc.nia.nih.gov  
+   
+   hgsql hg18 -e 'drop table gadAll'
+   hgsql hg18 <~/src/hg/lib/gadAll.sql
+   hgsql hg18 -e 'load data local infile "GAD-Hg18DATA.txt" into table gadAll ignore 1 lines'
+   hgsql hg18 -e 'create index geneSymbol on gadAll(geneSymbol(10))'
+
+# create gad table
+
+   hgsql hg18 -N -e \
+   'select "chr",chromosome, chromStart, chromEnd, geneSymbol from gadAll where chromStart <>0 and chromEnd <>0 and chromosome<>""'|\
+   sed -e 's/chr\t/chr/' |grep -v "chr\." |grep -v " "|sort -u >gadHg18.bed
+
+   hgLoadBed hg18 gad gadHg18.bed
+
+#####################################################################
