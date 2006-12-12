@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.29 2006/03/09 18:26:58 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.30 2006/12/12 19:29:11 hiram Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -253,12 +253,27 @@ struct bed *bedItem, *bedList;
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
-struct hTableInfo *hti = hFindTableInfoDb(hGetDb(), chrom, "rmsk");
+char *db = hGetDb();
+struct hTableInfo *hti = NULL;
+
+conn = hAllocConn();
+hti = hFindTableInfoDb(db, chrom, "rmsk");
 
 if (hti == NULL)
     {
+    char *repeatTable = cloneString("repeatTableNotFound");
+    if (sqlTableExists(conn,"repeats"))
+	{
+	freeMem(repeatTable);
+	repeatTable = cloneString("repeats");
+	}
+    else if (sqlTableExists(conn,"windowmaskerSdust"))
+	{
+	freeMem(repeatTable);
+	repeatTable = cloneString("windowmaskerSdust");
+	}
     /* if there isn't a rmsk track, look for the repeats bed file */
-    bedList = hGetBedRangeDb(hGetDb(), "repeats", chrom, chromStart, chromEnd, NULL);
+    bedList = hGetBedRangeDb(hGetDb(), repeatTable, chrom, chromStart, chromEnd, NULL);
     for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	{
 	if (bedItem->chromEnd > chromEnd) bedItem->chromEnd = chromEnd;
@@ -271,7 +286,6 @@ if (hti == NULL)
     }
 else
     {
-    conn = hAllocConn();
     sr = hRangeQuery(conn, "rmsk", chrom, chromStart, chromEnd, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -285,8 +299,8 @@ else
 	    memset(dna+ro.genoStart-chromStart, 'n', ro.genoEnd - ro.genoStart);
 	}
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     }
+hFreeConn(&conn);
 }
 
 
