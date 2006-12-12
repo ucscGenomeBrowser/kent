@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.158 2006/12/12 00:57:49 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.159 2006/12/12 18:26:40 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -233,6 +233,7 @@ char buf[256];
 char *tmp;
 tmp = cloneString(label);
 eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
+stripChar(tmp,'.');	/*	periods confuse hgTables	*/
 stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
 stripChar(tmp,'-');	/*	since that's the Invalid table */
 safef(buf, sizeof(buf), "%s%s", CT_PREFIX, tmp); /* name check in hgText */ 
