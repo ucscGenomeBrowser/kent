@@ -11,8 +11,9 @@ CREATE TABLE vegaInfoZfish (
     zfinId varchar(255) not null,	# ZFIN ID
     zfinSymbol varchar(255) not null,	# ZFIN gene symbol
     method varchar(255) not null,	# GTF method field
-    geneDesc varchar(255) not null,	# Vega gene description
+    geneDesc longblob not null,	# Vega gene description
     confidence varchar(255) not null,	# Status (KNOWN, NOVEL, PUTATIVE, PREDICTED)
               #Indices
-    PRIMARY KEY(transcriptId)
+    PRIMARY KEY(transcriptId),
+    INDEX(geneId)
 );

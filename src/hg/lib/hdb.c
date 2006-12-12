@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.310 2006/12/04 17:56:49 hartera Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.311 2006/12/12 01:09:04 hartera Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -655,6 +655,7 @@ if (conn == NULL)
     {
     centralArchiveCc = getCentralCcFromCfg("archivebackup");
     conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
+   
     }
 return(conn);
 }
@@ -2032,15 +2033,20 @@ char buf[128];
 char query[256];
 char *res = NULL;
     
-conn = (archive) ? hConnectArchiveCentral() : hConnectCentral();
-safef(query, sizeof(query), "select %s from dbDb where name = '%s'",
-      field, database);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-    res = cloneString(buf);
-if (archive)
-    hDisconnectArchiveCentral(&conn);
-else 
-    hDisconnectCentral(&conn);
+conn = (archive) ? hMaybeConnectArchiveCentral() : hConnectCentral();
+if (conn != NULL) 
+    {
+    safef(query, sizeof(query), "select %s from dbDb where name = '%s'",
+       field, database);
+    if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+        res = cloneString(buf);
+    if (archive)
+        hDisconnectArchiveCentral(&conn);
+    else 
+        hDisconnectCentral(&conn);
+   }
+/* res is NULL if no connection can be made to archive db or if */
+/* the db is not found. If no connection to hgcentral, aborts with error */
 return res;
 }
 
