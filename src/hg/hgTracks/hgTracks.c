@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1249 2006/12/12 21:53:00 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1250 2006/12/12 22:34:00 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11830,7 +11830,7 @@ else if (sameString(type, "bed"))
     else if (ct->fieldCount == 15)
 	{
 	char *theType = trackDbSetting(tdb, "type");
-	if (sameString(theType, "expRatio"))
+	if (theType && sameString(theType, "expRatio"))
 	    {
 	    tg = trackFromTrackDb(tdb);
 	    expRatioMethodsFromCt(tg);	    
