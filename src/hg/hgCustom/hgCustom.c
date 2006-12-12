@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.107 2006/12/11 21:41:20 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.108 2006/12/12 22:42:55 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -320,21 +320,21 @@ if (ct && ctHtmlUrl(ct))
                                     TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS, TRUE);
     }
 else
+    {
     cgiMakeTextArea(hgCtDocText, cartUsualString(cart, hgCtDocText, ""),
                                     TEXT_ENTRY_ROWS, TEXT_ENTRY_COLS);
+    cgiSimpleTableFieldStart();
+    cgiSimpleTableStart();
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    makeClearButton(hgCtDocText);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    cgiTableEnd();
+    cgiTableFieldEnd();
+    }
 cgiTableFieldEnd();
 
-cgiSimpleTableFieldStart();
-cgiSimpleTableStart();
-
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-makeClearButton(hgCtDocText);
-cgiTableFieldEnd();
-cgiTableRowEnd();
-
-cgiTableEnd();
-cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
 
