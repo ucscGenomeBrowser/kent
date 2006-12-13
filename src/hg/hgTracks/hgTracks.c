@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1253 2006/12/13 21:02:03 ann Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1254 2006/12/13 21:14:06 ann Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12081,7 +12081,34 @@ if (sameString(database, "galGal3"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-
+if (sameString(database, "canFam2"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
+if (sameString(database, "rheMac2"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
+if (sameString(database, "panTro2"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
+if (sameString(database, "anoGam1"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
 
 if (sameString(database, "ce2"))
     {
