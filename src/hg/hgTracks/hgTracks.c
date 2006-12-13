@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1252 2006/12/13 18:03:46 ann Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1253 2006/12/13 21:02:03 ann Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12039,11 +12039,9 @@ if (liftOverChainForDb(database) != NULL)
 if (sameString(database, "hg18")
             || sameString(database, "mm8")
             || sameString(database, "rn4") 
-            || sameString(database, "bosTau2") 
             || sameString(database, "monDom4") 
             || sameString(database, "xenTro2") 
             || sameString(database, "danRer4") 
-            || sameString(database, "ci2") 
             || sameString(database, "canFam1") 
             || sameString(database, "dm2") 
             || sameString(database, "galGal2")
