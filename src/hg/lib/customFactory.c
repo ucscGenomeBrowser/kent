@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.44 2006/12/13 18:05:08 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.45 2006/12/13 18:12:49 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -142,26 +142,27 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
 {
 char *db = customTrackTempDb();
 /* running the single command:
- *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -tmpDir=../trash/ct
+ *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -allowStartEqualEnd
+ *	    -tmpDir=../trash/ct -allowStartEqualEnd
  *		-maxChromNameLength=${nameLength} stdin
  */
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadBed", "-verbose=0", "-noNameIx", "-ignoreEmpty", 
-	NULL, NULL, NULL, NULL, "stdin", NULL};
+	"-allowStartEqualEnd", NULL, NULL, NULL, NULL, "stdin", NULL};
 dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
-cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "%s", db);
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "%s", db);
+cmd1[7] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "%s", track->dbTableName);
-cmd1[7] = dyStringCannibalize(&tmpDy);
+cmd1[8] = dyStringCannibalize(&tmpDy);
 /* the "/dev/null" file isn't actually used for anything, but it is used
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
- *	The /dev/stderr will get stderr messages from hgLoadBed into the
- *	Apache error log
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
 	"/dev/null", track->dbStderrFile);
@@ -808,8 +809,8 @@ cmd2[7] = track->dbTableName;
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
- *	The /dev/stderr will get stderr messages from hgLoadBed into the
- *	Apache error log
+ *	The dbStderrFile will get stderr messages from this pipeline into the
+ *	our private error file so we can return the errors to the user.
  */
 return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
 	"/dev/null", track->dbStderrFile);
