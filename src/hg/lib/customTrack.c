@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.159 2006/12/12 18:26:40 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.160 2006/12/13 02:32:03 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -497,25 +497,11 @@ if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
 	|| tdb->altColorB != tdb->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 hashMayRemove(tdb->settingsHash, "altColor");
-if (tdb->html && tdb->html[0])
-    {
-    /* write doc file in trash and add reference to the track line*/
-    char *htmlFile = NULL;
-    static struct tempName tn;
 
-    if ((htmlFile = hashFindVal(tdb->settingsHash, "htmlFile")) == NULL)
-        {
-        customTrackTrashFile(&tn, ".html");
-        htmlFile = tn.forCgi;
-        }
-    writeGulp(htmlFile, tdb->html, strlen(tdb->html));
-    fprintf(f, "\t%s='%s'", "htmlFile", htmlFile);
-    }
-
-hashMayRemove(tdb->settingsHash, "htmlFile");
 if (tdb->settings && (strlen(tdb->settings) > 0))
     saveSettings(f, hashToRaString(tdb->settingsHash));
 fputc('\n', f);
+fflush(f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
 trackDbFree(&def);
@@ -550,8 +536,26 @@ for (track = trackList; track != NULL; track = track->next)
         wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
         ctAddToSettings(track, "tdbType", track->tdb->type);
         }
-    if (track->htmlFile)
+
+    /* handle track description */
+    if (isNotEmpty(track->tdb->html))
+        {
+        /* write doc file in trash and add reference to the track line*/
+        if (!track->htmlFile)
+            {
+            static struct tempName tn;
+            customTrackTrashFile(&tn, ".html");
+            track->htmlFile = tn.forCgi;
+            }
+        writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
         ctAddToSettings(track, "htmlFile", track->htmlFile);
+        }
+    else
+        {
+        track->htmlFile = NULL;
+        ctRemoveFromSettings(track, "htmlFile");
+        }
+
     saveTdbLine(f, fileName, track->tdb);
     if (!track->dbTrack)
         {
@@ -700,8 +704,8 @@ else if (isNotEmpty(docFileName))
         customText = NULL;
         }
     }
-else if (cartNonemptyString(cart, CT_CUSTOM_DOC_TEXT_VAR))
-    html = cartString(cart, CT_CUSTOM_DOC_TEXT_VAR);
+else 
+    html = cartUsualString(cart, CT_CUSTOM_DOC_TEXT_VAR, "");
 html = customDocParse(html);
 
 struct customTrack *newCts = NULL, *ct = NULL;
