@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.41 2006/12/01 20:52:01 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.42 2006/12/13 00:38:06 aamp Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -113,7 +113,7 @@ static boolean bedRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
-if (type != NULL && !sameString(type, fac->name) && !sameWord(type, "expRatio"))
+if (type != NULL && !sameString(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -127,6 +127,14 @@ if (isBed)
     track->fieldCount = wordCount;
 customPpReuse(cpp, line);
 return isBed;
+}
+
+static boolean microarrayRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a microarray track */
+{
+return bedRecognizer(fac, cpp, type, track) && (track->fieldCount == 15);
 }
 
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
@@ -383,6 +391,19 @@ slReverse(&track->bedList);
 return bedFinish(track, dbRequested);
 }
 
+static struct customTrack *microarrayLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up microarray data until get next track line. */
+{
+struct customTrack *ct = bedLoader(fac, chromHash, cpp, track, dbRequested);
+freeMem(track->tdb->type);
+/* /\* freeMem(track->dbTrackType); *\/ */
+track->tdb->type = cloneString("array");
+/* track->dbTrackType = cloneString("expRatio"); */
+return ct;
+}
+
 static struct customFactory bedFactory = 
 /* Factory for bed tracks */
     {
@@ -390,6 +411,15 @@ static struct customFactory bedFactory =
     "bed",
     bedRecognizer,
     bedLoader,
+    };
+
+static struct customFactory microarrayFactory = 
+/* Factory for bed tracks */
+    {
+    NULL,
+    "array",
+    microarrayRecognizer,
+    microarrayLoader,
     };
 
 /*** GFF/GTF Factory - converts to BED ***/
@@ -959,7 +989,8 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gffFactory);
-    slAddTail(&factoryList, &bedFactory); 
+    slAddTail(&factoryList, &bedFactory);
+    slAddTail(&factoryList, &microarrayFactory);
     }
 }
 

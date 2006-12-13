@@ -357,6 +357,8 @@ struct bed *bedList = tg->items;
 int i;
 int numRows = combineGroup->numGroups;
 char newLongLabel[512];
+if (bedList && (bedList->expCount != combineGroup->size))
+    errAbort("Error: %s grouping has bad size (%d).  Expected %d", combineGroup->name, combineGroup->size, bedList->expCount);
 maBedClumpGivenGrouping(bedList, combineGroup);
 /* Initialize the lfs array first. */
 for (i = 0; i < numRows; i++)
@@ -1088,6 +1090,8 @@ static void ctLoadMultScoresBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 struct customTrack *ct = tg->customPt;
+if (!ct)
+    errAbort("tg->customPt set incorrectly");
 if (ct->dbTrack)
     {
     if (ct->fieldCount != 15)

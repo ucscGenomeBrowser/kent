@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1250 2006/12/12 22:34:00 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1251 2006/12/13 00:38:10 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11827,17 +11827,6 @@ else if (sameString(type, "bed"))
 	{
 	tg->loadItems = ctLoadBed8;
 	}
-    else if (ct->fieldCount == 15)
-	{
-	char *theType = trackDbSetting(tdb, "type");
-	if (theType && sameString(theType, "expRatio"))
-	    {
-	    tg = trackFromTrackDb(tdb);
-	    expRatioMethodsFromCt(tg);	    
-	    }
-	else
-	    tg->loadItems = ctLoadBed8;
-	}
     else 
 	{
 	tg->loadItems = ctLoadGappedBed;
@@ -11852,6 +11841,12 @@ else if (sameString(type, "chromGraph"))
     tg = trackFromTrackDb(tdb);
     chromGraphMethodsCt(tg);
     tdb->type = typeOrig;
+    }
+else if (sameString(type, "array"))
+    {
+    tg = trackFromTrackDb(tdb);
+    expRatioMethodsFromCt(tg);
+    tg->customPt = ct;
     }
 else
     {
@@ -12548,8 +12543,8 @@ if (restrictionEnzymesOk())
     slSafeAddHead(&trackList, cuttersTg());
     }
 loadCustomTracks(&trackList);
-
 groupTracks(&trackList, pGroupList);
+
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide, FALSE);
 
