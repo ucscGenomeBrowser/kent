@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1175 2006/12/08 21:10:11 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1176 2006/12/13 18:27:50 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15265,7 +15265,7 @@ type = ct->tdb->type;
 cartWebStart(cart, "Custom Track: %s", ct->tdb->shortLabel);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
-if (sameWord(type, "expRatio"))
+if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
 else if (ct->wiggle)
     {
