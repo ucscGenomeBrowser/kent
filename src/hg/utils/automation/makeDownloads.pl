@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.2 2006/10/16 22:05:31 angie Exp $
+# $Id: makeDownloads.pl,v 1.3 2006/12/13 19:07:35 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -578,7 +578,7 @@ $db.fa.gz - "Soft-masked" assembly sequence in one file.
     of 12 or less) are shown in lower case; non-repeating sequence is
     shown in upper case.
 
-$db.ga.masked.gz - "Hard-masked" assembly sequence in one file.
+$db.fa.masked.gz - "Hard-masked" assembly sequence in one file.
     Repeats are masked by capital Ns; non-repeating sequence is shown in
     upper case.
 
