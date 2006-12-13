@@ -14,7 +14,7 @@
 #include "jksql.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.61 2006/12/09 00:17:41 kate Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.62 2006/12/13 20:59:13 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -150,11 +150,13 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char *userName = wikiLinkUserName();
+char *encSessionName = cgiEncodeFull(sessionName);
+char *encSessionOwner = cgiEncodeFull(sessionOwner);
 char query[512];
 
 safef(query, sizeof(query), "SELECT shared, contents FROM %s "
       "WHERE userName = '%s' AND sessionName = '%s';",
-      namedSessionTable, sessionOwner, sessionName);
+      namedSessionTable, encSessionOwner, encSessionName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -174,8 +176,9 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 else
     errAbort("Could not find session %s for user %s.",
-	     sessionName, userName);
+	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
+freeMem(encSessionName);
 }
 
 void cartLoadSettings(struct lineFile *lf, struct cart *cart)

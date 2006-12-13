@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.11 2006/10/06 21:16:52 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.12 2006/12/13 20:59:13 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,7 +73,7 @@ char returnAddress[512];
 safef(returnAddress, sizeof(returnAddress), "/cgi-bin/hgSession?%s", session);
 printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Click here to "
        "reset</A> the browser user interface settings to their defaults.\n",
-       session, cgiEncode(returnAddress));
+       session, cgiEncodeFull(returnAddress));
 }
 
 
@@ -103,7 +103,7 @@ return thePath;
 void addSessionLink(struct dyString *dy, char *userName, char *sessionName,
 		    boolean encode)
 /* Add to dy an URL that tells hgSession to load a saved session.  
- * If encode, cgiEncode the URL. */
+ * If encode, cgiEncodeFull the URL. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
 dyStringPrintf(dyTmp, "http://%s%s?hgS_doOtherUser=submit&"
@@ -111,7 +111,7 @@ dyStringPrintf(dyTmp, "http://%s%s?hgS_doOtherUser=submit&"
 	       cgiServerName(), destAppScriptName(), userName, sessionName);
 if (encode)
     {
-    dyStringPrintf(dy, "%s", cgiEncode(dyTmp->string));
+    dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
     }
 else
     {
@@ -146,15 +146,15 @@ return dyStringCannibalize(&dy);
 
 void addUrlLink(struct dyString *dy, char *url, boolean encode)
 /* Add to dy an URL that tells hgSession to load settings from the given url. 
- * If encode, cgiEncode the whole thing. */
+ * If encode, cgiEncodeFull the whole thing. */
 {
 struct dyString *dyTmp = dyStringNew(1024);
-char *encodedUrl = cgiEncode(url);
+char *encodedUrl = cgiEncodeFull(url);
 dyStringPrintf(dyTmp, "http://%s%s?hgS_doLoadUrl=submit&hgS_loadUrlName=%s",
 	       cgiServerName(), destAppScriptName(), encodedUrl);
 if (encode)
     {
-    dyStringPrintf(dy, "%s", cgiEncode(dyTmp->string));
+    dyStringPrintf(dy, "%s", cgiEncodeFull(dyTmp->string));
     }
 else
     {
@@ -188,6 +188,16 @@ return dyStringCannibalize(&dy);
 }
 
 
+char *cgiDecodeClone(char *encStr)
+/* Allocate and return a CGI-decoded copy of encStr. */
+{
+size_t len = strlen(encStr);
+char *decStr = needMem(len+1);
+cgiDecode(encStr, decStr, len);
+return decStr;
+}
+
+
 void showExistingSessions(char *userName)
 /* Print out a table with buttons for sharing/unsharing/loading/deleting 
  * previously saved sessions. */
@@ -197,40 +207,44 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[512];
 boolean foundAny = FALSE;
+char *encUserName = cgiEncodeFull(userName);
 
 printf("<H3>My Sessions</H3>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
 safef(query, sizeof(query), "SELECT sessionName, shared from %s "
-      "WHERE userName = '%s';",
-      namedSessionTable, userName);
+      "WHERE userName = '%s' ORDER BY sessionName;",
+      namedSessionTable, encUserName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *sessionName = row[0];
+    char *encSessionName = row[0];
+    char *sessionName = cgiDecodeClone(encSessionName);
     char *link = NULL;
     boolean shared = atoi(row[1]);
     char buf[512];
-    printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>%s</TD><TD>", sessionName);
-    safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, sessionName);
+    printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>");
+    htmlTextOut(sessionName);
+    printf("</TD><TD>");
+    safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, encSessionName);
     cgiMakeButton(buf, "load as current session");
     printf("</TD><TD>");
-    safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, sessionName);
+    safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     cgiMakeButton(buf, "delete");
     printf("</TD><TD>");
     if (shared)
 	{
-	safef(buf, sizeof(buf), "%s%s", hgsUnsharePrefix, sessionName);
+	safef(buf, sizeof(buf), "%s%s", hgsUnsharePrefix, encSessionName);
 	cgiMakeButton(buf, "don't share");
 	}
     else
 	{
-	safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, sessionName);
+	safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
 	cgiMakeButton(buf, "share");
 	}
-    link = getSessionLink(userName, sessionName);
+    link = getSessionLink(userName, encSessionName);
     printf("</TD><TD>%s</TD>\n", link);
     freez(&link);
-    link = getSessionEmailLink(userName, sessionName);
+    link = getSessionEmailLink(userName, encSessionName);
     printf("<TD>%s</TD></TR>\n", link);
     freez(&link);
     foundAny = TRUE;
@@ -457,8 +471,10 @@ char *doNewSession()
 {
 struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = cartString(cart, hgsNewSessionName);
+char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
 char *userName = wikiLinkUserName();
+char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 
 if (sqlTableExists(conn, namedSessionTable))
@@ -473,7 +489,7 @@ if (sqlTableExists(conn, namedSessionTable))
     /* If this session already existed, preserve its firstUse and useCount. */
     dyStringPrintf(dy, "SELECT firstUse, useCount FROM %s "
 		       "WHERE userName = '%s' AND sessionName = '%s';",
-		   namedSessionTable, userName, sessionName);
+		   namedSessionTable, encUserName, encSessionName);
     sr = sqlGetResult(conn, dy->string);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -487,15 +503,14 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringClear(dy);
     dyStringPrintf(dy, "DELETE FROM %s WHERE userName = '%s' AND "
 		       "sessionName = '%s';",
-		   namedSessionTable, userName, sessionName);
+		   namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, dy->string);
 
     dyStringClear(dy);
     dyStringPrintf(dy, "INSERT INTO %s ", namedSessionTable);
     dyStringAppend(dy, "(userName, sessionName, contents, shared, "
 		       "firstUse, lastUse, useCount) VALUES (");
-    dyStringPrintf(dy, "'%s', ", userName);
-    dyStringPrintf(dy, "'%s', ", sessionName);
+    dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
     dyStringAppend(dy, "'");
     cartEncodeState(cart, dy);
     dyStringAppend(dy, "', ");
@@ -506,9 +521,9 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringPrintf(dyMessage,
 	  "Added a new session <B>%s</B> that %s be shared with other users.  "
 	  "%s %s",
-	  sessionName, (shareSession ? "may" : "may not"),
-	  getSessionLink(userName, sessionName),
-	  getSessionEmailLink(userName, sessionName));
+	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
+	  getSessionLink(userName, encSessionName),
+	  getSessionEmailLink(userName, encSessionName));
     dyStringFree(&dy);
     }
 else
@@ -531,44 +546,48 @@ struct dyString *dyMessage = dyStringNew(1024);
 struct hashEl *helList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
 char *userName = wikiLinkUserName();
+char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
 char query[512];
 
 helList = cartFindPrefix(cart, hgsUnsharePrefix);
 for (hel = helList;  hel != NULL;  hel = hel->next)
     {
-    char *sessionName = hel->name + strlen(hgsUnsharePrefix);
+    char *encSessionName = hel->name + strlen(hgsUnsharePrefix);
+    char *sessionName = cgiDecodeClone(encSessionName);
     safef(query, sizeof(query), "UPDATE %s SET shared = 0 "
 	  "WHERE userName = '%s' AND sessionName = '%s';",
-	  namedSessionTable, userName, sessionName);
+	  namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, query);
     dyStringPrintf(dyMessage,
 		   "Marked session <B>%s</B> as unshared.<BR>\n",
-		   sessionName);
+		   htmlEncode(sessionName));
     didSomething = TRUE;
     }
 
 helList = cartFindPrefix(cart, hgsSharePrefix);
 for (hel = helList;  hel != NULL;  hel = hel->next)
     {
-    char *sessionName = hel->name + strlen(hgsSharePrefix);
+    char *encSessionName = hel->name + strlen(hgsSharePrefix);
+    char *sessionName = cgiDecodeClone(encSessionName);
     safef(query, sizeof(query), "UPDATE %s SET shared = 1 "
 	  "WHERE userName = '%s' AND sessionName = '%s';",
-	  namedSessionTable, userName, sessionName);
+	  namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, query);
     dyStringPrintf(dyMessage,
 		   "Marked session <B>%s</B> as shared.<BR>\n",
-		   sessionName);
+		   htmlEncode(sessionName));
     didSomething = TRUE;
     }
 
 hel = cartFindPrefix(cart, hgsLoadPrefix);
 if (hel != NULL)
     {
-    char *sessionName = hel->name + strlen(hgsLoadPrefix);
+    char *encSessionName = hel->name + strlen(hgsLoadPrefix);
+    char *sessionName = cgiDecodeClone(encSessionName);
     dyStringPrintf(dyMessage,
 		   "Loaded settings from session <B>%s</B>.<BR>\n",
-		   sessionName);
+		   htmlEncode(sessionName));
     cartLoadUserSession(conn, userName, sessionName, cart);
     didSomething = TRUE;
     }
@@ -576,14 +595,15 @@ if (hel != NULL)
 helList = cartFindPrefix(cart, hgsDeletePrefix);
 for (hel = helList;  hel != NULL;  hel = hel->next)
     {
-    char *sessionName = hel->name + strlen(hgsDeletePrefix);
+    char *encSessionName = hel->name + strlen(hgsDeletePrefix);
+    char *sessionName = cgiDecodeClone(encSessionName);
     safef(query, sizeof(query), "DELETE FROM %s "
 	  "WHERE userName = '%s' AND sessionName = '%s';",
-	  namedSessionTable, userName, sessionName);
+	  namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, query);
     dyStringPrintf(dyMessage,
 		   "Deleted session <B>%s</B>.<BR>\n",
-		   sessionName);
+		   htmlEncode(sessionName));
     didSomething = TRUE;
     }
 
@@ -608,7 +628,7 @@ char *sessionName = cartString(cart, hgsOtherUserSessionName);
 
 safef(message, sizeof(message),
       "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
-      otherUser, sessionName);
+      otherUser, htmlEncode(sessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart);
 hDisconnectCentral(&conn);
 return cloneString(message);
