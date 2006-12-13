@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.42 2006/12/13 00:38:06 aamp Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.43 2006/12/13 01:03:59 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1299,7 +1299,10 @@ struct customPp *cpp = customDocPpNew(lf);
 /* extract doc */
 struct dyString *ds = dyStringNew(0);
 while ((line = customPpNextReal(cpp)) != NULL)
+    {
     dyStringAppend(ds, line);
+    dyStringAppend(ds, "\n");
+    }
 return dyStringCannibalize(&ds);
 }
 
