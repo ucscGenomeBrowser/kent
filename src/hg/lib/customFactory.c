@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.43 2006/12/13 01:03:59 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.44 2006/12/13 18:05:08 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -250,8 +250,8 @@ customFactoryCheckChromName(bed->chrom, lf);
 
 bed->chromStart = lineFileNeedNum(lf, row, 1);
 bed->chromEnd = lineFileNeedNum(lf, row, 2);
-if (bed->chromEnd <= bed->chromStart)
-    lineFileAbort(lf, "chromStart must be less than chromEnd (%d >= %d)", 
+if (bed->chromEnd < bed->chromStart)
+    lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
     	bed->chromStart, bed->chromEnd);
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
