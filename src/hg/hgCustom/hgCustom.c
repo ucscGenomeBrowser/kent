@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.108 2006/12/12 22:42:55 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.109 2006/12/13 01:03:24 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -910,6 +910,13 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 return NULL;
 }
 
+boolean customTrackHasConfig(char *text)
+/* determine if there are track or browser lines in text */
+{
+text = skipLeadingSpaces(text);
+return startsWith("track ", text) || startsWith("browser ", text);
+}
+
 void doMiddle(struct cart *theCart)
 /* create web page */
 {
@@ -974,9 +981,15 @@ else
                 fileContents = cartOptionalString(cart, hgCtDataFile);
             customText = fileContents;
             }
-        if (startsWith("track ", customText) &&
-            startsWith("track ", trackConfig))
+        /* check for duplicate track config in config and data entry */
+        if (customTrackHasConfig(trackConfig) &&
+            customTrackHasConfig(customText))
+            {
+            if (startsWith(trackConfig, customText))
+                trackConfig = "";
+            else
                 customText = "Duplicate track configuration found - remove track and browser lines from Configuration box or from Data";
+            }
         dyStringPrintf(dsTrack, "%s\n%s\n", trackConfig, customText);
         customText = dyStringCannibalize(&dsTrack);
         cartSetString(cart, hgCtDataText, customText);
