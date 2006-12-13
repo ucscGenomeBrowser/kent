@@ -1,8 +1,8 @@
-setenv BRANCHNN 144
-setenv TODAY 2006-10-09     # v144 final
-setenv LASTWEEK 2006-09-26  # v143 final
-setenv REVIEWDAY 2006-10-03  # preview of v144
-setenv LASTREVIEWDAY 2006-09-18 # preview of v143
+setenv BRANCHNN 148
+setenv TODAY 2006-12-11     # v148 final
+setenv LASTWEEK 2006-11-27     # v147 final
+setenv REVIEWDAY 2006-12-04    # preview of v148
+setenv LASTREVIEWDAY 2006-11-13  # preview of v147
 
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 hgwdevold
@@ -25,4 +25,5 @@ if ( "$HOST" == "hgwbeta" ) then
 endif
 if ( "$HOST" == "hgwdev" ) then
     setenv JAVABUILD /scratch/javaBuild
+    setenv JAVA_HOME /usr/java/jdk1.5.0_10
 endif
