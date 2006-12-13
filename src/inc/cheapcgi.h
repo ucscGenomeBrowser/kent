@@ -122,6 +122,11 @@ char *cgiEncode(char *inString);
  * and all other characters translated to %hexVal. 
  * You can free return value with freeMem(). */
 
+char *cgiEncodeFull(char *inString);
+/* Return a cgi-encoded version of inString (no + for space!). 
+ * Alphanumerics/./_ kept as is and all other characters translated to 
+ * %hexVal. */
+
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg);
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 

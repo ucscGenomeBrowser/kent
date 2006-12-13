@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.83 2006/09/27 00:26:35 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.84 2006/12/13 18:16:43 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -551,6 +551,50 @@ while ((c = *in++) != 0)
         *out++ = c;
     else if (c == ' ')
         *out++ = '+';
+    else
+        {
+        unsigned char uc = c;
+        char buf[4];
+        *out++ = '%';
+        safef(buf, sizeof(buf), "%02X", uc);
+        *out++ = buf[0];
+        *out++ = buf[1];
+        }
+    }
+*out++ = 0;
+return outString;
+}
+
+char *cgiEncodeFull(char *inString)
+/* Return a cgi-encoded version of inString (no + for space!). 
+ * Alphanumerics/./_ kept as is and all other characters translated to 
+ * %hexVal. */
+{
+char c;
+int outSize = 0;
+char *outString, *out, *in;
+
+if (inString == NULL)
+    return(cloneString(""));
+
+/* Count up how long it will be */
+in = inString;
+while ((c = *in++) != 0)
+    {
+    if (isalnum(c) || c == '.' || c == '_')
+        outSize += 1;
+    else
+        outSize += 3;
+    }
+outString = needMem(outSize+1);
+
+/* Encode string */
+in = inString;
+out = outString;
+while ((c = *in++) != 0)
+    {
+    if (isalnum(c) || c == '.' || c == '_')
+        *out++ = c;
     else
         {
         unsigned char uc = c;
