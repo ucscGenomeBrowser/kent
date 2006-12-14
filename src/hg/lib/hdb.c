@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.311 2006/12/12 01:09:04 hartera Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.312 2006/12/14 18:07:22 hartera Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -639,23 +639,6 @@ if (conn == NULL)
     {
     centralArchiveCc = getCentralCcFromCfg("archivebackup");
     conn = sqlAllocConnection(centralArchiveCc);
-    }
-return(conn);
-}
-
-struct sqlConnection *hMaybeConnectArchiveCentral()
-/* Connect to central database for archives.
- * Free this up with hDisconnectCentralArchive(). */
-{
-struct sqlConnection *conn = NULL;
-if (centralArchiveCc == NULL)
-    centralArchiveCc = getCentralCcFromCfg("archivecentral");
-conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
-if (conn == NULL)
-    {
-    centralArchiveCc = getCentralCcFromCfg("archivebackup");
-    conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
-   
     }
 return(conn);
 }
@@ -2033,20 +2016,15 @@ char buf[128];
 char query[256];
 char *res = NULL;
     
-conn = (archive) ? hMaybeConnectArchiveCentral() : hConnectCentral();
-if (conn != NULL) 
-    {
-    safef(query, sizeof(query), "select %s from dbDb where name = '%s'",
-       field, database);
-    if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-        res = cloneString(buf);
-    if (archive)
-        hDisconnectArchiveCentral(&conn);
-    else 
-        hDisconnectCentral(&conn);
-   }
-/* res is NULL if no connection can be made to archive db or if */
-/* the db is not found. If no connection to hgcentral, aborts with error */
+conn = (archive) ? hConnectArchiveCentral() : hConnectCentral();
+safef(query, sizeof(query), "select %s from dbDb where name = '%s'",
+      field, database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    res = cloneString(buf);
+if (archive)
+    hDisconnectArchiveCentral(&conn);
+else 
+    hDisconnectCentral(&conn);
 return res;
 }
 
@@ -2419,7 +2397,7 @@ struct dbDb *dbList = NULL, *db;
 char *assembly;
 char *next;
 
-conn = hMaybeConnectArchiveCentral();
+conn = hConnectArchiveCentral();
 if (conn)
     {
     /* NOTE: archive orderKey convention is opposite of production server! */
@@ -2442,9 +2420,6 @@ if (conn)
     hDisconnectArchiveCentral(&conn);
     slReverse(&dbList);
     }
-else
-    /* dbList is NULL if can not connect to archive database */
-    dbList = NULL;
 return dbList;
 }
 
@@ -3861,25 +3836,6 @@ slReverse(&liftOverDbList);
 return liftOverDbList;
 }
 
-boolean liftOverChainFileExists(struct liftOverChain *chain)
-/* check whether a liftOver chain file exists in gbdb */
-{
-boolean exists = FALSE;
-/* get liftOver chain file name from the liftOver chain table */
-char *chainFile = liftOverChainFile(chain->fromDb, chain->toDb);
-FILE *f = NULL;
-
-/* check existence of the file by trying to open it */
-if (chainFile != NULL)
-      {
-      f = fopen(chainFile, "r");
-      if (f != NULL)
-         exists = TRUE;
-      fclose(f);
-      }
-return exists;
-}
-
 struct dbDb *hGetLiftOverToDatabases(char *fromDb)
 /* Get list of databases for which there are liftOver chain files 
  * to convert from the fromDb assembly.
@@ -3894,10 +3850,8 @@ struct hash *dbNameHash = newHash(3);
 chainList = liftOverChainListFiltered();
 
 /* Create hash of databases having liftOver chains from the fromDb */
-/* Also check to see if the liftOver chains exist in /gbdb/ */
-chain=chainList;
 for (chain = chainList; chain != NULL; chain = chain->next)
-    if (sameString(chain->fromDb,fromDb) && liftOverChainFileExists(chain))
+    if (sameString(chain->fromDb,fromDb))
 	hashAdd(hash, chain->toDb, chain->toDb);
 
 /* Get list of all current databases */
