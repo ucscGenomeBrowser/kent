@@ -2005,9 +2005,16 @@ identifier gvSrcId
     hgFixed.gv.srcId full
 
 #links between oreganno (regulatory annotation) and related tables
-identifier oregId
+identifier oregHg18Id
 "ORegAnno track identifier: links annotations to attributes and external links"
     hg18.oreganno.id
+    hgFixed.oregannoAttr.id
+    hgFixed.oregannoLink.id
+
+#links between oreganno (regulatory annotation) and related tables
+identifier oregDm2Id
+"ORegAnno track identifier: links annotations to attributes and external links"
+    dm2.oreganno.id
     hgFixed.oregannoAttr.id
     hgFixed.oregannoLink.id
 
