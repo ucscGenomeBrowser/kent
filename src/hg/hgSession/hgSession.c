@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.12 2006/12/13 20:59:13 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.13 2006/12/14 00:11:31 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,7 +58,7 @@ printf("Signing in enables you to save current settings into a "
        "If you wish, you can share named sessions with other users.\n"
        "The wiki also serves as a forum for users "
        "to share knowledge and ideas.\n");
-printf("<P>The sign in page is handled by our "
+printf("<P>The sign-in page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
 printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
        wikiLinkUserLoginUrl(cartSessionId(cart)));
