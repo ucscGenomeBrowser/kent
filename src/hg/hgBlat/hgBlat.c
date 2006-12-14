@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.109 2006/12/07 21:54:45 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.110 2006/12/14 20:16:26 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -726,7 +726,7 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *userSeq;
-char *db, *organism, *oldDb;
+char *db, *organism, *oldDb, *oldOrg;
 boolean clearUserSeq = cgiBoolean("Clear");
 
 cart = theCart;
@@ -739,6 +739,13 @@ dbChange = differentStringNullOk(db, oldDb);
 if (dbChange && oldDb)
     {
     cartRemove(cart, "position");
+    }
+
+/* cart support for bare urls specifying ?db= without org which may differ */
+oldOrg = cartOptionalString(cart, "org");
+if (!sameOk(organism,oldOrg))
+    {
+    cartSetString(cart, "org", organism);
     }
 
 /* Get sequence - from userSeq variable, or if 
