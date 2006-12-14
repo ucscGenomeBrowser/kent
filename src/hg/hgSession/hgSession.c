@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.13 2006/12/14 00:11:31 kuhn Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.14 2006/12/14 21:58:23 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -669,9 +669,9 @@ if (fromUrl)
 else
     {
     char *settings = cartString(cart, hgsLoadLocalFileName);
-    lf = lineFileOnString("settingsFromFile", TRUE, settings);
     dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
 		   (unsigned long)strlen(settings));
+    lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
     }
 cartLoadSettings(lf, cart);
 lineFileClose(&lf);
