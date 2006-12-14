@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.23 2006/12/12 04:15:16 hartera Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.24 2006/12/14 17:48:11 hartera Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -50,7 +50,6 @@ void askForDestination(struct liftOverChain *liftOver, char *fromPos,
 /* set up page for entering data */
 {
 struct dbDb *dbList;
-struct sqlConnection *conn = NULL;
 
 cartWebStart(cart, "Convert %s to New Assembly", fromPos);
 
@@ -62,11 +61,6 @@ cartSaveSession(cart);
 puts("\n<TABLE WIDTH=\"100%%\">\n");
 
 /* top row -- labels */
-conn = hMaybeConnectArchiveCentral();
-if (conn == NULL)
-    cgiParagraph(
-        "No archived databases available. Drop-down menus do not contain"
-        " databases on the archive server.""");
 cgiSimpleTableRowStart();
 cgiTableField("Old Genome: ");
 cgiTableField("Old Assembly: ");

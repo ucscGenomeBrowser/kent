@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.50 2006/12/04 18:06:30 hartera Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.51 2006/12/14 17:51:24 hartera Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -69,18 +69,11 @@ void webMain(struct liftOverChain *chain, char *dataFormat, boolean multiple)
 {
 struct dbDb *dbList;
 char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb);
-struct sqlConnection *conn = NULL;
-
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
     "The input data can be pasted into the text box, or uploaded from a file."
     "");
-conn = hMaybeConnectArchiveCentral();
-if (conn == NULL)
-    cgiParagraph(
-        "No archived databases available. Drop down menus contain"
-        " only databases not on the archive server.""");
 
 /* create HMTL form */
 puts("<FORM ACTION=\"../cgi-bin/hgLiftOver\" METHOD=\"POST\" "
