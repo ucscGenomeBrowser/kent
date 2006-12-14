@@ -63,7 +63,6 @@ void backEndStringEmitAll(struct pfBackEnd *back,
 	struct backEndString *list, FILE *f)
 /* Emit all labeled strings to file. */
 {
-char label[64];
 struct backEndString *bes;
 for (bes = list; bes != NULL; bes=bes->next)
     emitLocalString(back, bes->id, bes->string, f);

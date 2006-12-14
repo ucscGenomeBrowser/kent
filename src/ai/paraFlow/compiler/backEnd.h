@@ -5,11 +5,13 @@
 #ifndef PFBACKEND_H
 #define PFBACKEND_H
 
-#ifndef PFPREAMBLE.H
+#ifndef PFPREAMBLE_H
 #include "pfPreamble.h"
 #endif
 
-enum isxValType;
+#ifndef ISX_H
+#include "isx.h"
+#endif
 
 enum pfbSegment {pfbNone, pfbData, pfbCode, pfbBss, pfbString};
 /* Types of segment */

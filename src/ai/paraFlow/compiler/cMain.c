@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "hash.h"
-#include "dyString.h"
+#include "dystring.h"
 #include "pfCompile.h"
 #include "pfParse.h"
 #include "codedType.h"

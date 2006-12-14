@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "hash.h"
-#include "dyString.h"
+#include "dystring.h"
 #include "pfCompile.h"
 #include "pfParse.h"
 #include "pfScope.h"
@@ -129,7 +129,6 @@ static void codeFunctions(struct pfCompile *pfc, struct pfParse *parent,
 	FILE *asmFile, struct pfParse *classPp)
 /* Generate code inside of functions */
 {
-struct isxList *isxList = isxListNew();
 struct pfParse *pp;
 for (pp = parent->children; pp != NULL; pp = pp->next)
     {
@@ -188,7 +187,7 @@ static void asmModule(struct pfCompile *pfc, struct pfParse *program,
 {
 FILE *asmFile;
 FILE *isxFile, *branchFile; 
-struct isxList *isxList, *modVarIsx;
+struct isxList *modVarIsx;
 char path[PATH_LEN];
 char *baseName = module->name;
 struct hash *labelHash = hashNew(0);
@@ -232,13 +231,7 @@ struct dyString *asmCoder(struct pfCompile *pfc, struct pfParse *program,
 {
 struct pfParse *module;
 struct dyString *gccFiles = dyStringNew(0);
-struct hash *compTypeHash = NULL;
-struct backEndString *strings = NULL;
 char mainName[PATH_LEN];
-FILE *mainFile;
-struct pfBackEnd *back = pfc->backEnd;
-char label[128];
-int realModuleCount = 0;
 
 for (module = program->children; module != NULL; module = module->next)
     {
