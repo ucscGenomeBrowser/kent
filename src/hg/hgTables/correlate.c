@@ -21,7 +21,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.55 2006/12/15 20:36:02 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.56 2006/12/15 21:53:34 hiram Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -1964,9 +1964,12 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
 	}
     }
 
-hPrintf("<B>warning:</B> reached maximum data points: ");
-printLongWithCommas(stdout,(long)maxLimitCount);
-hPrintf(" before end of data.<BR>");
+if (reachedMaxLimit)
+    {
+    hPrintf("<B>warning:</B> reached maximum data points: ");
+    printLongWithCommas(stdout,(long)maxLimitCount);
+    hPrintf(" before end of data.<BR>");
+    }
 
 /*	returning results, the collected data	*/
 table1->vSet = vSet1;
