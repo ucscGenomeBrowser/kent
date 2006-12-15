@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1257 2006/12/15 21:25:22 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1258 2006/12/15 23:55:14 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8632,12 +8632,14 @@ static void doLabelNextItemButtons(struct track *track, struct track *parentTrac
 /* signal the browser to find the next thing on the track before it */
 /* does anything else. */
 {
-int arrowWidth = insideHeight - 1;
+int arrowWidth = insideHeight;
 int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
-int rightButtonX = insideX + insideWidth - arrowButtonWidth;
+int rightButtonX = insideX + insideWidth - arrowButtonWidth - 1;
 char buttonText[100];
-vgNextItemButton(vg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, labelColor, TRUE);
-vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, labelColor, FALSE);
+Color fillColor = lightGrayIndex();
+labelColor = blackIndex();
+vgNextItemButton(vg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
+vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->mapName);
 mapBoxReinvokeExtra(insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
  		    NULL, 0, 0, "Previous item", buttonText);
