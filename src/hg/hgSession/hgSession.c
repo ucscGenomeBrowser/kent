@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.15 2006/12/15 18:48:02 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.16 2006/12/15 20:15:49 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,13 +55,13 @@ char *wikiHost = wikiLinkHost();
 cartWebStart(cart, "Sign in to UCSC Genome Bioinformatics");
 printf("Signing in enables you to save current settings into a "
        "named session, and then restore settings from the session later.\n"
-       "If you wish, you can share named sessions with other users.\n"
-       "The wiki also serves as a forum for users "
-       "to share knowledge and ideas.\n");
+       "If you wish, you can share named sessions with other users.\n");
 printf("<P>The sign-in page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
 printf("<A HREF=\"%s\"><B>click here to sign in.</B></A>\n",
        wikiLinkUserLoginUrl(cartSessionId(cart)));
+printf("The wiki also serves as a forum for users "
+       "to share knowledge and ideas.\n");
 }
 
 void showCartLinks()
