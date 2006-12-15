@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1254 2006/12/13 21:14:06 ann Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1255 2006/12/15 05:37:04 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2250,6 +2250,72 @@ for (i=0; i<count; ++i)
     }
 }
 
+static void countBaseRangeUse(int x1, int x2, int width, UBYTE *useCounts)
+/* increment base use counts for a pixels from a feature */
+{
+if (x1 < 0)
+    x1 = 0;
+if (x2 >= width)
+    x2 = width-1;
+int w = x2-x1;
+if (w >= 0)
+    {
+    if (w == 0)
+        w = 1;
+    incRange(useCounts+x1, w); 
+    }
+}
+
+static void countLinkedFeaturesBaseUse(struct linkedFeatures *lf, int width, int baseWidth,
+                                       UBYTE *useCounts, UBYTE *gapUseCounts)
+/* increment base use counts for a set of linked features */
+{
+struct simpleFeature *sf;
+
+/* Performence-sensitive code.  Most of the overhead is in the calls to
+ * roundingScale().  To avoid adding more overhead when rendering gaps, the
+ * translation to pixel coordinates is done here, and then we save the
+ * previous block coordinates for use in marking the gap. */
+int x1 = -1, x2 = -1, prevX1 = -1, prevX2 = -1;  /* pixel coords */
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    x1 = roundingScale(sf->start-winStart, width, baseWidth);
+    x2 = roundingScale(sf->end-winStart, width, baseWidth);
+    countBaseRangeUse(x1, x2, width, useCounts);
+    /* line from prevX2 -> x1; blocks are in orientation order */
+    if ((gapUseCounts != NULL) && (prevX1 >= 0))
+        countBaseRangeUse(((lf->orientation > 0) ? prevX2: x1),
+                          ((lf->orientation > 0) ? x2-1: prevX1),
+                          width, gapUseCounts);
+    prevX1 = x1;
+    prevX2 = x2;
+    }
+/* last gap */
+if ((gapUseCounts != NULL) && (prevX1 >= 0))
+    countBaseRangeUse(((lf->orientation > 0) ? prevX2: x1),
+                      ((lf->orientation > 0) ? x2-1: prevX1),
+                      width, gapUseCounts);
+}
+
+static void countTrackBaseUse(struct track *tg, int width, int baseWidth,
+                              UBYTE *useCounts, UBYTE *gapUseCounts)
+/* increment base use counts for a track */
+{
+struct linkedFeatures *lf;
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    countLinkedFeaturesBaseUse(lf, width, baseWidth, useCounts, gapUseCounts);
+
+if (gapUseCounts != NULL)
+    {
+    /* don't overwrite other exons with lighter intron lines */
+    int i;
+    for (i = 0; i < width; i++)
+        {
+        if (useCounts[i] > 0)
+            gapUseCounts[i] = 0;
+        }
+    }
+}
 
 static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -2257,36 +2323,25 @@ static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd
 /* Draw dense items doing color averaging items. */
 {
 int baseWidth = seqEnd - seqStart;
-UBYTE *useCounts;
+UBYTE *useCounts, *gapUseCounts = NULL;
 int lineHeight = mgFontLineHeight(font);
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-int x1, x2, w;
 
 AllocArray(useCounts, width);
-memset(useCounts, 0, width * sizeof(useCounts[0]));
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    {
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	x1 = roundingScale(sf->start-winStart, width, baseWidth);
-	if (x1 < 0)
-	  x1 = 0;
-	x2 = roundingScale(sf->end-winStart, width, baseWidth);
-	if (x2 >= width)
-	  x2 = width-1;
-	w = x2-x1;
-	if (w >= 0)
-	  {
-	  if (w == 0)
-	     w = 1;
-	  incRange(useCounts+x1, w); 
-	  }
-	}
-    }
+/* limit adding gap lines to <= 10mb to improve performance */
+if (baseWidth <= 10000000)
+    AllocArray(gapUseCounts, width);
+countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts);
+
 grayThreshold(useCounts, width);
 vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
+if (gapUseCounts != NULL)
+    {
+    int midY = yOff + (tg->heightPer>>1);
+    grayThreshold(gapUseCounts, width);
+    vgVerticalSmear(vg,xOff,midY,width,1,gapUseCounts,TRUE);
+    freeMem(gapUseCounts);
+    }
 }
 
 void linkedFeaturesAverageDense(struct track *tg, 
