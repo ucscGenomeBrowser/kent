@@ -21,7 +21,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.54 2006/11/29 19:50:08 kent Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.55 2006/12/15 20:36:02 hiram Exp $";
 
 #define MAX_POINTS_STR	"300,000,000"
 #define MAX_POINTS	300000000
@@ -815,6 +815,24 @@ if ((dv->count > 0) && ((dv->maxCount - dv->count) > 1024000))
 
     dv->maxCount = dv->count;
     }
+}
+
+static void truncateVectors(struct dataVector *v1, struct dataVector *v2,
+	int size)
+/* reduce two intersected vectors to specified size */
+{
+int i;
+double sumProducts = 0.0;
+for (i = 0; i < size; ++i)
+    sumProducts += v1->value[i] * v2->value[i];
+v1->count = size;
+v2->count = size;
+v1->sumProduct = sumProducts;
+v2->sumProduct = sumProducts;
+v1->start = v1->position[0];
+v1->end = v1->position[(v1->count)-1] + 1; /* non-inclusive */
+v2->start = v2->position[0];
+v2->end = v2->position[(v2->count)-1] + 1; /* non-inclusive */
 }
 
 static void intersectVectors(struct dataVector *v1, struct dataVector *v2)
@@ -1832,6 +1850,7 @@ struct trackTable *table2;
 struct dataVector *vSet1;
 struct dataVector *vSet2;
 int totalBases = 0;
+boolean reachedMaxLimit = FALSE;
 
 vSet1 = NULL;	/*	initialize linked list	*/
 vSet2 = NULL;	/*	initialize linked list	*/
@@ -1926,7 +1945,11 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
 		continue;		/* next region	*/
 		}
 	    if ((totalBases + v1->count) >= maxLimitCount)
-		break;
+		{
+		int size = maxLimitCount - totalBases;
+		truncateVectors(v1, v2, size);
+		reachedMaxLimit = TRUE;
+		}
 	    totalBases += v1->count;
 	    if (region->name)
 		{
@@ -1940,6 +1963,10 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
 	    freeDataVector(&v1);	/* no data in second	*/
 	}
     }
+
+hPrintf("<B>warning:</B> reached maximum data points: ");
+printLongWithCommas(stdout,(long)maxLimitCount);
+hPrintf(" before end of data.<BR>");
 
 /*	returning results, the collected data	*/
 table1->vSet = vSet1;
