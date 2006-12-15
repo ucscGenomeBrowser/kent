@@ -9,7 +9,7 @@
 #define NEUTRAL    3
 #define POLAR      4
 
-#define MAX_PB_PIXWIDTH 30000
+#define MAX_PB_PIXWIDTH 10000
 
 #define MAX_PB_ORG 50		/* max number of oganisms that support PB */
 
