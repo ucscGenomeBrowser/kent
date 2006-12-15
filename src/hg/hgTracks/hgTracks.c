@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1256 2006/12/15 19:02:04 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1257 2006/12/15 21:25:22 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1027,45 +1027,24 @@ int end = winEnd;
 int size = winBaseCount;
 int sizeWanted = size;
 int bufferToEdge;
+struct bed *items = NULL;
 /* If there's stuff on the screen, skip past it. */
 /* If not, skip to the edge of the window. */
-struct bed *items = hGetBedRange(tg->mapName, chromName, winStart, winEnd, NULL);
 if (next)
     {
-    if (items)
-	{
-	slSort(&items, bedCmpEnd);
-	slReverse(&items);
-	if (items->chromEnd > end)
-	    start = items->chromEnd;
-	else
-	    start = end;
-	}
-    else
-	start = end;
+    start = end;
     end = start + size;
     if (end > seqBaseCount)
 	end = seqBaseCount;
     }
 else
     {
-    if (items)
-	{
-	slSort(&items, bedCmp);
-	if (items->chromStart < start)
-	    end = items->chromStart;
-	else 
-	    end = start;
-	}
-    else
-	end = start;
+    end = start;
     start = end - size;
     if (start < 0)
 	start = 0;
     }
 size = end - start;
-if (items)
-    bedFreeList(&items);
 /* Now it's time to do the search. */
 for (;;)
     {
@@ -1073,7 +1052,28 @@ for (;;)
     /* If we got something, or weren't able to search as big as we wanted to */
     /* (in case we're at the end of the chrom).  */
     if ((items != NULL) || (size < sizeWanted))
-	break;
+	{
+	/* If none of these were on the original screen, we're done. */
+	/* Remove the ones that were on the original screen. */
+	struct bed *item;
+	struct bed *goodList = NULL;
+	while ((item = slPopHead(&items)) != NULL)
+	    {
+	    item->next = NULL;
+	    if (((item->chromStart >= winStart) && (item->chromEnd < winEnd)) ||
+		((item->chromEnd > winStart) && (item->chromEnd <= winEnd)) ||
+		((item->chromStart <= winStart) && (item->chromEnd >= winEnd)))
+		bedFree(&item);
+	    else
+		slAddHead(&goodList, item);
+	    }
+	if (goodList)
+	    {
+	    slReverse(&goodList);
+	    items = goodList;
+	    break;
+	    }
+	}
     sizeWanted *= 2;
     if (next)
 	{
