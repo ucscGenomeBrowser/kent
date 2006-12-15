@@ -2672,7 +2672,6 @@ visibility hide
 color 30,120,0
 type bed 6 +
 mafTrack encodeTbaAlign
-origAssembly hg16
 dataVersion May 2006
 
 track encodeDless
