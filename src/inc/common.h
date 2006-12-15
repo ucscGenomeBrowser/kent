@@ -122,6 +122,15 @@
 /* Default size of directory path string buffers */
 #define PATH_LEN 512
 
+/* inline functions: To declare a function inline, place the entire function
+ * in a header file and prefix it with the INLINE macro.  If used with a
+ * compiler that doesn't support inline, change the INLINE marco to be simply
+ * `static'.
+ */
+#ifndef INLINE
+#define INLINE static inline
+#endif
+
 /* stdargs compatibility: in a unix universe a long time ago, types of va_list
  * were passed by value.  It was assume one could do things like:
  *
