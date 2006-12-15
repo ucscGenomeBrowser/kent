@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.14 2006/12/14 21:58:23 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.15 2006/12/15 18:48:02 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -559,6 +559,7 @@ for (hel = helList;  hel != NULL;  hel = hel->next)
 	  "WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, query);
+    sessionTouchLastUse(conn, encUserName, encSessionName);
     dyStringPrintf(dyMessage,
 		   "Marked session <B>%s</B> as unshared.<BR>\n",
 		   htmlEncode(sessionName));
@@ -574,6 +575,7 @@ for (hel = helList;  hel != NULL;  hel = hel->next)
 	  "WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encUserName, encSessionName);
     sqlUpdate(conn, query);
+    sessionTouchLastUse(conn, encUserName, encSessionName);
     dyStringPrintf(dyMessage,
 		   "Marked session <B>%s</B> as shared.<BR>\n",
 		   htmlEncode(sessionName));

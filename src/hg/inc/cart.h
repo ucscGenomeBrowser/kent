@@ -291,6 +291,10 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 
 #define namedSessionTable "namedSessionDb"
 
+void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
+			 char *encSessionName);
+/* Increment namedSessionDb.useCount and update lastUse for this session. */
+
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart);
 /* If permitted, load the contents of the given user's session. */

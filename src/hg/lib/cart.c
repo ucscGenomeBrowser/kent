@@ -14,7 +14,7 @@
 #include "jksql.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.62 2006/12/13 20:59:13 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.63 2006/12/15 18:48:02 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -143,6 +143,24 @@ hashAdd(cart->exclude, var, NULL);
 }
 
 
+void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,
+			 char *encSessionName)
+/* Increment namedSessionDb.useCount and update lastUse for this session. */
+{
+struct dyString *dy = dyStringNew(1024);
+int useCount;
+dyStringPrintf(dy, "SELECT useCount FROM %s "
+	       "WHERE userName = '%s' AND sessionName = '%s';",
+	       namedSessionTable, encUserName, encSessionName);
+useCount = sqlQuickNum(conn, dy->string) + 1;
+dyStringClear(dy);
+dyStringPrintf(dy, "UPDATE %s SET useCount = %d, lastUse=now() "
+	       "WHERE userName = '%s' AND sessionName = '%s';",
+	       namedSessionTable, useCount, encUserName, encSessionName);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+}
+
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart)
 /* If permitted, load the contents of the given user's session. */
@@ -166,9 +184,12 @@ if ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *sessionVar = cartSessionVarName();
 	unsigned hgsid = cartSessionId(cart);
+	struct sqlConnection *conn2 = hConnectCentral();
+	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetInt(cart, sessionVar, hgsid);
+	hDisconnectCentral(&conn2);
 	}
     else
 	errAbort("Sharing has not been enabled for user %s's session %s.",
