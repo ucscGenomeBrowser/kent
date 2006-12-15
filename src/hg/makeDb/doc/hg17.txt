@@ -18603,6 +18603,15 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 # end AFFYHUEX1 track
 
 ##########################################################################
+# AFFY HUEX1 OFF-BY-ONE FIX (Andy 2006-12-14)
+   ssh hgwdev
+   cd /cluster/data/hg17/bed/affyHumanExon
+   echo "select * from affyHuEx1" | hgsql hg17 | \
+      tail +2 | awk 'BEGIN{OFS="\t"}{print $2,$3-1,$4,$5,$6,$7}' \
+    > affyHuEx1.fixed.bed
+   hgLoadBed hg17 affyHuEx1 affyHuEx1.fixed.bed
+
+##########################################################################
 # NSCAN composite track - (2005-09-29 markd)  loaded proteins 2005-10-13
     cd /cluster/data/hg17/bed/nscan/
     # obtained NSCAN and NSCAN-EST predictions from michael brent's group

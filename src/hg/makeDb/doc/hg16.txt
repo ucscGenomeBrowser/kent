@@ -11824,3 +11824,41 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
   sudo mytouch hg16 ensEstGtp 0409081800.00
   sudo mytouch hg16 ensEstPep 0409081800.00
 
+
+##########################################################################
+# AFFY HUEX1 OFF-BY-ONE FIX (Andy 2006-12-14)
+   ssh hgwdev
+   cd /cluster/data/hg16/bed/affyHumanExon
+   liftOver /cluster/data/hg17/bed/affyHumanExon/affyHuEx1.fixed.bed \
+      /gbdb/hg17/liftOver/hg17ToHg16.over.chain.gz affyHuEx1.fixed.bed affyHuEx1.unmapped
+awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.fixed.bed | sort -k2,2nr | head
+#2325773 204918
+#2402134 204802
+#3645108 60419
+#2366900 52086
+#3016074 9552
+#3641787 8061
+#2321649 8054
+   # So there's 4 of them with problems this time:
+     egrep -v "\b(2325773|2402134|3645108|2366900)\b" affyHuEx1.fixed.bed > alreadyok.bed
+     egrep "\b(2325773|2402134|3645108|2366900)\b" affyHuEx1.fixed.bed \
+      /cluster/data/hg17/bed/affyHumanExon/affyHuEx1.fixed.bed > good.hg17.bed
+     bedToFa /cluster/data/hg17/hg17.2bit good.hg17.bed good.hg17.fa
+     gfClient blat6 17785 /cluster/data/hg16/nib good.hg17.fa bad.hg16.psl
+     tail +6 bad.hg16.psl | awk '$11==$13{print}' > good.hg16.psl
+     pslToBed good.hg16.psl good.hg16.bed
+     # Scores were lost in the transformations.  Put em back in.
+     egrep "\b(2325773|2402134|3645108|2366900)\b" affyHuEx1.fixed.bed
+#chr1    24924744        25129662        2325773 500     +
+#chr1    24924872        25129674        2402134 900     -
+#chr1    168139941       168192027       2366900 1000    +
+#chr16   2600606 2661025 3645108 200     +
+     awk 'BEGIN{OFS="\t"} 
+         $4=="2325773"{score="500";} 
+         $4=="2402134"{score="900";} 
+         $4=="3645108"{score="200";}
+     {print $1,$2,$3,$4,score,$6}' good.hg16.bed > good.bed
+     cat alreadyok.bed good.bed > affyHuEx1.fixed.bed
+     bedSort affyHuEx1.fixed.bed tmp.bed
+     rm good.* bad.* alreadyok.bed
+   hgLoadBed hg16 affyHuEx1 affyHuEx1.fixed.bed

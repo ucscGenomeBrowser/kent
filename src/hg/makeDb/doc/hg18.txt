@@ -11984,3 +11984,28 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
    hgLoadBed hg18 gad gadHg18.bed
 
 #####################################################################
+
+##########################################################################
+# AFFY HUEX1 OFF-BY-ONE FIX (Andy 2006-12-14)
+   ssh hgwdev
+   cd /cluster/data/hg18/bed/affyHumanExon
+   liftOver /cluster/data/hg17/bed/affyHumanExon/affyHuEx1.fixed.bed \
+      /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz affyHuEx1.fixed.bed affyHuEx1.unmapped
+   awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.fixed.bed | sort -k2,2nr | head
+#2440970 81664
+#3016074 9552
+#3641787 8061
+#2321649 8054
+   # It seems the liftOver problem still happens for that segmental dupe.
+   # So the start is correct and the end is correct.  Just make two entries, both
+   # with size == 305.
+   grep -v "\b2440970\b" affyHuEx1.fixed.bed > tmp.bed
+   grep "\b2440970\b" affyHuEx1.fixed.bed > bad.bed
+   awk 'BEGIN{OFS="\t"}{print $1,$2,$2+305,$4,$5,$6}' bad.bed > good.bed
+   awk 'BEGIN{OFS="\t"}{print $1,$3-305,$3,$4,$5,$6}' bad.bed >> good.bed
+   cat tmp.bed good.bed > affyHuEx1.fixed.bed 
+   bedSort affyHuEx1.fixed.bed tmp.bed
+   mv tmp.bed affyHuEx1.fixed.bed
+   rm good.bed bad.bed
+   hgLoadBed hg18 affyHuEx1 affyHuEx1.fixed.bed
+   
