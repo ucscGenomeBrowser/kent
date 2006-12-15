@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.45 2006/12/13 18:12:49 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.46 2006/12/15 19:02:08 aamp Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -135,6 +135,14 @@ static boolean microarrayRecognizer(struct customFactory *fac,
 /* Return TRUE if looks like we're handling a microarray track */
 {
 return bedRecognizer(fac, cpp, type, track) && (track->fieldCount == 15);
+}
+
+static boolean coloredExonRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a colored-exon track */
+{
+return bedRecognizer(fac, cpp, type, track) && (track->fieldCount >= 14);
 }
 
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
@@ -356,19 +364,20 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 	}
     }
 if (wordCount > 12)
-    // get the microarray expressions
+    // get the microarray/colored-exon fields
     {
-    if (wordCount < 15)
-	lineFileAbort(lf, "not enough fields in BED file.");
     bed->expCount = (int)sqlUnsigned(row[12]);
     sqlSignedDynamicArray(row[13], &bed->expIds, &count);
     if (count != bed->expCount)
 	lineFileAbort(lf, "expecting %d elements in expIds array (bed field 14)",
 		      bed->expCount);
-    sqlFloatDynamicArray(row[14], &bed->expScores, &count);
-    if (count != bed->expCount)
-	lineFileAbort(lf, "expecting %d elements in expIds array (bed field 15)",
-		      bed->expCount);	
+    if (wordCount == 15)
+	{
+	sqlFloatDynamicArray(row[14], &bed->expScores, &count);
+	if (count != bed->expCount)
+	    lineFileAbort(lf, "expecting %d elements in expScores array (bed field 15)",
+			  bed->expCount);	
+	}
     }
 return bed;
 }
@@ -405,6 +414,17 @@ track->tdb->type = cloneString("array");
 return ct;
 }
 
+static struct customTrack *coloredExonLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up microarray data until get next track line. */
+{
+struct customTrack *ct = bedLoader(fac, chromHash, cpp, track, dbRequested);
+freeMem(track->tdb->type);
+track->tdb->type = cloneString("coloredExon");
+return ct;
+}
+
 static struct customFactory bedFactory = 
 /* Factory for bed tracks */
     {
@@ -421,6 +441,15 @@ static struct customFactory microarrayFactory =
     "array",
     microarrayRecognizer,
     microarrayLoader,
+    };
+
+static struct customFactory coloredExonFactory = 
+/* Factory for bed tracks */
+    {
+    NULL,
+    "coloredExon",
+    coloredExonRecognizer,
+    coloredExonLoader,
     };
 
 /*** GFF/GTF Factory - converts to BED ***/
@@ -992,6 +1021,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &microarrayFactory);
+    slAddTail(&factoryList, &coloredExonFactory);
     }
 }
 

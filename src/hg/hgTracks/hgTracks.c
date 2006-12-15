@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1255 2006/12/15 05:37:04 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1256 2006/12/15 19:02:04 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1155,6 +1155,14 @@ struct linkedFeaturesSeries *lfs = item;
 return lfs->name;
 }
 
+int linkedFeaturesSeriesCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart. */
+{
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
+return a->start - b->start;
+}
+
 void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList)
 /* Free up a linked features series list. */
 {
@@ -1762,7 +1770,13 @@ int saveColor = color;
 
 if ((lf = lfs->features) == NULL)
     return;
-lfColors(tg, lf, vg, &color, &bColor);
+if (sameString(tg->tdb->type, "coloredExon"))
+    {
+    color = blackIndex();
+    bColor = color;
+    }
+else 
+    lfColors(tg, lf, vg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
 for (lf = lfs->features; lf != NULL; lf = lf->next)
@@ -2497,6 +2511,59 @@ linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = bed->thickStart;
 lf->tallEnd = bed->thickEnd;
 return lf;
+}
+
+struct linkedFeaturesSeries *lfsFromColoredExonBed(struct bed *bed)
+/* Convert a single BED 14 thing into a special linkedFeaturesSeries */
+/* where each linkedFeatures is a colored block. */
+{
+struct linkedFeaturesSeries *lfs;
+struct linkedFeatures *lfList = NULL;
+int *starts = bed->chromStarts;
+int *sizes = bed->blockSizes;
+int blockCount = bed->blockCount, i;
+int expCount = bed->expCount;
+if (expCount != blockCount)
+    errAbort("bed->expCount != bed->blockCount");
+AllocVar(lfs);
+lfs->name = cloneString(bed->name);
+lfs->start = bed->chromStart;
+lfs->end = bed->chromEnd;
+lfs->orientation = orientFromChar(bed->strand[0]);
+lfs->grayIx = grayInRange(bed->score, 0, 1000);
+for (i = 0; i < blockCount; i++)
+    {
+    struct linkedFeatures *lf;
+    struct simpleFeature *sf;
+    AllocVar(lf);
+    strncpy(lf->name, bed->name, sizeof(lf->name));
+    lf->start = starts[i] + bed->chromStart;
+    lf->end = lf->start + sizes[i];
+    AllocVar(sf);
+    sf->start = lf->start;
+    sf->end = lf->end;
+    lf->orientation = lfs->orientation;
+    lf->components = sf;
+    lf->grayIx = lfs->grayIx;
+    /* Do some logic for thickStart/thickEnd. */
+    lf->tallStart = lf->start;
+    lf->tallEnd = lf->end;
+    if ((bed->thickStart < lf->end) && (bed->thickStart >= lf->start))
+	lf->tallStart = bed->thickStart;
+    if ((bed->thickEnd < lf->end) && (bed->thickEnd >= lf->start))
+	lf->tallEnd = bed->thickEnd;
+    if (((bed->thickStart < lf->start) && (bed->thickEnd < lf->start)) ||
+	((bed->thickStart > lf->end) && (bed->thickEnd > lf->end)))
+	lf->tallStart = lf->end;
+    /* Finally the business about the color. */
+    lf->extra = (void *)USE_ITEM_RGB;
+    lf->filterColor = (unsigned)bed->expIds[i];
+    slAddHead(&lfList, lf);
+    }
+slReverse(&lfList);
+lfs->features = lfList;
+lfs->noLine = FALSE;
+return lfs;
 }
 
 struct linkedFeatures *lfFromBed(struct bed *bed)
@@ -10155,6 +10222,102 @@ bedMethods(tg);
 tg->drawItemAt = triangleDrawAt;
 }
 
+void loadColoredExonBed(struct track *tg)
+/* Load the items into a linkedFeaturesSeries. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bed;
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
+char extraWhere[128] ;
+/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
+ * by default, and the variable is named after the composite track. */
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+      tg->tdb->tableName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    }
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 14);
+    lfs = lfsFromColoredExonBed(bed);
+    slAddHead(&lfsList, lfs);
+    bedFree(&bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfsList);
+slSort(&lfsList, linkedFeaturesSeriesCmp);
+tg->items = lfsList;
+}
+
+void ctLoadColoredExon(struct track *tg)
+/* Convert bed info in window to linked features series for custom track. */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed;
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+if (ct->dbTrack)
+    {
+    int fieldCount = ct->fieldCount;
+    int rowOffset;
+    char **row;
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlResult *sr = NULL;
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
+	lfs = lfsFromColoredExonBed(bed);
+	slAddHead(&lfsList, lfs);
+	}
+    hFreeOrDisconnect(&conn);
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	{
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+		    && sameString(chromName, bed->chrom))
+	    {
+	    lfs = lfsFromColoredExonBed(bed);
+	    slAddHead(&lfsList, lfs);
+	    }
+	}
+    }
+slReverse(&lfsList);
+slSort(&lfsList, linkedFeaturesSeriesCmp);
+tg->items = lfsList;
+}
+
+void coloredExonMethods(struct track *tg)
+/* For BED 14 type "coloredExon" tracks. */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadColoredExonBed;
+tg->canPack = TRUE;
+}
+
+void coloredExonMethodsFromCt(struct track *tg)
+/* same as coloredExonMethods but different loader. */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = ctLoadColoredExon;
+tg->canPack = TRUE;
+}
+
 boolean genePredClassFilter(struct track *tg, void *item)
 /* Returns true if an item should be added to the filter. */
 {
@@ -11334,6 +11497,10 @@ else if (sameWord(type, "maf"))
     {
     mafMethods(track);
     }
+else if (sameWord(type, "coloredExon"))
+    {
+    coloredExonMethods(track);
+    }
 else if (sameWord(type, "axt"))
     {
     if (wordCount < 2)
@@ -11836,6 +12003,7 @@ char *ctMapItemName(struct track *tg, void *item)
   return buf;
 }
 
+
 struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
@@ -11901,6 +12069,12 @@ else if (sameString(type, "array"))
     {
     tg = trackFromTrackDb(tdb);
     expRatioMethodsFromCt(tg);
+    tg->customPt = ct;
+    }
+else if (sameString(type, "coloredExon"))
+    {
+    tg = trackFromTrackDb(tdb);
+    coloredExonMethodsFromCt(tg);
     tg->customPt = ct;
     }
 else
