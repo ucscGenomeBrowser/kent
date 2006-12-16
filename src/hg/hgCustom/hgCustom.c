@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.109 2006/12/13 01:03:24 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.110 2006/12/16 00:08:13 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -349,7 +349,7 @@ if (isUpdateForm)
     safef(buf, sizeof buf, "track name='%s' description='%s'",
                             ct->tdb->shortLabel, ct->tdb->longLabel);
     char *trackLine = ctOrigTrackLine(ct);
-    cgiMakeHiddenVar(hgCtUpdatedTrack, trackLine ? trackLine : buf);
+    cgiMakeHiddenVar(hgCtUpdatedTrack, trackLine ? htmlEncode(trackLine) : buf);
     }
 else
     {
@@ -1046,6 +1046,9 @@ else
 	doRefreshCustom(&warn);
 	addWarning(dsWarn, warn);
 	}
+    /* TODO: consider suppressing this if not needed -- it will
+     * often be unnecessary, as customTracksSaveCart is called
+     * from ParseCart */
     customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
     if (ctList || cartVarExists(cart, hgCtDoDelete))
