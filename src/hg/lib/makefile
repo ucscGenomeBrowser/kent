@@ -8,7 +8,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o  axtInfo.o \
     axtLib.o bactigPos.o bdgpExprLink.o bdgpGeneInfo.o \
-    bed.o bed5FloatScore.o bed6FloatScore.o bed12Source.o \
+    bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed12Source.o \
     bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o \
     cart.o cartDb.o ccdsInfo.o ccdsGeneMap.o celeraCoverage.o \
@@ -18,7 +18,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
-    cnpIafrate.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
+    cnpIafrate.o cnpRedon.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
     customFactory.o customPp.o customTrack.o cutter.o cytoBand.o \
     dbDb.o dbRIP.o dbSnpRs.o defaultDb.o dless.o dnaMotifSql.o dnaProbe.o \
@@ -38,13 +38,13 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     geneBands.o geneCheck.o geneCheckDetails.o geneCheckWidget.o \
     geneGraph.o genePred.o genePredReader.o genoLay.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
-    glDbRep.o goa.o goaPart.o growthCondition.o grp.o hapmapSnps.o hCommon.o \
+    glDbRep.o goa.o goaPart.o growthCondition.o grp.o hapmapAlleleFreq.o hapmapSnps.o hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hPrint.o \
     HInv.o hui.o humanParalog.o \
     imageClone.o isochores.o itemAttr.o jalview.o \
-    jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o \
+    jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o \
     kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mafFrames.o mafSummary.o mapSts.o \
@@ -56,7 +56,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o riken.o rikenBest.o rikenCluster.o rmskOut.o \
-    rnaFold.o rnaGene.o rnaGroup.o rnaLpFold.o tRNAs.o gbRNAs.o \
+    rnaFold.o rnaGene.o rnaGroup.o rnaLpFold.o tRNAs.o gbRNAs.o snoRNAs.o\
     rnaSecStr.o tfbsConsFactors.o \
     roughAli.o transMapInfo.o sage.o sageCounts.o sageExp.o sample.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o \

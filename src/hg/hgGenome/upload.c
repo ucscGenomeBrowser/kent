@@ -13,6 +13,8 @@
 #include "chromGraph.h"
 #include "chromGraphFactory.h"
 #include "errCatch.h"
+#include "hPrint.h"
+#include "customTrack.h"
 #include "hgGenome.h"
 
 
@@ -21,7 +23,7 @@ static char *markerNames[] = {
     cgfMarkerGenomic,
     cgfMarkerSts,
     cgfMarkerSnp,
-    cgfMarkerAffy100,
+    // cgfMarkerAffy100,
     cgfMarkerAffy500,
     cgfMarkerHumanHap300,
     };
@@ -141,10 +143,11 @@ void updateCustomTracks(struct customTrack *upList)
 {
 struct customTrack *outList = NULL;
 struct tempName tempName;
-char *fileName = cartOptionalString(cart, "ct");
+char *varName = customTrackFileVar(database);
+char *fileName = cartOptionalString(cart, varName);
 if (fileName == NULL || !fileExists(fileName))
     {
-    makeTempName(&tempName, "hggUp", ".ra");
+    makeTempName(&tempName, "hggUp", ".bed");
     fileName = tempName.forCgi;
     outList = upList;
     }
@@ -178,8 +181,8 @@ else
     }
 
 uglyf("Saving customTrack to %s<BR>\n", fileName);
-customTrackSave(outList, fileName);
-cartSetString(cart, "ct", fileName);
+customTracksSaveFile(outList, fileName);
+cartSetString(cart, varName, fileName);
 
 hPrintf("This data is now available in the drop down menus on the ");
 hPrintf("main page for graphing.<BR>");

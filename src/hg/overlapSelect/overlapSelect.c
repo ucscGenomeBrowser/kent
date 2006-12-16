@@ -96,9 +96,9 @@ unsigned getFileFormat(char *path)
 char *filePath = path;
 char filePathBuf[PATH_LEN];
 
-if (endsWith(filePath, ".gz"))
+if (endsWith(filePath, ".gz") || endsWith(filePath, ".bz2") || endsWith(filePath, ".Z"))
     {
-    /* strip .gz extension */
+    /* strip .gz/.bz2/.Z extension */
     splitPath(path, NULL, filePathBuf, NULL);
     filePath = filePathBuf;
     }

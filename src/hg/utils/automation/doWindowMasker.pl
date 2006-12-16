@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doWindowMasker.pl instead.
 
-# $Id: doWindowMasker.pl,v 1.2 2006/11/14 23:17:46 aamp Exp $
+# $Id: doWindowMasker.pl,v 1.4 2006/12/01 20:07:00 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -115,10 +115,11 @@ set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker
 set fa = $db.fa
 set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
+chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 pushd \$tmpDir
-twoBitToFa $unmaskedSeq \$fa
-nice \$windowMasker -mk_counts true -input \$fa -output windowmasker.counts
+twoBitToFa \$inputTwoBit \$fa
+\$windowMasker -mk_counts true -input \$fa -output windowmasker.counts
 popd 
 cp \$tmpDir/windowmasker.counts .
 rm -rf \$tmpDir
@@ -142,14 +143,15 @@ set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker
 set fa = $db.fa
 set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
+chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 cp windowmasker.counts \$tmpDir
 pushd \$tmpDir
-twoBitToFa $unmaskedSeq \$fa
-nice \$windowMasker -ustat windowmasker.counts -input \$fa -output windowmasker.intervals
-perl -wpe \'if \(s\/^\>lcl\\\|\(\\w+\).\*\\n\$\/\/\) { \$chr = \$1\; } \\
+twoBitToFa \$inputTwoBit \$fa
+\$windowMasker -ustat windowmasker.counts -input \$fa -output windowmasker.intervals
+perl -wpe \'if \(s\/^\>lcl\\\|\(\.\*\)\\n\$\/\/\) { \$chr = \$1\; } \\
    if \(\/^\(\\d+\) \- \(\\d+\)\/\) { \\
-   \$s=\$1\; \$e=\$2+1\; s\/\(\\d+\) \- \(\\d+\)\/\$chr\\t\$s\\t\$s\/\; \\
+   \$s=\$1\; \$e=\$2+1\; s\/\(\\d+\) \- \(\\d+\)\/\$chr\\t\$s\\t\$e\/\; \\
    }\' windowmasker.intervals > windowmasker.bed
 popd 
 cp \$tmpDir/windowmasker.bed .
@@ -174,14 +176,15 @@ set windowMaskerDir = /cluster/bin/\$MACHTYPE
 set windowMasker = \$windowMaskerDir/windowmasker
 set fa = $db.fa
 set tmpDir = `mktemp -d -p /scratch/tmp doWindowMasker.XXXXXX`
+chmod 775 \$tmpDir
 set inputTwoBit = $unmaskedSeq
 cp windowmasker.counts \$tmpDir
 pushd \$tmpDir
-twoBitToFa $unmaskedSeq \$fa
-nice \$windowMasker -ustat windowmasker.counts -sdust true -input \$fa -output windowmasker.intervals
-perl -wpe \'if \(s\/^\>lcl\\\|\(\\w+\).\*\\n\$\/\/\) { \$chr = \$1\; } \\
+twoBitToFa \$inputTwoBit \$fa
+\$windowMasker -ustat windowmasker.counts -sdust true -input \$fa -output windowmasker.intervals
+perl -wpe \'if \(s\/^\>lcl\\\|\(\.\*\)\\n\$\/\/\) { \$chr = \$1\; } \\
    if \(\/^\(\\d+\) \- \(\\d+\)\/\) { \\
-   \$s=\$1\; \$e=\$2+1\; s\/\(\\d+\) \- \(\\d+\)\/\$chr\\t\$s\\t\$s\/\; \\
+   \$s=\$1\; \$e=\$2+1\; s\/\(\\d+\) \- \(\\d+\)\/\$chr\\t\$s\\t\$e\/\; \\
    }\' windowmasker.intervals > windowmasker.sdust.bed
 popd 
 cp \$tmpDir/windowmasker.sdust.bed .
@@ -201,7 +204,7 @@ sub doTwoBit {
   &HgAutomate::checkExistsUnlessDebug('mask', 'sdust', ("$runDir/windowmasker.counts", 
            "$runDir/windowmasker.bed", "$runDir/windowmasker.sdust.bed"));
   my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = new HgRemoteScript("$runDir/doTwoBit.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 twoBitMask $unmaskedSeq windowmasker.bed $db.wmsk.2bit
@@ -222,6 +225,7 @@ sub doCleanup {
   $bossScript->add(<<_EOF_
 gzip $runDir/windowmasker.counts
 gzip $runDir/windowmasker.bed
+gzip $runDir/windowmasker.sdust.bed
 _EOF_
   );
   $bossScript->execute();
@@ -240,7 +244,7 @@ _EOF_
 ($db) = @ARGV;
 
 # Force debug and verbose until this is looking pretty solid:
-$opt_debug = 1;
+#$opt_debug = 1;
 $opt_verbose = 3 if ($opt_verbose < 3);
 
 # Establish what directory we will work in.

@@ -29,6 +29,9 @@ void htmlCenterParagraph(char *line, ...);
 void htmlHorizontalLine();
 /* Print a horizontal line. */
 
+void htmlNbSpaces(int count);
+/* Print a number of non-breaking spaces. */
+
 void htmHorizontalLine(FILE *f);
 /* Print a horizontal line. */
 
@@ -37,6 +40,9 @@ void htmTextOut(FILE *f, char *s);
 
 void htmlTextOut(char *s);
 /* Print out string, if necessary replacing > with &gt; and the like */
+
+char *htmlEncode(char *s);
+/* Return a clone of s but if necessary replacing > with &gt; and the like */
 
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */

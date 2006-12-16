@@ -18,7 +18,7 @@ int i;
 int key=0;
 for (i=0; i<seedWeight; ++i)
     {
-    int nt = ntValUpper[dna[seedOffsets[i]]];
+    int nt = ntValUpper[(int)dna[seedOffsets[i]]];
     if (nt < 0)
         return -1;
     key <<= 2;
@@ -56,7 +56,6 @@ struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int parentStart, int parent
 int seedSpan = spacedSeedSpan(weight);
 int *seedOffsets = spacedSeedOffsets(weight);
 int slotCount = (1<<(2*weight));
-struct seqPos **slots, *pos;
 DNA *dna = seq->dna;
 int lastBase = seq->size - seedSpan;
 int i;

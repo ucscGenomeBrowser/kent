@@ -1,3 +1,4 @@
+#strand	qName	qStart	qEnd	tName	tStart	tEnd	bitScore	eVal
 ++	Q99983	0	421	AB000114	100	1363	773	0
 ++	Q99984	0	413	AB000115	241	1480	827	0
 ++	Q99984	211	228	AB000449	435	486	23	0.5

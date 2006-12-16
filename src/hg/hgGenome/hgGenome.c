@@ -1,11 +1,12 @@
 /* hgGenome is a CGI script that produces a web page containing
  * a graphic with all chromosomes in genome, and a graph or two
- * on top of them. */
+ * on top of them. This module just contains the main routine,
+ * the routine that dispatches to various page handlers, and shared
+ * utility functions. */
 
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "options.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
@@ -22,11 +23,15 @@
 #include "genoLay.h"
 #include "cytoBand.h"
 #include "hCytoBand.h"
+#include "errCatch.h"
 #include "chromGraph.h"
 #include "customTrack.h"
+#include "hCommon.h"
+#include "hPrint.h"
+#include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.41 2006/09/22 08:26:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.51 2006/12/05 01:52:23 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -213,10 +218,28 @@ return minLabelWidth;
 
 /* Routines to fetch cart variables. */
 
+double getThreshold()
+/* Return user-set threshold */
+{
+return cartUsualDouble(cart, hggThreshold, defaultThreshold);
+}
+
+boolean getYellowMissing()
+/* Return draw background in yellow for missing data flag. */
+{
+return cartUsualBoolean(cart, hggYellowMissing, FALSE);
+}
+
 int graphHeight()
 /* Return height of graph. */
 {
 return cartUsualIntClipped(cart, hggGraphHeight, 27, 5, 200);
+}
+
+int regionPad()
+/* Number of bases to pad regions by. */
+{
+return cartUsualIntClipped(cart, hggRegionPad, hggRegionPadDefault, 0, 10000000);
 }
 
 int graphsPerLine()
@@ -225,7 +248,6 @@ int graphsPerLine()
 return cartUsualIntClipped(cart, hggGraphsPerLine,
 	defaultGraphsPerLine, minGraphsPerLine, maxGraphsPerLine);
 }
-
 
 int linesOfGraphs()
 /* Return number of lines of graphs */
@@ -285,8 +307,8 @@ int i,j;
 for (i=0; i<graphRows; ++i)
    for (j=0; j<graphCols; ++j)
        if ((gg = ggAt(i,j)) != NULL)
-           break;
-return gg;
+           return gg;
+return NULL;
 }
 
 struct slRef *ggAllVisible()
@@ -305,288 +327,6 @@ slReverse(&list);
 return list;
 }
 
-static char *allColors[] = {
-    "black", "blue", "purple", "red", "orange", "yellow", "green", "gray",
-};
-
-static char *defaultColors[maxLinesOfGraphs][maxGraphsPerLine] = {
-    {"black", "blue", "red", "yellow", },
-    {"gray", "purple", "green", "orange",},
-    {"black", "blue", "red", "yellow", },
-    {"gray", "purple", "green", "orange",},
-    {"black", "blue", "red", "yellow", },
-    {"gray", "purple", "green", "orange",},
-};
-
-char *graphColorAt(int row, int col)
-/* Return graph color at given row/column, NULL if nonw. */
-{
-char *varName = graphColorVarName(row, col);
-char *color = cartUsualString(cart, varName, defaultColors[row][col]);
-if (color == NULL) color = defaultColors[0][0];
-return color;
-}
-
-Color colorFromAscii(struct vGfx *vg, char *asciiColor)
-/* Get color index for a named color. */
-{
-if (sameWord("red", asciiColor))
-    return MG_RED;
-else if (sameWord("blue", asciiColor))
-    return MG_BLUE;
-else if (sameWord("yellow", asciiColor))
-    return vgFindColorIx(vg, 190, 190, 0);
-else if (sameWord("purple", asciiColor))
-    return vgFindColorIx(vg, 150, 0, 200);
-else if (sameWord("orange", asciiColor))
-    return vgFindColorIx(vg, 230, 120, 0);
-else if (sameWord("green", asciiColor))
-    return vgFindColorIx(vg, 0, 180, 0);
-else if (sameWord("gray", asciiColor))
-    return MG_GRAY;
-else
-    return MG_BLACK;
-}
-
-/* Page drawing stuff. */
-
-void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
-	struct genoLay *gl, char *chromGraph, int yOff, int height, Color color,
-	boolean leftLabel, boolean rightLabel)
-/* Draw chromosome graph on all chromosomes in layout at given
- * y offset and height. */
-{
-struct genoGraph *gg = hashFindVal(ggHash, chromGraph);
-if (gg != NULL)
-    {
-    /* Get binary data source and scaling info etc. */
-    struct chromGraphBin *cgb = gg->cgb;
-    struct chromGraphSettings *cgs = gg->settings;
-    int maxGapToFill = cgs->maxGapToFill;
-    double pixelsPerBase = 1.0/gl->basesPerPixel;
-    double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
-    gScale = height/(gMax-gMin);
-    uglyf("chromGraph %s, gMin %f, gMax %f, Height %d, gScale %f\n<BR>\n", chromGraph, gMin, gMax, height, gScale);
-
-    /* Draw significance threshold as a light blue line */
-    if (leftLabel)
-        {
-	static struct rgbColor guidelineColor = { 220, 220, 255};
-	Color lightBlue = vgFindRgb(vg, &guidelineColor);
-	struct slRef *ref;
-	struct genoLayChrom *chrom;
-	int rightX = gl->picWidth - gl->rightLabelWidth - gl->margin;
-	int leftX = gl->leftLabelWidth + gl->margin;
-	int width = rightX - leftX;
-	double threshold = cartUsualDouble(cart, hggThreshold, 
-		defaultThreshold);
-	int y = height - ((threshold - gMin)*gScale) + yOff;
-	for (ref = gl->leftList; ref != NULL; ref = ref->next)
-	    {
-	    chrom = ref->val;
-	    vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
-	    }
-	ref = gl->bottomList;
-	if (ref != NULL)
-	    {
-	    chrom = ref->val;
-	    vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
-	    }
-	}
-
-    /* Draw graphs on each chromosome */
-    chromGraphBinRewind(cgb);
-    while (chromGraphBinNextChrom(cgb))
-	{
-	struct genoLayChrom *chrom = hashFindVal(gl->chromHash, cgb->chrom);
-	if (chrom)
-	    {
-	    int chromX = chrom->x, chromY = chrom->y;
-	    int minY = chromY + yOff;
-	    int maxY = chromY + yOff + height - 1;
-
-	    if (chromGraphBinNextVal(cgb))
-	        {
-		/* Handle first point as special case here, so don't
-		 * have to test for first point in inner loop. */
-		int x,y,start,lastStart,lastX,lastY;
-		start = lastStart = cgb->chromStart;
-		x = lastX = pixelsPerBase*start + chromX;
-		y = lastY = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
-		if (y < minY) y = minY;
-		else if (y > maxY) y = maxY;
-		vgDot(vg, x, y, color);
-
-		/* Draw rest of points, connecting with line to previous point
-		 * if not too far off. */
-		while (chromGraphBinNextVal(cgb))
-		    {
-		    start = cgb->chromStart;
-		    x = pixelsPerBase*start + chromX;
-		    y = (height - ((cgb->val - gMin)*gScale)) + chromY+yOff;
-		    if (y < minY) y = minY;
-		    else if (y > maxY) y = maxY;
-		    if (x != lastX || y != lastY)
-		        {
-			if (start - lastStart <= maxGapToFill)
-			    vgLine(vg, lastX, lastY, x, y, color);
-			else
-			    vgDot(vg, x, y, color);
-			}
-		    lastX = x;
-		    lastY = y;
-		    lastStart = start;
-		    }
-		}
-	    }
-	else
-	    {
-	    /* Just read and discard data. */
-	    while (chromGraphBinNextVal(cgb))
-	        ;
-	    }
-	}
-
-
-    /* Draw labels. */
-    if (withLabels && (leftLabel || rightLabel))
-        {
-	int lineY = yOff;
-	int i,j;
-	int spaceWidth = tl.nWidth;
-	int tickWidth = spaceWidth*2/3;
-	int fontPixelHeight = mgFontPixelHeight(gl->font);
-	for (i=0; i<gl->lineCount; ++i)
-	    {
-	    for (j=0; j< cgs->linesAtCount; ++j)
-	        {
-		double lineAt = cgs->linesAt[j];
-		int y = (height - ((lineAt - gMin)*gScale)) + lineY;
-		int textTop = y - fontPixelHeight/2+1;
-		int textBottom = textTop + fontPixelHeight;
-		char label[24];
-		safef(label, sizeof(label), "%g", lineAt);
-		if (leftLabel)
-		    {
-		    vgBox(vg, gl->margin + gl->leftLabelWidth - tickWidth-1, y,
-		    	tickWidth, 1, color);
-		    if (textTop >= lineY && textBottom < lineY + height)
-			{
-			vgTextRight(vg, gl->margin, textTop, 
-			    gl->leftLabelWidth-spaceWidth, fontPixelHeight,
-			    color, gl->font, label);
-			}
-		    }
-		if (rightLabel)
-		    {
-		    vgBox(vg, 
-		    	gl->picWidth - gl->margin - gl->rightLabelWidth+1, 
-		    	y, tickWidth, 1, color);
-		    if (textTop >= lineY && textBottom < lineY + height)
-			{
-			vgText(vg,
-			    gl->picWidth - gl->margin - gl->rightLabelWidth + spaceWidth,
-			    textTop, color, gl->font, label);
-			}
-		    }
-		}
-	    lineY += gl->lineHeight;
-	    }
-	}
-    }
-}
-
-void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
-	int graphRows, int graphCols, int oneRowHeight)
-/* Create genome GIF file and HTML that includes it. */
-{
-struct vGfx *vg;
-struct tempName gifTn;
-Color shadesOfGray[10];
-int maxShade = ArraySize(shadesOfGray)-1;
-int spacing = 1;
-int yOffset = 2*spacing;
-int innerHeight = oneRowHeight - 3*spacing;
-int i,j;
-
-/* Create gif file and make reference to it in html. */
-makeTempName(&gifTn, "hgtIdeo", ".gif");
-vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
-
-hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
-	    gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
-
-/* Get our grayscale. */
-hMakeGrayShades(vg, shadesOfGray, maxShade);
-
-/* Draw the labels and then the chromosomes. */
-genoLayDrawChromLabels(gl, vg, MG_BLACK);
-genoLayDrawBandedChroms(gl, vg, database, conn, 
-	shadesOfGray, maxShade, MG_BLACK);
-
-/* Draw chromosome graphs. */
-for (i=0; i<graphRows; ++i)
-    {
-    for (j=graphCols-1; j>=0; --j)
-	{
-	char *graph = graphSourceAt(i,j);
-	if (graph != NULL && graph[0] != 0)
-	    {
-	    Color color = colorFromAscii(vg, graphColorAt(i,j));
-	    drawChromGraph(vg, conn, gl, graph, 
-		    gl->betweenChromOffsetY + yOffset, 
-		    innerHeight,  color, j==0, j==1);
-	    }
-	}
-    yOffset += oneRowHeight;
-    }
-
-vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
-vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
-vgClose(&vg);
-}
-
-struct slName *userListAll()
-/* List all graphs that user has uploaded */
-{
-return NULL;
-}
-
-void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal)
-/* Make a drop-down with available chrom graphs */
-{
-int totalCount = 1 + slCount(ggList);
-char **menu, **values;
-int i = 0;
-struct slRef *ref;
-
-AllocArray(menu, totalCount);
-AllocArray(values, totalCount);
-menu[0] = "";
-values[0] = "";
-
-for (ref = ggList; ref != NULL; ref = ref->next)
-    {
-    struct genoGraph *gg = ref->val;
-    ++i;
-    menu[i] = gg->shortLabel;
-    values[i] = gg->name;
-    }
-cgiMakeDropListWithVals(varName, menu, values, totalCount, curVal);
-freez(&menu);
-freez(&values);
-}
-
-void colorDropdown(int row, int col)
-/* Put up color drop down menu. */
-{
-char *varName = graphColorVarName(row, col);
-char *curVal = graphColorAt(row, col);
-cgiMakeDropList(varName, allColors, ArraySize(allColors), curVal);
-}
-
 struct genoLay *ggLayout(struct sqlConnection *conn, 
 	int graphRows, int graphCols)
 /* Figure out how to lay out image. */
@@ -598,6 +338,7 @@ int minLeftLabelWidth = 0, minRightLabelWidth = 0;
 
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
+tl.picWidth = cartUsualInt(cart, hggImageWidth, hgDefaultPixWidth);
 
 /* Refine all graphs actually used, and calculate label
  * widths if need be. */
@@ -633,83 +374,36 @@ return genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
 	minLeftLabelWidth, minRightLabelWidth);
 }
 
-void mainPage(struct sqlConnection *conn)
-/* Do main page of application:  hotlinks bar, controls, graphic. */
+static void addPadToBed3(struct bed3 *bedList, int atStart, int atEnd)
+/* Add padding to bed3 list */
 {
-struct genoLay *gl;
-int graphRows = linesOfGraphs();
-int graphCols = graphsPerLine();
-int i, j;
-int realCount = 0;
-
-cartWebStart(cart, "%s Genome Graphs", genome);
-
-/* Start form and save session var. */
-hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
-cartSaveSession(cart);
-
-/* Draw graph controls. */
-hPrintf("<TABLE>");
-for (i=0; i<graphRows; ++i)
+struct bed3 *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    hPrintf("<TR>");
-    if (graphRows == 1)
-	{
-	hPrintf("<TD>");
-	    hPrintf("graph ");
-	hPrintf("</TD>");
-	}
-    for (j=0; j<graphCols; ++j)
-	{
-	char *varName = graphVarName(i,j);
-	char *curVal = cartUsualString(cart, varName, "");
-	if (curVal[0] != 0)
-	    ++realCount;
-	hPrintf("<TD>");
-	graphDropdown(conn, varName, curVal);
-	hPrintf(" in ");
-	colorDropdown(i, j);
-	if (j != graphCols-1) hPrintf(",");
-	hPrintf("</TD>");
-	}
-    if (i == 0)
-	{
-	hPrintf("<TD>");
-	cgiMakeButton("submit", "Go!");
-	hPrintf("</TD>");
-	}
-    hPrintf("</TR>");
+    int start = bed->chromStart + atStart;
+    if (start < 0) start = 0;
+    int end = bed->chromEnd + atEnd;
+    int chromEnd = hChromSize(bed->chrom);
+    if (end > chromEnd) end = chromEnd;
+    bed->chromStart = start;
+    bed->chromEnd = end;
     }
-hPrintf("</TABLE>");
-cgiMakeButton(hggUpload, "Upload");
-hPrintf(" ");
-cgiMakeButton(hggConfigure, "Configure");
-hPrintf(" ");
-cgiMakeOptionalButton(hggCorrelate, "Correlate", realCount < 2);
-hPrintf(" significance threshold:");
-cartMakeDoubleVar(cart, hggThreshold, defaultThreshold,  3);
-hPrintf(" ");
-cgiMakeOptionalButton(hggBrowse, "Browse Regions", realCount == 0);
-hPrintf(" ");
-cgiMakeOptionalButton(hggSort, "Sort Genes", 
-	realCount == 0 || !hgNearOk(database));
-hPrintf("<BR>");
+}
 
-
-/* Get genome layout. */
-gl = ggLayout(conn, graphRows, graphCols);
-
-/* Draw picture. Enclose in table to add a couple of pixels between
- * it and controls on IE. */
-hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
-genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
-hPrintf("</TD></TR></TABLE>\n");
-
-/* Write a little click-on-help */
-hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
-
-hPrintf("</FORM>\n");
-cartWebEnd();
+struct bed3 *regionsOverThreshold(struct genoGraph *gg)
+/* Get list of regions over threshold */
+{
+/* Get list of regions. */
+if (gg == NULL)
+    errAbort("Please go back and select a graph.");
+double threshold = getThreshold();
+struct bed3 *bedList = chromGraphBinToBed3(gg->binFileName, threshold);
+if (bedList == NULL)
+    errAbort("No regions over %g, please go back and set a lower threshold",
+    	threshold);
+int pad = regionPad();
+addPadToBed3(bedList, -pad, pad);
+return bedList;
 }
 
 void dispatchPage()
@@ -773,6 +467,7 @@ void dispatchLocation()
 struct sqlConnection *conn = NULL;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
+cartSetString(cart, "db", database); /* Some custom tracks code needs this */
 withLabels = cartUsualBoolean(cart, hggLabels, TRUE);
 conn = hAllocConn();
 getGenoGraphs(conn);

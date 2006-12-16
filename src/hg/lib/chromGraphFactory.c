@@ -14,6 +14,8 @@
 #include "customFactory.h"
 #include "chromGraphFactory.h"
 
+#define affy500Table "snpArrayAffy500"
+
 typedef int (*Chopper)(char *line, char **cols, int maxCol);
 /* A function that breaks a row into columns. */
 
@@ -47,7 +49,7 @@ return el;
 static boolean chromGraphRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type, 
     	struct customTrack *track)
-/* Return TRUE if looks like we're handling a wig track */
+/* Return TRUE if looks like we're handling a chromGraph track */
 {
 return sameOk(type, fac->name);
 }
@@ -207,49 +209,111 @@ for (i=0; i<ArraySize(tables); ++i)
 return NULL;
 }
 
+struct markerTypeRecognizer
+/* Helper to recognize a marker type. */
+    {
+    struct markerTypeRecognizer *next;
+    char *type;		/* Type	string from UI */
+    char *table;	/* Table to assist in recognition */
+    char *query; 	/* Query (with %s for item, %s for table)  */
+    int matches;	/* Count of matches. */
+    };
+
+static struct markerTypeRecognizer *getMarkerRecognizers(
+	struct sqlConnection *conn, int colCount)
+/* Return list of marker recognizers. */
+{
+struct markerTypeRecognizer *list = NULL, *mtr;
+char *table;
+
+/* STS marker recognizer */
+table = "stsAlias";
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerSts;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where alias='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Affy 500 recognizer */
+table = affy500Table;
+if (sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerAffy500;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* SNP table */
+table = findSnpTable(conn);
+if (table != NULL)
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerSnp;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where name='%s'";
+    slAddHead(&list, mtr);
+    }
+
+/* Chromosome */
+table = "chromInfo";
+if (colCount >= 3 && sqlTableExists(conn, table))
+    {
+    AllocVar(mtr);
+    mtr->type = cgfMarkerGenomic;
+    mtr->table = table;
+    mtr->query = "select count(*) from %s where chrom='%s'";
+    slAddHead(&list, mtr);
+    }
+
+return list;
+}
+
 static char *guessMarkerType(struct slName *lineList, Chopper chopper, 
 	struct sqlConnection *conn, int colCount)
 /* Guess which type of marker type is being used. */
 {
-boolean gotSts = sqlTableExists(conn, "stsAlias");
-char *snpTable = findSnpTable(conn);
-int stsCount = 0, snpCount = 0, chromCount = 0;
-int lineCount = 0;
+struct markerTypeRecognizer *mtrList = getMarkerRecognizers(conn, colCount);
+struct markerTypeRecognizer *mtr, *bestMtr = NULL;
+int lineCount = 0, bestCount = 0;
 struct slName *el;
 char *type = NULL;
 
+/* Loop through sample lines keeping track of who recognizes markers. */
 for (el = lineList; el != NULL; el = el->next)
     {
     char *s = cloneString(el->name);
-    char *row[2];
-    chopper(s, row, 2);
-    char *marker = row[0];
-    if (hgOfficialChromName(marker))
-        ++chromCount;
-    char query[512];
-    if (gotSts)
-	{
-	safef(query, sizeof(query), 
-	    "select count(*) from stsAlias where alias='%s'", marker);
-	if (sqlQuickNum(conn, query) > 0)
-	    ++stsCount;
-	}
-    else if (snpTable != NULL)
+    char *row[1];
+    chopper(s, row, ArraySize(row));
+    for (mtr = mtrList; mtr != NULL; mtr = mtr->next)
         {
-	safef(query, sizeof(query), 
-	    "select count(*) from %s where name='%s'", snpTable, marker);
+	char query[512];
+	safef(query, sizeof(query), mtr->query, mtr->table, row[0]);
 	if (sqlQuickNum(conn, query) > 0)
-	    ++snpCount;
+	    mtr->matches += 1;
 	}
+    freeMem(s);
     ++lineCount;
     }
-int minCount = lineCount/2;
-if (chromCount > minCount && colCount >= 3)
-    type = cgfMarkerGenomic;
-else if (snpCount >= minCount)
-    type = cgfMarkerSnp;
-else if (stsCount >= minCount)
-    type = cgfMarkerSts;
+
+/* Figure out who recognizes the most markers. */
+for (mtr = mtrList; mtr != NULL; mtr = mtr->next)
+    {
+    if (mtr->matches > bestCount)
+         {
+	 bestCount = mtr->matches;
+	 bestMtr = mtr;
+	 }
+    }
+
+/* Return best type, so long as at least half are recognized */
+if (bestCount > lineCount/2)
+    type = bestMtr->type;
+slFreeList(&mtrList);
 return type;
 }
 
@@ -570,11 +634,22 @@ else if (sameString(markerType, cgfMarkerAffy100))
     }
 else if (sameString(markerType, cgfMarkerAffy500))
     {
-    warn("Support for Affy 500k chip coming soon.");
+    if (!sqlTableExists(conn, affy500Table))
+        errAbort("Sorry, no data for %s on this assembly.",
+		cgfMarkerAffy500);
+    ok = mayProcessDb(conn, cpp, colCount, formatType,
+    	firstLineLabels, fileList, affy500Table,
+    	"select chrom,chromStart,name from %s", NULL, NULL, report);
     }
 else if (sameString(markerType, cgfMarkerHumanHap300))
     {
-    warn("Support for Illumina HumanHap300 coming soon.");
+    char *table = "snpArrayIllumina300";
+    if (!sqlTableExists(conn, table))
+        errAbort("Sorry, no data for %s on this assembly.",
+		cgfMarkerHumanHap300);
+    ok = mayProcessDb(conn, cpp, colCount, formatType,
+    	firstLineLabels, fileList, table,
+    	"select chrom,chromStart,name from %s", NULL, NULL, report);
     }
 else
     {

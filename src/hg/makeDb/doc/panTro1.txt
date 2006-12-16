@@ -2125,7 +2125,16 @@ rm rsAll.fas
 ssh hgwdev
 mkdir /gbdb/panTro1/snp
 ln -s /cluster/store12/snp/125/chimp/rs_fasta/snp.fa /gbdb/panTro1/snp/snp.fa
+cd /cluster/store12/snp/125/chimp/rs_fasta
 hgLoadSeq panTro1 /gbdb/chimp/snp/snp.fa
+
+# look up id in extFile
+# move into separate table
+hgsql panTro1 < snpSeq.sql
+hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 179085' panTro1
+hgsql -e 'delete from seq where extFile = 179085' panTro1
+hgsql -e 'alter table snpSeq add index acc (acc)' panTro1
+
 # clean up after hgLoadSeq
 rm seq.tab
 

@@ -30,6 +30,11 @@
 #define hggMaxGapToFill hggPrefix "maxGapToFill"
 #define hggUploadFile hggPrefix "uploadFile"
 #define hggUploadRa hggPrefix "uploadRa"
+#define hggImageWidth hggPrefix "imageWidth"
+#define hggRegionPad hggPrefix "regionPad"
+#define hggYellowMissing hggPrefix "yellowMissing"
+
+#define hggRegionPadDefault 25000
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"
@@ -49,7 +54,10 @@ extern char *database;
 extern char *genome;
 extern struct genoGraph *ggUserList;	/* List of user graphs */
 extern struct genoGraph *ggDbList;	/* List of graphs in database. */
+extern struct trackLayout tl;  /* Dimensions of things, fonts, etc. */
 extern struct slRef *ggList; /* List of active genome graphs */
+extern struct hash *ggHash;	  /* Hash of active genome graphs */
+extern boolean withLabels;	/* Draw labels? */
 
 /*** Name prefixes to separate user from db graphs. */
 #define hggUserTag "user: "
@@ -72,6 +80,18 @@ struct genoGraph
 
 
 /*** Routines from hgGenome.h ***/
+
+int regionPad();
+/* Number of bases to pad regions by. */
+
+double getThreshold();
+/* Return user-set threshold */
+
+boolean getYellowMissing();
+/* Return draw background in yellow for missing data flag. */
+
+struct bed3 *regionsOverThreshold();
+/* Get list of regions over threshold */
 
 int graphHeight();
 /* Return height of graph. */
@@ -121,10 +141,10 @@ void hggDoUsualHttp();
 /* Wrap html page dispatcher with code that writes out
  * HTTP header and write cart back to database. */
 
+/*** Functions imported from other modules. ***/
+
 void mainPage(struct sqlConnection *conn);
 /* Do main page of application:  hotlinks bar, controls, graphic. */
-
-/*** Functions imported from other modules. ***/
 
 void uploadPage();
 /* Put up initial upload page. */

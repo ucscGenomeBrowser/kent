@@ -17,7 +17,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.30 2006/05/23 00:12:41 kate Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.32 2006/12/13 18:17:55 angie Exp $";
 
 jmp_buf htmlRecover;
 
@@ -77,6 +77,14 @@ void htmHorizontalLine(FILE *f)
 fprintf(f, "<P><HR ALIGN=\"CENTER\"></P>");
 }
 
+void htmlNbSpaces(int count)
+/* Print a number of non-breaking spaces. */
+{
+int i;
+for (i=0; i<count; ++i)
+    printf("&nbsp;");
+}
+
 void htmTextOut(FILE *f, char *s)
 /* Print out string to file, if necessary replacing > with &gt; and the like */
 {
@@ -114,6 +122,66 @@ void htmlTextOut(char *s)
 /* Print out string, if necessary replacing > with &gt; and the like */
 {
 htmTextOut(stdout, s);
+}
+
+char *htmlEncode(char *s)
+/* Return a clone of s but if necessary replacing > with &gt; and the like */
+{
+size_t len = 0;
+char c;
+char *encStr;
+char *p = s;
+/* First pass through s to determine encoded length to allocate: */
+/* [as a shortcut, we could simply allocate 6*length of s] */
+while ((c = *p++) != 0)
+    {
+    switch (c)
+        {
+	case '>':
+	case '<':
+	    len += 4;
+	    break;
+	case '&':
+	    len += 5;
+	    break;
+	case '"':
+	    len += 6;
+	    break;
+	default:
+	    len++;
+	    break;
+	}
+    }
+encStr = needMem(len+1);
+/* Second pass through s to encode: */
+len = 0;
+p = s;
+while ((c = *p++) != 0)
+    {
+    switch (c)
+        {
+	case '>':
+	    strcat(encStr+len, "&gt;");
+	    len += 4;
+	    break;
+	case '<':
+	    strcat(encStr+len, "&lt;");
+	    len += 4;
+	    break;
+	case '&':
+	    strcat(encStr+len, "&amp;");
+	    len += 5;
+	    break;
+	case '"':
+	    strcat(encStr+len, "&quot;");
+	    len += 6;
+	    break;
+	default:
+	    encStr[len++] = c;
+	    break;
+	}
+    }
+return encStr;
 }
 
 

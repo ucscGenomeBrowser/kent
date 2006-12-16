@@ -310,17 +310,19 @@ bga->targetName = cloneString(line+1);
 
 /* Process something like:
  *      Length = 100000
- 	Safeguard against wrapped lines!
+ * however this follows a possible multi-line description, so be specified
+ * and limit how far we can scan
  */
-for (lenSearch=0; lenSearch<3; lenSearch++)
+for (lenSearch=0; lenSearch<25; lenSearch++)
 	{
 	line = bfNeedNextLine(bf);
 	wordCount = chopLine(line, words);
-	if (wordCount >= 3 && isdigit(words[2][0]))
+	if (wordCount == 3 && sameString(words[0], "Length") &&  sameString(words[1], "=")
+            && isdigit(words[2][0]))
 		break;
 	}
-if (lenSearch>=3)
-    bfError(bf, "Expecting length");
+if (lenSearch>=25)
+    bfError(bf, "Expecting Length =");
 decomma(words[2]);
 bga->targetSize = atoi(words[2]);
 

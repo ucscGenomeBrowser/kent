@@ -1,13 +1,13 @@
 # Build all directories in utils
 # test comment
-# 	$Id: makefile,v 1.4 2006/07/31 22:28:43 angie Exp $
+# 	$Id: makefile,v 1.5 2006/11/29 18:04:35 angie Exp $
 
 include ../../inc/common.mk
 
 all:    
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE) 'HG_WARN=${HG_WARN_ERR}' ) ;\
+	    ( cd $$D && echo $$D && $(MAKE) ) ;\
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
 	done

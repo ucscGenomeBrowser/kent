@@ -32,7 +32,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.333 2006/11/23 00:31:38 rhead Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.335 2006/12/11 20:01:18 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -191,7 +191,7 @@ snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
 printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
 cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
 
-printf("<BR><BR>\n");
+printf("<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
 printf("Any type of data can be excluded from view by deselecting the checkbox below.\n");
 printf("Not all assemblies include values in all categories.\n");
 printf("<BR><BR>\n");
@@ -2332,7 +2332,8 @@ if (isCustomTrack(tdb->tableName))
     cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->tableName);
     puts("&nbsp;");
-    cgiMakeOnClickButton("document.customTrackForm.submit();return false;",
+    if (differentString(tdb->type, "chromGraph"))
+        cgiMakeOnClickButton("document.customTrackForm.submit();return false;",
                                 "Update custom track");
     }
 printf("<BR>\n");

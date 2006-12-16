@@ -36,9 +36,10 @@ set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
 set strPur strPur1
 set felCat felCat3
+set gasAcu gasAcu1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
@@ -70,7 +71,7 @@ databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2
+set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2,FelCat3,GasAcu1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -493,9 +494,10 @@ identifier encodePseudogeneYale dependency
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
-    $hg,!hg17.acemblyPep.name unique minCheck=0.90
-    hg17.acemblyPep.name unique minCheck=0.63
-    $hg.acemblyClass.name full unique
+    $hg,!hg18,!hg17.acemblyPep.name unique minCheck=0.90
+    hg18,hg17.acemblyPep.name unique minCheck=0.63
+    $hg,!hg18.acemblyClass.name full unique
+    hg18.acemblyClass.name minCheck=0.99
 
 identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
@@ -2003,9 +2005,16 @@ identifier gvSrcId
     hgFixed.gv.srcId full
 
 #links between oreganno (regulatory annotation) and related tables
-identifier oregId
+identifier oregHg18Id
 "ORegAnno track identifier: links annotations to attributes and external links"
     hg18.oreganno.id
+    hgFixed.oregannoAttr.id
+    hgFixed.oregannoLink.id
+
+#links between oreganno (regulatory annotation) and related tables
+identifier oregDm2Id
+"ORegAnno track identifier: links annotations to attributes and external links"
+    dm2.oreganno.id
     hgFixed.oregannoAttr.id
     hgFixed.oregannoLink.id
 

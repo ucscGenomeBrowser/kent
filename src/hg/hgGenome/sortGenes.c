@@ -11,6 +11,7 @@
 #include "chromGraph.h"
 #include "binRange.h"
 #include "hdb.h"
+#include "hPrint.h"
 #include "../near/hgNear/hgNear.h"
 #include "hgGenome.h"
 
@@ -30,13 +31,9 @@ if (!hgNearOk(database))
 
 /* Get list of regions. */
 struct genoGraph *gg = ggFirstVisible();
-if (gg == NULL)
-    errAbort("Please go back and select a graph.");
-double threshold = cartUsualDouble(cart, hggThreshold, defaultThreshold);
-struct bed3 *bed, *bedList = chromGraphBinToBed3(gg->binFileName, threshold);
-if (bedList == NULL)
-    errAbort("No regions over %g, please go back and set a lower threshold",
-    	threshold);
+double threshold = getThreshold();
+struct bed3 *bed, *bedList = regionsOverThreshold(gg);
+
 /* Figure out what table and column are the sorter's main gene set. */
 struct hash *genomeRa = hgReadRa(genome, database, "hgNearData", 
 	"genome.ra", NULL);

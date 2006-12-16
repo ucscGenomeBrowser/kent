@@ -10,13 +10,13 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: vaccine.c,v 1.1 2006/11/18 00:18:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: vaccine.c,v 1.3 2006/12/08 23:28:36 fanhsu Exp $";
 
 static boolean vaccineExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
 /* Return TRUE if vaccineAll table exists and it has an entry with the gene symbol */
 {
-if (sqlTableExists(conn, "gsSubjInfo") == TRUE)
+if (sqlTableExists(conn, "gsidSubjInfo") == TRUE)
     {
     return(TRUE);
     }
@@ -27,7 +27,8 @@ static void vaccinePrint(struct section *section,
 	struct sqlConnection *conn, char *subjId)
 /* Print out Vaccine section. */
 {
-char *date1stInject, *immunStatus, *dateInfect;
+char *immunStatus;
+char *daysInfectF, *daysInfectL;
 
 char query[256];
 struct sqlResult *sr;
@@ -35,22 +36,27 @@ char **row;
 
 printf("<TABLE>");
 
-safef(query, sizeof(query), "select date1stInject, immunStatus, dateInfect from gsSubjInfo where subjId='%s'", subjId);
+safef(query, sizeof(query), 
+      "select immunStatus, daysInfectF, daysInfectL from gsidSubjInfo where subjId='%s'", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
     
 if (row != NULL) 
     {
-    date1stInject   = row[0];
-    immunStatus      = row[1];
-    dateInfect     = row[2];
+    immunStatus  = row[0];
+    daysInfectF	 = row[1];
+    daysInfectL  = row[2];
+
     printf("<TR>");
-    printf("<TD>");
-    printf("<B>Initial Vaccine:</B> %s%s", date1stInject, GSBLANKS);
-    printf("</TD>");
     printf("<TD>");
     printf("<B>Vaccine/Placebo:</B> %s%s", immunStatus, GSBLANKS);
     printf("</TD>");
+    
+    printf("<TD>");
+    printf("<B>Days of infection relative to first injection date:</B> %s\n", 
+	   daysInfectF);
+    printf("</TD>");
+
     printf("</TR>");
     
     printf("<TR>");
@@ -58,7 +64,8 @@ if (row != NULL)
     printf("<B>HIV Status:</B> %s%s", "data missing", GSBLANKS);
     printf("</TD>");
     printf("<TD>");
-    printf("<B>Estimated Infection Date:</B> %s\n", dateInfect);
+    printf("<B>Days of infection relative to last negative date:</B> %s\n", 
+	   daysInfectL);
     printf("</TD>");
     printf("</TR>");
     }

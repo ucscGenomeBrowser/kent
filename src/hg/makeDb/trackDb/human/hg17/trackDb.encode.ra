@@ -1072,7 +1072,7 @@ shortLabel UCD Ng ChIP Hits
 longLabel UC Davis ChIP/Chip NimbleGen (E2F1, Myc ab, HeLa Cells)
 group encodeChip
 priority 56.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5
 dataVersion ENCODE June & Oct 2005 Freezes
 
@@ -1717,40 +1717,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 color 120,30,50
 altColor 50,0,0
-type bed 12
-useScore 1
-dataVersion ENCODE Oct 2005 Freeze
-release beta
-
-    track encodeUtexStageMycHelaTags
-    subTrack encodeUtexStage
-    shortLabel UT Myc HeLa Tags
-    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
-    priority 1
-release beta
-
-    track encodeUtexStageMycHelaPeaks
-    shortLabel UT Myc HeLa Pk
-    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Peaks
-    subTrack encodeUtexStage
-    noInherit on
-    color 120,30,50
-    type bed 5 .
-    priority 2
-release beta
-
-track encodeUtexStage
-compositeTrack on
-shortLabel UT-Austin STAGE
-longLabel University of Texas, Austin STAGE (Sequence Tag Analysis of Genomic Enrichment)
-group encodeChrom
-priority 63.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 120,30,50
-altColor 50,0,0
 type bed 5
-release alpha
 
     track encodeUtexStageStat1HelaTags
     subTrack encodeUtexStage
@@ -1758,7 +1725,6 @@ release alpha
     longLabel University of Texas, Austin STAGE (STAT1, HeLa) Tags
     dataVersion Oct 2006
     priority 1
-release alpha
 
     track encodeUtexStageCMycHelaTags
     subTrack encodeUtexStage
@@ -1766,7 +1732,6 @@ release alpha
     longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
-release alpha
 
     track encodeUtexStageMycHelaPeaks
     shortLabel UT Myc HeLa Pk
@@ -1777,7 +1742,6 @@ release alpha
     type bed 5 .
     priority 3
     dataVersion ENCODE Oct 2005 Freeze
-release alpha
 
 track encodeUWRegulomeBase
 compositeTrack on
@@ -1789,8 +1753,8 @@ priority 66.05
 chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
 visibility hide
 maxHeightPixels 128:16:16
-minLimit -5.45
-maxLimit 6.33
+minLimit -13.40
+maxLimit 15.55
 viewLimits 0.5:3
 maxHeightPixels 128:16:16
 type bedGraph 5
@@ -1909,501 +1873,6 @@ dataVersion ENCODE June 2006
     longLabel SKnSH DNaseI Sensitivity
     color 255,0,255
     priority 16
-
-track encodeRegulomeBase
-release alpha
-compositeTrack on
-shortLabel UW/Reg DNaseI Sens
-longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
-group encodeChrom
-priority 66.1
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility hide
-minLimit -8.8
-maxLimit 13.15
-viewLimits 0:5
-maxHeightPixels 128:16:16
-type bedGraph 5
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeBaseCACO2
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel CACO2
-    longLabel CACO2 DNaseI Sensitivity
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeBaseGM
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel GM06990
-    longLabel GM06990 DNaseI Sensitivity
-    color 90,50,210
-    priority 2
-
-    track encodeRegulomeBaseSKNSH
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel SKNSH
-    longLabel SKNSH DNaseI Sensitivity
-    color 120,50,180
-    priority 3
-
-    track encodeRegulomeBaseHuh7
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel Huh7
-    longLabel Huh7 DNaseI Sensitivity
-    color 150,50,150
-    priority 4
-
-    track encodeRegulomeBaseHepG2
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel HepG2
-    longLabel HepG2 DNaseI Sensitivity
-    color 180,50,120
-    priority 5
-
-    track encodeRegulomeBaseK562
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel K562
-    longLabel K562 DNaseI Sensitivity
-    color 210,50,90
-    priority 6
-
-    track encodeRegulomeBaseCD34
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel CD34
-    longLabel CD34 DNaseI Sensitivity
-    color 240,50,60
-    priority 7
-
-    track encodeRegulomeBaseHeLa
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeBase
-    shortLabel HeLa
-    longLabel HeLa DNaseI Sensitivity
-    color 60,50,240
-    priority 8
-
-track encodeRegulomeBase
-release beta
-compositeTrack on
-shortLabel UW/Reg DNaseI Sens
-longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
-group encodeChrom
-priority 66.1
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility hide
-maxHeightPixels 128:16:16
-type wig 0.0 3.0
-spanList 250
-autoScaleDefault Off
-smoothingWindow 2
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
-
-    track encodeRegulomeBaseCACO2
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel CACO2
-    longLabel CACO2 DNaseI Sensitivity
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeBaseGM06990
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel GM06990
-    longLabel GM06990 DNaseI Sensitivity
-    color 90,50,210
-    priority 2
-
-    track encodeRegulomeBaseSKNSH
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel SKNSH
-    longLabel SKNSH DNaseI Sensitivity
-    color 120,50,180
-    priority 3
-
-    track encodeRegulomeBaseHuh7
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel Huh7
-    longLabel Huh7 DNaseI Sensitivity
-    color 150,50,150
-    priority 4
-
-    track encodeRegulomeBaseHepG2
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel HepG2
-    longLabel HepG2 DNaseI Sensitivity
-    color 180,50,120
-    priority 5
-
-    track encodeRegulomeBaseK562
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel K562
-    longLabel K562 DNaseI Sensitivity
-    color 210,50,90
-    priority 6
-
-    track encodeRegulomeBaseERY
-  release beta
-  type wig 0.0 3.0
-    subTrack encodeRegulomeBase
-    shortLabel ERY
-    longLabel Adult Erythroblast DNaseI Sensitivity
-    color 240,50,60
-    priority 7
-
-track encodeRegulomeProb
-release alpha
-compositeTrack on
-shortLabel UW/Reg DNaseI HSs
-longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
-group encodeChrom
-priority 66.2
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-type bedGraph 5
-minLimit 1.1
-maxLimit 3.0
-viewLimits 1:2
-autoScaleDefault Off
-maxHeightPixels 128:16:16
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeProbCACO2
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel CACO2 
-    longLabel CACO2 DNaseI HSs
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeProbGM
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel GM06990
-    longLabel GM06990 DNaseI HSs
-    color 90,50,210
-    priority 2
-    dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeProbSKNSH
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel SKNSH
-    longLabel SKNSH DNaseI HSs
-    color 120,50,180
-    priority 3
-
-    track encodeRegulomeProbHuh7
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel Huh7
-    longLabel Huh7 DNaseI HSs
-    color 150,50,150
-    priority 4
-
-    track encodeRegulomeProbHepG2
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel HepG2
-    longLabel HepG2 DNaseI HSs
-    color 180,50,120
-    priority 5
-
-    track encodeRegulomeProbK562
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel K562
-    longLabel K562 DNaseI HSs
-    color 210,50,90
-    priority 6
-    
-    track encodeRegulomeProbERY
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel ERY
-    longLabel Adult Erythroblast DNaseI HSs
-    color 240,50,60
-    priority 7
-
-    track encodeRegulomeProbCD34
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel CD34
-    longLabel CD34 DNaseI HSs
-    color 240,50,60
-    priority 7
-    dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeProbHeLa
-   release alpha
-   type bedGraph 5
-    subTrack encodeRegulomeProb
-    shortLabel HeLa
-    longLabel HeLa DNaseI HSs
-    color 60,50,240
-    priority 8
-
-track encodeRegulomeProb
-release beta
-compositeTrack on
-shortLabel UW/Reg DNaseI HSs
-longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
-group encodeChrom
-priority 66.2
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-type bedGraph 4
-minLimit 1.1
-maxLimit 3.0
-viewLimits 1:2
-autoScaleDefault Off
-maxHeightPixels 128:16:16
-dataVersion ENCODE June 2005 Freeze
-
-    track encodeRegulomeProbCACO2
-    release beta
-    type bedGraph 4
-    subTrack encodeRegulomeProb
-    shortLabel CACO2 
-    longLabel CACO2 DNaseI HSs
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeProbGM06990
-    release beta
-    subTrack encodeRegulomeProb
-    shortLabel GM06990
-    longLabel GM06990 DNaseI HSs
-    color 90,50,210
-    priority 2
-
-    track encodeRegulomeProbSKNSH
-    release beta
-    subTrack encodeRegulomeProb
-    shortLabel SKNSH
-    longLabel SKNSH DNaseI HSs
-    color 120,50,180
-    priority 3
-
-    track encodeRegulomeProbHuh7
-    release beta
-    subTrack encodeRegulomeProb
-    shortLabel Huh7
-    longLabel Huh7 DNaseI HSs
-    color 150,50,150
-    priority 4
-
-    track encodeRegulomeProbHepG2
-    release beta
-    subTrack encodeRegulomeProb
-    shortLabel HepG2
-    longLabel HepG2 DNaseI HSs
-    color 180,50,120
-    priority 5
-
-    track encodeRegulomeProbK562
-    release beta
-    subTrack encodeRegulomeProb
-    shortLabel K562
-    longLabel K562 DNaseI HSs
-    color 210,50,90
-    priority 6
-
-    track encodeRegulomeProbERY
-    release beta
-    subTrack encodeRegulomeProb
-    shortLabel ERY
-    longLabel Adult Erythroblast DNaseI HSs
-    color 240,50,60
-    priority 7
-
-track encodeRegulomeQuality
-release alpha
-compositeTrack on
-shortLabel UW/Reg Q/A
-longLabel ENCODE UW/Regulome Plate Quality Score
-group encodeChrom
-priority 66.3
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-type bed 5 .
-useScore 1
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeQualityCACO2
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel CACO2 
-    longLabel CACO2 Quality
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeQualityGM
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel GM06990 
-    longLabel GM06990 Quality
-    color 90,50,210
-    priority 2
-
-    track encodeRegulomeQualitySKNSH
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel SKNSH 
-    longLabel SKNSH Quality
-    color 120,50,180
-    priority 3
-
-    track encodeRegulomeQualityHuh7
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel Huh7
-    longLabel Huh7 Quality
-    color 150,50,150
-    priority 4
-
-    track encodeRegulomeQualityHepG2
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel HepG2
-    longLabel HepG2 Quality
-    color 180,50,120
-    priority 5
-
-    track encodeRegulomeQualityK562
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel K562 
-    longLabel K562 Quality
-    color 210,50,90
-    priority 6
-
-    track encodeRegulomeQualityCD34
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel CD34
-    longLabel CD34 Quality
-    color 240,50,60
-    priority 7
-dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeRegulomeQualityHeLa
-   release alpha
-   type bed 5 .
-    subTrack encodeRegulomeQuality
-    shortLabel HeLa
-    longLabel HeLa Quality
-    color 60,50,240
-    priority 8
-
-
-track encodeRegulomeQuality
-release beta
-compositeTrack on
-shortLabel UW/Reg Q/A
-longLabel ENCODE UW/Regulome Plate Quality Score
-group encodeChrom
-priority 66.3
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-type bed 5 .
-useScore 1
-dataVersion ENCODE June 2005 Freeze
-origAssembly hg16
-
-    track encodeRegulomeQualityCACO2
-   release beta
-    subTrack encodeRegulomeQuality
-    shortLabel CACO2 
-    longLabel CACO2 Quality
-    color 60,50,240
-    priority 1
-
-    track encodeRegulomeQualityGM06990
-  release beta
-    subTrack encodeRegulomeQuality
-    shortLabel GM06990 
-    longLabel GM06990 Quality
-    color 90,50,210
-    priority 2
-
-    track encodeRegulomeQualitySKNSH
-  release beta
-    subTrack encodeRegulomeQuality
-    shortLabel SKNSH 
-    longLabel SKNSH Quality
-    color 120,50,180
-    priority 3
-
-    track encodeRegulomeQualityHuh7
-  release beta
-    subTrack encodeRegulomeQuality
-    shortLabel Huh7
-    longLabel Huh7 Quality
-    color 150,50,150
-    priority 4
-
-    track encodeRegulomeQualityHepG2
-  release beta
-    subTrack encodeRegulomeQuality
-    shortLabel HepG2
-    longLabel HepG2 Quality
-    color 180,50,120
-    priority 5
-
-    track encodeRegulomeQualityK562
-  release beta
-    subTrack encodeRegulomeQuality
-    shortLabel K562 
-    longLabel K562 Quality
-    color 210,50,90
-    priority 6
-
-    track encodeRegulomeQualityERY
-  release beta
-    subTrack encodeRegulomeQuality
-    shortLabel ERY
-    longLabel Adult Erythroblast Quality
-    color 240,50,60
-    priority 7
 
 track encodeRegulomeAmplicon
 compositeTrack on
@@ -2582,54 +2051,6 @@ dataVersion May 2006
     type bed5FloatScore
     priority 2
 
-track encodeNhgriDnaseHsChip
-compositeTrack on
-shortLabel NHGRI DNaseI-HS
-longLabel NHGRI DNaseI-Hypersensitive Sites
-group encodeChrom
-priority 61.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 5 .
-useScore 1
-dataVersion ENCODE June & Oct 2005 Freezes
-release beta
-
-    track encodeNhgriDnaseHsChipGm06990
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase GM069 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990, Chip method)
-    dataVersion ENCODE Oct 2005 Freeze
-    color 80,50,80
-    priority 1
-release beta
-
-    track encodeNhgriDnaseHsChipCd4
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
-    dataVersion ENCODE Oct 2005 Freeze
-    color 120,10,120
-    priority 2
-release beta
-
-    track encodeNhgriDnaseHsMpssCd4
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4 MS
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
-    dataVersion ENCODE June 2005 Freeze
-    color 120,10,120
-    priority 3
-release beta
-
-    track encodeNhgriDnaseHsMpssCd4Act
-    subTrack encodeNhgriDnaseHsChip 
-    shortLabel DNase CD4-act MS
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
-    dataVersion ENCODE June 2005 Freeze
-    priority 4
-release beta
-
 track encodeNhgriDukeDnaseHs
 compositeTrack on
 shortLabel Duke/NHGRI DNase
@@ -2647,7 +2068,6 @@ windowingFunction mean
 autoScale Off
 dataVersion ENCODE June & Oct 2005 Freezes and August 2006
 subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Old_DNase-chip mpss=MPSS
-release alpha
 
     track encodeNhgriDnaseHsChipRawGm06990
     subTrack encodeNhgriDukeDnaseHs
@@ -2657,7 +2077,6 @@ release alpha
     dataVersion ENCODE Oct 2005 Freeze
     subGroups group=raw
     priority 1
-release alpha
 
     track encodeNhgriDnaseHsChipRawCd4
     subTrack encodeNhgriDukeDnaseHs
@@ -2667,7 +2086,6 @@ release alpha
     subGroups group=raw
     dataVersion ENCODE Oct 2005 Freeze
     priority 2
-release alpha
 
     track encodeNhgriDnaseHsChipRawHela
     subTrack encodeNhgriDukeDnaseHs
@@ -2677,7 +2095,6 @@ release alpha
     dataVersion Aug 2006
     subGroups group=raw
     priority 3
-release alpha
 
     track encodeNhgriDnaseHsChipRawHepG2
     subTrack encodeNhgriDukeDnaseHs
@@ -2687,59 +2104,54 @@ release alpha
     dataVersion Sept 2006
     subGroups group=raw
     priority 4
-release alpha
 
     track encodeNhgriDnaseHsChipPvalGm06990
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990, New Chip method)
     noInherit on
-    type bed 5+
+    type bed 5 +
     useScore 1
     color 80,50,80
     priority 5
     subGroups group=pval
     dataVersion Aug 2006
-release alpha
 
     track encodeNhgriDnaseHsChipPvalCd4
     subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase CD4 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+, New Chip method)
-    type bed 5+
+    type bed 5 +
     useScore 1
     color 120,10,120
     priority 6
     subGroups group=pval
     dataVersion Aug 2006
-release alpha
 
     track encodeNhgriDnaseHsChipPvalHela
     subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HeLa Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3, New Chip method)
-    type bed 5+
+    type bed 5 +
     useScore 1
     color 180,12,140
     priority 7
     subGroups group=pval
     dataVersion Aug 2006
-release alpha
 
     track encodeNhgriDnaseHsChipPvalHepG2
     subTrack encodeNhgriDukeDnaseHs
     noInherit on
     shortLabel DNase HepG2 Pval
     longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2, New Chip method)
-    type bed 5+
+    type bed 5 +
     useScore 1
     color 240,12,132
     priority 8
     subGroups group=pval
     dataVersion Sept 2006
-release alpha
 
     track encodeNhgriDnaseHsChipGm06990
     subTrack encodeNhgriDukeDnaseHs off
@@ -2752,7 +2164,6 @@ release alpha
     useScore 1
     subGroups group=oldChip
     priority 9
-release alpha
 
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDukeDnaseHs off
@@ -2765,7 +2176,6 @@ release alpha
     useScore 1
     subGroups group=oldChip
     priority 10
-release alpha
 
     track encodeNhgriDnaseHsMpssCd4
     subTrack encodeNhgriDukeDnaseHs off
@@ -2778,7 +2188,6 @@ release alpha
     useScore 1
     subGroups group=mpss
     priority 11
-release alpha
 
     track encodeNhgriDnaseHsMpssCd4Act
     subTrack encodeNhgriDukeDnaseHs off
@@ -2790,7 +2199,6 @@ release alpha
     useScore 1
     subGroups group=mpss
     priority 12
-release alpha
 
 track encodeTbaAlign
 shortLabel TBA Alignment
@@ -3255,17 +2663,17 @@ dataVersion ENCODE Oct 2005 Freeze
     color 110,40,30
     priority 3
 
-track encode_tba23EvoFold
-shortLabel TBA23 EvoFold
-longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+track encodeEvoFold
+shortLabel UCSC EvoFold
+longLabel UCSC, RNA secondary structure predicted by EvoFold (id_strand_score)
 group encodeGenes
-priority 63.1
+priority 63.11
 visibility hide
-color 20,90,0
+color 30,120,0
 type bed 6 +
-mafTrack multiz17way
+mafTrack encodeTbaAlign
 origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
+dataVersion May 2006
 
 track encodeDless
 shortLabel DLESS

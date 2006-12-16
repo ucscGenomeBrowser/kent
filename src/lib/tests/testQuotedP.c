@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 char *encoded = NULL;
 char *decoded = NULL;
 if (argc != 2)
-errAbort("Specify a string to encode/decode on commandline using quotes.\n"
+errAbort("%s: Specify a string to encode/decode on commandline using quotes.\n"
        , argv[0]);
 	    
 encoded = quotedPrintableEncode(argv[1]);

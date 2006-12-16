@@ -148,6 +148,7 @@
 #include "encodeIndels.h"
 #include "encodeHapMapAlleleFreq.h"
 #include "hapmapSnps.h"
+#include "hapmapAlleleFreq.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -188,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1169 2006/11/29 21:53:41 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1175 2006/12/08 21:10:11 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4209,7 +4210,7 @@ char *version = NULL;
 struct trackDb *tdbRgdEst;
 char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
+int end = cartUsualInt(cart, "t",0);
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4362,10 +4363,13 @@ else
     {
     warn("Couldn't find %s in gbCdnaInfo table", acc);
     }
-printf("<B>Position:</B> "
-               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-                      hgTracksPathAndSettings(), database, chrom, start+1, end);
-printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
+if (end != 0 && differentString(chrom,"0") && isNotEmpty(chrom))
+    {
+    printf("<B>Position:</B> "
+           "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+                  hgTracksPathAndSettings(), database, chrom, start+1, end);
+    printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
+    }
 
 sqlFreeResult(&sr);
 freeDyString(&dy);
@@ -12389,7 +12393,33 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void printSnpOrthoSummary(char *rsId, char *observed)
+/* helper function for printSnp125Info */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int count = 0;
+
+if (sameString("hg18", database) && hTableExists("snp126orthoPanTro2RheMac2"))
+    {
+    safef(query, sizeof(query),
+          "select count(*) from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
+    count = sqlQuickNum(conn, query);
+    if (count != 1) return;
+    
+    safef(query, sizeof(query),
+          "select chimpAllele from snp126orthoPanTro2RheMac2 where name='%s'", rsId);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    printf("<B>Summary: </B>%s>%s (chimp allele displayed first, then '>', then human alleles)<br>\n", row[0], observed);
+    sqlFreeResult(&sr);
+    }
+}
+
 void printSnpOrthos(char *rsId)
+/* helper function for printSnp125Info */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -12426,6 +12456,7 @@ void printSnp125Info(struct snp125 snp)
 int alleleLen = strlen(snp.refUCSC);
 char refUCSCRevComp[1024];
 
+printSnpOrthoSummary(snp.name, snp.observed);
 if (sameString(snp.strand,"-"))
     {
     safef(refUCSCRevComp, ArraySize(refUCSCRevComp), "%s", snp.refUCSC);
@@ -14930,6 +14961,7 @@ if(cgiVarExists("agxPrintEdges"))
 printf("</center>\n");
 printTrackHtml(tdb);
 hFreeConn(&conn);
+// hFreeConn(&orthoConn);
 }
 
 
@@ -15991,6 +16023,76 @@ hFreeConn(&conn);
 }
 
 
+void printSnpAllele(char *orthoDb, int snpVersion, char *rsId)
+/* check whether snpAlleles exists for a database */
+/* if found, print value */
+{
+char tableName[512];
+struct sqlConnection *conn = sqlConnect(orthoDb);
+char query[256];
+struct sqlResult *sr;
+char **row = NULL;
+
+safef(tableName, sizeof(tableName), "snp%d%sorthoAllele", snpVersion, database);
+fprintf(stderr, "checking for %s.%s\n", orthoDb, tableName);
+if (!hTableExistsDb(orthoDb, tableName)) 
+    {
+    fprintf(stderr, "%s.%s not found\n", orthoDb, tableName);
+    sqlDisconnect(&conn);
+    return;
+    }
+
+safef(query, sizeof(query), "select allele from %s where name = '%s'", tableName, rsId);
+sr = sqlGetResult(conn, query);
+fprintf(stderr, "query = %s\n", query);
+row = sqlNextRow(sr);
+if (!row) 
+    {
+    sqlDisconnect(&conn);
+    return;
+    }
+printf("<B>%s Allele:</B> %s<BR>\n", orthoDb, row[0]);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+}
+
+void doHapmapAlleleFreq(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct hapmapAlleleFreq hms;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hapmapAlleleFreqStaticLoad(row+rowOffset, &hms);
+    bedPrintPos((struct bed *)&hms, 3);
+    printf("<BR>\n");
+    printf("<B>Strand:</B> %s<BR>\n", hms.strand);
+    printf("<B>Center:</B> %s<BR>\n", hms.center);
+    printf("<B>Ref Allele:</B> %s<BR>\n", hms.refAllele);
+    printf("<B>Other Allele:</B> %s<BR>\n", hms.otherAllele);
+    printf("<B>Ref Allele Frequency:</B> %f<BR>\n", hms.refAlleleFreq);
+    printf("<B>Other Allele Frequency:</B> %f<BR>\n", hms.otherAlleleFreq);
+    printSnpAllele("panTro2", 125, hms.name);
+    printSnpAllele("rheMac2", 125, hms.name);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
+
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
@@ -17029,10 +17131,10 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
+    char *strand = NULL;
     mut = gvPosLoad(row);
-    bedPrintPos((struct bed *)mut, 3);
-    if (mut->strand != NULL) 
-       printf("<B>strand:</B> %s<BR>\n", mut->strand);
+    strand = mut->strand;
+    printPos(mut->chrom, mut->chromStart, mut->chromEnd, strand, TRUE, mut->name);
     }
 sqlFreeResult(&sr);
 
@@ -17564,11 +17666,16 @@ else if (sameWord(track, "rnaGene"))
     doRnaGene(tdb, item);
     }
 else if (sameWord(track, "RfamSeedFolds") 
+	 || sameWord(track, "RfamFullFolds") 
 	 || sameWord(track, "rfamTestFolds") 
 	 || sameWord(track, "evofold") 
+	 || sameWord(track, "evofoldRaw") 
 	 || sameWord(track, "encode_tba23EvoFold") 
+	 || sameWord(track, "encodeEvoFold") 
 	 || sameWord(track, "rnafold") 
 	 || sameWord(track, "rnaTestFolds") 
+	 || sameWord(track, "rnaTestFoldsV2") 
+	 || sameWord(track, "rnaTestFoldsV3") 
 	 || sameWord(track, "mcFolds") 
 	 || sameWord(track, "rnaEditFolds")
 	 || sameWord(track, "altSpliceFolds"))
@@ -18059,6 +18166,10 @@ else if (sameString("interPro", track))
 else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
+    }
+else if (startsWith("hapmapAlleleFreq", track))
+    {
+    doHapmapAlleleFreq(tdb, item);
     }
 else if (startsWith("hapmapSnps", track))
     {

@@ -49,7 +49,6 @@ static void axtOffset(struct axt *axt, int qStart, int qEnd, int qSize,
 	int tStart, int tSize)
 /* Add offsets to psl */
 {
-int i;
 int qOffset;
 if (axt->qStrand == '-')
     qOffset = qSize - qEnd;
@@ -150,7 +149,6 @@ struct chain *chain;
 reverseComplement(rQuery->dna, rQuery->size);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    struct axt *axtList, *axt;
     struct dnaSeq *qSeq = (chain->qStrand == '-' ? rQuery : query);
     struct axtBundle *bun = NULL;
     struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);

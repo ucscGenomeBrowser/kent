@@ -19,11 +19,15 @@ struct phyloTree
     struct phyloTree **edges;
     struct phyloName *ident;		/* the name and branch length */
     struct phyloTree *mark;		/* probably the favorite child */
+    bool isDup;				/* is this a duplication node */
     int numEdges;
     int allocedEdges;
 
     void *priv;
 };
+
+extern struct phyloTree *phyloOpenTree(char *fileName);
+/* opens an NH tree file */
 
 extern struct phyloTree *phyloReadTree(struct lineFile *lf);
 /* reads a phyloTree from lineFile (first line only) */
@@ -64,5 +68,10 @@ extern struct phyloTree *phyloFindMarkUpTree(struct phyloTree *tree);
 
 extern void phyloMarkUpTree(struct phyloTree *tree);
 /* mark all the nodes from this one up to the top of the tree */
+
+extern void phyloPrintTreeNoDups( struct phyloTree *tree,FILE *f);
+/* print out phylogenetic tree in Newick format (only speciation nodes) */
+
+extern int phyloCountLeaves( struct phyloTree *tree);
 
 #endif

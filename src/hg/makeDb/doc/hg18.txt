@@ -9942,7 +9942,14 @@ rm rsAll.fas
 ssh hgwdev
 mkdir /gbdb/hg18/snp
 ln -s /cluster/store12/snp/126/human/rs_fasta/snp.fa /gbdb/hg18/snp/snp.fa
+cd /cluster/store12/snp/126/human/rs_fasta
 hgLoadSeq hg18 /gbdb/hg18/snp/snp.fa
+# look up id in extFile
+# move into separate table
+hgsql hg18 < snpSeq.sql
+hgsql -e 'insert into snpSeq select acc, file_offset from seq where extFile = 15200238' hg18
+hgsql -e 'delete from seq where extFile = 15200238' hg18
+hgsql -e 'alter table snpSeq add index acc (acc)' hg18
 # clean up after hgLoadSeq
 rm seq.tab
 
@@ -10458,7 +10465,7 @@ cd /san/sanvol1/snp/liftOver/hg18/rheMac2/output
 cd /san/sanvol1/snp/liftOver/hg18/panTro2/output
 /bin/csh concat.csh
 
-# load into hg18
+# load into panTro2 and rheMac2
 # Doing the load and split so I can easily load sequence for a full chrom
 ssh hgwdev
 cp /san/sanvol1/snp/liftOver/hg18/rheMac2/output/all.out /cluster/data/dbSNP/ortho/hg18/rheMac2Lift
@@ -10508,7 +10515,7 @@ cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
 hgsql panTro2 < drop.sql
 rm chr*.tab
 
-# do a preliminary load
+# do a preliminary load -- combine chimp and macaque
 cd /cluster/data/dbSNP/ortho/hg18/rheMac2Seq
 hgsql hg18 < snp126orthoPrelim.sql
 hgsql -e 'load data local infile "snp126orthoPrelim.tab" into table snp126orthoPrelim' hg18
@@ -10780,6 +10787,45 @@ gzip illumina.bed
 # This uses the gv* tables in hgFixed for the related data.  The track has
 # been on hg17, just added to hg18.  Most variants were mapped directly to
 # hg18 only the LSDB BGMUT was lifted using liftOver.
+
+# Update, reloaded table Dec 2006	Belinda Giardine
+# new entries for previous sources and more IDbases
+#concat and sort gvPos data
+cd /cluster/store6/giardine/gvNov2006/
+cat *hg17.txt > gvPos.Hg17.txt
+cat *hg18.txt > gvPos.Hg18.txt
+grep "^chr" gvPos.Hg18.txt | sort -k1,1 -k2,2n > gvPosSorted.Hg18.bed
+grep "^chr" gvPos.Hg17.txt | sort -k1,1 -k2,2n > gvPosSorted.Hg17.bed
+#make loadHgFixed.sql file by:
+##start with ls -1 of data, delete pos and .sql file(s),
+##edit to make load commands
+#delete old
+cd ~giardine/gv/
+hgsql hgFixed < dropTables.sql
+cd ~giardine/humPhen/kent/src/hg/lib/
+hgsql hg17 < gv.sql
+#cut and paste gvPos table into hg18 as well
+cd /cluster/store6/giardine/gvNov2006/
+#create a file with load statements
+#load like below or cut and paste if want to watch for warnings
+hgsql hgFixed < loadHgFixed.sql
+hgLoadBed hg17 gvPos gvPosSorted.Hg17.bed -noSort -oldTable -tab
+hgLoadBed hg18 gvPos gvPosSorted.Hg18.bed -noSort -oldTable -tab
+#check counts to verify loads succeeded
+#get disease association predictions for conserved variants
+#featureBits doesn't keep bed fields, must load and use hgTables to do intersect
+#get list a variants that are already done
+hgsql -N hgFixed > gvWithDiseaseStatus.txt <<end
+select id from gvAttr where attrType = 'disease';
+end
+#use table browser to get variants that intersect most conserved track
+#for each build with attributes in hgFixed
+#set conserved variants that are null to likely
+~kent/src/hg/utils/gvParsers/computeDiseaseAssocCons
+conservedVariants.hg17.txt conservedVariants.hg18.txt >
+gvAttrConservedDisease.txt
+hgsql hgFixed
+        load data local infile "gvAttrConservedDisease.txt" into table gvAttr;
 
     # << emacs
 ##########################################################################
@@ -11897,4 +11943,19 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/$contig
     cp -p /san/sanvol1/scratch/hg18/uniGene/hg18.uniGene.pslReps.psl .
 
     hgLoadPsl -table=uniGene_3 hg18 hg18.uniGene.pslReps.psl
+
 ####################################################################
+# EXONIPHY (2006-12-05 acs)
+
+    # predictions provided by Brona Brejova in Siepel Lab (bb248@cornell.edu).
+    # stored in /cluster/data/hg18/bed/exoniphy/exoniphy.gff
+
+    ldHgGene -genePredExt -gtf hg18 exoniphy exoniphy.gff
+
+####################################################################
+# HapMap CNVRs (copy number variable regions) from Matt Hurles (Heather Dec. 2006)
+# Change bed3 to bed6 to match hg17
+
+cd /cluster/data/hg18/bed/sv
+redon.pl < cnpRedon.hg18 > redon.bed
+hgLoadBed hg18 cnpRedon cnpRedon.bed

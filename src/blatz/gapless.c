@@ -32,7 +32,7 @@ struct cBlock *block = NULL;
     DNA *t = tDna + tPos;
     int i;
     for (i=0; i<hitSpan; ++i)
-        totalScore += matrix[q[i]][t[i]];
+        totalScore += matrix[(int)q[i]][(int)t[i]];
     }
 
 /* Extend to right. */
@@ -46,7 +46,7 @@ struct cBlock *block = NULL;
 
     for (i=hitSpan; i<maxBases; ++i)
         {
-        if ((score += matrix[q[i]][t[i]]) > bestScore)
+        if ((score += matrix[(int)q[i]][(int)t[i]]) > bestScore)
             {
             bestPos = i;
             bestScore = score;
@@ -66,7 +66,7 @@ struct cBlock *block = NULL;
     int i, bestPos=0, score=0, bestScore=0;
     for (i=-1; i>=maxBases; --i)
         {
-        if ((score += matrix[q[i]][t[i]]) > bestScore)
+        if ((score += matrix[(int)q[i]][(int)t[i]]) > bestScore)
             {
             bestPos = i;
             bestScore = score;
@@ -335,7 +335,6 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                 for (i=0; i<count; ++i)
                     {
                     int targetPos = pos[i];
-                    int diagonal = queryPos - targetPos;
                     struct diagonalTrack sdt, *dt;
                     int dynaRet;
                     dynaRet = doDynaCounting(targetPos, queryPos); // LX

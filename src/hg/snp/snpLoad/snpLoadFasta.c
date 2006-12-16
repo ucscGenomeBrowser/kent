@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.20 2006/08/04 17:13:00 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.21 2006/12/05 17:59:28 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -49,9 +49,6 @@ struct lineFile *lf;
 FILE *f;
 char *line;
 int lineSize;
-char *chopAtRs;
-char *chopAtMolType;
-char *chopAtAllele;
 int wordCount9, wordCount2;
 char *row[9], *rsId[2], *molType[2], *class[2], *allele[2];
 int classVal = 0;

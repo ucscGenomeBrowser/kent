@@ -6,6 +6,7 @@
 #include "cheapcgi.h"
 #include "chromGraph.h"
 #include "correlate.h"
+#include "hPrint.h"
 #include "hgGenome.h"
 
 static void correlateChrom(struct chromGraphBin *a, struct chromGraphBin *b,

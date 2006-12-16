@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "log.h"
 #include "paraLib.h"
 #include "broadData.h"
 #include "md5.h"
@@ -68,7 +69,6 @@ return sd;
 int openOutputSocket(int port)
 {
 int sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-struct sockaddr_in sai;
 if (sd < 0)
     errAbort("Couldn't open datagram socket");
 return sd;
@@ -158,7 +158,6 @@ void fileTrackerFree(struct fileTracker **pFt)
 struct fileTracker *ft = *pFt;
 if (ft != NULL)
     {
-    int i;
     freeMem(ft->fileName);
     freez(pFt);
     }
@@ -282,7 +281,6 @@ return 0;
 void calcMd5OnSection(struct fileTracker *ft)
 /* Calculate md5. */
 {
-struct md5_context ctx;
 if (!ft->doneMd5)
     {
 #ifdef SOON
@@ -303,7 +301,6 @@ bdParseSectionDoneMessage(m, &fileId, &sectionIx, &blockCount);
 ft = findTracker(ftList, fileId);
 if (ft != NULL && sectionIx == ft->curSectionIx)
     {
-    struct fileSection *section = &ft->section;
     int missingCount = 0;
     for (i=0; i<blockCount; ++i)
 	++missingCount;
@@ -387,7 +384,6 @@ else
 void broadNode()
 /* broadNode - Daemon that runs on cluster nodes in broadcast data system. */
 {
-int port = 0;
 int inSd, outSd;
 int err = 0;
 struct bdMessage *m = NULL;

@@ -88,42 +88,6 @@ char *curTableLabel();
 char *getScriptName();
 /* returns script name from environment or hardcoded for command line */
 
-/* ---------- Javascript stuff. ----------------------*/
-
-void jsCreateHiddenForm(char **vars, int varCount);
-/* Create a hidden form with the given variables */
-
-void jsWriteFunctions();
-/* Write out Javascript functions. */
-
-char *jsOnChangeEnd(struct dyString **pDy);
-/* Finish up javascript onChange command. */
-
-void jsDropDownCarryOver(struct dyString *dy, char *var);
-/* Add statement to carry-over drop-down item to dy. */
-
-void jsTextCarryOver(struct dyString *dy, char *var);
-/* Add statement to carry-over text item to dy. */
-
-void jsTrackingVar(char *jsVar, char *val);
-/* Emit a little Javascript to keep track of a variable. 
- * This helps especially with radio buttons. */
-
-void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar);
-/* Carry over tracked variable (radio button?) to hidden form. */
-
-void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar, 
-	char *val, char *selVal);
-/* Make a radio button that also sets tracking variable
- * in javascript. */
-
-void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal);
-/* Make a check box filling in with existing value and
- * putting a javascript tracking variable on it. */
-
-char *jsOnRangeChange(char *cgiVar, char *jsVar, char *val);
-/* Make a little javascript to set the range radio button when
- * they type in the range text box. */
 
 /* ---------- Other UI stuff. ----------------------*/
 

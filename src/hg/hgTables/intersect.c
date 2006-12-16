@@ -12,10 +12,11 @@
 #include "bed.h"
 #include "hdb.h"
 #include "featureBits.h"
+#include "jsHelper.h"
 #include "hgTables.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.36 2006/08/03 18:46:00 hiram Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.37 2006/11/29 19:50:08 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -196,9 +197,9 @@ if (!wigOptions)
 	name, iName);
     puts("Check the following boxes to complement one or both tables. To complement a table means to include a row in the intersection if it \n"
      "is <I>not</I> included in the table. <P>");
-    jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", FALSE);
+    jsMakeTrackingCheckBox(cart, hgtaNextInvertTable, "invertTable", FALSE);
     printf("Complement %s before intersection/union <BR>\n", name);
-    jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", FALSE);
+    jsMakeTrackingCheckBox(cart, hgtaNextInvertTable2, "invertTable2", FALSE);
     printf("Complement %s before intersection/union <P>\n", iName);
     }
 else
@@ -223,7 +224,7 @@ hPrintf("</FORM>\n");
     int varCount = ArraySize(nextVars);
     memcpy(saveVars, nextVars, varCount * sizeof(saveVars[0]));
     saveVars[varCount] = hgtaDoIntersectMore;
-    jsCreateHiddenForm(saveVars, varCount+1);
+    jsCreateHiddenForm(cart, getScriptName(), saveVars, varCount+1);
     }
 
 htmlClose();

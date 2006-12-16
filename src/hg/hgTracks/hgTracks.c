@@ -94,7 +94,6 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 #include "dless.h"
-#include "humPhen.h"
 #include "liftOver.h"
 #include "hgConfig.h"
 #include "gv.h"
@@ -106,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1240 2006/11/14 00:30:24 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1248 2006/12/11 17:57:59 ann Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -967,6 +966,7 @@ while (exon != NULL)
     refAdd(&exonList, exon);    
     exon = exon->next;
     }
+/* Now sort it. */
 if (next)
     slSort(&exonList, exonSlRefCmp);
 else 
@@ -982,8 +982,13 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     if (next && (exon->end > winEnd))
 	{
 	if (exon->start < winEnd)
+	    {
 	    /* not an intron hanging over edge. */
-	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    if ((lf->tallEnd > winEnd) && (lf->tallEnd < exon->end) && (lf->tallEnd > exon->start))
+		linkedFeaturesMoveWinEnd(lf->tallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    else
+		linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    }
 	else if (bigExon)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
@@ -995,8 +1000,13 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     else if (!next && (exon->start < winStart))
 	{
 	if (exon->end > winStart)
+	    {
 	    /* not an inron hanging over the edge. */
-	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    if ((lf->tallStart < winStart) && (lf->tallStart > exon->start) && (lf->tallStart < exon->end))
+		linkedFeaturesMoveWinStart(lf->tallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    else
+		linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    }
 	else if (bigExon)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
@@ -11902,15 +11912,14 @@ if (liftOverChainForDb(database) != NULL)
 
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
-if (sameString(database, "hg17")
-            || sameString(database, "mm6")
-            || sameString(database, "rn3") 
+if (sameString(database, "hg18")
+            || sameString(database, "mm8")
+            || sameString(database, "rn4") 
             || sameString(database, "anoGam1") 
-            || sameString(database, "apiMel2") 
             || sameString(database, "canFam1") 
             || sameString(database, "dm2") 
             || sameString(database, "galGal2")
-            || sameString(database, "panTro1")
+            || sameString(database, "panTro2")
             || sameString(database, "tetNig1"))
     {
     hPuts("<TD ALIGN=CENTER>");
@@ -11919,13 +11928,13 @@ if (sameString(database, "hg17")
     }
 
 /* Print NCBI MapView anchor */
-if (sameString(database, "hg17"))
+if (sameString(database, "hg18"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "mm6"))
+if (sameString(database, "mm8"))
     {
     hPrintf("<TD ALIGN=CENTER>");
     hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
@@ -11939,7 +11948,7 @@ if (sameString(database, "danRer2"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "galGal2"))
+if (sameString(database, "galGal3"))
     {
     hPrintf("<TD ALIGN=CENTER>");
     hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
@@ -12161,6 +12170,7 @@ registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpIafrate", cnpIafrateMethods);
 registerTrackHandler("cnpSebat", cnpSebatMethods);
 registerTrackHandler("cnpFosmid", cnpFosmidMethods);
+registerTrackHandler("cnpRedon", cnpRedonMethods);
 registerTrackHandler("delConrad", delConradMethods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
 registerTrackHandler("delHinds", delHindsMethods);
@@ -12353,10 +12363,15 @@ registerTrackHandler("altGraphXPsb2004", altGraphXMethods );
 registerTrackHandler("altGraphXT6Con", altGraphXMethods ); 
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("RfamSeedFolds", rnaSecStrMethods);
+registerTrackHandler("RfamFullFolds", rnaSecStrMethods);
 registerTrackHandler("rfamTestFolds", rnaSecStrMethods);
 registerTrackHandler("rnaTestFolds", rnaSecStrMethods);
+registerTrackHandler("rnaTestFoldsV2", rnaSecStrMethods);
+registerTrackHandler("rnaTestFoldsV3", rnaSecStrMethods);
 registerTrackHandler("evofold", rnaSecStrMethods);
+registerTrackHandler("evofoldRaw", rnaSecStrMethods);
 registerTrackHandler("encode_tba23EvoFold", rnaSecStrMethods);
+registerTrackHandler("encodeEvoFold", rnaSecStrMethods);
 registerTrackHandler("rnafold", rnaSecStrMethods);
 registerTrackHandler("mcFolds", rnaSecStrMethods);
 registerTrackHandler("rnaEditFolds", rnaSecStrMethods);

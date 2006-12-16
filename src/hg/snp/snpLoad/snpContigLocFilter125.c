@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter125.c,v 1.5 2006/08/10 18:21:55 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter125.c,v 1.6 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -48,8 +48,6 @@ char **row;
 int count = 0;
 int orient = 0;
 int end = 0;
-char chromName[64];
-struct hashEl *hel = NULL;
 
 contigChroms = newHash(0);
 verbose(1, "reading ContigInfo...\n");
@@ -176,13 +174,10 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashEl *el1, *el2;
-struct hashEl *helRandom;
 FILE *f;
-struct coords *cel = NULL;
 int start = 0;
 int end = 0;
 int loc_type = 0;
-int phys_pos_from = 0;
 
 f = hgCreateTabFile(".", "ContigLocFilter");
 

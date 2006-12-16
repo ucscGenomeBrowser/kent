@@ -20,12 +20,10 @@ int main(int argc, char *argv[])
 {
 char *encoded = NULL;
 char *decoded = NULL;
-int i = 0, l = 0;
 char *input = cloneString(argv[1]);
-char *p = input;
 boolean validB64 = TRUE;
 if (argc != 2)
-errAbort("Specify a string to encode/decode on commandline using quotes.\n"
+errAbort("%s: Specify a string to encode/decode on commandline using quotes.\n"
        , argv[0]);
 	    
 encoded = base64Encode(argv[1], strlen(argv[1]));

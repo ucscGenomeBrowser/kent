@@ -17,7 +17,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetDeletions.c,v 1.1 2006/09/06 20:08:21 heather Exp $";
+static char const rcsid[] = "$Id: snpGetDeletions.c,v 1.2 2006/12/05 17:59:28 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -93,8 +93,6 @@ char **row;
 int start = 0;
 int end = 0;
 int weight = 0;
-int slashCount = 0;
-int pos = 0;
 int candidateCount = 0;
 int matchCount = 0;
 
@@ -143,7 +141,6 @@ int main(int argc, char *argv[])
 /* read snpTable, output deletions that pass input filtering */
 {
 struct slName *chromList = NULL;
-struct slName *chromPtr = NULL;
 
 if (argc != 4)
     usage();

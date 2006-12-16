@@ -49,8 +49,6 @@ struct dnaSeq *query;
 // LX BEG
 int b, bend, printing; 
 FILE *bedfp = NULL;
-int j; 
-int i;
 // See if bed file output of the mask was requested
 if (differentString(bzp->dynaBedFileQ, "")) 
    bedfp = mustOpen(bzp->dynaBedFileQ, "w");
@@ -89,7 +87,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
         {
 	if (seqIsLower(query))
 	    warn("Sequence %s is all lower case, and thus ignored. Use -unmask "
-	         "flag to unmask lower case sequence.");
+	         "flag to unmask lower case sequence.", query->name);
 	}
     verbose(1, "%s (%d bases) score %2.0f\n", 
             query->name, query->size, bestScore);

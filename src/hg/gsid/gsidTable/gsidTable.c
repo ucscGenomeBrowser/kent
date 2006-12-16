@@ -25,7 +25,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.3 2006/11/22 22:01:28 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.5 2006/12/05 01:54:38 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -41,6 +41,7 @@ char *displayCountString; /* Ascii version of display count, including 'all'. */
 struct hash *oldCart;	/* Old cart hash. */
 //struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 struct hash *columnHash;  /* Hash of active columns keyed by name. */
+int passedFilterCount;  /* number of subjects passing filter */
 
 void controlPanelStart()
 /* Put up start of tables around a control panel. */ {
@@ -83,15 +84,7 @@ controlPanelStart();
     static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
     hPrintf(" display ");
     hPrintf("<SELECT NAME=\"%s\"", countVarName);
-    hPrintf(" onchange=\""
-        "document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
-        "document.orgForm.submit();"
-        "\"",
-        countVarName,
-        countVarName,
-        countVarName);
-    hPrintf(">\n");
-
+    hPrintf(" onchange=\"document.mainForm.submit();\">\n");
     for (i = 0; i < ArraySize(menu); ++i)
         {
         hPrintf("<OPTION VALUE=\"%s\"", menu[i]);
@@ -195,7 +188,8 @@ for (si = siList; si != NULL; si = si->next)
 hPrintf("<!-- End Rows -->");
 
 hPrintf("</TABLE>\n");
-hPrintf("<BR>Subjects Displayed: %d",slCount(siList));
+hPrintf("<BR>Displayed %d out of %d subjects passing filter.",
+    slCount(siList), passedFilterCount);
 hPrintf("</CENTER>");
 }
 
@@ -268,16 +262,6 @@ mainControlPanel();
 if (subjList != NULL)
     bigTable(conn, colList,subjList);
 hPrintf("</FORM>\n");
-/* hidden form */
-hPrintf("<FORM ACTION=\"../cgi-bin/gsidTable\" METHOD=\"GET\" NAME=\"orgForm\">\n");
-hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
-hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orderVarName,
-        cartUsualString(cart, orderVarName, ""));
-hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", countVarName,
-        cartUsualString(cart, countVarName, ""));
-cartSaveSession(cart);
-puts("</FORM>");
 }
 
 
@@ -1211,6 +1195,7 @@ struct subjInfo *getOrderedList(struct column *ord,
 {
 struct subjInfo *subjList = advFilterResults(colList, conn);
 struct subjInfo *si;
+passedFilterCount = slCount(subjList);
 
 for (si=subjList;si;si=si->next)
     {

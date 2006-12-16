@@ -5,9 +5,10 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "web.h"
+#include "hPrint.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.3 2006/07/01 09:24:37 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.7 2006/12/02 01:32:49 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -36,7 +37,7 @@ hPrintf("<TABLE>\n");
 hPrintf("<TR>\n");
 hPrintf("<TD>\n");
 hPrintf("image width: ");
-cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
+cgiMakeIntVar(hggImageWidth, cartUsualInt(cart, hggImageWidth, hgDefaultPixWidth), 4);
 hPrintf("</TD>\n");
 hPrintf("<TD>\n");
 hPrintf("graph height: ");
@@ -56,12 +57,24 @@ hPrintf("<TD>\n");
 cgiMakeButton("submit", "Submit");
 hPrintf("</TD>\n");
 hPrintf("</TR>\n");
-hPrintf("<TR>\n");
-hPrintf("<TD>\n");
-cartMakeCheckBox(cart, hggLabels, TRUE);
-hPrintf("numerical labels");
-hPrintf("</TD>\n");
 hPrintf("</TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("numerical labels: ");
+cartMakeCheckBox(cart, hggLabels, TRUE);
+hPrintf(" <I>Label axis on left for first graph and on right for last graph</I>");
+hPrintf("</TD></TR></TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("hilight missing: ");
+cartMakeCheckBox(cart, hggYellowMissing, FALSE);
+hPrintf(" <I>Highlight graph background where there is missing data</I>");
+hPrintf("</TD></TR></TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("region pad: ");
+cgiMakeIntVar(hggRegionPad, regionPad(), 6);
+hPrintf(" <I>Number of bases to add to either side of regions over threshold</I>");
+hPrintf("</TD></TR></TABLE>\n");
+int regionPad();
+
 hPrintf("</FORM>\n");
 cartWebEnd();
 }

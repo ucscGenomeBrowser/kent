@@ -86,10 +86,10 @@ immediately following the 'alpha:' target
 Also, a make in this trackDb directory wants to do all assemblies
 that exist at UCSC.  You are most likely working on a subset
 of these, and often only one.  In this case, limit the list
-of assemblies with the extra arguments ZOO_DBS and DBS,
+of assemblies with the extra argument DBS=...
 for example to rebuild just the hg17.trackDb:
 
-$ make alpha ZOO_DBS="" DBS=hg17
+$ make alpha DBS=hg17
 
 Extra Credit:
 
@@ -116,5 +116,5 @@ binary every time, thus always picking up any potentially new
 library.
 
 ====================================================================
-This file last updated: $Date: 2004/12/17 21:28:16 $
+This file last updated: $Date: 2006/12/07 23:56:46 $
 

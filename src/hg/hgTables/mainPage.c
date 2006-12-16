@@ -10,6 +10,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "web.h"
+#include "jsHelper.h"
 #include "hui.h"
 #include "hgColors.h"
 #include "trackDb.h"
@@ -17,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.101 2006/10/31 23:24:02 heather Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.102 2006/11/29 19:50:08 kent Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -30,8 +31,7 @@ return strcmp(a->shortLabel, b->shortLabel);
 static struct dyString *onChangeStart()
 /* Start up a javascript onChange command */
 {
-struct dyString *dy = dyStringNew(1024);
-dyStringAppend(dy, "onChange=\"");
+struct dyString *dy = jsOnChangeStart();
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
@@ -611,7 +611,7 @@ if (isPositional)
     makeRegionButton("range", regionType);
     hPrintf(" position ");
     hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=26 VALUE=\"%s\" onFocus=\"%s\">\n",
-    	hgtaRange, range, jsOnRangeChange(hgtaRegionType, "regionType", "range"));
+    	hgtaRange, range, jsRadioUpdate(hgtaRegionType, "regionType", "range"));
     cgiMakeButton(hgtaDoLookupPosition, "lookup");
     hPrintf("</TD></TR>\n");
     }
@@ -833,7 +833,7 @@ hPrintf("</FORM>\n");
     static char *saveVars[] = {
       "clade", "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
       hgtaRange, hgtaOutputType, hgtaOutFileName};
-    jsCreateHiddenForm(saveVars, ArraySize(saveVars));
+    jsCreateHiddenForm(cart, getScriptName(), saveVars, ArraySize(saveVars));
     }
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");

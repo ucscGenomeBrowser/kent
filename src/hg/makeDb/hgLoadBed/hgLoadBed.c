@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.44 2006/07/12 20:35:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.45 2006/12/13 18:03:28 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -23,6 +23,7 @@ boolean noLoad = FALSE;		/* Do not load DB or remove tab file */
 boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean strict = FALSE;		/* do sanity checks on chrom start,end */
+boolean allowStartEqualEnd = FALSE;  /* TRUE,  during strict, start == end OK */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 int maxChromNameLength = 0;		/* specify to avoid chromInfo */
@@ -44,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
     {"bedGraph", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"strict", OPTION_BOOLEAN},
+    {"allowStartEqualEnd", OPTION_BOOLEAN},
     {"maxChromNameLength", OPTION_INT},
     {"tmpDir", OPTION_STRING},
     {"noNameIx", OPTION_BOOLEAN},
@@ -80,6 +82,7 @@ errAbort(
   "   -ignoreEmpty  - no error on empty input file\n"
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
+  "   -allowStartEqualEnd  - during strict, allow Start==End OK\n"
   "   -verbose=N - verbose level for extra information to STDERR"
   );
 }
@@ -175,11 +178,22 @@ int i, wordCount;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (strict)
-	if (bed->chromStart >= bed->chromEnd)
+	{
+	if (allowStartEqualEnd)
 	    {
-	    verbose(1,"WARNING: start >= end: %s\n", bed->line);
-	    continue;
+	    if (bed->chromStart > bed->chromEnd)
+		{
+		verbose(1,"WARNING: start > end: %s\n", bed->line);
+		continue;
+		}
+	    } else {
+	    if (bed->chromStart >= bed->chromEnd)
+		{
+		verbose(1,"WARNING: start >= end: %s\n", bed->line);
+		continue;
+		}
 	    }
+	}
     if (!noBin)
         fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
     if (strictTab)
@@ -417,6 +431,7 @@ notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
 strict = optionExists("strict");
+allowStartEqualEnd = optionExists("allowStartEqualEnd");
 tmpDir = optionVal("tmpDir", tmpDir);
 nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");

@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.20 2006/10/24 00:23:06 hartera Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.24 2006/12/14 17:48:11 hartera Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */

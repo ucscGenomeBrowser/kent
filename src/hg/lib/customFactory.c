@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.40 2006/11/16 23:55:45 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.45 2006/12/13 18:12:49 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -113,7 +113,7 @@ static boolean bedRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
-if (type != NULL && !sameString(type, fac->name) && !sameWord(type, "expRatio"))
+if (type != NULL && !sameString(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -129,31 +129,40 @@ customPpReuse(cpp, line);
 return isBed;
 }
 
+static boolean microarrayRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a microarray track */
+{
+return bedRecognizer(fac, cpp, type, track) && (track->fieldCount == 15);
+}
+
 static struct pipeline *bedLoaderPipe(struct customTrack *track)
 /* Set up pipeline that will load wig into database. */
 {
 char *db = customTrackTempDb();
 /* running the single command:
- *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -tmpDir=../trash/ct
+ *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -allowStartEqualEnd
+ *	    -tmpDir=../trash/ct -allowStartEqualEnd
  *		-maxChromNameLength=${nameLength} stdin
  */
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadBed", "-verbose=0", "-noNameIx", "-ignoreEmpty", 
-	NULL, NULL, NULL, NULL, "stdin", NULL};
+	"-allowStartEqualEnd", NULL, NULL, NULL, NULL, "stdin", NULL};
 dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
-cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "%s", db);
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "%s", db);
+cmd1[7] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "%s", track->dbTableName);
-cmd1[7] = dyStringCannibalize(&tmpDy);
+cmd1[8] = dyStringCannibalize(&tmpDy);
 /* the "/dev/null" file isn't actually used for anything, but it is used
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
- *	The /dev/stderr will get stderr messages from hgLoadBed into the
- *	Apache error log
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
  */
 return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
 	"/dev/null", track->dbStderrFile);
@@ -383,6 +392,19 @@ slReverse(&track->bedList);
 return bedFinish(track, dbRequested);
 }
 
+static struct customTrack *microarrayLoader(struct customFactory *fac,  
+	struct hash *chromHash,
+    	struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up microarray data until get next track line. */
+{
+struct customTrack *ct = bedLoader(fac, chromHash, cpp, track, dbRequested);
+freeMem(track->tdb->type);
+/* /\* freeMem(track->dbTrackType); *\/ */
+track->tdb->type = cloneString("array");
+/* track->dbTrackType = cloneString("expRatio"); */
+return ct;
+}
+
 static struct customFactory bedFactory = 
 /* Factory for bed tracks */
     {
@@ -390,6 +412,15 @@ static struct customFactory bedFactory =
     "bed",
     bedRecognizer,
     bedLoader,
+    };
+
+static struct customFactory microarrayFactory = 
+/* Factory for bed tracks */
+    {
+    NULL,
+    "array",
+    microarrayRecognizer,
+    microarrayLoader,
     };
 
 /*** GFF/GTF Factory - converts to BED ***/
@@ -778,8 +809,8 @@ cmd2[7] = track->dbTableName;
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
  *	This function exits if it can't get the pipe created
- *	The /dev/stderr will get stderr messages from hgLoadBed into the
- *	Apache error log
+ *	The dbStderrFile will get stderr messages from this pipeline into the
+ *	our private error file so we can return the errors to the user.
  */
 return pipelineOpen(cmds, pipelineWrite | pipelineNoAbort,
 	"/dev/null", track->dbStderrFile);
@@ -959,7 +990,8 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gffFactory);
-    slAddTail(&factoryList, &bedFactory); 
+    slAddTail(&factoryList, &bedFactory);
+    slAddTail(&factoryList, &microarrayFactory);
     }
 }
 
@@ -1268,7 +1300,10 @@ struct customPp *cpp = customDocPpNew(lf);
 /* extract doc */
 struct dyString *ds = dyStringNew(0);
 while ((line = customPpNextReal(cpp)) != NULL)
+    {
     dyStringAppend(ds, line);
+    dyStringAppend(ds, "\n");
+    }
 return dyStringCannibalize(&ds);
 }
 

@@ -57,6 +57,7 @@ struct customTrack
 #define CT_CUSTOM_FILE_NAME_VAR "hgt.customFile__filename"
 #define CT_CUSTOM_DOC_TEXT_VAR  "hgct_docText"
 #define CT_CUSTOM_DOC_FILE_VAR  "hgct_docFile"
+#define CT_CUSTOM_DOC_FILE_NAME_VAR "hgct_docFile__filename"
 
 #define CT_DO_REMOVE_VAR        "hgct_doRemoveCustomTrack"
 #define CT_SELECTED_TABLE_VAR   "hgct_table"
@@ -91,6 +92,9 @@ void customTracksSaveCart(struct cart *cart, struct customTrack *ctList);
 
 void customTracksSaveFile(struct customTrack *trackList, char *fileName);
 /* Save out custom tracks. This is just used by internally  */
+
+char *customTrackFileVar(char *database);
+/* return CGI var name containing custom track filename for a database */
 
 void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash);
 /* Lift tracks based on hash of ctgPos. */
@@ -138,6 +142,9 @@ struct trackDb *customTrackTdbDefault();
 
 boolean isCustomTrack(char *track);
 /* determine if track name refers to a custom track */
+
+boolean customTrackIsCompressed(char *fileName);
+/* test for file suffix indicating compression */
 
 void  customTrackDump(struct customTrack *track);
 /* Write out info on custom track to stdout */

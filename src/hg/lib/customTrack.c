@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.154 2006/11/21 00:33:08 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.158 2006/12/12 00:57:49 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -410,7 +410,7 @@ if (retReplacedCts)
 return newCtList;
 }
 
-static char *customTrackFileVar(char *database)
+char *customTrackFileVar(char *database)
 /* return CGI var name containing custom track filename for a database */
 {
 char buf[64];
@@ -588,6 +588,37 @@ else
     }
 }
 
+boolean customTrackIsCompressed(char *fileName)
+/* test for file suffix indicating compression */
+{
+    return (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
+            endsWith(fileName,".bz2"));
+}
+
+static char *prepCompressedFile(struct cart *cart, char *fileName, 
+                                        char *binVar, char *fileVar)
+/* determine compression type and format properly for parser */
+{
+    if (!customTrackIsCompressed(fileName))
+    return NULL;
+char buf[256];
+char *cFBin = cartOptionalString(cart, binVar);
+if (cFBin)
+    {
+    safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
+    /* cgi functions preserve binary data, cart vars have been 
+     *  cloneString-ed  which is bad for a binary stream that might 
+     * contain 0s  */
+    }
+else
+    {
+    char *cF = cartOptionalString(cart, fileVar);
+    safef(buf,sizeof(buf),"compressed://%s %lu %lu",
+        fileName, (unsigned long) cF, (unsigned long) strlen(cF));
+    }
+return cloneString(buf);
+}
+
 struct customTrack *customTracksParseCartDetailed(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
@@ -605,6 +636,7 @@ struct customTrack *customTracksParseCartDetailed(struct cart *cart,
  * error */
 {
 #define CT_CUSTOM_FILE_BIN_VAR  CT_CUSTOM_FILE_VAR "__binary"
+#define CT_CUSTOM_DOC_FILE_BIN_VAR  CT_CUSTOM_DOC_FILE_VAR "__binary"
 int numAdded = 0;
 char *err = NULL;
 
@@ -623,32 +655,18 @@ if (customText && bogusMacEmptyChars(customText))
 
 fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
 char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-if (fileName && fileName[0])
+if (isNotEmpty(fileName))
     {
     /* handle file input, optionally with compression */
-    if (fileContents && fileContents[0])
+    if (isNotEmpty(fileContents))
         customText = fileContents;
     else
         {
-        if (endsWith(fileName,".gz") || endsWith(fileName,".Z")  ||
-            endsWith(fileName,".bz2"))
+        /* file contents not available -- check for compressed */
+        if (customTrackIsCompressed(fileName))
             {
-            char buf[256];
-            char *cFBin = cartOptionalString(cart, CT_CUSTOM_FILE_BIN_VAR);
-            if (cFBin)
-                {
-                safef(buf,sizeof(buf),"compressed://%s %s", fileName,  cFBin);
-                /* cgi functions preserve binary data, cart vars have been 
-                 *  cloneString-ed  which is bad for a binary stream that might 
-                 * contain 0s  */
-                }
-            else
-                {
-                char *cF = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
-                safef(buf,sizeof(buf),"compressed://%s %lu %lu",
-                    fileName, (unsigned long) cF, (unsigned long) strlen(cF));
-                }
-            customText = cloneString(buf);
+            customText = prepCompressedFile(cart, fileName, 
+                                CT_CUSTOM_FILE_BIN_VAR, CT_CUSTOM_FILE_VAR);
             }
         else
             {
@@ -663,14 +681,30 @@ customText = skipLeadingSpaces(customText);
 
 /* get track description from cart */
 char *html = NULL;
-if (cartNonemptyString(cart, CT_CUSTOM_DOC_FILE_VAR))
-    html = cartString(cart, CT_CUSTOM_DOC_FILE_VAR);
+char *docFileName = cartOptionalString(cart, CT_CUSTOM_DOC_FILE_NAME_VAR);
+char *docFileContents = cartOptionalString(cart, CT_CUSTOM_DOC_FILE_VAR);
+if (isNotEmpty(docFileContents))
+    html = docFileContents;
+else if (isNotEmpty(docFileName))
+    {
+    if (customTrackIsCompressed(docFileName))
+        html = prepCompressedFile(cart, docFileName, 
+                        CT_CUSTOM_DOC_FILE_BIN_VAR, CT_CUSTOM_DOC_FILE_VAR);
+    else
+        {
+        /* unreadable file */
+        struct dyString *ds = dyStringNew(0);
+        dyStringPrintf(ds, "Can't read doc file: %s", docFileName);
+        err = dyStringCannibalize(&ds);
+        customText = NULL;
+        }
+    }
 else if (cartNonemptyString(cart, CT_CUSTOM_DOC_TEXT_VAR))
     html = cartString(cart, CT_CUSTOM_DOC_TEXT_VAR);
 html = customDocParse(html);
 
 struct customTrack *newCts = NULL, *ct = NULL;
-if (customText != NULL && customText[0] != 0)
+if (isNotEmpty(customText))
     {
     /* protect against format errors in input from user */
     struct errCatch *errCatch = errCatchNew();
@@ -752,8 +786,8 @@ if (customTracksExist(cart, &ctFileName))
                 break;
                 }
             }
-        cartRemove(cart, CT_SELECTED_TABLE_VAR);
         }
+    cartRemove(cart, CT_SELECTED_TABLE_VAR);
     }
 
 /* merge new and old tracks */
@@ -766,6 +800,7 @@ cartRemove(cart, CT_CUSTOM_TEXT_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_NAME_VAR);
 cartRemove(cart, CT_CUSTOM_FILE_BIN_VAR);
+cartRemove(cart, CT_CUSTOM_DOC_FILE_BIN_VAR);
 
 if (retCtFileName)
     *retCtFileName = ctFileName;

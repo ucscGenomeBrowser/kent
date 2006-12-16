@@ -20,10 +20,12 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.106 2006/11/08 21:48:24 galt Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.109 2006/12/07 21:54:45 galt Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
+boolean orgChange = FALSE;
+boolean dbChange = FALSE;
 
 struct serverTable
 /* Information on a server. */
@@ -608,11 +610,10 @@ void askForSeq(char *organism, char *db)
 {
 struct serverTable *serve = NULL;
 
-/* JavaScript to copy input data on the change genome button to a hidden form
-This was done in order to be able to flexibly arrange the UI HTML
-*/
+/* JavaScript to update form when org changes */
 char *onChangeText = "onchange=\""
-    " document.mainForm.submit();\"";
+    "document.mainForm.changeInfo.value='orgChange';"
+    "document.mainForm.submit();\"";
 
 char *userSeq = NULL;
 
@@ -623,6 +624,7 @@ printf(
 "<H2>BLAT Search Genome</H2>\n");
 cartSaveSession(cart);
 puts("\n");
+puts("<INPUT TYPE=HIDDEN NAME=changeInfo VALUE=\"\">\n");
 puts("<TABLE BORDER=0 WIDTH=80>\n<TR>\n");
 printf("<TD ALIGN=CENTER>Genome:</TD>");
 printf("<TD ALIGN=CENTER>Assembly:</TD>");
@@ -724,23 +726,19 @@ void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
 char *userSeq;
-char *db, *organism;
-boolean orgChange = FALSE;
+char *db, *organism, *oldDb;
 boolean clearUserSeq = cgiBoolean("Clear");
 
 cart = theCart;
 dnaUtilOpen();
 
-organism = cgiOptionalString("org");
-orgChange = differentStringNullOk(organism, hashFindVal(oldVars, "org"));
-if (orgChange)
+getDbAndGenome(cart, &db, &organism);
+/* stomp cart vars dependent on old db */
+oldDb = hashFindVal(oldVars, "db");
+dbChange = differentStringNullOk(db, oldDb);
+if (dbChange && oldDb)
     {
-    db = hDefaultDbForGenome(organism);
-    cartSetString(cart, "db", db);
-    }
-else
-    {
-    getDbAndGenome(cart, &db, &organism);
+    cartRemove(cart, "position");
     }
 
 /* Get sequence - from userSeq variable, or if 
@@ -769,13 +767,21 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
+
+/* org has precedence over db when changeInfo='orgChange' */
+orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
+if (orgChange)
+    {
+    cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
+    }
+
 htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;

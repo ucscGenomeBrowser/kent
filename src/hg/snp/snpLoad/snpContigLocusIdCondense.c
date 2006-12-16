@@ -22,7 +22,7 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.8 2006/07/06 17:34:25 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.9 2006/12/05 17:59:28 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -47,8 +47,8 @@ void printArray(FILE *f)
 int i;
 boolean first = TRUE;
 /* special case for UTR/intron */
-if (functionFound[5] && functionFound[6])
-    functionFound[5] = FALSE;
+// if (functionFound[5] && functionFound[6])
+    // functionFound[5] = FALSE;
 for (i=0; i<ArraySize(functionStrings); i++)
     if (functionFound[i])
         {
@@ -67,10 +67,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 FILE *f;
-struct dyString *functionList = newDyString(255);
 char *currentSnpString = NULL;
-int len = 0;
-char *finalString = NULL;
 int currentSnpNum = 0;
 int functionIndex = 0;
 

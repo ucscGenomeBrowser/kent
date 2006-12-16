@@ -11,7 +11,7 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.33 2006/07/28 18:50:29 angie Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.34 2006/12/01 21:34:09 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -257,12 +257,12 @@ else
     fprintf(f, "%d %s %d %d %s %d %d %c %d\n", ++ix, psl->tName, psl->tStart+1, 
             psl->tEnd, psl->qName, qs+1, qe, psl->strand[0], score);
 if (strlen(t) != size)
-    warn("size of T %ld and Q %d differ on line %d\n",strlen(t), size, ix);
+    warn("size of T %ld and Q %d differ on line %d\n",(long)strlen(t), size, ix);
 for (i=0; i<size ; i++) 
     fputc(t[i],f);
 fputc('\n',f);
 if (strlen(q) != size)
-    warn("size of T %ld and Q %d differ on line %d\n",strlen(q), size, ix);
+    warn("size of T %ld and Q %d differ on line %d\n",(long)strlen(q), size, ix);
 for (i=0; i<size ; i++) 
     fputc(q[i],f);
 fputc('\n',f);

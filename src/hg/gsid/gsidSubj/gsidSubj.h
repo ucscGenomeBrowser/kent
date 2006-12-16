@@ -89,7 +89,7 @@ boolean checkDatabases(char *databases);
 /* -------- Commands ---------- */
 
 /* -------- CGI Data Variables ---------- */
-#define hgsSubj "hgs_subj"	/* Main gene id. */
+#define hgsSubj "hgs_subj"	/* Main subject id. */
 
 /* -------- Global Variables --------*/
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */

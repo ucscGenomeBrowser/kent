@@ -13,7 +13,7 @@
 extern char *createTablesSql;
 extern char *createKeysSql;
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.5 2006/09/28 04:54:52 markd Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.6 2006/12/01 20:01:55 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -151,7 +151,7 @@ int c;
 /* when a new column is found, add a zero byte to the row buffer. Can't
  * save pointers in row until the whole line is read as it might resize */
 dyStringClear(rowBuf);
-while ((c = fgetc_unlocked(fh)) != EOF)
+while ((c = getc_unlocked(fh)) != EOF)
     {
     if ((c == '\n') && !inQuotes && (prevChar != '\\'))
         break;  /* reached end of line */

@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpGetSimple.c,v 1.5 2006/09/01 20:54:01 heather Exp $";
+static char const rcsid[] = "$Id: snpGetSimple.c,v 1.6 2006/12/05 17:59:28 heather Exp $";
 
 static struct hash *chromHash = NULL;
 static struct hash *annotationsHash = NULL;
@@ -98,7 +98,7 @@ char *randomString = NULL;
 struct hashEl *hel = NULL;
 
 safef(query, sizeof(query), 
-    "select name, chrom, chromStart, chromEnd, strand, refUCSC, observed, class, locType from %s", tableName);
+    "select name, chrom, chromStart, chromEnd, strand, refUCSC, observed, class, locType, weight from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -108,6 +108,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!sameString(row[8], "exact")) continue;
     if (triAllelic(row[6])) continue;
     if (sameString(row[6], "A/C/G/T")) continue;
+    // if (!sameString(row[9], "1")) continue;
     hel = hashLookup(annotationsHash, row[0]);
     if (hel != NULL) continue;
     hel = hashLookup(chromHash, row[1]);
@@ -121,7 +122,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 cookie = hashFirst(chromHash);
-while (hel = hashNext(&cookie))
+while ((hel = hashNext(&cookie)))
     fclose(hel->val);
 }
 

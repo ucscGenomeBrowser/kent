@@ -14,7 +14,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMoltype.c,v 1.3 2006/06/24 00:46:13 heather Exp $";
+static char const rcsid[] = "$Id: snpMoltype.c,v 1.4 2006/12/05 17:59:28 heather Exp $";
 
 static struct hash *multiFastaHash = NULL;
 static struct hash *chromFastaHash = NULL;
@@ -111,7 +111,6 @@ struct sqlResult *sr;
 char **row;
 char tableName[64];
 char fileName[64];
-char *classString = NULL;
 FILE *f;
 char *molType = NULL;
 
@@ -197,7 +196,6 @@ int main(int argc, char *argv[])
 /* hash snpFasta, read through chrN_snpTmp, rewrite with extensions to individual chrom tables */
 {
 struct slName *chromList, *chromPtr;
-struct snpTmp *snpList = NULL;
 char tableName[64];
 
 if (argc != 2)

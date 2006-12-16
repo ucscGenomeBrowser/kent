@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckCluster2.c,v 1.1 2006/09/05 20:44:29 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckCluster2.c,v 1.2 2006/12/05 17:59:28 heather Exp $";
 
 static char *database = NULL;
 static char *snpTable = NULL;
@@ -16,9 +16,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-    "snpCheckCluster - check for clustering errors using binRange\n"
+    "snpCheckCluster2 - check for clustering errors using binRange\n"
     "usage:\n"
-    "    snpCheckCluster database snpTable\n");
+    "    snpCheckCluster2 database snpTable\n");
 }
 
 
@@ -104,9 +104,6 @@ verbose(1, "  match count = %d\n", matchCount);
 int main(int argc, char *argv[])
 /* read snpTable, report positions with more than annotation */
 {
-struct slName *chromList = NULL;
-struct slName *chromPtr = NULL;
-
 if (argc != 3)
     usage();
 
@@ -117,16 +114,21 @@ snpTable = argv[2];
 if (!hTableExists(snpTable)) 
     errAbort("no %s table\n", snpTable);
 
-chromList = hAllChromNames();
+// chromList = hAllChromNames();
 
-outputFileHandle = mustOpen("snpCheckCluster2.out", "w");
-for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    {
-    verbose(1, "chrom = %s\n", chromPtr->name);
-    getBinKeeper(chromPtr->name);
-    checkForClusters(chromPtr->name);
-    }
+// outputFileHandle = mustOpen("snpCheckCluster2.out", "w");
+// for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    // {
+    // verbose(1, "chrom = %s\n", chromPtr->name);
+    // getBinKeeper(chromPtr->name);
+    // checkForClusters(chromPtr->name);
+    // }
 
+// carefulClose(&outputFileHandle);
+
+outputFileHandle = mustOpen("snpCheckCluster2.chr22", "w");
+getBinKeeper("chr22");
+checkForClusters("chr22");
 carefulClose(&outputFileHandle);
 return 0;
 }

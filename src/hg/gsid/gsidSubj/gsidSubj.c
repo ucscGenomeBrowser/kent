@@ -18,7 +18,7 @@
 #include "gsidSubj.h"
 //#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.2 2006/11/23 00:53:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.3 2006/12/06 18:40:21 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -248,7 +248,7 @@ if (sameWord(curSubjId, ""))
     }
 else
     {
-    safef(query, sizeof(query), "select subjId from %s.gsSubjInfo where subjId = '%s'", 
+    safef(query, sizeof(query), "select subjId from %s.gsidSubjInfo where subjId = '%s'", 
     	  database, curSubjId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);

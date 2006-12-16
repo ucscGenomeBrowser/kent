@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.35 2006/11/08 21:44:46 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.36 2006/12/05 17:59:27 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -75,7 +75,6 @@ int count = 0;
 int orient = 0;
 int end = 0;
 char chromName[64];
-struct hashEl *hel = NULL;
 struct coords *celOld, *celNew = NULL;
 
 contigCoords = newHash(0);
@@ -192,7 +191,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashEl *el1, *el2;
-struct hashEl *helRandom;
 FILE *f;
 struct coords *cel = NULL;
 int start = 0;
@@ -231,7 +229,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         /* check against phys_pos_from */
 	phys_pos_from = sqlUnsigned(row[3]);
 	if (phys_pos_from > 0 && phys_pos_from != start)
-	   verbose(1, "unexpected coords snp_id = %d, ctg_id = %d, phys_pos_from = %d, start = %d\n", 
+	   verbose(1, "unexpected coords snp_id = %s, ctg_id = %s, phys_pos_from = %d, start = %d\n", 
 	               row[0], row[1], phys_pos_from, start); 
 	
 	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 

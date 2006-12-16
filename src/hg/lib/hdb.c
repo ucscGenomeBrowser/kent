@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.309 2006/11/17 00:21:46 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.312 2006/12/14 18:07:22 hartera Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"

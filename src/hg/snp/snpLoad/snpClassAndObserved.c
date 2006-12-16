@@ -18,7 +18,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpClassAndObserved.c,v 1.3 2006/06/23 20:52:01 heather Exp $";
+static char const rcsid[] = "$Id: snpClassAndObserved.c,v 1.4 2006/12/05 17:59:28 heather Exp $";
 
 struct snpData
     {
@@ -278,7 +278,6 @@ int main(int argc, char *argv[])
 /* read through chrN_snpTmp, rewrite with extensions to individual chrom tables */
 {
 struct slName *chromList, *chromPtr;
-struct snpTmp *snpList = NULL;
 char tableName[64];
 
 if (argc != 2)

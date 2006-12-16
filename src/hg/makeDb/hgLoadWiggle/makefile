@@ -68,6 +68,7 @@ cgi:: compile
 	rm -f ${CGI_BIN}-${USER}/loader/wigEncode
 	mv $A${EXE} ${CGI_BIN}-${USER}/loader/$A
 	mv wigEncode ${CGI_BIN}-${USER}/loader/wigEncode
+	rm -f hgWiggle
 
 alpha:: strip
 	@if [ ! -d "${CGI_BIN}/loader" ]; then \

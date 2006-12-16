@@ -4,7 +4,7 @@ all:
 
 test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
 	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
-	longDbNameTest
+	longDbNameTest multiLineDescTest
 
 
 protMrnaTest: mkdirs
@@ -59,6 +59,11 @@ longDbNameTest: mkdirs
 	pslCheck output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
+# multiline description broke parser
+multiLineDescTest: mkdirs
+	../blastToPsl input/multiLineDesc.blast output/$@.psl
+	pslCheck output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
 
 # this test is currently disabled, mega-blast is painful because
 # Database: comes before Query= and there are multiple queries for each

@@ -11,7 +11,7 @@
 #include "net.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.1 2006/11/18 00:18:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.2 2006/12/04 17:17:17 fanhsu Exp $";
 
 static boolean sequenceExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -22,15 +22,6 @@ if (sqlTableExists(conn, "dnaSeq") == TRUE)
     return(TRUE);
     }
 return(FALSE);
-}
-
-/* !!! to be updated later */
-
-char *getSeqId(char *subjId)
-{
-char *chp;
-chp = strstr(subjId, "GSID") +5;
-return(strdup(chp));
 }
 
 static void sequencePrint(struct section *section, 
@@ -45,10 +36,9 @@ char *seq, *seqId;
 int i, l;
 char *chp;
 
-seqId = getSeqId(subjId);
 printf("<B>DNA Sequences</B><BR>");
-safef(query, sizeof(query), "select * from dnaSeq where id like '%c%s%c' order by id", 
-     '%',  seqId, '%');
+safef(query, sizeof(query), 
+      "select dnaSeqId, seq from gsIdXref, dnaSeq where subjId = '%s' and id = dnaSeqId order by dnaSeqId", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL) printf("<BR>Not available.<BR><BR>");
@@ -75,9 +65,9 @@ while (row != NULL)
     }
 sqlFreeResult(&sr);
 
-seqId = getSeqId(subjId);
 printf("<B>Protein Sequences</B><BR>");
-safef(query, sizeof(query), "select * from aaSeq where id like '%c%s%c' order by id", '%', seqId, '%');
+safef(query, sizeof(query), 
+      "select aaSeqId, seq from gsIdXref, aaSeq where subjId = '%s' and aaSeqId = id order by aaSeqId", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL) printf("<BR>Not available.<BR>");

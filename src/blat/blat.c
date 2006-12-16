@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.110 2006/10/27 01:36:04 angie Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.111 2006/12/01 18:30:43 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -113,7 +113,9 @@ printf(
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
   "               it is marked as overused.  Typically this is 256 for tileSize\n"
   "               12, 1024 for tile size 11, 4096 for tile size 10.\n"
-  "               Default is 1024.  Typically only comes into play with makeOoc\n"
+  "               Default is 1024.  Typically only comes into play with makeOoc.\n"
+  "               Also affected by stepSize. When stepSize is halved repMatch is\n"
+  "               doubled to compensate.\n"
   "   -mask=type  Mask out repeats.  Alignments won't be started in masked region\n"
   "               but may extend through it in nucleotide searches.  Masked areas\n"
   "               are ignored entirely in protein or translated searches. Types are\n"

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/makePushQSql.pl instead.
 
-# $Id: makePushQSql.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
+# $Id: makePushQSql.pl,v 1.2 2006/12/07 21:35:20 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -505,7 +505,9 @@ sub adviseDeveloper {
  *** Please edit the output to ensure correctness before using.
  *** 1. Resolve any warnings output by this script.
  *** 2. Remove any entries which should not be pushed.
- *** 3. Add files associated with tracks.  First, look at the results
+ *** 3. Add tables associated with the main track table (e.g. *Pep tables
+        for gene prediction tracks).
+ *** 4. Add files associated with tracks.  First, look at the results
         of this query:
           hgsql $db -e 'select distinct(path) from extFile'
         Then, look at file(s) named in each of the following wiggle tables:
@@ -519,10 +521,10 @@ _EOF_
   }
   &HgAutomate::verbose(1, <<_EOF_
         Files go in the second field after tables (it's tables, cgis, files).
- *** 4. This script currently does not recognize composite tracks.  If $db
+ *** 5. This script currently does not recognize composite tracks.  If $db
         has any composite tracks, you should manually merge the separate
         per-table entries into one entry.
- *** 5. Just before executing the sql, note the ID of the most recent entry
+ *** 6. Just before executing the sql, note the ID of the most recent entry
         in the Main Push Queue.  If the ID (first column) of the last
         INSERT statement is not 1 greater than the most recent entry's,
         make it so to avoid an ID clash with an existing entry.
