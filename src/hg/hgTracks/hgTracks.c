@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1258 2006/12/15 23:55:14 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1259 2006/12/16 00:05:00 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -189,7 +189,8 @@ boolean ideogramAvail = FALSE;           /* Is the ideogram data available for t
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
-boolean withNextItemArrows = FALSE;	/* Display next exon/feature navigation buttons near center labels? */
+boolean withNextItemArrows = FALSE;	/* Display next feature (gene) navigation buttons near center labels? */
+boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
 boolean withPriorityOverride = FALSE;	/* Display priority for each track to allow reordering */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
@@ -1851,7 +1852,7 @@ return width / (seqEnd - seqStart);
 boolean nextItemCompatible(struct track *tg)
 /* Check to see if we draw nextPrev item buttons on a track. */
 {
-return (withNextItemArrows && tg->nextItemButtonable && tg->nextPrevItem);
+return (withNextExonArrows && tg->nextItemButtonable && tg->nextPrevItem);
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct vGfx *vg, enum trackVisibility vis, struct slList *item, 
@@ -12867,6 +12868,7 @@ if (psOutput != NULL)
    hPrintDisable();
    hideControls = TRUE;
    withNextItemArrows = FALSE;
+   withNextExonArrows = FALSE;
    hgFindMatches = NULL;
    }
 
@@ -13493,6 +13495,7 @@ withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
+withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", FALSE);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
