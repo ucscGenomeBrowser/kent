@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1259 2006/12/16 00:05:00 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1260 2006/12/16 04:25:53 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2285,17 +2285,19 @@ static void countLinkedFeaturesBaseUse(struct linkedFeatures *lf, int width, int
                                        UBYTE *useCounts, UBYTE *gapUseCounts)
 /* increment base use counts for a set of linked features */
 {
+/* Performence-sensitive code.  Most of the overhead is in the mapping of base
+ * to pixel.  This was change from using roundingScale() to doing it all in
+ * floating point, with the divide take out of the loop. To avoid adding more
+ * overhead when rendering gaps, the translation to pixel coordinates is done
+ * here, and then we save the previous block coordinates for use in marking
+ * the gap. */
 struct simpleFeature *sf;
-
-/* Performence-sensitive code.  Most of the overhead is in the calls to
- * roundingScale().  To avoid adding more overhead when rendering gaps, the
- * translation to pixel coordinates is done here, and then we save the
- * previous block coordinates for use in marking the gap. */
+double scale = ((double)width)/((double)baseWidth);
 int x1 = -1, x2 = -1, prevX1 = -1, prevX2 = -1;  /* pixel coords */
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
-    x1 = roundingScale(sf->start-winStart, width, baseWidth);
-    x2 = roundingScale(sf->end-winStart, width, baseWidth);
+    x1 = round(((double)(sf->start-winStart)) * scale);
+    x2 = round(((double)(sf->end-winStart)) * scale);
     countBaseRangeUse(x1, x2, width, useCounts);
     /* line from prevX2 -> x1; blocks are in orientation order */
     if ((gapUseCounts != NULL) && (prevX1 >= 0))
@@ -2342,8 +2344,8 @@ UBYTE *useCounts, *gapUseCounts = NULL;
 int lineHeight = mgFontLineHeight(font);
 
 AllocArray(useCounts, width);
-/* limit adding gap lines to <= 10mb to improve performance */
-if (baseWidth <= 10000000)
+/* limit adding gap lines to <= 25mb to improve performance */
+if (baseWidth <= 25000000)
     AllocArray(gapUseCounts, width);
 countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts);
 
