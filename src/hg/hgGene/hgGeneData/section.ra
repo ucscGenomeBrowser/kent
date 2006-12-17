@@ -14,7 +14,7 @@ longLabel Sequence
 priority 30
 
 name gad
-shortLabel GAD
+shortLabel Genetic Associations
 longLabel Genetic Association Studies of Complex Diseases and Disorders
 priority 35
 
