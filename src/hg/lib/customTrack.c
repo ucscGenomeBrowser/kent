@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.160 2006/12/13 02:32:03 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.161 2006/12/18 22:46:01 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -750,6 +750,7 @@ if (isNotEmpty(customText))
 char *ctFileName = NULL;
 struct customTrack *ctList = NULL, *replacedCts = NULL;
 struct customTrack *nextCt = NULL;
+boolean removedCt = FALSE;
 
 /* load existing custom tracks from trash file */
 if (customTracksExist(cart, &ctFileName))
@@ -773,6 +774,7 @@ if (customTracksExist(cart, &ctFileName))
                 if (cartVarExists(cart, CT_DO_REMOVE_VAR))
                     {
                     /* remove a track if requested, e.g. by hgTrackUi */
+                    removedCt = TRUE;
                     slRemoveEl(&ctList, ct);
                     /* remove visibility variable */
                     cartRemove(cart, selectedTable);
@@ -798,7 +800,8 @@ if (customTracksExist(cart, &ctFileName))
 /* merge new and old tracks */
 numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
-customTracksSaveCart(cart, ctList);
+if (newCts || removedCt)
+   customTracksSaveCart(cart, ctList);
 
 cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);

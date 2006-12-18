@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.110 2006/12/16 00:08:13 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.111 2006/12/18 22:46:02 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -926,6 +926,7 @@ struct customTrack *replacedCts = NULL;
 char *err = NULL, *warn = NULL;
 char *selectedTable = NULL;
 struct customTrack *ct = NULL;
+boolean ctUpdated = FALSE;
 
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
@@ -1013,7 +1014,10 @@ else
                 {
                 struct errCatch *catch = errCatchNew();
                 if (errCatchStart(catch))
+                    {
                     customTrackUpdateFromConfig(ct, trackConfig, &browserLines);
+                    ctUpdated = TRUE;
+                    }
                 errCatchEnd(catch);
                 if (catch->gotError)
                     addWarning(dsWarn, catch->message->string);
@@ -1040,16 +1044,18 @@ else
 	return;
 	}
     if (cartVarExists(cart, hgCtDoDelete))
+        {
 	doDeleteCustom();
+        ctUpdated = TRUE;
+        }
     if (cartVarExists(cart, hgCtDoRefresh))
 	{
 	doRefreshCustom(&warn);
 	addWarning(dsWarn, warn);
+        ctUpdated = TRUE;
 	}
-    /* TODO: consider suppressing this if not needed -- it will
-     * often be unnecessary, as customTracksSaveCart is called
-     * from ParseCart */
-    customTracksSaveCart(cart, ctList);
+    if (ctUpdated)
+        customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
     if (ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
