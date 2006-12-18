@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.19 2006/11/17 00:25:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.20 2006/12/18 23:11:20 angie Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -158,7 +158,7 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	wiggleSize = wordCount;
 	/*	current wiggle standard expects 13 words	*/
-	lineFileExpectWords(lf, wiggleSize, 13);
+	lineFileExpectWords(lf, 13, wiggleSize);
 	}
     chrName = cloneString(words[0]);
     chrStart = lineFileNeedNum(lf, words, 1);
