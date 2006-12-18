@@ -910,6 +910,12 @@ type bed 8 .
     color 102,0,153
     priority 2
 
+searchTable acembly
+searchType genePred
+searchMethod prefix
+termRegex [^[:space:]]+
+searchPriority 50
+
 searchTable wgRna
 searchMethod fuzzy
 searchType bed
