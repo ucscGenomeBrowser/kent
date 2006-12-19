@@ -10,7 +10,7 @@ O = liftUp.o
 all: liftUp
 
 liftUp: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/liftUp $O ${MYLIBS} $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/liftUp $O ${MYLIBS} $L
 
 compile: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o liftUp $O ${MYLIBS} $L

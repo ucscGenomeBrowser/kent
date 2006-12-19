@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooGreedy.o
 
 ooGreedy: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooGreedy $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooGreedy $O $(MYLIBS) $L
 
 
 lib:

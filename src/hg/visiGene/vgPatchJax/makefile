@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = vgPatchJax.o
 
 vgPatchJax: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgPatchJax $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgPatchJax
+	${CC} ${COPT} -o ${BINDIR}/vgPatchJax $O ${MYLIBS} $L
+	strip ${BINDIR}/vgPatchJax
 
 clean:
 	rm -f $O

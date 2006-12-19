@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = stageMultiz.o
 
 stageMultiz: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/stageMultiz $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/stageMultiz${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/stageMultiz $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/stageMultiz${EXE}
 
 tags: 
 	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h

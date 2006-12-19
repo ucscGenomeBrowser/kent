@@ -3,11 +3,11 @@ test:   simpleTest biggerTest
 PROG=chimpChromContigAgp
 
 simpleTest:     mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} input/chrom.agp input/scaffold.agp output/chromContig.agp
+	${BINDIR}/${PROG} input/chrom.agp input/scaffold.agp output/chromContig.agp
 	diff expected/chromContig.agp output
 	
 biggerTest:     mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} input/chrom2.agp input/scaffold2.agp output/chromContig2.agp
+	${BINDIR}/${PROG} input/chrom2.agp input/scaffold2.agp output/chromContig2.agp
 	diff expected/chromContig2.agp output
 
 mkdirs:

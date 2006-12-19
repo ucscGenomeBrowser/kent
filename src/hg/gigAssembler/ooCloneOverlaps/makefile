@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooCloneOverlaps.o
 
 ooCloneOverlaps: $O 
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooCloneOverlaps $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneOverlaps $O $(MYLIBS) $L
 

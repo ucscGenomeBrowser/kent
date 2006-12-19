@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = chainStitchId.o
 
 chainStitchId: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/chainStitchId $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/chainStitchId${EXE}
+	${CC} ${COPT} -o ${BINDIR}/chainStitchId $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/chainStitchId${EXE}
 
 clean:
 	rm -f $O

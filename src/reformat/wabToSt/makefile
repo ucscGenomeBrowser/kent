@@ -8,4 +8,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = wabToSt.o
 
 wabToSt: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/wabToSt $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/wabToSt $O $(MYLIBS) $L

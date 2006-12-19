@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = randomLines.o
 
 randomLines: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/randomLines $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/randomLines${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/randomLines $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/randomLines${EXE}

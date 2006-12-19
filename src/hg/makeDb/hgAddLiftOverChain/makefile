@@ -8,6 +8,6 @@ O = hgAddLiftOverChain.o
 A = hgAddLiftOverChain
 
 hgAddLiftOverChain: $O ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
 

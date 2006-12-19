@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = dateXmlCgi.o
 
 dateXmlCgi: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/dateXmlCgi $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/dateXmlCgi
+	${CC} ${COPT} -o ${BINDIR}/dateXmlCgi $O ${MYLIBS} $L
+	strip ${BINDIR}/dateXmlCgi
 
 clean:
 	rm -f $O

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = textHist2.o
 
 textHist2: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/textHist2 $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/textHist2${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/textHist2 $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/textHist2${EXE}

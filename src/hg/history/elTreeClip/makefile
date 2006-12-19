@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = elTreeClip.o
 
 elTreeClip: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/elTreeClip $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/elTreeClip${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/elTreeClip $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/elTreeClip${EXE}
 

@@ -10,7 +10,7 @@ O = ${X}.o
 ${X}: $O ${MYLIBS}
 	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
 	${STRIP} ${X}${EXE}
-	cp ${X} ${HOME}/bin/${MACHTYPE}/${X} 
+	cp ${X} ${BINDIR}/${X} 
 
 test:
 	${X} hg16 /cluster/data/hg16/bed/snp/build122/seq -chr=chr22 > hg16-chr22.log 

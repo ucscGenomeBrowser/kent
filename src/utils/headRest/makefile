@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = headRest.o
 
 headRest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/headRest $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/headRest
+	${CC} ${COPT} -o ${BINDIR}/headRest $O ${MYLIBS} $L
+	strip ${BINDIR}/headRest
 
 clean:
 	rm -f $O

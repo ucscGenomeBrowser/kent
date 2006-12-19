@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pepPredToFa.o
 
 pepPredToFa: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pepPredToFa $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/pepPredToFa${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pepPredToFa $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/pepPredToFa${EXE}

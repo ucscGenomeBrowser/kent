@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = raSort.o
 
 raSort: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/raSort $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/raSort${EXE}
+	${CC} ${COPT} -o ${BINDIR}/raSort $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/raSort${EXE}
 
 clean:
 	rm -f $O

@@ -11,7 +11,7 @@ O =  altGraph.o
 TESTO = test.o
 
 altGraph: $(O)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/altGraph $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/altGraph $O $(MYLIBS) $L
 
 test: $(TESTO)
 	${CC} ${COPT} ${CFLAGS} -o test $(TESTO) $(MYLIBS) $L

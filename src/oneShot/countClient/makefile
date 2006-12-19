@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = countClient.o
 
 countClient: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/countClient $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/countClient${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/countClient $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/countClient${EXE}

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgGeneBands.o
 
 hgGeneBands: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgGeneBands $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgGeneBands${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgGeneBands $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgGeneBands${EXE}

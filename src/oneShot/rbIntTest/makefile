@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = rbIntTest.o
 
 rbIntTest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/rbIntTest $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/rbIntTest${EXE}
+	${CC} ${COPT} -o ${BINDIR}/rbIntTest $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/rbIntTest${EXE}
 
 clean:
 	rm -f $O

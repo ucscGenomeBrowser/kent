@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = gffPeek.o
 
 gffPeek: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/gffPeek $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/gffPeek${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/gffPeek $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/gffPeek${EXE}

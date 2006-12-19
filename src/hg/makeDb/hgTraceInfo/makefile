@@ -9,7 +9,7 @@ O = hgTraceInfo.o
 A = hgTraceInfo
 
 $A: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/$A $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/$A $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib && ${MAKE}

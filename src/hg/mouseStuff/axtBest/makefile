@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = axtBest.o
 
 axtBest: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtBest $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtBest${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtBest $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtBest${EXE}

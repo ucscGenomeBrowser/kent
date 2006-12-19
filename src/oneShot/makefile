@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = oneShot.o
 
 oneShot: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/oneShot $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/oneShot${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/oneShot $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/oneShot${EXE}

@@ -8,7 +8,7 @@ O = ooGreedy.o
 
 ooGreedy.84:
 	${CC} ${COPT} ${CFLAGS} -Wimplicit -I../../inc -I../../../inc -c ooGreedy.c
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooGreedy.84 ooGreedy.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooGreedy.84 ooGreedy.o $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}

@@ -5,4 +5,4 @@ O = ixali.o
 
 ixali: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/ixali
+	mv ${AOUT} ${BINDIR}/ixali

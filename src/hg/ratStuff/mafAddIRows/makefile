@@ -8,5 +8,5 @@ CFLAGS=-ggdb
 O = mafAddIRows.o
 
 mafAddIRows: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafAddIRows $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafAddIRows${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafAddIRows $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/mafAddIRows${EXE}

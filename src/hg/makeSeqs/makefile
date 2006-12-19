@@ -13,4 +13,4 @@ makeSeqs: $O
 	mv ${AOUT} makeSeqs
 	${STRIP} makeSeqs${EXE}
 	chmod a+rx makeSeqs
-	cp makeSeqs $(HOME)/bin/$(MACHTYPE)
+	cp makeSeqs ${BINDIR}

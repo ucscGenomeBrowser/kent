@@ -19,11 +19,11 @@ A = vgPrepImage
 O = ${A}.o jp2Dec.o jpgDec.o jpgTiles.o
 
 ${A}: $O ${MYLIBS}
-	${LINK} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/${A}
+	${LINK} ${COPT} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	strip ${BINDIR}/${A}
 
 install:
-	cp ${HOME}/bin/${MACHTYPE}/${A} /cluster/bin/${MACHTYPE}/
+	cp ${BINDIR}/${A} /cluster/bin/${MACHTYPE}/
 
 example:
 	vgPrepImage /san/sanvol1/visiGene/offline/allenBrain/imageDisk \

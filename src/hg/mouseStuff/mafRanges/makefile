@@ -10,8 +10,8 @@ O = ${A}.o
 all: ${A} test
 
 ${A}: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 test:
 	cd tests && ${MAKE}

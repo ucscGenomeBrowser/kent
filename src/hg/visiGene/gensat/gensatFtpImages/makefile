@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = gensatFtpImages.o
 
 gensatFtpImages: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/gensatFtpImages $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/gensatFtpImages
+	${CC} ${COPT} -o ${BINDIR}/gensatFtpImages $O ${MYLIBS} $L
+	strip ${BINDIR}/gensatFtpImages
 
 clean:
 	rm -f $O

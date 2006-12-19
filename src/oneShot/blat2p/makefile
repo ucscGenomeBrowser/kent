@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
 O = blat2p.o
 
 blat2p: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/blat2p $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/blat2p${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blat2p $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/blat2p${EXE}

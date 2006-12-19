@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = seqFromPsl.o
 
 seqFromPsl: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/seqFromPsl $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/seqFromPsl${EXE}
+	${CC} ${COPT} -o ${BINDIR}/seqFromPsl $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/seqFromPsl${EXE}
 
 clean:
 	rm -f $O

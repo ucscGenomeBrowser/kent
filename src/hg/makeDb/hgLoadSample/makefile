@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadSample.o
 
 hgLoadSample: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadSample $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadSample${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadSample $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgLoadSample${EXE}

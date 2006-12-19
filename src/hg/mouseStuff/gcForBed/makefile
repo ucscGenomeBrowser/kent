@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = gcForBed.o
 
 gcForBed: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/gcForBed $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/gcForBed${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/gcForBed $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/gcForBed${EXE}

@@ -9,7 +9,7 @@ A = hgSelect
 
 O = $A.o
 
-BIN = $(HOME)/bin/$(MACHTYPE)
+BIN = ${BINDIR}
 PROG = ${BIN}/$A
 
 ${PROG}: $O $(MYLIBS)

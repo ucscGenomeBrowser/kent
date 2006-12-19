@@ -8,6 +8,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooCloneSpan.o
 
 ooCloneSpan: $O 
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooCloneSpan $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/ooCloneSpan${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneSpan $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/ooCloneSpan${EXE}
 

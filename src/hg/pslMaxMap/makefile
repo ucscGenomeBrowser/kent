@@ -8,8 +8,8 @@ O = pslMaxMap.o
 
 
 pslMaxMap: $O ${MYLIBS}
-	${CC} ${CFLAGS} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslMaxMap $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/pslMaxMap${EXE}
+	${CC} ${CFLAGS} ${COPT} -o ${BINDIR}/pslMaxMap $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/pslMaxMap${EXE}
 
 clean:
 	rm -f $O

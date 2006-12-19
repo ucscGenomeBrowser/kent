@@ -3,7 +3,7 @@ include ../../inc/common.mk
 
 O =  patSpace.o
 
-$(HOME)/bin/$(MACHTYPE)/patSpace: $(O)  
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/patSpace $O ../../lib/$(MACHTYPE)/jkweb.a
+${BINDIR}/patSpace: $(O)  
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/patSpace $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

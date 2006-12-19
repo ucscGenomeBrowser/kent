@@ -9,6 +9,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkDbSync.o
 
 checkDbSync: $(O)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkDbSync $O $(MYLIBS) $(L)
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkDbSync${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkDbSync $O $(MYLIBS) $(L)
+	${STRIP} ${BINDIR}/checkDbSync${EXE}
 

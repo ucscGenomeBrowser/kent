@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgCeOrfToGene.o
 
 hgCeOrfToGene: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgCeOrfToGene $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgCeOrfToGene${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgCeOrfToGene $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgCeOrfToGene${EXE}

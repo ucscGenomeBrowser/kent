@@ -4,10 +4,10 @@ XINC=-DGZ_FILENAMES=1
 
 O = gffgenes.o 
 
-${HOME}/bin/${MACHTYPE}/gffgenes: ${O}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/gffgenes $O \
+${BINDIR}/gffgenes: ${O}
+	${CC} ${COPT} -o ${BINDIR}/gffgenes $O \
 		../../lib/${MACHTYPE}/jkweb.a
-	${STRIP} ${HOME}/bin/${MACHTYPE}/gffgenes${EXE}
+	${STRIP} ${BINDIR}/gffgenes${EXE}
 
 clean:
 	rm -f ${O}

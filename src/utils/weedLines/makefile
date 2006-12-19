@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = weedLines.o
 
 weedLines: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/weedLines $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/weedLines${EXE}
+	${CC} ${COPT} -o ${BINDIR}/weedLines $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/weedLines${EXE}
 
 clean:
 	rm -f $O

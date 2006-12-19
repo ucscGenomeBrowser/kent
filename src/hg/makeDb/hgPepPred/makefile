@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgPepPred.o
 
 hgPepPred: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgPepPred $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgPepPred $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib && ${MAKE}

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkNt.o
 
 checkNt: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkNt $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkNt${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkNt $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/checkNt${EXE}

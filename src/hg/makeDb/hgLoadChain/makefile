@@ -7,9 +7,9 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgLoadChain.o 
 
 hgLoadChain: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/hgLoadChain \
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadChain \
 		$O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadChain${EXE}
+	${STRIP} ${BINDIR}/hgLoadChain${EXE}
 
 lib:
 	cd ../../../lib && ${MAKE}

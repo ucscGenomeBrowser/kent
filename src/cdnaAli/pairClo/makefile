@@ -3,7 +3,7 @@ include ../../inc/common.mk
 
 O =  pairClo.o 
 
-$(HOME)/bin/$(MACHTYPE)/pairClo: $(O)  
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pairClo $O ../../lib/$(MACHTYPE)/jkweb.a
+${BINDIR}/pairClo: $(O)  
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pairClo $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

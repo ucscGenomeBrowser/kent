@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bedUp.o
 
 bedUp: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bedUp $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/bedUp $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib && ${MAKE}

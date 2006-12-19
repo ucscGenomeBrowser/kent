@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgEnsGeneXRef.o
 
 hgEnsGeneXRef: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgEnsGeneXRef $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgEnsGeneXRef${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgEnsGeneXRef $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgEnsGeneXRef${EXE}
 compile: $O 
 	${CC} -o hgEnsGeneXRef $O ${MYLIBS} ${L}

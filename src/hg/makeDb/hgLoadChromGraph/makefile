@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgLoadChromGraph.o
 
 hgLoadChromGraph: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgLoadChromGraph $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgLoadChromGraph
+	${CC} ${COPT} -o ${BINDIR}/hgLoadChromGraph $O ${MYLIBS} $L
+	strip ${BINDIR}/hgLoadChromGraph
 
 clean:
 	rm -f $O

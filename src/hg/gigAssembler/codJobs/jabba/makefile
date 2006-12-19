@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = jabba.o jobDb.o
 
 jabba: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/jabba $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/jabba${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/jabba $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/jabba${EXE}

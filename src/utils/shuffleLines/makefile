@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = shuffleLines.o
 
 shuffleLines: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/shuffleLines $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/shuffleLines
+	${CC} ${COPT} -o ${BINDIR}/shuffleLines $O ${MYLIBS} $L
+	strip ${BINDIR}/shuffleLines
 
 clean:
 	rm -f $O

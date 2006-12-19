@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = maskOutFa.o
 
 maskOutFa: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/maskOutFa $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/maskOutFa${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/maskOutFa $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/maskOutFa${EXE}

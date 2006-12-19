@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgFakeAgp.o
 
 hgFakeAgp: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgFakeAgp $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgFakeAgp${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgFakeAgp $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgFakeAgp${EXE}
 
 clean:
 	rm -f $O

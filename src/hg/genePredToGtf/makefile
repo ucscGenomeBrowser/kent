@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = genePredToGtf.o
 
 genePredToGtf: $O $(MYLIBS) makefile
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/genePredToGtf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/genePredToGtf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredToGtf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/genePredToGtf${EXE}

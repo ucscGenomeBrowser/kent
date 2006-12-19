@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = netClass.o
 
 netClass: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/netClass $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/netClass${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/netClass $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/netClass${EXE}
 
 compile:: $O
 	${CC} ${COPT} ${CFLAGS} -o netClass${EXE} $O ${MYLIBS} $L

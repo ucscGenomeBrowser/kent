@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = lineCount.o
 
 lineCount: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/lineCount $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/lineCount${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/lineCount $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/lineCount${EXE}

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = fakeChromGraph.o
 
 fakeChromGraph: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fakeChromGraph $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/fakeChromGraph
+	${CC} ${COPT} -o ${BINDIR}/fakeChromGraph $O ${MYLIBS} $L
+	strip ${BINDIR}/fakeChromGraph
 
 clean:
 	rm -f $O

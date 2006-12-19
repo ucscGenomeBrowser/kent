@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = padFile.o
 
 padFile: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/padFile $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/padFile${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/padFile $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/padFile${EXE}

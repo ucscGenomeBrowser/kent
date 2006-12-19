@@ -24,8 +24,8 @@ GENES = $(PSEUDO)/refGene.tab $(PSEUDO)/mgcGene.tab $(PSEUDO)/sortedKnownGene.ta
 O = pslPseudo.o 
 
 pslPseudo: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPseudo $O $(MARKDEBUG) $(MYLIBS) $L 
-	#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslPseudo${EXE}
+	gcc -ggdb -o ${BINDIR}/pslPseudo $O $(MARKDEBUG) $(MYLIBS) $L 
+	#${STRIP} ${BINDIR}/pslPseudo${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

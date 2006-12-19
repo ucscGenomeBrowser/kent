@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainStats.o
 
 chainStats: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainStats $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainStats${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainStats $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/chainStats${EXE}

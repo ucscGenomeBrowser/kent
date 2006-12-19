@@ -10,7 +10,7 @@ O = ${A}.o
 
 ${A}:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L}
-	mv ${AOUT} ${HOME}/bin/${MACHTYPE}/${A}
+	mv ${AOUT} ${BINDIR}/${A}
 
 clean:	
-	rm ${O} ${HOME}/bin/${MACHTYPE}/${A}
+	rm ${O} ${BINDIR}/${A}

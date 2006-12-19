@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = htTpf.o
 
 htTpf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/htTpf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/htTpf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/htTpf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/htTpf${EXE}

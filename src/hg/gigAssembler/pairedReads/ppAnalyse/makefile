@@ -8,6 +8,6 @@ O = ppAnalyse.o
 
 ppAnalyse: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppAnalyse $O $(MYLIBS) $L
-	mv ppAnalyse $(HOME)/bin/$(MACHTYPE)
+	mv ppAnalyse ${BINDIR}
 
 

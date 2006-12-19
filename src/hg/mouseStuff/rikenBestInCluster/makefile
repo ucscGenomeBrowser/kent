@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rikenBestInCluster.o
 
 rikenBestInCluster: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/rikenBestInCluster $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/rikenBestInCluster${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rikenBestInCluster $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/rikenBestInCluster${EXE}

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mafTest.o mafXml.o
 
 mafTest: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafTest $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafTest${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafTest $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/mafTest${EXE}

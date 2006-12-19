@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 L = ${MYSQLLIBS} -lm
-BIN=${HOME}/bin/${MACHTYPE}
+BIN=${BINDIR}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 

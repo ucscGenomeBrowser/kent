@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = safePush.o
 
 safePush: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/safePush $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/safePush
+	${CC} ${COPT} -o ${BINDIR}/safePush $O ${MYLIBS} $L
+	strip ${BINDIR}/safePush
 
 clean:
 	rm -f $O

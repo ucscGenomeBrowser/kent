@@ -4,6 +4,6 @@ O =  cdnaOff.o
 
 cdnaOff: $(O)  
 	cd ../lib && ${MAKE}
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/cdnaOff $O ../lib/cdnaAli.o ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/cdnaOff $O ../lib/cdnaAli.o ../../lib/$(MACHTYPE)/jkweb.a
 
 

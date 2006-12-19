@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtToBed.o
 
 axtToBed: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtToBed $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtToBed${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtToBed $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtToBed${EXE}

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = growNet.o
 
 growNet: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/growNet $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/growNet${EXE}
+	${CC} ${COPT} -o ${BINDIR}/growNet $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/growNet${EXE}
 
 clean:
 	rm -f $O

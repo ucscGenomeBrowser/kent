@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rbTest.o 
 
 rbTest: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/rbTest $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/rbTest${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rbTest $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/rbTest${EXE}

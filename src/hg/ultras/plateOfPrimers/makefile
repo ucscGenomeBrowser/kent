@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = plateOfPrimers.o
 
 plateOfPrimers: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/plateOfPrimers $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/plateOfPrimers${EXE}
+	${CC} ${COPT} -o ${BINDIR}/plateOfPrimers $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/plateOfPrimers${EXE}
 
 clean:
 	rm -f $O

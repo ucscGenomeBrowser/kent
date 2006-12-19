@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = maxEachRow.o
 
 maxEachRow: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/maxEachRow $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/maxEachRow
+	${CC} ${COPT} -o ${BINDIR}/maxEachRow $O ${MYLIBS} $L
+	strip ${BINDIR}/maxEachRow
 
 clean:
 	rm -f $O

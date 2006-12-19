@@ -1,4 +1,4 @@
-PROG=${HOME}/bin/${MACHTYPE}/netToAxt
+PROG=${BINDIR}/netToAxt
 
 test: clean all
 

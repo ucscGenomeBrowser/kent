@@ -4,5 +4,5 @@ include ../../inc/common.mk
 O = colCount.o 
 
 colCount: $O
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/colCount $O ../../lib/$(MACHTYPE)/jkweb.a 
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/colCount $O ../../lib/$(MACHTYPE)/jkweb.a 
 

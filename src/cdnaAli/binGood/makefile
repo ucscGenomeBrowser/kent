@@ -3,7 +3,7 @@ include ../../inc/common.mk
 
 O =  binGood.o ../lib/cdnaAli.o
 
-$(HOME)/bin/$(MACHTYPE)/binGood: $(O)  
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/binGood $O ../../lib/$(MACHTYPE)/jkweb.a
+${BINDIR}/binGood: $(O)  
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/binGood $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

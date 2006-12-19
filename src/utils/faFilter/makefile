@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faFilter.o
 
 faFilter: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faFilter $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/faFilter${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faFilter $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/faFilter${EXE}
 
 test:
 	(cd tests && ${MAKE} test)

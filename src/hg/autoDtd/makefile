@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = autoDtd.o
 
 autoDtd: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/autoDtd $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/autoDtd
+	${CC} ${COPT} -o ${BINDIR}/autoDtd $O ${MYLIBS} $L
+	strip ${BINDIR}/autoDtd
 
 clean:
 	rm -f $O

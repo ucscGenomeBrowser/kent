@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = allenCollectSeq.o
 
 allenCollectSeq: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/allenCollectSeq $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/allenCollectSeq
+	${CC} ${COPT} -o ${BINDIR}/allenCollectSeq $O ${MYLIBS} $L
+	strip ${BINDIR}/allenCollectSeq
 
 clean:
 	rm -f $O

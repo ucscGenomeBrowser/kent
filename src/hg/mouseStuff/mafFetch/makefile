@@ -8,5 +8,5 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = mafFetch.o
 
 mafFetch: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafFetch $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafFetch${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafFetch $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/mafFetch${EXE}

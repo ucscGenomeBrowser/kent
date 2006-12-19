@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = faAlign.o
 
 faAlign: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faAlign $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/faAlign${EXE}
+	${CC} ${COPT} -o ${BINDIR}/faAlign $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/faAlign${EXE}
 
 clean:
 	rm -f $O

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = mafToAxt.o
 
 mafToAxt: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafToAxt $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToAxt${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafToAxt $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/mafToAxt${EXE}

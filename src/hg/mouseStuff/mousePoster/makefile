@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mousePoster.o
 
 mousePoster: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mousePoster $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/mousePoster${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mousePoster $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/mousePoster${EXE}

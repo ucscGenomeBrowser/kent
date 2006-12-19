@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = tableSum.o
 
 tableSum: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/tableSum $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/tableSum${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/tableSum $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/tableSum${EXE}

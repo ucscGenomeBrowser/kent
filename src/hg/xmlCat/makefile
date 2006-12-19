@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = xmlCat.o
 
 xmlCat: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/xmlCat $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/xmlCat
+	${CC} ${COPT} -o ${BINDIR}/xmlCat $O ${MYLIBS} $L
+	strip ${BINDIR}/xmlCat
 
 test:: 
 	doTest

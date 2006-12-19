@@ -19,8 +19,8 @@ alpha:: compile
 	ixIxx ${CGI_BIN}/visiGeneData/visiGene.text ${CGI_BIN}/visiGeneData/visiGene.ix ${CGI_BIN}/visiGeneData/visiGene.ixx
 
 compile: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgGetText $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgGetText
+	${CC} ${COPT} -o ${BINDIR}/vgGetText $O ${MYLIBS} $L
+	strip ${BINDIR}/vgGetText
 
 clean:
 	rm -f $O

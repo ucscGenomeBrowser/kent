@@ -5,7 +5,6 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 LIBS= ${MYLIBS} -lm
 
-BINDIR= $(HOME)/bin/$(MACHTYPE)
 OBJS = pslMap.o
 
 all: ${BINDIR}/pslMap

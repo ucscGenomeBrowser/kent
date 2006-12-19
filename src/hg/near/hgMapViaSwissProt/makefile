@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgMapViaSwissProt.o
 
 hgMapViaSwissProt: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgMapViaSwissProt $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgMapViaSwissProt${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgMapViaSwissProt $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgMapViaSwissProt${EXE}

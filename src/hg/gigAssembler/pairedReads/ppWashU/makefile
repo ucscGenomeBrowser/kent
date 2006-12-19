@@ -8,4 +8,4 @@ O = ppWashU.o
 
 ppWashU: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppWashU $O $(MYLIBS) $L
-	mv ppWashU $(HOME)/bin/$(MACHTYPE)
+	mv ppWashU ${BINDIR}

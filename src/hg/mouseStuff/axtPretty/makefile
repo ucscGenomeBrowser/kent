@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtPretty.o
 
 axtPretty: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtPretty $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtPretty${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtPretty $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtPretty${EXE}

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadEranModules.o esMotif.o
 
 hgLoadEranModules: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadEranModules $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadEranModules${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadEranModules $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgLoadEranModules${EXE}

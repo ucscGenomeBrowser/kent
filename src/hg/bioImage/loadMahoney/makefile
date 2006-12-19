@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = loadMahoney.o mahoney.o
 
 loadMahoney: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/loadMahoney $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/loadMahoney${EXE}
+	${CC} ${COPT} -o ${BINDIR}/loadMahoney $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/loadMahoney${EXE}
 
 clean:
 	rm -f $O

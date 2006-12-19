@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = pslSplitOnTarget.o
 
 pslSplitOnTarget: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslSplitOnTarget $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/pslSplitOnTarget${EXE}
+	${CC} ${COPT} -o ${BINDIR}/pslSplitOnTarget $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/pslSplitOnTarget${EXE}
 
 clean:
 	rm -f $O

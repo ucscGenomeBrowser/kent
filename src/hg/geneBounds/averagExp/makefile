@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = averagExp.o
 
 averagExp: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/averagExp $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/averagExp${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/averagExp $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/averagExp${EXE}

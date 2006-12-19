@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = selectTrainedHits.o
 
 selectTrainedHits: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/selectTrainedHits $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/selectTrainedHits${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/selectTrainedHits $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/selectTrainedHits${EXE}

@@ -8,8 +8,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = vgChangeContributors.o
 
 vgChangeContributors: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgChangeContributors $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgChangeContributors
+	${CC} ${COPT} -o ${BINDIR}/vgChangeContributors $O ${MYLIBS} $L
+	strip ${BINDIR}/vgChangeContributors
 
 clean:
 	rm -f $O

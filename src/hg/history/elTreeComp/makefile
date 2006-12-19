@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = elTreeComp.o
 
 elTreeComp: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/elTreeComp $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/elTreeComp${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/elTreeComp $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/elTreeComp${EXE}
 

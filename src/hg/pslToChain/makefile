@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = pslToChain.o
 
 pslToChain: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslToChain $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/pslToChain${EXE}
+	${CC} ${COPT} -o ${BINDIR}/pslToChain $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/pslToChain${EXE}
 
 clean:
 	rm -f $O

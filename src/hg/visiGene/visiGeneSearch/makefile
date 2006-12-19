@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = visiGeneSearch.o
 
 visiGeneSearch: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/visiGeneSearch $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/visiGeneSearch
+	${CC} ${COPT} -o ${BINDIR}/visiGeneSearch $O ${MYLIBS} $L
+	strip ${BINDIR}/visiGeneSearch
 
 clean:
 	rm -f $O

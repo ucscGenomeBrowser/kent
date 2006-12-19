@@ -1,4 +1,6 @@
-MAFRANGES = ${HOME}/bin/${MACHTYPE}/mafRanges
+include ../../../../inc/common.mk
+
+MAFRANGES = ${BINDIR}/mafRanges
 DIFF = diff
 
 test: clean all

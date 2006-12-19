@@ -8,7 +8,7 @@ O = addAveMedScoreToPsls  createSageSummary
 
 %: %.c 
 	${CC} ${COPT} ${CFLAGS}  -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
-	cp $@ $(HOME)/bin/$(MACHTYPE)/
+	cp $@ ${BINDIR}/
 
 all : $(O)
 

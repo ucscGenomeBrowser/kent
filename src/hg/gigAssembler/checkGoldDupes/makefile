@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkGoldDupes.o
 
 checkGoldDupes: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkGoldDupes $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkGoldDupes${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkGoldDupes $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/checkGoldDupes${EXE}

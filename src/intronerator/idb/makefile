@@ -1,4 +1,4 @@
-P=$(HOME)/bin/$(MACHTYPE)
+P=${BINDIR}
 
 X=
 

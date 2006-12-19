@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = pslSomeRecords.o
 
 pslSomeRecords: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslSomeRecords $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/pslSomeRecords${EXE}
+	${CC} ${COPT} -o ${BINDIR}/pslSomeRecords $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/pslSomeRecords${EXE}
 
 clean:
 	rm -f $O

@@ -6,9 +6,9 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = netToAxt.o
 
-${HOME}/bin/${MACHTYPE}/netToAxt: $O ${MYLIBS}
-	${CC} ${COPTS} -o ${HOME}/bin/${MACHTYPE}/netToAxt $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/netToAxt${EXE}
+${BINDIR}/netToAxt: $O ${MYLIBS}
+	${CC} ${COPTS} -o ${BINDIR}/netToAxt $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/netToAxt${EXE}
 
 test:
 	cd tests && ${MAKE}

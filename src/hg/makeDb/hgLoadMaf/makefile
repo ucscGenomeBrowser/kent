@@ -10,12 +10,12 @@ PROG2 = hgLoadMafSummary
 all: ${PROG1} ${PROG2}
 
 ${PROG1}: ${PROG1}.o $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${PROG1} ${PROG1}.o $(MYLIBS) $L
-#${STRIP} $(HOME)/bin/$(MACHTYPE)/${PROG1}${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${PROG1} ${PROG1}.o $(MYLIBS) $L
+#${STRIP} ${BINDIR}/${PROG1}${EXE}
 
 ${PROG2}: ${PROG2}.o $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${PROG2} ${PROG2}.o $(MYLIBS) $L
-#${STRIP} $(HOME)/bin/$(MACHTYPE)/${PROG2}${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${PROG2} ${PROG2}.o $(MYLIBS) $L
+#${STRIP} ${BINDIR}/${PROG2}${EXE}
 
 clean::
 	rm -f ${PROG1}.o ${PROG2}.o $B

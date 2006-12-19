@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
 O = blat.o
 
 blat: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/blat${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blat $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/blat${EXE}
 
 all:
 	cd ../lib && ${MAKE}

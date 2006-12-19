@@ -10,7 +10,7 @@ A = hgCert
 O = $A.o
 
 my: compile
-	mv $A${EXE} ${HOME}/bin/${MACHTYPE}/$A
+	mv $A${EXE} ${BINDIR}/$A
 
 mgsc: compile
 	mv $A${EXE} /usr/local/apache/cgi-bin-mgsc/$A

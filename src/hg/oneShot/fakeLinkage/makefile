@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = fakeLinkage.o
 
 fakeLinkage: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fakeLinkage $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/fakeLinkage${EXE}
+	${CC} ${COPT} -o ${BINDIR}/fakeLinkage $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/fakeLinkage${EXE}
 
 clean:
 	rm -f $O

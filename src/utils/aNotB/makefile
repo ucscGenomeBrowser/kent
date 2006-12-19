@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = aNotB.o
 
 aNotB: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/aNotB $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/aNotB${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/aNotB $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/aNotB${EXE}

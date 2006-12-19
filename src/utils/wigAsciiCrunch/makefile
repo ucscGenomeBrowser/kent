@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = wigAsciiCrunch.o
 
 wigAsciiCrunch: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigAsciiCrunch $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/wigAsciiCrunch${EXE}
+	${CC} ${COPT} -o ${BINDIR}/wigAsciiCrunch $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/wigAsciiCrunch${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgDropSplitTable.o
 
 hgDropSplitTable: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgDropSplitTable $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgDropSplitTable${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgDropSplitTable $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgDropSplitTable${EXE}
 
 clean:
 	rm -f $O

@@ -8,5 +8,5 @@ O = iriToDnaMotif.o ../lib/improbRunInfo.o
 
 iriToDnaMotif: $O $(MYLIBS)
 	cd ../lib && ${MAKE}
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/iriToDnaMotif $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/iriToDnaMotif${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/iriToDnaMotif $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/iriToDnaMotif${EXE}

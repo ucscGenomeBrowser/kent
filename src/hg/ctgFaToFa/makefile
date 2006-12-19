@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ctgFaToFa.o
 
 ctgFaToFa: $O ../../lib/$(MACHTYPE)/jkweb.a 
-	${CC} ${COPT} ${CFLAGS} -O -o $(HOME)/bin/$(MACHTYPE)/ctgFaToFa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -O -o ${BINDIR}/ctgFaToFa $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}

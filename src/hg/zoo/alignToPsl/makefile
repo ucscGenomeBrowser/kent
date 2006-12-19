@@ -12,5 +12,5 @@ compile: $O
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
-	mv $A $(HOME)/bin/$(MACHTYPE)/alignToPsl
+	mv $A ${BINDIR}/alignToPsl
 

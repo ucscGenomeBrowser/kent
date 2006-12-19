@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = bioImageLoad.o
 
 bioImageLoad: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/bioImageLoad $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/bioImageLoad${EXE}
+	${CC} ${COPT} -o ${BINDIR}/bioImageLoad $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/bioImageLoad${EXE}
 
 clean:
 	rm -f $O

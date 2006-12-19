@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = speciesDist.o
 
 speciesDist: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/speciesDist $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/speciesDist${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/speciesDist $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/speciesDist${EXE}
 

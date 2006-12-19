@@ -5,7 +5,6 @@ MYLIBDIR = ../../../src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = est2genomeToPsl.o
-BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 est2genomeToPsl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o est2genomeToPsl $O $(MYLIBS) $L

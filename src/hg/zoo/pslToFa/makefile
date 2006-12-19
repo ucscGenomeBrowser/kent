@@ -8,4 +8,4 @@ O = pslToFa.o
 
 pslToFa: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o pslToFa $O $(MYLIBS) $L
-#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslToFa${EXE}
+#${STRIP} ${BINDIR}/pslToFa${EXE}

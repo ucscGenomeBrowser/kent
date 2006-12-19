@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = mafCoverage.o
 
 mafCoverage: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafCoverage $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/mafCoverage${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mafCoverage $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/mafCoverage${EXE}
 
 test:	test1 test2
 %:	input/%.maf

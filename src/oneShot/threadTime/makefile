@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = threadTime.o
 
 threadTime: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/threadTime $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/threadTime
+	${CC} ${COPT} -o ${BINDIR}/threadTime $O ${MYLIBS} $L
+	strip ${BINDIR}/threadTime
 
 clean:
 	rm -f $O

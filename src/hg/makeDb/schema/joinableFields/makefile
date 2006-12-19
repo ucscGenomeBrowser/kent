@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = joinableFields.o
 
 joinableFields: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/joinableFields $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/joinableFields${EXE}
+	${CC} ${COPT} -o ${BINDIR}/joinableFields $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/joinableFields${EXE}
 
 clean:
 	rm -f $O

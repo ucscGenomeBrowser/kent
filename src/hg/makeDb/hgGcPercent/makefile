@@ -7,9 +7,9 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgGcPercent.o 
 
 hgGcPercent: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/hgGcPercent \
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgGcPercent \
 		$O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgGcPercent${EXE}
+	${STRIP} ${BINDIR}/hgGcPercent${EXE}
 
 compile: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o hgGcPercent ${O} ${MYLIBS} $L

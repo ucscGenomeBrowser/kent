@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceG
 
 % : %.c
 	${CC} ${COPT} -I../inc -I../../inc  -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${MYSQLLIBS} -lm -lz
-	cp $@ ${HOME}/bin/${MACHTYPE}
+	cp $@ ${BINDIR}
 
 %Test: %Test.c 
 	${CC} ${COPT} -gp  -I../../inc -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}

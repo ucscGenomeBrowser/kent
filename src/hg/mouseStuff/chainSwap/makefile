@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainSwap.o
 
 chainSwap: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainSwap $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainSwap${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainSwap $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/chainSwap${EXE}

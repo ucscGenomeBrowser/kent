@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = weedTab.o
 
 weedTab: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/weedTab $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/weedTab${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/weedTab $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/weedTab${EXE}

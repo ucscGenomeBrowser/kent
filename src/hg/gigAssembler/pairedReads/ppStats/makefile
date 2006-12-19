@@ -8,7 +8,7 @@ O = ppStats.o pPair.o
 
 ppStats: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppStats $O $(MYLIBS) $L
-	mv ppStats $(HOME)/bin/$(MACHTYPE)
+	mv ppStats ${BINDIR}
 
 
 lib:

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = gensatImageDownload.o ../lib/gs.o
 
 gensatImageDownload: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/gensatImageDownload $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/gensatImageDownload
+	${CC} ${COPT} -o ${BINDIR}/gensatImageDownload $O ${MYLIBS} $L
+	strip ${BINDIR}/gensatImageDownload
 
 clean:
 	rm -f $O

@@ -16,8 +16,8 @@ BUILD=gs.17/build34
 O = checkExp.o 
 
 checkExp: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkExp $O $(MARKDEBUG) $(MYLIBS) $L 
-#${STRIP} $(HOME)/bin/$(MACHTYPE)/checkExp${EXE}
+	gcc -ggdb -o ${BINDIR}/checkExp $O $(MARKDEBUG) $(MYLIBS) $L 
+#${STRIP} ${BINDIR}/checkExp${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

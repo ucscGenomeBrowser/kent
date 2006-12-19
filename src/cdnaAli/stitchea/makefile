@@ -3,7 +3,7 @@ include ../../inc/common.mk
 
 O =  stitchea.o
 
-$(HOME)/bin/$(MACHTYPE)/stitchea: $(O)  
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/stitchea $O ../../lib/$(MACHTYPE)/jkweb.a
+${BINDIR}/stitchea: $(O)  
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/stitchea $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

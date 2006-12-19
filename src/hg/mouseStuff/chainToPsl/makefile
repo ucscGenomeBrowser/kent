@@ -7,4 +7,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = chainToPsl.o
 
 chainToPsl: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainToPsl $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainToPsl $O $(MYLIBS) $L

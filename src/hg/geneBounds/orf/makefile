@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = orf.o
 
 orf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/orf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/orf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/orf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/orf${EXE}

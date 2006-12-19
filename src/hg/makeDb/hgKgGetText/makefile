@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgKgGetText.o
 
 hgKgGetText: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgKgGetText $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgKgGetText
+	${CC} ${COPT} -o ${BINDIR}/hgKgGetText $O ${MYLIBS} $L
+	strip ${BINDIR}/hgKgGetText
 
 clean:
 	rm -f $O

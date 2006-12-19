@@ -5,5 +5,5 @@ O = indexRa.o
 
 indexRa: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/indexRa
+	mv ${AOUT} ${BINDIR}/indexRa
 

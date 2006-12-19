@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtSplitByTarget.o
 
 axtSplitByTarget: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtSplitByTarget $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtSplitByTarget${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtSplitByTarget $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtSplitByTarget${EXE}

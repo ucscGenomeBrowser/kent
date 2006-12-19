@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = nibbNameFix.o
 
 nibbNameFix: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/nibbNameFix $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/nibbNameFix
+	${CC} ${COPT} -o ${BINDIR}/nibbNameFix $O ${MYLIBS} $L
+	strip ${BINDIR}/nibbNameFix
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ endif
 alpha: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a -lm 
 	${STRIP} ${AOUT}${EXE}
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/ameme
+	mv ${AOUT} ${BINDIR}/ameme
 
 cgi: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a -lm 

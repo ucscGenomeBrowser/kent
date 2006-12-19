@@ -10,10 +10,10 @@ O = liftOver.o
 all: liftOver liftOverMerge
 
 liftOver: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/liftOver $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/liftOver $O $(MYLIBS) $L
 
 liftOverMerge:  liftOverMerge.o $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/liftOverMerge liftOverMerge.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/liftOverMerge liftOverMerge.o $(MYLIBS) $L
 
 test::
 	cd tests && ${MAKE} test

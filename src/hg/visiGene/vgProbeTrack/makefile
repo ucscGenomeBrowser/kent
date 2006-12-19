@@ -10,8 +10,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = vgProbeTrack.o
 
 vgProbeTrack: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgProbeTrack $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/vgProbeTrack${EXE}
+	${CC} ${COPT} -o ${BINDIR}/vgProbeTrack $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/vgProbeTrack${EXE}
 
 autoSql:
 	autoSql vgPrb.as vgPrb -dbLink

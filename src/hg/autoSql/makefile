@@ -10,7 +10,7 @@ O = autoSql.o
 
 autoSql: ${O}
 	${CC} -o autoSql $O ../../lib/${MACHTYPE}/jkweb.a ${L}
-	cp -f autoSql ${HOME}/bin/${MACHTYPE}
+	cp -f autoSql ${BINDIR}
 
 test:
 	cd tests && ${MAKE} test

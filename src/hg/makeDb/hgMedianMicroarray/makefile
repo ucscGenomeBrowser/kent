@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgMedianMicroarray.o
 
 hgMedianMicroarray: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgMedianMicroarray $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgMedianMicroarray${EXE}
 
 test:
 	hgMedianMicroarray ce1 kimLifeCycle kimWormLifeCycle kimMed.ra kimLifeCycleMedian kimWormLifeCycleMedian -tab=output -noLoad -limit=500

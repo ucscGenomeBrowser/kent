@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = cactiSine.o
 
 cactiSine: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/cactiSine $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/cactiSine
+	${CC} ${COPT} -o ${BINDIR}/cactiSine $O ${MYLIBS} $L
+	strip ${BINDIR}/cactiSine
 
 clean:
 	rm -f $O

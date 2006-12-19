@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = faToTwoBit.o
 
 faToTwoBit: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faToTwoBit $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/faToTwoBit${EXE}
+	${CC} ${COPT} -o ${BINDIR}/faToTwoBit $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/faToTwoBit${EXE}
 
 clean:
 	rm -f $O

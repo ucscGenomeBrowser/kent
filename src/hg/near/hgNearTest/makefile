@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgNearTest.o
 
 hgNearTest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgNearTest $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/hgNearTest${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgNearTest $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/hgNearTest${EXE}
 
 test:
 	hgNearTest hgwdev-${USER}.cse.ucsc.edu/cgi-bin/hgNear org=Yeast repeat=1 test.log

@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = tubeTree.o
 
 tubeTree: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/tubeTree $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/tubeTree${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/tubeTree $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/tubeTree${EXE}
 

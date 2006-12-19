@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgYeastRegCode.o
 
 hgYeastRegCode: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgYeastRegCode $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgYeastRegCode${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgYeastRegCode $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgYeastRegCode${EXE}
 
 clean:
 	rm -f $O

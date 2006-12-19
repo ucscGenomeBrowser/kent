@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = makeTableDescriptions.o
 
 makeTableDescriptions: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/makeTableDescriptions $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/makeTableDescriptions
+	${CC} ${COPT} -o ${BINDIR}/makeTableDescriptions $O ${MYLIBS} $L
+	strip ${BINDIR}/makeTableDescriptions
 
 clean:
 	rm -f $O

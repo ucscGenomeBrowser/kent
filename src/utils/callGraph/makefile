@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = callGraph.o
 
 callGraph: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/callGraph $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/callGraph${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/callGraph $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/callGraph${EXE}

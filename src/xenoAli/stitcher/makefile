@@ -5,4 +5,4 @@ O = stitcher.o
 
 stitcher: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a -lm
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/stitcher
+	mv ${AOUT} ${BINDIR}/stitcher

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = estLibStats.o
 
 estLibStats: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/estLibStats $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/estLibStats${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/estLibStats $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/estLibStats${EXE}

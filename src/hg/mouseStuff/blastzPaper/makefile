@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = blastzPaper.o
 
 blastzPaper: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/blastzPaper $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/blastzPaper${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blastzPaper $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/blastzPaper${EXE}

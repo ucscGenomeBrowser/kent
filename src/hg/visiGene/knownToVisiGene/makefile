@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = knownToVisiGene.o
 
 knownToGenePix: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/knownToVisiGene $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/knownToVisiGene${EXE}
+	${CC} ${COPT} -o ${BINDIR}/knownToVisiGene $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/knownToVisiGene${EXE}
 
 clean:
 	rm -f $O

@@ -6,7 +6,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = blastToPsl
 O = $A.o 
-BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 all: ${BINDIR}/blastToPsl ${BINDIR}/pslUniq
 

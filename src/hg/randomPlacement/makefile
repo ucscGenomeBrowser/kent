@@ -11,9 +11,9 @@ A = randomPlacement
 O = randomPlacement.o
 
 ${A}: ${O} $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A}${EXE} \
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A}${EXE} \
 		$O ${MYLIBS} ${L} 
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/${A}${EXE}
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 compile: $O 
 	${CC} -g $O ${MYLIBS} ${L} 

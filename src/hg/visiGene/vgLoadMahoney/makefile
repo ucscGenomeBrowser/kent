@@ -16,8 +16,8 @@ mahoney.o: mahoney.h mahoney.c
 vgLoadMahoney.o: mahoney.o
 
 vgLoadMahoney: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadMahoney $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/vgLoadMahoney${EXE}
+	${CC} ${COPT} -o ${BINDIR}/vgLoadMahoney $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/vgLoadMahoney${EXE}
 
 clean:
 	rm -f $O

@@ -1,3 +1,4 @@
+include ../../inc/common.mk
 
 L = ${MYSQLLIBS} -lm 
 MYLIBDIR = ../../lib/${MACHTYPE}
@@ -7,7 +8,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 	${CC} ${COPT}  -I../inc -I../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 %: %.c 
 	${CC} ${COPT}  -I../inc -I../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
-	mv $@ ${HOME}/bin/${MACHTYPE}/
+	mv $@ ${BINDIR}/
 
 O = liftAgp
 

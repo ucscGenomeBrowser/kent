@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = raToCds.o
 
 raToCds: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/raToCds $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/raToCds${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/raToCds $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/raToCds${EXE}

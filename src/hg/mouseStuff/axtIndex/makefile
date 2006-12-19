@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtIndex.o
 
 axtIndex: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtIndex $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtIndex${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtIndex $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtIndex${EXE}

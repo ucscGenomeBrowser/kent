@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslToBed.o 
 
 myown:pslToBed
-	mv pslToBed $(HOME)/bin/$(MACHTYPE)/
+	mv pslToBed ${BINDIR}/
 
 pslToBed:
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)

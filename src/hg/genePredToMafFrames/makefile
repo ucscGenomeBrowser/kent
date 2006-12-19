@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O =  orgGenes.o mkMafFrames.o splitMultiMappings.o finishMafFrames.o genePredToMafFrames.o
 
 genePredToMafFrames: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/genePredToMafFrames $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredToMafFrames $O $(MYLIBS) $L
 
 orgGenes.o: orgGenes.h orgGenes.c
 mkMafFrames.o: mkMafFrames.c mkMafFrames.h orgGenes.h frameIncr.h

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
 O = isPcr.o
 
 isPcr: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/isPcr $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/isPcr${EXE}
+	${CC} ${COPT} -o ${BINDIR}/isPcr $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/isPcr${EXE}
 
 clean:
 	rm -f $O

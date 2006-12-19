@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = countLines.o
 
 countLines: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/countLines $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/countLines${EXE}
+	${CC} ${COPT} -o ${BINDIR}/countLines $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/countLines${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = fixHarbisonMotifs.o
 
 fixHarbisonMotifs: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fixHarbisonMotifs $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/fixHarbisonMotifs${EXE}
+	${CC} ${COPT} -o ${BINDIR}/fixHarbisonMotifs $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/fixHarbisonMotifs${EXE}
 
 clean:
 	rm -f $O

@@ -9,7 +9,7 @@ O = ${A}.o
 
 ${A}:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L} -lm -g
-	cp ${AOUT} ${HOME}/bin/${MACHTYPE}/${A}
+	cp ${AOUT} ${BINDIR}/${A}
 	mv ${AOUT} ${A}
 
 tags:	
@@ -17,4 +17,4 @@ tags:
 	etags *.c *.h ../../lib/*.c ../../inc/*.h
 
 clean:	
-	rm ${O} ${HOME}/bin/${MACHTYPE}/${A}
+	rm ${O} ${BINDIR}/${A}

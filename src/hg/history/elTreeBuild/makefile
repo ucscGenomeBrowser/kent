@@ -8,8 +8,8 @@ CFLAGS=-ggdb
 O = elTreeBuild.o
 
 elTreeBuild: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/elTreeBuild $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/elTreeBuild${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/elTreeBuild $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/elTreeBuild${EXE}
 
 test1:
 	elTreeBuild test/s1.tree test/g1.tree test1.out

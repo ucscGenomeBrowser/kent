@@ -13,7 +13,7 @@ compile: $O
 	mv ${AOUT} $A${EXE}
 	${STRIP} $A${EXE}
 	chmod a+rx $A
-	cp $A ${HOME}/bin/${MACHTYPE}
+	cp $A ${BINDIR}
 
 debug: $O
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}

@@ -5,7 +5,6 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-BINDIR = $(HOME)/bin/$(MACHTYPE)
 PROG = ${BINDIR}/pslSwap${EXE}
 OBJS = pslSwap.o
 

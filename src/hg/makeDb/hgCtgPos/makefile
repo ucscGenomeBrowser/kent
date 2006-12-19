@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgCtgPos.o liftSpec.o
 
 hgCtgPos: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgCtgPos $O ${MYLIBS} $L
+	${CC} ${COPT} -o ${BINDIR}/hgCtgPos $O ${MYLIBS} $L
 
 lib:
 	cd ../../../lib && ${MAKE}

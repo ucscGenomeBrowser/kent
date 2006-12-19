@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faPolyASizes.o
 
 faPolyASizes: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faPolyASizes${EXE} $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/faPolyASizes${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faPolyASizes${EXE} $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/faPolyASizes${EXE}

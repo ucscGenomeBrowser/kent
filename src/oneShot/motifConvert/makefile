@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = motifConvert.o
 
 motifConvert: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/motifConvert $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/motifConvert${EXE}
+	${CC} ${COPT} -o ${BINDIR}/motifConvert $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/motifConvert${EXE}
 
 clean:
 	rm -f $O

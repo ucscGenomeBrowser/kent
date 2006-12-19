@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = lavToPsl.o
 
 lavToPsl: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/lavToPsl $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/lavToPsl${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/lavToPsl $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/lavToPsl${EXE}

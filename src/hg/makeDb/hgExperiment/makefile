@@ -8,5 +8,5 @@ PROG = hgExperiment
 O = ${PROG}.o
 
 ${PROG}: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${PROG} $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/${PROG}${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${PROG} $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/${PROG}${EXE}

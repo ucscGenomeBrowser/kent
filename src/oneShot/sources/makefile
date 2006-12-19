@@ -3,5 +3,5 @@ include ../../inc/common.mk
 
 O = sources.o 
 
-$(HOME)/bin/$(MACHTYPE)/sources: $(O)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/sources $O ../../lib/$(MACHTYPE)/jkweb.a
+${BINDIR}/sources: $(O)
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/sources $O ../../lib/$(MACHTYPE)/jkweb.a

@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = qaToQac.o
 
 qaToQac: $O ../../lib/$(MACHTYPE)/jkweb.a 
-	${CC} ${COPT} ${CFLAGS} -O -o $(HOME)/bin/$(MACHTYPE)/qaToQac $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -O -o ${BINDIR}/qaToQac $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}

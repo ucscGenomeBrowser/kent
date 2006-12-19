@@ -5,4 +5,4 @@ O = waba.o wabaCrude.o
 
 waba: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a -lm
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/waba
+	mv ${AOUT} ${BINDIR}/waba

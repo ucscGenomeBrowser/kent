@@ -20,8 +20,8 @@ fixed::	${A} tinyFixed smallFixed mediumFixed largeFixed hugeFixed
 allThree::	all bold fixed
 
 $A: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} ${COPT} -o ${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 compile:	${O} ${MYLIBS}
 	${CC} ${COPT} -o ${A}${EXE} $O ${MYLIBS} $L
@@ -86,6 +86,6 @@ hugeFixed:	mgHugeFont.c
 		misc/10x20-L1.bdf stdout >> mgHugeFont.c
 
 clean:
-	rm -f ${HOME}/bin/${MACHTYPE}/${A} $O \
+	rm -f ${BINDIR}/${A} $O \
 		mgTinyFont.c mgSmallFont.c mgMediumFont.c mgLargeFont.c \
 		mgHugeFont.c

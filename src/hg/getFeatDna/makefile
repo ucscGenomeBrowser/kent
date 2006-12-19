@@ -8,7 +8,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = getFeatDna.o
 
 getFeatDna: $O ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/getFeatDna $O ${MYLIBS} $L
+	${CC} -o ${BINDIR}/getFeatDna $O ${MYLIBS} $L
 
 clean::
 	rm -f ${O}

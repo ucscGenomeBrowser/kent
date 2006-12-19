@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = multizzy.o
 
 multizzy: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/multizzy $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/multizzy${EXE}
+	${CC} ${COPT} -o ${BINDIR}/multizzy $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/multizzy${EXE}
 
 clean:
 	rm -f $O

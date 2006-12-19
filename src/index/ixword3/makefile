@@ -5,4 +5,4 @@ O = ixword3.o
 
 ixword3: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/ixword3
+	mv ${AOUT} ${BINDIR}/ixword3

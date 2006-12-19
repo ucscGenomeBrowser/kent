@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgTpf.o
 
 hgTpf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgTpf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgTpf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgTpf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgTpf${EXE}

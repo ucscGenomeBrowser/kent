@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = scrapeCruzBiotech.o
 
 scrapeCruzBiotech: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/scrapeCruzBiotech $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/scrapeCruzBiotech${EXE}
+	${CC} ${COPT} -o ${BINDIR}/scrapeCruzBiotech $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/scrapeCruzBiotech${EXE}
 
 clean:
 	rm -f $O

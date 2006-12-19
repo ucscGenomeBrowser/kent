@@ -5,4 +5,4 @@ O = cbAli.o
 
 cbAli: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/cbAli
+	mv ${AOUT} ${BINDIR}/cbAli

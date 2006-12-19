@@ -8,9 +8,9 @@ A = agpTweak
 O = ${A}.o
 
 agpToFa: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} \
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} \
 		$O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 compile: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L

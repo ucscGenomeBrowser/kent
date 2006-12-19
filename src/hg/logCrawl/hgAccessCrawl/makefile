@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgAccessCrawl.o
 
 hgAccessCrawl: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgAccessCrawl $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgAccessCrawl${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgAccessCrawl $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgAccessCrawl${EXE}

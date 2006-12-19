@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = vgLoadNibb.o
 
 vgLoadNibb: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadNibb $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgLoadNibb
+	${CC} ${COPT} -o ${BINDIR}/vgLoadNibb $O ${MYLIBS} $L
+	strip ${BINDIR}/vgLoadNibb
 
 clean:
 	rm -f $O

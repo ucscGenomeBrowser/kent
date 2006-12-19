@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = rowsToCols.o
 
 rowsToCols: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/rowsToCols $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/rowsToCols
+	${CC} ${COPT} -o ${BINDIR}/rowsToCols $O ${MYLIBS} $L
+	strip ${BINDIR}/rowsToCols
 
 clean:
 	rm -f $O

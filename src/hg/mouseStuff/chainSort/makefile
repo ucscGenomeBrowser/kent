@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainSort.o
 
 chainSort: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainSort $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainSort${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainSort $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/chainSort${EXE}

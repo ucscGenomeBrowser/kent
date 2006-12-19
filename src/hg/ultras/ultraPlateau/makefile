@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = ultraPlateau.o
 
 ultraPlateau: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/ultraPlateau $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/ultraPlateau${EXE}
+	${CC} ${COPT} -o ${BINDIR}/ultraPlateau $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/ultraPlateau${EXE}
 
 clean:
 	rm -f $O

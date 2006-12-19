@@ -8,5 +8,5 @@ O = iriToControlTable.o ../lib/improbRunInfo.o
 
 iriToControlTable: $O $(MYLIBS)
 	cd ../lib && ${MAKE}
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/iriToControlTable $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/iriToControlTable${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/iriToControlTable $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/iriToControlTable${EXE}

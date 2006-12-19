@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = ultraPcrRegions.o
 
 ultraPcrRegions: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/ultraPcrRegions $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/ultraPcrRegions${EXE}
+	${CC} ${COPT} -o ${BINDIR}/ultraPcrRegions $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/ultraPcrRegions${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = pairCompress.o
 
 pairCompress: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pairCompress $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/pairCompress${EXE}
+	${CC} ${COPT} -o ${BINDIR}/pairCompress $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/pairCompress${EXE}
 
 clean:
 	rm -f $O

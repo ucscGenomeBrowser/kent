@@ -9,20 +9,20 @@ O = axtSomeRecords.o
 all: discretize mapRecords axtSomeRecords mi
 
 axtSomeRecords: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/axtSomeRecords $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/axtSomeRecords${EXE}
+	${CC} ${COPT} -o ${BINDIR}/axtSomeRecords $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/axtSomeRecords${EXE}
 
 mi: mi.o ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mi mi.o ${MYLIBS} $L 
-	${STRIP} ${HOME}/bin/${MACHTYPE}/mi${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mi mi.o ${MYLIBS} $L 
+	${STRIP} ${BINDIR}/mi${EXE}
 
 discretize: discretize.o ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/discretize discretize.o ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/discretize${EXE}
+	${CC} ${COPT} -o ${BINDIR}/discretize discretize.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/discretize${EXE}
 
 mapRecords: mapRecords.o ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mapRecords mapRecords.o ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/mapRecords${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mapRecords mapRecords.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/mapRecords${EXE}
 
 clean:
 	rm -f $O

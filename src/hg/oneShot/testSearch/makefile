@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = testSearch.o
 
 testSearch: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/testSearch $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/testSearch
+	${CC} ${COPT} -o ${BINDIR}/testSearch $O ${MYLIBS} $L
+	strip ${BINDIR}/testSearch
 
 clean:
 	rm -f $O

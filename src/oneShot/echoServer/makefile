@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = echoServer.o
 
 echoServer: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/echoServer $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/echoServer${EXE}
+	${CC} ${COPT} -o ${BINDIR}/echoServer $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/echoServer${EXE}
 
 clean:
 	rm -f $O

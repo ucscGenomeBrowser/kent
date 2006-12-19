@@ -8,7 +8,7 @@ CFLAGS= -ggdb
 O = exonMap.o
 
 exonMap: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/exonMap $O ${MYLIBS} $L
+	${CC} ${COPT} -o ${BINDIR}/exonMap $O ${MYLIBS} $L
 
 clean:
 	rm -f $O

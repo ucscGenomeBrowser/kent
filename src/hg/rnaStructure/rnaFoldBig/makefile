@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rnaFoldBig.o
 
 rnaFoldBig: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/rnaFoldBig $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/rnaFoldBig${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rnaFoldBig $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/rnaFoldBig${EXE}

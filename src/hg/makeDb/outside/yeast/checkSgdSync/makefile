@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkSgdSync.o
 
 checkSgdSync: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkSgdSync $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkSgdSync${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkSgdSync $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/checkSgdSync${EXE}

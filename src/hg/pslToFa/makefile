@@ -8,5 +8,5 @@ O = pslToFa.o
 CFLAGS=-ggdb
 
 pslToFa: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslToFa $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslToFa${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslToFa $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/pslToFa${EXE}

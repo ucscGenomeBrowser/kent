@@ -13,15 +13,15 @@ A = wigAsciiToBinary
 all::	${A} wigZoom wigBedToBinary
 
 $A: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} ${COPT} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 wigZoom: wigZoom.o ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigZoom wigZoom.o ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/wigZoom${EXE}
+	${CC} ${COPT} -o ${BINDIR}/wigZoom wigZoom.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/wigZoom${EXE}
 
 wigBedToBinary: wigBedToBinary.o ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigBedToBinary wigBedToBinary.o ${MYLIBS} $L
+	${CC} ${COPT} -o ${BINDIR}/wigBedToBinary wigBedToBinary.o ${MYLIBS} $L
 
 test:
 	@echo "The testing is out of date and needs to be fixed"
@@ -29,9 +29,9 @@ test:
 #	cd test_data && ./runtest
 
 clean:
-	rm -f ${HOME}/bin/${MACHTYPE}/${A} $O \
-	${HOME}/bin/${MACHTYPE}/wigZoom wigZoom.o \
-	${HOME}/bin/${MACHTYPE}/wigBedToBinary wigBedToBinary.o \
+	rm -f ${BINDIR}/${A} $O \
+	${BINDIR}/wigZoom wigZoom.o \
+	${BINDIR}/wigBedToBinary wigBedToBinary.o \
 	test_data/chrM.ascii test_data/chr0.wib test_data/chr0.wig \
 	test_data/chrM_256.ascii test_data/chrS.wib test_data/chrS.wig \
 	test_data/chrM_256.wib test_data/chrM_256.wig \

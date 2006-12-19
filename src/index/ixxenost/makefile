@@ -5,4 +5,4 @@ O = ixxenost.o
 
 ixxenost: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/ixxenost
+	mv ${AOUT} ${BINDIR}/ixxenost

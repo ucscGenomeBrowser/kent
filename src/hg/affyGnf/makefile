@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 % : %.c
 	$(CC) $(COPT) -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) -lm -lz
-	cp $@ $(HOME)/bin/$(MACHTYPE)
+	cp $@ ${BINDIR}
 
 O = affyUclaMergePslData affyPslAndAtlasToBed pslAffySelect
 

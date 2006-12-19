@@ -4,6 +4,6 @@ include ../../inc/common.mk
 O = fixcr.o 
 
 fixcr: $(O)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/fixcr $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/fixcr $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

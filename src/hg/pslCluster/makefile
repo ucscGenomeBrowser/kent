@@ -8,12 +8,12 @@ CFLAGS= -ggdb
 O = pslCluster.o
 
 pslCluster: $O ${MYLIBS}
-	${CC} ${CFLAGS} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslCluster $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslCluster${EXE}
+	${CC} ${CFLAGS} ${COPT} -o ${BINDIR}/pslCluster $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/pslCluster${EXE}
 
 pslMaxMap: pslMaxMap.o ${MYLIBS}
-	${CC} ${CFLAGS} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslMaxMap pslMaxMap.o ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslCluster${EXE}
+	${CC} ${CFLAGS} ${COPT} -o ${BINDIR}/pslMaxMap pslMaxMap.o ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/pslCluster${EXE}
 
 clean:
 	rm -f $O

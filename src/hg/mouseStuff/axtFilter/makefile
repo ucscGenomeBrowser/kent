@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtFilter.o
 
 axtFilter: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtFilter $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtFilter${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtFilter $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtFilter${EXE}

@@ -8,5 +8,5 @@ CFLAGS= -g
 O = protDat.o
 
 protDat: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/protDat $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/protDat${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/protDat $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/protDat${EXE}

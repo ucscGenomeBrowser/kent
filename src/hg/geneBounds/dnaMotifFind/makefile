@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = dnaMotifFind.o 
 
 dnaMotifFind: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/dnaMotifFind $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/dnaMotifFind${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/dnaMotifFind $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/dnaMotifFind${EXE}

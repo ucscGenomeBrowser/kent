@@ -8,8 +8,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgsqladmin.o
 
 hgsqladmin: $O ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/hgsqladmin $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgsqladmin${EXE}
+	${CC} -o ${BINDIR}/hgsqladmin $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgsqladmin${EXE}
 
 clean::
 	rm -f ${O}

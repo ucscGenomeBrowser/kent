@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = endsInLf.o
 
 endsInLf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/endsInLf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/endsInLf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/endsInLf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/endsInLf${EXE}

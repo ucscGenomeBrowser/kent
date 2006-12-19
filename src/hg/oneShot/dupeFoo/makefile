@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = dupeFoo.o
 
 dupeFoo: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/dupeFoo $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/dupeFoo${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/dupeFoo $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/dupeFoo${EXE}

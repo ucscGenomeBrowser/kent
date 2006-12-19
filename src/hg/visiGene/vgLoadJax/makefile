@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = vgLoadJax.o
 
 vgLoadJax: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadJax $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgLoadJax
+	${CC} ${COPT} -o ${BINDIR}/vgLoadJax $O ${MYLIBS} $L
+	strip ${BINDIR}/vgLoadJax
 
 forwardSlices: forwardSlices.o ${MYLIBS}
 	${CC} ${COPT} -o forwardSlices forwardSlices.o ${MYLIBS} $L

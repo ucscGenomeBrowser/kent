@@ -9,8 +9,8 @@ O = subsetAxt.o
 DATA_FILES = blastz.mat coding.mat medium.mat promoter.mat twilight.mat
 
 subsetAxt: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/subsetAxt $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/subsetAxt${EXE}
+	${CC} ${COPT} -o ${BINDIR}/subsetAxt $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/subsetAxt${EXE}
 
 copyData:
 	${MKDIR} ${HOME}/data/subsetAxt

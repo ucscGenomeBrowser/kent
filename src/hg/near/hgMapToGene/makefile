@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgMapToGene.o
 
 hgMapToGene: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgMapToGene $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgMapToGene${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgMapToGene $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgMapToGene${EXE}
 
 clean::
 	rm -f ${O} hgMapToGene

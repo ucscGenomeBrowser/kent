@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faSimplify.o
 
 faSimplify: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faSimplify $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/faSimplify${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faSimplify $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/faSimplify${EXE}

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = sqlPerf.o
 
 sqlPerf: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/sqlPerf $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/sqlPerf${EXE}
+	${CC} ${COPT} -o ${BINDIR}/sqlPerf $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/sqlPerf${EXE}
 
 compile: $O ${MYLIBS}
 	${CC} ${COPT} -o sqlPerf $O ${MYLIBS} $L

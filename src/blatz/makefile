@@ -10,16 +10,16 @@ all: blatz blatzClient blatzServer
 	echo made
 
 blatz: standalone.o $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatz standalone.o $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/blatz${EXE}
+	${CC} ${COPT} -o ${BINDIR}/blatz standalone.o $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/blatz${EXE}
 
 blatzServer: server.o $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatzServer server.o $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/blatzServer${EXE}
+	${CC} ${COPT} -o ${BINDIR}/blatzServer server.o $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/blatzServer${EXE}
 
 blatzClient: client.o bzp.o ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatzClient client.o bzp.o ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/blatzClient${EXE}
+	${CC} ${COPT} -o ${BINDIR}/blatzClient client.o bzp.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/blatzClient${EXE}
 
 clean:
 	rm -f $O

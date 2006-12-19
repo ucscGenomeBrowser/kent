@@ -10,11 +10,11 @@ A = hgKnownGeneList
 O = $A.o
 
 $A:	compile
-	rm -f ${HOME}/bin/${MACHTYPE}/$A${EXE}
-	mv $A ${HOME}/bin/${MACHTYPE}/$A${EXE}
+	rm -f ${BINDIR}/$A${EXE}
+	mv $A ${BINDIR}/$A${EXE}
 
 mgsc: strip
-	mv $A ${HOME}/bin/${MACHTYPE}/$A
+	mv $A ${BINDIR}/$A
 
 compile: $O 
 	${CC} -o $A $O ${MYLIBS} ${L}

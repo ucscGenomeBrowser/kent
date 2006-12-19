@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = pslRecalcMatch.o
 
 pslRecalcMatch: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslRecalcMatch $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/pslRecalcMatch
+	${CC} ${COPT} -o ${BINDIR}/pslRecalcMatch $O ${MYLIBS} $L
+	strip ${BINDIR}/pslRecalcMatch
 
 clean:
 	rm -f $O

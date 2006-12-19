@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = orthologBySynteny.o
 
 orthologBySynteny: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/orthologBySynteny $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/orthologBySynteny${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/orthologBySynteny $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/orthologBySynteny${EXE}

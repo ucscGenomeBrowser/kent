@@ -8,8 +8,8 @@ CFLAGS= -ggdb
 O = pslDist.o
 
 pslDist: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslDist $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslDist${EXE}
+	${CC} ${COPT} -o ${BINDIR}/pslDist $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/pslDist${EXE}
 
 clean:
 	rm -f $O

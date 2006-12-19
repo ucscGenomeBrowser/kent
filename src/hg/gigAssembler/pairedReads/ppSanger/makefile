@@ -8,7 +8,7 @@ O = ppSanger.o sangInsert.o sangRange.o sangRead.o
 
 ppSanger: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppSanger $O $(MYLIBS) $L
-	mv ppSanger $(HOME)/bin/$(MACHTYPE)
+	mv ppSanger ${BINDIR}
 
 
 lib:

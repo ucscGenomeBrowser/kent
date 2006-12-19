@@ -17,7 +17,7 @@ $A: $O $(MYLIBS)
 
 install:
 	${STRIP} $A${EXE}
-	mv $A $(HOME)/bin/$(MACHTYPE)/$A
+	mv $A ${BINDIR}/$A
 
 test:
 	cd tests && ${MAKE}

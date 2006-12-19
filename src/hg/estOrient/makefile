@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
 O = estOrient.o
-B =  ${HOME}/bin/${MACHTYPE}/estOrient
+B =  ${BINDIR}/estOrient
 
 $B: estOrient
 	@${MKDIR} `dirname $B`

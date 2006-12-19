@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = lineRange.o
 
 lineRange: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/lineRange $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/lineRange${EXE}
+	${CC} ${COPT} -o ${BINDIR}/lineRange $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/lineRange${EXE}
 
 clean:
 	rm -f $O

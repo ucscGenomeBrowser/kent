@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadSeq.o 
 
 hgLoadSeq: $O ../../../lib/$(MACHTYPE)/jkweb.a makefile
-	${CC} ${COPT} ${CFLAGS} ${F64} -o $(HOME)/bin/$(MACHTYPE)/hgLoadSeq $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} ${F64} -o ${BINDIR}/hgLoadSeq $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib && ${MAKE}

@@ -15,4 +15,4 @@ $A: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $A $O $(MYLIBS) $L
 
 install:
-	mv $A $(HOME)/bin/$(MACHTYPE)/$A
+	mv $A ${BINDIR}/$A

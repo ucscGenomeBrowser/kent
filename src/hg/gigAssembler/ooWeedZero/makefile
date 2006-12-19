@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooWeedZero.o
 
 ooWeedZero: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooWeedZero $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/ooWeedZero${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooWeedZero $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/ooWeedZero${EXE}

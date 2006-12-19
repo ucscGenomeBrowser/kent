@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtRescore.o
 
 axtRescore: compile
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtRescore${EXE}
+	${STRIP} ${BINDIR}/axtRescore${EXE}
 
 compile: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtRescore $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtRescore $O $(MYLIBS) $L

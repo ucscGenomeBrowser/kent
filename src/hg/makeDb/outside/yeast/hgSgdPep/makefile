@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgSgdPep.o
 
 hgSgdPep: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgSgdPep $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgSgdPep${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgSgdPep $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgSgdPep${EXE}

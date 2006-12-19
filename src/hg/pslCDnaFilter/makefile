@@ -8,7 +8,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 H = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h polyASize.h hapRegions.h usage.msg algo.msg
 O = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o polyASize.o hapRegions.o pslCDnaFilter.o
-B =  ${HOME}/bin/${MACHTYPE}/pslCDnaFilter
+B =  ${BINDIR}/pslCDnaFilter
 
 $B: pslCDnaFilter
 	@${MKDIR} `dirname $B`

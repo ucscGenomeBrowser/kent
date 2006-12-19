@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = balancedTree.o
 
 balancedTree: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/balancedTree $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/balancedTree${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/balancedTree $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/balancedTree${EXE}

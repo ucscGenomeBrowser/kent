@@ -12,24 +12,24 @@ A = hgLoadWiggle
 all::	${A} hgWiggle wigEncode
 
 hgLoadWiggle: $O ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 hgDumpWiggle:	hgDumpWiggle.o ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/hgDumpWiggle hgDumpWiggle.o \
+	${CC} -o ${BINDIR}/hgDumpWiggle hgDumpWiggle.o \
 		${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgDumpWiggle${EXE}
+	${STRIP} ${BINDIR}/hgDumpWiggle${EXE}
 
 hgWiggle:	hgWiggle.o ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/hgWiggle hgWiggle.o \
+	${CC} -o ${BINDIR}/hgWiggle hgWiggle.o \
 		${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgWiggle${EXE}
+	${STRIP} ${BINDIR}/hgWiggle${EXE}
 
 hgWiggle.o:	../../inc/wiggle.h hgWiggle.c
 
 wigEncode:	wigEncode.o ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/wigEncode wigEncode.o ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/wigEncode${EXE}
+	${CC} -o ${BINDIR}/wigEncode wigEncode.o ${MYLIBS} $L
+	${STRIP} ${BINDIR}/wigEncode${EXE}
 
 wigEncode.o:	../../inc/wiggle.h wigEncode.c
 

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadAxt.o
 
 hgLoadAxt: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadAxt $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadAxt${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadAxt $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgLoadAxt${EXE}

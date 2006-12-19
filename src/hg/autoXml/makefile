@@ -8,8 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = autoXml.o
 
 autoXml: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/autoXml $O $(MYLIBS)
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/autoXml${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/autoXml $O $(MYLIBS)
+#	${STRIP} ${BINDIR}/autoXml${EXE}
 
 test::
 	doTest

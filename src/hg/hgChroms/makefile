@@ -5,7 +5,6 @@ MYLIBDIR = ../../../src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = hgChroms.o
-BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 hgChroms: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o hgChroms $O $(MYLIBS) $L

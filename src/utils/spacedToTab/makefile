@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = spacedToTab.o
 
 spacedToTab: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/spacedToTab $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/spacedToTab${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/spacedToTab $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/spacedToTab${EXE}

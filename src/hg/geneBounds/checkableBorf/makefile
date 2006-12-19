@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkableBorf.o
 
 checkableBorf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkableBorf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkableBorf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkableBorf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/checkableBorf${EXE}

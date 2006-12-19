@@ -8,8 +8,8 @@ A = hgNetDist
 O = $A.o
 
 hgNetDist: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/$A $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/$A${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/$A $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/$A${EXE}
 	
 yeast:	
 	hgNetDist yeastP2P.tab sacCer1 yeastP2P -threshold=3

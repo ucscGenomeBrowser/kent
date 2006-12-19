@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = letterChain.o
 
 letterChain: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/letterChain $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/letterChain${EXE}
+	${CC} ${COPT} -o ${BINDIR}/letterChain $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/letterChain${EXE}
 
 clean:
 	rm -f $O

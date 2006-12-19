@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = eisenInput.o
 
 eisenInput: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/eisenInput $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/eisenInput${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/eisenInput $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/eisenInput${EXE}

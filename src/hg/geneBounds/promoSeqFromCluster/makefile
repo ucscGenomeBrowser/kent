@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = promoSeqFromCluster.o
 
 promoSeqFromCluster: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/promoSeqFromCluster $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/promoSeqFromCluster${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/promoSeqFromCluster $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/promoSeqFromCluster${EXE}

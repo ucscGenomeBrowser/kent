@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = findMotif.o
 
 findMotif: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/findMotif $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/findMotif${EXE}
+	${CC} ${COPT} -o ${BINDIR}/findMotif $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/findMotif${EXE}
 
 compile: ${O} ${MYLIBS}
 	${CC} ${COPT} -o findMotif $O ${MYLIBS} $L

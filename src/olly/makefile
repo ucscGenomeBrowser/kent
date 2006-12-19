@@ -8,5 +8,5 @@ O = olly.o
 
 olly: $O $(MYLIBS)
 #	${CC} ${COPT} ${CFLAGS} -o olly $O $(MYLIBS) $L
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/olly $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/olly${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/olly $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/olly${EXE}

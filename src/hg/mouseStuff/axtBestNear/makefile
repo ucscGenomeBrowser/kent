@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = axtBestNear.o
 
 axtBestNear: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtBestNear $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtBestNear${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtBestNear $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/axtBestNear${EXE}
 test: chr22 
 %:	input/%.axt
 	axtBestNear input/$@.axt $@ output/$@.axt 

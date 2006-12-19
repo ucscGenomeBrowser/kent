@@ -4,7 +4,7 @@ L =
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
-INSTALLDIR = $(HOME)/bin/$(MACHTYPE)
+INSTALLDIR = ${BINDIR}
 
 PROG = scaffoldFaToAgp
 

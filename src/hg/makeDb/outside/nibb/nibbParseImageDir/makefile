@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = nibbParseImageDir.o
 
 nibbParseImageDir: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/nibbParseImageDir $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/nibbParseImageDir
+	${CC} ${COPT} -o ${BINDIR}/nibbParseImageDir $O ${MYLIBS} $L
+	strip ${BINDIR}/nibbParseImageDir
 
 clean:
 	rm -f $O

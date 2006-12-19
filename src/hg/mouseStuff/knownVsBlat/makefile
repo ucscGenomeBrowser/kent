@@ -11,11 +11,11 @@ O = knownVsBlat.o $S
 all: knownVsBlat kvsSummary
 
 knownVsBlat: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/knownVsBlat $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/knownVsBlat${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/knownVsBlat $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/knownVsBlat${EXE}
 
 O2 = kvsSummary.o $S
 
 kvsSummary: $(O2) $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/kvsSummary $(O2) $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/kvsSummary${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/kvsSummary $(O2) $(MYLIBS) $L
+	${STRIP} ${BINDIR}/kvsSummary${EXE}

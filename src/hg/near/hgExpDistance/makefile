@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgExpDistance.o
 
 hgExpDistance: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgExpDistance $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgExpDistance${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgExpDistance $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgExpDistance${EXE}
 
 clean::
 	rm -f ${O} hgExpDistance

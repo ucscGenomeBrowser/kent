@@ -9,7 +9,7 @@ A = hgJaxQtl
 O = $A.o
 
 my: compile
-	mv $A${EXE} ${HOME}/bin/${MACHTYPE}
+	mv $A${EXE} ${BINDIR}
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 

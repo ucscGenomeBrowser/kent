@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtForEst.o
 
 axtForEst: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtForEst $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtForEst${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtForEst $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/axtForEst${EXE}

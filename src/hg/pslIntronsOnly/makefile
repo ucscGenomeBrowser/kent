@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslIntronsOnly.o 
 
 pslIntronsOnly: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslIntronsOnly $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslIntronsOnly $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib && ${MAKE}

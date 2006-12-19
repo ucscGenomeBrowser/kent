@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = cdnaOnOoJobs.o
 
 cdnaOnOoJobs: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/cdnaOnOoJobs $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/cdnaOnOoJobs${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/cdnaOnOoJobs $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/cdnaOnOoJobs${EXE}
 
 fix: makeFix.o
 	${CC} ${COPT} ${CFLAGS} -o makeFix makeFix.o $(MYLIBS) $L

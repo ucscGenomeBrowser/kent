@@ -4,8 +4,8 @@ O = randDNA.o
 A = randDNA
 
 ${A}: $O
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} ${COPT} -o ${BINDIR}/${A} $O
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 clean:
 	rm -f $O

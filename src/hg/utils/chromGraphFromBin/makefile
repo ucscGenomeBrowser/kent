@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = chromGraphFromBin.o
 
 chromGraphFromBin: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/chromGraphFromBin $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/chromGraphFromBin${EXE}
+	${CC} ${COPT} -o ${BINDIR}/chromGraphFromBin $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/chromGraphFromBin${EXE}
 
 clean:
 	rm -f $O

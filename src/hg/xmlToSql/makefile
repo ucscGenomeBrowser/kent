@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = xmlToSql.o elStat.o rename.o tables.o
 
 xmlToSql: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/xmlToSql $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/xmlToSql
+	${CC} ${COPT} -o ${BINDIR}/xmlToSql $O ${MYLIBS} $L
+	strip ${BINDIR}/xmlToSql
 
 clean:
 	rm -f $O

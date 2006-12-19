@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = synthElemTree.o
 
 synthElemTree: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/synthElemTree $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/synthElemTree${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/synthElemTree $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/synthElemTree${EXE}
 

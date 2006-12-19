@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rmFromFinf.o
 
 rmFromFinf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/rmFromFinf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/rmFromFinf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rmFromFinf $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/rmFromFinf${EXE}

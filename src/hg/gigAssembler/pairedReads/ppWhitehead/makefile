@@ -8,5 +8,5 @@ O = ppWhitehead.o
 
 ppWhitehead: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppWhitehead $O $(MYLIBS) $L
-	mv ppWhitehead $(HOME)/bin/$(MACHTYPE)
+	mv ppWhitehead ${BINDIR}
 

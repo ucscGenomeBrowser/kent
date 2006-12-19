@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = getHumanBrainRna.o
 
 getHumanBrainRna: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/getHumanBrainRna $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/getHumanBrainRna${EXE}
+	${CC} ${COPT} -o ${BINDIR}/getHumanBrainRna $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/getHumanBrainRna${EXE}
 
 clean:
 	rm -f $O

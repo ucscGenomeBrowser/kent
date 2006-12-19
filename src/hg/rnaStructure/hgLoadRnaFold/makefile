@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadRnaFold.o
 
 hgLoadRnaFold: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadRnaFold $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadRnaFold${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadRnaFold $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgLoadRnaFold${EXE}
 
 test:
 	hgLoadRnaFold -tab=output -noLoad hg16 test input

@@ -8,5 +8,5 @@ X = chimpHiQualDiffs
 O = ${X}.o
 
 ${X}: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${X} $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/${X}${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${X} $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/${X}${EXE}

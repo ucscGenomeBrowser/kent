@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = opendirTest.o
 
 opendirTest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/opendirTest $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/opendirTest${EXE}
+	${CC} ${COPT} -o ${BINDIR}/opendirTest $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/opendirTest${EXE}
 
 clean:
 	rm -f $O

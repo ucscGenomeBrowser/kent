@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = chainToAxt.o
 
 chainToAxt: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/chainToAxt $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/chainToAxt${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainToAxt $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/chainToAxt${EXE}
 
 test: chrM
 %:	input/%.chain

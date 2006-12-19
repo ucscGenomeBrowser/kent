@@ -8,8 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooNtInput.o
 
 ooNtInput: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooNtInput $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/ooNtInput${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooNtInput $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/ooNtInput${EXE}
 
 
 lib:

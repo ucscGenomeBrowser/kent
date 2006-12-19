@@ -5,8 +5,8 @@ O = indexgl.o
 
 indexgl: ${O} 
 	${CC} $O ../../lib/${MACHTYPE}/jkweb.a \
-		-o ${HOME}/bin/${MACHTYPE}/indexgl
-	${STRIP} ${HOME}/bin/${MACHTYPE}/indexgl${EXE}
+		-o ${BINDIR}/indexgl
+	${STRIP} ${BINDIR}/indexgl${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = splitFileByColumn.o
 
 splitFileByColumn: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/splitFileByColumn $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/splitFileByColumn${EXE}
+	${CC} ${COPT} -o ${BINDIR}/splitFileByColumn $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/splitFileByColumn${EXE}
 
 clean:
 	rm -f $O

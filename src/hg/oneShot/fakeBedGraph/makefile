@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = fakeBedGraph.o
 
 fakeBedGraph: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fakeBedGraph $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/fakeBedGraph
+	${CC} ${COPT} -o ${BINDIR}/fakeBedGraph $O ${MYLIBS} $L
+	strip ${BINDIR}/fakeBedGraph
 
 clean:
 	rm -f $O

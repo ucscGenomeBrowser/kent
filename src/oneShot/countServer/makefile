@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = countServer.o
 
 countServer: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/countServer $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/countServer${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/countServer $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/countServer${EXE}

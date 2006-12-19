@@ -2,7 +2,7 @@ include ../../../../inc/common.mk
 # tests for hgLoadMaf
 
 PROG = hgLoadMaf
-P = ${HOME}/bin/${MACHTYPE}/${PROG}
+P = ${BINDIR}/${PROG}
 
 test: testoutput clean
 

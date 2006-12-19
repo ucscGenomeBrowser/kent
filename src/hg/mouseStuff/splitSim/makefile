@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = splitSim.o
 
 splitSim: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/splitSim $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/splitSim${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/splitSim $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/splitSim${EXE}

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = nibbPrepImages.o
 
 nibbPrepImages: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/nibbPrepImages $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/nibbPrepImages
+	${CC} ${COPT} -o ${BINDIR}/nibbPrepImages $O ${MYLIBS} $L
+	strip ${BINDIR}/nibbPrepImages
 
 clean:
 	rm -f $O

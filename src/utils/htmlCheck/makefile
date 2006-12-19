@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = htmlCheck.o
 
 htmlCheck: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/htmlCheck $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/htmlCheck${EXE}
+	${CC} ${COPT} -o ${BINDIR}/htmlCheck $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/htmlCheck${EXE}
 
 clean:
 	rm -f $O

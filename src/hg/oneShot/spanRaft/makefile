@@ -3,6 +3,6 @@ include ../../../inc/common.mk
 O = spanRaft.o 
 
 spanRaft: $(O)
-	cc -o $(HOME)/bin/$(MACHTYPE)/spanRaft $O ../../../lib/$(MACHTYPE)/jkweb.a
+	cc -o ${BINDIR}/spanRaft $O ../../../lib/$(MACHTYPE)/jkweb.a
 
 

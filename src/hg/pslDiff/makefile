@@ -8,7 +8,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = pslSets.o pslDiff.o
 # pslDiff.o
-B =  ${HOME}/bin/${MACHTYPE}/pslDiff
+B =  ${BINDIR}/pslDiff
 
 $B: pslDiff
 	@${MKDIR} `dirname $B`

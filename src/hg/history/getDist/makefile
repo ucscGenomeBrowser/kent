@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = getDist.o
 
 getDist: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/getDist $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/getDist${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/getDist $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/getDist${EXE}
 

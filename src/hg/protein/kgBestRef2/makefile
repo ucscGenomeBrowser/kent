@@ -16,13 +16,13 @@ all::
 
 ${A1}: ${O1} ${MYLIBS}
 	${CC} ${COPT} ${HG_WARN} ${HG_DEFS} \
-		-o ${HOME}/bin/${MACHTYPE}/${A1} ${O1} ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A1}${EXE}
+		-o ${BINDIR}/${A1} ${O1} ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A1}${EXE}
 
 ${A2}: ${O2} ${MYLIBS}
 	${CC} ${COPT} ${HG_WARN} ${HG_DEFS} \
-		-o ${HOME}/bin/${MACHTYPE}/${A2} ${O2} ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A2}${EXE}
+		-o ${BINDIR}/${A2} ${O2} ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A2}${EXE}
 
 compile: ${O1} ${O2}
 	${CC} -Wall ${O1} ${MYLIBS} ${L}

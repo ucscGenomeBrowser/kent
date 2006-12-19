@@ -8,7 +8,7 @@ A = randFrag
 O = ${A}.o
 
 compile: $(O) $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${A} $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O $(MYLIBS) $L
 
 clean:
 	rm -f $(O)

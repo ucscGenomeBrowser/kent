@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = trimFosmids.o
 
 trimFosmids: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/trimFosmids $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/trimFosmids${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/trimFosmids $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/trimFosmids${EXE}

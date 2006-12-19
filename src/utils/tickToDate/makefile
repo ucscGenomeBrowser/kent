@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = tickToDate.o
 
 tickToDate: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/tickToDate $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/tickToDate${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/tickToDate $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/tickToDate${EXE}

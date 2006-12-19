@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = mafToPsl.o
 
 mafToPsl: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafToPsl $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToPsl${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafToPsl $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/mafToPsl${EXE}

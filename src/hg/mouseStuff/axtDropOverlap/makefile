@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = axtDropOverlap.o 
 
 axtDropOverlap: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/axtDropOverlap $O ${MYLIBS} $L
-#${STRIP} ${HOME}/bin/${MACHTYPE}/axtDropOverlap${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtDropOverlap $O ${MYLIBS} $L
+#${STRIP} ${BINDIR}/axtDropOverlap${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

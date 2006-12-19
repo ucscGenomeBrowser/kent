@@ -4,5 +4,5 @@ O = faRandomize.o
 
 faNoise: $(O)
 	${CC} ${COPT} ${CFLAGS} -o faRandomize $O ../../lib/$(MACHTYPE)/jkweb.a
-	cp faRandomize $(HOME)/bin/$(MACHTYPE)/
+	cp faRandomize ${BINDIR}/
 

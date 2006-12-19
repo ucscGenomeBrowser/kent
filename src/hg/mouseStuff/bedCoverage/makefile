@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bedCoverage.o
 
 bedCoverage: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bedCoverage $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedCoverage${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/bedCoverage $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/bedCoverage${EXE}

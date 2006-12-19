@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faRc.o
 
 faRc: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faRc $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/faRc${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faRc $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/faRc${EXE}

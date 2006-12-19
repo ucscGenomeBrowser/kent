@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = joinerCheck.o 
 
 joinerCheck: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/joinerCheck $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/joinerCheck${EXE}
+	${CC} ${COPT} -o ${BINDIR}/joinerCheck $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/joinerCheck${EXE}
 
 clean:
 	rm -f $O

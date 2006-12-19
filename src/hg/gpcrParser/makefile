@@ -12,7 +12,7 @@ O = gpcrParser.o
 
 gpcrParser: $O 
 	${CC} ${COPT} -o gpcrParser $O ${MYLIBS} ${L} 
-	mv gpcrParser ${HOME}/bin/${MACHTYPE}
+	mv gpcrParser ${BINDIR}
 
 clean::
 	rm -f gpcrParser ${O}

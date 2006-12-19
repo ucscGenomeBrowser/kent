@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = kgPutBack.o
 
 kgPutBack: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/kgPutBack $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/kgPutBack${EXE}
+	${CC} ${COPT} -o ${BINDIR}/kgPutBack $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/kgPutBack${EXE}
 
 clean:
 	rm -f $O

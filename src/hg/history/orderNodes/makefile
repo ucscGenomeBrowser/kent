@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = orderNodes.o
 
 orderNodes: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/orderNodes $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/orderNodes${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/orderNodes $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/orderNodes${EXE}
 

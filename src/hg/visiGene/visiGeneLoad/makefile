@@ -10,8 +10,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = visiGeneLoad.o
 
 visiGeneLoad: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/visiGeneLoad $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/visiGeneLoad${EXE}
+	${CC} ${COPT} -o ${BINDIR}/visiGeneLoad $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/visiGeneLoad${EXE}
 
 clean:
 	rm -f $O

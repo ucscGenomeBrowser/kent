@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = agpToGl.o
 
 agpToGl: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/agpToGl $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/agpToGl${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpToGl $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/agpToGl${EXE}

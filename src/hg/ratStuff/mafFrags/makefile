@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = mafFrags.o
 
 mafFrags: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafFrags $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/mafFrags${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mafFrags $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/mafFrags${EXE}
 
 test:
 	${MKDIR} output

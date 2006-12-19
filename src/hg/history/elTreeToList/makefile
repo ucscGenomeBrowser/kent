@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = elTreeToList.o
 
 elTreeToList: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/elTreeToList $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/elTreeToList${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/elTreeToList $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/elTreeToList${EXE}
 

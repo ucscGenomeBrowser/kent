@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainNet.o
 
 chainNet: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainNet $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainNet${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainNet $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/chainNet${EXE}

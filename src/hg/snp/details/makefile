@@ -9,11 +9,11 @@ O = ${A}.o
 
 dbSnp:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L}
-	mv ${AOUT} ${HOME}/bin/${MACHTYPE}/${A}
+	mv ${AOUT} ${BINDIR}/${A}
 
 tags:	
 	ctags *.c *.h ../../lib/*.c ../../inc/*.h
 	etags *.c *.h ../../lib/*.c ../../inc/*.h
 
 clean:	
-	rm ${O} ${HOME}/bin/${MACHTYPE}/${A}
+	rm ${O} ${BINDIR}/${A}

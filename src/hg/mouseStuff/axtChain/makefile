@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = axtChain.o
 
 axtChain: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtChain $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtChain${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtChain $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtChain${EXE}

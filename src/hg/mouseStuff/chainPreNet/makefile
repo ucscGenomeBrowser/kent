@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainPreNet.o
 
 chainPreNet: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainPreNet $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainPreNet${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainPreNet $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/chainPreNet${EXE}

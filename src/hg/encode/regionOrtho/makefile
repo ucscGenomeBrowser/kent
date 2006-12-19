@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-INSTALLDIR = ${HOME}/bin/${MACHTYPE}
+INSTALLDIR = ${BINDIR}
 SCRIPT_DIR = /cluster/data/encode/bin/scripts
 CFLAGS = -g
 

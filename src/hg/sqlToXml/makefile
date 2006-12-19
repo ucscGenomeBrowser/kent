@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = sqlToXml.o
 
 sqlToXml: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/sqlToXml $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/sqlToXml
+	${CC} ${COPT} -o ${BINDIR}/sqlToXml $O ${MYLIBS} $L
+	strip ${BINDIR}/sqlToXml
 
 clean:
 	rm -f $O

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = detab.o
 
 detab: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/detab $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/detab${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/detab $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/detab${EXE}

@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = chopTree.o
 
 chopTree: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chopTree $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/chopTree${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chopTree $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/chopTree${EXE}
 

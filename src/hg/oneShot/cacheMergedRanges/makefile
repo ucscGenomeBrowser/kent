@@ -8,5 +8,5 @@ O = cacheMergedRanges.o rbmTree.o
 
 cacheMergedRanges: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o cacheMergedRanges $O $(MYLIBS) $L
-	mv cacheMergedRanges${EXE} ${HOME}/bin/${MACHTYPE}/
-	${STRIP} ${HOME}/bin/${MACHTYPE}/cacheMergedRanges${EXE}
+	mv cacheMergedRanges${EXE} ${BINDIR}/
+	${STRIP} ${BINDIR}/cacheMergedRanges${EXE}

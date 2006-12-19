@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = axtAndBed.o
 
 axtAndBed: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtAndBed $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtAndBed${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtAndBed $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtAndBed${EXE}

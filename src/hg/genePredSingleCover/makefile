@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = geneScore.o genePredSingleCover.o
 
 genePredSingleCover: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/genePredSingleCover $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredSingleCover $O $(MYLIBS) $L
 
 geneScore.o: geneScore.c geneScore.h
 genePredSingleCover.o: genePredSingleCover.c geneScore.h

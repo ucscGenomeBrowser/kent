@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = pslPartition.o
 
-$(HOME)/bin/$(MACHTYPE)/pslPartition: $O $(MYLIBS)
+${BINDIR}/pslPartition: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o pslPartition $O $(MYLIBS) $L
 	cp -f pslPartition $@
 

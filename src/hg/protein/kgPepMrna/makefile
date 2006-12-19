@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = kgPepMrna.o
 
 kgPepMrna: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/kgPepMrna $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/kgPepMrna${EXE}
+	${CC} ${COPT} -o ${BINDIR}/kgPepMrna $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/kgPepMrna${EXE}
 
 clean:
 	rm -f $O

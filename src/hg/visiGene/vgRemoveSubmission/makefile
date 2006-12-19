@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = vgRemoveSubmission.o
 
 vgRemoveSubmission: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgRemoveSubmission $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgRemoveSubmission
+	${CC} ${COPT} -o ${BINDIR}/vgRemoveSubmission $O ${MYLIBS} $L
+	strip ${BINDIR}/vgRemoveSubmission
 
 clean:
 	rm -f $O

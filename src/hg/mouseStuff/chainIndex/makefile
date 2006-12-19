@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = chainIndex.o
 
 chainIndex: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/chainIndex $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/chainIndex
+	${CC} ${COPT} -o ${BINDIR}/chainIndex $O ${MYLIBS} $L
+	strip ${BINDIR}/chainIndex
 
 clean:
 	rm -f $O

@@ -5,7 +5,6 @@ MYLIBDIR = ../../../src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = spideyToPsl.o
-BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 spideyToPsl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o spideyToPsl $O $(MYLIBS) $L

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = lineFileSplit.o
 
 lineFileSplit: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/lineFileSplit $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/lineFileSplit
+	${CC} ${COPT} -o ${BINDIR}/lineFileSplit $O ${MYLIBS} $L
+	strip ${BINDIR}/lineFileSplit
 
 clean:
 	rm -f $O

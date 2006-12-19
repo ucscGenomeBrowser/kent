@@ -9,4 +9,4 @@ CFLAGS=-ggdb
 targets: mafOrder
 
 mafOrder: mafOrder.o $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafOrder mafOrder.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafOrder mafOrder.o $(MYLIBS) $L

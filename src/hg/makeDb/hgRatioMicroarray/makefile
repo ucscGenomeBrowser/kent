@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgRatioMicroarray.o
 
 hgRatioMicroarray: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgRatioMicroarray $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgRatioMicroarray${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgRatioMicroarray $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgRatioMicroarray${EXE}
 
 test:
 	hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra -noLoad -limit=100 -tab=output

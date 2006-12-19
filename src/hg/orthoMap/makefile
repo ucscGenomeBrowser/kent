@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 % : %.c
 	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(O) $(MYLIBS) $(MYSQLLIBS) -lm -lz
-	cp $@ $(HOME)/bin/$(MACHTYPE)
+	cp $@ ${BINDIR}
 
 %Test: %Test.c 
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)

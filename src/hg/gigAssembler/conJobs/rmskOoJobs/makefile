@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rmskOoJobs.o
 
 rmskOoJobs: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/rmskOoJobs $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/rmskOoJobs${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rmskOoJobs $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/rmskOoJobs${EXE}
 
 fix: makeFix.o
 	${CC} ${COPT} ${CFLAGS} -o makeFix makeFix.o $(MYLIBS) $L

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkYbr.o
 
 checkYbr: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkYbr $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkYbr${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkYbr $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/checkYbr${EXE}

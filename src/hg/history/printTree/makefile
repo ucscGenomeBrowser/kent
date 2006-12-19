@@ -8,6 +8,6 @@ CFLAGS=-ggdb
 O = printTree.o
 
 printTree: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/printTree $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/printTree${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/printTree $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/printTree${EXE}
 

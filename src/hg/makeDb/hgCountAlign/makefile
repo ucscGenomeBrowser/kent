@@ -8,7 +8,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = align.o hgCountAlign.o slidingWin.o  winCounts.o
 H = align.h  slidingWin.h  winCounts.h
-PROG = ${HOME}/bin/${MACHTYPE}/hgCountAlign
+PROG = ${BINDIR}/hgCountAlign
 
 ${PROG}: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${CFLAGS} -o ${PROG} $O ${MYLIBS} $L

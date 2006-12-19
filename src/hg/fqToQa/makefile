@@ -8,8 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = fqToQa.o
 
 fqToQa: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/fqToQa $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/fqToQa${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/fqToQa $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/fqToQa${EXE}
 
 
 lib:

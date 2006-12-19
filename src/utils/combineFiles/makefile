@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = combineFiles.o
 
 combineFiles: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/combineFiles $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/combineFiles${EXE}
+	${CC} ${COPT} -o ${BINDIR}/combineFiles $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/combineFiles${EXE}
 
 clean:
 	rm -f $O

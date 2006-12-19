@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = labSheet.o
 
 labSheet: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/labSheet $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/labSheet${EXE}
+	${CC} ${COPT} -o ${BINDIR}/labSheet $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/labSheet${EXE}
 
 clean:
 	rm -f $O

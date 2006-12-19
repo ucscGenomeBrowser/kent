@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = netStats.o
 
 netStats: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/netStats $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/netStats${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/netStats $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/netStats${EXE}

@@ -7,9 +7,9 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = agpToFa.o
 
 agpToFa: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/agpToFa \
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpToFa \
 		$O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/agpToFa${EXE}
+	${STRIP} ${BINDIR}/agpToFa${EXE}
 
 compile: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o agpToFa $O ${MYLIBS} $L

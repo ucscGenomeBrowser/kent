@@ -9,8 +9,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgLoadOut.o
 
 hgLoadOut: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/hgLoadOut $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadOut${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadOut $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgLoadOut${EXE}
 
 lib:
 	cd ../../../lib && ${MAKE}

@@ -9,9 +9,9 @@ O = whyConserved.o
 all: whyConserved trackOverlap
 
 whyConserved: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/whyConserved $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/whyConserved${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/whyConserved $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/whyConserved${EXE}
 
 trackOverlap: trackOverlap.o
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/trackOverlap trackOverlap.o $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/trackOverlap${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/trackOverlap trackOverlap.o $(MYLIBS) $L
+	${STRIP} ${BINDIR}/trackOverlap${EXE}

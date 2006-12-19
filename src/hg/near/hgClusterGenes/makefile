@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgClusterGenes.o
 
 hgClusterGenes: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgClusterGenes $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgClusterGenes${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgClusterGenes $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/hgClusterGenes${EXE}

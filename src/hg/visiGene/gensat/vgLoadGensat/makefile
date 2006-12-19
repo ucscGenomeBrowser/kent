@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = vgLoadGensat.o ../lib/gs.o
 
 vgLoadGensat: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadGensat $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/vgLoadGensat
+	${CC} ${COPT} -o ${BINDIR}/vgLoadGensat $O ${MYLIBS} $L
+	strip ${BINDIR}/vgLoadGensat
 
 clean:
 	rm -f $O

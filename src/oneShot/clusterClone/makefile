@@ -8,8 +8,8 @@ O = clusterClone.o
 A = clusterClone
 
 ${A}: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
+	${CC} ${COPT} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/${A}${EXE}
 
 clean:
 	rm -f $O

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgAvidShortBed.o
 
 hgAvidShortBed: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgAvidShortBed $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgAvidShortBed${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgAvidShortBed $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/hgAvidShortBed${EXE}

@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faTrimPolyA.o
 
 faTrimPolyA: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faTrimPolyA $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/faTrimPolyA${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faTrimPolyA $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/faTrimPolyA${EXE}
 
 test:
 	(cd tests && ${MAKE} test)

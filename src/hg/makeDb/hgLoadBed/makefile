@@ -9,8 +9,8 @@ O = hgLoadBed.o
 A = hgLoadBed
 
 hgLoadBed: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadBed${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgLoadBed${EXE}
 
 compile:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L

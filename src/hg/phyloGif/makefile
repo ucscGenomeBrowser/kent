@@ -16,10 +16,10 @@ compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 	chmod a+rx $A${EXE}
-	cp $A${EXE} ${HOME}/bin/${MACHTYPE}/
+	cp $A${EXE} ${BINDIR}/
 
 test: compile
-	${HOME}/bin/${MACHTYPE}/phyloGif -phyloGif_tree=17way.nh > test.gif
+	${BINDIR}/phyloGif -phyloGif_tree=17way.nh > test.gif
 	file test.gif
 
 testWeb: compile

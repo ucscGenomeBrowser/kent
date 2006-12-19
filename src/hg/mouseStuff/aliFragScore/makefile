@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = aliFragScore.o
 
 aliFragScore: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/aliFragScore $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/aliFragScore${EXE}
+	${CC} ${COPT} -o ${BINDIR}/aliFragScore $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/aliFragScore${EXE}
 
 clean:
 	rm -f $O

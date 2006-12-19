@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgBlatTest.o
 
 hgBlatTest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgBlatTest $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/hgBlatTest${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgBlatTest $O ${MYLIBS} $L
+#	${STRIP} ${BINDIR}/hgBlatTest${EXE}
 
 test:
 	hgBlatTest hgwdev-${USER}.cse.ucsc.edu/cgi-bin/hgBlat test.log org=human db=hg16 type=DNA sort=score output=psl repeat=1 

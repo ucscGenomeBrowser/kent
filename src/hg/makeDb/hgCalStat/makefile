@@ -9,8 +9,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgCalStat.o
 
 hgCalStat: $O ../../../lib/${MACHTYPE}/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/hgCalStat $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgCalStat${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgCalStat $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgCalStat${EXE}
 
 lib:
 	cd ../../../lib && ${MAKE}

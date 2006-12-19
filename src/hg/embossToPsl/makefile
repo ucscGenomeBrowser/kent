@@ -5,7 +5,6 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = embossToPsl.o
-BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 embossToPsl: $O $(MYLIBS)
 	${CC} -o embossToPsl $O $(MYLIBS) $L

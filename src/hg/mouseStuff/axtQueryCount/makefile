@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtQueryCount.o
 
 axtQueryCount: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtQueryCount $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtQueryCount${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtQueryCount $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/axtQueryCount${EXE}

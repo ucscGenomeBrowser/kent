@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = fixBlastTrack.o
 
 fixBlastTrack: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fixBlastTrack $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/fixBlastTrack${EXE}
+	${CC} ${COPT} -o ${BINDIR}/fixBlastTrack $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/fixBlastTrack${EXE}
 
 clean:
 	rm -f $O

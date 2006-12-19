@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = dnsInfo.o
 
 dnsInfo: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/dnsInfo $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/dnsInfo${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/dnsInfo $O $(MYLIBS) $L
+	${STRIP} ${BINDIR}/dnsInfo${EXE}

@@ -8,8 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslCDnaGenomeMatch.o 
 
 pslCDnaGenomeMatch: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch $O $(MARKDEBUG) $(MYLIBS) $L 
-#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch${EXE}
+	gcc -ggdb -o ${BINDIR}/pslCDnaGenomeMatch $O $(MARKDEBUG) $(MYLIBS) $L 
+#${STRIP} ${BINDIR}/pslCDnaGenomeMatch${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

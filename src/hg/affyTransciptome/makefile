@@ -1,3 +1,4 @@
+include ../../inc/common.mk
 
 L = -lz -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
@@ -7,6 +8,6 @@ O = affyPairsToSample normalizeSampleFile avgTranscriptomeExps maxTranscriptomeE
 	groupSamples
 
 %: %.c 
-	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $(HOME)/bin/$(MACHTYPE)/$@ $(addsuffix .c,$@) $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o ${BINDIR}/$@ $(addsuffix .c,$@) $(MYLIBS)
 
 all : $(O)
