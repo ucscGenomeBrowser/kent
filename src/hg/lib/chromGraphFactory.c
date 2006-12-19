@@ -424,9 +424,11 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 		 "Chromosome %s not found in this assembly (%s).", 
 		 chrom, hGetDb());
     if (start < 0 || start >= ci->size)
+	{
 	lineFileAbort(cpp->fileStack,
 		 "Chromosome %s is %d bases long, but got coordinate %u",
 		 chrom, ci->size, start);
+	}
     for (i=2, fileEl = fileList; i<colCount; ++i, fileEl = fileEl->next)
 	{
 	char *val = row[i];
@@ -658,7 +660,10 @@ else
 if (ok)
     return fileList;
 else
+    {
+    noWarnAbort();
     return NULL;
+    }
 }
 
 static void saveLabeledFileList(struct labeledFile *fileList)
@@ -691,6 +696,7 @@ if (preview == NULL)
 /* Figure out format type - scanning preview if it isn't well defined. */
 struct sqlConnection *conn = hAllocConn();
 int colCount;
+
 if (sameString(formatType, cgfFormatGuess))
     {
     if (!figureOutFormat(preview, &formatType, &colCount))
