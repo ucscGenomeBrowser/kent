@@ -421,8 +421,8 @@ The Update Custom Track page provides sections for modifying the track
 configuration information (the browser lines and track lines), the annotation
 data, and the descriptive documentation that accompanies the track. Existing
 track configuration lines are displayed in the top &quot;Edit 
-configuration&quot; text box. In the current implementation of this page, the 
-existing annotation
+configuration&quot; text box. In the current implementation of this utility, 
+the existing annotation
 data is not displayed. Because of this, the data cannot be incrementally 
 edited through this interface, but instead must be fully replaced using one of 
 the data entry methods described in <A HREF="#ADD_CT">Loading a Custom Track 
@@ -431,11 +431,11 @@ track, it will be displayed in the track documentation edit box, where it may
 be edited or completely replaced. Once you have completed your updates, click
 the Submit button to upload the new data into the Genome Browser.
 <P>
-If the data or description text for your custom track was loaded from a file
-on your hard disk or server, you should first edit the file, then reload it 
-from the Update Custom Track page using the &quot;Browse&quot; button. Note that
-edits made on this page to description text uploaded from a file will not be
-saved to the original file on your computer or server. Because of this, we 
+If the data or description text for your custom track was originally loaded from
+a file on your hard disk or server, you should first edit the file, then reload 
+it from the Update Custom Track page using the &quot;Browse&quot; button. Note 
+that edits made on this page to description text uploaded from a file will not 
+be saved to the original file on your computer or server. Because of this, we 
 recommend that you use the documentation edit box only for changes made to 
 text that was typed or pasted in.
         </TD><TD WIDTH=15></TD></TR></TABLE>
@@ -542,7 +542,9 @@ Genome Browser:</P>
 	Browser window, and also the label of the track control at the
 	bottom of the screen. The name can consist of up to 15
 	characters, and must be enclosed in quotes if the text contains
-	spaces. The default value is &quot;User Track&quot;.
+	spaces. We recommend that the track_label be restricted to alpha-numeric
+	characters and spaces to avoid potential parsing problems. The default 
+	value is &quot;User Track&quot;.
 	<LI><B>description=<<I>center_label</I>></B> - Defines the center label of the track
 	in the Genome Browser window. The description can consist of up
 	to 60 characters, and must be enclosed in quotes if the text contains
