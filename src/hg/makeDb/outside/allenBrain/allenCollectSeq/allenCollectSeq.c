@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.1 2006/07/26 03:59:13 markd Exp $";
+static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.2 2006/12/19 22:49:52 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -134,8 +134,31 @@ simplifySeqName(probeList, "probe");
 while (lineFileRowTab(lf, row))
     {
     char *acc = row[3];
+    char *accChop = NULL;
+    char *s = strrchr(acc,'.');
+    char *acc0 = addSuffix(acc,".0");
+    char *acc1 = addSuffix(acc,".1");
+    char *acc2 = addSuffix(acc,".2");
+    char *acc3 = addSuffix(acc,".3");
+    char *acc4 = addSuffix(acc,".4");
+    if (s && (strchr("0123456789",s[1])) && s[2]==0)  /* ends in [.][0-9] */
+	{
+    	accChop = cloneStringZ(acc,s-acc);
+	}
     struct dnaSeq *seq = NULL;
     if ((seq = hashFindVal(probeHash, acc)) != NULL)
+	++hitProbe;
+    else if (accChop && ((seq = hashFindVal(probeHash, accChop)) != NULL))
+	++hitProbe;
+    else if ((seq = hashFindVal(probeHash, acc0)) != NULL)
+	++hitProbe;
+    else if ((seq = hashFindVal(probeHash, acc1)) != NULL)
+	++hitProbe;
+    else if ((seq = hashFindVal(probeHash, acc2)) != NULL)
+	++hitProbe;
+    else if ((seq = hashFindVal(probeHash, acc3)) != NULL)
+	++hitProbe;
+    else if ((seq = hashFindVal(probeHash, acc4)) != NULL)
 	++hitProbe;
     else if ((seq = hashFindVal(nmHash, acc)) != NULL)
 	++hitNm;
@@ -170,6 +193,12 @@ while (lineFileRowTab(lf, row))
 	faWriteNext(fFa, seqName, seq->dna, seq->size);
 	}
     ++hitTotal;
+    freeMem(accChop);
+    freeMem(acc0);
+    freeMem(acc1);
+    freeMem(acc2);
+    freeMem(acc3);
+    freeMem(acc4);
     }
 verbose(1, "%d (%3.1f%%) hitProbe\n", hitProbe, 100.0 * hitProbe/hitTotal);
 verbose(1, "%d (%3.1f%%) hitNm\n", hitNm, 100.0 * hitNm/hitTotal);
