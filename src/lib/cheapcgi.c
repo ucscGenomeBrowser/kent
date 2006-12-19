@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.84 2006/12/13 18:16:43 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.85 2006/12/19 18:49:52 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -1031,7 +1031,7 @@ else
 
 for (i=0; i<menuSize; ++i)
     {
-    if (sameWord(menu[i], checked))
+    if (sameWord(values[i], checked))
         selString = " SELECTED";
     else
         selString = "";

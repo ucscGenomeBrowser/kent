@@ -34,7 +34,7 @@ for (group = groupList; group != NULL; group = group->next)
     groups[numGroups] = group->name;
     labels[numGroups] = group->name;
     if (sameWord(defaultGroup, groups[numGroups]))
-	defaultLabel = labels[numGroups];
+	defaultLabel = groups[numGroups];
     numGroups++;
     if (numGroups >= ArraySize(groups))
 	internalErr();

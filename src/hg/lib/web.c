@@ -12,7 +12,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.103 2006/11/08 21:46:55 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.104 2006/12/19 18:49:52 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -529,7 +529,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     clades[numClades] = cloneString(row[0]);
     labels[numClades] = cloneString(row[1]);
     if (sameWord(defaultClade, clades[numClades]))
-	defaultLabel = labels[numClades];
+	defaultLabel = clades[numClades];
     numClades++;
     if (numClades >= ArraySize(clades))
 	internalErr();
@@ -643,7 +643,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
     /* Save a pointer to the current assembly */
     if (sameWord(db, cur->name))
-        selAssembly = cur->description;
+        selAssembly = cur->name;
 
     if (allowInactive ||
         ((cur->active || sameWord(cur->name, db)) 
@@ -739,6 +739,7 @@ for (cur = dbList; ((cur != NULL) && (numAssemblies < 128)); cur = cur->next)
     numAssemblies++;
     }
 
+#ifdef OLD
 // Have to use the "menu" name, not the value, to mark selected:
 if (assembly != NULL)
     {
@@ -747,6 +748,7 @@ if (assembly != NULL)
     safef(orgAssembly, sizeof(orgAssembly), "%s %s", selOrg, selFreeze);
     assembly = cloneString(orgAssembly);
     }
+#endif /* OLD */
 
 cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);

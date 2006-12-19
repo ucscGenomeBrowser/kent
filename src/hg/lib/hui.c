@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.84 2006/11/14 00:30:25 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.85 2006/12/19 18:49:52 kent Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -642,7 +642,7 @@ void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
 /* Make appropriately labeled drop down of options if any are applicable.*/
 {
 enum baseColorDrawOpt curOpt = baseColorDrawOptEnabled(cart, tdb);
-char *curLabel = baseColorDrawAllOptionLabels[curOpt];
+char *curValue = baseColorDrawAllOptionValues[curOpt];
 char var[512];
 boolean gotCds = baseColorGotCds(tdb);
 boolean gotSeq = baseColorGotSequence(tdb);
@@ -654,7 +654,7 @@ if (gotCds && gotSeq)
     cgiMakeDropListFull(var, baseColorDrawAllOptionLabels,
 			baseColorDrawAllOptionValues,
 			ArraySize(baseColorDrawAllOptionLabels),
-			curLabel, NULL);
+			curValue, NULL);
     printf("<BR><BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
@@ -664,7 +664,7 @@ else if (gotCds)
     cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
-			curLabel, NULL);
+			curValue, NULL);
     printf("<BR><BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     }
@@ -674,7 +674,7 @@ else if (gotSeq)
     cgiMakeDropListFull(var, baseColorDrawItemOptionLabels,
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
-			curLabel, NULL);
+			curValue, NULL);
     printf("<BR><BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }

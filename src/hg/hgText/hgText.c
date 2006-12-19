@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.166 2006/10/20 05:15:39 kate Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.167 2006/12/19 18:49:52 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -619,12 +619,10 @@ for (t = trackList, i=1; t != NULL; t = t->next, ++i)
 	safef(tbl, sizeof(tbl), "%s.%s", database, t->tableName);
     trackNames[i] = cloneString(tbl);
     if (value != NULL && sameString(value, tbl))
-        selected = t->shortLabel;
+        selected = trackNames[i];
     }
 if (selected == NULL)
-    {
-    selected = trackLabels[0];
-    }
+    selected = trackNames[0];
 cgiMakeDropListFull(varName, trackLabels, trackNames, 
 	trackCount+1, selected, javascript);
 }
