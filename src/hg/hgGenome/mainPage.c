@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.3 2006/12/02 01:32:49 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.4 2006/12/19 19:11:08 kent Exp $";
 
 
 static char *allColors[] = {
@@ -286,7 +286,7 @@ vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
 vgClose(&vg);
 }
 
-void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal)
+void graphDropdown(struct sqlConnection *conn, char *varName, char *curVal, char *js)
 /* Make a drop-down with available chrom graphs */
 {
 int totalCount = 1 + slCount(ggList);
@@ -306,23 +306,23 @@ for (ref = ggList; ref != NULL; ref = ref->next)
     menu[i] = gg->shortLabel;
     values[i] = gg->name;
     }
-cgiMakeDropListWithVals(varName, menu, values, totalCount, curVal);
+cgiMakeDropListFull(varName, menu, values, totalCount, curVal, js);
 freez(&menu);
 freez(&values);
 }
 
-void colorDropdown(int row, int col)
+void colorDropdown(int row, int col, char *js)
 /* Put up color drop down menu. */
 {
 char *varName = graphColorVarName(row, col);
 char *curVal = graphColorAt(row, col);
-cgiMakeDropList(varName, allColors, ArraySize(allColors), curVal);
+cgiMakeDropListFull(varName, allColors, allColors, ArraySize(allColors), curVal, js);
 }
 
-static struct dyString *onChangeStart(int graphRows, int graphCols)
-/* Return common prefix to onChange javascript string */
+static void addThresholdGraphCarries(struct dyString *dy, int graphRows, int graphCols)
+/* Add javascript that carries over threshold and graph vars
+ * to new form. */
 {
-struct dyString *dy = jsOnChangeStart();
 jsTextCarryOver(dy, hggThreshold);
 int i,j;
 for (i=0; i<graphRows; ++i)
@@ -331,6 +331,13 @@ for (i=0; i<graphRows; ++i)
 	jsDropDownCarryOver(dy, graphVarName(i,j));
 	jsDropDownCarryOver(dy, graphColorVarName(i,j));
 	}
+}
+
+static struct dyString *onChangeStart(int graphRows, int graphCols)
+/* Return common prefix to onChange javascript string */
+{
+struct dyString *dy = jsOnChangeStart();
+addThresholdGraphCarries(dy, graphRows, graphCols);
 return dy;
 }
 
@@ -354,14 +361,29 @@ dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return jsOnChangeEnd(&dy);
 }
 
-static char *onChangeDb(int graphRows, int graphCols)
-/* Return javascript executed when they change database. */
+static void saveOnChangeOtherFunction(int graphRows, int graphCols)
+/* Write out Javascript function to save vars in hidden
+ * form and submit. */
 {
-struct dyString *dy = onChangeStart(graphRows, graphCols);
+struct dyString *dy = dyStringNew(0);
+addThresholdGraphCarries(dy, graphRows, graphCols);
 jsDropDownCarryOver(dy, "clade");
 jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, "db");
-return jsOnChangeEnd(&dy);
+char *js = jsOnChangeEnd(&dy);
+chopSuffixAt(js, '"');
+hPrintf("<SCRIPT>\n");
+hPrintf("function changeOther()\n");
+hPrintf("{\n");
+hPrintf("%s\n", js);
+hPrintf("}\n");
+hPrintf("</SCRIPT>\n");
+}
+
+static char *onChangeOther()
+/* Return javascript executed when they change database. */
+{
+return "onChange=\"changeOther();\"";
 }
 
 void mainPage(struct sqlConnection *conn)
@@ -378,11 +400,15 @@ cartWebStart(cart, "%s Genome Graphs", genome);
 
 /* Start form and save session var. */
 hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", scriptName);
-jsWriteFunctions();
 cartSaveSession(cart);
+
+/* Write some javascript functions */
+jsWriteFunctions();
+saveOnChangeOtherFunction(graphRows, graphCols);
 
 /* Print clade, genome and assembly line. */
 boolean gotClade = hGotClade();
+char *jsOther = onChangeOther(graphRows, graphCols);
     {
     hPrintf("<TABLE>");
     if (gotClade)
@@ -400,7 +426,7 @@ boolean gotClade = hGotClade();
 	}
     htmlNbSpaces(3);
     hPrintf("<B>assembly:</B>\n");
-    printAssemblyListHtml(database, onChangeDb(graphRows, graphCols));
+    printAssemblyListHtml(database, jsOther);
     hPrintf("</TD></TR>\n");
     hPrintf("</TABLE>");
     }
@@ -423,18 +449,10 @@ for (i=0; i<graphRows; ++i)
 	if (curVal[0] != 0)
 	    ++realCount;
 	hPrintf("<TD>");
-	graphDropdown(conn, varName, curVal);
+	graphDropdown(conn, varName, curVal, jsOther);
 	hPrintf(" in ");
-	colorDropdown(i, j);
+	colorDropdown(i, j, jsOther);
 	if (j != graphCols-1) hPrintf(",");
-	hPrintf("</TD>");
-	}
-    if (i == 0)
-	{
-	hPrintf("<TD>");
-	/* Call button "Submit" rather than "submit" to avoid
-	 * conflict with Javascript "submit" method. */
-	cgiMakeButton("Submit", "Go!"); 
 	hPrintf("</TD>");
 	}
     hPrintf("</TR>");
