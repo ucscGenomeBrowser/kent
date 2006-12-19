@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.4 2006/12/19 19:11:08 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.5 2006/12/19 20:19:15 kent Exp $";
 
 
 static char *allColors[] = {
@@ -296,7 +296,7 @@ struct slRef *ref;
 
 AllocArray(menu, totalCount);
 AllocArray(values, totalCount);
-menu[0] = "";
+menu[0] = "-- nothing --";
 values[0] = "";
 
 for (ref = ggList; ref != NULL; ref = ref->next)
@@ -436,12 +436,7 @@ hPrintf("<TABLE>");
 for (i=0; i<graphRows; ++i)
     {
     hPrintf("<TR>");
-    if (graphRows == 1)
-	{
-	hPrintf("<TD>");
-	    hPrintf("graph ");
-	hPrintf("</TD>");
-	}
+    hPrintf("<TD><B>graph</B></TD>");
     for (j=0; j<graphCols; ++j)
 	{
 	char *varName = graphVarName(i,j);
@@ -473,28 +468,35 @@ cgiMakeOptionalButton(hggSort, "Sort Genes",
 hPrintf("<BR>");
 
 
-/* Get genome layout.  This can fail so it is wrapped in an error
- * catcher. */
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
+if (ggList != NULL)
     {
-    gl = ggLayout(conn, graphRows, graphCols);
+    /* Get genome layout.  This can fail so it is wrapped in an error
+     * catcher. */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	gl = ggLayout(conn, graphRows, graphCols);
 
-    /* Draw picture. Enclose in table to add a couple of pixels between
-     * it and controls on IE. */
-    hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
-    genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
-    hPrintf("</TD></TR></TABLE>\n");
+	/* Draw picture. Enclose in table to add a couple of pixels between
+	 * it and controls on IE. */
+	hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
+	genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
+	hPrintf("</TD></TR></TABLE>\n");
 
-    /* Write a little click-on-help */
-    hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
+	/* Write a little click-on-help */
+	hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
 
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	 warn(errCatch->message->string);
+    errCatchFree(&errCatch); 
     }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-     warn(errCatch->message->string);
-errCatchFree(&errCatch); 
-
+else
+    {
+    hPrintf("<BR>No graph data is available for this assembly.  You can still upload your own "
+            "data though.");
+    }
 hPrintf("</FORM>\n");
 
 /* Hidden form - fo the benefit of javascript. */

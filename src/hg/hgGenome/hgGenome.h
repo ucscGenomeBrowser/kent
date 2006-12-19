@@ -42,10 +42,10 @@
 #define hggSort hggDo "Sort"
 #define hggCorrelate hggDo "Correlate"
 #define hggUpload hggDo "Upload"
+#define hggSubmitUpload hggDo "SubmitUpload"
 #define hggClick hggDo "Click"
 #define hggClickX hggClick ".x"
 #define hggClickY hggClick ".y"
-#define hggSubmitUpload2 hggDo "SubmitUpload2"
 
 /*** External vars declared in hgGenome.c ***/
 extern struct cart *cart;
@@ -105,7 +105,7 @@ int graphsPerLine();
 /* Return number of graphs to draw per line. */
 
 #define minLinesOfGraphs 1
-#define maxLinesOfGraphs 6
+#define maxLinesOfGraphs 10
 #define defaultLinesOfGraphs 1
 int linesOfGraphs();
 /* Return number of lines of graphs */

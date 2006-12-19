@@ -93,8 +93,7 @@ hPrintf(" bases.<BR>");
 hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 hPrintf(" ");
-// cgiMakeButton(hggSubmitUpload, "Submit");
-cgiMakeButton(hggSubmitUpload2, "Submit");
+cgiMakeButton(hggSubmitUpload, "Submit");
 hPrintf("</FORM>\n");
 hPrintf("<i>note: If you are uploading more than one data set please give them ");
 hPrintf("different names.  Only the most recent data set of a given name is ");
@@ -180,7 +179,6 @@ else
     hashFree(&upHash);
     }
 
-uglyf("Saving customTrack to %s<BR>\n", fileName);
 customTracksSaveFile(outList, fileName);
 cartSetString(cart, varName, fileName);
 
@@ -188,7 +186,7 @@ hPrintf("This data is now available in the drop down menus on the ");
 hPrintf("main page for graphing.<BR>");
 }
 
-void trySubmitUpload2(struct sqlConnection *conn, char *rawText)
+void trySubmitUpload(struct sqlConnection *conn, char *rawText)
 /* Called when they've submitted from uploads page */
 {
 struct lineFile *lf = lineFileOnString("uploaded data", TRUE, rawText);
@@ -207,25 +205,24 @@ struct customTrack *trackList = chromGraphParser(cpp,
 	nullIfAllSpace(cartUsualString(cart, hggDataSetDescription, NULL)),
 	settings, TRUE);
 updateCustomTracks(trackList);
-
-hPrintf("<CENTER>");
-cgiMakeButton("submit", "OK");
-hPrintf("</CENTER>");
 }
 
-void submitUpload2(struct sqlConnection *conn)
+void submitUpload(struct sqlConnection *conn)
 /* Called when they've submitted from uploads page */
 {
 char *rawText = cartUsualString(cart, hggUploadFile, NULL);
 int rawTextSize = strlen(rawText);
 struct errCatch *errCatch = errCatchNew();
-cartWebStart(cart, "Data Upload2 Complete (%d bytes)", rawTextSize);
+cartWebStart(cart, "Data Upload Complete (%d bytes)", rawTextSize);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\">");
 cartSaveSession(cart);
 if (errCatchStart(errCatch))
-     trySubmitUpload2(conn, rawText);
+     trySubmitUpload(conn, rawText);
 errCatchFinish(&errCatch);
 cartRemove(cart, hggUploadFile);
+hPrintf("<CENTER>");
+cgiMakeButton("submit", "OK");
+hPrintf("</CENTER>");
 hPrintf("</FORM>");
 cartWebEnd();
 }
