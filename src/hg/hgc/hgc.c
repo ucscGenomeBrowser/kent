@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1176 2006/12/13 18:27:50 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1177 2006/12/19 19:23:38 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16849,7 +16849,7 @@ for (i=0; i < oregannoAttrSize; i++)
     {
     int used = 0;
     /* names are quote safe, come from oregannoUi.c */
-    safef(query, sizeof(query), "select * from hgFixed.oregannoAttr where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
+    safef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -16873,7 +16873,7 @@ for (i=0; i < oregannoAttrSize; i++)
         printf("%s ", attr.attrVal);
         printf("<BR>\n");
         }
-    safef(query, sizeof(query), "select * from hgFixed.oregannoLink where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
+    safef(query, sizeof(query), "select * from oregannoLink where id = '%s' and attribute = '%s'", r->id, oregannoAttributes[i]);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {

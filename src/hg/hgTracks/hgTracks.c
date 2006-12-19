@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1260 2006/12/16 04:25:53 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1261 2006/12/19 19:23:33 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10659,6 +10659,68 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
+Color gvColorByCount(struct track *tg, void *item, struct vGfx *vg)
+/* color items by whether they are single position or multiple */
+{
+struct gvPos *el = item;
+struct sqlConnection *conn = hAllocConn();
+char *escId = NULL;
+char *multColor = NULL, *singleColor = NULL;
+int num = 0;
+char query[256];
+if (el->id != NULL)
+    escId = sqlEscapeString(el->id);
+else
+    escId = sqlEscapeString(el->name);
+safef(query, sizeof(query), "select count(*) from gvPos where name = '%s'",
+    escId);
+num = sqlQuickNum(conn, query);
+hFreeConn(&conn);
+freeMem(escId);
+singleColor = cartUsualString(cart, "gvColorCountSingle", "blue");
+multColor = cartUsualString(cart, "gvColorCountMult", "green");
+if (num == 1) 
+    {
+    if (sameString(singleColor, "red"))
+        return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+    else if (sameString(singleColor, "orange"))
+        return vgFindColorIx(vg, 255, 153, 0);
+    else if (sameString(singleColor, "green"))
+        return vgFindColorIx(vg, 0, 153, 0); /* dark green */
+    else if (sameString(singleColor, "gray"))
+        return MG_GRAY;
+    else if (sameString(singleColor, "purple"))
+        return vgFindColorIx(vg, 204, 0, 255);
+    else if (sameString(singleColor, "blue"))
+        return MG_BLUE;
+    else if (sameString(singleColor, "brown"))
+        return vgFindColorIx(vg, 100, 50, 0); /* brown */
+    else
+        return MG_BLACK;
+    }
+else if (num > 1) 
+    {
+    if (sameString(multColor, "red"))
+        return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+    else if (sameString(multColor, "orange"))
+        return vgFindColorIx(vg, 255, 153, 0);
+    else if (sameString(multColor, "green"))
+        return vgFindColorIx(vg, 0, 153, 0); /* dark green */
+    else if (sameString(multColor, "gray"))
+        return MG_GRAY;
+    else if (sameString(multColor, "purple"))
+        return vgFindColorIx(vg, 204, 0, 255);
+    else if (sameString(multColor, "blue"))
+        return MG_BLUE;
+    else if (sameString(multColor, "brown"))
+        return vgFindColorIx(vg, 100, 50, 0); /* brown */
+    else
+        return MG_BLACK;
+    }
+else 
+    return MG_BLACK;
+}
+
 Color gvColorByDisease(struct track *tg, void *item, struct vGfx *vg)
 /* color items by whether they are known or likely to cause disease */
 {
@@ -10762,6 +10824,8 @@ char *choice = NULL;
 choice = cartOptionalString(cart, "gvPos.filter.colorby");
 if (choice != NULL && sameString(choice, "type"))
     return gvColorByType(tg, item, vg);
+else if (choice != NULL && sameString(choice, "count"))
+    return gvColorByCount(tg, item, vg);
 else
     return gvColorByDisease(tg, item, vg);
 }
@@ -10923,6 +10987,12 @@ for (label = gvLabels; label != NULL; label = label->next)
     else if (endsWith(label->name, "dbid") && differentString(label->val, "0"))
         useId = TRUE;
     }
+if (!useHgvs && !useCommon && !useId) 
+    {
+    /* assume noone really wants no names, squish will still remove names */
+    useHgvs = TRUE;
+    cartSetBoolean(cart, "gvPos.label.hgvs", TRUE);
+    }
 
 for (el = tg->items; el != NULL; el = el->next)
     {
@@ -11020,7 +11090,7 @@ struct oregannoAttr *attr = NULL;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
 
-safef(query, sizeof(query), "select * from hgFixed.oregannoAttr where id = '%s' and attribute = 'type'", el->id);
+safef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
 attr = oregannoAttrLoadByQuery(conn, query);
 hFreeConn(&conn);
 if (attr == NULL) 

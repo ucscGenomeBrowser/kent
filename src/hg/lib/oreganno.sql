@@ -18,7 +18,7 @@ CREATE TABLE oreganno (
 );
 
 #attributes associated with an ORegAnno regulatory region
-CREATE TABLE hgFixed.oregannoAttr (
+CREATE TABLE oregannoAttr (
     id varchar(48) not null,	# key into the oreganno table
     attribute varchar(48) not null,	# name of attribute being listed
     attrVal varchar(255) not null,	# value of this oreganno attribute
@@ -27,7 +27,7 @@ CREATE TABLE hgFixed.oregannoAttr (
 );
 
 #links for ORegAnno regulatory region
-CREATE TABLE hgFixed.oregannoLink (
+CREATE TABLE oregannoLink (
     id varchar(48) not null,	# key into the oreganno table
     attribute varchar(48) not null,	# name of attribute being listed
     raKey varchar(48) not null,	# key into RA file, tells how to link
