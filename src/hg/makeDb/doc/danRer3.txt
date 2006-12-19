@@ -2969,8 +2969,8 @@ if ($found eq "TRUE")
      # are only a few kb apart (from beginning of one to end of the other)
      # so use stricter pslPairs parameters as for human and mouse.
      ssh kkstore02
-     mkdir /cluster/data/danRer3/bed/bacends/pairsNew
-     cd /cluster/data/danRer3/bed/bacends/pairsNew
+     mkdir /cluster/data/danRer3/bed/bacends/pairs
+     cd /cluster/data/danRer3/bed/bacends/pairs
      set bacDir = /cluster/data/danRer3/bed/bacends/bacends.1
      /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
@@ -2991,8 +2991,8 @@ if ($found eq "TRUE")
      # a reverse sequence put in first column. use a perl script to do this.
      cd /cluster/data/danRer3/bed/bacends
      set bacDir = /cluster/data/danRer3/bed/bacends/bacends.1
-     mkdir singlesNew
-     cd singlesNew
+     mkdir singles
+     cd singles
      cp /cluster/data/danRer2/bed/ZonLab/bacends/singles/formatSingles.pl .
      perl formatSingles.pl $bacDir/bacEndSingles.txt > \
                            $bacDir/bacEndSingles.format
@@ -5840,6 +5840,7 @@ done
 # PEPTIDE ID FOR EACH SEQUENCE - FOR ALL OTHER SPECIES THE PEPTIDE SEQUENCES
 # ARE REPRESENTED BY THEIR KNOWN GENES TRANSCRIPT ID
 # (DONE, 2006-07-03, hartera)
+# CHANGED INDEX ON ensZfishBlastTab (DONE, 2006-11-03, hartera)
     ssh hgwdev
     mkdir -p /cluster/data/danRer3/bed/hgNearBlastp
     cd /cluster/data/danRer3/bed/hgNearBlastp
@@ -5975,6 +5976,18 @@ _EOF_
     # all queries and links now work for the transcript ID instead of 
     # peptide ID for ensZfishBlastTab and drBlastTab tables.
 
+    # Gene Sorter is very slow for danRer3. ensZfishBlastTab has an index
+    # on both the query and target. All the other BlatTab tables have only
+    # an index on the query so try dropping the index on the target.
+    hgsql -e 'alter table ensZfishBlastTab drop index target;' danRer3
+    # Gene Sorter still loads slowly.
+    # Index is too short. hgLoadBlastTab used to load table and index on
+    # query is query(12). The first 12 characters are not unique for
+    # the Ensembl IDs so extend to query(20).
+    hgsql -e 'alter table ensZfishBlastTab drop index query;' danRer3
+    hgsql -e 'create index query on ensZfishBlastTab (query(20));' danRer3
+    # Much faster now.
+
 # END OF HGNEAR STUFF
 ####################################################
 # GENE SET BASED ON ENSEMBL GENES (PROTEIN CODING GENES) 
@@ -6029,8 +6042,8 @@ _EOF_
     # to remove these extra newlines.
 
     # Repeat above steps and get the Ensembl transcript ID from Ensembl 
-    # Attributes and then get EntrezGene ID, RefSeq DNA ID and 
-    # from the External References section. Select text, 
+    # Attributes and then get EntrezGene ID, RefSeq DNA ID, and RefSeq 
+    # Peptide ID and from the External References section. Select text, 
     # tab-separated for output. Choose gzip compression. Hit export. Again 
     # Ensembl v36 gives the same result for Danio rerio. 
     # Save as ensGeneInfo38Coding2.txt.gz
@@ -6071,12 +6084,13 @@ _EOF_
     grep -f ens38UniProtMorethanOne.txt ensGene38UniProtandExtId.txt.uniq \
          > ens38UniProtMorethanOne.uniProtandExtIds
      
-    # to do blastp of Ensembl Proteins vs UniProt:
+    # to do blastp of Ensembl Proteins vs UniProt 
+    # (last uniProt update 2006-01-23):
     ssh hgwdev
     mkdir -p /cluster/data/danRer3/bed/ensGenes/blastDb
     cd /cluster/data/danRer3/bed/ensGenes/blastDb
     # create a table of Danio Rerio (Brachydanio rerio in UniProt)
-    # SWISS-PROT sequences:
+    # SWISS-PROT sequences (2006-05-31)
     hgsql uniProt -e ' \
       create table test.danioProt select protein.* from protein,accToTaxon \
       where accToTaxon.taxon = 7955 and accToTaxon.acc = protein.acc;'
@@ -6453,7 +6467,7 @@ CREATE TABLE ens38Zfish (
     # 45 of these left
     # ENSDART00000009971 has only 48% Identity to Q5DTD0. maps to Q58EF8 on
     # Ensembl web page.
-    # Check 10 alignmnts with >= 95% and 10 that have >= 90% and < 95%
+    # Check 10 alignments with >= 95% and 10 that have >= 90% and < 95%
     cd /cluster/data/danRer3/bed/ensGenes/blastp/runAll2/out
     # ens38Blastp.out has the alignments in NCBI format
     # 95-96% 226
@@ -6504,28 +6518,60 @@ CREATE TABLE ens38Zfish (
 # only InterPro domain given for Ensembl, no UniProt ID.
 # ENSDART00000066247 Q58EK5 90.08 767 231 485 251 3e-124 441 3 (gapOpen 3)
 # only InterPro domain given for Ensembl, no UniProt ID.
-    # convert to PSL so can use pslReps to filter on coverage. 
-    ssh kkstore02
-    cd /cluster/data/danRer3/bed/ensGenes/blastp/runAll2/out
-    nice blastToPsl ens38Blastp.out ens38vsUniProtBlastp.psl &
-    mkdir test
-    cd test
-    pslReps -singleHit -minAli=0.90 ../ens38vsUniProtBlastp.psl \
-        ens38vsUniProtMinAli90.psl /dev/null
-    # 539 of the Ensembl IDs were not in ensBlastp
-    pslReps -singleHit -nearTop=0 -minAli=0.90 ../ens38vsUniProtBlastp.psl \
-        ens38vsUniProtMinAli90_0.psl /dev/null
-    # 538 of the Ensembl IDs were not in ensBlastp
-    pslReps -singleHit -nearTop=0 -minAli=0.90 -minCover=0.80 \
-            ../ens38vsUniProtBlastp.psl \
-        ens38vsUniProtMinAli90minCov80.psl /dev/null
-    # 357 of the Ensembl IDs were not in ensBlastp90
-    # 747 lost from psl than in ensBlastp90
-    pslReps -singleHit -nearTop=0 -minAli=0.90 -minCover=0.40 \
-            ../ens38vsUniProtBlastp.psl \
-        ens38vsUniProtMinAli90minCov40.psl /dev/null
-    # 459 were not in ensBlastp90
-    # 217 lost from psl but in ensBlastp90
+    # for 95% identity and above, there are only 18 proteins that have
+    # mismatch > 40.
+    # for between 90-95% then there are 62 with mismatch > 40. 
+    # use grep -A 100 -w 
+    # look at examples with high mismatch but identity < 95%.
+    # ---+------+--------+------+--------+----------+
+    # | query  | target | identity | aliLength | mismatch | gapOpen     
+    # |qStart | qEnd | tStart | tEnd | eValue | bitScore |
+
+    # ENSDART00000012435 | Q6IQX1 |     91.2 |      1932 |      163 |       5
+    # |  2 | 1931 |      3 | 1931 |      0 |     3093 |
+    # this has a high number of mismatches but distributed throughout
+    # the protein and the UniProt sequence aligns to the genome with the 
+    # same exon structure as for ENSDART00000012435.
+    # ENSDART00000050066 | Q7M558 |    91.69 |      3008 |      249 |       1
+    # |  0 | 3008 |      0 | 3007 |      0 |     5543 |
+    # this is a very large protein so the mismatch is small compared to
+    # the protein size. has same exon structure as Ensembl protein at
+    # chr17:18,247,969-18,259,468. Blats to several regions - could be a
+    # processed pseudogene or assembly artifact. 
+    # If identity < 95% and mismatch > 40 then size is at least around 450bp.
+    # ENSDART00000028708 | Q7T296 |    90.12 |       486 |       45 |       1
+    # |  0 |  486 |     18 |  501 |      0 |      907 |
+    # The most gaps in a sequence is 9 - only 1 sequence < 95% identity and 
+    # most have 0-2 gaps. Same for those >= 95% identity.
+    #  ENSDART00000039735 | Q7T1C9 |    98.15 |      1406 |       12 |       9
+    #  |  0 | 1394 |      0 | 1404 |      0 |     2175 |
+    # Gaps are spread throughout the seqeunce and are short. Blat of this
+    # UniProt sequence gives the same exon structure as for the Ensembl seq.
+    # | ENSDART00000053813 | Q7M560 |    90.07 |      2275 |      104 |      9 
+    # |  0 | 2178 |     99 | 2349 |      0 |     3966 |
+    # There are several large gaps in the first third of the sequence. The
+    # rest of the gaps are short. Ensembl does not have a UniProt ID for this
+    # transcript. Blat aligns this sequence to several places on the genome
+    # all in close proximity to each other. One alignment corresponds to the
+    # an Ensembl ID but not the one above. It does align to the region of 
+    # ENSDART00000053813 but with a different exon structure.
+    # ENSDART00000044490 | Q3ZMH2 |    90.74 |      1004 |       64 |       7
+    # |  0 |  985 |     88 | 1082 |      0 |     1682 |
+    # This has a couple of larger gaps. The UniProt sequence aligns to the 
+    # same region as ENSDART00000044490 which has 3 extra exons. There is 
+    # another transcript with the same exon structure.
+    # | ENSDART00000041503 | Q3ZMH2 |    91.42 |       991 |       63 |
+    # 5 |  0 |  974 |     82 | 1068 |      0 |     1684 |
+    # This has only slightly higher identity.
+    # ENSDART00000025635 | Q4FE55 |    99.33 |      2545 |        6 |       7
+    # |  0 | 2542 |      0 | 2537 |      0 |     4859 |
+    # just short gaps. This Blats to the same region of ENSDART00000025635
+    # and gives the same exon structure.
+    # could filter more using pslReps but should not filter on minAli since
+    # either the query or target could be partial.
+    # Use identity >= 90% as the cutoff and then associate the RefSeqs with
+    # ZFIN IDs and update the official ZFIN Gene symbols. 
+    # 
     ssh hgwdev  # kkstore02
     cd /cluster/data/danRer3/bed/ensGenes
     mkdir alignments
@@ -6540,13 +6586,22 @@ CREATE TABLE ens38Zfish (
     hgsql -e 'alter table ensGene add index(proteinID);' danRer3
     hgsql -e 'select count(*) from ensGene;' danRer3
     # 32143
+    hgsql -e 'update ensGene set proteinID = "";' danRer3
+    # ensBlastp is the table in the test database where proteins have 
+    # >=90% identity to the Ensembl proteins.
     hgsql -e 'select count(*) from ensGene as g, test.ensBlastp90 as p \
           where g.name = p.query;' danRer3
-    # 12614 
+    # for >= 90% there are
+    # 12614
+    # for >=95%, there are 
+    # 11910
+   
     # Use these UniProt IDs to fill in proteinID table.
     hgsql -e 'update ensGene as g, test.ensBlastp90 as p \
           set g.proteinID = p.target where g.name = p.query;' danRer3
-    # check that there are   rows with proteID filled.
+    # check that there are 12614 rows with proteinID filled.
+    hgsql -e 'select count(*) from ensGene where proteinID != "";' danRer3
+    # 12614
     # once this is done, can create ensCanonical and ensIsoforms table -
     # see section on "BUILD GENE SORTER TABLES".
     
@@ -6557,13 +6612,15 @@ CREATE TABLE ens38Zfish (
 cat << 'EOF' > ens38Zfish2.sql
 CREATE TABLE ens38Zfish2 (
     transcriptId varchar(255) not null,     
-    entrezGeneId varchar(255) not null,     
-    refSeqId varchar(255) not null
+    entrezGeneId int(10) unsigned not null,     
+    refSeqId varchar(255) not null,
+    refSeqProtId varchar(255) not null
 );
 'EOF'
     # << emacs
     tail +2 ensGeneInfo38Coding2.txt > ens38Coding2.tab
     hgLoadSqlTab test ens38Zfish2 ens38Zfish2.sql ens38Coding2.tab
+    # 24523 lines where there is no Entrez Gene Id so these are set to 0.
     hgsql -N -e 'select distinct(entrezGeneId) from ens38Zfish2;' test \
          | sort > ens38Zfish2.geneId.uniq
     wc -l ens38Zfish2.geneId.uniq
@@ -6595,11 +6652,13 @@ CREATE TABLE ens38Zfish2 (
     comm -12 mrnaAcc.refLink.dr3.uniq ensToRefSeq.refseq | wc
     # 7738 
     wc -l ensToRefSeq.refseq
-    # 7738 
+    # 7738
+    # merge the ens38Zfish2 table with ens38ZfishNew.  
     # for the Known Genes details pages. Changed table name from 
     # ensGeneXRef to ensXRefZfish as there are a number of tables already
     # with similar names to ensGeneXRef so this would be confusing.
     # create a table definition for ensXRefZfish:
+    # (updated 2006-11-08, hartera)
     cd ~/kent/src/hg/lib
 cat << 'EOF' > ensXRefZfish.as
 table ensXRefZfish
@@ -6608,10 +6667,11 @@ table ensXRefZfish
     string ensGeneId;   "Ensembl Transcript ID"
     string zfinId;   "ZFIN ID"
     string uniProtId;   "Unified UniProt protein accession"
-    string geneId;	"NCBI Entrez Gene (formerly LocusLink) ID"
-    string geneSymbol;  "NCBI Entrez Gene (formerly LocusLink) Symbol"
+    string spDisplayId; "UniProt Display ID"
+    string geneId;	"ZFIN Gene Symbol (formerly LocusLink) ID"
+    string geneSymbol;  "Official ZFIN Gene Symbol"
     string refSeq;      "RefSeq DNA Accession"
-    # string protAcc;     "RefSeq Protein Accession"
+    string protAcc;     "RefSeq Protein Accession"
     string description; "Description"
     )
 'EOF'
@@ -6619,8 +6679,8 @@ table ensXRefZfish
     autoSql ensXRefZfish.as ensXRefZfish
     mv ensXRefZfish.h ../inc
     # commit ensXRefZfish* files to CVS.
-    # add zfinId, uniProtId, geneId, geneSymbol, refSeq and protAcc as keys. 
-    # ensGeneId is already the primary key.
+    # add zfinId, uniProtId, spDisplayId, geneId, geneSymbol, refSeq and 
+    # protAcc as keys. ensGeneId is already the primary key.
     # get the gene2refseq file from NCBI to give the Entrez Gene ID
     # and symbol for refSeq accessions. Taxonomy ID is 7955 for Danio rerio.
     # columns in file are tax_id, GeneID, status, 
@@ -6632,7 +6692,10 @@ table ensXRefZfish
     # tax_id, GeneID, Symbol, LocusTag, Synonyms, dbXrefs, chromosome,
     # map location, description, type of gene, Symbol from nomenclature
     # authority, Full name from nomenclature authority, Nomenclature status.
-    # DOWNLOAD LATEST versions (from March 23, 2006)
+    # DOWNLOAD LATEST versions (from Nov. 8, 2006)
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/ensGenes/downloads
+    cd /cluster/data/danRer3/bed/ensGenes/downloads
     wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
     wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
     gunzip gene2refseq.gz
@@ -6640,14 +6703,114 @@ table ensXRefZfish
     # get records for taxon ID: 7955
     awk '{if ($1 == 7955) print;}' gene2refseq > zfish.gene2refseq
     wc -l zfish.gene2refseq
-    # 50465 zfish.gene2refseq 
+    # 14659 zfish.gene2refseq
+    # 50465 zfish.gene2refseq - in March 
+    # Most of the ones no longer in the gene2refseq file are 
+    # PREDICTED, PROVISIONAL AND MODEL.
+# 37206 MODEL
+# 6278 PREDICTED
+# 6174 PROVISIONAL
+# 43 NA
+# 13 Reviewed
+# 5 REVIEWED
+# 1 VALIDATED
+# New sequences added:
+# 7021 PROVISIONAL
+# 6801 PREDICTED
+# 52 NA
+# 13 Reviewed
+# 12 VALIDATED
+# 10 INFERRED
+# 5 REVIEWED
+
     awk '{if ($1 == 7955) print;}' gene_info > zfish.gene_info
     wc -l zfish.gene_info
-    # 38126 zfish.gene_info
-    # checked that the Ensembl 37 genes for zebrafish are the same as 
+    # 38915 zfish.gene_info
+    # 38126 zfish.gene_info - in March
+    # checked that the Ensembl 38 genes for zebrafish are the same as 
     # for Ensembl 35 for which these files were downloaded (see above - 
-    # updated file names to reflect v37).
-    # write program taking ensGene37Coding.tsv and ensGene37Coding2.tsv as 
+    # updated file names to reflect v38).
+    # also download the file from ZFIN that gives gene Symbols, ZFIN IDs
+    # and RefSeq accessions. ZFIN associates more than one ZFIN ID with
+    # UniProt IDs but there is a one to one relationship for ZFIN IDs 
+    # and RefSeq accessions. Therefore the RefSeq accessions can be used
+    # to identify a ZFIN ID and gene name and vice versa.
+    wget --timestamping http://zfin.org/data_transfer/Downloads/refseq.txt
+    # already the ensGeneInfo38Coding.txt and ensGeneInfo38Coding2.txt
+    # files into tables so that the information can be put together.
+    # these are ens38Zfish and ens38Zfish2 in the test database.
+    # first copy the ens38Zfish table and then replace the uniProtId column
+    # with the best hits from the ensBlastp90 table. 
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/ensGenes
+    sed -e 's/ens38Zfish/ens38ZfishNew/' ens38Zfish.sql > ens38ZfishNew.sql
+    # create table
+    hgsql test < ens38ZfishNew.sql
+    hgsql -e 'insert into ens38ZfishNew select * from ens38Zfish;' test
+    # Add spDisplayId column:
+    hgsql -e \
+      'alter table ens38ZfishNew add spDisplayId varchar(255) NOT NULL;' test
+    # add some indices
+    hgsql -e 'create index uniProt on ens38ZfishNew (uniProt);' test
+    hgsql -e 'create index query on ens38ZfishNew (transcriptId(20));' test
+    # first remove uniProt IDs and add those found by Blastp:
+    hgsql -e 'update ens38ZfishNew set uniProt = "";' test
+    # add displayIds from uniProt to this table
+    hgsql -e 'select count(*) from ens38ZfishNew as g, ensBlastp90 as p \
+          where g.transcriptId = p.query;' test
+    # 37362
+    hgsql -e 'update ens38ZfishNew as g, ensBlastp90 as p \
+          set g.uniProt = p.target where g.transcriptId = p.query;' test
+    # check that 37362 rows have an entry for uniProt - ok
+    hgsql -e 'select count(*) from ens38ZfishNew as g, uniProt.displayId as p \
+          where g.uniProt = p.acc;' test
+    # 37362
+    hgsql -e 'update ens38ZfishNew as g, uniProt.displayId as p \
+          set g.spDisplayId = p.val where g.uniProt = p.acc;' test
+    # check that 37362 of the rows have spDisplayId - ok.
+    # add new columns for ens38ZfishNew
+    hgsql -e \
+      'alter table ens38ZfishNew add entrezGeneId varchar(255) NOT NULL;' test
+    hgsql -e \
+      'alter table ens38ZfishNew add refSeqId varchar(255) NOT NULL;' test
+    hgsql -e \
+      'alter table ens38ZfishNew add refSeqProtId varchar(255) NOT NULL;' test
+
+    # merge together the tables. 
+    hgsql -e 'update ens38ZfishNew as g, ens38Zfish2 as e \
+          set g.entrezGeneId = e.entrezGeneId \
+          where g.transcriptId = e.transcriptId;' test
+    
+    hgsql -e 'update ens38ZfishNew as g, ens38Zfish2 as e \
+          set g.refSeqId = e.refSeqId \
+          where g.transcriptId = e.transcriptId;' test
+    
+    hgsql -e 'update ens38ZfishNew as g, ens38Zfish2 as e \
+          set g.refSeqProtId = e.refSeqProtId \
+          where g.transcriptId = e.transcriptId;' test
+    
+    cd /cluster/data/danRer3/bed/ensGenes/downloads/
+    hgsql -N -e 'select * from ens38ZfishNew;' test > ens38ZfishNew.txt
+    ssh kkstore04
+    cd /cluster/data/danRer3/bed/ensGenes/downloads/
+    
+    # There are 308 cases where there is a RefSeq ID but no Entrez Gene ID.
+    # There are 1046 cases where there is an Entrez Gene ID but no RefSeq ID.
+    # Use the NCBI files to fill in the gaps where needed.
+    # get ZFIN file of ZFIN IDs, gene name and GenBank accession 
+    # refseq.txt has ZFIN IDs, gene name and RefSeq ID.
+    wget --timestamping http://zfin.org/data_transfer/Downloads/gene_seq.txt
+    awk '{print $1, $2}' gene_seq.txt | sort | uniq > geneSeq.genes
+    awk '{print $1, $2}' refseq.txt | sort | uniq > refSeq.genes
+    comm -23 refSeq.genes geneSeq.genes > refSeqOnly
+    comm -13 refSeq.genes geneSeq.genes > geneSeqOnly
+    wc -l *SeqOnly
+    # 9542 geneSeqOnly
+    # 827 refSeqOnly 
+    # The program needs to be written to fill in these gaps for RefSeq ID,
+    # Entrez Gene ID and RefSeq Peptide ID. It should then check for the
+    # gene symbol using the ZFIN ID using RefSeq ID.  
+    # write program taking ensGene38Coding.tsv and ensGene38Coding2.tsv as 
     # input and also the RefSeq files to find Entrez Gene IDs and Gene Symbols.
     # and give the tabbed output for loading into the ensXRefZfish table.
     # hgEnsGeneXRef.c in ~/kent/src/hg/near/hgZfishEnsXRef
@@ -6888,6 +7051,7 @@ _EOF_
 
 ###########################################################################
 # LIFTOVER CHAINS TO DANRER2 (DONE, 2006-04-25 - 2006-05-03, hartera)
+# CLEANUP BLAT DIRECTORY (DONE, 2006-12-14, hartera)
     # Split (using makeLoChain-split) of danRer2 is doc'ed in makeDanRer2.doc
     # Do what makeLoChain-split says to do next (start blat alignment)
     ssh kk
@@ -6978,7 +7142,11 @@ _EOF_
     rm *.log
     # test by converting a region using the "convert" link on
     # the browser, and comparing to blat of the same region
-   
+
+    # CLEANUP for LiftOver blat directory (2006-12-14, hartera)
+    ssh kkstore02
+    rm -r blat.danRer2.2006-04-25
+
 # REDO BACENDS - bacEndPairs, bacEndSingles, bacEndBadPairs and all_bacends
 # (split as chrN_allBacends) ONLY (DONE, 2006-05-01 - 2006-05-08, hartera) 
 # RELOADED chrN_allBacends TABLES (DONE, 2006-06-08, hartera)
@@ -6994,8 +7162,8 @@ _EOF_
      # all_bacends AS ARGUMENT TO pslPairs. THIS WILL THEN AUTOMATICALLY
      # ADD THE CORRECT PSL TABLE NAME TO THE BED (LFS) TABLES
      ssh kkstore02
-     mkdir /cluster/data/danRer3/bed/bacends/newPairs
-     cd /cluster/data/danRer3/bed/bacends/newPairs
+     mkdir /cluster/data/danRer3/bed/bacends/pairsNew
+     cd /cluster/data/danRer3/bed/bacends/pairsNew
      set bacDir = /cluster/data/danRer3/bed/bacends/bacends.1
      /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
@@ -7608,6 +7776,7 @@ cat << '_EOF_' > getRhInfo
 
 ###########################################################################
 # LIFTOVER CHAINS TO DANRER4 (DONE, 2006-05-31 - 2006-06-06, hartera)
+# CLEANUP BLAT DIRECTORY (DONE, 2006-12-14, hartera)
    # Split (using makeLoChain-split) of danRer4 is doc'ed in makeDanRer4.doc
    # Do what makeLoChain-split says to do next (start blat alignment)
    # Use pk as runs faster than on kk. Scripts only run on kk so run manually.
@@ -7747,6 +7916,10 @@ exit 0
    # copy README.txt from another liftOver directory if it is not there already.
    # test by converting a region using the "convert" link on
    # the browser, and comparing to blat of the same region
+   
+   # CLEANUP blat directory (2006-12-14, hartera)
+   ssh kkstore02
+   rm -r /cluster/data/danRer3/bed/blat.danRer4.2006-05-31
 
 ###########################################################################
 # CREATE MICROARRAY DATA TRACK BY ADDING ZON LAB WILD TYPE MICROARRAY DATA TO 
@@ -7809,6 +7982,13 @@ exit 0
 # (DONE, 2006-06-08 - 2006-06-12, hartera)
 # Zon Lab WT Affy data tables in hgFixed renamed to reflect that the data 
 # is log2 transformed (DONE, 2006-07-30, hartera)
+# Recreate the ensToAffyZebrafish and ensToAffyZonWildType tables after 
+# updating the Affy Zebrafish track with different filtering used for the 
+# Blat alignments - see UPDATE AFFY ZEBRAFISH TRACK section. Also the 
+# Affy Zon Lab Wild Type Array data was updated with a different method of 
+# processing - see hgFixed.txt (DONE, 2006-10-25, hartera)
+# Recreated the ensCanonical and ensIsoforms table after updating proteinID
+# in ensGene table (DONE, 2006-11-06, hartera) 
 #  This should be done after creating ensGene, ensGtp and ensPep tables
 #  for the Ensembl Genes track.
 #  The BlastTab tables are already built - see HGNEAR PROTEIN BLAST TABLES
@@ -7835,9 +8015,16 @@ exit 0
    $HOME/bin/x86_64/hgMapToGene danRer3 refGene ensGene \
          ensToLocusLink -lookup=refToLl.txt
 
+   # Update the following three tables after update of Affy Zebrafish and
+   # Affy Zon Lab Wild Type data (2006-10-25):
+   hgsql -e 'drop table ensToAffyZebrafish;' danRer3
+   hgsql -e 'drop table ensToAffyZonWildType;' danRer3
+   hgsql -e 'drop table zebrafishZonWTDistance;' danRer3
+
    # Create table that maps between Ensembl genes and the Affy Zebrfish
    # probeset consensus sequences.
-   $HOME/bin/x86_64/hgMapToGene danRer3 affyZebrafish ensGene ensToAffyZebrafish
+   $HOME/bin/x86_64/hgMapToGene danRer3 affyZebrafish ensGene \
+           ensToAffyZebrafish
 
    # Create a table that maps between Ensembl genes and 
    # the Zon lab microarray expression data.
@@ -7845,19 +8032,15 @@ exit 0
                ensGene ensToAffyZonWildType 
 
    # Create expression distance table.
-   nice hgExpDistance danRer3 hgFixed.zebrafishZonWTMedian \
+   nice hgExpDistance danRer3 hgFixed.zebrafishZonWTMedianRatio \
         hgFixed.zebrafishZonWTMedianExps zebrafishZonWTDistance  \
         -lookup=ensToAffyZebrafish &
    # Have 15617 elements in hgFixed.zebrafishZonWTMedian
-   # Got 9023 unique elements in hgFixed.zebrafishZonWTMedian
+   # Got 8911 unique elements in hgFixed.zebrafishZonWTMedian
    # Made zebrafishZonWTDistance.tab
    # Loaded zebrafishZonWTDistance
    # Made query index
    # Took 2 minutes.
-   # hgFixed.zebrafishZonWTMedian renamed as hgFixed.zebrafishZonWTMedianLog
-   # and hgFixed.zebrafishZonWTAll table renamed as 
-   # hgFixed.zebrafishZonWTAllLog to show that the data is log 
-   # transformed. (hartera, 2006-07-30)
    # To allow data to be viewed in Gene Sorter, add the hgNearOk=1 
    # to the dbDb table entry for danRer3 on hgcentraltest -
    # see section on MAKE HGCENTRALTEST ENTRY FOR DANRER3.
@@ -7865,6 +8048,11 @@ exit 0
    # added a protein ID field to ensGene before running this hgClusterGenes
    # Cluster together various alt-splicing isoforms.
    # Creates the knownIsoforms and knownCanonical tables
+   # Rebuild this after creating updating the ensGene table with
+   # protein IDs from UniProt with >= 90% identity to Ensembl proteins.
+   # (2006-11-06, hartera)
+   hgsql -e 'drop table ensIsoforms;' danRer3
+   hgsql -e 'drop table ensCanonical;' danRer3
    hgClusterGenes danRer3 ensGene ensIsoforms ensCanonical
    # Got 22877 clusters, from 32143 genes in 28 chromosomes
    # There are also 22877 genes in the ensGtp table so this is in agreement.
@@ -7884,6 +8072,7 @@ exit 0
 # Blat's minIdentity seems to be more severe than that for pslReps or 
 # pslCDnaFilter as it takes insertions and deletions into account.
 # These are Jim's recommendations. 
+# Remove old Affy zebrafish directories (DONE, 2006-12-13, hartera)    
     # Array chip sequences already downloaded for danRer1
     ssh hgwdev
     cd /projects/compbio/data/microarray/affyZebrafish
@@ -8006,6 +8195,13 @@ exit 0
     # short alignments may also have longer alignments to different regions 
     # of the genome that are good.
 
+    # CLEANUP:
+    # remove old Affy Zebrafish alignment directories (hartera, 2006-12-13)
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed
+    rm -r affyZebrafish.2005-08-19
+    rm -r affyZebrafish.2005-09-25
+
 #########################################################################
 # NEW RH MAP SEQUENCES FOR TRACK (in progress, 2006-10-12, hartera)
 # Data from Yi Zhou at Boston Children's Hospital:
@@ -8021,3 +8217,29 @@ exit 0
     dos2unix rhSequenceSubmit100306.txt
     dos2unix rhSequenceSubmitSeq100306.txt
     # need to convert format of FASTA file to remove the line numbers
+
+###########################################################################
+# BACENDS CLEANUP (DONE, 2006-12-13, hartera)
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/bacends
+    mv ./seqs/getCloneEnds.csh .
+    rm CHORI73.* DH.* DHBacs.fullnames DHmorethan2.*
+    rm bacEndsChroms.psl bacNAandUnScafs.psl
+    rm bacends.lst genome.lst names.psl namesPls.uniq header pslCheck.log \
+       raw*
+    rm -r /san/sanvol1/scratch/danRer3/bacends/scaffoldsNAandUnPsl
+    rm -r /cluster/data/danRer3/bed/bacends/scaffoldsNAandUnPsl
+    rm -r newPairs2
+    rm -r /san/sanvol1/scratch/danRer3/bacends/scaffoldsNAandUnRun
+    rm -r /cluster/data/danRer3/bed/bacends/scaffoldsNAandUnRun 
+    rm -r singles pairs scores
+    rm -r ./cloneandStsAliases/tmp
+    rm ./cloneandStsAliases/*.bak ./cloneandStsAliases/*.tab \
+       ./cloneandStsAliases/*.sort ./cloneandStsAliases/*.uniq 
+    rm DH_bacends.fa
+    rm -r liftedPsl 
+    # the psl directory is large, gzip the contents
+    cd psl
+    gzip *.psl
+
+######################################################################### 
