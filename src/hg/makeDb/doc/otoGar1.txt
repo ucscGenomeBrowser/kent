@@ -1,0 +1,64 @@
+##########################################################################
+#  Run the makeGenomeDb.pl script (DONE - 2006-12-18 - Robert)
+    # prepare for the makeGenomeDb.pl script:
+    ssh hgwdev
+    cd /cluster/data/otoGar1
+cat << '_EOF_' > otoGar1.config.ra 
+# Config parameters for makeGenomeDb.pl:
+db otoGar1
+clade vertebrate
+genomeCladePriority 16
+commonName Bushbaby
+scientificName Otolemur garnetti 
+assemblyDate Dec. 2006
+assemblyLabel Broad version 1
+orderKey 16
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25 
+mitoAcc none
+fastaFiles /cluster/data/otoGar1/fromBroad/Draft_v1.agp.chromosome.fasta
+dbDbSpeciesDir bushbaby
+_EOF_
+
+~/kent/src/hg/utils/automation/makeGenomeDb.pl otoGar1.config.ra
+~/kent/src/hg/utils/automation/makeGenomeDb.pl otoGar1.config.ra -continue agp
+#########################################################################
+#WindowMasker
+ssh kolossus
+cd /cluster/data/otoGar1/bed
+~/kent/src/hg/utils/automation/doWindowMasker.pl otoGar1 -workhorse=kolossus > wmRun.log 2>&1 &
+ssh hgwdev
+cd /cluster/data/otoGar1/bed/WindowMasker.2006-12-18/
+hgLoadBed otoGar1 windowmasker windowmasker.bed.gz
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 2006-12-19 - Robert)
+    ssh kolossus
+    mkdir /cluster/data/otoGar1/bed/simpleRepeat
+    cd /cluster/data/otoGar1/bed/simpleRepeat
+    nice -n 19 time twoBitToFa ../../otoGar1.unmasked.2bit stdout \
+	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+	    -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed otoGar1 simpleRepeat \
+      /cluster/data/otoGar1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    featureBits otoGar1 simpleRepeat
+
+#########################################################################
+# Mask seeds with orrb to do better alignments - Robert
+download and compile orrb from www.drive5.com/orrb  and copy to
+/cluster/bin/i386/orrb
+mkdir /cluster/data/otoGar1/orrb
+cd /cluster/data/otoGar1/orrb
+twoBitToFa ../otoGar1/otoGar1.unmasked.2bit \
+   /san/sanvol1/scratch/otoGar/otoGar1.fa
+/cluster/bin/i386/orrb -mask /san/sanvol1/scratch/otoGar/otoGar1.fa \
+                     -target /san/sanvol1/scratch/otoGar/otoGar1.fa\
+                   -out otoGar1.maskOrrb.fa -wordsize 11 -threshalpha 13 \
+                   -pattern 00011111000
