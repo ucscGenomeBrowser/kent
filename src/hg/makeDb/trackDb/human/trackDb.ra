@@ -1611,104 +1611,49 @@ semiShortCircuit 1
 termRegex [A-Z0-9\(\)/-]+
 searchPriority 20
 
-searchName hapmapAlleleFreqCEUShort
+searchName hapmapAlleleFreqCEU
 searchTable hapmapAlleleFreqCEU
 searchMethod exact
 searchType bed
 semiShortCircuit 1
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAlleleFreqCEULong
-searchTable hapmapAlleleFreqCEU
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
-padding 250
-
-searchName hapmapAlleleFreqCHBShort
+searchName hapmapAlleleFreqCHB
 searchTable hapmapAlleleFreqCHB
 searchMethod exact
 searchType bed
 semiShortCircuit 1
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAlleleFreqCHBLong
-searchTable hapmapAlleleFreqCHB
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
-padding 250
-
-searchName hapmapAlleleFreqCHBandJPTShort
+searchName hapmapAlleleFreqCHBandJPT
 searchTable hapmapAlleleFreqCHBandJPT
 searchMethod exact
 searchType bed
 semiShortCircuit 1
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAlleleFreqCHBandJPTLong
-searchTable hapmapAlleleFreqCHBandJPT
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
-padding 250
-
-searchName hapmapAlleleFreqJPTShort
+searchName hapmapAlleleFreqJPT
 searchTable hapmapAlleleFreqJPT
 searchMethod exact
 searchType bed
 semiShortCircuit 1
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAlleleFreqJPTLong
-searchTable hapmapAlleleFreqJPT
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
-padding 250
-
-searchName hapmapAlleleFreqYRIShort
+searchName hapmapAlleleFreqYRI
 searchTable hapmapAlleleFreqYRI
 searchMethod exact
 searchType bed
 semiShortCircuit 1
-termRegex (rs[0-9]{3}[0-9]+)
-dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+termRegex (rs[1-9][0-9]*)
 searchPriority 12
-padding 250
-
-searchName hapmapAlleleFreqYRILong
-searchTable hapmapAlleleFreqYRI
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
-dontCheck (rs[0-9]{3}[0-9]+)
-searchPriority 16
 padding 250
 
 searchTable cnpSharp
