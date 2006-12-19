@@ -15,7 +15,7 @@ tables bdgpGeneInfo
 idSql select flyBaseId from bdgpGeneInfo where bdgpName = '%s'
 preCutAt -
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
-priority 25
+priority 10
 
 name uniProt
 tables bdgpGene
@@ -26,14 +26,14 @@ shortLabel RefSeq
 tables bdgpToRefSeq
 idSql select value from bdgpToRefSeq where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-priority 40
+priority 10
 
 name pubMed
 shortLabel PubMed
 tables bdgpSwissProt
 idSql select symbol from bdgpSwissProt where bdgpName = '%s' and symbol != SUBSTRING_INDEX(bdgpName,'-',1)
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
-priority 60
+priority 10
 
 name geneCards
 hide

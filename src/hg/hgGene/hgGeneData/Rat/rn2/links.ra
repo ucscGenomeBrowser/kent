@@ -8,5 +8,5 @@ nameSql select spId from kgXref where kgID = '%s'
 url ../cgi-bin/pbTracks?proteinID=%s
 hgsid on
 dbInUrl on
-priority 21
+priority 1
 

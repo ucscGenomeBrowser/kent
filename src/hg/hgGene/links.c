@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.26 2006/07/26 15:25:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.27 2006/12/19 18:45:50 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -39,7 +39,9 @@ if (dif < 0)
 else if (dif > 0)
     return 1;
 else
-    return 0;
+    {
+    return differentWord(b->shortLabel, a->shortLabel);
+    }
 }
 
 static char *linkRequiredField(struct hash *hash, char *name)

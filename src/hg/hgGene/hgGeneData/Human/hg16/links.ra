@@ -8,12 +8,12 @@ url ../cgi-bin/hgTracks?position=%s:%s-%s&knownGene=pack
 nameFormat %s:%s-%s
 hgsid on
 dbInUrl on
-priority 10
+priority 1
 
 name exonPrimer
 shortLabel ExonPrimer
 tables kgXref
 idSql select kgID from kgXref where kgID = '%s'
 url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=hg16&acc=%s
-priority 95
+priority 10
 

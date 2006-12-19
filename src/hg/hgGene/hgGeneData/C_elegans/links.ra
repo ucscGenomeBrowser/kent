@@ -14,7 +14,7 @@ shortLabel WormBase
 tables sangerGene
 idSql select name from sangerGene where name = '%s'
 url http://www.wormbase.org/db/gene/gene?name=%s
-priority 25
+priority 10
 
 name uniProt
 tables sangerLinks
@@ -26,7 +26,7 @@ shortLabel RefSeq
 tables sangerToRefSeq
 idSql select value from sangerToRefSeq where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-priority 40
+priority 10
 
 name locusLink
 hide
@@ -39,7 +39,7 @@ shortLabel PubMed
 tables orfToGene
 idSql select value from orfToGene where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
-priority 60
+priority 10
 
 name geneCards
 hide
@@ -57,5 +57,5 @@ name aceView
 shortLabel AceView
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
-priority 110
+priority 10
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=worm&l=%s

@@ -14,7 +14,7 @@ shortLabel FlyBase
 tables flyBase2004Xref
 idSql select fbgn from flyBase2004Xref where name = '%s'
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
-priority 25
+priority 10
 
 name uniProt
 tables flyBaseToUniProt
@@ -25,14 +25,14 @@ shortLabel RefSeq
 tables flyBaseToRefSeq
 idSql select value from flyBaseToRefSeq where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-priority 40
+priority 10
 
 name pubMed
 shortLabel PubMed
 tables flyBase2004Xref
 idSql select symbol from flyBase2004Xref where name = '%s' and symbol != name
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
-priority 60
+priority 10
 
 name geneCards
 hide

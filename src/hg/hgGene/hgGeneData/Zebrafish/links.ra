@@ -14,14 +14,14 @@ shortLabel Ensembl Genes
 tables ensGene
 idSql select name from ensGene where name = '%s'
 url http://feb2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
-priority 25
+priority 10
 
 name zfin
 shortLabel ZFIN
 tables ensXRefZfish
 idSql select zfinId from ensXRefZfish where ensGeneId = '%s'
 url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
-priority 28
+priority 10
 
 name tbSchema
 shortLabel Table Schema
@@ -31,28 +31,28 @@ name uniProt
 shortLabel UniProt
 tables ensXRefZfish
 idSql select uniProtId from ensXRefZfish where ensGeneId = '%s'
-priority 30
+priority 10
 
 name refSeq
 shortLabel RefSeq
 tables ensXRefZfish
 idSql select refSeq from ensXRefZfish where ensGeneId = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-priority 40
+priority 10
 
 name refSeqPep
 shortLabel RefSeq Peptide
 tables ensXRefZfish
 idSql select protAcc from ensXRefZfish where ensGeneId = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenPept&tool=genome.ucsc.edu
-priority 42
+priority 10
 
 name entrezGene
 shortLabel Entrez Gene
 tables ensXRefZfish
 idSql select geneId from ensXRefZfish where ensGeneId = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s&tool=genome.ucsc.edu
-priority 45
+priority 10
 
 name genBank
 hide
