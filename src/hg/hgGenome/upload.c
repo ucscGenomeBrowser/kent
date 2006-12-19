@@ -182,7 +182,7 @@ else
 customTracksSaveFile(outList, fileName);
 cartSetString(cart, varName, fileName);
 
-hPrintf("This data is now available in the drop down menus on the ");
+hPrintf("This data is now available in the drop-down menus on the ");
 hPrintf("main page for graphing.<BR>");
 }
 
