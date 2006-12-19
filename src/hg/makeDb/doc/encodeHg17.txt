@@ -2778,6 +2778,48 @@ EOF
     sed 's/dless/encodeDless/g' ~/kent/src/hg/lib/dless.sql | hgsql hg17
     echo "load data local infile 'dless.filtered.dat' into table encodeDless" | hgsql hg17
 
+#######################################################################
+# YALE RFBR (Regulatory Factor Binding Regions) DATA 
+# (in progress, 2006-11-01-2006-11-13, hartera)
+# Data provided by Mark Gerstein's lab at Yale.
+# Contact: zhengdong.zhang@yale.edu 
+# E-mail from Zhengdong on Nov. 20, 2006 to say that currently there is a 
+# discussion among some ENCODE people if DHS sites should be included
+# when the clusters and deserts are generated. Therefore, it should not be 
+# released to the public site yet.   
+    ssh hgwdev
+    mkdir /cluster/data/encode/yale/rfbr
+    # move data from ftp site
+    mv /var/ftp/encode/encode-tf-clusters-deserts.zip \
+       /cluster/data/encode/yale/rfbr
+    cd /cluster/data/encode/yale/rfbr
+    unzip encode-tf-clusters-deserts.zip 
+    # 3 files:
+# encode-tf-clusters-deserts-description.txt
+# encode-tf-clusters.bed
+# encode-tf-deserts.bed
+   # remove the URL from the name field and leave the just the accession 
+   sed -e \
+      's/http\:\/\/dart\.gersteinlab\.org\/cgi\-bin\/ar\/lookup\.cgi?acc=//' \
+      encode-tf-clusters.bed > clusters.bed
+   
+   sed -e \
+      's/http\:\/\/dart\.gersteinlab\.org\/cgi\-bin\/ar\/lookup\.cgi?acc=//' \
+      encode-tf-deserts.bed > deserts.bed
+   
+   # load data files as BED files
+   hgLoadBed hg17 encodeYaleChipRfbrClusters clusters.bed
+   hgLoadBed hg17 encodeYaleChipRfbrDeserts deserts.bed
+   
+   # add description page
+   cp encode-tf-clusters-deserts-description.txt \
+      ~/kent/src/hg/makeDb/trackDb/human/hg17/encodeYaleChipRfbr.html
+   # edit description to add extra method details requested from contributor
+# Add trackDb entry to trackDb.encode.ra for hg17. see encodeYaleAffyRNATars
+# and use the same url and urlLabel and dataVersion is Dec 2005 here. 
+# that is the contributors data freeze, not an ENCODE one.
+=======
+
 
 ################################################################
 # EvoFold ENCODE track, Jakob Skou Pedersen 12.03.2006 
