@@ -1,9 +1,0 @@
-name global
-examples Some examples of search terms are 'SWI1' 'YPL016W' 'meiosis' and 'glucose'.
-geneTable sgdGene
-canonicalTable sgdCanonical
-isoformTable sgdIsoforms
-pepTable sgdPep
-allTranscriptQuery select name,chrom,txStart,txEnd,proteinID from sgdGene
-allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from sgdCanonical
-oneGeneQuery select name,chrom,txStart,txEnd,proteinId from sgdGene where name = '%s'

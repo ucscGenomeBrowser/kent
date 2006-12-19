@@ -1,6 +1,0 @@
-machine hgwbeta.cse.ucsc.edu
-server hgw1.cse.ucsc.edu
-quick false
-dbSpec all
-table all
-zoomCount 3

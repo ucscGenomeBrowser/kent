@@ -1,4 +1,0 @@
-array of string letters = ("a", "b", "c");
-
-for (int x in letters)
-    print(x);

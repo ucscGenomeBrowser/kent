@@ -1,8 +1,0 @@
-int a = 1<<4;
-int b = 8>>2;
-int c = -1 << 3 + 1;
-int d = 8<<1 + 8 >> 1;
-
-array of int aa = (a,b,c,d);
-print(aa);
-

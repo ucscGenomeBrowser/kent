@@ -1,6 +1,0 @@
-#fileName	bodyPart	gene	submitId	bac	probeColor	imageWidth	imageHeight
-bacFile1	brain	HOXA1	bsz01	RP_012345	green	400	300
-bacFile1	brain	HOXA2	bsz02	RP_012344	red	400	300
-bacFile1	liver	CYP450A	bsz03	RP_012343	green	400	300
-	expression	liver	0.7	hepatocyte	squamous	scattered
-	expression	brain	0.7	neuron	pyramidal	regional

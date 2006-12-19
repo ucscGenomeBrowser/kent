@@ -1,6 +1,0 @@
-#!/bin/sh -e
-# run ant to build java tree
-
-#JAVA_HOME="/usr/java/jdk1.5.0_06"
-#export JAVA_HOME
-exec ant -emacs "$@"

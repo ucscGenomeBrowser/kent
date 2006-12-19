@@ -1,5 +1,0 @@
-#!/bin/tcsh -ef
-foreach i (visiGene/*.ra)
-    visiGeneLoad $i $i:r.tab $i:r.txt
-    echo $i
-end

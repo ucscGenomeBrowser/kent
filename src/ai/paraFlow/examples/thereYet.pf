@@ -1,8 +1,0 @@
-bit arrived = 0;
-while (!arrived)
-   {
-   print("Are we there yet?");
-   string answer = lineIn();
-   if (answer == "yes")
-       arrived = 1;
-   }

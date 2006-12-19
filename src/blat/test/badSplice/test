@@ -1,4 +1,0 @@
-blat -q=rna -fine chr16part.fa small2.fa small2.psl > small2.log
-pslReps -nohead small2.psl smallBest2.psl /dev/null
-awk '{print $10,$19}' smallBest2.psl
-echo 'see also small2.log'

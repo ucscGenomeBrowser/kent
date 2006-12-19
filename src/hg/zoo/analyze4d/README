@@ -1,9 +1,0 @@
-This directory and subdirectory contains utilities for analyzing 4d sites.  
-
-In the "4d" subdirectory there is a tool called amalgam.pl which
-amalgamets a lits of 4d sites into a single list. 
-
-In this directory analyze analyzes the substitution activity at the 4d sites.
-The analyze tool takes a raw "zoo" alignment, in which the first sequence is
-human, and also in which the alignment coordinates correspond to the 
-coordinates in the 4d list.  It then prints out a list of summary statistics.

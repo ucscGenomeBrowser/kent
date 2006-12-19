@@ -1,7 +1,0 @@
-(2.000000,1.000000,3.000000,4.000000,5.000000,4.500000)
-argmax: 4
-argmin: 1
-argmin of x*x in -5 to 6: 0
-('minusOne'@-1,'one'@1,'two'@2,'zero'@0)
-argmin x*x: zero
-argmax x: two

@@ -1,1 +1,0 @@
-Expecting to find sequence ultraContig1 at line 32 of tests/input/test2.fa, but got ultraContig0.  When input is FASTA, sequences must appear in exactly the same order as in AGP.

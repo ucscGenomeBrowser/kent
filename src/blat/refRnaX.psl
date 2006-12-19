@@ -1,6 +1,0 @@
-psLayout version 3
-
-match	mis- 	rep. 	N's	Q gap	Q gap	T gap	T gap	strand	Q        	Q   	Q    	Q  	T        	T   	T    	T  	block	blockSizes 	qStarts	 tStarts
-     	match	match	   	count	bases	count	bases	      	name     	size	start	end	name     	size	start	end	count
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-1219	114	0	0	2	56	9	3865	++	mCreaMrna	1606	200	1589	hCreaGeno	6896	394	5592	10	145,205,96,222,82,128,135,126,167,27,	200,355,560,656,878,960,1088,1223,1349,1562,	394,1150,1558,2040,2391,2588,4377,5013,5342,5565,

@@ -1,2 +1,0 @@
-array of int a = (1,2,3);
-array of int aTop = para (int x in a) top 10.0 x*x;

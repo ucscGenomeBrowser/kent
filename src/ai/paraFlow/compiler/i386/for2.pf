@@ -1,7 +1,0 @@
-int z = 999;
-int sum=0;
-for (int i=0; i<10; ++i)
-    sum += i;
-_printInt(sum);
-for (int j=0; j<10; ++j)
-     _printInt(j);

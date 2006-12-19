@@ -1,7 +1,0 @@
-track	name='Colors etc.'	description='Some colors you might use'	priority='0.001'	fieldCount='4'	firstItemPos='chr2:1-12'	inputType='bed'	itemCount='3'	tdbType='bed 4 .'
-chr2	1	12	rose
-chr2	22	219	yellow
-chr2	18	188	green
-track	name='animals'	description='Some fuzzy animals'	priority='0.002'	fieldCount='12'	firstItemPos='chr3:1000-5000'	inputType='bed'	itemCount='2'	tdbType='bed 12 .'
-chr3	1000	5000	gorilla	960	+	1100	4700	0	2	1567,1488,	0,2512,
-chr3	2000	7000	mongoose	200	-	2200	6950	0	4	433,100,550,1500,	0,500,2000,3500,
