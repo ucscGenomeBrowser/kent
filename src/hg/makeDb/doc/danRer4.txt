@@ -7848,6 +7848,25 @@ close INFO;
     # of transcript Ids with different instances of OTTER gene ids.
 
     # WAITING NOW FOR VEGA GENE UPDATE (2006-10-19)
+    # Received e-mail from Ian Sealy at Sanger (is1@sanger.ac.uk) that 
+    # Vega gene update is ready in gtf format (2006-11-02)
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega
+    mkdir update
+    cd update
+    wget --timestamping ftp://ftp.sanger.ac.uk/pub/is1/vega.gtf
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega/update
+    ldHgGene -bin -genePredExt danRer4 vegaUpdate vega.gtf
+    # Read 6823 transcripts in 93253 lines in 1 files
+  6823 groups 25 seqs 4 sources 2 feature types
+invalid gffGroup detected on line: chr22        PUTATIVE        exon
+67909276791256  0.000000        -       .       gene_id "si:rp71-1i20.2";
+transcript_id "RP71-1I20.1-001";
+GFF/GTF group RP71-1I20.1-001 on chr22+, this line is on chr22-, all group
+members must be on same seq and strand
+   # Still has non-unique transcript IDs - need to wait for next release
+   # of VEGA genes and Ensembl for this to be fixed. 
 
 ##########################################################################
 # N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
@@ -8033,17 +8052,19 @@ line+ /san/sanvol1/scratch/danRer4/affy/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # save as a tab separated text file using Excel: XEBLIB96_pov_070704.txt
     # Remove quotation marks
     sed -e 's/"//g' XEBLIB96_pov_070704.txt > GISArray.txt
-    awk 'BEGIN{FS="\t"} {if ($2 !~ /Serial/) print ">"$2"\n"$4}' \
-        GISArray.txt > GISZfishArray.fa
+    # also remove other unwanted characters, ^@, which is ASCII for NULL
+    tr -d '\0' < GISArray.txt > GISArray.format.txt 
+    awk 'BEGIN{FS="\t"} {if ($2 !~ /Serial/ && ($2 != "")) print ">"$2"\n"$4}' \
+        GISArray.format.txt > GISZfishArray.fa
     grep '>' GISZfishArray.fa | wc -l
-    # 16413
+    # 16399
     # align sequences to the zebrafish genome on pk
     mkdir -p /san/sanvol1/scratch/compugen
    cp /projects/compbio/data/microarray/compugen/zebrafish/GISZfishArray.fa \
-       /san/sanvol1/scratch/compugen
-    # Set up cluster job to align Zebrafish consensus sequences to danRer3
-    mkdir -p /cluster/data/danRer4/bed/compugenZebrafish.2006-10-23
-    ln -s /cluster/data/danRer4/bed/compugenZebrafish.2006-10-23 \
+       /san/sanvol1/scratch/compugen/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer4
+    mkdir -p /cluster/data/danRer4/bed/compugenZebrafish.2006-11-03
+    ln -s /cluster/data/danRer4/bed/compugenZebrafish.2006-11-03 \
           /cluster/data/danRer4/bed/compugenZebrafish
     # Align sequences on the pitakluster. Scaffolds were aligned for NA_random
     # and Un_random and lifted to chrom level afterwards. Chroms 1-25 and M
@@ -8071,18 +8092,422 @@ line+ /san/sanvol1/scratch/danRer4/compugen/psl/$(root1)_$(root2).psl}\n#ENDLOOP
     para try, check, push ... etc.
     para time
 # Completed: 3237 of 3237 jobs
-# CPU time in finished jobs:       1999s      33.32m     0.56h    0.02d  0.000 y
-# IO & Wait Time:                  8346s     139.10m     2.32h    0.10d  0.000 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
+# CPU time in finished jobs:       1948s      32.46m     0.54h    0.02d  0.000 y
+# IO & Wait Time:                 11145s     185.75m     3.10h    0.13d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             108s       1.80m     0.03h    0.00d
-# Submission to last job:           441s       7.35m     0.12h    0.01d
- 
+# Longest finished job:             428s       7.13m     0.12h    0.00d
+# Submission to last job:           621s      10.35m     0.17h    0.01d
+
     # need to do pslSort and lift up
     ssh pk
     cd /san/sanvol1/scratch/danRer4/compugen
-    # CHECK SEQUENCE NAMES - SOME IN raw.psl HAVE NO NAME
+      
+    # Do sort, liftUp and then best in genome filter.
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # Previously did not use minCover since a lot of sequence is in
+    # Un and NA so genes may be split up so good to see all alignments.
+    # However, found a number of short alignments of <= 50 bp. These are
+    # not meaningful so maybe need to use minCover. If increased too much,
+    # then hits on poor parts of the assembly will be missed.
+    # use pslCDnaFilter with the same parameters as used for zebrafish
+    # Genbank EST alignments.
+    pslSort dirs raw.psl tmp psl
+    pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=8 \
+       -ignoreNs -bestOverlap -minId=0.95 -minCover=0.15 raw.psl contig.psl
+# for Compugen:
+# Dropping minCover to 0.10 doesn't make a difference. Decreasing the minId to
+# 0.92 increases the number of sequences aligned and does not increase
+# the number of alignments for sequences with the most alignments. 
+# Removed the minimum non repeat filter does significantly increase the 
+# number of alignments for some sequences.
+
+145 CGENZEB_456015402_0
+     79 CGENZEB_456008445_0
+     72 CGENZEB_456015991_0
+     53 CGENZEB_456012678_0
+     46 CGENZEB_456004521_0
+
+# Total sequences: 16399
+seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+        weird over:     13      48
+        kept weird:     8       16
+    drop localBest:     1288    7040
+              kept:     14632   19420
+# 89.2% are kept.
+
+
+# minCov = 0.10 minNonRepSize = 8
+# seqs    aligns
+seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+        weird over:     13      48
+        kept weird:     8       16
+    drop localBest:     1288    7040
+              kept:     14632   19420
+
+# 89.2% are kept.
+# minCov=0.10 minNonRepSize = 10
+seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1015    72795
+     drop minIdent:     811     3462
+        weird over:     13      48
+        kept weird:     8       16
+    drop localBest:     1278    6901
+              kept:     14616   19396
+
+# 89.1% kept.
+# minNonRepSize = 0
+                        seqs    aligns
+             total:     15544   102554
+     drop minIdent:     1344    23893
+        weird over:     42      271
+        kept weird:     24      44
+    drop localBest:     1772    49794
+              kept:     15338   28867
+# 93.8% kept from total
+# but there are large numbers of alignments for some probes:
+# 62 CGENZEB_456005547_0
+    603 CGENZEB_456005221_0
+    454 CGENZEB_456010007_0
+    409 CGENZEB_456014900_0
+    372 CGENZEB_456009900_0
+
+# try increase identity but low minReps
+    pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=8 \
+       -ignoreNs -bestOverlap -minId=0.97 -minCover=0.15 raw.psl \
+       contigMinRep8minId97.psl
+# seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     1982    8772
+        weird over:     9       29
+        kept weird:     7       14
+    drop localBest:     766     2915
+              kept:     13715   18322
+# this has improved highest number of hits a lot but this is similar to 
+# that achieved with higher identity too
+# but only kept 80% of seqeuences.
+145 CGENZEB_456015402_0
+     79 CGENZEB_456008445_0
+     72 CGENZEB_456015991_0
+     53 CGENZEB_456012678_0
+     46 CGENZEB_456004521_0
+# lower minCov:
+   pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=8 \
+        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.08 raw.psl \
+        contigMinCov8.psl
+
+# seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+        weird over:     13      48
+        kept weird:     8       16
+    drop localBest:     1288    7040
+              kept:     14632   19420
+
+# 89.2%, now nearBest = 0.1%
+   pslCDnaFilter -localNearBest=0.001 -minQSize=20 -minNonRepSize=8 \
+        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.10 raw.psl \
+        contigMinCov10NearBest1percent.psl
+# seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+        weird over:     13      48
+        kept weird:     7       15
+    drop localBest:     1350    7451
+              kept:     14632   19009
+# same number of sequences aligning but less overall alignments:
+# 115 CGENZEB_456015402_0
+#     71 CGENZEB_456015991_0
+#    71 CGENZEB_456008445_0
+#    46 CGENZEB_456004521_0
+#    38 CGENZEB_456008610_0
+# CGENZEB_456012678_0 now went down to 1. 
+
+
+#                         seqs    aligns
+#             total:     15272   828202
+#drop minNonRepSize:     2763    741674
+#     drop minIdent:     2656    39188
+#     drop minCover:     2550    10784
+#        weird over:     359     1439
+#        kept weird:     277     347
+#    drop localBest:     2830    17737
+#              kept:     14952   18819
+# Kept 97.9% of alignments. There are 15502 Affy sequences originally
+# aligned so there are now 96.5% remaining.
+     
+    # lift up the coordinates to chrom level
+    liftUp affyZebrafish.psl \
+           /cluster/data/danRer4/jkStuff/liftAll.lft warn contig.psl
+    # Got 6247 lifts in /cluster/data/danRer4/jkStuff/liftAll.lft
+    # Lifting contig.psl
     
+    # rsync these psl files
+    rsync -a --progress /san/sanvol1/scratch/danRer4/affy/*.psl \
+         /cluster/data/danRer4/bed/affyZebrafish/
+    
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.tmp
+    mv affyZebrafish.psl.tmp affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    hgsql -e 'drop table affyZebrafish;' danRer4
+    hgLoadPsl danRer4 affyZebrafish.psl
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+    /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /gbdb/hgFixed/affyProbes
+    # these sequences were loaded previously so no need to reload.
+    hgLoadSeq -abbr=Zebrafish: danRer3 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # check number of short alignments:
+    hgsql -e \
+     'select count(*) from affyZebrafish where (qEnd - qStart) <= 50;' danRer4
+    # 7
+    # for previous filtered set, there were 1272 alignments of <= 50 bp so
+    # this has improved.
+    hgsql -e 'select count(distinct(qName)) from affyZebrafish;' danRer4
+    # 14952
+    # Previously, there were 14819 so more sequences have aligned but less
+    # short alignments are retained. Many of the short alignments may also 
+    # have longer alignments to different regions of the genome that are good.
+    
+#########################################################################
+# ENSEMBL GENES TRACKS (in progress, 2006-12-13, hartera)
+# Obtained from BioMart at Ensembl (The Wellcome Trust Sanger Institute)
+    ssh kkstore04
+    mkdir -p /cluster/data/danRer4/bed/ensembl41
+    cd /cluster/data/danRer4/bed/ensembl41
+
+    # Get the Ensembl gene data from
+    # http://www.ensembl.org/Multi/martview
+    # Follow this sequence through the pages: (NOTE: this interface has changed
+    # a little since danRer2). Ensembl version is 41 (Oct 2006).
+    # Page 1) Select the Ensembl dataset (v41 here) and the 
+    # Danio_rerio choice (ZFISH6 here). Hit next. 28506 entries total.
+    # Page 2) Then hit next. 
+    # Page 3) Choose the "Structures" Attribute Page from the pulldown menu
+    # at the top. Make sure that under the GENE section, the Ensembl 
+    # Attributes checked include the Ensembl Gene ID and Ensembl 
+    # Transcript ID. Choose GTF as the output. Choose gzip compression.  
+    # Hit export. Save as ensemblGene41.gff.gz
+
+    # then on the same last page, switch to the Features Attribute Page
+    # select Ensembl Transcript ID and Biotype under the GENE section.
+    # Select "Text, tab separated" as the output format and gzip 
+    # compression. Biotype gives information to separate the genes into
+    # protein-coding and RNA genes and pseudogenes. 
+    # Save as ensemblGene41Biotype.tsv.gz
+
+    # The Ensembl gene predictions are mapped to chromosomes except for 
+    # chrNA and chrUn. Use lift files for scaffolds to these chroms.
+    # get chrUn and chrNA Ensembl records.
+ 
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/ensembl41
+    # unzip files
+    gunzip *.gz
+    
+    # need to lift up the NA and Un scaffolds to chroms
+    liftUp -type=.gtf ensemblGene41.lifted \
+     /cluster/data/danRer4/jkStuff/liftAll.lft carry ensemblGene41.gff
+    # Got 6247 lifts in /cluster/data/danRer4/jkStuff/liftAll.lft
+    # Lifting ensemblGene41.gff
+
+    wc -l ensemblGene41*
+    # 807869 ensemblGene41.gff
+    # 807869 ensemblGene41.lifted
+    # 39624 ensemblGene41Biotype.tsv
+    
+    # check there are no scaffolds left in lifted file:
+    grep Zv6_NA ensemblGene41.lifted
+    grep Zv6_scaffold ensemblGene41.lifted
+    # there are none so ok.
+    # add chr at beginning of each line. NA and Un already have "chr" 
+    # prefix so then remove the extra one.
+    sed -e "s/^/chr/" ensemblGene41.lifted | sed -e "s/chrchr/chr/" \
+        > ensGene41.gff
+    # check file sizes -ok and some of the lifted co-ordinates
+    # Also remove the suffix that denotes the transcript version number. 
+    # This is not in the ensGtp or ensPep tables.
+    perl -pi.bak -e 's/\.[0-9]+//'g ensGene41.gff
+
+   # Next split up the gff into a protein-coding gene set and a RNA gene and
+   # pseudogene set and load into different tracks.
+ 
+   # get transcript IDs only for protein coding transcripts
+   grep "protein_coding" ensemblGene41Biotype.tsv | awk '{print $1}' \
+        > ensGene41ProteinCoding.ids
+   # skip header line and grab everything else from the file
+   tail +2 ensemblGene41Biotype.tsv | grep -v "protein_coding" \
+        | awk '{print $1}' > ensGene41NonCoding.ids
+   wc -l ensGene41*ids
+   # 3558 ensGene41NonCoding.ids
+   # 36065 ensGene41ProteinCoding.ids
+   # 39623 total
+   wc -l ensemblGene41Biotype.tsv
+   # 39624 ensemblGene41Biotype.tsv
+
+   # then get only the protein-coding trancsripts from the GFF file
+   # write a script to do this as grep is slow
+cat << 'EOF' > getIds.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($in, $file, %ids);
+$in = $ARGV[0]; # list of ids
+$file = $ARGV[1]; # GFF file or other data file
+
+open(IN, $in) || die "Can not open $in :$!\n"; 
+open (FILE, $file) || die "Can not open $file :$!\n"; 
+open (FOUND, ">found.log") || "Can not create found.log: $!\n";
+
+while (<IN>) {
+   chomp;
+   my $l = $_;
+   $ids{$l} = 1;
+}
+close(IN);
+
+# read GFF file or other data file and check whether transcript ID is in 
+# the hash before printing out that line.
+while  (<FILE>){
+   my ($line, $transId);
+
+   $line = $_;
+   $transId = "";
+
+   if ($line =~ /(ENSDART[0-9]+)/){
+      $transId = $1;
+   }
+   if (exists($ids{$transId})){
+      print $line;
+      print FOUND "$transId\n";
+   }
+}
+close(FILE);
+'EOF'
+   chmod +x getIds.pl
+   perl getIds.pl ensGene41ProteinCoding.ids ensGene41.gff \
+        > ensGene41ProteinCoding.gff
+   # uniq found.log and check against input ids
+   sort found.log | uniq > foundProtein.uniq
+   sort ensGene41ProteinCoding.ids > ens41ProteinIds.sort
+   comm -13 foundProtein.uniq ens41ProteinIds.sort
+   
+   perl getIds.pl ensGene41NonCoding.ids ensGene41.gff \
+        > ensGene41NonCoding.gff
+   sort found.log | uniq > foundNonCoding.uniq
+   sort ensGene41NonCoding.ids > ens41NonCodingIds.sort
+   comm -13 foundNonCoding.uniq ens41NonCodingIds.sort
+   # All ids were found in the gff file
+   rm *.sort *.uniq *.bak found.log
+   wc -l ensGene41*.gff
+   # 807869 ensGene41.gff
+   #   3693 ensGene41NonCoding.gff
+   # 804176 ensGene41ProteinCoding.gff
+
+   # load into database
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/ensembl41
+   hgsql -e 'drop table ensGene;' danRer4
+   hgsql -e 'drop table ensGeneNonCoding;' danRer4
+   /cluster/bin/x86_64/ldHgGene danRer4 ensGene ensGene41ProteinCoding.gff
+   # Read 36065 transcripts in 804176 lines in 1 files
+   # 36065 groups 27 seqs 1 sources 4 feature types
+   # 36065 gene predictions
+
+   /cluster/bin/x86_64/ldHgGene danRer4 ensGeneNonCoding ensGene41NonCoding.gff
+   # Read 3558 transcripts in 3693 lines in 1 files
+   # 3558 groups 27 seqs 1 sources 1 feature types
+   # 3558 gene predictions
+
+   # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and
+   # hgKnownToSuper.  Use BioMart to create it as above, except:
+   # Page 3) Choose the "Features" box. In "Ensembl Attributes", check
+   # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.
+   # Choose Text, tab-separated as the output format and gzip compression.  
+   # Result name: ensGtp.
+   ssh kkstore04 
+   cd /cluster/data/danRer4/bed/ensembl41
+   gunzip ensGtp.tsv.gz
+   # separate the IDs for protein-coding genes and the rest (RNA genes and
+   # pseudogenes).
+   
+   perl getIds.pl ensGene41ProteinCoding.ids ensGtp.tsv \
+        > ensGtpProteinCoding.txt
+   # uniq found.log and check against input ids
+   sort found.log | uniq > foundProtein.uniq
+   sort ensGene41ProteinCoding.ids > ens41ProteinIds.sort
+   comm -13 foundProtein.uniq ens41ProteinIds.sort
+   
+
+   perl getIds.pl ensGene41NonCoding.ids ensGtp.tsv \
+        > ensGtpNonCoding.txt
+   # uniq found.log and check against input ids
+   sort found.log | uniq > foundNonCoding.uniq
+   sort ensGene41NonCoding.ids > ens41NonCodingIds.sort
+   comm -13 foundNonCoding.uniq ens41NonCodingIds.sort
+   # All ids were found in the gff file
+   rm *.sort *.uniq *.bak found.log
+   wc -l ensGtp*.txt
+   # 3558 ensGtpNonCoding.txt
+   # 36065 ensGtpProteinCoding.txt
+   # The non-coding set have only gene ids and transcript ids and
+   # no protein ids.
+   
+
+   # Load database
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/ensembl41/
+   # load ensGtp for protein-coding genes
+   hgLoadSqlTab danRer4 ensGtp ~/kent/src/hg/lib/ensGtp.sql \
+            ensGtpProteinCoding.txt
+   
+
+   # Get the ensembl peptide sequences from
+   # http://www.ensembl.org/Multi/martview
+   # Choose Danio Rerio as the organism
+   # Follow this sequence through the pages:
+   # Page 1) Choose the Ensembl Genes choice. Hit next.
+   # Page 2) Then hit next.
+   # Page 3) Choose "Sequences" from the Attributes pulldown menu at the top.
+   # Page 4) Choose Peptide as type of sequence to export and select 
+   # Ensembl Gene ID from Gene Attributes and 
+   # Ensembl Transcript ID and Ensembl Peptide ID from 
+   # Transcript Attributes as the output,
+   # choose text/fasta and gzip compression,
+   # name the file ensemblPep and then hit export.
+   gunzip ensemblPep.fasta.gz
+   hgPepPred danRer4 ensembl ensemblPep.fasta
+   # get "unexpected end of file" error. Notified Ensembl (2006-12-15).
+   # Ensembl helpdesk say that the files sometimes get terminated early
+   # for large downloads so try using this link to BioMart instead:
+   # http://www.biomart.org/biomart/martview
+   # Repeat above using this link. This has Ensembl42 though so e-mailed 
+   # Ensembl to ask if they are releasing Ensembl42 soon (2006-12-18)
+
+
 #########################################################################
 # RADIATION HYBRID (RH) MAP TRACK (in progress, 2006-10-12, hartera)
 # Data from Yi Zhou at Boston Children's Hospital:
