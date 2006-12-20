@@ -1259,7 +1259,7 @@ for (i = 0, expLfs = tg->items; (i < nExps) && (expLfs != NULL); i++, expLfs = e
 	if (x2 > insideWidth-1) 
 	    x2 = insideWidth-1;
 	w = x2 - x1;
-	for (j = 0; j <= w; j++)
+	for (j = 0; j < w; j++)
 	    {
 	    if ((pixCountArray[i][x1+j] == 0) || 
 		(pixScoreArray[i][x1+j] == MICROARRAY_MISSING_DATA) ||
