@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.5 2006/12/19 20:19:15 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.6 2006/12/20 18:06:27 kent Exp $";
 
 
 static char *allColors[] = {
@@ -459,7 +459,9 @@ cgiMakeButton(hggConfigure, "Configure");
 hPrintf(" ");
 cgiMakeOptionalButton(hggCorrelate, "Correlate", realCount < 2);
 hPrintf(" significance threshold:");
-cartMakeDoubleVar(cart, hggThreshold, defaultThreshold,  3);
+hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
+	hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
+hPrintf(" onchange=\"changeOther();\" onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
 hPrintf(" ");
 cgiMakeOptionalButton(hggBrowse, "Browse Regions", realCount == 0);
 hPrintf(" ");
