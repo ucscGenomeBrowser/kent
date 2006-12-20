@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.6 2006/12/20 18:06:27 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.7 2006/12/20 18:26:31 kent Exp $";
 
 
 static char *allColors[] = {
@@ -375,7 +375,11 @@ chopSuffixAt(js, '"');
 hPrintf("<SCRIPT>\n");
 hPrintf("function changeOther()\n");
 hPrintf("{\n");
+hPrintf("if (!submitted)\n");
+hPrintf("{\n");
+hPrintf("submitted=true;\n");
 hPrintf("%s\n", js);
+hPrintf("}\n");
 hPrintf("}\n");
 hPrintf("</SCRIPT>\n");
 }
