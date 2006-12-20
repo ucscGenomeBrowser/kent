@@ -201,7 +201,7 @@ TMPDIR=/scratch/tmp
 # GENBANK AUTO UPDATE (DONE Nov 2006 heather)
     # Don't need a liftAll.lft file
     # Guidance from Mark:
-    # Genbank does its own partitioning.  The only think the lift file is used
+    # Genbank does its own partitioning.  The only thing the lift file is used
     # for is locating gaps.  It optimizes by splitting on largish gaps.      
     # The current threshold is 3000000.  If you don't any gaps over   
     # this threshold, you don't need a lift file.  With 200K scaffolds,
