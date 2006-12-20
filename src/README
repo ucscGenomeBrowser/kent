@@ -20,9 +20,10 @@ GENERAL INSTALL INSTRUCTIONS
 1. Get the code.  The best way to do this now for
    Unix users is via CVS following the instructions at:
      http://genome.ucsc.edu/admin/cvs.html
-   For Windows users download the latest jksrcXXX.zip
-   from www.soe.ucsc.edu/~kent/src and put it in a
-   directory named kent/src, and unzip it.
+   Or, fetch the entire source in a single file:
+     http://hgdownload.cse.ucsc.edu/admin/jksrc.zip
+   Note futher documentation for the build process in your
+   unpacked source tree in src/product/README.*
 2. Check that the environment variable MACHTYPE
    exists on your system.  It should on Unix.  
    (And making this on non-Unix systems is beyond
@@ -311,4 +312,4 @@ return twoBit;
 }
 
 ====================================================================
-This file last updated: $Date: 2006/07/05 18:48:40 $
+This file last updated: $Date: 2006/12/20 22:12:40 $
