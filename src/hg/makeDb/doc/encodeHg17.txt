@@ -857,6 +857,7 @@ csh load.csh >&! load.log
 ##########################################################################
 # UCSD/Ludwig Institute Nimblegen chip/chip (2005-10-07 KATE)
 #   New data submission
+# New data 2006-12-04 by Keith Ching <keching@ucsd.edu)
 
     ssh hgwdev
     cd /cluster/data/encode/UCSD/nimblegen
@@ -877,6 +878,15 @@ cat > load.csh << 'EOF'
     csh load.csh >&! load.log
     # Created hg17 composite track with all 16 datasets
     # The hg16 composite only has the first 4 submitted
+
+# New data 2006-12-04 by Keith Ching <keching@ucsd.edu)
+
+    ssh kkstore03
+    cd /cluster/data/encode/UCSD
+    mkdir 2006-12-04/lab
+    cd 2006-12-04/lab
+    # files: encode.{nimblegen,pcr}.wig.gz, encode_{nimblegen,pcr}_desc.html
+   
 
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
@@ -1321,7 +1331,7 @@ cat > load.csh << 'EOF'
 
 # Additional data submitted 8/10/06: Raw & Pval for HelaS3 and GM cells
 # Submitted new PVAL (3 cell lines) data on 8/11
-# Additional data submission 9/22/06  -- HepG2 cell line
+# Additional data submission from Greg (at Duke now) 9/22/06  -- HepG2 cell line
 
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
@@ -1408,7 +1418,7 @@ cat > loadPval.csh << 'EOF'
         set lcell = `echo $cell | sed 's/\(.*\)/\L\1/'`
         awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t%s_%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR-1, $5 * 35 + 100, $5)}' $cell.pval.hg17.bed > $cell.pval.bed5+
         set table = encodeNhgriDnaseHsChipPval$cell
-        sed "s/bed5FloatScore/$table/" ~/kent/src/hg/lib/bed5FloatScore.sql > \
+        sed "s/bed5Pval/$table/" ~/kent/src/hg/lib/bed5Pval.sql > \
                 $table.sql
         hgsql hg17 -e "DROP TABLE IF EXISTS $table"
         hgsql hg17 < $table.sql
@@ -1445,7 +1455,7 @@ cat > loadPval.csh << 'EOF'
     set lcell = hepg2
     awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t%s_%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR, $5 * 35 + 100, $5)}' $cell.pval.bed > $cell.pval.bed5+
     set table = encodeNhgriDnaseHsChipPval$cell
-    sed "s/bed5FloatScore/$table/" ~/kent/src/hg/lib/bed5FloatScore.sql > \
+    sed "s/bed5Pval/$table/" ~/kent/src/hg/lib/bed5Pval.sql > \
             $table.sql
     hgsql hg17 -e "DROP TABLE IF EXISTS $table"
     hgsql hg17 < $table.sql
@@ -1624,6 +1634,24 @@ cat > loadSig.csh << 'EOF'
 # as the name field in a BED5.  Score range: .602-3.23
 #  Scale *330 produces integer range 200-1000.
 # NOTE: >50% of sites are < 1 data value, so use 200 as low score
+0.500000 ************************************************************ 628
+1.000000 ************** 148
+1.500000 ** 25
+2.000000 ***************** 173
+2.500000 ** 24
+3.000000  1
+
+# signal data dist:
+0.000000 ************************************************************ 1782529
+0.500000 *** 93246
+1.000000 * 24171
+1.500000  11657
+2.000000  1764
+2.500000  185
+3.000000  13
+
+# New data submitted 2006-11-29 by guoneng.zhong@yale.edu
+# 6 datasets -- Pol2 (2 antibodies) and H3K4ac in HeLa and GM006990
 
     cd /cluster/data/encode/yale/chip/2005-10-26
     mkdir -p wig wib
@@ -1682,6 +1710,103 @@ cat > loadSig.csh << 'EOF'
     foreach d (lab/{jun,fos,taf,baf155,baf170})
         antiword $d/*.doc > ${d:t}.txt
     end
+
+    # New data submitted 2006-11-29 by guoneng.zhong@yale.edu
+    # 6 datasets -- Pol2 (2 antibodies) and H3K4ac in HeLa and GM006990
+    cd /cluster/data/encode/yale/chip
+    mdkir 2006-11-29/lab
+    cd 2006-11-29/lab
+    tar xfz yale_batch_1.tgz
+
+    # files are in 6 dirs, 1 per experiment
+    # info.txt in experiment dir indicates antibody/cell line
+    # files to load are: miyoung_?/*-*-*-hits.bed, *signal.wig, *pvalue.wig
+    # pvalue and wig appear same format as previous, with overlap,
+    # so use same processing as previous datasets (above)
+    # Score range in hits files: 0.255 - 3.788
+    # The low score is lower than previous data sets (.6), so similar
+    # scaling for score (*330) will produce a near-invisible 84 score
+    # Check with submitter. Sites data distribution is:
+    0.000000 ******************************* 1399
+    0.500000 ************************************************************ 2731
+    1.000000 ********************************* 1494
+    1.500000 ****** 288
+    2.000000 * 62
+    2.500000  18
+    3.000000  6
+    3.500000  2
+
+    # signal data dist
+    0.000000 ************************************************************ 2162644
+    0.500000 *** 111537
+    1.000000 * 24294
+    1.500000  3919
+    2.000000  786
+    2.500000  353
+    3.000000  26
+    3.500000  51
+
+    ln -s lab/miyoung_1 pol2n_hela
+    ln -s lab/miyoung_2 pol2n_gm06990
+    ln -s lab/miyoung_3 pol2_hela
+    ln -s lab/miyoung_4 pol2_gm06990
+    ln -s lab/miyoung_7 h4kac4_hela
+    ln -s lab/miyoung_8 h4kac4_gm06990
+cat > loadSig.csh << 'EOF'
+#!/bin/csh -ef
+  set pfx = encodeYaleChip
+  foreach d (pol2n_hela pol2n_gm06990 pol2_hela pol2_gm06990 h4kac4_hela h4kac4_gm06990)
+        set factor = `echo $d | sed 's/_.*//'`
+        set cell = `echo $d | sed 's/.*_//'`
+        set Factor = `echo $factor | perl -wpe 's/(.*)/\u$1/'`
+        set Cell = `echo $cell | perl -wpe 's/(.*)/\u$1/'`
+        echo $Factor $Cell
+
+        # load pval 
+        set table = ${pfx}Pval$Factor$Cell
+        echo $table
+        set f = $d/*-*-*-pvalue.wig
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        hgLoadBed -strict -bedGraph=4 hg17 $table $table.trim
+
+        # load signal 
+        set table = ${pfx}Signal$Factor$Cell
+        echo $table
+        set f = $d/*-*-*-signal.wig
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        hgLoadBed -strict -bedGraph=4 hg17 $table $table.trim 
+  end
+'EOF'
+    loadSig.csh >&! loadSig.log &
+    egrep 'trim|Loaded' *.log
+        Reading encodeYaleChipPvalPol2nHela.trim
+        Loaded 382721 elements of size 4
+        Reading encodeYaleChipSignalPol2nHela.trim
+        Loaded 382721 elements of size 4
+        Reading encodeYaleChipPvalPol2nGm06990.trim
+        Loaded 385149 elements of size 4
+        Reading encodeYaleChipSignalPol2nGm06990.trim
+        Loaded 385149 elements of size 4
+        Reading encodeYaleChipPvalPol2Hela.trim
+        Loaded 382721 elements of size 4
+        Reading encodeYaleChipSignalPol2Hela.trim
+        Loaded 382721 elements of size 4
+        Reading encodeYaleChipPvalPol2Gm06990.trim
+        Loaded 385149 elements of size 4
+        Reading encodeYaleChipSignalPol2Gm06990.trim
+        Loaded 385149 elements of size 4
+        Reading encodeYaleChipPvalH4kac4Hela.trim
+        Loaded 382721 elements of size 4
+        Reading encodeYaleChipSignalH4kac4Hela.trim
+        Loaded 382721 elements of size 4
+        Reading encodeYaleChipPvalH4kac4Gm06990.trim
+        Loaded 385149 elements of size 4
+        Reading encodeYaleChipSignalH4kac4Gm06990.trim
+        Loaded 385149 elements of size 4
+    # Note size difference between Gm06990 and Hela -- inform submitter
+
 
 ##########################################################################
 # UTexas STAGE (2005-10-31, 11-17 kate)
@@ -2818,7 +2943,6 @@ EOF
 # Add trackDb entry to trackDb.encode.ra for hg17. see encodeYaleAffyRNATars
 # and use the same url and urlLabel and dataVersion is Dec 2005 here. 
 # that is the contributors data freeze, not an ENCODE one.
-=======
 
 
 ################################################################
