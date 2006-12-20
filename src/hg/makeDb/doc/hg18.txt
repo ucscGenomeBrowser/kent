@@ -10916,6 +10916,11 @@ hgsql hgFixed
 # Parse flat file received from Obi Griffith, into 3 tables, load.
 # Has other species but only Human has enough entries for now.
 
+# Reloaded attributes and links Dec 2006
+# Moved these from hgFixed to hg18
+# Addition of other species showed that keeping these in hgFixed 
+# caused more complications than benefits.
+
 ##########################################################################
 # LIFT ACEMBLY FROM HG17 TO HG18 (DONE, Fan, 9/28/06)
 

@@ -5300,3 +5300,10 @@ grep "^chr" oreganno.dm2.txt | sort -k1,1 -k2,2n > oreganno.bed
 hgLoadBed dm2 oreganno oreganno.bed -noSort -oldTable -tab
 rm oreganno.bed
 
+#Reload attributes and links Dec 2006
+#Moved from hgFixed to dm2
+#cut and paste create table statements
+cd /cluster/data/dm2/bed/oreganno/
+hgsql dm2
+    load data local infile "oregannoAttr.dm2.txt" into table oregannoAttr;
+    load data local infile "oregannoLink.dm2.txt" into table oregannoLink;
