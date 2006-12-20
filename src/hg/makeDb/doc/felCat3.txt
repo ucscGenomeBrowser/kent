@@ -203,7 +203,7 @@ TMPDIR=/scratch/tmp
     # Guidance from Mark:
     # Genbank does its own partitioning.  The only thing the lift file is used
     # for is locating gaps.  It optimizes by splitting on largish gaps.      
-    # The current threshold is 3000000.  If you don't any gaps over   
+    # The current threshold is 3000000.  If you don't have any gaps over   
     # this threshold, you don't need a lift file.  With 200K scaffolds,
     # you can probably just skip this. 
 
