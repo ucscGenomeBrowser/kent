@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgGoAssociation.c,v 1.3 2006/06/26 15:00:56 angie Exp $";
+static char const rcsid[] = "$Id: hgGoAssociation.c,v 1.4 2006/12/20 16:32:18 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -85,7 +85,20 @@ char *row[15];
 int allCount = 0;
 int uniqCount = 0;
 int taxonCount = 0;
+char *line;
+int lineSize;
+
 FILE *f = hgCreateTabFile(tabDir, table);
+
+/* skip initial comment lines */
+lineFileNext(lf, &line, &lineSize);
+while (*line == '!')
+	{
+	lineFileNext(lf, &line, &lineSize);
+	}
+	
+/* back off 1 line, to get the valid data line */	
+lineFileReuse(lf);
 
 while (lineFileNextRowTab(lf, row, 15))
     {
