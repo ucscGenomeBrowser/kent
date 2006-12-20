@@ -115,7 +115,6 @@ EOF
 # *** Edit each README.txt to resolve any notes marked with "***":
 #     /cluster/data/felCat3/goldenPath/database/README.txt
 #     /cluster/data/felCat3/goldenPath/bigZips/README.txt
-#     /cluster/data/felCat3/goldenPath/chromosomes/README.txt
 
 #########################################################################
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE Oct 20, 2006 heather)
