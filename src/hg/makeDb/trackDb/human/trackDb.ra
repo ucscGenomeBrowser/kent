@@ -1365,7 +1365,7 @@ group regulation
 priority 79.1
 visibility hide
 type expRatio
-expScale 3.0
+expScale 4.0
 expStep 0.5
 expProbeTable affyHumanExonProbeAnnot
 expTable affyHumanExonExps
@@ -1380,7 +1380,6 @@ visibility hide
 url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=$$
 useScore 1
 type bed 6 .
-origAssembly hg16
 
 track xTBAmaf
 shortLabel xTBAmaf
