@@ -2312,6 +2312,16 @@ spectrum on
 type chain otoGar1
 otherDb otoGar1
 
+track netOtoGar1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 274.2
+visibility hide
+spectrum on
+type netAlign otoGar1 chainOtoGar1
+otherDb otoGar1
+
 track chainCanHg12
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
