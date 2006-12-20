@@ -579,20 +579,6 @@ csh doGene.hg17.csh >&! doGene.hg17.log
     genePredCheck -db=hg17 encodeEgaspUpdFgenesh
         # 820 gene predictions
     
-##########################################################################
-# UCSD/LI Nimblegen Hela
-# Data submitted on hg17 for June freeze
-
-    cd /cluster/data/encode/UCSD/nimblegen/2005-06-01
-    foreach f (lab/Nim*/*.wig)
-        set t =  `echo $f:t:r | sed -e \
-         's/rnap/encodeUcsdNgHeLaRnap/; s/tmh3k4/encodeUcsdNgHeLaH3K4me3/;'`
-        echo $t
-        grep "^chr" $f | hgLoadBed -onServer -bedGraph=4 hg17 $t stdin
-        checkTableCoords hg17 $t
-    end
-        # Produces 4 tables, encodeUcsdNgHeLa{Rnap,H3K4me3}_p{0,30}
-        # Loaded 385149 elements of size 4 
 
 ##########################################################################
 # STANFORD PROMOTERS
@@ -855,6 +841,20 @@ csh load.csh >&! load.log
     rm *.bed
 
 ##########################################################################
+# UCSD/LI Nimblegen Hela
+# Data submitted on hg17 for June freeze
+
+    cd /cluster/data/encode/UCSD/nimblegen/2005-06-01
+    foreach f (lab/Nim*/*.wig)
+        set t =  `echo $f:t:r | sed -e \
+         's/rnap/encodeUcsdNgHeLaRnap/; s/tmh3k4/encodeUcsdNgHeLaH3K4me3/;'`
+        echo $t
+        grep "^chr" $f | hgLoadBed -onServer -bedGraph=4 hg17 $t stdin
+        checkTableCoords hg17 $t
+    end
+        # Produces 4 tables, encodeUcsdNgHeLa{Rnap,H3K4me3}_p{0,30}
+        # Loaded 385149 elements of size 4 
+
 # UCSD/Ludwig Institute Nimblegen chip/chip (2005-10-07 KATE)
 #   New data submission
 # New data 2006-12-04 by Keith Ching <keching@ucsd.edu)
@@ -879,14 +879,19 @@ cat > load.csh << 'EOF'
     # Created hg17 composite track with all 16 datasets
     # The hg16 composite only has the first 4 submitted
 
-# New data 2006-12-04 by Keith Ching <keching@ucsd.edu)
+##########################################################################
+# UCSD/LI Chip/Chip on Nimblegen and PCR platforms (2006-12-04)
+# from Keith Ching <keching@ucsd.edu)
 
     ssh kkstore03
     cd /cluster/data/encode/UCSD
     mkdir 2006-12-04/lab
     cd 2006-12-04/lab
     # files: encode.{nimblegen,pcr}.wig.gz, encode_{nimblegen,pcr}_desc.html
-   
+    # Nimblegen data: 6 histones, Pol2, TAF1, p300 in HeLa
+    # PCR data: CTCF, 2 histones, TAF1 in HeLa, U937, GM, and IMR90
+    # candidates for merging into existing tracks: LI Ng gIF, LI Chip Various
+    # (asking submitters 2006-12-20 kate)
 
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
@@ -1634,6 +1639,7 @@ cat > loadSig.csh << 'EOF'
 # as the name field in a BED5.  Score range: .602-3.23
 #  Scale *330 produces integer range 200-1000.
 # NOTE: >50% of sites are < 1 data value, so use 200 as low score
+awk '{print $4}' *_?/*-hits.bed | sort -n | textHistogram -real -binSize=.5 stdin
 0.500000 ************************************************************ 628
 1.000000 ************** 148
 1.500000 ** 25
