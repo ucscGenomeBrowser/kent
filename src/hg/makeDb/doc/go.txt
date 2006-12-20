@@ -34,3 +34,37 @@
 # (June 16, 2005)
 # hgGoAssociation:
 # Passed 5515470 of 6413534 of 6413534, 86.00% 
+##########################################################################
+# UPDATE GO DATABASE (DONE, 2006-12-20, Fan)
+
+# UPDATE GO DATABASE
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /cluster/store1/geneOntology/20061219
+cd /cluster/store1/geneOntology/20061219
+
+wget --timestamping
+http://www.godatabase.org/dev/database/archive/latest/go_200612-assocdb-data.gz
+
+hgsql mysql <<end
+create database go061219;
+end
+zcat go_*data.gz | sed -e 's/ENGINE=MyISAM DEFAULT
+CHARSET=latin1/TYPE=MyISAM/g' >j.tmp
+hgsql go061219 <j.tmp
+rm j.tmp
+
+wget --timestamping
+ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_uniprot.gz
+
+# The format of gene_association.goa_uniprot.gz changed, there is comment
+# lines at the head now.
+# Updated hgGoAssociation.c to skip those initial comment lines.
+
+zcat gene_association.goa_uniprot.gz\
+|/cluster/home/fanhsu/bin/x86_64/hgGoAssociation go061219 goaPart stdin
+# Passed 9049274 of 10512956 of 10512956, 86.08%
+
+# Ask sys-admin to switch the database pointer go to point to go061219.
+##########################################################################
+
