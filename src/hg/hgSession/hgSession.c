@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.16 2006/12/15 20:15:49 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.17 2006/12/21 18:47:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -465,6 +465,16 @@ cartWebEnd();
 }
 
 
+void cleanHgSessionFromCart(struct cart *cart)
+/* Remove hgSession action variables that should not stay in the cart. */
+{
+cartRemovePrefix(cart, hgsUnsharePrefix);
+cartRemovePrefix(cart, hgsSharePrefix);
+cartRemovePrefix(cart, hgsLoadPrefix);
+cartRemovePrefix(cart, hgsDeletePrefix);
+cartRemovePrefix(cart, hgsDo);
+}
+
 char *doNewSession()
 /* Save current settings in a new named session.  
  * Return a message confirming what we did. */
@@ -512,6 +522,7 @@ if (sqlTableExists(conn, namedSessionTable))
 		       "firstUse, lastUse, useCount) VALUES (");
     dyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
     dyStringAppend(dy, "'");
+    cleanHgSessionFromCart(cart);
     cartEncodeState(cart, dy);
     dyStringAppend(dy, "', ");
     dyStringPrintf(dy, "%d, ", (shareSession ? 1 : 0));
@@ -644,6 +655,7 @@ char *fileName = cartString(cart, hgsSaveLocalFileName);
 char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType);
 
+cleanHgSessionFromCart(cart);
 cartDump(cart);
 
 textOutClose(&compressPipe);
@@ -724,13 +736,8 @@ else
     doMainPage(message);
     }
 
-/* Remove cart variables that should not stay there (actions that have been 
- * performed),  and save the cart state. */
-cartRemovePrefix(cart, hgsUnsharePrefix);
-cartRemovePrefix(cart, hgsSharePrefix);
-cartRemovePrefix(cart, hgsLoadPrefix);
-cartRemovePrefix(cart, hgsDeletePrefix);
-cartRemovePrefix(cart, hgsDo);
+cleanHgSessionFromCart(cart);
+/* Save the cart state: */
 cartCheckout(&cart);
 }
 
