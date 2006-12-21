@@ -10,16 +10,15 @@
 ################################
 
 set db=""
-set host1=""
-set host2="-h hgwbeta"
 set mach1="hgwbeta"
 set mach2="hgw1"
 set times=0
 
 if ( $#argv < 1 || $#argv > 4 ) then
   echo
-  echo "  checks an entire db between two nodes in realTime"
-  echo "  ignores genbank tables"
+  echo "  checks on table match for an entire db between two nodes in realTime."
+  echo "  optionally reports if update times do not match."
+  echo "  ignores genbank tables."
   echo
   echo "    usage:  database [machine1 machine2] [times]"
   echo "              defaults to beta and hgw1"
@@ -54,7 +53,7 @@ if ( $#argv == 3 || $#argv == 4 ) then
 endif
 
 checkMachineName.csh $mach1 $mach2
-if ($status) then
+if ( $status ) then
   exit 1
 endif
 
@@ -73,18 +72,40 @@ endif
 if ( 1 == $times) then
   # get the table and update times, stripping out genbank
   ssh -x qateam@$mach1 mysql $db -A -N \
-    -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' > $mach1.status
+    -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' >& $mach1.status
+    if ( $status ) then
+      rm -f $mach1.status
+      echo "\n  $db does not exist on $mach1\n"
+      exit 1
+    endif
   ssh -x qateam@$mach2 mysql $db -A -N \
-    -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' > $mach2.status
+    -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' >& $mach2.status
+    if ( $status ) then
+      rm -f $mach1.status
+      rm -f $mach2.status
+      echo "\n  $db does not exist on $mach2\n"
+      exit 1
+    endif
   cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
     > genbank.local
   cat $mach1.status | egrep -v -f genbank.local > $mach1.out
   cat $mach2.status | egrep -v -f genbank.local > $mach2.out
 else
   ssh -x qateam@$mach1 mysql $db -A -N \
-    -e '"'SHOW TABLES'"' > $mach1.out
+    -e '"'SHOW TABLES'"' >& $mach1.out
+  if ( $status ) then
+    rm -f $mach1.out
+    echo "\n  $db does not exist on $mach1\n"
+    exit 1
+  endif
   ssh -x qateam@$mach2 mysql $db -A -N \
-    -e '"'SHOW TABLES'"' > $mach2.out
+    -e '"'SHOW TABLES'"' >& $mach2.out
+  if ( $status ) then
+    rm -f $mach1.out
+    rm -f $mach2.out
+    echo "\n  $db does not exist on $mach2\n"
+    exit 1
+  endif
 endif
 
 echo
