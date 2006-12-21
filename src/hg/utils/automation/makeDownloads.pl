@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.3 2006/12/13 19:07:35 angie Exp $
+# $Id: makeDownloads.pl,v 1.4 2006/12/21 22:21:41 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -716,6 +716,47 @@ _EOF_
 } # makeChromosomesReadme
 
 
+sub makeLiftOverReadme {
+  # Dump out a README.txt for the liftOver/ dir, where doBlastzChainNet.pl
+  # runs will deposit the .over.chain.gz files.
+  my ($runDir) = @_;
+  my $fh = &HgAutomate::mustOpen(">$runDir/README.liftOver.txt");
+  print $fh <<_EOF_
+This directory contains the data files required as input to the
+liftOver utility. This tool -- which requires a Linux platform --
+allows the mass conversion of coordinates from one assembly to
+another. The executable file for the utility can be downloaded from
+http://hgwdev.cse.ucsc.edu/~kent/exe/linux/liftOver.gz.
+
+The file names reflect the assembly conversion data contained within
+in the format <db1>To<Db2>.over.chain.gz. For example, a file named
+hg15ToHg16.over.chain.gz file contains the liftOver data needed to
+convert hg15 (Human Build 33) coordinates to hg16 (Human Build 34).
+If no file is available for the assembly in which you're interested,
+please send a request to the genome mailing list
+(genome\@soe.ucsc.edu) and we will attempt to provide you with one.
+
+To download a large file or multiple files from this directory,
+we recommend that you use ftp rather than downloading the files via our
+website. To do so, ftp to hgdownload.cse.ucsc.edu (user: anonymous),
+then cd to goldenPath/$db/liftOver.  To download multiple files,
+use the "mget" command:
+
+    mget <filename1> <filename2> ...
+    - or -
+    mget -a (to download all the files in the directory)
+
+-------------------------------------------------------
+Please refer to the credits page
+(http://genome.ucsc.edu/goldenPath/credits.html) for guidelines and
+restrictions regarding data use for these assemblies.
+
+_EOF_
+  ;
+  close($fh);
+} # makeLiftOverReadme
+
+
 sub doCompress {
   # step: compress [workhorse]
   my $runDir = "$topDir/goldenPath";
@@ -728,8 +769,8 @@ sub doCompress {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-rm -rf bigZips database
-mkdir bigZips database
+rm -rf bigZips database liftOver
+mkdir bigZips database liftOver
 
 _EOF_
   );
@@ -740,9 +781,9 @@ _EOF_
   }
   $bossScript->add(<<_EOF_
 # Add md5sum.txt and README.txt to each dir:
-foreach d (bigZips $chromGz database)
+foreach d (bigZips $chromGz database liftOver)
   cd $runDir/\$d
-  if (\$d != "database") then
+  if (\$d != "database" && \$d != "liftOver") then
     md5sum *.gz > md5sum.txt
   endif
   mv $runDir/README.\$d.txt README.txt
@@ -755,6 +796,7 @@ _EOF_
   &makeDatabaseReadme($runDir);
   &makeBigZipsReadme($runDir);
   &makeChromosomesReadme($runDir) if ($chromBased);
+  &makeLiftOverReadme($runDir);
 
   $bossScript->execute();
 } # doCompress
@@ -773,7 +815,7 @@ actual compressed files.";
   my $gp = "$HgAutomate::goldenPath/$db";
   $bossScript->add(<<_EOF_
 mkdir -p $gp
-foreach d (bigZips $chromGz database)
+foreach d (bigZips $chromGz database liftOver)
   rm -rf $gp/\$d
   mkdir $gp/\$d
   ln -s $runDir/\$d/*.{gz,txt} $gp/\$d/
@@ -862,11 +904,12 @@ _EOF_
 _EOF_
     );
   }
+  # liftOver/README.txt doesn't require any editing.
   &HgAutomate::verbose(1, <<_EOF_
      (The htdocs/goldenPath/$db/*/README.txt "files" are just links to those.)
  *** If you have to make any edits that would always apply to future
      assemblies from the same sequencing center, please edit them into
-     ~/kent/src/utils/$base (or ask Angie for help).
+     ~/kent/src/hg/utils/automation/$base (or ask Angie for help).
 
 _EOF_
   );
