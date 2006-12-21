@@ -9,17 +9,17 @@
 #
 ################################
 
-set host1=""
-set host2="-h hgwbeta"
 set mach1="hgwbeta"
 set mach2="hgw1"
+set databases=""
 set times=""
 
 if ( $#argv < 1 || $#argv > 4 ) then
   echo
-  echo "  checks all dbs between two nodes in realTime"
+  echo "  checks table match for all dbs between two nodes in realTime"
   echo "  ignores genbank tables"
   echo "  uses db list from first machine"
+  echo "  optionally reports if update times do not match."
   echo
   echo "    usage:  go [machine1 machine2] [times]"
   echo "              defaults to beta and hgw1"
