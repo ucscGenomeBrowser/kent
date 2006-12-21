@@ -1377,7 +1377,7 @@ longLabel Affymetrix Human Exon 1.0 Probe Sets
 group regulation
 priority 79.11
 visibility hide
-url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=$$
+url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=1:$$
 useScore 1
 type bed 6 .
 
