@@ -5,7 +5,7 @@ table agpFrag
     uint chromStart;	"start position in chromosome"
     uint chromEnd;	"end position in chromosome"
     int ix;             "ix of this fragment (useless)"
-    char[1] type;       "(P)redraft, (D)raft, (F)inished or (O)ther"
+    char[1] type;       "(W)GS contig, (P)redraft, (D)raft, (F)inished or (O)ther"
     string frag;        "which fragment"
     uint fragStart;     "start position in frag"
     uint fragEnd;       "end position in frag"
