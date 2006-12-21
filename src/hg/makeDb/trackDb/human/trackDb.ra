@@ -1378,6 +1378,7 @@ group regulation
 priority 79.11
 visibility hide
 url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=1:$$
+urlLabel Netaffx Link
 useScore 1
 type bed 6 .
 
