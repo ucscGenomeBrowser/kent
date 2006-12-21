@@ -2565,6 +2565,13 @@ tablesIgnored $tetNig
     gaze
     ecoresHg17
 
+tablesIgnored $felCat
+    gap
+    gold
+    intronEst
+    rmsk
+    microsat
+
 tablesIgnored mm3
     chr%_mm3Hg15L
     ensEst
