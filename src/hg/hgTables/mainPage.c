@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.102 2006/11/29 19:50:08 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.103 2006/12/21 22:52:27 donnak Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -815,10 +815,15 @@ void mainPageAfterOpen(struct sqlConnection *conn)
  * will happen in calling routine. */
 {
 hPrintf("%s", 
-  "Use this program to get the data associated with a track in text "
+  "Use this program to retrieve the data associated with a track in text "
   "format, to calculate intersections between tracks, and to retrieve "
   "DNA sequence covered by a track. See <A HREF=\"#Help\">Using the Table "
-  "Browser</A> for a description of the controls in this form. ");
+  "Browser</A> for a description of the controls in this form. "
+  "For more complex queries, you may want to use our "
+  "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download29\">public "
+  "MySQL server</A>. Refer to the "
+  "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
+  "contributors and usage restrictions associated with these data.");
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=%s>\n",
