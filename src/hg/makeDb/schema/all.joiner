@@ -43,7 +43,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$can
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $rn,$panTro,$galGal,$canFam,$bosTau
+set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig
 
 # Define organism databases for which we build a xenoRefGene track:
 set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat
