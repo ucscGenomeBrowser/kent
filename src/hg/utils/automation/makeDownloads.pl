@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/makeDownloads.pl instead.
+# edit ~/kent/src/hg/utils/automation/makeDownloads.pl instead.
 
-# $Id: makeDownloads.pl,v 1.4 2006/12/21 22:21:41 angie Exp $
+# $Id: makeDownloads.pl,v 1.5 2006/12/21 22:23:43 angie Exp $
 
 use Getopt::Long;
 use warnings;
