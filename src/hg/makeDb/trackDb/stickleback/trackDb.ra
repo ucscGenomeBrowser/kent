@@ -11,7 +11,7 @@ type chain oryLat1
 otherDb oryLat1
 
 track netOryLat1
-shortLabel $o_Organism Chain
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 139.1
