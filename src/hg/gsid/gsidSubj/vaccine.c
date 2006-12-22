@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: vaccine.c,v 1.4 2006/12/21 17:57:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: vaccine.c,v 1.5 2006/12/22 00:31:45 fanhsu Exp $";
 
 static boolean vaccineExists(struct section *section, 
 	struct sqlConnection *conn, char *subjId)
@@ -29,6 +29,7 @@ static void vaccinePrint(struct section *section,
 {
 char *immunStatus;
 char *daysInfectF, *daysInfectL;
+char *injections;
 
 char query[256];
 struct sqlResult *sr;
@@ -37,7 +38,7 @@ char **row;
 printf("<TABLE>");
 
 safef(query, sizeof(query), 
-      "select immunStatus, daysInfectF, daysInfectL from gsidSubjInfo where subjId='%s'", subjId);
+      "select immunStatus, daysInfectF, daysInfectL, injections from gsidSubjInfo where subjId='%s'", subjId);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
     
@@ -46,6 +47,7 @@ if (row != NULL)
     immunStatus  = row[0];
     daysInfectF	 = row[1];
     daysInfectL  = row[2];
+    injections   = row[3];
 
     printf("<TR>");
     printf("<TD>");
@@ -67,6 +69,12 @@ if (row != NULL)
     printf("<TD>");
     printf("<B>Days of infection relative to last negative date:</B> %s\n", 
 	   daysInfectL);
+    printf("</TD>");
+    printf("</TR>");
+    
+    printf("<TR>");
+    printf("<TD>");
+    printf("<B>Injections:</B> &nbsp%s%s", injections, GSBLANKS);
     printf("</TD>");
     printf("</TR>");
     }
