@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.3 2006/02/28 19:00:54 galt Exp $";
+static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.4 2006/12/22 23:25:28 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,9 +18,9 @@ errAbort(
   "vgLoadAllen - Create .ra and .tab files for loading Allen Brain Atlas images\n"
   "into VisiGene\n"
   "usage:\n"
-  "   vgLoadAllen sourceImageDir parsed.tab probes.fa name.tab outDir\n"
+  "   vgLoadAllen sourceImageDir allen.tab probes.fa name.tab outDir\n"
   "where sourceImageDir is the full-size jpg image dir converted from the ABA image Disk\n"
-  "parsedTab is the output of nibbParseImageDir, \n"
+  "allen.tab is the ABA input \n"
   "probes.fa contains the sequence of all the probes\n"
   "name.tab is two columns: biological name and the aba probe id (used with the gene sorter)\n"
   "outputDir is where the output .ra and tab files go.\n"
@@ -33,7 +33,7 @@ errAbort(
  vgLoadAllen 
    sourceImageDir = /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain 
      (if san is down can use /cluster/store11/visiGene/offline/allenBrain/imageDisk with .jp2)
-   parsed.tab     = /cluster/store11/visiGene/offline/allenBrain/probesAndData/allen20051021.tab 
+   allen.tab     = /cluster/store11/visiGene/offline/allenBrain/probesAndData/allen20051021.tab 
    probes.fa      = /cluster/data/mm7/bed/allenBrain/allProbes.fa 
    name.tab       = /cluster/data/mm7/bed/allenBrain/allProbes.tab
    outDir         = output
@@ -150,14 +150,14 @@ carefulClose(&f);
 void writeTab(
 	struct hash *imageHash, 
 	struct hash *seqHash, 
-	char *sourceImageDir, char *parsedTab, 
+	char *sourceImageDir, char *allenTab, 
 	struct hash *nameHash, char *outName)
 /* Synthesize data and write out tab-separated file with one line for
  * each image. */
 {
 char sourceImage[PATH_LEN];
 FILE *f = mustOpen(outName, "w");
-struct lineFile *lf = lineFileOpen(parsedTab, TRUE);
+struct lineFile *lf = lineFileOpen(allenTab, TRUE);
 char *row[5];
 
 /* Write header. */
@@ -215,7 +215,7 @@ lineFileClose(&lf);
 carefulClose(&f);
 }
 
-void vgLoadAllen(char *sourceImageDir, char *parsedTab, char *probesFa,
+void vgLoadAllen(char *sourceImageDir, char *allenTab, char *probesFa,
 	char *nameTab, char *outDir)
 /* vgLoadAllen - Create .ra and .tab files for loading Xenopus images from NIBB 
  * into VisiGene. */
@@ -237,7 +237,7 @@ writeRa(outPath);
 
 /* Make tab separated file. */
 safef(outPath, sizeof(outPath), "%s/%s", outDir, "aba.tab");
-writeTab(imageHash, seqHash, sourceImageDir, parsedTab, nameHash, outPath);
+writeTab(imageHash, seqHash, sourceImageDir, allenTab, nameHash, outPath);
 }
 
 int main(int argc, char *argv[])
@@ -246,7 +246,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
-// vgLoadAllen sourceImageDir parsed.tab probes.fa name.tab outDir
 vgLoadAllen(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 
