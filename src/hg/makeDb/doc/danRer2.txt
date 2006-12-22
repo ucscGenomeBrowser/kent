@@ -5316,3 +5316,8 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
     makeLoChain-split danRer2 /cluster/data/danRer2/nib >&! split.log &
     # Took about 30 minutes to run.
  
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 452 where name = 'danRer2';"
+

@@ -2149,4 +2149,8 @@ chainSome $(path1)
     | hgLoadBed fr1 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 465 where name = 'fr1';"
 

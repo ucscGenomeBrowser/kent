@@ -2730,3 +2730,9 @@ done
    # enrich 1.04x
    # Similar coverage here too. Looked at chain and net tracks for danRer4
    # on the tetNig1 Browser and they look ok.
+
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 460 where name = 'tetNig1';"
+

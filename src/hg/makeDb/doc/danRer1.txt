@@ -5040,3 +5040,9 @@ cat > template << 'EOF'
          hgcentralbeta
    hgsql -h genome-centdb -e \
          'update dbDb set active = 0 where name = "danRer1";' hgcentral
+
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 453 where name = 'danRer1';"
+

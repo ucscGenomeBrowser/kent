@@ -8524,3 +8524,9 @@ close(FILE);
     dos2unix rhSequenceSubmitSeq100306.txt
    
     # need to convert format of FASTA file to remove the line numbers 
+
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 450 where name = 'danRer4';"
+

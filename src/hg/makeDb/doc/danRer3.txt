@@ -8242,4 +8242,8 @@ exit 0
     cd psl
     gzip *.psl
 
-######################################################################### 
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 451 where name = 'danRer3';"
+
