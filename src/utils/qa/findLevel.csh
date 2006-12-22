@@ -61,7 +61,7 @@ else
 endif
 set currDir=`pwd`
 
-grep -xq track.$tableName trackDb.ra
+grep -xq track.$tableName trackDb.ra >& /dev/null
 
 if (! $status ) then
   # the track is mentioned in the assembly-level trackDb.ra file
@@ -70,7 +70,7 @@ else
   # the track is not at the assembly-level, go up to the organism level
   cd ..
   set currDir=`pwd`
-  grep -xq track.$tableName trackDb.ra
+  grep -xq track.$tableName trackDb.ra >& /dev/null
 
   if (! $status ) then
     # the track is mentioned in the organism-level trackDb.ra file
@@ -79,7 +79,7 @@ else
     # the track is not at the organism level, go up to the top level
     cd ..
     set currDir=`pwd`
-    grep -xq track.$tableName trackDb.ra
+    grep -xq track.$tableName trackDb.ra >& /dev/null
    
     if (! $status ) then
       # the track is mentioned in the top-level trackDb.ra file
