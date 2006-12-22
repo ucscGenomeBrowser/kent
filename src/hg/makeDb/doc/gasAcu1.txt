@@ -757,3 +757,67 @@ TMPDIR=/scratch/tmp
 	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1Un \
 	-bigClusterHub=kk > do.log 2>&1 &
 XXX - Running 2006-12-20 16:57
+real    48m28.199s
+user    0m0.071s
+sys     0m0.053s
+    #	It claims one job failed, but I don't see that ?  Continuing:
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1Un \
+	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
+
+#######################################################################
+## BLASTZ Stickleback chroms vs Medaka chroms and random contigs
+##	(WORKING - 2006-12-22 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.oryLat1.2006-12-22
+    cd /cluster/data/gasAcu1/bed/blastz.oryLat1.2006-12-22
+    cat << '_EOF_' > DEF
+# Stickleback chroms vs. Medaka random contigs
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    
+# TARGET: Stickleback gasAcu1 no chrUn sequence, only chroms
+#       The largest is 32 million bases, there are 22 of them
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Medaka oryLat1 chroms and chrUn in scaffolds
+#       The largest scaffold is only 76,000 bases, there are 36,000 of them
+#       and a total size of 119 million.
+#       The biggest chrom is just under 40 million
+SEQ2_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/oryLat1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/oryLat1/chrUn.lift
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/cluster/data/gasAcu1/bed/blastz.oryLat1.2006-12-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1ChrUn \
+	-bigClusterHub=pk > do.log 2>&1 &
+
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 470 where name = 'gasAcu1';"
+

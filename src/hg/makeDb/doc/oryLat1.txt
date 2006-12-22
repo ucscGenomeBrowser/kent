@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.7 2006/12/21 01:01:57 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.8 2006/12/22 19:53:34 hiram Exp $"
 #
 
 ##########################################################################
@@ -1672,3 +1672,9 @@ TMPDIR=/scratch/tmp
 	-blastzOutRoot /cluster/bluearc/oryLat1GasAcu1Un \
 	-bigClusterHub=pk > do.log 2>&1 &
 XXX - Running 2006-12-20 15:34
+
+#########################################################################
+##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
+    hgsql -h genome-testdb hgcentraltest \
+	-e "update dbDb set orderKey = 475 where name = 'oryLat1';"
+
