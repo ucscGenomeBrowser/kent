@@ -16,10 +16,10 @@
 
 static struct repeatItem *otherRepeatItem = NULL;
 static char *repeatClassNames[] =  {
-    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "RNA", "Unknown", "Other", 
+    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "RNA", "Other", "Unknown", 
 };
 static char *repeatClasses[] = {
-    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "RNA", "Unknown", "Other", 
+    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "RNA", "Other", "Unknown", 
 };
 
 static struct repeatItem *makeRepeatItems()
@@ -34,8 +34,9 @@ for (i=0; i<numClasses; ++i)
     ri->class = repeatClasses[i];
     ri->className = repeatClassNames[i];
     slAddHead(&riList, ri);
+    if (sameString(repeatClassNames[i], "Other"))
+        otherRepeatItem = ri;               
     }
-otherRepeatItem = riList;
 slReverse(&riList);
 return riList;
 }
