@@ -674,6 +674,15 @@ type bed 4 +
     type bed 6 .
     priority 8
 
+    track cnpWong
+    subTrack cnp
+    shortLabel Wong CNPs 
+    longLabel Copy Number Polymorphisms (Wong)
+    noInherit on
+    type bed 9 .
+    itemRgb on
+    priority 9
+
 track varMultizHMRDEC
 shortLabel varMultiz6Way
 longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
