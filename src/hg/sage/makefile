@@ -1,3 +1,4 @@
+include ../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
