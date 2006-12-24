@@ -20,7 +20,7 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-static char const rcsid[] = "$Id: gbProcessedCheck.c,v 1.2 2004/08/29 08:21:58 genbank Exp $";
+static char const rcsid[] = "$Id: gbProcessedCheck.c,v 1.3 2006/12/24 20:48:42 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -61,58 +61,111 @@ fputc('\n', stderr);
 gErrorCnt++;
 }
 
-void checkOrgCat(struct gbEntry* entry)
-/* Check for organism category changing for organisms we are managing. */
+struct slTime
+/* linked list of times */
 {
-struct gbProcessed* proc0 = entry->processed;
-struct gbProcessed* procNext = proc0->next;
+    struct slTime *next;
+    time_t time;
+};
+
+struct slTime* slTimeNew(time_t time)
+/* create a new slTime object */
+{
+struct slTime* st;
+AllocVar(st);
+st->time = time;
+return st;
+}
+
+boolean slTimeHave(struct slTime* stLst, time_t time)
+/* determine if time is in the list */
+{
+struct slTime* st;
+for (st = stLst; st != NULL; st = st->next)
+    {
+    if (st->time == time)
+        return TRUE;
+    }
+return FALSE;
+}
+
+
+void checkProcOrgCat(struct gbEntry* entry, struct gbProcessed* proc0, char *org0,
+                     struct gbProcessed* proc, struct slTime** reported)
+/* Check for organism category changing from a give processed entry
+ * to the latest entry. Report error if not already reported */
+{
+char* org = gbGenomePreferedOrgName(proc->organism);
+/* name in static table,  so can compare ptrs. NULL is returned
+ * for organism we don't know about. change from NULL to not
+ * NULL also a orgCat change. */
+if ((org != org0) && !slTimeHave(*reported, proc->modDate))
+    {
+    gbError("%s\t%s\t%s\t%s changes organism \"%s\" to \"%s\"",
+            entry->acc, 
+            gbFormatDate(proc->modDate),
+            gbSrcDbName(entry->processed->update->release->srcDb),
+            gbFormatDate(proc0->modDate),
+            proc->organism,
+            proc0->organism);
+    slSafeAddHead(reported, slTimeNew(proc->modDate));
+    }
+}
+
+void checkOrgCats(struct gbEntry* entry, struct gbProcessed* procNext, struct slTime** reported)
+/* Check for organism category changing starting at a give processed entry */
+{
 if (procNext != NULL)
     {
     /* might have multiple organism, compare prefered names */
+    struct gbProcessed* proc0 = entry->processed;
     char* org0 = gbGenomePreferedOrgName(proc0->organism);
     while (procNext != NULL)
         {
-        char* orgNext = gbGenomePreferedOrgName(procNext->organism);
-        /* name in static table,  so can compare ptrs. NULL is returned
-         * for organism we don't know about. change from NULL to not
-         * NULL also a orgCat change. */
-        if (orgNext != org0)
-            {
-            gbError("%s\t%s\t%s\t%s changes organism \"%s\" to \"%s\"",
-                    entry->acc, 
-                    gbFormatDate(procNext->modDate),
-                    gbSrcDbName(entry->processed->update->release->srcDb),
-                    gbFormatDate(proc0->modDate),
-                    procNext->organism,
-                    proc0->organism);
-            break;  /* only report first error */
-            }
+        checkProcOrgCat(entry, proc0, org0, procNext, reported);
         procNext = procNext->next;
         }
     }
 }
 
+void checkOrgCat(struct gbEntry* entry, struct gbSelect* prevSelect)
+/* Check for organism category changing for organisms we are managing. */
+{
+struct slTime* reported = NULL;
+/* compare to latest processed entry */
+checkOrgCats(entry, entry->processed->next, &reported);
+if (prevSelect != NULL)
+    {
+    /* check against all processed entries in the previous release */
+    struct gbEntry* prevEntry = gbReleaseFindEntry(prevSelect->release, entry->acc);
+    if (prevEntry != NULL)
+        checkOrgCats(entry, prevEntry->processed, &reported);
+    }
+slFreeList(&reported);
+}
+
 void checkEst(struct gbRelease* mrnaRelease,
-              struct gbEntry* estEntry)
+              struct gbEntry* entry,
+              struct gbSelect* prevSelect)
 /* Check an EST, check for type change and orgCat change for
  * any of genomes in use */
 {
-struct gbEntry* mrnaEntry = gbReleaseFindEntry(mrnaRelease, estEntry->acc);
+struct gbEntry* mrnaEntry = gbReleaseFindEntry(mrnaRelease, entry->acc);
 if (mrnaEntry != NULL)
     {
     /* type changed, output in format for ignore.idx */
-    if (mrnaEntry->processed->modDate > estEntry->processed->modDate)
+    if (mrnaEntry->processed->modDate > entry->processed->modDate)
         gbError("%s\t%s\t%s\t%s changes type EST to mRNA",
-                mrnaEntry->acc, gbFormatDate(estEntry->processed->modDate),
+                mrnaEntry->acc, gbFormatDate(entry->processed->modDate),
                 gbSrcDbName(mrnaRelease->srcDb),
                 gbFormatDate(mrnaEntry->processed->modDate));
     else
         gbError("%s\t%s\t%s\t%s changes type mRNA to EST",
                 mrnaEntry->acc, gbFormatDate(mrnaEntry->processed->modDate),
                 gbSrcDbName(mrnaRelease->srcDb),
-                gbFormatDate(estEntry->processed->modDate));
+                gbFormatDate(entry->processed->modDate));
     }
-checkOrgCat(estEntry);
+checkOrgCat(entry, prevSelect);
 }
 
 void checkEstPartition(struct gbRelease* mrnaRelease,
@@ -121,12 +174,21 @@ void checkEstPartition(struct gbRelease* mrnaRelease,
 {
 struct hashCookie cookie;
 struct hashEl* hel;
+
 gbVerbEnter(2, "checking %s", gbSelectDesc(select));
 gbReleaseLoadProcessed(select);
+struct gbSelect* prevSelect = gbProcessedGetPrevRel(select);
+if (prevSelect != NULL)
+    gbReleaseLoadProcessed(prevSelect);
 cookie = hashFirst(select->release->entryTbl);
 while ((hel = hashNext(&cookie)) != NULL)
-    checkEst(mrnaRelease, hel->val);
+    checkEst(mrnaRelease, hel->val, prevSelect);
 gbReleaseUnload(select->release);
+if (prevSelect != NULL)
+    {
+    gbReleaseUnload(prevSelect->release);
+    freeMem(prevSelect);
+    }
 gbVerbLeave(2, "checking %s", gbSelectDesc(select));
 }
 
@@ -158,17 +220,24 @@ struct hashCookie cookie;
 struct hashEl* hel;
 
 gbReleaseLoadProcessed(select);
-gbVerbEnter(2, "checking %s", gbSelectDesc(select));
+struct gbSelect* prevSelect = gbProcessedGetPrevRel(select);
+if (prevSelect != NULL)
+    gbReleaseLoadProcessed(prevSelect);
 
+gbVerbEnter(2, "checking %s", gbSelectDesc(select));
 cookie = hashFirst(select->release->entryTbl);
 while ((hel = hashNext(&cookie)) != NULL)
-    checkOrgCat(hel->val);
+    checkOrgCat(hel->val, prevSelect);
 gbVerbLeave(2, "checking %s", gbSelectDesc(select));
-
 if (select->release->srcDb == GB_GENBANK)
     checkEstPartitions(select->release);
 
 gbReleaseUnload(select->release);
+if (prevSelect != NULL)
+    {
+    gbReleaseUnload(prevSelect->release);
+    freeMem(prevSelect);
+    }
 }
 
 void gbProcessedCheck()

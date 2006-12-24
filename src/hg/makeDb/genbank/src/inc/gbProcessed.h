@@ -54,6 +54,9 @@ boolean gbProcessedGetIndex(struct gbSelect* select, char* idxPath);
 void gbProcessedParseIndex(struct gbSelect* select);
 /* Parse a processed index file if it exists and is readable */
 
+struct gbSelect* gbProcessedGetPrevRel(struct gbSelect* select);
+/* Determine if the previous release has data for selected for select. */
+
 #endif
 /*
  * Local Variables:

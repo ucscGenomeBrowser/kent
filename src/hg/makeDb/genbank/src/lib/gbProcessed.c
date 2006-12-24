@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.6 2006/03/11 00:07:59 markd Exp $";
+static char const rcsid[] = "$Id: gbProcessed.c,v 1.7 2006/12/24 20:48:42 markd Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0
@@ -120,10 +120,10 @@ if (select->release->genome != NULL)
     if (newOrgCat != entry->orgCat)
         {
         /* change orgCat, this is bad */
-        errAbort("entry %s %s organism previously specified as \"%s\" (%s), is specfied as \"%s\" (%s) in %s, add one to ignored.idx",
+        errAbort("entry %s %s organism previously specified as \"%s\" (%s) in %s, is specfied as \"%s\" (%s) in %s, add one to ignored.idx",
                  entry->acc, gbFormatDate(modDate), entry->processed->organism,
-                 gbFmtSelect(entry->orgCat), organism,
-                 gbFmtSelect(newOrgCat), lf->fileName);
+                 gbFmtSelect(entry->orgCat), gbFormatDate(entry->processed->modDate),
+                 organism, gbFmtSelect(newOrgCat), lf->fileName);
         }
     }
 }
@@ -134,16 +134,13 @@ static void parseRow(struct gbSelect* select, char **row, struct lineFile* lf)
 char *acc = row[GBIDX_ACC_COL];
 char *organism = row[GBIDX_ORGANISM_COL];
 time_t modDate = gbParseDate(lf, row[GBIDX_MODDATE_COL]);
-
 if (gbIgnoreGet(select->release->ignore, acc, modDate) == NULL)
     {
     struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
     if (entry == NULL)
         entry = gbEntryNew(select->release, acc, select->type);
     else
-        {
         checkRowEntry(select, lf, entry, organism, modDate);
-        }
     gbEntryAddProcessed(entry, select->update,
                         gbParseInt(lf, row[GBIDX_VERSION_COL]), modDate,
                         organism);
@@ -165,6 +162,30 @@ if (gbIsReadable(idxPath))
     lineFileClose(&lf);
     }
 }
+
+struct gbSelect* gbProcessedGetPrevRel(struct gbSelect* select)
+/* Determine if the previous release has data for selected for select. */
+{
+struct gbSelect* prevSelect = NULL;
+struct gbRelease* prevRel = select->release->next;
+while (prevRel != NULL)
+    {
+    if (gbReleaseHasData(prevRel, GB_PROCESSED, select->type,
+                         select->accPrefix))
+        break;
+    prevRel = prevRel->next;
+    }
+if (prevRel != NULL)
+    {
+    AllocVar(prevSelect);
+    prevSelect->release = prevRel;
+    prevSelect->type = select->type;
+    prevSelect->orgCats = select->orgCats;
+    prevSelect->accPrefix = select->accPrefix;
+    }
+return prevSelect;
+}
+
 
 /*
  * Local Variables:

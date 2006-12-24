@@ -1019,6 +1019,8 @@ Warning: NR_001874: malformed RefSeq CDS:
    - JK: The ORESTES libraries (which I think, like the RAGE are
      just ESTs) should be taken with a large grain of salt.
 
+   - how to select for above
+        
 
 - MGC details page like to CCDS shouldn't have error if ccdsMgcMap
   not built (or maybe a more informative message, nice to have link).
@@ -1050,3 +1052,15 @@ Warning: NR_001874: malformed RefSeq CDS:
     e) suppressed_final  --permanently suppressed
     f) suppressed_temporary --temporarily suppressed, may become public
     again
+
+- look at PASA alignment stuff to see if there are any good ideas.
+  http://pasa.sourceforge.net/
+
+- keywords should be split at `;'
+
+- write doc on how to reproduce the alignment
+    blat -noHead -repeats=lower -ooc=hg18.ooc -q=rna -fine hg18.2bit mrna.fa mrna.rawPsl
+    faPolyASizes mrna.fa mrna.polya
+    sort -k 10,10 mrna.rawPsl | pslCDnaFilter -minId=0.96 -minCover=0.25 -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 -ignoreNs -bestOverlap -polyASizes=mrna.polya stdin mrna.psl
+
+-- add -polyT trimming, -q=mrna to EST alignments !!!!!!!!!!!!

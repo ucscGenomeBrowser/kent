@@ -1,4 +1,4 @@
-/* mgcDbLoad - create and load MGC tracks into the databases. */
+/* mgcDbLoad - create and load MGC tracks into the database. */
 
 #include "common.h"
 #include "options.h"
@@ -13,9 +13,10 @@
 #include "jksql.h"
 #include "gbVerb.h"
 #include "gbFileOps.h"
+#include "gbSql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.14 2006/02/23 05:22:05 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.15 2006/12/24 20:48:42 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -25,17 +26,6 @@ static struct optionSpec optionSpecs[] = {
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
-
-
-/* Flags indicate what tables depending on browser (all or just full)  */
-#define MGC_BOTH_TABLES 0x10  /* tables in both all and full-length */
-#define MGC_FULL_TABLES 0x20  /* tables just in full-length browser */
-#define MGC_MGC_TABLES  0x40  /* tables just in all MGC browder */
-
-/* Flags indicate sets of tables: */
-#define MGC_REAL_TABLES 0x1  /* base tables */
-#define MGC_TMP_TABLES  0x2  /* _tmp tables */
-#define MGC_OLD_TABLES  0x4  /* _old tables */
 
 /* table names */
 static char *MGC_STATUS_TBL = "mgcStatus";
@@ -47,15 +37,46 @@ static char *MGC_FAILED_EST_TBL = "mgcFailedEst";
 static char *MGC_PICKED_EST_TBL = "mgcPickedEst";
 static char *MGC_UNPICKED_EST_TBL = "mgcUnpickedEst";
 
-/* tmp versions of tables */
-static char *MGC_STATUS_TMP = "mgcStatus_tmp";
-static char *MGC_FULL_STATUS_TMP = "mgcFullStatus_tmp";
-static char *MGC_FULL_MRNA_TMP = "mgcFullMrna_tmp";
-static char *MGC_GENES_TMP = "mgcGenes_tmp";
-static char *MGC_INCOMPLETE_MRNA_TMP = "mgcIncompleteMrna_tmp";
-static char *MGC_FAILED_EST_TMP = "mgcFailedEst_tmp";
-static char *MGC_PICKED_EST_TMP = "mgcPickedEst_tmp";
-static char *MGC_UNPICKED_EST_TMP = "mgcUnpickedEst_tmp";
+/* table on databases with just full-length MGCs */
+static char *mgcFullTables[] =
+{
+    "mgcFullStatus",
+    "mgcFullMrna",
+    "mgcGenes",
+    NULL
+};
+
+/* tables only on the full browser */
+static char *mgcFullOnlyTables[] =
+{
+    "mgcFullStatus",
+    "mgcFullMrna",
+    NULL
+};
+
+/* table on databases with all MGCs */
+static char *mgcAllTables[] =
+{
+    "mgcStatus",
+    "mgcFullMrna",
+    "mgcGenes",
+    "mgcIncompleteMrna",
+    "mgcFailedEst",
+    "mgcPickedEst",
+    "mgcUnpickedEst",
+    NULL
+};
+
+/* table only on all bowsers MGCs */
+static char *mgcAllOnlyTables[] =
+{
+    "mgcStatus",
+    "mgcIncompleteMrna",
+    "mgcFailedEst",
+    "mgcPickedEst",
+    "mgcUnpickedEst",
+    NULL
+};
 
 /* command line globals */
 char *workDir;
@@ -96,96 +117,12 @@ errAbort(
 }
 
 
-time_t getTablModTime(struct sqlConnection *conn, char *table)
-/* get the modification date and time of a table, or 0 if doesn't exist */
-{
-time_t modTime = 0;
-struct sqlResult *sr;
-char **row;
-char query[512];
-
-safef(query, sizeof(query), "show table status like '%s'", table);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    /* column 11 == update_time */
-    char *updateTime = row[11];
-    char *src = updateTime, *dest = updateTime;
-
-    /* format is 2003-03-18 18:14:43, convert to YYYYMMDDHHMMSS */
-    while (*src != '\0')
-        {
-        if (isdigit(*src))
-            *dest++ = *src;
-        src++;
-        }
-    *dest = '\0';
-    modTime = gbParseTimeStamp(updateTime);
-    }
-
-sqlFreeResult(&sr);
-return modTime;
-}
-
-void dropTable(struct sqlConnection *conn, char *table, unsigned which)
-/* Drop a table, and _tmp, _old, select by flags  */
-{
-char table2[64];
-if (which & MGC_REAL_TABLES)
-    sqlDropTable(conn, table);
-if (which & MGC_TMP_TABLES)
-    {
-    safef(table2, sizeof(table2), "%s_tmp", table);
-    sqlDropTable(conn, table2);
-    }
-if (which & MGC_OLD_TABLES)
-    {
-    safef(table2, sizeof(table2), "%s_old", table);
-    sqlDropTable(conn, table2);
-    }
-}
-
-void dropTables(struct sqlConnection *conn, unsigned browser, unsigned which)
-/* drop MGC-related tables based on flags */
-{
-if (browser & MGC_BOTH_TABLES)
-    {
-    dropTable(conn, MGC_FULL_MRNA_TBL, which);
-    dropTable(conn, MGC_GENES_TBL, which);
-    }
-if (browser & MGC_FULL_TABLES)
-    {
-    dropTable(conn, MGC_FULL_STATUS_TBL, which);
-    }
-if (browser & MGC_MGC_TABLES)
-    {
-    dropTable(conn, MGC_STATUS_TBL, which);
-    dropTable(conn, MGC_INCOMPLETE_MRNA_TBL, which);
-    dropTable(conn, MGC_FAILED_EST_TBL, which);
-    dropTable(conn, MGC_PICKED_EST_TBL, which);
-    dropTable(conn, MGC_UNPICKED_EST_TBL, which);
-    }
-}
-
-void remakePslTable(struct sqlConnection *conn, char *table, char *insertTable)
-/* rename a PSL table */
-{
-/* create with tName index and bin and if the specified table has bin.  This
- * is done so insert from the other table works. */
-boolean useBin = (sqlFieldIndex(conn, insertTable, "bin") >= 0);
-unsigned options = PSL_TNAMEIX | ((useBin ? PSL_WITH_BIN : 0));
-char *sqlCmd = pslGetCreateSql(table, options, 0);
-sqlRemakeTable(conn, table, sqlCmd);
-freez(&sqlCmd);
-}
-
-char *loadMgcStatus(struct sqlConnection *conn, char *mgcStatusTab)
+void loadMgcStatus(struct sqlConnection *conn, char *mgcStatusTab, char *statusTblName)
 /* load the mgcStatus or mgcFullStatus tables, return name loaded */
 {
 struct lineFile* inLf;
 FILE *outFh;
 char tmpFile[PATH_LEN];
-char *statusTblName = allMgcTables ? MGC_STATUS_TMP : MGC_FULL_STATUS_TMP;
 gbVerbEnter(2, "loading %s", statusTblName);
 
 /* uncompress to tmp file */
@@ -206,16 +143,17 @@ sqlLoadTabFile(conn, tmpFile, statusTblName, SQL_TAB_FILE_ON_SERVER);
 unlink(tmpFile);
 
 gbVerbLeave(2, "loading %s", statusTblName);
-return statusTblName;
 }
 
 void createMgcFullMrna(struct sqlConnection *conn, char *statusTblName)
 /* create the mgcFullMrna table */
 {
 char sql[1024];
-gbVerbEnter(2, "loading %s", MGC_FULL_MRNA_TMP);
+char tmpTbl[32];
+tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_FULL_MRNA_TBL);
+gbVerbEnter(2, "loading %s", tmpTbl);
 
-remakePslTable(conn, MGC_FULL_MRNA_TMP, "all_mrna");
+tblBldRemakePslTable(conn, tmpTbl, "all_mrna");
 
 /* insert a join by accession of the all_mrna table and mgcStatus rows having
  * full-length state */
@@ -224,10 +162,10 @@ safef(sql, sizeof(sql),
       "  SELECT all_mrna.* FROM all_mrna, %s"
       "    WHERE (all_mrna.qName = %s.acc)"
       "      AND (%s.state = %d)",
-      MGC_FULL_MRNA_TMP, statusTblName, statusTblName,
+      tmpTbl, statusTblName, statusTblName,
       statusTblName, MGC_STATE_FULL_LENGTH);
 sqlUpdate(conn, sql);
-gbVerbLeave(2, "loading %s", MGC_FULL_MRNA_TMP);
+gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
 struct genePred* pslRowToGene(char **row)
@@ -262,24 +200,27 @@ char query[512], **row;
 struct sqlResult *sr;
 char tabFile[PATH_LEN];
 FILE *tabFh;
+char tmpTbl[32], tmpMrnaTbl[32];
+tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_GENES_TBL);
+tblBldGetTmpName(tmpMrnaTbl, sizeof(tmpMrnaTbl), MGC_FULL_MRNA_TBL);
 
-gbVerbEnter(2, "loading %s", MGC_GENES_TMP);
+gbVerbEnter(2, "loading %s", tmpTbl);
 
 /* create the tmp table */
-sql = genePredGetCreateSql(MGC_GENES_TMP, genePredAllFlds, 0, hGetMinIndexLength());
-sqlRemakeTable(conn, MGC_GENES_TMP, sql);
+sql = genePredGetCreateSql(tmpTbl, genePredAllFlds, 0, hGetMinIndexLength());
+sqlRemakeTable(conn, tmpTbl, sql);
 freez(&sql);
 
 /* get CDS and PSL to generate genePred, put result in tab file for load */
-safef(tabFile, sizeof(tabFile), "%s/%s", workDir, MGC_GENES_TMP);
+safef(tabFile, sizeof(tabFile), "%s/%s", workDir, tmpTbl);
 tabFh = mustOpen(tabFile, "w");
 
 /* go ahead and get gene even if no CDS annotation (query returns string
  * of "n/a" */
 safef(query, sizeof(query),
-      "SELECT cds.name,matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts "
+      "SELECT cds.name,%s.* "
       "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds = cds.id)",
-      MGC_FULL_MRNA_TMP, MGC_FULL_MRNA_TMP);
+      tmpMrnaTbl, tmpMrnaTbl, tmpMrnaTbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -290,18 +231,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 carefulClose(&tabFh);
-sqlLoadTabFile(conn, tabFile, MGC_GENES_TMP, SQL_TAB_FILE_ON_SERVER);
+sqlLoadTabFile(conn, tabFile, tmpTbl, SQL_TAB_FILE_ON_SERVER);
 
-gbVerbLeave(2, "loading %s", MGC_GENES_TMP);
+gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
 void createMgcIncompleteMrna(struct sqlConnection *conn)
 /* create the  table */
 {
 char sql[1024];
-gbVerbEnter(2, "loading %s", MGC_INCOMPLETE_MRNA_TMP);
+char tmpTbl[32];
+tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_INCOMPLETE_MRNA_TBL);
+gbVerbEnter(2, "loading %s", tmpTbl);
 
-remakePslTable(conn, MGC_INCOMPLETE_MRNA_TMP, "all_mrna");
+tblBldRemakePslTable(conn, tmpTbl, "all_mrna");
 
 /* insert a join by accession of the all_mrna table and mgcStatus rows not
  * having full-length or in-progress status values.  Wanring: This relies on
@@ -311,18 +254,20 @@ safef(sql, sizeof(sql),
       "  SELECT all_mrna.* FROM all_mrna, mgcStatus_tmp"
       "    WHERE (all_mrna.qName =  mgcStatus_tmp.acc)"
       "      AND (mgcStatus_tmp.state = %d)",
-      MGC_INCOMPLETE_MRNA_TMP, MGC_STATE_PROBLEM);
+      tmpTbl, MGC_STATE_PROBLEM);
 sqlUpdate(conn, sql);
-gbVerbLeave(2, "loading %s", MGC_INCOMPLETE_MRNA_TMP);
+gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
 void createMgcPickedEst(struct sqlConnection *conn)
 /* create the mgcPickedEst table */
 {
 char sql[1024];
-gbVerbEnter(2, "loading %s", MGC_PICKED_EST_TMP);
+char tmpTbl[32];
+tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_PICKED_EST_TBL);
+gbVerbEnter(2, "loading %s", tmpTbl);
 
-remakePslTable(conn, MGC_PICKED_EST_TMP, "all_est");
+tblBldRemakePslTable(conn, tmpTbl, "all_est");
 
 /* insert a join by image id of the all_est table and mgcStatus rows having
  * inprogress status values, only getting 5' ESTs.  No acc in mgcStatus
@@ -336,19 +281,21 @@ safef(sql, sizeof(sql),
       "      AND (mgcStatus_tmp.imageId = imageClone.imageId)"
       "      AND (mgcStatus_tmp.acc = '')"
       "      AND (mgcStatus_tmp.state = %d)",
-      MGC_PICKED_EST_TMP, MGC_STATE_PENDING);
+      tmpTbl, MGC_STATE_PENDING);
 sqlUpdate(conn, sql);
-gbVerbLeave(2, "loading %s", MGC_PICKED_EST_TMP);
+gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
 void createMgcFailedEst(struct sqlConnection *conn)
 /* create the mgcFailedEst table */
 {
 char sql[1024];
+char tmpTbl[32];
+tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_FAILED_EST_TBL);
 
-gbVerbEnter(2, "loading %s", MGC_FAILED_EST_TMP);
+gbVerbEnter(2, "loading %s", tmpTbl);
 
-remakePslTable(conn, MGC_FAILED_EST_TMP, "all_est");
+tblBldRemakePslTable(conn, tmpTbl, "all_est");
 
 /* insert a join by image id of the all_est table and mgcStatus rows having
  * failed status values, only getting 5' ESTs.  No acc in mgcStatus indicates
@@ -361,19 +308,21 @@ safef(sql, sizeof(sql),
       "      AND (mgcStatus_tmp.imageId = imageClone.imageId)"
       "      AND (mgcStatus_tmp.acc = '')"
       "      AND (mgcStatus_tmp.state = %d)",
-      MGC_FAILED_EST_TMP, MGC_STATE_PROBLEM);
+      tmpTbl, MGC_STATE_PROBLEM);
 sqlUpdate(conn, sql);
-gbVerbLeave(2, "loading %s", MGC_FAILED_EST_TMP);
+gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
 void createMgcUnpickedEst(struct sqlConnection *conn)
 /* create the mgcUnpickedEst table */
 {
 char sql[1024];
+char tmpTbl[32];
+tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_UNPICKED_EST_TBL);
 
-gbVerbEnter(2, "loading %s", MGC_UNPICKED_EST_TMP);
+gbVerbEnter(2, "loading %s", tmpTbl);
 
-remakePslTable(conn, MGC_UNPICKED_EST_TMP, "all_est");
+tblBldRemakePslTable(conn, tmpTbl, "all_est");
 
 /* insert a join by accession of the all_mrna table and mgcStatus rows not
  * full-length or inprogress status values.  No acc in mgcStatus indicates a
@@ -386,33 +335,19 @@ safef(sql, sizeof(sql),
       "      AND (mgcStatus_tmp.imageId = imageClone.imageId)"
       "      AND (mgcStatus_tmp.acc = '')"
       "      AND (mgcStatus_tmp.state = %d)",
-      MGC_UNPICKED_EST_TMP, MGC_STATE_UNPICKED);
+      tmpTbl, MGC_STATE_UNPICKED);
 sqlUpdate(conn, sql);
-gbVerbLeave(2, "loading %s", MGC_UNPICKED_EST_TMP);
+gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
-void addRename(struct sqlConnection *conn, struct dyString* sql, char *table)
-/* Add a rename of one of the tables to the sql command */
+void buildMgcTbls(struct sqlConnection *conn, char *mgcStatusTabFile)
+/* build the tables and load with _tmp name */
 {
-if (sqlTableExists(conn, table))
-    dyStringPrintf(sql, "%s TO %s_old, ", table, table);
-dyStringPrintf(sql, "%s_tmp TO %s", table, table);
-}
-
-void mgcDbLoad(char *database, char *mgcStatusTabFile)
-/* Load the database with the MGC tables. */
-{
-struct sqlConnection *conn;
-struct dyString* sql = dyStringNew(1024);
-char *statusTblName;
-
-gbVerbEnter(1, "Loading MGC tables");
-hSetDb(database);
-conn = hAllocConn();
-
-/* laod status table into database, and full entries into memory */
-statusTblName = loadMgcStatus(conn, mgcStatusTabFile);
-
+char statusTblName[32];
+tblBldGetTmpName(statusTblName, sizeof(statusTblName),
+                 (allMgcTables ? MGC_STATUS_TBL : MGC_FULL_STATUS_TBL));
+tblBldDropTables(conn, ((allMgcTables) ?mgcAllOnlyTables : mgcFullOnlyTables), TBLBLD_TMP_TABLE);
+loadMgcStatus(conn, mgcStatusTabFile, statusTblName);
 createMgcFullMrna(conn, statusTblName);
 createMgcGenes(conn);
 if (allMgcTables) 
@@ -422,47 +357,34 @@ if (allMgcTables)
     createMgcFailedEst(conn);
     createMgcUnpickedEst(conn);
     }
+}
 
-/* Get old tables out of the way (in case of failure) */
-dropTables(conn, (MGC_BOTH_TABLES|MGC_FULL_TABLES|MGC_MGC_TABLES),
-           MGC_OLD_TABLES);
-
-/* Generate rename of tables, move real to old and tmp to real. */
-dyStringAppend(sql, "RENAME TABLE ");
-addRename(conn, sql, MGC_FULL_MRNA_TBL);
-dyStringAppend(sql, ", ");
-addRename(conn, sql, MGC_GENES_TBL);
+void installMgcTbls(struct sqlConnection *conn)
+/* install the tables in an atomic manner */
+{
 if (allMgcTables)
-    {
-    dyStringAppend(sql, ", ");
-    addRename(conn, sql, MGC_STATUS_TBL);
-    dyStringAppend(sql, ", ");
-    addRename(conn, sql, MGC_INCOMPLETE_MRNA_TBL);
-    dyStringAppend(sql, ", ");
-    addRename(conn, sql, MGC_FAILED_EST_TBL);
-    dyStringAppend(sql, ", ");
-    addRename(conn, sql, MGC_PICKED_EST_TBL);
-    dyStringAppend(sql, ", ");
-    addRename(conn, sql, MGC_UNPICKED_EST_TBL);
-    }
+    tblBldAtomicInstall(conn, mgcAllTables);
 else
-    {
-    dyStringAppend(sql, ", ");
-    addRename(conn, sql, MGC_FULL_STATUS_TBL);
-    }
-sqlUpdate(conn, sql->string);
-dyStringFree(&sql);
+    tblBldAtomicInstall(conn, mgcFullTables);
+}
 
-/*  Drop tables for other type of browser, in case switching */
-if (allMgcTables)
-    dropTables(conn, MGC_FULL_TABLES, MGC_REAL_TABLES);
-else
-    dropTables(conn, MGC_MGC_TABLES, MGC_REAL_TABLES);
+void mgcDbLoad(char *database, char *mgcStatusTabFile)
+/* Load the database with the MGC tables. */
+{
+gbVerbEnter(1, "Loading MGC tables");
+hSetDb(database);
+struct sqlConnection *conn = hAllocConn();
+
+buildMgcTbls(conn, mgcStatusTabFile);
+installMgcTbls(conn);
+
+/*  Drop tables only on *OTHER* type of browser, in case switching */
+tblBldDropTables(conn, ((allMgcTables) ? mgcFullOnlyTables : mgcAllOnlyTables), TBLBLD_REAL_TABLE);
 
 /* Now get ride of old and do tmp as well, in case of switching browser
  * type */
-dropTables(conn, (MGC_BOTH_TABLES|MGC_FULL_TABLES|MGC_MGC_TABLES),
-           (MGC_TMP_TABLES|MGC_OLD_TABLES));
+tblBldDropTables(conn, mgcFullTables, TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);
+tblBldDropTables(conn, mgcAllTables, TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);
 
 hFreeConn(&conn);
 gbVerbLeave(1, "Loading MGC tables");
@@ -471,13 +393,12 @@ gbVerbLeave(1, "Loading MGC tables");
 void mgcDropTables(char *database)
 /* drop all MGC-related tables. */
 {
-struct sqlConnection *conn;
 hSetDb(database);
-conn = hAllocConn();
+struct sqlConnection *conn = hAllocConn();
 gbVerbEnter(1, "droping MGC tables");
 
-dropTables(conn, (MGC_BOTH_TABLES|MGC_FULL_TABLES|MGC_MGC_TABLES),
-           (MGC_REAL_TABLES|MGC_TMP_TABLES|MGC_OLD_TABLES));
+tblBldDropTables(conn, mgcFullTables, TBLBLD_REAL_TABLE|TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);
+tblBldDropTables(conn, mgcAllTables, TBLBLD_REAL_TABLE|TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);
 
 hFreeConn(&conn);
 gbVerbLeave(1, "droping MGC tables");
@@ -486,15 +407,11 @@ gbVerbLeave(1, "droping MGC tables");
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *database;
-char* mgcStatusTabFile;
-boolean drop;
-
 setlinebuf(stdout);
 setlinebuf(stderr);
 
 optionInit(&argc, argv, optionSpecs);
-drop = optionExists("drop");
+boolean drop = optionExists("drop");
 gbVerbInit(optionInt("verbose", 0));
 if (gbVerbose >= 5)
     sqlMonitorEnable(JKSQL_TRACE);
@@ -502,8 +419,7 @@ if (drop)
     {
     if (argc != 2)
         usage();
-    database = argv[1];
-    mgcDropTables(database);
+    mgcDropTables(argv[1]);
     }
 else
     {
@@ -512,12 +428,7 @@ else
     workDir = optionVal("workdir", "work/load/mgc");
     gbMakeDirs(workDir);
     allMgcTables = optionExists("allMgcTables");
-    
-    database = argv[1];
-    mgcStatusTabFile = argv[2];
-    hSetDb(database);
-
-    mgcDbLoad(database, mgcStatusTabFile);
+    mgcDbLoad(argv[1], argv[2]);
     }
 return 0;
 }
