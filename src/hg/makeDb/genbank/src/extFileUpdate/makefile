@@ -4,7 +4,7 @@ INCL += -I../dbload
 
 O = extFileUpdate.o raInfoTbl.o ../dbload/dbLoadOptions.o ../dbload/dbLoadPartitions.o
 
-PROGS = $(BINARCH)/extFileUpdate ${BINDIR}/gbExtFileUpdate
+PROGS = $(BINARCH)/extFileUpdate ${BINDIR}/gbExtFileUpdate ${BINDIR}/extFileTool
 
 all: ${PROGS}
 
