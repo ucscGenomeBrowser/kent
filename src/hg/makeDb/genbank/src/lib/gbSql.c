@@ -1,6 +1,8 @@
 #include "common.h"
 #include "gbSql.h"
 #include "jksql.h"
+#include "psl.h"
+#include "dystring.h"
 
 void gbSqlDupTableDef(struct sqlConnection *conn, char* table,
                       char* newTable)
@@ -97,7 +99,75 @@ char *gbSqlStrOrNullTabVar(char *str)
 return (str == NULL) ? "\\N" : str;
 }
 
+void tblBldGetTmpName(char *tmpTable, int tmpBufSize, char *table)
+/* generate the temporary table name */
+{
+safef(tmpTable, tmpBufSize, "%s_tmp", table);
+}
 
+void tblBldDrop(struct sqlConnection *conn, char *table, unsigned selFlags)
+/* Drop a tables based on the set of select flags: TBLBLD_REAL_TABLE,
+ * TBLBLD_TMP_TABLE, TBLBLD_OLD_TABLE */
+{
+char table2[64];
+if (selFlags & TBLBLD_REAL_TABLE)
+    sqlDropTable(conn, table);
+if (selFlags & TBLBLD_TMP_TABLE)
+    {
+    safef(table2, sizeof(table2), "%s_tmp", table);
+    sqlDropTable(conn, table2);
+    }
+if (selFlags & TBLBLD_OLD_TABLE)
+    {
+    safef(table2, sizeof(table2), "%s_old", table);
+    sqlDropTable(conn, table2);
+    }
+}
+
+void tblBldDropTables(struct sqlConnection *conn, char **tables, unsigned selFlags)
+/* Drop a list of tables based on the set of select flags: TBLBLD_REAL_TABLE,
+ * TBLBLD_TMP_TABLE, TBLBLD_OLD_TABLE */
+{
+int i;
+for (i = 0; tables[i] != NULL; i++)
+    tblBldDrop(conn, tables[i], selFlags);
+}
+
+void tblBldRemakePslTable(struct sqlConnection *conn, char *table, char *insertTable)
+/* remake a PSL table based on another PSL that is going to be inserted into
+ * it. */
+{
+/* create with tName index and bin and if the specified table has bin.  This
+ * is done so insert from the other table works. */
+boolean useBin = (sqlFieldIndex(conn, insertTable, "bin") >= 0);
+unsigned options = PSL_TNAMEIX | ((useBin ? PSL_WITH_BIN : 0));
+char *sqlCmd = pslGetCreateSql(table, options, 0);
+sqlRemakeTable(conn, table, sqlCmd);
+freez(&sqlCmd);
+}
+
+void tblBldAtomicInstall(struct sqlConnection *conn, char **tables)
+/* Install the tables in the NULL terminated in an atomic manner.  Drop
+ * under tbl_old first, then renametbl to tbl_old, and tbl_tmp to tbl. */
+{
+int i;
+
+for (i = 0; tables[i] != NULL; i++)
+    tblBldDrop(conn, tables[i], TBLBLD_OLD_TABLE);
+
+struct dyString* sql = dyStringNew(1024);
+dyStringAppend(sql, "RENAME TABLE ");
+for (i = 0; tables[i] != NULL; i++)
+    {
+    if (i > 0)
+        dyStringAppend(sql, ", ");
+    if (sqlTableExists(conn, tables[i]))
+        dyStringPrintf(sql, "%s TO %s_old, ", tables[i], tables[i]);
+    dyStringPrintf(sql, "%s_tmp TO %s", tables[i], tables[i]);
+    }
+sqlUpdate(conn, sql->string);
+dyStringFree(&sql);
+}
 
 /*
  * Local Variables:

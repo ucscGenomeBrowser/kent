@@ -31,6 +31,31 @@ void gbUnlockDb(struct sqlConnection *conn, char *db);
 char *gbSqlStrOrNullTabVar(char *str);
 /* If str is null, return \N for loading tab file, otherwise str */
 
+/***** the following are table building methods *****/
+/* Select flags indicate sets of tables: */
+#define TBLBLD_REAL_TABLE 0x1  /* base table */
+#define TBLBLD_TMP_TABLE  0x2  /* _tmp table */
+#define TBLBLD_OLD_TABLE  0x4  /* _old table */
+
+void tblBldGetTmpName(char *tmpTable, int tmpBufSize, char *table);
+/* generate the temporary table name */
+
+void tblBldDrop(struct sqlConnection *conn, char *table, unsigned selFlags);
+/* Drop a tables based on the set of select flags: TBLBLD_REAL_TABLE,
+ * TBLBLD_TMP_TABLE, TBLBLD_OLD_TABLE */
+
+void tblBldDropTables(struct sqlConnection *conn, char **tables, unsigned selFlags);
+/* Drop a list of tables based on the set of select flags: TBLBLD_REAL_TABLE,
+ * TBLBLD_TMP_TABLE, TBLBLD_OLD_TABLE */
+
+void tblBldRemakePslTable(struct sqlConnection *conn, char *table, char *insertTable);
+/* remake a PSL table based on another PSL that is going to be inserted into
+ * it. */
+
+void tblBldAtomicInstall(struct sqlConnection *conn, char **tables);
+/* Install the tables in the NULL terminated in an atomic manner.  Drop
+ * under tbl_old first, then renametbl to tbl_old, and tbl_tmp to tbl. */
+
 #endif
 
 /*
