@@ -4,9 +4,12 @@ include ${GBROOT}/common.mk
 
 SUBDIRS = src tests
 
-all: ${SUBDIRS:%=%.suball} jkprogs
+all: ${SUBDIRS:%=%.suball} doJkprogs
 %.suball:
 	${MAKE} -C $* all
+
+#doJkprogs: jkprogs
+doJkprogs:  # disabled
 
 # special version of these programs needed for now
 jkprogs: ${BINARCH}/blat \
