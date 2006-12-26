@@ -1063,4 +1063,7 @@ Warning: NR_001874: malformed RefSeq CDS:
     faPolyASizes mrna.fa mrna.polya
     sort -k 10,10 mrna.rawPsl | pslCDnaFilter -minId=0.96 -minCover=0.25 -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 -ignoreNs -bestOverlap -polyASizes=mrna.polya stdin mrna.psl
 
--- add -polyT trimming, -q=mrna to EST alignments !!!!!!!!!!!!
+- add -polyT trimming, -q=mrna to EST alignments !!!!!!!!!!!!
+
+- instead of creating a *.jobs file per job, create one big file and
+  have the offset of the record a parameter to the gbBlat
