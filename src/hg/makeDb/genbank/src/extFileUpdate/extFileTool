@@ -3,8 +3,7 @@ set usage {extFileTool cmd
     Tool for running various extFile management tools.
 
     cmd is one of:
-       - update - run update
-       - unused - generated extFile dumps and find unused releases
+       - update - run update and generated extFile dumps
 }
 
 proc report {stat msg} {
@@ -16,15 +15,6 @@ proc report {stat msg} {
 
 proc loadDbs {dbFile} {
     return [split [exec fgrep -v "#" $dbFile] \n]
-}
-
-proc extFileUpdate {dbs logFh} {
-    foreach db $dbs {
-        puts $logFh "==== begin $db ===="
-        exec bin/x86_64/extFileUpdate $db >&@$logFh
-        puts $logFh "==== end $db ===="
-        flush $logFh
-    }
 }
 
 proc dumpExtFile {db} {
@@ -39,13 +29,14 @@ proc dumpExtFile {db} {
     file rename -force $dumpTmp $dumpFile
 }
 
-proc findUnusedReleases {dbs logFh} {
+proc extFileUpdate {dbs logFh} {
     foreach db $dbs {
+        puts $logFh "==== begin $db ===="
+        exec bin/x86_64/extFileUpdate $db >&@$logFh
         dumpExtFile $db
+        puts $logFh "==== end $db ===="
+        flush $logFh
     }
-    exec bin/findUnusedReleases >@$logFh
-    puts $logFh "\nDetails:"
-    exec bin/findUnusedReleases -details >@$logFh
 }
 
 if {[llength $argv] != 1} {
@@ -64,7 +55,7 @@ switch -glob $host {
         set dbFile etc/rr.dbs
     }
     mgc {
-        set dbFile etc/mgc.dbs
+        set dbFile etc/rr.dbs
     }
     error "don't know how to handle $host"
 }
@@ -81,9 +72,6 @@ if {[catch {
     switch $cmd {
         update {
             extFileUpdate $dbs $logFh
-        }
-        unused {
-            findUnusedReleases $dbs $logFh
         }
         default {
             error "unknown command: $cmd\n$usage"
