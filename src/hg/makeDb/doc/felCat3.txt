@@ -258,6 +258,16 @@ felCat3.perChromTables = no
 
 #########################################################################
 
+# CREATE MICROSAT TRACK (DONE Nov. 2006 Heather)
+     ssh hgwdev
+     cd /cluster/data/felCat3/bed
+     mkdir microsat
+     cd microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+     /cluster/bin/i386/hgLoadBed felCat3 microsat microsat.bed
+
+#########################################################################
+
 # GENSCAN (DONE Nov. 2006 Heather)
 # Assume none of the 200K scaffolds are all Ns
 # (These cause Genscan to run forever)
