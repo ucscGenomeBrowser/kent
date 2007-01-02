@@ -16,7 +16,7 @@
 #include "gbSql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.15 2006/12/24 20:48:42 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.16 2007/01/02 06:08:28 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -173,7 +173,7 @@ struct genePred* pslRowToGene(char **row)
 {
 struct genbankCds cds;
 struct genePred *genePred;
-struct psl *psl = pslLoad(row+1);
+struct psl *psl = pslLoad(row+1); /* skip CDS in first column */
 
 /* this sets cds start/end to -1 on error, which results in no CDS */
 if (!genbankCdsParse(row[0], &cds))
@@ -184,7 +184,6 @@ if (!genbankCdsParse(row[0], &cds))
     else 
         fprintf(stderr, "Warning: invalid CDS annotation for MGC mRNA %s: %s\n",
                 psl->qName, row[0]);
-
     }
 
 genePred = genePredFromPsl2(psl, genePredAllFlds, &cds, genePredStdInsertMergeSize);
@@ -217,10 +216,11 @@ tabFh = mustOpen(tabFile, "w");
 
 /* go ahead and get gene even if no CDS annotation (query returns string
  * of "n/a" */
+char *pslCols = "matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts";
 safef(query, sizeof(query),
-      "SELECT cds.name,%s.* "
+      "SELECT cds.name,%s "
       "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds = cds.id)",
-      tmpMrnaTbl, tmpMrnaTbl, tmpMrnaTbl);
+      pslCols, tmpMrnaTbl, tmpMrnaTbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
