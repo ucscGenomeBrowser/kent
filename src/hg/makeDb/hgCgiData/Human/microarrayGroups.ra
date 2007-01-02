@@ -82,8 +82,8 @@ names 10n,17299_thy+,17369_thy-,17440_thy+,17440_thy-,8n,9n,adrenal_gland,adrena
 name affyRatioTissueMedian
 type combine median
 description Arrays Grouped By Tissue Median
-expIds 47,38,20,21,22,45,46,8,23,55,65,9,18,64,76,66,67,30,31,68,77,1,56,71,69,70,64,76,63,75,10,37,80,58,73,83,32,51,2,81,84,57,72,11,24,12,25,63,75,3,13,59,82,48,49,50,26,53,40,44,42,43,41,60,79,14,27,61,74,0,15,28,33,36,16,39,4,5,62,78,6,7,17,29,35,54,19,34,52,
-groupSizes 1,1,1,1,1,1,1,2,2,4,2,2,2,1,1,1,1,1,2,2,2,1,3,2,1,1,1,2,2,4,2,2,1,1,1,2,1,1,1,1,1,2,2,2,1,2,2,2,2,2,2,2,2,3,
+expIds  47,38,20,21,22,45,46,23,8,55,65,18,9,66,67,30,31,68,77,1,56,71,69,70,64,76,63,75,10,37,80,58,73,83,32,51,2,81,84,57,72,11,24,12,25,13,3,59,82,48,49,50,26,53,40,44,42,43,41,60,79,14,27,61,74,0,15,28,33,36,16,39,4,5,62,78,6,7,17,29,35,54,19,34,52,
+groupSizes 1,1,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,2,2,2,1,3,2,1,1,1,2,2,2,2,2,1,1,1,2,1,1,1,1,1,2,2,2,1,2,2,2,2,2,2,2,2,3,
 names 10n,17299_thy+,17369_thy-,17440_thy+,17440_thy-,8n,9n,adrenal_gland,amygdala,brain,caudate_nucleus,cerebellum,corpus_callosum,cortex,daudi1,daudi2,drg1,drg2,fetal_brain,fetal_liver,heart,hepg2,hl60,huovr,huvec1,huvec2,huvec3,k562,kidney,liver,lung,molt4,ovr102,ovr278e,ovr278s,pancreas,pc1,pc3,pc4,pc6,pc8,pituary_gland,placenta,raji,retinoblastoma,salivary_gland,spinal_cord,spleen,testis,thalamus,thymus,thyroid,trachea,uterus,
 
 name affyRatioChipIds
