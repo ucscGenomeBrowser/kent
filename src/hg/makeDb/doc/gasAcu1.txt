@@ -1170,3 +1170,191 @@ XXX - running 2006-12-28 23:54
     #	37154459 bases of 446627861 (8.319%) in intersection
     featureBits galGal3 chainGasAcu1Link > fb.galGal3.chainGasAcu1Link.txt
     #	32781658 bases of 1042591351 (3.144%) in intersection
+
+#########################################################################
+## 8-Way Multiz (WORKING - 2007-01-02 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/gasAcu1/bed/multiz9way
+    cd /cluster/data/gasAcu1/bed/multiz9way
+
+    /cluster/bin/phast/tree_doctor --prune chimp_panTro2,macaque_rheMac2,rat_rn4,rabbit_oryCun1,cow_bosTau2,dog_canFam2,armadillo_dasNov1,elephant_loxAfr1,tenrec_echTel1,monodelphis_monDom4,xenopus_xenTro2 17way.nh
+
+    #	use the output of that to manually construct this tree.
+    #	Arbitrarily set 0.2 distances for this added branch
+    #	All other distances remain as specified in the 17way.nh
+
+    cat << '_EOF_' > 8way.nh
+(((human_hg18:0.054922,mouse_mm8:0.412790):0.475049,
+	chicken_galGal3:0.454691):0.279364,
+  (((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.2,
+    (stickleback_gasAcu1:0.2,medaka_oryLat1:0.2):0.2):0.292961,
+	zebrafish_danRer4:0.782561):0.156067);
+'_EOF_'
+    # << happy emacs
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/gasAcu1_8way.gif
+
+    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    #	Use this output to create the table below
+    grep -y gasAcu1 8way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                           chainGasAcu1Link  chain linearGap
+#    distance                      on gasAcu1    on other   minScore
+#  1  0.4000 - medaka oryLat1      (% 38.754) (% 27.044)       2000     loose
+#  2  0.7994 - tetraodon tetNig1   (% 42.044) (% 50.004)       5000     loose
+#  3  0.8399 - fugu fr1            (% 32.836) (% 49.909)       2000     loose
+#  4  1.4755 - zebrafish danRer4   (% 35.163) (% 13.104)       5000     loose
+#  6  1.5831 - chicken galGal3     (%  8.319) (%  3.144)       2000     loose
+#  7  1.6584 - human hg18          (% 11.353) (%  1.923)       2000     loose
+#  8  2.0162 - mouse mm8           (% 11.070) (%  2.056)       2000     loose
+
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    #	bash shell syntax here ...
+    export H=/cluster/data/gasAcu1/bed
+    mkdir mafLinks
+    for G in oryLat1 tetNig1 fr1 danRer4 galGal3 hg18 mm8
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore05
+    mkdir /san/sanvol1/scratch/gasAcu1/multiz8way
+    cd /san/sanvol1/scratch/gasAcu1/multiz8way
+    time rsync -a --copy-links --progress \
+	/cluster/data/gasAcu1/bed/multiz8way/mafLinks/ .
+
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/gasAcu1/bed/multiz8way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = gasAcu1
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz8way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz8way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    awk '{print $1}' /cluster/data/gasAcu1/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 23 jobs
+    para try ... check ... push ... etc ...
+# Completed: 23 of 23 jobs
+# CPU time in finished jobs:      10221s     170.35m     2.84h    0.12d  0.000 y
+# IO & Wait Time:                   140s       2.33m     0.04h    0.00d  0.000 y
+# Average job time:                 450s       7.51m     0.13h    0.01d
+# Longest finished job:             747s      12.45m     0.21h    0.01d
+# Submission to last job:           747s      12.45m     0.21h    0.01d
+
+    #	combine results into a single file for loading and gbdb reference
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    time catDir maf > multiz8way.maf
+    #	real    0m7.143
+    #	makes an 1.6 Gb file:
+    #	-rw-rw-r--  1 1663828214 Jan  2 13:44 multiz8way.maf
+
+    #	Create per-chrom individual maf files for downloads
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    mkdir mafDownloads
+    time for M in maf/chr*.maf
+    do
+	B=`basename $M`
+	cp -p ${M} mafDownloads/${B}
+	gzip mafDownloads/${B}
+	echo ${B} done
+    done
+    #	real    5m9.273
+
+    #	deliver to downloads
+    ssh hgwdev
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/mafDownloads \
+	/usr/local/apache/htdocs/goldenPath/gasAcu1/multiz8way
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    mkdir /gbdb/gasAcu1/multiz8way
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/multiz8way.maf \
+	/gbdb/gasAcu1/multiz8way
+    time nice -n +19 hgLoadMaf gasAcu1 multiz8way
+    #	Loaded 1989046 mafs in 1 files from /gbdb/gasAcu1/multiz8way
+    #	real    0m47.121s
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 gasAcu1 multiz8waySummary multiz8way.maf
+    #	Created 744730 summary blocks from 5182575 components
+    #		and 1989046 mafs from multiz8way.maf
+    #	real    0m58.192
+
+    #	Create tree image for details page
+    #	You can get a better image from the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    # cp 8way.nh treeImage.nh
+    #	Edit treeImage.nh to make the names as desired
+    #	Submit this treeImage.nh to the phyloGif program, or:
+    # /cluster/bin/phast/draw_tree -b -s treeImage.nh > treeImage.ps
