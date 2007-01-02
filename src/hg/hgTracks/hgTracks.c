@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1261 2006/12/19 19:23:33 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1262 2007/01/02 16:22:33 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1061,7 +1061,7 @@ for (;;)
 	while ((item = slPopHead(&items)) != NULL)
 	    {
 	    item->next = NULL;
-	    if (((item->chromStart >= winStart) && (item->chromEnd < winEnd)) ||
+	    if (((item->chromStart >= winStart) && (item->chromStart < winEnd)) ||
 		((item->chromEnd > winStart) && (item->chromEnd <= winEnd)) ||
 		((item->chromStart <= winStart) && (item->chromEnd >= winEnd)))
 		bedFree(&item);
