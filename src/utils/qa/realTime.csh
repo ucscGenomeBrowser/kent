@@ -11,13 +11,9 @@
 
 set tablelist=""
 set db=""
-set host1=""
-set host2="-h hgwbeta"
 set sqlVersion=0
 set sqlSubVersion=0
-set first=""
-set second=""
-set third=""
+set update=""
 
 if ( $#argv != 2 ) then
   echo
@@ -50,25 +46,30 @@ foreach table (`cat $tablelist`)
   echo "============="
 
   foreach machine (hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc)
+    if ("mgc" == $machine || "hgw1" == $machine ) then
+      echo
+    endif
     # find out version of mysql running 
     # (v 5 has different signature for TABLE STATUS output)
     # (so does ver 4.1.*)
+    ssh -x qateam@$machine mysql $db -A -N \
+      -e '"'SELECT @@version'"' >& /dev/null
+    if ( $status ) then
+      echo "."
+      continue
+    endif
     set sqlVersion=`ssh -x qateam@$machine mysql $db -A -N \
       -e '"'SELECT @@version'"' | awk -F. '{print $1}'`
     set sqlSubVersion=`ssh -x qateam@$machine mysql $db -A -N \
       -e '"'SELECT @@version'"' | awk -F. '{print $2}'`
-    # echo $sqlVersion $sqlSubVersion
     if (4 == $sqlVersion && 0 == $sqlSubVersion) then
-      set third=`ssh -x qateam@$machine mysql $db -A -N \
+      set update=`ssh -x qateam@$machine mysql $db -A -N \
         -e '"'SHOW TABLE STATUS'"' | grep -w ^$table | awk '{print $13, $14}'`
     else
-      set third=`ssh -x qateam@$machine mysql $db -A -N \
+      set update=`ssh -x qateam@$machine mysql $db -A -N \
         -e '"'SHOW TABLE STATUS'"' | grep -w ^$table | awk '{print $14, $15}'`
     endif
-    if ("mgc" == $machine || "hgw1" == $machine ) then
-      echo
-    endif
-    echo "."$third
+    echo "."$update
   end
 end
 echo
