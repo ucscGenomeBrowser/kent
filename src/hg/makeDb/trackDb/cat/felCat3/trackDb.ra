@@ -43,3 +43,13 @@ intronGap 30
 type psl est
 baseColorUseSequence genbank
 
+# Jim thought we should hide this
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility hide
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
