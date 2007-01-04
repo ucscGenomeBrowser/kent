@@ -12,7 +12,7 @@ shortLabel Gepis Tissue
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.cgl.ucsf.edu/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=mouse
-priority 60
+priority 10
 
 name geneCards
 shortLabel GeneCards
