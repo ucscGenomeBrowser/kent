@@ -7,8 +7,7 @@ HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MA
 HG_WARN=-Wformat -Wimplicit -Wuninitialized -Wreturn-type
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
-# add the follow to makefiles to enable stronger warning checks
-# HG_WARN = ${HG_WARN_ERR}
+# Stronger warning checks, and warnings-->errors, for libraries and CGIs:
 ifeq (${OSTYPE},darwin)
     HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable
 else
@@ -18,7 +17,10 @@ else
     HG_WARN_ERR = -DJK_WARN -Wall -Werror
   endif
 endif
-# HG_WARN=${HG_WARN_ERR}
+# Apply the stronger checks to all code on our development machine:
+ifeq (${HOST},hgwdev)
+    HG_WARN=${HG_WARN_ERR}
+endif
 
 ifeq (${SCRIPTS},)
     SCRIPTS=/cluster/bin/scripts
