@@ -35,16 +35,16 @@ slide 40. Sequences with more than 25% gaps with respect to the human
 sequence were discarded. Only alignments with more than four sequences, a
 minimum size of 50 columns and at most 1% repeat masked letters were
 considered. RNAz can only handle alignments with up to six sequences. From
-alignments with more than six sequences we chose a subset of six: We used a
-greedy algorithm and iteratively selected sequences optimizing the set for
-a mean pairwise identity of around 80%. In cases of alignments with more
-than 10 sequences we sampled three different of such subsets. The windows
-were finally scored with RNAz version 0.1.1 in the forward and reverse
-complement direction. Overlapping hits with at least one sampled alignment
-with RNAz score > 0.5 were combined to a single genomic regions. The
-track shows regions with at least one window in the cluster with an average
-RNAz score of all samples > 0.5 and at least one hit with RNAz score
-> 0.9.
+alignments with more than six sequences we chose a subset of six. For subset
+selection, we used a greedy algorithm and iteratively selected sequences 
+optimizing the set for a mean pairwise identity of around 80%. In cases of 
+alignments with more than 10 sequences we sampled three different of such 
+subsets. The windows were finally scored with RNAz version 0.1.1 in the 
+forward and reverse complement direction. Overlapping hits with at least one 
+sampled alignment with RNAz score > 0.5 were combined to a single genomic 
+regions. The track shows regions with at least one window in the cluster with 
+an average RNAz score of all samples > 0.5 and at least one hit with RNAz 
+score > 0.9.
 </P>
 
 <H2>Credits</H2>
@@ -59,17 +59,17 @@ Univ. of Leipzig).
 <H2>References</H2>
 
 <P>
-Washietl, S., et al. 2007. Structured RNAs in the ENCODE Selected Regions
-of the Human Genome, Genome Res., in press
-</p>
+Washietl S et al. Structured RNAs in the ENCODE Selected Regions
+of the Human Genome, <I>Genome Res.</I> 2007 (in press)
+</P>
 
 <P>
-Washietl, S., Hofacker, I. L., and Stadler, P. F., 2005. Fast and reliable
-prediction of noncoding RNAs. Proc. Natl. Acad. Sci. USA, 102:2454 2459.
-</p>
+Washietl S, Hofacker IL, Stadler PF. Fast and reliable prediction of noncoding 
+RNAs. <I>Proc. Natl. Acad. Sci. USA</I>. 2005 102:2454-2459.
+</P>
 
 <P>
-Hofacker, I. L., Fekete, M., and Stadler, P. F., 2002. Secondary structure
-prediction for aligned RNA sequences. J. Mol. Biol., 319:1059 1066.
-</p>
+Hofacker IL, Fekete M, Stadler PF. Secondary structure
+prediction for aligned RNA sequences. <I>J. Mol. Biol.</I> 2002 319:1059-1066.
+</P>
 
