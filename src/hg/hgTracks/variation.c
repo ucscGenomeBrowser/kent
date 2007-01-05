@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.117 2006/12/07 22:19:07 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.118 2007/01/05 16:10:48 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -356,6 +356,8 @@ const Color ca = a->color;
 const Color cb = b->color;
 
 /* order is important here */
+if (ca==cb)
+    return 0;
 if (ca==MG_RED)
     return 1;
 if (cb==MG_RED)
