@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.17 2006/12/21 18:47:29 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.18 2007/01/05 22:25:11 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -480,7 +480,7 @@ char *doNewSession()
  * Return a message confirming what we did. */
 {
 struct dyString *dyMessage = dyStringNew(2048);
-char *sessionName = cartString(cart, hgsNewSessionName);
+char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
 char *userName = wikiLinkUserName();
@@ -636,8 +636,8 @@ char *doOtherUser()
 {
 struct sqlConnection *conn = hConnectCentral();
 char message[1024];
-char *otherUser = cartString(cart, hgsOtherUserName);
-char *sessionName = cartString(cart, hgsOtherUserSessionName);
+char *otherUser = trimSpaces(cartString(cart, hgsOtherUserName));
+char *sessionName = trimSpaces(cartString(cart, hgsOtherUserSessionName));
 
 safef(message, sizeof(message),
       "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
@@ -651,7 +651,7 @@ void doSaveLocal()
 /* Output current settings to be saved as a file on the user's machine.  
  * Return a message confirming what we did. */
 {
-char *fileName = cartString(cart, hgsSaveLocalFileName);
+char *fileName = trimSpaces(cartString(cart, hgsSaveLocalFileName));
 char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType);
 
@@ -670,7 +670,7 @@ struct lineFile *lf = NULL;
 webPushErrHandlersCart(cart);
 if (fromUrl)
     {
-    char *url = cartString(cart, hgsLoadUrlName);
+    char *url = trimSpaces(cartString(cart, hgsLoadUrlName));
     if (isEmpty(url))
 	errAbort("Please go back and enter the URL (http://..., ftp://...) "
 		 "of a file that contains "
@@ -682,7 +682,7 @@ if (fromUrl)
     }
 else
     {
-    char *settings = cartString(cart, hgsLoadLocalFileName);
+    char *settings = trimSpaces(cartString(cart, hgsLoadLocalFileName));
     dyStringPrintf(dyMessage, "Loaded settings from local file (%lu bytes).",
 		   (unsigned long)strlen(settings));
     lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
