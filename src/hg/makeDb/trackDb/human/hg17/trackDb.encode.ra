@@ -355,7 +355,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeYaleAffyNeutRNATransMap
     release alpha
     subTrack encodeYaleAffyRNATransMap
-    shortLabel Yale RNA Neu Sum
+    shortLabel Yale RNA Neutro
     longLabel Yale Neutrophil RNA Transcript Map
     priority 1
     color 50,100,50
@@ -1046,7 +1046,7 @@ type bedGraph 4
 maxHeightPixels 128:16:16
 minLimit -3.99
 maxLimit 4.63
-viewLimits 0:1.6
+viewLimits 1:4
 color 32,128,180
 altColor 180,128,32
 autoScale Off
