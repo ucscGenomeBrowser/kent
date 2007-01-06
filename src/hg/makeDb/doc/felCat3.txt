@@ -155,6 +155,16 @@ EOF
     nice featureBits felCat3 chainMm8Link
     # 486204459 bases of 1642698377 (29.598%) in intersection
 
+#########################################################################
+# BLASTZ/CHAIN/NET CANFAM2 (Done Nov 18 2006 heather)
+# Do target = canFam2 first (documented in canFam2.txt)
+
+    mkdir /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap
+    cd /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap
+    doBlastzChainNet.pl /cluster/data/felCat3/bed/blastz.canFam2.2006-11-16/DEF -swap >& do.log &
+    nice featureBits felCat3 chainCanFam2Link
+    # 1209933048 bases of 1642698377 (73.655%) in intersection
+
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE Oct 24 2006 heather)
