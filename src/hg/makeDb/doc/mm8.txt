@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.27 2006/12/01 17:00:17 fanhsu Exp $"
+#	"$Id: mm8.txt,v 1.28 2007/01/06 00:33:26 heather Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7501,6 +7501,45 @@ set out = $3
     ln -s blastz.gasAcu1.swap /cluster/data/mm8/bed/blastz.gasAcu1
     nice featureBits mm8 chainGasAcu1Link
 #52781141 bases of 2567283971 (2.056%) in intersection
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET FELCAT3 (Done Nov 15 2006 heather)
+# working in /cluster/data/felCat3 because /cluster/data/mm8 is 94% full
+    mkdir /cluster/data/felCat3/bed/blastz.mm8.2006-11-14
+    ln -s /cluster/data/felCat3/bed/blastz.mm8.2006-11-14 /cluster/data/mm8/bed/blastz.felCat3
+    cd /cluster/data/felCat3/bed/blastz.mm8.2006-11-14
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Mouse mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Cat felCat3 
+SEQ2_DIR=/san/sanvol1/scratch/felCat3/felCat3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/felCat3/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/felCat3/bed/blastz.mm8.2006-11-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk
+      -chainMinScore=3000 -chainLinearGap=medium
+      -blastzOutRoot /cluster/bluearc/felCat3/blastz.mm8 >& do.log &
+    tail -f do.log
+
+    nice featureBits -chrom=chr1 mm8 chainFelCat3Link
+    36333124 bases of 191450312 (18.978%) in intersection
 
 #############################################################################
 #  REBUILD miRNA TRACK (DONE - 2006-12-01 - Fan)
