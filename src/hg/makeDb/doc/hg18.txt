@@ -11097,6 +11097,47 @@ cat > mafFrags.csh << 'EOF'
     time csh mafFrags.csh > mafFrags.log 
     nice gzip up*.maf
     md5sum up*.gz >> md5sum.txt
+
+
+#########################################################################
+# BLASTZ/CHAIN/NET HG18 (Done Nov 09 2006 heather)
+# working in /cluster/data/felCat3 because /cluster/data/hg18 is 96% full
+# make this a link in /cluster/data/hg18
+    mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-11-09
+    ln -s /cluster/data/felCat3/bed/blastz.hg18.2006-11-09 /cluster/data/hg18/bed/blastz.felCat3
+    cd /cluster/data/felCat3/bed/blastz.hg18.2006-11-09
+    cat << '_EOF_' > DEF
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+# Can we use 2bit here?
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cat felCat3 
+SEQ2_DIR=/san/sanvol1/scratch/felCat3/felCat3.2bit
+SEQ2_LEN=/san/sanvol1/scratch/felCat3/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/felCat3/bed/blastz.hg18.2006-11-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk
+      -chainMinScore=3000 -chainLinearGap=medium
+      -blastzOutRoot /cluster/bluearc/felCat3/blastz.hg18 >& do.log &
+    tail -f do.log
+
+    nice featureBits -chrom=chr1 hg18 chainFelCat3Link
+    # 86932463 bases of 224999719 (38.637%) in intersection
+
 ##############################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
 # Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
