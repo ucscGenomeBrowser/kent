@@ -1,16 +1,35 @@
 <H2>Description</H2>
 <P>
-This track shows the map of -log10(P-value) for ChIP-chip using Human
-Hela S3 cells hybridized to maskless photolithographic arrays with 50-mer
-oligonucleotides tiled with 12-nt overlaps covering most of the non-
-repetitive DNA sequence of the ENCODE regions
-This track shows the combined results of three multiple biological
-replicates. For all arrays, the ChIP DNA was labeled with Cy5 and the
-control DNA was labeled with Cy3.
+This track shows the map of signal intensity (estimating the fold
+enrichment [log2 scale] of ChIP DNA vs imput DNA) for ChIP-chip 
+using 3 antibodies in HeLaS3 (cervix epithelial adenocarcinoma) and
+GM06990 (lymphoblastoid) 
+cells hybridized to maskless photolithographic arrays with 50-mer 
+oligonucleotides tiled with 12-nt overlaps covering most of the 
+non-repetitive DNA sequence of the ENCODE regions.
+
+The antibodies used were:
+<P>
+- anti-RNA polymerase II (
+<A TARGET=_BLANK HREF="http://www.scbt.com/product.php?datasheet=899">
+N-20</A> polyclonal antibody)
+<br>
+- anti-RNA polymerase II (
+<A TARGET=_BLANK HREF="http://store.crpinc.com/datasheet.aspx?catalogno=MMS-126R">
+8WG16</A> monoclonal antibody against pre-initiation complex form)
+<br>
+- anti-H4Kac4 (Histone H4 tetra-acetylated lysine)
+<P>
+The initiation-complex form of RNA polymerase II is associated with the transcription start site and tetra-acetylated Histone H4 is found in transcriptionally active euchromatin. 
+<P>
 These data are available at NCBI GEO, which also provides additional
 information about the experimental protocols.
 
 <H2>Methods</H2>
+<P>
+This track shows the combined results of three multiple biological replicates.  
+For all arrays, the ChIP DNA was labeled with Cy5 and the control DNA was 
+labeled with Cy3.
 <P>
 The data from replicates were quantile-normalized and median-scaled to each
 other (both Cy3 and Cy5 channels). Using a 1000 bp sliding window centered
@@ -20,14 +39,14 @@ signal of all log2(Cy5/Cy3) ratios (median of pairwise averages) within the
 window, including replicates. Using the same procedure, a -log10(P-value)
 map (measuring significance of enrichment of oligonucleotide probes in the
 window) for all sliding windows was made by computing P-values using the
-Wilcoxon paired signed rank test comparing fluorensent intensity between
+Wilcoxon paired signed rank test comparing fluorescent intensity between
 Cy5 and Cy3 for each oligonucleotide probe (Cy5 and Cy3 signals from the
 same array). A binding site was determined by thresholding oligonucleotide
 positions with -log10(P-value) (>= 4), extending qualified positions
 upstream and downstream 250 bp, and requiring 1000 bp space between two
 sites. Top 400 sites are retained.
 
-<H2> Verification </H2>
+<H2>Verification</H2>
 <P>
 ChIP-chip binding sites were verified by comparing "hit lists" generated
 from combinations of different biological replicates. Only experiments that
