@@ -11100,7 +11100,7 @@ cat > mafFrags.csh << 'EOF'
 
 
 #########################################################################
-# BLASTZ/CHAIN/NET HG18 (Done Nov 09 2006 heather)
+# BLASTZ/CHAIN/NET FELCAT3 (Done Nov 09 2006 heather)
 # working in /cluster/data/felCat3 because /cluster/data/hg18 is 96% full
 # make this a link in /cluster/data/hg18
     mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-11-09
