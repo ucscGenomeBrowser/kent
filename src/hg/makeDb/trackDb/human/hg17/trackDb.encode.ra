@@ -1511,6 +1511,7 @@ type bed .
     altColor 50,50,200
 
 track encodeYaleChipPval
+release beta
 compositeTrack on
 shortLabel Yale ChIP pVal
 longLabel Yale ChIP/Chip (HeLa cells) P-Value
@@ -1525,98 +1526,50 @@ minLimit 0
 maxLimit 20
 viewLimits 0:10
 dataVersion ENCODE Oct 2005 Freeze
-subGroup1 celltype Cell_Type hela=HeLa gm=GM06990
-subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 
 
     track encodeYaleChipPvalBaf155
+    release beta
     subTrack encodeYaleChipPval
-    shortLabel YU BAF155 HeLa P
+    shortLabel Yale BAF155 Pval
     longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) P-Value 
     color 50,50,200
-    subGroups celltype=hela factor=baf155
     priority 1
 
     track encodeYaleChipPvalBaf170
+    release beta
     subTrack encodeYaleChipPval
-    shortLabel YU BAF170 HeLa P
+    shortLabel Yale BAF170 Pval
     longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) P-Value 
     color 200,50,50
-    subGroups celltype=hela factor=baf170
     priority 2
 
     track encodeYaleChipPvalFos
+    release beta
     subTrack encodeYaleChipPval
-    shortLabel YU c-Fos HeLa Pv
+    shortLabel Yale c-Fos Pval
     longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) P-Value
-    subGroups celltype=hela factor=fos
     color 112,63,175
     priority 3
 
     track encodeYaleChipPvalJun
+    release beta
     subTrack encodeYaleChipPval
-    shortLabel YU c-Jun HeLa Pv
+    shortLabel Yale c-Jun Pval
     longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) P-Value
-    subGroups celltype=hela factor=jun
-    color 50,50,200
+    color 200,50,50
     priority 4
 
     track encodeYaleChipPvalTaf
+    release beta
     subTrack encodeYaleChipPval
-    shortLabel YU TAF1 HeLa Pv
+    shortLabel Yale TAF1 Pval
     longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) P-Value
-    color 200,50,50
-    subGroups celltype=hela factor=taf1
+    color 50,50,200
+    color 112,63,175
     priority 5
 
-    track encodeYaleChipPvalPol2Hela
-    subTrack encodeYaleChipPval
-    shortLabel YU Pol2 HeLa Pv
-    longLabel Yale ChIP/Chip (Pol2 ab, HeLa cells) P-Value
-    color 100,20,20
-    subGroups celltype=hela factor=pol2
-    priority 6
-
-    track encodeYaleChipPvalPol2nHela
-    subTrack encodeYaleChipPval
-    shortLabel YU Pol2N HeLa Pv
-    longLabel Yale ChIP/Chip (Pol2 N-terminus ab, HeLa cells) P-Value
-    color 20,20,100
-    subGroups celltype=hela factor=pol2n
-    priority 7
-
-    track encodeYaleChipPvalH4kac4Hela
-    subTrack encodeYaleChipPval
-    shortLabel YU H4Kac4 HeLa P
-    longLabel Yale ChIP/Chip (H4Kac4 ab, HeLa cells) P-Value
-    color 20,100,20
-    subGroups celltype=hela factor=h4kac4
-    priority 8
-
-    track encodeYaleChipPvalPol2Gm06990
-    subTrack encodeYaleChipPval
-    shortLabel YU Pol2 GM Pv
-    color 100,20,20
-    longLabel Yale ChIP/Chip (Pol2 ab, GM06990 cells) P-Value
-    subGroups celltype=gm factor=pol2
-    priority 9
-
-    track encodeYaleChipPvalPol2nGm06990
-    subTrack encodeYaleChipPval
-    shortLabel YU Pol2N GM Pv
-    longLabel Yale ChIP/Chip (Pol2 N-terminus ab, GM06990 cells) P-Value
-    color 20,20,100
-    subGroups celltype=gm factor=pol2n
-    priority 10
-
-    track encodeYaleChipPvalH4kac4Gm06990
-    subTrack encodeYaleChipPval
-    shortLabel YU H4Kac4 GM Pv
-    longLabel Yale ChIP/Chip (H4Kac4 ab, GM06990 cells) P-Value
-    color 20,100,20
-    subGroups celltype=gm factor=h4kac4
-    priority 11
-
 track encodeYaleChipSignal
+release beta
 compositeTrack on
 shortLabel Yale ChIP Signal
 longLabel Yale ChIP/Chip (HeLa cells) Signal
@@ -1632,12 +1585,188 @@ windowingFunction mean
 viewLimits 0:2
 autoScale Off
 dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeYaleChipSignalBaf155
+    release beta
+    subTrack encodeYaleChipSignal
+    shortLabel Yale BAF155 Sig
+    longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) Signal
+    color 50,50,200
+    priority 1
+
+    track encodeYaleChipSignalBaf170
+    release beta
+    subTrack encodeYaleChipSignal
+    shortLabel Yale BAF170 Sig
+    longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) Signal
+    color 200,50,50
+    priority 2
+
+    track encodeYaleChipSignalFos
+    release beta
+    subTrack encodeYaleChipSignal
+    shortLabel Yale c-Fos Sig
+    longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) Signal
+    color 112,63,175
+    priority 3
+
+    track encodeYaleChipSignalJun
+    release beta
+    subTrack encodeYaleChipSignal
+    shortLabel Yale c-Jun Sig
+    longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) Signal
+    color 200,50,50
+    priority 4
+
+    track encodeYaleChipSignalTaf
+    release beta
+    subTrack encodeYaleChipSignal
+    shortLabel Yale TAF1 Sig
+    longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) Signal
+    color 50,50,200
+    priority 5
+
+track encodeYaleChipPvalue
+release alpha
+compositeTrack on
+shortLabel Yale ChIP pVal
+longLabel Yale ChIP/Chip P-Value
+group encodeChip
+priority 65.21
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bedGraph 4
+maxHeightPixels 128:16:16
+autoScale Off
+windowingFunction mean
+minLimit 0
+maxLimit 20
+viewLimits 0:10
+dataVersion ENCODE Oct 2005 Freeze
 subGroup1 celltype Cell_Type hela=HeLa gm=GM06990
 subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 
 
+    track encodeYaleChipPvalBaf155
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU BAF155 HeLa P
+    longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) P-Value 
+    color 50,50,200
+    subGroups celltype=hela factor=baf155
+    priority 1
+
+    track encodeYaleChipPvalBaf170
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU BAF170 HeLa P
+    longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) P-Value 
+    color 200,50,50
+    subGroups celltype=hela factor=baf170
+    priority 2
+
+    track encodeYaleChipPvalFos
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU c-Fos HeLa Pv
+    longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) P-Value
+    subGroups celltype=hela factor=fos
+    color 112,63,175
+    priority 3
+
+    track encodeYaleChipPvalJun
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU c-Jun HeLa Pv
+    longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) P-Value
+    subGroups celltype=hela factor=jun
+    color 50,50,200
+    priority 4
+
+    track encodeYaleChipPvalTaf
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU TAF1 HeLa Pv
+    longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) P-Value
+    color 200,50,50
+    subGroups celltype=hela factor=taf1
+    priority 5
+
+    track encodeYaleChipPvalPol2Hela
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU Pol2 HeLa Pv
+    longLabel Yale ChIP/Chip (Pol2 ab, HeLa cells) P-Value
+    color 100,20,20
+    subGroups celltype=hela factor=pol2
+    priority 6
+
+    track encodeYaleChipPvalPol2nHela
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU Pol2N HeLa Pv
+    longLabel Yale ChIP/Chip (Pol2 N-terminus ab, HeLa cells) P-Value
+    color 20,20,100
+    subGroups celltype=hela factor=pol2n
+    priority 7
+
+    track encodeYaleChipPvalH4kac4Hela
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU H4Kac4 HeLa P
+    longLabel Yale ChIP/Chip (H4Kac4 ab, HeLa cells) P-Value
+    color 20,100,20
+    subGroups celltype=hela factor=h4kac4
+    priority 8
+
+    track encodeYaleChipPvalPol2Gm06990
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU Pol2 GM Pv
+    color 100,20,20
+    longLabel Yale ChIP/Chip (Pol2 ab, GM06990 cells) P-Value
+    subGroups celltype=gm factor=pol2
+    priority 9
+
+    track encodeYaleChipPvalPol2nGm06990
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU Pol2N GM Pv
+    longLabel Yale ChIP/Chip (Pol2 N-terminus ab, GM06990 cells) P-Value
+    color 20,20,100
+    subGroups celltype=gm factor=pol2n
+    priority 10
+
+    track encodeYaleChipPvalH4kac4Gm06990
+    release alpha
+    subTrack encodeYaleChipPvalue
+    shortLabel YU H4Kac4 GM Pv
+    longLabel Yale ChIP/Chip (H4Kac4 ab, GM06990 cells) P-Value
+    color 20,100,20
+    subGroups celltype=gm factor=h4kac4
+    priority 11
+
+track encodeYaleChipSig
+release alpha
+compositeTrack on
+shortLabel Yale ChIP Signal
+longLabel Yale ChIP/Chip Signal
+group encodeChip
+priority 65.22
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+maxHeightPixels 128:16:16
+type bedGraph 4
+minLimit 0
+maxLimit 3.353
+windowingFunction mean
+viewLimits 0:2
+autoScale Off
+dataVersion ENCODE Oct 2005 Freeze and Nov 2006
+subGroup1 celltype Cell_Type hela=HeLa gm=GM06990
+subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF1 pol2=Pol2 pol2n=Pol2-N h4kac4=H4Kac4 
 
     track encodeYaleChipSignalBaf155
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU BAF155 HeLa S
     longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) Signal
     color 50,50,200
@@ -1645,7 +1774,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 1
 
     track encodeYaleChipSignalBaf170
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU BAF170 HeLa S
     longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) Signal
     color 200,50,50
@@ -1653,7 +1783,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 2
 
     track encodeYaleChipSignalFos
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU c-Fos HeLa S
     longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) Signal
     color 112,63,175
@@ -1661,7 +1792,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 3
 
     track encodeYaleChipSignalJun
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU c-Jun HeLa S
     longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) Signal
     color 200,50,50
@@ -1669,7 +1801,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 4
 
     track encodeYaleChipSignalTaf
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU TAF1 HeLa Sig
     longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) Signal
     color 50,50,200
@@ -1677,7 +1810,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 5
 
     track encodeYaleChipSignalPol2Hela
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU Pol2 HeLa Sig
     longLabel YU ChIP/Chip (Pol2 ab, HeLa cells) Signal
     color 100,20,20
@@ -1685,7 +1819,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 6
 
     track encodeYaleChipSignalPol2nHela
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU Pol2N HeLa S
     longLabel Yale ChIP/Chip (Pol2 N-terminus ab, HeLa cells) Signal
     color 20,20,100
@@ -1693,7 +1828,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 7
 
     track encodeYaleChipSignalH4kac4Hela
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU H4Kac4 HeLa S
     longLabel Yale ChIP/Chip (H4Kac4 ab, HeLa cells) Signal
     color 20,100,20
@@ -1701,7 +1837,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 8
 
     track encodeYaleChipSignalPol2Gm06990
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU Pol2 GM Sig
     color 100,20,20
     longLabel Yale ChIP/Chip (Pol2 ab, GM06990 cells) Signal
@@ -1709,7 +1846,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 9
 
     track encodeYaleChipSignalPol2nGm06990
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU Pol2N GM Sig
     longLabel Yale ChIP/Chip (Pol2 N-terminus ab, GM06990 cells) Signal
     color 20,20,100
@@ -1717,7 +1855,8 @@ subGroup2 factor Factor baf155=BAF155 baf170=BAF170 fos=c-Fos jun=c-Jun taf1=TAF
     priority 10
 
     track encodeYaleChipSignalH4kac4Gm06990
-    subTrack encodeYaleChipSignal
+    release alpha
+    subTrack encodeYaleChipSig
     shortLabel YU H4Kac4 GM Sig
     longLabel Yale ChIP/Chip (H4Kac4 ab, GM06990 cells) Signal
     color 20,100,20
