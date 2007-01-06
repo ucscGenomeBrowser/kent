@@ -145,6 +145,16 @@ EOF
     nice featureBits felCat3 chainHg18Link
     # 1014983843 bases of 1642698377 (61.788%) in intersection
 
+#########################################################################
+# BLASTZ/CHAIN/NET MM8 (Done Nov 09 2006 heather)
+# Do target = mm8 first (documented in mm8.txt)
+
+    mkdir /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap
+    cd /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap
+    doBlastzChainNet.pl /cluster/data/felCat3/bed/blastz.mm8.2006-11-14/DEF -swap >& do.log &
+    nice featureBits felCat3 chainMm8Link
+    # 486204459 bases of 1642698377 (29.598%) in intersection
+
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE Oct 24 2006 heather)
