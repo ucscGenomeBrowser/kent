@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.46 2006/12/15 19:02:08 aamp Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.47 2007/01/06 00:41:49 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1484,12 +1484,14 @@ for (track = trackList; track != NULL; track = track->next)
         {
         /* save item count and first item because if track is 
          * loaded to the database, the bedList will be available next time */
-        char buf[32];
-        safef(buf, sizeof buf, "%d", slCount(track->bedList));
-        ctAddToSettings(track, "itemCount", cloneString(buf));
-        safef(buf, sizeof buf, "%s:%d-%d", track->bedList->chrom,
+        struct dyString *ds = dyStringNew(0);
+        dyStringPrintf(ds, "%d", slCount(track->bedList));
+        ctAddToSettings(track, "itemCount", cloneString(ds->string));
+        dyStringClear(ds);
+        dyStringPrintf(ds, "%s:%d-%d", track->bedList->chrom,
                 track->bedList->chromStart, track->bedList->chromEnd);
-        ctAddToSettings(track, "firstItemPos", cloneString(buf));
+        ctAddToSettings(track, "firstItemPos", cloneString(ds->string));
+        dyStringFree(&ds);
         }
     char *setting = browserLinesToSetting(browserLines);
     if (setting)
