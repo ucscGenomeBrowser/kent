@@ -12,9 +12,11 @@
 #include "web.h"
 #include "hdb.h"
 #include "wikiLink.h"
+#include "customTrack.h"
+#include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.18 2007/01/05 22:25:11 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.19 2007/01/08 22:58:32 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -535,6 +537,16 @@ if (sqlTableExists(conn, namedSessionTable))
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
 	  getSessionLink(userName, encSessionName),
 	  getSessionEmailLink(userName, encSessionName));
+    if (cartFindPrefix(cart, CT_FILE_VAR_PREFIX) != NULL)
+	dyStringPrintf(dyMessage,
+		"<P>Note: the session contains a reference to at least one "
+		"custom track.  Custom tracks are "
+		"subject to an expiration policy described in the "
+		"<A HREF=\"/goldenPath/help/customTrack.html\" "
+		"TARGET=_BLANK>custom track documentation</A>.  "
+		"In order to keep a custom track from expiring, you can "
+		"periodically view the custom track in the genome browser."
+		"</P>");
     dyStringFree(&dy);
     }
 else
@@ -545,6 +557,61 @@ else
 	  namedSessionTable, sqlGetDatabase(conn));
 hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
+}
+
+void checkForCustomTracks(struct dyString *dyMessage)
+/* Scan cart for ctfile_<db> variables.  Tally up the databases that have 
+ * live custom tracks and those that have expired custom tracks. */
+{
+struct hashEl *helList = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
+if (helList != NULL)
+    {
+    struct hashEl *hel;
+    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE;
+    struct slName *liveDbList = NULL, *expiredDbList = NULL, *sln = NULL;
+    for (hel = helList;  hel != NULL;  hel = hel->next)
+	{
+	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
+	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	customFactoryTestExistence(hel->val, &thisGotLiveCT, &thisGotExpiredCT);
+	if (thisGotLiveCT)
+	    slNameAddHead(&liveDbList, db);
+	if (thisGotExpiredCT)
+	    slNameAddHead(&expiredDbList, db);
+	gotLiveCT |= thisGotLiveCT;
+	gotExpiredCT |= thisGotExpiredCT;
+	}
+    if (gotLiveCT)
+	{
+	slSort(&liveDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one active custom "
+		       "track (in database ");
+	for (sln = liveDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "%s%s",
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringPrintf(dyMessage,
+		       ").  Custom track(s) can be viewed "
+		       "<A HREF=\"hgCustom?%s\">here</A> "
+		       "or in the genome browser.</P>",
+		       cartSidUrlString(cart));
+	}
+    if (gotExpiredCT)
+	{
+	slSort(&expiredDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one expired custom "
+		       "track (in database ");
+	for (sln = expiredDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "%s%s",
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringPrintf(dyMessage,
+		       "), so it may not appear as originally intended."
+		       "</P>");
+	}
+    slNameFreeList(&liveDbList);
+    slNameFreeList(&expiredDbList);
+    }
 }
 
 char *doUpdateSessions()
@@ -602,6 +669,7 @@ if (hel != NULL)
 		   "Loaded settings from session <B>%s</B>.<BR>\n",
 		   htmlEncode(sessionName));
     cartLoadUserSession(conn, userName, sessionName, cart);
+    checkForCustomTracks(dyMessage);
     didSomething = TRUE;
     }
 
@@ -635,16 +703,17 @@ char *doOtherUser()
  * Return a message confirming what we did. */
 {
 struct sqlConnection *conn = hConnectCentral();
-char message[1024];
+struct dyString *dyMessage = dyStringNew(1024);
 char *otherUser = trimSpaces(cartString(cart, hgsOtherUserName));
 char *sessionName = trimSpaces(cartString(cart, hgsOtherUserSessionName));
 
-safef(message, sizeof(message),
+dyStringPrintf(dyMessage,
       "Loaded settings from user <B>%s</B>'s session <B>%s</B>.",
       otherUser, htmlEncode(sessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart);
+checkForCustomTracks(dyMessage);
 hDisconnectCentral(&conn);
-return cloneString(message);
+return dyStringCannibalize(&dyMessage);
 }
 
 void doSaveLocal()
@@ -688,6 +757,7 @@ else
     lf = lineFileOnString("settingsFromFile", TRUE, cloneString(settings));
     }
 cartLoadSettings(lf, cart);
+checkForCustomTracks(dyMessage);
 lineFileClose(&lf);
 return dyStringCannibalize(&dyMessage);
 }
