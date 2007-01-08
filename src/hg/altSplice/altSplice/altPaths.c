@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.18 2005/03/16 23:40:35 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.19 2007/01/08 19:23:34 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -291,7 +291,6 @@ int **createDistanceMatrix(struct altGraphX *agx, bool **em, int source, int sin
 int **D = NULL;
 int vC = agx->vertexCount + 2;
 int i = 0, j = 0, k = 0;
-int **adjList = NULL;   /* Adjacency list. */
 int *adjStartCounts = NULL;  /* Number of vertices in the adj list. */
 int *adjEndCounts = NULL;  /* Number of vertices in the adj list. */
 
@@ -432,7 +431,6 @@ path->vCount++;
 void pathAddTail(struct path *path, int vert)
 /* Add vert to the end of a path. */
 {
-int i = 0;
 if(path->maxVCount <= path->vCount + 1)
     {
     ExpandArray(path->vertices, path->maxVCount, path->maxVCount*2);
@@ -448,7 +446,7 @@ struct path *pathsBetweenVerts(int **distance, int source, int sink,
 {
 struct path *pathList = NULL;
 struct path *path = NULL;
-int i = 0, j = 0;
+int i = 0;
 int maxDepth = 10;
 
 /* This amounts to a breadth first search of paths
@@ -714,6 +712,38 @@ for(path = splice->paths; path != NULL; path = path->next)
 slSort(&splice->paths, pathBpCountCmp);
 }
 
+boolean isMutuallyExclusive(struct splice *splice, struct altGraphX *ag,
+			   bool **em, int source, int sink)
+/* Return TRUE if the paths in splice are mutually exclusive, FALSE
+   otherwise. */
+{
+bool *seen = NULL;
+int i = 0;
+struct path *path = NULL, *pathNext = NULL;
+boolean mutExculsive = TRUE;
+AllocArray(seen, ag->vertexCount);
+/* Loop through each path recording vertices that are
+   seen. If the same one is seen twice then mutExculsive = FALSE. */
+for(path = splice->paths; path != NULL; path = pathNext)
+    {
+    pathNext = path->next;
+    for(i = 1; i < path->vCount -1; i++)
+	{
+	if(seen[path->vertices[i]] == TRUE) 
+	    {
+	    mutExculsive = FALSE;
+	    pathNext = NULL;
+	    }
+	else
+	    {
+	    seen[path->vertices[i]] = TRUE;
+	    }
+	}
+    }
+freez(&seen);
+return mutExculsive;
+}
+
 boolean isMutuallyExclusiveExonPath(struct splice *splice, struct altGraphX *ag, bool **em,
 				    int source, int sink)
 /* Return TRUE if splice is a pair of mutally exclusive exons, FALSE otherwise. 
@@ -723,7 +753,6 @@ boolean isMutuallyExclusiveExonPath(struct splice *splice, struct altGraphX *ag,
 */
 
 {
-int altStart = 0, altEnd = 0, startV = 0, endV = 0;
 struct path *shortPath = splice->paths;
 struct path *longPath = splice->paths->next;
 int endVert = longPath->vCount - 1;
@@ -776,8 +805,6 @@ boolean cassettePaths(struct splice *splice, struct altGraphX *ag, bool **em,
 /* short and long refer to bpCount. */
 struct path *shortPath = splice->paths; 
 struct path *longPath = splice->paths->next;
-int *shortVerts = shortPath->vertices;
-int *longVerts = longPath->vertices;
 int vCount = ag->vertexCount;
 int endVert = longPath->vCount-1;
 int startVert = 0;
@@ -868,7 +895,7 @@ if(shortPath->vCount == 4 && longPath->vCount == 2 &&
    inDegree(em, shortVerts[2], 0, vCount) == 1  &&  /* internal 3' ss has 1 connection in. */
    outDegree(em, shortVerts[2], 0, vCount) == 1 &&  /* internal 3' ss has 1 connection out. */
    inDegree(em, shortVerts[3], 0, vCount) == 2  &&  /* downstream 5' ss has two connections upstream. */
-   (splice, ag, em, source,sink))
+   isMutuallyExclusive(splice, ag, em, source,sink))
     retInt = TRUE;
 return retInt;
 }
@@ -1029,37 +1056,6 @@ else
 return alt3;
 }
 
-boolean isMutuallyExclusive(struct splice *splice, struct altGraphX *ag,
-			   bool **em, int source, int sink)
-/* Return TRUE if the paths in splice are mutually exclusive, FALSE
-   otherwise. */
-{
-bool *seen = NULL;
-int i = 0;
-struct path *path = NULL, *pathNext = NULL;
-boolean mutExculsive = TRUE;
-AllocArray(seen, ag->vertexCount);
-/* Loop through each path recording vertices that are
-   seen. If the same one is seen twice then mutExculsive = FALSE. */
-for(path = splice->paths; path != NULL; path = pathNext)
-    {
-    pathNext = path->next;
-    for(i = 1; i < path->vCount -1; i++)
-	{
-	if(seen[path->vertices[i]] == TRUE) 
-	    {
-	    mutExculsive = FALSE;
-	    pathNext = NULL;
-	    }
-	else
-	    {
-	    seen[path->vertices[i]] = TRUE;
-	    }
-	}
-    }
-freez(&seen);
-return mutExculsive;
-}
 
 boolean isAltTxStart(struct splice *splice, struct altGraphX *ag, bool **em,
 		     int source, int sink)
@@ -1214,7 +1210,7 @@ splice->vCount = ag->vertexCount;
 splice->vPositions = CloneArray(ag->vPositions, splice->vCount);
 splice->vTypes = CloneArray(ag->vTypes, splice->vCount);
 if(vertIx == source)
-    safef(buff, sizeof(buff), "%s.s", ag->name, vertIx);
+    safef(buff, sizeof(buff), "%s.s", ag->name);
 else
     safef(buff, sizeof(buff), "%s.%d", ag->name, vertIx);
 splice->name = cloneString(buff);
@@ -1278,12 +1274,6 @@ boolean isLooseCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int v
 {
 unsigned char *vTypes = ag->vTypes;
 int i=0;
-struct altGraphX *subAg = NULL;
-int vCount = ag->vertexCount;
-int numAltVerts = 4;
-int *vPos = ag->vPositions;
-int *starts = ag->edgeStarts;
-int *ends = ag->edgeEnds;
 /* Quick check. */
 if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
     return FALSE;
@@ -1317,7 +1307,6 @@ struct splice *splice = NULL;
 int *altStarts = NULL;
 int altCount = 0;
 int i = 0;
-char buff[256];
 struct path *path = NULL;
 
 splice = newSplice(ag, vertIx, sink, source);
@@ -1508,7 +1497,6 @@ struct splice *splice = NULL;
 int vCount = ag->vertexCount;
 int *vPos = ag->vPositions;
 int altBpStartV=-1, altBpEndV=-1, startV=-1, endV=-1;
-int looseAdded = 0;
 for(i = 0; i < vCount; i++) 
     {
     for(j = 0; j < vCount; j++) 
@@ -1567,10 +1555,7 @@ int doAltPathsAnalysis(struct altGraphX *agx, FILE *spliceOut)
 {
 bool **em = altGraphXCreateEdgeMatrix(agx);
 int source = -1, sink = agx->vertexCount;
-int vC = agx->vertexCount + 2;
-int *vPos = agx->vPositions;
 int **distance = createDistanceMatrix(agx, em, source, sink);
-unsigned char *vTypes = agx->vTypes;
 int vertIx = 0;
 int numAltEvents = 0;
 struct splice *splice = NULL, *spliceList = NULL;
@@ -1657,7 +1642,6 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
     {
     for(path = splice->paths; path != NULL; path = path->next)
 	{
-	int pathCount = 0;
 	/* If writing beds, create the bed and write it out. */
 	if(pathBedFile != NULL)
 	    {	
@@ -1747,7 +1731,7 @@ void writeOutFrames(FILE *htmlOut, char *fileName, char *db, char *browserName)
 /* Write out the frames. */
 {
 fprintf(htmlOut, "<html><head><title>Alt-Splicing Paths</title></head>\n"
-     "<frameset cols=\"18%,82%\">\n"
+     "<frameset cols=\"18%%,82%%\">\n"
      "<frame name=\"_list\" src=\"./%s\">\n"
      "<frame name=\"browser\" src=\"http://%s/cgi-bin/hgTracks?db=%s\">\n"
      "</frameset>\n"

@@ -2,7 +2,7 @@
 #include "math.h"
 #include "heap.h"
 
-static char const rcsid[] = "$Id: heap.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: heap.c,v 1.3 2007/01/08 19:23:36 sugnet Exp $";
 
 int _heapParent(int i)
 /* Return the parent index of node at heap index i. */
@@ -127,7 +127,6 @@ void heapTraverseVals(struct heap *heap, void (*func)(void *val))
 /* Apply func to every element of heap with heapEl->val as parameter. */
 {
 int i;
-struct heapEl *hel;
 for (i=0; i<heap->count; ++i)
     {
     func(heap->array[i]->val);

@@ -8,16 +8,14 @@
 #include "jksql.h"
 #include "altSpliceSite.h"
 
-static char const rcsid[] = "$Id: altSpliceSite.c,v 1.2 2003/07/21 04:35:28 sugnet Exp $";
+static char const rcsid[] = "$Id: altSpliceSite.c,v 1.3 2007/01/08 19:23:36 sugnet Exp $";
 
 struct altSpliceSite *altSpliceSiteLoad(char **row)
 /* Load a altSpliceSite from row fetched with select * from altSpliceSite
  * from database.  Dispose of this with altSpliceSiteFree(). */
 {
 struct altSpliceSite *ret;
-int sizeOne,i;
-char *s;
-
+int sizeOne;
 AllocVar(ret);
 ret->altCount = sqlUnsigned(row[7]);
 ret->chrom = cloneString(row[0]);

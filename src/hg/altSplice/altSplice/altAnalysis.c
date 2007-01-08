@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.16 2004/12/27 20:39:40 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.17 2007/01/08 19:23:34 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -231,8 +231,7 @@ boolean areConstitutive(struct altGraphX *ag, bool **em, int v1, int v2)
 */
 {
 int sum = 0;
-boolean isConst = TRUE;
-int i = 0, j = 0;
+int i = 0;
 int vC = ag->vertexCount;
 for(i = 0; i < vC; i++)
     {
@@ -458,12 +457,8 @@ boolean isCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
 {
 unsigned char *vTypes = ag->vTypes;
 int i=0;
-struct altGraphX *subAg = NULL;
-int vCount = ag->vertexCount;
 int numAltVerts = 4;
 int *vPos = ag->vPositions;
-int *starts = ag->edgeStarts;
-int *ends = ag->edgeEnds;
 /* Quick check. */
 if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
     return FALSE;
@@ -1401,12 +1396,10 @@ void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
 /* Walk throught the altGraphX graph and look for evidence of altSplicing. */
 {
-struct altSpliceSite *aSplice = NULL;
 struct altSpliceSite *notAlt = NULL, *notAltList = NULL;
 bool **em = altGraphXCreateEdgeMatrix(ag);
 int vCount = ag->vertexCount;
 unsigned char *vTypes = ag->vTypes;
-int *vPos = ag->vPositions;
 int altSpliceSitesOrig = *altSpliceSites;
 int i,j,k;
 int altCount = 0;
@@ -1553,7 +1546,7 @@ else
 void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
 {
 fprintf(htmlOut, "<html><head><title>Human Alt Splicing Conserved in Mouse</title></head>\n"
-     "<frameset cols=\"18%,82%\">\n"
+     "<frameset cols=\"18%%,82%%\">\n"
      "<frame name=\"_list\" src=\"./%s\">\n"
      "<frame name=\"browser\" src=\"http://hgwdev-sugnet.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=NM_005487&altGraphXCon=full\">\n"
      "</frameset>\n"

@@ -7,7 +7,7 @@
 #include "geneGraph.h"
 #include "altSpliceSite.h"
 
-static char const rcsid[] = "$Id: altSummary.c,v 1.2 2003/07/10 16:37:34 sugnet Exp $";
+static char const rcsid[] = "$Id: altSummary.c,v 1.3 2007/01/08 19:23:35 sugnet Exp $";
 
 
 
@@ -387,11 +387,9 @@ void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
 /* Walk throught the altGraphX graph and look for evidence of altSplicing. */
 {
-struct altSpliceSite *aSplice = NULL;
 bool **em = altGraphXCreateEdgeMatrix(ag);
 int vCount = ag->vertexCount;
 unsigned char *vTypes = ag->vTypes;
-int *vPos = ag->vPositions;
 int altSpliceSitesOrig = *altSpliceSites;
 int i,j,k;
 for(i=0; i<vCount; i++)
@@ -453,7 +451,7 @@ else
 void writeOutFrames(FILE *htmlOut, char *fileName, char *db)
 {
 fprintf(htmlOut, "<html><head><title>Human Alt Splicing Conserved in Mouse</title></head>\n"
-     "<frameset cols=\"18%,82%\">\n"
+     "<frameset cols=\"18%%,82%%\">\n"
      "<frame name=\"_list\" src=\"./%s\">\n"
      "<frame name=\"browser\" src=\"http://hgwdev-sugnet.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=NM_005487&altGraphXCon=full\">\n"
      "</frameset>\n"

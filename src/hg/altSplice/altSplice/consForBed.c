@@ -5,7 +5,7 @@
 #include "bed.h"
 #include "options.h"
 #include "obscure.h"
-
+#include "memalloc.h"
 #define FLOAT_CHEAT 10000.0 /* Trick for storing floats with limited percision in ints. */
 
 void usage() 

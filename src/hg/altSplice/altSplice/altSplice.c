@@ -68,12 +68,13 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "bed.h"
+#include "nib.h"
 #include "options.h"
 #include "binRange.h"
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.21 2005/03/28 17:38:49 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.22 2007/01/08 19:23:35 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -319,7 +320,6 @@ if(query->tStart < target->tStart || query->tEnd > target->tEnd ||
 for(qIx = 0; qIx < qECount; qIx++) 
     {
     boolean edgeFound = FALSE;
-    int qSize = qPos[qEnds[qIx]] - qPos[qStarts[qIx]];
     /* only looking at exons. */
     if(altGraphXEdgeType(query, qIx) != ggExon)
 	continue;
@@ -396,8 +396,6 @@ for(mc = mcList; mc != NULL; mc = mc->next)
     ag = ggToAltGraphX(gg);
     if(ag != NULL)
 	{
-	struct geneGraph *gTemp = NULL;
-	struct ggEdge *cassettes = NULL;
 	char name[256];
 	freez(&ag->name);
 	safef(name, sizeof(name), "%s.%d", ag->tName, count++);
@@ -477,9 +475,8 @@ struct psl *getPslsFromDatabase(char *chrom, int chromStart, int chromEnd,
 				struct sqlConnection *conn)
 /** Load the psls for a given table directly from the database. */
 {
-int i,j,k,l;
-char buff[256];
-struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
+
+struct psl *pslList = NULL;
 pslList = loadPslsFromDb(conn, numDbTables, dbTables, chrom, chromStart, chromEnd);
 return pslList;
 }
@@ -510,7 +507,6 @@ void setupTissueLibraryCache(struct sqlConnection *conn)
 {
 struct sqlResult *sr = NULL;
 char query[256];
-int organismId = -1;
 struct slInt *tissue = NULL, *library = NULL;
 char **row = NULL;
 int i = 0;
@@ -692,8 +688,6 @@ struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn,
 {
 struct altGraphX *ag = NULL;
 struct dnaSeq *genoSeq = NULL;
-int i,j,k,l;
-char buff[256];
 struct ggMrnaAli *maList=NULL, *ma=NULL, *maNext=NULL, *maSameStrand=NULL;
 struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
 char *chrom = gp->chrom;
@@ -762,7 +756,6 @@ struct genePred *convertBedsToGps(char *bedFile)
 {
 struct genePred *gpList = NULL, *gp =NULL;
 struct bed *bedList=NULL, *bed=NULL;
-char *row[4];
 bedList = bedLoadAll(bedFile);
 if(bedList->strand == NULL)
     errAbort("Beds must have strand information.");
@@ -799,7 +792,7 @@ void createAltSplices(char *outFile,  boolean memTest)
    build altSplice graphs. */
 {
 struct genePred *gp = NULL, *gpList = NULL;
-struct altGraphX *ag=NULL, *agList= NULL;
+struct altGraphX *ag=NULL;
 FILE *out = NULL;
 struct sqlConnection *conn = hAllocConn();
 char *gpFile = NULL;
@@ -855,7 +848,7 @@ else /* Have to set up agxSeen binKeeper based on genePreds. */
 
 dotForUserInit(max(slCount(gpList)/10, 1));
 out = mustOpen(outFile, "w");
-for(gp = gpList; gp != NULL & count < 5; )
+for(gp = gpList; gp != NULL && count < 5; )
     {
     dotForUser();
     fflush(stderr);
@@ -890,8 +883,6 @@ int main(int argc, char *argv[])
 /* main routine, calls optionInt and sets database */
 {
 char *outFile = NULL;
-char *bedFile = NULL;
-char *memTestStr = NULL;
 boolean memTest=FALSE;
 char *db = NULL;
 if(argc == 1)

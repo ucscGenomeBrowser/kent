@@ -65,7 +65,7 @@ boolean bedInGraph(struct bed *bed, struct altGraphX *agx)
 int *vPos = agx->vPositions;
 int *starts = agx->edgeStarts;
 int *ends = agx->edgeEnds;
-int posIx = 0, edgeIx = 0;
+int edgeIx = 0;
 boolean inGraph = TRUE;
 int eC = agx->edgeCount;
 int i = 0;
@@ -100,7 +100,6 @@ boolean edgeExists(struct altGraphX *agx, int pos1, int pos2)
 /* Return TRUE if there exists an edge connecting position 1 and
    position 2 in the graph. */
 {
-int i = 0;
 int *vPos = agx->vPositions;
 int *starts = agx->edgeStarts;
 int *ends = agx->edgeEnds;
@@ -118,15 +117,7 @@ boolean cassetteInGraph(struct bed *bed, struct altGraphX *agx)
 /* Assume bed is a cassette exon 1bp---intron---cassette---intron---1bp and
    see if it is in the graph. */
 {
-int *vPos = agx->vPositions;
-int *starts = agx->edgeStarts;
-int *ends = agx->edgeEnds;
-int posIx = 0, edgeIx = 0;
 boolean inGraph = TRUE;
-int eC = agx->edgeCount;
-int i = 0;
-int start = 0;
-int end = 0;
 assert(bed);
 assert(agx);
 if(bed->blockCount != 3 || bed->blockSizes[0] != 1 || bed->blockSizes[2] != 1)
@@ -178,7 +169,6 @@ char * bedFile = NULL, *agxFile = NULL;
 char *inGraphFile = NULL, *notInGraphFile = NULL;
 char *db = NULL;
 boolean doCassette = optionExists("cassetteBeds");
-struct altGraphX *agxList = NULL, *agx = NULL;
 struct bed *bedList = NULL, *bed = NULL;
 FILE *inAgx = NULL, *notInAgx = NULL;
 int inAgxCount = 0, notInAgxCount = 0;

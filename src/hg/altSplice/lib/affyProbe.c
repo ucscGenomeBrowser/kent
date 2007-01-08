@@ -8,16 +8,14 @@
 #include "jksql.h"
 #include "affyProbe.h"
 
-static char const rcsid[] = "$Id: affyProbe.c,v 1.1 2004/05/04 00:01:52 sugnet Exp $";
+static char const rcsid[] = "$Id: affyProbe.c,v 1.2 2007/01/08 19:23:36 sugnet Exp $";
 
 struct affyProbe *affyProbeLoad(char **row)
 /* Load a affyProbe from row fetched with select * from affyProbe
  * from database.  Dispose of this with affyProbeFree(). */
 {
 struct affyProbe *ret;
-int sizeOne,i;
-char *s;
-
+int sizeOne;
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[9]);
 ret->chrom = cloneString(row[0]);
