@@ -11,4 +11,7 @@ char *cfgVal(char *name);
 /* Return option with given name.  Squawk and die if it
  * doesn't exist. */
 
+unsigned long cfgModTime();
+/* Return modification time of config file */
+
 #endif
