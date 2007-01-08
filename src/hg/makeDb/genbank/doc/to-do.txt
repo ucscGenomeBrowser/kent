@@ -1015,9 +1015,12 @@ Warning: NR_001874: malformed RefSeq CDS:
 - create problem library table, and color cDNAs and provide details
   based on it
    - Athersys RAGE Library
-   - Invitrogen CR mRNAs
+   - Other RAGE libraries?? 
+           see http://www.nature.com/nbt/journal/v19/n5/full/nbt0501_440.html
+   - Invitrogen CR mRNAs (http://fulllength.invitrogen.com/ in COMMENT)
    - JK: The ORESTES libraries (which I think, like the RAGE are
      just ESTs) should be taken with a large grain of salt.
+       these are probably ok,see http://www.nature.com/tpj/journal/v2/n3/full/6500103a.html
 
    - how to select for above
         
@@ -1067,3 +1070,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - instead of creating a *.jobs file per job, create one big file and
   have the offset of the record a parameter to the gbBlat
+
+- generate error if attempt to long with per chromosome tables and
+  a large number of `chromosomes'.

@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.10 2006/09/20 22:48:53 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.11 2007/01/08 00:48:41 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -77,7 +77,7 @@ struct genomeInfo
 static struct genomeInfo genomeInfoTbl[] = 
 {
     {"hg17",  9606, 35, 1},
-    {"hg18",  9606, 36, 1},
+    {"hg18",  9606, 36, 2},
     {"mm8",  10090, 36, 1},
     {NULL,       0,  0, 0}
 };
