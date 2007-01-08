@@ -43,6 +43,7 @@ longLabel UniProt (SwissProt/TrEMBL) Protein Accession
 priority 2.15
 visibility off
 type lookup kgXref kgID spID
+search exact
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name refSeq
