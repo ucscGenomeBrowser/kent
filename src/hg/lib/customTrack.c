@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.161 2006/12/18 22:46:01 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.162 2007/01/08 22:55:03 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -624,6 +624,17 @@ else
 return cloneString(buf);
 }
 
+boolean ctConfigUpdate(char *ctFile)
+/* CT update is needed if database has been enabled since
+ * the custom tracks in this file were created.  The only way to check is
+ * by file mod time, unless we add the enable time to
+ * browser metadata somewhere */
+{
+if (!ctFile)
+    return FALSE;
+return cfgModTime() > fileModTime(ctFile);
+}
+
 struct customTrack *customTracksParseCartDetailed(struct cart *cart,
 					  struct slName **retBrowserLines,
 					  char **retCtFileName,
@@ -800,8 +811,8 @@ if (customTracksExist(cart, &ctFileName))
 /* merge new and old tracks */
 numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
-if (newCts || removedCt)
-   customTracksSaveCart(cart, ctList);
+if (newCts || removedCt || ctConfigUpdate(ctFileName))
+    customTracksSaveCart(cart, ctList);
 
 cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);
