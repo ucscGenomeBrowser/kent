@@ -781,14 +781,16 @@ hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 # the value for a probeset in one array to the median value across all arrays
 # for that probset and then a log2 is taken. This allows comparison 
 # between arrays that may differ due to technical or biological differences.
-
+# RE-CREATE tables. Data was log2 already so antilog the values to get 
+# absolute values and then pass through the microarray processing programs.
+# (DONE, 2007-01-05 - 2007-01-08, hartera)
    ssh hgwdev
    mkdir /projects/compbio/data/microarray/zebrafishWT
    cd /projects/compbio/data/microarray/zebrafishWT
    # copy the data here received by e-mail and unzip
    unzip wt34.loessNorm.absval.2006-10-12.zip 
-   mv wt34.loessNorm.absval.2006-10-12.txt wtAffyAbs.txt
-   dos2unix wtAffyAbs.txt 
+   mv wt34.loessNorm.absval.2006-10-12.txt wtAffyNormLog2.txt
+   dos2unix wtAffyNormLog2.txt 
 cat << 'EOF' > format.pl
 #!/usr/bin/perl -w
 use strict;
@@ -834,17 +836,41 @@ else
 'EOF'
    # << emacs
 chmod +x format.pl
-perl format.pl < wtAffyAbs.txt > zebrafishWTAbs.txt
+perl format.pl < wtAffyNormLog2.txt > zebrafishWTNormLog2.txt
+# antilog the values, log is base 2
+cat << 'EOF' > cnvToAntilog
+#!/usr/bin/awk -f
+BEGIN {
+    FS = "\t"
+    RS = "\n"
+    ORS=""
+}
+{
+    print $1 "\t"
+    x=2
+    while (x < NF) {
+        print 2^$x "\t"
+        x++
+    }
+    print 2^$NF "\n"
+}
+'EOF'
+chmod +x cnvToAntilog
+# run script and skip header line in file
+tail +2 zebrafishWTNormLog2.txt | cnvToAntiLog > tmp.txt
+# add back header line:
+head -1 zebrafishWTNormLog2.txt > header
+cat header tmp.txt > zebrafishWTNormAbs.txt
+
 # Then load the data into hgFixed using hgGnfMicroarrray and use options
 # to set the url, ref, and credit to "n/a" and chip to Zebrafish.
 # Need to use this program to get 3 extras needed for hgMedianMicroarray
-# Added an option to hgGnfMicroarray to preserve the values as floats and not
-# round them which is the default. For these arrays it takes away too much
-# precision from the data values.
+# No need to round the values this time as they are larger and have 
+# a larger range.
 # Create the main expRecord table and the expData table for the 
 # absolute measurements
 hgGnfMicroarray zebrafishZonWTAllExps zebrafishZonWTAll \
-     zebrafishWTAbs.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a -noRound
+     zebrafishWTNormAbs.txt -chip=Zebrafish -url=n/a -ref=n/a -credit=n/a 
 
 # Changed the Exps table so that the extras column for the MedianExps table 
 # has the strain and developmental stage in the second field so that an 
@@ -883,8 +909,10 @@ hgsql hgFixed < zfishWTExpsNewExtras.sql
 
 # Convert these to ratios using the median of the absoulute values 
 # across all experiments to be the denominator for each probeset.
-hgRatioMicroarray zebrafishZonWTAll zebrafishZonWTAllRatio -minAbsVal=0 \
-       -minMaxVal=0
+# minAbsVal is 0 here as no value in this dataset is less than 1 and the
+# default for this parameter is 20.
+hgRatioMicroarray -minAbsVal=0 zebrafishZonWTAll zebrafishZonWTAllRatio 
+
 # Create the .ra file for the Median tables
 hgsql -N -e 'select extras, id from zebrafishZonWTAllExps;' hgFixed \
       > zfishWTExps
@@ -938,6 +966,17 @@ hgMedianMicroarray hgFixed zebrafishZonWTAllRatio zebrafishZonWTAllExps \
 hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
   zfishZonWTMedian.ra zebrafishZonWTMedian zebrafishZonWTMedianExps -minExps=1
 
+# get distribution of MedianRatio scores:
+hgsql -N -e 'select * from zebrafishZonWTMedianRatio;' hgFixed > medRatioData
+awk '{print $3}' medRatioData > medRatioData2
+perl -pi.bak -e 's/,/\n/g' medRatioData2
+textHistogram -real -binSize=0.2 -maxBinCount=1100 -minVal=-200 \
+    medRatioData2 > histMedRatio.out
+
+# from this histogram, see that most values fall between -2 to +2 so set the
+# trackDb for the Affy Zon Wild Type Array track to have expScale of 2.0
+# and expStep to 0.2 for the log scale to display the ratios in this track.
+ 
 ##########################################################################
 
 #The Mouse GNF Expression Atlas 2 (2004)
@@ -961,3 +1000,5 @@ hgMedianMicroarray hgFixed zebrafishZonWTAll zebrafishZonWTAllExps \
     # mgcMBLabValid.2006-10-25.acc
     hgLoadSqlTab hgFixed mgcMBLabValid ~/compbio/genbank/kent/src/hg/lib/mgcMBLabValid.sql mgcMBLabValid.2006-10-25.acc
     gzip mgcMBLabValid.2006-10-25.acc
+
+
