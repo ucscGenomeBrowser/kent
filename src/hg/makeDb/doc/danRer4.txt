@@ -7182,6 +7182,10 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 # UPDATE ARRAY DATA TRACK AFTER PROCESSING ARRAY DATA DIFFERENTLY AND
 # RELOADING INTO hgFixed (see hgFixed.txt for details). 
 # (DONE, 2006-10-20, hartera)
+# UPDATE ARRAY DATA TRACK AFTER REPROCESSING ARRAY DATA TO ANTILOG THE LOG2
+# VALUES FROM NORMALISATION TO GET THE ABSOLUTE VALUES AND
+# RELOADING INTO hgFixed (see hgFixed.txt for details).
+# (DONE, 2007-01-08, hartera)
 # Array data is for whole embryos of five wild type zebrafish strains. 
 # Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
 # Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
@@ -7194,7 +7198,9 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
     # from the track controls on the track description page. Also set up the
     # Zebrafish microarrayGroups.ra so that the Medians of replicates or
     # Means of replicates can also be selected for display.
-
+    # Create mapped data in zebrafishZonWT.bed.
+    rm zebrafishZonWT.bed
+    hgsql -e 'drop table affyZonWildType;' danRer4
     hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTAllRatio \
          /cluster/data/danRer4/bed/affyZebrafish/affyZebrafish.psl
     # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
@@ -7210,7 +7216,7 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
     sort ratioExps.out | uniq -c > ratioExps.uniq.count
     textHistogram -binSize=0.5 -real -maxBinCount=40 -minVal=-10 \
         ratioExps.out > expRatios.hist
-    # Most values are between -6 and +3.
+    # Most values are between -3 and +2.
     # Therefore use the following trackDb entry:
 
 # track affyZonWildType
@@ -7220,7 +7226,7 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
 # priority 80
 # visibility hide
 # type expRatio
-# expScale 3.0
+# expScale 2.0
 # expStep 0.2
 # groupings affyZonWildTypeGroups
     # The .ra file in /usr/local/apache/cgi-bin/hgCgiData/Zebrafish
@@ -8233,45 +8239,42 @@ drop minNonRepSize:     1004    72545
 #    46 CGENZEB_456004521_0
 #    38 CGENZEB_456008610_0
 # CGENZEB_456012678_0 now went down to 1. 
+# 89.2% aligned
 
+   cd /san/sanvol1/scratch/danRer4/compugen
+   rm contig*
+# Use these parameters:
+   pslCDnaFilter -localNearBest=0.001 -minQSize=20 -minNonRepSize=8 \
+        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.10 raw.psl \
+        contig.psl
+   
+   # lift up the coordinates to chrom level
+   liftUp compugenZebrafish.psl \
+          /cluster/data/danRer4/jkStuff/liftAll.lft warn contig.psl
+   # Got 6247 lifts in /cluster/data/danRer4/jkStuff/liftAll.lft
+   # Lifting contig.psl
+    
+   # rsync these psl files
+   rsync -a --progress /san/sanvol1/scratch/danRer4/compugen/*.psl \
+         /cluster/data/danRer4/bed/compugenZebrafish
+    
+   ssh kkstore04
+   cd /cluster/data/danRer4/bed/compugenZebrafish
+   # shorten names in psl file
+   pslCheck compugenZebrafish.psl
+   # psl is good
+   # load track into database
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/compugenZebrafish
+   hgsql -e 'drop table compugenZebrafish;' danRer4
+   hgLoadPsl danRer4 compugenZebrafish.psl
+   # Add entry in trackDb/zebrafish/trackDb.ra and a search for hgFindSpec
+   # Add a description page. 
+   # Need to add disclaimer for sequences.
 
-#                         seqs    aligns
-#             total:     15272   828202
-#drop minNonRepSize:     2763    741674
-#     drop minIdent:     2656    39188
-#     drop minCover:     2550    10784
-#        weird over:     359     1439
-#        kept weird:     277     347
-#    drop localBest:     2830    17737
-#              kept:     14952   18819
-# Kept 97.9% of alignments. There are 15502 Affy sequences originally
-# aligned so there are now 96.5% remaining.
-     
-    # lift up the coordinates to chrom level
-    liftUp affyZebrafish.psl \
-           /cluster/data/danRer4/jkStuff/liftAll.lft warn contig.psl
-    # Got 6247 lifts in /cluster/data/danRer4/jkStuff/liftAll.lft
-    # Lifting contig.psl
-    
-    # rsync these psl files
-    rsync -a --progress /san/sanvol1/scratch/danRer4/affy/*.psl \
-         /cluster/data/danRer4/bed/affyZebrafish/
-    
-    ssh kkstore04
-    cd /cluster/data/danRer4/bed/affyZebrafish
-    # shorten names in psl file
-    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.tmp
-    mv affyZebrafish.psl.tmp affyZebrafish.psl
-    pslCheck affyZebrafish.psl
-    # psl is good
-    # load track into database
-    ssh hgwdev
-    cd /cluster/data/danRer4/bed/affyZebrafish
-    hgsql -e 'drop table affyZebrafish;' danRer4
-    hgLoadPsl danRer4 affyZebrafish.psl
     # Add consensus sequences for Zebrafish chip
     # Copy sequences to gbdb if they are not there already
-    mkdir -p /gbdb/hgFixed/affyProbes
+    mkdir -p /gbdb/hgFixed/compugenProbes
     ln -s \
     /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
       /gbdb/hgFixed/affyProbes
