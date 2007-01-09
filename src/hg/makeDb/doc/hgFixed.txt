@@ -16,7 +16,7 @@
 hgGnfMicroarray gnfHumanU95AllExps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95
 # Convert these to ratios using the median of medians of non-cancerous
 # cell types as the denominator as so:
-cd ~/src/hg/makDb/hgRatioMicroarray
+cd ~/src/hg/makeDb/hgRatioMicroarray
 hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra
 # Take the median value over multiple replicants and put in this table:
 cd ../hgMedianMicroarray
