@@ -2924,13 +2924,14 @@ mafTrack encodeTbaAlign
 dataVersion May 2006
 
 track encodeUViennaRnaz
-shortLabel UVienna RNAz
-longLabel UVienna, RNA secondary structure 
+shortLabel Vienna RNAz
+longLabel University of Vienna, RNA secondary structure predicted by RNAz 
 group encodeGenes
 priority 63.12
 visibility hide
 color 30,120,0
 type bed 4
+dataVersion Dec 2006
 
 track encodeDless
 shortLabel DLESS
