@@ -413,7 +413,7 @@ urlLabel Yale DART Link:
 
     track encodeYaleAffyNeutRNATars
     subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu
+    shortLabel Yale TAR Neutro
     longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
     priority 1
     color 50,100,50
@@ -421,7 +421,7 @@ urlLabel Yale DART Link:
 
     track encodeYaleAffyPlacRNATars
     subTrack encodeYaleAffyRNATars
-    shortLabel Yale RNA Plcnta
+    shortLabel Yale TAR Plcnta
     longLabel Yale Placenta RNA Transcriptionally Active Region
     priority 12
     color 50,50,150
