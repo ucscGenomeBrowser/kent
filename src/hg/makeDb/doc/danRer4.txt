@@ -8296,81 +8296,104 @@ drop minNonRepSize:     1004    72545
     # have longer alignments to different regions of the genome that are good.
     
 #########################################################################
-# ENSEMBL GENES TRACKS (in progress, 2006-12-13, hartera)
+# ENSEMBL GENES TRACKS FOR ENSEMBL VERSION 42 (in progress, 2007-01-08, hartera)
 # Obtained from BioMart at Ensembl (The Wellcome Trust Sanger Institute)
+   # Starting downloading Ensembl v41 genes (2006-12-13)
+   # get "unexpected end of file" error with the peptide download. 
+   # Notified Ensembl (2006-12-15).
+   # Ensembl helpdesk say that the files sometimes get terminated early
+   # for large downloads so try using this link to BioMart instead:
+   # http://www.biomart.org/biomart/martview
+   # Repeat above using this link. This has Ensembl42 though so e-mailed 
+   # Ensembl to ask if they are releasing Ensembl42 soon (2006-12-18)
+# Updated to Ensembl v42 in Dec. 2006 so use this new data set (2007-01-08):
     ssh kkstore04
-    mkdir -p /cluster/data/danRer4/bed/ensembl41
-    cd /cluster/data/danRer4/bed/ensembl41
+    mkdir -p /cluster/data/danRer4/bed/ensembl42
+    cd /cluster/data/danRer4/bed/ensembl42
 
-    # Get the Ensembl gene data from
-    # http://www.ensembl.org/Multi/martview
+    # Get the Ensembl gene data from BioMart at:
+    # http://www.biomart.org/biomart/martview
     # Follow this sequence through the pages: (NOTE: this interface has changed
-    # a little since danRer2). Ensembl version is 41 (Oct 2006).
-    # Page 1) Select the Ensembl dataset (v41 here) and the 
-    # Danio_rerio choice (ZFISH6 here). Hit next. 28506 entries total.
-    # Page 2) Then hit next. 
-    # Page 3) Choose the "Structures" Attribute Page from the pulldown menu
-    # at the top. Make sure that under the GENE section, the Ensembl 
-    # Attributes checked include the Ensembl Gene ID and Ensembl 
-    # Transcript ID. Choose GTF as the output. Choose gzip compression.  
-    # Hit export. Save as ensemblGene41.gff.gz
-
-    # then on the same last page, switch to the Features Attribute Page
+    # significantly since danRer3). Ensembl version is 42 (Dec 2006).
+    # 1) The Dataset link in the left panel is selected. Select the 
+    # Ensembl dataset (v42 here) and the Danio_rerio choice (ZFISH6 here).
+    # 2) Click on the Attributes link in the left panel.  
+    # 3) Select Structures. Click on the + next to GENE to expand it
+    # and check the boxes for the Ensembl Gene ID and Ensembl
+    # Transcript ID. 
+    # 4) Clicking on the "Count" link on the top black menu shows that there
+    # are  28,508 / 28,508 Genes selected in Danio rerio genes (ZFISH6)
+    # 5) Click on the "Results" link on the top black menu and then select GFF
+    # as the format and select to export all results to a 
+    # "Compressed web file (notify by e-mail)" and hit the "Go" button and
+    # enter e-mail address as requested.
+    # When results are ready, you will receive an e-mail with a link to
+    # download the results, save as ensemblGene42.gff.gz
+    # Save as and move file to 
+    # /cluster/data/danRer4/bed/ensembl42
+    gunzip ensemblGene42.gff.gz
+    # file unzips ok.
+    # Repeat above but at step 3, selec the Features Attribute
     # select Ensembl Transcript ID and Biotype under the GENE section.
     # Select "Text, tab separated" as the output format and gzip 
     # compression. Biotype gives information to separate the genes into
-    # protein-coding and RNA genes and pseudogenes. 
-    # Save as ensemblGene41Biotype.tsv.gz
+    # protein-coding and RNA genes and pseudogenes.
+    # For step 5, select CSV as the output and then select to export all
+    # results to a "Compressed web file (notify by e-mail)" and hit the 
+    # "Go" button and enter e-mail address as requested.
+ 
+    # Save as ensemblGene42Biotype.tsv.gz and move to 
+    # /cluster/data/danRer4/bed/ensembl42
+    gunzip ensemblGene42Biotype.tsv.gz
+    # file unzips ok.
 
     # The Ensembl gene predictions are mapped to chromosomes except for 
     # chrNA and chrUn. Use lift files for scaffolds to these chroms.
     # get chrUn and chrNA Ensembl records.
  
     ssh kkstore04
-    cd /cluster/data/danRer4/bed/ensembl41
-    # unzip files
-    gunzip *.gz
+    cd /cluster/data/danRer4/bed/ensembl42
     
     # need to lift up the NA and Un scaffolds to chroms
-    liftUp -type=.gtf ensemblGene41.lifted \
-     /cluster/data/danRer4/jkStuff/liftAll.lft carry ensemblGene41.gff
+    liftUp -type=.gtf ensemblGene42.lifted \
+     /cluster/data/danRer4/jkStuff/liftAll.lft carry ensemblGene42.gff
     # Got 6247 lifts in /cluster/data/danRer4/jkStuff/liftAll.lft
-    # Lifting ensemblGene41.gff
+    # Lifting ensemblGene42.gff
 
-    wc -l ensemblGene41*
-    # 807869 ensemblGene41.gff
-    # 807869 ensemblGene41.lifted
-    # 39624 ensemblGene41Biotype.tsv
+    wc -l ensemblGene42*
+    # 807871 ensemblGene42.gff
+    # 807871 ensemblGene42.lifted
+    # 39626 ensemblGene42Biotype.tsv
     
     # check there are no scaffolds left in lifted file:
-    grep Zv6_NA ensemblGene41.lifted
-    grep Zv6_scaffold ensemblGene41.lifted
+    grep Zv6_NA ensemblGene42.lifted
+    grep Zv6_scaffold ensemblGene42.lifted
     # there are none so ok.
     # add chr at beginning of each line. NA and Un already have "chr" 
     # prefix so then remove the extra one.
-    sed -e "s/^/chr/" ensemblGene41.lifted | sed -e "s/chrchr/chr/" \
-        > ensGene41.gff
+    sed -e "s/^/chr/" ensemblGene42.lifted | sed -e "s/chrchr/chr/" \
+        > ensGene42.gff
     # check file sizes -ok and some of the lifted co-ordinates
     # Also remove the suffix that denotes the transcript version number. 
     # This is not in the ensGtp or ensPep tables.
-    perl -pi.bak -e 's/\.[0-9]+//'g ensGene41.gff
+    perl -pi.bak -e 's/\.[0-9]+//'g ensGene42.gff
 
    # Next split up the gff into a protein-coding gene set and a RNA gene and
    # pseudogene set and load into different tracks.
  
    # get transcript IDs only for protein coding transcripts
-   grep "protein_coding" ensemblGene41Biotype.tsv | awk '{print $1}' \
-        > ensGene41ProteinCoding.ids
+   grep "protein_coding" ensemblGene42Biotype.tsv | awk '{print $1}' \
+        > ensGene42ProteinCoding.ids
    # skip header line and grab everything else from the file
-   tail +2 ensemblGene41Biotype.tsv | grep -v "protein_coding" \
-        | awk '{print $1}' > ensGene41NonCoding.ids
-   wc -l ensGene41*ids
-   # 3558 ensGene41NonCoding.ids
-   # 36065 ensGene41ProteinCoding.ids
-   # 39623 total
-   wc -l ensemblGene41Biotype.tsv
-   # 39624 ensemblGene41Biotype.tsv
-
+   tail +2 ensemblGene42Biotype.tsv | grep -v "protein_coding" \
+        | awk '{print $1}' > ensGene42NonCoding.ids
+   wc -l ensGene42*ids
+   # 3560 ensGene42NonCoding.ids
+   # 36065 ensGene42ProteinCoding.ids
+   # 39625 total
+   wc -l ensemblGene42Biotype.tsv
+   # 39626 ensemblGene41Biotype.tsv
+   # extra line is the header line
    # then get only the protein-coding trancsripts from the GFF file
    # write a script to do this as grep is slow
 cat << 'EOF' > getIds.pl
@@ -8411,105 +8434,122 @@ while  (<FILE>){
 close(FILE);
 'EOF'
    chmod +x getIds.pl
-   perl getIds.pl ensGene41ProteinCoding.ids ensGene41.gff \
-        > ensGene41ProteinCoding.gff
+   perl getIds.pl ensGene42ProteinCoding.ids ensGene42.gff \
+        > ensGene42ProteinCoding.gff
    # uniq found.log and check against input ids
    sort found.log | uniq > foundProtein.uniq
-   sort ensGene41ProteinCoding.ids > ens41ProteinIds.sort
-   comm -13 foundProtein.uniq ens41ProteinIds.sort
-   
-   perl getIds.pl ensGene41NonCoding.ids ensGene41.gff \
-        > ensGene41NonCoding.gff
+   sort ensGene42ProteinCoding.ids > ens42ProteinIds.sort
+   comm -13 foundProtein.uniq ens42ProteinIds.sort
+   # All ids were found in the gff file
+
+   perl getIds.pl ensGene42NonCoding.ids ensGene42.gff \
+        > ensGene42NonCoding.gff
    sort found.log | uniq > foundNonCoding.uniq
-   sort ensGene41NonCoding.ids > ens41NonCodingIds.sort
-   comm -13 foundNonCoding.uniq ens41NonCodingIds.sort
+   sort ensGene42NonCoding.ids > ens42NonCodingIds.sort
+   comm -13 foundNonCoding.uniq ens42NonCodingIds.sort
    # All ids were found in the gff file
    rm *.sort *.uniq *.bak found.log
-   wc -l ensGene41*.gff
-   # 807869 ensGene41.gff
-   #   3693 ensGene41NonCoding.gff
-   # 804176 ensGene41ProteinCoding.gff
+   wc -l ensGene42*.gff
+   # 807871 ensGene42.gff
+   #   3695 ensGene42NonCoding.gff
+   # 804176 ensGene42ProteinCoding.gff
 
    # load into database
    ssh hgwdev
-   cd /cluster/data/danRer4/bed/ensembl41
+   cd /cluster/data/danRer4/bed/ensembl42
    hgsql -e 'drop table ensGene;' danRer4
    hgsql -e 'drop table ensGeneNonCoding;' danRer4
-   /cluster/bin/x86_64/ldHgGene danRer4 ensGene ensGene41ProteinCoding.gff
+   /cluster/bin/x86_64/ldHgGene danRer4 ensGene ensGene42ProteinCoding.gff
    # Read 36065 transcripts in 804176 lines in 1 files
    # 36065 groups 27 seqs 1 sources 4 feature types
    # 36065 gene predictions
 
-   /cluster/bin/x86_64/ldHgGene danRer4 ensGeneNonCoding ensGene41NonCoding.gff
-   # Read 3558 transcripts in 3693 lines in 1 files
-   # 3558 groups 27 seqs 1 sources 1 feature types
-   # 3558 gene predictions
-
+   /cluster/bin/x86_64/ldHgGene danRer4 ensGeneNonCoding ensGene42NonCoding.gff
+   # Read 3560 transcripts in 3695 lines in 1 files
+   # 3560 groups 27 seqs 1 sources 1 feature types
+   # 3560 gene predictions
+   # The only difference between Ensembl v42 and v41 for zebrafish is two
+   # extra gene predictions in the non-coding category in v42.
+ 
    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and
    # hgKnownToSuper.  Use BioMart to create it as above, except:
-   # Page 3) Choose the "Features" box. In "Ensembl Attributes", check
-   # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.
-   # Choose Text, tab-separated as the output format and gzip compression.  
-   # Result name: ensGtp.
+   # Step 3) Choose "Features". Expand the GENE section and under 
+   # "Ensembl Attributes", check boxes for Ensembl Gene ID, 
+   # Ensembl Transcript ID, Ensembl Peptide ID.
+   # After clicking on the Results link in the top black menu,
+   # Choose CSV as the output format and Export all results to a 
+   # "Compressed web file (notify by e-mail)" and hit the 
+   # "Go" button and enter e-mail address as requested.
+   # Result name: ensembl42Gtp.tsv.gz
+
    ssh kkstore04 
-   cd /cluster/data/danRer4/bed/ensembl41
-   gunzip ensGtp.tsv.gz
+   cd /cluster/data/danRer4/bed/ensembl42
+   gunzip ensembl42Gtp.tsv.gz
    # separate the IDs for protein-coding genes and the rest (RNA genes and
    # pseudogenes).
-   
-   perl getIds.pl ensGene41ProteinCoding.ids ensGtp.tsv \
+   # transcript ID and gene ID are in different columns than before so switch
+   # Gene ID should be in first column and Transcrip ID in the second column.
+   awk 'BEGIN {FS="\t"} {OFS="\t"} {print $2,$1,$3}' ensembl42Gtp.tsv \
+       > ens42GtpFormat.tsv
+   perl getIds.pl ensGene42ProteinCoding.ids ens42GtpFormat.tsv \
         > ensGtpProteinCoding.txt
    # uniq found.log and check against input ids
    sort found.log | uniq > foundProtein.uniq
-   sort ensGene41ProteinCoding.ids > ens41ProteinIds.sort
-   comm -13 foundProtein.uniq ens41ProteinIds.sort
+   sort ensGene42ProteinCoding.ids > ens42ProteinIds.sort
+   comm -13 foundProtein.uniq ens42ProteinIds.sort
    
-
-   perl getIds.pl ensGene41NonCoding.ids ensGtp.tsv \
+   perl getIds.pl ensGene42NonCoding.ids ens42GtpFormat.tsv \
         > ensGtpNonCoding.txt
    # uniq found.log and check against input ids
    sort found.log | uniq > foundNonCoding.uniq
-   sort ensGene41NonCoding.ids > ens41NonCodingIds.sort
-   comm -13 foundNonCoding.uniq ens41NonCodingIds.sort
+   sort ensGene42NonCoding.ids > ens42NonCodingIds.sort
+   comm -13 foundNonCoding.uniq ens42NonCodingIds.sort
    # All ids were found in the gff file
    rm *.sort *.uniq *.bak found.log
    wc -l ensGtp*.txt
-   # 3558 ensGtpNonCoding.txt
+   # 3560 ensGtpNonCoding.txt
    # 36065 ensGtpProteinCoding.txt
    # The non-coding set have only gene ids and transcript ids and
    # no protein ids.
    
-
    # Load database
    ssh hgwdev
-   cd /cluster/data/danRer4/bed/ensembl41/
+   cd /cluster/data/danRer4/bed/ensembl42/
+   hgsql -e 'drop table ensGtp;' danRer4
    # load ensGtp for protein-coding genes
    hgLoadSqlTab danRer4 ensGtp ~/kent/src/hg/lib/ensGtp.sql \
             ensGtpProteinCoding.txt
-   
+   # only load IDs for the protein coding genes. The non-coding genes
+   # have no protein ID.
 
    # Get the ensembl peptide sequences from
-   # http://www.ensembl.org/Multi/martview
+   # http://www.biomart.org/biomart/martview
    # Choose Danio Rerio as the organism
-   # Follow this sequence through the pages:
-   # Page 1) Choose the Ensembl Genes choice. Hit next.
-   # Page 2) Then hit next.
-   # Page 3) Choose "Sequences" from the Attributes pulldown menu at the top.
-   # Page 4) Choose Peptide as type of sequence to export and select 
+   # Follow this sequence:
+   # 1) Choose the Ensembl Genes 42 as the database and then 
+   # Danio Rerio genese (ZFISH6) as the dataset.
+   # 2) Click on the Attributes link in the left panel. Select sequences.
+   # 3) Expand the SEQUENCES section and choose Peptide as type of sequence 
+   # to export and then expand the Header Information section and select 
    # Ensembl Gene ID from Gene Attributes and 
    # Ensembl Transcript ID and Ensembl Peptide ID from 
-   # Transcript Attributes as the output,
-   # choose text/fasta and gzip compression,
-   # name the file ensemblPep and then hit export.
-   gunzip ensemblPep.fasta.gz
-   hgPepPred danRer4 ensembl ensemblPep.fasta
-   # get "unexpected end of file" error. Notified Ensembl (2006-12-15).
-   # Ensembl helpdesk say that the files sometimes get terminated early
-   # for large downloads so try using this link to BioMart instead:
-   # http://www.biomart.org/biomart/martview
-   # Repeat above using this link. This has Ensembl42 though so e-mailed 
-   # Ensembl to ask if they are releasing Ensembl42 soon (2006-12-18)
+   # Transcript Attributes 
+   # 4) Click on the Filters link in the left panel and expand the GENE
+   # section. Select the Gene type box and then select protein_coding as 
+   # these are the only genes with an associated protein sequence.
+   # 5) Click on the Results link in the top black menu bar and 
+   # choose FASTA for the output and export all results to
+   # Compressed file (notify by e-mail).
+   # save the file as ensembl42Pep.fasta.gz and move to
+   # /cluster/data/danRer4/bed/ensembl42
+   # Got results URL by e-mail but BioMart seems to be currently inaccessible
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/ensembl42
+   gunzip ensembl42Pep.fasta.gz
+   hgPepPred danRer4 ensembl ensembl42Pep.fasta
 
+   # edit trackDb/zebrafish/danRer4 to have an ensGene entry with subtracks:
+# 
 
 #########################################################################
 # RADIATION HYBRID (RH) MAP TRACK (in progress, 2006-10-12, hartera)
