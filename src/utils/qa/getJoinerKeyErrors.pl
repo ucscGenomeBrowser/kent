@@ -8,7 +8,7 @@
 # Rev Date: 2005-11-XX
 # Author  : Ann Zweig
 # Rev Date: 2006-02-13 - added results to HTML page
-# Results : http://hgwdev.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/batchErrors.YYYY-MM-DD
+# Results : http://hgwdev.cse.ucsc.edu/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.YYMMDD
 
 use File::Copy;
 
@@ -129,7 +129,7 @@ print STDERR "PROCESSING: $0 program completed successfully.\nOutput: $outfile\n
 closedir(DIR);
 
 # copy results to html location
-$oldlocation = "batchErrors.$p_year-$p_month-$p_day";
-$newlocation = "/usr/local/apache/htdocs/qa/test-results/joinerCheck_monitor/keys/batchErrors.$p_year-$p_month-$p_day";
+$oldlocation = "joinerKeyErrors.$p_year$p_month$p_day";
+$newlocation = "/usr/local/apache/htdocs/qa/test-results/joinerCheck_monitor/keys/joinerKeyErrors.$p_year$p_month$p_day";
 copy($oldlocation, $newlocation);
 
