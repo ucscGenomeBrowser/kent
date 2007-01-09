@@ -389,3 +389,33 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     featureBits felCat3 cpgIslandExt
     # 30893611 bases of 1642698377 (1.881%) in intersection
 
+#########################################################################
+# Build contigAcc table (DONE, Heather, Jan 2007)
+# I found the contig accessions at
+# http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=Nucleotide&cmd=Search&term=AANG01000001:AANG01817956[PACC]
+# They have a regular pattern:
+#   contig_0 --> AANG01000001
+#   contig_1 --> AANG01000002
+#   contig_817955 --> AANG01817956
+
+  ssh kkstore05
+  cd /cluster/data/felCat3
+  cat << '_EOF_' > contigAcc.csh
+
+#!/bin/tcsh
+set contig = 0
+set acc = 1000001
+while ($contig < 817956)
+    echo "contig_$contig\tAANG0$acc"
+    set contig=`expr $contig + 1`
+    set acc=`expr $acc + 1`
+end
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+  ./contigAcc.csh > contigAcc.out
+
+  ssh hgwdev
+  cd /cluster/data/felCat3
+  hgsql felCat3 < contigAcc.sql
+  hgsql -e 'load data local infile "contigAcc.out" into table contigAcc'
