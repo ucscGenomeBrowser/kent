@@ -834,22 +834,6 @@ priority 146
 visibility hide
 type bed 4 +
 
-    track cnpSharp
-    subTrack cnp 
-    shortLabel Sharp CNPs 
-    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
-    noInherit on
-    type bed 4 +
-    priority 1
-
-    track cnpSebat
-    subTrack cnp
-    shortLabel Sebat CNPs 
-    longLabel Copy Number Polymorphisms from ROMA (Sebat)
-    noInherit on
-    type bed 4 +
-    priority 2
-
     track cnpTuzun
     subTrack cnp
     shortLabel Tuzun Fosmids
