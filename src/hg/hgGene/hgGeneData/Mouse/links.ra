@@ -47,5 +47,5 @@ tables kgXref
 idSql select spID from kgXref where kgID = '%s'
 nameSql select spId from kgXref where kgID = '%s'
 url ../cgi-bin/pbTracks?proteinID=%s
-priority 10
+priority 1
 
