@@ -18,31 +18,6 @@ group map
 visibility dense
 type bed 3 +
 
-track multiz7way
-shortLabel Conservation
-longLabel 7 Species Multiz Alignment & Conservation 
-group compGeno
-priority 104.2
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-# wiggle phastCons7way
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz7wayFrames
-# irows on
-autoScaleDefault Off
-windowingFunction mean
-summary multiz7waySummary
-speciesCodonDefault gasAcu1
-speciesGroups vertebrate
-sGroup_vertebrate hg18 mm8 danRer4 tetNig1 fr1 oryLat1
-# speciesDefaultOff danRer4 fr1
-treeImage phylo/gasAcu1_7way.gif
-
 track multiz8way
 shortLabel Conservation
 longLabel 8 Species Multiz Alignment & Conservation 
@@ -57,7 +32,7 @@ maxHeightPixels 100:40:11
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
-frames multiz8wayFrames
+# frames multiz8wayFrames
 # irows on
 autoScaleDefault Off
 windowingFunction mean
@@ -67,4 +42,3 @@ speciesGroups vertebrate
 sGroup_vertebrate hg18 mm8 galGal3 danRer4 tetNig1 fr1 oryLat1
 # speciesDefaultOff danRer4 fr1
 treeImage phylo/gasAcu1_8way.gif
-
