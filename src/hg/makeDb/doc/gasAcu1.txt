@@ -645,7 +645,8 @@ fr1 #	146655780 bases of 446627861 (32.836%) in intersection
 on fr1 #	148005715 bases of 315518167 (46.909%) in intersection
 
 #######################################################################
-## BLASTZ oryLat1 chrUn contigs/scaffolds only (WORKING - 2006-12-20 - Hiram)
+## BLASTZ oryLat1 chrUn contigs/scaffolds only (DONE - 2006-12-20 - Hiram)
+##  This was an experiment, not used
     ssh kkstore05
     mkdir /cluster/data/gasAcu1/bed/blastz.oryLat1.Un.2006-12-20
     cd /cluster/data/gasAcu1/bed/blastz.oryLat1.Un.2006-12-20
@@ -706,11 +707,11 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-blastzOutRoot /cluster/bluearc/gasAcu1OryLat1 \
 	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
-XXX - Running 2006-12-20 15:15
 
 #######################################################################
 ## BLASTZ Stickleback chroms vs Medaka random contigs
 ##	(DONE - 2006-12-20 - Hiram)
+##	This was an experiment, not used
     ssh kkstore05
     mkdir /cluster/data/gasAcu1/bed/blastz.oryLat1.ChrUn.2006-12-20
     cd /cluster/data/gasAcu1/bed/blastz.oryLat1.ChrUn.2006-12-20
@@ -756,16 +757,6 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1Un \
 	-bigClusterHub=kk > do.log 2>&1 &
-XXX - Running 2006-12-20 16:57
-real    48m28.199s
-user    0m0.071s
-sys     0m0.053s
-    #	It claims one job failed, but I don't see that ?  Continuing:
-    time doBlastzChainNet.pl -verbose=2 DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1Un \
-	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
 
 #######################################################################
 ## BLASTZ Stickleback chroms vs Medaka chroms and random contigs
@@ -832,6 +823,7 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 ## 7-Way Multiz (DONE - 2006-12-22 - Hiram)
+##  replaced by 8-Way done below
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/multiz7way
     cd /cluster/data/gasAcu1/bed/multiz7way
@@ -1018,7 +1010,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
     /cluster/bin/phast/draw_tree -b -s treeImage.nh > treeImage.ps
 
 ############################################################################
-# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (WORKING - 2006-12-22 - Hiram)
+# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2006-12-22 - Hiram)
+##  replaced by 8-Way done below
     ssh kolossus
     mkdir /cluster/data/gasAcu1/bed/multiz7way/anno
     cd /cluster/data/gasAcu1/bed/multiz7way/anno
@@ -1073,16 +1066,10 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
     time cat *.maf | \
     	nice -n +19 hgLoadMafSummary gasAcu1 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz7waySummary stdin
-XXXX - running 19:28
-    # Created 273438 summary blocks from 5182575 components
-    #	and 2269386 mafs from stdin
-    #	real    14m15.419s
-    #	user    1m9.618s
-    #	sys     0m13.094s
 
 #######################################################################
 ## BLASTZ Stickleback chroms vs chicken chroms and random contigs
-##	(WORKING - 2006-12-28 - Hiram)
+##	(DONE - 2006-12-28 - 2007-01-05 - Hiram)
     ssh kkstore05
     mkdir /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28
     cd /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28
@@ -1131,7 +1118,6 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-blastzOutRoot /cluster/bluearc/gasAcu1ChrGalGal3ChrUn \
 	-bigClusterHub=pk > do.log 2>&1 &
-XXX - running 2006-12-28 23:54
     #	real    53m30.713s
     #	failed during the load step due to difficulties on hgwdev
     #	continuing 2007-01-02
@@ -1172,7 +1158,7 @@ XXX - running 2006-12-28 23:54
     #	32781658 bases of 1042591351 (3.144%) in intersection
 
 #########################################################################
-## 8-Way Multiz (WORKING - 2007-01-02 - Hiram)
+## 8-Way Multiz (DONE - 2007-01-02 - 2007-01-05 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/multiz9way
     cd /cluster/data/gasAcu1/bed/multiz9way
@@ -1318,6 +1304,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     #	-rw-rw-r--  1 1663828214 Jan  2 13:44 multiz8way.maf
 
     #	Create per-chrom individual maf files for downloads
+    #	NOT NECESSARY HERE - DONE LATER WITH THE ANNOTATED MAFS
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way
     mkdir mafDownloads
@@ -1330,7 +1317,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     done
     #	real    5m9.273
 
-    #	deliver to downloads
+    #	deliver to downloads *!* NOT NECESSARY HERE - DONE LATER WITH
+    #		THE ANNOTATED MAFS
     ssh hgwdev
     ln -s /cluster/data/gasAcu1/bed/multiz8way/mafDownloads \
 	/usr/local/apache/htdocs/goldenPath/gasAcu1/multiz8way
@@ -1358,3 +1346,118 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     #	Edit treeImage.nh to make the names as desired
     #	Submit this treeImage.nh to the phyloGif program, or:
     # /cluster/bin/phast/draw_tree -b -s treeImage.nh > treeImage.ps
+
+############################################################################
+# ANNOTATE MULTIZ8WAY MAF AND LOAD TABLES (DONE - 2007-01-05 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/anno
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    ln -s  /cluster/data/gasAcu1/chrom.sizes gasAcu1.len
+    #	This were done before during the 7-way
+    # twoBitInfo -nBed /cluster/data/gasAcu1/gasAcu1.sdTrf.{2bit,N.bed}
+    ln -s  /cluster/data/gasAcu1/gasAcu1.sdTrf.N.bed gasAcu1.bed
+    for DB in `cat /cluster/data/gasAcu1/bed/multiz8way/species.lst`
+    do
+      echo gasAcu1.bed  >> nBeds
+      echo gasAcu1.len  >> sizes
+      echo $DB
+    done
+
+    echo '#!/bin/csh -ef' > jobs.csh
+    echo date >> jobs.csh
+    # do smaller jobs first so you can see some progress immediately:
+    for F in `ls -1rS ../../maf/*.maf`
+    do
+     echo nice -n 19 mafAddIRows -nBeds=nBeds -sizes=sizes $F \
+      /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit ../maf/`basename $F` >> jobs.csh
+     echo "echo $F" >> jobs.csh
+    done 
+    echo date >> jobs.csh
+    chmod +x jobs.csh
+    time ./jobs.csh > jobs.log 2>&1 &
+    #	to watch progress;
+    tail -f jobs.log
+
+    #	real    21m36.340s
+    #	user    4m39.482s
+    #	sys     16m0.538s
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
+    mkdir -p /gbdb/gasAcu1/multiz8way/anno/maf
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/anno/maf/*.maf \
+      /gbdb/gasAcu1/multiz8way/anno/maf
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/gasAcu1/multiz8way/anno/maf gasAcu1 multiz8way
+    #	Loaded 2332594 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
+    #	real    1m5.774s
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kolossus
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
+    time cat *.maf | \
+    	nice -n +19 hgLoadMafSummary gasAcu1 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 -test multiz8waySummary stdin
+    #	Created 307708 summary blocks from 5751922 components
+    #	and 2332594 mafs from stdin
+    #	real    17m8.967s
+
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
+    sed -e 's/mafSummary/multiz8waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz8waySummary.sql
+    time nice -n +19 hgLoadSqlTab gasAcu1 multiz8waySummary \
+	/tmp/multiz8waySummary.sql multiz8waySummary.tab
+    #	real    0m4.360s
+
+#########################################################################
+# MULTIZ8WAY DOWNLOADABLES (DONE - 2007-01-05 - Hiram)
+    # Annotated MAF is now documented, so use anno/maf for downloads/
+    ssh hgwdev
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/mafDownloads
+    cd /cluster/data/gasAcu1/bed/multiz8way
+
+    # upstream mafs 
+    #	There isn't any refGene table, trying ensGene instead
+    time for S in 1000 2000 5000
+    do
+        echo "making upstream${S}.maf"
+        nice -n +19 featureBits gasAcu1 ensGene:upstream:${S} \
+		-fa=/dev/null -bed=up.bad
+        awk -F'\t' \
+'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
+		up.bad > up.bed
+        rm up.bad
+        nice -n +19 mafFrags gasAcu1 multiz8way up.bed upstream${S}.maf \
+                -orgs=species.lst
+        rm up.bed
+	nice -n +19 gzip -c upstream${S}.maf \
+	    > mafDownloads/ensGene.upstream${S}.maf.gz
+    done > mafFrags.log 2>&1 &
+    #	to monitor progress:
+    tail -f mafFrags.log
+    #	real    1m23.682s
+
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    time for M in anno/maf/chr*.maf
+    do
+	B=`basename $M`
+	nice -n +19 gzip -c ${M} > mafDownloads/${B}.gz
+	echo ${B}.gz done
+    done
+    #	real    5m59.708s
+
+    cd mafDownloads
+    nice -n +19 md5sum *.maf.gz > md5sum.txt
+    # Make a README.txt
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/gasAcu1/multiz8way
+    mkdir $dir
+    ln -s /cluster/data/gasAcu1/bed/multiz8way.2006-07-18/mafDownloads/{*.gz,*.txt} $dir

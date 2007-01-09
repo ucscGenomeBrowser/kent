@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.9 2006/12/23 01:01:13 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.10 2007/01/09 01:18:09 hiram Exp $"
 #
 
 ##########################################################################
@@ -418,7 +418,7 @@ TMPDIR=/scratch/tmp
     #	real    312m34.518s
     #	user    0m0.151s
     #	sys     0m0.123s
-XXX - RUNNING 2006-12-04 15:55
+
     #	failed during the netClass operation in loadUp.csh due to missing
     #	rmsk table in oryLat1 - added options to netClass to allow
     #	specification of repeat table, and rerun the two commands here to
@@ -516,7 +516,7 @@ TMPDIR=/scratch/tmp
     #	real    832m8.618s
     #	user    0m0.165s
     #	sys     0m0.109s
-XXX - RUNNING 2006-12-04 16:09
+
     #	failed during the netClass operation in loadUp.csh due to missing
     #	rmsk table in oryLat1 - added options to netClass to allow
     #	specification of repeat table, and rerun the two commands here to
@@ -605,7 +605,7 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
       -bigClusterHub pk \
       -blastzOutRoot /cluster/bluearc/oryLat1DanRer4 > do.log 2>&1 &
-XXX - RUNNING 2006-12-04 16:18
+
     #	failed during the netClass operation in loadUp.csh due to missing
     #	rmsk table in oryLat1 - added options to netClass to allow
     #	specification of repeat table, and rerun the two commands here to
@@ -1748,3 +1748,117 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/oryLat1Fr1 > do.log 2>&1 &
 XXX - Running 2006-12-22
+
+#########################################################################
+# ENSEMBL GENES (DONE - 2007-01-05 - Hiram)
+#  Good luck with the biomart interface.  It seems to be different each time
+#  it is used.
+    mkdir /cluster/data/oryLat1/bed/ensembl
+    cd /cluster/data/oryLat1/bed/ensembl
+    # Get the ensembl gene data from 
+    # http://www.biomart.org/biomart/martview/
+    #	
+    # Follow this sequence through the pages:
+    #	The default dataset will be Human.  In the right side
+    #	frame, if you scroll it up and down, you will come to a pull-down
+    #	dataset menu where you can select the organism.  There appear to be
+    #	two pull-down menus in this frame, one for:
+    #	Database: ENSEMBL 42 GENE (SANGER)
+    #	and you can select the second:
+    #	Dataset: Oryzias latipes genes (MEDAKA1)
+
+    #	After selecting the Dataset, in the left frame, click on the
+    #	"Attributes" (Features) label, now the right frame changes to radio
+    #	buttons, Features, Sequences, Structures
+    #	Click the "Structures" button, the three optional buttons can be
+    #	expanded to select elements of these:
+    #	REGION:
+    #	GENE:
+    #	EXON:
+    #	REGION: has Chromosome checked
+    #	GENE: has Ensembl Gene ID and Biotype selected
+    #	EXON: has no selections
+    #	In the GENE: menu:
+    #	Unselect Biotype
+    #	and Select
+    #	Ensembl Gene ID
+    #	Ensembl Transcript ID
+    #	External Gene ID
+
+    #	Then, in the black menu bar above these frames, click rhe "Results"
+    #	it shows the first ten rows.  For this organism, there appear to be no
+    #	External Gene ID in the HTML view.  Change the "Display maximum"
+    #	"rows as" pull-down
+    #	to GFF, and use the "Export all results to" pull-down to
+    #	Compressed file (.gz), press the "Go" button to download.
+    #	Save this file as oryLat1.ensembl42.gff.gz
+    #	The regular chroms came with just their numbers, but the chrUn
+    #	scaffolds arrived as scaffolds.  Will need to lift to chrUn.
+
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software, and liftUp to get scaffolds onto chrUn
+    #	The scaffolds and ultracontigs mentioned in this are not the scaffolds
+    #	we have in our lift file for chrUn ...  can't use them.
+    zcat oryLat1.ensembl42.gff.gz | egrep -v "scaffold|ultracontig" \
+	| sed -e "s/^\([0-9][0-9]*\)/chr\1/" | gzip -c > ensembl42.gff.gz
+    #	Verify names OK:
+    zcat ensembl42.gff.gz | awk '{print $1}' | sort | uniq -c
+    #	22938 chr1
+    #	15887 chr10
+    #	18645 chr11
+    #	20162 chr12
+    #	21474 chr13
+    #	21302 chr14
+    #	20148 chr15
+    #	22978 chr16
+    #	26164 chr17
+    #	13671 chr18
+    #	17109 chr19
+    #	10988 chr2
+    #	15705 chr20
+    #	21361 chr21
+    #	21030 chr22
+    #	12984 chr23
+    #	19009 chr24
+    #	21767 chr3
+    #	26204 chr4
+    #	24335 chr5
+    #	24300 chr6
+    #	24329 chr7
+    #	23323 chr8
+    #	27795 chr9
+
+
+    cd /cluster/data/oryLat1/bed/ensembl
+    ldHgGene -gtf -genePredExt oryLat1 ensGene ensembl42.gff.gz
+    #	Read 23087 transcripts in 493608 lines in 1 files
+    #	23087 groups 24 seqs 1 sources 4 feature types
+    #	23087 gene predictions
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # for the Attributes, choose the "Features" box, and then In "GENE:"
+    # select Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Results, choose txt output and a gzipped file, save this as
+    # ensGtp42.txt.gz
+    #	Strip the first lines which is merely column heading labels
+    zcat ensGtp42.txt.gz | headRest 1 stdin | sed -e "s/ /\t/g" > ensGtp.txt
+    hgLoadSqlTab oryLat1 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.txt
+    hgsql -N -e "select count(*) from ensGtp;" oryLat1
+    #	+-------+
+    #	| 26148 |
+    #	+-------+
+    wc -l ensGtp.txt
+    #	26148 ensGtp.txt
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # for the Attributes, choose the "Sequences" box, and then 
+    # SEQUENCES: Peptide and 
+    #	Header Information "Ensembl Gene ID"
+    #	Results output as FASTA
+    # Save file as ensemblPep.fa.gz
+    gunzip -c ensemblPep.fa.gz \
+    | perl -wpe 's/^>.*\|(ENSGACT\d+\.\d+).*/>$1/' \
+    > ensPep.fa
+    hgPepPred oryLat1 generic ensPep ensPep.fa
