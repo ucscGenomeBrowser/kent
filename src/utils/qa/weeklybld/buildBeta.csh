@@ -69,17 +69,20 @@ endif
 #
 # Build Table Descriptions
 #
-echo "buildTableDescriptions.pl."
-echo "see buildDescr.log for output"
-cd $BUILDDIR/$dir
-# !!!! REMOVING THIS IS TAKING FOREVER
-echo skipping buildTableDescriptions.pl for now, was hanging.
+# QA is now running the buildTableDescriptions.pl script on hgwbeta as
+# a nightly cron job - Ann set this up  (2007-01-10)
+
+#echo "buildTableDescriptions.pl."
+#echo "see buildDescr.log for output"
+#cd $BUILDDIR/$dir
+
+# !!!! WARNING: AS IS MAY REQUIRE TWEAKING OF hg.conf TO WORK
 #kent/src/test/buildTableDescriptions.pl -kentSrc kent/src -gbdDPath /usr/local/apache/htdocs/goldenPath/gbdDescriptions.html >& /cluster/bin/build/scripts/buildDescr.log
-set err = $status
-if ( $err ) then
-    echo "buildTableDescriptions.pl returned error $err"
-    exit 1
-endif
+#set err = $status
+#if ( $err ) then
+#    echo "buildTableDescriptions.pl returned error $err"
+#    exit 1
+#endif
 #
 echo
 echo "Build libs, alpha, strict-track/zoo, table-descr  done."
