@@ -14,7 +14,8 @@ set today=""
 set diffs=0
 set outfile=""
 set summaryFile=""
-set comment=""
+set comment=0
+set archived=0
 set mode="fast"
 
 if ( $#argv < 1 || $#argv > 2 ) then
@@ -80,7 +81,13 @@ foreach db ( $dbs )
   set active=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
      WHERE name =  "'$db'"' hgcentral`
   if ( 0 == $active ) then
-    set comment="active=0"
+    set archived=`ssh -x qateam@$machine mysql $db -A -N \
+      -e '"'SHOW TABLES'"' | wc -l`
+    if ( 1 == $archived ) then
+      set comment="archived"
+    else
+      set comment="active=0"
+    endif
     echo $db $comment | gawk '{printf "%7s %9s", $1, $2}'
     echo
     echo $db $comment | gawk '{printf "%7s %9s", $1, $2}' >> $summaryFile
