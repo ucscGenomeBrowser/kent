@@ -12123,9 +12123,9 @@ XXX - Running 2006-12-14 16:19
 # AFFY HUEX1 OFF-BY-ONE FIX (Andy 2006-12-14)
    ssh hgwdev
    cd /cluster/data/hg18/bed/affyHumanExon
-   liftOver /cluster/data/hg17/bed/affyHumanExon/affyHuEx1.fixed.bed \
-      /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz affyHuEx1.fixed.bed affyHuEx1.unmapped
-   awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.fixed.bed | sort -k2,2nr | head
+   liftOver /cluster/data/hg17/bed/affyHumanExon/affyHuEx1.bed \
+      /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz affyHuEx1.bed affyHuEx1.unmapped
+   awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.bed | sort -k2,2nr | head
 #2440970 81664
 #3016074 9552
 #3641787 8061
@@ -12133,12 +12133,65 @@ XXX - Running 2006-12-14 16:19
    # It seems the liftOver problem still happens for that segmental dupe.
    # So the start is correct and the end is correct.  Just make two entries, both
    # with size == 305.
-   grep -v "\b2440970\b" affyHuEx1.fixed.bed > tmp.bed
-   grep "\b2440970\b" affyHuEx1.fixed.bed > bad.bed
+   grep -v "\b2440970\b" affyHuEx1.bed > tmp.bed
+   grep "\b2440970\b" affyHuEx1.bed > bad.bed
    awk 'BEGIN{OFS="\t"}{print $1,$2,$2+305,$4,$5,$6}' bad.bed > good.bed
    awk 'BEGIN{OFS="\t"}{print $1,$3-305,$3,$4,$5,$6}' bad.bed >> good.bed
-   cat tmp.bed good.bed > affyHuEx1.fixed.bed 
-   bedSort affyHuEx1.fixed.bed tmp.bed
-   mv tmp.bed affyHuEx1.fixed.bed
+   cat tmp.bed good.bed > affyHuEx1.bed 
+   bedSort affyHuEx1.bed tmp.bed
+   mv tmp.bed affyHuEx1.bed
    rm good.bed bad.bed
-   hgLoadBed hg18 affyHuEx1 affyHuEx1.fixed.bed
+   hgLoadBed hg18 affyHuEx1 affyHuEx1.bed
+   
+##########################################################################
+# CGAP SAGE (In progress Andy 2007-01-09)
+    # This is the BED part.
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+    mkdir /san/sanVol1/scratch/andy/cgapSage
+    ln -s /san/sanVol1/scratch/andy/cgapSage cgapSage
+    wget ftp://ftp1.nci.nih.gov/pub/SAGE/SAGE_hs_long_forward_v36.1.tar.gz
+    wget ftp://ftp1.nci.nih.gov/pub/SAGE/SAGE_hs_long_reverse_v36.1.tar.gz
+    tar xfz SAGE_hs_long_forward_v36.1.tar.gz
+    tar xfz SAGE_hs_long_reverse_v36.1.tar.gz 
+    cd hs_forward/
+    cat * | awk 'BEGIN{OFS="\t"}{print $1, $3, $4, $2, 1000, "+"}' > ../unlifted.bed 
+    cd ../hs_reverse/
+    cat * | awk 'BEGIN{OFS="\t"}{print $1, $4, $3, $2, 1000, "-"}' >> ../unlifted.bed 
+    cd ../
+    rm -rf hs*
+    liftUp lifted.bed /cluster/data/hg18/jkStuff/liftAll.lft warn unlifted.bed 
+#Got 378 lifts in /cluster/data/hg18/jkStuff/liftAll.lft
+#Lifting unlifted.bed
+#Expecting number field 3 line 13868252 of unlifted.bed, got CCATCGGATGCCCACCT
+    # Looks like there was a funny line in unlifted.bed:
+    grep CCATCGGATGCCCACCT unlifted.bed 
+#NT_011362       24364534NT_004321       CCATCGGATGCCCACCT       AATAAGCCAGAGTCTAT       1000    -
+#NT_004321       7900    7884    CCATCGGATGCCCACCT       1000    -
+    # Ok so there's one record for CCATCGGATGCCCACCT in addition... and for
+    # AATAAGCCAGAGTCTAT?
+    grep AATAAGCCAGAGTCTAT unlifted.bed 
+#NT_011362       24364534NT_004321       CCATCGGATGCCCACCT       AATAAGCCAGAGTCTAT       1000    -
+#NT_011362       24364534        24364518        AATAAGCCAGAGTCTAT       1000    -
+    # Looks like that one's got a record too.  So just get rid of the stupid
+    # line:
+    grep -v 24364534NT_004321 unlifted.bed > tmp
+    mv tmp unlifted.bed
+    liftUp lifted.bed /cluster/data/hg18/jkStuff/liftAll.lft warn unlifted.bed 
+    rm unlifted.bed
+    head lifted.bed 
+#chr1    649     665     TGTCTGCGCCTGCGCCG       1000    -
+#chr1    670     686     CTAGCGCGTCGGGGTGG       1000    +
+    nibFrag /cluster/data/hg18/nib/chr1.nib 669 686 "+" /dev/stdout
+#>/cluster/data/hg18/nib/chr1.nib:669-686
+#ctagcgcgtcggggtgg
+    nibFrag /cluster/data/hg18/nib/chr1.nib 649 665 m /dev/stdout
+#>/cluster/data/hg18/nib/chr1.nib:649-665
+#tgtctgcgcctgcgcc
+    # It looks like there's off-by-one errors, so fix em:
+    awk 'BEGIN{OFS="\t"}{start=$2; end=$3;if ($6 == "-") { end = end+1; } else { start = start-1 } print $1, start, end, $4, $5, $6}' \
+       < lifted.bed > mapping.bed6
+    rm lifted.bed
+    # Add thickStart/thickEnd fields
+    awk 'BEGIN{OFS="\t"}{thickStart=$2; thickEnd=$3; if ($6=="-") {thickStart = thickStart+13; } else { thickEnd = thickEnd-13; } print $0, thickStart, thickEnd}' \
+       < mapping.bed6 > mapping.bed
