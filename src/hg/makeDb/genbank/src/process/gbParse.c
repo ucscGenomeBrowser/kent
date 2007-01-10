@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.16 2006/09/29 00:19:20 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.17 2007/01/10 05:10:08 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -211,7 +211,7 @@ slAddTail(&gbs, c0);
 gbDefinitionField = c0 = newField("DEFINITION", "def", GBF_MULTI_LINE, 1024);
 slAddTail(&gbs, c0);
 
-gbKeywordsField = c0 = newField("KEYWORDS", "key", GBF_TRACK_VALS, 1024);
+gbKeywordsField = c0 = newField("KEYWORDS", "key", GBF_TRACK_VALS|GBF_MULTI_LINE, 1024);
 slAddTail(&gbs, c0);
 
 c0 = newField("SOURCE", "src", GBF_TRACK_VALS, 128);
