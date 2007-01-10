@@ -1,5 +1,6 @@
 
 Getting a browser up and running quickly in a minimal state
+(see also: http://genomewiki.ucsc.edu/index.php/Browser_installation)
 
 The browser can be made to operate with a bare minimum of tables
 for the purpose of demonstrating the CGI binaries are functioning.
@@ -64,4 +65,4 @@ Some assemblies have all the DNA sequence in a single .2bit file,
 for example: /gbdb/mm8/mm8.2bit
 
 ====================================================================
-This file last updated: $Date: 2006/08/12 22:11:30 $
+This file last updated: $Date: 2007/01/10 18:12:46 $
