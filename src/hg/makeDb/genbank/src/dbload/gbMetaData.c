@@ -33,7 +33,7 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.34 2006/10/09 16:17:28 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.35 2007/01/10 20:04:03 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -226,9 +226,7 @@ else
 /* do we have MGC on this ? */
 char *val = gbConfGetDb(options->conf, sqlGetDatabase(conn), "mgcTables.default");
 haveMgc = (val != NULL) && !sameString(val, "no");
-#if 0 /* FIXME disabled until genbank fixes download files */
 loadMiscDiff = haveMgc;
-#endif
 if (loadMiscDiff && !sqlTableExists(conn, "gbMiscDiff"))
     sqlUpdate(conn, gbMiscDiffCreate);
 
