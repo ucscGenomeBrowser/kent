@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.19 2007/01/08 22:58:32 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.20 2007/01/10 00:22:52 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -547,6 +547,15 @@ if (sqlTableExists(conn, namedSessionTable))
 		"In order to keep a custom track from expiring, you can "
 		"periodically view the custom track in the genome browser."
 		"</P>");
+    if (cartOptionalString(cart, "ss") != NULL)
+	dyStringPrintf(dyMessage,
+		"<P>Note: the session contains a reference to saved BLAT "
+		"results, which are subject to the same expiration policy as "
+		"<A HREF=\"/goldenPath/help/customTrack.html\" "
+		"TARGET=_BLANK>custom tracks</A>.  "
+		"In order to keep BLAT results from expiring, you can "
+		"periodically view them in the genome browser."
+		"</P>");
     dyStringFree(&dy);
     }
 else
@@ -562,6 +571,7 @@ return dyStringCannibalize(&dyMessage);
 void checkForCustomTracks(struct dyString *dyMessage)
 /* Scan cart for ctfile_<db> variables.  Tally up the databases that have 
  * live custom tracks and those that have expired custom tracks. */
+/* While we're at it, also look for saved blat results. */
 {
 struct hashEl *helList = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
 if (helList != NULL)
@@ -611,6 +621,36 @@ if (helList != NULL)
 	}
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
+    }
+/* Check for saved blat results (quasi custom track). */
+char *ss = cartOptionalString(cart, "ss");
+if (isNotEmpty(ss))
+    {
+    char buf[1024];
+    char *words[2];
+    int wordCount;
+    boolean exists = FALSE;
+    safef(buf, sizeof(buf), ss);
+    wordCount = chopLine(buf, words);
+    if (wordCount < 2)
+	exists = FALSE;
+    else
+	exists = fileExists(words[0]) && fileExists(words[1]);
+
+    if (exists)
+	dyStringPrintf(dyMessage,
+		"<P>Note: the session contains saved BLAT results "
+		"which are subject to the same expiration policy as "
+		"<A HREF=\"/goldenPath/help/customTrack.html\" "
+		"TARGET=_BLANK>custom tracks</A>.  "
+		"In order to keep blat results from expiring, you can "
+		"periodically view them in the genome browser."
+		"</P>");
+    else
+	dyStringPrintf(dyMessage,
+		"<P>Note: the session contains an expired reference to "
+		"previously saved BLAT results, so it may not appear as "
+		"originally intended.</P>");
     }
 }
 
