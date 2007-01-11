@@ -4,31 +4,33 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = snpContigLocFilter.o snpContigLocFilter125.o \
-    snpContigLocusIdFilter.o snpContigLocusIdFilter125.o snpContigLocusIdCondense.o \
-    snpSplitByChrom.o snpSplitByChrom2.o snpLocType.o snpLocType125.o \
-    snpExpandAllele.o snpSort.o snpRefUCSC.o \
-    snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
-    snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
-    snpPAR.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
-    snpClassAndObserved.o snpMoltype.o affyLookup.o cnpLookup.o \
-    snpGetSimple.o snpGetInsertions.o snpGetDeletions.o \
-    fetchSeq.o snpOrthoLookup.o snpOrthoCheck.o snpCheckCluster.o snpCheckCluster2.o \
-    snpReadSeq.o snpReadSeq2.o trimHeader.o snpOrthoJoin.o snpFreq.o \
-    snpCleanSeq.o snpGetSeqDup.o
+O = affyLookup.o cnpLookup.o fetchSeq.o illuminaLookup.o \
+    snpCheckAlleles.o snpCheckClassAndObserved.o snpCheckCluster.o snpCheckCluster2.o \
+    snpClassAndObserved.o snpCleanSeq.o snpCompareLoctype.o snpCompareWeight.o \
+    snpContigLocFilter.o snpContigLocFilter125.o \
+    snpContigLocusIdCondense.o snpContigLocusIdFilter.o snpContigLocusIdFilter125.o \
+    snpExpandAllele.o snpFinalTable.o snpFreq.o snpFunction.o \
+    snpGetDeletions.o snpGetInsertions.o snpGetSeqDup.o snpGetSimple.o \
+    snpLoadFasta.o snpLocType.o snpLocType125.o \
+    snpMissing.o snpMoltype.o snpMultiple.o \
+    snpOrthoCheck.o snpOrthoJoin.o snpOrthoLookup.o snpPAR.o \
+    snpReadFasta.o snpReadSeq.o snpReadSeq2.o snpRefUCSC.o \
+    snpSort.o snpSplitByChrom.o snpSplitByChrom2.o snpSNP.o \
+    subSnpCondense.o trimHeader.o
 
-all: snpContigLocFilter snpContigLocFilter125 \
-     snpContigLocusIdFilter snpContigLocusIdFilter125 snpContigLocusIdCondense \
-     snpSplitByChrom snpSplitByChrom2 snpLocType snpLocType125 \
-     snpExpandAllele snpSort snpRefUCSC \
-     snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
-     snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
-     snpPAR illuminaLookup snpCompareWeight subSnpCondense \
-     snpClassAndObserved snpMoltype affyLookup cnpLookup \
-     snpGetSimple snpGetInsertions snpGetDeletions \
-     fetchSeq snpOrthoLookup snpOrthoCheck snpCheckCluster snpCheckCluster2 \
-     snpReadSeq snpReadSeq2 trimHeader snpOrthoJoin snpFreq \
-     snpCleanSeq snpGetSeqDup
+all: affyLookup cnpLookup fetchSeq illuminaLookup \
+     snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
+     snpClassAndObserved snpCleanSeq snpCompareLoctype snpCompareWeight \
+     snpContigLocFilter snpContigLocFilter125 \
+     snpContigLocusIdCondense snpContigLocusIdFilter snpContigLocusIdFilter125 \
+     snpExpandAllele snpFinalTable snpFreq snpFunction \
+     snpGetDeletions snpGetInsertions snpGetSeqDup snpGetSimple \
+     snpLoadFasta snpLocType snpLocType125 \
+     snpMissing snpMoltype snpMultiple \
+     snpOrthoCheck snpOrthoJoin snpOrthoLookup snpPAR \
+     snpReadFasta snpReadSeq snpReadSeq2 snpRefUCSC \
+     snpSort snpSplitByChrom snpSplitByChrom2 snpSNP \
+     subSnpCondense trimHeader
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
