@@ -7,7 +7,7 @@
 #include "cheapcgi.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.11 2005/09/03 02:08:18 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.12 2007/01/11 21:56:17 kuhn Exp $";
 
 FILE *errLog = NULL;
 int errCode = 0;
@@ -209,11 +209,11 @@ struct hash *progHash = hashNew(0);
 int i;
 int hgTracksTotal = 0;
 int hgTracksPosted = 0;
-int hgNearTotal = 0;
+/* int hgNearTotal = 0;
 int hgGeneTotal = 0;
 int hgTextTotal = 0;
 int hgBlatTotal = 0;
-int hgTablesTotal = 0;
+int hgTablesTotal = 0; */
 int hgcTotal = 0;
 int dbTotal = 0;
 int other = 0;
@@ -235,11 +235,11 @@ int refresh = 0;
 int gatewayMultiple = 0;
 int zoomInRuler = 0;
 int hgTracksRobot = 0;
-int hgTablesRobot = 0;
+/* int hgTablesRobot = 0;
 int hgTextRobot = 0;
 int hgGeneRobot = 0;
 int hgNearRobot = 0;
-int hgBlatRobot = 0;
+int hgBlatRobot = 0; */
 int undisclosedOutsideSimple = 0;
 int undisclosedOutsideWithCustom = 0;
 int resetAll = 0;
@@ -251,7 +251,8 @@ struct nameCount *gList = NULL, *gEl, *gNone, *gPost, *gRobot;
 struct hash *dbHash = hashNew(8);       /* db var in hgTracks after hgGateway */
 struct nameCount *dbList = NULL, *dbEl;
 struct hash *trackHash = hashNew(10);
-struct visCount *vcList = NULL, *vc;
+struct visCount *vcList = NULL;
+/* struct visCount *vcList = NULL, *vc; */
 
 /* Allocate dummy group for POSTed htc's. */
 AllocVar(gPost);
