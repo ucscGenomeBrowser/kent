@@ -18,6 +18,7 @@ SCRIPT_FILES = \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
 	doHgNearBlastp.pl \
+	synBlastp.csh \
 	doRecipBest.pl \
 	doRepeatMasker.pl \
 	doSameSpeciesLiftOver.pl \
