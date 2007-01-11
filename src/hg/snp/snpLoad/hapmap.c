@@ -1,11 +1,15 @@
 /* hapmap - for each chrom, read a file with data from 5 populations and merge. */
 /* Note: As of hg17, we don't have hapmap data for all chroms, just chr1-22 and chrX. */
+
 /* clean up hashes between chroms or just leak memory like crazy? */
-/* Include an overall hash to check for multiple alignments? */
-/* Confirm that r+o = n */
-/* Confirm that JPT + CHB = combined */
+
+/* Include an overall hash to check for multiple alignments?  (on the same or different chrom) */
 /* Not checking if the same SNP is reported more than once for the same population. */
 /* In this case, just use the final values */
+
+/* This is in place: confirm that r+o = n */
+
+/* To do (here or elsewhere): confirm that JPT + CHB = combined */
 
 /* If errors occur past the first population, move to errorHash */
 /* Check errorHash first then */
@@ -16,7 +20,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: hapmap.c,v 1.1 2007/01/11 01:16:32 heather Exp $";
+static char const rcsid[] = "$Id: hapmap.c,v 1.2 2007/01/11 18:28:50 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 static char *db = NULL;
@@ -50,6 +54,16 @@ errAbort(
   "hapmap - Read chrom files and merge over populations.\n"
   "usage:\n"
   "  hapmap database \n");
+}
+
+boolean validAllele(char *allele)
+{
+if (sameString(allele, "A")) return TRUE;
+if (sameString(allele, "C")) return TRUE;
+if (sameString(allele, "G")) return TRUE;
+if (sameString(allele, "T")) return TRUE;
+if (sameString(allele, "?")) return TRUE;
+return FALSE;
 }
 
 boolean validPop(char *pop)
@@ -124,6 +138,17 @@ lf = lineFileOpen(inputFileName, TRUE);
 while (lineFileNext(lf, &line, NULL)) 
     {
     chopString(line, " ", row, ArraySize(row));
+    /* allele should be 'A', 'C', 'G', 'T' or '?' */
+    if (!validAllele(row[5]))
+        {
+        fprintf(errorFileHandle, "invalid refAllele %s for %s in chrom %s\n", row[5], row[1], chrom);
+        continue;
+	}
+    if (!validAllele(row[7]))
+        {
+        fprintf(errorFileHandle, "invalid otherAllele %s for %s in chrom %s\n", row[7], row[1], chrom);
+        continue;
+	}
 
     /* check counts */
     /* don't put in error hash, counts could be fine for other populations */
@@ -215,12 +240,24 @@ while (lineFileNext(lf, &line, NULL))
 	    hashAdd(errorHash, rsId, NULL);
             continue;
 	    }
-	/* otherAllele might be '?' if previous populations were monomorphic */
-	if (otherCount != 0 && differentString(si->otherAllele, "?") && differentString(row[7], "?"))
+	if (otherCount != 0)
 	    {
-	    fprintf(errorFileHandle, "different otherAlleles for %s in chrom %s\n", rsId, chrom);
-	    hashRemove(snpHash, rsId);
-	    hashAdd(errorHash, rsId, NULL);
+	    /* we have already encountered a valid otherAllele in a previous population */
+            if (differentString(si->otherAllele, "?"))
+	        {
+	        /* Check that row[7] doesn't conflict with the previous other allele. */
+	        /* If otherCount is nonZero, we know row[7] isn't '?' (we screened for that before hashLookup) */
+	        if (differentString(si->otherAllele, row[7]))
+	            {
+	            fprintf(errorFileHandle, "different otherAlleles for %s in chrom %s\n", rsId, chrom);
+	            hashRemove(snpHash, rsId);
+	            hashAdd(errorHash, rsId, NULL);
+	            }
+		}
+	    /* otherAllele is '?' (previous populations were monomorphic) */
+	    /* So, this is the first time we encounter other allele and we save it. */
+	    else
+	        si->otherAllele = cloneString(row[7]);
 	    }
 	setCounts(row[0], si, refCount, otherCount);
 	}
