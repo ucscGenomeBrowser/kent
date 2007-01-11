@@ -334,7 +334,7 @@ type bed 12
 track encodeSangerChip
 compositeTrack on
 subGroup1 celltype Cell_Type gm06990=GM06990 k562=K562 hela=HeLa hfl1=HFL-1 molt4=MOLT4 ptr8=PTR8
-subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
+subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac h3k9me3=H3K9me3 h3k27me3=H3K27me3 h3k36me3=H3K36me3 h3k79me3=H3K79me3 ctcf=CTCF
 shortLabel Sanger ChIP
 longLabel Sanger ChIP/Chip (histones H3,H4 ab in GM06990, K562, HeLa, HFL-1, MOLT4, and PTR8 cells) 
 group encodeChip
@@ -347,7 +347,7 @@ minLimit -46.1
 maxLimit 75
 viewLimits 0:10
 autoScale Off
-dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
+dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
 
     track encodeSangerChipH3K4me1
     subTrack encodeSangerChip
@@ -399,6 +399,51 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     priority 5
     color 10,10,130
 
+    track encodeSangerChipH3K9me3
+    subTrack encodeSangerChip
+    shortLabel SI H3K9me3 GM06990
+    subGroups celltype=gm06990 factor=h3k9me3
+    longLabel Sanger Institute ChIP/Chip (H3K9me3 ab, GM06990 cells)
+    dataVersion Jan 2007
+    priority 6
+    color 10,10,130
+
+    track encodeSangerChipH3K27me3
+    subTrack encodeSangerChip
+    shortLabel SI H3K27me3 GM06990
+    subGroups celltype=gm06990 factor=h3k27me3
+    longLabel Sanger Institute ChIP/Chip (H3K27me3 ab, GM06990 cells)
+    dataVersion Jan 2007
+    priority 7
+    color 10,10,130
+    
+    track encodeSangerChipH3K36me3
+    subTrack encodeSangerChip
+    shortLabel SI H3K36me3 GM06990
+    subGroups celltype=gm06990 factor=3k36me3
+    longLabel Sanger Institute ChIP/Chip (H3K36me3 ab, GM06990 cells)
+    dataVersion Jan 2007
+    priority 8
+    color 10,10,130
+
+    track encodeSangerChipH3K79me3
+    subTrack encodeSangerChip
+    shortLabel SI H3K79me3 GM06990
+    subGroups celltype=gm06990 factor=h3k79me3
+    longLabel Sanger Institute ChIP/Chip (H3K79me3 ab, GM06990 cells)
+    dataVersion Jan 2007
+    priority 9
+    color 10,10,130
+    
+    track encodeSangerChipCTCF
+    subTrack encodeSangerChip
+    shortLabel SI CTCF GM06990
+    subGroups celltype=gm06990 factor=ctcf
+    longLabel Sanger Institute ChIP/Chip (CTCF ab, GM06990 cells)
+    dataVersion Jan 2007
+    priority 10
+    color 10,10,130
+   
     track encodeSangerChipH3K4me2K562
     subTrack encodeSangerChip
     shortLabel SI H3K4me2 K562
@@ -406,7 +451,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=k562 factor=h3k4me2
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
-    priority 6
+    priority 11
     color 10,10,10
 
     track encodeSangerChipH3K4me3K562
@@ -416,7 +461,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=k562 factor=h3k4me3
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
-    priority 7
+    priority 12
     color 10,10,10
 
     track encodeSangerChipH3acK562
@@ -426,7 +471,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=k562 factor=h3ac
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
-    priority 8
+    priority 13
     color 10,10,10
 
     track encodeSangerChipH4acK562
@@ -436,7 +481,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=k562 factor=h3ac
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
-    priority 9
+    priority 14
     color 10,10,10
 
     track encodeSangerChipH3K4me1HeLa
@@ -445,7 +490,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, HeLa cells) 
     subGroups celltype=hela factor=h3k4me1
     dataVersion ENCODE Oct 2005 Freeze
-    priority 10
+    priority 15
     color 10,10,130
 
     track encodeSangerChipH3K4me2HeLa
@@ -454,7 +499,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, HeLa cells)
     subGroups celltype=hela factor=h3k4me2
     dataVersion ENCODE Oct 2005 Freeze
-    priority 11
+    priority 16
     color 10,10,130
 
     track encodeSangerChipH3K4me3HeLa
@@ -463,7 +508,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, HeLa cells)
     subGroups celltype=hela factor=h3k4me3
     dataVersion ENCODE Oct 2005 Freeze
-    priority 12
+    priority 17
     color 10,10,130
 
     track encodeSangerChipH3acHeLa
@@ -472,7 +517,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3ac ab, HeLa cells) 
     subGroups celltype=hela factor=h3ac
     dataVersion ENCODE Oct 2005 Freeze
-    priority 13
+    priority 18
     color 10,10,130
 
     track encodeSangerChipH4acHeLa
@@ -481,7 +526,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H4ac ab, HeLa cells)
     subGroups celltype=hela factor=h4ac
     dataVersion ENCODE Oct 2005 Freeze
-    priority 14
+    priority 19
     color 10,10,130
 
     track encodeSangerChipH3K4me1HFL1
@@ -490,7 +535,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, HFL-1 cells) 
     subGroups celltype=hfl1 factor=h3k4me1
     dataVersion Jan 2006
-    priority 15
+    priority 20
     color 10,10,10
 
     track encodeSangerChipH3K4me2HFL1
@@ -499,7 +544,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h3k4me2
     dataVersion Jan 2006
-    priority 16
+    priority 21
     color 10,10,10
 
     track encodeSangerChipH3K4me3HFL1
@@ -508,7 +553,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h3k4me3
     dataVersion Jan 2006
-    priority 17
+    priority 22
     color 10,10,10
 
     track encodeSangerChipH3acHFL1
@@ -517,7 +562,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3ac ab, HFL-1 cells) 
     subGroups celltype=hfl1 factor=h3ac
     dataVersion Jan 2006
-    priority 18
+    priority 23
     color 10,10,10
 
     track encodeSangerChipH4acHFL1
@@ -526,7 +571,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H4ac ab, HFL-1 cells)
     subGroups celltype=hfl1 factor=h4ac
     dataVersion Jan 2006
-    priority 19
+    priority 24
     color 10,10,10
 
     track encodeSangerChipH3K4me1Molt4
@@ -535,7 +580,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=molt4 factor=h3k4me1
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, MOLT4 cells) 
     dataVersion August 2006
-    priority 20
+    priority 25
     color 10,10,130
 
     track encodeSangerChipH3K4me2Molt4
@@ -544,7 +589,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=molt4 factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, MOLT4 cells)
     dataVersion August 2006
-    priority 21
+    priority 26
     color 10,10,130
 
     track encodeSangerChipH3K4me3Molt4
@@ -553,7 +598,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=molt4 factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, MOLT4 cells)
     dataVersion August 2006
-    priority 22
+    priority 27
     color 10,10,130
 
     track encodeSangerChipH3acMolt4
@@ -562,7 +607,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=molt4 factor=h3ac
     longLabel Sanger Institute ChIP/Chip (H3ac ab, MOLT4 cells) 
     dataVersion August 2006
-    priority 23
+    priority 28
     color 10,10,130
 
     track encodeSangerChipH4acMolt4
@@ -571,7 +616,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     subGroups celltype=molt4 factor=h4ac
     longLabel Sanger Institute ChIP/Chip (H4ac ab, MOLT4 cells)
     dataVersion August 2006
-    priority 24
+    priority 29
     color 10,10,130
 
     track encodeSangerChipH3K4me1Ptr8
@@ -580,7 +625,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, PTR8 cells) 
     subGroups celltype=ptr8 factor=h3k4me1
     dataVersion August 2006
-    priority 25
+    priority 30
     color 10,10,10
 
     track encodeSangerChipH3K4me2Ptr8
@@ -589,7 +634,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, PTR8 cells)
     subGroups celltype=ptr8 factor=h3k4me2
     dataVersion August 2006
-    priority 26
+    priority 31
     color 10,10,10
 
     track encodeSangerChipH3K4me3Ptr8
@@ -598,7 +643,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 data
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, PTR8 cells)
     subGroups celltype=ptr8 factor=h3k4me3
     dataVersion August 2006
-    priority 27
+    priority 32
     color 10,10,10
 
 track encodeSangerChipHits
