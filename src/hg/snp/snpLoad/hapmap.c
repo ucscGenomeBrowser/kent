@@ -20,7 +20,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: hapmap.c,v 1.2 2007/01/11 18:28:50 heather Exp $";
+static char const rcsid[] = "$Id: hapmap.c,v 1.3 2007/01/11 18:51:57 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 static char *db = NULL;
@@ -28,12 +28,13 @@ static struct hash *snpHash = NULL;
 static struct hash *errorHash = NULL;
 
 // strand, refAllele, otherAllele could be single char
+/* center is a list */
 struct snpInfo
     {
     char *chrom;
     int  position;
     char *strand;
-    char *center;
+    struct slName *center;
     char *refAllele;
     char *otherAllele;
 
@@ -128,6 +129,7 @@ struct snpInfo *si = NULL;
 int refCount;
 int otherCount;
 int total;
+struct slName *newCenter;
 
 // double-check
 safef(inputFileName, sizeof(inputFileName), "%s.hapmap", chrom);
@@ -199,7 +201,9 @@ while (lineFileNext(lf, &line, NULL))
         si->chrom = cloneString(chrom);
         si->position = atoi(row[2]);
         si->strand = cloneString(row[3]);
-        si->center = cloneString(row[4]);
+	/* tricky stuff ... */
+	newCenter = slNameNew(row[4]);
+        slSafeAddHead (&(si->center), newCenter);
         si->refAllele = cloneString(row[5]);
 	/* force use of '?' for otherAllele */
 	if (otherCount == 0)
@@ -222,13 +226,6 @@ while (lineFileNext(lf, &line, NULL))
 	if (differentString(si->strand, row[3]))
 	    {
             fprintf(errorFileHandle, "different strands for %s in chrom %s\n", rsId, chrom);
-	    hashRemove(snpHash, rsId);
-	    hashAdd(errorHash, rsId, NULL);
-            continue;
-	    }
-	if (differentString(si->center, row[4]))
-	    {
-            fprintf(errorFileHandle, "different centers for %s in chrom %s\n", rsId, chrom);
 	    hashRemove(snpHash, rsId);
 	    hashAdd(errorHash, rsId, NULL);
             continue;
@@ -260,6 +257,12 @@ while (lineFileNext(lf, &line, NULL))
 	        si->otherAllele = cloneString(row[7]);
 	    }
 	setCounts(row[0], si, refCount, otherCount);
+	/* if this is a new center, add it */
+	if (!slNameInList(si->center, row[4]))
+	    {
+	    newCenter = slNameNew(row[4]);
+            slSafeAddHead (&(si->center), newCenter);
+	    }
 	}
     }
 lineFileClose(&lf);
@@ -299,6 +302,9 @@ while ((hel = hashNext(&cookie)) != NULL)
     fprintf(outputFileHandle, "%d\t", si->otherCountCHB);
     fprintf(outputFileHandle, "%d\t", si->otherCountJPT);
     fprintf(outputFileHandle, "%d\n", si->otherCountYRI);
+
+    if (slCount(si->center) > 1)
+        fprintf(errorFileHandle, "multiple centers for %s\n", rsId);
     }
 carefulClose(&outputFileHandle);
 
