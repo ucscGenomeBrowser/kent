@@ -1463,7 +1463,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     ln -s /cluster/data/gasAcu1/bed/multiz8way.2006-07-18/mafDownloads/{*.gz,*.txt} $dir
 
 #######################################################################
-# MULTIZ8WAY MAF FRAMES (WORKING - 2007-01-10 - Hiram)
+# MULTIZ8WAY MAF FRAMES (DONE - 2007-01-10 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/multiz8way/frames
     cd /cluster/data/gasAcu1/bed/multiz8way/frames
@@ -1544,3 +1544,98 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     time nice -n +19 hgLoadMafFrames gasAcu1 multiz8wayFrames \
 	multiz8way.mafFrames.gz
 
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS
+#		(WORKING - 2007-01-10 - Hiram)
+
+# Estimate phastCons parameters
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/cons
+    cd /cluster/data/gasAcu1/bed/multiz8way/cons
+
+    twoBitToFa -seq=chrIV ../../../gasAcu1.sdTrf.2bit chrIV.fa
+    # Create a starting-tree.mod based on chrIV (the largest one)
+    time /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chrIV.maf \
+	--refseq ./chrIV.fa --in-format MAF \
+	--windows 100000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	26 seconds
+
+    time /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+--tree "(((hg18,mm8),galGal3),(((tetNig1,fr1),(gasAcu1,oryLat1)),danRer4))" \
+    --out-root starting-tree
+    #	Fitting tree model to s1.1-32632948.ss using REV ...
+    #	Writing model to starting-tree.mod ...
+    #	real    4m10.820s
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.449
+    #	This 0.449 is used in the --gc argument below
+
+    # Create SS files on san filesystem
+    #	Using a size of 10,000,000 to slow down the phastCons pk jobs
+    ssh kkstore05
+    mkdir -p  /san/sanvol1/scratch/gasAcu1/cons/ss
+    cd  /san/sanvol1/scratch/gasAcu1/cons/ss
+    time for C in `awk '{print $1}' /cluster/data/gasAcu1/chrom.sizes`
+    do
+      if [ -s /cluster/data/gasAcu1/bed/multiz8way/maf/${C}.maf ]; then
+	mkdir -p ${C}
+	mkdir -p /cluster/data/gasAcu1/bed/multiz8way/cons/${C}
+	echo msa_split $C
+	twoBitToFa -seq=${C} /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit \
+		/cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/gasAcu1/bed/multiz8way/maf/${C}.maf \
+	    --refseq /cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa \
+	    --in-format MAF --windows 4000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+      fi
+    done &
+    #	real    6m44.295s
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    cd /san/sanvol1/scratch/gasAcu1/cons/ss
+    ls -1l chr*/chr*.ss | grep -v Un | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/gasAcu1/bed/multiz8way/cons/starting-tree.mod \
+      --gc 0.407 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.17 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	<< happy emacs
+    chmod a+x makeTree.csh
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+XXX - running 2007-01-10 17:15
