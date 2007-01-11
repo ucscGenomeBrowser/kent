@@ -12195,6 +12195,61 @@ XXX - Running 2006-12-14 16:19
     # Add thickStart/thickEnd fields
     awk 'BEGIN{OFS="\t"}{thickStart=$2; thickEnd=$3; if ($6=="-") {thickStart = thickStart+13; } else { thickEnd = thickEnd-13; } print $0, thickStart, thickEnd}' \
        < mapping.bed6 > mapping.bed
+
+
+##########################################################################
+#  xxBlastTab - Help filter out unwanted paralogs  (Galt 2007-01-10)
+#
+# Background: The xxBlastTab tables are made with a simple blastall 
+# (blastp with -b 1) which chooses the best match.  Unfortunately this
+# means that if there is no proper match it will still pick something
+# even though it's probably not orthologous. This is especially a problem
+# in organisms like rat knownGene which has only 30% gene coverage. 
+# The strategy here is to filter our xxBlastTab using synteny mappings from
+# the chains. This is done by simply taking hg18.kg and using /gbdb/$db chains
+# and pslMap to lift the genes to the target xx assembly.  Then hgMapToGene
+# will find which of those mapped ids have good overlap with xx.knownGene.
+# The final mapping is then created by doing an inner join between 
+# the traditional xxBlastTab and the mapping table produced above.
+# Then simply drop the old table and rename the new table.
+#
+#
+# We are starting with xxBlastTab tables already built in the usual way with
+# blastall/blastp, probably with doHgNearBlastp.pl script.
+#
+# I created a new utility script called synBlastp.csh since I have to do this
+# several times. 
+#
+# we want to update hg18 for rat and mouse, 
+# so check ./hgGeneData/Human/hg18/otherOrgs.ra for current settings
+
+ssh hgwdev
+
+synBlastp.csh hg18 rn4
+
+#hg18.rnBlastTab results:
+#new number of unique query values:
+# 13120
+#new number of unique target values
+# 6431
+#old number of unique query values:
+# 26982
+#old number of unique target values
+# 6732
+
+synBlastp.csh hg18 mm8
+
+#hg18.mmBlastTab results:
+#new number of unique query values:
+# 28733
+#new number of unique target values
+# 15366
+#old number of unique query values:
+# 33016
+#old number of unique target values
+# 15918
+
+
 ##########################################################################
 # GenBank gbMiscDiff table (markd 2007-01-10)
 # Supports `NCBI Clone Validation' section of mgcGenes details page

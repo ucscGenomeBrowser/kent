@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.4 2007/01/11 02:33:38 markd Exp $"
+#	"$Id: mm7.txt,v 1.5 2007/01/11 23:41:29 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12442,6 +12442,127 @@ exit 0
 	bzcat ${F} | gzip > ${C}.regPotential7X.mm7.gz
 	echo
     done
+
+#############################################################################
+# Create Allen Brain Atlas mapping. (Done 2006-12-19 Galt)
+# We are creating several things: a psl probe-track for the RR on mouse,
+# a link out from kg to the probe to the ABA website, 
+# and a set of gene/probe info which visiGene will use.
+# (This needs to be done after have created sequences in
+# ncbiXm and tigrMgiTc as above.)
+
+# metadata.log and SRGEsequence.log was provided by 
+#  Susan Sunkin <SusanS@alleninstitute.org>
+# this is an update to the visiGene with 6000 new images.
+
+# See mm6.txt for steps not needing to be repeated.
+
+# copy in the data files (directory already exists from previous build)
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/allenBrain
+    mkdir old
+    mv * old/
+    cp /cluster/data/mm6/bed/allenBrain/allen20061204.tab .
+    cp /cluster/data/mm6/bed/allenBrain/probeSeq.20061204.fasta .
+    cp /cluster/data/mm6/bed/allenBrain/allProbes.fa .
+    cp /cluster/data/mm6/bed/allenBrain/allProbes.tab .
+    cp /cluster/data/mm6/bed/allenBrain/allenBrainUrl.tab .
+
+
+# Set up a blat run to align the probes.
+    ssk pk
+    cd /cluster/data/mm7/bed/allenBrain
+    mkdir split
+    faSplit sequence allProbes.fa 200 split/rp
+    mkdir run
+    cd run
+    ls -1 ../split/*.fa > mrna.lst
+    ls -1 /scratch/hg/mm7/nib/*.nib > genome.lst
+    mkdir psl
+    cat << '_EOF_' > gsub
+#LOOP
+blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+# Then do the usual para try/push/time/check until the run is finished
+#Completed: 7760 of 7760 jobs
+#CPU time in finished jobs:      27958s     465.96m     7.77h    0.32d  0.001 y
+#IO & Wait Time:                 66555s    1109.25m    18.49h    0.77d  0.002 y
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              27s       0.45m     0.01h    0.00d
+#Submission to last job:          1093s      18.22m     0.30h    0.01d
+
+
+# Then do sorting and near-best-in-genome step on file server
+    ssh kkstore
+    cd /cluster/data/mm7/bed/allenBrain/run
+    pslSort dirs raw.psl tmp psl
+    pslReps raw.psl ../best.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
+    sort -k 14,14 -k 16,16n ../best.psl > ../allenBrainAli.psl
+
+# Clean up big files no longer needed
+    rm raw.psl
+    rm -r psl
+    rm -r ../split
+
+# Load up database
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/allenBrain
+
+# Make a new table that contains the URLs for the allen brain genes
+# Make this one first since all.joiner considers it the master table.
+
+    hgsql mm7 -e 'drop table allenBrainUrl'
+    hgsql mm7 < ~/kent/src/hg/lib/allenBrainUrl.sql
+    hgsql mm7 -e 'load data local infile "allenBrainUrl.tab" into table allenBrainUrl'
+
+# Make probe alignment table, and load sequence.
+    hgLoadPsl mm7 allenBrainAli.psl
+    rm /gbdb/mm7/allenBrain/allProbes.fa
+    ln -s /cluster/data/mm7/bed/allenBrain/allProbes.fa /gbdb/mm7/allenBrain/allProbes.fa
+    hgLoadSeq -replace mm7 /gbdb/mm7/allenBrain/allProbes.fa
+
+# Make mapping between known genes and allenBrain
+    hgMapToGene mm7 allenBrainAli -type=psl knownGene knownToAllenBrain 
+
+##########################################################################
+#  xxBlastTab - Help filter out unwanted paralogs  (Galt 2007-01-11)
+#
+# We are starting with xxBlastTab tables already built in the usual way with
+# blastall/blastp, probably with doHgNearBlastp.pl script.
+#
+# we want to update mm7 for human and rat, 
+# so check ./hgGeneData/Mouse/mm7/otherOrgs.ra for current settings
+
+ssh hgwdev
+
+synBlastp.csh mm7 hg17 
+#mm7.hgBlastTab:
+#new number of unique query values:
+#23504
+#new number of unique target values
+#14254
+#old number of unique query values:
+#27703
+#old number of unique target values
+#15623
+#cleanup:
+
+
+synBlastp.csh mm7 rn3
+#mm7.rnBlastTab:
+#new number of unique query values:
+#8603
+#new number of unique target values
+#5071
+#old number of unique query values:
+#19217
+#old number of unique target values
+#5508
+
 
 #########################################################################
 ##########################################################################

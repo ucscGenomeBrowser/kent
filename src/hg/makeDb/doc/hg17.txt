@@ -22578,6 +22578,56 @@ done
 
    hgLoadBed hg17 gad gad.bed
 
+##########################################################################
+#  xxBlastTab - Help filter out unwanted paralogs  (Galt 2007-01-11)
+#
+# Background: The xxBlastTab tables are made with a simple blastall 
+# (blastp with -b 1) which chooses the best match.  Unfortunately this
+# means that if there is no proper match it will still pick something
+# even though it's probably not orthologous. This is especially a problem
+# in organisms like rat knownGene which has only 30% gene coverage. 
+# The strategy here is to filter our xxBlastTab using synteny mappings from
+# the chains. This is done by simply taking $db.kg and using /gbdb/$db chains
+# and pslMap to lift the genes to the target xx assembly.  Then hgMapToGene
+# will find which of those mapped ids have good overlap with xx.knownGene.
+# The final mapping is then created by doing an inner join between 
+# the traditional xxBlastTab and the mapping table produced above.
+# Then simply drop the old table and rename the new table.
+#
+# We are starting with xxBlastTab tables already built in the usual way with
+# blastall/blastp, probably with doHgNearBlastp.pl script.
+#
+# I created a new utility script called synBlastp.csh since I have to do this
+# several times. 
+#
+# we want to update hg17 for rat and mouse, 
+# so check ./hgGeneData/Human/hg17/otherOrgs.ra for current settings
+
+ssh hgwdev
+
+synBlastp.csh hg17 rn3
+#hg17.rnBlastTab results:
+#new number of unique query values:
+#10728
+#new number of unique target values
+#5177
+#old number of unique query values:
+#24030
+#old number of unique target values
+#5535
+
+synBlastp.csh hg17 mm7
+#new number of unique query values:
+#28292
+#new number of unique target values
+#15051
+#old number of unique query values:
+#33306
+#old number of unique target values
+#15631
+
+
+
 #####################################################################
 ##########################################################################
 # GenBank gbMiscDiff table (markd 2007-01-10)
