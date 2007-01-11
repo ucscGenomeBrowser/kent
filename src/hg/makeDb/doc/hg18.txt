@@ -12195,3 +12195,10 @@ XXX - Running 2006-12-14 16:19
     # Add thickStart/thickEnd fields
     awk 'BEGIN{OFS="\t"}{thickStart=$2; thickEnd=$3; if ($6=="-") {thickStart = thickStart+13; } else { thickEnd = thickEnd-13; } print $0, thickStart, thickEnd}' \
        < mapping.bed6 > mapping.bed
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna hg18

@@ -8254,3 +8254,10 @@ exit 0
     hgsql -h genome-testdb hgcentraltest \
 	-e "update dbDb set orderKey = 451 where name = 'danRer3';"
 
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer3

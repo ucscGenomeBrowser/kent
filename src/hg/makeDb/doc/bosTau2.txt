@@ -1696,3 +1696,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /cluster/data/bosTau2/bed/blastz.canFam2.swap/axtChain
     nice netClass -verbose=0 -noAr noClass.net bosTau2 canFam2 bosTau2.canFam2.net
     nice gzip bosTau2.canFam2.net
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna bosTau2

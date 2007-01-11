@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.3 2006/08/01 16:59:29 kent Exp $"
+#	"$Id: mm7.txt,v 1.4 2007/01/11 02:33:38 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12444,3 +12444,10 @@ exit 0
     done
 
 #########################################################################
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna mm7

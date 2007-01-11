@@ -2527,3 +2527,10 @@ doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
     #   59307185 bases of 1381238994 (4.294%) in intersection
 
 
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna xenTro1

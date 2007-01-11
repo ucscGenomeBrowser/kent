@@ -11862,3 +11862,10 @@ awk 'BEGIN{OFS="\t"}{print $4,$3-$2}' affyHuEx1.fixed.bed | sort -k2,2nr | head
      bedSort affyHuEx1.fixed.bed tmp.bed
      rm good.* bad.* alreadyok.bed
    hgLoadBed hg16 affyHuEx1 affyHuEx1.fixed.bed
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna hg16
