@@ -12257,3 +12257,64 @@ synBlastp.csh hg18 mm8
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna hg18
+
+#################################################
+# BUILD ncRna TRACK (DONE, 1/12/07, Fan)
+
+# Download the terms and make the database.
+    ssh hgwdev
+    cd /cluster/store11/gs.19/build36
+    cd bed
+    mkdir ncRna
+
+# copy Perl file at:
+# http://cvs.sanger.ac.uk/cgi-bin/viewcvs.cgi/biomart-perl/scripts/webExample.pl?view=markup
+# into getBiomart.pl
+
+# create the following query xml file, ncRna.xml:
+
+    cat << '_EOF_' >ncRna.xml
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE Query> 
+<Query virtualSchemaName="default" Header="1" count="" softwareVersion="0.5">
+<Dataset name="hsapiens_gene_ensembl" interface="default" Formatter="GTF" >
+
+<Attribute name="biotype" /> 
+<Attribute name="str_chrom_name" /> 
+<Attribute name="gene_stable_id" /> 
+<Attribute name="exon_chrom_start" /> 
+<Attribute name="exon_chrom_end" /> 
+<Attribute name="transcript_chrom_strand" /> 
+<Attribute name="external_gene_id" /> 
+</Dataset>
+</Query>
+'_EOF_'
+
+# get Ensembl gene data from BioMart and filter out protein-conding genes
+
+    perl getBiomart.pl ncRna.xml | grep -v protein_coding >ncRna0.tab
+     
+# cut and paste different cols to form ncRna.tab
+
+    cat ncRna0.tab | sed -e 's/ENSG/chr\tENSG/'>j1
+    cut -f 2 j1 >j.chr0
+    cut -f 1 j1 >j.chr
+    cat j.chr0|sed -e 's/chr/0/' >j.0
+    cut -f 6 j1  >j.strand
+    cut -f 4,5 j1 >j.startEnd
+    cut -f 3 j1 >j.name
+    cut -f 7 j1 >j.type
+    cut -f 8 j1 >j.extGeneId
+    paste j.chr0 j.chr j.startEnd j.name j.0 j.strand j.0 j.0 j.type j.extGeneId >j.all
+    cat j.all|grep -v c6_COX|grep -v c6_QBL|grep -v c5_H2\
+    |sed -e 's/chr\t/chr/'\
+    |grep -v NT_\
+    |sed -e 's/\t-1\t/\t-\t/' |sed -e 's/\t1\t/\t+\t/' \
+    |sed -e 's/chrMT/chrM/'\
+    |sort -k1,1 -k2,2n -k3,3n >ncRna.tab
+
+    hgLoadBed -strict -tab -sqlTable=/cluster/home/fanhsu/src/hg/lib/ncRna.sql hg18 ncRna ncRna.tab
+
+    rm j.*
+    rm j1
+
