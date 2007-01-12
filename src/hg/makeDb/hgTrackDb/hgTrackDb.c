@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.28 2005/06/06 21:45:29 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.29 2007/01/12 00:32:56 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -143,9 +143,12 @@ for (td = tdList; td != NULL; td = tdNext)
     }
 for (td = *pTrackList; td != NULL; td = td->next)
     {
+    char *htmlName;
+    if ((htmlName = trackDbSetting(td, "html")) == NULL)
+        htmlName = td->tableName;
     if (!hashLookup(htmlHash, td->tableName))
 	{
-	sprintf(fileName, "%s/%s.html", dirName, td->tableName);
+	sprintf(fileName, "%s/%s.html", dirName, htmlName);
 	if (fileExists(fileName))
 	    {
 	    char *s;

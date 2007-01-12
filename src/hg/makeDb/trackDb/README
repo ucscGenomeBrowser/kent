@@ -301,6 +301,9 @@ Some settings used by various tracks:
         (used chiefly by ENCODE)
     o origAssembly - prints out a message on the details page, indicating
         that the data was lifted from this assembly (used chiefly by ENCODE)
+    o html - specifies alternate filename for track description. Should only
+        be used when updating an existing track (used chiefly by ENCODE).
+        in conjunction with the 'release alpha' setting.
 
 Note: We have a restriction on table names.   We currently do not handle
 table names in the format chrN_table_name.   The 2nd underscore is not allowed.
