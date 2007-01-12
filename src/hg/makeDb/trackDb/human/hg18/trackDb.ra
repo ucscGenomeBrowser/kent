@@ -989,6 +989,7 @@ termRegex [^[:space:]]+
 searchPriority 50
 
 searchTable wgRna
+searchTable ncRna
 searchMethod fuzzy
 searchType bed
 searchPriority 10
