@@ -927,6 +927,16 @@ color 20,90,0
 type bed 6 +
 mafTrack multiz17way
 
+track ncRna
+shortLabel non-coding genes
+longLabel Ensembl Non-Protein-Coding Genes
+group genes
+priority 63.5
+color 150,0,0
+visibility hide
+type bed 8 +
+url http://www.ensembl.org/Homo_sapiens/geneview?gene=$$
+
 track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA snoRNAs, scaRNAs and microRNAs from snoRNABase and miRBase
