@@ -75,7 +75,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     trackDbCustom.o trackLayout.o trackTable.o \
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
-    wabAli.o web.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
+    wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o
 
