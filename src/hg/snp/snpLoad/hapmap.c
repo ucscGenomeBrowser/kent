@@ -20,7 +20,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: hapmap.c,v 1.3 2007/01/11 18:51:57 heather Exp $";
+static char const rcsid[] = "$Id: hapmap.c,v 1.4 2007/01/12 01:14:51 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 static char *db = NULL;
@@ -84,6 +84,8 @@ si->refCountCHB = 0;
 si->otherCountCHB = 0;
 si->refCountJPT = 0;
 si->otherCountJPT = 0;
+si->refCountYRI = 0;
+si->otherCountYRI = 0;
 }
 
 void setCounts(char *pop, struct snpInfo *si, int refCount, int otherCount)
