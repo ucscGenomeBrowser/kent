@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.48 2007/01/08 22:35:41 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.49 2007/01/12 23:52:30 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -151,13 +151,19 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
 char *db = customTrackTempDb();
 /* running the single command:
  *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -allowStartEqualEnd
- *	    -tmpDir=../trash/ct -allowStartEqualEnd
+ *	    -tmpDir=/data/tmp -allowStartEqualEnd
  *		-maxChromNameLength=${nameLength} stdin
  */
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadBed", "-verbose=0", "-noNameIx", "-ignoreEmpty", 
 	"-allowStartEqualEnd", NULL, NULL, NULL, NULL, "stdin", NULL};
-dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
@@ -814,7 +820,7 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
 /*	Run the two commands in a pipeline:
  *	loader/wigEncode -verbose=0 -wibSizeLimit=300000000 stdin stdout \
  *	    ${wibFile} | \
- *	loader/hgLoadWiggle -verbose=0 -tmpDir=../trash/ct \
+ *	loader/hgLoadWiggle -verbose=0 -tmpDir=/data/tmp \
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
  *	    -pathPrefix=. ${db} ${table} stdin
  */
@@ -822,12 +828,18 @@ char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000", 
 	"stdin", "stdout", NULL, NULL};
-char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", NULL, NULL, NULL,
-    NULL, NULL, NULL, "stdin", NULL};
+char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", NULL, NULL, NULL, NULL,
+	NULL, NULL, "stdin", NULL};
 char **cmds[] = {cmd1, cmd2, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+
 cmd1[5] = track->wibFile;
 
-dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd2[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
