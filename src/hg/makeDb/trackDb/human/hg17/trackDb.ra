@@ -308,6 +308,7 @@ type bed 5 .
 
 track multiz17way
 release beta
+wiggle phastCons17way
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
