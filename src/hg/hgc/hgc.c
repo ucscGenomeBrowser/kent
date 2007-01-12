@@ -189,7 +189,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1177 2006/12/19 19:23:38 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1178 2007/01/12 20:43:29 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17082,7 +17082,11 @@ while ((row = sqlNextRow(sr)) != NULL)
             {
             char url[512];
             char *encodedAcc = cgiEncode(link->acc);
-            safef(url, sizeof(url), linktype, encodedAcc);
+            char *encode = hashFindVal(thisLink, "needsEncoded");
+            if (encode != NULL)
+                safef(url, sizeof(url), linktype, encodedAcc);
+            else
+                safef(url, sizeof(url), linktype, link->acc);
             if (sameString(link->displayVal, ""))
                 printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->acc);
             else
@@ -17137,6 +17141,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printPos(mut->chrom, mut->chromStart, mut->chromEnd, strand, TRUE, mut->name);
     }
 sqlFreeResult(&sr);
+printf("*Note the DNA retrieved by the above link is the chromosome sequence.<br>");
 
 /* fetch and print the source */
 safef(query, sizeof(query),
