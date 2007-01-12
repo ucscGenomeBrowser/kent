@@ -113,6 +113,7 @@
 #include "jaxQTL.h"
 #include "jaxQTL3.h"
 #include "wgRna.h"
+#include "ncRna.h"
 #include "gbProtAnn.h"
 #include "hgSeq.h"
 #include "chain.h"
@@ -189,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1178 2007/01/12 20:43:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1179 2007/01/12 22:56:57 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12788,6 +12789,40 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doNcRna(struct trackDb *tdb, char *item)
+/* Handle click in ncRna track. */
+{
+struct ncRna *ncRna;
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = hAllocConn();
+int bedSize;
+
+genericHeader(tdb, item);
+bedSize = 8;
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s'", table, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    ncRna = ncRnaLoad(row);
+    printCustomUrlWithLabel(tdb, item, 
+			    "Ensembl Non-Coding Gene: ", 
+			    "http://www.ensembl.org/Homo_sapiens/geneview?gene=$$", TRUE);
+    printf("<B>RNA Type:</B> %s", ncRna->type);
+
+    printf("<BR>");
+    bed = bedLoadN(row+hasBin, bedSize);
+    bedPrintPos(bed, bedSize);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+}
+
 void doWgRna(struct trackDb *tdb, char *item)
 /* Handle click in wgRna track. */
 {
@@ -18044,6 +18079,10 @@ else if (sameWord(track, "jaxRepTranscript"))
 else if (sameWord(track, "wgRna"))
     {
     doWgRna(tdb, item);
+    }
+else if (sameWord(track, "ncRna"))
+    {
+    doNcRna(tdb, item);
     }
 else if (sameWord(track, "gbProtAnn"))
     {
