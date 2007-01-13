@@ -16,11 +16,13 @@ static struct optionSpec optionSpecs[] =
     {"chrom", OPTION_STRING|OPTION_MULTI},
     {"keepDisoriented", OPTION_BOOLEAN},
     {"disoriented", OPTION_STRING},
+    {"inclVer", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static struct slName *gChroms = NULL;
 static boolean gKeepDisoriented = FALSE;
+static boolean gInclVer = FALSE;
 static char *gDisoriented = NULL;
 
 void usage(char *msg, ...)
@@ -43,20 +45,54 @@ errAbort("\n%s",
          "    be determined.\n"
          "   -disoriented=psl - output ESTs that where orientation can't\n"
          "    be determined to this file.\n"
+         "   -inclVer - add NCBI version number to accession if not already\n"
+         "    present.\n"
          );
+}
+
+/* cache of information about current EST from gbCdnaInfo. */
+static char gbCacheAcc[32];
+static int gbCacheDir = -1;   // read directory, -1 if unknown
+static int gbCacheVer = -1;   // version, or -1 if unknown
+
+static void gbCacheLoad(struct sqlConnection *conn, char *acc)
+/* load cache for gbCdnaInfo */
+{
+safecpy(gbCacheAcc, sizeof(gbCacheAcc), acc);
+gbCacheDir = -1;
+gbCacheVer = -1;
+char query[512];
+safef(query, sizeof(query), "select version, direction from gbCdnaInfo where acc='%s'", acc);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    gbCacheVer = sqlSigned(row[0]);
+    gbCacheDir = sqlSigned(row[1]);
+    }
+sqlFreeResult(&sr);
+}
+static void gbCacheNeed(struct sqlConnection *conn, char *acc)
+/* load cache with acc if not already loaded */
+{
+if (!sameString(acc, gbCacheAcc))
+    gbCacheLoad(conn, acc);
 }
 
 static int cDnaReadDirection(struct sqlConnection *conn, char *acc)
 /* Return the direction field from the gbCdnaInfo table for accession
    acc. Return -1 if not in table.*/
 {
-int direction = -1;
-char query[512];
-char buf[64], *s = NULL;
-safef(query, sizeof(query), "select direction from gbCdnaInfo where acc='%s'", acc);
-if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
-    direction = sqlSigned(s);
-return direction;
+gbCacheNeed(conn, acc);
+return gbCacheDir;
+}
+
+static int cDnaVersion(struct sqlConnection *conn, char *acc)
+/* Return the version field from the gbCdnaInfo table for accession
+   acc. Return -1 if not in table.*/
+{
+gbCacheNeed(conn, acc);
+return gbCacheVer;
 }
 
 static struct hash *loadOrientation(struct sqlConnection *conn, char *chrom)
@@ -113,6 +149,23 @@ if (orient == 0)
 return orient;
 }
 
+static void addVersion(struct sqlConnection *conn, struct psl *est)
+/* update the qName field of a psl to have the version (unless it already
+ * has it */
+{
+if (strchr(est->qName, '.') == NULL)
+    {
+    int ver = cDnaVersion(conn, est->qName);
+    if (ver >= 0)
+        {
+        char newQName[32];
+        safef(newQName, sizeof(newQName), "%s.%d", est->qName, ver);
+        est->qName = needMoreMem(est->qName, 0, strlen(newQName)+1);
+        strcpy(est->qName, newQName);
+        }
+    }
+}
+
 static void processEst(struct sqlConnection *conn, struct hash *orientHash,
                        struct psl *est, FILE *outPslFh, FILE *disorientedFh)
 /* adjust orientation of an EST and output */
@@ -122,10 +175,16 @@ if ((orient != 0) || gKeepDisoriented)
     {
     if (orient < 0)
         est->strand[0] = ((est->strand[0] == '+') ? '-' : '+');
+    if (gInclVer)
+        addVersion(conn, est);
     pslTabOut(est, outPslFh);
     }
 else if (disorientedFh != NULL)
+    {
+    if (gInclVer)
+        addVersion(conn, est);
     pslTabOut(est, disorientedFh);
+    }
 }
 
 static void orientEstsChrom(struct sqlConnection *conn, struct sqlConnection *conn2,
@@ -181,9 +240,11 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("wrong # of args:");
+ZeroVar(&gbCacheAcc);
 gChroms = optionMultiVal("chrom", NULL);
 gKeepDisoriented = optionExists("keepDisoriented");
 gDisoriented = optionVal("disoriented", NULL);
+gInclVer = optionExists("inclVer");
 if (gKeepDisoriented && (gDisoriented != NULL))
     errAbort("can't specify both -keepDisoriented and -disoriented");
 
