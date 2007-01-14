@@ -25,7 +25,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.5 2006/12/05 01:54:38 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.6 2007/01/14 23:11:47 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -841,7 +841,7 @@ char query[256];
 struct slName *list=NULL, *el;
 
 safef(query, sizeof(query),
-    "select distinct %s from gsSubjInfo", col->name);
+    "select distinct %s from gsidSubjInfo", col->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -879,7 +879,7 @@ char query[256];
 struct slName *list=NULL, *el;
 
 safef(query, sizeof(query),
-    "select distinct %s from gsSubjInfo", col->name);
+    "select distinct %s from gsidSubjInfo", col->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

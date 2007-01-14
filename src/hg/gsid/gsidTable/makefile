@@ -5,7 +5,7 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = gsidTable
 
-O = $A.o advFilter.o configure.o getSeq.o gsSubjInfo.o
+O = $A.o advFilter.o configure.o getSeq.o gsidSubjInfo.o
 
 include ../../../inc/cgi_build_rules.mk
 

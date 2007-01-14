@@ -8,7 +8,7 @@ struct subjInfo
 /* subjInfo - subject info */
     {
     struct subjInfo *next;
-    char **fields;       /* array of field values from gsSubjInfo. fields[0] is always subjId */
+    char **fields;       /* array of field values from gsidSubjInfo. fields[0] is always subjId */
     char *sortString;    /* value to use if sorting as a string */
     int sortInteger;     /* value to use if sorting as an integer */
     int sortDouble;      /* value to use if sorting as an double */
@@ -30,10 +30,10 @@ struct column
     boolean filterOn;		/* True if its filter on. */
     char *type;                 /* type of column */
     struct hash* remap;         /* hash for substitutes if type="remap" */
-    char *query;                /* query if not in gsSubjInfo main table */
+    char *query;                /* query if not in gsidSubjInfo main table */
     boolean filterDropDown;	/* True if filter uses dropdown list. */
 
-    int colNo;                  /* index into subjInfo string array or -1 if not in gsSubjInfo table */
+    int colNo;                  /* index into subjInfo string array or -1 if not in gsidSubjInfo table */
 
     struct hash *settings;	/* Settings from ra file. */
 
@@ -217,7 +217,7 @@ void dropDownAdvFilterControls(struct column *col, struct sqlConnection *conn);
 /* Print out controls for dropdown list filter. */
 
 struct subjInfo *readAllSubjInfo(struct sqlConnection *conn, struct column *columns);
-/* Get all main table gsSubjInfo columns in use. */
+/* Get all main table gsidSubjInfo columns in use. */
 
 boolean anyRealInCart(struct cart *cart, char *wild);
 /* Return TRUE if variables are set matching wildcard. */

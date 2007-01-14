@@ -1,5 +1,5 @@
 #This file contains definitions of hiv1 table view columns.
-# main table is gsSubjInfo table (hivQuan,cd4 are in gsClinicRec table)
+# main table is gsidSubjInfo table (hivQuan,cd4 are in gsidClinicRec table)
 #  the name must also be the fieldname in the table
 #
 name subjId
@@ -17,27 +17,27 @@ visibility on
 type remap "Vaccine"="+" "Placebo"="-"
 filterDropDown on
 
-#(not in main table gsSubjInfo)
+#(not in main table gsidSubjInfo)
 name hivQuan
 shortLabel HIV
 longLabel HIV Quantity
 priority 3
 visibility on
 type integer
-query select hivQuan from gsClinicRec where subjId='%s' order by daysCollection desc limit 1;
+query select hivQuan from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
 
-#(not in main table gsSubjInfo)
+#(not in main table gsidSubjInfo)
 name cd4Count
 shortLabel CD4
 longLabel CD4 Count
 priority 4
 visibility on
 type integer
-query select cd4Count from gsClinicRec where subjId='%s' order by daysCollection desc limit 1;
+query select cd4Count from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
 
 name daysInfectL
 shortLabel DILN
-longLabel Days of infection relative to last negative date
+longLabel The day of infection relative to last negative date
 priority 5
 visibility on
 type integer

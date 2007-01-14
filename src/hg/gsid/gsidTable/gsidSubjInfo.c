@@ -1,4 +1,4 @@
-/* col gsSubjInfo - columns having to do with subjInfo and closely related tables. */
+/* col gsidSubjInfo - columns having to do with subjInfo and closely related tables. */
 
 #include "common.h"
 //#include "linefile.h"
@@ -15,10 +15,10 @@
 
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: gsSubjInfo.c,v 1.1 2006/11/17 23:13:22 galt Exp $";
+static char const rcsid[] = "$Id: gsidSubjInfo.c,v 1.1 2007/01/14 23:11:46 galt Exp $";
 
 struct subjInfo *readAllSubjInfo(struct sqlConnection *conn, struct column *columns)
-/* Get all main table gsSubjInfo columns in use. */
+/* Get all main table gsidSubjInfo columns in use. */
 {
 struct sqlResult *sr;
 char **row;
@@ -41,7 +41,7 @@ for (column=columns;column;column=column->next)
 	sep = ",";
 	}
     }
-dyStringAppend(query," from gsSubjInfo\n");
+dyStringAppend(query," from gsidSubjInfo\n");
 
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
