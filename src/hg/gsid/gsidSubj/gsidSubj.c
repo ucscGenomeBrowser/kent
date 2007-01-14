@@ -18,7 +18,7 @@
 #include "gsidSubj.h"
 //#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: gsidSubj.c,v 1.3 2006/12/06 18:40:21 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidSubj.c,v 1.4 2007/01/14 16:56:22 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -244,7 +244,7 @@ if (sameWord(curSubjId, ""))
     printf("<input type=\"text\" name=\"hgs_subj\" value=\"%s\">\n", curSubjId);
     cgiMakeButton("submit", "Go!");
     printf("</H3>");
-    printf("For example: GSID3123");fflush(stdout);
+    printf("For example: GSID4123");fflush(stdout);
     }
 else
     {
@@ -266,7 +266,7 @@ else
     	printf("<H3>Please enter a valid subject ID.\n");
     	printf("<input type=\"text\" name=\"hgs_subj\" value=\"%s\">\n", "");
     	cgiMakeButton("submit", "Go!");
-    	printf("<BR><BR>For example: GSID3123");
+    	printf("<BR><BR>For example: GSID4123");
 	printf("</H3>");
 	fflush(stdout);
 	}
