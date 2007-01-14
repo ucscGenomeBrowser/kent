@@ -8,5 +8,5 @@ MAILTO=genbank@cse.ucsc.edu
 # during the week and weekends we do both mRNAs and ESTs.  Only on this
 # machine, MGC needs current ESTs and this is also nice sanity check for other
 # machines.
-0,15,30,45 1-6 * * 0-5	/genbank/etc/hgwbeta-dbload -inclEsts
-0,15,30,45 0-14 * * 6,7	/genbank/etc/hgwbeta-dbload -inclEsts
+0,15,30,45 1-6 * * 0-5	/genbank/etc/mgc-dbload -inclEsts
+0,15,30,45 0-14 * * 6,7	/genbank/etc/mgc-dbload -inclEsts
