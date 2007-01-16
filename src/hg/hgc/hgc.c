@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1179 2007/01/12 22:56:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1180 2007/01/16 23:26:20 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6544,6 +6544,7 @@ char *proteinID = NULL;
 char *ans;
 char *ensPep;
 char *chp;
+char *archive;
 
 /* shortItemName is the name without the "." + version */ 
 shortItemName = cloneString(itemName);
@@ -6558,7 +6559,7 @@ if (genomeStrEnsembl == NULL)
     }
 /* print URL that links to Ensembl transcript details */
 if (url != NULL && url[0] != 0)
-    printCustomUrl(tdb, itemName, TRUE);
+    printCustomUrlWithLabel(tdb, itemName, "Ensembl Gene Link", tdb->url, TRUE);
 else
     {
     printf("<B>Ensembl Gene Link: </B>");
@@ -6604,8 +6605,12 @@ if (hTableExists("superfamily"))
     if (proteinID != NULL)
         { 
         printf("<B>Ensembl Protein: </B>");
-        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-        genomeStrEnsembl,proteinID);
+        if  ((archive = trackDbSetting(tdb, "archive")) != NULL)
+            printf("<A HREF=\"http://%s.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+            archive, genomeStrEnsembl,proteinID);
+        else 
+            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+            genomeStrEnsembl,proteinID);
         printf("%s</A><BR>\n", proteinID);
 	}
 
@@ -6656,7 +6661,11 @@ if (hTableExists("ensGtp") && (proteinID == NULL))
     if (proteinID != NULL)
 	{ 
         printf("<B>Ensembl Protein: </B>");
-        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
+        if  ((archive = trackDbSetting(tdb, "archive")) != NULL)
+            printf("<A HREF=\"http://%s.archive.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+            archive, genomeStrEnsembl,proteinID);
+        else 
+            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
         printf("%s</A><BR>\n", proteinID);
 	}
     }
@@ -6684,7 +6693,7 @@ printf("<BR>\n");
 
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
-if (sqlGetField(conn, database, "ensGene", "name", condStr) != NULL)
+if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
     {
     if (wordCount > 0)
     	{
@@ -17541,7 +17550,7 @@ else if (sameWord(track, "superfamily"))
     {
     doSuperfamily(tdb, item, NULL);
     }
-else if (sameWord(track, "ensGene"))
+else if (sameWord(track, "ensGene") || sameWord (track, "ensGeneNonCoding"))
     {
     doEnsemblGene(tdb, item, NULL);
     }
