@@ -1548,7 +1548,7 @@ real    18m9.059s
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
-#		(WORKING - 2007-01-10 - Hiram)
+#		(DONE - 2007-01-10 - 2007-01-17 - Hiram)
 
 # Estimate phastCons parameters
     ssh kkstore05
@@ -1667,6 +1667,16 @@ mkdir -p log/${C} tree/${C}
     #	never stops with the --NH argument
     time /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.7834 \
 	0.10 12 ave.{cons,noncons}.mod
+## 0.20 10 
+( Solving for new omega: 10.000000 12.922391 12.450309 12.439360 )
+
+Transition parameters: gamma=0.200000, omega=10.000000, mu=0.100000, nu=0.025000
+Relative entropy: H=1.358227 bits/site
+Expected min. length: L_min=6.803722 sites
+Expected max. length: L_max=4.741215 sites
+Phylogenetic information threshold: PIT=L_min*H=9.241002 bits
+Recommended expected length: omega=12.439360 sites (for L_min*H=9.783400)
+
 ## 0.01 12 does not convert, trying without --NH
 Transition parameters: gamma=0.010000, omega=12.000000, mu=0.083333, nu=0.000842
 Relative entropy: H=1.012920 bits/site
@@ -1710,8 +1720,8 @@ Phylogenetic information threshold: PIT=L_min*H=10.120357 bits
     #	SKIP to here passing by the tuning numbers
     ssh pk
     # Create cluster dir to do main phastCons run
-    mkdir /san/sanvol1/scratch/gasAcu1/cons/consRun1
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    mkdir /san/sanvol1/scratch/gasAcu1/cons/consRun4
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
@@ -1764,7 +1774,7 @@ rmdir /scratch/tmp/${2}
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
     ssh kolossus
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
     #	The sed's and the sort get the file names in chrom,start order
     #	You might like to verify it is correct by first looking at the
     #	list it produces:
@@ -1791,13 +1801,14 @@ rmdir /scratch/tmp/${2}
     #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
     #	1089350685 lower) in 34 sequences in 34 files
 
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
     #	The 446627861 comes from the non-n genome as counted above.
     awk '
 {sum+=$3-$2}
 END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 	mostConserved8Way.bed
-    #	% 8.36 = 100.0*37347218/446627861 --exp-len 12 --tar-cov 0.01
+    #	% 11.49 = 100.0*51326297/446627861 --exp-len 10 --tar-cov 0.20
+    #	%  8.36 = 100.0*37347218/446627861 --exp-len 12 --tar-cov 0.01
     #	% 10.24 = 100.0*45733412/446627861 --exp-len 12 --tar-cov 0.10
     #	% 11.45 = 100.0*51136218/446627861 --exp-len 12 --tar-cov 0.17
 
@@ -1808,6 +1819,9 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 
     HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits gasAcu1 \
 	-enrichment ensGene:cds mostConserved8Way.bed
+    #	--expected-length 10 --target-coverage 0.20
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 11.492%, both 4.041%, cover
+    #	61.07%, enrich 5.31x
     #	--expected-length 12 --target-coverage 0.01
     #	ensGene:cds 6.618%, mostConserved8Way.bed 8.362%, both 3.628%, cover
     #	54.82%, enrich 6.56x
@@ -1821,9 +1835,10 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
     # Load most conserved track into database
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way
+    # ended up using the set: --expected-length 10 --target-coverage 0.20
     time nice -n +19 hgLoadBed -strict gasAcu1 phastConsElements8way \
 	mostConserved8Way.bed
-    #	Loaded 810915 elements of size 5
+    #	Loaded 446138 elements of size 5
     #	real    0m18.333s
 
     #	should measure the same as above
@@ -1838,7 +1853,7 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 
     # Create merged posterier probability file and wiggle track data files
     ssh pk
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
     # the sed business gets the names sorted by chromName, chromStart
     #	so that everything goes in numerical order into wigEncode
     #	This was verified above to be correct
@@ -1852,13 +1867,12 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
     #	real    3m39.548
     #	-rw-rw-r--   1 296834860 Jan 14 15:27 phastCons8.wib
     #	-rw-rw-r--   1  47569318 Jan 14 15:27 phastCons8.wig
-XXX down to here for 12 and 0.01 2007-01-14
     time nice -n +19 cp -p phastCons8.wi? /cluster/data/gasAcu1/bed/multiz8way/
     #	real    1m21.329s
 
     #	prepare compressed copy of ascii data values for downloads
     ssh pk
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
     cat << '_EOF_' > gzipAscii.sh
 #!/bin/sh
 
@@ -1884,21 +1898,24 @@ done
     #	real    18m15.212s
 
     #	copy them for downloads
-    ssh kkstore04
+    ssh kkstore05
     #	this directory is actually a symlink from store9 to store8 to
     #	avoid the data full problem on store9
     mkdir /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores
     cd /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores
-    cp -p  /san/sanvol1/scratch/gasAcu1/cons/consRun1/phastCons8Scores/* .
+    cp -p  /san/sanvol1/scratch/gasAcu1/cons/consRun4/phastCons8Scores/* .
+    # make a README.txt file here, and an md5sum
 
     ssh hgwdev
-    cd /usr/local/apache/htdocs/goldenPath/gasAcu1
-    ln -s /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores .
+    mkdir /usr/local/apache/htdocs/goldenPath/gasAcu1/phastCons8Scores
+    cd /usr/local/apache/htdocs/goldenPath/gasAcu1/phastCons8Scores
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores/* .
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way
     ln -s `pwd`/phastCons8.wib /gbdb/gasAcu1/wib/phastCons8.wib
+    # ended up using the set: --expected-length 10 --target-coverage 0.20
     time nice -n +19 hgLoadWiggle gasAcu1 phastCons8 phastCons8.wig
     #	real    0m9.256s
 
@@ -1914,13 +1931,13 @@ done
 
     cat << '_EOF_' | gnuplot > histo.png
 set terminal png small color \
-        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+        xffffff x000000 x000000 x444444 xaa4400 x00ffff xff0000
 set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
 set title " Stickleback gasAcu1 Histogram phastCons8 track"
-set xlabel " phastCons8 score"
+set xlabel " phastCons8 score - --expected-length 10 --target-coverage 0.20"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
@@ -1933,6 +1950,33 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+    #	The mostConserved can also be characterized by a histogram
+    awk '{print $3-$2}' mostConserved8Way.bed > mostCons.txt
+    textHistogram -verbose=2 -autoScale=1000 -pValues mostCons.txt \
+	> mostCons.histo.txt
+
+    cat << '_EOF_' | gnuplot > mostCons.png
+set terminal png small color \
+        xffffff x000000 x000000 x444444 xaa4400 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Stickleback gasAcu1 histogram: lengths of mostConserved track elements"
+set xlabel " mostConserved element length - --expected-length 10 --target-coverage 0.20"
+set ylabel " # of elements at this length"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set xrange [0:200]
+set y2tics
+set boxwidth 2
+set style fill solid
+
+plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
+        "mostCons.histo.txt" using 2:6 axes x1y2 title " CRF" with lines
+'_EOF_'
+#	<< happy emacs
 
 ##############################################################################
 ## Medaka oryLat1 swap (DONE - 2007-01-12 - Hiram)
