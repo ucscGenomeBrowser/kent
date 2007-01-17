@@ -45,48 +45,41 @@ void uploadPage()
 /* Put up initial upload page. */
 {
 char *oldFileName = cartUsualString(cart, hggUploadFile "__filename", "");
-cartWebStart(cart, "Upload Data to Genome Association View");
+cartWebStart(cart, "Upload Data to Genome Graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">");
 cartSaveSession(cart);
 hPrintf("Name of data set: ");
 cartMakeTextVar(cart, hggDataSetName, "", 16);
-hPrintf("<i>Only first 16 letters are displayed in some contexts.</i>");
 hPrintf("<BR>");
 
 hPrintf("Description: ");
 cartMakeTextVar(cart, hggDataSetDescription, "", 64);
-hPrintf(" <i>Optional - used in Genome Browser</i> ");
 hPrintf("<BR>\n");
 
 
 hPrintf("File format: ");
 cgiMakeDropList(hggFormatType, formatNames, ArraySize(formatNames), 
     	cartUsualString(cart, hggFormatType, formatNames[0]));
-hPrintf(" <i>Guess is usually accurate, override if problems.</i> ");
 hPrintf("<BR>\n");
 
 hPrintf(" Markers are: ");
 cgiMakeDropList(hggMarkerType, markerNames, ArraySize(markerNames), 
     	cartUsualString(cart, hggMarkerType, markerNames[0]));
-hPrintf("<i> This says how values are mapped to chromosomes.</i>");
 hPrintf("<BR>\n");
 
 hPrintf(" Column labels: ", colLabelNames, ArraySize(colLabelNames),
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
 cgiMakeDropList(hggColumnLabels, colLabelNames, ArraySize(colLabelNames), 
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
-hPrintf("<i> Optionally include first row of file in labels.</i>");
 hPrintf("<BR>\n");
 
-hPrintf("Display Min Value: ");
+hPrintf("Display min value: ");
 cartMakeTextVar(cart, hggMinVal, "", 5);
-hPrintf(" Max Value: ");
+hPrintf(" max value: ");
 cartMakeTextVar(cart, hggMaxVal, "", 5);
-hPrintf(" <i>Leave min/max blank to take scale from data itself.</i><BR>\n");
 
-hPrintf("Label Values: ");
+hPrintf("Label values: ");
 cartMakeTextVar(cart, hggLabelVals, "", 32);
-hPrintf(" <i>Comma-separated numbers for axis label</i><BR>\n");
 hPrintf("Draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
@@ -95,10 +88,10 @@ hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 hPrintf(" ");
 cgiMakeButton(hggSubmitUpload, "Submit");
 hPrintf("</FORM>\n");
-hPrintf("<i>note: If you are uploading more than one data set please give them ");
+hPrintf("<i>Note: If you are uploading more than one data set please give them ");
 hPrintf("different names.  Only the most recent data set of a given name is ");
-hPrintf("kept.  Data sets will be kept for at least 8 hours.  After that time ");
-hPrintf("you may have to upload them again.</i>");
+hPrintf("kept.  Otherwise data sets will be kept for at least 48 hours from ");
+hPrintf("last use.  After that time you may have to upload them again.</i>");
 
 /* Put up section that describes file formats. */
 webNewSection("Upload file formats");
@@ -126,6 +119,45 @@ hPrintf("%s",
 "</P>"
 );
 
+webNewSection("Using the upload page");
+hPrintf(
+"To upload a file in any of the supported formats, "
+"locate the file on your computer using the controls next to <B>File name:</B>, "
+"and then submit. The other controls on this form are optional, though "
+"filling them out will sometimes enhance the display. In general "
+"the controls that default to <i>best guess</i> can be left alone, "
+"since the guess is almost always correct. The controls for display min and "
+"max values and connecting lines can be set later via the configuration "
+"page as well. Here is a description of each control."
+"<UL>"
+"<LI><B>Name of data set:</B> Displayed in graph drop-down in Genome Graphs "
+" and as trackname in Genome Browser. Only the first 16 characters are "
+" visible in some contexts. For data sets with multiple graphs, this is the "
+" first part of the name, shared with all members of the data set.</LI>"
+"<LI><B>Description:</B> A short sentence describing the data set. Displayed in "
+"the Genome Graphs and Genome Browser configuration pages, and as the center "
+"label in the Genome Browser.</LI>"
+"<LI><B>File format:</B> Controls whether the upload file is a tab-separated, "
+" comma-separated, or space separated table.</LI>"
+"<LI><B>Markers are:</B> Describes how to map the data to chromosomes. The choices "
+" are either the first column of the file is an ID of some sort, or the first column "
+" is a chromosome and the next a base. The IDs can be SNP rs numbers, STS marker names "
+" or ID's from any of the supported genotyping platforms.</LI>"
+"<LI><B>Column labels:</B> Controls whether the first row of the upload file is "
+" interpreted as labels rather than data. If the first row contains text in the "
+" numerical fields, or if the mapping fields are empty, it is interpreted by "
+" \"best guess\" as labels. This is generally correct, but you can override this "
+" interpretation by explicitly setting the control. </LI>"
+"<LI><B>Display min value/max value:</B> Set the range of the data set that will "
+" be plotted. If left blank, the range will be taken from the min/max values in the "
+" data set itself. For all data sets to share the same scale usually you'll need "
+" to set this.</LI>"
+"<LI><B>Label Values:</B> A comma-separated list of numbers for the vertical axis. "
+" If left blank the axis will be labeled at the 1/3 and 2/3 point. </LI>"
+"<LI><B>Draw connecting lines:</B> Lines connecting data points separated by "
+" no more than this number of bases are drawn.  </LI>"
+"<LI><B>File name:</B> The controls here let you select which file on your "
+" computer to upload.</LI>");
 cartWebEnd();
 }
 
