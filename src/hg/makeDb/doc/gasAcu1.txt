@@ -1499,31 +1499,6 @@ real    18m9.059s
     # get the genes for all genomes
     # mRNAs with CDS.  single select to get cds+psl, then split that up and
     # create genePred
-    # using mrna table as genes:
-    mkdir genes
-    for qDB in danRer4 tetNig1
-    do
-      tmpExt=`mktemp temp.XXXXXX`
-      tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
-      tmpMrna=${qDB}.mrna.${tmpExt}
-      tmpCds=${qDB}.cds.${tmpExt}
-      echo $qDB
-      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
-                   from all_mrna,gbCdnaInfo,cds \
-                   where (all_mrna.qName = gbCdnaInfo.acc) and \
-                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
-       ${qDB} > ${tmpMrnaCds}
-      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
-      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
-      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
-        stdout \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > /scratch/tmp/$qDB.tmp.gz
-      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
-      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
-      rm -f $tmpExt
-    done
-
     # using ensGene for gasAcu1 oryLat1
     for qDB in danRer4 galGal3
     do
@@ -1540,8 +1515,7 @@ real    18m9.059s
     # using genscan for tetNig1
     # using ensGene for gasAcu1, oryLat1 and fr1
     # genePreds; (must keep only the first 10 columns for knownGene)
-    for qDB in mm8 hg18 gasAcu1 oryLat1 fr1
-    for qDB in tetNig1
+    for qDB in mm8 hg18 gasAcu1 oryLat1 fr1 tetNig1
     do
       if [ $qDB = "gasAcu1" -o $qDB = "oryLat1" -o $qDB = "fr1" ]; then
         geneTbl=ensGene
