@@ -1,11 +1,11 @@
-setenv BRANCHNN 148
-setenv TODAY 2006-12-11     # v148 final
-setenv LASTWEEK 2006-11-27     # v147 final
-setenv REVIEWDAY 2006-12-04    # preview of v148
-setenv LASTREVIEWDAY 2006-11-13  # preview of v147
+setenv BRANCHNN 150
+setenv TODAY 2007-01-16     # v150 final
+setenv LASTWEEK 2007-01-02     # v149 final
+setenv REVIEWDAY 2007-01-08    # preview of v150
+setenv LASTREVIEWDAY 2006-12-18    # preview of v149
 
 setenv WEEKLYBLD /cluster/bin/build/scripts
-setenv BOX32 hgwdevold
+setenv BOX32 titan
 
 setenv CVSROOT /projects/compbio/cvsroot
 setenv CVS_RSH ssh
