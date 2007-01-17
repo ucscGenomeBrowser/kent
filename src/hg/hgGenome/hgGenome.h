@@ -18,6 +18,7 @@
 #define hggThreshold hggPrefix "threshold"
 #define defaultThreshold 3.5
 #define hggGraphsPerLine hggPrefix "graphsPerLine"
+#define hggChromLayout hggPrefix "chromLayout"
 #define hggLinesOfGraphs hggPrefix "linesOfGraphs"
 #define hggDataSetName hggPrefix "dataSetName"
 #define hggDataSetDescription hggPrefix "dataSetDescription"
@@ -110,6 +111,12 @@ int graphsPerLine();
 #define defaultLinesOfGraphs 1
 int linesOfGraphs();
 /* Return number of lines of graphs */
+
+#define layTwoPerLine "two per line"
+#define layOnePerLine "one per line"
+#define layAllOneLine "all in one line"
+char *chromLayout();
+/* Return one of above strings specifying layout. */
 
 void getGenoGraphs(struct sqlConnection *conn);
 /* Set up ggList and ggHash with all available genome graphs */

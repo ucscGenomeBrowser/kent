@@ -19,6 +19,12 @@ struct genoLayChrom
      int width,height; 	/* Pixel width and height */
      };
 
+#define genoLayTwoPerLine "two per line"
+#define genoLayOnePerLine "one per line"
+#define genoLayAllOneLine "all in one line"
+/* The "how" parameter to genoLayNew should be one of these 
+ * above three. */
+
 struct genoLay
 /* This has information on how to lay out chromosomes. */
     {
@@ -42,6 +48,8 @@ struct genoLay
     int totalHeight;			/* Total width/height in pixels */
     double basesPerPixel;		/* Bases per pixel */
     double pixelsPerBase;		/* Pixels per base. */
+    char *how;				/* How parameter from genoLayNew. */
+    boolean allOneLine;			/* True if draw all on one line. */
     };
 
 void genoLayDump(struct genoLay *gl);
@@ -57,10 +65,12 @@ struct genoLayChrom *genoLayDbChroms(struct sqlConnection *conn,
 
 struct genoLay *genoLayNew(struct genoLayChrom *chromList,
 	MgFont *font, int picWidth, int betweenChromHeight,
-	int minLeftLabelWidth, int minRightLabelWidth);
+	int minLeftLabelWidth, int minRightLabelWidth,
+	char *how);
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated
- * by the platypus having a bunch of sex chromosomes. */
+ * by the platypus having a bunch of sex chromosomes.  The how
+ * parameter should be one of the string constants defined above. */
 
 void genoLayDrawChromLabels(struct genoLay *gl, struct vGfx *vg, int color);
 /* Draw chromosomes labels in image */

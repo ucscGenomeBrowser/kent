@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.9 2007/01/17 18:46:11 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.10 2007/01/17 20:31:09 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -27,6 +27,12 @@ for (i=0; i<choiceCount; ++i)
     }
 printf("</SELECT>\n");
 }
+
+char *chromLayouts[] = {
+    layTwoPerLine,
+    layOnePerLine,
+    layAllOneLine,
+    };
 
 
 void configurePage()
@@ -60,6 +66,11 @@ cgiMakeButton("submit", "Submit");
 hPrintf("</TD>\n");
 hPrintf("</TR>\n");
 hPrintf("</TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("chromosome layout: ");
+cgiMakeDropList(hggChromLayout, chromLayouts, ArraySize(chromLayouts), 
+        chromLayout());
+hPrintf("</TD></TR></TABLE>\n");
 hPrintf("<TABLE><TR><TD>\n");
 hPrintf("numerical labels: ");
 cartMakeCheckBox(cart, hggLabels, TRUE);

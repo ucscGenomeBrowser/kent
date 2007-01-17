@@ -132,7 +132,8 @@ slReverse(&autoList);
 
 struct genoLay *genoLayNew(struct genoLayChrom *chromList,
 	MgFont *font, int picWidth, int betweenChromHeight,
-	int minLeftLabelWidth, int minRightLabelWidth)
+	int minLeftLabelWidth, int minRightLabelWidth,
+	char *how)
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated
  * by the platypus having a bunch of sex chromosomes. */
@@ -151,8 +152,10 @@ int sexBasesInLine=0;		/* Bases in line for sex chromsome. */
 double sexBasesPerPixel, autosomeBasesPerPixel, basesPerPixel;
 int pos = margin;
 int y = 0;
-int chromHeight = mgFontLineHeight(font);
+int fontHeight = mgFontLineHeight(font);
+int chromHeight = fontHeight;
 int lineHeight = chromHeight + betweenChromHeight;
+boolean allOneLine = FALSE;
 
 refList = refListFromSlList(chromList);
 
@@ -175,152 +178,201 @@ gl->chromOffsetY = lineHeight - chromHeight;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     hashAdd(gl->chromHash, chrom->fullName, chrom);
 
-/* Put sex chromosomes on bottom, and rest on left. */
-separateSexChroms(refList, &refList, &gl->bottomList);
-autoCount = slCount(refList);
-gl->leftList = refList;
-
-/* If there are a lot of chromosomes, then move later
- * (and smaller) chromosomes to a new right column */
-if (autoCount > 12)
+if (sameString(how, genoLayOnePerLine))
     {
-    halfCount = (autoCount+1)/2;
-    ref = slElementFromIx(refList, halfCount-1);
-    gl->rightList = ref->next;
-    ref->next = NULL;
-    slReverse(&gl->rightList);
+    gl->leftList = refList;
+    }
+else if (sameString(how, genoLayAllOneLine))
+    {
+    gl->bottomList = refList;
+    allOneLine = TRUE;
+    }
+else
+    {
+    /* Put sex chromosomes on bottom, and rest on left. */
+    separateSexChroms(refList, &refList, &gl->bottomList);
+    autoCount = slCount(refList);
+    gl->leftList = refList;
+
+    /* If there are a lot of chromosomes, then move later
+     * (and smaller) chromosomes to a new right column */
+    if (autoCount > 12)
+	{
+	halfCount = (autoCount+1)/2;
+	ref = slElementFromIx(refList, halfCount-1);
+	gl->rightList = ref->next;
+	ref->next = NULL;
+	slReverse(&gl->rightList);
+	}
     }
 
-/* Figure out space needed for autosomes. */
-left = gl->leftList;
-right = gl->rightList;
-while (left || right)
+if (allOneLine)
     {
-    bases = 0;
-    chromInLine = 0;
-    if (left)
+    long totalBases = 0, bStart=0, bEnd;
+    int chromCount = 0, chromIx=0;
+    for (ref = gl->bottomList; ref != NULL; ref = ref->next)
         {
-	chrom = left->val;
-	labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
-	if (leftLabelWidth < labelWidth)
-	    leftLabelWidth = labelWidth;
-	bases = chrom->size;
-	left = left->next;
+	chrom = ref->val;
+	totalBases += chrom->size;
+	chromCount += 1;
 	}
-    if (right)
+    int availablePixels = picWidth - minLeftLabelWidth - minRightLabelWidth
+       - 2*margin - (chromCount-1);
+    double basesPerPixel = (double)totalBases/availablePixels;
+    gl->picHeight = 2*margin + lineHeight + fontHeight;
+    for (ref = gl->bottomList; ref != NULL; ref = ref->next)
         {
-	chrom = right->val;
-	labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
-	if (rightLabelWidth < labelWidth)
-	    rightLabelWidth = labelWidth;
-	bases += chrom->size;
-	right = right->next;
+	chrom = ref->val;
+	bEnd = bStart + chrom->size;
+	int pixStart = round(bStart / basesPerPixel);
+	int pixEnd = round(bEnd / basesPerPixel);
+	chrom->width = pixEnd - pixStart;
+	chrom->height = lineHeight;
+	chrom->x = pixStart + margin + chromIx + minLeftLabelWidth;
+	chrom->y = 0;
+	chromIx += 1;
+	bStart = bEnd;
 	}
-    if (autosomeBasesInLine < bases)
-        autosomeBasesInLine = bases;
-    gl->lineCount += 1;
+    gl->lineCount = 1;
+    gl->picHeight = 2*margin + lineHeight + fontHeight + 1;
+    gl->allOneLine = TRUE;
+    gl->leftLabelWidth = minLeftLabelWidth;
+    gl->rightLabelWidth = minRightLabelWidth;
+    gl->basesPerPixel = basesPerPixel;
+    gl->pixelsPerBase = 1.0/basesPerPixel;
     }
-
-/* Figure out space needed for sex chromosomes. */
-if (gl->bottomList)
+else
     {
-    gl->lineCount += 1;
-    bases = 0;
-    sexOtherPixels = spaceWidth + 2*margin;
+    /* Figure out space needed for autosomes. */
+    left = gl->leftList;
+    right = gl->rightList;
+    while (left || right)
+	{
+	bases = 0;
+	chromInLine = 0;
+	if (left)
+	    {
+	    chrom = left->val;
+	    labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
+	    if (leftLabelWidth < labelWidth)
+		leftLabelWidth = labelWidth;
+	    bases = chrom->size;
+	    left = left->next;
+	    }
+	if (right)
+	    {
+	    chrom = right->val;
+	    labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
+	    if (rightLabelWidth < labelWidth)
+		rightLabelWidth = labelWidth;
+	    bases += chrom->size;
+	    right = right->next;
+	    }
+	if (autosomeBasesInLine < bases)
+	    autosomeBasesInLine = bases;
+	gl->lineCount += 1;
+	}
+
+    /* Figure out space needed for bottom chromosomes. */
+    if (gl->bottomList)
+	{
+	gl->lineCount += 1;
+	sexOtherPixels = spaceWidth + 2*margin;
+	for (ref = gl->bottomList; ref != NULL; ref = ref->next)
+	    {
+	    chrom = ref->val;
+	    sexBasesInLine += chrom->size;
+	    labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
+	    if (ref == gl->bottomList )
+		{
+		if (leftLabelWidth < labelWidth)
+		    leftLabelWidth  = labelWidth;
+		sexOtherPixels = leftLabelWidth;
+		}
+	    else if (ref->next == NULL)
+		{
+		if (rightLabelWidth < labelWidth)
+		    rightLabelWidth  = labelWidth;
+		sexOtherPixels += rightLabelWidth + spaceWidth;
+		}
+	    else
+		{
+		sexOtherPixels += labelWidth + spaceWidth;
+		}
+	    }
+	}
+
+    /* Do some adjustments if side labels are bigger than needed for
+     * chromosome names. */
+    if (leftLabelWidth < minLeftLabelWidth)
+	{
+	extraLabelPadding += (minLeftLabelWidth - leftLabelWidth);
+	leftLabelWidth = minLeftLabelWidth;
+	}
+    if (rightLabelWidth < minRightLabelWidth)
+	{
+	extraLabelPadding += (minRightLabelWidth - rightLabelWidth);
+	rightLabelWidth = minRightLabelWidth;
+	}
+    sexOtherPixels += extraLabelPadding;
+
+    /* Figure out the number of bases needed per pixel. */
+    autosomeOtherPixels = 2*margin + spaceWidth + leftLabelWidth + rightLabelWidth;
+    basesPerPixel = autosomeBasesPerPixel 
+	    = autosomeBasesInLine/(picWidth-autosomeOtherPixels);
+    if (gl->bottomList)
+	{
+	sexBasesPerPixel = sexBasesInLine/(picWidth-sexOtherPixels);
+	if (sexBasesPerPixel > basesPerPixel)
+	    basesPerPixel = sexBasesPerPixel;
+	}
+
+    /* Save positions and sizes of some things in layout structure. */
+    gl->leftLabelWidth = leftLabelWidth;
+    gl->rightLabelWidth = rightLabelWidth;
+    gl->basesPerPixel = basesPerPixel;
+    gl->pixelsPerBase = 1.0/basesPerPixel;
+
+    /* Set pixel positions for left autosomes */
+    for (ref = gl->leftList; ref != NULL; ref = ref->next)
+	{
+	chrom = ref->val;
+	chrom->x = leftLabelWidth + margin;
+	chrom->y = y;
+	chrom->width = round(chrom->size/basesPerPixel);
+	chrom->height = lineHeight;
+	y += lineHeight;
+	}
+
+    /* Set pixel positions for right autosomes */
+    y = 0;
+    for (ref = gl->rightList; ref != NULL; ref = ref->next)
+	{
+	chrom = ref->val;
+	chrom->width = round(chrom->size/basesPerPixel);
+	chrom->height = lineHeight;
+	chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
+	chrom->y = y;
+	y += lineHeight;
+	}
+    gl->picHeight = 2*margin + lineHeight * gl->lineCount;
+    y = gl->picHeight - margin - lineHeight;
+
+    /* Set pixel positions for sex chromosomes */
     for (ref = gl->bottomList; ref != NULL; ref = ref->next)
 	{
 	chrom = ref->val;
-	sexBasesInLine += chrom->size;
-	labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
-	if (ref == gl->bottomList )
-	    {
-	    if (leftLabelWidth < labelWidth)
-		leftLabelWidth  = labelWidth;
-	    sexOtherPixels = leftLabelWidth;
-	    }
+	chrom->y = y;
+	chrom->width = round(chrom->size/basesPerPixel);
+	chrom->height = lineHeight;
+	if (ref == gl->bottomList)
+	    chrom->x = leftLabelWidth + margin;
 	else if (ref->next == NULL)
-	    {
-	    if (rightLabelWidth < labelWidth)
-		rightLabelWidth  = labelWidth;
-	    sexOtherPixels += rightLabelWidth + spaceWidth;
-	    }
+	    chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
 	else
-	    {
-	    sexOtherPixels += labelWidth + spaceWidth;
-	    }
+	    chrom->x = 2*spaceWidth+mgFontStringWidth(font,chrom->shortName) + pos;
+	pos = chrom->x + chrom->width;
 	}
-    }
-
-/* Do some adjustments if side labels are bigger than needed for
- * chromosome names. */
-if (leftLabelWidth < minLeftLabelWidth)
-    {
-    extraLabelPadding += (minLeftLabelWidth - leftLabelWidth);
-    leftLabelWidth = minLeftLabelWidth;
-    }
-if (rightLabelWidth < minRightLabelWidth)
-    {
-    extraLabelPadding += (minRightLabelWidth - rightLabelWidth);
-    rightLabelWidth = minRightLabelWidth;
-    }
-sexOtherPixels += extraLabelPadding;
-
-/* Figure out the number of bases needed per pixel. */
-autosomeOtherPixels = 2*margin + spaceWidth + leftLabelWidth + rightLabelWidth;
-basesPerPixel = autosomeBasesPerPixel 
-	= autosomeBasesInLine/(picWidth-autosomeOtherPixels);
-if (gl->bottomList)
-    {
-    sexBasesPerPixel = sexBasesInLine/(picWidth-sexOtherPixels);
-    if (sexBasesPerPixel > basesPerPixel)
-        basesPerPixel = sexBasesPerPixel;
-    }
-
-/* Save positions and sizes of some things in layout structure. */
-gl->leftLabelWidth = leftLabelWidth;
-gl->rightLabelWidth = rightLabelWidth;
-gl->basesPerPixel = basesPerPixel;
-gl->pixelsPerBase = 1.0/basesPerPixel;
-
-/* Set pixel positions for left autosomes */
-for (ref = gl->leftList; ref != NULL; ref = ref->next)
-    {
-    chrom = ref->val;
-    chrom->x = leftLabelWidth + margin;
-    chrom->y = y;
-    chrom->width = round(chrom->size/basesPerPixel);
-    chrom->height = lineHeight;
-    y += lineHeight;
-    }
-
-/* Set pixel positions for right autosomes */
-y = 0;
-for (ref = gl->rightList; ref != NULL; ref = ref->next)
-    {
-    chrom = ref->val;
-    chrom->width = round(chrom->size/basesPerPixel);
-    chrom->height = lineHeight;
-    chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
-    chrom->y = y;
-    y += lineHeight;
-    }
-gl->picHeight = 2*margin + lineHeight * gl->lineCount;
-y = gl->picHeight - margin - lineHeight;
-
-/* Set pixel positions for sex chromosomes */
-for (ref = gl->bottomList; ref != NULL; ref = ref->next)
-    {
-    chrom = ref->val;
-    chrom->y = y;
-    chrom->width = round(chrom->size/basesPerPixel);
-    chrom->height = lineHeight;
-    if (ref == gl->bottomList)
-	chrom->x = leftLabelWidth + margin;
-    else if (ref->next == NULL)
-        chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
-    else
-	chrom->x = 2*spaceWidth+mgFontStringWidth(font,chrom->shortName) + pos;
-    pos = chrom->x + chrom->width;
     }
 return gl;
 }
@@ -364,22 +416,36 @@ void genoLayDrawChromLabels(struct genoLay *gl, struct vGfx *vg, int color)
 struct slRef *ref;
 struct genoLayChrom *chrom;
 int pixelHeight = mgFontPixelHeight(gl->font);
-int yOffset = gl->chromOffsetY + gl->chromHeight - pixelHeight;
-
-/* Draw chromosome labels. */
-for (ref = gl->leftList; ref != NULL; ref = ref->next)
-    leftLabel(vg, gl, ref->val, yOffset, pixelHeight, color);
-for (ref = gl->rightList; ref != NULL; ref = ref->next)
-    rightLabel(vg, gl, ref->val, yOffset, pixelHeight, color);
-for (ref = gl->bottomList; ref != NULL; ref = ref->next)
+if (gl->allOneLine)
     {
-    chrom = ref->val;
-    if (ref == gl->bottomList)
-	leftLabel(vg, gl, chrom, yOffset, pixelHeight, color);
-    else if (ref->next == NULL)
-	rightLabel(vg, gl, chrom, yOffset, pixelHeight, color);
-    else
-        midLabel(vg, gl, chrom, yOffset, pixelHeight, color);
+    int yOffset = gl->chromOffsetY + gl->chromHeight + 1;
+
+    for (ref = gl->bottomList; ref != NULL; ref = ref->next)
+	{
+	chrom = ref->val;
+	vgTextCentered(vg, chrom->x, yOffset, chrom->width, pixelHeight, color, gl->font,
+		chrom->shortName);
+	}
+    }
+else
+    {
+    int yOffset = gl->chromOffsetY + gl->chromHeight - pixelHeight;
+
+    /* Draw chromosome labels. */
+    for (ref = gl->leftList; ref != NULL; ref = ref->next)
+	leftLabel(vg, gl, ref->val, yOffset, pixelHeight, color);
+    for (ref = gl->rightList; ref != NULL; ref = ref->next)
+	rightLabel(vg, gl, ref->val, yOffset, pixelHeight, color);
+    for (ref = gl->bottomList; ref != NULL; ref = ref->next)
+	{
+	chrom = ref->val;
+	if (ref == gl->bottomList)
+	    leftLabel(vg, gl, chrom, yOffset, pixelHeight, color);
+	else if (ref->next == NULL)
+	    rightLabel(vg, gl, chrom, yOffset, pixelHeight, color);
+	else
+	    midLabel(vg, gl, chrom, yOffset, pixelHeight, color);
+	}
     }
 }
 
@@ -406,7 +472,7 @@ void genoLayDrawBandedChroms(struct genoLay *gl, struct vGfx *vg, char *db,
 char *bandTable = "cytoBandIdeo";
 int yOffset = gl->chromOffsetY;
 genoLayDrawSimpleChroms(gl, vg, defaultColor);
-if (sqlTableExists(conn, bandTable))
+if (sqlTableExists(conn, bandTable) && !gl->allOneLine)
     {
     int centromereColor = hCytoBandCentromereColor(vg);
     double pixelsPerBase = 1.0/gl->basesPerPixel;

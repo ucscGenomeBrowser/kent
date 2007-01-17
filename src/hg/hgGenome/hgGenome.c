@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.53 2007/01/17 18:45:17 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.54 2007/01/17 20:31:10 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -256,6 +256,12 @@ return cartUsualIntClipped(cart, hggLinesOfGraphs,
 	defaultLinesOfGraphs, minLinesOfGraphs, maxLinesOfGraphs);
 }
 
+char *chromLayout()
+/* Return one of above strings specifying layout. */
+{
+return cartUsualString(cart, hggChromLayout, layTwoPerLine);
+}
+
 char *graphVarName(int row, int col)
 /* Get graph data source variable for given row and column.  Returns
  * static buffer. */
@@ -371,7 +377,7 @@ for (i=0; i<graphRows; ++i)
 chromList = genoLayDbChroms(conn, FALSE);
 oneRowHeight = graphHeight()+betweenRowPad;
 return genoLayNew(chromList, tl.font, tl.picWidth, graphRows*oneRowHeight,
-	minLeftLabelWidth, minRightLabelWidth);
+	minLeftLabelWidth, minRightLabelWidth, chromLayout());
 }
 
 static void addPadToBed3(struct bed3 *bedList, int atStart, int atEnd)

@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.7 2006/12/20 18:26:31 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.8 2007/01/17 20:31:10 kent Exp $";
 
 
 static char *allColors[] = {
@@ -94,7 +94,6 @@ if (gg != NULL)
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;
     gScale = height/(gMax-gMin);
-    // uglyf("chromGraph %s, gMin %f, gMax %f, Height %d, gScale %f\n<BR>\n", chromGraph, gMin, gMax, height, gScale);
 
     /* Draw significance threshold as a light blue line */
     if (leftLabel)
