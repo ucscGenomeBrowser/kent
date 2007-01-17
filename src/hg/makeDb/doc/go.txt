@@ -67,4 +67,32 @@ zcat gene_association.goa_uniprot.gz\
 
 # Ask sys-admin to switch the database pointer go to point to go061219.
 ##########################################################################
+### UPDATE GO DATABASE (DONE 07-01-16, Fan)
+
+# UPDATE GO DATABASE
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /cluster/store1/geneOntology/20070111
+cd /cluster/store1/geneOntology/20070111
+
+wget --timestamping \
+http://www.godatabase.org/dev/database/archive/latest/go_200701-assocdb-data.gz
+
+hgsql mysql -e 'create database go070111'
+
+zcat go_*data.gz | sed -e 's/ENGINE=MyISAM DEFAULT CHARSET=latin1/TYPE=MyISAM/g' >j.tmp
+hgsql go070111 <j.tmp
+rm j.tmp
+
+# Please note the new place to get gene_association.goa_uniprot.gz
+wget --timestamping \
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+
+zcat gene_association.goa_uniprot.gz\
+|hgGoAssociation go070111 goaPart stdin
+
+# Passed 10341476 of 12083865 of 12083865, 85.58%
+
+# Ask sys-admin to switch the database pointer go to point to go061219.
+##########################################################################
 
