@@ -42,3 +42,13 @@ speciesGroups vertebrate
 sGroup_vertebrate hg18 mm8 galGal3 danRer4 tetNig1 fr1 oryLat1
 # speciesDefaultOff danRer4 fr1
 treeImage phylo/gasAcu1_8way.gif
+
+track phastConsElements8way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
