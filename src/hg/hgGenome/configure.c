@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.8 2007/01/17 18:45:17 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.9 2007/01/17 18:46:11 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -32,7 +32,7 @@ printf("</SELECT>\n");
 void configurePage()
 /* Put up configuration page. */
 {
-cartWebStart(cart, "Configure Genome Association View");
+cartWebStart(cart, "Configure Genome Graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
 cartSaveSession(cart);
 hPrintf("<TABLE>\n");
