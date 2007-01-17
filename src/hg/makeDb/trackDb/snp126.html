@@ -163,3 +163,22 @@ to the reference assembly.  For the new location types, the class 'in-del' is pr
   <LI>The header lines in the rs_fasta files were used for molecule type.
   </UL>
 </P>
+
+<H2>Orthologous Alleles (human only)</H2>
+<P>
+Beginning with the March 2006 human assembly, we provide a related table that 
+contains orthologous alleles in the chimpanzee and rhesus macaque assemblies.
+We use our liftOver utility to identify the orthologous alleles.  The candidate human SNPs are 
+a filtered list that meet the criteria:
+<UL>
+<LI>class = 'single'
+<LI>locType = 'exact'
+<LI>chromEnd = chromStart + 1
+<LI>align to just one location
+<LI>are not aligned to a chrN_random chrom
+<LI>are biallelic (not tri or quad allelic)
+</UL>
+
+In some cases the orthologous allele is unknown; these are set to 'N'.
+If a lift was not possible, we set the orthologous allele to '?' and the orthologous start and end 
+position to 0 (zero).
