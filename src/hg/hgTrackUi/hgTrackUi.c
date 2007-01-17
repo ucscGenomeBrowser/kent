@@ -32,7 +32,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.335 2006/12/11 20:01:18 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.336 2007/01/17 00:08:18 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2273,7 +2273,7 @@ else if (tdb->type != NULL)
             else if (startsWith("encodeGencode", track))
                 gencodeUI(tdb);
             nmdFilterOptions(tdb);
-            if (! sameString(track, "tigrGeneIndex"))
+            if (! sameString(track, "tigrGeneIndex") && !sameString(track, "ensGeneNonCoding"))
 		baseColorDrawOptDropDown(cart, tdb);
             }
 	else if (sameWord(words[0], "expRatio"))
