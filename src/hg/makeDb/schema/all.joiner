@@ -538,7 +538,8 @@ identifier nscanName dependency
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
-    $gbd.vegaGene.name
+    $gbd,!hg15.vegaGene.name
+    hg15.vegaGene.name minCheck=0.01
     $gbd.vegaPseudoGene.name
 
 identifier vegaGeneName typeOf=vegaName dependency
