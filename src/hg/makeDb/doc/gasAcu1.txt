@@ -1844,6 +1844,9 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
     #	should measure the same as above
     time nice -n +19 \
 	featureBits gasAcu1 -enrichment ensGene:cds phastConsElements8way
+    #	At: --expected-length 10 --target-coverage 0.20
+    #	ensGene:cds 6.618%, phastConsElements8way 11.492%, both 4.041%, cover
+    #	61.07%, enrich 5.31x
     #	At: --expected-length 12 --target-coverage 0.10 result:
     #	ensGene:cds 6.618%, phastConsElements8way 10.240%, both 3.920%, cover
     #	59.24%, enrich 5.79x
