@@ -38,6 +38,7 @@
 
 /*** Command variables. ***/
 #define hggConfigure hggDo "Configure"
+#define hggConfigureOne hggDo "ConfigureOne"
 #define hggBrowse hggDo "Browse"
 #define hggSort hggDo "Sort"
 #define hggCorrelate hggDo "Correlate"
@@ -151,6 +152,9 @@ void uploadPage();
 
 void configurePage();
 /* Put up configuration page. */
+
+void configureOnePage();
+/* Put up configuration for one graph. */
 
 void correlatePage(struct sqlConnection *conn);
 /* Put up correlation page. */

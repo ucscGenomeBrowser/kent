@@ -4,11 +4,13 @@
 #include "hCommon.h"
 #include "cart.h"
 #include "cheapcgi.h"
+#include "chromGraph.h"
 #include "web.h"
 #include "hPrint.h"
+#include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.7 2006/12/02 01:32:49 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.8 2007/01/17 18:45:17 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -73,8 +75,63 @@ hPrintf("region pad: ");
 cgiMakeIntVar(hggRegionPad, regionPad(), 6);
 hPrintf(" <I>Number of bases to add to either side of regions over threshold</I>");
 hPrintf("</TD></TR></TABLE>\n");
-int regionPad();
+hPrintf("</FORM>\n");
 
+webNewSection("Configure Individual Graphs");
+hPrintf("Click on the hyperlink by the graph name to configure it.");
+hTableStart();
+hPrintf("<TR><TH>name</TH>");
+hPrintf("<TH>description</TH></TR>");
+struct slRef *ref;
+for (ref = ggList; ref != NULL; ref = ref->next)
+    {
+    struct genoGraph *gg = ref->val;
+    hPrintf("<TR><TD><A HREF=\"../cgi-bin/hgGenome?%s&%s=on&g=%s\">",
+        cartSidUrlString(cart), hggConfigureOne, gg->name);
+    hPrintf("%s", gg->shortLabel);
+    hPrintf("</A></TD>", gg->shortLabel);
+    hPrintf("<TD>%s</TD></TR>\n", gg->longLabel);
+    }
+#define hggConfigureOne hggDo "ConfigureOne"
+hTableEnd();
+cartWebEnd();
+}
+
+void configureOnePage()
+/* Put up configuration for one graph. */
+{
+/* Figure out which graph we're configuring. */
+char *graphName = cartString(cart, "g");
+struct genoGraph *gg = hashFindVal(ggHash, graphName);
+if (gg == NULL)
+    {
+    /* Warn/return rather than abort if have problems, so that 
+     * cartRemovePrefix(hggDo) is executed to keep us from error
+     * loop forever... */
+    warn("Graph %s not found", graphName);
+    return;
+    }
+
+/* Put up web page with controls */
+cartWebStart(cart, "Configure %s", gg->shortLabel);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar(hggConfigure, "on");
+struct chromGraphSettings *cgs = gg->settings;
+char varName[chromGraphVarNameMaxSize];
+chromGraphVarName(gg->name, "minVal", varName);
+hPrintf("Display min value: ");
+cartMakeIntVar(cart, varName, cgs->minVal, 5);
+chromGraphVarName(gg->name, "maxVal", varName);
+hPrintf(" max value: ");
+cartMakeIntVar(cart, varName, cgs->maxVal, 5);
+hPrintf("<BR>\n");
+hPrintf("Draw connecting lines between markers separated by up to ");
+chromGraphVarName(gg->name, "maxGapToFill", varName);
+cartMakeIntVar(cart, varName, cgs->maxGapToFill, 8);
+hPrintf("<BR>\n");
+cgiMakeButton("submit", "Submit");
 hPrintf("</FORM>\n");
 cartWebEnd();
 }
+

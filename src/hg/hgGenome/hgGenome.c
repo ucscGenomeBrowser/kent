@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.52 2006/12/19 20:19:15 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.53 2007/01/17 18:45:17 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -414,6 +414,10 @@ struct sqlConnection *conn = hAllocConn();
 if (cartVarExists(cart, hggConfigure))
     {
     configurePage();
+    }
+else if (cartVarExists(cart, hggConfigureOne))
+    {
+    configureOnePage();
     }
 else if (cartVarExists(cart, hggUpload))
     {
