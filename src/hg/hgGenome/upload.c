@@ -77,9 +77,11 @@ hPrintf("Display min value: ");
 cartMakeTextVar(cart, hggMinVal, "", 5);
 hPrintf(" max value: ");
 cartMakeTextVar(cart, hggMaxVal, "", 5);
+hPrintf("<BR>\n");
 
 hPrintf("Label values: ");
 cartMakeTextVar(cart, hggLabelVals, "", 32);
+hPrintf("<BR>\n");
 hPrintf("Draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
