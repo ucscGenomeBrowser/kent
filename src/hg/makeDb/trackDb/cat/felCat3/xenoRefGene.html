@@ -28,13 +28,15 @@ To display codon colors, select the <em>genomic codons</em> option from the
 information about this feature.
 </UL>
 Note: There is a small known issue with the display of codon coloring in this
-track. Of nearly 275,000 alignments, approximately 250 occurring at the ends
-of felCat3 scaffolds do not have an exon frame annotation in the xenoRefGene
-table, yet in the Browser they are displayed as if the exon frame is known.
-This problem will be corrected when time allows.  For questions regarding this
-issue, please contact us at <A
-HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">genome@soe.ucsc.edu</em></A>.
+track. Of nearly 275,000 alignments, the underlying table is missing the
+CDS-region exon frame for approximately 250 alignments that occur at the ends
+of felCat3 scaffolds. However, the Browser assumes an exon frame of zero when
+displaying these CDS regions. The affected alignments are available in the
+table xenoRefGeneAnnotation, which can be viewed using the Table Browser.
+Please contact us at <A
+HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">genome@soe.ucsc.edu</A>
 <!-- above address is genome at soe.ucsc.edu -->
+with any questions.
 </P>
 
 <H2>Methods</H2>
