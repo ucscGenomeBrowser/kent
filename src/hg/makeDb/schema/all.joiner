@@ -189,7 +189,7 @@ identifier UniProtReference
 "Reference (journal) ID in UniProt (just inside UCSC Relationalized)"
     uniProt.reference.id
     uniProt.citation.reference full
-    uniProt.referenceAuthors.reference full
+    uniProt.referenceAuthors.reference
 
 identifier UniProtCitation
 "Citation ID in UniProt (just use inside UCSC Relationalized UniProt)"
