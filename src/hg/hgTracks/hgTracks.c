@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1265 2007/01/16 07:16:12 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1266 2007/01/18 01:11:16 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6556,7 +6556,7 @@ char condStr[255];
 char *rnaType;
 Color color = {MG_BLACK};  /* Set default to black.  But, if we got black, something is wrong. */
 Color hColor;
-struct rgbColor hAcaColor = {0, 128, 0}; /* darker green, per request by Weber */
+struct rgbColor hAcaColor = {0, 128, 0}; /* darker green */
 struct sqlConnection *conn;
 char *name;
 
