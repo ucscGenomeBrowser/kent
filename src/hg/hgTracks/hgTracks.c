@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1266 2007/01/18 01:11:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1267 2007/01/18 01:18:34 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12743,7 +12743,6 @@ registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
-registerTrackHandler("vegaNew", vegaMethods);
 registerTrackHandler("pseudoGeneLink", retroGeneMethods);
 registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo", retroGeneMethods);
