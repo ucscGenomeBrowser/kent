@@ -88,7 +88,7 @@ hPrintf(" bases.<BR>");
 hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 hPrintf(" ");
-cgiMakeButton(hggSubmitUpload, "Submit");
+cgiMakeButton(hggSubmitUpload, "submit");
 hPrintf("</FORM>\n");
 hPrintf("<i>Note: If you are uploading more than one data set please give them ");
 hPrintf("different names.  Only the most recent data set of a given name is ");

@@ -89,8 +89,8 @@ for (el = list; el != NULL; el = el->next)
 carefulClose(&f);
 
 /* Print out some info. */
-hPrintf("Thresholding <i>%s</i> at %g ", gg->shortLabel, threshold);
-hPrintf("there are %d regions covering %lld bases.<BR>\n",
+hPrintf("Thresholding <i>%s</i> at %g. ", gg->shortLabel, threshold);
+hPrintf("There are %d regions covering %lld bases.<BR>\n",
     slCount(bedList), bedTotalSize((struct bed*)bedList) );
 hPrintf("Installed a Gene Sorter filter that selects only genes in these regions.<BR>\n");
 

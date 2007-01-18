@@ -136,7 +136,7 @@ for (aRef = ggRefList; aRef != NULL; aRef = aRef->next)
 webPrintLinkTableEnd();
 hPrintf("</TD><TD>");
 hPrintf("<CENTER>");
-cgiMakeButton("submit", "Return to Graphs");
+cgiMakeButton("submit", "return to graphs");
 hPrintf("</CENTER>");
 hPrintf("</TD></TR></TABLE>");
 
@@ -147,7 +147,7 @@ hPrintf("move in the same direction, while a negative R indicates that they ");
 hPrintf("tend to move in in opposite directions.</P>\n");
 hPrintf("<P>R-Squared (which is indeed just R*R) measures how much of the ");
 hPrintf("variation in one graph can be explained by a linear dependence on ");
-hPrintf("other graph. R-Squared ranges between 0 when the two graphs are ");
+hPrintf("the other graph. R-Squared ranges between 0 when the two graphs are ");
 hPrintf("independent to 1 when the graphs are completely dependent.</P>");
 hPrintf("</FORM>");
 cartWebEnd();

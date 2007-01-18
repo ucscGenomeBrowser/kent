@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.8 2007/01/17 20:31:10 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.9 2007/01/18 20:28:26 kent Exp $";
 
 
 static char *allColors[] = {
@@ -448,7 +448,7 @@ for (i=0; i<graphRows; ++i)
 	    ++realCount;
 	hPrintf("<TD>");
 	graphDropdown(conn, varName, curVal, jsOther);
-	hPrintf(" in ");
+	hPrintf(" <B>in</B> ");
 	colorDropdown(i, j, jsOther);
 	if (j != graphCols-1) hPrintf(",");
 	hPrintf("</TD>");
@@ -456,19 +456,19 @@ for (i=0; i<graphRows; ++i)
     hPrintf("</TR>");
     }
 hPrintf("</TABLE>");
-cgiMakeButton(hggUpload, "Upload");
+cgiMakeButton(hggUpload, "upload");
 hPrintf(" ");
-cgiMakeButton(hggConfigure, "Configure");
+cgiMakeButton(hggConfigure, "configure");
 hPrintf(" ");
-cgiMakeOptionalButton(hggCorrelate, "Correlate", realCount < 2);
-hPrintf(" significance threshold:");
+cgiMakeOptionalButton(hggCorrelate, "correlate", realCount < 2);
+hPrintf(" <B>significance threshold:</B>");
 hPrintf("<INPUT TYPE=\"TEXT\" NAME=\"%s\" SIZE=\"%d\" VALUE=\"%g\"",
 	hggThreshold, 3, cartUsualDouble(cart, hggThreshold, defaultThreshold));
 hPrintf(" onchange=\"changeOther();\" onkeypress=\"return submitOnEnter(event,document.mainForm);\">");
 hPrintf(" ");
-cgiMakeOptionalButton(hggBrowse, "Browse Regions", realCount == 0);
+cgiMakeOptionalButton(hggBrowse, "browse regions", realCount == 0);
 hPrintf(" ");
-cgiMakeOptionalButton(hggSort, "Sort Genes", 
+cgiMakeOptionalButton(hggSort, "sort genes", 
 	realCount == 0 || !hgNearOk(database));
 hPrintf("<BR>");
 

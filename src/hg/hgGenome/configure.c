@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.10 2007/01/17 20:31:09 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.11 2007/01/18 20:28:26 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -61,9 +61,6 @@ hPrintf(" lines of graphs: ");
 makeNumMenu(hggLinesOfGraphs, minLinesOfGraphs, maxLinesOfGraphs, 
 	linesOfGraphs());
 hPrintf("</TD>\n");
-hPrintf("<TD>\n");
-cgiMakeButton("submit", "Submit");
-hPrintf("</TD>\n");
 hPrintf("</TR>\n");
 hPrintf("</TABLE>\n");
 hPrintf("<TABLE><TR><TD>\n");
@@ -82,10 +79,14 @@ cartMakeCheckBox(cart, hggYellowMissing, FALSE);
 hPrintf(" <I>Highlight graph background where there is missing data</I>");
 hPrintf("</TD></TR></TABLE>\n");
 hPrintf("<TABLE><TR><TD>\n");
-hPrintf("region pad: ");
+hPrintf("region padding: ");
 cgiMakeIntVar(hggRegionPad, regionPad(), 6);
 hPrintf(" <I>Number of bases to add to either side of regions over threshold</I>");
 hPrintf("</TD></TR></TABLE>\n");
+hPrintf("<TABLE><TR><TD>\n");
+cgiMakeButton("submit", "submit");
+hPrintf("</TD></TR></TABLE>\n");
+hPrintf("</TD>\n");
 hPrintf("</FORM>\n");
 
 webNewSection("Configure Individual Graphs");
@@ -141,7 +142,7 @@ hPrintf("Draw connecting lines between markers separated by up to ");
 chromGraphVarName(gg->name, "maxGapToFill", varName);
 cartMakeIntVar(cart, varName, cgs->maxGapToFill, 8);
 hPrintf("<BR>\n");
-cgiMakeButton("submit", "Submit");
+cgiMakeButton("submit", "submit");
 hPrintf("</FORM>\n");
 cartWebEnd();
 }
