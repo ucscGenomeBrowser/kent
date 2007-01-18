@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1183 2007/01/18 01:16:54 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1184 2007/01/18 17:42:46 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12838,6 +12838,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 			    "http://www.ensembl.org/Homo_sapiens/geneview?gene=$$", TRUE);
     printf("<B>Type:</B> %s<BR>", ncRna->type);
     if (ncRna->extGeneId != NULL)
+    if (!sameWord(ncRna->extGeneId, ""))
 	{
     	printf("<B>External Gene ID:</B> %s<BR>", ncRna->extGeneId);
 	}
