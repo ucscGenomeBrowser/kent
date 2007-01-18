@@ -71,3 +71,12 @@ table refSeqSummary
     string summary;	"Summary comments"
     )
 
+table xenoRefGeneAnnotation
+"Elements of xenoRefGene which are noted in genePredCheck"
+    (
+    string name;	"Name of gene"
+    string chrom;	"Chromosome"
+    uint cdsStart;	"Coding start"
+    uint cdsEnd;	"Coding end"
+    string annotation;	"Notation from genePredCheck"
+    )
