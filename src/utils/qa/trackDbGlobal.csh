@@ -86,11 +86,11 @@ foreach db ( $dbs )
     if ( 1 == $archived ) then
       set comment="archived"
     else
-      set comment="active=0"
+      set comment="RRactive=0"
     endif
-    echo $db $comment | gawk '{printf "%7s %9s", $1, $2}'
+    echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}'
     echo
-    echo $db $comment | gawk '{printf "%7s %9s", $1, $2}' >> $summaryFile
+    echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}' >> $summaryFile
     echo "\n\n\n" >> $summaryFile
     continue
   endif
