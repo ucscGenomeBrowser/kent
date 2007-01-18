@@ -2348,7 +2348,14 @@ cat > load.csh << 'EOF'
 #  Submitted by Rob Andrews
 #  Data in two additional cell lines (MOLT4 and PTR8) submitted
 #  8/8/08 by Rob -- 8 additional subtracks.
-
+# Updated (DONE, 2007-01-09, hartera)
+# 4 histone mods in GM06990 cells and data for CTCF antibody (CCCTC-binding
+# factor (zinc finger protein)) also in GM06990 to be added to existing track.
+# Total of 5 new subtracks submitted by Rob Andrews: rma@sanger.ac.uk
+# Update of the above 5 new subtracks (DONE, 2007-01-18, hartera)
+# The 2007-01-09 update had incorrect data. Corrected data was received 
+# on 2007-01-18 for the five new subtracks and the track was updated. 
+# New data was submitted by Christopher Koch: cmk@sanger.ac.uk
     ssh hgwdev
     cd /cluster/data/encode/sanger/chipchip
     mkdir -p 2006-03-16/lab
@@ -2407,7 +2414,43 @@ cat > load.csh << 'EOF'
     csh load.csh >&! load.log &
     # loaded 23983 elements for 8 tables
 
+    # update by adding these additional 5 subtracks.
+    # replaced the 5 new subtracks with corrected data (2007-01-18)
+    ssh hgwdev
+    cd /cluster/data/encode/sanger/chipchip
+    mkdir -p 2007-01-18/lab
+    rm latest
+    ln -s /cluster/data/encode/sanger/chipchip/2007-01-18 \
+      /cluster/data/encode/sanger/chipchip/latest
+    cd latest
+    mv /var/ftp/encode/*.wig.txt lab
 
+    grep "^chr" lab/CTCF_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+         CTCF.bed
+    grep "^chr" lab/H3K27me3_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+         H3K27me3.bed
+    grep "^chr" lab/H3K36me3_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+         H3K36me3.bed
+    grep "^chr" lab/H3K79me3_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+         H3K79me3.bed
+    grep "^chr" lab/H3K9me3_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+         H3K9me3.bed
+    # load data into hg17 database
+cat > load.csh << 'EOF'
+    foreach f (*.bed)
+        set t = $f:r
+        echo $t
+	hgLoadBed -bedGraph=4 hg17 encodeSangerChip$t $t.bed
+    end
+'EOF'
+    csh load.csh >&! load.log &
+    # update trackDb/human/hg17/trackDb.encode.ra to add these new subtracks
+    # to the encodeSangerChip track. update the encodeSangerChip.html to 
+    # list the new antibodies used and links for them from the information on
+    # the Sanger data access page:
+    # http://www.sanger.ac.uk/PostGenomics/encode/data-access.shtml
+
+#######################################################################
 # ENCODE PSEUDOGENE TRACK (DONE, 2006-03-30, hartera)
     # Yontao reloaded the encodePseudogeneUcsc2 table with shorter 
     # names for the pseudogenes as they were cut off in the browser so now
