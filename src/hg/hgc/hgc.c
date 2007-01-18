@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1180 2007/01/16 23:26:20 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1181 2007/01/18 00:15:12 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12798,6 +12798,20 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void ncRnaPrintPos(struct bed *bed, int bedSize)
+/* Print first two fields of an ncRna entry in
+ * standard format. */
+{
+char *strand = NULL;
+if (bedSize >= 4)
+    printf("<B>Item:</B> %s<BR>\n", bed->name);
+if (bedSize >= 6)
+   {
+   strand = bed->strand;
+   }
+printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
+}
+
 void doNcRna(struct trackDb *tdb, char *item)
 /* Handle click in ncRna track. */
 {
@@ -12822,11 +12836,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     printCustomUrlWithLabel(tdb, item, 
 			    "Ensembl Non-Coding Gene: ", 
 			    "http://www.ensembl.org/Homo_sapiens/geneview?gene=$$", TRUE);
-    printf("<B>RNA Type:</B> %s", ncRna->type);
+    printf("<B>Type:</B> %s", ncRna->type);
 
     printf("<BR>");
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize);
+    ncRnaPrintPos(bed, bedSize);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
