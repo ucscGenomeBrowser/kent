@@ -33,7 +33,7 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.35 2007/01/10 20:04:03 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.36 2007/01/18 17:00:32 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -643,7 +643,9 @@ while ((nextUpd = slPopHead(&allUpdaters)) != NULL)
     }
 gbCdnaInfoUpd = NULL;
 refSeqStatusUpd = NULL;
+refSeqSummaryUpd = NULL;
 refLinkUpd = NULL;
+gbMiscDiffUpd = NULL;
 /* cache unique string tables in goFaster mode */
 if ((gOptions->flags & DBLOAD_GO_FASTER) == 0)
     gbMDParseFree();
