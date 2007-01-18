@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1182 2007/01/18 00:50:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1183 2007/01/18 01:16:54 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6559,7 +6559,7 @@ if (genomeStrEnsembl == NULL)
     }
 /* print URL that links to Ensembl transcript details */
 if (url != NULL && url[0] != 0)
-    printCustomUrlWithLabel(tdb, itemName, "Ensembl Gene Link", tdb->url, TRUE);
+    printCustomUrlWithLabel(tdb, itemName, "Ensembl Gene Link:", tdb->url, TRUE);
 else
     {
     printf("<B>Ensembl Gene Link: </B>");
