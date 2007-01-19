@@ -4,7 +4,7 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = affyLookup.o cnpLookup.o fetchSeq.o hapmap.o illuminaLookup.o \
+O = affyLookup.o cnpLookup.o fetchSeq.o hapmap.o hapmapGenotype.o illuminaLookup.o \
     snpCheckAlleles.o snpCheckClassAndObserved.o snpCheckCluster.o snpCheckCluster2.o \
     snpClassAndObserved.o snpCleanSeq.o snpCompareLoctype.o snpCompareWeight.o \
     snpContigLocFilter.o snpContigLocFilter125.o \
@@ -18,7 +18,7 @@ O = affyLookup.o cnpLookup.o fetchSeq.o hapmap.o illuminaLookup.o \
     snpSort.o snpSplitByChrom.o snpSplitByChrom2.o snpSNP.o \
     subSnpCondense.o trimHeader.o
 
-all: affyLookup cnpLookup fetchSeq hapmap illuminaLookup \
+all: affyLookup cnpLookup fetchSeq hapmap hapmapGenotype illuminaLookup \
      snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
      snpClassAndObserved snpCleanSeq snpCompareLoctype snpCompareWeight \
      snpContigLocFilter snpContigLocFilter125 \
@@ -43,6 +43,9 @@ fetchSeq: fetchSeq.o ${MYLIBS}
 
 hapmap: hapmap.o ${MYLIBS}
 	${CC} -O -o hapmap hapmap.o ${MYLIBS} $L
+
+hapmapGenotype: hapmapGenotype.o ${MYLIBS}
+	${CC} -O -o hapmapGenotype hapmapGenotype.o ${MYLIBS} $L
 
 illuminaLookup: illuminaLookup.o ${MYLIBS}
 	${CC} -O -o illuminaLookup illuminaLookup.o ${MYLIBS} $L
