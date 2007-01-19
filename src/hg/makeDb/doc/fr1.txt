@@ -387,6 +387,7 @@
 /cluster/bin/i386/blat -mask=lower -ooc={check in exists /scratch/hg/h/11.ooc} {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP 
 '_EOF_' 
+    # << happy emacs
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
     para try
@@ -469,6 +470,7 @@
 /cluster/bin/i386/blat -mask=lower -ooc={check in exists /scratch/hg/h/11.ooc} {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP 
 '_EOF_' 
+    # << happy emacs
     gensub2 genome.lst est.lst gsub spec
     para create spec
     para try
@@ -535,6 +537,7 @@
 restrict mol=mRNA & !(org="Takifugu rubripes")
 hide mol
 '_EOF_' 
+    # << happy emacs
 
     # unpack non-Fugu mRNAs
     gunzip -c $genbankdir/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
@@ -571,6 +574,7 @@ hide mol
 /cluster/bin/i386/blat -q=rnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP 
 '_EOF_'
+    # << happy emacs
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
     para try
@@ -854,6 +858,7 @@ SEQ2_LEN=$BASE/S2.len
 
 #DEBUG=1
 '_EOF_' 
+    # << happy emacs
 
     # save the DEF file in the current standard place
     chmod +x DEF
@@ -1051,6 +1056,7 @@ SEQ2_LEN=$BASE/S2.len
 /cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_' 
+    # << happy emacs
     echo "" > dummy.list
     gensub2 genome.list dummy.list gsub jobList
     para create jobList
@@ -1406,6 +1412,7 @@ SEQ2_LEN=$BASE/S2.len
 blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
     cat << '_EOF_' > blastSome
 #!/bin/sh
 BLASTMAT=/iscratch/i/blast/data
@@ -1432,6 +1439,7 @@ fi
 rm -f $f.1 $f.2 $3.tmp $f.8
 exit 1
 '_EOF_'
+    # << happy emacs
 
     chmod +x blastSome
     gensub2 fugu.lst kg.lst blastGsub blastSpec
@@ -1452,10 +1460,12 @@ exit 1
 chainSome $(path1)
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
 
     cat << '_EOF_' > chainSome
 (cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=10000 stdin ../c.`basename $1`.psl)
 '_EOF_'
+    # << happy emacs
     chmod +x chainSome
 
     ls -1dS `pwd`/blastOut/kg?? > chain.lst
@@ -1562,14 +1572,14 @@ chainSome $(path1)
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
-    # << this line makes emacs coloring happy
+    # << happy emacs
                                                                                 
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
            /iscratch/i/danRer2/nib $2 >& $3
 '_EOF_'
-    # << this line makes emacs coloring happy
+    # << happy emacs
                                                                                 
     chmod a+x doChain
     gensub2 input.lst single gsub jobList
@@ -1746,6 +1756,7 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
 blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
     cat << '_EOF_' > blastSome
 #!/bin/sh
 BLASTMAT=/iscratch/i/blast/data
@@ -1776,6 +1787,7 @@ fi
 rm -f $f.1 $f.2 $3.tmp $f.8
 exit 1
 '_EOF_'
+    # << happy emacs
 
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
@@ -1795,10 +1807,12 @@ exit 1
 chainSome $(path1)
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
 
     cat << '_EOF_' > chainSome
 (cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin ../c.`basename $1`.psl)
 '_EOF_'
+    # << happy emacs
     chmod +x chainSome
 
     ls -1dS `pwd`/blastOut/kg?? > chain.lst
@@ -1875,6 +1889,7 @@ set $outLog = $5
 
 faFrag -mixed $inFa $st $end $outFa >& $outLog
 '_EOF_'
+    # << happy emacs
      chmod +x getMaskedFaFrags.csh 
      ssh kkr1u00
      cp /cluster/data/fr1/Un/chrUn.fa /iscratch/i/fr1
@@ -1973,6 +1988,7 @@ faFrag -mixed $inFa $st $end $outFa >& $outLog
 blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
     cat << '_EOF_' > blastSome
 #!/bin/sh
 BLASTMAT=/iscratch/i/blast/data
@@ -1999,6 +2015,7 @@ fi
 rm -f $f.1 $f.2 $3.tmp $f.8
 exit 1
 '_EOF_'
+    # << happy emacs
 
     chmod +x blastSome
     gensub2 target.lst kg.lst blastGsub blastSpec
@@ -2019,11 +2036,12 @@ exit 1
 chainSome $(path1)
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
 
     cat << '_EOF_' > chainSome
 (cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
 '_EOF_'
-    # << emacs
+    # << happy emacs
     chmod +x chainSome
 
     ls -1dS `pwd`/blastOut/kg?? > chain.lst
@@ -2153,4 +2171,188 @@ chainSome $(path1)
 ##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
     hgsql -h genome-testdb hgcentraltest \
 	-e "update dbDb set orderKey = 465 where name = 'fr1';"
+
+
+#########################################################################
+##  BLASTZ SWAP MEDAKA oryLat1 to Fr1 (DONE - 2007-01-11 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/fr1/bed/blastz.oryLat1.swap
+    cd /cluster/data/fr1/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-22/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    22m4.224s
+
+#########################################################################
+## MEDAKA ORYLAT1 BLASTZ (WORKING - 2007-01-11 - Hiram)
+##	The above swap doesn't contain the the Medaka chrUn scaffolds
+#	and it would be good to have the Fr1 alignments back on Medaka
+##	So, to get them, run this blastz of the Medaka chroms and chrUn
+##	Scaffolds, then swap it back to Medaka, no Db loads as we are
+##	going to extract the chrUn chains and nets out of this business
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Medaka chroms and chrUn in scaffolds
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr1
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+#       20,397 scaffolds, largest 1.1M bases, smallest 107 bases
+SEQ1_DIR=/san/sanvol1/scratch/fr1/chrUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ1_CTGDIR=/san/sanvol1/scratch/fr1/fr1.UnScaffolds.sdTrf.2bit
+SEQ1_CTGLEN=/san/sanvol1/scratch/fr1/scaffold.sizes
+SEQ1_LIFT=/san/sanvol1/scratch/fr1/UnScaffolds/ordered.lft
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: Medaka oryLat1, chrUn in scaffolds
+#       36,494 scaffolds, 25 chroms
+SEQ2_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/oryLat1/chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=10
+
+BASE=/cluster/data/fr1/bed/blastz.oryLat1.2007-01-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-stop=net -bigClusterHub=pk > do.log 2>&1 &
+
+##########################################################################
+## Swap Stickleback gasAcu1 alignments back to fr1
+##	(DONE - 2006-12-11 - Hiram)
+    mkdir /cluster/data/fr1/bed/blastz.gasAcu1.swap
+    cd /cluster/data/fr1/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr1.2006-12-08/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > do.log 2>&1 &
+
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr1.2006-12-08/DEF \
+	-continue=net -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > net.log 2>&1 &
+    #	real    24m33.761s
+    #	user    0m0.125s
+    #	sys     0m0.080s
+
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.gasAcu1.swap
+    time nice -n 19 featureBits fr1 chainGasAcu1Link \
+	> fb.fr1.chainGasAcu1Link.txt 2>&1 &
+    #	148005715 bases of 315518167 (46.909%) in intersection
+
+#######################################################################
+## Stickleback gasAcu1  BLASTZ (WORKING - 2007-01-11 - Hiram)
+##	The above swap doesn't contain the the Stickleback random contigs
+##	and it would be good to have the Fr1 alignments back on Stickleback
+##	So, to get them, run this blastz of the Stickleback chroms and random
+##	contigs, then swap it back to Stickleback, no Db loads as we are
+##	going to extract the random chains and nets out of this business
+##	(WORKIN - 2007-01-11 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11
+    cd /cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11
+    cat << '_EOF_' > DEF
+# Fugu vs. Stickleback chroms and randoms in scaffolds
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr1
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+#       20,397 scaffolds, largest 1.1M bases, smallest 107 bases
+SEQ1_DIR=/san/sanvol1/scratch/fr1/chrUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ1_CTGDIR=/san/sanvol1/scratch/fr1/fr1.UnScaffolds.sdTrf.2bit
+SEQ1_CTGLEN=/san/sanvol1/scratch/fr1/scaffold.sizes
+SEQ1_LIFT=/san/sanvol1/scratch/fr1/UnScaffolds/ordered.lft
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: Stickleback gasAcu1 chroms and chrUn in contigs
+#       The largest chrom is 32M bases, the largest contig 418,670 bases
+#       The smallest chrom chrM is 15,742 bases, smallest contig 60 bases
+#       there are 5,115 chroms and contig pieces
+#       total size 1,089,690,673 bases
+#       47107538 N's 1042583135 real 834274605 upper 208308530 lower
+SEQ2_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/gasAcu1/chrUn.extraCloneGap.lift
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF -smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/fr1GasAcu1Un \
+	-stop=net -bigClusterHub=pk > do.log 2>&1 &
+XXXX - running 2007-01-11 20:55
+    time doBlastzChainNet.pl -verbose=2 DEF -smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/fr1GasAcu1Un \
+	-continue=cat -stop=net -bigClusterHub=pk > cat-net.log 2>&1 &
+    #	real    170m43.012s
+    ## An interesting failure in this one that did not stop it:
+    #	HgStepManager: executing step 'chainMerge'.
+    # ssh -x kolossus nice 'chainMergeSort
+    # /cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11/axtChain/run/chain/*.chain |
+    # nice gzip -c >
+    # /cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11/axtChain/fr1.gasAcu1.all.chain.gz'
+    #	bash: /bin/nice: Argument list too long
+
+    ## To work-around this:
+    ssh kolossus
+    cd /cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11/axtChain/run/chain
+    chainMergeSort *.chain | gzip -c > ../../fr1.gasAcu1.all.chain.gz
+    cd ../..
+    chainSplit chain fr1.gasAcu1.all.chain.gz
+    time ./netChains.csh > netChains.out 2>&1 &
+    #	real    12m14.200s
+    ## OK, that is sufficient to get going with the swap
+    mkdir /cluster/data/gasAcu1/bed/blastz.fr1.swap
+    cd /cluster/data/gasAcu1/bed/blastz.fr1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
 
