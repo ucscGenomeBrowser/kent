@@ -783,4 +783,16 @@ searchMethod exact
 searchType genePred
 searchPriority 10
 
-
+track orfeomeGenes
+shortLabel ORFeome Genes
+longLabel ORFeome Collaboration Genes
+group orfeome
+priority 1
+visibility pack
+color 120,120,220
+type genePred . orfeomeMRna
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons

@@ -13,3 +13,4 @@ CREATE TABLE grpMgc (
 INSERT grpMgc VALUES("mgc", "Mammalian Gene Collection Tracks", 0.5);
 INSERT grpMgc VALUES("mgcCList", "Mammalian Gene Collection C-List RT-PCR", 0.52);
 INSERT grpMgc VALUES("mgcBCGSC", "Mammalian Gene Collection BCGSC RT-PCR", 0.53);
+INSERT grpMgc VALUES("orfeome", "ORFeome Collaboration Tracks", 0.55);
