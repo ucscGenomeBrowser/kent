@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.105 2007/01/19 19:41:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.106 2007/01/19 20:00:42 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -414,7 +414,7 @@ webStartWrapperGatewayHeader(theCart, headerText, format, args, TRUE, TRUE,
 va_end(args);
 }
 
-void webEndSection()
+static void webEndSection()
 /* Close down a section */
 {
 puts(

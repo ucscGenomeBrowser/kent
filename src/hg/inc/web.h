@@ -36,14 +36,8 @@ void webStartWrapperDetailedNoArgs(struct cart *theCart, char *headerText,
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
-void webEndSection();
-/* Close down a section */
-
 void webEnd();
 /* output the footer of the HTML page */
-
-void webEndSection();
-/* Close down a section */
 
 void webEndSectionTables();
 /* Finish with section tables (but don't do /BODY /HTML lik
