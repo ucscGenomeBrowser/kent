@@ -379,7 +379,7 @@ webFinishPartialLinkTable(1, 2, 3);
 webPrintLinkTableEnd();
 }
 
-static void prAlign(struct sqlConnection *conn, struct psl *psl)
+static void prAlign(struct sqlConnection *conn, char *pslTbl, struct psl *psl)
 /* print an alignment */
 {
 // genomic location
@@ -400,7 +400,7 @@ webPrintLinkCell(psl->strand);
 // mRNA location, linked to aligment viewer
 webPrintLinkCellStart();
 char other[128];
-safef(other, sizeof(other), "%d&aliTrack=%s", psl->tStart, "mgcFullMrna");
+safef(other, sizeof(other), "%d&aliTrack=%s", psl->tStart, pslTbl);
 hgcAnchorSomewhere("htcCdnaAli", psl->qName, other, psl->tName);
 printf("%s:%d-%d</A>", psl->qName, psl->qStart+1, psl->qEnd);
 webPrintLinkCellEnd();
@@ -447,7 +447,7 @@ for (pass = 1; pass <= 2; pass++)
         if ((pass == 1) == (psl->tStart == start))
             {
             webPrintLinkTableNewRow();
-            prAlign(conn, psl);
+            prAlign(conn, pslTbl, psl);
             }
     }
 webPrintLinkTableEnd();
