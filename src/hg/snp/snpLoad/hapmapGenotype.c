@@ -1,18 +1,10 @@
 /* hapmapGenotype - for each chrom, read a file with data from 5 populations and merge. */
 /* Note: As of hg17, we don't have hapmap data for all chroms, just chr1-22 and chrX. */
 
-/* clean up hashes between chroms or just leak memory like crazy? */
-
 /* Include an overall hash to check for multiple alignments?  (on the same or different chrom) */
 /* Not checking if the same SNP is reported more than once for the same population. */
 /* In this case, just use the final values */
 
-/* This is in place: confirm that r+o = n */
-
-/* To do (here or elsewhere): confirm that JPT + CHB = combined */
-
-/* If errors occur past the first population, move to errorHash */
-/* Check errorHash first then */
 
 #include "common.h"
 
@@ -21,10 +13,9 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmapGenotype.c,v 1.3 2007/01/19 23:18:06 heather Exp $";
+static char const rcsid[] = "$Id: hapmapGenotype.c,v 1.4 2007/01/19 23:34:52 heather Exp $";
 
 FILE *errorFileHandle = NULL;
-FILE *countFileHandle = NULL;
 // database used to get chrom list
 static char *db = NULL;
 static struct hash *snpHash = NULL;
@@ -73,7 +64,6 @@ if (sameString(allele, "A")) return TRUE;
 if (sameString(allele, "C")) return TRUE;
 if (sameString(allele, "G")) return TRUE;
 if (sameString(allele, "T")) return TRUE;
-if (sameString(allele, "?")) return TRUE;
 return FALSE;
 }
 
@@ -108,6 +98,7 @@ si->tCountYRI = 0;
 }
 
 void setCount(struct snpInfo *si, char *pop, char *allele, int count)
+/* set the count for a specific population and allele. */
 {
 if (sameString(pop, "CEU"))
     {
@@ -148,25 +139,26 @@ if (sameString(pop, "YRI"))
 }
 
 boolean validInput(char **row, int count, char *chrom)
+/* This checks any input row. */
+/* Errors are written to errorFileHandle. */
 {
 int count1, count2, total;
 
-/* allele should be 'A', 'C', 'G', 'T' or '?' */
+/* allele should be 'A', 'C', 'G', or 'T'  */
 if (!validAllele(row[5]))
     {
-    fprintf(errorFileHandle, "invalid refAllele %s for %s in chrom %s\n", row[5], row[1], chrom);
+    fprintf(errorFileHandle, "invalid allele %s for %s in chrom %s\n", row[5], row[1], chrom);
     return FALSE;
     }
 
 if (count == 10)
     if (!validAllele(row[7]))
         {
-        fprintf(errorFileHandle, "invalid otherAllele %s for %s in chrom %s\n", row[7], row[1], chrom);
+        fprintf(errorFileHandle, "invalid allele %s for %s in chrom %s\n", row[7], row[1], chrom);
         return FALSE;
         }
 
 /* check counts */
-/* don't put in error hash, counts could be fine for other populations */
 count1 = sqlSigned(row[6]);
 if (count == 10)
     {
@@ -181,14 +173,12 @@ else
     
 if (total != count1 + count2)
     {
-    fprintf(countFileHandle, "wrong counts for %s in pop %s, chrom %s\n", row[1], row[0], chrom);
-    fprintf(countFileHandle, "count1 = %d, count2 = %d, total = %d\n", count1, count2, total);
+    fprintf(errorFileHandle, "wrong counts for %s in pop %s, chrom %s\n", row[1], row[0], chrom);
+    fprintf(errorFileHandle, "count1 = %d, count2 = %d, total = %d\n", count1, count2, total);
     return FALSE;
     }
 
-/* check population */
-/* should be fine, I control this upstream */
-/* no need for error hash */
+/* check population (should be fine, I control this upstream) */
 if (!validPop(row[0]))
     {
     fprintf(errorFileHandle, "unknown pop %s for %s in chrom %s\n", row[0], row[1], chrom);
@@ -198,6 +188,7 @@ return TRUE;
 }
 
 boolean validExtension(char **row, struct snpInfo *si, char *chrom)
+/* This checks a row that is being added to an existing snpInfo */
 {
 if (differentString(si->observed, row[2]))
     {
@@ -218,7 +209,8 @@ return TRUE;
 }
 
 void readFile(char *chrom)
-/* possible optimization: don't do hash lookup for first population */
+/* Read input.  Use hashes to manage rsIds. */
+/* Move snpInfo to errorHash if necessary. */
 {
 char inputFileName[64];
 struct lineFile *lf = NULL;
@@ -284,6 +276,7 @@ lineFileClose(&lf);
 }
 
 void printOutput(char *chrom)
+/* generate bed+ output into files chrN.hapmap.new */
 {
 char outputFileName[64];
 FILE *outputFileHandle = NULL;
@@ -324,6 +317,8 @@ carefulClose(&outputFileHandle);
 }
 
 int main(int argc, char *argv[])
+/* read hapmap allele frequency files which have one line for each of 4 populations */
+/* merge into a single line for each rsId */
 {
 struct slName *chromList, *chromPtr;
 char inputFileName[64];
@@ -335,7 +330,6 @@ hSetDb(db);
 chromList = hAllChromNamesDb(db);
 
 errorFileHandle = mustOpen("hapmap.errors", "w");
-countFileHandle = mustOpen("hapmap.counts", "w");
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
@@ -351,7 +345,6 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     freeHash(&errorHash);
     }
 carefulClose(&errorFileHandle);
-carefulClose(&countFileHandle);
 
 return 0;
 }
