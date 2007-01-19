@@ -423,11 +423,17 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 	lineFileAbort(cpp->fileStack,
 		 "Chromosome %s not found in this assembly (%s).", 
 		 chrom, hGetDb());
-    if (start < 0 || start >= ci->size)
+    if (start >= ci->size)
 	{
 	lineFileAbort(cpp->fileStack,
-		 "Chromosome %s is %d bases long, but got coordinate %u",
+		 "Chromosome %s is %d bases long, but got coordinate %d.",
 		 chrom, ci->size, start);
+	}
+    else if (start < 0)
+        {
+	lineFileAbort(cpp->fileStack,
+		 "Negative base position %d on chromosome %s.",
+		 start, chrom);
 	}
     for (i=2, fileEl = fileList; i<colCount; ++i, fileEl = fileEl->next)
 	{
