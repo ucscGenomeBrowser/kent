@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.51 2006/12/22 18:59:40 angie Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.52 2007/01/19 00:04:09 hiram Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -58,6 +58,7 @@ static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", NULL};
 static char *gasAcuNames[] = {"Gasterosteus aculeatus", NULL};
+static char *oryLatNames[] = {"Oryzias latipes", NULL};
 static char *ornAnaNames[] = {"Ornithorhynchus anatinus", NULL};
 /* hypothetical ancestor, will never match native */
 static char *canHgNames[] = {"Boreoeutheria ancestor", NULL};
@@ -106,6 +107,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"bosTau", bosTauNames, "Bos taurus "},
     {"xenTro", xenTroNames, "Xenopus tropicalis "},
     {"gasAcu", gasAcuNames, NULL},
+    {"oryLat", oryLatNames, NULL},
     {"ornAna", ornAnaNames, NULL},
     {"canHg", canHgNames, "Boreoeutheria ancestor"},
     {"strPur", strPurNames, NULL},
