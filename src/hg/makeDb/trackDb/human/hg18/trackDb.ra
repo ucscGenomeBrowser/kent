@@ -120,30 +120,55 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
-track fakeChromGraph
-shortLabel Fake ChromGraph
-longLabel Fake Nested Sine Wave ChromGraph Data
-group phenDis
-priority 151
-visibility hide
-color 50,0, 175
-type chromGraph
-maxHeightPixels 100:32:8
-maxGapToFill 20000
-linesAt 50,100,150
-minMax 0,200
+#track fakeChromGraph
+#shortLabel Fake ChromGraph
+#longLabel Fake Nested Sine Wave ChromGraph Data
+#group phenDis
+#priority 151
+#visibility hide
+#color 50,0, 175
+#type chromGraph
+#maxHeightPixels 100:32:8
+#maxGapToFill 20000
+#linesAt 50,100,150
+#minMax 0,200
+ 
+#track fakeChromGraph2
+#shortLabel Fake ChromGraph2
+#longLabel Fake Nested Sine Wave ChromGraph Data 2
+#group phenDis
+#priority 152
+#visibility hide
+#color 30,70,75
+#type chromGraph
+#maxHeightPixels 100:32:8
+#maxGapToFill 20000
+#minMax 0,200
+ 
+#track fakeHomozygousity1
+#shortLabel Fake Homozygousity
+#longLabel Fake Homozygousity Data
+#group phenDis
+#priority 153
+#visibility hide
+#color 30,70,75
+#type chromGraph
+#maxHeightPixels 100:32:8
+#maxGapToFill 10000
+#minMax 0,1
+ 
+#track fakeHomozygousity2
+#shortLabel Fake Homozygousity2
+#longLabel Fake Homozygousity Data
+#group phenDis
+#priority 154
+#visibility hide
+#color 30,70,75
+#type chromGraph
+#maxHeightPixels 100:32:8
+#maxGapToFill 10000
+#minMax 0,1
 
-track fakeChromGraph2
-shortLabel Fake ChromGraph2
-longLabel Fake Nested Sine Wave ChromGraph Data 2
-group phenDis
-priority 152
-visibility hide
-color 30,70,75
-type chromGraph
-maxHeightPixels 100:32:8
-maxGapToFill 20000
-minMax 0,200
 
 track mrna
 shortLabel $Organism mRNAs
