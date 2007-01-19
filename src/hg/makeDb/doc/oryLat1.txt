@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.10 2007/01/09 01:18:09 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.11 2007/01/19 00:13:29 hiram Exp $"
 #
 
 ##########################################################################
@@ -1279,28 +1279,36 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=pk -blastzOutRoot \
 	/cluster/bluearc/oryLat1Fr1 > do.log 2>&1 &
-XXX - Running 2006-12-13 14:08
-    #	real    3667m22.409s
-    #	user    0m0.226s
-    #	sys     0m0.181s
+    ### Two jobs fail during the chain step.  axtChain gets a segfault
+    #  by-passing those, continuing with chainMerge
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=chainMerge -verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/oryLat1Fr1 > chainMerge.log 2>&1 &
 
     cd /cluster/data/oryLat1/bed
     rm blastz.fr1
-    ln -s blastz.fr1.2006-12-08 blastz.fr1
+    ln -s blastz.fr1.2006-12-13 blastz.fr1
     ssh hgwdev
     cd /cluster/data/oryLat1/bed/blastz.fr1
     nice -n 19 featureBits oryLat1 chainFr1Link > fb.oryLat1.fr1.txt 2>&1
-    #	173441855 bases of 700386597 (24.764%) in intersection
+    #	165968083 bases of 700386597 (23.697%) in intersection
 
     # Let's try a swap and see what happens
     ssh kkstore04
     mkdir /cluster/data/fr1/bed/blastz.oryLat1.swap
     cd /cluster/data/fr1/bed/blastz.oryLat1.swap
     time doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-08/DEF \
+	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-13/DEF \
 	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-swap > swap.log 2>&1 &
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-13/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -bigClusterHub=pk -swap > net_swap.log 2>&1 &
+XXXX - running 2007-01-18 10:06
     #	real    32m7.742s
     #	user    0m0.148s
     #	sys     0m0.097s
@@ -1514,10 +1522,16 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=kk -verbose=2 -blastzOutRoot \
 	/cluster/bluearc/oryLat1TetNig1 > do.log 2>&1 &
-XXX - Running 2006-12-13 16:46
-    #	real    4142m50.979s
-    #	user    0m0.243s
-    #	sys     0m0.181s
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+ 	-continue=cat \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk -verbose=2 \
+	-blastzOutRoot /cluster/bluearc/oryLat1TetNig1 > cat.log 2>&1 &
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+ 	-continue=chainRun \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk -verbose=2 \
+	-blastzOutRoot /cluster/bluearc/oryLat1TetNig1 > chain.log 2>&1 &
 
     cd /cluster/data/oryLat1/bed
     rm blastz.tetNig1
@@ -1526,23 +1540,30 @@ XXX - Running 2006-12-13 16:46
     cd /cluster/data/oryLat1/bed/blastz.tetNig1
     nice -n 19 featureBits -noRandom oryLat1 chainTetNig1Link \
 	>fb.oryLat1.tetNig1.txt 2>&1
-    #	102368873 bases of 582143106 (17.585%) in intersection
+    #	160388236 bases of 700386597 (22.900%) in intersection
 
-    # Let's try a swap and see what happens
+    # And the swap
     ssh kkstore04
     cd /cluster/data/tetNig1/bed
-    mv blastz.oryLat1.swap blastz.oryLat1.swap.2006-12-05
+    mv blastz.oryLat1.swap blastz.oryLat1.swap.2006-12-08
     mkdir blastz.oryLat1.swap
     cd /cluster/data/tetNig1/bed/blastz.oryLat1.swap
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.tetNig1.2006-12-08/DEF \
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.tetNig1.2006-12-13/DEF \
 	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-swap > swap.log 2>&1 &
-    #	real    11m57.050s
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=kk > swap.log 2>&1 &
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.tetNig1.2006-12-13/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -swap -bigClusterHub=kk > net-swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.oryLat1.swap
     nice -n 19 featureBits -noRandom tetNig1 chainOryLat1Link \
 	>fb.tetNig1.oryLat1.txt 2>&1
-    #	81227466 bases of 205367312 (39.552%) in intersection
+    #	130327582 bases of 342403326 (38.063%) in intersection
 
 #########################################################################
 # BLASTZ/CHAIN/NET gasAcu1 (WORKING - 2006-12-14 - Hiram)
@@ -1682,6 +1703,7 @@ TMPDIR=/scratch/tmp
 
 #######################################################################
 ## Swap of Stickleback chroms vs Medaka chroms and random contigs
+## (DONE - 2006-12-22 - Hiram)
     ssh kkstore04
     mkdir /cluster/data/oryLat1/bed/blastz.gasAcu1.swap
     cd /cluster/data/oryLat1/bed/blastz.gasAcu1.swap
@@ -1700,6 +1722,74 @@ TMPDIR=/scratch/tmp
     time featureBits oryLat1 chainGasAcu1Link \
 	> fb.oryLat1.chainGasAcu1Link.txt 2>&1
     #	189411142 bases of 700386597 (27.044%) in intersection
+
+#######################################################################
+## Stickleback gasAcu1  BLASTZ (WORKING - 2007-01-11 - Hiram)
+##	The above swap doesn't contain the the Stickleback random contigs
+##	and it would be good to have the Medaka alignments back on Stickleback
+##	randoms.  So, to get them, run this blastz of the Stickleback chroms
+##	and random contigs, then swap it back to Stickleback, no Db loads as
+##	we are going to extract the random chains and nets out of this business
+##	(WORKIN - 2007-01-11 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/oryLat1/bed/blastz.gasAcu1.2007-01-11
+    cd /cluster/data/oryLat1/bed/blastz.gasAcu1.2007-01-11
+    cat << '_EOF_' > DEF
+# Medaka chroms vs. Stickleback chroms and randoms in scaffolds
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Medaka oryLat1 no chrUn sequence, only chroms
+#       The largest is 40 million bases, there are 25 of them
+SEQ1_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/oryLat1/oryLat1.noUn.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+
+# QUERY: Stickleback gasAcu1 chroms and chrUn in contigs
+#       The largest chrom is 32M bases, the largest contig 418,670 bases
+#       The smallest chrom chrM is 15,742 bases, smallest contig 60 bases
+#       there are 5,115 chroms and contig pieces
+#       total size 1,089,690,673 bases
+#       47107538 N's 1042583135 real 834274605 upper 208308530 lower
+SEQ2_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/gasAcu1/chrUn.extraCloneGap.lift
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/cluster/data/oryLat1/bed/blastz.gasAcu1.2007-01-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF -smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/oryLat1GasAcu1Un \
+	-stop=net -bigClusterHub=pk > do.log 2>&1 &
+    #	real    127m37.446s
+    #	user    0m0.148s
+    #	sys     0m0.111s
+    ## And the swap
+    mkdir /cluster/data/gasAcu1/bed/blastz.orylat1.swap
+    cd /cluster/data/gasAcu1/bed/blastz.orylat1.swap
+    time doBlastzChainNet.pl -verbose=2 -smallClusterHub=pk \
+	/cluster/data/oryLat1/bed/blastz.gasAcu1.2007-01-11/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
 
 #######################################################################
 ## BLASTZ FR1 fr1 chrUn in contigs, Medaka chroms only, no randoms
@@ -1748,6 +1838,17 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/oryLat1Fr1 > do.log 2>&1 &
 XXX - Running 2006-12-22
+
+    ##  Running the swap
+    ssh kkstore02
+    mkdir /cluster/data/fr1/bed/blastz.oryLat1.swap
+    cd /cluster/data/fr1/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.fr1.2006-12-22/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    22m4.224s
 
 #########################################################################
 # ENSEMBL GENES (DONE - 2007-01-05 - Hiram)
@@ -1855,10 +1956,72 @@ XXX - Running 2006-12-22
     # Get them from ensembl as above in the gene section except for
     # for the Attributes, choose the "Sequences" box, and then 
     # SEQUENCES: Peptide and 
-    #	Header Information "Ensembl Gene ID"
+    #	Header Information "Ensembl Transcript ID"
     #	Results output as FASTA
-    # Save file as ensemblPep.fa.gz
-    gunzip -c ensemblPep.fa.gz \
-    | perl -wpe 's/^>.*\|(ENSGACT\d+\.\d+).*/>$1/' \
-    > ensPep.fa
+    # Save file as ensPep.fa.gz
     hgPepPred oryLat1 generic ensPep ensPep.fa
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2007-01-18 - Hiram)
+    # Use -repMatch=200 (based on size -- for human we use 1024, and 
+    # medaka size is ~20% of human judging by gapless oryLat1 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    blat /cluster/data/oryLat1/oryLat1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/oryLat1/11.ooc -repMatch=200
+# Wrote 46600 overused 11-mers to /cluster/bluearc/oryLat1/11.ooc
+
+#########################################################################
+# GENBANK AUTO UPDATE (WORKING - 2007-01-18 - Hiram)
+    # Make a liftAll.lft that specifies 5M chunks for genbank:
+    ssh kkstore04
+    cd /cluster/data/oryLat1
+    simplePartition.pl oryLat1.2bit 5000000 /tmp/oryLat1P
+    cat /tmp/oryLat1P/*/*.lft > jkStuff/liftAll.lft
+    rm -r /tmp/oryLat1P
+
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add oryLat1 just after gasAcu1
+
+# oryLat1 (G. Aculeatus)
+oryLat1.serverGenome = /cluster/data/oryLat1/oryLat1.2bit
+oryLat1.clusterGenome = /iscratch/i/oryLat1/oryLat1.2bit
+oryLat1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+oryLat1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+oryLat1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+oryLat1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+oryLat1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+oryLat1.ooc = /cluster/bluearc/oryLat1/11.ooc
+oryLat1.lift = /cluster/data/oryLat1/jkStuff/liftAll.lft
+oryLat1.genbank.mrna.xeno.load = yes
+oryLat1.downloadDir = oryLat1
+
+    cvs ci -m "Added oryLat1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added Oryzias latipes (medaka)." src/lib/gbGenome.c
+    make install-server
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice -n +19 bin/gbAlignStep -initial oryLat1 &
+XXX - running 2007-01-18 16:05
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad oryLat1 &
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add oryLat1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added oryLat1." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
