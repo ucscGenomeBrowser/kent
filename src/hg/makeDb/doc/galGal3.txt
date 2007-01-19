@@ -1884,3 +1884,93 @@ BASE=/cluster/data/galGal3/bed/blastz.galGal3.2006-09-08
 # STS?
 #########################################################################
 #########################################################################
+# SWAP STICKLEBACK GASACU1
+    ssh pk
+    mkdir /cluster/data/galGal3/bed/blastz.gasAcu1.swap
+    cd /cluster/data/galGal3/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/DEF \
+	-smallClusterHub=pk \
+        -chainMinScore=2000 -chainLinearGap=loose \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	failed on the net step:
+# HgStepManager: executing step 'net'.
+# netChains: looks like previous stage was not successful
+#	(can't find [galGal3.gasAcu1.]all.chain[.gz]).
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/DEF \
+	-smallClusterHub=pk \
+        -chainMinScore=2000 -chainLinearGap=loose \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -continue=net -swap -bigClusterHub=pk > net_swap.log 2>&1 &
+    #	real    7m11.286s
+
+    featureBits galGal3 chainGasAcu1Link > fb.galGal3.chainGasAcu1Link.txt
+    #	32781658 bases of 1042591351 (3.144%) in intersection
+
+#######################################################################
+## BLASTZ Chicken chroms vs Stickleback chroms and random contigs
+##  The above swap of gasAcu1 does *not* include the stickleback chrUn
+##  To get alignments on the stickleback chrUn, do this alignment of
+##  stickleback with chrUn to chicken, and swap them back to stickleback.
+##  Don't do any Db loading, pick out the stickleback randoms after the swap
+##	(WORKIN - 2007-01-11 - Hiram)
+    ssh kkstore03
+    mkdir /cluster/data/galGal3/bed/blastz.gasAcu1.2007-01-11
+    cd /cluster/data/galGal3/bed/blastz.gasAcu1.2007-01-11
+    cat << '_EOF_' > DEF
+# Chicken chroms vs. Stickleback chroms and chrUn in contigs
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    
+# TARGET: Chicken galGal3 chroms only, no random sequence
+#       The largest is 200 million bases, there are 34 of them
+SEQ1_DIR=/san/sanvol1/scratch/galGal3/galGal3.noRandoms.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/galGal3/galGal3.noRandoms.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Stickleback gasAcu1 chroms and chrUn in contigs
+#       The largest chrom is 32M bases, the largest contig 418,670 bases
+#       The smallest chrom chrM is 15,742 bases, smallest contig 60 bases
+#       there are 5,115 chroms and contig pieces
+#       total size 1,089,690,673 bases
+#       47107538 N's 1042583135 real 834274605 upper 208308530 lower
+SEQ2_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/gasAcu1/chrUn.extraCloneGap.lift
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.gasAcu1.2007-01-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/galGal3ChrGasAcu1Un \
+	-stop=net -bigClusterHub=pk > do.log 2>&1 &
+    #	real    116m59.888s
+    #	And swapping:
+    mkdir /cluster/data/gasAcu1/bed/blastz.galGal3.swap
+    cd /cluster/data/gasAcu1/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/galGal3/bed/blastz.gasAcu1.2007-01-11/DEF \
+	-smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
