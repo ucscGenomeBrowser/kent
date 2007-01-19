@@ -1073,3 +1073,11 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - generate error if attempt to long with per chromosome tables and
   a large number of `chromosomes'.
+
+- add optimizer script that does analyze tables and sorts tables.
+
+- why does ncbi misc_diff on MGC report polyA being one base less
+  than it actually is??
+
+- is too much being lost from xeno alignments by throwing out PSLs with
+  overlaping blocks?  Maybe fix psls rather than discard?
