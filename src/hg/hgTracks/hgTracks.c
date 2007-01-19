@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1267 2007/01/18 01:18:34 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1268 2007/01/19 20:21:02 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13046,7 +13046,7 @@ hPrintf("<CENTER>\n");
 if (!hideControls)
     {
     char *browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
-    char *organization = (hIsMgcServer() ? "MGC" : "UCSC");
+    char *organization = (hIsMgcServer() ? "MGC/ORFeome" : "UCSC");
     hotLinks();
 
     /* Show title . */
