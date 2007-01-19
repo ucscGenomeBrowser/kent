@@ -17,7 +17,7 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.16 2006/04/26 20:33:30 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.17 2007/01/19 16:33:46 kent Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -1877,7 +1877,8 @@ return count;
 boolean confidentPath(struct hash *mrnaHash, struct exonGraph *eg, 
 		      struct exonPath *maximalPaths, struct exonPath *ep)
 /** Return TRUE if all edges in ep were seen in 5% or more
-   of the paths. */
+   of the paths.  Always believe edges with 4 or more paths. 
+   Also always believe all edges when there are 10 or less paths.*/
 {
 double minPercent = optionFloat("minPercent", .05);
 int trumpSize = optionInt("trumpSize", 450);
@@ -1950,8 +1951,10 @@ hashRow0(conn, query, hash);
 }
 
 void removeShortFragments(struct exonGraph *eg)
-/** Remove paths that doen't have at least log_2 exons of the
-    maximal path. */
+/** Remove paths that doen't have a least a few exons of the
+    maximal path.  The minimum # of exons is 2 for short genes.
+    For genes with more than 16 exons the minimum might go up to 3 
+    or a little more. */
 {
 struct exonPath *ep = NULL, *epList = NULL, *epNext = NULL, *rejects = NULL;
 int maxExons = 0;
