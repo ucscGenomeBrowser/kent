@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1180 2007/01/16 23:26:20 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1180.2.1 2007/01/19 23:35:19 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -255,6 +255,14 @@ void hgcStart(char *title)
  * error handler to normal html error handler. */
 {
 cartHtmlStart(title);
+}
+
+char* getEntrezNucleotideUrl(char *accession)
+/* get URL for Entrez browser on a nucleotide. free resulting string */
+{
+char url[512];
+safef(url, sizeof(url), entrezFormat, "Nucleotide", accession, "GenBank");
+return cloneString(url);
 }
 
 void printEntrezNucleotideUrl(FILE *f, char *accession)
@@ -17574,6 +17582,10 @@ else if (sameWord(track, "mappedRefSeq"))
 else if (sameWord(track, "mgcGenes"))
     {
     doMgcGenes(tdb, item);
+    }
+else if (sameWord(track, "orfeomeGenes"))
+    {
+    doOrfeomeGenes(tdb, item);
     }
 else if (startsWith("viralProt", track))
     {
