@@ -1,4 +1,5 @@
 #include "common.h"
+#include "hCommon.h"
 #include "obscure.h"
 #include "dnautil.h"
 #include "errabort.h"
@@ -12,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.104 2006/12/19 18:49:52 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.105 2007/01/19 19:41:51 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -87,7 +88,7 @@ char uiState[256];
 char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
-
+boolean isGsid   = hIsGsidServer();
 if (theCart)
     db = cartOptionalString(theCart, "db");
 
@@ -205,10 +206,19 @@ if (isEncode)
 else
     {
     printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
-    puts("           Home</A> &nbsp;&nbsp;&nbsp;");
-    printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+    puts("           <font color=white>Home</font></A> &nbsp;&nbsp;&nbsp;");
+    if (isGsid) 
+	{
+    	printf("       <A HREF=\"/cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
 	       uiState);
-    puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
+	puts("           <font color=white>Subject View</font></A> &nbsp;&nbsp;&nbsp;");
+	}
+    if (!isGsid)
+	{
+	printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+	       uiState);
+    	puts("           <font color=white>Genomes</font></A> &nbsp;&nbsp;&nbsp;");
+    	}
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
@@ -222,7 +232,7 @@ else
 	{
     	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
 		theCart ? "&" : "", uiState+1 );
-    	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
+    	puts("           <font color=white>Blat</font></A> &nbsp;&nbsp;&nbsp;");
 	}
     {
     char *table = (theCart == NULL ? NULL :
@@ -250,13 +260,22 @@ else
 	       "class=\"topbar\">\n",
 	       uiState, theCart ? "&" : "?" );
     }
-    puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
+    if (!isGsid) puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
 	{
-	printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
-	       uiState);
-	puts("           Gene Sorter</A> &nbsp;&nbsp;&nbsp;");
+	if (isGsid)
+	    {
+	    printf("       <A HREF=\"/cgi-bin/gsidTable%s\" class=\"topbar\">\n",
+	           uiState);
+	    puts("           <font color=white>Table View</font></A> &nbsp;&nbsp;&nbsp;");
+	    }
+	else
+	    {
+	    printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
+	           uiState);
+	    puts("           <font color=white>Gene Sorter</font></A> &nbsp;&nbsp;&nbsp;");
+	    }
 	}
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
 	{
