@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1184 2007/01/18 17:42:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1185 2007/01/19 18:11:46 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17144,7 +17144,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             char url[512];
             char *encodedAcc = cgiEncode(link->acc);
             char *encode = hashFindVal(thisLink, "needsEncoded");
-            if (encode != NULL)
+            if (encode != NULL && sameString(encode, "yes"))
                 safef(url, sizeof(url), linktype, encodedAcc);
             else
                 safef(url, sizeof(url), linktype, link->acc);
