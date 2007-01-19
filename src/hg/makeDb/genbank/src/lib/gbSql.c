@@ -1,8 +1,11 @@
 #include "common.h"
 #include "gbSql.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "psl.h"
 #include "dystring.h"
+#include "genbank.h"
+#include "genePred.h"
 
 void gbSqlDupTableDef(struct sqlConnection *conn, char* table,
                       char* newTable)
@@ -167,6 +170,67 @@ for (i = 0; tables[i] != NULL; i++)
     }
 sqlUpdate(conn, sql->string);
 dyStringFree(&sql);
+}
+
+struct genePred* pslRowToGene(char **row, FILE *warnFh)
+/* Read CDS and PSL and convert to genePred with specified CDS string */
+{
+struct genbankCds cds;
+struct genePred *genePred;
+struct psl *psl = pslLoad(row+1); /* skip CDS in first column */
+
+/* this sets cds start/end to -1 on error, which results in no CDS */
+boolean ok = genbankCdsParse(row[0], &cds);
+if (!ok && (warnFh != NULL))
+    {
+    if (sameString(row[0], "n/a"))
+        fprintf(warnFh, "Warning: no CDS annotation for mRNA %s\n",
+                psl->qName);
+    else 
+        fprintf(warnFh, "Warning: invalid CDS annotation for mRNA %s: %s\n",
+                psl->qName, row[0]);
+    }
+
+genePred = genePredFromPsl2(psl, genePredAllFlds, &cds, genePredStdInsertMergeSize);
+pslFree(&psl);
+return genePred;
+}
+
+void tblBldGenePredFromPsl(struct sqlConnection *conn, char *tmpDir, char *pslTbl,
+                           char *genePredTbl, FILE *warnFh)
+/* build a genePred table from a PSL table, output warnings about missing or
+ * invalid CDS if warnFh is not NULL */
+{
+/* create the tmp table */
+char *sql = genePredGetCreateSql(genePredTbl, genePredAllFlds, 0, hGetMinIndexLength());
+sqlRemakeTable(conn, genePredTbl, sql);
+freez(&sql);
+
+/* get CDS and PSL to generate genePred, put result in tab file for load */
+char tabFile[PATH_LEN];
+safef(tabFile, sizeof(tabFile), "%s/%s", tmpDir, genePredTbl);
+FILE *tabFh = mustOpen(tabFile, "w");
+
+/* go ahead and get gene even if no CDS annotation (query returns string
+ * of "n/a" */
+char *pslCols = "matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts";
+char query[512];
+safef(query, sizeof(query),
+      "SELECT cds.name,%s "
+      "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds = cds.id)",
+      pslCols, pslTbl, pslTbl);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *genePred = pslRowToGene(row, warnFh);
+    genePredTabOut(genePred, tabFh);
+    genePredFree(&genePred);
+    }
+sqlFreeResult(&sr);
+
+carefulClose(&tabFh);
+sqlLoadTabFile(conn, tabFile, genePredTbl, SQL_TAB_FILE_ON_SERVER);
 }
 
 /*

@@ -56,6 +56,10 @@ void tblBldAtomicInstall(struct sqlConnection *conn, char **tables);
 /* Install the tables in the NULL terminated in an atomic manner.  Drop
  * under tbl_old first, then renametbl to tbl_old, and tbl_tmp to tbl. */
 
+void tblBldGenePredFromPsl(struct sqlConnection *conn, char *tmpDir, char *pslTbl,
+                           char *genePredTbl, FILE *warnFh);
+/* build a genePred table from a PSL table, output warnings about missing or
+ * invalid CDS if warnFh is not NULL */
 #endif
 
 /*

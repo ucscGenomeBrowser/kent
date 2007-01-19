@@ -5,7 +5,6 @@
 #include "portable.h"
 #include "mgcStatusTbl.h"
 #include "linefile.h"
-#include "genbank.h"
 #include "psl.h"
 #include "genePred.h"
 #include "hgRelate.h"
@@ -16,7 +15,7 @@
 #include "gbSql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.16 2007/01/02 06:08:28 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.17 2007/01/19 19:46:38 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -168,72 +167,16 @@ sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
-struct genePred* pslRowToGene(char **row)
-/* Read CDS and PSL and convert to genePred with specified CDS string */
-{
-struct genbankCds cds;
-struct genePred *genePred;
-struct psl *psl = pslLoad(row+1); /* skip CDS in first column */
-
-/* this sets cds start/end to -1 on error, which results in no CDS */
-if (!genbankCdsParse(row[0], &cds))
-    {
-    if (sameString(row[0], "n/a"))
-        fprintf(stderr, "Warning: no CDS annotation for MGC mRNA %s\n",
-                psl->qName);
-    else 
-        fprintf(stderr, "Warning: invalid CDS annotation for MGC mRNA %s: %s\n",
-                psl->qName, row[0]);
-    }
-
-genePred = genePredFromPsl2(psl, genePredAllFlds, &cds, genePredStdInsertMergeSize);
-pslFree(&psl);
-return genePred;
-}
-
 void createMgcGenes(struct sqlConnection *conn)
 /* create the mgcGenes table from the mgcFullMrna table */
 {
-char *sql;
-char query[512], **row;
-struct sqlResult *sr;
-char tabFile[PATH_LEN];
-FILE *tabFh;
-char tmpTbl[32], tmpMrnaTbl[32];
-tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), MGC_GENES_TBL);
+char tmpGeneTbl[32], tmpMrnaTbl[32];
+tblBldGetTmpName(tmpGeneTbl, sizeof(tmpGeneTbl), MGC_GENES_TBL);
 tblBldGetTmpName(tmpMrnaTbl, sizeof(tmpMrnaTbl), MGC_FULL_MRNA_TBL);
 
-gbVerbEnter(2, "loading %s", tmpTbl);
-
-/* create the tmp table */
-sql = genePredGetCreateSql(tmpTbl, genePredAllFlds, 0, hGetMinIndexLength());
-sqlRemakeTable(conn, tmpTbl, sql);
-freez(&sql);
-
-/* get CDS and PSL to generate genePred, put result in tab file for load */
-safef(tabFile, sizeof(tabFile), "%s/%s", workDir, tmpTbl);
-tabFh = mustOpen(tabFile, "w");
-
-/* go ahead and get gene even if no CDS annotation (query returns string
- * of "n/a" */
-char *pslCols = "matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts";
-safef(query, sizeof(query),
-      "SELECT cds.name,%s "
-      "FROM cds,%s,gbCdnaInfo WHERE (%s.qName = gbCdnaInfo.acc) AND (gbCdnaInfo.cds = cds.id)",
-      pslCols, tmpMrnaTbl, tmpMrnaTbl);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct genePred *genePred = pslRowToGene(row);
-    genePredTabOut(genePred, tabFh);
-    genePredFree(&genePred);
-    }
-sqlFreeResult(&sr);
-
-carefulClose(&tabFh);
-sqlLoadTabFile(conn, tabFile, tmpTbl, SQL_TAB_FILE_ON_SERVER);
-
-gbVerbLeave(2, "loading %s", tmpTbl);
+gbVerbEnter(2, "loading %s", tmpGeneTbl);
+tblBldGenePredFromPsl(conn, workDir, tmpMrnaTbl, tmpGeneTbl, stderr);
+gbVerbLeave(2, "loading %s", tmpGeneTbl);
 }
 
 void createMgcIncompleteMrna(struct sqlConnection *conn)

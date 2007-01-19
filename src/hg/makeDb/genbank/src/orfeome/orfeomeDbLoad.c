@@ -6,7 +6,6 @@
 #include "linefile.h"
 #include "genbank.h"
 #include "psl.h"
-#include "genePred.h"
 #include "hgRelate.h"
 #include "hdb.h"
 #include "jksql.h"
@@ -19,7 +18,19 @@
 #include "hdb.h"
 #include "orfeomeImageIds.h"
 
-static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.1 2006/12/24 20:48:14 markd Exp $";
+static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.2 2007/01/19 19:46:38 markd Exp $";
+
+/* Notes:
+ *  - Identifies ORFeome clones by both image id and genbank keywords, as it
+ *    was taking a long time to get all of the data in place.
+ *
+ *  - Several attempts at generating the orfeomeMRna alignment table from
+ *    the all_mrna table using INSERT ... SELECT with a join.  However this
+ *    ways really, really slow (one version didn't complete after 9 hours).
+ *    Various attempts to optimize it failed.  It was demonstrated that the
+ *    select was the problem, not the insert.  So this was changed to build a tmp
+ *    table of accessions and do a insert via join from just this table..
+ */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -34,16 +45,21 @@ static char *orfeomeImageIdsFile = "etc/orfeome.imageIds";
 
 /* table names */
 static char *ORFEOME_MRNA_TBL = "orfeomeMRna";
+static char *ORFEOME_GENES_TBL = "orfeomeGenes";
 
 /* list of all tables */
 static char *orfeomeTables[] =
 {
     "orfeomeMRna",
+    "orfeomeGenes",
     NULL
 };
 
+/* temporary table to use in select, automatically deleted on conntect close*/
+static char *orfeomeAccTmpTbl = "orfeomeAcc_tmp";
+
 /* command line globals */
-char *workDir;
+static char *workDir;
 
 void usage()
 /* Explain usage and exit. */
@@ -72,7 +88,7 @@ static struct orfeomeImageIds* loadOrfeomeImageIds(char *db)
 /* load ORFeome image id ranges for this organism */
 {
 struct gbGenome* genome = gbGenomeNew(db);
-struct orfeomeImageIds *allIds = orfeomeImageIdsLoadAll(orfeomeImageIdsFile);
+struct orfeomeImageIds *allIds = orfeomeImageIdsLoadAllByTab(orfeomeImageIdsFile);
 struct orfeomeImageIds *dbIds = NULL, *ids;
 while ((ids = slPopHead(&allIds)) != NULL)
     {
@@ -86,50 +102,116 @@ gbGenomeFree(&genome);
 return dbIds;
 }
 
-static void addImageIdWhere(struct dyString *sql, struct orfeomeImageIds* imageIds)
-/* add a where clause on imageIds being in the imageClone table */
+static void selectAccByImageId(struct sqlConnection *conn, struct orfeomeImageIds *imageIds, struct hash *accSet)
+/* select ORFeome accession by image id */
 {
+struct dyString *sql = dyStringNew(1024);
 struct orfeomeImageIds *ids;
-dyStringAppend(sql, "(");
+dyStringPrintf(sql, "SELECT acc FROM imageClone WHERE ");
 for (ids = imageIds; ids != NULL; ids = ids->next)
     {
     if (ids != imageIds)
         dyStringAppend(sql, " OR ");
-    dyStringPrintf(sql, "(%d <= imageId and imageId <= %d)", ids->imageFirst, ids->imageLast);
+    dyStringPrintf(sql, "(%d <= imageId AND imageId <= %d)", ids->imageFirst, ids->imageLast);
     }
-dyStringAppend(sql, ")");
+struct sqlResult *sr = sqlGetResult(conn, sql->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashStore(accSet, row[0]);
+sqlFreeResult(&sr);
+dyStringFree(&sql);
 }
 
-static void createOrfeomeMrna(struct sqlConnection *conn, struct orfeomeImageIds* imageIds)
+static void getAccByImageId(struct sqlConnection *conn, struct hash *accSet)
+/* add ORFeome accession by image id */
+{
+struct orfeomeImageIds *imageIds = loadOrfeomeImageIds(sqlGetDatabase(conn));
+if (imageIds != NULL)
+    selectAccByImageId(conn, imageIds, accSet);
+orfeomeImageIdsFreeList(&imageIds);
+}
+
+static void getAccByKeyword(struct sqlConnection *conn, struct hash *accSet)
+/* add ORFeome accession by keyword search */
+{
+struct sqlResult *sr = sqlGetResult(conn,
+                                    "SELECT acc FROM gbCdnaInfo,keyword WHERE (keyword.name LIKE \"%orfeome%\") AND (gbCdnaInfo.keyword = keyword.id)");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashStore(accSet, row[0]);
+sqlFreeResult(&sr);
+}
+
+static struct hash* getOrfeomeAccs(struct sqlConnection *conn)
+/* build set of ORFeome GenBank accessions */
+{
+struct hash *accSet = hashNew(20);
+getAccByImageId(conn, accSet);
+getAccByKeyword(conn, accSet);
+return accSet;
+}
+
+static void buildOrfeomeAccTmpTbl(struct sqlConnection *conn, struct hash *accSet)
+/* build tmp table of ORFeome accessions */
+{
+// build tmp file
+char tmpFile[PATH_LEN];
+safef(tmpFile, sizeof(tmpFile), "%s/%s.%s.tab", workDir, orfeomeAccTmpTbl, sqlGetDatabase(conn));
+FILE *fh = mustOpen(tmpFile, "w");
+
+struct hashCookie hc = hashFirst(accSet);
+struct hashEl *hel;
+while ((hel = hashNext(&hc)) != NULL)
+    fprintf(fh, "%s\n", hel->name);
+
+carefulClose(&fh);
+
+// create and load table;
+char sql[4096];
+safef(sql, sizeof(sql), "CREATE TEMPORARY TABLE %s (acc char(16) primary key)",
+      orfeomeAccTmpTbl);
+sqlUpdate(conn, sql);
+sqlLoadTabFile(conn, tmpFile, orfeomeAccTmpTbl, SQL_TAB_FILE_ON_SERVER);
+
+if (remove(tmpFile) < 0)
+    errnoAbort("Couldn't remove %s", tmpFile);
+}
+
+static void loadOrfeomeMrnaTbl(struct sqlConnection *conn, char *tmpTbl)
+/* load the orfeomeMrna table from the mRNA table with join from tmp acc table */
+{
+char sql[1024];
+safef(sql, sizeof(sql), "INSERT INTO %s SELECT all_mrna.* FROM all_mrna,%s WHERE all_mrna.qName = %s.acc",
+      tmpTbl, orfeomeAccTmpTbl, orfeomeAccTmpTbl);
+sqlUpdate(conn, sql);
+}
+
+static void createOrfeomeMrnaTbl(struct sqlConnection *conn)
 /* create the orfeomeMrna table */
 {
-struct dyString *sql = dyStringNew(1024);
 char tmpTbl[32];
 tblBldGetTmpName(tmpTbl, sizeof(tmpTbl), ORFEOME_MRNA_TBL);
 gbVerbEnter(2, "loading %s", tmpTbl);
-
 tblBldRemakePslTable(conn, tmpTbl, "all_mrna");
 
-/* Build insert of a join from he all_mrna table having image ids
- * in the specified ranges. */
-dyStringPrintf(sql,
-      "INSERT INTO %s"
-      "  SELECT all_mrna.* FROM all_mrna,imageClone"
-      "    WHERE (all_mrna.qName = imageClone.acc)"
-      "      AND ",
-      tmpTbl);
-addImageIdWhere(sql, imageIds);
+struct hash* accSet = getOrfeomeAccs(conn);
+buildOrfeomeAccTmpTbl(conn, accSet);
+hashFree(&accSet);
 
-sqlUpdate(conn, sql->string);
-dyStringFree(&sql);
+loadOrfeomeMrnaTbl(conn, tmpTbl);
 gbVerbLeave(2, "loading %s", tmpTbl);
 }
 
-static void buildOrfeomeTables(struct sqlConnection *conn,
-                               struct orfeomeImageIds* imageIds)
-/* build ORFeome tables with _tmp names */
+static void createOrfeomeGenesTbl(struct sqlConnection *conn)
+/* create the orfeomeGenes table */
 {
-createOrfeomeMrna(conn, imageIds);
+char tmpGeneTbl[32], tmpMrnaTbl[32];
+tblBldGetTmpName(tmpGeneTbl, sizeof(tmpGeneTbl), ORFEOME_GENES_TBL);
+tblBldGetTmpName(tmpMrnaTbl, sizeof(tmpMrnaTbl), ORFEOME_MRNA_TBL);
+
+gbVerbEnter(2, "loading %s", tmpGeneTbl);
+tblBldGenePredFromPsl(conn, workDir, tmpMrnaTbl, tmpGeneTbl, stderr);
+gbVerbLeave(2, "loading %s", tmpGeneTbl);
 }
 
 static void orfeomeDbLoad(char *db)
@@ -138,13 +220,13 @@ static void orfeomeDbLoad(char *db)
 gbVerbEnter(1, "Loading ORFeome tables");
 hSetDb(db);
 struct sqlConnection *conn = hAllocConn();
-struct orfeomeImageIds* imageIds = loadOrfeomeImageIds(db);
 
 tblBldDropTables(conn, orfeomeTables, TBLBLD_TMP_TABLE);
-buildOrfeomeTables(conn, imageIds);
+createOrfeomeMrnaTbl(conn);
+createOrfeomeGenesTbl(conn);
 tblBldAtomicInstall(conn, orfeomeTables);
+tblBldDropTables(conn, orfeomeTables, TBLBLD_OLD_TABLE);
 
-orfeomeImageIdsFreeList(&imageIds);
 hFreeConn(&conn);
 gbVerbLeave(1, "Loading ORFeome tables");
 }
@@ -155,7 +237,7 @@ static void orfeomeDropTables(char *db)
 hSetDb(db);
 struct sqlConnection *conn = hAllocConn();
 gbVerbEnter(1, "droping ORFeome tables");
-
+tblBldDropTables(conn, orfeomeTables, TBLBLD_REAL_TABLE|TBLBLD_TMP_TABLE|TBLBLD_OLD_TABLE);
 hFreeConn(&conn);
 gbVerbLeave(1, "droping ORFeome tables");
 }
@@ -170,6 +252,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 2)
     usage();
 boolean drop = optionExists("drop");
+workDir = optionVal("workdir", "work/load/orfeome");
 gbVerbInit(optionInt("verbose", 0));
 if (gbVerbose >= 5)
     sqlMonitorEnable(JKSQL_TRACE);
@@ -179,9 +262,6 @@ if (drop)
     }
 else
     {
-    if (argc != 3)
-        usage();
-    workDir = optionVal("workdir", "work/load/orfeome");
     gbMakeDirs(workDir);
     orfeomeDbLoad(argv[1]);
     }
