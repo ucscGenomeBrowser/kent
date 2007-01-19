@@ -120,10 +120,18 @@
 
      <li> <code><em>$db</em>.mgcTables.<em>$host</em></code> - indicates which
           MGC tables to create when loading database on <CODE><em>$host</em></code>.
-          Values are <CODE>no</CODE>, <CODE>all</CODE>, <CODE>full</CODE>.
+          Values are <CODE>no</CODE>, <CODE>all</CODE>, or <CODE>full</CODE>.
           <CODE><em>$host</em></code> is the value returned by <CODE>uname -n</CODE>.
      <li> <code><em>$db</em>.mgcTables.default</code> - indicates which
-          MGC tables to create when the is no host-specific setting.
+          MGC tables to create when there is no host-specific setting.
+
+     <li> <code><em>$db</em>.orfeomeTables.<em>$host</em></code> - indicates if
+          ORFeome tables should be create when loading database on <CODE><em>$host</em></code>.
+          Values are <CODE>yes</CODE>, or <CODE>no</CODE>.
+          <CODE><em>$host</em></code> is the value returned by <CODE>uname -n</CODE>.
+     <li> <code><em>$db</em>.orfeomeTables.default</code> - indicates if
+          ORFeome tables should be created when there is no host-specific setting.
+
      <li> <code><em>$db</em>.perChromTables</code> - Set to <CODE>no</CODE>
           if per-chromosome alignment tables should not be created.
 
