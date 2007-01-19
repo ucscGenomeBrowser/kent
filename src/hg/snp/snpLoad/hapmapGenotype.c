@@ -21,7 +21,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmapGenotype.c,v 1.1 2007/01/19 21:38:43 heather Exp $";
+static char const rcsid[] = "$Id: hapmapGenotype.c,v 1.2 2007/01/19 22:17:43 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 FILE *countFileHandle = NULL;
@@ -147,6 +147,57 @@ if (sameString(pop, "YRI"))
 
 }
 
+boolean validate(char **row, int count, char *chrom)
+{
+int count1, count2, total;
+
+/* allele should be 'A', 'C', 'G', 'T' or '?' */
+if (!validAllele(row[5]))
+    {
+    fprintf(errorFileHandle, "invalid refAllele %s for %s in chrom %s\n", row[5], row[1], chrom);
+    return FALSE;
+    }
+
+if (count == 10)
+    if (!validAllele(row[7]))
+        {
+        fprintf(errorFileHandle, "invalid otherAllele %s for %s in chrom %s\n", row[7], row[1], chrom);
+        return FALSE;
+        }
+
+/* check counts */
+/* don't put in error hash, counts could be fine for other populations */
+count1 = sqlSigned(row[6]);
+if (count == 10)
+    {
+    count2 = sqlSigned(row[8]);
+    total = sqlSigned(row[9]);
+    }
+else
+    {
+    count2 = 0;
+    total = sqlSigned(row[7]);
+    }
+    
+if (total != count1 + count2)
+    {
+    fprintf(countFileHandle, "wrong counts for %s in pop %s, chrom %s\n", row[1], row[0], chrom);
+    fprintf(countFileHandle, "count1 = %d, count2 = %d, total = %d\n", count1, count2, total);
+    return FALSE;
+    }
+
+/* check population */
+/* should be fine, I control this upstream */
+/* no need for error hash */
+if (!validPop(row[0]))
+    {
+    fprintf(errorFileHandle, "unknown pop %s for %s in chrom %s\n", row[0], row[1], chrom);
+    return FALSE;
+    }
+return TRUE;
+}
+
+
 void readFile(char *chrom)
 /* possible optimization: don't do hash lookup for first population */
 {
@@ -157,10 +208,8 @@ char *row[10];
 struct hashEl *hel = NULL;
 char *rsId;
 struct snpInfo *si = NULL;
-int count1;
-int count2;
-int total;
 int elementCount;
+boolean isValid;
 
 // double-check
 safef(inputFileName, sizeof(inputFileName), "%s.hapmap", chrom);
@@ -176,50 +225,9 @@ while (lineFileNext(lf, &line, NULL))
 	fprintf(errorFileHandle, "unexpected format: %s\n", line);
 	continue;
 	}
-    /* allele should be 'A', 'C', 'G', 'T' or '?' */
-    if (!validAllele(row[5]))
-        {
-        fprintf(errorFileHandle, "invalid refAllele %s for %s in chrom %s\n", row[5], row[1], chrom);
-        continue;
-	}
-    if (elementCount == 10)
-        if (!validAllele(row[7]))
-            {
-            fprintf(errorFileHandle, "invalid otherAllele %s for %s in chrom %s\n", row[7], row[1], chrom);
-            continue;
-	    }
 
-    /* check counts */
-    /* don't put in error hash, counts could be fine for other populations */
-    count1 = sqlSigned(row[6]);
-    if (elementCount == 10)
-        {
-        count2 = sqlSigned(row[8]);
-        total = sqlSigned(row[9]);
-	}
-    else
-        {
-	count2 = 0;
-	total = sqlSigned(row[7]);
-	}
-    
-    if (total != count1 + count2)
-        {
-        fprintf(countFileHandle, "wrong counts for %s in pop %s, chrom %s\n", 
-                row[1], row[0], chrom);
-        fprintf(countFileHandle, "count1 = %d, count2 = %d, total = %d\n", 
-                count1, count2, total);
-        continue;
-        }
-
-    /* check population */
-    /* should be fine, I control this upstream */
-    /* no need for error hash */
-    if (!validPop(row[0]))
-        {
-        fprintf(errorFileHandle, "unknown pop %s for %s in chrom %s\n", row[0], row[1], chrom);
-        continue;
-	}
+    isValid = validate(row, elementCount, chrom);
+    if (!isValid) continue;
 
     rsId = cloneString(row[1]);
 
@@ -237,9 +245,9 @@ while (lineFileNext(lf, &line, NULL))
 	si->observed = cloneString(row[2]);
         si->position = sqlSigned(row[3]);
         si->strand = cloneString(row[4]);
-	setCount(si, row[0], row[5], count1); 
+	setCount(si, row[0], row[5], sqlSigned(row[6])); 
 	if (elementCount == 10)
-	    setCount(si, row[0], row[7], count2); 
+	    setCount(si, row[0], row[7], sqlSigned(row[8])); 
 	hashAdd(snpHash, rsId, si);
 	}
     else
@@ -266,9 +274,9 @@ while (lineFileNext(lf, &line, NULL))
 	    hashAdd(errorHash, rsId, NULL);
             continue;
 	    }
-	setCount(si, row[0], row[5], count1); 
+	setCount(si, row[0], row[5], sqlSigned(row[6])); 
 	if (elementCount == 10)
-	    setCount(si, row[0], row[7], count2); 
+	    setCount(si, row[0], row[7], sqlSigned(row[8])); 
 	}
     }
 lineFileClose(&lf);
