@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.38 2007/01/19 20:16:03 markd Exp $
+# $Id: gbDbLoadStep,v 1.39 2007/01/19 21:13:27 genbank Exp $
 #
 use strict;
 use warnings;
@@ -165,7 +165,12 @@ sub getOrfeomeConf($) {
 # load ORFeome tables
 sub loadOrfeome($) {
     my($db) = @_;
-    runProg("orfeomeDbLoad $verboseArg $db");
+    my $cmd = "orfeomeDbLoad ";
+    if (defined($verboseArg)) {
+        $cmd .= "$verboseArg ";
+    }
+    $cmd .= $db;
+    runProg($cmd);
 }
 
 # dump gbExtFile table, used to find releases that are no londer needed
