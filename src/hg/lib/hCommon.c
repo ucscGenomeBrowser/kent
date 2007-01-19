@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.31 2006/09/26 22:36:38 kate Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.32 2007/01/19 17:46:15 fanhsu Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
@@ -223,6 +223,21 @@ if (!haveChecked)
     haveChecked = TRUE;
     }
 return mgcHost;
+}
+
+boolean hIsGsidServer()
+/* Is this the GSID-customized server? Change for config variable
+ * gsid.server=yes */
+{
+static boolean gsidHost = FALSE;
+static boolean haveChecked = FALSE;
+if (!haveChecked)
+    {
+    char *serverOpt = cfgOption("gsid.server");
+    gsidHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
+    haveChecked = TRUE;
+    }
+return gsidHost;
 }
 
 void hTableStart()

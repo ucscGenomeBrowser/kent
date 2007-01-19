@@ -58,6 +58,10 @@ boolean hIsMgcServer();
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
 
+boolean hIsGsidServer();
+/* Is this the GSID-customized server? Change for config variable
+ * gsid.server=yes */
+
 void hTableStart();
 /* Output a table with solid borders. */
 
