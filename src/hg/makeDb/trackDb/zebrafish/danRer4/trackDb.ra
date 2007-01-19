@@ -23,6 +23,15 @@ group map
 visibility dense
 type bed 3 +
 
+track rhMap
+shortLabel Radiation Hybrid Map
+longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+group map
+priority 14
+visibility hide
+type psl .
+dataVersion Oct 2006
+
 track bacEndPairs
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
@@ -49,6 +58,30 @@ priority 17
 visibility hide
 type bed 6 +
 exonArrows off
+
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl v42 Gene Predictions (Protein-Coding Genes)
+group genes
+priority 32.8
+visibility pack
+color 150,0,0
+type genePred ensPep
+url http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=$$
+urlName gene
+archive dec2006
+ 
+track ensGeneNonCoding
+shortLabel Ensembl NonCoding
+longLabel Ensembl v42 Gene Predictions (Non-Coding Genes) 
+group genes
+priority 32.9
+visibility hide
+color 12,12,120
+type genePred
+url http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=$$
+urlName gene
+archive dec2006
 
 track multiz7way
 shortLabel Conservation 
@@ -214,6 +247,12 @@ shortCircuit 1
 termRegex (AC|AL|BX|CR|CT|Zv6_scaffold)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
+
+searchTable rhMap
+searchMethod prefix
+searchType psl
+termRegex [[:alnum:]]*-?[[:alnum:]\._:\-]+
+searchPriority 11
 
 searchTable nscanGene
 searchType genePred

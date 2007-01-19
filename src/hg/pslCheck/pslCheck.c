@@ -1,16 +1,20 @@
-/* pslCheck - validate PSL files. */
+/* pslCheck - validate PSL files or tables. */
 #include "common.h"
 #include "options.h"
 #include "portable.h"
 #include "psl.h"
 #include "hash.h"
+#include "jksql.h"
 #include "sqlNum.h"
+#include "chromInfo.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.8 2006/01/28 04:21:26 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.9 2007/01/05 08:07:03 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
+    {"db", OPTION_STRING},
     {"prot", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
     {"targetSizes", OPTION_STRING},
@@ -19,6 +23,7 @@ static struct optionSpec optionSpecs[] =
     {"fail", OPTION_STRING},
     {NULL, 0}
 };
+char *db = NULL;
 int protCheck = FALSE;
 boolean quiet = FALSE;
 char *passFile = NULL;
@@ -35,9 +40,11 @@ void usage()
 errAbort(
   "pslCheck - validate PSL files\n"
   "usage:\n"
-  "   pslCheck file(s)\n"
+  "   pslCheck fileTbl(s)\n"
   "options:\n"
-  "   -prot  confirm psls are protein psls\n"
+  "   -db=db - get targetSizes from this database, and if file doesn't exist,\n"
+  "    look for a table in this database.\n"
+  "   -prot - confirm psls are protein psls\n"
   "   -pass=pslFile - write PSLs without errors to this file\n"
   "   -fail=pslFile - write PSLs with errors to this file\n"
   "   -targetSizes=sizesFile - tab file with columns of target and size.\n"
@@ -57,6 +64,22 @@ char *cols[2];
 while (lineFileNextRowTab(lf, cols, ArraySize(cols)))
     hashAddInt(sizes, cols[0], sqlUnsigned(cols[1]));
 lineFileClose(&lf);
+return sizes;
+}
+
+static struct hash *loadChromInfoSizes(struct sqlConnection *conn)
+/* chromInfo sizes */
+{
+struct hash *sizes = hashNew(20);
+char **row;
+struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chromInfo *ci = chromInfoLoad(row);
+    hashAddInt(sizes, ci->chrom, ci->size);
+    chromInfoFree(&ci);
+    }
+sqlFreeResult(&sr);
 return sizes;
 }
 
@@ -93,13 +116,16 @@ if (size != expectSz)
 return 0;    
 }
 
-static void checkPsl(struct lineFile *lf, struct psl *psl, FILE *errFh,
-                     FILE *passFh, FILE *failFh)
+static void checkPsl(struct lineFile *lf, char *tbl, struct psl *psl,
+                     FILE *errFh, FILE *passFh, FILE *failFh)
 /* check a psl */
 {
 char pslDesc[PATH_LEN+64];
 int numErrs = 0;
-safef(pslDesc, sizeof(pslDesc), "%s:%u", lf->fileName, lf->lineIx);
+if (lf != NULL)
+    safef(pslDesc, sizeof(pslDesc), "%s:%u", lf->fileName, lf->lineIx);
+else
+    safef(pslDesc, sizeof(pslDesc), "%s", tbl);
 numErrs += pslCheck(pslDesc, errFh, psl);
 if (protCheck && !pslIsProtein(psl))
     {
@@ -121,29 +147,53 @@ errCount += numErrs;
 
 static void checkPslFile(char *fileName, FILE *errFh,
                          FILE *passFh, FILE *failFh)
-/* Check one .psl file */
+/* Check one psl file */
 {
 struct lineFile *lf = pslFileOpen(fileName);
 struct psl *psl;
 
 while ((psl = pslNext(lf)) != NULL)
     {
-    checkPsl(lf, psl, errFh, passFh, failFh);
+    checkPsl(lf, NULL, psl, errFh, passFh, failFh);
     pslFree(&psl);
     }
 lineFileClose(&lf);
 }
 
-void checkPsls(int fileCount, char *fileNames[])
-/* checkPsls - check files. */
+static void checkPslTbl(struct sqlConnection *conn, char *tbl, FILE *errFh,
+                         FILE *passFh, FILE *failFh)
+/* Check one psl table */
+{
+char query[1024], **row;
+safef(query, sizeof(query), "select * from %s", tbl);
+struct sqlResult *sr = sqlGetResult(conn, query);
+int rowOff = (sqlFieldColumn(sr, "bin") >= 0) ? 1 : 0;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct psl *psl = pslLoad(row+rowOff);
+    checkPsl(NULL, tbl, psl, errFh, passFh, failFh);
+    pslFree(&psl);
+    }
+sqlFreeResult(&sr);
+}
+
+void checkFilesTbls(struct sqlConnection *conn,
+                    int fileTblCount, char *fileTblNames[])
+/* checkPsl file or tables. */
 {
 int i;
 FILE *errFh = quiet ? mustOpen("/dev/null", "w") : stderr;
 FILE *passFh = passFile ? mustOpen(passFile, "w") : NULL;
 FILE *failFh = failFile ? mustOpen(failFile, "w") : NULL;
 
-for (i=0; i<fileCount; ++i)
-    checkPslFile(fileNames[i], errFh, passFh, failFh);
+for (i = 0; i< fileTblCount; i++)
+    {
+    if (fileExists(fileTblNames[i]))
+        checkPslFile(fileTblNames[i], errFh, passFh, failFh);
+    else
+        checkPslTbl(conn, fileTblNames[i], errFh, passFh, failFh);
+    }
 carefulClose(&passFh);
 carefulClose(&failFh);
 }
@@ -154,15 +204,22 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
+db = optionVal("db", NULL);
 protCheck = optionExists("prot");
 quiet = optionExists("quiet");
 passFile = optionVal("pass", NULL);
 failFile = optionVal("fail", NULL);
+struct sqlConnection *conn = NULL;
+if (db != NULL)
+    conn = sqlConnect(db);
 
 if (optionExists("targetSizes"))
     targetSizes = loadSizes(optionVal("targetSizes", NULL));
+else if (db != NULL)
+    targetSizes = loadChromInfoSizes(conn);
 if (optionExists("querySizes"))
     querySizes = loadSizes(optionVal("querySizes", NULL));
-checkPsls(argc-1, argv+1);
+checkFilesTbls(conn, argc-1, argv+1);
+sqlDisconnect(&conn);
 return ((errCount == 0) ? 0 : 1);
 }

@@ -31,7 +31,7 @@ longLabel UniProt (SwissProt/TrEMBL) Protein Display ID
 priority 2.1
 visibility off
 type association kgXref
-queryFull select kgID spDisplayID from kgXref
+queryFull select kgID,spDisplayID from kgXref
 queryOne select spDisplayId,spID from kgXref where kgID = '%s'
 invQueryOne select kgID from kgXref where spDisplayId = '%s'
 search fuzzy
@@ -43,6 +43,7 @@ longLabel UniProt (SwissProt/TrEMBL) Protein Accession
 priority 2.15
 visibility off
 type lookup kgXref kgID spID
+search exact
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name refSeq

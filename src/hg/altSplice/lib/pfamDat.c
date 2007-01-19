@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "pfamDat.h"
 
-static char const rcsid[] = "$Id: pfamDat.c,v 1.2 2004/03/31 19:22:19 sugnet Exp $";
+static char const rcsid[] = "$Id: pfamDat.c,v 1.3 2007/01/08 19:23:36 sugnet Exp $";
 
 void pfamHitStaticLoad(char **row, struct pfamHit *ret)
 /* Load a row from pfamHit table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->model = row[0];
 ret->descript = row[1];
@@ -29,8 +27,6 @@ struct pfamHit *pfamHitLoad(char **row)
  * from database.  Dispose of this with pfamHitFree(). */
 {
 struct pfamHit *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->model = cloneString(row[0]);
@@ -83,7 +79,6 @@ struct pfamHit *pfamHitCommaIn(char **pS, struct pfamHit *ret)
  * return a new pfamHit */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -124,7 +119,6 @@ for (el = *pList; el != NULL; el = next)
 void pfamHitOutput(struct pfamHit *el, FILE *f, char sep, char lastSep) 
 /* Print out pfamHit.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->model);
 if (sep == ',') fputc('"',f);
@@ -145,8 +139,6 @@ void pfamDHitStaticLoad(char **row, struct pfamDHit *ret)
 /* Load a row from pfamDHit table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->model = row[0];
 ret->domain = sqlSigned(row[1]);
@@ -167,8 +159,6 @@ struct pfamDHit *pfamDHitLoad(char **row)
  * from database.  Dispose of this with pfamDHitFree(). */
 {
 struct pfamDHit *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->model = cloneString(row[0]);
@@ -228,7 +218,6 @@ struct pfamDHit *pfamDHitCommaIn(char **pS, struct pfamDHit *ret)
  * return a new pfamDHit */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -278,7 +267,6 @@ for (el = *pList; el != NULL; el = next)
 void pfamDHitOutput(struct pfamDHit *el, FILE *f, char sep, char lastSep) 
 /* Print out pfamDHit.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->model);
 if (sep == ',') fputc('"',f);
@@ -318,7 +306,6 @@ struct pfamDat *pfamDatLoad(char **row)
  * from database.  Dispose of this with pfamDatFree(). */
 {
 struct pfamDat *ret;
-int sizeOne,i;
 char *s;
 
 AllocVar(ret);
@@ -375,7 +362,6 @@ struct pfamDat *pfamDatCommaIn(char **pS, struct pfamDat *ret)
  * return a new pfamDat */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -424,7 +410,6 @@ for (el = *pList; el != NULL; el = next)
 void pfamDatOutput(struct pfamDat *el, FILE *f, char sep, char lastSep) 
 /* Print out pfamDat.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->seqName);
 if (sep == ',') fputc('"',f);
@@ -466,20 +451,6 @@ for(i=0; i < offsetCount; i++)
 	errAbort("pfamDat::addHitTabs() - Found a '%c' where expecting a ' ' at position %d in line %s",
 		 line[tmpOffset], tmpOffset, line);
     line[tmpOffset] = '\t';
-    }
-}
-
-static void addDHitTabs(char *line, int *offsets, int offsetCount)
-/* Add a tab at the correct offsets for a pfam file. */
-{
-
-int i;
-for(i=0;i < offsetCount; i++)
-    {
-    if(line[offsets[i]] != ' ' && line[offsets[i]] != '/')
-	errAbort("pfamDat::addDHitTabs() - Found a '%c' where expecting a ' ' or '/' at position %d in line %s",
-		 line[offsets[i]], offsets[i], line);
-    line[offsets[i]] = '\t';
     }
 }
 
@@ -625,7 +596,6 @@ void pfamDatWritePfamFile(struct pfamDat *pfamDat, char *fileName)
 {
 
 FILE *out = mustOpen(fileName,"w");
-int i;
 int nameWidth = 15, descWidth=38;
 struct pfamHit *pHit = NULL;
 struct pfamDHit *pDHit = NULL;

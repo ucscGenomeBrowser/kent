@@ -16,7 +16,6 @@ int rowCount =0;
 int rowMax = 1000;
 char **rowNames = NULL;
 char **colNames = NULL;
-char *cleanName = NULL;
 struct hash *iHash = newHash(12);
 char buff[256];
 char *tmp;

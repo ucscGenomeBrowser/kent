@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: mm6.txt,v 1.1 2006/07/25 20:14:36 markd Exp $"
+#	"$Id: mm6.txt,v 1.2 2007/01/11 02:33:37 markd Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10249,3 +10249,10 @@ knownToVisiGene mm6
     rsync -a --progress \
           kkr1u00:/iscratch/i/mm6/split10k /san/sanvol1/scratch/mm6/
 
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna mm6

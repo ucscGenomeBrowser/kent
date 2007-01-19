@@ -5275,3 +5275,10 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
 
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna rn3

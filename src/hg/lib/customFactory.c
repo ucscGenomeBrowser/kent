@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.46 2006/12/15 19:02:08 aamp Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.49 2007/01/12 23:52:30 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -151,13 +151,19 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
 char *db = customTrackTempDb();
 /* running the single command:
  *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -allowStartEqualEnd
- *	    -tmpDir=../trash/ct -allowStartEqualEnd
+ *	    -tmpDir=/data/tmp -allowStartEqualEnd
  *		-maxChromNameLength=${nameLength} stdin
  */
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/hgLoadBed", "-verbose=0", "-noNameIx", "-ignoreEmpty", 
 	"-allowStartEqualEnd", NULL, NULL, NULL, NULL, "stdin", NULL};
-dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
@@ -290,7 +296,9 @@ if (wordCount > 7)
 	 ((bed->thickEnd < bed->chromStart) ||
 	  (bed->thickEnd > bed->chromEnd)))
 	 lineFileAbort(lf, 
-	     "thickEnd out of range (chromStart to chromEnd, or 0 if no CDS)");
+	     "thickEnd out of range for %s:%d-%d, thick:%d-%d (chromStart to chromEnd, or 0 if no CDS)",
+		       bed->name, bed->chromStart, bed->chromEnd,
+		       bed->thickStart, bed->thickEnd);
      }
 else
      bed->thickEnd = bed->chromEnd;
@@ -812,7 +820,7 @@ static struct pipeline *wigLoaderPipe(struct customTrack *track)
 /*	Run the two commands in a pipeline:
  *	loader/wigEncode -verbose=0 -wibSizeLimit=300000000 stdin stdout \
  *	    ${wibFile} | \
- *	loader/hgLoadWiggle -verbose=0 -tmpDir=../trash/ct \
+ *	loader/hgLoadWiggle -verbose=0 -tmpDir=/data/tmp \
  *	    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
  *	    -pathPrefix=. ${db} ${table} stdin
  */
@@ -820,12 +828,18 @@ char *db = customTrackTempDb();
 struct dyString *tmpDy = newDyString(0);
 char *cmd1[] = {"loader/wigEncode", "-verbose=0", "-wibSizeLimit=300000000", 
 	"stdin", "stdout", NULL, NULL};
-char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", NULL, NULL, NULL,
-    NULL, NULL, NULL, "stdin", NULL};
+char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", NULL, NULL, NULL, NULL,
+	NULL, NULL, "stdin", NULL};
 char **cmds[] = {cmd1, cmd2, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+
 cmd1[5] = track->wibFile;
 
-dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd2[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
@@ -1059,8 +1073,9 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 *retB = atoi(row[2]);
 }
 
-void customTrackUpdateFromSettings(struct customTrack *track, 
-                                        char *line, int lineIx)
+static void customTrackUpdateFromSettings(struct customTrack *track, 
+				   char *line, int lineIx,
+				   boolean getMaxChromName)
 /* replace settings in track with those from new track line */
 {
 char *pLine = line;
@@ -1166,7 +1181,7 @@ if ((val = hashFindVal(hash, "offset")) != NULL)
     track->offset = atoi(val);
 if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
-else
+else if (getMaxChromName)
     track->maxChromName = hGetMinIndexLength();
 //uglyf("<BR>track: %s</BR>", line);
 if (!strstr(line, "tdbType"))
@@ -1232,7 +1247,7 @@ char *line;
 struct slName *browserLines = NULL;
 while (lineFileNextReal(lf, &line))
     if (startsWithWord("track", line))
-        customTrackUpdateFromSettings(ct, line, 1);
+        customTrackUpdateFromSettings(ct, line, 1, TRUE);
     else if (startsWithWord("browser", line))
         slNameAddTail(&browserLines, line);
     else
@@ -1269,7 +1284,8 @@ for (bl = ctBrowserLines(ct); bl != NULL; bl = bl->next)
 return (dyStringCannibalize(&ds));
 }
 
-struct customTrack *trackLineToTrack(char *line, int lineIx)
+static struct customTrack *trackLineToTrack(char *line, int lineIx,
+					    boolean getMaxChromName)
 /* Convert a track specification line to a custom track structure. */
 {
 /* Make up basic track with associated tdb.  Fill in settings
@@ -1278,7 +1294,7 @@ struct customTrack *track;
 AllocVar(track);
 struct trackDb *tdb = customTrackTdbDefault();	
 track->tdb = tdb;
-customTrackUpdateFromSettings(track, line, lineIx);
+customTrackUpdateFromSettings(track, line, lineIx, getMaxChromName);
 return track;
 }
 
@@ -1375,7 +1391,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     //char *type = NULL;
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx);
+	track = trackLineToTrack(line, cpp->fileStack->lineIx, TRUE);
         }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
@@ -1385,7 +1401,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
                         "track name='%s' description='%s'",
                         CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack( defaultLine, 1);
+        track = trackLineToTrack( defaultLine, 1, TRUE);
         customPpReuse(cpp, line);
 	}
     else
@@ -1406,7 +1422,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     /* Database tracks already mostly loaded, just check that table 
      * still exists (they are removed when not accessed for a while). */
         {
-	if (!ctDbTableExists(ctConn, track->dbTableName))
+	if (!ctConn || !ctDbTableExists(ctConn, track->dbTableName))
 	    continue;
 	track->wiggle = startsWith("wig ", track->tdb->type);
 	oneList = track;
@@ -1484,12 +1500,14 @@ for (track = trackList; track != NULL; track = track->next)
         {
         /* save item count and first item because if track is 
          * loaded to the database, the bedList will be available next time */
-        char buf[32];
-        safef(buf, sizeof buf, "%d", slCount(track->bedList));
-        ctAddToSettings(track, "itemCount", cloneString(buf));
-        safef(buf, sizeof buf, "%s:%d-%d", track->bedList->chrom,
+        struct dyString *ds = dyStringNew(0);
+        dyStringPrintf(ds, "%d", slCount(track->bedList));
+        ctAddToSettings(track, "itemCount", cloneString(ds->string));
+        dyStringClear(ds);
+        dyStringPrintf(ds, "%s:%d-%d", track->bedList->chrom,
                 track->bedList->chromStart, track->bedList->chromEnd);
-        ctAddToSettings(track, "firstItemPos", cloneString(buf));
+        ctAddToSettings(track, "firstItemPos", cloneString(ds->string));
+        dyStringFree(&ds);
         }
     char *setting = browserLinesToSetting(browserLines);
     if (setting)
@@ -1503,6 +1521,94 @@ if (retBrowserLines != NULL)
 customPpFree(&cpp);
 sqlDisconnect(&ctConn);
 return trackList;
+}
+
+void customFactoryTestExistence(char *fileName, boolean *retGotLive,
+				boolean *retGotExpired)
+/* Test existence of custom track fileName.  If it exists, parse it just 
+ * enough to tell whether it refers to database tables and if so, whether 
+ * they are alive or have expired. */
+{
+struct customTrack *trackList = NULL, *track = NULL;
+char *line = NULL;
+struct sqlConnection *ctConn = NULL;
+boolean dbTrack = ctDbUseAll();
+
+if (!fileExists(fileName))
+    {
+    if (retGotExpired)
+	*retGotExpired = TRUE;
+    return;
+    }
+
+struct lineFile *lf = customLineFile(fileName, TRUE);
+
+/* wrap a customPp object around it. */
+struct customPp *cpp = customPpNew(lf);
+lf = NULL;
+
+if (dbTrack)
+    ctConn = sqlCtConn(TRUE);
+
+/* Loop through this once for each track. */
+while ((line = customPpNextReal(cpp)) != NULL)
+    {
+    /* Parse out track line and save it in track var.
+     * First time through make up track var from thin air
+     * if no track line. Find out explicit type setting if any.
+     * Also make sure settingsHash is set up. */
+    lf = cpp->fileStack;
+
+    if (startsWithWord("track", line))
+        {
+	track = trackLineToTrack(line, cpp->fileStack->lineIx, FALSE);
+        }
+    else if (trackList == NULL)
+	/* In this case we handle simple files with a single track
+	 * and no track line. */
+        {
+        char defaultLine[256];
+        safef(defaultLine, sizeof defaultLine, 
+	      "track name='%s' description='%s'",
+	      CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
+        track = trackLineToTrack(defaultLine, 1, FALSE);
+        customPpReuse(cpp, line);
+	}
+    else
+        {
+	errAbort("Expecting 'track' line, got %s\nline %d of %s",
+		 line, lf->lineIx, lf->fileName);
+	}
+    assert(track);
+
+    /* don't verify database for custom track -- we might be testing existence 
+     * for another database. */
+
+    if (track->dbDataLoad)
+	/* Track was loaded into the database -- check if it still exists. */
+        {
+	if (ctConn && ctDbTableExists(ctConn, track->dbTableName))
+	    {
+	    if (retGotLive)
+		*retGotLive = TRUE;
+	    }
+	else
+	    {
+	    if (retGotExpired)
+		*retGotExpired = TRUE;
+	    }
+	}
+    else
+	/* Track data in this file -- definitely live, no need to read it. */
+	{
+	if (retGotLive)
+	    *retGotLive = TRUE;
+	break;
+	}
+    slAddHead(&trackList, track);
+    }
+customPpFree(&cpp);
+sqlDisconnect(&ctConn);
 }
 
 char *ctInitialPosition(struct customTrack *ct)

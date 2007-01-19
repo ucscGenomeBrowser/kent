@@ -50,7 +50,7 @@ struct column
 /* A column in the big table. The central data structure for
  * hgNear. */
    {
-   /* Data set during initialization that is guaranteed to be in each track.  */
+   /* Data set during initialization that is guaranteed to be in each column.  */
    struct column *next;		/* Next column. */
    char *name;			/* Column name, not allocated here. */
    char *shortLabel;		/* Column label. */
@@ -62,8 +62,8 @@ struct column
    char *itemUrl;		/* printf formatted URL string for linking.
                                  * May be NULL.  Should contain one %s, which
 				 * get's filled in with whatever cellVal
-				 * return. */
-   char *itemUrlQuery;		/* sql query does lookup from cellVal
+				 * returns. */
+   char *itemUrlQuery;		/* SQL query. Does lookup from cellVal
     				 * to the desired value to use in itemUrl in
 				 * place of cellVal */
    boolean useHgsid;		/* Add hgsid= to itemUrl? */
@@ -85,7 +85,7 @@ struct column
 
    void (*cellPrint)(struct column *col, struct genePos *gp, 
    	struct sqlConnection *conn);
-   /* Print one cell of this column.  Note that gp->chrom may be 
+   /* Print one cell of this column in HTML.  Note that gp->chrom may be 
     * NULL legitimately. */
 
    void (*labelPrint)(struct column *col);

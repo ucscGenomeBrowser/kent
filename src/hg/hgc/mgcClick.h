@@ -17,5 +17,9 @@ void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId);
 
 void doMgcGenes(struct trackDb *tdb, char *acc);
 /* Process click on a mgcGenes track. */
+
+void doOrfeomeGenes(struct trackDb *tdb, char *acc);
+/* Process click on a orfeomeGenes track. */
+
 #endif
 

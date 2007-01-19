@@ -14,7 +14,7 @@
 #include "jksql.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.63 2006/12/15 18:48:02 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.64 2007/01/08 23:32:28 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -171,6 +171,11 @@ char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
 char query[512];
+
+if (isEmpty(sessionOwner))
+    errAbort("Please go back and enter a wiki user name for this session.");
+if (isEmpty(sessionName))
+    errAbort("Please go back and enter a session name to load.");
 
 safef(query, sizeof(query), "SELECT shared, contents FROM %s "
       "WHERE userName = '%s' AND sessionName = '%s';",

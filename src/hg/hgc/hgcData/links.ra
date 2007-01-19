@@ -77,11 +77,6 @@ dataId mrna
 dataLink OMIM
 dataLinkCol 2
 
-name BTKbase
-label BTKbase
-url http://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=full;mut=%s
-acc yes
-
 name EntrezGene
 label Entrez Gene
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
@@ -96,3 +91,589 @@ name EnsemblMouseGene
 label Ensembl Mouse GeneView
 url http://www.ensembl.org/Mus_musculus/geneview?db=core;gene=%s
 acc yes
+ 
+name HGMD
+label HGMD
+url http://www.hgmd.cf.ac.uk/ac/gene.php?gene=%s
+acc yes
+
+name LOVD
+label LOVD
+url http://www.dmd.nl/nmdb/search.php?select_db=%s
+acc yes
+
+name PubMed
+label PubMed
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=%s
+acc yes
+
+name BTKbase
+label BTKbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=BTK;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name ADAbase
+label ADAbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=ADA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name AICDAbase
+label AICDAbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=AICDA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name AIREbase
+label AIREbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=AIRE;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name AP3B1base
+label AP3B1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=AP3B1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C1QAbase
+label C1QAbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C1QA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C1QBbase
+label C1QBbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C1QB;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C1QGbase
+label C1QGbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C1QG;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C1Sbase
+label C1Sbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C1S;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C2base
+label C2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C3base
+label C3base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C3;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C5base
+label C5base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C5;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C6base
+label C6base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C6;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C7base
+label C7base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C7;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C8Bbase
+label C8Bbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C8B;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name C9base
+label C9base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=C9;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CASP10base
+label CASP10base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CASP10;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CASP8base
+label CASP8base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CASP8;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD19base
+label CD19base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CD19;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD247base
+label CD247base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CD247;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD3Dbase
+label CD3Dbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CD3D;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD40base
+label CD40base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CD40;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD55base
+label CD55base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CD55;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD8Abase
+label CD8Abase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CD8A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CEBPEbase
+label CEBPEbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CEBPE;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CFDbase
+label CFDbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CFD;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CFHbase
+label CFHbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CFH;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CFIbase
+label CFIbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CFI;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CIITAbase
+label CIITAbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CIITA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CTSCbase
+label CTSCbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CTSC;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CXCR4base
+label CXCR4base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CXCR4;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CYBAbase
+label CYBAbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CYBA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CYBBbase
+label CYBBbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=CYBB;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name DCLRE1Cbase
+label DCLRE1Cbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=DCLRE1C;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name DKC1base
+label DKC1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=DKC1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name DNMT3Bbase
+label DNMT3Bbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=DNMT3B;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name ELA2base
+label ELA2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=ELA2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name FASLGbase
+label FASLGbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=FASLG;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name FCGR1Abase
+label FCGR1Abase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=FCGR1A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name FCGR3Abase
+label FCGR3Abase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=FCGR3A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name FOXN1base
+label FOXN1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=FOXN1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name FOXP3base
+label FOXP3base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=FOXP3;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name GFI1base
+label GFI1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=GFI1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IFNGR1base
+label IFNGR1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IFNGR1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IFNGR2base
+label IFNGR2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IFNGR2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IGHG2base
+label IGHG2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IGHG2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IGHMbase
+label IGHMbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IGHM;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IGLL1base
+label IGLL1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IGLL1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IL12Bbase
+label IL12Bbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IL12B;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IL12RB1base
+label IL12RB1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IL12RB1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IL2RAbase
+label IL2RAbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IL2RA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IL7Rbase
+label IL7Rbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IL7R;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IRAK4base
+label IRAK4base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=IRAK4;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name ITGB2base
+label ITGB2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=ITGB2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name JAK3base
+label JAK3base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=JAK3;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name LIG1base
+label LIG1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=LIG1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name LIG4base
+label LIG4base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=LIG4;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name LYSTbase
+label LYSTbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=LYST;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name MASP2base
+label MASP2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=MASP2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name MLPHbase
+label MLPHbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=MLPH;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name MPObase
+label MPObase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=MPO;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name MRE11Abase
+label MRE11Abase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=MRE11A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name MYO5Abase
+label MYO5Abase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=MYO5A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name NCF1base
+label NCF1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=NCF1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name NHEJ1base
+label NHEJ1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=NHEJ1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name NPbase
+label NPbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=NP;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name PFCbase
+label PFCbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=PFC;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name PRF1base
+label PRF1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=PRF1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name PTPRCbase
+label PTPRCbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=PTPRC;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RAB27Abase
+label RAB27Abase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RAB27A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RAC2base
+label RAC2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RAC2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RAG1base
+label RAG1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RAG1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RAG2base
+label RAG2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RAG2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RFX5base
+label RFX5base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RFX5;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RFXANKbase
+label RFXANKbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RFXANK;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name RFXAPbase
+label RFXAPbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=RFXAP;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SBDSbase
+label SBDSbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=SBDS;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SERPING1base
+label SERPING1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=SERPING1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SLC35C1base
+label SLC35C1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=SLC35C1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SMARCAL1base
+label SMARCAL1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=SMARCAL1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SP110base
+label SP110base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=SP110;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SPINK5base
+label SPINK5base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=SPINK5;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name STAT1base
+label STAT1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=STAT1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name STAT5Bbase
+label STAT5Bbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=STAT5B;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name STX11base
+label STX11base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=STX11;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TAP1base
+label TAP1base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TAP1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TAP2base
+label TAP2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TAP2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TAZbase
+label TAZbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TAZ;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TCN2base
+label TCN2base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TCN2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TMC6base
+label TMC6base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TMC6;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TMC8base
+label TMC8base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TMC8;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name UNC13Dbase
+label UNC13Dbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=UNC13D;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TNFRSF13Bbase
+label TNFRSF13Bbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=TNFRSF13B;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name WASbase
+label WASbase
+url http://bioinf.uta.fi/xml/fetch.xml?gene=WAS;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name ZAP70base
+label ZAP70base
+url http://bioinf.uta.fi/xml/fetch.xml?gene=ZAP70;view=full;mut=%s
+acc yes
+needsEncoded yes
+

@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1262 2007/01/02 16:22:33 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1265 2007/01/16 07:16:12 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6512,6 +6512,43 @@ tg->itemColor = encodeRnaColor;
 tg->itemNameColor = encodeRnaColor;
 }
 
+Color ncRnaColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of ncRna track item. */
+{
+char condStr[255];
+char *rnaType;
+Color color = {MG_GRAY};  /* Set default to gray */
+struct rgbColor hAcaColor = {0, 128, 0}; /* darker green, per request by Weber */
+Color hColor;
+struct sqlConnection *conn;
+char *name;
+
+conn = hAllocConn();
+hColor = vgFindColorIx(vg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
+
+name = tg->itemName(tg, item);
+sprintf(condStr, "name='%s'", name);
+rnaType = sqlGetField(conn, database, "ncRna", "type", condStr);
+
+if (sameWord(rnaType, "miRNA"))    color = MG_RED;
+if (sameWord(rnaType, "misc_RNA")) color = MG_BLACK;
+if (sameWord(rnaType, "snRNA"))    color = MG_BLUE;
+if (sameWord(rnaType, "snoRNA"))   color = MG_MAGENTA;
+if (sameWord(rnaType, "rRNA"))     color = MG_CYAN;
+if (sameWord(rnaType, "scRNA"))    color = MG_YELLOW;
+if (sameWord(rnaType, "Mt_tRNA"))  color = MG_GREEN;
+if (sameWord(rnaType, "Mt_rRNA"))  color = hColor;
+
+hFreeConn(&conn);
+return(color);
+}
+
+void ncRnaMethods(struct track *tg)
+/* Make track for ncRna. */
+{
+tg->itemColor = ncRnaColor;
+}
+
 Color wgRnaColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of wgRna track item. */
 {
@@ -12706,6 +12743,7 @@ registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
+registerTrackHandler("vegaNew", vegaMethods);
 registerTrackHandler("pseudoGeneLink", retroGeneMethods);
 registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo", retroGeneMethods);
@@ -12718,6 +12756,7 @@ registerTrackHandler("flyBaseNoncoding", flyBaseGeneMethods);
 registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
+registerTrackHandler("ensGeneNonCoding", ensGeneMethods);
 registerTrackHandler("ensEst", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
@@ -12746,6 +12785,7 @@ registerTrackHandler("wabaCbr", cbrWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("encodeRna", encodeRnaMethods);
 registerTrackHandler("wgRna", wgRnaMethods);
+registerTrackHandler("ncRna", ncRnaMethods);
 registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);

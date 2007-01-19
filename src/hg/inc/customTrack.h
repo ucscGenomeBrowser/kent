@@ -162,4 +162,10 @@ void customTrackHandleLift(struct customTrack *ctList);
 boolean customTracksExist(struct cart *cart, char **retCtFileName);
 /* determine if there are any custom tracks.  Cleanup from expired tracks */
 
+boolean ctConfigUpdate(char *filename);
+/* CT update is needed if database has been enabled since
+ * the custom tracks in this file were created.  The only way to check is
+ * by file mod time, unless we add the enable time to
+ * browser metadata somewhere */
+
 #endif

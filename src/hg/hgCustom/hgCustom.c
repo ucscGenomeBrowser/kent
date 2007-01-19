@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.111 2006/12/18 22:46:02 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.112 2007/01/08 22:55:03 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1054,7 +1054,7 @@ else
 	addWarning(dsWarn, warn);
         ctUpdated = TRUE;
 	}
-    if (ctUpdated)
+    if (ctUpdated || ctConfigUpdate(ctFileName))
         customTracksSaveCart(cart, ctList);
     warn = dyStringCannibalize(&dsWarn);
     if (ctList || cartVarExists(cart, hgCtDoDelete))

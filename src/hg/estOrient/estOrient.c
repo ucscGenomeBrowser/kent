@@ -15,11 +15,15 @@ static struct optionSpec optionSpecs[] =
 {
     {"chrom", OPTION_STRING|OPTION_MULTI},
     {"keepDisoriented", OPTION_BOOLEAN},
+    {"disoriented", OPTION_STRING},
+    {"inclVer", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
-struct slName *gChroms = NULL;
-boolean gKeepDisoriented = FALSE;
+static struct slName *gChroms = NULL;
+static boolean gKeepDisoriented = FALSE;
+static boolean gInclVer = FALSE;
+static char *gDisoriented = NULL;
 
 void usage(char *msg, ...)
 /* usage msg and exit */
@@ -39,23 +43,59 @@ errAbort("\n%s",
          "   -chrom=chr - process this chromosome, maybe repeated\n"
          "   -keepDisoriented - don't drop ESTs where orientation can't\n"
          "    be determined.\n"
+         "   -disoriented=psl - output ESTs that where orientation can't\n"
+         "    be determined to this file.\n"
+         "   -inclVer - add NCBI version number to accession if not already\n"
+         "    present.\n"
          );
 }
 
-int cDnaReadDirection(struct sqlConnection *conn, char *acc)
+/* cache of information about current EST from gbCdnaInfo. */
+static char gbCacheAcc[32];
+static int gbCacheDir = -1;   // read directory, -1 if unknown
+static int gbCacheVer = -1;   // version, or -1 if unknown
+
+static void gbCacheLoad(struct sqlConnection *conn, char *acc)
+/* load cache for gbCdnaInfo */
+{
+safecpy(gbCacheAcc, sizeof(gbCacheAcc), acc);
+gbCacheDir = -1;
+gbCacheVer = -1;
+char query[512];
+safef(query, sizeof(query), "select version, direction from gbCdnaInfo where acc='%s'", acc);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    gbCacheVer = sqlSigned(row[0]);
+    gbCacheDir = sqlSigned(row[1]);
+    }
+sqlFreeResult(&sr);
+}
+static void gbCacheNeed(struct sqlConnection *conn, char *acc)
+/* load cache with acc if not already loaded */
+{
+if (!sameString(acc, gbCacheAcc))
+    gbCacheLoad(conn, acc);
+}
+
+static int cDnaReadDirection(struct sqlConnection *conn, char *acc)
 /* Return the direction field from the gbCdnaInfo table for accession
    acc. Return -1 if not in table.*/
 {
-int direction = -1;
-char query[512];
-char buf[64], *s = NULL;
-safef(query, sizeof(query), "select direction from gbCdnaInfo where acc='%s'", acc);
-if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
-    direction = sqlSigned(s);
-return direction;
+gbCacheNeed(conn, acc);
+return gbCacheDir;
 }
 
-struct hash *loadOrientation(struct sqlConnection *conn, char *chrom)
+static int cDnaVersion(struct sqlConnection *conn, char *acc)
+/* Return the version field from the gbCdnaInfo table for accession
+   acc. Return -1 if not in table.*/
+{
+gbCacheNeed(conn, acc);
+return gbCacheVer;
+}
+
+static struct hash *loadOrientation(struct sqlConnection *conn, char *chrom)
 /* load data from estOrientInfo table for chrom. */
 {
 struct hash *orientHash = hashNew(23);
@@ -75,7 +115,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 return orientHash;
 }
 
-struct estOrientInfo *findOrientInfo(struct hash *orientHash, struct psl *psl)
+static struct estOrientInfo *findOrientInfo(struct hash *orientHash, struct psl *psl)
 /* search for an orientInfo object for a psl. */
 {
 /* can be multiple entries for a name, find overlap */
@@ -90,8 +130,8 @@ while (hel != NULL)
 return NULL;
 }
 
-int getOrient(struct sqlConnection *conn, struct hash *orientHash,
-                  struct psl *est)
+static int getOrient(struct sqlConnection *conn, struct hash *orientHash,
+                     struct psl *est)
 /* get orientation of an EST, or 0 if unknown */
 {
 int orient = 0;
@@ -109,8 +149,25 @@ if (orient == 0)
 return orient;
 }
 
-void processEst(struct sqlConnection *conn, struct hash *orientHash,
-                struct psl *est, FILE *outPslFh)
+static void addVersion(struct sqlConnection *conn, struct psl *est)
+/* update the qName field of a psl to have the version (unless it already
+ * has it */
+{
+if (strchr(est->qName, '.') == NULL)
+    {
+    int ver = cDnaVersion(conn, est->qName);
+    if (ver >= 0)
+        {
+        char newQName[32];
+        safef(newQName, sizeof(newQName), "%s.%d", est->qName, ver);
+        est->qName = needMoreMem(est->qName, 0, strlen(newQName)+1);
+        strcpy(est->qName, newQName);
+        }
+    }
+}
+
+static void processEst(struct sqlConnection *conn, struct hash *orientHash,
+                       struct psl *est, FILE *outPslFh, FILE *disorientedFh)
 /* adjust orientation of an EST and output */
 {
 int orient = getOrient(conn, orientHash, est);
@@ -118,12 +175,21 @@ if ((orient != 0) || gKeepDisoriented)
     {
     if (orient < 0)
         est->strand[0] = ((est->strand[0] == '+') ? '-' : '+');
+    if (gInclVer)
+        addVersion(conn, est);
     pslTabOut(est, outPslFh);
+    }
+else if (disorientedFh != NULL)
+    {
+    if (gInclVer)
+        addVersion(conn, est);
+    pslTabOut(est, disorientedFh);
     }
 }
 
-void orientEstsChrom(struct sqlConnection *conn, struct sqlConnection *conn2,
-                     char *chrom, char *estTable, FILE *outPslFh)
+static void orientEstsChrom(struct sqlConnection *conn, struct sqlConnection *conn2,
+                            char *chrom, char *estTable, FILE *outPslFh,
+                            FILE *disorientedFh)
 /* orient ESTs on one chromsome */
 {
 struct pslReader *pr;
@@ -132,20 +198,26 @@ struct hash *orientHash = loadOrientation(conn, chrom);
 
 pr = pslReaderChromQuery(conn, estTable, chrom, NULL);
 while ((psl = pslReaderNext(pr)) != NULL)
-    processEst(conn2, orientHash, psl, outPslFh);
+    {
+    processEst(conn2, orientHash, psl, outPslFh, disorientedFh);
+    pslFree(&psl);
+    }
 
 pslReaderFree(&pr);
 hashFree(&orientHash);
 }
 
-void estOrient(char *db, char *estTable, char *outPslFile)
+static void estOrient(char *db, char *estTable, char *outPslFile)
 /* convert ESTs so that orientation matches directory of transcription */
 {
 struct sqlConnection *conn = sqlConnectReadOnly(db);
 struct sqlConnection *conn2 = sqlConnectReadOnly(db);
-FILE * outPslFh = mustOpen(outPslFile, "w");
 struct slName *chroms = NULL;
 struct slName *chrom;
+FILE * outPslFh = mustOpen(outPslFile, "w");
+FILE *disorientedFh = NULL;
+if (gDisoriented != NULL)
+    disorientedFh = mustOpen(gDisoriented, "w");
 
 if (gChroms != NULL)
     chroms = gChroms;
@@ -154,20 +226,27 @@ else
 slNameSort(&chroms);
 
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)
-    orientEstsChrom(conn, conn2, chrom->name, estTable, outPslFh);
+    orientEstsChrom(conn, conn2, chrom->name, estTable, outPslFh, disorientedFh);
 
 sqlDisconnect(&conn);
 sqlDisconnect(&conn2);
+carefulClose(&disorientedFh);
 carefulClose(&outPslFh);
 }
+
 int main(int argc, char *argv[])
 /* Process command line */
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("wrong # of args:");
+ZeroVar(&gbCacheAcc);
 gChroms = optionMultiVal("chrom", NULL);
 gKeepDisoriented = optionExists("keepDisoriented");
+gDisoriented = optionVal("disoriented", NULL);
+gInclVer = optionExists("inclVer");
+if (gKeepDisoriented && (gDisoriented != NULL))
+    errAbort("can't specify both -keepDisoriented and -disoriented");
 
 estOrient(argv[1], argv[2], argv[3]);
 return 0;

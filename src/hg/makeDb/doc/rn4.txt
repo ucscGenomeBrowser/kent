@@ -4422,3 +4422,44 @@ mysql> select count(*), exception from snp125Exceptions group by exception;
 +----------+---------------------------+
 
 
+##########################################################################
+#  xxBlastTab - Help filter out unwanted paralogs  (Galt 2007-01-11)
+#
+# We are starting with xxBlastTab tables already built in the usual way with
+# blastall/blastp, probably with doHgNearBlastp.pl script.
+#
+# we want to update rn4 for human and mouse, 
+# so check ./hgGeneData/Rat/rn4/otherOrgs.ra for current settings
+
+ssh hgwdev
+
+synBlastp.csh rn4 hg18 
+#rn4.hgBlastTab:
+#new number of unique query values:
+#7379
+#new number of unique target values
+#6373
+#old number of unique query values:
+#7977
+#old number of unique target values
+#6657
+
+synBlastp.csh rn4 mm8
+#rn4.mmBlastTab:
+#new number of unique query values:
+#7397
+#new number of unique target values
+#6502
+#old number of unique query values:
+#7988
+#old number of unique target values
+#6788
+
+
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna rn4

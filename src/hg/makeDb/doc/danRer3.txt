@@ -7927,6 +7927,10 @@ exit 0
 # UPDATE ARRAY DATA TRACK AFTER PROCESSING ARRAY DATA DIFFERENTLY AND
 # RELOADING INTO hgFixed (see hgFixed.txt for details).
 # (DONE, 2006-10-20, hartera)
+# UPDATE ARRAY DATA TRACK AFTER REPROCESSING ARRAY DATA TO ANTILOG THE LOG2
+# VALUES FROM NORMALISATION TO GET THE ABSOLUTE VALUES AND
+# RELOADING INTO hgFixed (see hgFixed.txt for details).
+# (DONE, 2007-01-08, hartera)
 # Array data is for whole embryos of five wild type zebrafish strains. 
 # Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
 # Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
@@ -7939,12 +7943,15 @@ exit 0
     # from the track controls on the track description page. Also set up the
     # Zebrafish microarrayGroups.ra so that the Medians of replicates or
     # Means of replicates can also be selected for display.
- 
+    # Create mapped data in zebrafishZonWT.bed.
+    rm zebrafishZonWT.bed
+    hgsql -e 'drop table affyZonWildType;' danRer3
     hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTAllRatio \
          /cluster/data/danRer3/bed/affyZebrafish/affyZebrafish.psl
     # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
     # Mapped 14494,  multiply-mapped 4102, missed 0, unmapped 1123
 
+    # Load mapped data into database:
     hgLoadBed danRer3 affyZonWildType zebrafishZonWT.bed
     # Loaded 18596 elements of size 15
     # add trackDb.ra entry at trackDb/zebrafish level
@@ -7956,7 +7963,7 @@ exit 0
     sort ratioExps.out | uniq -c > ratioExps.uniq.count
     textHistogram -binSize=0.5 -real -maxBinCount=40 -minVal=-10 \
         ratioExps.out > expRatios.hist
-    # Most values are between -6 and +3.
+    # Most values are between -3 and +2.
     # Therefore use the following trackDb entry:
 
 # track affyZonWildType
@@ -7966,7 +7973,7 @@ exit 0
 # priority 80
 # visibility hide
 # type expRatio
-# expScale 3.0
+# expScale 2.0
 # expStep 0.2
 # groupings affyZonWildTypeGroups
     # The .ra file in /usr/local/apache/cgi-bin/hgCgiData/Zebrafish
@@ -8247,3 +8254,10 @@ exit 0
     hgsql -h genome-testdb hgcentraltest \
 	-e "update dbDb set orderKey = 451 where name = 'danRer3';"
 
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer3

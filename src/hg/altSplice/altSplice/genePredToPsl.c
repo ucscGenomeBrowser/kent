@@ -78,7 +78,7 @@ else
 void pslListFromGenePred(struct genePred *gpList, FILE *out) 
 {
 struct genePred *gp = NULL;
-struct psl *psl=NULL, *pslList = NULL;
+struct psl *psl=NULL;
 for(gp=gpList; gp != NULL; gp=gp->next)
     {
     int size = chromSize(gp->chrom);

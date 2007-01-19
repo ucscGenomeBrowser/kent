@@ -645,7 +645,8 @@ fr1 #	146655780 bases of 446627861 (32.836%) in intersection
 on fr1 #	148005715 bases of 315518167 (46.909%) in intersection
 
 #######################################################################
-## BLASTZ oryLat1 chrUn contigs/scaffolds only (WORKING - 2006-12-20 - Hiram)
+## BLASTZ oryLat1 chrUn contigs/scaffolds only (DONE - 2006-12-20 - Hiram)
+##  This was an experiment, not used
     ssh kkstore05
     mkdir /cluster/data/gasAcu1/bed/blastz.oryLat1.Un.2006-12-20
     cd /cluster/data/gasAcu1/bed/blastz.oryLat1.Un.2006-12-20
@@ -706,11 +707,11 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-blastzOutRoot /cluster/bluearc/gasAcu1OryLat1 \
 	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
-XXX - Running 2006-12-20 15:15
 
 #######################################################################
 ## BLASTZ Stickleback chroms vs Medaka random contigs
 ##	(DONE - 2006-12-20 - Hiram)
+##	This was an experiment, not used
     ssh kkstore05
     mkdir /cluster/data/gasAcu1/bed/blastz.oryLat1.ChrUn.2006-12-20
     cd /cluster/data/gasAcu1/bed/blastz.oryLat1.ChrUn.2006-12-20
@@ -756,16 +757,6 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1Un \
 	-bigClusterHub=kk > do.log 2>&1 &
-XXX - Running 2006-12-20 16:57
-real    48m28.199s
-user    0m0.071s
-sys     0m0.053s
-    #	It claims one job failed, but I don't see that ?  Continuing:
-    time doBlastzChainNet.pl -verbose=2 DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-blastzOutRoot /cluster/bluearc/gasAcu1ChrOryLat1Un \
-	-continue=cat -bigClusterHub=kk > cat.log 2>&1 &
 
 #######################################################################
 ## BLASTZ Stickleback chroms vs Medaka chroms and random contigs
@@ -832,6 +823,7 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 ## 7-Way Multiz (DONE - 2006-12-22 - Hiram)
+##  replaced by 8-Way done below
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/multiz7way
     cd /cluster/data/gasAcu1/bed/multiz7way
@@ -1018,7 +1010,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
     /cluster/bin/phast/draw_tree -b -s treeImage.nh > treeImage.ps
 
 ############################################################################
-# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (WORKING - 2006-12-22 - Hiram)
+# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2006-12-22 - Hiram)
+##  replaced by 8-Way done below
     ssh kolossus
     mkdir /cluster/data/gasAcu1/bed/multiz7way/anno
     cd /cluster/data/gasAcu1/bed/multiz7way/anno
@@ -1049,4 +1042,998 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
     time ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
     tail -f jobs.log
-    #	real    102m8.005s
+    #	real    19m20.705s
+    #	user    7m11.818s
+    #	sys     11m31.508s
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz7way/anno/maf
+    mkdir -p /gbdb/gasAcu1/multiz7way/anno/maf
+    ln -s /cluster/data/gasAcu1/bed/multiz7way/anno/maf/*.maf \
+      /gbdb/gasAcu1/multiz7way/anno/maf
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/gasAcu1/multiz7way/anno/maf gasAcu1 multiz7way
+    #	Loaded 2269386 mafs in 23 files from /gbdb/gasAcu1/multiz7way/anno/maf
+    #	real    0m52.053s
+    #	user    0m35.608s
+    #	sys     0m3.762s
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kolossus
+    cd /cluster/data/gasAcu1/bed/multiz7way/anno/maf
+    time cat *.maf | \
+    	nice -n +19 hgLoadMafSummary gasAcu1 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 -test multiz7waySummary stdin
+
+#######################################################################
+## BLASTZ Stickleback chroms vs chicken chroms and random contigs
+##	(DONE - 2006-12-28 - 2007-01-05 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28
+    cd /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28
+    cat << '_EOF_' > DEF
+# Stickleback chroms vs. Chicken random contigs
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    
+# TARGET: Stickleback gasAcu1 no chrUn sequence, only chroms
+#	The largest is 32 million bases, there are 22 of them
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal3 chroms and randoms in contigs
+#	The largest chrom is 200M bases, the largest contig 122,228
+#	The smallest chrom is 1028 bases, smallest contig 54 bases
+#	there are 25,991 chroms and contig pieces
+#	total size 1,089,690,673 bases
+#	47107538 N's 1042583135 real 834274605 upper 208308530 lower
+SEQ2_DIR=/san/sanvol1/scratch/galGal3/galGal3.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/galGal3/galGal3.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/galGal3/galGal3.randomContigs.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/galGal3/galGal3.randomContigs.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/galGal3/randomContigs.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/gasAcu1ChrGalGal3ChrUn \
+	-bigClusterHub=pk > do.log 2>&1 &
+    #	real    53m30.713s
+    #	failed during the load step due to difficulties on hgwdev
+    #	continuing 2007-01-02
+    cd axtChain
+    ./loadUp.csh
+    cd ..
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-smallClusterHub=pk \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/gasAcu1ChrGalGal3ChrUn \
+	-continue=download -bigClusterHub=pk > download.log 2>&1 &
+
+    #	And, to swap:
+    mkdir /cluster/data/galGal3/bed/blastz.gasAcu1.swap
+    cd /cluster/data/galGal3/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/DEF \
+	-smallClusterHub=pk \
+        -chainMinScore=2000 -chainLinearGap=loose \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	failed on the net step:
+# HgStepManager: executing step 'net'.
+# netChains: looks like previous stage was not successful
+#	(can't find [galGal3.gasAcu1.]all.chain[.gz]).
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/DEF \
+	-smallClusterHub=pk \
+        -chainMinScore=2000 -chainLinearGap=loose \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -continue=net -swap -bigClusterHub=pk > net_swap.log 2>&1 &
+    #	real    7m11.286s
+
+    featureBits gasAcu1 chainGalGal3Link > fb.gasAcu1.chainGalGal2Link.txt 
+    #	37154459 bases of 446627861 (8.319%) in intersection
+    featureBits galGal3 chainGasAcu1Link > fb.galGal3.chainGasAcu1Link.txt
+    #	32781658 bases of 1042591351 (3.144%) in intersection
+
+    #  Adding the chrUn result from the galGal3 swapped alignments
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/axtChain
+    chainSplit chain gasAcu1.galGal3.all.chain.gz
+    cp -p ../../blastz.galGal3.swap/axtChain/chain/chrUn.chain chain/chrUn.chain
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/axtChain/chain
+    hgLoadChain gasAcu1 chrUn_chainGalGal3 chrUn.chain
+    Loading 13904 chains into gasAcu1.chrUn_chainGalGal3
+
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/blastz.galGal3.2006-12-28/axtChain/chain
+    chainMergeSort *.chain | gzip -c > ../gasAcu1.galGal3.all.chain.gz
+    #	This changes the IDs, but nothing else
+    #	reusing the existing netChains with some alterations
+    cp netChains.csh netChainsUn.csh
+    #	fixup the reference to chrom.sizes and the 2bit file in this script
+    #	and running it after moving existing items out of the way
+
+
+#########################################################################
+## 8-Way Multiz (DONE - 2007-01-02 - 2007-01-05 - Hiram)
+##  re-done with new chrUn.maf 2007-01-13 - Hiram
+    ssh hgwdev
+    mkdir /cluster/data/gasAcu1/bed/multiz9way
+    cd /cluster/data/gasAcu1/bed/multiz9way
+
+    /cluster/bin/phast/tree_doctor --prune chimp_panTro2,macaque_rheMac2,rat_rn4,rabbit_oryCun1,cow_bosTau2,dog_canFam2,armadillo_dasNov1,elephant_loxAfr1,tenrec_echTel1,monodelphis_monDom4,xenopus_xenTro2 17way.nh
+
+    #	use the output of that to manually construct this tree.
+    #	Arbitrarily set 0.2 distances for this added branch
+    #	All other distances remain as specified in the 17way.nh
+
+    cat << '_EOF_' > 8way.nh
+(((human_hg18:0.054922,mouse_mm8:0.412790):0.475049,
+	chicken_galGal3:0.454691):0.279364,
+  (((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.2,
+    (stickleback_gasAcu1:0.2,medaka_oryLat1:0.2):0.2):0.292961,
+	zebrafish_danRer4:0.782561):0.156067);
+'_EOF_'
+    # << happy emacs
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/gasAcu1_8way.gif
+
+    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    #	Use this output to create the table below
+    grep -y gasAcu1 8way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                           chainGasAcu1Link  chain linearGap
+#    distance                      on gasAcu1    on other   minScore
+#  1  0.4000 - medaka oryLat1      (% 38.308) (% 27.044)       2000     loose
+#  2  0.7994 - tetraodon tetNig1   (% 42.044) (% 50.004)       5000     loose
+#  3  0.8399 - fugu fr1            (% 35.925) (% 49.909)       2000     loose
+#  4  1.4755 - zebrafish danRer4   (% 35.163) (% 13.104)       5000     loose
+#  6  1.5831 - chicken galGal3     (%  9.181) (%  3.144)       2000     loose
+#  7  1.6584 - human hg18          (% 11.353) (%  1.923)       2000     loose
+#  8  2.0162 - mouse mm8           (% 11.070) (%  2.056)       2000     loose
+
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    #	bash shell syntax here ...
+    export H=/cluster/data/gasAcu1/bed
+    mkdir mafLinks
+    for G in oryLat1 tetNig1 fr1 danRer4 galGal3 hg18 mm8
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore05
+    mkdir /san/sanvol1/scratch/gasAcu1/multiz8way
+    cd /san/sanvol1/scratch/gasAcu1/multiz8way
+    time rsync -a --copy-links --progress \
+	/cluster/data/gasAcu1/bed/multiz8way/mafLinks/ .
+
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/gasAcu1/bed/multiz8way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = gasAcu1
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz8way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz8way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    awk '{print $1}' /cluster/data/gasAcu1/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 23 jobs
+    para try ... check ... push ... etc ...
+# Completed: 23 of 23 jobs
+# CPU time in finished jobs:      10916s     181.93m     3.03h    0.13d  0.000 y
+# IO & Wait Time:                   130s       2.17m     0.04h    0.00d  0.000 y
+# Average job time:                 480s       8.00m     0.13h    0.01d
+# Longest finished job:            1109s      18.48m     0.31h    0.01d
+# Submission to last job:          1109s      18.48m     0.31h    0.01d
+
+    #	combine results into a single file for loading and gbdb reference
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    time catDir maf > multiz8way.maf
+    #	real    0m10.186s
+    #	makes an 1.7 Gb file:
+    #	-rw-rw-r--  1 1728277662 Jan 13 15:35 multiz8way.maf
+
+    #	Create per-chrom individual maf files for downloads
+    #	NOT NECESSARY HERE - DONE LATER WITH THE ANNOTATED MAFS
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    mkdir mafDownloads
+    time for M in maf/chr*.maf
+    do
+	B=`basename $M`
+	cp -p ${M} mafDownloads/${B}
+	gzip mafDownloads/${B}
+	echo ${B} done
+    done
+    #	real    5m9.273
+
+    #	deliver to downloads *!* NOT NECESSARY HERE - DONE LATER WITH
+    #		THE ANNOTATED MAFS
+    ssh hgwdev
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/mafDownloads \
+	/usr/local/apache/htdocs/goldenPath/gasAcu1/multiz8way
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    mkdir /gbdb/gasAcu1/multiz8way
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/multiz8way.maf \
+	/gbdb/gasAcu1/multiz8way
+    time nice -n +19 hgLoadMaf gasAcu1 multiz8way
+    #	Loaded 1989046 mafs in 1 files from /gbdb/gasAcu1/multiz8way
+    #	real    0m47.121s
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 gasAcu1 multiz8waySummary multiz8way.maf
+    #	Created 775687 summary blocks from 6070904 components
+    #		and 2047322 mafs from multiz8way.maf
+    #	real    1m0.331s
+
+    #	Create tree image for details page
+    #	You can get a better image from the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    # cp 8way.nh treeImage.nh
+    #	Edit treeImage.nh to make the names as desired
+    #	Submit this treeImage.nh to the phyloGif program, or:
+    # /cluster/bin/phast/draw_tree -b -s treeImage.nh > treeImage.ps
+
+############################################################################
+# ANNOTATE MULTIZ8WAY MAF AND LOAD TABLES (DONE - 2007-01-05 - Hiram)
+##  re-done with new chrUn.maf 2007-01-13 - Hiram
+    ssh kolossus
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/anno
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    ln -s  /cluster/data/gasAcu1/chrom.sizes gasAcu1.len
+    #	This were done before during the 7-way
+    # twoBitInfo -nBed /cluster/data/gasAcu1/gasAcu1.sdTrf.{2bit,N.bed}
+    ln -s  /cluster/data/gasAcu1/gasAcu1.sdTrf.N.bed gasAcu1.bed
+    for DB in `cat /cluster/data/gasAcu1/bed/multiz8way/species.lst`
+    do
+      echo gasAcu1.bed  >> nBeds
+      echo gasAcu1.len  >> sizes
+      echo $DB
+    done
+
+    echo '#!/bin/csh -ef' > jobs.csh
+    echo date >> jobs.csh
+    # do smaller jobs first so you can see some progress immediately:
+    for F in `ls -1rS ../../maf/*.maf`
+    do
+     echo mafAddIRows -nBeds=nBeds -sizes=sizes $F \
+      /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit ../maf/`basename $F` >> jobs.csh
+     echo "echo $F" >> jobs.csh
+    done 
+    echo date >> jobs.csh
+    chmod +x jobs.csh
+    time nice -n +19 ./jobs.csh > jobs.log 2>&1 &
+    #	to watch progress;
+    real    18m9.059stail -f jobs.log
+real    18m9.059s
+
+    #	real    21m36.340s
+    #	user    4m39.482s
+    #	sys     16m0.538s
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
+    mkdir -p /gbdb/gasAcu1/multiz8way/anno/maf
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/anno/maf/*.maf \
+      /gbdb/gasAcu1/multiz8way/anno/maf
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/gasAcu1/multiz8way/anno/maf gasAcu1 multiz8way
+    #	Loaded 2387915 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
+    #	real    1m7.974s
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kolossus
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
+    time cat *.maf | \
+    	nice -n +19 hgLoadMafSummary gasAcu1 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 -test multiz8waySummary stdin
+    #	Created 323476 summary blocks from 6070904 components
+    #	and 2387915 mafs from stdin
+    #	real    1m26.098s
+
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
+    sed -e 's/mafSummary/multiz8waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz8waySummary.sql
+    time nice -n +19 hgLoadSqlTab gasAcu1 multiz8waySummary \
+	/tmp/multiz8waySummary.sql multiz8waySummary.tab
+    #	real    0m4.668
+
+#########################################################################
+# MULTIZ8WAY DOWNLOADABLES (DONE - 2007-01-05 - Hiram)
+##  re-done with new chrUn.maf 2007-01-13 - Hiram
+    # Annotated MAF is now documented, so use anno/maf for downloads/
+    ssh hgwdev
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/mafDownloads
+    cd /cluster/data/gasAcu1/bed/multiz8way
+
+    # upstream mafs 
+    #	There isn't any refGene table, trying ensGene instead
+    time for S in 1000 2000 5000
+    do
+        echo "making upstream${S}.maf"
+        nice -n +19 featureBits gasAcu1 ensGene:upstream:${S} \
+		-fa=/dev/null -bed=up.bad
+        awk -F'\t' \
+'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
+		up.bad > up.bed
+        rm up.bad
+        nice -n +19 mafFrags gasAcu1 multiz8way up.bed upstream${S}.maf \
+                -orgs=species.lst
+        rm up.bed
+	nice -n +19 gzip -c upstream${S}.maf \
+	    > mafDownloads/ensGene.upstream${S}.maf.gz
+	rm -f upstream${S}.maf
+    done > mafFrags.log 2>&1 &
+    #	to monitor progress:
+    tail -f mafFrags.log
+    #	real    1m23.682s
+
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    time for M in anno/maf/chr*.maf
+    do
+	B=`basename $M`
+	nice -n +19 gzip -c ${M} > mafDownloads/${B}.gz
+	echo ${B}.gz done
+    done
+    #	real    6m0.132s
+
+    cd mafDownloads
+    nice -n +19 md5sum *.maf.gz > md5sum.txt
+    # Make a README.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/gasAcu1/multiz8way
+    cd /usr/local/apache/htdocs/goldenPath/gasAcu1/multiz8way
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/mafDownloads/{*.gz,*.txt} .
+
+#######################################################################
+# MULTIZ8WAY MAF FRAMES (DONE - 2007-01-10 - Hiram)
+##  re-done with new chrUn.maf 2007-01-13 - Hiram
+    ssh hgwdev
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/frames
+    cd /cluster/data/gasAcu1/bed/multiz8way/frames
+    # The following is adapted from the mm8 sequence
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes:
+    mkdir genes
+    for qDB in danRer4 tetNig1
+    do
+      tmpExt=`mktemp temp.XXXXXX`
+      tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
+      tmpMrna=${qDB}.mrna.${tmpExt}
+      tmpCds=${qDB}.cds.${tmpExt}
+      echo $qDB
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       ${qDB} > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
+        stdout \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    # using ensGene for gasAcu1 oryLat1
+    for qDB in danRer4 galGal3
+    do
+	geneTbl=refGene
+      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-100 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    # using knownGene for mm8 hg18
+    # using genscan for tetNig1
+    # using ensGene for gasAcu1, oryLat1 and fr1
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm8 hg18 gasAcu1 oryLat1 fr1
+    for qDB in tetNig1
+    do
+      if [ $qDB = "gasAcu1" -o $qDB = "oryLat1" -o $qDB = "fr1" ]; then
+        geneTbl=ensGene
+      elif [ $qDB = "tetNig1" ]; then
+        geneTbl=genscan
+      else
+        geneTbl=knownGene
+      fi
+      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    ###
+    
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way/frames
+    mv mafFrames/ mafFrames.old
+    time cat ../maf/*.maf | nice -n +19 genePredToMafFrames gasAcu1 stdin stdout gasAcu1 genes/gasAcu1.gp.gz oryLat1 genes/oryLat1.gp.gz fr1 genes/fr1.gp.gz tetNig1 genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz galGal3 genes/galGal3.gp.gz mm8 genes/mm8.gp.gz hg18 genes/hg18.gp.gz | gzip > multiz8way.mafFrames.gz
+    #	real    1m7.299s
+
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way/frames
+    time nice -n +19 hgLoadMafFrames gasAcu1 multiz8wayFrames \
+	multiz8way.mafFrames.gz
+    #	real    0m32.220s
+
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS
+#		(WORKING - 2007-01-10 - Hiram)
+
+# Estimate phastCons parameters
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/cons
+    cd /cluster/data/gasAcu1/bed/multiz8way/cons
+
+    twoBitToFa -seq=chrIV ../../../gasAcu1.sdTrf.2bit chrIV.fa
+    # Create a starting-tree.mod based on chrIV (the largest one)
+    time /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chrIV.maf \
+	--refseq ./chrIV.fa --in-format MAF \
+	--windows 100000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	26 seconds
+
+    time /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+--tree "(((hg18,mm8),galGal3),(((tetNig1,fr1),(gasAcu1,oryLat1)),danRer4))" \
+    --out-root starting-tree
+    #	Fitting tree model to s1.1-32632948.ss using REV ...
+    #	Writing model to starting-tree.mod ...
+    #	real    4m10.820s
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.449
+    #	This 0.449 is used in the --gc argument below
+
+    # Create SS files on san filesystem
+    #	Using a size of 10,000,000 to slow down the phastCons pk jobs
+    ssh kkstore05
+    mkdir -p  /san/sanvol1/scratch/gasAcu1/cons/ss
+    cd  /san/sanvol1/scratch/gasAcu1/cons/ss
+    time for C in `awk '{print $1}' /cluster/data/gasAcu1/chrom.sizes`
+    do
+      if [ -s /cluster/data/gasAcu1/bed/multiz8way/maf/${C}.maf ]; then
+	mkdir -p ${C}
+	mkdir -p /cluster/data/gasAcu1/bed/multiz8way/cons/${C}
+	echo msa_split $C
+	twoBitToFa -seq=${C} /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit \
+		/cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/gasAcu1/bed/multiz8way/maf/${C}.maf \
+	    --refseq /cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa \
+	    --in-format MAF --windows 10000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+      fi
+    done &
+    #	real    6m34.278s
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    cd /san/sanvol1/scratch/gasAcu1/cons/ss
+    ls -1l chr*/chr*.ss | grep -v Un | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/gasAcu1/bed/multiz8way/cons/starting-tree.mod \
+      --gc 0.449 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-length 12 --target-coverage 0.01 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	<< happy emacs
+    chmod a+x makeTree.csh
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+./makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 47 of 47 jobs
+# CPU time in finished jobs:      66398s    1106.64m    18.44h    0.77d  0.002 y
+# IO & Wait Time:                   246s       4.09m     0.07h    0.00d  0.000 y
+# Average job time:                1418s      23.63m     0.39h    0.02d
+# Longest finished job:            2097s      34.95m     0.58h    0.02d
+# Submission to last job:          2097s      34.95m     0.58h    0.02d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh pk
+    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ave.cons.mod > cons_summary.txt 2>&1 &
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/gasAcu1/bed/multiz8way/cons
+
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    #	never stops with the --NH argument
+    time /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.7834 \
+	0.10 12 ave.{cons,noncons}.mod
+## 0.01 12 does not convert, trying without --NH
+Transition parameters: gamma=0.010000, omega=12.000000, mu=0.083333, nu=0.000842
+Relative entropy: H=1.012920 bits/site
+Expected min. length: L_min=15.386530 sites
+Expected max. length: L_max=10.103812 sites
+Phylogenetic information threshold: PIT=L_min*H=15.585327 bits
+
+## 0.10 12
+# ( Solving for new omega: 12.000000 7.303911 5.603783 4.937054 4.700330 4.651391 4.648962 4.648956 )
+
+# Transition parameters: gamma=0.100000, omega=12.000000, mu=0.083333, nu=0.009259
+# Relative entropy: H=1.200128 bits/site
+# Expected min. length: L_min=9.375672 sites
+# Expected max. length: L_max=6.463613 sites
+# Phylogenetic information threshold: PIT=L_min*H=11.252009 bits
+# Recommended expected length: omega=4.648956 sites (for L_min*H=9.783400)
+
+## 0.17 12
+# ( Solving for new omega: 12.000000 10.568744 10.445646 10.444628 )
+
+# Trans parameters: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=1.267443 bits/site
+# Expected min. length: L_min=7.976979 sites
+# Expected max. length: L_max=5.664374 sites
+# Phylogenetic information threshold: PIT=L_min*H=10.110368 bits
+# Recommended expected length: omega=10.444628 sites (for L_min*H=9.783400)
+
+    /cluster/bin/phast/$MACHTYPE/consEntropy .17 12 \
+                        ave.cons.mod ave.noncons.mod
+Transition parameters: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+Relative entropy: H=1.253111 bits/site
+Expected min. length: L_min=8.076184 sites
+Expected max. length: L_max=5.736142 sites
+Phylogenetic information threshold: PIT=L_min*H=10.120357 bits
+
+#Transition parameters:gamma=0.100000, omega=12.000000, mu=0.083333, nu=0.009259
+# Relative entropy: H=1.454874 bits/site
+# Required length: N=7.596943 sites
+# Total entropy: NH=11.052595 bits
+
+    #	SKIP to here passing by the tuning numbers
+    ssh pk
+    # Create cluster dir to do main phastCons run
+    mkdir /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    mkdir ppRaw bed
+
+    # Create script to run phastCons with right parameters
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cat > doPhast << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ../ave.{cons,noncons}.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-length 12 --target-coverage 0.01 --quiet \
+	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.{cons,noncons}.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+./doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+    #	These jobs are very fast and very I/O intensive, even on the san
+    #	they will hang it up as they work at full tilt.
+# Completed: 58 of 58 jobs
+# CPU time in finished jobs:       1619s      26.98m     0.45h    0.02d  0.000 y
+# IO & Wait Time:                   373s       6.22m     0.10h    0.00d  0.000 y
+# Average job time:                  34s       0.57m     0.01h    0.00d
+# Longest finished job:              48s       0.80m     0.01h    0.00d
+# Submission to last job:            67s       1.12m     0.02h    0.00d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    #	The sed's and the sort get the file names in chrom,start order
+    #	You might like to verify it is correct by first looking at the
+    #	list it produces:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | less
+    #	if that looks right, then let it run:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	| /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved8Way.bed
+    #	~ 16 seconds
+    cp -p mostConserved8Way.bed /cluster/data/gasAcu1/bed/multiz8way
+
+    # Figure out how much is actually covered by the bed file as so:
+    #	Get the non-n genome size from faSize on all chroms:
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/multiz8way/cons
+    faSize chr*/*.fa
+    #	463354448 bases (16726587 N's 446627861 real 348847599
+    #	upper 97780262 lower) in 23 sequences in 23 files
+
+    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
+    #	1089350685 lower) in 34 sequences in 34 files
+
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    #	The 446627861 comes from the non-n genome as counted above.
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
+	mostConserved8Way.bed
+    #	% 8.36 = 100.0*37347218/446627861 --exp-len 12 --tar-cov 0.01
+    #	% 10.24 = 100.0*45733412/446627861 --exp-len 12 --tar-cov 0.10
+    #	% 11.45 = 100.0*51136218/446627861 --exp-len 12 --tar-cov 0.17
+
+    #	Aiming for %70 coverage in
+    #	the following featureBits measurement on CDS:
+    # Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits gasAcu1 \
+	-enrichment ensGene:cds mostConserved8Way.bed
+    #	--expected-length 12 --target-coverage 0.01
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 8.362%, both 3.628%, cover
+    #	54.82%, enrich 6.56x
+    #	--expected-length 12 --target-coverage 0.10
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 10.240%, both 3.920%, cover
+    #	59.24%, enrich 5.79x
+    #	--expected-length 12 --target-coverage 0.17
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 11.449%, both 4.092%, cover
+    #	61.84%, enrich 5.40x
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    time nice -n +19 hgLoadBed -strict gasAcu1 phastConsElements8way \
+	mostConserved8Way.bed
+    #	Loaded 810915 elements of size 5
+    #	real    0m18.333s
+
+    #	should measure the same as above
+    time nice -n +19 \
+	featureBits gasAcu1 -enrichment ensGene:cds phastConsElements8way
+    #	At: --expected-length 12 --target-coverage 0.10 result:
+    #	ensGene:cds 6.618%, phastConsElements8way 10.240%, both 3.920%, cover
+    #	59.24%, enrich 5.79x
+    #	At: --expected-length 12 --target-coverage 0.17 result:
+    #	ensGene:cds 6.618%, phastConsElements8way 11.449%,
+    #	both 4.092%, cover 61.84%, enrich 5.40x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh pk
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    # the sed business gets the names sorted by chromName, chromStart
+    #	so that everything goes in numerical order into wigEncode
+    #	This was verified above to be correct
+    time nice -n +19 find ./ppRaw -type f \
+	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	    | $HOME/bin/$MACHTYPE/wigEncode -noOverlap stdin \
+		phastCons8.wig phastCons8.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    3m39.548
+    #	-rw-rw-r--   1 296834860 Jan 14 15:27 phastCons8.wib
+    #	-rw-rw-r--   1  47569318 Jan 14 15:27 phastCons8.wig
+XXX down to here for 12 and 0.01 2007-01-14
+    time nice -n +19 cp -p phastCons8.wi? /cluster/data/gasAcu1/bed/multiz8way/
+    #	real    1m21.329s
+
+    #	prepare compressed copy of ascii data values for downloads
+    ssh pk
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun1
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons8Scores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons8Scores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+	    gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    18m15.212s
+
+    #	copy them for downloads
+    ssh kkstore04
+    #	this directory is actually a symlink from store9 to store8 to
+    #	avoid the data full problem on store9
+    mkdir /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores
+    cd /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores
+    cp -p  /san/sanvol1/scratch/gasAcu1/cons/consRun1/phastCons8Scores/* .
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/gasAcu1
+    ln -s /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores .
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    ln -s `pwd`/phastCons8.wib /gbdb/gasAcu1/wib/phastCons8.wib
+    time nice -n +19 hgLoadWiggle gasAcu1 phastCons8 phastCons8.wig
+    #	real    0m9.256s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/multiz8way
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=gasAcu1 phastCons8 > histogram.data 2>&1
+    #	real    0m30.744
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Stickleback gasAcu1 Histogram phastCons8 track"
+set xlabel " phastCons8 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+##############################################################################
+## Medaka oryLat1 swap (DONE - 2007-01-12 - Hiram)
+    ## And the swap
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.orylat1.swap
+    cd /cluster/data/gasAcu1/bed/blastz.orylat1.swap
+    time doBlastzChainNet.pl -verbose=2 -smallClusterHub=pk \
+	/cluster/data/oryLat1/bed/blastz.gasAcu1.2007-01-11/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
+
+    time doBlastzChainNet.pl -verbose=2 -smallClusterHub=pk \
+	/cluster/data/oryLat1/bed/blastz.gasAcu1.2007-01-11/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -swap -stop=net -bigClusterHub=pk > net-swap.log 2>&1 &
+    #	real    18m21.951s
+
+    ## Taking this chrUn chain result over to the other global result
+    ssh kkstore05
+    #	Note: previous result files temporarily moved out of the way
+    cd /cluster/data/gasAcu1/bed/blastz.oryLat1.2006-12-22/axtChain
+    chainSplit chain gasAcu1.oryLat1.all.chain.gz
+    cp -p ../../blastz.orylat1.swap/axtChain/chain/chrUn.chain ./chain
+    cd chain
+    chainMergeSort *.chain | gzip -c > ../gasAcu1.oryLat1.all.chain.gz
+    cd ..
+    rm -fr chain
+    #	they have new IDs
+    chainSplit chain gasAcu1.oryLat1.all.chain.gz
+    #	And then reusing the netChains.csh script, fixing up references
+    #	to the appropriate chrom.sizes and 2bit file for gasAcu1
+    cp netChains.csh netChainsUn.csh
+    time ./netChainsUn.csh
+    #	real    30m9.385s
+
+    ## reloading, reuse the load.csh script, fixup reference to correct
+    ##	chrom.sizes
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/blastz.oryLat1.2006-12-22/axtChain
+
+###########################################################################
+## SWAP FR1 BLASTZ (DONE - 2007-01-13 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/gasAcu1/bed/blastz.fr1.swap
+    cd /cluster/data/gasAcu1/bed/blastz.fr1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/fr1/bed/blastz.gasAcu1.2007-01-11/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    130m31.028s
+
+    ## Take that chrUn result into the primary fr1 blastz result
+    cd /cluster/data/gasAcu1/bed/blastz.fr1.2006-12-08/axtChain
+    chainSplit chain gasAcu1.fr1.all.chain.gz
+    cd chain
+    cp -p /cluster/data/gasAcu1/bed/blastz.fr1.swap/axtChain/chain/chrUn.chain .
+    chainMergeSort *.chain | gzip -c > ../gasAcu1.fr1.all.chain.gz
+    cd ..
+    chainSplit chain gasAcu1.fr1.all.chain.gz
+    #	And then reusing the netChains.csh script, fixing up references
+    #	to the appropriate chrom.sizes and 2bit file for gasAcu1
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/blastz.fr1.2006-12-08/axtChain
+    cp netChains.csh netChainsUn.csh
+    time ./netChainsUn.csh
+    #	real    122m36.719s
+    #  And then reloading these, reusing the loadUp.csh script, fixup
+    #	reference to chrom.sizes
+    cp loadUp.csh reLoad.csh
+    time ./reLoad.csh > reLoad.out 2>&1
+    #	real    3m38.799s
+    #	After moving previous stuff out of the way
+    ./makeMd5sum.csh
+    ./installDownloads.csh

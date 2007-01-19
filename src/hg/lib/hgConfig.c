@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.14 2006/03/19 18:14:33 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.15 2007/01/08 22:54:37 kate Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -118,4 +118,12 @@ char *val = cfgOption(name);
 if (val == NULL)
     errAbort("%s doesn't exist in hg.conf file", name);
 return val;
+}
+
+unsigned long cfgModTime()
+/* Return modification time of config file */
+{
+char filename[PATH_LEN];
+getConfigFile(filename);
+return fileModTime(filename);
 }

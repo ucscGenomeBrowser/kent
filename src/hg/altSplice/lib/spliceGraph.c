@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "spliceGraph.h"
 
-static char const rcsid[] = "$Id: spliceGraph.c,v 1.3 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: spliceGraph.c,v 1.4 2007/01/08 19:23:36 sugnet Exp $";
 
 struct spliceNode **_sgTmpLoadingArray = NULL;
 int _sgTmpLoadingArraySize = 0;
@@ -17,9 +17,8 @@ struct spliceNode *spliceNodeLoad(char **row)
 /* Load a spliceNode from row fetched with select * from spliceNode
  * from database.  Dispose of this with spliceNodeFree(). */
 {
+int sizeOne;
 struct spliceNode *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->edgeCount = sqlUnsigned(row[8]);
@@ -160,7 +159,7 @@ struct splicePath *splicePathLoad(char **row)
  * from database.  Dispose of this with splicePathFree(). */
 {
 struct splicePath *ret;
-int sizeOne,i;
+int i;
 char *s;
 
 AllocVar(ret);

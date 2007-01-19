@@ -135,41 +135,8 @@ EOF
 
 #########################################################################
 # BLASTZ/CHAIN/NET HG18 (Done Nov 09 2006 heather)
-# working in /cluster/data/felCat3 because /cluster/data/hg18 is 96% full
-# make this a link in /cluster/data/hg18
-    mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-11-09
-    cd /cluster/data/felCat3/bed/blastz.hg18.2006-11-09
-    cat << '_EOF_' > DEF
-
-BLASTZ_M=50
-
-# TARGET: Human Hg18
-# Can we use 2bit here?
-SEQ1_DIR=/scratch/hg/hg18/nib
-SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Cat felCat3 
-SEQ2_DIR=/san/sanvol1/scratch/felCat3/felCat3.2bit
-SEQ2_LEN=/san/sanvol1/scratch/felCat3/chrom.sizes
-# Maximum number of scaffolds that can be lumped together
-SEQ2_LIMIT=500
-SEQ2_CHUNK=30000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/felCat3/bed/blastz.hg18.2006-11-09
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << this line keeps emacs coloring happy
-    doBlastzChainNet.pl DEF \
-      -bigClusterHub pk
-      -chainMinScore=3000 -chainLinearGap=medium
-      -blastzOutRoot /cluster/bluearc/felCat3/blastz.hg18 >& do.log &
-    tail -f do.log
-
-    nice featureBits -chrom=chr1 hg18 chainFelCat3Link
-    # 86932463 bases of 224999719 (38.637%) in intersection
+# Do target = hg18 first because felCat3 is 200K scaffolds (documented in hg18.txt)
+# Then do swap
 
     mkdir /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap
     cd /cluster/data/felCat3/bed/blastz.hg18.2006-11-10.swap
@@ -178,8 +145,25 @@ TMPDIR=/scratch/tmp
     nice featureBits felCat3 chainHg18Link
     # 1014983843 bases of 1642698377 (61.788%) in intersection
 
-# TO DO: Adjust directory names based on convention
-    ln -s /cluster/data/felCat3/bed/blastz.hg18.2006-11-09 /cluster/data/hg18/bed/blastz.felCat3
+#########################################################################
+# BLASTZ/CHAIN/NET MM8 (Done Nov 09 2006 heather)
+# Do target = mm8 first (documented in mm8.txt)
+
+    mkdir /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap
+    cd /cluster/data/felCat3/bed/blastz.mm8.2006-11-15.swap
+    doBlastzChainNet.pl /cluster/data/felCat3/bed/blastz.mm8.2006-11-14/DEF -swap >& do.log &
+    nice featureBits felCat3 chainMm8Link
+    # 486204459 bases of 1642698377 (29.598%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET CANFAM2 (Done Nov 18 2006 heather)
+# Do target = canFam2 first (documented in canFam2.txt)
+
+    mkdir /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap
+    cd /cluster/data/felCat3/bed/blastz.canFam2.2006-11-18.swap
+    doBlastzChainNet.pl /cluster/data/felCat3/bed/blastz.canFam2.2006-11-16/DEF -swap >& do.log &
+    nice featureBits felCat3 chainCanFam2Link
+    # 1209933048 bases of 1642698377 (73.655%) in intersection
 
 
 #########################################################################
@@ -405,3 +389,33 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     featureBits felCat3 cpgIslandExt
     # 30893611 bases of 1642698377 (1.881%) in intersection
 
+#########################################################################
+# Build contigAcc table (DONE, Heather, Jan 2007)
+# I found the contig accessions at
+# http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=Nucleotide&cmd=Search&term=AANG01000001:AANG01817956[PACC]
+# They have a regular pattern:
+#   contig_0 --> AANG01000001
+#   contig_1 --> AANG01000002
+#   contig_817955 --> AANG01817956
+
+  ssh kkstore05
+  cd /cluster/data/felCat3
+  cat << '_EOF_' > contigAcc.csh
+
+#!/bin/tcsh
+set contig = 0
+set acc = 1000001
+while ($contig < 817956)
+    echo "contig_$contig\tAANG0$acc"
+    set contig=`expr $contig + 1`
+    set acc=`expr $acc + 1`
+end
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+  ./contigAcc.csh > contigAcc.out
+
+  ssh hgwdev
+  cd /cluster/data/felCat3
+  hgsql felCat3 < contigAcc.sql
+  hgsql -e 'load data local infile "contigAcc.out" into table contigAcc'

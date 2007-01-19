@@ -825,6 +825,55 @@ spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
 
+track cnp
+compositeTrack on
+shortLabel Structural Var
+longLabel Structural Variation
+group varRep
+priority 146
+visibility hide
+type bed 4 +
+
+    track cnpTuzun
+    subTrack cnp
+    shortLabel Tuzun Fosmids
+    longLabel Structural Variation identified by Fosmids (Tuzun)
+    noInherit on
+    type bed 4 .
+    priority 3
+
+    track delMccarroll
+    subTrack cnp
+    shortLabel McCarroll Dels
+    longLabel Deletions from Genotype Analysis (McCarroll)
+    noInherit on
+    type bed 4 .
+    priority 4
+
+    track delHinds
+    subTrack cnp
+    shortLabel Hinds Dels
+    longLabel Deletions from Haploid Hybridization Analysis (Hinds)
+    noInherit on
+    type bed 4 .
+    priority 5
+
+    track cnpLocke
+    subTrack cnp
+    shortLabel Locke 
+    longLabel Locke
+    noInherit on
+    type bed 4 +
+    priority 6
+
+    track cnpRedon
+    subTrack cnp
+    shortLabel Redon CNPs
+    longLabel Copy Number Polymorphisms from SNP and BAC microarrays (Redon)
+    noInherit on
+    type bed 6 .
+    priority 7
+
 track chainSelf
 shortLabel Self Chain 
 longLabel $Organism Chained Self Alignments
@@ -878,6 +927,16 @@ color 20,90,0
 type bed 6 +
 mafTrack multiz17way
 
+track ncRna
+shortLabel non-coding genes
+longLabel Ensembl Non-Protein-Coding Genes
+group genes
+priority 63.5
+color 150,0,0
+visibility hide
+type bed 8 +
+url http://www.ensembl.org/Homo_sapiens/geneview?gene=$$
+
 track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA snoRNAs, scaRNAs and microRNAs from snoRNABase and miRBase
@@ -930,6 +989,7 @@ termRegex [^[:space:]]+
 searchPriority 50
 
 searchTable wgRna
+searchTable ncRna
 searchMethod fuzzy
 searchType bed
 searchPriority 10
@@ -946,14 +1006,6 @@ scoreMax 1000
 spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
-
-track cnpRedon
-shortLabel Redon CNPs
-longLabel Copy Number Polymorphisms from SNP and BAC microarrays 
-priority 146
-group varRep
-visibility hide
-type bed 6 .
 
 track uc16
 shortLabel Ultra Conserved

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "exonGraph.h"
 
-static char const rcsid[] = "$Id: exonGraph.c,v 1.5 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: exonGraph.c,v 1.6 2007/01/08 19:23:36 sugnet Exp $";
 
 struct exonNode **_egTmpLoadingArray = NULL;
 int _egTmpLoadingArraySize = 0;
@@ -18,8 +18,7 @@ struct exonNode *exonNodeLoad(char **row)
  * from database.  Dispose of this with exonNodeFree(). */
 {
 struct exonNode *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->startCount = sqlUnsigned(row[12]);
@@ -278,7 +277,7 @@ struct exonPath *exonPathLoad(char **row)
  * from database.  Dispose of this with exonPathFree(). */
 {
 struct exonPath *ret;
-int sizeOne,i;
+int i;
 char *s;
 
 AllocVar(ret);

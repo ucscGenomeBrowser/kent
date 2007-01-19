@@ -2,12 +2,12 @@
 #include "snp125Ui.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.25 2006/12/01 01:09:02 heather Exp $";
+static char const rcsid[] = "$Id: snp125Ui.c,v 1.26 2007/01/04 22:57:52 heather Exp $";
 
 boolean snp125ExtendedNames = TRUE;
 
 float snp125AvHetCutoff = 0.0;
-int snp125WeightCutoff = 3;
+int snp125WeightCutoff = 1;
 
 /****** Some stuff for snp colors *******/
 

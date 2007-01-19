@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.312 2006/12/14 18:07:22 hartera Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.313 2007/01/03 23:43:52 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1627,7 +1627,7 @@ return desc;
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
 			   int chromEnd, char *sqlConstraints)
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
- * in the given range in table.
+ * in the given range in table.  If chromEnd is 0, omit the range (whole chrom).
  * WARNING: this does not use the bin column and maybe slower than you would like. */
 {
 struct dyString *query = newDyString(512);
@@ -1645,6 +1645,7 @@ boolean canDoUTR, canDoIntrons;
 boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
 char tStrand = '?', qStrand = '?';
 int i;
+boolean gotWhere = FALSE;
 
 /* Caller can give us either a full table name or root table name. */
 hParseTableName(table, rootName, parsedChrom);
@@ -1694,13 +1695,25 @@ if (sameString("tStarts", hti->startsField))
     dyStringAppend(query, ",tSize");
 else
     dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
-dyStringPrintf(query, " FROM %s WHERE %s < %d AND %s > %d",
-	       fullTableName,
-	       hti->startField, chromEnd, hti->endField, chromStart);
+dyStringPrintf(query, " FROM %s", fullTableName);
+if (chromEnd != 0)
+    {
+    dyStringPrintf(query, " WHERE %s < %d AND %s > %d",
+		   hti->startField, chromEnd, hti->endField, chromStart);
+    gotWhere = TRUE;
+    }
 if (hti->chromField[0] != 0)
-    dyStringPrintf(query, " AND %s = '%s'", hti->chromField, chrom);
+    {
+    dyStringPrintf(query, " %s %s = '%s'",
+		   (gotWhere ? "AND" : "WHERE"), hti->chromField, chrom);
+    gotWhere = TRUE;
+    }
 if (useSqlConstraints)
-    dyStringPrintf(query, " AND %s", sqlConstraints);
+    {
+    dyStringPrintf(query, " %s %s",
+		   (gotWhere ? "AND" : "WHERE"), sqlConstraints);
+    gotWhere = TRUE;
+    }
 
 sr = sqlGetResult(conn, query->string);
 

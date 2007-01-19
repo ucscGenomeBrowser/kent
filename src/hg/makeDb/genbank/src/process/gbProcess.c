@@ -49,7 +49,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.17 2006/10/07 20:47:16 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.18 2007/01/10 05:10:08 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -987,6 +987,22 @@ for (gmd = gbMiscDiffVals; gmd != NULL; gmd = gmd->next, iDiff++)
 
 }
 
+boolean isOrfeomeClone()
+/* determine if this is an ORFeome clone from the keyword field */
+{
+return (gbKeywordsField->val != NULL) && containsStringNoCase(gbKeywordsField->val->string, "orfeome");
+}
+
+void hackOrfeomeClone()
+/* Make edits to ORFEome clone entries due to problematic submissions to
+ * genbank.  Change ORFeome clones that were entered as molecule type DNA
+ * to mRNA. */
+{
+struct keyVal *kv = kvtGet(kvt, "mol");
+if (kv != NULL)
+    kv->val = "mRNA";
+}
+
 char *findSyntheticTarget()
 /* for a synthetic sequence, attempt to find the targete organism.  This was
  * added to support the ORFeome clones.  In general, there is no simple way to
@@ -1009,8 +1025,6 @@ if (synOrgBuf->stringSize > 0)
 else
     return NULL;
 }
-
-
 
 void writePepSeq()
 /* If information is available, write the peptide sequence and
@@ -1157,6 +1171,8 @@ parseMiscDiffs();
 
 if (startsWith("synthetic construct", gbOrganismField->val->string))
     synOrg = findSyntheticTarget();
+if (isOrfeomeClone())
+    hackOrfeomeClone();
 
 /* for refseqs, we only keep NM_ */
 if (gbGuessSrcDb(accession) == GB_REFSEQ)

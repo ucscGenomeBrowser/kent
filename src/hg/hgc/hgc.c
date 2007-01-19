@@ -113,6 +113,7 @@
 #include "jaxQTL.h"
 #include "jaxQTL3.h"
 #include "wgRna.h"
+#include "ncRna.h"
 #include "gbProtAnn.h"
 #include "hgSeq.h"
 #include "chain.h"
@@ -189,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1177 2006/12/19 19:23:38 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1180 2007/01/16 23:26:20 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6543,6 +6544,7 @@ char *proteinID = NULL;
 char *ans;
 char *ensPep;
 char *chp;
+char *archive;
 
 /* shortItemName is the name without the "." + version */ 
 shortItemName = cloneString(itemName);
@@ -6557,7 +6559,7 @@ if (genomeStrEnsembl == NULL)
     }
 /* print URL that links to Ensembl transcript details */
 if (url != NULL && url[0] != 0)
-    printCustomUrl(tdb, itemName, TRUE);
+    printCustomUrlWithLabel(tdb, itemName, "Ensembl Gene Link", tdb->url, TRUE);
 else
     {
     printf("<B>Ensembl Gene Link: </B>");
@@ -6603,8 +6605,12 @@ if (hTableExists("superfamily"))
     if (proteinID != NULL)
         { 
         printf("<B>Ensembl Protein: </B>");
-        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-        genomeStrEnsembl,proteinID);
+        if  ((archive = trackDbSetting(tdb, "archive")) != NULL)
+            printf("<A HREF=\"http://%s.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+            archive, genomeStrEnsembl,proteinID);
+        else 
+            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+            genomeStrEnsembl,proteinID);
         printf("%s</A><BR>\n", proteinID);
 	}
 
@@ -6655,7 +6661,11 @@ if (hTableExists("ensGtp") && (proteinID == NULL))
     if (proteinID != NULL)
 	{ 
         printf("<B>Ensembl Protein: </B>");
-        printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
+        if  ((archive = trackDbSetting(tdb, "archive")) != NULL)
+            printf("<A HREF=\"http://%s.archive.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
+            archive, genomeStrEnsembl,proteinID);
+        else 
+            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
         printf("%s</A><BR>\n", proteinID);
 	}
     }
@@ -6683,7 +6693,7 @@ printf("<BR>\n");
 
 /* skip the rest if this gene is not in ensGene */
 sprintf(condStr, "name='%s'", item);
-if (sqlGetField(conn, database, "ensGene", "name", condStr) != NULL)
+if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
     {
     if (wordCount > 0)
     	{
@@ -12788,6 +12798,40 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doNcRna(struct trackDb *tdb, char *item)
+/* Handle click in ncRna track. */
+{
+struct ncRna *ncRna;
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = hAllocConn();
+int bedSize;
+
+genericHeader(tdb, item);
+bedSize = 8;
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s'", table, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    ncRna = ncRnaLoad(row);
+    printCustomUrlWithLabel(tdb, item, 
+			    "Ensembl Non-Coding Gene: ", 
+			    "http://www.ensembl.org/Homo_sapiens/geneview?gene=$$", TRUE);
+    printf("<B>RNA Type:</B> %s", ncRna->type);
+
+    printf("<BR>");
+    bed = bedLoadN(row+hasBin, bedSize);
+    bedPrintPos(bed, bedSize);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+}
+
 void doWgRna(struct trackDb *tdb, char *item)
 /* Handle click in wgRna track. */
 {
@@ -17082,7 +17126,11 @@ while ((row = sqlNextRow(sr)) != NULL)
             {
             char url[512];
             char *encodedAcc = cgiEncode(link->acc);
-            safef(url, sizeof(url), linktype, encodedAcc);
+            char *encode = hashFindVal(thisLink, "needsEncoded");
+            if (encode != NULL)
+                safef(url, sizeof(url), linktype, encodedAcc);
+            else
+                safef(url, sizeof(url), linktype, link->acc);
             if (sameString(link->displayVal, ""))
                 printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n", label, url, link->acc);
             else
@@ -17137,6 +17185,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printPos(mut->chrom, mut->chromStart, mut->chromEnd, strand, TRUE, mut->name);
     }
 sqlFreeResult(&sr);
+printf("*Note the DNA retrieved by the above link is the chromosome sequence.<br>");
 
 /* fetch and print the source */
 safef(query, sizeof(query),
@@ -17501,7 +17550,7 @@ else if (sameWord(track, "superfamily"))
     {
     doSuperfamily(tdb, item, NULL);
     }
-else if (sameWord(track, "ensGene"))
+else if (sameWord(track, "ensGene") || sameWord (track, "ensGeneNonCoding"))
     {
     doEnsemblGene(tdb, item, NULL);
     }
@@ -18039,6 +18088,10 @@ else if (sameWord(track, "jaxRepTranscript"))
 else if (sameWord(track, "wgRna"))
     {
     doWgRna(tdb, item);
+    }
+else if (sameWord(track, "ncRna"))
+    {
+    doNcRna(tdb, item);
     }
 else if (sameWord(track, "gbProtAnn"))
     {

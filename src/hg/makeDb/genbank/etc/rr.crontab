@@ -4,13 +4,14 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# sunday-thrusday load mRNAs
-# poll hourly 16:30 - 21:30
+# sun-thru late afternoon, load mRNAs
+# poll hourly 16:30 - 21:30, which is low usage period
 30 16-21 * * 0-4	/genbank/etc/rr-dbload
 
-# friday night and saturday, both mRNAs and ESTS
-# poll hourly fri 16:30-23:30, sat all day
+# fri late afternoon on, load mRNAs and ESTS
 30 16-23 * * 5	/genbank/etc/rr-dbload -inclEsts
-30 0-23 * * 6	/genbank/etc/rr-dbload -inclEsts
-# -extFileUpdate
+
+# sat, all day load mRNAs and ESTS
+# poll every 15 minutes
+0,15,30,45 0-23 * * 6	/genbank/etc/hgwbeta-dbload -inclEsts
 

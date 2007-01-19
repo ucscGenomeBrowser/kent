@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.14 2006/04/21 19:31:21 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.15 2007/01/03 23:45:00 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -460,9 +460,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 	    for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
 		{
 		char *chrom = chromPtr->name;
-		int chromSize = hChromSize(chrom);
-		struct bed *bedList = hGetBedRange(table, chrom, 0, chromSize,
-						   NULL);
+		struct bed *bedList = hGetBedRange(table, chrom, 0, 0, NULL);
 		if (hti->isSplit && isNotEmpty(hti->chromField))
 		    gotError |= checkSplitTableOnlyChrom(bedList, table, hti,
 							 tableChrom);

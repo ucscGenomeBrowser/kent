@@ -220,6 +220,9 @@ struct bed *altGraphGetExonCassette(struct altGraphX *ag, int eIx);
 int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx);
 /* count how many unique libraries or tissues contain a given edge */
 
+enum ggEdgeType altGraphXEdgeType(struct altGraphX *ag, int edge);
+/* Return edge type. */
+
 struct bed *altGraphXToBed(struct altGraphX *ag);
 /* Merge all overlapping exons to form bed datatype. Free with bedFree().*/
 

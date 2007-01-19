@@ -82,6 +82,12 @@ struct customTrack *customFactoryParse(char *text, boolean isFile,
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.*/
 
+void customFactoryTestExistence(char *fileName, boolean *retGotLive,
+				boolean *retGotExpired);
+/* Test existence of custom track fileName.  If it exists, parse it just 
+ * enough to tell whether it refers to database tables and if so, whether 
+ * they are alive or have expired. */
+
 /*  HACK ALERT - The table browser needs to be able to encode its wiggle
  *	data.  This function is temporarily global until a proper method
  *	is used to work this business into the table browser custom
@@ -120,10 +126,6 @@ char *ctGenome(struct customTrack *ct);
 
 char *ctOrigTrackLine(struct customTrack *ct);
 /* return initial setting by user for track line */
-
-void customTrackUpdateFromSettings(struct customTrack *track, 
-                                        char *line, int lineIx);
-/* replace settings in track with those from new track line */
 
 void customTrackUpdateFromConfig(struct customTrack *ct, char *config,
                                 struct slName **retBrowserLines);

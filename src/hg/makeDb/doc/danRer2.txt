@@ -5321,3 +5321,10 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
     hgsql -h genome-testdb hgcentraltest \
 	-e "update dbDb set orderKey = 452 where name = 'danRer2';"
 
+##########################################################################
+# GenBank gbMiscDiff table (markd 2007-01-10)
+# Supports `NCBI Clone Validation' section of mgcGenes details page
+
+   # genbank release 157.0 now contains misc_diff fields for MGC clones
+   # reloading mRNAs results in gbMiscDiff table being created.
+   ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer2

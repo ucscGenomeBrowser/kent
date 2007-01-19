@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.37 2006/11/29 19:50:08 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.38 2007/01/03 23:14:13 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -312,11 +312,18 @@ else
 	}
 }
 
-static int countBasesOverlap(struct bed *bedItem, Bits *bits, boolean hasBlocks)
+static int countBasesOverlap(struct bed *bedItem, Bits *bits, boolean hasBlocks,
+			     int chromSize)
 /* Return the number of bases belonging to bedItem covered by bits. */
 {
 int count = 0;
 int i, j;
+
+if (bedItem->chromStart < 0 || bedItem->chromEnd > chromSize)
+    errAbort("Item out of range [0,%d): %s %s:%d-%d",
+	     chromSize, (bedItem->name ? bedItem->name : ""),
+	     bedItem->chrom, bedItem->chromStart, bedItem->chromEnd);
+
 if (hasBlocks)
     {
     for (i=0;  i < bedItem->blockCount;  i++)
@@ -378,7 +385,7 @@ return(bedList);
 
 static struct bed *filterBedByOverlap(struct bed *bedListIn, boolean hasBlocks,
 				      char *op, int moreThresh, int lessThresh,
-				      Bits *bits)
+				      Bits *bits, int chromSize)
 {
 struct bed *intersectedBedList = NULL;
 struct bed *bed = NULL, *nextBed = NULL;
@@ -386,7 +393,7 @@ struct bed *bed = NULL, *nextBed = NULL;
  * enough to keep. */
 for (bed = bedListIn;  bed != NULL;  bed = nextBed)
     {
-    int numBasesOverlap = countBasesOverlap(bed, bits, hasBlocks);
+    int numBasesOverlap = countBasesOverlap(bed, bits, hasBlocks, chromSize);
     int length = 0;
     double pctBasesOverlap;
     nextBed = bed->next;
@@ -494,7 +501,8 @@ if (isBpWise)
     }
 else
     intersectedBedList = filterBedByOverlap(bedList1, hti1->hasBlocks, op,
-					    moreThresh, lessThresh, bits2);
+					    moreThresh, lessThresh, bits2,
+					    chromSize);
 bitFree(&bits2);
 lmCleanup(&lm2);
 return intersectedBedList;
@@ -615,7 +623,8 @@ else
 	struct bed *bedList1 = getRegionAsBed(db, table, region, filter,
 					      idHash, lm, retFieldCount);
 	bedMerged = filterBedByOverlap(bedList1, hti->hasBlocks, op,
-				       moreThresh, lessThresh, bits1);
+				       moreThresh, lessThresh, bits1,
+				       chromSize);
 	}
     bitFree(&bits1);
     bitFree(&bits2);

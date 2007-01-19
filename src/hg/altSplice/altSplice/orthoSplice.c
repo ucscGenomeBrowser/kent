@@ -38,7 +38,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.31 2005/01/27 18:26:25 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.32 2007/01/08 19:23:35 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -92,7 +92,7 @@ struct orthoAgReport
 
 static boolean doHappyDots;   /* output activity dots? */
 static char *altTable = "altGraphX";  /* Name of table to load splice graphs from. */
-static struct orthoAgReport *agReportList = NULL; /* List of reports. */
+//static struct orthoAgReport *agReportList = NULL; /* List of reports. */
 static unsigned int chromSize = 0; /* Size of chromosome. */
 static int trumpNum = BIGNUM;      /* If we seen an edge trumpNum times,
 			            * keep it even if it isn't conserved.*/
@@ -251,7 +251,7 @@ for (el = *pList; el != NULL; el = next)
 void orthoAgReportHeader(FILE *out)
 /** Output a header for the orthoAgReport fields. */
 {
-fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", 
+fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", 
 	"numVertexes", "vertexMap",  "ssSoftFound", "ssSoftMissing", "ssHardFound", 
 	"ssHardMissing", "ssDoubles", "ssVeryClose", "altEdges", "altEdgesFound");
 }
@@ -329,7 +329,7 @@ boolean isPossibleExon(struct altGraphX *ag, int v1, int v2, boolean strict)
 /* Return TRUE if this edge is supported by a possible exon from
    the possibleExon track. */
 {
-struct binElement *be = NULL, *beList = NULL;
+struct binElement *beList = NULL;
 int *vPos = ag->vPositions;
 struct bed *bed = NULL;
 if(getEdgeType(ag, v1, v2) != ggExon) 
@@ -632,7 +632,6 @@ boolean betterChain(struct chain *chain, int start, int end,
 /* Return TRUE if chain is a better fit than bestChain. If TRUE
    fill in bestChain and bestCover. */
 {
-struct chain *subChain=NULL, *toFree=NULL;
 int blocksCovered = 0;
 boolean better = FALSE;
 /* Check for easy case. */
@@ -683,8 +682,6 @@ void chainNetGetRange(char *db, char *netTable, char *chrom,
 		      struct chainNet **toFree)
 /* Load up the appropriate chainNet list for this range. */
 {
-struct cnFill *searchHi=NULL, *searchLo = NULL;
-struct slRef *refList = NULL, *ref = NULL;
 struct binElement *beList = NULL, *be = NULL;
 (*fill) = NULL;
 (*toFree) = NULL;
@@ -717,12 +714,7 @@ struct chain *chainForBlocks(char *db, char *netTable,
 			     int *blockStarts, int *blockSizes, int blockCount)
 /** Load the chain in the database for this position from the net track. */
 {
-char query[256];
-struct sqlResult *sr;
-char **row;
 struct cnFill *fill=NULL;
-struct cnFill *gap=NULL;
-struct chain *subChain=NULL, *toFree=NULL;
 struct chain *chain = NULL;
 struct chainNet *net = NULL;
 int bestOverlap = 0;
@@ -783,12 +775,7 @@ struct chain *chainForPosition(struct sqlConnection *conn, char *db, char *netTa
 			       char *chainFile, char *chrom, int start, int end)
 /** Load the chain in the database for this position from the net track. */
 {
-char query[256];
-struct sqlResult *sr;
-char **row;
 struct cnFill *fill=NULL;
-struct cnFill *gap=NULL;
-struct chain *subChain=NULL, *toFree=NULL;
 struct chain *chain = NULL;
 struct chainNet *net = chainNetLoadRange(db, netTable, chrom,
 					 start, end, NULL);
@@ -877,7 +864,6 @@ void makeVertexMap(struct altGraphX *ag, struct altGraphX *orthoAg, struct chain
 struct chain *subChain = NULL, *toFree = NULL;
 int qs = 0, qe = 0;
 struct orthoSpliceEdge *se = NULL;
-int i;
 for(se = seList; se != NULL; se = se->next)
     {
     chainSubsetOnT(chain, se->chromStart, se->chromEnd, &subChain, &toFree);    
@@ -942,7 +928,7 @@ struct chain *subChain = NULL, *toFree = NULL;
 int *vPos = ag->vPositions;
 int *orthoPos = orthoAg->vPositions;
 int bestOverlap = 0;
-int i=0,j=0;
+int i=0;
 int qs = 0, qe = 0;
 int oVCount = orthoAg->vertexCount;
 bool edge; 
@@ -987,7 +973,7 @@ struct chain *subChain = NULL, *toFree = NULL;
 int *vPos = ag->vPositions;
 int *orthoPos = orthoAg->vPositions;
 int bestOverlap = 0;
-int i=0,j=0;
+int i=0;
 int qs = 0, qe = 0;
 int oVCount = orthoAg->vertexCount;
 bool edge; 
@@ -1071,7 +1057,7 @@ AllocArray(ret->edgeTypes, eC);
 return ret;
 }
 
-void *freeCommonAg(struct altGraphX **ag)
+void freeCommonAg(struct altGraphX **ag)
 /** Free a common stub copied from another algGraphX */
 {
 struct altGraphX *el = *ag;
@@ -1151,7 +1137,6 @@ boolean moreEvidence(struct altGraphX *ag, bool **em, int vertex1, int vertex2)
 int i=0;
 int vC = ag->vertexCount;
 int vertex1Count = 0, vertex2Count =0;
-int edge = 0;
 struct evidence *ev = NULL, *evList = ag->evidence;
 for(i=0; i<vC; i++)
     {
@@ -1294,14 +1279,13 @@ void fillInReport(struct orthoAgReport *agRep, struct altGraphX *ag, bool **agEm
     - Alt-splicing found and missing.
 */
 {
-int i=0,j=0, k=0, vCount = ag->vertexCount;
-int eCount = 0;
+int i=0,j=0, vCount = ag->vertexCount;
 int *edgeSeen = NULL, *cEdgeSeen = NULL; /* Used to keep track of alt
 					  * splicing. If a vertex is
 					  * connected to more than one
 					  * thing then it is
 					  * alt-splicing. */
-struct orthoSpliceEdge *seList = NULL, *se = NULL;
+struct orthoSpliceEdge *se = NULL;
 AllocArray(edgeSeen, vCount);
 AllocArray(cEdgeSeen, vCount);
 agRep->ssSoftMissing = agRep->ssSoftFound = 0;
@@ -1369,7 +1353,7 @@ if(!usingChromKeeper)
     struct sqlConnection *orthoConn = NULL; 
     orthoConn = hAllocConn2();
     safef(query, sizeof(query), 
-	  "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%s'",
+	  "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%c'",
 	  altTable, chrom, chromEnd, chromStart, strand);
     agxList = altGraphXLoadByQuery(orthoConn, query);
     hFreeConn2(&orthoConn);
@@ -1718,10 +1702,8 @@ struct altGraphX *findOrthoAltGraphX(struct altGraphX *ag, char *db,
 {
 struct altGraphX *orthoAg = NULL;
 struct chain *chain = NULL;
-struct chain *subChain = NULL, *toFree = NULL;
-struct orthoSpliceEdge *seList = NULL, *se = NULL;
+struct orthoSpliceEdge *seList = NULL;
 int i;
-int qs = 0, qe = 0;
 int *starts = NULL, *sizes = NULL;
 int blockCount =0;
 /* Find the best chain (one that overlaps the most exons. */

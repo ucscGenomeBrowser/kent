@@ -8,6 +8,7 @@ TESTS = apSimpleCassDistTest altSimpleCassTest \
 # Order is important to avoid rebuilding too
 # much stuff on the fly.
 allTests: in $(TESTS)
+	@echo "Passed: All tests successful."
 
 # Check to make sure that basic alt3, alt5, and cass splices
 # have been created correctly, or at least consistently...
@@ -20,15 +21,15 @@ altSimpleCassTest: simpleCassAgx
 
 # Check for distance matrix creation in altPaths
 apSimpleCassDistTest: simpleCassAgx
-	altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
+	../altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
 	diff -u $(EXPECT_DIR)/apSimpleCassDist.gold.mat tmp.dist
 
 apSoftEndsStartsDistTest: softEndsStartsAgx
-	altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
+	../altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
 	diff -u $(EXPECT_DIR)/apSoftEndsStartsDist.gold.mat tmp.dist
 
 apAlt35CassRetDistTest: alt3Prime5PrimeCassAgx
-	altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
+	../altPaths tmp.agx tmp.splice -dumpDistMatrix=tmp.dist
 	diff -u $(EXPECT_DIR)/apAlt35CassRetDist.gold.mat tmp.dist
 
 # Create the input files necessary for tests.
@@ -52,31 +53,31 @@ clean:
 
 # Make the basic agx for tests.
 alt3Prime5PrimeCassAgx: 
-	altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
+	../altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
           -agxOut=tmp.agx  -chromNib=$(IN_DIR)/chromTest.nib \
           -skipTissues -localMem -pslFile=$(IN_DIR)/alt3Prime5PrimeCassAgx.psl >& /dev/null
 
 # Make the basic agx for tests.
 simpleCassAgx: 
-	altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
+	../altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
           -agxOut=tmp.agx  -chromNib=$(IN_DIR)/chromTest.nib \
           -skipTissues -localMem -pslFile=$(IN_DIR)/simpleCass.psl >& /dev/null
 
 # agx with some soft ends.
 softEndsStartsAgx:
-	altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
+	../altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
           -agxOut=tmp.agx  -chromNib=$(IN_DIR)/chromTest.nib \
           -skipTissues -localMem -pslFile=$(IN_DIR)/altEndsStarts.psl >& /dev/null
 
 # mutual exclusive exons
 mutExclusiveAgx:
-	altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
+	../altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
           -agxOut=tmp.agx  -chromNib=$(IN_DIR)/chromTest.nib \
           -skipTissues -localMem -pslFile=$(IN_DIR)/mutExclusive.psl >& /dev/null
 
 # mutual exclusive exons
 altRetIntAgx:
-	altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
+	../altSplice -consensus -db=hg16 -beds=$(IN_DIR)/testLoci.bed \
           -agxOut=tmp.agx  -chromNib=$(IN_DIR)/chromTest.nib \
           -skipTissues -localMem -pslFile=$(IN_DIR)/altRetInt.psl >& /dev/null
 

@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doWindowMasker.pl instead.
 
-# $Id: doWindowMasker.pl,v 1.4 2006/12/01 20:07:00 hiram Exp $
+# $Id: doWindowMasker.pl,v 1.5 2007/01/08 23:34:09 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -102,7 +102,7 @@ sub checkOptions {
 # * step: count [workhorse]
 sub doCount {
   my $runDir = "$buildDir";
-  &HgAutomate::checkCleanSlate('count', 'mask', $runDir);
+  &HgAutomate::checkCleanSlate('count', 'mask', "$runDir/windowmasker.counts");
   &HgAutomate::mustMkdir($runDir);
   
   my $whatItDoes = "It does WindowMasker counts step.";

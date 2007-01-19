@@ -2974,3 +2974,29 @@ cat nativeTop100perc.bed | awk 'BEGIN{OFS="\t"} {$5=int(100*$5); $4=$4 "_" $6 "_
 
 cat /cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql | sed -e 's/evofold/encodeEvoFold/' > tmp.sql
 hgLoadBed -notItemRgb -sqlTable=tmp.sql hg17 encodeEvoFold encodeEvoFold.bed
+
+###########################################################################
+# UVienna RNA structure data (DONE, 2007-01-03 - 2007-01-04, hartera)
+# Submitted 2006-12-15 by Stefan Washietl at the University of Vienna
+# 
+ssh hgwdev
+mkdir -p /cluster/data/encode/UVienna/2006-12-15/lab
+cd /cluster/data/encode/UVienna/
+ln -s /cluster/data/encode/UVienna/2006-12-15 \
+      /cluster/data/encode/UVienna/latest
+
+# copy rnaz.bed and rnaz_track.html to /cluster/data/encode/UVienna/latest/lab
+cd /cluster/data/encode/UVienna/latest/lab
+# remove header line
+tail +2 rnaz.bed > rnazNoHeader.bed
+# load the data in rnaz.bed into the hg17 database
+hgLoadBed -notItemRgb -strict hg17 encodeUViennaRnaz rnazNoHeader.bed
+# Reading rnazNoHeader.bed
+# Loaded 3707 elements of size 4
+# Sorted
+
+# then add trackDb.ra entry in trackDb/human/hg17/trackDb.encode.ra
+# and add the description.
+cp rnaz_track.html \
+   ~/kent/src/hg/makeDb/trackDb/human/hg17/encodeUViennaRnaz.html
+# edit description and change re-format publications
