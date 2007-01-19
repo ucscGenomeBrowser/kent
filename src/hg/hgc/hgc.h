@@ -207,6 +207,9 @@ void doFlyreg(struct trackDb *tdb, char *item);
 void dbRIP(struct trackDb *tdb, char *item, char *itemForUrl);
 /* Put up dbRIP track info */
 
+char* getEntrezNucleotideUrl(char *accession);
+/* get URL for Entrez browser on a nucleotide. free resulting string */
+
 void printEntrezNucleotideUrl(FILE *f, char *accession);
 /* Print URL for Entrez browser on a nucleotide. */
 
