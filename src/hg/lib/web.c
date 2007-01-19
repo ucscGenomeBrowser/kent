@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.106 2007/01/19 20:00:42 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.107 2007/01/19 20:49:04 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -206,18 +206,18 @@ if (isEncode)
 else
     {
     printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
-    puts("           <font color=white>Home</font></A> &nbsp;&nbsp;&nbsp;");
+    puts("           Home</A> &nbsp;&nbsp;&nbsp;");
     if (isGsid) 
 	{
     	printf("       <A HREF=\"/cgi-bin/gsidSubj%s\" class=\"topbar\">\n",
 	       uiState);
-	puts("           <font color=white>Subject View</font></A> &nbsp;&nbsp;&nbsp;");
+	puts("           Subject View</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (!isGsid)
 	{
 	printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 	       uiState);
-    	puts("           <font color=white>Genomes</font></A> &nbsp;&nbsp;&nbsp;");
+    	puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
     	}
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
@@ -232,7 +232,7 @@ else
 	{
     	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">", 
 		theCart ? "&" : "", uiState+1 );
-    	puts("           <font color=white>Blat</font></A> &nbsp;&nbsp;&nbsp;");
+    	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
     {
     char *table = (theCart == NULL ? NULL :
@@ -268,13 +268,13 @@ else
 	    {
 	    printf("       <A HREF=\"/cgi-bin/gsidTable%s\" class=\"topbar\">\n",
 	           uiState);
-	    puts("           <font color=white>Table View</font></A> &nbsp;&nbsp;&nbsp;");
+	    puts("           Table View</A> &nbsp;&nbsp;&nbsp;");
 	    }
 	else
 	    {
 	    printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	           uiState);
-	    puts("           <font color=white>Gene Sorter</font></A> &nbsp;&nbsp;&nbsp;");
+	    puts("           Gene Sorter</A> &nbsp;&nbsp;&nbsp;");
 	    }
 	}
     if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
@@ -290,24 +290,25 @@ else
 	       uiState, theCart ? "&" : "?" );
 	puts("&nbsp;&nbsp;&nbsp;");
 	}
-    puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
+    if (!isGsid) puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp;&nbsp;&nbsp;" "\n" 
 	 );
-    if (endsWith(scriptName, "hgBlat"))
-	puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
-    else if (endsWith(scriptName, "hgText"))
-	puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
-    else if (endsWith(scriptName, "hgNear"))
-	puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
-    else if (endsWith(scriptName, "hgTables"))
-	puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
-    else
-	puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
-    puts("       class=\"topbar\">");
-
-    puts("           Help</A> ");
+    if (!isGsid)
+	{
+    	if (endsWith(scriptName, "hgBlat"))
+	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
+    	else if (endsWith(scriptName, "hgText"))
+	    puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
+    	else if (endsWith(scriptName, "hgNear"))
+	    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+    	else if (endsWith(scriptName, "hgTables"))
+	    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
+    	else 
+	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
+	puts("       class=\"topbar\">");
+    	puts("           Help</A> ");
+    	}
     }
-    
 puts("&nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
