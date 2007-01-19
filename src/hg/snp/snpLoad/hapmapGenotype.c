@@ -21,7 +21,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmapGenotype.c,v 1.2 2007/01/19 22:17:43 heather Exp $";
+static char const rcsid[] = "$Id: hapmapGenotype.c,v 1.3 2007/01/19 23:18:06 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 FILE *countFileHandle = NULL;
@@ -147,7 +147,7 @@ if (sameString(pop, "YRI"))
 
 }
 
-boolean validate(char **row, int count, char *chrom)
+boolean validInput(char **row, int count, char *chrom)
 {
 int count1, count2, total;
 
@@ -197,6 +197,25 @@ if (!validPop(row[0]))
 return TRUE;
 }
 
+boolean validExtension(char **row, struct snpInfo *si, char *chrom)
+{
+if (differentString(si->observed, row[2]))
+    {
+    fprintf(errorFileHandle, "different observed strings for %s in chrom %s\n", row[1], chrom);
+    return FALSE;
+    }
+if (si->position != sqlSigned(row[3]))
+    {
+    fprintf(errorFileHandle, "multiple positions for %s in chrom %s\n", row[1], chrom);
+    return FALSE;
+    }
+if (differentString(si->strand, row[4]))
+    {
+    fprintf(errorFileHandle, "different strands for %s in chrom %s\n", row[1], chrom);
+    return FALSE;
+    }
+return TRUE;
+}
 
 void readFile(char *chrom)
 /* possible optimization: don't do hash lookup for first population */
@@ -211,12 +230,8 @@ struct snpInfo *si = NULL;
 int elementCount;
 boolean isValid;
 
-// double-check
 safef(inputFileName, sizeof(inputFileName), "%s.hapmap", chrom);
-if (!fileExists(inputFileName)) return;
-
 lf = lineFileOpen(inputFileName, TRUE);
-
 while (lineFileNext(lf, &line, NULL)) 
     {
     elementCount = chopString(line, " ", row, ArraySize(row));
@@ -226,7 +241,7 @@ while (lineFileNext(lf, &line, NULL))
 	continue;
 	}
 
-    isValid = validate(row, elementCount, chrom);
+    isValid = validInput(row, elementCount, chrom);
     if (!isValid) continue;
 
     rsId = cloneString(row[1]);
@@ -253,23 +268,9 @@ while (lineFileNext(lf, &line, NULL))
     else
         {
 	si = (struct snpInfo *)hel->val;
-	if (differentString(si->observed, row[2]))
+	isValid = validExtension(row, si, chrom);
+	if (!isValid)
 	    {
-            fprintf(errorFileHandle, "different observed strings for %s in chrom %s\n", rsId, chrom);
-	    hashRemove(snpHash, rsId);
-	    hashAdd(errorHash, rsId, NULL);
-            continue;
-	    }
-        if (si->position != sqlSigned(row[3]))
-	    {
-            fprintf(errorFileHandle, "multiple positions for %s in chrom %s\n", rsId, chrom);
-	    hashRemove(snpHash, rsId);
-	    hashAdd(errorHash, rsId, NULL);
-            continue;
-	    }
-	if (differentString(si->strand, row[4]))
-	    {
-            fprintf(errorFileHandle, "different strands for %s in chrom %s\n", rsId, chrom);
 	    hashRemove(snpHash, rsId);
 	    hashAdd(errorHash, rsId, NULL);
             continue;
