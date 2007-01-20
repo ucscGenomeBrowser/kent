@@ -1218,3 +1218,20 @@ type wig
     subGroups specRec=rh
     color 25,150,25
     priority 6
+
+track atomFilterMaf
+shortLabel Filter Maf
+longLabel Filter Maf
+group x
+priority 70.1
+visibility pack
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+pairwiseHeight 10
+summary atomFilterMafSummary
+# frames BRtestMafFrames
+# wiggle phastCons17way
+maxHeightPixels 100:40:11
+ speciesOrder mm8 rn4 canFam2  hg18-1 mm8-1 rn4-1 canFam2-1  hg18-2 mm8-2 rn4-2 canFam2-2 hg18-3  mm8-3 rn4-3 canFam2-3 hg18-4  mm8-4 rn4-4 canFam2-4 
+# speciesOrder humanP rn4 mm8 canFam2 ratA mouseA dogA ratB mouseB dogB
