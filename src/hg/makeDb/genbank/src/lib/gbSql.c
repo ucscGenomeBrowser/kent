@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "genbank.h"
 #include "genePred.h"
+#include "binRange.h"
 
 void gbSqlDupTableDef(struct sqlConnection *conn, char* table,
                       char* newTable)
@@ -202,7 +203,7 @@ void tblBldGenePredFromPsl(struct sqlConnection *conn, char *tmpDir, char *pslTb
  * invalid CDS if warnFh is not NULL */
 {
 /* create the tmp table */
-char *sql = genePredGetCreateSql(genePredTbl, genePredAllFlds, 0, hGetMinIndexLength());
+char *sql = genePredGetCreateSql(genePredTbl, genePredAllFlds, genePredWithBin, hGetMinIndexLength());
 sqlRemakeTable(conn, genePredTbl, sql);
 freez(&sql);
 
@@ -223,9 +224,10 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct genePred *genePred = pslRowToGene(row, warnFh);
-    genePredTabOut(genePred, tabFh);
-    genePredFree(&genePred);
+    struct genePred *gp = pslRowToGene(row, warnFh);
+    fprintf(tabFh, "%d\t", binFromRange(gp->txStart, gp->txEnd));
+    genePredTabOut(gp, tabFh);
+    genePredFree(&gp);
     }
 sqlFreeResult(&sr);
 
