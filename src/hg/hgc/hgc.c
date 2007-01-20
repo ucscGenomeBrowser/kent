@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1186 2007/01/19 20:01:29 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1187 2007/01/20 01:35:23 genbank Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4433,7 +4433,8 @@ struct psl *psl, *pslList = NULL;
 boolean hasBin;
 char splitTable[64];
 char query[256];
-hFindSplitTable(seqName, table, splitTable, &hasBin);
+if (!hFindSplitTable(seqName, table, splitTable, &hasBin))
+    errAbort("can't find table %s or %s_%s", table, seqName, table);
 safef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
