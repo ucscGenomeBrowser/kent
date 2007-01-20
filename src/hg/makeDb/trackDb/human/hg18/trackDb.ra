@@ -1220,8 +1220,8 @@ type wig
     priority 6
 
 track atomFilterMaf
-shortLabel Filter Maf
-longLabel Filter Maf
+shortLabel Filtered Atom Maf
+longLabel Filtered Atom Maf
 group x
 priority 70.1
 visibility pack
