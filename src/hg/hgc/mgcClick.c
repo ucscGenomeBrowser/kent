@@ -696,7 +696,7 @@ if (canOrderClone(FALSE, ci))
 // http://www.orfeomecollaboration.org/bin/cloneStatus.pl
 #endif
 
-if (ci->imageClone > 0)
+if (ci->imageId > 0)
     prImageLink(ci);
 prGenbankLink(ci);
 
