@@ -3,8 +3,9 @@
 #include "linefile.h"
 #include "options.h"
 #include "fa.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: faCat.c,v 1.4 2007/01/21 23:14:17 baertsch Exp $";
+static char const rcsid[] = "$Id: faCat.c,v 1.5 2007/01/21 23:27:23 baertsch Exp $";
 
 struct liftSpec
 /* How to lift coordinates. */
@@ -134,7 +135,7 @@ carefulClose(&liftFh);
 void faCat(char *inFile, char *outFile, char *liftFile)
 /* faCat - Filter out fa records that don't match expression. */
 {
-char tempFile[256] = "temp.lft";
+char *tempFile = rTempName("/tmp", "lift", ".lft");
 struct lineFile *inLf = lineFileOpen(inFile, TRUE);
 FILE *outFh = NULL;
 FILE *tempFh = mustOpen(tempFile, "w");
@@ -148,7 +149,6 @@ char nameNew[512];
 char outFileName[512];
 char liftFileName[512];
 char fastaHeader[512];
-
 safef(nameNew,sizeof(nameNew), "%s.%d",name, fileIndex);
 safef(fastaHeader,sizeof(fastaHeader),">%s\n",nameNew);
 safef(outFileName, sizeof(outFileName), "%s.%d.fa",outFile, fileIndex);
@@ -190,6 +190,7 @@ carefulClose(&tempFh);
 fixNewLength(tempFile, liftFileName, offset);
 lineFileClose(&inLf);
 carefulClose(&outFh);
+unlink(tempFile);
 }
 
 int main(int argc, char *argv[])
