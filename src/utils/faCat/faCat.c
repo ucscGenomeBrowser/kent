@@ -4,13 +4,13 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faCat.c,v 1.2 2007/01/21 00:53:46 baertsch Exp $";
+static char const rcsid[] = "$Id: faCat.c,v 1.3 2007/01/21 01:17:19 baertsch Exp $";
 
 struct liftSpec
 /* How to lift coordinates. */
     {
     struct liftSpec *next;	/* Next in list. */
-    int offset;			/* Offset to add. */
+    long int offset;			/* Offset to add. */
     char *oldName;		/* Name in source file. */
     int oldSize;                /* Size of old sequence. */
     char *newName;		/* Name in dest file. */
@@ -93,7 +93,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     if (!isdigit(words[4][0]))
 	errAbort("Expecting number in fifth field line %d of %s", lf->lineIx, lf->fileName);
     AllocVar(el);
-    el->offset = atoi(offs);
+    el->offset = atol(offs);
     el->oldName = cloneString(words[1]);
     el->oldSize = atoi(words[2]);
     el->newName = cloneString(words[3]);
@@ -116,13 +116,13 @@ if (list == NULL)
     errAbort("Empty liftSpec file %s", fileName);
 return list;
 }
-void fixNewLength(char *inFile, char *liftFile, int offset)
+void fixNewLength(char *inFile, char *liftFile, long int offset)
 {
 FILE *liftFh = mustOpen(liftFile, "w");
 struct liftSpec *el, *lifts = readLifts(inFile);
 for (el = lifts; el != NULL; el = el->next)
     {
-    fprintf(liftFh, "%d\t%s\t%d\t%s\t%d\n",el->offset, el->oldName, el->oldSize, el->newName,  offset);
+    fprintf(liftFh, "%ld\t%s\t%d\t%s\t%ld\n",el->offset, el->oldName, el->oldSize, el->newName,  offset);
     }
 carefulClose(&liftFh);
 }
@@ -139,7 +139,7 @@ char *seqHeader;
 char prefix[2] = ">";
 char name[256] = "chrUn";
 char cr[2] = "\n";
-int offset = 0;
+long int offset = 0;
 char *gap = NULL;
 int i;
 
@@ -158,7 +158,7 @@ while (faMixedSpeedReadNext(inLf, &seq, &seqSize, &seqHeader))
     //    faWriteNext(outFh, seqHeader, seq, seqSize);
 
 /* output lift record:       offset oldName oldSize newName newSize */
-    fprintf(liftFh, "%d\t%s\t%d\t%s\t%d\n",offset, seqHeader, seqSize, name,  0);
+    fprintf(liftFh, "%ld\t%s\t%d\t%s\t%d\n",offset, seqHeader, seqSize, name,  0);
     offset += (seqSize + gapSize);
     writeSeqWithBreaks(outFh, seq, seqSize, 50);
     writeSeqWithBreaks(outFh, gap, gapSize, 50);
