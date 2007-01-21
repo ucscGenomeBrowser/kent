@@ -15,7 +15,7 @@
 #include "gbSql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.17 2007/01/19 19:46:38 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.18 2007/01/21 04:20:59 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -49,11 +49,10 @@ static char *mgcFullTables[] =
 static char *mgcFullOnlyTables[] =
 {
     "mgcFullStatus",
-    "mgcFullMrna",
     NULL
 };
 
-/* table on databases with all MGCs */
+/* table on databases with all MGC tracks */
 static char *mgcAllTables[] =
 {
     "mgcStatus",
@@ -66,7 +65,7 @@ static char *mgcAllTables[] =
     NULL
 };
 
-/* table only on all bowsers MGCs */
+/* table only on browser with all MGC tracks */
 static char *mgcAllOnlyTables[] =
 {
     "mgcStatus",
@@ -289,7 +288,7 @@ void buildMgcTbls(struct sqlConnection *conn, char *mgcStatusTabFile)
 char statusTblName[32];
 tblBldGetTmpName(statusTblName, sizeof(statusTblName),
                  (allMgcTables ? MGC_STATUS_TBL : MGC_FULL_STATUS_TBL));
-tblBldDropTables(conn, ((allMgcTables) ?mgcAllOnlyTables : mgcFullOnlyTables), TBLBLD_TMP_TABLE);
+tblBldDropTables(conn, ((allMgcTables) ? mgcAllOnlyTables : mgcFullOnlyTables), TBLBLD_TMP_TABLE);
 loadMgcStatus(conn, mgcStatusTabFile, statusTblName);
 createMgcFullMrna(conn, statusTblName);
 createMgcGenes(conn);
