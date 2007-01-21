@@ -4,7 +4,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faCat.c,v 1.3 2007/01/21 01:17:19 baertsch Exp $";
+static char const rcsid[] = "$Id: faCat.c,v 1.4 2007/01/21 23:14:17 baertsch Exp $";
 
 struct liftSpec
 /* How to lift coordinates. */
@@ -23,11 +23,14 @@ void usage()
 {
 errAbort("faCat - concatenate fa records and add gaps between each sequence.\n"
          "usage:\n"
-         "   faCat [options] in.fa out.fa liftFile\n"
+         "   faCat [options] in.fa outRoot liftFileRoot\n"
          "\n"
          "Options:\n"
-         "    -gapSize=N - size of gap to insert between each sequence. Default 25.\n"
+         "    -gapSize=N - size of gap to insert between each sequence. (default 25).\n"
+         "    -maxOputputSize=N - Split file into multiple file if output exceeds N (default 2000000).\n"
+         "    -name=chrUn - name of output sequence\n"
          "\n"
+         "Note: .fa and .lft will be appended to the outRoot and liftFile names resp.\n"
          );
 }
 
@@ -37,11 +40,13 @@ static struct optionSpec options[] = {
 };
 
 /* command line options */
+char *name = "chrUn";
 char *namePat = NULL;
 boolean vOption = FALSE;
 int minSize = -1;
 int maxSize = -1;
 int gapSize = 0;
+long maxOutputSize = 2000000; /* max size of output file */
 
 boolean matchName(char *seqHeader)
 /* see if the sequence name matches */
@@ -116,13 +121,13 @@ if (list == NULL)
     errAbort("Empty liftSpec file %s", fileName);
 return list;
 }
-void fixNewLength(char *inFile, char *liftFile, long int offset)
+void fixNewLength(char *inFile, char *liftFile, long int size)
 {
 FILE *liftFh = mustOpen(liftFile, "w");
 struct liftSpec *el, *lifts = readLifts(inFile);
 for (el = lifts; el != NULL; el = el->next)
     {
-    fprintf(liftFh, "%ld\t%s\t%d\t%s\t%ld\n",el->offset, el->oldName, el->oldSize, el->newName,  offset);
+    fprintf(liftFh, "%ld\t%s\t%ld\t%s\t%d\n",el->offset, el->oldName, size, el->newName,  el->newSize);
     }
 carefulClose(&liftFh);
 }
@@ -131,41 +136,59 @@ void faCat(char *inFile, char *outFile, char *liftFile)
 {
 char tempFile[256] = "temp.lft";
 struct lineFile *inLf = lineFileOpen(inFile, TRUE);
-FILE *outFh = mustOpen(outFile, "w");
-FILE *liftFh = mustOpen(tempFile, "w");
+FILE *outFh = NULL;
+FILE *tempFh = mustOpen(tempFile, "w");
 DNA *seq;
 int seqSize;
 char *seqHeader;
-char prefix[2] = ">";
-char name[256] = "chrUn";
-char cr[2] = "\n";
 long int offset = 0;
 char *gap = NULL;
-int i;
+int i, fileIndex = 1;
+char nameNew[512];
+char outFileName[512];
+char liftFileName[512];
+char fastaHeader[512];
 
+safef(nameNew,sizeof(nameNew), "%s.%d",name, fileIndex);
+safef(fastaHeader,sizeof(fastaHeader),">%s\n",nameNew);
+safef(outFileName, sizeof(outFileName), "%s.%d.fa",outFile, fileIndex);
+safef(liftFileName, sizeof(liftFileName), "%s.%d.lft",liftFile, fileIndex++);
+outFh = mustOpen(outFileName, "w");
 gap = needMem(gapSize+1);
 for (i = 0 ; i < gapSize ; i++)
     {
     gap[i] = 'N';
     }
 gap[i] = '\0';
-mustWrite(outFh, prefix, strlen(prefix));
-mustWrite(outFh, name, strlen(name));
-mustWrite(outFh, cr, strlen(cr));
+mustWrite(outFh, fastaHeader, strlen(fastaHeader));
 while (faMixedSpeedReadNext(inLf, &seq, &seqSize, &seqHeader))
     {
 //    if (vOption ^ recMatches(seq, seqSize, seqHeader))
     //    faWriteNext(outFh, seqHeader, seq, seqSize);
 
 /* output lift record:       offset oldName oldSize newName newSize */
-    fprintf(liftFh, "%ld\t%s\t%d\t%s\t%d\n",offset, seqHeader, seqSize, name,  0);
+    fprintf(tempFh, "%ld\t%s\t%d\t%s\t%d\n",offset, nameNew, 0, seqHeader,  seqSize);
     offset += (seqSize + gapSize);
     writeSeqWithBreaks(outFh, seq, seqSize, 50);
     writeSeqWithBreaks(outFh, gap, gapSize, 50);
+    if (offset > maxOutputSize)
+        {
+        carefulClose(&tempFh);
+        carefulClose(&outFh);
+        fixNewLength(tempFile, liftFileName, offset);
+        tempFh = mustOpen(tempFile, "w");
+        safef(nameNew,sizeof(nameNew), "%s.%d",name, fileIndex);
+        safef(fastaHeader,sizeof(fastaHeader),">%s\n",nameNew);
+        safef(liftFileName, sizeof(liftFileName), "%s.%d.lft",liftFile, fileIndex);
+        safef(outFileName, sizeof(outFileName), "%s.%d.fa",outFile, fileIndex++);
+        outFh = mustOpen(outFileName, "w");
+        mustWrite(outFh, fastaHeader, strlen(fastaHeader));
+        offset = 0;
+        }
     }
+carefulClose(&tempFh);
+fixNewLength(tempFile, liftFileName, offset);
 lineFileClose(&inLf);
-carefulClose(&liftFh);
-fixNewLength(tempFile, liftFile, offset);
 carefulClose(&outFh);
 }
 
@@ -175,9 +198,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-//namePat = optionVal("name", NULL);
+name = optionVal("name", "chrUn");
 //vOption = optionExists("v");
 //minSize = optionInt("minSize", -1);
+maxOutputSize = optionInt("maxOutputSize", maxOutputSize);
 gapSize = optionInt("gapSize", 25);
 faCat(argv[1],argv[2], argv[3]);
 return 0;
