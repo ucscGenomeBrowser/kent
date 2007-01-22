@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.11 2007/01/19 00:13:29 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.12 2007/01/22 06:21:54 hiram Exp $"
 #
 
 ##########################################################################
@@ -1446,7 +1446,17 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=kk \
 	-verbose=2 -blastzOutRoot /cluster/bluearc/oryLat1DanRer4 >do.log 2>&1 &
-XXX - Running 2006-12-13 15:12
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk \
+	-continue=cat -verbose=2 \
+	-blastzOutRoot /cluster/bluearc/oryLat1DanRer4 >cat.log 2>&1 &
+XXX - Running 2007-01-19 11:24
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk \
+	-continue=chainMerge -verbose=2 \
+	-blastzOutRoot /cluster/bluearc/oryLat1DanRer4 > chainMerge.log 2>&1 &
 
     cd /cluster/data/oryLat1/bed
     rm blastz.danRer4
@@ -2010,11 +2020,11 @@ oryLat1.downloadDir = oryLat1
     ssh kkstore02
     cd /cluster/data/genbank
     nice -n +19 bin/gbAlignStep -initial oryLat1 &
-XXX - running 2007-01-18 16:05
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    nice ./bin/gbDbLoadStep -drop -initialLoad oryLat1 &
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oryLat1
+    #	real    17m10.400s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -2025,3 +2035,311 @@ XXX - running 2007-01-18 16:05
     cvs ci -m "Added oryLat1." etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
+#########################################################################
+## 5-Way Multiz (DONE - 2007-01-21 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oryLat1/bed/multiz5way
+    cd /cluster/data/oryLat1/bed/multiz5way
+
+    /cluster/bin/phast/tree_doctor \
+	--prune human_hg18,mouse_mm8,chicken_galGal3 \
+	/cluster/data/gasAcu1/bed/multiz8way/8way.nh
+
+    #	the output of that is used in this cat
+
+    cat << '_EOF_' > 5way.nh
+(((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.200000,
+    (stickleback_gasAcu1:0.200000,medaka_oryLat1:0.200000):0.200000):0.292961,
+	zebrafish_danRer4:0.782561);
+'_EOF_'
+    # << happy emacs
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/oryLat1_5way.gif
+
+    /cluster/bin/phast/all_dists 5way.nh > 5way.distances.txt
+    #	Use this output to create the table below
+    grep -y oryLat1 5way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainOryLat1Link   chain    linearGap
+#    distance                      on oryLat1    on other   minScore
+#  1  0.4000 - stickleback gasAcu1 (% 27.044) (% 38.308)       2000     loose
+#  2  0.7994 - tetraodon tetNig1   (% 22.900) (% 38.063)       2000     loose
+#  3  0.8399 - fugu fr1            (% 23.697) (% 40.975)       2000     loose
+#  4  1.4755 - zebrafish danRer4   (% 22.275) (% 12.899)       2000     loose
+
+    cd /cluster/data/oryLat1/bed/multiz5way
+    #	bash shell syntax here ...
+    export H=/cluster/data/oryLat1/bed
+    mkdir mafLinks
+    for G in gasAcu1 tetNig1 fr1 danRer4
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore04
+    mkdir /san/sanvol1/scratch/oryLat1/multiz5way
+    cd /san/sanvol1/scratch/oryLat1/multiz5way
+    time nice -n +19 rsync -a --copy-links --progress \
+	/cluster/data/oryLat1/bed/multiz5way/mafLinks/ .
+    #	15 seconds to copy 522 Mb
+
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/oryLat1/bed/multiz5way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	5way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #	NOTE: you need to set the db and multiz dirname properly in this script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = oryLat1
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz5way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz5way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /cluster/data/oryLat1/bed/multiz5way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    awk '{print $1}' /cluster/data/oryLat1/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 23 jobs
+    para try ... check ... push ... etc ...
+# Completed: 26 of 26 jobs
+# CPU time in finished jobs:       7273s     121.22m     2.02h    0.08d  0.000 y
+# IO & Wait Time:                   156s       2.60m     0.04h    0.00d  0.000 y
+# Average job time:                 286s       4.76m     0.08h    0.00d
+# Longest finished job:            1142s      19.03m     0.32h    0.01d
+# Submission to last job:          1152s      19.20m     0.32h    0.01d
+
+    #	combine results into a single file for loading and gbdb reference
+    ssh kkstore05
+    cd /cluster/data/oryLat1/bed/multiz5way
+    time catDir maf > multiz5way.maf
+    #	real    0m6.756s
+    #	makes a 1.3 Gb file:
+    #	-rw-rw-r--  1 1390377007 Jan 21 21:31 multiz5way.maf
+
+    #	Create per-chrom individual maf files for downloads
+    #	NOT NECESSARY HERE - DONE LATER WITH THE ANNOTATED MAFS
+    ssh kkstore05
+    cd /cluster/data/oryLat1/bed/multiz5way
+    mkdir mafDownloads
+    time for M in maf/chr*.maf
+    do
+	B=`basename $M`
+	cp -p ${M} mafDownloads/${B}
+	gzip mafDownloads/${B}
+	echo ${B} done
+    done
+    #	real    5m9.273
+
+    #	deliver to downloads *!* NOT NECESSARY HERE - DONE LATER WITH
+    #		THE ANNOTATED MAFS
+    ssh hgwdev
+    ln -s /cluster/data/oryLat1/bed/multiz5way/mafDownloads \
+	/usr/local/apache/htdocs/goldenPath/oryLat1/multiz5way
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way
+    mkdir /gbdb/oryLat1/multiz5way
+    ln -s /cluster/data/oryLat1/bed/multiz5way/multiz5way.maf \
+	/gbdb/oryLat1/multiz5way
+    time nice -n +19 hgLoadMaf oryLat1 multiz5way
+    #	Loaded 1559270 mafs in 1 files from /gbdb/oryLat1/multiz5way
+    #	real    0m38.327s
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 oryLat1 multiz5waySummary multiz5way.maf
+    #	Created 724676 summary blocks from 3597261 components
+    #	and 1559270 mafs from multiz5way.maf
+    #	real    0m47.574s
+
+    #	Create tree image for details page
+    #	You can get a better image from the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    # cp 5way.nh treeImage.nh
+    #	Edit treeImage.nh to make the names as desired
+    #	Submit this treeImage.nh to the phyloGif program, or:
+    # /cluster/bin/phast/draw_tree -b -s treeImage.nh > treeImage.ps
+
+############################################################################
+# ANNOTATE MULTIZ5WAY MAF AND LOAD TABLES (DONE - 2007-01-21 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/oryLat1/bed/multiz5way/anno
+    cd /cluster/data/oryLat1/bed/multiz5way/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    ln -s  /cluster/data/oryLat1/chrom.sizes oryLat1.len
+     twoBitInfo -nBed /cluster/data/oryLat1/oryLat1.sdTrf.{2bit,N.bed}
+    ln -s  /cluster/data/oryLat1/oryLat1.sdTrf.N.bed oryLat1.bed
+    for DB in `cat /cluster/data/oryLat1/bed/multiz5way/species.lst`
+    do
+      echo oryLat1.bed  >> nBeds
+      echo oryLat1.len  >> sizes
+      echo $DB
+    done
+
+    echo '#!/bin/csh -ef' > jobs.csh
+    echo date >> jobs.csh
+    # do smaller jobs first so you can see some progress immediately:
+    for F in `ls -1rS ../../maf/*.maf`
+    do
+     echo mafAddIRows -nBeds=nBeds -sizes=sizes $F \
+      /cluster/data/oryLat1/oryLat1.sdTrf.2bit ../maf/`basename $F` >> jobs.csh
+     echo "echo $F" >> jobs.csh
+    done 
+    echo date >> jobs.csh
+    chmod +x jobs.csh
+    time nice -n +19 ./jobs.csh > jobs.log 2>&1 &
+    #	to watch progress;
+    tail -f jobs.log
+    #	real    32m40.275s
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way/anno/maf
+    mkdir -p /gbdb/oryLat1/multiz5way/anno/maf
+    ln -s /cluster/data/oryLat1/bed/multiz5way/anno/maf/*.maf \
+      /gbdb/oryLat1/multiz5way/anno/maf
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/oryLat1/multiz5way/anno/maf oryLat1 multiz5way
+    #	Loaded 1895177 mafs in 26 files from /gbdb/oryLat1/multiz5way/anno/maf
+    #	real    0m54.818s
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kolossus
+    cd /cluster/data/oryLat1/bed/multiz5way/anno/maf
+    time cat *.maf | \
+    	nice -n +19 hgLoadMafSummary oryLat1 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 -test multiz5waySummary stdin
+    #	Created 407683 summary blocks from 3597261 components and 1895177 mafs
+    #	from stdin
+    #	real    1m8.551s
+
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way/anno/maf
+    sed -e 's/mafSummary/multiz5waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz5waySummary.sql
+    time nice -n +19 hgLoadSqlTab oryLat1 multiz5waySummary \
+	/tmp/multiz5waySummary.sql multiz5waySummary.tab
+    #	real    0m5.563s
+
+#######################################################################
+# MULTIZ5WAY MAF FRAMES (DONE - 2007-01-21 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oryLat1/bed/multiz5way/frames
+    cd /cluster/data/oryLat1/bed/multiz5way/frames
+    mkdir genes
+    # The following is adapted from the gasAcu1 8-way sequence
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using refGene for danRer4
+    for qDB in danRer4
+    do
+	geneTbl=refGene
+      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 2-100 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    # using genscan for tetNig1
+    # using ensGene for oryLat1, gasAcu1, and fr1
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in gasAcu1 oryLat1 fr1 tetNig1
+    do
+      if [ $qDB = "gasAcu1" -o $qDB = "oryLat1" -o $qDB = "fr1" ]; then
+        geneTbl=ensGene
+      elif [ $qDB = "tetNig1" ]; then
+        geneTbl=genscan
+      fi
+      echo hgsql -N -e \"'select * from '$geneTbl\;\" ${qDB}
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
+      rm -f $tmpExt
+    done
+
+    ###
+    
+    ssh kkstore04
+    cd /cluster/data/oryLat1/bed/multiz5way/frames
+    time cat ../maf/*.maf | nice -n +19 genePredToMafFrames oryLat1 \
+	stdin stdout gasAcu1 genes/gasAcu1.gp.gz oryLat1 \
+	genes/oryLat1.gp.gz fr1 genes/fr1.gp.gz tetNig1 \
+	genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz \
+	| gzip > multiz5way.mafFrames.gz
+    #	real    0m40.059s
+
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way/frames
+    time nice -n +19 hgLoadMafFrames oryLat1 multiz5wayFrames \
+	multiz5way.mafFrames.gz
+    #	real    0m22.466s
