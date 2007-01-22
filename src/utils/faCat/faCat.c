@@ -5,7 +5,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faCat.c,v 1.5 2007/01/21 23:27:23 baertsch Exp $";
+static char const rcsid[] = "$Id: faCat.c,v 1.6 2007/01/22 19:30:38 hiram Exp $";
 
 struct liftSpec
 /* How to lift coordinates. */
@@ -28,7 +28,7 @@ errAbort("faCat - concatenate fa records and add gaps between each sequence.\n"
          "\n"
          "Options:\n"
          "    -gapSize=N - size of gap to insert between each sequence. (default 25).\n"
-         "    -maxOputputSize=N - Split file into multiple file if output exceeds N (default 2000000).\n"
+         "    -maxOutputSize=N - Split file into multiple file if output exceeds N (default 2000000).\n"
          "    -name=chrUn - name of output sequence\n"
          "\n"
          "Note: .fa and .lft will be appended to the outRoot and liftFile names resp.\n"
@@ -37,6 +37,7 @@ errAbort("faCat - concatenate fa records and add gaps between each sequence.\n"
 
 static struct optionSpec options[] = {
     {"gapSize", OPTION_INT},
+    {"maxOutputSize", OPTION_INT},
     {NULL, 0},
 };
 
