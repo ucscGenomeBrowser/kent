@@ -58,12 +58,10 @@ acc yes
 name uniProtDis
 label UniProt disease
 dataSql select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=21 and comment.commentVal=commentVal.id
-dataId spId
 
 name uniProtPoly
 label UniProt polymorphism
 dataSql select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=16 and comment.commentVal=commentVal.id
-dataId spId
 
 name MPlink
 label Mammalian Phenotype (MP)
@@ -73,7 +71,6 @@ acc yes
 name omimTitle2
 label OMIM title
 dataSql select title, omimId from hgFixed.omimTitle where omimId = '%s'
-dataId mrna
 dataLink OMIM
 dataLinkCol 2
 
