@@ -1164,8 +1164,8 @@ type bed 8 .
     priority 10
 
 track divMMK
-shortLabel modified McDonald-Kreitman
-longLabel Selection with Chimp and Rhesus using modified McDonald-Kreitman
+shortLabel McDonald-Kreitman AR
+longLabel Recent selection in human non-coding regions using a McDonald-Kreitman test
 compositeTrack on
 group x
 priority 205
@@ -1173,48 +1173,48 @@ visibility hide
 subGroup1 specRec Species_reckoned_with ch=chimp rh=rhesus
 type wig
 
-    track divChimpPVal
+    track divChimpMaskPVal
     subTrack divMMK
-    shortLabel -log(p-value), chimp
-    longLabel Chi square test, negative log of p-value, chimp
+    shortLabel -log(p-value) chimp
+    longLabel Negative log of p-value, chi-square test, chimp divergence
     subGroups specRec=ch
     priority 1
 
-    track divChimpNI
+    track divChimpMaskNI
     subTrack divMMK
     shortLabel NI chimp
-    longLabel NI chimp
+    longLabel Neutrality index, chimp divergence 
     subGroups specRec=ch
     color 0,0,250
     priority 2
 
-    track divChimpCorrQVal
+    track divChimpMaskCorrQVal
     subTrack divMMK
-    shortLabel -log(FDR), chimp
-    longLabel Negative log of the false discovery rate, chimp
+    shortLabel -log(FDR) chimp
+    longLabel Negative log of the false discovery rate, chimp divergence 
     subGroups specRec=ch
     color 25,150,25
     priority 3
 
-    track divRhesusPVal
+    track divRhesusMaskPVal
     subTrack divMMK
-    shortLabel -log(p-value), rhesus
-    longLabel Chi square test, negative log of p-value, rhesus
+    shortLabel -log(p-value) rhesus
+    longLabel Negative log of p-value, chi-square test, rhesus divergence
     subGroups specRec=rh
     priority 4
 
-    track divRhesusNI
+    track divRhesusMaskNI
     subTrack divMMK
     shortLabel NI rhesus
-    longLabel NI rhesus
+    longLabel Neutrality index, rhesus divergence
     subGroups specRec=rh
     color 0,0,250
     priority 5
 
-    track divRhesusCorrQVal
+    track divRhesusMaskCorrQVal
     subTrack divMMK
-    shortLabel -log(FDR), rhesus
-    longLabel Negative log of the false discovery rate, rhesus
+    shortLabel -log(FDR) rhesus
+    longLabel Negative log of the false discovery rate, rhesus divergence
     subGroups specRec=rh
     color 25,150,25
     priority 6
