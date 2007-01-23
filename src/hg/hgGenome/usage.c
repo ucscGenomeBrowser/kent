@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.1 2007/01/23 17:59:22 kent Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.2 2007/01/23 18:07:51 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -31,6 +31,10 @@ hPrintf("%s",
 "        <LI><B>configure: </B> Takes you to a page where you can control "
 "        many aspects of the program including the overall size of the image, "
 "        how many graphs can be drawn, and the chromosome layout."
+"        </LI>\n"
+"        <LI><B>correlate: </B> If more than one graph is selected, takes you "
+"        to a page listing the Pearson's correlation coefficient for each "
+"        pair of graphs."
 "        </LI>\n"
 "        <LI><B>significance threshold: </B> Values over this threshold will "
 "        be considered significant. A light blue line will be drawn across "
