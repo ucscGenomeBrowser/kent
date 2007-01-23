@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.11 2007/01/23 18:00:44 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.12 2007/01/23 18:14:37 kent Exp $";
 
 
 static char *allColors[] = {
@@ -138,7 +138,7 @@ if (gg != NULL)
 	    if (chromGraphBinNextVal(cgb))
 	        {
 		/* Set clipping so can't scribble outside of box. */
-		vgSetClip(vg, chromX, chromY, chrom->width, chrom->height);
+		vgSetClip(vg, chromX, chromY, chrom->width+1, chrom->height);
 
 		/* Handle first point as special case here, so don't
 		 * have to test for first point in inner loop. */
