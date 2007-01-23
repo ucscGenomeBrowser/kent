@@ -103,7 +103,7 @@ cartSetString(cart, keyCartName, keyTn.forCgi);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
 hPrintf("<CENTER>");
-cgiMakeButton("submit", "Go To Gene Sorter");
+cgiMakeButton("submit", "go to gene sorter");
 hPrintf("</CENTER>");
 hPrintf("</FORM>");
 
