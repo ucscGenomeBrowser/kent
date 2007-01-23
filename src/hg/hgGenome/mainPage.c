@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.10 2007/01/23 17:59:21 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.11 2007/01/23 18:00:44 kent Exp $";
 
 
 static char *allColors[] = {
@@ -509,7 +509,7 @@ if (ggList != NULL)
 else
     {
     hPrintf("<BR>No graph data is available for this assembly.  You can still upload your own "
-            "data though.");
+            "data.");
     }
 hPrintf("</FORM>\n");
 
