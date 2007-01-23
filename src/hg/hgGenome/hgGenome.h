@@ -154,6 +154,9 @@ void hggDoUsualHttp();
 void mainPage(struct sqlConnection *conn);
 /* Do main page of application:  hotlinks bar, controls, graphic. */
 
+void printMainHelp();
+/* Put up main page help info. */
+
 void uploadPage();
 /* Put up initial upload page. */
 

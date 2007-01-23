@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.9 2007/01/18 20:28:26 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.10 2007/01/23 17:59:21 kent Exp $";
 
 
 static char *allColors[] = {
@@ -107,17 +107,20 @@ if (gg != NULL)
 	int width = rightX - leftX;
 	double threshold = cartUsualDouble(cart, hggThreshold, 
 		defaultThreshold);
-	int y = height - ((threshold - gMin)*gScale) + yOff;
-	for (ref = gl->leftList; ref != NULL; ref = ref->next)
+	if (threshold >= gMin && threshold <= gMax)
 	    {
-	    chrom = ref->val;
-	    vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
-	    }
-	ref = gl->bottomList;
-	if (ref != NULL)
-	    {
-	    chrom = ref->val;
-	    vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+	    int y = height - ((threshold - gMin)*gScale) + yOff;
+	    for (ref = gl->leftList; ref != NULL; ref = ref->next)
+		{
+		chrom = ref->val;
+		vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+		}
+	    ref = gl->bottomList;
+	    if (ref != NULL)
+		{
+		chrom = ref->val;
+		vgBox(vg, leftX, y + chrom->y, width, 1, lightBlue);
+		}
 	    }
 	}
 
@@ -134,6 +137,9 @@ if (gg != NULL)
 
 	    if (chromGraphBinNextVal(cgb))
 	        {
+		/* Set clipping so can't scribble outside of box. */
+		vgSetClip(vg, chromX, chromY, chrom->width, chrom->height);
+
 		/* Handle first point as special case here, so don't
 		 * have to test for first point in inner loop. */
 		int x,y,start,lastStart,lastX,lastY;
@@ -172,6 +178,7 @@ if (gg != NULL)
 		    lastY = y;
 		    lastStart = start;
 		    }
+		vgUnclip(vg);
 		}
 	    }
 	else
@@ -193,6 +200,7 @@ if (gg != NULL)
 	int fontPixelHeight = mgFontPixelHeight(gl->font);
 	for (i=0; i<gl->lineCount; ++i)
 	    {
+	    vgSetClip(vg, 0, lineY, gl->picWidth, gl->lineHeight);
 	    for (j=0; j< cgs->linesAtCount; ++j)
 	        {
 		double lineAt = cgs->linesAt[j];
@@ -226,6 +234,7 @@ if (gg != NULL)
 		    }
 		}
 	    lineY += gl->lineHeight;
+	    vgUnclip(vg);
 	    }
 	}
     }
@@ -529,6 +538,8 @@ hPrintf("</FORM>\n");
     jsCreateHiddenForm(cart, scriptName, allVars, varCount);
     }
 
+webNewSection("Using Genome Graphs");
+printMainHelp();
 cartWebEnd();
 }
 
