@@ -1,0 +1,796 @@
+/* gsidMember - Administer GSID HIV membership - signup, paypal, lost password, etc. */
+
+#include "common.h"
+#include "hash.h"
+#include "obscure.h"
+#include "hgConfig.h"
+#include "cheapcgi.h"
+#include "memalloc.h"
+#include "jksql.h"
+#include "htmshell.h"
+#include "cart.h"
+#include "hPrint.h"
+#include "hdb.h"
+#include "hui.h"
+#include "web.h"
+#include "ra.h"
+#include "hgColors.h"
+#include <crypt.h>
+
+#include "net.h"
+
+#include "gsidMember.h"
+#include "versionInfo.h"
+
+static char const rcsid[] = "$Id: gsidMember.c,v 1.1 2007/01/23 06:38:11 galt Exp $";
+
+char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
+/* The excludeVars are not saved to the cart. (We also exclude
+ * any variables that start "near.do.") */
+
+/* ---- Global variables. ---- */
+struct cart *cart;	/* This holds cgi and other variables between clicks. */
+char *database;		/* Name of genome database - hg15, mm3, or the like. */
+struct hash *oldCart;	/* Old cart hash. */
+char *errMsg;           /* Error message to show user when form data rejected */
+
+/* -------- password functions ---- */
+
+void encryptPWD(char *password, char *salt, char *buf, int bufsize)
+/* encrypt a password */
+{
+/* encrypt user's password. */
+safef(buf,bufsize,crypt(password, salt));
+}
+
+
+void encryptNewPWD(char *password, char *buf, int bufsize)
+/* encrypt a new password */
+{
+unsigned long seed[2];
+char salt[] = "$1$........";
+const char *const seedchars =
+"./0123456789ABCDEFGHIJKLMNOPQRST"
+"UVWXYZabcdefghijklmnopqrstuvwxyz";
+int i;
+/* Generate a (not very) random seed. */
+seed[0] = time(NULL);
+seed[1] = getpid() ^ (seed[0] >> 14 & 0x30000);
+/* Turn it into printable characters from `seedchars'. */
+for (i = 0; i < 8; i++)
+    salt[3+i] = seedchars[(seed[i/5] >> (i%5)*6) & 0x3f];
+encryptPWD(password, salt, buf, bufsize);
+}
+
+bool checkPWD(char *password, char *encPassword)
+/* check an encrypted password */
+{
+char encPwd[35] = "";
+encryptPWD(password, encPassword, encPwd, sizeof(encPwd));
+if (sameString(encPassword,encPwd))
+    {
+    return TRUE;
+    }
+else
+    {
+    return FALSE;
+    }
+}
+
+/*
+char password[35]; 
+
+            encryptNewPWD(userPassword, password, sizeof(password));
+            safef(query, sizeof(query),
+                "update %s set password = '%s' where user = '%s' ",
+                tbl, u.password, u.user);
+            sqlUpdate(conn, query);
+            loginOK = TRUE;
+*/
+
+
+/* --- update passwords file ----- */
+
+void updatePasswordsFile(struct sqlConnection *conn)
+/* update the passwords file containing email:encryptedPassword */
+{
+struct sqlResult *sr;
+char **row;
+ 
+char password[35]; 
+//TODO: change to real name when permissions fixed.
+//FILE *out = mustOpen("../trash/passwords", "w");
+FILE *out = mustOpen("../conf/passwords", "w");
+
+sr = sqlGetResult(conn, "select * from members where activated='Y'");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    encryptNewPWD(row[1], password, sizeof(password));
+    fprintf(out,"%s:%s\n",row[0],password);
+    }
+sqlFreeResult(&sr);
+
+carefulClose(&out);
+
+}
+
+/* ---------- reverse DNS function --------- */
+
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netdb.h>
+
+char *reverseDns(char *ip)
+/* do reverse dns lookup on ip using getnamebyaddr,
+ *  and then return a string to be freed that is the host */
+{
+struct hostent *hp;
+struct sockaddr_in sock;
+if (inet_aton(ip,&sock.sin_addr) == 0) return NULL;
+hp = gethostbyaddr(&sock.sin_addr,sizeof(sock.sin_addr),AF_INET);
+if (!hp) return NULL;
+return cloneString(hp->h_name); 
+}
+
+
+/* -------- paypal functions ------ */
+
+void appendSqlField(struct dyString* dy, char *varName, struct cgiVar *cgiVars)
+/* append the next field to the sql insert statement */
+{
+boolean isFirstField = dy->stringSize == 0;
+if (isFirstField)
+    dyStringAppend(dy,"insert into transactions set ");
+dyStringPrintf(dy,"%s%s='%s'",
+    isFirstField ? "" : ", ",
+    varName,
+    cgiUsualString(varName,""));
+struct cgiVar *this = NULL;
+for(this=cgiVars;this;this=this->next)
+    {
+    if (sameString(this->name,varName))
+	this->saved = TRUE;
+    }
+}
+
+
+void processIpn(struct sqlConnection *conn)
+/* process Instant Payment Notification 
+ *  Steps: 
+ *   verify server source name
+ *   write to log
+ *   compose post pack to paypal.com or sandbox
+ *     todo: optimize this with https
+ *   verify response
+ *   write transaction to ipn table
+ *   mark user as paid if transaction is completed
+ *    (matching on email)
+ *   activate user account if completed by updating "passwords" file.
+ */
+{
+
+/* save the ipn post variables received to the log regardless */
+struct cgiVar *this=NULL, *cgiVars = cgiVarList();
+FILE *f=mustOpen("ipn.log","a");
+struct dyString *dy=newDyString(256);
+char *paypalServer = cfgOption("paypalServer");
+dyStringPrintf(dy,"http://%s/cgi-bin/webscr?cmd=_notify-validate", paypalServer);
+for(this=cgiVars;this;this=this->next)
+    {
+    fprintf(f,"%s=%s\n", this->name, this->val);
+    char *encodedVal = cgiEncode(this->val);
+    dyStringPrintf(dy,"&%s=%s", this->name, encodedVal);
+    freeMem(encodedVal);
+    this->saved = FALSE; /* clear now, use later */ 
+    }
+fflush(f);
+
+/* verify ipn sender ip */
+char *remoteAddr=getenv("REMOTE_ADDR");
+//66.135.197.164 ipn.sandbox.paypal.com
+fprintf(f,"REMOTE_ADDR=%s\n", remoteAddr);
+fflush(f);
+
+char *paypalIpn = reverseDns(remoteAddr);
+
+if (!sameString(paypalIpn,cfgOption("paypalIpnServer")))
+    {
+    fprintf(f,"Error: invalid REMOTE_ADDR %s=%s is not paypal ipn %s\n", remoteAddr, paypalIpn, cfgOption("paypalIpnServer"));
+    fflush(f);
+    goto cleanup;
+    }
+
+/* verify via post back to paypal */
+fprintf(f,"about to attempt POST to [%s]:\n",dy->string);
+fflush(f);
+struct lineFile *lf = netLineFileMayOpen(dy->string);
+if (!lf)
+    {
+    fprintf(f,"Error: unable to post verification to %s\n",dy->string);
+    fflush(f);
+    goto cleanup;
+    }
+fprintf(f,"POST verification response:\n");
+fflush(f);
+char *line = NULL;
+boolean verified = FALSE;
+while (lineFileNext(lf, &line, NULL))
+    {
+    fprintf(f,"%s\n",line);
+    fflush(f);
+    if (sameString(line,"VERIFIED"))
+	verified = TRUE;
+    }
+lineFileClose(&lf);
+if (!verified)
+    {
+    fprintf(f,"NOT VERIFIED (txn_id=%s)\n",cgiOptionalString("txn_id"));
+    fflush(f);
+    goto cleanup;
+    }
+fprintf(f,"VERIFIED (txn_id=%s)\n",cgiOptionalString("txn_id"));
+fflush(f);
+
+/* append to transactions table */
+dyStringClear(dy);
+appendSqlField(dy,"invoice",cgiVars);
+appendSqlField(dy,"receiver_email",cgiVars);
+appendSqlField(dy,"item_name",cgiVars);
+appendSqlField(dy,"item_number",cgiVars);
+appendSqlField(dy,"quantity",cgiVars);
+appendSqlField(dy,"payment_status",cgiVars);
+appendSqlField(dy,"pending_reason",cgiVars);
+appendSqlField(dy,"payment_date",cgiVars);
+appendSqlField(dy,"mc_gross",cgiVars);
+appendSqlField(dy,"mc_fee",cgiVars);
+appendSqlField(dy,"shipping",cgiVars);
+appendSqlField(dy,"tax",cgiVars);
+appendSqlField(dy,"mc_currency",cgiVars);
+appendSqlField(dy,"txn_id",cgiVars);
+appendSqlField(dy,"txn_type",cgiVars);
+appendSqlField(dy,"first_name",cgiVars);
+appendSqlField(dy,"last_name",cgiVars);
+appendSqlField(dy,"address_street",cgiVars);
+appendSqlField(dy,"address_city",cgiVars);
+appendSqlField(dy,"address_state",cgiVars);
+appendSqlField(dy,"address_zip",cgiVars);
+appendSqlField(dy,"address_country",cgiVars);
+appendSqlField(dy,"address_status",cgiVars);
+appendSqlField(dy,"residence_country",cgiVars);
+appendSqlField(dy,"payer_email",cgiVars);
+appendSqlField(dy,"payer_id",cgiVars);
+appendSqlField(dy,"payer_status",cgiVars);
+appendSqlField(dy,"payment_type",cgiVars);
+appendSqlField(dy,"payment_gross",cgiVars);
+appendSqlField(dy,"payment_fee",cgiVars);
+appendSqlField(dy,"business",cgiVars);
+appendSqlField(dy,"referrer_id",cgiVars);
+appendSqlField(dy,"receiver_id",cgiVars);
+appendSqlField(dy,"charset",cgiVars);
+appendSqlField(dy,"custom",cgiVars);
+appendSqlField(dy,"notify_version",cgiVars);
+appendSqlField(dy,"verify_sign",cgiVars);
+/* catchall for fields we did not anticipate, or future fields */
+dyStringPrintf(dy,", otherFields='");
+for(this=cgiVars;this;this=this->next)
+    {
+    if (!this->saved)
+	dyStringPrintf(dy,"%s=%s\\n",this->name,this->val);
+    /* remove these vars from the cart for better security/privacy */
+    cartRemove(cart, this->name);	
+    }
+dyStringPrintf(dy,"'");
+
+//debug  TODO: clean that out of trash
+//writeGulp("../trash/debug.sql", dy->string, dy->stringSize);
+
+sqlUpdate(conn,dy->string);
+
+/* see if payment_status is completed */
+
+char *invoice = cgiUsualString("invoice","");
+char *paymentStatus = cgiUsualString("payment_status","");
+if (!sameString("Completed",paymentStatus))
+    {
+    fprintf(f,"Note: payment status not 'Completed' %s\n",dy->string);
+    fflush(f);
+    /* send payer an email confirming */
+    char cmd[256];
+    safef(cmd,sizeof(cmd), 
+    "echo \"We received your payment through Paypal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV access.\" %s"
+    , paymentStatus
+    , cgiUsualString("payment_reason","") 
+    , invoice);
+    int result = system(cmd);
+    if (result == -1)
+	{
+	fprintf(f,"Note: sending email notice of non-activated account to %s failed\n", invoice);
+	fflush(f);
+	goto cleanup;
+	}
+    goto cleanup;
+    }
+
+// TODO: add a check for the amount paid so that it matches the type.
+//  or else, add encryption so that users can't hack the html page
+//  and re-add the require-encryption on the site settings.
+
+// TODO: process the date better, so expirations can work.
+
+// TODO: check if using the email as the invoice will work
+//  when a year has passed.  It would be trouble if they 
+//  couldn't renew later simply because the invoice was
+//  still viewd as a repeat
+
+/* Write payment info to the members table 
+ *  email field has been stored in the invoice field */
+dyStringClear(dy);
+dyStringPrintf(dy,"update members set "
+"activated='Y',"
+"amountPaid='%s',"
+"datePaid='%s'"
+" where email='%s'"
+, cgiUsualString("payment_gross","")
+, cgiUsualString("payment_date","")
+, invoice
+);
+
+//debug  TODO: clean that out of trash
+//writeGulp("../trash/debug.sql", dy->string, dy->stringSize);
+
+sqlUpdate(conn,dy->string);
+
+
+
+updatePasswordsFile(conn);
+
+/* send payer an email confirming */
+char cmd[256];
+safef(cmd,sizeof(cmd), 
+"echo \"We received your payment through Paypal. Your account is now activated.\nPlease go to http://%s/ to access the site. \" | mail -s \"Payment received for GSID HIV access.\" %s"
+, getenv("HTTP_HOST"), invoice);
+int result = system(cmd);
+if (result == -1)
+    {
+    fprintf(f,"Note: sending email notice of activated account to %s failed\n", invoice);
+    fflush(f);
+    goto cleanup;
+    }
+
+cleanup:
+freez(&paypalIpn);
+fprintf(f,"\n");
+carefulClose(&f);
+dyStringFree(&dy);
+}
+
+/* -------- functions ---- */
+
+void debugShowAllMembers(struct sqlConnection *conn)
+/* display all members */
+{
+struct sqlResult *sr;
+char **row;
+ 
+hPrintf("<h1>Members</h1>");
+hPrintf("<table>");
+hPrintf("<th>email</th><th>password</th>");
+
+sr = sqlGetResult(conn, "select * from members");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hPrintf("<tr><td>%s</td><td>%s</td></tr>",row[0],row[1]);
+    }
+sqlFreeResult(&sr);
+
+hPrintf("</table>");
+}
+
+
+
+void lostPasswordPage(struct sqlConnection *conn)
+/* draw the lost password page */
+{
+hPrintf(
+"<h2>HIV VAC</h2>"
+"<p align=\"left\">"
+"</p>"
+"<font color=red>%s</font>"
+"<h3>Send Me My Lost Password</h3>"
+"<form method=post action=\"/cgi-bin-signup/gsidMember\" name=lostPasswordForm >"
+"<table>"
+"<tr><td>E-mail</td><td><input type=text name=gsidM_email size=20> "
+  "(your e-mail is also your user-id)</td></tr>"
+"<tr><td>&nbsp;</td><td><input type=submit name=gsidMember.do.lostPassword value=submit>"
+"&nbsp;<input type=submit name=gsidMember.do.signupPage value=cancel></td></tr>"
+"</table>"
+"<br>"
+, errMsg ? errMsg : ""
+);
+
+cartSaveSession(cart);
+
+hPrintf("</FORM>");
+
+}
+
+
+void lostPassword(struct sqlConnection *conn)
+/* process the lost password form */
+{
+char query[256];
+char cmd[256];
+char *email = cartUsualString(cart, "gsidM_email", "");
+if (!email || sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("email cannot be blank");
+    lostPasswordPage(conn);
+    return;
+    }
+safef(query,sizeof(query), "select password from members where email='%s'", email);
+char *password = sqlQuickString(conn, query);
+if (!password)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("email not found");
+    lostPasswordPage(conn);
+    return;
+    }
+
+safef(cmd,sizeof(cmd), 
+"echo \"Your password is: %s\" | mail -s \"Lost GSID HIV password\" %s"
+, password, email);
+int result = system(cmd);
+if (result == -1)
+    {
+    hPrintf(
+    "<h2>HIV VAC</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Error emailing password to: %s</h3>"
+    "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+    , email
+    );
+    }
+else
+    {
+    hPrintf(
+    "<h2>HIV VAC</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Password has been emailed to: %s</h3>"
+    "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+    , email
+    );
+    }
+
+freez(&password);
+}
+
+
+
+void signupPage(struct sqlConnection *conn)
+/* draw the signup page */
+{
+hPrintf(
+"<h2>HIV VAC</h2>\n"
+"<p align=\"left\">"
+"</p>"
+"GSID provides access to data from the 2003 VaxGen AIDSVAX phase III trials on a yearly fee-membership basis.<br>\n"
+"Academic and non-profit researchers get a substantial discount. <br>\n"
+"<br>\n"
+"If you are already a member, click <a href=https://%s/>here</a> to access HIVVAC.<br>\n"
+"<font color=red>%s</font>"
+"<h3>Sign up</h3>\n"
+"<form method=post action=\"/cgi-bin-signup/gsidMember\" name=mainForm >\n"
+"NOTE: Your e-mail is also your user-id and MUST match what you will use with paypal.\n"
+"<table>\n"
+"<tr><td>E-mail</td><td><input type=text name=gsidM_email value=\"%s\"size=20>\n"
+"<tr><td>Password</td><td><input type=password name=gsidM_password value=\"%s\" size=10></td></tr>\n"
+"<tr><td>Name</td><td><input type=text name=gsidM_name value=\"%s\" size=20></td></tr>\n"
+"<tr><td>Phone</td><td><input type=text name=gsidM_phone value=\"%s\" size=20></td></tr>\n"
+"<tr><td>Institution</td><td><input type=text name=gsidM_institution value=\"%s\" size=40></td></tr>\n"
+"<tr><td>Type</td><td><input type=radio name=gsidM_type value=commercial%s>Commercial $%s.00 USD</td></tr>\n"
+"<tr><td>&nbsp;</td><td><input type=radio name=gsidM_type value=academic%s>Academic $%s.00 USD</td></tr>\n"
+"<tr><td>&nbsp;</td><td><input type=submit name=gsidMember.do.signup value=submit></td></tr>\n"
+"</table>\n"
+"<br>\n"
+"Questions? Call 831-555-5555.<br>\n"
+"Lost your password? Click <a href=gsidMember?gsidMember.do.lostPasswordPage=1>here</a>.<br>\n"
+, getenv("HTTP_HOST")
+, errMsg ? errMsg : ""
+, cartUsualString(cart, "gsidM_email", "")
+, cartUsualString(cart, "gsidM_password", "")
+, cartUsualString(cart, "gsidM_name", "")
+, cartUsualString(cart, "gsidM_phone", "")
+, cartUsualString(cart, "gsidM_institution", "")
+, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) ? " checked" : ""
+, cfgOption("paypalCommercialFee")
+, sameString("academic",cartUsualString(cart, "gsidM_type", "")) ? " checked" : ""
+, cfgOption("paypalAcademicFee")
+);
+
+
+cartSaveSession(cart);
+
+hPrintf("</FORM>");
+
+}
+
+
+
+void signup(struct sqlConnection *conn)
+/* process the signup form */
+{
+char query[256];
+char *email = cartUsualString(cart, "gsidM_email", "");
+if (!email || sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("email cannot be blank");
+    signupPage(conn);
+    return;
+    }
+safef(query,sizeof(query), "select password from members where email='%s'", email);
+char *password = sqlQuickString(conn, query);
+if (password)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("A user with this email already exists.");
+    signupPage(conn);
+    freez(&password);
+    return;
+    }
+
+//TODO: make password requirements stricter, e.g. min length etc.
+password = cartUsualString(cart, "gsidM_password", "");
+if (!password || sameString(password,"") || (strlen(password)<6))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Password must be at least 6 characters long.");
+    signupPage(conn);
+    return;
+    }
+
+char *name = cartUsualString(cart, "gsidM_name", "");
+if (!name || sameString(name,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Mame cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+char *phone = cartUsualString(cart, "gsidM_phone", "");
+if (!phone || sameString(phone,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Phone cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+char *institution = cartUsualString(cart, "gsidM_institution", "");
+if (!institution || sameString(institution,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Institution cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+char *type = cartUsualString(cart, "gsidM_type", "");
+if (!type || sameString(type,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Type cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+safef(query,sizeof(query), "insert into members set "
+    "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
+    email, password, "N", name, phone, institution, type);
+sqlUpdate(conn, query);
+
+//char buttonFile[256];
+//safef(buttonFile,sizeof(buttonFile),"./%s.button",type); // TODO may move the button file later
+char buttonHtml[4096];
+//readInGulp(buttonFile, &buttonHtml, NULL);
+
+char *paypalServer = cfgOption("paypalServer");
+char *httpHost=getenv("HTTP_HOST");
+char *paypalEmail = cfgOption("paypalEmail");
+
+safef(buttonHtml,sizeof(buttonHtml),
+"<form action=\"https://%s/cgi-bin/webscr\" method=\"post\">\n"
+"<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n"
+"<input type=\"hidden\" name=\"business\" value=\"%s\">\n"
+"<input type=\"hidden\" name=\"invoice\" value=\"%s\">\n"
+"<input type=\"hidden\" name=\"item_name\" value=\"GSID HIV Access Yearly %s Membership Fee\">\n"
+"<input type=\"hidden\" name=\"item_number\" value=\"%s\">\n"
+"<input type=\"hidden\" name=\"amount\" value=\"%s.00\">\n"
+"<input type=\"hidden\" name=\"no_shipping\" value=\"2\">\n"
+"<input type=\"hidden\" name=\"return\" "
+"value=\"https://%s/cgi-bin-signup/gsidMember?gsidMember.do.paypalThanks=1\">\n"
+"<input type=\"hidden\" name=\"cancel_return\" "
+"value=\"https://%s/cgi-bin-signup/gsidMember?gsidMember.do.paypalCancel=1\">\n"
+"<input type=\"hidden\" name=\"no_note\" value=\"1\">\n"
+"<input type=\"hidden\" name=\"currency_code\" value=\"USD\">\n"
+"<input type=\"hidden\" name=\"lc\" value=\"US\">\n"
+"<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF\">\n"
+"<input type=\"image\" src=\"https://%s/en_US/i/btn/x-click-but23.gif\" border=\"0\" name=\"submit\" alt=\"Make payments with PayPal - it's fast, free and secure!\">\n"
+"<img alt=\"\" border=\"0\" src=\"https://%s/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">\n"
+"</form>\n"
+, paypalServer
+, paypalEmail
+, email
+
+, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) 
+  ? "Commercial"
+  : "Academic"
+
+, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) 
+  ? "001"
+  : "002"
+
+, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) 
+  ? cfgOption("paypalCommercialFee") 
+  : cfgOption("paypalAcademicFee")
+
+, httpHost
+, httpHost
+, paypalServer
+, paypalServer
+);
+
+hPrintf(
+"<h2>HIV VAC</h2>"
+"<p align=\"left\">"
+"</p>"
+"<h3>User %s successfully added.</h3>"
+"Pay yearly %s membership fee using paypal %s<br>"
+"Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+, email, type, buttonHtml
+);
+
+}
+
+
+void paypalThanks()
+/* thank the user for their payment and welcome them */
+{
+char *paypalServer = cfgOption("paypalServer");
+char *status = cgiUsualString("st", "");
+if (sameString(status,"Completed"))
+    {
+    hPrintf(
+    "<p>\n"
+    "<CENTER><H1>Thanks For Joining GSID HIV VAC</H1></CENTER>\n"
+    "<br>\n"
+    "Your account is now activated and ready to use.<br>\n"
+    "<br>\n"
+    "Thank you for your payment. "
+    "Your transaction has been completed, and a receipt for your purchase has been emailed to you.<br>\n"
+    "You may log into paypal at http://%s/us to view details of this transaction.\n"
+    "<br>\n"
+    "<br>\n"
+    "<big>\n"
+    "Go to <a href=\"/\">GSID HIV VAC</A>\n"
+    "</big>\n"
+    "<br>\n"
+    "<br>\n"
+    , paypalServer
+    );
+    }
+else
+    {
+    hPrintf(
+    "<p>\n"
+    "<CENTER><H1>Thanks For Joining GSID HIV VAC</H1></CENTER>\n"
+    "<br>\n"
+    "Thank you for your payment. "
+    "However, your account is not activated yet (status=%s).<br>\n"
+    "<br>\n"
+    "When your transaction has been completed, a notice will be emailed to you.<br>\n"
+    "You may log into paypal at http://%s/us to view details of this transaction.\n"
+    "<br>\n"
+    "<br>\n"
+    "<big>\n"
+    "When your transaction is completed, you may go to <a href=\"/\">GSID HIV VAC</A>\n"
+    "</big>\n"
+    "<br>\n"
+    "<br>\n"
+    , status
+    , paypalServer
+    );
+    }
+}
+
+void paypalCancel()
+/* the user has cancelled their payment before completion */
+{
+hPrintf(
+"<p>\n"
+"<CENTER><H1>GSID HIV VAC - Payment Cancelled</H1></CENTER>\n"
+"<br>\n"
+"Because you cancelled your Paypal payment, your account has not been activated.<br>\n"
+"<br>\n"
+"<big>\n"
+"Go to <a href=\"/hiv-signup-html/\">GSID HIV VAC</A> to sign up.\n"
+"</big>\n"
+"<br>\n"
+"<br>\n"
+);
+}
+
+
+void doMiddle(struct cart *theCart)
+/* Write the middle parts of the HTML page. 
+ * This routine sets up some globals and then
+ * dispatches to the appropriate page-maker. */
+{
+struct sqlConnection *conn;
+//char *oldOrg;
+cart = theCart;
+
+hSetDb("membership");
+conn = hAllocConn();
+
+
+if (cartVarExists(cart, "debug"))
+    debugShowAllMembers(conn);
+else if (cartVarExists(cart, "update"))
+    {
+    updatePasswordsFile(conn);
+    hPrintf(
+    "<h2>HIV VAC</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Successfully updated the authentication file.</h3>"
+    "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+    );
+    }
+else if (cgiVarExists("verify_sign"))
+    processIpn(conn);
+else if (cartVarExists(cart, "gsidMember.do.paypalThanks"))
+    paypalThanks();
+else if (cartVarExists(cart, "gsidMember.do.paypalCancel"))
+    paypalCancel();
+else if (cartVarExists(cart, "gsidMember.do.lostPasswordPage"))
+    lostPasswordPage(conn);
+else if (cartVarExists(cart, "gsidMember.do.lostPassword"))
+    lostPassword(conn);
+else if (cartVarExists(cart, "gsidMember.do.signup"))
+    signup(conn);
+else
+    signupPage(conn);
+    
+
+hFreeConn(&conn);
+cartRemovePrefix(cart, "gsidMember.do.");
+
+}
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "gsidMember - administer gsid hiv membership functions - a cgi script\n"
+  "usage:\n"
+  "   gsidMember\n"
+  );
+}
+
+int main(int argc, char *argv[])
+/* Process command line. */
+{
+pushCarefulMemHandler(100000000);
+cgiSpoof(&argc, argv);
+htmlSetStyle(htmlStyleUndecoratedLink);
+htmlSetBgColor(HG_CL_OUTSIDE);
+oldCart = hashNew(10);
+cartHtmlShell("GSID Member v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldCart);
+return 0;
+}
