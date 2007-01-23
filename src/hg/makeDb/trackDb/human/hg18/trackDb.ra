@@ -1224,7 +1224,7 @@ shortLabel Filtered Atom Maf
 longLabel Filtered Atom Maf
 group x
 priority 70.1
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
