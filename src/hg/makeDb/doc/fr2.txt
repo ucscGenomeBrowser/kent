@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.2 2007/01/23 18:38:53 hiram Exp $"
+#       "$Id: fr2.txt,v 1.3 2007/01/23 19:50:37 hiram Exp $"
 #
 
 ##########################################################################
@@ -60,6 +60,16 @@ genomeCladePriority 110
     # << happy emacs
 
     makeGenomeDb.pl config.ra > mgdb.out 2>&1
+    #	This sequence creates and loads the following files into the
+    #	new database oryLat1
+    #	chr*_gap, chr*_gold, chromInfo, gc5Base, grp
+    #	And, when you follow the instructions it gives at the end to check in
+    #	the trackDb files it creates, and you do a make in your trackDb
+    #	hierarchy, you will then create the trackDb and hgFindSpec tables
+    #	(with a 'make alpha') or your specific trackDb_logname
+    #	hgFindSpec_logname with a simple 'make' with no arguments.
+    #	The sequence also adds an entry to the dbDb table to turn on this
+    #	organism in the drop-down menus
 
     ############################################
     # Checked in trackDb fr2 files to the source tree.  Instructions
