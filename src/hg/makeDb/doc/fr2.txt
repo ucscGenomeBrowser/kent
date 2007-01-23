@@ -1,0 +1,99 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Medaka
+# genome, Takifugu rubripes, October 2004, MEDAKA1 from
+#       Institute of Genetics (NIG) and the University of Tokyo
+#       NIG: http://dolphin.lab.nig.ac.jp/medaka/
+#       UTGB: http://medaka.utgenome.org/o
+#       Data release policy: http://medaka.utgenome.org/#policy
+#       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
+#
+#       "$Id: fr2.txt,v 1.1 2007/01/23 00:42:17 hiram Exp $"
+#
+
+##########################################################################
+### Fetch sequence       (DONE - 2007-01-22 - Cory McLean and Hiram)
+  ssh kkstore02
+  mkdir /cluster/store5/fr2
+  ln -s /cluster/store5/fr2 /cluster/data/fr2
+  cd /cluster/data/fr2
+  mkdir jgi
+  cd jgi
+  cat << '_EOF_' > fetch.sh
+#!/bin/sh
+
+wget --timestamping "ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/v4.0/*"
+
+gunzip fugu.041029.scaffolds.fasta.gz
+
+scaffoldFaToAgp fugu.041029.scaffolds.fasta
+
+gzip fugu.041029.scaffolds.fasta
+'_EOF_'
+    # << happy emacs
+    chmod +x fetch.sh
+    ./fetch.sh
+
+##########################################################################
+#  Run the makeGenomeDb.pl script (DONE - 2007-01-22 - Cory and Hiram)
+    # prepare for the makeGenomeDb.pl script:
+    ssh hgwdev
+    cd /cluster/data/fr2
+    #   the config.ra script pretty much specifies everything
+    cat << '_EOF_' >  config.ra
+db fr2
+scientificName Takifugu Rubripes
+assemblyDate Oct. 2004
+assemblyLabel JGI V4.0
+# orderKey = fr1.orderKey - 1
+orderKey 464
+#       NC_004299.1
+mitoAcc 23397366
+fastaFiles /cluster/data/fr2/jgi/fugu.041029.scaffolds.fasta.gz
+dbDbSpeciesDir fugu
+agpFiles /cluster/data/fr2/jgi/fugu.041029.scaffolds.agp
+commonName Fugu
+clade Vertebrate
+genomeCladePriority 110
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl config.ra > mgdb.out 2>&1
+
+    ############################################
+    # Checked in trackDb fr2 files to the source tree.  Instructions
+    # located in ~/kent/src/product/README.trackDb
+    ssh hgwdev
+    cd /gbdb/fr2
+    ln -s /cluster/data/fr2/fr2.unmasked.2bit ./fr2.2bit
+
+################################################
+## WINDOWMASKER (Working - 2007-01-22 - Cory and Hiram)
+  cd /cluster/data/fr2/bed/
+  ~/kent/src/hg/utils/automation/doWindowMasker.pl fr2 \
+      -workhorse=kolossus > wmRun.log 2>&1 &
+
+  # Save the log
+  mv wmRun.log WindowMasker.2007-01-22
+
+  # Masking statistics
+  cd WindowMasker.2007-01-22
+  twoBitToFa fr2.wmsk.2bit stdout | faSize stdin
+
+  # 400525790 bases (49313545 N's 351212245 real 284686886 upper
+  # 66525359 lower)
+
+  hgLoadBed -strict fr2 windowmaskerSdust windowmasker.sdust.bed.gz
+  # Loaded 1747418 elements of size 3
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (Working 2007-01-22 - Cory and Hiram)
+  ssh kolossus
+  mkdir /cluster/data/fr2/bed/simpleRepeat
+  cd /cluster/data/fr2/bed/simpleRepeat
+  time nice -n 19 twoBitToFa ../../fr2.unmasked.2bit stdout \
+     | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+     -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
+
+
