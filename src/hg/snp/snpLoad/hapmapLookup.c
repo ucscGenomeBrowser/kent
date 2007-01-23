@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapLookup.c,v 1.1 2007/01/23 01:12:05 heather Exp $";
+static char const rcsid[] = "$Id: hapmapLookup.c,v 1.2 2007/01/23 05:33:27 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -94,19 +94,14 @@ return ret;
 boolean samePosition(char **row, struct snpSubset *ss)
 /* simple comparison function */
 {
-if (sameString(row[3], "rs3963317"))
-    verbose(1, "samePosition for rs3963317\n");
-/* don't check if not a fair comparison */
-if (differentString(ss->class, "single")) return FALSE;
-if (differentString(ss->locType, "exact")) return FALSE;
-if (ss->end != ss->start + 1) return FALSE;
+/* must be simple */
+assert(sameString(ss->class, "single"));
+assert(sameString(ss->locType, "exact"));
+assert(ss->end == ss->start + 1);
 
-/* now compare */
 if (differentString(row[0], ss->chrom)) return FALSE;
 if (sqlUnsigned(row[1]) != ss->start) return FALSE;
 if (sqlUnsigned(row[2]) != ss->end) return FALSE;
-if (sameString(row[3], "rs3963317"))
-    verbose(1, "samePosition for rs3963317 TRUE\n");
 return TRUE;
 }
 
@@ -129,19 +124,22 @@ if (sameString(rc, row[5])) return TRUE;
 return FALSE;
 }
 
+boolean strandMatch(char **row, struct snpSubset *ss)
+{
+if (row[4][0] != ss->strand) return FALSE;
+return TRUE;
+}
+
 void checkObservedAndStrand(char **row, struct snpSubset *ss)
 {
+boolean sameStrand = strandMatch(row, ss);
 
-/* if we don't know the observed string from dbSNP, all we can check is strand */
-if (sameString(ss->observed, "unknown") || sameString(ss->observed, "n/a"))
-    {
-    if (row[4][0] != ss->strand)
-        fprintf(errorFileHandle, "snp %s strand mismatch\n", row[3]);
-    return;
-    }
+/* we know that ss has valid observed */
+assert(differentString(ss->observed, "unknown"));
+assert(differentString(ss->observed, "n/a"));
 
 /* perhaps this is a reverse complement */
-if (differentString(row[5], ss->observed) && row[4][0] != ss->strand)
+if (differentString(row[5], ss->observed) && !sameStrand)
     {
     if (reverseComplemented(row, ss))
         fprintf(errorFileHandle, "snp %s reverse complemented\n", row[3]);
@@ -150,15 +148,25 @@ if (differentString(row[5], ss->observed) && row[4][0] != ss->strand)
     return;
     }
         
-if (sameString(row[5], ss->observed) && row[4][0] != ss->strand)
+if (sameString(row[5], ss->observed) && !sameStrand)
     {
     fprintf(errorFileHandle, "snp %s strand mismatch\n", row[3]);
     return;
     }
 
-if (differentString(row[5], ss->observed) && row[4][0] == ss->strand)
+if (differentString(row[5], ss->observed) && sameStrand) 
     fprintf(errorFileHandle, "snp %s observed mismatch\n", row[3]);
         
+}
+
+
+boolean isComplexDbSnp(struct snpSubset *ss)
+/* could also check observed */
+{
+if (ss->end != ss->start + 1) return TRUE;
+if (differentString(ss->class, "single")) return TRUE;
+if (differentString(ss->locType, "exact")) return TRUE;
+return FALSE;
 }
 
 void processSnps(struct hash *snpHash, struct hash *exceptionHash, char *hapmapTable)
@@ -192,6 +200,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
     subsetElement = (struct snpSubset *)hel->val;
+
+    if (sameString(subsetElement->observed, "unknown") || sameString(subsetElement->observed, "n/a"))
+        {
+	if (!strandMatch(row, subsetElement))
+            fprintf(errorFileHandle, "snp %s strand mismatch (dbSNP observed unknown)\n", row[3]);
+	continue;
+	}
+
+    if (isComplexDbSnp(subsetElement))
+        {
+	if (differentString(subsetElement->observed, row[5]))
+	    fprintf(errorFileHandle, "%s: snp observed = %s, hapmap observed = %s\n", row[3], subsetElement->observed, row[5]);
+	continue;
+	}
 
     if (!samePosition(row, subsetElement))
         {
