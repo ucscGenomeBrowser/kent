@@ -1215,7 +1215,7 @@ TMPDIR=/scratch/tmp
 #    distance                      on gasAcu1    on other   minScore
 #  1  0.4000 - medaka oryLat1      (% 38.308) (% 27.044)       2000     loose
 #  2  0.7994 - tetraodon tetNig1   (% 42.044) (% 50.004)       5000     loose
-#  3  0.8399 - fugu fr1            (% 35.925) (% 49.909)       2000     loose
+#  3  0.8399 - fugu fr1            (% 35.925) (% 46.909)       2000     loose
 #  4  1.4755 - zebrafish danRer4   (% 35.163) (% 13.104)       5000     loose
 #  6  1.5831 - chicken galGal3     (%  9.181) (%  3.144)       2000     loose
 #  7  1.6584 - human hg18          (% 11.353) (%  1.923)       2000     loose
