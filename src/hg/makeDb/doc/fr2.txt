@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.1 2007/01/23 00:42:17 hiram Exp $"
+#       "$Id: fr2.txt,v 1.2 2007/01/23 18:38:53 hiram Exp $"
 #
 
 ##########################################################################
@@ -95,5 +95,37 @@ genomeCladePriority 110
   time nice -n 19 twoBitToFa ../../fr2.unmasked.2bit stdout \
      | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
      -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
+  # ~31m
+  # Make a filtered version for sequence masking:
+  awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+  splitFileByColumn trfMask.bed trfMaskChrom
 
+  # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed fr2 simpleRepeat \
+      /cluster/data/fr2/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    featureBits fr2 simpleRepeat
+    # 9915088 bases of 393312790 (2.521%) in intersection
+
+    featureBits fr1 simpleRepeat
+    # 6801339 bases of 315518167 (2.156%) in intersection
+#########################################################################
+## Add TRF mask to WindowMasker masked sequence
+    ssh kkstore02
+    cd /cluster/data/fr2
+    twoBitMask bed/WindowMasker.2007-01-22/fr2.wmsk.sdust.2bit \
+      -add bed/simpleRepeat/trfMask.bed fr2.2bit
+
+    # Received ignorable warning:
+    # Warning: BED file bed/simpleRepeat/trfMask.bed has >=13 fields which means it
+    # might contain block coordinates, but this program uses only the first three
+    # fields (the entire span -- no support for blocks).
+
+    # Make this be the actual file the get DNA browser sees
+    ssh hgwdev
+    cd /gbdb/fr2/
+    rm fr2.2bit
+    ln -s /cluster/data/fr2/fr2.2bit fr2.2bit
 
