@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.162 2007/01/08 22:55:03 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.163 2007/01/23 22:06:00 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -764,6 +764,7 @@ struct customTrack *nextCt = NULL;
 boolean removedCt = FALSE;
 
 /* load existing custom tracks from trash file */
+boolean changedCt = FALSE;
 if (customTracksExist(cart, &ctFileName))
     {
     ctList = 
@@ -798,8 +799,11 @@ if (customTracksExist(cart, &ctFileName))
                     }
                 else
                     {
-                    if (html)
+                    if (html && differentString(html, ct->tdb->html))
+                        {
                         ct->tdb->html = html;
+                        changedCt = TRUE;
+                        }
                     }
                 break;
                 }
@@ -811,7 +815,7 @@ if (customTracksExist(cart, &ctFileName))
 /* merge new and old tracks */
 numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
-if (newCts || removedCt || ctConfigUpdate(ctFileName))
+if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
     customTracksSaveCart(cart, ctList);
 
 cartRemove(cart, CT_CUSTOM_TEXT_ALT_VAR);
