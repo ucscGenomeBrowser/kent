@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.12 2007/01/22 06:21:54 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.13 2007/01/23 00:41:12 hiram Exp $"
 #
 
 ##########################################################################
@@ -220,6 +220,9 @@ genomeCladePriority 105
     ln -s ../rawData/allSeqLevel.agp ./oryLat1.agp
 
     cd /cluster/data/oryLat1
+    #	Being brave, a complete run will do this entirely
+    makeGenomeDb.pl config.ra > mgdb.out 2>&1
+
     #	run the script one step at a time in case there are difficulties
     #	(there were problems until I figured out how to synchronize the agp
     #	file with the sequence file)
@@ -325,6 +328,9 @@ done > checkFa.out
     #	Percent masked sdust: %33.05 = 100*231477315/700386597
     #	Percent masked wmsk: %32.29 = 100*226173115/700386597
 
+    #	Load this table
+    hgLoadBed -strict oryLat1 windowmaskerSdust windowmasker.sdust.bed.gz
+
 ########################################################################
 ##  Check how much ensembl sequence is repeat masked
     ssh kkstore04
@@ -345,7 +351,7 @@ done > checkFa.out
     ssh kolossus
     mkdir /cluster/data/oryLat1/bed/simpleRepeat
     cd /cluster/data/oryLat1/bed/simpleRepeat
-    nice -n 19 time twoBitToFa ../../oryLat1.unmasked.2bit stdout \
+    time nice -n 19 twoBitToFa ../../oryLat1.unmasked.2bit stdout \
 	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
 	    -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
     # ~1h 20m
