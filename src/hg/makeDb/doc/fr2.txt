@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.3 2007/01/23 19:50:37 hiram Exp $"
+#       "$Id: fr2.txt,v 1.4 2007/01/24 00:59:45 hiram Exp $"
 #
 
 ##########################################################################
@@ -121,6 +121,7 @@ genomeCladePriority 110
 
     featureBits fr1 simpleRepeat
     # 6801339 bases of 315518167 (2.156%) in intersection
+
 #########################################################################
 ## Add TRF mask to WindowMasker masked sequence
     ssh kkstore02
@@ -138,4 +139,36 @@ genomeCladePriority 110
     cd /gbdb/fr2/
     rm fr2.2bit
     ln -s /cluster/data/fr2/fr2.2bit fr2.2bit
+
+#########################################################################
+## Lift our .2bit file against the .lft file to create a scaffold fasta file
+    cd /cluster/data/fr2/jkStuff
+    cp ../jgi/fugu.041029.scaffolds.lft liftAll.lft
+    cp /cluster/data/tetNig1/jkStuff/lft2BitToFa.pl .
+    cd ..
+    mkdir noUn
+    cd noUn
+    time ../jkStuff/lft2BitToFa.pl ../fr2.2bit ../jkStuff/liftAll.lft \
+         > chrUn.scaffolds.fa
+    # real    5m4.520s
+
+    twoBitToFa -seq=chrM ../fr2.2bit chrM.fa
+    faToTwoBit *.fa fr2.scaffolds.2bit
+    twoBitInfo *.2bit stdout | sort -k2nr > fr2.scaffolds.sizes
+
+
+##########################################################################
+## Move the data out to the cluster
+    cd /san/sanvol1/scratch/
+    mkdir fr2
+    cd fr2
+    cp -p /cluster/data/fr2/jkStuff/liftAll.lft
+    cp -p /cluster/data/fr2/chrom.sizes .
+    cp -p /cluster/data/fr2/fr2.2bit .
+    cp -p /cluster/data/fr2/noUn/*2bit .
+    cp -p /cluster/data/fr2/noUn/*sizes .
+
+## Edit the kent/src/hg/makeDb/doc/gasAcu1.txt doc to show what we're going to
+## do there.
+
 

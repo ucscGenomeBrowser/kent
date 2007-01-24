@@ -2058,3 +2058,96 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
     #	After moving previous stuff out of the way
     ./makeMd5sum.csh
     ./installDownloads.csh
+
+#########################################################################
+# BLASTZ/CHAIN/NET FR2 (DONE - 2007-01-23 - Hiram)
+##  no chrUn in gasAcu1, and align to fr2 scaffolds,
+##	results lifted to fr2 chrUn coordinates
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23
+    cd /cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23
+    cat << '_EOF_' > DEF
+# Stickleback vs. Fugu
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Stippleback gasAcu1, no chrUn in this run
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.noUn.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=0
+
+# QUERY: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/gasAcu1Fr2 > do.log 2>&1 &
+    #	real    27m33.395s
+    #	user    0m0.189s
+    #	sys     0m0.163s
+    # Error because of inconsistent chrom sizes. We had attempted to modify
+    # our lift file to remove a gap inserted at the end of the entire
+    # sequence, which we should not have done. 
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -verbose=2 -continue=chainRun -bigClusterHub=pk \
+        -blastzOutRoot /cluster/bluearc/gasAcu1Fr2 > chainRun.log 2>&1 &
+
+################################################
+### XXX Running at 17:00 on 2007-01-23, to be continued...
+################################################
+    
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed
+    ln -s blastz.fr2.2007-01-23 blastz.fr2
+    cd blastz.fr2
+    time nice -n 19 featureBits gasAcu1 chainFr1Link \
+	> fb.gasAcu1.chainFr1Link.txt 2>&1 &
+    #	146655780 bases of 446627861 (32.836%) in intersection
+
+    mkdir /cluster/data/fr2/bed/blastz.gasAcu1.swap
+    cd /cluster/data/fr2/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > do.log 2>&1 &
+
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23/DEF \
+	-continue=net -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > net.log 2>&1 &
+    #	real    24m33.761s
+    #	user    0m0.125s
+    #	sys     0m0.080s
+
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/blastz.gasAcu1.swap
+    time nice -n 19 featureBits fr2 chainGasAcu1Link \
+	> fb.fr2.chainGasAcu1Link.txt 2>&1 &
+    #	148005715 bases of 315518167 (46.909%) in intersection
+
