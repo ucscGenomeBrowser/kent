@@ -48,7 +48,7 @@ priority 40
 visibility dense
 color 150,0,0
 type genePred ensPep
-url http://www.ensembl.org/perl/transview?transcript=$$track genscan
+url http://dec2006.archive.ensembl.org/Takifugu_rubripes/transview?transcript=$$
 
 track genscan
 shortLabel Genscan Genes
