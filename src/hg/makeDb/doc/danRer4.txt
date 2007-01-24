@@ -9154,3 +9154,58 @@ cat << '_EOF_' > getRhInfo
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer4
+
+#########################################################################
+# BLASTZ/CHAIN/NET oryLat1 (WORKING - 2007-01-19 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19
+    cd /cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19
+    cat << '_EOF_' > DEF
+# Zebrafish vs. Medaka
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer4, no randoms or Un in this sequence
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/danRer4.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/danRer4/danRer4.noUn.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# TARGET: Medaka oryLat1 (40M chunks covers the largest chroms in one gulp)
+#       chrUn in Scaffolds for this alignment run
+SEQ2_DIR=/san/sanvol1/scratch/oryLat1/oryLat1.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/oryLat1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/oryLat1/oryLat1UnScaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/oryLat1/chrUn.lift
+SEQ2_CHUNK=40000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/danRer4OryLat1 > do.log 2>&1 &
+    #	real    556m6.806s
+
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/danRer4/bed/blastz.oryLat1.2007-01-19/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk  > swap.log 2>&1 &
+XXX - running 2007-01-20 09:21
