@@ -6,6 +6,7 @@
 #Radiation Hybrid map information
 CREATE TABLE rhMapInfo (
     name varchar(255) not null,	# Name of Radiation Hybrid (RH) map marker
+    zfinId varchar(255) not null,	# ZFIN ID for the marker
     linkageGp varchar(255) not null,	# Linkage group to which the marker was mapped
     position int unsigned not null,	# Position number in RH map for this linkage group
     distance int unsigned not null,	# Distance from the top of linkage group (cR)
@@ -15,5 +16,6 @@ CREATE TABLE rhMapInfo (
     leftPrimer varchar(255) not null,	# Forward primer sequence
     rightPrimer varchar(255) not null,	# Reverse primer sequence
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(name),
+    INDEX(zfinId)
 );
