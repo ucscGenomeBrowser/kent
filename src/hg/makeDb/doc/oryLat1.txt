@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.13 2007/01/23 00:41:12 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.14 2007/01/24 01:00:20 hiram Exp $"
 #
 
 ##########################################################################
@@ -222,8 +222,18 @@ genomeCladePriority 105
     cd /cluster/data/oryLat1
     #	Being brave, a complete run will do this entirely
     makeGenomeDb.pl config.ra > mgdb.out 2>&1
+    #	This sequence creates and loads the following files into the
+    #	new database oryLat1
+    #	chr*_gap, chr*_gold, chromInfo, gc5Base, grp
+    #	And, when you follow the instructions it gives at the end to check in
+    #	the trackDb files it creates, and you do a make in your trackDb
+    #	hierarchy, you will then create the trackDb and hgFindSpec tables
+    #	(with a 'make alpha') or your specific trackDb_logname
+    #	hgFindSpec_logname with a simple 'make' with no arguments.
+    #	The sequence also adds an entry to the dbDb table to turn on this
+    #	organism in the drop-down menus
 
-    #	run the script one step at a time in case there are difficulties
+    #	run the script one step at a time if there are difficulties
     #	(there were problems until I figured out how to synchronize the agp
     #	file with the sequence file)
     makeGenomeDb.pl config.ra -stop=seq -workhorse=hgwdev
@@ -2349,3 +2359,444 @@ cat  << '_EOF_' > template
     time nice -n +19 hgLoadMafFrames oryLat1 multiz5wayFrames \
 	multiz5way.mafFrames.gz
     #	real    0m22.466s
+
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS
+#		(WORKING - 2007-01-23 - Hiram)
+    # The following is adapted from the gasAcu1 8-way sequence
+
+# Estimate phastCons parameters
+    ssh kkstore04
+    mkdir /cluster/data/oryLat1/bed/multiz5way/cons
+    cd /cluster/data/oryLat1/bed/multiz5way/cons
+
+    #	The automatic build process does not leave masked fa sequences for the
+    #	chroms, so, create them here.
+    twoBitToFa -seq=chr1 ../../../oryLat1.sdTrf.2bit chr1.fa
+    # Create a starting-tree.mod based on chr1 (the largest one)
+    time /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr1.maf \
+	--refseq ./chr1.fa --in-format MAF \
+	--windows 100000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	20 seconds
+
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+--tree "(((tetNig1,fr1),(gasAcu1,oryLat1)),danRer4)" \
+    --out-root starting-tree
+    #	Fitting tree model to s1.1-39973033.ss using REV ...
+    #	Writing model to starting-tree.mod ...
+    #	real    0m8.798s
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.430
+    #	This 0.430 is used in the --gc argument below
+
+    # Create SS files on san filesystem
+    #	Using a size of 10,000,000 to slow down the phastCons pk jobs
+    ssh kkstore04
+    mkdir -p  /san/sanvol1/scratch/oryLat1/cons/ss
+    cd  /san/sanvol1/scratch/oryLat1/cons/ss
+    time for C in `awk '{print $1}' /cluster/data/oryLat1/chrom.sizes`
+    do
+      if [ -s /cluster/data/oryLat1/bed/multiz5way/maf/${C}.maf ]; then
+	mkdir -p ${C}
+	mkdir -p /cluster/data/oryLat1/bed/multiz5way/cons/${C}
+	echo msa_split $C
+	twoBitToFa -seq=${C} /cluster/data/oryLat1/oryLat1.sdTrf.2bit \
+		/cluster/data/oryLat1/bed/multiz5way/cons/${C}/${C}.fa
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/oryLat1/bed/multiz5way/maf/${C}.maf \
+	    --refseq /cluster/data/oryLat1/bed/multiz5way/cons/${C}/${C}.fa \
+	    --in-format MAF --windows 10000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+      fi
+    done &
+    #	real    8m10.478s
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    cd /san/sanvol1/scratch/oryLat1/cons/ss
+    ls -1l chr*/chr*.ss | grep -v Un | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/oryLat1/cons/treeRun1
+    cd /san/sanvol1/scratch/oryLat1/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/oryLat1/bed/multiz5way/cons/starting-tree.mod \
+      --gc 0.430 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-length 12 --target-coverage 0.10 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	<< happy emacs
+    chmod a+x makeTree.csh
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+./makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       7821s     130.35m     2.17h    0.09d  0.000 y
+# IO & Wait Time:                   149s       2.48m     0.04h    0.00d  0.000 y
+# Average job time:                 159s       2.66m     0.04h    0.00d
+# Longest finished job:             300s       5.00m     0.08h    0.00d
+# Submission to last job:           346s       5.77m     0.10h    0.00d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh pk
+    cd /san/sanvol1/scratch/oryLat1/cons/treeRun1
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ave.cons.mod > cons_summary.txt
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ave.noncons.mod > noncons_summary.txt
+    cp -p ave.*.mod ..
+    cd ..
+    cp -p ave.*.mod /cluster/data/oryLat1/bed/multiz5way/cons
+XXXX - to here 2007-01-23 10:06
+
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    #	never stops with the --NH argument
+    time /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.7834 \
+	0.10 12 ave.{cons,noncons}.mod
+## 0.20 10 
+( Solving for new omega: 10.000000 12.922391 12.450309 12.439360 )
+
+Transition parameters: gamma=0.200000, omega=10.000000, mu=0.100000, nu=0.025000
+Relative entropy: H=1.358227 bits/site
+Expected min. length: L_min=6.803722 sites
+Expected max. length: L_max=4.741215 sites
+Phylogenetic information threshold: PIT=L_min*H=9.241002 bits
+Recommended expected length: omega=12.439360 sites (for L_min*H=9.783400)
+
+## 0.01 12 does not convert, trying without --NH
+Transition parameters: gamma=0.010000, omega=12.000000, mu=0.083333, nu=0.000842
+Relative entropy: H=1.012920 bits/site
+Expected min. length: L_min=15.386530 sites
+Expected max. length: L_max=10.103812 sites
+Phylogenetic information threshold: PIT=L_min*H=15.585327 bits
+
+## 0.10 12
+# ( Solving for new omega: 12.000000 7.303911 5.603783 4.937054 4.700330 4.651391 4.648962 4.648956 )
+
+# Transition parameters: gamma=0.100000, omega=12.000000, mu=0.083333, nu=0.009259
+# Relative entropy: H=1.200128 bits/site
+# Expected min. length: L_min=9.375672 sites
+# Expected max. length: L_max=6.463613 sites
+# Phylogenetic information threshold: PIT=L_min*H=11.252009 bits
+# Recommended expected length: omega=4.648956 sites (for L_min*H=9.783400)
+
+## 0.17 12
+# ( Solving for new omega: 12.000000 10.568744 10.445646 10.444628 )
+
+# Trans parameters: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=1.267443 bits/site
+# Expected min. length: L_min=7.976979 sites
+# Expected max. length: L_max=5.664374 sites
+# Phylogenetic information threshold: PIT=L_min*H=10.110368 bits
+# Recommended expected length: omega=10.444628 sites (for L_min*H=9.783400)
+
+    /cluster/bin/phast/$MACHTYPE/consEntropy .17 12 \
+                        ave.cons.mod ave.noncons.mod
+Transition parameters: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+Relative entropy: H=1.253111 bits/site
+Expected min. length: L_min=8.076184 sites
+Expected max. length: L_max=5.736142 sites
+Phylogenetic information threshold: PIT=L_min*H=10.120357 bits
+
+#Transition parameters:gamma=0.100000, omega=12.000000, mu=0.083333, nu=0.009259
+# Relative entropy: H=1.454874 bits/site
+# Required length: N=7.596943 sites
+# Total entropy: NH=11.052595 bits
+
+    #	SKIP to here passing by the tuning numbers
+    ssh pk
+    # Create cluster dir to do main phastCons run
+    mkdir /san/sanvol1/scratch/oryLat1/cons/consRun4
+    cd /san/sanvol1/scratch/oryLat1/cons/consRun4
+    mkdir ppRaw bed
+
+    # Create script to run phastCons with right parameters
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cat > doPhast << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ../ave.{cons,noncons}.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-length 12 --target-coverage 0.01 --quiet \
+	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.{cons,noncons}.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+./doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+    #	These jobs are very fast and very I/O intensive, even on the san
+    #	they will hang it up as they work at full tilt.
+# Completed: 58 of 58 jobs
+# CPU time in finished jobs:       1619s      26.98m     0.45h    0.02d  0.000 y
+# IO & Wait Time:                   373s       6.22m     0.10h    0.00d  0.000 y
+# Average job time:                  34s       0.57m     0.01h    0.00d
+# Longest finished job:              48s       0.80m     0.01h    0.00d
+# Submission to last job:            67s       1.12m     0.02h    0.00d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /san/sanvol1/scratch/oryLat1/cons/consRun4
+    #	The sed's and the sort get the file names in chrom,start order
+    #	You might like to verify it is correct by first looking at the
+    #	list it produces:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | less
+    #	if that looks right, then let it run:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	| /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved8Way.bed
+    #	~ 16 seconds
+    cp -p mostConserved8Way.bed /cluster/data/oryLat1/bed/multiz5way
+
+    # Figure out how much is actually covered by the bed file as so:
+    #	Get the non-n genome size from faSize on all chroms:
+    ssh kkstore04
+    cd /cluster/data/oryLat1/bed/multiz5way/cons
+    faSize chr*/*.fa
+    #	463354448 bases (16726587 N's 446627861 real 348847599
+    #	upper 97780262 lower) in 23 sequences in 23 files
+
+    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
+    #	1089350685 lower) in 34 sequences in 34 files
+
+    cd /san/sanvol1/scratch/oryLat1/cons/consRun4
+    #	The 446627861 comes from the non-n genome as counted above.
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
+	mostConserved8Way.bed
+    #	% 11.49 = 100.0*51326297/446627861 --exp-len 10 --tar-cov 0.20
+    #	%  8.36 = 100.0*37347218/446627861 --exp-len 12 --tar-cov 0.01
+    #	% 10.24 = 100.0*45733412/446627861 --exp-len 12 --tar-cov 0.10
+    #	% 11.45 = 100.0*51136218/446627861 --exp-len 12 --tar-cov 0.17
+
+    #	Aiming for %70 coverage in
+    #	the following featureBits measurement on CDS:
+    # Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits oryLat1 \
+	-enrichment ensGene:cds mostConserved8Way.bed
+    #	--expected-length 10 --target-coverage 0.20
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 11.492%, both 4.041%, cover
+    #	61.07%, enrich 5.31x
+    #	--expected-length 12 --target-coverage 0.01
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 8.362%, both 3.628%, cover
+    #	54.82%, enrich 6.56x
+    #	--expected-length 12 --target-coverage 0.10
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 10.240%, both 3.920%, cover
+    #	59.24%, enrich 5.79x
+    #	--expected-length 12 --target-coverage 0.17
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 11.449%, both 4.092%, cover
+    #	61.84%, enrich 5.40x
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way
+    # ended up using the set: --expected-length 10 --target-coverage 0.20
+    time nice -n +19 hgLoadBed -strict oryLat1 phastConsElements5way \
+	mostConserved8Way.bed
+    #	Loaded 446138 elements of size 5
+    #	real    0m18.333s
+
+    #	should measure the same as above
+    time nice -n +19 \
+	featureBits oryLat1 -enrichment ensGene:cds phastConsElements5way
+    #	At: --expected-length 10 --target-coverage 0.20
+    #	ensGene:cds 6.618%, phastConsElements5way 11.492%, both 4.041%, cover
+    #	61.07%, enrich 5.31x
+    #	At: --expected-length 12 --target-coverage 0.10 result:
+    #	ensGene:cds 6.618%, phastConsElements5way 10.240%, both 3.920%, cover
+    #	59.24%, enrich 5.79x
+    #	At: --expected-length 12 --target-coverage 0.17 result:
+    #	ensGene:cds 6.618%, phastConsElements5way 11.449%,
+    #	both 4.092%, cover 61.84%, enrich 5.40x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh pk
+    cd /san/sanvol1/scratch/oryLat1/cons/consRun4
+    # the sed business gets the names sorted by chromName, chromStart
+    #	so that everything goes in numerical order into wigEncode
+    #	This was verified above to be correct
+    time nice -n +19 find ./ppRaw -type f \
+	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	    | $HOME/bin/$MACHTYPE/wigEncode -noOverlap stdin \
+		phastCons8.wig phastCons8.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    3m39.548
+    #	-rw-rw-r--   1 296834860 Jan 14 15:27 phastCons8.wib
+    #	-rw-rw-r--   1  47569318 Jan 14 15:27 phastCons8.wig
+    time nice -n +19 cp -p phastCons8.wi? /cluster/data/oryLat1/bed/multiz5way/
+    #	real    1m21.329s
+
+    #	prepare compressed copy of ascii data values for downloads
+    ssh pk
+    cd /san/sanvol1/scratch/oryLat1/cons/consRun4
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons8Scores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons8Scores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+	    gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    18m15.212s
+
+    #	copy them for downloads
+    ssh kkstore04
+    #	this directory is actually a symlink from store9 to store8 to
+    #	avoid the data full problem on store9
+    mkdir /cluster/data/oryLat1/bed/multiz5way/phastCons8Scores
+    cd /cluster/data/oryLat1/bed/multiz5way/phastCons8Scores
+    cp -p  /san/sanvol1/scratch/oryLat1/cons/consRun4/phastCons8Scores/* .
+    # make a README.txt file here, and an md5sum
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/oryLat1/phastCons8Scores
+    cd /usr/local/apache/htdocs/goldenPath/oryLat1/phastCons8Scores
+    ln -s /cluster/data/oryLat1/bed/multiz5way/phastCons8Scores/* .
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way
+    ln -s `pwd`/phastCons8.wib /gbdb/oryLat1/wib/phastCons8.wib
+    # ended up using the set: --expected-length 10 --target-coverage 0.20
+    time nice -n +19 hgLoadWiggle oryLat1 phastCons8 phastCons8.wig
+    #	real    0m9.256s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/multiz5way
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=oryLat1 phastCons8 > histogram.data 2>&1
+    #	real    0m30.744
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        xffffff x000000 x000000 x444444 xaa4400 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Stickleback oryLat1 Histogram phastCons8 track"
+set xlabel " phastCons8 score - --expected-length 10 --target-coverage 0.20"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	The mostConserved can also be characterized by a histogram
+    awk '{print $3-$2}' mostConserved8Way.bed > mostCons.txt
+    textHistogram -verbose=2 -autoScale=1000 -pValues mostCons.txt \
+	> mostCons.histo.txt
+
+    cat << '_EOF_' | gnuplot > mostCons.png
+set terminal png small color \
+        xffffff x000000 x000000 x444444 xaa4400 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Stickleback oryLat1 histogram: lengths of mostConserved track elements"
+set xlabel " mostConserved element length - --expected-length 10 --target-coverage 0.20"
+set ylabel " # of elements at this length"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set xrange [0:200]
+set y2tics
+set boxwidth 2
+set style fill solid
+
+plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
+        "mostCons.histo.txt" using 2:6 axes x1y2 title " CRF" with lines
+'_EOF_'
+#	<< happy emacs
+
