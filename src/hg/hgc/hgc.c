@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1187 2007/01/20 01:35:23 genbank Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1188 2007/01/24 23:57:35 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6543,7 +6543,6 @@ void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
 {
 struct trackDb *tdbSf;
 char *shortItemName;
-char *url = tdb->url;
 char supfamURL[512];
 char *genomeStr = "";
 char *genomeStrEnsembl = "";
@@ -6553,7 +6552,8 @@ char *proteinID = NULL;
 char *ans;
 char *ensPep;
 char *chp;
-char *archive;
+char *archive = trackDbSetting(tdb, "ensArchive");
+char ensUrl[256];
 
 /* shortItemName is the name without the "." + version */ 
 shortItemName = cloneString(itemName);
@@ -6566,17 +6566,18 @@ if (genomeStrEnsembl == NULL)
     warn("Organism %s not found!", organism); fflush(stdout);
     return;
     }
+
 /* print URL that links to Ensembl transcript details */
-if (url != NULL && url[0] != 0)
-    printCustomUrlWithLabel(tdb, itemName, "Ensembl Gene Link:", tdb->url, TRUE);
+if (archive != NULL)
+    sprintf(ensUrl, "http://%s.archive.ensembl.org/%s", 
+            archive, genomeStrEnsembl);
 else
-    {
-    printf("<B>Ensembl Gene Link: </B>");
-    printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" "
-	       "target=_blank>", 
-	       genomeStrEnsembl,shortItemName);
-    printf("%s</A><br>", itemName);
-    }
+    sprintf(ensUrl, "http://www.ensembl.org/%s", genomeStrEnsembl);
+ 
+printf("<B>Ensembl Gene Link: </B>");
+printf("<A HREF=\"%s/transview?transcript=%s\" "
+               "target=_blank>", ensUrl, shortItemName);
+printf("%s</A><br>", itemName);
 
 if (hTableExists("superfamily"))
     {
@@ -6614,12 +6615,8 @@ if (hTableExists("superfamily"))
     if (proteinID != NULL)
         { 
         printf("<B>Ensembl Protein: </B>");
-        if  ((archive = trackDbSetting(tdb, "archive")) != NULL)
-            printf("<A HREF=\"http://%s.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-            archive, genomeStrEnsembl,proteinID);
-        else 
-            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-            genomeStrEnsembl,proteinID);
+        printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>", 
+            ensUrl, proteinID);
         printf("%s</A><BR>\n", proteinID);
 	}
 
@@ -6670,11 +6667,8 @@ if (hTableExists("ensGtp") && (proteinID == NULL))
     if (proteinID != NULL)
 	{ 
         printf("<B>Ensembl Protein: </B>");
-        if  ((archive = trackDbSetting(tdb, "archive")) != NULL)
-            printf("<A HREF=\"http://%s.archive.ensembl.org/%s/protview?peptide=%s\" target=_blank>", 
-            archive, genomeStrEnsembl,proteinID);
-        else 
-            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
+        printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>", 
+            ensUrl,proteinID);
         printf("%s</A><BR>\n", proteinID);
 	}
     }
