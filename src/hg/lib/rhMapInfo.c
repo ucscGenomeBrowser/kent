@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "rhMapInfo.h"
 
-static char const rcsid[] = "$Id: rhMapInfo.c,v 1.1 2006/03/06 19:42:37 hartera Exp $";
+static char const rcsid[] = "$Id: rhMapInfo.c,v 1.2 2007/01/24 04:20:57 hartera Exp $";
 
 void rhMapInfoStaticLoad(char **row, struct rhMapInfo *ret)
 /* Load a row from rhMapInfo table into ret.  The contents of ret will
@@ -16,14 +16,15 @@ void rhMapInfoStaticLoad(char **row, struct rhMapInfo *ret)
 {
 
 ret->name = row[0];
-ret->linkageGp = row[1];
-ret->position = sqlUnsigned(row[2]);
-ret->distance = sqlUnsigned(row[3]);
-ret->markerType = row[4];
-ret->source = row[5];
-ret->mapSite = row[6];
-ret->leftPrimer = row[7];
-ret->rightPrimer = row[8];
+ret->zfinId = row[1];
+ret->linkageGp = row[2];
+ret->position = sqlUnsigned(row[3]);
+ret->distance = sqlUnsigned(row[4]);
+ret->markerType = row[5];
+ret->source = row[6];
+ret->mapSite = row[7];
+ret->leftPrimer = row[8];
+ret->rightPrimer = row[9];
 }
 
 struct rhMapInfo *rhMapInfoLoad(char **row)
@@ -34,14 +35,15 @@ struct rhMapInfo *ret;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
-ret->linkageGp = cloneString(row[1]);
-ret->position = sqlUnsigned(row[2]);
-ret->distance = sqlUnsigned(row[3]);
-ret->markerType = cloneString(row[4]);
-ret->source = cloneString(row[5]);
-ret->mapSite = cloneString(row[6]);
-ret->leftPrimer = cloneString(row[7]);
-ret->rightPrimer = cloneString(row[8]);
+ret->zfinId = cloneString(row[1]);
+ret->linkageGp = cloneString(row[2]);
+ret->position = sqlUnsigned(row[3]);
+ret->distance = sqlUnsigned(row[4]);
+ret->markerType = cloneString(row[5]);
+ret->source = cloneString(row[6]);
+ret->mapSite = cloneString(row[7]);
+ret->leftPrimer = cloneString(row[8]);
+ret->rightPrimer = cloneString(row[9]);
 return ret;
 }
 
@@ -51,7 +53,7 @@ struct rhMapInfo *rhMapInfoLoadAll(char *fileName)
 {
 struct rhMapInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -69,7 +71,7 @@ struct rhMapInfo *rhMapInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct rhMapInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -91,6 +93,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->name = sqlStringComma(&s);
+ret->zfinId = sqlStringComma(&s);
 ret->linkageGp = sqlStringComma(&s);
 ret->position = sqlUnsignedComma(&s);
 ret->distance = sqlUnsignedComma(&s);
@@ -111,6 +114,7 @@ struct rhMapInfo *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
+freeMem(el->zfinId);
 freeMem(el->linkageGp);
 freeMem(el->markerType);
 freeMem(el->source);
@@ -138,6 +142,10 @@ void rhMapInfoOutput(struct rhMapInfo *el, FILE *f, char sep, char lastSep)
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->zfinId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

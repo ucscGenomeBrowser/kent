@@ -5,13 +5,14 @@
 #ifndef RHMAPINFO_H
 #define RHMAPINFO_H
 
-#define RHMAPINFO_NUM_COLS 9
+#define RHMAPINFO_NUM_COLS 10
 
 struct rhMapInfo
 /* Radiation Hybrid map information */
     {
     struct rhMapInfo *next;  /* Next in singly linked list. */
     char *name;	/* Name of Radiation Hybrid (RH) map marker */
+    char *zfinId;	/* ZFIN ID for the marker */
     char *linkageGp;	/* Linkage group to which the marker was mapped */
     unsigned position;	/* Position number in RH map for this linkage group */
     unsigned distance;	/* Distance from the top of linkage group (cR) */
