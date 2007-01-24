@@ -16,12 +16,18 @@
 # machine and required using eval $$cmd; I am not sure why this
 # is working other places. 
 
+# note:  new group ARCHIVED_DBS created for assemblies still needed
+# to support Conservation tracks in other assemblies.  These should
+# have only chromInfo table on hgwbeta and RR.  make will not rebuild
+# trackDb on hgwdev unless the db is specified explicitly on the 
+# command line.
+
 
 include ../../../inc/common.mk
 
 DBS = 	hg13 hg15 hg16 hg17 hg18\
 	panTro1 panTro2 \
-	rheMac1 rheMac2 \
+	rheMac2 \
 	otoGar1 tupBel1\
 	canFam1 canFam2 \
 	felCat3 \
@@ -97,6 +103,8 @@ BACT_DBS = \
 	vibrChol1 vibrChol_MO10_1 vibrChol_O395_1 vibrFisc_ES114_1 \
 	vibrPara1 vibrVuln_CMCP6_1 vibrVuln_YJ016_1
 
+ARCHIVED_DBS = \
+	rheMac1 
 
 update: #clean
 	@for D in *; do \
