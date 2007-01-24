@@ -84,6 +84,8 @@ visibility pack
 color 150,0,0
 type genePred ensPep
 url http://jul2005.archive.ensembl.org/perl/transview?transcript=$$
+urlName gene
+archive jul2005
 
 track multiz5way
 shortLabel Conservation
