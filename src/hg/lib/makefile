@@ -55,7 +55,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
-    rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o riken.o rikenBest.o rikenCluster.o rmskOut.o \
+    rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o \
+    rgdQtl.o riken.o rhMapInfo.o rikenBest.o rikenCluster.o rmskOut.o \
     rnaFold.o rnaGene.o rnaGroup.o rnaLpFold.o tRNAs.o gbRNAs.o snoRNAs.o\
     rnaSecStr.o tfbsConsFactors.o \
     roughAli.o transMapInfo.o sage.o sageCounts.o sageExp.o sample.o \
