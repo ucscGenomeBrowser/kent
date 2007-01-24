@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.107 2007/01/19 20:49:04 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.108 2007/01/24 04:38:36 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -120,6 +120,9 @@ if (withHtmlHeader)
     printf("\t%s\n", headerText);
     puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
 	 "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
+	 "\t<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"2;URL=%s\">" "\n"
+	 "\t<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">" "\n"
+	 "\t<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">" "\n"
 	 "\t<TITLE>"
 	 );
     /* we need to take any HTML formatting out of the titlebar string */
