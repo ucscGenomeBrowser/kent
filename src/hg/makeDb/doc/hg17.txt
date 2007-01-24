@@ -21449,11 +21449,11 @@ hgsql -N -e 'select chrom, chromStart, chromEnd, name, score, strand from snp125
 lineFileSplit snp.bed lines 100000 snp-
 ln -s /san/sanvol1/snp/liftOver/hg17/input /san/sanvol1/snp/liftOver/hg17/panTro2All/input
 ln -s /san/sanvol1/snp/liftOver/hg17/input /san/sanvol1/snp/liftOver/hg17/rheMac2All/input
-cd ../panTro2
+cd ../panTro2All
 ./makeJobList.csh
 mkdir output
 mkdir unmapped
-cd ../rheMac2
+cd ../rheMac2All
 ./makeJobList.csh
 mkdir output
 mkdir unmapped
