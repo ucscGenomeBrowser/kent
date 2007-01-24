@@ -20,9 +20,10 @@
 #include "net.h"
 
 #include "gsidMember.h"
+#include "bio.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.1 2007/01/23 06:38:11 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.2 2007/01/24 02:54:45 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -173,8 +174,9 @@ void processIpn(struct sqlConnection *conn)
 struct cgiVar *this=NULL, *cgiVars = cgiVarList();
 FILE *f=mustOpen("ipn.log","a");
 struct dyString *dy=newDyString(256);
+struct dyString *dyVerify = NULL;
 char *paypalServer = cfgOption("paypalServer");
-dyStringPrintf(dy,"http://%s/cgi-bin/webscr?cmd=_notify-validate", paypalServer);
+dyStringAppend(dy,"/cgi-bin/webscr?cmd=_notify-validate");
 for(this=cgiVars;this;this=this->next)
     {
     fprintf(f,"%s=%s\n", this->name, this->val);
@@ -203,17 +205,28 @@ if (!sameString(paypalIpn,cfgOption("paypalIpnServer")))
 /* verify via post back to paypal */
 fprintf(f,"about to attempt POST to [%s]:\n",dy->string);
 fflush(f);
-struct lineFile *lf = netLineFileMayOpen(dy->string);
-if (!lf)
+
+dyVerify = bio(paypalServer, dy->string, "all.pem", NULL);  /* certs to verify OK */
+if (!dyVerify)
     {
     fprintf(f,"Error: unable to post verification to %s\n",dy->string);
     fflush(f);
     goto cleanup;
     }
+
+//struct lineFile *lf = netLineFileMayOpen(dy->string);
+
+struct lineFile *lf = lineFileOnString("response",TRUE,cloneString(dyVerify->string));
 fprintf(f,"POST verification response:\n");
 fflush(f);
 char *line = NULL;
 boolean verified = FALSE;
+/* skip http response header */
+while (lineFileNext(lf, &line, NULL))  
+    {
+    if (sameString(line,""))
+	break;
+    }
 while (lineFileNext(lf, &line, NULL))
     {
     fprintf(f,"%s\n",line);
@@ -362,6 +375,7 @@ freez(&paypalIpn);
 fprintf(f,"\n");
 carefulClose(&f);
 dyStringFree(&dy);
+dyStringFree(&dyVerify);
 }
 
 /* -------- functions ---- */

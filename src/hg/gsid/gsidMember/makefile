@@ -1,11 +1,12 @@
 include ../../../inc/common.mk
 
-L = $(MYSQLLIBS) -lm -lcrypt
+XINC = -I/usr/include
+L = $(MYSQLLIBS) -lm -lcrypt -lssl
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = gsidMember
 
-O = $A.o members.o
+O = $A.o members.o bio.o
 
 #include ../../../inc/cgi_build_rules.mk
 
