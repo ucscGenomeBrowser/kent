@@ -6,7 +6,7 @@ priority 40
 visibility dense
 color 150,0,0
 type genePred ensPep
-url http://www.ensembl.org/perl/transview?transcript=$$
+urlName gene
 
 track anoEstTcl
 shortLabel AnoEST Unique
