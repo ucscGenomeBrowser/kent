@@ -30,6 +30,8 @@ group map
 priority 14
 visibility hide
 type psl .
+url http://zfin.org/cgi-bin/ZFIN_jump?record=$$
+urlName gene
 dataVersion Oct 2006
 
 track bacEndPairs
