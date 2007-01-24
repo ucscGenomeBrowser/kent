@@ -541,7 +541,6 @@ priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
-urlName gene
 
 track ensEstGene
 shortLabel Ensembl EST Genes

@@ -6,7 +6,6 @@ priority 40
 visibility dense
 color 150,0,0
 type genePred ensPep
-urlName gene
 
 track anoEstTcl
 shortLabel AnoEST Unique
