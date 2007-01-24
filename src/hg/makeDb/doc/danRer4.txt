@@ -8610,7 +8610,7 @@ close(FILE);
 # archive dec2006
  
 #########################################################################
-# RADIATION HYBRID (RH) MAP TRACK (in progress, 2007-01-12 - , hartera)
+# RADIATION HYBRID (RH) MAP TRACK (DONE, 2007-01-12 - 2007-01-23, hartera)
 # Data from Yi Zhou at Boston Children's Hospital:
 # yzhou@enders.tch.harvard.edu
 # Latest RH map sequences and primers received on 2006-10-03 from
@@ -8781,163 +8781,164 @@ line+ /san/sanvol1/scratch/danRer4/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.15 raw.psl contig.psl
 #                         seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     3442    104586
-     drop minCover:     2838    205568
-        weird over:     163     1124
-        kept weird:     107     172
-    drop localBest:     3011    17130
-              kept:     11121   14216
+#             total:     11326   1628158
+#      drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     3442    104586
+#     drop minCover:     2838    205568
+#        weird over:     163     1124
+#        kept weird:     107     172
+#    drop localBest:     3011    17130
+#              kept:     11121   14216
 
 # 11514
 # The percentage aligned is 11121/11514 = 96.6%
+# Number of alignments for markers with most alignments after filtering:
 # 35 BZ83M20.Z.BACENDS
-     17 ZKP63A5.YA.BACENDS
-     17 ZKP117C9.YA.BACENDS
-     16 ZK30E10.SP6.BACENDS
-     15 ZC133H17.ZA.BACENDS
-     12 Z13442.MGH
-     11 ZK105J10.T7.BACENDS
-     10 ZC261G9.ZAF.BACENDS
-     10 ZC261G9.ZA.BACENDS
-      9 ZK19H9.SP6.BACENDS
-      9 Z4910.MGH
-      9 FJ07G09.X1.WU_ZFEST
-      8 ZK4I5.T7.BACENDS
-      8 ZC27I3.ZA.BACENDS
+# 17 ZKP63A5.YA.BACENDS
+# 17 ZKP117C9.YA.BACENDS
+# 16 ZK30E10.SP6.BACENDS
+# 15 ZC133H17.ZA.BACENDS
+# 12 Z13442.MGH
+# 11 ZK105J10.T7.BACENDS
+# 10 ZC261G9.ZAF.BACENDS
+# 10 ZC261G9.ZA.BACENDS
+# 9 ZK19H9.SP6.BACENDS
+# 9 Z4910.MGH
+# 9 FJ07G09.X1.WU_ZFEST
+# 8 ZK4I5.T7.BACENDS
+# 8 ZC27I3.ZA.BACENDS
 
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.92 -minCover=0.15 raw.psl contig.psl
 #                         seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     2740    60578
-     drop minCover:     3083    223430
-        weird over:     318     3132
-        kept weird:     154     249
-    drop localBest:     3480    43022
-              kept:     11212   14470
+#            total:     11326   1628158
+#     drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     2740    60578
+#     drop minCover:     3083    223430
+#        weird over:     318     3132
+#        kept weird:     154     249
+#    drop localBest:     3480    43022
+#              kept:     11212   14470
 # Percentage aligned is 11212/11514 = 97.4%
 
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=10 \
        -ignoreNs -bestOverlap -minId=0.92 -minCover=0.15 raw.psl contig.psl
 #                         seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3026    1258275
-     drop minIdent:     2902    72521
-     drop minCover:     3256    231002
-        weird over:     344     3365
-        kept weird:     157     252
-    drop localBest:     3604    51799
-              kept:     11228   14560
+#             total:     11326   1628158
+#      drop invalid:     1       1
+#drop minNonRepSize:     3026    1258275
+#     drop minIdent:     2902    72521
+#     drop minCover:     3256    231002
+#        weird over:     344     3365
+#        kept weird:     157     252
+#    drop localBest:     3604    51799
+#            kept:     11228   14560
 
 # There isn't much difference 11228/11514 = 97.5%
      awk '{print $10}' contig.psl | sort | uniq -c | sort -nr 
 # Top numbers of hits:
 # 35 BZ83M20.Z.BACENDS
-     17 ZKP63A5.YA.BACENDS
-     17 ZKP117C9.YA.BACENDS
-     16 ZK30E10.SP6.BACENDS
-     15 ZC133H17.ZA.BACENDS
-     13 FJ07G09.X1.WU_ZFEST
-     12 Z13442.MGH
-     11 ZK105J10.T7.BACENDS
-     10 ZC261G9.ZAF.BACENDS
-     10 ZC261G9.ZA.BACENDS
-      9 ZK19H9.SP6.BACENDS
-      9 Z4910.MGH
-      9 Z3157.MGH
-      8 ZK4I5.T7.BACENDS
+# 17 ZKP63A5.YA.BACENDS
+# 17 ZKP117C9.YA.BACENDS
+# 16 ZK30E10.SP6.BACENDS
+# 15 ZC133H17.ZA.BACENDS
+# 13 FJ07G09.X1.WU_ZFEST
+# 12 Z13442.MGH
+# 11 ZK105J10.T7.BACENDS
+# 10 ZC261G9.ZAF.BACENDS
+# 10 ZC261G9.ZA.BACENDS
+# 9 ZK19H9.SP6.BACENDS
+# 9 Z4910.MGH
+# 9 Z3157.MGH
+# 8 ZK4I5.T7.BACENDS
 
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.90 -minCover=0.15 raw.psl contig.psl
 #    seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     2306    34000
-     drop minCover:     3166    230461
-        weird over:     388     5030
-        kept weird:     168     270
-    drop localBest:     3647    62505
-              kept:     11232   14534
+#           total:     11326   1628158
+#      drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     2306    34000
+#     drop minCover:     3166    230461
+#        weird over:     388     5030
+#        kept weird:     168     270
+#    drop localBest:     3647    62505
+#              kept:     11232   14534
+
 # Percent sequences aligned: 11232/11514 = 97.6%
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.90 -minCover=0.20 raw.psl contig.psl
 #                           seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     2306    34000
-     drop minCover:     3418    245102
-        weird over:     343     4235
-        kept weird:     159     252
-    drop localBest:     3206    48291
-              kept:     11189   14107
+#             total:     11326   1628158
+#      drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     2306    34000
+#     drop minCover:     3418    245102
+#        weird over:     343     4235
+#        kept weird:     159     252
+#    drop localBest:     3206    48291
+#              kept:     11189   14107
 # Percent sequences aligned: 11189/11514 = 97.2%
 
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.80 -minCover=0.20 raw.psl contig.psl
-# seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     1       2
-     drop minCover:     3599    256955
-        weird over:     414     8594
-        kept weird:     173     270
-    drop localBest:     3410    70389
-              kept:     11205   14154
+# 			seqs    aligns
+#             total:     11326   1628158
+#      drop invalid:     1       1
+#drop minNonRepSize:     3068    1286657
+#     drop minIdent:     1       2
+#     drop minCover:     3599    256955
+#        weird over:     414     8594
+#        kept weird:     173     270
+#    drop localBest:     3410    70389
+#              kept:     11205   14154
 # Percent sequences aligned: 11205/11514 = 97.3%
 # 35 BZ83M20.Z.BACENDS
-     17 ZKP63A5.YA.BACENDS
-     17 ZKP117C9.YA.BACENDS
-     16 ZK30E10.SP6.BACENDS
-     15 ZC133H17.ZA.BACENDS
-     13 FJ07G09.X1.WU_ZFEST
-     11 ZK105J10.T7.BACENDS
-     10 ZC261G9.ZAF.BACENDS
-     10 ZC261G9.ZA.BACENDS
-      9 ZK19H9.SP6.BACENDS
-      9 Z4910.MGH
-      8 ZK4I5.T7.BACENDS
-      8 ZC27I3.ZA.BACENDS
-      8 Z7243.MGH
-      8 Z3157.MGH
+# 17 ZKP63A5.YA.BACENDS
+# 17 ZKP117C9.YA.BACENDS
+# 16 ZK30E10.SP6.BACENDS
+# 15 ZC133H17.ZA.BACENDS
+# 13 FJ07G09.X1.WU_ZFEST
+# 11 ZK105J10.T7.BACENDS
+# 10 ZC261G9.ZAF.BACENDS
+# 10 ZC261G9.ZA.BACENDS
+# 9 ZK19H9.SP6.BACENDS
+# 9 Z4910.MGH
+# 8 ZK4I5.T7.BACENDS
+# 8 ZC27I3.ZA.BACENDS
+# 8 Z7243.MGH
+# 8 Z3157.MGH
 
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.80 -minCover=0.15 raw.psl contig.psl
 #                         seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     1       2
-     drop minCover:     3322    238087
-        weird over:     470     9995
-        kept weird:     181     288
-    drop localBest:     3876    88821
-              kept:     11246   14590
+#            total:     11326   1628158
+#      drop invalid:     1       1
+#drop minNonRepSize:     3068    1286657
+#     drop minIdent:     1       2
+#     drop minCover:     3322    238087
+#        weird over:     470     9995
+#        kept weird:     181     288
+#    drop localBest:     3876    88821
+#              kept:     11246   14590
 # Percent sequences aligned: 11246/11514 = 97.7%
 # Use lower minId and higher minCover (0.20) as for the BAC ends and for
 # the RH map on other zebrafish assemblies.
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.20 raw.psl contig.psl
 #                        seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     3552    255528
-        weird over:     403     7578
-        kept weird:     171     268
-    drop localBest:     3358    68020
-              kept:     11203   14146
-  
-    # 97.3% (11203/11514) of sequences are aligned using these filter criteria
+#             total:     11326   1628158
+#      drop invalid:     1       1
+#drop minNonRepSize:     3068    1286657
+#     drop minIdent:     775     3806
+#     drop minCover:     3552    255528
+#        weird over:     403     7578
+#        kept weird:     171     268
+#    drop localBest:     3358    68020
+#              kept:     11203   14146
+# 97.3% (11203/11514) of sequences are aligned using these filter criteria
     # Loaded these sequences as below and then checked the rhMap track in the
     # danRer4 Genome Browser to see if there are any pileups.
     # there is one big pileup on chr24 that is in the same region as 
@@ -8954,83 +8955,83 @@ drop minNonRepSize:     3068    1286657
     # try increasing the minCover parameter:
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.25 raw.psl contig.psl
-    #                        seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     3754    271241
-        weird over:     358     6379
-        kept weird:     157     252
-    drop localBest:     2916    52769
-              kept:     11100   13684
+#                        seqs    aligns
+#             total:     11326   1628158
+#      drop invalid:     1       1
+#drop minNonRepSize:     3068    1286657
+#     drop minIdent:     775     3806
+#     drop minCover:     3754    271241
+#        weird over:     358     6379
+#        kept weird:     157     252
+#    drop localBest:     2916    52769
+#              kept:     11100   13684
     # Percent sequences aligned: 11100/11514 = 96.4%
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.30 raw.psl contig.psl
-#  seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     3929    283124
-        weird over:     310     5451
-        kept weird:     145     236
-    drop localBest:     2549    41325
-              kept:     10938   13245
+#  			seqs    aligns
+#      	total:     11326   1628158
+# drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     775     3806
+#     drop minCover:     3929    283124
+#        weird over:     310     5451
+#        kept weird:     145     236
+#    drop localBest:     2549    41325
+#              kept:     10938   13245
     # Percent sequences aligned: 10938/11514 = 95.0%
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.40 raw.psl contig.psl
-    #  seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     4293    298517
-        weird over:     245     4052
-        kept weird:     128     211
-    drop localBest:     2079    26658
-              kept:     10489   12519
+#  			seqs    aligns
+#             total:     11326   1628158
+#      drop invalid:     1       1
+#drop minNonRepSize:     3068    1286657
+#     drop minIdent:     775     3806
+#     drop minCover:     4293    298517
+#        weird over:     245     4052
+#        kept weird:     128     211
+#    drop localBest:     2079    26658
+#              kept:     10489   12519
     # Percent sequences aligned: 10489/11514 = 91.1%
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.35 raw.psl contig.psl
-   # seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     4119    292022
-        weird over:     274     4640
-        kept weird:     137     227
-    drop localBest:     2279    32801
-              kept:     10724   12871
+# 			seqs    aligns
+#     	     total:     11326   1628158
+#      drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     775     3806
+#     drop minCover:     4119    292022
+#        weird over:     274     4640
+#        kept weird:     137     227
+#    drop localBest:     2279    32801
+#              kept:     10724   12871
     # Percent sequences aligned: 10724/11514 = 93.1%
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.32 raw.psl contig.psl
-    # seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     4001    287002
-        weird over:     296     5113
-        kept weird:     144     235
-    drop localBest:     2437    37599
-              kept:     10862   13093
+# 			seqs    aligns
+#             total:     11326   1628158
+# 	drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#     drop minIdent:     775     3806
+#     drop minCover:     4001    287002
+#        weird over:     296     5113
+#        kept weird:     144     235
+#    drop localBest:     2437    37599
+#              kept:     10862   13093
     # Percent sequences aligned: 10862/11514 = 94.3%
     rm contig*
     # Final parameters: use minCover=0.33
     pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
        -ignoreNs -bestOverlap -minId=0.85 -minCover=0.33 raw.psl contig.psl
-# seqs    aligns
-             total:     11326   1628158
-      drop invalid:     1       1
-drop minNonRepSize:     3068    1286657
-     drop minIdent:     775     3806
-     drop minCover:     4045    288763
-        weird over:     287     4946
-        kept weird:     142     233
-    drop localBest:     2375    35906
-              kept:     10818   13025
+# 			seqs    aligns
+# 	     total:     11326   1628158
+#     drop invalid:     1       1
+# drop minNonRepSize:     3068    1286657
+#      drop minIdent:     775     3806
+#     drop minCover:     4045    288763
+#        weird over:     287     4946
+#        kept weird:     142     233
+#    drop localBest:     2375    35906
+#              kept:     10818   13025
     # Percent sequences aligned: 10818/11514 = 94.0%
     # This is a compromise between reducing the number of sequences piling
     # up on chr24 but not losing all alignments for too many sequences.
@@ -9088,7 +9089,7 @@ drop minNonRepSize:     3068    1286657
     sort rhMapPrimers100306.txt > rhMapPrimers.sort
     wc -l *.sort
     # 11514 rhMap.headers.sort
-    # 134378 rhMapPrimers.sort
+    # 13437 rhMapPrimers.sort
     comm -12 rhMap.headers.sort rhMapPrimers.sort | wc -l
     # 11514 in common
     # so all FASTA headers from rhMap022306.fa are in the primers file
@@ -9130,18 +9131,128 @@ cat << '_EOF_' > getRhInfo
     # Need to add ZFIN IDs - data received on 2006-06-23
     # rhSeqWithZdbNameToRachel.zip
     unzip rhSeqWithZdbNameToRachel.zip
- 
-    ssh hgwdev 
+    tail +3 rhSeqWithZdbNameToRachel.txt \
+            | awk 'BEGIN {OFS= "\t"} {print $1, $7}' \
+            | sort | uniq > rhSeqZfinIds.txt
+    # translate names to upper case
+    cat rhSeqZfinIds.txt | tr '[a-z]' '[A-Z]' > rhSeqZfinIds.format.txt      
+    # then map these marker names and ZFIN IDs to markers in
+    # rhMapInfoSorted.tab 
+cat << 'EOF' > mapZfinIds.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($zf, $rh, %zfinIds);
+$zf = $ARGV[0]; # file of ZFIN IDs and marker names
+$rh = $ARGV[1]; # rhMapInfo.tab file
+
+open (ZFIN, $zf) || die "Can not open $zf :$!\n";
+open (RH, $rh) || die "Can not open $rh : $!\n";
+
+while (<ZFIN>){
+   my ($line, @fi);
+   chomp;
+   $line = $_;
+   @fi = split(/\t/, $line);
+   # store ZFIN ID in hash keyed by marker name
+   $zfinIds{$fi[1]} = $fi[0];
+}
+close ZFIN;
+
+# read in the markers from rhMapInfo file
+while (<RH>){
+   my ($li, @f, $marker, @m, $mName, $j, $i);
+   $mName = "";
+   $zf = "";
+   chomp;
+   $li = $_;
+   @f = split(/\t/, $li);
+   $marker = $f[0];
+   # split by "."
+   @m = split(/\./, $marker);
+   
+   # remove the extension after the last "." 
+   $mName = $m[0];
+   if (($mName ne "") && (exists($zfinIds{$mName}))) {
+      $zf = $zfinIds{$mName};
+   }
+   for ($j = 1; $j < $#m; $j++){
+      $mName = $mName . "." . $m[$j];
+   }
+   if (($mName ne "") && (exists($zfinIds{$mName}))) {
+      $zf = $zfinIds{$mName};
+   }
+   print "$f[0]\t$zf";
+   for ($i = 1; $i <= $#f; $i++){
+      print "\t$f[$i]";
+   }
+   if ($#f == 6){
+      print "\t\t";
+   }
+   print "\n";
+}
+'EOF'
+    chmod +x mapZfinIds.pl
+    perl mapZfinIds.pl rhSeqZfinIds.format.txt rhMapInfoSorted.tab \
+         > rhMapInfoWithZfinIds.tab
+    # There are 1867 markers with no ZFIN ID
+    wc -l rhMapInfo*
+    # 11514 rhMapInfo.tab
+    # 11514 rhMapInfoSorted.tab
+    # 11514 rhMapInfoWithZfinIds.tab
+
+    # When loading, found that 1942.C has only 1 primer. Problem with
+    # rhMapPrimers100306.txt. There was a new line between the primers
+    # for this file so remove it there and in rhMap100306.fa and then 
+    # process it again.
+
     # Create a table with RH map item information including type, source,
     # origin and primer sequences.
     # already created rhMapInfo.sql, rhMapInfo.c and rhMapInfo.h files 
-    # using autosql - see danRer2.txt
-    # create and load table
-    cd /cluster/data/danRer4/bed/ZonLab/rhMap 
+    # using autosql - see danRer3.txt. None of the assemblies with RH
+    # map on the RR have this rhMapInfo table so it can be redefined.
+    # load these into a table called rhMapInfo2 - this is rhMapInfo
+    # with an extra column for the ZFIN ID. 
+    # Use autosql to create a .sql file.
+    ssh hgwdev
+cat << 'EOF' > ~/kent/src/hg/lib/rhMapInfo.as
+table rhMapInfo
+"Radiation Hybrid map information"
+(
+string name;            "Name of Radiation Hybrid (RH) map marker"
+string zfinId; 		"ZFIN ID for the marker"
+string linkageGp;       "Linkage group to which the marker was mapped"
+uint position;          "Position number in RH map for this linkage group"
+uint distance;          "Distance from the top of linkage group (cR)"
+string markerType;      "Type of marker"
+string source;          "Source of marker"
+string mapSite;         "Institution that mapped the marker"
+string leftPrimer;      "Forward primer sequence"
+string rightPrimer;     "Reverse primer sequence"
+)
+'EOF'
+# << happy emacs
+    # create .sql, .c and .h files using autoSql
+    cd ~/kent/src/hg/lib
+    autoSql rhMapInfo.as rhMapInfo
+    mv rhMapInfo.h ../inc
+    # edit rhMapInfo.sql and add an index (INDEX(zfinId)).
+    # commit these files (*.as, *sql, *.c and *.h) to CVS replacing 
+    # the original rhMapInfo* files. 
+    # make changes to hgc so that it prints the ZFIN ID in addition to the
+    # other rhMapInfo fields. 
+ 
+    # load table
+    cd /cluster/data/danRer4/bed/ZonLab/rhMap
+    hgsql -e 'drop table rhMapInfo;' danRer4 
     hgLoadSqlTab danRer4 rhMapInfo ~/kent/src/hg/lib/rhMapInfo.sql \
-          rhMapInfoSorted.tab
-    # Need to add ZFIN IDs - data received on 2006-06-23
-    # rhSeqWithZdbNameToRachel.zip
+          rhMapInfoWithZfinIds.tab
+    # add code to hgc.c to print ZFIN ID, if available, on the details page
+    # together with the other marker-related information.
+    # added track to trackDb.ra in trackDb/zebrafish/danRer4 with a URL for 
+    # the ZFIN IDs to link to the relevant page at http://www.zfin.org 
+    # and added an html page for the track.
+
 #########################################################################
 ##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
     hgsql -h genome-testdb hgcentraltest \
