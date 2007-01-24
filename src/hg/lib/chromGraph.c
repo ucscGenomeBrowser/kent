@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.13 2006/08/10 01:06:49 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.14 2007/01/24 01:25:57 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -303,6 +303,9 @@ if (cart != NULL)
     if (cgs->pixels > cgs->maxPixels)
         cgs->pixels = cgs->maxPixels;
     }
+/* For sanity in various places force max to be greater than min. */
+if (cgs->maxVal <= cgs->minVal)
+    cgs->maxVal = cgs->minVal+1;
 return cgs;
 }
 
