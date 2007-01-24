@@ -49,6 +49,8 @@ visibility dense
 color 150,0,0
 type genePred ensPep
 url http://dec2006.archive.ensembl.org/Takifugu_rubripes/transview?transcript=$$
+urlName gene
+archive dec2006
 
 track genscan
 shortLabel Genscan Genes
