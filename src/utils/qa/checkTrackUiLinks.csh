@@ -12,6 +12,7 @@
 set tableinput=""
 set tables=""
 set machine="hgwbeta"
+set rr="false"
 set baseUrl=""
 set target=""
 set hgsid=""
@@ -64,11 +65,18 @@ endif
 # set hgsid so don't fill up sessionDb table
 if ( "genome" == $machine ) then
   set baseUrl="http://$machine.ucsc.edu/"
+  set rr="true"
 else
   set baseUrl="http://$machine.cse.ucsc.edu/"
 endif
 set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
   | head -1 | awk '{print $4}'`
+
+foreach node (hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8)
+  if ( $machine == $node ) then 
+    set rr="true"
+  endif
+end
 
 foreach table ($tables)
   echo
@@ -82,6 +90,10 @@ foreach table ($tables)
   endif
   set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
   htmlCheck checkLinks "$target"
+  # slow it down if hitting the RR
+  if ( "true" == $rr ) then
+    sleep 2
+  endif 
 end 
 echo
 
