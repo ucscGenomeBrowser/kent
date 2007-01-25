@@ -6,7 +6,6 @@ priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
-url http://www.ensembl.org/Oryzias_latipes/transview?transcript=$$
 
 track chainGasAcu1
 shortLabel $o_Organism Chain
