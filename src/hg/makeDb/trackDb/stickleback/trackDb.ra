@@ -1,11 +1,12 @@
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
+longLabel Ensembl v41 Gene Predictions
 group genes
 priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
+ensArchive oct2006
 
 track chainGasAcu1
 track chainOryLat1
