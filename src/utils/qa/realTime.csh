@@ -10,6 +10,7 @@
 ################################
 
 set tablelist=""
+set tables=""
 set db=""
 set sqlVersion=0
 set sqlSubVersion=0
@@ -33,14 +34,15 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-# make a file for single-table queries
+# check if it is a file or a tablename
 file $tablelist | egrep "ASCII text" > /dev/null
-if ($status) then
-  echo $argv[2] > xxtablelistxx
-  set tablelist="xxtablelistxx"
+if (! $status) then
+  set tables=`cat $tablelist`
+else
+  set tables=$tablelist
 endif
 
-foreach table (`cat $tablelist`)
+foreach table ($tables)
   echo
   echo $table
   echo "============="
@@ -73,5 +75,3 @@ foreach table (`cat $tablelist`)
   end
 end
 echo
-
-rm -f xxtablelistxx
