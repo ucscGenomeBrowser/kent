@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1188 2007/01/24 23:57:35 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1189 2007/01/25 05:32:44 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6662,7 +6662,9 @@ if (hTableExists("superfamily"))
     }
 if (hTableExists("ensGtp") && (proteinID == NULL))
     {
-    sprintf(cond_str2, "transcript='%s'", shortItemName);  
+    /* shortItemName removes version number but sometimes the ensGtp */
+    /* table has a transcript with version number so exact match not used */
+    sprintf(cond_str2, "transcript like '%s%%'", shortItemName);  
     proteinID=sqlGetField(conn, database, "ensGtp","protein",cond_str2);
     if (proteinID != NULL)
 	{ 
