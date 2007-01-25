@@ -69,9 +69,7 @@ priority 32.8
 visibility pack
 color 150,0,0
 type genePred ensPep
-url http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=$$
-urlName gene
-archive dec2006
+ensArchive dec2006
  
 track ensGeneNonCoding
 shortLabel Ensembl NonCoding
@@ -81,9 +79,7 @@ priority 32.9
 visibility hide
 color 12,12,120
 type genePred
-url http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=$$
-urlName gene
-archive dec2006
+ensArchive dec2006
 
 track multiz7way
 shortLabel Conservation 
