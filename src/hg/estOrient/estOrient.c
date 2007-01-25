@@ -16,6 +16,7 @@ static struct optionSpec optionSpecs[] =
     {"chrom", OPTION_STRING|OPTION_MULTI},
     {"keepDisoriented", OPTION_BOOLEAN},
     {"disoriented", OPTION_STRING},
+    {"info", OPTION_STRING},
     {"inclVer", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -24,6 +25,7 @@ static struct slName *gChroms = NULL;
 static boolean gKeepDisoriented = FALSE;
 static boolean gInclVer = FALSE;
 static char *gDisoriented = NULL;
+static char *gInfo = NULL;
 
 void usage(char *msg, ...)
 /* usage msg and exit */
@@ -47,6 +49,12 @@ errAbort("\n%s",
          "    be determined to this file.\n"
          "   -inclVer - add NCBI version number to accession if not already\n"
          "    present.\n"
+         "   -info=infoFile - write information about each EST to this tab\n"
+         "    separated file \n"
+         "       qName tName tStart tEnd origStrand newStrand orient\n"
+         "    where orient is < 0 if PSL was reverse, > 0 if it was left unchanged\n"
+         "    and 0 if the orientation couldn't be determined (and was left\n"
+         "    unchanged).\n"
          );
 }
 
@@ -167,29 +175,32 @@ if (strchr(est->qName, '.') == NULL)
 }
 
 static void processEst(struct sqlConnection *conn, struct hash *orientHash,
-                       struct psl *est, FILE *outPslFh, FILE *disorientedFh)
+                       struct psl *est, FILE *outPslFh, FILE *disorientedFh,
+                       FILE *infoFh)
 /* adjust orientation of an EST and output */
 {
 int orient = getOrient(conn, orientHash, est);
+char origStrand[3];
+safecpy(origStrand, sizeof(origStrand), est->strand);
+if (gInclVer)
+    addVersion(conn, est);
 if ((orient != 0) || gKeepDisoriented)
     {
     if (orient < 0)
         est->strand[0] = ((est->strand[0] == '+') ? '-' : '+');
-    if (gInclVer)
-        addVersion(conn, est);
     pslTabOut(est, outPslFh);
     }
 else if (disorientedFh != NULL)
-    {
-    if (gInclVer)
-        addVersion(conn, est);
     pslTabOut(est, disorientedFh);
-    }
+if (infoFh != NULL)
+    fprintf(infoFh, "%s\t%s\t%d\t%d\t%s\t%s\t%d\n",
+            est->qName, est->tName, est->tStart, est->tEnd,
+            origStrand, est->strand, orient);
 }
 
 static void orientEstsChrom(struct sqlConnection *conn, struct sqlConnection *conn2,
                             char *chrom, char *estTable, FILE *outPslFh,
-                            FILE *disorientedFh)
+                            FILE *disorientedFh, FILE *infoFh)
 /* orient ESTs on one chromsome */
 {
 struct pslReader *pr;
@@ -199,7 +210,7 @@ struct hash *orientHash = loadOrientation(conn, chrom);
 pr = pslReaderChromQuery(conn, estTable, chrom, NULL);
 while ((psl = pslReaderNext(pr)) != NULL)
     {
-    processEst(conn2, orientHash, psl, outPslFh, disorientedFh);
+    processEst(conn2, orientHash, psl, outPslFh, disorientedFh, infoFh);
     pslFree(&psl);
     }
 
@@ -218,6 +229,12 @@ FILE * outPslFh = mustOpen(outPslFile, "w");
 FILE *disorientedFh = NULL;
 if (gDisoriented != NULL)
     disorientedFh = mustOpen(gDisoriented, "w");
+FILE *infoFh = NULL;
+if (gInfo != NULL)
+    {
+    infoFh = mustOpen(gInfo, "w");
+    fprintf(infoFh, "#qName\ttName\ttStart\ttEnd\torigStrand\tnewStrand\torient\n");
+    }
 
 if (gChroms != NULL)
     chroms = gChroms;
@@ -226,10 +243,11 @@ else
 slNameSort(&chroms);
 
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)
-    orientEstsChrom(conn, conn2, chrom->name, estTable, outPslFh, disorientedFh);
+    orientEstsChrom(conn, conn2, chrom->name, estTable, outPslFh, disorientedFh, infoFh);
 
 sqlDisconnect(&conn);
 sqlDisconnect(&conn2);
+carefulClose(&infoFh);
 carefulClose(&disorientedFh);
 carefulClose(&outPslFh);
 }
@@ -244,6 +262,7 @@ ZeroVar(&gbCacheAcc);
 gChroms = optionMultiVal("chrom", NULL);
 gKeepDisoriented = optionExists("keepDisoriented");
 gDisoriented = optionVal("disoriented", NULL);
+gInfo = optionVal("info", NULL);
 gInclVer = optionExists("inclVer");
 if (gKeepDisoriented && (gDisoriented != NULL))
     errAbort("can't specify both -keepDisoriented and -disoriented");
