@@ -17,6 +17,7 @@ install:
 	cp -p --remove-destination checkSync.csh           ${SCRIPTS}
 	cp -p --remove-destination checkSyncAll.csh        ${SCRIPTS}
 	cp -p --remove-destination checkTableStatus.csh    ${SCRIPTS}
+	cp -p --remove-destination checkTrackUiLinks.csh   ${SCRIPTS}
 	cp -p --remove-destination commTrio.csh            ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTableLists.csh   ${SCRIPTS}
