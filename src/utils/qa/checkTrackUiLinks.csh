@@ -58,7 +58,7 @@ endif
 
 # process "all" choice
 if ("all" == $tableinput) then
-  set tables=`ssh -x qateam@hgw1 mysql -A -N \
+  set tables=`ssh -x qateam@$machine mysql -A -N \
     -e '"'SELECT tableName FROM trackDb'"' $db`
 endif
 
