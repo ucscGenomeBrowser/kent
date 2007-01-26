@@ -21,9 +21,10 @@
 
 #include "gsidMember.h"
 #include "bio.h"
+#include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.2 2007/01/24 02:54:45 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.3 2007/01/26 21:36:20 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -335,16 +336,33 @@ if (!sameString("Completed",paymentStatus))
 //  couldn't renew later simply because the invoice was
 //  still viewd as a repeat
 
+char *paymentDate = cgiUsualString("payment_date","");
+/* handle expiration date */
+setenv("DATEMSK","./datemsk", TRUE);  /* required by getdate() */
+struct tm *tm=getdate(paymentDate);
+if (!tm)
+    {
+    fprintf(f,"error: getdate(%s) returned null struct tm*\n", paymentDate);
+    fflush(f);
+    goto cleanup;
+    }
+/* set expiration date to one year ahead */
+char expireDate[11]; /* note: tm returns year rel 1900, mon and day are 0 based */ 
+safef(expireDate,sizeof(expireDate),"%4d-%02d-%02d",1900+tm->tm_year+1,tm->tm_mon+1,tm->tm_mday+1);
+
+
 /* Write payment info to the members table 
  *  email field has been stored in the invoice field */
 dyStringClear(dy);
 dyStringPrintf(dy,"update members set "
 "activated='Y',"
 "amountPaid='%s',"
-"datePaid='%s'"
+"datePaid='%s',"
+"expireDate='%s'"
 " where email='%s'"
 , cgiUsualString("payment_gross","")
-, cgiUsualString("payment_date","")
+, paymentDate
+, expireDate
 , invoice
 );
 
@@ -612,14 +630,13 @@ sqlUpdate(conn, query);
 //safef(buttonFile,sizeof(buttonFile),"./%s.button",type); // TODO may move the button file later
 char buttonHtml[4096];
 //readInGulp(buttonFile, &buttonHtml, NULL);
+char buttonData[4096];
 
 char *paypalServer = cfgOption("paypalServer");
 char *httpHost=getenv("HTTP_HOST");
 char *paypalEmail = cfgOption("paypalEmail");
 
-safef(buttonHtml,sizeof(buttonHtml),
-"<form action=\"https://%s/cgi-bin/webscr\" method=\"post\">\n"
-"<input type=\"hidden\" name=\"cmd\" value=\"_xclick\">\n"
+/*
 "<input type=\"hidden\" name=\"business\" value=\"%s\">\n"
 "<input type=\"hidden\" name=\"invoice\" value=\"%s\">\n"
 "<input type=\"hidden\" name=\"item_name\" value=\"GSID HIV Access Yearly %s Membership Fee\">\n"
@@ -634,38 +651,93 @@ safef(buttonHtml,sizeof(buttonHtml),
 "<input type=\"hidden\" name=\"currency_code\" value=\"USD\">\n"
 "<input type=\"hidden\" name=\"lc\" value=\"US\">\n"
 "<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF\">\n"
-"<input type=\"image\" src=\"https://%s/en_US/i/btn/x-click-but23.gif\" border=\"0\" name=\"submit\" alt=\"Make payments with PayPal - it's fast, free and secure!\">\n"
-"<img alt=\"\" border=\"0\" src=\"https://%s/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">\n"
-"</form>\n"
-, paypalServer
+"<input type=\"hidden\" name=\"cert_id\" value=\"%s\">\n"
+*/
+
+safef(buttonData, sizeof(buttonData), 
+"cmd=_xclick\n"
+"business=%s\n"
+"invoice=%s\n"
+"item_name=GSID HIV Access Yearly %s Membership Fee\n"
+"item_number=%s\n"
+"amount=%s.00\n"
+"no_shipping=2\n"
+"return=https://%s/cgi-bin-signup/gsidMember?gsidMember.do.paypalThanks=1\n"
+"cancel_return=https://%s/cgi-bin-signup/gsidMember?gsidMember.do.paypalCancel=1\n"
+"notify_url=https://%s/cgi-bin-signup/gsidMember\n"
+"no_note=1\n"
+"currency_code=USD\n"
+"lc=US\n"
+"bn=PP-BuyNowBF\n"
+"cert_id=%s\n"
+
 , paypalEmail
 , email
 
-, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) 
+, sameString("commercial",type) 
   ? "Commercial"
   : "Academic"
 
-, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) 
+, sameString("commercial",type) 
   ? "001"
   : "002"
 
-, sameString("commercial",cartUsualString(cart, "gsidM_type", "")) 
+, sameString("commercial",type) 
   ? cfgOption("paypalCommercialFee") 
   : cfgOption("paypalAcademicFee")
 
 , httpHost
 , httpHost
-, paypalServer
-, paypalServer
+, httpHost
+, cfgOption("gsidCertId")
 );
 
+
+//debug  TODO: clean that out of trash
+//writeGulp("../trash/debug.buttonData", buttonData, strlen(buttonData));
+//fprintf(stderr, "debug: buttonData=[%s]\n", buttonData);
+
+char *buttonEncrypted = sign_and_encryptFromFiles(buttonData, "gsid_key.pem", "gsid_cert.pem", cfgOption("paypalCert"), FALSE);
+
+if (buttonEncrypted)
+    {
+    //eraseWhiteSpace(buttonEncrypted);
+    //debug  TODO: clean that out of trash
+    //writeGulp("../trash/debug.buttonEnc", buttonEncrypted, strlen(buttonEncrypted));
+    }
+else
+    {
+    buttonEncrypted = cloneString("");
+    fprintf(stderr, "error: sign_and_encrypt failed on buttonData=[%s]\n", buttonData);
+    }
+
+safef(buttonHtml,sizeof(buttonHtml),
+"<form action=\"https://%s/cgi-bin/webscr\" method=\"post\">\n"
+"<input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n"
+"<input type=\"image\" src=\"https://%s/en_US/i/btn/x-click-but23.gif\" border=\"0\" name=\"submit\" alt=\"Make payments with PayPal - it's fast, free and secure!\">\n"
+"<img alt=\"\" border=\"0\" src=\"https://%s/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">\n"
+"<input type=\"hidden\" name=\"encrypted\" value=\"%s\">\n"
+"</form>\n"
+, paypalServer
+, paypalServer
+, paypalServer
+, buttonEncrypted
+);
+
+freez(&buttonEncrypted);
+
+//debug
+//fprintf(stderr, "encrypted button form: [%s]\n", buttonHtml);
+
 hPrintf(
-"<h2>HIV VAC</h2>"
-"<p align=\"left\">"
-"</p>"
-"<h3>User %s successfully added.</h3>"
-"Pay yearly %s membership fee using paypal %s<br>"
-"Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+"<h2>HIV VAC</h2>\n"
+"<p align=\"left\">\n"
+"</p>\n"
+"<h3>User %s successfully added.</h3>\n"
+"Pay yearly %s membership fee using paypal\n"
+"%s\n"
+"<br>\n"
+"Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>\n"
 , email, type, buttonHtml
 );
 

@@ -6,9 +6,7 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = gsidMember
 
-O = $A.o members.o bio.o
-
-#include ../../../inc/cgi_build_rules.mk
+O = $A.o members.o bio.o paypalSignEncrypt.o
 
 HG_WARN=${HG_WARN_ERR}
 
@@ -26,7 +24,14 @@ init:
 	hgsql membership < members.sql
 	hgsql membership < transactions.sql
 	hgsql membership -e 'insert into members (email,password,activated) values ("hivcat","mIdhzf33z","Y")'
-	
+
+initSSL:
+	openssl genrsa -out gsid_key.pem 1024
+	openssl req -new -config openssl.cnf -key gsid_key.pem -x509 -days 3650 -out gsid_cert.pem
+	(get paypal_cert.pem at 'https://www.paypal.com/us/cgi-bin/webscr?cmd=_profile-website-cert')
+	(get sandbox_cert.pem at 'https://www.sandbox.paypal.com/us/cgi-bin/webscr?cmd=_profile-website-cert')
+	cp *.pem /var/www/cgi-bin-signup/
+	cp datemsk /var/www/cgi-bin-signup/
 
 clean: 
 	rm -f $O members.c members.h members.sql

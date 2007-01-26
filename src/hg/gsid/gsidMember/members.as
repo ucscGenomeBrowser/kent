@@ -9,6 +9,7 @@ table members
     string institution;	"institution (if any)"
     string type;	"type of membership"
     float  amountPaid;	"amount paid"
-    string datePaid;	"date paid"
+    string datePaid;	"date paid in paypal format"
+    char[10] expireDate; "expiration date"
     )
 
