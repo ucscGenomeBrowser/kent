@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.12 2007/01/23 18:14:37 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.13 2007/01/26 00:35:13 kent Exp $";
 
 
 static char *allColors[] = {
@@ -35,11 +35,11 @@ static char *allColors[] = {
 };
 
 static char *defaultColors[maxLinesOfGraphs][maxGraphsPerLine] = {
-    {"black", "blue", "red", "yellow", },
+    {"blue", "red", "black", "yellow", },
     {"gray", "purple", "green", "orange",},
-    {"black", "blue", "red", "yellow", },
+    {"blue", "red", "black", "yellow", },
     {"gray", "purple", "green", "orange",},
-    {"black", "blue", "red", "yellow", },
+    {"blue", "red", "black", "yellow", },
     {"gray", "purple", "green", "orange",},
 };
 
@@ -165,7 +165,7 @@ if (gg != NULL)
 			    vgLine(vg, lastX, lastY, x, y, color);
 			else
 			    {
-			    if (yellowMissing && firstInRow)
+			    if (yellowMissing && leftLabel)
 			        {
 				int width = x - lastX - 1;
 				if (width > 0)
