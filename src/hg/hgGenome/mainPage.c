@@ -27,7 +27,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.13 2007/01/26 00:35:13 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.14 2007/01/26 00:46:38 kent Exp $";
 
 
 static char *allColors[] = {
@@ -60,7 +60,7 @@ if (sameWord("red", asciiColor))
 else if (sameWord("blue", asciiColor))
     return MG_BLUE;
 else if (sameWord("yellow", asciiColor))
-    return vgFindColorIx(vg, 190, 190, 0);
+    return vgFindColorIx(vg, 220, 220, 0);
 else if (sameWord("purple", asciiColor))
     return vgFindColorIx(vg, 150, 0, 200);
 else if (sameWord("orange", asciiColor))
@@ -89,7 +89,7 @@ if (gg != NULL)
     struct chromGraphBin *cgb = gg->cgb;
     struct chromGraphSettings *cgs = gg->settings;
     int maxGapToFill = cgs->maxGapToFill;
-    static struct rgbColor missingDataColor = { 200, 200, 100};
+    static struct rgbColor missingDataColor = { 180, 180, 120};
     Color missingColor = vgFindRgb(vg, &missingDataColor);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
     double gMin = cgs->minVal, gMax = cgs->maxVal, gScale;

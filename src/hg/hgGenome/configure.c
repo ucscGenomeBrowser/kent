@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.13 2007/01/23 00:35:13 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.14 2007/01/26 00:46:38 kent Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -76,7 +76,7 @@ hPrintf("</TD></TR></TABLE>\n");
 hPrintf("<TABLE><TR><TD>\n");
 hPrintf("highlight missing: ");
 cartMakeCheckBox(cart, hggYellowMissing, FALSE);
-hPrintf(" <I>Highlight graph background where there is missing data</I>");
+hPrintf(" <I>Highlight background in yellow/gray if there is missing data in first graph</I>");
 hPrintf("</TD></TR></TABLE>\n");
 hPrintf("<TABLE><TR><TD>\n");
 hPrintf("region padding: ");
