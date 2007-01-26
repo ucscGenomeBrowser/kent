@@ -469,6 +469,14 @@ on which the the track is based. To identify this table, open up the
 <A HREF="../../../cgi-bin/hgTables" TARGET=_blank>Table Browser</A>, 
 select the correct genome assembly, then select the track name from the 
 <em>track</em> list. The <em>table</em> list will show the primary table.
+Alternatively, the primary table name can be obtained from a mouseover on the
+track name in the track control section.
+
+<P>Note that composite track subtracks are not valid <em>track_name</em>
+values.  To find the symbolic name of a composite track, look in the
+<em>tableName</em> field in the <em>trackDb</em> table, or mouseover the track
+name in the track control section. It is not possible to display only a subset
+of the subtracks at this time.
 <UL>
    <LI><B>position <<I>position</I>></B> - Determines the part of the genome
    that the Genome Browser will initially open to, in chromosome:start-end format.  
