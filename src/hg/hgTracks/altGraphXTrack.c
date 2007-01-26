@@ -348,6 +348,7 @@ else
 void altGraphXMethods(struct track *tg)
 /* setup special methods for altGraphX track */
 {
+bedMethods(tg);
 tg->drawItems = altGraphXDrawPackTrack;
 tg->loadItems = altGraphXLoadItemsPack;
 tg->freeItems = altGraphXFreeItems;

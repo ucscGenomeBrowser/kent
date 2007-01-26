@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1268 2007/01/19 20:21:02 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1269 2007/01/26 01:46:53 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11639,7 +11639,10 @@ else if (sameWord(type, "chromGraph"))
     {
     chromGraphMethods(track);
     }
-
+else if (sameWord(type, "altGraphX"))
+    {
+    altGraphXMethods(track);
+    }
 }
 
 static void compositeLoad(struct track *track)
@@ -12809,7 +12812,6 @@ registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
-registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
@@ -12853,10 +12855,6 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
-registerTrackHandler("altGraphXCon2", altGraphXMethods ); 
-registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); 
-/* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
-registerTrackHandler("altGraphXT6Con", altGraphXMethods ); 
 registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("RfamSeedFolds", rnaSecStrMethods);
 registerTrackHandler("RfamFullFolds", rnaSecStrMethods);
