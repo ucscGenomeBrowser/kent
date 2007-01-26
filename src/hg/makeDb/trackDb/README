@@ -304,6 +304,9 @@ Some settings used by various tracks:
     o html - specifies alternate filename for track description. Should only
         be used when updating an existing track (used chiefly by ENCODE).
         in conjunction with the 'release alpha' setting.
+    o scoreMin, scoreMax - sets the range used to color the track if 
+        colored by score.  Allows use of the whole color range when data
+        has scores with a smaller range than 0-1000.
 
 Note: We have a restriction on table names.   We currently do not handle
 table names in the format chrN_table_name.   The 2nd underscore is not allowed.
