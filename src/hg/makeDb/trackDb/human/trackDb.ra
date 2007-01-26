@@ -181,7 +181,23 @@ longLabel Alternative Splicing from ESTs/mRNAs
 group rna
 priority 74
 visibility hide
-type bed 3 .
+type altGraphX
+
+track altGraphX2
+shortLabel Alt-Splicing2
+longLabel Alternative Splicing from ESTs/mRNAs - test take 2
+group rna
+priority 74.1
+visibility hide
+type altGraphX
+
+track altGraphRna
+shortLabel AltSplice mRNA
+longLabel Alternative Splicing from mRNAs ignore mouse
+group rna
+priority 74.1
+visibility hide
+type altGraphX
 
 track mgcIntrons
 shortLabel mgcIntronPicks

@@ -127,7 +127,7 @@ longLabel Alternative Splicing from ESTs/mRNAs
 group rna
 priority 74
 visibility hide
-type bed 3
+type altGraphX
 
 track rikenCageTc
 shortLabel Riken CAGE TC
