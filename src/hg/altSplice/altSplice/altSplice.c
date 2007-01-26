@@ -74,7 +74,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.23 2007/01/19 21:24:19 kent Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.24 2007/01/26 04:58:35 kent Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -84,6 +84,7 @@ double minCover = 0.0; /* Minimum percent of transcript aligning. */
 double minAli = 0.0;   /* Minimum percent identity of alignments to keep. */
 boolean weightMrna = FALSE; /* Add more weight to alignments of mRNAs? */
 boolean useChromKeeper = FALSE; /* Load all of the info from the database once and store in local memory. */
+boolean singleExonOk = FALSE;	/* If true keep single exon alignments. */
 int numDbTables =0;     /* Number of tables we're going to load psls from. */
 char **dbTables = NULL; /* Tables that psls will be loaded from. */
 struct hash *tissLibHash = NULL; /* Hash of slInts by accession where first slInt is lib, second is tissue. */
@@ -113,6 +114,8 @@ static struct optionSpec optionSpecs[] =
     {"chromNib", OPTION_STRING},
     {"pslFile", OPTION_STRING},
     {"killList", OPTION_STRING},
+    {"noEst", OPTION_BOOLEAN},
+    {"singleExonOk", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -132,7 +135,9 @@ static char *optionDescripts[] =
     "Load all of the psls and associated information once from from db and cache in memory.",
     "Chromosome sequence in nib format.",
     "Use psl alignments in file rather than database.",
-    "File of accessions to avoid."
+    "File of accessions to avoid.",
+    "Don't include ESTs, just refSeq and mRNA.",
+    "Allow single exon genes through.",
 };
 
 void usage()
@@ -142,9 +147,10 @@ int i;
 printf(
        "altSplice - constructs altSplice graphs using psl alignments\n"
        "from est and mrna databases. Must specify either a bed file\n"
-       "or a genePred file to load coordinates.\n"
+       "or a genePred file to load coordinates. This file should contain\n"
+       "data for one and only one chromosome.\n"
        "usage:\n"
-       "   altSplice -db=hg15 -beds=rnaCluter.bed -agxOut=out.agx\n"
+       "   altSplice -db=hg15 -beds=rnaCluster.bed -agxOut=out.agx\n"
        "where options are:\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "   -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
@@ -195,8 +201,14 @@ for(psl = pslList; psl != NULL; psl = pslNext)
     {
     boolean notTooBig = FALSE;
     pslNext = psl->next;
-    notTooBig = ((psl->tStarts[0] + psl->blockSizes[0] >= chromStart) && 
-		     (psl->tStarts[psl->blockCount -1] <= chromEnd));
+
+    /* Figure out chromStart/chromEnd put us in the middle of a big
+     * intron or the like inside of another gene.  If so ignore alignments
+     * from enclosing genes by setting notTooBig. */
+    int endFirstExon = psl->tStarts[0] + psl->blockSizes[0];
+    int startLastExon = psl->tStarts[psl->blockCount-1];
+    int pad=100;   
+    notTooBig = (endFirstExon + pad >= chromStart && startLastExon -pad <= chromEnd);
 #ifdef AFFYSPLICE
     notTooBig = TRUE;
 #endif
@@ -291,13 +303,12 @@ return dif;
 boolean agIsUnique(struct altGraphX *ag)
 /* Return TRUE if there isn't an altGraphX record already seen like this one. */
 {
-char *dummy = "d";
 char buff[256];
 safef(buff, sizeof(buff), "%s-%s-%d-%d", ag->tName, ag->strand, ag->tStart, ag->tEnd);
 if(hashFindVal(uniqPos, buff))
     return FALSE;
 else 
-    hashAdd(uniqPos, buff, dummy);
+    hashAdd(uniqPos, buff, NULL);
 return TRUE;
 }    
 
@@ -310,7 +321,6 @@ int *qStarts = query->edgeStarts, *tStarts = target->edgeStarts;
 int *qEnds = query->edgeEnds, *tEnds = target->edgeEnds;
 int qECount = query->edgeCount, tECount = target->edgeCount;
 int qIx = 0, tIx = 0;
-int subset = 0;
 if(query->tStart < target->tStart || query->tEnd > target->tEnd ||
    query->strand[0] != target->strand[0])
     return FALSE;
@@ -336,10 +346,10 @@ for(qIx = 0; qIx < qECount; qIx++)
 	    break; /* No need to keep looking for this query exon. */
 	    }
 	}
-    if(edgeFound)
-	subset++;
+    if (!edgeFound)
+        return FALSE;
     }
-return subset > 0;
+return TRUE;
 }
 
 
@@ -444,30 +454,36 @@ return pslList;
 void setupTables(char *chrom)
 /* What tables are we using for constructing graphs. */
 {
+char *tablePrefixes[8];
+int prefixCount = 0;
+
 #ifdef AFFYSPLICE
-char *tablePrefixes[] = {}; 
 char *wholeTables[] = {"splicesTmp"}; 
 #endif
 #ifdef USUAL
-char *tablePrefixes[] = {"_mrna", "_intronEst"};
 /* char *wholeTables[] = {}; */ /* Uncomment this if want to skip refSeq alignments
 				   usually for comparison purposes. */
-				   
 char *wholeTables[] = {"refSeqAli"};
 #endif
 int i;
 char buff[256];
 
-numDbTables = (ArraySize(tablePrefixes) + ArraySize(wholeTables));
+#ifndef AFFYSPLICE
+tablePrefixes[prefixCount++] = "_mrna";
+if (!optionExists("noEst"))
+    tablePrefixes[prefixCount++] = "_est";
+#endif
+
+numDbTables = (prefixCount + ArraySize(wholeTables));
 dbTables = needMem(sizeof(char*) * numDbTables);
-for(i=0; i< ArraySize(tablePrefixes); i++)
+for(i=0; i< prefixCount; i++)
     {
     snprintf(buff, sizeof(buff),"%s%s", chrom, tablePrefixes[i]);
     dbTables[i] = cloneString(buff);
     }
-for(i = ArraySize(tablePrefixes); i < numDbTables; i++)
+for(i = prefixCount; i < numDbTables; i++)
     {
-    dbTables[i] = cloneString(wholeTables[i-ArraySize(tablePrefixes)]);
+    dbTables[i] = cloneString(wholeTables[i-prefixCount]);
     }
 }
 
@@ -566,6 +582,7 @@ struct psl *pslList = NULL, *psl = NULL;
 for(i = 0; i < numDbTables; i++)
     {
     sr = hRangeQuery(conn, dbTables[i], chrom, 0, chromSize, NULL, &rowOffset);
+// JK: use hChromQuery(conn, dbTables[i], chrom, NULL, &rowOffset); instead?
     while((row = sqlNextRow(sr)) != NULL)
 	{
 	psl = pslLoad(row+rowOffset);
@@ -694,10 +711,12 @@ char *chrom = gp->chrom;
 int chromStart = BIGNUM;
 int chromEnd = -1;
 
+verbose(2, "agFromGp on %s\n", gp->name);
+
 pslList = getPsls(gp, conn);
 if(slCount(pslList) == 0)
     {
-    warn("No available alignments for %s.", gp->name);
+    verbose(2, "No available alignments for %s.", gp->name);
     return NULL;
     }
 /* expand to find the furthest boundaries of alignments */
@@ -709,7 +728,7 @@ genoSeq = dnaFromChrom(chrom, chromStart, chromEnd, dnaLower);
 for(psl = pslList; psl != NULL; psl = pslNext)
     {
     pslNext = psl->next;
-    if(pslHasIntron(psl, genoSeq, chromStart))
+    if(singleExonOk || pslHasIntron(psl, genoSeq, chromStart))
 	{
 	slAddHead(&pslCluster, psl);
 	}
@@ -787,6 +806,16 @@ if (dif == 0)
 return dif;
 }
 
+boolean gpAllSameChrom(struct genePred *list)
+/* Return TRUE if all genePreds are on same chromosome. */
+{
+struct genePred *gp;
+for (gp = list; gp != NULL; gp = gp->next)
+    if (!sameString(gp->chrom, list->chrom))
+         return FALSE;
+return TRUE;
+}
+
 void createAltSplices(char *outFile,  boolean memTest)
 /* Top level routine, gets genePredictions and runs through them to 
    build altSplice graphs. */
@@ -812,13 +841,13 @@ else
     usage();
     }
 
+if (!gpAllSameChrom(gpList))
+    errAbort("Multiple chromosomes in bed or genePred file.");
+
 /* Sanity check to make sure we got some loci to work
    with. */
 if(gpList == NULL)
-    {
-    warn("No gene boundaries were found.");
-    return;
-    }
+    errAbort("No gene boundaries were found.");
 slSort(&gpList, genePredCmp);
 setupTables(gpList->chrom);
 
@@ -900,6 +929,7 @@ hSetDb(db);
 if(optionExists("killList"))
     initKillList();
 outFile = optionVal("agxOut", NULL);
+singleExonOk = optionExists("singleExonOk");
 if(outFile == NULL)
     errAbort("Must specify output file with -agxOut flag. Try -help for usage.");
 if(optionVal("chromNib", NULL) != NULL)
