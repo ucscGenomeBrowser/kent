@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.49 2007/01/12 23:52:30 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.50 2007/01/26 01:02:50 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -778,7 +778,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
         {
 	pslIsProt = (stringIn("protein", line) != NULL);
 	int i;
-	for (i=0; i<4; ++i)
+	for (i=0; i<3; ++i)
 	    customFactoryNextRealTilTrack(cpp);
 	continue;
 	}
