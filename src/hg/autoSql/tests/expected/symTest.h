@@ -7,24 +7,24 @@
 
 #define SYMTEST_NUM_COLS 3
 
-enum sex
+enum symTestSex
     {
-    male = 0,
-    female = 1,
+    symTestMale = 0,
+    symTestFemale = 1,
     };
-enum skills
+enum symTestSkills
     {
-    cProg = 0x0001,
-    javaProg = 0x0002,
-    pythonProg = 0x0004,
-    awkProg = 0x0008,
+    symTestCProg = 0x0001,
+    symTestJavaProg = 0x0002,
+    symTestPythonProg = 0x0004,
+    symTestAwkProg = 0x0008,
     };
 struct symTest
 /* test of enum and set symbolic columns */
     {
     struct symTest *next;  /* Next in singly linked list. */
     int id;	/* unique id */
-    enum sex sex;	/* enumerated column */
+    enum symTestSex sex;	/* enumerated column */
     unsigned skills;	/* set column */
     };
 

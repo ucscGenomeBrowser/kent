@@ -71,7 +71,7 @@ ret->ptCount = sqlSigned(row[5]);
 ret->difCount = sqlSigned(row[7]);
 ret->valCount = sqlSigned(row[10]);
 ret->id = sqlUnsigned(row[0]);
-strcpy(ret->shortName, row[1]);
+safecpy(ret->shortName, sizeof(ret->shortName), row[1]);
 ret->longName = cloneString(row[2]);
 {
 char *s = cloneString(row[3]);

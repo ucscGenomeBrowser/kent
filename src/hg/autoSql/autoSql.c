@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.29 2006/10/18 23:15:32 heather Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.30 2007/01/26 05:28:26 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -79,23 +79,34 @@ fprintf(f, "    PRIMARY KEY(%s)\n", table->columnList->name);
 fprintf(f, ");\n");
 }
 
-void cSymTypeDef(struct asColumn *col, FILE *f)
-/* print out C enum for enum or set columns */
+static void cSymTypePrName(struct asObject *dbObj, char *name, FILE *f)
+/* print the C type name, prefixed with the object name */
+{
+fprintf(f, "%s%c%s", dbObj->name, toupper(name[0]), name+1);
+}
+
+void cSymTypeDef(struct asObject *dbObj, struct asColumn *col, FILE *f)
+/* print out C enum for enum or set columns.  enum and value names are
+ * prefixed with structure names to prevent collisions */
 {
 boolean isEnum = (col->lowType->type == t_enum);
-fprintf(f, "enum %s\n    {\n", col->name);
+fprintf(f, "enum ");
+cSymTypePrName(dbObj, col->name, f);
+fprintf(f, "\n    {\n");
 unsigned value = isEnum ? 0 : 1;
 struct slName *val;
 for (val = col->values; val != NULL; val = val->next)
     {
+    fprintf(f, "    ");
+    cSymTypePrName(dbObj, val->name, f);
     if (isEnum)
         {
-        fprintf(f, "    %s = %d,\n", val->name, value);
+        fprintf(f, " = %d,\n", value);
         value++;
         }
     else
         {
-        fprintf(f, "    %s = 0x%.4x,\n", val->name, value);
+        fprintf(f, " = 0x%.4x,\n", value);
         value = value << 1;
         }
     }
@@ -137,10 +148,12 @@ else
     fprintf(f, " %s", col->name); 
 }
 
-void cEnumColumn(struct asColumn *col, FILE *f)
+void cEnumColumn(struct asObject *dbObj, struct asColumn *col, FILE *f)
 /* print out enum column def in C */
 {
-fprintf(f, "    enum %s %s", col->name, col->name);
+fprintf(f, "    enum ");
+cSymTypePrName(dbObj, col->name, f);
+fprintf(f, " %s", col->name);
 }
 
 void cOtherColumn(struct asColumn *col, FILE *f)
@@ -156,7 +169,7 @@ if (col->isList && col->fixedSize)
     fprintf(f, "[%d]", col->fixedSize);
 }
 
-void cColumn(struct asColumn *col, FILE *f)
+void cColumn(struct asObject *dbObj, struct asColumn *col, FILE *f)
 /* Print out a column in C. */
 {
 if (col->obType != NULL)
@@ -164,7 +177,7 @@ if (col->obType != NULL)
 else if (col->lowType->type == t_char)
     cCharColumn(col, f);
 else if (col->lowType->type == t_enum)
-    cEnumColumn(col, f);
+    cEnumColumn(dbObj, col, f);
 else
     cOtherColumn(col, f);
 fprintf(f, ";\t/* %s */\n", col->comment);
@@ -184,7 +197,7 @@ fprintf(f, "#define %s_NUM_COLS %d\n\n", defineName,
 for (col = dbObj->columnList; col != NULL; col = col->next)
     {
     if ((col->lowType->type == t_enum) || (col->lowType->type == t_set))
-        cSymTypeDef(col, f);
+        cSymTypeDef(dbObj, col, f);
     }
 
 fprintf(f, "struct %s\n", dbObj->name);
@@ -193,7 +206,7 @@ fprintf(f, "    {\n");
 if (!dbObj->isSimple)
     fprintf(f, "    struct %s *next;  /* Next in singly linked list. */\n", dbObj->name);
 for (col = dbObj->columnList; col != NULL; col = col->next)
-    cColumn(col, f);
+    cColumn(dbObj, col, f);
 fprintf(f, "    };\n\n");
 }
 
@@ -359,7 +372,7 @@ if (col->isSizeLink == isSizeLink)
 		break;
 	    case t_char:
 		if (col->fixedSize > 0)
-		    fprintf(f, "strcpy(ret->%s, row[%d]);\n", col->name, colIx);
+		    fprintf(f, "safecpy(ret->%s, sizeof(ret->%s), row[%d]);\n", col->name, col->name, colIx);
 		else
 		    fprintf(f, "ret->%s = row[%d][0];\n", col->name, colIx);
 		break;

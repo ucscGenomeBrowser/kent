@@ -9,7 +9,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = autoSql.o
 
 autoSql: ${O}
-	${CC} -o autoSql $O ../../lib/${MACHTYPE}/jkweb.a ${L}
+	${CC} ${COPT} -o autoSql $O ../../lib/${MACHTYPE}/jkweb.a ${L}
 	cp -f autoSql ${BINDIR}
 
 test:
