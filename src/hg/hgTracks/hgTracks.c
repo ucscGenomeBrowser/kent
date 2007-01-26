@@ -105,7 +105,7 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1269 2007/01/26 01:46:53 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1270 2007/01/26 19:19:51 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11910,12 +11910,22 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+static int getScoreFilter(char *tableName)
+/* check for score filter configuration setting */
+{
+char optionScoreStr[128];
+
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tableName);
+return cartUsualInt(cart, optionScoreStr, 0);
+}
+
 void ctLoadSimpleBed(struct track *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
 {
 struct customTrack *ct = tg->customPt;
 struct bed *bed, *nextBed, *list = NULL;
+int scoreFilter = getScoreFilter(ct->tdb->tableName);
 
 if (ct->dbTrack)
     {
@@ -11942,6 +11952,8 @@ else
 	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
 		    && sameString(chromName, bed->chrom))
 	    {
+            if (scoreFilter && bed->score < scoreFilter)
+                continue;
 	    slAddHead(&list, bed);
 	    }
 	}
@@ -11957,6 +11969,7 @@ struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 boolean useItemRgb = FALSE;
+int scoreFilter = getScoreFilter(ct->tdb->tableName);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
@@ -11987,6 +12000,8 @@ else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	{
+        if (scoreFilter && bed->score < scoreFilter)
+            continue;
 	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
 		    && sameString(chromName, bed->chrom))
 	    {
@@ -12013,6 +12028,7 @@ void ctLoadBed8(struct track *tg)
 struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
+int scoreFilter = getScoreFilter(ct->tdb->tableName);
 
 if (ct->dbTrack)
     {
@@ -12037,6 +12053,8 @@ else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	{
+        if (scoreFilter && bed->score < scoreFilter)
+            continue;
 	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
 		    && sameString(chromName, bed->chrom))
 	    {
@@ -12058,6 +12076,7 @@ struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 boolean useItemRgb = FALSE;
+int scoreFilter = getScoreFilter(ct->tdb->tableName);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
@@ -12088,6 +12107,8 @@ else
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	{
+        if (scoreFilter && bed->score < scoreFilter)
+            continue;
 	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
 		    && sameString(chromName, bed->chrom))
 	    {
