@@ -8,8 +8,8 @@
     ssh kkstore05
     mkdir /cluster/store12/bosTau3
     ln -s /cluster/store12/bosTau3 /cluster/data/bosTau3
-    mkdir /cluster/data/bosTau3/downloads
-    cd /cluster/data/bosTau3/downloads
+    mkdir /cluster/data/bosTau3/baylor
+    cd /cluster/data/bosTau3/baylor
 
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/ReadMeBovine.3.1.txt
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20060815-freeze/contigs/*
@@ -29,10 +29,10 @@
 # 1) Their AGP file used capitalized "Chr".  This is not recommended for us.
     ssh kkstore05
     cd /cluster/data/bosTau3
-    sed -e 's/Chr/chr/' downloads/Btau20060815.agp > fixup/UCSC.agp
+    sed -e 's/Chr/chr/' baylor/Btau20060815.agp > fixup/UCSC.agp
 # 2) Their quality scores were reported by scaffold, not by chrom.
 #    Convert to qac (UCSC compressed qual score format) and lift from AGP.
-    zcat downloads/Btau20060815.contigs.fa.qual.gz | qaToQac stdin fixup/scaffolds.qac
+    zcat baylor/Btau20060815.contigs.fa.qual.gz | qaToQac stdin fixup/scaffolds.qac
     qacAgpLift fixup/UCSC.agp fixup/scaffolds.qac fixup/chrom.qac
 # 3) They used a ".1" suffix in the contig and quality files.
 #    An example line from the contig.fa file:
@@ -216,5 +216,6 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     cd /cluster/data/bosTau3
     mkdir bed/ooc
     cd bed/ooc
+    ls -1 /cluster/data/bosTau3/bosTau3.2bit > nib.lst
     blat nib.lst /dev/null /dev/null -tileSize=11 -makeOoc=/cluster/bluearc/bosTau3/11.ooc -repMatch=1005
 
