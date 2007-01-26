@@ -46,6 +46,7 @@ install:
 	cp -p --remove-destination getRRdumpfile.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
+	cp -p --remove-destination getTablesize.csh        ${SCRIPTS}
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
