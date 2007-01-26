@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hPrint.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.4 2007/01/25 22:05:40 ann Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.5 2007/01/26 00:45:56 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -12,10 +12,8 @@ hPrintf("%s",
 
 "<P>Genome Graphs is a tool for displaying genome-wide data sets such\n"
 "as the results of genome-wide SNP association studies, linkage studies\n"
-"and homozygosity mapping. This tool is not pre-loaded with any sample\n"
-"data. This section will help you upload your own data by providing brief\n"
-"line-by-line descriptions of the controls on this page. For more\n"
-"information on using this program, see the\n"
+"and homozygosity mapping. Here are line-by-line descriptions of the controls \n"
+"on this page. See also the\n"
 "<A HREF=\"../goldenPath/help/hgGenomeHelp.html\" TARGET=\"_blank\">Genome\n"
 "Graphs User's Guide</A>.\n"
 "        <UL>\n"
