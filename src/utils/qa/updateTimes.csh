@@ -103,14 +103,16 @@ if ( $mach3 != "hgwdev" &&  $mach3 != "hgwbeta" ) then
   set rr3="true"
 endif
 
-# make a file for single-table queries
+
+# check if it is a file or a tablename
 file $tablelist | egrep "ASCII text" > /dev/null
-if ($status) then
-  echo $argv[2] > xxtablelistxx
-  set tablelist="xxtablelistxx"
+if (! $status) then
+  set tables=`cat $tablelist`
+else
+  set tables=$tablelist
 endif
 
-foreach table (`cat $tablelist`)
+foreach table ($tables)
   echo
   echo $table
   echo "============="
@@ -159,5 +161,3 @@ foreach table (`cat $tablelist`)
   endif
 end
 echo
-
-rm -f xxtablelistxx
