@@ -1172,3 +1172,171 @@ _EOF_
     ldHgGene -predTab strPur1 genscan genscan.txt.new 
     rm genscan*{new,txt,sql}
 
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-01-26 )
+    ssh kkstore02
+    bash # if not using bash shell already
+
+    mkdir /cluster/data/strPur1/blastDb
+    cd /cluster/data/strPur1
+    faToTwoBit strPur1.2bit temp.fa
+    faSplit sequence temp.fa 500 blastDb/
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    mkdir -p /san/sanvol1/scratch/strPur1/blastDb
+    cd /cluster/data/strPur1/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/strPur1/blastDb
+    done
+
+    mkdir -p /cluster/data/strPur1/bed/tblastn.hg18KG
+    cd /cluster/data/strPur1/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/strPur1/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 494 query.lst
+
+   # we want around 50000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(50000/`wc query.lst | awk "{print \\\$1}"`\)
+# 36727/(50000/494) = 362.862760
+
+   mkdir -p /cluster/bluearc/strPur1/bed/tblastn.hg18KG/kgfa
+   split -l 360 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/strPur1/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/strPur1/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/strPur1/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/strPur1/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/strPur1/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.2
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit # back to bash
+    
+    ssh pk
+    cd /cluster/data/strPur1/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 50882 of 50882 jobs
+# CPU time in finished jobs:    8964073s  149401.22m  2490.02h  103.75d  0.284 y
+# IO & Wait Time:               1545368s   25756.13m   429.27h   17.89d  0.049 y
+# Average job time:                 207s       3.44m     0.06h    0.00d
+# Longest finished job:             983s      16.38m     0.27h    0.01d
+# Submission to last job:        133787s    2229.78m    37.16h    1.55d
+
+    ssh kkstore04
+    cd /cluster/data/strPur1/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/strPur1/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    exit
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/strPur1/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/strPur1/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 103 of 103 jobs
+# CPU time in finished jobs:       4863s      81.06m     1.35h    0.06d  0.000 y
+# IO & Wait Time:                 88639s    1477.31m    24.62h    1.03d  0.003 y
+# Average job time:                 908s      15.13m     0.25h    0.01d
+# Longest finished job:            1737s      28.95m     0.48h    0.02d
+# Submission to last job:          3936s      65.60m     1.09h    0.05d
+
+    ssh kkstore04
+    cd /cluster/data/strPur1/bed/tblastn.hg18KG/blastOut
+    bash # if using another shell
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/strPur1/bed/tblastn.hg18KG/blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+    # this is ok.
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/strPur1/bed/tblastn.hg18KG
+    hgLoadPsl strPur1 blastHg18KG.psl
+    # check coverage
+    featureBits strPur1 refGene:cds  blastHg18KG -enrichment
+# refGene:cds 0.065%, blastHg18KG 0.898%, both 0.024%, cover 37.31%, enrich 41.56x
+
+    featureBits strPur1 blastHg18KG blastHg17KG  -enrichment
+# blastHg18KG 0.898%, blastHg17KG 0.842%, both 0.749%, cover 83.46%, enrich 99.18x
+    
+    ssh kkstore04
+    rm -rf /cluster/data/strPur1/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/strPur1/bed/tblastn.hg18KG/blastOut
+#end tblastn
+##########################################################################
