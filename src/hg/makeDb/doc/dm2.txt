@@ -5487,7 +5487,7 @@ hgsql dm2
     rm bed.tab wiggle.tab
 
 ###########################################################################
-# HUMAN (hg18) PROTEINS TRACK (DONE,  2006-06-16, braney)
+# HUMAN (hg18) PROTEINS TRACK (DONE,  2007-01-26, braney)
     ssh kkstore04
     bash # if not using bash shell already
     # use blastDb database made for hg17 protein track
