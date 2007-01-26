@@ -190,7 +190,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1189 2007/01/25 05:32:44 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1190 2007/01/26 01:53:47 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -249,6 +249,7 @@ struct customTrack *theCtList = NULL;
 
 /* forwards */
 char *getPredMRnaProtSeq(struct genePred *gp);
+void doAltGraphXDetails(struct trackDb *tdb, char *item);
 
 void hgcStart(char *title)
 /* Print out header of web page with title.  Set
@@ -2991,6 +2992,10 @@ if (wordCount > 0)
     else if (sameString(type, "bed6FloatScore"))
 	{
 	doBed6FloatScore(tdb, item);
+	}
+    else if (sameString(type, "altGraphX"))
+        {
+	doAltGraphXDetails(tdb,item);
 	}
     }
 printTrackHtml(tdb);
@@ -18028,11 +18033,6 @@ else if( sameWord(track, "ancientR"))
 else if( sameWord(track, "gcPercent"))
     {
     doGcDetails(tdb, item);
-    }
-else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon") 
-	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho") || startsWith("altGraphX", track))
-    {
-    doAltGraphXDetails(tdb,item);
     }
 else if (sameWord(track, "htcTrackHtml"))
     {
