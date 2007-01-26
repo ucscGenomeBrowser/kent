@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.5 2007/01/24 23:56:37 hiram Exp $"
+#       "$Id: fr2.txt,v 1.6 2007/01/26 16:29:29 braney Exp $"
 #
 
 ##########################################################################
@@ -479,3 +479,172 @@ genomeCladePriority 110
     # this part.
     # hgPepPred fr2 generic ensPep ensPep.fa
 
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-01-26)
+    ssh kkstore02
+    bash # if not using bash shell already
+
+    mkdir /cluster/data/fr2/blastDb
+    cd /cluster/data/fr2
+    zcat jgi/fugu.041029.scaffolds.fasta.gz > temp.fa
+    faSplit sequence temp.fa 500 blastDb/
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    mkdir -p /san/sanvol1/scratch/fr2/blastDb
+    cd /cluster/data/fr2/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/fr2/blastDb
+    done
+
+    mkdir -p /cluster/data/fr2/bed/tblastn.hg18KG
+    cd /cluster/data/fr2/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/fr2/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 495 query.lst
+
+   # we want around 100000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(100000/`wc query.lst | awk "{print \\\$1}"`\)
+
+# 36727/(100000/495) = 181.798650
+
+   mkdir -p /cluster/bluearc/fr2/bed/tblastn.hg18KG/kgfa
+   split -l 180 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/fr2/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/fr2/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/fr2/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/fr2/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/fr2/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.2
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit # back to bash
+    
+    ssh pk
+    cd /cluster/data/fr2/bed/tblastn.hg18KG
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 101475 of 101475 jobs
+# CPU time in finished jobs:    3924977s   65416.29m  1090.27h   45.43d  0.124 y
+# IO & Wait Time:               1118884s   18648.06m   310.80h   12.95d  0.035 y
+# Average job time:                  50s       0.83m     0.01h    0.00d
+# Longest finished job:            3925s      65.42m     1.09h    0.05d
+# Submission to last job:         46557s     775.95m    12.93h    0.54d
+
+    ssh kkstore04
+    cd /cluster/data/fr2/bed/tblastn.hg18KG
+    tcsh
+    mkdir chainRun
+    cd chainRun
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/fr2/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/fr2/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/fr2/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 205 of 205 jobs
+# CPU time in finished jobs:       2262s      37.70m     0.63h    0.03d  0.000 y
+# IO & Wait Time:                 40989s     683.15m    11.39h    0.47d  0.001 y
+# Average job time:                 211s       3.52m     0.06h    0.00d
+# Longest finished job:             360s       6.00m     0.10h    0.00d
+# Submission to last job:          1492s      24.87m     0.41h    0.02d
+
+    ssh kkstore04
+    cd /cluster/data/fr2/bed/tblastn.hg18KG/blastOut
+    bash # if using another shell
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/fr2/bed/tblastn.hg18KG/unliftBlastHg18KG.psl
+    cd ..
+    pslCheck unliftBlastHg18KG.psl
+    liftUp blastHg18KG.psl ../../jkStuff/liftAll.lft warn unliftBlastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/tblastn.hg18KG
+    hgLoadPsl fr2 blastHg18KG.psl
+
+    # check coverage
+    featureBits fr2 blastHg18KG 
+# 19761405 bases of 393312790 (5.024%) in intersection
+
+    featureBits fr2 refGene:cds blastHg18KG  -enrichment
+# ensGene:cds 8.216%, blastHg18KG 5.024%, both 4.401%, cover 53.57%, enrich 10.66x
+
+    ssh kkstore04
+    rm -rf /cluster/data/fr2/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/fr2/bed/tblastn.hg18KG/blastOut
+#end tblastn
+##########################################################################
