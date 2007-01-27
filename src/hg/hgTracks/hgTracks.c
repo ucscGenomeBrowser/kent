@@ -104,8 +104,9 @@
 #include "dbRIP.h"
 #include "wikiLink.h"
 #include "dnaMotif.h"
+#include "hapmapTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1270 2007/01/26 19:19:51 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1271 2007/01/27 00:09:40 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12923,6 +12924,8 @@ registerTrackHandler("transMapAncMRnaGene", transMapMethods);
 registerTrackHandler("transMapAncMRnaAliGene", transMapMethods);
 
 registerTrackHandler("retroposons", dbRIPMethods);
+
+registerTrackHandler("hapmapAlleles", hapmapMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
