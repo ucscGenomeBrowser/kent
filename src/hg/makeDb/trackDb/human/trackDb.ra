@@ -464,55 +464,6 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-track orthoAlleles
-compositeTrack on
-shortLabel HapMap SNPs + Ortho
-longLabel HapMap SNPs with Orthologous Alleles
-group varRep
-priority 144.1
-visibility hide
-type bed 6 + 
-
-    track orthoAllelesYRI
-    subTrack orthoAlleles
-    shortLabel SNPs YRI
-    longLabel  SNPs from the YRI Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 1
-
-    track orthoAllelesCEU
-    subTrack orthoAlleles
-    shortLabel SNPs CEU
-    longLabel  SNPs from the CEU Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 2
-
-    track orthoAllelesCHB
-    subTrack orthoAlleles
-    shortLabel SNPs CHB
-    longLabel  SNPs from the CHB Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 3
-
-    track orthoAllelesJPT
-    subTrack orthoAlleles
-    shortLabel SNPs JPT
-    longLabel  SNPs from the JPT Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 4
-
-    track orthoAllelesJPT_CHB
-    subTrack orthoAlleles
-    shortLabel SNPs JPT+CHB
-    longLabel  SNPs from the Combined JPT+CHB Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 5
-
 track hapmapLdHotspot
 compositeTrack on
 shortLabel HapMap LD Hotspots
@@ -627,63 +578,14 @@ altColor 0,0,0
 spectrum on
 type bed 12 .
 
-track hapmapSnps
-shortLabel HapMap SNPs (Old)
-longLabel HapMap Genotyped SNPs, Primate Alleles, and Derived Allele Frequencies
+track hapmapAlleles
+shortLabel HapMap SNPs
+longLabel HapMap Genotyped SNPs
 group varRep
 priority 144.48
 visibility hide
 type bed 6 +
-
-track hapmapAlleleFreq
-compositeTrack on
-shortLabel HapMap SNPs
-longLabel HapMap SNPs
-group varRep
-priority 144.48
-visibility hide
-type bed 6 + 
-
-    track hapmapAlleleFreqYRI
-    subTrack hapmapAlleleFreq
-    shortLabel SNPs YRI
-    longLabel SNPs from the YRI Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 1
-
-    track hapmapAlleleFreqCEU
-    subTrack hapmapAlleleFreq
-    shortLabel SNPs CEU
-    longLabel SNPs from the CEU Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 2
-
-    track hapmapAlleleFreqCHB
-    subTrack hapmapAlleleFreq
-    shortLabel SNPs CHB
-    longLabel SNPs from the CHB Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 3
-
-    track hapmapAlleleFreqJPT
-    subTrack hapmapAlleleFreq
-    shortLabel SNPs JPT
-    longLabel SNPs from the JPT Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 4
-
-    track hapmapAlleleFreqCHBandJPT
-    subTrack hapmapAlleleFreq
-    shortLabel SNPs CHB+JPT
-    longLabel SNPs from the Combined CHB+JPT Population
-    color 200,100,0
-    altColor 0,100,200
-    priority 5
-
+canPack off
 
 track haplotype
 shortLabel Haplotype Blocks
@@ -1626,51 +1528,6 @@ searchType bed
 semiShortCircuit 1
 termRegex [A-Z0-9\(\)/-]+
 searchPriority 20
-
-searchName hapmapAlleleFreqCEU
-searchTable hapmapAlleleFreqCEU
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[1-9][0-9]*)
-searchPriority 12
-padding 250
-
-searchName hapmapAlleleFreqCHB
-searchTable hapmapAlleleFreqCHB
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[1-9][0-9]*)
-searchPriority 12
-padding 250
-
-searchName hapmapAlleleFreqCHBandJPT
-searchTable hapmapAlleleFreqCHBandJPT
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[1-9][0-9]*)
-searchPriority 12
-padding 250
-
-searchName hapmapAlleleFreqJPT
-searchTable hapmapAlleleFreqJPT
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[1-9][0-9]*)
-searchPriority 12
-padding 250
-
-searchName hapmapAlleleFreqYRI
-searchTable hapmapAlleleFreqYRI
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[1-9][0-9]*)
-searchPriority 12
-padding 250
 
 searchTable cnpSharp
 searchMethod exact
