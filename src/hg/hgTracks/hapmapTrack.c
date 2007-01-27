@@ -89,12 +89,10 @@ if (isFull)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	hapmapAllelesStaticLoad(row+rowOffset, &hapmapSnp);
-	fprintf(stderr, "hapmap SNP = %s\n", hapmapSnp.name);
 	// CEU
 	if (hapmapSnp.allele1CountCEU > 0 || hapmapSnp.allele2CountCEU > 0) 
 	    {
 	    grayLevelCEU = grayInRange(hapmapSnp.allele1CountCEU, 0, 120);
-	    fprintf(stderr, "grayLevelCEU = %d\n", grayLevelCEU);
 	    col = shadesOfGray[grayLevelCEU];
 	    x1 = roundingScale(hapmapSnp.chromStart-winStart, width, baseWidth)+xOff;
 	    x2 = roundingScale(hapmapSnp.chromEnd-winStart, width, baseWidth)+xOff;
@@ -116,7 +114,6 @@ if (isFull)
 	if (hapmapSnp.allele1CountCHB > 0 || hapmapSnp.allele2CountCHB > 0) 
 	    {
 	    grayLevelCHB = grayInRange(hapmapSnp.allele1CountCHB, 0, 90);
-	    fprintf(stderr, "grayLevelCHB = %d\n", grayLevelCHB);
 	    col = shadesOfGray[grayLevelCHB];
 	    x1 = roundingScale(hapmapSnp.chromStart-winStart, width, baseWidth)+xOff;
 	    x2 = roundingScale(hapmapSnp.chromEnd-winStart, width, baseWidth)+xOff;
@@ -138,7 +135,6 @@ if (isFull)
 	if (hapmapSnp.allele1CountJPT > 0 || hapmapSnp.allele2CountJPT > 0) 
 	    {
 	    grayLevelJPT = grayInRange(hapmapSnp.allele1CountJPT, 0, 90);
-	    fprintf(stderr, "grayLevelJPT = %d\n", grayLevelJPT);
 	    col = shadesOfGray[grayLevelJPT];
 	    x1 = roundingScale(hapmapSnp.chromStart-winStart, width, baseWidth)+xOff;
 	    x2 = roundingScale(hapmapSnp.chromEnd-winStart, width, baseWidth)+xOff;
@@ -160,7 +156,6 @@ if (isFull)
 	if (hapmapSnp.allele1CountYRI > 0 || hapmapSnp.allele2CountYRI > 0) 
 	    {
 	    grayLevelYRI = grayInRange(hapmapSnp.allele1CountYRI, 0, 120);
-	    fprintf(stderr, "grayLevelYRI = %d\n", grayLevelYRI);
 	    col = shadesOfGray[grayLevelYRI];
 	    x1 = roundingScale(hapmapSnp.chromStart-winStart, width, baseWidth)+xOff;
 	    x2 = roundingScale(hapmapSnp.chromEnd-winStart, width, baseWidth)+xOff;
