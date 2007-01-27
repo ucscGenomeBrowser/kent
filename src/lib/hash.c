@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.34 2006/08/10 01:02:16 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.35 2007/01/27 05:18:25 markd Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -485,6 +485,22 @@ if ((hash = *pHash) != NULL)
     {
     hashTraverseVals(hash, freeMem);
     freeHash(pHash);
+    }
+}
+
+void hashFreeWithVals(struct hash **pHash, void (freeFunc)())
+/* Free up hash table and all values associated with it. freeFunc is a
+ * function to free an entry, should take a pointer to a pointer to an
+ * entry. */
+{
+struct hash *hash = *pHash;
+if (hash != NULL)
+    {
+    struct hashCookie cookie = hashFirst(hash);
+    struct hashEl *hel;
+    while ((hel = hashNext(&cookie)) != NULL)
+        freeFunc(&hel->val);
+    hashFree(pHash);
     }
 }
 

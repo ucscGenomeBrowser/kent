@@ -162,6 +162,11 @@ void freeHashAndVals(struct hash **pHash);
 /* Free up hash table and all values associated with it.
  * (Just calls freeMem on each hel->val) */
 
+void hashFreeWithVals(struct hash **pHash, void (freeFunc)());
+/* Free up hash table and all values associated with it. freeFunc is a
+ * function to free an entry, should take a pointer to a pointer to an
+ * entry. */
+
 void hashFreeList(struct hash **pList);
 /* Free up a list of hashes. */
 
