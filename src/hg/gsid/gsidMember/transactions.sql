@@ -36,7 +36,7 @@ CREATE TABLE transactions (
   charset          VARCHAR(30),
   custom           VARCHAR(30),
   notify_version   VARCHAR(10),
-  verify_sign      VARCHAR(10),
+  verify_sign      VARCHAR(255),
   otherFields      LONGBLOB,
   PRIMARY KEY (id),
   INDEX payer_email (payer_email)

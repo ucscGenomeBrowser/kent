@@ -24,7 +24,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.3 2007/01/26 21:36:20 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.4 2007/01/27 00:31:14 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -104,7 +104,9 @@ char password[35];
 //FILE *out = mustOpen("../trash/passwords", "w");
 FILE *out = mustOpen("../conf/passwords", "w");
 
-sr = sqlGetResult(conn, "select * from members where activated='Y'");
+sr = sqlGetResult(conn, 
+"select * from members where activated='Y'"
+" and (expireDate='' or (current_date() < expireDate))");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     encryptNewPWD(row[1], password, sizeof(password));
@@ -350,6 +352,22 @@ if (!tm)
 char expireDate[11]; /* note: tm returns year rel 1900, mon and day are 0 based */ 
 safef(expireDate,sizeof(expireDate),"%4d-%02d-%02d",1900+tm->tm_year+1,tm->tm_mon+1,tm->tm_mday+1);
 
+/* use invoice# to map back to user's email */
+char query[256];
+safef(query,sizeof(query), "select email from invoices where id=%s", invoice);
+char *email = sqlQuickString(conn, query);
+if (!email)
+    {
+    fprintf(f,"error: unable to use invoice# %s to map back to user's email.\n", invoice);
+    fflush(f);
+    goto cleanup;
+    return;
+    }
+
+
+// TODO: add code to handle expired accounts as follows:
+// valid members: select * from members where expireDate='' or (current_date() < expireDate);
+//  does admin need to add some periodic forced-update?
 
 /* Write payment info to the members table 
  *  email field has been stored in the invoice field */
@@ -363,7 +381,7 @@ dyStringPrintf(dy,"update members set "
 , cgiUsualString("payment_gross","")
 , paymentDate
 , expireDate
-, invoice
+, email
 );
 
 //debug  TODO: clean that out of trash
@@ -626,6 +644,13 @@ safef(query,sizeof(query), "insert into members set "
     email, password, "N", name, phone, institution, type);
 sqlUpdate(conn, query);
 
+safef(query, sizeof(query), "insert into invoices values(default, '%s')", email);
+sqlUpdate(conn, query);
+int id = sqlLastAutoId(conn);
+char invoice[20];
+safef(invoice, sizeof(invoice), "%d", id);
+
+
 //char buttonFile[256];
 //safef(buttonFile,sizeof(buttonFile),"./%s.button",type); // TODO may move the button file later
 char buttonHtml[4096];
@@ -672,7 +697,7 @@ safef(buttonData, sizeof(buttonData),
 "cert_id=%s\n"
 
 , paypalEmail
-, email
+, invoice
 
 , sameString("commercial",type) 
   ? "Commercial"

@@ -24,6 +24,7 @@ init:
 	hgsql membership < members.sql
 	hgsql membership < transactions.sql
 	hgsql membership -e 'insert into members (email,password,activated) values ("hivcat","mIdhzf33z","Y")'
+	hgsql membership < invoices.sql
 
 initSSL:
 	openssl genrsa -out gsid_key.pem 1024
