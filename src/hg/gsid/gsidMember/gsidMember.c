@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.5 2007/01/27 02:09:10 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.6 2007/01/27 02:43:46 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -571,87 +571,16 @@ hPrintf("</FORM>");
 }
 
 
-
-void signup(struct sqlConnection *conn)
-/* process the signup form */
+void drawPaymentButton(struct sqlConnection *conn, char *type)
 {
 char query[256];
 char *email = cartUsualString(cart, "gsidM_email", "");
-if (!email || sameString(email,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Email cannot be blank.");
-    signupPage(conn);
-    return;
-    }
-safef(query,sizeof(query), "select password from members where email='%s'", email);
-char *password = sqlQuickString(conn, query);
-if (password)
-    {
-    freez(&errMsg);
-    errMsg = cloneString("A user with this email already exists.");
-    signupPage(conn);
-    freez(&password);
-    return;
-    }
-
-//TODO: make password requirements stricter, e.g. min length etc.
-password = cartUsualString(cart, "gsidM_password", "");
-if (!password || sameString(password,"") || (strlen(password)<6))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Password must be at least 6 characters long.");
-    signupPage(conn);
-    return;
-    }
-
-char *name = cartUsualString(cart, "gsidM_name", "");
-if (!name || sameString(name,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Name cannot be blank.");
-    signupPage(conn);
-    return;
-    }
-
-char *phone = cartUsualString(cart, "gsidM_phone", "");
-if (!phone || sameString(phone,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Phone cannot be blank.");
-    signupPage(conn);
-    return;
-    }
-
-char *institution = cartUsualString(cart, "gsidM_institution", "");
-if (!institution || sameString(institution,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Institution cannot be blank.");
-    signupPage(conn);
-    return;
-    }
-
-char *type = cartUsualString(cart, "gsidM_type", "");
-if (!type || sameString(type,""))
-    {
-    freez(&errMsg);
-    errMsg = cloneString("Type cannot be blank.");
-    signupPage(conn);
-    return;
-    }
-
-safef(query,sizeof(query), "insert into members set "
-    "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
-    email, password, "N", name, phone, institution, type);
-sqlUpdate(conn, query);
 
 safef(query, sizeof(query), "insert into invoices values(default, '%s')", email);
 sqlUpdate(conn, query);
 int id = sqlLastAutoId(conn);
 char invoice[20];
 safef(invoice, sizeof(invoice), "%d", id);
-
 
 //char buttonFile[256];
 //safef(buttonFile,sizeof(buttonFile),"./%s.button",type); // TODO may move the button file later
@@ -739,16 +668,105 @@ freez(&buttonEncrypted);
 //fprintf(stderr, "encrypted button form: [%s]\n", buttonHtml);
 
 hPrintf(
+"Pay yearly %s membership fee using paypal\n"
+"%s\n"
+"<br>\n"
+, type
+, buttonHtml
+);
+
+}
+
+
+void signup(struct sqlConnection *conn)
+/* process the signup form */
+{
+char query[256];
+char *email = cartUsualString(cart, "gsidM_email", "");
+if (!email || sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+safef(query,sizeof(query), "select password from members where email='%s'", email);
+char *password = sqlQuickString(conn, query);
+if (password)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("A user with this email already exists.");
+    signupPage(conn);
+    freez(&password);
+    return;
+    }
+
+//TODO: make password requirements stricter, e.g. min length etc.
+password = cartUsualString(cart, "gsidM_password", "");
+if (!password || sameString(password,"") || (strlen(password)<6))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Password must be at least 6 characters long.");
+    signupPage(conn);
+    return;
+    }
+
+char *name = cartUsualString(cart, "gsidM_name", "");
+if (!name || sameString(name,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Name cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+char *phone = cartUsualString(cart, "gsidM_phone", "");
+if (!phone || sameString(phone,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Phone cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+char *institution = cartUsualString(cart, "gsidM_institution", "");
+if (!institution || sameString(institution,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Institution cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+char *type = cartUsualString(cart, "gsidM_type", "");
+if (!type || sameString(type,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Type cannot be blank.");
+    signupPage(conn);
+    return;
+    }
+
+safef(query,sizeof(query), "insert into members set "
+    "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
+    email, password, "N", name, phone, institution, type);
+sqlUpdate(conn, query);
+
+
+hPrintf(
 "<h2>HIV VAC</h2>\n"
 "<p align=\"left\">\n"
 "</p>\n"
 "<h3>User %s successfully added.</h3>\n"
-"Pay yearly %s membership fee using paypal\n"
-"%s\n"
-"<br>\n"
-"Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>\n"
-, email, type, buttonHtml
+, email
 );
+
+drawPaymentButton(conn, type);
+
+hPrintf(
+"Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>\n"
+);
+
 
 }
 
@@ -891,25 +909,34 @@ if ((row = sqlNextRow(sr)) == NULL)
     accountLoginPage(conn);
     return;
     }
-struct members m;
-membersStaticLoad(row, &m);
+struct members *m = membersLoad(row);
+sqlFreeResult(&sr);
 
-hPrintf("<h1>Account Information for %s:</h1>\n",m.email);
+hPrintf("<h1>Account Information for %s:</h1>\n",m->email);
 hPrintf("<table>\n");
-hPrintf("<tr><td align=right>name:</td><td>%s</td><tr>\n",m.name);
-hPrintf("<tr><td align=right>phone:</td><td>%s</td><tr>\n",m.phone);
-hPrintf("<tr><td align=right>institution:</td><td>%s</td><tr>\n",m.institution);
-hPrintf("<tr><td align=right>type:</td><td>%s</td><tr>\n",m.type);
-hPrintf("<tr><td align=right>amount paid:</td><td>$%8.2f</td><tr>\n",m.amountPaid);
-hPrintf("<tr><td align=right>expiration:</td><td>%s</td><tr>\n",m.expireDate);
-hPrintf("<tr><td align=right>activated:</td><td>%s</td><tr>\n",m.activated);
+hPrintf("<tr><td align=right>name:</td><td>%s</td><tr>\n",m->name);
+hPrintf("<tr><td align=right>phone:</td><td>%s</td><tr>\n",m->phone);
+hPrintf("<tr><td align=right>institution:</td><td>%s</td><tr>\n",m->institution);
+hPrintf("<tr><td align=right>type:</td><td>%s</td><tr>\n",m->type);
+hPrintf("<tr><td align=right>amount paid:</td><td>$%8.2f</td><tr>\n",m->amountPaid);
+hPrintf("<tr><td align=right>expiration:</td><td>%s</td><tr>\n",m->expireDate);
+hPrintf("<tr><td align=right>activated:</td><td>%s</td><tr>\n",m->activated);
 hPrintf("</table>\n");
 hPrintf("<br>\n");
+
+
+/* add payment button if needed */
+char *currentDate=sqlQuickString(conn, "select current_date()");
+if (!sameString(m->activated,"Y") || strcmp(currentDate,m->expireDate)>0)
+    {
+    drawPaymentButton(conn, m->type);
+    }
+freez(&currentDate);
 
 hPrintf("Return to <a href=\"gsidMember\">signup</A>.<br>\n");
 hPrintf("Go to <a href=\"/\">GSID HIV VAC</A>.<br>\n");
 
-sqlFreeResult(&sr);
+membersFree(&m);
 
 }
 
