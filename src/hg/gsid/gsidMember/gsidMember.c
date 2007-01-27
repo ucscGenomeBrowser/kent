@@ -20,11 +20,12 @@
 #include "net.h"
 
 #include "gsidMember.h"
+#include "members.h"
 #include "bio.h"
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.4 2007/01/27 00:31:14 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.5 2007/01/27 02:09:10 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -474,7 +475,7 @@ char *email = cartUsualString(cart, "gsidM_email", "");
 if (!email || sameString(email,""))
     {
     freez(&errMsg);
-    errMsg = cloneString("email cannot be blank");
+    errMsg = cloneString("Email cannot be blank.");
     lostPasswordPage(conn);
     return;
     }
@@ -483,7 +484,7 @@ char *password = sqlQuickString(conn, query);
 if (!password)
     {
     freez(&errMsg);
-    errMsg = cloneString("email not found");
+    errMsg = cloneString("Email not found.");
     lostPasswordPage(conn);
     return;
     }
@@ -531,6 +532,7 @@ hPrintf(
 "Academic and non-profit researchers get a substantial discount. <br>\n"
 "<br>\n"
 "If you are already a member, click <a href=https://%s/>here</a> to access HIVVAC.<br>\n"
+"To view your existing account, click <a href=\"gsidMember?gsidMember.do.displayAccount=1\">here</a>.<br>\n"
 "<font color=red>%s</font>"
 "<h3>Sign up</h3>\n"
 "<form method=post action=\"/cgi-bin-signup/gsidMember\" name=mainForm >\n"
@@ -547,7 +549,7 @@ hPrintf(
 "</table>\n"
 "<br>\n"
 "Questions? Call 831-555-5555.<br>\n"
-"Lost your password? Click <a href=gsidMember?gsidMember.do.lostPasswordPage=1>here</a>.<br>\n"
+"Lost your password? Click <a href=\"gsidMember?gsidMember.do.lostPasswordPage=1\">here</a>.<br>\n"
 , getenv("HTTP_HOST")
 , errMsg ? errMsg : ""
 , cartUsualString(cart, "gsidM_email", "")
@@ -578,7 +580,7 @@ char *email = cartUsualString(cart, "gsidM_email", "");
 if (!email || sameString(email,""))
     {
     freez(&errMsg);
-    errMsg = cloneString("email cannot be blank");
+    errMsg = cloneString("Email cannot be blank.");
     signupPage(conn);
     return;
     }
@@ -607,7 +609,7 @@ char *name = cartUsualString(cart, "gsidM_name", "");
 if (!name || sameString(name,""))
     {
     freez(&errMsg);
-    errMsg = cloneString("Mame cannot be blank.");
+    errMsg = cloneString("Name cannot be blank.");
     signupPage(conn);
     return;
     }
@@ -660,24 +662,6 @@ char buttonData[4096];
 char *paypalServer = cfgOption("paypalServer");
 char *httpHost=getenv("HTTP_HOST");
 char *paypalEmail = cfgOption("paypalEmail");
-
-/*
-"<input type=\"hidden\" name=\"business\" value=\"%s\">\n"
-"<input type=\"hidden\" name=\"invoice\" value=\"%s\">\n"
-"<input type=\"hidden\" name=\"item_name\" value=\"GSID HIV Access Yearly %s Membership Fee\">\n"
-"<input type=\"hidden\" name=\"item_number\" value=\"%s\">\n"
-"<input type=\"hidden\" name=\"amount\" value=\"%s.00\">\n"
-"<input type=\"hidden\" name=\"no_shipping\" value=\"2\">\n"
-"<input type=\"hidden\" name=\"return\" "
-"value=\"https://%s/cgi-bin-signup/gsidMember?gsidMember.do.paypalThanks=1\">\n"
-"<input type=\"hidden\" name=\"cancel_return\" "
-"value=\"https://%s/cgi-bin-signup/gsidMember?gsidMember.do.paypalCancel=1\">\n"
-"<input type=\"hidden\" name=\"no_note\" value=\"1\">\n"
-"<input type=\"hidden\" name=\"currency_code\" value=\"USD\">\n"
-"<input type=\"hidden\" name=\"lc\" value=\"US\">\n"
-"<input type=\"hidden\" name=\"bn\" value=\"PP-BuyNowBF\">\n"
-"<input type=\"hidden\" name=\"cert_id\" value=\"%s\">\n"
-*/
 
 safef(buttonData, sizeof(buttonData), 
 "cmd=_xclick\n"
@@ -836,6 +820,99 @@ hPrintf(
 );
 }
 
+/* ----- account login/display functions ---- */
+
+void accountLoginPage(struct sqlConnection *conn)
+/* draw the account login page */
+{
+char *email = cartUsualString(cart, "gsidM_email", "");
+/* for password security, use cgi hash instead of cart */
+char *password = cgiUsualString("gsidM_password", ""); 
+hPrintf(
+"<h2>HIV VAC</h2>"
+"<p align=\"left\">"
+"</p>"
+"<font color=red>%s</font>"
+"<h3>Account Login</h3>"
+"<form method=post action=\"gsidMember\" name=accountLoginForm >"
+"<table>"
+"<tr><td>E-mail</td><td><input type=text name=gsidM_email value=\"%s\" size=20> "
+"<tr><td>Password</td><td><input type=password name=gsidM_password value=\"%s\" size=10></td></tr>\n"
+  "(your e-mail is also your user-id)</td></tr>"
+"<tr><td>&nbsp;</td><td><input type=submit name=gsidMember.do.displayAccount value=submit>"
+"&nbsp;<input type=submit name=gsidMember.do.signupPage value=cancel></td></tr>"
+"</table>"
+"<br>"
+, errMsg ? errMsg : ""
+, email
+, password
+);
+
+cartSaveSession(cart);
+
+hPrintf("</FORM>");
+
+}
+
+
+
+void displayAccount(struct sqlConnection *conn)
+/* display user account info */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *email = cartUsualString(cart, "gsidM_email", "");
+if (sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email cannot be blank.");
+    accountLoginPage(conn);
+    return;
+    }
+/* for password security, use cgi hash instead of cart */
+char *password = cgiUsualString("gsidM_password", ""); 
+if (sameString(password,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Password cannot be blank.");
+    accountLoginPage(conn);
+    return;
+    }
+
+safef(query,sizeof(query),"select * from members where email='%s'", email);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    {
+    freez(&errMsg);
+    char temp[256];
+    safef(temp,sizeof(temp),"Email %s not found.",email);
+    errMsg = cloneString(temp);
+    accountLoginPage(conn);
+    return;
+    }
+struct members m;
+membersStaticLoad(row, &m);
+
+hPrintf("<h1>Account Information for %s:</h1>\n",m.email);
+hPrintf("<table>\n");
+hPrintf("<tr><td align=right>name:</td><td>%s</td><tr>\n",m.name);
+hPrintf("<tr><td align=right>phone:</td><td>%s</td><tr>\n",m.phone);
+hPrintf("<tr><td align=right>institution:</td><td>%s</td><tr>\n",m.institution);
+hPrintf("<tr><td align=right>type:</td><td>%s</td><tr>\n",m.type);
+hPrintf("<tr><td align=right>amount paid:</td><td>$%8.2f</td><tr>\n",m.amountPaid);
+hPrintf("<tr><td align=right>expiration:</td><td>%s</td><tr>\n",m.expireDate);
+hPrintf("<tr><td align=right>activated:</td><td>%s</td><tr>\n",m.activated);
+hPrintf("</table>\n");
+hPrintf("<br>\n");
+
+hPrintf("Return to <a href=\"gsidMember\">signup</A>.<br>\n");
+hPrintf("Go to <a href=\"/\">GSID HIV VAC</A>.<br>\n");
+
+sqlFreeResult(&sr);
+
+}
+
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
@@ -873,6 +950,8 @@ else if (cartVarExists(cart, "gsidMember.do.lostPasswordPage"))
     lostPasswordPage(conn);
 else if (cartVarExists(cart, "gsidMember.do.lostPassword"))
     lostPassword(conn);
+else if (cartVarExists(cart, "gsidMember.do.displayAccount"))
+    displayAccount(conn);
 else if (cartVarExists(cart, "gsidMember.do.signup"))
     signup(conn);
 else
