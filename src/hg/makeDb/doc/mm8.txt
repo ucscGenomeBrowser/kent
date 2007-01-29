@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.30 2007/01/11 23:41:29 galt Exp $"
+#	"$Id: mm8.txt,v 1.31 2007/01/29 22:21:10 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7692,3 +7692,14 @@ synBlastp.csh mm8 rn4
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna mm8
+
+##########################################################################
+## WindowMasker (WORKING - 2007-01-29 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/mm8/bed/WindowMasker.2007-01-29
+    cd /cluster/data/mm8/bed/WindowMasker.2007-01-29
+    # copy *.csh scripts from
+    # /cluster/data/danRer4/bed/WindowMasker.2006-12-04
+    #	and fixup the db name and work directory in those scripts, then:
+    time nice -n +19 ./doCount.csh > doCount.out 2>&1
+
