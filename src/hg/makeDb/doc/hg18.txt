@@ -12487,7 +12487,7 @@ synBlastp.csh hg18 mm8
 
 
 #########################################################################
-# BLASTZ/CHAIN/NET FR2 (WORKING - 2007-01-24 - Hiram)
+# BLASTZ/CHAIN/NET FR2 (DONE - 2007-01-26 - Hiram)
 ##  Align to fr2 scaffolds,
 ##	results lifted to fr2 chrUn coordinates
     ssh kkstore02
@@ -12532,4 +12532,19 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/hg18Fr2 > do.log 2>&1 &
-XXX running 2007-01-24 16:15
+    #	real    414m47.505s
+
+    ##  Swap back to fr2 (duplicated in fr2.txt also)
+    mkdir /cluster/data/fr2/bed/blastz.hg18.swap
+    cd /cluster/data/fr2/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/hg18/bed/blastz.fr2.2007-01-24/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    #	real    47m14.554s
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/blastz.hg18.swap
+    time nice -n +19 featureBits fr2 chainHg18Link \
+	> fb.fr2.chainHg18Link.txt 2>&1 &
+    #	42875664 bases of 393312790 (10.901%) in intersection
