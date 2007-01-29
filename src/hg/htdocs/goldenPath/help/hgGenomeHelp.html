@@ -1,0 +1,341 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+  <META name="description" content="UCSC Genome Graphs">
+  <META name="keywords" content="genome, genome data, table browser, genome browser, genome assembly, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA">
+  <TITLE>UCSC Genome Browser: Genome Graphs User's Guide</TITLE>
+  <LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+</HEAD>
+
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+  <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
+<!--Content Tables-->  
+  <TR><TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>	
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>	
+	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	        <FONT SIZE="4"><B>&nbsp;Genome Graphs User's Guide </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+   	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+	        <H3> Table of Contents: </H3>
+	 	<UL><B>
+  		<LI><A CLASS="toc" HREF="#Introduction">Introduction</A>
+        	<LI><A CLASS="toc" HREF="#FormatUpload">Formatting &amp; Uploading Data</A>
+	   	  <UL>
+                  <LI><A CLASS="toc" HREF="#Format">Formatting Data</A>
+                  <LI><A CLASS="toc" HREF="#Upload">Uploading Data</A>
+		  </UL>
+        	<LI><A CLASS="toc" HREF="#Sample">Quick Start</A>
+        	<LI><A CLASS="toc" HREF="#Displaying">Displaying Data in Genome Graphs</A>
+	   	  <UL>
+                  <LI><A CLASS="toc" HREF="#Configure">Configuring the Display</A>
+                  <LI><A CLASS="toc" HREF="#SigThreshold">Setting a Significance Threshold</A>
+                  <LI><A CLASS="toc" HREF="#DataRegion">Setting a Data Region</A>
+		  </UL>
+        	<LI><A CLASS="toc" HREF="#ViewInGB">Viewing Data in the Genome Browser</A>
+        	<LI><A CLASS="toc" HREF="#ViewInGS">Viewing Data in the Gene Sorter</A>
+        	<LI><A CLASS="toc" HREF="#DataSets">Deleting Data</A>
+        	<LI><A CLASS="toc" HREF="#Correlate">Correlating Data</A>
+		</B></UL>
+		<P>
+		The UCSC Genome Graphs User's Guide was last updated on 2 
+		February 2007. 
+		<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">Questions and feedback are welcome</A>.
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+  <P>
+
+<!------Introduction-------------------------->
+<A NAME="Introduction"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Introduction </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		Genome Graphs is a tool for displaying genome-wide data sets 
+		such as the results of genome-wide SNP association studies, 
+		linkage studies and homozygosity mapping.</P>
+		<P>
+		Using the Genome Graphs tool, you can:
+                <UL>
+                <LI> upload several sets of genome-wide data and display
+                     them simultaneously</LI>
+                <LI> click on an area of interest and go directly to the
+                     genome browser at that position</LI>
+                <LI> set a significance threshold for your data and view
+                     only regions that meet that threshold</LI>
+                <LI> view the genes that exist in areas where your data
+                     meet your significance threshold</LI>
+                </UL>
+		<P>
+		This User's Guide is aimed at both the novice Genome Graphs user
+		as well the advanced user. If you are new to the Genome Graphs 
+		tool, read the <A HREF="#Sample">Quick Start</A> section to 
+		learn about the basics using some sample data. Advanced users 
+		may want to proceed directly to the section that addresses 
+		a particular area of functionality in detail.</P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+<!-------Format & Upload-------------------------->
+<A NAME="FormatUpload"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Formatting &amp; Uploading Data </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		</P>
+
+<!-------Formatting Data------------------------->
+<A NAME="Format"></A>
+	        <HR>
+	        <B><FONT SIZE="3" COLOR="#0000FF">Formatting Data</FONT></B>
+		<P>
+		[how to format data]</P>
+	        <P>
+
+<!-------Uploading Data---------------------------->
+<A NAME="Upload"></A>
+	        <HR>
+	        <B><FONT SIZE="3" COLOR="#0000FF">Uploading Data</FONT></B>
+	        <P>
+		[how to upload data.  this will explain how to upload your
+		own data.  Sample data will be covered in another section.]</P>
+		<P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+
+<!-------Quick Start-------------------------->
+<A NAME="Sample"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Quick Start </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		[Use sample data to get a feel for what Genome Graphs is capable of.]</P>
+		<P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+
+<!-------Displaying Data in Genome Graphs-------------------------->
+<A NAME="Displaying"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Displaying Data in Genome Graphs </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		[How to display data in Genome Graphs.  Including configuring.]</P>
+		<P>
+
+<!-------Configuring the Display------------------------->
+<A NAME="Configure"></A>
+                <HR>
+                <B><FONT SIZE="3" COLOR="#0000FF">Configuring the Display</FONT></B>
+                <P>
+                [how to configure the Genome Graphs display (configure button).  And
+		how to configure individual graphs.]</P>
+                <P>
+
+<!-------Setting a Significance Threshold------------------------->
+<A NAME="SigThreshold"></A>
+                <HR>
+                <B><FONT SIZE="3" COLOR="#0000FF">Setting a Significance Threshold</FONT></B>
+                <P>
+                [how to set the sig. thresh. and what it means (significance threshold box)]</P>
+                <P>
+
+<!-------Setting a Data Region------------------------->
+<A NAME="DataRegion"></A>
+                <HR>
+                <B><FONT SIZE="3" COLOR="#0000FF">Setting a Data Region</FONT></B>
+                <P>
+                [how to set the data region and what it means (region boxES)]</P>
+                <P>
+
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+<!-------Displaying Data in the Genome Browser-------------------------->
+<A NAME="ViewInGB"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Viewing Data in the Genome Browser </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		[How to view your Graph data in the Genome Browser.  Including
+		moving around with the frames and navigating back to hgGenome.]</P>
+		<P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+
+<!-------Displaying Data in the Gene Sorter-------------------------->
+<A NAME="ViewInGS"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Viewing Data in the Gene Sorter </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		[How to view your Graph data in the Gene Sorter.]</P>
+		<P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+<!-------Deleting Data-------------------------->
+<A NAME="DataSets"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Deleting Data </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		[How to delete your data sets.  Including life-span of your data
+		on the server.]</P>
+		<P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+
+
+<!-------Correlating Data-------------------------->
+<A NAME="Correlate"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+      <TR><TD>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>
+ 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+	      <TR><TD>
+	    	<FONT SIZE="4"><B>&nbsp; Correlating Data Sets </B></FONT>
+	      </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	      <TR><TH HEIGHT=10></TH></TR>
+	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		<P>
+		[How to correlate your data sets.]</P>
+		<P>
+	      </TD><TD WIDTH=15></TD></TR>
+	    </TABLE>
+	  <BR></TD></TR>
+	</TABLE>
+      </TD></TR>
+    </TABLE>
+    <P>
+
+
+
+<!------End of Document--------------------->
+  </TD></TR>
+</TABLE>
+</BODY></HTML>
+
