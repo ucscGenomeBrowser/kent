@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.6 2007/01/26 16:29:29 braney Exp $"
+#       "$Id: fr2.txt,v 1.7 2007/01/29 18:39:33 hiram Exp $"
 #
 
 ##########################################################################
@@ -478,6 +478,36 @@ genomeCladePriority 110
     # XXX Still waiting for the proteins to be sent to us so that we can add
     # this part.
     # hgPepPred fr2 generic ensPep ensPep.fa
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-01-25 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fr2", "blat3", "17786", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fr2", "blat3", "17787", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+# BLASTZ/CHAIN/NET Hg18 (DONE - 2007-01-26 - Hiram)
+    ##  Swap back to fr2
+    mkdir /cluster/data/fr2/bed/blastz.hg18.swap
+    cd /cluster/data/fr2/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/hg18/bed/blastz.fr2.2007-01-24/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    #	real    47m14.554s
+
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/blastz.hg18.swap
+    time nice -n +19 featureBits fr2 chainHg18Link \
+	> fb.fr2.chainHg18Link.txt 2>&1 &
+    #	42875664 bases of 393312790 (10.901%) in intersection
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-01-26)
