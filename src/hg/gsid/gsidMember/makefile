@@ -6,7 +6,7 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = gsidMember
 
-O = $A.o members.o bio.o paypalSignEncrypt.o
+O = members.o $A.o bio.o paypalSignEncrypt.o
 
 HG_WARN=${HG_WARN_ERR}
 
