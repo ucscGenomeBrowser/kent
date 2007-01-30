@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.30 2006/08/03 18:07:16 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.31 2007/01/30 19:43:46 kate Exp $";
 
 
 off_t fileSize(char *pathname)
@@ -205,7 +205,7 @@ unsigned long fileModTime(char *pathName)
 {
 struct stat st;
 if (stat(pathName, &st) < 0)
-    errAbort("stat failed in fileModTime");
+    errAbort("stat failed in fileModTime: %s", pathName);
 return st.st_mtime;
 }
 
