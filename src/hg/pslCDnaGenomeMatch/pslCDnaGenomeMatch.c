@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.15 2006/09/05 12:31:15 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.16 2007/01/30 19:55:51 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -826,7 +826,8 @@ if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
                 missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, 
                 gapCount[maxIndex], snpCount[maxIndex],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
-        fprintf(scoreFile, "##bestHit %s %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
+        if (scoreFile)
+            fprintf(scoreFile, "##bestHit %s %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
                 gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
                 name,  psl->tName , psl->tStart, chromEnd, maxIndex, 
                 missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
@@ -1296,7 +1297,12 @@ mrnaCount++;
 lociCounter = 0;
 if (seqCount == 1)
     {
-    pslTabOut(alignList->psl, outFile);
+    struct psl *psl = alignList->psl;
+    if (psl == NULL)
+        return;
+    if (psl->strand[0] == '+' && psl->strand[1] == '-')
+        pslRc(psl);
+    pslTabOut(psl, outFile);
     outputCount++;
     return;
     }
