@@ -63,6 +63,15 @@ cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred augustusPep
+
 track mrna
 shortLabel mRNAs
 longLabel Chimp and Human mRNAs from GenBank 
