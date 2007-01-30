@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.31 2007/01/29 22:21:10 hiram Exp $"
+#	"$Id: mm8.txt,v 1.32 2007/01/30 23:56:54 mario Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7603,6 +7603,8 @@ TMPDIR=/scratch/tmp
 blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
+    # << happy emacs
+
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
 # Then do the usual para try/push/time/check until the run is finished
@@ -7703,3 +7705,57 @@ synBlastp.csh mm8 rn4
     #	and fixup the db name and work directory in those scripts, then:
     time nice -n +19 ./doCount.csh > doCount.out 2>&1
 
+##########################################################################
+## AUGUSTUS ab initio predictions (DONE, 2007-01-30 - Mario)
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/augustus
+    cd /cluster/data/mm8/bed/augustus
+
+    # get the program AUGUSTUS, e.g. from the web
+    wget http://augustus.gobics.de/binaries/augustus.2.0.1.src.tar.gz
+    # unpack
+    tar xzf augustus.2.0.1.src.tar.gz
+
+    # compile the binary if necessary
+    cd augustus/src
+    make augustus
+
+    # create output directory
+    cd /cluster/data/mm8/bed/augustus
+    mkdir out err
+
+    # create file with sequences and their sizes by modifying chrom.sizes
+    cat ../../chrom.sizes | perl -e 'while(<>){s/chr([0-9a-zA-Z]+)(_random|)/\/cluster\/data\/mm8\/$1\/chr$1$2.fa.masked/; print;}' > seq.lst
+
+    # create the job list
+    augustus/scripts/createAugustusJoblist.pl --sequences seq.lst --chunksize 5300000 --overlap 300000 --command "/cluster/data/panTro2/bed/augustus/augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/panTro2/bed/augustus/augustus/config --species=human --sample=100 --/augustus/verbosity=0" --outputdir /cluster/data/mm8/bed/augustus/out/ --errordir /cluster/data/mm8/bed/augustus/err/ --joblist job.lst
+
+    para try
+    para check
+    para push
+
+# CPU time in finished jobs:    2984823s   49747.06m   829.12h   34.55d  0.095 y
+# IO & Wait Time:                 19258s     320.96m     5.35h    0.22d  0.001 y
+# Average job time:                5403s      90.05m     1.50h    0.06d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            7896s     131.60m     2.19h    0.09d
+# Submission to last job:         15716s     261.93m     4.37h    0.18d
+
+    # check the error files, should be no errors
+    cat err/*.err
+
+    cat out/*.gff | augustus/scripts/join_aug_pred.pl > augustus.pep.gff
+    augustus/scripts/getAnnoFasta.pl augustus.pep.gff
+    cat augustus.pep.gff | egrep "CDS|codon"> augustus.gff
+
+    # load into database
+
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/augustus/
+    ldHgGene -bin mm8 augustus augustus.gff
+    # 32377 gene predictions
+
+    hgPepPred panTro2 generic augustusPep augustus.pep.aa
+
+    featureBits mm8 augustus
+    # 35380585 bases of 2567283971 (1.378%) in intersection
