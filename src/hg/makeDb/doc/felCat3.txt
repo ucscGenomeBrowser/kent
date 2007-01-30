@@ -594,3 +594,76 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/felCat3/bed/tblastn.hg18KG/blastOut
 #end tblastn
 ##########################################################################
+# AUGUSTUS ab initio track (DONE, mario 2007-01-30)
+    ssh hgwdev
+    mkdir /cluster/data/felCat3/bed/augustus
+    cd /cluster/data/felCat3/bed/augustus
+
+    # get the program AUGUSTUS from the augustus web server
+    wget http://augustus.gobics.de/binaries/augustus.2.0.1.src.tar.gz
+    tar xzf augustus.2.0.1.src.tar.gz
+
+    # compile the binary if necessary
+    cd augustus/src
+    make augustus
+
+    # create output and error directory
+    cd /cluster/data/felCat3/bed/augustus
+    mkdir out err
+
+    ssh kkstore
+    cd /cluster/data/felCat3/bed/augustus
+
+    # use the split fasta files that were already generated for genscan, see above
+    # (completely masked files are no problem)
+
+    ls ../genscan/split/*.fa >> genome.lst
+
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/augustus/config --species=human --sample=100 --/augustus/verbosity=0 {check in line+ $(path1)} --outfile={check out line out/$(root1).gtf} --errfile=err/$(root1).err
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # create the job list
+    ssh pk
+    cd /cluster/data/felCat3/bed/augustus
+    /parasol/bin/gensub2 genome.list single gsub jobList
+
+    wc -l jobList
+    # 1939
+
+    para try
+    para check
+    para push
+
+# CPU time in finished jobs:    4923552s   82059.20m  1367.65h   56.99d  0.156 y
+# IO & Wait Time:                  9930s     165.50m     2.76h    0.11d  0.000 y
+# Average job time:                2544s      42.41m     0.71h    0.03d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            4050s      67.50m     1.12h    0.05d
+# Submission to last job:         45408s     756.80m    12.61h    0.53d
+
+   # check the error files, should be no errors
+   cat err/*.err
+   # no errors, delete the empty files
+   rm err/*.err
+
+   cat out/*.gtf | augustus/scripts/join_aug_pred.pl > augustus.pep.gff
+   augustus/scripts/getAnnoFasta.pl augustus.pep.gff
+   cat augustus.pep.gff | egrep "CDS|codon"> augustus.gff
+
+   # load into database
+   ssh hgwdev
+   cd /cluster/data/felCat3/bed/augustus/
+
+   ldHgGene -bin felCat3 augustus augustus.gff
+   # 28510 gene predictions
+
+   hgPepPred felCat3 generic augustusPep augustus.pep.aa
+
+   featureBits felCat3 augustus
+   # 21748832 bases of 1642698377 (1.324%) in intersection
+#########################################################################
