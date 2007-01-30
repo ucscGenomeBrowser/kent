@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgNotYet.c,v 1.2 2007/01/24 18:28:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgNotYet.c,v 1.3 2007/01/30 22:30:56 fanhsu Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -26,7 +26,7 @@ char *db = NULL;
 void hgNotYet()
 /* hgNotYet - Human Genome Browser. */
 {
-printf("This function is currently under construction.<BR>Please visit us again in the future.\n");
+printf("The function you selected is currently under construction.<BR>Please visit us again in the future.\n");
 return;
 }
 
@@ -63,7 +63,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, "%s %s%s Gateway\n", organism, buffer, browserName);
+    cartWebStart(theCart, "%s %s%s\n", organism, buffer, browserName);
     htmlDoEscape();
     }
 hgNotYet();
