@@ -139,6 +139,21 @@ struct ggMrnaInput *ggGetMrnaForBac(char *bacAcc);
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci);
 /* Make a list of clusters from ci. */
 
+struct ggMrnaCluster *ggMrnaSoftClusterOfOne(struct ggMrnaAli *ma, 
+	struct dnaSeq *genoSeq);
+/* Make up a ggMrnaCluster with just one thing on it. */
+/* Defined in ggCluster. */
+
+struct ggMrnaCluster *ggMrnaSoftFilteredClusterOfOne(struct ggMrnaAli *ma,
+        struct dnaSeq *genoSeq, int minExonSize, int minNonSpliceExon);
+/* Make up a ggMrnaCluster with just one thing on it.
+ * All edges here will be soft (not intended for alt-splicing use) */
+
+void ggMrnaClusterMerge(struct ggMrnaCluster *aMc, struct ggMrnaCluster *bMc);
+/* Merge bMc into aMc.  Afterwords aMc will be bigger and
+ * bMc will be gone. */
+
+
 struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
 /* Make up a gene transcript graph out of the ggMrnaCluster. */
 
