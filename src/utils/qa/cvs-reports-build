@@ -1,7 +1,7 @@
 #!/bin/sh
-# Start Tcl from a compbio bin directory \
-exec /projects/compbio/bin/`uname -m`/tcl $0 ${1+"$@"}
-package require Tclx 8.0.0
+# Start Tcl from a cluter bin directory \
+exec /cluster/bin/tcl/`uname -m`/bin/tclsh8.4 $0 ${1+"$@"}
+package require Tclx
 
 #
 # Program to build the cvs-reports directory.
