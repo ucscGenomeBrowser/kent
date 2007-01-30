@@ -9302,172 +9302,6 @@ hgLoadBed -notItemRgb -sqlTable=altGraphX.sql hg18 altGraphX hg18.mm7.t3.exoniph
 
 # end AltGraphX track.
 
-###########################################################################
-# ALTGRAPHX2 TRACK (kent) in progress Fri Jan 19 11:27:45 PST 2007
-# The exoniphy and human/mouse blastz/chain/nets need to be done before
-# this.
-
-ssh hgwdev
-cd /cluster/store1/sugnet/altSplice/
-mkdir hg18-2007.01.19
-cd hg18-2007.01.19
-mkdir rnaCluster
-cd rnaCluster
-
-# Don't use RAGE libraries for clone bounds.
-~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  hg18 rage.libs
-
-# Make spec file to run. 
-echo "#!/bin/tcsh -ef@ > clusterRna.spec
-foreach c (`echo 'select chrom from chromInfo' | hgsql hg18 | grep -v chrom`)
-    set out = chrom/$c.bed
-    echo "clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c" >> clusterRna.spec
-end
-
-# Run the file. Needs to be done on machine with database access.
-# Takes an hour or so.
-chmod 755 clusterRna.spec
-mkdir chrom
-./clusterRna.spec >& clusterRna.log
-
-cd ..
-
-# Make script to setup job file for raw altGraphX files on human
-# If we had a cluster with database access this could be run there.
-# As it is, run it on hgwdev.  This took 45 minutes.
-cat << '_EOF_' > makeRun.sh
-#!/bin/sh
-echo "#!/bin/tcsh -ef"
-for chrom in `echo "select chrom from chromInfo" | hgsql hg18 | grep -v chrom`; do
-echo "echo 'Doing $chrom'"
-echo "altSplice -db=hg18   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/hg18.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/hg18/nib/$chrom.nib"
-done
-'_EOF_'
-    # << this line makes emacs coloring happy
-
-mkdir agxs
-chmod 755 makeRun.sh
-./makeRun.sh > toRun.sh
-chmod 755 toRun.sh
-./toRun.sh >& toRun.log &
-
-cat agxs/*.agx > hg18.agx
-
-mkdir hg18
-mv agxs/ makeRun.sh toRun.log toRun.sh hg18.agx hg18
-cd ..
-
-mkdir mm8
-cd mm8
-# make the rnaClusters
-mkdir rnaCluster
-cd rnaCluster/
-mkdir chrom
-
-# Don't use RAGE libraries for clone bounds.
-~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  mm8 rage.libs
-
-echo "#!/bin/tcsh -ef" > clusterRna.spec
-foreach c (`echo 'select chrom from chromInfo' | hgsql mm8 | grep -v chrom`)
-    set out = chrom/$c.bed
-    echo "clusterRna -mrnaExclude=mm8.rage.libs mm8 /dev/null $out -chrom=$c" >> clusterRna.spec
-end
-
-# Could make this a cluster run if had a cluster with database access.
-# as is, took about 15 minutes on hgwdev. (Faster than human since less ESTs.)
-chmod 755 clusterRna.spec
-./clusterRna.spec >& clusterRna.log &
-
-cd ..
-
-# Make batch file file to run altSplice program (by making a batch file).
-cat << '_EOF_' > makeRun.sh
-#!/bin/sh
-echo "#!/bin/tcsh -ef"
-for chrom in `echo "select chrom from chromInfo" | hgsql mm8 | grep -v chrom`; do
-echo "echo 'Doing $chrom'"
-echo "/cluster/home/sugnet/bin/i386/altSplice -db=mm8   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/mm8.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/mm8/nib/$chrom.nib"
-done
-'_EOF_'
-    # << this line keeps emacs coloring happy
-chmod 755 makeRun.sh
-./makeRun.sh > toRun.sh
-chmod 755 toRun.sh
-
-# Run altSplice.  This takes about 12 minutes.
-mkdir agxs
-./toRun.sh >& toRun.log & 
-
-cat agxs/*.agx > mm8.agx
-cd ..
-mkdir orthoSpliceExoniphy
-cd orthoSpliceExoniphy/
-
-echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql hg18 | grep -v txStart > hg18.exoniphy.bed
-mkdir orthoSplice
-cd orthoSplice
-echo 'select chrom, size from chromInfo' | hgsql hg18 | grep -v chrom > chromSizes.tab
-TODO JK: Stopping here for the moment. Need to find out mm8 bits...
-zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
-# cp /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz .
-# chainSplit chains hg18.mm7.all.chain 
-zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netSplit stdin nets
-# cp /cluster/data/hg18/bed/blastz.mm7/axtChain/hg18.mm7.net.gz .
-# netSplit hg18.mm7.net.gz nets
-
-mkdir agx report logs
-cat << '_EOF_' > makeRun.sh
-#!/usr/bin/perl -w
-
-open(IN, 'chromSizes.tab') or die "Can't open chromSizes.tab\n";
-while(<IN>) {
-    chomp;
-    @w = split;
-    print "orthoSplice -chromSize=$w[1] -exonFile=../hg18.exoniphy.bed -trumpNum=3 -chrom=$w[0] -altInFile=../../hg18/agxs/hg18.$w[0].agx -orthoAgxFile=../../mm8/mm8.agx -db=hg18 -orthoDb=mm8 -netFile=nets/$w[0].net -chainFile=chains/$w[0].chain -commonFile=agx/$w[0].hg18.mm8.cons.t3.agx -reportFile=report/$w[0].hg18.report -edgeFile=report/$w[0].hg18.edge.report >& logs/$w[0].test.log\n";
-}
-'_EOF_'
-    # << this line keeps emacs coloring happy
-
-chmod 755 makeRun.sh
-./makeRun.sh > orthoSplice.para.spec
-
-# do a little cluster run
-ssh kki
-cd /cluster/store1/sugnet/altSplice/hg18-2007.01.19/orthoSpliceExoniphy/orthoSplice
-para create orthoSplice.para.spec 
-para push
-# Do para check, etc until done.  Here's the para time results.
-#
-# 49 jobs in batch
-# 147 jobs (including everybody's) in Parasol queue.
-# Checking finished jobs
-# Completed: 47 of 49 jobs
-# Crashed: 2 jobs
-# CPU time in finished jobs:       7002s     116.70m     1.94h    0.08d  0.000 y
-# IO & Wait Time:                   196s       3.27m     0.05h    0.00d  0.000 y
-# Average job time:                 153s       2.55m     0.04h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1283s      21.38m     0.36h    0.01d
-# Submission to last job:          1283s      21.38m     0.36h    0.01d
-#
-# The two jobs that crashed are ok, it was simply the result of no input on
-# some of the small random chroms. It'd be good to take the jobs out earlier
-# somehow. Probably Angie could figure out a way to add a file existence
-# test in a line of the perl script above.  The altInFile is missing in this
-# case. 
-
-# Concatenate cluster output and load it into the database.
-ssh hgwdev
-cd /cluster/store1/sugnet/altSplice/hg18-2007.01.19/orthoSpliceExoniphy/orthoSplice
-cat agx/*.agx > hg18.mm8.t3.exoniphy.agx
-cp ~/kent/src/hg/lib/altGraphX.sql .
-hgLoadBed -notItemRgb -sqlTable=altGraphX.sql hg18 altGraphX2 hg18.mm8.t3.exoniphy.agx 
-
-# clean up disk space we're not using
-rm hg18.mm7.all.chain hg18.mm7.net.gz nets/* chains/* 
-
-# end AltGraphX track.
-
 ####################################################################
 # EXONWALK TRACK (sugnet) Wed Apr 26 13:51:14 PDT 2006
 
@@ -9581,6 +9415,318 @@ Track Specification      track  overlap track    cov   track   new    cum
 -----------------------------------------------------------------------------
 exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 # end ExonWalk track.
+
+###########################################################################
+# ALTGRAPHX2 TRACK (kent) in progress Fri Jan 19 11:27:45 PST 2007
+# The exoniphy and human/mouse blastz/chain/nets need to be done before
+# this.
+
+ssh hgwdev
+cd /cluster/store1/sugnet/altSplice/
+mkdir hg18-2007.01.19
+cd hg18-2007.01.19
+mkdir rnaCluster
+cd rnaCluster
+
+# Don't use RAGE libraries for clone bounds.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  hg18 rage.libs
+
+# Make spec file to run. 
+echo "#!/bin/tcsh -ef@ > clusterRna.spec
+foreach c (`echo 'select chrom from chromInfo' | hgsql hg18 | grep -v chrom`)
+    set out = chrom/$c.bed
+    echo "clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c" >> clusterRna.spec
+end
+
+# Run the file. Needs to be done on machine with database access.
+# Takes an hour or so.
+chmod 755 clusterRna.spec
+mkdir chrom
+./clusterRna.spec >& clusterRna.log
+
+cd ..
+
+# Make script to setup job file for raw altGraphX files on human
+# If we had a cluster with database access this could be run there.
+# As it is, run it on hgwdev.  This took 45 minutes.
+cat << '_EOF_' > makeRun.sh
+#!/bin/sh
+echo "#!/bin/tcsh -ef"
+for chrom in `echo "select chrom from chromInfo" | hgsql hg18 | grep -v chrom`; do
+echo "echo 'Doing $chrom'"
+echo "altSplice -db=hg18   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/hg18.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/hg18/nib/$chrom.nib"
+done
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+mkdir agxs
+chmod 755 makeRun.sh
+./makeRun.sh > toRun.sh
+chmod 755 toRun.sh
+./toRun.sh >& toRun.log &
+
+cat agxs/*.agx > hg18.agx
+
+mkdir hg18
+mv agxs/ makeRun.sh toRun.log toRun.sh hg18.agx hg18
+cd ..
+
+mkdir mm8
+cd mm8
+# make the rnaClusters
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+
+# Don't use RAGE libraries for clone bounds.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  mm8 rage.libs
+
+echo "#!/bin/tcsh -ef" > clusterRna.spec
+foreach c (`echo 'select chrom from chromInfo' | hgsql mm8 | grep -v chrom`)
+    set out = chrom/$c.bed
+    echo "clusterRna -mrnaExclude=mm8.rage.libs mm8 /dev/null $out -chrom=$c" >> clusterRna.spec
+end
+
+# Could make this a cluster run if had a cluster with database access.
+# as is, took about 15 minutes on hgwdev. (Faster than human since less ESTs.)
+chmod 755 clusterRna.spec
+./clusterRna.spec >& clusterRna.log &
+
+cd ..
+
+# Make batch file file to run altSplice program (by making a batch file).
+cat << '_EOF_' > makeRun.sh
+#!/bin/sh
+echo "#!/bin/tcsh -ef"
+for chrom in `echo "select chrom from chromInfo" | hgsql mm8 | grep -v chrom`; do
+echo "echo 'Doing $chrom'"
+echo "/cluster/home/sugnet/bin/i386/altSplice -db=mm8   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/mm8.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/mm8/nib/$chrom.nib"
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+chmod 755 makeRun.sh
+./makeRun.sh > toRun.sh
+chmod 755 toRun.sh
+
+# Run altSplice.  This takes about 12 minutes.
+mkdir agxs
+./toRun.sh >& toRun.log & 
+
+cat agxs/*.agx > mm8.agx
+cd ..
+mkdir orthoSpliceExoniphy
+cd orthoSpliceExoniphy/
+
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql hg18 | grep -v txStart > hg18.exoniphy.bed
+mkdir orthoSplice
+cd orthoSplice
+echo 'select chrom, size from chromInfo' | hgsql hg18 | grep -v chrom > chromSizes.tab
+zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
+# cp /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz .
+# chainSplit chains hg18.mm7.all.chain 
+zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netSplit stdin nets
+# cp /cluster/data/hg18/bed/blastz.mm7/axtChain/hg18.mm7.net.gz .
+# netSplit hg18.mm7.net.gz nets
+
+mkdir agx report logs
+cat << '_EOF_' > makeRun.sh
+#!/usr/bin/perl -w
+
+open(IN, 'chromSizes.tab') or die "Can't open chromSizes.tab\n";
+while(<IN>) {
+    chomp;
+    @w = split;
+    print "orthoSplice -chromSize=$w[1] -exonFile=../hg18.exoniphy.bed -trumpNum=3 -chrom=$w[0] -altInFile=../../hg18/agxs/hg18.$w[0].agx -orthoAgxFile=../../mm8/mm8.agx -db=hg18 -orthoDb=mm8 -netFile=nets/$w[0].net -chainFile=chains/$w[0].chain -commonFile=agx/$w[0].hg18.mm8.cons.t3.agx -reportFile=report/$w[0].hg18.report -edgeFile=report/$w[0].hg18.edge.report >& logs/$w[0].test.log\n";
+}
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+chmod 755 makeRun.sh
+./makeRun.sh > orthoSplice.para.spec
+
+# do a little cluster run
+ssh kki
+cd /cluster/store1/sugnet/altSplice/hg18-2007.01.19/orthoSpliceExoniphy/orthoSplice
+para create orthoSplice.para.spec 
+para push
+# Do para check, etc until done.  Here's the para time results.
+#
+# 49 jobs in batch
+# 147 jobs (including everybody's) in Parasol queue.
+# Checking finished jobs
+# Completed: 47 of 49 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:       7002s     116.70m     1.94h    0.08d  0.000 y
+# IO & Wait Time:                   196s       3.27m     0.05h    0.00d  0.000 y
+# Average job time:                 153s       2.55m     0.04h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1283s      21.38m     0.36h    0.01d
+# Submission to last job:          1283s      21.38m     0.36h    0.01d
+#
+# The two jobs that crashed are ok, it was simply the result of no input on
+# some of the small random chroms. It'd be good to take the jobs out earlier
+# somehow. Probably Angie could figure out a way to add a file existence
+# test in a line of the perl script above.  The altInFile is missing in this
+# case. 
+
+# Concatenate cluster output and load it into the database.
+ssh hgwdev
+cd /cluster/store1/sugnet/altSplice/hg18-2007.01.19/orthoSpliceExoniphy/orthoSplice
+cat agx/*.agx > hg18.mm8.t3.exoniphy.agx
+cp ~/kent/src/hg/lib/altGraphX.sql .
+hgLoadBed -notItemRgb -sqlTable=altGraphX.sql hg18 altGraphX2 hg18.mm8.t3.exoniphy.agx 
+
+# clean up disk space we're not using
+rm hg18.mm7.all.chain hg18.mm7.net.gz nets/* chains/* 
+
+# end AltGraphX2 track.
+
+####################################################################
+# EXONWALK2 TRACK (kent) Tue Jan 24 2007
+
+# first make altGraphX2 track (see above)
+ssh hgwdev
+cd
+/cluster/store1/sugnet/altSplice/hg18-2007.01.19/orthoSpliceExoniphy
+mkdir exonWalk
+mkdir beds
+cd exonWalk
+mkdir beds
+foreach file (`ls ../orthoSplice/agx/*.agx`)
+  set base=`basename $file .agx`
+  echo "exonWalk db=hg18 minPercent=0 trumpSize=100000 $file beds/$base.bed" >> exonWalk.para.spec
+end
+
+# Execute para spec as batch file since wants database access.
+# takes about 2.5 hours
+#para create exonWalk.para.spec
+#para push
+#cat beds/*.bed > hg18.mm7.cons.t3.exoniphy.bed
+time tcsh -efx exonWalk.para.spec
+#8256.940u 21.747s 2:18:07.32 99.8%      0+0k 0+0io 0pf+0w 
+
+mkdir orfs
+cd orfs
+mkdir bedOrf beds fa borf genePred
+cd beds
+# cp /cluster/store1/sugnet/store1/altSplice/hg17-2005.01.09/orthoSpliceExonify/exonWalk/orfs.mrna2/*.sh ./
+cat ../../beds/*.bed | splitFile stdin 500 exonWalk.
+cd ..
+cat << '_EOF_' > makeFa.sh
+#!/bin/sh
+
+for file in "$@"
+do
+ base=`basename $file`
+ echo "Doing $file"
+ echo "sequenceForBed -db=hg18 -bedIn=$file -fastaOut=fa/$base.fa "
+ sequenceForBed -db=hg18 -bedIn=$file -fastaOut=fa/$base.fa 
+done
+'_EOF_'
+chmod 755 makeFa.sh
+makeFa.sh beds/*
+
+cat << '_EOF_' > makeBorf.sh
+#!/bin/sh
+
+for file in "$@"
+do
+ base=`basename $file`
+ echo "Doing $file"
+ echo "borfBig $file borf/$base.borf "
+ borfBig $file borf/$base.borf
+done
+'_EOF_'
+chmod 755 makeBorf.sh
+makeBorf.sh fa/*.fa
+
+# Alternatively do this on the cluster.  It takes a little doing to
+# get a version of bestorf set up to be cluster accessible.  I
+# just copied it in from /projects/compbio/bin/borf, including
+# copying in some binary fiels that script referenced.
+# As a parasol job on kk, here's what para time said:
+CPU time in finished jobs:      51577s     859.61m    14.33h    0.60d  0.002 y
+IO & Wait Time:                 25442s     424.04m     7.07h    0.29d  0.001 y
+Average job time:                 132s       2.19m     0.04h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             179s       2.98m     0.05h    0.00d
+Submission to last job:           307s       5.12m     0.09h    0.00d
+
+cat << '_EOF_' > makeGenePred.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  borfMatcher -keepNmd beds/$base borf/$base.borf bedOrf/$base.bed genePred/$base.gp 
+done
+'_EOF_'
+chmod 755 makeGenePred.sh 
+
+makeGenePred.sh beds/*
+cat beds/* > hg18.mm7.exonWalk.bed
+cat genePred/*.gp | ldHgGene -predTab hg18 exonWalk2 stdin
+
+cat << '_EOF_' > makeNoNmdGenePred.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  /cluster/home/sugnet/bin/i386/borfMatcher beds/$base borf/$base.borf bedOrfNoNmd/$base.bed genePredNoNmd/$base.gp 
+done
+'_EOF_'
+
+mkdir bedOrfNoNmd genePredNoNmd
+chmod 755 ./makeNoNmdGenePred.sh 
+
+wc beds/*
+ 275987 3311844 57319256 total
+wc genePredNoNmd/*.gp
+ 169203 1692030 59907679 total
+wc genePred/*.gp
+ 225252 2252520 83619240 total
+
+
+cat genePred/*.gp > hg18.mm7.exonWalk.nmd.gp
+cat genePredNoNmd/*.gp > hg18.mm7.exonWalk.noNmd.gp
+cat beds/* > hg18.mm7.exonWalk.all.bed
+
+# Plain "exonWalk" track is the only one used on regular genome browser.
+ldHgGene -predTab hg18 exonWalk hg18.mm7.exonWalk.noNmd.gp 
+hgLoadBed hg18 exonWalkAll hg18.mm7.exonWalk.all.bed 
+ldHgGene -predTab hg18 exonWalkWithNmd hg18.mm7.exonWalk.nmd.gp 
+
+cat hg18.mm7.exonWalk.noNmd.gp  | cut -f 1,2 -d '.' | sort | uniq -c | sort -rnk 1 > counts.txt
+Q1 1.000000
+median 3.000000
+Q3 7.000000
+average 10.670556
+min 1.000000
+max 3844.000000
+count 15857
+total 169203.000000
+standard deviation 63.330761
+
+cat hg18.mm7.exonWalk.nmd.gp  | cut -f 1,2 -d '.' | sort | uniq -c | sort -rnk 1 > counts.txt
+ave counts.txt
+Q1 1.000000
+median 3.000000
+Q3 8.000000
+average 14.037891
+min 1.000000
+max 7278.000000
+count 16046
+total 225252.000000
+standard deviation 99.406890
+
+trackGenome hg18 all refGene:cds trackGenome.spec
+Track Specification      track  overlap track    cov   track   new    cum 
+                          size     size  geno  track     cov   cov    cov 
+-----------------------------------------------------------------------------
+exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
+# end ExonWalk track.
+
 
 ####################################################################
 # LOAD ENSEMBL GENES (DONE, 2006-05-02, Fan)
