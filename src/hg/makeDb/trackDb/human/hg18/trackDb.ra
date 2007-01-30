@@ -207,7 +207,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
 track augustusAbinitio
-shortLabel Augustus Ab Initio
+shortLabel Augustus
 longLabel Augustus Ab Initio Gene Predictions
 group genes
 priority 51.7
