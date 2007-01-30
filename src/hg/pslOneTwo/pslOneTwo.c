@@ -14,13 +14,14 @@ errAbort(
   "   pslOneTwo in.psl out.psl\n"
   "options:\n"
   "   -clip     clip output based on score of top alignment and score of the second\n"
-  "   -clipPercent=ratio  output top score if (S2/S1) > ratio\n"
+  "   -clipRatio=ratio  output top score if (S2/S1) < ratio. Default 0\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"clip", OPTION_BOOLEAN},
    {"clipRatio", OPTION_FLOAT},
+   {NULL,0}
 };
 
 struct scoreNode
@@ -36,7 +37,7 @@ void pslOneTwo(char *inName, char *outName)
 {
 struct hash *pslHash = newHash(0);
 struct lineFile *pslLf = pslFileOpen(inName);
-int scoreNew, score1, score2;
+int scoreNew;
 struct scoreNode *node, *nodeList = NULL;
 FILE *outf = mustOpen(outName, "w");
 struct psl *psl;
@@ -80,6 +81,9 @@ for(node = nodeList; node; node = node->next)
     {
     if (doClip)
 	{
+        struct psl *p = node->one;
+        verbose(2,"ratio %f < %f scores %d %d %s\n",
+                (double)node->score2/node->score1, clipRatio, node->score1, node->score2, p->qName);
 	if ((node->two == NULL) || (clipRatio > (double)node->score2/node->score1))
 	    pslTabOut(node->one, outf);
 	}
