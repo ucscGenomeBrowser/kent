@@ -14,13 +14,14 @@ errAbort(
   "   chainOneTwo in.chain out.chain\n"
   "options:\n"
   "   -clip     clip output based on score of top alignment and score of the second\n"
-  "   -clipPercent=ratio  output top score if (S2/S1) > ratio\n"
+  "   -clipRatio=ratio  output top score if (S2/S1) > ratio\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"clip", OPTION_BOOLEAN},
    {"clipRatio", OPTION_FLOAT},
+   {NULL, 0}
 };
 
 struct scoreNode
@@ -36,7 +37,8 @@ void chainOneTwo(char *inName, char *outName)
 {
 struct hash *chainHash = newHash(0);
 struct lineFile *chainLf = lineFileOpen(inName,TRUE);
-int scoreNew, score1, score2;
+int scoreNew;
+//int score1, score2;
 struct scoreNode *node, *nodeList = NULL;
 FILE *outf = mustOpen(outName, "w");
 struct chain *chain;
