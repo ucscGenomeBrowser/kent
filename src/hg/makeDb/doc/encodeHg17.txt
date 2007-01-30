@@ -1629,6 +1629,15 @@ cat > loadSig.csh << 'EOF'
 'EOF'
     csh loadSig.csh >&! loadSig.log 
     rm -f *.trim
+
+    # restoring Neutrophil table which somehow got dropped from hgwdev
+    # 2006-01-04 kate
+    set table = encodeYaleAffyNeutRNATransMap
+    wigEncode $table.trim wig/$table.wig wib/$table.wib
+    # Converted encodeYaleAffyNeutRNATransMap.trim, upper limit 3275.25, lower limit -2658.03
+    set gdir = /gbdb/hg17/encode/YaleRna/2005-10-14
+    hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
+    
     
 ##########################################################################
 # Yale Chip/chip (2005-10-31 kate)
@@ -1639,6 +1648,12 @@ cat > loadSig.csh << 'EOF'
 # as the name field in a BED5.  Score range: .602-3.23
 #  Scale *330 produces integer range 200-1000.
 # NOTE: >50% of sites are < 1 data value, so use 200 as low score
+
+# New data submitted 2006-11-29 by guoneng.zhong@yale.edu
+# 6 datasets -- Pol2 (2 antibodies) and H3K4ac in HeLa and GM006990
+
+# New data submitted 2007-01-30 by guoneng.zhong@yale.edu
+
 awk '{print $4}' *_?/*-hits.bed | sort -n | textHistogram -real -binSize=.5 stdin
 0.500000 ************************************************************ 628
 1.000000 ************** 148
@@ -1812,6 +1827,12 @@ cat > loadSig.csh << 'EOF'
         Reading encodeYaleChipSignalH4kac4Gm06990.trim
         Loaded 385149 elements of size 4
     # Note size difference between Gm06990 and Hela -- inform submitter
+
+# New data submitted 2007-01-30 by guoneng.zhong@yale.edu
+    cd /cluster/data/encode/yale/chip/2007-01-30
+    mkdir lab
+    cd lab
+    tar xvfz jan07_batch.tgz
 
 
 ##########################################################################
