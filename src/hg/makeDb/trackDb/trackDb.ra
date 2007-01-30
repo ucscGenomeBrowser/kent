@@ -327,9 +327,9 @@ color 12,12,120
 type genePred refPep refMrna
 baseColorUseCds given
 
-track augustusAbinitio
-shortLabel Augustus Ab Initio
-longLabel Augustus Ab Initio Gene Predictions
+track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
 group genes
 priority 51.7
 visibility hide
