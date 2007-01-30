@@ -21,7 +21,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     nt4.o obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o phyloTree.o \
     pipeline.o portimpl.o pscmGfx.o psGfx.o psl.o pslGenoShow.o \
     pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o qa.o quickHeap.o quotedP.o \
-    ra.o rbTree.o repMask.o rle.o rnautil.o rudp.o scoreWindow.o \
+    ra.o rangeTree.o rbTree.o repMask.o rle.o rnautil.o rudp.o scoreWindow.o \
     seqOut.o seqStats.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     slog.o snof.o snofmake.o snofsig.o \
