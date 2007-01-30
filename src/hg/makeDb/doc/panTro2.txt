@@ -2,7 +2,7 @@
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: panTro2.txt,v 1.6 2006/08/21 18:03:19 archanat Exp $"
+#	"$Id: panTro2.txt,v 1.7 2007/01/30 23:48:40 mario Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -2955,4 +2955,59 @@ doPhast.csh $(root1) $(file1) 13 .01 .23
     # update trackDb; need a panTro2-specific page to describe informants
     chimp/panTro2/nscanGene.html    (from  CanFam1_hg17_nscan_10_18_2005/description.html )
     chimp/panTro2/trackDb.ra
+
+##########################################################################
+# AUGUSTUS ab initio track  (DONE, mario, 1/30/2007)
+    ssh hgwdev
+    mkdir /cluster/data/panTro2/bed/augustus
+    cd /cluster/data/panTro2/bed/augustus
+
+    # get the program AUGUSTUS
+    wget http://augustus.gobics.de/binaries/augustus.2.0.1.src.tar.gz
+    tar xzf augustus.2.0.src.tar.gz
+    # compile the binary if necessary
+    cd augustus/src
+    make augustus
+
+    # create output directory
+    cd /cluster/data/panTro2/bed/augustus
+    mkdir out
+
+    # create file with sequences and their sizes by modifying chrom.sizes
+    cat ../../chrom.sizes | perl -e 'while(<>){s/chr([0-9a-zA-Z]+)/\/cluster\/data\/panTro2\/$1\/chr$1.fa.masked/; print;}' > seq.lst
+
+    # create the job list
+    augustus/scripts/createAugustusJoblist.pl --sequences seq.lst --chunksize 5300000 --overlap 300000 --command "/cluster/data/panTro2/bed/augustus/augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/panTro2/bed/augustus/augustus/config --species=human --sample=100 --/augustus/verbosity=0" --outputdir /cluster/data/panTro2/bed/augustus/out/ --joblist job.lst
+
+    para try
+    para check
+    para push
+
+# CPU time in finished jobs:    3785702s   63095.03m  1051.58h   43.82d  0.120 y
+# IO & Wait Time:                 38307s     638.45m    10.64h    0.44d  0.001 y
+# Average job time:                5785s      96.42m     1.61h    0.07d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            8767s     146.12m     2.44h    0.10d
+# Submission to last job:         20341s     339.02m     5.65h    0.24d
+
+    # check the error files
+    cat out/*.err
+    # In this case no error was reported.
+    rm out/*.err
+
+    cat out/*.gff | augustus/scripts/join_aug_pred.pl > augustus.pep.gff
+    augustus/scripts/getAnnoFasta.pl augustus.pep.gff
+    cat augustus.pep.gff | egrep "CDS|codon"> augustus.gff
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/augustus/
+    ldHgGene -bin panTro2 augustus augustus.gff
+    # 33218 gene predictions
+
+    hgPepPred panTro2 generic augustusPep augustus.pep.aa
+    featureBits panTro2 augustus
+    # 32820465 bases of 2909485072 (1.128%) in intersection
+#######################################################################
+
 
