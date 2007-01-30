@@ -18164,6 +18164,7 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
 
 # end exonWalk
 
+####################################################################
 ### hapmapRecombRate (Daryl; September 19, 2005)
     Lifted from hg16; see makeHg16.doc for details
     # Update (Jen; October 25, 2005)
