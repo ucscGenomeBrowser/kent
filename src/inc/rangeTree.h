@@ -27,3 +27,5 @@ struct range *rangeTreeList(struct rbTree *tree);
 /* Return list of all ranges in tree in order.  Not thread safe. 
  * No need to free this when done, memory is local to tree. */
 
+struct rbTree *rangeTreeNew();
+/* Create a new, empty, rangeTree. */

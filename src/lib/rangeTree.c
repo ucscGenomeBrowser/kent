@@ -58,3 +58,8 @@ slReverse(&rangeList);
 return rangeList;
 }
 
+struct rbTree *rangeTreeNew()
+/* Create a new, empty, rangeTree. */
+{
+return rbTreeNew(rangeCmp);
+}
