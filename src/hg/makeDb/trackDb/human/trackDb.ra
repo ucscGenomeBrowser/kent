@@ -591,13 +591,73 @@ spectrum on
 type bed 12 .
 
 track hapmapAlleles
+compositeTrack on
 shortLabel HapMap SNPs
-longLabel HapMap Genotyped SNPs
+longLabel HapMap SNPs
 group varRep
 priority 144.48
 visibility hide
-type bed 6 +
-canPack off
+type bed 6 + 
+
+    track hapmapAllelesCEU
+    subTrack hapmapAlleles
+    shortLabel SNPs CEU
+    longLabel SNPs from the CEU Population
+    priority 1
+
+    track hapmapAllelesCHB
+    subTrack hapmapAlleles
+    shortLabel SNPs CHB
+    longLabel SNPs from the CHB Population
+    priority 2
+
+    track hapmapAllelesJPT
+    subTrack hapmapAlleles
+    shortLabel SNPs JPT
+    longLabel SNPs from the JPT Population
+    priority 3
+
+    track hapmapAllelesYRI
+    subTrack hapmapAlleles
+    shortLabel SNPs YRI
+    longLabel SNPs from the YRI Population
+    priority 4
+
+searchName hapmapAllelesCEU
+searchTable hapmapAllelesCEU
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
+
+searchName hapmapAllelesCHB
+searchTable hapmapAllelesCHB
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
+
+searchName hapmapAllelesJPT
+searchTable hapmapAllelesJPT
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
+
+searchName hapmapAllelesYRI
+searchTable hapmapAllelesYRI
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
 
 track haplotype
 shortLabel Haplotype Blocks
