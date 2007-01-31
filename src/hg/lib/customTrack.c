@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.163 2007/01/23 22:06:00 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.164 2007/01/31 20:00:53 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -630,7 +630,7 @@ boolean ctConfigUpdate(char *ctFile)
  * by file mod time, unless we add the enable time to
  * browser metadata somewhere */
 {
-if (!ctFile)
+if (!ctFile || !fileExists(ctFile))
     return FALSE;
 return cfgModTime() > fileModTime(ctFile);
 }
@@ -767,8 +767,21 @@ boolean removedCt = FALSE;
 boolean changedCt = FALSE;
 if (customTracksExist(cart, &ctFileName))
     {
-    ctList = 
-        customFactoryParse(ctFileName, TRUE, retBrowserLines);
+    /* protect against corrupted CT trash file or table */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        ctList = 
+            customFactoryParse(ctFileName, TRUE, retBrowserLines);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        remove(ctFileName);
+        warn("Internal error (%s): removing custom tracks", 
+                        errCatch->message->string);
+        }
+    errCatchFree(&errCatch); 
 
     /* handle selected tracks -- update doc, remove, etc. */
     char *selectedTable = NULL;
