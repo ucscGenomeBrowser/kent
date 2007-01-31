@@ -38,7 +38,10 @@ int alleleCount = thisItem->allele1Count + thisItem->allele2Count;
 int minorCount = min(thisItem->allele1Count, thisItem->allele2Count);
 
 grayLevel = grayInRange(minorCount, 0, alleleCount/2);
-if (minorCount > 0) grayLevel++;
+if (grayLevel < maxShade)
+    grayLevel++;
+if (grayLevel < maxShade)
+    grayLevel++;
 col = shadesOfGray[grayLevel];
 
 return col;
