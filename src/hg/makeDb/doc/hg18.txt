@@ -12743,3 +12743,40 @@ TMPDIR=/scratch/tmp
     time nice -n +19 featureBits fr2 chainHg18Link \
 	> fb.fr2.chainHg18Link.txt 2>&1 &
     #	42875664 bases of 393312790 (10.901%) in intersection
+
+############################################################################
+##  BLASTZ mm8 test with WindowMasker sequence (WORKING - 2007-01-30 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/hg18/bed/blastz.mm8.2007-01-30
+    cd /cluster/data/hg18/bed/blastz.mm8.2007-01-30
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/hg18/hg18.noUn.sdTrf.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm8 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/san/sanvol1/scratch/mm8/sdTrf/mm8.noUn.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/mm8/sdTrf/noUn.sdTrf.sizes
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.mm8.2007-01-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/hg18Mm8 \
+	-chainMinScore=3000 -chainLinearGap=medium > do.out 2>&1 &
+XXX - running 2007-01-30
+    time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/hg18Mm8 \
+	-continue=cat -stop=net \
+	-chainMinScore=3000 -chainLinearGap=medium > cat.out 2>&1 &
