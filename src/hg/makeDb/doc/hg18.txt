@@ -11140,6 +11140,55 @@ gvAttrConservedDisease.txt
 hgsql hgFixed
         load data local infile "gvAttrConservedDisease.txt" into table gvAttr;
 
+# Update, reloaded table January 2007       Belinda Giardine
+# new source (first set of LOVD) and some fixes to IDbases and HbVar
+cd /cluster/store6/giardine/gvJan2007/
+cat ../gvNov2006/gvPos.Hg18.txt | perl -ne 'if (/base_|HbVar/) {} else { print; }' > gvPos2.Hg18.txt
+cat gvPos2.Hg18.txt gvPosLOVD.hg18.txt gvPosIDbases.hg18.txt
+gvPosHbVar.hg18.txt > gvPos.Hg18.all.txt
+grep "^chr" gvPos.Hg18.all.txt | sort -k1,1 -k2,2n > gvPosSortedHg18.bed
+cat ../gvNov2006/gvPos.Hg17.txt | perl -ne 'if (/base_|HbVar/) {} else { print; }' > gvPos2.Hg17.txt
+cat gvPos2.Hg17.txt gvPosLOVD.hg17.txt gvPosIDbases.hg17.txt
+gvPosHbVar.hg17.txt > gvPos.Hg17.all.txt
+grep "^chr" gvPos.Hg17.all.txt | sort -k1,1 -k2,2n > gvPosSortedHg17.bed
+hgsql hg17
+        truncate table gvPos;
+hgLoadBed hg17 gvPos gvPosSortedHg17.bed -noSort -oldTable -tab
+hgsql hg18
+        truncate table gvPos;
+hgLoadBed hg18 gvPos gvPosSortedHg18.bed -noSort -oldTable -tab
+#grep for unknown and replaced in location fields (a few in IDbases)
+#leave gvSrc but update with
+	load data local infile "gvSrcAdditions.txt" into table gvSrc;
+hgsql hgFixed < emptyTables.sql
+hgsql hgFixed < reload.sql
+#fix SP deletion links
+hgsql hgFixed < ../gvNov2006/spDels.sql
+#run checks before QA
+#script to check for non unique rows in database
+uniqueCheck.pl gvAttr > gvAttrNonunique.txt
+uniqueCheck.pl gvLink > gvLinkNonunique.txt
+#fix duplicates and note to fix scripts later
+cd ../gvNov2006/
+mv gvLinkSP.txt gvLinkSP.old
+cat gvLinkSP.old | sort | uniq > gvLinkSP.txt
+mv gvLinkHbVar.txt gvLinkHbVar.old
+cat gvLinkHbVar.old | sort | uniq > gvLinkHbVar.txt
+#empty and reload
+select distinct attrType from gvAttr;
+select distinct attrType from gvLink;
+#and compare against gvAttrTypeKey in hg/lib/gvUi.c
+select distinct raKey from gvLink;
+#compare against hgc/hgcData/links.ra
+checkSeq.pl build < gvPosSorted.hg18.txt > seqErrors.hg18.txt
+checkSeq.pl build < gvPosSorted.hg17.txt > seqErrors.hg17.txt
+#check errors.txt to make sure no problems in mapping
+joinerChecks.pl table1 IDfield1 table2 IDfield2
+#for gv, gvPos, gvSrc, gvAttr, and gvLink
+#quick delete for extras, note to fix parser scripts
+hgsql hgFixed < attrFix.sql
+
+
     # << emacs
 ##########################################################################
 #  hars 1 to 202  Sol 09/10/2006

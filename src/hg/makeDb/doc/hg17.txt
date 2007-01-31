@@ -21658,6 +21658,9 @@ computeDiseaseAssocCons > gvAttrConservedDisease.txt
 #reload tables, additions to previous sources and more IDbases
 #details in hg18 doc
 
+#Belinda Giardine Jan 2007
+#reload tables, additions and corrections, details in hg18 doc
+
 #############################################################
 # Illumina Hap300 (Heather, July 2006)
 
