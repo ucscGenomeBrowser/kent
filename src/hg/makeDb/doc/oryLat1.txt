@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.16 2007/01/28 16:18:18 braney Exp $"
+#	"$Id: oryLat1.txt,v 1.17 2007/01/31 19:32:49 hiram Exp $"
 #
 
 ##########################################################################
@@ -3014,4 +3014,22 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/oryLat1Fr2 > do.log 2>&1 &
-XXX running 2007-01-24 16:15
+    #	real    601m51.650s
+
+    mkdir /cluster/data/fr2/bed/blastz.oryLat1.swap
+    cd /cluster/data/fr2/bed/blastz.oryLat1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/oryLat1/bed/blastz.fr2.2007-01-24/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/blastz.fr2.2007-01-24
+    time nice -n +19 featureBits oryLat1 chainFr2Link \
+	> fb.oryLat1.chainFr2Link.txt 2>&1
+    #	177508958 bases of 700386597 (25.344%) in intersection
+    cd /cluster/data/fr2/bed/blastz.oryLat1.swap]
+    time nice -n +19 featureBits fr2 chainOryLat1Link \
+	> fb.fr2.chainOryLat1Link.txt 2>&1
+    #	143996507 bases of 393312790 (36.611%) in intersection

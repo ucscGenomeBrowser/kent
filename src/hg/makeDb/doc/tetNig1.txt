@@ -2736,3 +2736,76 @@ done
     hgsql -h genome-testdb hgcentraltest \
 	-e "update dbDb set orderKey = 460 where name = 'tetNig1';"
 
+#########################################################################
+# BLASTZ/CHAIN/NET FR2 (DONE - 2007-01-29 - Hiram)
+##  Align to fr2 scaffolds,
+##	results lifted to fr2 chrUn coordinates
+    ssh kkstore03
+    mkdir /cluster/data/tetNig1/bed/blastz.fr2.2007-01-25
+    cd /cluster/data/tetNig1/bed/blastz.fr2.2007-01-25
+    cat << '_EOF_' > DEF
+# Tetraodon vs. Fugu
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Tetraodon tetNig1
+SEQ1_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/tetNig1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/tetNig1/bed/blastz.fr2.2007-01-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/tetNig1Fr2 > do.log 2>&1 &
+    #	real    259m39.548s
+
+    ## Swap to fr2
+    mkdir /cluster/data/fr2/bed/blastz.tetNig1.swap
+    cd /cluster/data/fr2/bed/blastz.tetNig1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/tetNig1/bed/blastz.fr2.2007-01-25/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/tetNig1/bed/blastz.fr2.2007-01-25/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -bigClusterHub=pk -swap > net_swap.log 2>&1 &
+    #	real    40m40.471s
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.fr2.2007-01-25
+    time nice -n +19 featureBits tetNig1 chainFr2Link \
+	> fb.tetNig1.chainFr2Link.txt 2>&1 
+    #	246828605 bases of 342403326 (72.087%) in intersection
+
+    cd /cluster/data/fr2/bed/blastz.tetNig1.swap
+    time nice -n +19 featureBits fr2 chainTetNig1Link \
+	> fb.fr2.chainTetNig1.txt 2>&1
+    #	247086553 bases of 393312790 (62.822%) in intersection
