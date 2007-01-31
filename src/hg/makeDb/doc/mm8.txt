@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.32 2007/01/30 23:56:54 mario Exp $"
+#	"$Id: mm8.txt,v 1.33 2007/01/31 19:31:57 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7704,6 +7704,20 @@ synBlastp.csh mm8 rn4
     # /cluster/data/danRer4/bed/WindowMasker.2006-12-04
     #	and fixup the db name and work directory in those scripts, then:
     time nice -n +19 ./doCount.csh > doCount.out 2>&1
+    #	real    67m32.178s
+    time nice -n +19 ./doSdust.csh >doSdust.out 2>&1
+    #	real    477m24.667s
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/WindowMasker.2007-01-29
+    gzip windowmasker.sdust.bed
+    time nice -n +19 ./applyMask.csh > applyMask.out 2>&1
+    time nice -n +19 ./addTrf.csh > addTrf.out 2>&1
+    twoBitToFa mm8.sdTrf.2bit stdout | faSize stdin
+    #	2664455088 bases (97171400 N's 2567283688 real 1644888505 upper
+    #	922395183 lower) in 34 sequences in 1 files
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/WindowMasker.2007-01-29
+    
 
 ##########################################################################
 ## AUGUSTUS ab initio predictions (DONE, 2007-01-30 - Mario)
