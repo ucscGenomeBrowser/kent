@@ -157,6 +157,9 @@ int pslCmpQuery(const void *va, const void *vb);
 int pslCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target. */
 
+int pslCmpTargetAndStrand(const void *va, const void *vb);
+/* Compare to sort based on target, strand,  tStart. */
+
 int pslCmpScore(const void *va, const void *vb);
 /* Compare to sort based on score (descending). */
 
