@@ -4,18 +4,10 @@
 #include "hash.h"
 #include "binRange.h"
 #include "options.h"
-#include "nibTwo.h"
 #include "psl.h"
-#include "ggMrnaAli.h"
-#include "geneGraph.h"
+#include "rangeTree.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.1 2007/01/27 04:15:17 kent Exp $";
-
-void addCluster(struct ggMrnaAli *maList, struct binKeeper *bins, struct dnaSeq *chrom);
-/* Do basic clustering. */
-
-void writeCluster(struct ggMrnaCluster *cluster, FILE *f);
-/* Write out a cluster to file. */
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.2 2007/01/31 08:05:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,9 +15,8 @@ void usage()
 errAbort(
   "clusterPsl - Make clusters of mRNA aligments\n"
   "usage:\n"
-  "   clusterPsl input dnaSource  output\n"
+  "   clusterPsl input output\n"
   "where input is a psl file (not necessarily sorted)\n"
-  "      dnaSource is a .2bit file or a directory of .nib files\n"
   "      output is a text file full of cluster info\n"
   "options:\n"
   "   -verbose=2 Make output more verbose.\n"
@@ -37,33 +28,135 @@ static struct optionSpec options[] = {
 };
 
 
-struct ggMrnaCluster *clusterPslsOnChrom(struct psl *pslList, struct dnaSeq *chrom)
-/* Make clusters of overlapping alignments on a single chromosome. */
+struct pslCluster
+/* A cluster of overlapping (at the block level on the same strand)
+ * alignments. */
+    {
+    struct pslCluster *next;
+    int tStart,tEnd;
+    struct psl *pslList;
+    struct rbTree *exonTree;
+    };
+
+struct pslCluster *pslClusterNew()
+/* Create cluster around a single alignment. */
 {
-struct ggMrnaCluster *clusterList = NULL;
+struct pslCluster *cluster;
+AllocVar(cluster);
+cluster->exonTree = rangeTreeNew();
+cluster->tEnd = -BIGNUM;
+return cluster;
+}
+
+void pslClusterAdd(struct pslCluster *cluster, struct psl *psl)
+/* Add new psl to cluster.  Note, uses psl->next to put psl on list
+ * inside of cluster. */
+{
+cluster->tStart = min(psl->tStart, cluster->tStart);
+cluster->tEnd = max(psl->tEnd, cluster->tEnd);
+int block, blockCount = psl->blockCount;
+for (block = 0; block < blockCount; ++block)
+    {
+    int blockSize = psl->blockSizes[block];
+    int tStart = psl->tStarts[block];
+    int tEnd = tStart + blockSize;
+    rangeTreeAdd(cluster->exonTree, tStart, tEnd);
+    }
+slAddHead(&cluster->pslList, psl);
+}
+
+void pslClusterFree(struct pslCluster **pCluster)
+{
+struct pslCluster *cluster = *pCluster;
+if (cluster != NULL)
+    {
+    rbTreeFree(&cluster->exonTree);
+    pslFreeList(&cluster->pslList);
+    freez(pCluster);
+    }
+}
+
+void pslClusterMerge(struct pslCluster *a, struct pslCluster **pB)
+/* Merge b into a.  Destroys b. */
+{
+struct pslCluster *b = *pB;
+a->pslList = slCat(a->pslList, b->pslList);
+b->pslList = NULL;
+a->tStart = min(a->tStart, b->tStart);
+a->tEnd = max(a->tEnd, b->tEnd);
+struct range *range;
+for (range = rangeTreeList(b->exonTree); range != NULL; range = range->next)
+    rangeTreeAdd(a->exonTree, range->start, range->end);
+pslClusterFree(pB);
+}
+
+boolean pslIntersectsCluster(struct pslCluster *cluster, struct psl *psl)
+/* Return TRUE if any block in psl intersects with cluster. */
+{
+int block, blockCount = psl->blockCount;
+for (block = 0; block < blockCount; ++block)
+    {
+    struct range tempR;
+    int start = psl->tStarts[block];
+    int end = start + psl->blockSizes[block];
+    tempR.start = start;
+    tempR.end = end;
+    if (rbTreeFind(cluster->exonTree, &tempR))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void pslIntoBinsOfClusters(struct psl *psl, struct binKeeper *bins)
+/* Add projection onto target into a binKeeper full of pslClusters.
+ * This will create and merge clusters as need be. */
+{
+/* Create new cluster around psl. */
+struct pslCluster *newCluster = pslClusterNew();
+pslClusterAdd(newCluster, psl);
+
+/* Get list of all overlapping old clusters. */
+struct binElement *bel, *belList = binKeeperFind(bins, psl->tStart, psl->tEnd);
+for (bel = belList; bel != NULL; bel = bel->next)
+    {
+    struct pslCluster *oldCluster = bel->val;
+    if (pslIntersectsCluster(oldCluster, psl))
+	{
+	binKeeperRemove(bins, oldCluster->tStart, oldCluster->tEnd, oldCluster);
+	pslClusterMerge(oldCluster, &newCluster);
+	newCluster = oldCluster;
+	}
+    }
+slFreeList(&belList);
+
+/* Merge any existing overlapping clusters into newCluster. */
+binKeeperAdd(bins, newCluster->tStart, newCluster->tEnd, newCluster);
+}
+
+struct pslCluster *clusterPslsOnChrom(struct psl *pslList)
+/* Make clusters of overlapping alignments on a single chromosome. 
+ * Return a list of such clusters. */
+{
+struct pslCluster *clusterList = NULL;
+
+if (pslList == NULL)
+    return NULL;
 
 /* Convert alignments from psl to ggMrnaAli. */
-struct psl *psl;
-struct ggMrnaAli *maList = NULL, *ma;
-for (psl = pslList; psl != NULL; psl = psl->next)
+struct psl *psl, *next = NULL;
+struct binKeeper *bins = binKeeperNew(0, pslList->tSize);
+for (psl = pslList; psl != NULL; psl = next)
     {
-    assert(psl->tSize == chrom->size);
-    ma = pslToGgMrnaAli(psl, psl->tName, 0, psl->tSize, chrom);
-    ggMrnaAliMergeBlocks(ma, 5);
-    slAddHead(&maList, ma);
+    next = psl->next;
+    pslIntoBinsOfClusters(psl, bins);
     }
-slReverse(&maList);
-
-/* Set up conversion from maList to binKeeper full of ggMrnaClusters. */
-struct binKeeper *bins = binKeeperNew(0, chrom->size);
-addCluster(maList, bins, chrom);
 
 /* Convert from binKeeper of clusters to simple list of clusters. */
 struct binElement *binList, *bin;
 binList = binKeeperFindAll(bins);
 for (bin = binList; bin != NULL; bin = bin->next)
     {
-    struct ggMrnaCluster *cluster = bin->val;
+    struct pslCluster *cluster = bin->val;
     slAddHead(&clusterList, cluster);
     }
 slReverse(&clusterList);
@@ -73,17 +166,60 @@ binKeeperFree(&bins);
 return clusterList;
 }
 
+void pslClusterWrite(struct pslCluster *cluster, FILE *f)
+/* Write out info on cluster to file as a bed12 + 2 */
+{
+static int id=0;
+int pslCount = slCount(cluster->pslList);
+struct rbTree *exonTree = cluster->exonTree;
+struct range *range, *rangeList = rangeTreeList(exonTree);
 
-void clusterPsl(char *pslName, char *seqDir, char *outName)
+if (cluster->pslList->strand[0] == '-')
+    {
+    int chromSize = cluster->pslList->tSize;
+    slReverse(&rangeList);
+    for (range = rangeList; range != NULL; range = range->next)
+        {
+	reverseIntRange(&range->start, &range->end, chromSize);
+	}
+    }
+
+int chromStart = rangeList->start;
+struct range *lastRange = slLastEl(rangeList);
+int chromEnd = lastRange->end;
+
+fprintf(f, "%s\t%d\t%d\t", cluster->pslList->tName, chromStart, chromEnd);
+fprintf(f, "r%de%di%d\t", pslCount, exonTree->n, ++id);
+fprintf(f, "0\t");	/* score field */
+fprintf(f, "%s\t", cluster->pslList->strand);
+fprintf(f, "%d\t", chromStart);	/* thick start */
+fprintf(f, "%d\t", chromEnd);	/* thick end */
+fprintf(f, "0\t");	/* itemRgb*/
+fprintf(f, "%d\t", exonTree->n);	/* Block count */
+for (range = rangeList; range != NULL; range = range->next)
+    fprintf(f, "%d,", range->end - range->start);
+fprintf(f, "\t");
+for (range = rangeList; range != NULL; range = range->next)
+    fprintf(f, "%d,", range->start - chromStart);
+fprintf(f, "\t");
+fprintf(f, "%d\t", pslCount);
+struct psl *psl;
+for (psl = cluster->pslList; psl != NULL; psl = psl->next)
+    {
+    fprintf(f, "%s,", psl->qName);
+    };
+fprintf(f, "\n");
+}
+
+void clusterPsl(char *pslName, char *outName)
 /* Transform a file full of psl's into a file full of rnaClusters */
 {
 FILE *out = mustOpen(outName, "w");
 
 /* Set up DNA seqence accesser */
-struct nibTwoCache *dnaCache = nibTwoCacheNew(seqDir);
 /* Load in list and sort by chromosomes. */
 struct psl *pslList = pslLoadAll(pslName);
-slSort(&pslList, pslCmpTarget);
+slSort(&pslList, pslCmpTargetAndStrand);
 
 /* Go through input one chromosome at a time. */
 struct psl *chromStart, *chromEnd = NULL;
@@ -91,10 +227,13 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
     {
     /* Find chromosome end. */
     char *chromName = chromStart->tName;
+    char strand = chromStart->strand[0];
     struct psl *psl, *dummy, **endAddress = &dummy;
     for (psl = chromStart; psl != NULL; psl = psl->next)
         {
 	if (!sameString(psl->tName, chromName))
+	    break;
+	if (psl->strand[0] != strand)
 	    break;
 	endAddress = &psl->next;
 	}
@@ -104,19 +243,16 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
     *endAddress = NULL;
 
     /* Get chromosome sequence */
-    uglyf("chrom %s\n", chromStart->tName); 
-    struct dnaSeq *chrom = nibTwoCacheSeq(dnaCache, chromStart->tName);
+    verbose(1, "chrom %s %s\n", chromStart->tName, chromStart->strand); 
 
     /* Create clusters. */
-    struct ggMrnaCluster *clusterList = clusterPslsOnChrom(chromStart, chrom);
+    struct pslCluster *clusterList = clusterPslsOnChrom(chromStart);
 
     /* Write clusters to file. */
-    struct ggMrnaCluster *cluster;
+    struct pslCluster *cluster;
     for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
-         writeCluster(cluster, out);
+         pslClusterWrite(cluster, out);
 
-    /* Free chromosome sequence. */
-    dnaSeqFree(&chrom);
 
     /* Restore list. */
     *endAddress = chromEnd;
@@ -129,8 +265,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
-clusterPsl(argv[1], argv[2], argv[3]);
+clusterPsl(argv[1], argv[2]);
 return 0;
 }

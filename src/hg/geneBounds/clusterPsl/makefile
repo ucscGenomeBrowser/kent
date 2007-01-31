@@ -4,7 +4,7 @@ L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = clusterPsl.o addCluster.o writeCluster.o
+O = clusterPsl.o
 
 clusterPsl: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/clusterPsl $O ${MYLIBS} $L
