@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAlleles.h"
 
-static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.1 2007/01/26 23:52:37 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.2 2007/01/31 18:47:13 heather Exp $";
 
 void hapmapAllelesStaticLoad(char **row, struct hapmapAlleles *ret)
 /* Load a row from hapmapAlleles table into ret.  The contents of ret will
@@ -20,18 +20,12 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->observed = row[6];
-strcpy(ret->allele1, row[7]);
-ret->allele1CountCEU = sqlUnsigned(row[8]);
-ret->allele1CountCHB = sqlUnsigned(row[9]);
-ret->allele1CountJPT = sqlUnsigned(row[10]);
-ret->allele1CountYRI = sqlUnsigned(row[11]);
-strcpy(ret->allele2, row[12]);
-ret->allele2CountCEU = sqlUnsigned(row[13]);
-ret->allele2CountCHB = sqlUnsigned(row[14]);
-ret->allele2CountJPT = sqlUnsigned(row[15]);
-ret->allele2CountYRI = sqlUnsigned(row[16]);
+safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
+ret->allele1Count = sqlUnsigned(row[8]);
+safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
+ret->allele2Count = sqlUnsigned(row[10]);
 }
 
 struct hapmapAlleles *hapmapAllelesLoad(char **row)
@@ -46,18 +40,12 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->observed = cloneString(row[6]);
-strcpy(ret->allele1, row[7]);
-ret->allele1CountCEU = sqlUnsigned(row[8]);
-ret->allele1CountCHB = sqlUnsigned(row[9]);
-ret->allele1CountJPT = sqlUnsigned(row[10]);
-ret->allele1CountYRI = sqlUnsigned(row[11]);
-strcpy(ret->allele2, row[12]);
-ret->allele2CountCEU = sqlUnsigned(row[13]);
-ret->allele2CountCHB = sqlUnsigned(row[14]);
-ret->allele2CountJPT = sqlUnsigned(row[15]);
-ret->allele2CountYRI = sqlUnsigned(row[16]);
+safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
+ret->allele1Count = sqlUnsigned(row[8]);
+safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
+ret->allele2Count = sqlUnsigned(row[10]);
 return ret;
 }
 
@@ -67,7 +55,7 @@ struct hapmapAlleles *hapmapAllelesLoadAll(char *fileName)
 {
 struct hapmapAlleles *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -85,7 +73,7 @@ struct hapmapAlleles *hapmapAllelesLoadAllByChar(char *fileName, char chopper)
 {
 struct hapmapAlleles *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -114,15 +102,9 @@ ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->observed = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->allele1, sizeof(ret->allele1));
-ret->allele1CountCEU = sqlUnsignedComma(&s);
-ret->allele1CountCHB = sqlUnsignedComma(&s);
-ret->allele1CountJPT = sqlUnsignedComma(&s);
-ret->allele1CountYRI = sqlUnsignedComma(&s);
+ret->allele1Count = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->allele2, sizeof(ret->allele2));
-ret->allele2CountCEU = sqlUnsignedComma(&s);
-ret->allele2CountCHB = sqlUnsignedComma(&s);
-ret->allele2CountJPT = sqlUnsignedComma(&s);
-ret->allele2CountYRI = sqlUnsignedComma(&s);
+ret->allele2Count = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -182,25 +164,13 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->allele1);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->allele1CountCEU);
-fputc(sep,f);
-fprintf(f, "%u", el->allele1CountCHB);
-fputc(sep,f);
-fprintf(f, "%u", el->allele1CountJPT);
-fputc(sep,f);
-fprintf(f, "%u", el->allele1CountYRI);
+fprintf(f, "%u", el->allele1Count);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->allele2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->allele2CountCEU);
-fputc(sep,f);
-fprintf(f, "%u", el->allele2CountCHB);
-fputc(sep,f);
-fprintf(f, "%u", el->allele2CountJPT);
-fputc(sep,f);
-fprintf(f, "%u", el->allele2CountYRI);
+fprintf(f, "%u", el->allele2Count);
 fputc(lastSep,f);
 }
 

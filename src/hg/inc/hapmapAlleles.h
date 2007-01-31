@@ -5,10 +5,10 @@
 #ifndef HAPMAPALLELES_H
 #define HAPMAPALLELES_H
 
-#define HAPMAPALLELES_NUM_COLS 17
+#define HAPMAPALLELES_NUM_COLS 11
 
 struct hapmapAlleles
-/* HapMap allele counts by population */
+/* HapMap allele counts */
     {
     struct hapmapAlleles *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
@@ -19,15 +19,9 @@ struct hapmapAlleles
     char strand[2];	/* Which genomic strand contains the observed alleles */
     char *observed;	/* Observed string from genotype file */
     char allele1[2];	/* This allele has been observed */
-    unsigned allele1CountCEU;	/* allele1 count for the CEU population */
-    unsigned allele1CountCHB;	/* allele1 count for the CHB population */
-    unsigned allele1CountJPT;	/* allele1 count for the JPT population */
-    unsigned allele1CountYRI;	/* allele1 count for the YRI population */
+    unsigned allele1Count;	/* allele1 count  */
     char allele2[2];	/* This allele may not have been observed */
-    unsigned allele2CountCEU;	/* allele2 count for the CEU population */
-    unsigned allele2CountCHB;	/* allele2 count for the CHB population */
-    unsigned allele2CountJPT;	/* allele2 count for the JPT population */
-    unsigned allele2CountYRI;	/* allele2 count for the YRI population */
+    unsigned allele2Count;	/* allele2 count */
     };
 
 void hapmapAllelesStaticLoad(char **row, struct hapmapAlleles *ret);

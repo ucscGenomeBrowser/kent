@@ -1,5 +1,5 @@
 table hapmapAlleles
-"HapMap allele counts by population"
+"HapMap allele counts"
     (
     string  chrom;      "Chromosome"
     uint    chromStart; "Start position in chrom (0 based)"
@@ -11,15 +11,10 @@ table hapmapAlleles
     string  observed;   "Observed string from genotype file"
 
     char[1] allele1;    "This allele has been observed"
-    uint    allele1CountCEU;       "allele1 count for the CEU population"
-    uint    allele1CountCHB;       "allele1 count for the CHB population"
-    uint    allele1CountJPT;       "allele1 count for the JPT population"
-    uint    allele1CountYRI;       "allele1 count for the YRI population"
+    uint    allele1Count;       "allele1 count "
 
     char[1] allele2;    "This allele may not have been observed"
-    uint    allele2CountCEU;       "allele2 count for the CEU population"
-    uint    allele2CountCHB;       "allele2 count for the CHB population"
-    uint    allele2CountJPT;       "allele2 count for the JPT population"
-    uint    allele2CountYRI;       "allele2 count for the YRI population"
+    uint    allele2Count;       "allele2 count"
 
     )
+
