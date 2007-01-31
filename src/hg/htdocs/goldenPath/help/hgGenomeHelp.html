@@ -39,7 +39,7 @@
                   <LI><A CLASS="toc" HREF="#Format">Formatting Data</A>
                   <LI><A CLASS="toc" HREF="#Upload">Uploading Data</A>
 		  </UL>
-        	<LI><A CLASS="toc" HREF="#Sample">Quick Start</A>
+<!---        	<LI><A CLASS="toc" HREF="#Sample">Quick Start</A> -->
         	<LI><A CLASS="toc" HREF="#Displaying">Displaying Data in Genome Graphs</A>
 	   	  <UL>
                   <LI><A CLASS="toc" HREF="#Configure">Configuring the Display</A>
@@ -93,6 +93,15 @@
                 <LI> view the genes that exist in areas where your data
                      meet your significance threshold</LI>
                 </UL>
+
+		<P>
+		To return to Genome Graphs from any other location on the 
+		Genome Browser website, use your browser's Back button, or 
+		press <EM>Home</EM> on the blue navigation bar, then 
+		press the <EM>Genome Graphs</EM> link.
+		</P>
+
+<!--- TO BE COMPLETED ***
 		<P>
 		This User's Guide is aimed at both the novice Genome Graphs user
 		as well the advanced user. If you are new to the Genome Graphs 
@@ -100,6 +109,8 @@
 		learn about the basics using some sample data. Advanced users 
 		may want to proceed directly to the section that addresses 
 		a particular area of functionality in detail.</P>
+-->
+
 	      </TD><TD WIDTH=15></TD></TR>
 	    </TABLE>
 	  <BR></TD></TR>
@@ -157,7 +168,7 @@
 		</td></tr>
 
 		<tr><td valign="top" width="20">&mdash;</td><td><b>Illumina HumanHap300 
-		Bead Chip: </b>e.g. <TT>***</TT>
+		Bead Chip: </b>e.g. <TT>rs12345</TT>
 		</td></tr>
 		</table>
 
@@ -282,7 +293,8 @@
     <P>
 
 
-<!-------Quick Start-------------------------->
+<!-- TO BE COMPLETED ***
+<!-------Quick Start-------------------------
 <A NAME="Sample"></A>
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
       <TR><TD>
@@ -306,6 +318,8 @@
       </TD></TR>
     </TABLE>
     <P>
+*** TO BE COMPLETED -->
+
 
 
 <!-------Displaying Data in Genome Graphs-------------------------->
@@ -323,7 +337,8 @@
 	      <TR><TH HEIGHT=10></TH></TR>
 	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
 		<P>
-		[How to display data in Genome Graphs.  Including configuring.]</P>
+		Once you have uploaded your data, you will want to customize the 
+		Genome Graphs display.</P>
 		<P>
 
 <!-------Configuring the Display------------------------->
@@ -331,8 +346,61 @@
                 <HR>
                 <B><FONT SIZE="3" COLOR="#0000FF">Configuring the Display</FONT></B>
                 <P>
-                [how to configure the Genome Graphs display (configure button).  And
-		how to configure individual graphs.]</P>
+		<B>Configuring the display</B><BR>
+		To go to the configuration page, press the <EM>configure</EM> button
+		on the main Genome Graphs page.  This is the page from which you can
+		configure many overall aspects of the Genome Graphs display.
+		Inidividual graphs can also be configured (see the next section
+		for help on that).
+		</P>
+
+		<P>
+		On this page you will find the following controls:
+		<UL>
+		<LI><B>image width</B> - controls the overall width of the graphs
+			display on the main Genome Graphs page.  The default is
+			620 pixels.</LI>
+		<LI><B>graph height</B> - controls the height of the graph(s) in
+			the space above each chromosome.  The default is
+			27 pixels.</LI>
+		<LI><B>graphs per line</B> - controls how many graphs are displayed
+			on each line in the space above each chromosome. For example,
+			if you set this value to 2, the display will superimpose
+			two graphs on top of eachother on one line.  The axis label
+			for the first graph will appear on the left side of the display
+			and the axis for the second graph on the right side.</LI>
+		<LI><B>lines of graphs</B> - controls how many sets of graphs will
+			appear above each chromosome.  For example, if you set this
+			value to 2, the display will make room for two lines of
+			graphs (each at the <B>graph height</B> above) in the space
+			above each chromosome.
+		<LI><B>chromosome layout</B> - controls how the chromosomes are layed
+			out in the Genome Graphs display. You can choose to view one
+			or two chromosomes on each horizontal line in the display. 
+			Alternatively, you can set up the display such that all of the
+			chromosomes appear in one long line. If you choose this layout,
+			you may want to adjust the width of the image (<B>image width</B> 
+			above).</LI>
+		<LI><B>numerical labels</B> - check this box if you would like to see
+			axis labels to the right/left of the display. If you did not specify
+			<B>label values</B> when you uploaded your file, the numerical
+			labels will default to 1/3 and 2/3 of the max and min values in
+			your data input file.</LI>
+		<LI><B>highlight missing</B> - check this box if you would like to
+			see the areas in your graph where there is no data. Note that if
+			you are displaying more than one graph, this attribute only
+			pertains to the first graph.</LI>
+		<LI><B>region padding</B> - ************  The default is 25,000 bases.</LI>
+		</P>
+
+		<P>
+		When you have completed configuring the display, press the <EM>submit</EM>
+		button to return to the Genome Graphs display.
+		</P>
+	
+		<P>
+		<B>Configuring individual graphs</B><BR>
+		</P>
                 <P>
 
 <!-------Setting a Significance Threshold------------------------->
@@ -340,7 +408,42 @@
                 <HR>
                 <B><FONT SIZE="3" COLOR="#0000FF">Setting a Significance Threshold</FONT></B>
                 <P>
-                [how to set the sig. thresh. and what it means (significance threshold box)]</P>
+		Most genome-wide data has some amount of noise and is only interesting when 
+		the data values are above a certain value.  You can set this value using the 
+		significance threshold input box.  Enter a decimal number in this input box
+		and press Enter.  The display will now have a light gray line across the 
+		graph at this data value.  If you have more than one graph displayed, the 
+		significance threshold only pertains to the graphs that contain the significance
+		threshold in the displayed data range.
+		</P>
+
+		<P>
+		The significance threshold works in concert with the <EM>browse regions</EM> 
+		and <EM>sort genes</EM> buttons; it will effect the regions that are 
+		displayed once you press either of these two buttons.
+		</P>
+
+		<P>
+		To open the Genome Browser with a view of all of the regions in your graph 
+		that include data points that pass the significance threshold, press the 
+		<EM>browse regions</EM> button. This will open the Genome Browser with a 
+		navigation pane on the left side of the screen. This pane will contain 
+		links to all regions which pass your significance threshold.
+		</P>
+
+		<P>
+		To view a list of genes which are in regions that pass the significance 
+		threshold, press the <EM>sort genes</EM> button.  This will open the 
+		Gene Sorter with only the genes that are in significant locations 
+		with respect to your data.
+		</P>
+
+		<P>
+		If you would rather view all of your regions without restricting the 
+		output to only those regions that pass the significance threshold, simply 
+		delete any values from the significance threshold input box and press 
+		Enter before pressing <EM>browse regions</EM>.
+		</P>
                 <P>
 
 <!-------Setting a Data Region------------------------->
