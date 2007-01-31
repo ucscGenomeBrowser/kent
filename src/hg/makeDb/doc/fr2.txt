@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.7 2007/01/29 18:39:33 hiram Exp $"
+#       "$Id: fr2.txt,v 1.8 2007/01/31 19:30:51 hiram Exp $"
 #
 
 ##########################################################################
@@ -226,7 +226,7 @@ genomeCladePriority 110
     cp -p /cluster/data/fr2/jkStuff/liftAll.lft /cluster/bluearc/fugu/fr2
 
 #########################################################################
-# GENBANK AUTO UPDATE (WORKING - 2007-01-24 - Hiram and Cory)
+# GENBANK AUTO UPDATE (DONE - 2007-01-24 - Hiram and Cory)
     # Make a liftAll.lft that specifies 5M chunks for genbank:
     # Actually not necessary, since our chunks are small enough.  If we had
     # to, would look like this:
@@ -314,7 +314,7 @@ genomeCladePriority 110
     make etc-update
 
 #########################################################################
-# ENSEMBL GENES (WORKING - 2007-01-24 - Hiram and Cory)
+# ENSEMBL GENES (DONE - 2007-01-24 - Hiram and Cory)
 #  Good luck with the biomart interface.  It seems to be different each time
 #  it is used.
     mkdir /cluster/data/fr2/bed/ensembl
@@ -677,4 +677,33 @@ chainOne $(path1)
     rm -rf /cluster/data/fr2/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/fr2/bed/tblastn.hg18KG/blastOut
 #end tblastn
-##########################################################################
+
+#########################################################################
+# BLASTZ/CHAIN/NET TetNig1 SWAP (DONE - 2007-01-29 - Hiram)
+##  Align to fr2 scaffolds,
+##	results lifted to fr2 chrUn coordinates
+    ## Swap to fr2
+    mkdir /cluster/data/fr2/bed/blastz.tetNig1.swap
+    cd /cluster/data/fr2/bed/blastz.tetNig1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/tetNig1/bed/blastz.fr2.2007-01-25/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -swap > swap.log 2>&1 &
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/tetNig1/bed/blastz.fr2.2007-01-25/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -bigClusterHub=pk -swap > net_swap.log 2>&1 &
+    #	real    40m40.471s
+
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/blastz.fr2.2007-01-25
+    time nice -n +19 featureBits tetNig1 chainFr2Link \
+	> fb.tetNig1.chainFr2Link.txt 2>&1 
+    #	246828605 bases of 342403326 (72.087%) in intersection
+
+    cd /cluster/data/fr2/bed/blastz.tetNig1.swap
+    time nice -n +19 featureBits fr2 chainTetNig1Link \
+	> fb.fr2.chainTetNig1.txt 2>&1
+    #	247086553 bases of 393312790 (62.822%) in intersection
