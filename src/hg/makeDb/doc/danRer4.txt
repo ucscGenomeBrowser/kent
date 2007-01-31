@@ -9320,3 +9320,87 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-swap -bigClusterHub=pk  > swap.log 2>&1 &
 XXX - running 2007-01-20 09:21
+
+#########################################################################
+# BLASTZ/CHAIN/NET fr2 (DONE - 2007-01-29 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/blastz.fr2.2007-01-29
+    cd /cluster/data/danRer4/bed/blastz.fr2.2007-01-29
+    cat << '_EOF_' > DEF
+# Zebrafish vs. Fugu
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer4, no randoms or Un in this sequence
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/danRer4.noUn.sdTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/danRer4/danRer4.noUn.sdTrf.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer4/bed/blastz.fr2.2007-01-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/danRer4Fr2 > do.log 2>&1 &
+    ## recover from pk kluster problems and finish blastz job
+    time doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=cat -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/danRer4Fr2 > cat.log 2>&1 &
+    ## recover from kki kluster problems and finish chain job
+    time doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=chainMerge -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/danRer4Fr2 > chainMerge.log 2>&1 &
+    #	real    554m13.214s
+
+    ## swap
+    mkdir /cluster/data/fr2/bed/blastz.danRer4.swap
+    cd /cluster/data/fr2/bed/blastz.danRer4.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/danRer4/bed/blastz.fr2.2007-01-29/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	running 2007-01-30 - 16:35
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/danRer4/bed/blastz.fr2.2007-01-29/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=net -swap -bigClusterHub=pk > net_swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/blastz.fr2.2007-01-29
+    time nice -n +19 featureBits danRer4 chainFr2Link \
+	> fb.danRer4.chainFr2Link.txt 2>&1
+    #	138918185 bases of 1626093931 (8.543%) in intersection
+    time nice -n +19 featureBits fr2 chainDanRer4Link \
+	> fb.fr2.chainDanRer4Link.txt 2>&1
+    #	80963231 bases of 393312790 (20.585%) in intersection
