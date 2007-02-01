@@ -271,7 +271,7 @@
 
 		<LI><B>Label values</B>: A comma-separated list of numbers 
 		for the vertical axis. If left blank, the axis will be 
-		labeled at the 1/3 and 2/3 point.</LI>
+		labeled at the 1/3 and 2/3 points of your data range.</LI>
 
 		<LI><B>Draw connecting lines</B>: Lines connecting data 
 		points separated by no more than this number of bases are 
@@ -337,7 +337,7 @@
 	      <TR><TH HEIGHT=10></TH></TR>
 	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
 		<P>
-		Once you have uploaded your data, you will want to customize the 
+		Once you have uploaded your data, may will want to customize the 
 		Genome Graphs display.</P>
 		<P>
 
@@ -390,7 +390,11 @@
 			see the areas in your graph where there is no data. Note that if
 			you are displaying more than one graph, this attribute only
 			pertains to the first graph.</LI>
-		<LI><B>region padding</B> - ************  The default is 25,000 bases.</LI>
+		<LI><B>region padding</B> - controls the size of the data regions. The
+			data regions are the span of bases that will be added to either
+			side of the data points in your graphs which exceed the 
+			significance threshold. The default places 25,000 bases on 
+			either side.</LI>
 		</UL>
 		</P>
 
@@ -401,6 +405,29 @@
 	
 		<P>
 		<B>Configuring individual graphs</B><BR>
+		</P>
+
+		<P>
+		Near the bottom of the Configuration page, you will see a list of
+		the graphs that you have uploaded. Click on the hyperlinked graph
+		name to configure that graph. This configuration pertains to 
+		the Genome Graphs view. 
+		</P>
+
+		<P>
+		You can set the range of the display 
+		by editing the <EM>Display min/max value</EM> values. This will
+		restrict the Genome Graphs display for this graph to that
+		data range. The axis will be labeled at 1/3 and 2/3 of the 
+		data range that you set.
+		</P>
+
+		<P>
+		If your data is sparse, you may want to draw lines between
+		your data points. You can configure that by editing the
+		<EM>Draw connecgting lines between markers separated by
+		up to ... bases</EM> value.  The default value is 25,000,000
+		bases.
 		</P>
                 <P>
 
