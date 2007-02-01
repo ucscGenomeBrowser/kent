@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.20 2006/08/02 20:10:58 markd Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.21 2007/02/01 00:43:16 kate Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -107,6 +107,20 @@ if (countChars(group, '"') >= 2)
 if (strstr(group, "transcript_id") != NULL)
     return TRUE;
 return FALSE;
+}
+
+boolean gffHasGtfGroup(char *line)
+/* Return TRUE if line has a GTF group field */
+{
+char *words[10];
+char *dupe = cloneString(line);
+int wordCt = chopTabs(dupe, words);
+boolean isGtf = FALSE;
+if (wordCt >= 9) 
+    if (isGtfGroup(words[8]))
+        isGtf = TRUE;
+freeMem(dupe);
+return isGtf;
 }
 
 static void readQuotedString(char *fileName, int lineIx, char *in, char *out, char **retNext)

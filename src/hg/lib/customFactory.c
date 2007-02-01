@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.50 2007/01/26 01:02:50 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.51 2007/02/01 00:43:16 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -507,6 +507,26 @@ customPpReuse(cpp, line);
 return isGff;
 }
 
+static boolean gtfRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type, 
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a gtf track.
+   First run the GFF recognizer, then check for GTF group syntax */
+{
+boolean isGtf = FALSE;
+if (type != NULL && !sameString(type, fac->name))
+    return FALSE;
+/* GTF is an extension of GFF, so run the GFF recognizer first.
+ * This will also create a GFF file handle for the track */
+if (!gffRecognizer(fac, cpp, type, track))
+    return FALSE;
+char *line = customPpNextReal(cpp);
+if (gffHasGtfGroup(line))
+    isGtf = TRUE;
+customPpReuse(cpp, line);
+return isGtf;
+}
+
 static double gffGroupAverageScore(struct gffGroup *group, double defaultScore)
 /* Return average score of GFF group, or average if none. */
 {
@@ -552,15 +572,18 @@ struct genePred *gp;
 struct bed *bedList = NULL, *bed;
 struct gffGroup *group;
 int i, blockCount, chromStart, exonStart;
-char *exonSelectWord = (gff->isGtf ? "exon" : NULL);
 
 gffGroupLines(gff);
 
 for (group = gff->groupList; group != NULL; group = group->next)
     {
     /* First convert to gene-predictions since this is almost what we want. */
-    gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), exonSelectWord, genePredNoOptFld,
-                                genePredGxfDefaults);
+    if (gff->isGtf)
+        gp = genePredFromGroupedGtf(gff, group, niceGeneName(group->name), 
+                                    genePredNoOptFld, genePredGxfDefaults);
+    else
+        gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), 
+                                NULL, genePredNoOptFld, genePredGxfDefaults);
     if (gp != NULL)
         {
 	/* Make a bed out of the gp. */
@@ -616,6 +639,15 @@ static struct customFactory gffFactory =
     NULL,
     "gff",
     gffRecognizer,
+    gffLoader,
+    };
+
+static struct customFactory gtfFactory = 
+/* Factory for gtf tracks. Shares loader with gffFactory */
+    {
+    NULL,
+    "gtf",
+    gtfRecognizer,
     gffLoader,
     };
 
@@ -1032,6 +1064,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &wigFactory);
     slAddTail(&factoryList, &chromGraphFactory);
     slAddTail(&factoryList, &pslFactory);
+    slAddTail(&factoryList, &gtfFactory);
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &microarrayFactory);
@@ -1459,7 +1492,9 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		}
 	    }
         char *dataUrl = NULL;
-        if (lf->fileName && startsWith("http://", lf->fileName))
+        if (lf->fileName && 
+                (startsWith("http://", lf->fileName) || 
+                 startsWith("ftp://", lf->fileName)))
             dataUrl = cloneString(lf->fileName);
 	oneList = fac->loader(fac, chromHash, cpp, track, dbTrack);
 	/* Save a few more settings. */

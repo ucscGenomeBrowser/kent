@@ -127,6 +127,9 @@ int gffLineCmp(const void *va, const void *vb);
 void gffOutput(struct gffLine *el, FILE *f, char sep, char lastSep);
 /* Print out GTF.  Separate fields with sep. Follow last field with lastSep. */
 
+boolean gffHasGtfGroup(char *line);
+/* Return TRUE if line has a GTF group field */
+
 #define gffTabOut(el,f) gffOutput(el,f,'\t','\n');
 /* Print out GTF as a line in a tab-separated file. */
 
