@@ -10,5 +10,9 @@ clusterPsl: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/clusterPsl $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/clusterPsl${EXE}
 
+test:
+	clusterPsl -verbose=0 input.psl output.cluster
+	diff expected.cluster output.cluster
+
 clean:
 	rm -f $O
