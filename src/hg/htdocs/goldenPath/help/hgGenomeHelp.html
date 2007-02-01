@@ -479,8 +479,41 @@
                 <HR>
                 <B><FONT SIZE="3" COLOR="#0000FF">Setting a Data Region</FONT></B>
                 <P>
-                [how to set the data region and what it means (region boxES)]</P>
-                <P>
+		The data region is the span of bases that will be added to either side
+		of the data points in your graphs which exceed the significance 
+		threshold. Set the data region by editing the <EM>region 
+		padding</EM> value on the configuration page. 
+		The combination of setting the data region and the significance 
+		threshold will affect two things:
+		<UL>
+		<LI>the regions displayed in the 
+			<A HREF="#ViewInGB">Genome Browser</A> 
+			after you press the <EM>browse regions</EM> button</LI>,
+		<LI>the genes displayed in the 
+			<A HREF="#ViewInGS">Gene Sorter</A> 
+			after you press the <EM>sort genes</EM> button</LI>.
+		</UL> 
+                </P>
+
+		<P>
+		For example, take a data set that contains the following data:<BR>
+		<TT>chr2 400100000 2.3<BR>
+		    chr2 400100500 4.5<BR>
+		    chr2 400101000 1.2<BR></TT>
+		If you set the significance threshold at 4.0, one data point
+		in the data set passes that threshold. If you then set the data 
+		range to 200, then the one significant data point will be 
+		padded on each side by 200 base pairs.  In that case, the 
+		only resulting significant data region will be 
+		chr2:400,100,300-400,100,700.<BR><BR>
+		If instead you set the data range
+		to 2,000, then the one significant data point will be
+		padded on each side by 2,000 base pairs.  In that case, the 
+		resulting significant data region will be 
+		chr2:400,098,500-400,102,500.
+		</P>
+
+		<P>
 
 	      </TD><TD WIDTH=15></TD></TR>
 	    </TABLE>
@@ -505,9 +538,20 @@
 	      <TR><TH HEIGHT=10></TH></TR>
 	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
 		<P>
-		[How to view your Graph data in the Genome Browser.  Including
-		moving around with the frames and navigating back to hgGenome.]</P>
+		To view your graphs in the Genome Browser, press the 
+		<EM>browse regions</EM> button. This will open the Genome
+		Browser with your graph(s) displayed as track(s). You can
+		configure and <A HREF="hgTracksHelp.html#FineTuning">edit your track</A> 
+		as you can any other track in the Genome Browser. 
+		In addition to the Genome Browser, you will also see a pane 
+		on the left-hand side, which contains links to all of the 
+		<A HREF="#DataRegion">significant regions</A> in your data.
+		Please note that if you are displaying more than one graph in 
+		Genome Graphs, the significant regions are based only on the 
+		first graph in the display list. 
+		</P>
 		<P>
+
 	      </TD><TD WIDTH=15></TD></TR>
 	    </TABLE>
 	  <BR></TD></TR>
@@ -532,7 +576,15 @@
 	      <TR><TH HEIGHT=10></TH></TR>
 	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
 		<P>
-		[How to view your Graph data in the Gene Sorter.]</P>
+		To view the set of genes that are in 
+		<A HREF="#DataRegion">significant regions</A> in your data, 
+		press the <EM>sort genes</EM> button. This will open the Gene
+		Sorter with a filter to include only genes that are located 
+		in regions in your input data that are above the significance 
+		threshold. Please note that if you are displaying more than 
+		one graph in Genome Graphs, the significant genes are based 
+		only on the first graph in the display list.
+		</P>
 		<P>
 	      </TD><TD WIDTH=15></TD></TR>
 	    </TABLE>
