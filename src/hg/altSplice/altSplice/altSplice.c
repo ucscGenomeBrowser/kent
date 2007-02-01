@@ -74,7 +74,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.24 2007/01/26 04:58:35 kent Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.25 2007/02/01 19:36:09 kent Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -377,7 +377,7 @@ return alreadySeen;
 }
 
 struct altGraphX *agFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
-				   struct genePred *gp, int chromStart, int chromEnd, FILE *out )
+				   int chromStart, int chromEnd, FILE *out )
 /** Custer overlaps from maList into altGraphX structure. */
 {
 struct altGraphX *ag = NULL, *agList = NULL;
@@ -756,7 +756,7 @@ slReverse(&maSameStrand);
 /* If there is a cluster to work with create an geneGraph */
 if(maSameStrand != NULL)
     {
-    ag = agFromAlignments(maSameStrand, genoSeq, conn, gp, chromStart, chromEnd,  out);
+    ag = agFromAlignments(maSameStrand, genoSeq, conn, chromStart, chromEnd,  out);
     }
 else
     {
