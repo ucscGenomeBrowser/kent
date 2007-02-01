@@ -666,4 +666,35 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
 
    featureBits felCat3 augustus
    # 21748832 bases of 1642698377 (1.324%) in intersection
-#########################################################################
+
+############################################################################
+# GENEID GENES (DONE - 2007-02-01 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/felCat3/bed/geneid
+    cd /cluster/data/felCat3/bed/geneid
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/F.catus/golden_path_200603/geneidv1.2/felCat3.gtf" \
+        -O "felCat3.gtf"
+    wget --timestamping \
+"http://genome.imim.es/genepredictions/F.catus/golden_path_200603/geneidv1.2/felCat3.prot" \
+        -O "felCat3.prot"
+
+    # Add missing .1 to protein id's
+    perl -wpe 's/^(>scaffold\w+)$/$1.1/' felCat3.prot > felCat3-fixed.prot
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed/geneid
+    #	load predictions
+    ldHgGene -genePredExt -gtf felCat3 geneid felCat3.gtf
+    #	Read 150033 transcripts in 349549 lines in 1 files
+    #	150033 groups 142169 seqs 1 sources 3 feature types
+    #	150033 gene predictions
+
+    #	load protein sequences
+    hgPepPred felCat3 generic geneidPep felCat3-fixed.prot
+
+    nice -n +19 featureBits felCat3 -enrichment refGene:CDS geneid
+    #	refGene:CDS 0.013%, geneid 1.440%, both 0.004%, cover 31.81%,
+    #	enrich 22.09x
+    nice -n +19 featureBits felCat3 -enrichment genscan:CDS geneid
+    #	genscan:CDS 2.838%, geneid 1.440%, both 0.816%, cover 28.76%,
+    #	enrich 19.97x
