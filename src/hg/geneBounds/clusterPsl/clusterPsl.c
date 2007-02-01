@@ -1,5 +1,6 @@
 /* clusterRna - Make clusters of mRNA and ESTs. */
 #include "common.h"
+#include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"
 #include "binRange.h"
@@ -7,7 +8,7 @@
 #include "psl.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.3 2007/02/01 19:15:35 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.4 2007/02/01 19:31:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +39,31 @@ struct pslCluster
     struct rbTree *exonTree;
     };
 
+void pslClusterFree(struct pslCluster **pCluster)
+/* Free up memory associated with cluster. */
+{
+struct pslCluster *cluster = *pCluster;
+if (cluster != NULL)
+    {
+    rbTreeFree(&cluster->exonTree);
+    pslFreeList(&cluster->pslList);
+    freez(pCluster);
+    }
+}
+
+void pslClusterFreeList(struct pslCluster **pList)
+/* Free a list of dynamically allocated pslCluster's */
+{
+struct pslCluster *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    pslClusterFree(&el);
+    }
+*pList = NULL;
+}
+
 struct pslCluster *pslClusterNew()
 /* Create cluster around a single alignment. */
 {
@@ -47,6 +73,7 @@ cluster->exonTree = rangeTreeNew();
 cluster->tEnd = -BIGNUM;
 return cluster;
 }
+
 
 void pslClusterAdd(struct pslCluster *cluster, struct psl *psl)
 /* Add new psl to cluster.  Note, uses psl->next to put psl on list
@@ -63,17 +90,6 @@ for (block = 0; block < blockCount; ++block)
     rangeTreeAdd(cluster->exonTree, tStart, tEnd);
     }
 slAddHead(&cluster->pslList, psl);
-}
-
-void pslClusterFree(struct pslCluster **pCluster)
-{
-struct pslCluster *cluster = *pCluster;
-if (cluster != NULL)
-    {
-    rbTreeFree(&cluster->exonTree);
-    pslFreeList(&cluster->pslList);
-    freez(pCluster);
-    }
 }
 
 void pslClusterMerge(struct pslCluster *a, struct pslCluster **pB)
@@ -242,8 +258,7 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
     for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
          pslClusterWrite(cluster, out);
 
-    /* Restore list. */
-    *endAddress = chromEnd;
+    pslClusterFreeList(&clusterList);	/* Note free's psls as well! */
     }
 carefulClose(&out);
 }
