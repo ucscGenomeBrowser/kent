@@ -150,6 +150,7 @@
 #include "encodeHapMapAlleleFreq.h"
 #include "hapmapSnps.h"
 #include "hapmapAlleleFreq.h"
+#include "hapmapAlleles.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -190,7 +191,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1190 2007/01/26 01:53:47 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1191 2007/02/01 00:45:08 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16028,6 +16029,70 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doHapmapAlleles(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct hapmapAlleles *hma;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+int majorCount = 0;
+int minorCount = 0;
+char *majorAllele = NULL;
+char *minorAllele = NULL;
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+{
+    hma = hapmapAllelesLoad(row+rowOffset);
+    // make this a link
+    printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
+    printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hma->observed);
+    printf("<B>Strand:</B> %s<BR>\n", hma->strand);
+    if (hma->allele1Count >= hma->allele2Count)
+        {
+	majorAllele = hma->allele1;
+	majorCount = hma->allele1Count;
+	minorCount = hma->allele2Count;
+	if (minorCount > 0)
+	    minorAllele = hma->allele2;
+        }
+    else 
+        {
+	majorAllele = hma->allele2;
+	majorCount = hma->allele2Count;
+	minorCount = hma->allele1Count;
+	if (minorCount > 0)
+	    minorAllele = hma->allele1;
+	}
+    printf("<B>Total observations:</B> %d<BR>\n", majorCount + minorCount);
+    printf("<B>Major Allele:</B> %s<BR>\n", majorAllele);
+    printf("<B>Major Allele Count:</B> %d<BR>\n", majorCount);
+    if (minorCount > 0)
+       {
+       printf("<B>Minor Allele:</B> %s<BR>\n", minorAllele);
+       printf("<B>Minor Allele Count:</B> %d<BR>\n", minorCount);
+       }
+    else
+       printf("<B>Minor Allele:</B> not available (monomorphic) <BR>\n");
+	    
+    bedPrintPos((struct bed *)hma, 3);
+
+}
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doHapmapSnps(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
@@ -18253,6 +18318,10 @@ else if (startsWith("hapmapAlleleFreq", track))
 else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
+    }
+else if (startsWith("hapmapAlleles", track))
+    {
+    doHapmapAlleles(tdb, item);
     }
 else if (sameString("snpArrayAffy250Nsp", track) ||
          sameString("snpArrayAffy250Sty", track) ||
