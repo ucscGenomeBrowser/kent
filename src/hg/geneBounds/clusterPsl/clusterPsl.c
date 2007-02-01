@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.2 2007/01/31 08:05:36 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.3 2007/02/01 19:15:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -115,7 +115,7 @@ void pslIntoBinsOfClusters(struct psl *psl, struct binKeeper *bins)
 struct pslCluster *newCluster = pslClusterNew();
 pslClusterAdd(newCluster, psl);
 
-/* Get list of all overlapping old clusters. */
+/* Merge in any existing overlapping clusters.. */
 struct binElement *bel, *belList = binKeeperFind(bins, psl->tStart, psl->tEnd);
 for (bel = belList; bel != NULL; bel = bel->next)
     {
@@ -129,7 +129,7 @@ for (bel = belList; bel != NULL; bel = bel->next)
     }
 slFreeList(&belList);
 
-/* Merge any existing overlapping clusters into newCluster. */
+/* Add to binKeeper. */
 binKeeperAdd(bins, newCluster->tStart, newCluster->tEnd, newCluster);
 }
 
@@ -173,17 +173,6 @@ static int id=0;
 int pslCount = slCount(cluster->pslList);
 struct rbTree *exonTree = cluster->exonTree;
 struct range *range, *rangeList = rangeTreeList(exonTree);
-
-if (cluster->pslList->strand[0] == '-')
-    {
-    int chromSize = cluster->pslList->tSize;
-    slReverse(&rangeList);
-    for (range = rangeList; range != NULL; range = range->next)
-        {
-	reverseIntRange(&range->start, &range->end, chromSize);
-	}
-    }
-
 int chromStart = rangeList->start;
 struct range *lastRange = slLastEl(rangeList);
 int chromEnd = lastRange->end;
@@ -252,7 +241,6 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
     struct pslCluster *cluster;
     for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
          pslClusterWrite(cluster, out);
-
 
     /* Restore list. */
     *endAddress = chromEnd;
