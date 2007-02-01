@@ -23,7 +23,7 @@ if ( $#argv < 2 || $#argv > 3 ) then
   echo "  checks all links on trackUi pages for a track."
   echo
   echo "    usage:  database tablelist [machine]"
-  echo '           tablelist may be single table or "all"'
+  echo '           tablelist may also be single table or "all"'
   echo "           machine defaults to hgwbeta"
   echo
   exit
@@ -40,11 +40,9 @@ endif
 # set machine name and check validity
 if ( $#argv == 3 ) then
   set machine="$argv[3]"
-  if ( "genome" != $machine ) then
-    checkMachineName.csh $machine
-    if ( $status ) then
-      exit 1
-    endif
+  checkMachineName.csh $machine
+  if ( $status ) then
+    exit 1
   endif
 endif
 
@@ -58,21 +56,16 @@ endif
 
 # process "all" choice
 if ("all" == $tableinput) then
-  set tables=`ssh -x qateam@$machine mysql -A -N \
-    -e '"'SELECT tableName FROM trackDb'"' $db`
+  set tables=`wgetTableField.csh $db trackDb tableName $machine \
+     | grep -v tableName`
 endif
 
 # set hgsid so don't fill up sessionDb table
-if ( "genome" == $machine ) then
-  set baseUrl="http://$machine.ucsc.edu/"
-  set rr="true"
-else
-  set baseUrl="http://$machine.cse.ucsc.edu/"
-endif
+set baseUrl="http://$machine.cse.ucsc.edu/"
 set hgsid=`htmlCheck  getVars $baseUrl/cgi-bin/hgGateway | grep hgsid \
   | head -1 | awk '{print $4}'`
 
-foreach node (hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8)
+foreach node (hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc)
   if ( $machine == $node ) then 
     set rr="true"
   endif
@@ -83,8 +76,7 @@ foreach table ($tables)
   echo $table
   echo "============="
   # check to see if the table exists on the machine
-  ssh -x qateam@hgw1 mysql -A -N -e '"'SELECT tableName FROM trackDb'"' $db \
-    | grep $table > /dev/null
+  wgetTableField.csh $db trackDb tableName $machine | grep -w $table > /dev/null
   if ( $status ) then
     echo "no such track"
   endif
