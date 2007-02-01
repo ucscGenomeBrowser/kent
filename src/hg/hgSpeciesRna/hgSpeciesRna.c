@@ -70,7 +70,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct dnaSeq *seq = NULL;
-    if ( hashLookup(filterHash, row[0]) != NULL)
+    if ( filter == NULL || hashLookup(filterHash, row[0]) != NULL)
         {
         seq = hGenBankGetMrna(row[0], NULL);
         faWriteNext(f, seq->name, seq->dna, seq->size);
