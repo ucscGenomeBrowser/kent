@@ -179,3 +179,28 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 searchPriority 50
+
+track chainHg18WM
+shortLabel Hg18 Chain WM
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments - Window Masker masked
+group x
+priority 259
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain hg18
+otherDb hg18
+
+track netHg18WM
+shortLabel Hg18 Net WM
+longLabel $o_Organism ($o_date/$o_db) Alignment Net - Window Masker masked
+group x
+priority 259.1
+visibility hide
+spectrum on
+type netAlign hg18 chainHg18WM
+otherDb hg18
+
