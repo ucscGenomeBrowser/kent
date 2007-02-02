@@ -1235,3 +1235,27 @@ summary atomFilterMafSummary
 maxHeightPixels 100:40:11
  speciesOrder mm8 rn4 canFam2  hg18-1 mm8-1 rn4-1 canFam2-1  hg18-2 mm8-2 rn4-2 canFam2-2 hg18-3  mm8-3 rn4-3 canFam2-3 hg18-4  mm8-4 rn4-4 canFam2-4 
 # speciesOrder humanP rn4 mm8 canFam2 ratA mouseA dogA ratB mouseB dogB
+
+track chainMm8WM
+shortLabel Mm8 Chain WM
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments - Window Masker masked
+group x
+priority 270
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain mm8
+otherDb mm8
+
+track netMm8WM
+shortLabel Mm8 Net WM
+longLabel $o_Organism ($o_date/$o_db) Alignment Net - Window Masker masked
+group x
+priority 270.1
+visibility hide
+spectrum on
+type netAlign mm8 chainMm8WM
+otherDb mm8
