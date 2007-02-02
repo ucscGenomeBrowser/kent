@@ -1,10 +1,3 @@
-object evidence
-"List of mRNA/ests supporting a given edge"
-(
-    int evCount;                   "number of ests evidence"
-    int [evCount] mrnaIds;         "ids of mrna evidence, indexes into altGraphx->mrnaRefs"
-)
-
 table altGraphX
 "An alternatively spliced gene graph."
     (
@@ -27,4 +20,11 @@ table altGraphX
     int[mrnaRefCount] mrnaTissues;  "Ids of tissues that mrnas come from, indexes into tissue table"
     int[mrnaRefCount] mrnaLibs;     "Ids of libraries that mrnas come from, indexes into library table"
    )
+
+object evidence
+"List of mRNA/ests supporting a given edge"
+(
+    int evCount;                   "number of ests evidence"
+    int [evCount] mrnaIds;         "ids of mrna evidence, indexes into altGraphx->mrnaRefs"
+)
 
