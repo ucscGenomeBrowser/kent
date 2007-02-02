@@ -151,6 +151,7 @@
 #include "hapmapSnps.h"
 #include "hapmapAlleleFreq.h"
 #include "hapmapAlleles.h"
+#include "hapmapAllelesCombined.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -191,7 +192,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1191 2007/02/01 00:45:08 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1192 2007/02/02 00:38:16 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16053,7 +16054,6 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
 {
     hma = hapmapAllelesLoad(row+rowOffset);
-    // make this a link
     printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
     printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hma->observed);
@@ -16086,6 +16086,54 @@ while ((row = sqlNextRow(sr)) != NULL)
        printf("<B>Minor Allele:</B> not available (monomorphic) <BR>\n");
 	    
     bedPrintPos((struct bed *)hma, 3);
+
+}
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
+void doHapmapAllelesCombined(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct hapmapAllelesCombined *hmac;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+{
+    hmac = hapmapAllelesCombinedLoad(row+rowOffset);
+    printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
+    printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hmac->observed);
+    printf("<B>Strand:</B> %s<BR>\n", hmac->strand);
+
+    printf("<B>allele1:</B> %s<BR>\n", hmac->allele1);
+
+    printf("<B>CEU allele1 count:</B> %d<BR>\n", hmac->allele1CountCEU);
+    printf("<B>CHB allele1 count:</B> %d<BR>\n", hmac->allele1CountCHB);
+    printf("<B>JPT allele1 count:</B> %d<BR>\n", hmac->allele1CountJPT);
+    printf("<B>YRI allele1 count:</B> %d<BR>\n", hmac->allele1CountYRI);
+
+    printf("<B>allele2:</B> %s<BR>\n", hmac->allele2);
+
+    printf("<B>CEU allele2 count:</B> %d<BR>\n", hmac->allele2CountCEU);
+    printf("<B>CHB allele2 count:</B> %d<BR>\n", hmac->allele2CountCHB);
+    printf("<B>JPT allele2 count:</B> %d<BR>\n", hmac->allele2CountJPT);
+    printf("<B>YRI allele2 count:</B> %d<BR>\n", hmac->allele2CountYRI);
+
+    bedPrintPos((struct bed *)hmac, 3);
 
 }
 printTrackHtml(tdb);
@@ -18319,7 +18367,14 @@ else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
     }
-else if (startsWith("hapmapAlleles", track))
+else if (sameString("hapmapAllelesCombined", track))
+    {
+    doHapmapAllelesCombined(tdb, item);
+    }
+else if (sameString("hapmapAllelesCEU", track) ||
+         sameString("hapmapAllelesCHB", track) ||
+	 sameString("hapmapAllelesJPT", track) ||
+	 sameString("hapmapAllelesYRI", track))
     {
     doHapmapAlleles(tdb, item);
     }
