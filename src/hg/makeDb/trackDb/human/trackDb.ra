@@ -623,6 +623,12 @@ type bed 6 +
     longLabel SNPs from the YRI Population
     priority 4
 
+    track hapmapAllelesCombined
+    subTrack hapmapAlleles
+    shortLabel SNPs Combined
+    longLabel SNPs from All Populations
+    priority 5
+
 searchName hapmapAllelesCEU
 searchTable hapmapAllelesCEU
 searchMethod exact
