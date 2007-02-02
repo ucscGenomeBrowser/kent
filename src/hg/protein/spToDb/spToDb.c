@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.16 2007/02/02 22:22:42 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.17 2007/02/02 22:53:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -231,9 +231,10 @@ while (line != NULL && line[0] != 0)
 	/* temporarily disable hard exit to accept new Swiss-Prot file format */
 	/* errAbort("Expecting = line %d of %s", lf->lineIx, lf->fileName); */
         /* fprintf(stderr, "Expecting = line %d of %s:%s\n", lf->lineIx, lf->fileName, inLine); */
+	/* Still seems to be necessary Feb 2, 2006.  I contacted UniProt about it.  -jk. */
         if (!strstr(inLine, "DOI"))
 	    {
-	    fprintf(stderr, "%d of %s:%s\n", lf->lineIx, lf->fileName, inLine);
+	    verbose(2, "%d of %s:%s\n", lf->lineIx, lf->fileName, inLine);
 	    }
 	break;
 	}
