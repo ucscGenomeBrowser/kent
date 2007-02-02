@@ -192,7 +192,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1194 2007/02/02 01:47:05 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1195 2007/02/02 23:47:21 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6127,7 +6127,7 @@ void displayProteinPrediction(char *pepName, char *pepSeq)
 /* display a protein prediction. */
 {
 printf("<PRE><TT>");
-printf(">%s\n", pepName);
+printf(">%s length=%d\n", pepName,(int)strlen(pepSeq));
 printLines(stdout, pepSeq, 50);
 printf("</TT></PRE>");
 }
