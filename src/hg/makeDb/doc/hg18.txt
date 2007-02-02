@@ -12775,8 +12775,31 @@ TMPDIR=/scratch/tmp
     time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/hg18Mm8 \
 	-chainMinScore=3000 -chainLinearGap=medium > do.out 2>&1 &
-XXX - running 2007-01-30
     time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/hg18Mm8 \
 	-continue=cat -stop=net \
 	-chainMinScore=3000 -chainLinearGap=medium > cat.out 2>&1 &
+    #	real    635m55.126s 
+    nice -n +19 featureBits -noRandom hg18 chainMm8Link \
+	> fb.noRandom.hg18.chainMm8Link.txt 2>&1
+    #	991429484 bases of 2868834265 (34.559%) in intersection
+    nice -n +19 featureBits -noRandom hg18 chainMm8WMLink \
+	> fb.noRandom.hg18.chainMm8WMLink.txt 2>&1
+    #	1071083201 bases of 2868834265 (37.335%) in intersection
+
+    ## swap to mm8
+    mkdir /cluster/data/mm8/bed/blastz.hg18.swap.2007-02-01
+    cd /cluster/data/mm8/bed/blastz.hg18.swap.2007-02-01
+    time doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	/cluster/data/hg18/bed/blastz.mm8.2007-01-30/DEF \
+	-swap -stop=net -chainMinScore=3000 \
+	-chainLinearGap=medium > swap.out 2>&1 &
+    #	this created the directory /cluster/data/mm8/bed/blastz.hg18.swap
+    #	after it was done, move to here blastz.hg18.swap.2007-02-01 since
+    #	it is on a filesystem with some free space
+    nice -n +19 featureBits -noRandom mm8 chainHg18Link \
+	> fb.noRandom.mm8.chainHg18Link.txt 2>&1
+    #	983004750 bases of 2550172871 (38.547%) in intersection
+    nice -n +19 featureBits -noRandom mm8 chainHg18WMLink \
+	> fb.noRandom.mm8.chainHg18WMLink.txt 2>&1
+    #	976774811 bases of 2550172871 (38.302%) in intersection
