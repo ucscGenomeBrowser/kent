@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.14 2007/02/02 21:45:13 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.15 2007/02/02 22:15:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -457,17 +457,47 @@ struct slName *n;
 char *taxonSig = "NCBI_TaxID=";
 int taxonSigLen = strlen(taxonSig);
 
-/* Parse ID line. */
+/* Parse ID line.  These can be in two forms with either 5 or 6 words
+ * that I know about anyway.  Both forms start with ID and the accession,
+ * and end with the size and 'AA.'  In the middle we look for signs of
+ * curation depending on how many words there are. */
     {
-    char *row[5];
-    if (!lineFileRow(lf, row))
-	return NULL;
+    char *row[16];
+    int rowSize = lineFileChopNext(lf, row, ArraySize(row));
+    if (rowSize == 0)
+        return NULL;
+    if (rowSize < 5)
+        errAbort("Short first line of record line %d of %s", 
+		lf->lineIx, lf->fileName);
+    if (rowSize > 6)
+        errAbort("Long first line of record line %d of %s", 
+		lf->lineIx, lf->fileName);
+    lmAllocVar(lm, spr);
+
+    /* Fetch ID. */
     if (!sameString(row[0], "ID"))
 	errAbort("Expecting ID line %d of %s", lf->lineIx, lf->fileName);
-    lmAllocVar(lm, spr);
     spr->id = lmCloneString(lm, row[1]);
-    spr->isCurated = sameString(row[2], "STANDARD;");
-    spr->aaSize = lineFileNeedNum(lf, row, 4);
+
+    /* Fetch size. */
+    if (!sameString(row[rowSize-1], "AA."))
+        errAbort("Expecting 'AA.' at end of line %d of %s",
+		lf->lineIx, lf->fileName);
+    spr->aaSize = lineFileNeedNum(lf, row, rowSize-2);
+
+    /* Figure out if it's curated. */
+    char *tag = row[2];
+    if (sameString(tag, "STANDARD;"))
+        spr->isCurated = TRUE;
+    else if (sameString(tag, "Reviewed;"))
+        spr->isCurated = TRUE;
+    else if (sameString(tag, "PRELIMINARY;"))
+        spr->isCurated = FALSE;
+    else if (sameString(tag, "Unreviewed;"))
+        spr->isCurated = FALSE;
+    else
+        errAbort("Unrecognized field 3 of ID line %d of %s",
+		lf->lineIx, lf->fileName);
     }
 
 /* Loop around parsing until get '//' */
@@ -1051,6 +1081,38 @@ for (;;)
     lmCleanup(&lm);
     }
 dyStringFree(&dy);
+
+carefulClose(&displayId);
+carefulClose(&otherAcc);
+carefulClose(&organelle);
+carefulClose(&info);
+carefulClose(&description);
+carefulClose(&geneLogic);
+carefulClose(&gene);
+carefulClose(&taxon);
+carefulClose(&accToTaxon);
+carefulClose(&commonName);
+carefulClose(&keyword);
+carefulClose(&accToKeyword);
+carefulClose(&commentType);
+carefulClose(&commentVal);
+carefulClose(&comment);
+carefulClose(&protein);
+carefulClose(&extDb);
+carefulClose(&extDbRef);
+carefulClose(&featureClass);
+carefulClose(&featureType);
+carefulClose(&featureId);
+carefulClose(&feature);
+carefulClose(&author);
+carefulClose(&reference);
+carefulClose(&referenceAuthors);
+carefulClose(&citationRp);
+carefulClose(&citation);
+carefulClose(&rcType);
+carefulClose(&rcVal);
+carefulClose(&citationRc);
+carefulClose(&pathogenHost);
 }
 
 int main(int argc, char *argv[])
