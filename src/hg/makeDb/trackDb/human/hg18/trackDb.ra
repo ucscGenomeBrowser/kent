@@ -1236,6 +1236,77 @@ maxHeightPixels 100:40:11
  speciesOrder mm8 rn4 canFam2  hg18-1 mm8-1 rn4-1 canFam2-1  hg18-2 mm8-2 rn4-2 canFam2-2 hg18-3  mm8-3 rn4-3 canFam2-3 hg18-4  mm8-4 rn4-4 canFam2-4 
 # speciesOrder humanP rn4 mm8 canFam2 ratA mouseA dogA ratB mouseB dogB
 
+track jkClusterRna
+shortLabel jk clusterRna 
+longLabel Boundaries of RNA clusters (no ESTs) from clusterRna -jk
+group x
+priority 10
+visibility hide
+color 0,150,100
+type bed 12 +
+
+track jkClusterRna2
+shortLabel jk clusterPsl
+longLabel Boundaries of RNA clusters (no ESTs) from clusterPsl -jk
+group x
+priority 11
+visibility hide
+color 0,100,150
+type bed 12 +
+
+track altGraphRna
+shortLabel jk altSplice 
+longLabel Alternative Splicing from mRNAs ignore mouse
+group x
+priority 12.2
+visibility hide
+type altGraphX
+
+track jkOrthoSplice
+shortLabel jkOrthoSplice 
+longLabel orthoSplice mRNAs, no ESTs on human side - jk
+group x
+priority 12.3
+visibility hide
+type altGraphX
+
+
+track jkProjectedAgx
+shortLabel jk projectedAgx
+longLabel altSplice AGX file from clusterPsl projected to bed -jk
+group x
+priority 12.4
+visibility hide
+color 150,100,0
+type bed 12 .
+
+track jkProjectedOrtho
+shortLabel jk projectedOrtho
+longLabel orthoSplice AGX file projected to bed -jk
+group x
+priority 12.5
+visibility hide
+color 150,100,0
+type bed 12 .
+
+track jkExonWalk
+shortLabel jk ExonWalk
+longLabel ExonWalk run on jk projectedAgx
+group x
+priority 13
+visibility hide
+color 200,50,50
+type bed 12 .
+
+track jkOrthoWalk
+shortLabel jk OrthoWalk
+longLabel ExonWalk run on jk orthoSplice.agx
+group x
+priority 13.1
+visibility hide
+color 200,50,50
+type bed 12 .
+
 track chainMm8WM
 shortLabel Mm8 Chain WM
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments - Window Masker masked
