@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.13 2006/09/11 18:15:09 giardine Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.14 2007/02/02 21:45:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +25,8 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
+
+const int lineHeadSize = 5;
 
 void groupLine(struct lineFile *lf, char *type, 
 	char *firstLine, struct dyString *val)
@@ -45,7 +47,7 @@ while (lineFileNext(lf, &line, NULL))
 	break;
 	}
     dyStringAppendC(val, ' ');
-    line += 5;
+    line += lineHeadSize;
     dyStringAppend(val, line);
     }
 }
@@ -82,6 +84,7 @@ struct spRecord
     struct slName *commonNames;	/* Common name(s). */
     char *taxonToGenus;	/* Taxonomy up to genus. */
     struct spTaxon *taxonList;	/* NCBI Taxonomy ID. */
+    struct spTaxon *hostList;	/* NCBI ID of host organisms if any */
     char *organelle;	/* Organelle. */
     struct spLitRef *literatureList;	/* List of literature references. */
     struct spComment *commentList;	/* List of comments. */
@@ -451,6 +454,8 @@ struct spRecord *spRecordNext(struct lineFile *lf,
 char *line, *word, *type;
 struct spRecord *spr;
 struct slName *n;
+char *taxonSig = "NCBI_TaxID=";
+int taxonSigLen = strlen(taxonSig);
 
 /* Parse ID line. */
     {
@@ -501,11 +506,15 @@ for (;;)
 	date = nextWord(&line);
 	if (date == NULL)
 	    errAbort("Short DT line %d of %s", lf->lineIx, lf->fileName);
-	if (endsWith(line, "Created)"))
+	if (endsWith(line, "Created)") 
+		|| endsWith(line, "integrated into UniProtKB/Swiss-Prot.") 
+		|| endsWith(line, "integrated into UniProtKB/TrEMBL."))
 	    spr->createDate = lmCloneString(lm, date);
-	else if (endsWith(line, "Last sequence update)"))
+	else if (endsWith(line, "Last sequence update)") 
+		|| stringIn("sequence version", line))
 	    spr->seqDate = lmCloneString(lm, date);
-	else if (endsWith(line, "Last annotation update)"))
+	else if (endsWith(line, "Last annotation update)") 
+		|| stringIn("entry version", line))
 	    spr->annDate = lmCloneString(lm, date);
 	else
 	    {
@@ -565,15 +574,15 @@ for (;;)
 	}
     else if (startsWith("OX", type))
         {
-	char *sig = "NCBI_TaxID=";
+	/* Taxon(s) of species with this protein. */
 	char *s;
 	struct spTaxon *taxon;
 	groupLine(lf, type, line, dy);
 	s = dy->string;
-	if (!startsWith(sig, s))
+	if (!startsWith(taxonSig, s))
 	    errAbort("Don't understand OX line %d of %s. Expecting %s", 
-	    	lf->lineIx, lf->fileName, sig);
-	s += strlen(sig);
+	    	lf->lineIx, lf->fileName, taxonSig);
+	s += taxonSigLen;
 	while ((word = nextWord(&s)) != NULL)
 	    {
 	    lmAllocVar(lm, taxon);
@@ -581,6 +590,24 @@ for (;;)
 	    slAddHead(&spr->taxonList, taxon);
 	    }
 	}
+    else if (startsWith("OH", type))
+        {
+	char *s;
+	struct spTaxon *host;
+	/* Pathogen host relationship. */
+	groupLine(lf, type, line, dy);
+	s = dy->string;
+	if (!startsWith(taxonSig, s))
+	    errAbort("Don't understand OH line %d of %s. Expecting %s", 
+	    	lf->lineIx, lf->fileName, taxonSig);
+	while ((s = stringIn(taxonSig, s)) != NULL)
+	     {
+	     s += taxonSigLen;
+	     lmAllocVar(lm, host);
+	     host->id = atoi(s);
+	     slAddHead(&spr->hostList, host);
+	     }
+        }
     else if (startsWith("RN", type))
         {
 	spParseReference(lf, line, lm, dy, spr);
@@ -632,6 +659,7 @@ for (;;)
 slReverse(&spr->accList);
 slReverse(&spr->gnList);
 slReverse(&spr->taxonList);
+slReverse(&spr->hostList);
 slReverse(&spr->commonNames);
 slReverse(&spr->literatureList);
 slReverse(&spr->commentList);
@@ -786,6 +814,7 @@ FILE *citation = createAt(tabDir, "citation");
 FILE *rcType = createAt(tabDir, "rcType");
 FILE *rcVal = createAt(tabDir, "rcVal");
 FILE *citationRc = createAt(tabDir, "citationRc");
+FILE *pathogenHost = createAt(tabDir, "pathogenHost");
 
 /* Some of the tables require unique IDs */
 struct uniquer *organelleUni = uniquerNew(organelle, 14);
@@ -805,6 +834,7 @@ struct uniquer *rcValUni = uniquerNew(rcVal, 18);
 /* Other unique helpers. */
 struct hash *taxonHash = newHash(18);
 struct hash *taxonIdHash = newHash(18);
+struct hash *pathogenHostHash = newHash(16);
 int citationId = 0;
 
 for (;;)
@@ -893,6 +923,30 @@ for (;;)
 	    }
 	for (tax = spr->taxonList; tax != NULL; tax = tax->next)
 	    fprintf(accToTaxon, "%s\t%d\n", acc, tax->id);
+	}
+
+    /* host/pathogen relationship */
+    if (spr->hostList != NULL)
+        {
+	struct spTaxon *patho, *host;
+	if (spr->taxonList == NULL)
+	    errAbort("OH field without OX field in record ending line %d of %s",
+	        lf->lineIx, lf->fileName);
+	for (patho = spr->taxonList; patho != NULL; patho = patho->next)
+	    {
+	    int pathoId = patho->id;
+	    for (host = spr->hostList; host != NULL; host = host->next)
+		{
+		int hostId = host->id;
+		char hashKey[24];
+		safef(hashKey, sizeof(hashKey), "%X_%X", hostId, pathoId);
+		if (!hashLookup(pathogenHostHash, hashKey))
+		    {
+		    hashAdd(pathogenHostHash, hashKey, NULL);
+		    fprintf(pathogenHost, "%d\t%d\n", pathoId, hostId);
+		    }
+		}
+	    }
 	}
 
     /* keyword and accToKeyword */

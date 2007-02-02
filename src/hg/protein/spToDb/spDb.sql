@@ -96,6 +96,15 @@ CREATE TABLE accToTaxon (
     INDEX(taxon)
 );
 
+#Host of pathogenic organism
+CREATE TABLE pathogenHost (
+    pathogen int not null,	# Pathogen taxon
+    host int not null,	# Host taxon
+              #Indices
+    INDEX(pathogen),
+    INDEX(taxon)
+);
+
 #A keyword
 CREATE TABLE keyword (
     id int not null,	# Keyword ID - we create this

@@ -8,6 +8,8 @@ OS   Theileria parva.
 OC   Eukaryota; Alveolata; Apicomplexa; Piroplasmida; Theileriidae;
 OC   Theileria.
 OX   NCBI_TaxID=5875;
+OH   NCBI_TaxID=9913; 
+OH   NCBI_TaxID=9901;
 RN   [1]
 RP   SEQUENCE FROM N.A.
 RC   STRAIN=Muguga;

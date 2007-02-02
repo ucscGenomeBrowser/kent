@@ -75,6 +75,13 @@ table accToTaxon
     int	taxon;		"ID in taxon table"
     )
 
+table pathogenHost
+"Host of pathogenic organism"
+    (
+    int pathogen;  "Pathogen taxon"
+    int host;	   "Host taxon"
+    )
+
 table keyword
 "A keyword"
     (
