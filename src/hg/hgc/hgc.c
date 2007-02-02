@@ -192,7 +192,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1192 2007/02/02 00:38:16 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1193 2007/02/02 01:37:51 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16104,6 +16104,15 @@ char **row;
 char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
+int total = 0;
+float freq1CEU = 0;
+float freq2CEU = 0;
+float freq1CHB = 0;
+float freq2CHB = 0;
+float freq1JPT = 0;
+float freq2JPT = 0;
+float freq1YRI = 0;
+float freq2YRI = 0;
 
 genericHeader(tdb, itemName);
 
@@ -16120,18 +16129,94 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", hmac->strand);
 
     printf("<B>allele1:</B> %s<BR>\n", hmac->allele1);
-
-    printf("<B>CEU allele1 count:</B> %d<BR>\n", hmac->allele1CountCEU);
-    printf("<B>CHB allele1 count:</B> %d<BR>\n", hmac->allele1CountCHB);
-    printf("<B>JPT allele1 count:</B> %d<BR>\n", hmac->allele1CountJPT);
-    printf("<B>YRI allele1 count:</B> %d<BR>\n", hmac->allele1CountYRI);
-
     printf("<B>allele2:</B> %s<BR>\n", hmac->allele2);
 
-    printf("<B>CEU allele2 count:</B> %d<BR>\n", hmac->allele2CountCEU);
-    printf("<B>CHB allele2 count:</B> %d<BR>\n", hmac->allele2CountCHB);
-    printf("<B>JPT allele2 count:</B> %d<BR>\n", hmac->allele2CountJPT);
-    printf("<B>YRI allele2 count:</B> %d<BR>\n", hmac->allele2CountYRI);
+    htmlHorizontalLine();
+    printf("<B>Allele frequencies:</B><BR>\n");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", hmac->allele1, hmac->allele2);
+    if (hmac->allele1CountCEU > 0 || hmac->allele2CountCEU > 0)
+        {
+	total = hmac->allele1CountCEU + hmac->allele2CountCEU;
+	freq1CEU = 100.0 * hmac->allele1CountCEU / total;
+	freq2CEU = 100.0 * hmac->allele2CountCEU / total;
+        printf("<TR>");
+	printf("<TD>CEU</TD>");
+	if (hmac->allele1CountCEU > hmac->allele2CountCEU)
+	    {
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele1CountCEU, freq1CEU);
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele2CountCEU, freq2CEU);
+	    }
+	else
+	    {
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele1CountCEU, freq1CEU);
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele2CountCEU, freq2CEU);
+	    }
+	printf("</TR>\n");
+	}
+
+    if (hmac->allele1CountCHB > 0 || hmac->allele2CountCHB > 0)
+        {
+	total = hmac->allele1CountCHB + hmac->allele2CountCHB;
+	freq1CHB = 100.0 * hmac->allele1CountCHB / total;
+	freq2CHB = 100.0 * hmac->allele2CountCHB / total;
+        printf("<TR>");
+	printf("<TD>CHB</TD>");
+	if (hmac->allele1CountCHB > hmac->allele2CountCHB)
+	    {
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele1CountCHB, freq1CHB);
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele2CountCHB, freq2CHB);
+	    }
+	else
+	    {
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele1CountCHB, freq1CHB);
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele2CountCHB, freq2CHB);
+	    }
+	printf("</TR>\n");
+	}
+
+    if (hmac->allele1CountJPT > 0 || hmac->allele2CountJPT > 0)
+        {
+	total = hmac->allele1CountJPT + hmac->allele2CountJPT;
+	freq1JPT = 100.0 * hmac->allele1CountJPT / total;
+	freq2JPT = 100.0 * hmac->allele2CountJPT / total;
+        printf("<TR>");
+	printf("<TD>JPT</TD>");
+	if (hmac->allele1CountJPT > hmac->allele2CountJPT)
+	    {
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele1CountJPT, freq1JPT);
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele2CountJPT, freq2JPT);
+	    }
+	else
+	    {
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele1CountJPT, freq1JPT);
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele2CountJPT, freq2JPT);
+	    }
+	printf("</TR>\n");
+	}
+
+    if (hmac->allele1CountYRI > 0 || hmac->allele2CountYRI > 0)
+        {
+	total = hmac->allele1CountYRI + hmac->allele2CountYRI;
+	freq1YRI = 100.0 * hmac->allele1CountYRI / total;
+	freq2YRI = 100.0 * hmac->allele2CountYRI / total;
+        printf("<TR>");
+	printf("<TD>YRI</TD>");
+	if (hmac->allele1CountYRI > hmac->allele2CountYRI)
+	    {
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele1CountYRI, freq1YRI);
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele2CountYRI, freq2YRI);
+	    }
+	else
+	    {
+	    printf("<TD>%d (%3.2f%%)</TD>", hmac->allele1CountYRI, freq1YRI);
+	    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", hmac->allele2CountYRI, freq2YRI);
+	    }
+	printf("</TR>\n");
+	}
+
+    printf("</TABLE>\n");
+    htmlHorizontalLine();
 
     bedPrintPos((struct bed *)hmac, 3);
 
