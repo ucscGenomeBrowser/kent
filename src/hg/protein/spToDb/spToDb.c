@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.15 2007/02/02 22:15:28 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.16 2007/02/02 22:22:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -762,7 +762,7 @@ strncpy(dup, spDate, sizeof(dup));
 day = dup;
 month = dup+3;
 year = dup+7;
-dup[2] = dup[6] = 0;
+dup[2] = dup[6] = dup[11] = 0;
 monthIx = stringIx(month, months);
 if (monthIx < 0)
    errAbort("Strange month %s", month);
