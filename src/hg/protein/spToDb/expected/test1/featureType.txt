@@ -3,7 +3,7 @@
 3	Protein 108
 4	By similarity
 5	10 kDa protein
-6	13.5 X 12 AA approximate tandem repeatsof E-E-T-Q-K-T-V-E-P-E-Q-T
+6	13.5 X 12 AA approximate tandem repeats of E-E-T-Q-K-T-V-E-P-E-Q-T
 7	1 (approximate)
 8	2 (approximate)
 9	3
@@ -18,8 +18,8 @@
 18	12
 19	13 (approximate)
 20	14 (incomplete)
-21	11S globulin seed storage protein G3acidic chain
-22	11S globulin seed storage protein G3basic chain
+21	11S globulin seed storage protein G3 acidic chain
+22	11S globulin seed storage protein G3 basic chain
 23	Interchain (acidic-basic) (Potential)
 24	Gln-rich
 25	Gln/Gly-rich
@@ -32,17 +32,17 @@
 32	E -> S (in Ref. 2)
 33	GTP (By similarity)
 34	Pro/Thr-rich
-35	12S seed storage protein CRA1 alpha chain(By similarity)
-36	12S seed storage protein CRA1 beta chain(By similarity)
+35	12S seed storage protein CRA1 alpha chain (By similarity)
+36	12S seed storage protein CRA1 beta chain (By similarity)
 37	Interchain (alpha-beta) (Potential)
 38	E -> Q (in Ref. 1)
 39	V -> E (in Ref. 1)
-40	12S seed storage protein CRB alpha chain(By similarity)
-41	12S seed storage protein CRB beta chain(By similarity)
+40	12S seed storage protein CRB alpha chain (By similarity)
+41	12S seed storage protein CRB beta chain (By similarity)
 42	A -> R (in Ref. 1)
-43	13S globulin seed storage protein 1acidic chain (By similarity)
-44	13S globulin seed storage protein 1 basicchain (By similarity)
-45	13S globulin seed storage protein 2acidic chain (By similarity)
-46	13S globulin seed storage protein 2 basicchain (By similarity)
-47	13S globulin seed storage protein 3acidic chain (By similarity)
-48	13S globulin seed storage protein 3 basicchain (By similarity)
+43	13S globulin seed storage protein 1 acidic chain (By similarity)
+44	13S globulin seed storage protein 1 basic chain (By similarity)
+45	13S globulin seed storage protein 2 acidic chain (By similarity)
+46	13S globulin seed storage protein 2 basic chain (By similarity)
+47	13S globulin seed storage protein 3 acidic chain (By similarity)
+48	13S globulin seed storage protein 3 basic chain (By similarity)
