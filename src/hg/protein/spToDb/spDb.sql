@@ -102,7 +102,7 @@ CREATE TABLE pathogenHost (
     host int not null,	# Host taxon
               #Indices
     INDEX(pathogen),
-    INDEX(taxon)
+    INDEX(host)
 );
 
 #A keyword
