@@ -399,16 +399,17 @@
 			see the areas in your graph where there is no data. Note that if
 			you are displaying more than one graph, this attribute only
 			pertains to the first graph.</LI>
-		<LI><B>region padding</B> - controls the size of the data regions. The
-			data regions are the span of bases that will be added to either
-			side of the data points in your graphs which exceed the 
-			significance threshold. The default places 25,000 bases on 
-			either side.</LI>
+		<LI><B>region padding</B> - controls the size of the data 
+                       regions. The data points in your graphs which exceed 
+		       the significance threshold are padded by this number
+		       of bases on either side.  
+		       The default places 25,000 bases on each side.</LI>
 		</UL>
 		</P>
 
 		<P>
-		When you have completed configuring the display, press the <EM>submit</EM>
+		When you have completed configuring the display, press the 
+		<B>submit</B>
 		button to return to the Genome Graphs display.
 		</P>
 	
@@ -425,7 +426,7 @@
 
 		<P>
 		You can set the range of the display 
-		by editing the <EM>Display min/max value</EM> values. This will
+		by editing the <B>Display min/max value</B> values. This will
 		restrict the Genome Graphs display for this graph to that
 		data range. The axis will be labeled at 1/3 and 2/3 of the 
 		data range that you set.
@@ -434,13 +435,14 @@
 		<P>
 		If your data is sparse, you may want to draw lines between
 		your data points. You can configure that by editing the
-		<EM>Draw connecting lines between markers separated by
-		up to ... bases</EM> value.  The default value is 25,000,000
+		<B>Draw connecting lines between markers separated by
+		up to ... bases</B> value.  The default value is 25,000,000
 		bases.
 		</P>
 		
 		<P>
-		When you have completed configuring the display, press the <EM>submit</EM>
+		When you have completed configuring the display, press the
+		<B>submit</B>
 		button twice to return to the Genome Graphs display.
 		</P>
                 <P>
@@ -460,23 +462,32 @@
 		</P>
 
 		<P>
-		The significance threshold works in concert with the <EM>browse regions</EM> 
-		and <EM>sort genes</EM> buttons; it will affect the regions that are 
+		The significance threshold works in concert with the <B>browse
+		regions</B> 
+		and <B>sort genes</B> buttons; it will affect the regions 
+		that are 
 		displayed once you press either of these two buttons.
 		</P>
 
 		<P>
-		To open the Genome Browser with a view of all of the regions in your graph 
-		that include data points that pass the significance threshold, press the 
-		<EM>browse regions</EM> button. This will open the Genome Browser with a 
-		navigation pane on the left side of the screen. This pane will contain 
+		To open the Genome Browser with a view of all of the regions 
+		in your graph 
+		that include data points that pass the significance threshold,
+		press the 
+		<B>browse regions</B> button. This will open the Genome 
+		Browser with a 
+		navigation pane on the left side of the screen. This pane 
+		will contain 
 		links to all regions which pass your significance threshold.
 		</P>
 
 		<P>
-		To view a list of genes which are in regions that pass the significance 
-		threshold, press the <EM>sort genes</EM> button.  This will open the 
-		Gene Sorter with only the genes that are in significant locations 
+		To view a list of genes which are in regions that pass the 
+		significance 
+		threshold, press the <B>sort genes</B> button.  This will 
+		open the 
+		Gene Sorter with only the genes that are in significant 
+		locations 
 		with respect to your data.
 		</P>
 
@@ -484,7 +495,7 @@
 		If you would rather view all of your regions without restricting the 
 		output to only those regions that pass the significance threshold, simply 
 		delete any values from the significance threshold input box and press 
-		Enter before pressing <EM>browse regions</EM>.
+		Enter before pressing <B>browse regions</B>.
 		</P>
                 <P>
 
@@ -495,26 +506,28 @@
                 <P>
 		The data region is the span of bases that will be added to either side
 		of the data points in your graphs which exceed the significance 
-		threshold. Set the data region by editing the <EM>region 
-		padding</EM> value on the configuration page. 
+		threshold. Set the data region by editing the <B>region 
+		padding</B> value on the configuration page. 
 		The combination of setting the data region and the significance 
 		threshold will affect two things:
 		<UL>
 		<LI>the regions displayed in the 
 			<A HREF="#ViewInGB">Genome Browser</A> 
-			after you press the <EM>browse regions</EM> button,</LI>
+			after you press the <B>browse regions</B> button,</LI>
 		<LI>the genes displayed in the 
 			<A HREF="#ViewInGS">Gene Sorter</A> 
-			after you press the <EM>sort genes</EM> button.</LI>
+			after you press the <B>sort genes</B> button.</LI>
 		</UL> 
                 </P>
 
 		<P>
-		For example, take a data set that contains the following data:<BR>
+		For example, take a data set that contains the following data:
+		<P>
 		<TT>chr2 400100000 2.3<BR>
 		    chr2 400100500 4.5<BR>
 		    chr2 400101000 1.2<BR></TT>
-		If you set the significance threshold at 4.0, one data point
+		<P>If you set the significance threshold at 4.0, one data 
+		point
 		in the data set passes that threshold. If you then set the data 
 		range to 200, then the one significant data point will be 
 		padded on each side by 200 base pairs.  In that case, the 
