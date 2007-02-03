@@ -1436,11 +1436,10 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
 	/tmp/multiz8waySummary.sql multiz8waySummary.tab
     #	real    0m4.525
 
-XXX - to here 2007-02-02
-
 #########################################################################
 # MULTIZ8WAY DOWNLOADABLES (DONE - 2007-01-05 - Hiram)
 ##  re-done with new chrUn.maf 2007-01-13 - Hiram
+##  re-done with fr2 in place of fr1 - 2007-02-03 - Hiram
     # Annotated MAF is now documented, so use anno/maf for downloads/
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/multiz8way/mafDownloads
@@ -1466,7 +1465,7 @@ XXX - to here 2007-02-02
     done > mafFrags.log 2>&1 &
     #	to monitor progress:
     tail -f mafFrags.log
-    #	real    1m23.682s
+    #	real    3m12.000s
 
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way
@@ -1476,7 +1475,7 @@ XXX - to here 2007-02-02
 	nice -n +19 gzip -c ${M} > mafDownloads/${B}.gz
 	echo ${B}.gz done
     done
-    #	real    6m0.132s
+    #	real    6m1.454
 
     cd mafDownloads
     nice -n +19 md5sum *.maf.gz > md5sum.txt
@@ -1490,9 +1489,11 @@ XXX - to here 2007-02-02
 #######################################################################
 # MULTIZ8WAY MAF FRAMES (DONE - 2007-01-10 - Hiram)
 ##  re-done with new chrUn.maf 2007-01-13 - Hiram
+##  re-donw with fr2 in place of fr1 - 2007-02-03 - Hiram
     ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/multiz8way/frames
     cd /cluster/data/gasAcu1/bed/multiz8way/frames
+    mkdir genes
     # The following is adapted from the mm8 sequence
 
     #------------------------------------------------------------------------
@@ -1536,9 +1537,8 @@ XXX - to here 2007-02-02
     
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way/frames
-    mv mafFrames/ mafFrames.old
     time cat ../maf/*.maf | nice -n +19 genePredToMafFrames gasAcu1 stdin stdout gasAcu1 genes/gasAcu1.gp.gz oryLat1 genes/oryLat1.gp.gz fr2 genes/fr2.gp.gz tetNig1 genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz galGal3 genes/galGal3.gp.gz mm8 genes/mm8.gp.gz hg18 genes/hg18.gp.gz | gzip > multiz8way.mafFrames.gz
-    #	real    1m7.299s
+    #	real    0m55.706
 
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way/frames
@@ -1549,6 +1549,7 @@ XXX - to here 2007-02-02
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
 #		(DONE - 2007-01-10 - 2007-01-17 - Hiram)
+## re-done with fr2 in place of fr1 - 2007-02-03 - Hiram
 
 # Estimate phastCons parameters
     ssh kkstore05
@@ -1557,18 +1558,18 @@ XXX - to here 2007-02-02
 
     twoBitToFa -seq=chrIV ../../../gasAcu1.sdTrf.2bit chrIV.fa
     # Create a starting-tree.mod based on chrIV (the largest one)
-    time /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chrIV.maf \
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chrIV.maf \
 	--refseq ./chrIV.fa --in-format MAF \
 	--windows 100000000,1000 --out-format SS \
 	--between-blocks 5000 --out-root s1
     #	26 seconds
 
-    time /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
 --tree "(((hg18,mm8),galGal3),(((tetNig1,fr2),(gasAcu1,oryLat1)),danRer4))" \
     --out-root starting-tree
     #	Fitting tree model to s1.1-32632948.ss using REV ...
     #	Writing model to starting-tree.mod ...
-    #	real    4m10.820s
+    #	real    3m53.084
 
     rm s1.*.ss
     # add up the C and G:
@@ -1576,6 +1577,8 @@ XXX - to here 2007-02-02
     #	0.449
     #	This 0.449 is used in the --gc argument below
 
+    ## the fa files are needed for the sequence and they are created during
+    #	this loop if they haven't been done before
     # Create SS files on san filesystem
     #	Using a size of 10,000,000 to slow down the phastCons pk jobs
     ssh kkstore05
@@ -1587,18 +1590,20 @@ XXX - to here 2007-02-02
 	mkdir -p ${C}
 	mkdir -p /cluster/data/gasAcu1/bed/multiz8way/cons/${C}
 	echo msa_split $C
-	twoBitToFa -seq=${C} /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit \
+	if [ ! -s /cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa ]; then
+	    twoBitToFa -seq=${C} /cluster/data/gasAcu1/gasAcu1.sdTrf.2bit \
 		/cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa
+	fi
 	chrN=${C/chr/}
 	chrN=${chrN/_random/}
-	/cluster/bin/phast/$MACHTYPE/msa_split \
+	nice -n +19 /cluster/bin/phast/$MACHTYPE/msa_split \
 	    /cluster/data/gasAcu1/bed/multiz8way/maf/${C}.maf \
 	    --refseq /cluster/data/gasAcu1/bed/multiz8way/cons/${C}/${C}.fa \
 	    --in-format MAF --windows 10000000,0 --between-blocks 5000 \
 	    --out-format SS --out-root ${C}/${C}
       fi
     done &
-    #	real    6m34.278s
+    #	real    6m31.721
 
     # Create a random list of 50 1 mb regions  (do not use the _randoms)
     cd /san/sanvol1/scratch/gasAcu1/cons/ss
@@ -1607,8 +1612,8 @@ XXX - to here 2007-02-02
 
     # Set up parasol directory to calculate trees on these 50 regions
     ssh pk
-    mkdir /san/sanvol1/scratch/gasAcu1/cons/treeRun1
-    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    mkdir /san/sanvol1/scratch/gasAcu1/cons/treeRun6
+    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun6
     mkdir tree log
 
     #	Tuning this loop should come back to here to recalculate 
@@ -1622,7 +1627,7 @@ mkdir -p log/${C} tree/${C}
     /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
       /cluster/data/gasAcu1/bed/multiz8way/cons/starting-tree.mod \
       --gc 0.449 --nrates 1,1 --no-post-probs --ignore-missing \
-      --expected-length 12 --target-coverage 0.01 \
+      --expected-length 10 --target-coverage 0.20 \
       --quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
     #	<< happy emacs
@@ -1641,23 +1646,24 @@ mkdir -p log/${C} tree/${C}
     para create jobList
     para try/push/check/etc
 # Completed: 47 of 47 jobs
-# CPU time in finished jobs:      66398s    1106.64m    18.44h    0.77d  0.002 y
-# IO & Wait Time:                   246s       4.09m     0.07h    0.00d  0.000 y
-# Average job time:                1418s      23.63m     0.39h    0.02d
-# Longest finished job:            2097s      34.95m     0.58h    0.02d
-# Submission to last job:          2097s      34.95m     0.58h    0.02d
+# CPU time in finished jobs:      78013s    1300.22m    21.67h    0.90d  0.002 y
+# IO & Wait Time:                   224s       3.73m     0.06h    0.00d  0.000 y
+# Average job time:                1665s      27.74m     0.46h    0.02d
+# Longest finished job:            2123s      35.38m     0.59h    0.02d
+# Submission to last job:          2123s      35.38m     0.59h    0.02d
 
     # Now combine parameter estimates.  We can average the .mod files
     # using phyloBoot.  This must be done separately for the conserved
     # and nonconserved models
     ssh pk
-    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun1
+    cd /san/sanvol1/scratch/gasAcu1/cons/treeRun6
     ls -1 tree/chr*/*.cons.mod > cons.list
     /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
 	--output-average ave.cons.mod > cons_summary.txt 2>&1 &
     ls -1 tree/chr*/*.noncons.mod > noncons.list
     /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
 	--output-average ave.noncons.mod > noncons_summary.txt
+    cp -p ave.*.mod ..
     cd ..
     cp -p ave.*.mod /cluster/data/gasAcu1/bed/multiz8way/cons
 
@@ -1666,7 +1672,17 @@ mkdir -p log/${C} tree/${C}
     #		 ave.cons.mod ave.noncons.mod --NH 9.78
     #	never stops with the --NH argument
     time /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.7834 \
-	0.10 12 ave.{cons,noncons}.mod
+	0.20 10 ave.{cons,noncons}.mod
+## 0.20 10 with fr2
+( Solving for new omega: 10.000000 12.945684 12.467518 12.456325 )
+
+Transition parameters: gamma=0.200000, omega=10.000000, mu=0.100000, nu=0.025000
+Relative entropy: H=1.364850 bits/site
+Expected min. length: L_min=6.767655 sites
+Expected max. length: L_max=4.721873 sites
+Phylogenetic information threshold: PIT=L_min*H=9.236837 bits
+Recommended expected length: omega=12.456325 sites (for L_min*H=9.783400)
+
 ## 0.20 10 
 ( Solving for new omega: 10.000000 12.922391 12.450309 12.439360 )
 
@@ -1720,8 +1736,8 @@ Phylogenetic information threshold: PIT=L_min*H=10.120357 bits
     #	SKIP to here passing by the tuning numbers
     ssh pk
     # Create cluster dir to do main phastCons run
-    mkdir /san/sanvol1/scratch/gasAcu1/cons/consRun4
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
+    mkdir /san/sanvol1/scratch/gasAcu1/cons/consRun5
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun5
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
@@ -1733,7 +1749,7 @@ mkdir /scratch/tmp/${2}
 cp -p ../ss/${1}/${2}.ss ../ave.{cons,noncons}.mod /scratch/tmp/${2}
 pushd /scratch/tmp/${2} > /dev/null
 /cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
-   --expected-length 12 --target-coverage 0.01 --quiet \
+   --expected-length 10 --target-coverage 0.20 --quiet \
 	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
 popd > /dev/null
 mkdir -p ppRaw/${1}
@@ -1765,16 +1781,16 @@ rmdir /scratch/tmp/${2}
     #	These jobs are very fast and very I/O intensive, even on the san
     #	they will hang it up as they work at full tilt.
 # Completed: 58 of 58 jobs
-# CPU time in finished jobs:       1619s      26.98m     0.45h    0.02d  0.000 y
-# IO & Wait Time:                   373s       6.22m     0.10h    0.00d  0.000 y
-# Average job time:                  34s       0.57m     0.01h    0.00d
-# Longest finished job:              48s       0.80m     0.01h    0.00d
-# Submission to last job:            67s       1.12m     0.02h    0.00d
+# CPU time in finished jobs:       1739s      28.99m     0.48h    0.02d  0.000 y
+# IO & Wait Time:                   302s       5.03m     0.08h    0.00d  0.000 y
+# Average job time:                  35s       0.59m     0.01h    0.00d
+# Longest finished job:              47s       0.78m     0.01h    0.00d
+# Submission to last job:            77s       1.28m     0.02h    0.00d
 
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
     ssh kolossus
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun5
     #	The sed's and the sort get the file names in chrom,start order
     #	You might like to verify it is correct by first looking at the
     #	list it produces:
@@ -1798,15 +1814,13 @@ rmdir /scratch/tmp/${2}
     #	463354448 bases (16726587 N's 446627861 real 348847599
     #	upper 97780262 lower) in 23 sequences in 23 files
 
-    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
-    #	1089350685 lower) in 34 sequences in 34 files
-
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun5
     #	The 446627861 comes from the non-n genome as counted above.
     awk '
 {sum+=$3-$2}
 END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 	mostConserved8Way.bed
+    #	% 11.58 = 100.0*51703035/446627861 --exp-len 10 --tar-cov 0.20 fr2
     #	% 11.49 = 100.0*51326297/446627861 --exp-len 10 --tar-cov 0.20
     #	%  8.36 = 100.0*37347218/446627861 --exp-len 12 --tar-cov 0.01
     #	% 10.24 = 100.0*45733412/446627861 --exp-len 12 --tar-cov 0.10
@@ -1819,6 +1833,9 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 
     HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits gasAcu1 \
 	-enrichment ensGene:cds mostConserved8Way.bed
+    #	--expected-length 10 --target-coverage 0.20 fr2
+    #	ensGene:cds 6.618%, mostConserved8Way.bed 11.576%, both 4.070%, cover
+    #	61.49%, enrich 5.31x
     #	--expected-length 10 --target-coverage 0.20
     #	ensGene:cds 6.618%, mostConserved8Way.bed 11.492%, both 4.041%, cover
     #	61.07%, enrich 5.31x
@@ -1838,12 +1855,15 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
     # ended up using the set: --expected-length 10 --target-coverage 0.20
     time nice -n +19 hgLoadBed -strict gasAcu1 phastConsElements8way \
 	mostConserved8Way.bed
-    #	Loaded 446138 elements of size 5
-    #	real    0m18.333s
+    #	Loaded 1263039 elements of size 5
+    #	real    0m29.697
 
     #	should measure the same as above
     time nice -n +19 \
 	featureBits gasAcu1 -enrichment ensGene:cds phastConsElements8way
+    #	At: --expected-length 10 --target-coverage 0.20 fr2
+    #	ensGene:cds 6.618%, phastConsElements8way 11.576%, both 4.070%, cover
+    #	61.49%, enrich 5.31x
     #	At: --expected-length 10 --target-coverage 0.20
     #	ensGene:cds 6.618%, phastConsElements8way 11.492%, both 4.041%, cover
     #	61.07%, enrich 5.31x
@@ -1856,7 +1876,7 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 
     # Create merged posterier probability file and wiggle track data files
     ssh pk
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun5
     # the sed business gets the names sorted by chromName, chromStart
     #	so that everything goes in numerical order into wigEncode
     #	This was verified above to be correct
@@ -1867,15 +1887,14 @@ END{printf "%% %.2f = 100.0*%d/446627861\n",100.0*sum/446627861,sum}' \
 	    | $HOME/bin/$MACHTYPE/wigEncode -noOverlap stdin \
 		phastCons8.wig phastCons8.wib
     #	Converted stdin, upper limit 1.00, lower limit 0.00
-    #	real    3m39.548
-    #	-rw-rw-r--   1 296834860 Jan 14 15:27 phastCons8.wib
-    #	-rw-rw-r--   1  47569318 Jan 14 15:27 phastCons8.wig
+    #	real    3m55.780
+    #	-rw-rw-r--   1 297832681 Feb  3 14:50 phastCons8.wib
+    #	-rw-rw-r--   1  49168315 Feb  3 14:50 phastCons8.wig
     time nice -n +19 cp -p phastCons8.wi? /cluster/data/gasAcu1/bed/multiz8way/
-    #	real    1m21.329s
 
     #	prepare compressed copy of ascii data values for downloads
     ssh pk
-    cd /san/sanvol1/scratch/gasAcu1/cons/consRun4
+    cd /san/sanvol1/scratch/gasAcu1/cons/consRun5
     cat << '_EOF_' > gzipAscii.sh
 #!/bin/sh
 
@@ -1898,7 +1917,7 @@ done
     #	<< happy emacs
     chmod +x gzipAscii.sh
     time nice -n +19 ./gzipAscii.sh
-    #	real    18m15.212s
+    #	real    5m31.855s
 
     #	copy them for downloads
     ssh kkstore05
@@ -1906,7 +1925,7 @@ done
     #	avoid the data full problem on store9
     mkdir /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores
     cd /cluster/data/gasAcu1/bed/multiz8way/phastCons8Scores
-    cp -p  /san/sanvol1/scratch/gasAcu1/cons/consRun4/phastCons8Scores/* .
+    cp -p  /san/sanvol1/scratch/gasAcu1/cons/consRun5/phastCons8Scores/* .
     # make a README.txt file here, and an md5sum
 
     ssh hgwdev
