@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.8 2007/01/31 19:30:51 hiram Exp $"
+#       "$Id: fr2.txt,v 1.9 2007/02/03 01:44:56 hiram Exp $"
 #
 
 ##########################################################################
@@ -707,3 +707,93 @@ chainOne $(path1)
     time nice -n +19 featureBits fr2 chainTetNig1Link \
 	> fb.fr2.chainTetNig1.txt 2>&1
     #	247086553 bases of 393312790 (62.822%) in intersection
+
+#########################################################################
+# BLASTZ/CHAIN/NET gasAcu1 swap (DONE - 2007-01-23 - Hiram)
+##  no chrUn in gasAcu1, and align to fr2 scaffolds,
+##	results lifted to fr2 chrUn coordinates
+    ssh kkstore05
+    mkdir /cluster/data/fr2/bed/blastz.gasAcu1.swap
+    cd /cluster/data/fr2/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl \
+	/cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -bigClusterHub=pk > swap.log 2>&1 &
+    #	real    24m33.761s
+
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/blastz.gasAcu1.swap
+    time nice -n 19 featureBits fr2 chainGasAcu1Link \
+	> fb.fr2.chainGasAcu1Link.txt 2>&1 &
+    # 158383996 bases of 393312790 (40.269%) in intersection
+
+#########################################################################
+##  BLASTZ/CHAIN/NET to gasAcu1 chrUn - the above swap does not include
+##	gasAcu1 chrUn - thus its browser would be empty for any fr2 alignments.
+##	This procedure will get fr2 alignments added to the gasAcu1 browser
+##	for chrUn
+    ssh kkstore02
+    mkdir /cluster/data/fr2/bed/blastz.gasAcu1.2007-01-31
+    cd /cluster/data/fr2/bed/blastz.gasAcu1.2007-01-31
+
+    cat << '_EOF_' > DEF
+# Stickleback vs. Fugu, Stickleback chrUn in contigs only, to fugu contigs
+
+# Try "human-fugu" (more distant, less repeat-killed than mammal) params
+# +M=50:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    
+# TARGET: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf
+#       coordinates
+SEQ1_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ1_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ1_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ1_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ1_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: Stickleback gasAcu1 chrUn only
+#       chrUn in contigs for this alignment run
+#       The largest is 418,000 bases and there are 5,000 of them.
+SEQ2_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.chrUn.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.chrUn.sdTrf.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.chrUnContigsOnly.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/gasAcu1/gasAcu1.chrUnContigsOnly.sdTrf.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/gasAcu1/chrUn.extraCloneGap.lift
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/fr2/bed/blastz.gasAcu1.2007-01-31
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #  << happy emacs
+
+    time doBlastzChainNet.pl DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/fr2GasAcu1 \
+	-stop=net -bigClusterHub=pk > do.log 2>&1 &
+    #	real    73m13.156s
+
+    ##	swap back to gasAcu1
+    mkdir /cluster/data/gasAcu1/bed/blastz.fr2.swap
+    cd /cluster/data/gasAcu1/bed/blastz.fr2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/fr2/bed/blastz.gasAcu1.2007-01-31/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=chainMerge -bigClusterHub=pk > swap.log 2>&1 &
+
+    ## Now, with that chain result in hand, place it manually back in with
+    ##	the full chroms chains and re-run the nets and so forth.
+
