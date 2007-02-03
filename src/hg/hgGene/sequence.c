@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.16 2007/02/03 00:06:48 baertsch Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.17 2007/02/03 00:19:48 baertsch Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -110,13 +110,10 @@ static void printProteinLink(struct sqlConnection *conn, char *geneId)
 {
 char *table = genomeSetting("knownGenePep");
 char query[256];
-char protQuery[256];
 char title[128];
-safef(protQuery, sizeof(protQuery), 
-	"select proteinId from knownGene where name='%s'" ,  geneId);
 safef(query, sizeof(query), 
 	"select length(seq) from %s where name='%s'" , table,  geneId);
-safef(title, sizeof(title), "Protein %s (%d aa)", sqlQuickString(conn, protQuery), sqlQuickNum(conn,query));
+safef(title, sizeof(title), "Protein (%d aa)", sqlQuickNum(conn,query));
 printSeqLink(conn, geneId, "knownGenePep", hggDoGetProteinSeq,
 	title);
 }
