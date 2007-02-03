@@ -1180,9 +1180,10 @@ TMPDIR=/scratch/tmp
 #########################################################################
 ## 8-Way Multiz (DONE - 2007-01-02 - 2007-01-05 - Hiram)
 ##  re-done with new chrUn.maf 2007-01-13 - Hiram
+##  re-done with fr2 instead of fr1 - 2007-02-02 - Hiram
     ssh hgwdev
-    mkdir /cluster/data/gasAcu1/bed/multiz9way
-    cd /cluster/data/gasAcu1/bed/multiz9way
+    mkdir /cluster/data/gasAcu1/bed/multiz8way
+    cd /cluster/data/gasAcu1/bed/multiz8way
 
     /cluster/bin/phast/tree_doctor --prune chimp_panTro2,macaque_rheMac2,rat_rn4,rabbit_oryCun1,cow_bosTau2,dog_canFam2,armadillo_dasNov1,elephant_loxAfr1,tenrec_echTel1,monodelphis_monDom4,xenopus_xenTro2 17way.nh
 
@@ -1193,7 +1194,7 @@ TMPDIR=/scratch/tmp
     cat << '_EOF_' > 8way.nh
 (((human_hg18:0.054922,mouse_mm8:0.412790):0.475049,
 	chicken_galGal3:0.454691):0.279364,
-  (((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.2,
+  (((tetraodon_tetNig1:0.199381,fugu_fr2:0.239894):0.2,
     (stickleback_gasAcu1:0.2,medaka_oryLat1:0.2):0.2):0.292961,
 	zebrafish_danRer4:0.782561):0.156067);
 '_EOF_'
@@ -1215,6 +1216,7 @@ TMPDIR=/scratch/tmp
 #    distance                      on gasAcu1    on other   minScore
 #  1  0.4000 - medaka oryLat1      (% 38.308) (% 27.044)       2000     loose
 #  2  0.7994 - tetraodon tetNig1   (% 42.044) (% 50.004)       5000     loose
+#  3  0.8399 - fugu fr2            (% 37.574) (% 40.269)       2000     loose
 #  3  0.8399 - fugu fr1            (% 35.925) (% 46.909)       2000     loose
 #  4  1.4755 - zebrafish danRer4   (% 35.163) (% 13.104)       5000     loose
 #  6  1.5831 - chicken galGal3     (%  9.181) (%  3.144)       2000     loose
@@ -1225,7 +1227,7 @@ TMPDIR=/scratch/tmp
     #	bash shell syntax here ...
     export H=/cluster/data/gasAcu1/bed
     mkdir mafLinks
-    for G in oryLat1 tetNig1 fr1 danRer4 galGal3 hg18 mm8
+    for G in oryLat1 tetNig1 fr2 danRer4 galGal3 hg18 mm8
     do
 	mkdir mafLinks/$G
 	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
@@ -1310,19 +1312,19 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     # 23 jobs
     para try ... check ... push ... etc ...
 # Completed: 23 of 23 jobs
-# CPU time in finished jobs:      10916s     181.93m     3.03h    0.13d  0.000 y
-# IO & Wait Time:                   130s       2.17m     0.04h    0.00d  0.000 y
-# Average job time:                 480s       8.00m     0.13h    0.01d
-# Longest finished job:            1109s      18.48m     0.31h    0.01d
-# Submission to last job:          1109s      18.48m     0.31h    0.01d
+# CPU time in finished jobs:      11075s     184.58m     3.08h    0.13d  0.000 y
+# IO & Wait Time:                   155s       2.58m     0.04h    0.00d  0.000 y
+# Average job time:                 488s       8.14m     0.14h    0.01d
+# Longest finished job:            1123s      18.72m     0.31h    0.01d
+# Submission to last job:          1123s      18.72m     0.31h    0.01d
 
     #	combine results into a single file for loading and gbdb reference
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way
-    time catDir maf > multiz8way.maf
-    #	real    0m10.186s
+    time nice -n +19 catDir maf > multiz8way.maf
+    #	real    0m7.656s
     #	makes an 1.7 Gb file:
-    #	-rw-rw-r--  1 1728277662 Jan 13 15:35 multiz8way.maf
+    #	-rw-rw-r--  1 1742307109 Feb  2 16:58 multiz8way.maf
 
     #	Create per-chrom individual maf files for downloads
     #	NOT NECESSARY HERE - DONE LATER WITH THE ANNOTATED MAFS
@@ -1371,6 +1373,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
 ############################################################################
 # ANNOTATE MULTIZ8WAY MAF AND LOAD TABLES (DONE - 2007-01-05 - Hiram)
 ##  re-done with new chrUn.maf 2007-01-13 - Hiram
+##  re-done with fr2 instead of fr1 - 2007-02-02 - Hiram
     ssh kolossus
     mkdir /cluster/data/gasAcu1/bed/multiz8way/anno
     cd /cluster/data/gasAcu1/bed/multiz8way/anno
@@ -1401,13 +1404,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     chmod +x jobs.csh
     time nice -n +19 ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
-    real    18m9.059stail -f jobs.log
-real    18m9.059s
-
-    #	real    21m36.340s
-    #	user    4m39.482s
-    #	sys     16m0.538s
-
+    tail -f jobs.log
+    #	real    18m49.451s
     # Load anno/maf
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
@@ -1416,8 +1414,8 @@ real    18m9.059s
       /gbdb/gasAcu1/multiz8way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/gasAcu1/multiz8way/anno/maf gasAcu1 multiz8way
-    #	Loaded 2387915 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
-    #	real    1m7.974s
+    #	Loaded 2395565 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
+    #	real    1m4.490s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -1426,9 +1424,9 @@ real    18m9.059s
     time cat *.maf | \
     	nice -n +19 hgLoadMafSummary gasAcu1 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz8waySummary stdin
-    #	Created 323476 summary blocks from 6070904 components
-    #	and 2387915 mafs from stdin
-    #	real    1m26.098s
+    #	Created 322344 summary blocks from 6111763 components
+    #	and 2395565 mafs from stdin
+    #	real    1m36.569s
 
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
@@ -1436,7 +1434,9 @@ real    18m9.059s
       > /tmp/multiz8waySummary.sql
     time nice -n +19 hgLoadSqlTab gasAcu1 multiz8waySummary \
 	/tmp/multiz8waySummary.sql multiz8waySummary.tab
-    #	real    0m4.668
+    #	real    0m4.525
+
+XXX - to here 2007-02-02
 
 #########################################################################
 # MULTIZ8WAY DOWNLOADABLES (DONE - 2007-01-05 - Hiram)
@@ -1513,11 +1513,11 @@ real    18m9.059s
 
     # using knownGene for mm8 hg18
     # using genscan for tetNig1
-    # using ensGene for gasAcu1, oryLat1 and fr1
+    # using ensGene for gasAcu1, oryLat1 and fr2
     # genePreds; (must keep only the first 10 columns for knownGene)
-    for qDB in mm8 hg18 gasAcu1 oryLat1 fr1 tetNig1
+    for qDB in mm8 hg18 gasAcu1 oryLat1 fr2 tetNig1
     do
-      if [ $qDB = "gasAcu1" -o $qDB = "oryLat1" -o $qDB = "fr1" ]; then
+      if [ $qDB = "gasAcu1" -o $qDB = "oryLat1" -o $qDB = "fr2" ]; then
         geneTbl=ensGene
       elif [ $qDB = "tetNig1" ]; then
         geneTbl=genscan
@@ -1537,7 +1537,7 @@ real    18m9.059s
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way/frames
     mv mafFrames/ mafFrames.old
-    time cat ../maf/*.maf | nice -n +19 genePredToMafFrames gasAcu1 stdin stdout gasAcu1 genes/gasAcu1.gp.gz oryLat1 genes/oryLat1.gp.gz fr1 genes/fr1.gp.gz tetNig1 genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz galGal3 genes/galGal3.gp.gz mm8 genes/mm8.gp.gz hg18 genes/hg18.gp.gz | gzip > multiz8way.mafFrames.gz
+    time cat ../maf/*.maf | nice -n +19 genePredToMafFrames gasAcu1 stdin stdout gasAcu1 genes/gasAcu1.gp.gz oryLat1 genes/oryLat1.gp.gz fr2 genes/fr2.gp.gz tetNig1 genes/tetNig1.gp.gz danRer4 genes/danRer4.gp.gz galGal3 genes/galGal3.gp.gz mm8 genes/mm8.gp.gz hg18 genes/hg18.gp.gz | gzip > multiz8way.mafFrames.gz
     #	real    1m7.299s
 
     ssh hgwdev
@@ -1564,7 +1564,7 @@ real    18m9.059s
     #	26 seconds
 
     time /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
---tree "(((hg18,mm8),galGal3),(((tetNig1,fr1),(gasAcu1,oryLat1)),danRer4))" \
+--tree "(((hg18,mm8),galGal3),(((tetNig1,fr2),(gasAcu1,oryLat1)),danRer4))" \
     --out-root starting-tree
     #	Fitting tree model to s1.1-32632948.ss using REV ...
     #	Writing model to starting-tree.mod ...
@@ -2176,6 +2176,59 @@ TMPDIR=/scratch/tmp
     time nice -n 19 featureBits fr2 chainGasAcu1Link \
 	> fb.fr2.chainGasAcu1Link.txt 2>&1 &
     # 158383996 bases of 393312790 (40.269%) in intersection
+
+###########################################################################
+#  Manually fixing up the fr2 alignments to gasAcu1 to get chrUn results
+##	(DONE - 2007-01-31 - 2007-02-02 - Hiram)
+##	Ran the blastz on fr2 and aligned just the chrUn sequence to fr2
+    ##	swap back to gasAcu1
+    mkdir /cluster/data/gasAcu1/bed/blastz.fr2.swap
+    cd /cluster/data/gasAcu1/bed/blastz.fr2.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/fr2/bed/blastz.gasAcu1.2007-01-31/DEF \
+	-chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap -stop=chainMerge -bigClusterHub=pk > swap.log 2>&1 &
+
+    ## Now, with that chain result in hand, place it manually back in with
+    ##	the full chroms chains and re-run the nets and so forth.
+    ssh kkstore05
+    cd /cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23/axtChain
+    #	restore the chain directory which was removed by cleanUp.csh
+    chainSplit chain gasAcu1.fr2.all.chain.gz
+    #	copy into here the chrUn.chain result
+    cd chain
+    cp -p \
+	/cluster/data/gasAcu1/bed/blastz.fr2.swap/axtChain/chain/chrUn.chain .
+    time nice -n +19 chainMergeSort *.chain \
+	| gzip -c > ../gasAcu1.fr2.all.chain.gz
+    cd ..
+    rm -fr chain
+    #	they have new IDs
+    chainSplit chain gasAcu1.fr2.all.chain.gz
+    #	And then reusing the netChains.csh script, fixing up references
+    #	to the appropriate chrom.sizes and 2bit file for gasAcu1
+    cp netChains.csh netChainsUn.csh
+    time nice -n +19 ./netChainsUn.csh
+    #	real    30m9.385s
+
+    ## reloading, reuse the load.csh script, fixup reference to correct
+    ##	chrom.sizes
+    ssh hgwdev
+    cd /cluster/data/gasAcu1/bed/blastz.fr2.2007-01-23/axtChain
+    time nice -n +19 ./reLoad.csh > reLoad.out 2>&1
+    #	real    3m53.174s
+
+    nice -n +19 featureBits gasAcu1 chainFr2Link \
+	> fb.gasAcu1.chainFr2Link.txt 2>&1
+    #	167817405 bases of 446627861 (37.574%) in intersection
+    #	without chrUn covered before, it was:
+    #	153570946 bases of 446627861 (34.385%) in intersection
+
+    #	and fr2 is covered:
+    nice -n +19 featureBits fr2 chainGasAcu1Link \
+	> fb.fr2.chainGasAcu1Link.txt 2>&1
+    #	158383996 bases of 393312790 (40.269%) in intersection
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-01-27)
