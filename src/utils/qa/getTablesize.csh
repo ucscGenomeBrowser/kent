@@ -12,10 +12,13 @@
 set tableinput=""
 set tables=""
 set db=""
+set list=""
 set first=""
 set second=""
 set machine1="hgwbeta"
 set machine2=""
+set mach1Tot=0
+set mach2Tot=0
 
 if ( $#argv < 2 || $#argv > 4 ) then
   echo
@@ -24,6 +27,7 @@ if ( $#argv < 2 || $#argv > 4 ) then
   echo "    usage:  database tablelist [machine1] [machine2]"
   echo "           tablelist may be single table"
   echo "           defaults to hgwbeta"
+  echo "           uses overnight STATUS dumps.  not real time"
   echo
   exit
 else
@@ -56,6 +60,7 @@ endif
 file $tableinput | egrep "ASCII text" > /dev/null
 if ( ! $status ) then
   set tables=`cat $tableinput`
+  set list="true"
 else
   set tables=$tableinput
 endif
@@ -72,6 +77,19 @@ foreach table ($tables)
       | awk '{printf("%0.2f", $1/1000000) }'`
     echo "$second megabytes"
   endif 
-
+  set mach1Tot=`echo $mach1Tot $first  | awk '{print $1+$2}'`
+  set mach2Tot=`echo $mach2Tot $second | awk '{print $1+$2}'`
 end 
+
+# output totals if more than one table
 echo
+if ( "true" == $list ) then
+  echo $machine1 "total" "=" $mach1Tot \
+    | awk '{printf("%7s %5s %1s %0.2f\n", $1, $2, $3, $4)}'
+  if ( $machine2 != "" ) then
+    echo $machine2 "total" "=" $mach2Tot \
+      | awk '{printf("%7s %5s %1s %0.2f\n", $1, $2, $3, $4)}'
+  endif
+  echo
+endif 
+
