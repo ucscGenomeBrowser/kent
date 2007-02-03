@@ -24,7 +24,7 @@ CREATE TABLE otherAcc (
 #A part of a cell that has it's own genome
 CREATE TABLE organelle (
     id int not null,	# Organelle ID - we create this
-    val varchar(255) not null,	# Text description
+    val longblob not null,	# Text description
               #Indices
     PRIMARY KEY(id)
 );
@@ -203,7 +203,7 @@ CREATE TABLE feature (
     end int not null,	# End coordinate (non-inclusive)
     featureClass int not null,	# ID of featureClass
     featureType int not null,	# ID of featureType
-    softEndBits char not null,  # 1 for start <, 2 for start ?, 4 for end >, 8 for end ?
+    softEndBits tinyint not null,  # 1 for start <, 2 for start ?, 4 for end >, 8 for end ?
     featureId int(11) NOT NULL default '0', # feature Id
               #Indices
     INDEX(acc)

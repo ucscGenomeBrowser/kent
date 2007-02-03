@@ -16,7 +16,7 @@ table organelle
 "A part of a cell that has it's own genome"
     (
     int id;	"Organelle ID - we create this"
-    string val;	"Text description"
+    lstring val;	"Text description"
     )
 
 table info
@@ -164,7 +164,7 @@ table feature
     int end;	"End coordinate (non-inclusive)"
     int featureClass;	"ID of featureClass"
     int featureType;    "ID of featureType"
-    byte softEndBits;  "1 for start <, 2 for start ?, 4 for end >, 8 for end ?"
+    ushort softEndBits;  "1 for start <, 2 for start ?, 4 for end >, 8 for end ?"
     )
 
 table author
