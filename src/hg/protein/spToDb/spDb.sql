@@ -292,3 +292,20 @@ CREATE TABLE citationRc (
               #Indices
     INDEX(citation)
 );
+
+#Contains just the variably spliced proteins
+CREATE TABLE varProtein (
+    acc char(12) not null,	# Primary accession
+    val longblob not null,	# Amino acids
+              #Indices
+    PRIMARY KEY(acc)
+);
+
+#Accessions and other info on the variably-spliced proteins
+CREATE TABLE varAcc (
+    varAcc char(12) not null,	# Accession of variant
+    parAcc char(12) not null,	# Accession of parent (non-variant)
+    variant char(4) not null,	# Variant part of accession
+              #Indices
+    PRIMARY KEY(varAcc)
+);
