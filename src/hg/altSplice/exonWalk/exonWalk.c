@@ -17,7 +17,7 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.17 2007/01/19 16:33:46 kent Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.18 2007/02/04 21:48:03 kent Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -35,6 +35,7 @@ static struct optionSpec optionSpecs[] =
     {"maxMem", OPTION_INT},
     {"debug", OPTION_BOOLEAN},
     {"noTrim", OPTION_BOOLEAN},
+    {"singleExonOk", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
@@ -55,6 +56,7 @@ static char *optionDescripts[] =
     "Size in bytes to use before giving up on an exonWalk. Default 256000000",
     "Print debugging info.",
     "Don't merge vertices in same connected component.",
+    "Allow single exon transcripts to slip through.",
     "How verbose to be about things (default 0)"
 };
 
@@ -85,6 +87,7 @@ long maxWalkTime = 60 * 10; /* Amout of time to walk a graph before giving up in
 boolean debug = FALSE; /** Turns on some debugging output. */
 boolean diagnostics = FALSE; /* Print out some extra tracks. */
 boolean noPathMerging = FALSE; /* Overrides usual behavior of merging two paths that are identical together. */
+boolean singleExonOk = FALSE;	/* Allows export of single exons. */
 FILE *hippos = NULL;   /* File for logging graphs that have too many edges or nodes. */
 FILE *whites = NULL;   /* Log file for exons which were never seen. */
 static jmp_buf exonWalkRecover; /* Used for error recoverys. */
@@ -873,6 +876,17 @@ int exonPathCountExons(struct exonPath *ep)
 /** Count the number of exons in a exonPath. */
 {
 return slCount(ep->nodes);
+}
+
+void singleExonBedOut(char *chrom, int start, int end, char *name, char *strand,
+	FILE *out)
+/* Print out single exon bed. */
+{
+fprintf(out, "%s\t%u\t%u\t%s\t1000\t%s\t%u\t%u\t0\t", 
+        chrom, start, end, name, strand, start, end);
+fprintf(out, "1\t");			// exonCount
+fprintf(out, "%d,\t", end-start);	// sizes
+fprintf(out, "0\n");		        // relative starts
 }
 
 void exonPathBedOut(struct altGraphX *agx, struct exonPath *ep, FILE *out)
@@ -1933,7 +1947,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     ++count;
     }
 sqlFreeResult(&sr);
-uglyf("%d match %s\n", count, query);
 }
 
 void addMrnaAccsToHash(struct hash *hash)
@@ -1988,6 +2001,22 @@ eg->paths = epList;
 eg->pathCount = slCount(epList);
 }
 
+boolean agxSingleExon(struct altGraphX *agx)
+/* Return true for single exon graphs. */
+{
+if ( agx->vertexCount == 2 && agx->edgeCount == 1)
+    {
+    unsigned char v0Type = agx->vTypes[0];
+    unsigned char v1Type = agx->vTypes[1];
+    int eType = agx->edgeTypes[0];
+    verbose(2, "agxSingleExon(%s) %s:%d-%d v0Type %d, v1Type %d, eType %d\n",
+    	agx->name, agx->tName, agx->tStart+1, agx->tEnd, v0Type, v1Type, eType);
+    return TRUE;
+    }
+else
+    return FALSE;
+}
+
 void exonWalk(char *inFile, char *bedOut)
 /** Starting routine. */
 {
@@ -2031,45 +2060,52 @@ for(agx = agxList; agx != NULL; agx = agx->next)
     dotForUser();
     if(diagnostics)
 	writeOutNodes(agx, exonSites);
-
-    eg = exonGraphFromAgx(agx);
-    if(removeFrags)
-	removeShortFragments(eg);
-    currentGraph = eg;
-    if(diagnostics)
-	{
-	for(ep = eg->paths; ep != NULL; ep = ep->next)
-	    exonPathBedOut(agx, ep,cleanEsts);
-	fflush(cleanEsts);
+    if (agxSingleExon(agx))
+        {
+	singleExonBedOut(agx->tName, agx->tStart, agx->tEnd, agx->name, agx->strand, f);
 	}
-    exonGraphConnectEquivalentNodes(eg);
-    if(debug) { nodeSanityCheck(eg); }
-
-    /* If we have something to output. */
-    if(eg->nodeCount != 0)
-	epList = exonGraphBreadthFirstMaxPaths(agx, eg);
-    
-    for(ep = epList; ep != NULL; ep = ep->next)
+    else
 	{
-	char buff[256];
-	snprintf(buff, sizeof(buff), "%d", index++);
-	ep->qName = cloneString(buff);
-	exonPathCreateStringRep(ep);
-	if(TRUE || confidentPath(mrnaHash, eg, epList, ep))
+
+	eg = exonGraphFromAgx(agx);
+	if(removeFrags)
+	    removeShortFragments(eg);
+	currentGraph = eg;
+	if(diagnostics)
 	    {
-	    if(debug)
-		{
-		printf("%s\n", ep->path);
-		exonPathBedOut(agx, ep, stdout);
-		}
-	    exonPathBedOut(agx, ep,f);
+	    for(ep = eg->paths; ep != NULL; ep = ep->next)
+		exonPathBedOut(agx, ep,cleanEsts);
+	    fflush(cleanEsts);
 	    }
-	else if(diagnostics)
-	    exonPathBedOut(agx, ep, rejects);
+	exonGraphConnectEquivalentNodes(eg);
+	if(debug) { nodeSanityCheck(eg); }
+
+	/* If we have something to output. */
+	if(eg->nodeCount != 0)
+	    epList = exonGraphBreadthFirstMaxPaths(agx, eg);
+	
+	for(ep = epList; ep != NULL; ep = ep->next)
+	    {
+	    char buff[256];
+	    snprintf(buff, sizeof(buff), "%d", index++);
+	    ep->qName = cloneString(buff);
+	    exonPathCreateStringRep(ep);
+	    if(TRUE || confidentPath(mrnaHash, eg, epList, ep))
+		{
+		if(debug)
+		    {
+		    printf("%s\n", ep->path);
+		    exonPathBedOut(agx, ep, stdout);
+		    }
+		exonPathBedOut(agx, ep,f);
+		}
+	    else if(diagnostics)
+		exonPathBedOut(agx, ep, rejects);
+	    }
+	exonPathFreeList(&epList);
+	exonGraphFree(&eg);
+	currentGraph = NULL;
 	}
-    exonPathFreeList(&epList);
-    exonGraphFree(&eg);
-    currentGraph = NULL;
     }
 warn("\tDone.");
 /* Do some cleanup. */
