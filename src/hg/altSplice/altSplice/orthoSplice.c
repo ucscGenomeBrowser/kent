@@ -38,7 +38,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.32 2007/01/08 19:23:35 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.33 2007/02/04 21:46:44 kent Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -63,7 +63,7 @@ struct orthoSpliceEdge
     int v1;                     /* Vertex 1 in graph. */
     int v2;                     /* Vertex 2 in graph. */
     int orthoV1;                /* Vertex 1 in orthoGraph. */
-    int orthoV2;                /* Vertex 2 in orhtoGraph. */
+    int orthoV2;                /* Vertex 2 in orthoGraph. */
     int alt;                    /* Possible alt splice? 1=TRUE 0=FALSE */
     int altCons;                /* Possible alt in orthoAg too? */
     int conserved;              /* Conserved in ortholgous genome? 1=TRUE 0=FALSE */    
@@ -79,7 +79,7 @@ struct orthoAgReport
     char *orthoAgName;           /**< Orthologous altGraphX name. */
     char *chrom;                 /**< Chrom name. */
     int numVertexes;             /**< Number of vertexes in ag. */
-    int *vertexMap;              /**< Maping of vertexes in ag to orthoAgName. */
+    int *vertexMap;              /**< Maping of vertexes in ag to orthoAgName. Not owned here. */
     int ssSoftFound;             /**< Number of splice sites in ag that are splice sites in orhtoAg. */
     int ssSoftMissing;           /**< Number of splice sites in ag that are not splice sites in orhtoAg. */
     int ssHardFound;             /**< Number of splice sites in ag that are splice sites in orhtoAg. */
@@ -251,7 +251,7 @@ for (el = *pList; el != NULL; el = next)
 void orthoAgReportHeader(FILE *out)
 /** Output a header for the orthoAgReport fields. */
 {
-fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", 
+fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orthoAgName", 
 	"numVertexes", "vertexMap",  "ssSoftFound", "ssSoftMissing", "ssHardFound", 
 	"ssHardMissing", "ssDoubles", "ssVeryClose", "altEdges", "altEdgesFound");
 }
@@ -287,7 +287,7 @@ fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
 }
 
 void outputReport(struct orthoAgReport *rep)
-/** Write out a reprort. Have to write top level orthoAgReport and the
+/** Write out a report. Have to write top level orthoAgReport and the
     list of orthoSpliceEdge mini reports. */
 {
 static boolean repHeader = FALSE;
