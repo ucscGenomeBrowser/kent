@@ -74,7 +74,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.25 2007/02/01 19:36:09 kent Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.26 2007/02/04 21:45:54 kent Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -574,15 +574,13 @@ void loadPslsFromDatabase(struct sqlConnection *conn, char *db, char *chrom)
     from the desired pslTables. */
 {
 int i = 0;
-int chromSize = hdbChromSize(db, chrom);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
 struct psl *pslList = NULL, *psl = NULL;
 for(i = 0; i < numDbTables; i++)
     {
-    sr = hRangeQuery(conn, dbTables[i], chrom, 0, chromSize, NULL, &rowOffset);
-// JK: use hChromQuery(conn, dbTables[i], chrom, NULL, &rowOffset); instead?
+    sr = hChromQuery(conn, dbTables[i], chrom, NULL, &rowOffset); 
     while((row = sqlNextRow(sr)) != NULL)
 	{
 	psl = pslLoad(row+rowOffset);
@@ -711,9 +709,10 @@ char *chrom = gp->chrom;
 int chromStart = BIGNUM;
 int chromEnd = -1;
 
-verbose(2, "agFromGp on %s\n", gp->name);
+verbose(2, "agFromGp on %s %s:%d-%d\n", gp->name, gp->chrom, gp->txStart, gp->txEnd);
 
 pslList = getPsls(gp, conn);
+verbose(3, "  got %d psls\n", slCount(pslList));
 if(slCount(pslList) == 0)
     {
     verbose(2, "No available alignments for %s.", gp->name);
@@ -721,6 +720,7 @@ if(slCount(pslList) == 0)
     }
 /* expand to find the furthest boundaries of alignments */
 expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
+verbose(3, "  expanded to %s:%d-%d\n", chrom, chromStart, chromEnd);
 
 /* get the sequence */
 genoSeq = dnaFromChrom(chrom, chromStart, chromEnd, dnaLower);
@@ -738,12 +738,15 @@ for(psl = pslList; psl != NULL; psl = pslNext)
 	    pslFree(&psl);
 	}
     }
+verbose(3, "  got %d psls after intron/singleExon check\n", slCount(pslCluster));
 /* load and check the alignments */
 maList = pslListToGgMrnaAliList(pslCluster, gp->chrom, chromStart, chromEnd, genoSeq, maxGap);
+verbose(3, "  got %d in maList\n", slCount(maList));
 
 for(ma = maList; ma != NULL; ma = maNext)
     {
     maNext = ma->next;
+    verbose(4, "      ma->strand %s, gp->strand %s\n", ma->strand, gp->strand);
     if(ma->strand[0] == gp->strand[0])
 	{
 	slSafeAddHead(&maSameStrand, ma);
@@ -752,6 +755,8 @@ for(ma = maList; ma != NULL; ma = maNext)
 	ggMrnaAliFree(&ma);
     }
 slReverse(&maSameStrand);
+
+verbose(3, "  got %d in ma on same strand\n", slCount(maSameStrand));
 
 /* If there is a cluster to work with create an geneGraph */
 if(maSameStrand != NULL)
@@ -775,7 +780,7 @@ struct genePred *convertBedsToGps(char *bedFile)
 {
 struct genePred *gpList = NULL, *gp =NULL;
 struct bed *bedList=NULL, *bed=NULL;
-bedList = bedLoadAll(bedFile);
+bedList = bedLoadNAll(bedFile, 6);
 if(bedList->strand == NULL)
     errAbort("Beds must have strand information.");
 for(bed=bedList; bed!=NULL; bed=bed->next)
