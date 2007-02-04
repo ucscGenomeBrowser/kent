@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.22 2006/05/20 00:28:17 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.23 2007/02/04 05:09:02 kent Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -851,7 +851,8 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     gfCountSeq(gf, seq);
 gfAllocLists(gf);
 gfZeroNonOverused(gf);
-AllocArray(gf->sources, seqCount);
+if (seqCount > 0)
+    AllocArray(gf->sources, seqCount);
 gf->sourceCount = seqCount;
 for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     {
