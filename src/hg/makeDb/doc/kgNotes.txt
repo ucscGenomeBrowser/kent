@@ -1,0 +1,272 @@
+# Make directory
+ssh hgwdev
+mkdir /cluster/data/hg18/bed/jkg
+cd /cluster/data/hg18/bed/jkg
+
+# Get psls - refSeqAli and mrna separated into chromosomes
+mkdir mrnaIn
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo $c
+    hgGetAnn hg18 refSeqAli $c mrnaIn/$c.psl
+    hgGetAnn hg18 mrna $c stdout >> mrnaIn/$c.psl
+end
+# Just ignore cases where get Error: no table rows matching query.  These are
+# from some of the small randoms.
+
+# Cluster the RNA
+mkdir clusterPsl
+cd mrnaIn
+foreach f (*.psl)
+    echo $f
+    clusterPsl $f ../clusterPsl/$f:r.bed
+end
+cd ..
+
+# Do the altSplice - takes about 5 minutes
+mkdir altSplice
+cd clusterPsl
+foreach f (*.bed)
+    echo $f to $f:r.agx
+    set c=$f:r
+    altSplice db=hg18 beds=$f -agxOut=../altSplice/$c.agx -noEst -singleExonOk \
+    	-weightMrna -localMem -consensus \
+	-chromNib=/cluster/data/hg18/nib/$c.nib
+end
+cd ..
+
+# Setup mouse dir
+mkdir mm8
+cd mm8
+
+# Get mouse mrna including ESTs.  Takes about a minute
+mkdir mrnaIn
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
+    echo $c
+    hgGetAnn mm8 refSeqAli $c mrnaIn/$c.psl
+    hgGetAnn mm8 mrna $c stdout >> mrnaIn/$c.psl
+    hgGetAnn mm8 intronEst $c stdout >> mrnaIn/$c.psl
+end
+
+# Get mouse clusters.  Takes a little more than a minute
+mkdir clusterPsl
+cd mrnaIn
+foreach f (*.psl)
+    echo $f
+    clusterPsl $f ../clusterPsl/$f:r.bed
+end
+cd ..
+
+# Do mouse altSplice. This will include ESTs. Takes about 30 minutes
+mkdir altSplice
+cd clusterPsl
+foreach f (*.bed)
+    echo $f to $f:r.agx
+    set c=$f:r
+    altSplice db=mm8 beds=$f -agxOut=../altSplice/$c.agx -singleExonOk \
+    	-weightMrna -localMem -consensus \
+	-chromNib=/cluster/data/mm8/nib/$c.nib
+end
+cat *.agx > ../mouse.agx
+cd ..
+
+# Clean up all but final mouse.agx
+rm -r mrnaIn altSplice clusterPsl
+
+# Unpack chains and nets and split by chromosome
+zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
+zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netSplit stdin nets
+cd ..
+
+# Get exonophy
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql -N hg18 > exoniphy.bed
+
+# Create orthoSplice directory structure and a para spec file
+mkdir orthoSplice
+cd orthoSplice
+mkdir agx report
+cd ../altSplice
+echo "#\!/bin/tcsh -ef" > ../orthoSplice/spec
+foreach f (*.agx)
+    set c=$f:r
+    set chromSize=`echo select size from chromInfo where chrom=\"$c\" | hgsql -N hg18`
+    echo "orthoSplice -chromSize=$chromSize -exonFile=../exoniphy.bed -trumpNum=3 -chrom=$c -altInFile=../altSplice/$f -orthoAgxFile=../mm8/mouse.agx -db=hg18 -orthoDb=mm8 -netFile=../mm8/nets/$c.net -chainFile=../mm8/chains/$c.chain -commonFile=agx/$c.agx -reportFile=report/$c.report -edgeFile=report/$c.edge" >> ../orthoSplice/spec
+end
+cd ..
+
+# Do parasol run on iServer (high RAM) cluster
+ssh kki
+cd /cluster/data/hg18/bed/jkg/orthoSplice
+para create spec
+para make
+para time
+#Completed: 46 of 46 jobs
+#CPU time in finished jobs:      21333s     355.56m     5.93h    0.25d  0.001 y
+#IO & Wait Time:                   214s       3.56m     0.06h    0.00d  0.000 y
+#Average job time:                 468s       7.81m     0.13h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            3362s      56.03m     0.93h    0.04d
+#Submission to last job:          3362s      56.03m     0.93h    0.04d
+
+# Clean up chains and nets since they are big
+cd /cluster/data/hg18/bed/jkg
+rm -r mm8/chains mm8/nets
+
+# Make exonWalk directory and spec file
+mkdir exonWalk
+mkdir exonWalk/bed
+cd orthoSplice/agx
+echo #\!/bin/tcsh -ef > ../../exonWalk/spec
+foreach f (*.agx)
+    set c=$f:r
+    echo exonWalk ../orthoSplice/agx/$f bed/$c.bed >> ../../exonWalk/spec
+end
+cd ../..
+
+# Do exonWalk cluster job
+ssh kki
+cd /cluster/data/hg18/bed/jkg/exonWalk
+para create spec
+para make
+para time
+#Completed: 46 of 46 jobs
+#CPU time in finished jobs:        465s       7.75m     0.13h    0.01d  0.000 y
+#IO & Wait Time:                    99s       1.65m     0.03h    0.00d  0.000 y
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             428s       7.13m     0.12h    0.00d
+#Submission to last job:           428s       7.13m     0.12h    0.00d
+
+# Get exonWalk transcript sequences.  This'll take about 2 minutes
+cd /cluster/data/hg18/bed/jkg/exonWalk
+mkdir fa
+cd bed
+foreach f (*.bed)
+    set c=$f:r
+    echo $f to $c.fa
+    sequenceForBed -db=hg18 -bedIn=$f -fastaOut=../fa/$c.fa -upCase -keepName
+end
+cd ..
+
+# Fetch human protein set.
+hgsql -N sp070202 -e \
+  'select p.acc, p.val from protein p, accToTaxon x where x.taxon=9606 and p.acc=x.acc'\
+  |awk '{print ">" $1;print $2}' >humanProt.fa
+
+# Create blatProt directory and parasol spec
+mkdir blatProt blatProt/rawChrom
+cd exonWalk/fa
+echo #\!/bin/tcsh -ef > ../../blatProt/spec
+foreach f (*.fa)
+    set c=$f:r
+    echo blat -t=dnax -q=prot -minIdentity=90 ../exonWalk/fa/$f ../humanProt.fa rawChrom/$c.psl >> ../../blatProt/spec
+end
+
+# Run protein/transcript blat job on iserver cluster
+ssh kki
+cd /cluster/data/hg18/bed/jkg/blatProt
+para create spec
+para make
+para time
+#CPU time in finished jobs:       4976s      82.93m     1.38h    0.06d  0.000 y
+#IO & Wait Time:                   117s       1.95m     0.03h    0.00d  0.000 y
+#Average job time:                 111s       1.85m     0.03h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             463s       7.72m     0.13h    0.01d
+
+# Sort and do near-besting
+cd /cluster/data/hg18/bed/jkg/blatProt
+pslSort dirs raw.psl . rawChrom
+pslReps raw.psl nearBest.psl /dev/null -nohead -minCover=0.8 -minAli=0.80 -nearTop=0.002
+
+# Load a bunch of stuff into the database:
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+hgLoadBed hg18 jkClusterRna2 clusterPsl/*.bed
+hgLoadBed -notItemRgb -sqlTable=altGraphRna.sql hg18 altGraphRna altSplice/*.agx
+hgLoadBed -notItemRgb -sqlTable=jkOrthoSplice.sql hg18 jkOrthoSplice orthoSplice/agx/*.agx
+cat altSplice/*.agx | agxToBed stdin altSplice.bed
+hgLoadBed hg18 jkProjectedAgx altSplice.bed
+cat orthoSplice/agx/*.agx | agxToBed stdin orthoSplice.bed
+hgLoadBed hg18 jkProjectedOrtho orthoSplice.bed
+hgLoadBed hg18 jkOrthoWalk exonWalk/bed/*.bed
+
+## Some analysis of things in humanProt.fa that didn't map to any sequence.
+## Examining random sample of 25 of these.  (Only 81% did map, over 10,000
+## didn't).
+Summary:
+  7 - SE - Single exon gene dropped by orthoSplice, usually wrongly.
+       fix orthoSplice a little, rework single exon handling.
+  4 - TS - too small (< 18 AA)
+       ignore
+  4 - DI - divergend (%ID < 90)
+       ignore - it's ok, all examples in HLA, best not to map
+          wrong haplotypes to genome.
+  3 - RI - retained intron nicely filtered out by orthoSplice
+       Yay!
+  2 - NM - no mRNAs mapped in region. SwissProt based on DNA clone annotation 
+      ignore - want stronger evidence than this.
+  1 - WS - weird splicing, strange intron boundaries, decent evidence for them...
+       Hmm, send this example to Al to look at?
+  1 - DE - exon dropped, only one mRNA supports it in alt situation.
+       Hmm. Probably just live with this.
+  1 - TC - Part of variable region of T-cell receptor. Splicing wierd.
+       Hmm.  Ignore/make separate process for Ab fragments and T-Cell receptor
+       fragments?
+  1 - NE - noisy ends or retained intron. Probably as well as not to filter out.
+       Ignore.
+  1 - SC - Single exon transcript dropped by altSplice.  Overlaps spliced transcripts.
+      Consider making altSplice better on single exons in midst of other stuff
+      ... or not.
+
+
+DI A0AQY6 - only 89.9% ID on best match to genome (matches in chr6_xxx_hap)
+DI A1E127 - only 88.0% ID on best match to genome (matches in chr6_xxx_hap)
+TS P30095 - 10 letters long - couldn't web blat to genome
+RI Q16193 - Looks to be derived from transcript with retained intron. Dropped
+         by orthoSplice.
+TS Q16217 - 11 letters long - couldn't web blat to genome
+DI Q571Q4 - only 89.9% ID on best match to genome (matches in chr6_xxx_hap)
+RI Q59GH2 - Looks to be derived from transcript with retained intron. Dropped by
+	 orthoSplice
+NM Q5NV77 - We map no RNAs there.  Ensembl has a prediction. SwissProt entry
+	    based on DNA clone, not RNA
+DI Q5QR74 - no blat alignment to genome. 24 AA. NCBI - hits HLA region of alt assembly
+NM Q5TEV5 - We map no RNAs there. Ensembl has a prediction. SwissProt entry
+	    based on DNA clone, not RNA
+TC Q5ZGK9 - no blat alignment to genome. 75 AA. NCBI - 57 bases hit at 100% ID
+	    (76% cov) on chr7. In raw.psl. Not clear why online blat fails,
+	    command line finds it.  COmmand line does have higher sensitivity.
+	    No repeat involvement.  Looks like RNA gets dropped because of 
+	    noncannonical ends to large intron.  Huge pile up of mRNAs.
+	    Is variable region of a T-cell receptor
+SE Q6FHK0 - Single exon gene dropped by orthoSplice in spite of RefSeq, mRNA, and
+	 exoniphy.
+NE Q6PIG1 - Only 73/111 bases covered.  Filtered out by pslReps.  Noisy
+	 ends/retained intron perhaps?  Is on chr9.
+SE Q6ZP23 - Single exon in midst of intron on same strand.  No ensembl or
+	 exoniphy. Does overlap another single exon transcript, but in a very
+	 loose way.
+NM Q6ZRI4 - no blat alignment to genome. 123 AA. NCBI - has gap of 14 against genome.
+         No RNAs in browser map to this region, though there is an Ensembl
+	 gene.... Curious that protein blat misses via web.... Nucleotide blat finds
+	 it.
+SE Q71MG6 - no blat alignment to genome. 96 AA. NCBI - 100% coverage 100% ID to chr9
+	 aligns to 100% masked region, a middle aged LINE L1.  There are mRNA
+	 that make it to clusters and altSplice, but get cut at orthoSplice
+	 (which seems wierd since there are two RNAs.  Oh, but one seems to
+	 get lost at the altSplice stage, the longer one.)
+WS Q76I85 - several weird splice sites in the middle end up breaking up this
+         transcript at the altSplice stage. Two genbank rna transcripts and
+	 a refSeq support this though.  Curious!
+SE Q7YCG6 - best mapping has lots of stop codons, only 94% identity. Dropped by
+         orthoSplice in spite of a small pile-up of RNAs in region..
+SC Q8N9M9 - no blat alignment to genome. 124 AA. NCBI - 100% coverage 99% ID to chr3
+         Single exon transcript CDS entirely in repeat (LTR). Overlaps spliced
+	 alignments. No exoniphy. Just single transcript.
+SE Q8NGJ9 - single exon refSeq dropped by orthoSplice in spite of exoniphy overlap
+DE Q96DZ9 - an exon gets dropped by orthSplice
+TS Q9UC29 - 12 letters long - couldn't web blat to genome
+TS Q9UC89 - 17 letters long - couldn't web blat to genome
+SE Q9UCZ0 - orthoSplice drops single exon gene in spite of Exoniphy & refSeq.
+SE Q9UCZ2 - orthoSplice drops single exon gene in spite of Exoniphy & refSeq.
+
