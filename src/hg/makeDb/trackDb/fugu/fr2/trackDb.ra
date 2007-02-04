@@ -18,3 +18,37 @@ group map
 visibility dense
 type bed 3 +
 
+track multiz5way
+shortLabel Conservation
+longLabel 5 Species Multiz Alignment & Conservation 
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons5
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+frames multiz5wayFrames
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz5waySummary
+speciesCodonDefault fr2
+speciesGroups vertebrate
+sGroup_vertebrate tetNig1 gasAcu1 oryLat1 danRer4 
+# speciesDefaultOff danRer4 fr1
+treeImage phylo/fr2_5way.gif
+
+track phastConsElements5way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
