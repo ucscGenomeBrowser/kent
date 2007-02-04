@@ -10,6 +10,7 @@
      o (in 33x5) Making polyA trimming leave two bases so as not to mess up
        stop codon in rna's that just contain coding region.
      o (in 33x6) Improving usage message on repMatch.
+     o (in 33x7) Making blat not abort with error on empty target database.
 
 33:
      o Fixed problem with out=blast8 and out=blast9 output using
