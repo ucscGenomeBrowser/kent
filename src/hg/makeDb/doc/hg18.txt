@@ -9522,11 +9522,7 @@ mkdir orthoSplice
 cd orthoSplice
 echo 'select chrom, size from chromInfo' | hgsql hg18 | grep -v chrom > chromSizes.tab
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
-# cp /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz .
-# chainSplit chains hg18.mm7.all.chain 
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netSplit stdin nets
-# cp /cluster/data/hg18/bed/blastz.mm7/axtChain/hg18.mm7.net.gz .
-# netSplit hg18.mm7.net.gz nets
 
 mkdir agx report logs
 cat << '_EOF_' > makeRun.sh
