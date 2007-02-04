@@ -16,8 +16,12 @@ static struct optionSpec optionSpecs[] =
     {"fastaOut", OPTION_STRING}, /* File to print fasta records to. */
     {"bedIn", OPTION_STRING},    /* File to read bed records from. */
     {"upCase", OPTION_BOOLEAN},  /* Upcase the file. */
+    {"keepName", OPTION_BOOLEAN}, /* Keep id's in fa file same as bed name. */
     {NULL, 0}
 };
+
+boolean upCase = FALSE;
+boolean keepName = FALSE;
 
 void usage()
 {
@@ -27,7 +31,9 @@ errAbort("sequenceForBed - Writes sequence for beds to a fasta\n"
 	 "sequenceForBed -db=hg15 -bedIn=someFile.bed -fastaOut=fileWithSeq.fa\n"
 	 "\n"
 	 "optional args:\n"
-	 "   -upCase: output sequence as uppercase\n");
+	 "   -upCase: output sequence as uppercase\n"
+	 "   -keepName: keep id's in fa file same as bed name (no chromosome stuff)\n"
+	 );
 }
 
 void sequenceForBed(char *db, char *bedFile, char *fastaFile)
@@ -53,9 +59,13 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     {
     dotForUser();
     seq = hSeqForBed(bed);
-    safef(nameBuff, sizeof(nameBuff), "%s.%s.%s:%d-%d", bed->name, bed->strand, 
-	  bed->chrom, bed->chromStart, bed->chromEnd);
-    if(optionExists("upCase"))
+    if (keepName)
+	safef(nameBuff, sizeof(nameBuff), "%s %s:%d-%d %s strand", bed->name, 
+	      bed->chrom, bed->chromStart, bed->chromEnd, bed->strand);
+    else
+	safef(nameBuff, sizeof(nameBuff), "%s.%s.%s:%d-%d", bed->name, bed->strand, 
+	      bed->chrom, bed->chromStart, bed->chromEnd);
+    if (upCase)
 	touppers(seq->dna);
     faWriteNext(fasta, nameBuff, seq->dna, seq->size);
     dnaSeqFree(&seq);
@@ -75,6 +85,8 @@ optionInit(&argc, argv, optionSpecs);
 db = optionVal("db", NULL);
 bedFile = optionVal("bedIn", NULL);
 fastaFile = optionVal("fastaOut", NULL);
+upCase = optionExists("upcase");
+keepName = optionExists("keepName");
 
 if(db == NULL || bedFile == NULL || fastaFile == NULL)
     {
