@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.13 2005/11/13 18:15:11 donnak Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.14 2007/02/05 21:44:06 ann Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -39,7 +39,7 @@ hPrintf("%s",
 "        all tables associated with the track specified in the <em>track</em> \n"
 "        list.</LI>\n"
 "        \n"
-"        <LI><B>Describe Table Schema: </B>Displays schema information for the \n"
+"        <LI><B>describe table schema: </B>Displays schema information for the \n"
 "        tables associated with the selected track.</LI>\n"
 "        \n"
 "        <LI><B>region: </B>Restricts the query to a\n"
@@ -51,7 +51,7 @@ hPrintf("%s",
 "        range, such as chrX:100000-200000, or a gene name or other id in \n"
 "        the text box.</LI>\n"
 "        \n"
-"        <LI><B>Lookup:</B> Press this button after typing in a gene name or \n"
+"        <LI><B>lookup:</B> Press this button after typing in a gene name or \n"
 "        other id in the position text box to look up the chromosome position\n"
 "        \n"
 "        <LI><B>identifiers</B> (selected tracks only)<B>: </B>Restricts the \n"
@@ -121,10 +121,10 @@ hPrintf("%s",
 "        \n"
 "        </UL>\n"
 "        </LI>\n"
-"        <LI><B>Get Output: </B>Submits a data query based on the specified \n"
+"        <LI><B>get output: </B>Submits a data query based on the specified \n"
 "        parameters and returns the output.</LI>\n"
 "        \n"
-"        <LI><B>Summary/Statistics: </B>Displays statistics about the data \n"
+"        <LI><B>summary/statistics: </B>Displays statistics about the data \n"
 "        specified by the parameters.</LI>\n"
 "        \n"
 "        </UL>\n");
