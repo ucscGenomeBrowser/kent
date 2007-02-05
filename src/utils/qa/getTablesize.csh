@@ -69,12 +69,20 @@ foreach table ($tables)
   echo
   echo $table
   echo "============="
-  set first=`getRRtableStatus.csh $db $table Data_length $machine1 \
-    | awk '{printf("%0.2f", $1/1000000) }'`
+  set first=`getRRtableStatus.csh $db $table Data_length $machine1`
+  if ( $status ) then
+    set first=0
+  else
+    set first=`echo $first | awk '{printf("%0.2f", $1/1000000) }'`
+  endif 
   echo "$first megabytes"
   if ( "" != $machine2) then
-    set second=`getRRtableStatus.csh $db $table Data_length $machine2 \
-      | awk '{printf("%0.2f", $1/1000000) }'`
+    set second=`getRRtableStatus.csh $db $table Data_length $machine1`
+    if ( $status ) then
+      set second=0
+    else
+      set second=`echo $second | awk '{printf("%0.2f", $1/1000000) }'`
+    endif 
     echo "$second megabytes"
   endif 
   set mach1Tot=`echo $mach1Tot $first  | awk '{print $1+$2}'`
@@ -84,11 +92,11 @@ end
 # output totals if more than one table
 echo
 if ( "true" == $list ) then
-  echo $machine1 "total" "=" $mach1Tot \
-    | awk '{printf("%7s %5s %1s %0.2f\n", $1, $2, $3, $4)}'
+  echo $machine1 "total" "=" $mach2Tot megabytes \
+    | awk '{printf("%7s %5s %1s %0.2f %9s\n", $1, $2, $3, $4, $5)}'
   if ( $machine2 != "" ) then
-    echo $machine2 "total" "=" $mach2Tot \
-      | awk '{printf("%7s %5s %1s %0.2f\n", $1, $2, $3, $4)}'
+    echo $machine2 "total" "=" $mach2Tot megabytes \
+      | awk '{printf("%7s %5s %1s %0.2f %9s\n", $1, $2, $3, $4, $5)}'
   endif
   echo
 endif 
