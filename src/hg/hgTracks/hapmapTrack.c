@@ -46,6 +46,66 @@ slSort(&simpleItemList, bedCmp);
 tg->items = simpleItemList;
 }
 
+void hapmapDrawAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw the hapmap at position. */
+{
+
+if (!zoomedToBaseLevel)
+    {
+    bedDrawSimpleAt(tg, item, vg, xOff, y, scale, font, color, vis);
+    return;
+    }
+
+char *allele = NULL;
+int chromStart = 0;
+int chromEnd = 0;
+
+if (sameString(tg->mapName, "hapmapAllelesCombined"))
+    {
+    struct hapmapAllelesCombined *thisItem = item;
+    int count1 = 0;
+    int count2 = 0;
+    chromStart = thisItem->chromStart;
+    chromEnd = thisItem->chromEnd;
+    count1 = count1 + thisItem->allele1CountCEU;
+    count1 = count1 + thisItem->allele1CountCHB;
+    count1 = count1 + thisItem->allele1CountJPT;
+    count1 = count1 + thisItem->allele1CountYRI;
+    count2 = count2 + thisItem->allele2CountCEU;
+    count2 = count2 + thisItem->allele2CountCHB;
+    count2 = count2 + thisItem->allele2CountJPT;
+    count2 = count2 + thisItem->allele2CountYRI;
+    if (count1 < count2)
+        allele = cloneString(thisItem->allele1);
+    else
+        allele = cloneString(thisItem->allele2);
+    }
+else
+    {
+    struct hapmapAlleles *thisItem = item;
+    chromStart = thisItem->chromStart;
+    chromEnd = thisItem->chromEnd;
+    if (thisItem->allele1Count < thisItem->allele2Count)
+        allele = cloneString(thisItem->allele1);
+    else
+        allele = cloneString(thisItem->allele2);
+    }
+
+int heightPer, x1, x2, w;
+Color textColor = MG_BLACK;
+
+heightPer = tg->heightPer;
+x1 = round((double)((int)chromStart-winStart)*scale) + xOff;
+x2 = round((double)((int)chromEnd-winStart)*scale) + xOff;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+y += (heightPer >> 1) - 3;
+
+vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
+
+}
+
 boolean isMixed(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
                 int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
 /* return TRUE if different populations have a different major allele */
@@ -53,24 +113,24 @@ boolean isMixed(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, i
 int allele1Count = 0;
 int allele2Count = 0;
 
-if (allele1CountCEU >= allele2CountCEU) 
+if (allele1CountCEU >= allele2CountCEU && allele1CountCEU > 0) 
     allele1Count++;
-else
+else if (allele2CountCEU > 0)
     allele2Count++;
 
-if (allele1CountCHB >= allele2CountCHB) 
+if (allele1CountCHB >= allele2CountCHB && allele1CountCHB > 0) 
     allele1Count++;
-else
+else if (allele2CountCHB > 0)
     allele2Count++;
 
-if (allele1CountJPT >= allele2CountJPT) 
+if (allele1CountJPT >= allele2CountJPT && allele1CountJPT > 0) 
     allele1Count++;
-else
+else if (allele2CountJPT > 0)
     allele2Count++;
 
-if (allele1CountYRI >= allele2CountYRI) 
+if (allele1CountYRI >= allele2CountYRI && allele1CountYRI > 0) 
     allele1Count++;
-else
+else if (allele2CountYRI > 0)
     allele2Count++;
 
 if (allele1Count > 0 && allele2Count > 0) return TRUE;
@@ -137,6 +197,7 @@ void hapmapMethods(struct track *tg)
 /* Make hapmap track.  */
 {
 bedMethods(tg);
+tg->drawItemAt = hapmapDrawAt;
 tg->loadItems = hapmapLoad;
 tg->itemColor = hapmapColor;
 tg->itemNameColor = hapmapColor;
