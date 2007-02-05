@@ -48,44 +48,44 @@ char *oldFileName = cartUsualString(cart, hggUploadFile "__filename", "");
 cartWebStart(cart, "Upload Data to Genome Graphs");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">");
 cartSaveSession(cart);
-hPrintf("Name of data set: ");
+hPrintf("name of data set: ");
 cartMakeTextVar(cart, hggDataSetName, "", 16);
 hPrintf("<BR>");
 
-hPrintf("Description: ");
+hPrintf("description: ");
 cartMakeTextVar(cart, hggDataSetDescription, "", 64);
 hPrintf("<BR>\n");
 
 
-hPrintf("File format: ");
+hPrintf("file format: ");
 cgiMakeDropList(hggFormatType, formatNames, ArraySize(formatNames), 
     	cartUsualString(cart, hggFormatType, formatNames[0]));
 hPrintf("<BR>\n");
 
-hPrintf(" Markers are: ");
+hPrintf(" markers are: ");
 cgiMakeDropList(hggMarkerType, markerNames, ArraySize(markerNames), 
     	cartUsualString(cart, hggMarkerType, markerNames[0]));
 hPrintf("<BR>\n");
 
-hPrintf(" Column labels: ", colLabelNames, ArraySize(colLabelNames),
+hPrintf(" column labels: ", colLabelNames, ArraySize(colLabelNames),
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
 cgiMakeDropList(hggColumnLabels, colLabelNames, ArraySize(colLabelNames), 
 	cartUsualString(cart, hggColumnLabels, colLabelNames[0]));
 hPrintf("<BR>\n");
 
-hPrintf("Display min value: ");
+hPrintf("display min value: ");
 cartMakeTextVar(cart, hggMinVal, "", 5);
 hPrintf(" max value: ");
 cartMakeTextVar(cart, hggMaxVal, "", 5);
 hPrintf("<BR>\n");
 
-hPrintf("Label values: ");
+hPrintf("label values: ");
 cartMakeTextVar(cart, hggLabelVals, "", 32);
 hPrintf("<BR>\n");
-hPrintf("Draw connecting lines between markers separated by up to ");
+hPrintf("draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
-hPrintf("File name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
+hPrintf("file name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
 	oldFileName);
 hPrintf(" ");
 cgiMakeButton(hggSubmitUpload, "submit");
@@ -124,7 +124,7 @@ hPrintf("%s",
 webNewSection("Using the upload page");
 hPrintf(
 "To upload a file in any of the supported formats, "
-"locate the file on your computer using the controls next to <B>File name:</B>, "
+"locate the file on your computer using the controls next to <B>file name</B>, "
 "and then submit. The other controls on this form are optional, though "
 "filling them out will sometimes enhance the display. In general "
 "the controls that default to <i>best guess</i> can be left alone, "
@@ -132,33 +132,33 @@ hPrintf(
 "max values and connecting lines can be set later via the configuration "
 "page as well. Here is a description of each control."
 "<UL>"
-"<LI><B>Name of data set:</B> Displayed in graph drop-down in Genome Graphs "
+"<LI><B>name of data set:</B> Displayed in graph drop-down in Genome Graphs "
 " and as trackname in Genome Browser. Only the first 16 characters are "
 " visible in some contexts. For data sets with multiple graphs, this is the "
 " first part of the name, shared with all members of the data set.</LI>"
-"<LI><B>Description:</B> A short sentence describing the data set. Displayed in "
+"<LI><B>description:</B> A short sentence describing the data set. Displayed in "
 "the Genome Graphs and Genome Browser configuration pages, and as the center "
 "label in the Genome Browser.</LI>"
-"<LI><B>File format:</B> Controls whether the upload file is a tab-separated, "
+"<LI><B>file format:</B> Controls whether the upload file is a tab-separated, "
 " comma-separated, or space separated table.</LI>"
-"<LI><B>Markers are:</B> Describes how to map the data to chromosomes. The choices "
+"<LI><B>markers are:</B> Describes how to map the data to chromosomes. The choices "
 " are either the first column of the file is an ID of some sort, or the first column "
 " is a chromosome and the next a base. The IDs can be SNP rs numbers, STS marker names "
 " or ID's from any of the supported genotyping platforms.</LI>"
-"<LI><B>Column labels:</B> Controls whether the first row of the upload file is "
+"<LI><B>column labels:</B> Controls whether the first row of the upload file is "
 " interpreted as labels rather than data. If the first row contains text in the "
 " numerical fields, or if the mapping fields are empty, it is interpreted by "
 " \"best guess\" as labels. This is generally correct, but you can override this "
 " interpretation by explicitly setting the control. </LI>"
-"<LI><B>Display min value/max value:</B> Set the range of the data set that will "
+"<LI><B>display min value/max value:</B> Set the range of the data set that will "
 " be plotted. If left blank, the range will be taken from the min/max values in the "
 " data set itself. For all data sets to share the same scale usually you'll need "
 " to set this.</LI>"
-"<LI><B>Label values:</B> A comma-separated list of numbers for the vertical axis. "
+"<LI><B>label values:</B> A comma-separated list of numbers for the vertical axis. "
 " If left blank the axis will be labeled at the 1/3 and 2/3 point. </LI>"
-"<LI><B>Draw connecting lines:</B> Lines connecting data points separated by "
+"<LI><B>draw connecting lines:</B> Lines connecting data points separated by "
 " no more than this number of bases are drawn.  </LI>"
-"<LI><B>File name:</B> The controls here let you select which file on your "
+"<LI><B>file name:</B> The controls here let you select which file on your "
 " computer to upload.</LI>");
 cartWebEnd();
 }
