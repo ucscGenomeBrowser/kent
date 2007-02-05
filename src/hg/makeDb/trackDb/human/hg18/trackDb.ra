@@ -1330,3 +1330,29 @@ visibility hide
 spectrum on
 type netAlign mm8 chainMm8WM
 otherDb mm8
+
+track multizMetazoan
+shortLabel Metazoan Maf
+longLabel Metazoan Multiz Alignment (4 species: hg18, ce3, dm2, ci2)
+group X
+priority 104.6
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+#wiggle phastCons6way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+# frames multizFrames
+# irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multizMetazoanSummary
+speciesOrder ci2 dm2 ce3
+# speciesGroups 
+# sGroup_mammal panTro2 rheMac2 mm8 rn4 canFam2
+# speciesDefaultOff
+# treeImage phylo/syn_6way.jpg
+# speciesCodonDefault hg18
