@@ -85,6 +85,4 @@ if ( $debug == "true" ) then
   # exit
 endif
 
-exit 1
-
-# rm -f tablelist
+exit
