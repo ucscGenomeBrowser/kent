@@ -2,10 +2,14 @@
 # Adopted from an earlier process Gill did for his private go database
 # Update GO database (2005-07-26, hartera)
 # Download the terms and make the database.
+
+# Added symlink for the build dir:  /cluster/data/geneOntology
+# so store1 doesn't need to be directly referenced (2007-01-10 kate)
+
     ssh hgwdev
         
-    mkdir /cluster/store1/geneOntology/20041124
-    cd /cluster/store1/geneOntology/20041124
+    mkdir /cluster/data/geneOntology/20041124
+    cd /cluster/data/geneOntology/20041124
 
     wget --timestamping http://www.godatabase.org/dev/database/archive/latest/go_200411-assocdb-data.gz
 
