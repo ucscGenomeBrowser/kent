@@ -38,7 +38,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.33 2007/02/04 21:46:44 kent Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.34 2007/02/05 04:46:42 kent Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -321,6 +321,7 @@ if( (ag->vTypes[v1] == ggHardStart || ag->vTypes[v1] == ggSoftStart)
 else if( (ag->vTypes[v1] == ggHardEnd || ag->vTypes[v1] == ggSoftEnd)
 	 && (ag->vTypes[v2] == ggHardStart || ag->vTypes[v2] == ggSoftStart))
     return ggSJ;
+// JK - it looks like ggSJ is an intron.  What is ggIntron then?
 else
     return ggIntron;
 }
@@ -353,12 +354,15 @@ boolean isExactPossibleExon(struct altGraphX *ag, int v1, int v2)
 return isPossibleExon(ag, v1,v2,TRUE);
 }
 
+#ifdef UNUSED
 boolean overlapsPossibleExon(struct altGraphX *ag, int v1, int v2)
 /* Return TRUE if this edge is supported by a possible exon from
    the possibleExon track. */
 {
 return isPossibleExon(ag, v1,v2, FALSE);
 }
+// JK - might be good to use this, especially in soft-end/single-exon case. 
+#endif /* UNUSED */
 
 struct orthoSpliceEdge *altGraphXToOSEdges(struct altGraphX *ag)
 /* Return a list of splice edges based on data in altGraphX. */
@@ -394,6 +398,7 @@ if (doHappyDots && (--dot <= 0))
     }
 }
 
+#ifdef UNUSED
 int agxRangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
@@ -424,12 +429,13 @@ else if (b->tEnd <= a->tStart)
 else
     return 0;
 }
+#endif /* UNUSED */
 
 void findChromsAndMaxSizes(struct altGraphX *agxList, struct slName **pNameList, int *pMaxSize)
 /* Loop through the agxList and find chromosomes and the
    max size. */
 {
-struct hash *hash = newHash(6);
+struct hash *hash = newHash(0);
 struct altGraphX *agx = NULL;
 int maxSize = 0;
 struct slName *nameList = NULL, *name = NULL;
