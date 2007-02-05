@@ -141,6 +141,7 @@ sub slurpAutoSql {
   confess "Too many arguments" if (defined shift);
   open(P, "find $rootDir -name '*.as' -print |") || die "Can't open pipe";
   my %tableAS = ();
+  my %objectAS = ();
   while (<P>) {
     chop;
     my $filename = $_;
@@ -174,6 +175,14 @@ sub slurpAutoSql {
 			       autoSql => $as,
 			       tableName => $table,
 			       filename => $filename, };
+	} elsif ($object ne "") {
+	  if (defined $objectAS{$table}) {
+	    die "Duplicate autoSql def for object $object (" .
+	      $objectAS{$object}->{filename} . " vs. $filename)";
+	  }
+	  $objectAS{$object} = { autoSql => $as,
+				 objectName => $object,
+				 filename => $filename, };
 	}
 	$as = $table = $object = $fields = "";
       }
@@ -200,6 +209,21 @@ sub slurpAutoSql {
       }
     }
     @autoSql = @newAS;
+  }
+  # When table definitions rely on objects, add the object definitions to
+  # the stored table autoSql (so the autoSql parser doesn't die in hgTables).
+  foreach my $table (keys %tableAS) {
+    if ($tableAS{$table}->{autoSql} =~ /\n\s+table (\w+)/) {
+      my $object = $1;
+      if (defined $objectAS{$object}) {
+	$tableAS{$table}->{autoSql} .= ("\n" . $objectAS{$object}->{autoSql});
+      } elsif (defined $tableAS{$object}) {
+	$tableAS{$table}->{autoSql} .= ("\n" . $tableAS{$object}->{autoSql});
+      } else {
+	warn "Incomplete AutoSql? table $table refers to object $object " .
+	  "but I can't find the definition of $object.";
+      }
+    }
   }
   return %tableAS;
 }
