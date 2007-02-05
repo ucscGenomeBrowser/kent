@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.14 2007/01/26 00:46:38 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.15 2007/02/05 22:19:56 ann Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */
@@ -132,13 +132,13 @@ cgiMakeHiddenVar(hggConfigure, "on");
 struct chromGraphSettings *cgs = gg->settings;
 char varName[chromGraphVarNameMaxSize];
 chromGraphVarName(gg->name, "minVal", varName);
-hPrintf("Display min value: ");
+hPrintf("display min value: ");
 cartMakeIntVar(cart, varName, cgs->minVal, 5);
 chromGraphVarName(gg->name, "maxVal", varName);
 hPrintf(" max value: ");
 cartMakeIntVar(cart, varName, cgs->maxVal, 5);
 hPrintf("<BR>\n");
-hPrintf("Draw connecting lines between markers separated by up to ");
+hPrintf("draw connecting lines between markers separated by up to ");
 chromGraphVarName(gg->name, "maxGapToFill", varName);
 cartMakeIntVar(cart, varName, cgs->maxGapToFill, 8);
 hPrintf(" bases.");
