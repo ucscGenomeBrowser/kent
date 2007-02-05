@@ -144,7 +144,7 @@ hPrintf("<P>R, also known as Pearson's correlation coefficient, is a measure ");
 hPrintf("of the extent that two graphs move together.  The value of R ranges ");
 hPrintf("between -1 and 1.  A positive R indicates that the graphs tend to ");
 hPrintf("move in the same direction, while a negative R indicates that they ");
-hPrintf("tend to move in in opposite directions.</P>\n");
+hPrintf("tend to move in opposite directions.</P>\n");
 hPrintf("<P>R-Squared (which is indeed just R*R) measures how much of the ");
 hPrintf("variation in one graph can be explained by a linear dependence on ");
 hPrintf("the other graph. R-Squared ranges between 0 when the two graphs are ");
