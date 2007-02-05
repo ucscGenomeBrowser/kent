@@ -1334,7 +1334,7 @@ otherDb mm8
 track multizMetazoan
 shortLabel Metazoan Maf
 longLabel Metazoan Multiz Alignment (4 species: hg18, ce3, dm2, ci2)
-group X
+group x
 priority 104.6
 visibility hide
 color 0, 10, 100
