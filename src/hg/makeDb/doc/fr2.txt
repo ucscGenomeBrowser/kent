@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.10 2007/02/04 06:34:29 hiram Exp $"
+#       "$Id: fr2.txt,v 1.11 2007/02/05 22:07:49 hiram Exp $"
 #
 
 ##########################################################################
@@ -304,7 +304,7 @@ genomeCladePriority 110
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad fr2
 
-    # enable daily alignment and update of hgwdev
+    # enable daily alignment and update of hgwdev (DONE - 2007-02-05 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # add fr2 to:
@@ -1079,3 +1079,423 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
     time nice -n +19 hgLoadMafFrames fr2 multiz5wayFrames \
 	multiz5way.mafFrames.gz
     #	real    0m20.580s
+
+#########################################################################
+# MULTIZ5WAY DOWNLOADABLES (DONE - 2007-02-05 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/fr2/bed/multiz5way/mafDownloads
+    cd /cluster/data/fr2/bed/multiz5way
+
+    # upstream mafs 
+    #	There isn't any refGene table, trying ensGene instead
+    time for S in 1000 2000 5000
+    do
+        echo "making upstream${S}.maf"
+        nice -n +19 featureBits fr2 ensGene:upstream:${S} \
+		-fa=/dev/null -bed=up.bad
+        awk -F'\t' \
+'{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' \
+		up.bad > up.bed
+        rm up.bad
+        nice -n +19 mafFrags fr2 multiz5way up.bed upstream${S}.maf \
+                -orgs=species.lst
+        rm up.bed
+	nice -n +19 gzip -c upstream${S}.maf \
+	    > mafDownloads/ensGene.upstream${S}.maf.gz
+	rm -f upstream${S}.maf
+    done > mafFrags.log 2>&1 &
+    #	to monitor progress:
+    tail -f mafFrags.log
+    #	real    0m54.940s
+
+    ssh kkstore05
+    cd /cluster/data/fr2/bed/multiz5way
+    time for M in anno/maf/chr*.maf
+    do
+	B=`basename $M`
+	nice -n +19 gzip -c ${M} > mafDownloads/${B}.gz
+	echo ${B}.gz done
+    done
+    #	real    4m39.440s
+
+    cd mafDownloads
+    nice -n +19 md5sum *.maf.gz > md5sum.txt
+    # Make a README.txt
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/fr2/multiz5way
+    cd /usr/local/apache/htdocs/goldenPath/fr2/multiz5way
+    ln -s /cluster/data/fr2/bed/multiz5way/mafDownloads/{*.gz,*.txt} .
+
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS
+#		(DONE - 2007-02-05 - Hiram)
+
+# Estimate phastCons parameters
+    ssh kkstore05
+    mkdir /cluster/data/fr2/bed/multiz5way/cons
+    cd /cluster/data/fr2/bed/multiz5way/cons
+
+    # Create a starting-tree.mod based on one 25,000,000 window of chrUn
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chrUn.maf \
+	--refseq ../../../Un/chrUn.fa --in-format MAF \
+	--windows 25000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	real    4m27.989s
+
+
+    time nice -n +19 /cluster/bin/phast/$MACHTYPE/phyloFit -i SS \
+	s1.174992629-199991578.ss \
+	--tree "(((tetNig1,fr2),(gasAcu1,oryLat1)),danRer4)" \
+	--out-root starting-tree
+    #	As an experiment, ran all of these ss files through this prediction
+    #	and the resulting stats of the add up the C and G:
+    ## min    Q1 median   Q3   max     mean  N   sum     stddev
+    # 0.45 0.457 0.463 0.469 0.479 0.461941 17 7.853 0.00759621
+    #	Using the one closest to the mean: s1.174992629-199991578.ss
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.463
+    #	This 0.463 is used in the --gc argument below
+
+    ## the fa files are needed for the sequence and they are created during
+    #	this loop if they haven't been done before
+    # Create SS files on san filesystem
+    ssh kkstore05
+    mkdir -p  /san/sanvol1/scratch/fr2/cons/ss
+    cd  /san/sanvol1/scratch/fr2/cons/ss
+    time for C in \
+	`awk '{print $1}' /cluster/data/fr2/chrom.sizes | sed -e "s/chr//"`
+    do
+	mkdir -p chr${C}
+	echo msa_split $C
+	nice -n +19 /cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/fr2/bed/multiz5way/maf/chr${C}.maf \
+	    --refseq /cluster/data/fr2/${C}/chr${C}.fa \
+	    --in-format MAF --windows 2500000,0 --between-blocks 5000 \
+	    --out-format SS --out-root chr${C}/chr${C}
+    done &
+    #	real    4m2.736s
+
+    # Create a random list of 50 1 mb regions
+    cd /san/sanvol1/scratch/fr2/cons/ss
+    ls -1l chr*/chr*.ss \
+	| awk '$5 > 4000000 {print $9;}' \
+	| randomLines stdin 50 ../randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/fr2/cons/treeRun1
+    cd /san/sanvol1/scratch/fr2/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/fr2/bed/multiz5way/cons/starting-tree.mod \
+      --gc 0.463 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-length 10 --target-coverage 0.20 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	<< happy emacs
+    chmod a+x makeTree.csh
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+./makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       5204s      86.74m     1.45h    0.06d  0.000 y
+# IO & Wait Time:                   204s       3.39m     0.06h    0.00d  0.000 y
+# Average job time:                 108s       1.80m     0.03h    0.00d
+# Longest finished job:             138s       2.30m     0.04h    0.00d
+# Submission to last job:           141s       2.35m     0.04h    0.00d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh pk
+    cd /san/sanvol1/scratch/fr2/cons/treeRun1
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ave.cons.mod > cons_summary.txt 2>&1 &
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ave.noncons.mod > noncons_summary.txt
+    cp -p ave.*.mod ..
+    cd ..
+    cp -p ave.*.mod /cluster/data/fr2/bed/multiz5way/cons
+
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    #	never stops with the --NH argument
+    time /cluster/bin/phast/$MACHTYPE/consEntropy --NH 9.7834 \
+	0.20 10 ave.{cons,noncons}.mod
+## 0.20 10
+( Solving for new omega: 10.000000 10.467305 10.449210 10.449184 )
+
+Transition parameters: gamma=0.200000, omega=10.000000, mu=0.100000, nu=0.025000
+Relative entropy: H=0.903779 bits/site
+Expected min. length: L_min=10.726004 sites
+Expected max. length: L_max=6.735382 sites
+Phylogenetic information threshold: PIT=L_min*H=9.693936 bits
+Recommended expected length: omega=10.449184 sites (for L_min*H=9.783400)
+
+    ssh pk
+    # Create cluster dir to do main phastCons run
+    mkdir /san/sanvol1/scratch/fr2/cons/consRun1
+    cd /san/sanvol1/scratch/fr2/cons/consRun1
+    mkdir ppRaw bed
+
+    # Create script to run phastCons with right parameters
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cat > doPhast << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ../ave.{cons,noncons}.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-length 10 --target-coverage 0.20 --quiet \
+	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.{cons,noncons}.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+./doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+    #	These jobs are very fast and very I/O intensive, even on the san
+    #	they will hang it up as they work at full tilt.
+# Completed: 162 of 162 jobs
+# CPU time in finished jobs:       1501s      25.02m     0.42h    0.02d  0.000 y
+# IO & Wait Time:                   924s      15.40m     0.26h    0.01d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest finished job:              23s       0.38m     0.01h    0.00d
+# Submission to last job:            44s       0.73m     0.01h    0.00d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /san/sanvol1/scratch/fr2/cons/consRun1
+    #	The sed's and the sort get the file names in chrom,start order
+    #	You might like to verify it is correct by first looking at the
+    #	list it produces:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | less
+    #	if that looks right, then let it run:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	| /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved5Way.bed
+    #	~ 16 seconds
+    cp -p mostConserved5Way.bed /cluster/data/fr2/bed/multiz5way
+
+    # Figure out how much is actually covered by the bed file as so:
+    #	Get the non-n genome size from faSize on all chroms:
+    ssh kkstore05
+    cd /cluster/data/fr2
+    faSize Un/chrUn.fa M/chrM.fa
+    #	400525790 bases (49313545 N's 351212245 real 284435760
+    #	upper 66776485 lower) in 2 sequences in 2 files
+
+    cd /san/sanvol1/scratch/fr2/cons/consRun1
+    #	The 351212245 comes from the non-n genome as counted above.
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/351212245\n",100.0*sum/351212245,sum}' \
+	mostConserved5Way.bed
+    #	% 15.82 = 100.0*55573943/351212245 --exp-len 10 --tar-cov 0.20
+
+    #	Aiming for %70 coverage in
+    #	the following featureBits measurement on CDS:
+    # Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits fr2 \
+	-enrichment ensGene:cds mostConserved5Way.bed
+    #	--expected-length 10 --target-coverage 0.20 fr2
+    #	ensGene:cds 8.216%, mostConserved5Way.bed 14.130%, both 5.188%, cover
+    #	63.14%, enrich 4.47x
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/multiz5way
+    # ended up using the set: --expected-length 10 --target-coverage 0.20
+    time nice -n +19 hgLoadBed -strict fr2 phastConsElements5way \
+	mostConserved5Way.bed
+    #	Loaded 1140341 elements of size 5
+    #	real    0m28.545
+
+    #	should measure the same as above
+    time nice -n +19 \
+	featureBits fr2 -enrichment ensGene:cds phastConsElements5way
+    #	At: --expected-length 10 --target-coverage 0.20 fr2
+    #	ensGene:cds 8.216%, phastConsElements5way 14.130%, both 5.188%, cover
+    #	63.14%, enrich 4.47x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh pk
+    cd /san/sanvol1/scratch/fr2/cons/consRun1
+    # the sed business gets the names sorted by chromName, chromStart
+    #	so that everything goes in numerical order into wigEncode
+    #	This was verified above to be correct
+    time nice -n +19 find ./ppRaw -type f \
+	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	    | $HOME/bin/$MACHTYPE/wigEncode -noOverlap stdin \
+		phastCons5.wig phastCons5.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    3m49.865s
+    #	-rw-rw-r--   1 288320445 Feb  5 13:51 phastCons5.wib
+    #	-rw-rw-r--   1  37122305 Feb  5 13:51 phastCons5.wig
+    time nice -n +19 cp -p phastCons5.wi? /cluster/data/fr2/bed/multiz5way/
+
+    #	prepare compressed copy of ascii data values for downloads
+    ssh pk
+    cd /san/sanvol1/scratch/fr2/cons/consRun1
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons5Scores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons5Scores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+	    gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    5m21.400s
+
+    #	copy them for downloads
+    ssh kkstore05
+    #	this directory is actually a symlink from store9 to store8 to
+    #	avoid the data full problem on store9
+    mkdir /cluster/data/fr2/bed/multiz5way/phastCons5Scores
+    cd /cluster/data/fr2/bed/multiz5way/phastCons5Scores
+    cp -p  /san/sanvol1/scratch/fr2/cons/consRun1/phastCons5Scores/* .
+    # make a README.txt file here, and an md5sum
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/fr2/phastCons5Scores
+    cd /usr/local/apache/htdocs/goldenPath/fr2/phastCons5Scores
+    ln -s /cluster/data/fr2/bed/multiz5way/phastCons5Scores/* .
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/multiz5way
+    ln -s `pwd`/phastCons5.wib /gbdb/fr2/wib/phastCons5.wib
+    # ended up using the set: --expected-length 10 --target-coverage 0.20
+    time nice -n +19 hgLoadWiggle fr2 phastCons5 phastCons5.wig
+    #	real    0m9.256s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/fr2/bed/multiz5way
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=fr2 phastCons5 > histogram.data 2>&1
+    #	real    0m30.744
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        xffffff x000000 x000000 x444444 xaa4400 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Stickleback fr2 Histogram phastCons5 track"
+set xlabel " phastCons5 score - --expected-length 10 --target-coverage 0.20"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    #	The mostConserved can also be characterized by a histogram
+    awk '{print $3-$2}' mostConserved5Way.bed > mostCons.txt
+    textHistogram -verbose=2 -autoScale=1000 -pValues mostCons.txt \
+	> mostCons.histo.txt
+
+    cat << '_EOF_' | gnuplot > mostCons.png
+set terminal png small color \
+        xffffff x000000 x000000 x444444 xaa4400 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Stickleback fr2 histogram: lengths of mostConserved track elements"
+set xlabel " mostConserved element length - --expected-length 10 --target-coverage 0.20"
+set ylabel " # of elements at this length"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set xrange [0:200]
+set y2tics
+set boxwidth 2
+set style fill solid
+
+plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
+        "mostCons.histo.txt" using 2:6 axes x1y2 title " CRF" with lines
+'_EOF_'
+#	<< happy emacs
+
