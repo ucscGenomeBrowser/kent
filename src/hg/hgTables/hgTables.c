@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.135 2006/10/20 04:58:40 kate Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.136 2007/02/05 23:04:46 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1298,6 +1298,33 @@ void doLookupPosition(struct sqlConnection *conn)
 doMainPage(conn);
 }
 
+void doTableStatus(struct sqlConnection *conn)
+/* Get status of a table. */
+{
+puts("Content-Type:text/plain\n\n");
+struct sqlResult *sr;
+char **row;
+char *sep="";
+int c = 0;
+int numCols = 0;
+sr = sqlGetResult(conn, "SHOW TABLE STATUS");
+numCols = sqlCountColumns(sr);
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    printf("%s \t", field);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sep="";
+    for (c=0;c<numCols;++c)
+	{
+	printf("%s%s",sep,row[c]);
+	sep = "\t";
+	}
+    fprintf(stdout, "\n");	    
+    }
+sqlFreeResult(&sr);
+}
+
 void doTopSubmit(struct sqlConnection *conn)
 /* Respond to submit button on top level page.
  * This basically just dispatches based on output type. */
@@ -1451,6 +1478,8 @@ else if (cartVarExists(cart, hgtaDoGalaxyPrintPairwiseAligns))
     doGalaxyPrintPairwiseAligns(conn);
 else if (cartVarExists(cart, hgtaDoLookupPosition))
     doLookupPosition(conn);
+else if (cartVarExists(cart, hgtaDoTableStatus))
+    doTableStatus(conn);
 else	/* Default - put up initial page. */
     doMainPage(conn);
 cartRemovePrefix(cart, hgtaDo);
