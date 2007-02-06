@@ -7,6 +7,7 @@
 
 #include "hapmapAlleles.h"
 #include "hapmapAllelesCombined.h"
+#include "hapmapAllelesOrtho.h"
 
 
 static void hapmapLoad(struct track *tg)
@@ -15,8 +16,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
-
-struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL;
 
 if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
@@ -34,6 +33,23 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
     return;
     }
 
+if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+{
+    struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
+        slAddHead(&orthoItemList, orthoLoadItem);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    slSort(&orthoItemList, bedCmp);
+    tg->items = orthoItemList;
+    return;
+}
+
+struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -47,7 +63,8 @@ tg->items = simpleItemList;
 }
 
 void hapmapDrawAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
-/* Draw the hapmap at position. */
+/* Draw the hapmap alleles at a given position. */
+/* Display major allele when zoomed to base level. */
 {
 
 if (!zoomedToBaseLevel)
@@ -75,17 +92,24 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
     count2 = count2 + thisItem->allele2CountCHB;
     count2 = count2 + thisItem->allele2CountJPT;
     count2 = count2 + thisItem->allele2CountYRI;
-    if (count1 < count2)
+    if (count1 >= count2)
         allele = cloneString(thisItem->allele1);
     else
         allele = cloneString(thisItem->allele2);
+    }
+else if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+    {
+    struct hapmapAllelesOrtho *thisItem = item;
+    chromStart = thisItem->chromStart;
+    chromEnd = thisItem->chromEnd;
+    allele = cloneString(thisItem->orthoAllele);
     }
 else
     {
     struct hapmapAlleles *thisItem = item;
     chromStart = thisItem->chromStart;
     chromEnd = thisItem->chromEnd;
-    if (thisItem->allele1Count < thisItem->allele2Count)
+    if (thisItem->allele1Count >= thisItem->allele2Count)
         allele = cloneString(thisItem->allele1);
     else
         allele = cloneString(thisItem->allele2);
@@ -147,6 +171,9 @@ Color col;
 int totalCount = 0;
 int minorCount = 0;
 int grayLevel = 0;
+
+if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+    return MG_BLACK;
 
 if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
