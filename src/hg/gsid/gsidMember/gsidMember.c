@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.6 2007/01/27 02:43:46 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.7 2007/02/06 00:56:52 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -306,39 +306,6 @@ sqlUpdate(conn,dy->string);
 /* see if payment_status is completed */
 
 char *invoice = cgiUsualString("invoice","");
-char *paymentStatus = cgiUsualString("payment_status","");
-if (!sameString("Completed",paymentStatus))
-    {
-    fprintf(f,"Note: payment status not 'Completed' %s\n",dy->string);
-    fflush(f);
-    /* send payer an email confirming */
-    char cmd[256];
-    safef(cmd,sizeof(cmd), 
-    "echo \"We received your payment through Paypal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV access.\" %s"
-    , paymentStatus
-    , cgiUsualString("payment_reason","") 
-    , invoice);
-    int result = system(cmd);
-    if (result == -1)
-	{
-	fprintf(f,"Note: sending email notice of non-activated account to %s failed\n", invoice);
-	fflush(f);
-	goto cleanup;
-	}
-    goto cleanup;
-    }
-
-// TODO: add a check for the amount paid so that it matches the type.
-//  or else, add encryption so that users can't hack the html page
-//  and re-add the require-encryption on the site settings.
-
-// TODO: process the date better, so expirations can work.
-
-// TODO: check if using the email as the invoice will work
-//  when a year has passed.  It would be trouble if they 
-//  couldn't renew later simply because the invoice was
-//  still viewd as a repeat
-
 char *paymentDate = cgiUsualString("payment_date","");
 /* handle expiration date */
 setenv("DATEMSK","./datemsk", TRUE);  /* required by getdate() */
@@ -365,10 +332,28 @@ if (!email)
     return;
     }
 
+char *paymentStatus = cgiUsualString("payment_status","");
+if (!sameString("Completed",paymentStatus))
+    {
+    fprintf(f,"Note: payment status not 'Completed' %s\n",dy->string);
+    fflush(f);
+    /* send payer an email confirming */
+    char cmd[256];
+    safef(cmd,sizeof(cmd), 
+    "echo \"We received your payment through Paypal. However your account is not yet activated.\nPayment status is %s %s. When your payment status is completed your account will be activated and you will receive another email.  Thank you.\" | mail -s \"Payment received for GSID HIV access.\" %s"
+    , paymentStatus
+    , cgiUsualString("payment_reason","") 
+    , email);
+    int result = system(cmd);
+    if (result == -1)
+	{
+	fprintf(f,"Note: sending email notice of non-activated account to %s failed\n", email);
+	fflush(f);
+	goto cleanup;
+	}
+    goto cleanup;
+    }
 
-// TODO: add code to handle expired accounts as follows:
-// valid members: select * from members where expireDate='' or (current_date() < expireDate);
-//  does admin need to add some periodic forced-update?
 
 /* Write payment info to the members table 
  *  email field has been stored in the invoice field */
@@ -391,18 +376,17 @@ dyStringPrintf(dy,"update members set "
 sqlUpdate(conn,dy->string);
 
 
-
 updatePasswordsFile(conn);
 
 /* send payer an email confirming */
 char cmd[256];
 safef(cmd,sizeof(cmd), 
 "echo \"We received your payment through Paypal. Your account is now activated.\nPlease go to http://%s/ to access the site. \" | mail -s \"Payment received for GSID HIV access.\" %s"
-, getenv("HTTP_HOST"), invoice);
+, getenv("HTTP_HOST"), email);
 int result = system(cmd);
 if (result == -1)
     {
-    fprintf(f,"Note: sending email notice of activated account to %s failed\n", invoice);
+    fprintf(f,"Note: sending email notice of activated account to %s failed\n", email);
     fflush(f);
     goto cleanup;
     }
