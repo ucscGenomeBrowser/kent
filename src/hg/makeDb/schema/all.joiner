@@ -2328,6 +2328,7 @@ tablesIgnored $gbd
     cpgIslandExt
     ctgPos
     cytoBand
+    evofold
     firstEF
     gbLoaded
     gbDelete_tmp
@@ -2504,6 +2505,7 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeEvoFold
     encodeGisChip%
     encodeNhgriDnaseHs%
     encodeRegulomeDnaseGM06990%
