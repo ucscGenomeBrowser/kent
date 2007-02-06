@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.161 2006/11/15 20:41:47 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.162 2007/02/06 01:29:50 kate Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1864,16 +1864,6 @@ if (oldOrg != NULL && !sameString(oldOrg, genome))
 hSetDb(database);
 getGenomeSettings();
 conn = hAllocConn();
-
-/* dump custom tracks if assembly changes */
-char *oldDb = hashFindVal(oldCart, "db");
-oldOrg = hashFindVal(oldCart, "org");
-if ((oldDb    && differentWord(oldDb, database)) ||
-    (oldOrg   && differentWord(oldOrg, genome)))
-    {
-    cartRemove(cart, "ct");
-    cartRemovePrefix(cart, "ct_");
-    }
 
 /* Get groupOn.  Revert to default if no advanced filter. */
 groupOn = cartUsualString(cart, groupVarName, "expression");
