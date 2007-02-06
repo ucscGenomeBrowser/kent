@@ -152,6 +152,7 @@
 #include "hapmapAlleleFreq.h"
 #include "hapmapAlleles.h"
 #include "hapmapAllelesCombined.h"
+#include "hapmapAllelesOrtho.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -192,7 +193,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1195 2007/02/02 23:47:21 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1196 2007/02/06 19:24:36 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16140,7 +16141,7 @@ safef(query, sizeof(query),
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-{
+    {
     hmac = hapmapAllelesCombinedLoad(row+rowOffset);
     printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
@@ -16163,7 +16164,51 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     bedPrintPos((struct bed *)hmac, 3);
 
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
+
+void doHapmapOrthos(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct hapmapAllelesOrtho *ortho;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+char *otherDb = NULL;
+int orthoStart = 0;
+int orthoEnd = 0;
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ortho = hapmapAllelesOrthoLoad(row+rowOffset);
+    printf("<BR><B>Ortho Allele:</B> %s\n", ortho->orthoAllele);
+    printf("<BR><B>Ortho Strand:</B> %s\n", ortho->orthoStrand);
+    printf("<BR><B>Ortho </B>");
+    bedPrintPos((struct bed *)ortho, 3);
+
+    printf("<BR>");
+    if (sameString(table, "hapmapAllelesChimp"))
+        otherDb = "panTro2";
+    if (sameString(table, "hapmapAllelesMacaque"))
+        otherDb = "rheMac2";
+    orthoStart = max(start - 250, 1);
+    orthoEnd = min(start + 250, hChromSize(ortho->orthoChrom));
+    linkToOtherBrowser(otherDb, ortho->orthoChrom, orthoStart, orthoEnd);
+    printf("Open %s browser</A> centered at this position.<BR>\n", otherDb);
+
+    }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -18405,6 +18450,11 @@ else if (sameString("hapmapAllelesCEU", track) ||
 	 sameString("hapmapAllelesYRI", track))
     {
     doHapmapAlleles(tdb, item);
+    }
+else if (sameString("hapmapAllelesChimp", track) ||
+         sameString("hapmapAllelesMacaque", track))
+    {
+    doHapmapOrthos(tdb, item);
     }
 else if (sameString("snpArrayAffy250Nsp", track) ||
          sameString("snpArrayAffy250Sty", track) ||
