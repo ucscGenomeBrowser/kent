@@ -629,6 +629,18 @@ type bed 6 +
     longLabel SNPs from All Populations
     priority 5
 
+    track hapmapAllelesChimp
+    subTrack hapmapAlleles
+    shortLabel Chimp Alleles
+    longLabel Orthologous Alleles from Chimp (panTro2)
+    priority 6
+
+    track hapmapAllelesMacaque
+    subTrack hapmapAlleles
+    shortLabel Macaque Alleles
+    longLabel Orthologous Alleles from Macaque (rheMac2)
+    priority 7
+
 searchName hapmapAllelesCEU
 searchTable hapmapAllelesCEU
 searchMethod exact
