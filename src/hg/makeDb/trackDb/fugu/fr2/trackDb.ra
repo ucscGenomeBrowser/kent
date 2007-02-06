@@ -28,7 +28,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-# wiggle phastCons5
+wiggle phastCons5
 spanList 1
 pairwiseHeight 12
 yLineOnOff Off
@@ -39,8 +39,7 @@ windowingFunction mean
 summary multiz5waySummary
 speciesCodonDefault fr2
 speciesGroups vertebrate
-sGroup_vertebrate tetNig1 gasAcu1 oryLat1 danRer4 
-# speciesDefaultOff danRer4 fr1
+sGroup_vertebrate tetNig1 oryLat1 gasAcu1 danRer4 
 treeImage phylo/fr2_5way.gif
 
 track phastConsElements5way
