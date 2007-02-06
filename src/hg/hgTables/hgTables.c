@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.138 2007/02/06 21:20:23 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.139 2007/02/06 21:50:05 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1314,6 +1314,7 @@ numCols = sqlCountColumns(sr);
 char *field;
 while ((field = sqlFieldName(sr)) != NULL)
     printf("%s \t", field);
+printf("\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sep="";
