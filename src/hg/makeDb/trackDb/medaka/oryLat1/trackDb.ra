@@ -47,7 +47,7 @@ windowingFunction mean
 summary multiz5waySummary
 speciesCodonDefault oryLat1
 speciesGroups vertebrate
-sGroup_vertebrate gasAcu1 tetNig1 fr1 danRer4
+sGroup_vertebrate gasAcu1 tetNig1 fr2 danRer4
 treeImage phylo/oryLat1_5way.gif
 
 track phastConsElements5way
