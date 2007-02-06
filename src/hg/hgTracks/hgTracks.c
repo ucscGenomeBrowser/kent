@@ -106,7 +106,7 @@
 #include "dnaMotif.h"
 #include "hapmapTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1271 2007/01/27 00:09:40 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1272 2007/02/06 01:46:10 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2299,19 +2299,26 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     x1 = round(((double)(sf->start-winStart)) * scale);
     x2 = round(((double)(sf->end-winStart)) * scale);
+    /* need to adjust x1/x2 before saving as prevX1/prevX2 */
+    if (x1 < 0)
+        x1 = 0;
+    if (x2 >= width)
+        x2 = width-1;
     countBaseRangeUse(x1, x2, width, useCounts);
-    /* line from prevX2 -> x1; blocks are in orientation order */
+    /* line from previous block to this block, however blocks seem to be reversed
+     * sometimes, not sure why, so just check. */
     if ((gapUseCounts != NULL) && (prevX1 >= 0))
-        countBaseRangeUse(((lf->orientation > 0) ? prevX2: x1),
-                          ((lf->orientation > 0) ? x2-1: prevX1),
+        countBaseRangeUse(((prevX2 < x1) ? prevX2: x1),
+                          ((prevX2 < x1) ? x2-1: prevX1),
                           width, gapUseCounts);
+
     prevX1 = x1;
     prevX2 = x2;
     }
 /* last gap */
 if ((gapUseCounts != NULL) && (prevX1 >= 0))
-    countBaseRangeUse(((lf->orientation > 0) ? prevX2: x1),
-                      ((lf->orientation > 0) ? x2-1: prevX1),
+    countBaseRangeUse(((prevX2 < x1) ? prevX2: x1),
+                      ((prevX2 < x1) ? x2-1: prevX1),
                       width, gapUseCounts);
 }
 
