@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.137 2007/02/06 02:06:14 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.138 2007/02/06 21:20:23 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1301,7 +1301,7 @@ doMainPage(conn);
 void doTableStatus(struct sqlConnection *conn)
 /* Get table status for a database. */
 {
-puts("Content-Type:text/plain\n\n");
+puts("Content-Type:text/plain\n");
 char *db= cartString(cart, "db");
 printf("Table status for database %s\n", db);
 struct sqlResult *sr;
