@@ -39,7 +39,7 @@ windowingFunction mean
 summary multiz8waySummary
 speciesCodonDefault gasAcu1
 speciesGroups vertebrate
-sGroup_vertebrate hg18 mm8 galGal3 danRer4 tetNig1 fr1 oryLat1
+sGroup_vertebrate oryLat1 tetNig1 fr1 danRer4 galGal3 hg18 mm8
 # speciesDefaultOff danRer4 fr1
 treeImage phylo/gasAcu1_8way.gif
 
