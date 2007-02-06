@@ -39,7 +39,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     geneGraph.o genePred.o genePredReader.o genoLay.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o \
-    hapmapAlleles.o hapmapAllelesCombined.o hapmapAlleleFreq.o hapmapSnps.o \
+    hapmapAlleles.o hapmapAllelesCombined.o hapmapAllelesOrtho.o hapmapAlleleFreq.o hapmapSnps.o \
     hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o \
