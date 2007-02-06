@@ -74,6 +74,7 @@ if (!zoomedToBaseLevel)
     }
 
 char *allele = NULL;
+char *strand = NULL;
 int chromStart = 0;
 int chromEnd = 0;
 
@@ -84,6 +85,7 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
     int count2 = 0;
     chromStart = thisItem->chromStart;
     chromEnd = thisItem->chromEnd;
+    strand = cloneString(thisItem->strand);
     count1 = count1 + thisItem->allele1CountCEU;
     count1 = count1 + thisItem->allele1CountCHB;
     count1 = count1 + thisItem->allele1CountJPT;
@@ -103,12 +105,14 @@ else if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName
     chromStart = thisItem->chromStart;
     chromEnd = thisItem->chromEnd;
     allele = cloneString(thisItem->orthoAllele);
+    strand = cloneString(thisItem->strand);
     }
 else
     {
     struct hapmapAlleles *thisItem = item;
     chromStart = thisItem->chromStart;
     chromEnd = thisItem->chromEnd;
+    strand = cloneString(thisItem->strand);
     if (thisItem->allele1Count >= thisItem->allele2Count)
         allele = cloneString(thisItem->allele1);
     else
@@ -125,6 +129,12 @@ w = x2-x1;
 if (w < 1)
     w = 1;
 y += (heightPer >> 1) - 3;
+
+/* might possibly reverse and then reverse again, but this keeps the logic simple */
+if (sameString(strand, "-"))
+    reverseComplement(allele, 1);
+if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+    reverseComplement(allele, 1);
 
 vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
 
