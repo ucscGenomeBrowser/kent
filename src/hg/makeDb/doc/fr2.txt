@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.11 2007/02/05 22:07:49 hiram Exp $"
+#       "$Id: fr2.txt,v 1.12 2007/02/06 23:56:45 hiram Exp $"
 #
 
 ##########################################################################
@@ -1499,3 +1499,12 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
 '_EOF_'
 #	<< happy emacs
 
+############################################################################
+##  Set a more interesting default position, location of CABIN1 gene
+##	DONE - 2007-02-08 - Hiram
+    ssh hgwdev
+    hgsql -e "update
+    hgsql -e \
+'update dbDb set defaultPos="chrUn:29,305,920-29,330,760" where name = "fr2";' \
+	-h genome-testdb hgcentraltest
+############################################################################
