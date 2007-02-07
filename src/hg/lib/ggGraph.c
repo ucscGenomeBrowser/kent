@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.16 2005/04/13 06:25:53 markd Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.17 2007/02/07 20:37:14 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -1139,6 +1139,7 @@ struct hash *aliHash = newAlignmentHash(mc);
 int minOverlap = 6; /* Don't believe any soft start/end that is less
 		     than 6bp from hard start/end.  Usually end up
 		     being alignment oddities.*/
+/* Try and snap soft edges to nearby hard edes */
 int i;
 for(i=0; i<gg->vertexCount; i++)
     {
