@@ -9,21 +9,107 @@
 #include "hapmapAllelesCombined.h"
 #include "hapmapAllelesOrtho.h"
 
+boolean isMixed(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
+                int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
+/* return TRUE if different populations have a different major allele */
+{
+int allele1Count = 0;
+int allele2Count = 0;
+
+if (allele1CountCEU >= allele2CountCEU && allele1CountCEU > 0) 
+    allele1Count++;
+else if (allele2CountCEU > 0)
+    allele2Count++;
+
+if (allele1CountCHB >= allele2CountCHB && allele1CountCHB > 0) 
+    allele1Count++;
+else if (allele2CountCHB > 0)
+    allele2Count++;
+
+if (allele1CountJPT >= allele2CountJPT && allele1CountJPT > 0) 
+    allele1Count++;
+else if (allele2CountJPT > 0)
+    allele2Count++;
+
+if (allele1CountYRI >= allele2CountYRI && allele1CountYRI > 0) 
+    allele1Count++;
+else if (allele2CountYRI > 0)
+    allele2Count++;
+
+if (allele1Count > 0 && allele2Count > 0) return TRUE;
+
+return FALSE;
+}
+
+boolean isAllPops(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
+                  int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
+/* return TRUE if data available for all populations */
+{
+if (allele1CountCEU == 0 && allele2CountCEU == 0) return FALSE;
+if (allele1CountCHB == 0 && allele2CountCHB == 0) return FALSE;
+if (allele1CountJPT == 0 && allele2CountJPT == 0) return FALSE;
+if (allele1CountYRI == 0 && allele2CountYRI == 0) return FALSE;
+
+return TRUE;
+}
+
+boolean isComplexObserved(char *observed)
+/* return TRUE if not simple bi-allelic A/C, A/G, A/T, etc. */
+{
+if (sameString(observed, "A/C")) return FALSE;
+if (sameString(observed, "A/G")) return FALSE;
+if (sameString(observed, "A/T")) return FALSE;
+if (sameString(observed, "C/G")) return FALSE;
+if (sameString(observed, "C/T")) return FALSE;
+if (sameString(observed, "G/T")) return FALSE;
+return TRUE;
+}
+
 
 static void hapmapLoad(struct track *tg)
+/* load filtered data */
+/* currently mixed and geno filters apply only to combined track, could extend that */
+/* mixed and geno filters calibrated to all populations, regardless of what is displayed, could change that */
+/* observed filter applies to everything but orthos, could add observed to ortho table */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
 
+char *observedFilter = cartCgiUsualString(cart, HA_OBSERVED, "don't care");
+boolean complexObserved = FALSE;
+
 if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
     struct hapmapAllelesCombined *combinedLoadItem, *combinedItemList = NULL;
+    char *mixedFilter = cartCgiUsualString(cart, HA_POP_MIXED, "don't care");
+    char *genoFilter = cartCgiUsualString(cart, HA_GENO_AVAIL, "don't care");
+    boolean mixed = FALSE;
+    boolean popsAll = TRUE;
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
         {
         combinedLoadItem = hapmapAllelesCombinedLoad(row+rowOffset);
+
+        mixed = isMixed(combinedLoadItem->allele1CountCEU, combinedLoadItem->allele1CountCHB,
+                combinedLoadItem->allele1CountJPT, combinedLoadItem->allele1CountYRI,
+                combinedLoadItem->allele2CountCEU, combinedLoadItem->allele2CountCHB,
+                combinedLoadItem->allele2CountJPT, combinedLoadItem->allele2CountYRI);
+	if (sameString(mixedFilter, "not mixed") && mixed) continue;
+	if (sameString(mixedFilter, "only mixed") && !mixed) continue;
+
+        popsAll = isAllPops(combinedLoadItem->allele1CountCEU, combinedLoadItem->allele1CountCHB,
+                combinedLoadItem->allele1CountJPT, combinedLoadItem->allele1CountYRI,
+                combinedLoadItem->allele2CountCEU, combinedLoadItem->allele2CountCHB,
+                combinedLoadItem->allele2CountJPT, combinedLoadItem->allele2CountYRI);
+	if (sameString(genoFilter, "all populations") && !popsAll) continue;
+	if (sameString(genoFilter, "subset of populations") && popsAll) continue;
+
+        complexObserved = isComplexObserved(combinedLoadItem->observed);
+	if (sameString(observedFilter, "complex") && !complexObserved) continue;
+	if (sameString(observedFilter, "bi-alleleic") && complexObserved) continue;
+
         slAddHead(&combinedItemList, combinedLoadItem);
         }
     sqlFreeResult(&sr);
@@ -54,6 +140,11 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffse
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
+
+    complexObserved = isComplexObserved(simpleLoadItem->observed);
+    if (sameString(observedFilter, "complex") && !complexObserved) continue;
+    if (sameString(observedFilter, "bi-alleleic") && complexObserved) continue;
+
     slAddHead(&simpleItemList, simpleLoadItem);
     }
 sqlFreeResult(&sr);
@@ -138,38 +229,6 @@ if (cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 
 vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
 
-}
-
-boolean isMixed(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
-                int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
-/* return TRUE if different populations have a different major allele */
-{
-int allele1Count = 0;
-int allele2Count = 0;
-
-if (allele1CountCEU >= allele2CountCEU && allele1CountCEU > 0) 
-    allele1Count++;
-else if (allele2CountCEU > 0)
-    allele2Count++;
-
-if (allele1CountCHB >= allele2CountCHB && allele1CountCHB > 0) 
-    allele1Count++;
-else if (allele2CountCHB > 0)
-    allele2Count++;
-
-if (allele1CountJPT >= allele2CountJPT && allele1CountJPT > 0) 
-    allele1Count++;
-else if (allele2CountJPT > 0)
-    allele2Count++;
-
-if (allele1CountYRI >= allele2CountYRI && allele1CountYRI > 0) 
-    allele1Count++;
-else if (allele2CountYRI > 0)
-    allele2Count++;
-
-if (allele1Count > 0 && allele2Count > 0) return TRUE;
-
-return FALSE;
 }
 
 
