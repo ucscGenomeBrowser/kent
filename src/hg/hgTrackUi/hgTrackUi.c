@@ -26,13 +26,14 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 #include "dbRIP.h"
+#include "hapmapAlleles.h"
 
 #define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.337 2007/01/31 16:26:15 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.338 2007/02/07 01:41:11 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2138,6 +2139,56 @@ acemblyDropDown("acembly.type", acemblyClass);
 printf("  ");
 }
 
+void hapmapAllelesUi(struct trackDb *tdb)
+/* Options for filtering hapmap alleles */
+/* Default is always "don't care" */
+/* May also add filters for orthoAvail, inRepeat, and zygosity */
+{
+char **menu;
+int menuSize = 0;
+int menuPos = 0;
+
+puts("<P>");
+puts("<B>Filters for the display of the All Populations data:</B>");
+puts("<BR><BR>\n");
+
+puts("<B>Major alleles mixed across populations:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "don't care";
+menu[menuPos++] = "only mixed";
+menu[menuPos++] = "not mixed";
+cgiMakeDropList(HA_POP_MIXED, menu, menuSize, cartCgiUsualString(cart, HA_POP_MIXED, menu[0]));
+freez(&menu);
+
+puts("<B>Genotypes available across populations:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "don't care";
+menu[menuPos++] = "all populations";
+menu[menuPos++] = "subset of populations";
+cgiMakeDropList(HA_GENO_AVAIL, menu, menuSize, cartCgiUsualString(cart, HA_GENO_AVAIL, menu[0]));
+freez(&menu);
+
+puts("<P>");
+puts("<B>Filter for the display of Human data:</B>");
+puts("<BR><BR>\n");
+
+puts("<B>Observed:</B>&nbsp;");
+menuSize = 3;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "don't care";
+menu[menuPos++] = "bi-alleleic";
+menu[menuPos++] = "complex";
+cgiMakeDropList(HA_OBSERVED, menu, menuSize, cartCgiUsualString(cart, HA_OBSERVED, menu[0]));
+freez(&menu);
+
+puts("</P>\n");
+}
+
 void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
@@ -2279,6 +2330,8 @@ else if (startsWith("retroposons", track))
     retroposonsUi(tdb);
 else if (sameString(track, "tfbsConsSites"))
     tfbsConsSitesUi(tdb);
+else if (sameString(track, "hapmapAlleles"))
+    hapmapAllelesUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
