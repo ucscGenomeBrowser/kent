@@ -13,7 +13,7 @@
 extern char *createTablesSql;
 extern char *createKeysSql;
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.6 2006/12/01 20:01:55 genbank Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.7 2007/02/07 18:10:08 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -111,18 +111,12 @@ errCatchFree(&except);
 }
 
 static void convertRow(char **row, int numCols, struct sqlFieldInfo *fieldInfoList,
-                char *dumpFile, char *table, FILE *loadFh)
+                       char *dumpFile, char *table, FILE *loadFh)
 /* convert one row and output to file */
 {
 int iCol;
 char *sep = "";
 struct sqlFieldInfo *fi;
-
-/* for some reason, the dump files have an extra tab at the end, so we 
- * skip this bogus column */
-if (row[numCols-1][0] != '\0')
-    errAbort("%s: expected empty column at end of row", dumpFile);
-numCols--;
 
 if (slCount(fieldInfoList) != numCols)
     errAbort("%s: table %s has %d columns, import file has %d columns",
