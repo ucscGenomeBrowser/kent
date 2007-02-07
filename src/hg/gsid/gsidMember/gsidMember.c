@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.7 2007/02/06 00:56:52 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.8 2007/02/07 23:09:13 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -80,17 +80,22 @@ else
     }
 }
 
-/*
-char password[35]; 
 
-            encryptNewPWD(userPassword, password, sizeof(password));
-            safef(query, sizeof(query),
-                "update %s set password = '%s' where user = '%s' ",
-                tbl, u.password, u.user);
-            sqlUpdate(conn, query);
-            loginOK = TRUE;
-*/
-
+boolean checkPwdCharClasses(char *password)
+/* check that password uses at least 3 character classes */
+{
+/* [A-Z] [a-z] [0-9] [!@#$%^&*()] */
+int classes[4]={0,0,0,0};
+char c;
+while ((c=*password++))
+    {
+    if (c >= 'A' && c <= 'Z') classes[0] = 1;
+    if (c >= 'a' && c <= 'z') classes[1] = 1;
+    if (c >= '0' && c <= '9') classes[2] = 1;
+    if (strchr("!@#$%^&*()",c)) classes[3] = 1;
+    }
+return ((classes[0]+classes[1]+classes[2]+classes[3])>=3);
+}
 
 /* --- update passwords file ----- */
 
@@ -687,10 +692,17 @@ if (password)
 
 //TODO: make password requirements stricter, e.g. min length etc.
 password = cartUsualString(cart, "gsidM_password", "");
-if (!password || sameString(password,"") || (strlen(password)<6))
+if (!password || sameString(password,"") || (strlen(password)<8))
     {
     freez(&errMsg);
-    errMsg = cloneString("Password must be at least 6 characters long.");
+    errMsg = cloneString("Password must be at least 8 characters long.");
+    signupPage(conn);
+    return;
+    }
+if (!checkPwdCharClasses(password))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Password must contain characters from 3 of the following classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
     signupPage(conn);
     return;
     }
