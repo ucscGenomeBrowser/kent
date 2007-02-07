@@ -87,10 +87,10 @@ int i;
 for (i = 0; ca->rawCols[i] != NULL; i++)
     {
     if (i > 0)
-        fputc_unlocked('\t', fh);
-    fputs_unlocked(ca->rawCols[i], fh);
+        putc_unlocked('\t', fh);
+    fputs(ca->rawCols[i], fh);
     }
-fputc_unlocked(term, fh);
+putc_unlocked(term, fh);
 }
 
 static char **saveRawCols(struct rowReader *rr)
