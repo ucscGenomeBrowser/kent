@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.338 2007/02/07 01:41:11 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.339 2007/02/07 16:28:16 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -621,7 +621,7 @@ for (i = 0; i < gvColorTypeSize; i++)
 
 printf("<BR>");
 cartMakeRadioButton(cart, "gvPos.filter.colorby", "disease", "type");
-printf("<B>Color mutations by phenotype association</B> (determination is described <a href=#phenoassoc>below</a>)<BR>");
+printf("<B>Color mutations by phenotype association</B> (determination is described <A HREF=#phenoassoc>below</A>)<BR>");
 for (i = 0; i < gvColorDASize; i++)
     {
     char *defaultVal = cartUsualString(cart, gvColorDAStrings[i], gvColorDADefault[i]);
