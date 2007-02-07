@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.313 2007/01/03 23:43:52 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.314 2007/02/07 20:37:29 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -561,7 +561,8 @@ return conn;
 void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
-sqlFreeConnection(hdbCc, pConn);
+if (hdbCc != NULL)
+    sqlFreeConnection(hdbCc, pConn);
 }
 
 void hFreeConn2(struct sqlConnection **pConn)
