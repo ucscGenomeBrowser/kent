@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.17 2007/02/07 20:37:14 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.18 2007/02/07 21:47:28 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -545,11 +545,9 @@ struct hash *newAlignmentHash(struct ggMrnaCluster *mc)
 {
 struct hash *hash = newHash(4);
 struct ggAliInfo *ai = NULL;
-char buff[256];
 for(ai=mc->mrnaList; ai != NULL; ai = ai->next)
     {
-    safef(buff, sizeof(buff), "%s", ai->ma->qName);
-    hashAdd(hash, buff, ai);
+    hashAdd(hash, ai->ma->qName, ai);
     }
 return hash;
 }
