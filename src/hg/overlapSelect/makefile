@@ -26,7 +26,7 @@ overlapSelect.o: usage.msg overlapSelect.c coordCols.h selectTable.h chromAnn.h
 # create usage msg from text
 usage.msg: usage.txt
 	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
-	${BINDIR}/stringify $< >> $@.tmp
+	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
 
 test:
