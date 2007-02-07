@@ -8,7 +8,7 @@ HG_WARN=-Wformat -Wimplicit -Wuninitialized -Wreturn-type
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
 # Stronger warning checks, and warnings-->errors, for libraries and CGIs:
-ifeq (${OSTYPE},darwin)
+ifeq (darwin,$(findstring darwin,${OSTYPE}))
     HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable
 else
   ifeq (solaris,$(findstring solaris,${OSTYPE}))
