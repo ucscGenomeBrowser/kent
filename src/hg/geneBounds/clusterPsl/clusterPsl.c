@@ -14,7 +14,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.5 2007/02/07 20:47:10 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.6 2007/02/07 21:00:14 kent Exp $";
 
 int maxMergeGap = 5;
 
@@ -240,7 +240,7 @@ int chromEnd = cluster->tEnd;
 
 assert(cluster->tStart == rangeList->start);
 fprintf(f, "%s\t%d\t%d\t", cluster->pslList->tName, chromStart, chromEnd);
-fprintf(f, "r%de%di%d\t", pslCount, exonTree->n, ++id);
+fprintf(f, "c%d\t", ++id);
 fprintf(f, "0\t");	/* score field */
 fprintf(f, "%s\t", cluster->pslList->strand);
 fprintf(f, "%d\t", chromStart);	/* thick start */
