@@ -1,4 +1,5 @@
-/* clusterRna - Make clusters of mRNA and ESTs. */
+/* clusterRna - Make clusters of mRNA and ESTs.  Optionally turn clusters into
+ * graphs. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -7,8 +8,15 @@
 #include "options.h"
 #include "psl.h"
 #include "rangeTree.h"
+#include "geneGraph.h"
+#include "altGraph.h"
+#include "nib.h"
+#include "twoBit.h"
+#include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.4 2007/02/01 19:31:40 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.5 2007/02/07 20:47:10 kent Exp $";
+
+int maxMergeGap = 5;
 
 void usage()
 /* Explain usage and exit. */
@@ -16,15 +24,22 @@ void usage()
 errAbort(
   "clusterPsl - Make clusters of mRNA aligments\n"
   "usage:\n"
-  "   clusterPsl input output\n"
+  "   clusterPsl input output.bed\n"
   "where input is a psl file (not necessarily sorted)\n"
   "      output is a text file full of cluster info\n"
   "options:\n"
   "   -verbose=2 Make output more verbose.\n"
+  "   -agx=output.agx - Create splicing graphs\n"
+  "   -dna=db.2bit - DNA - two bit file or nib dir.\n"
+  "   -maxMergeGap=N Merge blocks separated by no more than this. Default %d\n",
+      maxMergeGap
   );
 }
 
 static struct optionSpec options[] = {
+   {"agx", OPTION_STRING},
+   {"dna", OPTION_STRING},
+   {"maxMergeGap", OPTION_INT},
    {NULL, 0},
 };
 
@@ -70,6 +85,7 @@ struct pslCluster *pslClusterNew()
 struct pslCluster *cluster;
 AllocVar(cluster);
 cluster->exonTree = rangeTreeNew();
+cluster->tStart = BIGNUM;
 cluster->tEnd = -BIGNUM;
 return cluster;
 }
@@ -182,6 +198,36 @@ binKeeperFree(&bins);
 return clusterList;
 }
 
+
+void writeClusterGraph(struct pslCluster *cluster, struct dnaSeq *chrom, 
+	char *chromName, FILE *f)
+/* Create a geneGraph out of cluster, and write it to file. */
+{
+verbose(3, "writeClusterGraph %s:%d-%d\n", chromName, 
+	cluster->tStart, cluster->tEnd);
+struct ggMrnaAli *maList = pslListToGgMrnaAliList(cluster->pslList, 
+	chromName, 0, chrom->size, chrom, maxMergeGap);
+verbose(4, " %d psls goes to %d ggMrnaAli\n", slCount(cluster->pslList),
+	slCount(maList));
+struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, chrom);
+struct ggMrnaCluster *mcList = ggClusterMrna(ci);
+verbose(4, " %d ggMrnaClusters made\n", slCount(mcList));
+struct ggMrnaCluster *mc;
+for (mc = mcList; mc != NULL; mc = mc->next)
+    {
+    struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
+    checkEvidenceMatrix(gg);
+    struct altGraphX *ag = ggToAltGraphX(gg);
+    if (ag != NULL)
+         altGraphXTabOut(ag, f);
+    altGraphXFree(&ag);
+    freeGeneGraph(&gg);
+    }
+ggFreeMrnaClusterList(&mcList);
+ggMrnaAliFreeList(&maList);
+freez(&ci);	/* Note - DON'T call freeGgMrnaInput, it'll free chrom! */
+}
+
 void pslClusterWrite(struct pslCluster *cluster, FILE *f)
 /* Write out info on cluster to file as a bed12 + 2 */
 {
@@ -189,10 +235,10 @@ static int id=0;
 int pslCount = slCount(cluster->pslList);
 struct rbTree *exonTree = cluster->exonTree;
 struct range *range, *rangeList = rangeTreeList(exonTree);
-int chromStart = rangeList->start;
-struct range *lastRange = slLastEl(rangeList);
-int chromEnd = lastRange->end;
+int chromStart = cluster->tStart;
+int chromEnd = cluster->tEnd;
 
+assert(cluster->tStart == rangeList->start);
 fprintf(f, "%s\t%d\t%d\t", cluster->pslList->tName, chromStart, chromEnd);
 fprintf(f, "r%de%di%d\t", pslCount, exonTree->n, ++id);
 fprintf(f, "0\t");	/* score field */
@@ -216,18 +262,29 @@ for (psl = cluster->pslList; psl != NULL; psl = psl->next)
 fprintf(f, "\n");
 }
 
-void clusterPsl(char *pslName, char *outName)
+void clusterPsl(char *pslName, char *clusterOut, char *dnaSource, char *agxOut)
 /* Transform a file full of psl's into a file full of rnaClusters */
 {
-FILE *out = mustOpen(outName, "w");
+FILE *fCluster = mustOpen(clusterOut, "w");
 
 /* Set up DNA seqence accesser */
+struct nibTwoCache *nibTwo = NULL;
+if (dnaSource != NULL)
+    nibTwo = nibTwoCacheNew(dnaSource);
+
+FILE *fAgx = NULL;
+if (agxOut != NULL)
+    fAgx = mustOpen(agxOut, "w");
+  
+struct dnaSeq *chrom = NULL;
+
 /* Load in list and sort by chromosomes. */
 struct psl *pslList = pslLoadAll(pslName);
 slSort(&pslList, pslCmpTargetAndStrand);
 
 /* Go through input one chromosome at a time. */
 struct psl *chromStart, *chromEnd = NULL;
+char *oldChromName = cloneString("");
 for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
     {
     /* Find chromosome end. */
@@ -249,6 +306,12 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
 
     /* Get chromosome sequence */
     verbose(1, "chrom %s %s\n", chromStart->tName, chromStart->strand); 
+    if (nibTwo != NULL && !sameString(chromName, oldChromName))
+        {
+	dnaSeqFree(&chrom);
+	chrom = nibTwoCacheSeq(nibTwo, chromName);
+	verbose(2, "Loaded %d bases in %s\n", chrom->size, chromName);
+	}
 
     /* Create clusters. */
     struct pslCluster *clusterList = clusterPslsOnChrom(chromStart);
@@ -256,11 +319,19 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
     /* Write clusters to file. */
     struct pslCluster *cluster;
     for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
-         pslClusterWrite(cluster, out);
+	 {
+         pslClusterWrite(cluster, fCluster);
+	 if (fAgx != NULL)
+	     writeClusterGraph(cluster, chrom, chromName, fAgx);
+	 }
 
+    freez(&oldChromName);
+    oldChromName = cloneString(chromName);
     pslClusterFreeList(&clusterList);	/* Note free's psls as well! */
     }
-carefulClose(&out);
+nibTwoCacheFree(&nibTwo);
+carefulClose(&fCluster);
+carefulClose(&fAgx);
 }
 
 
@@ -270,6 +341,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-clusterPsl(argv[1], argv[2]);
+if (optionExists("agx") && !optionExists("dna"))
+   errAbort("Need to use dna option with agx option.");
+maxMergeGap = optionInt("maxMergeGap", maxMergeGap);
+clusterPsl(argv[1], argv[2], optionVal("dna", NULL), optionVal("agx", NULL));
 return 0;
 }
