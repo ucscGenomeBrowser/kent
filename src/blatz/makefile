@@ -22,7 +22,7 @@ blatzClient: client.o bzp.o ${MYLIBS}
 	${STRIP} ${BINDIR}/blatzClient${EXE}
 
 clean:
-	rm -f $O
+	rm -f $O standalone.o server.o client.o
 
 test:	doTest
 
