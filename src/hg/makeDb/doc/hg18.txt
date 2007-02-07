@@ -12676,6 +12676,171 @@ synBlastp.csh hg18 mm8
     rm j.*
     rm j1
 
+###########################################################
+# MAKE Drosophila Proteins track (DONE 2007-02-06 braney)
+    ssh kkstore02
+    sandir=/san/sanvol1/scratch/hg18
+    mkdir $sandir
+    cd /cluster/data/hg18
+    cat noUn/chr*fa > temp.fa
+    faSplit gap temp.fa 1000000 $sandir/blastDb/x -lift=$sandir/blastDb.lft
+    cat randomContigs/*.fa > temp.fa
+    faSplit sequence temp.fa 150 $sandir/blastDb/y
+    rm temp.fa
+    cd $sandir/blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    mkdir -p /cluster/data/hg18/bed/tblastn.dm2FB
+    cd /cluster/data/hg18/bed/tblastn.dm2FB
+    echo  /san/sanvol1/scratch/hg18/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 3066 query.lst
+
+   # we want around 150000 jobs
+   calc `wc /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl | awk "{print \\\$1}"`/\(150000/`wc query.lst | awk "{print \\\$1}"`\)
+
+# 18929/(150000/3066) = 386.908760
+
+   mkdir -p /cluster/bluearc/hg18/bed/tblastn.dm2FB/fbfa
+   split -l 387 /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl  /cluster/bluearc/hg18/bed/tblastn.dm2FB/fbfa/kg
+   ln -s /cluster/bluearc/hg18/bed/tblastn.dm2FB/fbfa 
+   cd fbfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S fbfa/*.fa > fb.lst
+   mkdir -p /cluster/bluearc/hg18/bed/tblastn.dm2FB/blastOut
+   ln -s /cluster/bluearc/hg18/bed/tblastn.dm2FB/blastOut
+   for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/hg18/bed/tblastn.dm2FB
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /san/sanvol1/scratch/hg18/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/dm2/bed/blat.dm2FB/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    exit
+    chmod +x blastSome
+    gensub2 query.lst fb.lst blastGsub blastSpec
+    
+    ssh pk
+    cd /cluster/data/hg18/bed/tblastn.dm2FB
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 150234 of 150234 jobs
+# CPU time in finished jobs:    8313632s  138560.53m  2309.34h   96.22d  0.264 y
+# IO & Wait Time:                882301s   14705.02m   245.08h   10.21d  0.028 y
+# Average job time:                  61s       1.02m     0.02h    0.00d
+# Longest finished job:             545s       9.08m     0.15h    0.01d
+# Submission to last job:         40693s     678.22m    11.30h    0.47d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/tblastn.dm2FB
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/hg18/bed/tblastn.dm2FB/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    exit
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/hg18/bed/tblastn.dm2FB/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/hg18/bed/tblastn.dm2FB/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+# Completed: 48 of 49 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:     209872s    3497.86m    58.30h    2.43d  0.007 y
+# IO & Wait Time:                 48501s     808.35m    13.47h    0.56d  0.002 y
+# Average job time:                5383s      89.71m     1.50h    0.06d
+# Longest finished job:           19336s     322.27m     5.37h    0.22d
+# Submission to last job:         19336s     322.27m     5.37h    0.22d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/tblastn.dm2FB/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/hg18/bed/tblastn.dm2FB/unliftBlastDm2FB.psl
+    cd ..
+    pslCheck unliftBlastDm2FB.psl
+    sed "s/[0-9XY]*\///" unliftBlastDm2FB.psl | liftUp -type=.psl -nohead stdout ../../randomContigs/hg18.randomContigs.lift carry stdin | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > blastDm2FB.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/tblastn.dm2FB
+    hgLoadPsl hg18 blastDm2FB.psl
+
+    # check coverage
+    featureBits hg18 blastDm2FB 
+# 5976178 bases of 2881515245 (0.207%) in intersection
+
+    featureBits hg18 knownGene:cds blastDm2FB  -enrichment
+# knownGene:cds 1.111%, blastDm2FB 0.207%, both 0.130%, cover 11.71%, enrich 56.45x
+
+    ssh kkstore04
+    rm -rf /cluster/data/hg18/bed/tblastn.dm2FB/blastOut
+    rm -rf /cluster/bluearc/hg18/bed/tblastn.dm2FB/blastOut
+#end tblastn
+##########################################################################
 
 #########################################################################
 # BLASTZ/CHAIN/NET FR2 (DONE - 2007-01-26 - Hiram)
