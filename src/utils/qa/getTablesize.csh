@@ -92,9 +92,9 @@ end
 # output totals if more than one table
 echo
 if ( "true" == $list ) then
-  echo $machine1 "total" "=" $mach2Tot megabytes \
+  echo $machine1 "total" "=" $mach1Tot megabytes \
     | awk '{printf("%7s %5s %1s %0.2f %9s\n", $1, $2, $3, $4, $5)}'
-  if ( $machine2 != "" ) then
+  if ( "" != $machine2 ) then
     echo $machine2 "total" "=" $mach2Tot megabytes \
       | awk '{printf("%7s %5s %1s %0.2f %9s\n", $1, $2, $3, $4, $5)}'
   endif
