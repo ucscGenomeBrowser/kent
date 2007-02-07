@@ -13,7 +13,7 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggCluster.c,v 1.9 2005/04/13 06:25:53 markd Exp $";
+static char const rcsid[] = "$Id: ggCluster.c,v 1.10 2007/02/07 21:47:07 kent Exp $";
 
 
 
@@ -391,7 +391,8 @@ for (ma = maList; ma != NULL; ma = ma->next)
     {
     struct ggMrnaCluster *mergableClusters = NULL, *newMc = NULL;
     updateActiveClusters(&activeClusters, &finishedClusters, ma->strand, ma->tStart);
-    newMc = ggMrnaClusterOfOne(ma, genoSeq);    if (newMc)
+    newMc = ggMrnaClusterOfOne(ma, genoSeq);    
+    if (newMc)
 	{
 	mergableClusters = findMergableClusters(&activeClusters, newMc);
 	if (mergableClusters == NULL)
