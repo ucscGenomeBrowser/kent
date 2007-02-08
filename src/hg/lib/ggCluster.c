@@ -13,7 +13,7 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggCluster.c,v 1.10 2007/02/07 21:47:07 kent Exp $";
+static char const rcsid[] = "$Id: ggCluster.c,v 1.11 2007/02/08 08:46:03 kent Exp $";
 
 
 
@@ -124,7 +124,7 @@ for(i=0; i<blockCount; i++)
     /* Enter first vertex, checking to see if it has consensus splice sites. */
     v = &vertices[vCount++];
     v->position = block->tStart;
-    if(i == 0 || !isGoodIntron(genoSeq, block-1, block, isRev))
+    if(i == 0 || !genoSeq || !isGoodIntron(genoSeq, block-1, block, isRev))
 	v->type = ggSoftStart;
     else
 	v->type = ggHardStart;
@@ -132,7 +132,7 @@ for(i=0; i<blockCount; i++)
     /* Enter second vertex, checking to see if it has consensus splice sites. */
     v = &vertices[vCount++];
     v->position = block->tEnd;
-    if(i == blockCount-1 || !isGoodIntron(genoSeq, block, block+1, isRev))
+    if(i == blockCount-1 || !genoSeq || !isGoodIntron(genoSeq, block, block+1, isRev))
 	v->type = ggSoftEnd;
     else
 	v->type = ggHardEnd;
