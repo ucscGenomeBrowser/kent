@@ -14,6 +14,7 @@
 /* Variables set from command line. */
 int mergeMax = 5;	
 boolean fixIntrons = TRUE;
+int minSize = 18;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,13 +29,16 @@ errAbort(
   "options:\n"
   "   -mergeMax=N - merge small blocks separated by no more than N on either\n"
   "                 target or query. Default value is %d.\n"
+  "   -minSize=N - suppress output of beds of less than this size (in exons)\n"
+  "                Default value is %d.\n"
   "   -noFixIntrons - slide large gaps in target to seek for splice sites.\n"
-  , mergeMax
+  , mergeMax, minSize
   );
 }
 
 static struct optionSpec options[] = {
    {"mergeMax", OPTION_INT},
+   {"minSize", OPTION_INT},
    {"noFixIntrons", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -176,12 +180,18 @@ if (rangeList == NULL)
 
 /* Figure out number of blocks and overall bounds. */
 int blockCount = 0;
+int totalSize = 0;
 struct range *range = NULL, *lastRange = NULL;
 for (range = rangeList; range != NULL; range = range->next)
     {
     ++blockCount;
+    totalSize += range->end - range->start;
     lastRange = range;
     }
+
+if (totalSize < minSize)
+    return NULL;
+
 int chromStart = rangeList->start;
 int chromEnd = lastRange->end;
 
@@ -255,7 +265,8 @@ for (i=1; i<psl->blockCount; ++i)
 	 /* Break case. Not a short break or a gt/ag or gc/ag intron on either strand */
 	 slReverse(&list);
 	 bed = rangeListToBed(list, psl->tName, psl->qName, psl->strand, 0);
-	 slAddHead(&bedList, bed);
+	 if (bed)
+	     slAddHead(&bedList, bed);
 	 lmAllocVar(lm, list);
 	 list->start = tStart;
 	 list->end = tStart + blockSize;
@@ -271,7 +282,8 @@ for (i=1; i<psl->blockCount; ++i)
     }
 slReverse(&list);
 bed  = rangeListToBed(list, psl->tName, psl->qName, psl->strand, 0);
-slAddHead(&bedList, bed);
+if (bed)
+    slAddHead(&bedList, bed);
 
 lmCleanup(&lm);
 slReverse(&bedList);
@@ -329,6 +341,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 mergeMax = optionInt("mergeMax", mergeMax);
 fixIntrons = !optionExists("noFixIntrons");
+minSize = optionInt("minSize", minSize);
 if (argc != 4)
     usage();
 txPsltoBed(argv[1], argv[2], argv[3]);
