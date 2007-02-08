@@ -8296,7 +8296,8 @@ drop minNonRepSize:     1004    72545
     # have longer alignments to different regions of the genome that are good.
     
 #########################################################################
-# ENSEMBL GENES TRACKS FOR ENSEMBL VERSION 42 
+# ENSEMBL GENES TRACKS FOR ENSEMBL VERSION 42
+# ENSEMBL GENES (PROTEIN-CODING) AND ENSEMBL NON-CODING GENES 
 # (DONE, 2007-01-08 - 2007-01-09 hartera)
 # Obtained from BioMart at Ensembl (The Wellcome Trust Sanger Institute)
    # Starting downloading Ensembl v41 genes (2006-12-13)
@@ -8608,6 +8609,60 @@ close(FILE);
 # url http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=$$
 # urlName gene
 # archive dec2006
+
+    # Add Biotype and External Gene ID to the Ensembl Non-Coding genes table
+    # These can be retrieved from BioMart using the method as above for
+    # Biotype but also selecting the External Gene ID. Click on the Filter 
+    # link on the left panel and expand the GENE section and check the box
+    # for Gene Type and select all types except for protein_coding.
+    # Select TSV as the output and Compressed file (*.gz) as the format.
+    # save as ensNonCoding.biotype.txt.gz
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/ensembl42
+    gunzip ensNonCoding.biotype.txt.gz
+    tail +2 ensNonCoding.biotype.txt > ensNonCoding.biotype.tab
+cat << 'EOF' > ensBiotype.sql
+CREATE TABLE ensBiotype (
+    transcriptId varchar(255) not null,
+    biotype varchar(255) not null,
+    extGeneId varchar(255) not null
+);
+'EOF'
+    hgLoadSqlTab danRer4 ensBiotype ensBiotype.sql ensNonCoding.biotype.tab
+    # Add extra fields to ensNonCoding genePred table:
+    hgsql -e \
+         'alter table ensGeneNonCoding add biotype varchar(255) NOT NULL;' \
+         danRer4
+    hgsql -e \
+         'alter table ensGeneNonCoding add extGeneId varchar(255) NOT NULL;' \
+         danRer4
+    # Add index to the extGeneId column:
+    hgsql -e 'alter table ensGeneNonCoding add index(extGeneId);' danRer4
+    hgsql -e 'select count(*) from ensGeneNonCoding;' danRer4
+    # 3560
+    hgsql -e 'update ensGeneNonCoding set biotype = "";' danRer4
+    hgsql -e 'update ensGeneNonCoding set extGeneId = "";' danRer4
+    # Now populate these columns with data from the ensBiotype table
+    hgsql -e 'select count(*) from ensGeneNonCoding as g, ensBiotype as b \
+          where g.name = b.transcriptId;' danRer4
+    # 3560
+    hgsql -e 'update ensGeneNonCoding as g, ensBiotype as b \
+          set g.biotype = b.biotype where g.name = b.transcriptId;' danRer4
+    hgsql -e 'select count(*) from ensGeneNonCoding where biotype != "";' \
+          danRer4
+    # 3560
+    # then set the External Gene ID:
+    hgsql -e 'update ensGeneNonCoding as g, ensBiotype as b \
+          set g.extGeneId = b.extGeneId where g.name = b.transcriptId;' danRer4
+    hgsql -e 'select count(*) from ensGeneNonCoding where biotype != "";' \
+          danRer4
+    # 3393
+    # This is correct since 167 rows in the ensNonCoding.biotype.tab have no
+    # external Gene ID:
+    awk '{if ($3 == "") print;}' ensNonCoding.biotype.tab | wc -l
+    # 167
+    # 3393 + 167 = 3360
+    # Now check code in hgc.c for handling the details page for this track.
  
 #########################################################################
 # RADIATION HYBRID (RH) MAP TRACK (DONE, 2007-01-12 - 2007-01-23, hartera)
@@ -8615,6 +8670,8 @@ close(FILE);
 # yzhou@enders.tch.harvard.edu
 # Latest RH map sequences and primers received on 2006-10-03 from
 # Anhua (Peter) Song - asong@enders.tch.harvard.edu
+# Changed the name of rhMapInfo table and related files to rhMapZfishInfo
+# to make the name more zebrafish-specific (2007-02-08, hartera)
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/ZonLab/rhMap-2006-10-03
     cd /cluster/data/danRer4/bed/ZonLab
@@ -9215,9 +9272,11 @@ while (<RH>){
     # with an extra column for the ZFIN ID. 
     # Use autosql to create a .sql file.
     ssh hgwdev
-cat << 'EOF' > ~/kent/src/hg/lib/rhMapInfo.as
-table rhMapInfo
-"Radiation Hybrid map information"
+    # rename the information table and make it zebrafish specific
+    # (2007-02-08, hartera)
+cat << 'EOF' > ~/kent/src/hg/lib/rhMapZfishInfo.as
+table rhMapZfishInfo
+"Zebrafish Radiation Hybrid map information"
 (
 string name;            "Name of Radiation Hybrid (RH) map marker"
 string zfinId; 		"ZFIN ID for the marker"
@@ -9234,24 +9293,27 @@ string rightPrimer;     "Reverse primer sequence"
 # << happy emacs
     # create .sql, .c and .h files using autoSql
     cd ~/kent/src/hg/lib
-    autoSql rhMapInfo.as rhMapInfo
-    mv rhMapInfo.h ../inc
-    # edit rhMapInfo.sql and add an index (INDEX(zfinId)).
+    autoSql rhMapZfishInfo.as rhMapZfishInfo
+    mv rhMapZfishInfo.h ../inc
+    # edit rhMapZfishInfo.sql and add an index (INDEX(zfinId)).
     # commit these files (*.as, *sql, *.c and *.h) to CVS replacing 
     # the original rhMapInfo* files. 
     # make changes to hgc so that it prints the ZFIN ID in addition to the
-    # other rhMapInfo fields. 
+    # other rhMapZfishInfo fields. 
  
-    # load table
+    # reload table with new name (2007-02-08, hartera):
     cd /cluster/data/danRer4/bed/ZonLab/rhMap
     hgsql -e 'drop table rhMapInfo;' danRer4 
-    hgLoadSqlTab danRer4 rhMapInfo ~/kent/src/hg/lib/rhMapInfo.sql \
+    hgLoadSqlTab danRer4 rhMapZfishInfo ~/kent/src/hg/lib/rhMapZfishInfo.sql \
           rhMapInfoWithZfinIds.tab
+    
     # add code to hgc.c to print ZFIN ID, if available, on the details page
     # together with the other marker-related information.
     # added track to trackDb.ra in trackDb/zebrafish/danRer4 with a URL for 
     # the ZFIN IDs to link to the relevant page at http://www.zfin.org 
     # and added an html page for the track.
+    # Added the rhMapZfishInfo.h file to the makefile in src/hg/lib
+    # and replaced rhMapInfo with rhMapZfishInfo in src/hg/hgc/hgc.c
 
 #########################################################################
 ##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
