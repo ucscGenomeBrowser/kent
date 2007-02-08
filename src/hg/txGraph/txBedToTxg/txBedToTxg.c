@@ -26,13 +26,14 @@ static struct optionSpec options[] = {
 struct ggMrnaAli *bedToMa(struct bed *bed)
 /* convert psl to format the clusterer likes. */
 {
-struct ggMrnaAli *ma;
-int i;
-int blockCount = bed->blockCount;
-struct ggMrnaBlock *blocks, *block;
+/* Figure out numerical as well as character representation of strand. */
 char *strand = bed->strand;
 int orientation = (strand[0] == '-' ? -1 : 1); 
+int blockCount = bed->blockCount;
+verbose(2, "bedToMa %s\n", bed->name);
 
+/* Allocate structure and fill in all but blocks. */
+struct ggMrnaAli *ma;
 AllocVar(ma);
 ma->orientation = orientation;
 ma->qName = cloneString(bed->name);
@@ -45,19 +46,34 @@ ma->hasIntrons = (blockCount > 1);
 ma->tName = cloneString(bed->chrom);
 ma->tStart = bed->chromStart;
 ma->tEnd = bed->chromEnd;
-ma->blockCount = blockCount;
-ma->blocks = AllocArray(blocks, blockCount);
 
-for (i = 0; i<blockCount; ++i)
+/* Deal with blocks. */
+struct ggMrnaBlock *blocks, *block;
+if (blockCount > 0)
     {
-    int bSize = bed->blockSizes[i];
-    int tStart = bed->chromStarts[i] + bed->chromStart;
-    int qStart = tStart;
-    block = blocks+i;
-    block->qStart = qStart;
-    block->qEnd = qStart + bSize;
-    block->tStart = tStart;
-    block->tEnd = tStart + bSize;
+    ma->blockCount = blockCount;
+    ma->blocks = AllocArray(blocks, blockCount);
+
+    int i;
+    for (i = 0; i<blockCount; ++i)
+	{
+	int bSize = bed->blockSizes[i];
+	int tStart = bed->chromStarts[i] + bed->chromStart;
+	int qStart = tStart;
+	block = blocks+i;
+	block->qStart = qStart;
+	block->qEnd = qStart + bSize;
+	block->tStart = tStart;
+	block->tEnd = tStart + bSize;
+	}
+    }
+else
+    {
+    /* If no block list, make single block. */
+    ma->blockCount = 1;
+    ma->blocks = AllocVar(block);
+    block->qStart = block->tStart = bed->chromStart;
+    block->qEnd = block->tEnd = bed->chromEnd;
     }
 return ma;
 }
