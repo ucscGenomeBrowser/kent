@@ -15,14 +15,14 @@
 
 /* Check for triallelic or quadallelic -- log and discard if found. */
 /* Also check for no alleles. */
-/* Also calculate score. */
+/* Also calculate score (minor allele frequency). */
 
 /* Output is:
    chrom
    chromStart
    chromEnd
    name
-   score
+   score (minor allele frequency)
    strand
    observed
    allele1
@@ -37,7 +37,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmap1.c,v 1.2 2007/02/08 21:09:04 heather Exp $";
+static char const rcsid[] = "$Id: hapmap1.c,v 1.3 2007/02/08 21:19:43 heather Exp $";
 
 FILE *logFileHandle = NULL;
 FILE *outputFileHandle = NULL;
@@ -71,6 +71,7 @@ int getScore(int aCount, int cCount, int gCount, int tCount)
 {
 int maxCount = 0;
 int total = aCount + cCount + gCount + tCount;
+int score = 0;
 
 maxCount = aCount;
 if (cCount > maxCount) maxCount = cCount;
@@ -78,7 +79,8 @@ if (gCount > maxCount) maxCount = gCount;
 if (tCount > maxCount) maxCount = tCount;
 
 maxCount = maxCount * 1000;
-return maxCount / total;
+score = 1000 - (maxCount / total);
+return score;
 }
 
 void handleInput(char **row)
@@ -107,20 +109,20 @@ score = getScore(aCountHomo + aCountHetero, cCountHomo + cCountHetero, gCountHom
 fprintf(outputFileHandle, "%s %s %s %s %d %s %s ", row[0], row[1], row[2], row[3], score, row[5], row[6]);
 
 if (aCountHomo > 0 || aCountHetero > 0)
-    fprintf(outputFileHandle, "A %d ", aCountHomo);
+    fprintf(outputFileHandle, "A %d ", aCountHomo/2);
 if (cCountHomo > 0 || cCountHetero > 0)
-    fprintf(outputFileHandle, "C %d ", cCountHomo);
+    fprintf(outputFileHandle, "C %d ", cCountHomo/2);
 if (gCountHomo > 0 || gCountHetero > 0)
-    fprintf(outputFileHandle, "G %d ", gCountHomo);
+    fprintf(outputFileHandle, "G %d ", gCountHomo/2);
 if (tCountHomo > 0 || tCountHetero > 0)
-    fprintf(outputFileHandle, "T %d ", tCountHomo);
+    fprintf(outputFileHandle, "T %d ", tCountHomo/2);
 
 /* handle monomorphic */
 if (status == 1)
     fprintf(outputFileHandle, "? 0 ");
 
 /* maximum 2 of these can be greater than zero */
-fprintf(outputFileHandle, "%d\n", aCountHetero + cCountHetero + gCountHetero + tCountHetero);
+fprintf(outputFileHandle, "%d\n", (aCountHetero + cCountHetero + gCountHetero + tCountHetero)/2);
 }
 
 
