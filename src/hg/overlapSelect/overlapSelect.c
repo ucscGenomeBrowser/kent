@@ -346,6 +346,10 @@ switch (inFmt)
 rowReaderFree(&ioFiles.inRr);
 carefulClose(&ioFiles.outFh);
 carefulClose(&ioFiles.dropFh);
+/* enable for memory analysis */
+#if 0
+selectTableFree();
+#endif
 }
 
 void usage(char *msg)

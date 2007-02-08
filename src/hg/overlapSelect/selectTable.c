@@ -1,4 +1,5 @@
-/* selectTable - module that contains ranges use to select */
+/* selectTable - module that contains ranges use to select.  This module
+ * functions as a global object. */
 
 #include "common.h"
 #include "selectTable.h"
@@ -358,5 +359,11 @@ if (bins != NULL)
 verbose(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
         ((inCa->strand == '\0') ? '?' : inCa->strand), stats.inOverlap);
 return stats;
+}
+
+void selectTableFree()
+/* free selectTable structures. */
+{
+chromBinsFree(&selectBins);
 }
 

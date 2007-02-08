@@ -1,4 +1,5 @@
-/* selectTable - module that contains ranges use to select */
+/* selectTable - module that contains ranges use to select.  This module
+ * functions as a global object. */
 #ifndef SELECT_TABLE_H
 #define SELECT_TABLE_H
 
@@ -63,5 +64,8 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
 
 struct overlapAggStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
 /* Compute the aggregate overlap of a chromAnn */
+
+void selectTableFree();
+/* free selectTable structures. */
 
 #endif
