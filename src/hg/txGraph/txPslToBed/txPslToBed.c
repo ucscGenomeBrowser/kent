@@ -125,15 +125,15 @@ for (i=1; i<psl->blockCount; ++i)
 		}
 	    if (memcmp(intronEnd-2, "ag", 2) != 0)
 	        {
-		if (memcmp(intronEnd-2-1, "ag", 2) != 0)
-		    {
-		    psl->blockSizes[i] -= 1;
-		    psl->tStarts[i] += 1;
-		    }
-		else if (memcmp(intronEnd-2+1, "ag", 2) != 0)
+		if (memcmp(intronEnd-2-1, "ag", 2) == 0)
 		    {
 		    psl->blockSizes[i] += 1;
 		    psl->tStarts[i] -= 1;
+		    }
+		else if (memcmp(intronEnd-2+1, "ag", 2) == 0)
+		    {
+		    psl->blockSizes[i] -= 1;
+		    psl->tStarts[i] += 1;
 		    }
 		}
 	    }
@@ -152,15 +152,15 @@ for (i=1; i<psl->blockCount; ++i)
 		}
 	    if (memcmp(intronEnd-2, "ac", 2) != 0)
 	        {
-		if (memcmp(intronEnd-2-1, "ac", 2) != 0)
-		    {
-		    psl->blockSizes[i] -= 1;
-		    psl->tStarts[i] += 1;
-		    }
-		else if (memcmp(intronEnd-2+1, "ac", 2) != 0)
+		if (memcmp(intronEnd-2-1, "ac", 2) == 0)
 		    {
 		    psl->blockSizes[i] += 1;
 		    psl->tStarts[i] -= 1;
+		    }
+		else if (memcmp(intronEnd-2+1, "ac", 2) == 0)
+		    {
+		    psl->blockSizes[i] -= 1;
+		    psl->tStarts[i] += 1;
 		    }
 		}
 	    }
