@@ -24,7 +24,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: allenCleanup.c,v 1.2 2007/02/08 01:32:32 galt Exp $";
+static char const rcsid[] = "$Id: allenCleanup.c,v 1.3 2007/02/08 22:49:14 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,6 +39,7 @@ errAbort(
   "output.tab is the cleaned up allen output.\n"
   "options:\n"
   "   -cleanImages - causes real clean-up of images\n"
+  "   -checkImages - check for all images - full, thumb, tiles\n"
   );
 }
 
@@ -55,11 +56,100 @@ but only one level deep.
 */   
 
 bool cleanImages = FALSE;
+bool checkImages = FALSE;
 
 static struct optionSpec options[] = {
    {"cleanImages", OPTION_BOOLEAN},
+   {"checkImages", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+
+
+void checkOutImages(char *sourcePath, char *relPath)
+/* check for full-image/tiles/thumb from sourcePath 
+ * relPath is "subdir/file.jp2" */
+{
+int width=0, height=0;
+char outPath[256], dir[256], name[128], extension[64];
+splitPath(relPath, dir, name, extension);
+
+/* see if there is a full-size downloadable image */
+safef(outPath,sizeof(outPath),"%s/%s%s%s",sourcePath,dir,name,".jpg");
+boolean fe = fileExists(outPath);
+if (!fe)
+    {
+    printf("missing full image (%s)\n",outPath);
+    return;
+    }
+unsigned long long size = fileSize(outPath);
+if (size < 256)
+    {
+    printf("truncated full image (%s) size=%llu\n", outPath, size);
+    return;
+    }
+jpegSize(outPath, &width, &height);
+
+//printf("debug: jpegSize width=(%d) height=(%d)\n",width,height);  //debug
+
+/* see if there is a tiles dir */
+safef(outPath,sizeof(outPath),"%s/%s%s",sourcePath,dir,name);
+fe = fileExists(outPath);
+if (!fe)
+    {
+    printf("missing tiles dir (%s)\n",outPath);
+    return;
+    }
+
+/* see if all tiles are there */
+char expected[256];
+int eLevel = 0;
+int eWidth = width;
+int eHeight = height;
+int eTiles = ((eWidth+511)/512)*((eHeight+511)/512);
+int eTile = 0;
+struct fileInfo *dList = NULL, *dEntry;
+dList = listDirX(outPath, "*.jpg", FALSE);
+for (dEntry = dList; dEntry != NULL; dEntry = dEntry->next)
+    {
+    safef(expected,sizeof(expected),"_%01d_%03d.jpg",eLevel,eTile);
+    //printf("debug: tile (%s) expected(%s)\n",dEntry->name, expected);  //debug
+    if (!endsWith(dEntry->name,expected))
+	{
+    	printf("debug: sourcePath (%s) relPath (%s)\n", sourcePath, relPath);  //debug
+    	printf("debug: jpegSize width=(%d) height=(%d)\n",width,height);  //debug
+	printf("debug: tile (%s) expected(%s)\n",dEntry->name, expected);  //debug
+	break;
+	}
+    ++eTile;
+    if (eTile >= eTiles)
+	{
+	++eLevel;
+	eWidth = eWidth/2;
+	eHeight = eHeight/2;
+	eTiles = ((eWidth+511)/512)*((eHeight+511)/512);
+	eTile = 0;
+	}
+    }
+slFreeList(&dList);    
+
+/* see if there is a thumbnail */
+safef(outPath,sizeof(outPath),"%s/%s%s%s",sourcePath,dir,name,".jpg");
+char *thumb = replaceChars(outPath,"/full/","/200/");
+fe = fileExists(thumb);
+if (!fe)
+    {
+    printf("missing thumbnail (%s)\n",thumb);
+    return;
+    }
+freez(&thumb);
+
+verbose(3,"\n");  
+
+//debug
+//exit(0);
+
+}
 
 
 void cleanOutImages(char *imageDisk, char *sourcePath, char *relPath, char *hideDir)
@@ -244,9 +334,12 @@ while (lineFileRowTab(lf, row))
 	continue;
 	}
 
-    if (hashFindVal(imageHash, gene))
+    char *existing = hashFindVal(imageHash, gene);
+    if (existing)
 	{
 	/* this one is in use */
+	if (checkImages)
+	    checkOutImages(sourcePath, existing);
 	hashRemove(imageHash, gene);  
 	/* any remaining at end are unused images */
 	}
@@ -314,10 +407,17 @@ printf("final count of unique existing gene/images: %d\n",count);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+
+//debug
+int x = 5/2;
+uglyf("x=%d\n",x);
+exit(0);
+
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 cleanImages = optionExists("cleanImages");
+checkImages = optionExists("checkImages");
 allenCleanup(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
