@@ -86,7 +86,6 @@ if (blockCount != psl->blockCount)
 	    }
 	}
     bed->blockCount = blockCount;
-    uglyf("Trimmed %d blocks of %d\n", psl->blockCount - blockCount, psl->blockCount);
     }
 return bed;
 }
@@ -114,30 +113,24 @@ for (i=1; i<bed->blockCount; ++i)
 	    {
 	    if (memcmp(intronStart, "gt", 2) != 0)
 		{
-		uglyf("hoping to slide gt on %s\n", bed->name);
 		if (memcmp(intronStart-1, "gt", 2) == 0)
 		    {
-		    uglyf("intronStart + 1, blockSizes - 1\n");
 		    bed->blockSizes[i-1] -= 1;
 		    }
 		else if (memcmp(intronStart+1, "gt", 2) == 0)
 		    {
-		    uglyf("intronStart - 1, blockSizes + 1\n");
 		    bed->blockSizes[i-1] += 1;
 		    }
 		}
 	    if (memcmp(intronEnd-2, "ag", 2) != 0)
 	        {
-		uglyf("hoping to slide ag on %s\n", bed->name);
 		if (memcmp(intronEnd-2-1, "ag", 2) != 0)
 		    {
-		    uglyf("intronEnd + 1, blockSize - 1, chromStarts + 1\n");
 		    bed->blockSizes[i] -= 1;
 		    bed->chromStarts[i] += 1;
 		    }
 		else if (memcmp(intronEnd-2+1, "ag", 2) != 0)
 		    {
-		    uglyf("intronEnd - 1, blockSize + 1, chromStarts - 1\n");
 		    bed->blockSizes[i] += 1;
 		    bed->chromStarts[i] -= 1;
 		    }
@@ -147,30 +140,24 @@ for (i=1; i<bed->blockCount; ++i)
 	    {
 	    if (memcmp(intronStart, "ct", 2) != 0)
 		{
-		uglyf("hoping to slide ct on %s\n", bed->name);
 		if (memcmp(intronStart-1, "ct", 2) == 0)
 		    {
-		    uglyf("intronStart + 1, blockSizes - 1\n");
 		    bed->blockSizes[i-1] -= 1;
 		    }
 		else if (memcmp(intronStart+1, "ct", 2) == 0)
 		    {
-		    uglyf("intronStart - 1, blockSizes + 1\n");
 		    bed->blockSizes[i-1] += 1;
 		    }
 		}
 	    if (memcmp(intronEnd-2, "ac", 2) != 0)
 	        {
-		uglyf("hoping to slide ac on %s\n", bed->name);
 		if (memcmp(intronEnd-2-1, "ac", 2) != 0)
 		    {
-		    uglyf("intronEnd + 1, blockSize - 1, chromStarts + 1\n");
 		    bed->blockSizes[i] -= 1;
 		    bed->chromStarts[i] += 1;
 		    }
 		else if (memcmp(intronEnd-2+1, "ac", 2) != 0)
 		    {
-		    uglyf("intronEnd - 1, blockSize + 1, chromStarts - 1\n");
 		    bed->blockSizes[i] += 1;
 		    bed->chromStarts[i] -= 1;
 		    }
