@@ -11,10 +11,11 @@ table hapmapAlleles
     string  observed;   "Observed string from genotype file"
 
     char[1] allele1;    "This allele has been observed"
-    uint    allele1Count;       "allele1 count "
+    uint    allele1Count;       "Count of individuals who are homozygous for allele1"
 
     char[1] allele2;    "This allele may not have been observed"
-    uint    allele2Count;       "allele2 count"
+    uint    allele2Count;       "Count of individuals who are homozygous for allele2"
 
+    uint    heteroCount;   "Count of individuals who are heterozygous"
     )
 

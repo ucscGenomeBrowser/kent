@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAlleles.h"
 
-static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.2 2007/01/31 18:47:13 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.3 2007/02/08 21:39:45 heather Exp $";
 
 void hapmapAllelesStaticLoad(char **row, struct hapmapAlleles *ret)
 /* Load a row from hapmapAlleles table into ret.  The contents of ret will
@@ -26,6 +26,7 @@ safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
 ret->allele1Count = sqlUnsigned(row[8]);
 safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
 ret->allele2Count = sqlUnsigned(row[10]);
+ret->heteroCount = sqlUnsigned(row[11]);
 }
 
 struct hapmapAlleles *hapmapAllelesLoad(char **row)
@@ -46,6 +47,7 @@ safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
 ret->allele1Count = sqlUnsigned(row[8]);
 safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
 ret->allele2Count = sqlUnsigned(row[10]);
+ret->heteroCount = sqlUnsigned(row[11]);
 return ret;
 }
 
@@ -55,7 +57,7 @@ struct hapmapAlleles *hapmapAllelesLoadAll(char *fileName)
 {
 struct hapmapAlleles *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[12];
 
 while (lineFileRow(lf, row))
     {
@@ -73,7 +75,7 @@ struct hapmapAlleles *hapmapAllelesLoadAllByChar(char *fileName, char chopper)
 {
 struct hapmapAlleles *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[12];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -105,6 +107,7 @@ sqlFixedStringComma(&s, ret->allele1, sizeof(ret->allele1));
 ret->allele1Count = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->allele2, sizeof(ret->allele2));
 ret->allele2Count = sqlUnsignedComma(&s);
+ret->heteroCount = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -171,6 +174,8 @@ fprintf(f, "%s", el->allele2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->allele2Count);
+fputc(sep,f);
+fprintf(f, "%u", el->heteroCount);
 fputc(lastSep,f);
 }
 

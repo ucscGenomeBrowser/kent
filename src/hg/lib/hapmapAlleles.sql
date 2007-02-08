@@ -5,15 +5,16 @@
 
 #HapMap allele counts
 CREATE TABLE hapmapAlleles (
-    chrom varchar(255) not null,	# Chromosome
-    chromStart int unsigned not null,	# Start position in chrom (0 based)
-    chromEnd int unsigned not null,	# End position in chrom (1 based)
-    name varchar(255) not null,	# Reference SNP identifier from dbSnp
-    score int unsigned not null,	# Not used
-    strand char(1) not null,	# Which genomic strand contains the observed alleles
-    observed varchar(255) not null,	# Observed string from genotype file
-    allele1 enum('A', 'C', 'G', 'T')      # This allele has been observed
-    allele1Count int unsigned not null,	# allele1 count 
-    allele2 enum('A', 'C', 'G', 'T', '?')      # This allele may not have been observed
-    allele2Count int unsigned not null	# allele2 count
+    chrom varchar(255) not null,	     # Chromosome
+    chromStart int unsigned not null,	     # Start position in chrom (0 based)
+    chromEnd int unsigned not null,	     # End position in chrom (1 based)
+    name varchar(255) not null,	             # Reference SNP identifier from dbSnp
+    score int unsigned not null,	     # Minor allele frequency (0-500)
+    strand char(1) not null,	             # Which genomic strand contains the observed alleles
+    observed varchar(255) not null,	     # Observed string from genotype file
+    allele1 enum('A', 'C', 'G', 'T')         # This allele has been observed
+    allele1Count int unsigned not null,	     # Count of individuals who are homozygous for allele1
+    allele2 enum('A', 'C', 'G', 'T', '?')    # This allele may not have been observed
+    allele2Count int unsigned not null,	     # Count of individuals who are homozygous for allele2
+    heteroCount int unsigned not null	     # Count of individuals who are heterozygous
 );
