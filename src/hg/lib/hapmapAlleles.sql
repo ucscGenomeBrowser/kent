@@ -12,9 +12,9 @@ CREATE TABLE hapmapAlleles (
     score int unsigned not null,	     # Minor allele frequency (0-500)
     strand char(1) not null,	             # Which genomic strand contains the observed alleles
     observed varchar(255) not null,	     # Observed string from genotype file
-    allele1 enum('A', 'C', 'G', 'T')         # This allele has been observed
+    allele1 enum('A', 'C', 'G', 'T'),        # This allele has been observed
     allele1Count int unsigned not null,	     # Count of individuals who are homozygous for allele1
-    allele2 enum('A', 'C', 'G', 'T', '?')    # This allele may not have been observed
+    allele2 enum('A', 'C', 'G', 'T', '?'),   # This allele may not have been observed
     allele2Count int unsigned not null,	     # Count of individuals who are homozygous for allele2
     heteroCount int unsigned not null	     # Count of individuals who are heterozygous
 );
