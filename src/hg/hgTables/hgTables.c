@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.139 2007/02/06 21:50:05 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.140 2007/02/08 17:00:35 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1328,6 +1328,40 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+void doMysqlVersion(struct sqlConnection *conn)
+/* Get mysql version */
+{
+puts("Content-Type:text/plain\n");
+struct sqlResult *sr;
+sr = sqlGetResult(conn, "SELECT @@VERSION");
+
+
+char **row;
+char *sep="";
+int c = 0;
+int numCols = 0;
+
+numCols = sqlCountColumns(sr);
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    printf("%s \t", field);
+
+
+
+printf("\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sep="";
+    for (c=0;c<numCols;++c)
+	{
+	printf("%s%s",sep,row[c]);
+	sep = "\t";
+	}
+    fprintf(stdout, "\n");	    
+    }
+sqlFreeResult(&sr);
+}
+
 void doTopSubmit(struct sqlConnection *conn)
 /* Respond to submit button on top level page.
  * This basically just dispatches based on output type. */
@@ -1483,6 +1517,8 @@ else if (cartVarExists(cart, hgtaDoLookupPosition))
     doLookupPosition(conn);
 else if (cartVarExists(cart, hgtaDoTableStatus))
     doTableStatus(conn);
+else if (cartVarExists(cart, hgtaDoMysqlVersion))
+    doMysqlVersion(conn);
 else	/* Default - put up initial page. */
     doMainPage(conn);
 cartRemovePrefix(cart, hgtaDo);

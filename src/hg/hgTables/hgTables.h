@@ -427,6 +427,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoGetGalaxyQuery "hgta_doGetGalaxyQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 #define hgtaDoTableStatus "hgta_doTableStatus"
+#define hgtaDoMysqlVersion "hgta_doMysqlVersion"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
