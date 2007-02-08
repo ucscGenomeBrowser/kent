@@ -24,7 +24,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: allenCleanup.c,v 1.1 2006/12/23 04:19:24 galt Exp $";
+static char const rcsid[] = "$Id: allenCleanup.c,v 1.2 2007/02/08 01:32:32 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -61,7 +61,78 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct hash *makeImageHash(char *imageDisk, int *dupeCount)
+
+void cleanOutImages(char *imageDisk, char *sourcePath, char *relPath, char *hideDir)
+/* move to dupe or unused in imageDisk, 
+ * delete image/tiles/thumb from sourcePath 
+ * relPath is "subdir/file.jp2" 
+ * hideDir is either "unused" or "dupes" */
+{
+char outPath[256], oldPath[256], dir[256], name[128], extension[64];
+splitPath(relPath, dir, name, extension);
+safef(outPath,sizeof(outPath),"%s/%s%s",imageDisk,dir,hideDir); 
+
+/* move file to hideDir subdir  */
+verbose(3,"moving to ./%s: outPath=[%s]\n",hideDir,outPath);
+boolean fe = fileExists(outPath);
+if (!fe)
+    {
+    verbose(3,"debug: calling makeDir(%s)\n",outPath);
+    makeDir(outPath);
+    }
+safef(oldPath,sizeof(oldPath),"%s/%s%s%s",imageDisk,dir,name,extension);
+safef(outPath,sizeof(outPath),"%s/%s%s/%s%s",imageDisk,dir,hideDir,name,extension);
+verbose(3,"link(%s,%s) and unlink(%s)\n",oldPath,outPath,oldPath);
+if (link(oldPath,outPath)==0)
+    {
+    unlink(oldPath);
+    }
+
+/* see if there are any downloadable images to cleanup */
+safef(outPath,sizeof(outPath),"%s/%s%s%s",sourcePath,dir,name,".jpg");
+verbose(3,"checking if exists: outPath=[%s]\n",outPath);
+fe = fileExists(outPath);
+if (fe)
+    {
+    verbose(3,"calling unlink(%s)\n",outPath);
+    unlink(outPath);
+    }
+
+/* see if there are any tiles to cleanup */
+safef(outPath,sizeof(outPath),"%s/%s%s",sourcePath,dir,name);
+verbose(3,"checking if dir exists: outPath=[%s]\n",outPath);
+fe = fileExists(outPath);
+if (fe)
+    {
+    struct fileInfo *dList = NULL, *dEntry;
+    dList = listDirX(outPath, "*.jpg", TRUE);
+    for (dEntry = dList; dEntry != NULL; dEntry = dEntry->next)
+	{
+	verbose(3,"debug: calling unlink(%s)\n",dEntry->name);
+	unlink(dEntry->name);
+	}
+    slFreeList(&dList);    
+    verbose(3,"debug: calling rmdir(%s)\n",outPath);
+    rmdir(outPath);
+    }
+
+/* see if there is a thumbnail to cleanup */
+safef(outPath,sizeof(outPath),"%s/%s%s%s",sourcePath,dir,name,".jpg");
+char *thumb = replaceChars(outPath,"/full/","/200/");
+verbose(3,"checking if thumb exists: thumb=[%s]\n",thumb);
+fe = fileExists(thumb);
+if (fe)
+    {
+    verbose(3,"calling unlink(%s)\n",thumb);
+    unlink(thumb);
+    }
+freez(&thumb);
+
+verbose(3,"\n");  
+
+}
+
+struct hash *makeImageHash(char *imageDisk, int *dupeCount, char *sourcePath)
 /* look in each subdir for .jp2 files
  * but only look in subdirs, and only one level deep.
  * hash key is the gene name which is the first part of filename up to "_" 
@@ -92,6 +163,8 @@ for (dEntry = dList; dEntry != NULL; dEntry = dEntry->next)
 		if (valExisting)
 		    {
 		    printf("duplicate image: key=%s value=%s (existing=%s)\n", key, val, valExisting);
+		    if (cleanImages)
+	    		cleanOutImages(imageDisk,sourcePath,val,"dupes");
 		    (*dupeCount)++;
 		    }
 		else
@@ -113,7 +186,6 @@ void allenCleanup(char *imageDisk, char *sourcePath,
  char *allenTab, char *output)
 /* clean up input allen.tab */
 {
-char outPath[PATH_LEN];
 FILE *f = mustOpen(output, "w");
 struct lineFile *lf = lineFileOpen(allenTab, TRUE);
 char *row[5];
@@ -124,7 +196,7 @@ int refSeqDupe = 0;
 struct hash *geneSymbolHash = newHash(0); /* actually initial part of image name */
 int geneSymbolDupe = 0;
 int imageDupe = 0;
-struct hash *imageHash = makeImageHash(imageDisk,&imageDupe);
+struct hash *imageHash = makeImageHash(imageDisk,&imageDupe,sourcePath);
 int imageCount = imageHash->elCount;
 int imageMissing = 0;
 int count = 0;
@@ -145,7 +217,6 @@ while (lineFileRowTab(lf, row))
     char *entrez = row[2];
     char *refSeq = row[3];
     char *url = row[4];
-    //char *probeId = hashFindVal(nameHash, refSeq);
     if ((refSeq==NULL)||sameOk(refSeq,""))
 	{
 	++refSeqEmpty;
@@ -212,6 +283,8 @@ for (i=0; i<imageHash->size; ++i)
 	{
 	char *val = (char *)hel->val;
 	printf("unused image: %s\n", val);
+	if (cleanImages)
+	    cleanOutImages(imageDisk,sourcePath,val,"unused");
 	}
     }
 
@@ -230,10 +303,11 @@ printf("final count of unique existing gene/images: %d\n",count);
 //  Add the checking of the sourceImageDir: main jpg, thumb jpg, 7 levels of tiles jpg
 //    report any that are incomplete.
 //
-//TODO:
-//  Implement the cleanImages option
-//   which would move .jp2 duplicates into ./dupes and unused into ./unused,
-//   and when it did so, it would remove the corresponding jpg files in sourceImageDir
+
+/* cleanImages option
+  moves .jp2 duplicates into ./dupes and unused into ./unused,
+   and removes the corresponding jpg files (full-download-image,tiles,thumbnail) in sourceImageDir
+*/
 
 }
 
