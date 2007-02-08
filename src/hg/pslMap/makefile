@@ -22,7 +22,7 @@ pslMap.o: usage.msg
 # create usage msg from text
 usage.msg: usage.txt
 	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
-	stringify $< >> $@.tmp
+	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
 
 test::

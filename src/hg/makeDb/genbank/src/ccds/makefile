@@ -11,7 +11,7 @@ all: ${PROGS}
 
 # generate C code contain SQL for building tables
 %.c: %.sql
-	stringify -var=$*Sql $< >$@
+	${STRINGIFY} -var=$*Sql $< >$@
 
 clean:
 	rm -f ${O} ${PROGS} ccdsImport.o ccdsMkTables.o mkCcdsGeneMap.o createKeys.c createTables.c

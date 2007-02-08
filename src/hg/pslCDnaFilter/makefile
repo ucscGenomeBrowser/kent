@@ -25,7 +25,7 @@ polyASizes.o: polyASizes.c polyASizes.h
 # create msg from text
 %.msg: %.txt
 	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
-	stringify $< >> $@.tmp
+	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
 
 test:

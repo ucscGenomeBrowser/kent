@@ -36,6 +36,7 @@ TESTBIN = ${GBROOT}/tests/bin
 TESTBINARCH = ${TESTBIN}/$(MACHTYPE)
 
 MKDIR = mkdir -p
+STRINGIFY = stringify
 
 %.o: %.c
 	${CC} ${CFLAGS} -c -o $@ $<
