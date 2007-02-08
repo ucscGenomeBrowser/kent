@@ -5,6 +5,7 @@
 
 #HapMap allele counts
 CREATE TABLE hapmapAlleles (
+    bin smallint unsigned not null,          # For browser speed up
     chrom varchar(255) not null,	     # Chromosome
     chromStart int unsigned not null,	     # Start position in chrom (0 based)
     chromEnd int unsigned not null,	     # End position in chrom (1 based)
