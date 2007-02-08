@@ -10,5 +10,9 @@ txPslToBed: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txPslToBed $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txPslToBed${EXE}
 
+test:
+	txPslToBed -verbose=0 input.psl output.bed -dnaPath=/cluster/data/hg18/hg18.2bit
+	diff expected.bed output.bed
+
 clean:
 	rm -f $O
