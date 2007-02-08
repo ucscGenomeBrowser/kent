@@ -11,7 +11,7 @@
 
 /* Variables set from command line. */
 int mergeMax = 5;	
-boolean fixIntrons = FALSE;
+boolean fixIntrons = TRUE;
 char *dnaPath = NULL;
 
 void usage()
@@ -25,16 +25,15 @@ errAbort(
   "options:\n"
   "   -mergeMax=N - merge small blocks separated by no more than N on either\n"
   "                 target or query. Default value is %d.\n"
-  "   -fixIntrons - slide large gaps in target to seek for splice sites.\n"
-  "   -dnaPath=path - path to DNA - either a two bit file or a dir of nib files\n"
-  "               Used with fixIntrons\n"
+  "   -noFixIntrons - slide large gaps in target to seek for splice sites.\n"
+  "   -dnaPath=path - path to DNA - either a two bit file or a dir of nib files.\n"
   , mergeMax
   );
 }
 
 static struct optionSpec options[] = {
    {"mergeMax", OPTION_INT},
-   {"fixIntrons", OPTION_BOOLEAN},
+   {"noFixIntrons", OPTION_BOOLEAN},
    {"dnaPath", OPTION_STRING},
    {NULL, 0},
 };
@@ -115,20 +114,30 @@ for (i=1; i<bed->blockCount; ++i)
 	    {
 	    if (memcmp(intronStart, "gt", 2) != 0)
 		{
-		if (memcmp(intronStart+1, "gt", 2) == 0)
-		    bed->blockSizes[i-1] += 1;
-		else if (memcmp(intronStart-1, "gt", 2) == 0)
+		uglyf("hoping to slide gt on %s\n", bed->name);
+		if (memcmp(intronStart-1, "gt", 2) == 0)
+		    {
+		    uglyf("intronStart + 1, blockSizes - 1\n");
 		    bed->blockSizes[i-1] -= 1;
+		    }
+		else if (memcmp(intronStart+1, "gt", 2) == 0)
+		    {
+		    uglyf("intronStart - 1, blockSizes + 1\n");
+		    bed->blockSizes[i-1] += 1;
+		    }
 		}
 	    if (memcmp(intronEnd-2, "ag", 2) != 0)
 	        {
-		if (memcmp(intronEnd-2+1, "ag", 2) != 0)
+		uglyf("hoping to slide ag on %s\n", bed->name);
+		if (memcmp(intronEnd-2-1, "ag", 2) != 0)
 		    {
+		    uglyf("intronEnd + 1, blockSize - 1, chromStarts + 1\n");
 		    bed->blockSizes[i] -= 1;
 		    bed->chromStarts[i] += 1;
 		    }
-		else if (memcmp(intronEnd-2-1, "ag", 2) != 0)
+		else if (memcmp(intronEnd-2+1, "ag", 2) != 0)
 		    {
+		    uglyf("intronEnd - 1, blockSize + 1, chromStarts - 1\n");
 		    bed->blockSizes[i] += 1;
 		    bed->chromStarts[i] -= 1;
 		    }
@@ -138,20 +147,30 @@ for (i=1; i<bed->blockCount; ++i)
 	    {
 	    if (memcmp(intronStart, "ct", 2) != 0)
 		{
-		if (memcmp(intronStart+1, "ct", 2) == 0)
-		    bed->blockSizes[i-1] += 1;
-		else if (memcmp(intronStart-1, "ct", 2) == 0)
+		uglyf("hoping to slide ct on %s\n", bed->name);
+		if (memcmp(intronStart-1, "ct", 2) == 0)
+		    {
+		    uglyf("intronStart + 1, blockSizes - 1\n");
 		    bed->blockSizes[i-1] -= 1;
+		    }
+		else if (memcmp(intronStart+1, "ct", 2) == 0)
+		    {
+		    uglyf("intronStart - 1, blockSizes + 1\n");
+		    bed->blockSizes[i-1] += 1;
+		    }
 		}
 	    if (memcmp(intronEnd-2, "ac", 2) != 0)
 	        {
-		if (memcmp(intronEnd-2+1, "ac", 2) != 0)
+		uglyf("hoping to slide ac on %s\n", bed->name);
+		if (memcmp(intronEnd-2-1, "ac", 2) != 0)
 		    {
+		    uglyf("intronEnd + 1, blockSize - 1, chromStarts + 1\n");
 		    bed->blockSizes[i] -= 1;
 		    bed->chromStarts[i] += 1;
 		    }
-		else if (memcmp(intronEnd-2-1, "ac", 2) != 0)
+		else if (memcmp(intronEnd-2+1, "ac", 2) != 0)
 		    {
+		    uglyf("intronEnd - 1, blockSize + 1, chromStarts - 1\n");
 		    bed->blockSizes[i] += 1;
 		    bed->chromStarts[i] -= 1;
 		    }
@@ -209,7 +228,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 mergeMax = optionInt("mergeMax", mergeMax);
-fixIntrons = optionExists("fixIntrons");
+fixIntrons = !optionExists("noFixIntrons");
 dnaPath = optionVal("dnaPath", dnaPath);
 if (fixIntrons && !dnaPath)
     errAbort("dnaPath required with fixIntrons option.");
