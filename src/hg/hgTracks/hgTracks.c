@@ -106,7 +106,7 @@
 #include "dnaMotif.h"
 #include "hapmapTrack.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1272 2007/02/06 01:46:10 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1273 2007/02/08 02:48:57 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11910,7 +11910,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             handler(track);
         }
     if (track->loadItems == NULL)
-        warn("No load handler for %s", tdb->tableName);
+        warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->tableName);
     else if (track->drawItems == NULL)
         warn("No draw handler for %s", tdb->tableName);
     else
