@@ -51,7 +51,7 @@ ma->blocks = AllocArray(blocks, blockCount);
 for (i = 0; i<blockCount; ++i)
     {
     int bSize = bed->blockSizes[i];
-    int tStart = bed->chromStarts[i] - bed->chromStart;
+    int tStart = bed->chromStarts[i] + bed->chromStart;
     int qStart = tStart;
     block = blocks+i;
     block->qStart = qStart;
