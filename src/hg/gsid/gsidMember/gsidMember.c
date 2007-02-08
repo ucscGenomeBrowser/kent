@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.8 2007/02/07 23:09:13 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.9 2007/02/08 02:11:19 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -702,7 +702,7 @@ if (!password || sameString(password,"") || (strlen(password)<8))
 if (!checkPwdCharClasses(password))
     {
     freez(&errMsg);
-    errMsg = cloneString("Password must contain characters from 3 of the following classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
+    errMsg = cloneString("Password must contain characters from 3 of the following 4 classes: [A-Z] [a-z] [0-9] [!@#$%^&*()].");
     signupPage(conn);
     return;
     }
