@@ -100,10 +100,10 @@ struct bed *bedList = bedLoadAll(inBed);
 FILE *f = mustOpen(outGraph, "w");
 verbose(1, "Loaded %d beds from %s\n", slCount(bedList), inBed);
 struct ggMrnaAli *maList = bedListToGgMrnaAliList(bedList);
-verbose(1, "Created %d ma's\n", slCount(maList));
+verbose(2, "Created %d ma's\n", slCount(maList));
 struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, NULL);
 struct ggMrnaCluster *mc, *mcList = ggClusterMrna(ci);
-verbose(1, "Clustered ok\n");
+verbose(1, "Reduced to %d clusters\n", slCount(mcList));
 for (mc = mcList; mc != NULL; mc = mc->next)
     {
     struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);

@@ -10,5 +10,9 @@ txBedToTxg: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txBedToTxg $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txBedToTxg${EXE}
 
+test:
+	txBedToTxg -verbose=0 input.bed output.txg 
+	diff expected.txg output.txg
+
 clean:
 	rm -f $O
