@@ -1,0 +1,51 @@
+This contains code to make and modify transcription graphs (txGraphs).
+These are graphs with a node for each start, end, or splice site, and
+an edge for each exon or intron. They represent a fair approximation 
+to a gene with possible multiple transcripts.
+
+The pipeline for generating these is
+    txPslToBed | txBedToTgx | tgxOrtho | tgxAddEvidence | tgxTrim | txgWalk
+where tgxAddEvidence may be run several times to add different
+evidence.  Here's a bit more info on each program:
+
+txPslToBed - Transforms alignments to putative exons by projecting
+    alignment onto genomic axis only.  It also merges together 
+    blocks separated by only a small amount into exons.  It will
+    extend or trim an exon by one base on either side to get
+    gt/ag ends. It breaks up alignments with longer gaps that
+    are not introns into separate bed records on either side of the
+    gap.  Finally it trims small isolated bed records.
+input: psl file, corresponding target dna
+output: bed file
+status: done
+
+txBedToTgx - Clusters together overlapping exons (on same strand)
+    and creates a transcript graph.  Associates evidence with each
+    edge in the form of type, weight, name of item in bed file.
+input: list of bed files, types, and weights.  Bed files are bed12
+    (multiple block).
+output: tgx file
+status: in progress
+
+tgxOrtho - Looks for orthologous edges in two graphs from two species.
+input: tgx files from both species, chains & nets between species
+output: bed file for introns, bed file for exons
+status: planning.  Will reuse elements of orthoSplice code.
+
+tgxAddEvidence - Adds evidence from a bed file to existing transcript
+     graph.  
+input: tgx file, bed file, type, and weight. 
+output: tgx file with additional evidence.
+status: planning. Will reuse elements of orthoSplice code.
+
+tgxTrim - Trims a graph to the subset with sufficient evidence.
+input: tgx file, weight threshold
+output: trimmed tgx file
+status: planning.  Will reuse elements of orthoSplice code.
+
+tgxWalk - Walks graph producing transcripts. Does threaded walk
+     following connected mRNA evidence (in current species) so
+     as to avoid combinatorical explosions in alt-splice situations.
+input: tgx file
+output: bed 12 file (bed in exons)
+status: planning. Will be hopefully minor changes to exonWalk.
