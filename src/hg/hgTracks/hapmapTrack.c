@@ -171,6 +171,7 @@ int chromEnd = 0;
 
 if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
+    /* this needs to be normalized */
     struct hapmapAllelesCombined *thisItem = item;
     int count1 = 0;
     int count2 = 0;
@@ -255,15 +256,13 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
         col = MG_GREEN;
 	return col;
 	}
-    else
-        {
-	int allele1Count = thisItem->allele1CountCEU + thisItem->allele1CountCHB +
+    /* this should be normalized */
+    int allele1Count = thisItem->allele1CountCEU + thisItem->allele1CountCHB +
 	                   thisItem->allele1CountJPT + thisItem->allele1CountYRI;
-	int allele2Count = thisItem->allele2CountCEU + thisItem->allele2CountCHB +
+    int allele2Count = thisItem->allele2CountCEU + thisItem->allele2CountCHB +
 	                   thisItem->allele2CountJPT + thisItem->allele2CountYRI;
-	totalCount = allele1Count + allele2Count;
-        minorCount = min(allele1Count, allele2Count);
-	}
+    totalCount = allele1Count + allele2Count;
+    minorCount = min(allele1Count, allele2Count);
     }
 else
     {
