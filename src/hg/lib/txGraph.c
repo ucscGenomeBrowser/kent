@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txGraph.h"
 
-static char const rcsid[] = "$Id: txGraph.c,v 1.1 2007/02/08 22:10:39 kent Exp $";
+static char const rcsid[] = "$Id: txGraph.c,v 1.2 2007/02/08 22:35:49 kent Exp $";
 
 struct txGraph *txGraphLoad(char **row)
 /* Load a txGraph from row fetched with select * from txGraph
@@ -68,16 +68,6 @@ int sizeOne;
 sqlStringDynamicArray(row[15], &ret->mrnaRefs, &sizeOne);
 assert(sizeOne == ret->mrnaRefCount);
 }
-{
-int sizeOne;
-sqlSignedDynamicArray(row[16], &ret->mrnaTissues, &sizeOne);
-assert(sizeOne == ret->mrnaRefCount);
-}
-{
-int sizeOne;
-sqlSignedDynamicArray(row[17], &ret->mrnaLibs, &sizeOne);
-assert(sizeOne == ret->mrnaRefCount);
-}
 return ret;
 }
 
@@ -87,7 +77,7 @@ struct txGraph *txGraphLoadAll(char *fileName)
 {
 struct txGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -105,7 +95,7 @@ struct txGraph *txGraphLoadAllByChar(char *fileName, char chopper)
 {
 struct txGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -215,28 +205,6 @@ for (i=0; i<ret->mrnaRefCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
-{
-int i;
-s = sqlEatChar(s, '{');
-AllocArray(ret->mrnaTissues, ret->mrnaRefCount);
-for (i=0; i<ret->mrnaRefCount; ++i)
-    {
-    ret->mrnaTissues[i] = sqlSignedComma(&s);
-    }
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
-{
-int i;
-s = sqlEatChar(s, '{');
-AllocArray(ret->mrnaLibs, ret->mrnaRefCount);
-for (i=0; i<ret->mrnaRefCount; ++i)
-    {
-    ret->mrnaLibs[i] = sqlSignedComma(&s);
-    }
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
 *pS = s;
 return ret;
 }
@@ -260,8 +228,6 @@ freeMem(el->edgeTypes);
 if (el->mrnaRefs != NULL)
     freeMem(el->mrnaRefs[0]);
 freeMem(el->mrnaRefs);
-freeMem(el->mrnaTissues);
-freeMem(el->mrnaLibs);
 freez(pEl);
 }
 
@@ -386,28 +352,6 @@ for (i=0; i<el->mrnaRefCount; ++i)
     if (sep == ',') fputc('"',f);
     fprintf(f, "%s", el->mrnaRefs[i]);
     if (sep == ',') fputc('"',f);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-{
-int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->mrnaRefCount; ++i)
-    {
-    fprintf(f, "%d", el->mrnaTissues[i]);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-{
-int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->mrnaRefCount; ++i)
-    {
-    fprintf(f, "%d", el->mrnaLibs[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);

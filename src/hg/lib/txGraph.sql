@@ -21,8 +21,6 @@ CREATE TABLE txGraph (
     edgeTypes longblob not null,	# Type for each edge, ggExon, ggIntron, etc.
     mrnaRefCount int not null,	# Number of supporting mRNAs.
     mrnaRefs longblob not null,	# Ids of mrnas supporting this.
-    mrnaTissues longblob not null,	# Ids of tissues that mrnas come from, indexes into tissue table
-    mrnaLibs longblob not null,	# Ids of libraries that mrnas come from, indexes into library table
               #Indices
     PRIMARY KEY(tName)
 );

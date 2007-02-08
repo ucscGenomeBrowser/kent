@@ -178,11 +178,6 @@ for(i=0; i<gg->mrnaRefCount; i++)
     dyStringPrintf(accessionList, "%s,", gg->mrnaRefs[i]);
 sqlStringDynamicArray(accessionList->string, &tg->mrnaRefs, &tg->mrnaRefCount);
 dyStringFree(&accessionList);
-if(gg->mrnaRefCount > 0)
-    {
-    tg->mrnaTissues = CloneArray(gg->mrnaTissues, gg->mrnaRefCount);
-    tg->mrnaLibs = CloneArray(gg->mrnaLibs, gg->mrnaRefCount);
-    }
 
 /* convert vertexes */
 for (i=0,j=0; i<totalVertexCount; ++i)

@@ -17,8 +17,6 @@ table txGraph
     int[edgeCount] edgeTypes;       "Type for each edge, ggExon, ggIntron, etc."
     int mrnaRefCount;               "Number of supporting mRNAs."
     string[mrnaRefCount] mrnaRefs;  "Ids of mrnas supporting this." 
-    int[mrnaRefCount] mrnaTissues;  "Ids of tissues that mrnas come from, indexes into tissue table"
-    int[mrnaRefCount] mrnaLibs;     "Ids of libraries that mrnas come from, indexes into library table"
    )
 
 object txEvList

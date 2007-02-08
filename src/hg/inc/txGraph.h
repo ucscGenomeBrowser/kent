@@ -5,7 +5,7 @@
 #ifndef TXGRAPH_H
 #define TXGRAPH_H
 
-#define TXGRAPH_NUM_COLS 18
+#define TXGRAPH_NUM_COLS 16
 
 struct txGraph
 /* A transcription graph. Includes alt-splicing info. */
@@ -27,8 +27,6 @@ struct txGraph
     int *edgeTypes;	/* Type for each edge, ggExon, ggIntron, etc. */
     int mrnaRefCount;	/* Number of supporting mRNAs. */
     char **mrnaRefs;	/* Ids of mrnas supporting this. */
-    int *mrnaTissues;	/* Ids of tissues that mrnas come from, indexes into tissue table */
-    int *mrnaLibs;	/* Ids of libraries that mrnas come from, indexes into library table */
     };
 
 struct txGraph *txGraphLoad(char **row);
