@@ -5,7 +5,7 @@
 #  01-26-07
 #  Robert Kuhn
 #
-#  gets a column of table data from RR node using WGET
+#  gets a column of table data from any node using wget
 #
 ################################
 
@@ -16,7 +16,7 @@ set machine="hgw1"
 
 if ( $#argv < 3 || $#argv > 4 ) then
   echo
-  echo "  gets a column of table data from RR node using WGET"
+  echo "  gets a column of table data from any node using wget"
   echo
   echo "    usage:  database table field [machine]"
   echo "             (defaults to hgw1)"
