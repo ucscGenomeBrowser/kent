@@ -15,6 +15,7 @@
 
 /* Check for triallelic or quadallelic -- log and discard if found. */
 /* Also check for no alleles. */
+/* Also calculate score. */
 
 /* Output is:
    chrom
@@ -36,7 +37,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmap1.c,v 1.1 2007/02/08 20:36:21 heather Exp $";
+static char const rcsid[] = "$Id: hapmap1.c,v 1.2 2007/02/08 21:09:04 heather Exp $";
 
 FILE *logFileHandle = NULL;
 FILE *outputFileHandle = NULL;
