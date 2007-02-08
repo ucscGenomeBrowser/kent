@@ -11,7 +11,7 @@ txPslToBed: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txPslToBed${EXE}
 
 test:
-	txPslToBed -verbose=0 input.psl output.bed -dnaPath=/cluster/data/hg18/hg18.2bit
+	txPslToBed -verbose=0 input.psl /cluster/data/hg18/hg18.2bit output.bed 
 	diff expected.bed output.bed
 
 clean:

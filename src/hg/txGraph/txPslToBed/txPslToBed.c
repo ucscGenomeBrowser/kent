@@ -14,7 +14,6 @@
 /* Variables set from command line. */
 int mergeMax = 5;	
 boolean fixIntrons = TRUE;
-char *dnaPath = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,12 +22,13 @@ errAbort(
   "txPsltoBed - Convert a psl to a bed file by projecting it onto its target\n"
   "sequence. Optionally merge adjacent blocks and trim to splice sites.\n"
   "usage:\n"
-  "   txPsltoBed input.psl output.bed\n"
+  "   txPsltoBed input.psl dnaPath output.bed\n"
+  "where dnaPath is either a two bit file or a dir of nib files containing the DNA\n"
+  "referenced on the target side of input.psl.\n"
   "options:\n"
   "   -mergeMax=N - merge small blocks separated by no more than N on either\n"
   "                 target or query. Default value is %d.\n"
   "   -noFixIntrons - slide large gaps in target to seek for splice sites.\n"
-  "   -dnaPath=path - path to DNA - either a two bit file or a dir of nib files.\n"
   , mergeMax
   );
 }
@@ -36,7 +36,6 @@ errAbort(
 static struct optionSpec options[] = {
    {"mergeMax", OPTION_INT},
    {"noFixIntrons", OPTION_BOOLEAN},
-   {"dnaPath", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -281,42 +280,36 @@ return bedList;
 
 
 
-void txPsltoBed(char *inPsl, char *outBed)
+void txPsltoBed(char *inPsl, char *dnaPath, char *outBed)
 /* txPsltoBed - Convert a psl to a bed file by projecting it onto it's target 
  * sequence. Optionally merge adjacent blocks and trim to splice sites. */
 {
 FILE *f = mustOpen(outBed, "w");
 struct psl *psl, *pslList  = pslLoadAll(inPsl);
 char *chromName = "";
-struct nibTwoCache *ntc = NULL;
+struct nibTwoCache *ntc = nibTwoCacheNew(dnaPath);
 struct dnaSeq *chrom = NULL;
 
-if (dnaPath)
-     ntc = nibTwoCacheNew(dnaPath);
 
 verbose(2, "Loaded %d psls\n", slCount(pslList));
 
-if (ntc)
-    slSort(&pslList, pslCmpTarget);
+slSort(&pslList, pslCmpTarget);
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     verbose(3, "Processing %s\n", psl->qName);
-    if (ntc)
-        {
-	if (!sameString(chromName, psl->tName))
-	    {
-	    dnaSeqFree(&chrom);
-	    chrom = nibTwoCacheSeq(ntc, psl->tName);
-	    toLowerN(chrom->dna, chrom->size);
-	    chromName = psl->tName;
-	    verbose(2, "Loaded %d bases in %s\n", chrom->size, chromName);
-	    }
-	if (psl->tSize != chrom->size)
-	    errAbort("DNA and PSL out of sync. %s thinks %s is %d bases, but %s thinks it's %d.",
-	             inPsl, chromName, psl->tSize, dnaPath, chrom->size);
-	if (fixIntrons)
-	    fixPslIntrons(psl, chrom);
+    if (!sameString(chromName, psl->tName))
+	{
+	dnaSeqFree(&chrom);
+	chrom = nibTwoCacheSeq(ntc, psl->tName);
+	toLowerN(chrom->dna, chrom->size);
+	chromName = psl->tName;
+	verbose(2, "Loaded %d bases in %s\n", chrom->size, chromName);
 	}
+    if (psl->tSize != chrom->size)
+	errAbort("DNA and PSL out of sync. %s thinks %s is %d bases, but %s thinks it's %d.",
+		 inPsl, chromName, psl->tSize, dnaPath, chrom->size);
+    if (fixIntrons)
+	fixPslIntrons(psl, chrom);
     struct bed *bedList = pslToBedList(psl, chrom, mergeMax);
     struct bed *bed;
     for (bed = bedList; bed != NULL; bed = bed->next)
@@ -336,11 +329,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 mergeMax = optionInt("mergeMax", mergeMax);
 fixIntrons = !optionExists("noFixIntrons");
-dnaPath = optionVal("dnaPath", dnaPath);
-if (fixIntrons && !dnaPath)
-    errAbort("dnaPath required except with noFixIntrons option.");
-if (argc != 3)
+if (argc != 4)
     usage();
-txPsltoBed(argv[1], argv[2]);
+txPsltoBed(argv[1], argv[2], argv[3]);
 return 0;
 }
