@@ -19,8 +19,6 @@ set machine1="hgwbeta"
 set machine2=""
 set mach1Tot=0
 set mach2Tot=0
-set mach1dump=""
-set mach2dump=""
 
 if ( $#argv < 2 || $#argv > 4 ) then
   echo
