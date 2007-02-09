@@ -12964,3 +12964,26 @@ TMPDIR=/scratch/tmp
     nice -n +19 featureBits -noRandom mm8 chainHg18WMLink \
 	> fb.noRandom.mm8.chainHg18WMLink.txt 2>&1
     #	976774811 bases of 2550172871 (38.302%) in intersection
+
+#############################################################################
+# RE-BUILD WGRNA TRACK (DONE, 2007-02-09, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg18/bed
+
+  mkdir wgRna-2007-02-07
+  cd wgRna-2007-02-07
+
+# Received the data file, wg_feb2007.txt (saved from wg_feb2007.doc) 
+# from Michel Weber's email
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg18/bed/wgRna-2007-02-07.
+
+# The record of hsa-mir-770 was found missing the strand info.
+# manually add "+" to wg_feb2007.txt for the record of hsa-mir-770.
+
+  cat wg_feb2007.txt|sed -e 's/ /\t/g' > wgRna.tab
+
+  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+
+#############################################################################
