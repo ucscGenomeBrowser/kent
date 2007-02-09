@@ -49,6 +49,54 @@ lineFileClose(&lf);
 return hash;
 }
 
+double weightOfEvidence(struct txGraph *txg, struct txEvList *evidence, struct hash *weightHash)
+/* Sum up weight of all evidence and return. */
+{
+struct txEvidence *ev;
+double total = 0;
+for (ev = evidence->evList; ev != NULL; ev = ev->next)
+    {
+    struct txSource *source = slElementFromIx(txg->sources, ev->sourceId);
+    struct weight *weight = hashFindVal(weightHash, source->type);
+    if (weight == NULL)
+         warn("No weight of type %s\n", source->type);
+    else
+        total += weight->value;
+    }
+return total;
+}
+
+void txGraphTrimOne(struct txGraph *txg, struct hash *weightHash, double threshold)
+/* Trim down one graph. */
+{
+struct txEvList *evidence, *next;
+struct txEvList *newEvidenceList = NULL;
+int readIx = 0, writeIx = 0;
+for (evidence = txg->evidence; evidence != NULL; evidence = next)
+    {
+    next = evidence->next;
+    double weight = weightOfEvidence(txg, evidence, weightHash);
+    verbose(3, "%s edge %d, evCount %d, weight %f\n", 
+    	txg->name, readIx, slCount(evidence->evList), weight);
+    if (weight < threshold)
+        {
+	verbose(3, "  trimming\n");
+	}
+    else
+        {
+	txg->edgeStarts[writeIx] = txg->edgeStarts[readIx];
+	txg->edgeEnds[writeIx] = txg->edgeEnds[readIx];
+	txg->edgeTypes[writeIx] = txg->edgeTypes[readIx];
+	slAddHead(&newEvidenceList, evidence);
+	++writeIx;
+	}
+    ++readIx;
+    }
+slReverse(&newEvidenceList);
+txg->evidence = newEvidenceList;
+txg->edgeCount = writeIx;
+}
+
 void txgTrim(char *inTxg, char *inWeights, char *asciiThreshold, char *outTxg)
 /* txgTrim - Trim out parts of txGraph that are not of sufficient weight.. */
 {
@@ -62,7 +110,10 @@ struct txGraph *txg;
 FILE *f = mustOpen(outTxg, "w");
 for (txg = txgList; txg != NULL; txg = txg->next)
     {
-    txGraphTabOut(txg, f);
+    verbose(2, "%s edgeCount %d, slCount(evidence) %d\n", txg->name, txg->edgeCount, slCount(txg->evidence));
+    txGraphTrimOne(txg, weightHash, threshold);
+    if (txg->edgeCount > 0)
+	txGraphTabOut(txg, f);
     }
 carefulClose(&f);
 }
