@@ -10,10 +10,12 @@
 #include "common.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "localmem.h"
 #include "ggPrivate.h"
 #include "hdb.h"
+#include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.18 2007/02/07 21:47:28 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.19 2007/02/09 01:18:05 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -98,6 +100,8 @@ for(ge = geList; ge != NULL; ge = ge->next)
     {
     AllocVar(ret);
     ret->id = ge->id;
+    ret->start = ge->start;
+    ret->end = ge->end;
     ggEvAddHeadWrapper(&retList, &ret);
     }
 slReverse(&retList);
@@ -202,6 +206,8 @@ for (da = mc->mrnaList; da != NULL; da = da->next)
 	ev->id = findMrnaIdByName(da->ma->qName, gg->mrnaRefs, gg->mrnaRefCount);
 	if(ev->id < 0)
 	    errAbort("ggGraph::makeInitialGraph() - Couldn't find %s in mrnalist.", da->ma->tName);
+	ev->start = vAll[lastVix].position;
+	ev->end = vAll[vix].position;
 	ggEvAddHeadWrapper(&evM[lastVix][vix], &ev); 
 	}
     }
@@ -838,7 +844,8 @@ for (i=0; i<vCount; ++i)
 return result;
 }
 
-static boolean exonEnclosed(struct geneGraph *gg, int startIx, int endIx)
+static boolean exonEnclosed(struct geneGraph *gg, int startIx, int endIx,
+	int *retStartIx, int *retEndIx)
 /* See if defined by start to end is completely enclosed by another exon. */
 {
 int i,j;
@@ -860,7 +867,11 @@ for (i=0; i<vCount; ++i)
 		struct ggVertex *dv = vertices+j;
 		type = dv->type;
 		if ((type == ggSoftEnd) || ((type == ggHardEnd) && (dv->position >= endIx)))
+		    {
+		    *retStartIx = i;
+		    *retEndIx = j;
 		    return TRUE;
+		    }
 		}
 	    }
 	}
@@ -888,10 +899,14 @@ for (i=0; i<vCount; ++i)
 	    {
 	    if (waysOut[j])
 		{
-		if (vertices[j].type == ggSoftEnd && exonEnclosed(gg, i, j))
+		int otherI=0, otherJ=0;
+		if (vertices[j].type == ggSoftEnd && exonEnclosed(gg, i, j, 
+			&otherI, &otherJ))
 		    {
 		    waysOut[j] = FALSE;
-		    ggEvidenceFreeList(&gg->evidence[i][j]);
+		    gg->evidence[otherI][otherJ] = 
+		    	slCat(gg->evidence[otherI][otherJ], gg->evidence[i][j]);
+		    gg->evidence[i][j] = NULL;
 		    result = TRUE;
 		    }
 		else
@@ -1125,6 +1140,111 @@ for(vStart = 0; vStart < vC; vStart++)
 	}
     }
 }
+
+void mergeDoubleSofts(struct geneGraph *gg)
+/* Merge together overlapping edges with soft ends. */
+{
+struct mergedEdge
+/* Hold together info on a merged edge. */
+    {
+    int vertex1, vertex2;
+    struct ggEvidence *evidence;
+    };
+
+int i,j;
+
+/* Traverse graph and build up range tree */
+struct rbTree *rangeTree = rangeTreeNew(0);
+bool **edgeMatrix = gg->edgeMatrix;
+int vertexCount = gg->vertexCount;
+for (i=0; i<vertexCount; ++i)
+    for (j=0; j<vertexCount; ++j)
+	{
+	if (edgeMatrix[i][j])
+	    {
+	    struct ggVertex *start = &gg->vertices[i];
+	    struct ggVertex *end = &gg->vertices[j];
+	    if (start->type == ggSoftStart && end->type == ggSoftEnd)
+		rangeTreeAdd(rangeTree, start->position, end->position);
+	    }
+	}
+
+
+/* Traverse graph again merging edges */
+struct ggEvidence ***evidence = gg->evidence;
+for (i=0; i<vertexCount; ++i)
+    for (j=0; j<vertexCount; ++j)
+	{
+	if (edgeMatrix[i][j])
+	    {
+	    struct ggVertex *start = &gg->vertices[i];
+	    struct ggVertex *end = &gg->vertices[j];
+	    if (start->type == ggSoftStart && end->type == ggSoftEnd)
+		{
+		struct range *r = rangeTreeFindEnclosing(rangeTree,
+			start->position, end->position);
+		assert(r != NULL);
+		struct mergedEdge *mergeEdge = r->val;
+		if (mergeEdge == NULL)
+		    {
+		    lmAllocVar(rangeTree->lm, mergeEdge);
+		    r->val = mergeEdge;
+		    }
+		if (start->position == r->start)
+		    mergeEdge->vertex1 = i;
+		if (end->position == r->end)
+		    mergeEdge->vertex2 = j;
+		mergeEdge->evidence = slCat(mergeEdge->evidence, evidence[i][j]);
+		evidence[i][j] = NULL;
+		edgeMatrix[i][j] = FALSE;
+		}
+	    }
+	}
+
+/* Traverse merged edge list */
+struct range *r;
+for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
+    {
+    struct mergedEdge *mergeEdge = r->val;
+    int v1 = mergeEdge->vertex1;
+    int v2 = mergeEdge->vertex2;
+    evidence[v1][v2] = mergeEdge->evidence;
+    edgeMatrix[v1][v2] = TRUE;
+    }
+
+rbTreeFree(&rangeTree);
+}
+
+int ggCountEdges(struct geneGraph *gg)
+/* Count number of edges. */
+{
+int edgeCount = 0;
+int vertexCount = gg->vertexCount;
+int i,j;
+bool **edgeMatrix = gg->edgeMatrix;
+for(i=0; i<vertexCount; i++)
+    for (j=0; j<vertexCount; j++)
+        {
+	if (edgeMatrix[i][j])
+	    ++edgeCount;
+	}
+return edgeCount;
+}
+
+int ggCountAllEvidence(struct geneGraph *gg)
+/* Count total amount of evidence on all vertices. */
+{
+int total = 0;
+int vertexCount = gg->vertexCount;
+int i,j;
+struct ggEvidence ***evidence = gg->evidence;
+for(i=0; i<vertexCount; i++)
+    for (j=0; j<vertexCount; j++)
+        {
+	total += slCount(evidence[i][j]);
+	}
+return total;
+}
 		
 struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
 					  struct hash *tissLibHash, boolean fillInEvidence)
@@ -1139,6 +1259,7 @@ int minOverlap = 6; /* Don't believe any soft start/end that is less
 		     being alignment oddities.*/
 /* Try and snap soft edges to nearby hard edes */
 int i;
+// verbose(3, "ggGraphConsensusCluster init %d vertices, %d edges, %d evidence\n", gg->vertexCount, ggCountEdges(gg), ggCountAllEvidence(gg));
 for(i=0; i<gg->vertexCount; i++)
     {
     if(gg->vertices[i].type == ggSoftStart)
@@ -1157,6 +1278,7 @@ for(i=0; i<gg->vertexCount; i++)
     }
 /* Fill in soft ends and starts with the "best" soft end or start. */
 softlyTrimConsensus(gg, aliHash);
+mergeDoubleSofts(gg);
 hideLittleOrphans(gg);
 fixLargeMrnaInserts(gg); 
 if(fillInEvidence)
