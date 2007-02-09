@@ -9,7 +9,7 @@
 #include "ggMrnaAli.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: ggMrnaAli.c,v 1.8 2005/04/13 06:25:53 markd Exp $";
+static char const rcsid[] = "$Id: ggMrnaAli.c,v 1.9 2007/02/09 02:11:27 kent Exp $";
 
 void ggMrnaBlockStaticLoad(char **row, struct ggMrnaBlock *ret)
 /* Load a row from ggMrnaBlock table into ret.  The contents of ret will
@@ -429,6 +429,7 @@ ma->tStart = psl->tStart;
 ma->tEnd = psl->tEnd;
 ma->blockCount = blockCount = psl->blockCount;
 ma->blocks = AllocArray(blocks, blockCount);
+ma->sourceType = "psl";
 
 for (i = 0; i<blockCount; ++i)
     {
