@@ -102,6 +102,7 @@ struct ggMrnaAli
     short milliScore;	/* Score 0-1000  */
     short blockCount;	/* Number of blocks.  */
     struct ggMrnaBlock *blocks;	/* Dynamically allocated array.  */
+    char *sourceType;	/* Not allocated here.  Typically "refSeq", "mrna" etc. */
     };
 
 struct ggMrnaAli *ggMrnaAliLoad(char **row);
