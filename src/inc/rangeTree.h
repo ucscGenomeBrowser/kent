@@ -14,6 +14,7 @@ struct range
     {
     struct range *next;
     int start,end;	/* Zero based half open interval. */
+    void *val;		/* Some value associated with range. */
     };
 
 int rangeCmp(void *va, void *vb);
@@ -22,6 +23,10 @@ int rangeCmp(void *va, void *vb);
 
 void rangeTreeAdd(struct rbTree *tree, int start, int end);
 /* Add range to tree, merging with existing ranges if need be. */
+
+struct range *rangeTreeFindEnclosing(struct rbTree *tree, int start, int end);
+/* Find item in range tree that encloses range between start and end 
+ * if there is any such item. */
 
 struct range *rangeTreeList(struct rbTree *tree);
 /* Return list of all ranges in tree in order.  Not thread safe. 
