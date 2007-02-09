@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1198 2007/02/09 22:52:59 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1199 2007/02/09 23:37:36 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5349,8 +5349,8 @@ int blockCount, i;
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
 
-trashDirFile(&indexTn, ".html", "index");
-trashDirFile(&bodyTn, ".html", "body");
+trashDirFile(&indexTn, "index", "index", ".html");
+trashDirFile(&bodyTn, "body", "body", ".html");
 
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
@@ -14840,7 +14840,7 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-trashDirFile(&gifTn, ".gif", "hgc");
+trashDirFile(&gifTn, "hgc", "hgc", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(vg);
 vgSetClip(vg, 0, 0, pixWidth, pixHeight);
@@ -16660,8 +16660,8 @@ struct dnaSeq *tSeq;
 char *tables[4] = {"luGene2", "luGene", "refGene", "mgcGenes"};
 
 /* open file to write to */
-trashDirFile(&indexTn, ".html", "index");
-trashDirFile(&bodyTn, ".html", "body");
+trashDirFile(&indexTn, "index", "index", ".html");
+trashDirFile(&bodyTn, "body", "body", ".html");
 body = mustOpen(bodyTn.forCgi, "w");
 
 /* get query genes struct info*/
