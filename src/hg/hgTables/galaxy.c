@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.3 2005/06/23 18:34:03 giardine Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.4 2007/02/09 23:47:08 hiram Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -141,7 +141,7 @@ FILE *f;
 if (!cartVarExists(cart, "galaxyFileFormat") ||
     sameString(cartString(cart, "galaxyFileFormat"), "bed"))
     {
-    makeTempName(&tn, hgtaCtTempNamePrefix, ".bed");
+    trashDirFile(&tn, "ct", hgtaCtTempNamePrefix, ".bed");
     f = mustOpen(tn.forCgi, "w");
     textOpen();
     for (region = regionList; region != NULL; region = region->next)
@@ -189,7 +189,7 @@ if (!cartVarExists(cart, "galaxyFileFormat") ||
 else
     {
     /* print results as tab-delimited table columns */
-    makeTempName(&tn, hgtaCtTempNamePrefix, ".tab");
+    trashDirFile(&tn, "ct", hgtaCtTempNamePrefix, ".tab");
     f = mustOpen(tn.forCgi, "w");
     textOpen();
     tabOutSelectedFields(database, table, f, fullTableFields(database, table));

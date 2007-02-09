@@ -19,8 +19,9 @@
 #include "wiggle.h"
 #include "correlate.h"
 #include "bedCart.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.53 2006/10/20 05:16:10 kate Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.54 2007/02/09 23:47:07 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -434,7 +435,7 @@ if (doCt)
 	{
 	struct dyString *wigSettings = newDyString(0);
 	struct tempName tn;
-	makeTempName(&tn, hgtaCtTempNamePrefix, ".wib");
+	trashDirFile(&tn, "ct", hgtaCtTempNamePrefix, ".wib");
 	ctNew->wibFile = cloneString(tn.forCgi);
 	char *wiggleFile = cloneString(ctNew->wibFile);
 	chopSuffix(wiggleFile);
