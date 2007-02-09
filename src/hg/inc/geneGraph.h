@@ -4,7 +4,9 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* geneGraph - stuff that represents the alt splicing patterns possible for a
- * gene based on the mRNA evidence as a graph. */
+ * gene based on the mRNA evidence as a graph. This is used by the altSplice
+ * program. */
+
 #ifndef GENEGRAPH_H
 #define GENEGRAPH_H
 
@@ -56,6 +58,7 @@ struct ggEvidence
 {
     struct ggEvidence *next;   /* Next in list. */
     int id;                    /* Index into mrnaRefs of supporting mRNA. */
+    int start,end;	       /* Bounds of evidence in chrom coordinates. */
 };
 
 struct ggEdge
@@ -129,15 +132,24 @@ void freeGeneGraph(struct geneGraph **pGg);
  *
  * These three passes correspond to the next three
  * functions.  Generally you only need to look at
- * the details of the last pass, so the structure
+ * the details of the last pass, so the structures
  * they use are hidden */
 
 
 struct ggMrnaInput *ggGetMrnaForBac(char *bacAcc);
-/* Read in clustering input from hgap database. */
+/* Read in clustering input from hgap database. The bacAcc parameter
+ * is more likely to be a chromosome these days. */
 
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci);
 /* Make a list of clusters from ci. */
+
+struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
+/* Make up a gene transcript graph out of the ggMrnaCluster. */
+
+struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
+					  struct hash *tissLibHash, boolean fillInEvidence);
+/* Make up a gene transcript graph out of the ggMrnaCluster. Only
+ extending truncated exons to consensus splice sites. */
 
 struct ggMrnaCluster *ggMrnaSoftClusterOfOne(struct ggMrnaAli *ma, 
 	struct dnaSeq *genoSeq);
@@ -153,14 +165,6 @@ void ggMrnaClusterMerge(struct ggMrnaCluster *aMc, struct ggMrnaCluster *bMc);
 /* Merge bMc into aMc.  Afterwords aMc will be bigger and
  * bMc will be gone. */
 
-
-struct geneGraph *ggGraphCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
-/* Make up a gene transcript graph out of the ggMrnaCluster. */
-
-struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
-					  struct hash *tissLibHash, boolean fillInEvidence);
-/* Make up a gene transcript graph out of the ggMrnaCluster. Only
- extending truncated exons to consensus splice sites. */
 
 
 void freeGgMrnaInput(struct ggMrnaInput **pCi);
