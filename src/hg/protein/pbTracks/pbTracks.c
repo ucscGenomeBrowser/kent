@@ -14,8 +14,9 @@
 #include "pbStamp.h"
 #include "pbStampPict.h"
 #include "pbTracks.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.43 2006/03/06 20:02:30 angie Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.44 2007/02/09 23:53:06 hiram Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -242,7 +243,7 @@ if (psOutput2)
     }
 else
     {
-    makeTempName(&gifTn2, "pbt", ".gif");
+    trashDirFile(&gifTn2, "pbt", "pbt", ".gif");
     vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi);
     }
 

@@ -13,8 +13,9 @@
 #include "cheapcgi.h"
 #include "hgColors.h"
 #include "pbTracks.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.12 2006/07/11 20:53:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.13 2007/02/09 23:52:57 hiram Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -1511,7 +1512,7 @@ if (psOutput)
     }
 else
     {
-    makeTempName(&gifTn, "pbt", ".gif");
+    trashDirFile(&gifTn, "pbt", "pbt", ".gif");
     vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     }
 
