@@ -71,12 +71,6 @@ if ( $#argv == 4 ) then
   endif
 endif
 
-### new hgTables method not on RR yet.  work with dev-kuhn for now.
-###   until hgTables code is on RR:
-#  if ( "hgwbeta" == $mach1 ) then 
-#    set mach1="hgwdev-kuhn"
-#  endif
-
 # for stripping out genbank
 cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
   > genbank.local
@@ -92,9 +86,9 @@ foreach machine ( $mach1 $mach2 )
 
   # drop header lines from file and grab appropriate fields
   if ( 1 == $times) then
+    # find mysql version before grabbing STATUS fields
     set ver=`getVersion.csh $machine 1`
     set subver=`getVersion.csh $machine 2`
-    # find mysql version before grabbing STATUS fields
     if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
       # newer mysql versions use different fields
       cat $machine.tmp | sed '1,2d' \
@@ -107,31 +101,14 @@ foreach machine ( $mach1 $mach2 )
     cat $machine.tmp | sed '1,2d' \
       | awk '{print $1}' >& $machine.status
   endif
-##### for testing purposes, drop some extra lines from output
-#   if ( 1 == $times) then
-#     if ( "hgwdev-kuhn" == $machine ) then 
-#       cat $machine.tmp | sed '1,7d' \
-#         | awk '{print $1, $13, $14}' >& $machine.status
-#     else
-#       cat $machine.tmp | sed '1,2d;12,17d' \
-#         | awk '{print $1, $13, $14}' >& $machine.status
-#     endif
-#   else
-#     if ( "hgwdev-kuhn" == $machine ) then 
-#       cat $machine.tmp | sed '1,7d' \
-#         | awk '{print $1}' >& $machine.status
-#     else
-#       cat $machine.tmp | sed '1,2d;9,14d' \
-#         | awk '{print $1}' >& $machine.status
-#     endif
-#   endif
-####### end test block
   rm $machine.tmp
+
   # strip genbank
   cat $machine.status | egrep -v -f genbank.local > $machine.out
   rm -f $machine.status
 end
 
+# get diffs
 commTrio.csh $mach1.out $mach2.out | sed -e "s/\.out//g" \
    | sed -e "s/Only/only/" > trioFile
 echo
