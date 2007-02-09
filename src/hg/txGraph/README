@@ -1,4 +1,4 @@
-This contains code to make and modify transcription graphs (txGraphs).
+This dir contains code to make and modify transcription graphs (txGraphs).
 These are graphs with a node for each start, end, or splice site, and
 an edge for each exon or intron. They represent a fair approximation 
 to a gene with possible multiple transcripts.
