@@ -26,8 +26,8 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo "            [mode] (realTime|fast)"
   echo "       - defaults to fast which uses mysql-genome instead of WGET"
   echo "       - uses fast for settings and html fields, even in realTime"
-  echo "       - overwrites file in dev/qa/test-results/trackDb is used"
-  echo "           twice the same day."
+  echo "       - overwrites file in dev/qa/test-results/trackDb "
+  echo "           if used twice the same day."
   echo
   exit 1
 else
@@ -81,9 +81,8 @@ foreach db ( $dbs )
   set active=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
      WHERE name =  "'$db'"' hgcentral`
   if ( 0 == $active ) then
-    set archived=`ssh -x qateam@$machine mysql $db -A -N \
-      -e '"'SHOW TABLES'"' | wc -l`
-    if ( 1 == $archived ) then
+    set archived=`getTableStatus.csh $db $machine | wc -l`
+    if ( 3 == $archived ) then
       set comment="archived"
     else
       set comment="RRactive=0"

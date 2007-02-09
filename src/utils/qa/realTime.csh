@@ -12,8 +12,8 @@
 set tablelist=""
 set tables=""
 set db=""
-set sqlVersion=0
-set sqlSubVersion=0
+set ver=""
+set subver=""
 set update=""
 
 if ( $#argv != 2 ) then
@@ -54,22 +54,25 @@ foreach table ($tables)
     # find out version of mysql running 
     # (v 5 has different signature for TABLE STATUS output)
     # (so does ver 4.1.*)
-    ssh -x qateam@$machine mysql $db -A -N \
-      -e '"'SELECT @@version'"' >& /dev/null
-    if ( $status ) then
-      echo "."
-      continue
-    endif
-    set sqlVersion=`ssh -x qateam@$machine mysql $db -A -N \
-      -e '"'SELECT @@version'"' | awk -F. '{print $1}'`
-    set sqlSubVersion=`ssh -x qateam@$machine mysql $db -A -N \
-      -e '"'SELECT @@version'"' | awk -F. '{print $2}'`
-    if (4 == $sqlVersion && 0 == $sqlSubVersion) then
-      set update=`ssh -x qateam@$machine mysql $db -A -N \
-        -e '"'SHOW TABLE STATUS'"' | grep -w ^$table | awk '{print $13, $14}'`
+    set ver=`getVersion.csh $machine 1`
+    set subver=`getVersion.csh $machine 2`
+    if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
+      # newer mysql versions use different fields
+      set update=`getTableStatus.csh $db $machine | sed '1,2d' \
+        | grep -w ^$table | awk '{print $14, $15}'`
+      if ( $status ) then
+        # echo "."
+        echo "ooooo"
+        continue
+      endif
     else
-      set update=`ssh -x qateam@$machine mysql $db -A -N \
-        -e '"'SHOW TABLE STATUS'"' | grep -w ^$table | awk '{print $14, $15}'`
+      set update=`getTableStatus.csh $db $machine | sed '1,2d' \
+        | grep -w ^$table | awk '{print $13, $14}'`
+      if ( $status ) then
+        # echo "."
+        echo "xxxxx"
+        continue
+      endif
     endif
     echo "."$update
   end

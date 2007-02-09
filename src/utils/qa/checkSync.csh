@@ -12,6 +12,9 @@
 set db=""
 set mach1="hgwbeta"
 set mach2="hgw1"
+set url1=""
+set url2=""
+set url=""
 set times=0
 
 if ( $#argv < 1 || $#argv > 4 ) then
@@ -33,9 +36,8 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
-
 if ( $#argv == 2 ) then
-  if ( $argv[2] == "times" ) then
+  if ( "times" == $argv[2] ) then
     set times=1
   else
     echo
@@ -69,46 +71,67 @@ if ( $#argv == 4 ) then
   endif
 endif
 
-if ( 1 == $times) then
-  # get the table and update times, stripping out genbank
-  ssh -x qateam@$mach1 mysql $db -A -N \
-    -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' >& $mach1.status
-    if ( $status ) then
-      rm -f $mach1.status
-      echo "\n  $db does not exist on $mach1\n"
-      exit 1
-    endif
-  ssh -x qateam@$mach2 mysql $db -A -N \
-    -e '"'SHOW TABLE STATUS'"' | awk '{print $1, $13, $14}' >& $mach2.status
-    if ( $status ) then
-      rm -f $mach1.status
-      rm -f $mach2.status
-      echo "\n  $db does not exist on $mach2\n"
-      exit 1
-    endif
-  cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
-    > genbank.local
-  cat $mach1.status | egrep -v -f genbank.local > $mach1.out
-  cat $mach2.status | egrep -v -f genbank.local > $mach2.out
-else
-  ssh -x qateam@$mach1 mysql $db -A -N \
-    -e '"'SHOW TABLES'"' >& $mach1.out
-  if ( $status ) then
-    rm -f $mach1.out
-    echo "\n  $db does not exist on $mach1\n"
-    exit 1
-  endif
-  ssh -x qateam@$mach2 mysql $db -A -N \
-    -e '"'SHOW TABLES'"' >& $mach2.out
-  if ( $status ) then
-    rm -f $mach1.out
-    rm -f $mach2.out
-    echo "\n  $db does not exist on $mach2\n"
-    exit 1
-  endif
-endif
+### new hgTables method not on RR yet.  work with dev-kuhn for now.
+###   until hgTables code is on RR:
+#  if ( "hgwbeta" == $mach1 ) then 
+#    set mach1="hgwdev-kuhn"
+#  endif
 
-echo
+# for stripping out genbank
+cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
+  > genbank.local
+
+foreach machine ( $mach1 $mach2 )
+  # get the update times
+  getTableStatus.csh $db $machine > $machine.tmp
+  if ( $status ) then
+    cat $machine.tmp
+    rm $machine.tmp
+    exit 1
+  endif
+
+  # drop header lines from file and grab appropriate fields
+  if ( 1 == $times) then
+    set ver=`getVersion.csh $machine 1`
+    set subver=`getVersion.csh $machine 2`
+    # find mysql version before grabbing STATUS fields
+    if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
+      # newer mysql versions use different fields
+      cat $machine.tmp | sed '1,2d' \
+        | awk '{print $1, $14, $15}' >& $machine.status
+    else
+      cat $machine.tmp | sed '1,2d' \
+        | awk '{print $1, $13, $14}' >& $machine.status
+    endif
+  else
+    cat $machine.tmp | sed '1,2d' \
+      | awk '{print $1}' >& $machine.status
+  endif
+##### for testing purposes, drop some extra lines from output
+#   if ( 1 == $times) then
+#     if ( "hgwdev-kuhn" == $machine ) then 
+#       cat $machine.tmp | sed '1,7d' \
+#         | awk '{print $1, $13, $14}' >& $machine.status
+#     else
+#       cat $machine.tmp | sed '1,2d;12,17d' \
+#         | awk '{print $1, $13, $14}' >& $machine.status
+#     endif
+#   else
+#     if ( "hgwdev-kuhn" == $machine ) then 
+#       cat $machine.tmp | sed '1,7d' \
+#         | awk '{print $1}' >& $machine.status
+#     else
+#       cat $machine.tmp | sed '1,2d;9,14d' \
+#         | awk '{print $1}' >& $machine.status
+#     endif
+#   endif
+####### end test block
+  rm $machine.tmp
+  # strip genbank
+  cat $machine.status | egrep -v -f genbank.local > $machine.out
+  rm -f $machine.status
+end
+
 commTrio.csh $mach1.out $mach2.out | sed -e "s/\.out//g" \
    | sed -e "s/Only/only/" > trioFile
 echo
@@ -125,19 +148,8 @@ if ( 0 != $firstOnly || 0 !=  $secondOnly ) then
   echo
 endif
 
-# to allow files to pile up stop here:
-# exit
-
-# couldn't make wildcards work, e.g.:
-# rm -f "$mach1*Only"
-
-rm -f $mach1.status
-rm -f $mach2.status
-rm -f $mach1.out
-rm -f $mach2.out
-rm -f $mach1.out.Only
-rm -f $mach2.out.Only
-rm -f $mach1.out.$mach2.out.Only
+rm -f *Only
+rm -f *out
 rm -f trioFile
 rm -f outFile
 rm -f genbank.local

@@ -40,6 +40,7 @@ install:
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination getConservation.csh     ${SCRIPTS}
+	cp -p --remove-destination getField.csh            ${SCRIPTS}
 	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
@@ -47,7 +48,9 @@ install:
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
 	cp -p --remove-destination getTablesize.csh        ${SCRIPTS}
+	cp -p --remove-destination getTableStatus.csh      ${SCRIPTS}
 	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
+	cp -p --remove-destination getVersion.csh          ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
@@ -60,4 +63,3 @@ install:
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
-	cp -p --remove-destination wgetTableField.csh      ${SCRIPTS}
