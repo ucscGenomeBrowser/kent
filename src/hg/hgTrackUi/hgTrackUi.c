@@ -26,6 +26,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 #include "dbRIP.h"
+#include "tfbsConsSites.h"
 #include "hapmapAlleles.h"
 
 #define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
@@ -33,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.339 2007/02/07 16:28:16 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.340 2007/02/09 00:47:53 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -61,11 +62,11 @@ if (none)
 
 void tfbsConsSitesUi(struct trackDb *tdb)
 {
-float tfbsConsSitesCutoff;
-printf("<BR><B>Z score cutoff (default 2.33, minimum 1.64):&nbsp;</B>");
-tfbsConsSitesCutoff =
-    sqlFloat(cartUsualString(cart, "tfbsConsSitesCutoff", "2.33"));
-cgiMakeDoubleVar("tfbsConsSitesCutoff",tfbsConsSitesCutoff,5);
+float tfbsConsSitesCutoff =
+    sqlFloat(cartUsualString(cart,TFBS_SITES_CUTOFF,TFBS_SITES_CUTOFF_DEFAULT));
+printf("<BR><B>Z score cutoff (default %s, minimum %s):&nbsp;</B>",
+	TFBS_SITES_CUTOFF_DEFAULT, TFBS_SITES_CUTOFF_MINIMUM);
+cgiMakeDoubleVar(TFBS_SITES_CUTOFF,tfbsConsSitesCutoff,5);
 }
 
 void stsMapUi(struct trackDb *tdb)
