@@ -66,6 +66,7 @@ void tfbsConsSitesOutput(struct tfbsConsSites *el, FILE *f, char sep, char lastS
 /*	For trackUi cart variable	*/
 #define TFBS_SITES_CUTOFF	"tfbsConsSitesCutoff"
 #define TFBS_SITES_CUTOFF_DEFAULT	"2.33"
+#define TFBS_SITES_CUTOFF_MINIMUM	"1.64"
 
 #endif /* TFBSCONSSITES_H */
 
