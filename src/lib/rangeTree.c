@@ -30,6 +30,7 @@ void rangeTreeAdd(struct rbTree *tree, int start, int end)
 struct range tempR, *existing;
 tempR.start = start;
 tempR.end = end;
+tempR.val = NULL;
 while ((existing = rbTreeRemove(tree, &tempR)) != NULL)
      {
      tempR.start = min(tempR.start, existing->start);
@@ -56,6 +57,19 @@ rangeList = NULL;
 rbTreeTraverse(tree, rangeListAdd);
 slReverse(&rangeList);
 return rangeList;
+}
+
+struct range *rangeTreeFindEnclosing(struct rbTree *tree, int start, int end)
+/* Find item in range tree that encloses range between start and end 
+ * if there is any such item. */
+{
+struct range tempR, *r;
+tempR.start = start;
+tempR.end = end;
+r = rbTreeFind(tree, &tempR);
+if (r != NULL && r->start <= start && r->end >= end)
+    return r;
+return NULL;
 }
 
 struct rbTree *rangeTreeNew()
