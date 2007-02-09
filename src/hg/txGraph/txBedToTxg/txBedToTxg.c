@@ -25,7 +25,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct ggMrnaAli *bedToMa(struct bed *bed)
+struct ggMrnaAli *bedToMa(struct bed *bed, char *sourceType)
 /* convert psl to format the clusterer likes. */
 {
 /* Figure out numerical as well as character representation of strand. */
@@ -48,6 +48,7 @@ ma->hasIntrons = (blockCount > 1);
 ma->tName = cloneString(bed->chrom);
 ma->tStart = bed->chromStart;
 ma->tEnd = bed->chromEnd;
+ma->sourceType = sourceType;
 
 /* Deal with blocks. */
 struct ggMrnaBlock *blocks, *block;
@@ -80,14 +81,14 @@ else
 return ma;
 }
 
-struct ggMrnaAli *bedListToGgMrnaAliList(struct bed *bedList)
+struct ggMrnaAli *bedListToGgMrnaAliList(struct bed *bedList, char *sourceType)
 /* Copy list of beds to list of ggMrnaAli. */
 {
 struct bed *bed;
 struct ggMrnaAli *maList = NULL;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    struct ggMrnaAli *ma = bedToMa(bed);
+    struct ggMrnaAli *ma = bedToMa(bed, sourceType);
     slAddHead(&maList, ma);
     }
 slReverse(&maList);
@@ -176,7 +177,7 @@ for (i=0; i<tg->sourceCount; ++i)
     {
     struct txSource *source;
     AllocVar(source);
-    source->type = cloneString("???");
+    source->type = cloneString(gg->mrnaTypes[i]);
     source->accession = cloneString(gg->mrnaRefs[i]);
     slAddHead(&tg->sources, source);
     }
@@ -254,7 +255,7 @@ void txBedToTxg(char *inBed, char *outGraph)
 struct bed *bedList = bedLoadAll(inBed);
 FILE *f = mustOpen(outGraph, "w");
 verbose(1, "Loaded %d beds from %s\n", slCount(bedList), inBed);
-struct ggMrnaAli *maList = bedListToGgMrnaAliList(bedList);
+struct ggMrnaAli *maList = bedListToGgMrnaAliList(bedList, "bed");
 verbose(2, "Created %d ma's\n", slCount(maList));
 struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, NULL);
 struct ggMrnaCluster *mc, *mcList = ggClusterMrna(ci);
