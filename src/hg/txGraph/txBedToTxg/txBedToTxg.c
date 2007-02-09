@@ -144,7 +144,6 @@ bool **em = gg->edgeMatrix;
 int edgeCount = 0;
 int totalVertexCount = gg->vertexCount;
 int usedVertexCount;
-struct dyString *accessionList = NULL;
 int *translator;	/* Translates away unused vertices. */
 struct ggVertex *vertices = gg->vertices;
 struct ggEvidence *ev = NULL;
@@ -170,14 +169,18 @@ tg->name = cloneString("NA");
 tg->vertexCount = usedVertexCount;
 tg->vTypes = AllocArray(vTypes, usedVertexCount);
 tg->vPositions = AllocArray(vPositions, usedVertexCount);
-tg->mrnaRefCount = gg->mrnaRefCount;
-accessionList = newDyString(10*gg->mrnaRefCount);
-/* Have to print the accessions all out in the same string to conform
-   to how the memory is handled later. */
-for(i=0; i<gg->mrnaRefCount; i++)
-    dyStringPrintf(accessionList, "%s,", gg->mrnaRefs[i]);
-sqlStringDynamicArray(accessionList->string, &tg->mrnaRefs, &tg->mrnaRefCount);
-dyStringFree(&accessionList);
+tg->sourceCount = gg->mrnaRefCount;
+
+/* Cope with gg->mrnaRefs -> tg->sources conversion here. */
+for (i=0; i<tg->sourceCount; ++i)
+    {
+    struct txSource *source;
+    AllocVar(source);
+    source->type = cloneString("???");
+    source->accession = cloneString(gg->mrnaRefs[i]);
+    slAddHead(&tg->sources, source);
+    }
+slReverse(&tg->sources);
 
 /* convert vertexes */
 for (i=0,j=0; i<totalVertexCount; ++i)
@@ -223,7 +226,7 @@ for (i=0; i<totalVertexCount; ++i)
 		{
 		struct txEvidence *txEv;
 		AllocVar(txEv);
-		txEv->mrnaId = ev->id;
+		txEv->sourceId = ev->id;
 		txEv->start = ev->start;
 		txEv->end = ev->end;
 		slAddHead(&evList->evList, txEv);
