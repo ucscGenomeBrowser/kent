@@ -14,6 +14,7 @@
 #include "hPrint.h"
 #include "../near/hgNear/hgNear.h"
 #include "hgGenome.h"
+#include "trashDir.h"
 
 struct colTrack
 /* Genome browser track/gene sorter column correspondence. */
@@ -82,7 +83,7 @@ struct hashEl *el, *list = hashElListHash(transcriptHash);
 
 /* Create file with all matching gene IDs. */
 struct tempName keyTn;
-makeTempName(&keyTn, "hggKey", ".key");
+trashDirFile(&keyTn, "hgg", "key", ".key");
 FILE *f = mustOpen(keyTn.forCgi, "w");
 for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s\n", el->name);

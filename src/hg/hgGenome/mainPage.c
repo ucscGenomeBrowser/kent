@@ -26,8 +26,9 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "hgGenome.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.14 2007/01/26 00:46:38 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.15 2007/02/09 23:19:52 hiram Exp $";
 
 
 static char *allColors[] = {
@@ -254,7 +255,7 @@ int innerHeight = oneRowHeight - 3*spacing;
 int i,j;
 
 /* Create gif file and make reference to it in html. */
-makeTempName(&gifTn, "hgtIdeo", ".gif");
+trashDirFile(&gifTn, "hgg", "ideo", ".gif");
 vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
 
 hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",

@@ -9,6 +9,7 @@
 #include "chromGraph.h"
 #include "hPrint.h"
 #include "hgGenome.h"
+#include "trashDir.h"
 
 static void quotedBrowserUrl(FILE *f, struct bed3 *bed, struct genoGraph *gg)
 /* Print URL that will open browser at bed position with genoGraph track on */
@@ -32,7 +33,7 @@ char *indexFrame = "index";
 
 /* Write index html file. */
 struct tempName indexTn;
-makeTempName(&indexTn, "hggIndex", ".html");
+trashDirFile(&indexTn, "hgg", "index", ".html");
 FILE *f = mustOpen(indexTn.forCgi, "w");
 htmlSetBackground(hBackgroundImage());
 htmStart(f, "Region Index");

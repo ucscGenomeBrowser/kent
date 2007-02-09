@@ -16,6 +16,7 @@
 #include "hPrint.h"
 #include "customTrack.h"
 #include "hgGenome.h"
+#include "trashDir.h"
 
 
 static char *markerNames[] = {
@@ -180,7 +181,7 @@ char *varName = customTrackFileVar(database);
 char *fileName = cartOptionalString(cart, varName);
 if (fileName == NULL || !fileExists(fileName))
     {
-    makeTempName(&tempName, "hggUp", ".bed");
+    trashDirFile(&tempName, "hgg", "up", ".bed");
     fileName = tempName.forCgi;
     outList = upList;
     }
