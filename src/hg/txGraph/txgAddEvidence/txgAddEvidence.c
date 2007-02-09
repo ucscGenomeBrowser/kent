@@ -69,11 +69,33 @@ for (txg = txgList; txg != NULL; txg = txg->next)
     if (bk == NULL)
         {
 	struct minChromSize *chrom = hashMustFindVal(sizeHash, txg->tName);
+	verbose(2, "New binKeeper for %s\n", txg->tName);
 	bk = binKeeperNew(0, chrom->minSize);
 	hashAdd(bkHash, txg->tName, bk);
 	}
+    binKeeperAdd(bk, txg->tStart, txg->tEnd, txg);
     }
 return bkHash;
+}
+
+void addEvidence(struct bed *bedList, struct hash *bkHash)
+/* Input is a list of additional evidence in bedList, and a hash
+ * full of binKeepers full of txGraphs. */
+{
+struct bed *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    verbose(2, "Processing %s %s:%d-%d\n", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
+    struct binKeeper *bk = hashMustFindVal(bkHash, bedList->chrom);
+    struct binElement *bel, *belList = binKeeperFind(bk, bed->chromStart, bed->chromEnd);
+    verbose(3, "%s hits %d tgx\n", bed->name, slCount(belList));
+    for (bel = belList; bel != NULL; bel = bel->next)
+        {
+	struct txGraph *txg = bel->val;
+	verbose(3, "  txg %s:%d-%d\n", txg->tName, txg->tStart, txg->tEnd);
+	assert(sameString(txg->tName, bed->chrom));
+	}
+    }
 }
 
 void txgAddEvidence(char *txgIn, char *bedIn, char *sourceType, char *txgOut)
@@ -89,6 +111,9 @@ verbose(1, "Adding %s evidence from %s to %s. Result is in %s.\n",
 	sourceType, bedIn, txgIn, txgOut);
 struct hash *bkHash = txgIntoKeeperHash(txgList);
 verbose(2, "Loaded into keeper hash of %d elements\n", bkHash->elCount);
+
+addEvidence(bedList, bkHash);
+verbose(2, "Added evidence.\n");
 
 carefulClose(&f);
 }
