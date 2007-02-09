@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.18 2007/02/09 01:19:23 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.19 2007/02/09 02:10:35 kent Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -69,6 +69,7 @@ if ((gg = *pGg) != NULL)
 	freez(&gg->mrnaRefs[i]);
 	}
     freez(&gg->mrnaRefs);
+    freez(&gg->mrnaTypes);
     freez(&gg->tName);
     freez(&gg->mrnaTissues);
     freez(&gg->mrnaLibs);

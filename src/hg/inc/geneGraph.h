@@ -105,6 +105,7 @@ struct geneGraph
     char strand[3];                     /* + or - */
     int mrnaRefCount;                   /* Count of mRNAs supporting this. */
     char **mrnaRefs;                    /* names/ids of mrnas supporting this. */
+    char **mrnaTypes;			/* Types for mrnaRefs. */
     int *mrnaTissues;                   /* tissues from which mrnas originated, 0 if unknown. Indexes into tissue table */
     int *mrnaLibs;                       /* libraries from which mrnas originated, 0 if unknown, Indexes into library table */
     struct ggEvidence ***evidence;       /* Like adjacency matrix except each point is an linked list of supporting evidence */

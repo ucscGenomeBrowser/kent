@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.19 2007/02/09 01:18:05 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.20 2007/02/09 02:10:53 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -167,9 +167,14 @@ gg->tName = cloneString(ci->tName);
 gg->tStart = mc->tStart;
 gg->tEnd = mc->tEnd;
 gg->mrnaRefCount = mrnaRefCount = slCount(mc->refList);
-gg->mrnaRefs = needMem(sizeof(char *) * mrnaRefCount);
+AllocArray(gg->mrnaRefs, mrnaRefCount);
+AllocArray(gg->mrnaTypes, mrnaRefCount);
+
 for (ref = mc->refList, i=0; ref != NULL; ref = ref->next, ++i)
+     {
      gg->mrnaRefs[i] = cloneString(ref->ma->qName);
+     gg->mrnaTypes[i] = ref->ma->sourceType;
+     }
 
 /* Allocate gene graph and edge matrix. Also the evidence matrix */
 gg->vertexCount = vAllCount;
