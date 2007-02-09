@@ -61,16 +61,14 @@ foreach table ($tables)
       set update=`getTableStatus.csh $db $machine | sed '1,2d' \
         | grep -w ^$table | awk '{print $14, $15}'`
       if ( $status ) then
-        # echo "."
-        echo "ooooo"
+        echo "."
         continue
       endif
     else
       set update=`getTableStatus.csh $db $machine | sed '1,2d' \
         | grep -w ^$table | awk '{print $13, $14}'`
       if ( $status ) then
-        # echo "."
-        echo "xxxxx"
+        echo "."
         continue
       endif
     endif

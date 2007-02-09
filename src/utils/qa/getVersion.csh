@@ -36,10 +36,7 @@ endif
 set url1="http://"
 set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMysqlVersion=1"
 set url="$url1$machine$url2"
-# wget -q -O $machine.version "$url"
 set version=`wget -q -O /dev/stdout "$url"`
-wget -q -O /dev/stdout "$url"
-exit
 if (! $part ) then
   echo $version | grep .
 else
