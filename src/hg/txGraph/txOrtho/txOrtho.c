@@ -126,7 +126,6 @@ hashFree(&sizeHash);
 return bkHash;
 }
 
-#ifdef SOON 
 struct altGraphX *agxForCoordinates(char *chrom, int chromStart, int chromEnd, char strand, 
 				    struct hash *orthoChromHash)
 /* Get list of graphs that cover a particular region. */
@@ -147,6 +146,24 @@ if (bk != NULL)
     slFreeList(&beList);
     }
 return agxList;
+}
+
+void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
+/* Return range of bases covered by chain on q side on the plus
+ * strand. */
+{
+if (chain == NULL)
+    errAbort("Can't find range in null query chain.");
+if (chain->qStrand == '-')
+    {
+    *retQs = chain->qSize - chain->qEnd;
+    *retQe = chain->qSize - chain->qStart;
+    }
+else
+    {
+    *retQs = chain->qStart;
+    *retQe = chain->qEnd;
+    }
 }
 
 void loadOrthoAgxList(struct altGraphX *ag, struct chain *chain, struct hash *orthoGraphHash,
@@ -184,6 +201,7 @@ if(chain != NULL)
 *revRet = reverse;
 *orthoAgListRet = orthoAgList;
 }
+#ifdef SOON 
 #endif /* SOON */
 
 int chainBlockCoverage(struct chain *chain, int start, int end,
@@ -301,10 +319,27 @@ if (bk != NULL)
 return fillList;
 }
 
-struct altGraphX *findOrthoGraph(struct altGraphX *inGraph, struct hash *chainHash,
-	struct hash *netHash, struct hash *orthoGraphHash)
-/* Find orthologous graph if any. */
+struct altGraphX *orthoGraphsViaChain(struct altGraphX *inGraph, struct chain *chain, 
+	struct hash *orthoGraphHash)
+/* Get a list of orthologous graphs in another species using chain to map.
+ * The orthologous graphs are simply those that overlap at the exon level on the
+ * same strand. */
 {
+boolean reverse = FALSE;
+struct altGraphX *orthoGraphList = NULL;
+loadOrthoAgxList(inGraph, chain, orthoGraphHash, &reverse, &orthoGraphList);
+uglyf("Loaded %d orthoAgx. Reverse %d.\n", slCount(orthoGraphList), reverse);
+return orthoGraphList;
+}
+
+struct altGraphX *findOrthoGraphs(struct altGraphX *inGraph, struct hash *chainHash,
+	struct hash *netHash, struct hash *orthoGraphHash)
+/* Find list of orthologous graphs if any.  Beware the side effect of tweaking
+ * some of the fill->next pointers at the highest level of the net. It's expensive
+ * to avoid the side effect, and it doesn't bother subsequent calls to this function. */
+{
+struct altGraphX *orthoGraphList = NULL;
+
 /* Get appropriate part of nets. */
 struct cnFill *fillList = netFillAt(inGraph->tName, 
 	inGraph->tStart, inGraph->tEnd, netHash);
@@ -338,6 +373,7 @@ if (chain != NULL)
     verbose(3, "Best chain for %s is %s:%d-%d %c %s:%d-%d\n", inGraph->name,
     	chain->tName, chain->tStart, chain->tEnd, chain->qStrand, 
 	chain->qName, chain->qStart, chain->qEnd);
+    orthoGraphList = orthoGraphsViaChain(inGraph, chain, orthoGraphHash);
     }
 else
     {
@@ -347,18 +383,19 @@ else
 freeMem(starts);
 freeMem(sizes);
 
-return NULL;	// uglyf
+return orthoGraphList;
 }
 
 void writeOrthoEdges(struct altGraphX *inGraph, struct hash *chainHash,
 	struct hash *netHash, struct hash *orthoGraphHash, FILE *f)
 /* Look for orthologous edges, and write any we find. */
 {
-struct altGraphX *orthoGraph = 
-	findOrthoGraph(inGraph, chainHash, netHash, orthoGraphHash);
-if (orthoGraph != NULL)
+struct altGraphX *orthoGraphList = 
+	findOrthoGraphs(inGraph, chainHash, netHash, orthoGraphHash);
+if (orthoGraphList != NULL)
     {
-    verbose(3, "Graph %s maps to orthologous graph %s\n", inGraph->name, orthoGraph->name);
+    verbose(3, "Graph %s maps to %d orthologous graph starting with %s\n", 
+    	inGraph->name, slCount(orthoGraphList), orthoGraphList->name);
     }
 else
     verbose(4, "No orthologous graph for %s\n", inGraph->name);
