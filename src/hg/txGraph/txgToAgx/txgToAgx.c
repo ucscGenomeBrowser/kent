@@ -44,15 +44,21 @@ for (evs = tx->evidence; evs != NULL; evs = evs->next)
     {
     struct evidence *ev;
     AllocVar(ev);
-    ev->evCount = evs->evCount;
     int *mrnaIds = AllocArray(ev->mrnaIds, evs->evCount);
     int i;
     struct txEvidence *txEv = evs->evList;
     for (i=0; i<evs->evCount; ++i)
         {
-	mrnaIds[i] = txEv->sourceId;
+	struct txSource *source = slElementFromIx(tx->sources, txEv->sourceId);
+	char *sourceType = source->type;
+	if (sameString(sourceType, "refSeq") || sameString(sourceType, "mrna") || sameString(sourceType, "est"))
+	    {
+	    mrnaIds[ev->evCount] = txEv->sourceId;
+	    ev->evCount += 1;
+	    }
+	    
 	txEv = txEv->next;
-	}
+        }
     slAddHead(&ag->evidence, ev);
     }
 slReverse(&ag->evidence);
