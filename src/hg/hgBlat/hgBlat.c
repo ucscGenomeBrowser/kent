@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.111 2007/02/09 22:45:50 hiram Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.112 2007/02/09 23:14:58 hiram Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -495,11 +495,11 @@ maxTotalSize = maxSingleSize * 2.5;
 maxSeqCount = 25;
 
 /* Create temporary file to store sequence. */
-trashDirFile(&faTn, ".fa", "hgSs");
+trashDirFile(&faTn, "hgSs", "hgSs", ".fa");
 faWriteAll(faTn.forCgi, seqList);
 
 /* Create a temporary .psl file with the alignments against genome. */
-trashDirFile(&pslTn, ".pslx", "hgSs");
+trashDirFile(&pslTn, "hgSs", "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
 serve = findServer(db, isTx);

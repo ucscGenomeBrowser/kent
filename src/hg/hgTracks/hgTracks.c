@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1274 2007/02/09 22:42:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1275 2007/02/09 23:15:23 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8327,7 +8327,7 @@ if(doIdeo)
     startBand[0] = endBand[0] = '\0';
     fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand)); 
     /* Draw the ideogram. */
-    trashDirFile(&gifTn, ".gif", "hgtIdeo");
+    trashDirFile(&gifTn, "hgtIdeo", "hgtIdeo", ".gif");
     /* Start up client side map. */
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
@@ -9133,7 +9133,7 @@ if (psOutput)
     vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
 else
     {
-    trashDirFile(&gifTn, ".gif", "hgt");
+    trashDirFile(&gifTn, "hgt", "hgt", ".gif");
     vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     }
 makeGrayShades(vg);
@@ -13488,7 +13488,7 @@ void handlePostscript()
 {
 struct tempName psTn;
 char *pdfFile = NULL;
-trashDirFile(&psTn, ".eps", "hgt");
+trashDirFile(&psTn, "hgt", "hgt", ".eps");
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
