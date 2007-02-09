@@ -19,8 +19,9 @@
 #include "net.h"
 #include "htmlPage.h"
 #include "wiggle.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.4 2007/02/09 23:47:08 hiram Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.5 2007/02/09 23:53:52 hiram Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
