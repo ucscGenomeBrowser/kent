@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.17 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.18 2007/02/09 01:19:23 kent Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -663,6 +663,8 @@ for(i=0; i < ag->edgeCount; i++)
 	struct ggEvidence *ge = NULL;
 	AllocVar(ge);
 	ge->id = e->mrnaIds[j];
+	ge->start = gg->vertices[x].position;
+	ge->end = gg->vertices[y].position;
 	ggEvAddHeadWrapper(&gg->evidence[x][y], &ge);
 	}
     slReverse(&gg->evidence[x][y]);
