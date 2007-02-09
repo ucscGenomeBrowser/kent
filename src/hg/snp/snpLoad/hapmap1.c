@@ -37,7 +37,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmap1.c,v 1.3 2007/02/08 21:19:43 heather Exp $";
+static char const rcsid[] = "$Id: hapmap1.c,v 1.4 2007/02/09 03:38:41 heather Exp $";
 
 FILE *logFileHandle = NULL;
 FILE *outputFileHandle = NULL;
@@ -83,18 +83,59 @@ score = 1000 - (maxCount / total);
 return score;
 }
 
+boolean validObserved(char *observed, int aCount, int cCount, int gCount, int tCount)
+{
+if (sameString(observed, "A/C"))
+    {
+    if (gCount > 0 || tCount > 0) return FALSE;
+    return TRUE;
+    }
+if (sameString(observed, "A/G"))
+    {
+    if (cCount > 0 || tCount > 0) return FALSE;
+    return TRUE;
+    }
+if (sameString(observed, "A/T"))
+    {
+    if (cCount > 0 || gCount > 0) return FALSE;
+    return TRUE;
+    }
+if (sameString(observed, "C/G"))
+    {
+    if (aCount > 0 || tCount > 0) return FALSE;
+    return TRUE;
+    }
+if (sameString(observed, "C/T"))
+    {
+    if (aCount > 0 || gCount > 0) return FALSE;
+    return TRUE;
+    }
+if (sameString(observed, "G/T"))
+    {
+    if (aCount > 0 || cCount > 0) return FALSE;
+    return TRUE;
+    }
+
+/* don't check if not simple */
+return TRUE;
+}
+
 void handleInput(char **row)
 {
 int aCountHomo = sqlUnsigned(row[8]);
 int aCountHetero = sqlUnsigned(row[9]);
+int aCount = aCountHomo + aCountHetero;
 int cCountHomo = sqlUnsigned(row[11]);
 int cCountHetero = sqlUnsigned(row[12]);
+int cCount = cCountHomo + cCountHetero;
 int gCountHomo = sqlUnsigned(row[14]);
 int gCountHetero = sqlUnsigned(row[15]);
+int gCount = gCountHomo + gCountHetero;
 int tCountHomo = sqlUnsigned(row[17]);
 int tCountHetero = sqlUnsigned(row[18]);
+int tCount = tCountHomo + tCountHetero;
 
-int status = alleleCount(aCountHomo + aCountHetero, cCountHomo + cCountHetero, gCountHomo + gCountHetero, tCountHomo + tCountHetero);
+int status = alleleCount(aCount, cCount, gCount, tCount);
 
 int score = 0;
 
@@ -104,7 +145,13 @@ if (status > 2 || status == 0)
     return;
     }
 
-score = getScore(aCountHomo + aCountHetero, cCountHomo + cCountHetero, gCountHomo + gCountHetero, tCountHomo + tCountHetero);
+score = getScore(aCount, cCount, gCount, tCount);
+
+if (!validObserved(row[6], aCount, cCount, gCount, tCount))
+    {
+    fprintf(logFileHandle, "incorrect alleles for %s\n", row[3]);
+    return;
+    }
 
 fprintf(outputFileHandle, "%s %s %s %s %d %s %s ", row[0], row[1], row[2], row[3], score, row[5], row[6]);
 
