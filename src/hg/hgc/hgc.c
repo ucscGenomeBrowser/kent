@@ -192,8 +192,9 @@
 #include "mgcClick.h"
 #include "ccdsClick.h"
 #include "memalloc.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1197 2007/02/09 03:05:26 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1198 2007/02/09 22:52:59 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5339,21 +5340,6 @@ blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0,
 return blockCount;
 }
 
-static void hgcTrashFile(struct tempName *tn, char *prefix, char *suffix)
-/*	obtain a trash file name for the index or body.html files */
-{
-static boolean firstTime = TRUE;
-char dirNamePrefix[16];
-if (firstTime)
-    {
-    mkdirTrashDirectory("index");
-    mkdirTrashDirectory("body");
-    firstTime = FALSE;
-    }
-safef(dirNamePrefix, sizeof(dirNamePrefix), "%s/%s", prefix, prefix);
-makeTempName(tn, dirNamePrefix, suffix);
-}
-
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
 		       enum gfType qType, int qStart, int qEnd, 
 		       char *qName, int cdsS, int cdsE)
@@ -5363,8 +5349,8 @@ int blockCount, i;
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
 
-hgcTrashFile(&indexTn, "index", ".html");
-hgcTrashFile(&bodyTn, "body", ".html");
+trashDirFile(&indexTn, ".html", "index");
+trashDirFile(&bodyTn, ".html", "body");
 
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
@@ -14835,20 +14821,6 @@ mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
 exprBedColorsMade = TRUE;
 }
 
-static void altXTrashFile(struct tempName *tn, char *suffix)
-/*	obtain a trash file name for the altX graph image	*/
-{
-static boolean firstTime = TRUE;
-char prefix[16];
-if (firstTime)
-    {
-    mkdirTrashDirectory("hgc");
-    firstTime = FALSE;
-    }
-safef(prefix, sizeof(prefix), "hgc/hgc");
-makeTempName(tn, prefix, suffix);
-}
-
 char *altGraphXMakeImage(struct trackDb *tdb, struct altGraphX *ag)
 /* Create a drawing of splicing pattern. */
 {
@@ -14868,7 +14840,7 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-altXTrashFile(&gifTn, ".gif");
+trashDirFile(&gifTn, ".gif", "hgc");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(vg);
 vgSetClip(vg, 0, 0, pixWidth, pixHeight);
@@ -16688,8 +16660,8 @@ struct dnaSeq *tSeq;
 char *tables[4] = {"luGene2", "luGene", "refGene", "mgcGenes"};
 
 /* open file to write to */
-hgcTrashFile(&indexTn, "index", ".html");
-hgcTrashFile(&bodyTn, "body", ".html");
+trashDirFile(&indexTn, ".html", "index");
+trashDirFile(&bodyTn, ".html", "body");
 body = mustOpen(bodyTn.forCgi, "w");
 
 /* get query genes struct info*/
