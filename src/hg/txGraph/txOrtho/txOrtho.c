@@ -332,14 +332,10 @@ uglyf("Loaded %d orthoAgx. Reverse %d.\n", slCount(orthoGraphList), reverse);
 return orthoGraphList;
 }
 
-struct altGraphX *findOrthoGraphs(struct altGraphX *inGraph, struct hash *chainHash,
-	struct hash *netHash, struct hash *orthoGraphHash)
-/* Find list of orthologous graphs if any.  Beware the side effect of tweaking
- * some of the fill->next pointers at the highest level of the net. It's expensive
- * to avoid the side effect, and it doesn't bother subsequent calls to this function. */
+struct chain *findMostOverlappingChain(struct altGraphX *inGraph, struct hash *chainHash,
+	struct hash *netHash)
+/* Find chain that has most block-level overlap with exons in graph. */
 {
-struct altGraphX *orthoGraphList = NULL;
-
 /* Get appropriate part of nets. */
 struct cnFill *fillList = netFillAt(inGraph->tName, 
 	inGraph->tStart, inGraph->tEnd, netHash);
@@ -368,6 +364,20 @@ int bestOverlap = 0;
 lookForBestChain(fillList, inGraph->tStart, inGraph->tEnd, starts, sizes, blockCount,
 	chainHash, &chain, &bestOverlap);
 
+freeMem(starts);
+freeMem(sizes);
+return chain;
+}
+
+
+struct altGraphX *findOrthoGraphs(struct altGraphX *inGraph, struct hash *chainHash,
+	struct hash *netHash, struct hash *orthoGraphHash)
+/* Find list of orthologous graphs if any.  Beware the side effect of tweaking
+ * some of the fill->next pointers at the highest level of the net. It's expensive
+ * to avoid the side effect, and it doesn't bother subsequent calls to this function. */
+{
+struct altGraphX *orthoGraphList = NULL;
+struct chain *chain = findMostOverlappingChain(inGraph, chainHash, netHash);
 if (chain != NULL)
     {
     verbose(3, "Best chain for %s is %s:%d-%d %c %s:%d-%d\n", inGraph->name,
@@ -379,11 +389,11 @@ else
     {
     verbose(3, "Couldn't find best chain for %s\n", inGraph->name);
     }
-
-freeMem(starts);
-freeMem(sizes);
-
 return orthoGraphList;
+}
+
+void writeCommonEdges(struct altGraphX *inGraph, struct altGraphX *outGraph, FILE *f)
+{
 }
 
 void writeOrthoEdges(struct altGraphX *inGraph, struct hash *chainHash,
@@ -394,6 +404,11 @@ struct altGraphX *orthoGraphList =
 	findOrthoGraphs(inGraph, chainHash, netHash, orthoGraphHash);
 if (orthoGraphList != NULL)
     {
+    struct altGraphX *orthoGraph;
+    for (orthoGraph = orthoGraphList; orthoGraph != NULL; orthoGraph = orthoGraph->next)
+        {
+	writeCommonEdges(inGraph, orthoGraph, f);
+	}
     verbose(3, "Graph %s maps to %d orthologous graph starting with %s\n", 
     	inGraph->name, slCount(orthoGraphList), orthoGraphList->name);
     }
