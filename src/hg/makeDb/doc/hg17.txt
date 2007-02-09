@@ -18187,69 +18187,228 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
     paste hg17.panTro1.rheMac1.sort.txt daf.sort.txt | awk '{printf "%s\t%d\t%d\t%s\t0\t%c\t%c\t%c\t%c\t%c\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n",$1,$2,$3,$4,$6,$7,$8,$11,$15,$12,$16,$29,$30,$31,$32,$33}' >! hapmapSnps.bed
     hgLoadBed hg17 hapmapSnps -sqlTable=hapmapSnps.sql hapmapSnps.bed
 
-############################################
-# HapMap SNPs (updated Nov. 2006, Heather)
+############################################################################################
+# HapMap SNPs rel21a (Feb. 2007, Heather)
+
+# get files for each chrom, for each population
+# these contain data for all individuals
+# not using the JPT+CHB files
 ssh kkstore05
-cd /cluster/store12/snp/hapmap/rel21/frequencies/2006-07/rs_strand/non-redundant/zips
-wget http://www.hapmap.org/downloads/frequencies/2006-07/rs_strand/non-redundant/* 
-cd ..
-# create 5 pop.all files, combining chroms, taking only the columns we need
-getData.csh
-cat << '_EOF_' > getData.csh
-#!/bin/csh -ef
-rm -rf YRI.all
-foreach file (zips/*_YRI_*)
-    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> YRI.all
+cd /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant/zips
+wget http://www.hapmap.org/downloads/genotypes/2006-07/rs_strand/non-redundant/* 
+
+# get population data (needed to define children in CEU and YRI trios)
+cd /cluster/store12/snp/hapmap
+wget http://www.hapmap.org/downloads/samples_individuals/*gz
+gunzip pedinfo2sample_CEU.txt.gz
+filterPedigree.pl < pedinfo2sample_CEU.txt > CEU.filtered
+cp CEU.filtered rel21a/genotypes/2007-01/rs_strand/non-redundant/CEU.list
+gunzip pedinfo2sample_YRI.txt.gz
+filterPedigree.pl < pedinfo2sample_YRI.txt > YRI.filtered
+cp YRI.filtered rel21a/genotypes/2007-01/rs_strand/non-redundant/YRI.list
+
+#!/usr/bin/env perl
+while (<STDIN>) {
+    my @fields = split;
+    if ($fields[2] == 0 && $fields[3] == 0) {
+        @subfields = split /:/, $fields[6];
+        print $subfields[4];
+        print "\n";
+    }
+}
+
+cd /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant
+zcat zips/*chr22_CEU* | head -1 > header.CEU
+zcat zips/*chr22_YRI* | head -1 > header.YRI
+# add carriage returns to header.CEU and header.YRI
+grep -n -f CEU.list header.CEU > offsets.CEU
+grep -n -f YRI.list header.YRI > offsets.YRI
+# delete ids in offsets.CEU and offsets.YRI so just column numbers remain
+
+# for each population, combine all chroms, and combine all individuals
+# for CEU and YRI, filter out children from trios
+# This creates CEU.merge, CHB.merge, JPT.merge, YRI.merge
+
+./merge.csh
+
+#!/bin/tcsh 
+rm -f CEU.merge
+rm -f CHB.merge
+rm -f JPT.merge
+rm -f YRI.merge
+
+foreach chrom (`cat chrom.list`)
+
+    echo $chrom
+
+    # CEU
+    echo "CEU"
+    set fileName=`echo $chrom | awk '{printf "zips/genotypes_%s_CEU_r21a_nr.txt.gz", $1}'`
+    zcat $fileName | filterCEU.pl >> CEU.merge
+
+    # CHB
+    echo "CHB"
+    set fileName=`echo $chrom | awk '{printf "zips/genotypes_%s_CHB_r21a_nr.txt.gz", $1}'`
+    zcat $fileName | filterCHB.pl >> CHB.merge
+
+    # JPT
+    echo "JPT"
+    set fileName=`echo $chrom | awk '{printf "zips/genotypes_%s_JPT_r21a_nr.txt.gz", $1}'`
+    zcat $fileName | filterJPT.pl >> JPT.merge
+
+    # YRI
+    echo "YRI"
+    set fileName=`echo $chrom | awk '{printf "zips/genotypes_%s_YRI_r21a_nr.txt.gz", $1}'`
+    zcat $fileName | filterYRI.pl >> YRI.merge
+
 end
 
-rm -rf CEU.all
-foreach file (zips/*_CEU_*)
-    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> CEU.all
-end
 
-rm -rf JPTandCHB.all
-foreach file (zips/*_JPT+CHB_*)
-    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> JPTandCHB.all
-end
+# Below is filterCEU.pl
+# The others are very similar: YRI uses "offsets.YRI"
+# CHB and JPT just read the input directly
 
-rm -rf CHB.all
-foreach file (zips/*_CHB_*)
-    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> CHB.all
-end
+#!/usr/bin/env perl 
 
-rm -rf JPT.all
-foreach file (zips/*_JPT_*)
-    zcat $file | awk '{print $1, $2, $3, $4, $6, $11, $12, $13, $14, $15, $16, $17'} >> JPT.all
-end
-'_EOF_'
-# format (includes calculate score)
-format.pl < CEU.all > CEU.bed
-format.pl < CHB.all > CHB.bed
-format.pl < JPT.all > JPT.bed
-format.pl < JPTandCHB.all > JPTandCHB.bed
-format.pl < YRI.all > YRI.bed
+# read in a list of the columns that we are keeping
+sub initList {
+open LIST, "offsets.CEU";
+chomp(@list = <LIST>);
+close LIST;
+$listSize = @list;
+}
+
+&initList;
+
+while (<STDIN>) {
+    my @fields = split;
+    # skip header
+    if ($fields[0] eq "rs#") { next; }
+    # chrom
+    print $fields[2];
+    print " ";
+    # position: add zero-based start coord
+    print $fields[3] - 1;
+    print " ";
+    print $fields[3];
+    print " ";
+    # rsId
+    print $fields[0];
+    print " ";
+    # score
+    print "0 ";
+    # strand
+    print $fields[4];
+    print " ";
+    # observed
+    print $fields[1];
+    print " ";
+    @alleles = ();
+    for ( my $loop = 0; $loop < $listSize; $loop++ ) {
+	push (@alleles, $fields[@list[$loop]-1]);
+    }
+    # N is used for missing data
+    $nCount = 0;
+    # counts
+    $aCountHomo = 0;
+    $cCountHomo = 0;
+    $gCountHomo = 0;
+    $tCountHomo = 0;
+    $aCountHetero = 0;
+    $cCountHetero = 0;
+    $gCountHetero = 0;
+    $tCountHetero = 0;
+    foreach $allele (@alleles) {
+        $parent1 = substr($allele, 0, 1);
+        $parent2 = substr($allele, 1, 1);
+	# Ns must be together
+	if ($parent1 eq "N" && $parent2 ne "N") { die "Unexpected input"; }
+	if ($parent2 eq "N" && $parent1 ne "N") { die "Unexpected input"; }
+	if ($parent1 eq "N" && $parent2 eq "N") { $nCount++; next; }
+
+	if ($parent1 eq "A" && $parent2 eq "A") { 
+	    $aCountHomo = $aCountHomo + 2;
+	    next; 
+	}
+	if ($parent1 eq "C" && $parent2 eq "C") { 
+	    $cCountHomo = $cCountHomo + 2;
+	    next; 
+	}
+	if ($parent1 eq "G" && $parent2 eq "G") { 
+	    $gCountHomo = $gCountHomo + 2;
+	    next; 
+	}
+	if ($parent1 eq "T" && $parent2 eq "T") { 
+	    $tCountHomo = $tCountHomo + 2;
+	    next; 
+	}
+
+	if ($parent1 eq "A") { $aCountHetero++; }
+	if ($parent1 eq "C") { $cCountHetero++; }
+	if ($parent1 eq "G") { $gCountHetero++; }
+	if ($parent1 eq "T") { $tCountHetero++; }
+	if ($parent2 eq "A") { $aCountHetero++; }
+	if ($parent2 eq "C") { $cCountHetero++; }
+	if ($parent2 eq "G") { $gCountHetero++; }
+	if ($parent2 eq "T") { $tCountHetero++; }
+    }
+    print "A ";
+    print $aCountHomo;
+    print " ";
+    print $aCountHetero;
+    print " ";
+    print "C ";
+    print $cCountHomo;
+    print " ";
+    print $cCountHetero;
+    print " ";
+    print "G ";
+    print $gCountHomo;
+    print " ";
+    print $gCountHetero;
+    print " ";
+    print "T ";
+    print $tCountHomo;
+    print " ";
+    print $tCountHetero;
+    print " ";
+
+    print "\n";
+
+}
+
+# Switch to C programs from kent/src/hg/snp/snpLoad.
+
+# Determine major and minor allele (set minor to '?' if monomorphic)
+# Calculate score (minor allele frequency)
+# Log and skip if wrong number of elements in row
+# Log and skip if triallelic or quadallelic
+# Log and skip degenerate case (no alleles) 
+# No errors this run
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap1 CEU.merge CEU.condense
+wc -l hapmap1.log
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap1 CHB.merge CHB.condense
+wc -l hapmap1.log
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap1 JPT.merge JPT.condense
+wc -l hapmap1.log
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap1 YRI.merge YRI.condense
+wc -l hapmap1.log
+
+# save some space
+gzip *merge
 
 # load
 ssh hgwdev
-cd /cluster/store12/snp/hapmap/rel21/frequencies/2006-07/rs_strand/non-redundant
-hgLoadBed hg17 hapmapAlleleFreqCEU CEU.bed -sqlTable=hapmapAlleleFreqCEU.sql -tab
-hgLoadBed hg17 hapmapAlleleFreqCHB CHB.bed -sqlTable=hapmapAlleleFreqCHB.sql -tab
-hgLoadBed hg17 hapmapAlleleFreqJPT JPT.bed -sqlTable=hapmapAlleleFreqJPT.sql -tab
-hgLoadBed hg17 hapmapAlleleFreqJPTandCHB.bed -sqlTable=hapmapAlleleFreqCHBandJPT.sql -tab
-hgLoadBed hg17 hapmapAlleleFreqYRI YRI.bed -sqlTable=hapmapAlleleFreqYRI.sql -tab
+cd /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant
+cp /cluster/home/heather/kent/src/hg/lib/hapmapAlleles.sql .
+# modify hapmapAlleles for 4 populations
+hgLoadBed hg17 hapmapAllelesCEU -sqlTable=hapmapAllelesCEU.sql CEU.condense
+hgLoadBed hg17 hapmapAllelesCHB -sqlTable=hapmapAllelesCHB.sql CHB.condense
+hgLoadBed hg17 hapmapAllelesJPT -sqlTable=hapmapAllelesJPT.sql JPT.condense
+hgLoadBed hg17 hapmapAllelesYRI -sqlTable=hapmapAllelesYRI.sql YRI.condense
 
-# index
-hgsql -e 'alter table hapmapAlleleFreqCEU add index name (name)' hg17
-hgsql -e 'alter table hapmapAlleleFreqCHB add index name (name)' hg17
-hgsql -e 'alter table hapmapAlleleFreqJPT add index name (name)' hg17
-hgsql -e 'alter table hapmapAlleleFreqJPTandCHB add index name (name)' hg17
-hgsql -e 'alter table hapmapAlleleFreqYRI add index name (name)' hg17
-hgsql -e 'alter table hapmapAlleleFreqCEU add index chrom (chrom, bin)' hg17
-hgsql -e 'alter table hapmapAlleleFreqCHB add index chrom (chrom, bin)' hg17
-hgsql -e 'alter table hapmapAlleleFreqJPT add index chrom (chrom, bin)' hg17
-hgsql -e 'alter table hapmapAlleleFreqJPTandCHB add index chrom (chrom, bin)' hg17
-hgsql -e 'alter table hapmapAlleleFreqYRI add index chrom (chrom, bin)' hg17
 
+############################################################################################
 
 ### HapMap LD (Daryl; February 11, 2006)
     ## start from the genotypes files, run Haploview, reformat, and load
