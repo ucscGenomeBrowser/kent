@@ -166,6 +166,13 @@ for (i=0; i<txg->edgeCount; ++i)
 		    sourceIx = txg->sourceCount;
 		    txg->sourceCount += 1;
 		    }
+		struct txEvidence *ev;
+		AllocVar(ev);
+		ev->sourceId = sourceIx;
+		ev->start = start;
+		ev->end = end;
+		slAddTail(&txg->evidence->evList, ev);
+		txg->evidence->evCount += 1;
 		}
 	    }
 	}
