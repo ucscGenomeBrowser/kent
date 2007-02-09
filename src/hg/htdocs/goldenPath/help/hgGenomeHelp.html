@@ -31,6 +31,7 @@
 	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
 	      <TR><TH HEIGHT=10></TH></TR>
    	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
+              <A NAME="TOC"></A>
 	        <H3> Table of Contents: </H3>
 	 	<UL><B>
   		<LI><A CLASS="toc" HREF="#Introduction">Introduction</A>
@@ -234,7 +235,6 @@
 		<A HREF="../../FAQ/FAQreleases#release1">this</A> page. 
 		Now, press the upload button to go to the upload page.
 		</P>
-
 		<P>
 		To upload a file in any of the supported formats, locate the 
 		file on your computer using the controls next to <B>file 
@@ -247,6 +247,7 @@
 		lines can be set later via the configuration page as well. 
 		Here is a description of each control.
 		</P>
+<A NAME="Controls"></A>
 
 		<UL>
 		<LI><B>name of data set:</B> Displayed in graph drop-down in 
@@ -328,11 +329,105 @@
    <TR><TH HEIGHT=10></TH></TR>
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
    <P>
-   [Use sample data to get a feel for what Genome Graphs is capable of.]</P>
-   <P>
-   Click <A HREF="hgGenome_example1.txt">here</A> for a copy of this example that can be 
-   pasted into the browser without editing.
+   The Genome Graphs tool does not come pre-loaded with any sample data.  Use 
+   the examples in this section of the User's Guide to get a feel for how the 
+   tool works. Refer to other <A HREF="#TOC">sections</A> 
+   in this User's Guide for details and instructions for more advanced features.
    </P>
+
+<!-------Example #1---------------------------->
+<A NAME="example1"></A>
+ <HR>
+ <B><FONT SIZE="3" COLOR="#0000FF">Example #1 &mdash; SNPs on chr22</FONT></B>
+   <P>
+   Follow these steps to display in Genome Graphs all of the highest quality 
+   SNPs on chromosome 22 for the hg18 assembly whose predicted functional 
+   role is &quot;coding non-synonymous&quot; 
+   (where there is a change in the peptide for the allele with respect to 
+   the reference assembly). Note that there are no SNPs on the p-arm of 
+   chromosome 22. 
+   </P>
+   <P>
+   This data set is <A HREF="#Format">formatted</A> in the <TT>marker value</TT> 
+   style. The <TT>markers</TT> are <B>dbSNP rsIDs</B>. The associated 
+   <TT>value</TT> is <B>+1</B> if the SNP is on the positive strand, and 
+   <B>-1</B> if the SNP is on the negative strand. Here are the first 
+   ten rows of the data file:<BR><BR>
+
+<TT><PRE>
+rs2154787       +1
+rs12160578      +1
+rs8140723       +1
+rs8141435       +1
+rs2186477       +1
+rs2508089       +1
+rs7292455       +1
+rs7292597       +1
+rs11705636      +1
+rs2261629       +1
+</TT></PRE>
+
+   Note that if you simply cut and paste these ten rows into Genome Graphs, 
+   it may not work well as these have been formatted in HTML to display 
+   properly on this web page. Click <A HREF="hgGenome_example1.txt">here</A> 
+   for a copy of the entire data set for this example that can be uploaded 
+   into Genome Graphs without editing.
+   </P>
+
+   <P><B>Step 1. Upload the data into the Genome Graphs tool</B><BR>
+   Copy the entire sample <A HREF="hgGenome_example1.txt">data set</A> 
+   into a text editor and save the file to your computer. This data 
+   set is associated with the most recent human assembly: hg18 
+   (Mar. 2006). Be sure to 
+   configure the Genome Graphs tool to use the hg18 assembly 
+   like so:<BR><BR>
+
+<PRE>
+<B>clade:</B>		Vertebrate
+<B>genome:</B>		Human
+<B>assembly:</B>	Mar. 2006
+</PRE>
+    
+   <A HREF="#Upload">Upload</A> the file into the Genome Graphs tool. 
+   You can configure each <A HREF="#Controls">control</A> on the upload 
+   page, or just leave them set to their default values.<BR>
+   The upload process may take some time, as the program is actually 
+   mapping each rsID in the input file to its location(s) in the genome.
+   </P>
+
+   <P><B>Step 2. Display the graph in Genome Graphs</B><BR>
+   Now that your input file has been uploaded to the server, you will want 
+   to display it in the Genome Graphs tool. To display your uploaded data, 
+   simply choose the graph name from the 
+   <B>graph</B> drop-down list, then choose the color in which you 
+   would like it to be displayed from the <B>in</B> drop-down list. 
+   Your graph will be displayed directly above the chromosomes 
+   in Genome Graphs. You should see the data plotted directly 
+   above chromosome 22.
+   </P>
+
+   <P><B>Step 3. View the graph in the Genome Browser</B><BR>
+   From the Genome Graphs display, press anywhere on the graph 
+   or on chromosome 22 to open the
+   Genome Browser for hg18 centered at that location on chr22. 
+   The graph will be drawn as a track near the top of the Genome
+   Browser display. 
+   </P>
+   <P>
+
+
+<!-------Example #2--------------------------***
+<A NAME="example2"></A>
+ <HR>
+ <B><FONT SIZE="3" COLOR="#0000FF">Example #2</FONT></B>
+   <P>
+   </P>
+   <P>
+   </P>
+   <P>
+
+*** ADD EXAMPLE #2 WHEN READY -->
+
    <P>
    </TD><TD WIDTH=15></TD></TR>
    </TABLE>
