@@ -9,7 +9,6 @@ CREATE TABLE txGraph (
     tStart int not null,	# First bac touched by graph.
     tEnd int not null,	# Start position in first bac.
     name varchar(255) not null,	# Human readable name.
-    id int unsigned not null,	# Unique ID.
     strand char(2) not null,	# + or - strand.
     vertexCount int unsigned not null,	# Number of vertices in graph.
     vTypes longblob not null,	# Type for each vertex.
@@ -19,8 +18,8 @@ CREATE TABLE txGraph (
     edgeEnds longblob not null,	# Array with end vertex of edges.
     evidence longblob not null,	# array of evidence tables containing references to mRNAs that support a particular edge.
     edgeTypes longblob not null,	# Type for each edge, ggExon, ggIntron, etc.
-    mrnaRefCount int not null,	# Number of supporting mRNAs.
-    mrnaRefs longblob not null,	# Ids of mrnas supporting this.
+    sourceCount int not null,	# Number of sources of evidence.
+    sources longblob not null,	# Sources of evidence.
               #Indices
     PRIMARY KEY(tName)
 );

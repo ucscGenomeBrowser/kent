@@ -5,7 +5,7 @@
 #ifndef TXGRAPH_H
 #define TXGRAPH_H
 
-#define TXGRAPH_NUM_COLS 16
+#define TXGRAPH_NUM_COLS 15
 
 struct txGraph
 /* A transcription graph. Includes alt-splicing info. */
@@ -15,7 +15,6 @@ struct txGraph
     int tStart;	/* First bac touched by graph. */
     int tEnd;	/* Start position in first bac. */
     char *name;	/* Human readable name. */
-    unsigned id;	/* Unique ID. */
     char strand[3];	/* + or - strand. */
     unsigned vertexCount;	/* Number of vertices in graph. */
     unsigned char *vTypes;	/* Type for each vertex. */
@@ -25,8 +24,8 @@ struct txGraph
     int *edgeEnds;	/* Array with end vertex of edges. */
     struct txEvList *evidence;	/* array of evidence tables containing references to mRNAs that support a particular edge. */
     int *edgeTypes;	/* Type for each edge, ggExon, ggIntron, etc. */
-    int mrnaRefCount;	/* Number of supporting mRNAs. */
-    char **mrnaRefs;	/* Ids of mrnas supporting this. */
+    int sourceCount;	/* Number of sources of evidence. */
+    struct txSource *sources;	/* Sources of evidence. */
     };
 
 struct txGraph *txGraphLoad(char **row);
@@ -103,7 +102,7 @@ struct txEvidence
 /* Information on evidence for an edge. */
     {
     struct txEvidence *next;  /* Next in singly linked list. */
-    int mrnaId;	/* Id (index) in mRNA list */
+    int sourceId;	/* Id (index) in sources list */
     int start;	/* Start position */
     int end;	/* End position */
     };
@@ -128,6 +127,37 @@ void txEvidenceOutput(struct txEvidence *el, FILE *f, char sep, char lastSep);
 
 #define txEvidenceCommaOut(el,f) txEvidenceOutput(el,f,',',',');
 /* Print out txEvidence as a comma separated list including final comma. */
+
+#define TXSOURCE_NUM_COLS 2
+
+struct txSource
+/* Source of evidence in graph. */
+    {
+    struct txSource *next;  /* Next in singly linked list. */
+    char *type;	/* Type: refSeq, mrna, est, etc. */
+    char *accession;	/* GenBank accession. With type forms a key */
+    };
+
+struct txSource *txSourceCommaIn(char **pS, struct txSource *ret);
+/* Create a txSource out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new txSource */
+
+void txSourceFree(struct txSource **pEl);
+/* Free a single dynamically allocated txSource such as created
+ * with txSourceLoad(). */
+
+void txSourceFreeList(struct txSource **pList);
+/* Free a list of dynamically allocated txSource's */
+
+void txSourceOutput(struct txSource *el, FILE *f, char sep, char lastSep);
+/* Print out txSource.  Separate fields with sep. Follow last field with lastSep. */
+
+#define txSourceTabOut(el,f) txSourceOutput(el,f,'\t','\n');
+/* Print out txSource as a line in a tab-separated file. */
+
+#define txSourceCommaOut(el,f) txSourceOutput(el,f,',',',');
+/* Print out txSource as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txGraph.h"
 
-static char const rcsid[] = "$Id: txGraph.c,v 1.2 2007/02/08 22:35:49 kent Exp $";
+static char const rcsid[] = "$Id: txGraph.c,v 1.3 2007/02/09 01:15:01 kent Exp $";
 
 struct txGraph *txGraphLoad(char **row)
 /* Load a txGraph from row fetched with select * from txGraph
@@ -17,38 +17,37 @@ struct txGraph *txGraphLoad(char **row)
 struct txGraph *ret;
 
 AllocVar(ret);
-ret->vertexCount = sqlUnsigned(row[6]);
-ret->edgeCount = sqlUnsigned(row[9]);
-ret->mrnaRefCount = sqlSigned(row[14]);
+ret->vertexCount = sqlUnsigned(row[5]);
+ret->edgeCount = sqlUnsigned(row[8]);
+ret->sourceCount = sqlSigned(row[13]);
 ret->tName = cloneString(row[0]);
 ret->tStart = sqlSigned(row[1]);
 ret->tEnd = sqlSigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->id = sqlUnsigned(row[4]);
-safecpy(ret->strand, sizeof(ret->strand), row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[4]);
 {
 int sizeOne;
-sqlUbyteDynamicArray(row[7], &ret->vTypes, &sizeOne);
+sqlUbyteDynamicArray(row[6], &ret->vTypes, &sizeOne);
 assert(sizeOne == ret->vertexCount);
 }
 {
 int sizeOne;
-sqlSignedDynamicArray(row[8], &ret->vPositions, &sizeOne);
+sqlSignedDynamicArray(row[7], &ret->vPositions, &sizeOne);
 assert(sizeOne == ret->vertexCount);
 }
 {
 int sizeOne;
-sqlSignedDynamicArray(row[10], &ret->edgeStarts, &sizeOne);
+sqlSignedDynamicArray(row[9], &ret->edgeStarts, &sizeOne);
 assert(sizeOne == ret->edgeCount);
 }
 {
 int sizeOne;
-sqlSignedDynamicArray(row[11], &ret->edgeEnds, &sizeOne);
+sqlSignedDynamicArray(row[10], &ret->edgeEnds, &sizeOne);
 assert(sizeOne == ret->edgeCount);
 }
 {
 int i;
-char *s = row[12];
+char *s = row[11];
 for (i=0; i<ret->edgeCount; ++i)
     {
     s = sqlEatChar(s, '{');
@@ -60,13 +59,20 @@ slReverse(&ret->evidence);
 }
 {
 int sizeOne;
-sqlSignedDynamicArray(row[13], &ret->edgeTypes, &sizeOne);
+sqlSignedDynamicArray(row[12], &ret->edgeTypes, &sizeOne);
 assert(sizeOne == ret->edgeCount);
 }
 {
-int sizeOne;
-sqlStringDynamicArray(row[15], &ret->mrnaRefs, &sizeOne);
-assert(sizeOne == ret->mrnaRefCount);
+int i;
+char *s = row[14];
+for (i=0; i<ret->sourceCount; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    slSafeAddHead(&ret->sources, txSourceCommaIn(&s, NULL));
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+slReverse(&ret->sources);
 }
 return ret;
 }
@@ -77,7 +83,7 @@ struct txGraph *txGraphLoadAll(char *fileName)
 {
 struct txGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[15];
 
 while (lineFileRow(lf, row))
     {
@@ -95,7 +101,7 @@ struct txGraph *txGraphLoadAllByChar(char *fileName, char chopper)
 {
 struct txGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[15];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -120,7 +126,6 @@ ret->tName = sqlStringComma(&s);
 ret->tStart = sqlSignedComma(&s);
 ret->tEnd = sqlSignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->id = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->vertexCount = sqlUnsignedComma(&s);
 {
@@ -193,15 +198,18 @@ for (i=0; i<ret->edgeCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
-ret->mrnaRefCount = sqlSignedComma(&s);
+ret->sourceCount = sqlSignedComma(&s);
 {
 int i;
 s = sqlEatChar(s, '{');
-AllocArray(ret->mrnaRefs, ret->mrnaRefCount);
-for (i=0; i<ret->mrnaRefCount; ++i)
+for (i=0; i<ret->sourceCount; ++i)
     {
-    ret->mrnaRefs[i] = sqlStringComma(&s);
+    s = sqlEatChar(s, '{');
+    if(s[0] != '}')        slSafeAddHead(&ret->sources, txSourceCommaIn(&s,NULL));
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
     }
+slReverse(&ret->sources);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
@@ -224,10 +232,7 @@ freeMem(el->edgeStarts);
 freeMem(el->edgeEnds);
 txEvListFreeList(&el->evidence);
 freeMem(el->edgeTypes);
-/* All strings in mrnaRefs are allocated at once, so only need to free first. */
-if (el->mrnaRefs != NULL)
-    freeMem(el->mrnaRefs[0]);
-freeMem(el->mrnaRefs);
+txSourceFreeList(&el->sources);
 freez(pEl);
 }
 
@@ -258,8 +263,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
@@ -342,19 +345,24 @@ for (i=0; i<el->edgeCount; ++i)
 if (sep == ',') fputc('}',f);
 }
 fputc(sep,f);
-fprintf(f, "%d", el->mrnaRefCount);
+fprintf(f, "%d", el->sourceCount);
 fputc(sep,f);
 {
 int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->mrnaRefCount; ++i)
+/* Loading txSource list. */
     {
-    if (sep == ',') fputc('"',f);
-    fprintf(f, "%s", el->mrnaRefs[i]);
-    if (sep == ',') fputc('"',f);
-    fputc(',', f);
+    struct txSource *it = el->sources;
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->sourceCount; ++i)
+        {
+        fputc('{',f);
+        txSourceCommaOut(it,f);
+        it = it->next;
+        fputc('}',f);
+        fputc(',',f);
+        }
+    if (sep == ',') fputc('}',f);
     }
-if (sep == ',') fputc('}',f);
 }
 fputc(lastSep,f);
 }
@@ -445,7 +453,7 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->mrnaId = sqlSignedComma(&s);
+ret->sourceId = sqlSignedComma(&s);
 ret->start = sqlSignedComma(&s);
 ret->end = sqlSignedComma(&s);
 *pS = s;
@@ -478,11 +486,64 @@ for (el = *pList; el != NULL; el = next)
 void txEvidenceOutput(struct txEvidence *el, FILE *f, char sep, char lastSep) 
 /* Print out txEvidence.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%d", el->mrnaId);
+fprintf(f, "%d", el->sourceId);
 fputc(sep,f);
 fprintf(f, "%d", el->start);
 fputc(sep,f);
 fprintf(f, "%d", el->end);
+fputc(lastSep,f);
+}
+
+struct txSource *txSourceCommaIn(char **pS, struct txSource *ret)
+/* Create a txSource out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new txSource */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->type = sqlStringComma(&s);
+ret->accession = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void txSourceFree(struct txSource **pEl)
+/* Free a single dynamically allocated txSource such as created
+ * with txSourceLoad(). */
+{
+struct txSource *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->type);
+freeMem(el->accession);
+freez(pEl);
+}
+
+void txSourceFreeList(struct txSource **pList)
+/* Free a list of dynamically allocated txSource's */
+{
+struct txSource *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    txSourceFree(&el);
+    }
+*pList = NULL;
+}
+
+void txSourceOutput(struct txSource *el, FILE *f, char sep, char lastSep) 
+/* Print out txSource.  Separate fields with sep. Follow last field with lastSep. */
+{
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->type);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->accession);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
