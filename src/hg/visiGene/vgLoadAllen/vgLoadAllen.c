@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.4 2006/12/22 23:25:28 galt Exp $";
+static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.5 2007/02/09 00:51:23 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -175,7 +175,7 @@ fprintf(f, "seq\n");
 while (lineFileRowTab(lf, row))
     {
     char *gene = row[0];
-    char *geneName = row[1];
+    /* char *geneName = row[1]; */
     char *entrez = row[2];
     char *refSeq = row[3];
     char *url = row[4];
