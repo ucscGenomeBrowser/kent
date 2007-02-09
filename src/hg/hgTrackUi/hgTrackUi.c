@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.340 2007/02/09 00:47:53 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.341 2007/02/09 03:04:36 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2174,10 +2174,11 @@ cgiMakeDropList(HA_GENO_AVAIL, menu, menuSize, cartCgiUsualString(cart, HA_GENO_
 freez(&menu);
 
 puts("<P>");
-puts("<B>Filter for the display of Human data:</B>");
-puts("<BR><BR>\n");
+puts("<B>Filters for the display of Human data:</B>");
+puts("<BR>\n");
 
-puts("<B>Observed:</B>&nbsp;");
+scoreUi(tdb, 500);
+puts("<B> Observed:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
