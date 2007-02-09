@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.20 2007/02/09 02:10:53 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.21 2007/02/09 03:50:15 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -1265,12 +1265,15 @@ int minOverlap = 6; /* Don't believe any soft start/end that is less
 /* Try and snap soft edges to nearby hard edes */
 int i;
 // verbose(3, "ggGraphConsensusCluster init %d vertices, %d edges, %d evidence\n", gg->vertexCount, ggCountEdges(gg), ggCountAllEvidence(gg));
-for(i=0; i<gg->vertexCount; i++)
+if (ci->genoSeq != NULL)
     {
-    if(gg->vertices[i].type == ggSoftStart)
-	tryToFixSoftStartAlignment(gg, mc, aliHash, i, minOverlap);
-    if(gg->vertices[i].type == ggSoftEnd)
-	tryToFixSoftEndAlignment(gg, mc, aliHash, i, minOverlap);
+    for(i=0; i<gg->vertexCount; i++)
+	{
+	if(gg->vertices[i].type == ggSoftStart)
+	    tryToFixSoftStartAlignment(gg, mc, aliHash, i, minOverlap);
+	if(gg->vertices[i].type == ggSoftEnd)
+	    tryToFixSoftEndAlignment(gg, mc, aliHash, i, minOverlap);
+	}
     }
 
 /* Try to fill in soft ends and starts with hard starts and ends. */
