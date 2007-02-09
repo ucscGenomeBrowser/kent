@@ -4,8 +4,8 @@ an edge for each exon or intron. They represent a fair approximation
 to a gene with possible multiple transcripts.
 
 The pipeline for generating these is
-    txPslToBed | txBedToTgx | tgxOrtho | tgxAddEvidence | tgxTrim | txgWalk
-where tgxAddEvidence may be run several times to add different
+    txPslToBed | txBedToTgx | txgOrtho | txgAddEvidence | txgTrim | txgWalk
+where txgAddEvidence may be run several times to add different
 evidence.  Here's a bit more info on each program:
 
 txPslToBed - Transforms alignments to putative exons by projecting
@@ -24,28 +24,30 @@ txBedToTgx - Clusters together overlapping exons (on same strand)
     edge in the form of type, weight, name of item in bed file.
 input: list of bed files, types, and weights.  Bed files are bed12
     (multiple block).
-output: tgx file
-status: in progress
+output: txg file
+status: done. May require tinkering for evolving .txg format.
 
-tgxOrtho - Looks for orthologous edges in two graphs from two species.
-input: tgx files from both species, chains & nets between species
+txgOrtho - Looks for orthologous edges in two graphs from two species.
+input: txg files from both species, chains & nets between species
 output: bed file for introns, bed file for exons
 status: planning.  Will reuse elements of orthoSplice code.
 
-tgxAddEvidence - Adds evidence from a bed file to existing transcript
+txgAddEvidence - Adds evidence from a bed file to existing transcript
      graph.  
-input: tgx file, bed file, type, and weight. 
-output: tgx file with additional evidence.
-status: planning. Will reuse elements of orthoSplice code.
+input: txg file, bed file, type, and weight. 
+output: txg file with additional evidence.
+status: done. Could use more testing for sure though.
 
-tgxTrim - Trims a graph to the subset with sufficient evidence.
-input: tgx file, weight threshold
-output: trimmed tgx file
+txgTrim - Trims a graph to the subset with sufficient evidence.
+input: txg file, weight threshold
+output: trimmed txg file
 status: planning.  Will reuse elements of orthoSplice code.
 
-tgxWalk - Walks graph producing transcripts. Does threaded walk
+txgWalk - Walks graph producing transcripts. Does threaded walk
      following connected mRNA evidence (in current species) so
      as to avoid combinatorical explosions in alt-splice situations.
-input: tgx file
+    input: txg file
 output: bed 12 file (bed in exons)
 status: planning. Will be hopefully minor changes to exonWalk.
+
+txgToAgx - Converts from txGraph format to the altGraphX that exonWalk uses.
