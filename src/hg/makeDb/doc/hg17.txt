@@ -18407,6 +18407,47 @@ hgLoadBed hg17 hapmapAllelesCHB -sqlTable=hapmapAllelesCHB.sql CHB.condense
 hgLoadBed hg17 hapmapAllelesJPT -sqlTable=hapmapAllelesJPT.sql JPT.condense
 hgLoadBed hg17 hapmapAllelesYRI -sqlTable=hapmapAllelesYRI.sql YRI.condense
 
+# save some more space
+gzip *condense
+
+# sanity check
+mysql> select count(*) from hapmapAllelesCEU where allele1Count + allele2Count + heteroCount = 0;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+mysql> select count(*) from hapmapAllelesCHB where allele1Count + allele2Count + heteroCount = 0;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+mysql> select count(*) from hapmapAllelesJPT where allele1Count + allele2Count + heteroCount = 0;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+mysql> select count(*) from hapmapAllelesYRI where allele1Count + allele2Count + heteroCount = 0;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+# create indexes
+mysql> alter table hapmapAllelesCEU add index name (name);
+mysql> alter table hapmapAllelesCEU add index chrom (chrom, bin);
+mysql> alter table hapmapAllelesCHB add index name (name);
+mysql> alter table hapmapAllelesCHB add index chrom (chrom, bin);
+mysql> alter table hapmapAllelesJPT add index name (name);
+mysql> alter table hapmapAllelesJPT add index chrom (chrom, bin);
+mysql> alter table hapmapAllelesYRI add index name (name);
+mysql> alter table hapmapAllelesYRI add index chrom (chrom, bin);
 
 ############################################################################################
 
