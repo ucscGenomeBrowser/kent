@@ -105,8 +105,9 @@
 #include "wikiLink.h"
 #include "dnaMotif.h"
 #include "hapmapTrack.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1273 2007/02/08 02:48:57 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1274 2007/02/09 22:42:18 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -212,35 +213,6 @@ char *rulerMenu[] =
 struct hgPositions *hgp = NULL;
 
 struct trackLayout tl;
-
-static void ideoTrashFile(struct tempName *tn, char *suffix)
-/*	obtain a trash file name for the ideogram	*/
-{
-static boolean firstTime = TRUE;
-char prefix[32];
-if (firstTime)
-    {
-    mkdirTrashDirectory("hgtIdeo");
-    firstTime = FALSE;
-    }
-safef(prefix, sizeof(prefix), "hgtIdeo/hgtIdeo");
-makeTempName(tn, prefix, suffix);
-}
-
-static void hgtTrashFile(struct tempName *tn, char *suffix)
-/*	obtain a trash file name for the browser gif image or eps file	*/
-{
-static boolean firstTime = TRUE;
-char prefix[16];
-if (firstTime)
-    {
-    mkdirTrashDirectory("hgt");
-    firstTime = FALSE;
-    }
-safef(prefix, sizeof(prefix), "hgt/hgt");
-makeTempName(tn, prefix, suffix);
-}
-
 
 void initTl()
 /* Initialize layout around small font and a picture about 600 pixels
@@ -8355,7 +8327,7 @@ if(doIdeo)
     startBand[0] = endBand[0] = '\0';
     fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand)); 
     /* Draw the ideogram. */
-    ideoTrashFile(&gifTn, ".gif");
+    trashDirFile(&gifTn, ".gif", "hgtIdeo");
     /* Start up client side map. */
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
@@ -9161,7 +9133,7 @@ if (psOutput)
     vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
 else
     {
-    hgtTrashFile(&gifTn, ".gif");
+    trashDirFile(&gifTn, ".gif", "hgt");
     vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
     }
 makeGrayShades(vg);
@@ -13516,7 +13488,7 @@ void handlePostscript()
 {
 struct tempName psTn;
 char *pdfFile = NULL;
-hgtTrashFile(&psTn, ".eps");
+trashDirFile(&psTn, ".eps", "hgt");
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
