@@ -12,6 +12,7 @@
 boolean isMixed(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
                 int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
 /* return TRUE if different populations have a different major allele */
+/* don't need to consider heteroCount */
 {
 int allele1Count = 0;
 int allele2Count = 0;
@@ -44,6 +45,7 @@ return FALSE;
 boolean isAllPops(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
                   int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
 /* return TRUE if data available for all populations */
+/* once combined table has heteroCount, add that here */
 {
 if (allele1CountCEU == 0 && allele2CountCEU == 0) return FALSE;
 if (allele1CountCHB == 0 && allele2CountCHB == 0) return FALSE;
@@ -76,10 +78,15 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
+char optionScoreStr[128];
+int optionScore;
+char extraWhere[128];
 
 char *observedFilter = cartCgiUsualString(cart, HA_OBSERVED, "don't care");
 boolean complexObserved = FALSE;
 
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
     struct hapmapAllelesCombined *combinedLoadItem, *combinedItemList = NULL;
@@ -136,7 +143,13 @@ if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "ha
 }
 
 struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+if (optionScore > 0)
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
@@ -236,6 +249,9 @@ vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
 
 static Color hapmapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw hapmap item */
+/* Use grayscale based on minor allele. */
+/* The higher minor allele frequency, the darker the shade. */
+/* Could also use score, since I've set that based on minor allele frequency. */
 {
 Color col;
 int totalCount = 0;
