@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "memalloc.h"
 #include "options.h"
 #include "bed.h"
 #include "ggMrnaAli.h"
@@ -15,7 +16,10 @@ void usage()
 errAbort(
   "txBedToTxg - Create a transcription graph out of a bed-12 file.\n"
   "usage:\n"
-  "   txBedToTxg in.bed out.txg\n"
+  "   txBedToTxg in.lst out.txg\n"
+  "where in.lst is a file with two columns:\n"
+  "    type - usually 'refSeq' or 'mrna' or 'est' or something\n"
+  "    bed -  a bed file\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -249,14 +253,25 @@ return tg;
 }
 
 
-void txBedToTxg(char *inBed, char *outGraph)
+void txBedToTxg(char *inList, char *outGraph)
 /* txBedToTxg - Create a transcription graph out of a bed-12 file.. */
 {
-struct bed *bedList = bedLoadAll(inBed);
+struct lineFile *lf = lineFileOpen(inList, TRUE);
 FILE *f = mustOpen(outGraph, "w");
-verbose(1, "Loaded %d beds from %s\n", slCount(bedList), inBed);
-struct ggMrnaAli *maList = bedListToGgMrnaAliList(bedList, "bed");
+char *row[2];
+struct ggMrnaAli *maList = NULL;
+
+/* Load in all beds. */
+while (lineFileRow(lf, row))
+    {
+    char *type = cloneString(row[0]);
+    char *inBed = row[1];
+    struct bed *bedList = bedLoadAll(inBed);
+    verbose(1, "Loaded %d beds from %s\n", slCount(bedList), inBed);
+    maList = slCat(maList, bedListToGgMrnaAliList(bedList, type));
+    }
 verbose(2, "Created %d ma's\n", slCount(maList));
+
 struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, NULL);
 struct ggMrnaCluster *mc, *mcList = ggClusterMrna(ci);
 verbose(1, "Reduced to %d clusters\n", slCount(mcList));
@@ -265,15 +280,18 @@ for (mc = mcList; mc != NULL; mc = mc->next)
     struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
     struct txGraph *tg = txGraphFromGeneGraph(gg);
     if (tg != NULL)
-        {
+	{
 	static int id=0;
 	char name[16];
 	safef(name, sizeof(name), "a%d", ++id);
+	verbose(3, "writing %s\n", name);
 	freez(&tg->name);
 	tg->name = name;
 	txGraphTabOut(tg, f);
 	tg->name = NULL;
 	}
+    freeGeneGraph(&gg);
+    txGraphFree(&tg);
     }
 carefulClose(&f);
 }
@@ -281,6 +299,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+// pushCarefulMemHandler(500000000);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
