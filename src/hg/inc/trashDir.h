@@ -3,7 +3,7 @@
 #ifndef TRASHDIR_H
 #define TRASHDIR_H
 
-void trashDirFile(struct tempName *tn, char *suffix, char *dirName);
-/*	obtain a trash file name in the specified trash dirName */
+void trashDirFile(struct tempName *tn, char *dirName, char *base, char *suffix);
+/*	obtain a trash file name trash/dirName/base*.suffix */
 
 #endif	/*	TRASHDIR_H	*/

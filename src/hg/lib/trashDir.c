@@ -1,14 +1,14 @@
 /* trashDir.c - temporary file creation and directory creation in /trash */
 
-static char const rcsid[] = "$Id: trashDir.c,v 1.1 2007/02/09 22:25:08 hiram Exp $";
+static char const rcsid[] = "$Id: trashDir.c,v 1.2 2007/02/09 23:14:03 hiram Exp $";
 
 #include "common.h"
 #include "hash.h"
 #include "portable.h"
 #include "trashDir.h"
 
-void trashDirFile(struct tempName *tn, char *suffix, char *dirName)
-/*	obtain a trash file name in the specified trash dirName */
+void trashDirFile(struct tempName *tn, char *dirName, char *base, char *suffix)
+/*	obtain a trash file name trash/dirName/base*.suffix */
 {
 static struct hash *dirHash = NULL;
 char prefix[64];
@@ -22,6 +22,6 @@ if (hashLookup(dirHash,dirName))
     hashAddInt(dirHash, dirName, 1);	/* remember, been here, done that */
     mkdirTrashDirectory(dirName);
     }
-safef(prefix, sizeof(prefix), "%s/%s", dirName,dirName);
+safef(prefix, sizeof(prefix), "%s/%s", dirName,base);
 makeTempName(tn, prefix, suffix);
 }
