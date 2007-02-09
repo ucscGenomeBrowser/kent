@@ -193,7 +193,7 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1196 2007/02/06 19:24:36 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1197 2007/02/09 03:05:26 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16075,16 +16075,18 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (minorCount > 0)
 	    minorAllele = hma->allele1;
 	}
-    printf("<B>Total observations:</B> %d<BR>\n", majorCount + minorCount);
+    printf("<B>Total observations:</B> %d<BR>\n", majorCount + minorCount + hma->heteroCount);
+    printf("<B>Minor allele frequency (0-500): </B> %d<BR>\n", hma->score);
     printf("<B>Major Allele:</B> %s<BR>\n", majorAllele);
-    printf("<B>Major Allele Count:</B> %d<BR>\n", majorCount);
+    printf("<B>Count of individuals who are homozygous for major allele:</B> %d<BR>\n", majorCount);
     if (minorCount > 0)
        {
        printf("<B>Minor Allele:</B> %s<BR>\n", minorAllele);
-       printf("<B>Minor Allele Count:</B> %d<BR>\n", minorCount);
+       printf("<B>Count of individuals who are homozygous for minor allele:</B> %d<BR>\n", minorCount);
        }
     else
        printf("<B>Minor Allele:</B> not available (monomorphic) <BR>\n");
+    printf("<B>Count of individuals who are heterozygous:</B> %d<BR>\n", hma->heteroCount);
 	    
     bedPrintPos((struct bed *)hma, 3);
 
