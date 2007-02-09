@@ -68,5 +68,11 @@ void hapmapAllelesOutput(struct hapmapAlleles *el, FILE *f, char sep, char lastS
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+/* items for trackUi options and filters */
+
+#define HA_POP_MIXED "hapmapAlleles.popMixed"
+#define HA_GENO_AVAIL "hapmapAlleles.genoAvail"
+#define HA_OBSERVED "hapmapAlleles.observed"
+
 #endif /* HAPMAPALLELES_H */
 
