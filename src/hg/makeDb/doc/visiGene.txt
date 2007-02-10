@@ -186,7 +186,7 @@ endif
 # -----------------------
 
 # ADDED TWO ADDITIONAL ZOOM-OUT LEVELS 5 AND 6:
-# Ran /san/sanvol1/offline/level56Run/ cluster jog on a list of all files dumped
+# Ran /san/sanvol1/offline/level56Run/ cluster job on a list of all files dumped
 #  from the visiGene.imageFile table so that we made new zoom out levels 5 and 6
 #  for all pictures.  Since it was a special one-time deal, I just used ImageMagick.
 # vgPrepImage.c has been modified to do the 2 new zoomout levels so that they
@@ -1005,5 +1005,120 @@ mysql> select * from contributor where name in ('JAX JAX','MGI MGI');
 insert into submissionContributor select id, '3981' from submissionSet where submissionSource = 7;
 insert into submissionContributor select id, '3982' from submissionSet where submissionSource = 7;
 
+#######################################################
+#
+#  Received a major update from Susan Sunkin at ABA
+#  consisting of 6000 new images (we had 12000 already)
+#
+#
+
+# Allen Brain Atlas jp2 image prep (Galt 2006-12-12)
+# Create parasol directory and a list of the jpg files.
+ssh pk
+cd /san/sanvol1/visiGene/offline/allenBrain
+rm -fr prepImageRun
+mkdir prepImageRun
+find imageDisk -name '*.jp2' -print | sed 's/imageDisk\///' | grep May_06 > prepImageRun/jpg.lst
+
+cd prepImageRun
+# Create parasol batch
+cat << '_EOF_' > gsub
+#LOOP
+vgPrepImage /san/sanvol1/visiGene/offline/allenBrain/imageDisk /san/sanvol1/visiGene/gbdb/200/inSitu/Mouse/allenBrain /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain $(path1)
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+gensub2 jpg.lst single gsub spec
+para make spec -maxNode=50
+
+[pk:prepImageRun> /parasol/bin/para time
+6317 jobs in batch
+266106 jobs (including everybody's) in Parasol queue.
+Checking finished jobs
+Completed: 6317 of 6317 jobs
+CPU time in finished jobs:     267986s    4466.44m    74.44h    3.10d  0.008 y
+IO & Wait Time:                368981s    6149.68m   102.49h    4.27d  0.012 y
+Average job time:                 101s       1.68m     0.03h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            1471s      24.52m     0.41h    0.02d
+Submission to last job:         43292s     721.53m    12.03h    0.50d
 
 
+# -maxNode=50 was needed because it opens many output files at the same time - do not overwhelm NFS
+
+# -----------------------
+
+# Allen Brain Atlas update (Galt 2007-02-08)
+
+# see mm6.txt for prep running allenCleanup and allenCollectSeq
+
+# LOAD ALLEN BRAIN DATA
+# note mm6,mm7,mm8 all have the same thing since it is for mouse generally
+# note make sure the contributors list in vgLoadAllen.c is correct
+vgLoadAllen \
+ /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain \
+ /san/sanvol1/visiGene/offline/allenBrain/probesAndData/allen20061204.tab \
+ /cluster/data/mm6/bed/allenBrain/allProbes.fa \
+ /cluster/data/mm6/bed/allenBrain/allProbes.tab \
+ output
+#Got 17913 images
+#Got 17913 named probes
+#Got 17913 probe sequences
+
+# Did not do this: 
+# (instead, I asked Heather to clone entire visiGene db to visiGeneOld)
+#backed-up data in case of trouble:
+#mkdir /san/sanvol1/visiGene/dump/visiGene.20061220
+#hgsqldump visiGene -T /san/sanvol1/visiGene/dump/visiGene.20061220
+
+#restore fileLocation to point to dev
+update fileLocation set name =
+concat('http://hgwdev.cse.ucsc.edu',substring(name,INSTR(name,'/visiGene/')));
+# 14 rows
+
+# clean out the old ABA records before we do a full load
+delete from submissionSource where name = 'Allen Brain Atlas (ABA)';
+# 1 row
+
+delete submissionSet from submissionSet ss left join submissionSource so on
+ss.submissionSource=so.id where so.id is null;
+# 1 row
+
+delete submissionContributor from submissionContributor sc left join
+submissionSet ss on sc.submissionSet=ss.id where ss.id is null;
+# 13 rows
+
+delete image from image i left join submissionSet ss on i.submissionSet=ss.id
+where ss.id is null;
+# 11736 rows
+
+delete imageFile from imageFile imf left join submissionSet ss on
+imf.submissionSet=ss.id where ss.id is null;
+# 11736 rows
+
+delete imageProbe from imageProbe ip left join image i on ip.image=i.id where
+i.id is null;
+# 11737 rows
+
+delete expressionLevel from expressionLevel el left join imageProbe ip on
+el.imageProbe=ip.id where ip.id is null;
+# 0 rows
+
+delete antibodySource from antibodySource abs left join submissionSource so on
+abs.submissionSource=so.id where so.id is null;
+# 0 rows
+
+
+
+#load into visiGene db
+visiGeneLoad -database=visiGene output/aba.ra output/aba.tab /dev/null
+
+
+# RE-MAKE FULL TEXT INDEX
+cd hg/visiGene/vgGetText
+make alpha
+# basically does this, and puts it in cgi-bin/visiGeneData/:
+#vgGetText visiGene.text mm8 hg18
+#ixIxx visiGene.text visiGene.ix visiGene.ixx
+
+############################
