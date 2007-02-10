@@ -59,7 +59,6 @@
 
  */
 #include "common.h"
-#include "errabort.h"
 #include "altGraphX.h"
 #include "geneGraph.h"
 #include "genePred.h"
@@ -75,7 +74,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.27 2007/02/10 02:04:53 kent Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.28 2007/02/10 18:51:30 kent Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -155,7 +154,7 @@ printf(
        "where options are:\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "   -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
-noWarnAbort();
+errAbort("");
 }
 
 void initializeChromNib(char *fileName)
