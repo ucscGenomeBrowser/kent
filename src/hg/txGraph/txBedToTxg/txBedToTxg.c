@@ -20,8 +20,6 @@ errAbort(
   "where in.lst is a file with two columns:\n"
   "    type - usually 'refSeq' or 'mrna' or 'est' or something\n"
   "    bed -  a bed file\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
