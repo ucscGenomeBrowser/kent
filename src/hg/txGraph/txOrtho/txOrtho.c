@@ -331,13 +331,6 @@ boolean reverse = FALSE;
 struct altGraphX *orthoGraphList = NULL;
 loadOrthoAgxList(inGraph, chain, orthoGraphHash, &reverse, &orthoGraphList);
 uglyf("%s maps to %d orthoAgx. Reverse %d.\n", inGraph->name, slCount(orthoGraphList), reverse);
-if (orthoGraphList != NULL)
- { struct altGraphX *graph;
- uglyf("specifically  ");
- for (graph = orthoGraphList; graph != NULL; graph = graph->next)
-     uglyf("%s,", graph->name);
-uglyf("\n");
- }
 return orthoGraphList;
 }
 
