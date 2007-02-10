@@ -8,6 +8,8 @@
 #include "binRange.h"
 #include "chain.h"
 #include "chainNet.h"
+#include "rbTree.h"
+#include "rangeTree.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -328,11 +330,18 @@ struct altGraphX *orthoGraphsViaChain(struct altGraphX *inGraph, struct chain *c
 boolean reverse = FALSE;
 struct altGraphX *orthoGraphList = NULL;
 loadOrthoAgxList(inGraph, chain, orthoGraphHash, &reverse, &orthoGraphList);
-uglyf("Loaded %d orthoAgx. Reverse %d.\n", slCount(orthoGraphList), reverse);
+uglyf("%s maps to %d orthoAgx. Reverse %d.\n", inGraph->name, slCount(orthoGraphList), reverse);
+if (orthoGraphList != NULL)
+ { struct altGraphX *graph;
+ uglyf("specifically  ");
+ for (graph = orthoGraphList; graph != NULL; graph = graph->next)
+     uglyf("%s,", graph->name);
+uglyf("\n");
+ }
 return orthoGraphList;
 }
 
-struct chain *findMostOverlappingChain(struct altGraphX *inGraph, struct hash *chainHash,
+struct chain *bestChainForGraph(struct altGraphX *inGraph, struct hash *chainHash,
 	struct hash *netHash)
 /* Find chain that has most block-level overlap with exons in graph. */
 {
@@ -370,14 +379,13 @@ return chain;
 }
 
 
-struct altGraphX *findOrthoGraphs(struct altGraphX *inGraph, struct hash *chainHash,
-	struct hash *netHash, struct hash *orthoGraphHash)
+struct altGraphX *findOrthoGraphs(struct altGraphX *inGraph, struct chain *chain,
+	struct hash *orthoGraphHash)
 /* Find list of orthologous graphs if any.  Beware the side effect of tweaking
  * some of the fill->next pointers at the highest level of the net. It's expensive
  * to avoid the side effect, and it doesn't bother subsequent calls to this function. */
 {
 struct altGraphX *orthoGraphList = NULL;
-struct chain *chain = findMostOverlappingChain(inGraph, chainHash, netHash);
 if (chain != NULL)
     {
     verbose(3, "Best chain for %s is %s:%d-%d %c %s:%d-%d\n", inGraph->name,
@@ -392,25 +400,171 @@ else
 return orthoGraphList;
 }
 
-void writeCommonEdges(struct altGraphX *inGraph, struct altGraphX *outGraph, FILE *f)
+struct rbTree *graphToRangeTree(struct altGraphX *graph)
+/* Make a range tree that covers all exons in graph. */
 {
+struct rbTree *rangeTree = rangeTreeNew();
+int i;
+for (i=0; i<graph->edgeCount; ++i)
+    {
+    if (graph->edgeTypes[i] == ggExon)
+        {
+	int start = graph->vPositions[graph->edgeStarts[i]];
+	int end  = graph->vPositions[graph->edgeEnds[i]];
+	rangeTreeAdd(rangeTree, start, end);
+	}
+    }
+return rangeTree;
+}
+
+int chainBasesInBlocks(struct chain *chain)
+/* Return total number of bases in chain blocks. */
+{
+int total = 0;
+struct cBlock *block;
+for (block = chain->blockList; block != NULL; block = block->next)
+    total += block->tEnd - block->tStart;
+return total;
+}
+
+
+boolean edgeMap(int start, int end, struct chain *chain,
+	int *retStart, int *retEnd, boolean *retRev,
+	boolean *retStartExact, boolean *retEndExact,
+	int *retCoverage)
+/* Map edge through chain. Return FALSE if no map. */
+{
+struct chain *subChain = NULL, *toFree = NULL;
+chainSubsetOnT(chain, start, end, &subChain, &toFree);
+if (!subChain)
+    return FALSE;
+uglyf("subChain at %s:%d-%d is %s:%d-%d (%c) %s:%d-%d\n",
+     subChain->tName, start, end, 
+     subChain->tName, subChain->tStart, subChain->tEnd,
+     subChain->qStrand,
+     subChain->qName, subChain->qStart, subChain->qEnd);
+*retRev = FALSE;
+*retStartExact = *retEndExact = FALSE;
+qChainRangePlusStrand(subChain, retStart, retEnd);
+if (start == subChain->tStart)
+    *retStartExact = TRUE;
+if (end == subChain->tEnd)
+    *retEndExact = TRUE;
+if ((subChain->qStrand == '-'))
+    {
+    *retRev = TRUE;
+#ifdef UNUSED
+    boolean swap;
+    swap = *retStartExact;
+    *retStartExact = *retEndExact;
+    *retEndExact = swap;
+#endif /* UNUSED */
+    }
+*retCoverage = chainBasesInBlocks(subChain);
+chainFree(&toFree);
+return TRUE;
+}
+
+void writeOverlappingEdges(
+	enum ggEdgeType edgeType, char *inChrom,
+	int inStart, int start, enum ggVertexType startType, boolean startMappedExact, 
+	int inEnd, int end, enum ggVertexType endType, boolean endMappedExact, 
+	struct altGraphX *graph, FILE *f)
+/* Write edges of graph that overlap correctly to f */
+{
+if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
+   {
+   if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
+       {
+	int edgeCount = graph->edgeCount;
+	int i;
+	for (i=0; i<edgeCount; ++i)
+	    {
+	    if (graph->edgeTypes[i] == edgeType)
+		{
+		int eStartIx = graph->edgeStarts[i];
+		int eStart = graph->vPositions[eStartIx];
+		enum ggVertexType eStartType = graph->vTypes[eStartIx];
+		int eEndIx = graph->edgeEnds[i];
+		int eEnd = graph->vPositions[eEndIx];
+		enum ggVertexType eEndType = graph->vTypes[eEndIx];
+		int overlap = rangeIntersection(start, end, eStart, eEnd);
+		if (overlap > 0)
+		    {
+		    if (startType == ggSoftStart || startType == ggSoftEnd || start == eStart)
+		        {
+			if (endType == ggSoftStart || endType == ggSoftEnd || end == eEnd)
+			    {
+			    uglyf("%s\t%d\t%d\t%s\t%d\t%d\n", 
+			    	(edgeType == ggExon ? "exon" : "intron"),
+				startType, endType, inChrom, inStart, inEnd);
+			    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", 
+			    	(edgeType == ggExon ? "exon" : "intron"),
+				startType, endType, inChrom, inStart, inEnd);
+			    }
+			}
+		    }
+		}
+	    }
+       }
+   }
+}
+
+void writeCommonEdges(struct altGraphX *inGraph, struct rbTree *inRanges,
+	struct chain *chain, struct altGraphX *orthoGraph, FILE *f)
+{
+int i;
+for (i=0; i<inGraph->edgeCount; ++i)
+    {
+    enum ggEdgeType edgeType = inGraph->edgeTypes[i];
+    /* Load up end info on exon in other organism. */
+    int inStartIx = inGraph->edgeStarts[i];
+    int inEndIx = inGraph->edgeEnds[i];
+    int inStart = inGraph->vPositions[inStartIx];
+    int inEnd  = inGraph->vPositions[inEndIx];
+    int inSize = inEnd - inStart;
+    enum ggVertexType inStartType = inGraph->vTypes[inStartIx];
+    enum ggVertexType inEndType = inGraph->vTypes[inEndIx];
+
+    int orthoStart, orthoEnd, orthoCoverage;
+    boolean orthoRev, orthoStartExact, orthoEndExact;
+    if (edgeMap(inStart, inEnd, chain,  &orthoStart, &orthoEnd,
+	    &orthoRev, &orthoStartExact, &orthoEndExact, &orthoCoverage))
+	{
+	uglyf("edge type %s[%d %d] mapped %d of %d\n", (edgeType == ggIntron ? "intron" : "exon"),
+		inStartType, inEndType, orthoCoverage, inSize);
+	uglyf("Mapped edge %s:%d-%d (%c) %s:%d(%c)-%d(%c)\n",
+		inGraph->tName, inStart, inEnd,
+		(orthoRev ? '-' : '+'),
+		chain->qName, 
+		orthoStart, (orthoStartExact ? '!' : '?'),
+		orthoEnd, (orthoEndExact ? '!' : '?'));
+	writeOverlappingEdges(edgeType, inGraph->tName,
+		inStart, orthoStart, inStartType, orthoStartExact, 
+		inEnd, orthoEnd, inEndType, orthoEndExact, orthoGraph, f);
+	uglyf("\n");
+	}
+    }
 }
 
 void writeOrthoEdges(struct altGraphX *inGraph, struct hash *chainHash,
 	struct hash *netHash, struct hash *orthoGraphHash, FILE *f)
 /* Look for orthologous edges, and write any we find. */
 {
+struct chain *chain = bestChainForGraph(inGraph, chainHash, netHash);
 struct altGraphX *orthoGraphList = 
-	findOrthoGraphs(inGraph, chainHash, netHash, orthoGraphHash);
+	findOrthoGraphs(inGraph, chain, orthoGraphHash);
 if (orthoGraphList != NULL)
     {
     struct altGraphX *orthoGraph;
+    struct rbTree *inRanges = graphToRangeTree(inGraph);
     for (orthoGraph = orthoGraphList; orthoGraph != NULL; orthoGraph = orthoGraph->next)
         {
-	writeCommonEdges(inGraph, orthoGraph, f);
+	writeCommonEdges(inGraph, inRanges, chain, orthoGraph, f);
 	}
     verbose(3, "Graph %s maps to %d orthologous graph starting with %s\n", 
     	inGraph->name, slCount(orthoGraphList), orthoGraphList->name);
+    rbTreeFree(&inRanges);
     }
 else
     verbose(4, "No orthologous graph for %s\n", inGraph->name);
