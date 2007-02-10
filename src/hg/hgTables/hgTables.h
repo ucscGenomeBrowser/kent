@@ -428,6 +428,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 #define hgtaDoTableStatus "hgta_doTableStatus"
 #define hgtaDoMysqlVersion "hgta_doMysqlVersion"
+#define hgtaDoMetaData "hgta_doMetaData"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -457,6 +458,10 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaCtVis "hgta_ctVis"
 #define hgtaCtUrl "hgta_ctUrl"
 #define hgtaCtWigOutType "hgta_ctWigOutType"
+#define hgtaStatus "hgta_status"
+#define hgtaVersion "hgta_version"
+#define hgtaDatabases "hgta_databases"
+#define hgtaTables "hgta_tables"
 
    /* These intersection page vars come in pairs so we can cancel. */
 #define hgtaIntersectGroup "hgta_intersectGroup"

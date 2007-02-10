@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.142 2007/02/08 17:05:11 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.143 2007/02/10 19:38:26 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1328,6 +1328,53 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+void doMetaData(struct sqlConnection *conn)
+/* Get meta data for a database. */
+{
+puts("Content-Type:text/plain\n");
+char *db= cartString(cart, "db");
+char *query = "";
+if (cartVarExists(cart, hgtaStatus))
+    {
+    printf("Table status for database %s\n", db);
+    query = "SHOW TABLE STATUS";
+    }
+else if (cartVarExists(cart, hgtaVersion))
+    {
+    query = "SELECT @@VERSION";
+    }
+else if (cartVarExists(cart, hgtaDatabases))
+    {
+    query = "SHOW DATABASES";
+    }
+else if (cartVarExists(cart, hgtaTables))
+    {
+    query = "SHOW TABLES";
+    }
+struct sqlResult *sr;
+char **row;
+char *sep="";
+int c = 0;
+int numCols = 0;
+sr = sqlGetResult(conn, query);
+numCols = sqlCountColumns(sr);
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    printf("%s \t", field);
+printf("\n");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sep="";
+    for (c=0;c<numCols;++c)
+	{
+	printf("%s%s",sep,row[c]);
+	sep = "\t";
+	}
+    fprintf(stdout, "\n");	    
+    }
+sqlFreeResult(&sr);
+}
+
 void doMysqlVersion(struct sqlConnection *conn)
 /* Get mysql version */
 {
@@ -1510,6 +1557,8 @@ else if (cartVarExists(cart, hgtaDoTableStatus))
     doTableStatus(conn);
 else if (cartVarExists(cart, hgtaDoMysqlVersion))
     doMysqlVersion(conn);
+else if (cartVarExists(cart, hgtaDoMetaData))
+    doMetaData(conn);
 else	/* Default - put up initial page. */
     doMainPage(conn);
 cartRemovePrefix(cart, hgtaDo);
