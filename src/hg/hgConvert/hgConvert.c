@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.24 2006/12/14 17:48:11 hartera Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.25 2007/02/10 18:52:19 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -290,9 +290,8 @@ else
         /* Check if the toDb has active set to 1. If it is then print position */
         /* link to browser for toDb, otherwise just print position without link. */
         if (hDbIsActive(liftOver->toDb)) 
-	    printf("<A HREF=\"%s?%s=%u&db=%s&position=%s:%d-%d\">",
-	       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
-	       liftOver->toDb,
+	    printf("<A HREF=\"%s?db=%s&position=%s:%d-%d\">",
+	       hgTracksName(), liftOver->toDb,
 	       chain->qName, qStart+1, qEnd);
 	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
         if (hDbIsActive(liftOver->toDb))
