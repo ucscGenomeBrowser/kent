@@ -465,12 +465,15 @@ void writeOverlappingEdges(
 	struct altGraphX *graph, FILE *f)
 /* Write edges of graph that overlap correctly to f */
 {
+boolean outerOk = FALSE;
 if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
-   {
-   if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
-       {
+    {
+    if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
+	{
+	outerOk = TRUE;
 	int edgeCount = graph->edgeCount;
 	int i;
+	boolean anyOverlap = FALSE;
 	for (i=0; i<edgeCount; ++i)
 	    {
 	    if (graph->edgeTypes[i] == edgeType)
@@ -482,25 +485,46 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 		int eEnd = graph->vPositions[eEndIx];
 		enum ggVertexType eEndType = graph->vTypes[eEndIx];
 		int overlap = rangeIntersection(start, end, eStart, eEnd);
+		uglyf("  %d %s %s:%d-%d overlap %d\n",
+			i, (edgeType == ggExon ? "exon" : "intron"),
+			graph->tName, eStart, eEnd, overlap);
 		if (overlap > 0)
 		    {
+		    anyOverlap = TRUE;
+		    boolean wroteIt = FALSE;
 		    if (startType == ggSoftStart || startType == ggSoftEnd || start == eStart)
-		        {
+			{
 			if (endType == ggSoftStart || endType == ggSoftEnd || end == eEnd)
 			    {
 			    uglyf("%s\t%d\t%d\t%s\t%d\t%d\n", 
-			    	(edgeType == ggExon ? "exon" : "intron"),
+				(edgeType == ggExon ? "exon" : "intron"),
 				startType, endType, inChrom, inStart, inEnd);
 			    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", 
-			    	(edgeType == ggExon ? "exon" : "intron"),
+				(edgeType == ggExon ? "exon" : "intron"),
 				startType, endType, inChrom, inStart, inEnd);
+			    wroteIt = TRUE;
 			    }
+			}
+		    if (!wroteIt)
+			{
+			uglyf("skipping %s, startType=%d, endType=%d, start=%d, eStart=%d, end=%d, eEnd=%d\n",
+			    (edgeType == ggExon ? "exon" : "intron"),
+			    startType, endType, start, eStart, end, eEnd);
 			}
 		    }
 		}
 	    }
-       }
-   }
+	if (!anyOverlap)
+	    uglyf("no overlap %s %s: start %d, startType %d, exact %d, end %d, endType %d, exact %d\n",
+		(edgeType == ggExon ? "exon" : "intron"),
+		graph->name, start, startType, startMappedExact, end, endType, endMappedExact);
+	}
+    }
+if (!outerOk)
+    {
+    uglyf("dismissed based on end exactitude: startType %d, exact %d, endType %d, exact %d\n",
+    	startType, startMappedExact, endType, endMappedExact);
+    }
 }
 
 void writeCommonEdges(struct altGraphX *inGraph, struct rbTree *inRanges,
