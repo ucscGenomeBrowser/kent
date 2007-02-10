@@ -1,6 +1,6 @@
 /* trashDir.c - temporary file creation and directory creation in /trash */
 
-static char const rcsid[] = "$Id: trashDir.c,v 1.2 2007/02/09 23:14:03 hiram Exp $";
+static char const rcsid[] = "$Id: trashDir.c,v 1.3 2007/02/10 00:04:14 hiram Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -17,7 +17,7 @@ if (! dirHash)
 	dirHash = newHash(0);
 
 /* already created this directory ? */
-if (hashLookup(dirHash,dirName))
+if (! hashLookup(dirHash,dirName))
     {
     hashAddInt(dirHash, dirName, 1);	/* remember, been here, done that */
     mkdirTrashDirectory(dirName);
