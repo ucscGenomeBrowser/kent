@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.21 2007/02/09 03:50:15 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.22 2007/02/10 03:08:11 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -909,9 +909,7 @@ for (i=0; i<vCount; ++i)
 			&otherI, &otherJ))
 		    {
 		    waysOut[j] = FALSE;
-		    gg->evidence[otherI][otherJ] = 
-		    	slCat(gg->evidence[otherI][otherJ], gg->evidence[i][j]);
-		    gg->evidence[i][j] = NULL;
+		    moveEvidenceIfUnique(&gg->evidence[otherI][otherJ], &gg->evidence[i][j]);
 		    result = TRUE;
 		    }
 		else
@@ -1199,8 +1197,7 @@ for (i=0; i<vertexCount; ++i)
 		    mergeEdge->vertex1 = i;
 		if (end->position == r->end)
 		    mergeEdge->vertex2 = j;
-		mergeEdge->evidence = slCat(mergeEdge->evidence, evidence[i][j]);
-		evidence[i][j] = NULL;
+		moveEvidenceIfUnique(&mergeEdge->evidence, &evidence[i][j]);
 		edgeMatrix[i][j] = FALSE;
 		}
 	    }
