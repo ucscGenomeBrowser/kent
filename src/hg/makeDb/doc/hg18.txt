@@ -12965,6 +12965,159 @@ TMPDIR=/scratch/tmp
 	> fb.noRandom.mm8.chainHg18WMLink.txt 2>&1
     #	976774811 bases of 2550172871 (38.302%) in intersection
 
+###########################################################
+# MAKE C. elegans proteins track
+    ssh kkstore02
+    sandir=/san/sanvol1/scratch/hg18
+
+    mkdir -p /cluster/data/hg18/bed/tblastn.ce3WB
+    cd /cluster/data/hg18/bed/tblastn.ce3WB
+    echo  /san/sanvol1/scratch/hg18/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 3066 query.lst
+
+   # we want around 200000 jobs
+   calc `wc /cluster/data/ce3/bed/blat.ce3WB/ce3WB.psl | awk "{print \\\$1}"`/\(200000/`wc query.lst | awk "{print \\\$1}"`\)
+
+# 22395/(200000/3066) = 343.315350
+
+   mkdir -p /cluster/bluearc/hg18/bed/tblastn.ce3WB/wbfa
+   split -l 343 /cluster/data/ce3/bed/blat.ce3WB/ce3WB.psl  /cluster/bluearc/hg18/bed/tblastn.ce3WB/wbfa/wb
+   ln -s /cluster/bluearc/hg18/bed/tblastn.ce3WB/wbfa 
+   cd wbfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S wbfa/*.fa > wb.lst
+   mkdir -p /cluster/bluearc/hg18/bed/tblastn.ce3WB/blastOut
+   ln -s /cluster/bluearc/hg18/bed/tblastn.ce3WB/blastOut
+   for i in `cat wb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/hg18/bed/tblastn.ce3WB
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /san/sanvol1/scratch/hg18/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/ce3/bed/blat.ce3WB/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    exit
+    chmod +x blastSome
+    gensub2 query.lst wb.lst blastGsub blastSpec
+    
+    ssh pk
+    cd /cluster/data/hg18/bed/tblastn.ce3WB
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 195603 of 195603 jobs
+# CPU time in finished jobs:   12047221s  200787.01m  3346.45h  139.44d  0.382 y
+# IO & Wait Time:               9089287s  151488.12m  2524.80h  105.20d  0.288 y
+# Average job time:                 108s       1.80m     0.03h    0.00d
+# Longest finished job:            1002s      16.70m     0.28h    0.01d
+# Submission to last job:        192221s    3203.68m    53.39h    2.22d
+
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/tblastn.ce3WB
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/hg18/bed/tblastn.ce3WB/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    exit
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/hg18/bed/tblastn.ce3WB/blastOut/wb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/hg18/bed/tblastn.ce3WB/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:     161714s    2695.23m    44.92h    1.87d  0.005 y
+# IO & Wait Time:                 40315s     671.92m    11.20h    0.47d  0.001 y
+# Average job time:                3061s      51.02m     0.85h    0.04d
+# Longest finished job:            9372s     156.20m     2.60h    0.11d
+# Submission to last job:         11599s     193.32m     3.22h    0.13d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/tblastn.ce3WB/blastOut
+    for i in wb??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/hg18/bed/tblastn.ce3WB/unliftBlastCe3WB.psl
+    cd ..
+    pslCheck unliftBlastCe3WB.psl
+    sed "s/[0-9XY]*\///" unliftBlastCe3WB.psl | liftUp -type=.psl -nohead stdout ../../randomContigs/hg18.randomContigs.lift carry stdin | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > blastCe3WB.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/tblastn.ce3WB
+    hgLoadPsl hg18 blastCe3WB.psl
+
+    # check coverage
+    featureBits hg18 blastCe3WB 
+# 4326489 bases of 2881515245 (0.150%) in intersection
+
+    featureBits hg18 knownGene:cds blastCe3WB  -enrichment
+# knownGene:cds 1.111%, blastCe3WB 0.150%, both 0.086%, cover 7.76%, enrich 51.67x
+
+    ssh kkstore04
+    rm -rf /cluster/data/hg18/bed/tblastn.ce3WB/blastOut
+    rm -rf /cluster/bluearc/hg18/bed/tblastn.ce3WB/blastOut
+#end tblastn
+##########################################################################
+
 #############################################################################
 # RE-BUILD WGRNA TRACK (DONE, 2007-02-09, Fan)
 
