@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1199 2007/02/09 23:37:36 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1200 2007/02/10 21:36:11 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15408,6 +15408,7 @@ char *gene = NULL, *pos = NULL;
 char *ptr;
 char *buffer;
 char *spAcc;
+boolean isCe = FALSE;
 boolean isDm = FALSE;
 boolean isSacCer = FALSE;
 char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
@@ -15417,6 +15418,8 @@ if (sameString("blastSacCer1SG", tdb->tableName))
     isSacCer = TRUE;
 if (startsWith("blastDm", tdb->tableName))
     isDm = TRUE;
+if (startsWith("blastCe", tdb->tableName))
+    isCe = TRUE;
 buffer = needMem(strlen(itemName)+ 1);
 strcpy(buffer, itemName);
 acc = buffer;
@@ -15458,6 +15461,8 @@ if (isDm == TRUE)
     cartWebStart(cart, "FlyBase Protein %s", useName);
 else if (isSacCer == TRUE)
     cartWebStart(cart, "Yeast Protein %s", useName);
+else if (isCe == TRUE)
+    cartWebStart(cart, "Worm Protein %s", useName);
 else
     cartWebStart(cart, "Human Protein %s", useName);
 if (pos != NULL)
@@ -15472,6 +15477,13 @@ if (pos != NULL)
 	printf("<B>D. melanogaster position:</B>\n");
 	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
 	    hgTracksName(), pos, dmDb);
+	}
+    else if (isCe == TRUE)
+	{
+	char *assembly = "ce3";
+	printf("<B>Worm position:</B>\n");
+	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, assembly);
 	}
     else if (isSacCer == TRUE)
 	{
@@ -17866,7 +17878,7 @@ else if (sameWord(track, "firstEF"))
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") || 
         sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") ||
-        sameWord(track, "blastHg18KG") )
+        sameWord(track, "blastCe3WB") || sameWord(track, "blastHg18KG") )
     {
     blastProtein(tdb, item);
     }
