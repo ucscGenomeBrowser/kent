@@ -81,6 +81,7 @@ for (txg = txgList; txg != NULL; txg = txg->next)
 	}
     binKeeperAdd(bk, txg->tStart, txg->tEnd, txg);
     }
+hashFree(&sizeHash);
 return bkHash;
 }
 
