@@ -190,9 +190,11 @@ cat orthoSplice/agx/*.agx | agxToBed stdin orthoSplice.bed
 hgLoadBed hg18 jkProjectedOrtho orthoSplice.bed
 hgLoadBed hg18 jkOrthoWalk exonWalk/bed/*.bed
 
+###########################################################################
 ## Some analysis of things in humanProt.fa that didn't map to any sequence.
 ## Examining random sample of 25 of these.  (Only 81% did map, over 10,000
 ## didn't).
+
 Summary:
   7 - SE - Single exon gene dropped by orthoSplice, usually wrongly.
        fix orthoSplice a little, rework single exon handling.
@@ -270,3 +272,28 @@ TS Q9UC89 - 17 letters long - couldn't web blat to genome
 SE Q9UCZ0 - orthoSplice drops single exon gene in spite of Exoniphy & refSeq.
 SE Q9UCZ2 - orthoSplice drops single exon gene in spite of Exoniphy & refSeq.
 
+###########################################################################
+## Some specific regions of interest.
+
+chr22:41,921,231-41,927,980 - two overlapping single exon transcripts.
+      exonWalk keeps shorter of two.  Mouse synteny, but not well
+      conserved in mammals. Ensembl gene and UCSC known gene on shorter
+      transcript. RNA from longer transcript has copy number variation
+      compared to genome.
+chr22:42,545,257-42,600,891 - two single exon transcripts overlap the last
+      exon of a cluster of spliced transcripts. Good mouse synteny throughout
+      Ensembl, UCSC Known ignor single exon transcripts. Makes it through
+      orthoSplice, but single exon transcript not emitted by exonWalk.
+chr22:43,265,931-43,274,172 - gene mostly single exon but short 5' UTR exon
+      as well.  RefSeq/mRNA is enough to get this into set. 
+chr22:44,324,300-44,435,566 - gene with 6 single exon transcripts overlapping
+      final spliced exon.
+chr22:45,008,587-45,039,578 - Four rna clusters in 30 kb.  Good mix of spliced
+      and single exon.
+chr22:45,067,214-45,074,098 - Single exon gene. 5 RNAs. filtered out by
+      orthoSplice. On main syntenic mouse chain, but looks like low 
+      coverage of the alignment in this region. No Exoniphy. Has Ensembl
+      and current UCSC Known.
+chr22:14,632,219-14,671,164 - Two genes on opposite strands.  Smaller
+      2 exon gene gets turned into intron only by orthoSplice, and this
+      is read as exon by exonWalk.  Bigger one is c set, smaller d set.
