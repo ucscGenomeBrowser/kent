@@ -4463,3 +4463,29 @@ synBlastp.csh rn4 mm8
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna rn4
+
+###########################################################################
+# REVERSE LIFTOVER CHAINS RN4 -> RN3 (DONE 2007-02-09 kate)
+
+    # copy rn3 2bit to cluster-friendly dir
+    ssh kkstore06
+    cp -p /cluster/data/rn3/rn3.2bit /san/sanvol1/scratch/rn3
+
+    # create the directory and scripts
+    ssh kkstore04
+    cd /cluster/data/rn4
+    doSameSpeciesLiftOver.pl rn4 rn3 -debug -bigClusterHub pk
+
+    # go to created dir and run for real
+    cd /cluster/data/rn4/bed/blat.rn3.2007-02-09
+    doSameSpeciesLiftOver.pl rn4 rn3 -bigClusterHub pk >& do.log & tail -f do.log
+
+    # failed for unknown region during chainNet of chr4.  Error message
+    # indicated the file /cluster/data/rn3/chrom.sizes couldn't be found.
+    # I extracted the remaining steps from the doNet.csh file and ran those.
+
+    doNet.csh >&! doNet.log
+
+    doSameSpeciesLiftOver.pl rn4 rn3 -continue load -bigClusterHub pk >& doLoad.log
+
+
