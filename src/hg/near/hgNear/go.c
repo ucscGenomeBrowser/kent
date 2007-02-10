@@ -9,8 +9,9 @@
 #include "hCommon.h"
 #include "obscure.h"
 #include "hgNear.h"
+#include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.14 2005/03/03 07:10:57 donnak Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.15 2007/02/10 00:48:08 kate Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -38,8 +39,10 @@ struct hash *hash = newHash(6);
 
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
+    struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
+    char *proteinAcc = spFindAcc(spConn, gp->protein);
     safef(query, sizeof(query), 
-	    "select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, gp->protein);
+	    "select term.name from goaPart,term where goaPart.%s = '%s' and goaPart.goId = term.acc", col->goaIdColumn, proteinAcc);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -55,6 +58,7 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
+    sqlDisconnect(&spConn);
     }
 if (gotOne)
     result = cloneString(dy->string);
@@ -75,11 +79,13 @@ struct hash *hash = newHash(6);
 hPrintf("<TD>");
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
+    struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
+    char *proteinAcc = spFindAcc(spConn, gp->protein);
     safef(query, sizeof(query), 
 	    "select term.name,term.acc from goaPart,term "
 	    "where goaPart.%s = '%s' "
 	    "and goaPart.goId = term.acc", 
-	    col->goaIdColumn, gp->protein);
+	    col->goaIdColumn, proteinAcc);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -102,6 +108,7 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
+    sqlDisconnect(&spConn);
     }
 if (!gotOne)
     hPrintf("n/a");

@@ -335,7 +335,7 @@ priority 10
 visibility off
 type go
 colWidth 50
-goaIdColumn dbObjectSymbol
+goaIdColumn dbObjectId
 
 name description
 shortLabel Description
