@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.110 2007/01/24 19:54:33 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.111 2007/02/10 00:30:48 fanhsu Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -191,6 +191,33 @@ else
     uiState[1] = 0;
     }
 
+/* Put up the hot links bar. */
+if (isGsid) 
+    {
+    printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+    printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+
+    /* Home */
+    printf("<TD ALIGN=CENTER><A HREF=\"/index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
+
+    /* Blat */
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+
+    /* Subject  View */
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
+
+    /* Sequence View */
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Sequence View</FONT></A></TD>");
+
+    /* Table View */
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Table View</FONT>");
+
+    printf("</TR></TABLE>");
+    printf("</TD></TR></TABLE>\n");
+    }
+else
+{
+
 puts(
        "<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
@@ -236,6 +263,7 @@ else
 		theCart ? "&" : "", uiState+1 );
     	puts("           Blat</A> &nbsp;&nbsp;&nbsp;");
 	}
+}
     {
     char *table = (theCart == NULL ? NULL :
 		   (endsWith(scriptName, "hgGene") ?
