@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.19 2007/02/09 02:10:35 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.20 2007/02/10 06:10:20 kent Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -505,6 +505,8 @@ else
     errAbort("geneGraph::ggClassifyEdge() - "
 	     "Edge from %d -> %d has types %d-%d which isn't recognized as intron or exon.\n",
 	     v1, v2, vertices[v1].type, vertices[v2].type);
+#ifdef NEVER
+// What the heck? Flipping inton/exon on strand???? */
 if(sameString(gg->strand, "-"))
     {
     if(et == ggExon)
@@ -512,6 +514,7 @@ if(sameString(gg->strand, "-"))
     else if(et == ggIntron)
 	et = ggExon;
     }
+#endif /* NEVER */
 return et;
 }
 
