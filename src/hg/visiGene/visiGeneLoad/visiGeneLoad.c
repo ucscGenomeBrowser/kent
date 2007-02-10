@@ -78,6 +78,7 @@ static char *requiredItemFields[] = {"fileName", "submitId"};
 static char *requiredSetFields[] = {"contributor", "submitSet"};
 static char *requiredFields[] = {"imageWidth", "imageHeight", "fullDir", "thumbDir", "taxon", 
 	"age", "probeColor", };
+/*
 static char *optionalFields[] = {
     "abName", "abDescription", "abSubmitId", "abTaxon", "abUrl", "bodyPart", "copyright",
     "embedding", "fixation", "fPrimer", "genbank", "gene",
@@ -89,6 +90,7 @@ static char *optionalFields[] = {
     "specimenNotes", "strain", "publication", "pubUrl",
     "setUrl", "seq", "uniProt",
     };
+*/
 
 char *hashValOrDefault(struct hash *hash, char *key, char *defaultVal)
 /* Lookup key in hash and return value, or return default if it doesn't exist. */
@@ -489,7 +491,6 @@ void doAntibodySource(struct sqlConnection *conn,
 {
 if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
     {
-    struct sqlResult *sr;
     struct dyString *dy = dyStringNew(0);
 
     /* Try to hook up with existing antibody record. */
@@ -546,7 +547,7 @@ if (abName[0] != 0)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	int id = sqlUnsigned(row[0]);
-	char *name = row[1];
+	/* char *name = row[1]; */
 	char *description = row[2];
 	char *taxon = row[3];
 	int score = 1;
@@ -616,11 +617,8 @@ int doProbe(struct lineFile *lf, struct sqlConnection *conn,
 	char *fPrimer, char *rPrimer, char *seq, int bacId)
 /* Update probe table and probeType table if need be and return probe ID. */
 {
-struct sqlResult *sr;
-char **row;
 int probeTypeId = 0;
 int probeId = 0;
-int bestScore = 0;
 struct dyString *dy = dyStringNew(0);
 char *probeType = "RNA";
 boolean gotPrimers = (rPrimer[0] != 0 && fPrimer[0] != 0);
@@ -1253,8 +1251,8 @@ while (lineFileNextReal(lf, &line))
 	char *gene = getVal("gene", raHash, rowHash, words, "");
 	char *genotype = getVal("genotype", raHash, rowHash, words, "wild type");
 	char *imagePos = getVal("imagePos", raHash, rowHash, words, "0");
-	char *journal = getVal("journal", raHash, rowHash, words, "");
-	char *journalUrl = getVal("journalUrl", raHash, rowHash, words, "");
+	/* char *journal = getVal("journal", raHash, rowHash, words, ""); */
+	/* char *journalUrl = getVal("journalUrl", raHash, rowHash, words, ""); */
 	char *locusLink = getVal("locusLink", raHash, rowHash, words, "");
 	char *minAge = getVal("minAge", raHash, rowHash, words, "");
 	char *maxAge = getVal("maxAge", raHash, rowHash, words, "");
