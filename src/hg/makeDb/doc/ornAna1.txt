@@ -4,7 +4,7 @@
 
 
 #########################################################################
-# DOWNLOAD SEQUENCE (DONE 12/15/06 angie)
+# DOWNLOAD SEQUENCE (DONE 12/15/06 angie - REDONE 2/5/07 angie)
     ssh kkstore05
     mkdir /cluster/store12/ornAna1
     ln -s /cluster/store12/ornAna1 /cluster/data/ornAna1
@@ -35,9 +35,26 @@
     # which was not in any .agp file.  Removed Ultra673 from chrUn.fa -- 
     # LaDeana confirmed that's OK.
 
+    # RELOADING 2/5/07 to pick up slight changes to chr5 and chrUn so we 
+    # will be completely in sync with GenBank
+    cd /cluster/data/ornAna1
+    mv downloads downloads.bak
+    mkdir downloads
+    cd downloads
+    wget --timestamping $baseUrl/platypus.070113.tar.gz
+    tar xvzf platypus.070113.tar.gz
+    faSize *.fa
+#Invalid fasta format: sequence size == 0 for element Ultra673
+#1996794193 bases (154575690 N's 1842218503 real 1842218503 upper 0 lower) in 201523 sequences in 20 files
+#Total size: mean 9908.5 sd 331992.5 min 0 (Ultra673) max 59581953 (chr3) median 1069
+#N count: mean 767.0 sd 20573.1
+#U count: mean 9141.5 sd 311758.8
+#L count: mean 0.0 sd 0.0
+    # I edited out the empty Ultra673 (LaDeana OK'd).
+
 
 #########################################################################
-# MAKE GENOME DB (DONE 12/19/06 angie)
+# MAKE GENOME DB (DONE 12/19/06 angie - REDONE 2/5/07 angie)
     ssh kkstore05
     cd /cluster/data/ornAna1
     cat > ornAna1.config.ra <<EOF
@@ -49,28 +66,49 @@ commonName Platypus
 scientificName Ornithorhynchus anatinus
 assemblyDate Dec. 2006
 assemblyLabel WUSTL version 6.0?
-orderKey 35
+orderKey 365
 mitoAcc 5836058
 fastaFiles /cluster/data/ornAna1/downloads/chr*.fa
 agpFiles /cluster/data/ornAna1/downloads/chr*.agp
 dbDbSpeciesDir platypus
 EOF
 
-    makeGenomeDb.pl ornAna1.config.ra \
+    ~/kent/src/hg/utils/automation/makeGenomeDb.pl ornAna1.config.ra \
       >& makeGenomeDb.log & tail -f makeGenomeDb.log
     # Followed instructions printed out at the end of the script for 
     # editing the template description files and checked them in.
 
 
 #########################################################################
-# REPEATMASKER (DONE 12/20/06 angie)
+# RELOAD GOLD/GAP, REBUILD DOWNLOAD AFTER AGP TWEAK (DONE 1/8/07 angie - OBSOLETED BY TOTAL REBUILD)
+# LaDeana sent a manual tweak to chr5.agp:  change "p" to "-" for
+# this one entry:
+# chr5    647409    657392    203    W    Contig2532.3    1    9984    p
+# So reload the agp, re-compress for download.
+    ssh kkstore05
+    cd /cluster/data/ornAna1
+    # Make the necessary edits:
+    $EDITOR downloads/chr5.agp
+    $EDITOR ornAna1.agp
+    # Reload the table
+    ssh -x hgwdev hgGoldGapGl -noGl ornAna1 /cluster/data/ornAna1/ornAna1.agp
+    # Regenerate the download file and update md5sum.txt:
+    cd /cluster/data/ornAna1/goldenPath/bigZips
+    gzip -c /cluster/data/ornAna1/ornAna1.agp > ornAna1.agp.gz
+    md5sum ornAna1.agp.gz
+#e8539f496b2343c5e802b2362e61c9a3  ornAna1.agp.gz
+    $EDITOR md5sum.txt
+
+
+#########################################################################
+# REPEATMASKER (DONE 12/20/06 angie - REDONE 2/5/07)
     ssh kkstore05
     # Run -debug to create the dir structure and preview the scripts:
     doRepeatMasker.pl ornAna1 -verbose 3 -debug
     # Run it for real and tail the log:
     doRepeatMasker.pl ornAna1 -verbose 3 \
-      >& /cluster/data/ornAna1/bed/RepeatMasker.2006-12-19/do.log &
-    tail -f /cluster/data/ornAna1/bed/RepeatMasker.2006-12-19/do.log
+      >& /cluster/data/ornAna1/bed/RepeatMasker.2007-02-05/do.log &
+    tail -f /cluster/data/ornAna1/bed/RepeatMasker.2007-02-05/do.log
     # RepeatMasker and lib version from do.log:
 #grep version of RepeatMasker$ /cluster/bluearc/RepeatMasker/RepeatMasker
 #    October 6 2006 (open-3-1-6) version of RepeatMasker
@@ -78,20 +116,48 @@ EOF
 #CC   RELEASE 20061006;                                            *
     # Coverage:
     featureBits ornAna1 rmsk
-#633510998 bases of 1842236818 (34.388%) in intersection
+#633511004 bases of 1842236818 (34.388%) in intersection
 
 
 #########################################################################
-# SIMPLE REPEATS (TRF) (DONE 12/20/06 angie)
-    ssh kolossus
-    nice tcsh
+# SIMPLE REPEATS (TRF) (DONE 12/20/06 angie - REDONE 2/6/07)
+    # The first time around I just piped twoBitToFa|trfBig but due to the
+    # large number of scaffolds, that took 12.5 hours.  This time, make it
+    # a small cluster job.
+    ssh kki
     mkdir /cluster/data/ornAna1/bed/simpleRepeat
     cd /cluster/data/ornAna1/bed/simpleRepeat
-    twoBitToFa ../../ornAna1.unmasked.2bit stdout \
-    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
-      -bedAt=simpleRepeat.bed -tempDir=/tmp \
-    >& trf.log & tail -f trf.log
-    # took 12.5hours -- slow for scaffold-based!
+    # no splitting -- choose a chunk size equal to the largest sequence:
+    set chunkSize = `awk '{print $2;}' ../../chrom.sizes | sort -nr | head -1`
+    ~/kent/src/hg/utils/automation/simplePartition.pl ../../ornAna1.unmasked.2bit $chunkSize chunks
+    cat > gsub <<'_EOF_'
+#LOOP
+./doTrfBig.csh {check in exists $(path1)} {check out exists $(path1).bed}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    cat > doTrfBig.csh <<'_EOF_'
+#!/bin/csh -ef
+
+sed -e 's/^.*://' $1 \
+| twoBitToFa ../../ornAna1.unmasked.2bit -seqList=stdin stdout \
+| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+      -bedAt=$2 -tempDir=/tmp
+'_EOF_'
+    # << emacs
+    chmod a+x doTrfBig.csh
+    ls -1S chunks/*/*.lst > chunks.lst
+    gensub2 chunks.lst single gsub jobList
+    para make jobList
+    para time
+#Completed: 36 of 36 jobs
+#CPU time in finished jobs:      13498s     224.96m     3.75h    0.16d  0.000 y
+#IO & Wait Time:                   749s      12.49m     0.21h    0.01d  0.000 y
+#Average job time:                 396s       6.60m     0.11h    0.00d
+#Longest finished job:            1017s      16.95m     0.28h    0.01d
+#Submission to last job:          1017s      16.95m     0.28h    0.01d
+    cat chunks/*/*.bed > simpleRepeat.bed
+
     # Make a filtered version for sequence masking:
     awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
 
@@ -105,56 +171,73 @@ EOF
 
 
 #########################################################################
-# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 12/20/06 angie)
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 12/20/06 angie - REDONE 2/6/07)
     ssh kolossus
     cd /cluster/data/ornAna1
     time twoBitMask ornAna1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed ornAna1.2bit
     # This warning is OK -- the extra fields are not block coordinates.
 #Warning: BED file bed/simpleRepeat/trfMask.bed has >=13 fields which means it might contain block coordinates, but this program uses only the first three fields (the entire span -- no support for blocks).
-#3.815u 3.570s 0:18.18 40.5%     0+0k 0+0io 2pf+0w
+#5.490u 3.275s 0:18.91 46.3%     0+0k 0+0io 4pf+0w
     # Link to it from /gbdb:
     ssh hgwdev
     ln -s /cluster/data/ornAna1/ornAna1.2bit /gbdb/ornAna1/ornAna1.2bit
 
 
 #########################################################################
-# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 12/21/06 angie)
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 12/21/06 angie - REDONE 2/6/07)
     cd /cluster/data/ornAna1
-    ln -s bed/RepeatMasker.2006-12-19/ornAna1.fa.out .
+    ln -s bed/RepeatMasker.2007-02-05/ornAna1.fa.out .
     makeDownloads.pl ornAna1 -verbose=2 \
       >& jkStuff/downloads.log & tail -f jkStuff/downloads.log
     # Edit README.txt files when done:
 # *** Edit each README.txt to resolve any notes marked with "***":
 #     /cluster/data/ornAna1/goldenPath/database/README.txt
 #     /cluster/data/ornAna1/goldenPath/bigZips/README.txt
-#     /cluster/data/ornAna1/goldenPath/chromosomes/README.txt
 
 
 #########################################################################
-# WINDOWMASKER FOR COMPARISON (IN PROGRESS 1/8/07 angie)
+# WINDOWMASKER FOR COMPARISON (IN PROGRESS 1/11/07 angie)
     cd /cluster/data/ornAna1
     ~/kent/src/hg/utils/automation/doWindowMasker.pl -debug ornAna1
     ~/kent/src/hg/utils/automation/doWindowMasker.pl ornAna1 \
       >& bed/WindowMasker.2006-12-22/do.log &
     tail -f bed/WindowMasker.2006-12-22/do.log
     # Needs -workhorse kolossus so it can connect to the NCBI server...
-    # but kolossus currently thinks it's x86 32bit not 64, doh...
+    #     ~/kent/src/hg/utils/automation/doWindowMasker.pl ornAna1 \
+    ~/kent/src/hg/utils/automation/doWindowMasker.pl ornAna1 \
+      -buildDir /cluster/data/ornAna1/bed/WindowMasker.2006-12-22/do.log \
+      -workhorse kolossus -continue mask \
+      >& bed/WindowMasker.2006-12-22/do.log &
+    tail -f bed/WindowMasker.2006-12-22/do.log
+    cd bed/WindowMasker.2006-12-22
+    # Compare coverage to rmsk which was 633510998 / 1842236818 = 34.388%
+    zcat windowmasker.bed.gz | awk '{print $3 - $2}' | total
+#844961729
+    # 844961729 / 1842236818 = 45.866%
+    zcat windowmasker.sdust.bed.gz | awk '{print $3 - $2}' | total
+#1011460283
+    # 1011460283 / 1842236818 = 54.904%
+    # The coverage is higher, but do we really want to mask 55% of the 
+    # assembly before alignment??
+#TODO - evaluate!!
 
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE 12/22/06 angie)
+# MAKE 11.OOC FILE FOR BLAT (DONE 12/22/06 angie - REDONE 2/6/07)
+# (probably frivolous to redo because the assembly changes were so small, 
+# but redo anyway so it's reproduceable later.)
     # Use -repMatch=608 
     # To determine -repMatch for new species, first scale 1024 by size 
     # relative to human (e.g. divide ornAna1 / hg18 gapless bases from 
     # featureBits).  That gives ~607, rounding up to 608.
     ssh kolossus
     blat /cluster/data/ornAna1/ornAna1.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=/cluster/bluearc/ornAna1/11.ooc -repMatch=6
+      -makeOoc=/cluster/bluearc/ornAna1/11.ooc -repMatch=608
 #Wrote 35954 overused 11-mers to /cluster/bluearc/ornAna1/11.ooc
 
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE 1/5/07 angie)
+# GENBANK AUTO UPDATE (DONE 1/5/07 angie - REDONE 2/6/07)
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
