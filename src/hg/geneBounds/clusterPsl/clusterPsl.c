@@ -14,7 +14,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.6 2007/02/07 21:00:14 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.7 2007/02/10 02:02:19 kent Exp $";
 
 int maxMergeGap = 5;
 
@@ -199,27 +199,35 @@ return clusterList;
 }
 
 
+struct geneGraph *ggMakeInitialGraph(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
+/* Create initial gene graph from input input. */
+
 void writeClusterGraph(struct pslCluster *cluster, struct dnaSeq *chrom, 
 	char *chromName, FILE *f)
 /* Create a geneGraph out of cluster, and write it to file. */
 {
-verbose(3, "writeClusterGraph %s:%d-%d\n", chromName, 
-	cluster->tStart, cluster->tEnd);
 struct ggMrnaAli *maList = pslListToGgMrnaAliList(cluster->pslList, 
 	chromName, 0, chrom->size, chrom, maxMergeGap);
-verbose(4, " %d psls goes to %d ggMrnaAli\n", slCount(cluster->pslList),
-	slCount(maList));
 struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, chrom);
 struct ggMrnaCluster *mcList = ggClusterMrna(ci);
-verbose(4, " %d ggMrnaClusters made\n", slCount(mcList));
 struct ggMrnaCluster *mc;
 for (mc = mcList; mc != NULL; mc = mc->next)
     {
     struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
-    checkEvidenceMatrix(gg);
+    // struct geneGraph *gg = ggMakeInitialGraph(mc, ci);
+    // AllocArray(gg->mrnaTissues, gg->mrnaRefCount);
+    // AllocArray(gg->mrnaLibs, gg->mrnaRefCount);
     struct altGraphX *ag = ggToAltGraphX(gg);
     if (ag != NULL)
-         altGraphXTabOut(ag, f);
+	{
+	static int id=0;
+	char name[16];
+	safef(name, sizeof(name), "a%d", ++id);
+	freez(&ag->name);
+	ag->name = name;
+	altGraphXTabOut(ag, f);
+	ag->name = NULL;
+	}
     altGraphXFree(&ag);
     freeGeneGraph(&gg);
     }
@@ -310,6 +318,7 @@ for (chromStart = pslList; chromStart != NULL; chromStart = chromEnd)
         {
 	dnaSeqFree(&chrom);
 	chrom = nibTwoCacheSeq(nibTwo, chromName);
+	toLowerN(chrom->dna, chrom->size);
 	verbose(2, "Loaded %d bases in %s\n", chrom->size, chromName);
 	}
 
