@@ -404,6 +404,17 @@ autoTranslate 0
 type genePred
 otherDb tetNig1
 
+track blastCe3WB
+shortLabel C. elegans Proteins
+longLabel C. elegans Proteins
+group genes
+priority 2002
+visibility hide
+colorChromDefault off
+type psl protein
+pred ce3.blastWBPep01
+blastRef ce3.blastWBRef01
+
 track blastDm2FB
 shortLabel D. mel. Proteins (dm2)
 longLabel D. melanogaster Proteins (dm2)
