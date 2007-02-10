@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.5 2007/02/09 00:51:23 galt Exp $";
+static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.6 2007/02/10 00:21:37 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -130,6 +130,7 @@ fprintf(f, "strain C57BL/6\n");
 fprintf(f, "age 56\n");
 fprintf(f, "sex male\n");
 fprintf(f, "bodyPart brain\n");
+fprintf(f, "contributor Boe A.,Dang C.,Jeung D.,Luong L.,Sunkin S.,Sutram M.,Youngstrom B.,Lein E.,Jones A.,ABA ABA,ABI ABI,Allen Institute for Brain Science,Allen Brain Atlas,\n");
 fprintf(f, "acknowledgement "
     "Thanks to the Allen Institute for Brain "
     "Science, particularly to Andrew Boe, Chinh Dang, Darren Jeung, Lon "
