@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.2 2006/11/06 21:50:26 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.3 2007/02/10 00:23:10 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -1019,6 +1019,9 @@ are usually taken from read pair data.
 </LI>
 <LI><B>Clone</B> - gaps between supercontigs linked by the physical map.  
 In general, these are represented by 1,000 <em>N</em>s  in the assembly.  
+
+*** Developer: look for this kind of gap placement:
+
 Clone gaps of 3,000,000 have been placed at the end of chrX and at the 
 beginning of all other chromosomes.  
 </LI>
