@@ -38,7 +38,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.34 2007/02/05 04:46:42 kent Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.35 2007/02/10 02:04:53 kent Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -516,7 +516,7 @@ return bk;
 struct hash *allChainsHash(char *fileName)
 /** Hash all the chains in a given file by their ids. */
 {
-struct hash *hash = newHash(0);
+struct hash *hash = newHash(18);
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct chain *chain;
 struct chain *chainList = NULL;
@@ -595,7 +595,8 @@ return chain;
 
 int chainBlockCoverage(struct chain *chain, int start, int end,
 		       int* blockStarts, int *blockSizes, int blockCount)
-/* Calculate how many of the blocks are in a chain. */
+/* Calculate how many of the blocks are covered at both block begin and
+ * end by a chain. */
 {
 struct cBlock *cBlock = NULL, *boxInList=NULL;
 int blocksCovered = 0;
@@ -620,8 +621,13 @@ for(i=0; i<blockCount; i++)
     int blockEnd = blockStarts[i] + blockSizes[i];
     for(cBlock = boxInList; cBlock != NULL && cBlock->tStart < end; cBlock = cBlock->next)
 	{
+	//    CCCCCC  CCCCC       CCCCCC    CCC  CCCC
+	//     BBB   BBBB    BBB BBBBBBBB        BBBB
+	//     yes    no     no     no      no   yes?
+	// JK - if (cBlock->tStart <= blockStart && cBlock->tEnd >= blockStart) ?
 	if(cBlock->tStart < blockStart && cBlock->tEnd > blockStart)
 	    startFound = TRUE;
+	// JK - if (startFound && cBlock->tStart <= blockEnd && cBlock->tEnd >= blockEnd) ?
 	if(startFound && cBlock->tStart < blockEnd && cBlock->tEnd > blockEnd)
 	    {
 	    blocksCovered++;
@@ -837,7 +843,7 @@ return (ag->vTypes[vertex] == ggHardStart || ag->vTypes[vertex] == ggHardEnd);
 }
 
 int vertexForPosition(struct altGraphX *ag, int position, struct orthoAgReport *agRep)
-/** Return the vetex that occurs at position otherwise return -1. */
+/** Return the vertex that occurs at position otherwise return -1. */
 {
 int i;
 int v = -1;
@@ -854,6 +860,7 @@ return v;
 }
 
 void printIntArray(int *array, int count)
+/** Print array of integers to stdout. */
 {
 int i;
 for(i=0; i<count; i++)
@@ -908,7 +915,7 @@ void outputSpeciesExon(struct altGraphX *ag, int v1, int v2)
 struct bed bed;
 static char name[256];
 int *vPos = ag->vPositions;
-boolean softEndsOk = !optionExists("hardEndsOnly");
+boolean softEndsOk = !optionExists("hardEndsOnly");	// JK - always TRUE
 if((isHardVertex(ag, v1) && isHardVertex(ag,v2)) || softEndsOk)
     {
     safef(name, sizeof(name), "%s.%d.%d", ag->name, v1, v2);
@@ -923,8 +930,10 @@ if((isHardVertex(ag, v1) && isHardVertex(ag,v2)) || softEndsOk)
     }
 }
 
-int findBestOrthoStartByOverlap(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm,
-				struct chain *chain, int *vMap, int softStart, int hardEnd,  bool reverse )
+int findBestOrthoStartByOverlap(struct altGraphX *ag, bool **em, 
+				struct altGraphX *orthoAg, bool **orthoEm,
+				struct chain *chain, int *vMap, 
+				int softStart, int hardEnd,  bool reverse )
 /** Look for a good match for softStart by looking an edge in
     orthoAg that overlaps well with softStart->hardEnd in orthologous
     genome using chain to check for overlap. */
@@ -957,6 +966,10 @@ for(i=0; i<oVCount; i++)
 	    overlap = rangeIntersection(qs, qe, oEnd, oStart);
 	else
 	    overlap = rangeIntersection(qs, qe, oStart, oEnd);
+	// JK - I'm confused why the (overlap < 2*min(abs(qs-qe),abs(oStart-oEnd))
+	//      clause is needed.  By definition of overlap I thought you'd have
+	//                overlap < min(abs(qs-qe),abs(oStart-oEnd)
+	// Perhaps replace this with an assert to this affect inside the if block?
 	if(overlap > bestOverlap && (overlap < 2*min(abs(qs-qe),abs(oStart-oEnd))))
 	    {
 	    overlap = bestOverlap;
@@ -1002,6 +1015,7 @@ for(i=0; i<oVCount; i++)
 	    overlap = rangeIntersection(qs, qe, oEnd, oStart);
 	else
 	    overlap = rangeIntersection(qs, qe, oStart, oEnd);
+	// JK - similar concerns about second part of if here....
 	if(overlap > bestOverlap  && (overlap < 2*min(abs(qs-qe),abs(oStart-oEnd))))
 	    {
 	    overlap = bestOverlap;
@@ -1178,6 +1192,7 @@ void findSoftStartsEnds(struct altGraphX *ag, bool **em, struct altGraphX *ortho
 /** Transcription start and end in much more variable than splice sites.
     Map soft vertexes by looking for a vertex in the orthologous
     graph with an edge that overlaps. */
+// JK - This looks like a good thing to watch as it processes single exon genes.
 {
 int i=0,j=0;
 int vCount = ag->vertexCount;
@@ -1247,21 +1262,23 @@ edgeNum = getEdgeNum(ag, v1, v2);
 e = slElementFromIx(ag->evidence, edgeNum);
 se->conf = e->evCount;
 
-/* Check edge in ag for alt-splicing, by checking to se if this edge
- * has been connected to any other vertices. */
+/* Check edge in ag for alt-splicing, by checking to see if the 
+ * second vertex has been connected to any other vertices other than first. */
 if(agEm[v1][v2])
     {
     eCount =0;
     for(k=v2; k<vCount; k++)
 	{
+	// JK note - the se->soft part of this if seems like it would open the door
+	// for a leaky termination signal to be counted as alt-splicing.
 	if(agEm[v1][k] && (ag->vTypes[k] == ggHardStart || ag->vTypes[k] == ggHardEnd || se->soft))
 	    eCount++;
 	}
     if(eCount > 1)
 	se->alt = TRUE;
     }
-/* Check edge in common subgraph for alt-splicing, by checking to se
- * if this edge has been connected to any other vertices. */
+/* Check edge in common subgraph for alt-splicing, by checking to see if the 
+ * second vertex has been connected to any other vertices other than first. */
 if(commonEm[v1][v2])
     {
     eCount=0;
@@ -1636,6 +1653,8 @@ for(i=0;i<vCount; i++)
 		}
 	    else if(trumpValue(oldEv, ag) >= trumpNum && !isSoftEdge(ag, i, j))
 		match = TRUE;
+	    // JK - Ah, here is where soft edges (from single exon genes?) get downweighted
+	    // some more!
 	    else if(trumpValue(oldEv, ag) >= floor(1.5*trumpNum) && isSoftEdge(ag, i, j))
 		match = TRUE;
 	    else if(possibleExons != NULL)
