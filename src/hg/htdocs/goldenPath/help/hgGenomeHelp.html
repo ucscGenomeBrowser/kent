@@ -136,182 +136,156 @@
 
 <!-------Format & Upload-------------------------->
 <A NAME="FormatUpload"></A>
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-      <TR><TD>
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-          <TR><TD>
- 	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
-	      <TR><TD>
-	    	<FONT SIZE="4"><B>&nbsp; Formatting &amp; Uploading Data </B></FONT>
-	      </TD></TR>
-	    </TABLE>
-	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	      <TR><TH HEIGHT=10></TH></TR>
-	      <TR><TD WIDTH=10>&nbsp;</TD><TD>
-		<P>
-		</P>
+ <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+ <TR><TD>
+  <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR><TD>
+    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+    <TR><TD>
+    <FONT SIZE="4"><B>&nbsp; Formatting &amp; Uploading Data </B></FONT>
+    </TD></TR>
+    </TABLE>
+     <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+     <TR><TH HEIGHT=10></TH></TR>
+     <TR><TD WIDTH=10>&nbsp;</TD><TD>
+     <P>
+     </P>
 
 <!-------Formatting Data------------------------->
 <A NAME="Format"></A>
-	        <B><FONT SIZE="3" COLOR="#0000FF">Formatting Data</FONT></B>
-		<P>
-		Genome Graphs allows you to upload data from files that reside 
-		on your computer. Several file formats are accepted by the 
-		program.  For all formats there is a single line for each marker. 
-		Each line starts with information on the marker, and ends with 
-		the numerical values associated with that marker. The markers 
-		can be of one of the following types:
-		</P>
+  <B><FONT SIZE="3" COLOR="#0000FF">Formatting Data</FONT></B>
+  <P>Genome Graphs allows you to upload data from files that reside 
+  on your computer. Several file formats are accepted by the 
+  program.  For all formats there is a single line for each marker. 
+  Each line starts with information on the marker, and ends with 
+  the numerical values associated with that marker. The markers 
+  can be of one of the following types:</P>
 
-		<table>
-		<tbody><tr><td valign="top" width="20">&mdash;</td><td><b>chromosome 
-		base: </b> e.g. <TT>chr1 130000</TT> (Note that the first base 
-		in a chromosome is considered position 0.) 
-		</td></tr>
+  <table>
+  <tbody><tr><td valign="top" width="20">&mdash;</td>
+  <td><b>chromosome base: </b> e.g. <TT>chr1 130000</TT> 
+  (Note that the first base in a chromosome is considered position 0.)
+  </td></tr>
 
-		<tr><td valign="top" width="20">&mdash;</td><td><b>STS Marker: </b>
-		e.g. <TT>RH75228</TT>
-		</td></tr>
+  <tr><td valign="top" width="20">&mdash;</td>
+  <td><b>STS Marker:</b> e.g. <TT>RH75228</TT>
+  </td></tr>
 
-		<tr><td valign="top" width="20">&mdash;</td><td><b>dbSNP rsID: </b>
-		e.g. <TT>rs12345</TT>
-		</td></tr>
+  <tr><td valign="top" width="20">&mdash;</td>
+  <td><b>dbSNP rsID:</b> e.g. <TT>rs12345</TT>
+  </td></tr>
 
-		<tr><td valign="top" width="20">&mdash;</td><td><b>Affymetrix 500k 
-		Gene Chip: </b>e.g. <TT>SNP_A-1780270</TT>
-		</td></tr>
+  <tr><td valign="top" width="20">&mdash;</td>
+  <td><b>Affymetrix 500k Gene Chip:</b> e.g. <TT>SNP_A-1780270</TT>
+  </td></tr>
 
-		<tr><td valign="top" width="20">&mdash;</td><td><b>Illumina HumanHap300 
-		Bead Chip: </b>e.g. <TT>rs12345</TT>
-		</td></tr>
-		</table>
+  <tr><td valign="top" width="20">&mdash;</td>
+  <td><b>Illumina HumanHap300 Bead Chip: </b>e.g. <TT>rs12345</TT>
+  </td></tr>
+  </table>
 
-		<P>
-		The marker-value pairs in each line of the file can be separated 
-		with a single space, a tab, or a comma. The file can 
-		contain multiple values for each marker.  In that case, a 
-		separate graph will be created for each value column in the 
-		input file.
-		</P>
+  <P>The marker-value pairs in each line of the file can be separated 
+  with a single space, a tab, or a comma. The file can 
+  contain multiple values for each marker.  In that case, a 
+  separate graph will be created for each value column in the input file.</P>
+  <P>For example, <B>chromosome base</B> markers with only one 
+  value associated with the marker would be entered like this:</P>
 
-		<P>
-		For example, <B>chromosome base</B> markers with only one 
-		value associated with the marker would be entered like this:
-		</P>
+  <TT>chrX 100000 1.23</TT>
 
-		<TT>chrX 100000 1.23</TT>
+  <P><B>dbSNP rsID</B> markers with two values associated 
+  with the marker would be entered like this:</P>
 
-		<P>
-		<B>dbSNP rsID</B> markers with two values associated 
-		with the marker would be entered like this:
-		</P>
+  <TT>rs10218492 0.384 0.882</TT>
 
-		<TT>rs10218492 0.384 0.882</TT>
+  <P>The Genome Graph program will map the marker IDs to the genome. 
+  In cases where the marker maps to more than one location in 
+  the genome, the value(s) in your input file will be associated 
+  with each location.</P>
 
-		<P>
-		The Genome Graph program will map the marker IDs to the genome. 
-		In cases where the marker maps to more than one location in 
-		the genome, the value(s) in your input file will be associated 
-		with each location.
-		</P>
-
-		<P>
-		Note that markers can only be mapped to assemblies for which 
-		there already exists a track of the type that contains your 
-		marker type. You can not, for example, use dbSNP rsID markers 
-		for the cow genome, as it does not have a SNP track.
-		</P>
-	        <P>
+  <P>Note that markers can only be mapped to assemblies for which 
+  there already exists a track of the type that contains your 
+  marker type. You can not, for example, use dbSNP rsID markers 
+  for the cow genome, as it does not have a SNP track.</P>
+  <P>
 
 <!-------Uploading Data---------------------------->
 <A NAME="Upload"></A>
-	        <HR>
-	        <B><FONT SIZE="3" COLOR="#0000FF">Uploading Data</FONT></B>
-	        <P>
-		Once you have created your input file, you must upload it to 
-		Genome Graphs. From the main Genome Graphs page, choose your 
-		clade, genome, and assembly to which your data pertains.
-		If you are unsure of the UCSC assembly name, you can check 
-		<A HREF="../../FAQ/FAQreleases#release1">this</A> page. 
-		Now, press the upload button to go to the upload page.
-		</P>
-		<P>
-		To upload a file in any of the supported formats, locate the 
-		file on your computer using the controls next to <B>file 
-		name</B>, and then submit. The other controls on this form are 
-		optional, though filling them out will sometimes enhance the 
-		display. In general the controls that default to &qout;best 
-		guess&quot; can be left alone, since the guess is almost always 
-		correct. 
-		The controls for display min and max values and connecting 
-		lines can be set later via the configuration page as well. 
-		Here is a description of each control.
-		</P>
+  <HR>
+  <B><FONT SIZE="3" COLOR="#0000FF">Uploading Data</FONT></B>
+
+  <P>Once you have created your input file, you must upload it to 
+  Genome Graphs. From the main Genome Graphs page, choose your 
+  clade, genome, and assembly to which your data pertains.
+  If you are unsure of the UCSC assembly name, you can check 
+  <A HREF="../../FAQ/FAQreleases#release1">this</A> page. 
+  Now, press the upload button to go to the upload page.</P>
+
+  <P>To upload a file in any of the supported formats, locate the 
+  file on your computer using the controls next to <B>file 
+  name</B>, and then submit. The other controls on this form are 
+  optional, though filling them out will sometimes enhance the 
+  display. In general the controls that default to &qout;best 
+  guess&quot; can be left alone, since the guess is almost always 
+  correct.</P>
+
+  <P>The controls for display min and max values and connecting 
+  lines can be set later via the configuration page as well. 
+  Here is a description of each control.</P>
+
 <A NAME="Controls"></A>
+  <UL>
+  <LI><B>name of data set:</B> Displayed in graph drop-down in 
+   Genome Graphs and as the track name in Genome Browser. Only the
+   first 16 characters are visible in some contexts. For data 
+   sets with multiple graphs, this is the first part of the 
+   name, shared with all members of the data set.</LI>
 
-		<UL>
-		<LI><B>name of data set:</B> Displayed in graph drop-down in 
-		Genome Graphs and as the track name in Genome Browser. Only 
-		the 
-		first 16 characters are visible in some contexts. For data 
-		sets with multiple graphs, this is the first part of the 
-		name, shared with all members of the data set.</LI>
+  <LI><B>description:</B>  A short sentence describing the 
+   data set. Displayed in the Genome Graphs and Genome Browser 
+   configuration pages, and as the center label in the Genome Browser.</LI>
 
-		<LI><B>description:</B>  A short sentence describing the 
-		data set. Displayed in the Genome Graphs and Genome Browser 
-		configuration pages, and as the center label in the Genome 
-		Browser.</LI>
+  <LI><B>file format:</B> Controls whether the upload file is 
+   a tab-separated, comma-separated, or space separated table.</LI>
 
-		<LI><B>file format:</B> Controls whether the upload file is 
-		a tab-separated, comma-separated, or space separated table.
-		</LI>
+  <LI><B>markers are:</B> Describes how to map the data to 
+   chromosomes. The choices are that either the first column of the 
+   file is an ID of some sort, or the first column is a chromosome 
+   and the next a base. The IDs can be SNP rs numbers, STS marker 
+   names or ID's from any of the supported genotyping platforms.</LI>
 
-		<LI><B>markers are:</B> Describes how to map the data to 
-		chromosomes. The choices are that either the first column 
-		of the 
-		file is an ID of some sort, or the first column is a 
-		chromosome 
-		and the next a base. The IDs can be SNP rs numbers, STS marker 
-		names or ID's from any of the supported genotyping platforms.
-                </LI>
+  <LI><B>column labels:</B> Controls whether the first row of the 
+   upload file is interpreted as labels or data. If the 
+   first row contains text in the numerical fields, or if the 
+   mapping fields are empty, it is interpreted by &quot;best 
+   guess&quot; as labels. This is generally correct, but you can 
+   override this interpretation by explicitly setting the control.</LI>
 
-		<LI><B>column labels:</B> Controls whether the first row of 
-		the 
-		upload file is interpreted as labels or data. If the 
-		first row contains text in the numerical fields, or if the 
-		mapping fields are empty, it is interpreted by &quot;best 
-		guess&quot; as labels. This is generally correct, but you can 
-		override this interpretation by explicitly setting the control.
-		</LI>
+  <LI><B>display min value/max value:</B> Set the range of the 
+   data set that will be plotted. If left blank, the range will 
+   be taken from the min/max values in the data set itself. For 
+   all data sets to share the same scale, you will usually need 
+   to set this.</LI>
 
-		<LI><B>display min value/max value:</B> Set the range of the 
-		data set that will be plotted. If left blank, the range will 
-		be taken from the min/max values in the data set itself. For 
-		all data sets to share the same scale, you will usually need 
-                to set this.</LI>
+  <LI><B>label values:</B> A comma-separated list of numbers 
+   for the vertical axis. If left blank, the axis will be 
+   labeled at the 1/3 and 2/3 points of your data range.</LI>
 
-		<LI><B>label values:</B> A comma-separated list of numbers 
-		for the vertical axis. If left blank, the axis will be 
-		labeled at the 1/3 and 2/3 points of your data range.</LI>
+  <LI><B>draw connecting lines:</B> Lines are drawn connecting data points 
+   that are separated by this number of bases or fewer.</LI>
 
-		<LI><B>draw connecting lines:</B> Lines are drawn connecting 
-                data points that are separated by this number of bases or 
-		fewer.</LI>
-
-		<LI><B>file name:</B> The controls here let you select 
-		which file on your computer to upload.</LI>
-		<UL>
-
-
-		</P>
-		<P>
-	      </TD><TD WIDTH=15></TD></TR>
-	    </TABLE>
-	  <BR></TD></TR>
-	</TABLE>
-      </TD></TR>
-    </TABLE>
-    <P>
+  <LI><B>file name:</B> The controls here let you select 
+   which file on your computer to upload.</LI>
+  <UL>
+  </P>
+  <P>
+  </TD><TD WIDTH=15></TD></TR>
+  </TABLE>
+ <BR></TD></TR>
+ </TABLE>
+</TD></TR>
+</TABLE>
+<P>
 
 
 <!-------Quick Start------------------------->
