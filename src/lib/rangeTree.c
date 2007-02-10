@@ -40,6 +40,16 @@ struct range *r = lmCloneMem(tree->lm, &tempR, sizeof(tempR));
 rbTreeAdd(tree, r);
 }
 
+boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end)
+/* Return TRUE if start-end overlaps anything in tree */
+{
+struct range tempR;
+tempR.start = start;
+tempR.end = end;
+tempR.val = NULL;
+return rbTreeFind(tree, &tempR) != NULL;
+}
+
 static struct range *rangeList;
 
 static void rangeListAdd(void *v)

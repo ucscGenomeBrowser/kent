@@ -24,6 +24,9 @@ int rangeCmp(void *va, void *vb);
 void rangeTreeAdd(struct rbTree *tree, int start, int end);
 /* Add range to tree, merging with existing ranges if need be. */
 
+boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end);
+/* Return TRUE if start-end overlaps anything in tree */
+
 struct range *rangeTreeFindEnclosing(struct rbTree *tree, int start, int end);
 /* Find item in range tree that encloses range between start and end 
  * if there is any such item. */
