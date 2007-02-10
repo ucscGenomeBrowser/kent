@@ -16,7 +16,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.44 2007/02/09 23:53:06 hiram Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.45 2007/02/10 00:19:33 hiram Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -344,8 +344,8 @@ struct tempName psTn;
 struct tempName psTn2;
 char *pdfFile = NULL;
 
-makeTempName(&psTn, "pbt", ".eps");
-makeTempName(&psTn2,"pbt2",".eps");
+trashDirFile(&psTn, "pbt", "pbt", ".eps");
+trashDirFile(&psTn2, "pbt", "pbt2", ".eps");
 
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
