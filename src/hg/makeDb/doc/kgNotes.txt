@@ -66,15 +66,15 @@ foreach f (*.bed)
     	-weightMrna -localMem -consensus \
 	-chromNib=/cluster/data/mm8/nib/$c.nib
 end
-cat *.agx > ../mouse.agx
 cd ..
+cat altSplice/*.agx > ../mouse.agx
 
 # Clean up all but final mouse.agx
 rm -r mrnaIn altSplice clusterPsl
 
-# Unpack chains and nets and split by chromosome
+# Unpack chains and nets, apply synteny filter and split by chromosome
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
-zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netSplit stdin nets
+zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netFilter -syn stdin | netSplit stdin nets
 cd ..
 
 # Get exonophy
