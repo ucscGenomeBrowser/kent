@@ -5,7 +5,7 @@
 #include "tokenizer.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.5 2006/07/17 19:35:30 markd Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.6 2007/02/11 21:43:15 kent Exp $";
 
 /* n.b. switched double/float from %f to %g to partially address losing
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g
@@ -89,8 +89,10 @@ if (isdigit(tkz->string[0]))
     }
 else if (isalpha(tkz->string[0]))
     {
+#ifdef OLD
     if (obj->isSimple)
         tokenizerErrAbort(tkz, "simple objects can't include variable length arrays\n");
+#endif /* OLD */
     col->linkedSizeName = cloneString(tkz->string);
     col->linkedSize = mustFindColumn(obj, col->linkedSizeName);
     col->linkedSize->isSizeLink = TRUE;
