@@ -438,15 +438,7 @@ if (start == subChain->tStart)
 if (end == subChain->tEnd)
     *retEndExact = TRUE;
 if ((subChain->qStrand == '-'))
-    {
     *retRev = TRUE;
-#ifdef UNUSED
-    boolean swap;
-    swap = *retStartExact;
-    *retStartExact = *retEndExact;
-    *retEndExact = swap;
-#endif /* UNUSED */
-    }
 *retCoverage = chainBasesInBlocks(subChain);
 chainFree(&toFree);
 return TRUE;
@@ -512,7 +504,6 @@ for (i=0; i<inGraph->edgeCount; ++i)
     int inEndIx = inGraph->edgeEnds[i];
     int inStart = inGraph->vPositions[inStartIx];
     int inEnd  = inGraph->vPositions[inEndIx];
-    int inSize = inEnd - inStart;
     enum ggVertexType inStartType = inGraph->vTypes[inStartIx];
     enum ggVertexType inEndType = inGraph->vTypes[inEndIx];
 
