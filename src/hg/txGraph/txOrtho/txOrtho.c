@@ -330,7 +330,6 @@ struct altGraphX *orthoGraphsViaChain(struct altGraphX *inGraph, struct chain *c
 boolean reverse = FALSE;
 struct altGraphX *orthoGraphList = NULL;
 loadOrthoAgxList(inGraph, chain, orthoGraphHash, &reverse, &orthoGraphList);
-uglyf("%s maps to %d orthoAgx. Reverse %d.\n", inGraph->name, slCount(orthoGraphList), reverse);
 return orthoGraphList;
 }
 
@@ -431,11 +430,6 @@ struct chain *subChain = NULL, *toFree = NULL;
 chainSubsetOnT(chain, start, end, &subChain, &toFree);
 if (!subChain)
     return FALSE;
-uglyf("subChain at %s:%d-%d is %s:%d-%d (%c) %s:%d-%d\n",
-     subChain->tName, start, end, 
-     subChain->tName, subChain->tStart, subChain->tEnd,
-     subChain->qStrand,
-     subChain->qName, subChain->qStart, subChain->qEnd);
 *retRev = FALSE;
 *retStartExact = *retEndExact = FALSE;
 qChainRangePlusStrand(subChain, retStart, retEnd);
@@ -465,15 +459,12 @@ void writeOverlappingEdges(
 	struct altGraphX *graph, boolean orthoRev, FILE *f)
 /* Write edges of graph that overlap correctly to f */
 {
-boolean outerOk = FALSE;
 if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
     {
     if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
 	{
-	outerOk = TRUE;
 	int edgeCount = graph->edgeCount;
 	int i;
-	boolean anyOverlap = FALSE;
 	for (i=0; i<edgeCount; ++i)
 	    {
 	    if (graph->edgeTypes[i] == edgeType)
@@ -485,13 +476,8 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 		int oEnd = graph->vPositions[oEndIx];
 		// enum ggVertexType oEndType = graph->vTypes[oEndIx];
 		int overlap = rangeIntersection(start, end, oStart, oEnd);
-		uglyf("  %d %s %s:%d-%d overlap %d\n",
-			i, (edgeType == ggExon ? "exon" : "intron"),
-			graph->tName, oStart, oEnd, overlap);
 		if (overlap > 0)
 		    {
-		    anyOverlap = TRUE;
-		    boolean wroteIt = FALSE;
 		    enum ggVertexType rStartType = startType, rEndType = endType;
 		    if (orthoRev)
 		        {
@@ -502,34 +488,15 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 			{
 			if (rEndType == ggSoftStart || rEndType == ggSoftEnd || end == oEnd)
 			    {
-			    uglyf("%s\t%d\t%d\t%s\t%d\t%d\n", 
-				(edgeType == ggExon ? "exon" : "intron"),
-				startType, endType, inChrom, inStart, inEnd);
 			    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", 
 				(edgeType == ggExon ? "exon" : "intron"),
 				startType, endType, inChrom, inStart, inEnd);
-			    wroteIt = TRUE;
 			    }
-			}
-		    if (!wroteIt)
-			{
-			uglyf("skipping %s, rStartType=%d, rEndType=%d, start=%d, oStart=%d, end=%d, oEnd=%d\n",
-			    (edgeType == ggExon ? "exon" : "intron"),
-			    rStartType, rEndType, start, oStart, end, oEnd);
 			}
 		    }
 		}
 	    }
-	if (!anyOverlap)
-	    uglyf("no overlap %s %s: start %d, startType %d, exact %d, end %d, endType %d, exact %d\n",
-		(edgeType == ggExon ? "exon" : "intron"),
-		graph->name, start, startType, startMappedExact, end, endType, endMappedExact);
 	}
-    }
-if (!outerOk)
-    {
-    uglyf("dismissed based on end exactitude: startType %d, exact %d, endType %d, exact %d\n",
-    	startType, startMappedExact, endType, endMappedExact);
     }
 }
 
@@ -554,18 +521,9 @@ for (i=0; i<inGraph->edgeCount; ++i)
     if (edgeMap(inStart, inEnd, chain,  &orthoStart, &orthoEnd,
 	    &orthoRev, &orthoStartExact, &orthoEndExact, &orthoCoverage))
 	{
-	uglyf("edge type %s[%d %d] mapped %d of %d\n", (edgeType == ggIntron ? "intron" : "exon"),
-		inStartType, inEndType, orthoCoverage, inSize);
-	uglyf("Mapped edge %s:%d-%d (%c) %s:%d(%c)-%d(%c)\n",
-		inGraph->tName, inStart, inEnd,
-		(orthoRev ? '-' : '+'),
-		chain->qName, 
-		orthoStart, (orthoStartExact ? '!' : '?'),
-		orthoEnd, (orthoEndExact ? '!' : '?'));
 	writeOverlappingEdges(edgeType, inGraph->tName,
 		inStart, orthoStart, inStartType, orthoStartExact, 
 		inEnd, orthoEnd, inEndType, orthoEndExact, orthoGraph, orthoRev, f);
-	uglyf("\n");
 	}
     }
 }

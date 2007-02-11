@@ -12,7 +12,7 @@ txOrtho: $O ${MYLIBS}
 
 test:
 	txOrtho input.agx input.chain input.net inOrtho.agx output.edges -verbose=0
-	diff output.edges expected.edges
+	diff expected.edges output.edges
 
 clean:
 	rm -f $O
