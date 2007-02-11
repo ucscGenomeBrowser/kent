@@ -7,19 +7,21 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.3 2006/05/11 00:55:22 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.4 2007/02/11 04:22:45 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"bin", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
     {"skipInvalid", OPTION_BOOLEAN},
+    {"noValidate", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 boolean gBin = FALSE;
 boolean gGenePredExt = FALSE;
 boolean gSkipInvalid = FALSE;
+boolean gNoValidate = FALSE;
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -38,7 +40,9 @@ errAbort("%s\n"
          "   -skipInvalid - instead of aborting on genePreds that\n"
          "    don't pass genePredCheck, generate a warning and skip\n"
          "    them.  You really should fix the data instead of using\n"
-         "    this option\n", msg);
+         "    this option\n"
+         "   -noValidate - don't validate genePred; for debugging only!!\n",
+         msg);
 }
 
 void setupTable(struct sqlConnection *conn, char *table)
@@ -87,7 +91,7 @@ unsigned optFields = (genePredIdFld|genePredName2Fld|genePredCdsStatFld|genePred
 if (gGenePredExt && ((optFields & optFields) != optFields))
     errAbort("genePred %s doesn't have fields required for -genePredExt", gene->name);
 
-if (checkGene(gene))
+if (gNoValidate || checkGene(gene))
     {
     if (!gGenePredExt)
         gene->optFields = 0;  /* omit optional fields */
@@ -136,6 +140,7 @@ if (argc < 4)
 gBin = optionExists("bin");
 gGenePredExt = optionExists("genePredExt");
 gSkipInvalid = optionExists("skipInvalid");
+gNoValidate = optionExists("noValidate");
 hgLoadGenePred(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
