@@ -47,7 +47,8 @@ switch(type)
 void txgWriteXml(struct txGraph *graph, FILE *f)
 /* Write out graph as xml. */
 {
-fprintf(f, "<txGraph>\n");
+fprintf(f, "<txGraph name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\">\n",
+	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd);
 int i;
 fprintf(f, "  <vertices count=\"%d\">\n", graph->vertexCount);
 for (i=0; i<graph->vertexCount; ++i)
@@ -57,7 +58,7 @@ for (i=0; i<graph->vertexCount; ++i)
 	graph->vPositions[i], i);
     }
 fprintf(f, "  </vertices>\n");
-fprintf(f, "  <edges>\n");
+fprintf(f, "  <edges count=\"%d\">\n", graph->edgeCount);
 struct txEvList *evList =  graph->evidence;
 for (i=0; i<graph->edgeCount; ++i)
     {
@@ -67,9 +68,9 @@ for (i=0; i<graph->edgeCount; ++i)
     char *t2 = ggVertexTypeAsString(graph->vTypes[i2]);
     int x1 = graph->vPositions[i1];
     int x2 = graph->vPositions[i2];
-    fprintf(f, "    <edge type=\"%s\" t1=\"%s\" t2=\"%s\" x1=\"%d\" x2=\"%d\" i1=\"%d\" i2=\"%d\"", 
+    fprintf(f, "    <edge type=\"%s\" t1=\"%s\" t2=\"%s\" size=\"%d\" x1=\"%d\" x2=\"%d\" i1=\"%d\" i2=\"%d\"", 
         (graph->edgeTypes[i] == ggExon ? "exon  " : "intron"),
-	t1, t2, x1, x2, i1, i2);
+	t1, t2, x2-x1, x1, x2, i1, i2);
     if (showEvidence)
         {
 	fprintf(f, ">\n");

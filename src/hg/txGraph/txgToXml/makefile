@@ -10,5 +10,9 @@ txgToXml: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txgToXml $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txgToXml${EXE}
 
+test:
+	txgToXml input.txg output.xml
+	diff expected.xml output.xml
+
 clean:
 	rm -f $O
