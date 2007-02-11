@@ -38,6 +38,9 @@ enum ggVertexType
     ggRangeStart  /* 6 An start that could happen anywhere in a range. */
     };
 
+char *ggVertexTypeAsString(enum ggVertexType type);
+/* Return string corresponding to vertex type. */
+
 enum ggEdgeType
 /* classifies an edge */
 {

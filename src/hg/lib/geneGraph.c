@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.20 2007/02/10 06:10:20 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.21 2007/02/11 03:30:26 kent Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -486,6 +486,23 @@ for(i=0; i<gg1->mrnaRefCount; i++)
 return allOk;
 }
 
+char uglyc(enum ggEdgeType type)
+{
+switch (type)
+    {
+    case ggSoftStart:
+        return '(';
+    case ggHardStart:
+        return '[';
+    case ggSoftEnd:
+        return ')';
+    case ggHardEnd:
+        return ']';
+    default:
+        return '?';
+    }
+}
+
 enum ggEdgeType ggClassifyEdge(struct geneGraph *gg, int v1, int v2)
 /* Classify and edge as ggExon or ggIntron. ggExon is not
  * necessarily coding. */
@@ -505,6 +522,9 @@ else
     errAbort("geneGraph::ggClassifyEdge() - "
 	     "Edge from %d -> %d has types %d-%d which isn't recognized as intron or exon.\n",
 	     v1, v2, vertices[v1].type, vertices[v2].type);
+uglyf("ggClassifyEdge %c %d %d %c as %s\n", uglyc(vertices[v1].type),
+	gg->vertices[v1].position, gg->vertices[v2].position, uglyc(vertices[v2].type),
+	(et == ggExon ? "exon" : "intron") );
 #ifdef NEVER
 // What the heck? Flipping inton/exon on strand???? */
 if(sameString(gg->strand, "-"))
@@ -518,6 +538,25 @@ if(sameString(gg->strand, "-"))
 return et;
 }
 
+
+char *ggVertexTypeAsString(enum ggVertexType type)
+/* Return string corresponding to vertex type. */
+{
+switch(type)
+    {
+    case ggSoftStart:
+        return "(";
+    case ggHardStart:
+        return "[";
+    case ggSoftEnd:
+        return ")";
+    case ggHardEnd:
+        return "]";
+    default:
+        errAbort("Unknown type %d", type);
+	return "unknown";
+    }
+}
 
 
 struct altGraphX *ggToAltGraphX(struct geneGraph *gg)
