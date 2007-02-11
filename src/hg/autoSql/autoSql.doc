@@ -116,10 +116,14 @@ lists.  This routine allows AutoSQL to have objects that contain other objects.
 TYPES OF OBJECTS
 
 AutoSQL has three types of objects:  
-	simple - objects that contain no variable sized arrays.  
-	object - objects that can contain variable sized arrays.  A next
+	object - objects that appear in lists.  A next
 	         pointer is automatically inserted as the first field in
-		 the C structure corresponding to an object.
+		 the C structure corresponding to an object.  What look
+		 like arrays in the .as file will be linked lists in memory.
+	simple - objects that don't appear in lists.  Arrays in the .as file
+	         will also be arrays in memory.  At one point simple objects
+		 could not include strings or variable-sized arrays, but this
+		 limitation has been lifted.
 	table  - like objects, but the program generates a SQL as well
 	         as a C definition.
 

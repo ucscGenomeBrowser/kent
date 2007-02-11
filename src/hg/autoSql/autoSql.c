@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.30 2007/01/26 05:28:26 markd Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.31 2007/02/11 20:47:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -390,7 +390,6 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct asObject *obj = col->obType;
 		fprintf(f, "{\n");
-		fprintf(f, "int sizeOne;\n");
 		fprintf(f, "char *s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
@@ -985,13 +984,160 @@ dyStringFree(&stringFrees);
 dyStringFree(&update);
 }
 
+boolean internalsNeedFree(struct asObject *table)
+/* Return TRUE if the fields of a table contain strings,
+ * dynamically sized arrays, objects, or anything else that
+ * needs freeing. */
+{
+struct asColumn *col;
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
+    struct asObject *obj;
+
+    if ((obj = col->obType) != NULL)
+	{
+	if (type == t_object)
+	    return TRUE;
+	else if (type == t_simple)
+	    {
+	    if (internalsNeedFree(obj))
+	        return TRUE;
+	    if (col->isArray && !col->fixedSize)
+		return TRUE;
+	    }
+	}
+    else
+	{
+	if (col->isList)
+	    {
+	    if (lt->stringy)
+		return TRUE;
+	    if (!col->fixedSize)
+		return TRUE;
+	    }
+	else
+	    {
+	    if (lt->stringy)
+		return TRUE;
+	    }
+	}
+    }
+return FALSE;
+}
+
+void printIndent(int spaces, FILE *f, char *format, ...)
+/* Write out to file indented by spaces. */
+{
+va_list args;
+va_start(args, format);
+spaceOut(f, spaces);
+vfprintf(f, format, args);
+va_end(args);
+}
+
+void freeFields(struct asObject *table, int spaces, FILE *f)
+/* Write out code to free fields of a table. */
+{
+struct asColumn *col;
+for (col = table->columnList; col != NULL; col = col->next)
+    {
+    struct asTypeInfo *lt = col->lowType;
+    enum asTypes type = lt->type;
+    char *colName = col->name;
+    struct asObject *obj;
+
+    if ((obj = col->obType) != NULL)
+	{
+	if (type == t_object)
+	    {
+	    printIndent(spaces, f, "%sFreeList(&el->%s);\n", obj->name, colName);
+	    }
+	else if (type == t_simple)
+	    {
+	    if (internalsNeedFree(obj))
+	        {
+		if (col->isArray)
+		    {
+		    if (col->fixedSize)
+			{
+			printIndent(spaces, f, "%sFreeInternals(el->%s, ArraySize(el->%s));\n",
+				obj->name, colName, colName);
+			}
+		    else
+		        {
+			printIndent(spaces, f, "%sFreeInternals(el->%s, el->%s);\n",
+				obj->name, colName, col->linkedSizeName);
+			printIndent(spaces, f, "freeMem(el->%s);\n", colName);
+			}
+		    }
+		else
+		    {
+		    printIndent(spaces, f, "%sFreeInternals(&el->%s, 1);\n", obj->name, colName);
+		    }
+		}
+	    else
+		{
+		if (col->isArray && !col->fixedSize)
+		    {
+		    printIndent(spaces, f, "freeMem(el->%s);\n", colName);
+		    }
+		}
+	    }
+	}
+    else
+	{
+	if (col->isList)
+	    {
+	    if (lt->stringy)
+		{
+		printIndent(spaces, f, "/* All strings in %s are allocated at once, so only need to free first. */\n", colName);
+		printIndent(spaces, f, "if (el->%s != NULL)\n", colName);
+		printIndent(spaces, f, "    freeMem(el->%s[0]);\n", colName);
+		}
+	    if (!col->fixedSize)
+		{
+		printIndent(spaces, f, "freeMem(el->%s);\n", colName);
+		}
+	    }
+	else
+	    {
+	    if (lt->stringy)
+		{
+		printIndent(spaces, f, "freeMem(el->%s);\n", colName);
+		}
+	    }
+	}
+    }
+}
+
+void makeFreeInternals(struct asObject *table, FILE *f, FILE *hFile)
+/* Make a function that frees the internal parts if any of a simple object 
+ * (or array of simple objects). */
+{
+char *tableName = table->name;
+
+fprintf(hFile, "void %sFreeInternals(struct %s *array, int count);\n", tableName, tableName);
+fprintf(hFile, "/* Free internals of a simple type %s (one not put on a list). */\n\n", tableName);
+
+fprintf(f, "void %sFreeInternals(struct %s *array, int count)\n", tableName, tableName);
+fprintf(f, "/* Free internals of a simple type %s (one not put on a list). */\n", tableName);
+fprintf(f, "{\n");
+fprintf(f, "int i;\n");
+fprintf(f, "for (i=0; i<count; ++i)\n");
+fprintf(f, "    {\n");
+fprintf(f, "    struct %s *el = &array[i];\n", tableName);
+freeFields(table, 4, f);
+fprintf(f, "    }\n");
+fprintf(f, "}\n\n");
+}
 
 
 void makeFree(struct asObject *table, FILE *f, FILE *hFile)
 /* Make function that frees a dynamically allocated table. */
 {
 char *tableName = table->name;
-struct asColumn *col;
 
 fprintf(hFile, "void %sFree(struct %s **pEl);\n", tableName, tableName);
 fprintf(hFile, "/* Free a single dynamically allocated %s such as created\n", tableName);
@@ -1004,45 +1150,7 @@ fprintf(f, "{\n");
 fprintf(f, "struct %s *el;\n", tableName);
 fprintf(f, "\n");
 fprintf(f, "if ((el = *pEl) == NULL) return;\n");
-for (col = table->columnList; col != NULL; col = col->next)
-    {
-    struct asTypeInfo *lt = col->lowType;
-    enum asTypes type = lt->type;
-    char *colName = col->name;
-    struct asObject *obj;
-
-    if ((obj = col->obType) != NULL)
-	{
-	if (type == t_object)
-	    fprintf(f, "%sFreeList(&el->%s);\n", obj->name, colName);
-	else if (type == t_simple)
-	    {
-	    if (col->isArray && !col->fixedSize)
-		fprintf(f, "freeMem(el->%s);\n", colName);
-	    }
-	}
-    else
-	{
-	if (col->isList)
-	    {
-	    if (lt->stringy)
-		{
-		fprintf(f, "/* All strings in %s are allocated at once, so only need to free first. */\n", colName);
-		fprintf(f, "if (el->%s != NULL)\n", colName);
-		fprintf(f, "    freeMem(el->%s[0]);\n", colName);
-		}
-	    if (!col->fixedSize)
-		fprintf(f, "freeMem(el->%s);\n", colName);
-	    }
-	else
-	    {
-	    if (lt->stringy)
-		{
-		fprintf(f, "freeMem(el->%s);\n", colName);
-		}
-	    }
-	}
-    }
+freeFields(table, 0, f);
 fprintf(f, "freez(pEl);\n");
 fprintf(f, "}\n\n");
 }
@@ -1282,7 +1390,12 @@ if (obj->isTable)
         }
     }
 makeCommaIn(obj, cFile, hFile);
-if (!obj->isSimple)
+if (obj->isSimple)
+    {
+    if (internalsNeedFree(obj))
+	makeFreeInternals(obj, cFile, hFile);
+    }
+else
     {
     makeFree(obj, cFile, hFile);
     makeFreeList(obj, cFile, hFile);

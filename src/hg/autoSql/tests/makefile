@@ -10,7 +10,7 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 # .as not used as dependencies, as we want to run everything each time
-test:   hardTest  newTest  polyTest  mainTest \
+test:   hardTest  newTest  polyTest  simpleTest mainTest \
         testHarness dbLinkTest symTest symColsTest
 
 # hardTest
@@ -35,6 +35,13 @@ polyTest: mkout
 	${DIFF} expected/polyTest.h   output/polyTest.h  
 	${DIFF} expected/polyTest.c   output/polyTest.c  
 
+# simpleTest
+simpleTest: mkout
+	${AUTOSQL} input/simpleTest.as output/simpleTest
+	${DIFF} expected/simpleTest.sql output/simpleTest.sql
+	${DIFF} expected/simpleTest.h   output/simpleTest.h  
+	${DIFF} expected/simpleTest.c   output/simpleTest.c  
+
 # test
 mainTest: mkout
 	${AUTOSQL} input/mainTest.as output/mainTest
@@ -43,7 +50,7 @@ mainTest: mkout
 	${DIFF} expected/mainTest.c   output/mainTest.c  
 
 # testHarness
-testHarness: output/mainTest.o testHarness.o
+testHarness: output/mainTest.o output/simpleTest.o testHarness.o
 	${CC} -o testHarness testHarness.o output/mainTest.o ${MYLIBS} ${MYSQLLIBS}
 	./testHarness > output/testHarness.out
 	${DIFF} expected/testHarness.out output/testHarness.out
