@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.30 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.31 2007/02/11 06:00:42 kent Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -622,7 +622,7 @@ enum agColor
 
 bool **altGraphXCreateEdgeMatrix(struct altGraphX *ag)
 /* create an edgematix from an altGraphX, free this with 
- * agFreeEdgeMatrix */
+ * agFreeEdgeMatrix. */
 {
 int numVert = ag->vertexCount;
 bool **em;
@@ -640,9 +640,39 @@ for(i=0; i< numVert; i++)
 
 /* fill in edges */
 for(i=0; i < numEdges; i++)
-    em[eStarts[i]][eEnds[i]] = TRUE;
+    {
+    em[eStarts[i]][eEnds[i]] = ag->edgeTypes[i] + 1;
+    }
 return em;
 }
+
+static UBYTE  **altGraphXCreateEdgeTypePlusOneMatrix(struct altGraphX *ag)
+/* create an edgematix from an altGraphX, free this with 
+ * agFreeEdgeMatrix. Contents of edge matrix is edge-type + 1
+ * (so as to make ggExon non-zero) */
+{
+int numVert = ag->vertexCount;
+UBYTE **em;
+int i=0;
+int numEdges = ag->edgeCount;
+int *eStarts, *eEnds;
+eStarts = ag->edgeStarts;
+eEnds = ag->edgeEnds;
+
+assert(numVert > 0);
+/* allocate memory */
+AllocArray(em, numVert);
+for(i=0; i< numVert; i++)
+    AllocArray(em[i], numVert);
+
+/* fill in edges */
+for(i=0; i < numEdges; i++)
+    {
+    em[eStarts[i]][eEnds[i]] = ag->edgeTypes[i] + 1;
+    }
+return em;
+}
+
 
 void altGraphXFreeEdgeMatrix(bool ***pEm, int vertCount)
 /* Free an edge matrix. */
@@ -716,7 +746,7 @@ unsigned char *sVTypes = NULL;
 int *sVPositions = NULL;
 int vertCount = ag->vertexCount;
 int edgeCount = ag->edgeCount;
-bool **em = NULL;
+UBYTE **em = NULL;
 int i,j;
 
 /* convert vertices to translator order */
@@ -746,7 +776,7 @@ ag->edgeStarts = sEdgeStarts;
 freez(&ag->edgeEnds);
 ag->edgeEnds = sEdgeEnds;
 
-em = altGraphXCreateEdgeMatrix(ag);
+em = altGraphXCreateEdgeTypePlusOneMatrix(ag);
 
 /* sort our edges by the same translator order,
  * use edge matrix to do so. */
@@ -767,13 +797,14 @@ for(i=0; i<vertCount; i++)
 	    {
 	    ag->edgeStarts[edgeCount] = i;
 	    ag->edgeEnds[edgeCount] = j;
+	    ag->edgeTypes[edgeCount] = em[i][j] - 1;  /* obscure code. */
 	    slAddHead(&ag->evidence, agEv[i][j]);
 	    edgeCount++;
 	    }
 	}
     }
 slReverse(&ag->evidence);
-altGraphXFreeEdgeMatrix(&em, vertCount);
+altGraphXFreeEdgeMatrix((bool ***)(&em), vertCount);
 for(i=0; i<vertCount; i++)
     freez(&agEv[i]);
 freez(&agEv);
