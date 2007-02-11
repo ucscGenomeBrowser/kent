@@ -5,7 +5,7 @@
 #ifndef TXGRAPH_H
 #define TXGRAPH_H
 
-#define TXGRAPH_NUM_COLS 15
+#define TXGRAPH_NUM_COLS 11
 
 struct txGraph
 /* A transcription graph. Includes alt-splicing info. */
@@ -17,13 +17,9 @@ struct txGraph
     char *name;	/* Human readable name. */
     char strand[3];	/* + or - strand. */
     unsigned vertexCount;	/* Number of vertices in graph. */
-    unsigned char *vTypes;	/* Type for each vertex. */
-    int *vPositions;	/* Position in target for each vertex. */
+    struct txVertex *vertices;	/* Splice sites and soft ends. */
     unsigned edgeCount;	/* Number of edges in graph. */
-    int *edgeStarts;	/* Array with start vertex of edges. */
-    int *edgeEnds;	/* Array with end vertex of edges. */
-    struct txEvList *evidence;	/* array of evidence tables containing references to mRNAs that support a particular edge. */
-    int *edgeTypes;	/* Type for each edge, ggExon, ggIntron, etc. */
+    struct txEdge *edges;	/* Edges (introns and exons) in graph. */
     int sourceCount;	/* Number of sources of evidence. */
     struct txSource *sources;	/* Sources of evidence. */
     };
@@ -65,36 +61,62 @@ void txGraphOutput(struct txGraph *el, FILE *f, char sep, char lastSep);
 #define txGraphCommaOut(el,f) txGraphOutput(el,f,',',',');
 /* Print out txGraph as a comma separated list including final comma. */
 
-#define TXEVLIST_NUM_COLS 2
+#define TXVERTEX_NUM_COLS 2
 
-struct txEvList
-/* List of mRNA/ests supporting a given edge */
+struct txVertex
+/* A vertex in a transcription graph - splice site or soft end */
     {
-    struct txEvList *next;  /* Next in singly linked list. */
-    int evCount;	/* number of ests evidence */
-    struct txEvidence *evList;	/* ids of mrna evidence, indexes into altGraphx->mrnaRefs */
+    int position;	/* Vertex position in genomic sequence. */
+    unsigned char type;	/* Vertex type - ggSoftStart, ggHardStart, etc. */
     };
 
-struct txEvList *txEvListCommaIn(char **pS, struct txEvList *ret);
-/* Create a txEvList out of a comma separated string. 
+struct txVertex *txVertexCommaIn(char **pS, struct txVertex *ret);
+/* Create a txVertex out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new txEvList */
+ * return a new txVertex */
 
-void txEvListFree(struct txEvList **pEl);
-/* Free a single dynamically allocated txEvList such as created
- * with txEvListLoad(). */
+void txVertexOutput(struct txVertex *el, FILE *f, char sep, char lastSep);
+/* Print out txVertex.  Separate fields with sep. Follow last field with lastSep. */
 
-void txEvListFreeList(struct txEvList **pList);
-/* Free a list of dynamically allocated txEvList's */
+#define txVertexTabOut(el,f) txVertexOutput(el,f,'\t','\n');
+/* Print out txVertex as a line in a tab-separated file. */
 
-void txEvListOutput(struct txEvList *el, FILE *f, char sep, char lastSep);
-/* Print out txEvList.  Separate fields with sep. Follow last field with lastSep. */
+#define txVertexCommaOut(el,f) txVertexOutput(el,f,',',',');
+/* Print out txVertex as a comma separated list including final comma. */
 
-#define txEvListTabOut(el,f) txEvListOutput(el,f,'\t','\n');
-/* Print out txEvList as a line in a tab-separated file. */
+#define TXEDGE_NUM_COLS 5
 
-#define txEvListCommaOut(el,f) txEvListOutput(el,f,',',',');
-/* Print out txEvList as a comma separated list including final comma. */
+struct txEdge
+/* An edge in a transcription graph - exon or intron */
+    {
+    struct txEdge *next;  /* Next in singly linked list. */
+    int startIx;	/* Index of start in vertex array */
+    int endIx;	/* Index of end in vertex array */
+    unsigned char type;	/* Edge type */
+    int evCount;	/* Count of evidence */
+    struct txEvidence *evList;	/* List of evidence */
+    };
+
+struct txEdge *txEdgeCommaIn(char **pS, struct txEdge *ret);
+/* Create a txEdge out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new txEdge */
+
+void txEdgeFree(struct txEdge **pEl);
+/* Free a single dynamically allocated txEdge such as created
+ * with txEdgeLoad(). */
+
+void txEdgeFreeList(struct txEdge **pList);
+/* Free a list of dynamically allocated txEdge's */
+
+void txEdgeOutput(struct txEdge *el, FILE *f, char sep, char lastSep);
+/* Print out txEdge.  Separate fields with sep. Follow last field with lastSep. */
+
+#define txEdgeTabOut(el,f) txEdgeOutput(el,f,'\t','\n');
+/* Print out txEdge as a line in a tab-separated file. */
+
+#define txEdgeCommaOut(el,f) txEdgeOutput(el,f,',',',');
+/* Print out txEdge as a comma separated list including final comma. */
 
 #define TXEVIDENCE_NUM_COLS 3
 
@@ -133,7 +155,6 @@ void txEvidenceOutput(struct txEvidence *el, FILE *f, char sep, char lastSep);
 struct txSource
 /* Source of evidence in graph. */
     {
-    struct txSource *next;  /* Next in singly linked list. */
     char *type;	/* Type: refSeq, mrna, est, etc. */
     char *accession;	/* GenBank accession. With type forms a key */
     };
@@ -143,12 +164,8 @@ struct txSource *txSourceCommaIn(char **pS, struct txSource *ret);
  * This will fill in ret if non-null, otherwise will
  * return a new txSource */
 
-void txSourceFree(struct txSource **pEl);
-/* Free a single dynamically allocated txSource such as created
- * with txSourceLoad(). */
-
-void txSourceFreeList(struct txSource **pList);
-/* Free a list of dynamically allocated txSource's */
+void txSourceFreeInternals(struct txSource *array, int count);
+/* Free internals of a simple type txSource (one not put on a list). */
 
 void txSourceOutput(struct txSource *el, FILE *f, char sep, char lastSep);
 /* Print out txSource.  Separate fields with sep. Follow last field with lastSep. */

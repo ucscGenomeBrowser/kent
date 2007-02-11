@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txGraph.h"
 
-static char const rcsid[] = "$Id: txGraph.c,v 1.3 2007/02/09 01:15:01 kent Exp $";
+static char const rcsid[] = "$Id: txGraph.c,v 1.4 2007/02/11 23:19:39 kent Exp $";
 
 struct txGraph *txGraphLoad(char **row)
 /* Load a txGraph from row fetched with select * from txGraph
@@ -18,61 +18,48 @@ struct txGraph *ret;
 
 AllocVar(ret);
 ret->vertexCount = sqlUnsigned(row[5]);
-ret->edgeCount = sqlUnsigned(row[8]);
-ret->sourceCount = sqlSigned(row[13]);
+ret->edgeCount = sqlUnsigned(row[7]);
+ret->sourceCount = sqlSigned(row[9]);
 ret->tName = cloneString(row[0]);
 ret->tStart = sqlSigned(row[1]);
 ret->tEnd = sqlSigned(row[2]);
 ret->name = cloneString(row[3]);
 safecpy(ret->strand, sizeof(ret->strand), row[4]);
 {
-int sizeOne;
-sqlUbyteDynamicArray(row[6], &ret->vTypes, &sizeOne);
-assert(sizeOne == ret->vertexCount);
-}
-{
-int sizeOne;
-sqlSignedDynamicArray(row[7], &ret->vPositions, &sizeOne);
-assert(sizeOne == ret->vertexCount);
-}
-{
-int sizeOne;
-sqlSignedDynamicArray(row[9], &ret->edgeStarts, &sizeOne);
-assert(sizeOne == ret->edgeCount);
-}
-{
-int sizeOne;
-sqlSignedDynamicArray(row[10], &ret->edgeEnds, &sizeOne);
-assert(sizeOne == ret->edgeCount);
+int i;
+char *s = row[6];
+AllocArray(ret->vertices, ret->vertexCount);
+for (i=0; i<ret->vertexCount; ++i)
+    {
+    s = sqlEatChar(s, '{');
+    txVertexCommaIn(&s, &ret->vertices[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
 }
 {
 int i;
-char *s = row[11];
+char *s = row[8];
 for (i=0; i<ret->edgeCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->evidence, txEvListCommaIn(&s, NULL));
+    slSafeAddHead(&ret->edges, txEdgeCommaIn(&s, NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
-slReverse(&ret->evidence);
-}
-{
-int sizeOne;
-sqlSignedDynamicArray(row[12], &ret->edgeTypes, &sizeOne);
-assert(sizeOne == ret->edgeCount);
+slReverse(&ret->edges);
 }
 {
 int i;
-char *s = row[14];
+char *s = row[10];
+AllocArray(ret->sources, ret->sourceCount);
 for (i=0; i<ret->sourceCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->sources, txSourceCommaIn(&s, NULL));
+    txSourceCommaIn(&s, &ret->sources[i]);
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
-slReverse(&ret->sources);
 }
 return ret;
 }
@@ -83,7 +70,7 @@ struct txGraph *txGraphLoadAll(char *fileName)
 {
 struct txGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -101,7 +88,7 @@ struct txGraph *txGraphLoadAllByChar(char *fileName, char chopper)
 {
 struct txGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -131,21 +118,13 @@ ret->vertexCount = sqlUnsignedComma(&s);
 {
 int i;
 s = sqlEatChar(s, '{');
-AllocArray(ret->vTypes, ret->vertexCount);
+AllocArray(ret->vertices, ret->vertexCount);
 for (i=0; i<ret->vertexCount; ++i)
     {
-    ret->vTypes[i] = sqlUnsignedComma(&s);
-    }
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
-{
-int i;
-s = sqlEatChar(s, '{');
-AllocArray(ret->vPositions, ret->vertexCount);
-for (i=0; i<ret->vertexCount; ++i)
-    {
-    ret->vPositions[i] = sqlSignedComma(&s);
+    s = sqlEatChar(s, '{');
+    if(s[0] != '}')        txVertexCommaIn(&s, &ret->vertices[i]);
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -154,47 +133,14 @@ ret->edgeCount = sqlUnsignedComma(&s);
 {
 int i;
 s = sqlEatChar(s, '{');
-AllocArray(ret->edgeStarts, ret->edgeCount);
-for (i=0; i<ret->edgeCount; ++i)
-    {
-    ret->edgeStarts[i] = sqlSignedComma(&s);
-    }
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
-{
-int i;
-s = sqlEatChar(s, '{');
-AllocArray(ret->edgeEnds, ret->edgeCount);
-for (i=0; i<ret->edgeCount; ++i)
-    {
-    ret->edgeEnds[i] = sqlSignedComma(&s);
-    }
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
-{
-int i;
-s = sqlEatChar(s, '{');
 for (i=0; i<ret->edgeCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    if(s[0] != '}')        slSafeAddHead(&ret->evidence, txEvListCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->edges, txEdgeCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
-slReverse(&ret->evidence);
-s = sqlEatChar(s, '}');
-s = sqlEatChar(s, ',');
-}
-{
-int i;
-s = sqlEatChar(s, '{');
-AllocArray(ret->edgeTypes, ret->edgeCount);
-for (i=0; i<ret->edgeCount; ++i)
-    {
-    ret->edgeTypes[i] = sqlSignedComma(&s);
-    }
+slReverse(&ret->edges);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
@@ -202,14 +148,14 @@ ret->sourceCount = sqlSignedComma(&s);
 {
 int i;
 s = sqlEatChar(s, '{');
+AllocArray(ret->sources, ret->sourceCount);
 for (i=0; i<ret->sourceCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    if(s[0] != '}')        slSafeAddHead(&ret->sources, txSourceCommaIn(&s,NULL));
+    if(s[0] != '}')        txSourceCommaIn(&s, &ret->sources[i]);
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
-slReverse(&ret->sources);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
@@ -226,13 +172,10 @@ struct txGraph *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->tName);
 freeMem(el->name);
-freeMem(el->vTypes);
-freeMem(el->vPositions);
-freeMem(el->edgeStarts);
-freeMem(el->edgeEnds);
-txEvListFreeList(&el->evidence);
-freeMem(el->edgeTypes);
-txSourceFreeList(&el->sources);
+freeMem(el->vertices);
+txEdgeFreeList(&el->edges);
+txSourceFreeInternals(el->sources, el->sourceCount);
+freeMem(el->sources);
 freez(pEl);
 }
 
@@ -272,61 +215,14 @@ fprintf(f, "%u", el->vertexCount);
 fputc(sep,f);
 {
 int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->vertexCount; ++i)
+/* Loading txVertex list. */
     {
-    fprintf(f, "%u", el->vTypes[i]);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-{
-int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->vertexCount; ++i)
-    {
-    fprintf(f, "%d", el->vPositions[i]);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-fprintf(f, "%u", el->edgeCount);
-fputc(sep,f);
-{
-int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->edgeCount; ++i)
-    {
-    fprintf(f, "%d", el->edgeStarts[i]);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-{
-int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->edgeCount; ++i)
-    {
-    fprintf(f, "%d", el->edgeEnds[i]);
-    fputc(',', f);
-    }
-if (sep == ',') fputc('}',f);
-}
-fputc(sep,f);
-{
-int i;
-/* Loading txEvList list. */
-    {
-    struct txEvList *it = el->evidence;
+    struct txVertex *it = el->vertices;
     if (sep == ',') fputc('{',f);
-    for (i=0; i<el->edgeCount; ++i)
+    for (i=0; i<el->vertexCount; ++i)
         {
         fputc('{',f);
-        txEvListCommaOut(it,f);
-        it = it->next;
+        txVertexCommaOut(&it[i],f);
         fputc('}',f);
         fputc(',',f);
         }
@@ -334,15 +230,24 @@ int i;
     }
 }
 fputc(sep,f);
+fprintf(f, "%u", el->edgeCount);
+fputc(sep,f);
 {
 int i;
-if (sep == ',') fputc('{',f);
-for (i=0; i<el->edgeCount; ++i)
+/* Loading txEdge list. */
     {
-    fprintf(f, "%d", el->edgeTypes[i]);
-    fputc(',', f);
+    struct txEdge *it = el->edges;
+    if (sep == ',') fputc('{',f);
+    for (i=0; i<el->edgeCount; ++i)
+        {
+        fputc('{',f);
+        txEdgeCommaOut(it,f);
+        it = it->next;
+        fputc('}',f);
+        fputc(',',f);
+        }
+    if (sep == ',') fputc('}',f);
     }
-if (sep == ',') fputc('}',f);
 }
 fputc(sep,f);
 fprintf(f, "%d", el->sourceCount);
@@ -356,8 +261,7 @@ int i;
     for (i=0; i<el->sourceCount; ++i)
         {
         fputc('{',f);
-        txSourceCommaOut(it,f);
-        it = it->next;
+        txSourceCommaOut(&it[i],f);
         fputc('}',f);
         fputc(',',f);
         }
@@ -367,15 +271,42 @@ int i;
 fputc(lastSep,f);
 }
 
-struct txEvList *txEvListCommaIn(char **pS, struct txEvList *ret)
-/* Create a txEvList out of a comma separated string. 
+struct txVertex *txVertexCommaIn(char **pS, struct txVertex *ret)
+/* Create a txVertex out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new txEvList */
+ * return a new txVertex */
 {
 char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->position = sqlSignedComma(&s);
+ret->type = sqlUnsignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void txVertexOutput(struct txVertex *el, FILE *f, char sep, char lastSep) 
+/* Print out txVertex.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%d", el->position);
+fputc(sep,f);
+fprintf(f, "%u", el->type);
+fputc(lastSep,f);
+}
+
+struct txEdge *txEdgeCommaIn(char **pS, struct txEdge *ret)
+/* Create a txEdge out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new txEdge */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->startIx = sqlSignedComma(&s);
+ret->endIx = sqlSignedComma(&s);
+ret->type = sqlUnsignedComma(&s);
 ret->evCount = sqlSignedComma(&s);
 {
 int i;
@@ -395,33 +326,39 @@ s = sqlEatChar(s, ',');
 return ret;
 }
 
-void txEvListFree(struct txEvList **pEl)
-/* Free a single dynamically allocated txEvList such as created
- * with txEvListLoad(). */
+void txEdgeFree(struct txEdge **pEl)
+/* Free a single dynamically allocated txEdge such as created
+ * with txEdgeLoad(). */
 {
-struct txEvList *el;
+struct txEdge *el;
 
 if ((el = *pEl) == NULL) return;
 txEvidenceFreeList(&el->evList);
 freez(pEl);
 }
 
-void txEvListFreeList(struct txEvList **pList)
-/* Free a list of dynamically allocated txEvList's */
+void txEdgeFreeList(struct txEdge **pList)
+/* Free a list of dynamically allocated txEdge's */
 {
-struct txEvList *el, *next;
+struct txEdge *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    txEvListFree(&el);
+    txEdgeFree(&el);
     }
 *pList = NULL;
 }
 
-void txEvListOutput(struct txEvList *el, FILE *f, char sep, char lastSep) 
-/* Print out txEvList.  Separate fields with sep. Follow last field with lastSep. */
+void txEdgeOutput(struct txEdge *el, FILE *f, char sep, char lastSep) 
+/* Print out txEdge.  Separate fields with sep. Follow last field with lastSep. */
 {
+fprintf(f, "%d", el->startIx);
+fputc(sep,f);
+fprintf(f, "%d", el->endIx);
+fputc(sep,f);
+fprintf(f, "%u", el->type);
+fputc(sep,f);
 fprintf(f, "%d", el->evCount);
 fputc(sep,f);
 {
@@ -509,29 +446,16 @@ ret->accession = sqlStringComma(&s);
 return ret;
 }
 
-void txSourceFree(struct txSource **pEl)
-/* Free a single dynamically allocated txSource such as created
- * with txSourceLoad(). */
+void txSourceFreeInternals(struct txSource *array, int count)
+/* Free internals of a simple type txSource (one not put on a list). */
 {
-struct txSource *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->type);
-freeMem(el->accession);
-freez(pEl);
-}
-
-void txSourceFreeList(struct txSource **pList)
-/* Free a list of dynamically allocated txSource's */
-{
-struct txSource *el, *next;
-
-for (el = *pList; el != NULL; el = next)
+int i;
+for (i=0; i<count; ++i)
     {
-    next = el->next;
-    txSourceFree(&el);
+    struct txSource *el = &array[i];
+    freeMem(el->type);
+    freeMem(el->accession);
     }
-*pList = NULL;
 }
 
 void txSourceOutput(struct txSource *el, FILE *f, char sep, char lastSep) 

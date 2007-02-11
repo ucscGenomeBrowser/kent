@@ -445,7 +445,7 @@ return TRUE;
 }
 
 void writeOverlappingEdges(
-	enum ggEdgeType edgeType, char *inChrom,
+	enum ggEdgeType edgeType, struct altGraphX *inGraph,
 	int inStart, int start, enum ggVertexType startType, boolean startMappedExact, 
 	int inEnd, int end, enum ggVertexType endType, boolean endMappedExact, 
 	struct altGraphX *graph, boolean orthoRev, FILE *f)
@@ -480,9 +480,11 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 			{
 			if (rEndType == ggSoftStart || rEndType == ggSoftEnd || end == oEnd)
 			    {
-			    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", 
+			    fprintf(f, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%s\t%s\t%d\t%d\n", 
+				inGraph->name,
 				(edgeType == ggExon ? "exon" : "intron"),
-				startType, endType, inChrom, inStart, inEnd);
+				startType, endType, inGraph->tName, inStart, inEnd,
+				graph->name, graph->tName, start, end);
 			    }
 			}
 		    }
@@ -512,7 +514,7 @@ for (i=0; i<inGraph->edgeCount; ++i)
     if (edgeMap(inStart, inEnd, chain,  &orthoStart, &orthoEnd,
 	    &orthoRev, &orthoStartExact, &orthoEndExact, &orthoCoverage))
 	{
-	writeOverlappingEdges(edgeType, inGraph->tName,
+	writeOverlappingEdges(edgeType, inGraph,
 		inStart, orthoStart, inStartType, orthoStartExact, 
 		inEnd, orthoEnd, inEndType, orthoEndExact, orthoGraph, orthoRev, f);
 	}

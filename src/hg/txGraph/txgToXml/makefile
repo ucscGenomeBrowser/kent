@@ -11,7 +11,7 @@ txgToXml: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txgToXml${EXE}
 
 test:
-	txgToXml input.txg output.xml
+	txgToXml -verbose=0 input.txg output.xml
 	diff expected.xml output.xml
 
 clean:

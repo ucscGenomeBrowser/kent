@@ -138,76 +138,60 @@ enum ggEdgeType ggClassifyEdge(struct geneGraph *gg, int v1, int v2);
  * necessarily coding. */
 // JK - duplicate code from geneGraph.h.  Fix
 
-struct txGraph *txGraphFromGeneGraph(struct geneGraph *gg)
+struct txGraph *txGraphFromGeneGraph(struct geneGraph *gg, char *name)
 /* Convert a gene graph to an altGraphX data structure for storage in
  * database. */
 {
 struct txGraph *tg = NULL;
 bool **em = gg->edgeMatrix;
-int edgeCount = 0;
 int totalVertexCount = gg->vertexCount;
 int usedVertexCount;
 int *translator;	/* Translates away unused vertices. */
-struct ggVertex *vertices = gg->vertices;
+struct ggVertex *ggVertices = gg->vertices;
 struct ggEvidence *ev = NULL;
 int i,j;
-UBYTE *vTypes;
-int *vPositions;
 
+/* We'll just write out the used vertices. Find them. */
 AllocArray(translator, totalVertexCount);
 usedVertexCount = countUsed(gg, totalVertexCount, translator);
-for (i=0; i<totalVertexCount; ++i)
-    {
-    bool *waysOut = em[i];
-    for (j=0; j<totalVertexCount; ++j)
-	if (waysOut[j] && gg->vertices[j].type != ggUnused)
-	    ++edgeCount;
-    }
+
 AllocVar(tg);
 snprintf(tg->strand, sizeof(tg->strand), "%s", gg->strand);
 tg->tName = cloneString(gg->tName);
 tg->tStart = gg->tStart;
 tg->tEnd = gg->tEnd;
-tg->name = cloneString("NA");
+tg->name = cloneString(naForNull(name));
 tg->vertexCount = usedVertexCount;
-tg->vTypes = AllocArray(vTypes, usedVertexCount);
-tg->vPositions = AllocArray(vPositions, usedVertexCount);
+AllocArray(tg->vertices, usedVertexCount);
 tg->sourceCount = gg->mrnaRefCount;
+AllocArray(tg->sources, tg->sourceCount);
 
 /* Cope with gg->mrnaRefs -> tg->sources conversion here. */
 for (i=0; i<tg->sourceCount; ++i)
     {
-    struct txSource *source;
-    AllocVar(source);
+    struct txSource *source = &tg->sources[i];
     source->type = cloneString(gg->mrnaTypes[i]);
     source->accession = cloneString(gg->mrnaRefs[i]);
-    slAddHead(&tg->sources, source);
     }
-slReverse(&tg->sources);
 
 /* convert vertexes */
 for (i=0,j=0; i<totalVertexCount; ++i)
     {
-    struct ggVertex *v = vertices+i;
+    struct ggVertex *v = ggVertices+i;
     if (v->type != ggUnused && vertexUsed(gg, i))
 	{
-	vTypes[j] = v->type;
-	vPositions[j] = v->position;
+	struct txVertex *tv = &tg->vertices[j];
+	tv->type = v->type;
+	tv->position = v->position;
 	++j;
 	}
     }
 
 /* convert edges */
-tg->edgeCount = edgeCount;
-AllocArray(tg->edgeStarts, edgeCount);
-AllocArray(tg->edgeEnds, edgeCount);
-AllocArray(tg->edgeTypes, edgeCount);
-tg->evidence = NULL;
-edgeCount = 0;
 for (i=0; i<totalVertexCount; ++i)
     {
     bool *waysOut = em[i];
-    if(gg->vertices[i].type == ggUnused)
+    if(ggVertices[i].type == ggUnused)
 	{	
 	for (j=0; j<totalVertexCount; ++j)
 	    {
@@ -218,13 +202,16 @@ for (i=0; i<totalVertexCount; ++i)
 	}
     for (j=0; j<totalVertexCount; ++j)
 	{
-	if (waysOut[j] && gg->vertices[j].type != ggUnused)
+	if (waysOut[j] && ggVertices[j].type != ggUnused)
 	    {
+	    /* Allocate edge and store basic info. */
+	    struct txEdge *edge;
+	    AllocVar(edge);
+	    edge->startIx = translator[i];
+	    edge->endIx = translator[j];
+	    edge->type = ggClassifyEdge(gg, i, j);
+
 	    /* Store the mrna evidence. */
-	    struct txEvList *evList;
-	    AllocVar(evList);
-	    evList->evCount = slCount(gg->evidence[i][j]);
-	    // evList->mrnaIds = AllocArray(evList->mrnaIds, evList->evCount);
 	    for(ev = gg->evidence[i][j]; ev != NULL; ev = ev->next)
 		{
 		struct txEvidence *txEv;
@@ -232,20 +219,18 @@ for (i=0; i<totalVertexCount; ++i)
 		txEv->sourceId = ev->id;
 		txEv->start = ev->start;
 		txEv->end = ev->end;
-		slAddHead(&evList->evList, txEv);
+		slAddHead(&edge->evList, txEv);
+		edge->evCount += 1;
 		}
-	    slReverse(&evList->evList);
-	    slAddHead(&tg->evidence, evList);
+	    slReverse(&edge->evList);
 
-	    /* Store the edge information. */
-	    tg->edgeStarts[edgeCount] = translator[i];
-	    tg->edgeEnds[edgeCount] = translator[j];
-	    tg->edgeTypes[edgeCount] = ggClassifyEdge(gg, i, j);
-	    ++edgeCount;
+	    /* Add edge to graph. */
+	    tg->edgeCount += 1;
+	    slAddHead(&tg->edges, edge);
 	    }
 	}
     }
-slReverse(&tg->evidence);
+slReverse(&tg->edges);
 freeMem(translator);
 return tg;
 }
@@ -275,19 +260,13 @@ struct ggMrnaCluster *mc, *mcList = ggClusterMrna(ci);
 verbose(1, "Reduced to %d clusters\n", slCount(mcList));
 for (mc = mcList; mc != NULL; mc = mc->next)
     {
+    static int id=0;
+    char name[16];
+    safef(name, sizeof(name), "a%d", ++id);
     struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
-    struct txGraph *tg = txGraphFromGeneGraph(gg);
+    struct txGraph *tg = txGraphFromGeneGraph(gg, name);
     if (tg != NULL)
-	{
-	static int id=0;
-	char name[16];
-	safef(name, sizeof(name), "a%d", ++id);
-	verbose(3, "writing %s\n", name);
-	freez(&tg->name);
-	tg->name = name;
 	txGraphTabOut(tg, f);
-	tg->name = NULL;
-	}
     freeGeneGraph(&gg);
     txGraphFree(&tg);
     }

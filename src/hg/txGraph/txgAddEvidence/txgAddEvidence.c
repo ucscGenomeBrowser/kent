@@ -97,16 +97,16 @@ if (lastSource != NULL && sameString(accession, lastSource->accession)
     return lastSourceIx;
     }
 struct txSource *source;
-int ix = 0;
 lastSource = NULL;
-for (source = txg->sources; source != NULL; source = source->next)
+int ix;
+for (ix=0; ix<txg->sourceCount; ++ix)
     {
+    source = &txg->sources[ix];
     if (sameString(accession, source->accession) && sameString(type, source->type))
 	{
         lastSource = source;
 	break;
 	}
-    ++ix;
     }
 if (lastSource)
     {
@@ -124,56 +124,53 @@ void addEvidenceRange(struct txGraph *txg,
 /* Search through txg, and if can find an edge meeting the
  * given specs, add evidence to it. */
 {
-int i;
-int *vPositions = txg->vPositions;
-for (i=0; i<txg->edgeCount; ++i)
+struct txVertex *v = txg->vertices;
+struct txEdge *edge;
+for (edge = txg->edges; edge != NULL; edge = edge->next)
     {
-    int iStart = txg->edgeStarts[i];
-    int iEnd = txg->edgeEnds[i];
-    int eStart = vPositions[iStart];
-    int eEnd = vPositions[iEnd];
+    int iStart = edge->startIx;
+    int iEnd = edge->endIx;
+    int eStart = v[iStart].position;
+    int eEnd = v[iEnd].position;
     if (rangeIntersection(eStart, eEnd, start, end) > 0)
         {
-	if (txg->edgeTypes[i] ==  edgeType)
+	if (edge->type ==  edgeType)
 	    {
 	    boolean doIt = TRUE;
 	    if (startType == ggHardStart || startType == ggHardEnd)
 		{
-		if (startType != txg->vTypes[iStart])
+		if (startType != v[iStart].type)
 		    doIt = FALSE;
 		if (eStart != start)
 		    doIt = FALSE;
 		}
 	    if (endType == ggHardEnd || endType == ggHardStart)
 		{
-		if (endType != txg->vTypes[iEnd])
+		if (endType != v[iEnd].type)
 		    doIt = FALSE;
 		if (eEnd != end)
 		    doIt = FALSE;
 		}
 	    if (doIt)
 	        {
-		uglyf("Adding evidence at %s:%d-%d to edge %d of %s\n", txg->tName, start, end, i, txg->name);
-		uglyf("evCount = %d\n", txg->evidence->evCount);
-		uglyf("slCount(evList) = %d\n", slCount(txg->evidence->evList));
+		verbose(2, "Adding evidence at %s:%d-%d to edge of %s\n", txg->tName, start, end, txg->name);
 		int sourceIx = getSourceIx(txg, sourceType, accession);
 		if (sourceIx < 0)
 		    {
-		    struct txSource *source;
-		    AllocVar(source);
+		    sourceIx = txg->sourceCount;
+		    txg->sources = ExpandArray(txg->sources, sourceIx, txg->sourceCount+1);
+		    struct txSource *source = &txg->sources[sourceIx];
 		    source->type = cloneString(sourceType);
 		    source->accession = cloneString(accession);
-		    slAddTail(&txg->sources, source);
-		    sourceIx = txg->sourceCount;
-		    txg->sourceCount += 1;
+		    txg->sourceCount = sourceIx + 1;
 		    }
 		struct txEvidence *ev;
 		AllocVar(ev);
 		ev->sourceId = sourceIx;
 		ev->start = start;
 		ev->end = end;
-		slAddTail(&txg->evidence->evList, ev);
-		txg->evidence->evCount += 1;
+		slAddTail(&edge->evList, ev);
+		edge->evCount += 1;
 		}
 	    }
 	}

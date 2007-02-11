@@ -49,14 +49,14 @@ lineFileClose(&lf);
 return hash;
 }
 
-double weightOfEvidence(struct txGraph *txg, struct txEvList *evidence, struct hash *weightHash)
+double weightOfEvidence(struct txGraph *txg, struct txEvidence *evList, struct hash *weightHash)
 /* Sum up weight of all evidence and return. */
 {
 struct txEvidence *ev;
 double total = 0;
-for (ev = evidence->evList; ev != NULL; ev = ev->next)
+for (ev = evList; ev != NULL; ev = ev->next)
     {
-    struct txSource *source = slElementFromIx(txg->sources, ev->sourceId);
+    struct txSource *source = &txg->sources[ev->sourceId];
     struct weight *weight = hashFindVal(weightHash, source->type);
     if (weight == NULL)
          warn("No weight of type %s\n", source->type);
@@ -69,32 +69,25 @@ return total;
 void txGraphTrimOne(struct txGraph *txg, struct hash *weightHash, double threshold)
 /* Trim down one graph. */
 {
-struct txEvList *evidence, *next;
-struct txEvList *newEvidenceList = NULL;
-int readIx = 0, writeIx = 0;
-for (evidence = txg->evidence; evidence != NULL; evidence = next)
+struct txEdge *edge, *next, *newList = NULL;
+for (edge = txg->edges; edge != NULL; edge = next)
     {
-    next = evidence->next;
-    double weight = weightOfEvidence(txg, evidence, weightHash);
-    verbose(3, "%s edge %d, evCount %d, weight %f\n", 
-    	txg->name, readIx, slCount(evidence->evList), weight);
+    next = edge->next;
+    double weight = weightOfEvidence(txg, edge->evList, weightHash);
+    verbose(3, "%s edge: evCount %d, weight %f\n", 
+    	txg->name, slCount(edge->evList), weight);
     if (weight < threshold)
         {
 	verbose(3, "  trimming\n");
+	txg->edgeCount -= 1;
 	}
     else
         {
-	txg->edgeStarts[writeIx] = txg->edgeStarts[readIx];
-	txg->edgeEnds[writeIx] = txg->edgeEnds[readIx];
-	txg->edgeTypes[writeIx] = txg->edgeTypes[readIx];
-	slAddHead(&newEvidenceList, evidence);
-	++writeIx;
+	slAddHead(&newList, edge);
 	}
-    ++readIx;
     }
-slReverse(&newEvidenceList);
-txg->evidence = newEvidenceList;
-txg->edgeCount = writeIx;
+slReverse(&newList);
+txg->edges = newList;
 }
 
 void txgTrim(char *inTxg, char *inWeights, char *asciiThreshold, char *outTxg)
@@ -110,7 +103,7 @@ struct txGraph *txg;
 FILE *f = mustOpen(outTxg, "w");
 for (txg = txgList; txg != NULL; txg = txg->next)
     {
-    verbose(2, "%s edgeCount %d, slCount(evidence) %d\n", txg->name, txg->edgeCount, slCount(txg->evidence));
+    verbose(2, "%s edgeCount %d\n", txg->name, txg->edgeCount);
     txGraphTrimOne(txg, weightHash, threshold);
     if (txg->edgeCount > 0)
 	txGraphTabOut(txg, f);

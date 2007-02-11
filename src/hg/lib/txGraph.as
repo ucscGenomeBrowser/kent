@@ -7,23 +7,29 @@ table txGraph
     string name;                    "Human readable name."
     char[2] strand;                 "+ or - strand."
     uint vertexCount;               "Number of vertices in graph."
-    ubyte[vertexCount] vTypes;      "Type for each vertex."
-    int[vertexCount] vPositions;    "Position in target for each vertex."
+    simple txVertex[vertexCount] vertices;   "Splice sites and soft ends."
     uint edgeCount;                 "Number of edges in graph."
-    int[edgeCount] edgeStarts;      "Array with start vertex of edges."
-    int[edgeCount] edgeEnds;        "Array with end vertex of edges."
-    object txEvList[edgeCount] evidence;  "array of evidence tables containing references to mRNAs that support a particular edge."
-    int[edgeCount] edgeTypes;       "Type for each edge, ggExon, ggIntron, etc."
-    int sourceCount;		     "Number of sources of evidence."
-    object txSource[sourceCount] sources; "Sources of evidence."
+    object txEdge[edgeCount] edges; "Edges (introns and exons) in graph."
+    int sourceCount;		    "Number of sources of evidence."
+    simple txSource[sourceCount] sources; "Sources of evidence."
    )
 
-object txEvList
-"List of mRNA/ests supporting a given edge"
-(
-    int evCount;                   "number of ests evidence"
-    object txEvidence [evCount] evList;         "ids of mrna evidence, indexes into altGraphx->mrnaRefs"
-)
+simple txVertex
+"A vertex in a transcription graph - splice site or soft end"
+    (
+    int position;	"Vertex position in genomic sequence."
+    ubyte type;		"Vertex type - ggSoftStart, ggHardStart, etc."
+    )
+
+object txEdge
+"An edge in a transcription graph - exon or intron"
+    (
+    int startIx;	"Index of start in vertex array"
+    int endIx;		"Index of end in vertex array"
+    ubyte type;		"Edge type"
+    int evCount;	"Count of evidence"
+    object txEvidence[evCount] evList; "List of evidence"
+    )
 
 object txEvidence
 "Information on evidence for an edge."
@@ -33,7 +39,7 @@ object txEvidence
     int end;		"End position"
     )
 
-object txSource
+simple txSource
 "Source of evidence in graph."
     (
     string type;   "Type: refSeq, mrna, est, etc."

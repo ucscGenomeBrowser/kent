@@ -11,13 +11,9 @@ CREATE TABLE txGraph (
     name varchar(255) not null,	# Human readable name.
     strand char(2) not null,	# + or - strand.
     vertexCount int unsigned not null,	# Number of vertices in graph.
-    vTypes longblob not null,	# Type for each vertex.
-    vPositions longblob not null,	# Position in target for each vertex.
+    vertices longblob not null,	# Splice sites and soft ends.
     edgeCount int unsigned not null,	# Number of edges in graph.
-    edgeStarts longblob not null,	# Array with start vertex of edges.
-    edgeEnds longblob not null,	# Array with end vertex of edges.
-    evidence longblob not null,	# array of evidence tables containing references to mRNAs that support a particular edge.
-    edgeTypes longblob not null,	# Type for each edge, ggExon, ggIntron, etc.
+    edges longblob not null,	# Edges (introns and exons) in graph.
     sourceCount int not null,	# Number of sources of evidence.
     sources longblob not null,	# Sources of evidence.
               #Indices

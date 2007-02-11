@@ -11,7 +11,7 @@ txgAddEvidence: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txgAddEvidence${EXE}
 
 test:
-	txgAddEvidence input.txg input.bed esttt output.txg
+	txgAddEvidence -hard input.txg input.bed esttt output.txg
 	diff expected.txg output.txg
 
 clean:

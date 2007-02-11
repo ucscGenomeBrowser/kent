@@ -47,37 +47,34 @@ switch(type)
 void txgWriteXml(struct txGraph *graph, FILE *f)
 /* Write out graph as xml. */
 {
-fprintf(f, "<txGraph name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\">\n",
-	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd);
+fprintf(f, "  <txGraph name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\" vertexCount=\"%d\" edgeCount=\"%d\">\n",
+	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd, graph->vertexCount, graph->edgeCount);
 int i;
-fprintf(f, "  <vertices count=\"%d\">\n", graph->vertexCount);
 for (i=0; i<graph->vertexCount; ++i)
     {
+    struct txVertex *v = &graph->vertices[i];
     fprintf(f, "    <vertex type=\"%s\" pos=\"%d\" i=\"%d\"/>\n",
-    	ggVertexTypeAsString(graph->vTypes[i]),
-	graph->vPositions[i], i);
+    	ggVertexTypeAsString(v->type), v->position, i);
     }
-fprintf(f, "  </vertices>\n");
-fprintf(f, "  <edges count=\"%d\">\n", graph->edgeCount);
-struct txEvList *evList =  graph->evidence;
-for (i=0; i<graph->edgeCount; ++i)
+struct txEdge *edge;
+for (edge = graph->edges; edge != NULL; edge = edge->next)
     {
-    int i1 = graph->edgeStarts[i];
-    int i2 = graph->edgeEnds[i];
-    char *t1 = ggVertexTypeAsString(graph->vTypes[i1]);
-    char *t2 = ggVertexTypeAsString(graph->vTypes[i2]);
-    int x1 = graph->vPositions[i1];
-    int x2 = graph->vPositions[i2];
+    int i1 = edge->startIx;
+    int i2 = edge->endIx;
+    char *t1 = ggVertexTypeAsString(graph->vertices[i1].type);
+    char *t2 = ggVertexTypeAsString(graph->vertices[i2].type);
+    int x1 = graph->vertices[i1].position;
+    int x2 = graph->vertices[i2].position;
     fprintf(f, "    <edge type=\"%s\" t1=\"%s\" t2=\"%s\" size=\"%d\" x1=\"%d\" x2=\"%d\" i1=\"%d\" i2=\"%d\"", 
-        (graph->edgeTypes[i] == ggExon ? "exon  " : "intron"),
+        (edge->type == ggExon ? "exon  " : "intron"),
 	t1, t2, x2-x1, x1, x2, i1, i2);
     if (showEvidence)
         {
 	fprintf(f, ">\n");
 	struct txEvidence *ev;	
-	for (ev = evList->evList; ev != NULL; ev = ev->next)
+	for (ev = edge->evList; ev != NULL; ev = ev->next)
 	    {
-	    struct txSource *source = slElementFromIx(graph->sources,ev->sourceId);
+	    struct txSource *source = &graph->sources[ev->sourceId];
 	    fprintf(f, "      <ev type=\"%s\" acc=\"%s\" x1=\"%d\" x2=\"%d\"/>\n",
 	    	source->type, source->accession, ev->start, ev->end);
 	    }
@@ -87,21 +84,22 @@ for (i=0; i<graph->edgeCount; ++i)
         {
 	fprintf(f, "/>\n");
 	}
-    evList = evList->next;
     }
-fprintf(f, "  </edges>\n");
-fprintf(f, "</txGraph>\n");
+fprintf(f, "  </txGraph>\n");
 }
 
 void txgToXml(char *inTxg, char *outXml)
 /* txgToXml - Convert txg to an XML format.. */
 {
 struct txGraph *txg, *txgList = txGraphLoadAll(inTxg);
+verbose(1, "loaded %d from %s\n", slCount(txgList), inTxg);
 FILE *f = mustOpen(outXml, "w");
+fprintf(f, "<txGraphList count=\"%d\">\n", slCount(txgList));
 for (txg = txgList; txg != NULL; txg = txg->next)
     {
     txgWriteXml(txg, f);
     }
+fprintf(f, "</txGraphList>\n");
 carefulClose(&f);
 }
 

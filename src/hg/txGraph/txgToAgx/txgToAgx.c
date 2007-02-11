@@ -25,6 +25,7 @@ static struct optionSpec options[] = {
 struct altGraphX *txGraphToAltGraphX(struct txGraph *tx)
 /* Copy transcription graph to altSpliceX format. */
 {
+/* Allocate struct and deal with easy fields. */
 struct altGraphX *ag;
 AllocVar(ag);
 ag->tName = cloneString(tx->tName);
@@ -33,47 +34,69 @@ ag->tEnd = tx->tEnd;
 ag->name = cloneString(tx->name);
 ag->id = 0;
 ag->strand[0] = tx->strand[0];
-ag->vertexCount = tx->vertexCount;
-ag->vTypes = CloneArray(tx->vTypes, tx->vertexCount);
-ag->vPositions = CloneArray(tx->vPositions, tx->vertexCount);
-ag->edgeCount = tx->edgeCount;
-ag->edgeStarts = CloneArray(tx->edgeStarts, tx->edgeCount);
-ag->edgeEnds = CloneArray(tx->edgeEnds, tx->edgeCount);
-struct txEvList *evs;
-for (evs = tx->evidence; evs != NULL; evs = evs->next)
+
+/* Deal with vertices. */
+int vertexCount = ag->vertexCount = tx->vertexCount;
+AllocArray(ag->vTypes, vertexCount);
+AllocArray(ag->vPositions, vertexCount);
+int i;
+for (i=0; i<vertexCount; ++i)
+    {
+    struct txVertex *v = &tx->vertices[i];
+    ag->vTypes[i] = v->type;
+    ag->vPositions[i] = v->position;
+    }
+
+/* Deal with edges. */
+int edgeCount = ag->edgeCount = tx->edgeCount;
+AllocArray(ag->edgeStarts, edgeCount);
+AllocArray(ag->edgeEnds, edgeCount);
+AllocArray(ag->edgeTypes, edgeCount);
+struct txEdge *edge;
+for (edge = tx->edges, i=0; edge != NULL; edge = edge->next, ++i)
+    {
+    assert(i < edgeCount);
+    ag->edgeStarts[i] = edge->startIx;
+    ag->edgeEnds[i] = edge->endIx;
+    ag->edgeTypes[i] = edge->type;
+    }
+
+/* Deal with evidence inside of edges. */
+for (edge = tx->edges; edge != NULL; edge = edge->next)
     {
     struct evidence *ev;
     AllocVar(ev);
-    int *mrnaIds = AllocArray(ev->mrnaIds, evs->evCount);
+    int *mrnaIds = AllocArray(ev->mrnaIds, edge->evCount);
     int i;
-    struct txEvidence *txEv = evs->evList;
-    for (i=0; i<evs->evCount; ++i)
+    struct txEvidence *txEv;
+    for (txEv = edge->evList, i=0; txEv != NULL; txEv = txEv->next, ++i)
         {
-	struct txSource *source = slElementFromIx(tx->sources, txEv->sourceId);
+	assert(i < edge->evCount);
+	struct txSource *source = &tx->sources[txEv->sourceId];
 	char *sourceType = source->type;
 	if (sameString(sourceType, "refSeq") || sameString(sourceType, "mrna") || sameString(sourceType, "est"))
 	    {
 	    mrnaIds[ev->evCount] = txEv->sourceId;
 	    ev->evCount += 1;
 	    }
-	    
-	txEv = txEv->next;
         }
     slAddHead(&ag->evidence, ev);
     }
 slReverse(&ag->evidence);
-ag->edgeTypes = CloneArray(tx->edgeTypes, tx->edgeCount);
-ag->mrnaRefCount = tx->sourceCount;
-AllocArray(ag->mrnaRefs, tx->sourceCount);
+
+/* Convert sources into mrnaRefs. */
+int sourceCount = ag->mrnaRefCount = tx->sourceCount;
+AllocArray(ag->mrnaRefs, sourceCount);
+int sourceIx;
+for (sourceIx=0; sourceIx<sourceCount; ++sourceIx)
+    {
+    struct txSource *source = &tx->sources[sourceIx];
+    ag->mrnaRefs[sourceIx] = cloneString(source->accession);
+    }
+
+/* Deal with tissues and libs by just making arrays of all zero. */
 AllocArray(ag->mrnaTissues, tx->sourceCount);
 AllocArray(ag->mrnaLibs, tx->sourceCount);
-struct txSource *source;
-int sourceIx = 0;
-for (source = tx->sources; source != NULL; source = source->next)
-    {
-    ag->mrnaRefs[sourceIx] = cloneString(source->accession);
-    ++sourceIx;
-    }
 return ag;
 }
 
