@@ -56,7 +56,7 @@ endif
 
 # process "all" choice
 if ("all" == $tableinput) then
-  set tables=`wgetTableField.csh $db trackDb tableName $machine \
+  set tables=`getField.csh $db trackDb tableName $machine \
      | grep -v tableName`
 endif
 
@@ -76,12 +76,13 @@ foreach table ($tables)
   echo $table
   echo "============="
   # check to see if the table exists on the machine
-  wgetTableField.csh $db trackDb tableName $machine | grep -w $table > /dev/null
+  getField.csh $db trackDb tableName $machine | grep -w $table > /dev/null
   if ( $status ) then
     echo "no such track"
+    continue
   endif
   set target="$baseUrl/cgi-bin/hgTrackUi?hgsid=$hgsid&db=$db&g=$table"
-  htmlCheck checkLinks "$target"
+  htmlCheck checkLinks "$target" 
   # slow it down if hitting the RR
   if ( "true" == $rr ) then
     sleep 2

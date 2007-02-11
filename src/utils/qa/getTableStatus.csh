@@ -13,6 +13,7 @@ set db=""
 set mach="hgwbeta"
 set url1=""
 set url2=""
+set url3=""
 set url=""
 
 if ( $#argv < 1 || $#argv > 2 ) then
@@ -51,8 +52,10 @@ endif
 
 # get the STATUS
 set url1="http://"
-set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doTableStatus=1"
-set url="$url1$mach$url2"
+# set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doTableStatus=1"
+set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
+set url3="&hgta_status=1"
+set url="$url1$mach$url2$url3"
 wget -q -O $mach.tempfile "$url"
 if ( $db != `head -1 $mach.tempfile | awk '{print $NF}'` ) then
   # does not allow uniProt or visiGene, etc to work.  
