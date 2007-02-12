@@ -13,7 +13,7 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggCluster.c,v 1.12 2007/02/09 01:18:57 kent Exp $";
+static char const rcsid[] = "$Id: ggCluster.c,v 1.13 2007/02/12 01:58:13 kent Exp $";
 
 
 
@@ -43,24 +43,29 @@ static boolean isGoodIntron(struct dnaSeq *targetSeq,
     struct ggMrnaBlock *b,  boolean isRev)
 /* Return true if there's a good intron between a and b. If true will update strand.*/
 {
-if (a->qEnd == b->qStart && b->tStart - a->tEnd > 40)
+if (a->qEnd == b->qStart && b->tStart - a->tEnd >= 30)
     {
-    DNA *iStart = targetSeq->dna + a->tEnd;
-    DNA *iEnd = targetSeq->dna + b->tStart;
-    if (isRev)
+    if (targetSeq)
 	{
-        if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'c')
-            return TRUE;
-        if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'g' && iEnd[-1] == 'c')
-	    return TRUE;
+	DNA *iStart = targetSeq->dna + a->tEnd;
+	DNA *iEnd = targetSeq->dna + b->tStart;
+	if (isRev)
+	    {
+	    if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'c')
+		return TRUE;
+	    if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'g' && iEnd[-1] == 'c')
+		return TRUE;
+	    }
+	else
+	    {
+	    if (iStart[0] == 'g' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
+		return TRUE;
+	    if (iStart[0] == 'g' && iStart[1] == 'c' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
+		return TRUE;
+	    }
 	}
     else
-	{
-        if (iStart[0] == 'g' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
-            return TRUE;
-        if (iStart[0] == 'g' && iStart[1] == 'c' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
-            return TRUE;
-	}
+        return TRUE;	/* Done all the checking we can */
     }
 return FALSE;
 }
@@ -124,7 +129,7 @@ for(i=0; i<blockCount; i++)
     /* Enter first vertex, checking to see if it has consensus splice sites. */
     v = &vertices[vCount++];
     v->position = block->tStart;
-    if (i == 0 || (genoSeq && !isGoodIntron(genoSeq, block-1, block, isRev)))
+    if (i == 0 || (!isGoodIntron(genoSeq, block-1, block, isRev)))
 	v->type = ggSoftStart;
     else
 	v->type = ggHardStart;
@@ -132,7 +137,7 @@ for(i=0; i<blockCount; i++)
     /* Enter second vertex, checking to see if it has consensus splice sites. */
     v = &vertices[vCount++];
     v->position = block->tEnd;
-    if(i == blockCount-1 || (genoSeq && !isGoodIntron(genoSeq, block, block+1, isRev)))
+    if(i == blockCount-1 || (!isGoodIntron(genoSeq, block, block+1, isRev)))
 	v->type = ggSoftEnd;
     else
 	v->type = ggHardEnd;
