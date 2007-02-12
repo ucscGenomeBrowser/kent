@@ -83,36 +83,34 @@ hashFree(&sizeHash);
 return bkHash;
 }
 
-
 int getSourceIx(struct txGraph *txg, char *type, char *accession)
 /* Search support for type & accession */
 {
-static struct txSource *lastSource = NULL;
-int lastSourceIx = -1;
-if (lastSource != NULL && sameString(accession, lastSource->accession)
-	&& sameString(type, lastSource->type))
+/* Start search where we got last result for better performance
+ * when doing things again and again. */
+static int lastIx = 0;
+if (lastIx < txg->sourceCount)
     {
-    return lastSourceIx;
+    struct txSource *source = &txg->sources[lastIx];
+    if (sameString(accession, source->accession) && sameString(type, source->type))
+	return lastIx;
     }
-struct txSource *source;
-lastSource = NULL;
+
+/* Search through whole list of sources. */
 int ix;
 for (ix=0; ix<txg->sourceCount; ++ix)
     {
-    source = &txg->sources[ix];
-    if (sameString(accession, source->accession) && sameString(type, source->type))
+    if (ix != lastIx)
 	{
-        lastSource = source;
-	break;
+	struct txSource *source = &txg->sources[ix];
+	if (sameString(accession, source->accession) && sameString(type, source->type))
+	    {
+	    lastIx = ix;
+	    return ix;
+	    }
 	}
     }
-if (lastSource)
-    {
-    lastSourceIx = ix;
-    return ix;
-    }
-else
-    return -1;
+return -1;
 }
 
 void addEvidenceRange(struct txGraph *txg, 
@@ -189,7 +187,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     for (bel = belList; bel != NULL; bel = bel->next)
         {
 	struct txGraph *txg = bel->val;
-	verbose(3, "  txg %s:%d-%d\n", txg->tName, txg->tStart, txg->tEnd);
+	verbose(3, "  txg %s %s:%d-%d\n", txg->name, txg->tName, txg->tStart, txg->tEnd);
 	if (bed->strand[0] == 0 || sameString(txg->strand, bed->strand))
 	    {
 	    addEvidenceRange(txg, bed->chromStart, ggVertexTypeFromString(bed->startType),
