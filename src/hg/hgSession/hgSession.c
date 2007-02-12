@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.20 2007/01/10 00:22:52 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.21 2007/02/12 22:47:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -139,7 +139,8 @@ char *getSessionEmailLink(char *userName, char *sessionName)
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringPrintf(dy, "<A HREF=\"mailto:?subject=UCSC browser session %s&"
-	       "body=This is my new favorite UCSC browser session:%%20",
+	       "body=Here is a UCSC browser session I%%27d like to share with "
+	       "you:%%20",
 	       sessionName);
 addSessionLink(dy, userName, sessionName, TRUE);
 dyStringPrintf(dy, "\">Email</A>\n");
@@ -477,6 +478,7 @@ cartRemovePrefix(cart, hgsDeletePrefix);
 cartRemovePrefix(cart, hgsDo);
 }
 
+#define INITIAL_USE_COUNT 0
 char *doNewSession()
 /* Save current settings in a new named session.  
  * Return a message confirming what we did. */
@@ -495,7 +497,7 @@ if (sqlTableExists(conn, namedSessionTable))
     struct dyString *dy = dyStringNew(16 * 1024);
     char **row;
     char *firstUse = "now()";
-    int useCount = 0;
+    int useCount = INITIAL_USE_COUNT;
     char firstUseBuf[32];
 
     /* If this session already existed, preserve its firstUse and useCount. */
@@ -531,7 +533,16 @@ if (sqlTableExists(conn, namedSessionTable))
     dyStringPrintf(dy, "%s, now(), %d);", firstUse, useCount);
     sqlUpdate(conn, dy->string);
 
-    dyStringPrintf(dyMessage,
+    if (useCount > INITIAL_USE_COUNT)
+	dyStringPrintf(dyMessage,
+	  "Overwrote the contents of session <B>%s</B> "
+	  "(that %s be shared with other users).  "
+	  "%s %s",
+	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
+	  getSessionLink(userName, encSessionName),
+	  getSessionEmailLink(userName, encSessionName));
+    else
+	dyStringPrintf(dyMessage,
 	  "Added a new session <B>%s</B> that %s be shared with other users.  "
 	  "%s %s",
 	  htmlEncode(sessionName), (shareSession ? "may" : "may not"),
