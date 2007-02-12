@@ -1001,4 +1001,28 @@ textHistogram -real -binSize=0.2 -maxBinCount=1100 -minVal=-200 \
     hgLoadSqlTab hgFixed mgcMBLabValid ~/compbio/genbank/kent/src/hg/lib/mgcMBLabValid.sql mgcMBLabValid.2006-10-25.acc
     gzip mgcMBLabValid.2006-10-25.acc
 
+##########################################################################
+# ZEBRAFISH DEVELOPMENTAL ARRAYS FROM GENOME INSTITUTE OF SINGAPORE (GIS) 
+# Data from Article:
+# Transcriptome Analysis of Zebrafish Embryogenesis Using Microarrays Mathavan
+# S, Lee SGP, Mak A, Miller LD, Murthy KRK, et al. PLoS Genetics Vol. 1, No. 2,
+# e29, pages 260-276 doi:10.1371/journal.pgen.0010029
+# Contact: Sinnakaruppan Mathavan <mathavans@gis.a-star.edu.sg>
+# Downloaded expression data from
+# http://giscompute.gis.a-star.edu.sg/~govind/zebrafish/data_download.html
+# after clicking on link to download largest dataset (12.9 MB):
+# ene expression data showing the expression profile during different stages
+# of zebrafish embryonic development for the genes selected from the array are
+# presented (Compugen array). Each value represents an average performance of
+# 2-4 replicates. GenBank id of the selected gene is given as the identifier.
+# Total RNA from different stages of embryonic development, adult male and
+# female were pooled in equal concentrations and used as reference RNA. The
+# genes were annotated using Zebrafish Chip Annotation Database.
+
+     ssh hgwdev
+     mkdir -p /projects/compbio/data/microarray/zebrafishGISDev
+     # Downloaded data and saved in Excel as a tab, separated text file:
+     # PLOSGISData.txt
+     # This file contains Genbank accessions and the expression values
+     # which are log2 based. 
 
