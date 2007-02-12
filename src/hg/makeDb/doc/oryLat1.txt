@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.19 2007/02/06 23:57:22 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.20 2007/02/12 20:16:17 hiram Exp $"
 #
 
 ##########################################################################
@@ -3023,6 +3023,7 @@ TMPDIR=/scratch/tmp
     hgsql -e \
 'update dbDb set defaultPos="chr6:11,027,149-11,038,707" where name = "oryLat1";' \
 	-h genome-testdb hgcentraltest
+
 ############################################################################
 #  BLATSERVERS ENTRY (DONE - 2007-02-08 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
@@ -3034,3 +3035,19 @@ TMPDIR=/scratch/tmp
 	VALUES ("oryLat1", "blat3", "17789", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+############################################################################
+## Medaka Photograph  (DONE - 2007-02-12 12:15 - Hiram)
+# Permission to use photo received in email from moris@cb.k.u-tokyo.ac.jp
+# Shinichi Morishita 2007-02-09 18:25 - Morishita Lab - Univ of Tokyo
+    ssh hgwdev
+    mkdir /cluster/data/oryLat1/photograph
+    cd /cluster/data/oryLat1/photograph
+    wget --timestamping "http://medaka.utgenome.org/picture/Medaka_hd_rR.jpg" \
+	-O oryLat1.Kiyoshi.Naruse.jpg
+    convert -quality 100 -crop "1464x600+0+300" -sharpen 0 -normalize \
+	oryLat1.Kiyoshi.Naruse.jpg oryLat1.crop.jpg
+    convert -quality 80 -geometry 300x200 oryLat1.crop.jpg \
+	Oryzias_latipes.jpg
+    # add this image to the browser doc source tree in images and copy it
+    #	to /usr/local/apache/htdocs/images on hgwdev
