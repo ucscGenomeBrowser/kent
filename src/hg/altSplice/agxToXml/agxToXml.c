@@ -28,18 +28,15 @@ static struct optionSpec options[] = {
 void agxWriteXml(struct altGraphX *graph, FILE *f)
 /* Write out graph as xml. */
 {
-fprintf(f, "<altGraphX name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\">\n",
-	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd);
+fprintf(f, "  <altGraphX name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\" vertexCount=\"%d\" edgeCount=\"%d\">\n",
+	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd, graph->vertexCount, graph->edgeCount);
 int i;
-fprintf(f, "  <vertices count=\"%d\">\n", graph->vertexCount);
 for (i=0; i<graph->vertexCount; ++i)
     {
     fprintf(f, "    <vertex type=\"%s\" pos=\"%d\" i=\"%d\"/>\n",
     	ggVertexTypeAsString(graph->vTypes[i]),
 	graph->vPositions[i], i);
     }
-fprintf(f, "  </vertices>\n");
-fprintf(f, "  <edges count=\"%d\">\n", graph->edgeCount);
 struct evidence *evList =  graph->evidence;
 for (i=0; i<graph->edgeCount; ++i)
     {
@@ -69,8 +66,7 @@ for (i=0; i<graph->edgeCount; ++i)
 	}
     evList = evList->next;
     }
-fprintf(f, "  </edges>\n");
-fprintf(f, "</altGraphX>\n");
+fprintf(f, "  </altGraphX>\n");
 }
 
 void agxToXml(char *inTxg, char *outXml)
@@ -78,10 +74,12 @@ void agxToXml(char *inTxg, char *outXml)
 {
 struct altGraphX *agx, *agxList = altGraphXLoadAll(inTxg);
 FILE *f = mustOpen(outXml, "w");
+fprintf(f, "<agxList>\n");
 for (agx = agxList; agx != NULL; agx = agx->next)
     {
     agxWriteXml(agx, f);
     }
+fprintf(f, "</agxList>\n");
 carefulClose(&f);
 }
 
