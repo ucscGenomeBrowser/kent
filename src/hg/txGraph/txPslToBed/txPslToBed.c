@@ -132,9 +132,12 @@ int totalSize = 0;
 struct range *range = NULL, *lastRange = NULL;
 for (range = rangeList; range != NULL; range = range->next)
     {
-    ++blockCount;
-    totalSize += range->end - range->start;
-    lastRange = range;
+    if (range->end > range->start)
+	{
+	++blockCount;
+	totalSize += range->end - range->start;
+	lastRange = range;
+	}
     }
 
 if (totalSize < minSize)
@@ -160,9 +163,12 @@ int *starts = AllocArray(bed->chromStarts, blockCount);
 int i = 0;
 for (range = rangeList; range != NULL; range = range->next)
     {
-    sizes[i] = range->end - range->start;
-    starts[i] = range->start - chromStart;
-    ++i;
+    if (range->end > range->start)
+	{
+	sizes[i] = range->end - range->start;
+	starts[i] = range->start - chromStart;
+	++i;
+	}
     }
 
 return bed;
