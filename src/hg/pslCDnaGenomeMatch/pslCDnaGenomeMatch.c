@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.16 2007/01/30 19:55:51 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.17 2007/02/12 22:10:46 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -246,7 +246,12 @@ int size = end - start;
 assert(size >= 0);
 if (strand == '-')
     {
+    verbose(6,"before start %d end %d size %d\n",
+            start, end, nib-size);
     reverseIntRange(&start, &end, nib->size);
+    verbose(6,"after start %d end %d size %d\n",
+            start, end, nib-size);
+    assert(start > 0);
     seq = nibInfoLoadSeq(nib, start, size);
 //    seq = nibTwoCacheSeqPart(ntc, seqName, 
 //	start, size, &retFullSeqSize);
@@ -665,14 +670,14 @@ int *neither;             /* count of cases where the loci all have the same bas
 int *gapCount;             /* count of cases where the loci are gaps*/
 int *snpCount;             /* count of cases where the loci are snps*/
 int indel = 0;             /* count of gaps in mrna alignment */
-int maxScore = -100;       /* max scoring alignment for this mrna */
-int nextBestScore = -100;       /* 2nd best scoring alignment for this mrna */
+int maxScore = -1;       /* max scoring alignment for this mrna */
+int nextBestScore = -1;       /* 2nd best scoring alignment for this mrna */
 int maxCount = 0;       /* number of alignments with max score */
 int maxIndex = -1;      /* index in loci list of best aligment */
 char *chrom;           /* best alignment */
 int chromStart;
 int chromEnd;
-int i = 0;
+//int i = 0;
 //int prevLoc = misMatchList->mrnaLoc;
 if (misMatchList == NULL) 
     return FALSE;
@@ -758,25 +763,27 @@ for (mrnaMisMatch = mrnaMm ; mrnaMisMatch != NULL ;
             }
             if (index != NOVALUE)
                 {
-                verbose(4,"snp index %d loc %d ", index, mrnaMisMatch->mrnaLoc); 
-                verbose(4, " %s count[%d] %d %s\n", 
+                verbose(6,"snp index %d loc %d ", index, mrnaMisMatch->mrnaLoc); 
+                verbose(6, " %s count[%d] %d %s\n", 
                         mrnaMisMatch->snps[index], index, snpCount[index], mrnaMisMatch->chroms[index]);
                 }
             else
-                verbose(4,"snp index %d loc %d \n", index, mrnaMisMatch->mrnaLoc);
+                verbose(6,"snp index %d loc %d \n", index, mrnaMisMatch->mrnaLoc);
         }
     }
 mrnaMisMatchFreeList(&mrnaMm);
-/* now grap the highest scoring alignment and output it if there are no others that score within 5 points */
+/* now grap the highest scoring alignment and output it if there are no others that score within minDiff points */
 for (l = lociList ; l != NULL; l=l->next)
     {
     int z = l->index;
     int score = goodCount[z]-missCount[z] - indel ;
-    verbose(5,"loop %d\n",i++);
     if (maxScore == score)
         {
         maxCount ++;
-        nextBestScore = score;
+        if (maxScore != score)
+            {
+            nextBestScore = score;
+            }
         verbose(5,"score == maxScore %s score %d nextBestScore %d maxScore %d\n",
                 name, score, nextBestScore, maxScore);
         }
@@ -813,44 +820,55 @@ for (l = lociList ; l != NULL; l=l->next)
             missCount[z]+ goodCount[z]+ neither[z]+ indel, gapCount[z], z, snpCount[z],
             seqCount - slCount(lociList), score, nextBestScore, l->index, maxCount);
     }
-if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
+for (l = lociList ; l != NULL; l=l->next)
     {
-    int diff = maxScore - nextBestScore;
+    int z = l->index;
+    int score = goodCount[z]-missCount[z] - indel ;
+    int diff =  score - nextBestScore;
+    int spread = maxScore - nextBestScore;
+    getLociPosition(lociList, l->index, &chrom, &chromStart, &chromEnd, &psl);
     assert(psl != NULL);
-    if (maxIndex >= 0 && maxCount == 1 && diff > minDiff)
+    if (diff >= minDiff && spread >= minDiff /* z >= 0 *&& maxCount == 1 && */)
         {
-        verbose(2, "%s bestHit %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
-                gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
-                name,  psl->tName , psl->tStart, chromEnd, maxIndex, 
-                missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
-                missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, 
-                gapCount[maxIndex], snpCount[maxIndex],
+        verbose(2, "%s bestHit score %d %s:%d-%d [%d] mismatch %d good %d neither %d indel %d sum %d\
+                gaps %d snps %d seqCnt-loci %d maxScore %d maxCount %d 2nd best %d diff %d\n",
+                name,  score, psl->tName , psl->tStart, chromEnd, z, 
+                missCount[z], goodCount[z], neither[z], indel,
+                missCount[z]+ goodCount[z]+ neither[z]+ indel, 
+                gapCount[z], snpCount[z],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
         if (scoreFile)
-            fprintf(scoreFile, "##bestHit %s %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
+            fprintf(scoreFile, "##bestHit %s score %d %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
                 gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
-                name,  psl->tName , psl->tStart, chromEnd, maxIndex, 
-                missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
-                missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, 
-                gapCount[maxIndex], snpCount[maxIndex],
+                name,  score, psl->tName , psl->tStart, chromEnd, z, 
+                missCount[z], goodCount[z], neither[z], indel,
+                missCount[z]+ goodCount[z]+ neither[z]+ indel, 
+                gapCount[z], snpCount[z],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
         if (psl->strand[0] == '+' && psl->strand[1] == '-')
             pslRc(psl);
         pslTabOut(psl, outFile);
         outputCount++;
         filterCount++;
+        /* 
         freez(&missCount);
         freez(&goodCount);
         freez(&gapCount);
         freez(&neither);
         freez(&snpCount);
         return TRUE;
+        */
         }
     else
-        verbose(2, "%s nobestScore %d nextBestScore %d maxCount %d index %d pos %s:%d-%d diff %d \n", name, maxScore, nextBestScore, maxCount, maxIndex, psl->tName , psl->tStart, chromEnd, diff);
+        {
+        verbose(2, "%s NO score %d maxScore %d nextBestScore %d maxCount %d index %d pos %s:%d-%d diff %d < %d\n", 
+                name, score , maxScore, nextBestScore, maxCount, z, 
+                psl->tName , psl->tStart, chromEnd, diff, minDiff);
+        }
     }
-else
-    verbose(2, "%s noLoci bestScore %d nextBestScore %d maxCount %d index %d no loci\n", name, maxScore, nextBestScore, maxCount, maxIndex);
+//else
+//    verbose(2, "%s noLoci bestScore %d nextBestScore %d maxCount %d index %d no loci\n", 
+//            name, maxScore, nextBestScore, maxCount, maxIndex);
 freez(&missCount);
 freez(&goodCount);
 freez(&gapCount);
@@ -968,12 +986,12 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     if (genomeStrand == '-')
         reverseIntRange(&ts, &te, psl->tSize);
 
+    verbose(5,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
+            psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
+            psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
     tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
-    verbose(4,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
-            psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
-            psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
     verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, strlen(tSeq->dna));
     verbose(6,"qSeq %s\n",qSeq->dna);
     assert(psl->strand[0] == '+');
@@ -1189,7 +1207,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
-    verbose(4,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
+    verbose(5,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
             psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
     verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, strlen(tSeq->dna));
