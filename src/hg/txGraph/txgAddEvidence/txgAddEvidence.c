@@ -3,10 +3,10 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "bed.h"
 #include "geneGraph.h"
 #include "txGraph.h"
 #include "binRange.h"
+#include "txEdgeBed.h"
 
 boolean bedIsIntron = FALSE;
 boolean bedIsHard = FALSE;
@@ -17,17 +17,15 @@ void usage()
 errAbort(
   "txgAddEvidence - Add evidence from a bed file to existing transcript graph.\n"
   "usage:\n"
-  "   txgAddEvidence in.txg in.bed sourceType out.txg\n"
-  "where sourceType is a decriptive word like 'refSeq' 'est' etc.\n"
-  "options:\n"
-  "   -intron - in.bed file  is full of introns, not exons\n"
-  "   -hard   - in.bed file is full of hard single exons\n"
+  "   txgAddEvidence in.txg in.edges sourceType out.txg\n"
+  "where in.txg is a tab-separated file in txGraph format\n"
+  "      in.edges is a tab-separated file in txEdgeBed or txEdgeOrtho format\n"
+  "      sourceType is a decriptive word like 'refSeq' 'est' etc.\n"
+  "      out.txt is the output graph with additional info\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {"intron", OPTION_BOOLEAN},
-   {"hard", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -177,59 +175,11 @@ for (edge = txg->edges; edge != NULL; edge = edge->next)
     }
 }
 
-void addBedEvidence(struct bed *bed, char *sourceType, struct txGraph *txg)
-/* Add evidence from bed file to txg */
-{
-if (bedIsIntron)
-    {
-    addEvidenceRange(txg, bed->chromStart, ggHardEnd, bed->chromEnd, ggHardStart, 
-        ggIntron, sourceType, bed->name);
-    }
-else if (bedIsHard)
-    {
-    addEvidenceRange(txg, bed->chromStart, ggHardStart, bed->chromEnd, ggHardEnd, 
-        ggExon, sourceType, bed->name);
-    }
-else
-    {
-    int blockCount = bed->blockCount;
-    if (blockCount <= 1)
-	addEvidenceRange(txg, bed->chromStart, ggSoftStart, bed->chromEnd, ggSoftEnd, 
-	    ggExon, sourceType, bed->name);
-    else
-        {
-	/* Add first exon. */
-	int bedStart = bed->chromStart;
-	int start = bed->chromStarts[0] + bedStart;
-	int end = start + bed->blockSizes[0];
-	addEvidenceRange(txg, start, ggSoftStart, end, ggHardEnd, 
-		ggExon, sourceType, bed->name);
-
-	/* Add remaining exons. */
-	int i;
-	for (i=1; i<blockCount; ++i)
-	    {
-	    /* Add preceding intron. */
-	    start = bed->chromStarts[i] + bedStart;
-	    addEvidenceRange(txg, end, ggHardEnd, start, ggHardStart, 
-	    	ggIntron, sourceType, bed->name);
-
-	    /* Add current exon */
-	    end = start + bed->blockSizes[i];
-	    boolean isLast = (i == blockCount-1);
-	    addEvidenceRange(txg, start, ggHardStart, end, 
-	    	(isLast ? ggSoftEnd : ggHardEnd),
-		ggExon, sourceType, bed->name);
-	    }
-	}
-    }
-}
-
-void addEvidence(struct bed *bedList, char *sourceType, struct hash *bkHash)
+void addEvidence(struct txEdgeBed *bedList, char *sourceType, struct hash *bkHash)
 /* Input is a list of additional evidence in bedList, and a hash
  * full of binKeepers full of txGraphs. */
 {
-struct bed *bed;
+struct txEdgeBed *bed;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     verbose(2, "Processing %s %s:%d-%d\n", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
@@ -242,7 +192,9 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	verbose(3, "  txg %s:%d-%d\n", txg->tName, txg->tStart, txg->tEnd);
 	if (bed->strand[0] == 0 || sameString(txg->strand, bed->strand))
 	    {
-	    addBedEvidence(bed, sourceType, txg);
+	    addEvidenceRange(txg, bed->chromStart, ggVertexTypeFromString(bed->startType),
+				  bed->chromEnd, ggVertexTypeFromString(bed->endType),
+				  bed->type, sourceType, bed->name);
 	    }
 	}
     }
@@ -253,7 +205,7 @@ void txgAddEvidence(char *txgIn, char *bedIn, char *sourceType, char *txgOut)
 {
 struct txGraph *txgList = txGraphLoadAll(txgIn);
 verbose(2, "%d elements in txgList\n", slCount(txgList));
-struct bed *bedList = bedLoadAll(bedIn);
+struct txEdgeBed *bedList = txEdgeBedLoadAll(bedIn);
 verbose(2, "%d elements in bedList\n", slCount(bedList));
 FILE *f = mustOpen(txgOut, "w");
 
