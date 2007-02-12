@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.22 2007/02/11 05:59:58 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.23 2007/02/12 03:37:15 kent Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -535,6 +535,25 @@ switch(type)
     default:
         errAbort("Unknown type %d", type);
 	return "unknown";
+    }
+}
+
+enum ggVertexType ggVertexTypeFromString(char *s)
+/* Return string corresponding to vertex type. */
+{
+switch(s[0])
+    {
+    case '(':
+	return ggSoftStart;
+    case '[':
+	return ggHardStart;
+    case ')':
+	return ggSoftEnd;
+    case ']':
+	return ggHardEnd;
+    default:
+        errAbort("Unknown type %s", s);
+	return ggUnused;
     }
 }
 
