@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.22 2007/02/10 03:08:11 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.23 2007/02/12 17:59:12 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -1167,8 +1167,9 @@ for (i=0; i<vertexCount; ++i)
 	    {
 	    struct ggVertex *start = &gg->vertices[i];
 	    struct ggVertex *end = &gg->vertices[j];
-	    if (start->type == ggSoftStart && end->type == ggSoftEnd)
-		rangeTreeAdd(rangeTree, start->position, end->position);
+	    if (start->position < end->position)
+		if (start->type == ggSoftStart && end->type == ggSoftEnd)
+		    rangeTreeAdd(rangeTree, start->position, end->position);
 	    }
 	}
 
@@ -1184,21 +1185,24 @@ for (i=0; i<vertexCount; ++i)
 	    struct ggVertex *end = &gg->vertices[j];
 	    if (start->type == ggSoftStart && end->type == ggSoftEnd)
 		{
-		struct range *r = rangeTreeFindEnclosing(rangeTree,
-			start->position, end->position);
-		assert(r != NULL);
-		struct mergedEdge *mergeEdge = r->val;
-		if (mergeEdge == NULL)
+		if (start->position < end->position)
 		    {
-		    lmAllocVar(rangeTree->lm, mergeEdge);
-		    r->val = mergeEdge;
+		    struct range *r = rangeTreeFindEnclosing(rangeTree,
+			    start->position, end->position);
+		    assert(r != NULL);
+		    struct mergedEdge *mergeEdge = r->val;
+		    if (mergeEdge == NULL)
+			{
+			lmAllocVar(rangeTree->lm, mergeEdge);
+			r->val = mergeEdge;
+			}
+		    if (start->position == r->start)
+			mergeEdge->vertex1 = i;
+		    if (end->position == r->end)
+			mergeEdge->vertex2 = j;
+		    moveEvidenceIfUnique(&mergeEdge->evidence, &evidence[i][j]);
+		    edgeMatrix[i][j] = FALSE;
 		    }
-		if (start->position == r->start)
-		    mergeEdge->vertex1 = i;
-		if (end->position == r->end)
-		    mergeEdge->vertex2 = j;
-		moveEvidenceIfUnique(&mergeEdge->evidence, &evidence[i][j]);
-		edgeMatrix[i][j] = FALSE;
 		}
 	    }
 	}
