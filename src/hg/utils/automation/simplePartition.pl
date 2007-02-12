@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/simplePartition.pl instead.
 
-# $Id: simplePartition.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
+# $Id: simplePartition.pl,v 1.2 2007/02/12 21:56:38 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -101,19 +101,40 @@ sub getParts {
   &HgAutomate::verbose(2, "Making \@parts from 2bit...\n");
   open(P, $cmd)
     || die "Couldn't open pipe ($cmd): $_\n";
+  my @glomChunks = ();
+  my $glomSize = 0;
   while (<P>) {
     chomp;
     my ($seq, $seqSize) = split("\t");
-    #*** Add logic to glom small parts together.
-    for (my $offset = 0;  $offset < $seqSize;  $offset += $chunkSize) {
-      my $end = $offset + $chunkSize;
-      $end = $seqSize if ($end > $seqSize);
-      my $size = $end - $offset;
-      my $chunkSpec = [ $seq, $seqSize, $offset, $size,
-			"$twoBit:$seq:$offset-$end" ];
-      my @partChunks = ( $chunkSpec );
-    push @parts, \@partChunks;
+    if ($glomSize > 0 && ($glomSize + $seqSize) > $chunkSize) {
+      # New sequence doesnt fit in glom -- flush out the glom.
+      my @glomChunksCopy = @glomChunks;
+      push @parts, \@glomChunksCopy;
+      @glomChunks = ();
+      $glomSize = 0;
     }
+    if ($seqSize > $chunkSize) {
+      # Break into chunks.
+      for (my $offset = 0;  $offset < $seqSize;  $offset += $chunkSize) {
+	my $end = $offset + $chunkSize;
+	$end = $seqSize if ($end > $seqSize);
+	my $size = $end - $offset;
+	my $chunkSpec = [ $seq, $seqSize, $offset, $size,
+			  "$twoBit:$seq:$offset-$end" ];
+	my @partChunks = ( $chunkSpec );
+	push @parts, \@partChunks;
+      }
+    } else {
+      # Add to glom.
+      my $chunkSpec = [ $seq, $seqSize, 0, $seqSize, "$twoBit:$seq" ];
+      push @glomChunks, $chunkSpec;
+      $glomSize += $seqSize;
+    }
+  }
+  if ($glomSize > 0) {
+    # Flush out last glom.
+    my @glomChunksCopy = @glomChunks;
+    push @parts, \@glomChunksCopy;
   }
   close(P);
   return \@parts;
