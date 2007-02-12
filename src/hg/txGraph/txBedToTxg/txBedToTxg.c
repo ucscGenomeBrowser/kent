@@ -27,58 +27,83 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct ggMrnaAli *bedToMa(struct bed *bed, char *sourceType)
+struct ggMrnaAli *bedListToMa(struct bed *startBed, struct bed *endBed, 
+	char *sourceType)
 /* convert psl to format the clusterer likes. */
 {
+/* Total up all blocks in list. */
+struct bed *bed;
+int blockCount = 0;
+int chromStart = startBed->chromStart;
+int chromEnd = startBed->chromEnd;
+int qStart = 0;
+for (bed = startBed; bed != endBed; bed = bed->next)
+    {
+    if (bed->blockCount == 0)
+        errAbort("txBedToTxg needs to be run on beds with blocks (bed12)");
+    blockCount += bed->blockCount;
+    chromEnd = bed->chromEnd;
+    }
+
 /* Figure out numerical as well as character representation of strand. */
-char *strand = bed->strand;
+char *strand = startBed->strand;
 int orientation = (strand[0] == '-' ? -1 : 1); 
-int blockCount = bed->blockCount;
-verbose(2, "bedToMa %s\n", bed->name);
+verbose(2, "bedListToMa %s\n", startBed->name);
 
 /* Allocate structure and fill in all but blocks. */
 struct ggMrnaAli *ma;
 AllocVar(ma);
 ma->orientation = orientation;
-ma->qName = cloneString(bed->name);
+ma->qName = cloneString(startBed->name);
 ma->qStart = 0;
-ma->qEnd = bed->chromEnd - bed->chromStart;
+ma->qEnd = chromEnd - chromStart;
 ma->baseCount = ma->qEnd;
-ma->milliScore = bed->score;
-snprintf(ma->strand, sizeof(ma->strand), "%s", strand);
+ma->milliScore = startBed->score;
+ma->strand[0] = strand[0];
 ma->hasIntrons = (blockCount > 1);
-ma->tName = cloneString(bed->chrom);
-ma->tStart = bed->chromStart;
-ma->tEnd = bed->chromEnd;
+ma->tName = cloneString(startBed->chrom);
+ma->tStart = chromStart;
+ma->tEnd = chromEnd;
 ma->sourceType = sourceType;
 
 /* Deal with blocks. */
 struct ggMrnaBlock *blocks, *block;
-if (blockCount > 0)
+ma->blockCount = blockCount;
+ma->blocks = block = AllocArray(blocks, blockCount);
+for (bed = startBed;  bed != endBed; bed = bed->next)
     {
-    ma->blockCount = blockCount;
-    ma->blocks = AllocArray(blocks, blockCount);
-
+    boolean isFirstBed = (bed == startBed);
+    boolean isLastBed = (bed->next == endBed);
     int i;
-    for (i = 0; i<blockCount; ++i)
+    for (i=0; i<bed->blockCount; ++i)
 	{
+	boolean isFirstBlock = (i == 0);
+	boolean isLastBlock = (i == bed->blockCount-1);
+
+	/* Do the basic block. */
 	int bSize = bed->blockSizes[i];
 	int tStart = bed->chromStarts[i] + bed->chromStart;
-	int qStart = tStart;
-	block = blocks+i;
 	block->qStart = qStart;
-	block->qEnd = qStart + bSize;
+	qStart += bSize;
+	block->qEnd = qStart;
 	block->tStart = tStart;
 	block->tEnd = tStart + bSize;
+
+	/* Possibly soften ends */
+	if (isLastBlock && !isLastBed)
+	    {
+	    uglyf("Soften end\n");
+	    block->qEnd -= 1;
+	    block->tEnd -= 1;
+	    }
+	if (isFirstBlock && !isFirstBed)
+	    {
+	    uglyf("Soften start\n");
+	    block->qStart += 1;
+	    block->tStart += 1;
+	    }
+	block += 1;
 	}
-    }
-else
-    {
-    /* If no block list, make single block. */
-    ma->blockCount = 1;
-    ma->blocks = AllocVar(block);
-    block->qStart = block->tStart = bed->chromStart;
-    block->qEnd = block->tEnd = bed->chromEnd;
     }
 return ma;
 }
@@ -86,11 +111,24 @@ return ma;
 struct ggMrnaAli *bedListToGgMrnaAliList(struct bed *bedList, char *sourceType)
 /* Copy list of beds to list of ggMrnaAli. */
 {
-struct bed *bed;
+struct bed *startBed, *bed, *endBed;
 struct ggMrnaAli *maList = NULL;
-for (bed = bedList; bed != NULL; bed = bed->next)
+for (startBed = bedList; startBed != NULL; startBed = endBed)
     {
-    struct ggMrnaAli *ma = bedToMa(bed, sourceType);
+    /* Figure out first bed with different name, or that otherwise can't be
+     * a continuation of previous bed. */
+    struct bed *lastBed = startBed;
+    for (bed = startBed->next; bed != NULL; bed = bed->next)
+        {
+	if ( lastBed->chromEnd >= bed->chromStart || !sameString(lastBed->name, bed->name) 
+		|| bed->strand[0] != lastBed->strand[0] 
+		|| !sameString(bed->chrom, lastBed->chrom))
+	    break;
+	lastBed = bed;
+	}
+    endBed = bed;
+
+    struct ggMrnaAli *ma = bedListToMa(startBed, endBed, sourceType);
     slAddHead(&maList, ma);
     }
 slReverse(&maList);
