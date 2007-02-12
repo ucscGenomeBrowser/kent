@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1200 2007/02/10 21:36:11 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1201 2007/02/12 19:12:16 braney Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5664,7 +5664,8 @@ if ((addp == 1) || (pred != NULL))
 	addp = 1;
     sprintf(buffer, "%s",readName);
     
-    if ((ptr = strchr(buffer, '.')) != NULL)
+    if (!sameString(pred, "ce3.blastWBPep01")  &&
+	(ptr = strchr(buffer, '.')) != NULL)
 	{
 	*ptr = 0;
 	psl->qName = cloneString(buffer);
@@ -15453,7 +15454,7 @@ else if ((pos = strchr(acc, '.')) != NULL)
 	{
 	*gene++ = 0;
 	useName = gene;
-	if (!isDm && ((prot = strchr(gene, '.')) != NULL))
+	if (!isDm && !isCe && ((prot = strchr(gene, '.')) != NULL))
 	    *prot++ = 0;
 	}
     }
@@ -15513,6 +15514,8 @@ if (acc != NULL)
 	printf("<B>FlyBase Entry:</B> <A HREF=\" %s%s", tdb->url, acc);
     else if (isSacCer== TRUE)
 	printf("<B>SGD Entry:</B> <A HREF=\" %s%s", tdb->url, acc);
+    else if (isCe == TRUE)
+	printf("<B>Wormbase ORF Name:</B> <A HREF=\" %s%s", tdb->url, acc);
     else
 	{
 	printf("<B>Human mRNA:</B> <A HREF=\"");
