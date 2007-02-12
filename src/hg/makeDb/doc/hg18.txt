@@ -13140,3 +13140,24 @@ chainOne $(path1)
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
 
 #############################################################################
+# RE-BUILD WGRNA TRACK AGAIN (DONE, 2007-02-12, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg18/bed
+
+  mkdir wgRna-2007-02-12
+  cd wgRna-2007-02-12
+
+# Received the data file, wg_feb2007_corrected.txt (saved from wg_feb2007_corrected.doc) 
+# from Michel Weber's email
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg18/bed/wgRna-2007-02-12.
+
+# The record of hsa-mir-770 was found missing the strand info.
+# manually add "+" to wg_feb2007_corrected.txt for the record of hsa-mir-770.
+
+  cat wg_feb2007_corrected.txt|sed -e 's/ /\t/g' > wgRna.tab
+
+  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+
+#############################################################################
