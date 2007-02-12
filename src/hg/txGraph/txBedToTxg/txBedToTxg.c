@@ -290,20 +290,23 @@ for (i=0; i<inCount; ++i)
     }
 verbose(2, "Created %d ma's\n", slCount(maList));
 
-struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, NULL);
-struct ggMrnaCluster *mc, *mcList = ggClusterMrna(ci);
-verbose(1, "Reduced to %d clusters\n", slCount(mcList));
-for (mc = mcList; mc != NULL; mc = mc->next)
+if (maList != NULL)
     {
-    static int id=0;
-    char name[16];
-    safef(name, sizeof(name), "a%d", ++id);
-    struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
-    struct txGraph *tg = txGraphFromGeneGraph(gg, name);
-    if (tg != NULL)
-	txGraphTabOut(tg, f);
-    freeGeneGraph(&gg);
-    txGraphFree(&tg);
+    struct ggMrnaInput *ci = ggMrnaInputFromAlignments(maList, NULL);
+    struct ggMrnaCluster *mc, *mcList = ggClusterMrna(ci);
+    verbose(1, "Reduced to %d clusters\n", slCount(mcList));
+    for (mc = mcList; mc != NULL; mc = mc->next)
+	{
+	static int id=0;
+	char name[16];
+	safef(name, sizeof(name), "a%d", ++id);
+	struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
+	struct txGraph *tg = txGraphFromGeneGraph(gg, name);
+	if (tg != NULL)
+	    txGraphTabOut(tg, f);
+	freeGeneGraph(&gg);
+	txGraphFree(&tg);
+	}
     }
 carefulClose(&f);
 }
