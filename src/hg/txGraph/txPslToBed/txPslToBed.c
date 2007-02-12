@@ -43,58 +43,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct bed *pslToBed(struct psl *psl, int mergeMax)
-/* Create a bed similar to PSL, but merging nearby blocks. */
-{
-/* Calculate blockCount. */
-int blockCount = 1;
-int tStart = psl->tStarts[0];
-int qStart = psl->qStarts[0];
-int blockSize = psl->blockSizes[0];
-int i;
-for (i=1; i<psl->blockCount; ++i)
-    {
-    int tEnd = tStart + blockSize;
-    int qEnd = qStart + blockSize;
-    tStart = psl->tStarts[i];
-    qStart = psl->qStarts[i];
-    blockSize = psl->blockSizes[i];
-    if (tStart - tEnd > mergeMax || qStart - qEnd > mergeMax)
-	++blockCount;
-    }
-
-/* Call library routine that does conversion without merging. */
-struct bed *bed = bedFromPsl(psl);
-if (blockCount != psl->blockCount)
-    {
-    /* If need be merge some blocks. */
-    blockCount = 1;
-    int tStart = psl->tStarts[0];
-    int qStart = psl->qStarts[0];
-    int blockSize = psl->blockSizes[0];
-    for (i=1; i<psl->blockCount; ++i)
-        {
-	int tEnd = tStart + blockSize;
-	int qEnd = qStart + blockSize;
-	tStart = psl->tStarts[i];
-	qStart = psl->qStarts[i];
-	blockSize = psl->blockSizes[i];
-	if (tStart - tEnd > mergeMax || qStart - qEnd > mergeMax)
-	    {
-	    bed->blockSizes[blockCount] = blockSize;
-	    bed->chromStarts[blockCount] = tStart - bed->chromStart;
-	    ++blockCount;
-	    }
-	else
-	    {
-	    bed->blockSizes[blockCount-1] += tStart - tEnd + blockSize;
-	    }
-	}
-    bed->blockCount = blockCount;
-    }
-return bed;
-}
-
 void fixPslIntrons(struct psl *psl, struct dnaSeq *chrom)
 /* Go through gaps in psl.  For ones the right size to be introns,
  * see if ends are introns.  If not see if adding or subtracting
