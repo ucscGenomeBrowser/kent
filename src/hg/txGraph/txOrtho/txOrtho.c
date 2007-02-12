@@ -430,9 +430,9 @@ return TRUE;
 
 void writeOverlappingEdges(
 	enum ggEdgeType edgeType, struct txGraph *inGraph,
-	int inStart, int start, enum ggVertexType startType, boolean startMappedExact, 
-	int inEnd, int end, enum ggVertexType endType, boolean endMappedExact, 
-	struct txGraph *graph, boolean orthoRev, FILE *f)
+	int inStart, int mappedStart, enum ggVertexType startType, boolean startMappedExact, 
+	int inEnd, int mappedEnd, enum ggVertexType endType, boolean endMappedExact, 
+	struct txGraph *orthoGraph, boolean orthoRev, int mappedCoverage, FILE *f)
 /* Write edges of graph that overlap correctly to f */
 {
 if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
@@ -440,17 +440,17 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
     if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
 	{
 	struct txEdge *edge;
-	for (edge = graph->edges; edge != NULL; edge = edge->next)
+	for (edge = orthoGraph->edges; edge != NULL; edge = edge->next)
 	    {
 	    if (edge->type == edgeType)
 		{
-		int oStartIx = edge->startIx;
-		int oStart = graph->vertices[oStartIx].position;
-		// enum ggVertexType oStartType = graph->vTypes[oStartIx];
-		int oEndIx = edge->endIx;
-		int oEnd = graph->vertices[oEndIx].position;
-		// enum ggVertexType oEndType = graph->vTypes[oEndIx];
-		int overlap = rangeIntersection(start, end, oStart, oEnd);
+		int orthoStartIx = edge->startIx;
+		int orthoStart = orthoGraph->vertices[orthoStartIx].position;
+		enum ggVertexType orthoStartType = orthoGraph->vertices[orthoStartIx].type;
+		int orthoEndIx = edge->endIx;
+		int orthoEnd = orthoGraph->vertices[orthoEndIx].position;
+		enum ggVertexType orthoEndType = orthoGraph->vertices[orthoEndIx].type;
+		int overlap = rangeIntersection(mappedStart, mappedEnd, orthoStart, orthoEnd);
 		if (overlap > 0)
 		    {
 		    enum ggVertexType rStartType = startType, rEndType = endType;
@@ -459,15 +459,36 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 			rStartType = endType;
 			rEndType = startType;
 			}
-		    if (rStartType == ggSoftStart || rStartType == ggSoftEnd || start == oStart)
+		    if (rStartType == ggSoftStart || rStartType == ggSoftEnd || mappedStart == orthoStart)
 			{
-			if (rEndType == ggSoftStart || rEndType == ggSoftEnd || end == oEnd)
+			if (rEndType == ggSoftStart || rEndType == ggSoftEnd || mappedEnd == orthoEnd)
 			    {
-			    fprintf(f, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%s\t%s\t%d\t%d\n", 
-				inGraph->name,
-				(edgeType == ggExon ? "exon" : "intron"),
-				startType, endType, inGraph->tName, inStart, inEnd,
-				graph->name, graph->tName, start, end);
+			    /* Compute score that depends on how much start/end have wobbled. */
+			    int mappedOverlapScore = 1000 * overlap/(mappedEnd - mappedStart);
+			    int orthoOverlapScore = 1000 * overlap/(orthoEnd - orthoStart);
+			    int overlapScore = min(mappedOverlapScore, orthoOverlapScore);
+			    int coverageScore = 1000 * mappedCoverage/(inEnd - inStart);
+
+			    /* Write out bed fields. */
+			    fprintf(f, "%s\t%d\t%d\t", inGraph->tName, inStart, inEnd);
+			    fprintf(f, "%s\t", orthoGraph->name);
+			    fprintf(f, "%d\t", coverageScore);
+			    fprintf(f, "%s\t", inGraph->strand);
+
+			    /* Write out edge and vertex type info. */
+			    fprintf(f, "%s\t", ggVertexTypeAsString(startType));
+			    fprintf(f, "%s\t", (edgeType == ggExon ? "exon" : "intron"));
+			    fprintf(f, "%s\t", ggVertexTypeAsString(endType));
+
+			    /* Write out mouse info. */
+			    fprintf(f, "%s\t%d\t%d\t", orthoGraph->tName, mappedStart, mappedEnd);
+			    fprintf(f, "%s\t", inGraph->name);
+			    fprintf(f, "%d\t", overlapScore);
+			    fprintf(f, "%s\t", orthoGraph->strand);
+			    fprintf(f, "%s\t", ggVertexTypeAsString(orthoStartType));
+			    fprintf(f, "%s\t", ggVertexTypeAsString(orthoEndType));
+			    fprintf(f, "%d\t", orthoStart);
+			    fprintf(f, "%d\n", orthoEnd);
 			    }
 			}
 		    }
@@ -479,6 +500,7 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 
 void writeCommonEdges(struct txGraph *inGraph, 
 	struct chain *chain, struct txGraph *orthoGraph, FILE *f)
+/* Write out common edges between inGraph and orthoGraph. */
 {
 struct txEdge *edge;
 for (edge = inGraph->edges; edge != NULL; edge = edge->next)
@@ -492,14 +514,15 @@ for (edge = inGraph->edges; edge != NULL; edge = edge->next)
     enum ggVertexType inStartType = inGraph->vertices[inStartIx].type;
     enum ggVertexType inEndType = inGraph->vertices[inEndIx].type;
 
-    int orthoStart, orthoEnd, orthoCoverage;
-    boolean orthoRev, orthoStartExact, orthoEndExact;
-    if (edgeMap(inStart, inEnd, chain,  &orthoStart, &orthoEnd,
-	    &orthoRev, &orthoStartExact, &orthoEndExact, &orthoCoverage))
+    int mappedStart, mappedEnd, mappedCoverage;
+    boolean mappedRev, mappedStartExact, mappedEndExact;
+    if (edgeMap(inStart, inEnd, chain,  &mappedStart, &mappedEnd,
+	    &mappedRev, &mappedStartExact, &mappedEndExact, &mappedCoverage))
 	{
 	writeOverlappingEdges(edgeType, inGraph,
-		inStart, orthoStart, inStartType, orthoStartExact, 
-		inEnd, orthoEnd, inEndType, orthoEndExact, orthoGraph, orthoRev, f);
+		inStart, mappedStart, inStartType, mappedStartExact, 
+		inEnd, mappedEnd, inEndType, mappedEndExact, orthoGraph, 
+		mappedRev, mappedCoverage, f);
 	}
     }
 }
