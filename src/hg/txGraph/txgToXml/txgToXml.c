@@ -25,25 +25,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *ggVertexTypeAsString(enum ggVertexType type)
-/* Return string corresponding to vertex type. */
-{
-switch(type)
-    {
-    case ggSoftStart:
-        return "(";
-    case ggHardStart:
-        return "[";
-    case ggSoftEnd:
-        return ")";
-    case ggHardEnd:
-        return "]";
-    default:
-        errAbort("Unknown type %d", type);
-	return "unknown";
-    }
-}
-
 void txgWriteXml(struct txGraph *graph, FILE *f)
 /* Write out graph as xml. */
 {
