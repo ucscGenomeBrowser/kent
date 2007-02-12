@@ -3,13 +3,14 @@
 #include "linefile.h"
 #include "hash.h"
 #include "memalloc.h"
+#include "localmem.h"
 #include "options.h"
-#include "altGraphX.h"
+#include "geneGraph.h"
+#include "txGraph.h"
 #include "binRange.h"
 #include "chain.h"
 #include "chainNet.h"
 #include "rbTree.h"
-#include "rangeTree.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -81,11 +82,11 @@ struct minChromSize
     int minSize;		
     };
 
-struct hash *txgChromMinSizeHash(struct altGraphX *txgList)
+struct hash *txgChromMinSizeHash(struct txGraph *txgList)
 /* Hash full of lower bounds on chromosome sizes, taken
  * from tEnd's in txgList. */
 {
-struct altGraphX *txg;
+struct txGraph *txg;
 struct hash *sizeHash = hashNew(16);
 for (txg = txgList; txg != NULL; txg = txg->next)
     {
@@ -105,13 +106,13 @@ for (txg = txgList; txg != NULL; txg = txg->next)
 return sizeHash;
 }
 
-struct hash *txgIntoKeeperHash(struct altGraphX *txgList)
+struct hash *txgIntoKeeperHash(struct txGraph *txgList)
 /* Create a hash full of bin keepers (one for each chromosome or contig.
  * The binKeepers are full of txGraphs. */
 {
 struct hash *sizeHash = txgChromMinSizeHash(txgList);
 struct hash *bkHash = hashNew(16);
-struct altGraphX *txg;
+struct txGraph *txg;
 for (txg = txgList; txg != NULL; txg = txg->next)
     {
     struct binKeeper *bk = hashFindVal(bkHash, txg->tName);
@@ -128,12 +129,12 @@ hashFree(&sizeHash);
 return bkHash;
 }
 
-struct altGraphX *agxForCoordinates(char *chrom, int chromStart, int chromEnd, char strand, 
+struct txGraph *agxForCoordinates(char *chrom, int chromStart, int chromEnd, char strand, 
 				    struct hash *orthoChromHash)
 /* Get list of graphs that cover a particular region. */
 {
 struct binElement *beList = NULL, *be = NULL;
-struct altGraphX *agx = NULL, *agxList = NULL;
+struct txGraph *agx = NULL, *agxList = NULL;
 struct binKeeper *bk = hashFindVal(orthoChromHash, chrom);
 if (bk != NULL)
     {
@@ -168,13 +169,13 @@ else
     }
 }
 
-void loadOrthoAgxList(struct altGraphX *ag, struct chain *chain, struct hash *orthoGraphHash,
-				   boolean *revRet, struct altGraphX **orthoAgListRet)
-/** Return the altGraphX records in the orhtologous position on the other genome
+void loadOrthoAgxList(struct txGraph *ag, struct chain *chain, struct hash *orthoGraphHash,
+				   boolean *revRet, struct txGraph **orthoAgListRet)
+/** Return the txGraph records in the orhtologous position on the other genome
     as defined by ag and chain. */
 {
 int qs = 0, qe = 0;
-struct altGraphX *orthoAgList = NULL; 
+struct txGraph *orthoAgList = NULL; 
 struct chain *subChain = NULL, *toFree = NULL;
 boolean reverse = FALSE;
 char *strand = NULL;
@@ -321,19 +322,19 @@ if (bk != NULL)
 return fillList;
 }
 
-struct altGraphX *orthoGraphsViaChain(struct altGraphX *inGraph, struct chain *chain, 
+struct txGraph *orthoGraphsViaChain(struct txGraph *inGraph, struct chain *chain, 
 	struct hash *orthoGraphHash)
 /* Get a list of orthologous graphs in another species using chain to map.
  * The orthologous graphs are simply those that overlap at the exon level on the
  * same strand. */
 {
 boolean reverse = FALSE;
-struct altGraphX *orthoGraphList = NULL;
+struct txGraph *orthoGraphList = NULL;
 loadOrthoAgxList(inGraph, chain, orthoGraphHash, &reverse, &orthoGraphList);
 return orthoGraphList;
 }
 
-struct chain *bestChainForGraph(struct altGraphX *inGraph, struct hash *chainHash,
+struct chain *bestChainForGraph(struct txGraph *inGraph, struct hash *chainHash,
 	struct hash *netHash)
 /* Find chain that has most block-level overlap with exons in graph. */
 {
@@ -348,13 +349,13 @@ int blockCount = 0;
 int *starts, *sizes;
 AllocArray(starts, inGraph->edgeCount);
 AllocArray(sizes, inGraph->edgeCount);
-int i;
-for (i=0; i<inGraph->edgeCount; ++i)
+struct txEdge *edge;
+for (edge = inGraph->edges; edge != NULL; edge = edge->next)
     {
-    if (inGraph->edgeTypes[i] == ggExon)
+    if (edge->type == ggExon)
         {
-	int start = starts[blockCount] = inGraph->vPositions[inGraph->edgeStarts[i]];
-	sizes[blockCount] = inGraph->vPositions[inGraph->edgeEnds[i]] - start;
+	int start = starts[blockCount] = inGraph->vertices[edge->startIx].position;
+	sizes[blockCount] = inGraph->vertices[edge->endIx].position - start;
 	++blockCount;
 	}
     }
@@ -371,13 +372,13 @@ return chain;
 }
 
 
-struct altGraphX *findOrthoGraphs(struct altGraphX *inGraph, struct chain *chain,
+struct txGraph *findOrthoGraphs(struct txGraph *inGraph, struct chain *chain,
 	struct hash *orthoGraphHash)
 /* Find list of orthologous graphs if any.  Beware the side effect of tweaking
  * some of the fill->next pointers at the highest level of the net. It's expensive
  * to avoid the side effect, and it doesn't bother subsequent calls to this function. */
 {
-struct altGraphX *orthoGraphList = NULL;
+struct txGraph *orthoGraphList = NULL;
 if (chain != NULL)
     {
     verbose(3, "Best chain for %s is %s:%d-%d %c %s:%d-%d\n", inGraph->name,
@@ -390,23 +391,6 @@ else
     verbose(3, "Couldn't find best chain for %s\n", inGraph->name);
     }
 return orthoGraphList;
-}
-
-struct rbTree *graphToRangeTree(struct altGraphX *graph)
-/* Make a range tree that covers all exons in graph. */
-{
-struct rbTree *rangeTree = rangeTreeNew();
-int i;
-for (i=0; i<graph->edgeCount; ++i)
-    {
-    if (graph->edgeTypes[i] == ggExon)
-        {
-	int start = graph->vPositions[graph->edgeStarts[i]];
-	int end  = graph->vPositions[graph->edgeEnds[i]];
-	rangeTreeAdd(rangeTree, start, end);
-	}
-    }
-return rangeTree;
 }
 
 int chainBasesInBlocks(struct chain *chain)
@@ -445,27 +429,26 @@ return TRUE;
 }
 
 void writeOverlappingEdges(
-	enum ggEdgeType edgeType, struct altGraphX *inGraph,
+	enum ggEdgeType edgeType, struct txGraph *inGraph,
 	int inStart, int start, enum ggVertexType startType, boolean startMappedExact, 
 	int inEnd, int end, enum ggVertexType endType, boolean endMappedExact, 
-	struct altGraphX *graph, boolean orthoRev, FILE *f)
+	struct txGraph *graph, boolean orthoRev, FILE *f)
 /* Write edges of graph that overlap correctly to f */
 {
 if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
     {
     if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
 	{
-	int edgeCount = graph->edgeCount;
-	int i;
-	for (i=0; i<edgeCount; ++i)
+	struct txEdge *edge;
+	for (edge = graph->edges; edge != NULL; edge = edge->next)
 	    {
-	    if (graph->edgeTypes[i] == edgeType)
+	    if (edge->type == edgeType)
 		{
-		int oStartIx = graph->edgeStarts[i];
-		int oStart = graph->vPositions[oStartIx];
+		int oStartIx = edge->startIx;
+		int oStart = graph->vertices[oStartIx].position;
 		// enum ggVertexType oStartType = graph->vTypes[oStartIx];
-		int oEndIx = graph->edgeEnds[i];
-		int oEnd = graph->vPositions[oEndIx];
+		int oEndIx = edge->endIx;
+		int oEnd = graph->vertices[oEndIx].position;
 		// enum ggVertexType oEndType = graph->vTypes[oEndIx];
 		int overlap = rangeIntersection(start, end, oStart, oEnd);
 		if (overlap > 0)
@@ -494,20 +477,20 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
     }
 }
 
-void writeCommonEdges(struct altGraphX *inGraph, struct rbTree *inRanges,
-	struct chain *chain, struct altGraphX *orthoGraph, FILE *f)
+void writeCommonEdges(struct txGraph *inGraph, 
+	struct chain *chain, struct txGraph *orthoGraph, FILE *f)
 {
-int i;
-for (i=0; i<inGraph->edgeCount; ++i)
+struct txEdge *edge;
+for (edge = inGraph->edges; edge != NULL; edge = edge->next)
     {
-    enum ggEdgeType edgeType = inGraph->edgeTypes[i];
+    enum ggEdgeType edgeType = edge->type;
     /* Load up end info on exon in other organism. */
-    int inStartIx = inGraph->edgeStarts[i];
-    int inEndIx = inGraph->edgeEnds[i];
-    int inStart = inGraph->vPositions[inStartIx];
-    int inEnd  = inGraph->vPositions[inEndIx];
-    enum ggVertexType inStartType = inGraph->vTypes[inStartIx];
-    enum ggVertexType inEndType = inGraph->vTypes[inEndIx];
+    int inStartIx = edge->startIx;
+    int inEndIx = edge->endIx;
+    int inStart = inGraph->vertices[inStartIx].position;
+    int inEnd  = inGraph->vertices[inEndIx].position;
+    enum ggVertexType inStartType = inGraph->vertices[inStartIx].type;
+    enum ggVertexType inEndType = inGraph->vertices[inEndIx].type;
 
     int orthoStart, orthoEnd, orthoCoverage;
     boolean orthoRev, orthoStartExact, orthoEndExact;
@@ -521,24 +504,22 @@ for (i=0; i<inGraph->edgeCount; ++i)
     }
 }
 
-void writeOrthoEdges(struct altGraphX *inGraph, struct hash *chainHash,
+void writeOrthoEdges(struct txGraph *inGraph, struct hash *chainHash,
 	struct hash *netHash, struct hash *orthoGraphHash, FILE *f)
 /* Look for orthologous edges, and write any we find. */
 {
 struct chain *chain = bestChainForGraph(inGraph, chainHash, netHash);
-struct altGraphX *orthoGraphList = 
+struct txGraph *orthoGraphList = 
 	findOrthoGraphs(inGraph, chain, orthoGraphHash);
 if (orthoGraphList != NULL)
     {
-    struct altGraphX *orthoGraph;
-    struct rbTree *inRanges = graphToRangeTree(inGraph);
+    struct txGraph *orthoGraph;
     for (orthoGraph = orthoGraphList; orthoGraph != NULL; orthoGraph = orthoGraph->next)
         {
-	writeCommonEdges(inGraph, inRanges, chain, orthoGraph, f);
+	writeCommonEdges(inGraph, chain, orthoGraph, f);
 	}
     verbose(3, "Graph %s maps to %d orthologous graph starting with %s\n", 
     	inGraph->name, slCount(orthoGraphList), orthoGraphList->name);
-    rbTreeFree(&inRanges);
     }
 else
     verbose(4, "No orthologous graph for %s\n", inGraph->name);
@@ -548,20 +529,20 @@ void txOrtho(char *inAgx, char *inChain, char *inNet, char *orthoAgx, char *outE
 /* txOrtho - Produce list of shared edges between two transcription graphs in two species. */
 {
 /* Load up input and create output file */
-struct altGraphX *inGraphList = altGraphXLoadAll(inAgx);
+struct txGraph *inGraphList = txGraphLoadAll(inAgx);
 verbose(1, "Loaded %d input graphs in %s\n", slCount(inGraphList), inAgx);
 struct hash *chainHash = allChainsHash(inChain);
 verbose(1, "Read %d chains from %s\n", chainHash->elCount, inChain);
 struct hash *netHash = netToBkHash(inNet);
 verbose(1, "Read %d nets from %s\n", netHash->elCount, inNet);
-struct altGraphX *orthoGraphList = altGraphXLoadAll(orthoAgx);
+struct txGraph *orthoGraphList = txGraphLoadAll(orthoAgx);
 verbose(1, "Loaded %d ortho graphs in %s\n", slCount(orthoGraphList), orthoAgx);
 struct hash *orthoGraphHash = txgIntoKeeperHash(orthoGraphList);
 verbose(1, "%d ortho chromosomes/scaffolds\n", orthoGraphHash->elCount);
 FILE *f = mustOpen(outEdges, "w");
 
 /* Loop through inGraphList. */
-struct altGraphX *inGraph;
+struct txGraph *inGraph;
 for (inGraph = inGraphList; inGraph != NULL; inGraph = inGraph->next)
     {
     verbose(2, "Processing %s %s:%d-%d strand %s\n", 

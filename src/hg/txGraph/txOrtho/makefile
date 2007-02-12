@@ -11,7 +11,7 @@ txOrtho: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txOrtho${EXE}
 
 test:
-	txOrtho input.agx input.chain input.net inOrtho.agx output.edges -verbose=0
+	txOrtho input.txg input.chain input.net inOrtho.txg output.edges -verbose=0
 	diff expected.edges output.edges
 
 clean:
