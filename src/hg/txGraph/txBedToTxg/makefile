@@ -11,7 +11,7 @@ txBedToTxg: $O ${MYLIBS}
 #	${STRIP} ${HOME}/bin/${MACHTYPE}/txBedToTxg${EXE}
 
 test:
-	txBedToTxg -verbose=0 input.lst output.txg 
+	txBedToTxg -verbose=0 inRef.bed refSeq input.bed mrna output.txg 
 	diff expected.txg output.txg
 
 clean:

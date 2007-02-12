@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "txBedToTxg - Create a transcription graph out of a bed-12 file.\n"
   "usage:\n"
-  "   txBedToTxg in.lst out.txg\n"
+  "   txBedToTxg in1.bed in1Type [in2.bed in2type ...]  out.txg\n"
   "where in.lst is a file with two columns:\n"
   "    type - usually 'refSeq' or 'mrna' or 'est' or something\n"
   "    bed -  a bed file\n"
@@ -92,13 +92,11 @@ for (bed = startBed;  bed != endBed; bed = bed->next)
 	/* Possibly soften ends */
 	if (isLastBlock && !isLastBed)
 	    {
-	    uglyf("Soften end\n");
 	    block->qEnd -= 1;
 	    block->tEnd -= 1;
 	    }
 	if (isFirstBlock && !isFirstBed)
 	    {
-	    uglyf("Soften start\n");
 	    block->qStart += 1;
 	    block->tStart += 1;
 	    }
@@ -274,19 +272,18 @@ return tg;
 }
 
 
-void txBedToTxg(char *inList, char *outGraph)
+void txBedToTxg(char *outGraph, char **inPairs, int inCount)
 /* txBedToTxg - Create a transcription graph out of a bed-12 file.. */
 {
-struct lineFile *lf = lineFileOpen(inList, TRUE);
 FILE *f = mustOpen(outGraph, "w");
-char *row[2];
 struct ggMrnaAli *maList = NULL;
+int i;
 
-/* Load in all beds. */
-while (lineFileRow(lf, row))
+/* Load all bed files and convert to ggMrnaAli. */
+for (i=0; i<inCount; ++i)
     {
-    char *type = cloneString(row[0]);
-    char *inBed = row[1];
+    char *inBed = *inPairs++;
+    char *type = *inPairs++;
     struct bed *bedList = bedLoadAll(inBed);
     verbose(1, "Loaded %d beds from %s\n", slCount(bedList), inBed);
     maList = slCat(maList, bedListToGgMrnaAliList(bedList, type));
@@ -316,8 +313,8 @@ int main(int argc, char *argv[])
 {
 // pushCarefulMemHandler(500000000);
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc < 4 || argc%2 != 0)
     usage();
-txBedToTxg(argv[1], argv[2]);
+txBedToTxg(argv[argc-1], argv+1, argc/2-1);
 return 0;
 }
