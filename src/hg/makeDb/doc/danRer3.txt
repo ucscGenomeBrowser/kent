@@ -8261,3 +8261,164 @@ exit 0
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer3
+
+###########################################################################
+# REMAKE RADIATION HYBRID MAP TRACK (in progress, 2007-02-08, hartera)
+# Use update of Radiation Hybrid map data from October 2006 and use method
+# as documented in danRer4.txt to map these sequences to danRer3.
+# Data from Yi Zhou at Boston Children's Hospital:
+# yzhou@enders.tch.harvard.edu
+# Latest RH map sequences and primers received on 2006-10-03 from
+# Anhua (Peter) Song - asong@enders.tch.harvard.edu
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/ZonLab/rhMap-2006-10-03
+    cd /cluster/data/danRer3/bed/ZonLab
+    ln -s rhMap-2006-10-03 rhMap
+    cd rhMap
+    # download data files from e-mail:
+    # rhSequenceSubmit100306.zip and rhSequenceSubmitSeq100306.zip
+    unzip rhSequenceSubmit100306.zip
+    unzip rhSequenceSubmitSeq100306.zip
+    dos2unix rhSequenceSubmit100306.txt
+    dos2unix rhSequenceSubmitSeq100306.txt
+    # Sequences are in rhSequenceSubmitSeq100306.txt and primers and other
+    # information are in rhSequenceSubmi100306.txt
+    grep '>' rhSequenceSubmitSeq100306.txt | wc -l
+    # 11514
+    wc -l  rhSequenceSubmit100306.txt
+    # 13438 rhSequenceSubmit100306.txt
+   
+    grep '>' rhSequenceSubmitSeq100306.txt > rhMap.names
+
+    # remove '>' from names and grab first field
+    perl -pi.bak -e 's/>//' rhMap.names
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap.names | sort | uniq \
+        > rhMap.namesOnly.sort
+    awk 'BEGIN {FS="|"} {print $1;}' rhSequenceSubmit100306.txt | sort | uniq \
+        > rhMapPrimers.namesOnly.sort
+    wc -l *.sort
+    # 11514 rhMap.namesOnly.sort
+    # 13436 rhMapPrimers.namesOnly.sort (after removing blank line)
+    
+    # get a list of headers from the FASTA file
+    grep '>' rhSequenceSubmitSeq100306.txt > rhMap.headers
+    awk 'BEGIN {FS="|"} {print $5;}' rhMap.headers | sort | uniq
+# BAC_END
+# EST
+# GENE
+# SSLP
+# STS
+    # There are 5 types of sequence here.
+    awk 'BEGIN {FS="|"} {print $9;}' rhMap.headers | sort | uniq
+#BACends
+#Custom
+#Insertion_Mutant
+#Insertion_Mutants
+#MGH
+#NCBI
+#Sanger SG
+#Sequencing_Project
+#ThisseClone
+#Thisse_Clone
+#other_zfEst
+#wu_zfEst
+#wz
+    awk 'BEGIN {FS="|"} {print $10;}' rhMap.headers | sort | uniq
+    # CHBG
+    # MPIEB
+
+# Insertion_Mutant = Insertion_Mutants; ThisseClone = Thisse_Clone;
+# So there are 11 different sources.
+    # There are 2 sequences with problem primers. E-mailed Peter Song about
+    # these and he suggested to delete thoser primers:
+    # >fb33f01.u1|5|388|5615|EST|f|cR|f|wu_zfEst|CHBG|+++33333333333333333333.|
+    # >zfishb-a976e04.p1c|14|16|158|STS|f|cR|f|Sequencing_Project|CHBG|A|A| 
+    # edit rhMap022306.fa and rhMapPrimers022306.txt and delete these primers.
+    # need to reformat FASTA headers so they are in the format: 
+    # NAME.SOURCE.TYPE.ORIGIN
+    # Insertion_Mutant=Insertion_Mutants; Thisse_Clone=ThisseClone
+    # so change these to have the same name. Also shorten Sanger SG to
+    # Shotgun.
+    sed -e 's/Insertion_Mutants/InsertMut/' rhSequenceSubmitSeq100306.txt \
+       | sed -e 's/Insertion_Mutant/InsertMut/' \
+       | sed -e 's/Sanger SG/Shotgun/' \
+       | sed -e 's/ThisseClone/Thisse/' \
+       | sed -e 's/Thisse_Clone/Thisse/' \
+       | sed -e 's/Sequencing_Project/Seqproj/' > rhMap100306.fa
+    # Do the same for the primers and information file:
+    sed -e 's/Insertion_Mutants/InsertMut/' rhSequenceSubmit100306.txt \
+       | sed -e 's/Insertion_Mutant/InsertMut/' \
+       | sed -e 's/Sanger SG/Shotgun/' \
+       | sed -e 's/ThisseClone/Thisse/' \
+       | sed -e 's/Thisse_Clone/Thisse/' \
+       | sed -e 's/Sequencing_Project/Seqproj/' > rhMapPrimers100306.txt
+
+    # use a script to reformat the names for the FASTA headers to the format 
+    # >NAME.SOURCE where name is the first field separated by "|" and source
+    # is the 9th field. The source is used to make the name unique. Some
+    # of these names are BAC ends that occur in the BAC ends track so there
+    # are name clashes in the seq table if the names are not made unique.
+    # Also make the name upper case as for those for the danRer1 and danRer2
+    # RH map and remove base numbering on each sequence line of FASTA file.
+cat << '_EOF_' > rhFix
+#!/usr/bin/awk -f 
+
+#>z1396|14|418|5707|SSLP|f|cR|f|MGH|MPIEB|ATCCTTCAGCCACTCCTTCA|TGGAACCTGAAAAACACACG|
+/^>/ {
+    split(toupper($0), a, "\\|");
+    print a[1]"."a[9];
+    next;
+}
+
+/^[0-9]+ / {
+    $0 = $2;
+}
+
+{
+    print $0;
+}
+
+'_EOF_'
+# << keep emacs coloring happy
+    chmod +x rhFix
+    rhFix rhMap100306.fa > rhMap.fa
+    # Blat sequences vs danRer3 genome
+    ssh pk
+    mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/blatRun
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap
+    # put the rhMap sequences on the san 
+    mkdir -p /san/sanvol1/scratch/danRer3/rhMap
+    cp rhMap.fa /san/sanvol1/scratch/danRer3/rhMap/
+    # do blat run to align RH map sequences to danRer3 and and use
+    # chrNA_random and chrUn_random separated into scaffolds.
+    cd blatRun
+    ls -1S /san/sanvol1/scratch/danRer3/rhMap/rhMap.fa > rhMap.lst
+    foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/*.fa)
+       ls -1S $f >> genome.lst
+    end
+    wc -l genome.lst 
+    # 15149 genome.lst
+    # for output:
+    mkdir -p /san/sanvol1/scratch/danRer3/rhMap/psl
+    # use -repeats option to report matches to repeat bases separately
+    # to other matches in the PSL output.
+    echo '#LOOP\n/cluster/bin/x86_64/blat -repeats=lower -minIdentity=80
+-ooc=/san/sanvol1/scratch/danRer3/danRer3_11.ooc $(path1) $(path2) {check out
+line+ /san/sanvol1/scratch/danRer3/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
+> template.sub
+
+    gensub2 genome.lst rhMap.lst template.sub para.spec
+    para create para.spec
+    para try, check, push ... etc.
+    para time
+# Completed: 15149 of 15149 jobs
+# CPU time in finished jobs:      14077s     234.62m     3.91h    0.16d  0.000 y
+# IO & Wait Time:                 39588s     659.79m    11.00h    0.46d  0.001 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           379s       6.32m     0.11h    0.00d
+
+    # need to do pslSort and lift up
+
+#########################################################################
