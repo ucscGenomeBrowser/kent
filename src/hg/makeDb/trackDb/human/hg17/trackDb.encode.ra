@@ -3118,6 +3118,7 @@ longLabel UCSC, RNA secondary structure predicted by EvoFold (id_strand_score)
 group encodeGenes
 priority 63.11
 visibility hide
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 color 30,120,0
 type bed 6 +
 mafTrack encodeTbaAlign
