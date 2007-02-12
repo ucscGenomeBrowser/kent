@@ -14,6 +14,7 @@
 set choice=''
 set outPath='/usr/local/apache/htdocs/qa/test-results'
 set todaysDb=''
+set list=''
 set error="ERROR - no database list. Try this first: databaseAday.csh init"
 
 if ( $#argv < 1  || $#argv > 2 ) then
@@ -60,8 +61,8 @@ if ( $choice == "today" ) then
   # be sure we haven't completely wrapped around the list
   # an redo list if so
   if ( $todaysDb == "DO-OVER" ) then
-    $0 init .
-    set todaysDb=`$0 today .`
+    $0 init $outPath
+    set todaysDb=`$0 today $outPath`
   endif
   # all is good!
   echo $todaysDb
@@ -77,7 +78,7 @@ if ( $choice == "init" ) then
   # get list of active $gbd databases
   hgsql -h genome-centdb hgcentral -B -N \
     -e "SELECT name FROM dbDb WHERE active = 1" \
-    | sed -e "s/ /\n/g" > $outPath/databaseAdayList
+    > $outPath/databaseAdayList
   #   | sed -e "s/ /\n/g" | sort > $outPath/databaseAdayList
   # ( seems more random without the sort )
 
@@ -99,8 +100,8 @@ if ( $choice == "next" ) then
     exit 1
   endif
   
-  # get the database at the top of the list
-  set todaysDb=`cat $outPath/databaseAdayList | head -1`
+  # get the database at the top of the list 
+  set todaysDb=`head -1 $outPath/databaseAdayList`
   # be sure we haven't completely wrapped around the list
   # if so, reinitialize list and quit
   if ( $todaysDb == "DO-OVER" ) then
@@ -108,10 +109,8 @@ if ( $choice == "next" ) then
     exit 0
   endif
   # put the top db at the bottom of the list
-  grep -v $todaysDb $outPath/databaseAdayList > XXdatabaseAdayTempListXX
-  echo $todaysDb >> XXdatabaseAdayTempListXX
-  # move the new file back into place
-  mv XXdatabaseAdayTempListXX $outPath/databaseAdayList
+  set list=`grep -v $todaysDb $outPath/databaseAdayList`
+  echo $list $todaysDb | sed -e "s/ /\n/g" > $outPath/databaseAdayList
 
   # give the file the correct permissions
   chmod 774 $outPath/databaseAdayList
