@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.17 2007/02/12 22:10:46 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.18 2007/02/12 22:20:42 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -434,7 +434,7 @@ struct misMatch *mm;
 for (mm = *misMatchList ; mm != NULL ; mm = mm->next)
     for (i = 0 ; i < mm->snpCount; i++)
         {
-        verbose(4,"       [%d] print snp %s %s %s:%d %c mrnaLoc %d t %c loci %d\n",
+        verbose(4,"       [%d] print mmlist snp %s %s %s:%d %c mrnaLoc %d t %c loci %d\n",
             mm->loci, mm->snps[i], mm->name, mm->chrom, mm->chromStart, 
             mm->strand, mm->mrnaLoc,  mm->genomeBase, mm->loci);
         }
@@ -826,9 +826,9 @@ for (l = lociList ; l != NULL; l=l->next)
     int score = goodCount[z]-missCount[z] - indel ;
     int diff =  score - nextBestScore;
     int spread = maxScore - nextBestScore;
-    getLociPosition(lociList, l->index, &chrom, &chromStart, &chromEnd, &psl);
+    bool posOk = getLociPosition(lociList, l->index, &chrom, &chromStart, &chromEnd, &psl);
     assert(psl != NULL);
-    if (diff >= minDiff && spread >= minDiff /* z >= 0 *&& maxCount == 1 && */)
+    if (posOk && diff >= minDiff && spread >= minDiff /* z >= 0 *&& maxCount == 1 && */)
         {
         verbose(2, "%s bestHit score %d %s:%d-%d [%d] mismatch %d good %d neither %d indel %d sum %d\
                 gaps %d snps %d seqCnt-loci %d maxScore %d maxCount %d 2nd best %d diff %d\n",
