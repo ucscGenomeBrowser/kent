@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.18 2007/02/12 22:20:42 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.19 2007/02/12 23:43:13 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -1116,12 +1116,13 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 
     for (mm = *misMatchList ; mm != NULL ; mm = mm->next)
         {
+        /* i = offset within the block */
         int i = mm->mrnaLoc - qs;
         int genomeStart = ts+i;
         if (genomeStrand == '-')
             genomeStart = te-i-1;
         if (sameString(mm->chrom , na) && index == mm->loci &&
-                mm->mrnaLoc >= qs && mm->mrnaLoc <= qe && i >= 0)
+                mm->mrnaLoc >= qs && mm->mrnaLoc < qe && i >= 0)
             {
             char t = toupper(tSeq->dna[i]);
             char q = toupper(qSeq->dna[i]);
@@ -1139,9 +1140,9 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
                 verbose(2, "mismatch %s %s q %c != mmBase %c offset %d\n",psl->qName, psl->tName,q,(mm->mrnaBase), i );
                 assert(q==(mm->mrnaBase));
                 }
-            verbose(5,"   fillin yz mismatch %s %d %c/%c t %s:%d q %d %s %c loci %d\n",
-                    psl->qName, i ,t, q, psl->tName, 
-                    genomeStart, mm->mrnaLoc, psl->strand, genomeStrand, mm->loci);
+            verbose(5,"   fillinMatches() %s %c/%c t %s:%d q %d i %d qs %d qe %d %s %c loci %d\n",
+                    psl->qName, t, q, psl->tName, 
+                    genomeStart, mm->mrnaLoc, i, qs, qe ,psl->strand, genomeStrand, mm->loci);
             }
 /*        else if (i < 0)
             {
@@ -1154,9 +1155,9 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
         else if (sameString(mm->chrom , na) && index == mm->loci )
             {
             mm->genomeBase = '-';
-            verbose(5,"   fillin skipped yz mismatch %s t %s:%d q %d %s loci %d i %d\n",
+            verbose(5,"   fillinMatches() skipped mismatch %s t %s:%d mrnaLoc %d qs %d %s loci %d i=mrnLoc-qs %d\n",
                     psl->qName, psl->tName, 
-                    psl->tStart, mm->mrnaLoc, psl->strand, mm->loci, i);
+                    psl->tStart, mm->mrnaLoc, qs , psl->strand, mm->loci, i);
             }
         }
     /*
@@ -1207,7 +1208,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
-    verbose(5,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
+    verbose(5,"  buildMisMatches for blk %s t %s:%d-%d q %d-%d %s strand %c\n",
             psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
     verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, strlen(tSeq->dna));
@@ -1252,15 +1253,17 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
                 snpBase = toupper(tSeq->dna[offset]);
                if (snpBase != t)
                    {
-                   verbose(3,"snp mismatch genome %c snpbase %c mrna %c ts %d snp %d valid %s\n",
+                   verbose(4,"snp mismatch genome %c snpbase %c mrna %c ts %d snp %d valid %s\n",
                            t, snpBase, q, ts, snp->chromStart, snp->valid);
 //                        assert(snpBase == t);
                    }
                else
-                verbose(3,"       [%d] snp match %s %s %s:%d %s %s offset %d gs %c ts %d genomic%c %c valid %s\n",
+                verbose(4,"       [%d] snp match %s %s %s:%d %s %s offset %d gs %c ts %d genomic%c %c valid %s\n",
                         getLoci(lociList, psl->tName, psl->tStart), snp->name, psl->qName, snp->chrom, snp->chromStart, snp->observed, 
                         snp->strand, offset, genomeStrand, ts, genomeStrand, t, snp->valid);
                 }
+           verbose(5,"     add mismatch genome %c mrna %c ts %d gn %d offset %d mrnaLoc %d\n",
+                       t, q, ts, genomeStart, i, mrnaLoc);
             newMisMatches(misMatchList, psl->qName, i ,t, q, psl->tName, 
                     genomeStart, mrnaLoc, genomeStrand, lociList, snpList);
             }
@@ -1270,6 +1273,8 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 //        {
 //        char q = toupper(qSeq->dna[i]);
 //
+//            verbose(4, "mismatch gap %c offset %d \n",
+//                    q, i);
 //        newMisMatches(misMatchList, psl->qName, i ,'-', q, psl->tName, 
 //                -1, i, genomeStrand, lociList, snpList);
 //        }
