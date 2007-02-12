@@ -97,6 +97,7 @@ DIRS = \
 	nibFrag \
 	nibSize \
 	nt4Frag \
+	pslToPslx \
 	pslToXa \
 	randomLines \
 	rmFaDups \
