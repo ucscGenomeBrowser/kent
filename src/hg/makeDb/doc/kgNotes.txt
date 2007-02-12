@@ -3,109 +3,90 @@ ssh hgwdev
 mkdir /cluster/data/hg18/bed/jkg
 cd /cluster/data/hg18/bed/jkg
 
-# Get psls - refSeqAli and mrna separated into chromosomes
-mkdir mrnaIn
+# Get refSeq and mrna tables converted to bed.  Ignore the
+# stdin is empty messages, these are just from _random chroms
+# with no annotations.
+mkdir refSeq mrna
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
-    hgGetAnn hg18 refSeqAli $c mrnaIn/$c.psl
-    hgGetAnn hg18 mrna $c stdout >> mrnaIn/$c.psl
+    hgGetAnn -noMatchOk hg18 refSeqAli $c stdout | txPslToBed stdin /cluster/data/hg18/hg18.2bit refSeq/$c.bed
+    hgGetAnn -noMatchOk hg18 mrna $c stdout | txPslToBed stdin /cluster/data/hg18/hg18.2bit mrna/$c.bed
 end
-# Just ignore cases where get Error: no table rows matching query.  These are
-# from some of the small randoms.
 
-# Cluster the RNA
-mkdir clusterPsl
-cd mrnaIn
-foreach f (*.psl)
-    echo $f
-    clusterPsl $f ../clusterPsl/$f:r.bed
+# Create splicing graphs
+mkdir nativeTxg
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo $c
+    txBedToTxg refSeq/$c.bed refSeq mrna/$c.bed mrna nativeTxg/$c.txg
 end
-cd ..
 
-# Do the altSplice - takes about 5 minutes
-mkdir altSplice
-cd clusterPsl
-foreach f (*.bed)
-    echo $f to $f:r.agx
-    set c=$f:r
-    altSplice db=hg18 beds=$f -agxOut=../altSplice/$c.agx -noEst -singleExonOk \
-    	-weightMrna -localMem -consensus \
-	-chromNib=/cluster/data/hg18/nib/$c.nib
-end
-cd ..
 
 # Setup mouse dir
 mkdir mm8
 cd mm8
 
 # Get mouse mrna including ESTs.  Takes about a minute
-mkdir mrnaIn
+mkdir refSeq mrna est
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     echo $c
-    hgGetAnn mm8 refSeqAli $c mrnaIn/$c.psl
-    hgGetAnn mm8 mrna $c stdout >> mrnaIn/$c.psl
-    hgGetAnn mm8 intronEst $c stdout >> mrnaIn/$c.psl
+    hgGetAnn -noMatchOk mm8 refSeqAli $c stdout | txPslToBed stdin /cluster/data/mm8/mm8.2bit refSeq/$c.bed 
+    hgGetAnn -noMatchOk mm8 mrna $c stdout | txPslToBed stdin /cluster/data/mm8/mm8.2bit mrna/$c.bed
+    hgGetAnn -noMatchOk mm8 intronEst $c stdout | txPslToBed stdin /cluster/data/mm8/mm8.2bit est/$c.bed
 end
 
-# Get mouse clusters.  Takes a little more than a minute
-mkdir clusterPsl
-cd mrnaIn
-foreach f (*.psl)
-    echo $f
-    clusterPsl $f ../clusterPsl/$f:r.bed
+# Create mouse splicing graphs.  Takes about 10 minutes
+rm -f mouse.txg
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
+    echo $c
+    txBedToTxg refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> mouse.txg
 end
-cd ..
 
-# Do mouse altSplice. This will include ESTs. Takes about 30 minutes
-mkdir altSplice
-cd clusterPsl
-foreach f (*.bed)
-    echo $f to $f:r.agx
-    set c=$f:r
-    altSplice db=mm8 beds=$f -agxOut=../altSplice/$c.agx -singleExonOk \
-    	-weightMrna -localMem -consensus \
-	-chromNib=/cluster/data/mm8/nib/$c.nib
-end
-cd ..
-cat altSplice/*.agx > ../mouse.agx
 
-# Clean up all but final mouse.agx
-rm -r mrnaIn altSplice clusterPsl
+# Clean up all but final mouse.txg
+rm -r est mrna refSeq
 
 # Unpack chains and nets, apply synteny filter and split by chromosome
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netFilter -syn stdin | netSplit stdin nets
 cd ..
 
-# Get exonophy
-echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql -N hg18 > exoniphy.bed
-
-# Create orthoSplice directory structure and a para spec file
-mkdir orthoSplice
-cd orthoSplice
-mkdir agx report
-cd ../altSplice
-echo "#\!/bin/tcsh -ef" > ../orthoSplice/spec
-foreach f (*.agx)
+# Run txOrtho directory and a para spec file
+mkdir txOrtho
+cd txOrtho
+mkdir edges
+cd ../nativeTxg
+echo "#\!/bin/tcsh -ef" > ../txOrtho/spec
+foreach f (*.txg)
     set c=$f:r
-    set chromSize=`echo select size from chromInfo where chrom=\"$c\" | hgsql -N hg18`
-    echo "orthoSplice -chromSize=$chromSize -exonFile=../exoniphy.bed -trumpNum=3 -chrom=$c -altInFile=../altSplice/$f -orthoAgxFile=../mm8/mouse.agx -db=hg18 -orthoDb=mm8 -netFile=../mm8/nets/$c.net -chainFile=../mm8/chains/$c.chain -commonFile=agx/$c.agx -reportFile=report/$c.report -edgeFile=report/$c.edge" >> ../orthoSplice/spec
+    echo txOrtho ../nativeTxg/$f ../mm8/chains/$c.chain ../mm8/nets/$c.net ../mm8/mouse.txg edges/$c.edges >> ../txOrtho/spec
 end
 cd ..
 
-# Do parasol run on iServer (high RAM) cluster
+# Add evidence from ortho edges
+cd /cluster/data/hg18/bed/jkg
+mkdir orthoTxg
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    set c = $f:r
+    echo $c
+    txgAddEvidence nativeTxg/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
+end
+
+# Do txOrtho parasol run on iServer (high RAM) cluster
 ssh kki
-cd /cluster/data/hg18/bed/jkg/orthoSplice
+cd /cluster/data/hg18/bed/jkg/txOrtho
 para create spec
 para make
 para time
-#Completed: 46 of 46 jobs
-#CPU time in finished jobs:      21333s     355.56m     5.93h    0.25d  0.001 y
-#IO & Wait Time:                   214s       3.56m     0.06h    0.00d  0.000 y
-#Average job time:                 468s       7.81m     0.13h    0.01d
+Completed: 49 of 49 jobs
+#CPU time in finished jobs:      17441s     290.68m     4.84h    0.20d  0.001 y
+#IO & Wait Time:                   403s       6.72m     0.11h    0.00d  0.000 y
+#Average job time:                 364s       6.07m     0.10h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:            3362s      56.03m     0.93h    0.04d
-#Submission to last job:          3362s      56.03m     0.93h    0.04d
+#Longest finished job:            3437s      57.28m     0.95h    0.04d
+#Submission to last job:          3437s      57.28m     0.95h    0.04d
+
+# Get exonophy
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql -N hg18 > exoniphy.bed
 
 # Clean up chains and nets since they are big
 cd /cluster/data/hg18/bed/jkg
