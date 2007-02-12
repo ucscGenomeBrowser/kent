@@ -10,6 +10,9 @@
 #include "dystring.h"
 #include "txGraph.h"
 
+int maxJoinSize = 50000;
+boolean forceRefSeqJoin = TRUE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -20,10 +23,18 @@ errAbort(
   "where in.lst is a file with two columns:\n"
   "    type - usually 'refSeq' or 'mrna' or 'est' or something\n"
   "    bed -  a bed file\n"
+  "options:\n"
+  "    -maxJoinSize=N - Maximum size of gap to join for introns with\n"
+  "                    noisy ends. Default %d.\n"
+  "    -noForceRefSeqJoin - If set don't force joins above maxJoinSize\n"
+  "                    on refSeq type\n"
+  , maxJoinSize
   );
 }
 
 static struct optionSpec options[] = {
+   {"maxJoinSize", OPTION_INT},
+   {"noForceRefSeqJoin", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -111,6 +122,7 @@ struct ggMrnaAli *bedListToGgMrnaAliList(struct bed *bedList, char *sourceType)
 {
 struct bed *startBed, *bed, *endBed;
 struct ggMrnaAli *maList = NULL;
+boolean bigGapOk = (sameString(sourceType, "refSeq") && forceRefSeqJoin);
 for (startBed = bedList; startBed != NULL; startBed = endBed)
     {
     /* Figure out first bed with different name, or that otherwise can't be
@@ -120,7 +132,9 @@ for (startBed = bedList; startBed != NULL; startBed = endBed)
         {
 	if ( lastBed->chromEnd >= bed->chromStart || !sameString(lastBed->name, bed->name) 
 		|| bed->strand[0] != lastBed->strand[0] 
-		|| !sameString(bed->chrom, lastBed->chrom))
+		|| !sameString(bed->chrom, lastBed->chrom) )
+	    break;
+	if (!bigGapOk && lastBed->chromEnd - bed->chromStart > maxJoinSize)
 	    break;
 	lastBed = bed;
 	}
@@ -316,6 +330,8 @@ int main(int argc, char *argv[])
 {
 // pushCarefulMemHandler(500000000);
 optionInit(&argc, argv, options);
+maxJoinSize = optionInt("maxJoinSize", maxJoinSize);
+forceRefSeqJoin = !optionExists("noForceRefSeqJoin");
 if (argc < 4 || argc%2 != 0)
     usage();
 txBedToTxg(argv[argc-1], argv+1, argc/2-1);
