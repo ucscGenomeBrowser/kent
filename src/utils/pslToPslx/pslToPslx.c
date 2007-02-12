@@ -155,8 +155,7 @@ carefulClose(&pslOutFh);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int options = 0;
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 5)
     usage();
 gMasked = optionExists("masked");
