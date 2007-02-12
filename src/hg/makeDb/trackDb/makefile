@@ -35,6 +35,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	rn2 rn3 rn4 \
 	oryCun1 \
 	bosTau1 bosTau2 bosTau3 \
+	eduCab1 \
 	dasNov1 \
 	loxAfr1 \
 	echTel1 \
