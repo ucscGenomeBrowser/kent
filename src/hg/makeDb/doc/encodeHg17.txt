@@ -2975,13 +2975,14 @@ EOF
 
 #######################################################################
 # YALE RFBR (Regulatory Factor Binding Regions) DATA 
-# (in progress, 2006-11-01-2006-11-13, hartera)
+# (DONE, 2006-11-01-2006-11-13, hartera)
 # Data provided by Mark Gerstein's lab at Yale.
 # Contact: zhengdong.zhang@yale.edu 
 # E-mail from Zhengdong on Nov. 20, 2006 to say that currently there is a 
 # discussion among some ENCODE people if DHS sites should be included
 # when the clusters and deserts are generated. Therefore, it should not be 
 # released to the public site yet.   
+# Approved for release to public site by Zhengdong Zhang on 2007-01-24.
     ssh hgwdev
     mkdir /cluster/data/encode/yale/rfbr
     # move data from ftp site
