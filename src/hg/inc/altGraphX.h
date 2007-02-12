@@ -69,6 +69,8 @@ void evidenceOutput(struct evidence *el, FILE *f, char sep, char lastSep);
 #define evidenceCommaOut(el,f) evidenceOutput(el,f,',',',');
 /* Print out evidence as a comma separated list including final comma. */
 
+#define ALTGRAPHX_NUM_COLS 18
+
 struct altGraphX
 /* An alternatively spliced gene graph. */
     {

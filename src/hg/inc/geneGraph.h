@@ -41,6 +41,9 @@ enum ggVertexType
 char *ggVertexTypeAsString(enum ggVertexType type);
 /* Return string corresponding to vertex type. */
 
+enum ggVertexType ggVertexTypeFromString(char *s);
+/* Return string corresponding to vertex type. */
+
 enum ggEdgeType
 /* classifies an edge */
 {
