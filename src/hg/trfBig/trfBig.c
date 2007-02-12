@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.15 2006/09/11 16:36:47 angie Exp $";
+static char const rcsid[] = "$Id: trfBig.c,v 1.16 2007/02/12 23:08:05 angie Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
@@ -144,7 +144,11 @@ if (doBed)
     bedFile = mustOpen(bedFileName, "w");
     }
 splitPath(input, dir, seqName, ext);
-sprintf(tempFile, "%s/%s.tf", tempDir, seqName);
+if (sameString("stdin", seqName))
+    safef(tempFile, sizeof(tempFile), "%s",
+	  rTempName(tempDir, seqName, ".tf"));
+else
+    safef(tempFile, sizeof(tempFile), "%s/%s.tf", tempDir, seqName);
 if (endsWith(input, ".nib") && 
 	(endsWith(output, ".nib") || sameString(output, "/dev/null")))
     {
