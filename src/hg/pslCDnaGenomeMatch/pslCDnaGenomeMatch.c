@@ -30,7 +30,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.20 2007/02/13 03:50:36 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.21 2007/02/13 20:08:35 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -272,12 +272,12 @@ void addLoci(struct loci **lociList, struct psl *psl)
 struct loci *loci = NULL;
 bool found = FALSE;
 
-for (loci = *lociList ; loci != NULL ; loci = loci->next)
-    {
-    if (sameString(psl->tName, loci->chrom) && 
-            psl->tStart == loci->chromStart && psl->tEnd == loci->chromEnd)
-        errAbort("loci already added %s:%d-%d loci %d-%d\n",
-                psl->tName, psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd);
+//for (loci = *lociList ; loci != NULL ; loci = loci->next)
+//    {
+//    if (sameString(psl->tName, loci->chrom) && 
+//            psl->tStart == loci->chromStart && psl->tEnd == loci->chromEnd)
+//        errAbort("loci already added %s:%d-%d loci %d-%d\n",
+//                psl->tName, psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd);
 //    if (sameString(psl->tName, loci->chrom) && 
 //            positiveRangeIntersection(psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd))
 //        {
@@ -287,7 +287,7 @@ for (loci = *lociList ; loci != NULL ; loci = loci->next)
 //                psl->tName, psl->tStart, psl->tEnd, loci->chromStart, loci->chromEnd);
 //        found = TRUE;
 //        }
-    }
+//    }
 if (!found)
     {
     AllocVar(loci);
@@ -679,6 +679,7 @@ int maxScore = -100;       /* max scoring alignment for this mrna */
 int nextBestScore = -100;       /* 2nd best scoring alignment for this mrna */
 int maxCount = 0;       /* number of alignments with max score */
 int maxIndex = -1;      /* index in loci list of best aligment */
+int qNameCount = 0;     /* count of filtered psls for this qName */
 char *chrom;           /* best alignment */
 int chromStart;
 int chromEnd;
@@ -820,11 +821,11 @@ for (l = lociList ; l != NULL; l=l->next)
     bool posOk = getLociPosition(lociList, l->index, &chrom, &chromStart, &chromEnd, &psl);
     assert(psl != NULL);
     if (scoreFile != NULL)
-        fprintf(scoreFile, "### %s %s:%d [%d] mismatch %d good %d neither %d indel %d \
- gaps %d snpCount[%d] %d total %d score %d nextBestScore %d diff %d index %d maxCnt %d \n",
-            name, l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
+        fprintf(scoreFile, "##   %s score %d %s:%d [%d] mismatch %d good %d neither %d indel %d \
+ gaps %d snpCount[%d] %d total %d nextBestScore %d diff %d index %d maxCnt %d \n",
+            name, score , l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
             missCount[z]+ goodCount[z]+ neither[z]+ indel, gapCount[z], z, snpCount[z],
-            score, nextBestScore, diff ,l->index, maxCount);
+            nextBestScore, diff ,l->index, maxCount);
     verbose(3, "%s %s:%d [%d] mismatch %d good %d neither %d indel %d \
  gaps %d snpCount[%d] %d total %d score %d nextBestScore %d diff %d index %d maxCnt %d\n",
             name, l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
@@ -840,7 +841,7 @@ for (l = lociList ; l != NULL; l=l->next)
                 gapCount[z], snpCount[z],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
         if (scoreFile)
-            fprintf(scoreFile, "##bestHit %s score %d %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
+            fprintf(scoreFile, "##>> %s score %d %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
  gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
                 name,  score, psl->tName , chromStart, chromEnd, z, 
                 missCount[z], goodCount[z], neither[z], indel,
@@ -852,6 +853,7 @@ for (l = lociList ; l != NULL; l=l->next)
         pslTabOut(psl, outFile);
         outputCount++;
         filterCount++;
+        qNameCount++;
         /* 
         freez(&missCount);
         freez(&goodCount);
@@ -876,6 +878,8 @@ freez(&goodCount);
 freez(&gapCount);
 freez(&neither);
 freez(&snpCount);
+if (qNameCount > 0)
+    return TRUE;
 return FALSE;
 }
 
