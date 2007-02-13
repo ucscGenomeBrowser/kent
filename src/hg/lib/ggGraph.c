@@ -15,7 +15,7 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.24 2007/02/13 00:52:18 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.25 2007/02/13 04:46:07 kent Exp $";
 
 static int maxEvidence = 500;
 
@@ -1161,6 +1161,30 @@ for (ev = evList, i=0; ev != NULL; ev = ev->next, i++)
 gg->vertices[v2].position = intMedian(evCount, sorter);
 }
 
+static void trimEmptyEdges(struct geneGraph *gg)
+/* Get rid of edges that are less than zero length. */
+{
+int vertexCount = gg->vertexCount;
+int i,j;
+for(i=0; i<vertexCount; i++)
+    {
+    int pos1 = gg->vertices[i].position;
+    for (j=0; j<vertexCount; j++)
+        {
+	if (gg->edgeMatrix[i][j])
+	    {
+	    int pos2 = gg->vertices[j].position;
+	    int edgeSize = pos2-pos1;
+	    if (edgeSize <= 0)
+		{
+		gg->edgeMatrix[i][j] = FALSE;
+		ggEvidenceFreeList(&gg->evidence[i][j]);
+		}
+	    }
+	}
+    }
+}
+
 static void mergeDoubleSofts(struct geneGraph *gg)
 /* Merge together overlapping edges with soft ends. */
 {
@@ -1236,6 +1260,7 @@ for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
     edgeMatrix[v1][v2] = TRUE;
     }
 
+trimEmptyEdges(gg);
 rbTreeFree(&rangeTree);
 }
 
@@ -1269,6 +1294,7 @@ for(i=0; i<vertexCount; i++)
 	}
 return total;
 }
+
 		
 struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
 					  struct hash *tissLibHash, boolean fillInEvidence)
