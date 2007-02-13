@@ -1,5 +1,5 @@
 #!/bin/tcsh
-# $Id: synBlastp.csh,v 1.2 2007/02/13 00:37:05 galt Exp $
+# $Id: synBlastp.csh,v 1.3 2007/02/13 01:37:29 galt Exp $
 ##########################################################################
 #
 #  synBlastp.csh - Help filter out unwanted paralogs from xxBlastTab 
@@ -135,8 +135,6 @@ set sql = "select count(distinct query) from ${xxBlastTab}"; echo "new number of
 set sql = "select count(distinct target) from ${xxBlastTab}"; echo "new number of unique target values"; hgsql $db -BN -e "$sql"
 
 #cleanup:
-
-echo "cleanup:"
 
 hgsql $otherDb -BN -e "drop table temp${db}KgPslMapped"
 hgsql $otherDb -BN -e "drop table temp${otherDb}kgTo${db}kg"
