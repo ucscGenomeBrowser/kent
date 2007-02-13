@@ -100,11 +100,11 @@ int edgeTrackerCmpStart(const void *va, const void *vb)
 {
 const struct edgeTracker *a = *((struct edgeTracker **)va);
 const struct edgeTracker *b = *((struct edgeTracker **)vb);
-return b->start - a->start;
+return a->start - b->start;
 }
 
 struct edgeTracker *makeTrackerList(struct txGraph *txg, double sourceTypeWeights[],
-	struct lm *lm)
+	double threshold, struct lm *lm)
 /* Make up a structure to help walk the graph. */
 {
 struct edgeTracker *trackerList = NULL;
@@ -117,6 +117,8 @@ for (edge = txg->edges, i=0; edge != NULL; edge = edge->next, i++)
     tracker->edge = edge;
     tracker->exitList = findEdgesThatStartWith(txg, edge->endIx, lm);
     tracker->weight = edgeTotalWeight(edge, sourceTypeWeights);
+    if (tracker->weight < threshold)
+        tracker->visited = TRUE;
     tracker->start = txg->vertices[edge->startIx].position;
     tracker->end = txg->vertices[edge->endIx].position;
     slAddHead(&trackerList, tracker);
@@ -140,9 +142,9 @@ int weightedRnaCmp(const void *va, const void *vb)
 {
 const struct weightedRna *a = *((struct weightedRna **)va);
 const struct weightedRna *b = *((struct weightedRna **)vb);
-double diff = a->typeWeight - b->typeWeight;
+double diff = b->typeWeight - a->typeWeight;
 if (diff == 0)
-    diff = a->txWeight - b->txWeight;
+    diff = b->txWeight - a->txWeight;
 if (diff < 0)
     return -1;
 else if (diff > 0)
@@ -246,7 +248,7 @@ for (i=0; i<txg->sourceCount; ++i)
     sourceTypeWeights[i] = weightFromHash(weightHash, txg->sources[i].type);
 
 /* Set up structure to track edges. */
-struct edgeTracker *tracker, *trackerList = makeTrackerList(txg, sourceTypeWeights, lm);
+struct edgeTracker *tracker, *trackerList = makeTrackerList(txg, sourceTypeWeights, threshold, lm);
 
 /* Calculate txWeights for all sources. */
 double sourceTxWeights[txg->sourceCount];

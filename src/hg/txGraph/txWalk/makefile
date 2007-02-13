@@ -12,6 +12,7 @@ txWalk: $O ${MYLIBS}
 
 test:
 	txWalk input.txg input.weights 3 output.bed
+	diff expected.bed output.bed
 
 clean:
 	rm -f $O
