@@ -87,3 +87,12 @@ struct rbTree *rangeTreeNew()
 {
 return rbTreeNew(rangeCmp);
 }
+
+struct rbTree *rangeTreeNewDetailed(struct lm *lm, struct rbTreeNode *stack[128])
+/* Allocate rangeTree on an existing local memory & stack.  This is for cases
+ * where you want a lot of trees, and don't want the overhead for each one. 
+ * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
+{
+return rbTreeNewDetailed(rangeCmp, lm, stack);
+}
+

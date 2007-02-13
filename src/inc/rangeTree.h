@@ -36,4 +36,9 @@ struct range *rangeTreeList(struct rbTree *tree);
  * No need to free this when done, memory is local to tree. */
 
 struct rbTree *rangeTreeNew();
-/* Create a new, empty, rangeTree. */
+/* Create a new, empty, rangeTree.  Free with rbFreeTree. */
+
+struct rbTree *rangeTreeNewDetailed(struct lm *lm, struct rbTreeNode *stack[128]);
+/* Allocate rangeTree on an existing local memory & stack.  This is for cases
+ * where you want a lot of trees, and don't want the overhead for each one. 
+ * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
