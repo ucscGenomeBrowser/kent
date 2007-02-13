@@ -422,7 +422,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     track encodeSangerChipH3K36me3
     subTrack encodeSangerChip
     shortLabel SI H3K36me3 GM06990
-    subGroups celltype=gm06990 factor=3k36me3
+    subGroups celltype=gm06990 factor=h3k36me3
     longLabel Sanger Institute ChIP/Chip (H3K36me3 ab, GM06990 cells)
     dataVersion Jan 2007
     priority 8
@@ -738,7 +738,7 @@ dataVersion ENCODE June & Oct 2005 Freezes, Aug 2006 & Jan 2007 data
     track encodeSangerChipH3K36me3
     subTrack encodeSangerChip
     shortLabel SI H3K36me3 GM06990
-    subGroups celltype=gm06990 factor=3k36me3
+    subGroups celltype=gm06990 factor=h3k36me3
     longLabel Sanger Institute ChIP/Chip (H3K36me3 ab, GM06990 cells)
     dataVersion Jan 2007
     priority 8
