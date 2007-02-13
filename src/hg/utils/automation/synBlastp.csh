@@ -1,5 +1,5 @@
 #!/bin/tcsh
-# $Id: synBlastp.csh,v 1.1 2007/01/11 23:53:53 galt Exp $
+# $Id: synBlastp.csh,v 1.2 2007/02/13 00:37:05 galt Exp $
 ##########################################################################
 #
 #  synBlastp.csh - Help filter out unwanted paralogs from xxBlastTab 
@@ -122,16 +122,17 @@ hgLoadPsl $otherDb $db.$otherDb.kg.psl -table=temp${db}KgPslMapped
 echo "hgMapToGene:"
 hgMapToGene -all $otherDb -type=psl -verbose=0 temp${db}KgPslMapped knownGene temp${otherDb}kgTo${db}kg
 
-echo "new $db.$xxBlastTab as inner join with pslMapped kg results:"
-hgsql $db -BN -e "create table ${xxBlastTab}Temp as select a.query, a.target from \
-${xxBlastTab} a, ${otherDb}.temp${otherDb}kgTo${db}kg b where a.query = b.value and a.target = b.name"
-
 echo "$db.${xxBlastTab}:"
-set sql = "select count(distinct query) from ${xxBlastTab}Temp"; echo "new number of unique query values:"; hgsql $db -BN -e "$sql"
-set sql = "select count(distinct target) from ${xxBlastTab}Temp"; echo "new number of unique target values"; hgsql $db -BN -e "$sql"
+
 # original for comparison:
 set sql = "select count(distinct query) from ${xxBlastTab}"; echo "old number of unique query values:"; hgsql $db -BN -e "$sql"
 set sql = "select count(distinct target) from ${xxBlastTab}"; echo "old number of unique target values"; hgsql $db -BN -e "$sql"
+
+# drop rows that do not have a match in the psl-mapped otherDb table.
+hgsql $db -BN -e "delete ${xxBlastTab} from ${xxBlastTab} a left join ${otherDb}.temp${otherDb}kgTo${db}kg b on (a.query = b.value and a.target = b.name) where b.value is NULL"
+
+set sql = "select count(distinct query) from ${xxBlastTab}"; echo "new number of unique query values:"; hgsql $db -BN -e "$sql"
+set sql = "select count(distinct target) from ${xxBlastTab}"; echo "new number of unique target values"; hgsql $db -BN -e "$sql"
 
 #cleanup:
 
@@ -139,9 +140,6 @@ echo "cleanup:"
 
 hgsql $otherDb -BN -e "drop table temp${db}KgPslMapped"
 hgsql $otherDb -BN -e "drop table temp${otherDb}kgTo${db}kg"
-
-hgsql $db -BN -e "drop table ${xxBlastTab}"
-hgsql $db -BN -e "rename table ${xxBlastTab}Temp to ${xxBlastTab}"
 
 rm $db.kg.psl $db.kg.cds $db.$otherDb.kg.psl
 cd ..
