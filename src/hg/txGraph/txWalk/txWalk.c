@@ -55,25 +55,6 @@ struct weight *weight = hashMustFindVal(hash, name);
 return weight->value;
 }
 
-struct slRef *findEdgesThatStartWith(struct txGraph *txg, int startIx, struct lm *lm)
-/* Build up list of all edges with given start. */
-{
-struct txEdge *edge;
-struct slRef *exitList = NULL;
-for (edge = txg->edges; edge != NULL; edge = edge->next)
-    {
-    if (edge->startIx == startIx)
-	{
-	struct slRef *ref;
-	lmAllocVar(lm, ref);
-	ref->val = edge;
-	slAddHead(&exitList, ref);
-	}
-    }
-slReverse(&exitList);
-return exitList;
-}
-
 double edgeTotalWeight(struct txEdge *edge, double sourceTypeWeights[])
 /* Return sum of all sources at edge. */
 {
@@ -90,7 +71,6 @@ struct edgeTracker
    struct edgeTracker *next;
    struct txEdge *edge;	/* Corresponding edge. */
    boolean visited;	/* True if visited during traversal. */
-   struct slRef *exitList;	/* References to edges that exit this one. */
    double weight;	/* Total weight of edge. */
    int start, end;	/* Start/end in sequence. */
    };
@@ -115,7 +95,6 @@ for (edge = txg->edges, i=0; edge != NULL; edge = edge->next, i++)
     struct edgeTracker *tracker;
     lmAllocVar(lm, tracker);
     tracker->edge = edge;
-    tracker->exitList = findEdgesThatStartWith(txg, edge->endIx, lm);
     tracker->weight = edgeTotalWeight(edge, sourceTypeWeights);
     if (tracker->weight < threshold)
         tracker->visited = TRUE;
