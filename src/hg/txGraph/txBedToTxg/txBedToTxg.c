@@ -10,7 +10,7 @@
 #include "dystring.h"
 #include "txGraph.h"
 
-int maxJoinSize = 50000;
+int maxJoinSize = 70000;	/* This excludes most of the chr14 IG mess */
 boolean forceRefSeqJoin = TRUE;
 
 void usage()
