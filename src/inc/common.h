@@ -445,6 +445,10 @@ double slDoubleMedian(struct slDouble *list);
 void intSort(int count, int *array);
 /* Sort an array of ints. */
 
+int intMedian(int count, int *array);
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+
 struct slName
 /* List of names. The name array is allocated to accommodate full name
  */

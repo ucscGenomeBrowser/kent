@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.105 2006/10/16 06:34:00 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.106 2007/02/13 00:51:15 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -505,6 +505,22 @@ void intSort(int count, int *array)
 {
 if (count > 1)
 qsort(array, count, sizeof(array[0]), intCmp);
+}
+
+int intMedian(int count, int *array)
+/* Return median value in array.  This will sort
+ * the array as a side effect. */
+{
+int median;
+intSort(count, array);
+if ((count&1) == 1)
+    median = array[count>>1];
+else
+    {
+    count >>= 1;
+    median = (array[count] + array[count-1]) * 0.5;
+    }
+return median;
 }
 
 
