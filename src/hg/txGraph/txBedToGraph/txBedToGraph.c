@@ -132,11 +132,12 @@ AllocVar(cluster);
 cluster->chromStart = lb->chromStart;
 cluster->chromEnd = lb->chromEnd;
 cluster->lbList = lb;
+lb->next = NULL;
 
 /* Fill in range tree with exons. */
 cluster->exonTree = rangeTreeNewDetailed(lm, rbStack);
 struct bed *bed;
-for (bed = lb->bedList; lb != NULL; lb = lb->next)
+for (bed = lb->bedList; bed != NULL; bed = bed->next)
     {
     int block, blockCount = bed->blockCount;
     for (block = 0; block < blockCount; ++block)
