@@ -8,8 +8,8 @@ functional RNA structures. </P>
 <H2> Display Conventions and Configuration </H2>
 <P>
 Track elements are labeled using the convention <em>ID_strand_score</em>.
-At the zoomed-out level, secondary structure prediction regions are
-indicated by blocks, with the stem-pairing regions shown in a darker shade 
+When zoomed out beyond the base level, secondary structure prediction regions
+are indicated by blocks, with the stem-pairing regions shown in a darker shade 
 than unpaired regions. Arrows indicate the predicted strand.
 When zoomed in to the base level, the specific secondary structure predictions 
 are shown in parenthesis format. The confidence score for each position is
@@ -30,7 +30,7 @@ is calculated (in units of ten) from the start position of the element on
 the positive strand or from the end position when on the negative strand.</P>
 <P>
 The graphical display may be filtered to show only those track elements 
-with unnormalized scores that meet or exceed a certain threshhold. To set a 
+with scores that meet or exceed a certain threshhold. To set a 
 threshhold, type the minimum score into the text box at the top of the 
 description page.</P>
 
@@ -41,7 +41,7 @@ stochastic context-free grammars (phylo-SCFGs), which are combined
 probabilistic models of RNA secondary structure and primary sequence
 evolution. The predictions consist of both a specific RNA secondary
 structure and an overall score. The overall score is essentially a
-log-odd score phylo-SCFG modeling the constrained evolution of
+log-odd score between a phylo-SCFG modeling the constrained evolution of
 stem-pairing regions and one which only models unpaired regions.</P>
 <P>
 The predictions for this track were based on the conserved elements of
