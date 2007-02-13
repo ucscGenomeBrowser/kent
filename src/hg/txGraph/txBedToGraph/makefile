@@ -1,0 +1,17 @@
+include ../../../inc/common.mk
+
+L = ${MYSQLLIBS} -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
+
+O = txBedToGraph.o
+
+txBedToGraph: $O ${MYLIBS}
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txBedToGraph $O ${MYLIBS} $L
+	${STRIP} ${HOME}/bin/${MACHTYPE}/txBedToGraph${EXE}
+
+test:
+	txBedToGraph -verbose=2 inRef.bed refSeq input.bed mrna output.txg 
+
+clean:
+	rm -f $O
