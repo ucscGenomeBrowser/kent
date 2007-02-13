@@ -22839,13 +22839,13 @@ synBlastp.csh hg17 rn3
 
 synBlastp.csh hg17 mm7
 #new number of unique query values:
-#28292
+#25506
 #new number of unique target values
-#15051
+#13462
 #old number of unique query values:
-#33306
+#32951
 #old number of unique target values
-#15631
+#14803
 
 
 

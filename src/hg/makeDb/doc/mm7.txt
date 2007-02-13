@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.6 2007/02/10 02:00:26 galt Exp $"
+#	"$Id: mm7.txt,v 1.7 2007/02/13 01:53:14 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12543,13 +12543,13 @@ ssh hgwdev
 synBlastp.csh mm7 hg17 
 #mm7.hgBlastTab:
 #new number of unique query values:
-#23504
+#24760
 #new number of unique target values
-#14254
+#15354
 #old number of unique query values:
-#27703
+#27511
 #old number of unique target values
-#15623
+#15931
 #cleanup:
 
 
