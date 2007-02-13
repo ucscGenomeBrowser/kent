@@ -10,22 +10,23 @@
 ################################
 
 set db=""
-set dbs=""
+set index=""
+set mach="hgwbeta"
 set url1=""
 set url2=""
 set list="false"
-set size=""
+set size=0
 set totSize=0
-set mach="hgwbeta"
+set indexSize=0
+set totIndexSize=0
 
-if ( $#argv != 1 ) then
+if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  gets size of database from TABLE STATUS dumps"
-  echo "  form hgwbeta only"
+  echo "  from hgwbeta only"
   echo
-  echo "    usage:  database | all | filename"
+  echo "    usage:  database | all | filename [index]"
   echo "           defaults to hgwbeta"
-  echo "           not real time"
   echo
   exit
 else
@@ -35,6 +36,17 @@ endif
 if ( "$HOST" != "hgwdev" ) then
  echo "\n error: you must run this script on dev!\n"
  exit 1
+endif
+
+if ( $#argv == 2 ) then
+  set index=$argv[2]
+  if ( $index != "index" ) then
+    echo
+    echo ' error.  second argument must be "index" ' 
+    $0
+    echo
+    exit
+  endif
 endif
 
 # check for file of db names
@@ -50,17 +62,41 @@ else
   endif
 endif
 
-echo "db" "Gbytes" | awk '{printf ("%7s %5s\n", $1, $2)}'
-echo "======= =====" 
+# print headers
+echo
+if ( $index == "index" ) then
+  echo "db" "Gbytes" "index" | awk '{printf ("%7s %5s %5s\n", $1, $2, $3)}'
+  echo "======= ====== =====" 
+else
+  echo "db" "Gbytes" | awk '{printf ("%7s %5s\n", $1, $2)}'
+  echo "======= ======" 
+endif
+
+# do data
 foreach database ( `echo $db | sed -e "s/ /\n/"` )
   set url1="http://$mach.cse.ucsc.edu/cgi-bin/hgTables"
   set url2="?hgta_doMetaData=1&db=$database&hgta_status=1"
   set size=`wget -q -O /dev/stdout "$url1$url2" \
     | awk '{total+=$6} END {printf "%0.1f", total/1000000000}'`
-  echo $database $size | awk '{printf ("%7s %5s\n", $1, $2)}'
   set totSize=`echo $totSize $size | awk '{print $1+$2}'`
+  if ( $index == "index" ) then
+    set indexSize=`wget -q -O /dev/stdout "$url1$url2" \
+      | awk '{total+=$8} END {printf "%0.1f", total/1000000000}'`
+    echo $database $size $indexSize \
+      | awk '{printf ("%7s %6s %5s\n", $1, $2, $3)}'
+    set totIndexSize=`echo $totIndexSize $indexSize | awk '{print $1+$2}'`
+  else
+    echo $database $size | awk '{printf ("%7s %6s\n", $1, $2)}'
+  endif
 end
 
+# print totals
 if ( "true" == $list ) then
-  echo "\n total = $totSize Gbytes \n"
+  if ( "index" == "index" ) then
+    echo "\n total = $totSize  $totIndexSize "
+  else
+    echo "\n total = $totSize Gbytes "
+  endif
 endif
+echo
+
