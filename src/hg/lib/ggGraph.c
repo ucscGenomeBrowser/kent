@@ -15,13 +15,13 @@
 #include "hdb.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.23 2007/02/12 17:59:12 kent Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.24 2007/02/13 00:52:18 kent Exp $";
 
 static int maxEvidence = 500;
 
 enum{ softEndBleedLimit = 5};  /* For soft ends allow some bleeding into next intron */
 
-int ggEvidenceIx(struct ggEvidence *hayStack, struct ggEvidence *needle)
+static int ggEvidenceIx(struct ggEvidence *hayStack, struct ggEvidence *needle)
 /* return index of needle in haystack or -1 if not present */
 {
 int count = 0;
@@ -1144,7 +1144,24 @@ for(vStart = 0; vStart < vC; vStart++)
     }
 }
 
-void mergeDoubleSofts(struct geneGraph *gg)
+static void updatePointsInEdgeWithMedianOfEvidence(struct geneGraph *gg, 
+	int v1, int v2)
+/* Replace point positions with median values of evidence for edge. */
+{
+struct ggEvidence *evList = gg->evidence[v1][v2];
+int evCount = slCount(evList);
+int sorter[evCount];
+int i;
+struct ggEvidence *ev;
+for (ev = evList, i=0; ev != NULL; ev = ev->next, i++)
+    sorter[i] = ev->start;
+gg->vertices[v1].position = intMedian(evCount, sorter);
+for (ev = evList, i=0; ev != NULL; ev = ev->next, i++)
+    sorter[i] = ev->end;
+gg->vertices[v2].position = intMedian(evCount, sorter);
+}
+
+static void mergeDoubleSofts(struct geneGraph *gg)
 /* Merge together overlapping edges with soft ends. */
 {
 struct mergedEdge
@@ -1215,6 +1232,7 @@ for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
     int v1 = mergeEdge->vertex1;
     int v2 = mergeEdge->vertex2;
     evidence[v1][v2] = mergeEdge->evidence;
+    updatePointsInEdgeWithMedianOfEvidence(gg, v1, v2);
     edgeMatrix[v1][v2] = TRUE;
     }
 
