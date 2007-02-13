@@ -5,6 +5,7 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = affyLookup.o cnpLookup.o fetchSeq.o \
+    hapmap1.o hapmap2.o \
     hapmap.o hapmapCondense.o hapmapGenotype.o hapmapLookup.o \
     hapmapMonomorphic.o hapmapValidate.o \
     illuminaLookup.o \
@@ -23,6 +24,7 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
     subSnpCondense.o trimHeader.o
 
 all: affyLookup cnpLookup fetchSeq \
+     hapmap1 hapmap2 \
      hapmap hapmapCondense hapmapGenotype hapmapLookup \
      hapmapMonomorphic hapmapValidate \
      illuminaLookup \
@@ -48,6 +50,12 @@ cnpLookup: cnpLookup.o ${MYLIBS}
 
 fetchSeq: fetchSeq.o ${MYLIBS}
 	${CC} -O -o fetchSeq fetchSeq.o ${MYLIBS} $L
+
+hapmap1: hapmap1.o ${MYLIBS}
+	${CC} -O -o hapmap1 hapmap1.o ${MYLIBS} $L
+
+hapmap2: hapmap2.o ${MYLIBS}
+	${CC} -O -o hapmap2 hapmap2.o ${MYLIBS} $L
 
 hapmap: hapmap.o ${MYLIBS}
 	${CC} -O -o hapmap hapmap.o ${MYLIBS} $L
