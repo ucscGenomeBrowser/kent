@@ -5,7 +5,7 @@
 #ifndef HAPMAPALLELESCOMBINED_H
 #define HAPMAPALLELESCOMBINED_H
 
-#define HAPMAPALLELESCOMBINED_NUM_COLS 17
+#define HAPMAPALLELESCOMBINED_NUM_COLS 21
 
 struct hapmapAllelesCombined
 /* HapMap allele counts by population */
@@ -28,6 +28,10 @@ struct hapmapAllelesCombined
     unsigned allele2CountCHB;	/* allele2 count for the CHB population */
     unsigned allele2CountJPT;	/* allele2 count for the JPT population */
     unsigned allele2CountYRI;	/* allele2 count for the YRI population */
+    unsigned heteroCountCEU;	/* Count of CEU individuals who are heterozygous */
+    unsigned heteroCountCHB;	/* Count of CHB individuals who are heterozygous */
+    unsigned heteroCountJPT;	/* Count of JPT individuals who are heterozygous */
+    unsigned heteroCountYRI;	/* Count of YRI individuals who are heterozygous */
     };
 
 void hapmapAllelesCombinedStaticLoad(char **row, struct hapmapAllelesCombined *ret);

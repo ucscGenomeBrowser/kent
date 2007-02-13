@@ -5,6 +5,7 @@
 
 #HapMap allele counts by population
 CREATE TABLE hapmapAllelesCombined (
+    bin smallint unsigned not null,          # For browser speed up
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chrom (0 based)
     chromEnd int unsigned not null,	# End position in chrom (1 based)
@@ -21,5 +22,10 @@ CREATE TABLE hapmapAllelesCombined (
     allele2CountCEU int unsigned not null,	# allele2 count for the CEU population
     allele2CountCHB int unsigned not null,	# allele2 count for the CHB population
     allele2CountJPT int unsigned not null,	# allele2 count for the JPT population
-    allele2CountYRI int unsigned not null	# allele2 count for the YRI population
+    allele2CountYRI int unsigned not null,      # allele2 count for the YRI population
+    heteroCountCEU int unsigned not null,     # Count of CEU individuals who are heterozygous
+    heteroCountCHB int unsigned not null,     # Count of CHB individuals who are heterozygous
+    heteroCountJPT int unsigned not null,     # Count of JPT individuals who are heterozygous
+    heteroCountYRI int unsigned not null     # Count of YRI individuals who are heterozygous
+
 );

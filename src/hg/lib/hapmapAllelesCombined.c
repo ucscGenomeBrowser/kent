@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAllelesCombined.h"
 
-static char const rcsid[] = "$Id: hapmapAllelesCombined.c,v 1.1 2007/02/02 00:31:36 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAllelesCombined.c,v 1.2 2007/02/13 00:43:53 heather Exp $";
 
 void hapmapAllelesCombinedStaticLoad(char **row, struct hapmapAllelesCombined *ret)
 /* Load a row from hapmapAllelesCombined table into ret.  The contents of ret will
@@ -32,6 +32,10 @@ ret->allele2CountCEU = sqlUnsigned(row[13]);
 ret->allele2CountCHB = sqlUnsigned(row[14]);
 ret->allele2CountJPT = sqlUnsigned(row[15]);
 ret->allele2CountYRI = sqlUnsigned(row[16]);
+ret->heteroCountCEU = sqlUnsigned(row[17]);
+ret->heteroCountCHB = sqlUnsigned(row[18]);
+ret->heteroCountJPT = sqlUnsigned(row[19]);
+ret->heteroCountYRI = sqlUnsigned(row[20]);
 }
 
 struct hapmapAllelesCombined *hapmapAllelesCombinedLoad(char **row)
@@ -58,6 +62,10 @@ ret->allele2CountCEU = sqlUnsigned(row[13]);
 ret->allele2CountCHB = sqlUnsigned(row[14]);
 ret->allele2CountJPT = sqlUnsigned(row[15]);
 ret->allele2CountYRI = sqlUnsigned(row[16]);
+ret->heteroCountCEU = sqlUnsigned(row[17]);
+ret->heteroCountCHB = sqlUnsigned(row[18]);
+ret->heteroCountJPT = sqlUnsigned(row[19]);
+ret->heteroCountYRI = sqlUnsigned(row[20]);
 return ret;
 }
 
@@ -67,7 +75,7 @@ struct hapmapAllelesCombined *hapmapAllelesCombinedLoadAll(char *fileName)
 {
 struct hapmapAllelesCombined *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[21];
 
 while (lineFileRow(lf, row))
     {
@@ -85,7 +93,7 @@ struct hapmapAllelesCombined *hapmapAllelesCombinedLoadAllByChar(char *fileName,
 {
 struct hapmapAllelesCombined *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[21];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -123,6 +131,10 @@ ret->allele2CountCEU = sqlUnsignedComma(&s);
 ret->allele2CountCHB = sqlUnsignedComma(&s);
 ret->allele2CountJPT = sqlUnsignedComma(&s);
 ret->allele2CountYRI = sqlUnsignedComma(&s);
+ret->heteroCountCEU = sqlUnsignedComma(&s);
+ret->heteroCountCHB = sqlUnsignedComma(&s);
+ret->heteroCountJPT = sqlUnsignedComma(&s);
+ret->heteroCountYRI = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -201,6 +213,14 @@ fputc(sep,f);
 fprintf(f, "%u", el->allele2CountJPT);
 fputc(sep,f);
 fprintf(f, "%u", el->allele2CountYRI);
+fputc(sep,f);
+fprintf(f, "%u", el->heteroCountCEU);
+fputc(sep,f);
+fprintf(f, "%u", el->heteroCountCHB);
+fputc(sep,f);
+fprintf(f, "%u", el->heteroCountJPT);
+fputc(sep,f);
+fprintf(f, "%u", el->heteroCountYRI);
 fputc(lastSep,f);
 }
 

@@ -22,4 +22,9 @@ table hapmapAllelesCombined
     uint    allele2CountJPT;       "allele2 count for the JPT population"
     uint    allele2CountYRI;       "allele2 count for the YRI population"
 
+    uint    heteroCountCEU;        "Count of CEU individuals who are heterozygous"
+    uint    heteroCountCHB;        "Count of CHB individuals who are heterozygous"
+    uint    heteroCountJPT;        "Count of JPT individuals who are heterozygous"
+    uint    heteroCountYRI;        "Count of YRI individuals who are heterozygous"
+
     )
