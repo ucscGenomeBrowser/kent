@@ -17,7 +17,8 @@ txPslToBed - Transforms alignments to putative exons by projecting
     gap.  Finally it trims small isolated bed records.
 input: psl file, corresponding target dna
 output: bed file
-status: done
+status: done.  It'd be good to add some logic to flip the psl strand
+    if there's good evidence in the introns.
 
 txBedToTgx - Clusters together overlapping exons (on same strand)
     and creates a transcript graph.  Associates evidence with each
@@ -25,9 +26,8 @@ txBedToTgx - Clusters together overlapping exons (on same strand)
 input: list of bed files, types, and weights.  Bed files are bed12
     (multiple block).
 output: txg file
-status: done. Looks like want to merge this to get txPslToTgx...
-     It's nice having the bed output for quality check, but it
-     isn't quite expressive enough.  Can't handle 'soft introns'
+status: done.   Need to add option to take tgx.name root from command
+    line.
 
 txOrtho - Looks for orthologous edges in two graphs from two species.
 input: txg files from both species, chains & nets between species
