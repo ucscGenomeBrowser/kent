@@ -12,6 +12,7 @@
 
 int maxJoinSize = 70000;	/* This excludes most of the chr14 IG mess */
 boolean forceRefSeqJoin = TRUE;
+char *prefix = "a";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,13 +29,15 @@ errAbort(
   "                    noisy ends. Default %d.\n"
   "    -noForceRefSeqJoin - If set don't force joins above maxJoinSize\n"
   "                    on refSeq type\n"
-  , maxJoinSize
+  "    -prefix=xyz - Use the given prefix for the graph names, default %s\n"
+  , maxJoinSize, prefix
   );
 }
 
 static struct optionSpec options[] = {
    {"maxJoinSize", OPTION_INT},
    {"noForceRefSeqJoin", OPTION_BOOLEAN},
+   {"prefix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -312,8 +315,8 @@ if (maList != NULL)
     for (mc = mcList; mc != NULL; mc = mc->next)
 	{
 	static int id=0;
-	char name[16];
-	safef(name, sizeof(name), "a%d", ++id);
+	char name[256];
+	safef(name, sizeof(name), "%s%d", prefix, ++id);
 	struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
 	struct txGraph *tg = txGraphFromGeneGraph(gg, name);
 	if (tg != NULL)
@@ -332,6 +335,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 maxJoinSize = optionInt("maxJoinSize", maxJoinSize);
 forceRefSeqJoin = !optionExists("noForceRefSeqJoin");
+prefix = optionVal("prefix", prefix);
 if (argc < 4 || argc%2 != 0)
     usage();
 txBedToTxg(argv[argc-1], argv+1, argc/2-1);
