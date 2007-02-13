@@ -8,7 +8,7 @@ O = txgAddEvidence.o
 
 txgAddEvidence: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txgAddEvidence $O ${MYLIBS} $L
-#	${STRIP} ${HOME}/bin/${MACHTYPE}/txgAddEvidence${EXE}
+	${STRIP} ${HOME}/bin/${MACHTYPE}/txgAddEvidence${EXE}
 
 test:
 	txgAddEvidence input.txg input.bed esttt output.txg

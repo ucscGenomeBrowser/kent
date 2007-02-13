@@ -10,6 +10,7 @@
 
 boolean bedIsIntron = FALSE;
 boolean bedIsHard = FALSE;
+char *specificChrom = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,10 +23,14 @@ errAbort(
   "      in.edges is a tab-separated file in txEdgeBed or txEdgeOrtho format\n"
   "      sourceType is a decriptive word like 'refSeq' 'est' etc.\n"
   "      out.txt is the output graph with additional info\n"
+  "options:\n"
+  "      -chrom=chrN - Set to only add edges for given chromosome.  Useful\n"
+  "                    if in.txg is chromosome specific but in.edges is not.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"chrom", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -180,6 +185,8 @@ void addEvidence(struct txEdgeBed *bedList, char *sourceType, struct hash *bkHas
 struct txEdgeBed *bed;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
+    if (specificChrom != NULL && !sameString(bed->chrom, specificChrom))
+        continue;
     verbose(2, "Processing %s %s:%d-%d\n", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
     struct binKeeper *bk = hashMustFindVal(bkHash, bedList->chrom);
     struct binElement *bel, *belList = binKeeperFind(bk, bed->chromStart, bed->chromEnd);
@@ -228,8 +235,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-bedIsIntron = optionExists("intron");
-bedIsHard = optionExists("hard");
+specificChrom = optionVal("chrom", NULL);
 if (argc != 5)
     usage();
 txgAddEvidence(argv[1], argv[2], argv[3], argv[4]);
