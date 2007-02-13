@@ -17,7 +17,7 @@ end
 mkdir nativeTxg
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
-    txBedToTxg refSeq/$c.bed refSeq mrna/$c.bed mrna nativeTxg/$c.txg
+    txBedToTxg -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna nativeTxg/$c.txg
 end
 
 
@@ -25,7 +25,7 @@ end
 mkdir mm8
 cd mm8
 
-# Get mouse mrna including ESTs.  Takes about a minute
+# Get mouse mrna including ESTs.  Takes about a three minutes
 mkdir refSeq mrna est
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     echo $c
@@ -34,7 +34,7 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     hgGetAnn -noMatchOk mm8 intronEst $c stdout | txPslToBed stdin /cluster/data/mm8/mm8.2bit est/$c.bed
 end
 
-# Create mouse splicing graphs.  Takes about 10 minutes
+# Create mouse splicing graphs.  Takes about 7 minutes
 rm -f mouse.txg
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     echo $c
@@ -50,7 +50,7 @@ zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSpl
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netFilter -syn stdin | netSplit stdin nets
 cd ..
 
-# Run txOrtho directory and a para spec file
+# Make txOrtho directory and a para spec file
 mkdir txOrtho
 cd txOrtho
 mkdir edges
@@ -62,15 +62,6 @@ foreach f (*.txg)
 end
 cd ..
 
-# Add evidence from ortho edges
-cd /cluster/data/hg18/bed/jkg
-mkdir orthoTxg
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    set c = $f:r
-    echo $c
-    txgAddEvidence nativeTxg/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
-end
-
 # Do txOrtho parasol run on iServer (high RAM) cluster
 ssh kki
 cd /cluster/data/hg18/bed/jkg/txOrtho
@@ -78,55 +69,82 @@ para create spec
 para make
 para time
 Completed: 49 of 49 jobs
-#CPU time in finished jobs:      17441s     290.68m     4.84h    0.20d  0.001 y
-#IO & Wait Time:                   403s       6.72m     0.11h    0.00d  0.000 y
-#Average job time:                 364s       6.07m     0.10h    0.00d
+#CPU time in finished jobs:      17963s     299.39m     4.99h    0.21d  0.001 y
+#IO & Wait Time:                   402s       6.70m     0.11h    0.00d  0.000 y
+#Average job time:                 375s       6.25m     0.10h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:            3437s      57.28m     0.95h    0.04d
-#Submission to last job:          3437s      57.28m     0.95h    0.04d
+#Longest finished job:            2850s      47.50m     0.79h    0.03d
+#Submission to last job:          2850s      47.50m     0.79h    0.03d
 
-# Get exonophy
-echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql -N hg18 > exoniphy.bed
+
+# Add evidence from ortho edges - takes about 10 seconds.
+cd /cluster/data/hg18/bed/jkg
+mkdir orthoTxg
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo $c
+    txgAddEvidence nativeTxg/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
+end
 
 # Clean up chains and nets since they are big
 cd /cluster/data/hg18/bed/jkg
 rm -r mm8/chains mm8/nets
 
-# Make exonWalk directory and spec file
-mkdir exonWalk
-mkdir exonWalk/bed
-cd orthoSplice/agx
-echo #\!/bin/tcsh -ef > ../../exonWalk/spec
-foreach f (*.agx)
-    set c=$f:r
-    echo exonWalk ../orthoSplice/agx/$f bed/$c.bed >> ../../exonWalk/spec
-end
-cd ../..
+# Get exonophy
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" \
+	| hgsql -N hg18 > exoniphy.bed
+bedToTxEdges exoniphy.bed exoniphy.edges
 
-# Do exonWalk cluster job
-ssh kki
-cd /cluster/data/hg18/bed/jkg/exonWalk
-para create spec
-para make
-para time
-#Completed: 46 of 46 jobs
-#CPU time in finished jobs:        465s       7.75m     0.13h    0.01d  0.000 y
-#IO & Wait Time:                    99s       1.65m     0.03h    0.00d  0.000 y
-#Average job time:                  12s       0.20m     0.00h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             428s       7.13m     0.12h    0.00d
-#Submission to last job:           428s       7.13m     0.12h    0.00d
+# Add exoniphy evidence - just takes 20 seconds or so.
+mkdir exoniphyTxg
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo $c
+    txgAddEvidence -chrom=$c orthoTxg/$c.txg exoniphy.edges exoniphy exoniphyTxg/$c.txg
+end
+
+# Create an evidence weight file
+cat > trim.weights <<end
+refSeq  100
+mrna    2
+txOrtho 1
+exoniphy 1
+end
+
+# Trim graphs - takes less than 10 seconds.
+mkdir trimmedTxg
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo $c
+    txgTrim exoniphyTxg/$c.txg trim.weights 3 trimmedTxg/$c.txg
+end
+
+# Convert to agx for exonWalk - takes 5 seconds
+mkdir agx
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo $c
+    txgToAgx trimmedTxg/$c.txg agx/$c.agx
+end
+
+# Do exonWalk - takes about 20 seconds
+mkdir exonWalk
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo exonWalk $c
+    exonWalk agx/$c.agx exonWalk/$c.bed
+end
+
+# Do  txWalk  - takes 4 seconds
+mkdir txWalk
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo txWalk $c
+    txWalk exoniphyTxg/$c.txg trim.weights 3 txWalk/$c.bed
+end
+
 
 # Get exonWalk transcript sequences.  This'll take about 2 minutes
-cd /cluster/data/hg18/bed/jkg/exonWalk
-mkdir fa
-cd bed
-foreach f (*.bed)
-    set c=$f:r
-    echo $f to $c.fa
-    sequenceForBed -db=hg18 -bedIn=$f -fastaOut=../fa/$c.fa -upCase -keepName
+mkdir txFa
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo txFa $c
+    sequenceForBed -db=hg18 -bedIn=exonWalk/$c.bed -fastaOut=txFa/$c.fa -upCase -keepName
 end
-cd ..
+
 
 # Fetch human protein set.
 hgsql -N sp070202 -e \
@@ -135,11 +153,11 @@ hgsql -N sp070202 -e \
 
 # Create blatProt directory and parasol spec
 mkdir blatProt blatProt/rawChrom
-cd exonWalk/fa
-echo #\!/bin/tcsh -ef > ../../blatProt/spec
+cd txFa
+echo #\!/bin/tcsh -ef > ../blatProt/spec
 foreach f (*.fa)
     set c=$f:r
-    echo blat -t=dnax -q=prot -minIdentity=90 ../exonWalk/fa/$f ../humanProt.fa rawChrom/$c.psl >> ../../blatProt/spec
+    echo blat -t=dnax -q=prot -minIdentity=90 ../txFa/$f ../humanProt.fa rawChrom/$c.psl >> ../blatProt/spec
 end
 
 # Run protein/transcript blat job on iserver cluster
@@ -148,20 +166,35 @@ cd /cluster/data/hg18/bed/jkg/blatProt
 para create spec
 para make
 para time
-#CPU time in finished jobs:       4976s      82.93m     1.38h    0.06d  0.000 y
-#IO & Wait Time:                   117s       1.95m     0.03h    0.00d  0.000 y
-#Average job time:                 111s       1.85m     0.03h    0.00d
+#Completed: 49 of 49 jobs
+#CPU time in finished jobs:       4543s      75.72m     1.26h    0.05d  0.000 y
+#IO & Wait Time:                   140s       2.33m     0.04h    0.00d  0.000 y
+#Average job time:                  96s       1.59m     0.03h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             463s       7.72m     0.13h    0.01d
+#Longest finished job:             399s       6.65m     0.11h    0.00d
+#Submission to last job:           425s       7.08m     0.12h    0.00d
+
 
 # Sort and do near-besting
 cd /cluster/data/hg18/bed/jkg/blatProt
 pslSort dirs raw.psl . rawChrom
 pslReps raw.psl nearBest.psl /dev/null -nohead -minCover=0.8 -minAli=0.80 -nearTop=0.002
 
-# Load a bunch of stuff into the database:
+## Load a bunch of stuff into the database:
 ssh hgwdev
 cd /cluster/data/hg18/bed/jkg
+hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
+hgGetAnn hg18 all_mrna - stdout | hgLoadPsl hg18 stdin -table=jkgInputMrna
+hgLoadBed hg18 jkgRefSeqBed refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed mrna/*.bed
+cat nativeTxg/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
+hgLoadBed -notItemRgb -sqlTable=jkgTrimmedGraph.sql hg18 jkgTrimmedGraph  agx/*.agx
+hgLoadBed hg18 jkgRawTranscripts exonWalk/*.bed
+hgLoadBed hg18 jkgTxWalk txWalk/*.bed
+
+## About time to delete these old ones...
 hgLoadBed hg18 jkClusterRna2 clusterPsl/*.bed
 hgLoadBed -notItemRgb -sqlTable=altGraphRna.sql hg18 altGraphRna altSplice/*.agx
 hgLoadBed -notItemRgb -sqlTable=jkOrthoSplice.sql hg18 jkOrthoSplice orthoSplice/agx/*.agx
@@ -261,20 +294,124 @@ chr22:41,921,231-41,927,980 - two overlapping single exon transcripts.
       conserved in mammals. Ensembl gene and UCSC known gene on shorter
       transcript. RNA from longer transcript has copy number variation
       compared to genome.
+    Take 2 - now two separate transcripts because of 19 base insert in
+    both RNAs.  Is a polymorphism? Is in a simple tandem repeat.
 chr22:42,545,257-42,600,891 - two single exon transcripts overlap the last
       exon of a cluster of spliced transcripts. Good mouse synteny throughout
       Ensembl, UCSC Known ignor single exon transcripts. Makes it through
       orthoSplice, but single exon transcript not emitted by exonWalk.
+    Take 2 - looks like still need some ExonWalk fixing to handle this.
 chr22:43,265,931-43,274,172 - gene mostly single exon but short 5' UTR exon
       as well.  RefSeq/mRNA is enough to get this into set. 
+    Take 2 - looks like this is working decently now.
 chr22:44,324,300-44,435,566 - gene with 6 single exon transcripts overlapping
       final spliced exon.
+    Take 2 - single exon transcripts ignored.  Maybe ok in this case.
 chr22:45,008,587-45,039,578 - Four rna clusters in 30 kb.  Good mix of spliced
       and single exon.
+    Take 2 - Not real sure about how AK127072 is handled.
 chr22:45,067,214-45,074,098 - Single exon gene. 5 RNAs. filtered out by
       orthoSplice. On main syntenic mouse chain, but looks like low 
       coverage of the alignment in this region. No Exoniphy. Has Ensembl
       and current UCSC Known.
+    Take 2 - The single exon gene seems nicely done by the median end
+      handling. 
 chr22:14,632,219-14,671,164 - Two genes on opposite strands.  Smaller
       2 exon gene gets turned into intron only by orthoSplice, and this
       is read as exon by exonWalk.  Bigger one is c set, smaller d set.
+    Take 2 - Seems fixed.
+
+###########################################################################
+## Some specific regions of interest take two.
+chr22:27,492,855-27,536,126 - Two genes with some transcripts that are 
+      nicely cleaned up by the txPslToBed phase.
+chr22:34,911,084-34,940,293 - Region of spotty orthology. Terminal exon
+      of BC006276 removed correctly since no other support. There are
+      two orthologous adjacent exons, but no orthologous intron in between.
+      This seems correct, as mouse has an additional exon in middle...
+chr22:35,005,411-35,115,427 - Strongly orthologous region. Myosin heavy chain.
+      A lot of fragmentary transcripts seem to be nicely merged in graph.
+      What looks like it might be alt splicing at a distance is revealed
+      as noise by the txPslToBed phase.
+chr22:35,213,851-35,218,377 - 3' end of reverse strand gene with 11 mRNAs.
+      It selects the longest for the 3' end, as does RefSeq.  Probably a 
+      good thing here, but ... not sure how the soft end attatched to
+      hard end consensus code is actually working, I'd have thought it
+      might kick in sooner.  That's right, it needs *5* to override
+      longest.  Maybe that's good for ESTs, but for mRNA, perhaps 1 or
+      two should do?
+chr22:35,236,804-35,236,989 - Similar case where there's enough mRNAs (20?)
+      that longest is overridden.  Seems maybe reasonable.  Looks like this
+      gene may have several polyadenylation sites.  On the other hand, 
+      RefSeq does choose the largest, so perhaps we should stick with them?
+chr22:35,232,252-35,233,254 - Looks like has perhaps three promoters, two
+      of which are conserved in mouse, and good RNA evidence for the third.
+      All seem preserved in the trimmed graph.
+chr22:35,251,888-35,252,258 - Longer exon, caused by being initial rather
+      than middle exon in some trancripts, supported by two mRNAs and mouse
+      orthology, preserved in trimmed graph.
+chr13:29,797,646-29,834,682 - Not clear why last exon of CR598046 survives
+      trimmiing.  Looks like this is because the single exon mRNA AK130570, 
+      which does overlap the third exon, gets assigned as support for the
+      first exon instead!?  Likely a fixable bug with a fairly small test
+      case.
+chr6:132,312,312-132,312,480 - Single mRNA with a slightly shorter exon
+      looks like it gets swept up in orthology with larger exon, and preserved
+      even when it shouldn't be.
+chr6:132,495,393-132,514,405 - Single initial exon kept from two fairly
+      unrelated transcripts that share a single splice site.  Maybe this
+      is ok?  Maybe want a little stronger filter here somehow....
+      Note in browser at view of chr6:132,427,897-132,618,026 these
+      don't look to line up as well as perhaps they should.
+chr6:132,690,933-132,690,960 - A soft end that should be merged into
+      nearby shorter hard end.  Looks like just mRNA ended barely the
+      other side of the splice site, and blat didn't find the other
+      exon, and instead continued...  Likely a fixable bug with a small test
+      case.
+chr20:33,329,929-33,336,101 - The RNA BC014403 is on the wrong strand,
+      and thus gets broken up at each exon because of bad splice sites.
+      The txPslToBed phase should fix this instead. A fixable bug with smalll
+      test case.
+chr20:33,336,445-33,343,866 - Good test case for exonWalk.  Two transcripts
+      that share some splice sites, but vary quite a bit.  Could get
+      combinatorical easily if using a niave walker.  ExonWalk does just
+      generate 2 transcripts here, but I don't agree with them.
+chr20:33,351,905-33,360,150 - Seems like several large unspliced mRNAs get
+      merged into the final exon inappropriately.  They should be kept
+      separate, merged with each other instead maybe?
+chr20:33,414,646-33,451,743 - Some relatively complicated alt-splicing.
+      Another good test case for the walker.  Grapher seems to be doing
+      the right thing.
+chr22:47,213,740-47,601,299 - Another case where the wrong exon got assigned
+      support for an RNA?  See txWalk of AY358847.
+
+###########################################################################
+
+## Other notes
+The immunoglobulin heavy chain cluster on chr14 is exceptional, and
+difficult to cluster.  There's about 10,000 overlapping mRNAs in the
+region.  This made many things slow on chr14, particularly the
+txgAddEvidence program.  In response I put a "maxJoinSize" option in
+txBedToTxg that prevents adding soft introns larger than 70k.  This
+cut the largest cluster from 2191 edges to 1008.
+
+This was the old txOrtho run:
+CPU time in finished jobs:      17441s     290.68m     4.84h    0.20d  0.001 y
+IO & Wait Time:                   403s       6.72m     0.11h    0.00d  0.000 y
+Average job time:                 364s       6.07m     0.10h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            3437s      57.28m     0.95h    0.04d
+Submission to last job:          3437s      57.28m     0.95h    0.04d
+
+After change this became:
+
+CPU time in finished jobs:      17963s     299.39m     4.99h    0.21d  0.001 y
+IO & Wait Time:                   402s       6.70m     0.11h    0.00d  0.000 y
+Average job time:                 375s       6.25m     0.10h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            2850s      47.50m     0.79h    0.03d
+Submission to last job:          2850s      47.50m     0.79h    0.03d
+
+The longest job is now chr1, not chr14.  This also made the
+txgAddEvidence for chr14 go down to 0.3 seconds.
+
