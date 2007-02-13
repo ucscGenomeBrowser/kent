@@ -18,7 +18,7 @@ echo "Moving review tag to current tip versions"
 # rtag the review tag
 echo
 echo "moving tag review..."
-# new way should be must faster:
+# new way should be faster:
 cvs -d hgwdev:$CVSROOT rtag -Fa review kent >& /dev/null
 # note: if this breaks the cvs-reports just return it to the old way.
 # old way:

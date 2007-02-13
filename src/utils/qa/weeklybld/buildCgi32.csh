@@ -60,10 +60,10 @@ rm -fr hgCgiData
 echo "the customTrack loader is to be released soon, then remove the next line:"
 rm -fr loader
 
-echo "the hgSession cgi is to be released soon, then remove the next line:"
-if (-e hgSession) then
-    rm hgSession
-endif    
+#echo "the hgSession cgi is to be released soon, then remove the next line:"
+#if (-e hgSession) then
+#    rm hgSession
+#endif    
 
 #echo "debug: skipping scp"
 scp -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/

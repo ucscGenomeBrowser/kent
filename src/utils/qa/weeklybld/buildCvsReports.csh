@@ -41,6 +41,7 @@ echo "now building CVS reports."
 @ LASTNN=$BRANCHNN - 1
 set fromTag=v${LASTNN}_branch
 set toTag=v${BRANCHNN}_branch
+set branchTag="branch"
 set reviewTag="review"
 
 if ( "$BRANCHNN" == "" ) then
@@ -70,9 +71,9 @@ endif
 cd /projects/compbio/bin
 
 if ( "$mode" == "review") then
-    ./cvs-reports-delta $toTag $reviewTag $TODAY $REVIEWDAY review
+    ./cvs-reports-delta $branchTag $reviewTag $TODAY $REVIEWDAY review v${BRANCHNN}
 else    
-    ./cvs-reports-delta $reviewTag $toTag $REVIEWDAY $TODAY branch
+    ./cvs-reports-delta $reviewTag $branchTag $REVIEWDAY $TODAY branch v${BRANCHNN}
 endif    
 if ( $status ) then
  echo "cvs-reports-delta failed on $HOST"

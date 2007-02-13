@@ -8,10 +8,12 @@ endif
 # run on hgwdev
 # need to create a mini-sandbox to build these robot utilities
 if ( -d $JAVABUILD ) then
-  rm -fr $JAVABUILD
+  rm -fr $JAVABUILD/*
 endif
 
-mkdir $JAVABUILD
+if (! -d $JAVABUILD ) then
+    mkdir $JAVABUILD
+endif    
 cd $JAVABUILD
 cvs co -d . kent/java
 if ( $status ) then

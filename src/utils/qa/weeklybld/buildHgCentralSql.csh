@@ -34,7 +34,7 @@ cp -p /tmp/hgcentral.sql /usr/local/apache/htdocs/admin/hgcentral.sql
 rm hiding/hgcent/hgcentral.sql
 cp -p /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
 cd hiding/hgcent
-set CVSROOT=/projects/hg/cvsroot 
+set CVSROOT=/projects/compbio/cvsroot 
 set temp = '"'"v${BRANCHNN}"'"'
 cvs -d hgwdev:$CVSROOT commit -m $temp  hgcentral.sql
 if ( $status ) then
