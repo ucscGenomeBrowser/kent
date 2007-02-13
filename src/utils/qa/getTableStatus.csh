@@ -44,12 +44,6 @@ if ( $status ) then
   exit 1
 endif
 
-# new hgTables method not on RR yet.  work with dev-kuhn for now.
-# for now, until hgTables code is on RR:
-# if ( "hgwbeta" == $mach ) then 
-#   set mach="hgwdev-kuhn"
-# endif
-
 # get the STATUS
 set url1="http://"
 # set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doTableStatus=1"
