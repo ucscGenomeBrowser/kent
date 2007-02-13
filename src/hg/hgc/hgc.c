@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1201 2007/02/12 19:12:16 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1202 2007/02/13 20:18:54 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18524,7 +18524,7 @@ char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "
 
 int main(int argc, char *argv[])
 {
-pushCarefulMemHandler(LIMIT_2or8GB);
+pushCarefulMemHandler(LIMIT_2or6GB);
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

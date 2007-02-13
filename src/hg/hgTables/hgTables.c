@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.143 2007/02/10 19:38:26 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.144 2007/02/13 20:18:24 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1653,8 +1653,8 @@ cartCheckout(&cart);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
-pushCarefulMemHandler(LIMIT_2or8GB);
 cgiSpoof(&argc, argv);
 
 hgTables();
