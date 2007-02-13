@@ -18449,6 +18449,23 @@ mysql> alter table hapmapAllelesJPT add index chrom (chrom, bin);
 mysql> alter table hapmapAllelesYRI add index name (name);
 mysql> alter table hapmapAllelesYRI add index chrom (chrom, bin);
 
+# 2nd step in processing: create hapmapAllelesCombined
+ssh hgwdev
+cd kent/src/hg/snp/snpLoad
+./hapmap2 hg17
+hgLoadBed hg17 hapmapAllelesCombined -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesCombined.sql hapmapAllelesCombined.tab
+
+# create indexes
+mysql> alter table hapmapAllelesCombined add index name (name);
+mysql> alter table hapmapAllelesCombined add index chrom (chrom, bin);
+
+# errors
+grep -v missing hapmap2.errors
+# different strands for rs1621378
+# different strands for rs5768
+
+
+
 ############################################################################################
 
 ### HapMap LD (Daryl; February 11, 2006)
