@@ -188,7 +188,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     if (specificChrom != NULL && !sameString(bed->chrom, specificChrom))
         continue;
     verbose(2, "Processing %s %s:%d-%d\n", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
-    struct binKeeper *bk = hashMustFindVal(bkHash, bedList->chrom);
+    struct binKeeper *bk = hashMustFindVal(bkHash, bed->chrom);
     struct binElement *bel, *belList = binKeeperFind(bk, bed->chromStart, bed->chromEnd);
     verbose(3, "%s hits %d txg\n", bed->name, slCount(belList));
     for (bel = belList; bel != NULL; bel = bel->next)
