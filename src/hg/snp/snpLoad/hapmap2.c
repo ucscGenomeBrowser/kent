@@ -13,7 +13,7 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.1 2007/02/13 00:41:39 heather Exp $";
+static char const rcsid[] = "$Id: hapmap2.c,v 1.2 2007/02/14 00:06:46 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -180,7 +180,7 @@ return TRUE;
 }
 
 boolean matchingObserved(struct hashEl *helCEU, struct hashEl *helCHB, 
-                       struct hashEl *helJPT, struct hashEl *helYRI)
+                         struct hashEl *helJPT, struct hashEl *helYRI)
 /* returns TRUE if all 4 observed are the same. */
 {
 if (differentObserved(helCEU, helCHB)) return FALSE;
@@ -191,6 +191,62 @@ if (differentObserved(helCHB, helYRI)) return FALSE;
 if (differentObserved(helJPT, helYRI)) return FALSE;
 
 return TRUE;
+}
+
+int getAlleleCount(char *allele, struct hashEl *helCEU, struct hashEl *helCHB, 
+                   struct hashEl *helJPT, struct hashEl *helYRI)
+/* return count of allele over all populations */
+/* don't adjust for strand */
+/* don't include heterozygous */
+{
+int count = 0;
+struct hapmapAlleles *ha = NULL;
+if (helCEU)
+    {
+    ha = (struct hapmapAlleles *)helCEU->val;
+    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
+    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    }
+if (helCHB)
+    {
+    ha = (struct hapmapAlleles *)helCHB->val;
+    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
+    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    }
+if (helJPT)
+    {
+    ha = (struct hapmapAlleles *)helJPT->val;
+    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
+    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    }
+if (helYRI)
+    {
+    ha = (struct hapmapAlleles *)helYRI->val;
+    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
+    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    }
+return count;
+}
+
+boolean matchingAlleles(struct hashEl *helCEU, struct hashEl *helCHB, 
+                        struct hashEl *helJPT, struct hashEl *helYRI)
+/* returns FALSE if more than 2 alleles found overall */
+{
+int aCount = getAlleleCount("A", helCEU, helCHB, helJPT, helYRI);
+int cCount = getAlleleCount("C", helCEU, helCHB, helJPT, helYRI);
+int gCount = getAlleleCount("G", helCEU, helCHB, helJPT, helYRI);
+int tCount = getAlleleCount("T", helCEU, helCHB, helJPT, helYRI);
+int alleleCount = 0;
+
+if (aCount > 0) alleleCount++;
+if (cCount > 0) alleleCount++;
+if (gCount > 0) alleleCount++;
+if (tCount > 0) alleleCount++;
+
+if (alleleCount > 2) return FALSE;
+
+return TRUE;
+
 }
 
 int getAvhet(struct hashEl *helCEU, struct hashEl *helCHB, 
@@ -342,6 +398,61 @@ ha = (struct hapmapAlleles *)hel->val;
 return ha->heteroCount;
 }
 
+char *reverseObserved(char *observed)
+/* reverse complement simple observed string */
+/* if complex, leave as is */
+{
+if (sameString(observed, "A/T")) return "A/T";
+if (sameString(observed, "C/G")) return "C/G";
+
+if (sameString(observed, "A/C")) return "G/T";
+if (sameString(observed, "A/G")) return "C/T";
+if (sameString(observed, "C/T")) return "A/G";
+if (sameString(observed, "G/T")) return "A/C";
+
+return observed;
+}
+
+struct hashEl *forcePositive(struct hashEl *hel)
+/* convert to positive strand */
+{
+struct hapmapAlleles *ha;
+if (!hel) return NULL;
+ha = (struct hapmapAlleles *)hel->val;
+if (sameString(ha->strand, "+")) return hel;
+if (sameString(ha->allele2, "?"))
+    {
+    strcpy(ha->strand, "+");
+    reverseComplement(ha->allele1, 1);
+    ha->observed = reverseObserved(ha->observed);
+    /* put it back in the hash element */
+    hel->val = ha;
+    return hel;
+    }
+char *allele1 = cloneString(ha->allele1);
+int allele1Count = ha->allele1Count;
+char *allele2 = cloneString(ha->allele2);
+int allele2Count = ha->allele2Count;
+
+reverseComplement(allele1, 1);
+reverseComplement(allele2, 1);
+
+strcpy(ha->allele1, allele2);
+ha->allele1Count = allele2Count;
+
+strcpy(ha->allele2, allele1);
+ha->allele2Count = allele1Count;
+
+strcpy(ha->strand, "+");
+ha->observed = reverseObserved(ha->observed);
+/* put it back in the hash element */
+hel->val = ha;
+return hel;
+
+}
+
+
+
 struct hapmapAllelesCombined *mergeOne(struct hashEl *helCEU, struct hashEl *helCHB, 
                                        struct hashEl *helJPT, struct hashEl *helYRI)
 /* score is average heterozygosity */
@@ -390,6 +501,48 @@ ret->heteroCountYRI = getHeteroCount(helYRI);
 return ret;
 }
 
+void writeOutput(struct hapmapAllelesCombined *hac, FILE *outputFileHandle)
+/* output one hapmapAllelesCombined */
+{
+fprintf(outputFileHandle, "%s %d %d %s ", hac->chrom, hac->chromStart, hac->chromEnd, hac->name);
+fprintf(outputFileHandle, "%d %s %s ", hac->score, hac->strand, hac->observed);
+fprintf(outputFileHandle, "%s %d %d %d %d ", hac->allele1, hac->allele1CountCEU, hac->allele1CountCHB, hac->allele1CountJPT, hac->allele1CountYRI);
+fprintf(outputFileHandle, "%s %d %d %d %d ", hac->allele2, hac->allele2CountCEU, hac->allele2CountCHB, hac->allele2CountJPT, hac->allele2CountYRI);
+fprintf(outputFileHandle, "%d %d %d %d\n", hac->heteroCountCEU, hac->heteroCountCHB, hac->heteroCountJPT, hac->heteroCountYRI);
+}	    
+
+void showAllele(struct hashEl *hel)
+/* helper function for debugging */
+{
+struct hapmapAlleles *ha = NULL;
+if (!hel) return;
+ha = (struct hapmapAlleles *)hel->val;
+verbose(1, "name = %s\n", ha->name);
+verbose(1, "score = %d\n", ha->score);
+verbose(1, "strand = %s\n", ha->strand);
+verbose(1, "allele1 = %s\n", ha->allele1);
+verbose(1, "allele1Count = %d\n", ha->allele1Count);
+verbose(1, "allele2 = %s\n", ha->allele2);
+verbose(1, "allele2Count = %d\n", ha->allele2Count);
+verbose(1, "heteroCount = %d\n", ha->allele2Count);
+verbose(1, "------------------------\n");
+}
+
+struct hapmapAllelesCombined *fixStrandAndMerge(struct hashEl *helCEU, struct hashEl *helCHB, 
+                                                struct hashEl *helJPT, struct hashEl *helYRI)
+/* force everything to positive strand */
+{
+boolean allMatch = TRUE;
+helCEU = forcePositive(helCEU);
+helCHB = forcePositive(helCHB);
+helJPT = forcePositive(helJPT);
+helYRI = forcePositive(helYRI);
+/* need a sanity check for alleles */
+allMatch = matchingAlleles(helCEU, helCHB, helJPT, helYRI);
+if (!allMatch) return NULL;
+return mergeOne(helCEU, helCHB, helJPT, helYRI);
+}
+
 void mergeAll()
 /* read through nameHash */
 /* look up in 4 population hashes */
@@ -435,12 +588,14 @@ while ((nameHashElement = hashNext(&cookie)) != NULL)
 	continue;
 	}
 
-    /* do a reverseComplement if strand different? */
-    /* correct rather than discard? */
+    /* if strand is different, log and fix if possible */
     allMatch = matchingStrand(helCEU, helCHB, helJPT, helYRI);
     if (!allMatch)
         {
 	fprintf(errorFileHandle, "different strands for %s\n", nameHashElement->name);
+	hac = fixStrandAndMerge(helCEU, helCHB, helJPT, helYRI);
+	if (hac)
+	    writeOutput(hac, outputFileHandle);
 	continue;
 	}
 
@@ -452,22 +607,18 @@ while ((nameHashElement = hashNext(&cookie)) != NULL)
 	continue;
 	}
 
-    hac = mergeOne(helCEU, helCHB, helJPT, helYRI);
-    if (hac)
+    /* should just have 2 alleles in all */
+    allMatch = matchingAlleles(helCEU, helCHB, helJPT, helYRI);
+    if (!allMatch)
         {
-        fprintf(outputFileHandle, "%s %d %d %s ", 
-            hac->chrom, hac->chromStart, hac->chromEnd, hac->name);
-        fprintf(outputFileHandle, "%d %s %s ", 
-	    hac->score, hac->strand, hac->observed);
-        fprintf(outputFileHandle, "%s %d %d %d %d ", hac->allele1, 
-	    hac->allele1CountCEU, hac->allele1CountCHB, 
-	    hac->allele1CountJPT, hac->allele1CountYRI);
-        fprintf(outputFileHandle, "%s %d %d %d %d ", hac->allele2, 
-	    hac->allele2CountCEU, hac->allele2CountCHB, 
-	    hac->allele2CountJPT, hac->allele2CountYRI);
-        fprintf(outputFileHandle, "%d %d %d %d\n", hac->heteroCountCEU, 
-            hac->heteroCountCHB, hac->heteroCountJPT, hac->heteroCountYRI);
-	}	    
+	fprintf(errorFileHandle, "different alleles for %s\n", nameHashElement->name);
+	continue;
+	}
+        
+    hac = mergeOne(helCEU, helCHB, helJPT, helYRI);
+    if (hac) 
+        writeOutput(hac, outputFileHandle);
+
     }
 carefulClose(&outputFileHandle);
 }
