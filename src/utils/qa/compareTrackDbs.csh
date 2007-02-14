@@ -4,7 +4,6 @@ if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares trackDb on two machines."
  echo "  optionally compares another field instead of tableName."
- echo "  this will break when hgText is retired."
  echo
  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
  echo ""
@@ -78,18 +77,6 @@ if ( $#argv == 4 ) then
     exit 1
   endif
 endif
-
-
-#### OLD WAY WITH HGTEXT !!! #####
-#set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgText?db=hg16&table=hg16.trackDb&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results&field_tableName=on&phase=Get+these+fields"
-
-#set url1 = "http://"
-#set url2 = ".cse.ucsc.edu/cgi-bin/hgText?db="
-#set url3 = "&table="
-#set url4 = "."
-#set url5 = "&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
-#set url6 = "&field_$field=on"
-#set url7 = "&phase=Get+these+fields"
 
 #### NEW WAY WITH hgTables
 #set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgTables?db=hg16&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table=trackDb&origPhase=Get+results&outputType=Tab-separated%2C+Choose+fields...&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"

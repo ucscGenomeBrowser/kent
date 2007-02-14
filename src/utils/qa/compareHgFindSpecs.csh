@@ -4,7 +4,6 @@ if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares hgFindSpec on two machines."
  echo "  optionally compares another field instead of searchName."
- echo "  this will break when hgText is replaced by hgTables."
  echo
  echo "    usage: machine1 machine2 database [field] (defaults to searchName)"
  echo ""
