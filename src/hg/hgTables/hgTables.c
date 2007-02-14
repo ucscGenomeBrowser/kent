@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.143 2007/02/10 19:38:26 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.143.2.1 2007/02/14 02:21:20 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1334,20 +1334,20 @@ void doMetaData(struct sqlConnection *conn)
 puts("Content-Type:text/plain\n");
 char *db= cartString(cart, "db");
 char *query = "";
-if (cartVarExists(cart, hgtaStatus))
+if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", db);
     query = "SHOW TABLE STATUS";
     }
-else if (cartVarExists(cart, hgtaVersion))
+else if (cartVarExists(cart, hgtaMetaVersion))
     {
     query = "SELECT @@VERSION";
     }
-else if (cartVarExists(cart, hgtaDatabases))
+else if (cartVarExists(cart, hgtaMetaDatabases))
     {
     query = "SHOW DATABASES";
     }
-else if (cartVarExists(cart, hgtaTables))
+else if (cartVarExists(cart, hgtaMetaTables))
     {
     query = "SHOW TABLES";
     }
