@@ -10,5 +10,7 @@ struct linkedBeds
     int chromStart,chromEnd;	/* Bounds in genome. */
     };
 
-struct txGraph *makeGraph(struct linkedBeds *lbList);
-/* Create a graph corresponding to linkedBedsList */
+struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name);
+/* Create a graph corresponding to linkedBedsList.
+ * The maxBleedOver parameter controls how much of a soft edge that
+ * can be cut off when snapping to a hard edge. */

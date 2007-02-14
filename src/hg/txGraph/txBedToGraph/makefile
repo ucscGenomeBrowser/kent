@@ -11,7 +11,7 @@ txBedToGraph: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txBedToGraph${EXE}
 
 test:
-	txBedToGraph -verbose=2 inRef.bed refSeq input.bed mrna output.txg 
+	txBedToGraph -verbose=3 inRef.bed refSeq input.bed mrna output.txg 
 
 clean:
 	rm -f $O

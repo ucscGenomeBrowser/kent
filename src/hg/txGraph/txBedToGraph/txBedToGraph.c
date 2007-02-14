@@ -20,6 +20,7 @@
 
 int maxJoinSize = 70000;	/* This excludes most of the chr14 IG mess */
 boolean forceRefSeqJoin = TRUE;
+int maxBleedOver = 5;
 char *prefix = "a";
 
 void usage()
@@ -33,14 +34,17 @@ errAbort(
   "                    noisy ends. Default %d.\n"
   "    -noForceRefSeqJoin - If set don't force joins above maxJoinSize\n"
   "                    on refSeq type\n"
+  "    -maxBleedOver=N - Maximum amount of exon that can be lost when snapping\n"
+  "                    soft to hard edges. Devault %d\n"
   "    -prefix=xyz - Use the given prefix for the graph names, default %s\n"
-  , maxJoinSize, prefix
+  , maxJoinSize, maxBleedOver, prefix
   );
 }
 
 static struct optionSpec options[] = {
    {"maxJoinSize", OPTION_INT},
    {"noForceRefSeqJoin", OPTION_BOOLEAN},
+   {"maxBleedOver", OPTION_INT},
    {"prefix", OPTION_STRING},
    {NULL, 0},
 };
@@ -259,9 +263,12 @@ struct lbCluster *cluster, *nextCluster;
 struct txGraph *graphList = NULL;
 for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     {
+    char name[128];
+    static int id=0;
     nextCluster = cluster->next;
-    verbose(2, "Got cluster of %d.\n", slCount(cluster->lbList));
-    struct txGraph *graph = makeGraph(cluster->lbList);
+    safef(name, sizeof(name), "%s%d", prefix, ++id);
+    verbose(2, "Got cluster of %d called %s.\n", slCount(cluster->lbList), name);
+    struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, name);
 #ifdef SOON
     slAddHead(&graphList, graph);
 #endif /* SOON */
@@ -329,6 +336,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 maxJoinSize = optionInt("maxJoinSize", maxJoinSize);
 forceRefSeqJoin = !optionExists("noForceRefSeqJoin");
+maxBleedOver = optionInt("maxBleedOver", maxBleedOver);
 prefix = optionVal("prefix", prefix);
 if (argc < 4 || argc%2 != 0)
     usage();
