@@ -1,4 +1,4 @@
-/* clusterRna - Make clusters of mRNA and ESTs.  Optionally turn clusters into
+/* clusterPsl - Make clusters of mRNA and ESTs.  Optionally turn clusters into
  * graphs. */
 #include "common.h"
 #include "memalloc.h"
@@ -14,7 +14,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.7 2007/02/10 02:02:19 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.8 2007/02/14 12:44:00 kent Exp $";
 
 int maxMergeGap = 5;
 
@@ -29,7 +29,8 @@ errAbort(
   "      output is a text file full of cluster info\n"
   "options:\n"
   "   -verbose=2 Make output more verbose.\n"
-  "   -agx=output.agx - Create splicing graphs\n"
+  "   -agx=output.agx - Create splicing graphs. Note this is usually done\n"
+  "                     with txBedToGraph these days.\n"
   "   -dna=db.2bit - DNA - two bit file or nib dir.\n"
   "   -maxMergeGap=N Merge blocks separated by no more than this. Default %d\n",
       maxMergeGap
@@ -169,12 +170,10 @@ struct pslCluster *clusterPslsOnChrom(struct psl *pslList)
 /* Make clusters of overlapping alignments on a single chromosome. 
  * Return a list of such clusters. */
 {
-struct pslCluster *clusterList = NULL;
-
 if (pslList == NULL)
     return NULL;
 
-/* Convert alignments from psl to ggMrnaAli. */
+/* Creat binKeeper full of clusters. */
 struct psl *psl, *next = NULL;
 struct binKeeper *bins = binKeeperNew(0, pslList->tSize);
 for (psl = pslList; psl != NULL; psl = next)
@@ -184,6 +183,7 @@ for (psl = pslList; psl != NULL; psl = next)
     }
 
 /* Convert from binKeeper of clusters to simple list of clusters. */
+struct pslCluster *clusterList = NULL;
 struct binElement *binList, *bin;
 binList = binKeeperFindAll(bins);
 for (bin = binList; bin != NULL; bin = bin->next)
@@ -199,8 +199,6 @@ return clusterList;
 }
 
 
-struct geneGraph *ggMakeInitialGraph(struct ggMrnaCluster *mc, struct ggMrnaInput *ci);
-/* Create initial gene graph from input input. */
 
 void writeClusterGraph(struct pslCluster *cluster, struct dnaSeq *chrom, 
 	char *chromName, FILE *f)
@@ -214,9 +212,6 @@ struct ggMrnaCluster *mc;
 for (mc = mcList; mc != NULL; mc = mc->next)
     {
     struct geneGraph *gg = ggGraphConsensusCluster(mc, ci, NULL, FALSE);
-    // struct geneGraph *gg = ggMakeInitialGraph(mc, ci);
-    // AllocArray(gg->mrnaTissues, gg->mrnaRefCount);
-    // AllocArray(gg->mrnaLibs, gg->mrnaRefCount);
     struct altGraphX *ag = ggToAltGraphX(gg);
     if (ag != NULL)
 	{
