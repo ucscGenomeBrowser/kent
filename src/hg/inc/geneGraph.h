@@ -5,7 +5,8 @@
  *****************************************************************************/
 /* geneGraph - stuff that represents the alt splicing patterns possible for a
  * gene based on the mRNA evidence as a graph. This is used by the altSplice
- * program. */
+ * program.  See also src/hg/txGraph/txBedToGraph for a more recent, faster,
+ * more memory efficient approach. */
 
 #ifndef GENEGRAPH_H
 #define GENEGRAPH_H
