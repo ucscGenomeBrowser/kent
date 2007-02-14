@@ -23,6 +23,7 @@
 #include "hash.h"
 #include "localmem.h"
 #include "rbTree.h"
+#include "rangeTree.h"
 #include "dlist.h"
 #include "bed.h"
 #include "ggTypes.h"
@@ -666,7 +667,113 @@ removeUnusedVertices(vertexTree, edgeTree);
 lmCleanup(&lm);
 }
 
-#ifdef DEBUG
+struct edge *edgeFromConsensusOfEvidence(struct rbTree *vertexTree, struct evidence *evList,
+	struct lm *lm)
+/* Attempt to create a single edge from a list of overlapping evidence ranges.
+ * The start will be the consensus of all evidence starts.  Likewise
+ * the end will be the consensus of all evidence ends.  The evidence that
+ * overlaps this edge will be included in the edge. */
+{
+/* Gather up lists of starts and ends. */
+struct slInt *startList = NULL, *endList = NULL;
+struct evidence *ev, *nextEv;
+int listSize = 0;
+for (ev = evList; ev != NULL; ev = ev->next)
+    {
+    struct slInt *x;
+    lmAllocVar(lm, x);
+    x->val = ev->start;
+    slAddHead(&startList, x);
+    lmAllocVar(lm, x);
+    x->val = ev->end;
+    slAddHead(&endList, x);
+    ++listSize;
+    }
+
+/* Get consensus starts and ends. */
+slSort(&startList, slIntCmp);
+struct vertex *start = consensusVertex(vertexTree, startList, listSize, ggSoftStart);
+slSort(&endList, slIntCmpRev);
+struct vertex *end = consensusVertex(vertexTree, endList, listSize, ggSoftEnd);
+
+/* Make edge */
+struct edge *edge;
+AllocVar(edge);
+edge->start = start;
+edge->end = end;
+
+/* Add overlapping evidence to edge. */
+for (ev = evList; ev != NULL; ev = nextEv)
+    {
+    nextEv = ev->next;
+    if (rangeIntersection(ev->start, ev->end, start->position, end->position) > 0)
+        slAddHead(&edge->evList, ev);
+    }
+
+return edge;
+}
+
+static void mergeDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree)
+/* Merge together overlapping edges with soft ends. */
+{
+struct mergedEdge
+/* Hold together info on a merged edge. */
+    {
+    struct evidence *evidence;
+    };
+
+/* Traverse graph and build up range tree */
+struct rbTree *rangeTree = rangeTreeNew(0);
+struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *start = edge->start;
+    struct vertex *end = edge->end;
+    if (start->type == ggSoftStart && end->type == ggSoftEnd)
+        rangeTreeAdd(rangeTree, start->position, end->position);
+    }
+
+/* Traverse graph again merging edges */
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *start= edge->start;
+    struct vertex *end = edge->end;
+    if (start->type == ggSoftStart && end->type == ggSoftEnd)
+        {
+	struct range *r = rangeTreeFindEnclosing(rangeTree,
+		start->position, end->position);
+	assert(r != NULL);
+	struct mergedEdge *mergeEdge = r->val;
+	if (mergeEdge == NULL)
+	    {
+	    lmAllocVar(rangeTree->lm, mergeEdge);
+	    r->val = mergeEdge;
+	    }
+	mergeEdge->evidence = slCat(edge->evList, mergeEdge->evidence);
+	edge->evList = NULL;
+	rbTreeRemove(edgeTree, edge);
+	}
+    }
+
+/* Traverse merged edge list, making a single edge from each range.  */
+struct range *r;
+struct lm *lm = lmInit(0);
+for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
+    {
+    struct mergedEdge *mergedEdge = r->val;
+    struct edge *edge = edgeFromConsensusOfEvidence(vertexTree, mergedEdge->evidence, lm);
+    if (edge != NULL)
+	rbTreeAdd(edgeTree, edge);
+    }
+lmCleanup(&lm);
+
+removeUnusedVertices(vertexTree, edgeTree);
+slFreeList(&edgeRefList);
+rbTreeFree(&rangeTree);
+}
+
 static void dumpVertices(struct rbTree *vertexTree)
 {
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
@@ -678,6 +785,7 @@ for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
 printf("\n");
 slFreeList(&vRefList);
 }
+#ifdef DEBUG
 #endif /* DEBUG */
 
 struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name)
@@ -704,6 +812,12 @@ verbose(2, "%d edges, %d vertices after snapHalfHards\n",
 halfHardConsensuses(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
 	edgeTree->n, vertexTree->n);
+dumpVertices(vertexTree);
+
+mergeDoubleSofts(vertexTree, edgeTree);
+verbose(2, "%d edges, %d vertices after mergeDoubleSofts\n",
+	edgeTree->n, vertexTree->n);
+dumpVertices(vertexTree);
 
 /* Clean up and go home. */
 rbTreeFree(&vertexTree);
