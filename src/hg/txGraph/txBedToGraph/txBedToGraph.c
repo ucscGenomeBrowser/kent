@@ -269,11 +269,10 @@ for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     safef(name, sizeof(name), "%s%d", prefix, ++id);
     verbose(2, "Got cluster of %d called %s.\n", slCount(cluster->lbList), name);
     struct txGraph *graph = makeGraph(cluster->lbList, maxBleedOver, name);
-#ifdef SOON
     slAddHead(&graphList, graph);
-#endif /* SOON */
     lbClusterFree(&cluster);
     }
+slReverse(&graphList);
 return graphList;
 }
 

@@ -8,6 +8,7 @@ struct linkedBeds
     struct bed *bedList;	/* Nonempty list of beds, order is important */
     char *sourceType;		/* "mrna", "refSeq", etc. not alloced here */
     int chromStart,chromEnd;	/* Bounds in genome. */
+    int id;			/* Corresponds to source ID when filled in. */
     };
 
 struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name);

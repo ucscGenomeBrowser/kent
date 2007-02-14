@@ -767,13 +767,15 @@ for (r = rangeTreeList(rangeTree); r != NULL; r = r->next)
     if (edge != NULL)
 	rbTreeAdd(edgeTree, edge);
     }
-lmCleanup(&lm);
 
+/* Clean up and go home. */
+lmCleanup(&lm);
 removeUnusedVertices(vertexTree, edgeTree);
 slFreeList(&edgeRefList);
 rbTreeFree(&rangeTree);
 }
 
+#ifdef DEBUG
 static void dumpVertices(struct rbTree *vertexTree)
 {
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
@@ -785,8 +787,88 @@ for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
 printf("\n");
 slFreeList(&vRefList);
 }
-#ifdef DEBUG
 #endif /* DEBUG */
+
+struct txGraph *treeTreeToTxg(struct rbTree *vertexTree, struct rbTree *edgeTree, char *name,
+	struct linkedBeds *lbList)
+/* Convert from vertexTree/edgeTree representation to txGraph */
+{
+/* Allocate txGraph, and fill in some of the relatively easy fields. */
+struct txGraph *txg;
+AllocVar(txg);
+struct bed *bed = lbList->bedList;
+txg->name = cloneString(name);
+txg->tName = cloneString(bed->chrom);
+txg->strand[0] = bed->strand[0];
+txg->vertexCount = vertexTree->n;
+txg->edgeCount = edgeTree->n;
+
+/* Get vertex list and number sequentially. Fill in vertex array */
+int i;
+struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
+struct txVertex *tv = AllocArray(txg->vertices, vertexTree->n);
+for (vRef = vRefList, i=0; vRef != NULL; vRef = vRef->next, i++)
+    {
+    struct vertex *v = vRef->val;
+    v->count = i;
+    tv->position = v->position;
+    tv->type = v->type;
+    ++tv;
+    }
+slFreeList(&vRefList);
+
+/* Deal with sources. */
+int sourceCount = 0;
+struct linkedBeds *lb;
+for (lb = lbList; lb != NULL; lb = lb->next)
+    lb->id = sourceCount++;
+struct txSource *source = AllocArray(txg->sources, sourceCount);
+for (lb = lbList; lb != NULL; lb = lb->next)
+    {
+    source->accession = cloneString(lb->bedList->name);
+    source->type = cloneString(lb->sourceType);
+    ++source;
+    }
+txg->sourceCount = sourceCount;
+
+/* Convert edges */
+struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+
+    /* Allocate edge and fill in start and end. */
+    struct txEdge *te;
+    AllocVar(te);
+    te->startIx = edge->start->count;
+    te->endIx = edge->end->count;
+
+    /* Figure out whether it's an intron or exon. */
+    enum ggVertexType startType = edge->start->type;
+    if (startType == ggHardStart || startType == ggSoftStart)
+        te->type = ggExon;
+    else
+        te->type = ggIntron;
+
+    /* Convert the evidence. */
+    struct evidence *ev;
+    for (ev = edge->evList; ev != NULL; ev = ev->next)
+        {
+	struct txEvidence *tev;
+	AllocVar(tev);
+	tev->sourceId = ev->lb->id;
+	tev->start = ev->start;
+	tev->end = ev->end;
+	slAddHead(&te->evList, tev);
+	te->evCount += 1;
+	}
+    slReverse(&te->evList);
+
+    slAddHead(&txg->edges, te);
+    }
+slReverse(&txg->edges);
+return txg;
+}
 
 struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name)
 /* Create a graph corresponding to linkedBedsList.
@@ -812,15 +894,15 @@ verbose(2, "%d edges, %d vertices after snapHalfHards\n",
 halfHardConsensuses(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
 	edgeTree->n, vertexTree->n);
-dumpVertices(vertexTree);
 
 mergeDoubleSofts(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after mergeDoubleSofts\n",
 	edgeTree->n, vertexTree->n);
-dumpVertices(vertexTree);
+
+struct txGraph *txg = treeTreeToTxg(vertexTree, edgeTree, name, lbList);
 
 /* Clean up and go home. */
 rbTreeFree(&vertexTree);
 rbTreeFree(&edgeTree);
-return NULL;	/* ugly */
+return txg;
 }
