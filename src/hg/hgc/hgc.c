@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1203 2007/02/14 05:14:01 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1204 2007/02/14 15:35:37 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4568,6 +4568,11 @@ else if (startsWith("celeraMrna",track))
     {
     type = "mRNA";
     table = "celeraMrna";
+    }
+else if (startsWith("all_mrnaFiltered",track))
+    {
+    type = "mRNA";
+    table = track;
     }
 else 
     {
