@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1202 2007/02/13 20:18:54 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1203 2007/02/14 05:14:01 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16084,28 +16084,28 @@ hFreeConn(&conn);
 }
 
 
-void showOneHapmapRow(char *pop, int count1, int count2)
+void showOneHapmapRow(char *pop, int count1, int count2, int heteroCount)
 {
-int total = count1 + count2;
+int total = count1 + count2 + heteroCount;
 float freq1 = 0.0;
 float freq2 = 0.0;
 
 if (total == 0) return;
 
-freq1 = 100.0 * count1 / total;
-freq2 = 100.0 * count2 / total;
+freq1 = 50.0 * ((count1*2) + heteroCount) / total;
+freq2 = 50.0 * ((count2*2) + heteroCount) / total;
 
 printf("<TR>");
 printf("<TD>%s</TD>", pop);
 if (count1 > count2)
     {
-    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count1 + heteroCount, freq1);
+    printf("<TD>%d (%3.2f%%)</TD>", count2 + heteroCount, freq2);
     }
 else
     {
-    printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD>%d (%3.2f%%)</TD>", count1 + heteroCount, freq1);
+    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count2 + heteroCount, freq2);
     }
 printf("</TR>\n");
 
@@ -16122,6 +16122,7 @@ char **row;
 char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
+float avHet = 0.0;
 
 genericHeader(tdb, itemName);
 
@@ -16137,17 +16138,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hmac->observed);
     printf("<B>Strand:</B> %s<BR>\n", hmac->strand);
 
-    printf("<B>allele1:</B> %s<BR>\n", hmac->allele1);
-    printf("<B>allele2:</B> %s<BR>\n", hmac->allele2);
+    printf("<B>Allele1:</B> %s<BR>\n", hmac->allele1);
+    printf("<B>Allele2:</B> %s<BR>\n", hmac->allele2);
+    avHet = hmac->score / 1000.0;
+    printf("<B>Average heterozygosity: %3.2f%%</B>", avHet);
 
     htmlHorizontalLine();
     printf("<B>Allele frequencies:</B><BR>\n");
     printf("<TABLE BORDER=1>\n");
     printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", hmac->allele1, hmac->allele2);
-    showOneHapmapRow("CEU", hmac->allele1CountCEU, hmac->allele2CountCEU);
-    showOneHapmapRow("CHB", hmac->allele1CountCHB, hmac->allele2CountCHB);
-    showOneHapmapRow("JPT", hmac->allele1CountJPT, hmac->allele2CountJPT);
-    showOneHapmapRow("YRI", hmac->allele1CountYRI, hmac->allele2CountYRI);
+    showOneHapmapRow("CEU", hmac->allele1CountCEU, hmac->allele2CountCEU, hmac->heteroCountCEU);
+    showOneHapmapRow("CHB", hmac->allele1CountCHB, hmac->allele2CountCHB, hmac->heteroCountCHB);
+    showOneHapmapRow("JPT", hmac->allele1CountJPT, hmac->allele2CountJPT, hmac->heteroCountJPT);
+    showOneHapmapRow("YRI", hmac->allele1CountYRI, hmac->allele2CountYRI, hmac->heteroCountYRI);
     printf("</TABLE>\n");
     htmlHorizontalLine();
 
