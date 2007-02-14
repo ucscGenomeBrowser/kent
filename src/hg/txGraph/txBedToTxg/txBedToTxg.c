@@ -19,11 +19,10 @@ void usage()
 {
 errAbort(
   "txBedToTxg - Create a transcription graph out of a bed-12 file.\n"
+  "You probably want to use txBedToGraph instead though. This uses the\n"
+  "old geneGraph clustering engine.\n"
   "usage:\n"
   "   txBedToTxg in1.bed in1Type [in2.bed in2type ...]  out.txg\n"
-  "where in.lst is a file with two columns:\n"
-  "    type - usually 'refSeq' or 'mrna' or 'est' or something\n"
-  "    bed -  a bed file\n"
   "options:\n"
   "    -maxJoinSize=N - Maximum size of gap to join for introns with\n"
   "                    noisy ends. Default %d.\n"
