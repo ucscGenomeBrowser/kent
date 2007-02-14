@@ -24,12 +24,15 @@ visibility dense
 type bed 3 +
 
 track rhMap
-shortLabel Radiation Hybrid Map
+shortLabel Radiation Hybrid
 longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
 group map
 priority 14
 visibility hide
 type psl .
+url http://zfin.org/cgi-bin/ZFIN_jump?record=$$
+urlName gene
+dataVersion Oct 2006
 
 track bacEndPairs
 shortLabel BAC End Pairs
