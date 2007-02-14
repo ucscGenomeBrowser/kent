@@ -5,7 +5,7 @@ cd /cluster/data/hg18/bed/jkg
 
 # Get refSeq and mrna tables converted to bed.  Ignore the
 # stdin is empty messages, these are just from _random chroms
-# with no annotations.
+# with no annotations.  Takes 2 minutes.
 mkdir refSeq mrna
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
@@ -13,19 +13,18 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     hgGetAnn -noMatchOk hg18 mrna $c stdout | txPslToBed stdin /cluster/data/hg18/hg18.2bit mrna/$c.bed
 end
 
-# Create splicing graphs
-mkdir nativeTxg
+# Create splicing graphs.  Takes 12 seconds.
+mkdir bedToGraph
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
-    txBedToTxg -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna nativeTxg/$c.txg
+    txBedToGraph -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna bedToGraph/$c.txg
 end
-
 
 # Setup mouse dir
 mkdir mm8
 cd mm8
 
-# Get mouse mrna including ESTs.  Takes about a three minutes
+# Get mouse mrna including ESTs.  Takes about three minutes
 mkdir refSeq mrna est
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     echo $c
@@ -33,12 +32,13 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     hgGetAnn -noMatchOk mm8 mrna $c stdout | txPslToBed stdin /cluster/data/mm8/mm8.2bit mrna/$c.bed
     hgGetAnn -noMatchOk mm8 intronEst $c stdout | txPslToBed stdin /cluster/data/mm8/mm8.2bit est/$c.bed
 end
+#ignore gripe about missing data in chrM
 
-# Create mouse splicing graphs.  Takes about 7 minutes
+# Create mouse splicing graphs.  Takes a minute and a half.
 rm -f mouse.txg
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
     echo $c
-    txBedToTxg refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> mouse.txg
+    txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> mouse.txg
 end
 
 
@@ -54,11 +54,11 @@ cd ..
 mkdir txOrtho
 cd txOrtho
 mkdir edges
-cd ../nativeTxg
+cd ../bedToGraph
 echo "#\!/bin/tcsh -ef" > ../txOrtho/spec
 foreach f (*.txg)
     set c=$f:r
-    echo txOrtho ../nativeTxg/$f ../mm8/chains/$c.chain ../mm8/nets/$c.net ../mm8/mouse.txg edges/$c.edges >> ../txOrtho/spec
+    echo txOrtho ../bedToGraph/$f ../mm8/chains/$c.chain ../mm8/nets/$c.net ../mm8/mouse.txg edges/$c.edges >> ../txOrtho/spec
 end
 cd ..
 
@@ -69,12 +69,12 @@ para create spec
 para make
 para time
 Completed: 49 of 49 jobs
-#CPU time in finished jobs:      17963s     299.39m     4.99h    0.21d  0.001 y
-#IO & Wait Time:                   402s       6.70m     0.11h    0.00d  0.000 y
-#Average job time:                 375s       6.25m     0.10h    0.00d
+CPU time in finished jobs:      18162s     302.70m     5.04h    0.21d  0.001 y
+#IO & Wait Time:                   450s       7.50m     0.13h    0.01d  0.000 y
+#Average job time:                 380s       6.33m     0.11h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:            2850s      47.50m     0.79h    0.03d
-#Submission to last job:          2850s      47.50m     0.79h    0.03d
+#Longest finished job:            2901s      48.35m     0.81h    0.03d
+#Submission to last job:          2901s      48.35m     0.81h    0.03d
 
 
 # Add evidence from ortho edges - takes about 10 seconds.
@@ -82,7 +82,7 @@ cd /cluster/data/hg18/bed/jkg
 mkdir orthoTxg
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
-    txgAddEvidence nativeTxg/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
+    txgAddEvidence bedToGraph/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
 end
 
 # Clean up chains and nets since they are big
@@ -107,27 +107,6 @@ refSeq  100
 mrna    2
 txOrtho 1
 exoniphy 1
-end
-
-# Trim graphs - takes less than 10 seconds.
-mkdir trimmedTxg
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo $c
-    txgTrim exoniphyTxg/$c.txg trim.weights 3 trimmedTxg/$c.txg
-end
-
-# Convert to agx for exonWalk - takes 5 seconds
-mkdir agx
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo $c
-    txgToAgx trimmedTxg/$c.txg agx/$c.agx
-end
-
-# Do exonWalk - takes about 20 seconds
-mkdir exonWalk
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo exonWalk $c
-    exonWalk agx/$c.agx exonWalk/$c.bed
 end
 
 # Do  txWalk  - takes 4 seconds
@@ -180,7 +159,21 @@ cd /cluster/data/hg18/bed/jkg/blatProt
 pslSort dirs raw.psl . rawChrom
 pslReps raw.psl nearBest.psl /dev/null -nohead -minCover=0.8 -minAli=0.80 -nearTop=0.002
 
-## Load a bunch of stuff into the database:
+###########################################################################
+## Load take 3 into the database
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq2
+hgGetAnn hg18 all_mrna - stdout | hgLoadPsl hg18 stdin -table=jkgInputMrna2
+hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
+hgLoadBed hg18 jkgTxWalk2 txWalk/*.bed
+
+###########################################################################
+## Load take 2 into the database:
 ssh hgwdev
 cd /cluster/data/hg18/bed/jkg
 hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
@@ -193,16 +186,6 @@ awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed h
 hgLoadBed -notItemRgb -sqlTable=jkgTrimmedGraph.sql hg18 jkgTrimmedGraph  agx/*.agx
 hgLoadBed hg18 jkgRawTranscripts exonWalk/*.bed
 hgLoadBed hg18 jkgTxWalk txWalk/*.bed
-
-## About time to delete these old ones...
-hgLoadBed hg18 jkClusterRna2 clusterPsl/*.bed
-hgLoadBed -notItemRgb -sqlTable=altGraphRna.sql hg18 altGraphRna altSplice/*.agx
-hgLoadBed -notItemRgb -sqlTable=jkOrthoSplice.sql hg18 jkOrthoSplice orthoSplice/agx/*.agx
-cat altSplice/*.agx | agxToBed stdin altSplice.bed
-hgLoadBed hg18 jkProjectedAgx altSplice.bed
-cat orthoSplice/agx/*.agx | agxToBed stdin orthoSplice.bed
-hgLoadBed hg18 jkProjectedOrtho orthoSplice.bed
-hgLoadBed hg18 jkOrthoWalk exonWalk/bed/*.bed
 
 ###########################################################################
 ## Some analysis of things in humanProt.fa that didn't map to any sequence.
@@ -350,43 +333,53 @@ chr22:35,232,252-35,233,254 - Looks like has perhaps three promoters, two
 chr22:35,251,888-35,252,258 - Longer exon, caused by being initial rather
       than middle exon in some trancripts, supported by two mRNAs and mouse
       orthology, preserved in trimmed graph.
+      Take 3 - still good.
 chr13:29,797,646-29,834,682 - Not clear why last exon of CR598046 survives
       trimmiing.  Looks like this is because the single exon mRNA AK130570, 
       which does overlap the third exon, gets assigned as support for the
       first exon instead!?  Likely a fixable bug with a fairly small test
       case.
+      Take 3 - looks fixed.
 chr6:132,312,312-132,312,480 - Single mRNA with a slightly shorter exon
       looks like it gets swept up in orthology with larger exon, and preserved
       even when it shouldn't be.
+      Take 3 - still a problem.
 chr6:132,495,393-132,514,405 - Single initial exon kept from two fairly
       unrelated transcripts that share a single splice site.  Maybe this
       is ok?  Maybe want a little stronger filter here somehow....
       Note in browser at view of chr6:132,427,897-132,618,026 these
       don't look to line up as well as perhaps they should.
+      Take 3 - still the same.
 chr6:132,690,933-132,690,960 - A soft end that should be merged into
       nearby shorter hard end.  Looks like just mRNA ended barely the
       other side of the splice site, and blat didn't find the other
       exon, and instead continued...  Likely a fixable bug with a small test
       case.
+      Take 3 - fixed.
 chr20:33,329,929-33,336,101 - The RNA BC014403 is on the wrong strand,
       and thus gets broken up at each exon because of bad splice sites.
       The txPslToBed phase should fix this instead. A fixable bug with smalll
       test case.
+      Take 3 - still busted
 chr20:33,336,445-33,343,866 - Good test case for exonWalk.  Two transcripts
       that share some splice sites, but vary quite a bit.  Could get
       combinatorical easily if using a niave walker.  ExonWalk does just
       generate 2 transcripts here, but I don't agree with them.
+      Take 3 - still good.
 chr20:33,351,905-33,360,150 - Seems like several large unspliced mRNAs get
       merged into the final exon inappropriately.  They should be kept
       separate, merged with each other instead maybe?
+      Take 3 - fixed.
 chr20:33,414,646-33,451,743 - Some relatively complicated alt-splicing.
       Another good test case for the walker.  Grapher seems to be doing
       the right thing.
+      Take 3 - still good.
 chr22:47,213,740-47,601,299 - Another case where the wrong exon got assigned
       support for an RNA?  See txWalk of AY358847.
+      Take 3 - better.  Looks like this had two bugs, and just one was fixed.
+               Other bug is mRNA that needs flipping to other strand.
 
 ###########################################################################
-
 ## Other notes
 The immunoglobulin heavy chain cluster on chr14 is exceptional, and
 difficult to cluster.  There's about 10,000 overlapping mRNAs in the
@@ -414,4 +407,23 @@ Submission to last job:          2850s      47.50m     0.79h    0.03d
 
 The longest job is now chr1, not chr14.  This also made the
 txgAddEvidence for chr14 go down to 0.3 seconds.
+
+###########################################################################
+## Feb 14 notes -
+Rewrote graph maker (now txBedToGraph) and walker (now txWalk).  
+
+The graph maker hopefull will eliminate a number of small problems
+with the old graph maker, as well as being considerably more efficient.
+The txGraph/txBedToGraph/makeGraph.c module is essentially a rewrite of 
+hg/lib/ggGraph.c. It relies heavily on the rbTree and rangeTree modules,
+in the process eliminating a lot of linear list traversal. 
+
+The walker is less ambitious then exonWalk in some ways.  It is not
+even trying to build gene structures out of ESTs.  It stitches
+together exons purely based on transcripts it has seen.  It does
+do a good job of a consensus genome-projection of exons from RNA
+alignments. I think it does a pretty good job of selecting a minimal
+number of transcripts that cover all exons.  It give explicit and
+overriding weight to RefSeq transcripts.
+
 
