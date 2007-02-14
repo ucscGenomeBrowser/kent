@@ -261,8 +261,8 @@ for (cluster = clusterList; cluster != NULL; cluster = nextCluster)
     {
     nextCluster = cluster->next;
     verbose(2, "Got cluster of %d.\n", slCount(cluster->lbList));
-#ifdef SOON
     struct txGraph *graph = makeGraph(cluster->lbList);
+#ifdef SOON
     slAddHead(&graphList, graph);
 #endif /* SOON */
     lbClusterFree(&cluster);
