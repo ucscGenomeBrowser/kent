@@ -21,6 +21,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "localmem.h"
 #include "rbTree.h"
 #include "dlist.h"
 #include "bed.h"
@@ -204,6 +205,39 @@ for (lb = lbList; lb != NULL; lb = lb->next)
 return edgeTree;
 }
 
+static void incVertexUses(void *item)
+/* Callback to clear edge->start->useCount and edge->end->useCount. */
+{
+struct edge *edge = item;
+edge->start->count += 1; 
+edge->end->count += 1;
+}
+
+static void removeUnusedVertices(struct rbTree *vertexTree, struct rbTree *edgeTree)
+/* Remove vertices not connected to any edges. */
+{
+/* Get vertex list and clear counts. */
+struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
+for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
+    {
+    struct vertex *v = vRef->val;
+    v->count = 0;
+    }
+
+/* Inc counts of vertices connected to edges. */
+rbTreeTraverse(edgeTree, incVertexUses);
+
+/* Remove unused vertices. */
+for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
+    {
+    struct vertex *v = vRef->val;
+    if (v->count == 0)
+        rbTreeRemove(vertexTree, v);
+    }
+
+slFreeList(&vRefList);
+}
+
 static struct dlList *sortedListFromTree(struct rbTree *tree)
 /* Create a double-linked list from tree. List will be sorted.  */
 {
@@ -314,11 +348,10 @@ if (snapCount > 0)
 dlListFree(&vList);
 }
 
-
-static void addWaysInAndOut(struct rbTree *vertexTree, struct rbTree *edgeTree)
+static void addWaysInAndOut(struct rbTree *vertexTree, struct rbTree *edgeTree,
+	struct lm *lm)
 /* Put a bunch of ways in and out of the graph onto the edges. */
 {
-struct lm *lm = vertexTree->lm;	/* We'll store the waysIn/Out here. */
 struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
 for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
     {
@@ -474,7 +507,8 @@ static void snapHalfHards(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Snap edges that are half hard to edges that are fully hard and that
  * share the original hard end */
 {
-addWaysInAndOut(vertexTree, edgeTree);
+struct lm *lm = lmInit(0);
+addWaysInAndOut(vertexTree, edgeTree, lm);
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
 for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
     {
@@ -483,40 +517,142 @@ for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
     v->waysIn = v->waysOut = NULL;	/* These are trashed so remove them. */
     }
 slFreeList(&vRefList);
+removeUnusedVertices(vertexTree, edgeTree);
+lmCleanup(&lm);
+}
+
+static struct vertex *consensusVertex(struct rbTree *vertexTree, struct slInt *list, 
+	int listSize, enum ggVertexType softType)
+/* Return vertex corresponding to a soft vertex 1/4 of way (rounded down)
+ * through list. */
+{
+struct slInt *el = slElementFromIx(list, listSize/4);
+return matchingVertex(vertexTree, el->val, softType);
+}
+
+static void halfConsensusForward(struct vertex *v, 
+	struct rbTree *vertexTree, struct rbTree *edgeTree,
+	enum ggVertexType softType, struct lm *lm)
+/* Figure out consensus end of all edges beginning at v that have soft end. */
+{
+/* Collect a list of all attached softies. */
+struct slInt *list = NULL, *el;
+struct slRef *edgeRef;
+int softCount = 0;
+for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *v = edge->end;
+    if (v->type == softType)
+        {
+	lmAllocVar(lm, el);
+	el->val = v->position;
+	slAddHead(&list, el);
+	++softCount;
+	}
+    }
+
+/* See if have enough elements to make consensus forming
+ * worthwhile. */
+if (softCount > 1)
+    {
+    slSort(&list, slIntCmpRev);
+    struct vertex *end = consensusVertex(vertexTree, list, softCount, softType);
+    for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
+	{
+	struct edge *edge = edgeRef->val;
+	struct vertex *v = edge->end;
+	if (v != end && v->type == softType)
+	    {
+	    rbTreeRemove(edgeTree, edge);
+	    }
+	}
+    }
 }
 
 
-static void incVertexUses(void *item)
-/* Callback to clear edge->start->useCount and edge->end->useCount. */
+static void halfConsensusBackward(struct vertex *v, 
+	struct rbTree *vertexTree, struct rbTree *edgeTree,
+	enum ggVertexType softType, struct lm *lm)
+/* Figure out consensus start of all edges end at v that have soft start. */
 {
-struct edge *edge = item;
-edge->start->count += 1; 
-edge->end->count += 1;
+/* Collect a list of all attached softies. */
+struct slInt *list = NULL, *el;
+struct slRef *edgeRef;
+int softCount = 0;
+for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *v = edge->start;
+    if (v->type == softType)
+        {
+	lmAllocVar(lm, el);
+	el->val = v->position;
+	slAddHead(&list, el);
+	++softCount;
+	}
+    }
+
+/* See if have enough elements to make consensus forming
+ * worthwhile. */
+if (softCount > 1)
+    {
+    slSort(&list, slIntCmp);
+    struct vertex *start = consensusVertex(vertexTree, list, softCount, softType);
+    for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
+	{
+	struct edge *edge = edgeRef->val;
+	struct vertex *v = edge->start;
+	if (v != start && v->type == softType)
+	    {
+	    rbTreeRemove(edgeTree, edge);
+	    }
+	}
+    }
 }
 
-static void removeUnusedVertices(struct rbTree *vertexTree, struct rbTree *edgeTree)
-/* Remove vertices not connected to any edges. */
+static void halfHardConsensus(struct vertex *v, 
+	struct rbTree *vertexTree, struct rbTree *edgeTree,
+	struct lm *lm)
+/* Form consensus of soft vertices connected to hard vertex v. 
+ * Consensus is:
+ *    1) The largest refSeq.
+ *    2) If no refSeq, something 3/4 of the way to the largest. */
 {
-/* Get vertex list and clear counts. */
+enum ggVertexType currentType = v->type;
+enum ggVertexType softType;
+
+/* Figure out what types look for at the other end.  If we're
+ * a soft vertex we can't do anything. */
+if (currentType == ggHardStart)
+    softType = ggSoftEnd;
+else if (currentType == ggHardEnd)
+    softType = ggSoftStart;
+else
+    return;
+
+halfConsensusForward(v, vertexTree, edgeTree, softType, lm);
+halfConsensusBackward(v, vertexTree, edgeTree, softType, lm);
+}
+
+static void halfHardConsensuses(struct rbTree *vertexTree, struct rbTree *edgeTree)
+/* Collect soft edges that share a hard edge. Move all of them to a consensus
+ * vertex, which is either:
+ *    1) The largest refSeq.
+ *    2) If no refSeq, something 3/4 of the way to the largest. */
+{
+struct lm *lm = lmInit(0);
+addWaysInAndOut(vertexTree, edgeTree, lm);
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
 for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
     {
     struct vertex *v = vRef->val;
-    v->count = 0;
+    halfHardConsensus(v, vertexTree, edgeTree, lm);
+    v->waysIn = v->waysOut = NULL;	/* These are trashed so remove them. */
     }
-
-/* Inc counts of vertices connected to edges. */
-rbTreeTraverse(edgeTree, incVertexUses);
-
-/* Remove unused vertices. */
-for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
-    {
-    struct vertex *v = vRef->val;
-    if (v->count == 0)
-        rbTreeRemove(vertexTree, v);
-    }
-
 slFreeList(&vRefList);
+removeUnusedVertices(vertexTree, edgeTree);
+lmCleanup(&lm);
 }
 
 static void dumpVertices(struct rbTree *vertexTree)
@@ -546,20 +682,17 @@ verbose(2, "%d unique vertices\n", vertexTree->n);
 struct rbTree *edgeTree = makeEdgeTree(lbList, vertexTree);
 verbose(2, "%d unique edges\n", edgeTree->n);
 
-dumpVertices(vertexTree);
 snapSoftToCloseHard(vertexTree, edgeTree, maxBleedOver);
 verbose(2, "%d edges, %d vertices after snapSoftToCloseHard\n", 
 	edgeTree->n, vertexTree->n);
-dumpVertices(vertexTree);
+
 snapHalfHards(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after snapHalfHards\n", 
 	edgeTree->n, vertexTree->n);
-dumpVertices(vertexTree);
-removeUnusedVertices(vertexTree, edgeTree);
-dumpVertices(vertexTree);
-verbose(2, "%d edges, %d vertices after removeUnusedVertices\n", 
-	edgeTree->n, vertexTree->n);
 
+halfHardConsensuses(vertexTree, edgeTree);
+verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
+	edgeTree->n, vertexTree->n);
 
 /* Clean up and go home. */
 rbTreeFree(&vertexTree);
