@@ -295,12 +295,26 @@ for (node = oldNode->prev; !dlStart(node); node = node->prev)
 return FALSE;
 }
 
+static void mergeOrAddEdge(struct rbTree *edgeTree, struct edge *edge)
+/* Add edge back if it is still unique, otherwise move evidence from
+ * edge into existing edge. */
+{
+struct edge *existing = rbTreeFind(edgeTree, edge);
+if (existing)
+    {
+    existing->evList = slCat(existing->evList, edge->evList);
+    edge->evList = NULL;
+    }
+else
+    rbTreeAdd(edgeTree, edge);
+}
+
 static void updateForwardedEdges(struct rbTree *edgeTree)
 /* Go through edges, following the movedTo's in the
  * vertices if need be. */
 {
 struct slRef *ref, *refList = rbTreeItems(edgeTree);
-int forwardCount = 0, addedBackCount = 0;
+int forwardCount = 0;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     struct edge *edge = ref->val;
@@ -313,16 +327,11 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	    edge->start = start->movedTo;
 	if (end->movedTo)
 	    edge->end = end->movedTo;
-	if (!rbTreeFind(edgeTree, edge))
-	    {
-	    rbTreeAdd(edgeTree, edge);
-	    ++addedBackCount;
-	    }
+	mergeOrAddEdge(edgeTree, edge);
 	}
     }
 if (forwardCount > 0)
-    verbose(3, "Forwarded %d edges, of which %d are still unique\n", 
-	    forwardCount, addedBackCount);
+    verbose(3, "Forwarded %d edges.\n", forwardCount);
 slFreeList(&refList);
 }
 
@@ -423,8 +432,7 @@ for (;;)
     struct edge *hardEdge = hardRef->val;
     softEdge->end = hardEdge->end;
     ++snapCount;
-    if (!rbTreeFind(edgeTree, softEdge))
-        rbTreeAdd(edgeTree, softEdge);
+    mergeOrAddEdge(edgeTree, softEdge);
     softRef = softRef->next;
     }
 if (snapCount > 0)
@@ -466,8 +474,7 @@ for (;;)
     struct edge *hardEdge = hardRef->val;
     softEdge->start = hardEdge->start;
     ++snapCount;
-    if (!rbTreeFind(edgeTree, softEdge))
-        rbTreeAdd(edgeTree, softEdge);
+    mergeOrAddEdge(edgeTree, softEdge);
     softRef = softRef->next;
     }
 if (snapCount > 0)
@@ -565,6 +572,8 @@ if (softCount > 1)
 	if (v != end && v->type == softType)
 	    {
 	    rbTreeRemove(edgeTree, edge);
+	    edge->end = end;
+	    mergeOrAddEdge(edgeTree, edge);  // Will always merge. 
 	    }
 	}
     }
@@ -606,6 +615,8 @@ if (softCount > 1)
 	if (v != start && v->type == softType)
 	    {
 	    rbTreeRemove(edgeTree, edge);
+	    edge->start = start;
+	    mergeOrAddEdge(edgeTree, edge);  // Will always merge. 
 	    }
 	}
     }
@@ -655,6 +666,7 @@ removeUnusedVertices(vertexTree, edgeTree);
 lmCleanup(&lm);
 }
 
+#ifdef DEBUG
 static void dumpVertices(struct rbTree *vertexTree)
 {
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
@@ -666,7 +678,6 @@ for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
 printf("\n");
 slFreeList(&vRefList);
 }
-#ifdef DEBUG
 #endif /* DEBUG */
 
 struct txGraph *makeGraph(struct linkedBeds *lbList, int maxBleedOver, char *name)
