@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.145 2007/02/14 00:20:39 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.146 2007/02/14 21:26:39 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1328,6 +1328,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+/* Remove any meta data variables from the cart. (Copied from above!) */
+void removeMetaData()
+{
+cartRemove(cart, "hgta_metaStatus");
+cartRemove(cart, "hgta_metaVersion");
+cartRemove(cart, "hgta_metaDatabases");
+cartRemove(cart, "hgta_metaTables");
+}
+
 void doMetaData(struct sqlConnection *conn)
 /* Get meta data for a database. */
 {
@@ -1373,6 +1382,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(stdout, "\n");	    
     }
 sqlFreeResult(&sr);
+removeMetaData();
 }
 
 void doMysqlVersion(struct sqlConnection *conn)
