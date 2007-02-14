@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1277 2007/02/13 20:19:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1278 2007/02/14 15:13:13 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10843,8 +10843,10 @@ if (choice != NULL && sameString(choice, "type"))
     return gvColorByType(tg, item, vg);
 else if (choice != NULL && sameString(choice, "count"))
     return gvColorByCount(tg, item, vg);
-else
+else if (choice != NULL && sameString(choice, "disease"))
     return gvColorByDisease(tg, item, vg);
+else
+    return gvColorByType(tg, item, vg);
 }
 
 boolean gvFilterAccuracy(struct gv *el)
