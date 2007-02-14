@@ -421,6 +421,9 @@ struct slInt *slIntNew(int x);
 int slIntCmp(const void *va, const void *vb);
 /* Compare two slInts. */
 
+int slIntCmpRev(const void *va, const void *vb);
+/* Compare two slInts in reverse direction. */
+
 void doubleSort(int count, double *array);
 /* Sort an array of doubles. */
 

@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.106 2007/02/13 00:51:15 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.107 2007/02/14 08:41:59 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -408,6 +408,14 @@ int slIntCmp(const void *va, const void *vb)
 const struct slInt *a = *((struct slInt **)va);
 const struct slInt *b = *((struct slInt **)vb);
 return a->val - b->val;
+}
+
+int slIntCmpRev(const void *va, const void *vb)
+/* Compare two slInts in reverse direction. */
+{
+const struct slInt *a = *((struct slInt **)va);
+const struct slInt *b = *((struct slInt **)vb);
+return b->val - a->val;
 }
 
 static int doubleCmp(const void *va, const void *vb)
