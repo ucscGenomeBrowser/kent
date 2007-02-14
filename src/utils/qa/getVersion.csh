@@ -35,7 +35,7 @@ endif
 
 set url1="http://"
 # set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMysqlVersion=1"
-set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_version=1"
+set url2=".cse.ucsc.edu/cgi-bin/hgTables?hgta_doMetaData=1&hgta_metaVersion=1"
 set url="$url1$machine$url2"
 set version=`wget -q -O /dev/stdout "$url"`
 set version=`echo $version | awk -F" " '{print $2}'`

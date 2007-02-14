@@ -75,7 +75,7 @@ endif
 # do data
 foreach database ( `echo $db | sed -e "s/ /\n/"` )
   set url1="http://$mach.cse.ucsc.edu/cgi-bin/hgTables"
-  set url2="?hgta_doMetaData=1&db=$database&hgta_status=1"
+  set url2="?hgta_doMetaData=1&db=$database&hgta_metaStatus=1"
   set size=`wget -q -O /dev/stdout "$url1$url2" \
     | awk '{total+=$6} END {printf "%0.1f", total/1000000000}'`
   set totSize=`echo $totSize $size | awk '{print $1+$2}'`
