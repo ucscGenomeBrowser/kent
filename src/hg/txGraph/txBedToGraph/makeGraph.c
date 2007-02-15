@@ -405,6 +405,7 @@ int snapHalfHardForward(struct vertex *v, struct rbTree *edgeTree,
  * to nearest hard vertex connected to v. */
 {
 int snapCount = 0;
+// enum ggVertex otherHardType = (hardType == ggHardStart ? ggHardEnd : ggHardStart);
 slSort(&v->waysOut, edgeRefCmpEnd); 
 struct slRef *hardRef = v->waysOut, *softRef = v->waysOut;
 for (;;)
@@ -447,6 +448,7 @@ int snapHalfHardBackward(struct vertex *v, struct rbTree *edgeTree,
  * to nearest hard vertex connected to v. */
 {
 int snapCount = 0;
+// enum ggVertex otherHardType = (hardType == ggHardStart ? ggHardEnd : ggHardStart);
 slSort(&v->waysIn, edgeRefCmpStartRev); 
 struct slRef *hardRef = v->waysIn, *softRef = v->waysIn;
 for (;;)
@@ -529,13 +531,46 @@ removeUnusedVertices(vertexTree, edgeTree);
 lmCleanup(&lm);
 }
 
-static struct vertex *consensusVertex(struct rbTree *vertexTree, struct slInt *list, 
-	int listSize, enum ggVertexType softType)
-/* Return vertex corresponding to a soft vertex 1/4 of way (rounded down)
- * through list. */
+struct sourceAndPos
+/* A vertex source and position. */
+    {
+    struct sourceAndPos *next;
+    int position;		/* Position in genome. */
+    bool trustedSource;		/* If true this is trusted source (refSeq) */
+    };
+
+int sourceAndPosCmp(const void *va, const void *vb)
+/* Compare two sourceAndPos by position. */
 {
-struct slInt *el = slElementFromIx(list, listSize/4);
-return matchingVertex(vertexTree, el->val, softType);
+const struct sourceAndPos *a = *((struct sourceAndPos **)va);
+const struct sourceAndPos *b = *((struct sourceAndPos **)vb);
+return a->position - b->position;
+}
+
+int sourceAndPosCmpRev(const void *va, const void *vb)
+/* Compare two sourceAndPos in reverse direction. */
+{
+const struct sourceAndPos *a = *((struct sourceAndPos **)va);
+const struct sourceAndPos *b = *((struct sourceAndPos **)vb);
+return b->position - a->position;
+}
+
+static struct vertex *consensusVertex(struct rbTree *vertexTree, struct sourceAndPos *list, 
+	int listSize, enum ggVertexType softType)
+/* Return first trusted (refSeq) vertex, or if no trusted one, then 
+ * a soft vertex 1/4 of way (rounded down) through list. */
+{
+struct sourceAndPos *el;
+uglyf("consensusVertex, listSize %d (%d)\n", listSize, slCount(list));
+for (el = list; el != NULL; el = el->next) uglyf("  pos %d, trusted %d\n", el->position, el->trustedSource);
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el->trustedSource)
+        break;
+    }
+if (el == NULL)
+    el = slElementFromIx(list, listSize/4);
+return matchingVertex(vertexTree, el->position, softType);
 }
 
 static void halfConsensusForward(struct vertex *v, 
@@ -544,7 +579,7 @@ static void halfConsensusForward(struct vertex *v,
 /* Figure out consensus end of all edges beginning at v that have soft end. */
 {
 /* Collect a list of all attached softies. */
-struct slInt *list = NULL, *el;
+struct sourceAndPos *list = NULL, *el;
 struct slRef *edgeRef;
 int softCount = 0;
 for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
@@ -553,10 +588,15 @@ for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
     struct vertex *v = edge->end;
     if (v->type == softType)
         {
-	lmAllocVar(lm, el);
-	el->val = v->position;
-	slAddHead(&list, el);
-	++softCount;
+	struct evidence *ev;
+	for (ev = edge->evList; ev != NULL; ev = ev->next)
+	    {
+	    lmAllocVar(lm, el);
+	    el->position = ev->end;
+	    el->trustedSource = sameString(ev->lb->sourceType, "refSeq");
+	    slAddHead(&list, el);
+	    ++softCount;
+	    }
 	}
     }
 
@@ -564,7 +604,7 @@ for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
  * worthwhile. */
 if (softCount > 1)
     {
-    slSort(&list, slIntCmpRev);
+    slSort(&list, sourceAndPosCmpRev);
     struct vertex *end = consensusVertex(vertexTree, list, softCount, softType);
     for (edgeRef = v->waysOut; edgeRef != NULL; edgeRef = edgeRef->next)
 	{
@@ -587,7 +627,7 @@ static void halfConsensusBackward(struct vertex *v,
 /* Figure out consensus start of all edges end at v that have soft start. */
 {
 /* Collect a list of all attached softies. */
-struct slInt *list = NULL, *el;
+struct sourceAndPos *list = NULL, *el;
 struct slRef *edgeRef;
 int softCount = 0;
 for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
@@ -596,10 +636,15 @@ for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
     struct vertex *v = edge->start;
     if (v->type == softType)
         {
-	lmAllocVar(lm, el);
-	el->val = v->position;
-	slAddHead(&list, el);
-	++softCount;
+	struct evidence *ev;
+	for (ev = edge->evList; ev != NULL; ev = ev->next)
+	    {
+	    lmAllocVar(lm, el);
+	    el->position = ev->start;
+	    el->trustedSource = sameString(ev->lb->sourceType, "refSeq");
+	    slAddHead(&list, el);
+	    ++softCount;
+	    }
 	}
     }
 
@@ -607,7 +652,7 @@ for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
  * worthwhile. */
 if (softCount > 1)
     {
-    slSort(&list, slIntCmp);
+    slSort(&list, sourceAndPosCmp);
     struct vertex *start = consensusVertex(vertexTree, list, softCount, softType);
     for (edgeRef = v->waysIn; edgeRef != NULL; edgeRef = edgeRef->next)
 	{
@@ -675,25 +720,28 @@ struct edge *edgeFromConsensusOfEvidence(struct rbTree *vertexTree, struct evide
  * overlaps this edge will be included in the edge. */
 {
 /* Gather up lists of starts and ends. */
-struct slInt *startList = NULL, *endList = NULL;
+struct sourceAndPos *startList = NULL, *endList = NULL;
 struct evidence *ev, *nextEv;
 int listSize = 0;
 for (ev = evList; ev != NULL; ev = ev->next)
     {
-    struct slInt *x;
+    struct sourceAndPos *x;
+    boolean trustedSource = sameString(ev->lb->sourceType, "refSeq");
     lmAllocVar(lm, x);
-    x->val = ev->start;
+    x->position = ev->start;
+    x->trustedSource = trustedSource;
     slAddHead(&startList, x);
     lmAllocVar(lm, x);
-    x->val = ev->end;
+    x->position = ev->end;
+    x->trustedSource = trustedSource;
     slAddHead(&endList, x);
     ++listSize;
     }
 
 /* Get consensus starts and ends. */
-slSort(&startList, slIntCmp);
+slSort(&startList, sourceAndPosCmp);
 struct vertex *start = consensusVertex(vertexTree, startList, listSize, ggSoftStart);
-slSort(&endList, slIntCmpRev);
+slSort(&endList, sourceAndPosCmpRev);
 struct vertex *end = consensusVertex(vertexTree, endList, listSize, ggSoftEnd);
 
 /* Make edge */
@@ -807,15 +855,23 @@ txg->edgeCount = edgeTree->n;
 int i;
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
 struct txVertex *tv = AllocArray(txg->vertices, vertexTree->n);
+int tStart = BIGNUM, tEnd = -BIGNUM;
 for (vRef = vRefList, i=0; vRef != NULL; vRef = vRef->next, i++)
     {
     struct vertex *v = vRef->val;
+    int position = v->position;
     v->count = i;
-    tv->position = v->position;
+    tv->position = position;
     tv->type = v->type;
+    tStart = min(tStart, position);
+    tEnd = max(tEnd, position);
     ++tv;
     }
 slFreeList(&vRefList);
+
+/* Fill in overall bounds. */
+txg->tStart = tStart;
+txg->tEnd = tEnd;
 
 /* Deal with sources. */
 int sourceCount = 0;
@@ -840,8 +896,10 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
     /* Allocate edge and fill in start and end. */
     struct txEdge *te;
     AllocVar(te);
-    te->startIx = edge->start->count;
-    te->endIx = edge->end->count;
+    struct vertex *start = edge->start;
+    struct vertex *end = edge->end;
+    te->startIx = start->count;
+    te->endIx = end->count;
 
     /* Figure out whether it's an intron or exon. */
     enum ggVertexType startType = edge->start->type;
