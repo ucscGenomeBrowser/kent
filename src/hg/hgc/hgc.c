@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1204 2007/02/14 15:35:37 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1205 2007/02/15 17:11:19 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16146,7 +16146,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Allele1:</B> %s<BR>\n", hmac->allele1);
     printf("<B>Allele2:</B> %s<BR>\n", hmac->allele2);
     avHet = hmac->score / 1000.0;
-    printf("<B>Average heterozygosity: %3.2f%%</B>", avHet);
+    printf("<B>Average heterozygosity:</B> %3.2f%%<BR>\n", avHet);
 
     htmlHorizontalLine();
     printf("<B>Allele frequencies:</B><BR>\n");
