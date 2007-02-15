@@ -761,6 +761,90 @@ for (ev = evList; ev != NULL; ev = nextEv)
 return edge;
 }
 
+static void removeEnclosedDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree, 
+	int maxBleedOver)
+/* Move double-softs that overlap spliced things to a very great extent into
+ * the spliced things. Also remove tiny double-softs (no more than 2*maxBleedOver). */
+{
+/* Traverse graph and build up range tree covering spliced exons*/
+struct rbTree *rangeTree = rangeTreeNew(0);
+struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
+int removedCount = 0;
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *start = edge->start;
+    struct vertex *end = edge->end;
+    if (start->type == ggHardStart || end->type == ggHardEnd)
+	rangeTreeAdd(rangeTree, start->position, end->position);
+    }
+
+/* Traverse graph again building up list of edgeRefs to the spliced
+ * exons on the ranges. */
+struct lm *lm = rangeTree->lm;
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *start = edge->start;
+    struct vertex *end = edge->end;
+    if (start->type == ggHardStart || end->type == ggHardEnd)
+	{
+	struct range *r = rangeTreeFindEnclosing(rangeTree,
+		start->position, end->position);
+	struct slRef *ref;
+	lmAllocVar(lm, ref);
+	ref->val = edge;
+	slAddHead(&r->val, ref);
+	}
+    }
+
+/* Traverse graph yet one more time looking for doubly-soft exons
+ * that are overlapping the spliced exons. */
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    struct vertex *start = edge->start;
+    struct vertex *end = edge->end;
+    if (start->type == ggSoftStart && end->type == ggSoftEnd)
+        {
+	int s = start->position + maxBleedOver;
+	int e = end->position - maxBleedOver;
+	if (e - s <= 0)
+	     {
+	     /* Tiny case, just remove edge and forget it. */
+	     rbTreeRemove(edgeTree, edge);
+	     ++removedCount;
+	     }
+	else
+	     {
+	     /* Normal case, look for exon list that encloses us, and
+	      * if any single exon in that list encloses us, merge into it. */
+	     struct range *r = rangeTreeFindEnclosing(rangeTree, s, e);
+	     if (r != NULL)
+	         {
+		 struct slRef *el;
+		 for (el = r->val; el != NULL; el = el->next)
+		     {
+		     struct edge *hardEdge = el->val;
+		     if (hardEdge->start->position <= s && hardEdge->end->position >= e)
+		         {
+			 rbTreeRemove(edgeTree, edge);
+			 hardEdge->evList = slCat(edge->evList, hardEdge->evList);
+			 ++removedCount;
+			 }
+		     }
+		 }
+	     }
+	}
+    }
+
+/* Clean up and go home. */
+if (removedCount > 0)
+    removeUnusedVertices(vertexTree, edgeTree);
+slFreeList(&edgeRefList);
+rbTreeFree(&rangeTree);
+}
+
 static void mergeDoubleSofts(struct rbTree *vertexTree, struct rbTree *edgeTree)
 /* Merge together overlapping edges with soft ends. */
 {
@@ -951,6 +1035,10 @@ verbose(2, "%d edges, %d vertices after snapHalfHards\n",
 
 halfHardConsensuses(vertexTree, edgeTree);
 verbose(2, "%d edges, %d vertices after medianHalfHards\n", 
+	edgeTree->n, vertexTree->n);
+
+removeEnclosedDoubleSofts(vertexTree, edgeTree, maxBleedOver);
+verbose(2, "%d edges, %d vertices after mergeEnclosedDoubleSofts\n",
 	edgeTree->n, vertexTree->n);
 
 mergeDoubleSofts(vertexTree, edgeTree);

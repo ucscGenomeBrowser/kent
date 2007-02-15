@@ -20,7 +20,7 @@
 
 int maxJoinSize = 70000;	/* This excludes most of the chr14 IG mess */
 boolean forceRefSeqJoin = TRUE;
-int maxBleedOver = 5;
+int maxBleedOver = 6;
 char *prefix = "a";
 
 void usage()
@@ -35,7 +35,7 @@ errAbort(
   "    -noForceRefSeqJoin - If set don't force joins above maxJoinSize\n"
   "                    on refSeq type\n"
   "    -maxBleedOver=N - Maximum amount of exon that can be lost when snapping\n"
-  "                    soft to hard edges. Devault %d\n"
+  "                    soft to hard edges. Default %d\n"
   "    -prefix=xyz - Use the given prefix for the graph names, default %s\n"
   , maxJoinSize, maxBleedOver, prefix
   );
