@@ -55,6 +55,13 @@ if (allele1CountYRI == 0 && allele2CountYRI == 0) return FALSE;
 return TRUE;
 }
 
+boolean isTransitionObserved(char *observed)
+{
+if (sameString(observed, "A/G")) return TRUE;
+if (sameString(observed, "C/T")) return TRUE;
+return FALSE;
+}
+
 boolean isComplexObserved(char *observed)
 /* return TRUE if not simple bi-allelic A/C, A/G, A/T, etc. */
 {
@@ -84,6 +91,7 @@ char extraWhere[128];
 
 char *observedFilter = cartCgiUsualString(cart, HA_OBSERVED, "don't care");
 boolean complexObserved = FALSE;
+boolean transitionObserved = FALSE;
 
 safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
@@ -113,11 +121,38 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
 	if (sameString(genoFilter, "all populations") && !popsAll) continue;
 	if (sameString(genoFilter, "subset of populations") && popsAll) continue;
 
-        complexObserved = isComplexObserved(combinedLoadItem->observed);
-	if (sameString(observedFilter, "complex") && !complexObserved) continue;
-	if (sameString(observedFilter, "bi-alleleic") && complexObserved) continue;
+        if (sameString(observedFilter, "don't care"))
+	    {
+            slAddHead(&combinedItemList, combinedLoadItem);
+	    continue;
+	    }
 
-        slAddHead(&combinedItemList, combinedLoadItem);
+        complexObserved = isComplexObserved(combinedLoadItem->observed);
+
+	if (sameString(observedFilter, "complex"))
+	    {
+	    if (complexObserved) slAddHead(&combinedItemList, combinedLoadItem);
+	    continue;
+	    }
+
+	if (sameString(observedFilter, "bi-alleleic")) 
+	    {
+	    if (!complexObserved) slAddHead(&combinedItemList, combinedLoadItem);
+	    continue;
+	    }
+
+	transitionObserved = isTransitionObserved(combinedLoadItem->observed);
+
+        if (sameString(observedFilter, "transition")) 
+	    {
+	    if (transitionObserved) slAddHead(&combinedItemList, combinedLoadItem);
+	    continue;
+	    }
+
+        if (sameString(observedFilter, "transversion")) 
+	    {
+	    if (!transitionObserved) slAddHead(&combinedItemList, combinedLoadItem);
+            }
         }
     sqlFreeResult(&sr);
     hFreeConn(&conn);
@@ -150,15 +185,43 @@ if (optionScore > 0)
     }
 else
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
 
-    complexObserved = isComplexObserved(simpleLoadItem->observed);
-    if (sameString(observedFilter, "complex") && !complexObserved) continue;
-    if (sameString(observedFilter, "bi-alleleic") && complexObserved) continue;
+    if (sameString(observedFilter, "don't care"))
+        {
+        slAddHead(&simpleItemList, simpleLoadItem);
+        continue;
+        }
 
-    slAddHead(&simpleItemList, simpleLoadItem);
+    complexObserved = isComplexObserved(simpleLoadItem->observed);
+
+    if (sameString(observedFilter, "complex"))
+        {
+        if (complexObserved) slAddHead(&simpleItemList, simpleLoadItem);
+	continue;
+        }
+
+    if (sameString(observedFilter, "bi-alleleic")) 
+        {
+        if (!complexObserved) slAddHead(&simpleItemList, simpleLoadItem);
+	continue;
+        }
+
+    transitionObserved = isTransitionObserved(simpleLoadItem->observed);
+
+    if (sameString(observedFilter, "transition")) 
+        {
+	if (transitionObserved) slAddHead(&simpleItemList, simpleLoadItem);
+	continue;
+        }
+
+    if (sameString(observedFilter, "transversion")) 
+        {
+	if (!transitionObserved) slAddHead(&simpleItemList, simpleLoadItem);
+        }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
