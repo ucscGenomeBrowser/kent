@@ -561,8 +561,6 @@ static struct vertex *consensusVertex(struct rbTree *vertexTree, struct sourceAn
  * a soft vertex 1/4 of way (rounded down) through list. */
 {
 struct sourceAndPos *el;
-uglyf("consensusVertex, listSize %d (%d)\n", listSize, slCount(list));
-for (el = list; el != NULL; el = el->next) uglyf("  pos %d, trusted %d\n", el->position, el->trustedSource);
 for (el = list; el != NULL; el = el->next)
     {
     if (el->trustedSource)
