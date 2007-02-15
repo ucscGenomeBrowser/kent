@@ -123,6 +123,7 @@ DIRS = \
 	undupFa \
 	upper \
 	venn \
+	weedLines \
 	wordLine
 
 BAD_DIRS= \
