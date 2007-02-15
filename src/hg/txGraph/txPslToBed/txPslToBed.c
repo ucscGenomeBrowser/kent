@@ -15,6 +15,8 @@
 int mergeMax = 5;	
 boolean fixIntrons = TRUE;
 int minSize = 18;
+int minIntronSize=16;
+FILE *unusualFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -32,16 +34,81 @@ errAbort(
   "   -minSize=N - suppress output of beds of less than this size (in exons)\n"
   "                Default value is %d.\n"
   "   -noFixIntrons - slide large gaps in target to seek for splice sites.\n"
-  , mergeMax, minSize
+  "   -minIntronSize - minimum size of an intron, default %d.\n"
+  "   -unusual=fileName - put info about unusual splice sites etc. here\n"
+  , mergeMax, minSize, minIntronSize
   );
 }
+
 
 static struct optionSpec options[] = {
    {"mergeMax", OPTION_INT},
    {"minSize", OPTION_INT},
    {"noFixIntrons", OPTION_BOOLEAN},
+   {"minIntronSize", OPTION_INT},
+   {"unusual", OPTION_STRING},
    {NULL, 0},
 };
+
+void unusualPrint(char *format, ...)
+/* Print out info to unusual file if it exists. */
+{
+if (unusualFile != NULL)
+    {
+    va_list args;
+    va_start(args, format);
+    vfprintf(unusualFile, format, args);
+    va_end(args);
+    }
+}
+
+void fixOrientation(struct psl *psl, struct dnaSeq *chrom)
+/* If the transcript is spliced, use this to override the
+ * input orientation.  Also write info about unusual splice
+ * sites to unusual file. */
+{
+int inputOrientation = (psl->strand[0] == '-' ? -1 : 1);
+int totalOrientation = 0;
+int outputOrientation;
+int i;
+int lastBlock = psl->blockCount-1;
+for (i=0; i<lastBlock; ++i)
+    {
+    int blockSize = psl->blockSizes[i];
+    int tStart = psl->tStarts[i] + blockSize;
+    int qStart = psl->qStarts[i] + blockSize;
+    int tEnd = psl->tStarts[i+1];
+    int qEnd = psl->qStarts[i+1];
+    if (qStart == qEnd && tEnd-tStart >= minIntronSize)
+        {
+	char *intronStart = chrom->dna + tStart;
+	char *intronEnd = chrom->dna + tEnd;
+	int orientation = intronOrientationMinSize(intronStart, intronEnd, minIntronSize);
+	totalOrientation += orientation;
+	if (orientation == 0)
+	    {
+	    unusualPrint("site %c%c/%c%c %s %s %d %s:%d-%d\n", intronStart[0], intronStart[1],
+	    	intronEnd[-2], intronEnd[-1], psl->strand, psl->qName,
+		i+1, psl->tName, psl->tStart+1, psl->tEnd); 
+	    }
+	}
+    }
+if (totalOrientation > 0)
+    outputOrientation = 1;
+else if (totalOrientation < 0)
+    outputOrientation = -1;
+else
+    outputOrientation = inputOrientation;
+if (outputOrientation != inputOrientation)
+    {
+    unusualPrint("flip %s %d %d %d %s:%d-%d\n", psl->qName, inputOrientation,
+    	outputOrientation, totalOrientation, psl->tName, psl->tStart+1, psl->tEnd);
+    if (psl->strand[0] == '+')
+        psl->strand[0] = '-';
+    else
+        psl->strand[0] = '+';
+    }
+}
 
 void fixPslIntrons(struct psl *psl, struct dnaSeq *chrom)
 /* Go through gaps in psl.  For ones the right size to be introns,
@@ -60,7 +127,7 @@ for (i=1; i<psl->blockCount; ++i)
     start = psl->tStarts[i];
     char *intronStart = dna+end;
     char *intronEnd = dna+start;
-    if (intronOrientation(intronStart, intronEnd) != orientation)
+    if (intronOrientationMinSize(intronStart, intronEnd, minIntronSize) != orientation)
         {
 	if (orientation > 0)
 	    {
@@ -212,7 +279,7 @@ for (i=1; i<psl->blockCount; ++i)
 	 /* merge case */
 	 list->end = tStart + blockSize;
 	 }
-    else if (qGap > 1 || qGap < -1 || tStart - tEnd < 16 ||
+    else if (qGap > 1 || qGap < -1 || tStart - tEnd < minIntronSize ||
         (strand == '+' && (iStart[0] != 'g' || (iStart[1] != 'c' && iStart[1] != 't') || iEnd[0] != 'a' || iEnd[1] != 'g' )) ||
         (strand == '-' && (iStart[0] != 'c' || iStart[1] != 't' || (iEnd[0] != 'a' && iEnd[0] != 'g') || iEnd[1] != 'c' )))
 	 {
@@ -274,6 +341,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     if (psl->tSize != chrom->size)
 	errAbort("DNA and PSL out of sync. %s thinks %s is %d bases, but %s thinks it's %d.",
 		 inPsl, chromName, psl->tSize, dnaPath, chrom->size);
+    fixOrientation(psl, chrom);
     if (fixIntrons)
 	fixPslIntrons(psl, chrom);
     struct bed *bedList = pslToBedList(psl, chrom, mergeMax);
@@ -294,10 +362,14 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 mergeMax = optionInt("mergeMax", mergeMax);
-fixIntrons = !optionExists("noFixIntrons");
 minSize = optionInt("minSize", minSize);
+fixIntrons = !optionExists("noFixIntrons");
+minIntronSize = optionInt("minIntronSize", minIntronSize);
+if (optionExists("unusual"))
+    unusualFile = mustOpen(optionVal("unusual", NULL), "w");
 if (argc != 4)
     usage();
 txPsltoBed(argv[1], argv[2], argv[3]);
+carefulClose(&unusualFile);
 return 0;
 }
