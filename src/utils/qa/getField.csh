@@ -38,7 +38,7 @@ if ( 4 == $#argv ) then
 endif
 
 set url1="http://"
-# $machine = hgwdev-kuhn
+# $machine = hgwdev
 set url2=".cse.ucsc.edu/cgi-bin/hgTables?db="
 # $db = hg17
 set url3="&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table="
