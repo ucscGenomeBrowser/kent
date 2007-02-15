@@ -41,6 +41,12 @@ gClass_main 128,0,125
 gClass_putative 200,0,125
 urlLabel Transcript ID:
 
+searchTable acembly
+searchType genePred
+searchMethod prefix
+termRegex [^[:space:]]+
+searchPriority 50
+
 track exoniphy
 shortLabel Exoniphy
 longLabel Exoniphy Human/Mouse/Rat/Dog
@@ -971,6 +977,12 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
+searchTable wgRna
+searchTable ncRna
+searchMethod fuzzy
+searchType bed
+searchPriority 10
+
 track polyA
 compositeTrack on
 shortLabel Poly(A)
@@ -994,7 +1006,6 @@ type bed 8 .
     color 102,0,153
     priority 2
 
-
 track affyHuEx1
 shortLabel Affy HuEx 1.0
 longLabel Affymetrix Human Exon 1.0 Probe Sets
@@ -1006,18 +1017,6 @@ urlLabel Netaffx Link:
 useScore 1
 type bed 6 .
 origAssembly hg17
-
-searchTable acembly
-searchType genePred
-searchMethod prefix
-termRegex [^[:space:]]+
-searchPriority 50
-
-searchTable wgRna
-searchTable ncRna
-searchMethod fuzzy
-searchType bed
-searchPriority 10
 
 track tfbsConsSites
 shortLabel TFBS Conserved
@@ -1162,6 +1161,47 @@ type bed 8 .
     longLabel Embryonic Stem Cell LongSAGE: library SHES9, cell line UC06
     color 155,33,250
     priority 10
+
+
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 144
+visibility hide
+type bed 4 .
+
+    track snpArrayAffy500
+    subTrack snpArray
+    shortLabel Affy 500K
+    longLabel Affymetrix GeneChip Human Mapping 500K 
+    type bed 6 +
+    priority 1
+
+    track snpArrayIllumina300
+    subTrack snpArray
+    shortLabel Illumina 300K
+    longLabel Illumina HumanHap300 BeadChip
+    type bed 4 .
+    priority 2
+
+searchName illumina
+searchTable snpArrayIllumina300
+searchMethod exact
+searchType bed
+termRegex (rs[0-9]+)
+searchPriority 12
+padding 250
+
+searchName affy500
+searchTable snpArrayAffy500
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
+
 
 track divMMK
 shortLabel McDonald-Kreitman AR
