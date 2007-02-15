@@ -239,6 +239,26 @@ for (vRef = vRefList; vRef != NULL; vRef = vRef->next)
 slFreeList(&vRefList);
 }
 
+static void removeEmptyEdges(struct rbTree *vertexTree, struct rbTree *edgeTree)
+/* Remove edges that are zero or negative in length. */
+{
+int removeCount = 0;
+struct slRef *edgeRef, *edgeRefList = rbTreeItems(edgeTree);
+for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
+    {
+    struct edge *edge = edgeRef->val;
+    if (edge->start->position >= edge->end->position)
+        {
+	removeCount += 1;
+	rbTreeRemove(edgeTree, edge);
+	}
+    }
+if (removeCount)
+    removeUnusedVertices(vertexTree, edgeTree);
+slFreeList(&edgeRefList);
+}
+
+
 static struct dlList *sortedListFromTree(struct rbTree *tree)
 /* Create a double-linked list from tree. List will be sorted.  */
 {
@@ -774,7 +794,9 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
     struct vertex *start = edge->start;
     struct vertex *end = edge->end;
     if (start->type == ggHardStart || end->type == ggHardEnd)
+	{
 	rangeTreeAdd(rangeTree, start->position, end->position);
+	}
     }
 
 /* Traverse graph again building up list of edgeRefs to the spliced
@@ -1027,6 +1049,10 @@ verbose(2, "%d unique edges\n", edgeTree->n);
 
 snapSoftToCloseHard(vertexTree, edgeTree, maxBleedOver);
 verbose(2, "%d edges, %d vertices after snapSoftToCloseHard\n", 
+	edgeTree->n, vertexTree->n);
+
+removeEmptyEdges(vertexTree, edgeTree);
+verbose(2, "%d edges, %d vertices after removeEmptyEdges\n",
 	edgeTree->n, vertexTree->n);
 
 snapHalfHards(vertexTree, edgeTree);
