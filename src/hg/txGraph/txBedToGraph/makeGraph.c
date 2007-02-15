@@ -828,7 +828,9 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 		         {
 			 rbTreeRemove(edgeTree, edge);
 			 hardEdge->evList = slCat(edge->evList, hardEdge->evList);
+			 edge->evList = NULL;
 			 ++removedCount;
+			 break;
 			 }
 		     }
 		 }
