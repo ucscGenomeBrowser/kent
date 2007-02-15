@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.43 2006/11/08 00:25:05 heather Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.44 2007/02/15 16:20:46 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -691,13 +691,12 @@ assert(sizeof(bits32) == 4);
 assert(sizeof(bits16) == 2);
 }
 
-
-int intronOrientation(DNA *iStart, DNA *iEnd)
+int intronOrientationMinSize(DNA *iStart, DNA *iEnd, int minIntronSize)
 /* Given a gap in genome from iStart to iEnd, return 
  * Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
  * intron.  Assumes DNA is lower cased. */
 {
-if (iEnd - iStart < 32)
+if (iEnd - iStart < minIntronSize)
     return 0;
 if (iStart[0] == 'g' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 'g')
     {
@@ -709,6 +708,14 @@ else if (iStart[0] == 'c' && iStart[1] == 't' && iEnd[-2] == 'a' && iEnd[-1] == 
     }
 else
     return 0;
+}
+
+int intronOrientation(DNA *iStart, DNA *iEnd)
+/* Given a gap in genome from iStart to iEnd, return 
+ * Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
+ * intron.  Assumes DNA is lower cased. */
+{
+return intronOrientationMinSize(iStart, iEnd, 32);
 }
 
 int dnaScore2(DNA a, DNA b)
