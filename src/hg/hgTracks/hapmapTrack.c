@@ -177,6 +177,9 @@ if (!zoomedToBaseLevel)
     return;
     }
 
+/* figure out allele to display */
+/* allele varies depending on which type of subtrack */
+
 char *allele = NULL;
 char *strand = NULL;
 int chromStart = 0;
@@ -224,6 +227,7 @@ else
         allele = cloneString(thisItem->allele2);
     }
 
+/* determine graphics attributes for vgTextCentered */
 int heightPer, x1, x2, w;
 Color textColor = MG_BLACK;
 
