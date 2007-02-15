@@ -50,6 +50,7 @@ static struct optionSpec optionSpecs[] =
     {"bestOverlap", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
     {"weirdOverlapped", OPTION_STRING},
+    {"noValidate", OPTION_BOOLEAN},
     {"alignStats", OPTION_STRING},
     {"hapRefMapped", OPTION_STRING},
     {"hapRefCDnaAlns", OPTION_STRING},
@@ -57,6 +58,7 @@ static struct optionSpec optionSpecs[] =
     {NULL, 0}
 };
 
+static boolean gValidate = TRUE;       /* run pslCheck validations */
 static float gLocalNearBest = -1.0;    /* local near best in genome */
 static float gGlobalNearBest = -1.0;   /* global near best in genome */
 static unsigned gCDnaOpts = 0;         /* options for cDnaReader */
@@ -461,7 +463,8 @@ static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
 /* filter the current query set of alignments in cdna */
 {
 /* n.b. order should agree with doc */
-invalidPslFilter(cdna);
+if (gValidate)
+    invalidPslFilter(cdna);
 if (gMinQSize > 0)
     minQSizeFilter(cdna);
 if (gMinAlnSize > 0)
@@ -567,7 +570,12 @@ gDropped = optionVal("dropped", NULL);
 gWeirdOverlappped = optionVal("weirdOverlapped", NULL);
 gHapRefMapped = optionVal("hapRefMapped", NULL);
 gHapRefCDnaAlns = optionVal("hapRefCDnaAlns", NULL);
+if (optionExists("noValidate"))
+    gValidate = FALSE;
 alnIdQNameMode = optionExists("alnIdQNameMode");
+if (optionExists("ignoreNs"))
+    gCDnaOpts |= cDnaIgnoreNs;
+
 
 pslCDnaFilter(argv[1], argv[2]);
 return 0;
