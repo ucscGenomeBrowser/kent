@@ -5,7 +5,7 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: weedLines.c,v 1.2 2007/02/15 19:57:36 kent Exp $";
+static char const rcsid[] = "$Id: weedLines.c,v 1.3 2007/02/15 20:08:34 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,15 +30,19 @@ void weedLines(char *weedFile, char *file, boolean invert)
 /* weedLines - Selectively remove lines from file. */
 {
 struct hash *hash = hashWordsInFile(weedFile, 16);
+verbose(2, "%d words in weed file %s\n", hash->elCount, weedFile);
 struct lineFile *lf = lineFileOpen(file, TRUE);
 char *line, *word, *dupe;
 
 while (lineFileNext(lf, &line, NULL))
     {
-    boolean doWeed;
+    boolean doWeed = FALSE;
     dupe = cloneString(line);
-    word = nextWord(&line);
-    doWeed = (hashLookup(hash, word) != NULL);
+    while ((word = nextWord(&line)) != NULL)
+        {
+	if (hashLookup(hash, word))
+	    doWeed = TRUE;
+	}
     if (invert)
         doWeed = !doWeed;
     if (!doWeed)
