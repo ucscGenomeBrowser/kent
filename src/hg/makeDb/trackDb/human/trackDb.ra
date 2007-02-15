@@ -688,6 +688,34 @@ termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
+searchName hapmapAllelesCombined
+searchTable hapmapAllelesCombined
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
+
+searchName hapmapAllelesChimp
+searchTable hapmapAllelesChimp
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
+
+searchName hapmapAllelesMacaque
+searchTable hapmapAllelesMacaque
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex (rs[1-9][0-9]*)
+searchPriority 12
+padding 250
+
+
 track haplotype
 shortLabel Haplotype Blocks
 longLabel Common Haplotype Blocks
