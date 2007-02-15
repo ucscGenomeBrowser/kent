@@ -47,6 +47,7 @@ if ( $status ) then
   echo
   echo "  ${db}: no such database on $machine"
   echo
+  exit 1
 endif
 
 # set machine name and check validity
