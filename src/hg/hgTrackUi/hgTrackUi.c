@@ -34,7 +34,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.342 2007/02/10 21:35:39 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.343 2007/02/15 21:30:56 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2179,11 +2179,13 @@ puts("<BR>\n");
 
 scoreUi(tdb, 500);
 puts("<B> Observed:</B>&nbsp;");
-menuSize = 3;
+menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
 menu[menuPos++] = "don't care";
 menu[menuPos++] = "bi-alleleic";
+menu[menuPos++] = "transition";
+menu[menuPos++] = "transversion";
 menu[menuPos++] = "complex";
 cgiMakeDropList(HA_OBSERVED, menu, menuSize, cartCgiUsualString(cart, HA_OBSERVED, menu[0]));
 freez(&menu);
