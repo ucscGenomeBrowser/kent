@@ -37,6 +37,18 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
+# check for valid db 
+set url1="http://"
+set url2=".cse.ucsc.edu/cgi-bin/hgTables?db=$db&hgta_doMetaData=1"
+set url3="&hgta_metaDatabases=1"
+set url="$url1$machine$url2$url3"
+wget -q -O /dev/stdout "$url" | grep $db > /dev/null
+if ( $status ) then
+  echo
+  echo "  ${db}: no such database on $machine"
+  echo
+endif
+
 # set machine name and check validity
 if ( $#argv == 3 ) then
   set machine="$argv[3]"
