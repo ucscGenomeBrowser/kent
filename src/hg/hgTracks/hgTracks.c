@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1278 2007/02/14 15:13:13 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1279 2007/02/15 18:10:40 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13947,7 +13947,6 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 
 int main(int argc, char *argv[])
 {
-pushCarefulMemHandler(LIMIT_2or6GB);
 enteredMainTime = clock1000();
 uglyTime(NULL);
 isPrivateHost = hIsPrivateHost();
