@@ -5,7 +5,7 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: weedLines.c,v 1.1 2004/10/02 07:18:42 kent Exp $";
+static char const rcsid[] = "$Id: weedLines.c,v 1.2 2007/02/15 19:57:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,7 +31,7 @@ void weedLines(char *weedFile, char *file, boolean invert)
 {
 struct hash *hash = hashWordsInFile(weedFile, 16);
 struct lineFile *lf = lineFileOpen(file, TRUE);
-char *line, *word, **row, *dupe;
+char *line, *word, *dupe;
 
 while (lineFileNext(lf, &line, NULL))
     {
