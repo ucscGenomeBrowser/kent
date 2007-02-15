@@ -12,7 +12,7 @@ txBedToGraph: $O ${MYLIBS}
 
 test:
 	txBedToGraph -verbose=0 inRef.bed refSeq input.bed mrna output.txg 
-	diff expected.tgx output.txg
+	diff expected.txg output.txg
 
 clean:
 	rm -f $O
