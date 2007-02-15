@@ -62,6 +62,9 @@ if (unusualFile != NULL)
     }
 }
 
+int totalIntronLooking = 0;
+int totalFunny = 0;
+
 void fixOrientation(struct psl *psl, struct dnaSeq *chrom)
 /* If the transcript is spliced, use this to override the
  * input orientation.  Also write info about unusual splice
@@ -81,12 +84,14 @@ for (i=0; i<lastBlock; ++i)
     int qEnd = psl->qStarts[i+1];
     if (qStart == qEnd && tEnd-tStart >= minIntronSize)
         {
+	++totalIntronLooking;
 	char *intronStart = chrom->dna + tStart;
 	char *intronEnd = chrom->dna + tEnd;
 	int orientation = intronOrientationMinSize(intronStart, intronEnd, minIntronSize);
 	totalOrientation += orientation;
 	if (orientation == 0)
 	    {
+	    totalFunny += 1;
 	    unusualPrint("site %c%c/%c%c %s %s %d %s:%d-%d\n", intronStart[0], intronStart[1],
 	    	intronEnd[-2], intronEnd[-1], psl->strand, psl->qName,
 		i+1, psl->tName, psl->tStart+1, psl->tEnd); 
@@ -352,6 +357,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	}
     bedFreeList(&bedList);
     }
+unusualPrint("total intron-looking %d, total funny-looking %d\n", 
+	totalIntronLooking, totalFunny);
 carefulClose(&f);
 dnaSeqFree(&chrom);
 nibTwoCacheFree(&ntc);
