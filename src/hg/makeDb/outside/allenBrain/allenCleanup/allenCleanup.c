@@ -24,7 +24,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: allenCleanup.c,v 1.3 2007/02/08 22:49:14 galt Exp $";
+static char const rcsid[] = "$Id: allenCleanup.c,v 1.4 2007/02/15 00:51:16 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -90,8 +90,6 @@ if (size < 256)
     }
 jpegSize(outPath, &width, &height);
 
-//printf("debug: jpegSize width=(%d) height=(%d)\n",width,height);  //debug
-
 /* see if there is a tiles dir */
 safef(outPath,sizeof(outPath),"%s/%s%s",sourcePath,dir,name);
 fe = fileExists(outPath);
@@ -113,12 +111,11 @@ dList = listDirX(outPath, "*.jpg", FALSE);
 for (dEntry = dList; dEntry != NULL; dEntry = dEntry->next)
     {
     safef(expected,sizeof(expected),"_%01d_%03d.jpg",eLevel,eTile);
-    //printf("debug: tile (%s) expected(%s)\n",dEntry->name, expected);  //debug
     if (!endsWith(dEntry->name,expected))
 	{
-    	printf("debug: sourcePath (%s) relPath (%s)\n", sourcePath, relPath);  //debug
-    	printf("debug: jpegSize width=(%d) height=(%d)\n",width,height);  //debug
-	printf("debug: tile (%s) expected(%s)\n",dEntry->name, expected);  //debug
+    	printf("warning: sourcePath (%s) relPath (%s)\n", sourcePath, relPath);
+    	printf("warning: jpegSize width=(%d) height=(%d)\n",width,height);
+	printf("warning: tile (%s) expected(%s)\n",dEntry->name, expected);
 	break;
 	}
     ++eTile;
@@ -146,9 +143,6 @@ freez(&thumb);
 
 verbose(3,"\n");  
 
-//debug
-//exit(0);
-
 }
 
 
@@ -167,12 +161,10 @@ verbose(3,"moving to ./%s: outPath=[%s]\n",hideDir,outPath);
 boolean fe = fileExists(outPath);
 if (!fe)
     {
-    verbose(3,"debug: calling makeDir(%s)\n",outPath);
     makeDir(outPath);
     }
 safef(oldPath,sizeof(oldPath),"%s/%s%s%s",imageDisk,dir,name,extension);
 safef(outPath,sizeof(outPath),"%s/%s%s/%s%s",imageDisk,dir,hideDir,name,extension);
-verbose(3,"link(%s,%s) and unlink(%s)\n",oldPath,outPath,oldPath);
 if (link(oldPath,outPath)==0)
     {
     unlink(oldPath);
@@ -180,17 +172,14 @@ if (link(oldPath,outPath)==0)
 
 /* see if there are any downloadable images to cleanup */
 safef(outPath,sizeof(outPath),"%s/%s%s%s",sourcePath,dir,name,".jpg");
-verbose(3,"checking if exists: outPath=[%s]\n",outPath);
 fe = fileExists(outPath);
 if (fe)
     {
-    verbose(3,"calling unlink(%s)\n",outPath);
     unlink(outPath);
     }
 
 /* see if there are any tiles to cleanup */
 safef(outPath,sizeof(outPath),"%s/%s%s",sourcePath,dir,name);
-verbose(3,"checking if dir exists: outPath=[%s]\n",outPath);
 fe = fileExists(outPath);
 if (fe)
     {
@@ -198,11 +187,9 @@ if (fe)
     dList = listDirX(outPath, "*.jpg", TRUE);
     for (dEntry = dList; dEntry != NULL; dEntry = dEntry->next)
 	{
-	verbose(3,"debug: calling unlink(%s)\n",dEntry->name);
 	unlink(dEntry->name);
 	}
     slFreeList(&dList);    
-    verbose(3,"debug: calling rmdir(%s)\n",outPath);
     rmdir(outPath);
     }
 
@@ -213,12 +200,9 @@ verbose(3,"checking if thumb exists: thumb=[%s]\n",thumb);
 fe = fileExists(thumb);
 if (fe)
     {
-    verbose(3,"calling unlink(%s)\n",thumb);
     unlink(thumb);
     }
 freez(&thumb);
-
-verbose(3,"\n");  
 
 }
 
@@ -322,7 +306,7 @@ while (lineFileRowTab(lf, row))
 	{
 	++refSeqDupe;
 	// maybe save these to a file?
-	uglyf("dupe refSeq: %s\n", refSeq);
+	verbose(2,"dupe refSeq: %s\n", refSeq);
 	continue;
 	}
 
@@ -330,7 +314,7 @@ while (lineFileRowTab(lf, row))
 	{
 	++geneSymbolDupe;
 	// maybe save these to a file?
-	uglyf("dupe gene symbol: %s\n", gene);
+	verbose(2,"dupe gene symbol: %s\n", gene);
 	continue;
 	}
 
@@ -347,7 +331,7 @@ while (lineFileRowTab(lf, row))
 	{
 	++imageMissing;
 	// maybe save these to a file?
-	uglyf("missing image: %s\n", gene);
+	verbose(2,"missing image: %s\n", gene);
 	continue;
 	}
 
@@ -392,27 +376,23 @@ printf("# of missing images: %d\n",imageMissing);
 printf("# of unused images: %d\n", imageHash->elCount);
 printf("final count of unique existing gene/images: %d\n",count);
 
-//TODO:
-//  Add the checking of the sourceImageDir: main jpg, thumb jpg, 7 levels of tiles jpg
-//    report any that are incomplete.
-//
+}
+
+/*
+   checkImages option
+  Add the checking of the sourceImageDir: main jpg, thumb jpg, 7 levels of tiles jpg
+    report any that are incomplete.
+*/
 
 /* cleanImages option
   moves .jp2 duplicates into ./dupes and unused into ./unused,
    and removes the corresponding jpg files (full-download-image,tiles,thumbnail) in sourceImageDir
 */
 
-}
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-
-//debug
-int x = 5/2;
-uglyf("x=%d\n",x);
-exit(0);
-
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
