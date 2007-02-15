@@ -71,3 +71,16 @@ twoBitToFa ../otoGar1/otoGar1.unmasked.2bit \
                      -target /san/sanvol1/scratch/otoGar/otoGar1.fa\
                    -out otoGar1.maskOrrb.fa -wordsize 11 -threshalpha 13 \
                    -pattern 00011111000
+
+#########################################################################
+## Processing photograph (DONE - 2007-02-15 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/otoGar1/photograph
+    cd /cluster/data/otoGar1/photograph
+    cp -p /usr/local/apache/htdocs/images/Bu* ./BushBaby.jpg
+    convert -quality 80 -normalize -sharpen 0 -geometry 200x320 BushBaby.jpg \
+	Otolemur_garnettii.jpg
+    # add Otolemur_garnettii.jpg to the browser doc source tree and copy
+    #	to /usr/local/apache/htdocs/images
+    #	It is still a bit dark, a -gamma argument could lighten it
+
