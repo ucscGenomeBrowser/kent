@@ -204,9 +204,9 @@ sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]); 
-    int gene = sqlUnsigned(row[1]); 
-    int antibody = sqlUnsigned(row[2]); 
-    int probeType = sqlUnsigned(row[3]); 
+    /* int gene = sqlUnsigned(row[1]); */
+    /* int antibody = sqlUnsigned(row[2]); */
+    /* int probeType = sqlUnsigned(row[3]); */
     char *fPrimer = row[4]; 
     char *rPrimer = row[5]; 
     char *seq = row[6]; 
@@ -220,10 +220,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     int tStart = 0;
     int tEnd = 0;
     char *tStrand = " ";
+    /*
     char *peGene = "";
     int bacInfo = 0;
     int seqid = 0;
     int pslid = 0;
+    */
     char *state = "new";
     char *db = "";
     int vgPrb = 0;
@@ -325,7 +327,7 @@ while(more)
     name = cloneString(line);
     verbose(1,"name=%s\n",name);
     dyStringClear(dy);
-    while(more=lineFileNext(lf, &line, &lineSize))
+    while((more=lineFileNext(lf, &line, &lineSize)))
 	{
 	if (line[0] == '>')
 	    {
@@ -499,7 +501,6 @@ struct dyString *dy = dyStringNew(0);
 char cmdLine[256];
 char path1[256];
 char path2[256];
-FILE *f = NULL;
 
 dyStringClear(dy);
 dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
@@ -663,7 +664,7 @@ while(more)
     name = cloneString(line+1);
     verbose(2,"name=%s\n",name);
     dyStringClear(dy);
-    while(more=lineFileNext(lf, &line, &lineSize))
+    while((more=lineFileNext(lf, &line, &lineSize)))
 	{
 	if (line[0] == '>')
 	    {
@@ -872,7 +873,6 @@ static void updateVgPrbAli(struct sqlConnection *conn, char *db, char *table, ch
 /* update vgPrbAli from vgProbes track for db */
 {
 struct dyString *dy = dyStringNew(0);
-char cmd[256];
 char dbTrk[256];
 safef(dbTrk,sizeof(dbTrk),"%s.%s",db,track);
 if (!sqlTableExists(conn, dbTrk))
@@ -1214,13 +1214,13 @@ doAccessionsSeq(conn, taxon, db);
 
 }
 
-
+/*  keep around, but dangerous in the wrong hands ;)
 static void init(struct sqlConnection *conn)
-/* build tables - for the first time */
+/ * build tables - for the first time * /
 {
 if (!sqlTableExists(conn, "vgPrb"))
     {
-    initTable(conn, "vgPrb", FALSE);  /* this most important table should never be nuked automatically */
+    initTable(conn, "vgPrb", FALSE);  / * this most important table should never be nuked automatically * /
     sqlUpdate(conn, "create index tName on vgPrb(tName(20));");
     sqlUpdate(conn, "create index seq on vgPrb(seq(40));");
     }
@@ -1233,6 +1233,8 @@ initTable(conn, "vgPrbAli", TRUE);
 initTable(conn, "vgPrbAliAll", TRUE);
 
 }
+*/
+
 
 static void doAlignments(struct sqlConnection *conn, char *db)
 {
@@ -1294,7 +1296,6 @@ static void getPslMapFa(struct sqlConnection *conn,
 {
 int rc = 0;
 struct dyString *dy = dyStringNew(0);
-char outName[256];
 /* get .fa for pslRecalcMatch use */
 dyStringClear(dy);
 dyStringPrintf(dy, 
@@ -1318,7 +1319,6 @@ static void doPslMapAli(struct sqlConnection *conn,
 {
 char cmd[256];
 
-int rc = 0;
 struct dyString *dy = dyStringNew(0);
 char path[256];
 char toDb[12];
@@ -1410,8 +1410,6 @@ char cmd[256];
 
 int rc = 0;
 struct dyString *dy = dyStringNew(0);
-char outName[256];
-char path[256];
 char dbTrk[256];
 
 safef(dbTrk,sizeof(dbTrk),"%s.%s",db,track);

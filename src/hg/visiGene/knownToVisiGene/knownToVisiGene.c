@@ -153,7 +153,6 @@ FILE *f = hgCreateTabFile(tempDir, outTable);
 struct sqlConnection *hConn = sqlConnect(database);
 struct sqlConnection *iConn = sqlConnect(visiDb);
 struct sqlResult *sr;
-char query[512];
 char **row;
 struct hash *geneImageHash = newHash(18);
 struct hash *locusLinkImageHash = newHash(18);
