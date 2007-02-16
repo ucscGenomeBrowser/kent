@@ -22,6 +22,19 @@
     faSize assembly.bases.gz 
 # 1741478929 bases (0 N's 1741478929 real 1741478929 upper 0 lower)
 #	in 50470 sequences in 1 files
+    #	Discovered later that this quals file needs to be lifted
+    qaToQac assembly.quals.gz stdout \
+	| qacAgpLift assembly.agp stdin scaffold.lifted.qac
+
+    ##	Calculate N50
+    #	Find total length in sequence
+    sort -k2nr chrom.sizes | awk '{sum+=$2;print NR,sum,$2,$1}' | tail -1
+    #	7233 1781602899 340 scaffold_7232
+    #	half of 1781602899 is 890801449
+    #	run this again, scanning the list until the sum reaches 890801449
+    sort -k2nr chrom.sizes | awk '{sum+=$2;print NR,sum,$2,$1}' | less
+    #	204 889215106 2440512 scaffold_201
+    #	205 891654231 2439125 scaffold_205
 
 #########################################################################
 ## Create .ra file and run makeGenomeDb.pl
@@ -40,9 +53,35 @@ orderKey 375
 mitoAcc none
 fastaFiles /cluster/data/anoCar1/downloads/assembly.bases.gz
 agpFiles /cluster/data/anoCar1/downloads/assembly.agp
-qualFiles /cluster/data/anoCar1/downloads/assembly.quals.gz
+qualFiles /cluster/data/anoCar1/downloads/scaffold.lifted.qac
 dbDbSpeciesDir lizard
 '_EOF_'
 
-    time makeGenomeDb.pl anoCar1.config.ra > makeGenomeDb.out 2>&1
+    time makeGenomeDb.pl -verbose=2 anoCar1.config.ra > makeGenomeDb.out 2>&1
+    #	broken down during the quals step since assembly.quals.gz needed
+    #	to be lifted.  do the qaToQac | qacAgpLift sequence, fixup the
+    #	specification above for qualFiles, and finish off the quals loading:
+    ssh kkstore05
+    cd /cluster/data/anoCar1/bed/qual
+    qacToWig -fixed ../../downloads/scaffold.lifted.qac stdout \
+	| wigEncode stdin qual.wig qual.wib
+    ssh hgwdev
+    cd /cluster/data/anoCar1/bed/qual
+    time nice -n +19 hgLoadWiggle \
+	-pathPrefix=/gbdb/anoCar1/wib anoCar1 quality qual.wig
 
+    ##	continue
+    ssh hgwdev
+    cd /cluster/data/anoCar1
+    time makeGenomeDb.pl -verbose=2 -continue=dbDb anoCar1.config.ra \
+	> makeDbDb.out 2>&1
+
+##########################################################################
+## Photograph - permission to use obtained from R. Steven Rainwater
+##		(DONE - 2007-02-16 - Hiram)
+    ## Fetch photo from:
+    wget --timestamping \
+	"http://rainwaterreptileranch.org/steve/photos/herps/anole2.jpeg" \
+	-O R.Steven.Rainwater.Anole.Lizard.jpg
+    convert -quality 80 -sharpen 0 -crop "168x272+264+37" \
+	R.Steven.Rainwater.Anole.Lizard.jpg Anolis_carolinensis.jpg
