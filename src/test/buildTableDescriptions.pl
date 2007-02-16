@@ -364,12 +364,15 @@ foreach my $db (@dbs) {
   my %tableTypes = $trackDb->getTrackNamesTypes();
   my %tableFields = &getTableFields($hgConf, $db);
   foreach my $table (sort keys %tableFields) {
-    next if ($table =~ /^trackDb_/);
+    next if ($table =~ /^(trackDb|hgFindSpec)_/);
     if ((! defined $tableAutoSql{$table}) ||
 	($tableFields{$table} ne $tableAutoSql{$table}->{fields})) {
-      $tableAutoSql{$table} =
+      my $as =
 	&matchAutoSqlByFields($tableFields{$table}, \%tableAutoSql,
 			      \%fieldsAutoSql);
+      if ((defined $as) && (! defined $tableAutoSql{$table})) {
+	$tableAutoSql{$table} = $as;
+      }
     }
     if (! defined $tableTypes{$table} &&
        defined $tableAutoSql{$table}) {
