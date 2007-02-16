@@ -21,4 +21,5 @@ table gbCdnaInfo
     uint geneName;    "Link to id in geneName table"
     uint productName; "Link to id in productName table"
     uint author;      "Link to id in author table"
+    uint gi;          "Genbank identifier"
     )
