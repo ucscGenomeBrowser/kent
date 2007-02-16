@@ -222,6 +222,8 @@ for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     fprintf(f, "%d,", r->start - minBase);
     }
 fprintf(f, "\n");
+
+rbTreeFree(&rangeTree);
 }
 
 void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold, FILE *f)
