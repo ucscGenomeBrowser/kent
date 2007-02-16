@@ -18451,8 +18451,8 @@ mysql> alter table hapmapAllelesYRI add index chrom (chrom, bin);
 
 # 2nd step in processing: create hapmapAllelesCombined
 ssh hgwdev
-cd kent/src/hg/snp/snpLoad
-./hapmap2 hg17
+cd /cluster/data/hg17/bed/hapmap/rel21a
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap2 hg17
 hgLoadBed hg17 hapmapAllelesCombined -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesCombined.sql hapmapAllelesCombined.tab
 
 # create indexes
@@ -18460,10 +18460,106 @@ mysql> alter table hapmapAllelesCombined add index name (name);
 mysql> alter table hapmapAllelesCombined add index chrom (chrom, bin);
 
 # errors
+# nothing that isn't biallelic
+# nothing with mixed positions
+# over 500K that were not available in all 4 populations
+# Also, 2 strand corrections done
 grep -v missing hapmap2.errors
 # different strands for rs1621378
 # different strands for rs5768
 
+# cleanup to save space
+rm hapmapAllelesCombined.tab
+
+# monomorphism
+
+YRI        867,835 
+CEU      1,252,743 
+CHB      1,496,438 
+JPT      1,539,094 
+combined   607,393 
+
+# observed strings
+# why is A/T different from other transversions?
+
+A/G      1,344,043
+C/T      1,344,542
+A/C        352,875
+A/T        275,670
+C/G        354,299
+G/T        354,149
+triallelic   1,370
+quadallelic    403
+other        1,226
+
+# some details on the others:
+125     -/A/T
+124     -/A/G
+107     -/C/T
+85      -/A/C
+79      -/G/T
+25      -/C/G
+
+18      -/A/C/T
+13      -/A/G/T
+12      -/A/C/G
+11      -/C/G/T
+
+7       (LARGEINSERTION)
+5       (LARGEDELETION)
+6       microsat
+2       het
+
+# 3rd step: check against hg17.snp125
+ssh hgwdev
+cd /cluster/data/hg17/bed/hapmap/rel21a
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapLookup hg17
+hapmapAllelesCombined snp125 snp125Exceptions
+
+# 1817 total that are complex type from dbSNP (hapmapLookup.log)
+# This is not based on observed string, only on size, class and locType
+# 1176 class = mixed
+#  616 class = single but locType != exact
+#   11 class = named
+#    6 class = insertion
+#    4 class = deletion
+#    2 class = microsat
+#    2 class = het
+
+# Generally if class = single the observed string is okay
+# Exceptions to that:
+#    rs700519 quad-allelic, locType = rangeDeletion
+#    rs1572672 tri-allelic, locType = between
+#    rs2357412 tri-allelic, locType = range
+#    rs2364671 tri-allelic, locType = rangeSubstitution
+#    rs3959788 quad-allelic, locType = between
+
+# 74 items in hapmapLookup.error
+# 59 reverse complement (that's okay)
+#  7 multiple alignment (6 from chrX:154,219,000-154,220,500 which is close to PAR)
+
+#  4 observed with dbSNP complex, hapmap biallelic
+#  all positive strand, locType = between
+#  all cluster errors in dbSNP
+#  rs10485830
+#  rs7625205 (intronic)
+#  rs713582
+#  rs11403115 (class = insertion)
+
+# 3 observed mismatch
+# all dbSNP clustering error
+# rs2230624 (tri-allelic)
+# rs3963317 (monomorphic in hapmap, rangeSubstitution in dbSNP)
+# rs5017503 (monomoprhic in hapmap)
+
+# a strange one
+# rs731449
+# dbSNP strand = -, hapmap strand = +
+# dbSNP observed = G/T, hapmap observed = C/T
+# dbSNP clustering error rs2321451, which is C/T
+# hapmap monomorphic for T
+# ortho A
+# no repeats, no genes, no mRNAs, no conservation
 
 
 ############################################################################################
