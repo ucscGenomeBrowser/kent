@@ -4,7 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "bed.h"
-#include "geneGraph.h"
+#include "rangeTree.h"
+#include "sqlNum.h"
+#include "ggTypes.h"
 #include "txGraph.h"
 
 void usage()
@@ -173,17 +175,15 @@ void rnaOut(struct txGraph *txg, struct slRef *trackerRefList,
 /* Write out one RNA transcript and mark corresponding edges as visited. */
 {
 struct slRef *ref;
-int exonCount = 0;
 int minBase = BIGNUM, maxBase = -BIGNUM;
 
-/* Count up exons and set visit flags, figure min/max. */
+/* Set visit flags, figure min/max. */
 for (ref = trackerRefList; ref != NULL; ref = ref->next)
     {
     struct edgeTracker *tracker = ref->val;
     tracker->visited = TRUE;
     if (tracker->edge->type == ggExon)
 	{
-	exonCount += 1;
 	minBase = min(minBase, tracker->start);
 	maxBase = max(maxBase, tracker->end);
 	}
@@ -192,24 +192,34 @@ for (ref = trackerRefList; ref != NULL; ref = ref->next)
 /* Write out bed stuff except for blocks. */
 fprintf(f, "%s\t%d\t%d\t", txg->tName, minBase, maxBase);
 fprintf(f, "%s.%s\t0\t%s\t", txg->name, source->accession, txg->strand);
-fprintf(f, "0\t0\t0\t%d\t", exonCount);
 
-/* Write out block sizes */
+/* Pass blocks through a rangeTree to merge any ones that 
+ * are overlapping.  This occassionally happens in the graph. */
+struct rbTree *rangeTree = rangeTreeNew();
 for (ref = trackerRefList; ref != NULL; ref = ref->next)
     {
     struct edgeTracker *tracker = ref->val;
-    tracker->visited = TRUE;
     if (tracker->edge->type == ggExon)
-	fprintf(f, "%d,", tracker->end - tracker->start);
+	rangeTreeAdd(rangeTree, tracker->start, tracker->end);
+    }
+
+/* Get exon list and write out block count. */
+
+/* Write out exon count and block sizes */
+fprintf(f, "0\t0\t0\t%d\t", rangeTree->n);
+struct slRef *eRef, *eRefList = rbTreeItems(rangeTree);
+for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
+    {
+    struct range *r = eRef->val;
+    fprintf(f, "%d,", r->end - r->start);
     }
 fprintf(f, "\t");
 
 /* Write out block starts */
-for (ref = trackerRefList; ref != NULL; ref = ref->next)
+for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     {
-    struct edgeTracker *tracker = ref->val;
-    if (tracker->edge->type == ggExon)
-	fprintf(f, "%d,", tracker->start - minBase);
+    struct range *r = eRef->val;
+    fprintf(f, "%d,", r->start - minBase);
     }
 fprintf(f, "\n");
 }
