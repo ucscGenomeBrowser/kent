@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1205 2007/02/15 17:11:19 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1206 2007/02/16 00:03:51 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16097,20 +16097,25 @@ float freq2 = 0.0;
 
 if (total == 0) return;
 
-freq1 = 50.0 * ((count1*2) + heteroCount) / total;
-freq2 = 50.0 * ((count2*2) + heteroCount) / total;
+/* convert from individuals to alleles */
+count1 = (count1 * 2) + heteroCount;
+count2 = (count2 * 2) + heteroCount;
+total = total * 2;
+
+freq1 = 100.0 * count1 / total;
+freq2 = 100.0 * count2 / total;
 
 printf("<TR>");
 printf("<TD>%s</TD>", pop);
 if (count1 > count2)
     {
-    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count1 + heteroCount, freq1);
-    printf("<TD>%d (%3.2f%%)</TD>", count2 + heteroCount, freq2);
+    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
 else
     {
-    printf("<TD>%d (%3.2f%%)</TD>", count1 + heteroCount, freq1);
-    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count2 + heteroCount, freq2);
+    printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
