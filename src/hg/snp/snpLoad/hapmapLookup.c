@@ -5,9 +5,10 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapLookup.c,v 1.2 2007/01/23 05:33:27 heather Exp $";
+static char const rcsid[] = "$Id: hapmapLookup.c,v 1.3 2007/02/16 00:34:25 heather Exp $";
 
 FILE *errorFileHandle = NULL;
+FILE *logFileHandle = NULL;
 
 struct snpSubset 
     {
@@ -29,7 +30,38 @@ errAbort(
     "    hapmapLookup db hapmapTable snpTable exceptionTable \n");
 }
 
+#define PAR1X 2642881
+#define PAR1Y 2642881
+#define PAR2X 154494748
+#define PAR2Y 57372174
 
+
+boolean isPar(char *chrom, int start, int end)
+/* these are hg17 coordinates */
+{
+if (sameString(chrom, "chrY"))
+    {
+    if (end < PAR1Y) return TRUE;
+    if (start > PAR2Y) return TRUE;
+    }
+if (sameString(chrom, "chrX"))
+    {
+    if (end < PAR1X) return TRUE;
+    if (start > PAR2X) return TRUE;
+    }
+return FALSE;
+}
+
+boolean isComplexObserved(char *observed)
+{
+if (sameString(observed, "A/C")) return FALSE;
+if (sameString(observed, "A/G")) return FALSE;
+if (sameString(observed, "A/T")) return FALSE;
+if (sameString(observed, "C/G")) return FALSE;
+if (sameString(observed, "C/T")) return FALSE;
+if (sameString(observed, "G/T")) return FALSE;
+return TRUE;
+}
 
 struct hash *storeExceptions(char *tableName)
 /* store multiply-aligning SNPs */
@@ -42,12 +74,13 @@ char **row;
 
 verbose(1, "reading exceptions...\n");
 ret = newHash(0);
-safef(query, sizeof(query), "select name, exception from %s", tableName);
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, exception from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (!sameString(row[1], "MultipleAlignments")) continue;
-    hashAdd(ret, cloneString(row[0]), NULL);
+    if (!sameString(row[4], "MultipleAlignments")) continue;
+    if (isPar(row[0], sqlUnsigned(row[1]), sqlUnsigned(row[2]))) continue;
+    hashAdd(ret, cloneString(row[3]), NULL);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -90,7 +123,6 @@ hFreeConn(&conn);
 return ret;
 }
 
-
 boolean samePosition(char **row, struct snpSubset *ss)
 /* simple comparison function */
 {
@@ -98,6 +130,28 @@ boolean samePosition(char **row, struct snpSubset *ss)
 assert(sameString(ss->class, "single"));
 assert(sameString(ss->locType, "exact"));
 assert(ss->end == ss->start + 1);
+
+/* allow for PAR */
+if (sameString(row[0], "chrX") && sameString(ss->chrom, "chrX"))
+    {
+    if (sqlUnsigned(row[1]) < PAR1X && ss->start < PAR1X) return TRUE;
+    if (sqlUnsigned(row[1]) > PAR2X && ss->start > PAR2X) return TRUE;
+    }
+if (sameString(row[0], "chrX") && sameString(ss->chrom, "chrY"))
+    {
+    if (sqlUnsigned(row[1]) < PAR1X && ss->start < PAR1Y) return TRUE;
+    if (sqlUnsigned(row[1]) > PAR2X && ss->start > PAR2Y) return TRUE;
+    }
+if (sameString(row[0], "chrY") && sameString(ss->chrom, "chrX"))
+    {
+    if (sqlUnsigned(row[1]) < PAR1Y && ss->start < PAR1X) return TRUE;
+    if (sqlUnsigned(row[1]) > PAR2Y && ss->start > PAR2X) return TRUE;
+    }
+if (sameString(row[0], "chrY") && sameString(ss->chrom, "chrY"))
+    {
+    if (sqlUnsigned(row[1]) < PAR1Y && ss->start < PAR1Y) return TRUE;
+    if (sqlUnsigned(row[1]) > PAR2Y && ss->start > PAR2Y) return TRUE;
+    }
 
 if (differentString(row[0], ss->chrom)) return FALSE;
 if (sqlUnsigned(row[1]) != ss->start) return FALSE;
@@ -133,35 +187,41 @@ return TRUE;
 void checkObservedAndStrand(char **row, struct snpSubset *ss)
 {
 boolean sameStrand = strandMatch(row, ss);
+char *rsId = cloneString(row[3]);
+char *hapmapObserved = cloneString(row[5]);
 
 /* we know that ss has valid observed */
 assert(differentString(ss->observed, "unknown"));
 assert(differentString(ss->observed, "n/a"));
 
-/* perhaps this is a reverse complement */
-if (differentString(row[5], ss->observed) && !sameStrand)
+if (sameStrand && sameString(ss->observed, hapmapObserved)) return;
+
+if (!sameStrand)
     {
+    /* perhaps this is a reverse complement */
     if (reverseComplemented(row, ss))
-        fprintf(errorFileHandle, "snp %s reverse complemented\n", row[3]);
-    else
-        fprintf(errorFileHandle, "snp %s: hapmap observed and strand issue\n", row[3]);
+        {
+        fprintf(errorFileHandle, "snp %s reverse complemented\n", rsId);
+	return;
+	}
+
+    if (sameString(hapmapObserved, ss->observed))
+        {
+        fprintf(errorFileHandle, "snp %s strand mismatch\n", rsId);
+        return;
+        }
+
+    fprintf(errorFileHandle, "snp %s: hapmap observed and strand issue\n", rsId);
     return;
     }
         
-if (sameString(row[5], ss->observed) && !sameStrand)
-    {
-    fprintf(errorFileHandle, "snp %s strand mismatch\n", row[3]);
-    return;
-    }
-
-if (differentString(row[5], ss->observed) && sameStrand) 
-    fprintf(errorFileHandle, "snp %s observed mismatch\n", row[3]);
+fprintf(errorFileHandle, "snp %s observed mismatch\n", rsId);
         
 }
 
 
 boolean isComplexDbSnp(struct snpSubset *ss)
-/* could also check observed */
+/* not including observed in this */
 {
 if (ss->end != ss->start + 1) return TRUE;
 if (differentString(ss->class, "single")) return TRUE;
@@ -183,20 +243,22 @@ char **row;
 struct hashEl *hel = NULL;
 struct hashEl *hel2 = NULL;
 struct snpSubset *subsetElement = NULL;
+char *rsId = NULL;
 
 verbose(1, "process SNPs...\n");
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed from %s", hapmapTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hel = hashLookup(snpHash, row[3]);
+    rsId = cloneString(row[3]);
+    hel = hashLookup(snpHash, rsId);
     if (hel == NULL) 
         {
-	hel2 = hashLookup(exceptionHash, row[3]);
+	hel2 = hashLookup(exceptionHash, rsId);
 	if (hel2 == NULL)
-	    fprintf(errorFileHandle, "%s not found\n", row[3]);
+	    fprintf(errorFileHandle, "%s not found\n", rsId);
 	else
-	    fprintf(errorFileHandle, "%s aligns multiple places\n", row[3]);
+	    fprintf(errorFileHandle, "%s aligns multiple places\n", rsId);
 	continue;
 	}
     subsetElement = (struct snpSubset *)hel->val;
@@ -204,24 +266,44 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sameString(subsetElement->observed, "unknown") || sameString(subsetElement->observed, "n/a"))
         {
 	if (!strandMatch(row, subsetElement))
-            fprintf(errorFileHandle, "snp %s strand mismatch (dbSNP observed unknown)\n", row[3]);
+            fprintf(errorFileHandle, "snp %s strand mismatch (dbSNP observed unknown)\n", rsId);
 	continue;
 	}
 
+    char *hapmapObserved = cloneString(row[5]);
+
+    if (!isComplexObserved(subsetElement->observed) && !isComplexObserved(hapmapObserved))
+        {
+        checkObservedAndStrand(row, subsetElement);
+        }
+
     if (isComplexDbSnp(subsetElement))
         {
-	if (differentString(subsetElement->observed, row[5]))
-	    fprintf(errorFileHandle, "%s: snp observed = %s, hapmap observed = %s\n", row[3], subsetElement->observed, row[5]);
+	fprintf(logFileHandle, "%s %s %d %d %c %s %s %s\n", rsId, subsetElement->chrom, 
+	                       subsetElement->start, subsetElement->end, subsetElement->strand,
+			       subsetElement->observed, subsetElement->class, subsetElement->locType);
+	/* could print strand here, too */
+	if (differentString(subsetElement->observed, hapmapObserved))
+	    {
+	    if (isComplexObserved(subsetElement->observed) && !isComplexObserved(hapmapObserved))
+	        fprintf(errorFileHandle, "%s: snp complex observed = %s, hapmap simple observed = %s\n", 
+		        rsId, subsetElement->observed, hapmapObserved);
+	    if (!isComplexObserved(subsetElement->observed) && isComplexObserved(hapmapObserved))
+	        fprintf(errorFileHandle, "%s: snp simple observed = %s, hapmap complex observed = %s\n", 
+		        rsId, subsetElement->observed, hapmapObserved);
+	    if (isComplexObserved(subsetElement->observed) && isComplexObserved(hapmapObserved))
+	        fprintf(errorFileHandle, "%s: snp complex observed = %s, hapmap complex observed = %s\n", 
+		        rsId, subsetElement->observed, hapmapObserved);
+	    }
 	continue;
 	}
 
     if (!samePosition(row, subsetElement))
         {
-	fprintf(errorFileHandle, "position mismatch for snp %s\n", row[3]);
+	fprintf(errorFileHandle, "position mismatch for snp %s\n", rsId);
 	continue;
 	}
 
-    checkObservedAndStrand(row, subsetElement);
     }
 }
 
@@ -258,6 +340,7 @@ if (!hTableExists(exceptionTableName))
     errAbort("no %s table in %s\n", exceptionTableName, snpDb);
 
 errorFileHandle = mustOpen("hapmapLookup.error", "w");
+logFileHandle = mustOpen("hapmapLookup.log", "w");
 
 exceptionHash = storeExceptions(exceptionTableName);
 snpHash = storeSnps(snpTableName, exceptionHash);
@@ -265,6 +348,7 @@ verbose(1, "finished creating dbSNP hash\n");
 processSnps(snpHash, exceptionHash, hapmapTableName);
 
 carefulClose(&errorFileHandle);
+carefulClose(&logFileHandle);
 
 return 0;
 }
