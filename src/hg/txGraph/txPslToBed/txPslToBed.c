@@ -199,12 +199,14 @@ for (i=1; i<psl->blockCount; ++i)
 		    {
 		    psl->blockSizes[i] += 1;
 		    psl->tStarts[i] -= 1;
+		    psl->qStarts[i] -= 1;
 		    didFix = TRUE;
 		    }
 		else if (memcmp(intronEnd-2+1, "ag", 2) == 0)
 		    {
 		    psl->blockSizes[i] -= 1;
 		    psl->tStarts[i] += 1;
+		    psl->qStarts[i] += 1;
 		    didFix = TRUE;
 		    }
 		}
@@ -230,18 +232,22 @@ for (i=1; i<psl->blockCount; ++i)
 		    {
 		    psl->blockSizes[i] += 1;
 		    psl->tStarts[i] -= 1;
+		    psl->qStarts[i] -= 1;
 		    didFix = TRUE;
 		    }
 		else if (memcmp(intronEnd-2+1, "ac", 2) == 0)
 		    {
 		    psl->blockSizes[i] -= 1;
 		    psl->tStarts[i] += 1;
+		    psl->qStarts[i] += 1;
 		    didFix = TRUE;
 		    }
 		}
 	    }
 	}
     }
+if (didFix)
+    verbose(3, "Did little intron fix on %s\n", psl->qName);
 return didFix;
 }
 
@@ -322,7 +328,7 @@ if (cds != NULL)
 return bed;
 }
 
-struct bed *pslToBedList(struct psl *psl, struct dnaSeq *chrom, int mergeMax)
+struct bed *pslToBedList(struct psl *psl, struct dnaSeq *chrom, int mergeMax, boolean fixedOrientation)
 /* Convert a psl to a list of beds, breaking up at gaps that are bigger than mergeMax,
  * and not introns. */
 {
@@ -330,7 +336,12 @@ struct bed *bedList = NULL, *bed;
 struct lm *lm = lmInit(0);
 struct range *list = NULL, *el;
 char strand = psl->strand[0];
-struct genbankCds *cds = getCds(psl->qName);
+
+/* Try and find genbank cds (unless we already had to flipped sequence, in which
+ * case the CDS is pretty suspect!) */
+struct genbankCds *cds = NULL;
+if (!fixedOrientation) 
+	cds = getCds(psl->qName);
 
 /* Create first range from first block, and put it on list. */
 int tStart = psl->tStarts[0];
@@ -401,16 +412,7 @@ for (i=1; i<psl->blockCount; ++i)
 	 /* We might need to invalidate CDS. */
 	 if (cds != NULL)
 	    {
-	    if (qGapSize < 0)
-	        {
-		/* Here we probably "fixed" and intron at expense of CDS. */
-		if (rangeIntersection(cds->start, cds->end, qGapStart-1, qGapStart+1))
-		    {
-		    cds = NULL;
-		    verbose(3, "fixed intron but broke CDS in %s\n", psl->qName);
-		    }
-		}
-	    else if (rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd))
+	    if (rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd))
 		{
 		/* Invalidate CDS if that's where break occurs and query gap not a multiple of 3. */
 		if ((qGapStart <= cds->start && cds->start < qGapEnd)
@@ -437,6 +439,15 @@ for (i=1; i<psl->blockCount; ++i)
 	 }
     else
          {
+	 if (cds != NULL && qGapSize != 0)
+	    {
+	    /* Here we probably "fixed" an intron at expense of CDS. */
+	    if (rangeIntersection(cds->start, cds->end, qGapStart-1, qGapStart+1))
+		{
+		cds = NULL;
+		verbose(3, "fixed intron but broke CDS in %s\n", psl->qName);
+		}
+	    }
 	 /* Normal case. */
 	 lmAllocVar(lm, el);
 	 el->start = tStart;
@@ -484,10 +495,10 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     if (psl->tSize != chrom->size)
 	errAbort("DNA and PSL out of sync. %s thinks %s is %d bases, but %s thinks it's %d.",
 		 inPsl, chromName, psl->tSize, dnaPath, chrom->size);
-    fixOrientation(psl, chrom);
+    boolean fixedOrientation = fixOrientation(psl, chrom);
     if (fixIntrons)
 	fixPslIntrons(psl, chrom);
-    struct bed *bedList = pslToBedList(psl, chrom, mergeMax);
+    struct bed *bedList = pslToBedList(psl, chrom, mergeMax, fixedOrientation);
     struct bed *bed;
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
