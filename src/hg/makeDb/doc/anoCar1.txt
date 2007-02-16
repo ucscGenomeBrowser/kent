@@ -85,3 +85,24 @@ dbDbSpeciesDir lizard
 	-O R.Steven.Rainwater.Anole.Lizard.jpg
     convert -quality 80 -sharpen 0 -crop "168x272+264+37" \
 	R.Steven.Rainwater.Anole.Lizard.jpg Anolis_carolinensis.jpg
+
+################################################
+## WINDOWMASKER (Working - 2007-02-16 - Hiram)
+    ssh kkstore05
+    cd /cluster/data/anoCar1/bed/
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl anoCar1 \
+      -workhorse=kolossus > wmRun.log 2>&1 &
+XXX - working 14:07
+
+    # Save the log
+    mv wmRun.log WindowMasker.2007-02-16
+
+    # Masking statistics
+    cd WindowMasker.2007-02-18
+    twoBitToFa anoCar1.wmsk.2bit stdout | faSize stdin
+
+    # 400525790 bases (49313545 N's 351212245 real 284686886 upper
+    # 66525359 lower)
+
+    hgLoadBed -strict anoCar1 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Loaded 1747418 elements of size 3
