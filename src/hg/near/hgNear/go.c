@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.15 2007/02/10 00:48:08 kate Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.16 2007/02/16 18:24:15 kate Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -167,14 +167,17 @@ if (searchString != NULL )
 	}
 
     /* Now whittle down list to only include those with correct protein. */
+    struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
     for (gp = list; gp != NULL; gp = next)
 	{
 	next = gp->next;
-	if (hashLookup(proteinHash, gp->protein))
+        char *proteinAcc = spFindAcc(spConn, gp->protein);
+	if (hashLookup(proteinHash, proteinAcc))
 	     {
 	     slAddHead(&newList, gp);
 	     }
 	}
+    sqlDisconnect(&spConn);
     slReverse(&newList);
     list = newList;
     hashFree(&prevHash);
@@ -237,12 +240,15 @@ struct hash *protHash = newHash(17);
 char query[512];
 struct genePos *gp;
 
-/* Build up hash of genes keyed by protein names. (The geneHash
+/* Build up hash of genes keyed by protein ids. (The geneHash
  * passed in is keyed by the mrna name. */
+struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
 for (gp = *pGeneList; gp != NULL; gp = gp->next)
     {
-    hashAdd(protHash, gp->protein, gp);
+    char *proteinAcc = spFindAcc(spConn, gp->protein);
+    hashAdd(protHash, proteinAcc, gp);
     }
+sqlDisconnect(&spConn);
 
 /* Build up hash full of all go IDs associated with protName. */
 
