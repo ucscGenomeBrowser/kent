@@ -18513,8 +18513,7 @@ other        1,226
 # 3rd step: check against hg17.snp125
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
-/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapLookup hg17
-hapmapAllelesCombined snp125 snp125Exceptions
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapLookup hg17 hapmapAllelesCombined snp125 snp125Exceptions
 
 # 1817 total that are complex type from dbSNP (hapmapLookup.log)
 # This is not based on observed string, only on size, class and locType
@@ -18526,7 +18525,7 @@ hapmapAllelesCombined snp125 snp125Exceptions
 #    2 class = microsat
 #    2 class = het
 
-# Generally if class = single the observed string is okay
+# Generally if class = single the observed string is bi-allelic as expected
 # Exceptions to that:
 #    rs700519 quad-allelic, locType = rangeDeletion
 #    rs1572672 tri-allelic, locType = between
@@ -18537,6 +18536,16 @@ hapmapAllelesCombined snp125 snp125Exceptions
 # 74 items in hapmapLookup.error
 # 59 reverse complement (that's okay)
 #  7 multiple alignment (6 from chrX:154,219,000-154,220,500 which is close to PAR)
+# Also rs6645103 which is PAR 
+mysql> select chrom, chromStart, chromEnd, strand, observed, class, locType, weight from snp125 where name = "rs6645103";
++-------------+------------+----------+--------+----------+--------+---------+--------+
+| chrom       | chromStart | chromEnd | strand | observed | class  | locType | weight |
++-------------+------------+----------+--------+----------+--------+---------+--------+
+| chrX_random |     273788 |   273789 | -      | C/T      | single | exact   |      3 |
+| chrX        |     421141 |   421142 | +      | C/T      | single | exact   |      3 |
+| chrY        |     421141 |   421142 | +      | C/T      | single | exact   |      3 |
++-------------+------------+----------+--------+----------+--------+---------+--------+
+
 
 #  4 observed with dbSNP complex, hapmap biallelic
 #  all positive strand, locType = between
