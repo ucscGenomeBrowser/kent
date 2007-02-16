@@ -467,18 +467,6 @@ visibility hide
 type bed 4 .
 
 track gvPos
-release alpha
-shortLabel Locus Variants
-longLabel Compilation of $Organism Disease Variants and Other Mutations
-group phenDis
-priority 144.7
-visibility hide
-color 150,0,150
-type bed 4 +
-
-track gvPos
-release beta
-html gvPosOld
 shortLabel Locus Variants
 longLabel Compilation of $Organism Disease Variants and Other Mutations
 group phenDis
