@@ -5,17 +5,17 @@
 #ifndef TXEDGEORTHO_H
 #define TXEDGEORTHO_H
 
-#define TXEDGEBED_NUM_COLS 19
+#define TXEDGEORTHO_NUM_COLS 19
 
-enum txEdgeBedType
+enum txEdgeOrthoType
     {
-    txEdgeBedExon = 0,
-    txEdgeBedIntron = 1,
+    txEdgeOrthoExon = 0,
+    txEdgeOrthoIntron = 1,
     };
-struct txEdgeBed
+struct txEdgeOrtho
 /* A transcription edge with additional orthology information. */
     {
-    struct txEdgeBed *next;  /* Next in singly linked list. */
+    struct txEdgeOrtho *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome or contig name */
     int chromStart;	/* Start position, zero-based */
     int chromEnd;	/* End position, non-inclusive */
@@ -23,7 +23,7 @@ struct txEdgeBed
     int score;	/* Parts per thousand of edge that align */
     char strand[2];	/* Strand - either plus or minus */
     char startType[2];	/* [ or ( for hard or soft */
-    enum txEdgeBedType type;	/* edge type */
+    enum txEdgeOrthoType type;	/* edge type */
     char endType[2];	/* ] or ) for hard or soft */
     char *mappedChrom;	/* Chromosome in other organism */
     int mappedStart;	/* ChromStart mapped to other organism */
@@ -37,46 +37,46 @@ struct txEdgeBed
     int orthoEnd;	/* End of orthologous edge (based on RNA in other species) */
     };
 
-void txEdgeBedStaticLoad(char **row, struct txEdgeBed *ret);
-/* Load a row from txEdgeBed table into ret.  The contents of ret will
+void txEdgeOrthoStaticLoad(char **row, struct txEdgeOrtho *ret);
+/* Load a row from txEdgeOrtho table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct txEdgeBed *txEdgeBedLoad(char **row);
-/* Load a txEdgeBed from row fetched with select * from txEdgeBed
- * from database.  Dispose of this with txEdgeBedFree(). */
+struct txEdgeOrtho *txEdgeOrthoLoad(char **row);
+/* Load a txEdgeOrtho from row fetched with select * from txEdgeOrtho
+ * from database.  Dispose of this with txEdgeOrthoFree(). */
 
-struct txEdgeBed *txEdgeBedLoadAll(char *fileName);
-/* Load all txEdgeBed from whitespace-separated file.
- * Dispose of this with txEdgeBedFreeList(). */
+struct txEdgeOrtho *txEdgeOrthoLoadAll(char *fileName);
+/* Load all txEdgeOrtho from whitespace-separated file.
+ * Dispose of this with txEdgeOrthoFreeList(). */
 
-struct txEdgeBed *txEdgeBedLoadAllByChar(char *fileName, char chopper);
-/* Load all txEdgeBed from chopper separated file.
- * Dispose of this with txEdgeBedFreeList(). */
+struct txEdgeOrtho *txEdgeOrthoLoadAllByChar(char *fileName, char chopper);
+/* Load all txEdgeOrtho from chopper separated file.
+ * Dispose of this with txEdgeOrthoFreeList(). */
 
-#define txEdgeBedLoadAllByTab(a) txEdgeBedLoadAllByChar(a, '\t');
-/* Load all txEdgeBed from tab separated file.
- * Dispose of this with txEdgeBedFreeList(). */
+#define txEdgeOrthoLoadAllByTab(a) txEdgeOrthoLoadAllByChar(a, '\t');
+/* Load all txEdgeOrtho from tab separated file.
+ * Dispose of this with txEdgeOrthoFreeList(). */
 
-struct txEdgeBed *txEdgeBedCommaIn(char **pS, struct txEdgeBed *ret);
-/* Create a txEdgeBed out of a comma separated string. 
+struct txEdgeOrtho *txEdgeOrthoCommaIn(char **pS, struct txEdgeOrtho *ret);
+/* Create a txEdgeOrtho out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new txEdgeBed */
+ * return a new txEdgeOrtho */
 
-void txEdgeBedFree(struct txEdgeBed **pEl);
-/* Free a single dynamically allocated txEdgeBed such as created
- * with txEdgeBedLoad(). */
+void txEdgeOrthoFree(struct txEdgeOrtho **pEl);
+/* Free a single dynamically allocated txEdgeOrtho such as created
+ * with txEdgeOrthoLoad(). */
 
-void txEdgeBedFreeList(struct txEdgeBed **pList);
-/* Free a list of dynamically allocated txEdgeBed's */
+void txEdgeOrthoFreeList(struct txEdgeOrtho **pList);
+/* Free a list of dynamically allocated txEdgeOrtho's */
 
-void txEdgeBedOutput(struct txEdgeBed *el, FILE *f, char sep, char lastSep);
-/* Print out txEdgeBed.  Separate fields with sep. Follow last field with lastSep. */
+void txEdgeOrthoOutput(struct txEdgeOrtho *el, FILE *f, char sep, char lastSep);
+/* Print out txEdgeOrtho.  Separate fields with sep. Follow last field with lastSep. */
 
-#define txEdgeBedTabOut(el,f) txEdgeBedOutput(el,f,'\t','\n');
-/* Print out txEdgeBed as a line in a tab-separated file. */
+#define txEdgeOrthoTabOut(el,f) txEdgeOrthoOutput(el,f,'\t','\n');
+/* Print out txEdgeOrtho as a line in a tab-separated file. */
 
-#define txEdgeBedCommaOut(el,f) txEdgeBedOutput(el,f,',',',');
-/* Print out txEdgeBed as a comma separated list including final comma. */
+#define txEdgeOrthoCommaOut(el,f) txEdgeOrthoOutput(el,f,',',',');
+/* Print out txEdgeOrtho as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

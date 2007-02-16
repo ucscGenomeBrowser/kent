@@ -1,4 +1,4 @@
-table txEdgeBed
+table txEdgeOrtho
 "A transcription edge with additional orthology information."
     (
     string chrom;	"Chromosome or contig name"

@@ -4,7 +4,7 @@
 # automatic way.
 
 #A transcription edge with additional orthology information.
-CREATE TABLE txEdgeBed (
+CREATE TABLE txEdgeOrtho (
     chrom varchar(255) not null,	# Chromosome or contig name
     chromStart int not null,	# Start position, zero-based
     chromEnd int not null,	# End position, non-inclusive
@@ -25,5 +25,5 @@ CREATE TABLE txEdgeBed (
     orthoStart int not null,	# Start of orthologous edge (based on RNA in other species)
     orthoEnd int not null,	# End of orthologous edge (based on RNA in other species)
               #Indices
-    INDEX(name(12))
+    PRIMARY KEY(name(12))
 );

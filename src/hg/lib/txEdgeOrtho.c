@@ -8,14 +8,14 @@
 #include "jksql.h"
 #include "txEdgeOrtho.h"
 
-static char const rcsid[] = "$Id: txEdgeOrtho.c,v 1.1 2007/02/12 17:55:05 kent Exp $";
+static char const rcsid[] = "$Id: txEdgeOrtho.c,v 1.2 2007/02/16 03:16:59 kent Exp $";
 
 /* definitions for type column */
 static char *values_type[] = {"exon", "intron", NULL};
 static struct hash *valhash_type = NULL;
 
-void txEdgeBedStaticLoad(char **row, struct txEdgeBed *ret)
-/* Load a row from txEdgeBed table into ret.  The contents of ret will
+void txEdgeOrthoStaticLoad(char **row, struct txEdgeOrtho *ret)
+/* Load a row from txEdgeOrtho table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -40,11 +40,11 @@ ret->orthoStart = sqlSigned(row[17]);
 ret->orthoEnd = sqlSigned(row[18]);
 }
 
-struct txEdgeBed *txEdgeBedLoad(char **row)
-/* Load a txEdgeBed from row fetched with select * from txEdgeBed
- * from database.  Dispose of this with txEdgeBedFree(). */
+struct txEdgeOrtho *txEdgeOrthoLoad(char **row)
+/* Load a txEdgeOrtho from row fetched with select * from txEdgeOrtho
+ * from database.  Dispose of this with txEdgeOrthoFree(). */
 {
-struct txEdgeBed *ret;
+struct txEdgeOrtho *ret;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -69,17 +69,17 @@ ret->orthoEnd = sqlSigned(row[18]);
 return ret;
 }
 
-struct txEdgeBed *txEdgeBedLoadAll(char *fileName) 
-/* Load all txEdgeBed from a whitespace-separated file.
- * Dispose of this with txEdgeBedFreeList(). */
+struct txEdgeOrtho *txEdgeOrthoLoadAll(char *fileName) 
+/* Load all txEdgeOrtho from a whitespace-separated file.
+ * Dispose of this with txEdgeOrthoFreeList(). */
 {
-struct txEdgeBed *list = NULL, *el;
+struct txEdgeOrtho *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[19];
 
 while (lineFileRow(lf, row))
     {
-    el = txEdgeBedLoad(row);
+    el = txEdgeOrthoLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -87,17 +87,17 @@ slReverse(&list);
 return list;
 }
 
-struct txEdgeBed *txEdgeBedLoadAllByChar(char *fileName, char chopper) 
-/* Load all txEdgeBed from a chopper separated file.
- * Dispose of this with txEdgeBedFreeList(). */
+struct txEdgeOrtho *txEdgeOrthoLoadAllByChar(char *fileName, char chopper) 
+/* Load all txEdgeOrtho from a chopper separated file.
+ * Dispose of this with txEdgeOrthoFreeList(). */
 {
-struct txEdgeBed *list = NULL, *el;
+struct txEdgeOrtho *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[19];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = txEdgeBedLoad(row);
+    el = txEdgeOrthoLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -105,10 +105,10 @@ slReverse(&list);
 return list;
 }
 
-struct txEdgeBed *txEdgeBedCommaIn(char **pS, struct txEdgeBed *ret)
-/* Create a txEdgeBed out of a comma separated string. 
+struct txEdgeOrtho *txEdgeOrthoCommaIn(char **pS, struct txEdgeOrtho *ret)
+/* Create a txEdgeOrtho out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new txEdgeBed */
+ * return a new txEdgeOrtho */
 {
 char *s = *pS;
 
@@ -137,11 +137,11 @@ ret->orthoEnd = sqlSignedComma(&s);
 return ret;
 }
 
-void txEdgeBedFree(struct txEdgeBed **pEl)
-/* Free a single dynamically allocated txEdgeBed such as created
- * with txEdgeBedLoad(). */
+void txEdgeOrthoFree(struct txEdgeOrtho **pEl)
+/* Free a single dynamically allocated txEdgeOrtho such as created
+ * with txEdgeOrthoLoad(). */
 {
-struct txEdgeBed *el;
+struct txEdgeOrtho *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
@@ -151,21 +151,21 @@ freeMem(el->txGraph);
 freez(pEl);
 }
 
-void txEdgeBedFreeList(struct txEdgeBed **pList)
-/* Free a list of dynamically allocated txEdgeBed's */
+void txEdgeOrthoFreeList(struct txEdgeOrtho **pList)
+/* Free a list of dynamically allocated txEdgeOrtho's */
 {
-struct txEdgeBed *el, *next;
+struct txEdgeOrtho *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    txEdgeBedFree(&el);
+    txEdgeOrthoFree(&el);
     }
 *pList = NULL;
 }
 
-void txEdgeBedOutput(struct txEdgeBed *el, FILE *f, char sep, char lastSep) 
-/* Print out txEdgeBed.  Separate fields with sep. Follow last field with lastSep. */
+void txEdgeOrthoOutput(struct txEdgeOrtho *el, FILE *f, char sep, char lastSep) 
+/* Print out txEdgeOrtho.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
