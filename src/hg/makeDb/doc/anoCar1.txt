@@ -1,0 +1,48 @@
+# for emacs: -*- mode: sh; -*-
+
+# Anolis carolinensis - Broad Institute 1.0
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2007-02-16 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/store12/anoCar1
+    ln -s /cluster/store12/anoCar1 /cluster/data/anoCar1
+    mkdir /cluster/data/anoCar1/downloads
+    cd /cluster/data/anoCar1/downloads
+    foreach f (assembly.agp \
+               BasicAssemblyOneLiner.out \
+               ForDistribution.command \
+               assembly.bases.gz \
+               assembly.links \
+               assembly.quals.gz \
+               source)
+      wget --timestamping \
+        ftp://ftp.broad.mit.edu/pub/assemblies/reptiles/lizard/AnoCar1.0/$f
+    end
+    faSize assembly.bases.gz 
+# 1741478929 bases (0 N's 1741478929 real 1741478929 upper 0 lower)
+#	in 50470 sequences in 1 files
+
+#########################################################################
+## Create .ra file and run makeGenomeDb.pl
+    ssh hgwdev
+    cd /cluster/data/anoCar1
+    cat << '_EOF_' >anoCar1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db anoCar1
+clade vertebrate
+genomeCladePriority 66
+scientificName Anolis carolinensis
+commonName Lizard
+assemblyDate Jan. 2007
+assemblyLabel Broad Institute AnoCar (1.0)
+orderKey 375
+mitoAcc none
+fastaFiles /cluster/data/anoCar1/downloads/assembly.bases.gz
+agpFiles /cluster/data/anoCar1/downloads/assembly.agp
+qualFiles /cluster/data/anoCar1/downloads/assembly.quals.gz
+dbDbSpeciesDir lizard
+'_EOF_'
+
+    time makeGenomeDb.pl anoCar1.config.ra > makeGenomeDb.out 2>&1
+
