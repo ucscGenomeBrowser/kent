@@ -26,6 +26,7 @@ clean:
 
 
 DIRS = \
+	gadPos \
 	kgAliasM \
 	kgAliasP \
 	kgAliasKgXref \
