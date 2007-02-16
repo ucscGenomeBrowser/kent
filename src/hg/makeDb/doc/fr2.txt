@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.12 2007/02/06 23:56:45 hiram Exp $"
+#       "$Id: fr2.txt,v 1.13 2007/02/16 22:09:25 hiram Exp $"
 #
 
 ##########################################################################
@@ -79,7 +79,7 @@ genomeCladePriority 110
     ln -s /cluster/data/fr2/fr2.unmasked.2bit ./fr2.2bit
 
 ################################################
-## WINDOWMASKER (Working - 2007-01-22 - Cory and Hiram)
+## WINDOWMASKER (DONE - 2007-01-22 - Cory and Hiram)
   cd /cluster/data/fr2/bed/
   ~/kent/src/hg/utils/automation/doWindowMasker.pl fr2 \
       -workhorse=kolossus > wmRun.log 2>&1 &
@@ -98,10 +98,11 @@ genomeCladePriority 110
   # Loaded 1747418 elements of size 3
 
 #########################################################################
-# SIMPLE REPEATS (TRF) (Working 2007-01-22 - Cory and Hiram)
+# SIMPLE REPEATS (TRF) (DONE 2007-01-22 - Cory and Hiram)
   ssh kolossus
   mkdir /cluster/data/fr2/bed/simpleRepeat
   cd /cluster/data/fr2/bed/simpleRepeat
+  #  This missed chrM sequence
   time nice -n 19 twoBitToFa ../../fr2.unmasked.2bit stdout \
      | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
      -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
@@ -121,6 +122,14 @@ genomeCladePriority 110
 
     featureBits fr1 simpleRepeat
     # 6801339 bases of 315518167 (2.156%) in intersection
+
+    #	recovery attempt to get chrM masked
+  time nice -n 19 twoBitToFa -seq=chrM ../../fr2.unmasked.2bit stdout \
+     | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+     -bedAt=chrM.simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
+    #	It finds nothing !
+    #	make an empty trfMaskChrom file:
+    touch trfMaskChrom/chrM.bed
 
 #########################################################################
 ## Add TRF mask to WindowMasker masked sequence
@@ -1507,4 +1516,62 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
     hgsql -e \
 'update dbDb set defaultPos="chrUn:29,305,920-29,330,760" where name = "fr2";' \
 	-h genome-testdb hgcentraltest
+
 ############################################################################
+##  DOWNLOADS - (DONE - 2007-02-12 - 2007-02-16 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/fr2
+    ~/kent/src/hg/utils/automation/makeDownloads.pl fr2 \
+	> makeDownloads.out 2>&1
+    #	Doesn't work due to missing Repeat masker outputs
+    #	Create WindowMasker separate files by chrom, for downloads
+    ssh kkstore05
+    cd /cluster/data/fr2/bed/WindowMasker.2007-01-22
+    #	This name change here is so the names created by splitFileByColumn
+    #	will be reasonable
+    zcat windowmasker.sdust.bed.gz > chr.fr2.WMSdust.bed
+    splitFileByColumn chr.fr2.WMSdust.bed chrWM
+    #	Creating chrWM/chr1.fr2.WMSdust.bed
+    #	Creating chrWM/chr2.fr2.WMSdust.bed
+    #	... etc ...
+    cd chrWM
+    tar cvzf ../chromWMSdust.bed.tar.gz *.bed
+    cd ..
+    #	Verify this process didn't destroy anything:
+    cat chrWM/*.bed | awk '{sum += $3-$2}END{printf "total size: %d\n",sum}'
+    #	total size: 115825307
+    zcat windowmasker.sdust.bed.gz \
+	| awk '{sum += $3-$2}END{printf "total size: %d\n",sum}'
+    #	total size: 115825307
+    #	deliver to bigZips
+    cd /cluster/data/fr2/goldenPath/bigZips
+    ln -s \
+    /cluster/data/fr2/bed/WindowMasker.2007-01-22/chromWMSdust.bed.tar.gz .
+    #	remove the chromOut.tar.gz file and re-make the md5sum.txt
+    md5sum *gz > md5sum.txt
+    #	go back to simpleRepeat and attempt to make a chrM.bed - turns out to
+    #	be an empty result, so leave an empty file there.  Then running this
+    #	makeDownloads.pl again, create two empty .out files to get through
+    #	that.
+    cd /cluster/data/fr2
+    touch Un/chrUn.fa.out
+    touch M/chrM.fa.out
+    ~/kent/src/hg/utils/automation/makeDownloads.pl fr2 \
+	> makeDownloads.out 2>&1
+    cd goldenPath/bigZips
+    ln -s \
+	/cluster/data/fr2/bed/WindowMasker.2007-01-22/chromWMSdust.bed.tar.gz .
+
+############################################################################
+## Fugu Photograph - obtained from Byrappa Venkatesh in email 2007-02-15
+##		(DONE - 2007-02-16 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/fr2/photograph
+    cd /cluster/data/fr2/photograph
+    ## original: Byrappa.Venkatesh.Fugu.jpg
+    identify By*
+    #	Byrappa.Venkatesh.Fugu.jpg JPEG 700x286 DirectClass 43kb 0.000u 0:01
+    convert -quality 80 -geometry 300x200 Byrappa.Venkatesh.Fugu.jpg \
+	Takifugu_rubripes.jpg
+    ##  check this file into the browser/images CVS source tree and
+    ##	copy to /usr/local/apache/htdocs/images
