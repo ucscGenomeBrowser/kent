@@ -13,6 +13,14 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     hgGetAnn -noMatchOk hg18 mrna $c stdout | txPslToBed stdin /cluster/data/hg18/hg18.2bit mrna/$c.bed
 end
 
+# Get GenBank and RefSeq CDS  and other info. Best to get it now
+# so it is synced with the refSeq and mrna inputs, even 
+# though we won't process it until a later step.
+echo 'select acc,name from gbCdnaInfo,cds where type="mRNA" and cds=cds.id and cds != 0' | hgsql -N hg18 > cds.tab
+echo 'select mrnaAcc,status from refSeqStatus' | hgsql -n hg18 > refSeqStatus.tab
+echo 'select acc,status from mgcFullStatus' | hgsql -n hg18 > mcgStatus.tab
+echo 'select acc,size from gbSeq where type="mRNA"' | hgsql -n hg18 > mrnaSize.tab
+
 # Create splicing graphs.  Takes 12 seconds.
 mkdir bedToGraph
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
@@ -116,14 +124,45 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     txWalk exoniphyTxg/$c.txg trim.weights 3 txWalk/$c.bed
 end
 
-
-# Get exonWalk transcript sequences.  This'll take about 2 minutes
-mkdir txFa
+# Get txWalk transcript sequences.  This'll take about 2 minutes
+rm -f txWalk.fa
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo txFa $c
-    sequenceForBed -db=hg18 -bedIn=exonWalk/$c.bed -fastaOut=txFa/$c.fa -upCase -keepName
+    echo transcript sequence for  $c
+    sequenceForBed -db=hg18 -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 end
+mkdir splitFa
+faSplit sequence txWalk.fa 300 splitFa/
 
+# Set up cluster run Victor Solovyev's Best Orf program.
+mkdir bestorf
+mkdir bestorf/fa bestorf/tab
+cd bestorf
+ls -1 ../splitFa/*.fa > in.lst
+cat << '_EOF_' > gsub
+#LOOP
+borfBig -exe=./borf $(path1) tab/$(root1).borf
+#ENDLOOP
+'_EOF_'
+gensub2 in.lst single gsub spec
+cat << '_EOF_' > borf
+#!/bin/tcsh -ef
+/cluster/bin/x86_64/bestorf /cluster/bin/x86_64/bestorf_hume.dat $1
+'_EOF_'
+chmod a+x borf
+
+# Do borf cluster run 
+ssh pk
+cd /cluster/data/hg18/bed/jkg/borf
+para create spec
+para make
+para time
+#Completed: 292 of 292 jobs
+#CPU time in finished jobs:       1379s      22.98m     0.38h    0.02d  0.000 y
+#IO & Wait Time:                   867s      14.45m     0.24h    0.01d  0.000 y
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              14s       0.23m     0.00h    0.00d
+#Submission to last job:           137s       2.28m     0.04h    0.00d
 
 # Fetch human protein set.
 hgsql -N sp070202 -e \
@@ -170,7 +209,7 @@ hgLoadBed hg18 jkgMrnaBed mrna/*.bed
 cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
-hgLoadBed hg18 jkgTxWalk txWalk/*.bed
+hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
 
 
 ###########################################################################
@@ -503,6 +542,4 @@ Important remaining issues:
    support.
 10) chr20:33,609,922-33,651,008 - Cool splicing. 6 mRNAs, Exoniphy and mouse
     support for many.
-9)
-10)
 
