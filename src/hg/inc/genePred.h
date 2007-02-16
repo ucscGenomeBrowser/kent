@@ -151,6 +151,12 @@ struct genePred *genePredExtLoadAll(char *fileName);
 char *genePredCdsStatStr(enum cdsStatus stat);
 /* get string value of a cdsStatus */
 
+void genePredAddGenbankCds(struct psl *psl, struct genbankCds* cds, 
+	struct genePred *gene);
+/* Convert cdsStart/End from mrna to genomic coordinates. 
+ * Note that the genePred blocks need not be filled in before
+ * this call. */
+
 int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
 

@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.87 2006/07/21 00:59:54 baertsch Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.88 2007/02/16 19:41:57 kent Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -909,9 +909,11 @@ else
     }
 }
 
-static void annotateCds(struct psl *psl, struct genbankCds* cds,
-                        struct genePred* gene)
-/* Convert cdsStart/End from mrna to genomic coordinates. */
+void genePredAddGenbankCds(struct psl *psl, struct genbankCds* cds, 
+	struct genePred *gene)
+/* Convert cdsStart/End from mrna to genomic coordinates. 
+ * Note that the genePred blocks need not be filled in before
+ * this call. */
 {
 if (cds == NULL)
     {
@@ -1118,7 +1120,7 @@ else
     gene->strand[0] = ((psl->strand[0] != psl->strand[1]) ? '-' : '+');
     }
 
-annotateCds(psl, cds, gene);
+genePredAddGenbankCds(psl, cds, gene);
 pslToExons(psl, gene, cds, options, cdsMergeSize, utrMergeSize);
 return gene;
 }
