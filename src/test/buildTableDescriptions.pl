@@ -26,9 +26,15 @@ my $verbose   = 0;
 
 # Hard-coded behaviors:
 my $debug         = 0;
-my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
+# These are ignored to avoid errors about duplicate table/object definitions.
+my %autoSqlIgnore = ( "hg/autoSql/tests/input/polyTest.as" => "",
+		      "hg/autoSql/tests/input/newTest.as" => "",
+		      "hg/autoSql/doc.as" => "",
+		      "hg/autoSql/doc2.as" => "",
+		      "hg/lib/bed.as" => "",
 		      "hg/lib/ggDbRep.as" => "",
 		      "hg/lib/genotype.as" => "",
+		      "hg/lib/txEdgeBed.as" => "",
 		      "hg/makeDb/schema/joinerGraph/all.as" => "",
 		      "hg/makeDb/schema/joinerGraph/swissProt.as" => "",
 		      "hg/protein/spToDb/spDbTables.as" => "",
@@ -142,6 +148,7 @@ sub slurpAutoSql {
   open(P, "find $rootDir -name '*.as' -print |") || die "Can't open pipe";
   my %tableAS = ();
   my %objectAS = ();
+  my $gotLeftParen = 0;
   while (<P>) {
     chop;
     my $filename = $_;
@@ -154,10 +161,13 @@ sub slurpAutoSql {
     my $fields = "";
     while (<F>) {
       $as .= $_;
+      if (/^\s*\(/) {
+	$gotLeftParen = 1;
+      }
       if (/^\s*table\s+(\S+)[^\;]*$/i) {
 	$table = $1;
 	$object = "";
-      } elsif (/^\s*(object|simple)\s+(\S+)/) {
+      } elsif (/^\s*(object|simple)\s+(\S+)/ && !$gotLeftParen) {
 	$object = $2;
 	$table = "";
       } elsif (/^[^\"]+\s+(\S+)\s*;/) {
@@ -185,6 +195,7 @@ sub slurpAutoSql {
 				 filename => $filename, };
 	}
 	$as = $table = $object = $fields = "";
+	$gotLeftParen = 0;
       }
     } # each line of autoSql file
     close(F);
