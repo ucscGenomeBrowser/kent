@@ -160,6 +160,20 @@ pslSort dirs raw.psl . rawChrom
 pslReps raw.psl nearBest.psl /dev/null -nohead -minCover=0.8 -minAli=0.80 -nearTop=0.002
 
 ###########################################################################
+## Load take 4 into the database. Takes 30 seconds.
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
+hgGetAnn hg18 all_mrna - stdout | hgLoadPsl hg18 stdin -table=jkgInputMrna
+hgLoadBed hg18 jkgRefSeqBed refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed mrna/*.bed
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
+hgLoadBed hg18 jkgTxWalk txWalk/*.bed
+
+
+###########################################################################
 ## Load take 3 into the database
 ssh hgwdev
 cd /cluster/data/hg18/bed/jkg
@@ -334,50 +348,65 @@ chr22:35,251,888-35,252,258 - Longer exon, caused by being initial rather
       than middle exon in some trancripts, supported by two mRNAs and mouse
       orthology, preserved in trimmed graph.
       Take 3 - still good.
+      Take 4 - lost longer exon. No problem though, it's just 6 bases longer,
+               and take 4 snaps at 6 rather than 5 bases.
 chr13:29,797,646-29,834,682 - Not clear why last exon of CR598046 survives
       trimmiing.  Looks like this is because the single exon mRNA AK130570, 
       which does overlap the third exon, gets assigned as support for the
       first exon instead!?  Likely a fixable bug with a fairly small test
       case.
       Take 3 - looks fixed.
+      Take 4 - still good.
 chr6:132,312,312-132,312,480 - Single mRNA with a slightly shorter exon
       looks like it gets swept up in orthology with larger exon, and preserved
       even when it shouldn't be.
       Take 3 - still a problem.
+      Take 4 - still a problem.
 chr6:132,495,393-132,514,405 - Single initial exon kept from two fairly
       unrelated transcripts that share a single splice site.  Maybe this
       is ok?  Maybe want a little stronger filter here somehow....
       Note in browser at view of chr6:132,427,897-132,618,026 these
       don't look to line up as well as perhaps they should.
       Take 3 - still the same.
+      Take 4 - still the same.
 chr6:132,690,933-132,690,960 - A soft end that should be merged into
       nearby shorter hard end.  Looks like just mRNA ended barely the
       other side of the splice site, and blat didn't find the other
       exon, and instead continued...  Likely a fixable bug with a small test
       case.
       Take 3 - fixed.
+      Take 4 - still fixed.
 chr20:33,329,929-33,336,101 - The RNA BC014403 is on the wrong strand,
       and thus gets broken up at each exon because of bad splice sites.
       The txPslToBed phase should fix this instead. A fixable bug with smalll
       test case.
-      Take 3 - still busted
+      Take 3 - still busted.
+      Take 4 - fixed.
 chr20:33,336,445-33,343,866 - Good test case for exonWalk.  Two transcripts
       that share some splice sites, but vary quite a bit.  Could get
       combinatorical easily if using a niave walker.  ExonWalk does just
       generate 2 transcripts here, but I don't agree with them.
       Take 3 - still good.
+      Take 4 - still good.
 chr20:33,351,905-33,360,150 - Seems like several large unspliced mRNAs get
       merged into the final exon inappropriately.  They should be kept
       separate, merged with each other instead maybe?
       Take 3 - fixed.
+      Take 4 - still fixed.
 chr20:33,414,646-33,451,743 - Some relatively complicated alt-splicing.
       Another good test case for the walker.  Grapher seems to be doing
       the right thing.
       Take 3 - still good.
+      Take 4 - still good.
 chr22:47,213,740-47,601,299 - Another case where the wrong exon got assigned
       support for an RNA?  See txWalk of AY358847.
       Take 3 - better.  Looks like this had two bugs, and just one was fixed.
                Other bug is mRNA that needs flipping to other strand.
+      Take 4 - better still.  Still we have one stray little (45 base)
+               single base exon left.  It's a fragment of a larger transcript.
+	       Perhaps could put in a rule if there's a larger transcript
+	       that a single exon gene is part of, the single exon bit of
+	       it vanishes?
 
 ###########################################################################
 ## Other notes
@@ -426,4 +455,54 @@ alignments. I think it does a pretty good job of selecting a minimal
 number of transcripts that cover all exons.  It give explicit and
 overriding weight to RefSeq transcripts.
 
+Weird regions still:
+	chr21:39,478,728-39,497,245 - broken up RefSeq NM_033656 exon
+	    This is a case where there is a 7 base gap in the alignment
+	    of a huge exon.  It's 6366 bases on one side of the gap and
+	    820 bases on the other side.  This does get broken up by 
+	    txPslToBed, but both sides are emitted.
+	      There's two ways the txBedToGraph goes wrong here.
+	    first, the consensus really does need to favor refSeq if
+	    available. Second, double-soft-end exons need to be merged
+	    into hard-ended exons that nearly or completely cover them.
+	   Take 4 - fixed.
+	chr21:39,628,929-39,649,503 - retained intron.
+	   Take 4 - still there.  We'll want to keep this actually
+	            until we get to the ranking/filtering step.
+	chr19:147,747-153,011 - broken up and little pieces
+	        retained in spite of no other support?
+	   Take 4 - fixed.  Actually looks fixed in take 3.
+
+Important remaining issues:
+1) Deal with fixing strand at txPslToBed phase. - done
+2) Make end consensus based on median of evidence, not
+   median of ends. - done
+3) Make orthologous support more specific - if it hits an
+   exact one (both hard ends) then *only* increase weight there.
+   For inexact matches down-weight significantly.
+4) Add EST evidence to pipeline.
+
+###########################################################################
+# For take 4 here are 10 cases where txWalk doesn't overlap RefSeq
+1) chr7:115,717,168-115,717,341 - single exon fragment on wrong strand.
+2) chr11:116,446,694-116,447,535  - Single exon gene with two mRNAs supporting it.
+3) chr21:33,066,282-33,091,884 - spliced gene with 4 transcripts
+4) chr22:31,235,858-31,237,788 - two mRNA. Have 2 long exons connected by 10k
+   gap with non-intronic ends.  One exon has mouse ortholog.  Looks to me
+   like perhaps a mutation/sequencing error in the reference genome.
+5) chr2:118,488,220-118,489,717 - single exon gene with two mRNAs supporting it.
+6) chr2:234,349,109-234,353,167 - interesting case. Three RNAs support it. All
+   Three of the RNAs seem to have an exact repeat covering half of themselves
+   that isn't in genome. All three are from same project - the ENCODE project!
+7) chr13:112,742,663-112,743,328 - Single initial exon of 2-exon mRNA with
+   non-cannonical splice sites. Terminal exon has support in mouse, and appears
+   as a second "gene".  Looks like could use a step at end of txWalk that
+   merges together cases like this.
+8) chr14:98,772,931-98,773,042 - Single exon supported single mRNA and mouse.
+9) chr2:220,128,116-220,132,463 - Cool splicing. Two mRNAs. Exoniphy and mouse
+   support.
+10) chr20:33,609,922-33,651,008 - Cool splicing. 6 mRNAs, Exoniphy and mouse
+    support for many.
+9)
+10)
 
