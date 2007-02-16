@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1206 2007/02/16 00:03:51 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1207 2007/02/16 00:33:29 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16088,6 +16088,22 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void showHapmapMonomorphic(struct hapmapAllelesCombined *hmac)
+{
+printf("<TR>");
+printf("<TD>%s</TD>", "CEU");
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountCEU * 2);
+printf("</TR>\n");
+printf("<TD>%s</TD>", "CHB");
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountCHB * 2);
+printf("</TR>\n");
+printf("<TD>%s</TD>", "JPT");
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountJPT * 2);
+printf("</TR>\n");
+printf("<TD>%s</TD>", "YRI");
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountYRI * 2);
+printf("</TR>\n");
+}
 
 void showOneHapmapRow(char *pop, int count1, int count2, int heteroCount)
 {
@@ -16149,18 +16165,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", hmac->strand);
 
     printf("<B>Allele1:</B> %s<BR>\n", hmac->allele1);
-    printf("<B>Allele2:</B> %s<BR>\n", hmac->allele2);
+    if (differentString(hmac->allele2, "?"))
+        printf("<B>Allele2:</B> %s<BR>\n", hmac->allele2);
+    else
+       printf("<B>Allele2:</B> not available (monomorphic) <BR>\n");
     avHet = hmac->score / 1000.0;
     printf("<B>Average heterozygosity:</B> %3.2f%%<BR>\n", avHet);
 
     htmlHorizontalLine();
     printf("<B>Allele frequencies:</B><BR>\n");
     printf("<TABLE BORDER=1>\n");
-    printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", hmac->allele1, hmac->allele2);
-    showOneHapmapRow("CEU", hmac->allele1CountCEU, hmac->allele2CountCEU, hmac->heteroCountCEU);
-    showOneHapmapRow("CHB", hmac->allele1CountCHB, hmac->allele2CountCHB, hmac->heteroCountCHB);
-    showOneHapmapRow("JPT", hmac->allele1CountJPT, hmac->allele2CountJPT, hmac->heteroCountJPT);
-    showOneHapmapRow("YRI", hmac->allele1CountYRI, hmac->allele2CountYRI, hmac->heteroCountYRI);
+    if (differentString(hmac->allele2, "?"))
+        {
+        printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", hmac->allele1, hmac->allele2);
+        showOneHapmapRow("CEU", hmac->allele1CountCEU, hmac->allele2CountCEU, hmac->heteroCountCEU);
+        showOneHapmapRow("CHB", hmac->allele1CountCHB, hmac->allele2CountCHB, hmac->heteroCountCHB);
+        showOneHapmapRow("JPT", hmac->allele1CountJPT, hmac->allele2CountJPT, hmac->heteroCountJPT);
+        showOneHapmapRow("YRI", hmac->allele1CountYRI, hmac->allele2CountYRI, hmac->heteroCountYRI);
+        }
+    else 
+        {
+        printf("<TR><TH>Population</TH> <TH>%s</TH></TR>\n", hmac->allele1);
+        showHapmapMonomorphic(hmac);
+	}
     printf("</TABLE>\n");
     htmlHorizontalLine();
 
