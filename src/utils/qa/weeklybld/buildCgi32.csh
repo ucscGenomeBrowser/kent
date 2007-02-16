@@ -56,6 +56,7 @@ rm -fr hgGeneData
 rm -fr visiGeneData
 rm -fr hgcData
 rm -fr hgCgiData
+rm -fr hgSubjData
 
 echo "the customTrack loader is to be released soon, then remove the next line:"
 rm -fr loader
