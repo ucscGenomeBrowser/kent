@@ -79,7 +79,7 @@ for (startBed = bedList; startBed != NULL; startBed = endBed)
     struct bed *lastBed = startBed;
     for (bed = startBed->next; bed != NULL; bed = bed->next)
         {
-	if ( lastBed->chromEnd >= bed->chromStart || !sameString(lastBed->name, bed->name) 
+	if ( lastBed->chromEnd > bed->chromStart || !sameString(lastBed->name, bed->name) 
 		|| bed->strand[0] != lastBed->strand[0] 
 		|| !sameString(bed->chrom, lastBed->chrom) )
 	    break;
