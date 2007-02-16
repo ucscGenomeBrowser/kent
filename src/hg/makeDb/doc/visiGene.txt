@@ -1122,3 +1122,112 @@ make alpha
 #ixIxx visiGene.text visiGene.ix visiGene.ixx
 
 ############################
+
+# REBUILD PROBETRACK   (DONE galt 2007-02-15)
+#    WITH vgProbeTrack PROGRAM - AFTER DOING Allen Brain Atlas update 2007-02-08
+
+# (make a backup of visiGene db and these tables: {mm6,mm7,...}.vgProbes and {hg17,hg18,...}.vgAllProbes
+cd /san/sanvol1/visiGene/dump
+# (this backup shown is really an example template for the next person who needs to do this)
+mkdir visiGene.20070215
+cd visiGene.20070215
+hgsqldump visiGene -T .
+mkdir mm6; hgsqldump mm6 vgProbes -T mm6
+mkdir mm7; hgsqldump mm7 vgProbes -T mm7
+mkdir mm8; hgsqldump mm8 vgProbes -T mm8
+mkdir hg17; hgsqldump hg17 vgAllProbes -T hg17
+mkdir hg18; hgsqldump hg18 vgAllProbes -T hg18
+#(do any others needed that might not be listed here)
+#(document the reason for making the backup)
+echo 'vgLoadAllen has been run on ABA update 2007-02-08, so making backup of visiGene db and probe tracks before updating probeTracks, ' > README
+
+# OK, NOW USE vgProbeTrack TO UPDATE
+
+cd ~/kent/src/hg/visiGene/vgProbeTrack
+
+# Make sure vgProbeTrack program is up to date
+make
+
+# -sqlPath must be included whenever the vgProbes or vgAllProbes track tables do not yet exist for the db
+# so it can find the .sql script to create vgProbes or vgAllProbes tables as needed.
+# I happen to know that only JAX was updated since last time, and that is mouse only
+
+# populate vgPrb with any new stuff in visiGene.probe (works for all taxons at once).
+vgProbeTrack POP
+# new probe records found = 7335, # new vgPrb records added = 7314
+#   most of these are old, but we updated ABA by dropping completely and re-adding
+#   so these probes find their way back via sequence identity of probes in vgPrb.sequence
+
+# find sequence using various methods - given probe seq, primers, bacs, refseq, etc.
+#  must specify a specific assembly to use, so mm8 is ready to use now
+#  this finds any stuff for the mouse taxon
+vgProbeTrack SEQ working mm8
+
+rc = 17 = count of primers for genome search for taxon 10090
+rc = 141 = count of primers for mrna search for taxon 10090
+bac list read done.
+found seq for 0 bacEndPairs
+rc = 93 = count of refSeq mrna for mm8
+rc = 1 = count of genRef mrna for mm8
+rc = 4 = count of genbank mrna for mm8
+rc = 19 = count of flatRef mrna for mm8
+rc = 0 = count of flatAll mrna for mm8
+rc = 0 = count of linkRef mrna for mm8
+rc = 0 = count of linkAll mrna for mm8
+rc = 1 = count of kgAlRef mrna for mm8
+rc = 4 = count of kgAlAll mrna for mm8
+
+# create alignments using either refSeqAli or all_mrna or bacEnds or blat.  Took 1.5 hours.  
+# alignments are individually tracked per assembly here
+# alignment successes go in $db.vgProbes psl track, and whether succeeded or failed,
+# it only looks for things that have not already attempted alignment
+# the status goes into visiGene.vgPrbAli with .db="mm8"
+vgProbeTrack ALI working mm8
+
+# this finds any seq required for mm8.vgProbes track not already in mm8.seq 
+# adds the new .fa file in /cluster/data/mm8/bed/visiGene/
+# adds a symlink to it in /gbdb/mm8/visiGene/
+# and runs hgLoadSeq mm6 /gbdb/mm8/visiGene/vgPrbExt_??????.fa to add it to mm8.seq
+vgProbeTrack EXT working mm8
+
+# mm6.vgProbes was already complete from previous probe track creation, 
+#  it just needed to catch the new Allen Brain probes and align them.  About 1.5 hours.
+vgProbeTrack ALI working mm7
+vgProbeTrack EXT working mm7
+
+# mm6.vgProbes was already complete from previous probe track creation, 
+#  it just needed to catch the new Allen Brain probes and align them.  About 1.5 hours.
+vgProbeTrack ALI working mm6
+vgProbeTrack EXT working mm6
+
+# hg18.vgAllProbes was pre-existing with all probes, just need to add new allenBrain mouse
+# this internally uses pslMap against the mm8 to hg18 liftover chain.gz
+# Because it is "Xeno" (from mouse to human), it creates track vgAllProbes,
+# and maintains the list of processed alignments in visiGene.vgPrbAliAll.
+vgProbeTrack PSLMAP working hg18 mm8  
+# updates hg18.seq/extFile similarly to the EXT command, but for All probes.
+# just like with EXT, EXTALL puts .fa in /cluster/data/hg18/visiGene
+# and symlink in /gbdb/hg18/visiGene and updates using hgLoadSeq.
+# if a sequence has already been loaded it will not be loaded again.
+vgProbeTrack EXTALL working hg18
+
+# hg17.vgAllProbes existed before
+vgProbeTrack PSLMAP working hg17 mm7 
+vgProbeTrack EXTALL working hg17
+
+
+# RE-MAKE knownToVisiGene tables (see respective makedocs for these)
+knownToVisiGene mm6
+knownToVisiGene mm7
+knownToVisiGene mm8
+knownToVisiGene hg17 -fromProbePsl=vgAllProbes
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+
+# update text/index for visiGene
+cd hg/visiGene/vgGetText
+make alpha
+#vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text mm7 mm8 hg17 hg18
+#probe has 26611 rows
+#gene has 20413 rows
+#imageProbe has 125765 rows
+
