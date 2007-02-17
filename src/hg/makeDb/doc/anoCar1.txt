@@ -92,7 +92,7 @@ dbDbSpeciesDir lizard
     cd /cluster/data/anoCar1/bed/
     time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl anoCar1 \
       -workhorse=kolossus > wmRun.log 2>&1 &
-XXX - working 14:07
+    #	real    172m58.813s
 
     # Save the log
     mv wmRun.log WindowMasker.2007-02-16
@@ -100,9 +100,49 @@ XXX - working 14:07
     # Masking statistics
     cd WindowMasker.2007-02-18
     twoBitToFa anoCar1.wmsk.2bit stdout | faSize stdin
+    #	1781602899 bases (40123970 N's 1741478929 real
+    #	1009685313 upper 731793616 lower) in 7233 sequences in 1 files
+    twoBitToFa anoCar1.wmsk.sdust.2bit stdout | faSize stdin
+    #	1781602899 bases (40123970 N's 1741478929 real
+    #	1000477327 upper 741001602 lower) in 7233 sequences in 1 files
 
-    # 400525790 bases (49313545 N's 351212245 real 284686886 upper
-    # 66525359 lower)
-
+    ssh hgwdev
     hgLoadBed -strict anoCar1 windowmaskerSdust windowmasker.sdust.bed.gz
-    # Loaded 1747418 elements of size 3
+    #	Loaded 8354004 elements of size 3
+
+    #	why does featureBits show more bases masked than what faSize
+    #	measured as lower case ?  Because this counts the masked sequence
+    #	in the gaps, and the faSize doesn't have the gaps.
+    time nice -n +19 featureBits anoCar1 windowmaskerSdust
+    #	781125572 bases of 1741478929 (44.854%) in intersection
+
+    time nice -n +19 featureBits -countGaps anoCar1 windowmaskerSdust
+    #	781125572 bases of 1781602899 (43.844%) in intersection
+
+    #	Curiously, WM overlaps gaps ?
+    time nice -n +19 featureBits -countGaps anoCar1 windowmaskerSdust gap
+    #	40123970 bases of 1781602899 (2.252%) in intersection
+    #	741001602 + 40123970 == 781125572 
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 2007-02-16 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/anoCar1/bed/simpleRepeat
+    cd /cluster/data/anoCar1/bed/simpleRepeat
+    time nice -n 19 twoBitToFa ../../anoCar1.unmasked.2bit stdout \
+	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+	    -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
+XXX - running 23:10
+    # ~1h 20m
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed anoCar1 simpleRepeat \
+      /cluster/data/anoCar1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    featureBits anoCar1 simpleRepeat
+    #	11740975 bases of 700386597 (1.676%) in intersection
+
