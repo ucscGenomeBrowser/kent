@@ -11,6 +11,7 @@
 #include "bed.h"
 #include "genbank.h"
 #include "genePred.h"
+#include "gbRnaMapInfo.h"
 #include "rangeTree.h"
 
 /* Variables set from command line. */
@@ -20,6 +21,7 @@ int minSize = 18;
 int minIntronSize=16;
 FILE *unusualFile = NULL;
 struct hash *cdsHash = NULL;
+FILE *mapInfo = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +36,7 @@ errAbort(
   "options:\n"
   "   -cds=fileName - A three column file: qName,cdsStart,cdsEnd that describes\n"
   "                   The coding region. Will be used to set thickStart/thickEnd.\n"
+  "   -mapInfo=fileName - Output info on how mapping went here\n"
   "   -mergeMax=N - merge small blocks separated by no more than N on either\n"
   "                 target or query. Default value is %d.\n"
   "   -minSize=N - suppress output of beds of less than this size (in exons)\n"
@@ -47,6 +50,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"cds", OPTION_STRING},
+   {"mapInfo", OPTION_STRING},
    {"mergeMax", OPTION_INT},
    {"minSize", OPTION_INT},
    {"noFixIntrons", OPTION_BOOLEAN},
@@ -69,6 +73,8 @@ if (unusualFile != NULL)
 
 int totalIntronLooking = 0;
 int totalFunny = 0;
+struct gbRnaMapInfo info;
+
 
 
 struct hash *hashCdsFile(char *fileName)
@@ -86,8 +92,7 @@ while (lineFileRow(lf, row))
 	lmAllocVar(hash->lm, cds);
 	if (genbankCdsParse(cdsString, cds))
 	    {
-	    if (cds->startComplete && cds->endComplete && !cds->complement)
-		hashAdd(hash, row[0], cds);
+	    hashAdd(hash, row[0], cds);
 	    }
 	else
 	    verbose(2, "Couldn't parse cds string %s\n", cdsString);
@@ -322,7 +327,16 @@ if (cds != NULL)
 	    {
 	    bed->thickStart = gp.cdsStart;
 	    bed->thickEnd = gp.cdsEnd;
+	    info.outputCds = "CDS";
 	    }
+	else
+	    {
+	    info.cdsOutside="OUT";
+	    }
+	}
+    else
+        {
+	info.cdsOutside="OUT2";
 	}
     }
 return bed;
@@ -339,9 +353,17 @@ char strand = psl->strand[0];
 
 /* Try and find genbank cds (unless we already had to flipped sequence, in which
  * case the CDS is pretty suspect!) */
-struct genbankCds *cds = NULL;
-if (!fixedOrientation) 
-	cds = getCds(psl->qName);
+struct genbankCds *cds = getCds(psl->qName);
+if (cds != NULL)
+    {
+    info.genbankCds = "CDS";
+    if (cds->startComplete && cds->endComplete && !cds->complement)
+	info.genbankFullCds = "FULL";
+    }
+
+if (fixedOrientation) 
+    cds = NULL;
+
 
 /* Create first range from first block, and put it on list. */
 int tStart = psl->tStarts[0];
@@ -370,21 +392,25 @@ for (i=1; i<psl->blockCount; ++i)
     char *iStart = chrom->dna + tEnd;
     char *iEnd = chrom->dna + tStart - 2;
     blockSize = psl->blockSizes[i];
+    if (psl->strand[0] == '-')
+        {
+	reverseIntRange(&qGapStart, &qGapEnd, psl->qSize);
+	}
     if (tGapSize <= mergeMax && qGapSize <= mergeMax)	
 	{
 	/* merge case - just extend previous block. */
 	list->end = tStart + blockSize;
+	info.mergedSmallGap = "GAP<7";
 
 	/* If we're in the CDS region we might need to invalidate CDS. */
-	if (cds != NULL && rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd))
+	if (cds != NULL && rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd)>0)
 	    {
-	    /* Get start/ends of gap as opposed to exon to help me not get confused. */
-
 	    /* If the actual CDS start/end is in a gap, then invalidate CDS. */
 	    if ((qGapStart <= cds->start && cds->start < qGapEnd)
 		|| (qGapStart <= cds->end && cds->end < qGapEnd))
 		{
 		cds = NULL;
+		info.smallGapBustsFrame = "BUST<7a";
 		verbose(3, "cds start/end in short gap for %s\n", psl->qName);
 		}
 	    else
@@ -396,8 +422,9 @@ for (i=1; i<psl->blockCount; ++i)
 			sizeDiff = -sizeDiff;
 		if (sizeDiff % 3 != 0)
 		    {
-		    cds = NULL;
+		    info.smallGapBustsFrame = "BUST<7b";
 		    verbose(3, "small gap in %s introduces frame shift\n", psl->qName);
+		    cds = NULL;
 		    }
 		}
 	    }
@@ -408,11 +435,12 @@ for (i=1; i<psl->blockCount; ++i)
         (strand == '-' && (iStart[0] != 'c' || iStart[1] != 't' 
 		|| (iEnd[0] != 'a' && iEnd[0] != 'g') || iEnd[1] != 'c' )))
 	 {
+	 info.splitLargeGap = "SPLIT";
 	 /* Break case. Not a short break or a gt/ag or gc/ag intron on either strand */
 	 /* We might need to invalidate CDS. */
 	 if (cds != NULL)
 	    {
-	    if (rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd))
+	    if (rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd)>0)
 		{
 		/* Invalidate CDS if that's where break occurs and query gap not a multiple of 3. */
 		if ((qGapStart <= cds->start && cds->start < qGapEnd)
@@ -420,11 +448,13 @@ for (i=1; i<psl->blockCount; ++i)
 		    {
 		    cds = NULL;
 		    verbose(3, "cds start/end in long gap for %s\n", psl->qName);
+		    info.largeGapBustsFrame = "BUST>7a";
 		    }
 		else if (qGapSize%3 != 0)
 		    {
 		    cds = NULL;
 		    verbose(3, "large gap in %s introduces frame shift\n", psl->qName);
+		    info.largeGapBustsFrame = "BUST>7b";
 		    }
 		}
 	    }
@@ -442,9 +472,10 @@ for (i=1; i<psl->blockCount; ++i)
 	 if (cds != NULL && qGapSize != 0)
 	    {
 	    /* Here we probably "fixed" an intron at expense of CDS. */
-	    if (rangeIntersection(cds->start, cds->end, qGapStart-1, qGapStart+1))
+	    if (rangeIntersection(cds->start, cds->end, qGapStart-1, qGapStart+1)>0)
 		{
 		cds = NULL;
+		info.intronNudgeBustsFrame = "BUST<2";
 		verbose(3, "fixed intron but broke CDS in %s\n", psl->qName);
 		}
 	    }
@@ -456,7 +487,7 @@ for (i=1; i<psl->blockCount; ++i)
 	 }
     }
 slReverse(&list);
- bed = rangeListToBed(list, psl, cds, 0);
+bed = rangeListToBed(list, psl, cds, 0);
 if (bed)
     slAddHead(&bedList, bed);
 
@@ -464,8 +495,6 @@ lmCleanup(&lm);
 slReverse(&bedList);
 return bedList;
 }
-
-
 
 void txPsltoBed(char *inPsl, char *dnaPath, char *outBed)
 /* txPsltoBed - Convert a psl to a bed file by projecting it onto it's target 
@@ -484,6 +513,27 @@ slSort(&pslList, pslCmpTarget);
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     verbose(3, "Processing %s\n", psl->qName);
+
+    /* Start recording our decision making here. */
+    ZeroVar(&info);
+
+    info.chrom = psl->tName;
+    info.chromStart = psl->tStart;
+    info.chromEnd = psl->tEnd;
+    info.accession = psl->qName;
+    info.genbankCds = ".";
+    info.genbankFullCds = ".";
+    info.intronNudged = ".";
+    info.directionFlipped = ".";
+    info.mergedSmallGap = ".";
+    info.splitLargeGap = ".";
+    info.splitLargGapInCds = ".";
+    info.smallGapBustsFrame = ".";
+    info.largeGapBustsFrame = ".";
+    info.intronNudgeBustsFrame = ".";
+    info.cdsOutside=".";
+    info.outputCds = ".";
+
     if (!sameString(chromName, psl->tName))
 	{
 	dnaSeqFree(&chrom);
@@ -496,8 +546,13 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	errAbort("DNA and PSL out of sync. %s thinks %s is %d bases, but %s thinks it's %d.",
 		 inPsl, chromName, psl->tSize, dnaPath, chrom->size);
     boolean fixedOrientation = fixOrientation(psl, chrom);
+    if (fixedOrientation)
+	info.directionFlipped = "FLIP";
     if (fixIntrons)
-	fixPslIntrons(psl, chrom);
+	{
+	if (fixPslIntrons(psl, chrom))
+	    info.intronNudged = "NUDGE";
+	}
     struct bed *bedList = pslToBedList(psl, chrom, mergeMax, fixedOrientation);
     struct bed *bed;
     for (bed = bedList; bed != NULL; bed = bed->next)
@@ -505,6 +560,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	bedTabOutN(bed, 12, f);
 	}
     bedFreeList(&bedList);
+    if (mapInfo != NULL)
+        gbRnaMapInfoTabOut(&info, mapInfo);
     }
 unusualPrint("total intron-looking %d, total funny-looking %d\n", 
 	totalIntronLooking, totalFunny);
@@ -528,7 +585,11 @@ if (argc != 4)
 char *cdsFile = optionVal("cds", NULL);
 if (cdsFile != NULL)
     cdsHash = hashCdsFile(cdsFile);
+char *mapInfoFile = optionVal("mapInfo", NULL);
+if (mapInfoFile != NULL)
+    mapInfo = mustOpen(mapInfoFile, "w");
 txPsltoBed(argv[1], argv[2], argv[3]);
 carefulClose(&unusualFile);
+carefulClose(&mapInfo);
 return 0;
 }
