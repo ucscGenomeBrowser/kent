@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.17 2007/02/17 02:53:24 kate Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.18 2007/02/17 02:54:00 kate Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -174,7 +174,7 @@ if (searchString != NULL )
 	{
 	next = gp->next;
         char *proteinAcc = spFindAcc(spConn, gp->protein);
-        if (hashLookup(proteinHash, proteinAcc))
+        if (proteinAcc && hashLookup(proteinHash, proteinAcc))
              {
              slAddHead(&newList, gp);
              }
