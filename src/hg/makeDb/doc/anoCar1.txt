@@ -132,17 +132,50 @@ dbDbSpeciesDir lizard
     time nice -n 19 twoBitToFa ../../anoCar1.unmasked.2bit stdout \
 	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
 	    -bedAt=simpleRepeat.bed -tempDir=/tmp > trf.log 2>&1 &
-XXX - running 23:10
-    # ~1h 20m
+    #	real    164m34.988s
+    #	user    159m32.859s
+    #	sys     4m31.649s
+
+    ssh kkstore05
+    cd /cluster/data/anoCar1/bed/simpleRepeat
     # Make a filtered version for sequence masking:
     awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
     splitFileByColumn trfMask.bed trfMaskChrom
 
     # Load unfiltered repeats into the database:
     ssh hgwdev
-    hgLoadBed anoCar1 simpleRepeat \
+    nice -n +19 hgLoadBed anoCar1 simpleRepeat \
       /cluster/data/anoCar1/bed/simpleRepeat/simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-    featureBits anoCar1 simpleRepeat
-    #	11740975 bases of 700386597 (1.676%) in intersection
+    #	Loaded 569322 elements of size 16
+    nice -n +19 featureBits anoCar1 simpleRepeat
+    #	50290171 bases of 1741478929 (2.888%) in intersection
+
+#########################################################################
+## Add TRF mask to WindowMasker masked sequence, and fixup the bogus
+##	window masked N's  (DONE - 2007-02-17 - Hiram)
+    ssh kkstore05
+    cd /cluster/data/anoCar1/bed/WindowMasker.2007-02-16
+    ##	Curious, twoBitMask would not accept stdout for its output 2bit
+    twoBitMask anoCar1.wmsk.sdust.2bit \
+      -add ../simpleRepeat/trfMask.bed tmp.2bit
+    twoBitToFa tmp.2bit stdout \
+	| sed -e "s/n/N/g" | faToTwoBit stdin anoCar1.2bit
+    ## check it:
+    twoBitToFa anoCar1.2bit stdout | faSize stdin
+    #	1781602899 bases (40123970 N's 1741478929 real
+    #	1000242640 upper 741236289 lower) in 7233 sequences in 1 files
+    ## trfMask contributes:
+    awk '{sum+=$3-$2} END{print sum}' ../simpleRepeat/trfMask.bed
+    #	16534332
+    ## and we measured wmsk.sdust before: 741001602
+    16534332 + 741001602
+
+#########################################################################
+## BLASTZ Hg18
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/hg18Fr2 > do.log 2>&1 &
+    #	real    414m47.505s
 

@@ -13160,4 +13160,42 @@ chainOne $(path1)
 
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
 
-#############################################################################
+#########################################################################
+## BLASTZ ANOCAR1 - Lizard - (WORKING - 2007-02-17 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
+    cd /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
+
+    cat << '_EOF_' > DEF
+# human vs lizard
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.sdTrf.2bit
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Lizard AnoCar1 - largest chunk big enough for largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/anoCar1/anoCar1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/anoCar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/hg18AnoCar1 > do.log 2>&1 &
+XXX - running - 2007-02-18 00:24
