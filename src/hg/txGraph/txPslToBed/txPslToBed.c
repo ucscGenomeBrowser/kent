@@ -11,17 +11,16 @@
 #include "bed.h"
 #include "genbank.h"
 #include "genePred.h"
-#include "gbRnaMapInfo.h"
 #include "rangeTree.h"
 
 /* Variables set from command line. */
 int mergeMax = 5;	
 boolean fixIntrons = TRUE;
+boolean fixStrand = TRUE;
 int minSize = 18;
 int minIntronSize=16;
 FILE *unusualFile = NULL;
 struct hash *cdsHash = NULL;
-FILE *mapInfo = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -36,12 +35,12 @@ errAbort(
   "options:\n"
   "   -cds=fileName - A three column file: qName,cdsStart,cdsEnd that describes\n"
   "                   The coding region. Will be used to set thickStart/thickEnd.\n"
-  "   -mapInfo=fileName - Output info on how mapping went here\n"
   "   -mergeMax=N - merge small blocks separated by no more than N on either\n"
   "                 target or query. Default value is %d.\n"
   "   -minSize=N - suppress output of beds of less than this size (in exons)\n"
   "                Default value is %d.\n"
-  "   -noFixIntrons - slide large gaps in target to seek for splice sites.\n"
+  "   -noFixIntrons - don't slide large gaps 1 base to seek for splice sites.\n"
+  "   -noFixStrand - don't flip to opposite strand for better splice sites.\n"
   "   -minIntronSize - minimum size of an intron, default %d.\n"
   "   -unusual=fileName - put info about unusual splice sites etc. here\n"
   , mergeMax, minSize, minIntronSize
@@ -50,31 +49,33 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"cds", OPTION_STRING},
-   {"mapInfo", OPTION_STRING},
    {"mergeMax", OPTION_INT},
    {"minSize", OPTION_INT},
    {"noFixIntrons", OPTION_BOOLEAN},
+   {"noFixStrand", OPTION_BOOLEAN},
    {"minIntronSize", OPTION_INT},
    {"unusual", OPTION_STRING},
    {NULL, 0},
 };
 
-void unusualPrint(char *format, ...)
+struct psl *curPsl;	/* Currently processed PSL */
+boolean anyUnusual;	/* Set if have any unusual things for this one. */
+
+void unusualPrint(char *type, int start, int end, char *format, ...)
 /* Print out info to unusual file if it exists. */
 {
 if (unusualFile != NULL)
     {
     va_list args;
     va_start(args, format);
+    fprintf(unusualFile, "%s\t%d\t%d\t%s/%s\t%s\t%s\t", 
+	curPsl->tName, start, end, curPsl->qName, type, type, curPsl->qName);
     vfprintf(unusualFile, format, args);
+    fprintf(unusualFile, "\n");
     va_end(args);
     }
+anyUnusual = TRUE;
 }
-
-int totalIntronLooking = 0;
-int totalFunny = 0;
-struct gbRnaMapInfo info;
-
 
 
 struct hash *hashCdsFile(char *fileName)
@@ -128,18 +129,10 @@ for (i=0; i<lastBlock; ++i)
     int qEnd = psl->qStarts[i+1];
     if (qStart == qEnd && tEnd-tStart >= minIntronSize)
         {
-	++totalIntronLooking;
 	char *intronStart = chrom->dna + tStart;
 	char *intronEnd = chrom->dna + tEnd;
 	int orientation = intronOrientationMinSize(intronStart, intronEnd, minIntronSize);
 	totalOrientation += orientation;
-	if (orientation == 0)
-	    {
-	    totalFunny += 1;
-	    unusualPrint("site %c%c/%c%c %s %s %d %s:%d-%d\n", intronStart[0], intronStart[1],
-	    	intronEnd[-2], intronEnd[-1], psl->strand, psl->qName,
-		i+1, psl->tName, psl->tStart+1, psl->tEnd); 
-	    }
 	}
     }
 if (totalOrientation > 0)
@@ -150,8 +143,8 @@ else
     outputOrientation = inputOrientation;
 if (outputOrientation != inputOrientation)
     {
-    unusualPrint("flip %s %d %d %d %s:%d-%d\n", psl->qName, inputOrientation,
-    	outputOrientation, totalOrientation, psl->tName, psl->tStart+1, psl->tEnd);
+    unusualPrint("flip", psl->tStart, psl->tEnd, "flip based on %d splice sites", 
+    	totalOrientation);
     if (psl->strand[0] == '+')
         psl->strand[0] = '-';
     else
@@ -168,7 +161,7 @@ boolean fixPslIntrons(struct psl *psl, struct dnaSeq *chrom)
  * a base could turn them into intron ends.  Return TRUE if
  * it did a fix. */
 {
-boolean didFix = FALSE;
+boolean anyFix = FALSE;
 int start = psl->tStarts[0];
 int size = psl->blockSizes[0];
 int i;
@@ -181,6 +174,7 @@ for (i=1; i<psl->blockCount; ++i)
     start = psl->tStarts[i];
     char *intronStart = dna+end;
     char *intronEnd = dna+start;
+    boolean didFix = FALSE;
     if (intronOrientationMinSize(intronStart, intronEnd, minIntronSize) != orientation)
         {
 	if (orientation > 0)
@@ -191,11 +185,15 @@ for (i=1; i<psl->blockCount; ++i)
 		    {
 		    psl->blockSizes[i-1] -= 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge-gt", end, start, 
+		    	"nudge + strand intron start back one to get gt");
 		    }
 		else if (memcmp(intronStart+1, "gt", 2) == 0)
 		    {
 		    psl->blockSizes[i-1] += 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge+gt", end, start, 
+		    	"nudge + strand intron start forward one to get gt");
 		    }
 		}
 	    if (memcmp(intronEnd-2, "ag", 2) != 0)
@@ -206,6 +204,8 @@ for (i=1; i<psl->blockCount; ++i)
 		    psl->tStarts[i] -= 1;
 		    psl->qStarts[i] -= 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge-ag", end, start, 
+		    	"nudge + strand intron end back one to get ag");
 		    }
 		else if (memcmp(intronEnd-2+1, "ag", 2) == 0)
 		    {
@@ -213,6 +213,8 @@ for (i=1; i<psl->blockCount; ++i)
 		    psl->tStarts[i] += 1;
 		    psl->qStarts[i] += 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge+ag", end, start, 
+		    	"nudge + strand intron end forward one to get ag");
 		    }
 		}
 	    }
@@ -224,11 +226,15 @@ for (i=1; i<psl->blockCount; ++i)
 		    {
 		    psl->blockSizes[i-1] -= 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge-ct", end, start, 
+		    	"nudge - strand intron end back one to get ct (ag)");
 		    }
 		else if (memcmp(intronStart+1, "ct", 2) == 0)
 		    {
 		    psl->blockSizes[i-1] += 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge+ct", end, start, 
+		    	"nudge - strand intron end forward one to get ct (ag)");
 		    }
 		}
 	    if (memcmp(intronEnd-2, "ac", 2) != 0)
@@ -239,6 +245,8 @@ for (i=1; i<psl->blockCount; ++i)
 		    psl->tStarts[i] -= 1;
 		    psl->qStarts[i] -= 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge-ac", end, start, 
+		    	"nudge - strand intron start back one to get ac (gt)");
 		    }
 		else if (memcmp(intronEnd-2+1, "ac", 2) == 0)
 		    {
@@ -246,14 +254,17 @@ for (i=1; i<psl->blockCount; ++i)
 		    psl->tStarts[i] += 1;
 		    psl->qStarts[i] += 1;
 		    didFix = TRUE;
+		    unusualPrint("nudge+ac", end, start, 
+		    	"nudge - strand intron start forward one to get ac (gt)");
 		    }
 		}
 	    }
 	}
+    anyFix |= didFix;
     }
-if (didFix)
+if (anyFix)
     verbose(3, "Did little intron fix on %s\n", psl->qName);
-return didFix;
+return anyFix;
 }
 
 struct bed *rangeListToBed(struct range *rangeList, struct psl *psl, 
@@ -327,16 +338,16 @@ if (cds != NULL)
 	    {
 	    bed->thickStart = gp.cdsStart;
 	    bed->thickEnd = gp.cdsEnd;
-	    info.outputCds = "CDS";
 	    }
 	else
 	    {
-	    info.cdsOutside="OUT";
+	    if (rangeIntersection(bed->chromStart, bed->chromEnd, gp.cdsStart, gp.cdsEnd) > 0)
+		unusualPrint("splitCds", bed->chromStart, bed->chromEnd, "fragment of CDS output");
 	    }
 	}
     else
         {
-	info.cdsOutside="OUT2";
+	unusualPrint("shortAli", psl->tStart, psl->tEnd, "alignment doesn't cover entire CDS.");
 	}
     }
 return bed;
@@ -356,9 +367,15 @@ char strand = psl->strand[0];
 struct genbankCds *cds = getCds(psl->qName);
 if (cds != NULL)
     {
-    info.genbankCds = "CDS";
-    if (cds->startComplete && cds->endComplete && !cds->complement)
-	info.genbankFullCds = "FULL";
+    if (!(cds->startComplete && cds->endComplete && !cds->complement))
+	{
+	unusualPrint("incCdsIn", psl->tStart, psl->tEnd, "incomplete CDS in input");
+	cds = NULL;
+	}
+    }
+else
+    {
+    unusualPrint("noCdsIn", psl->tStart, psl->tEnd, "missing CDS from input");
     }
 
 if (fixedOrientation) 
@@ -400,7 +417,8 @@ for (i=1; i<psl->blockCount; ++i)
 	{
 	/* merge case - just extend previous block. */
 	list->end = tStart + blockSize;
-	info.mergedSmallGap = "GAP<7";
+	unusualPrint("gapMerge", tGapStart, tGapEnd, "merging small gap t=%d q=%d",
+		tGapSize, qGapSize);
 
 	/* If we're in the CDS region we might need to invalidate CDS. */
 	if (cds != NULL && rangeIntersection(cds->start, cds->end, qGapStart, qGapEnd)>0)
@@ -410,7 +428,7 @@ for (i=1; i<psl->blockCount; ++i)
 		|| (qGapStart <= cds->end && cds->end < qGapEnd))
 		{
 		cds = NULL;
-		info.smallGapBustsFrame = "BUST<7a";
+		unusualPrint("scbIndel", tGapStart,tGapEnd, "small CDS boundary indel.");
 		verbose(3, "cds start/end in short gap for %s\n", psl->qName);
 		}
 	    else
@@ -422,7 +440,9 @@ for (i=1; i<psl->blockCount; ++i)
 			sizeDiff = -sizeDiff;
 		if (sizeDiff % 3 != 0)
 		    {
-		    info.smallGapBustsFrame = "BUST<7b";
+		    unusualPrint("cdsIndel", tGapStart,tGapEnd, 
+		    	"small indel breaks reading frame. qSize %d, tSize %d",
+			qGapSize, tGapSize);
 		    verbose(3, "small gap in %s introduces frame shift\n", psl->qName);
 		    cds = NULL;
 		    }
@@ -435,7 +455,10 @@ for (i=1; i<psl->blockCount; ++i)
         (strand == '-' && (iStart[0] != 'c' || iStart[1] != 't' 
 		|| (iEnd[0] != 'a' && iEnd[0] != 'g') || iEnd[1] != 'c' )))
 	 {
-	 info.splitLargeGap = "SPLIT";
+	 unusualPrint("notIntron", tGapStart, tGapEnd, 
+	    "split at noncannonical intron. strand %c. ends %c%c/%c%c. qGap %d, tGap %d",
+	    strand, iStart[0], iStart[1], iEnd[0], iEnd[1], qGapSize, tGapSize);
+
 	 /* Break case. Not a short break or a gt/ag or gc/ag intron on either strand */
 	 /* We might need to invalidate CDS. */
 	 if (cds != NULL)
@@ -448,13 +471,14 @@ for (i=1; i<psl->blockCount; ++i)
 		    {
 		    cds = NULL;
 		    verbose(3, "cds start/end in long gap for %s\n", psl->qName);
-		    info.largeGapBustsFrame = "BUST>7a";
+		    unusualPrint("lcbIndel", tGapStart, tGapEnd, "boundary of CDS falls through non-intron");
 		    }
 		else if (qGapSize%3 != 0)
 		    {
 		    cds = NULL;
 		    verbose(3, "large gap in %s introduces frame shift\n", psl->qName);
-		    info.largeGapBustsFrame = "BUST>7b";
+		    unusualPrint("bigIndel", tGapStart, tGapEnd, 
+		    	"large gap introduces frame shift. qGap %d", qGapSize);
 		    }
 		}
 	    }
@@ -475,7 +499,7 @@ for (i=1; i<psl->blockCount; ++i)
 	    if (rangeIntersection(cds->start, cds->end, qGapStart-1, qGapStart+1)>0)
 		{
 		cds = NULL;
-		info.intronNudgeBustsFrame = "BUST<2";
+		unusualPrint("cdsNudge", tGapStart, tGapEnd, "nudged intron but broke CDS");
 		verbose(3, "fixed intron but broke CDS in %s\n", psl->qName);
 		}
 	    }
@@ -501,7 +525,7 @@ void txPsltoBed(char *inPsl, char *dnaPath, char *outBed)
  * sequence. Optionally merge adjacent blocks and trim to splice sites. */
 {
 FILE *f = mustOpen(outBed, "w");
-struct psl *psl, *pslList  = pslLoadAll(inPsl);
+struct psl *pslList  = pslLoadAll(inPsl);
 char *chromName = "";
 struct nibTwoCache *ntc = nibTwoCacheNew(dnaPath);
 struct dnaSeq *chrom = NULL;
@@ -510,61 +534,37 @@ struct dnaSeq *chrom = NULL;
 verbose(2, "Loaded %d psls\n", slCount(pslList));
 
 slSort(&pslList, pslCmpTarget);
-for (psl = pslList; psl != NULL; psl = psl->next)
+for (curPsl = pslList; curPsl != NULL; curPsl = curPsl->next)
     {
-    verbose(3, "Processing %s\n", psl->qName);
+    verbose(3, "Processing %s\n", curPsl->qName);
 
     /* Start recording our decision making here. */
-    ZeroVar(&info);
+    anyUnusual = FALSE;
 
-    info.chrom = psl->tName;
-    info.chromStart = psl->tStart;
-    info.chromEnd = psl->tEnd;
-    info.accession = psl->qName;
-    info.genbankCds = ".";
-    info.genbankFullCds = ".";
-    info.intronNudged = ".";
-    info.directionFlipped = ".";
-    info.mergedSmallGap = ".";
-    info.splitLargeGap = ".";
-    info.splitLargGapInCds = ".";
-    info.smallGapBustsFrame = ".";
-    info.largeGapBustsFrame = ".";
-    info.intronNudgeBustsFrame = ".";
-    info.cdsOutside=".";
-    info.outputCds = ".";
-
-    if (!sameString(chromName, psl->tName))
+    if (!sameString(chromName, curPsl->tName))
 	{
 	dnaSeqFree(&chrom);
-	chrom = nibTwoCacheSeq(ntc, psl->tName);
+	chrom = nibTwoCacheSeq(ntc, curPsl->tName);
 	toLowerN(chrom->dna, chrom->size);
-	chromName = psl->tName;
+	chromName = curPsl->tName;
 	verbose(2, "Loaded %d bases in %s\n", chrom->size, chromName);
 	}
-    if (psl->tSize != chrom->size)
+    if (curPsl->tSize != chrom->size)
 	errAbort("DNA and PSL out of sync. %s thinks %s is %d bases, but %s thinks it's %d.",
-		 inPsl, chromName, psl->tSize, dnaPath, chrom->size);
-    boolean fixedOrientation = fixOrientation(psl, chrom);
-    if (fixedOrientation)
-	info.directionFlipped = "FLIP";
+		 inPsl, chromName, curPsl->tSize, dnaPath, chrom->size);
+    boolean fixedOrientation = FALSE;
+    if (fixStrand)
+	fixOrientation(curPsl, chrom);
     if (fixIntrons)
-	{
-	if (fixPslIntrons(psl, chrom))
-	    info.intronNudged = "NUDGE";
-	}
-    struct bed *bedList = pslToBedList(psl, chrom, mergeMax, fixedOrientation);
+	fixPslIntrons(curPsl, chrom);
+    struct bed *bedList = pslToBedList(curPsl, chrom, mergeMax, fixedOrientation);
     struct bed *bed;
     for (bed = bedList; bed != NULL; bed = bed->next)
-	{
 	bedTabOutN(bed, 12, f);
-	}
     bedFreeList(&bedList);
-    if (mapInfo != NULL)
-        gbRnaMapInfoTabOut(&info, mapInfo);
+    if (!anyUnusual)
+        unusualPrint("perfect", curPsl->tStart, curPsl->tEnd, "");
     }
-unusualPrint("total intron-looking %d, total funny-looking %d\n", 
-	totalIntronLooking, totalFunny);
 carefulClose(&f);
 dnaSeqFree(&chrom);
 nibTwoCacheFree(&ntc);
@@ -577,6 +577,7 @@ optionInit(&argc, argv, options);
 mergeMax = optionInt("mergeMax", mergeMax);
 minSize = optionInt("minSize", minSize);
 fixIntrons = !optionExists("noFixIntrons");
+fixStrand = !optionExists("noFixStrand");
 minIntronSize = optionInt("minIntronSize", minIntronSize);
 if (optionExists("unusual"))
     unusualFile = mustOpen(optionVal("unusual", NULL), "w");
@@ -585,11 +586,7 @@ if (argc != 4)
 char *cdsFile = optionVal("cds", NULL);
 if (cdsFile != NULL)
     cdsHash = hashCdsFile(cdsFile);
-char *mapInfoFile = optionVal("mapInfo", NULL);
-if (mapInfoFile != NULL)
-    mapInfo = mustOpen(mapInfoFile, "w");
 txPsltoBed(argv[1], argv[2], argv[3]);
 carefulClose(&unusualFile);
-carefulClose(&mapInfo);
 return 0;
 }
