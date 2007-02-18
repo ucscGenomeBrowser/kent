@@ -1081,3 +1081,8 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - is too much being lost from xeno alignments by throwing out PSLs with
   overlaping blocks?  Maybe fix psls rather than discard?
+
+- hg18 BC029540.1 chrX:119,914,829-119,947,319 multiple tandem dups, with
+  one alignment spans all, most likely a psl that links two genes.  Can
+  this be detected??
+

@@ -17,7 +17,7 @@
 static FILE* gOutFh = NULL;
 
 /* buffer for current ra record.  We don't parse into a hash table for
- * speed */
+ * speed. */
 static struct dyString* gRaRecBuf = NULL;
 
 static boolean readRaRecord(struct lineFile* inLf, char acc[GB_ACC_BUFSZ], 

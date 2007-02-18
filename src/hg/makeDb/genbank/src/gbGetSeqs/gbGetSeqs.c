@@ -1,5 +1,7 @@
-#include "gbIndex.h"
+#include "common.h"
 #include "gbDefs.h"
+#include "gbGetSeqs.h"
+#include "gbIndex.h"
 #include "gbGenome.h"
 #include "gbUpdate.h"
 #include "gbProcessed.h"
@@ -11,12 +13,12 @@
 #include "seqData.h"
 #include "pslData.h"
 #include "raData.h"
-#include "common.h"
+#include "pepData.h"
 #include "hash.h"
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.14 2006/10/07 20:46:26 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.15 2007/02/18 22:13:32 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -36,21 +38,14 @@ static struct optionSpec optionSpecs[] = {
 /* global options from command line */
 static unsigned gSrcDb;
 static unsigned gType;
+static boolean gPep = FALSE;
 static unsigned gOrgCats;
 static boolean gInclVersion;
 static boolean gAllowMissing;
 static FILE* gMissingFh = NULL;
-static char* gGetWhat;  /* "seq", "psl", "intronPsl" */
+static char* gGetWhat;  /* "seq", "psl", "intronPsl", "ra" */
 static unsigned gGetState;  /* getting GB_PROCESSED | GB_ALIGNED */
 static char* gDatabase;
-
-struct seqIdSelect
-/* Record in hash table of a sequence id that was specified  */
-{
-    char acc[GB_ACC_BUFSZ];
-    short version;
-    int selectCount;
-};
 
 /* hash table of ids to select, or NULL if all should be select */
 struct hash *gIdHash = NULL;
@@ -65,7 +60,7 @@ struct seqIdSelect *seqIdSelect;
 AllocVar(seqIdSelect);
 
 if (gIdHash == NULL)
-    gIdHash = hashNew(20);
+    gIdHash = hashNew(22);
 if (strchr(accSpec, '.') != NULL)
     seqIdSelect->version = gbSplitAccVer(accSpec, seqIdSelect->acc);
 else
@@ -200,7 +195,7 @@ boolean alreadySelected = (entry->selectVer > 0);
 boolean orgCatOk = orgCatSelected(entry);
 if (orgCatOk && !alreadySelected)
     {
-    if (gIdHash != NULL)
+    if ((gIdHash != NULL) && !gPep)
         selectExplict(entry);
     else 
         selectImplict(entry);
@@ -276,7 +271,9 @@ for (update = select->release->updates; update != NULL; update = update->next)
         {
         gbVerbEnter(2, "process update: %s", update->name);
         select->update = update;
-        if (sameString(gGetWhat, "seq"))
+        if (gPep)
+            pepDataProcessUpdate(select, gIdHash);
+        else if (sameString(gGetWhat, "seq"))
             seqDataProcessUpdate(select);
         else if (sameString(gGetWhat, "ra"))
             raDataProcessUpdate(select);
@@ -285,7 +282,10 @@ for (update = select->release->updates; update != NULL; update = update->next)
         gbVerbLeave(2, "process update: %s", update->name);
         }
     }
-checkExtract(select);
+
+// FIXME: current restriction that peps can't be checked
+if (!gPep)
+    checkExtract(select);
 
 gbReleaseUnload(select->release);
 gbVerbLeave(2, "process partition: %s", gbSelectDesc(select));
@@ -342,7 +342,9 @@ selectList = gbIndexGetPartitions(index, gGetState, gSrcDb, NULL,
 if (selectList == NULL)
     errAbort("no matching release or types need, make sure -gbRoot is correct");
 
-if (sameString(gGetWhat, "seq"))
+if (gPep)
+    pepDataOpen(gInclVersion, outFile);
+else if (sameString(gGetWhat, "seq"))
     seqDataOpen(gInclVersion, outFile);
 else if (sameString(gGetWhat, "ra"))
     raDataOpen(outFile);
@@ -352,7 +354,9 @@ else
 for (select = selectList; select != NULL; select = select->next)
     getPartitionData(select);
 
-if (sameString(gGetWhat, "seq"))
+if (gPep)
+    pepDataClose();
+else if (sameString(gGetWhat, "seq"))
     seqDataClose();
 else if (sameString(gGetWhat, "ra"))
     raDataClose();
@@ -360,7 +364,8 @@ else
     pslDataClose();
 slFreeList(&selectList);
 gbIndexFree(&index);
-if (gIdHash != NULL)
+// FIXME: current restriction that peps can't be checked
+if ((gIdHash != NULL) && (!gPep))
     checkForMissingAcc();
 }
 
@@ -394,7 +399,8 @@ errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "\n"
          " Arguments:\n"
          "     srcDb - genbank or refseq\n"
-         "     type - type. mrna, or est\n"
+         "     type - type mrna, est, or pep. pep is only supported for RefSeq and\n"
+         "            the ids specified may be either the RefSeq peptide or mRNA accssion.\n"
          "     seqFa - output file.  If -get=seq, a fasta file is created,\n"
          "             others are PSLs.  It will be compressed if it ends\n"
          "             in .gz.\n"
@@ -413,7 +419,15 @@ if (argc < 4)
 gbVerbInit(optionInt("verbose", 0));
 
 gSrcDb = gbParseSrcDb(argv[1]);
-gType = gbParseType(argv[2]);
+if (sameString(argv[2], "pep"))
+    {
+    if (gSrcDb != GB_REFSEQ)
+        errAbort("pep only supported for refseq");
+    gType = GB_MRNA;
+    gPep = TRUE;
+    }
+else
+    gType = gbParseType(argv[2]);
 outFile = argv[3];
 gbRoot = optionVal("gbRoot", NULL);
 gDatabase = optionVal("db", NULL);
@@ -438,6 +452,9 @@ if (!(sameString(gGetWhat, "seq")
       || sameString(gGetWhat, "ra")))
     errAbort("invalid value for -get, expected seq, psl, intronPsl, or ra: %s",
              gGetWhat);
+if (gPep && !sameString(gGetWhat, "seq"))
+    errAbort("can only specify -get=seq with type of pep");
+    
 if ((sameString(gGetWhat, "psl") || sameString(gGetWhat, "intronPsl")))
     {
     if (gDatabase == NULL)
@@ -446,7 +463,6 @@ if ((sameString(gGetWhat, "psl") || sameString(gGetWhat, "intronPsl")))
     }
 else
     gGetState = GB_PROCESSED;
-
 
 if (optionExists("accFile"))
     loadAccSelectFile(optionVal("accFile", NULL));

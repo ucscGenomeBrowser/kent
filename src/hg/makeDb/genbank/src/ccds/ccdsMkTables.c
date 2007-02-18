@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.11 2007/01/08 00:48:41 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.12 2007/02/18 22:13:31 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -202,7 +202,7 @@ return statValSet;
 
 static char *mkGroupVersionClause(struct genomeInfo *genome, struct sqlConnection *conn)
 /* get part of where clause that selects GroupVersions and CcdsUids that are currently
- * public.  WARNING: static return. */
+ * selected by organism, build, and status values,.  WARNING: static return. */
 {
 static char clause[1025];
 safef(clause, sizeof(clause),
