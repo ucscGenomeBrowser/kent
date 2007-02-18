@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.33 2006/06/09 00:08:11 galt Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.34 2007/02/18 05:48:43 baertsch Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -961,7 +961,7 @@ static int bedOverBig(struct lineFile *lf, int refCount,
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
-char *line, *words[20];
+char *line, *words[64];
 char *whyNot = NULL;
 int ct = 0;
 int errs = 0;
@@ -1020,7 +1020,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
 int bedFieldCount = bedPlus;
 char *line;
-char *words[32];
+char *words[64];
 int ct = 0;
 
 if (lineFileNextReal(lf, &line))
