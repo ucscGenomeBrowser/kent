@@ -680,3 +680,9 @@ url http://mecp2.chw.edu.au/cgi-bin/mecp2/search/process-search.cgi?display=simp
 acc yes
 needsEncoded yes
 
+name RettBASEprot
+label RettBASE
+url http://mecp2.chw.edu.au/cgi-bin/mecp2/search/process-search.cgi?display=simple&submit=Display&prot_sys_name=%s
+acc yes
+needsEncoded yes
+
