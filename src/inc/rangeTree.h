@@ -31,6 +31,11 @@ struct range *rangeTreeFindEnclosing(struct rbTree *tree, int start, int end);
 /* Find item in range tree that encloses range between start and end 
  * if there is any such item. */
 
+struct range *rangeTreeAllOverlapping(struct rbTree *tree, int start, int end);
+/* Return list of all items in range tree that overlap interval start-end.
+ * Do not free this list, it is owned by tree.  However it is only good until
+ * next call to rangeTreeFindInRange or rangTreeList. Not thread safe. */
+
 struct range *rangeTreeList(struct rbTree *tree);
 /* Return list of all ranges in tree in order.  Not thread safe. 
  * No need to free this when done, memory is local to tree. */

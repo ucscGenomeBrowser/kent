@@ -82,6 +82,19 @@ if (r != NULL && r->start <= start && r->end >= end)
 return NULL;
 }
 
+struct range *rangeTreeAllOverlapping(struct rbTree *tree, int start, int end)
+/* Return list of all items in range tree that overlap interval start-end.
+ * Do not free this list, it is owned by tree.  However it is only good until
+ * next call to rangeTreeFindInRange or rangTreeList. Not thread safe. */
+{
+struct range tempR;
+tempR.start = start;
+tempR.end = end;
+rangeList = NULL;
+rbTreeTraverseRange(tree, &tempR, &tempR, rangeListAdd);
+return rangeList;
+}
+
 struct rbTree *rangeTreeNew()
 /* Create a new, empty, rangeTree. */
 {
