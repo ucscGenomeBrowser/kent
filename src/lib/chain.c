@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.24 2006/03/10 17:43:36 angie Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.25 2007/02/19 18:29:32 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -419,6 +419,21 @@ void chainSubsetOnT(struct chain *chain, int subStart, int subEnd,
  * *retChainToFree.  The score and id fields are not really
  * properly filled in. */
 {
+/* Find first relevant block. */
+struct cBlock *firstBlock;
+for (firstBlock = chain->blockList; firstBlock != NULL; firstBlock = firstBlock->next)
+    {
+    if (firstBlock->tEnd > subStart)
+	break;
+    }
+chainFastSubsetOnT(chain, firstBlock, subStart, subEnd, retSubChain, retChainToFree);
+}
+
+void chainFastSubsetOnT(struct chain *chain, struct cBlock *firstBlock,
+	int subStart, int subEnd, struct chain **retSubChain,  struct chain **retChainToFree)
+/* Get subchain as in chainSubsetOnT. Pass in initial block that may
+ * be known from some index to speed things up. */
+{
 struct chain *sub = NULL;
 struct cBlock *oldB, *b, *bList = NULL;
 int qStart = BIGNUM, qEnd = -BIGNUM;
@@ -432,10 +447,8 @@ if (subStart <= chain->tStart && subEnd >= chain->tEnd)
     return;
     }
 /* Build new block list and calculate bounds. */
-for (oldB = chain->blockList; oldB != NULL; oldB = oldB->next)
+for (oldB = firstBlock; oldB != NULL; oldB = oldB->next)
     {
-    if (oldB->tEnd <= subStart)
-        continue;
     if (oldB->tStart >= subEnd)
         break;
     b = CloneVar(oldB);
@@ -485,7 +498,6 @@ if (bList != NULL)
     }
 *retSubChain = *retChainToFree = sub;
 }
-
 
 void chainSubsetOnQ(struct chain *chain, int subStart, int subEnd, 
     struct chain **retSubChain,  struct chain **retChainToFree)

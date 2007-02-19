@@ -130,6 +130,11 @@ void chainSubsetOnT(struct chain *chain, int subStart, int subEnd,
  * *retChainToFree.  The score and id fields are not really
  * properly filled in. */
 
+void chainFastSubsetOnT(struct chain *chain, struct cBlock *firstBlock,
+	int subStart, int subEnd, struct chain **retSubChain,  struct chain **retChainToFree);
+/* Get subchain as in chainSubsetOnT. Pass in initial block that may
+ * be known from some index to speed things up. */
+
 void chainSubsetOnQ(struct chain *chain, int subStart, int subEnd, 
     struct chain **retSubChain,  struct chain **retChainToFree);
 /* Get subchain of chain bounded by subStart-subEnd on 
