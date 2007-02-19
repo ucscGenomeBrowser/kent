@@ -2426,10 +2426,10 @@ chainOne $(path1)
 #end tblastn
 
 #######################################################################
-## BLASTZ LIZARD ANOCAR1 - (WORKING - 2007-02-18 - Hiram)
+## BLASTZ LIZARD ANOCAR1 - (DONE - 2007-02-18 - Hiram)
     ssh kkstore05
-    mkdir /cluster/data/gasAcu1/bed/blastz.anoCar2.2007-02-18
-    cd /cluster/data/gasAcu1/bed/blastz.anoCar2.2007-02-18
+    mkdir /cluster/data/gasAcu1/bed/blastz.anoCar1.2007-02-18
+    cd /cluster/data/gasAcu1/bed/blastz.anoCar1.2007-02-18
 
     cat << '_EOF_' > DEF
 # stickleback vs. lizard
@@ -2456,7 +2456,7 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=30
 SEQ2_LAP=0
 
-BASE=/cluster/data/gasAcu1/bed/blastz.anoCar2.2007-02-18
+BASE=/cluster/data/gasAcu1/bed/blastz.anoCar1.2007-02-18
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -2465,4 +2465,25 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-blastzOutRoot=/san/sanvol1/scratch/gasAcu1AnoCar1 > do.log 2>&1 &
-XXX - running 2007-02-18 21:58
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-blastzOutRoot=/san/sanvol1/scratch/gasAcu1AnoCar1 \
+	-continue=cleanup > cleanup.log 2>&1 &
+
+    ## measuring
+    time nice -n +19 featureBits gasAcu1 chainAnoCar1Link \
+	> fb.gasAcu1.chainAnoCar1Link.txt 2>&1
+    #	56386298 bases of 446627861 (12.625%) in intersection
+
+    ## swap documented in anoCar1.txt
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/gasAcu1/bed/blastz.anoCar1.2007-02-19/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log 2>&1 &
+
+    time nice -n +19 featureBits anoCar1 chainGasAcu1Link \
+	> fb.anoCar1.chainGasAcu1Link.txt 2>&1  
+    #	real    1m14.245s
+    #	54464074 bases of 1741478929 (3.127%) in intersection
