@@ -9,7 +9,7 @@
 #include "rbTree.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.73 2007/02/16 16:48:29 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.74 2007/02/19 18:28:42 kent Exp $";
 
 void usage()
 {
@@ -56,13 +56,23 @@ rangeTreeAdd(tree,141951595,141951602);
 rangeTreeAdd(tree,142058171,142058220);
 rangeTreeAdd(tree,142058344,142058638);
 rangeTreeAdd(tree,142058633,142058637);
-struct range *r = rangeTreeFindEnclosing(tree,141819907,141819906);
-printf("r is %p\n", r);
-struct range t;
-t.start = 141819907;
-t.end = 141819906;
-r = rbTreeFind(tree, &t);
-printf("r now is %p\n", r);
+int s = 141930000, e = 141950000;
+printf("Looking at things between %d and %d, should be 7\n", s, e);
+struct range *r;
+for (r = rangeTreeAllOverlapping(tree, s, e); r != NULL; r = r->next)
+    printf("  %d %d\n", r->start, r->end);
+s = 141932873;
+printf("Looking at things between %d and %d, should be 6\n", s, e);
+for (r = rangeTreeAllOverlapping(tree, s, e); r != NULL; r = r->next)
+    printf("  %d %d\n", r->start, r->end);
+s = 142058344, e=142058638;
+printf("Looking at things between %d and %d, should be 1\n", s, e);
+for (r = rangeTreeAllOverlapping(tree, s, e); r != NULL; r = r->next)
+    printf("  %d %d\n", r->start, r->end);
+s = 142058444, e=142058538;
+printf("Looking at things between %d and %d, should be 1\n", s, e);
+for (r = rangeTreeAllOverlapping(tree, s, e); r != NULL; r = r->next)
+    printf("  %d %d\n", r->start, r->end);
 }
 
 int main(int argc, char *argv[])
