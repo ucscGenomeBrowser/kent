@@ -1974,3 +1974,43 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=2000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
+
+#######################################################################
+## BLASTZ LIZARD ANOCAR1 - (WORKING - 2007-02-18 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18
+    cd /cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18
+
+    cat << '_EOF_' > DEF
+# chicken vs. lizard
+
+# Use same params as used for galGal3-xenTro2
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/san/sanvol1/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Lizard AnoCar1 - largest chunk big enough for largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/anoCar1/anoCar1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/anoCar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-blastzOutRoot=/san/sanvol1/scratch/galGal3AnoCar1 > do.log 2>&1
+XXX - running 2007-02-18 21:45
