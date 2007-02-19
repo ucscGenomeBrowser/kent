@@ -2424,4 +2424,45 @@ chainOne $(path1)
     rm -rf /cluster/data/gasAcu1/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/gasAcu1/bed/tblastn.hg18KG/blastOut
 #end tblastn
-##########################################################################
+
+#######################################################################
+## BLASTZ LIZARD ANOCAR1 - (WORKING - 2007-02-18 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/gasAcu1/bed/blastz.anoCar2.2007-02-18
+    cd /cluster/data/gasAcu1/bed/blastz.anoCar2.2007-02-18
+
+    cat << '_EOF_' > DEF
+# stickleback vs. lizard
+
+# Use same params as used for gasAcu1-danRer4
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Stickleback gasAcu1 - largest chunk big enough
+#	for all chroms except chrUn
+SEQ1_DIR=/san/sanvol1/scratch/gasAcu1/gasAcu1.2bit
+SEQ1_LEN=/cluster/data/gasAcu1/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+
+# QUERY: Lizard AnoCar1 - largest chunk big enough for largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/anoCar1/anoCar1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/anoCar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/gasAcu1/bed/blastz.anoCar2.2007-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-blastzOutRoot=/san/sanvol1/scratch/gasAcu1AnoCar1 > do.log 2>&1 &
+XXX - running 2007-02-18 21:58
