@@ -674,3 +674,9 @@ url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=ZAP70;view=full;mut=%s
 acc yes
 needsEncoded yes
 
+name RettBASE
+label RettBASE
+url http://mecp2.chw.edu.au/cgi-bin/mecp2/search/process-search.cgi?display=simple&submit=Display&sys_name=%s
+acc yes
+needsEncoded yes
+
