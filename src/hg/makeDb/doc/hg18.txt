@@ -13161,7 +13161,7 @@ chainOne $(path1)
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
 
 #########################################################################
-## BLASTZ ANOCAR1 - Lizard - (WORKING - 2007-02-17 - Hiram)
+## BLASTZ ANOCAR1 - Lizard - (DONE - 2007-02-17 - 2007-02-18 - Hiram)
     ssh kkstore05
     mkdir /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
     cd /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
@@ -13204,9 +13204,15 @@ TMPDIR=/scratch/tmp
 
     #	appears to have successfully finished
     ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
     time nice -n +19 featureBits hg18 chainAnoCar1Link \
 	> fb.hg18.chainAnoCar1Link.txt 2>&1
     #	real    2m28.318s
     #	137554843 bases of 2881515245 (4.774%) in intersection
 
     #	running the swap to anoCar1 - instructions in anoCar1.txt
+    cd /cluster/data/anoCar1/bed/blastz.hg18.swap
+    time nice -n +19 featureBits anoCar1 chainHg18Link \
+	> fb.anoCar1.chainHg18Link.txt 2>&1  
+    #	real    3m16.810s
+    #	112434396 bases of 1741478929 (6.456%) in intersection
