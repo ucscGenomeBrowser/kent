@@ -11,6 +11,7 @@
 #include "chain.h"
 #include "chainNet.h"
 #include "rbTree.h"
+#include "rangeTree.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +28,24 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
+
+struct indexedChain
+/* A chain with indexed blocks. */
+    {
+    struct chain *chain;	/* Associated chain */
+    struct rbTree *blockTree;	/* Tree of blocks. */
+    };
+
+void indexedChainSubsetOnT(struct indexedChain *ixc, int subStart, int subEnd, 
+    struct chain **retSubChain,  struct chain **retChainToFree)
+/* Extract subset of chain that has been indexed. */
+{
+struct range *r = rangeTreeAllOverlapping(ixc->blockTree, subStart, subEnd);
+if (r == NULL)
+    *retSubChain = *retChainToFree = NULL;
+else
+    chainFastSubsetOnT(ixc->chain, r->val, subStart, subEnd, retSubChain, retChainToFree);
+}
 
 struct hash *netToBkHash(char *netFile)
 /* Read net file into a hash full of binKeepers keyed by chromosome.
@@ -55,19 +74,33 @@ struct hash *allChainsHash(char *fileName)
 struct hash *chainHash = newHash(18);
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct chain *chain;
-struct chain *chainList = NULL;
 char chainId[20];
+struct lm *lm = chainHash->lm;
+struct rbTreeNode **stack;
+
+lmAllocArray(lm, stack, 128);
 while ((chain = chainRead(lf)) != NULL)
     {
+    struct indexedChain *ixc;
+    lmAllocVar(lm, ixc);
+    ixc->chain = chain;
+#ifdef SOON
+#endif /* SOON */
+    ixc->blockTree = rangeTreeNewDetailed(lm, stack);
+    struct cBlock *block;
+    for (block = chain->blockList; block != NULL; block = block->next)
+	{
+        struct range *r = rangeTreeAdd(ixc->blockTree, block->tStart, block->tEnd);
+	r->val = block;
+	}
     safef(chainId, sizeof(chainId), "%x", chain->id);
-    hashAddUnique(chainHash, chainId, chain);
-    slAddHead(&chainList, chain);
+    hashAddUnique(chainHash, chainId, ixc);
     }
 lineFileClose(&lf);
 return chainHash;
 }
 
-struct chain *chainFromId(struct hash *chainHash, int id)
+struct indexedChain *chainFromId(struct hash *chainHash, int id)
 /* Given chain ID and hash, return chain. */
 {
 char chainId[20];
@@ -169,7 +202,7 @@ else
     }
 }
 
-void loadOrthoAgxList(struct txGraph *ag, struct chain *chain, struct hash *orthoGraphHash,
+void loadOrthoAgxList(struct txGraph *ag, struct indexedChain *ixc, struct hash *orthoGraphHash,
 				   boolean *revRet, struct txGraph **orthoAgListRet)
 /** Return the txGraph records in the orhtologous position on the other genome
     as defined by ag and chain. */
@@ -179,10 +212,10 @@ struct txGraph *orthoAgList = NULL;
 struct chain *subChain = NULL, *toFree = NULL;
 boolean reverse = FALSE;
 char *strand = NULL;
-if(chain != NULL) 
+if(ixc != NULL) 
     {
     /* First find the orthologous splicing graph. */
-    chainSubsetOnT(chain, ag->tStart, ag->tEnd, &subChain, &toFree);    
+    indexedChainSubsetOnT(ixc, ag->tStart, ag->tEnd, &subChain, &toFree);    
     if(subChain != NULL)
 	{
 	qChainRangePlusStrand(subChain, &qs, &qe);
@@ -204,27 +237,18 @@ if(chain != NULL)
 *revRet = reverse;
 *orthoAgListRet = orthoAgList;
 }
-#ifdef SOON 
-#endif /* SOON */
 
-int chainBlockCoverage(struct chain *chain, int start, int end,
+int chainBlockCoverage(struct indexedChain *ixc, int start, int end,
 		       int* blockStarts, int *blockSizes, int blockCount)
 /* Calculate how many of the blocks are covered at both block begin and
  * end by a chain. */
 {
-struct cBlock *cBlock = NULL, *boxInList=NULL;
 int blocksCovered = 0;
 int i=0;
 
 /* Find the part of the chain of interest to us. */
-for(cBlock = chain->blockList; cBlock != NULL; cBlock = cBlock->next)
-    {
-    if(cBlock->tEnd >= start)
-	{
-	boxInList = cBlock;
-	break;
-	}
-    }
+struct range *rangeList = rangeTreeAllOverlapping(ixc->blockTree, start, end);
+
 /* Check to see how many of our exons the boxInList contains covers. 
    For each block check to see if the blockStart and blockEnd are 
    found in the boxInList. */
@@ -233,40 +257,52 @@ for(i=0; i<blockCount; i++)
     boolean startFound = FALSE;
     int blockStart = blockStarts[i];
     int blockEnd = blockStarts[i] + blockSizes[i];
-    for(cBlock = boxInList; cBlock != NULL && cBlock->tStart < end; cBlock = cBlock->next)
+    struct range *r;
+
+    /* Skip over bits of range list that are no longer relevant. */
+    while (rangeList != NULL && rangeList->end <= blockStart)
+        rangeList = rangeList->next;
+
+    /* Count up blocks covered on both ends. */
+    for (r = rangeList; r != NULL; r = r->next)
 	{
 	//    CCCCCC  CCCCC       CCCCCC    CCC  CCCC
 	//     BBB   BBBB    BBB BBBBBBBB        BBBB
-	//     yes    no     no     no      no   yes?
-	// JK - if (cBlock->tStart <= blockStart && cBlock->tEnd >= blockStart) ?
-	if(cBlock->tStart < blockStart && cBlock->tEnd > blockStart)
+	//     yes    no     no     no      no   yes
+	if(r->start <= blockStart && r->end >= blockStart)
 	    startFound = TRUE;
-	// JK - if (startFound && cBlock->tStart <= blockEnd && cBlock->tEnd >= blockEnd) ?
-	if(startFound && cBlock->tStart < blockEnd && cBlock->tEnd > blockEnd)
+	if(startFound && r->start <= blockEnd && r->end >= blockEnd)
 	    {
 	    blocksCovered++;
 	    break;
 	    }
+	if (r->start > blockEnd)
+	    break;
 	}
     }
 return blocksCovered;
 }
 
-boolean betterChain(struct chain *chain, int start, int end,
+boolean betterChain(struct indexedChain *ixc, int start, int end,
 		    int* blockStarts, int *blockSizes, int blockCount,
-		    struct chain **bestChain, int *bestCover)
+		    struct indexedChain **bestIxc, int *bestCover)
 /* Return TRUE if chain is a better fit than bestChain. If TRUE
    fill in bestChain and bestCover. */
 {
 int blocksCovered = 0;
 boolean better = FALSE;
+
 /* Check for easy case. */
+if (ixc == NULL)
+    return FALSE;
+struct chain *chain = ixc->chain;
 if(chain == NULL || chain->tStart > end || chain->tStart + chain->tSize < start)
     return FALSE;
-blocksCovered = chainBlockCoverage(chain, start, end, blockStarts, blockSizes, blockCount);
+    
+blocksCovered = chainBlockCoverage(ixc, start, end, blockStarts, blockSizes, blockCount);
 if(blocksCovered > (*bestCover))
     {
-    *bestChain = chain;
+    *bestIxc = ixc;
     *bestCover = blocksCovered;
     better = TRUE;
     }
@@ -276,7 +312,7 @@ return better;
 void lookForBestChain(struct cnFill *list, int start, int end,
 		      int* blockStarts, int *blockSizes, int blockCount,
 		      struct hash *chainHash, 
-		      struct chain **bestChain, int *bestCover)
+		      struct indexedChain **bestIxc, int *bestCover)
 /* Recursively look for the best chain. Best is defined as the chain
    that covers the most number of blocks found in starts and sizes. This
    will be stored in bestChain and number of blocks that it covers will
@@ -285,18 +321,17 @@ void lookForBestChain(struct cnFill *list, int start, int end,
 struct cnFill *fill=NULL;
 struct cnFill *gap=NULL;
 
-struct chain *chain = NULL;
 for(fill = list; fill != NULL; fill = fill->next)
     {
-    chain = chainFromId(chainHash, fill->chainId);
-    betterChain(chain, start, end, blockStarts, blockSizes, blockCount, bestChain, bestCover);
+    struct indexedChain *ixc = chainFromId(chainHash, fill->chainId);
+    betterChain(ixc, start, end, blockStarts, blockSizes, blockCount, bestIxc, bestCover);
     for(gap = fill->children; gap != NULL; gap = gap->next)
 	{
 	if(gap->children)
 	    {
 	    lookForBestChain(gap->children, start, end, 
 				       blockStarts, blockSizes, blockCount,
-				       chainHash, bestChain, bestCover);
+				       chainHash, bestIxc, bestCover);
 	    }
 	}
     }
@@ -322,19 +357,19 @@ if (bk != NULL)
 return fillList;
 }
 
-struct txGraph *orthoGraphsViaChain(struct txGraph *inGraph, struct chain *chain, 
-	struct hash *orthoGraphHash)
+struct txGraph *orthoGraphsViaChain(struct txGraph *inGraph, 
+	struct indexedChain *ixc, struct hash *orthoGraphHash)
 /* Get a list of orthologous graphs in another species using chain to map.
  * The orthologous graphs are simply those that overlap at the exon level on the
  * same strand. */
 {
 boolean reverse = FALSE;
 struct txGraph *orthoGraphList = NULL;
-loadOrthoAgxList(inGraph, chain, orthoGraphHash, &reverse, &orthoGraphList);
+loadOrthoAgxList(inGraph, ixc, orthoGraphHash, &reverse, &orthoGraphList);
 return orthoGraphList;
 }
 
-struct chain *bestChainForGraph(struct txGraph *inGraph, struct hash *chainHash,
+struct indexedChain *bestChainForGraph(struct txGraph *inGraph, struct hash *chainHash,
 	struct hash *netHash)
 /* Find chain that has most block-level overlap with exons in graph. */
 {
@@ -350,41 +385,45 @@ int *starts, *sizes;
 AllocArray(starts, inGraph->edgeCount);
 AllocArray(sizes, inGraph->edgeCount);
 struct txEdge *edge;
+int lastStart = 0;
 for (edge = inGraph->edges; edge != NULL; edge = edge->next)
     {
     if (edge->type == ggExon)
         {
 	int start = starts[blockCount] = inGraph->vertices[edge->startIx].position;
+	if (lastStart > start)
+	    errAbort("Unsorted edges in graph %s", inGraph->name);
 	sizes[blockCount] = inGraph->vertices[edge->endIx].position - start;
 	++blockCount;
 	}
     }
 
 /* Find chain that most overlaps blocks. */
-struct chain *chain = NULL;
+struct indexedChain *ixc = NULL;
 int bestOverlap = 0;
 lookForBestChain(fillList, inGraph->tStart, inGraph->tEnd, starts, sizes, blockCount,
-	chainHash, &chain, &bestOverlap);
+	chainHash, &ixc, &bestOverlap);
 
 freeMem(starts);
 freeMem(sizes);
-return chain;
+return ixc;
 }
 
 
-struct txGraph *findOrthoGraphs(struct txGraph *inGraph, struct chain *chain,
-	struct hash *orthoGraphHash)
+struct txGraph *findOrthoGraphs(struct txGraph *inGraph, 
+	struct indexedChain *ixc, struct hash *orthoGraphHash)
 /* Find list of orthologous graphs if any.  Beware the side effect of tweaking
  * some of the fill->next pointers at the highest level of the net. It's expensive
  * to avoid the side effect, and it doesn't bother subsequent calls to this function. */
 {
 struct txGraph *orthoGraphList = NULL;
-if (chain != NULL)
+if (ixc != NULL)
     {
+    struct chain *chain = ixc->chain;
     verbose(3, "Best chain for %s is %s:%d-%d %c %s:%d-%d\n", inGraph->name,
     	chain->tName, chain->tStart, chain->tEnd, chain->qStrand, 
 	chain->qName, chain->qStart, chain->qEnd);
-    orthoGraphList = orthoGraphsViaChain(inGraph, chain, orthoGraphHash);
+    orthoGraphList = orthoGraphsViaChain(inGraph, ixc, orthoGraphHash);
     }
 else
     {
@@ -404,14 +443,14 @@ return total;
 }
 
 
-boolean edgeMap(int start, int end, struct chain *chain,
+boolean edgeMap(int start, int end, struct indexedChain *ixc,
 	int *retStart, int *retEnd, boolean *retRev,
 	boolean *retStartExact, boolean *retEndExact,
 	int *retCoverage)
 /* Map edge through chain. Return FALSE if no map. */
 {
 struct chain *subChain = NULL, *toFree = NULL;
-chainSubsetOnT(chain, start, end, &subChain, &toFree);
+indexedChainSubsetOnT(ixc, start, end, &subChain, &toFree);
 if (!subChain)
     return FALSE;
 *retRev = FALSE;
@@ -499,7 +538,7 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
 }
 
 void writeCommonEdges(struct txGraph *inGraph, 
-	struct chain *chain, struct txGraph *orthoGraph, FILE *f)
+	struct indexedChain *ixc, struct txGraph *orthoGraph, FILE *f)
 /* Write out common edges between inGraph and orthoGraph. */
 {
 struct txEdge *edge;
@@ -516,7 +555,7 @@ for (edge = inGraph->edges; edge != NULL; edge = edge->next)
 
     int mappedStart, mappedEnd, mappedCoverage;
     boolean mappedRev, mappedStartExact, mappedEndExact;
-    if (edgeMap(inStart, inEnd, chain,  &mappedStart, &mappedEnd,
+    if (edgeMap(inStart, inEnd, ixc,  &mappedStart, &mappedEnd,
 	    &mappedRev, &mappedStartExact, &mappedEndExact, &mappedCoverage))
 	{
 	writeOverlappingEdges(edgeType, inGraph,
@@ -531,15 +570,15 @@ void writeOrthoEdges(struct txGraph *inGraph, struct hash *chainHash,
 	struct hash *netHash, struct hash *orthoGraphHash, FILE *f)
 /* Look for orthologous edges, and write any we find. */
 {
-struct chain *chain = bestChainForGraph(inGraph, chainHash, netHash);
+struct indexedChain *ixc = bestChainForGraph(inGraph, chainHash, netHash);
 struct txGraph *orthoGraphList = 
-	findOrthoGraphs(inGraph, chain, orthoGraphHash);
+	findOrthoGraphs(inGraph, ixc, orthoGraphHash);
 if (orthoGraphList != NULL)
     {
     struct txGraph *orthoGraph;
     for (orthoGraph = orthoGraphList; orthoGraph != NULL; orthoGraph = orthoGraph->next)
         {
-	writeCommonEdges(inGraph, chain, orthoGraph, f);
+	writeCommonEdges(inGraph, ixc, orthoGraph, f);
 	}
     verbose(3, "Graph %s maps to %d orthologous graph starting with %s\n", 
     	inGraph->name, slCount(orthoGraphList), orthoGraphList->name);
@@ -579,7 +618,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(1000000000);
+pushCarefulMemHandler(2000000000);
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
