@@ -13198,4 +13198,15 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-verbose=2 -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/hg18AnoCar1 > do.log 2>&1 &
-XXX - running - 2007-02-18 00:24
+    #	real    684m40.568s
+    #	there was a pause in there as the pk kluster was corrected during the
+    #	first kluster run to get it to finish.
+
+    #	appears to have successfully finished
+    ssh hgwdev
+    time nice -n +19 featureBits hg18 chainAnoCar1Link \
+	> fb.hg18.chainAnoCar1Link.txt 2>&1
+    #	real    2m28.318s
+    #	137554843 bases of 2881515245 (4.774%) in intersection
+
+    #	running the swap to anoCar1 - instructions in anoCar1.txt
