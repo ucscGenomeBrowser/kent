@@ -11,8 +11,9 @@ txWalk: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txWalk${EXE}
 
 test:
-	txWalk input.txg input.weights 3 output.bed
+	txWalk input.txg input.weights 3 output.bed -evidence=output.ev
 	diff expected.bed output.bed
+	diff expected.ev output.ev
 
 clean:
 	rm -f $O

@@ -9,6 +9,9 @@
 #include "ggTypes.h"
 #include "txGraph.h"
 
+/* Globals set from command line. */
+FILE *evFile = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -17,11 +20,12 @@ errAbort(
   "usage:\n"
   "   txWalk in.txg in.weights threshold out.bed\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -evidence=out.ev - place mrna associated with each transcript here.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"evidence", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -31,6 +35,13 @@ struct weight
     char *type;		/* Not allocated here */
     double value;	/* Weight value */
     };
+
+boolean isRnaSource(struct txSource *source)
+/* Return TRUE if it's some sort of RNA source. */
+{
+return (sameString(source->type, "refSeq") || sameString(source->type, "mrna")
+    || sameString(source->type, "est"));
+}
 
 struct hash *hashWeights(char *in)
 /* Return hash full of weights. */
@@ -143,8 +154,7 @@ struct weightedRna *rnaList = NULL, *rna;
 for (sourceId = 0; sourceId < txg->sourceCount; ++sourceId)
     {
     struct txSource *source = &txg->sources[sourceId];
-    if (sameString(source->type, "refSeq") || sameString(source->type, "mrna")
-    	|| sameString(source->type, "est"))
+    if (isRnaSource(source))
 	{
 	lmAllocVar(lm, rna);
 	rna->id = sourceId;
@@ -171,11 +181,13 @@ return TRUE;
 }
 
 void rnaOut(struct txGraph *txg, struct slRef *trackerRefList, 
-	struct txSource *source, FILE *f)
+	struct txSource *source, int txId, FILE *bedFile, FILE *efFile)
 /* Write out one RNA transcript and mark corresponding edges as visited. */
 {
 struct slRef *ref;
 int minBase = BIGNUM, maxBase = -BIGNUM;
+struct hash *evHash = hashNew(0);
+char nameBuf[256];
 
 /* Set visit flags, figure min/max. */
 for (ref = trackerRefList; ref != NULL; ref = ref->next)
@@ -190,8 +202,9 @@ for (ref = trackerRefList; ref != NULL; ref = ref->next)
     }
 
 /* Write out bed stuff except for blocks. */
-fprintf(f, "%s\t%d\t%d\t", txg->tName, minBase, maxBase);
-fprintf(f, "%s.%s\t0\t%s\t", txg->name, source->accession, txg->strand);
+fprintf(bedFile, "%s\t%d\t%d\t", txg->tName, minBase, maxBase);
+safef(nameBuf, sizeof(nameBuf), "%s.%d.%s", txg->name, txId, source->accession);
+fprintf(bedFile, "%s\t%d\t%s\t", nameBuf, 0, txg->strand);
 
 /* Pass blocks through a rangeTree to merge any ones that 
  * are overlapping.  This occassionally happens in the graph. */
@@ -199,34 +212,56 @@ struct rbTree *rangeTree = rangeTreeNew();
 for (ref = trackerRefList; ref != NULL; ref = ref->next)
     {
     struct edgeTracker *tracker = ref->val;
-    if (tracker->edge->type == ggExon)
+    struct txEdge *edge = tracker->edge;
+    if (edge->type == ggExon)
+	{
 	rangeTreeAdd(rangeTree, tracker->start, tracker->end);
+	struct txEvidence *ev;
+	for (ev = edge->evList; ev != NULL; ev = ev->next)
+	    {
+	    struct txSource *source = &txg->sources[ev->sourceId];
+	    if (isRnaSource(source))
+		hashStore(evHash, source->accession);
+	    }
+	}
     }
 
-/* Get exon list and write out block count. */
-
 /* Write out exon count and block sizes */
-fprintf(f, "0\t0\t0\t%d\t", rangeTree->n);
+fprintf(bedFile, "0\t0\t0\t%d\t", rangeTree->n);
 struct slRef *eRef, *eRefList = rbTreeItems(rangeTree);
 for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     {
     struct range *r = eRef->val;
-    fprintf(f, "%d,", r->end - r->start);
+    fprintf(bedFile, "%d,", r->end - r->start);
     }
-fprintf(f, "\t");
+fprintf(bedFile, "\t");
 
 /* Write out block starts */
 for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     {
     struct range *r = eRef->val;
-    fprintf(f, "%d,", r->start - minBase);
+    fprintf(bedFile, "%d,", r->start - minBase);
     }
-fprintf(f, "\n");
+fprintf(bedFile, "\n");
+
+if (evFile != NULL)
+    {
+    struct hashEl *hel, *helList = hashElListHash(evHash);
+    slSort(&helList, hashElCmp);
+    fprintf(evFile, "%s\t%s\t%d\t", nameBuf, source->accession, evHash->elCount);
+    for (hel = helList; hel != NULL; hel =  hel->next)
+        {
+	fprintf(evFile, "%s,", hel->name);
+	}
+    fprintf(evFile, "\n");
+    }
 
 rbTreeFree(&rangeTree);
+hashFree(&evHash);
 }
 
-void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold, FILE *f)
+void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold, FILE *bedFile,
+	FILE *evFile)
 /* Generate transcripts and write to file. */
 {
 /* Local memory pool for fast, easy cleanup. */
@@ -280,12 +315,13 @@ for (i=0; i<txg->sourceCount; ++i)
 /* Go from best to worst RNA, checking to see if it's exons are already
  * covered.  If not, then output transcript containing all exons in that RNA. */
 struct weightedRna *rna, *rnaList = makeWeightedRna(txg, sourceTypeWeights, sourceTxWeights, lm);
+int txId=0;
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     struct slRef *trackerRefList = edgesUsedBySource[rna->id];
     if (!allTrackerRefsVisited(trackerRefList))
 	{
-        rnaOut(txg, trackerRefList, &txg->sources[rna->id], f);
+        rnaOut(txg, trackerRefList, &txg->sources[rna->id], ++txId, bedFile, evFile);
 	}
     }
 
@@ -304,7 +340,7 @@ while (lineFileRow(lf, row))
     {
     struct txGraph *txg = txGraphLoad(row);
     verbose(3, "Processing %s\n", txg->name);
-    walkOut(txg, weightHash, threshold, f);
+    walkOut(txg, weightHash, threshold, f, evFile);
     txGraphFree(&txg);
     }
 carefulClose(&f);
@@ -314,9 +350,12 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+if (optionExists("evidence"))
+    evFile = mustOpen(optionVal("evidence", NULL), "w");
 if (argc != 5)
     usage();
 txWalk(argv[1], argv[2], argv[3], argv[4]);
+carefulClose(&evFile);
 return 0;
 }
 
