@@ -310,6 +310,25 @@ dbDbSpeciesDir lizard
     time nice -n +19 featureBits anoCar1 genscan
     #	31394034 bases of 1741478929 (1.803%) in intersection
 
+#########################################################################
+## BLASTZ GasAcu1/Stickleback swap (DONE - 2007-02-19 - Hiram)
+    ##	the original blastz to gasAcu1 measured
+    time nice -n +19 featureBits gasAcu1 chainAnoCar1Link \
+	> fb.gasAcu1.chainAnoCar1Link.txt 2>&1
+    #	56386298 bases of 446627861 (12.625%) in intersection
+
+    ssh kkstore05
+    mkdir /cluster/data/anoCar1/bed/blastz.gasAcu1.swap
+    cd /cluster/data/anoCar1/bed/blastz.gasAcu1.swap
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/gasAcu1/bed/blastz.anoCar1.2007-02-19/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log 2>&1 &
+
+    time nice -n +19 featureBits anoCar1 chainGasAcu1Link \
+	> fb.anoCar1.chainGasAcu1Link.txt 2>&1  
+
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-02-19)
     ssh kkstore05
