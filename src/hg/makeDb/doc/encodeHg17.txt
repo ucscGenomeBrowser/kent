@@ -1638,6 +1638,16 @@ cat > loadSig.csh << 'EOF'
     set gdir = /gbdb/hg17/encode/YaleRna/2005-10-14
     hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
     
+
+    # post wig downloads
+    ssh kkstore03
+    cd /cluster/data/encode/yale/rna/latest
+    mkdir downloads
+    foreach f (*.trim)
+        set table = ($f:r)
+        echo $table
+        gzip -c $f > downloads/$table.bedGraph.gz
+    end
     
 ##########################################################################
 # Yale Chip/chip (2005-10-31 kate)
