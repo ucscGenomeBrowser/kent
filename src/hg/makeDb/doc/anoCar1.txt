@@ -49,7 +49,7 @@ scientificName Anolis carolinensis
 commonName Lizard
 assemblyDate Jan. 2007
 assemblyLabel Broad Institute AnoCar (1.0)
-orderKey 375
+orderKey 440
 mitoAcc none
 fastaFiles /cluster/data/anoCar1/downloads/assembly.bases.gz
 agpFiles /cluster/data/anoCar1/downloads/assembly.agp
@@ -76,6 +76,10 @@ dbDbSpeciesDir lizard
     time makeGenomeDb.pl -verbose=2 -continue=dbDb anoCar1.config.ra \
 	> makeDbDb.out 2>&1
 
+    ## better orderKey to get Lizard between frog and fish
+    hgsql -e 'update dbDb set orderKey="440" where name="anoCar1";' \
+	hgcentraltest
+    ## fixup that number in the .ra file as mentioned above, was 375
 ##########################################################################
 ## Photograph - permission to use obtained from R. Steven Rainwater
 ##		(DONE - 2007-02-16 - Hiram)
@@ -172,10 +176,150 @@ dbDbSpeciesDir lizard
     16534332 + 741001602
 
 #########################################################################
-## BLASTZ Hg18
-    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-verbose=2 -bigClusterHub=pk \
-	-blastzOutRoot /cluster/bluearc/hg18Fr2 > do.log 2>&1 &
-    #	real    414m47.505s
+## BLASTZ Hg18 swap (DONE - 2007-02-18 - Hiram)
+    ##	the original blastz to hg18 measured
+    time nice -n +19 featureBits hg18 chainAnoCar1Link \
+	> fb.hg18.chainAnoCar1Link.txt 2>&1
+    #	real    2m28.318s
+    #	137554843 bases of 2881515245 (4.774%) in intersection
 
+    ssh kkstore05
+    mkdir /cluster/data/anoCar1/bed/blastz.hg18.swap
+    cd /cluster/data/anoCar1/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl \
+	/cluster/data/hg18/bed/blastz.anoCar1.2007-02-17/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk -swap > swap.log 2>&1 &
+
+    time nice -n +19 featureBits anoCar1 chainHg18Link \
+	> fb.anoCar1.chainHg18Link.txt 2>&1  
+    #	real    3m16.810s
+    #	112434396 bases of 1741478929 (6.456%) in intersection
+
+#########################################################################
+# GENSCAN PREDICTIONS (DONE - 2006-05-03 - 2006-05-05 - Hiram)
+    ssh kkstore05
+    #	Create a 2bit file all hard masked
+    cd /cluster/data/anoCar1
+    time nice -n +10 twoBitToFa anoCar1.2bit stdout \
+	| maskOutFa stdin hard stdout \
+	    | faToTwoBit stdin anoCar1.hard.2bit
+    #	make sure it still has all the unmasked sequence in it:
+    nice -n +19 twoBitToFa anoCar1.hard.2bit stdout | faSize stdin
+    #	1781602899 bases (781360259 N's 1000242640 real
+    #	1000242640 upper 0 lower) in 7233 sequences in 1 files
+
+    nice -n +19 twoBitToFa anoCar1.2bit stdout | faSize stdin
+    #	1781602899 bases (40123970 N's 1741478929 real
+    #	1000242640 upper 741236289 lower) in 7233 sequences in 1 files
+    #	same number of total bases, the lowers have become Ns:
+    #	781360259 == 741236289 + 40123970
+    #	the lower "reals" disappear from the "real" count:
+    #	1000242640 == 1741478929 - 741236289
+
+    #	And, make sure there aren't any sequences in this lot that have
+    #	become all N's with no sequence left in them:
+    twoBitToFa anoCar1.hard.2bit stdout \
+	| faCount stdin > anoCar1.hard.faCount
+    #	181 scaffolds end up with less than 100 bases of sequence left
+    egrep -v "^#|^total" anoCar1.hard.faCount | awk '{print $1,$2-$7}' \
+	| sort -k2nr | awk '{if ($2 < 100) { print }}' | wc -l
+    #	181
+    #	leaving 7.052 scaffolds with more than 100 bases of seqence left:
+    egrep -v "^#|^total" anoCar1.hard.faCount | awk '{print $1,$2-$7}' \
+	| sort -k2nr | awk '{if ($2 >= 100) { print }}' | wc -l
+    #	7052
+    #	make a list of those to extract their sequence:
+    egrep -v "^#|^total" anoCar1.hard.faCount | awk '{print $1,$2-$7}' \
+	| sort -k2nr | awk '{if ($2 >= 100) { print $1 }}' \
+	| sort > hard.genscan.list
+
+    twoBitToFa -seqList=hard.genscan.list anoCar1.hard.2bit genscan.hard.fa
+    #	What do we have left to work with:
+    faSize genscan.hard.fa
+    #	1780575355 bases (780338843 N's 1000236512 real
+    #	1000236512 upper 0 lower) in 7052 sequences in 1 files
+
+
+    #	creating 4,000,000 sized chunks, the largest scaffolds remain
+    #	in single pieces, the scaffolds smaller than 4,000,000 are grouped
+    #	into 4,000,000 sized fasta files.  You don't want to break these
+    #	things up because genscan will be doing its own internal 2.4 million
+    #	window on these pieces, and the gene names are going to be
+    #	constructed from the sequence name in these fasta files.  The
+    #	gene names are much better when they are this simple scaffoldN.M
+    #	numbering scheme.
+    mkdir genscanSplit
+    faSplit about genscan.hard.fa 4000000 genscanSplit/c_
+
+    ssh hgwdev
+    mkdir /cluster/data/anoCar1/bed/genscan
+    cd /cluster/data/anoCar1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/anoCar1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    #	Since we split on gaps, we have no chunks like that.  You can
+    #	verify with faCount on the chunks.
+    ls -1S /cluster/data/anoCar1/genscanSplit/c_*.fa > chunk.list
+
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/scratch/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 chunk.list single template jobList
+    para create jobList
+    para try, check, push, check, ...
+XXX - working 2007-02-18 - 22:56
+# Completed: 673 of 673 jobs
+# CPU time in finished jobs:      76339s    1272.32m    21.21h    0.88d  0.002 y
+# IO & Wait Time:                  2327s      38.78m     0.65h    0.03d  0.000 y
+# Average job time:                 117s       1.95m     0.03h    0.00d
+# Longest finished job:            1993s      33.22m     0.55h    0.02d
+# Submission to last job:          7526s     125.43m     2.09h    0.09d
+
+    #	There was a failed job, going to kolossus and running with a
+    #	reduced window size:
+    ssh kolossus
+    cd /cluster/data/anoCar1/bed/genscan
+    time /cluster/bin/x86_64/gsBig /cluster/bluearc/anoCar1/hardChunks/c_01.fa \
+        gtf/c_01.gtf -trans=pep/c_01.pep -subopt=subopt/c_01.bed \
+        -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat \
+	-tmp=/scratch/tmp -window=2000000
+    #	real    258m34.800s
+
+    # cat and lift the results into single files
+    ssh kkstore04
+    cd /cluster/data/anoCar1/bed/genscan
+    cat gtf/c_*.gtf | liftUp -type=.gtf genscan.gtf \
+	../../jkStuff/liftAll.lft carry stdin
+    cat subopt/c_*.bed | liftUp -type=.bed genscanSubopt.bed \
+	../../jkStuff/liftAll.lft carry stdin
+    cat pep/c_*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/anoCar1/bed/genscan
+    ldHgGene anoCar1 -gtf genscan genscan.gtf
+    #	Read 44899 transcripts in 323099 lines in 1 files
+    #	44899 groups 34 seqs 1 sources 1 feature types
+    #	44899 gene predictions
+
+    hgPepPred anoCar1 generic genscanPep genscan.pep
+    hgLoadBed -strict anoCar1 genscanSubopt genscanSubopt.bed
+    #	Loaded 530201 elements of size 6
+
+    #	check the numbers
+    time nice -n +19 featureBits anoCar1 genscan
+    #	54455852 bases of 2567283971 (2.121%) in intersection
