@@ -1976,7 +1976,7 @@ TMPDIR=/scratch/tmp
 	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
 
 #######################################################################
-## BLASTZ LIZARD ANOCAR1 - (WORKING - 2007-02-18 - Hiram)
+## BLASTZ LIZARD ANOCAR1 - (DONE - 2007-02-18 - Hiram)
     ssh kkstore05
     mkdir /cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18
     cd /cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18
@@ -2013,4 +2013,21 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-blastzOutRoot=/san/sanvol1/scratch/galGal3AnoCar1 > do.log 2>&1
-XXX - running 2007-02-18 21:45
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net \
+	-blastzOutRoot=/san/sanvol1/scratch/galGal3AnoCar1 > net.log 2>&1 &
+
+    time nice -n +19 featureBits galGal3 chainAnoCar1Link \
+	> fb.galGal3.chainAnoCar1Link.txt 2>&1
+    #	real    0m43.752s
+    #	106743952 bases of 1042591351 (10.238%) in intersection
+
+    ##	swap documented in anoCar1.txt
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log 2>&1 &

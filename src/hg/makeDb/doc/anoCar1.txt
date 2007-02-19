@@ -315,6 +315,7 @@ dbDbSpeciesDir lizard
     ##	the original blastz to gasAcu1 measured
     time nice -n +19 featureBits gasAcu1 chainAnoCar1Link \
 	> fb.gasAcu1.chainAnoCar1Link.txt 2>&1
+    #	real    0m51.499s
     #	56386298 bases of 446627861 (12.625%) in intersection
 
     ssh kkstore05
@@ -328,6 +329,9 @@ dbDbSpeciesDir lizard
 
     time nice -n +19 featureBits anoCar1 chainGasAcu1Link \
 	> fb.anoCar1.chainGasAcu1Link.txt 2>&1  
+    #	real    1m14.245s
+    #	54464074 bases of 1741478929 (3.127%) in intersection
+
 
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-02-19)
@@ -492,3 +496,28 @@ chainOne $(path1)
     rm -rf /cluster/data/anoCar1/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/anoCar1/bed/tblastn.hg18KG/blastOut
 #end tblastn
+
+#########################################################################
+## BLASTZ galGal3/Chicken swap (DONE - 2007-02-19 - Hiram)
+    ##	the original blastz to galGal3 measured
+    time nice -n +19 featureBits galGal3 chainAnoCar1Link \
+	> fb.galGal3.chainAnoCar1Link.txt 2>&1
+    #	real    0m43.752s
+    #	106743952 bases of 1042591351 (10.238%) in intersection
+
+    ssh kkstore05
+    mkdir /cluster/data/anoCar1/bed/blastz.galGal3.swap
+    cd /cluster/data/anoCar1/bed/blastz.galGal3.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/galGal3/bed/blastz.anoCar1.2007-02-18/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/anoCar1/bed/blastz.galGal3.swap
+    time nice -n +19 featureBits anoCar1 chainGalGal3Link \
+	> fb.anoCar1.chainGalGal3Link.txt 2>&1
+    #	real    1m8.359s
+    #	109074507 bases of 1741478929 (6.263%) in intersection
