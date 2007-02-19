@@ -8,6 +8,7 @@
 #include "psl.h"
 #include "genbank.h"
 #include "fa.h"
+#include "verbose.h"
 
 /* Variables set from command line. */
 char *refStatusFile = NULL;
@@ -114,6 +115,20 @@ boolean isStopCodon(char *dna)
 return (startsWith("taa", dna) || startsWith("tga", dna) || startsWith("tag", dna));
 }
 
+
+boolean hasStopCodons(char *dna, int codons)
+/* Return TRUE if there are stop codons in target coding region */
+{
+int i;
+for (i=0; i<codons; ++i)
+    {
+    if (isStopCodon(dna))
+        return TRUE;
+    dna += 3;
+    }
+return FALSE;
+}
+
 boolean checkCds(struct genbankCds *cds, struct dnaSeq *seq)
 /* Make sure no stop codons, and if marked complete that it does
  * really start with ATG and end with TAA/TAG/TGA */
@@ -135,14 +150,10 @@ if (cds->startComplete)
 	return FALSE;
 	}
     }
-int i;
-for (i=1; i<size; ++i)
+if (hasStopCodons(dna, size-1))
     {
-    if (isStopCodon(dna))
-	{
-        verbose(2, "%s has internal stop at codon %d of %d\n", seq->name, i-1, size);
-	return FALSE;
-	}
+    verbose(2, "%s has internal stop codon\n", seq->name);
+    return FALSE;
     }
 if (cds->endComplete)
     {
@@ -154,17 +165,135 @@ if (cds->endComplete)
 	return FALSE;
 	}
     }
+if (verboseLevel() >= 4)
+    {
+    char *s = seq->dna + cds->start;
+    char *e = seq->dna + cds->end-3;
+    verbose(4, "%s\t%d\t%d\t%c%c%c\t%c%c%c\n", seq->name, cds->startComplete, 
+    	cds->endComplete, s[0], s[1], s[2], e[0], e[1], e[2]);
+    }
 return TRUE;
 }
+
+boolean hasFrameShiftInCds(struct psl *psl, int cdsStart, int cdsEnd)
+/* Return TRUE if has frame shift (gaps of size not multiples of 3)
+ * in CDS. */
+{
+int i, lastBlock = psl->blockCount-1;
+for (i=0; i<lastBlock; ++i)
+    {
+    int blockSize = psl->blockSizes[i];
+    int itStart = psl->tStarts[i] + blockSize;
+    int itEnd = psl->tStarts[i+1];
+    if (rangeIntersection(itStart, itEnd, cdsStart, cdsEnd) > 0)
+	{
+	int iqStart = psl->qStarts[i] + blockSize;
+	int iqEnd = psl->qStarts[i+1];
+	int tGap = itEnd - itStart;
+	int qGap = iqEnd - iqStart;
+	int gapDifference = intAbs(tGap-qGap);
+	if (gapDifference % 3 != 0)
+	    return TRUE;
+	}
+    }
+return FALSE;
+}
+
 
 void mapAndOutput(struct genbankCds *cds, char *source, 
 	struct dnaSeq *rnaSeq, struct psl *psl, struct dnaSeq *txSeq, FILE *f)
 /* Map cds through psl from rnaSeq to txSeq.  If mapping is good write to file */
 {
+verbose(4, "mapAndOutput %s %d %d\n", psl->qName, cds->start, cds->end);
 /* First, because we're paranoid, check that input RNA CDS really is an
  * open reading frame. */
 if (!checkCds(cds, rnaSeq))
     return;
+
+/* We don't map on reverse strand.  Supposively we are all on +
+ * strand by now. */
+if (psl->strand[0] != '+' || psl->strand[1] != 0)
+    {
+    verbose(3, "%s/%s has funny strand %s, skipping\n", psl->qName, psl->tName, 
+    	psl->strand);
+    return;
+    }
+
+/* Next, attempt to map through psl, which is a lot easier since we're on
+ * + strand. */
+int mappedStart = -1, mappedEnd = -1;
+int i;
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int blockSize = psl->blockSizes[i];
+    int tStart = psl->tStarts[i];
+    int qStart = psl->qStarts[i];
+    int qEnd = qStart + blockSize;
+    if (rangeIntersection(qStart,qEnd,cds->start,cds->end) > 0)
+        {
+	if (qStart <= cds->start && cds->start < qEnd)
+	    {
+	    int placeInBlock = cds->start - qStart;
+	    mappedStart = tStart + placeInBlock;
+	    }
+	if (qStart < cds->end && cds->end <= qEnd)
+	    {
+	    int placeInBlock = cds->end - qStart;
+	    mappedEnd = tStart + placeInBlock;
+	    }
+	}
+    }
+
+/* If we mapped it output it. */
+if (mappedStart >= 0 && mappedEnd >= 0)
+    {
+    int cdsSize = mappedEnd - mappedStart;
+    if (cdsSize%3 == 0 || cdsSize == 0)
+        {
+	if (!hasFrameShiftInCds(psl, mappedStart, mappedEnd))
+	    {
+	    if (!hasStopCodons(txSeq->dna + mappedStart, cdsSize/3 - 1))
+	        {
+		char *s = txSeq->dna + mappedStart;
+		char *e = txSeq->dna + mappedEnd;
+		int score = 1000 - 50*pslCalcMilliBad(psl, FALSE);
+		if (score < 0) score = 0;
+		fprintf(f, "%s\t", psl->tName);
+		fprintf(f, "%d\t", mappedStart);
+		fprintf(f, "%d\t", mappedEnd);
+		fprintf(f, "%s\t", source);
+		fprintf(f, "%s\t", psl->qName);
+		fprintf(f, "%d\t", score);
+		fprintf(f, "%d\t", startsWith("tga", s));
+		fprintf(f, "%d\t", isStopCodon(e-3));
+		fprintf(f, "%d\t", 1);
+		fprintf(f, "1\t");	/* Block count */
+		fprintf(f, "%d,\t", mappedStart);
+		fprintf(f, "%d,\n", mappedEnd);
+		}
+	    else
+	        {
+		verbose(3, "%s has stop codon in mapped CDS %d %d\n", psl->qName,
+			mappedStart, mappedEnd);
+		}
+	    }
+	else
+	    {
+	    verbose(3, "%s frame shift in mapped CDS %d %d\n", psl->qName,
+	    	mappedStart, mappedEnd);
+	    }
+	}
+    else
+        {
+	verbose(3, "%s mapped CDS not a multiple of 3 %d %d\n", 
+	    psl->qName, mappedStart, mappedEnd);
+	}
+    }
+else
+    {
+    verbose(3, "%s ends not mapped %d %d\n", 
+    	psl->qName, mappedStart, mappedEnd);
+    }
 }
 
 void txCdsEvFromRna(char *rnaFa, char *rnaCds, char *txRnaPsl, char *txFa, 
