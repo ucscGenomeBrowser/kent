@@ -93,6 +93,7 @@ tempR.start = start;
 tempR.end = end;
 rangeList = NULL;
 rbTreeTraverseRange(tree, &tempR, &tempR, rangeListAdd);
+slReverse(&rangeList);
 return rangeList;
 }
 
