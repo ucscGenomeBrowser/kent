@@ -260,6 +260,78 @@ rbTreeFree(&rangeTree);
 hashFree(&evHash);
 }
 
+struct path
+/* A connected set of exons. */
+    {
+    struct path *next;
+    struct slRef *trackerRefList;
+    };
+
+boolean properSubsetOf(struct slRef *bigger, struct slRef *smaller)
+/* Return TRUE if smaller is a proper subset of bigger.  Assumes both are
+ * lists of references to edgeTrackers, and are sorted by starting coordinate. */
+{
+struct edgeTracker *bigTrack = bigger->val, *smallTrack = smaller->val;
+/* Do quick check for failure. */
+if (bigTrack->start > smallTrack->start)
+    return FALSE;
+
+/* Advance bigger to point to first block of smaller if possible. */
+for ( ; bigger != NULL; bigger = bigger->next)
+    {
+    if (bigger->val == smaller->val)
+        break;
+    }
+if (bigger == NULL)
+    return FALSE;
+
+/* Walk through smaller, and return FALSE if bigger disagrees or ends. */
+for ( ; smaller != NULL; smaller = smaller->next)
+    {
+    if (smaller->val != bigger->val)
+        return FALSE;
+    bigger = bigger->next;
+    if (bigger == NULL && smaller->next != NULL)
+        return FALSE;
+    }
+return TRUE;
+}
+
+void dumpTrackerRefList(struct slRef *refList)
+{
+struct slRef *ref;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    printf("%p ", ref->val);
+    }
+}
+
+boolean debug_properSubsetOf(struct slRef *bigger, struct slRef *smaller)
+{
+boolean isSubset = properSubsetOf(bigger, smaller);
+printf("is:\n  ");
+dumpTrackerRefList(smaller);
+printf("\na subset of;\n  ");
+dumpTrackerRefList(bigger);
+printf("\n? %s\n", (isSubset ? "yes" : "no"));
+printf("\n");
+return isSubset;
+}
+
+boolean properSubsetOfAny(struct path *pathList, struct slRef *trackerRefList)
+/* Return TRUE if trackerRefList is a subset of any of the paths in
+ * pathList */
+{
+struct path *path;
+for (path = pathList; path != NULL; path = path->next)
+    {
+    if (properSubsetOf(path->trackerRefList, trackerRefList))
+        return TRUE;
+    }
+return FALSE;
+}
+
+
 void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold, FILE *bedFile,
 	FILE *evFile)
 /* Generate transcripts and write to file. */
@@ -316,12 +388,18 @@ for (i=0; i<txg->sourceCount; ++i)
  * covered.  If not, then output transcript containing all exons in that RNA. */
 struct weightedRna *rna, *rnaList = makeWeightedRna(txg, sourceTypeWeights, sourceTxWeights, lm);
 int txId=0;
+struct path *path, *pathList = NULL;
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     struct slRef *trackerRefList = edgesUsedBySource[rna->id];
     if (!allTrackerRefsVisited(trackerRefList))
-	{
+    // if (trackerRefList != NULL && !properSubsetOfAny(pathList, trackerRefList)) // need to bring weights into this
+        {
+	lmAllocVar(lm, path);
+	path->trackerRefList = trackerRefList;
+	slAddHead(&pathList, path);
         rnaOut(txg, trackerRefList, &txg->sources[rna->id], ++txId, bedFile, evFile);
+	   /* testing */ if (trackerRefList->next != NULL) properSubsetOfAny(pathList, trackerRefList->next);
 	}
     }
 
