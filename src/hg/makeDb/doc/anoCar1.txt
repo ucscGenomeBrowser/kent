@@ -280,46 +280,32 @@ dbDbSpeciesDir lizard
     gensub2 chunk.list single template jobList
     para create jobList
     para try, check, push, check, ...
-XXX - working 2007-02-18 - 22:56
-# Completed: 673 of 673 jobs
-# CPU time in finished jobs:      76339s    1272.32m    21.21h    0.88d  0.002 y
-# IO & Wait Time:                  2327s      38.78m     0.65h    0.03d  0.000 y
-# Average job time:                 117s       1.95m     0.03h    0.00d
-# Longest finished job:            1993s      33.22m     0.55h    0.02d
-# Submission to last job:          7526s     125.43m     2.09h    0.09d
+# Completed: 319 of 319 jobs
+# CPU time in finished jobs:      39037s     650.62m    10.84h    0.45d  0.001 y
+# IO & Wait Time:                  1015s      16.91m     0.28h    0.01d  0.000 y
+# Average job time:                 126s       2.09m     0.03h    0.00d
+# Longest finished job:             459s       7.65m     0.13h    0.01d
+# Submission to last job:          3495s      58.25m     0.97h    0.04d
 
-    #	There was a failed job, going to kolossus and running with a
-    #	reduced window size:
-    ssh kolossus
+    # cat results into single files
+    ssh kkstore05
     cd /cluster/data/anoCar1/bed/genscan
-    time /cluster/bin/x86_64/gsBig /cluster/bluearc/anoCar1/hardChunks/c_01.fa \
-        gtf/c_01.gtf -trans=pep/c_01.pep -subopt=subopt/c_01.bed \
-        -exe=hg3rdParty/genscanlinux/genscan \
-        -par=hg3rdParty/genscanlinux/HumanIso.smat \
-	-tmp=/scratch/tmp -window=2000000
-    #	real    258m34.800s
-
-    # cat and lift the results into single files
-    ssh kkstore04
-    cd /cluster/data/anoCar1/bed/genscan
-    cat gtf/c_*.gtf | liftUp -type=.gtf genscan.gtf \
-	../../jkStuff/liftAll.lft carry stdin
-    cat subopt/c_*.bed | liftUp -type=.bed genscanSubopt.bed \
-	../../jkStuff/liftAll.lft carry stdin
+    cat gtf/c_*.gtf > genscan.gtf
+    cat subopt/c_*.bed > genscanSubopt.bed
     cat pep/c_*.pep > genscan.pep
 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/anoCar1/bed/genscan
     ldHgGene anoCar1 -gtf genscan genscan.gtf
-    #	Read 44899 transcripts in 323099 lines in 1 files
-    #	44899 groups 34 seqs 1 sources 1 feature types
-    #	44899 gene predictions
+    #	Read 28102 transcripts in 184045 lines in 1 files
+    #	28102 groups 4190 seqs 1 sources 1 feature types
+    #	28102 gene predictions
 
     hgPepPred anoCar1 generic genscanPep genscan.pep
     hgLoadBed -strict anoCar1 genscanSubopt genscanSubopt.bed
-    #	Loaded 530201 elements of size 6
+    #	Loaded 286327 elements of size 6
 
     #	check the numbers
     time nice -n +19 featureBits anoCar1 genscan
-    #	54455852 bases of 2567283971 (2.121%) in intersection
+    #	31394034 bases of 1741478929 (1.803%) in intersection
