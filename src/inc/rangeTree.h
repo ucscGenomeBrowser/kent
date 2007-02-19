@@ -21,7 +21,7 @@ int rangeCmp(void *va, void *vb);
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
 
-void rangeTreeAdd(struct rbTree *tree, int start, int end);
+struct range *rangeTreeAdd(struct rbTree *tree, int start, int end);
 /* Add range to tree, merging with existing ranges if need be. */
 
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end);

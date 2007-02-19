@@ -24,7 +24,7 @@ else
     return 0;
 }
 
-void rangeTreeAdd(struct rbTree *tree, int start, int end)
+struct range *rangeTreeAdd(struct rbTree *tree, int start, int end)
 /* Add range to tree, merging with existing ranges if need be. */
 {
 struct range tempR, *existing;
@@ -38,6 +38,7 @@ while ((existing = rbTreeRemove(tree, &tempR)) != NULL)
      }
 struct range *r = lmCloneMem(tree->lm, &tempR, sizeof(tempR));
 rbTreeAdd(tree, r);
+return r;
 }
 
 boolean rangeTreeOverlaps(struct rbTree *tree, int start, int end)
