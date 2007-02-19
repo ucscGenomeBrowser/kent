@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.104 2007/02/19 18:28:07 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.105 2007/02/19 23:28:37 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -468,9 +468,7 @@ if (isWig)
     {
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
-    if (cgiServerName() == NULL || startsWith("hgwdev", cgiServerName()) ||
-        startsWith("genome-test", cgiServerName()))
-        slAddTail(&otList, &otGalaxy);
+    slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     }
 else if (isMaf)
@@ -489,9 +487,7 @@ else if (isPositional)
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
     slAddTail(&otList, &otBed);
-    if (cgiServerName() == NULL || startsWith("hgwdev", cgiServerName())||
-        startsWith("genome-test", cgiServerName()))
-        slAddTail(&otList, &otGalaxy);
+    slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
     }

@@ -21,26 +21,17 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.5 2007/02/09 23:53:52 hiram Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.6 2007/02/19 23:28:37 giardine Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
 {
 char *url = NULL;
-char *script = cgiScriptName();
-if (script == NULL || strstr(script, "-test"))
-    {
-    url = cloneString("http://galaxy-test.cse.psu.edu/cgi-bin/galaxy");
-    /* allow to be overwritten by galaxyUrl parameter */
-    if (cartVarExists(cart, "galaxyUrl"))
-        {
-        url = cartString(cart, "galaxyUrl");
-        }
-    }
+/* use parameter if available */
+if (cartVarExists(cart, "GALAXY_URL"))
+    url = cartString(cart, "GALAXY_URL");
 else
-    {
-    url = cloneString("http://galaxy.cse.psu.edu/cgi-bin/galaxy");
-    }
+    url = cloneString("http://main.g2.bx.psu.edu/");
 return url;
 }
 
@@ -50,13 +41,19 @@ void doOutGalaxyQuery (struct trackDb *track, char *table, unsigned int hguid)
 struct hTableInfo *hti = getHti(database, table);
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 char *shortLabel = table;
+char selfUrl[256];
 if (track != NULL)
     shortLabel = track->shortLabel;
 htmlOpen("Output %s as %s", "results to Galaxy", shortLabel);
 hPrintf("<FORM ACTION=\"%s\" METHOD=POST>\n", getGalaxyUrl());
 /* copy cart parameters into hidden fields to send to Galaxy */
 hPrintf("\n"); /* make more readable */
-cgiMakeHiddenVar("galaDoTbQuery", "1");
+/* set default if no tool_id for Galaxy */
+if (!cartVarExists(cart, "tool_id")) 
+    cgiMakeHiddenVar("tool_id", "ucsc");
+safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerName(), cgiScriptName());
+cgiMakeHiddenVar("URL", selfUrl);
+cgiMakeHiddenVar("hgta_doGalaxyQuery", "go");
 hPrintf("\n"); 
 if (hguid > 0)
     {
@@ -66,14 +63,15 @@ if (hguid > 0)
     cgiMakeHiddenVar("userID", id);
     hPrintf("\n"); 
     }
-cgiMakeHiddenVar("galaxyFreeze", database);
 for (el = elList; el != NULL; el = el->next)
     {
     //NEED to check for outputType
     /* skip form elements from this page */
     if (sameString(el->name, "hgsid") || sameString(el->name, "fbQual") ||
         sameString(el->name, "fbUpBases") || sameString(el->name, "fbDownBases") ||
-	sameString(el->name, "galaxyFileFormat")
+	sameString(el->name, "galaxyFileFormat") || 
+        sameString(el->name, "hgta_doGalaxyQuery") ||
+        sameString(el->name, "hgta_doGetGalaxyQuery")
        )
        continue;
     if (el->val != NULL && differentString((char *)el->val, "*") &&
@@ -87,11 +85,10 @@ for (el = elList; el != NULL; el = el->next)
 
 if (isWiggle(database, table))
     {
-    /* GALA only handles BED format for now */
     cgiMakeHiddenVar(hgtaCtWigOutType, outWigBed);
     hPrintf("<BR>No options needed for wiggle tracks<BR>");
     if (sameString(cartString(cart, "hgta_regionType"), "genome"))
-        hPrintf("<BR><B>Genome wide wiggle queries are likely to time out.  It is recommended to choose a region, or use a Galaxy featured dataset.</B><BR><BR>");
+        hPrintf("<BR><B>Genome wide wiggle queries are likely to time out.  It is recommended to choose a region.</B><BR><BR>");
     cgiMakeHiddenVar("galaxyFileFormat", "bed");
     }
 else
@@ -243,14 +240,4 @@ for (el = alignTracks; el != NULL; el = el->next)
     }
 trackDbFreeList(&alignTracks);
 }
-
-/************** Subroutines for writing query description ************/
-//static int dbTableCompare(const void *va, const void *vb)
-/* Call the dbTableCmp from the library */
-//{
-//return dbTableCmp(va, vb);
-//}
-
-//rest need rewritten to work with cart
-//or use filter = filterClause(db, table, chrom) which returns the where SQL
 
