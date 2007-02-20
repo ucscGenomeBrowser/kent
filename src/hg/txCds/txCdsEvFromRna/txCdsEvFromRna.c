@@ -57,20 +57,6 @@ if (fUnmapped != NULL)
 }
 
 
-struct hash *faReadAllIntoHash(char *fileName)
-/* Return hash full of dnaSeq (lower case) from file */
-{
-struct dnaSeq *seq, *list = faReadAllDna(fileName);
-struct hash *hash = hashNew(18);
-for (seq = list; seq != NULL; seq = seq->next)
-    {
-    if (hashLookup(hash, seq->name))
-        errAbort("%s duplicated in %s", seq->name, fileName);
-    hashAdd(hash, seq->name, seq);
-    }
-return hash;
-}
-
 struct hash *cdsReadAllIntoHash(char *fileName)
 /* Return hash full of genbankCds records. */
 {
@@ -311,9 +297,9 @@ void txCdsEvFromRna(char *rnaFa, char *rnaCds, char *txRnaPsl, char *txFa,
  * and other info to transcript CDS evidence (tce) file.. */
 {
 /* Read sequences and CDSs into hash */
-struct hash *txSeqHash = faReadAllIntoHash(txFa);
+struct hash *txSeqHash = faReadAllIntoHash(txFa, dnaLower);
 verbose(2, "Read %d sequences from %s\n", txSeqHash->elCount, txFa);
-struct hash *rnaSeqHash = faReadAllIntoHash(rnaFa);
+struct hash *rnaSeqHash = faReadAllIntoHash(rnaFa, dnaLower);
 verbose(2, "Read %d sequences from %s\n", rnaSeqHash->elCount, rnaFa);
 struct hash *cdsHash = cdsReadAllIntoHash(rnaCds);
 verbose(2, "Read %d cds records from %s\n", cdsHash->elCount, rnaCds);

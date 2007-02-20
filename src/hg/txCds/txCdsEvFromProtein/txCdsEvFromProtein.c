@@ -90,20 +90,6 @@ verbose(2, "%d sources from %d elements\n", typeHash->elCount, sourceHash->elCou
 return sourceHash;
 }
 
-struct hash *faReadAllIntoHash(char *fileName, boolean isDna)
-/* Return hash full of dnaSeq (lower case) from file */
-{
-struct dnaSeq *seq, *list = faReadAllSeq(fileName, isDna);
-struct hash *hash = hashNew(18);
-for (seq = list; seq != NULL; seq = seq->next)
-    {
-    if (hashLookup(hash, seq->name))
-        errAbort("%s duplicated in %s", seq->name, fileName);
-    hashAdd(hash, seq->name, seq);
-    }
-return hash;
-}
-
 void removeNegativeGaps(struct psl *psl)
 /* It can happen that there will be negative sized gaps in a 
  * translated psl.  This gets rid of these.  It's easier here
@@ -229,8 +215,8 @@ void txCdsEvFromProtein(char *protFa, char *txProtPsl, char *txFa, char *output)
 /* txCdsEvFromProtein - Convert transcript/protein alignments and other evidence 
  * into a transcript CDS evidence (tce) file. */
 {
-struct hash *protHash = faReadAllIntoHash(protFa, FALSE);
-struct hash *txHash = faReadAllIntoHash(txFa, TRUE);
+struct hash *protHash = faReadAllIntoHash(protFa, dnaUpper);
+struct hash *txHash = faReadAllIntoHash(txFa, dnaLower);
 struct lineFile *lf = pslFileOpen(txProtPsl);
 struct hash *sourceHash = getSourceHash();
 FILE *f = mustOpen(output, "w");

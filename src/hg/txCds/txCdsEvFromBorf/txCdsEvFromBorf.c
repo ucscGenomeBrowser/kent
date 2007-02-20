@@ -25,26 +25,12 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct hash *faReadAllIntoHash(char *fileName)
-/* Return hash full of dnaSeq (lower case) from file */
-{
-struct dnaSeq *seq, *list = faReadAllDna(fileName);
-struct hash *hash = hashNew(18);
-for (seq = list; seq != NULL; seq = seq->next)
-    {
-    if (hashLookup(hash, seq->name))
-        errAbort("%s duplicated in %s", seq->name, fileName);
-    hashAdd(hash, seq->name, seq);
-    }
-return hash;
-}
-
 void txCdsEvFromBorf(char *inBorf, char *txFa, char *outTce)
 /* txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in an effort 
  * to annotate the coding regions.. */
 {
 struct lineFile *lf = lineFileOpen(inBorf, TRUE);
-struct hash *txHash = faReadAllIntoHash(txFa);
+struct hash *txHash = faReadAllIntoHash(txFa, dnaLower);
 char *row[BORF_NUM_COLS];
 FILE *f = mustOpen(outTce, "w");
 while (lineFileRowTab(lf, row))
