@@ -279,7 +279,7 @@ if (mappedStart >= 0 && mappedEnd >= 0)
 		fprintf(f, "%d\t", 1);
 		fprintf(f, "1\t");	/* Block count */
 		fprintf(f, "%d,\t", mappedStart);
-		fprintf(f, "%d,\n", mappedEnd);
+		fprintf(f, "%d,\n", mappedEnd - mappedStart);
 		}
 	    else
 	        {
