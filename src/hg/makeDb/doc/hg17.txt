@@ -22962,3 +22962,10 @@ synBlastp.csh hg17 mm7
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna hg17
+
+############
+# UPDATE hg17 knownToVisiGene (DONE galt 2007-02-15)
+# Create table that maps between known genes and visiGene database 
+    # mapping to other species such as mouse, zebrafish, frog
+    # requires visiGene probe track vgImageProbes be created first
+    knownToVisiGene hg17 -fromProbePsl=vgImageProbes

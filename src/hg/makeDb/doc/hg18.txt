@@ -13216,3 +13216,10 @@ TMPDIR=/scratch/tmp
 	> fb.anoCar1.chainHg18Link.txt 2>&1  
     #	real    3m16.810s
     #	112434396 bases of 1741478929 (6.456%) in intersection
+
+##########################################################################
+# UPDATED hg18.knownToVisiGene (DONE galt 2007-02-15)
+#  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
+ssh hgwdev
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+
