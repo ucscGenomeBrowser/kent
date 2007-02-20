@@ -56,7 +56,10 @@ while (lineFileRowTab(lf, row))
 	struct dnaSeq *txSeq = hashFindVal(txHash, b.name);
 	boolean hasStop = FALSE;
 	if (b.cdsEnd + 3 < txSeq->size)
+	    {
 	    hasStop = isStopCodon(txSeq->dna + b.cdsEnd);
+	    b.cdsEnd += 3;
+	    }
 	if (txSeq == NULL)
 	    errAbort("%s is in %s but not %s", b.name, inBorf, txFa);
 	int score = (b.score - 45)*5;
