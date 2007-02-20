@@ -13,6 +13,8 @@
 #include "bed.h"
 #endif
 
+#define BORF_NUM_COLS  12  /* number of columns in a borf */
+
 struct borf
 /* Parsed output from Victor Solovyev's bestorf program */
     {
