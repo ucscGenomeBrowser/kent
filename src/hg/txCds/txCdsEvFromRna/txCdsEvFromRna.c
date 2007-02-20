@@ -276,7 +276,6 @@ if (mappedStart >= 0 && mappedEnd >= 0)
 		fprintf(f, "%d\t", score);
 		fprintf(f, "%d\t", startsWith("atg", s));
 		fprintf(f, "%d\t", isStopCodon(e-3));
-		fprintf(f, "%d\t", 1);
 		fprintf(f, "1\t");	/* Block count */
 		fprintf(f, "%d,\t", mappedStart);
 		fprintf(f, "%d,\n", mappedEnd - mappedStart);
