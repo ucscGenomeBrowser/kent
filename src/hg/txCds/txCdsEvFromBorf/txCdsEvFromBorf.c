@@ -1,5 +1,5 @@
-/* txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in the effort 
- * of annotating the coding regions. */
+/* txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in an effort 
+ * to annotate the coding regions. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -12,8 +12,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in the effort \n"
-  "of annotating the coding regions.\n"
+  "txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in an effort \n"
+  "to annotate the coding regions.\n"
   "usage:\n"
   "   txCdsEvFromBorf input.borf input.fa output.tce\n"
   "options:\n"
@@ -40,8 +40,8 @@ return hash;
 }
 
 void txCdsEvFromBorf(char *inBorf, char *txFa, char *outTce)
-/* txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in the effort 
- * of annotating the coding regions.. */
+/* txCdsEvFromBorf - Convert borfBig format to txCdsEvidence (tce) in an effort 
+ * to annotate the coding regions.. */
 {
 struct lineFile *lf = lineFileOpen(inBorf, TRUE);
 struct hash *txHash = faReadAllIntoHash(txFa);
@@ -54,9 +54,12 @@ while (lineFileRowTab(lf, row))
     if (b.strand[0] == '+' && b.score >= 50)
 	{
 	struct dnaSeq *txSeq = hashFindVal(txHash, b.name);
+	boolean hasStop = FALSE;
+	if (b.cdsEnd + 3 < txSeq->size)
+	    hasStop = isStopCodon(txSeq->dna + b.cdsEnd);
 	if (txSeq == NULL)
 	    errAbort("%s is in %s but not %s", b.name, inBorf, txFa);
-	int score = (b.score - 50)*5;
+	int score = (b.score - 45)*5;
 	if (score > 1000) score = 1000;
 	if (score < 0) score = 0;
 	fprintf(f, "%s\t", b.name);
@@ -66,7 +69,7 @@ while (lineFileRowTab(lf, row))
 	fprintf(f, "%s\t", ".");
 	fprintf(f, "%d\t", score);
 	fprintf(f, "%d\t", startsWith("atg", txSeq->dna + b.cdsStart));
-	fprintf(f, "%d\t", isStopCodon(txSeq->dna + b.cdsEnd - 3));
+	fprintf(f, "%d\t", hasStop);
 	fprintf(f, "%d\t", 1);	
 	fprintf(f, "%d,\t", b.cdsStart);
 	fprintf(f, "%d,\n", b.cdsEnd - b.cdsStart);
