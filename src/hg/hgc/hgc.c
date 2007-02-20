@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1207 2007/02/16 00:33:29 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1208 2007/02/20 06:38:19 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17584,6 +17584,13 @@ else
 printTrackHtml(tdb);
 }
 
+void doColoredExon(struct trackDb *tdb, char *item)
+/* Print information for coloredExon type tracks. */
+{
+genericHeader(tdb, item);
+printTrackHtml(tdb);
+}
+
 struct trackDb *tdbForTableArg()
 /* get trackDb for track passed in table arg */
 {
@@ -17714,6 +17721,10 @@ else if (sameWord(track, "refFullAli"))
 else if (sameWord(track, "rikenMrna"))
     {
     doRikenRna(tdb, item);
+    }
+else if (sameWord(track, "cgapSage"))
+    {
+    doCgapSage(tdb, item);
     }
 else if (sameWord(track, "ctgPos") || sameWord(track, "ctgPos2"))
     {

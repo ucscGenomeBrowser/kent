@@ -567,6 +567,9 @@ void contigMethods(struct track *tg);
 void goldMethods(struct track *tg);
 /* Make track for golden path (assembly track). */
 
+void cgapSageMethods(struct track *tg);
+/* Make CGAP SAGE track. */
+
 void coverageMethods(struct track *tg);
 /* Make track for golden path positions of all frags. */
 

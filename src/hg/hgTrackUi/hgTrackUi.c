@@ -3,10 +3,9 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
-#include "web.h"
-#include "cart.h"
 #include "jksql.h"
 #include "trackDb.h"
+#include "hgTrackUi.h"
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
@@ -34,11 +33,11 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.343 2007/02/15 21:30:56 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.344 2007/02/20 06:38:24 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
-char *chromosome = NULL;	/* Chromosome. */
+char *chromosome = NULL;	        /* Chromosome. */
 
 void radioButton(char *var, char *val, char *ourVal)
 /* Print one radio button */
@@ -2203,6 +2202,8 @@ if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
     affyTxnPhase2Ui(tdb);
+else if (sameString(track, "cgapSage"))
+    cgapSageUi(tdb);
 else if (sameString(track, "stsMapMouseNew"))
         stsMapMouseUi(tdb);
 else if (sameString(track, "stsMapRat"))

@@ -8,7 +8,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTrackUi
 
-O = $A.o
+O = $A.o cgapSageUi.o
 
 include ../../inc/cgi_build_rules.mk
 

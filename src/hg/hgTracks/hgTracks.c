@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1279 2007/02/15 18:10:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1280 2007/02/20 06:38:08 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12641,6 +12641,7 @@ struct track *getTrackList( struct group **pGroupList)
 struct track *track, *trackList = NULL;
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("rgdGene", rgdGeneMethods);
+registerTrackHandler("cgapSage", cgapSageMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
@@ -13036,6 +13037,7 @@ for (track = trackList; track != NULL; track = track->next)
 	if (measureTiming)
 	    lastTime = clock1000();
 	track->loadItems(track); 
+	
 	if (measureTiming)
 	    {
 	    thisTime = clock1000();

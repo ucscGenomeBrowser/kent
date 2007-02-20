@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "cgapSage/cgapSageLib.h"
 
-static char const rcsid[] = "$Id: cgapSageLib.c,v 1.1 2007/01/30 00:05:40 aamp Exp $";
+static char const rcsid[] = "$Id: cgapSageLib.c,v 1.2 2007/02/20 06:38:29 aamp Exp $";
 
 /* definitions for sex column */
 static char *values_sex[] = {"male", "female", NULL};
@@ -106,6 +106,28 @@ while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     }
 lineFileClose(&lf);
 slReverse(&list);
+return list;
+}
+
+struct cgapSageLib *cgapSageLibLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cgapSageLib from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cgapSageLibFreeList(). */
+{
+struct cgapSageLib *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cgapSageLibLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
 return list;
 }
 

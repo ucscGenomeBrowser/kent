@@ -5,6 +5,10 @@
 #ifndef CGAPSAGELIB_H
 #define CGAPSAGELIB_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
 #define CGAPSAGELIB_NUM_COLS 21
 
 enum cgapSageLibSex
@@ -57,6 +61,13 @@ struct cgapSageLib *cgapSageLibLoadAllByChar(char *fileName, char chopper);
 
 #define cgapSageLibLoadAllByTab(a) cgapSageLibLoadAllByChar(a, '\t');
 /* Load all cgapSageLib from tab separated file.
+ * Dispose of this with cgapSageLibFreeList(). */
+
+struct cgapSageLib *cgapSageLibLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cgapSageLib from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
  * Dispose of this with cgapSageLibFreeList(). */
 
 struct cgapSageLib *cgapSageLibCommaIn(char **pS, struct cgapSageLib *ret);
