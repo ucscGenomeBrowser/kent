@@ -102,6 +102,9 @@ typedef char Codon; /* Our codon type. */
  * The "Standard" Code */
 AA lookupCodon(DNA *dna); 
 
+boolean isStopCodon(DNA *dna);
+/* Return TRUE if it's a stop codon. */
+
 /* Returns one letter code for protein, 
  * 0 for stop codon or X for bad input,
  * Vertebrate Mitochondrial Code */

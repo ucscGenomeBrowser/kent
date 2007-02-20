@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.44 2007/02/15 16:20:46 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.45 2007/02/20 02:02:46 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -214,8 +214,13 @@ for (i=0; i<3; ++i)
     ix = (ix<<2) + bv;
     }
 c = codonTable[ix].protCode;
-c = toupper(c);
 return c;
+}
+
+boolean isStopCodon(DNA *dna)
+/* Return TRUE if it's a stop codon. */
+{
+return lookupCodon(dna) == 0;
 }
 
 /* Returns one letter code for protein, 
@@ -879,6 +884,7 @@ if (bestPos >= 0)
     }
 return trimSize;
 }
+
 
 boolean isDna(char *poly, int size)
 /* Return TRUE if letters in poly are at least 90% ACGTU */
