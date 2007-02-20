@@ -1510,3 +1510,36 @@ chainOne $(path1)
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna xenTro2
+
+##########################################################################
+## WindowMasker masked sequence (DONE - 2007-02-20 - Hiram)
+    ssh kolossus
+    ##	This directory was placed on store12 since xenTro2 filesystem
+    ##	was full.  This is actually a symlink
+    mkdir /cluster/data/xenTro2/bed/WindowMasker.2007-02-19
+    cd /cluster/data/xenTro2/bed/WindowMasker.2007-02-19
+    ## copy the .csh scripts from mm8 WindowMasker run, edit to fixup
+    #	reference to correct DB and work directory.
+    time nice -n +19 ./doCounts.csh > doCounts.out 2>&1
+    time nice -n +19 ./doSdust.csh > doSdust.out 2>&1
+    
+    ssh kkstore05
+    cd /cluster/data/xenTro2/bed/WindowMasker.2007-02-19
+    gzip *.counts *.bed
+    nice -n +19 ./applyMask.csh
+    #	this addTrf properly gets the n's changed to N which WM masked
+    nice -n +19 ./addTrf.csh
+    #	measuring faSize of resulting xenTro2.sdTrf.2bit:
+    #	1513925492 bases (154525475 N's 1359400017 real
+    #	835902481 upper 523497536 lower) in 19759 sequences in 1 files
+    #	%38.51 = 523497536 / 1359400017
+    #	vs. existing xenTro2.2bit
+    #	1513925492 bases (154525475 N's 1359400017 real
+    #	1092281194 upper 267118823 lower) in 19759 sequences in 1 files
+    #	%19.65 = 267118823 / 1359400017
+
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/WindowMasker.2007-02-19
+    time nice -n +19 ./load.csh > load.out 2>&1
+    #	Loaded 7013938 elements of size 3
+    #	real    2m29.659s
