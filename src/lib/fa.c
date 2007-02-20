@@ -5,13 +5,14 @@
 
 #include "common.h"
 #include "errabort.h"
+#include "hash.h"
 #include "portable.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.36 2006/12/06 15:43:02 angie Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.37 2007/02/20 18:50:21 kent Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -597,6 +598,24 @@ struct dnaSeq *seqList = faReadAllMixableInLf(lf, isDna, mixed);
 lineFileClose(&lf);
 return seqList;
 }
+
+struct hash *faReadAllIntoHash(char *fileName, enum dnaCase dnaCase)
+/* Return hash of all sequences in FA file.  */
+{
+boolean isDna = (dnaCase == dnaLower);
+boolean isMixed = (dnaCase == dnaMixed);
+struct dnaSeq *seqList = faReadAllSeqMixable(fileName, isDna, isMixed);
+struct hash *hash = hashNew(18);
+struct dnaSeq *seq;
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    if (hashLookup(hash, seq->name))
+        errAbort("%s duplicated in %s", seq->name, fileName);
+    hashAdd(hash, seq->name, seq);
+    }
+return hash;
+}
+
 
 struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna)
 /* Return list of all sequences in FA file. */

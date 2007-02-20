@@ -35,6 +35,9 @@ struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna);
 struct dnaSeq *faReadAllMixed(char *fileName);
 /* Read in mixed case fasta file, preserving case. */
 
+struct hash *faReadAllIntoHash(char *fileName, enum dnaCase dnaCase);
+/* Return hash of all sequences in FA file.  */
+
 struct dnaSeq *faReadAllMixedInLf(struct lineFile *lf);
 /* Read in mixed case sequence from open fasta file. */
 
