@@ -127,13 +127,6 @@ verbose(2, "%d sources from %d elements\n", typeHash->elCount, sourceHash->elCou
 return sourceHash;
 }
 
-boolean isStopCodon(char *dna)
-/* Return TRUE if it's a stop codon. */
-{
-return (startsWith("taa", dna) || startsWith("tga", dna) || startsWith("tag", dna));
-}
-
-
 boolean hasStopCodons(char *dna, int codons)
 /* Return TRUE if there are stop codons in target coding region */
 {
