@@ -1,0 +1,17 @@
+This directory contains various programs to help map the coding
+region inside of a transcript.  In the Known Genes III build
+process it is applied to the bed file/fa file output of txWalk.
+
+The overall pipeline is to convert various lines of evidence to
+a common cdsEvidence format with:
+   txCdsEvFromRna - handles refSeq and genbank mRNA alignments
+   txCdsEvFromProtein - handles uniProt and refSeq protein alignments
+   txCdsEvFromBorf - handles bestorf (via borfBig) predictions
+These are then all concatenated together, and the best CDS for each
+transcript is picked with
+   txCdsPick
+Then the transcript bed and sequence are turned into a GTF gene
+prediction file and a protein sequence file with
+   txCdsToGene
+
+
