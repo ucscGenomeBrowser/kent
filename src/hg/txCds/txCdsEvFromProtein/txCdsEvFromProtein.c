@@ -151,7 +151,8 @@ void mapAndOutput(char *source, aaSeq *protSeq, struct psl *psl,
 {
 if (!sameString(psl->strand, "++"))
     {
-    unmappedPrint("%s funny strand %s\n", psl->qName, psl->strand);
+    unmappedPrint("%s alignment with %s funny strand %s\n", psl->qName, psl->tName,
+    	psl->strand);
     return;
     }
 removeNegativeGaps(psl);
@@ -160,9 +161,22 @@ int mappedEnd = psl->tEnd+3;
 char *s = txSeq->dna + mappedStart;
 char *e = txSeq->dna + mappedEnd-3;
 verbose(3, "%s s %c%c%c e %c%c%c %d %d \n", psl->qName, s[0], s[1], s[2], e[0], e[1], e[2], mappedStart, mappedEnd);
-int score = 1000 - 50*pslCalcMilliBad(psl, FALSE);
-if (score < 0) score = 0;
-double coverage = (double)totalAminoAcids(psl)/psl->qSize;
+int milliBad = pslCalcMilliBad(psl, FALSE);
+int score = 1000 - 10*milliBad;
+if (score <= 0)
+    {
+    unmappedPrint("%s too divergent compared to %s (%4.1f%% sequence identity)\n", 
+    	psl->qName, psl->tName, 0.1*(1000-milliBad));
+    return;
+    }
+int totalCovAa = totalAminoAcids(psl);
+double coverage = (double)totalCovAa/psl->qSize;
+if (coverage < 0.75)
+    {
+    unmappedPrint("%s covers too little of %s (%d of %d amino acids)\n",
+    	psl->qName, psl->tName, totalCovAa, psl->qSize);
+    return;
+    }
 score *= coverage;
 fprintf(f, "%s\t", psl->tName);
 fprintf(f, "%d\t", mappedStart);
