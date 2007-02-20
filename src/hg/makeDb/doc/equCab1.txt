@@ -1,0 +1,189 @@
+# for emacs: -*- mode: sh; -*-
+
+# Equus caballus - Broad Institute 1.0
+
+    wget --timestamping http://www.genome.gov/Images/press_photos/lowres/20008-72.jpg
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE 2/6/07 Fan)
+
+    ssh kkstore05
+    mkdir /cluster/store12/equCab1
+    ln -s /cluster/store12/equCab1 /cluster/data/equCab1
+    mkdir /cluster/data/equCab1/downloads
+    cd /cluster/data/equCab1/downloads
+
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/BasicAssemblyOneLiner.out
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/Draft_v1.agp.chromosome.fasta.gz
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/Draft_v1.agp.chromosome.qual.gz
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/ForDistribution.command
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.agp
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.bases.gz
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.bases.split.tar.gz
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.links
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.quals.gz
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.quals.split.tar.gz
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/assembly.unplaced
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/chromosomes.agp
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/source
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/assemblies/mammals/horse/Equus1/unplaced.fasta.gz
+
+    faSize Draft_v1.agp.chromosome.fasta.gz
+#2454853977 bases (32946942 N's 2421907035 real 2421907035 upper 0 lower) in #10526 sequences in 1 files
+#Total size: mean 233218.1 sd 993878.5 min 3000 (scaffold_10140.1-3000) max #5000000 (scaffold_0.1-5000000) median 4087
+#N count: mean 3130.1 sd 16192.7
+#U count: mean 230088.1 sd 982249.2
+#L count: mean 0.0 sd 0.0
+
+# Create a single chrUn
+    ssh kkstore05
+    cd /cluster/data/equCab1
+    mkdir ucsc
+    cd ucsc
+
+    cat ../chromosomes.agp |grep Un |grep -v fragment |cut -f 1,6 >un.tab
+
+    ssh hgwdev
+    hgsql equCab1
+
+CREATE TABLE horseUnContig (
+  	unId  varchar(40) NOT NULL,
+  	contigId varchar(40) NOT NULL,
+  	KEY (unId),
+  	KEY (contigId)
+  	) TYPE=MyISAM;
+
+	load data local infile "un.tab" into table horseUnContiq;
+	quit
+
+    hgsql equCab1 -N -e 'select s.* from horseContigSeq s, horseUnContig u where s.id=u.contigId' >unSeq.tab
+
+    hgsql equCab1 -e 'load data local infile "unSeq.tab" into table horseUnContigSeq'
+
+    pepPredToFa equCab1 horseUnContigSeq horseUnSeq.fa
+
+    scaffoldFaToAgp horseUnSeq.fa
+    cat ../chromosomes.agp |grep -v Un >j1.tmp
+    cat j1.tmp horseUnSeq.agp >ucsc.agp
+
+    qaToQac ../assembly.quals.gz  assembly.quals.qac
+
+    qacAgpLift ../ucsc.agp assembly.quals.qac ucscChrom.qac
+    mv ucscChrom.qac ..
+
+
+#########################################################################
+# MAKE GENOME DB (IN PROGRESS 2/8/07 Fan)
+    ssh kkstore05
+    cd /cluster/data/equCab1
+
+    cat > equCab1.config.ra <<EOF
+# Config parameters for makeGenomeDb.pl:
+db equCab1
+clade vertebrate
+genomeCladePriority 40
+scientificName Equus caballus
+commonName Horse
+assemblyDate Feb. 2007
+assemblyLabel Broad Institute equCab1 (1.0)
+orderKey 161
+# NC_001640
+mitoAcc 5835107
+fastaFiles /cluster/data/equCab1/downloads/assembly.bases.gz
+agpFiles /cluster/data/equCab1/downloads/ucsc.agp 
+qualFiles /cluster/data/equCab1/downloads/ucscChrom.qac
+dbDbSpeciesDir horse
+EOF
+
+    # Run with -debug to see what it would do / check for issues:
+    bash
+    makeGenomeDb.pl equCab1.config.ra -debug -verbose=3
+
+    # Run it for real:
+    makeGenomeDb.pl -continue db -verbose=2 equCab1.config.ra \
+      >& makeGenomeDb.log & tail -f makeGenomeDb.log
+
+    # Follow the directions at the end of the log after
+    #NOTES -- STUFF THAT YOU WILL HAVE TO DO --
+
+#########################################################################
+# REPEATMASKER (DONE 02/14/07, Fan)
+    ssh kkstore05
+    # Run -debug to create the dir structure and preview the scripts:
+    doRepeatMasker.pl equCab1 -verbose 3 -debug
+    # Run it for real and tail the log:
+    mkdir /cluster/data/equCab1/bed/RepeatMasker.2007-02-13
+    cd /cluster/data/equCab1/bed/RepeatMasker.2007-02-13
+
+    doRepeatMasker.pl equCab1 -verbose 3 \
+      >& do.log & tail -f do.log
+    # RM version info from do.log:
+#grep version of RepeatMasker$ /cluster/bluearc/RepeatMasker/RepeatMasker
+##    October 6 2006 (open-3-1-6) version of RepeatMasker
+#grep RELEASE /cluster/bluearc/RepeatMasker/Libraries/RepeatMaskerLib.embl
+##CC   RELEASE 20061006;
+
+# Took almost 2 days.
+
+# Completed: 4942 of 4942 jobs
+# CPU time in finished jobs:   34711332s  578522.21m  9642.04h  401.75d  1.101 y
+# IO & Wait Time:                918255s   15304.24m   255.07h   10.63d  0.029 y
+# Average job time:                7210s     120.16m     2.00h    0.08d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           13135s     218.92m     3.65h    0.15d
+# Submission to last job:        125032s    2083.87m    34.73h    1.45d
+    
+    ssh hgwdev
+    featureBits equCab1 rmsk
+# 994130286 bases of 2421923695 (41.047%) in intersection
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 2/15/07 Fan)
+    ssh kolossus
+    nice tcsh
+    mkdir /cluster/data/equCab1/bed/simpleRepeat
+    cd /cluster/data/equCab1/bed/simpleRepeat
+    twoBitToFa ../../equCab1.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+      -bedAt=simpleRepeat.bed -tempDir=/tmp \
+    >& trf.log & tail -f trf.log
+    # ~2 hours
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # Load unfiltered repeats into the database:
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed/simpleRepeat
+    hgLoadBed equCab1 simpleRepeat \
+      /cluster/data/equCab1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    featureBits equCab1 simpleRepeat
+#40603979 bases of 2421923695 (1.677%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (DONE 2/15/07 Fan)
+    ssh kolossus
+    cd /cluster/data/equCab1
+    time twoBitMask equCab1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed equCab1.2bit
+    # This warning is OK -- the extra fields are not block coordinates.
+#Warning: BED file bed/simpleRepeat/trfMask.bed has >=13 fields which means it might contain block coordinates, but this program uses only the first three fields (the entire span -- no support for blocks).
+2.234u 4.142s 0:17.72 35.9%     0+0k 0+0io 5pf+0w
+    # Link to it from /gbdb:
+    ssh hgwdev
+    ln -s /cluster/data/equCab1/equCab1.2bit /gbdb/equCab1/equCab1.2bit
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE 2/15/07 Fan)
+    cd /cluster/data/equCab1
+    /cluster/bin/scripts/makeDownloads.pl equCab1 -verbose=2 \
+      >& jkStuff/downloads.log & tail -f jkStuff/downloads.log
+
+#########################################################################
+## Send sequence to san for kluster runs (DONE - 2007-02-15 - Fan)
+    ssh kkstore05
+    cd /cluster/data/equCab1
+    mkdir /san/sanvol1/scratch/equCab1
+    cp -p equCab1.2bit /san/sanvol1/scratch/equCab1/
+    cp -p chrom.* /san/sanvol1/scratch/equCab1/
+
