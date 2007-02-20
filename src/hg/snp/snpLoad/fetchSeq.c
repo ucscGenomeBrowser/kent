@@ -10,7 +10,7 @@
 #include "sqlNum.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.8 2007/02/17 08:00:25 heather Exp $";
+static char const rcsid[] = "$Id: fetchSeq.c,v 1.9 2007/02/20 21:35:43 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,11 +18,11 @@ void usage()
 errAbort(
     "fetchSeq - append sequence to bed 6\n"
     "usage:\n"
-    "    fetchSeq input sequence\n");
+    "    fetchSeq input sequence output\n");
 }
 
 
-void doFetch(char *inputFileName, char *sequenceFileName)
+void doFetch(char *inputFileName, char *sequenceFileName, char *outputFileName)
 /* lookup sequence for each line */
 {
 struct lineFile *lf = NULL;
@@ -39,6 +39,8 @@ int score = 0;
 char *strand = NULL;
 
 struct dnaSeq *chunk = NULL;
+
+FILE *outputFileHandle = mustOpen(outputFileName, "w");
 
 tbf = twoBitOpen(sequenceFileName);
 
@@ -62,18 +64,19 @@ while (lineFileNext(lf, &line, NULL))
     touppers(chunk->dna);
     if (sameString(strand, "-"))
         reverseComplement(chunk->dna, chunk->size);
-    printf("%s\t%d\t%d\t%s\t%d\t%s\t%s\n", fileChrom, start, end, name, score, strand, chunk->dna);
+    fprintf(outputFileHandle, "%s\t%d\t%d\t%s\t%d\t%s\t%s\n", fileChrom, start, end, name, score, strand, chunk->dna);
     dnaSeqFree(&chunk);
     }
 
 lineFileClose(&lf);
+carefulClose(&outputFileHandle);
 }
 
 
 int main(int argc, char *argv[])
 /* read bed 6 file, look up sequence */
 {
-if (argc != 3)
+if (argc != 4)
     usage();
 
 if (!fileExists(argv[1]))
@@ -81,7 +84,7 @@ if (!fileExists(argv[1]))
 if (!fileExists(argv[2]))
     errAbort("can't find %s\n", argv[2]);
 
-doFetch(argv[1], argv[2]);
+doFetch(argv[1], argv[2], argv[3]);
 
 return 0;
 }
