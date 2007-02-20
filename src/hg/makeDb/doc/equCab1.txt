@@ -187,3 +187,47 @@ EOF
     cp -p equCab1.2bit /san/sanvol1/scratch/equCab1/
     cp -p chrom.* /san/sanvol1/scratch/equCab1/
 
+#########################################################################
+## Photograph (DONE - 2007-02-20 - Hiram)
+    mkdir /cluster/data/equCab1/photograph
+    wget --timestamping \
+	"http://www.genome.gov/Images/press_photos/highres/20008-300.jpg" \
+	-O Twilight_equCab1.jpg
+    convert -quality 80 -sharpen 0 -normalize -geometry 320x200 \
+	Twilight_equCab1.jpg Equus_caballus.jpg
+    # Add Equus_caballus.jpg to the browser/images source tree and copy
+    #	to /usr/local/apache/htdocs/images
+    #	Remember to use the -kb option when adding this binary data:
+    cvs add -kb Equus_caballus.jpg
+
+##########################################################################
+## WindowMasker masked sequence (DONE - 2007-02-20 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/equCab1/bed/WindowMasker.2007-02-20
+    cd /cluster/data/equCab1/bed/WindowMasker.2007-02-20
+    ## copy the .csh scripts from xenTro2 WindowMasker run, edit to fixup
+    #	reference to correct DB and work directory.
+    time nice -n +19 ./doCount.csh > doCount.out 2>&1
+XXX - running 2007-02-20 11:40
+    time nice -n +19 ./doSdust.csh > doSdust.out 2>&1
+    
+    ssh kkstore05
+    cd /cluster/data/equCab1/bed/WindowMasker.2007-02-20
+    gzip *.counts *.bed
+    nice -n +19 ./applyMask.csh
+    #	this addTrf properly gets the n's changed to N which WM masked
+    nice -n +19 ./addTrf.csh
+    #	measuring faSize of resulting equCab1.sdTrf.2bit:
+    #	1513925492 bases (154525475 N's 1359400017 real
+    #	835902481 upper 523497536 lower) in 19759 sequences in 1 files
+    #	%38.51 = 523497536 / 1359400017
+    #	vs. existing equCab1.2bit
+    #	1513925492 bases (154525475 N's 1359400017 real
+    #	1092281194 upper 267118823 lower) in 19759 sequences in 1 files
+    #	%19.65 = 267118823 / 1359400017
+
+    ssh hgwdev
+    cd /cluster/data/equCab1/bed/WindowMasker.2007-02-20
+    time nice -n +19 ./load.csh > load.out 2>&1
+    #	Loaded 7013938 elements of size 3
+    #	real    2m29.659s
