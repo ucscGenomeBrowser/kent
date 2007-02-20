@@ -59,23 +59,42 @@ void outputGtf(struct cdsEvidence *cds, struct bed *bed, FILE *f)
 }
 
 void outputProtein(struct cdsEvidence *cds, struct dnaSeq *txSeq, FILE *f)
-/* Translate txSeq to protein guided by cds, and output to file */
+/* Translate txSeq to protein guided by cds, and output to file.
+ * The implementation is a little complicated by checking for internal
+ * stop codons and other error conditions. */
 {
 struct dyString *dy = dyStringNew(4*1024);
 int blockIx;
 for (blockIx=0; blockIx<cds->cdsCount; ++blockIx)
     {
     DNA *dna = txSeq->dna + cds->cdsStarts[blockIx];
-    int aaSize = cds->cdsSizes[blockIx];
-    assert(aaSize%3 == 0);
+    int rnaSize = cds->cdsSizes[blockIx];
+    if (rnaSize%3 != 0)
+        {
+	errAbort("size of block (%d) not multiple of 3 in %s",
+	    rnaSize, cds->name);
+	}
+    int aaSize = rnaSize/3;
     int i;
     for (i=0; i<aaSize; ++i)
         {
 	AA aa = lookupCodon(dna);
-	assert(aa != 0);
+	if (aa == 0) aa = '*';
 	dyStringAppendC(dy, aa);
 	dna += 3;
 	}
+    }
+int lastCharIx = dy->stringSize-1;
+if (dy->string[lastCharIx] == '*')
+    {
+    dy->string[lastCharIx] = 0;
+    dy->stringSize = lastCharIx;
+    }
+char *prematureStop = strchr(dy->string, '*');
+if (prematureStop != NULL)
+    {
+    errAbort("Stop codons in CDS at position %d for %s", 
+    	(int)(prematureStop - dy->string), cds->name);
     }
 faWriteNext(f, cds->name, dy->string, dy->stringSize);
 dyStringFree(&dy);
