@@ -134,6 +134,27 @@ for (i=0; i<lastBlock; ++i)
     }
 }
 
+boolean aliGotStopCodons(struct psl *psl, struct dnaSeq *seq)
+/* Return TRUE if alignment includes stop codons. */
+{
+int i, lastBlock = psl->blockCount-1;
+for (i=0; i<lastBlock; ++i)
+    {
+    int qBlockSize = psl->blockSizes[i];
+    int tStart = psl->tStarts[i];
+    DNA *dna = seq->dna + tStart;
+    int i;
+    for (i=0; i<qBlockSize; ++i)
+        {
+	if (isStopCodon(dna))
+	    return TRUE;
+	dna += 3;
+	}
+    }
+return FALSE;
+}
+
+
 int totalAminoAcids(struct psl *psl)
 /* Count total number of amino acids in psl. */
 {
@@ -143,6 +164,8 @@ for (i=0; i<blockCount; ++i)
     total += psl->blockSizes[i];
 return total;
 }
+
+
 
 void mapAndOutput(char *source, aaSeq *protSeq, struct psl *psl, 
 	struct dnaSeq *txSeq, FILE *f)
@@ -156,6 +179,11 @@ if (!sameString(psl->strand, "++"))
     return;
     }
 removeNegativeGaps(psl);
+if (aliGotStopCodons(psl, txSeq))
+    {
+    unmappedPrint("%s alignment with %s has stop codons\n", psl->qName, psl->tName);
+    return;
+    }
 int mappedStart = psl->tStart;
 int mappedEnd = psl->tEnd+3;
 char *s = txSeq->dna + mappedStart;
