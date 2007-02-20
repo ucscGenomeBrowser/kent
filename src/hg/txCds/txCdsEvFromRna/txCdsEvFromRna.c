@@ -13,6 +13,7 @@
 /* Variables set from command line. */
 char *refStatusFile = NULL;
 char *mgcStatusFile = NULL;
+FILE *fUnmapped = NULL;
 char *defaultSource = "genbankCds";
 
 void usage()
@@ -29,16 +30,32 @@ errAbort(
   "   -mgcStatus=mgcStatus.tab - include two column file with MGC status\n"
   "         Selectively overrides source field of output\n"
   "   -source=name - Name to put in tce source field. Default is \"%s\"\n"
+  "   -unmapped=name - Put info about why stuff didn't map here\n"
   , defaultSource
   );
 }
 
 static struct optionSpec options[] = {
-   {"refSeqStatus", OPTION_STRING},
+   {"refStatus", OPTION_STRING},
    {"mgcStatus", OPTION_STRING},
    {"source", OPTION_STRING},
+   {"unmapped", OPTION_STRING},
    {NULL, 0},
 };
+
+
+void unmappedPrint(char *format, ...)
+/* Print out info to unmapped file if it exists. */
+{
+if (fUnmapped != NULL)
+    {
+    va_list args;
+    va_start(args, format);
+    vfprintf(fUnmapped, format, args);
+    va_end(args);
+    }
+}
+
 
 struct hash *faReadAllIntoHash(char *fileName)
 /* Return hash full of dnaSeq (lower case) from file */
@@ -87,7 +104,7 @@ if (refStatusFile != NULL)
     while (lineFileRow(lf, row))
         {
 	char typeBuf[128];
-	safef(typeBuf, sizeof(typeBuf), "RefSeq%s", row[2]);
+	safef(typeBuf, sizeof(typeBuf), "RefSeq%s", row[1]);
 	char *type = hashStoreName(typeHash, typeBuf);
 	hashAdd(sourceHash, row[0], type);
 	}
@@ -100,12 +117,13 @@ if (mgcStatusFile != NULL)
     while (lineFileRow(lf, row))
         {
 	char typeBuf[128];
-	safef(typeBuf, sizeof(typeBuf), "MGC%s", row[2]);
+	safef(typeBuf, sizeof(typeBuf), "MGC%s", row[1]);
 	char *type = hashStoreName(typeHash, typeBuf);
 	hashAdd(sourceHash, row[0], type);
 	}
     lineFileClose(&lf);
     }
+verbose(2, "%d sources from %d elements\n", typeHash->elCount, sourceHash->elCount);
 return sourceHash;
 }
 
@@ -136,7 +154,7 @@ boolean checkCds(struct genbankCds *cds, struct dnaSeq *seq)
 int size = cds->end - cds->start;
 if (size%3 != 0)
     {
-    verbose(2, "%s CDS size %d not a multiple of 3\n", seq->name, size);
+    unmappedPrint("%s input CDS size %d not a multiple of 3\n", seq->name, size);
     return FALSE;
     }
 size /= 3;
@@ -145,14 +163,14 @@ if (cds->startComplete)
     {
     if (!startsWith("atg", dna))
 	{
-        verbose(2, "%s \"start complete\" but begins with %c%c%c\n", seq->name,
-		dna[0], dna[1], dna[2]);
+        unmappedPrint("%s input CDS \"start complete\" but begins with %c%c%c\n", 
+		seq->name, dna[0], dna[1], dna[2]);
 	return FALSE;
 	}
     }
 if (hasStopCodons(dna, size-1))
     {
-    verbose(2, "%s has internal stop codon\n", seq->name);
+    unmappedPrint("%s input CDS has internal stop codon\n", seq->name);
     return FALSE;
     }
 if (cds->endComplete)
@@ -160,16 +178,16 @@ if (cds->endComplete)
     dna = seq->dna + cds->end - 3;
     if (!isStopCodon(dna))
 	{
-        verbose(2, "%s \"end complete\" but ends with %c%c%c\n", seq->name,
-		dna[0], dna[1], dna[2]);
+        unmappedPrint("%s input CDS  \"end complete\" but ends with %c%c%c\n", 
+		seq->name, dna[0], dna[1], dna[2]);
 	return FALSE;
 	}
     }
-if (verboseLevel() >= 4)
+if (verboseLevel() >= 3)
     {
     char *s = seq->dna + cds->start;
     char *e = seq->dna + cds->end-3;
-    verbose(4, "%s\t%d\t%d\t%c%c%c\t%c%c%c\n", seq->name, cds->startComplete, 
+    verbose(3, "%s\t%d\t%d\t%c%c%c\t%c%c%c\n", seq->name, cds->startComplete, 
     	cds->endComplete, s[0], s[1], s[2], e[0], e[1], e[2]);
     }
 return TRUE;
@@ -204,7 +222,6 @@ void mapAndOutput(struct genbankCds *cds, char *source,
 	struct dnaSeq *rnaSeq, struct psl *psl, struct dnaSeq *txSeq, FILE *f)
 /* Map cds through psl from rnaSeq to txSeq.  If mapping is good write to file */
 {
-verbose(4, "mapAndOutput %s %d %d\n", psl->qName, cds->start, cds->end);
 /* First, because we're paranoid, check that input RNA CDS really is an
  * open reading frame. */
 if (!checkCds(cds, rnaSeq))
@@ -214,7 +231,7 @@ if (!checkCds(cds, rnaSeq))
  * strand by now. */
 if (psl->strand[0] != '+' || psl->strand[1] != 0)
     {
-    verbose(3, "%s/%s has funny strand %s, skipping\n", psl->qName, psl->tName, 
+    unmappedPrint("%s/%s has funny strand %s, skipping\n", psl->qName, psl->tName, 
     	psl->strand);
     return;
     }
@@ -273,25 +290,25 @@ if (mappedStart >= 0 && mappedEnd >= 0)
 		}
 	    else
 	        {
-		verbose(3, "%s has stop codon in mapped CDS %d %d\n", psl->qName,
+		unmappedPrint("%s has stop codon in mapped CDS %d %d\n", psl->qName,
 			mappedStart, mappedEnd);
 		}
 	    }
 	else
 	    {
-	    verbose(3, "%s frame shift in mapped CDS %d %d\n", psl->qName,
+	    unmappedPrint("%s frame shift in mapped CDS %d %d\n", psl->qName,
 	    	mappedStart, mappedEnd);
 	    }
 	}
     else
         {
-	verbose(3, "%s mapped CDS not a multiple of 3 %d %d\n", 
+	unmappedPrint("%s mapped CDS not a multiple of 3 %d %d\n", 
 	    psl->qName, mappedStart, mappedEnd);
 	}
     }
 else
     {
-    verbose(3, "%s ends not mapped %d %d\n", 
+    unmappedPrint("%s ends not mapped %d %d\n", 
     	psl->qName, mappedStart, mappedEnd);
     }
 }
@@ -333,6 +350,8 @@ while ((psl = pslNext(lf)) != NULL)
 	    errAbort("%s is in %s but not %s", psl->qName, txRnaPsl, rnaFa);
 	mapAndOutput(cds, source, rnaSeq, psl, txSeq, f);
 	}
+    else
+        unmappedPrint("%s has no CDS in input %s\n",  psl->qName, rnaCds);
     }
 
 
@@ -349,6 +368,9 @@ if (argc != 6)
 refStatusFile = optionVal("refStatus", refStatusFile);
 mgcStatusFile = optionVal("mgcStatus", mgcStatusFile);
 defaultSource = optionVal("defaultSource", defaultSource);
+if (optionExists("unmapped"))
+    fUnmapped = mustOpen(optionVal("unmapped", NULL), "w");
 txCdsEvFromRna(argv[1], argv[2], argv[3], argv[4], argv[5]);
+carefulClose(&fUnmapped);
 return 0;
 }
