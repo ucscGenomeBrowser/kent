@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.6 2007/02/19 23:28:37 giardine Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.7 2007/02/20 23:43:45 giardine Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -53,7 +53,6 @@ if (!cartVarExists(cart, "tool_id"))
     cgiMakeHiddenVar("tool_id", "ucsc");
 safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerName(), cgiScriptName());
 cgiMakeHiddenVar("URL", selfUrl);
-cgiMakeHiddenVar("hgta_doGalaxyQuery", "go");
 hPrintf("\n"); 
 if (hguid > 0)
     {
@@ -71,7 +70,8 @@ for (el = elList; el != NULL; el = el->next)
         sameString(el->name, "fbUpBases") || sameString(el->name, "fbDownBases") ||
 	sameString(el->name, "galaxyFileFormat") || 
         sameString(el->name, "hgta_doGalaxyQuery") ||
-        sameString(el->name, "hgta_doGetGalaxyQuery")
+        sameString(el->name, "hgta_doGetGalaxyQuery") ||
+	sameString(el->name, "hgta_doTopSubmit")
        )
        continue;
     if (el->val != NULL && differentString((char *)el->val, "*") &&
@@ -91,6 +91,18 @@ if (isWiggle(database, table))
         hPrintf("<BR><B>Genome wide wiggle queries are likely to time out.  It is recommended to choose a region.</B><BR><BR>");
     cgiMakeHiddenVar("galaxyFileFormat", "bed");
     }
+else if (isMafTable(database, curTrack, curTable))
+    {
+    hPrintf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" CHECKED>%s",
+        "galaxyFileFormat", "maf", "MAF multiple alignment format");
+    if (!anyIntersection())
+        {
+        hPrintf("&nbsp;&nbsp;");
+        hPrintf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\">%s (tab-separated)",
+            "galaxyFileFormat", "tab", "All fields from selected table");
+        hPrintf("<BR><BR>"); 
+        }
+    }
 else
     {
     hPrintf("%s\n", "<P> <B> Create one BED record per: </B>");
@@ -109,7 +121,7 @@ else
         hPrintf("<BR><BR>");
         }
     }
-cgiMakeButton(hgtaDoGetGalaxyQuery, "Send query to Galaxy");
+cgiMakeButton(hgtaDoGalaxyQuery, "Send query to Galaxy");
 hPrintf("</FORM>\n");
 hPrintf(" ");
 /* new form as action is different */
@@ -122,81 +134,23 @@ hashElFreeList(&elList);
 }
 
 void doGalaxyQuery(struct sqlConnection *conn)
-/* print progress to Galaxy and url of BED file */
+/* print results in response to request from Galaxy */
 {
-char *table = curTable;
-struct hTableInfo *hti = getHti(database, table);
-struct featureBits *fbList = NULL, *fbPtr;
-char *fbQual = fbOptionsToQualifier();
-char fbTQ[128];
-int fields = hTableInfoBedFieldCount(hti);
-boolean gotResults = FALSE;
-struct region *region, *regionList = getRegions();
-struct tempName tn;
-FILE *f;
-
-/* for galaxyFileFormat=bed */
 if (!cartVarExists(cart, "galaxyFileFormat") ||
     sameString(cartString(cart, "galaxyFileFormat"), "bed"))
     {
-    trashDirFile(&tn, "ct", hgtaCtTempNamePrefix, ".bed");
-    f = mustOpen(tn.forCgi, "w");
-    textOpen();
-    for (region = regionList; region != NULL; region = region->next)
-        { /* print chrom at a time to save memory usage */
-        struct bed *bedList = NULL, *bed;
-        struct lm *lm = lmInit(64*1024);
-        printf("starting %s\n", region->chrom); /* keep apache happy */
-    
-        /* put if here for wiggle data points or rest */
-        bedList = cookedBedList(conn, curTable, region, lm, NULL);
-        printf(" have list\n"); /* keep apache happy */
-    
-        if ((fbQual == NULL) || (fbQual[0] == 0))
-            {
-            for (bed = bedList;  bed != NULL;  bed = bed->next)
-                {
-                bedTabOutN(bed, fields, f);
-                gotResults = TRUE;
-                }
-            printf(" done printing\n"); /* keep apache happy */
-            }
-        else
-            {
-            safef(fbTQ, sizeof(fbTQ), "%s:%s", hti->rootName, fbQual);
-            fbList = fbFromBed(fbTQ, hti, bedList, 0, 0, FALSE, FALSE);
-            for (fbPtr=fbList;  fbPtr != NULL;  fbPtr=fbPtr->next)
-                {
-                struct bed *fbBed = fbToBedOne(fbPtr);
-                bedTabOutN(fbBed, fields, f);
-                gotResults = TRUE;
-                }
-            featureBitsFreeList(&fbList);
-            }
-        bedList = NULL;
-        lmCleanup(&lm);
-        }
-    if (!gotResults)
-        {
-        fprintf(f, "none found\n");
-        }
-    carefulClose(&f);
-    stripString(tn.forCgi, "..");
-    printf("url=http://%s%s\n", cgiServerName(), tn.forCgi);
+    doGetBed(conn);
+    }
+else if (sameString(cartString(cart, "galaxyFileFormat"), "maf")) 
+    {
+    doOutMaf(curTrack, curTable, conn);
     }
 else
     {
     /* print results as tab-delimited table columns */
-    trashDirFile(&tn, "ct", hgtaCtTempNamePrefix, ".tab");
-    f = mustOpen(tn.forCgi, "w");
     textOpen();
-    tabOutSelectedFields(database, table, f, fullTableFields(database, table));
-    carefulClose(&f);
-    stripString(tn.forCgi, "..");
-    printf("url=http://%s%s\n", cgiServerName(), tn.forCgi);
+    tabOutSelectedFields(database, curTable, NULL, fullTableFields(database, curTable));
     }
-freeMem(fbQual);
-/* how to free regionList or hti? */
 }
 
 void galaxyHandler (char *format, va_list args)

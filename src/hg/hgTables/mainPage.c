@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.105 2007/02/19 23:28:37 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.106 2007/02/20 23:43:46 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -475,6 +475,7 @@ else if (isMaf)
     {
     slAddTail(&otList, &otMaf);
     slAddTail(&otList, &otAllFields);
+    slAddTail(&otList, &otGalaxy);
     }
 else if (isChromGraphCt)
     {
