@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "cdsEvidence.h"
+#include "cdsPick.h"
 #include "bed.h"
 
 void usage()
@@ -12,13 +13,22 @@ void usage()
 errAbort(
   "txCdsPick - Pick best CDS if any for transcript given evidence.\n"
   "usage:\n"
-  "   txCdsPick in.bed in.tce in.weights out.gp outPep.fa\n"
+  "   txCdsPick in.bed in.tce in.weights out.tce out.cdsPick\n"
+  "where:\n"
+  "   in.bed is the input transcripts, often from txWalk\n"
+  "   in.tce is the evidence in cdsEvidence format\n"
+  "   in.weights is a file describing how to weigh each source\n"
+  "              of evidence. Columns are source, weight.\n"
+  "   out.tce is best cdsEvidence line for coding transcripts, with\n"
+  "              weight adjusted\n"
+  "   out.cdsPick is a tab-separated file in cdsPick format for all transcripts\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -weightedTce=weighted.tce - output all weighted cdsEvidence here\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"weightedTce", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -71,7 +81,8 @@ const struct cdsEvidence *b = *((struct cdsEvidence **)vb);
 return b->score - a->score;
 }
 
-struct hash *loadAndWeighTce(char *fileName, struct hash *weightHash)
+struct hash *loadAndWeighTce(char *fileName, struct hash *weightHash,
+	char *outTce)
 /* Load transcript cds evidence from file into hash of
  * txInfo. */
 {
@@ -100,39 +111,98 @@ while  (lineFileRow(lf, row))
     slAddHead(&tx->cdsList, cds);
     }
 lineFileClose(&lf);
+slReverse(&txList);
 
 /* Sort all cdsLists by score. */
 for (tx = txList; tx != NULL; tx = tx->next)
+    {
     slSort(&tx->cdsList, cdsEvidenceCmpScore);
+    }
+
+/* Optionally output all weighted evidence. */
+char *weightedTce = optionVal("weightedTce", NULL);
+if (weightedTce != NULL)
+    {
+    FILE *f = mustOpen(weightedTce, "w");
+    for (tx = txList; tx != NULL; tx = tx->next)
+	{
+	struct cdsEvidence *cds;
+	for (cds = tx->cdsList; cds != NULL; cds = cds->next)
+	     cdsEvidenceTabOut(cds, f);
+	}
+    carefulClose(&f);
+    }
+
 return hash;
 }
 
 void txCdsPick(char *inBed, char *inTce, char *inWeights, 
-	char *outGp, char *outPep)
+	char *outTce, char *outPick)
 /* txCdsPick - Pick best CDS if any for transcript given evidence.. */
 {
 struct hash *weightHash = hashWeights(inWeights);
 verbose(2, "Read %d weights from %s\n", weightHash->elCount, inWeights);
-struct hash *txInfoHash = loadAndWeighTce(inTce, weightHash);
+struct hash *txInfoHash = loadAndWeighTce(inTce, weightHash, outTce);
 verbose(2, "Read info on %d transcripts from %s\n", 
 	txInfoHash->elCount, inTce);
 struct lineFile *lf = lineFileOpen(inBed, TRUE);
-FILE *f = mustOpen(outGp, "w");
+FILE *fTce = mustOpen(outTce, "w");
+FILE *fPick = mustOpen(outPick, "w");
 char *row[12];
 while (lineFileRow(lf, row))
     {
     struct bed *bed = bedLoad12(row);
     struct txInfo *tx = hashFindVal(txInfoHash, bed->name);
-    fprintf(f, "Transcript %s\n", bed->name);
+    struct cdsPick pick;
+    ZeroVar(&pick);
+    pick.name = bed->name;
+    pick.refSeq = pick.refProt = pick.swissProt = pick.uniProt = pick.genbank = "";
     if (tx != NULL)
         {
-	struct cdsEvidence *cds;
+	struct cdsEvidence *cds, *bestCds = tx->cdsList;
+	int bestSize = bestCds->end - bestCds->start;
+	int minSize = bestSize*0.90;
+	cdsEvidenceTabOut(bestCds, fTce);
+	pick.start = bestCds->start;
+	pick.end = bestCds->end;
+	pick.source = bestCds->source;
+	pick.score = bestCds->score;
+	pick.startComplete = bestCds->startComplete;
+	pick.endComplete = bestCds->endComplete;
 	for (cds = tx->cdsList; cds != NULL; cds = cds->next)
-	    cdsEvidenceTabOut(cds, f);
+	    {
+	    char *source = cds->source;
+	    if (rangeIntersection(bestCds->start, bestCds->end, cds->start, cds->end)
+	    	>= minSize)
+		{
+		if (startsWith("RefSeq", source) && pick.refSeq[0] == 0)
+		    pick.refSeq = cds->accession;
+		else if (startsWith("RefPep", source) && pick.refProt[0] == 0)
+		    pick.refProt = cds->accession;
+		else if (sameString("swissProt", source) && pick.swissProt[0] == 0)
+		    {
+		    pick.swissProt = cds->accession;
+		    if (pick.uniProt[0] == 0)
+		        pick.uniProt = cds->accession;
+		    }
+		else if (sameString("genbankCds", source) && pick.genbank[0] == 0)
+		    pick.genbank = cds->accession;
+		else if (sameString("trembl", source) && pick.uniProt[0] == 0)
+		    pick.uniProt = cds->accession;
+		else if (sameString("bestorf", source))
+		    pick.wBorfScore = cds->score;
+		}
+	    }
 	}
+    else
+        {
+	pick.source = "noncoding";
+	}
+    cdsPickTabOut(&pick, fPick);
     bedFree(&bed);
     }
-carefulClose(&f);
+carefulClose(&fPick);
+carefulClose(&fTce);
 }
 
 int main(int argc, char *argv[])

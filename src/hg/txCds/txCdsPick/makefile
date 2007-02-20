@@ -4,7 +4,7 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
 
-O = txCdsPick.o 
+O = txCdsPick.o  cdsPick.o
 
 txCdsPick: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsPick $O ${MYLIBS} $L
