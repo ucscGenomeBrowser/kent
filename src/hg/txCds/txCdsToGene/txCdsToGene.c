@@ -118,8 +118,6 @@ for (exon = exonList; exon != NULL; exon = nextExon)
     if (gapList != NULL)
         {
 	verbose(3, "Splitting exon because of CDS gap\n");
-	uglyf("Splitting exon %d-%d at txPos %d-%d because of gaps\n",
-		exon->start, exon->end, txStartPos, txEndPos);
 
 	/* Make up exons from current position up to next gap.  This is a little
 	 * complicated by possibly the gap starting before the exon. */
@@ -195,28 +193,33 @@ return newBed;
 }
 
 void outputGtf(struct cdsEvidence *cds, struct bed *bed, char *geneName, FILE *f)
-/* Write out bed in gtf format.  This is complicated mostly by the reverse 
- * strand. */
+/* Write out bed in gtf format.  The hard part of this involves juggling
+ * four sets of coordinates:
+ *   1) The genome coordinates.  Only used during output.
+ *   2) Relative strand coordinates - coordinates relative to
+ *      start of bed, on negative strand if need be.  This is
+ *      easier to convert to transcript coordinates than genome
+ *      coordinates would be.
+ *   3) Transcript coordinates - has no introns.
+ *   4) CDS coordinates - within transcript. */
 {
-/* Get exons and CDS in bed-relative coordinates. */
+/* Get exons in relative strand coordinates. */
 struct lm *lm = lmInit(0);
 struct range *exon, *exonList = bedToExonList(bed, lm);
 int bedSize = bed->chromEnd - bed->chromStart;
+if (bed->strand[0] == '-')
+    flipExonList(&exonList, bedSize);
+
+
+/* Get bounds of CDS in transcript coordinates, and source if available. */
 int cdsStart = -1, cdsEnd = 0;
 char *source = "noncoding";
-uglyf("outputGtf %s %d-%d\n", bed->name, bed->chromStart, bed->chromEnd);
-
 if (cds != NULL)
     {
     cdsStart = cds->start;
     cdsEnd = cds->end;
     source = cds->source;
-    uglyf("cds %d-%d (in transcript coordinates)\n", cdsStart, cdsEnd);
     }
-
-/* If on the strand of darkness flip coordinates */
-if (bed->strand[0] == '-')
-    flipExonList(&exonList, bedSize);
 
 /* Loop though and output exons and coding regions. */
 int cdsPos = 0;	/* Track position within CDS */
@@ -226,7 +229,6 @@ for (exon = exonList; exon != NULL; exon = exon->next)
     int exonStart = exon->start;
     int exonEnd = exon->end;
     int exonSize = exonEnd - exonStart;
-    uglyf("exon %d-%d (%d)\n", exonStart, exonEnd, exonSize);
     if (bed->strand[0] == '-')
         reverseIntRange(&exonStart, &exonEnd, bedSize);
     fprintf(f, "%s\t%s\texon\t%d\t%d\t.\t%s\t.\t",
@@ -240,14 +242,12 @@ for (exon = exonList; exon != NULL; exon = exon->next)
 	int txCdsStart = max(txStart, cdsStart);
 	int txCdsEnd = min(txEnd, cdsEnd);
 	int txCdsSize = txCdsEnd - txCdsStart;
-	uglyf("tx %d %d (%d), start/end of cds overlap %d %d (%d)\n", txStart, txEnd, txEnd-txStart, txCdsStart, txCdsEnd, txCdsSize);
 	if (txCdsSize > 0)
 	    {
 	    int offsetInExon = txCdsStart - txStart;
 	    int frame = cdsPos%3;
 	    int start = exon->start + offsetInExon;
 	    int end = start + txCdsSize;
-	    uglyf("  cds %d %d frame %d\n", start, end, frame);
 	    if (bed->strand[0] == '-')
 		reverseIntRange(&start, &end, bedSize);
 	    fprintf(f, "%s\t%s\tCDS\t%d\t%d\t.\t%s\t%d\t",

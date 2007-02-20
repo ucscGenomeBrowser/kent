@@ -10,5 +10,10 @@ txCdsToGene: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsToGene $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsToGene${EXE}
 
+test:
+	txCdsToGene in.bed in.fa in.tce output.gtf output.fa
+	diff expected.fa output.fa
+	diff expected.gtf output.gtf
+
 clean:
 	rm -f $O
