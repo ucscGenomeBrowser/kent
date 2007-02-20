@@ -367,7 +367,7 @@ if (argc != 6)
     usage();
 refStatusFile = optionVal("refStatus", refStatusFile);
 mgcStatusFile = optionVal("mgcStatus", mgcStatusFile);
-defaultSource = optionVal("defaultSource", defaultSource);
+defaultSource = optionVal("source", defaultSource);
 if (optionExists("unmapped"))
     fUnmapped = mustOpen(optionVal("unmapped", NULL), "w");
 txCdsEvFromRna(argv[1], argv[2], argv[3], argv[4], argv[5]);
