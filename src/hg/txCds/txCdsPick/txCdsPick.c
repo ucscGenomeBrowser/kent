@@ -96,6 +96,7 @@ while  (lineFileRow(lf, row))
         cds->score *= 0.95;
     if (!cds->endComplete)
         cds->score *= 0.95;
+    cds->score *= 2.0/(cds->cdsCount+1);
     slAddHead(&tx->cdsList, cds);
     }
 lineFileClose(&lf);
