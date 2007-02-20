@@ -328,6 +328,9 @@ cd $tmpDir/xenTro2/$2
                 "Xenopus tropicalis", "/gbdb/xenTro2/html/description.html", \
                 0, 0, "JGI v4.1");'
 
+    ## re-work orderKey 2007-02-20 to get Lizard above frog - Hiram
+    hgsql -e 'update dbDb set orderKey="445" where name="xenTro2";' \
+	hgcentraltest
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE 4/17/06 angie)
     ssh kkr8u00
