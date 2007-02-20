@@ -13,6 +13,9 @@
 #include "rangeTree.h"
 #include "cdsEvidence.h"
 
+/* Variables set from command line. */
+FILE *fBed = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -29,11 +32,12 @@ errAbort(
   "   out.gtf is the output gene predictions\n"
   "   out.fa is the output protein predictions\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -bedOut=output.bed - Save bed (with thickStart/thickEnd set)\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"bedOut", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -83,11 +87,13 @@ return exonList;
 
 struct bed *breakUpBedAtCdsBreaks(struct cdsEvidence *cds, struct bed *bed)
 /* Create a new broken-up that excludes part of gene between CDS breaks.  
+ * Also jiggles cds->end coordinate to cope with the sequence we remove.
  * Deals with transcript to genome coordinate mapping including negative
  * strand.  Be afraid, be very afraid! */
 {
 /* Create range tree covering all breaks.  The coordinates here
- * are transcript coordinates. */
+ * are transcript coordinates.  While we're out it shrink outer CDS
+ * since we are actually shrinking transcript. */
 struct rbTree *gapTree = rangeTreeNew();
 int bedSize = bed->chromEnd - bed->chromStart;
 struct lm *lm = gapTree->lm;	/* Convenient place to allocate memory. */
@@ -96,6 +102,8 @@ for (i=0; i<lastCds; ++i)
     {
     int gapStart = cds->cdsStarts[i] + cds->cdsSizes[i];
     int gapEnd = cds->cdsStarts[i+1];
+    int gapSize = gapEnd - gapStart;
+    cds->end -= gapSize;
     rangeTreeAdd(gapTree, gapStart, gapEnd);
     }
 
@@ -190,6 +198,51 @@ for (exon = newList, i=0; exon != NULL; exon = exon->next, i++)
 /* Clean up and go home. */
 rbTreeFree(&gapTree);
 return newBed;
+}
+
+int bedTotalBlockSize(struct bed *bed)
+/* Return total size of all blocks. */
+{
+int total = 0;
+int i;
+for (i=0; i<bed->blockCount; ++i)
+    total += bed->blockSizes[i];
+return total;
+}
+
+void setBedCds(struct cdsEvidence *cds, struct bed *bed)
+/* Set thickStart/thickEnd on bed from cds. */
+{
+if (cds == NULL)
+    {
+    bed->thickStart = bed->thickEnd = bed->chromStart;
+    return;
+    }
+int txCdsStart = cds->start, txCdsEnd = cds->end;
+if (bed->strand[0] == '-')
+    {
+    int txSize = bedTotalBlockSize(bed);
+    reverseIntRange(&txCdsStart, &txCdsEnd, txSize);
+    }
+int i;
+int txStart = 0, txEnd;
+for (i=0; i<bed->blockCount; ++i)
+    {
+    int blockSize = bed->blockSizes[i];
+    int exonStart = bed->chromStarts[i] + bed->chromStart;
+    txEnd = txStart + blockSize;
+    if (txStart <= txCdsStart && txCdsStart < txEnd)
+        {
+	int offset = txCdsStart - txStart;
+	bed->thickStart = exonStart + offset;
+	}
+    if (txStart < txCdsEnd && txCdsEnd <= txEnd)
+        {
+	int offset = txCdsEnd - txStart;
+	bed->thickEnd = exonStart + offset;
+	}
+    txStart = txEnd;
+    }
 }
 
 void outputGtf(struct cdsEvidence *cds, struct bed *bed, char *geneName, FILE *f)
@@ -337,6 +390,9 @@ while (lineFileRow(lf, row))
     char *geneName = cloneString(bed->name);
     chopSuffix(geneName);
     chopSuffix(geneName);
+    setBedCds(cds, bed);
+    if (fBed)
+        bedTabOutN(bed, 12, fBed);
     outputGtf(cds, bed, geneName, fGtf);
     freez(&geneName);
     bedFree(&bed);
@@ -353,6 +409,10 @@ optionInit(&argc, argv, options);
 dnaUtilOpen();
 if (argc != 6)
     usage();
+char *bedOut = optionVal("bedOut", NULL);
+if (bedOut != NULL)
+    fBed = mustOpen(bedOut, "w");
 txCdsToGene(argv[1], argv[2], argv[3], argv[4], argv[5]);
+carefulClose(&fBed);
 return 0;
 }
