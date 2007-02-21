@@ -244,3 +244,23 @@ XXX - running 2007-02-20 11:40
     | hgsql -h genome-testdb hgcentraltest
 
 ##########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE 2/20/07, Fan)
+    # Use -repMatch=860 (based on size -- for human we use 1024, and
+    # horse size is 84% of human judging by twoBitInfo -noNs)
+    ssh kolossus
+    blat /cluster/data/equCab1/equCab1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/equCab1/11.ooc -repMatch=860
+# Wrote 22800 overused 11-mers to /cluster/bluearc/equCab1/11.ooc
+
+    ssh kkr1u00
+    mkdir /iscratch/i/equCab1
+    cd /iscratch/i/equCab1
+    cp -p /cluster/bluearc/equCab1/11.ooc .
+    iSync
+##########################################################################
+
+
+
+
+
+
