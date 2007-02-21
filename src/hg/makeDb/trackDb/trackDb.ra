@@ -911,6 +911,14 @@ priority 73
 visibility hide
 type psl .
 
+track cgapSage
+shortLabel CGAP SAGE
+longLabel CGAP Long SAGE
+group rna
+priority 200.1
+visibility hide
+type bed 8 +
+
 track miRNA
 shortLabel miRNA
 longLabel MicroRNAs from miRBase
