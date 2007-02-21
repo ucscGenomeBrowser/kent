@@ -245,71 +245,58 @@ for (i=0; i<bed->blockCount; ++i)
     }
 }
 
-void outputGtf(struct cdsEvidence *cds, struct bed *bed, char *geneName, FILE *f)
-/* Write out bed in gtf format.  The hard part of this involves juggling
- * four sets of coordinates:
- *   1) The genome coordinates.  Only used during output.
- *   2) Relative strand coordinates - coordinates relative to
- *      start of bed, on negative strand if need be.  This is
- *      easier to convert to transcript coordinates than genome
- *      coordinates would be.
- *   3) Transcript coordinates - has no introns.
- *   4) CDS coordinates - within transcript. */
+void bedToGtf(struct bed *bed, char *source, char *geneName, FILE *f)
+/* Write out bed as a section of a GTF file */
 {
-/* Get exons in relative strand coordinates. */
+if (geneName == NULL) 
+    geneName = bed->name;
+
+/* Get bounds of CDS in relative coordinates. */
+int cdsStart = bed->thickStart - bed->chromStart;
+int cdsEnd = bed->thickEnd - bed->chromStart;
+boolean gotCds = (cdsStart != cdsEnd);
+
+/* Get exons in relative coordinates. */
 struct lm *lm = lmInit(0);
 struct range *exon, *exonList = bedToExonList(bed, lm);
+
+/* On minus strand flip relative coordinates. */
 int bedSize = bed->chromEnd - bed->chromStart;
 if (bed->strand[0] == '-')
-    flipExonList(&exonList, bedSize);
-
-
-/* Get bounds of CDS in transcript coordinates, and source if available. */
-int cdsStart = -1, cdsEnd = 0;
-char *source = "noncoding";
-if (cds != NULL)
     {
-    cdsStart = cds->start;
-    cdsEnd = cds->end;
-    source = cds->source;
+    flipExonList(&exonList, bedSize);
+    reverseIntRange(&cdsStart, &cdsEnd, bedSize);
     }
 
 /* Loop though and output exons and coding regions. */
 int cdsPos = 0;	/* Track position within CDS */
-int txPos = 0;	/* Track position within transcript. */
 for (exon = exonList; exon != NULL; exon = exon->next)
     {
     int exonStart = exon->start;
     int exonEnd = exon->end;
-    int exonSize = exonEnd - exonStart;
     if (bed->strand[0] == '-')
         reverseIntRange(&exonStart, &exonEnd, bedSize);
     fprintf(f, "%s\t%s\texon\t%d\t%d\t.\t%s\t.\t",
     	bed->chrom, source, exonStart + 1 + bed->chromStart, 
 	exonEnd + bed->chromStart, bed->strand);
     fprintf(f, "gene_id \"%s\"; transcript_id \"%s\";\n", geneName, bed->name);
-    if (cds != NULL)
+    if (gotCds)
 	{
-	int txStart = txPos;
-	int txEnd = txStart + exonSize;
-	int txCdsStart = max(txStart, cdsStart);
-	int txCdsEnd = min(txEnd, cdsEnd);
-	int txCdsSize = txCdsEnd - txCdsStart;
-	if (txCdsSize > 0)
+	int exonCdsStart = max(exon->start, cdsStart);
+	int exonCdsEnd = min(exon->end, cdsEnd);
+	int exonCdsSize = exonCdsEnd - exonCdsStart;
+	if (exonCdsSize > 0)
 	    {
-	    int offsetInExon = txCdsStart - txStart;
 	    int frame = cdsPos%3;
-	    int start = exon->start + offsetInExon;
-	    int end = start + txCdsSize;
 	    if (bed->strand[0] == '-')
-		reverseIntRange(&start, &end, bedSize);
-	    fprintf(f, "%s\t%s\tCDS\t%d\t%d\t.\t%s\t%d\t",
-		bed->chrom, source, start + 1 + bed->chromStart, end + bed->chromStart, bed->strand, frame);
+		reverseIntRange(&exonCdsStart, &exonCdsEnd, bedSize);
+	    fprintf(f, "%s\t%s\tCDS\t%d\t%d\t.\t%s\t%d\t", bed->chrom, source, 
+	    	exonCdsStart + 1 + bed->chromStart, 
+		exonCdsEnd + bed->chromStart, bed->strand, frame);
 	    fprintf(f, "gene_id \"%s\"; transcript_id \"%s\";\n", geneName, bed->name);
-	    cdsPos += txCdsSize;
+	    cdsPos += exonCdsSize;
 	    }
 	}
-    txPos += exonSize;
     }
 
 lmCleanup(&lm);
@@ -375,6 +362,7 @@ while (lineFileRow(lf, row))
     verbose(2, "processing %s\n", bed->name);
     struct cdsEvidence *cds = hashFindVal(cdsHash, bed->name);
     struct dnaSeq *txSeq = hashFindVal(txSeqHash, bed->name);
+    char *source = "noncoding";
     if (txSeq == NULL)
         errAbort("%s is in %s but not %s", bed->name, txBed, txFa);
     if (cds != NULL)
@@ -386,6 +374,7 @@ while (lineFileRow(lf, row))
 	    bedFree(&bed);
 	    bed = newBed;
 	    }
+	source = cds->source;
 	}
     char *geneName = cloneString(bed->name);
     chopSuffix(geneName);
@@ -393,7 +382,7 @@ while (lineFileRow(lf, row))
     setBedCds(cds, bed);
     if (fBed)
         bedTabOutN(bed, 12, fBed);
-    outputGtf(cds, bed, geneName, fGtf);
+    bedToGtf(bed, source, geneName, fGtf);
     freez(&geneName);
     bedFree(&bed);
     }
