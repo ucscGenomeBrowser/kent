@@ -231,3 +231,16 @@ XXX - running 2007-02-20 11:40
     time nice -n +19 ./load.csh > load.out 2>&1
     #	Loaded 7013938 elements of size 3
     #	real    2m29.659s
+
+##########################################################################
+## ADD BLAT SERVER (DONE - 2007-02-20 - Fan)
+
+# ask admin to create blat server.
+
+    echo 'INSERT INTO blatServers (db, host, port, isTrans) \
+         VALUES ("equCab1", "blat11", "17778", "1"); \
+         INSERT INTO blatServers (db, host, port, isTrans) \
+	 VALUES ("equCab1", "blat11", "17779", "0");' \
+    | hgsql -h genome-testdb hgcentraltest
+
+##########################################################################
