@@ -38,7 +38,7 @@ if ( 4 == $#argv ) then
 endif
 
 set url1="http://"
-# $machine = hgwdev
+# $machine = hgwdev-kuhn
 set url2=".cse.ucsc.edu/cgi-bin/hgTables?db="
 # $db = hg17
 set url3="&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table="
@@ -52,6 +52,6 @@ set url8="&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
 set url="$url1$machine$url2$db$url3$table$url4$url5$url6$url7$url8"
 
 wget -q -O $machine.$db.$table "$url"
-cat $machine.$db.$table | grep -v $field
+cat $machine.$db.$table | sed -e "1d"
 rm -f  $machine.$db.$table
 
