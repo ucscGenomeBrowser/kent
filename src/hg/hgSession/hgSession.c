@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.22 2007/02/21 22:32:02 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.23 2007/02/21 22:55:04 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -377,7 +377,7 @@ else
     cartWebStart(cart, "Session Management");
 
 printf("For detailed instructions on using this tool, see the "
-       "<A HREF=\"../goldenPath/help/hgTracksHelp.html#Sessions\">"
+       "<A HREF=\"../goldenPath/help/hgSessionHelp.html\">"
        "Sessions User's Guide</A>.<P>\n");
 
 showCartLinks();
