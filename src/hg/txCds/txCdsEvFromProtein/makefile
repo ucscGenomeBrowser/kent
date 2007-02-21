@@ -10,5 +10,10 @@ txCdsEvFromProtein: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsEvFromProtein $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsEvFromProtein${EXE}
 
+test:
+	txCdsEvFromProtein inProtein.fa in.psl inTx.fa output.tce -unmapped=output.unmapped
+	diff expected.tce output.tce
+	diff expected.unmapped output.unmapped
+
 clean:
 	rm -f $O

@@ -123,8 +123,8 @@ for (i=0; i<lastBlock; ++i)
 boolean aliGotStopCodons(struct psl *psl, struct dnaSeq *seq)
 /* Return TRUE if alignment includes stop codons. */
 {
-int i, lastBlock = psl->blockCount-1;
-for (i=0; i<lastBlock; ++i)
+int i;
+for (i=0; i<psl->blockCount; ++i)
     {
     int qBlockSize = psl->blockSizes[i];
     int tStart = psl->tStarts[i];
