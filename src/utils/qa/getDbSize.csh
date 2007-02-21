@@ -12,7 +12,7 @@
 set db=""
 set index=""
 set mach="hgwbeta"
-set url1=""
+set url1="http://$mach.cse.ucsc.edu/cgi-bin/hgTables"
 set url2=""
 set list="false"
 set size=0
@@ -40,7 +40,7 @@ endif
 
 if ( $#argv == 2 ) then
   set index=$argv[2]
-  if ( $index != "index" ) then
+  if ( "index" != $index ) then
     echo
     echo ' error.  second argument must be "index" ' 
     $0
@@ -59,12 +59,21 @@ else
     set list="true"
     set db=`hgsql -h hgwbeta -N -e "SELECT name FROM dbDb \
      WHERE active != 0" hgcentralbeta | sed -e "s/\t/\n/" | sort`
+  else
+    set url2="?hgta_doMetaData=1&hgta_metaDatabases=1"
+    wget -q -O /dev/stdout "$url1$url2" | grep -w $db >& /dev/null
+    if ( $status ) then
+      echo
+      echo " $db does not exist on $mach" 
+      echo
+      exit 1
+    endif
   endif
 endif
 
 # print headers
 echo
-if ( $index == "index" ) then
+if ( "index" == $index ) then
   echo "db" "Gbytes" "index" | awk '{printf ("%7s %5s %5s\n", $1, $2, $3)}'
   echo "======= ====== =====" 
 else
@@ -74,7 +83,6 @@ endif
 
 # do data
 foreach database ( `echo $db | sed -e "s/ /\n/"` )
-  set url1="http://$mach.cse.ucsc.edu/cgi-bin/hgTables"
   set url2="?hgta_doMetaData=1&db=$database&hgta_metaStatus=1"
   set size=`wget -q -O /dev/stdout "$url1$url2" \
     | awk '{total+=$6} END {printf "%0.1f", total/1000000000}'`
@@ -92,7 +100,7 @@ end
 
 # print totals
 if ( "true" == $list ) then
-  if ( "index" == "index" ) then
+  if ( "index" == $index ) then
     echo "\n total = $totSize  $totIndexSize "
   else
     echo "\n total = $totSize Gbytes "
