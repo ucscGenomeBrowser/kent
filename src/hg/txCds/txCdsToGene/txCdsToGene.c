@@ -260,7 +260,7 @@ if (bed->blockCount == 0)
 if (exonSource == NULL)
     exonSource = ".";
 if (cdsSource == NULL)
-    cdsSource = ".";
+    cdsSource = exonSource;
 if (geneName == NULL) 
     geneName = bed->name;
 
