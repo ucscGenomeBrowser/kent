@@ -6,16 +6,15 @@
 #Ortho alleles for HapMap SNPs
 CREATE TABLE hapmapAllelesOrtho (
     bin smallint(5) unsigned,
-    chrom varchar(255) not null,	# Chromosome
-    chromStart int unsigned not null,	# Start position in chrom (0 based)
-    chromEnd int unsigned not null,	# End position in chrom (1 based)
-    name varchar(255) not null,	# Reference SNP identifier from dbSnp
-    score int unsigned not null,	# Quality score
-    strand char(1) not null,	# Which genomic strand contains the observed alleles
-    orthoChrom varchar(255) not null,	# Chromosome in other org
-    orthoStart int unsigned not null,	# Start position in other org
-    orthoEnd int unsigned not null,	# End position in other org
-    orthoAllele char(1) not null,	# Allele in other org
-    orthoAllele enum('A', 'C', 'G', 'T', 'N') not null,      # Allele in other org
-    orthoStrand char(1) not null	# Strand in other org
+    chrom varchar(15) not null,				# Chromosome
+    chromStart int(10) unsigned not null,		# Start position in chrom (0 based)
+    chromEnd int(10) unsigned not null,			# End position in chrom (1 based)
+    name varchar(15) not null,				# Reference SNP identifier from dbSnp
+    score smallint(5) unsigned not null,		# Quality score
+    strand enum ('?','+','-') default '?' not null,	# Which genomic strand contains the observed alleles
+    orthoChrom varchar(15) not null,			# Chromosome in other org
+    orthoStart int(10) unsigned not null,		# Start position in other org
+    orthoEnd int(10) unsigned not null,			# End position in other org
+    orthoAllele enum('A', 'C', 'G', 'T', 'N') not null, # Allele in other org
+    orthoStrand enum('?','+','-') default '?' not null	# Strand in other org
 );
