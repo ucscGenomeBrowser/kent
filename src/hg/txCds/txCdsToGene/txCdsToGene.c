@@ -245,9 +245,22 @@ for (i=0; i<bed->blockCount; ++i)
     }
 }
 
-void bedToGtf(struct bed *bed, char *source, char *geneName, FILE *f)
-/* Write out bed as a section of a GTF file */
+void bedToGtf(struct bed *bed, char *exonSource, char *cdsSource, char *geneName, FILE *f)
+/* Write out bed as a section of a GTF file.
+ * Parameters: 
+ *      bed - a bed 12, ideally with thickStart/thickEnd set.
+ *      exonSource - name to include as source for exons.  NULL is ok.
+ *      cdsSource - name to include as source for CDS. NULL is ok.
+ *      geneName - gene (as opposed to transcript name). NULL is ok.
+ *      f - file to write to. */
 {
+/* Check input and supply defaults for any NULLs. */
+if (bed->blockCount == 0)
+    errAbort("bed with no blocks passed to bedToGtf");
+if (exonSource == NULL)
+    exonSource = ".";
+if (cdsSource == NULL)
+    cdsSource = ".";
 if (geneName == NULL) 
     geneName = bed->name;
 
@@ -277,7 +290,7 @@ for (exon = exonList; exon != NULL; exon = exon->next)
     if (bed->strand[0] == '-')
         reverseIntRange(&exonStart, &exonEnd, bedSize);
     fprintf(f, "%s\t%s\texon\t%d\t%d\t.\t%s\t.\t",
-    	bed->chrom, source, exonStart + 1 + bed->chromStart, 
+    	bed->chrom, exonSource, exonStart + 1 + bed->chromStart, 
 	exonEnd + bed->chromStart, bed->strand);
     fprintf(f, "gene_id \"%s\"; transcript_id \"%s\";\n", geneName, bed->name);
     if (gotCds)
@@ -290,7 +303,7 @@ for (exon = exonList; exon != NULL; exon = exon->next)
 	    int frame = cdsPos%3;
 	    if (bed->strand[0] == '-')
 		reverseIntRange(&exonCdsStart, &exonCdsEnd, bedSize);
-	    fprintf(f, "%s\t%s\tCDS\t%d\t%d\t.\t%s\t%d\t", bed->chrom, source, 
+	    fprintf(f, "%s\t%s\tCDS\t%d\t%d\t.\t%s\t%d\t", bed->chrom, cdsSource, 
 	    	exonCdsStart + 1 + bed->chromStart, 
 		exonCdsEnd + bed->chromStart, bed->strand, frame);
 	    fprintf(f, "gene_id \"%s\"; transcript_id \"%s\";\n", geneName, bed->name);
@@ -298,7 +311,6 @@ for (exon = exonList; exon != NULL; exon = exon->next)
 	    }
 	}
     }
-
 lmCleanup(&lm);
 }
 
@@ -362,7 +374,7 @@ while (lineFileRow(lf, row))
     verbose(2, "processing %s\n", bed->name);
     struct cdsEvidence *cds = hashFindVal(cdsHash, bed->name);
     struct dnaSeq *txSeq = hashFindVal(txSeqHash, bed->name);
-    char *source = "noncoding";
+    char *cdsSource = NULL;
     if (txSeq == NULL)
         errAbort("%s is in %s but not %s", bed->name, txBed, txFa);
     if (cds != NULL)
@@ -374,15 +386,27 @@ while (lineFileRow(lf, row))
 	    bedFree(&bed);
 	    bed = newBed;
 	    }
-	source = cds->source;
+	cdsSource = cds->accession;
+	if (sameString(cds->accession, "."))
+	    cdsSource = cds->source;
 	}
-    char *geneName = cloneString(bed->name);
-    chopSuffix(geneName);
-    chopSuffix(geneName);
+
+    /* Set bed CDS bounds and optionally output bed. */
     setBedCds(cds, bed);
     if (fBed)
         bedTabOutN(bed, 12, fBed);
-    bedToGtf(bed, source, geneName, fGtf);
+
+    /* Parse out bed name, which is in format chrom.geneId.txId.accession */
+    char *geneName = cloneString(bed->name);
+    char *accession = strrchr(geneName, '.');
+    assert(accession != NULL);
+    *accession++ = 0;
+    chopSuffix(geneName);
+
+    /* Output as GTF */
+    bedToGtf(bed, accession, cdsSource, geneName, fGtf);
+
+    /* Clean up for next iteration of loop. */
     freez(&geneName);
     bedFree(&bed);
     }
