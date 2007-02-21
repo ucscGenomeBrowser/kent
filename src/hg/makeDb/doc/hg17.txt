@@ -18463,6 +18463,10 @@ mysql> alter table hapmapAllelesCombined add index chrom (chrom, bin);
 # nothing that isn't biallelic
 # nothing with mixed positions
 # over 500K that were not available in all 4 populations
+# YRI: 187,485
+# CEU: 129,359
+# CHB and JPT: 97,095
+
 # Also, 2 strand corrections done
 grep -v missing hapmap2.errors
 # different strands for rs1621378
@@ -18569,6 +18573,14 @@ mysql> select chrom, chromStart, chromEnd, strand, observed, class, locType, wei
 # hapmap monomorphic for T
 # ortho A
 # no repeats, no genes, no mRNAs, no conservation
+
+# Counts of rows where 3 populations have one major allele, the 4th has the other
+
+hapmapMixed hg17
+# countCEU = 162931
+# countCHB = 46543
+# countJPT = 48791
+# countYRI = 309105
 
 
 ############################################################################################
@@ -21760,7 +21772,9 @@ hgsql -e 'delete from seq where extFile = 33852294' hg17
 hgsql -e 'alter table snpSeq add index acc (acc)' hg17
 
 #############################################################
-# Get panTro2 and rheMac2 allele for all SNPs
+# Get panTro2 and rheMac2 allele for all SNPs (Heather, Dec 2006 and Feb 2007)
+# Deletions will probably lift okay
+# The insertions have start == end so none of them will lift
 
 ssh hgwdev
 cd /san/sanvol1/snp/liftOver/hg17
@@ -21785,34 +21799,157 @@ mkdir unmapped
 ssh pk
 cd /san/sanvol1/snp/liftOver/hg17/panTro2All
 para create jobList; para try; para check; para push
+para time
+# Completed: 108 of 108 jobs
+# CPU time in finished jobs:      67758s    1129.29m    18.82h    0.78d  0.002 y
+# IO & Wait Time:                   961s      16.02m     0.27h    0.01d  0.000 y
+# Average job time:                 636s      10.60m     0.18h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1543s      25.72m     0.43h    0.02d
+# Submission to last job:         61513s    1025.22m    17.09h    0.71d
 
-# concat output (bed 6), preliminary load, split by chrom, get sequence, reload
+cd /san/sanvol1/snp/liftOver/hg17/rheMac2All
+para create jobList; para try; para check; para push
+para time
+# Completed: 108 of 108 jobs
+# CPU time in finished jobs:       1833s      30.56m     0.51h    0.02d  0.000 y
+# IO & Wait Time:                  1744s      29.06m     0.48h    0.02d  0.000 y
+# Average job time:                  33s       0.55m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              82s       1.37m     0.02h    0.00d
+# Submission to last job:         59987s     999.78m    16.66h    0.69d
+
+# add sequence
+# next time do this at the same time as lift
+
+cd /san/sanvol1/snp/liftOver/hg17
+mkdir panTro2Seq
+mkdir panTro2Seq/input
+mkdir panTro2Seq/output
+cp panTro2All/output/snp*out panTro2Seq/input
+cd panTro2Seq
+./makeJobList.csh
+
+cat << 'EOF' > makeJobList.csh
+#!/bin/tcsh
+rm -f jobList
+foreach fileName (`ls input/*`)
+    set baseName = $fileName:t
+    echo $baseName
+    echo "/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq $fileName /scratch/hg/panTro2/panTro2.2bit output/$baseName" >> jobList
+end
+'EOF'
+
+cd /san/sanvol1/snp/liftOver/hg17
+mkdir rheMac2Seq
+mkdir rheMac2Seq/input
+mkdir rheMac2Seq/output
+cp rheMac2All/output/snp*out rheMac2Seq/input
+cd rheMac2Seq
+cat << 'EOF' > makeJobList.csh
+#!/bin/tcsh
+rm -f jobList
+foreach fileName (`ls input/*`)
+    set baseName = $fileName:t
+    echo $baseName
+    echo "/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq $fileName /scratch/hg/rheMac2/rheMac2.2bit output/$baseName" >> jobList
+end
+'EOF'
+
+# cluster run for sequence
+ssh pk
+cd /san/sanvol1/snp/liftOver/hg17/panTro2Seq
+para create jobList; para try; para check; para push
+para time
+# Completed: 108 of 108 jobs
+# CPU time in finished jobs:      30509s     508.48m     8.47h    0.35d  0.001 y
+# IO & Wait Time:                   325s       5.42m     0.09h    0.00d  0.000 y
+# Average job time:                 286s       4.76m     0.08h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             551s       9.18m     0.15h    0.01d
+# Submission to last job:          1195s      19.92m     0.33h    0.01d
+
+cd /san/sanvol1/snp/liftOver/hg17/rheMac2Seq
+para create jobList; para try; para check; para push
+para time
+# Completed: 108 of 108 jobs
+# CPU time in finished jobs:      28517s     475.28m     7.92h    0.33d  0.001 y
+# IO & Wait Time:                   576s       9.61m     0.16h    0.01d  0.000 y
+# Average job time:                 269s       4.49m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             509s       8.48m     0.14h    0.01d
+# Submission to last job:          1166s      19.43m     0.32h    0.01d
+
+# quality scores (in progress)
+# This takes about 24 hours for each species!!  Ugh.
 ssh hgwdev
+cd /san/sanvol1/snp/liftOver/hg17
+cd panTro2Seq/output
+cat << 'EOF' > concat.csh
+#!/bin/tcsh
+rm -f all.out
+foreach fileName (`ls snp*.out`)
+    cat $fileName >> all.out
+end
+'EOF'
+sort all.out > all.sort
+cd /san/sanvol1/snp/liftOver/hg17
+mkdir panTro2Qual
+cp panTro2Seq/output/all.sort panTro2Qual
+cd panTro2Qual
+mkdir input
+splitFileByColumn all.sort input
+mkdir output
+cat << 'EOF' > addQual.pl
+#!/usr/bin/perl -W
+$db=shift;
+$chromName=shift;
+while (<STDIN>)
+{
+    my @fields = split;
+    my $chrom = $fields[0];
+    my $chromStart = $fields[1];
+    my $chromEnd = $fields[2];
+    my $name = $fields[3];
+    my $strand = $fields[5];
+    my $allele = $fields[6];
 
-cd /san/sanvol1/snp/liftOver/hg17/panTro2All/output
-./concat.csh
-hgsql panTro2 < snp125hg17ortho.sql
-hgsql panTro2 -e 'load data local infile "all.out" into table snp125hg17ortho"
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom2 panTro2 snp125hg17ortho
-hgsql panTro2 -e 'drop table snp125hg17ortho'
-/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq panTro2 /gbdb/panTro2/panTro2.2bit
-./concat2.csh
-hgsql panTro2 < snp125hg17orthoAllele.sql
-hgLoadSqlTab panTro2 snp125hg17orthoAllele snp125hg17orthoAllele.sql snp125hg17orthoAllele.tab
-hgsql panTro2 -e 'alter table snp125hg17orthoAllele add index name(name)'
-rm *tab
+    $cmd="hgWiggle -db=$db -chrom=$chromName -position=$chrom:$chromStart-$chromStart -rawDataOut quality";
+    open(RESULT, "$cmd |") or die "can't start '$cmd'\n";
+    while ($line = <RESULT>)
+    {
+        $score = int($line);
+        print "$chrom\t$chromStart\t$chromEnd\t$name\t$score\t$strand\t$allele\n";
+    }
+}
+'EOF'
+cat << 'EOF' > getQual.csh
+#!/bin/tcsh
+foreach fileName (`ls input/*`)
+    set chromName = $fileName:t:r
+    echo $chromName
+    addQual.pl panTro2 $chromName < $fileName > output/$chromName
+end
+'EOF'
 
-cd ../rheMac2All/output
-./concat.csh
-hgsql rheMac2 -e 'load data local infile "all.out" into table snp125hg17ortho"
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom2 rheMac2 snp125hg17ortho
-hgsql rheMac2 -e 'drop table snp125hg17ortho'
-/cluster/home/heather/kent/src/hg/snp/snpLoad/fetchSeq rheMac2 /gbdb/rheMac2/rheMac2.2bit
-./concat2.csh
-hgsql rheMac2 < snp125hg17orthoAllele.sql
-hgLoadSqlTab rheMac2 snp125hg17orthoAllele snp125hg17orthoAllele.sql snp125hg17orthoAllele.tab
-hgsql rheMac2 -e 'alter table snp125hg17orthoAllele add index name(name)'
-rm *tab
+cd rheMac2Seq/output
+cat << 'EOF' > concat.csh
+#!/bin/tcsh
+rm -f all.out
+foreach fileName (`ls snp*.out`)
+    cat $fileName >> all.out
+end
+'EOF'
+sort all.out > all.sort
+cd /san/sanvol1/snp/liftOver/hg17
+mkdir rheMac2Qual
+cp rheMac2Seq/output/all.sort rheMac2Qual
+cd rheMac2Qual
+mkdir input
+splitFileByColumn all.sort input
+mkdir output
+./getQual.csh
+
 
 
 ############
