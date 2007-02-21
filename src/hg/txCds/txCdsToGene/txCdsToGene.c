@@ -301,11 +301,12 @@ for (exon = exonList; exon != NULL; exon = exon->next)
 	if (exonCdsSize > 0)
 	    {
 	    int frame = cdsPos%3;
+	    int phase = (3-frame)%3;
 	    if (bed->strand[0] == '-')
 		reverseIntRange(&exonCdsStart, &exonCdsEnd, bedSize);
 	    fprintf(f, "%s\t%s\tCDS\t%d\t%d\t.\t%s\t%d\t", bed->chrom, cdsSource, 
 	    	exonCdsStart + 1 + bed->chromStart, 
-		exonCdsEnd + bed->chromStart, bed->strand, frame);
+		exonCdsEnd + bed->chromStart, bed->strand, phase);
 	    fprintf(f, "gene_id \"%s\"; transcript_id \"%s\";\n", geneName, bed->name);
 	    cdsPos += exonCdsSize;
 	    }
