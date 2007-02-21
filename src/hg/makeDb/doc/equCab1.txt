@@ -256,6 +256,7 @@ XXX - running 2007-02-20 11:40
     mkdir /iscratch/i/equCab1
     cd /iscratch/i/equCab1
     cp -p /cluster/bluearc/equCab1/11.ooc .
+    cp /cluster/data/equCab1/equCab1.2bit . -p
     iSync
 ##########################################################################
 
