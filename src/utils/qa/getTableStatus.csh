@@ -52,7 +52,7 @@ set url="$url1$mach$url2$url3"
 wget -q -O $mach.tempfile "$url"
 if ( $db != `head -1 $mach.tempfile | awk '{print $NF}'` ) then
   # does not allow uniProt or visiGene, etc to work.  
-  # hgTables.doTableStatus sets the db variable to hg18 if not an assembly
+  # hgTables.doMetaData sets the db variable to hg18 if not an assembly
   echo
   echo "  $db is not a valid database on $mach"
   echo
