@@ -26,3 +26,11 @@ longLabel P2P Network Distance to Selected Gene
 type pair wormP2P query target distance 1
 priority 9
 
+name goSimilarity
+shortLabel GO Similarity
+longLabel Number of Shared Gene Ontology Terms
+type association go.goaPart
+priority 7.1
+protKey on
+queryOne select goId from go.goaPart where dbObjectId='%s'
+queryAll select dbObjectId,goId from go.goaPart

@@ -20,3 +20,11 @@ type nameSimilarity ensGtp transcript gene
 name abc
 type abc ensGtp transcript gene
 
+name goSimilarity
+shortLabel GO Similarity
+longLabel Number of Shared Gene Ontology Terms
+type association go.goaPart
+priority 7.1
+protKey on
+queryOne select goId from go.goaPart where dbObjectId='%s'
+queryAll select dbObjectId,goId from go.goaPart
