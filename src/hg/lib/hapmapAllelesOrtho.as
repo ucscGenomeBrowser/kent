@@ -7,6 +7,8 @@ table hapmapAllelesOrtho
     string  name;        "Reference SNP identifier from dbSnp"
     uint    score;       "Quality score"
     char[1] strand;      "Which genomic strand contains the observed alleles"
+    lstring refUCSC;     "Reference genomic"
+    string  observed;    "dbSNP polymorphism"
 
     string  orthoChrom;  "Chromosome in other org"
     uint    orthoStart;  "Start position in other org"

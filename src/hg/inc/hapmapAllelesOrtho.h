@@ -5,7 +5,7 @@
 #ifndef HAPMAPALLELESORTHO_H
 #define HAPMAPALLELESORTHO_H
 
-#define HAPMAPALLELESORTHO_NUM_COLS 11
+#define HAPMAPALLELESORTHO_NUM_COLS 13
 
 struct hapmapAllelesOrtho
 /* Ortho alleles for HapMap SNPs */
@@ -17,6 +17,8 @@ struct hapmapAllelesOrtho
     char *name;	/* Reference SNP identifier from dbSnp */
     unsigned score;	/* Quality score */
     char strand[2];	/* Which genomic strand contains the observed alleles */
+    char *refUCSC;	/* Reference genomic */
+    char *observed;	/* dbSNP polymorphism */
     char *orthoChrom;	/* Chromosome in other org */
     unsigned orthoStart;	/* Start position in other org */
     unsigned orthoEnd;	/* End position in other org */

@@ -12,6 +12,8 @@ CREATE TABLE hapmapAllelesOrtho (
     name varchar(15) not null,				# Reference SNP identifier from dbSnp
     score smallint(5) unsigned not null,		# Quality score
     strand enum ('?','+','-') default '?' not null,	# Which genomic strand contains the observed alleles
+    refUCSC blob not null,        			# Reference genomic
+    observed varchar(255) not null,   			# dbSNP polymorphism
     orthoChrom varchar(15) not null,			# Chromosome in other org
     orthoStart int(10) unsigned not null,		# Start position in other org
     orthoEnd int(10) unsigned not null,			# End position in other org

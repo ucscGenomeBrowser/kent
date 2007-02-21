@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAllelesOrtho.h"
 
-static char const rcsid[] = "$Id: hapmapAllelesOrtho.c,v 1.1 2007/02/06 07:43:34 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAllelesOrtho.c,v 1.2 2007/02/21 23:45:03 heather Exp $";
 
 void hapmapAllelesOrthoStaticLoad(char **row, struct hapmapAllelesOrtho *ret)
 /* Load a row from hapmapAllelesOrtho table into ret.  The contents of ret will
@@ -21,11 +21,13 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
-ret->orthoChrom = row[6];
-ret->orthoStart = sqlUnsigned(row[7]);
-ret->orthoEnd = sqlUnsigned(row[8]);
-safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[9]);
-safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[10]);
+ret->refUCSC = row[6];
+ret->observed = row[7];
+ret->orthoChrom = row[8];
+ret->orthoStart = sqlUnsigned(row[9]);
+ret->orthoEnd = sqlUnsigned(row[10]);
+safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[11]);
+safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[12]);
 }
 
 struct hapmapAllelesOrtho *hapmapAllelesOrthoLoad(char **row)
@@ -41,11 +43,13 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
-ret->orthoChrom = cloneString(row[6]);
-ret->orthoStart = sqlUnsigned(row[7]);
-ret->orthoEnd = sqlUnsigned(row[8]);
-safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[9]);
-safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[10]);
+ret->refUCSC = cloneString(row[6]);
+ret->observed = cloneString(row[7]);
+ret->orthoChrom = cloneString(row[8]);
+ret->orthoStart = sqlUnsigned(row[9]);
+ret->orthoEnd = sqlUnsigned(row[10]);
+safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[11]);
+safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[12]);
 return ret;
 }
 
@@ -55,7 +59,7 @@ struct hapmapAllelesOrtho *hapmapAllelesOrthoLoadAll(char *fileName)
 {
 struct hapmapAllelesOrtho *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -73,7 +77,7 @@ struct hapmapAllelesOrtho *hapmapAllelesOrthoLoadAllByChar(char *fileName, char 
 {
 struct hapmapAllelesOrtho *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -100,6 +104,8 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->refUCSC = sqlStringComma(&s);
+ret->observed = sqlStringComma(&s);
 ret->orthoChrom = sqlStringComma(&s);
 ret->orthoStart = sqlUnsignedComma(&s);
 ret->orthoEnd = sqlUnsignedComma(&s);
@@ -118,6 +124,8 @@ struct hapmapAllelesOrtho *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->refUCSC);
+freeMem(el->observed);
 freeMem(el->orthoChrom);
 freez(pEl);
 }
@@ -154,6 +162,14 @@ fprintf(f, "%u", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->refUCSC);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->observed);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
