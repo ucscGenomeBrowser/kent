@@ -50,13 +50,6 @@ foreach machine ( $machine1 $machine2 )
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
       set host="-h hgwbeta"
-  #    hgsql -N $host -e "SHOW TABLES" $db >& /dev/null
-  #    if ( $status ) then
-  #      echo
-  #      echo "  database $db is not found on $machine"
-  #      echo
-  #      exit 1
-  #    endif
     else
       set cent=""
       set host="-h genome-centdb"
@@ -64,7 +57,7 @@ foreach machine ( $machine1 $machine2 )
   endif
 
   hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent \
-     | grep "$db" >& /dev/null
+     | grep -w "$db" >& /dev/null
   if ( $status ) then
     echo
     echo "  database $db is not found in dbDb on $machine"
@@ -73,38 +66,17 @@ foreach machine ( $machine1 $machine2 )
   endif
 end
 
-#### NEW WAY WITH hgTables
-#set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgTables?db=hg16&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table=trackDb&origPhase=Get+results&outputType=Tab-separated%2C+Choose+fields...&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
-
-set url1 = "http://"
-set url2 = ".cse.ucsc.edu/cgi-bin/hgTables?db="
-set url3 = "&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table="
-set url4 = "&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
-set url5 = "&field_$field=on"
-set url6 = "&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
-
-# add tableName to output if checking other fields -- to help interpret results
-# doesn't work for settings of because of embedded newlines
-set url5a = ""
-if ($field != "tableName") then
-  set url5a = "&field_tableName=on"
-endif
-
-rm -f $machine1.$db.$table 
-rm -f $machine2.$db.$table 
-
-set machine=$machine1
 foreach mach ( $machine1 $machine2 )
-  set url="$url1$mach$url2$db$url3$table$url4$url5a$url5$url6"
-  wget -q -O $mach.$db.$table "$url"
+  rm -f $mach.$db.$table 
+  getField.csh $db trackDb $field $mach > $mach.$db.out
 end
 
 # defensive logic to avoid "sort" disrupting blob tracks
 set sort=""
 if ($field != "html" && $field != "settings") then
   set sort="1"
-  sort $machine1.$db.$table > $machine1.$db.$table$sort 
-  sort $machine2.$db.$table > $machine2.$db.$table$sort 
+  sort $machine1.$db.out > $machine1.$db.out$sort 
+  sort $machine2.$db.out > $machine2.$db.out$sort 
 endif
 
 # DO NOT CHANGE this output, unless you want to change all of the following, too:
@@ -117,7 +89,7 @@ echo "---------------------------------------------------------------"
 echo 
 # if the line begins with a digit, substitute a newline at the beginning
 # | perl -pw -e "s/^(\d)/\nx/"
-diff $machine1.$db.$table$sort $machine2.$db.$table$sort | sed -e "/^[0123456789]/s/^/\n/" >& $db.temp
+diff $machine1.$db.out$sort $machine2.$db.out$sort | sed -e "/^[0123456789]/s/^/\n/" >& $db.temp
 if ( $status ) then
   echo "\n$db.$table.$field : Differences exist between $machine1 and $machine2 \n"
   cat $db.temp
@@ -127,8 +99,6 @@ else
 endif
 
 # clean up
-rm -f $machine1.$db.$table 
-rm -f $machine2.$db.$table 
-rm -f $machine1.$db.$table$sort 
-rm -f $machine2.$db.$table$sort
+rm -f $machine1.$db.out*
+rm -f $machine2.$db.out*
 rm -f $db.temp
