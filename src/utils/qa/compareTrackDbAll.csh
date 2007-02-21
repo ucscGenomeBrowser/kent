@@ -45,7 +45,7 @@ endif
 #   && $inputMode != "verbose" && $inputMode != "" ) then
 
 if (! ( $inputMode == "fast" || $inputMode == "fastVerbose" \
-     || $inputMode == "verbose" || $inputMode == "" )) then
+        || $inputMode == "verbose" || $inputMode == "" )) then
     echo
     echo "  mode ($inputMode) not acceptable.\n"
     echo "${0}:"
@@ -83,14 +83,15 @@ endif
 
 foreach field ( $fields )
   if ( $mode2 == "fast" || $field == "settings" ) then
-    # echo "\nmode2 = $mode2"
+    # echo "\n mode2 = $mode2"
     # echo "field  = $field"
     compareTrackDbFast.csh $machine1 $machine2 $db $field
     if ( $status ) then
       exit 1
     endif
+    echo "  not real time for $field"
   else
-    # echo "\nmode2 = $mode2"
+    # echo "\n mode2 = $mode2"
     # echo "field  = $field"
     compareTrackDbs.csh $machine1 $machine2 $db $field
     if ( $status ) then
@@ -99,18 +100,16 @@ foreach field ( $fields )
   endif
 end
 
-echo
-echo "---------------------------------------------------------------"
 set field="html"
 if ( $mode == "terse" ) then
   # expecting one of these two types of output from compareTrackDbFast.csh:
   # hg17.trackDb.html : Differences exist between hgw1 and hgwbeta
   # hg17.trackDb.html : No differences between hgw1 and hgw2
 
-  set diffLine=`compareTrackDbFast.csh $machine1 $machine2 $db $field | grep -i differences`
+  set diffLine=`compareTrackDbFast.csh $machine1 $machine2 $db $field \
+     | grep -i differences`
   echo $diffLine | grep "exist between $machine1" > /dev/null 
   if ( $status ) then  # errStatus of 1 says there are no diffs
-
   # DO NOT CHANGE this output, unless you want to change trackDbGlobal parsing, too.
     echo
     echo "  No differences in $field field"
@@ -124,6 +123,8 @@ else
   # mode is verbose: spew results to stdout 
   echo
   compareTrackDbFast.csh $machine1 $machine2 $db $field 
+  echo "  not real time for $field"
+  echo
 endif
 
 exit 0
