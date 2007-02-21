@@ -135,7 +135,7 @@ for (exon = exonList; exon != NULL; exon = nextExon)
 	for (gap = gapList; gap != NULL; gap = gap->next)
 	    {
 	    int txEnd = gap->start;
-	    int gapSize = rangeIntersection(gap->start, gap->end, exon->start, exon->end);
+	    int gapSize = rangeIntersection(gap->start, gap->end, txStart, txEndPos);
 	    int exonSize = txEnd - txStart;
 	    if (exonSize > 0)
 		{
