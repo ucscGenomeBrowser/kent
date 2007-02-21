@@ -3,23 +3,37 @@ ssh hgwdev
 mkdir /cluster/data/hg18/bed/jkg
 cd /cluster/data/hg18/bed/jkg
 
-# Get refSeq and mrna tables converted to bed.  Ignore the
-# stdin is empty messages, these are just from _random chroms
-# with no annotations.  Takes 2 minutes.
-mkdir refSeq mrna
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo $c
-    hgGetAnn -noMatchOk hg18 refSeqAli $c stdout | txPslToBed stdin /cluster/data/hg18/hg18.2bit refSeq/$c.bed
-    hgGetAnn -noMatchOk hg18 mrna $c stdout | txPslToBed stdin /cluster/data/hg18/hg18.2bit mrna/$c.bed
-end
-
 # Get GenBank and RefSeq CDS  and other info. Best to get it now
 # so it is synced with the refSeq and mrna inputs, even 
-# though we won't process it until a later step.
+# though we won't process much of it until a later step.
+# Takes 2 minutes
 echo 'select acc,name from gbCdnaInfo,cds where type="mRNA" and cds=cds.id and cds != 0' | hgsql -N hg18 > cds.tab
-echo 'select mrnaAcc,status from refSeqStatus' | hgsql -n hg18 > refSeqStatus.tab
-echo 'select acc,status from mgcFullStatus' | hgsql -n hg18 > mcgStatus.tab
-echo 'select acc,size from gbSeq where type="mRNA"' | hgsql -n hg18 > mrnaSize.tab
+echo 'select mrnaAcc,status from refSeqStatus' | hgsql -N hg18 > refSeqStatus.tab
+echo 'select acc,status from mgcFullStatus' | hgsql -N hg18 > mgcStatus.tab
+echo 'select acc,size from gbSeq where type="mRNA"' | hgsql -N hg18 > mrnaSize.tab
+echo 'select mrnaAcc,protAcc from refLink' | hgsql -N hg18 > refToPep.tab
+echo 'select l.protAcc,s.status from refLink l,refSeqStatus s where l.mrnaAcc=s.mrnaAcc' | \
+    hgsql -N hg18 > refPepStatus.tab
+/cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 refseq pep refPep.fa
+/cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 refseq mrna refSeq.fa
+/cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 genbank mrna mrna.fa
+
+# Get refSeq and mrna tables as psl.  Ignore the
+# stdin is empty messages, these are just from _random chroms
+# with no annotations.  Takes 7 seconds
+mkdir refSeq mrna
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo fetching $c mrna and refSeq alignments
+    hgGetAnn -noMatchOk hg18 refSeqAli $c refSeq/$c.psl
+    hgGetAnn -noMatchOk hg18 mrna $c mrna/$c.psl
+end
+
+# Convert psls to bed, saving mapping info.  Takes 1 min 40 sec.
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo checking splice sites on $c.psl and converting to bed.
+    txPslToBed refSeq/$c.psl -noFixStrand -cds=cds.tab /cluster/data/hg18/hg18.2bit refSeq/$c.bed -unusual=refSeq/$c.unusual
+    txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/hg18/hg18.2bit mrna/$c.bed -unusual=mrna/$c.unusual
+end
 
 # Create splicing graphs.  Takes 12 seconds.
 mkdir bedToGraph
@@ -76,14 +90,13 @@ cd /cluster/data/hg18/bed/jkg/txOrtho
 para create spec
 para make
 para time
-Completed: 49 of 49 jobs
-CPU time in finished jobs:      18162s     302.70m     5.04h    0.21d  0.001 y
-#IO & Wait Time:                   450s       7.50m     0.13h    0.01d  0.000 y
-#Average job time:                 380s       6.33m     0.11h    0.00d
+#Completed: 49 of 49 jobs
+#CPU time in finished jobs:       1916s      31.93m     0.53h    0.02d  0.000 y
+#IO & Wait Time:                   540s       9.00m     0.15h    0.01d  0.000 y
+#Average job time:                  50s       0.84m     0.01h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:            2901s      48.35m     0.81h    0.03d
-#Submission to last job:          2901s      48.35m     0.81h    0.03d
-
+#Longest finished job:             235s       3.92m     0.07h    0.00d
+#Submission to last job:           235s       3.92m     0.07h    0.00d
 
 # Add evidence from ortho edges - takes about 10 seconds.
 cd /cluster/data/hg18/bed/jkg
@@ -117,11 +130,11 @@ txOrtho 1
 exoniphy 1
 end
 
-# Do  txWalk  - takes 4 seconds
+# Do  txWalk  - takes 6 seconds
 mkdir txWalk
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo txWalk $c
-    txWalk exoniphyTxg/$c.txg trim.weights 3 txWalk/$c.bed
+    txWalk exoniphyTxg/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev
 end
 
 # Get txWalk transcript sequences.  This'll take about 2 minutes
@@ -131,7 +144,7 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     sequenceForBed -db=hg18 -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 end
 mkdir splitFa
-faSplit sequence txWalk.fa 300 splitFa/
+faSplit sequence txWalk.fa 200 splitFa/
 
 # Set up cluster run Victor Solovyev's Best Orf program.
 mkdir bestorf
@@ -152,51 +165,119 @@ chmod a+x borf
 
 # Do borf cluster run 
 ssh pk
-cd /cluster/data/hg18/bed/jkg/borf
+cd /cluster/data/hg18/bed/jkg/bestorf
 para create spec
 para make
 para time
-#Completed: 292 of 292 jobs
-#CPU time in finished jobs:       1379s      22.98m     0.38h    0.02d  0.000 y
-#IO & Wait Time:                   867s      14.45m     0.24h    0.01d  0.000 y
-#Average job time:                   8s       0.13m     0.00h    0.00d
+#CPU time in finished jobs:       1372s      22.87m     0.38h    0.02d  0.000 y
+#IO & Wait Time:                   754s      12.56m     0.21h    0.01d  0.000 y
+#Average job time:                  11s       0.18m     0.00h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:              14s       0.23m     0.00h    0.00d
-#Submission to last job:           137s       2.28m     0.04h    0.00d
+#Longest finished job:              16s       0.27m     0.00h    0.00d
+#Submission to last job:            54s       0.90m     0.01h    0.00d
 
-# Fetch human protein set.
+
+# Fetch human protein set and table that describes if curated or not.
 hgsql -N sp070202 -e \
   'select p.acc, p.val from protein p, accToTaxon x where x.taxon=9606 and p.acc=x.acc'\
   |awk '{print ">" $1;print $2}' >humanProt.fa
+hgsql -N sp0702020 -e 'select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=9606 and i.acc=x.acc' > uniCurated.tab
 
-# Create blatProt directory and parasol spec
-mkdir blatProt blatProt/rawChrom
-cd txFa
-echo #\!/bin/tcsh -ef > ../blatProt/spec
+# Create blat dir - we'll run a couple of types of alignments here.
+mkdir blat
+
+# Set up blat jobs for proteins vs. translated txWalk transcripts
+mkdir blat/protein
+mkdir blat/protein/raw
+cd splitFa
+echo #\!/bin/tcsh -ef > ../blat/protein/spec
 foreach f (*.fa)
     set c=$f:r
-    echo blat -t=dnax -q=prot -minIdentity=90 ../txFa/$f ../humanProt.fa rawChrom/$c.psl >> ../blatProt/spec
+    echo blat -t=dnax -q=prot -minIdentity=90 ../../splitFa/$f ../../humanProt.fa raw/uni_$c.psl >> ../blat/protein/spec
+    echo blat -t=dnax -q=prot -minIdentity=90 ../../splitFa/$f ../../refPep.fa raw/ref_$c.psl >> ../blat/protein/spec
 end
+cd ..
 
-# Run protein/transcript blat job on iserver cluster
-ssh kki
-cd /cluster/data/hg18/bed/jkg/blatProt
+# Run protein/transcript blat job on cluster
+ssh pk
+cd /cluster/data/hg18/bed/jkg/blat/protein
 para create spec
 para make
 para time
-#Completed: 49 of 49 jobs
-#CPU time in finished jobs:       4543s      75.72m     1.26h    0.05d  0.000 y
-#IO & Wait Time:                   140s       2.33m     0.04h    0.00d  0.000 y
-#Average job time:                  96s       1.59m     0.03h    0.00d
+Completed: 390 of 390 jobs
+CPU time in finished jobs:      12996s     216.59m     3.61h    0.15d  0.000 y
+IO & Wait Time:                  1632s      27.21m     0.45h    0.02d  0.000 y
+Average job time:                  38s       0.63m     0.01h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             119s       1.98m     0.03h    0.00d
+Submission to last job:           228s       3.80m     0.06h    0.00d
+
+# Set up blat jobs for mran vs. txWalk transcripts
+mkdir blat/rna
+mkdir blat/rna/raw
+cd splitFa
+echo #\!/bin/tcsh -ef > ../blat/rna/spec
+foreach f (*.fa)
+    set c=$f:r
+    echo blat -ooc=/cluster/data/hg18/11.ooc -minIdentity=95 ../../splitFa/$f ../../mrna.fa raw/mrna_$c.psl >> ../blat/rna/spec
+    echo blat -ooc=/cluster/data/hg18/11.ooc -minIdentity=97 ../../splitFa/$f ../../refSeq.fa raw/ref_$c.psl >> ../blat/rna/spec
+end
+cd ..
+
+# Run rna/transcript blat on cluster.  This is a little i/o heavy, so use
+# maxNode=50, or optimize i/o somehow.
+ssh pk
+cd /cluster/data/hg18/bed/jkg/blat/protein
+para create spec
+para make -maxNode=50
+#Completed: 390 of 390 jobs
+#CPU time in finished jobs:      18349s     305.82m     5.10h    0.21d  0.001 y
+#IO & Wait Time:                 21262s     354.37m     5.91h    0.25d  0.001 y
+#Average job time:                 102s       1.69m     0.03h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             399s       6.65m     0.11h    0.00d
-#Submission to last job:           425s       7.08m     0.12h    0.00d
+#Longest finished job:             582s       9.70m     0.16h    0.01d
+#Submission to last job:           786s      13.10m     0.22h    0.01d
 
 
-# Sort and do near-besting
-cd /cluster/data/hg18/bed/jkg/blatProt
-pslSort dirs raw.psl . rawChrom
-pslReps raw.psl nearBest.psl /dev/null -nohead -minCover=0.8 -minAli=0.80 -nearTop=0.002
+# Sort and select best alignments. Remove raw files for space. Takes 22
+# seconds.
+cd /cluster/data/hg18/bed/jkg/blat
+pslCat -nohead rna/raw/ref*.psl | sort -k 10 | txPslFilter stdin rna/refSeq.psl
+pslCat -nohead rna/raw/mrna*.psl | sort -k 10 | txPslFilter stdin rna/mrna.psl
+pslCat -nohead protein/raw/ref*.psl | sort -k 10 | txPslFilter stdin protein/refSeq.psl
+pslCat -nohead protein/raw/uni*.psl | sort -k 10 | txPslFilter stdin protein/uniProt.psl
+rm -r rna/raw protein/raw
+cd ..
+
+# Create evidence derived from mRNA CDS and mRNA/transcript alignments
+mkdir cdsEvidence
+txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab -unmapped=cdsEvidence/refSeqTx.unmapped
+txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab -unmapped=cdsEvidence/mrna.unmapped
+txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab -unmapped=cdsEvidence/refSeqProt.unmapped
+txCdsEvFromProtein humanProt.fa blat/protein/uniProt.psl txWalk.fa cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab -unmapped=cdsEvidence/uniProt.unmapped
+cat bestorf/tab/*.borf | txCdsEvFromBorf stdin txWalk.fa cdsEvidence/bestorf.tce
+
+# Consolidate and pick best CDS. 
+cat cdsEvidence/*.tce | sort  > unweighted.tce
+cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
+cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks -weightedTce=weighted.tce
+
+# Create gene prediction (GTF) and peptide fasta file.
+cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa
+
+###########################################################################
+## Load take 5 into the database
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq2
+cat mrna/*.psl | hgLoadPsl hg18 stdin -table=jkgInputMrna2
+hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
+ldHgGene hg18 jkgTxWalk2 bestCds.gtf -gtf -genePredExt
+
 
 ###########################################################################
 ## Load take 4 into the database. Takes 30 seconds.
@@ -476,6 +557,27 @@ Submission to last job:          2850s      47.50m     0.79h    0.03d
 The longest job is now chr1, not chr14.  This also made the
 txgAddEvidence for chr14 go down to 0.3 seconds.
 
+Also optimized the txOrtho to use rangeTrees to index the chainBlocks.  Before
+the change the run time was:
+Completed: 49 of 49 jobs
+CPU time in finished jobs:      18162s     302.70m     5.04h    0.21d  0.001 y
+IO & Wait Time:                   450s       7.50m     0.13h    0.01d  0.000 y
+Average job time:                 380s       6.33m     0.11h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            2901s      48.35m     0.81h    0.03d
+Submission to last job:          2901s      48.35m     0.81h    0.03d
+
+After it's
+
+Completed: 49 of 49 jobs
+CPU time in finished jobs:       1916s      31.93m     0.53h    0.02d  0.000 y
+IO & Wait Time:                   540s       9.00m     0.15h    0.01d  0.000 y
+Average job time:                  50s       0.84m     0.01h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             235s       3.92m     0.07h    0.00d
+Submission to last job:           235s       3.92m     0.07h    0.00d
+
+
 ###########################################################################
 ## Feb 14 notes -
 Rewrote graph maker (now txBedToGraph) and walker (now txWalk).  
@@ -542,4 +644,47 @@ Important remaining issues:
    support.
 10) chr20:33,609,922-33,651,008 - Cool splicing. 6 mRNAs, Exoniphy and mouse
     support for many.
+
+###########################################################################
+# For take 5, here are 10 cases where RefSeq CDS doesn't map
+chr16	843634	960985	NM_022773	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
+   Refseq disagrees with genome leading to 4 bp "stray" close to end of second exon.
+   Other RNAs agree with genome.  Looks like it is good to split here.
+  After merging leads to wacked out long exon.
+chr2	31603159	31659544	NM_000348	CDS	FULL	.	.	GAP<7	.	.	BUST<7b	.	.	.	.
+   1 BP insert in RNA relative to genome in exon 1. Two other RNAs including MGC full orf
+   support refSeq.
+  Seems ok now.
+chr12	29471755	29541886	NM_183378	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
+   No RNA here beyond refSeq, which has noncannonical end of intron 27. This does look like
+   one that a later stage could stitch together. (No gap in query side of sequence).
+  Seems ok now.
+chr1	212228482	212276385	NM_002763	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
+   AT/AC intron 2 causes split.  AT/AC supported by an independent RNA.  It again looks like
+   one that will be stitched at a later phase.
+  Seems ok now.
+chr1	200064910	200120045	NM_018085	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
+   Noncannonical intron split that will restitch.
+  Seems ok now.
+chr19	18655424	18749762	NM_025021	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
+   Noncannonical intron split that will restitch.
+  Seems ok now.
+chr5	77692094	77812318	NM_004866	CDS	FULL	.	.	GAP<7	.	.	BUST<7b	.	.	.	.
+   1 BP insertion in mRNA relative to genome in exon 7.  Of RNAs in region, 7 support RefSeq, 1 supports genome.
+  Turns into monster exon.
+chr11	102238673	102250922	NM_002426	CDS	FULL	.	.	GAP<7	.	.	BUST<7b	.	.	.	.
+   1 BP insertion in mRNA relative to genome in exon 5. 2 RNAs in region support RefSeq, 1 supports genome.
+  Turns into monster exon.
+chrX	128766593	128805149	NM_001008222	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
+   Noncannonical intron split that will restitch.
+  Seems ok now.
+chr1	1560962	1645635	NM_033492	CDS	FULL	NUDGE	.	GAP<7	SPLIT	.	.	.	.	OUT	.
+   Alignment of 5' UTR is very messy.  CDS Alignment better, but still has some gappy stuff.  There are 18
+   mRNAs that cover this regions.  Part of a duplicated region. RefSeq shows 15 different isoforms.  This
+   is the stuff of which curator nightmares are made! 
+  Seems more or less ok.
+
+###########################################################################
+# Weird regions take 5
+chr22:17,546,746-17,665,740 NM_007098 has wacked out huge exon.
 
