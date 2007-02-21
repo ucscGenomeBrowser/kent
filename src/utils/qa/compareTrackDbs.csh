@@ -1,5 +1,10 @@
 #!/bin/tcsh
 
+set table = "trackDb"
+set field = "tableName"
+set cent=""
+set host=""
+
 if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares trackDb on two machines."
@@ -13,14 +18,24 @@ endif
 set machine1 = $argv[1]
 set machine2 = $argv[2]
 set db = $argv[3]
-set cent=""
-set host=""
 
 #set machine1 = "hgwdev"
 #set machine1 = "hgwbeta"
 #set machine2 = "hgw1"
 
-# check validity of machine name and existence of db on the machine
+if ( $#argv == 4 ) then
+  # check if valid field -- checks on localhost (usually hgwdev)
+  set field = $argv[4]
+  hgsql -t -e "DESC $table" $db | grep -w $field | wc -l > /dev/null
+  if ( $status ) then
+    echo
+    echo "  $field is not a valid field for $table"
+    echo
+    exit 1
+  endif
+endif
+
+# check validity of machine name and existence of db on the machine.
 foreach machine ( $machine1 $machine2 )
   checkMachineName.csh $machine
   if ( $status ) then
@@ -35,48 +50,28 @@ foreach machine ( $machine1 $machine2 )
     if ( $machine == "hgwbeta" ) then
       set cent="beta"
       set host="-h hgwbeta"
-      hgsql -N $host -e "SHOW TABLES" "$db" >& /dev/null
-      if ( $status ) then
-        echo
-        echo "  database $db is not found on $machine"
-        echo
-        echo ${0}:
-        $0
-        exit 1
-      endif
+  #    hgsql -N $host -e "SHOW TABLES" $db >& /dev/null
+  #    if ( $status ) then
+  #      echo
+  #      echo "  database $db is not found on $machine"
+  #      echo
+  #      exit 1
+  #    endif
     else
       set cent=""
       set host="-h genome-centdb"
     endif
   endif
 
-  hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent | grep "$db" >& /dev/null
+  hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent \
+     | grep "$db" >& /dev/null
   if ( $status ) then
     echo
-    echo "  database $db is not in dbDb on $machine"
+    echo "  database $db is not found in dbDb on $machine"
     echo
-    echo ${0}:
-    $0
     exit 1
   endif
 end
-
-set table = "trackDb"
-set field = "tableName"
-
-if ( $#argv == 4 ) then
-  # check if valid field -- checks on localhost (usually hgwdev)
-  set field = $argv[4]
-  hgsql -t -e "DESC $table" $db | grep -w $field | wc -l > /dev/null
-  if ( $status ) then
-    echo
-    echo "  $field is not a valid field for $table"
-    echo
-    echo ${0}:
-    $0
-    exit 1
-  endif
-endif
 
 #### NEW WAY WITH hgTables
 #set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgTables?db=hg16&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table=trackDb&origPhase=Get+results&outputType=Tab-separated%2C+Choose+fields...&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
