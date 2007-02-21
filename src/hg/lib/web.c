@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.111 2007/02/10 00:30:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.112 2007/02/21 22:32:31 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -333,6 +333,8 @@ else
 	    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
     	else if (endsWith(scriptName, "hgTables"))
 	    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
+    	else if (endsWith(scriptName, "hgSession"))
+	    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html#Sessions\"");
     	else 
 	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
 	puts("       class=\"topbar\">");
