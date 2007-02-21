@@ -88,7 +88,6 @@ while (row2 != NULL)
 		chromEnd   = row4[1];
 		
 		fprintf(outputFile, "%s\t%s\t%s\t%s\n", chrom, chromStart, chromEnd, geneSymbol);
-		fflush(stdout);
 	        row4 = sqlNextRow(sr4);
 		}
             sqlFreeResult(&sr4);
