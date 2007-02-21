@@ -3349,6 +3349,7 @@ searchPriority 25
 searchTable blastHg18KG
 searchMethod prefix
 searchType psl
+semiShortCircuit 1
 
 searchName blastDm2FBGene
 searchTable blastDm2FB
