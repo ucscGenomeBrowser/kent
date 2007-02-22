@@ -51,7 +51,5 @@ set url8="&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
 
 set url="$url1$machine$url2$db$url3$table$url4$url5$url6$url7$url8"
 
-wget -q -O $machine.$db.$table "$url"
-cat $machine.$db.$table | sed -e "1d"
-rm -f  $machine.$db.$table
+wget -q -O /dev/stdout "$url" | sed -e "1d"
 
