@@ -22,8 +22,8 @@ struct hapmapAllelesOrtho
     char *orthoChrom;	/* Chromosome in other org */
     unsigned orthoStart;	/* Start position in other org */
     unsigned orthoEnd;	/* End position in other org */
-    char orthoAllele[2];	/* Allele in other org */
     char orthoStrand[2];	/* Strand in other org */
+    char orthoAllele[2];	/* Allele in other org */
     };
 
 void hapmapAllelesOrthoStaticLoad(char **row, struct hapmapAllelesOrtho *ret);

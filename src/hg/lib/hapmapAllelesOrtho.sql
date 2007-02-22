@@ -17,6 +17,6 @@ CREATE TABLE hapmapAllelesOrtho (
     orthoChrom varchar(15) not null,			# Chromosome in other org
     orthoStart int(10) unsigned not null,		# Start position in other org
     orthoEnd int(10) unsigned not null,			# End position in other org
-    orthoAllele enum('A', 'C', 'G', 'T', 'N') not null, # Allele in other org
-    orthoStrand enum('?','+','-') default '?' not null	# Strand in other org
+    orthoStrand enum('?','+','-') default '?' not null,	# Strand in other org
+    orthoAllele enum('A', 'C', 'G', 'T', 'N') not null  # Allele in other org
 );

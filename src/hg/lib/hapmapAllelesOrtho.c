@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAllelesOrtho.h"
 
-static char const rcsid[] = "$Id: hapmapAllelesOrtho.c,v 1.2 2007/02/21 23:45:03 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAllelesOrtho.c,v 1.3 2007/02/22 01:19:23 heather Exp $";
 
 void hapmapAllelesOrthoStaticLoad(char **row, struct hapmapAllelesOrtho *ret)
 /* Load a row from hapmapAllelesOrtho table into ret.  The contents of ret will
@@ -26,8 +26,8 @@ ret->observed = row[7];
 ret->orthoChrom = row[8];
 ret->orthoStart = sqlUnsigned(row[9]);
 ret->orthoEnd = sqlUnsigned(row[10]);
-safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[11]);
-safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[12]);
+safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[11]);
+safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[12]);
 }
 
 struct hapmapAllelesOrtho *hapmapAllelesOrthoLoad(char **row)
@@ -48,8 +48,8 @@ ret->observed = cloneString(row[7]);
 ret->orthoChrom = cloneString(row[8]);
 ret->orthoStart = sqlUnsigned(row[9]);
 ret->orthoEnd = sqlUnsigned(row[10]);
-safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[11]);
-safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[12]);
+safecpy(ret->orthoStrand, sizeof(ret->orthoStrand), row[11]);
+safecpy(ret->orthoAllele, sizeof(ret->orthoAllele), row[12]);
 return ret;
 }
 
@@ -109,8 +109,8 @@ ret->observed = sqlStringComma(&s);
 ret->orthoChrom = sqlStringComma(&s);
 ret->orthoStart = sqlUnsignedComma(&s);
 ret->orthoEnd = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->orthoAllele, sizeof(ret->orthoAllele));
 sqlFixedStringComma(&s, ret->orthoStrand, sizeof(ret->orthoStrand));
+sqlFixedStringComma(&s, ret->orthoAllele, sizeof(ret->orthoAllele));
 *pS = s;
 return ret;
 }
@@ -181,11 +181,11 @@ fputc(sep,f);
 fprintf(f, "%u", el->orthoEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->orthoAllele);
+fprintf(f, "%s", el->orthoStrand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->orthoStrand);
+fprintf(f, "%s", el->orthoAllele);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
