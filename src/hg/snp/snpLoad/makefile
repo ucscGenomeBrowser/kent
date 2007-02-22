@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o \
     hapmap.o hapmapCondense.o hapmapGenotype.o hapmapLookup.o \
-    hapmapMixed.o hapmapMonomorphic.o hapmapValidate.o \
+    hapmapMixed.o hapmapMonomorphic.o hapmapOrtho.o hapmapValidate.o \
     illuminaLookup.o \
     snpCheckAlleles.o snpCheckClassAndObserved.o snpCheckCluster.o snpCheckCluster2.o \
     snpClassAndObserved.o snpCleanSeq.o snpCompareLoctype.o snpCompareWeight.o \
@@ -17,7 +17,7 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
     snpGetDeletions.o snpGetInsertions.o snpGetSeqDup.o snpGetSimple.o \
     snpLoadFasta.o snpLocType.o snpLocType125.o \
     snpMissing.o snpMoltype.o snpMultiple.o \
-    snpOrthoCheck.o snpOrthoJoin.o \
+    snpOrtho.o snpOrthoCheck.o snpOrthoJoin.o \
     snpOrthoLookup.o snpPAR.o \
     snpReadFasta.o snpReadSeq.o snpReadSeq2.o snpRefUCSC.o \
     snpSort.o snpSplitByChrom.o snpSplitByChrom2.o snpSNP.o \
@@ -26,7 +26,7 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
 all: affyLookup cnpLookup fetchSeq \
      hapmap1 hapmap2 \
      hapmap hapmapCondense hapmapGenotype hapmapLookup \
-     hapmapMixed hapmapMonomorphic hapmapValidate \
+     hapmapMixed hapmapMonomorphic hapmapOrtho hapmapValidate \
      illuminaLookup \
      snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
      snpClassAndObserved snpCleanSeq snpCompareLoctype snpCompareWeight \
@@ -36,7 +36,7 @@ all: affyLookup cnpLookup fetchSeq \
      snpGetDeletions snpGetInsertions snpGetSeqDup snpGetSimple \
      snpLoadFasta snpLocType snpLocType125 \
      snpMissing snpMoltype snpMultiple \
-     snpOrthoCheck snpOrthoJoin \
+     snpOrtho snpOrthoCheck snpOrthoJoin \
      snpOrthoLookup snpPAR \
      snpReadFasta snpReadSeq snpReadSeq2 snpRefUCSC \
      snpSort snpSplitByChrom snpSplitByChrom2 snpSNP \
@@ -74,6 +74,9 @@ hapmapMixed: hapmapMixed.o ${MYLIBS}
 
 hapmapMonomorphic: hapmapMonomorphic.o ${MYLIBS}
 	${CC} -O -o hapmapMonomorphic hapmapMonomorphic.o ${MYLIBS} $L
+
+hapmapOrtho: hapmapOrtho.o ${MYLIBS}
+	${CC} -O -o hapmapOrtho hapmapOrtho.o ${MYLIBS} $L
 
 hapmapValidate: hapmapValidate.o ${MYLIBS}
 	${CC} -O -o hapmapValidate hapmapValidate.o ${MYLIBS} $L
@@ -161,6 +164,9 @@ snpMoltype: snpMoltype.o ${MYLIBS}
 
 snpMultiple: snpMultiple.o ${MYLIBS}
 	${CC} -O -o snpMultiple snpMultiple.o ${MYLIBS} $L
+
+snpOrtho: snpOrtho.o ${MYLIBS}
+	${CC} -O -o snpOrtho snpOrtho.o ${MYLIBS} $L
 
 snpOrthoCheck: snpOrthoCheck.o ${MYLIBS}
 	${CC} -O -o snpOrthoCheck snpOrthoCheck.o ${MYLIBS} $L
