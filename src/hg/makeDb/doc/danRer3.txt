@@ -8263,7 +8263,7 @@ exit 0
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer3
 
 ###########################################################################
-# REMAKE RADIATION HYBRID MAP TRACK (in progress, 2007-02-08, hartera)
+# REMAKE RADIATION HYBRID (RH) MAP TRACK (DONE, 2007-02-14, hartera)
 # Use update of Radiation Hybrid map data from October 2006 and use method
 # as documented in danRer4.txt to map these sequences to danRer3.
 # Data from Yi Zhou at Boston Children's Hospital:
@@ -8352,6 +8352,13 @@ exit 0
        | sed -e 's/ThisseClone/Thisse/' \
        | sed -e 's/Thisse_Clone/Thisse/' \
        | sed -e 's/Sequencing_Project/Seqproj/' > rhMapPrimers100306.txt
+    # edit these files to remove the extra newline char after the first primer
+    # for 1942c and then change "/" in FJ34C05.Y1/FJ56G09.Y1.WU_ZFEST to 
+    # an underscore (2007-02-14, hartera)
+    perl -pi.bak -e 's/fj34c05\.y1\/fj56g09/fj34c05\.y1_fj56g09/' \
+         rhMap100306.fa
+    perl -pi.bak -e 's/fj34c05\.y1\/fj56g09/fj34c05\.y1_fj56g09/' \
+         rhMapPrimers100306.txt
 
     # use a script to reformat the names for the FASTA headers to the format 
     # >NAME.SOURCE where name is the first field separated by "|" and source
@@ -8412,13 +8419,126 @@ line+ /san/sanvol1/scratch/danRer3/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     para try, check, push ... etc.
     para time
 # Completed: 15149 of 15149 jobs
-# CPU time in finished jobs:      14077s     234.62m     3.91h    0.16d  0.000 y
-# IO & Wait Time:                 39588s     659.79m    11.00h    0.46d  0.001 y
-# Average job time:                   4s       0.06m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              21s       0.35m     0.01h    0.00d
-# Submission to last job:           379s       6.32m     0.11h    0.00d
+#CPU time in finished jobs:      13684s     228.07m     3.80h    0.16d  0.000y
+#IO & Wait Time:                 38258s     637.63m    10.63h    0.44d  0.001 y
+#Average job time:                   3s       0.06m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              24s       0.40m     0.01h    0.00d
+#Submission to last job:           901s      15.02m     0.25h    0.01d
 
     # need to do pslSort and lift up
+    ssh pk
+    cd /san/sanvol1/scratch/danRer3/rhMap
+    # Do sort, liftUp and then best in genome filter.
+    pslSort dirs raw.psl tmp psl 
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # Previously did not use minCover since a lot of sequence is in
+    # Un and NA so genes may be split up so good to see all alignments.
+    # However, found a number of short alignments of <= 50 bp. These are
+    # not meaningful so maybe need to use minCover. If increased too much,
+    # then hits on poor parts of the assembly will be missed.
+    # use pslCDnaFilter with the same parameters as used for zebrafish
+    # Genbank EST alignments.
+        
+    # Use parameters as determined for danRer4
+    pslCDnaFilter -localNearBest=0.005 -minQSize=20 -minNonRepSize=16 \
+       -ignoreNs -bestOverlap -minId=0.85 -minCover=0.33 raw.psl contig.psl
+#                         seqs    aligns
+#             total:     11060   1767931
+#      drop invalid:     1       1
+#drop minNonRepSize:     3047    1297013
+#     drop minIdent:     763     3913
+#     drop minCover:     4065    420022
+#        weird over:     288     4267
+#        kept weird:     130     189
+#    drop localBest:     2188    34092
+#              kept:     10447   12890
+    # Percent sequences aligned: 10447/11514 = 90.7%
+    # This is a compromise between reducing the number of sequences piling
+    # up but not losing all alignments for too many sequences.
+    awk '{print $10}' contig.psl | sort | uniq -c | sort -nr > contig.count
+    head contig.count
+#      33 ZKP106G9.YA.BACENDS
+#     21 BZ83M20.Z.BACENDS
+#     12 ZK4I5.T7.BACENDS
+#     10 ZC27I3.ZA.BACENDS
+#     10 ZC261G9.ZAF.BACENDS
+#     10 ZC261G9.ZA.BACENDS
+#      8 ZK8O7.T7.BACENDS
+#      8 ZC77P2.ZB.BACENDS
+#      8 FJ89A05.X1.WU_ZFEST
+#      8 FJ07G09.X1.WU_ZFEST
+
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap
+    # lift up to genome level coordinates
+    liftUp rhMap.psl \
+           /cluster/data/danRer3/jkStuff/liftAllPlusliftScaffolds.lft warn \
+           /san/sanvol1/scratch/danRer3/rhMap/contig.psl
+    # Got 30168 lifts in
+    # /cluster/data/danRer3/jkStuff/liftAllPlusliftScaffolds.lft
+    pslCheck rhMap.psl
+    # psl looks ok
+    # cleanup 
+    rm *.bak *.sort
+    # Load sequence alignments into the database
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap   
+    # drop old table and reload final psl file
+    hgsql -e 'drop table rhMap;' danRer3 
+    hgLoadPsl danRer3 rhMap.psl
+     
+    # Copy sequences to gbdb if they are not already there.
+    mkdir -p /gbdb/danRer3/rhMap
+    # remove old sequences
+    rm /gbdb/danRer3/rhMap/rhMap022306.fa
+    ln -s \
+      /cluster/data/danRer3/bed/ZonLab/rhMap/rhMap.fa \
+      /gbdb/danRer3/rhMap/rhMap20061003.fa
+
+    # then add sequences to database:
+    # remove old ones first
+    hgsql -e 'select * from extFile where path like "%rhMap%";' danRer3
+#| id     | name           | path                               | size    |
+#+--------+----------------+------------------------------------+---------+
+#| 747628 | rhMap022306.fa | /gbdb/danRer3/rhMap/rhMap022306.fa | 7456861 |
+#+--------+----------------+------------------------------------+---------+
+    hgsql -e 'select count(*) from seq where extFile = 747628;' danRer3
+    hgsql -e 'delete from seq where extFile = 747628;' danRer3
+    # delete from extFile:
+    hgsql -e 'delete from extFile where id = 747628;' danRer3
+    hgLoadSeq danRer3 /gbdb/danRer3/rhMap/rhMap20061003.fa
+    # loaded succesfully
+    # Check in the Browser and see if there are many pileups
+    # Much reduced now on chr24. Took 10 random sequences in the pileup from
+    # minCover=0.20 and found that 7 of them still align to danRer4 
+    # with minCover=0.33 and 2 of those that don't also have primers that
+    # do not map using the hgPcr tool.
+    # Add trackDb entry and also an rhMap.html for trackDb/zebrafish/danRer4
+    # also add the search specs for hgFindSpec to trackDb.ra
+
+    # Add table of related information for the RH map details pages:
+    
+    # Check that all the headers from rhMap.headers are also in the primers
+    # file which seems to contain the same headers from the FASTA file
+    # as well as additional markers.
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/
+    # The same RH map version was used as for danRer4 so the data for the 
+    # info table is the same as for danRer4 so copy the file over. See 
+    # kent/src/hg/makeDb/doc/danRer4.txt for details on how this file is 
+    # produced.
+    cp /cluster/data/danRer4/bed/ZonLab/rhMap/rhMapInfoWithZfinIds.tab . 
+    # load the info table
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap
+    hgLoadSqlTab danRer3 rhMapZfishInfo ~/kent/src/hg/lib/rhMapZfishInfo.sql \
+          rhMapInfoWithZfinIds.tab
+    
+    # add code to hgc.c to print ZFIN ID, if available, on the details page
+    # together with the other marker-related information.
+    # added track to trackDb.ra in trackDb/zebrafish/danRer4 with a URL for 
+    # the ZFIN IDs to link to the relevant page at http://www.zfin.org 
+    # and added an html page for the track.
 
 #########################################################################
