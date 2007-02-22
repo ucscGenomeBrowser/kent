@@ -521,3 +521,180 @@ chainOne $(path1)
 	> fb.anoCar1.chainGalGal3Link.txt 2>&1
     #	real    1m8.359s
     #	109074507 bases of 1741478929 (6.263%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2007-02-19 - Hiram)
+    # This will find repeats within the genome that should not be matched
+    # against. Uses 11-mers.
+    # Use -repMatch=620 (based on size -- for human we use 1024, and
+    # lizard size is ~60.4% of human judging by gapless anoCar1 vs. hg18
+    # genome sizes from featureBits.
+
+    # hg18 / anoCar1 non-gap bases
+    #	2881515245 / 1741478929 = 1.654636
+    # anoCar1 / hg18 non-gap bases
+    #	1741478929 / 2881515245 = 0.604362
+
+    #	thus 1024 * 0.604362 ~= 620
+    
+    ssh kkstore05
+    blat /cluster/data/anoCar1/anoCar1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/data/anoCar1/11.ooc -repMatch=620
+    # Wrote 32070 overused 11-mers to /cluster/data/anoCar1/11.ooc
+
+    cp -p /cluster/data/anoCar1/11.ooc /san/sanvol1/scratch/anoCar1
+    cp -p /cluster/data/anoCar1/jkStuff/liftAll.lft \
+	/san/sanvol1/scratch/anoCar1
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-02-20 - Hiram)
+    # Make a liftAll.lft that specifies 5M chunks for genbank:
+    #	only a few of the largest scaffolds will be broken up, most of them not
+    ssh kkstore05
+    cd /cluster/data/anoCar1
+    simplePartition.pl anoCar1.2bit 5000000 /tmp/anoCar1
+    find /tmp/anoCar1 -type f | grep lft | xargs cat > jkStuff/liftAll.lft
+    rm -r /tmp/anoCar1
+    cp -p jkStuff/liftAll.lft /san/sanvol1/scratch/anoCar1
+
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add anoCar1 just after xenTro2
+    # anoCar1
+    anoCar1.serverGenome = /cluster/data/anoCar1/anoCar1.2bit
+    anoCar1.clusterGenome = /san/sanvol1/scratch/anoCar1/anoCar1.2bit
+    anoCar1.ooc = /san/sanvol1/scratch/anoCar1/11.ooc
+    anoCar1.lift = /san/sanvol1/scratch/anoCar1/liftAll.lft
+    anoCar1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+    anoCar1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+    anoCar1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+    anoCar1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+    anoCar1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+    anoCar1.refseq.mrna.native.load = yes
+    anoCar1.genbank.est.native.load = no
+    anoCar1.refseq.mrna.xeno.load = yes
+    anoCar1.genbank.mrna.xeno.load = yes
+    anoCar1.downloadDir = anoCar1
+    anoCar1.perChromTables = no
+
+    cvs ci -m "Added anoCar1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    #
+    cvs ci -m "Added Anolis carolinensis (lizard)." src/lib/gbGenome.c
+    make install-server
+
+    cd /cluster/data/genbank
+    screen
+
+    # This is a call to a script that will push our jobs out to the cluster
+    # since it's a big job.  
+    nice -n +19 bin/gbAlignStep -initial anoCar1 &
+    # logFile: var/build/logs/2007.02.19-22:10:25.anoCar1.initalign.log
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad anoCar1
+    #	real    8m9.108s
+
+    # enable daily alignment and update of hgwdev (DONE - 2007-02-20 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add anoCar1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added anoCar1." etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+##########################################################################
+## BLASTZ FROG xenTro2 (WORKING - 2007-02-20 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/anoCar1/bed/blastz.xenTro2.2007-02-20
+    cd /cluster/data/anoCar1/bed/blastz.xenTro2.2007-02-20
+
+    cat << '_EOF_' > DEF
+# Lizard vs frog
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Lizard AnoCar1 - largest chunk big enough for largest scaffold
+SEQ1_DIR=/san/sanvol1/scratch/anoCar1/anoCar1.2bit
+SEQ1_LEN=/san/sanvol1/scratch/anoCar1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# TARGET: Frog xenTro2 - single chunk big enough for the largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/xenTro2/xenTro2.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/xenTro2/chrom.sizes
+SEQ2_CHUNK=8000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/anoCar1/bed/blastz.xenTro2.2007-02-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-blastzOutRoot /cluster/bluearc/anoCar1XenTro2 > do.log 2>&1 &
+    ## real    1522m46.550s
+    ## this broke down during chaining because this file:
+# -rw-rw-r--  1 5982855 Feb 21 14:39 ../../pslParts/part039.lst.psl.g
+    ## has a bogus character control-V in the middle on a number
+    ## manually running through that one chain step with that line removed
+    ##	got the chaining completed, then continuing:
+    time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-continue=chainMerge \
+	-blastzOutRoot /cluster/bluearc/anoCar1XenTro2 > chainMerge.log 2>&1 &
+XXX - running - 2007-02-22 14:38
+
+############################################################################
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("anoCar1", "blat11", "17780", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("anoCar1", "blat11", "17781", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+## BLASTZ mm8/Mouse swap (DONE - 2007-02-20 - Hiram)
+    ##	the original blastz to mm8 measured
+    time nice -n +19 featureBits mm8 chainAnoCar1Link \
+	> fb.mm8.chainAnoCar1Link.txt 2>&1
+    #	real    1m37.380s
+    #	106743952 bases of 1042591351 (10.238%) in intersection
+
+    ssh kkstore04
+    mkdir /cluster/data/anoCar1/bed/blastz.mm8.swap
+    cd /cluster/data/anoCar1/bed/blastz.mm8.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/mm8/bed/blastz.anoCar1.2007-02-19/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk \
+	-swap > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/anoCar1/bed/blastz.mm8.swap
+    time nice -n +19 featureBits anoCar1 chainMm8Link \
+	> fb.anoCar1.chainMm8Link.txt 2>&1
+    #	real    2m1.527s
+    #	82784787 bases of 1741478929 (4.754%) in intersection
