@@ -14,6 +14,7 @@
 set choice=''
 set outPath='/usr/local/apache/htdocs/qa/test-results'
 set todaysDb=''
+set yestDb=''
 set list=''
 set error="ERROR - no database list. Try this first: databaseAday.csh init"
 
@@ -21,8 +22,8 @@ if ( $#argv < 1  || $#argv > 2 ) then
   echo
   echo " call with 'today' to find out the database we are monitoring today"
   echo
-  echo "    usage:  today | init | next [path]"
-  echo "            path defaults to /usr/local/apache/htdocs/qa/test-results'
+  echo "    usage:  today | yesterday | init | next [path]"
+  echo "            path defaults to /usr/local/apache/htdocs/qa/test-results"
   echo
   exit 1
 else
@@ -40,9 +41,10 @@ if ( $#argv == 2 ) then
   set outPath=$argv[2]
 endif
 
-if ( $choice != "today" && $choice != "init" && $choice != "next") then
+if ( $choice != "today" && $choice != "yesterday" && $choice != "init" \
+     && $choice != "next") then
   echo
-  echo " you must call this script using either 'today', 'init' or 'next'"
+  echo " you must call this script using either 'today', 'yesterday', 'init' or 'next'"
   echo
   exit 1
 endif
@@ -56,10 +58,9 @@ if ( $choice == "today" ) then
   endif
   # return the database at the top of the list
   set todaysDb=`head -1 $outPath/databaseAdayList`
-  # set todaysDb=`cat $outPath/databaseAdayList | head -1`
 
   # be sure we haven't completely wrapped around the list
-  # an redo list if so
+  # and redo list if so (catches any new dbs since last init)
   if ( $todaysDb == "DO-OVER" ) then
     $0 init $outPath
     set todaysDb=`$0 today $outPath`
@@ -67,6 +68,28 @@ if ( $choice == "today" ) then
   # all is good!
   echo $todaysDb
   exit 0
+endif
+
+# this is a 'yesterday' call
+if ( $choice == "yesterday" ) then
+  if (! -e $outPath/databaseAdayList) then
+    echo "\n $error\n"
+    exit 1
+  endif
+  # return the database at the bottom of the list
+  set yestDb=`tail -1 $outPath/databaseAdayList`
+  # check to see if it is a new list
+  # an redo list if so
+  if ( $yestDb == "DO-OVER" ) then
+    echo
+    echo "  sorry, list is freshly generated."
+    echo "  no db available from yesterday."
+    echo
+    exit 1
+  else
+    echo $yestDb
+    exit 0
+  endif
 endif
 
 # this is an initialization call -- query the RR to get the 
