@@ -8672,10 +8672,15 @@ CREATE TABLE ensBiotype (
 # Anhua (Peter) Song - asong@enders.tch.harvard.edu
 # Changed the name of rhMapInfo table and related files to rhMapZfishInfo
 # to make the name more zebrafish-specific (2007-02-08, hartera)
+# Remake track as one of the primer sequences was in the sequence for
+# 1942C.INSERTMUT and also changed another marker name to remove a forward 
+# slash. Remade rhMapZfishInfo table and removed spaces from primer sequences. 
+# (2007-02-14, hartera)
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/ZonLab/rhMap-2006-10-03
     cd /cluster/data/danRer4/bed/ZonLab
     ln -s rhMap-2006-10-03 rhMap
+    cd rhMap
     # download data files from e-mail:
     # rhSequenceSubmit100306.zip and rhSequenceSubmitSeq100306.zip
     unzip rhSequenceSubmit100306.zip
@@ -8753,7 +8758,13 @@ CREATE TABLE ensBiotype (
        | sed -e 's/ThisseClone/Thisse/' \
        | sed -e 's/Thisse_Clone/Thisse/' \
        | sed -e 's/Sequencing_Project/Seqproj/' > rhMapPrimers100306.txt
-
+    # edit these files to remove the extra newline char after the first primer
+    # for 1942c and then change "/" in FJ34C05.Y1/FJ56G09.Y1.WU_ZFEST to 
+    # an underscore (2007-02-14, hartera)
+    perl -pi.bak -e 's/fj34c05\.y1\/fj56g09/fj34c05\.y1_fj56g09/' \
+         rhMap100306.fa
+    perl -pi.bak -e 's/fj34c05\.y1\/fj56g09/fj34c05\.y1_fj56g09/' \
+         rhMapPrimers100306.txt 
     # use a script to reformat the names for the FASTA headers to the format 
     # >NAME.SOURCE where name is the first field separated by "|" and source
     # is the 9th field. The source is used to make the name unique. Some
@@ -8814,12 +8825,12 @@ line+ /san/sanvol1/scratch/danRer4/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     para try, check, push ... etc.
     para time
 # Completed: 3237 of 3237 jobs
-# CPU time in finished jobs:       4837s      80.62m     1.34h    0.06d  0.000y
-# IO & Wait Time:                 10635s     177.24m     2.95h    0.12d  0.000 y
-# Average job time:                   5s       0.08m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              29s       0.48m     0.01h    0.00d
-# Submission to last job:           104s       1.73m     0.03h    0.00d
+#CPU time in finished jobs:       4787s      79.78m     1.33h    0.06d  0.000 y
+#IO & Wait Time:                  8080s     134.67m     2.24h    0.09d  0.000 y
+#Average job time:                   4s       0.07m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              18s       0.30m     0.01h    0.00d
+#Submission to last job:           752s      12.53m     0.21h    0.01d
 
     # need to do pslSort and lift up
     ssh pk
@@ -9102,20 +9113,35 @@ line+ /san/sanvol1/scratch/danRer4/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     pslCheck rhMap.psl
     # psl looks ok
     # cleanup 
-    rm *.bak rhMap.headers rhMap.names *.sort headers.new rhMap100306.fa
+    rm *.bak rhMap.headers rhMap.names *.sort headers.new 
     # Load sequence alignments into the database
     ssh hgwdev
     cd /cluster/data/danRer4/bed/ZonLab/rhMap   
-    # drop test tables and reload final psl file 
+    # drop test tables and reload final psl file
+    # drop old rhMap table
+    hgsql -e 'drop table rhMap;' danRer4 
     hgLoadPsl danRer4 rhMap.psl
      
     # Copy sequences to gbdb if they are not already there.
     mkdir -p /gbdb/danRer4/rhMap
+    # remove old sequences
+    rm /gbdb/danRer4/rhMap/rhMap20061003.fa
     ln -s \
       /cluster/data/danRer4/bed/ZonLab/rhMap/rhMap.fa \
       /gbdb/danRer4/rhMap/rhMap20061003.fa
 
     # then add sequences to database:
+    # remove old sequences (2007-02-14, hartera)
+    hgsql -e 'select * from extFile where path like "%rhMap%";' danRer4
+# id     | name             | path                                 | size    |
++--------+------------------+--------------------------------------+---------+
+#| 709793 | rhMap20061003.fa | /gbdb/danRer4/rhMap/rhMap20061003.fa | 7456887 |
+    hgsql -e 'select count(*) from seq where extFile = 709793;' danRer4
+    # 11514
+    hgsql -e 'delete from seq where extFile = 709793;' danRer4
+    hgsql -e 'delete from extFile where id = 709793;' danRer4
+    
+    # then reload the new sequence file 
     hgLoadSeq danRer4 /gbdb/danRer4/rhMap/rhMap20061003.fa
     # loaded succesfully
     # Check in the Browser and see if there are many pileups
@@ -9131,14 +9157,11 @@ line+ /san/sanvol1/scratch/danRer4/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # Check that all the headers from rhMap.headers are also in the primers
     # file which seems to contain the same headers from the FASTA file
     # as well as additional markers.
+    # Remake the rhMapZfishInfo table too (hartera, 2007-02-14) so that 
+    # new line is removed from 1942C.INSERTMUT line and also the underscore is
+    # added to the FJ34C05.Y1_FJ56G09.Y1.WU_ZFEST ID in place of "/". 
     ssh kkstore04
     cd /cluster/data/danRer4/bed/ZonLab/rhMap/
-    sed -e 's/Insertion_Mutants/InsertMut/' rhSequenceSubmitSeq100306.txt \
-       | sed -e 's/Insertion_Mutant/InsertMut/' \
-       | sed -e 's/Sanger SG/Shotgun/' \
-       | sed -e 's/ThisseClone/Thisse/' \
-       | sed -e 's/Thisse_Clone/Thisse/' \
-       | sed -e 's/Sequencing_Project/Seqproj/' > rhMap100306.fa
     grep '>' rhMap100306.fa > rhMap.headers
 
     perl -pi.bak -e 's/>//' rhMap.headers
@@ -9194,7 +9217,8 @@ cat << '_EOF_' > getRhInfo
     # translate names to upper case
     cat rhSeqZfinIds.txt | tr '[a-z]' '[A-Z]' > rhSeqZfinIds.format.txt      
     # then map these marker names and ZFIN IDs to markers in
-    # rhMapInfoSorted.tab 
+    # rhMapInfoSorted.tab. Also remove spaces - some of the primer sequences
+    # have spaces (hartera, 2007-02-14)  
 cat << 'EOF' > mapZfinIds.pl
 #!/usr/bin/perl -w
 use strict;
@@ -9240,7 +9264,9 @@ while (<RH>){
       $zf = $zfinIds{$mName};
    }
    print "$f[0]\t$zf";
+   # print other fields and remove spaces
    for ($i = 1; $i <= $#f; $i++){
+      $f[$i] =~ s/\s//g;
       print "\t$f[$i]";
    }
    if ($#f == 6){
@@ -9261,7 +9287,7 @@ while (<RH>){
     # When loading, found that 1942.C has only 1 primer. Problem with
     # rhMapPrimers100306.txt. There was a new line between the primers
     # for this file so remove it there and in rhMap100306.fa and then 
-    # process it again.
+    # process it again (now this was done at an earlier step, 2007-02-14).
 
     # Create a table with RH map item information including type, source,
     # origin and primer sequences.
@@ -9304,6 +9330,8 @@ string rightPrimer;     "Reverse primer sequence"
     # reload table with new name (2007-02-08, hartera):
     cd /cluster/data/danRer4/bed/ZonLab/rhMap
     hgsql -e 'drop table rhMapInfo;' danRer4 
+    # reloaded the rhMapZfishInfo table (2007-02-08, hartera)
+    hgsql -e 'drop table rhMapZfishInfo;' danRer4
     hgLoadSqlTab danRer4 rhMapZfishInfo ~/kent/src/hg/lib/rhMapZfishInfo.sql \
           rhMapInfoWithZfinIds.tab
     
