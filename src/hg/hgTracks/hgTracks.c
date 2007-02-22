@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1280 2007/02/20 06:38:08 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1281 2007/02/22 01:31:18 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13380,7 +13380,6 @@ else if (newSizeDbl < 0)
     newSize = 0;
 else
     newSize = (int)newSizeDbl;
-if (newSize < 30) newSize = 30;
 if (newSize > seqBaseCount)
     newSize = seqBaseCount;
 zoomToSize(newSize);
