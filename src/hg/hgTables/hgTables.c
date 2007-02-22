@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.146 2007/02/14 21:26:39 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.147 2007/02/22 00:29:50 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1298,36 +1298,6 @@ void doLookupPosition(struct sqlConnection *conn)
 doMainPage(conn);
 }
 
-void doTableStatus(struct sqlConnection *conn)
-/* Get table status for a database. */
-{
-puts("Content-Type:text/plain\n");
-char *db= cartString(cart, "db");
-printf("Table status for database %s\n", db);
-struct sqlResult *sr;
-char **row;
-char *sep="";
-int c = 0;
-int numCols = 0;
-sr = sqlGetResult(conn, "SHOW TABLE STATUS");
-numCols = sqlCountColumns(sr);
-char *field;
-while ((field = sqlFieldName(sr)) != NULL)
-    printf("%s \t", field);
-printf("\n");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    sep="";
-    for (c=0;c<numCols;++c)
-	{
-	printf("%s%s",sep,row[c]);
-	sep = "\t";
-	}
-    fprintf(stdout, "\n");	    
-    }
-sqlFreeResult(&sr);
-}
-
 /* Remove any meta data variables from the cart. (Copied from above!) */
 void removeMetaData()
 {
@@ -1383,31 +1353,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 removeMetaData();
-}
-
-void doMysqlVersion(struct sqlConnection *conn)
-/* Get mysql version */
-{
-puts("Content-Type:text/plain\n");
-struct sqlResult *sr;
-sr = sqlGetResult(conn, "SELECT @@VERSION");
-char **row;
-char *sep="";
-int c = 0;
-int numCols = 0;
-numCols = sqlCountColumns(sr);
-printf("\n");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    sep="";
-    for (c=0;c<numCols;++c)
-	{
-	printf("%s%s",sep,row[c]);
-	sep = "\t";
-	}
-    fprintf(stdout, "\n");	    
-    }
-sqlFreeResult(&sr);
 }
 
 void doTopSubmit(struct sqlConnection *conn)
@@ -1563,10 +1508,6 @@ else if (cartVarExists(cart, hgtaDoGalaxyPrintPairwiseAligns))
     doGalaxyPrintPairwiseAligns(conn);
 else if (cartVarExists(cart, hgtaDoLookupPosition))
     doLookupPosition(conn);
-else if (cartVarExists(cart, hgtaDoTableStatus))
-    doTableStatus(conn);
-else if (cartVarExists(cart, hgtaDoMysqlVersion))
-    doMysqlVersion(conn);
 else if (cartVarExists(cart, hgtaDoMetaData))
     doMetaData(conn);
 else	/* Default - put up initial page. */
