@@ -34,9 +34,8 @@ cp -p /tmp/hgcentral.sql /usr/local/apache/htdocs/admin/hgcentral.sql
 rm hiding/hgcent/hgcentral.sql
 cp -p /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
 cd hiding/hgcent
-set CVSROOT=/projects/compbio/cvsroot 
 set temp = '"'"v${BRANCHNN}"'"'
-cvs -d hgwdev:$CVSROOT commit -m $temp  hgcentral.sql
+cvs -d hgwdev:/projects/compbio/cvsroot commit -m $temp  hgcentral.sql
 if ( $status ) then
 	echo "error during cvs commit of hgcentral.sql."
 	exit 1
