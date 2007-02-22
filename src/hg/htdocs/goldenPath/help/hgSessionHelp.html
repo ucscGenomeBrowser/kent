@@ -76,10 +76,12 @@ and feedback on this User's Guide are welcome.</A>
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
    <P>The <A HREF="../../cgi-bin/hgSession" target="_blank">Sessions</A> 
    tool allows you to configure your browser with specific 
-   track combinations, including custom tracks, and save the configuration 
-   options. Multiple sessions may be saved for future reference, for comparison 
+   track combinations, including 
+   <A HREF="hgTracksHelp.html#CustomTracks">custom tracks</A>, 
+   and save the configuration 
+   options. Multiple Sessions may be saved for future reference, for comparison 
    of scenarios or for sharing with your colleagues.  
-   <A HREF="#Lifespan">Saved sessions persist</A> 
+   <A HREF="#Lifespan">Saved Sessions persist</A> 
    for one year after the last access, unless deleted. 
    <A HREF="#CTs">Custom tracks persist</A> 
    for at least 48 hours after the last time they are viewed.</A>
@@ -88,16 +90,19 @@ and feedback on this User's Guide are welcome.</A>
    blue navigation bar in any assembly. To ensure privacy and security, you 
    must login to the <A HREF="http://genomewiki.cse.ucsc.edu/index.php">genomewiki</A> 
    site and create a username and password. The Sessions tool makes use of 
-   the built-in security of the wiki tool. [*** this could use some expanding]</P>
+   the built-in security of the wiki tool. [*** this could use some expanding ***]</P>
 
-   <P>Individual sessions may be designated as either 
+   <P>Individual Sessions may be designated as either 
    <A HREF="#ShareOrNot">&quot;shared&quot; or &quot;non-shared&quot;</A> 
    to protect the privacy of <A HREF="#Confidential">confidential data</A>. 
    To avoid having a new shared 
-   session from someone else override your existing Genome Browser settings, 
+   Session from someone else override your existing Genome Browser settings, 
    you are encouraged to <A HREF="#Open">open</A> 
    a new web-browser instance or to save existing 
-   settings in a session before loading a new shared session.</P>
+   settings in a Session before loading a new shared Session.</P>
+
+   <P>[*** should we note that not all mirror sites may have this feature 
+   available? ***]</P>
 
    </TD><TD WIDTH=15></TD></TR>
    </TABLE>
@@ -174,9 +179,19 @@ and feedback on this User's Guide are welcome.</A>
    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
    <TR><TH HEIGHT=10></TH></TR>
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
-   <P>
-   
-   </P>
+
+   <P>Once you save a Session for the first time, it will be available to you 
+   (and others if you <A HREF="#Share">share</A> it) for one year.  If you 
+   access the Session again during that 12 months, it will then be avaliable 
+   for one year after the access date. So, as long as you access your Session 
+   at least once a year, it will persist on the server until you 
+   <A HREF="#Delete">delete</A> it.</P>
+
+   <P>Note that if your Session contains tracks that expire (such as 
+   <A HREF="#CTs">Custom Tracks</A>, BLAT results, or Genome Graph tracks), 
+   those tracks will expire at their normal rate, and your Session will 
+   persist without those tracks.</P>
+
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
  <BR></TD></TR>
@@ -218,16 +233,43 @@ and feedback on this User's Guide are welcome.</A>
 <A NAME="Confidential"></A>
  <HR>
  <B><FONT SIZE="3" COLOR="#0000FF">Confidential Data</FONT></B>
- <P>
+ <P>If you do not choose to share your Session, your data and browser 
+ configuration will not be available to other users of the Genome 
+ Browser. Any confidential data or locations of interest that you are 
+ working with will be safe from viewing by others. [*** do we need 
+ to say something about the data living in the database in a 
+ not-so-encrypted format that WE could access if we were so inclined? ***]</P>
 
- </P>
+ <P>However, if you choose to share your Session, it will be available 
+ to anyone who knows the username and session name, has access to the 
+ local file, or knows the URL of the Session.  [*** has it been tested
+ that even if you don't SHARE your session, if you post to a public 
+ URL, it will not be available for viewing by others? ***]</P>
 
 <!-------Pointing Someone to Your Session------------------------->
 <A NAME="HowToShare"></A>
  <HR>
  <B><FONT SIZE="3" COLOR="#0000FF">Pointing Someone to Your Session</FONT></B>
- <P>
+ <P>There are three ways to let others know about your saved Sessions.
+  <UL>
+  <LI>Each previously saved named Session appears with hyperlinks named 
+   <EM>Browser</EM> and <EM>Email</EM>. The <EM>Browser</EM> link takes 
+   you to a page with a static link to the session which you can bookmark 
+   in your web browser. The <EM>Email</EM> link is for sending the link 
+   to others.</LI>
 
+  <LI>If you have saved your settings to a local file, you can send email 
+   to others with the file as an attachment and direct them to 
+   <A HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgSession">http://hgwdev.cse.ucsc.edu/cgi-bin/hgSession</A>.</LI>
+
+  <LI>If you have saved your settings to a web server, you can send 
+   email to others with a link such as 
+   http://hgwdev.cse.ucsc.edu/cgi-bin/hgSession?hgS_doLoadUrl=submit&hgS_loadUrlName=<B>U</B> 
+   where <B>U</B> is the URL of your settings file, e.g. 
+   http://www.mysite.edu/~me/mySession.txt. In this type of link, you can 
+   replace &quot;hgSession&quot; with &quot;hgTracks&quot; in order to 
+   proceed directly to the Genome Browser.</LI>
+  </UL>
  </P>
 
 <!-------Opening a Shared Session------------------------->
@@ -235,6 +277,19 @@ and feedback on this User's Guide are welcome.</A>
  <HR>
  <B><FONT SIZE="3" COLOR="#0000FF">Opening a Shared Session</FONT></B>
  <P>
+ [*** this section needs to include Angie's tips for not stomping over
+ your existing browser settings when opening another session:
+<BR><BR>
+ 1. If your colleague uses the "Email" link in hgSession to mail you a 
+ browser link, just open that in a new tab/window (safe because that 
+ link does not include hgsid).  
+<BR><BR>
+ 2. Open a new web browser tab or window, then navigate to UCSC (do not 
+ use a link with hgsid!!), click into hgSession, and then load your 
+ colleague's session.  The old web browser window will keep your old 
+ session, and the new window will get a new cart (new hgsid).  
+<BR><BR>
+ 3. Save your current session, then load your colleague's. ***]
 
  </P>
 
@@ -287,9 +342,21 @@ and feedback on this User's Guide are welcome.</A>
    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
    <TR><TH HEIGHT=10></TH></TR>
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
-   <P>
-   
+   <P>In addition to displaying standard UCSC tracks in your Session, you can 
+   also display <A HREF="hgTracksHelp.html#CustomTracks">Custom Tracks</A> and 
+   and <A HREF="hgTracksHelp.html#GenomeGraphs">Genome Graph</A> tracks. 
+   Before you create and save your Session, be sure to upload your 
+   <A HREF="../../cgi-bin/hgCustom" target="_blank">Custom Track</A> or 
+   <A HREF="../../cgi-bin/hgGenome" target="_blank">Genome Graph</A> track. 
+   Please note that Genome Graph tracks and 
+   Custom Tracks that are hosted on the UCSC server only have a lifespan 
+   of 48 hours.  If you create a Session that includes a Custom Track or 
+   Genome Graph track that has expired, the Session link will not display 
+   properly. [*** how? ***]</P>
+
+   <P>[*** Be sure to add information about BLAT and how long does it last. ***]   
    </P>
+
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
  <BR></TD></TR>
@@ -314,9 +381,17 @@ and feedback on this User's Guide are welcome.</A>
    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
    <TR><TH HEIGHT=10></TH></TR>
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
-   <P>
-   
-   </P>
+
+   <P>In the <B>Session Management</B> section, under the 
+   <EM>My Sessions</EM> header, press the <TT>delete</TT> button 
+   next to the Session name you would like to delete.  This will 
+   permanantely delete all details of the Session from the UCSC server. 
+   Any saved links to that Session will no longer work.</P>
+
+   <P>Unlike most other browser preferences, the Sessions settings are 
+   not saved in your user cart.  Therefore, when you choose to reset your 
+   cart, it will <EM>not</EM> delete your saved Sessions.</P>
+
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
  <BR></TD></TR>
