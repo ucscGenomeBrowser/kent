@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1281 2007/02/22 01:31:18 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1282 2007/02/22 19:31:20 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12456,7 +12456,11 @@ if (sameString(database, "anoGam1"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-
+if (sameString(database, "oryLat1"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
+        skipChr(chromName), winStart+1, winEnd, "UTGB");
+    }
 if (sameString(database, "ce2"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>", 
