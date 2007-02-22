@@ -21893,6 +21893,7 @@ foreach fileName (`ls snp*.out`)
 end
 'EOF'
 sort all.out > all.sort
+rm all.out
 cd /san/sanvol1/snp/liftOver/hg17
 mkdir panTro2Qual
 cp panTro2Seq/output/all.sort panTro2Qual
@@ -21933,14 +21934,9 @@ end
 'EOF'
 
 cd rheMac2Seq/output
-cat << 'EOF' > concat.csh
-#!/bin/tcsh
-rm -f all.out
-foreach fileName (`ls snp*.out`)
-    cat $fileName >> all.out
-end
-'EOF'
+concat.csh
 sort all.out > all.sort
+rm all.out
 cd /san/sanvol1/snp/liftOver/hg17
 mkdir rheMac2Qual
 cp rheMac2Seq/output/all.sort rheMac2Qual
@@ -21950,6 +21946,21 @@ splitFileByColumn all.sort input
 mkdir output
 ./getQual.csh
 
+# trial run of load (score = 0)
+cd /cluster/home/heather/kent/src/hg/snp/snpLoad
+# chimp
+snpOrtho hg17 snp125 /san/sanvol1/snp/liftOver/hg17/panTro2Seq/output/all.sort
+hgLoadBed hg17 snp125OrthoPanTro2 snpOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/snp125OrthoPanTro2.sql
+# rhesus
+snpOrtho hg17 snp125 /san/sanvol1/snp/liftOver/hg17/rheMac2Seq/output/all.sort
+hgLoadBed hg17 snp125OrthoRheMac2 snpOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/snp125OrthoRheMac2.sql
+# add index
+# get hapmap subset
+hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoPanTro2
+hgLoadBed hg17 hapmapAllelesChimp hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesChimp.sql
+hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoRheMac2
+hgLoadBed hg17 hapmapAllelesMacaque hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesMacaque.sql
+# add index
 
 
 ############
