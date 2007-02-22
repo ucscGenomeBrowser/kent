@@ -6,7 +6,7 @@ cd /cluster/data/hg18/bed/jkg
 # Get GenBank and RefSeq CDS  and other info. Best to get it now
 # so it is synced with the refSeq and mrna inputs, even 
 # though we won't process much of it until a later step.
-# Takes 2 minutes
+# Takes 2.5 minutes
 echo 'select acc,name from gbCdnaInfo,cds where type="mRNA" and cds=cds.id and cds != 0' | hgsql -N hg18 > cds.tab
 echo 'select mrnaAcc,status from refSeqStatus' | hgsql -N hg18 > refSeqStatus.tab
 echo 'select acc,status from mgcFullStatus' | hgsql -N hg18 > mgcStatus.tab
@@ -27,8 +27,22 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     hgGetAnn -noMatchOk hg18 refSeqAli $c refSeq/$c.psl
     hgGetAnn -noMatchOk hg18 mrna $c mrna/$c.psl
 end
+# Note this time, since there are blat changes not yet in the main pipeline
+# do:
+pslSplitOnTarget /cluster/store10/markd/genbank/realign/hg18/global/refseq.psl refSeq
+pslSplitOnTarget /cluster/store10/markd/genbank/realign/hg18/tightGlobal/mrna.psl mrna
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    if (! -e refSeq/$c.psl) then
+	  echo creating empty refSeq/$c.psl
+          echo -n "" >refSeq/$c.psl
+    endif
+    if (! -e mrna/$c.psl) then
+	  echo creating empty mrna/$c.psl
+          echo -n "" >mrna/$c.psl
+    endif
+end
 
-# Convert psls to bed, saving mapping info.  Takes 1 min 40 sec.
+# Convert psls to bed, saving mapping info.  Takes 2.5 min
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo checking splice sites on $c.psl and converting to bed.
     txPslToBed refSeq/$c.psl -noFixStrand -cds=cds.tab /cluster/data/hg18/hg18.2bit refSeq/$c.bed -unusual=refSeq/$c.unusual
@@ -263,7 +277,7 @@ cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
 cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks -weightedTce=weighted.tce
 
 # Create gene prediction (GTF) and peptide fasta file.
-cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa
+cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa -bedOut=bestCds.bed
 
 ###########################################################################
 ## Load take 5 into the database
@@ -276,7 +290,8 @@ hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
 cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
-ldHgGene hg18 jkgTxWalk2 bestCds.gtf -gtf -genePredExt
+hgLoadBed hg18 jkgTxWalk2 txWalk/*.bed
+ldHgGene hg18 jkgTxCdsPick2 bestCds.gtf -gtf -genePredExt
 
 
 ###########################################################################
@@ -651,6 +666,7 @@ chr16	843634	960985	NM_022773	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
    Refseq disagrees with genome leading to 4 bp "stray" close to end of second exon.
    Other RNAs agree with genome.  Looks like it is good to split here.
   After merging leads to wacked out long exon.
+  Fixed.
 chr2	31603159	31659544	NM_000348	CDS	FULL	.	.	GAP<7	.	.	BUST<7b	.	.	.	.
    1 BP insert in RNA relative to genome in exon 1. Two other RNAs including MGC full orf
    support refSeq.
@@ -672,9 +688,11 @@ chr19	18655424	18749762	NM_025021	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
 chr5	77692094	77812318	NM_004866	CDS	FULL	.	.	GAP<7	.	.	BUST<7b	.	.	.	.
    1 BP insertion in mRNA relative to genome in exon 7.  Of RNAs in region, 7 support RefSeq, 1 supports genome.
   Turns into monster exon.
+  Fixed.
 chr11	102238673	102250922	NM_002426	CDS	FULL	.	.	GAP<7	.	.	BUST<7b	.	.	.	.
    1 BP insertion in mRNA relative to genome in exon 5. 2 RNAs in region support RefSeq, 1 supports genome.
   Turns into monster exon.
+  Fixed
 chrX	128766593	128805149	NM_001008222	CDS	FULL	.	.	.	SPLIT	.	.	.	.	OUT	.
    Noncannonical intron split that will restitch.
   Seems ok now.
@@ -687,4 +705,50 @@ chr1	1560962	1645635	NM_033492	CDS	FULL	NUDGE	.	GAP<7	SPLIT	.	.	.	.	OUT	.
 ###########################################################################
 # Weird regions take 5
 chr22:17,546,746-17,665,740 NM_007098 has wacked out huge exon.
+  fixed.
 
+NM_004866	chr5	77692094	9
+77692094,77720416,77747099,77748120,77750354,77753380,77781512,77790823,77807082,
+0,0,0,0,1,1,2,2,0,
+0,0,0,0,2,2,1,0,1,0,
+
+############################################################################
+# Things to fix and test cases for take 6.  Looked at perhaps 5 megabases
+# of chromosome 1, and first part of chr22 (up to chr22:22,311,744-22,405,735)
+
+pslCdnaFilter - run so as to better pick better of two mappings.
+        Test case: chr22:20,150,617-20,157,116
+abFragFilter - get rid of all but selected few antibody fragments.
+        Test case: chr22:20,946,751-21,035,748
+txBedToGraph  - flag retained introns. Test case chr22:17,280,005-17,306,568.
+txBedToGraph  - Is end of CU013202 acting as hard stop and hard end?  Why
+         is CU013202 a separate transcript, not merged with NM_003347?
+txBedToGraph  - Why are BC050020 and NM_080764 not merged?
+txAddEvidence - Don't add evidence for double-hard-end that is only supported
+         on one end by another double-hard-end.  Test case
+	 chr22:19,221,254-19,221,743 the slightly larger exon on AK074268.
+txAddEvidence - Suppress adding hard-end evidence to double-soft that
+         overlaps.  Test case chr22:22,298,169-22,319,055.
+txWalk - make it output all transcripts that hit an edge with sufficient
+         evidence, and which are not subsets of previous transcripts.
+	 Test case chr1:67,646,622-67,669,121, currently only outputs
+	 3 of 4 refseqs.
+txWalk - for single-exon transcripts that overlap weakly, don't count
+         overlap as 2 pieces of evidence, just 1.1 or something.
+	 Test case chr22:20,109,925-20,125,924.
+txFilter - Remove transcripts completely enclosed on tx level that differ
+         only at 3' or 5' end.  Test case NM_176877 and AF377170. Also
+	 NM_005446 and AF065385.
+txFilter - Remove transcript that are result of fragmented RNA
+         where larger part of RNA is in another transcript.
+	 Test case chr22:19,863,475-19,871,029.
+txFilter - Merge transcripts that are the result of fragmented RNA
+         where good evidence and multiple introns on both sidex.
+	 Test case chr22:19,881,325-19,920,204.
+txFilter - Remove single exon genes that are more than 55% enclosed within
+	   exon of multiple exon gene.  Test case chr22:18,608,081-18,611,968.
+	   Also chr22:19,970,725-19,975,524
+txCdsAddEv - Process selano-cysteines and anternative starts.
+txCdsPick - Pick RefSeq CDS for RefSeq genes.
+txClusterAnalyser - Identify CDS that is not shared with dominant CDS
+           from transcript cluster and remove.
