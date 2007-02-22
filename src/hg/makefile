@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.124 2007/02/14 21:36:59 fanhsu Exp $
+# 	$Id: makefile,v 1.125 2007/02/22 19:48:51 kent Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -221,6 +221,7 @@ UTIL_DIRS = \
 	pslSimp \
 	pslSort \
 	pslSortAcc \
+	pslSplitOnTarget \
 	pslStats \
 	pslSwap \
 	pslToBed \
