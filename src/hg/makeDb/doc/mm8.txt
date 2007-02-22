@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.35 2007/02/20 22:23:14 galt Exp $"
+#	"$Id: mm8.txt,v 1.36 2007/02/22 22:43:31 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7773,8 +7773,61 @@ synBlastp.csh mm8 rn4
     featureBits mm8 augustus
     # 35380585 bases of 2567283971 (1.378%) in intersection
 
+#########################################################################
+## BLASTZ ANOCAR1 - Lizard - (DONE - 2007-02-19 - 2007-02-20 - Hiram)
+    ssh kkstore04
+    mkdir /cluster/data/mm8/bed/blastz.anoCar1.2007-02-19
+    cd /cluster/data/mm8/bed/blastz.anoCar1.2007-02-19
+
+    cat << '_EOF_' > DEF
+# Mouse vs lizard
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/san/sanvol1/scratch/mm8/mm8.sdTrf.2bit
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Lizard AnoCar1 - largest chunk big enough for largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/anoCar1/anoCar1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/anoCar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastz.anoCar1.2007-02-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/mm8AnoCar1 > do.log 2>&1 &
+    #	real    544m52.722s
+
+    #	appears to have successfully finished
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/blastz.anoCar1.2007-02-19
+    time nice -n +19 featureBits mm8 chainAnoCar1Link \
+	> fb.mm8.chainAnoCar1Link.txt 2>&1
+    #	real    1m37.380s
+    #	96286498 bases of 2567283971 (3.751%) in intersection
+
+    #	running the swap to anoCar1 - instructions in anoCar1.txt
+    cd /cluster/data/anoCar1/bed/blastz.mm8.swap
+    time nice -n +19 featureBits anoCar1 chainMm8Link \
+	> fb.anoCar1.chainMm8Link.txt 2>&1
+    #	real    2m1.527s
+    #	82784787 bases of 1741478929 (4.754%) in intersection
+
 #############################################################################
 # UPDATED mm8.knownToVisiGene (DONE galt 2007-02-15)
 ssh hgwdev
 knownToVisiGene mm8
-
