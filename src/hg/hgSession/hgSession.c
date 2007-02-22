@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.23 2007/02/21 22:55:04 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.24 2007/02/22 18:19:31 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -408,15 +408,18 @@ printf("<UL>\n");
 if (userName != NULL)
     {
     printf("<LI>Each previously saved named session appears with "
-	   "Link and Email options.  Link takes you to a page with "
-	   "a static link to the session which you can bookmark in your "
-	   "web browser.  Email is for sending the link to others.</LI>\n");
+	   "Browser and Email links.  "
+	   "The Browser link takes you to the Genome Browser "
+	   "with that session loaded.  The resulting Genome Browser page "
+	   "can be bookmarked in your web browser and/or shared with others.  "
+	   "The Email link invokes your email tool with a message "
+	   "containing the Genome Browser link.</LI>\n");
     }
 else
     {
     printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able to save "
-	   "named sessions which will be displayed with Link and Email "
-	   "options.</LI>\n", wikiLinkUserLoginUrl(cartSessionId(cart)));
+	   "named sessions which will be displayed with Browser and Email "
+	   "links.</LI>\n", wikiLinkUserLoginUrl(cartSessionId(cart)));
     }
 dyStringPrintf(dyUrl, "http://%s%s", cgiServerName(), cgiScriptName());
 
