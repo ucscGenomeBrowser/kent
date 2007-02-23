@@ -16,8 +16,10 @@ DIRS = \
 	txBedToTxg	\
 	txOrtho	\
 	txPslToBed	\
+	txPslFilter	\
 	txWalk	\
 	txgAddEvidence	\
+	txgGoodEdges	\
 	txgToAgx	\
 	txgToXml	\
 	txgTrim	
