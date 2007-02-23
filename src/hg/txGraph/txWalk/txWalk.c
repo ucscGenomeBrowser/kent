@@ -21,11 +21,14 @@ errAbort(
   "   txWalk in.txg in.weights threshold out.bed\n"
   "options:\n"
   "   -evidence=out.ev - place mrna associated with each transcript here.\n"
+  "   -singleExonThreshold - set single exon threshold. By default it's 1.3x the\n"
+  "                          usual threshold\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"evidence", OPTION_STRING},
+   {"singleExonThreshold", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -60,7 +63,6 @@ lineFileClose(&lf);
 return hash;
 }
 
-
 double weightFromHash(struct hash *hash, char *name)
 /* Find weight given name. */
 {
@@ -68,13 +70,25 @@ struct weight *weight = hashMustFindVal(hash, name);
 return weight->value;
 }
 
-double edgeTotalWeight(struct txEdge *edge, double sourceTypeWeights[])
+double edgeTotalWeight(struct txGraph *txg,
+	struct txEdge *edge, double sourceTypeWeights[])
 /* Return sum of all sources at edge. */
 {
 double total = 0;
 struct txEvidence *ev;
+int edgeStart = txg->vertices[edge->startIx].position;
+int edgeEnd = txg->vertices[edge->endIx].position;
+double edgeSizeFactor = 1.0/(edgeEnd - edgeStart);
 for (ev = edge->evList; ev != NULL; ev = ev->next)
-    total += sourceTypeWeights[ev->sourceId];
+    {
+    double sourceWeight = sourceTypeWeights[ev->sourceId];
+    int overlap = rangeIntersection(edgeStart, edgeEnd, ev->start, ev->end);
+    if (overlap > 0)
+        {
+	double weight = sourceWeight * edgeSizeFactor * overlap;
+	total += weight;
+	}
+    }
 return total;
 }
 
@@ -97,7 +111,7 @@ return a->start - b->start;
 }
 
 struct edgeTracker *makeTrackerList(struct txGraph *txg, double sourceTypeWeights[],
-	double threshold, struct lm *lm)
+	double threshold, double singleExonThreshold, struct lm *lm)
 /* Make up a structure to help walk the graph. */
 {
 struct edgeTracker *trackerList = NULL;
@@ -108,9 +122,18 @@ for (edge = txg->edges, i=0; edge != NULL; edge = edge->next, i++)
     struct edgeTracker *tracker;
     lmAllocVar(lm, tracker);
     tracker->edge = edge;
-    tracker->weight = edgeTotalWeight(edge, sourceTypeWeights);
-    if (tracker->weight < threshold)
-        tracker->visited = TRUE;
+    tracker->weight = edgeTotalWeight(txg, edge, sourceTypeWeights);
+    if (txg->vertices[edge->startIx].type == ggSoftStart && 
+    	txg->vertices[edge->endIx].type == ggSoftEnd)
+	{
+	if (tracker->weight < singleExonThreshold)
+	    tracker->visited = TRUE;
+	}
+    else
+	{
+	if (tracker->weight < threshold)
+	    tracker->visited = TRUE;
+	}
     tracker->start = txg->vertices[edge->startIx].position;
     tracker->end = txg->vertices[edge->endIx].position;
     slAddHead(&trackerList, tracker);
@@ -332,8 +355,8 @@ return FALSE;
 }
 
 
-void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold, FILE *bedFile,
-	FILE *evFile)
+void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold, 
+	double singleExonThreshold, FILE *bedFile, FILE *evFile)
 /* Generate transcripts and write to file. */
 {
 /* Local memory pool for fast, easy cleanup. */
@@ -346,13 +369,15 @@ for (i=0; i<txg->sourceCount; ++i)
     sourceTypeWeights[i] = weightFromHash(weightHash, txg->sources[i].type);
 
 /* Set up structure to track edges. */
-struct edgeTracker *tracker, *trackerList = makeTrackerList(txg, sourceTypeWeights, threshold, lm);
+struct edgeTracker *trackerList = makeTrackerList(txg, sourceTypeWeights, 
+	threshold, singleExonThreshold, lm);
 
 /* Calculate txWeights for all sources. */
 double sourceTxWeights[txg->sourceCount];
 for (i=0; i<txg->sourceCount; ++i)
      sourceTxWeights[i] = 0;
 struct txEdge *edge;
+struct edgeTracker *tracker;
 for (edge = txg->edges, tracker=trackerList; 
      edge != NULL; 
      edge = edge->next, tracker=tracker->next)
@@ -412,13 +437,15 @@ void txWalk(char *inTxg, char *inWeights, char *asciiThreshold, char *outBed)
 struct hash *weightHash = hashWeights(inWeights);
 struct lineFile *lf = lineFileOpen(inTxg, TRUE);
 double threshold = sqlDouble(asciiThreshold);
+threshold -= 0.000001;	/* Allow for some rounding. */
+double singleExonThreshold = optionDouble("singleExonThreshold", 1.3*threshold);
 FILE *f = mustOpen(outBed, "w");
 char *row[TXGRAPH_NUM_COLS];
 while (lineFileRow(lf, row))
     {
     struct txGraph *txg = txGraphLoad(row);
     verbose(3, "Processing %s\n", txg->name);
-    walkOut(txg, weightHash, threshold, f, evFile);
+    walkOut(txg, weightHash, threshold, singleExonThreshold, f, evFile);
     txGraphFree(&txg);
     }
 carefulClose(&f);
