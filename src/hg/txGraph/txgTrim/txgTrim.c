@@ -16,8 +16,6 @@ errAbort(
   "where in.weight is a file with two columns\n"
   "    type - usually 'refSeq' or 'mrna' or 'est' or something\n"
   "    weight -  a floating point number that interacts with threshold\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
