@@ -28,8 +28,9 @@ static struct optionSpec options[] = {
 void txgWriteXml(struct txGraph *graph, FILE *f)
 /* Write out graph as xml. */
 {
-fprintf(f, "  <txGraph name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\" vertexCount=\"%d\" edgeCount=\"%d\">\n",
-	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd, graph->vertexCount, graph->edgeCount);
+fprintf(f, "  <txGraph name=\"%s\" tName=\"%s\" strand=\"%s\" tStart=\"%d\" tEnd=\"%d\" vertexCount=\"%d\" edgeCount=\"%d\" sourceCount=\"%d\">\n",
+	graph->name, graph->tName, graph->strand, graph->tStart, graph->tEnd, graph->vertexCount, graph->edgeCount,
+	graph->sourceCount);
 int i;
 for (i=0; i<graph->vertexCount; ++i)
     {
@@ -56,8 +57,8 @@ for (edge = graph->edges; edge != NULL; edge = edge->next)
 	for (ev = edge->evList; ev != NULL; ev = ev->next)
 	    {
 	    struct txSource *source = &graph->sources[ev->sourceId];
-	    fprintf(f, "      <ev type=\"%s\" acc=\"%s\" x1=\"%d\" x2=\"%d\"/>\n",
-	    	source->type, source->accession, ev->start, ev->end);
+	    fprintf(f, "      <ev acc=\"%s\" x1=\"%d\" x2=\"%d\"/>\n",
+	    	source->accession, ev->start, ev->end);
 	    }
 	fprintf(f, "    </edge>\n");
 	}
@@ -65,6 +66,11 @@ for (edge = graph->edges; edge != NULL; edge = edge->next)
         {
 	fprintf(f, "/>\n");
 	}
+    }
+for (i=0; i<graph->sourceCount; ++i)
+    {
+    struct txSource *source = &graph->sources[i];
+    fprintf(f, "    <source type=\"%s\" acc=\"%s\"/>\n", source->type, source->accession);
     }
 fprintf(f, "  </txGraph>\n");
 }
