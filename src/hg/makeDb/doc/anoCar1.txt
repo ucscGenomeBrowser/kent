@@ -660,7 +660,25 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-continue=chainMerge \
 	-blastzOutRoot /cluster/bluearc/anoCar1XenTro2 > chainMerge.log 2>&1 &
-XXX - running - 2007-02-22 14:38
+    #	real    119m12.634s
+
+    ssh hgwdev
+    cd /cluster/data/anoCar1/bed/blastz.xenTro2.2007-02-20]
+    time nice -n +19 featureBits anoCar1 chainXenTro2Link \
+	> fb.anoCar1.chainXenTro2Link.txt 2>&1
+    #	real    11m33.086s
+    #	83873500 bases of 1741478929 (4.816%) in intersection
+
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.anoCar1.swap
+    cd /cluster/data/xenTro2/bed/blastz.anoCar1.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar1/bed/blastz.xenTro2.2007-02-20/DEF \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-swap > swap.log 2>&1 &
+
 
 ############################################################################
 #	After getting a blat server assigned by the Blat Server Gods,
@@ -698,3 +716,10 @@ XXX - running - 2007-02-22 14:38
 	> fb.anoCar1.chainMm8Link.txt 2>&1
     #	real    2m1.527s
     #	82784787 bases of 1741478929 (4.754%) in intersection
+
+    #	% Coverage of Lizard by
+    #	6.456 - Human hg18 5000,loose
+    #	6.263 - Chicken galGal3 5000,loose
+    #	4.816 - Frog xenTro2 5000,loose
+    #	4.754 - Mouse mm8 5000,loose
+    #	3.127 - Stickleback gasAcu1 5000,loose
