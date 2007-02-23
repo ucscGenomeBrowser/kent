@@ -21962,6 +21962,56 @@ hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoRheMac2
 hgLoadBed hg17 hapmapAllelesMacaque hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesMacaque.sql
 # add index
 
+##############################################################################
+# HapMap Recombination Rate Phase 2 (Heather Feb. 2006)
+# Contacts:
+# Gil McVean [mcvean@stats.ox.ac.uk]                                                                                                 
+# Colin Freeman [cfreeman@stats.ox.ac.uk]                                                                                            
+# Simon Myers [smyers@broad.mit.edu]         
+ssh hgwdev
+cd /cluster/data/hg17/bed/hapmap
+mkdir recombination
+cd recombination
+mkdir phase2
+cd phase2
+wget --no-check-certificate -N https://mathgen.stats.ox.ac.uk/HapMap_Phase2_rates_hotspots/HapMap_Phase2_rates_hotspots.tgz  
+gunzip *.tgz
+tar xvf *.tar
+cat << 'EOF' > makeBed.csh
+#!/bin/tcsh
+rm -f recomb.bed
+foreach chrom (`cat chrom.list`)
+    echo $chrom
+    set fileName=`echo $chrom | awk '{printf "genetic_map_%s.txt", $1}'`
+    makeBed.pl $chrom < $fileName >> recomb.bed
+end
+makeBed.pl chrX < genetic_map_chrX_par1.txt >> recomb.bed
+makeBed.pl chrX < genetic_map_chrX_non-par.txt >> recomb.bed
+makeBed.pl chrX < genetic_map_chrX_par2.txt >> recomb.bed
+'EOF'
+cat << 'EOF' > makeBed.pl
+#!/usr/bin/env perl
+$chromName = shift;
+while (<STDIN>) {
+    my @fields = split;
+    # skip header
+    if ($fields[0] eq "position") { next; }
+    print $chromName;
+    print "\t";
+    print $fields[0];
+    print "\t";
+    print $fields[0] + 1;
+    print "\t";
+    my $val1000 = $fields[1] * 1000;
+    my $valRound = int($val1000);
+    my $newVal = $valRound / 1000.0;
+    print $newVal;
+    print "\n";
+}
+'EOF'
+./makeBed.csh
+hgLoadBed hg17 snpRecombRateHapmapPhase2 recomb.bed -tab -sqlTable=snpRecombRateHapmapPhase2.sql
+hgsql -e 'alter table snpRecombRateHapmapPhase add index chrom (chrom, bin)' hg17
 
 ############
 # UPDATE hg17 knownToVisiGene (2006-04-05 galt)
