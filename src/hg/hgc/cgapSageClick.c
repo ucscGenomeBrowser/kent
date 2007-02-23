@@ -199,6 +199,8 @@ if (startsWith("libId", itemName))
     printCgapLibSection(libHash, itemName + 6);    
     }
 printCgapTagSection(tag, libHash, itemName);
+webNewSection("Track Details");
+printf("%s", tdb->html);
 cgapSageFree(&tag);
 hFreeConn(&conn);
 hashFreeWithVals(&libHash, cgapSageLibFree);
