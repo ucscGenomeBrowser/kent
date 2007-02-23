@@ -21968,6 +21968,8 @@ hgLoadBed hg17 hapmapAllelesMacaque hapmapOrtho.tab -tab -sqlTable=/cluster/home
 # Gil McVean [mcvean@stats.ox.ac.uk]                                                                                                 
 # Colin Freeman [cfreeman@stats.ox.ac.uk]                                                                                            
 # Simon Myers [smyers@broad.mit.edu]         
+# Data is missing chromEnd.  I am setting chromEnd = chromStart + 1 as a
+# kludge for now.
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap
 mkdir recombination
@@ -21975,6 +21977,8 @@ cd recombination
 mkdir phase2
 cd phase2
 wget --no-check-certificate -N https://mathgen.stats.ox.ac.uk/HapMap_Phase2_rates_hotspots/HapMap_Phase2_rates_hotspots.tgz  
+# data also available at
+# http://www.hapmap.org/downloads/recombination/2006-10_rel21_phaseII
 gunzip *.tgz
 tar xvf *.tar
 cat << 'EOF' > makeBed.csh
