@@ -5,50 +5,70 @@
 #include "cgapSage/cgapSage.h"
 #include "cgapSage/cgapSageLib.h"
 
-static struct slName *getListFromCgapSageLibs(struct sqlConnection *conn, char *column)
+static struct slName *getListFromCgapSageLibs(struct sqlConnection *conn, char *column, boolean returnIds, boolean distinct)
 /* Return [unique] list of tissues sorted alphabetically. */
 {
 struct slName *list = NULL;
 char query[256];
 char **row;
 struct sqlResult *sr;
-safef(query, sizeof(query), "select distinct %s from cgapSageLib order by %s", column, column);
+safef(query, sizeof(query), "select %s%s%s from cgapSageLib order by %s", (distinct) ? "distinct " : "", 
+      column, (returnIds) ? ",libId" : "", column);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    slNameAddHead(&list, row[0]);
+    char *word = (returnIds) ? row[1] : row[0];
+    slNameAddHead(&list, word);
     }
 slReverse(&list);
 sqlFreeResult(&sr);
 return list;
 }
 
-static void cgapSageDropList(struct slName *choices, char *dropName, char *selected)
+static void cgapSageDropList(struct slName *choices, struct slName *valList, char *dropName, char *selected)
 /* Make a drop list from the slName list. */
 {
 struct slName *choice;
 char **items;
+char **vals;
 int i;
 int size = slCount(choices);
 AllocArray(items, size + 1);
-items[0] = "None";
+items[0] = "All";
 for (choice = choices, i = 1; choice != NULL; choice = choice->next, i++)
     items[i] = choice->name;
-cgiMakeDropList(dropName, items, size + 1, selected);
+if (valList)
+    {
+    struct slName *val;
+    int vSize = slCount(valList);
+    if (size != vSize)
+	errAbort("Number of Lib IDs and Lib Names should be the same but they aren not.");
+    AllocArray(vals, size + 1);
+    vals[0] = "All";
+    for (val = valList, i = 1; val != NULL; val = val->next, i++)
+	vals[i] = val->name;
+    cgiMakeDropListWithVals(dropName, items, vals, size + 1, selected);
+    }
+else
+    cgiMakeDropList(dropName, items, size + 1, selected);
 }
 
 void cgapSageUi(struct trackDb *tdb)
 /* CGAP SAGE UI options. Highlight certain libs/tissues and filter by score. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct slName *tissueList = getListFromCgapSageLibs(conn, "tissue");
-struct slName *libList = getListFromCgapSageLibs(conn, "newLibName");
-char *tissueHl = cartUsualString(cart, "cgapSage.tissueHl", "None");
-char *libHl = cartUsualString(cart, "cgapSage.libHl", "None");
+struct slName *tissueList = getListFromCgapSageLibs(conn, "tissue", FALSE, TRUE);
+struct slName *libList = getListFromCgapSageLibs(conn, "newLibName", FALSE, FALSE);
+struct slName *libIdList = getListFromCgapSageLibs(conn, "newLibName", TRUE, FALSE);
+char *tissueHl = cartUsualString(cart, "cgapSage.tissueHl", "All");
+char *libHl = cartUsualString(cart, "cgapSage.libHl", "All");
 puts("<BR><B>Tissue:</B>");
-cgapSageDropList(tissueList, "cgapSage.tissueHl", tissueHl);
+cgapSageDropList(tissueList, NULL, "cgapSage.tissueHl", tissueHl);
 puts("<BR>\n");
 puts("<BR><B>Library:</B>\n");
-cgapSageDropList(libList, "cgapSage.libHl", libHl);
+cgapSageDropList(libList, libIdList, "cgapSage.libHl", libHl);
 hFreeConn(&conn);
+slNameFreeList(&tissueList);
+slNameFreeList(&libList);
+slNameFreeList(&libIdList);
 }

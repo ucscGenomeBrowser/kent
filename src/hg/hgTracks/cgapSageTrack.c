@@ -14,7 +14,7 @@ static int grayIxForCgap(double tpm)
 /* Return a grayIx based on the score. */
 {
 int val = (int)ceil(tpm);
-return grayInRange(val, 0, 200);
+return grayInRange(val, 0, 150);
 }
 
 static struct hash *libTissueHash(struct sqlConnection *conn)
@@ -38,6 +38,19 @@ struct cgapSageTpmHashEl
     int count;
     };
 
+static boolean keepThisLib(char *tissue, char *libId)
+{
+char *tissueHl = cartUsualString(cart, "cgapSage.tissueHl", "All");
+char *libHl = cartUsualString(cart, "cgapSage.libHl", "All");
+if (!tissue || !libId)
+    errAbort("NULL tissue or libId passed into keepThisLib()");
+if (sameString(tissueHl, "All") && sameString(libHl, "All"))
+    return TRUE;
+if (sameString(tissue, tissueHl) || sameString(libId, libHl))
+    return TRUE;
+return FALSE;
+}
+
 static struct hash *combineCgapSages(struct cgapSage *tag, struct hash *libHash)
 /* Go through the each lib for a tag and combine it's score using a hash for */
 /* repeated tissues. */
@@ -52,17 +65,20 @@ for (i = 0; i < tag->numLibs; i++)
     safef(libId, sizeof(libId), "%d", tag->libIds[i]);
     libName = hashMustFindVal(libHash, libId);
     tpm = hashFindVal(tpmHash, libName);
-    if (tpm)
+    if (keepThisLib(libName, libId))
 	{
-	tpm->count++;
-	tpm->total += tag->tagTpms[i];
-	}
-    else
-	{
-	AllocVar(tpm);
-	tpm->count = 1;
-	tpm->total = tag->tagTpms[i];
-	hashAdd(tpmHash, libName, tpm);
+	if (tpm)
+	    {
+	    tpm->count++;
+	    tpm->total += tag->tagTpms[i];
+	    }
+	else
+	    {
+	    AllocVar(tpm);
+	    tpm->count = 1;
+	    tpm->total = tag->tagTpms[i];
+	    hashAdd(tpmHash, libName, tpm);
+	    }
 	}
     }
 return tpmHash;
@@ -133,18 +149,22 @@ else
     {
     for (i = 0; i < tag->numLibs; i++)
 	{
-	struct linkedFeatures *lf = CloneVar(skel);
+	struct linkedFeatures *lf;
 	char libId[16];
 	char extra[32];
 	char *libName;
 	safef(libId, sizeof(libId), "%d", tag->libIds[i]);
 	libName = hashMustFindVal(libHash, libId);
-	safef(lf->name, sizeof(lf->name), "%s", libName);
-	safef(extra, sizeof(extra), "libId.%s", libId);
-	lf->grayIx = grayIxForCgap(tag->tagTpms[i]);
-	lf->extra = cloneString(extra);
-	addSimpleFeature(lf);	
-	slAddHead(&libList, lf);
+	if (keepThisLib(libName, libId))
+	    {
+	    lf = CloneVar(skel);
+	    safef(lf->name, sizeof(lf->name), "%s", libName);
+	    safef(extra, sizeof(extra), "libId.%s", libId);
+	    lf->grayIx = grayIxForCgap(tag->tagTpms[i]);
+	    lf->extra = cloneString(extra);
+	    addSimpleFeature(lf);	
+	    slAddHead(&libList, lf);
+	    }
 	}
     }
 slReverse(&libList);
@@ -193,9 +213,9 @@ void cgapSageDrawItems(struct track *tg,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Initialize the colors, then do the normal drawing. */
 {
-static struct rgbColor black = {0, 0, 0};
-static struct rgbColor cgapRed = {255, 0, 0};
-vgMakeColorGradient(vg, &black, &cgapRed, 10, cgapShadesOfRed);
+static struct rgbColor lowerColor = {205, 191, 191};
+static struct rgbColor cgapRed = {205, 0, 0};
+vgMakeColorGradient(vg, &lowerColor, &cgapRed, 10, cgapShadesOfRed);
 genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
