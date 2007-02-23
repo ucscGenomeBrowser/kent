@@ -5,9 +5,11 @@
 #include "options.h"
 #include "geneGraph.h"
 #include "txGraph.h"
+#include "ggTypes.h"
 #include "binRange.h"
 #include "txEdgeBed.h"
 
+int maxBleedOver = 6;
 boolean bedIsIntron = FALSE;
 boolean bedIsHard = FALSE;
 char *specificChrom = NULL;
@@ -26,11 +28,15 @@ errAbort(
   "options:\n"
   "      -chrom=chrN - Set to only add edges for given chromosome.  Useful\n"
   "                    if in.txg is chromosome specific but in.edges is not.\n"
+  "      -maxBleedOver=N - Maximum amount of exon that can be lost when snapping\n"
+  "                    soft to hard edges. Default %d\n"
+  , maxBleedOver
   );
 }
 
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
+   {"maxBleedOver", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -118,88 +124,164 @@ for (ix=0; ix<txg->sourceCount; ++ix)
 return -1;
 }
 
-void addEvidenceRange(struct txGraph *txg, 
-	int start, enum ggVertexType startType, 
-	int end,   enum ggVertexType endType,
-	enum ggEdgeType edgeType, char *sourceType, char *accession)
-/* Search through txg, and if can find an edge meeting the
- * given specs, add evidence to it. */
+boolean evIsHard(char *type)
+/* Return TRUE if txEdgeBed start/end type is hard. */
 {
-struct txVertex *v = txg->vertices;
-struct txEdge *edge;
+char c = type[0];
+return c == '[' || c == ']';
+}
+
+boolean vertexIsHard(struct txVertex *vertex)
+/* Return true if a hard start or hard end. */
+{
+unsigned char c = vertex->type;
+return c == ggHardStart || c == ggHardEnd;
+}
+
+int evEdgeScore(struct txGraph *txg, struct txEdge *edge, 
+	struct txEdgeBed *ev)
+/* Return a score for edge/evidence match up. There's two main
+ * factors in the score: the extent of the overlap, and the
+ * agreement of the hardness/softness of the ends. */
+{
+/* Check that introns go with introns and exons with exons. */
+if ((int)edge->type != (int)ev->type)
+    {
+    return 0;
+    }
+
+/* Unpack some of the input data structures into local variables
+ * and see if we even overlap. */
+struct txVertex *startVertex = &txg->vertices[edge->startIx];
+struct txVertex *endVertex = &txg->vertices[edge->endIx];
+int edgeStart = startVertex->position;
+int edgeEnd = endVertex->position;
+int evStart = ev->chromStart;
+int evEnd = ev->chromEnd;
+int overlapSize = rangeIntersection(edgeStart, edgeEnd, evStart, evEnd);
+if (overlapSize <= 0)
+    {
+    return 0;
+    }
+
+/* Figure out hardness/softness of starts and ends of both evidence
+ * and edge. */
+boolean edgeHardStart = vertexIsHard(startVertex);
+boolean edgeHardEnd = vertexIsHard(endVertex);
+boolean evHardStart = evIsHard(ev->startType);
+boolean evHardEnd = evIsHard(ev->endType);
+
+/* Go through 4 possible cases at start */
+int startBonus = 0;
+if (evHardStart && edgeHardStart)
+    {
+    if (evStart != edgeStart)
+        return 0;
+    startBonus = 2000000;
+    }
+else if (evHardStart && !edgeHardStart)
+    {
+    if (evStart - edgeStart > maxBleedOver)
+        return 0;
+    }
+else if (!evHardStart && edgeHardStart)
+    {
+    if (edgeStart - evStart > maxBleedOver)
+        return 0;
+    }
+else if (!evHardStart && !edgeHardStart)
+    {
+    /* Both soft, no real constraints */
+    }
+
+/* Go through 4 possible cases at end */
+int endBonus = 0;
+if (evHardEnd && edgeHardEnd)
+    {
+    if (evEnd != edgeEnd)
+        return 0;
+    endBonus = 2000000;
+    }
+else if (evHardEnd && !edgeHardEnd)
+    {
+    if (edgeEnd - evEnd > maxBleedOver)
+        return 0;
+    }
+else if (!evHardEnd && edgeHardEnd)
+    {
+    if (evEnd - edgeEnd > maxBleedOver)
+        return 0;
+    }
+else if (!evHardEnd && !edgeHardEnd)
+    {
+    /* Both soft, no real constraints */
+    }
+
+return startBonus + endBonus + overlapSize;
+}
+
+void addEvidenceToGraph(struct txGraph *txg, struct txEdgeBed *ev, 
+	char *sourceType)
+/* Search through txg, and if can find an edge that agrees with 
+ * ev, add ev to best agreeing edge. */
+{
+struct txEdge *edge, *bestEdge = NULL;
+int score, bestScore = 0;
 for (edge = txg->edges; edge != NULL; edge = edge->next)
     {
-    int iStart = edge->startIx;
-    int iEnd = edge->endIx;
-    int eStart = v[iStart].position;
-    int eEnd = v[iEnd].position;
-    if (rangeIntersection(eStart, eEnd, start, end) > 0)
+    score = evEdgeScore(txg, edge, ev);
+    if (score > bestScore)
         {
-	if (edge->type ==  edgeType)
-	    {
-	    boolean doIt = TRUE;
-	    if (startType == ggHardStart || startType == ggHardEnd)
-		{
-		if (startType != v[iStart].type)
-		    doIt = FALSE;
-		if (eStart != start)
-		    doIt = FALSE;
-		}
-	    if (endType == ggHardEnd || endType == ggHardStart)
-		{
-		if (endType != v[iEnd].type)
-		    doIt = FALSE;
-		if (eEnd != end)
-		    doIt = FALSE;
-		}
-	    if (doIt)
-	        {
-		verbose(2, "Adding evidence at %s:%d-%d to edge of %s\n", txg->tName, start, end, txg->name);
-		int sourceIx = getSourceIx(txg, sourceType, accession);
-		if (sourceIx < 0)
-		    {
-		    sourceIx = txg->sourceCount;
-		    txg->sources = ExpandArray(txg->sources, sourceIx, txg->sourceCount+1);
-		    struct txSource *source = &txg->sources[sourceIx];
-		    source->type = cloneString(sourceType);
-		    source->accession = cloneString(accession);
-		    txg->sourceCount = sourceIx + 1;
-		    }
-		struct txEvidence *ev;
-		AllocVar(ev);
-		ev->sourceId = sourceIx;
-		ev->start = start;
-		ev->end = end;
-		slAddTail(&edge->evList, ev);
-		edge->evCount += 1;
-		}
-	    }
+	bestScore = score;
+	bestEdge = edge;
 	}
+    }
+if (bestEdge != NULL)
+    {
+    verbose(2, "Adding evidence at %s:%d-%d to edge of %s\n", 
+	    txg->tName, ev->chromStart, ev->chromEnd, txg->name);
+    char *accession = ev->name;
+    int sourceIx = getSourceIx(txg, sourceType, accession);
+    if (sourceIx < 0)
+	{
+	sourceIx = txg->sourceCount;
+	txg->sources = ExpandArray(txg->sources, sourceIx, txg->sourceCount+1);
+	struct txSource *source = &txg->sources[sourceIx];
+	source->type = cloneString(sourceType);
+	source->accession = cloneString(accession);
+	txg->sourceCount = sourceIx + 1;
+	}
+    struct txEvidence *tev;
+    AllocVar(tev);
+    tev->sourceId = sourceIx;
+    tev->start = ev->chromStart;
+    tev->end = ev->chromEnd;
+    slAddTail(&bestEdge->evList, tev);
+    bestEdge->evCount += 1;
     }
 }
 
-void addEvidence(struct txEdgeBed *bedList, char *sourceType, struct hash *bkHash)
-/* Input is a list of additional evidence in bedList, and a hash
+void addEvidence(struct txEdgeBed *evList, char *sourceType, struct hash *bkHash)
+/* Input is a list of additional evidence in evList, and a hash
  * full of binKeepers full of txGraphs. */
 {
-struct txEdgeBed *bed;
-for (bed = bedList; bed != NULL; bed = bed->next)
+struct txEdgeBed *ev;
+for (ev = evList; ev != NULL; ev = ev->next)
     {
-    if (specificChrom != NULL && !sameString(bed->chrom, specificChrom))
+    if (specificChrom != NULL && !sameString(ev->chrom, specificChrom))
         continue;
-    verbose(2, "Processing %s %s:%d-%d\n", bed->name, bed->chrom, bed->chromStart, bed->chromEnd);
-    struct binKeeper *bk = hashMustFindVal(bkHash, bed->chrom);
-    struct binElement *bel, *belList = binKeeperFind(bk, bed->chromStart, bed->chromEnd);
-    verbose(3, "%s hits %d txg\n", bed->name, slCount(belList));
+    verbose(2, "Processing %s %s:%d-%d\n", ev->name, ev->chrom, ev->chromStart, ev->chromEnd);
+    struct binKeeper *bk = hashMustFindVal(bkHash, ev->chrom);
+    struct binElement *bel, *belList = binKeeperFind(bk, ev->chromStart, ev->chromEnd);
+    verbose(3, "%s hits %d txg\n", ev->name, slCount(belList));
     for (bel = belList; bel != NULL; bel = bel->next)
         {
 	struct txGraph *txg = bel->val;
 	verbose(3, "  txg %s %s:%d-%d\n", txg->name, txg->tName, txg->tStart, txg->tEnd);
-	if (bed->strand[0] == 0 || sameString(txg->strand, bed->strand))
+	if (ev->strand[0] == 0 || ev->strand[0] == '.' 
+		||sameString(txg->strand, ev->strand))
 	    {
-	    addEvidenceRange(txg, bed->chromStart, ggVertexTypeFromString(bed->startType),
-				  bed->chromEnd, ggVertexTypeFromString(bed->endType),
-				  bed->type, sourceType, bed->name);
+	    addEvidenceToGraph(txg, ev, sourceType);
 	    }
 	}
     }
@@ -236,6 +318,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 specificChrom = optionVal("chrom", NULL);
+maxBleedOver = optionInt("maxBleedOver", maxBleedOver);
 if (argc != 5)
     usage();
 txgAddEvidence(argv[1], argv[2], argv[3], argv[4]);
