@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.3 2006/12/06 00:49:32 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.4 2007/02/23 23:18:12 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -443,7 +443,7 @@ sub doPartition {
   my $tPartDir = '-lstDir tParts';
   my $qPartDir = '-lstDir qParts';
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
-  my $mkOutRoot = $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot" : "";
+  my $mkOutRoot = $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot;" : "";
 
   my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
   my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
@@ -478,7 +478,7 @@ _EOF_
   &HgAutomate::nfsNoodge("$outRoot");
 #*** If blastzOutRoot is used, this probably should not be done by $fileServer:
   &HgAutomate::run("ssh -x $fileServer " .
-		   "'(cd $runDir; $mkOutRoot; csh -ef xdir.sh)'");
+		   "'(cd $runDir; $mkOutRoot csh -ef xdir.sh)'");
 }
 
 sub doBlastzClusterRun {
@@ -1301,6 +1301,17 @@ ln -s $liftOverDir/$over $gbdbLiftOverDir/$over
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbLiftOverDir/$over \\
   $tDb $qDb
 
+# Update (or create) liftOver/md5sum.txt with the new .over.chain.gz.
+if (-e $gpLiftOverDir/md5sum.txt) then
+  set tmpFile = `mktemp -t tmpMd5.XXXXXX`
+  grep -v $over $gpLiftOverDir/md5sum.txt > \$tmpFile
+  md5sum $gpLiftOverDir/$over \\
+  | sed -e 's\@$gpLiftOverDir/\@\@' >> \$tmpFile
+  sort \$tmpFile > $gpLiftOverDir/md5sum.txt
+  rm \$tmpFile
+else
+  md5sum $gpLiftOverDir/$over > $gpLiftOverDir/md5sum.txt
+endif
 _EOF_
       );
   }
