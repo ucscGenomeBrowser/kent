@@ -1922,6 +1922,7 @@ identifier blastHg18KGPep04Id
      danRer4.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     dm2.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -1933,6 +1934,7 @@ identifier blastHg18KGRef04Id
      danRer4.blastHg18KG.qName
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
+     dm2.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
