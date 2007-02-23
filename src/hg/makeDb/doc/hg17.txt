@@ -22010,7 +22010,7 @@ while (<STDIN>) {
 }
 'EOF'
 ./makeBed.csh
-hgLoadBed hg17 snpRecombRateHapmapPhase2 recomb.bed -tab -sqlTable=snpRecombRateHapmapPhase2.sql
+hgLoadBed hg17 snpRecombRateHapmapPhase2 recomb.bed -tab -bedGraph=4
 hgsql -e 'alter table snpRecombRateHapmapPhase add index chrom (chrom, bin)' hg17
 
 ############
