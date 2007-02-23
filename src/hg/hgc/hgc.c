@@ -194,7 +194,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1208 2007/02/20 06:38:19 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1209 2007/02/23 03:29:58 kuhn Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8992,7 +8992,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Left Primer Sequence:</B> %s<BR>\n", snp.primerL);
     printf("<B>Right Primer Sequence:</B> %s<BR>\n", snp.primerR);
     if (snp.snpType[0] != 'S')
-	printf("<B>Indel Confidence</B>: %c<BR>\n", snp.questionM[0]);
+        if (snp.questionM[0] == 'H')
+	    printf("<B>Indel Confidence</B>: High\n");
+        if (snp.questionM[0] == 'L')
+	    printf("<B>Indel Confidence</B>: Low\n");
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
