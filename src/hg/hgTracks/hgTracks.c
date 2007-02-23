@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1282 2007/02/22 19:31:20 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1283 2007/02/23 20:15:28 kuhn Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6312,12 +6312,43 @@ if (atoi(name) != 0)
     chromNum =  atoi(name);
 else if (startsWith("U", name))
     chromNum = 26;
-else if (startsWith("X", name))
-    chromNum = 23;
 else if (startsWith("Y", name))
     chromNum = 24;
 else if (startsWith("M", name))
     chromNum = 25;
+else if (startsWith("XXI", name))
+    chromNum = 21;
+else if (startsWith("XX", name))
+    chromNum = 20;
+else if (startsWith("XIX", name))
+    chromNum = 19;
+else if (startsWith("XVIII", name))
+    chromNum = 18;
+else if (startsWith("XVII", name))
+    chromNum = 17;
+else if (startsWith("XVI", name))
+    chromNum = 16;
+else if (startsWith("XV", name))
+    chromNum = 15;
+else if (startsWith("XIV", name))
+    chromNum = 14;
+else if (startsWith("XIII", name))
+    chromNum = 13;
+else if (startsWith("XII", name))
+    chromNum = 12;
+else if (startsWith("XI", name))
+    chromNum = 11;
+else if (startsWith("X", name))
+    /*   stickleback should be chr10   */
+    chromNum = 23;
+else if (startsWith("IX", name))
+    chromNum = 9;
+else if (startsWith("VIII", name))
+    chromNum = 8;
+else if (startsWith("VII", name))
+    chromNum = 7;
+else if (startsWith("VI", name))
+    chromNum = 6;
 else if (startsWith("V", name))
     chromNum = 5;
 else if (startsWith("IV", name))
