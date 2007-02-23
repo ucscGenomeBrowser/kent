@@ -11,6 +11,7 @@
 
 set program=""
 set location=""
+set size=""
 
 if ( $#argv != 1 ) then
   echo
@@ -32,7 +33,23 @@ set cwd=`pwd`
 cd ~/kent
 set location=`find . -name $program`
 
-cvs annotate $location | awk '{print $2}' | sed -e "s/^(//" | sort \
-  | uniq -c | sort -k2 -nr
+
+foreach file ( $location )
+  cvs annotate $file| awk '{print $2}' | sed -e "s/^(//" | sort \
+    | uniq -c | sort -k2 -nr >& xxOutFilexx
+  set size=`cat xxOutFilexx | awk '{total+=$1} END {print total}'`
+  cat xxOutFilexx
+  if ( `wc -l xxOutFilexx | awk '{print $1}'` > 1 ) then
+    echo "-----" "-----" | awk '{printf("%7s %-10s\n", $1, $2)}'
+    echo $size "total" | awk '{printf("%7s %-10s\n", $1, $2)}'
+    echo
+  endif 
+  rm xxOutFilexx
+end
+
+
+
 echo
+
+
 
