@@ -1468,18 +1468,25 @@ maxLimit 100
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 origAssembly hg16
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr20,chr21,chr22,chrX
 
     track snpRecombRateHapmap
     subTrack snpRecombRate
-    shortLabel HapMap
+    shortLabel HapMap Phase I
     longLabel Oxford Recombination Rates from HapMap Phase I Release 16c.1
     priority 1
+
+    track snpRecombRateHapmapPhase2
+    subTrack snpRecombRate
+    shortLabel HapMap Phase II
+    longLabel Oxford Recombination Rates from HapMap Phase II Release 21
+    priority 2
 
     track snpRecombRatePerlegen
     subTrack snpRecombRate
     shortLabel Perlegen
     longLabel Oxford Recombination Rates from Perlegen Data
-    priority 2
+    priority 3
 
 track snpRecombHotspot
 compositeTrack on
