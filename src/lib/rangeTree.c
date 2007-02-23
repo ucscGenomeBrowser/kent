@@ -97,6 +97,32 @@ slReverse(&rangeList);
 return rangeList;
 }
 
+/* A couple of variables used to calculate total overlap. */
+static int totalOverlap;
+static int overlapStart, overlapEnd;
+
+static void addOverlap(void *v)
+/* Callback to add item to range list. */
+{
+struct range *r = v;
+totalOverlap += positiveRangeIntersection(r->start, r->end, 
+	overlapStart, overlapEnd);
+}
+
+int rangeTreeOverlapSize(struct rbTree *tree, int start, int end)
+/* Return the total size of intersection between interval
+ * from start to end, and items in range tree. Sadly not
+ * thread-safe. */
+{
+struct range tempR;
+tempR.start = overlapStart = start;
+tempR.end = overlapEnd = end;
+totalOverlap = 0;
+rbTreeTraverseRange(tree, &tempR, &tempR, addOverlap);
+return totalOverlap;
+}
+
+
 struct rbTree *rangeTreeNew()
 /* Create a new, empty, rangeTree. */
 {
