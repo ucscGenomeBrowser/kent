@@ -18,15 +18,17 @@ echo 'select l.protAcc,s.status from refLink l,refSeqStatus s where l.mrnaAcc=s.
 /cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 refseq mrna refSeq.fa
 /cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 genbank mrna mrna.fa
 
-# Get refSeq and mrna tables as psl.  Ignore the
+# Get refSeq, mrna and intronEst tables as psl.  Ignore the
 # stdin is empty messages, these are just from _random chroms
 # with no annotations.  Takes 7 seconds
-mkdir refSeq mrna
+mkdir refSeq mrna est
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo fetching $c mrna and refSeq alignments
     hgGetAnn -noMatchOk hg18 refSeqAli $c refSeq/$c.psl
     hgGetAnn -noMatchOk hg18 mrna $c mrna/$c.psl
+    hgGetAnn -noMatchOk hg18 intronEst $c est/$c.psl
 end
+
 # Note this time, since there are blat changes not yet in the main pipeline
 # do:
 pslSplitOnTarget /cluster/store10/markd/genbank/realign/hg18/global/refseq.psl refSeq
@@ -42,18 +44,51 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     endif
 end
 
-# Convert psls to bed, saving mapping info.  Takes 2.5 min
+# Get list of accessions that are associated with antibodies from database.
+# This will be a good list but not 100% complete.  Cluster these to get
+# four or five antibody heavy regions.  Later we'll weed out input that
+# falls primarily in these regions, and, include the regions themselves
+# as special genes.
+txAbFragFind hg18 antibodyAccs
+pslCat mrna/*.psl -nohead | weedLines -invert antibodyAccs stdin antibody.psl
+clusterPsl antibody.psl stdout | awk '$10 > 20' | cut -f 1-12 > antibody.bed
+
+# Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo checking splice sites on $c.psl and converting to bed.
     txPslToBed refSeq/$c.psl -noFixStrand -cds=cds.tab /cluster/data/hg18/hg18.2bit refSeq/$c.bed -unusual=refSeq/$c.unusual
-    txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/hg18/hg18.2bit mrna/$c.bed -unusual=mrna/$c.unusual
+    txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/hg18/hg18.2bit stdout \
+        | bedWeedOverlapping antibody.bed maxOverlap=0.5 stdin mrna/$c.bed
+    txPslToBed est/$c.psl /cluster/data/hg18/hg18.2bit stdout \
+        | bedWeedOverlapping antibody.bed maxOverlap=0.3 stdin est/$c.bed
 end
 
-# Create splicing graphs.  Takes 12 seconds.
+# Create mrna splicing graphs.  Takes 10 seconds.
 mkdir bedToGraph
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
     txBedToGraph -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna bedToGraph/$c.txg
+end
+
+# Create est splicing graphs.  Takes 6 minutes.
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    txBedToGraph -prefix=e$c. est/$c.bed est est/$c.txg
+end
+
+# Create an evidence weight file
+cat > trim.weights <<end
+refSeq  100
+mrna    2
+txOrtho 1
+exoniphy 1
+est 1
+end
+
+# Make evidence file for EST graph edges supported by at least 2 
+# ests.  Takes about 30 seconds.
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
+    echo getting edges from ESTs on $c
+    txgGoodEdges est/$c.txg  trim.weights 2 est est/$c.edges
 end
 
 # Setup mouse dir
@@ -112,6 +147,15 @@ para time
 #Longest finished job:             235s       3.92m     0.07h    0.00d
 #Submission to last job:           235s       3.92m     0.07h    0.00d
 
+# Clean up chains and nets since they are big
+cd /cluster/data/hg18/bed/jkg
+rm -r mm8/chains mm8/nets
+
+# Get exonophy. Takes about 4 seconds.
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" \
+	| hgsql -N hg18 > exoniphy.bed
+bedToTxEdges exoniphy.bed exoniphy.edges
+
 # Add evidence from ortho edges - takes about 10 seconds.
 cd /cluster/data/hg18/bed/jkg
 mkdir orthoTxg
@@ -120,28 +164,11 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     txgAddEvidence bedToGraph/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
 end
 
-# Clean up chains and nets since they are big
-cd /cluster/data/hg18/bed/jkg
-rm -r mm8/chains mm8/nets
-
-# Get exonophy
-echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" \
-	| hgsql -N hg18 > exoniphy.bed
-bedToTxEdges exoniphy.bed exoniphy.edges
-
 # Add exoniphy evidence - just takes 20 seconds or so.
 mkdir exoniphyTxg
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo $c
     txgAddEvidence -chrom=$c orthoTxg/$c.txg exoniphy.edges exoniphy exoniphyTxg/$c.txg
-end
-
-# Create an evidence weight file
-cat > trim.weights <<end
-refSeq  100
-mrna    2
-txOrtho 1
-exoniphy 1
 end
 
 # Do  txWalk  - takes 6 seconds
@@ -278,6 +305,22 @@ cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks
 
 # Create gene prediction (GTF) and peptide fasta file.
 cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa -bedOut=bestCds.bed
+
+###########################################################################
+## Load take 6 into the database. Takes 30 seconds.
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
+cat mrna/*.psl | hgLoadPsl hg18 stdin -table=jkgInputMrna
+hgLoadBed hg18 jkgRefSeqBed refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed mrna/*.bed
+hgLoadBed hg18 jkgAntibodyBed antibody.bed
+cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed hg18 jkgRefSeqUnusual  stdin
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
+hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
+
 
 ###########################################################################
 ## Load take 5 into the database
@@ -717,18 +760,32 @@ NM_004866	chr5	77692094	9
 # of chromosome 1, and first part of chr22 (up to chr22:22,311,744-22,405,735)
 
 pslCdnaFilter - run so as to better pick better of two mappings.
-        Test case: chr22:20,150,617-20,157,116
+        Test case: chr22:20,150,617-20,157,116 AK093171
+    Nope, still passes.
 abFragFilter - get rid of all but selected few antibody fragments.
         Test case: chr22:20,946,751-21,035,748
-txBedToGraph  - flag retained introns. Test case chr22:17,280,005-17,306,568.
+    Seems to be working well. It passes LOC96610, which is a gene in the
+    middle of region that shares a few exons with AB fragments, but suppresses
+    at least the vast majority of AB fragments.
 txBedToGraph  - Is end of CU013202 acting as hard stop and hard end?  Why
          is CU013202 a separate transcript, not merged with NM_003347?
-txBedToGraph  - Why are BC050020 and NM_080764 not merged?
+     This is from CU013202 getting moved to next hard end, and
+     NM_003347 extending far beyond it.   It should come out of
+     the wash when we do away with transcripts completely enclosed
+     by other transcripts.  There is indeed a site here that is both
+     a 5' and a 3' splice site.  (The sequence is agtg, and there's
+     a very nice RNA supporting each use.)
+txBedToGraph  - Why are BC040020 and NM_080764 not merged?
+     Hmm, graph looks ok.  Maybe a walker weirdness from BC040020
+     being broken up *and* the smaller fragment overlapping the
+     extension of the larger fragment by the refSeq UTR.
+     Keep an eye on it for chr22.601.
 txAddEvidence - Don't add evidence for double-hard-end that is only supported
          on one end by another double-hard-end.  Test case
 	 chr22:19,221,254-19,221,743 the slightly larger exon on AK074268.
 txAddEvidence - Suppress adding hard-end evidence to double-soft that
          overlaps.  Test case chr22:22,298,169-22,319,055.
+txWalk  - flag retained introns. Test case chr22:17,280,005-17,306,568.
 txWalk - make it output all transcripts that hit an edge with sufficient
          evidence, and which are not subsets of previous transcripts.
 	 Test case chr1:67,646,622-67,669,121, currently only outputs
