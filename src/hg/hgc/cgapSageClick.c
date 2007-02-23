@@ -19,8 +19,10 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartUsualInt(cart, "t", 0);
 int rowOffset;
+char extraWhere[128];
+safef(extraWhere, sizeof(extraWhere), "chromStart=%d and chromEnd=%d", start, end);
 sr = hOrderedRangeQuery(conn, tdb->tableName, chrom, start, end,
-			NULL, &rowOffset);
+			extraWhere, &rowOffset);
 row = sqlNextRow(sr);
 if (row != NULL)
     tag = cgapSageLoad(row+rowOffset);
