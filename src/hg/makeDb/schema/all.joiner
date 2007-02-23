@@ -1899,7 +1899,6 @@ identifier blastHg17KGPep02Id
      canFam2.blastHg17KG.qName
      apiMel2.blastHg17KG.qName
      dm2.blastHg17KG.qName
-     strPur1.blastHg17KG.qName
 
 identifier blastHg17KGRef02Id 
 "hg17 ref 02"
@@ -1909,7 +1908,6 @@ identifier blastHg17KGRef02Id
      canFam2.blastHg17KG.qName
      apiMel2.blastHg17KG.qName
      dm2.blastHg17KG.qName
-     strPur1.blastHg17KG.qName
 
 identifier blastHg18KGPep04Id 
 "hg18 peptides 04"
@@ -1923,6 +1921,7 @@ identifier blastHg18KGPep04Id
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
      dm2.blastHg18KG.qName
+     strPur1.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id 
 "hg18 ref 04"
@@ -1935,6 +1934,7 @@ identifier blastHg18KGRef04Id
      canFam2.blastHg18KG.qName
      felCat3.blastHg18KG.qName
      dm2.blastHg18KG.qName
+     strPur1.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
