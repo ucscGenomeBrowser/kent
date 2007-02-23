@@ -14,7 +14,7 @@
 #include "jksql.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.64 2007/01/08 23:32:28 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.65 2007/02/23 00:50:31 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -212,8 +212,6 @@ void cartLoadSettings(struct lineFile *lf, struct cart *cart)
 {
 char *line = NULL;
 int size = 0;
-char *words[2];
-int wordCount = 0;
 char *sessionVar = cartSessionVarName();
 unsigned hgsid = cartSessionId(cart);
 
@@ -221,20 +219,22 @@ cartRemoveLike(cart, "*");
 cartSetInt(cart, sessionVar, hgsid);
 while (lineFileNext(lf, &line, &size))
     {
-    wordCount = chopString(line, " ", words, ArraySize(words));
-    if (sameString(words[0], sessionVar))
+    char *var = nextWord(&line);
+    char *val = line;
+
+    if (sameString(var, sessionVar))
 	continue;
     else
 	{
-	if (wordCount == 2)
+	if (val != NULL)
 	    {
-	    struct dyString *dy = dyStringSub(words[1], "\\n", "\n");
-	    cartSetString(cart, words[0], dy->string);
+	    struct dyString *dy = dyStringSub(val, "\\n", "\n");
+	    cartSetString(cart, var, dy->string);
 	    dyStringFree(&dy);
 	    }
-	else if (wordCount == 1)
+	else if (var != NULL)
 	    {
-	    cartSetString(cart, words[0], "");
+	    cartSetString(cart, var, "");
 	    }
 	} /* not hgsid */
     } /* each line */
