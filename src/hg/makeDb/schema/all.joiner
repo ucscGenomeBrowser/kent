@@ -259,6 +259,16 @@ identifier ncbiTaxon
      visiGene.lifeStageScheme.taxon
      visiGene.strain.taxon
 
+# CGAP SAGE track Stuff
+
+# Databases with the CGAP SAGE track
+set cgapSageDbs hg18,mm8
+
+identifier cgapSageLibId external=CGAP
+"ID linking cgapSage and cgapSageLib tables"
+    $cgapSageDbs.cgapSageLib.libId
+    $cgapSageDbs.cgapSage.libIds comma
+
 # VisiGene Related Stuff
 
 identifier vgFileLocation
