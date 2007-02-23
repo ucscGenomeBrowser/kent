@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgStepManager.pm instead.
 
-# $Id: HgStepManager.pm,v 1.1 2006/10/09 20:44:34 angie Exp $
+# $Id: HgStepManager.pm,v 1.2 2007/02/23 23:16:22 angie Exp $
 package HgStepManager;
 
 use warnings;
@@ -159,12 +159,12 @@ sub execute {
   confess "Too many arguments" if (scalar(@_) > 0);
   my $startStep = $this->{'startStep'};
   my $stopStep = $this->{'stopStep'};
-  &HgAutomate::verbose(2, "HgStepManager: executing from step '$startStep' " .
+  &HgAutomate::verbose(1, "HgStepManager: executing from step '$startStep' " .
 		       "through step '$stopStep'.\n");
   foreach my $stepName ( @{$this->{'stepNames'}} ) {
     if ($this->stepOrder($startStep) <= $this->stepOrder($stepName) &&
 	$this->stepOrder($stepName)  <= $this->stepOrder($stopStep)) {
-      &HgAutomate::verbose(2, "HgStepManager: executing step '$stepName'.\n");
+      &HgAutomate::verbose(1, "HgStepManager: executing step '$stepName'.\n");
       &{$this->{'stepHash'}->{$stepName}->{'func'}}();
     }
   }
