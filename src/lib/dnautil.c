@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.45 2007/02/20 02:02:46 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.46 2007/02/23 23:22:26 angie Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -790,9 +790,10 @@ while (lettersLeft > 0)
     }
 }
 
-int maskTailPolyA(DNA *dna, int size)
-/* Convert PolyA at end to n.  This allows a few non-A's as noise to be 
- * trimmed too.  Returns number of bases trimmed.  Leaves very last a. */
+static int findTailPolyAMaybeMask(DNA *dna, int size, boolean doMask)
+/* Identify PolyA at end; mask to 'n' if specified.  This allows a few 
+ * non-A's as noise to be trimmed too.  Returns number of bases trimmed.  
+ * Leaves first two bases of PolyA in case there's a taa stop codon. */
 {
 int i;
 int score = 10;
@@ -829,8 +830,9 @@ if (bestPos >= 0)
     trimSize = size - bestPos - 2;	// Leave two for aa in taa stop codon
     if (trimSize > 0)
         {
-	for (i=size - trimSize; i<size; ++i)
-	    dna[i] = 'n';
+	if (doMask)
+	    for (i=size - trimSize; i<size; ++i)
+		dna[i] = 'n';
 	}
     else
         trimSize = 0;
@@ -838,9 +840,24 @@ if (bestPos >= 0)
 return trimSize;
 }
 
-int maskHeadPolyT(DNA *dna, int size)
-/* Convert PolyT at start.  This allows a few non-T's as noise to be 
- * trimmed too.  Returns number of bases trimmed.  */
+int tailPolyASize(DNA *dna, int size)
+/* Return size of PolyA at end (if present).  This allows a few non-A's as 
+ * noise to be trimmed too, but skips first two aa for taa stop codon. */
+{
+return findTailPolyAMaybeMask(dna, size, FALSE);
+}
+
+int maskTailPolyA(DNA *dna, int size)
+/* Convert PolyA at end to n.  This allows a few non-A's as noise to be 
+ * trimmed too.  Returns number of bases trimmed.  Leaves very last a. */
+{
+return findTailPolyAMaybeMask(dna, size, TRUE);
+}
+
+static int findHeadPolyTMaybeMask(DNA *dna, int size, boolean doMask)
+/* Return size of PolyT at start (if present); mask to 'n' if specified.  
+ * This allows a few non-T's as noise to be trimmed too, but skips last
+ * two tt for revcomp'd taa stop codon. */
 {
 int i;
 int score = 10;
@@ -876,15 +893,32 @@ for (i=0; i<size; ++i)
     }
 if (bestPos >= 0)
     {
-    trimSize = bestPos - 2;	// Leave two for aa in taa stop codon
+    trimSize = bestPos+1 - 2;	// Leave two for aa in taa stop codon
     if (trimSize > 0)
-	memset(dna, 'n', trimSize);
+	{
+	if (doMask)
+	    memset(dna, 'n', trimSize);
+	}
     else
         trimSize = 0;
     }
 return trimSize;
 }
 
+int headPolyTSize(DNA *dna, int size)
+/* Return size of PolyT at start (if present).  This allows a few non-T's as 
+ * noise to be trimmed too, but skips last two tt for revcomp'd taa stop 
+ * codon. */
+{
+return findHeadPolyTMaybeMask(dna, size, FALSE);
+}
+
+int maskHeadPolyT(DNA *dna, int size)
+/* Convert PolyT at start.  This allows a few non-T's as noise to be 
+ * trimmed too.  Returns number of bases trimmed.  */
+{
+return findHeadPolyTMaybeMask(dna, size, TRUE);
+}
 
 boolean isDna(char *poly, int size)
 /* Return TRUE if letters in poly are at least 90% ACGTU */
