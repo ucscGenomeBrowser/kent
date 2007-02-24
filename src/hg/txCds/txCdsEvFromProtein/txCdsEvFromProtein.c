@@ -13,6 +13,8 @@ char *refStatusFile = NULL;
 char *uniStatusFile = NULL;
 FILE *fUnmapped = NULL;
 char *defaultSource = "blatUniprot";
+struct hash *refToPepHash = NULL;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -29,15 +31,26 @@ errAbort(
   "         Selectively overrides source field of output\n"
   "   -source=name - Name to put in tce source field. Default is \"%s\"\n"
   "   -unmapped=name - Put info about why stuff didn't map here\n"
+  "   -exceptions=xxx.exceptions - Include file with info on selenocysteine\n"
+  "            and other exceptions.  You get this file by running\n"
+  "            files txCdsRaExceptions on ra files parsed out of genbank flat\n"
+  "            files.\n"
+  "   -refToPep=refToPep.tab - Put refSeq mrna to protein mapping file here\n"
+  "            Usually used with exceptions flag when processing refSeq\n"
   , defaultSource
   );
 }
+
+struct hash *selenocysteineHash = NULL;
+struct hash *altStartHash = NULL;
 
 static struct optionSpec options[] = {
    {"refStatus", OPTION_STRING},
    {"uniStatus", OPTION_STRING},
    {"source", OPTION_STRING},
    {"unmapped", OPTION_STRING},
+   {"refToPep", OPTION_STRING},
+   {"exceptions", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -51,6 +64,19 @@ if (fUnmapped != NULL)
     vfprintf(fUnmapped, format, args);
     va_end(args);
     }
+}
+
+struct hash *hashTwoColumnFileReverse(char *fileName)
+/* Return hash of strings with keys from second column
+ * in file, values from first column. */
+{
+struct hash *hash = hashNew(19);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+while (lineFileRow(lf, row))
+    hashAdd(hash, row[1], cloneString(row[0]));
+lineFileClose(&lf);
+return hash;
 }
 
 struct hash *getSourceHash()
@@ -120,20 +146,31 @@ for (i=0; i<lastBlock; ++i)
     }
 }
 
-boolean aliGotStopCodons(struct psl *psl, struct dnaSeq *seq)
+boolean aliGotStopCodons(struct psl *psl, struct dnaSeq *seq,
+	boolean selenocysteine)
 /* Return TRUE if alignment includes stop codons. */
 {
-int i;
-for (i=0; i<psl->blockCount; ++i)
+int blockIx;
+for (blockIx=0; blockIx<psl->blockCount; ++blockIx)
     {
-    int qBlockSize = psl->blockSizes[i];
-    int tStart = psl->tStarts[i];
+    int qBlockSize = psl->blockSizes[blockIx];
+    int tStart = psl->tStarts[blockIx];
     DNA *dna = seq->dna + tStart;
     int i;
     for (i=0; i<qBlockSize; ++i)
         {
-	if (isStopCodon(dna))
-	    return TRUE;
+	if (selenocysteine)
+	    {
+	    if (startsWith("taa", dna) || startsWith("tag", dna))
+		return TRUE;
+	    }
+	else
+	    {
+	    if (isStopCodon(dna))
+		{
+		return TRUE;
+		}
+	    }
 	dna += 3;
 	}
     }
@@ -158,6 +195,17 @@ void mapAndOutput(char *source, aaSeq *protSeq, struct psl *psl,
 /* Attempt to define CDS in txSeq by looking at alignment between
  * it and a protein. */
 {
+boolean selenocysteine = FALSE;
+if (hashLookup(selenocysteineHash, psl->qName))
+    selenocysteine = TRUE;
+if (refToPepHash != NULL)
+    {
+    char *refAcc = hashFindVal(refToPepHash, psl->qName);
+    if (refAcc != NULL)
+        if (hashLookup(selenocysteineHash, refAcc))
+	    selenocysteine = TRUE;
+    }
+	    
 if (!sameString(psl->strand, "++"))
     {
     unmappedPrint("%s alignment with %s funny strand %s\n", psl->qName, psl->tName,
@@ -165,7 +213,7 @@ if (!sameString(psl->strand, "++"))
     return;
     }
 removeNegativeGaps(psl);
-if (aliGotStopCodons(psl, txSeq))
+if (aliGotStopCodons(psl, txSeq, selenocysteine))
     {
     unmappedPrint("%s alignment with %s has stop codons\n", psl->qName, psl->tName);
     return;
@@ -210,6 +258,50 @@ for (i=0; i < psl->blockCount; ++i)
 fprintf(f, "\n");
 }
 
+void gbExceptionsHash(char *fileName, 
+	struct hash **retSelenocysteineHash, struct hash **retAltStartHash)
+/* Will read a genbank exceptions file, and return two hashes parsed out of
+ * it filled with the accessions having the two exceptions we can handle, 
+ * selenocysteines, and alternative start codons. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *scHash = *retSelenocysteineHash  = hashNew(0);
+struct hash *altStartHash = *retAltStartHash = hashNew(0);
+char *row[3];
+while (lineFileRowTab(lf, row))
+    {
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    char *row[3];
+    while (lineFileRow(lf, row))
+        {
+	if (sameString(row[1], "selenocysteine") && sameString(row[2], "yes"))
+	    hashAdd(scHash, row[0], NULL);
+	if (sameString(row[1], "exception") 
+		&& sameString(row[2], "alternative_start_codon"))
+	    hashAdd(altStartHash, row[0], NULL);
+	}
+    }
+verbose(2, "%d items in selenocysteineHash\n", scHash->elCount);
+verbose(2, "%d items in altStartCodonHash\n", altStartHash->elCount);
+lineFileClose(&lf);
+}
+
+void makeExceptionHashes()
+/* Create hash that has accessions using selanocysteine in it
+ * if using the exceptions option.  Otherwise the hash will be
+ * empty. */
+{
+char *fileName = optionVal("exceptions", NULL);
+if (fileName != NULL)
+    {
+    gbExceptionsHash(fileName, &selenocysteineHash, &altStartHash);
+    }
+else
+    {
+    selenocysteineHash = altStartHash = hashNew(4);
+    }
+}
+
 
 void txCdsEvFromProtein(char *protFa, char *txProtPsl, char *txFa, char *output)
 /* txCdsEvFromProtein - Convert transcript/protein alignments and other evidence 
@@ -251,6 +343,9 @@ uniStatusFile = optionVal("uniStatus", uniStatusFile);
 defaultSource = optionVal("source", defaultSource);
 if (optionExists("unmapped"))
     fUnmapped = mustOpen(optionVal("unmapped", NULL), "w");
+if (optionExists("refToPep"))
+    refToPepHash = hashTwoColumnFileReverse(optionVal("refToPep", NULL));
+makeExceptionHashes();
 txCdsEvFromProtein(argv[1], argv[2], argv[3], argv[4]);
 carefulClose(&fUnmapped);
 return 0;
