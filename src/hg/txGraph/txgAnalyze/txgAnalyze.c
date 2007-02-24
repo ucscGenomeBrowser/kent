@@ -314,9 +314,11 @@ for (sourceIx=0; sourceIx<graph->sourceCount; ++sourceIx)
 
 	/* Go through remaining reference sources looking for no overlap. */
 	int i;
-	for (i=sourceIx+1; i<graph->sourceCount; ++i)
+	for (i=0; i<graph->sourceCount; ++i)
 	    {
-	    struct txSource *s = &graph->sources[sourceIx];
+	    if (i == sourceIx)
+	        continue;
+	    struct txSource *s = &graph->sources[i];
 	    if (sameString(s->type, refType))
 	        {
 		boolean gotOverlap = FALSE;
@@ -324,11 +326,13 @@ for (sourceIx=0; sourceIx<graph->sourceCount; ++sourceIx)
 		    {
 		    if (edge->type == ggExon && evOfSourceOnList(edge->evList, i))
 		        {
-			gotOverlap = rangeTreeOverlaps(tree,
+			if (rangeTreeOverlaps(tree,
 					graph->vertices[edge->startIx].position,
-				        graph->vertices[edge->endIx].position);
-			if (gotOverlap)
+				        graph->vertices[edge->endIx].position))
+			    {
+			    gotOverlap = TRUE;
 			    break;
+			    }
 			}
 		    }
 		if (!gotOverlap)
