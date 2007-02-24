@@ -56,7 +56,7 @@ blastRef mm6.blastKGRef03
 
 track blastHg17KG
 shortLabel Human Proteins
-longLabel Human(hg17) proteins mapped by chained tBLASTn
+longLabel Human proteins mapped by chained tBLASTn
 group genes
 priority 30
 visibility dense
@@ -437,6 +437,34 @@ altColor 255,240,200
 spectrum on
 type chain mm6
 otherDb mm6
+
+track gvPos
+shortLabel Locus Variants
+longLabel Compilation of Human Disease Variants and Other Mutations
+group phenDis
+priority 144.7
+visibility hide
+color 150,0,150
+type bed 4 +
+
+searchName gvNameSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+xrefTable hgFixed.gv
+xrefQuery select id, name from %s where name like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+
+searchName gvAliasSearch
+searchTable gvPos
+query select chrom, chromStart, chromEnd, name from %s where name = '%s'
+dontCheckXrefQueryFormat on
+xrefTable hgFixed.gvAttr
+xrefQuery select id, attrVal from %s where attrType = 'commonName' and attrVal like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
 
 
 searchName blastHg17KGSprot
