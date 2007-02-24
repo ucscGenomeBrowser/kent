@@ -1,4 +1,5 @@
 # Make directory
+# :vim nowrap
 ssh hgwdev
 mkdir /cluster/data/hg18/bed/jkg
 cd /cluster/data/hg18/bed/jkg
@@ -147,6 +148,19 @@ para time
 #Longest finished job:             235s       3.92m     0.07h    0.00d
 #Submission to last job:           235s       3.92m     0.07h    0.00d
 
+# Filter out some duplicate edges. These are legitimate from txOrtho's point
+# of view, since they represent two different mouse edges both supporting
+# a human edge. However, from the human point of view we want only one
+# support from mouse orthology.  Just takes a second.
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg/txOrtho
+mkdir uniqEdges
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    echo uniqifying ortho edges for $c
+    cut -f 1-9 edges/$c.edges | sort | uniq > uniqEdges/$c.edges
+end
+cd ..
+
 # Clean up chains and nets since they are big
 cd /cluster/data/hg18/bed/jkg
 rm -r mm8/chains mm8/nets
@@ -156,27 +170,29 @@ echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chro
 	| hgsql -N hg18 > exoniphy.bed
 bedToTxEdges exoniphy.bed exoniphy.edges
 
-# Add evidence from ortho edges - takes about 10 seconds.
-cd /cluster/data/hg18/bed/jkg
-mkdir orthoTxg
+# Add evidence from ests, orthologous mouse transcripts, and exoniphy
+# Takes 36 seconds.
+mkdir graphWithEvidence
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo $c
-    txgAddEvidence bedToGraph/$c.txg txOrtho/edges/$c.edges txOrtho orthoTxg/$c.txg
+    echo adding evidence for $c
+    txgAddEvidence -chrom=$c bedToGraph/$c.txg exoniphy.edges exoniphy stdout \
+       | txgAddEvidence stdin txOrtho/uniqEdges/$c.edges txOrtho stdout \
+       | txgAddEvidence stdin est/$c.edges est graphWithEvidence/$c.txg
 end
 
-# Add exoniphy evidence - just takes 20 seconds or so.
-mkdir exoniphyTxg
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo $c
-    txgAddEvidence -chrom=$c orthoTxg/$c.txg exoniphy.edges exoniphy exoniphyTxg/$c.txg
-end
-
-# Do  txWalk  - takes 6 seconds
+# Do  txWalk  - takes 8 seconds
 mkdir txWalk
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo txWalk $c
-    txWalk exoniphyTxg/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev
+    txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev
 end
+
+# Make a file that lists the various categories of alt-splicing we see.
+# Do this by making and analysing splicing graphs of just the transcripts
+# that have passed our process so far.  The txgAnalyze program occassionally
+# will make a duplicate, which is the reason for the sort/uniq run.
+# Takes 7 seconds.
+cat txWalk/*.bed | txBedToGraph stdin txWalk stdout | txgAnalyze stdin stdout | sort | uniq > altSplice.bed
 
 # Get txWalk transcript sequences.  This'll take about 2 minutes
 rm -f txWalk.fa
@@ -184,14 +200,14 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo transcript sequence for  $c
     sequenceForBed -db=hg18 -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 end
-mkdir splitFa
-faSplit sequence txWalk.fa 200 splitFa/
+mkdir txFaSplit
+faSplit sequence txWalk.fa 200 txFaSplit/
 
 # Set up cluster run Victor Solovyev's Best Orf program.
 mkdir bestorf
 mkdir bestorf/fa bestorf/tab
 cd bestorf
-ls -1 ../splitFa/*.fa > in.lst
+ls -1 ../txFaSplit/*.fa > in.lst
 cat << '_EOF_' > gsub
 #LOOP
 borfBig -exe=./borf $(path1) tab/$(root1).borf
@@ -210,18 +226,19 @@ cd /cluster/data/hg18/bed/jkg/bestorf
 para create spec
 para make
 para time
-#CPU time in finished jobs:       1372s      22.87m     0.38h    0.02d  0.000 y
-#IO & Wait Time:                   754s      12.56m     0.21h    0.01d  0.000 y
-#Average job time:                  11s       0.18m     0.00h    0.00d
+#Completed: 195 of 195 jobs
+#CPU time in finished jobs:       1356s      22.59m     0.38h    0.02d  0.000 y
+#IO & Wait Time:                  1226s      20.44m     0.34h    0.01d  0.000 y
+#Average job time:                  13s       0.22m     0.00h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:              16s       0.27m     0.00h    0.00d
-#Submission to last job:            54s       0.90m     0.01h    0.00d
+#Longest finished job:              24s       0.40m     0.01h    0.00d
+#Submission to last job:            35s       0.58m     0.01h    0.00d
 
 
 # Fetch human protein set and table that describes if curated or not.
 hgsql -N sp070202 -e \
   'select p.acc, p.val from protein p, accToTaxon x where x.taxon=9606 and p.acc=x.acc'\
-  |awk '{print ">" $1;print $2}' >humanProt.fa
+  |awk '{print ">" $1;print $2}' >uniProt.fa
 hgsql -N sp0702020 -e 'select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=9606 and i.acc=x.acc' > uniCurated.tab
 
 # Create blat dir - we'll run a couple of types of alignments here.
@@ -230,12 +247,12 @@ mkdir blat
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 mkdir blat/protein
 mkdir blat/protein/raw
-cd splitFa
+cd txFaSplit
 echo #\!/bin/tcsh -ef > ../blat/protein/spec
 foreach f (*.fa)
     set c=$f:r
-    echo blat -t=dnax -q=prot -minIdentity=90 ../../splitFa/$f ../../humanProt.fa raw/uni_$c.psl >> ../blat/protein/spec
-    echo blat -t=dnax -q=prot -minIdentity=90 ../../splitFa/$f ../../refPep.fa raw/ref_$c.psl >> ../blat/protein/spec
+    echo blat -t=dnax -q=prot -minIdentity=90 ../../txFaSplit/$f ../../uniProt.fa raw/uni_$c.psl >> ../blat/protein/spec
+    echo blat -t=dnax -q=prot -minIdentity=90 ../../txFaSplit/$f ../../refPep.fa raw/ref_$c.psl >> ../blat/protein/spec
 end
 cd ..
 
@@ -253,32 +270,31 @@ Longest running job:                0s       0.00m     0.00h    0.00d
 Longest finished job:             119s       1.98m     0.03h    0.00d
 Submission to last job:           228s       3.80m     0.06h    0.00d
 
-# Set up blat jobs for mran vs. txWalk transcripts
+# Set up blat jobs for mrna vs. txWalk transcripts
 mkdir blat/rna
 mkdir blat/rna/raw
-cd splitFa
+cd txFaSplit
 echo #\!/bin/tcsh -ef > ../blat/rna/spec
 foreach f (*.fa)
     set c=$f:r
-    echo blat -ooc=/cluster/data/hg18/11.ooc -minIdentity=95 ../../splitFa/$f ../../mrna.fa raw/mrna_$c.psl >> ../blat/rna/spec
-    echo blat -ooc=/cluster/data/hg18/11.ooc -minIdentity=97 ../../splitFa/$f ../../refSeq.fa raw/ref_$c.psl >> ../blat/rna/spec
+    echo blat -ooc=/cluster/data/hg18/11.ooc -minIdentity=95 ../../txFaSplit/$f ../../mrna.fa raw/mrna_$c.psl >> ../blat/rna/spec
+    echo blat -ooc=/cluster/data/hg18/11.ooc -minIdentity=97 ../../txFaSplit/$f ../../refSeq.fa raw/ref_$c.psl >> ../blat/rna/spec
 end
 cd ..
 
 # Run rna/transcript blat on cluster.  This is a little i/o heavy, so use
 # maxNode=50, or optimize i/o somehow.
 ssh pk
-cd /cluster/data/hg18/bed/jkg/blat/protein
+cd /cluster/data/hg18/bed/jkg/blat/rna
 para create spec
 para make -maxNode=50
 #Completed: 390 of 390 jobs
-#CPU time in finished jobs:      18349s     305.82m     5.10h    0.21d  0.001 y
-#IO & Wait Time:                 21262s     354.37m     5.91h    0.25d  0.001 y
-#Average job time:                 102s       1.69m     0.03h    0.00d
+#CPU time in finished jobs:      18774s     312.89m     5.21h    0.22d  0.001 y
+#IO & Wait Time:                 18804s     313.41m     5.22h    0.22d  0.001 y
+#Average job time:                  96s       1.61m     0.03h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             582s       9.70m     0.16h    0.01d
-#Submission to last job:           786s      13.10m     0.22h    0.01d
-
+#Longest finished job:             606s      10.10m     0.17h    0.01d
+#Submission to last job:           898s      14.97m     0.25h    0.01d
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds.
@@ -291,19 +307,21 @@ rm -r rna/raw protein/raw
 cd ..
 
 # Create evidence derived from mRNA CDS and mRNA/transcript alignments
+# Takes 28 seconds.
 mkdir cdsEvidence
 txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab -unmapped=cdsEvidence/refSeqTx.unmapped
 txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab -unmapped=cdsEvidence/mrna.unmapped
 txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab -unmapped=cdsEvidence/refSeqProt.unmapped
-txCdsEvFromProtein humanProt.fa blat/protein/uniProt.psl txWalk.fa cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab -unmapped=cdsEvidence/uniProt.unmapped
+txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab -unmapped=cdsEvidence/uniProt.unmapped
 cat bestorf/tab/*.borf | txCdsEvFromBorf stdin txWalk.fa cdsEvidence/bestorf.tce
 
-# Consolidate and pick best CDS. 
+# Consolidate and pick best CDS.  Takes 4 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
 cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks -weightedTce=weighted.tce
 
 # Create gene prediction (GTF) and peptide fasta file.
+# Takes 7 seconds.
 cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa -bedOut=bestCds.bed
 
 ###########################################################################
@@ -319,7 +337,11 @@ cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed hg18 jkgRefSeqUnusual  stdin
 cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstExons stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstIntrons stdin
 hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
+hgLoadBed hg18 jkgAltSplice altSplice.bed
+ldHgGene hg18 jkgTxCdsPick bestCds.gtf -gtf -genePredExt
 
 
 ###########################################################################
@@ -380,7 +402,7 @@ hgLoadBed hg18 jkgRawTranscripts exonWalk/*.bed
 hgLoadBed hg18 jkgTxWalk txWalk/*.bed
 
 ###########################################################################
-## Some analysis of things in humanProt.fa that didn't map to any sequence.
+## Some analysis of things in uniProt.fa that didn't map to any sequence.
 ## Examining random sample of 25 of these.  (Only 81% did map, over 10,000
 ## didn't).
 
@@ -783,29 +805,47 @@ txBedToGraph  - Why are BC040020 and NM_080764 not merged?
 txAddEvidence - Don't add evidence for double-hard-end that is only supported
          on one end by another double-hard-end.  Test case
 	 chr22:19,221,254-19,221,743 the slightly larger exon on AK074268.
+     This seems to be added to txAddEvidence in general, but the test
+     case is rescued anyway by EST evidence this round.
 txAddEvidence - Suppress adding hard-end evidence to double-soft that
          overlaps.  Test case chr22:22,298,169-22,319,055.
+     Fixed take 6.
 txWalk  - flag retained introns. Test case chr22:17,280,005-17,306,568.
 txWalk - make it output all transcripts that hit an edge with sufficient
          evidence, and which are not subsets of previous transcripts.
 	 Test case chr1:67,646,622-67,669,121, currently only outputs
 	 3 of 4 refseqs.
+     Fixed take 6.
 txWalk - for single-exon transcripts that overlap weakly, don't count
          overlap as 2 pieces of evidence, just 1.1 or something.
 	 Test case chr22:20,109,925-20,125,924.
+     Fixed take 6.
 txFilter - Remove transcripts completely enclosed on tx level that differ
          only at 3' or 5' end.  Test case NM_176877 and AF377170. Also
 	 NM_005446 and AF065385.
 txFilter - Remove transcript that are result of fragmented RNA
          where larger part of RNA is in another transcript.
 	 Test case chr22:19,863,475-19,871,029.
+	 Test case chr22:18,080,172-18,095,585
 txFilter - Merge transcripts that are the result of fragmented RNA
          where good evidence and multiple introns on both sidex.
 	 Test case chr22:19,881,325-19,920,204.
 txFilter - Remove single exon genes that are more than 55% enclosed within
 	   exon of multiple exon gene.  Test case chr22:18,608,081-18,611,968.
 	   Also chr22:19,970,725-19,975,524
+	 First test case handled by other single exon filters.
+	 Second test case still valid.
 txCdsAddEv - Process selano-cysteines and anternative starts.
 txCdsPick - Pick RefSeq CDS for RefSeq genes.
 txClusterAnalyser - Identify CDS that is not shared with dominant CDS
            from transcript cluster and remove.
+
+######################################################################
+# Stuff to consider for take 7
+o - Remove accessions in
+	markd/compbio/mgc/cListPaperData/data/hgdata/athersysRage.acc
+                                                invitrogenCrap.acc
+    from input.
+o - Do tighter near-best placements, using Robert & David's method.
+o - Separating clusters that contain non-overlapping refSeq clusters
+    into separate genes.  See chr22:16,936,036-17,018,244.
