@@ -21,6 +21,7 @@ struct rbTreeNode
 /* Structure type for the red-black tree. */
 struct rbTree 
     {
+    struct rbTree *next;			/* Next tree in list. */
     struct rbTreeNode *root;			/* Root of tree */
     int n;					/* Number of items in tree. */
     int (* compare)(void *, void *);/* Comparison function */
