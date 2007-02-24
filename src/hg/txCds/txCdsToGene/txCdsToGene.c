@@ -9,6 +9,7 @@
 #include "fa.h"
 #include "bed.h"
 #include "dnautil.h"
+#include "genbank.h"
 #include "genePred.h"
 #include "rangeTree.h"
 #include "cdsEvidence.h"
@@ -33,13 +34,33 @@ errAbort(
   "   out.fa is the output protein predictions\n"
   "options:\n"
   "   -bedOut=output.bed - Save bed (with thickStart/thickEnd set)\n"
+  "   -exceptions=xxx.exceptions - Include file with info on selenocysteine\n"
+  "            and other exceptions.  You get this file by running\n"
+  "            files txCdsRaExceptions on ra files parsed out of genbank flat\n"
+  "            files.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"bedOut", OPTION_STRING},
+   {"exceptions", OPTION_STRING},
    {NULL, 0},
 };
+
+struct hash *selenocysteineHash = NULL;
+struct hash *altStartHash = NULL;
+
+void makeExceptionHashes()
+/* Create hash that has accessions using selanocysteine in it
+ * if using the exceptions option.  Otherwise the hash will be
+ * empty. */
+{
+char *fileName = optionVal("exceptions", NULL);
+if (fileName != NULL)
+    genbankExceptionsHash(fileName, &selenocysteineHash, &altStartHash);
+else
+    selenocysteineHash = altStartHash = hashNew(4);
+}
 
 struct hash *cdsEvidenceReadAllIntoHash(char *fileName)
 /* Return hash full of cdsEvidence keyed by transcript name. */
@@ -320,6 +341,12 @@ void outputProtein(struct cdsEvidence *cds, struct dnaSeq *txSeq, FILE *f)
  * The implementation is a little complicated by checking for internal
  * stop codons and other error conditions. */
 {
+boolean selenocysteine = FALSE;
+if (selenocysteineHash != NULL)
+    {
+    if (hashLookup(selenocysteineHash, txSeq->name))
+	selenocysteine = TRUE;
+    }
 struct dyString *dy = dyStringNew(4*1024);
 int blockIx;
 for (blockIx=0; blockIx<cds->cdsCount; ++blockIx)
@@ -336,7 +363,15 @@ for (blockIx=0; blockIx<cds->cdsCount; ++blockIx)
     for (i=0; i<aaSize; ++i)
         {
 	AA aa = lookupCodon(dna);
-	if (aa == 0) aa = '*';
+	if (aa == 0) 
+	    {
+	    aa = '*';
+	    if (selenocysteine)
+	        {
+		if (!isReallyStopCodon(dna, TRUE))
+		    aa = 'U';
+		}
+	    }
 	dyStringAppendC(dy, aa);
 	dna += 3;
 	}
@@ -424,6 +459,7 @@ dnaUtilOpen();
 if (argc != 6)
     usage();
 char *bedOut = optionVal("bedOut", NULL);
+makeExceptionHashes();
 if (bedOut != NULL)
     fBed = mustOpen(bedOut, "w");
 txCdsToGene(argv[1], argv[2], argv[3], argv[4], argv[5]);
