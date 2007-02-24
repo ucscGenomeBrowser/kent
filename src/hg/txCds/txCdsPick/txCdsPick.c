@@ -3,11 +3,15 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "genbank.h"
 #include "cdsEvidence.h"
 #include "cdsPick.h"
 #include "bed.h"
 
+/* Variables set via command line. */
 struct hash *refToPepHash = NULL;
+struct hash *pepToRefHash = NULL;
+FILE *exceptionsOut = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,14 +32,37 @@ errAbort(
   "   -weightedTce=weighted.tce - output all weighted cdsEvidence here\n"
   "   -refToPep=refToPep.tab - lets refSeq mappings to associated protein have\n"
   "              higher priority.  Highly recommended.\n"
+  "   -exceptionsIn=exceptions.tab - input exceptions. A file with info on\n"
+  "            selenocysteine and other exceptions.  You get this file by running\n"
+  "            files txCdsRaExceptions on ra files parsed out of genbank flat\n"
+  "            files.\n"
+  "   -exceptionsOut=exceptions.tab - output exceptions. In same format as\n"
+  "            input exceptions\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"weightedTce", OPTION_STRING},
    {"refToPep", OPTION_STRING},
+   {"exceptionsIn", OPTION_STRING},
+   {"exceptionsOut", OPTION_STRING},
    {NULL, 0},
 };
+
+struct hash *selenocysteineHash = NULL;
+struct hash *altStartHash = NULL;
+
+void makeExceptionHashes()
+/* Create hash that has accessions using selanocysteine in it
+ * if using the exceptions option.  Otherwise the hash will be
+ * empty. */
+{
+char *fileName = optionVal("exceptionsIn", NULL);
+if (fileName != NULL)
+    genbankExceptionsHash(fileName, &selenocysteineHash, &altStartHash);
+else
+    selenocysteineHash = altStartHash = hashNew(4);
+}
 
 struct weight
 /* A named weight. */
@@ -70,17 +97,18 @@ if (weight == NULL)
 return weight->value;
 }
 
-struct hash *hashTwoColumnFile(char *fileName)
-/* Return hash of strings with keys from first column
- * in file, values from second column. */
+void hashRefToPep(char *fileName)
+/* Create refToPep and pepToRef hashes from reading file. */
 {
-struct hash *hash = hashNew(19);
+refToPepHash = hashNew(19);
+pepToRefHash = hashNew(19);
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 while (lineFileRow(lf, row))
-    hashAdd(hash, row[0], cloneString(row[1]));
-lineFileClose(&lf);
-return hash;
+    {
+    hashAdd(refToPepHash, row[0], cloneString(row[1]));
+    hashAdd(pepToRefHash, row[1], cloneString(row[0]));
+    }
 }
 
 struct txInfo
@@ -185,6 +213,22 @@ if (weightedTce != NULL)
 return hash;
 }
 
+void transferExceptions(char *inName, char *inSource, char *outName, FILE *f)
+/* Write out exceptions attatched to inName to file, this time
+ * attached to outName. */
+{
+if (pepToRefHash && startsWith("RefPep", inSource))
+    {
+    inName = hashFindVal(pepToRefHash, inName);
+    if (inName == NULL)
+        return;
+    }
+if (hashLookup(selenocysteineHash, inName))
+    fprintf(f, "%s\tselenocysteine\tyes\n", outName);
+if (hashLookup(altStartHash, inName))
+    fprintf(f, "%s\texception\talternative_start_codon\n", outName);
+}
+
 void txCdsPick(char *inBed, char *inTce, char *inWeights, 
 	char *outTce, char *outPick)
 /* txCdsPick - Pick best CDS if any for transcript given evidence.. */
@@ -242,6 +286,9 @@ while (lineFileRow(lf, row))
 		    pick.wBorfScore = cds->score;
 		}
 	    }
+
+	if (exceptionsOut)
+	    transferExceptions(bestCds->accession, bestCds->source, bed->name, exceptionsOut);
 	}
     else
         {
@@ -261,7 +308,16 @@ optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
 if (optionExists("refToPep"))
-    refToPepHash = hashTwoColumnFile(optionVal("refToPep", NULL));
+    hashRefToPep(optionVal("refToPep", NULL));
+makeExceptionHashes();
+char *fileName = optionVal("exceptionsOut", NULL);
+if (fileName != NULL)
+    {
+    exceptionsOut = mustOpen(fileName, "w");
+    if (!optionExists("exceptionsIn"))
+        errAbort("Must use exceptionsIn flag with exceptionsOut.");
+    }
 txCdsPick(argv[1], argv[2], argv[3], argv[4], argv[5]);
+carefulClose(&exceptionsOut);
 return 0;
 }
