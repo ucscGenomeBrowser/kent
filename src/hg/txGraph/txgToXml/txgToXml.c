@@ -70,8 +70,8 @@ for (edge = graph->edgeList; edge != NULL; edge = edge->next)
 for (i=0; i<graph->sourceCount; ++i)
     {
     struct txSource *source = &graph->sources[i];
-    fprintf(f, "    <source type=\"%s\" acc=\"%s\" size=\"%d\"/>\n", 
-    	source->type, source->accession, source->size);
+    fprintf(f, "    <source type=\"%s\" acc=\"%s\"/>\n", 
+    	source->type, source->accession);
     }
 fprintf(f, "  </txGraph>\n");
 }
