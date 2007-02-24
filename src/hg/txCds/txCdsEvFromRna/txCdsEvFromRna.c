@@ -312,34 +312,6 @@ else
     }
 }
 
-void gbExceptionsHash(char *fileName, 
-	struct hash **retSelenocysteineHash, struct hash **retAltStartHash)
-/* Will read a genbank exceptions file, and return two hashes parsed out of
- * it filled with the accessions having the two exceptions we can handle, 
- * selenocysteines, and alternative start codons. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *scHash = *retSelenocysteineHash  = hashNew(0);
-struct hash *altStartHash = *retAltStartHash = hashNew(0);
-char *row[3];
-while (lineFileRowTab(lf, row))
-    {
-    struct lineFile *lf = lineFileOpen(fileName, TRUE);
-    char *row[3];
-    while (lineFileRow(lf, row))
-        {
-	if (sameString(row[1], "selenocysteine") && sameString(row[2], "yes"))
-	    hashAdd(scHash, row[0], NULL);
-	if (sameString(row[1], "exception") 
-		&& sameString(row[2], "alternative_start_codon"))
-	    hashAdd(altStartHash, row[0], NULL);
-	}
-    }
-verbose(2, "%d items in selenocysteineHash\n", scHash->elCount);
-verbose(2, "%d items in altStartCodonHash\n", altStartHash->elCount);
-lineFileClose(&lf);
-}
-
 void makeExceptionHashes()
 /* Create hash that has accessions using selanocysteine in it
  * if using the exceptions option.  Otherwise the hash will be
@@ -347,13 +319,9 @@ void makeExceptionHashes()
 {
 char *fileName = optionVal("exceptions", NULL);
 if (fileName != NULL)
-    {
-    gbExceptionsHash(fileName, &selenocysteineHash, &altStartHash);
-    }
+    genbankExceptionsHash(fileName, &selenocysteineHash, &altStartHash);
 else
-    {
     selenocysteineHash = altStartHash = hashNew(4);
-    }
 }
 
 void txCdsEvFromRna(char *rnaFa, char *rnaCds, char *txRnaPsl, char *txFa, 
