@@ -1,9 +1,11 @@
 /* genbank.c - Various functions for dealing with genbank data */
 #include "common.h"
+#include "hash.h"
+#include "linefile.h"
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.7 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.8 2007/02/24 20:04:57 kent Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
@@ -169,3 +171,30 @@ if (outAcc != inAcc)
 chopPrefix(outAcc);
 return outAcc;
 }
+
+void genbankExceptionsHash(char *fileName, 
+	struct hash **retSelenocysteineHash, struct hash **retAltStartHash)
+/* Will read a genbank exceptions file, and return two hashes parsed out of
+ * it filled with the accessions having the two exceptions we can handle, 
+ * selenocysteines, and alternative start codons. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *scHash = *retSelenocysteineHash  = hashNew(0);
+struct hash *altStartHash = *retAltStartHash = hashNew(0);
+char *row[3];
+while (lineFileRowTab(lf, row))
+    {
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    char *row[3];
+    while (lineFileRow(lf, row))
+        {
+	if (sameString(row[1], "selenocysteine") && sameString(row[2], "yes"))
+	    hashAdd(scHash, row[0], NULL);
+	if (sameString(row[1], "exception") 
+		&& sameString(row[2], "alternative_start_codon"))
+	    hashAdd(altStartHash, row[0], NULL);
+	}
+    }
+lineFileClose(&lf);
+}
+

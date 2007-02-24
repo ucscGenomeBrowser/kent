@@ -5,6 +5,14 @@
 /* buffer size for a genbank or refseq accession, with version */
 #define GENBANK_ACC_BUFSZ 24
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif
+
 struct genbankCds
 /* structure return information about parsed CDS */
 {
@@ -36,5 +44,11 @@ char* genbankDropVer(char *outAcc, char *inAcc);
 /* strip the version from a genbank id.  Input and output
  * strings maybe the same. acc length is checked against
  * GENBANK_ACC_BUFSZ. */
+
+void genbankExceptionsHash(char *fileName, 
+	struct hash **retSelenocysteineHash, struct hash **retAltStartHash);
+/* Will read a genbank exceptions file, and return two hashes parsed out of
+ * it filled with the accessions having the two exceptions we can handle, 
+ * selenocysteines, and alternative start codons. */
 
 #endif
