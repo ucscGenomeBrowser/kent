@@ -7,6 +7,8 @@
 #include "cdsPick.h"
 #include "bed.h"
 
+struct hash *refToPepHash = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -24,11 +26,14 @@ errAbort(
   "   out.cdsPick is a tab-separated file in cdsPick format for all transcripts\n"
   "options:\n"
   "   -weightedTce=weighted.tce - output all weighted cdsEvidence here\n"
+  "   -refToPep=refToPep.tab - lets refSeq mappings to associated protein have\n"
+  "              higher priority.  Highly recommended.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"weightedTce", OPTION_STRING},
+   {"refToPep", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -65,6 +70,19 @@ if (weight == NULL)
 return weight->value;
 }
 
+struct hash *hashTwoColumnFile(char *fileName)
+/* Return hash of strings with keys from first column
+ * in file, values from second column. */
+{
+struct hash *hash = hashNew(19);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+while (lineFileRow(lf, row))
+    hashAdd(hash, row[0], cloneString(row[1]));
+lineFileClose(&lf);
+return hash;
+}
+
 struct txInfo
 /* Information on a transcript */
     {
@@ -93,7 +111,9 @@ struct hash *hash = hashNew(18);
 char *row[CDSEVIDENCE_NUM_COLS];
 while  (lineFileRow(lf, row))
     {
+    /* Convert row to cdsEvidence structure. */
     struct cdsEvidence *cds = cdsEvidenceLoad(row);
+
     tx = hashFindVal(hash, cds->name);
     if (tx == NULL)
         {
@@ -108,6 +128,35 @@ while  (lineFileRow(lf, row))
     if (!cds->endComplete)
         cds->score *= 0.95;
     cds->score *= 2.0/(cds->cdsCount+1);
+
+    /* Parse accession out of name.  I wish this were a proper field.... */
+    char *acc = strrchr(cds->name, '.');
+    if (acc == NULL)
+	errAbort("Can't find . before accession line %d of %s", 
+		lf->lineIx, lf->fileName);
+    acc += 1;	/* Skip over accession part. */
+    int accLen = strlen(acc);
+    if (accLen < 6 || accLen > 16)
+        errAbort("%s doesn't seem to be an accession line %d of %s",
+		acc, lf->lineIx, lf->fileName);
+
+    /* Track whether it's refSeq, and the associated protein. */
+    char *refSeqAcc = NULL, *refPepAcc = NULL;
+    if (refToPepHash != NULL)
+        {
+	refPepAcc = hashFindVal(refToPepHash, acc);
+	if (refPepAcc != NULL)
+	    refSeqAcc = acc;
+	}
+
+    /* If we are refSeq, then bump our score for matches to our own
+     * rna or protein by an factor of 4. */
+    if (refSeqAcc != NULL && startsWith("RefSeq", cds->source) 
+    	&& sameString(cds->accession, refSeqAcc))
+	cds->score *= 10;
+    if (refPepAcc != NULL && startsWith("RefPep", cds->source)
+        && sameString(cds->accession, refPepAcc))
+	cds->score *= 4;
     slAddHead(&tx->cdsList, cds);
     }
 lineFileClose(&lf);
@@ -211,6 +260,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
+if (optionExists("refToPep"))
+    refToPepHash = hashTwoColumnFile(optionVal("refToPep", NULL));
 txCdsPick(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
