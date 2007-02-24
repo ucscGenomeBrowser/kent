@@ -19,7 +19,7 @@ struct txGraph
     unsigned vertexCount;	/* Number of vertices in graph. */
     struct txVertex *vertices;	/* Splice sites and soft ends. */
     unsigned edgeCount;	/* Number of edges in graph. */
-    struct txEdge *edges;	/* Edges (introns and exons) in graph. */
+    struct txEdge *edgeList;	/* Edges (introns and exons) in graph. */
     int sourceCount;	/* Number of sources of evidence. */
     struct txSource *sources;	/* Sources of evidence. */
     };

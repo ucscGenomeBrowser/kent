@@ -13,7 +13,7 @@ CREATE TABLE txGraph (
     vertexCount int unsigned not null,	# Number of vertices in graph.
     vertices longblob not null,	# Splice sites and soft ends.
     edgeCount int unsigned not null,	# Number of edges in graph.
-    edges longblob not null,	# Edges (introns and exons) in graph.
+    edgeList longblob not null,	# Edges (introns and exons) in graph.
     sourceCount int not null,	# Number of sources of evidence.
     sources longblob not null,	# Sources of evidence.
               #Indices

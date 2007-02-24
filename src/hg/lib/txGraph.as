@@ -9,7 +9,7 @@ table txGraph
     uint vertexCount;               "Number of vertices in graph."
     simple txVertex[vertexCount] vertices;   "Splice sites and soft ends."
     uint edgeCount;                 "Number of edges in graph."
-    object txEdge[edgeCount] edges; "Edges (introns and exons) in graph."
+    object txEdge[edgeCount] edgeList; "Edges (introns and exons) in graph."
     int sourceCount;		    "Number of sources of evidence."
     simple txSource[sourceCount] sources; "Sources of evidence."
    )

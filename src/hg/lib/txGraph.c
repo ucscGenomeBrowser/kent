@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txGraph.h"
 
-static char const rcsid[] = "$Id: txGraph.c,v 1.4 2007/02/11 23:19:39 kent Exp $";
+static char const rcsid[] = "$Id: txGraph.c,v 1.5 2007/02/24 01:54:33 kent Exp $";
 
 struct txGraph *txGraphLoad(char **row)
 /* Load a txGraph from row fetched with select * from txGraph
@@ -43,11 +43,11 @@ char *s = row[8];
 for (i=0; i<ret->edgeCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    slSafeAddHead(&ret->edges, txEdgeCommaIn(&s, NULL));
+    slSafeAddHead(&ret->edgeList, txEdgeCommaIn(&s, NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
-slReverse(&ret->edges);
+slReverse(&ret->edgeList);
 }
 {
 int i;
@@ -136,11 +136,11 @@ s = sqlEatChar(s, '{');
 for (i=0; i<ret->edgeCount; ++i)
     {
     s = sqlEatChar(s, '{');
-    if(s[0] != '}')        slSafeAddHead(&ret->edges, txEdgeCommaIn(&s,NULL));
+    if(s[0] != '}')        slSafeAddHead(&ret->edgeList, txEdgeCommaIn(&s,NULL));
     s = sqlEatChar(s, '}');
     s = sqlEatChar(s, ',');
     }
-slReverse(&ret->edges);
+slReverse(&ret->edgeList);
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
@@ -173,7 +173,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->tName);
 freeMem(el->name);
 freeMem(el->vertices);
-txEdgeFreeList(&el->edges);
+txEdgeFreeList(&el->edgeList);
 txSourceFreeInternals(el->sources, el->sourceCount);
 freeMem(el->sources);
 freez(pEl);
@@ -236,7 +236,7 @@ fputc(sep,f);
 int i;
 /* Loading txEdge list. */
     {
-    struct txEdge *it = el->edges;
+    struct txEdge *it = el->edgeList;
     if (sep == ',') fputc('{',f);
     for (i=0; i<el->edgeCount; ++i)
         {
