@@ -12388,7 +12388,7 @@ hgLoadBed hg18 cnpRedon cnpRedon.bed
    hgLoadBed hg18 gad gadHg18.bed
 
 #########################################################################
-# BLASTZ/CHAIN/NET oryLat1 (WORKING - 2006-12-14 - Hiram)
+# BLASTZ/CHAIN/NET oryLat1 (DONE - 2006-12-14 - Hiram)
 #  third time with randoms and chrUn in scaffolds on both sequences
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/blastz.oryLat1.2006-12-14
@@ -12435,47 +12435,7 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -verbose=2 \
 	-blastzOutRoot /cluster/bluearc/hg18OryLat1 > do.log 2>&1 &
-XXX - Running 2006-12-14 16:19
-    #	real    1735m5.670s
-    #	user    0m0.123s
-    #	sys     0m0.096s
-
-# Completed: 244725 of 310989 jobs
-# Crashed: 66264 jobs
-# CPU time in finished jobs:    4785488s   79758.13m  1329.30h   55.39d  0.152 y
-# IO & Wait Time:               1305533s   21758.89m   362.65h   15.11d  0.041 y
-# Average job time:                  25s       0.41m     0.01h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            3502s      58.37m     0.97h    0.04d
-# Submission to last job:        106149s    1769.15m    29.49h    1.23d
-
-    cd /cluster/data/oryLat1/bed
-    rm -f blastz.hg18
-    ln -s blastz.hg18.2006-12-08 blastz.hg18
-    ssh hgwdev
-    cd /cluster/data/oryLat1/bed/blastz.hg18
-    time nice -n 19 featureBits -noRandom oryLat1 chainHg18Link \
-	> fb.oryLat1.hg18.txt 2>&1 &
-    #	48299069 bases of 700386597 (6.896%) in intersection
-    #	40936335 bases of 582143106 (7.032%) in intersection
-
-    # Let's try a swap and see what happens
-    ssh kkstore04
-    mkdir /cluster/data/hg18/bed/blastz.oryLat1.swap
-    cd /cluster/data/hg18/bed/blastz.oryLat1.swap
-    time doBlastzChainNet.pl -verbose=2 \
-	/cluster/data/oryLat1/bed/blastz.hg18.2006-12-08/DEF \
-	-chainMinScore=2000 -chainLinearGap=loose \
-	-tRepeats=repeats -qRepeats=windowmaskerSdust -bigClusterHub=pk \
-	-swap > swap.log 2>&1 &
-    #	real    39m35.656s
-    #	user    0m0.147s
-    #	sys     0m0.100s
-
-    time nice -n 19 featureBits -noRandom hg18 chainOryLat1Link \
-	> fb.hg18.oryLat1.txt 2>&1 &
-    #	51598883 bases of 2881515245 (1.791%) in intersection
-    #	51259072 bases of 2868834265 (1.787%) in intersection
+    ### this did not work, abandoned
 
 ##########################################################################
 # AFFY HUEX1 OFF-BY-ONE FIX (Andy 2006-12-14)
