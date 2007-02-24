@@ -185,7 +185,71 @@ slSort(&rnaList, weightedRnaCmp);
 return rnaList;
 }
 
-void rnaOut(struct txGraph *txg, struct slRef *trackerRefList, 
+boolean subsetExceptForEnds(struct rbTree *aTree, struct rbTree *bTree,
+	struct slRef *bRangeRefList)
+/* Return TRUE if bTree is a subset of aTree are the same except for perhaps
+ * the start of the first exon and end of last exon.   By this I mean every
+ * exon is the same, not just enclosed. Pass in the refList for b, just as a 
+ * minor speed tweak. */
+{
+struct slRef *aRangeRefList = rbTreeItems(aTree);
+struct slRef *aRef, *bRef;
+struct range *a, *b;
+
+/* Loop through aTree until find beginning exon that is same as first
+ * exon in bTree. */
+bRef = bRangeRefList;
+b = bRef->val;
+for (aRef = aRangeRefList; aRef != NULL; aRef = aRef->next)
+    {
+    a = aRef->val;
+    if (a->end == b->end)
+        break;
+    if (a->end > b->end)
+        return FALSE;
+    }
+if (aRef == NULL)
+    return FALSE;
+if (a->start > b->start)
+    return FALSE;
+
+/* Advance B.  Check for single exon B. */
+bRef = bRef->next;
+if (bRef == NULL)
+    return TRUE;
+
+/* Advance A.  Check for single exon A */
+aRef = aRef->next;
+if (aRef == NULL)
+    return FALSE;
+
+/* Loop through until get to last exon in b, making sure we have
+ * an exact match on both ends. */
+for (;; aRef = aRef->next, bRef = bRef->next)
+    {
+    if (bRef->next == NULL)
+        break;
+    if (aRef->next == NULL)
+        return FALSE;
+    a = aRef->val;
+    b = bRef->val;
+    if (a->start != b->start || a->end != b->end)
+        return FALSE;
+    }
+
+/* On last exon just check start. */
+assert(aRef != NULL && bRef != NULL);
+a = aRef->val;
+b = bRef->val;
+if (a->start != b->start)
+    return FALSE;
+if (a->end < b->end)
+    return FALSE;
+return TRUE;
+}
+
+struct rbTree *rnaOut(struct txGraph *txg, struct lm *lm, struct rbTreeNode *stack[128],
+	struct rbTree *existingList, struct slRef *trackerRefList, 
 	struct txSource *source, int txId, FILE *bedFile, FILE *efFile)
 /* Write out one RNA transcript. */
 {
@@ -194,25 +258,9 @@ int minBase = BIGNUM, maxBase = -BIGNUM;
 struct hash *evHash = hashNew(0);
 char nameBuf[256];
 
-/* Figure min/max. */
-for (ref = trackerRefList; ref != NULL; ref = ref->next)
-    {
-    struct edgeTracker *tracker = ref->val;
-    if (tracker->edge->type == ggExon)
-	{
-	minBase = min(minBase, tracker->start);
-	maxBase = max(maxBase, tracker->end);
-	}
-    }
-
-/* Write out bed stuff except for blocks. */
-fprintf(bedFile, "%s\t%d\t%d\t", txg->tName, minBase, maxBase);
-safef(nameBuf, sizeof(nameBuf), "%s.%d.%s", txg->name, txId, source->accession);
-fprintf(bedFile, "%s\t%d\t%s\t", nameBuf, 0, txg->strand);
-
 /* Pass blocks through a rangeTree to merge any ones that 
  * are overlapping.  This occassionally happens in the graph. */
-struct rbTree *rangeTree = rangeTreeNew();
+struct rbTree *rangeTree = rangeTreeNewDetailed(lm, stack);
 for (ref = trackerRefList; ref != NULL; ref = ref->next)
     {
     struct edgeTracker *tracker = ref->val;
@@ -230,9 +278,37 @@ for (ref = trackerRefList; ref != NULL; ref = ref->next)
 	}
     }
 
+/* Check that not a proper subset at the exon level from something
+ * that is already output.  The conditions that lead to this
+ * are rare, but they do happen.  By subset in this context we
+ * mean every exon identical except perhaps for the start of the
+ * first exon and the end of the last exon. */
+struct slRef *eRef, *eRefList = rbTreeItems(rangeTree);
+struct rbTree *existing;
+for (existing = existingList; existing != NULL; existing = existing->next)
+     {
+     if (subsetExceptForEnds(existing, rangeTree, eRefList))
+         return NULL;
+     }
+
+/* Figure min/max. */
+for (ref = trackerRefList; ref != NULL; ref = ref->next)
+    {
+    struct edgeTracker *tracker = ref->val;
+    if (tracker->edge->type == ggExon)
+	{
+	minBase = min(minBase, tracker->start);
+	maxBase = max(maxBase, tracker->end);
+	}
+    }
+
+/* Write out bed stuff except for blocks. */
+fprintf(bedFile, "%s\t%d\t%d\t", txg->tName, minBase, maxBase);
+safef(nameBuf, sizeof(nameBuf), "%s.%d.%s", txg->name, txId, source->accession);
+fprintf(bedFile, "%s\t%d\t%s\t", nameBuf, 0, txg->strand);
+
 /* Write out exon count and block sizes */
 fprintf(bedFile, "0\t0\t0\t%d\t", rangeTree->n);
-struct slRef *eRef, *eRefList = rbTreeItems(rangeTree);
 for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     {
     struct range *r = eRef->val;
@@ -259,9 +335,9 @@ if (evFile != NULL)
 	}
     fprintf(evFile, "\n");
     }
-
-rbTreeFree(&rangeTree);
 hashFree(&evHash);
+slFreeList(&eRefList);
+return rangeTree;
 }
 
 struct path
@@ -353,6 +429,8 @@ void walkOut(struct txGraph *txg, struct hash *weightHash, double threshold,
 {
 /* Local memory pool for fast, easy cleanup. */
 struct lm *lm = lmInit(0);	 
+struct rbTreeNode **stack;
+lmAllocArray(lm, stack, 128);
 
 /* Look up type weights for all sources. */
 double sourceTypeWeights[txg->sourceCount];
@@ -406,6 +484,7 @@ for (i=0; i<txg->sourceCount; ++i)
 struct weightedRna *rna, *rnaList = makeWeightedRna(txg, sourceTypeWeights, sourceTxWeights, lm);
 int txId=0;
 struct path *path, *pathList = NULL;
+struct rbTree *existingList = NULL, *exonTree;
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     struct slRef *trackerRefList = edgesUsedBySource[rna->id];
@@ -415,7 +494,10 @@ for (rna = rnaList; rna != NULL; rna = rna->next)
 	lmAllocVar(lm, path);
 	path->trackerRefList = supportedList;
 	slAddHead(&pathList, path);
-        rnaOut(txg, trackerRefList, &txg->sources[rna->id], ++txId, bedFile, evFile);
+        exonTree = rnaOut(txg, lm, stack, existingList, trackerRefList, 
+		&txg->sources[rna->id], ++txId, bedFile, evFile);
+	if (exonTree != NULL)
+	    slAddHead(&existingList, exonTree);
 	}
     }
 
