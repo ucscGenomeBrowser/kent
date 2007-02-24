@@ -1028,9 +1028,9 @@ for (edgeRef = edgeRefList; edgeRef != NULL; edgeRef = edgeRef->next)
 	}
     slReverse(&te->evList);
 
-    slAddHead(&txg->edges, te);
+    slAddHead(&txg->edgeList, te);
     }
-slReverse(&txg->edges);
+slReverse(&txg->edgeList);
 return txg;
 }
 

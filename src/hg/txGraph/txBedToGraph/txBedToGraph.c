@@ -68,7 +68,7 @@ return dif;
 struct linkedBeds *linkedBedsLoad(char *fileName, char *sourceType)
 /* Read a bed file and turn it into a list of linked beds. */
 {
-struct bed *bedList = bedLoadAll(fileName);
+struct bed *bedList = bedLoadNAll(fileName, 12);
 struct bed *startBed, *bed, *endBed;
 struct linkedBeds *lb, *lbList = NULL;
 boolean bigGapOk = (sameString(sourceType, "refSeq") && forceRefSeqJoin);
