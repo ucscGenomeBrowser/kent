@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslReps.c,v 1.18 2006/08/14 22:18:49 galt Exp $";
+static char const rcsid[] = "$Id: pslReps.c,v 1.19 2007/02/24 12:32:08 kent Exp $";
 
 /* command line */
 static struct optionSpec optionSpecs[] = {
@@ -158,7 +158,6 @@ int start, size, end;
 int topCount = 0;
 char strand = psl->strand[0];
 
-if (uglyTarget(psl)) uglyf("%s:%d milliScore %d, threshold %d\n", psl->tName, psl->tStart, milliScore, threshold);
 for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     {
     start = psl->qStarts[blockIx];
@@ -236,7 +235,6 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	{
 	++goodAliCount;
 	milliScore += sizeFactor(psl);
-if (uglyTarget(psl)) uglyf("@%s:%d milliScore %d\n", psl->tName, psl->tStart, milliScore);
 	for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 	    {
 	    int start = psl->qStarts[blockIx];
@@ -263,13 +261,11 @@ if (uglyTarget(psl)) uglyf("@%s:%d milliScore %d\n", psl->tName, psl->tStart, mi
 	    }
 	}
     }
-if (uglyTarget(pslList)) uglyf("---finding best---\n");
 /* Print out any alignments that are within 2% of top score. */
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     if(passFilters(psl, scoreTrack))
 	{
-	if (uglyTarget(psl)) uglyf("accepted\n");
 	pslTabOut(psl, bestFile);
 	++bestAliCount;
 	}
