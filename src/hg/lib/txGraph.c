@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txGraph.h"
 
-static char const rcsid[] = "$Id: txGraph.c,v 1.6 2007/02/24 07:09:54 kent Exp $";
+static char const rcsid[] = "$Id: txGraph.c,v 1.7 2007/02/24 07:23:04 kent Exp $";
 
 struct txGraph *txGraphLoad(char **row)
 /* Load a txGraph from row fetched with select * from txGraph
@@ -442,7 +442,6 @@ if (ret == NULL)
     AllocVar(ret);
 ret->type = sqlStringComma(&s);
 ret->accession = sqlStringComma(&s);
-ret->size = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -469,8 +468,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->accession);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%d", el->size);
 fputc(lastSep,f);
 }
 

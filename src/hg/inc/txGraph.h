@@ -150,14 +150,13 @@ void txEvidenceOutput(struct txEvidence *el, FILE *f, char sep, char lastSep);
 #define txEvidenceCommaOut(el,f) txEvidenceOutput(el,f,',',',');
 /* Print out txEvidence as a comma separated list including final comma. */
 
-#define TXSOURCE_NUM_COLS 3
+#define TXSOURCE_NUM_COLS 2
 
 struct txSource
 /* Source of evidence in graph. */
     {
     char *type;	/* Type: refSeq, mrna, est, etc. */
     char *accession;	/* GenBank accession. With type forms a key */
-    int size;	/* Size if it's an mRNA type. */
     };
 
 struct txSource *txSourceCommaIn(char **pS, struct txSource *ret);
