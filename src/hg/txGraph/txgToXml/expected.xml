@@ -66,8 +66,8 @@
       <ev acc="normal" x1="16589442" x2="16591987"/>
       <ev acc="NM_015367" x1="16589442" x2="16591987"/>
     </edge>
-    <source type="refSeq" acc="NM_015367"/>
-    <source type="mrna" acc="normal"/>
+    <source type="refSeq" acc="NM_015367" size="5000"/>
+    <source type="mrna" acc="normal" size="2000"/>
   </txGraph>
   <txGraph name="a2" tName="chr22" strand="+" tStart="20000000" tEnd="200001020" vertexCount="2" edgeCount="1" sourceCount="3">
     <vertex type="(" pos="20000000" i="0"/>
@@ -77,9 +77,9 @@
       <ev acc="single1" x1="20000000" x2="20001000"/>
       <ev acc="single3" x1="20000000" x2="20000990"/>
     </edge>
-    <source type="mrna" acc="single1"/>
-    <source type="mrna" acc="single3"/>
-    <source type="mrna" acc="single2"/>
+    <source type="mrna" acc="single1" size="2000"/>
+    <source type="mrna" acc="single3" size="2000"/>
+    <source type="mrna" acc="single2" size="2000"/>
   </txGraph>
   <txGraph name="a3" tName="chr22" strand="+" tStart="30000000" tEnd="300002000" vertexCount="4" edgeCount="3" sourceCount="4">
     <vertex type="(" pos="30000000" i="0"/>
@@ -98,9 +98,9 @@
     <edge type="exon  " t1="[" t2=")" size="500" x1="30001500" x2="30002000" i1="2" i2="3">
       <ev acc="mixDouble1" x1="30001500" x2="30002000"/>
     </edge>
-    <source type="mrna" acc="mixSingle1"/>
-    <source type="mrna" acc="mixSingle3"/>
-    <source type="mrna" acc="mixDouble1"/>
-    <source type="mrna" acc="mixSingle2"/>
+    <source type="mrna" acc="mixSingle1" size="2000"/>
+    <source type="mrna" acc="mixSingle3" size="2000"/>
+    <source type="mrna" acc="mixDouble1" size="2000"/>
+    <source type="mrna" acc="mixSingle2" size="2000"/>
   </txGraph>
 </txGraphList>
