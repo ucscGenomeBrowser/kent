@@ -1545,7 +1545,7 @@ chainOne $(path1)
     #	real    2m29.659s
 
 #########################################################################
-## BLASTZ SWAP Lizard/anoCar1 - (WORKING - 2007-02-22 - Hiram)
+## BLASTZ SWAP Lizard/anoCar1 - (DONE - 2007-02-22 - Hiram)
     #	measurement of anoCar1 coverage by Frog
     time nice -n +19 featureBits anoCar1 chainXenTro2Link \
 	> fb.anoCar1.chainXenTro2Link.txt 2>&1
@@ -1562,3 +1562,10 @@ chainOne $(path1)
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-swap > swap.log 2>&1 &
+    #	real    136m3.288s
+
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/blastz.anoCar1.swap
+    time nice -n +19 featureBits xenTro2 chainAnoCar1Link \
+	> fb.xenTro2.chainAnoCar1Link.txt 2>&1
+    #	84514985 bases of 1359412157 (6.217%) in intersection
