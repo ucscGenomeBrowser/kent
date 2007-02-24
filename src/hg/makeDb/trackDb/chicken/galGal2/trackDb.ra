@@ -203,6 +203,15 @@ color 0,0,0
 type bed 5 +
 useScore 1
 
+track bgiSnp
+shortLabel BGI SNPs
+longLabel SNPs from Beijing Genomics Institute
+group varRep
+priority 20
+visibility dense
+color 170,20,20
+type bed 4 +
+
 track chainSelf
 shortLabel Self Chain 
 longLabel $Organism Chained Self Alignments
