@@ -161,7 +161,7 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # 1291561904 bases of 2812203870 (45.927%) in intersection
 
 #########################################################################
-# SIMPLE REPEATS (TRF) (DONE October 6, 2006 heather)
+# SIMPLE REPEATS (TRF) (Oct 2006/Feb 2007 heather)
     # look for an idle small cluster machine
     ssh -x kki parasol list machines | grep idle
     ssh kkr1u00
@@ -185,18 +185,40 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # 878 warnings
     # Compare coverage to previous assembly:
     featureBits bosTau3 simpleRepeat
+    # 22475721 bases of 2731807384 (0.823%) in intersection
     featureBits bosTau2 simpleRepeat
+    # 43628019 bases of 2812203870 (1.551%) in intersection
 
     # try again, spliting the fa files first this time
+    # 13k files in one directory, seems okay...
     ssh kkstore05
-    cd /cluster/data/bosTau3/fixup
+    cd /cluster/data/bosTau3
     mkdir split
     cd split
-    # this took about 5 minutes
-    zcat ../UCSC.bosTau3.fa.gz | faSplit byname stdin . -outDirDepth=3
-    cd /cluster/data/bosTau3/bed/simpleRepeat3
-    /bin/csh makeJoblist-trf.csh
-    tcsh trf-run.csh >&! trf.log &
+    twoBitToFa bosTau3.unmasked.2bit bosTau3.unmasked.fa
+    faSplit byname bosTau3.unmasked.fa .
+    rm bosTau3.unmasked.fa
+    cd /cluster/data/bosTau3/bed/simpleRepeat4
+    ./makeJobList-trf.csh
+    # split into regular chroms and chrUn
+    # regular chroms took about 90 minutes
+    ./trf-run.csh > & ! trf.log &
+    # chrUn took about 2 hours
+    ./trf-run-chrUn.csh > & ! trfUn.log &
+    ./concat.csh
+    ./concatUn.csh
+    # non chrUn 235926
+    # chrUn 54713
+    cp trf.bed all.bed
+    cat trfUn.bed >> all.bed
+    hgLoadBed bosTau3 simpleRepeat all.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    featureBits bosTau3 simpleRepeat
+    # 22475721 bases of 2731807384 (0.823%) in intersection
+
+    # Same result as first run!   Must be right
+    # Not sure why it is less than bosTau2, maybe just the assembly is better
+
+
 
 #########################################################################
 # WINDOWMASKER (TESTING Nov 16, 2006 Andy)
