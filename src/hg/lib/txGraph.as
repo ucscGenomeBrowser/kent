@@ -44,4 +44,5 @@ simple txSource
     (
     string type;   "Type: refSeq, mrna, est, etc."
     string accession;  "GenBank accession. With type forms a key"
+    int size;	   "Size if it's an mRNA type."
     )
