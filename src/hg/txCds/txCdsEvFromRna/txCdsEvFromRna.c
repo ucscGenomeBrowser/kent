@@ -31,15 +31,23 @@ errAbort(
   "         Selectively overrides source field of output\n"
   "   -source=name - Name to put in tce source field. Default is \"%s\"\n"
   "   -unmapped=name - Put info about why stuff didn't map here\n"
+  "   -exceptions=xxx.exceptions - Include file with info on selenocysteine\n"
+  "            and other exceptions.  You get this file by running\n"
+  "            files txCdsRaExceptions on ra files parsed out of genbank flat\n"
+  "            files.\n"
   , defaultSource
   );
 }
+
+struct hash *selenocysteineHash = NULL;
+struct hash *altStartHash = NULL;
 
 static struct optionSpec options[] = {
    {"refStatus", OPTION_STRING},
    {"mgcStatus", OPTION_STRING},
    {"source", OPTION_STRING},
    {"unmapped", OPTION_STRING},
+   {"exceptions", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -113,20 +121,28 @@ verbose(2, "%d sources from %d elements\n", typeHash->elCount, sourceHash->elCou
 return sourceHash;
 }
 
-boolean hasStopCodons(char *dna, int codons)
+boolean hasStopCodons(char *dna, int codons, boolean selenocysteine)
 /* Return TRUE if there are stop codons in target coding region */
 {
 int i;
 for (i=0; i<codons; ++i)
     {
-    if (isStopCodon(dna))
-        return TRUE;
+    if (selenocysteine)
+        {
+	if (startsWith("taa", dna) || startsWith("tag", dna))
+	    return TRUE;
+	}
+    else
+	{
+	if (isStopCodon(dna))
+	    return TRUE;
+	}
     dna += 3;
     }
 return FALSE;
 }
 
-boolean checkCds(struct genbankCds *cds, struct dnaSeq *seq)
+boolean checkCds(struct genbankCds *cds, struct dnaSeq *seq, boolean selenocysteine)
 /* Make sure no stop codons, and if marked complete that it does
  * really start with ATG and end with TAA/TAG/TGA */
 {
@@ -142,12 +158,15 @@ if (cds->startComplete)
     {
     if (!startsWith("atg", dna))
 	{
-        unmappedPrint("%s input CDS \"start complete\" but begins with %c%c%c\n", 
-		seq->name, dna[0], dna[1], dna[2]);
-	return FALSE;
+	if (!hashLookup(altStartHash, seq->name))
+	    {
+	    unmappedPrint("%s input CDS \"start complete\" but begins with %c%c%c\n", 
+		    seq->name, dna[0], dna[1], dna[2]);
+	    return FALSE;
+	    }
 	}
     }
-if (hasStopCodons(dna, size-1))
+if (hasStopCodons(dna, size-1, selenocysteine))
     {
     unmappedPrint("%s input CDS has internal stop codon\n", seq->name);
     return FALSE;
@@ -201,9 +220,11 @@ void mapAndOutput(struct genbankCds *cds, char *source,
 	struct dnaSeq *rnaSeq, struct psl *psl, struct dnaSeq *txSeq, FILE *f)
 /* Map cds through psl from rnaSeq to txSeq.  If mapping is good write to file */
 {
+boolean selenocysteine = (hashLookup(selenocysteineHash, psl->qName) != NULL);
+
 /* First, because we're paranoid, check that input RNA CDS really is an
  * open reading frame. */
-if (!checkCds(cds, rnaSeq))
+if (!checkCds(cds, rnaSeq, selenocysteine))
     return;
 
 /* We don't map on reverse strand.  Supposively we are all on +
@@ -248,7 +269,7 @@ if (mappedStart >= 0 && mappedEnd >= 0)
         {
 	if (!hasFrameShiftInCds(psl, mappedStart, mappedEnd))
 	    {
-	    if (!hasStopCodons(txSeq->dna + mappedStart, cdsSize/3 - 1))
+	    if (!hasStopCodons(txSeq->dna + mappedStart, cdsSize/3 - 1, selenocysteine))
 	        {
 		char *s = txSeq->dna + mappedStart;
 		char *e = txSeq->dna + mappedEnd;
@@ -288,6 +309,50 @@ else
     {
     unmappedPrint("%s ends not mapped %d %d\n", 
     	psl->qName, mappedStart, mappedEnd);
+    }
+}
+
+void gbExceptionsHash(char *fileName, 
+	struct hash **retSelenocysteineHash, struct hash **retAltStartHash)
+/* Will read a genbank exceptions file, and return two hashes parsed out of
+ * it filled with the accessions having the two exceptions we can handle, 
+ * selenocysteines, and alternative start codons. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *scHash = *retSelenocysteineHash  = hashNew(0);
+struct hash *altStartHash = *retAltStartHash = hashNew(0);
+char *row[3];
+while (lineFileRowTab(lf, row))
+    {
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    char *row[3];
+    while (lineFileRow(lf, row))
+        {
+	if (sameString(row[1], "selenocysteine") && sameString(row[2], "yes"))
+	    hashAdd(scHash, row[0], NULL);
+	if (sameString(row[1], "exception") 
+		&& sameString(row[2], "alternative_start_codon"))
+	    hashAdd(altStartHash, row[0], NULL);
+	}
+    }
+verbose(2, "%d items in selenocysteineHash\n", scHash->elCount);
+verbose(2, "%d items in altStartCodonHash\n", altStartHash->elCount);
+lineFileClose(&lf);
+}
+
+void makeExceptionHashes()
+/* Create hash that has accessions using selanocysteine in it
+ * if using the exceptions option.  Otherwise the hash will be
+ * empty. */
+{
+char *fileName = optionVal("exceptions", NULL);
+if (fileName != NULL)
+    {
+    gbExceptionsHash(fileName, &selenocysteineHash, &altStartHash);
+    }
+else
+    {
+    selenocysteineHash = altStartHash = hashNew(4);
     }
 }
 
@@ -337,6 +402,7 @@ lineFileClose(&lf);
 carefulClose(&f);
 }
 
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -348,6 +414,7 @@ mgcStatusFile = optionVal("mgcStatus", mgcStatusFile);
 defaultSource = optionVal("source", defaultSource);
 if (optionExists("unmapped"))
     fUnmapped = mustOpen(optionVal("unmapped", NULL), "w");
+makeExceptionHashes();
 txCdsEvFromRna(argv[1], argv[2], argv[3], argv[4], argv[5]);
 carefulClose(&fUnmapped);
 return 0;
