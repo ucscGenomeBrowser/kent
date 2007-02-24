@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.46 2007/02/23 23:22:26 angie Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.47 2007/02/24 17:31:13 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -222,6 +222,23 @@ boolean isStopCodon(DNA *dna)
 {
 return lookupCodon(dna) == 0;
 }
+
+boolean isReallyStopCodon(char *dna, boolean selenocysteine)
+/* Return TRUE if it's really a stop codon, even considering
+ * possibilility of selenocysteine. */
+{
+if (selenocysteine)
+    {
+    /* Luckily the mitochondria *also* replaces TGA with 
+     * something else, even though it isn't selenocysteine */
+    return lookupMitoCodon(dna) == 0;
+    }
+else
+    {
+    return lookupCodon(dna) == 0;
+    }
+}
+
 
 /* Returns one letter code for protein, 
  * 0 for stop codon or X for bad input,
