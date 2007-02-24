@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.9 2005/01/10 00:24:44 kent Exp $";
+static char const rcsid[] = "$Id: rbTree.c,v 1.10 2007/02/24 15:59:29 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 
@@ -663,7 +663,7 @@ refAdd(&itList, item);
 
 struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxItem)
 /* Return a sorted list of references to items in tree between range.
- * slFree this list when done. */
+ * slFreeList this list when done. */
 {
 itList = NULL;
 rbTreeTraverseRange(tree, minItem, maxItem, addRef);
@@ -672,7 +672,7 @@ return itList;
 }
 
 struct slRef *rbTreeItems(struct rbTree *tree)
-/* Return sorted list of items. */
+/* Return sorted list of items.  slFreeList this when done.*/
 {
 itList = NULL;
 rbTreeTraverse(tree, addRef);

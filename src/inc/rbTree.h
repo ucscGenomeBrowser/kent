@@ -72,13 +72,13 @@ void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
 
 struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxItem);
 /* Return a sorted list of references to items in tree between range.
- * slFree this list when done. */
+ * slFreeList this list when done. */
 
 void rbTreeTraverse(struct rbTree *tree, void (*doItem)(void *item));
 /* Apply doItem function to all items in tree */
 
 struct slRef *rbTreeItems(struct rbTree *tree);
-/* Return sorted list of items. */
+/* Return sorted list of items.  slFreeList this when done.*/
 
 void rbTreeDump(struct rbTree *tree, FILE *f, 
 	void (*dumpItem)(void *item, FILE *f));
