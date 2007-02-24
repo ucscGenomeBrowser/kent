@@ -5,6 +5,8 @@
 #include "options.h"
 #include "psl.h"
 
+double nearBest = 0.001;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -13,11 +15,13 @@ errAbort(
   "usage:\n"
   "   txPslFilter in.psl out.psl\n"
   "options:\n"
-  "   -xxx=XXX\n"
-  );
+  "   -nearBest=0.N - Set how close must be to best alignment pass.\n"
+  "                   default %g. Set to 0 to only past best scoring.\n"
+  , nearBest);
 }
 
 static struct optionSpec options[] = {
+   {"nearBest", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -26,7 +30,7 @@ int txScorePsl(struct psl *psl)
 {
 return psl->match + psl->repMatch - psl->misMatch 
 	- 2*(psl->qNumInsert + psl->tNumInsert)
-	- (psl->qBaseInsert + psl->tBaseInsert);
+	- (psl->qBaseInsert + psl->tBaseInsert)/2;
 }
 
 void outputBestOnly(struct psl *startPsl, struct psl *endPsl, FILE *f)
@@ -39,8 +43,9 @@ for (psl = startPsl; psl != endPsl; psl = psl->next)
     int score = txScorePsl(psl);
     if (score > bestScore) bestScore = score;
     }
+double threshold = bestScore * (1.0 - nearBest);
 for (psl = startPsl; psl != endPsl; psl = psl->next)
-    if (txScorePsl(psl) == bestScore)
+    if (txScorePsl(psl) >= threshold)
 	pslTabOut(psl, f);
 }
 
@@ -69,6 +74,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+nearBest = optionDouble("nearBest", nearBest);
 txPslFilter(argv[1], argv[2]);
 return 0;
 }
