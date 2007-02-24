@@ -11,7 +11,7 @@ txCdsEvFromProtein: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsEvFromProtein${EXE}
 
 test:
-	txCdsEvFromProtein inProtein.fa in.psl inTx.fa output.tce -unmapped=output.unmapped
+	txCdsEvFromProtein inProtein.fa in.psl inTx.fa output.tce -unmapped=output.unmapped -dodgeStop=3
 	diff expected.tce output.tce
 	diff expected.unmapped output.unmapped
 

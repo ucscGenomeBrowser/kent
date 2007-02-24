@@ -7,6 +7,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "psl.h"
+#include "rangeTree.h"
 
 /* Variables set from command line. */
 char *refStatusFile = NULL;
@@ -14,6 +15,8 @@ char *uniStatusFile = NULL;
 FILE *fUnmapped = NULL;
 char *defaultSource = "blatUniprot";
 struct hash *refToPepHash = NULL;
+int dodgeStop = 0;
+double minCoverage = 0.75;
 
 
 void usage()
@@ -37,7 +40,10 @@ errAbort(
   "            files.\n"
   "   -refToPep=refToPep.tab - Put refSeq mrna to protein mapping file here\n"
   "            Usually used with exceptions flag when processing refSeq\n"
-  , defaultSource
+  "   -dodgeStop=N - Dodge (put gaps in place of) up to this many stop codons\n"
+  "            Remark about it in unmapped file though\n"
+  "   -minCoverage=0.N - minimum coverage of protein to accept, default %g\n"
+  , defaultSource, minCoverage
   );
 }
 
@@ -49,8 +55,10 @@ static struct optionSpec options[] = {
    {"uniStatus", OPTION_STRING},
    {"source", OPTION_STRING},
    {"unmapped", OPTION_STRING},
-   {"refToPep", OPTION_STRING},
    {"exceptions", OPTION_STRING},
+   {"refToPep", OPTION_STRING},
+   {"dodgeStop", OPTION_INT},
+   {"minCoverage", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -146,11 +154,12 @@ for (i=0; i<lastBlock; ++i)
     }
 }
 
-boolean aliGotStopCodons(struct psl *psl, struct dnaSeq *seq,
+int aliCountStopCodons(struct psl *psl, struct dnaSeq *seq,
 	boolean selenocysteine)
-/* Return TRUE if alignment includes stop codons. */
+/* Return count of stop codons in alignment. */
 {
 int blockIx;
+int stopCount = 0;
 for (blockIx=0; blockIx<psl->blockCount; ++blockIx)
     {
     int qBlockSize = psl->blockSizes[blockIx];
@@ -159,22 +168,14 @@ for (blockIx=0; blockIx<psl->blockCount; ++blockIx)
     int i;
     for (i=0; i<qBlockSize; ++i)
         {
-	if (selenocysteine)
+	if (isReallyStopCodon(dna, selenocysteine))
 	    {
-	    if (startsWith("taa", dna) || startsWith("tag", dna))
-		return TRUE;
-	    }
-	else
-	    {
-	    if (isStopCodon(dna))
-		{
-		return TRUE;
-		}
+	    ++stopCount;
 	    }
 	dna += 3;
 	}
     }
-return FALSE;
+return stopCount;
 }
 
 
@@ -188,7 +189,63 @@ for (i=0; i<blockCount; ++i)
 return total;
 }
 
+int countUntilNextStop(char *dna, int maxCount, boolean selenocysteine)
+/* Count up number of codons until next stop */
+{
+int count;
+for (count=0; count<maxCount; ++count)
+    {
+    if (isReallyStopCodon(dna, selenocysteine))
+        break;
+    dna += 3;
+    }
+return count;
+}
 
+
+void outputDodgedBlocks(struct psl *psl, aaSeq *protSeq, struct dnaSeq *txSeq, 
+	boolean selenocysteine, FILE *f)
+/* Write out block count and the actual blocks to file.  What makes this
+ * fun is that we are inserting gaps to avoid stop codone. */
+{
+/* Build up list of ranges corresponding to parts of blocks 
+ * broken up by stops. */
+struct range *rangeList = NULL, *range;
+int blockIx;
+for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
+    {
+    int tStart = psl->tStarts[blockIx];
+    int size = psl->blockSizes[blockIx]*3;
+    char *dna = txSeq->dna + tStart;
+    int pos, brokenSize;
+    for (pos = 0; pos<size; pos += brokenSize+3)
+        {
+	brokenSize = 3*countUntilNextStop(dna+pos, (size-pos)/3, selenocysteine);
+	verbose(3, "blockIx %d, size %d, pos %d, size-pos %d, brokenSize %d\n", 
+		blockIx, pos, size, size-pos, brokenSize);
+	if (brokenSize > 0)
+	    {
+	    AllocVar(range);
+	    range->start = tStart+pos;
+	    range->end = range->start + brokenSize;
+	    slAddHead(&rangeList, range);
+	    }
+	}
+    }
+slReverse(&rangeList);
+
+/* Output to file */
+fprintf(f, "%d\t", slCount(rangeList));	
+for (range = rangeList; range != NULL; range = range->next)
+    fprintf(f, "%d,", range->start);
+fprintf(f, "\t");
+for (range = rangeList; range != NULL; range = range->next)
+    fprintf(f, "%d,", range->end - range->start);
+fprintf(f, "\n");
+
+/* Clean up and go home. */
+slFreeList(&rangeList);
+}
 
 void mapAndOutput(char *source, aaSeq *protSeq, struct psl *psl, 
 	struct dnaSeq *txSeq, FILE *f)
@@ -196,6 +253,7 @@ void mapAndOutput(char *source, aaSeq *protSeq, struct psl *psl,
  * it and a protein. */
 {
 boolean selenocysteine = FALSE;
+boolean doDodge = FALSE;
 if (hashLookup(selenocysteineHash, psl->qName))
     selenocysteine = TRUE;
 if (refToPepHash != NULL)
@@ -213,10 +271,29 @@ if (!sameString(psl->strand, "++"))
     return;
     }
 removeNegativeGaps(psl);
-if (aliGotStopCodons(psl, txSeq, selenocysteine))
+int stopCount = aliCountStopCodons(psl, txSeq, selenocysteine);
+if (stopCount > 0)
     {
-    unmappedPrint("%s alignment with %s has stop codons\n", psl->qName, psl->tName);
-    return;
+    if (dodgeStop)
+	{
+	if (stopCount > dodgeStop)
+	    {
+	    unmappedPrint("%s alignment with %s has too many (%d) stop codons\n", 
+	    	psl->qName, psl->tName, stopCount);
+	    return;
+	    }
+	else
+	    {
+	    unmappedPrint("%s alignment with %s dodging %d stop codons\n", 
+	    	psl->qName, psl->tName, stopCount);
+	    doDodge = TRUE;
+	    }
+	}
+    else
+	{
+	unmappedPrint("%s alignment with %s has stop codons\n", psl->qName, psl->tName);
+	return;
+	}
     }
 int mappedStart = psl->tStart;
 int mappedEnd = psl->tEnd+3;
@@ -233,7 +310,7 @@ if (score <= 0)
     }
 int totalCovAa = totalAminoAcids(psl);
 double coverage = (double)totalCovAa/psl->qSize;
-if (coverage < 0.75)
+if (coverage < minCoverage)
     {
     unmappedPrint("%s covers too little of %s (%d of %d amino acids)\n",
     	psl->qName, psl->tName, totalCovAa, psl->qSize);
@@ -248,14 +325,21 @@ fprintf(f, "%s\t", psl->qName);
 fprintf(f, "%d\t", score);
 fprintf(f, "%d\t", startsWith("atg", s));
 fprintf(f, "%d\t", isStopCodon(e));
-fprintf(f, "%d\t", psl->blockCount);	
-int i;
-for (i=0; i < psl->blockCount; ++i)
-    fprintf(f, "%d,", psl->tStarts[i]);
-fprintf(f, "\t");
-for (i=0; i < psl->blockCount; ++i)
-    fprintf(f, "%d,", psl->blockSizes[i]*3);
-fprintf(f, "\n");
+if (doDodge)
+    {
+    outputDodgedBlocks(psl, protSeq, txSeq, selenocysteine, f);
+    }
+else
+    {
+    fprintf(f, "%d\t", psl->blockCount);	
+    int i;
+    for (i=0; i < psl->blockCount; ++i)
+	fprintf(f, "%d,", psl->tStarts[i]);
+    fprintf(f, "\t");
+    for (i=0; i < psl->blockCount; ++i)
+	fprintf(f, "%d,", psl->blockSizes[i]*3);
+    fprintf(f, "\n");
+    }
 }
 
 void gbExceptionsHash(char *fileName, 
@@ -345,6 +429,8 @@ if (optionExists("unmapped"))
     fUnmapped = mustOpen(optionVal("unmapped", NULL), "w");
 if (optionExists("refToPep"))
     refToPepHash = hashTwoColumnFileReverse(optionVal("refToPep", NULL));
+dodgeStop = optionInt("dodgeStop", dodgeStop);
+minCoverage = optionDouble("minCoverage", minCoverage);
 makeExceptionHashes();
 txCdsEvFromProtein(argv[1], argv[2], argv[3], argv[4]);
 carefulClose(&fUnmapped);
