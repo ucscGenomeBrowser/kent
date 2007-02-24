@@ -44,6 +44,8 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
           echo -n "" >mrna/$c.psl
     endif
 end
+txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/refseq.ra refSeq.exceptions
+txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/mrna.ra mrna.exceptions
 
 # Get list of accessions that are associated with antibodies from database.
 # This will be a good list but not 100% complete.  Cluster these to get
@@ -180,11 +182,12 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
        | txgAddEvidence stdin est/$c.edges est graphWithEvidence/$c.txg
 end
 
-# Do  txWalk  - takes 8 seconds
+# Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
+# again...)
 mkdir txWalk
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo txWalk $c
-    txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev
+    txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25
 end
 
 # Make a file that lists the various categories of alt-splicing we see.
@@ -297,28 +300,65 @@ para make -maxNode=50
 #Submission to last job:           898s      14.97m     0.25h    0.01d
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
-# seconds.
+# seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
+# and also working on protein as well as rna alignments. The thresholds
+# for the proteins in particular are quite loose, which is ok because
+# they will be weighted against each other.  We lose some of the refSeq
+# mappings at tighter thresholds.
 cd /cluster/data/hg18/bed/jkg/blat
-pslCat -nohead rna/raw/ref*.psl | sort -k 10 | txPslFilter stdin rna/refSeq.psl
-pslCat -nohead rna/raw/mrna*.psl | sort -k 10 | txPslFilter stdin rna/mrna.psl
-pslCat -nohead protein/raw/ref*.psl | sort -k 10 | txPslFilter stdin protein/refSeq.psl
-pslCat -nohead protein/raw/uni*.psl | sort -k 10 | txPslFilter stdin protein/uniProt.psl
-rm -r rna/raw protein/raw
+pslCat -nohead rna/raw/ref*.psl | sort -k 10 | \
+	pslReps -noIntrons -nohead -minAli=0.90 -nearTop=0.005 stdin rna/refSeq.psl /dev/null
+pslCat -nohead rna/raw/mrna*.psl | sort -k 10 | \
+	pslReps -noIntrons -nohead -minAli=0.90 -nearTop=0.005  stdin rna/mrna.psl /dev/null
+pslCat -nohead protein/raw/ref*.psl | sort -k 10 | \
+	pslReps -noIntrons -nohead -nearTop=0.02  -ignoreSize -minAli=0.85 stdin protein/refSeq.psl /dev/null
+pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
+	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
+# rm -r rna/raw protein/raw
 cd ..
+
+txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/refseq.ra refSeq.exceptions
 
 # Create evidence derived from mRNA CDS and mRNA/transcript alignments
 # Takes 28 seconds.
 mkdir cdsEvidence
-txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab -unmapped=cdsEvidence/refSeqTx.unmapped
-txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab -unmapped=cdsEvidence/mrna.unmapped
-txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab -unmapped=cdsEvidence/refSeqProt.unmapped
-txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab -unmapped=cdsEvidence/uniProt.unmapped
+txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa \
+	cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab \
+	-unmapped=cdsEvidence/refSeqTx.unmapped \
+	-exceptions=refSeq.exceptions
+txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa \
+	cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab \
+	-unmapped=cdsEvidence/mrna.unmapped
+txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa \
+	cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab \
+	-unmapped=cdsEvidence/refSeqProt.unmapped \
+	-exceptions=refSeq.exceptions -refToPep=refToPep.tab \
+	-dodgeStop=3 -minCoverage=0.3
+txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
+	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
+	-unmapped=cdsEvidence/uniProt.unmapped -refToPep=refToPep.tab
 cat bestorf/tab/*.borf | txCdsEvFromBorf stdin txWalk.fa cdsEvidence/bestorf.tce
 
 # Consolidate and pick best CDS.  Takes 4 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
-cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks -weightedTce=weighted.tce
+cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks -weightedTce=weighted.tce -refToPep=refToPep.tab
+
+# History below of avoiding bestorf calls with RefSeq CDS's.
+# There's still a couple that map to swissProt or trembl, but
+# only 11, and mostly in the polymorphic regions.  Too tired
+# to look into them now.  Some of the polymorphs actually improve...
+#grep bestorf best.tce | grep NM_ | wc
+#182
+#136
+#60
+#105
+#99
+#37
+#20
+#14
+#4
+#0
 
 # Create gene prediction (GTF) and peptide fasta file.
 # Takes 7 seconds.
@@ -810,7 +850,6 @@ txAddEvidence - Don't add evidence for double-hard-end that is only supported
 txAddEvidence - Suppress adding hard-end evidence to double-soft that
          overlaps.  Test case chr22:22,298,169-22,319,055.
      Fixed take 6.
-txWalk  - flag retained introns. Test case chr22:17,280,005-17,306,568.
 txWalk - make it output all transcripts that hit an edge with sufficient
          evidence, and which are not subsets of previous transcripts.
 	 Test case chr1:67,646,622-67,669,121, currently only outputs
@@ -820,21 +859,29 @@ txWalk - for single-exon transcripts that overlap weakly, don't count
          overlap as 2 pieces of evidence, just 1.1 or something.
 	 Test case chr22:20,109,925-20,125,924.
      Fixed take 6.
-txFilter - Remove transcripts completely enclosed on tx level that differ
-         only at 3' or 5' end.  Test case NM_176877 and AF377170. Also
+txWalk - Remove transcripts completely enclosed on tx level that differ
+         only at 3' or 5' end.  Test case NM_176877 and AF397170. Also
 	 NM_005446 and AF065385.
+     Fixed take 5.
+txgAnalyze  - flag retained introns. Test case chr22:17,280,005-17,306,568.
+     Done take 6.
 txFilter - Remove transcript that are result of fragmented RNA
          where larger part of RNA is in another transcript.
 	 Test case chr22:19,863,475-19,871,029.
+     This case fell out of the wash with the single exon handling.
 	 Test case chr22:18,080,172-18,095,585
 txFilter - Merge transcripts that are the result of fragmented RNA
          where good evidence and multiple introns on both sidex.
 	 Test case chr22:19,881,325-19,920,204.
+     This case fell out of the wash with the more stringent best in 
+     genome mRNA filter.  This is good, because it would be a real
+     pain to fix, and hopefully it is rare enough it can be ignored.
 txFilter - Remove single exon genes that are more than 55% enclosed within
 	   exon of multiple exon gene.  Test case chr22:18,608,081-18,611,968.
 	   Also chr22:19,970,725-19,975,524
 	 First test case handled by other single exon filters.
-	 Second test case still valid.
+	 Second test case fell out of the wash with the more stringent
+	 mRNA placements.
 txCdsAddEv - Process selano-cysteines and anternative starts.
 txCdsPick - Pick RefSeq CDS for RefSeq genes.
 txClusterAnalyser - Identify CDS that is not shared with dominant CDS
