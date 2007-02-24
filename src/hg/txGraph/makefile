@@ -10,16 +10,17 @@ all:
 	done
 
 DIRS = \
-	agxToTxg	\
-	bedToTxEdges	\
-	txBedToGraph	\
-	txBedToTxg	\
-	txOrtho	\
-	txPslToBed	\
-	txPslFilter	\
-	txWalk	\
-	txgAddEvidence	\
-	txgGoodEdges	\
-	txgToAgx	\
-	txgToXml	\
-	txgTrim	
+    agxToTxg \
+    bedToTxEdges \
+    txAbFragFind \
+    txBedToGraph \
+    txOrtho \
+    txPslFilter \
+    txPslToBed \
+    txWalk \
+    txgAddEvidence \
+    txgAnalyze \
+    txgGoodEdges \
+    txgToAgx \
+    txgToXml \
+    txgTrim 

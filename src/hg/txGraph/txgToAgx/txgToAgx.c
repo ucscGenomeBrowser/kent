@@ -53,7 +53,7 @@ AllocArray(ag->edgeStarts, edgeCount);
 AllocArray(ag->edgeEnds, edgeCount);
 AllocArray(ag->edgeTypes, edgeCount);
 struct txEdge *edge;
-for (edge = tx->edges, i=0; edge != NULL; edge = edge->next, ++i)
+for (edge = tx->edgeList, i=0; edge != NULL; edge = edge->next, ++i)
     {
     assert(i < edgeCount);
     ag->edgeStarts[i] = edge->startIx;
@@ -62,7 +62,7 @@ for (edge = tx->edges, i=0; edge != NULL; edge = edge->next, ++i)
     }
 
 /* Deal with evidence inside of edges. */
-for (edge = tx->edges; edge != NULL; edge = edge->next)
+for (edge = tx->edgeList; edge != NULL; edge = edge->next)
     {
     struct evidence *ev;
     AllocVar(ev);

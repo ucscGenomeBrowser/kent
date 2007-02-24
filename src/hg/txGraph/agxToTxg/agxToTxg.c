@@ -54,7 +54,7 @@ for (i=0; i<edgeCount; ++i, agEv=agEv->next)
     e->startIx = ag->edgeStarts[i];
     e->endIx = ag->edgeEnds[i];
     e->type = ag->edgeTypes[i];
-    slAddHead(&txg->edges, e);
+    slAddHead(&txg->edgeList, e);
 
     /* Deal with evidence. */
     int j;
@@ -70,7 +70,7 @@ for (i=0; i<edgeCount; ++i, agEv=agEv->next)
 	}
     slReverse(&e->evList);
     }
-slReverse(&txg->edges);
+slReverse(&txg->edgeList);
 
 /* Deal with sources. */
 int sourceCount = txg->sourceCount = ag->mrnaRefCount;

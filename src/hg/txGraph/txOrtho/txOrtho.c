@@ -386,7 +386,7 @@ AllocArray(starts, inGraph->edgeCount);
 AllocArray(sizes, inGraph->edgeCount);
 struct txEdge *edge;
 int lastStart = 0;
-for (edge = inGraph->edges; edge != NULL; edge = edge->next)
+for (edge = inGraph->edgeList; edge != NULL; edge = edge->next)
     {
     if (edge->type == ggExon)
         {
@@ -479,7 +479,7 @@ if (startType == ggSoftStart || startType == ggSoftEnd || startMappedExact)
     if (endType == ggSoftStart || endType == ggSoftEnd || endMappedExact)
 	{
 	struct txEdge *edge;
-	for (edge = orthoGraph->edges; edge != NULL; edge = edge->next)
+	for (edge = orthoGraph->edgeList; edge != NULL; edge = edge->next)
 	    {
 	    if (edge->type == edgeType)
 		{
@@ -542,7 +542,7 @@ void writeCommonEdges(struct txGraph *inGraph,
 /* Write out common edges between inGraph and orthoGraph. */
 {
 struct txEdge *edge;
-for (edge = inGraph->edges; edge != NULL; edge = edge->next)
+for (edge = inGraph->edgeList; edge != NULL; edge = edge->next)
     {
     enum ggEdgeType edgeType = edge->type;
     /* Load up end info on exon in other organism. */

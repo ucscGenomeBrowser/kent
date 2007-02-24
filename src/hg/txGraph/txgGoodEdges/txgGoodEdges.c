@@ -77,7 +77,7 @@ struct txEdge *edge;
 struct txEdgeBed e;
 ZeroVar(&e);
 e.chrom = txg->tName;
-for (edge = txg->edges; edge != NULL; edge = edge->next)
+for (edge = txg->edgeList; edge != NULL; edge = edge->next)
     {
     double weight = weightOfEvidence(txg, edge->evList, weightHash);
     if (weight >= threshold)

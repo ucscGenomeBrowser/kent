@@ -39,7 +39,7 @@ for (i=0; i<graph->vertexCount; ++i)
     	ggVertexTypeAsString(v->type), v->position, i);
     }
 struct txEdge *edge;
-for (edge = graph->edges; edge != NULL; edge = edge->next)
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
     {
     int i1 = edge->startIx;
     int i2 = edge->endIx;

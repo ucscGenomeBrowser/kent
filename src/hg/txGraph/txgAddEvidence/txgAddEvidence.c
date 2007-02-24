@@ -227,7 +227,7 @@ void addEvidenceToGraph(struct txGraph *txg, struct txEdgeBed *ev,
 {
 struct txEdge *edge, *bestEdge = NULL;
 int score, bestScore = 0;
-for (edge = txg->edges; edge != NULL; edge = edge->next)
+for (edge = txg->edgeList; edge != NULL; edge = edge->next)
     {
     score = evEdgeScore(txg, edge, ev);
     if (score > bestScore)

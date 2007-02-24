@@ -68,7 +68,7 @@ void txGraphTrimOne(struct txGraph *txg, struct hash *weightHash, double thresho
 /* Trim down one graph. */
 {
 struct txEdge *edge, *next, *newList = NULL;
-for (edge = txg->edges; edge != NULL; edge = next)
+for (edge = txg->edgeList; edge != NULL; edge = next)
     {
     next = edge->next;
     double weight = weightOfEvidence(txg, edge->evList, weightHash);
@@ -85,7 +85,7 @@ for (edge = txg->edges; edge != NULL; edge = next)
 	}
     }
 slReverse(&newList);
-txg->edges = newList;
+txg->edgeList = newList;
 }
 
 void txgTrim(char *inTxg, char *inWeights, char *asciiThreshold, char *outTxg)
