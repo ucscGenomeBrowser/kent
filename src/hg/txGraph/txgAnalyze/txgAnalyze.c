@@ -9,6 +9,7 @@
 #include "txGraph.h"
 #include "rangeTree.h"
 
+char *refType = "refSeq";
 void usage()
 /* Explain usage and exit. */
 {
@@ -17,10 +18,16 @@ errAbort(
   "retained introns, alternative promoters, etc.\n"
   "usage:\n"
   "   txgAnalyze in.txg out.ana\n"
+  "options:\n"
+  "   refType=xxx - The type for the reference type of evidence, used for\n"
+  "                 the refJoined records indicating transcription across\n"
+  "                 what's usually considered 2 genes.  Default is %s.\n"
+  , refType
   );
 }
 
 static struct optionSpec options[] = {
+   {"refType", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -51,7 +58,7 @@ for (intron = graph->edgeList; intron != NULL; intron = intron->next)
 		     affectedExon->end = eEnd;
 		     slAddHead(&exonsWithIntrons, affectedExon);
 		     fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
-			    iStart, iEnd, graph->strand, "retainedIntron");
+			    iStart, iEnd, "retainedIntron", graph->strand);
 		     }
 		}
 	    }
@@ -83,7 +90,7 @@ for (exon = graph->edgeList; exon != NULL; exon = exon->next)
 		    int iEnd = v[intron->endIx].position;
 		    if (iStart < eStart && eEnd < iEnd)
 			 fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
-				eStart, eEnd, graph->strand, "cassetteExon");
+				eStart, eEnd, "cassetteExon", graph->strand);
 		    }
 		}
 	    }
@@ -139,8 +146,9 @@ for (e1 = graph->edgeList; e1 != NULL; e1 = e1->next)
 			     range->end = aEnd;
 			     slAddHead(&rangeList, range);
 			     fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
-				    aStart, aEnd, graph->strand, 
-				    (graph->strand[0] == '+' ? "altFivePrime" : "altThreePrime"));
+				    aStart, aEnd, 
+				    (graph->strand[0] == '+' ? "altFivePrime" : "altThreePrime"),
+				    graph->strand);
 			     }
 			 }
 		    }
@@ -190,8 +198,9 @@ for (e1 = graph->edgeList; e1 != NULL; e1 = e1->next)
 			     range->end = aEnd;
 			     slAddHead(&rangeList, range);
 			     fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
-				    aStart, aEnd, graph->strand, 
-				    (graph->strand[0] == '-' ? "altFivePrime" : "altThreePrime"));
+				    aStart, aEnd, 
+				    (graph->strand[0] == '-' ? "altFivePrime" : "altThreePrime"),
+				    graph->strand);
 			     }
 			 }
 		    }
@@ -262,8 +271,82 @@ if (slCount(promoterList) > 1)
     for (range = promoterList; range != NULL; range = range->next)
 	{
 	fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
-	    range->start, range->end, graph->strand, "altPromoter");
+	    range->start, range->end, "altPromoter", graph->strand);
 	}
+    }
+lmCleanup(&lm);
+}
+
+boolean evOfSourceOnList(struct txEvidence *evList, int sourceId)
+/* Return TRUE if sourceId is found on evList. */
+{
+struct txEvidence *ev;
+for (ev = evList; ev != NULL; ev = ev->next)
+    if (ev->sourceId == sourceId)
+        return TRUE;
+return FALSE;
+}
+
+void refSeparateButJoined(struct txGraph *graph, FILE *f)
+/* Flag graphs that have two non-overlapping refSeqs. */
+{
+int sourceIx;
+boolean foundIt = FALSE;
+struct lm *lm = lmInit(0);
+struct rbTreeNode **stack;
+lmAllocArray(lm, stack, 128);
+
+/* Loop through sources looking for reference type. */
+for (sourceIx=0; sourceIx<graph->sourceCount; ++sourceIx)
+    {
+    struct txSource *source = &graph->sources[sourceIx];
+    if (sameString(source->type, refType))
+        {
+	/* Create a rangeTree including all exons of source. */
+	struct rbTree *tree = rangeTreeNewDetailed(lm, stack);
+	struct txEdge *edge;
+	for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+	    {
+	    if (edge->type == ggExon && evOfSourceOnList(edge->evList, sourceIx))
+	        rangeTreeAdd(tree, graph->vertices[edge->startIx].position,
+				   graph->vertices[edge->endIx].position);
+	    }
+
+	/* Go through remaining reference sources looking for no overlap. */
+	int i;
+	for (i=sourceIx+1; i<graph->sourceCount; ++i)
+	    {
+	    struct txSource *s = &graph->sources[sourceIx];
+	    if (sameString(s->type, refType))
+	        {
+		boolean gotOverlap = FALSE;
+		for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+		    {
+		    if (edge->type == ggExon && evOfSourceOnList(edge->evList, i))
+		        {
+			gotOverlap = rangeTreeOverlaps(tree,
+					graph->vertices[edge->startIx].position,
+				        graph->vertices[edge->endIx].position);
+			if (gotOverlap)
+			    break;
+			}
+		    }
+		if (!gotOverlap)
+		     {
+		     foundIt = TRUE;
+		     break;
+		     }
+		}
+	    }
+	freez(&tree);
+	}
+    if (foundIt)
+        break;
+    }
+if (foundIt)
+    {
+    fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
+	graph->tStart, graph->tEnd, "refJoined", graph->strand);
     }
 lmCleanup(&lm);
 }
@@ -284,6 +367,7 @@ while (lineFileRow(lf, row))
     altThreePrime(txg, exonsWithIntrons, f);
     altFivePrime(txg, exonsWithIntrons, f);
     altPromoter(txg, f);
+    refSeparateButJoined(txg, f);
     slFreeList(&exonsWithIntrons);
     txGraphFree(&txg);
     }
@@ -296,6 +380,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+refType = optionVal("refType", refType);
 txgAnalyze(argv[1], argv[2]);
 return 0;
 }
