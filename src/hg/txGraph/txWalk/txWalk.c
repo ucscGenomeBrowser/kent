@@ -12,6 +12,9 @@
 /* Globals set from command line. */
 FILE *evFile = NULL;
 double singleExonFactor = 0.75;
+struct hash *sizeHash = NULL;
+boolean doDefrag = FALSE;
+double defragSize = 0.25;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +27,10 @@ errAbort(
   "   -evidence=out.ev - place mrna associated with each transcript here.\n"
   "   -singleExonFactor=0.N - factor used to lighten up weight of single exon\n"
   "                           transcripts. Default %g.\n"
+  "   -sizes=sizes.tab - tell program about size of RNA.  Format of file is\n"
+  "                      Two column - accession, size.  Enables -defrag\n"
+  "   -defrag=0.N - minimum size fragment of a gene to output relative to input\n"
+  "                 RNA size.  Requires sizes option. Suggested value 0.25\n"
   , singleExonFactor
   );
 }
@@ -31,6 +38,8 @@ errAbort(
 static struct optionSpec options[] = {
    {"evidence", OPTION_STRING},
    {"singleExonFactor", OPTION_DOUBLE},
+   {"sizes", OPTION_STRING},
+   {"defrag", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -91,6 +100,22 @@ for (ev = edge->evList; ev != NULL; ev = ev->next)
 	}
     }
 return total;
+}
+
+struct hash *hashKeyIntFile(char *fileName)
+/* Read in a two column file with first column a key, second a number,
+ * and return an integer valued hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(20);
+char *row[2];
+while (lineFileRow(lf, row))
+    {
+    int val = lineFileNeedNum(lf, row, 1);
+    hashAddInt(hash, row[0], val);
+    }
+lineFileClose(&lf);
+return hash;
 }
 
 struct edgeTracker
@@ -254,8 +279,7 @@ struct rbTree *rnaOut(struct txGraph *txg, struct lm *lm, struct rbTreeNode *sta
 /* Write out one RNA transcript. */
 {
 struct slRef *ref;
-int minBase = BIGNUM, maxBase = -BIGNUM;
-struct hash *evHash = hashNew(0);
+struct hash *evHash = hashNew(8);
 char nameBuf[256];
 
 /* Pass blocks through a rangeTree to merge any ones that 
@@ -278,6 +302,11 @@ for (ref = trackerRefList; ref != NULL; ref = ref->next)
 	}
     }
 
+/* Get list of evidence.  We built this up in a hash
+ * along with the range tree above. */
+struct hashEl *hel, *evList = hashElListHash(evHash);
+slSort(&evList, hashElCmp);
+
 /* Check that not a proper subset at the exon level from something
  * that is already output.  The conditions that lead to this
  * are rare, but they do happen.  By subset in this context we
@@ -291,15 +320,32 @@ for (existing = existingList; existing != NULL; existing = existing->next)
          return NULL;
      }
 
-/* Figure min/max. */
-for (ref = trackerRefList; ref != NULL; ref = ref->next)
+/* Figure min/max and totalSize. */
+int totalSize = 0;
+int minBase = BIGNUM, maxBase = -BIGNUM;
+for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     {
-    struct edgeTracker *tracker = ref->val;
-    if (tracker->edge->type == ggExon)
-	{
-	minBase = min(minBase, tracker->start);
-	maxBase = max(maxBase, tracker->end);
+    struct range *r = eRef->val;
+    minBase = min(minBase, r->start);
+    maxBase = max(maxBase, r->end);
+    totalSize += (r->end - r->start);
+    }
+
+/* Optionally filter out small fragments. */
+if (doDefrag)
+    {
+    int maxSize = 0;
+    for (hel = evList; hel != NULL; hel = hel->next)
+        {
+	char *acc = hel->name;
+	int size = hashIntValDefault(sizeHash, acc, 0);
+	if (!size)
+	    verbose(2, "%s not in sizes tab file", acc);
+	if (size > maxSize)
+	    maxSize = size;
 	}
+    if (totalSize < maxSize * defragSize)
+        return NULL;
     }
 
 /* Write out bed stuff except for blocks. */
@@ -324,17 +370,17 @@ for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
     }
 fprintf(bedFile, "\n");
 
+/* Optionally write out evidence list for each accession. */
 if (evFile != NULL)
     {
-    struct hashEl *hel, *helList = hashElListHash(evHash);
-    slSort(&helList, hashElCmp);
     fprintf(evFile, "%s\t%s\t%d\t", nameBuf, source->accession, evHash->elCount);
-    for (hel = helList; hel != NULL; hel =  hel->next)
+    for (hel = evList; hel != NULL; hel =  hel->next)
         {
 	fprintf(evFile, "%s,", hel->name);
 	}
     fprintf(evFile, "\n");
     }
+slFreeList(&evList);
 hashFree(&evHash);
 slFreeList(&eRefList);
 return rangeTree;
@@ -530,6 +576,16 @@ optionInit(&argc, argv, options);
 if (optionExists("evidence"))
     evFile = mustOpen(optionVal("evidence", NULL), "w");
 singleExonFactor = optionDouble("singleExonFactor", singleExonFactor);
+char *sizeFile = optionVal("sizes", NULL);
+if (sizeFile)
+    sizeHash = hashKeyIntFile(sizeFile);
+if (optionExists("defrag"))
+    {
+    if (sizeFile == NULL)
+        errAbort("-sizes option required with -defrag option.");
+    doDefrag = TRUE;
+    defragSize = optionDouble("defrag", defragSize);
+    }
 if (argc != 5)
     usage();
 txWalk(argv[1], argv[2], argv[3], argv[4]);
