@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: txInfo.c,v 1.1 2007/02/25 13:06:34 kent Exp $";
+static char const rcsid[] = "$Id: txInfo.c,v 1.2 2007/02/25 23:27:07 kent Exp $";
 
 void txInfoStaticLoad(char **row, struct txInfo *ret)
 /* Load a row from txInfo table into ret.  The contents of ret will
@@ -18,15 +18,20 @@ void txInfoStaticLoad(char **row, struct txInfo *ret)
 ret->name = row[0];
 ret->sourceAcc = row[1];
 ret->isRefSeq = sqlUnsigned(row[2]);
-ret->orfSize = sqlSigned(row[3]);
-ret->bestorfScore = sqlDouble(row[4]);
-ret->startComplete = sqlUnsigned(row[5]);
-ret->endComplete = sqlUnsigned(row[6]);
-ret->nonsenseMediatedDecay = sqlUnsigned(row[7]);
-ret->retainedIntronInCds = sqlUnsigned(row[8]);
-ret->selenocysteine = sqlUnsigned(row[9]);
-ret->genomicFrameShift = sqlUnsigned(row[10]);
-ret->genomicStop = sqlUnsigned(row[11]);
+ret->sourceSize = sqlSigned(row[3]);
+ret->aliCoverage = sqlDouble(row[4]);
+ret->aliIdRatio = sqlDouble(row[5]);
+ret->genoMapCount = sqlSigned(row[6]);
+ret->exonCount = sqlSigned(row[7]);
+ret->orfSize = sqlSigned(row[8]);
+ret->bestorfScore = sqlDouble(row[9]);
+ret->startComplete = sqlUnsigned(row[10]);
+ret->endComplete = sqlUnsigned(row[11]);
+ret->nonsenseMediatedDecay = sqlUnsigned(row[12]);
+ret->retainedIntronInCds = sqlUnsigned(row[13]);
+ret->selenocysteine = sqlUnsigned(row[14]);
+ret->genomicFrameShift = sqlUnsigned(row[15]);
+ret->genomicStop = sqlUnsigned(row[16]);
 }
 
 struct txInfo *txInfoLoad(char **row)
@@ -39,15 +44,20 @@ AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->sourceAcc = cloneString(row[1]);
 ret->isRefSeq = sqlUnsigned(row[2]);
-ret->orfSize = sqlSigned(row[3]);
-ret->bestorfScore = sqlDouble(row[4]);
-ret->startComplete = sqlUnsigned(row[5]);
-ret->endComplete = sqlUnsigned(row[6]);
-ret->nonsenseMediatedDecay = sqlUnsigned(row[7]);
-ret->retainedIntronInCds = sqlUnsigned(row[8]);
-ret->selenocysteine = sqlUnsigned(row[9]);
-ret->genomicFrameShift = sqlUnsigned(row[10]);
-ret->genomicStop = sqlUnsigned(row[11]);
+ret->sourceSize = sqlSigned(row[3]);
+ret->aliCoverage = sqlDouble(row[4]);
+ret->aliIdRatio = sqlDouble(row[5]);
+ret->genoMapCount = sqlSigned(row[6]);
+ret->exonCount = sqlSigned(row[7]);
+ret->orfSize = sqlSigned(row[8]);
+ret->bestorfScore = sqlDouble(row[9]);
+ret->startComplete = sqlUnsigned(row[10]);
+ret->endComplete = sqlUnsigned(row[11]);
+ret->nonsenseMediatedDecay = sqlUnsigned(row[12]);
+ret->retainedIntronInCds = sqlUnsigned(row[13]);
+ret->selenocysteine = sqlUnsigned(row[14]);
+ret->genomicFrameShift = sqlUnsigned(row[15]);
+ret->genomicStop = sqlUnsigned(row[16]);
 return ret;
 }
 
@@ -57,7 +67,7 @@ struct txInfo *txInfoLoadAll(char *fileName)
 {
 struct txInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[17];
 
 while (lineFileRow(lf, row))
     {
@@ -75,7 +85,7 @@ struct txInfo *txInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct txInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[17];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -99,6 +109,11 @@ if (ret == NULL)
 ret->name = sqlStringComma(&s);
 ret->sourceAcc = sqlStringComma(&s);
 ret->isRefSeq = sqlUnsignedComma(&s);
+ret->sourceSize = sqlSignedComma(&s);
+ret->aliCoverage = sqlDoubleComma(&s);
+ret->aliIdRatio = sqlDoubleComma(&s);
+ret->genoMapCount = sqlSignedComma(&s);
+ret->exonCount = sqlSignedComma(&s);
 ret->orfSize = sqlSignedComma(&s);
 ret->bestorfScore = sqlDoubleComma(&s);
 ret->startComplete = sqlUnsignedComma(&s);
@@ -149,6 +164,16 @@ fprintf(f, "%s", el->sourceAcc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->isRefSeq);
+fputc(sep,f);
+fprintf(f, "%d", el->sourceSize);
+fputc(sep,f);
+fprintf(f, "%g", el->aliCoverage);
+fputc(sep,f);
+fprintf(f, "%g", el->aliIdRatio);
+fputc(sep,f);
+fprintf(f, "%d", el->genoMapCount);
+fputc(sep,f);
+fprintf(f, "%d", el->exonCount);
 fputc(sep,f);
 fprintf(f, "%d", el->orfSize);
 fputc(sep,f);

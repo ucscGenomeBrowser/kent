@@ -5,7 +5,7 @@
 #ifndef TXINFO_H
 #define TXINFO_H
 
-#define TXINFO_NUM_COLS 12
+#define TXINFO_NUM_COLS 17
 
 struct txInfo
 /* Various bits of information about a transcript from the txGraph/txCds system (aka KG3) */
@@ -14,6 +14,11 @@ struct txInfo
     char *name;	/* Name of transcript */
     char *sourceAcc;	/* Accession of genbank transcript patterned on (may be refSeq) */
     unsigned char isRefSeq;	/* Is a refSeq */
+    int sourceSize;	/* Number of bases in source, excluding poly-A tail. */
+    double aliCoverage;	/* Fraction of bases in source aligning. */
+    double aliIdRatio;	/* matching/total bases in alignment */
+    int genoMapCount;	/* Number of times source aligns in genome. */
+    int exonCount;	/* Number of exons (excludes gaps from frame shift/stops) */
     int orfSize;	/* Size of ORF */
     double bestorfScore;	/* Score of best CDS according to bestorf */
     unsigned char startComplete;	/* Starts with ATG */

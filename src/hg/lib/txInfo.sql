@@ -8,6 +8,11 @@ CREATE TABLE txInfo (
     name varchar(255) not null,	# Name of transcript
     sourceAcc varchar(255) not null,	# Accession of genbank transcript patterned on (may be refSeq)
     isRefSeq tinyint unsigned not null,	# Is a refSeq
+    sourceSize int not null,	# Number of bases in source, excluding poly-A tail.
+    aliCoverage double not null,	# Fraction of bases in source aligning.
+    aliIdRatio double not null,	# matching/total bases in alignment
+    genoMapCount int not null,	# Number of times source aligns in genome.
+    exonCount int not null,	# Number of exons (excludes gaps from frame shift/stops)
     orfSize int not null,	# Size of ORF
     bestorfScore double not null,	# Score of best CDS according to bestorf
     startComplete tinyint unsigned not null,	# Starts with ATG
