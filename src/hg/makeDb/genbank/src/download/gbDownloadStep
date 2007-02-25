@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 my $usage = 
-    "gbDownloadStep [-verbose] [-ftp-verbose] [-genbank] [-refseq]\n"
+    "gbDownloadStep [-verbose] [-ftpVerbose] [-genbank] [-refseq] [-warnOnCheckError]\n"
     . "\n"
     . "Download required genbank and refseq data files.  The result will reflect\n"
     . "the current state of NCBI ftp site, although only a subset of files will be\n"
@@ -14,11 +14,13 @@ my $usage =
     . "\n"
     . "Options\n"
     . "  -verbose - print details\n"
-    . "  -ftp-verbose - print details of interaction with ftp server\n"
+    . "  -ftpVerbose - print details of interaction with ftp server\n"
     . "  -genbank - only update genbank\n"
-    . "  -refseq - only update refseq\n";
+    . "  -refseq - only update refseq\n"
+    . "  -warnOnCheckError - issue a warning instead of an error if check of existing file\n"
+    . "   against ftp site fails.\n";
 #
-# $Id: gbDownloadStep,v 1.10 2006/10/07 20:47:15 markd Exp $
+# $Id: gbDownloadStep,v 1.11 2007/02/25 02:44:05 markd Exp $
 #
 
 use strict;
@@ -37,6 +39,12 @@ my $FTP_HOST = "ftp.ncbi.nih.gov";
 
 # other globals
 my $tmpDir = "tmp";
+
+# globals
+$main::verbose = 0;
+$main::genbankUpd = 0;
+$main::refseqUpd = 0;
+$main::warnOnCheckError = 0;
 
 # determine of version of GenBank on the NCBI server from the 
 # GB_Release_Number file.
@@ -93,7 +101,7 @@ sub downloadOrCheckFull($$$$;$) {
         if (($file =~ $fileRE)
             && (!defined($excludeRE) || !($file =~ $excludeRE))) {
             my $localFile = "$outDir/$file";
-            if (ftpGetOrCheck($justCheck, $remFile, $localFile)) {
+            if (ftpGetOrCheck($justCheck, $main::warnOnCheckError, $remFile, $localFile)) {
                 push(@gotFiles, $localFile);
             }
         } else {
@@ -125,7 +133,7 @@ sub downloadOrCheckDaily($$$) {
         my $file = basename($remFile);
         if ($file =~ $fileRE) {
             my $localFile = "$outDir/$file";
-            if (ftpGetOrCheck(0, $remFile, $localFile)) {
+            if (ftpGetOrCheck(0, $main::warnOnCheckError, $remFile, $localFile)) {
                 md5Files("$outDir/$file.md5", $localFile);
             }
         } else {
@@ -160,7 +168,7 @@ sub updateGenBank() {
     my $justCheck = -e "$genBankDir/full.md5";
 
     downloadOrCheckFull($justCheck, $ftpDir, $genBankDir, $fullRE, $fullExcludeRE);
-    ftpGetOrCheck($justCheck, "genbank/gbrel.txt", "$genBankDir/gbrel.txt");
+    ftpGetOrCheck($justCheck, $main::warnOnCheckError, "genbank/gbrel.txt", "$genBankDir/gbrel.txt");
 
     # Check summing the files takes enough time that the conection may time out, so reopen.
     ftpOpen();
@@ -202,21 +210,20 @@ sub updateRefSeq() {
 }
 
 # Entry point
-$main::verbose = 0;
-$main::genbankUpd = 0;
-$main::refseqUpd = 0;
 while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
     my $opt = $ARGV[0];
     shift @ARGV;
     if ($opt eq "-verbose") {
         $main::verbose = 1;
         $gbCommon::verbose = 1;
-    } elsif ($opt eq "-ftp-verbose") {
+    } elsif ($opt eq "-ftpVerbose") {
         $gbFtp::verbose = 1;
     } elsif ($opt eq "-genbank") {
         $main::genbankUpd = 1;
     } elsif ($opt eq "-refseq") {
         $main::refseqUpd = 1;
+    } elsif ($opt eq "-warnOnCheckError") {
+        $main::warnOnCheckError = 1;
     } else {
         gbError("invalid option \"$opt\"");
     }

@@ -215,8 +215,9 @@ sub ftpSafeGet($$) {
 # size matches the remote size.  Verify that the local size matches the
 # remote size after download.  True return if gotten, false if exists.
 # If justCheck is true, just do the size check or error if not found.
-sub ftpGetOrCheck($$$) {
-    my($justCheck, $remFile, $localFile) = @_;
+# If warnOnCheckError is true, don't about if there if check fails
+sub ftpGetOrCheck($$$$) {
+    my($justCheck, $warnOnCheckError, $remFile, $localFile) = @_;
 
     my $remSize = ftpGetSize($remFile);
     if (!defined($remSize)) {
@@ -226,9 +227,13 @@ sub ftpGetOrCheck($$$) {
         my $localSize = getFileSize($localFile);
         my $remSize = ftpGetSize($remFile);
         if ($localSize != $remSize) {
-            die("size of existing file $localFile ($localSize) does not match ftp://$gbFtp::host/$remFile ($remSize)");
-        }
-        if ($main::verbose) {
+            my $msg = "size of existing file $localFile ($localSize) does not match ftp://$gbFtp::host/$remFile ($remSize)";
+            if ($warnOnCheckError) {
+                print STDERR "Warning: $msg\n";
+            } else {
+                die($msg);
+            }
+        } elsif ($main::verbose) {
             print STDERR "file exists with same size: $remSize == $localFile ($localSize)\n";
         }
         return 0;

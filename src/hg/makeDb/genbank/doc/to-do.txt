@@ -1071,7 +1071,7 @@ Warning: NR_001874: malformed RefSeq CDS:
 - instead of creating a *.jobs file per job, create one big file and
   have the offset of the record a parameter to the gbBlat
 
-- generate error if attempt to long with per chromosome tables and
+- generate error if attempt to load per chromosome tables with
   a large number of `chromosomes'.
 
 - add optimizer script that does analyze tables and sorts tables.
@@ -1086,3 +1086,6 @@ Warning: NR_001874: malformed RefSeq CDS:
   one alignment spans all, most likely a psl that links two genes.  Can
   this be detected??
 
+- BC050659 misc_diff was not in ra file, thus not loaded.
+
+- switch human and mouse to using global near best.

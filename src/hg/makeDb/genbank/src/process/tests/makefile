@@ -8,7 +8,7 @@ PROCESS = ${VG}${BINARCH}/gbProcess
 
 all:
 
-test: refseqTest estTest mgcTest
+test: refseqTest estTest mgcTest regressTest
 
 refseqTest:
 	${MAKE} doTest id=$@ input=refseq
@@ -20,6 +20,12 @@ estTest:
 # data like misc_difference needed for MGC
 mgcTest:
 	${MAKE} doTest id=$@ input=mgc
+
+# various regressions:
+#   - D26070 - text in /note field gets parsed as CDS because a line starts with
+#     `CDS'.
+regressTest:
+	${MAKE} doTest id=$@ input=regress
 
 # recursive target to run tests; args are: id, input
 doTest:
