@@ -155,7 +155,8 @@ while  (lineFileRow(lf, row))
         cds->score *= 0.95;
     if (!cds->endComplete)
         cds->score *= 0.95;
-    cds->score *= 2.0/(cds->cdsCount+1);
+    int pieces = cds->cdsCount;
+    cds->score *= 2.0/(pieces*pieces*pieces);
 
     /* Parse accession out of name.  I wish this were a proper field.... */
     char *acc = strrchr(cds->name, '.');
@@ -177,14 +178,19 @@ while  (lineFileRow(lf, row))
 	    refSeqAcc = acc;
 	}
 
-    /* If we are refSeq, then bump our score for matches to our own
-     * rna or protein by an factor of 4. */
+    /* If we are refSeq, bump our score for matches to our own 
+     * bits by a huge factor. */
     if (refSeqAcc != NULL && startsWith("RefSeq", cds->source) 
     	&& sameString(cds->accession, refSeqAcc))
-	cds->score *= 10;
+	cds->score += 1000000;
     if (refPepAcc != NULL && startsWith("RefPep", cds->source)
         && sameString(cds->accession, refPepAcc))
-	cds->score *= 4;
+	cds->score += 1000000;
+
+    /* If we are Genbank, and the same as this gene, then bump
+     * score a more modest amount. */
+    if (sameString("genbankCds", cds->source) && sameString(cds->accession, acc))
+        cds->score *= 1.2;
     slAddHead(&tx->cdsList, cds);
     }
 lineFileClose(&lf);
@@ -250,7 +256,7 @@ while (lineFileRow(lf, row))
     ZeroVar(&pick);
     pick.name = bed->name;
     pick.refSeq = pick.refProt = pick.swissProt = pick.uniProt = pick.genbank = "";
-    if (tx != NULL)
+    if (tx != NULL && tx->cdsList->score >= 2000)
         {
 	struct cdsEvidence *cds, *bestCds = tx->cdsList;
 	int bestSize = bestCds->end - bestCds->start;
