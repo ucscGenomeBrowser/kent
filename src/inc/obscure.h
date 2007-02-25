@@ -110,6 +110,10 @@ struct hash *hashWordsInFile(char *fileName, int hashSize);
 /* Create a hash of space delimited words in file. 
  * hashSize is as in hashNew() - pass 0 for default. */
 
+struct hash *hashNameIntFile(char *fileName);
+/* Given a two column file (name, integer value) return a
+ * hash keyed by name with integer values */
+
 void shuffleArrayOfPointers(void *pointerArray, int arraySize, 
 	int shuffleCount);
 /* Shuffle array of pointers of given size given number of times. */

@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.42 2006/07/27 18:08:38 hiram Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.43 2007/02/25 23:28:20 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -136,6 +136,18 @@ lineFileClose(&lf);
 return hash;
 }
 
+struct hash *hashNameIntFile(char *fileName)
+/* Given a two column file (name, integer value) return a
+ * hash keyed by name with integer values */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+struct hash *hash = hashNew(16);
+while (lineFileRow(lf, row))
+    hashAddInt(hash, row[0], lineFileNeedNum(lf, row, 1));
+lineFileClose(&lf);
+return hash;
+}
 
 struct slName *readAllLines(char *fileName)
 /* Read all lines of file into a list.  (Removes trailing carriage return.) */
