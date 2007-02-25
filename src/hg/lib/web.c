@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.114 2007/02/21 22:55:04 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.115 2007/02/25 23:26:37 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -1032,6 +1032,14 @@ void webPrintIntCell(int val)
 {
 webPrintLinkCellRightStart();
 printf("%d", val);
+webPrintLinkCellEnd();
+}
+
+void webPrintDoubleCell(double val)
+/* Print right-justified cell in our colors with two digits to right of decimal. */
+{
+webPrintLinkCellRightStart();
+printf("%4.2f", val);
 webPrintLinkCellEnd();
 }
 

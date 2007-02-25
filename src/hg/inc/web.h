@@ -215,6 +215,9 @@ void webPrintLinkCell(char *link);
 void webPrintIntCell(int val);
 /* Print right-justified int cell in our colors. */
 
+void webPrintDoubleCell(double val);
+/* Print right-justified cell in our colors with two digits to right of decimal. */
+
 void webPrintLabelCell(char *label);
 /* Print label cell in our colors. */
 
