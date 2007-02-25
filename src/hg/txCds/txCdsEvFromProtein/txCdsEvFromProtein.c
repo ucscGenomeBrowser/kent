@@ -310,14 +310,16 @@ if (score <= 0)
     return;
     }
 int totalCovAa = totalAminoAcids(psl);
-double coverage = (double)totalCovAa/psl->qSize;
-if (coverage < minCoverage)
+double protCoverage = (double)totalCovAa/psl->qSize;
+if (protCoverage < minCoverage)
     {
     unmappedPrint("%s covers too little of %s (%d of %d amino acids)\n",
     	psl->qName, psl->tName, totalCovAa, psl->qSize);
     return;
     }
-score *= coverage;
+score *= protCoverage;
+double mrnaInternalCoverage = 3.0*totalCovAa/(psl->tEnd - psl->tStart);
+score *= mrnaInternalCoverage*mrnaInternalCoverage;
 fprintf(f, "%s\t", psl->tName);
 fprintf(f, "%d\t", mappedStart);
 fprintf(f, "%d\t", mappedEnd);
