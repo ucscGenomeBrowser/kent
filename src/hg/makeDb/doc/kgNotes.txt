@@ -13,6 +13,7 @@ echo 'select mrnaAcc,status from refSeqStatus' | hgsql -N hg18 > refSeqStatus.ta
 echo 'select acc,status from mgcFullStatus' | hgsql -N hg18 > mgcStatus.tab
 echo 'select acc,size from gbSeq where type="mRNA"' | hgsql -N hg18 > mrnaSize.tab
 echo 'select mrnaAcc,protAcc from refLink' | hgsql -N hg18 > refToPep.tab
+echo 'select distinct name,sizePolyA from mrnaOrientInfo' | hgsql -N hg18 > sizePolyA.tab
 echo 'select l.protAcc,s.status from refLink l,refSeqStatus s where l.mrnaAcc=s.mrnaAcc' | \
     hgsql -N hg18 > refPepStatus.tab
 /cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 refseq pep refPep.fa
@@ -203,10 +204,12 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     echo transcript sequence for  $c
     sequenceForBed -db=hg18 -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 end
+rm -rf txFaSplit
 mkdir txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
 
 # Set up cluster run Victor Solovyev's Best Orf program.
+rm -rf bestorf
 mkdir bestorf
 mkdir bestorf/fa bestorf/tab
 cd bestorf
@@ -242,9 +245,10 @@ para time
 hgsql -N sp070202 -e \
   'select p.acc, p.val from protein p, accToTaxon x where x.taxon=9606 and p.acc=x.acc'\
   |awk '{print ">" $1;print $2}' >uniProt.fa
-hgsql -N sp0702020 -e 'select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=9606 and i.acc=x.acc' > uniCurated.tab
+hgsql -N sp070202 -e 'select i.acc,i.isCurated from info i,accToTaxon x where x.taxon=9606 and i.acc=x.acc' > uniCurated.tab
 
 # Create blat dir - we'll run a couple of types of alignments here.
+rm -rf blat
 mkdir blat
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
@@ -321,11 +325,11 @@ txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/refseq.ra refSeq.e
 
 # Create evidence derived from mRNA CDS and mRNA/transcript alignments
 # Takes 28 seconds.
+rm -rf cdsEvidence
 mkdir cdsEvidence
 txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa \
 	cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab \
-	-unmapped=cdsEvidence/refSeqTx.unmapped \
-	-exceptions=refSeq.exceptions
+	-unmapped=cdsEvidence/refSeqTx.unmapped -exceptions=refSeq.exceptions
 txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa \
 	cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab \
 	-unmapped=cdsEvidence/mrna.unmapped
@@ -341,28 +345,24 @@ cat bestorf/tab/*.borf | txCdsEvFromBorf stdin txWalk.fa cdsEvidence/bestorf.tce
 
 # Consolidate and pick best CDS.  Takes 4 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
+cat refSeq.exceptions mrna.exceptions > allIn.exceptions
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
-cat txWalk/*.bed | txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks -weightedTce=weighted.tce -refToPep=refToPep.tab
-
-# History below of avoiding bestorf calls with RefSeq CDS's.
-# There's still a couple that map to swissProt or trembl, but
-# only 11, and mostly in the polymorphic regions.  Too tired
-# to look into them now.  Some of the polymorphs actually improve...
-#grep bestorf best.tce | grep NM_ | wc
-#182
-#136
-#60
-#105
-#99
-#37
-#20
-#14
-#4
-#0
+cat txWalk/*.bed | \
+	txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks \
+		-weightedTce=weighted.tce -refToPep=refToPep.tab \
+		-exceptionsIn=allIn.exceptions \
+		-exceptionsOut=txWalk.exceptions
 
 # Create gene prediction (GTF) and peptide fasta file.
 # Takes 7 seconds.
-cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa -bedOut=bestCds.bed
+cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa \
+	-bedOut=bestCds.bed -exceptions=txWalk.exceptions
+
+# Create gene info table.
+cat bestorf/tab/*.borf > all.borf
+cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
+cat mrna/*.psl refSeq/*.psl | txInfoAssemble bestCds.bed best.tce all.borf \
+	altSplice.bed txWalk.exceptions sizePolyA.tab stdin all.flip txInfo.tab
 
 ###########################################################################
 ## Load take 6 into the database. Takes 30 seconds.
@@ -382,6 +382,9 @@ awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEst
 hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
 hgLoadBed hg18 jkgAltSplice altSplice.bed
 ldHgGene hg18 jkgTxCdsPick bestCds.gtf -gtf -genePredExt
+hgLoadCdsEvidence hg18 jkgTxCdsEvidence weighted.tce
+hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql txInfo.tab
+
 
 
 ###########################################################################
@@ -896,3 +899,19 @@ o - Remove accessions in
 o - Do tighter near-best placements, using Robert & David's method.
 o - Separating clusters that contain non-overlapping refSeq clusters
     into separate genes.  See chr22:16,936,036-17,018,244.
+o - When gene has retained intron and ORF doesn't overlap (in frame)
+    ORF of other genes in cluster, consider nuking ORF.
+o - Downweigh ORF score when NMD candidate: chr21:32,865,403-32,872,381.
+o - What happened to  NM_032476 at chr21:34,351,145-34,448,007?
+    Looks like a txWalk problem.  Fixed.
+o - chrX:152,822,047-152,827,969 is a good place for CDS frame clustering
+    and maybe reevaluating of BC080603's CDS.
+o - Another dubious ORF chrX:153,925,985-153,942,224 AX746776 from 
+    incompletely processed transcript?  NMD candidate.
+o - Here refSeq has two genes with same transcript just to get different
+    proteins.  chrX:153,939,681-153,954,680
+o - chr19:59,394,825-59,444,662  A transcriptoinally active cluster.
+    Looks like maybe falsesly separatee into two by refSeq.
+o - chrX:153,917,080-153,942,391 is a good example of a CDS to nuke.
+    The bestorf score is 0. It is an NMD target. It doesn't overlap
+    with other CDS's in region.
