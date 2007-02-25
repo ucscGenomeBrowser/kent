@@ -17,6 +17,12 @@ struct range
     void *val;		/* Some value associated with range. */
     };
 
+struct rbTree *rangeTreeNew();
+/* Create a new, empty, rangeTree.  Free with rbFreeTree. */
+
+#define rangeTreeFree(a) rbTreeFree(a)
+/* Free up range tree.  */
+
 int rangeCmp(void *va, void *vb);
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
@@ -44,9 +50,6 @@ struct range *rangeTreeAllOverlapping(struct rbTree *tree, int start, int end);
 struct range *rangeTreeList(struct rbTree *tree);
 /* Return list of all ranges in tree in order.  Not thread safe. 
  * No need to free this when done, memory is local to tree. */
-
-struct rbTree *rangeTreeNew();
-/* Create a new, empty, rangeTree.  Free with rbFreeTree. */
 
 struct rbTree *rangeTreeNewDetailed(struct lm *lm, struct rbTreeNode *stack[128]);
 /* Allocate rangeTree on an existing local memory & stack.  This is for cases
