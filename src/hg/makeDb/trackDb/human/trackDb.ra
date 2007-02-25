@@ -383,6 +383,17 @@ priority 92
 visibility hide
 type sample 0 8
 
+track vistaEnhancers
+shortLabel Vista Enhancers
+longLabel Vista HMR-Conserved Non-coding Human Enhancers from LBNL
+group regulation
+priority 93
+visibility hide
+color 95,138,197
+type bed 5 +
+useScore 1
+url http://enhancer-test.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
+
 track humMusL 
 shortLabel Mouse Cons
 longLabel Human/Mouse Evolutionary Conservation Score (std units)
