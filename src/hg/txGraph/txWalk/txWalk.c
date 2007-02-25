@@ -297,7 +297,10 @@ for (ref = trackerRefList; ref != NULL; ref = ref->next)
 	    {
 	    struct txSource *source = &txg->sources[ev->sourceId];
 	    if (isRnaSource(source))
-		hashStore(evHash, source->accession);
+		{
+		if (!hashLookup(evHash, source->accession))
+		    hashAdd(evHash, source->accession, source);
+		}
 	    }
 	}
     }
@@ -334,17 +337,10 @@ for (eRef = eRefList; eRef != NULL; eRef = eRef->next)
 /* Optionally filter out small fragments. */
 if (doDefrag)
     {
-    int maxSize = 0;
-    for (hel = evList; hel != NULL; hel = hel->next)
-        {
-	char *acc = hel->name;
-	int size = hashIntValDefault(sizeHash, acc, 0);
-	if (!size)
-	    verbose(2, "%s not in sizes tab file", acc);
-	if (size > maxSize)
-	    maxSize = size;
-	}
-    if (totalSize < maxSize * defragSize)
+    int size = hashIntValDefault(sizeHash, source->accession, 0);
+    if (!size)
+	verbose(1, "%s not in sizes tab file", source->accession);
+    if (totalSize < size * defragSize)
         return NULL;
     }
 
@@ -506,7 +502,7 @@ for (edge = txg->edgeList, tracker=trackerList;
 /* Make up list of edges used by each source. */
 struct slRef *edgesUsedBySource[txg->sourceCount];
 for (i=0; i<txg->sourceCount; ++i)
-    edgesUsedBySource[i] = 0;
+    edgesUsedBySource[i] = NULL;
 for (tracker = trackerList; tracker != NULL; tracker = tracker->next)
     {
     struct txEdge *edge = tracker->edge;
