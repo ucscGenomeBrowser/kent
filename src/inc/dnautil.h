@@ -216,14 +216,16 @@ int  dnaOrAaScoreMatch(char *a, char *b, int size, int matchScore, int mismatchS
 void writeSeqWithBreaks(FILE *f, char *letters, int letterCount, int maxPerLine);
 /* Write out letters with newlines every maxLine. */
 
-int tailPolyASize(DNA *dna, int size);
+int tailPolyASizeLoose(DNA *dna, int size);
 /* Return size of PolyA at end (if present).  This allows a few non-A's as 
- * noise to be trimmed too, but skips first two aa for taa stop codon. */
+ * noise to be trimmed too, but skips first two aa for taa stop codon. 
+ * It is less conservative in extending the polyA region than maskTailPolyA. */
 
-int headPolyTSize(DNA *dna, int size);
+int headPolyTSizeLoose(DNA *dna, int size);
 /* Return size of PolyT at start (if present).  This allows a few non-T's as 
  * noise to be trimmed too, but skips last two tt for revcomp'd taa stop 
- * codon. */
+ * codon.  
+ * It is less conservative in extending the polyA region than maskHeadPolyT. */
 
 int maskTailPolyA(DNA *dna, int size);
 /* Convert PolyA at end to n.  This allows a few non-A's as noise to be 

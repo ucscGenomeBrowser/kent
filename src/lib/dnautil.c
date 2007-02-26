@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.47 2007/02/24 17:31:13 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.48 2007/02/26 23:02:18 angie Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -807,7 +807,8 @@ while (lettersLeft > 0)
     }
 }
 
-static int findTailPolyAMaybeMask(DNA *dna, int size, boolean doMask)
+static int findTailPolyAMaybeMask(DNA *dna, int size, boolean doMask,
+				  boolean loose)
 /* Identify PolyA at end; mask to 'n' if specified.  This allows a few 
  * non-A's as noise to be trimmed too.  Returns number of bases trimmed.  
  * Leaves first two bases of PolyA in case there's a taa stop codon. */
@@ -830,6 +831,11 @@ for (i=size-1; i>=0; --i)
 	if (score >= bestScore)
 	    {
 	    bestScore = score;
+	    bestPos = i;
+	    }
+	else if (loose && score >= (bestScore - 8))
+	    {
+	    /* If loose, keep extending even if score isn't back up to best. */
 	    bestPos = i;
 	    }
 	}
@@ -857,21 +863,23 @@ if (bestPos >= 0)
 return trimSize;
 }
 
-int tailPolyASize(DNA *dna, int size)
+int tailPolyASizeLoose(DNA *dna, int size)
 /* Return size of PolyA at end (if present).  This allows a few non-A's as 
- * noise to be trimmed too, but skips first two aa for taa stop codon. */
+ * noise to be trimmed too, but skips first two aa for taa stop codon.  
+ * It is less conservative in extending the polyA region than maskTailPolyA. */
 {
-return findTailPolyAMaybeMask(dna, size, FALSE);
+return findTailPolyAMaybeMask(dna, size, FALSE, TRUE);
 }
 
 int maskTailPolyA(DNA *dna, int size)
 /* Convert PolyA at end to n.  This allows a few non-A's as noise to be 
  * trimmed too.  Returns number of bases trimmed.  Leaves very last a. */
 {
-return findTailPolyAMaybeMask(dna, size, TRUE);
+return findTailPolyAMaybeMask(dna, size, TRUE, FALSE);
 }
 
-static int findHeadPolyTMaybeMask(DNA *dna, int size, boolean doMask)
+static int findHeadPolyTMaybeMask(DNA *dna, int size, boolean doMask,
+				  boolean loose)
 /* Return size of PolyT at start (if present); mask to 'n' if specified.  
  * This allows a few non-T's as noise to be trimmed too, but skips last
  * two tt for revcomp'd taa stop codon. */
@@ -895,6 +903,11 @@ for (i=0; i<size; ++i)
 	if (score >= bestScore)
 	    {
 	    bestScore = score;
+	    bestPos = i;
+	    }
+	else if (loose && score >= (bestScore - 8))
+	    {
+	    /* If loose, keep extending even if score isn't back up to best. */
 	    bestPos = i;
 	    }
 	}
@@ -922,19 +935,20 @@ if (bestPos >= 0)
 return trimSize;
 }
 
-int headPolyTSize(DNA *dna, int size)
+int headPolyTSizeLoose(DNA *dna, int size)
 /* Return size of PolyT at start (if present).  This allows a few non-T's as 
  * noise to be trimmed too, but skips last two tt for revcomp'd taa stop 
- * codon. */
+ * codon.  
+ * It is less conservative in extending the polyA region than maskHeadPolyT. */
 {
-return findHeadPolyTMaybeMask(dna, size, FALSE);
+return findHeadPolyTMaybeMask(dna, size, FALSE, TRUE);
 }
 
 int maskHeadPolyT(DNA *dna, int size)
 /* Convert PolyT at start.  This allows a few non-T's as noise to be 
  * trimmed too.  Returns number of bases trimmed.  */
 {
-return findHeadPolyTMaybeMask(dna, size, TRUE);
+return findHeadPolyTMaybeMask(dna, size, TRUE, FALSE);
 }
 
 boolean isDna(char *poly, int size)
