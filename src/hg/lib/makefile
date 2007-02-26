@@ -78,7 +78,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackLayout.o trackTable.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o txEdgeBed.o txEdgeOrtho.o txGraph.o txInfo.o \
+    transRegCodeProbe.o txCluster.o txEdgeBed.o \
+    txEdgeOrtho.o txGraph.o txInfo.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o zdobnovSynt.o oreganno.o \
