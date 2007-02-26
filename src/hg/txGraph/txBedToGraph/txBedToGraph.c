@@ -318,7 +318,7 @@ for (strandStart = lbList; strandStart != NULL; strandStart = strandEnd)
     *endAddress = NULL;
 
     /* Create and write and free graphs. */
-    verbose(1, "creating graphs on %s %s\n", 
+    verbose(2, "creating graphs on %s %s\n", 
     	strandStart->bedList->chrom, strandStart->bedList->strand); 
     struct txGraph *graph, *graphList = graphOneStrand(strandStart, strandSizeLimit);
     for (graph = graphList; graph != NULL; graph = graph->next)
