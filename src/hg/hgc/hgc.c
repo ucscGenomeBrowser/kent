@@ -196,7 +196,7 @@
 #include "cdsEvidence.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1210 2007/02/25 23:29:21 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1211 2007/02/26 03:10:07 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1994,7 +1994,7 @@ if (sqlTableExists(conn, txInfoTable))
 	webPrintDoubleCell(info->bestorfScore);
 	webPrintLinkCell("<B>selenocysteine for UGA:</B>");
 	webPrintLinkCell(info->selenocysteine  ? "yes" : "no");
-	webPrintLinkCell("<B>Alignment ID:</B>");
+	webPrintLinkCell("<B>Alignment % ID:</B>");
 	webPrintDoubleCell(info->aliIdRatio*100);
 	webPrintLinkTableNewRow();
 	
@@ -2002,7 +2002,7 @@ if (sqlTableExists(conn, txInfoTable))
 	webPrintLinkCell(info->startComplete ? "yes" : "no");
 	webPrintLinkCell("<B>frame shift in genome:</B>");
 	webPrintLinkCell(info->genomicFrameShift  ? "yes" : "no");
-	webPrintLinkCell("<B>Coverage:</B>");
+	webPrintLinkCell("<B>% Coverage:</B>");
 	webPrintDoubleCell(info->aliCoverage*100);
 	webPrintLinkTableNewRow();
 
