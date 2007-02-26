@@ -389,7 +389,7 @@ longLabel Vista HMR-Conserved Non-coding Human Enhancers from LBNL
 group regulation
 priority 93
 visibility hide
-color 95,138,197
+color 71,103,148
 type bed 5 +
 useScore 1
 url http://enhancer-test.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
