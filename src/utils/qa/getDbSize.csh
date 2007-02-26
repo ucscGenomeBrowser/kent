@@ -23,7 +23,8 @@ set totIndexSize=0
 if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  gets size of database from TABLE STATUS dumps"
-  echo "  from hgwbeta only"
+  echo "    from hgwbeta only."
+  echo "  opitonally gives size of indices."
   echo
   echo "    usage:  database | all | filename [index]"
   echo "           defaults to hgwbeta"
