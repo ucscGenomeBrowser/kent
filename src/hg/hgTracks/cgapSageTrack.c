@@ -125,7 +125,21 @@ static struct linkedFeatures *cgapSageToLinkedFeatures(struct cgapSage *tag,
 struct linkedFeatures *libList = NULL;
 struct linkedFeatures *skel = skeletonLf(tag);
 int i;
-if (vis == tvPack)
+if (vis == tvDense)
+    /* Just use the skeleton one. */
+    {
+    double aveTpm = 0;
+    for (i = 0; i < tag->numLibs; i++)
+	/* Average the lib tpms. */
+	aveTpm += tag->tagTpms[i];
+    if (tag->numLibs > 0)
+	aveTpm /= tag->numLibs;
+    safef(skel->name, sizeof(skel->name), "whatever");
+    skel->grayIx = grayIxForCgap(aveTpm);
+    addSimpleFeature(skel);
+    libList = skel;
+    }
+else if (vis == tvPack)
     {
     /* If it's pack mode, average tissues into one linkedFeature. */
     struct hash *tpmHash = combineCgapSages(tag, libHash);
@@ -145,7 +159,7 @@ if (vis == tvPack)
     hashElFreeList(&tpmList);
     freeHashAndVals(&tpmHash);
     }
-else 
+else  
     {
     for (i = 0; i < tag->numLibs; i++)
 	{
@@ -184,6 +198,8 @@ char **row;
 int rowOffset;
 sr = hOrderedRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 			NULL, &rowOffset);
+if ((winEnd - winStart) > CGAP_SAGE_DENSE_GOVERNOR)
+    tg->visibility = tvDense;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct cgapSage *tag = cgapSageLoad(row+rowOffset);

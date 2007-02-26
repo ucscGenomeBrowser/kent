@@ -570,6 +570,9 @@ void goldMethods(struct track *tg);
 void cgapSageMethods(struct track *tg);
 /* Make CGAP SAGE track. */
 
+#define CGAP_SAGE_DENSE_GOVERNOR 3000000
+/* Size of browser window to dense the CGAP SAGE track at. */
+
 void coverageMethods(struct track *tg);
 /* Make track for golden path positions of all frags. */
 
