@@ -160,6 +160,11 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     featureBits bosTau2 rmsk
     # 1291561904 bases of 2812203870 (45.927%) in intersection
 
+    # Oct 16
+    featureBits bosTau3 rmsk
+    # 1270629763 bases of 2731807384 (46.512%) in intersection
+
+
 #########################################################################
 # SIMPLE REPEATS (TRF) (Oct 2006/Feb 2007 heather)
     # look for an idle small cluster machine
@@ -198,7 +203,9 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     twoBitToFa bosTau3.unmasked.2bit bosTau3.unmasked.fa
     faSplit byname bosTau3.unmasked.fa .
     rm bosTau3.unmasked.fa
-    cd /cluster/data/bosTau3/bed/simpleRepeat4
+    cd /cluster/data/bosTau3/bed
+    mkdir simpleRepeat4
+    cd simpleRepeat4
     ./makeJobList-trf.csh
     # split into regular chroms and chrUn
     # regular chroms took about 90 minutes
@@ -218,6 +225,8 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # Same result as first run!   Must be right
     # Not sure why it is less than bosTau2, maybe just the assembly is better
 
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' all.bed > trfMask.bed
 
 
 #########################################################################
@@ -241,3 +250,46 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     ls -1 /cluster/data/bosTau3/bosTau3.2bit > nib.lst
     blat nib.lst /dev/null /dev/null -tileSize=11 -makeOoc=/cluster/bluearc/bosTau3/11.ooc -repMatch=1005
 
+
+#########################################################################
+# MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (Heather, Feb. 2007)
+
+    ssh kolossus
+    cd /cluster/data/bosTau3
+    time twoBitMask bosTau3.rmsk.2bit -add bed/simpleRepeat4/trfMask.bed bosTau3.2bit
+    # Warning: BED file bed/simpleRepeat4/trfMask.bed has >=13 fields which
+    # means it might contain block coordinates, but this program uses only the
+    # first three fields (the entire span -- no support for blocks).
+    # 2.870u 6.542s 0:21.16 44.4%     0+0k 0+0io 5pf+0w
+
+    # Link to it from /gbdb:
+    ln -s /cluster/data/bosTau3/bosTau3.2bit /gbdb/bosTau3/bosTau3.2bit
+
+
+#########################################################################
+# MAKE DOWNLOADABLE / GOLDENPATH FILES
+cd /cluster/data/bosTau3
+ln -s /cluster/data/bosTau3/bed/RepeatMasker.2006-10-16/bosTau3.fa.out /cluster/data/bosTau3
+
+# TO DO: makeDownloads.pl
+
+#########################################################################
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (Heather, Feb. 2007)
+
+    ssh pk
+    mkdir /san/sanvol1/scratch/bosTau3
+    cp -p /cluster/data/bosTau3/bosTau3.2bit /san/sanvol1/scratch/bosTau3
+    cp -p /cluster/data/bosTau3/chrom.sizes /san/sanvol1/scratch/bosTau3
+    mkdir /san/sanvol1/scratch/bosTau3/rmsk
+    cp -p /cluster/data/bosTau3/bosTau3.fa.out /san/sanvol1/scratch/bosTau3/rmsk
+
+#########################################################################
+# BLASTZ/CHAIN/NET HG18 (Done Feb 2007 heather)
+# Do target = hg18 first because bosTau3 is 13k scaffolds (documented in hg18.txt)
+# Then do swap
+
+mkdir /cluster/data/bosTau3/bed/blastz.hg18.2007-02-25
+ln -s /cluster/data/bosTau3/bed/blastz.hg18.2007-02-25 /cluster/data/bosTau3/bed/blastz.hg18
+cd /cluster/data/bosTau3/bed/blastz.hg18
+doBlastzChainNet.pl /cluster/data/hg18/bed/blastz.bosTau3/DEF -swap >& do.log &
+featureBits bosTau3 chainHg18Link
