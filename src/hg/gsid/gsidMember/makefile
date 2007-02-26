@@ -23,7 +23,7 @@ members.c members.h: members.as
 init:
 	hgsql membership < members.sql
 	hgsql membership < transactions.sql
-	hgsql membership -e 'insert into members (email,password,activated) values ("hivcat","mIdhzf33z","Y")'
+	hgsql membership -e 'insert into members (email,password,activated) values ("hivcat","<hashed password here>","Y)"
 	hgsql membership < invoices.sql
 
 initSSL:

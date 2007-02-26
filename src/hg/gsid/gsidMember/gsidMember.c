@@ -25,9 +25,9 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.9 2007/02/08 02:11:19 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.10 2007/02/26 23:41:52 galt Exp $";
 
-char *excludeVars[] = { "submit", "Submit", "debug", "update", "gsidM_password", NULL }; 
+char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
  * any variables that start "near.do.") */
 
@@ -65,7 +65,7 @@ for (i = 0; i < 8; i++)
 encryptPWD(password, salt, buf, bufsize);
 }
 
-bool checkPWD(char *password, char *encPassword)
+bool checkPwd(char *password, char *encPassword)
 /* check an encrypted password */
 {
 char encPwd[35] = "";
@@ -97,6 +97,50 @@ while ((c=*password++))
 return ((classes[0]+classes[1]+classes[2]+classes[3])>=3);
 }
 
+unsigned int randInt(unsigned int n)
+/* little randome number helper returns 0 to n-1 */
+{
+return (unsigned int) n * (rand() / (RAND_MAX + 1.0));
+}
+
+char *generateRandomPassword()
+/* Generate valid random password for users who have lost their old one.
+ * Free the returned value.*/
+{
+char boundary[256];
+char punc[] = "!@#$%^&*()";
+/* choose a new string for the boundary */
+/* Set initial seed */
+int i = 0;
+int r = 0;
+char c = ' ';
+boundary[0]=0;
+srand( (unsigned)time( NULL ) );
+for(i=0;i<8;++i)
+    {
+    r = randInt(4);
+    switch (r) 
+	{
+	case 0 :
+    	    c = 'A' + randInt(26);
+	    break;
+	case 1 :
+    	    c = 'a' + randInt(26);
+	    break;
+	case 2 :
+    	    c = '0' + randInt(10);
+	    break;
+	default:
+    	    c = punc[randInt(10)];
+	    break;
+    	}
+    boundary[i] = c;
+    }
+boundary[i]=0;
+return cloneString(boundary);
+}
+
+
 /* --- update passwords file ----- */
 
 void updatePasswordsFile(struct sqlConnection *conn)
@@ -105,24 +149,23 @@ void updatePasswordsFile(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
  
-char password[35]; 
-//TODO: change to real name when permissions fixed.
-//FILE *out = mustOpen("../trash/passwords", "w");
 FILE *out = mustOpen("../conf/passwords", "w");
 
 sr = sqlGetResult(conn, 
-"select * from members where activated='Y'"
+"select email,password from members where activated='Y'"
 " and (expireDate='' or (current_date() < expireDate))");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    encryptNewPWD(row[1], password, sizeof(password));
-    fprintf(out,"%s:%s\n",row[0],password);
+    fprintf(out,"%s:%s\n",row[0],row[1]);
     }
 sqlFreeResult(&sr);
 
 carefulClose(&out);
 
 }
+
+
+
 
 /* ---------- reverse DNS function --------- */
 
@@ -436,7 +479,7 @@ hPrintf(
 "<p align=\"left\">"
 "</p>"
 "<font color=red>%s</font>"
-"<h3>Send Me My Lost Password</h3>"
+"<h3>Send Me A New Password</h3>"
 "<form method=post action=\"/cgi-bin-signup/gsidMember\" name=lostPasswordForm >"
 "<table>"
 "<tr><td>E-mail</td><td><input type=text name=gsidM_email size=20> "
@@ -477,9 +520,16 @@ if (!password)
     lostPasswordPage(conn);
     return;
     }
+freez(&password);
+password = generateRandomPassword();
+char encPwd[35] = "";
+encryptNewPWD(password, encPwd, sizeof(encPwd));
+
+safef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
+sqlUpdate(conn, query);
 
 safef(cmd,sizeof(cmd), 
-"echo \"Your password is: %s\" | mail -s \"Lost GSID HIV password\" %s"
+"echo \"Your new password is: %s\" | mail -s \"Lost GSID HIV password\" %s"
 , password, email);
 int result = system(cmd);
 if (result == -1)
@@ -690,7 +740,6 @@ if (password)
     return;
     }
 
-//TODO: make password requirements stricter, e.g. min length etc.
 password = cartUsualString(cart, "gsidM_password", "");
 if (!password || sameString(password,"") || (strlen(password)<8))
     {
@@ -743,9 +792,11 @@ if (!type || sameString(type,""))
     return;
     }
 
+char encPwd[35] = "";
+encryptNewPWD(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "insert into members set "
     "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
-    email, password, "N", name, phone, institution, type);
+    email, encPwd, "N", name, phone, institution, type);
 sqlUpdate(conn, query);
 
 
@@ -908,34 +959,79 @@ if ((row = sqlNextRow(sr)) == NULL)
 struct members *m = membersLoad(row);
 sqlFreeResult(&sr);
 
-hPrintf("<h1>Account Information for %s:</h1>\n",m->email);
-hPrintf("<table>\n");
-hPrintf("<tr><td align=right>name:</td><td>%s</td><tr>\n",m->name);
-hPrintf("<tr><td align=right>phone:</td><td>%s</td><tr>\n",m->phone);
-hPrintf("<tr><td align=right>institution:</td><td>%s</td><tr>\n",m->institution);
-hPrintf("<tr><td align=right>type:</td><td>%s</td><tr>\n",m->type);
-hPrintf("<tr><td align=right>amount paid:</td><td>$%8.2f</td><tr>\n",m->amountPaid);
-hPrintf("<tr><td align=right>expiration:</td><td>%s</td><tr>\n",m->expireDate);
-hPrintf("<tr><td align=right>activated:</td><td>%s</td><tr>\n",m->activated);
-hPrintf("</table>\n");
-hPrintf("<br>\n");
-
-
-/* add payment button if needed */
-char *currentDate=sqlQuickString(conn, "select current_date()");
-if (!sameString(m->activated,"Y") || strcmp(currentDate,m->expireDate)>0)
+if (checkPwd(password,m->password))
     {
-    drawPaymentButton(conn, m->type);
-    }
-freez(&currentDate);
 
-hPrintf("Return to <a href=\"gsidMember\">signup</A>.<br>\n");
-hPrintf("Go to <a href=\"/\">GSID HIV VAC</A>.<br>\n");
+    hPrintf("<h1>Account Information for %s:</h1>\n",m->email);
+    hPrintf("<table>\n");
+    hPrintf("<tr><td align=right>name:</td><td>%s</td><tr>\n",m->name);
+    hPrintf("<tr><td align=right>phone:</td><td>%s</td><tr>\n",m->phone);
+    hPrintf("<tr><td align=right>institution:</td><td>%s</td><tr>\n",m->institution);
+    hPrintf("<tr><td align=right>type:</td><td>%s</td><tr>\n",m->type);
+    hPrintf("<tr><td align=right>amount paid:</td><td>$%8.2f</td><tr>\n",m->amountPaid);
+    hPrintf("<tr><td align=right>expiration:</td><td>%s</td><tr>\n",m->expireDate);
+    hPrintf("<tr><td align=right>activated:</td><td>%s</td><tr>\n",m->activated);
+    hPrintf("</table>\n");
+    hPrintf("<br>\n");
+
+
+    /* add payment button if needed */
+    char *currentDate=sqlQuickString(conn, "select current_date()");
+    if (!sameString(m->activated,"Y") || strcmp(currentDate,m->expireDate)>0)
+	{
+	drawPaymentButton(conn, m->type);
+	}
+    freez(&currentDate);
+
+    hPrintf("Return to <a href=\"gsidMember\">signup</A>.<br>\n");
+    hPrintf("Go to <a href=\"/\">GSID HIV VAC</A>.<br>\n");
+    }
+else
+    {
+    hPrintf("<h1>Invalid User/Password</h1>\n",m->email);
+    hPrintf("Return to <a href=\"gsidMember\">signup</A>.<br>\n");
+    }
 
 membersFree(&m);
 
 }
 
+void upgradeMembersTable(struct sqlConnection* conn)
+/* one-time upgrade of members table to store encrypted passwords */
+{
+char query[256];
+
+safef(query,sizeof(query),"select email from members");
+struct slName *email=NULL,*list = sqlQuickList(conn,query);
+for(email=list;email;email=email->next)
+    {
+
+    uglyf("email=%s<br>\n",email->name);
+    
+    safef(query,sizeof(query),"select password from members where email='%s'", email->name);
+    char *password = sqlQuickString(conn,query);
+
+    uglyf("password=%s<br>\n",password);
+    
+    if (password)
+	{
+	if (!startsWith("$1$",password)) /* upgrade has not already been done */
+	    {
+	    uglyf("does not start with $1$<br>\n");
+	    char encPwd[35] = "";
+    	    encryptNewPWD(password, encPwd, sizeof(encPwd));
+	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'", encPwd, email->name);
+	    uglyf("query: %s<br>\n",query);
+	    sqlUpdate(conn,query);
+	    }
+	freez(&password);
+	}
+
+    uglyf("<br>\n");
+    
+    }
+slFreeList(&list);
+}
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
@@ -943,7 +1039,6 @@ void doMiddle(struct cart *theCart)
  * dispatches to the appropriate page-maker. */
 {
 struct sqlConnection *conn;
-//char *oldOrg;
 cart = theCart;
 
 hSetDb("membership");
@@ -952,6 +1047,19 @@ conn = hAllocConn();
 
 if (cartVarExists(cart, "debug"))
     debugShowAllMembers(conn);
+// remove after a while when it is no longer needed
+else if (cartVarExists(cart, "fixMembers"))
+    {
+    upgradeMembersTable(conn);
+    updatePasswordsFile(conn);
+    hPrintf(
+    "<h2>HIV VAC</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Successfully updated the members table to store hashed passwords.</h3>"
+    "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+    );
+    }
 else if (cartVarExists(cart, "update"))
     {
     updatePasswordsFile(conn);
