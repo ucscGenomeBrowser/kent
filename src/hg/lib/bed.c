@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.46 2006/12/12 21:52:57 aamp Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.47 2007/02/26 06:39:30 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -166,6 +166,20 @@ const struct bed *b = *((struct bed **)vb);
 int a_size = a->chromEnd - a->chromStart;
 int b_size = b->chromEnd - b->chromStart;
 return (a_size - b_size);
+}
+
+int bedCmpChromStrandStart(const void *va, const void *vb)
+/* Compare to sort based on chrom,strand,chromStart. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = strcmp(a->strand, b->strand);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
 }
 
 struct bedLine *bedLineNew(char *line)
