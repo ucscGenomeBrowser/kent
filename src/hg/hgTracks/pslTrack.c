@@ -285,6 +285,10 @@ int grayIx = pslGrayIx(psl, isXeno, maxShade);
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
+
+indelEnabled(cart, (tg ? tg->tdb : NULL),
+	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
 
 AllocVar(lf);
 lf->score = (psl->match - psl->misMatch - psl->repMatch);
@@ -323,7 +327,7 @@ if (drawOpt == baseColorDrawItemCodons ||
 else
     linkedFeaturesBoundsAndGrays(lf);
 /* If we are drawing anything special, stash psl for use in drawing phase: */
-if (drawOpt != baseColorDrawOff)
+if (drawOpt != baseColorDrawOff || indelShowQueryInsert || indelShowPolyA)
     lf->original = pslClone(psl);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;

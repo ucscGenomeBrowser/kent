@@ -16,7 +16,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.49 2006/11/14 00:30:24 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.50 2007/02/26 23:22:30 angie Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -51,12 +51,22 @@ static char const rcsid[] = "$Id: cds.c,v 1.49 2006/11/14 00:30:24 angie Exp $";
 #define CDS_PARTIAL_CODON_G 0xc0
 #define CDS_PARTIAL_CODON_B	0xc0
 
-#define CDS_GENOMIC_INSERTION   7
-#define CDS_GENOMIC_INSERTION_R 220
-#define CDS_GENOMIC_INSERTION_G 128
-#define CDS_GENOMIC_INSERTION_B 0
+#define CDS_QUERY_INSERTION   7
+#define CDS_QUERY_INSERTION_R 220
+#define CDS_QUERY_INSERTION_G 128
+#define CDS_QUERY_INSERTION_B 0
 
-#define CDS_NUM_COLORS 8
+#define CDS_QUERY_INSERTION_AT_END 8
+#define CDS_QUERY_INSERTION_AT_END_R 90
+#define CDS_QUERY_INSERTION_AT_END_G 210
+#define CDS_QUERY_INSERTION_AT_END_B 255
+
+#define CDS_POLY_A 9
+#define CDS_POLY_A_R 0
+#define CDS_POLY_A_G 210
+#define CDS_POLY_A_B 0
+
+#define CDS_NUM_COLORS 10
 
 /* Array of colors used in drawing codons/bases/differences: */
 Color cdsColor[CDS_NUM_COLORS];
@@ -261,6 +271,15 @@ else   /*negative strand*/
 }
 
 
+static void drawVertLine(struct vGfx *vg, int chromStart, int xOff, int y,
+			 int height, double scale, Color color)
+/* Draw a 1-pixel wide vertical line at the given chromosomal coord. */
+{
+int thisX = round((double)(chromStart-winStart)*scale) + xOff;
+vgLine(vg, thisX, y, thisX, y+height, color);
+}
+
+
 static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 	struct linkedFeatures *lf,
 	struct vGfx *vg, int xOff,
@@ -289,9 +308,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		{
 		if (mrnaSeq->dna[mrnaS+i] != genoSeq->dna[i])
 		    {
-		    int thisX = round((double)(s+i-winStart)*scale) + xOff;
-		    vgLine(vg, thisX, y+1, thisX, y+heightPer-2,
-			   cdsColor[CDS_STOP]);
+		    drawVertLine(vg, s+i, xOff, y+1, heightPer-2, scale,
+				 cdsColor[CDS_STOP]);
 		    }
 		}
 	    dnaSeqFree(&genoSeq);
@@ -386,7 +404,17 @@ if (codonChar == 'M' && foundStart != NULL && !(*foundStart))
     *foundStart = TRUE;
 
 if (codonChar == 0)
-    return(-3);    //stop codon
+    {
+    if (colorStopStart)
+	return(-3);    //stop codon
+    else
+	{
+	if (codonFirstColor)
+	    return('X' - 'A' + 1);
+	else
+	    return('X' - 'A' + 1 + 26);
+	}
+    }
 else if (codonChar == 'X')
     return(-2);     //bad input to lookupCodon
 else if (colorStopStart && codonChar == 'M')
@@ -443,7 +471,7 @@ if (haveGbCdnaInfo)
 }
 
 static void getHiddenGaps(struct psl *psl, unsigned *gaps)
-/*return the gaps in the query sequence of a psl that are 'hidden' 
+/*return the insertions in the query sequence of a psl that are 'hidden' 
   in the browser. This lets these insertions be indicated with the
   color orange.*/
 {
@@ -597,9 +625,15 @@ cdsColor[CDS_SPLICE] = vgFindColorIx(vg,CDS_SPLICE_R,CDS_SPLICE_G,
 cdsColor[CDS_PARTIAL_CODON] = vgFindColorIx(vg,CDS_PARTIAL_CODON_R,
 					    CDS_PARTIAL_CODON_G, 
 					    CDS_PARTIAL_CODON_B);
-cdsColor[CDS_GENOMIC_INSERTION] = vgFindColorIx(vg,CDS_GENOMIC_INSERTION_R, 
-						CDS_GENOMIC_INSERTION_G,
-						CDS_GENOMIC_INSERTION_B);
+cdsColor[CDS_QUERY_INSERTION] = vgFindColorIx(vg,CDS_QUERY_INSERTION_R, 
+						CDS_QUERY_INSERTION_G,
+						CDS_QUERY_INSERTION_B);
+cdsColor[CDS_QUERY_INSERTION_AT_END] = vgFindColorIx(vg, CDS_QUERY_INSERTION_AT_END_R, 
+					      CDS_QUERY_INSERTION_AT_END_G,
+					      CDS_QUERY_INSERTION_AT_END_B);
+cdsColor[CDS_POLY_A] = vgFindColorIx(vg,CDS_POLY_A_R,
+					    CDS_POLY_A_G, 
+					    CDS_POLY_A_B);
 }
 
 
@@ -907,7 +941,7 @@ struct simpleFeature *baseColorCodonsFromGenePred(char *chrom,
 
 static void getMrnaBases(struct psl *psl, struct dnaSeq *mrnaSeq,
 			 int mrnaS, int s, int e, boolean isRc,
-			 char retMrnaBases[4], boolean *retGenomicInsertion)
+			 char retMrnaBases[4], boolean *retQueryInsertion)
 /* Get mRNA bases for the current mRNA codon triplet.  If this is a split
  * codon, retrieve the adjacent mRNA bases to make a full triplet. */
 {
@@ -945,8 +979,8 @@ if(size < 3)
 	    }
 
 	getHiddenGaps(psl, gaps);
-	if(idx >= 0 && gaps[idx] > 0 && retGenomicInsertion != NULL)
-	    *retGenomicInsertion = TRUE;
+	if(idx >= 0 && gaps[idx] > 0 && retQueryInsertion != NULL)
+	    *retQueryInsertion = TRUE;
 
 	if (!appendAtStart)
             {
@@ -986,43 +1020,12 @@ if(mrnaS >= 0)
     char mrnaBases[4];
     char genomicCodon[2];
     char mrnaCodon[2]; 
-    Color textColor = whiteIndex();
-    boolean genomicInsertion = FALSE;
+    boolean queryInsertion = FALSE;
 
     getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
-		 mrnaBases, &genomicInsertion);
-
-    if (e <= lf->tallEnd)
-	{
-        boolean startColor = FALSE;
-
-	if (drawOpt == baseColorDrawItemCodons)
-	    {
-	    /* re-set color of this block based on mrna codons rather than
-	     * genomic, but keep the odd/even cycle of dark/light shades. */
-	    int mrnaGrayIx = setColorByCds(mrnaBases, (grayIx > 26), NULL,
-					   FALSE, TRUE);
-	    if (color == cdsColor[CDS_START])
-                startColor = TRUE;
-	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
-					    ixColor);
-	    if (startColor && sameString(mrnaCodon,"M"))
-                color = cdsColor[CDS_START];
-	    }
-	if (drawOpt == baseColorDrawDiffCodons)
-	    {
-	    /* Color codons red wherever mrna differs from genomic;
-	     * keep the odd/even cycle of dark/light shades. */
-	    colorAndCodonFromGrayIx(vg, genomicCodon, grayIx, ixColor);
-	    int mrnaGrayIx = setColorByDiff(mrnaBases, genomicCodon[0],
-					    (grayIx > 26));
-	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
-					    ixColor);
-	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(mrnaBases));
-	    }
-        if (genomicInsertion)
-	    textColor = color = cdsColor[CDS_GENOMIC_INSERTION];
-	}
+		 mrnaBases, &queryInsertion);
+    if (queryInsertion)
+	color = cdsColor[CDS_QUERY_INSERTION];
 
     dyStringAppendN(dyMrnaSeq, (char*)&mrnaSeq->dna[mrnaS], e-s);
 
@@ -1035,9 +1038,28 @@ if(mrnaS >= 0)
 				    zoomedToBaseLevel, winStart, maxPixels);
 	}
     else if (drawOpt == baseColorDrawItemCodons)
-	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score, font, mrnaCodon,
-				    zoomedToCodonLevel, winStart, maxPixels);
+	{
+	if (e <= lf->tallEnd)
+	    {
+	    boolean startColor = FALSE;
+	    /* re-set color of this block based on mrna codons rather than
+	     * genomic, but keep the odd/even cycle of dark/light shades. */
+	    int mrnaGrayIx = setColorByCds(mrnaBases, (grayIx > 26), NULL,
+					   FALSE, TRUE);
+	    if (color == cdsColor[CDS_START])
+                startColor = TRUE;
+	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
+					    ixColor);
+	    if (startColor && sameString(mrnaCodon,"M"))
+                color = cdsColor[CDS_START];
+	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
+					color, lf->score, font, mrnaCodon,
+					zoomedToCodonLevel, winStart,
+					maxPixels);
+	    }
+	else
+	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
+	}
     else if (drawOpt == baseColorDrawDiffBases)
 	{
 	char *diffStr = NULL;
@@ -1055,16 +1077,30 @@ if(mrnaS >= 0)
 	}
     else if (drawOpt == baseColorDrawDiffCodons)
 	{
-	if (genomicCodon[0] != 'X' && mrnaCodon[0] != genomicCodon[0])
+	if (e <= lf->tallEnd)
 	    {
-	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
-					heightPer, color, lf->score, font,
-                                        mrnaCodon, zoomedToCodonLevel,
-                                        winStart, maxPixels );
+	    /* Color codons red wherever mrna differs from genomic;
+	     * keep the odd/even cycle of dark/light shades. */
+	    colorAndCodonFromGrayIx(vg, genomicCodon, grayIx, ixColor);
+	    int mrnaGrayIx = setColorByDiff(mrnaBases, genomicCodon[0],
+					    (grayIx > 26));
+	    color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx,
+					    ixColor);
+	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(mrnaBases));
+	    if (mrnaCodon[0] == '\0')
+		mrnaCodon[0] = '*';
+	    if (genomicCodon[0] != 'X' && mrnaCodon[0] != genomicCodon[0])
+		{
+		drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
+					    heightPer, color, lf->score, font,
+					    mrnaCodon, zoomedToCodonLevel,
+					    winStart, maxPixels );
+		}
+	    else
+		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
 	    }
 	else
-	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
-				color, lf->score );
+	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
 	}
     else
         errAbort("Unknown drawOpt: %d<br>\n", drawOpt);
@@ -1074,8 +1110,7 @@ if(mrnaS >= 0)
 else
     {
     /*show we have an error by coloring entire exon block yellow*/
-    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
-			MG_YELLOW, lf->score );
+    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
     }
 }
 
@@ -1098,11 +1133,12 @@ boolean zoomedOutToPostProcessing =
     ((drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel) ||
      (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel));
 
-if (drawOpt == baseColorDrawGenomicCodons)
+if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
     drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
                                 zoomedToCodonLevel, winStart, maxPixels);
-else if (mrnaSeq != NULL && psl != NULL && !zoomedOutToPostProcessing)
+else if (mrnaSeq != NULL && psl != NULL && !zoomedOutToPostProcessing &&
+	 drawOpt != baseColorDrawGenomicCodons)
     drawDiffTextBox(vg, xOff, y, scale, heightPer, font, 
 		    color, chromName, s, e, psl, mrnaSeq, lf,
 		    grayIx, drawOpt, maxPixels,
@@ -1146,25 +1182,24 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 	    {
 	    char mrnaBases[4];
 	    char genomicCodon[2], mrnaCodon;
-	    boolean genomicInsertion = FALSE;
+	    boolean queryInsertion = FALSE;
 	    Color color = cdsColor[CDS_STOP];
 	    getMrnaBases(psl, mrnaSeq, mrnaS, s, e, (lf->orientation == -1),
-			 mrnaBases, &genomicInsertion);
-	    if (genomicInsertion)
-		color = cdsColor[CDS_GENOMIC_INSERTION];
+			 mrnaBases, &queryInsertion);
+	    if (queryInsertion)
+		color = cdsColor[CDS_QUERY_INSERTION];
 	    mrnaCodon = lookupCodon(mrnaBases);
 	    if (mrnaCodon == '\0')
 		mrnaCodon = '*';
 	    colorAndCodonFromGrayIx(vg, genomicCodon, sf->grayIx, dummyColor);
-	    if (genomicInsertion || mrnaCodon != genomicCodon[0])
-		drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score);
+	    if (queryInsertion ||
+		(genomicCodon[0] != 'X' && mrnaCodon != genomicCodon[0]))
+		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, color);
 	    }
 	else
 	    {
 	    /*show we have an error by coloring entire exon block yellow*/
-	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
-				MG_YELLOW, lf->score );
+	    drawScaledBox(vg, s, e, scale, xOff, y, heightPer, MG_YELLOW);
 	    }
 	}
     }
@@ -1180,19 +1215,117 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
  * genomic.  This tests drawing mode and zoom level but assumes that lf itself 
  * has been drawn already and we're not in dense mode etc. */
 {
-boolean showDiffBasesAllScales =
-    (tg->tdb && trackDbSetting(tg->tdb, "showDiffBasesAllScales"));
-if (showDiffBasesAllScales)
+if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel)
     {
-    if (drawOpt == baseColorDrawDiffCodons && !zoomedToCdsColorLevel)
+    drawCdsDiffCodonsOnly(tg, lf, vg, xOff, y, scale,
+			  heightPer, mrnaSeq, psl, winStart);
+    }
+if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel)
+    {
+    drawCdsDiffBaseTickmarksOnly(tg, lf, vg, xOff, y, scale,
+				 heightPer, mrnaSeq, psl, winStart);
+    }
+}
+
+
+void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
+			      struct vGfx *vg, int xOff,
+			      int y, double scale, int heightPer,
+			      struct dnaSeq *mrnaSeq, struct psl *psl,
+			      int winStart, enum baseColorDrawOpt drawOpt,
+			      boolean indelShowQInsert, boolean indelShowPolyA)
+/* If applicable, draw 1-pixel wide orange lines for query insertions in the
+ * middle of the query, 1-pixel wide blue lines for query insertions at the 
+ * end of the query, and 1-pixel wide green (instead of blue) when a query 
+ * insertion at the end is a valid poly-A tail. */
+{
+assert(psl);
+int i;
+int s;
+int lastBlk = psl->blockCount - 1;
+boolean gotPolyAStart=FALSE, gotPolyAEnd=FALSE;
+
+if (indelShowPolyA && mrnaSeq)
+    {
+    /* Draw green lines for polyA first, so if the entire transcript is 
+     * jammed into one pixel and the other end has a blue line, blue is 
+     * what the user sees. */
+    if (psl->qStarts[0] != 0)
 	{
-	drawCdsDiffCodonsOnly(tg, lf, vg, xOff, y, scale,
-			      heightPer, mrnaSeq, psl, winStart);
+	int polyTSize = 0;
+	/* If we reverse-complemented in baseColorDrawSetup, test for 
+	 * polyT head: */
+	if (psl->strand[0] == '-' || psl->strand[1] == '-')
+	    polyTSize = headPolyTSizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	if (polyTSize > 0 && (polyTSize + 3) >= psl->qStarts[0])
+	    {
+	    s = psl->tStarts[0];
+	    drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+			 cdsColor[CDS_POLY_A]);
+	    gotPolyAStart = TRUE;
+	    }
 	}
-    if (drawOpt == baseColorDrawDiffBases && !zoomedToBaseLevel)
+    if (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize)
 	{
-	drawCdsDiffBaseTickmarksOnly(tg, lf, vg, xOff, y, scale,
-				     heightPer, mrnaSeq, psl, winStart);
+	/* If we didn't reverse-complement in baseColorDrawSetup, test for
+	 * polyA tail: */
+	int polyASize = 0;
+	if (psl->strand[0] != '-' && psl->strand[1] != '-')
+	    polyASize = tailPolyASizeLoose(mrnaSeq->dna, mrnaSeq->size);
+	if (polyASize > 0 &&
+	    ((polyASize + 3) >= (psl->qSize -
+			 (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]))))
+	    {
+	    s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+	    drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+			 cdsColor[CDS_POLY_A]);
+	    gotPolyAEnd = TRUE;
+	    }
+	}
+    }
+
+if (indelShowQInsert)
+    {
+    if (psl->qStarts[0] != 0 && !gotPolyAStart)
+	{
+	/* Insert at beginning of query -- draw vertical blue line 
+	 * unless it's polyA. */
+	s = psl->tStarts[0];
+	drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
+	}
+    for (i = 1;  i < psl->blockCount;  i++)
+	{
+	int qBlkStart = psl->qStarts[i];
+	int qPrevBlkEnd = (psl->qStarts[i-1] + psl->blockSizes[i-1]);
+	if (qBlkStart > qPrevBlkEnd)
+	    {
+	    int tBlkStart = psl->tStarts[i];
+	    int tPrevBlkEnd = (psl->tStarts[i-1] + psl->blockSizes[i-1]);
+	    /* Note: if tBlkStart < tPrevBlkEnd, then we have overlap on 
+	     * target, possibly indicating a bug in the aligner. */
+	    if (tBlkStart <= tPrevBlkEnd)
+		{
+		/* Insert in query only -- draw vertical orange line. */
+		s = psl->tStarts[i];
+		drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+			     cdsColor[CDS_QUERY_INSERTION]);
+		}
+	    }
+	/* Note: if qBlkStart < qPrevBlkEnd, then we have overlap on query,
+	 * possibly indicating a bug in the aligner.  Most likely a gap 
+	 * should be drawn in that case (really a target insert) but I don't
+	 * think this is the place to do it.  Should be caught by 
+	 * pre-screening table data for block coords that overlap. */
+	}
+    if (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk] != psl->qSize &&
+	!gotPolyAEnd)
+	{
+	/* Insert at end of query -- draw vertical blue line unless it's 
+	 * all polyA. */
+	s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
+	drawVertLine(vg, s, xOff, y, heightPer-1, scale,
+		     cdsColor[CDS_QUERY_INSERTION_AT_END]);
 	}
     }
 }
@@ -1202,11 +1335,17 @@ enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
 			struct linkedFeatures *lf,
 			struct dnaSeq **retMrnaSeq, struct psl **retPsl)
 /* Returns the CDS coloring option, allocates colors if necessary, and 
- * returns the sequence and psl record for the given item if applicable. */
+ * returns the sequence and psl record for the given item if applicable. 
+ * Note: even if base coloring is not enabled, this will return psl and 
+ * mrna seq if query insert/polyA coloring is enabled. */
 {
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
 
-if (drawOpt == baseColorDrawOff)
+indelEnabled(cart, (tg ? tg->tdb : NULL),
+	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
+
+if (drawOpt == baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
     return drawOpt;
 
 /* allocate colors for coding coloring */
@@ -1217,7 +1356,8 @@ if (!cdsColorsMade)
     }
    
 /* If we are using item sequence, fetch alignment and sequence: */
-if (drawOpt != baseColorDrawOff && startsWith("psl", tg->tdb->type))
+if ((drawOpt != baseColorDrawOff && startsWith("psl", tg->tdb->type)) ||
+    indelShowQueryInsert || indelShowPolyA)
     {
     *retPsl = (struct psl *)(lf->original);
     if (*retPsl == NULL)
@@ -1226,7 +1366,8 @@ if (drawOpt != baseColorDrawOff && startsWith("psl", tg->tdb->type))
 if (drawOpt == baseColorDrawItemBases ||
     drawOpt == baseColorDrawDiffBases ||
     drawOpt == baseColorDrawItemCodons ||
-    drawOpt == baseColorDrawDiffCodons)
+    drawOpt == baseColorDrawDiffCodons ||
+    indelShowPolyA)
     {
     *retMrnaSeq = maybeGetSeqUpper(lf->name, tg->mapName);
     if (*retMrnaSeq != NULL && *retPsl != NULL)
@@ -1265,8 +1406,7 @@ for (sf = sfList; sf != NULL; sf = sf->next)
 				    winStart, maxPixels);
     else
         /* zoomed in just enough to see colored boxes */
-        drawScaledBoxSample(vg, sf->start, sf->end, scale, xOff, y, height, 
-		                color, 1.0);
+        drawScaledBox(vg, sf->start, sf->end, scale, xOff, y, height, color);
     }
 }
 

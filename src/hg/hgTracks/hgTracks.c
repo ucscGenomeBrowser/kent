@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1284 2007/02/26 17:54:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1285 2007/02/26 23:22:31 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1515,6 +1515,84 @@ slReverse(&ret);
 return ret;
 }
 
+void lfDrawSpecialGaps(struct linkedFeatures *lf,
+		       int intronGap, boolean chainLines, int gapFactor,
+		       struct track *tg, struct vGfx *vg, int xOff, int y,
+		       double scale, Color color, Color bColor,
+		       enum trackVisibility vis)
+/* If applicable, draw something special for the gap following this block.
+ * If intronGap has been specified, draw exon arrows only if the target gap
+ * length is at least intronGap.
+ * If chainLines, draw a double-line gap if both target and query have a gap 
+ * (mismatching sequence). */
+{
+struct simpleFeature *sf = NULL;
+int heightPer = tg->heightPer;
+int midY = y + (heightPer>>1);
+if (! ((intronGap > 0) || chainLines))
+    return;
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    if (sf->next != NULL)
+	{
+	int s, e, qGap, tGap;
+	int x1, x2, w;
+	if (sf->start >= sf->next->end)
+	    {
+	    s = sf->next->end;
+	    e = sf->start;
+	    }
+	else
+	    {
+	    s = sf->end;
+	    e = sf->next->start;
+	    }
+	if (rangeIntersection(winStart, winEnd, s, e) <= 0)
+	    continue;
+	tGap = e - s;
+	if (sf->qStart >= sf->next->qEnd)
+	    qGap = sf->qStart - sf->next->qEnd;
+	else
+	    qGap = sf->next->qStart - sf->qEnd;
+
+	x1 = round((double)((int)s-winStart)*scale) + xOff;
+	x2 = round((double)((int)e-winStart)*scale) + xOff;
+	w = x2 - x1;
+	if (chainLines && tGap > 0)
+	    {
+	    /* Compensate for innerLine's lopping off of a pixel at each end: */
+	    x1 -= 1;
+	    w += 2;
+	    /* If the gap in the target is more than gapFactor times the gap 
+	     * in the query we draw only one line, otherwise two. */
+	    if (qGap == 0 || (gapFactor > 0 && tGap > gapFactor * qGap))
+		innerLine(vg, x1, midY, w, color);
+	    else
+		{
+		int midY1 = midY - (heightPer>>2);
+		int midY2 = midY + (heightPer>>2);
+		if (chainLines && (vis == tvSquish))
+		    {
+		    midY1 = y;
+		    midY2 = y + heightPer - 1;
+		    }
+		innerLine(vg, x1, midY1, w, color);
+		innerLine(vg, x1, midY2, w, color);
+		}
+	    }
+	if (intronGap && (qGap == 0) && (tGap >= intronGap))
+	    {
+	    clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+			 lf->orientation, bColor, FALSE);
+	    }
+	}
+    }
+}
+
+/* Rule of thumb for displaying chain gaps: consider a valid double-sided 
+ * gap if target side is at most 5 times greater than query side. */
+#define CHAIN_GAP_FACTOR 5
+
 void linkedFeaturesDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -1530,23 +1608,34 @@ int tallStart, tallEnd, s, e, e2, s2;
 Color bColor;
 int intronGap = 0;
 boolean chainLines = ((vis != tvDense)&&(tg->subType == lfSubChain));
+int gapFactor = CHAIN_GAP_FACTOR;
 boolean hideLine = ((tg->subType == lfSubChain) || 
 	        ((vis == tvDense) && (tg->subType == lfSubXeno)));
+boolean hideArrows = hideLine;
 int midY = y + (heightPer>>1);
-int midY1 = midY - (heightPer>>2);
-int midY2 = midY + (heightPer>>2);
 int w;
 char *exonArrowsDense = trackDbSetting(tg->tdb, "exonArrowsDense");
 boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
 				   !sameWord(exonArrowsDense, "off"));
 boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
-
-//variables for genePred cds coloring
 struct psl *psl = NULL;
 struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
 Color saveColor = color;
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
+
+indelEnabled(cart, tg->tdb, &indelShowDoubleInsert, &indelShowQueryInsert,
+	     &indelShowPolyA);
+if (indelShowDoubleInsert && !hideLine)
+    {
+    /* If enabled and we weren't already suppressing the default line,
+     * show chain-like lines (single/double gap lines) but without the 
+     * chain track's gapFactor: */
+    chainLines = TRUE;
+    hideLine = TRUE;
+    gapFactor = 0;
+    }
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
@@ -1560,11 +1649,6 @@ if (vis != tvDense)
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
 
-if (chainLines && (vis == tvSquish))
-    {
-    midY1 = y;
-    midY2 = y + heightPer - 1;
-    }
 lfColors(tg, lf, vg, &color, &bColor);
 if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
     color = saveColor;
@@ -1577,12 +1661,15 @@ if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->mapName, "jaxQTL3"))
     tallStart = lf->start;
     tallEnd   = lf->end;
     }
+x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+w = x2-x1;
 if (!hideLine)
     {
-    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-    w = x2-x1;
     innerLine(vg, x1, midY, w, color);
+    }
+if (!hideArrows)
+    {
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
 	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
@@ -1590,10 +1677,11 @@ if (!hideLine)
 	}
     }
 
-for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; sf != NULL; sf = sf->next)
+for (sf = lf->codons ? lf->codons : lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
 
+    /* Draw UTR portion(s) of exon, if any: */
     if (s < tallStart)
 	{
 	e2 = e;
@@ -1610,6 +1698,7 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
             color, lf->score);
 	e = s2;
 	}
+    /* Draw "tall" portion of exon (or codon) */
     if (e > s)
 	{
         if (drawOpt != baseColorDrawOff &&
@@ -1643,66 +1732,20 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
                     }
             }
 	}
-
-    if ((intronGap || chainLines) && sf->next != NULL)
-	{
-	int qGap, tGap;
-	if (sf->start >= sf->next->end)
-	    {
-	    tGap = sf->start - sf->next->end;
-	    s = sf->next->end + 1;
-	    e = sf->start;
-	    }
-	else
-	    {
-	    tGap = sf->next->start - sf->start;
-	    s = sf->end;
-	    e = sf->next->start;
-	    }
-
-	x1 = round((double)((int)s-winStart)*scale) + xOff;
-	x2 = round((double)((int)e-winStart)*scale) + xOff;
-	if (chainLines)
-	    {
-    /* The idea here is to draw one or two lines
-     * based on whether the gap in the target
-     * is similar to the gap in the query.
-     * If the gap in the target is more than 
-     * GAPFACTOR times the gap in the query
-     * we draw only one line, otherwise two.
-     */
-	    x1--; /* this causes some lines to overwrite one
-		     pixel of the previous box */
-	    w = x2-x1;
-	    w++; /* innerLine subtracts 1 from the width */
-	    qGap = sf->next->qStart - sf->qEnd;
-	    tGap = sf->next->start - sf->end;
-#define GAPFACTOR 5
-	    if (tGap > GAPFACTOR * qGap)
-		innerLine(vg, x1, midY, w, color);
-	    else
-		{
-		innerLine(vg, x1, midY1, w, color);
-		innerLine(vg, x1, midY2, w, color);
-		}
-	    }
-	else /* checking for intronGap */
-	    {
-	    w = x2-x1;
-	    qGap = sf->qStart - sf->next->qEnd;
-	    if ((qGap == 0) && (tGap >= intronGap))
-		clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
-			 lf->orientation, bColor, FALSE);
-	    }
-	}
     }
+if ((intronGap > 0) || chainLines)
+    lfDrawSpecialGaps(lf, intronGap, chainLines, gapFactor,
+		      tg, vg, xOff, y, scale, color, bColor, vis);
+
 if (vis != tvDense)
     {
-    /* If showing different codons when zoomed way out, must do another pass 
-     * so that different codons aren't overdrawn by same codons.  The whole 
-     * item was drawn in the above loop, and now we just make some red marks 
-     * on top of it if necessary.  Similarly, when showing different bases, 
-     * draw tickmarks now so other exons don't overdraw. */
+    /* If highlighting differences between aligned sequence and genome when 
+     * zoomed way out, this must be done in a separate pass after exons are 
+     * drawn so that exons sharing the pixel don't overdraw differences. */
+    if (indelShowQueryInsert || indelShowPolyA)
+	baseColorOverdrawQInsert(tg, lf, vg, xOff, y, scale, heightPer,
+				 mrnaSeq, psl, winStart, drawOpt,
+				 indelShowQueryInsert, indelShowPolyA);
     baseColorOverdrawDiff(tg, lf, vg, xOff, y, scale, heightPer,
 			  mrnaSeq, psl, winStart, drawOpt);
     baseColorDrawCleanup(lf, &mrnaSeq, &psl);
@@ -3066,7 +3109,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->extra = cloneString(gp->name2);
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if (drawOpt>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
+    if (drawOpt != baseColorDrawOff && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(chrom, lf, gp, NULL,
                 (gp->optFields >= genePredExonFramesFld),
 		(drawOpt != baseColorDrawDiffCodons));

@@ -37,7 +37,7 @@ void baseColorCodonsFromPsl(char *chromName, struct linkedFeatures *lf,
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
         enum baseColorDrawOpt drawOpt);
 /* Given an lf and the psl from which the lf was constructed, 
- * return a list of simpleFeature elements, one per codon (or partial 
+ * set lf->codons to a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary.  sizeMul, isXeno and maxShade
  * are for defaulting to one-simpleFeature-per-exon if cds is not found. */
 
@@ -46,7 +46,9 @@ enum baseColorDrawOpt baseColorDrawSetup(struct vGfx *vg, struct track *tg,
 			struct linkedFeatures *lf,
 			struct dnaSeq **retMrnaSeq, struct psl **retPsl);
 /* Returns the CDS coloring option, allocates colors if necessary, and 
- * returns the sequence and psl record for the given item if applicable. */
+ * returns the sequence and psl record for the given item if applicable. 
+ * Note: even if base coloring is not enabled, this will return psl and 
+ * mrna seq if query insert/polyA display is enabled. */
 
 void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
         int grayIx, struct vGfx *vg, int xOff, int y,
@@ -67,6 +69,17 @@ void baseColorOverdrawDiff(struct track *tg,  struct linkedFeatures *lf,
  * level, draw 1-pixel wide red lines only where bases/codons differ from 
  * genomic.  This tests drawing mode and zoom level but assumes that lf itself 
  * has been drawn already and we're not in dense mode etc. */
+
+void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
+			      struct vGfx *vg, int xOff,
+			      int y, double scale, int heightPer,
+			      struct dnaSeq *mrnaSeq, struct psl *psl,
+			      int winStart, enum baseColorDrawOpt drawOpt,
+			      boolean indelShowQInsert, boolean indelShowPolyA);
+/* If applicable, draw 1-pixel wide orange lines for query insertions in the
+ * middle of the query, 1-pixel wide blue lines for query insertions at the 
+ * end of the query, and 1-pixel wide green (instead of blue) when a query 
+ * insertion at the end is a valid poly-A tail. */
 
 void baseColorDrawCleanup(struct linkedFeatures *lf, struct dnaSeq **pMrnaSeq,
 			  struct psl **pPsl);
