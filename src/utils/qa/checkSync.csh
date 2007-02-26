@@ -74,6 +74,7 @@ endif
 # for stripping out genbank
 cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
   > genbank.local
+echo gbLoaded >> genbank.local
 
 foreach machine ( $mach1 $mach2 )
   # get the update times
