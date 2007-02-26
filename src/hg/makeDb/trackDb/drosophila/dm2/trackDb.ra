@@ -456,7 +456,7 @@ type bed 9
     priority 2
 
 track blastHg17KG
-shortLabel Human  Proteins
+shortLabel Hg17 Proteins 
 longLabel Human(hg17) proteins mapped by chained tBLASTn
 group genes
 priority 142
