@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.2 2006/06/11 18:53:24 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.3 2007/02/26 16:14:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,6 +19,7 @@ errAbort(
 "   hgLoadSqlTab database table file.sql file(s).tab\n"
 "file.sql contains a SQL create statement for table\n"
 "file.tab contains tab-separated text (rows of table)\n"
+"The actual table name will come from the command line, not the sql file.\n"
 "options:\n"
 "  -warn - warn or errors or warnings rather than abort\n"
 "  -notOnServer - file is *not* in a directory that the mysql server can see\n"
@@ -33,6 +34,38 @@ static struct optionSpec options[] = {
     {"append", OPTION_BOOLEAN},
     {NULL, 0},
 };
+
+struct dyString *readAndReplaceTableName(char *fileName, char *table)
+/* Read file into string.  While doing so strip any leading comments
+ * and insist that the first non-comment line contain the words
+ * "create table" followed by a table name.  Replace the table name,
+ * and copy the rest of the file verbatem. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct dyString *dy = dyStringNew(0);
+char *line, *word;
+if (!lineFileNextReal(lf, &line))
+    errAbort("No real lines in %s\n", fileName);
+word = nextWord(&line);
+if (!sameWord(word, "create"))
+    errAbort("Expecting first word in file to be CREATE. Got %s", word);
+word = nextWord(&line);
+if (word == NULL || !sameWord(word, "table"))
+    errAbort("Expecting second word in file to be table. Got %s", emptyForNull(word));
+word = nextWord(&line);
+if (word == NULL)
+    errAbort("Expecting table name on same line as CREATE TABLE");
+dyStringPrintf(dy, "CREATE TABLE %s ", table);
+dyStringAppend(dy, line);
+dyStringAppendC(dy, '\n');
+while (lineFileNext(lf, &line, NULL))
+    {
+    dyStringAppend(dy, line);
+    dyStringAppendC(dy, '\n');
+    }
+lineFileClose(&lf);
+return dy;
+}
 
 void hgLoadSqlTab(char *database, char *table, char *createFile,
 		  int inCount, char *inNames[])
@@ -51,10 +84,9 @@ if (! optionExists("notOnServer"))
 
 if (! oldTable)
     {
-    char *create = NULL;
-    readInGulp(createFile, &create, NULL);
-    sqlRemakeTable(conn, table, create);
-    freez(&create);
+    struct dyString *dy = readAndReplaceTableName(createFile, table);
+    sqlRemakeTable(conn, table, dy->string);
+    dyStringFree(&dy);
     }
 verbose(1, "Scanning through %d files\n", inCount);
 for (i=0;  i < inCount;  i++)
