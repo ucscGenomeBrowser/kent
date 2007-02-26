@@ -83,8 +83,8 @@ struct txCdsCluster *txCdsClusterNew(struct bed *bed,
 /* Allocate and fill in basic fields. */
 struct txCdsCluster *cluster;
 AllocVar(cluster);
-cluster->start = bed->chromStart;
-cluster->end = bed->chromEnd;
+cluster->start = bed->thickStart;
+cluster->end = bed->thickEnd;
 cluster->bedList = bed;
 bed->next = NULL;
 
@@ -205,7 +205,7 @@ void bedIntoBinsOfClusters(struct bed *bed, struct binKeeper *bins,
 struct txCdsCluster *newCluster = txCdsClusterNew(bed, lm, rbStack);
 
 /* Merge in any existing overlapping clusters.. */
-struct binElement *bel, *belList = binKeeperFind(bins, bed->chromStart, bed->chromEnd);
+struct binElement *bel, *belList = binKeeperFind(bins, bed->thickStart, bed->thickEnd);
 for (bel = belList; bel != NULL; bel = bel->next)
     {
     struct txCdsCluster *oldCluster = bel->val;
@@ -240,9 +240,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 
 /* Flip around beds if on minus strand. */
 if (minusStrand)
-    {
     flipBedList(bedList, strandSizeLimit);
-    }
 
 /* Create binKeeper full of clusters. */
 struct binKeeper *bins = binKeeperNew(0, strandSizeLimit);
