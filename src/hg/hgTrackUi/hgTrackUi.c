@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.344 2007/02/20 06:38:24 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.345 2007/02/26 23:10:08 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1338,6 +1338,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
 baseColorDrawOptDropDown(cart, tdb);
+indelShowOptions(cart, tdb);
 }
 
 void bedUi(struct trackDb *tdb)
