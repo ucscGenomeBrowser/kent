@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.47 2007/02/26 06:39:30 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.48 2007/02/26 17:02:33 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -630,6 +630,16 @@ void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 /* Write a bed of wordCount fields, interpret column 9 as RGB. */
 {
 bedOutputN_Opt(el, wordCount, f, sep, lastSep, TRUE);
+}
+
+int bedTotalBlockSize(struct bed *bed)
+/* Return total size of all blocks. */
+{
+int total = 0;
+int i;
+for (i=0; i<bed->blockCount; ++i)
+    total += bed->blockSizes[i];
+return total;
 }
 
 struct genePred *bedToGenePred(struct bed *bed)

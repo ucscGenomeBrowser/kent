@@ -6,9 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "bed.h"
 #include "cdsEvidence.h"
 
-static char const rcsid[] = "$Id: cdsEvidence.c,v 1.1 2007/02/20 17:01:23 kent Exp $";
+static char const rcsid[] = "$Id: cdsEvidence.c,v 1.2 2007/02/26 17:02:33 kent Exp $";
 
 struct cdsEvidence *cdsEvidenceLoad(char **row)
 /* Load a cdsEvidence from row fetched with select * from cdsEvidence
@@ -199,4 +200,57 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct hash *cdsEvidenceReadAllIntoHash(char *fileName)
+/* Return hash full of cdsEvidence keyed by transcript name. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(18);
+char *row[CDSEVIDENCE_NUM_COLS];
+while (lineFileRowTab(lf, row))
+    {
+    struct cdsEvidence *cds = cdsEvidenceLoad(row);
+    if (hashLookup(hash, cds->name))
+        errAbort("%s duplicated in %s, perhaps you want to run txCdsPick?",
+		cds->name, fileName);
+    hashAdd(hash, cds->name, cds);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed)
+/* Set thickStart/thickEnd on bed from cdsEvidence. */
+{
+if (cds == NULL)
+    {
+    bed->thickStart = bed->thickEnd = bed->chromStart;
+    return;
+    }
+int txCdsStart = cds->start, txCdsEnd = cds->end;
+if (bed->strand[0] == '-')
+    {
+    int txSize = bedTotalBlockSize(bed);
+    reverseIntRange(&txCdsStart, &txCdsEnd, txSize);
+    }
+int i;
+int txStart = 0, txEnd;
+for (i=0; i<bed->blockCount; ++i)
+    {
+    int blockSize = bed->blockSizes[i];
+    int exonStart = bed->chromStarts[i] + bed->chromStart;
+    txEnd = txStart + blockSize;
+    if (txStart <= txCdsStart && txCdsStart < txEnd)
+        {
+	int offset = txCdsStart - txStart;
+	bed->thickStart = exonStart + offset;
+	}
+    if (txStart < txCdsEnd && txCdsEnd <= txEnd)
+        {
+	int offset = txCdsEnd - txStart;
+	bed->thickEnd = exonStart + offset;
+	}
+    txStart = txEnd;
+    }
+}
 

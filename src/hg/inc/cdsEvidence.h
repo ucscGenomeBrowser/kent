@@ -63,5 +63,11 @@ void cdsEvidenceOutput(struct cdsEvidence *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct hash *cdsEvidenceReadAllIntoHash(char *fileName);
+/* Return hash full of cdsEvidence keyed by transcript name. */
+
+void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed);
+/* Set thickStart/thickEnd on bed from cdsEvidence. */
+
 #endif /* CDSEVIDENCE_H */
 

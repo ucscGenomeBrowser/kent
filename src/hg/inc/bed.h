@@ -191,6 +191,9 @@ void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 #define bedCommaOutN(el,wordCount, f) bedOutputN(el,wordCount,f,',',',')
 /* Print out bed as a comma separated list including final comma. */
 
+int bedTotalBlockSize(struct bed *bed);
+/* Return total size of all blocks. */
+
 struct bed *bedFromPsl(struct psl *psl);
 /* Convert a single psl to a bed structure */
 
