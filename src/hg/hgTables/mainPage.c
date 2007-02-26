@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.106 2007/02/20 23:43:46 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.107 2007/02/26 18:09:08 kent Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -817,8 +817,10 @@ hPrintf("%s",
   "DNA sequence covered by a track. See <A HREF=\"#Help\">Using the Table "
   "Browser</A> for a description of the controls in this form. "
   "For more complex queries, you may want to use "
-  "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or our "
-  "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download29\">public "
+#ifdef SOON
+  "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
+#endif /* SOON */
+  "our <A HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download29\">public "
   "MySQL server</A>. Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data.");
