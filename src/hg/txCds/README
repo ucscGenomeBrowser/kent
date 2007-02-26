@@ -13,6 +13,29 @@ transcript is picked with
 Then the transcript bed and sequence are turned into a GTF gene
 prediction file and a protein sequence file with
    txCdsToGene
+Further information on these genes is put together with
+   txInfoAssemble.  
+The coding regions within the gene sets are clustered using
+   txCdsCluster
+Then we pick the strongest looking protein in these clusters.
+We look at all of the protein clusters in each transcript
+cluster, and drop the weaker proteins.  Then we revisit the
+possible CDSs, trying to pick ones more compatible with the
+better proteins with 
+   txCdsRepick
+And then run again the programs
+   txCdsToGene
+   txInfoAssemble
+   txCdsCluster
+At this point we have the final CDS assignments including the
+final coding/noncoding decision. The next step is to separate
+the noncoding transcripts into those that seem to just be
+byproducts of the coding clusters from the truly noncoding
+transcripts with
+   txSeparateNoncoding
+The noncoding ones are clustered again with
+   txBedToGraph
+
 
 The thinking behind this is to have each of the txCdsEv programs
 generate a score between 0 and 1000 indicating their certainty.
