@@ -9,12 +9,30 @@ genes that are expressed in a tissue. LongSAGE tags are 17 bases long.
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-Uniquely mapping LongSAGE tags are displayed.  Tag counts are normalized to
-tags per million (TPM).  Tags with higher TPM are shaded darker.  The
-<TT>CATG</TT> before the start of the tag is rendered as a thick line, the 17
-bases of the tag are drawn as a thinner line.  Thus the thin end points in the
-direction of transcription.
+Genomic mappings of LongSAGE tags are displayed.  Tag counts are normalized to
+tags per million (TPM) in the library.  Tags with higher TPM are shaded
+darker.  The <TT>CATG</TT> before the start of the tag is rendered as a thick
+line, the 17 bases of the tag are drawn as a thinner line.  Thus the thin end
+points in the direction of transcription.
+
+The track display modes are:
+<UL>
+<LI> <B>dense</B> - Draws location of mapped tags.
+<LI> <B>squish</B> - Draws one item per tag per tissue without labels.
+<LI> <B>pack</B> - Draws one item per tag per tissue with labels. The label
+includes the number of libraries containing the tag.
+Clicking on an item lists the libraries containing the tag, with the libraries
+with the particular tissue in bold.  Clicking on a library in the lists
+displays details information about that library.
+<LI> <B>full</B> - Draws one item per tag per library.
+Clicking on an item displays information about the library, along with other
+libraries containing the tag.
+</UL>
+
 </P>
+
+
+
 
 <H2>Methods</H2>
 
