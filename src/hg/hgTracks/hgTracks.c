@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1283 2007/02/23 20:15:28 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1284 2007/02/26 17:54:33 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13834,6 +13834,32 @@ else
     cgiSimpleTableFieldStart();
     printf(msg2);
     cgiTableFieldEnd();
+    sqlFreeResult(&sr);
+    safef(query, sizeof(query), "select count(*),sum(size) from chromInfo");
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	unsigned scafCount = sqlUnsigned(row[0]);
+	unsigned totalSize = sqlUnsigned(row[1]);
+	cgiTableRowEnd();
+	safef(msg1, sizeof(msg1), "contig/scaffold<BR>count:");
+	safef(msg2, sizeof(msg2), "total size:");
+	cgiSimpleTableRowStart();
+	cgiSimpleTableFieldStart();
+	printf(msg1);
+	cgiTableFieldEnd();
+	cgiSimpleTableFieldStart();
+	printf(msg2);
+	cgiTableFieldEnd();
+	cgiTableRowEnd();
+	cgiSimpleTableRowStart();
+	cgiSimpleTableFieldStart();
+	printLongWithCommas(stdout, scafCount);
+	cgiTableFieldEnd();
+	cgiSimpleTableFieldStart();
+	printLongWithCommas(stdout, totalSize);
+	cgiTableFieldEnd();
+	}
     cgiTableRowEnd();
     }
 sqlFreeResult(&sr);
