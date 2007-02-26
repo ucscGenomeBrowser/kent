@@ -13231,6 +13231,7 @@ TMPDIR=/scratch/tmp
 ssh hgwdev
 knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+
 ########################################################################
 # 25-Way Multiple Alignment
 
@@ -13384,6 +13385,7 @@ cat  << 'EOF' > spec
 ./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz28way.2007-02-25/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
+    # << emacs
     gensub2 ../split/chromChunks.lst single spec jobList
     para create jobList
         # 93 jobs
@@ -13391,3 +13393,50 @@ cat  << 'EOF' > spec
     para check
     para push
     para time > run.time
+
+
+#########################################################################
+# BLASTZ ORNANA1 (PLATYPUS) - (DONE 2007-02-23 angie)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+    cd /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+
+    # If I had to do it over, I would go with a larger SEQ2_LIMIT because 
+    # there were 437k jobs, avg <40s.
+
+    cat << '_EOF_' > DEF
+# human vs. platypus
+
+# Use same params as used for hg18-danRer4
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: hg18
+SEQ1_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: ornAna1
+SEQ2_DIR=/san/sanvol1/scratch/ornAna1/ornAna1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=75
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+      -blastzOutRoot /san/sanvol1/scratch/hg18.ornAna1 \
+      -bigClusterHub pk -smallClusterHub pk \
+      >& do.log & tail -f do.log
+
+
