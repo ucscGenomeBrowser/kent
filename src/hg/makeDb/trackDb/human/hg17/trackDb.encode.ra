@@ -1877,7 +1877,7 @@ type bed 5
 track encodeUWRegulomeBase
 compositeTrack on
 shortLabel UW/Reg QCP DNaseI Sens
-longLabel ENCODE UW/Regulome QCP DNaseI Sensitivity
+longLabel UW/Regulome QCP DNaseI Sensitivity
 group encodeChrom
 priority 66.05
 # NOTE: Missing regions
@@ -2148,7 +2148,7 @@ dataVersion ENCODE Oct2005 Freeze
 track encodeRegulomeDnaseArray
 compositeTrack on
 shortLabel UW DNase GM
-longLabel ENCODE UW DNase/Array GM06690 - DNase I sensitivity/hypersensitivity in GM06990 Cells
+longLabel UW Array DNase I sensitivity/hypersensitivity in GM06990 Cells
 group encodeChrom
 priority 66.5
 type bedGraph 4
