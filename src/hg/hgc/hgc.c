@@ -57,6 +57,7 @@
 #include "maf.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "rhMapZfishInfo.h"
 #include "recombRate.h"
 #include "recombRateRat.h"
 #include "recombRateMouse.h"
@@ -196,7 +197,7 @@
 #include "cdsEvidence.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1211 2007/02/26 03:10:07 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1212 2007/02/26 18:21:24 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4857,17 +4858,28 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
-void doRHmap(struct trackDb *tdb, char *itemName) 
-/* Put up RHmap information for Zebrafish */
+void printZfinCustomUrl (struct trackDb *tdb, char *itemName, boolean encode)
+/* print out a custom url for a ZFIN ID using url defined in trackDb */
+{
+char *url = tdb->url;
+
+if (url != NULL && url[0] != 0)
+    printCustomUrlWithLabel(tdb, itemName, "ZFIN ID:", url, encode);
+}
+
+void doZfishRHmap(struct trackDb *tdb, char *itemName) 
+/* Put up Radiation Hybrid map information for Zebrafish */
 {
 char *dupe, *type, *words[16];
 char title[256], query[256];
 struct sqlResult *sr = NULL;
-char **row; 
-int wordCount, pos, dist;
+char **row = NULL; 
+struct rhMapZfishInfo *rhInfo = NULL;
+int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn1 = hAllocConn();
+boolean rhMapInfoExists = sqlTableExists(conn, "rhMapZfishInfo");
 
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
@@ -4877,28 +4889,38 @@ genericHeader(tdb, itemName);
 cartWebStart(cart, title);
 
 /* Print out RH map information if available */
-if (hTableExists("rhMapInfo"))
+
+if (rhMapInfoExists)
     {
-    sprintf(query, "SELECT * FROM rhMapInfo WHERE name = '%s'", itemName);  
+    sprintf(query, "SELECT * FROM rhMapZfishInfo WHERE name = '%s'", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-        pos = sqlUnsigned(row[2]);
-        dist = sqlUnsigned(row[3]);
-	printf("<H2>Information on %s </H2>\n", itemName);
-        printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
-        printf("<TR><TH ALIGN=left>Linkage group:</TH><TD>%s</TD></TR>\n",row[1]);
-        printf("<TR><TH ALIGN=left>Position on linkage group:</TH><TD>%d</TD></TR>\n",pos);
-        printf("<TR><TH ALIGN=left>Distance (cR):</TH><TD>%d</TD></TR>\n",dist);
-        printf("<TR><TH ALIGN=left>Marker type:</TH><TD>%s</TD></TR>\n",row[4]);
-        printf("<TR><TH ALIGN=left>Marker source:</TH><TD>%s</TD></TR>\n",row[5]);
-        printf("<TR><TH ALIGN=left>Mapping institution:</TH><TD>%s</TD></TR>\n",row[6]);
-        printf("<TR><TH ALIGN=left>Forward Primer:</TH><TD>%s</TD></TR>\n",row[7]);
-        printf("<TR><TH ALIGN=left>Reverse Primer:</TH><TD>%s</TD></TR>\n",row[8]);
-        printf("</TABLE>\n");
+        rhInfo = rhMapZfishInfoLoad(row);
+        if (rhInfo != NULL)
+            {
+            printf("<H2>Information on %s </H2>\n", itemName);
+            if (!sameString(rhInfo->zfinId, ""))
+                {
+                printf("<H3>");
+                printZfinCustomUrl(tdb, rhInfo->zfinId, TRUE);
+                printf("</H3>\n");
+                }
+            printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+            printf("<TR><TH ALIGN=left>Linkage group:</TH><TD>%s</TD></TR>\n", rhInfo->linkageGp);
+            printf("<TR><TH ALIGN=left>Position on linkage group:</TH><TD>%d</TD></TR>\n", rhInfo->position);
+            printf("<TR><TH ALIGN=left>Distance (cR):</TH><TD>%d</TD></TR>\n", rhInfo->distance);
+            printf("<TR><TH ALIGN=left>Marker type:</TH><TD>%s</TD></TR>\n", rhInfo->markerType);
+            printf("<TR><TH ALIGN=left>Marker source:</TH><TD>%s</TD></TR>\n", rhInfo->source);
+            printf("<TR><TH ALIGN=left>Mapping institution:</TH><TD>%s</TD></TR>\n", rhInfo->mapSite);
+            printf("<TR><TH ALIGN=left>Forward Primer:</TH><TD>%s</TD></TR>\n", rhInfo->leftPrimer);
+            printf("<TR><TH ALIGN=left>Reverse Primer:</TH><TD>%s</TD></TR>\n", rhInfo->rightPrimer);
+            printf("</TABLE>\n");
+            }
         }
     }
+
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 if (wordCount > 0)
@@ -18179,7 +18201,7 @@ else if (sameWord(track, "stsMap"))
     }
 else if (sameWord(track, "rhMap")) 
     {
-    doRHmap(tdb, item);
+    doZfishRHmap(tdb, item);
     }
 else if (sameWord(track, "yaleBertoneTars"))
     {
