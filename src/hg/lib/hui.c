@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.85 2006/12/19 18:49:52 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.86 2007/02/26 23:05:06 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -655,7 +655,7 @@ if (gotCds && gotSeq)
 			baseColorDrawAllOptionValues,
 			ArraySize(baseColorDrawAllOptionLabels),
 			curValue, NULL);
-    printf("<BR><BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+    printf("<BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
 else if (gotCds)
@@ -665,7 +665,7 @@ else if (gotCds)
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
 			curValue, NULL);
-    printf("<BR><BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
+    printf("<BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     }
 else if (gotSeq)
@@ -675,7 +675,7 @@ else if (gotSeq)
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
-    printf("<BR><BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+    printf("<BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
 }
@@ -697,6 +697,83 @@ safef(optionStr, sizeof(optionStr), "%s." BASE_COLOR_VAR_SUFFIX,
 stringVal = cartUsualString(cart, optionStr, stringVal);
 
 return baseColorDrawOptStringToEnum(stringVal);
+}
+
+
+/*** Control of fancy indel display code: ***/
+
+static boolean indelAppropriate(struct trackDb *tdb)
+/* Return true if it makes sense to offer indel display options for tdb. */
+{
+return (tdb && startsWith("psl", tdb->type) &&
+	(cfgOptionDefault("browser.indelOptions", NULL) != NULL));
+}
+
+void indelShowOptions(struct cart *cart, struct trackDb *tdb)
+/* Make HTML inputs for indel display options if any are applicable. */
+{
+if (indelAppropriate(tdb))
+    {
+    boolean showDoubleInsert, showQueryInsert, showPolyA;
+    char var[512];
+    indelEnabled(cart, tdb, &showDoubleInsert, &showQueryInsert, &showPolyA);
+    printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
+    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->tableName);
+    cgiMakeCheckBox(var, showDoubleInsert);
+    printf("Draw double horizontal lines when both genome and query have "
+	   "an insertion "
+	   "<BR>\n");
+    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->tableName);
+    cgiMakeCheckBox(var, showQueryInsert);
+    printf("Draw a vertical blue line for an insertion at the beginning or "
+	   "end of the query, orange for insertion in the middle of the query"
+	   "<BR>\n");
+    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->tableName);
+    /* We can highlight valid polyA's only if we have query sequence -- 
+     * so indelPolyA code piggiebacks on baseColor code: */
+    if (baseColorGotSequence(tdb))
+	{
+	cgiMakeCheckBox(var, showPolyA);
+	printf("Draw a vertical green line where query has a polyA tail "
+	       "insertion"
+	       "<BR>\n");
+	}
+	
+    printf("<A HREF=\"%s\">Help on alignment gap/insertion display options</A>"
+	   "<BR>\n",
+	   INDEL_HELP_PAGE);
+    }
+}
+
+static boolean tdbOrCartBoolean(struct cart *cart, struct trackDb *tdb,
+				char *settingName, char *defaultOnOff)
+/* Query cart & trackDb to determine if a boolean variable is set. */
+{
+boolean alreadySet;
+char optionStr[512];
+alreadySet = !sameString("off",
+		trackDbSettingOrDefault(tdb, settingName, defaultOnOff));
+safef(optionStr, sizeof(optionStr), "%s_%s",
+      settingName, tdb->tableName);
+alreadySet = cartUsualBoolean(cart, optionStr, alreadySet);
+return alreadySet;
+}
+
+void indelEnabled(struct cart *cart, struct trackDb *tdb,
+		  boolean *retDoubleInsert, boolean *retQueryInsert,
+		  boolean *retPolyA)
+/* Query cart & trackDb to determine what indel display (if any) is enabled. */
+{
+boolean apropos = indelAppropriate(tdb);
+if (retDoubleInsert)
+    *retDoubleInsert = apropos &&
+	tdbOrCartBoolean(cart, tdb, INDEL_DOUBLE_INSERT, "off");
+if (retQueryInsert)
+    *retQueryInsert = apropos &&
+	tdbOrCartBoolean(cart, tdb, INDEL_QUERY_INSERT, "off");
+if (retPolyA)
+    *retPolyA = apropos &&
+	tdbOrCartBoolean(cart, tdb, INDEL_POLY_A, "off");
 }
 
 

@@ -507,6 +507,24 @@ enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
 
 
+/*** Control of fancy indel display code: ***/
+
+/* trackDb settings: */
+#define INDEL_DOUBLE_INSERT "indelDoubleInsert"
+#define INDEL_QUERY_INSERT "indelQueryInsert"
+#define INDEL_POLY_A "indelPolyA"
+
+#define INDEL_HELP_PAGE "/goldenPath/help/hgIndelDisplay.html"
+
+void indelShowOptions(struct cart *cart, struct trackDb *tdb);
+/* Make HTML inputs for indel display options if any are applicable. */
+
+void indelEnabled(struct cart *cart, struct trackDb *tdb,
+		  boolean *retDoubleInsert, boolean *retQueryInsert,
+		  boolean *retPolyA);
+/* Query cart & trackDb to determine what indel display (if any) is enabled. */
+
+
 /*** Some Stuff for the base position (ruler) controls ***/
 
 #define ZOOM_1PT5X      "1.5x"
