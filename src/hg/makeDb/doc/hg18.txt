@@ -6408,7 +6408,7 @@ cat > autoMultiz.csh << 'EOF'
     set pairs = /san/sanvol1/scratch/$db/mafNet
     rm -fr $tmp
     mkdir -p $tmp
-    cp ../{tree.nh,species.lst} $tmp
+    cp ../tree.nh,species.lst} $tmp
     pushd $tmp
     foreach s (`cat species.lst`)
         set in = $pairs/$s/$c.maf
@@ -13231,3 +13231,163 @@ TMPDIR=/scratch/tmp
 ssh hgwdev
 knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+########################################################################
+# 25-Way Multiple Alignment
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed
+    mkdir multiz28way
+    cd multiz28way
+
+    # start with 17way tree; update assemblies and add new species
+    mkdir tree
+    cd tree
+    cp ../../multiz17way/tree.nh tree.asm.nh
+    # edit
+    # create version for phyloGif program (replace spaces with commas)
+    cd ..
+
+# Organisms: 
+(N)ew, (U)pdated, (S)ame species since 17way:
+U chimp (panTro2) (needs chain/net update on hg18)
+S rhesus (rheMac2)
+N bushbaby (oroGar1) "Otolemumr garnetti" (galago)
+N tree_shrew (tupBel1) "Tupaia belangeri"
+S rat (rn4)
+S mouse (mm8)
+N guinea_pig (cavPor0) "Cavia porcellus"
+S rabbit (oryCun1)
+N shrew (sorAra0) "Sorex araneus"
+N hedgehog (eriEur0) "Erinaceus europaeus"
+S dog (canFam2)
+N cat (felCat1) "Felis catus"
+N horse (equCab1) "Equus caballus"
+U cow (bosTau2 or bosTau3) checking with Heather
+S armadillo (dasNov1) "Dasypus novemcinctus"
+S elephant (loxAf1)
+S tenrec (echTel1)
+S opossum (monDom4)
+N platypus (ornAna1 or ornAna0) checking with Angie "Ornithorhychus anatinus"
+U chicken (galGal3) (needs chain/net update on hg18)
+N lizard (anoCar1) "Anolis carolinensis" (Green Anole), Iguana family
+U frog (xenTro2) (needs chain/net update on hg18)
+U fugu (fr2) (needs chain/net update on hg18)
+S tetraodon (tetNig1)
+N stickleback (gasAcu1) "Gasterosteus aculeatus"
+N medaka (oryLat1) "Oryzias latipees"
+U zebrafish (danRer4) (needs chain/net update on hg18)
+
+    # create species list
+    sed -e 's/[()]//g' -e 's/ /\n/g' tree/tree.asm.nh | \
+        sed -e '/^$/d'| sort > species.lst
+    wc -l species.lst
+        # 28 species.lst
+
+    # verify all blastz's exists
+    foreach db (`cat species.lst`)
+        ls -d /cluster/data/hg18/bed/blastz.$db/mafNet/chr1.maf.gz
+    end
+    # add links of the formt blastz.<db> to blastz.<db>.<date> dirs:
+    cd /cluster/data/hg18/bed
+    ln -s blastz.fr2.2007-01-24 blastz.fr2
+    ln -s blastz.ornAna1.2007-02-21 blastz.ornAna1
+    ln -s blastz.oryLat1.swap blastz.oryLat1
+    # missing: cavPor0, equCab1, otoGar1, 
+    #   sorAra0 (blastz's run, but no net mafs): 
+    #                   /cluster/data/sorAra0/bed/zb.hg18
+    #   otoGar1 (repeatmasked, but no blastz): /cluster/data/otoGar1, Robert
+
+    # copy net mafs to cluster-friendly storage, splitting chroms
+    # into 50MB chunks  to improve run-time
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way
+    mkdir split
+    cd split
+    mafSplitPos hg18 50 mafSplit.bed
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz28way
+    cd split
+cat > split.csh << 'EOF'
+    set dir = /san/sanvol1/scratch/hg18/splitMafNet
+    mkdir -p $dir
+    foreach db (`cat ../species.lst`)
+        set mdir = /cluster/data/hg18/bed/blastz.$db/mafNet
+        if (-e $mdir) then
+            echo "$db"
+            mkdir -p $dir/$db
+            foreach f ($mdir/*)
+                set c = $f:t:r:r
+                echo "  $c"
+                nice mafSplit mafSplit.bed $dir/$db/ $f
+            end
+            echo "gzipping $dir/$db mafs"
+            nice gzip $dir/$db/*
+        endif
+    end
+'EOF'
+    csh split.csh >&! split.log
+    # 3 hours for 23 assemblies (8 minutes per)
+
+    set dir = /san/sanvol1/scratch/hg18/splitMafNet
+    ls $dir/fr2 | sed -e 's/.maf.gz//' -e 's/\./__/' > chromChunks.lst
+    wc -l chromChunks.lst
+        # 93
+    cd ..
+
+    # run multiz
+    mkdir -p maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = hg18
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/splitMafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../tree/tree.23.nh ../species.23.lst $tmp
+    pushd $tmp
+    foreach s (`cat species.23.lst`)
+        set c2 = `echo $c | sed 's/__/./'`
+        set in = $pairs/$s/$c2.maf
+        set out = $db.$s.sing.maf
+        if ($s == hg18) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.23.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'EOF'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz28way.2007-02-25/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    gensub2 ../split/chromChunks.lst single spec jobList
+    para create jobList
+        # 93 jobs
+    para try
+    para check
+    para push
+    para time > run.time
