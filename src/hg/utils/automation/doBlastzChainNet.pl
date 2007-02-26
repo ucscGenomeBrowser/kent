@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.4 2007/02/23 23:18:12 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.5 2007/02/26 02:25:20 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -377,7 +377,7 @@ sub requireNum {
 }
 
 my $oldDbFormat = '[a-z][a-z](\d+)?';
-my $newDbFormat = '[a-z][a-z][a-z][A-Z][a-z][a-z](\d+)?';
+my $newDbFormat = '[a-z][a-z][a-z][A-Z][a-z][a-z0-9](\d+)?';
 sub getDbFromPath {
   # Require that $val is a full path that contains a recognizable db as 
   # one of its elements (possibly the last one).
@@ -910,6 +910,7 @@ _EOF_
 sub loadUp {
   # Load chains; add repeat/gap stats to net; load nets.
   my $runDir = "$buildDir/axtChain";
+  my $QDbLink = "chain$QDb" . "Link";
   # First, make sure we're starting clean.
   if (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") {
     die "loadUp: looks like this was run successfully already " .
@@ -968,6 +969,10 @@ netClass -verbose=0 $tRepeats $qRepeats -noAr noClass.net $tDb $qDb $tDb.$qDb.ne
 # Load nets:
 netFilter -minGap=10 $tDb.$qDb.net \\
 | hgLoadNet -verbose=0 $tDb net$QDb stdin
+
+cd $buildDir
+featureBits $tDb $QDbLink >&fb.$tDb.$QDbLink.txt
+cat fb.$tDb.$QDbLink.txt
 _EOF_
       );
   }
