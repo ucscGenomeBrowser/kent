@@ -79,24 +79,6 @@ hashFree(&sizeHash);
 return keeperHash;
 }
 
-struct bed *readRetainedIntrons(char *fileName)
-/* Read through alt-spliced bed file, and return list of
- * alt-spliced introns in it. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
-struct bed *bed, *list = NULL;
-while (lineFileRow(lf, row))
-    {
-    if (sameString(row[3], "retainedIntron"))
-        {
-	bed = bedLoad6(row);
-	slAddHead(&list, bed);
-	}
-    }
-slReverse(&list);
-return list;
-}
 
 boolean isNonsenseMediatedDecayTarget(struct bed *bed)
 /* Return TRUE if there's an intron more than 55 bases past
@@ -174,10 +156,10 @@ else
 return FALSE;
 }
 
-boolean hasRetainedIntron(struct bed *bed, struct hash *hash)
+boolean hasRetainedIntron(struct bed *bed, struct hash *altSpliceHash)
 /* See if any exons in bed enclose any retained introns in keeper-hash */
 {
-struct binKeeper *keeper = hashFindVal(hash, bed->chrom);
+struct binKeeper *keeper = hashFindVal(altSpliceHash, bed->chrom);
 boolean gotOne = FALSE;
 if (keeper == NULL)
      return FALSE;
@@ -190,11 +172,14 @@ for (i=0; i<bed->blockCount; ++i)
     for (bin = binList; bin != NULL; bin = bin->next)
         {
 	struct bed *intron = bin->val;
-	if (intron->strand[0] == bed->strand[0] 
-		&& start < intron->chromStart && end > intron->chromEnd)
+	if (sameString(intron->name, "retainedIntron"))
 	    {
-	    gotOne = TRUE;
-	    break;
+	    if (intron->strand[0] == bed->strand[0] 
+		    && start < intron->chromStart && end > intron->chromEnd)
+		{
+		gotOne = TRUE;
+		break;
+		}
 	    }
 	}
     slFreeList(&binList);
@@ -202,6 +187,85 @@ for (i=0; i<bed->blockCount; ++i)
         break;
     }
 return gotOne;
+}
+
+int countStrangeSplices(struct bed *bed, struct hash *altSpliceHash)
+/* Count number of introns with strange splice sites. */
+{
+struct binKeeper *keeper = hashFindVal(altSpliceHash, bed->chrom);
+if (keeper == NULL)
+     return 0;
+int total = 0;
+int i, lastBlock = bed->blockCount-1;
+for (i=0; i<lastBlock; ++i)
+    {
+    int start = bed->chromStarts[i] + bed->blockSizes[i] + bed->chromStart;
+    int end = bed->chromStart + bed->chromStarts[i+1];
+    struct binElement *bin, *binList = binKeeperFind(keeper, start, end);
+    for (bin = binList; bin != NULL; bin = bin->next)
+        {
+	struct bed *intron = bin->val;
+	if (sameString(intron->name, "strangeSplice"))
+	    {
+	    if (intron->strand[0] == bed->strand[0] 
+		    && start == intron->chromStart && end == intron->chromEnd)
+		{
+		if (end - start > 3)
+		    {
+		    ++total;
+		    break;
+		    }
+		}
+	    }
+	}
+    slFreeList(&binList);
+    }
+return total;
+}
+
+int addIntronBleed(struct bed *bed, struct hash *altSpliceHash)
+/* Return the number of bases at start or end that bleed into introns
+ * of other, probably better, transcripts. */
+{
+struct binKeeper *keeper = hashFindVal(altSpliceHash, bed->chrom);
+if (keeper == NULL)
+     return 0;
+int i;
+int total = 0;
+int lastBlock = bed->blockCount-1;
+if (lastBlock == 0)
+    return 0;	/* Single exon case. */
+/* This funny loop just checks first and last block. */
+for (i=0; i<=lastBlock; i += lastBlock)
+    {
+    int start = bed->chromStarts[i] + bed->chromStart;
+    int end = start + bed->blockSizes[i];
+    struct binElement *bin, *binList = binKeeperFind(keeper, start, end);
+    for (bin = binList; bin != NULL; bin = bin->next)
+        {
+	struct bed *bleeder = bin->val;
+	if (sameString(bleeder->name, "bleedingExon"))
+	    {
+	    if (bleeder->strand[0] == bed->strand[0])
+		{
+		if (i == 0)  /* First block, want start to be same */
+		    {
+		    if (bleeder->chromStart == start && bleeder->chromEnd < end)
+		        total += bleeder->chromEnd - bleeder->chromStart;
+		    break;
+		    }
+		else if (i == lastBlock)
+		    {
+		    if (bleeder->chromEnd == end && bleeder->chromStart > start)
+		        total += bleeder->chromEnd - bleeder->chromStart;
+		    break;
+		    }
+		}
+	    }
+	}
+    slFreeList(&binList);
+    }
+return total;
 }
 
 int pslBedOverlap(struct psl *psl, struct bed *bed)
@@ -256,9 +320,9 @@ for (borf = borfList; borf != NULL; borf = borf->next)
 verbose(2, "Loaded %d borfs from %s\n", borfHash->elCount, borfFile);
 
 /* Build up structure for random access of retained introns */
-struct bed *retainedIntronList = readRetainedIntrons(altSpliceFile);
-verbose(2, "Loaded %d retained introns from %s\n", slCount(retainedIntronList), altSpliceFile);
-struct hash *retainedIntronHash = bedsIntoHashOfKeepers(retainedIntronList);
+struct bed *altSpliceList = bedLoadNAll(altSpliceFile, 6);
+verbose(2, "Loaded %d alts from %s\n", slCount(altSpliceList), altSpliceFile);
+struct hash *altSpliceHash = bedsIntoHashOfKeepers(altSpliceList);
 
 /* Read in exception info. */
 struct hash *selenocysteineHash, *altStartHash;
@@ -367,8 +431,10 @@ while (lineFileRow(lf, row))
     /* Figure out nonsense-mediated-decay from bed itself. */
     info.nonsenseMediatedDecay = isNonsenseMediatedDecayTarget(bed);
 
-    /* Figure out if retained intron from bed and intron keeper hash */
-    info.retainedIntron = hasRetainedIntron(bed, retainedIntronHash);
+    /* Figure out if retained intron from bed and alt-splice keeper hash */
+    info.retainedIntron = hasRetainedIntron(bed, altSpliceHash);
+    info.strangeSplice = countStrangeSplices(bed, altSpliceHash);
+    info.bleedIntoIntron = addIntronBleed(bed, altSpliceHash);
 
     /* Look up selenocysteine info. */
     info.selenocysteine = (hashLookup(selenocysteineHash, bed->name) != NULL);
