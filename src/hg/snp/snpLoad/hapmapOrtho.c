@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapOrtho.c,v 1.1 2007/02/22 01:04:29 heather Exp $";
+static char const rcsid[] = "$Id: hapmapOrtho.c,v 1.2 2007/02/27 19:12:32 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,7 +48,10 @@ struct sqlResult *sr;
 char **row;
 struct hashEl *hel = NULL;
 char *rsId = NULL;
+int start = 0;
+int end = 0;
 FILE *outputFileHandle = mustOpen("hapmapOrtho.tab", "w");
+FILE *errorFileHandle = mustOpen("hapmapOrtho.err", "w");
 
 safef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, orthoScore, strand, refUCSC, observed, "
@@ -58,6 +61,15 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     rsId = cloneString(row[3]);
+    start = sqlUnsigned(row[1]);
+    end = sqlUnsigned(row[2]);
+    /* all hapmap data is single base */
+    /* don't include lift if it wasn't also single base */
+    if (end != start + 1) 
+        {
+        fprintf(errorFileHandle, "skipping %s due to size %d\n", rsId, end-start);
+	continue;
+	}
     hel = hashLookup(hapmapHash, rsId);
     if (hel == NULL) continue;
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], rsId);
@@ -66,6 +78,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 carefulClose(&outputFileHandle);
+carefulClose(&errorFileHandle);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
