@@ -11,7 +11,7 @@ txgAnalyze: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txgAnalyze${EXE}
 
 test:
-	txgAnalyze input.txg output.bed
+	txgAnalyze input.txg /cluster/data/hg18/hg18.2bit output.bed
 	diff expected.bed output.bed
 
 clean:

@@ -5,6 +5,9 @@
 #include "localmem.h"
 #include "hash.h"
 #include "options.h"
+#include "dnautil.h"
+#include "dnaseq.h"
+#include "nibTwo.h"
 #include "ggTypes.h"
 #include "txGraph.h"
 #include "rangeTree.h"
@@ -17,7 +20,7 @@ errAbort(
   "txgAnalyze - Analyse transcription graph for alt exons, alt 3', alt 5', \n"
   "retained introns, alternative promoters, etc.\n"
   "usage:\n"
-  "   txgAnalyze in.txg out.ana\n"
+  "   txgAnalyze in.txg genome.2bit out.ana\n"
   "options:\n"
   "   refType=xxx - The type for the reference type of evidence, used for\n"
   "                 the refJoined records indicating transcription across\n"
@@ -212,6 +215,89 @@ rbTreeFree(&tree);
 lmCleanup(&lm);
 }
 
+void checkBleedBefore(struct txGraph *graph, struct txVertex *start, struct txVertex *end,
+	FILE *f)
+/* Start/end is a half-hard edge with soft start. Look for exons that share
+ * hard end, and note how far the soft start extends past their hard start. */
+{
+int minBleed = BIGNUM;
+struct txVertex *hardStart = NULL;
+struct txEdge *edge;
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+    {
+    if (edge->type == ggExon)
+        {
+	struct txVertex *eStart = &graph->vertices[edge->startIx];
+	struct txVertex *eEnd = &graph->vertices[edge->endIx];
+	if (eEnd == end && eStart != start && eStart->type == ggHardStart)
+	    {
+	    int bleed = eStart->position - start->position;
+	    if (bleed > 0 && bleed < minBleed)
+		 {
+	         minBleed = bleed;
+		 hardStart = eStart;
+		 }
+	    }
+	}
+    }
+if (hardStart != NULL)
+    {
+     fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
+	    start->position, hardStart->position, "bleedingExon", graph->strand);
+    }
+}
+
+void checkBleedAfter(struct txGraph *graph, struct txVertex *start, struct txVertex *end,
+	FILE *f)
+/* Start/end is a half-hard edge with soft end. Look for exons that share
+ * hard start, and note how far the soft end extends past their hard start. */
+{
+int minBleed = BIGNUM;
+struct txVertex *hardEnd = NULL;
+struct txEdge *edge;
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+    {
+    if (edge->type == ggExon)
+        {
+	struct txVertex *eStart = &graph->vertices[edge->startIx];
+	struct txVertex *eEnd = &graph->vertices[edge->endIx];
+	if (eStart == start && eEnd != end && eEnd->type == ggHardEnd)
+	    {
+	    int bleed = end->position - eEnd->position;
+	    if (bleed > 0 && bleed < minBleed)
+		 {
+	         minBleed = bleed;
+		 hardEnd = eEnd;
+		 }
+	    }
+	}
+    }
+if (hardEnd != NULL)
+    {
+     fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
+	    hardEnd->position, end->position, "bleedingExon", graph->strand);
+    }
+}
+
+void bleedsIntoIntrons(struct txGraph *graph, FILE *f)
+/* Write out cases where a soft start or end bleeds into
+ * an intron. */
+{
+struct txEdge *edge;
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+    {
+    if (edge->type == ggExon)
+        {
+	struct txVertex *start = &graph->vertices[edge->startIx];
+	struct txVertex *end = &graph->vertices[edge->endIx];
+	if (start->type == ggSoftStart && end->type == ggHardEnd)
+	    checkBleedBefore(graph, start, end, f);
+	else if (start->type == ggHardStart && end->type == ggSoftEnd)
+	    checkBleedAfter(graph, start, end, f);
+	}
+    }
+}
+
 void altPromoter(struct txGraph *graph, FILE *f)
 /* Write out alternative promoters. */
 {
@@ -275,6 +361,49 @@ if (slCount(promoterList) > 1)
 	}
     }
 lmCleanup(&lm);
+}
+
+
+boolean checkEnds(struct dnaSeq *chrom, int start, int end, char *ends, char *strand)
+/* Return TRUE if the ends of intron match the input ends. */
+{
+char *s = chrom->dna + start;
+char *e = chrom->dna + end;
+char iEnds[5];
+iEnds[0] = s[0];
+iEnds[1] = s[1];
+iEnds[2] = e[-2];
+iEnds[3] = e[-1];
+iEnds[4] = 0;
+toLowerN(iEnds, 4);
+if (strand[0] == '-')
+    reverseComplement(iEnds, 4);
+return sameString(ends, iEnds);
+}
+
+void strangeSplices(struct txGraph *graph, struct dnaSeq *chrom, FILE *f)
+/* Write out introns with non-cannonical ends. */
+{
+struct txEdge *edge;
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+    {
+    if (edge->type == ggIntron)
+        {
+	int start = graph->vertices[edge->startIx].position;
+	int end = graph->vertices[edge->endIx].position;
+        if (checkEnds(chrom, start, end, "atac", graph->strand))
+	    {
+	    fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
+		start, end, "atacIntron", graph->strand);
+	    }
+	else if (!checkEnds(chrom, start, end, "gtag", graph->strand) &&
+	        !checkEnds(chrom, start, end, "gcag", graph->strand) )
+	    {
+	    fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
+		start, end, "strangeSplice", graph->strand);
+	    }
+	}
+    }
 }
 
 boolean evOfSourceOnList(struct txEvidence *evList, int sourceId)
@@ -356,21 +485,31 @@ lmCleanup(&lm);
 }
 
 
-void txgAnalyze(char *inTxg, char *outFile)
+void txgAnalyze(char *inTxg, char *dnaPath, char *outFile)
 /* txgAnalyze - Analyse transcription graph for alt exons, alt 3', alt 5', 
  * retained introns, alternative promoters, etc.. */
 {
 struct lineFile *lf = lineFileOpen(inTxg, TRUE);
 FILE *f = mustOpen(outFile, "w");
 char *row[TXGRAPH_NUM_COLS];
+struct nibTwoCache *ntc = nibTwoCacheNew(dnaPath);
+struct dnaSeq *chrom = NULL;
 while (lineFileRow(lf, row))
     {
     struct txGraph *txg = txGraphLoad(row);
+    if (chrom == NULL || !sameString(chrom->name, txg->tName))
+        {
+	dnaSeqFree(&chrom);
+	chrom = nibTwoCacheSeq(ntc, txg->tName);
+	verbose(2, "Loaded %s into %s\n", txg->tName, chrom->name);
+	}
     struct range *exonsWithIntrons = retainedIntrons(txg, f);
     cassetteExons(txg, f);
     altThreePrime(txg, exonsWithIntrons, f);
     altFivePrime(txg, exonsWithIntrons, f);
     altPromoter(txg, f);
+    strangeSplices(txg, chrom, f);
+    bleedsIntoIntrons(txg, f);
     refSeparateButJoined(txg, f);
     slFreeList(&exonsWithIntrons);
     txGraphFree(&txg);
@@ -382,9 +521,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 refType = optionVal("refType", refType);
-txgAnalyze(argv[1], argv[2]);
+txgAnalyze(argv[1], argv[2], argv[3]);
 return 0;
 }
