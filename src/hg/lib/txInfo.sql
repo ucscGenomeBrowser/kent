@@ -18,10 +18,14 @@ CREATE TABLE txInfo (
     startComplete tinyint unsigned not null,	# Starts with ATG
     endComplete tinyint unsigned not null,	# Ends with stop codon
     nonsenseMediatedDecay tinyint unsigned not null,	# If true, is a nonsense mediated decay candidate.
-    retainedIntronInCds tinyint unsigned not null,	# If true has a retained intron in coding region
+    retainedIntron tinyint unsigned not null,	# True if has a retained intron compared to overlapping transcripts
+    bleedIntoIntron int not null,	# If nonzero number of bases start or end of tx bleeds into intron
+    strangeSplice int not null,	# Count of splice sites not gt/ag, gc/ag, or at/ac
+    cdsSingleInIntron tinyint unsigned not null,	# True if CDS is single exon and in intron of other transcript.
+    cdsSingleInUtr3 tinyint unsigned not null,	# True if CDS is single exon and in 3' UTR of other transcript.
     selenocysteine tinyint unsigned not null,	# If true TGA codes for selenocysteine
     genomicFrameShift tinyint unsigned not null,	# True if genomic version has frame shift we cut out
     genomicStop tinyint unsigned not null,	# True if genomic version has stop codon we cut out
               #Indices
-    PRIMARY KEY(name)
+    INDEX(name(24))
 );

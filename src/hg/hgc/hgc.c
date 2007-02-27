@@ -197,7 +197,7 @@
 #include "cdsEvidence.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1212 2007/02/26 18:21:24 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1213 2007/02/27 21:56:49 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1985,35 +1985,50 @@ if (sqlTableExists(conn, txInfoTable))
 
 	webPrintLinkCell("<B>ORF size:</B>");
 	webPrintIntCell(info->orfSize);
-	webPrintLinkCell("<B>retained intron in CDS:</B>");
-	webPrintLinkCell(info->retainedIntronInCds  ? "yes" : "no");
+	webPrintLinkCell("<B>retained intron:</B>");
+	webPrintLinkCell(info->retainedIntron ? "yes" : "no");
 	webPrintLinkCell("<B>RNA size:</B>");
 	webPrintIntCell(info->sourceSize);
 	webPrintLinkTableNewRow();
 
 	webPrintLinkCell("<B>bestorf score:</B>");
 	webPrintDoubleCell(info->bestorfScore);
-	webPrintLinkCell("<B>selenocysteine for UGA:</B>");
-	webPrintLinkCell(info->selenocysteine  ? "yes" : "no");
+	webPrintLinkCell("<B>CDS single in 3' UTR:</B>");
+	webPrintLinkCell(info->cdsSingleInUtr3 ? "yes" : "no");
 	webPrintLinkCell("<B>Alignment % ID:</B>");
 	webPrintDoubleCell(info->aliIdRatio*100);
 	webPrintLinkTableNewRow();
 	
 	webPrintLinkCell("<B>has start codon:</B>");
 	webPrintLinkCell(info->startComplete ? "yes" : "no");
-	webPrintLinkCell("<B>frame shift in genome:</B>");
-	webPrintLinkCell(info->genomicFrameShift  ? "yes" : "no");
+	webPrintLinkCell("<B>CDS single in intron:</B>");
+	webPrintLinkCell(info->cdsSingleInIntron ? "yes" : "no");
 	webPrintLinkCell("<B>% Coverage:</B>");
 	webPrintDoubleCell(info->aliCoverage*100);
 	webPrintLinkTableNewRow();
 
 	webPrintLinkCell("<B>has end codon:</B>");
 	webPrintLinkCell(info->endComplete ? "yes" : "no");
-	webPrintLinkCell("<B>stop codon in genome:</B>");
-	webPrintLinkCell(info->genomicStop ? "yes" : "no");
+	webPrintLinkCell("<B>frame shift in genome:</B>");
+	webPrintLinkCell(info->genomicFrameShift  ? "yes" : "no");
 	webPrintLinkCell("<B># of Alignments:</B>");
 	webPrintIntCell(info->genoMapCount);
 	webPrintLinkTableNewRow();
+
+	webPrintLinkCell(" ");
+	webPrintLinkCell(" ");
+	webPrintLinkCell("<B>stop codon in genome:</B>");
+	webPrintLinkCell(info->genomicStop ? "yes" : "no");
+	webPrintLinkCell("<B># strange splices:</B>");
+	webPrintIntCell(info->strangeSplice);
+	webPrintLinkTableNewRow();
+
+	webPrintLinkCell(" ");
+	webPrintLinkCell(" ");
+	webPrintLinkCell("<B>selenocysteine for UGA:</B>");
+	webPrintLinkCell(info->selenocysteine  ? "yes" : "no");
+	webPrintLinkCell("<B>end bleed into intron:</B>");
+	webPrintIntCell(info->bleedIntoIntron);
 
 	webPrintLinkTableEnd();
 

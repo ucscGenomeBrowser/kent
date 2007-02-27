@@ -14,7 +14,7 @@
 #include "cdsEvidence.h"
 
 
-static char const rcsid[] = "$Id: txCdsSuspect.c,v 1.1 2007/02/27 21:04:36 kent Exp $";
+static char const rcsid[] = "$Id: txCdsSuspect.c,v 1.2 2007/02/27 21:58:00 kent Exp $";
 
 /* Globals set from command line. */
 FILE *fNiceProt = NULL;
@@ -29,7 +29,7 @@ errAbort(
   "CDSs that lie entirely in an intron or in the 3' UTR of another, better looking\n"
   "transcript.\n"
   "usage:\n"
-  "   txCdsSuspect in.bed in.txg in.cluster in.info out.suspect\n"
+  "   txCdsSuspect in.bed in.txg in.cluster in.info out.suspect out.info\n"
   "options:\n"
   "   -niceProt=name - Put the 'nice' proteins and what cluster they're in here.\n"
   "   -minAaOverlap=N - minimum number of amino acids to overlap with to consider\n"
@@ -163,8 +163,10 @@ for (i=0; i<bed->blockCount; ++i)
 return count;
 }
 
-void flagProblems(struct bed *txBed, struct slRef *goodRefList, FILE *f)
-/* Write out info on problems with CDS of txBed. */
+void flagProblems(struct bed *txBed, struct slRef *goodRefList, 
+	struct txInfo *info, FILE *f)
+/* Write out info on problems with CDS of txBed, updating info structure 
+ * writing to file. */
 {
 if (txBed->thickStart >= txBed->thickEnd)
     return; /* We only care about tx with CDS. */
@@ -189,13 +191,20 @@ for (goodRef = goodRefList; goodRef != NULL; goodRef = goodRef->next)
 if (!cdsGoodOverlap)
     {
     if (cdsInIntron)
+	{
         fprintf(f, "%s\tcdsInIntron\n", txBed->name);
+	info->cdsSingleInIntron = TRUE;
+	}
     if (cdsInUtr)
+	{
         fprintf(f, "%s\tcdsInUtr\n", txBed->name);
+	info->cdsSingleInUtr3 = TRUE;
+	}
     }
 }
 
-void txCdsSuspect(char *inBed, char *inTxg, char *inCluster, char *inInfo, char *outSuspect)
+void txCdsSuspect(char *inBed, char *inTxg, char *inCluster, char *inInfo, 
+	char *outSuspect, char *outInfo)
 /* txCdsSuspect - Flag cases where the CDS prediction is very suspicious, including 
  * CDSs that lie entirely in an intron or in the 3' UTR of another, better looking 
  * transcript. */
@@ -355,10 +364,17 @@ for (txg = txgList; txg != NULL; txg = txg->next)
         {
 	char *tx = txg->sources[i].accession;
 	struct bed *bed = hashMustFindVal(bedHash, tx);
-	flagProblems(bed, protRefList, f);
+	struct txInfo *info = hashMustFindVal(infoHash, bed->name);
+	flagProblems(bed, protRefList, info, f);
 	}
     slFreeList(&protClusterRefList);
     }
+carefulClose(&f);
+
+/* Write out updated info file. */
+f = mustOpen(outInfo, "w");
+for (info = infoList; info != NULL; info = info->next)
+    txInfoTabOut(info, f);
 carefulClose(&f);
 }
 
@@ -366,14 +382,14 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 6)
+if (argc != 7)
     usage();
 char *fileName = optionVal("niceProt", NULL);
 if (fileName != NULL)
     fNiceProt = mustOpen(fileName, "w");
 minAaOverlap = optionInt("minAaOverlap", minAaOverlap);
 minCdsOverlap = minAaOverlap*3;
-txCdsSuspect(argv[1], argv[2], argv[3], argv[4], argv[5]);
+txCdsSuspect(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 carefulClose(&fNiceProt);
 return 0;
 }

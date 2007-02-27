@@ -5,7 +5,7 @@
 #ifndef TXINFO_H
 #define TXINFO_H
 
-#define TXINFO_NUM_COLS 17
+#define TXINFO_NUM_COLS 21
 
 struct txInfo
 /* Various bits of information about a transcript from the txGraph/txCds system (aka KG3) */
@@ -24,7 +24,11 @@ struct txInfo
     unsigned char startComplete;	/* Starts with ATG */
     unsigned char endComplete;	/* Ends with stop codon */
     unsigned char nonsenseMediatedDecay;	/* If true, is a nonsense mediated decay candidate. */
-    unsigned char retainedIntronInCds;	/* If true has a retained intron in coding region */
+    unsigned char retainedIntron;	/* True if has a retained intron compared to overlapping transcripts */
+    int bleedIntoIntron;	/* If nonzero number of bases start or end of tx bleeds into intron */
+    int strangeSplice;	/* Count of splice sites not gt/ag, gc/ag, or at/ac */
+    unsigned char cdsSingleInIntron;	/* True if CDS is single exon and in intron of other transcript. */
+    unsigned char cdsSingleInUtr3;	/* True if CDS is single exon and in 3' UTR of other transcript. */
     unsigned char selenocysteine;	/* If true TGA codes for selenocysteine */
     unsigned char genomicFrameShift;	/* True if genomic version has frame shift we cut out */
     unsigned char genomicStop;	/* True if genomic version has stop codon we cut out */
