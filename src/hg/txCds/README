@@ -17,13 +17,15 @@ Further information on these genes is put together with
    txInfoAssemble.  
 The coding regions within the gene sets are clustered using
    txCdsCluster
-Then we pick the strongest looking protein in these clusters.
-We look at all of the protein clusters in each transcript
-cluster, and drop the weaker proteins.  Then we revisit the
-possible CDSs, trying to pick ones more compatible with the
-better proteins with 
-   txCdsRepick
-And then run again the programs
+Then we pick the strongest looking protein in these clusters,
+and flag cases where it looks like a CDS prediction in the
+other proteins is just in an unprocessed intron, or is in the
+3' UTR of one of the nice proteins with:
+   txCdsSuspect
+We then strip the weakest CDSs including the ones flagged
+as suspect above, and the NMD targets with
+   txCdsStripWeak
+and then run again the programs
    txCdsToGene
    txInfoAssemble
    txCdsCluster
