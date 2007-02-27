@@ -603,7 +603,7 @@ track snpMap
 shortLabel SNP Map
 longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
-priority 144
+priority 100
 visibility hide
 type bed 4 .
 

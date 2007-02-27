@@ -1316,7 +1316,7 @@ track snp126
 shortLabel SNPs 
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 126) 
 group varRep
-priority 143.2
+priority 100
 visibility dense 
 type bed 6 +
 
@@ -1324,7 +1324,7 @@ track snp125
 shortLabel SNPs 
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
 group varRep
-priority 143.1
+priority 100
 visibility dense 
 type bed 6 +
 
@@ -1332,7 +1332,7 @@ track snp
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
-priority 143
+priority 100
 visibility dense
 type bed 6 +
 
@@ -1340,7 +1340,7 @@ track snpMap
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
-priority 144
+priority 100
 visibility hide
 type bed 4 .
 

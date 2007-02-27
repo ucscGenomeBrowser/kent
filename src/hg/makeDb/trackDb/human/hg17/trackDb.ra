@@ -563,7 +563,7 @@ track snp
 shortLabel snp124
 longLabel Simple Nucleotide Polymorphisms (dbSNP Build 124)
 group varRep
-priority 143
+priority 100
 visibility hide 
 type bed 6 +
 
