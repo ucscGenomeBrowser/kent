@@ -1463,6 +1463,14 @@ type bed 6 .
     altColor 255,0,0
     priority 3 
 
+track chimpParalogy
+shortLabel Chimp Paralogy
+longLabel Chimp Paralogy
+group varRep
+priority 330
+visibility hide
+type bed 3 .
+
 track chainRheMac2
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
