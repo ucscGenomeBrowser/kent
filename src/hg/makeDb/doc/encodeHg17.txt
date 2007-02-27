@@ -1337,6 +1337,8 @@ cat > load.csh << 'EOF'
 # Additional data submitted 8/10/06: Raw & Pval for HelaS3 and GM cells
 # Submitted new PVAL (3 cell lines) data on 8/11
 # Additional data submission from Greg (at Duke now) 9/22/06  -- HepG2 cell line
+# Additional data (DNAse array )for IMR90, K562 and H9 cells 
+#       (raw and pvalue) submitted 2/26/07
 
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
@@ -1467,6 +1469,45 @@ cat > loadPval.csh << 'EOF'
     hgLoadBed -strict -sqlTable=$table.sql hg17 \
             $table $cell.pval.bed5+
     checkTableCoords hg17 $table
+
+# Additional data (DNAse array )for IMR90, K562 and H9 cells 
+#       (raw and pvalue) submitted 2/26/07
+
+    cd /cluster/data/encode
+    ln -s NHGRI/crawford Duke
+    cd Duke
+    mkdir -p 2007-02-26/lab
+
+    # copy files from FTP area
+    cd 2007-02-26
+    # GOT HERE
+    ln -s lab/Crawford_DNase-chip_H9_pvalue_HG17.bed H9.pval.bed
+    ln -s lab/Crawford_DNase-chip_H9_RAW_hg17.bed H9.raw.bed
+    ln -s lab/Crawford_DNase-chip_IMR90_pvalue_HG17.bed Imr90.pval.bed
+    ln -s lab/Crawford_DNase-chip_IMR90_RAW_hg17.bed Imr90.raw.bed
+    ln -s lab/Crawford_DNase-chip_K562_pvalue_HG17.bed K562.pval.bed
+    ln -s lab/Crawford_DNase-chip_K562_RAW_hg17.bed K562.raw.bed
+
+    # load RAW
+    foreach cell (H9 Imr90 K562)
+        awk '{print $1, $2, $3, $5}' $cell.raw.bed | \
+                hgLoadBed -strict -bedGraph=4 hg17 \
+                        encodeNhgriDnaseHsChipRaw$cell stdin
+    end
+
+    # load PVAL
+    foreach cell (H9 Imr90 K562)
+        set lcell = `echo $cell | sed 's/\(.*\)/\l\1/'`
+        awk -v CELL=$lcell '/^chr/ {printf("%s\t%d\t%d\t%s_%d\t%d\t%.3f\n", $1, $2, $3, CELL, NR, $5 * 35 + 100, $5)}' $cell.pval.bed > $cell.pval.bed5+
+        set table = encodeNhgriDnaseHsChipPval$cell
+        sed "s/bed5Pval/$table/" ~/kent/src/hg/lib/bed5Pval.sql > \
+                $table.sql
+        hgsql hg17 -e "DROP TABLE IF EXISTS $table"
+        hgsql hg17 < $table.sql
+        hgLoadBed -strict -sqlTable=$table.sql hg17 \
+                $table $cell.pval.bed5+
+        checkTableCoords hg17 $table
+    end
 
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)
