@@ -910,7 +910,7 @@ track chainSelf
 shortLabel Self Chain 
 longLabel $Organism Chained Self Alignments
 group varRep
-priority 163
+priority 400
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chrX,chrY,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
 color 100,50,0
@@ -926,7 +926,7 @@ track netSelf
 shortLabel Self Net
 longLabel $Organism Chained Self Alignment Net
 group varRep
-priority 164
+priority 401
 visibility hide
 spectrum on
 type netAlign hg18 chainSelf

@@ -740,7 +740,7 @@ track chainSelf
 shortLabel Self Chain 
 longLabel Chained Self-Alignments
 group varRep
-priority 148
+priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200

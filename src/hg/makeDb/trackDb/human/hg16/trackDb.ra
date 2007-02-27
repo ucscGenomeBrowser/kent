@@ -922,7 +922,7 @@ track chainSelf
 shortLabel Self Chain 
 longLabel Chained Self Alignments
 group varRep
-priority 163
+priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -934,7 +934,7 @@ track netSelf
 shortLabel Self Net
 longLabel Chained Self Alignment Net
 group varRep
-priority 164
+priority 401
 visibility hide
 spectrum on
 type netAlign hg16 chainSelf
@@ -944,7 +944,7 @@ track syntenySelf
 shortLabel Self Synteny
 longLabel Self Synteny Using Blastz Single Coverage (100k window)
 group varRep
-priority 165
+priority 402
 visibility hide
 color 0,100,0
 altColor 255,240,200
