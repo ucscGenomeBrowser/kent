@@ -21974,15 +21974,16 @@ alter table snp125OrthoRheMac2 add index name (name);
 alter table snp125OrthoRheMac2 add index chrom (chrom, bin);
 
 # get hapmap subset for chimp
+# skip if lift wasn't size 1
+# this run 124822 skipped
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoPanTro2
 hgLoadBed hg17 hapmapAllelesChimp hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesChimp.sql
-# 379 warnings
-# working here
 alter table hapmapAllelesChimp add index name(name);
 alter table hapmapAllelesChimp add index chrom (chrom, bin);
 
 # get hapmap subset for macaque
+# this run 106607 skipped
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoRheMac2
 hgLoadBed hg17 hapmapAllelesMacaque hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesMacaque.sql
 rm hapmapOrtho.tab
