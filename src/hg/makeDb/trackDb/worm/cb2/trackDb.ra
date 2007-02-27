@@ -58,7 +58,7 @@ track M50chainSelf
 shortLabel M=50 Self Chain
 longLabel $Organism Chained Self Alignments BLASTZ_M=50
 group varRep
-priority 159
+priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -71,7 +71,7 @@ track M50netSelf
 shortLabel M=50 Self Net
 longLabel $Organism Chained Self Alignment Net BLASTZ_M=50
 group varRep
-priority 164
+priority 401
 visibility hide
 spectrum on
 type netAlign cb2 M50chainSelf
@@ -81,7 +81,7 @@ track M1000blastzSelf
 shortLabel M=1000 Self Blastz
 longLabel $Organism Blastz Self Aligments BLASTZ_M=1000
 group varRep
-priority 158.1
+priority 402
 visibility hide
 color 0,0,0
 altColor 50,128,50
@@ -93,7 +93,7 @@ track M1000chainSelf
 shortLabel M=1000 Self Chain
 longLabel $Organism Chained Self Alignments BLASTZ_M=1000
 group varRep
-priority 159.1
+priority 403
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -106,7 +106,7 @@ track M1000netSelf
 shortLabel M=1000 Self Net
 longLabel $Organism Chained Self Alignment Net BLASTZ_M=1000
 group varRep
-priority 164.1
+priority 404
 visibility hide
 spectrum on
 type netAlign cb2 M1000chainSelf

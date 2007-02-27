@@ -56,7 +56,7 @@ track chainSelf
 shortLabel Self Chain 
 longLabel Self Chained Alignments
 group varRep
-priority 163
+priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -69,7 +69,7 @@ track netSelf
 shortLabel Self Net
 longLabel $Organism Chained Self-Alignment Net
 group varRep
-priority 164
+priority 401
 visibility hide
 spectrum on
 type netAlign mm6 chainSelf
