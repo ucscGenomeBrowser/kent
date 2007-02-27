@@ -21987,6 +21987,8 @@ alter table hapmapAllelesChimp add index chrom (chrom, bin);
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoRheMac2
 hgLoadBed hg17 hapmapAllelesMacaque hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesMacaque.sql
 rm hapmapOrtho.tab
+rm hapmapOrtho.err
+rm bed.tab
 alter table hapmapAllelesMacaque add index name(name);
 alter table hapmapAllelesMacaque add index chrom (chrom, bin);
 
@@ -23200,3 +23202,8 @@ synBlastp.csh hg17 mm7
     # mapping to other species such as mouse, zebrafish, frog
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+
+#########################################################
+# Chimp Paralogy data from Eichlers lab (DONE Heather Feb. 2007)
+cd /cluster/data/hg17/bed/eichler
+hgLoadBed hg17 chimpParalogy chimpParalogy.bed -tab -sqlTable=chimpParalogy.sql
