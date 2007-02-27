@@ -297,9 +297,17 @@ if (stopCount > 0)
 	}
     }
 int mappedStart = psl->tStart;
-int mappedEnd = psl->tEnd+3;
+int mappedEnd = psl->tEnd;
 char *s = txSeq->dna + mappedStart;
-char *e = txSeq->dna + mappedEnd-3;
+char *e = txSeq->dna + mappedEnd;
+
+/* If next base is a stop codon, add it to alignment. */
+if (mappedEnd + 3 <= psl->tSize && isStopCodon(e))
+    {
+    mappedEnd += 3;
+    psl->blockSizes[psl->blockCount-1] += 1;
+    }
+
 verbose(3, "%s s %c%c%c e %c%c%c %d %d \n", psl->qName, s[0], s[1], s[2], e[0], e[1], e[2], mappedStart, mappedEnd);
 int milliBad = pslCalcMilliBad(psl, FALSE);
 int score = 1000 - 10*milliBad;
