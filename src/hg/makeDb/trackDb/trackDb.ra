@@ -301,7 +301,6 @@ type genePred knownGenePep knownGeneMrna
 hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -313,7 +312,6 @@ priority 34.5
 visibility hide
 color 12,120,12
 type genePred
-cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -405,7 +403,6 @@ group genes
 type genePred
 priority 36.05
 visibility hide
-cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -708,10 +705,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track tightMrna
 shortLabel Tight mRNAS
@@ -721,6 +721,13 @@ priority 55
 visibility hide
 spectrum on
 type psl .
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track intronEst
 shortLabel Spliced ESTs
@@ -731,9 +738,10 @@ visibility dense
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 maxItems 300
 
 track est
@@ -745,8 +753,9 @@ visibility hide
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 maxItems 300
 
 track interPro
@@ -776,6 +785,9 @@ priority 58
 visibility hide
 spectrum on
 type psl est
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 
 track xenoMrna
 shortLabel Other mRNAs
@@ -785,10 +797,11 @@ priority 63
 visibility hide
 spectrum on
 type psl xeno
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
@@ -798,6 +811,11 @@ priority 64
 visibility hide
 spectrum on
 type psl xeno
+baseColorUseCds genbank
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track xenoEst
 shortLabel Other ESTs
@@ -807,8 +825,9 @@ priority 65
 visibility hide
 spectrum on
 type psl xeno
-pslSequenceBases no
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed

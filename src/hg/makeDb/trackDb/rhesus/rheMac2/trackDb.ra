@@ -42,7 +42,6 @@ priority 35.1
 visibility pack
 color 12,12,120
 type genePred
-cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -72,7 +71,6 @@ priority 45.1
 visibility dense
 color 34,139,34
 type genePred nscanPep
-cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 

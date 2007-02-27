@@ -8,6 +8,8 @@ spectrum on
 intronGap 30
 type psl est
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 
 track all_mrna
 shortLabel $Organism mRNAs
@@ -17,10 +19,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track chainRn4
 shortLabel $o_Organism Chain

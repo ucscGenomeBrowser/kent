@@ -6,10 +6,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track intronEst
 shortLabel Spliced ESTs
@@ -20,8 +23,10 @@ visibility dense
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track est
 shortLabel $Organism ESTs
@@ -32,8 +37,9 @@ visibility hide
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 
 track ecoresHg17
 shortLabel $o_Organism Ecores

@@ -15,6 +15,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
+baseColorUseCds genbank
+baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track xenoMrna
 shortLabel Viral mRNAs
@@ -24,6 +31,11 @@ priority 55
 visibility pack
 spectrum on
 type psl xeno
+baseColorUseCds genbank
+baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track xenoBlastzMrna
 shortLabel Viral mRNAs Chained

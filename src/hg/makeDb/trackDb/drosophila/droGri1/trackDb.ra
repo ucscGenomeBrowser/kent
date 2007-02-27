@@ -15,6 +15,8 @@ visibility hide
 spectrum on
 type psl est
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 
 track all_mrna
 shortLabel D. gri. mRNAs
@@ -26,7 +28,11 @@ spectrum on
 type psl mrna
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
@@ -46,9 +52,11 @@ priority 63
 visibility hide
 spectrum on
 type psl xeno
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track blastDm2FB
 shortLabel D. mel. Proteins

@@ -27,10 +27,13 @@ priority 54
 visibility hide
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track all_est
 shortLabel $Organism ESTs
@@ -42,6 +45,8 @@ spectrum on
 intronGap 30
 type psl est
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 
 # Jim thought we should hide this
 track xenoRefGene

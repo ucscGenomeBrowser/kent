@@ -42,8 +42,10 @@ visibility dense
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track mzDy1Dp2Ag1_phast
 shortLabel Conservation

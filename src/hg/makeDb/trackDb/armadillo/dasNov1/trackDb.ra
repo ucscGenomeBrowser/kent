@@ -6,7 +6,6 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
 showDiffBasesAllScales .

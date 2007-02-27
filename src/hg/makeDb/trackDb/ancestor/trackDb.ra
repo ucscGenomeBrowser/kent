@@ -45,9 +45,11 @@ priority 63
 visibility hide
 spectrum on
 type psl xeno
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track xenoEst
 shortLabel All ESTs
@@ -57,6 +59,9 @@ priority 65
 visibility hide
 spectrum on
 type psl xeno
+baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track chainSelf

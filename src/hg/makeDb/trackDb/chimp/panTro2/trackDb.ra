@@ -59,7 +59,6 @@ priority 45.1
 visibility dense
 color 34,139,34
 type genePred nscanPep
-cdsDrawDefault genomic\ codons
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -80,10 +79,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track xenoMrna
 shortLabel Other mRNAs
@@ -93,9 +95,11 @@ priority 63
 visibility hide
 spectrum on
 type psl xeno
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track intronEst
 shortLabel Spliced ESTs
@@ -106,8 +110,10 @@ visibility dense
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track est
 shortLabel ESTs
@@ -118,8 +124,9 @@ visibility hide
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+indelDoubleInsert on
+indelQueryInsert on
 
 track multiz8way
 release alpha

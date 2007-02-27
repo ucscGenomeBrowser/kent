@@ -17,8 +17,10 @@ visibility dense
 spectrum on
 intronGap 30
 type psl est
-pslSequenceBases no
 baseColorUseSequence genbank
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track xenLaeRna
 shortLabel X. laevis mRNAs

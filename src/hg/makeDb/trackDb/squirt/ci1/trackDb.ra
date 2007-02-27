@@ -23,9 +23,10 @@ priority 57
 visibility hide
 spectrum on
 intronGap 30
-pslSequenceBases no
 baseColorUseSequence genbank
 type psl est
+indelDoubleInsert on
+indelQueryInsert on
 
 track all_mrna
 shortLabel $Organism mRNAs
@@ -35,9 +36,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 track intronEst
 shortLabel Spliced ESTs
@@ -47,9 +52,11 @@ priority 56
 visibility dense
 spectrum on
 intronGap 30
-pslSequenceBases no
 baseColorUseSequence genbank
 type psl est
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
 
 track snapGene
 shortLabel SNAP Genes
