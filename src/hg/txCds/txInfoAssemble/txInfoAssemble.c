@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "bed.h"
 #include "cdsEvidence.h"
 #include "borf.h"
 #include "binRange.h"
@@ -173,7 +174,7 @@ else
 return FALSE;
 }
 
-boolean retainedIntronInCds(struct bed *bed, struct hash *hash)
+boolean hasRetainedIntron(struct bed *bed, struct hash *hash)
 /* See if any exons in bed enclose any retained introns in keeper-hash */
 {
 struct binKeeper *keeper = hashFindVal(hash, bed->chrom);
@@ -192,11 +193,8 @@ for (i=0; i<bed->blockCount; ++i)
 	if (intron->strand[0] == bed->strand[0] 
 		&& start < intron->chromStart && end > intron->chromEnd)
 	    {
-	    if (rangeIntersection(intron->chromStart, intron->chromEnd, bed->thickStart, bed->thickEnd) > 0)
-		{
-		gotOne = TRUE;
-		break;
-		}
+	    gotOne = TRUE;
+	    break;
 	    }
 	}
     slFreeList(&binList);
@@ -370,7 +368,7 @@ while (lineFileRow(lf, row))
     info.nonsenseMediatedDecay = isNonsenseMediatedDecayTarget(bed);
 
     /* Figure out if retained intron from bed and intron keeper hash */
-    info.retainedIntronInCds = retainedIntronInCds(bed, retainedIntronHash);
+    info.retainedIntron = hasRetainedIntron(bed, retainedIntronHash);
 
     /* Look up selenocysteine info. */
     info.selenocysteine = (hashLookup(selenocysteineHash, bed->name) != NULL);
