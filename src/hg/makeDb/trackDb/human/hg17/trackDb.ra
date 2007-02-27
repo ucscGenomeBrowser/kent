@@ -1434,7 +1434,7 @@ compositeTrack on
 shortLabel RIPs
 longLabel Retrotransposon Insertion Polymorphisms in Humans
 group varRep
-priority 149.5
+priority 320
 visibility hide 
 thickDrawItem on
 type bed 6 .
