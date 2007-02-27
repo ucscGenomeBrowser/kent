@@ -572,7 +572,7 @@ compositeTrack on
 shortLabel SNP Arrays
 longLabel SNP Genotyping Arrays
 group varRep
-priority 144
+priority 101
 visibility hide
 type bed 4 .
 
