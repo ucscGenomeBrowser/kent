@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.48 2007/02/26 17:02:33 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.49 2007/02/27 22:00:36 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -641,6 +641,21 @@ for (i=0; i<bed->blockCount; ++i)
     total += bed->blockSizes[i];
 return total;
 }
+
+int bedTotalThickBlockSize(struct bed *bed)
+/* Return total size of all thick blocks. */
+{
+int total = 0;
+int i;
+for (i=0; i<bed->blockCount; ++i)
+    {
+    int start = bed->chromStart + bed->chromStarts[i];
+    int end = start + bed->blockSizes[i];
+    total += positiveRangeIntersection(start, end, bed->thickStart, bed->thickEnd);
+    }
+return total;
+}
+
 
 struct genePred *bedToGenePred(struct bed *bed)
 /* Convert a single bed to a genePred structure. */

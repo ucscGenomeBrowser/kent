@@ -194,6 +194,9 @@ void bedOutputNitemRgb(struct bed *el, int wordCount, FILE *f,
 int bedTotalBlockSize(struct bed *bed);
 /* Return total size of all blocks. */
 
+int bedTotalThickBlockSize(struct bed *bed);
+/* Return total size of all thick blocks. */
+
 struct bed *bedFromPsl(struct psl *psl);
 /* Convert a single psl to a bed structure */
 
