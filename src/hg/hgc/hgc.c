@@ -195,7 +195,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1217 2007/02/28 20:37:55 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1218 2007/02/28 21:33:34 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16080,31 +16080,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     hma = hapmapAllelesLoad(row+rowOffset);
     printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
-    printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hma->observed);
+    printf("<BR><B>Polymorphism type:</B> %s<BR>\n", hma->observed);
     printf("<B>Strand:</B> %s<BR>\n", hma->strand);
     if (hma->homoCount1 >= hma->homoCount2)
         {
-	majorAllele = hma->allele1;
+	majorAllele = cloneString(hma->allele1);
 	majorCount = hma->homoCount1;
 	minorCount = hma->homoCount2;
-	if (minorCount > 0)
-	    minorAllele = cloneString(hma->allele2);
+	minorAllele = cloneString(hma->allele2);
         }
     else 
         {
 	majorAllele = cloneString(hma->allele2);
 	majorCount = hma->homoCount2;
 	minorCount = hma->homoCount1;
-	if (minorCount > 0)
-	    minorAllele = hma->allele1;
+	minorAllele = cloneString(hma->allele1);
 	}
-    printf("<B>Total observations:</B> %d<BR>\n", majorCount + minorCount + hma->heteroCount);
-    printf("<B>Minor allele frequency (0-500): </B> %d<BR>\n", hma->score);
-    printf("<B>Major Allele:</B> %s<BR>\n", majorAllele);
+    printf("<B>Count of individuals:</B> %d<BR>\n", majorCount + minorCount + hma->heteroCount);
+    printf("<B>Minor allele frequency: </B> %d%%<BR>\n", hma->score / 10);
+    printf("<B>Major allele:</B> %s<BR>\n", majorAllele);
     printf("<B>Count of individuals who are homozygous for major allele:</B> %d<BR>\n", majorCount);
-    if (minorCount > 0)
+    if (differentString(minorAllele, "none"))
        {
-       printf("<B>Minor Allele:</B> %s<BR>\n", minorAllele);
+       printf("<B>Minor allele:</B> %s<BR>\n", minorAllele);
        printf("<B>Count of individuals who are homozygous for minor allele:</B> %d<BR>\n", minorCount);
        }
     else
