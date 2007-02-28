@@ -21,7 +21,7 @@
 #include "bedCart.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.54 2007/02/09 23:47:07 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.55 2007/02/28 20:39:07 giardine Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -311,7 +311,10 @@ struct hTableInfo *hti = getHti(database, table);
 char buf[256];
 char *setting;
 htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
-hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
+if (doGalaxy()) 
+    startGalaxyForm();
+else
+    hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 hPrintf("%s\n", "<TABLE><TR><TD>");
 if (doCt)
@@ -386,19 +389,37 @@ else
     }
 if (doCt)
     {
-    cgiMakeButton(hgtaDoGetCustomTrackTb, "get custom track in table browser");
-    hPrintf(" ");
-    cgiMakeButton(hgtaDoGetCustomTrackFile, "get custom track in file");
-    hPrintf("<BR>\n");
-    cgiMakeButton(hgtaDoGetCustomTrackGb, "get custom track in genome browser");
+    if (doGalaxy()) 
+        {
+        /* send the action parameter with the form as well */
+        cgiMakeHiddenVar(hgtaDoGetCustomTrackFile, "get custom track in file");
+        printGalaxySubmitButtons();
+        }
+    else 
+        {
+        cgiMakeButton(hgtaDoGetCustomTrackTb, "get custom track in table browser");
+        hPrintf(" ");
+        cgiMakeButton(hgtaDoGetCustomTrackFile, "get custom track in file");
+        hPrintf("<BR>\n");
+        cgiMakeButton(hgtaDoGetCustomTrackGb, "get custom track in genome browser");
+        }
     }
 else
     {
-    cgiMakeButton(hgtaDoGetBed, "get BED");
+    if (doGalaxy()) 
+        {
+        cgiMakeHiddenVar(hgtaDoGetBed, "get BED");
+        printGalaxySubmitButtons();
+        }
+    else 
+        cgiMakeButton(hgtaDoGetBed, "get BED");
     }
-hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "cancel");
-hPrintf("</FORM>\n");
+if (!doGalaxy()) 
+    {
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoMainPage, "cancel");
+    hPrintf("</FORM>\n");
+    }
 htmlClose();
 }
 

@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.107 2007/02/26 18:09:08 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.108 2007/02/28 20:39:08 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -415,6 +415,13 @@ for (ot = otList; ot != NULL; ot = ot->next)
     hPrintf(">%s\n", ot->label);
     }
 hPrintf("</SELECT>\n");
+if (startsWith("hgwdev-giardine", cgiServerName()) ||
+    startsWith("genome-test", cgiServerName())) 
+    {
+    hPrintf(" ");
+    cartMakeCheckBox(cart, "sendToGalaxy", FALSE);
+    hPrintf(" Send output to Galaxy");
+    }
 hPrintf("</TD></TR>\n");
 }
 
@@ -468,14 +475,12 @@ if (isWig)
     {
     slAddTail(&otList, &otWigData);
     slAddTail(&otList, &otWigBed);
-    slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     }
 else if (isMaf)
     {
     slAddTail(&otList, &otMaf);
     slAddTail(&otList, &otAllFields);
-    slAddTail(&otList, &otGalaxy);
     }
 else if (isChromGraphCt)
     {
@@ -488,7 +493,6 @@ else if (isPositional)
     slAddTail(&otList, &otSequence);
     slAddTail(&otList, &otGff);
     slAddTail(&otList, &otBed);
-    slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
     }

@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.7 2007/02/20 23:43:45 giardine Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.8 2007/02/28 20:39:08 giardine Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -35,124 +35,6 @@ else
 return url;
 }
 
-void doOutGalaxyQuery (struct trackDb *track, char *table, unsigned int hguid)
-/* print options page for background query */
-{
-struct hTableInfo *hti = getHti(database, table);
-struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *shortLabel = table;
-char selfUrl[256];
-if (track != NULL)
-    shortLabel = track->shortLabel;
-htmlOpen("Output %s as %s", "results to Galaxy", shortLabel);
-hPrintf("<FORM ACTION=\"%s\" METHOD=POST>\n", getGalaxyUrl());
-/* copy cart parameters into hidden fields to send to Galaxy */
-hPrintf("\n"); /* make more readable */
-/* set default if no tool_id for Galaxy */
-if (!cartVarExists(cart, "tool_id")) 
-    cgiMakeHiddenVar("tool_id", "ucsc");
-safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerName(), cgiScriptName());
-cgiMakeHiddenVar("URL", selfUrl);
-hPrintf("\n"); 
-if (hguid > 0)
-    {
-    char id[25];
-    safef(id, sizeof(id), "%u", hguid);
-    cgiMakeHiddenVar("hguid", id);
-    cgiMakeHiddenVar("userID", id);
-    hPrintf("\n"); 
-    }
-for (el = elList; el != NULL; el = el->next)
-    {
-    //NEED to check for outputType
-    /* skip form elements from this page */
-    if (sameString(el->name, "hgsid") || sameString(el->name, "fbQual") ||
-        sameString(el->name, "fbUpBases") || sameString(el->name, "fbDownBases") ||
-	sameString(el->name, "galaxyFileFormat") || 
-        sameString(el->name, "hgta_doGalaxyQuery") ||
-        sameString(el->name, "hgta_doGetGalaxyQuery") ||
-	sameString(el->name, "hgta_doTopSubmit")
-       )
-       continue;
-    if (el->val != NULL && differentString((char *)el->val, "*") &&
-        differentString((char *)el->val, "%2A") && differentString((char *)el->val, "ignored")
-        && differentString((char *)el->val, ""))
-        {
-        cgiMakeHiddenVar(el->name, (char *)el->val);
-        hPrintf("\n"); /* make more readable */
-        }
-    }
-
-if (isWiggle(database, table))
-    {
-    cgiMakeHiddenVar(hgtaCtWigOutType, outWigBed);
-    hPrintf("<BR>No options needed for wiggle tracks<BR>");
-    if (sameString(cartString(cart, "hgta_regionType"), "genome"))
-        hPrintf("<BR><B>Genome wide wiggle queries are likely to time out.  It is recommended to choose a region.</B><BR><BR>");
-    cgiMakeHiddenVar("galaxyFileFormat", "bed");
-    }
-else if (isMafTable(database, curTrack, curTable))
-    {
-    hPrintf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" CHECKED>%s",
-        "galaxyFileFormat", "maf", "MAF multiple alignment format");
-    if (!anyIntersection())
-        {
-        hPrintf("&nbsp;&nbsp;");
-        hPrintf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\">%s (tab-separated)",
-            "galaxyFileFormat", "tab", "All fields from selected table");
-        hPrintf("<BR><BR>"); 
-        }
-    }
-else
-    {
-    hPrintf("%s\n", "<P> <B> Create one BED record per: </B>");
-    hPrintf("%s\n", "<A HREF=\"/goldenPath/help/hgTextHelp.html#FeatureBits\">"
-     "<B>Help</B></A><P>");
-    fbOptionsHtiCart(hti, cart);
-    hPrintf("<BR><BR>");
-    /* allow user to choose bed or all fields from table */
-    hPrintf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" CHECKED>%s",
-        "galaxyFileFormat", "bed", "BED file format");
-    if (!anyIntersection())
-        {
-        hPrintf("&nbsp;&nbsp;");
-        hPrintf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\">%s (tab-separated)",
-            "galaxyFileFormat", "tab", "All fields from selected table");
-        hPrintf("<BR><BR>");
-        }
-    }
-cgiMakeButton(hgtaDoGalaxyQuery, "Send query to Galaxy");
-hPrintf("</FORM>\n");
-hPrintf(" ");
-/* new form as action is different */
-hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", cgiScriptName());
-cgiMakeButton(hgtaDoMainPage, "Cancel");
-hPrintf("</FORM>\n");
-htmlClose();
-hashElFreeList(&elList);
-/* how to free hti? */
-}
-
-void doGalaxyQuery(struct sqlConnection *conn)
-/* print results in response to request from Galaxy */
-{
-if (!cartVarExists(cart, "galaxyFileFormat") ||
-    sameString(cartString(cart, "galaxyFileFormat"), "bed"))
-    {
-    doGetBed(conn);
-    }
-else if (sameString(cartString(cart, "galaxyFileFormat"), "maf")) 
-    {
-    doOutMaf(curTrack, curTable, conn);
-    }
-else
-    {
-    /* print results as tab-delimited table columns */
-    textOpen();
-    tabOutSelectedFields(database, curTable, NULL, fullTableFields(database, curTable));
-    }
-}
-
 void galaxyHandler (char *format, va_list args)
 /* error Handler that passes error on to Galaxy */
 {
@@ -161,37 +43,79 @@ sprintf(msg, format, args);
 noWarnAbort();
 }
 
-void doGalaxyPrintGenomes()
-/* print the genomes list as text for GALAxy */
+void sendParamsToGalaxy(char *doParam, char *paramVal)
+/* intermediate page for formats printed directly from top form */
 {
+char *shortLabel = curTable;
+char hgsid[64];
 
-struct dbDb *dbs, *dbList = hDbDbList();
-textOpen();
-for (dbs=dbList;dbs != NULL;dbs = dbs->next)
-    hPrintf("%s\t%s\t%s\t%d\t%d\t%s\n", dbs->name, dbs->description, 
-	dbs->organism, dbs->active, dbs->orderKey, dbs->genome);
-dbDbFreeList(&dbList);
+if (curTrack != NULL)
+    shortLabel = curTrack->shortLabel;
+htmlOpen("Output %s as %s", "results to Galaxy", shortLabel);
+startGalaxyForm();
+/* send the hgta_do parameter that won't be in the cart */
+cgiMakeHiddenVar(doParam, paramVal);
+/* need to send sessionId */
+safef(hgsid, sizeof(hgsid), "%u", cartSessionId(cart));
+cgiMakeHiddenVar(cartSessionVarName(cart), hgsid);
+printGalaxySubmitButtons();
+htmlClose();
 }
 
-void doGalaxyPrintPairwiseAligns(struct sqlConnection *conn)
-/* print the builds that have pairwise alignments with this one, from trackDb */
+void startGalaxyForm ()
+/* start form to send parameters to Galaxy, also send required params */
 {
-struct trackDb *alignTracks = trackDbLoadWhere(conn, "trackDb", "type like 'netAlign%'");
-struct trackDb *el;
-char *parts[3];
-struct dbDb *dbs, *dbList = hDbDbList();
-struct hash *orgHash = newHash(8);
-for (dbs=dbList;dbs != NULL;dbs = dbs->next)
-    hashAdd(orgHash, cloneString(dbs->name), (void *)cloneString(dbs->genome));
-dbDbFreeList(&dbList);
-textOpen();
-for (el = alignTracks; el != NULL; el = el->next)
+char selfUrl[256];
+int hguid = cartUserId(cart);
+
+hPrintf("<FORM ACTION=\"%s\" METHOD=POST>\n", getGalaxyUrl());
+/* copy cart parameters into hidden fields to send to Galaxy */
+hPrintf("\n"); /* make more readable */
+/* Galaxy requires tool_id and URL */
+/* set default if no tool_id for Galaxy */
+if (!cartVarExists(cart, "tool_id"))
+    cgiMakeHiddenVar("tool_id", "ucsc_table_direct1");
+else
+    cgiMakeHiddenVar("tool_id", cartString(cart, "tool_id"));
+safef(selfUrl, sizeof(selfUrl), "http://%s%s", cgiServerName(), cgiScriptName());
+cgiMakeHiddenVar("URL", selfUrl);
+hPrintf("\n");
+/* forward user parameters */
+if (hguid > 0)
     {
-    struct hashEl *hEl;
-    chopByWhite(cloneString(el->type), parts, 3);
-    hEl = hashLookup(orgHash, parts[1]);
-    printf("%s %s\n", parts[1], (char *)hEl->val);
+    char id[25];
+    safef(id, sizeof(id), "%u", hguid);
+    cgiMakeHiddenVar("hguid", id);
+    hPrintf("\n");
     }
-trackDbFreeList(&alignTracks);
+/* send database and organism and table for Galaxy's info */
+cgiMakeHiddenVar("db", database);
+if (cartVarExists(cart, "org"))
+    cgiMakeHiddenVar("org", cartString(cart, "org"));
+cgiMakeHiddenVar("hgta_table", curTable);
+cgiMakeHiddenVar("hgta_track", cartString(cart, "hgta_track"));
+if (cartVarExists(cart, "hgta_regionType"))
+    cgiMakeHiddenVar("hgta_regionType", cartString(cart, "hgta_regionType"));
+if (cartVarExists(cart, "hgta_outputType"))
+    cgiMakeHiddenVar("hgta_outputType", cartString(cart, "hgta_outputType"));
+if (cartVarExists(cart, "position"))
+    cgiMakeHiddenVar("position", cartString(cart, "position"));
 }
 
+void printGalaxySubmitButtons ()
+/* print submit button to send query results to Galaxy */
+{
+cgiMakeButton(hgtaDoGalaxyQuery, "Send query to Galaxy");
+hPrintf("</FORM>\n");
+hPrintf(" ");
+/* new form as action is different */
+hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", cgiScriptName());
+cgiMakeButton(hgtaDoMainPage, "Cancel");
+hPrintf("</FORM>\n");
+}
+
+boolean doGalaxy ()
+/* has the send to Galaxy checkbox been selected? */
+{
+return cartUsualBoolean(cart, "sendToGalaxy", FALSE);
+}

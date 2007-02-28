@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.14 2007/02/05 21:44:06 ann Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.15 2007/02/28 20:39:08 giardine Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -91,8 +91,8 @@ hPrintf("%s",
 "        <LI><em><B>BED</B></em> - positions of data items in a standard\n"
 "        UCSC Browser format.</LI>\n"
 "        \n"
-"        <LI><em><B>query results to GALA</B></em> - displays results of query in the\n"
-"        Genome Alignment and Annotation database browser (GALA).\n"
+"        <LI><em><B>Send output to Galaxy</B></em> - displays results of query in \n"
+"        Galaxy a framework for interactive genome analysis.\n"
 "        \n"
 "        <LI><em><B>GTF</B></em> - positions of all data items in a standard\n"
 "        gene prediction format. (Both BED and GTF formats can be\n"

@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.147 2007/02/22 00:29:50 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.148 2007/02/28 20:39:08 giardine Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1268,7 +1268,14 @@ for (region = regionList; region != NULL; region = region->next)
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
 		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
-	hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
+        if (doGalaxy())
+            {
+            char *s, *script = hgTracksName();
+            s = strstr(script, "cgi-bin");
+            hPrintf("<A HREF=\"http://%s/%s?db=%s", cgiServerName(), s, database);
+            }
+        else
+	    hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
 	hPrintf("&position=%s", posBuf);
 	hPrintf("&%s=%s", table, hTrackOpenVis(table));
 	if (table2 != NULL)
@@ -1379,7 +1386,12 @@ else
 	track = cTdb;
     }
 if (sameString(output, outPrimaryTable))
-    doOutPrimaryTable(table, conn);
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutPrimaryTable(table, conn);
+    }
 else if (sameString(output, outSelectedFields))
     doOutSelectedFields(table, conn);
 else if (sameString(output, outSequence))
@@ -1389,19 +1401,47 @@ else if (sameString(output, outBed))
 else if (sameString(output, outCustomTrack))
     doOutCustomTrack(table, conn);
 else if (sameString(output, outGff))
-    doOutGff(table, conn);
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutGff(table, conn); 
+    }
 else if (sameString(output, outHyperlinks))
-    doOutHyperlinks(table, conn);
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutHyperlinks(table, conn); 
+    }
 else if (sameString(output, outWigData))
-    doOutWigData(track, table, conn);
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutWigData(track, table, conn);
+    }
 else if (sameString(output, outWigBed))
-    doOutWigBed(track, table, conn);
-else if (sameString(output, outGalaxy))
-    doOutGalaxyQuery(track, table, cartUserId(cart));
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutWigBed(track, table, conn);
+    }
 else if (sameString(output, outMaf))
-    doOutMaf(track, table, conn);
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutMaf(track, table, conn); 
+    }
 else if (sameString(output, outChromGraphData))
-    doOutChromGraphDataCt(track, table);
+    {
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoTopSubmit, "get output");
+    else
+        doOutChromGraphDataCt(track, table); 
+    }
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -1470,23 +1510,28 @@ else if (cartVarExists(cart, hgtaDoValueRange))
 else if (cartVarExists(cart, hgtaDoSelectFieldsMore))
     doSelectFieldsMore();
 else if (cartVarExists(cart, hgtaDoPrintSelectedFields))
-    doPrintSelectedFields();
+    doPrintSelectedFields();  
+else if (cartVarExists(cart, hgtaDoGalaxySelectedFields))
+    sendParamsToGalaxy(hgtaDoPrintSelectedFields, "get output");
 else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
     doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));
 else if ((varList = cartFindPrefix(cart, hgtaDoSetAllFieldPrefix)) != NULL)
     doSetAllField(varList->name + strlen(hgtaDoSetAllFieldPrefix));
 else if (cartVarExists(cart, hgtaDoGenePredSequence))
-    doGenePredSequence(conn);
+    doGenePredSequence(conn);  
 else if (cartVarExists(cart, hgtaDoGenomicDna))
-    doGenomicDna(conn);
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoGenomicDna, "submit");
+    else
+        doGenomicDna(conn);  
 else if (cartVarExists(cart, hgtaDoGetBed))
-    doGetBed(conn);
+    doGetBed(conn);  
 else if (cartVarExists(cart, hgtaDoGetCustomTrackTb))
-    doGetCustomTrackTb(conn);
+    doGetCustomTrackTb(conn);  
 else if (cartVarExists(cart, hgtaDoGetCustomTrackGb))
     doGetCustomTrackGb(conn);
 else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
-    doGetCustomTrackFile(conn);
+    doGetCustomTrackFile(conn);  
 else if (cartVarExists(cart, hgtaDoRemoveCustomTrack))
     doRemoveCustomTrack(conn);
 else if (cartVarExists(cart, hgtaDoClearSubtrackMerge))
@@ -1500,12 +1545,6 @@ else if (cartVarExists(cart, hgtaDoSubtrackMergeSubmit))
     doSubtrackMergeSubmit(conn);
 else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
     doSubtrackMergePage(conn);
-else if (cartVarExists(cart, hgtaDoGalaxyQuery))
-    doGalaxyQuery(conn);
-else if (cartVarExists(cart, hgtaDoGalaxyPrintGenomes))
-    doGalaxyPrintGenomes();
-else if (cartVarExists(cart, hgtaDoGalaxyPrintPairwiseAligns))
-    doGalaxyPrintPairwiseAligns(conn);
 else if (cartVarExists(cart, hgtaDoLookupPosition))
     doLookupPosition(conn);
 else if (cartVarExists(cart, hgtaDoMetaData))

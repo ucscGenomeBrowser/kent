@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.47 2006/11/28 00:57:42 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.48 2007/02/28 20:39:07 giardine Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -236,7 +236,10 @@ static void showTableButtons(char *db, char *table, boolean withGetButton)
 hPrintf("<BR>\n");
 if (withGetButton)
     {
-    cgiMakeButton(hgtaDoPrintSelectedFields, "get output");
+    if (doGalaxy()) /* need form fields here and Galaxy so add step to Galaxy */
+        cgiMakeButton(hgtaDoGalaxySelectedFields, "done with selections");
+    else 
+        cgiMakeButton(hgtaDoPrintSelectedFields, "get output");
     hPrintf(" ");
     cgiMakeButton(hgtaDoMainPage, "cancel");
     hPrintf(" ");

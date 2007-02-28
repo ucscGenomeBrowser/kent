@@ -410,6 +410,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoValueHistogram "hgta_doValueHistogram"
 #define hgtaDoValueRange "hgta_doValueRange"
 #define hgtaDoPrintSelectedFields "hgta_doPrintSelectedFields"
+#define hgtaDoGalaxySelectedFields "hgta_doGalaxySelectedFields"
 #define hgtaDoSelectFieldsMore "hgta_doSelectFieldsMore"
 #define hgtaDoClearAllFieldPrefix "hgta_doClearAllField."
 #define hgtaDoSetAllFieldPrefix "hgta_doSetAllField."
@@ -420,11 +421,7 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoGetCustomTrackTb "hgta_doGetCustomTrackTb"
 #define hgtaDoGetCustomTrackFile "hgta_doGetCustomTrackFile"
 #define hgtaDoRemoveCustomTrack "hgta_doRemoveCustomTrack"
-#define hgtaDoGetGalaxyQuery "hgta_doGetGalaxyQuery"
-#define hgtaDoGalaxyPrintGenomes "hgta_doGalaxyPrintGenomes"
-#define hgtaDoGalaxyPrintPairwiseAligns "hgta_doGalaxyPrintPairwiseAligns"
 #define hgtaDoGalaxyQuery "hgta_doGalaxyQuery"
-#define hgtaDoGetGalaxyQuery "hgta_doGetGalaxyQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 #define hgtaDoMetaData "hgta_doMetaData"
 
@@ -849,14 +846,17 @@ void doSummaryStatsBed(struct sqlConnection *conn);
  * or that is bed-format custom. */
 
 /* --------------- Galaxy functions --------------- */
-void doGalaxyPrintGenomes();
-/* print the genomes list as text for Galaxy */
+boolean doGalaxy ();
+/* Has the send query results to Galaxy checkbox been selected? */
 
-void doGalaxyPrintPairwiseAligns(struct sqlConnection *conn);
-/* print the builds that have pairwise alignments with this one, from trackDb */
+void printGalaxySubmitButtons ();
+/* print submit button to send query results to Galaxy */
 
-void doGalaxyQuery(struct sqlConnection *conn);
-/* */
+void startGalaxyForm ();
+/* start form to send parameters to Galaxy, also send required params */
+
+void sendParamsToGalaxy(char *doParam, char *paramVal);
+/* intermediate page for formats printed directly from top form */
 
 #define uglyw warn	/* Warn for debugging purposes. */
 #endif /* HGTABLES_H */

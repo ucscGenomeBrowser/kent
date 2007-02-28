@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.16 2005/06/07 14:04:09 giardine Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.17 2007/02/28 20:39:08 giardine Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -216,14 +216,26 @@ void genomicFormatPage(struct sqlConnection *conn)
 {
 struct hTableInfo *hti = getHti(database, curTable);
 htmlOpen("%s Genomic Sequence", curTableLabel());
-hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
+if (doGalaxy())
+    startGalaxyForm();
+else
+    hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 hgSeqOptionsHtiCart(hti, cart);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoGenomicDna, "get sequence");
-hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "cancel");
-hPrintf("</FORM>");
+if (doGalaxy())
+    {
+    /* pass parameter to get sequence to Galaxy */
+    cgiMakeHiddenVar(hgtaDoGenomicDna, "get sequence");
+    printGalaxySubmitButtons();
+    }
+else
+    {
+    cgiMakeButton(hgtaDoGenomicDna, "get sequence");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoMainPage, "cancel");
+    hPrintf("</FORM>");
+    }
 htmlClose();
 }
 
@@ -250,11 +262,17 @@ char *type = cartString(cart, hgtaGeneSeqType);
 
 if (sameWord(type, "protein"))
     {
-    doGenePredNongenomic(conn, 1);
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoGenePredSequence, "submit");
+    else
+        doGenePredNongenomic(conn, 1);
     }
 else if (sameWord(type, "mRNA"))
     {
-    doGenePredNongenomic(conn, 2);
+    if (doGalaxy() && !cgiOptionalString(hgtaDoGalaxyQuery))
+        sendParamsToGalaxy(hgtaDoGenePredSequence, "submit");
+    else
+        doGenePredNongenomic(conn, 2);
     }
 else
     genomicFormatPage(conn);
