@@ -28,6 +28,8 @@ SCRIPT_FILES = \
 	makeDownloads.pl \
 	makeGenomeDb.pl \
 	makePushQSql.pl \
+	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
-	partitionSequence.pl
+	partitionSequence.pl \
+	updateIgtc.pl
 
