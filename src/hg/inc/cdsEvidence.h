@@ -5,6 +5,10 @@
 #ifndef CDSEVIDENCE_H
 #define CDSEVIDENCE_H
 
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 #define CDSEVIDENCE_NUM_COLS 11
 
 struct cdsEvidence
