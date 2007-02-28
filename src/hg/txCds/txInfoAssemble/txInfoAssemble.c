@@ -189,8 +189,8 @@ for (i=0; i<bed->blockCount; ++i)
 return gotOne;
 }
 
-int countStrangeSplices(struct bed *bed, struct hash *altSpliceHash)
-/* Count number of introns with strange splice sites. */
+int countMatchingIntrons(struct bed *bed, char *type, struct hash *altSpliceHash)
+/* Count number of introns of a particular type . */
 {
 struct binKeeper *keeper = hashFindVal(altSpliceHash, bed->chrom);
 if (keeper == NULL)
@@ -205,7 +205,7 @@ for (i=0; i<lastBlock; ++i)
     for (bin = binList; bin != NULL; bin = bin->next)
         {
 	struct bed *intron = bin->val;
-	if (sameString(intron->name, "strangeSplice"))
+	if (sameString(intron->name, type))
 	    {
 	    if (intron->strand[0] == bed->strand[0] 
 		    && start == intron->chromStart && end == intron->chromEnd)
@@ -221,6 +221,18 @@ for (i=0; i<lastBlock; ++i)
     slFreeList(&binList);
     }
 return total;
+}
+
+int countStrangeSplices(struct bed *bed, struct hash *altSpliceHash)
+/* Count number of introns with strange splice sites. */
+{
+return countMatchingIntrons(bed, "strangeSplice", altSpliceHash);
+}
+
+int countAtacIntrons(struct bed *bed, struct hash *altSpliceHash)
+/* Count number of introns with at/ac splice sites. */
+{
+return countMatchingIntrons(bed, "atacIntron", altSpliceHash);
 }
 
 int addIntronBleed(struct bed *bed, struct hash *altSpliceHash)
@@ -359,6 +371,7 @@ while (lineFileRow(lf, row))
 
     /* Figure out name, sourceAcc, and isRefSeq from bed->name */
     info.name = bed->name;
+    info.category = "n/a";
     info.sourceAcc = strrchr(bed->name, '.');
     if (info.sourceAcc == NULL)
         info.sourceAcc = bed->name;
@@ -434,6 +447,7 @@ while (lineFileRow(lf, row))
     /* Figure out if retained intron from bed and alt-splice keeper hash */
     info.retainedIntron = hasRetainedIntron(bed, altSpliceHash);
     info.strangeSplice = countStrangeSplices(bed, altSpliceHash);
+    info.atacIntrons = countAtacIntrons(bed, altSpliceHash);
     info.bleedIntoIntron = addIntronBleed(bed, altSpliceHash);
 
     /* Look up selenocysteine info. */
