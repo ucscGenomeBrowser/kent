@@ -20,7 +20,7 @@ struct hapmapAlleles
     char *observed;	/* Observed string from genotype file */
     char allele1[2];	/* This allele has been observed */
     unsigned homoCount1;	/* Count of individuals who are homozygous for allele1 */
-    char allele2[2];	/* This allele may not have been observed */
+    char *allele2;	/* This allele may not have been observed */
     unsigned homoCount2;	/* Count of individuals who are homozygous for allele2 */
     unsigned heteroCount;	/* Count of individuals who are heterozygous */
     };

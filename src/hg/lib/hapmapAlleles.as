@@ -13,7 +13,7 @@ table hapmapAlleles
     char[1] allele1;    "This allele has been observed"
     uint    homoCount1;       "Count of individuals who are homozygous for allele1"
 
-    char[1] allele2;    "This allele may not have been observed"
+    string  allele2;    "This allele may not have been observed"
     uint    homoCount2;       "Count of individuals who are homozygous for allele2"
 
     uint    heteroCount;   "Count of individuals who are heterozygous"

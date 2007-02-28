@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAlleles.h"
 
-static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.4 2007/02/28 18:00:28 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.5 2007/02/28 19:48:25 heather Exp $";
 
 void hapmapAllelesStaticLoad(char **row, struct hapmapAlleles *ret)
 /* Load a row from hapmapAlleles table into ret.  The contents of ret will
@@ -24,7 +24,7 @@ safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->observed = row[6];
 safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
 ret->homoCount1 = sqlUnsigned(row[8]);
-safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
+ret->allele2 = row[9];
 ret->homoCount2 = sqlUnsigned(row[10]);
 ret->heteroCount = sqlUnsigned(row[11]);
 }
@@ -45,7 +45,7 @@ safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->observed = cloneString(row[6]);
 safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
 ret->homoCount1 = sqlUnsigned(row[8]);
-safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
+ret->allele2 = cloneString(row[9]);
 ret->homoCount2 = sqlUnsigned(row[10]);
 ret->heteroCount = sqlUnsigned(row[11]);
 return ret;
@@ -105,7 +105,7 @@ sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->observed = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->allele1, sizeof(ret->allele1));
 ret->homoCount1 = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->allele2, sizeof(ret->allele2));
+ret->allele2 = sqlStringComma(&s);
 ret->homoCount2 = sqlUnsignedComma(&s);
 ret->heteroCount = sqlUnsignedComma(&s);
 *pS = s;
@@ -122,6 +122,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->observed);
+freeMem(el->allele2);
 freez(pEl);
 }
 
