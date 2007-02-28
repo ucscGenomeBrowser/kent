@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.3 2007/02/10 00:23:10 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.4 2007/02/28 23:42:21 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -954,10 +954,13 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
+baseColorDefault diffCodons
 showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
 
 _EOF_
     ;
