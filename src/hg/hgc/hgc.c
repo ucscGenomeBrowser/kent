@@ -195,7 +195,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1215 2007/02/28 07:12:52 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1216 2007/02/28 19:49:52 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16082,19 +16082,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
     printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hma->observed);
     printf("<B>Strand:</B> %s<BR>\n", hma->strand);
-    if (hma->allele1Count >= hma->allele2Count)
+    if (hma->homoCount1 >= hma->homoCount2)
         {
 	majorAllele = hma->allele1;
-	majorCount = hma->allele1Count;
-	minorCount = hma->allele2Count;
+	majorCount = hma->homoCount1;
+	minorCount = hma->homoCount2;
 	if (minorCount > 0)
 	    minorAllele = hma->allele2;
         }
     else 
         {
 	majorAllele = hma->allele2;
-	majorCount = hma->allele2Count;
-	minorCount = hma->allele1Count;
+	majorCount = hma->homoCount2;
+	minorCount = hma->homoCount1;
 	if (minorCount > 0)
 	    minorAllele = hma->allele1;
 	}
