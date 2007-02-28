@@ -195,7 +195,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1216 2007/02/28 19:49:52 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1217 2007/02/28 20:37:55 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16088,11 +16088,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	majorCount = hma->homoCount1;
 	minorCount = hma->homoCount2;
 	if (minorCount > 0)
-	    minorAllele = hma->allele2;
+	    minorAllele = cloneString(hma->allele2);
         }
     else 
         {
-	majorAllele = hma->allele2;
+	majorAllele = cloneString(hma->allele2);
 	majorCount = hma->homoCount2;
 	minorCount = hma->homoCount1;
 	if (minorCount > 0)
@@ -16196,7 +16196,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", hmac->strand);
 
     printf("<B>Allele1:</B> %s<BR>\n", hmac->allele1);
-    if (differentString(hmac->allele2, "?"))
+    if (differentString(hmac->allele2, "none"))
         printf("<B>Allele2:</B> %s<BR>\n", hmac->allele2);
     else
        printf("<B>Allele2:</B> not available (monomorphic) <BR>\n");
@@ -16206,7 +16206,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlHorizontalLine();
     printf("<B>Allele frequencies:</B><BR>\n");
     printf("<TABLE BORDER=1>\n");
-    if (differentString(hmac->allele2, "?"))
+    if (differentString(hmac->allele2, "none"))
         {
         printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", hmac->allele1, hmac->allele2);
         showOneHapmapRow("CEU", hmac->allele1CountCEU, hmac->allele2CountCEU, hmac->heteroCountCEU);
