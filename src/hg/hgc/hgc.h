@@ -262,4 +262,10 @@ void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
 bool loweLabClick(char *track, char *item, struct trackDb *tdb);
 /* check if we have one of the lowelab tracks */
 
+void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable);
+/* Print out stuff from txInfo table. */
+
+void showCdsEvidence(char *geneName, struct trackDb *tdb, char *evTable);
+/* Print out stuff from cdsEvidence table. */
+
 #endif

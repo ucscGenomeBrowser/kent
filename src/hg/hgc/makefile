@@ -9,7 +9,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgc
 
 O = $A.o cgapSageClick.o expClick.o mafClick.o regMotif.o wiggleClick.o \
-	lowelab.o rnaFoldClick.o transMapClick.o ccdsClick.o mgcClick.o dbRIP.o
+	lowelab.o rnaFoldClick.o transMapClick.o txCdsInfo.o \
+	ccdsClick.o mgcClick.o dbRIP.o
 
 include ../../inc/cgi_build_rules.mk
 
