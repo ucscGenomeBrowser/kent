@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.10 2007/02/26 23:41:52 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.11 2007/02/28 00:03:09 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -47,7 +47,7 @@ safef(buf,bufsize,crypt(password, salt));
 }
 
 
-void encryptNewPWD(char *password, char *buf, int bufsize)
+void encryptNewPwd(char *password, char *buf, int bufsize)
 /* encrypt a new password */
 {
 unsigned long seed[2];
@@ -523,7 +523,7 @@ if (!password)
 freez(&password);
 password = generateRandomPassword();
 char encPwd[35] = "";
-encryptNewPWD(password, encPwd, sizeof(encPwd));
+encryptNewPwd(password, encPwd, sizeof(encPwd));
 
 safef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
 sqlUpdate(conn, query);
@@ -558,6 +558,111 @@ else
 freez(&password);
 }
 
+void changePasswordPage(struct sqlConnection *conn)
+/* change password page */
+{
+hPrintf(
+"<h2>HIV VAC</h2>"
+"<p align=\"left\">"
+"</p>"
+"<font color=red>%s</font>"
+"<h3>Change Password</h3>"
+"<form method=post action=\"/cgi-bin-signup/gsidMember\" name=changePasswordForm >"
+"<table>"
+"<tr><td>E-mail</td><td><input type=text name=gsidM_email size=20 value=\"%s\"> "
+  "(your e-mail is also your user-id)</td></tr>"
+"<tr><td>Current Password</td><td><input type=password name=gsidM_password value=\"\" size=10></td></tr>\n"
+"<tr><td>New Password</td><td><input type=password name=gsidM_newPassword value=\"\" size=10></td></tr>\n"
+"<tr><td>&nbsp;</td><td><input type=submit name=gsidMember.do.changePassword value=submit>"
+"&nbsp;<input type=submit name=gsidMember.do.signupPage value=cancel></td></tr>"
+"</table>"
+"<br>"
+, errMsg ? errMsg : ""
+, cartUsualString(cart, "gsidM_email", "")
+);
+
+cartSaveSession(cart);
+
+hPrintf("</FORM>");
+
+}
+
+void changePassword(struct sqlConnection *conn)
+/* process the change password form */
+{
+char query[256];
+char *email = cartUsualString(cart, "gsidM_email", "");
+char *currentPassword = cartUsualString(cart, "gsidM_password", "");
+char *newPassword = cartUsualString(cart, "gsidM_newPassword", "");
+if (!email || sameString(email,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email cannot be blank.");
+    changePasswordPage(conn);
+    return;
+    }
+if (!currentPassword || sameString(currentPassword,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Current password cannot be blank.");
+    changePasswordPage(conn);
+    return;
+    }
+if (!newPassword || sameString(newPassword,""))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("New password cannot be blank.");
+    changePasswordPage(conn);
+    return;
+    }
+safef(query,sizeof(query), "select password from members where email='%s'", email);
+char *password = sqlQuickString(conn, query);
+if (!password)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email not found.");
+    changePasswordPage(conn);
+    return;
+    }
+if (!checkPwd(currentPassword, password))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Invalid current password.");
+    changePasswordPage(conn);
+    return;
+    }
+freez(&password);
+if (!checkPwdCharClasses(newPassword))
+    {
+    freez(&errMsg);
+    errMsg = cloneString(
+	"Password must contain characters from 3 of the following 4 classes: "
+	"[A-Z] [a-z] [0-9] [!@#$%^&*()].");
+    changePasswordPage(conn);
+    return;
+    }
+char encPwd[35] = "";
+encryptNewPwd(newPassword, encPwd, sizeof(encPwd));
+safef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
+sqlUpdate(conn, query);
+
+hPrintf
+    (
+    "<h2>HIV VAC</h2>"
+    "<p align=\"left\">"
+    "</p>"
+    "<h3>Password has been changed.</h3>"
+    "Click <a href=gsidMember?gsidMember.do.signupPage=1>here</a> to return.<br>"
+    , email
+    );
+    
+updatePasswordsFile(conn);
+
+cartRemove(cart, "gsidM_password");
+cartRemove(cart, "gsidM_newPassword");
+}
+
+
 
 
 void signupPage(struct sqlConnection *conn)
@@ -572,6 +677,8 @@ hPrintf(
 "<br>\n"
 "If you are already a member, click <a href=https://%s/>here</a> to access HIVVAC.<br>\n"
 "To view your existing account, click <a href=\"gsidMember?gsidMember.do.displayAccount=1\">here</a>.<br>\n"
+"To change your password, click <a href=\"gsidMember?gsidMember.do.changePasswordPage=1\">here</a>.<br>\n"
+"Lost your password? Click <a href=\"gsidMember?gsidMember.do.lostPasswordPage=1\">here</a>.<br>\n"
 "<font color=red>%s</font>"
 "<h3>Sign up</h3>\n"
 "<form method=post action=\"/cgi-bin-signup/gsidMember\" name=mainForm >\n"
@@ -588,7 +695,6 @@ hPrintf(
 "</table>\n"
 "<br>\n"
 "Questions? Call 831-555-5555.<br>\n"
-"Lost your password? Click <a href=\"gsidMember?gsidMember.do.lostPasswordPage=1\">here</a>.<br>\n"
 , getenv("HTTP_HOST")
 , errMsg ? errMsg : ""
 , cartUsualString(cart, "gsidM_email", "")
@@ -793,7 +899,7 @@ if (!type || sameString(type,""))
     }
 
 char encPwd[35] = "";
-encryptNewPWD(password, encPwd, sizeof(encPwd));
+encryptNewPwd(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "insert into members set "
     "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
     email, encPwd, "N", name, phone, institution, type);
@@ -1019,7 +1125,7 @@ for(email=list;email;email=email->next)
 	    {
 	    uglyf("does not start with $1$<br>\n");
 	    char encPwd[35] = "";
-    	    encryptNewPWD(password, encPwd, sizeof(encPwd));
+    	    encryptNewPwd(password, encPwd, sizeof(encPwd));
 	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'", encPwd, email->name);
 	    uglyf("query: %s<br>\n",query);
 	    sqlUpdate(conn,query);
@@ -1081,6 +1187,10 @@ else if (cartVarExists(cart, "gsidMember.do.lostPasswordPage"))
     lostPasswordPage(conn);
 else if (cartVarExists(cart, "gsidMember.do.lostPassword"))
     lostPassword(conn);
+else if (cartVarExists(cart, "gsidMember.do.changePasswordPage"))
+    changePasswordPage(conn);
+else if (cartVarExists(cart, "gsidMember.do.changePassword"))
+    changePassword(conn);
 else if (cartVarExists(cart, "gsidMember.do.displayAccount"))
     displayAccount(conn);
 else if (cartVarExists(cart, "gsidMember.do.signup"))
