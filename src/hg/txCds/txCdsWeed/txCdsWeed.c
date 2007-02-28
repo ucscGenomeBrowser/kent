@@ -6,7 +6,7 @@
 #include "txInfo.h"
 #include "cdsEvidence.h"
 
-static char const rcsid[] = "$Id: txCdsWeed.c,v 1.1 2007/02/28 00:25:55 kent Exp $";
+static char const rcsid[] = "$Id: txCdsWeed.c,v 1.2 2007/02/28 00:44:47 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "txCdsWeed - Remove bad CDSs including NMD candidates\n"
   "usage:\n"
-  "   txCdsWeed in.tce in.info out.tce\n"
+  "   txCdsWeed in.tce in.info out.tce out.info\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -24,7 +24,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void txCdsWeed(char *inTce, char *inInfo, char *outTce)
+void txCdsWeed(char *inTce, char *inInfo, char *outTce, char *outInfo)
 /* txCdsWeed - Remove bad CDSs including NMD candidates. */
 {
 /* Read in txInfo into a hash keyed by transcript name */
@@ -48,7 +48,15 @@ for (cds = cdsList; cds != NULL; cds = cds->next)
 	{
 	cdsEvidenceTabOut(cds, f);
 	}
+    else
+	info->orfSize = 0;
     }
+carefulClose(&f);
+
+/* Write updated info file. */
+f = mustOpen(outInfo, "w");
+for (info = infoList; info != NULL; info = info->next)
+    txInfoTabOut(info, f);
 carefulClose(&f);
 }
 
@@ -56,8 +64,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-txCdsWeed(argv[1], argv[2], argv[3]);
+txCdsWeed(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
