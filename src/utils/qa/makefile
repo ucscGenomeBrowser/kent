@@ -4,6 +4,9 @@ include ../../inc/common.mk
 install:
 	cp -p --remove-destination bigPush.csh             ${SCRIPTS}
 	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
+	cp -p --remove-destination chain.csh               ${SCRIPTS}
+	cp -p --remove-destination chain2.csh              ${SCRIPTS}
+	cp -p --remove-destination chainNetTrio.csh        ${SCRIPTS}
 	cp -p --remove-destination checkAllStaticLinks.csh ${SCRIPTS}
 	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
@@ -56,6 +59,7 @@ install:
 	cp -p --remove-destination joinerBatchKeys.csh     ${SCRIPTS}
 	cp -p --remove-destination joinerBatchTimes.csh    ${SCRIPTS}
 	cp -p --remove-destination knownGene.csh           ${SCRIPTS}
+	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination realTime.csh            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
