@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.3 2007/02/28 08:36:16 kent Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.4 2007/02/28 08:50:54 kent Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -132,13 +132,14 @@ printf("%s",
 "that the transcript codes for protein.  This indicates that the coding sequence \n"
 "resides in a single exon, and that this exon is located entirely in the 3' UTR \n"
 "of another transcript that codes for a different protein not overlapping the \n"
-"ORF in the same frame. None of the RefSeq transcripts\n"
-"meet this condition, while 71 transcripts outside of RefSeq do. Therefore we remove \n"
-"the predicted coding  annotation when this condition is present.</LI>\n"
+"ORF in the same frame. We remove the CDS from non-refSeq transcripts that meet\n"
+"this condition, which often results from a retained intron or from missing the\n"
+"initial parts of a transcript.</LI>\n"
 "<LI><B>CDS single in intron</B> - This is another strong indicator that the ORF is\n"
 "not real. Here the coding region (CDS) lies entirely in the intron of another\n"
-"transcript which has strong evidence of coding for a protein. 0 RefSeq transcripts\n"
-"meet this criteria while 131 predicted CDS from Genbank transcripts do meet it.</LI>\n"
+"transcript which has strong evidence of coding for a protein. We remove the CDS\n"
+"from non-refSeq transcripts that meet this condition, which generally results\n"
+"from a retained intron.</LI>\n"
 "<LI><B>frame shift in genome</B> - This only occurs for RefSeq transcripts. Here\n"
 "a frame shift is detected in the coding region when aligning the transcript against\n"
 "the genome. Since RefSeq does examine these cases carefully, it is strong evidence\n"
