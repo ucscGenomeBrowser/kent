@@ -86,7 +86,8 @@ void customFactoryTestExistence(char *fileName, boolean *retGotLive,
 				boolean *retGotExpired);
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
- * they are alive or have expired. */
+ * they are alive or have expired.  If they are live, touch them to keep 
+ * them active. */
 
 /*  HACK ALERT - The table browser needs to be able to encode its wiggle
  *	data.  This function is temporarily global until a proper method

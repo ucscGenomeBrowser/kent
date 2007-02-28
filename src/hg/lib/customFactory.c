@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.51 2007/02/01 00:43:16 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.52 2007/02/28 00:32:42 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1562,7 +1562,8 @@ void customFactoryTestExistence(char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
  * enough to tell whether it refers to database tables and if so, whether 
- * they are alive or have expired. */
+ * they are alive or have expired.  If they are live, touch them to keep 
+ * them active. */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -1626,6 +1627,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	    {
 	    if (retGotLive)
 		*retGotLive = TRUE;
+	    /* Touch it to keep it alive. */
+	    ctTouchLastUse(ctConn, track->dbTableName, TRUE);
 	    }
 	else
 	    {
