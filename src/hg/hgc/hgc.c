@@ -197,7 +197,7 @@
 #include "cdsEvidence.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1213 2007/02/27 21:56:49 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1214 2007/02/28 00:31:46 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2116,8 +2116,13 @@ if (sqlTableExists(conn, evTable))
 	    "is over a million unless there are severe problems mapping the mRNA to the "
 	    "genome.  In other cases the score generally ranges from 0 to 50,000. "
 	    "The highest scoring prediction in this table is used to define the CDS "
-	    "boundaries for this transcript.  If no score is 2000 or more, the transcript "
-	    "is considered non-coding. ");
+	    "boundaries for this transcript.<P>If no score is 2000 or more, the transcript "
+	    "is considered non-coding. In cases where the CDS is subject to "
+	    "nonsense-mediated decay the CDS is removed.  The CDS is also removed "
+	    "from transcripts when evidence points to it being in an artifact of an "
+	    "incompletely processed transcript.  Specifically if the CDS is entirely "
+	    "enclosed in the 3' UTR or an intron of a refSeq or other high quality "
+	    "transcript, the CDS is removed.");
 	}
     else
         {
