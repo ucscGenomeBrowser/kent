@@ -315,9 +315,9 @@ vgTextCentered(vg, x1, y, w, heightPer, textColor, font, allele);
 
 static Color hapmapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw hapmap item */
-/* Use grayscale based on minor allele. */
+/* Use grayscale based on minor allele score or quality score. */
 /* The higher minor allele frequency, the darker the shade. */
-/* Could also use score, since I've set that based on minor allele frequency. */
+/* The higher quality score, the darker the shade. */
 {
 Color col;
 int totalCount = 0;
@@ -325,9 +325,12 @@ int minorCount = 0;
 int grayLevel = 0;
 
 if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
-    return MG_BLACK;
+    {
+    struct hapmapAllelesOrtho *thisItem = item;
+    grayLevel = grayInRange(thisItem->score, 0, 100);
+    }
 
-if (sameString(tg->mapName, "hapmapAllelesCombined"))
+else if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
     struct hapmapAllelesCombined *thisItem = item;
     if (isMixed(thisItem->allele1CountCEU, thisItem->allele1CountCHB,
@@ -349,11 +352,12 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
 else
     {
     struct hapmapAlleles *thisItem = item;
+    /* Could also use score, since I've set that based on minor allele frequency. */
     totalCount = thisItem->homoCount1 + thisItem->homoCount2;
     minorCount = min(thisItem->homoCount1, thisItem->homoCount2);
+    grayLevel = grayInRange(minorCount, 0, totalCount/2);
     }
 
-grayLevel = grayInRange(minorCount, 0, totalCount/2);
 if (grayLevel < maxShade)
     grayLevel++;
 if (grayLevel < maxShade)
