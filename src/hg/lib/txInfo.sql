@@ -6,6 +6,7 @@
 #Various bits of information about a transcript from the txGraph/txCds system (aka KG3)
 CREATE TABLE txInfo (
     name varchar(255) not null,	# Name of transcript
+    category varchar(255) not null,	# coding/nearCoding/noncoding for now
     sourceAcc varchar(255) not null,	# Accession of genbank transcript patterned on (may be refSeq)
     isRefSeq tinyint unsigned not null,	# Is a refSeq
     sourceSize int not null,	# Number of bases in source, excluding poly-A tail.
@@ -21,6 +22,7 @@ CREATE TABLE txInfo (
     retainedIntron tinyint unsigned not null,	# True if has a retained intron compared to overlapping transcripts
     bleedIntoIntron int not null,	# If nonzero number of bases start or end of tx bleeds into intron
     strangeSplice int not null,	# Count of splice sites not gt/ag, gc/ag, or at/ac
+    atacIntrons int not null,	# Count of number of at/ac introns
     cdsSingleInIntron tinyint unsigned not null,	# True if CDS is single exon and in intron of other transcript.
     cdsSingleInUtr3 tinyint unsigned not null,	# True if CDS is single exon and in 3' UTR of other transcript.
     selenocysteine tinyint unsigned not null,	# If true TGA codes for selenocysteine

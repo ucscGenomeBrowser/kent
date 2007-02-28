@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: txInfo.c,v 1.3 2007/02/27 21:57:24 kent Exp $";
+static char const rcsid[] = "$Id: txInfo.c,v 1.4 2007/02/28 08:46:42 kent Exp $";
 
 void txInfoStaticLoad(char **row, struct txInfo *ret)
 /* Load a row from txInfo table into ret.  The contents of ret will
@@ -16,26 +16,28 @@ void txInfoStaticLoad(char **row, struct txInfo *ret)
 {
 
 ret->name = row[0];
-ret->sourceAcc = row[1];
-ret->isRefSeq = sqlUnsigned(row[2]);
-ret->sourceSize = sqlSigned(row[3]);
-ret->aliCoverage = sqlDouble(row[4]);
-ret->aliIdRatio = sqlDouble(row[5]);
-ret->genoMapCount = sqlSigned(row[6]);
-ret->exonCount = sqlSigned(row[7]);
-ret->orfSize = sqlSigned(row[8]);
-ret->bestorfScore = sqlDouble(row[9]);
-ret->startComplete = sqlUnsigned(row[10]);
-ret->endComplete = sqlUnsigned(row[11]);
-ret->nonsenseMediatedDecay = sqlUnsigned(row[12]);
-ret->retainedIntron = sqlUnsigned(row[13]);
-ret->bleedIntoIntron = sqlSigned(row[14]);
-ret->strangeSplice = sqlSigned(row[15]);
-ret->cdsSingleInIntron = sqlUnsigned(row[16]);
-ret->cdsSingleInUtr3 = sqlUnsigned(row[17]);
-ret->selenocysteine = sqlUnsigned(row[18]);
-ret->genomicFrameShift = sqlUnsigned(row[19]);
-ret->genomicStop = sqlUnsigned(row[20]);
+ret->category = row[1];
+ret->sourceAcc = row[2];
+ret->isRefSeq = sqlUnsigned(row[3]);
+ret->sourceSize = sqlSigned(row[4]);
+ret->aliCoverage = sqlDouble(row[5]);
+ret->aliIdRatio = sqlDouble(row[6]);
+ret->genoMapCount = sqlSigned(row[7]);
+ret->exonCount = sqlSigned(row[8]);
+ret->orfSize = sqlSigned(row[9]);
+ret->bestorfScore = sqlDouble(row[10]);
+ret->startComplete = sqlUnsigned(row[11]);
+ret->endComplete = sqlUnsigned(row[12]);
+ret->nonsenseMediatedDecay = sqlUnsigned(row[13]);
+ret->retainedIntron = sqlUnsigned(row[14]);
+ret->bleedIntoIntron = sqlSigned(row[15]);
+ret->strangeSplice = sqlSigned(row[16]);
+ret->atacIntrons = sqlSigned(row[17]);
+ret->cdsSingleInIntron = sqlUnsigned(row[18]);
+ret->cdsSingleInUtr3 = sqlUnsigned(row[19]);
+ret->selenocysteine = sqlUnsigned(row[20]);
+ret->genomicFrameShift = sqlUnsigned(row[21]);
+ret->genomicStop = sqlUnsigned(row[22]);
 }
 
 struct txInfo *txInfoLoad(char **row)
@@ -46,26 +48,28 @@ struct txInfo *ret;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
-ret->sourceAcc = cloneString(row[1]);
-ret->isRefSeq = sqlUnsigned(row[2]);
-ret->sourceSize = sqlSigned(row[3]);
-ret->aliCoverage = sqlDouble(row[4]);
-ret->aliIdRatio = sqlDouble(row[5]);
-ret->genoMapCount = sqlSigned(row[6]);
-ret->exonCount = sqlSigned(row[7]);
-ret->orfSize = sqlSigned(row[8]);
-ret->bestorfScore = sqlDouble(row[9]);
-ret->startComplete = sqlUnsigned(row[10]);
-ret->endComplete = sqlUnsigned(row[11]);
-ret->nonsenseMediatedDecay = sqlUnsigned(row[12]);
-ret->retainedIntron = sqlUnsigned(row[13]);
-ret->bleedIntoIntron = sqlSigned(row[14]);
-ret->strangeSplice = sqlSigned(row[15]);
-ret->cdsSingleInIntron = sqlUnsigned(row[16]);
-ret->cdsSingleInUtr3 = sqlUnsigned(row[17]);
-ret->selenocysteine = sqlUnsigned(row[18]);
-ret->genomicFrameShift = sqlUnsigned(row[19]);
-ret->genomicStop = sqlUnsigned(row[20]);
+ret->category = cloneString(row[1]);
+ret->sourceAcc = cloneString(row[2]);
+ret->isRefSeq = sqlUnsigned(row[3]);
+ret->sourceSize = sqlSigned(row[4]);
+ret->aliCoverage = sqlDouble(row[5]);
+ret->aliIdRatio = sqlDouble(row[6]);
+ret->genoMapCount = sqlSigned(row[7]);
+ret->exonCount = sqlSigned(row[8]);
+ret->orfSize = sqlSigned(row[9]);
+ret->bestorfScore = sqlDouble(row[10]);
+ret->startComplete = sqlUnsigned(row[11]);
+ret->endComplete = sqlUnsigned(row[12]);
+ret->nonsenseMediatedDecay = sqlUnsigned(row[13]);
+ret->retainedIntron = sqlUnsigned(row[14]);
+ret->bleedIntoIntron = sqlSigned(row[15]);
+ret->strangeSplice = sqlSigned(row[16]);
+ret->atacIntrons = sqlSigned(row[17]);
+ret->cdsSingleInIntron = sqlUnsigned(row[18]);
+ret->cdsSingleInUtr3 = sqlUnsigned(row[19]);
+ret->selenocysteine = sqlUnsigned(row[20]);
+ret->genomicFrameShift = sqlUnsigned(row[21]);
+ret->genomicStop = sqlUnsigned(row[22]);
 return ret;
 }
 
@@ -75,7 +79,7 @@ struct txInfo *txInfoLoadAll(char *fileName)
 {
 struct txInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[21];
+char *row[23];
 
 while (lineFileRow(lf, row))
     {
@@ -93,7 +97,7 @@ struct txInfo *txInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct txInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[21];
+char *row[23];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -115,6 +119,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->name = sqlStringComma(&s);
+ret->category = sqlStringComma(&s);
 ret->sourceAcc = sqlStringComma(&s);
 ret->isRefSeq = sqlUnsignedComma(&s);
 ret->sourceSize = sqlSignedComma(&s);
@@ -130,6 +135,7 @@ ret->nonsenseMediatedDecay = sqlUnsignedComma(&s);
 ret->retainedIntron = sqlUnsignedComma(&s);
 ret->bleedIntoIntron = sqlSignedComma(&s);
 ret->strangeSplice = sqlSignedComma(&s);
+ret->atacIntrons = sqlSignedComma(&s);
 ret->cdsSingleInIntron = sqlUnsignedComma(&s);
 ret->cdsSingleInUtr3 = sqlUnsignedComma(&s);
 ret->selenocysteine = sqlUnsignedComma(&s);
@@ -147,6 +153,7 @@ struct txInfo *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
+freeMem(el->category);
 freeMem(el->sourceAcc);
 freez(pEl);
 }
@@ -169,6 +176,10 @@ void txInfoOutput(struct txInfo *el, FILE *f, char sep, char lastSep)
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->category);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -202,6 +213,8 @@ fputc(sep,f);
 fprintf(f, "%d", el->bleedIntoIntron);
 fputc(sep,f);
 fprintf(f, "%d", el->strangeSplice);
+fputc(sep,f);
+fprintf(f, "%d", el->atacIntrons);
 fputc(sep,f);
 fprintf(f, "%u", el->cdsSingleInIntron);
 fputc(sep,f);

@@ -2,6 +2,7 @@ table txInfo
 "Various bits of information about a transcript from the txGraph/txCds system (aka KG3)"
     (
     string name;	"Name of transcript"
+    string category;	"coding/nearCoding/noncoding for now"
     string sourceAcc;	"Accession of genbank transcript patterned on (may be refSeq)"
     ubyte isRefSeq;	"Is a refSeq"
     int sourceSize;	"Number of bases in source, excluding poly-A tail."
@@ -17,6 +18,7 @@ table txInfo
     ubyte retainedIntron;     "True if has a retained intron compared to overlapping transcripts"
     int bleedIntoIntron;     "If nonzero number of bases start or end of tx bleeds into intron"
     int strangeSplice;     "Count of splice sites not gt/ag, gc/ag, or at/ac"
+    int atacIntrons;	   "Count of number of at/ac introns"
     ubyte cdsSingleInIntron;   "True if CDS is single exon and in intron of other transcript."
     ubyte cdsSingleInUtr3;     "True if CDS is single exon and in 3' UTR of other transcript."
     ubyte selenocysteine; "If true TGA codes for selenocysteine"

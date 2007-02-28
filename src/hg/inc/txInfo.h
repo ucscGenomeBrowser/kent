@@ -5,13 +5,14 @@
 #ifndef TXINFO_H
 #define TXINFO_H
 
-#define TXINFO_NUM_COLS 21
+#define TXINFO_NUM_COLS 23
 
 struct txInfo
 /* Various bits of information about a transcript from the txGraph/txCds system (aka KG3) */
     {
     struct txInfo *next;  /* Next in singly linked list. */
     char *name;	/* Name of transcript */
+    char *category;	/* coding/nearCoding/noncoding for now */
     char *sourceAcc;	/* Accession of genbank transcript patterned on (may be refSeq) */
     unsigned char isRefSeq;	/* Is a refSeq */
     int sourceSize;	/* Number of bases in source, excluding poly-A tail. */
@@ -27,6 +28,7 @@ struct txInfo
     unsigned char retainedIntron;	/* True if has a retained intron compared to overlapping transcripts */
     int bleedIntoIntron;	/* If nonzero number of bases start or end of tx bleeds into intron */
     int strangeSplice;	/* Count of splice sites not gt/ag, gc/ag, or at/ac */
+    int atacIntrons;	/* Count of number of at/ac introns */
     unsigned char cdsSingleInIntron;	/* True if CDS is single exon and in intron of other transcript. */
     unsigned char cdsSingleInUtr3;	/* True if CDS is single exon and in 3' UTR of other transcript. */
     unsigned char selenocysteine;	/* If true TGA codes for selenocysteine */
