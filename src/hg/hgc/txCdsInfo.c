@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.2 2007/02/28 08:26:47 kent Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.3 2007/02/28 08:36:16 kent Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -139,7 +139,7 @@ printf("%s",
 "not real. Here the coding region (CDS) lies entirely in the intron of another\n"
 "transcript which has strong evidence of coding for a protein. 0 RefSeq transcripts\n"
 "meet this criteria while 131 predicted CDS from Genbank transcripts do meet it.</LI>\n"
-"<LI><B>frame shift in genome</B></LI> - The only occurs for RefSeq transcripts. Here\n"
+"<LI><B>frame shift in genome</B> - This only occurs for RefSeq transcripts. Here\n"
 "a frame shift is detected in the coding region when aligning the transcript against\n"
 "the genome. Since RefSeq does examine these cases carefully, it is strong evidence\n"
 "that the genome sequence is in error, or that the anonymous DNA doner carried\n"
