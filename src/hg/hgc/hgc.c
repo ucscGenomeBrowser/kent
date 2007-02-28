@@ -195,7 +195,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1218 2007/02/28 21:33:34 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1219 2007/02/28 21:53:28 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16251,8 +16251,9 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ortho = hapmapAllelesOrthoLoad(row+rowOffset);
-    printf("<BR><B>Ortho Allele:</B> %s\n", ortho->orthoAllele);
-    printf("<BR><B>Ortho Strand:</B> %s\n", ortho->orthoStrand);
+    printf("<BR><B>Ortho allele:</B> %s\n", ortho->orthoAllele);
+    printf("<BR><B>Ortho strand:</B> %s\n", ortho->orthoStrand);
+    printf("<BR><B>Quality (0-100):</B> %d\n", ortho->score);
     printf("<BR><B>Ortho </B>");
     bedPrintPos((struct bed *)ortho, 3);
 
@@ -16262,7 +16263,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sameString(table, "hapmapAllelesMacaque"))
         otherDb = "rheMac2";
     orthoStart = max(start - 250, 1);
-    orthoEnd = min(start + 250, hChromSize(ortho->orthoChrom));
+    // orthoEnd = min(start + 250, hChromSize(ortho->orthoChrom));
+    orthoEnd = orthoStart + 500;
     linkToOtherBrowser(otherDb, ortho->orthoChrom, orthoStart, orthoEnd);
     printf("Open %s browser</A> centered at this position.<BR>\n", otherDb);
 

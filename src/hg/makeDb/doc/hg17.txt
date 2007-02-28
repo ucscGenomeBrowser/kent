@@ -18379,12 +18379,15 @@ while (<STDIN>) {
 
 # Switch to C programs from kent/src/hg/snp/snpLoad.
 
-# Determine major and minor allele (set minor to '?' if monomorphic)
+# Determine allele1 and allele2 (set allele2 to "none" if monomorphic)
+# Alleles are in alphabetical order
 # Calculate score (minor allele frequency)
 # Log and skip if wrong number of elements in row
 # Log and skip if triallelic or quadallelic
 # Log and skip degenerate case (no alleles) 
 # No errors this run
+# Still running on kkstore05
+# Could rename "hapmap1" to "hapmapCondense"
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap1 CEU.merge CEU.condense
 wc -l hapmap1.log
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap1 CHB.merge CHB.condense
@@ -18411,28 +18414,28 @@ hgLoadBed hg17 hapmapAllelesYRI -sqlTable=hapmapAllelesYRI.sql YRI.condense
 gzip *condense
 
 # sanity check
-mysql> select count(*) from hapmapAllelesCEU where allele1Count + allele2Count + heteroCount = 0;
+mysql> select count(*) from hapmapAllelesCEU where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
 |        0 |
 +----------+
 
-mysql> select count(*) from hapmapAllelesCHB where allele1Count + allele2Count + heteroCount = 0;
+mysql> select count(*) from hapmapAllelesCHB where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
 |        0 |
 +----------+
 
-mysql> select count(*) from hapmapAllelesJPT where allele1Count + allele2Count + heteroCount = 0;
+mysql> select count(*) from hapmapAllelesJPT where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
 |        0 |
 +----------+
 
-mysql> select count(*) from hapmapAllelesYRI where allele1Count + allele2Count + heteroCount = 0;
+mysql> select count(*) from hapmapAllelesYRI where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
