@@ -19,9 +19,9 @@ struct hapmapAlleles
     char strand[2];	/* Which genomic strand contains the observed alleles */
     char *observed;	/* Observed string from genotype file */
     char allele1[2];	/* This allele has been observed */
-    unsigned allele1Count;	/* Count of individuals who are homozygous for allele1 */
+    unsigned homoCount1;	/* Count of individuals who are homozygous for allele1 */
     char allele2[2];	/* This allele may not have been observed */
-    unsigned allele2Count;	/* Count of individuals who are homozygous for allele2 */
+    unsigned homoCount2;	/* Count of individuals who are homozygous for allele2 */
     unsigned heteroCount;	/* Count of individuals who are heterozygous */
     };
 
@@ -67,7 +67,6 @@ void hapmapAllelesOutput(struct hapmapAlleles *el, FILE *f, char sep, char lastS
 /* Print out hapmapAlleles as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
 /* items for trackUi options and filters */
 
 #define HA_POP_MIXED "hapmapAlleles.popMixed"
@@ -75,4 +74,5 @@ void hapmapAllelesOutput(struct hapmapAlleles *el, FILE *f, char sep, char lastS
 #define HA_OBSERVED "hapmapAlleles.observed"
 
 #endif /* HAPMAPALLELES_H */
+
 

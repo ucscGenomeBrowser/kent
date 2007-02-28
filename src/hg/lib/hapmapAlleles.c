@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAlleles.h"
 
-static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.3 2007/02/08 21:39:45 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAlleles.c,v 1.4 2007/02/28 18:00:28 heather Exp $";
 
 void hapmapAllelesStaticLoad(char **row, struct hapmapAlleles *ret)
 /* Load a row from hapmapAlleles table into ret.  The contents of ret will
@@ -23,9 +23,9 @@ ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->observed = row[6];
 safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
-ret->allele1Count = sqlUnsigned(row[8]);
+ret->homoCount1 = sqlUnsigned(row[8]);
 safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
-ret->allele2Count = sqlUnsigned(row[10]);
+ret->homoCount2 = sqlUnsigned(row[10]);
 ret->heteroCount = sqlUnsigned(row[11]);
 }
 
@@ -44,9 +44,9 @@ ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->observed = cloneString(row[6]);
 safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
-ret->allele1Count = sqlUnsigned(row[8]);
+ret->homoCount1 = sqlUnsigned(row[8]);
 safecpy(ret->allele2, sizeof(ret->allele2), row[9]);
-ret->allele2Count = sqlUnsigned(row[10]);
+ret->homoCount2 = sqlUnsigned(row[10]);
 ret->heteroCount = sqlUnsigned(row[11]);
 return ret;
 }
@@ -104,9 +104,9 @@ ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->observed = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->allele1, sizeof(ret->allele1));
-ret->allele1Count = sqlUnsignedComma(&s);
+ret->homoCount1 = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->allele2, sizeof(ret->allele2));
-ret->allele2Count = sqlUnsignedComma(&s);
+ret->homoCount2 = sqlUnsignedComma(&s);
 ret->heteroCount = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -167,13 +167,13 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->allele1);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->allele1Count);
+fprintf(f, "%u", el->homoCount1);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->allele2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->allele2Count);
+fprintf(f, "%u", el->homoCount2);
 fputc(sep,f);
 fprintf(f, "%u", el->heteroCount);
 fputc(lastSep,f);
