@@ -77,9 +77,6 @@ return TRUE;
 
 static void hapmapLoad(struct track *tg)
 /* load filtered data */
-/* currently mixed and geno filters apply only to combined track, could extend that */
-/* mixed and geno filters calibrated to all populations, regardless of what is displayed, could change that */
-/* observed filter applies to everything but orthos, could add observed to ortho table */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -90,16 +87,18 @@ int optionScore;
 char extraWhere[128];
 
 char *observedFilter = cartCgiUsualString(cart, HA_OBSERVED, "don't care");
+
+char *mixedFilter = cartCgiUsualString(cart, HA_POP_MIXED, "don't care");
+char *genoFilter = cartCgiUsualString(cart, HA_GENO_AVAIL, "don't care");
 boolean complexObserved = FALSE;
 boolean transitionObserved = FALSE;
 
 safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
+
 if (sameString(tg->mapName, "hapmapAllelesCombined"))
     {
     struct hapmapAllelesCombined *combinedLoadItem, *combinedItemList = NULL;
-    char *mixedFilter = cartCgiUsualString(cart, HA_POP_MIXED, "don't care");
-    char *genoFilter = cartCgiUsualString(cart, HA_GENO_AVAIL, "don't care");
     boolean mixed = FALSE;
     boolean popsAll = TRUE;
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
@@ -284,7 +283,7 @@ else
     chromStart = thisItem->chromStart;
     chromEnd = thisItem->chromEnd;
     strand = cloneString(thisItem->strand);
-    if (thisItem->allele1Count >= thisItem->allele2Count)
+    if (thisItem->homoCount1 >= thisItem->homoCount2)
         allele = cloneString(thisItem->allele1);
     else
         allele = cloneString(thisItem->allele2);
@@ -350,8 +349,8 @@ if (sameString(tg->mapName, "hapmapAllelesCombined"))
 else
     {
     struct hapmapAlleles *thisItem = item;
-    totalCount = thisItem->allele1Count + thisItem->allele2Count;
-    minorCount = min(thisItem->allele1Count, thisItem->allele2Count);
+    totalCount = thisItem->homoCount1 + thisItem->homoCount2;
+    minorCount = min(thisItem->homoCount1, thisItem->homoCount2);
     }
 
 grayLevel = grayInRange(minorCount, 0, totalCount/2);
