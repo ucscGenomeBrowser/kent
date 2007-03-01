@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1285 2007/02/26 23:22:31 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1286 2007/03/01 00:12:30 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12431,7 +12431,7 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\" class=\"topbar\">%s</A></TD>",
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
        cartSessionId(cart), "Tables");
 if (hgNearOk(database))
