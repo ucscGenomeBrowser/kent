@@ -13,11 +13,11 @@
 #include "chromColors.h"
 #include "hdb.h"
 #include "hgTracks.h"
-#include "pseudoGeneLink.h"
+#include "retroMrnaInfo.h"
 #endif /* RETROGENE_H */
 
 extern char *protDbName;               /* Name of proteome database for this genome. */
-struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg);
+struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg);
 /* Return a linked feature from a retroGene. */
 
 void lfRetroGene(struct track *tg);

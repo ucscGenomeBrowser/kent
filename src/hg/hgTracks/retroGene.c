@@ -1,9 +1,9 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.8 2005/10/28 17:02:41 kent Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.9 2007/03/01 00:00:11 baertsch Exp $";
 
-struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg)
+struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
 /* Return a linked feature from a retroGene. */
 {
 struct linkedFeatures *lf;
@@ -40,16 +40,21 @@ void lfRetroGene(struct track *tg)
  * window... */
 {
 struct linkedFeatures *lfList = NULL, *lf;
-struct pseudoGeneLink *pg = NULL, *list = NULL;
+struct retroMrnaInfo *pg = NULL, *list = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+int colCount ;
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+colCount = sqlCountColumns(sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    pg = pseudoGeneLinkLoad(row+rowOffset);
+    if (colCount == 56)
+        pg = retroMrnaInfo56Load(row+rowOffset);
+    else
+        pg = retroMrnaInfoLoad(row+rowOffset);
     slAddHead(&list, pg);
     }
 sqlFreeResult(&sr);
@@ -70,8 +75,9 @@ void lookupRetroNames(struct track *tg)
 {
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn();
-boolean isNative = sameString(tg->mapName, "pseudoGeneLink");
-char *refGeneLabel = cartUsualString(cart, (isNative ? "pseudoGeneLink.label" : "xenoRefGene.label"), "gene");
+boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
+boolean isRetroNative = sameString(tg->mapName, "retroMrnaInfo");
+char *refGeneLabel = cartUsualString(cart, (isNative ? "pseudoGeneLink.label" : (isRetroNative ? "retroMrnaInfo.label" : "xenoRefGene.label")), "gene") ;
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
 boolean useAcc = sameString(refGeneLabel, "accession")
