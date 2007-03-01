@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapAllelesCombined.h"
 
-static char const rcsid[] = "$Id: hapmapAllelesCombined.c,v 1.2 2007/02/13 00:43:53 heather Exp $";
+static char const rcsid[] = "$Id: hapmapAllelesCombined.c,v 1.3 2007/03/01 17:53:51 heather Exp $";
 
 void hapmapAllelesCombinedStaticLoad(char **row, struct hapmapAllelesCombined *ret)
 /* Load a row from hapmapAllelesCombined table into ret.  The contents of ret will
@@ -27,7 +27,7 @@ ret->allele1CountCEU = sqlUnsigned(row[8]);
 ret->allele1CountCHB = sqlUnsigned(row[9]);
 ret->allele1CountJPT = sqlUnsigned(row[10]);
 ret->allele1CountYRI = sqlUnsigned(row[11]);
-safecpy(ret->allele2, sizeof(ret->allele2), row[12]);
+ret->allele2 = row[12];
 ret->allele2CountCEU = sqlUnsigned(row[13]);
 ret->allele2CountCHB = sqlUnsigned(row[14]);
 ret->allele2CountJPT = sqlUnsigned(row[15]);
@@ -57,7 +57,7 @@ ret->allele1CountCEU = sqlUnsigned(row[8]);
 ret->allele1CountCHB = sqlUnsigned(row[9]);
 ret->allele1CountJPT = sqlUnsigned(row[10]);
 ret->allele1CountYRI = sqlUnsigned(row[11]);
-safecpy(ret->allele2, sizeof(ret->allele2), row[12]);
+ret->allele2 = cloneString(row[12]);
 ret->allele2CountCEU = sqlUnsigned(row[13]);
 ret->allele2CountCHB = sqlUnsigned(row[14]);
 ret->allele2CountJPT = sqlUnsigned(row[15]);
@@ -126,7 +126,7 @@ ret->allele1CountCEU = sqlUnsignedComma(&s);
 ret->allele1CountCHB = sqlUnsignedComma(&s);
 ret->allele1CountJPT = sqlUnsignedComma(&s);
 ret->allele1CountYRI = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->allele2, sizeof(ret->allele2));
+ret->allele2 = sqlStringComma(&s);
 ret->allele2CountCEU = sqlUnsignedComma(&s);
 ret->allele2CountCHB = sqlUnsignedComma(&s);
 ret->allele2CountJPT = sqlUnsignedComma(&s);
@@ -149,6 +149,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->observed);
+freeMem(el->allele2);
 freez(pEl);
 }
 

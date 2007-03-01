@@ -23,7 +23,7 @@ struct hapmapAllelesCombined
     unsigned allele1CountCHB;	/* allele1 count for the CHB population */
     unsigned allele1CountJPT;	/* allele1 count for the JPT population */
     unsigned allele1CountYRI;	/* allele1 count for the YRI population */
-    char allele2[2];	/* This allele may not have been observed */
+    char *allele2;	/* This allele may not have been observed */
     unsigned allele2CountCEU;	/* allele2 count for the CEU population */
     unsigned allele2CountCHB;	/* allele2 count for the CHB population */
     unsigned allele2CountJPT;	/* allele2 count for the JPT population */
