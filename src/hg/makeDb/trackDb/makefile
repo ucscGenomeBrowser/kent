@@ -173,7 +173,7 @@ alpha: clean
 #cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
 strict: clean
-	# ${CVS} -q up -d -P .
+	${CVS} -q up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
                 if [ -e "$$D/makefile" ]; then \
