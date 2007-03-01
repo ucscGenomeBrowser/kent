@@ -5,27 +5,27 @@
 
 #HapMap allele counts by population
 CREATE TABLE hapmapAllelesCombined (
-    bin smallint unsigned not null,          # For browser speed up
-    chrom varchar(255) not null,	# Chromosome
-    chromStart int unsigned not null,	# Start position in chrom (0 based)
-    chromEnd int unsigned not null,	# End position in chrom (1 based)
-    name varchar(255) not null,	        # Reference SNP identifier from dbSnp
-    score int unsigned not null,	# Use for heterozygosity?
-    strand char(1) not null,	        # Which genomic strand contains the observed alleles
-    observed varchar(255) not null,	# Observed string from genotype file
-    allele1 enum('A', 'C', 'G', 'T') not null,      # This allele has been observed
-    allele1CountCEU int unsigned not null,	# allele1 count for the CEU population
-    allele1CountCHB int unsigned not null,	# allele1 count for the CHB population
-    allele1CountJPT int unsigned not null,	# allele1 count for the JPT population
-    allele1CountYRI int unsigned not null,	# allele1 count for the YRI population
-    allele2 enum('A', 'C', 'G', 'T', '?') not null,      # This allele may not have been observed
-    allele2CountCEU int unsigned not null,	# allele2 count for the CEU population
-    allele2CountCHB int unsigned not null,	# allele2 count for the CHB population
-    allele2CountJPT int unsigned not null,	# allele2 count for the JPT population
-    allele2CountYRI int unsigned not null,      # allele2 count for the YRI population
-    heteroCountCEU int unsigned not null,     # Count of CEU individuals who are heterozygous
-    heteroCountCHB int unsigned not null,     # Count of CHB individuals who are heterozygous
-    heteroCountJPT int unsigned not null,     # Count of JPT individuals who are heterozygous
-    heteroCountYRI int unsigned not null     # Count of YRI individuals who are heterozygous
+    bin smallint(5) unsigned not null,          	# For browser speed up
+    chrom varchar(15) not null,				# Chromosome
+    chromStart int(10) unsigned not null,		# Start position in chrom (0 based)
+    chromEnd int(10) unsigned not null,			# End position in chrom (1 based)
+    name varchar(15) not null,	        		# Reference SNP identifier from dbSnp
+    score smallint(5) unsigned not null,		# Use for heterozygosity
+    strand enum ('+', '-', '?') default '?' not null,	# Which genomic strand contains the observed alleles
+    observed varchar(255) not null,			# Observed string from genotype file
+    allele1 enum('A', 'C', 'G', 'T') not null,      	# This allele has been observed
+    allele1CountCEU smallint(5) unsigned not null,	# allele1 count for the CEU population
+    allele1CountCHB smallint(5) unsigned not null,	# allele1 count for the CHB population
+    allele1CountJPT smallint(5) unsigned not null,	# allele1 count for the JPT population
+    allele1CountYRI smallint(5) unsigned not null,	# allele1 count for the YRI population
+    allele2 enum("C", "G", "T", "none") not null,      	# This allele may not have been observed
+    allele2CountCEU smallint(5) unsigned not null,	# allele2 count for the CEU population
+    allele2CountCHB smallint(5) unsigned not null,	# allele2 count for the CHB population
+    allele2CountJPT smallint(5) unsigned not null,	# allele2 count for the JPT population
+    allele2CountYRI smallint(5) unsigned not null,      # allele2 count for the YRI population
+    heteroCountCEU smallint(5) unsigned not null,     	# Count of CEU individuals who are heterozygous
+    heteroCountCHB smallint(5) unsigned not null,     	# Count of CHB individuals who are heterozygous
+    heteroCountJPT smallint(5) unsigned not null,     	# Count of JPT individuals who are heterozygous
+    heteroCountYRI smallint(5) unsigned not null     	# Count of YRI individuals who are heterozygous
 
 );
