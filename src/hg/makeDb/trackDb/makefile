@@ -48,7 +48,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	ornAna1 \
 	fr1 fr2 \
 	cioSav1 \
-	danRer1 danRer2 danRer3 danRer4 \
+	danRer2 danRer3 danRer4 \
 	gasAcu1 \
 	dm1 dm2 dm3 \
 	dp2 dp3 \
@@ -81,7 +81,7 @@ MGC_DBS = \
 	hg16 hg17 hg18\
 	mm5 mm6 mm7 mm8 \
 	rn3 rn4 \
-	danRer1	danRer2 danRer3 danRer4 \
+	danRer2 danRer3 danRer4 \
 	xenTro1 xenTro2 \
 	bosTau2
 
@@ -106,7 +106,8 @@ BACT_DBS = \
 	vibrPara1 vibrVuln_CMCP6_1 vibrVuln_YJ016_1
 
 ARCHIVED_DBS = \
-	rheMac1 
+	rheMac1 \
+	danRer1 
 
 update: #clean
 	@for D in *; do \
@@ -172,7 +173,7 @@ alpha: clean
 #cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
 strict: clean
-	${CVS} -q up -d -P .
+	# ${CVS} -q up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
                 if [ -e "$$D/makefile" ]; then \
