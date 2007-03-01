@@ -6,8 +6,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = affyLookup.o cnpLookup.o fetchSeq.o \
     hapmap1.o hapmap2.o \
-    hapmap.o hapmapCondense.o hapmapExtend hapmapGenotype.o hapmapLookup.o \
-    hapmapMixed.o hapmapMonomorphic.o hapmapOrtho.o hapmapValidate.o \
+    hapmap.o hapmapCondense.o hapmapGenotype.o hapmapLookup.o hapmapMixed.o \
+    hapmapMonomorphic.o hapmapOrtho.o hapmapSummary.o hapmapValidate.o \
     illuminaLookup.o \
     snpCheckAlleles.o snpCheckClassAndObserved.o snpCheckCluster.o snpCheckCluster2.o \
     snpClassAndObserved.o snpCleanSeq.o snpCompareLoctype.o snpCompareWeight.o \
@@ -25,8 +25,8 @@ O = affyLookup.o cnpLookup.o fetchSeq.o \
 
 all: affyLookup cnpLookup fetchSeq \
      hapmap1 hapmap2 \
-     hapmap hapmapCondense hapmapExtend hapmapGenotype hapmapLookup \
-     hapmapMixed hapmapMonomorphic hapmapOrtho hapmapValidate \
+     hapmap hapmapCondense hapmapGenotype hapmapLookup hapmapMixed \
+     hapmapMonomorphic hapmapOrtho hapmapSummary hapmapValidate \
      illuminaLookup \
      snpCheckAlleles snpCheckClassAndObserved snpCheckCluster snpCheckCluster2 \
      snpClassAndObserved snpCleanSeq snpCompareLoctype snpCompareWeight \
@@ -63,9 +63,6 @@ hapmap: hapmap.o ${MYLIBS}
 hapmapCondense: hapmapCondense.o ${MYLIBS}
 	${CC} -O -o hapmapCondense hapmapCondense.o ${MYLIBS} $L
 
-hapmapExtend: hapmapExtend.o ${MYLIBS}
-	${CC} -O -o hapmapExtend hapmapExtend.o ${MYLIBS} $L
-
 hapmapGenotype: hapmapGenotype.o ${MYLIBS}
 	${CC} -O -o hapmapGenotype hapmapGenotype.o ${MYLIBS} $L
 
@@ -80,6 +77,9 @@ hapmapMonomorphic: hapmapMonomorphic.o ${MYLIBS}
 
 hapmapOrtho: hapmapOrtho.o ${MYLIBS}
 	${CC} -O -o hapmapOrtho hapmapOrtho.o ${MYLIBS} $L
+
+hapmapSummary: hapmapSummary.o ${MYLIBS}
+	${CC} -O -o hapmapSummary hapmapSummary.o ${MYLIBS} $L
 
 hapmapValidate: hapmapValidate.o ${MYLIBS}
 	${CC} -O -o hapmapValidate hapmapValidate.o ${MYLIBS} $L
