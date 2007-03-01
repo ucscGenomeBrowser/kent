@@ -22,9 +22,8 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  checks all databases on RR and compares trackDbs."
   echo
-  echo "    usage:  RRmachine, "
-  echo "            [mode] (realTime|fast)"
-  echo "       - defaults to fast which uses mysql-genome instead of WGET"
+  echo "    usage:  RRmachine  [realTime | fast]"
+  echo "       - defaults to fast which uses genome-mysql instead of wget"
   echo "       - uses fast for settings and html fields, even in realTime"
   echo "       - overwrites file in dev/qa/test-results/trackDb "
   echo "           if used twice the same day."
@@ -55,11 +54,12 @@ if ( $status ) then
   exit 1
 endif
 
-set dbs=`getAssemblies.csh trackDb hgwbeta \
+set dbs=`getAssemblies.csh chromInfo hgwbeta \
   | egrep -v "getting|found" | egrep "."`
  
 # set file paths and URLs
 set today=`date +%Y-%m-%d`
+# set today="2005-01-23"
 # set today="2005-01-23"
 set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
@@ -79,14 +79,21 @@ foreach db ( $dbs )
   set outfile="$todaysPath/$dbSummaryOut"
   set htmlfile="$todaysPath/$dbHtmlOut"
   set active=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
-     WHERE name =  "'$db'"' hgcentral`
+     WHERE name = "'$db'"' hgcentral`
   if ( 0 == $active ) then
-    set archived=`getTableStatus.csh $db $machine | wc -l`
-    if ( 3 == $archived ) then
+    # getTableStatus no longer works for active=0 dbs since
+    #   using wget on hgTables
+    # get number of tables (chromInfo +/- trackDb, hgFindSpec if archived)
+    # set archived=`getTableStatus.csh $db $machine | wc -l`
+    # if ( $status ) then
+    #  echo "\nproblem with $db"
+    #  echo "getTableStatus.csh failed\n"
+    # endif
+    # if ( 3 == $archived || 1 == $archived ) then
       set comment="archived"
-    else
-      set comment="RRactive=0"
-    endif
+    # else
+    #   set comment="RRactive=0"
+    # endif
     echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}'
     echo
     echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}' >> $summaryFile
