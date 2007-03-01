@@ -35,7 +35,7 @@ idSql select 'this is a necessary placeholder %s'
 url ../cgi-bin/hgTables?hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema
 hgsid on
 dbInUrl on
-priority 1
+priority 5
 
 name uniProt
 shortLabel UniProt
