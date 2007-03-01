@@ -341,7 +341,7 @@ shortLabel Conservation (9)
 longLabel 7 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
 group compGeno
 priority 100.01
-visibility pack
+visibility hide
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons9way
