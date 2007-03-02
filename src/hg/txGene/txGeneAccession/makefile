@@ -10,5 +10,9 @@ txGeneAccession: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGeneAccession $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneAccession${EXE}
 
+test:
+	txGeneAccession inOld.bed in.id inNew.bed output.tab -test
+	diff expected.tab output.tab
+
 clean:
 	rm -f $O

@@ -7,7 +7,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.2 2007/03/02 01:00:04 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.3 2007/03/02 01:20:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,11 +24,12 @@ errAbort(
   "Use old.bed from previous build for new builds on same assembly.  For new\n"
   "assemblies first liftOver old.bed, then use this.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -test - Don't update txLastId file, so testing is reproducible\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"test", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -123,12 +124,13 @@ if (oldBed->blockCount == 0)
 /* Otherwise we look for first intron start in old bed, and then
  * flip through new bed until we find an intron that starts at the
  * same place. */
-int oldFirstExonStart = oldBed->chromStart + oldBed->chromStarts[0] + oldBed->blockSizes[0];
+int oldFirstIntronStart = oldBed->chromStart + oldBed->chromStarts[0] + oldBed->blockSizes[0];
 int newLastBlock = newBed->blockCount-1, oldLastBlock = oldBed->blockCount-1;
 int newIx, oldIx;
 for (newIx=0; newIx < newLastBlock; ++newIx)
     {
-    if (newBed->chromStart + newBed->chromStarts[0] + newBed->blockSizes[0] == oldFirstExonStart)
+    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
+    if (iStartNew == oldFirstIntronStart)
         break;
     }
 if (newIx == newLastBlock)
@@ -211,9 +213,12 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
     }
 carefulClose(&f);
 
-FILE *fId = mustOpen(lastIdFile, "w");
-fprintf(fId, "%d\n", txId);
-carefulClose(&fId);
+if (!optionExists("test"))
+    {
+    FILE *fId = mustOpen(lastIdFile, "w");
+    fprintf(fId, "%d\n", txId);
+    carefulClose(&fId);
+    }
 }
 
 int main(int argc, char *argv[])
