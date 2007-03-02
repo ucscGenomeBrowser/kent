@@ -4072,7 +4072,8 @@ foreach file (rs_ch*.fas)
     zcat $file >> rsAll.fas
 end
 '_EOF_' 
-# snpCleanSeq strips the header and skips duplicates
+# << emacs
+#snpCleanSeq strips the header and skips duplicates
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCleanSeq rsAll.fas snp.fa
 rm rsAll.fas
 # load on hgwdev
@@ -4487,5 +4488,25 @@ synBlastp.csh rn4 mm8
     doNet.csh >&! doNet.log
 
     doSameSpeciesLiftOver.pl rn4 rn3 -continue load -bigClusterHub pk >& doLoad.log
+
+
+###########################################################################
+# QUALITY SCORES (DONE 2/22/07 angie)
+    ssh kolossus
+    nice tcsh
+    mkdir /cluster/data/rn4/bed/qual
+    cd /cluster/data/rn4/bed/qual
+    zcat ../../downloads/*.qual.gz \
+    | sed -re 's/^>gnl\|Rnor3.[0-9_]+\|/>/' \
+    | qaToQac stdin stdout \
+    | qacToWig -fixed stdin stdout \
+    | wigEncode stdin qual.{wig,wib}
+#Made 1 .wig files in stdout
+#Converted stdin, upper limit 99.00, lower limit 0.00
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/qual
+    rm -f /gbdb/rn4/wib/qual.wib
+    ln -s /cluster/data/rn4/bed/qual/qual.wib /gbdb/rn4/wib/
+    hgLoadWiggle -pathPrefix=/gbdb/rn4/wib rn4 quality qual.wig
 
 
