@@ -8,8 +8,9 @@
 #include "bed.h"
 #include "binRange.h"
 #include "hdb.h"
+#include "rangeTree.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.49 2007/02/27 22:00:36 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.50 2007/03/02 01:25:03 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1297,6 +1298,58 @@ struct bed *bed;
 for (bed = bedList; bed != NULL; bed = bed->next)
     total += (bed->chromEnd - bed->chromStart);
 return total;
+}
+
+int bedSameStrandOverlap(struct bed *a, struct bed *b)
+/* Return amount of block-level overlap on same strand between a and b */
+{
+/* Make sure on same strand, chromosome, and that overlap
+ * at the non-block level. */
+if (a->strand[0] != b->strand[0])
+    return 0;
+if (!sameString(a->chrom, b->chrom))
+    return 0;
+int outerOverlap = rangeIntersection(a->chromStart, a->chromEnd, 
+	b->chromStart, b->chromEnd);
+if (outerOverlap <= 0)
+    return 0;
+
+/* If both beds are non-blocked then we're pretty much done. */
+if (a->blockCount == 0 && b->blockCount == 0)
+    return outerOverlap;
+
+/* Otherwise make up a range tree containing regions covered by a. */
+struct rbTree *rangeTree = rangeTreeNew();
+int i;
+if (a->blockCount == 0)
+    rangeTreeAdd(rangeTree, a->chromStart, a->chromEnd);
+else
+    {
+    for (i=0; i < a->blockCount; ++i)
+	{
+	int start = a->chromStart + a->chromStarts[i];
+	int end = start + a->blockSizes[i];
+	rangeTreeAdd(rangeTree, start, end);
+	}
+    }
+
+/* Go through regions covered by b. */
+int totalOverlap = 0;
+if (b->blockCount == 0)
+    totalOverlap = rangeTreeOverlapSize(rangeTree, b->chromStart, b->chromEnd);
+else
+    {
+    for (i=0; i < b->blockCount; ++i)
+	{
+	int start = b->chromStart + b->chromStarts[i];
+	int end = start + b->blockSizes[i];
+	totalOverlap += rangeTreeOverlapSize(rangeTree, start, end);
+	}
+    }
+
+/* Clean up and return result. */
+rangeTreeFree(&rangeTree);
+return totalOverlap;
 }
 
 struct bed3 *bed3New(char *chrom, int start, int end)

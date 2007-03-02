@@ -317,5 +317,8 @@ int bedParseRgb(char *itemRgb);
 long long bedTotalSize(struct bed *bedList);
 /* Add together sizes of all beds in list. */
 
+int bedSameStrandOverlap(struct bed *a, struct bed *b);
+/* Return amount of block-level overlap on same strand between a and b */
+
 #endif /* BED_H */
 
