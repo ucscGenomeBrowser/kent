@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.82 2006/12/08 16:44:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.83 2007/03/02 08:54:36 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -97,7 +97,7 @@ char query[256];
 char *someAcc, *primaryAcc = NULL;
 safef(query, sizeof(query), proteinSql, geneId);
 someAcc = sqlQuickString(conn, query);
-if (someAcc == NULL)
+if (someAcc == NULL || someAcc[0] == 0)
     return NULL;
 primaryAcc = spFindAcc(spConn, someAcc);
 if (curProtId != NULL)

@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.17 2007/02/03 00:19:48 baertsch Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.18 2007/03/02 08:54:36 kent Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -113,9 +113,13 @@ char query[256];
 char title[128];
 safef(query, sizeof(query), 
 	"select length(seq) from %s where name='%s'" , table,  geneId);
-safef(title, sizeof(title), "Protein (%d aa)", sqlQuickNum(conn,query));
-printSeqLink(conn, geneId, "knownGenePep", hggDoGetProteinSeq,
-	title);
+int protSize = sqlQuickNum(conn, query);
+if (protSize > 0)
+    {
+    safef(title, sizeof(title), "Protein (%d aa)", protSize);
+    printSeqLink(conn, geneId, "knownGenePep", hggDoGetProteinSeq,
+	    title);
+    }
 }
 
 
