@@ -5,9 +5,10 @@
 #include "hash.h"
 #include "options.h"
 #include "bed.h"
+#include "txInfo.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.1 2007/02/28 01:57:43 kent Exp $";
+static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.2 2007/03/02 01:39:37 kent Exp $";
 
 int minNearOverlap=20;
 
@@ -70,8 +71,8 @@ for (i=0; i<blockCount; ++i)
 return total;
 }
 
-void separateOneStrand(struct bed *inList, struct bed **retCoding, 
-	struct bed **retNearCoding, struct bed **retNoncoding)
+void separateOneStrand(struct bed *inList, struct hash *infoHash,
+	struct bed **retCoding, struct bed **retNearCoding, struct bed **retNoncoding)
 /* Separate bed list into three parts depending on whether or not
  * it's coding. */
 {
@@ -91,17 +92,21 @@ for (bed = inList; bed != NULL; bed = bed->next)
 for (bed = inList; bed != NULL; bed = nextBed)
     {
     nextBed = bed->next;
+    struct txInfo *info = hashMustFindVal(infoHash, bed->name);
     if (bed->thickStart < bed->thickEnd)
 	{
 	slAddHead(retCoding, bed);
+	info->category = "coding";
 	}
     else if (bedOverlapWithRangeTree(rangeTree, bed) >= minNearOverlap)
         {
 	slAddHead(retNearCoding, bed);
+	info->category = "nearCoding";
         }
     else
         {
 	slAddHead(retNoncoding, bed);
+	info->category = "noncoding";
 	}
     }
 
@@ -111,11 +116,19 @@ slReverse(retNoncoding);
 rangeTreeFree(&rangeTree);
 }
 
-void txGeneSeparateNoncoding(char *inBed, 
-	char *outCoding, char *outNearCoding, char *outNoncoding)
+void txGeneSeparateNoncoding(char *inBed, char *inInfo,
+	char *outCoding, char *outNearCoding, char *outNoncoding, char *outInfo)
 /* txGeneSeparateNoncoding - Separate genes into three piles - coding, 
  * non-coding that overlap coding, and independent non-coding. */
 {
+/* Read in txInfo into a hash keyed by transcript name */
+struct hash *infoHash = hashNew(16);
+struct txInfo *info, *infoList = txInfoLoadAll(inInfo);
+for (info = infoList; info != NULL; info = info->next)
+    hashAdd(infoHash, info->name, info);
+verbose(2, "Read info on %d transcripts from %s\n", infoHash->elCount, 
+	inInfo);
+
 /* Read in bed, and sort so we can process it easily a 
  * strand of one chromosome at a time. */
 struct bed *inBedList = bedLoadNAll(inBed, 12);
@@ -151,7 +164,7 @@ for (chromStart = inBedList; chromStart != NULL; chromStart = chromEnd)
 
     /* Do the separation. */
     struct bed *codingList, *nearCodingList, *noncodingList;
-    separateOneStrand(chromStart, &codingList, &nearCodingList, &noncodingList);
+    separateOneStrand(chromStart, infoHash, &codingList, &nearCodingList, &noncodingList);
 
     /* Write lists to respective files. */
     writeBedList(codingList, fCoding);
@@ -161,15 +174,21 @@ for (chromStart = inBedList; chromStart != NULL; chromStart = chromEnd)
 carefulClose(&fCoding);
 carefulClose(&fNearCoding);
 carefulClose(&fNoncoding);
+
+/* Write out updated info file */
+FILE *f = mustOpen(outInfo, "w");
+for (info = infoList; info != NULL; info = info->next)
+    txInfoTabOut(info, f);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 7)
     usage();
 minNearOverlap = optionInt("minNearOverlap", minNearOverlap);
-txGeneSeparateNoncoding(argv[1], argv[2], argv[3], argv[4]);
+txGeneSeparateNoncoding(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
