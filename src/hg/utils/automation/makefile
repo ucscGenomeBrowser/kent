@@ -21,6 +21,7 @@ SCRIPT_FILES = \
 	synBlastp.csh \
 	doRecipBest.pl \
 	doRepeatMasker.pl \
+	doWindowMasker.pl \
 	doSameSpeciesLiftOver.pl \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
