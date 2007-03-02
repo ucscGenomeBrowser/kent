@@ -306,6 +306,8 @@ if (mappedEnd + 3 <= psl->tSize && isStopCodon(e))
     {
     mappedEnd += 3;
     psl->blockSizes[psl->blockCount-1] += 1;
+    psl->tEnd += 3;
+    psl->qEnd += 1;
     }
 
 verbose(3, "%s s %c%c%c e %c%c%c %d %d \n", psl->qName, s[0], s[1], s[2], e[0], e[1], e[2], mappedStart, mappedEnd);
@@ -313,8 +315,8 @@ int milliBad = pslCalcMilliBad(psl, FALSE);
 int score = 1000 - 10*milliBad;
 if (score <= 0)
     {
-    unmappedPrint("%s too divergent compared to %s (%4.1f%% sequence identity)\n", 
-    	psl->qName, psl->tName, 0.1*(1000-milliBad));
+    unmappedPrint("%s too divergent compared to %s (%d score (of 1000), %d milliBad)\n", 
+    	psl->qName, psl->tName, score, milliBad);
     return;
     }
 int totalCovAa = totalAminoAcids(psl);
