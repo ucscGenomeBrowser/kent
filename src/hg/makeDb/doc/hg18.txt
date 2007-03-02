@@ -13439,4 +13439,29 @@ TMPDIR=/scratch/tmp
       -bigClusterHub pk -smallClusterHub pk \
       >& do.log & tail -f do.log
 
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
 
+    # see hg17.txt for build temporary ccds database for CCDS.20070228
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg18 ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg18 -loadDb ccdsGene knownGene ccdsKgMap
+    checkTableCoords hg18 -verbose=2 ccdsGene
+    # update all.jointer to include hg18 in ccdsDb
+    joinerCheck -database=hg18 -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+
+    # build initial version of ccdsMgcMap table, updated by nightly genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -loadDb -db=hg18 ccdsGene mgcGenes ccdsMgcMap
+    
+    # load trackDb
+    cd kent/src/hg/makeDb/trackDb
+    make alpha
+    # check in browser
+
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
+    # << emacs

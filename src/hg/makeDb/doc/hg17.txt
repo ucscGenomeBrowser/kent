@@ -23210,3 +23210,37 @@ synBlastp.csh hg17 mm7
 # Chimp Paralogy data from Eichlers lab (DONE Heather Feb. 2007)
 cd /cluster/data/hg17/bed/eichler
 hgLoadBed hg17 chimpParalogy chimpParalogy.bed -tab -sqlTable=chimpParalogy.sql
+
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
+
+    cd /cluster/data/genbank/data/ccds/
+    ftp ftp-private.ncbi.nih.gov (user ccds, needs password)
+    get CCDS.20070228.tar.gz
+    mkdir /scratch/tmp/ccds
+    cd /scratch/tmp/ccds
+    tar -zxf /cluster/data/genbank/data/ccds/CCDS.20070228.tar.gz
+
+    # import ccds database tables
+    /cluster/data/genbank/bin/x86_64/ccdsImport ccds data/*.txt
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds hg17 ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+    checkTableCoords hg17 -verbose=2 ccdsGene
+    joinerCheck -database=hg17 -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+
+    # build initial version of ccdsMgcMap table, updated by nightly  genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -loadDb -db=hg17 ccdsGene mgcGenes ccdsMgcMap
+    
+    # load trackDb
+    cd kent/src/hg/makeDb/trackDb
+    make alpha
+    # check in browser
+
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
+    # << emacs

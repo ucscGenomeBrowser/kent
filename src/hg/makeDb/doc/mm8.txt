@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.36 2007/02/22 22:43:31 hiram Exp $"
+#	"$Id: mm8.txt,v 1.37 2007/03/02 21:00:55 markd Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7831,3 +7831,30 @@ TMPDIR=/scratch/tmp
 # UPDATED mm8.knownToVisiGene (DONE galt 2007-02-15)
 ssh hgwdev
 knownToVisiGene mm8
+
+############################################################################
+# Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
+
+    # see hg17.txt for build temporary ccds database for CCDS.20070228
+
+    # create and load ccdsGene and ccdsInfo tables from imported database
+    /cluster/data/genbank/bin/x86_64/ccdsMkTables -loadDb ccds mm8 ccdsInfo ccdsGene
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=mm8 -loadDb ccdsGene knownGene ccdsKgMap
+    checkTableCoords mm8 -verbose=2 ccdsGene
+    # update all.jointer to include mm8 in ccdsDb
+    joinerCheck -database=mm8 -identifier=ccdsGeneId ~/compbio/genbank/kent/src/hg/makeDb/schema/all.joiner
+
+    # build initial version of ccdsMgcMap table, updated by nightly genbank update
+    /cluster/data/genbank/bin/x86_64/mkCcdsGeneMap -loadDb -db=mm8 ccdsGene mgcGenes ccdsMgcMap
+    
+    # load trackDb
+    cd kent/src/hg/makeDb/trackDb
+    make alpha
+    # check in browser
+
+    # request push of 
+        ccdsGene
+        ccdsInfo
+        ccdsKgMap
+        ccdsMgcMap
+    # << emacs
