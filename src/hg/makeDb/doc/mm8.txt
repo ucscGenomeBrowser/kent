@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.37 2007/03/02 21:00:55 markd Exp $"
+#	"$Id: mm8.txt,v 1.38 2007/03/02 23:26:03 aamp Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7829,8 +7829,6 @@ TMPDIR=/scratch/tmp
 
 #############################################################################
 # UPDATED mm8.knownToVisiGene (DONE galt 2007-02-15)
-ssh hgwdev
-knownToVisiGene mm8
 
 ############################################################################
 # Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
@@ -7858,3 +7856,36 @@ knownToVisiGene mm8
         ccdsKgMap
         ccdsMgcMap
     # << emacs
+
+
+############################################################################
+# CGAP SAGE (DONE Andy 2007-03-01)
+ssh hgwdev
+cd san/andy/mouseSage/
+wget ftp://ftp1.nci.nih.gov/pub/SAGE/MOUSE/Mm.libraries.gz
+wget ftp://ftp1.nci.nih.gov/pub/SAGE/MOUSE/Mm_long.frequencies.gz
+wget ftp://ftp1.nci.nih.gov/pub/SAGE/SAGE_mm_long_forward_v36.1.tar.gz
+wget ftp://ftp1.nci.nih.gov/pub/SAGE/SAGE_mm_long_reverse_v36.1.tar.gz
+tar xvfz SAGE_mm_long_forward_v36.1.tar.gz 
+tar xvfz SAGE_mm_long_reverse_v36.1.tar.gz 
+rm *.tar.gz
+chmod a+r -R mm_* 
+chmod +x mm_*
+cd mm_forward/
+cat * | awk 'BEGIN{OFS="\t"}{print $1, $3, $4, $2, 1000, "+"}' > ../unlifted.bed
+cd ../mm_reverse/
+cat * | awk 'BEGIN{OFS="\t"}{print $1, $4, $3, $2, 1000, "-"}' >> ../unlifted.bed
+ctgPosToLft mm8 mm8.lft
+liftUp lifted.bed mm8.lft warn unlifted.bed 
+awk 'BEGIN{OFS="\t"}{strand = $6; start = $2; end = $3; if (strand == "-") { thickStart = end; } else { start = start - 1; thickStart = start
+ - 4; } thickEnd = thickStart + 4; print $1, start, end, $4, $5, strand, thickStart, thickEnd; }' lifted.bed > mapping.bed
+gunzip *.gz
+rm -rf mm_forward/ mm_reverse/ unlifted.bed lifted.bed mm8.lft 
+awk 'BEGIN{FS="\t"}{sex = $13; for (i=1; i<=12; i++) { printf("%s\t", $i); } if (sex == "unknown") { sex = ""; } else if (sex == "male and fe
+male") { sex = "male,female,"} else if (sex == "male") { sex = "male,"} else {sex = "female,"}; printf("%s\t", sex); for (i=14; i<=20; i++) {
+ printf("%s\t", $i); } print $21}' Mm.libraries | tail +2 > massaged.Mm.libraries
+cgapSageBedAddFreqs -noEmpty mapping.bed Mm_long.frequencies massaged.Mm.libraries cgapSage.bed
+ln -s ~/hg/lib/cgapSage/cgapSageLib.sql 
+ln -s ~/hg/lib/cgapSage/cgapSage.sql 
+hgLoadBed -sqlTable=cgapSage.sql mm8 cgapSage cgapSage.bed
+hgLoadSqlTab mm8 cgapSageLib cgapSageLib.sql massaged.Mm.libraries 
