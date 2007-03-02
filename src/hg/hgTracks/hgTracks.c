@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1285.2.3 2007/03/02 21:25:32 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1285.2.4 2007/03/02 21:25:39 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13454,7 +13454,6 @@ void zoomAroundCenter(double amount)
 {
 double newSizeDbl = (winBaseCount*amount + 0.5);
 int newSize;
-printf("zoom %g\n",newSizeDbl);
 if (newSizeDbl > seqBaseCount)
     newSize = seqBaseCount;
 else if (newSizeDbl < 1.0)
