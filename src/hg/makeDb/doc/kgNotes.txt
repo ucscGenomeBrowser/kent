@@ -196,7 +196,8 @@ end
 # that have passed our process so far.  The txgAnalyze program occassionally
 # will make a duplicate, which is the reason for the sort/uniq run.
 # Takes 7 seconds.
-cat txWalk/*.bed | txBedToGraph stdin txWalk stdout | txgAnalyze stdin stdout | sort | uniq > altSplice.bed
+cat txWalk/*.bed | txBedToGraph stdin txWalk txWalk.txg
+txgAnalyze txWalk.txg /cluster/data/hg18/hg18.2bit stdout | sort | uniq > altSplice.bed
 
 # Get txWalk transcript sequences.  This'll take about 2 minutes
 rm -f txWalk.fa
@@ -348,21 +349,99 @@ cat cdsEvidence/*.tce | sort  > unweighted.tce
 cat refSeq.exceptions mrna.exceptions > allIn.exceptions
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
 cat txWalk/*.bed | \
-	txCdsPick stdin unweighted.tce cds.weights best.tce cds.picks \
+	txCdsPick stdin unweighted.tce cds.weights pick.tce pick.picks \
 		-weightedTce=weighted.tce -refToPep=refToPep.tab \
 		-exceptionsIn=allIn.exceptions \
 		-exceptionsOut=txWalk.exceptions
 
 # Create gene prediction (GTF) and peptide fasta file.
 # Takes 7 seconds.
-cat txWalk/*.bed | txCdsToGene stdin txWalk.fa best.tce bestCds.gtf bestCds.fa \
-	-bedOut=bestCds.bed -exceptions=txWalk.exceptions
+cat txWalk/*.bed | txCdsToGene stdin txWalk.fa pick.tce pick.gtf pick.fa \
+	-bedOut=pick.bed -exceptions=txWalk.exceptions
 
-# Create gene info table.
+# Create gene info table. Takes 8 seconds
 cat bestorf/tab/*.borf > all.borf
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl | txInfoAssemble bestCds.bed best.tce all.borf \
-	altSplice.bed txWalk.exceptions sizePolyA.tab stdin all.flip txInfo.tab
+cat mrna/*.psl refSeq/*.psl | txInfoAssemble pick.bed pick.tce all.borf \
+	altSplice.bed txWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
+
+# Cluster purely based on CDS (in same frame). Takes 1 second
+txCdsCluster pick.bed pick.cluster
+
+# Flag suspicious CDS regions, and add this to info file. Weed out bad CDS
+# and generate a new gene set.
+txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
+txCdsWeed pick.tce pick.info weeded.tce weeded.info
+cat txWalk/*.bed | txCdsToGene stdin txWalk.fa weeded.tce weeded.gtf weeded.fa \
+	-bedOut=weeded.bed -exceptions=txWalk.exceptions
+
+# Separate the weeded set into coding, noncoding, and nearCoding.
+# Cluster the coding and the noncoding sets.
+txGeneSeparateNoncoding weeded.bed pick.info \
+	coding.bed nearCoding.bed noncoding.bed separated.info
+txCdsCluster coding.bed coding.cluster
+txBedToGraph noncoding.bed noncoding noncoding.txg
+
+# Assign permanent accessions to each transcript, and make up a number
+# of our files with this accession in place of the temporary IDs we've been
+# using.
+txGeneAccession /dev/null ~kent/src/hg/txGene/txGeneAccession/txLastId weeded.bed txToAcc.tab
+subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
+subColumn 1 separated.info txToAcc.tab ucscGenes.info
+subColumn 1 pick.picks txToAcc.tab ucscGenes.picks
+cat txWalk/*.ev | subColumn 1 stdin txToAcc.tab ucscGenes.ev
+
+# Make files with protein and mrna accessions.  These will be taken from
+# RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
+# Load these sequences into database.
+txGeneProtAndRna weeded.bed separated.info txWalk.fa weeded.tce refSeq.fa \
+    refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscPep.fa
+hgPepPred hg18a generic knownGenePep ucscPep.fa
+hgPepPred hg18a generic knownGeneMrna ucscGenes.fa
+
+# Make up knownGenes table, adding uniProt ID.
+txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.gp
+hgLoadSqlTab hg18a knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
+
+# Make up kgXref table.  Takes about 3 minutes.
+txGeneXref hg18 sp070202 ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
+hgLoadSqlTab hg18a kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
+
+# Make up and load kgColor table. Takes about a minute.
+txGeneColor sp070202 ucscGenes.info ucscGenes.picks ucscGenes.color
+hgLoadSqlTab hg18a kgColor ~/kent/src/hg/lib/kgColor.sql ucscGenes.color
+
+# Load up kgTxInfo table.
+hgLoadSqlTab hg18a kgTxInfo ~/kent/src/hg/lib/txInfo.sql ucscGenes.info
+
+# Make full text index
+mkdir index
+cd index
+hgKgGetText hg18 knownGene.text
+     
+
+###########################################################################
+## Load take 7 into the database. Takes 30 seconds.
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq2
+cat mrna/*.psl | hgLoadPsl hg18 stdin -table=jkgInputMrna2
+hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
+hgLoadBed hg18 jkgAntibodyBed2 antibody.bed
+cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed hg18 jkgRefSeqUnusual2  stdin
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18a jkgNativeGraph2 stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstExons2 stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstIntrons2 stdin
+hgLoadBed -strict hg18 jkgTxWalk2 txWalk/*.bed
+hgLoadBed hg18 jkgAltSplice2 altSplice.bed
+ldHgGene hg18 jkgTxCdsPick2 pick.gtf -gtf -genePredExt
+hgLoadCdsEvidence hg18 jkgTxCdsEvidence2 weighted.tce
+hgLoadSqlTab hg18 jkgTxInfo2 ~/kent/src/hg/lib/txInfo.sql separated.info
+ldHgGene hg18 jkgTxCdsRepick2 weeded.gtf -gtf -genePredExt
+
 
 ###########################################################################
 ## Load take 6 into the database. Takes 30 seconds.
@@ -381,68 +460,11 @@ awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstEx
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstIntrons stdin
 hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
 hgLoadBed hg18 jkgAltSplice altSplice.bed
-ldHgGene hg18 jkgTxCdsPick bestCds.gtf -gtf -genePredExt
+ldHgGene hg18 jkgTxCdsPick pick.gtf -gtf -genePredExt
 hgLoadCdsEvidence hg18 jkgTxCdsEvidence weighted.tce
-hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql txInfo.tab
+hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql separated.info
+ldHgGene hg18 jkgTxCdsRepick weeded.gtf -gtf -genePredExt
 
-
-
-###########################################################################
-## Load take 5 into the database
-ssh hgwdev
-cd /cluster/data/hg18/bed/jkg
-cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq2
-cat mrna/*.psl | hgLoadPsl hg18 stdin -table=jkgInputMrna2
-hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
-hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
-cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
-awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
-awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
-hgLoadBed hg18 jkgTxWalk2 txWalk/*.bed
-ldHgGene hg18 jkgTxCdsPick2 bestCds.gtf -gtf -genePredExt
-
-
-###########################################################################
-## Load take 4 into the database. Takes 30 seconds.
-ssh hgwdev
-cd /cluster/data/hg18/bed/jkg
-hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
-hgGetAnn hg18 all_mrna - stdout | hgLoadPsl hg18 stdin -table=jkgInputMrna
-hgLoadBed hg18 jkgRefSeqBed refSeq/*.bed
-hgLoadBed hg18 jkgMrnaBed mrna/*.bed
-cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
-awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
-awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
-hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
-
-
-###########################################################################
-## Load take 3 into the database
-ssh hgwdev
-cd /cluster/data/hg18/bed/jkg
-hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq2
-hgGetAnn hg18 all_mrna - stdout | hgLoadPsl hg18 stdin -table=jkgInputMrna2
-hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
-hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
-cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
-awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
-awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
-hgLoadBed hg18 jkgTxWalk2 txWalk/*.bed
-
-###########################################################################
-## Load take 2 into the database:
-ssh hgwdev
-cd /cluster/data/hg18/bed/jkg
-hgGetAnn hg18 refSeqAli - stdout | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
-hgGetAnn hg18 all_mrna - stdout | hgLoadPsl hg18 stdin -table=jkgInputMrna
-hgLoadBed hg18 jkgRefSeqBed refSeq/*.bed
-hgLoadBed hg18 jkgMrnaBed mrna/*.bed
-cat nativeTxg/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
-awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
-awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
-hgLoadBed -notItemRgb -sqlTable=jkgTrimmedGraph.sql hg18 jkgTrimmedGraph  agx/*.agx
-hgLoadBed hg18 jkgRawTranscripts exonWalk/*.bed
-hgLoadBed hg18 jkgTxWalk txWalk/*.bed
 
 ###########################################################################
 ## Some analysis of things in uniProt.fa that didn't map to any sequence.
@@ -915,3 +937,97 @@ o - chr19:59,394,825-59,444,662  A transcriptoinally active cluster.
 o - chrX:153,917,080-153,942,391 is a good example of a CDS to nuke.
     The bestorf score is 0. It is an NMD target. It doesn't overlap
     with other CDS's in region.
+o - chr13:112,573,175-112,597,164 is an example of a sinle exon transcript
+    that probably should be removed from overlapping too much a coding
+    transcript.
+o - chr19_random:158,550-294,266 - very difficult region.  What we're
+    doing is not yet enough to separate protein coding genes.  They all
+    end up in one big cluster even though refSeq, rightly I think, has
+    several distinct genes.  At any rate I don't know how to sort this out.
+o - chr5:69,470,446-69,917,303 - another very difficult region.
+o - chr22:43,456,057-43,654,296 - another region with transcripts that
+    cross genes.  
+In all it looks like the CDS stripper is being overactive, that most of
+it's activity is in gene-crossing regions, rather than in the retained
+introns it was intended for.
+
+#####
+# Preparing hg18a -
+Copied over files from /var/lib/mysql/hg18 to /var/lib/mysql/hg18a
+except for the chain and net tables, and the following tables:
+HInv
+HInvGeneMrna
+all_bacends
+all_fosends
+bacEndPairs
+blastKGPep04
+blastKGRef04
+ceBlastTab
+dmBlastTab
+drBlastTab
+foldUtr3
+foldUtr5
+fosEndPairs
+humanBlastTab
+humanHprdP2P
+humanVidalP2P
+humanWankerP2P
+kgAlias
+kgProtAlias
+kgProtMap
+kgSpAlias
+kgXref
+knownBlastTab
+knownCanonical
+knownExpDistance
+knownGene
+knownGeneMrna
+knownGenePep
+knownIsoforms
+knownToAllenBrain
+knownToEnsembl
+knownToGnf1h
+knownToGnfAtlas2
+knownToHInv
+knownToHprd
+knownToLocusLink
+knownToPfam
+knownToRefSeq
+knownToU133
+knownToU133Plus2
+knownToU95
+knownToVisiGene
+mmBlastTab
+multiz17way
+multiz17wayFrames
+multiz17waySummary
+oreganno
+oregannoAttr
+oregannoLink
+phastCons17way
+phastConsElements17way
+regPotential17X
+snp126
+snp126ExceptionDesc
+snp126orthoPanTro2RheMac2
+snpSeq
+pbAnomLimit
+pbResAvgStd
+pbStamp
+pepCCntDist
+pepExonCntDist
+pepHydroDist
+pepIPCntDist
+pepMolWtDist
+pepMwAa
+pepPi
+pepPiDist
+pepResDist
+rnBlastTab
+scBlastTab
+uniGene_3
+xenoEst
+xenoMrna
+xenoRefFlat
+xenoRefGene
+xenoRefSeqAli
