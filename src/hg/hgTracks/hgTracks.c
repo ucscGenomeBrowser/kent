@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1291 2007/03/02 20:43:51 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1292 2007/03/02 22:35:09 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9463,6 +9463,9 @@ if (rulerMode != tvHide)
         newWinWidth = insideWidth/tl.mWidth;
     else
         errAbort("invalid zoom type %s", zoomType);
+
+    if (newWinWidth < 1)
+	newWinWidth = 1;
 
     for (i=1; i<=boxes; ++i)
 	{
