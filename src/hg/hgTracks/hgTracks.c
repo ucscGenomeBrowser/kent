@@ -107,13 +107,14 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1286 2007/03/01 00:12:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1287 2007/03/02 10:32:54 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 static long enteredMainTime = 0;	/* time at beginning of main()	*/
 boolean isPrivateHost;		/* True if we're on genome-test. */
 char *protDbName;               /* Name of proteome database for this genome. */
+boolean gotKgColor;	/* Set to true if just take color from table. */
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3528,7 +3529,7 @@ slSort(&tg->items, linkedFeaturesCmpStart);
 limitVisibility(tg);
 }
 
-Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
+Color knownGeneColorCalc(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw known gene in. */
 {
 struct linkedFeatures *lf = item;
@@ -3618,6 +3619,31 @@ if (pdbID != NULL)
 
 hFreeConn(&conn);
 return(col);
+}
+
+
+Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color for a known gene item - looking it up in table in
+ * newer versions, and calculating it on fly in later versions. */
+{
+if (gotKgColor)
+    {
+    struct linkedFeatures *lf = item;
+    int colIx = MG_BLUE;
+    struct sqlConnection *conn = hAllocConn();
+    char query[512];
+    safef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'", 
+    	lf->name);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row = sqlNextRow(sr);
+    if (row != NULL)
+         colIx = vgFindColorIx(vg, sqlUnsigned(row[0]), sqlUnsigned(row[1]), sqlUnsigned(row[2]));
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    return colIx;
+    }
+else
+    return knownGeneColorCalc(tg, item, vg);
 }
 
 void knownGeneMethods(struct track *tg)
@@ -13967,6 +13993,13 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
+void setKgVars()
+/* Figure out which version of known genes we are on. */
+{
+if (hTableExists("kgColor"))
+    gotKgColor = TRUE;
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -13991,6 +14024,7 @@ else
     hgDebug = FALSE;
 
 hSetDb(database);
+setKgVars();
 
 hDefaultConnect();
 initTl();
