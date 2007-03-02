@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.108 2007/02/28 20:39:08 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.109 2007/03/02 14:25:44 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -416,7 +416,7 @@ for (ot = otList; ot != NULL; ot = ot->next)
     }
 hPrintf("</SELECT>\n");
 if (startsWith("hgwdev-giardine", cgiServerName()) ||
-    startsWith("genome-test", cgiServerName())) 
+    startsWith("hgwdev.cse", cgiServerName())) 
     {
     hPrintf(" ");
     cartMakeCheckBox(cart, "sendToGalaxy", FALSE);
