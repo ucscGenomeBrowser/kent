@@ -5,6 +5,7 @@
 #include "options.h"
 #include "jksql.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "hdb.h"
 #include "hgRelate.h"
 #include "binRange.h"
@@ -12,7 +13,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.2 2006/07/26 04:59:18 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.3 2007/03/02 00:48:49 kent Exp $";
 
 
 void usage()
@@ -61,20 +62,6 @@ safef(buf, sizeof(buf), "%s&%s", key1, key2);
 hashAdd(hash, buf, val);
 }
 
-struct hash *hashTwoColumnFile(char *fileName, int hashSize)
-/* Return hash from two-column file keyed by first column with values
- * of second column. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *hash = hashNew(hashSize);
-char *row[2];
-while (lineFileRow(lf, row))
-    hashAdd(hash, row[0], cloneString(row[1]));
-lineFileClose(&lf);
-return hash;
-}
-
-
 struct hash *loadGeneToModule(struct sqlConnection *conn, char *fileName, char *table)
 /* Load up simple two-column file into a lookup type table. */
 {
@@ -90,7 +77,7 @@ dyStringPrintf(dy,
 sqlRemakeTable(conn, table, dy->string);
 sqlLoadTabFile(conn, fileName, table, 0);
 verbose(1, "Loaded %s table\n", table);
-return hashTwoColumnFile(fileName, 0);
+return hashTwoColumnFile(fileName);
 }
 
 struct genomePos
