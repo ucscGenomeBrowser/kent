@@ -34,7 +34,7 @@ endif
 echo
 
 # make sure this is a valid database name
-set dbs=`hgsql -e "SELECT name FROM dbDb" hgcentraltest | grep $db`
+set dbs=`hgsql -e "SELECT name FROM dbDb" hgcentraltest | grep -w $db`
 if ( "$dbs" != $db ) then
   echo "   Invalid database name.  Try again."
   echo
