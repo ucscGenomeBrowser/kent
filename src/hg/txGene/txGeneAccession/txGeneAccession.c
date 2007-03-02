@@ -7,7 +7,7 @@
 #include "binRange.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.1 2007/03/02 00:51:52 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.2 2007/03/02 01:00:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -109,8 +109,8 @@ if (oldBed->blockCount > newBed->blockCount)
     return 0;
 
 /* Look for an exact match */
-int oldSize = bedTotalSize(oldBed);
-int newSize = bedTotalSize(newBed);
+int oldSize = bedTotalBlockSize(oldBed);
+int newSize = bedTotalBlockSize(newBed);
 int overlap = bedSameStrandOverlap(oldBed, newBed);
 if (oldSize == newSize && oldSize == overlap)
     return TRUE;
