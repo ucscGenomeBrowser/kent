@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1287 2007/03/02 10:32:54 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1288 2007/03/02 20:14:42 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1600,7 +1600,7 @@ void linkedFeaturesDrawAt(struct track *tg, void *item,
 /* Draw a single simple bed item at position. */
 {
 struct linkedFeatures *lf = item; 
-struct simpleFeature *sf;
+struct simpleFeature *sf, *components;
 int heightPer = tg->heightPer;
 int x1,x2;
 int shortOff = heightPer/4;
@@ -1678,7 +1678,9 @@ if (!hideArrows)
 	}
     }
 
-for (sf = lf->codons ? lf->codons : lf->components; sf != NULL; sf = sf->next)
+components = (lf->codons && zoomedToCdsColorLevel) ? 
+	      lf->codons : lf->components;
+for (sf = components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
 
