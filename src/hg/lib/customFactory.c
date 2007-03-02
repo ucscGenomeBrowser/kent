@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.52 2007/02/28 00:32:42 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.53 2007/03/02 22:34:56 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -150,13 +150,14 @@ static struct pipeline *bedLoaderPipe(struct customTrack *track)
 {
 char *db = customTrackTempDb();
 /* running the single command:
- *	hgLoadBed -verbose=0 -noNameIx -ignoreEmpty -allowStartEqualEnd
- *	    -tmpDir=/data/tmp -allowStartEqualEnd
- *		-maxChromNameLength=${nameLength} stdin
+ *	hgLoadBed -customTrackLoader -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} db tableName stdin
+ * -customTrackLoader turns on options: -noNameIx -ignoreEmpty
+ *	-allowStartEqualEnd -allowNegativeScores -verbose=0
  */
 struct dyString *tmpDy = newDyString(0);
-char *cmd1[] = {"loader/hgLoadBed", "-verbose=0", "-noNameIx", "-ignoreEmpty", 
-	"-allowStartEqualEnd", NULL, NULL, NULL, NULL, "stdin", NULL};
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader",
+	NULL, NULL, NULL, NULL, "stdin", NULL};
 char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
 struct stat statBuf;
 
@@ -164,13 +165,13 @@ if (stat(tmpDir,&statBuf))
     errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
 	"create directory or specify in hg.conf customTrash.tmpdir", tmpDir);
 dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
-cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-cmd1[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "%s", db);
-cmd1[7] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "%s", track->dbTableName);
-cmd1[8] = dyStringCannibalize(&tmpDy);
+cmd1[5] = dyStringCannibalize(&tmpDy);
 /* the "/dev/null" file isn't actually used for anything, but it is used
  * in the pipeLineOpen to properly get a pipe started that isn't simply
  * to STDOUT which is what a NULL would do here instead of this name.
