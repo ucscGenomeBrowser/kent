@@ -12,7 +12,7 @@ ALTER TABLE InterpretationTypes ADD INDEX (interpretation_type_uid);
 ALTER TABLE Interpretations ADD INDEX (interpretation_uid);
 ALTER TABLE Interpreters ADD INDEX (interpreter_uid);
 ALTER TABLE Locations ADD INDEX (location_uid);
-ALTER TABLE Locations_GroupVersions ADD INDEX (location_uid), ADD INDEX (group_version_uid);
+ALTER TABLE Locations_GroupVersions ADD INDEX (location_uid), ADD INDEX (group_version_uid), ADD INDEX (chromosome);
 ALTER TABLE NextIds ADD INDEX (table_name);
 ALTER TABLE Organizations ADD INDEX (organization_uid);
 ALTER TABLE Programs ADD INDEX (program_uid);

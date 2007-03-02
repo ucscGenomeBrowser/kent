@@ -102,7 +102,8 @@ ALTER TABLE [dbo].[Locations_GroupVersions] ADD
 	CONSTRAINT [PK_locations_groupVersions] PRIMARY KEY  CLUSTERED 
 	(
 		[location_uid],
-		[group_version_uid]
+		[group_version_uid],
+                [chromosome]
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 GO
 

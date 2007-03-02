@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.12 2007/02/18 22:13:31 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.13 2007/03/02 17:10:34 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -83,6 +83,14 @@ static struct genomeInfo genomeInfoTbl[] =
 };
 
 
+static char *ccdsMkId(int ccdsId, int ccdsVersion)
+/* construct a CCDS id.  WARNING: static return */
+{
+static char id[32];
+safef(id, sizeof(id), "CCDS%d.%d", ccdsId, ccdsVersion);
+return id;
+}
+
 static struct genomeInfo *getBuildTaxon(char *hgDb)
 /* translated the target databases to ncbi build and taxon */
 {
@@ -100,9 +108,7 @@ return NULL;
 static struct hashEl *gotCcdsSave(struct hash *gotCcds, int ccdsId, int ccdsVersion)
 /* save a ccds id in a hash table for sanity check purposes */
 {
-char id[32];
-safef(id, sizeof(id), "ccds%d.%d", ccdsId, ccdsVersion);
-return hashStore(gotCcds, id);
+return hashStore(gotCcds, ccdsMkId(ccdsId, ccdsVersion));
 }
 
 static void gotCcdsSaveSrcDb(struct hash *gotCcds, int ccdsId, int ccdsVersion,
@@ -154,6 +160,12 @@ else
     return 0;
 }
 
+static boolean ccdsIsIgnored(struct hash* ignoreTbl, int ccdsId, int ccdsVersion)
+/* detemine if a CCDS should be ignored */
+{
+return (hashLookup(ignoreTbl, ccdsMkId(ccdsId, ccdsVersion)) != NULL);
+}
+
 static void gotCcdsCheckInfo(struct hash *infoCcds)
 /* check source databases added to ccdsInof table */
 {
@@ -200,9 +212,19 @@ statValSet = dyStringCannibalize(&buf);
 return statValSet;
 }
 
-static char *mkGroupVersionClause(struct genomeInfo *genome, struct sqlConnection *conn)
-/* get part of where clause that selects GroupVersions and CcdsUids that are currently
- * selected by organism, build, and status values,.  WARNING: static return. */
+static char *mkCommonFrom()
+/* get common FROM clause. */
+{
+return "Groups, "
+    "GroupVersions, "
+    "CcdsUids, "
+    "CcdsStatusVals";
+}
+
+static char *mkCommonWhere(struct genomeInfo *genome, struct sqlConnection *conn)
+/* Get the common clause.  This is the where clause that selects GroupVersions
+ * and CcdsUids that are currently selected by organism, build, and status
+ * values. WARNING: static return. */
 {
 static char clause[1025];
 safef(clause, sizeof(clause),
@@ -213,12 +235,45 @@ safef(clause, sizeof(clause),
       "AND (GroupVersions.group_uid = Groups.group_uid) "
       "AND (CcdsStatusVals.ccds_status_val_uid = GroupVersions.ccds_status_val_uid) "
       "AND (CcdsStatusVals.ccds_status in (%s)) "
-      "AND (CcdsUids.group_uid = Groups.group_uid))",
+      "AND (CcdsUids.group_uid = Groups.group_uid)) ",
       genome->taxonId, genome->ncbiBuild,
       genome->ncbiBuildVersion, genome->ncbiBuildVersion,
       mkStatusValSet(conn));
 return clause;
 }
+
+static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
+/* Build table of CCDS ids to ignore.  This currently contains:
+ *   - ones that have the interpretation_subtype of "Partial match".
+ * This should be doable as part of the query, but MySQL 4.0 was very, very slow at it. */
+{
+struct hash* ignoreTbl = hashNew(20);
+
+// partial match
+static char select[4096];
+safef(select, sizeof(select),
+      "SELECT "
+      "CcdsUids.ccds_uid, GroupVersions.ccds_version "
+      "FROM %s, "
+      "Interpretations, "
+      "InterpretationSubtypes "
+      "WHERE %s "
+      "AND (Interpretations.ccds_uid = CcdsUids.ccds_uid) "
+#if 0
+      "AND (Interpretations.group_uid = GroupVersions.group_uid) "
+#endif
+      "AND (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
+      "AND (InterpretationSubtypes.interpretation_subtype = \"Partial match\") ",
+      mkCommonFrom(), mkCommonWhere(genome, conn));
+
+struct sqlResult *sr = sqlGetResult(conn, select);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
+sqlFreeResult(&sr);
+return ignoreTbl;
+}
+
 
 static char *mkCcdsInfoSelect(struct genomeInfo *genome, struct sqlConnection *conn)
 /* Construct select to get data for ccdsInfo table.  WARNING: static
@@ -231,23 +286,20 @@ safef(select, sizeof(select),
       "Organizations.name, "
       "Accessions.nuc_acc, Accessions.nuc_version, "
       "Accessions.prot_acc, Accessions.prot_version "
-      "FROM "
+      "FROM %s, "
       "Accessions, "
       "Accessions_GroupVersions, "
-      "Groups, "
-      "GroupVersions, "
-      "CcdsUids, "
-      "Organizations, "
-      "CcdsStatusVals "
+      "Organizations "
       "WHERE %s "
       "AND (Accessions.accession_uid = Accessions_GroupVersions.accession_uid) "
       "AND (Accessions_GroupVersions.group_version_uid = GroupVersions.group_version_uid) "
       "AND (Organizations.organization_uid = Accessions.organization_uid)",
-      mkGroupVersionClause(genome, conn));
+      mkCommonFrom(), mkCommonWhere(genome, conn));
 return select;
 }
 
-static void processCcdsInfoRow(char **row, struct ccdsInfo **ccdsInfoList, struct hash *gotCcds)
+static void processCcdsInfoRow(char **row, struct ccdsInfo **ccdsInfoList,
+                               struct hash* ignoreTbl, struct hash *gotCcds)
 /* Process a row from ccdsInfoSelect and add to the list of ccdsInfo rows.
  * Buffering the rows is necessary since there maybe multiple versions of 
  * an accession returned.  While only one accession will be alive, we can't filter
@@ -256,29 +308,30 @@ static void processCcdsInfoRow(char **row, struct ccdsInfo **ccdsInfoList, struc
 {
 int ccdsId = sqlSigned(row[0]);
 int ccdsVersion = sqlSigned(row[1]);
-struct ccdsInfo *ci;
-char *srcDb;
-
-AllocVar(ci);
-
-safef(ci->ccds, sizeof(ci->ccds), "CCDS%d.%d", ccdsId, ccdsVersion);
-if (sameString(row[2], "NCBI"))
+if (!ccdsIsIgnored(ignoreTbl, ccdsId, ccdsVersion))
     {
-    /* NCBI has separate version numbers */
-    ci->srcDb = ccdsInfoNcbi;
-    safef(ci->mrnaAcc, sizeof(ci->mrnaAcc), "%s.%s", row[3], row[4]);
-    safef(ci->protAcc, sizeof(ci->protAcc), "%s.%s", row[5], row[6]);
-    srcDb = "N";
+    struct ccdsInfo *ci;
+    AllocVar(ci);
+    char *srcDb;
+    safecpy(ci->ccds, sizeof(ci->ccds), ccdsMkId(ccdsId, ccdsVersion));
+    if (sameString(row[2], "NCBI"))
+        {
+        /* NCBI has separate version numbers */
+        ci->srcDb = ccdsInfoNcbi;
+        safef(ci->mrnaAcc, sizeof(ci->mrnaAcc), "%s.%s", row[3], row[4]);
+        safef(ci->protAcc, sizeof(ci->protAcc), "%s.%s", row[5], row[6]);
+        srcDb = "N";
+        }
+    else
+        {
+        ci->srcDb = (startsWith("OTT", ci->mrnaAcc) ? ccdsInfoVega : ccdsInfoEnsembl);
+        safef(ci->mrnaAcc, sizeof(ci->mrnaAcc), "%s", row[3]);
+        safef(ci->protAcc, sizeof(ci->protAcc), "%s", row[5]);
+        srcDb = "H";
+        }
+    slSafeAddHead(ccdsInfoList, ci);
+    gotCcdsSaveSrcDb(gotCcds, ccdsId, ccdsVersion, srcDb);
     }
-else
-    {
-    ci->srcDb = (startsWith("OTT", ci->mrnaAcc) ? ccdsInfoVega : ccdsInfoEnsembl);
-    safef(ci->mrnaAcc, sizeof(ci->mrnaAcc), "%s", row[3]);
-    safef(ci->protAcc, sizeof(ci->protAcc), "%s", row[5]);
-    srcDb = "H";
-    }
-slSafeAddHead(ccdsInfoList, ci);
-gotCcdsSaveSrcDb(gotCcds, ccdsId, ccdsVersion, srcDb);
 }
 
 static int lenLessVer(char *acc)
@@ -321,7 +374,8 @@ slReverse(&newList);
 }
 
 static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
-                           struct genomeInfo *genome, struct hash *gotCcds)
+                           struct genomeInfo *genome, struct hash* ignoreTbl,
+                           struct hash *gotCcds)
 /* create ccdsInfo table file */
 {
 char *query = mkCcdsInfoSelect(genome, conn);
@@ -329,7 +383,7 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 struct ccdsInfo *ccdsInfoList = NULL, *ci;
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    processCcdsInfoRow(row, &ccdsInfoList, gotCcds);
+    processCcdsInfoRow(row, &ccdsInfoList, ignoreTbl, gotCcds);
 sqlFreeResult(&sr);
 
 ccdsFilterDupAccessions(&ccdsInfoList);
@@ -353,17 +407,13 @@ safef(select, sizeof(select),
       "Groups.orientation, "
       "Locations.chr_start, "
       "Locations.chr_stop "
-      "FROM "
-      "Locations_GroupVersions, "
+      "FROM %s, "
       "Locations, "
-      "GroupVersions, "
-      "Groups, "
-      "CcdsUids, "
-      "CcdsStatusVals "
+      "Locations_GroupVersions "
       "WHERE %s "
       "AND (Locations.location_uid = Locations_GroupVersions.location_uid) "
       "AND (Locations_GroupVersions.group_version_uid = GroupVersions.group_version_uid)",
-      mkGroupVersionClause(genome, conn));
+      mkCommonFrom(), mkCommonWhere(genome, conn));
 return select;
 }
 
@@ -380,28 +430,33 @@ if (dif == 0)
 return dif;
 }
 
-static void locationProcessRow(char **row, struct ccdsLocationsJoin **locsList, struct hash *gotCcds)
+static void locationProcessRow(char **row, struct ccdsLocationsJoin **locsList,
+                               struct hash* ignoreTbl, struct hash *gotCcds)
 /* proces a row from the locations query and add to the list.  If the
  * chromsome is XY, split it into two entries */
 {
 struct ccdsLocationsJoin *loc = ccdsLocationsJoinLoad(row);
-if (sameString(loc->chrom, "XY"))
+if (ccdsIsIgnored(ignoreTbl, loc->ccds_uid, loc->ccds_version))
+    ccdsLocationsJoinFree(&loc);
+else
     {
-    /* no dynamic data, so can just copy */
-    struct ccdsLocationsJoin *locY;
-    AllocVar(locY);
-    *locY = *loc;
-    strcpy(loc->chrom, "X");
-    strcpy(locY->chrom, "Y");
-    slSafeAddHead(locsList, locY);
+    if (sameString(loc->chrom, "XY"))
+        {
+        /* no dynamic data, so can just copy */
+        struct ccdsLocationsJoin *locY;
+        AllocVar(locY);
+        *locY = *loc;
+        strcpy(loc->chrom, "X");
+        strcpy(locY->chrom, "Y");
+        slSafeAddHead(locsList, locY);
+        }
+    slSafeAddHead(locsList, loc);
+    gotCcdsSave(gotCcds, loc->ccds_uid, loc->ccds_version);
     }
-slSafeAddHead(locsList, loc);
-gotCcdsSave(gotCcds, loc->ccds_uid, loc->ccds_version);
 }
 
-static struct ccdsLocationsJoin *loadLocations(struct sqlConnection *conn,
-                                               struct genomeInfo *genome,
-                                               struct hash *gotCcds)
+static struct ccdsLocationsJoin *loadLocations(struct sqlConnection *conn, struct genomeInfo *genome,
+                                               struct hash* ignoreTbl, struct hash *gotCcds)
 /* load all exon locations into a list, sort by ccds id, and then
  * chrom and start */
 {
@@ -410,7 +465,7 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 struct ccdsLocationsJoin *locs = NULL;
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    locationProcessRow(row, &locs, gotCcds);
+    locationProcessRow(row, &locs, ignoreTbl, gotCcds);
 sqlFreeResult(&sr);
 slSort(&locs, ccdsLocationsJoinCmp);
 return locs;
@@ -448,8 +503,7 @@ gp->optFields = genePredAllFlds;
 numExons = slCount(locs);
 lastLoc = slElementFromIx(locs, numExons-1);
 
-safef(buf, sizeof(buf), "CCDS%d.%d", locs->ccds_uid, locs->ccds_version);
-gp->name = cloneString(buf);
+gp->name = cloneString(ccdsMkId(locs->ccds_uid, locs->ccds_version));
 safef(buf, sizeof(buf), "chr%s", locs->chrom);
 gp->chrom = cloneString(buf);
 gp->strand[0] = locs->strand[0];
@@ -496,10 +550,11 @@ return gp;
 }
 
 static void createCcdsGene(struct sqlConnection *conn, char *ccdsGeneFile,
-                           struct genomeInfo *genome, struct hash *gotCcds)
+                           struct genomeInfo *genome, struct hash* ignoreTbl,
+                           struct hash *gotCcds)
 /* create the ccdsGene tab file from the ccds database */
 {
-struct ccdsLocationsJoin *locs = loadLocations(conn, genome, gotCcds);
+struct ccdsLocationsJoin *locs = loadLocations(conn, genome, ignoreTbl, gotCcds);
 struct genePred *genes = NULL, *gp;
 FILE *genesFh;
 
@@ -561,15 +616,16 @@ struct sqlConnection *conn = sqlConnect(ccdsDb);
 char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
 char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
 struct genomeInfo *genome = getBuildTaxon(hgDb);
-struct hash *infoCcds = hashNew(18);
-struct hash *geneCcds = hashNew(18);
+struct hash *infoCcds = hashNew(20);
+struct hash *geneCcds = hashNew(20);
 hSetDb(hgDb);
 
 ccdsGetTblFileNames(ccdsInfoOut, ccdsInfoTbl, ccdsInfoFile);
 ccdsGetTblFileNames(ccdsGeneOut, ccdsGeneTbl, ccdsGeneFile);
+struct hash* ignoreTbl = buildIgnoreTbl(conn, genome);
 
-createCcdsInfo(conn, ccdsInfoFile, genome, infoCcds);
-createCcdsGene(conn, ccdsGeneFile, genome, geneCcds);
+createCcdsInfo(conn, ccdsInfoFile, genome, ignoreTbl, infoCcds);
+createCcdsGene(conn, ccdsGeneFile, genome, ignoreTbl, geneCcds);
 sqlDisconnect(&conn);
 sqlMonitorDisable();
 gotCcdsValidate(infoCcds, geneCcds);

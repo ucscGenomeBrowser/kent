@@ -82,13 +82,15 @@ GO
 CREATE TABLE [dbo].[InterpretationSubtypes] (
 	[interpretation_subtype_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
 	[interpretation_type_uid] [int] NOT NULL ,
-	[interpretation_subtype] [varchar] (128) COLLATE Latin1_General_BIN NOT NULL 
+	[interpretation_subtype] [varchar] (128) COLLATE Latin1_General_BIN NOT NULL ,
+        [for_public] [bit] NOT NULL
 ) ON [PRIMARY]
 GO
 
 CREATE TABLE [dbo].[InterpretationTypes] (
 	[interpretation_type_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
-	[interpretation_type] [varchar] (128) COLLATE Latin1_General_BIN NOT NULL 
+	[interpretation_type] [varchar] (128) COLLATE Latin1_General_BIN NOT NULL ,
+        [for_public] [bit] NOT NULL
 ) ON [PRIMARY]
 GO
 

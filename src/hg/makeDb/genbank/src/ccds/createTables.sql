@@ -92,14 +92,16 @@ DROP TABLE IF EXISTS InterpretationSubtypes;
 CREATE TABLE InterpretationSubtypes (
 	interpretation_subtype_uid int PRIMARY KEY  NOT NULL ,
 	interpretation_type_uid int NOT NULL ,
-	interpretation_subtype varchar (128) NOT NULL 
+	interpretation_subtype varchar (128) NOT NULL ,
+        for_public tinyint(1) NOT NULL
 ) 
 ;
 
 DROP TABLE IF EXISTS InterpretationTypes;
 CREATE TABLE InterpretationTypes (
 	interpretation_type_uid int PRIMARY KEY  NOT NULL ,
-	interpretation_type varchar (128) NOT NULL 
+	interpretation_type varchar (128) NOT NULL ,
+        for_public tinyint(1) NOT NULL
 ) 
 ;
 
