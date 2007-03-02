@@ -12,7 +12,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.13 2007/03/02 17:10:34 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.14 2007/03/02 18:47:04 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -61,6 +61,7 @@ errAbort(
   "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
   "     2 - show selects against CCDS database\n"
+  "     3 - include ignored entries\n"
   );
 }
 
@@ -242,6 +243,15 @@ safef(clause, sizeof(clause),
 return clause;
 }
 
+static void dumpIgnoreTbl(struct hash* ignoreTbl)
+/* print ignoreTbl for debugging purposes */
+{
+struct hashCookie cookie = hashFirst(ignoreTbl);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    verbose(3, "ignore: %s\n", hel->name);
+}
+
 static struct hash* buildIgnoreTbl(struct sqlConnection *conn, struct genomeInfo *genome)
 /* Build table of CCDS ids to ignore.  This currently contains:
  *   - ones that have the interpretation_subtype of "Partial match".
@@ -271,6 +281,8 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     hashStore(ignoreTbl, ccdsMkId(sqlUnsigned(row[0]), sqlUnsigned(row[1])));
 sqlFreeResult(&sr);
+if (verboseLevel() >= 3)
+    dumpIgnoreTbl(ignoreTbl);
 return ignoreTbl;
 }
 
