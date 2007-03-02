@@ -36,7 +36,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapSummary.c,v 1.1 2007/03/01 23:04:32 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSummary.c,v 1.2 2007/03/02 00:21:13 heather Exp $";
 
 struct orthoAllele
     {
@@ -165,6 +165,7 @@ safef(query, sizeof(query), "select * from %s", inputTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    offset = 0;
     /* first 7 columns same */
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t", 
             row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
