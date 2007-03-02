@@ -8,5 +8,5 @@ table kgXref
     string geneSymbol;  "Gene Symbol"
     string refseq;      "RefSeq ID"
     string protAcc;     "NCBI protein Accession number"
-    string description; "Description"
+    lstring description; "Description"
     )

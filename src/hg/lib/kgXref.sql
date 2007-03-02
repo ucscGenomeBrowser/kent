@@ -12,7 +12,7 @@ CREATE TABLE kgXref (
     geneSymbol varchar(40),	# Gene Symbol
     refseq varchar(40),		# RefSeq ID
     protAcc varchar(40),	# NCBI protein Accession number
-    description varchar(255),	# Description
+    description longblob not null,	# Description
               #Indices
     KEY(kgID),
     KEY(mRNA),

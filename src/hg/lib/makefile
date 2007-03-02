@@ -48,7 +48,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     HInv.o hui.o humanParalog.o \
     imageClone.o isochores.o itemAttr.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o \
-    kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
+    kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mafFrames.o mafSummary.o mapSts.o \
     mcnBreakpoints.o metaChromGraph.o microarray.o minGeneInfo.o mrnaMisMatch.o \
@@ -79,7 +79,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     trackDbCustom.o trackLayout.o trackTable.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o txCluster.o txEdgeBed.o \
-    txEdgeOrtho.o txGraph.o txInfo.o \
+    txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o \
     vegaInfo.o vegaInfoZfish.o visiGene.o vntr.o \
     wabAli.o web.o ncRna.o wgRna.o wigAsciiToBinary.o wigDataStream.o wiggle.o \
     wiggleCart.o wiggleUtils.o wikiLink.o zdobnovSynt.o oreganno.o \
