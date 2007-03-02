@@ -111,10 +111,10 @@ while (lineFileRow(lf, row))
     }
 }
 
-struct txInfo
+struct txCdsInfo
 /* Information on a transcript */
     {
-    struct txInfo *next;	/* Next in list. */
+    struct txCdsInfo *next;	/* Next in list. */
     char *name;			/* Name, not allocated here. */
     struct cdsEvidence *cdsList; /* List of cds evidence. */
     };
@@ -130,10 +130,10 @@ return b->score - a->score;
 struct hash *loadAndWeighTce(char *fileName, struct hash *weightHash,
 	char *outTce)
 /* Load transcript cds evidence from file into hash of
- * txInfo. */
+ * txCdsInfo. */
 {
-/* Read all tce's in file into list and hash of txInfo. */
-struct txInfo *tx, *txList = NULL;
+/* Read all tce's in file into list and hash of txCdsInfo. */
+struct txCdsInfo *tx, *txList = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = hashNew(18);
 char *row[CDSEVIDENCE_NUM_COLS];
@@ -241,9 +241,9 @@ void txCdsPick(char *inBed, char *inTce, char *inWeights,
 {
 struct hash *weightHash = hashWeights(inWeights);
 verbose(2, "Read %d weights from %s\n", weightHash->elCount, inWeights);
-struct hash *txInfoHash = loadAndWeighTce(inTce, weightHash, outTce);
+struct hash *txCdsInfoHash = loadAndWeighTce(inTce, weightHash, outTce);
 verbose(2, "Read info on %d transcripts from %s\n", 
-	txInfoHash->elCount, inTce);
+	txCdsInfoHash->elCount, inTce);
 struct lineFile *lf = lineFileOpen(inBed, TRUE);
 FILE *fTce = mustOpen(outTce, "w");
 FILE *fPick = mustOpen(outPick, "w");
@@ -251,7 +251,7 @@ char *row[12];
 while (lineFileRow(lf, row))
     {
     struct bed *bed = bedLoad12(row);
-    struct txInfo *tx = hashFindVal(txInfoHash, bed->name);
+    struct txCdsInfo *tx = hashFindVal(txCdsInfoHash, bed->name);
     struct cdsPick pick;
     ZeroVar(&pick);
     pick.name = bed->name;
@@ -286,7 +286,7 @@ while (lineFileRow(lf, row))
 		    }
 		else if (sameString("genbankCds", source) && pick.genbank[0] == 0)
 		    pick.genbank = cds->accession;
-		else if (sameString("trembl", source) && pick.uniProt[0] == 0)
+		else if (sameString("tremble", source) && pick.uniProt[0] == 0)
 		    pick.uniProt = cds->accession;
 		else if (sameString("bestorf", source))
 		    pick.wBorfScore = cds->score;
