@@ -45,6 +45,7 @@ rm storefile
 
 #set number of units that need full du
 set number=`echo $fullunit | awk -F" " '{print NF}'`
+
 if ($number == 0) then
   exit
 else
@@ -53,6 +54,16 @@ else
     # get them in order, most full unit first
     set j=`echo $j | awk '{print $1 + 1}'`
     set unit=$fullunit[$j]
+    # if the unit can't be logged into, simply mention it and stop processing
+    echo $unit | egrep 'bluearc|home|sanvol1|sanvol2' >& /dev/null
+    if ( ! $status ) then
+      # can't loginto bluearc or /cluster/home
+      echo "$unit is in the danger zone."
+      echo "  can't login to check."
+      echo "  notify admins."
+      echo
+      continue
+    endif
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
     if (-e $unit/du.$date) then
@@ -75,6 +86,7 @@ else
     set rows=`wc -l $fullfile | awk '{print $1-1}'`
     rm -f outfile
     set sizeN=101
+
     # keep info for files/dirs > 100 Mbytes only
     while ($rows - $n > 1 && $sizeN > 99)
   
