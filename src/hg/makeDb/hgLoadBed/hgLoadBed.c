@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.45 2006/12/13 18:03:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.46 2007/03/02 21:59:30 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -30,6 +30,9 @@ int maxChromNameLength = 0;		/* specify to avoid chromInfo */
 char *tmpDir = (char *)NULL;	/*	location to create a temporary file */
 boolean nameIx = TRUE;	/*	FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
+boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
+boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options*/
+/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -50,6 +53,8 @@ static struct optionSpec optionSpecs[] = {
     {"tmpDir", OPTION_STRING},
     {"noNameIx", OPTION_BOOLEAN},
     {"ignoreEmpty", OPTION_BOOLEAN},
+    {"allowNegativeScores", OPTION_BOOLEAN},
+    {"customTrackLoader", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -300,7 +305,12 @@ else if (!oldTable)
     if (bedSize >= 4)
        maybeBedGraph(4, dy, "  name varchar(255) not null,\n");
     if (bedSize >= 5)
-       maybeBedGraph(5, dy, "  score int unsigned not null,\n");
+	{
+	if (allowNegativeScores)
+	    maybeBedGraph(5, dy, "  score int not null,\n");
+	else
+	    maybeBedGraph(5, dy, "  score int unsigned not null,\n");
+	}
     if (bedSize >= 6)
        maybeBedGraph(6, dy, "  strand char(1) not null,\n");
     if (bedSize >= 7)
@@ -435,6 +445,16 @@ allowStartEqualEnd = optionExists("allowStartEqualEnd");
 tmpDir = optionVal("tmpDir", tmpDir);
 nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
+allowNegativeScores = optionExists("allowNegativeScores");
+customTrackLoader = optionExists("customTrackLoader");
+/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores */
+if (customTrackLoader)
+    {
+    ignoreEmpty = TRUE;
+    nameIx = FALSE;
+    allowStartEqualEnd = TRUE;
+    allowNegativeScores = TRUE;
+    }
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
