@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.1 2007/03/02 08:35:48 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.2 2007/03/02 08:46:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,10 +73,13 @@ for (info = infoList; info != NULL; info = info->next)
        {
        /* Fill in the relatively straightforward fields. */
        refseq = pick->refSeq;
-       spID = pick->uniProt;
-       protAcc = pick->refProt;
-       if (pick->uniProt[0] != 0)
-           spDisplayID = spAnyAccToId(uConn, spID);
+       if (info->orfSize > 0)
+	    {
+	    spID = pick->uniProt;
+	    protAcc = pick->refProt;
+	    if (pick->uniProt[0] != 0)
+	       spDisplayID = spAnyAccToId(uConn, spID);
+	    }
 
        /* Fill in gene symbol and description from refseq if possible. */
        if (refseq[0] != 0)
