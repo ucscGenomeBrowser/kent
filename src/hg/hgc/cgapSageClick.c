@@ -59,7 +59,9 @@ static void printCgapSageHeader(struct cgapSage *tag)
 /* Print basic information about the tag at the top. */
 {
 printf("<B>Tag sequence</B>: %s<BR>\n", tag->name);
-printf("<B>Position</B>: %s:%d-%d<BR>\n", tag->chrom, tag->chromStart+1, tag->chromEnd);
+printf("<B>Position:</B> "
+       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+       hgTracksPathAndSettings(), database, tag->chrom, tag->chromStart+1, tag->chromEnd, tag->chrom, tag->chromStart+1, tag->chromEnd);
 }
 
 static void stringCellLabelVal(char *label, char *val, boolean newRow)
