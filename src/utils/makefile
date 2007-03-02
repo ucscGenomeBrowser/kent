@@ -109,6 +109,7 @@ DIRS = \
 	splitFileByColumn \
 	stringify \
 	subChar \
+	subColumn \
 	subs \
 	tableSum \
 	tailLines \
