@@ -12,7 +12,7 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.19 2006/12/05 20:33:53 hiram Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.20 2007/03/02 17:12:12 kent Exp $";
 
 /* Command line switches. */
 char *tNewR = NULL;
@@ -73,7 +73,7 @@ struct chrom
     struct rbTree *trf;	       /* Simple repeats. */
     };
 
-struct range
+struct simpleRange
 /* A part of a chromosome. */
     {
     int start, end;	/* Half open zero based coordinates. */
@@ -81,12 +81,12 @@ struct range
 
 #define overlap(r1, r2) ((r1)->start <= (r2)->end && (r2)->start <= (r1)->end)
 
-int rangeCmp(void *va, void *vb)
+int simpleRangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
 {
-struct range *a = va;
-struct range *b = vb;
+struct simpleRange *a = va;
+struct simpleRange *b = vb;
 if (a->end <= b->start)
     return -1;
 else if (b->end <= a->start)
@@ -96,12 +96,12 @@ else
 }
 
 static int interSize;	/* Size of intersection. */
-static struct range interRange; /* Range to intersect with. */
+static struct simpleRange interRange; /* Range to intersect with. */
 
 void addInterSize(void *item)
 /* Add range to interSize. */
 {
-struct range *r = item;
+struct simpleRange *r = item;
 int size;
 size = rangeIntersection(r->start, r->end, interRange.start, interRange.end);
 interSize += size;
@@ -136,7 +136,7 @@ void getSeqGapsUnsplit(struct sqlConnection *conn, struct hash *chromHash)
  * to do one query per scaffold! */
 {
 struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-struct rbTree *tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+struct rbTree *tree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 int rowOffset = hOffsetPastBin(NULL, "gap");
 struct sqlResult *sr;
 char **row;
@@ -146,7 +146,7 @@ sr = sqlGetResult(conn, "select * from gap order by chrom");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct agpGap gap;
-    struct range *range;
+    struct simpleRange *range;
     agpGapStaticLoad(row+rowOffset, &gap);
     if (prevChrom == NULL)
 	prevChrom = cloneString(gap.chrom);
@@ -155,7 +155,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	setNGap(prevChrom, chromHash, tree);
 	freeMem(prevChrom);
 	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-	tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	tree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 	prevChrom = cloneString(gap.chrom);
 	}
     lmAllocVar(tree->lm, range);
@@ -174,7 +174,7 @@ sqlFreeResult(&sr);
 struct rbTree *getSeqGaps(struct sqlConnection *conn, char *chrom)
 /* Return a tree of ranges for sequence gaps in chromosome */
 {
-struct rbTree *tree = rbTreeNew(rangeCmp);
+struct rbTree *tree = rbTreeNew(simpleRangeCmp);
 int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
 char **row;
@@ -182,7 +182,7 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct agpGap gap;
-    struct range *range;
+    struct simpleRange *range;
     agpGapStaticLoad(row+rowOffset, &gap);
     lmAllocVar(tree->lm, range);
     range->start = gap.chromStart;
@@ -208,8 +208,8 @@ void getTrfUnsplit(struct sqlConnection *conn, struct hash *chromHash)
  * from a single query on the whole (unsplit) simpleRepeat table. */
 {
 struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-struct rbTree *tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
-struct range *range, *prevRange = NULL;
+struct rbTree *tree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
+struct simpleRange *range, *prevRange = NULL;
 struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
@@ -227,7 +227,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	prevRange = NULL;
 	freeMem(prevChrom);
 	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-	tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	tree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 	prevChrom = cloneString(row[0]);
 	}
     lmAllocVar(tree->lm, range);
@@ -261,8 +261,8 @@ sqlFreeResult(&sr);
 struct rbTree *getTrf(struct sqlConnection *conn, char *chrom)
 /* Return a tree of ranges for simple repeats in chromosome. */
 {
-struct rbTree *tree = rbTreeNew(rangeCmp);
-struct range *range, *prevRange = NULL;
+struct rbTree *tree = rbTreeNew(simpleRangeCmp);
+struct simpleRange *range, *prevRange = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -320,18 +320,18 @@ static void getRepeatsUnsplit(struct sqlConnection *conn,
 struct sqlResult *sr;
 char **row;
 struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-struct rbTree *allTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+struct rbTree *allTree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 struct rbTreeNode **newstack = lmAlloc(qLm, 256 * sizeof(newstack[0]));
-struct rbTree *newTree = rbTreeNewDetailed(rangeCmp, qLm, newstack);
+struct rbTree *newTree = rbTreeNewDetailed(simpleRangeCmp, qLm, newstack);
 char *prevChrom = NULL;
-struct range *prevRange = NULL, *prevNewRange = NULL;
+struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
 sr = sqlGetResult(conn,
     "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
     "order by genoName,genoStart");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct range *range;
+    struct simpleRange *range;
     char arKey[512];
     if (prevChrom == NULL)
 	prevChrom = cloneString(row[0]);
@@ -344,11 +344,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	freeMem(prevChrom);
 	prevRange = prevNewRange = NULL;
 	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-	allTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	allTree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 	if (arHash != NULL)
 	    {
 	    stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-	    newTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	    newTree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 	    }
 	prevChrom = cloneString(row[0]);
 	}
@@ -413,11 +413,11 @@ static void getRepeatsUnsplitTable(struct sqlConnection *conn,
 struct sqlResult *sr;
 char **row;
 struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-struct rbTree *allTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+struct rbTree *allTree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 struct rbTreeNode **newstack = lmAlloc(qLm, 256 * sizeof(newstack[0]));
-struct rbTree *newTree = rbTreeNewDetailed(rangeCmp, qLm, newstack);
+struct rbTree *newTree = rbTreeNewDetailed(simpleRangeCmp, qLm, newstack);
 char *prevChrom = NULL;
-struct range *prevRange = NULL, *prevNewRange = NULL;
+struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 char query[256];
 
 
@@ -426,7 +426,7 @@ safef(query, ArraySize(query), "select chrom,chromStart,chromEnd from %s "
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct range *range;
+    struct simpleRange *range;
     if (prevChrom == NULL)
 	prevChrom = cloneString(row[0]);
     else if (! sameString(prevChrom, row[0]))
@@ -438,7 +438,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	freeMem(prevChrom);
 	prevRange = prevNewRange = NULL;
 	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
-	allTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	allTree = rbTreeNewDetailed(simpleRangeCmp, qLm, stack);
 	prevChrom = cloneString(row[0]);
 	}
     lmAllocVar(allTree->lm, range);
@@ -479,12 +479,12 @@ static void getRepeats(struct sqlConnection *conn, struct hash *arHash,
 char *db = sqlGetDatabase(conn);
 struct sqlResult *sr;
 char **row;
-struct rbTree *allTree = rbTreeNew(rangeCmp);
-struct rbTree *newTree = rbTreeNew(rangeCmp);
+struct rbTree *allTree = rbTreeNew(simpleRangeCmp);
+struct rbTree *newTree = rbTreeNew(simpleRangeCmp);
 char tableName[64];
 char query[256];
 boolean splitRmsk = TRUE;
-struct range *prevRange = NULL, *prevNewRange = NULL;
+struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
 safef(tableName, sizeof(tableName), "%s_rmsk", chrom);
 if (! sqlTableExists(conn, tableName))
@@ -507,7 +507,7 @@ else
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct range *range;
+    struct simpleRange *range;
     char arKey[512];
     lmAllocVar(allTree->lm, range);
     range->start = sqlUnsigned(row[0]);
@@ -567,17 +567,17 @@ static void getRepeatsTable(struct sqlConnection *conn, char *table,
 {
 struct sqlResult *sr;
 char **row;
-struct rbTree *allTree = rbTreeNew(rangeCmp);
-struct rbTree *newTree = rbTreeNew(rangeCmp);
+struct rbTree *allTree = rbTreeNew(simpleRangeCmp);
+struct rbTree *newTree = rbTreeNew(simpleRangeCmp);
 char query[256];
-struct range *prevRange = NULL, *prevNewRange = NULL;
+struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
 safef(query, ArraySize(query), "select chromStart,chromEnd from %s "
 	    "where chrom = \"%s\"", table, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct range *range;
+    struct simpleRange *range;
     lmAllocVar(allTree->lm, range);
     range->start = sqlUnsigned(row[0]);
     range->end = sqlUnsigned(row[1]);
@@ -610,8 +610,8 @@ static struct rbTree *getNewRepeats(char *dirName, char *chrom)
 /* Read in repeatMasker .out line format file into a tree of ranges. */
 /* Handles lineage-specific files that preserve header */
 {
-struct rbTree *tree = rbTreeNew(rangeCmp);
-struct range *range;
+struct rbTree *tree = rbTreeNew(simpleRangeCmp);
+struct simpleRange *range;
 char fileName[512];
 struct lineFile *lf;
 char *row[7];
