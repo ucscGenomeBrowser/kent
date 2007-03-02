@@ -6,11 +6,12 @@
 #include "common.h"
 #include <unistd.h>
 #include "portable.h"
+#include "localmem.h"
 #include "hash.h"
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.43 2007/02/25 23:28:20 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.44 2007/03/02 00:45:01 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -145,6 +146,22 @@ char *row[2];
 struct hash *hash = hashNew(16);
 while (lineFileRow(lf, row))
     hashAddInt(hash, row[0], lineFileNeedNum(lf, row, 1));
+lineFileClose(&lf);
+return hash;
+}
+
+struct hash *hashTwoColumnFile(char *fileName)
+/* Given a two column file (key, value) return a hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+struct hash *hash = hashNew(16);
+while (lineFileRow(lf, row))
+    {
+    char *name = row[0];
+    char *value = lmCloneString(hash->lm, row[1]);
+    hashAdd(hash, name, value);
+    }
 lineFileClose(&lf);
 return hash;
 }

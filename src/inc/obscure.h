@@ -114,6 +114,9 @@ struct hash *hashNameIntFile(char *fileName);
 /* Given a two column file (name, integer value) return a
  * hash keyed by name with integer values */
 
+struct hash *hashTwoColumnFile(char *fileName);
+/* Given a two column file (key, value) return a hash. */
+
 void shuffleArrayOfPointers(void *pointerArray, int arraySize, 
 	int shuffleCount);
 /* Shuffle array of pointers of given size given number of times. */
