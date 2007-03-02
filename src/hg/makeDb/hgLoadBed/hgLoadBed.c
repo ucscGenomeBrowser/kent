@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.46 2007/03/02 21:59:30 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.47 2007/03/02 22:04:18 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -32,7 +32,8 @@ boolean nameIx = TRUE;	/*	FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
 boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options*/
-/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores */
+/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores
+	-verbose=0 */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -447,13 +448,15 @@ nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
-/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores */
+/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores
+	-verbose=0 */
 if (customTrackLoader)
     {
     ignoreEmpty = TRUE;
     nameIx = FALSE;
     allowStartEqualEnd = TRUE;
     allowNegativeScores = TRUE;
+    verboseSetLevel(0);
     }
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
