@@ -29,5 +29,5 @@ CREATE TABLE txInfo (
     genomicFrameShift tinyint unsigned not null,	# True if genomic version has frame shift we cut out
     genomicStop tinyint unsigned not null,	# True if genomic version has stop codon we cut out
               #Indices
-    INDEX(name(24))
+    INDEX(name(20))
 );

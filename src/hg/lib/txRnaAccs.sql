@@ -10,5 +10,5 @@ CREATE TABLE txRnaAccs (
     accCount int not null,	# Count of total accessions
     accs longblob not null,	# Array of accessions.  Not all of these have all exons
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(name(10))
 );
