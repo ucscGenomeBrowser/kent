@@ -3070,6 +3070,18 @@ searchTable transMapMRnaGene
 searchType genePred
 searchPriority 2.32
 
+searchTable retroMrnaInfo
+searchType bed
+searchMethod prefix
+searchPriority 3.5
+
+searchName retroMrnaInfoRefSeq
+searchTable retroMrnaInfo
+query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
+xrefTable refLink
+xrefQuery select mrnaAcc, name from %s where name like '%s%%'
+searchPriority 3.51
+
 searchTable pseudoGeneLink
 query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
 xrefTable refLink
