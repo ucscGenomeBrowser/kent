@@ -375,21 +375,29 @@ txCdsWeed pick.tce pick.info weeded.tce weeded.info
 cat txWalk/*.bed | txCdsToGene stdin txWalk.fa weeded.tce weeded.gtf weeded.fa \
 	-bedOut=weeded.bed -exceptions=txWalk.exceptions
 
-# Separate the weeded set into coding, noncoding, and nearCoding.
-# Cluster the coding and the noncoding sets.
-txGeneSeparateNoncoding weeded.bed pick.info \
-	coding.bed nearCoding.bed noncoding.bed separated.info
-txCdsCluster coding.bed coding.cluster
-txBedToGraph noncoding.bed noncoding noncoding.txg
-
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
 # using.
 txGeneAccession /dev/null ~kent/src/hg/txGene/txGeneAccession/txLastId weeded.bed txToAcc.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
-subColumn 1 separated.info txToAcc.tab ucscGenes.info
+subColumn 1 pick.info txToAcc.tab accessioned.info
 subColumn 1 pick.picks txToAcc.tab ucscGenes.picks
+subColumn 2 pick.nice txToAcc.tab ucscGenes.nice
 cat txWalk/*.ev | subColumn 1 stdin txToAcc.tab ucscGenes.ev
+
+# Separate the gene set into coding, noncoding, and nearCoding.
+# Cluster the coding and the noncoding sets.
+txGeneSeparateNoncoding ucscGenes.bed accessioned.info \
+	coding.bed nearCoding.bed noncoding.bed ucscGenes.info
+txCdsCluster coding.bed coding.cluster
+txBedToGraph noncoding.bed noncoding noncoding.txg
+
+# Do final clustering of transcripts into genes, and use this to build the
+# knownCanonical and related tables.
+txGeneCanonical coding.cluster ucscGenes.nice noncoding.txg ucscGenes.bed nearCoding.bed \
+	canonical.tab isoforms.tab txCluster.tab
+hgLoadSqlTab hg18a knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
+hgLoadSqlTab hg18a knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
 
 # Make files with protein and mrna accessions.  These will be taken from
 # RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
@@ -399,7 +407,8 @@ txGeneProtAndRna weeded.bed separated.info txWalk.fa weeded.tce refSeq.fa \
 hgPepPred hg18a generic knownGenePep ucscPep.fa
 hgPepPred hg18a generic knownGeneMrna ucscGenes.fa
 
-# Make up knownGenes table, adding uniProt ID.
+# Make up knownGenes table, adding uniProt ID. Load into database. Takes 3
+# seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.gp
 hgLoadSqlTab hg18a knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
 
@@ -411,15 +420,27 @@ hgLoadSqlTab hg18a kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
 txGeneColor sp070202 ucscGenes.info ucscGenes.picks ucscGenes.color
 hgLoadSqlTab hg18a kgColor ~/kent/src/hg/lib/kgColor.sql ucscGenes.color
 
-# Load up kgTxInfo table.
+# Load up kgTxInfo table. Takes 0.3 second
 hgLoadSqlTab hg18a kgTxInfo ~/kent/src/hg/lib/txInfo.sql ucscGenes.info
 
-# Make full text index
+# Make up alias tables and load them. Takes a minute or so.
+txGeneAlias hg18a sp070202 ucscGenes.xref ucscGenes.ev foo.alias foo.protAlias
+sort foo.alias | uniq > ucscGenes.alias
+sort foo.protAlias | uniq > ucscGenes.protAlias
+rm foo.alias foo.protAlias
+hgLoadSqlTab hg18a kgAlias ~/kent/src/hg/lib/kgAlias.sql ucscGenes.alias
+hgLoadSqlTab hg18a kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
+
+# Make full text index.  Takes a minute or so.  After this the genome browser
+# tracks display will work including the position search.  The genes details
+# page, gene sorter, and proteome browser still need more tables.
 mkdir index
 cd index
-hgKgGetText hg18 knownGene.text
+hgKgGetText hg18a knownGene.text
+ixIxx knownGene.text knownGene.ix knownGene.ixx
+ln -s /cluster/data/hg18/bed/jkg/index/knownGene.ix  /gbdb/hg18a/knownGene.ix
+ln -s /cluster/data/hg18/bed/jkg/index/knownGene.ixx /gbdb/hg18a/knownGene.ixx
      
-
 ###########################################################################
 ## Load take 7 into the database. Takes 30 seconds.
 ssh hgwdev
@@ -955,79 +976,79 @@ introns it was intended for.
 # Preparing hg18a -
 Copied over files from /var/lib/mysql/hg18 to /var/lib/mysql/hg18a
 except for the chain and net tables, and the following tables:
-HInv
-HInvGeneMrna
-all_bacends
-all_fosends
-bacEndPairs
-blastKGPep04
-blastKGRef04
-ceBlastTab
-dmBlastTab
-drBlastTab
-foldUtr3
-foldUtr5
+n/a HInv
+n/a HInvGeneMrna
+n/a all_bacends
+n/a all_fosends
+n/a bacEndPairs
+n/a blastKGPep04
+n/a blastKGRef04
+todo ceBlastTab
+todo dmBlastTab
+todo drBlastTab
+todo foldUtr3
+todo foldUtr5
 fosEndPairs
-humanBlastTab
-humanHprdP2P
-humanVidalP2P
-humanWankerP2P
-kgAlias
-kgProtAlias
-kgProtMap
-kgSpAlias
-kgXref
-knownBlastTab
-knownCanonical
-knownExpDistance
-knownGene
-knownGeneMrna
-knownGenePep
-knownIsoforms
-knownToAllenBrain
-knownToEnsembl
-knownToGnf1h
-knownToGnfAtlas2
-knownToHInv
-knownToHprd
-knownToLocusLink
-knownToPfam
-knownToRefSeq
-knownToU133
-knownToU133Plus2
-knownToU95
-knownToVisiGene
-mmBlastTab
-multiz17way
-multiz17wayFrames
-multiz17waySummary
-oreganno
-oregannoAttr
-oregannoLink
-phastCons17way
-phastConsElements17way
-regPotential17X
-snp126
-snp126ExceptionDesc
-snp126orthoPanTro2RheMac2
-snpSeq
-pbAnomLimit
-pbResAvgStd
-pbStamp
-pepCCntDist
-pepExonCntDist
-pepHydroDist
-pepIPCntDist
-pepMolWtDist
-pepMwAa
-pepPi
-pepPiDist
-pepResDist
-rnBlastTab
-scBlastTab
-uniGene_3
-xenoEst
-xenoMrna
-xenoRefFlat
-xenoRefGene
-xenoRefSeqAli
+todo humanBlastTab
+todo humanHprdP2P
+todo humanVidalP2P
+todo humanWankerP2P
+done kgAlias
+done kgProtAlias
+???? kgProtMap
+???? kgSpAlias
+todo kgXref
+todo knownBlastTab
+done knownCanonical
+todo knownExpDistance
+done knownGene
+done knownGeneMrna
+done knownGenePep
+done knownIsoforms
+todo knownToAllenBrain
+todo knownToEnsembl
+todo knownToGnf1h
+todo knownToGnfAtlas2
+todo knownToHInv
+todo knownToHprd
+todo knownToLocusLink
+todo knownToPfam
+todo knownToRefSeq
+todo knownToU133
+todo knownToU133Plus2
+todo knownToU95
+todo knownToVisiGene
+todo mmBlastTab
+n/a multiz17way
+n/a multiz17wayFrames
+n/a multiz17waySummary
+n/a oreganno
+n/a oregannoAttr
+n/a oregannoLink
+n/a phastCons17way
+n/a phastConsElements17way
+n/a regPotential17X
+n/a snp126
+n/a snp126ExceptionDesc
+n/a snp126orthoPanTro2RheMac2
+n/a snpSeq
+???? pbAnomLimit
+???? pbResAvgStd
+???? pbStamp
+???? pepCCntDist
+???? pepExonCntDist
+???? pepHydroDist
+???? pepIPCntDist
+???? pepMolWtDist
+???? pepMwAa
+???? pepPi
+???? pepPiDist
+???? pepResDist
+todo rnBlastTab
+todo scBlastTab
+n/a uniGene_3
+n/a xenoEst
+n/a xenoMrna
+n/a xenoRefFlat
+n/a xenoRefGene
+n/a xenoRefSeqAli
