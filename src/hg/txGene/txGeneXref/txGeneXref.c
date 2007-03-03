@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.2 2007/03/02 08:46:48 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.3 2007/03/03 21:16:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -146,6 +146,10 @@ for (info = infoList; info != NULL; info = info->next)
         geneSymbol = mRNA;
     if (description == NULL)
         description = mRNA;
+    /* Get rid of some characters that will cause havoc downstream. */
+    stripChar(geneSymbol, '\'');
+    subChar(geneSymbol, '<', '[');
+    subChar(geneSymbol, '>', ']');
     if (strlen(geneSymbol) > 40)
         strcpy(geneSymbol+37, "...");
 
