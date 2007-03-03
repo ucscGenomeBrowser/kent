@@ -32,6 +32,7 @@ struct txCdsCluster
     {
     struct txCdsCluster *next;
     int start,end;
+    char strand;
     struct bed *bedList;
     struct rbTree *frameTrees[3];
     };
@@ -69,7 +70,7 @@ void txCdsClusterSave(struct txCdsCluster *cluster, int id, FILE *f)
 struct bed *bed = cluster->bedList;
 fprintf(f, "%s\t%d\t%d\t", bed->chrom, cluster->start, cluster->end);
 fprintf(f, "tcc%d\t", id);
-fprintf(f, "0\t%s\t", bed->strand);
+fprintf(f, "0\t%c\t", cluster->strand);
 fprintf(f, "%d\t", slCount(cluster->bedList));
 for (bed=cluster->bedList; bed != NULL; bed = bed->next)
     fprintf(f, "%s,", bed->name);
@@ -259,7 +260,12 @@ for (bin = binList; bin != NULL; bin = bin->next)
     {
     struct txCdsCluster *cluster = bin->val;
     if (minusStrand)
+	{
+	cluster->strand = '-';
         reverseIntRange(&cluster->start, &cluster->end, strandSizeLimit);
+	}
+    else
+        cluster->strand = '+';
     slAddHead(&clusterList, cluster);
     }
 slReverse(&clusterList);
