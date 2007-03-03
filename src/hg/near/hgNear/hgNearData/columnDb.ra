@@ -64,12 +64,20 @@ type lookup knownToLocusLink name value
 itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
 
 name acc
-shortLabel GenBank
-longLabel GenBank mRNA Accession
+shortLabel UCSC ID
+longLabel UCSC Transcript ID
 priority 2.3
 visibility off
-type acc
+type knownDetails kgXref kgID kgID
+search exact
+
+name genbank
+shortLabel GenBank
+longLabel GenBank mRNA Accession
+priority 2.31
+visibility off
 itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+type lookup kgXref kgID mRNA
 
 name ensembl
 shortLabel Ensembl
