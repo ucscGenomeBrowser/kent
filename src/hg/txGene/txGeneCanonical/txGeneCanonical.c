@@ -14,7 +14,7 @@
 #include "txCluster.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.2 2007/03/03 20:32:05 kent Exp $";
+static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.3 2007/03/03 21:17:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -239,13 +239,13 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     slReverse(&gene->txList);
 
     /* Write out canonical file output */
-    fprintf(fCan, "%s\t%d\t%d\t%s\t%s\t%s\n",
-    	gene->chrom, gene->start, gene->end, name,
+    fprintf(fCan, "%s\t%d\t%d\t%d\t%s\t%s\n",
+    	gene->chrom, gene->start, gene->end, geneId,
 	gene->niceTx->name, gene->niceTx->name);
 
     /* Write out isoforms output. */
     for (bed = gene->txList; bed != NULL; bed = bed->next)
-        fprintf(fIso, "%s\t%s\n", name, bed->name);
+        fprintf(fIso, "%d\t%s\n", geneId, bed->name);
 
     /* Write out cluster output, starting with bed 6 standard fields. */
     fprintf(fClus, "%s\t%d\t%d\t%s\t%d\t%c\t",
