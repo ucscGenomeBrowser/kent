@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1292 2007/03/02 22:35:09 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1293 2007/03/03 21:05:52 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1849,7 +1849,7 @@ name = tg->mapItemName(tg, item);
 /* special process for KG, because of "hgg_prot" piggy back */
 if (sameWord(tg->mapName, "knownGene"))
     {
-    mapName = strdup(mapName);
+    mapName = cloneString(mapName);
     chp = strstr(mapName, "&hgg_prot");
     if (chp != NULL) *chp = '\0';
     }
@@ -3412,7 +3412,7 @@ char str2[255];
 struct linkedFeatures *lf = item;
 /* piggy back the protein ID (hgg_prot variable) on hgg_gene variable */
 safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, ((struct knownGenesExtra *)(lf->extra))->hgg_prot);
-return(strdup(str2));
+return(cloneString(str2));
 }
 
 void lookupKnownGeneNames(struct linkedFeatures *lfList)
@@ -3695,13 +3695,13 @@ else
     		}
 	    else
 	    	{
-	    	proteinName = strdup("");
+	    	proteinName = cloneString("");
 		}
 	    }
 	}
     }
 	
-name = strdup(proteinName);
+name = cloneString(proteinName);
 hFreeConn(&conn);
 /*
 abbr(name, "000000");
@@ -3748,13 +3748,13 @@ else
     		}
 	    else
 	    	{
-	    	proteinName = strdup("");
+	    	proteinName = cloneString("");
 		}
             }
         }
     }
 
-name = strdup(proteinName);
+name = cloneString(proteinName);
 hFreeConn(&conn);
 
 return(name);
