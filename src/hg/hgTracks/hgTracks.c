@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1293 2007/03/03 21:05:52 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1294 2007/03/03 21:35:15 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1620,6 +1620,7 @@ boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
 				   !sameWord(exonArrowsDense, "off"));
 boolean exonArrows = (tg->exonArrows &&
 		      (vis != tvDense || exonArrowsEvenWhenDense));
+boolean exonArrowsAlways = tg->exonArrowsAlways;
 struct psl *psl = NULL;
 struct dnaSeq *mrnaSeq = NULL;
 enum baseColorDrawOpt drawOpt = baseColorDrawOff;
@@ -1646,7 +1647,6 @@ if (vis != tvDense)
     if (drawOpt != baseColorDrawOff)
 	exonArrows = FALSE;
     }
-
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
 
@@ -1717,13 +1717,13 @@ for (sf = components; sf != NULL; sf = sf->next)
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score );
 
-            if (exonArrows &&
+            if (exonArrowsAlways || (exonArrows &&
                 /* Display barbs only if no intron is visible on the item.
                    This occurs when the exon completely spans the window,
                    or when it is the first or last intron in the feature and
                    the following/preceding intron isn't visible */
                 (sf->start <= winStart || sf->start == lf->start) &&
-                (sf->end >= winEnd || sf->end == lf->end))
+                (sf->end >= winEnd || sf->end == lf->end)))
                     {
                     Color barbColor = vgContrastingColor(vg, color);
                     x1 = round((double)((int)s-winStart)*scale) + xOff;
@@ -12272,6 +12272,17 @@ else if (sameString(type, "bed"))
     else if (ct->fieldCount < 12)
 	{
 	tg->loadItems = ctLoadBed8;
+	}
+    else if (ct->fieldCount == 15)
+	{
+	char *theType = trackDbSetting(tdb, "type");
+	if (theType && sameString(theType, "expRatio"))
+	    {
+	    tg = trackFromTrackDb(tdb);
+	    expRatioMethodsFromCt(tg);	    
+	    }
+	else
+	    tg->loadItems = ctLoadGappedBed;
 	}
     else 
 	{

@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.9 2007/03/01 00:00:11 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.10 2007/03/03 21:35:16 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
 /* Return a linked feature from a retroGene. */
@@ -200,5 +200,7 @@ tg->loadItems = loadRetroGene;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = retroGeneColor;
+tg->exonArrows = TRUE;
+tg->exonArrowsAlways = TRUE;
 }
 
