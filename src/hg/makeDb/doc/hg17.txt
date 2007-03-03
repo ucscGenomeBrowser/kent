@@ -23244,3 +23244,43 @@ hgLoadBed hg17 chimpParalogy chimpParalogy.bed -tab -sqlTable=chimpParalogy.sql
         ccdsKgMap
         ccdsMgcMap
     # << emacs
+
+#####################################################
+# Vista Enhancers (galt 2007-02-23 working)
+#
+# Vista from Lawrence-Berkeley has assayed
+# 301 human conserved non-coding intra- and inter-
+# genic elements for their ability to promote
+# lacZ in mouse embryos.  A positive looks like
+# a mouse with a purple spine.
+#
+# They provided a custom track with two tracks for pos and neg.
+# http://enhancer-test.lbl.gov/cgi-bin/customTrack.cgi
+# I am combining the tracks into one with high score for pos.
+#
+cd /cluster/data/hg17/bed
+mkdir vistaEnhancers
+cd vistaEnhancers
+wget -O custTrk "http://enhancer-test.lbl.gov/cgi-bin/customTrack.cgi"
+cat custTrk | head -116 | tail +2 > pos
+cat custTrk | tail +118 > neg
+cat pos | gawk '{print $1"\t"$2"\t"$3"\t"$4"\t900"}' > bed5
+cat neg | gawk '{print $1"\t"$2"\t"$3"\t"$4"\t100"}' >> bed5
+wc -l bed5
+#301 bed5
+hgLoadBed hg17 vistaEnhancers bed5
+#Loaded 301 elements of size 5
+
+# add to human/trackDb.ra
+track vistaEnhancers
+shortLabel Vista Enhancers
+longLabel Vista HMR-Conserved Non-coding Human Enhancers from LBNL
+group regulation
+priority 93
+visibility hide
+color 50,70,120
+type bed 5 .
+useScore 1
+url http://enhancer-test.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
+
+
