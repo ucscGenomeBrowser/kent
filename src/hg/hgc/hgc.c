@@ -190,12 +190,13 @@
 #include "oregannoUi.h"
 #include "ec.h"
 #include "transMapClick.h"
+#include "retroClick.h"
 #include "mgcClick.h"
 #include "ccdsClick.h"
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1219 2007/02/28 21:53:28 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1220 2007/03/03 21:50:19 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1930,7 +1931,6 @@ puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
-
 printf("</UL>\n");
 }
 
@@ -3303,7 +3303,7 @@ if (maskRep)
     char *visString = cartOptionalString(cart, "rmsk");
     for (rtdb = tdbList;  rtdb != NULL;  rtdb=rtdb->next)
 	{
-	if (sameString(rtdb->tableName, "rmsk"))
+	if (startsWith(rtdb->tableName, "rmsk"))
 	    break;
 	}
     printf("<P> <B>Note:</B> repeat masking style from previous page will <B>not</B> apply to this page.\n");
@@ -4410,6 +4410,8 @@ struct psl *psl;
 int aliCount = slCount(pslList);
 boolean same;
 char otherString[512];
+if (pslList == NULL || typeName == NULL)
+    return;
 
 if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
@@ -4488,38 +4490,6 @@ hFreeConn(&conn);
 return pslList;
 }
 
-void getSequenceInRange(struct dnaSeq **seqList, struct hash *hash, char *table, char *type, char *tName, int tStart, int tEnd)
-/* Load a list of fasta sequences given tName tStart tEnd */
-{
-struct sqlResult *sr = NULL;
-char **row;
-boolean hasBin;
-char splitTable[64];
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-
-hFindSplitTable(seqName, table, splitTable, &hasBin);
-safef(query, sizeof(query), "select qName from %s where tName = '%s' and tEnd > %d and tStart < %d", splitTable, tName, tStart, tEnd);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *acc = cloneString(row[0]);
-    struct dnaSeq *seq = hGenBankGetMrna(acc, NULL);
-    verbose(9,"%s %s %d<br>\n",acc, tName, tStart);
-    if (seq != NULL)
-        if (hashLookup(hash, acc) == NULL)
-            {
-            int len = strlen(seq->name);
-            seq->name [len-1] = type[0];
-            hashAdd(hash, acc, NULL);
-            slAddHead(seqList, seq);
-            }
-    }
-sqlFreeResult(&sr);
-slReverse(seqList);
-hFreeConn(&conn);
-}
-
 void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
 {
@@ -4543,6 +4513,11 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
 else if ( sameWord("blatzHg17KG", track)  )
     {
     type = "Human mRNA";
+    table = track;
+    }
+else if (stringIn("estFiltered",track))
+    {
+    type = "EST";
     table = track;
     }
 else if (stringIn("est", track) || stringIn("Est", track) ||
@@ -5439,21 +5414,24 @@ char *type;
 int start;
 unsigned int cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
+char accChopped[512] ;
+safef(accChopped, sizeof(accChopped), "%s",acc);
+chopSuffix(accChopped);
 
 /* Print start of HTML. */
 writeFramesetType();
 puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
+type = cartString(cart, "aliTrack");
+printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", accChopped, type);
 
 /* Get some environment vars. */
-type = cartString(cart, "aliTrack");
 start = cartInt(cart, "o");
 
 /* Get cds start and stop, if available */
 conn = hAllocConn();
 if (sqlTableExists(conn, "gbCdnaInfo"))
     {
-    sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", acc);
+    sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", accChopped);
     sr = sqlGetResult(conn, query); 
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -7998,36 +7976,28 @@ int first = 0;
 safef(chainTable,sizeof(chainTable), "selfChain");
 if (!hTableExists(chainTable) )
     safef(chainTable,sizeof(chainTable), "chainSelf");
-/*else
- *    {
- *    char *org = hOrganism(pg->assembly);
- *    org[0] = tolower(org[0]);
- *    safef(chainTable,sizeof(chainTable), "%sChain", org);
- *    } */
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
-printf("<B>Percent of retro that breaks net relative to Mouse : </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
-//printf("<B>Percent of retro that breaks net relative to Dog   : </B>%d&nbsp;%%<br>\n",pg->overlapDog);
-printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Percent&nbsp;Id:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
+printf("<B>Percent of retro that breaks net relative to Mouse : </B>%d&nbsp;%%<br>\n",pg->overlapMouse);
+printf("<B>Percent of retro that breaks net relative to Dog   : </B>%d&nbsp;%%<br>\n",pg->overlapDog);
+printf("<B>Percent of retro that breaks net relative to Macaque : </B>%d&nbsp;%%<br>\n",pg->overlapRhesus);
+printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;%d Parent Splice Sites <br>\n",pg->exonCover - pg->conservedSpliceSites, pg->exonCover,pg->exonCount);
+printf("<B>Conserved&nbsp;Splice&nbsp;Sites:</B>&nbsp;%d&nbsp;<br>\n",pg->conservedSpliceSites);
+printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>PolyA Percent&nbsp;Id:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
-printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
-//printf("<B>Conserved&nbsp;Introns:</B>&nbsp;%d &nbsp;<br>\n",pg->conservedIntrons);
-//printf("<B>Conserved&nbsp;Splice&nbsp;Sites:</B>&nbsp;%d&nbsp;<br>\n",pg->conservedSpliceSites);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
 printf("(%d&nbsp;%% of gene)<br>\n",pg->coverage);
 if (!sameString(pg->overName, "none"))
     printf("<B>Bases&nbsp;overlapping mRNA:</B>&nbsp;%s&nbsp;(%d&nbsp;bp)<br>\n", pg->overName, pg->maxOverlap);
 else
     printf("<B>No&nbsp;overlapping mRNA</B><br>");
-if (sameString(pg->type, "expressed"))
-    printf("<b>Type of RetroGene:&nbsp;</b>%s<p>\n",pg->type);
+if (sameString(pg->type, "singleExon"))
+    printf("<b>Overlap with Parent:&nbsp;</b>%s<p>\n",pg->type);
 else 
-    if (sameString(pg->type, "singleExon"))
-	printf("<b>Overlap with Parent:&nbsp;</b>%s<p>\n",pg->type);
-    else
-	printf("<b>Type of Parent:&nbsp;</b>%s<p>\n",pg->type);
+    printf("<b>Type of RetroGene:&nbsp;</b>%s<p>\n",pg->type);
 if (pseudoList != NULL)
     {
     printf("<H4>RetroGene/Gene Alignment</H4>");
+    
     printAlignments(pseudoList, start, "htcCdnaAli", alignTable, acc);
     }
 printf("<H4>Annotation for Gene locus that spawned RetroGene</H4>");
@@ -8112,35 +8082,32 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
 
 if (hTableExists("all_mrna"))
     {
-    struct psl *pslList = loadPslRangeT("all_mrna", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
-    struct dnaSeq *seqList = NULL;
-    struct tempName faTn, alnTn;
-    struct hash *faHash = hashNew(0);
-
-    /* create fasta file for multiple alignment and viewing with jalview */
-    makeTempName(&faTn, "fasta", ".fa");
-    makeTempName(&alnTn, "clustal", ".aln");
-    getSequenceInRange(&seqList , faHash, "all_mrna", "Retro", \
-            pg->chrom, pg->chromStart, pg->chromEnd);
-    getSequenceInRange(&seqList , faHash, "all_mrna", "Parent", \
-            pg->gChrom, pg->gStart, pg->gEnd);
-    faWriteAll(faTn.forCgi, seqList);
-
+    char parent[255];
+    struct psl *pslList = NULL;
+    char *dotPtr ;
+    safef(parent, sizeof(parent), "%s",pg->name);
+    /* strip off version and unique suffix when looking for parent gene*/
+    dotPtr = rStringIn(".",parent) ;
+    if (dotPtr != NULL)
+        *dotPtr = '\0';
+    pslList = loadPslRangeT("all_mrna", parent, pg->gChrom, pg->gStart, pg->gEnd);
 #ifdef NOT_USED
+    char callClustal[512] = "YES";
+    char inPath[512];
+    safef(inPath, sizeof(inPath), 
+            "../pseudogene/pseudoHumanExp.%s.%s.%d.aln",
+            pg->name, pg->chrom, pg->chromStart);
     /* either display a link to jalview or call it */
-    if (jal != NULL && sameString(jal, "YES"))
+    if (callClustal != NULL && sameString(callClustal, "YES"))
         {
-        safef(inPath,sizeof(inPath), \
-            "cgi-bin/cgiClustalw?fa=%s&db=%s",\
-            faTn.forCgi, hGetDb());
-        printf("Please wait while sequences are aligned with clustalw.");
         displayJalView(inPath, "CLUSTAL", NULL);
+        printf(" Display alignment of retrogene and parent mRNAs. ");
         }
-    else
-        {
-        hgcAnchorJalview(pg->name,  faTn.forCgi);
-        printf("JalView alignment of parent gene to retroGene</a>\n");
-        }
+//    else
+//        {
+//        hgcAnchorJalview(pg->name,  faTn.forCgi);
+//        printf("JalView alignment of parent gene to retroGene</a>\n");
+//        }
 #endif /* NOT_USED */
 
     if (pslList != NULL)
@@ -8227,18 +8194,26 @@ int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 int winStart = cartInt(cart, "l");
 int winEnd = cartInt(cart, "r");
-char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL;
+char *chrom = cartString(cart, "c");
 char *alignTable = cgiUsualString("table", cgiString("g"));
 int rowOffset = 0;
-
 /* Get alignment info. */
 if (sameString(alignTable,"pseudoGeneLink2"))
-    alignTable = cloneString("mrnaBlastz");
-if (startsWith("pseudoGeneLink",alignTable))
+    alignTable = cloneString("pseudoMrna2");
+else if (sameString(alignTable,"pseudoGeneLink3"))
+    alignTable = cloneString("pseudoMrna3");
+else if (startsWith("pseudoGeneLink",alignTable))
     alignTable = cloneString("pseudoMrna");
+if (startsWith("pseudoUcsc",alignTable))
+    {
+    alignTable = cloneString("pseudoMrna");
+    track = cloneString("pseudoGeneLink3");
+    }
 if (hTableExists(alignTable) )
+    {
     pslList = loadPslRangeT(alignTable, acc, chrom, winStart, winEnd);
+    }
 else
     errAbort("Table %s not found.\n",alignTable);
 slSort(&pslList, pslCmpScoreDesc);
@@ -8626,7 +8601,6 @@ puts("<LI>\n");
 hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
-
 printf("</UL>\n");
 printTrackHtml(tdb);
 }
@@ -8791,7 +8765,6 @@ if (startsWith("genePred", tdb->type))
     hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
     printf("Genomic Sequence</A> from assembly\n");
     puts("</LI>\n");
-
     printf("</UL>\n");
     }
 else if (startsWith("bed", tdb->type))
@@ -8945,7 +8918,6 @@ puts("<LI>\n");
 hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
-
 printf("</UL>\n");
 printTrackHtml(tdb);
 }
@@ -14779,6 +14751,7 @@ hFreeConn(&conn);
 return bedWSList;
 }
 
+/* Lowe Lab additions */
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
 {
 struct bed *sgList = NULL;
@@ -17721,7 +17694,7 @@ else if (startsWith("transMap", track))
 else if (sameString(track, "hgcTransMapCdnaAli"))
     transMapShowCdnaAli(item);
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
-	 sameWord(track, "all_mrna") ||
+	 startsWith("all_mrna",track) ||
 	 sameWord(track, "all_est") ||
 	 sameWord(track, "celeraMrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
@@ -17739,6 +17712,17 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
+else if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track )
+        || sameWord("pseudoUcsc",track))
+    {
+    doPseudoPsl(tdb, item);
+    }
+else if (startsWith("retroMrna",track ) || startsWith("retroAugust",track ))
+    {
+    retroClickHandler(tdb, item);
+    }
+else if (sameString(track, "hgcRetroCdnaAli"))
+    retroShowCdnaAli(item);
 else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") || sameWord(track, "affyZebrafish") || sameWord(track, "affyGnf1h") || sameWord(track, "affyGnf1m") )
     {
     doAffy(tdb, item, NULL);
@@ -17874,10 +17858,6 @@ else if (sameWord("otherSARS", track))
 else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
-    }
-else if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track ))
-    {
-    doPseudoPsl(tdb, item);
     }
 else if (sameWord(track, "borkPseudo"))
     {
