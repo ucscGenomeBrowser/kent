@@ -5,12 +5,13 @@
 #include "common.h"
 #include "jksql.h"
 #include "linefile.h"
+#include "rangeTree.h"
+#include "minChromSize.h"
 #include "bed.h"
 #include "binRange.h"
 #include "hdb.h"
-#include "rangeTree.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.50 2007/03/02 01:25:03 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.51 2007/03/03 20:34:17 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1234,7 +1235,9 @@ return ret;
 }
 
 struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordCount)
-/* read a list of beds and return results in hash of binKeeper structure for fast query*/
+/* Read a list of beds and return results in hash of binKeeper structure for fast query
+ * See also bedsIntoKeeperHash, which takes the beds read into a list already, but
+ * dispenses with the need for the sizeFile. */
 {
 struct binKeeper *bk; 
 struct bed *bed;
@@ -1270,6 +1273,22 @@ lineFileClose(&lf);
 return hash;
 }
 
+struct hash *bedsIntoKeeperHash(struct bed *bedList)
+/* Create a hash full of bin keepers (one for each chromosome or contig.
+ * The binKeepers are full of beds. */
+{
+struct hash *sizeHash = minChromSizeFromBeds(bedList);
+struct hash *bkHash = minChromSizeKeeperHash(sizeHash);
+struct bed *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    struct binKeeper *bk = hashMustFindVal(bkHash, bed->chrom);
+    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+    }
+hashFree(&sizeHash);
+return bkHash;
+}
+
 int bedParseRgb(char *itemRgb)
 /*	parse a string: "r,g,b" into three unsigned char values
 	returned as 24 bit number, or -1 for failure */
@@ -1300,6 +1319,51 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 return total;
 }
 
+void bedIntoRangeTree(struct bed *bed, struct rbTree *rangeTree)
+/* Add all blocks in bed to range tree.  For beds without blocks,
+ * add entire bed. */
+{
+int i;
+if (bed->blockCount == 0)
+    rangeTreeAdd(rangeTree, bed->chromStart, bed->chromEnd);
+else
+    {
+    for (i=0; i < bed->blockCount; ++i)
+	{
+	int start = bed->chromStart + bed->chromStarts[i];
+	int end = start + bed->blockSizes[i];
+	rangeTreeAdd(rangeTree, start, end);
+	}
+    }
+}
+
+struct rbTree *bedToRangeTree(struct bed *bed)
+/* Convert bed into a range tree. */
+{
+struct rbTree *rangeTree = rangeTreeNew();
+bedIntoRangeTree(bed, rangeTree);
+return rangeTree;
+}
+
+int bedRangeTreeOverlap(struct bed *bed, struct rbTree *rangeTree)
+/* Return number of bases bed overlaps with rangeTree. */
+{
+int totalOverlap = 0;
+if (bed->blockCount == 0)
+    totalOverlap = rangeTreeOverlapSize(rangeTree, bed->chromStart, bed->chromEnd);
+else
+    {
+    int i;
+    for (i=0; i < bed->blockCount; ++i)
+	{
+	int start = bed->chromStart + bed->chromStarts[i];
+	int end = start + bed->blockSizes[i];
+	totalOverlap += rangeTreeOverlapSize(rangeTree, start, end);
+	}
+    }
+return totalOverlap;
+}
+
 int bedSameStrandOverlap(struct bed *a, struct bed *b)
 /* Return amount of block-level overlap on same strand between a and b */
 {
@@ -1318,38 +1382,14 @@ if (outerOverlap <= 0)
 if (a->blockCount == 0 && b->blockCount == 0)
     return outerOverlap;
 
-/* Otherwise make up a range tree containing regions covered by a. */
-struct rbTree *rangeTree = rangeTreeNew();
-int i;
-if (a->blockCount == 0)
-    rangeTreeAdd(rangeTree, a->chromStart, a->chromEnd);
-else
-    {
-    for (i=0; i < a->blockCount; ++i)
-	{
-	int start = a->chromStart + a->chromStarts[i];
-	int end = start + a->blockSizes[i];
-	rangeTreeAdd(rangeTree, start, end);
-	}
-    }
-
-/* Go through regions covered by b. */
-int totalOverlap = 0;
-if (b->blockCount == 0)
-    totalOverlap = rangeTreeOverlapSize(rangeTree, b->chromStart, b->chromEnd);
-else
-    {
-    for (i=0; i < b->blockCount; ++i)
-	{
-	int start = b->chromStart + b->chromStarts[i];
-	int end = start + b->blockSizes[i];
-	totalOverlap += rangeTreeOverlapSize(rangeTree, start, end);
-	}
-    }
+/* Otherwise make up a range tree containing regions covered by a,
+ * and figure out how much b overlaps it.. */
+struct rbTree *rangeTree = bedToRangeTree(a);
+int overlap = bedRangeTreeOverlap(b, rangeTree);
 
 /* Clean up and return result. */
 rangeTreeFree(&rangeTree);
-return totalOverlap;
+return overlap;
 }
 
 struct bed3 *bed3New(char *chrom, int start, int end)

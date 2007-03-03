@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: minChromSize.c,v 1.1 2007/03/03 17:21:51 kent Exp $";
+static char const rcsid[] = "$Id: minChromSize.c,v 1.2 2007/03/03 20:34:17 kent Exp $";
 
 struct hash *minChromSizeFromBeds(struct bed *bedList)
 /* Go through bed list, creating a hash full of minChromSizes. 
@@ -51,18 +51,3 @@ hashElFreeList(&list);
 return keeperHash;
 }
 
-struct hash *bedsIntoKeeperHash(struct bed *bedList)
-/* Create a hash full of bin keepers (one for each chromosome or contig.
- * The binKeepers are full of beds. */
-{
-struct hash *sizeHash = minChromSizeFromBeds(bedList);
-struct hash *bkHash = minChromSizeKeeperHash(sizeHash);
-struct bed *bed;
-for (bed = bedList; bed != NULL; bed = bed->next)
-    {
-    struct binKeeper *bk = hashMustFindVal(bkHash, bed->chrom);
-    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
-    }
-hashFree(&sizeHash);
-return bkHash;
-}

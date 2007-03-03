@@ -30,8 +30,4 @@ struct hash *minChromSizeKeeperHash(struct hash *sizeHash);
 /* Return a hash full of binKeepers that match the input sizeHash,
  * (which generally is the output of minChromSizeFromBeds). */
 
-struct hash *bedsIntoKeeperHash(struct bed *bedList);
-/* Create a hash full of bin keepers (one for each chromosome or contig.
- * The binKeepers are full of beds. */
-
 #endif /* MINCHROMSIZE_H */
