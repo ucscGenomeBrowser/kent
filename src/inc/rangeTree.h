@@ -5,6 +5,9 @@
  * is significantly smaller than the number of bits would
  * be. */
 
+#ifndef RANGETREE_H
+#define RANGETREE_H
+
 #ifndef RBTREE_H
 #include "rbTree.h"
 #endif
@@ -55,3 +58,6 @@ struct rbTree *rangeTreeNewDetailed(struct lm *lm, struct rbTreeNode *stack[128]
 /* Allocate rangeTree on an existing local memory & stack.  This is for cases
  * where you want a lot of trees, and don't want the overhead for each one. 
  * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
+
+#endif /* RANGETREE_H */
+
