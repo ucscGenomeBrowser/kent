@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.88 2007/03/03 01:09:26 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.89 2007/03/03 01:14:54 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1478,7 +1478,7 @@ void appendLocalTime(struct paraMessage *pm, time_t t)
 {
 struct tm *tm;
 tm = localtime(&t);
-pmPrintf(pm, "%02d/%02d/%d %02d:%02d:%02d",
+pmPrintf(pm, "%04d/%02d/%02d %02d:%02d:%02d",
    1900+tm->tm_year, 1+tm->tm_mon, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
 }
 
