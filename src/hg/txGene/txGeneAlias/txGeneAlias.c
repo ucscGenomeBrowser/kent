@@ -9,7 +9,7 @@
 #include "kgXref.h"
 
 
-static char const rcsid[] = "$Id: txGeneAlias.c,v 1.1 2007/03/02 12:09:10 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAlias.c,v 1.2 2007/03/03 16:25:34 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,13 +37,15 @@ static struct optionSpec options[] = {
 void outAlias(FILE *f, char *id, char *alias)
 /* Output one alias to file. */
 {
-fprintf(f, "%s\t%s\n", id, alias);
+if (alias[0] != 0)
+    fprintf(f, "%s\t%s\n", id, alias);
 }
 
 void outProt(FILE *f, char *id, char *protId, char *alias)
 /* Output one protein alias to file */
 {
-fprintf(f, "%s\t%s\t%s\n", id, protId, alias);
+if (alias[0] != 0)
+    fprintf(f, "%s\t%s\t%s\n", id, protId, alias);
 }
 
 void txGeneAlias(char *genomeDb, char *uniProtDb, char *xrefFile, 
