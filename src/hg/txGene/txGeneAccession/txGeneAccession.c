@@ -6,8 +6,9 @@
 #include "bed.h"
 #include "binRange.h"
 #include "rangeTree.h"
+#include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.3 2007/03/02 01:20:38 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.4 2007/03/03 17:24:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,60 +46,6 @@ lineFileClose(&lf);
 return number;
 }
 
-struct minChromSize
-/* Associate chromosome and size. */
-    {
-    char *chrom;	/* Chromosome name, Not alloced here */
-    int minSize;		
-    };
-
-struct hash *sizeBeds(struct bed *bedList)
-/* Go through bed list, creating a hash full of minChromSizes. 
- * This is so we can use binKeeper without user having to pass
- * us list of chromSizes. */
-{
-struct hash *sizeHash = hashNew(16);
-struct bed *bed;
-for (bed = bedList; bed != NULL; bed = bed->next)
-    {
-    struct minChromSize *chrom = hashFindVal(sizeHash, bed->chrom);
-    if (chrom == NULL)
-        {
-	lmAllocVar(sizeHash->lm, chrom);
-	chrom->chrom = bed->chrom;
-	chrom->minSize = bed->chromEnd;
-	hashAdd(sizeHash, bed->chrom, chrom);
-	}
-    else
-        {
-	chrom->minSize = max(chrom->minSize, bed->chromEnd);
-	}
-    }
-return sizeHash;
-}
-
-struct hash *bedsIntoKeeperHash(struct bed *bedList)
-/* Create a hash full of bin keepers (one for each chromosome or contig.
- * The binKeepers are full of beds. */
-{
-struct hash *sizeHash = sizeBeds(bedList);
-struct hash *bkHash = hashNew(18);
-struct bed *bed;
-for (bed = bedList; bed != NULL; bed = bed->next)
-    {
-    struct binKeeper *bk = hashFindVal(bkHash, bed->chrom);
-    if (bk == NULL)
-        {
-	struct minChromSize *chrom = hashMustFindVal(sizeHash, bed->chrom);
-	verbose(3, "New binKeeper for %s\n", bed->chrom);
-	bk = binKeeperNew(0, chrom->minSize);
-	hashAdd(bkHash, bed->chrom, bk);
-	}
-    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
-    }
-hashFree(&sizeHash);
-return bkHash;
-}
 
 boolean compatibleExtension(struct bed *oldBed, struct bed *newBed)
 /* Return TRUE if newBed is a compatible extension of oldBed, meaning
