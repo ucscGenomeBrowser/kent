@@ -45,7 +45,7 @@ priority 75
 
 name otherOrgs
 shortLabel Other Species
-longLabel Homologous Genes in Other Species (BLASTP Best Hit)
+longLabel Homologous Genes in Other Species (BLASTP Best Hit. For Human/Mouse/Rat Synteny Filtered)
 priority 80
 
 name multipleAlignments
