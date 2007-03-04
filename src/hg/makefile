@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.125 2007/02/22 19:48:51 kent Exp $
+# 	$Id: makefile,v 1.126 2007/03/04 17:53:40 kent Exp $
 
 BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgTables hgTracks \
@@ -236,6 +236,7 @@ UTIL_DIRS = \
 	relPairs \
 	recycleDb \
 	reviewSanity \
+	rnaStructure \
 	sage \
 	scanRa \
 	semiNorm \
