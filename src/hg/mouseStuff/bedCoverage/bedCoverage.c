@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: bedCoverage.c,v 1.6 2006/06/20 15:47:11 angie Exp $";
+static char const rcsid[] = "$Id: bedCoverage.c,v 1.7 2007/03/04 17:09:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,10 +48,10 @@ return ciList;
 #define maxCover 100    /* Maximum coverage we track. */
 #define restricted 255	/* Special value for masked out. */
 
-struct range
+struct simpleRange
 /* A range inside of a chromosome. */
    {
-   struct range *next;
+   struct simpleRange *next;
    int start;	/* Start (zero based) */
    int end;	/* End (not included) */
    };
@@ -69,7 +69,7 @@ struct chromSizes
 
    double histogram[maxCover+1]; /* Coverage histogram. */
    boolean completed;   /* True if completed. */
-   struct range *restrictList;	/* List of ranges to restrict to. */
+   struct simpleRange *restrictList;	/* List of ranges to restrict to. */
    };
 
 
@@ -82,7 +82,7 @@ int count = 0;
 while (lineFileRow(lf, row))
     {
     struct chromSizes *cs = hashMustFindVal(hash, row[0]);
-    struct range *r;
+    struct simpleRange *r;
     AllocVar(r);
     r->start = lineFileNeedNum(lf, row, 1);
     r->end = lineFileNeedNum(lf, row, 2);
@@ -214,11 +214,11 @@ showStats(cs);
 }
 
 
-void restrictCov(UBYTE *cov, int size, struct range *restrictList)
+void restrictCov(UBYTE *cov, int size, struct simpleRange *restrictList)
 /* Set areas that are restricted (not in restrict list) to restricted
  * value. Assumes cov is all zero to begin with. */
 {
-struct range *r;
+struct simpleRange *r;
 memset(cov, restricted, size);
 for (r = restrictList; r != NULL; r = r->next)
     {
