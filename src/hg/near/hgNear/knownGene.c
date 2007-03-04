@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.30 2006/03/06 18:09:41 angie Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.31 2007/03/04 07:08:56 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -173,6 +173,7 @@ static char *knownPosCellVal(struct column *col, struct genePos *gp,
 char *pos = genePredPosFromTable("knownGene", gp, conn);
 if (pos == NULL)
     {
+    /* As a backup plan, try to find accession in all_mrna table. */
     char query[256];
     struct sqlResult *sr;
     char **row;
