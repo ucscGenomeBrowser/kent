@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.34 2007/02/18 05:48:43 baertsch Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.35 2007/03/04 17:04:46 kent Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -540,19 +540,19 @@ while (lineFileNext(lf, &line, NULL))
     }
 }
 
-struct range
+struct liftRange
 /* A start/stop pair. */
      {
-     struct range *next;
+     struct liftRange *next;
      int start;		/* Start 0 based */
      int end;		/* End, non-inclusive. */
      int val;		/* Some value (optional). */
      };
 
-static struct range *bedToRangeList(struct bed *bed)
+static struct liftRange *bedToRangeList(struct bed *bed)
 /* Convert blocks in bed to a range list. */
 {
-struct range *range, *rangeList = NULL;
+struct liftRange *range, *rangeList = NULL;
 int bedStart = bed->chromStart;
 int i, count = bed->blockCount, start;
 for (i=0; i<count; ++i)
@@ -567,10 +567,10 @@ slReverse(&rangeList);
 return rangeList;
 }
 
-static struct range *tPslToRangeList(struct psl *psl)
+static struct liftRange *tPslToRangeList(struct psl *psl)
 /* Convert target blocks in psl to a range list. */
 {
-struct range *range, *rangeList = NULL;
+struct liftRange *range, *rangeList = NULL;
 int i, count = psl->blockCount, start;
 for (i=0; i<count; ++i)
     {
@@ -585,10 +585,10 @@ return rangeList;
 }
 
 #if 0 /* not used */
-static struct range *qPslToRangeList(struct psl *psl)
+static struct liftRange *qPslToRangeList(struct psl *psl)
 /* Convert query blocks in psl to a range list. */
 {
-struct range *range, *rangeList = NULL;
+struct liftRange *range, *rangeList = NULL;
 int pslStart = psl->qStart;
 int i, count = psl->blockCount, start;
 for (i=0; i<count; ++i)
@@ -604,11 +604,11 @@ return rangeList;
 }
 #endif
 
-static int chainRangeIntersection(struct chain *chain, struct range *rangeList)
+static int chainRangeIntersection(struct chain *chain, struct liftRange *rangeList)
 /* Return chain/rangeList intersection size. */
 {
 struct cBlock *b = chain->blockList;
-struct range *r = rangeList;
+struct liftRange *r = rangeList;
 int one, total = 0;
 
 
@@ -646,14 +646,14 @@ for (;;)
     }
 }
 
-static void remapRangeList(struct chain *chain, struct range **pRangeList,
+static void remapRangeList(struct chain *chain, struct liftRange **pRangeList,
             int *pThickStart, int *pThickEnd, double minBlocks, bool fudgeThick,
-            struct range **retGood, struct range **retBad, char **retError)
+            struct liftRange **retGood, struct liftRange **retBad, char **retError)
 /* Remap range list through chain.  Return error message on failure,
  * NULL on success. */
 {
 struct cBlock *b = chain->blockList;
-struct range *r = *pRangeList, *nextR, *goodList = NULL, *badList = NULL;
+struct liftRange *r = *pRangeList, *nextR, *goodList = NULL, *badList = NULL;
 int bDiff, rStart = 0;
 bool gotStart = FALSE;
 int rCount = slCount(r), goodCount = 0;
@@ -831,10 +831,10 @@ if (goodCount != rCount)
 }
 
 #ifdef DEBUG
-static void dumpRangeList(struct range *rangeList, FILE *f)
+static void dumpRangeList(struct liftRange *rangeList, FILE *f)
 /* Write out range list to file. */
 {
-struct range *range;
+struct liftRange *range;
 for (range = rangeList; range != NULL; range = range->next)
     fprintf(f, "%d,", range->end - range->start);
 fprintf(f, "\n");
@@ -862,10 +862,10 @@ for (i=0; i<psl->blockCount; ++i)
 return total;
 }
 
-static struct range *reverseRangeList(struct range *rangeList, int chromSize)
+static struct liftRange *reverseRangeList(struct liftRange *rangeList, int chromSize)
 /* Return reverse-complemented rangeList. */
 {
-struct range *range;
+struct liftRange *range;
 slReverse(&rangeList);
 for (range = rangeList; range != NULL; range = range->next)
     reverseIntRange(&range->start, &range->end, chromSize);
@@ -881,7 +881,7 @@ struct chain *chainList = NULL,  *chain;
 int bedSize = sumBedBlocks(bed);
 struct binElement *binList;
 struct binElement *el;
-struct range *rangeList, *badRanges = NULL, *range;
+struct liftRange *rangeList, *badRanges = NULL, *range;
 char *error = NULL;
 int i, start, end = 0;
 int thickStart = bed->thickStart;
@@ -1165,7 +1165,7 @@ struct chain *chainList = NULL,  *chain;
 int pslSize = sumPslBlocks(psl);
 struct binElement *binList;
 struct binElement *el;
-struct range *rangeList, *badRanges = NULL, *range;
+struct liftRange *rangeList, *badRanges = NULL, *range;
 char *error = NULL;
 int i, start, end = 0;
 //int pslStart = psl->tStart;
@@ -1355,7 +1355,7 @@ static char *remapBlockedBed(struct hash *chainHash, struct bed *bed)
 struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
 int bedSize = sumBedBlocks(bed);
 struct binElement *binList, *el;
-struct range *rangeList, *badRanges = NULL, *range;
+struct liftRange *rangeList, *badRanges = NULL, *range;
 char *error = NULL;
 int i, start, end = 0;
 int thickStart = bed->thickStart;
@@ -1400,7 +1400,7 @@ if (error == NULL)
     {
     if (chain->qStrand == '-')
 	{
-	struct range *range;
+	struct liftRange *range;
 	slReverse(&rangeList);
 	for (range = rangeList; range != NULL; range = range->next)
 	    reverseIntRange(&range->start, &range->end, chain->qSize);
@@ -1431,11 +1431,11 @@ return error;
 }
 #endif
 
-static struct range *sampleToRangeList(struct sample *sample, int sizeOne)
+static struct liftRange *sampleToRangeList(struct sample *sample, int sizeOne)
 /* Make a range list corresponding to sample. */
 {
 int i;
-struct range *rangeList = NULL, *range;
+struct liftRange *rangeList = NULL, *range;
 for (i=0; i<sample->sampleCount; ++i)
     {
     AllocVar(range);
@@ -1448,12 +1448,12 @@ slReverse(&rangeList);
 return rangeList;
 }
 
-static struct sample *rangeListToSample(struct range *rangeList, 
+static struct sample *rangeListToSample(struct liftRange *rangeList, 
                                                 char *chrom, char *name,
 	unsigned score, char strand[3])
 /* Make sample based on range list and other parameters. */
 {
-struct range *range;
+struct liftRange *range;
 struct sample *sample;
 int sampleCount = slCount(rangeList);
 int  i, chromStart, chromEnd;
@@ -1490,7 +1490,7 @@ static void remapSample(struct hash *chainHash, struct sample *sample,
 /* Remap a single sample and output it. */
 {
 struct binElement *binList, *el;
-struct range *rangeList, *goodList = NULL;
+struct liftRange *rangeList, *goodList = NULL;
 struct chain *chain;
 struct sample *ns;
 char *error = NULL;
