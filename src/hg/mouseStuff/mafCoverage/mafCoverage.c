@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.5 2006/06/20 16:11:36 angie Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.6 2007/03/04 17:19:07 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -60,10 +60,10 @@ return ciList;
 #define maxDepth 100    /* Maximum depth we track, if change this showStats and shortStats need updating. */
 #define restricted 255	/* Special value for masked out. */
 
-struct range
+struct simpleRange
 /* A range inside of a chromosome. */
    {
-   struct range *next;
+   struct simpleRange *next;
    int start;	/* Start (zero based) */
    int end;	/* End (not included) */
    };
@@ -84,7 +84,7 @@ struct chromSizes
    double histogram[maxDepth+1]; /* Coverage histogram. */
    double histogramAlign[maxDepth+1]; /* Coverage histogram. */
    boolean completed;   /* True if completed. */
-   struct range *restrictList;	/* List of ranges to restrict to. */
+   struct simpleRange *restrictList;	/* List of ranges to restrict to. */
    };
 
 
@@ -97,7 +97,7 @@ int count = 0;
 while (lineFileRow(lf, row))
     {
     struct chromSizes *cs = hashMustFindVal(hash, row[0]);
-    struct range *r;
+    struct simpleRange *r;
     AllocVar(r);
     r->start = lineFileNeedNum(lf, row, 1);
     r->end = lineFileNeedNum(lf, row, 2);
@@ -263,11 +263,11 @@ showStats(cs);
 }
 
 
-void restrictCov(UBYTE *cov, int size, struct range *restrictList)
+void restrictCov(UBYTE *cov, int size, struct simpleRange *restrictList)
 /* Set areas that are restricted (not in restrict list) to restricted
  * value. Assumes cov is all zero to begin with. */
 {
-struct range *r;
+struct simpleRange *r;
 memset(cov, restricted, size);
 for (r = restrictList; r != NULL; r = r->next)
     {
