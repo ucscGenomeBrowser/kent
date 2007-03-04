@@ -10,6 +10,7 @@ struct gffFile;
 struct gffGroup;
 struct psl;
 struct genbankCds;
+struct rbTree;
 
 enum cdsStatus
 /* value to indicate status of CDS annotation at either start or end */
@@ -277,6 +278,9 @@ void genePredGrow(struct genePred *gp, unsigned *exonSpacePtr);
 /* Increase memory allocated to a psl to hold more exons.  exonSpacePtr
  * should point the the current maximum number of exons and will be
  * updated to with the new amount of space. */
+
+struct rbTree *genePredToRangeTree(struct genePred *gp, boolean cdsOnly);
+/* Convert genePred into a range tree. */
 
 #endif /* GENEPRED_H */
 

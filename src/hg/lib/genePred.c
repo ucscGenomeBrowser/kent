@@ -9,9 +9,10 @@
 #include "linefile.h"
 #include "genePred.h"
 #include "genbank.h"
+#include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.88 2007/02/16 19:41:57 kent Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.89 2007/03/04 20:25:21 kent Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1616,5 +1617,26 @@ ExpandArray(gp->exonEnds, exonSpace, newSpace);
 if (gp->optFields & genePredExonFramesFld)
     ExpandArray(gp->exonFrames, exonSpace, newSpace);
 *exonSpacePtr = newSpace;
+}
+
+struct rbTree *genePredToRangeTree(struct genePred *gp, boolean cdsOnly)
+/* Convert genePred into a range tree. */
+{
+struct rbTree *rangeTree = rangeTreeNew();
+int i;
+for (i=0; i<gp->exonCount; ++i)
+    {
+    int start = gp->exonStarts[i];
+    int end = gp->exonEnds[i];
+    if (cdsOnly)
+        {
+	start = max(start, gp->cdsStart);
+	end = min(end, gp->cdsEnd);
+	if (start >= end)
+	    continue;
+	}
+    rangeTreeAdd(rangeTree, start, end);
+    }
+return rangeTree;
 }
 
