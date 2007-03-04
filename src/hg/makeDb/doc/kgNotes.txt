@@ -454,6 +454,7 @@ hgMapToGene hg18a refGene knownGene knownToRefSeq
 hgMapToGene "-type=bed 12" hg18a affyUclaNorm knownGene knownToU133
 hgMapToGene hg18a affyU133Plus2 knownGene knownToU133Plus2
 hgMapToGene hg18a affyU95 knownGene knownToU95
+knownToVisiGene hg18a -fromProbePsl=vgAllProbes
 
 # Create expression distance table - takes about an hour
 hgExpDistance hg18a hgFixed.gnfHumanAtlas2MedianRatio \
@@ -473,7 +474,7 @@ cat << _EOF_ > config.ra
 # Latest human vs. other Gene Sorter orgs:
 # mouse, rat, zebrafish, worm, yeast, fly
 
-targetGenesetPrefix human
+targetGenesetPrefix known
 targetDb jk18
 queryDbs mm8 rn4 danRer4 ce3 sacCer1 dm2
 
@@ -481,7 +482,7 @@ mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
 jk18Fa /cluster/data/hg18/bed/jkg/ucscGenes.faa
 rn4Fa /cluster/data/rn4/bed/blastp/known.faa
 danRer4Fa /cluster/data/danRer4/bed/blastp/ensembl.faa
-ce3Fa /cluster/data/ce2/bed/blastp/wormPep140.faa
+ce3Fa /cluster/data/ce3/bed/blastp/wormPep140.faa
 sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
 dm2Fa /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
 
@@ -489,6 +490,86 @@ buildDir /cluster/data/hg18/bed/jkg/hgNearBlastp4
 scratchDir /san/sanvol1/scratch/jkgHgNearBlastp4
 _EOF_
 doHgNearBlastp.pl config.ra |& tee do.log 
+
+# Remove non-syntenic hits for mouse and rat
+mkdir /gbdb/hg18a/liftOver
+ln -s /cluster/data/hg18/bed/liftOver/hg18ToRn4.over.chain.gz \
+    /gbdb/hg18a/liftOver/hg18aToRn4.over.chain.gz
+ln -s /cluster/data/hg18/bed/liftOver/hg18ToMm8.over.chain.gz \
+    /gbdb/hg18a/liftOver/hg18aToMm8.over.chain.gz
+synBlastp.csh hg18a rn4
+synBlastp.csh hg18a mm8
+
+# MAKE FOLDUTR TABLES 
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/jkg
+    mkdir -p rnaStruct
+    cd rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa hg18a knownGene utr3 utr3/utr.fa
+    utrFa hg18a knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    faSplit sequence utr3/utr.fa 10000 utr3/split/s
+    faSplit sequence utr5/utr.fa 10000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    gensub2 in.lst single gsub spec
+    cp gsub ../utr5
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+
+    ssh pk
+    cd /cluster/data/hg18/bed/jkg/rnaStruct/utr3
+    para create spec
+    para try
+    para push
+# Completed: 36097 of 36097 jobs
+# CPU time in finished jobs:     335580s    5593.00m    93.22h    3.88d  0.011 y
+# IO & Wait Time:                653230s   10887.16m   181.45h    7.56d  0.021 y
+# Average job time:                  27s       0.46m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1730s      28.83m     0.48h    0.02d
+# Submission to last job:          6007s     100.12m     1.67h    0.07d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    cd /cluster/data/hg18/bed/jkg/rnaStruct/utr3
+    para create spec
+    para try
+    para push
+# Completed: 34011 of 34011 jobs
+# CPU time in finished jobs:      78543s    1309.05m    21.82h    0.91d  0.002 y
+# IO & Wait Time:                938250s   15637.50m   260.62h   10.86d  0.030 y
+# Average job time:                  30s       0.50m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5873s      97.88m     1.63h    0.07d
+# Submission to last job:          6139s     102.32m     1.71h    0.07d
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/jkg/rnaStruct/utr5
+    hgLoadRnaFold hg18a foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold -warnEmpty hg18a foldUtr3 fold
+# There are a three warnings on empty files.  Seems to be a problem in
+# RNAfold, so not easy for us to fix. Consequence is not too bad, just a
+# few 3' UTRs will be missing annotation.
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
 
 ###########################################################################
 ## Load take 7 into the database. Takes 30 seconds.
@@ -1032,15 +1113,15 @@ n/a all_fosends
 n/a bacEndPairs
 n/a blastKGPep04
 n/a blastKGRef04
-todo ceBlastTab
-todo dmBlastTab
-todo drBlastTab
-todo foldUtr3
-todo foldUtr5
+done ceBlastTab
+done dmBlastTab
+done drBlastTab
+done foldUtr3
+done foldUtr5
 n/a fosEndPairs
-todo gnfAtlas2Distance
+done gnfAtlas2Distance
 todo gnfU95Distance
-todo humanBlastTab
+???? humanBlastTab
 todo humanHprdP2P
 todo humanVidalP2P
 todo humanWankerP2P
@@ -1048,8 +1129,8 @@ done kgAlias
 done kgProtAlias
 ???? kgProtMap
 ???? kgSpAlias
-todo kgXref
-todo knownBlastTab
+done kgXref
+done knownBlastTab
 done knownCanonical
 todo knownExpDistance
 done knownGene
@@ -1068,8 +1149,8 @@ done knownToRefSeq
 done knownToU133
 done knownToU133Plus2
 done knownToU95
-todo knownToVisiGene
-todo mmBlastTab
+done knownToVisiGene
+done mmBlastTab
 n/a multiz17way
 n/a multiz17wayFrames
 n/a multiz17waySummary
@@ -1095,8 +1176,8 @@ n/a snpSeq
 ???? pepPi
 ???? pepPiDist
 ???? pepResDist
-todo rnBlastTab
-todo scBlastTab
+done rnBlastTab
+done scBlastTab
 n/a uniGene_3
 n/a xenoEst
 n/a xenoMrna
