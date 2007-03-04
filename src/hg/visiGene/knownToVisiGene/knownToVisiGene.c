@@ -6,6 +6,11 @@
 #include "options.h"
 #include "jksql.h"
 #include "hgRelate.h"
+#include "genePred.h"
+#include "psl.h"
+#include "rangeTree.h"
+#include "binRange.h"
+#include "hdb.h"
 #include "visiGene.h"
 
 void usage()
@@ -85,25 +90,7 @@ void foldIntoHash(struct sqlConnection *conn, char *table, char *keyField, char 
 struct sqlResult *sr;
 char query[512];
 char **row;
-if (fromProbePsl)
-    {
-    /* TODO 2006-01-25 Jim is concerned about alternate splicing, wants to us hgMapToGene
-       or something similar in future that matches exact exon structure in kg.
-       Earlier when I tried it, I found that adding -intronsToo made it pickup up more 
-       probes.  But then it made it so similar to simple overlap query (like only 27 recs dif)
-       that I chose to use just the query.  But for future we will need to handle exons better.
-    */
-    safef(query, sizeof(query), 
-	"select distinct kg.%s,ip.%s from %s ip, knownGene kg"
-	" where kg.chrom = ip.tName"
-	"   and kg.strand = ip.strand"
-	"   and ((kg.txStart < ip.tEnd) and (ip.tStart < kg.txEnd))"
-	, keyField, valField, table);
-    }
-else
-    {
-    safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
-    }
+safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -120,6 +107,77 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], cloneString(row[1]));
     }
 sqlFreeResult(&sr);
+}
+
+struct hash *keepersForChroms(struct sqlConnection *conn)
+/* Create hash of binKeepers keyed by chromosome */
+{
+struct hash *keeperHash = hashNew(0);
+struct sqlResult *sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *chrom = row[0];
+    int size = sqlUnsigned(row[1]);
+    struct binKeeper *bk = binKeeperNew(0, size);
+    hashAdd(keeperHash, chrom, bk);
+    }
+sqlFreeResult(&sr);
+return keeperHash;
+}
+
+void bestProbeOverlap(struct sqlConnection *conn, char *probeTable, 
+	struct genePred *gpList, struct hash *gpToProbeHash)
+/* Create hash of most overlapping probe if any for each gene. Require
+ * at least 100 base overlap. */
+{
+/* Create a hash of binKeepers filled with probes. */
+struct hash *keeperHash = keepersForChroms(conn);
+struct hashCookie it = hashFirst(keeperHash);
+struct hashEl *hel;
+int pslCount = 0;
+while ((hel = hashNext(&it)) != NULL)
+    {
+    char *chrom = hel->name;
+    struct binKeeper *bk = hel->val;
+    int rowOffset;
+    struct sqlResult *sr = hChromQuery(conn, probeTable, chrom, NULL, &rowOffset);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	struct psl *psl = pslLoad(row+rowOffset);
+	binKeeperAdd(bk, psl->tStart, psl->tEnd, psl);
+	++pslCount;
+	}
+    sqlFreeResult(&sr);
+    }
+verbose(2, "Loaded %d psls from %s\n", pslCount, probeTable);
+
+/* Loop through gene list, finding best probe if any for each gene. */
+struct genePred *gp;
+for (gp = gpList; gp != NULL; gp = gp->next)
+    {
+    struct rbTree *rangeTree = genePredToRangeTree(gp, FALSE);
+    struct psl *bestPsl = NULL;
+    int bestOverlap = 99;	/* MinOverlap - 1 */
+    struct binKeeper *bk = hashMustFindVal(keeperHash, gp->chrom);
+    struct binElement *bin, *binList = binKeeperFind(bk, gp->txStart, gp->txEnd);
+    for (bin = binList; bin != NULL; bin = bin->next)
+        {
+	struct psl *psl = bin->val;
+	if (psl->strand[0] == gp->strand[0])
+	    {
+	    int overlap = pslRangeTreeOverlap(psl, rangeTree);
+	    if (overlap > bestOverlap)
+		{
+		bestOverlap = overlap;
+		bestPsl = psl;
+		}
+	    }
+	}
+    if (bestPsl != NULL)
+        hashAdd(gpToProbeHash, gp->name, bestPsl->qName);
+    }
 }
 
 int bestImage(char *kgId, struct hash *kgToHash, struct hash *imageHash)
@@ -164,7 +222,7 @@ struct hash *knownToRefSeqHash = newHash(18);
 struct hash *knownToGeneHash = newHash(18);
 struct hash *favorHugoHash = newHash(18);
 struct hash *knownToProbeHash = newHash(18);
-struct slName *knownList = NULL, *known;
+struct genePred *knownList = NULL, *known;
 struct hash *dupeHash = newHash(17);
 
 /* Go through and make up hashes of images keyed by various fields. */
@@ -206,24 +264,24 @@ verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSe
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
-sr = sqlGetResult(hConn, "select name from knownGene");
+sr = sqlGetResult(hConn, "select * from knownGene");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *name = row[0];
-    if (!hashLookup(dupeHash, name))
+    struct genePred *known = genePredLoad(row);
+    if (!hashLookup(dupeHash, known->name))
         {
-	hashAdd(dupeHash, name, NULL);
-	known = slNameNew(name);
+	hashAdd(dupeHash, known->name, NULL);
 	slAddHead(&knownList, known);
 	}
     }
 slReverse(&knownList);
 sqlFreeResult(&sr);
+verbose(2, "Got %d known genes\n", slCount(knownList));
 
 /* Build up hashes from knownGene to other things. */
 if (fromProbePsl)
     {
-    foldIntoHash(hConn, fromProbePsl, "name", "qName", knownToProbeHash, NULL, FALSE);
+    bestProbeOverlap(hConn, fromProbePsl, knownList, knownToProbeHash);
     }
 else
     {
