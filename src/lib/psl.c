@@ -17,8 +17,9 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 #include "binRange.h"
+#include "rangeTree.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.75 2007/01/31 17:29:09 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.76 2007/03/04 20:24:19 kent Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1969,3 +1970,21 @@ if (psl->qSequence != NULL)
     }
 *blockSpacePtr = newSpace;
 }
+
+int pslRangeTreeOverlap(struct psl *psl, struct rbTree *rangeTree)
+/* Return amount that psl overlaps (on target side) with rangeTree. */
+{
+int i;
+int overlap = 0;
+boolean isRc = (psl->strand[1] == '-');
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int start = psl->tStarts[i];
+    int end = start + psl->blockSizes[i];
+    if (isRc)
+        reverseIntRange(&start, &end, psl->tSize);
+    overlap += rangeTreeOverlapSize(rangeTree, start, end);
+    }
+return overlap;
+}
+

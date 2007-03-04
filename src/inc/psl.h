@@ -25,6 +25,9 @@
 #include "dnaseq.h"
 #endif
 
+/* Some forward declarations of structures used but not defined here. */
+struct rbTree;
+
 #define PSL_NUM_COLS  21  /* number of columns in a PSL */
 #define PSLX_NUM_COLS 23  /* number of columns in a PSLX */
 
@@ -296,6 +299,9 @@ void pslGrow(struct psl *psl, int *blockSpacePtr);
 /* Increase memory allocated to a psl to hold more blocks.  blockSpacePtr
  * should point the the current maximum number of blocks and will be
  * updated to with the new amount of space. */
+
+int pslRangeTreeOverlap(struct psl *psl, struct rbTree *rangeTree);
+/* Return amount that psl overlaps (on target side) with rangeTree. */
 
 #endif /* PSL_H */
 
