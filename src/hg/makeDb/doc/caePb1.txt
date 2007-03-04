@@ -1,0 +1,295 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Caenorhabditis PB2801
+#	This is the actual name, it is sometimes known as:
+#	Caenorhabditis n. sp. PB2801
+#	From Wash U GSC
+#	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+n.+sp.+PB2801
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2007-02-16 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/store10/caePb1
+    ln -s /cluster/store10/caePb1 /cluster/data/caePb1
+
+    cd /cluster/data/caePb1
+    mkdir downloads
+    cd downloads
+    wget --timestamping \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_PB2801/assembly/draft/Caenorhabditis_PB2801-4.0/ASSEMBLY"
+
+    wget --timestamping \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_PB2801/assembly/draft/Caenorhabditis_PB2801-4.0/README" -O README.caePb1
+
+    wget --timestamping -m -nd -np \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_PB2801/assembly/draft/Caenorhabditis_PB2801-4.0/output/"
+
+    #	Going to manipulate the given supercontigs.agp.gz file to produce a
+    #	chrUn.agp.gz file, although this ends up being too detailed.  A second
+    #	super.lift and gold.tab will also be produced to get the chrUn_gold
+    #	table loaded with appropriate supercontigs without all the bridged
+    #	gaps.  This first chrUn.agp.gz file will be used with the initial
+    #	build so that the gap table will be constructed properly with all the
+    #	bridged gaps.
+    faCount contigs.fa.gz > faCount.contigs.fa.txt
+    mkdir ../jkStuff
+    cat << '_EOF_' > ../jkStuff/mkChrUnAgp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+
+open (FH,'zcat supercontigs.agp.gz|') or
+        die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+        my ($name, $gStart, $gEnd, $counter, $WN, $gapLen, $frag, $yesNo) =
+            split('\s+',$line);
+        $end = $start + $gapLen - 1;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+                    $start, $end, $itemCount++, $WN, $gapLen, $frag, $yesNo;
+        $start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $counter, $WN, $name, $cStart, $cEnd, $strand) =
+        split('\s+',$line);
+        my $ctgLen = $ctgEnd - $ctgStart + 1;
+        my $cLen = $cEnd - $cStart + 1;
+        die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+        if (!$firstTime) {
+            if ($ctgName ne $curContig) {
+                $end = $start + $scaffoldGapSize - 1;
+                printf "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+                    $start, $end, $itemCount++, $scaffoldGapSize;
+                $start = $end + 1;
+            }
+        } else {
+            $firstTime = 0;
+        }
+        $end = $start + $ctgLen - 1;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+                $start, $end, $itemCount++, $WN, $name,
+                $cStart, $cEnd, $strand;
+        $start = $end + 1;
+        $curContig = $ctgName;
+    }
+}
+close (FH);
+'_EOF_'
+# << happy emacs
+    chmod +x ../jkStuff/mkChrUnAgp.pl
+    ../jkStuff/mkChrUnAgp.pl | gzip > chrUn.agp.gz
+    qaToQac contigs.fa.qual.gz stdout \
+        | qacAgpLift chrUn.agp.gz stdin chrUn.qac
+
+##########################################################################
+## Initial database construction and beginning tables
+##	(DONE - 2007-03-01 - Hiram)
+
+    ssh kkstore01
+    cd /cluster/data/caePb1
+    cat << '_EOF_' > caePb1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caePb1
+clade worm
+genomeCladePriority 66
+scientificName Caenorhabditis PB2801
+commonName C. PB2801
+assemblyDate Jan. 2007
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis n. sp. PB2801
+orderKey 876
+mitoAcc none
+fastaFiles /cluster/data/caePb1/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/caePb1/downloads/scaffold.agp.gz
+qualFiles /cluster/data/caePb1/downloads/chrUn.qac
+dbDbSpeciesDir worm
+'_EOF_'
+# << happy emacs
+
+    time makeGenomeDb.pl -verbose=2 caePb1.config.ra > makeGenomeDb.out 2>&1
+
+##########################################################################
+##  Fixup chrUn_gold table, and add ctgPos2 table
+
+    ssh kkstore01
+    cd /cluster/data/caePb1/downloads
+
+    #	create a ctgPos2.tab table
+    cat << '_EOF_' > ../jkStuff/mkScafAgp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+
+open (CT,">ctgPos2.tab") or die "can not write to ctgPos2.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+        die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+        my ($name, $gStart, $gEnd, $counter, $WN, $gapLen, $frag, $yesNo) =
+            split('\s+',$line);
+        $end = $start + $gapLen - 1;
+        $scafEnd += $gapLen;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+                    $start, $end, $itemCount++, $WN, $gapLen, $frag, $yesNo;
+        $start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $counter, $WN, $name, $cStart, $cEnd, $strand) =
+        split('\s+',$line);
+        my $ctgLen = $ctgEnd - $ctgStart + 1;
+        my $cLen = $cEnd - $cStart + 1;
+        die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+        if (!$firstTime) {
+            if ($ctgName ne $curContig) {
+                $end = $start + $scaffoldGapSize - 1;
+                printf "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+                    $start, $end, $itemCount++, $scaffoldGapSize;
+                $start = $end + 1;
+                $scafEnd = $cStart - 1;
+            }
+        } else {
+            $firstTime = 0;
+            $scafEnd = 0;
+        }
+        $scafEnd += $ctgLen;
+        my $fragStart = $scafEnd - $ctgLen + 1;
+        $end = $start + $ctgLen - 1;
+        printf "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+                $start, $end, $itemCount++, $WN, $ctgName,
+                $fragStart, $scafEnd, $strand;
+        printf CT "%s\t%d\tchrUn\t%d\t%d\tW\n",
+                $name, $ctgLen, $start-1, $end;
+        $start = $end + 1;
+        $curContig = $ctgName;
+    }
+}
+close (FH);
+close (CT);
+'_EOF_"
+# << happy emacs
+    chmod +x ../jkStuff/mkScafAgp.pl
+    nice -n +19 ../jkStuff/mkScafAgp.pl
+
+    ##	and load that ctgPos2 table:
+    ssh hgwdev
+    cd /cluster/data/caePb1/downloads
+    hgLoadSqlTab caePb1 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+    ##  and the super.lift to get supercontigs lifted to chrUn
+    ssh kkstore01
+    cd /cluster/data/caePb1/downloads
+    
+    cat << '_EOF_' > ../jkStuff/mkSuperLift.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+my $superStart = 0;
+my $superEnd = 1;
+my $superLength = 0;
+my $chrUnSize = 207333000;
+my $chrUnName = "chrUn";
+
+open (GL,">gold.tab") or die "Can not write to gold.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+        die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+        my ($name, $gStart, $gEnd, $counter, $WN, $gapLen, $frag, $yesNo) =
+            split('\s+',$line);
+        $end = $start + $gapLen - 1;
+        $scafEnd += $gapLen;
+#       printf "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+#                   $start, $end, $itemCount++, $WN, $gapLen, $frag, $yesNo;
+        $start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $counter, $WN, $name, $cStart, $cEnd, $strand) =
+        split('\s+',$line);
+        my $ctgLen = $ctgEnd - $ctgStart + 1;
+        my $cLen = $cEnd - $cStart + 1;
+        die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+        if (!$firstTime) {
+            if ($ctgName ne $curContig) {
+                $superLength = $superEnd - $superStart;
+                $end = $start + $scaffoldGapSize - 1;
+#               printf "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+#                   $start, $end, $itemCount++, $scaffoldGapSize;
+                printf "%d\t%s\t%d\t%s\t%d\n",
+                        $superStart, $curContig, $superLength, $chrUnName,
+                                $chrUnSize;
+                printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+                        $chrUnName, $superStart, $superEnd, $itemCount++,
+                        $curContig, $superLength;
+                $start = $end + 1;
+                $scafEnd = $cStart - 1;
+                $superStart = $start - 1;
+            }
+        } else {
+            $firstTime = 0;
+            $scafEnd = 0;
+        }
+        $scafEnd += $ctgLen;
+        my $fragStart = $scafEnd - $ctgLen + 1;
+        $end = $start + $ctgLen - 1;
+        $superEnd = $end;
+#       printf "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+#               $start, $end, $itemCount++, $WN, $ctgName,
+#               $fragStart, $scafEnd, $strand;
+#       printf SL "%s\t%d\tchrUn\t%d\t%d\tW\n",
+#               $name, $ctgLen, $start-1, $end;
+        $start = $end + 1;
+        $curContig = $ctgName;
+    }
+}
+close (FH);
+$superLength = $superEnd - $superStart;
+printf "%d\t%s\t%d\t%s\t%d\n",
+    $superStart, $curContig, $superLength, $chrUnName, $chrUnSize;
+printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+        $chrUnName, $superStart, $superEnd, $itemCount++,
+        $curContig, $superLength;
+close (GL);
+'_EOF_'
+# << happy emacs
+    chmod +x ../jkStuff/mkSuperLift.pl
+
+    nice -n +19 ../jkStuff/mkSuperLift.pl > super.lift
+
+    ##	and load that ctgPos2 table:
+
+    ssh hgwdev
+    cd /cluster/data/caePb1/downloads
+    sed -e "s/agpFrag/chrUn_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chrUn_gold.sql
+    # edit that .sql file to add the bin column
+    #	 bin smallint(6) NOT NULL default '0',
+
+    hgLoadBed -sqlTable=chrUn_gold.sql caePb1 chrUn_gold gold.tab
