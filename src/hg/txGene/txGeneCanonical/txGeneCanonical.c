@@ -12,9 +12,10 @@
 #include "bed.h"
 #include "txGraph.h"
 #include "txCluster.h"
+#include "txInfo.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.3 2007/03/03 21:17:19 kent Exp $";
+static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.4 2007/03/04 07:07:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,7 +25,7 @@ errAbort(
   "to use when just interested in a single splicing varient. Produces final\n"
   "transcript clusters as well.\n"
   "usage:\n"
-  "   txGeneCanonical coding.cluster coding.nice noncoding.txg genes.bed canonical.tab isoforms.tab txCluster.tab\n"
+  "   txGeneCanonical coding.cluster genes.info noncoding.txg genes.bed canonical.tab isoforms.tab txCluster.tab\n"
   "where:\n"
   "   coding.cluster is clusters of all the coding genes, from txCdsCluster\n"
   "   noncoding.txg is a txGraph of noncoding genes from txBedToGraph run on the\n"
@@ -105,7 +106,7 @@ return gene;
 }
 
 struct gene *geneFromCluster(struct txCluster *cluster, struct hash *bedHash, 
-	struct hash *niceHash)
+	struct hash *infoHash)
 /* Create a coding gene from coding cluster. */
 {
 struct gene *gene = geneNew();
@@ -115,6 +116,7 @@ gene->end = cluster->chromEnd;
 gene->strand = cluster->strand[0];
 gene->isCoding = TRUE;
 int i;
+double bestScore = -BIGNUM;
 for (i=0; i<cluster->txCount; ++i)
     {
     /* Find and add bed. */
@@ -124,10 +126,16 @@ for (i=0; i<cluster->txCount; ++i)
     /* Recalc min/max of gene since cluster has CDS, not transcription bounds. */
     gene->start = min(gene->start, bed->chromStart);
     gene->end = max(gene->end, bed->chromEnd);
+
+    /* Figure out nicest gene in cluster to use as example. */
+    struct txInfo *info = hashMustFindVal(infoHash, bed->name);
+    double score = txInfoCodingScore(info, TRUE);
+    if (score > bestScore)
+         {
+	 bestScore = score;
+	 gene->niceTx = bed;
+	 }
     }
-char *niceAcc = hashFindVal(niceHash, cluster->name);
-if (niceAcc == NULL)  errAbort("Couldn't find %s in niceHash", cluster->name);
-gene->niceTx = hashMustFindVal(bedHash, niceAcc);
 return gene;
 }
 
@@ -167,7 +175,7 @@ slFreeList(&binList);
 return bestGene;
 }
 
-void txGeneCanonical(char *codingCluster, char *niceCoding, 
+void txGeneCanonical(char *codingCluster, char *infoFile, 
 	char *noncodingGraph, char *genesBed, char *nearCoding, 
 	char *outCanonical, char *outIsoforms, char *outClusters)
 /* txGeneCanonical - Pick a canonical version of each gene - that is the form
@@ -176,15 +184,20 @@ void txGeneCanonical(char *codingCluster, char *niceCoding,
 {
 /* Read in input into lists in memory. */
 struct txCluster *coding, *codingList = txClusterLoadAll(codingCluster);
-struct hash *niceHash = hashTwoColumnFile(niceCoding);
 struct txGraph *graph, *graphList = txGraphLoadAll(noncodingGraph);
 struct bed *bed, *nextBed, *bedList = bedLoadNAll(genesBed, 12);
+struct txInfo *info, *infoList = txInfoLoadAll(infoFile);
 struct bed *nearList = bedLoadNAll(nearCoding, 12);
 
 /* Make hash of all beds. */
 struct hash *bedHash = hashNew(18);
 for (bed = bedList; bed != NULL; bed = bed->next)
     hashAdd(bedHash, bed->name, bed);
+
+/* Make has of all info. */
+struct hash *infoHash = hashNew(18);
+for (info = infoList; info != NULL; info = info->next)
+    hashAdd(infoHash, info->name, info);
 
 /* Make a binKeeper structure that we'll populate with coding genes. */
 struct hash *sizeHash = minChromSizeFromBeds(bedList);
@@ -195,7 +208,7 @@ struct hash *keeperHash = minChromSizeKeeperHash(sizeHash);
 struct gene *gene, *geneList = NULL;
 for (coding = codingList; coding != NULL; coding = coding->next)
     {
-    gene = geneFromCluster(coding, bedHash, niceHash);
+    gene = geneFromCluster(coding, bedHash, infoHash);
     slAddHead(&geneList, gene);
     struct binKeeper *bk = hashMustFindVal(keeperHash, gene->chrom);
     binKeeperAdd(bk, gene->start, gene->end, gene);
@@ -288,6 +301,9 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     for (bed = gene->txList; bed != NULL; bed = bed->next)
         fprintf(fClus, "%s,", bed->name);
     fprintf(fClus, "\t");
+
+    /* Write out nice value */
+    fprintf(fClus, "%s\t", gene->niceTx->name);
 
     /* Write out coding/noncoding value. */
     fprintf(fClus, "%d\n", gene->isCoding);
