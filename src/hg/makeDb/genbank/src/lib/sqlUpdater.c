@@ -1,5 +1,6 @@
 #include "sqlUpdater.h"
 #include "common.h"
+#include "dystring.h"
 #include "hgRelate.h"
 #include "gbVerb.h"
 #include "jksql.h"
@@ -7,9 +8,7 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.8 2006/03/11 00:07:59 markd Exp $";
-
-#define UPDATE_QUERY_MAX (10*1024)
+static char const rcsid[] = "$Id: sqlUpdater.c,v 1.9 2007/03/04 18:18:17 markd Exp $";
 
 struct sqlUpdateCmd 
 /* object to hold one update command */
@@ -80,16 +79,19 @@ void sqlUpdaterModRow(struct sqlUpdater* su, int numRows, char* format, ...)
  */
 {
 va_list args;
-char query[UPDATE_QUERY_MAX];
+static struct dyString *query = NULL;
+if (query == NULL)
+    query = dyStringNew(1024);
+dyStringClear(query);
 struct sqlUpdateCmd* cmd;
 if (su->lm == NULL)
     su->lm = lmInit(64*1024);
 va_start(args, format);
-vasafef(query, sizeof(query), format, args);
+dyStringVaPrintf(query, format, args);
 va_end(args);
 
-cmd = lmAlloc(su->lm, sizeof(*cmd)+strlen(query));
-strcpy(cmd->cmd, query);
+cmd = lmAlloc(su->lm, sizeof(*cmd)+query->stringSize);
+strcpy(cmd->cmd, query->string);
 cmd->numRows = numRows;
 slAddHead(&su->updateCmds, cmd);
 su->numUpdates++;
@@ -98,7 +100,9 @@ su->numUpdates++;
 static void updateRows(struct sqlUpdater* su, struct sqlConnection *conn)
 /* execute update commands  */
 {
-char query[UPDATE_QUERY_MAX+256];
+static struct dyString *query = NULL;
+if (query == NULL)
+    query = dyStringNew(1024);
 struct sqlUpdateCmd *cmd;
 int numMatched;
 
@@ -110,11 +114,12 @@ if (su->verbose)
         
 for (cmd = su->updateCmds; cmd != NULL; cmd = cmd->next)
     {
-    safef(query, sizeof(query), "UPDATE %s SET %s", su->table, cmd->cmd);
-    sqlUpdateRows(conn, query, &numMatched);
+    dyStringClear(query);
+    dyStringPrintf(query, "UPDATE %s SET %s", su->table, cmd->cmd);
+    sqlUpdateRows(conn, query->string, &numMatched);
     if (numMatched != cmd->numRows)
         errAbort("expected %d matching row(s) on update of %s, got %d: %s",
-                 cmd->numRows, su->table, numMatched, query);
+                 cmd->numRows, su->table, numMatched, query->string);
     }
 lmCleanup(&su->lm);
 su->updateCmds = NULL;
