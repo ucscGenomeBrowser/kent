@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: txInfo.c,v 1.4 2007/02/28 08:46:42 kent Exp $";
+static char const rcsid[] = "$Id: txInfo.c,v 1.5 2007/03/04 06:54:40 kent Exp $";
 
 void txInfoStaticLoad(char **row, struct txInfo *ret)
 /* Load a row from txInfo table into ret.  The contents of ret will
@@ -229,4 +229,18 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+double txInfoCodingScore(struct txInfo *info, boolean boostRefSeq)
+/* Return coding score for info.  This is just the bestorf score,
+ * plus another 750 if it's a refSeq.  750 is quite a bit for a
+ * bestorf score, only about 1% of proteins score more than that. 
+ * If it's an NMD target then divide by 50. */
+{
+double score = info->bestorfScore;
+if (boostRefSeq && info->isRefSeq)
+    score += 750;
+if (info->nonsenseMediatedDecay)
+    score *= 0.02;
+return score;
+}
 

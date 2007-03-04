@@ -14,7 +14,7 @@
 #include "cdsEvidence.h"
 
 
-static char const rcsid[] = "$Id: txCdsSuspect.c,v 1.2 2007/02/27 21:58:00 kent Exp $";
+static char const rcsid[] = "$Id: txCdsSuspect.c,v 1.3 2007/03/04 06:54:40 kent Exp $";
 
 /* Globals set from command line. */
 FILE *fNiceProt = NULL;
@@ -43,20 +43,6 @@ static struct optionSpec options[] = {
    {"niceProt", OPTION_STRING},
    {NULL, 0},
 };
-
-double infoCodingScore(struct txInfo *info, boolean boostRefSeq)
-/* Return coding score for info.  This is just the bestorf score,
- * plus another 750 if it's a refSeq.  750 is quite a bit for a
- * bestorf score, only about 1% of proteins score more than that. 
- * If it's an NMD target then divide by 50. */
-{
-double score = info->bestorfScore;
-if (boostRefSeq && info->isRefSeq)
-    score += 750;
-if (info->nonsenseMediatedDecay)
-    score *= 0.02;
-return score;
-}
 
 int overlapInSameFrame(struct bed *a, struct bed *b)
 /* Return amount of overlap between coding regions (in same frame)
@@ -271,7 +257,7 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
         {
 	char *tx = cluster->txArray[i];
 	info = hashMustFindVal(infoHash, tx);
-	double score = infoCodingScore(info, TRUE);
+	double score = txInfoCodingScore(info, TRUE);
 	if (score > bestScore)
 	    {
 	    bestTx = tx;
@@ -336,7 +322,7 @@ for (txg = txgList; txg != NULL; txg = txg->next)
 	for (bed = bedList; bed != NULL; bed = bed->next)
 	    {
 	    struct txInfo *info = hashMustFindVal(infoHash, bed->name);
-	    double score = infoCodingScore(info, FALSE);
+	    double score = txInfoCodingScore(info, FALSE);
 	    bestProtScore = max(score, bestProtScore);
 	    }
 	}
@@ -353,7 +339,7 @@ for (txg = txgList; txg != NULL; txg = txg->next)
 	for (bed = bedList; bed != NULL; bed = bed->next)
 	    {
 	    struct txInfo *info = hashMustFindVal(infoHash, bed->name);
-	    double score = infoCodingScore(info, TRUE);
+	    double score = txInfoCodingScore(info, TRUE);
 	    if (score >= protScoreThreshold)
 		refAdd(&protRefList, bed);
 	    }

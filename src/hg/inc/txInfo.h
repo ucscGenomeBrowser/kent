@@ -79,5 +79,11 @@ void txInfoOutput(struct txInfo *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+double txInfoCodingScore(struct txInfo *info, boolean boostRefSeq);
+/* Return coding score for info.  This is just the bestorf score,
+ * plus another 750 if it's a refSeq.  750 is quite a bit for a
+ * bestorf score, only about 1% of proteins score more than that. 
+ * If it's an NMD target then divide by 50. */
+
 #endif /* TXINFO_H */
 
