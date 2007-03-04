@@ -8,10 +8,9 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "txInfo.h"
-#include "cdsEvidence.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.1 2007/03/02 02:34:27 kent Exp $";
+static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.2 2007/03/04 10:43:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +20,7 @@ errAbort(
   "These echo RefSeq when gene is based on RefSeq. Otherwise they are taken from\n"
   "the genome.\n"
   "usage:\n"
-  "   txGeneProtAndRna tx.bed tx.info tx.fa weeded.tce refSeq.fa refPep.fa txToAcc.tab outTx.fa outPep.fa \n"
+  "   txGeneProtAndRna tx.bed tx.info tx.fa tx.faa refSeq.fa refPep.fa txToAcc.tab outTx.fa outPep.fa \n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -31,7 +30,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void txGeneProtAndRna(char *inBed, char *inInfo, char *txFa,  char *cdsFile,
+void txGeneProtAndRna(char *inBed, char *inInfo, char *txFa,  char *txFaa,
 	char *refSeqFa, char *refToPepFile, char *refPepFa,
 	char *txToAccFile, char *outTxFa, char *outPepFa)
 /* txGeneProtAndRna - Create fasta files with our proteins and transcripts. 
@@ -46,14 +45,9 @@ struct txInfo *info, *infoList = txInfoLoadAll(inInfo);
 for (info = infoList; info != NULL; info = info->next)
     hashAdd(infoHash, info->name, info);
 
-/* Load CDS into hash. */
-struct hash *cdsHash = hashNew(18);
-struct cdsEvidence *cds, *cdsList = cdsEvidenceLoadAll(cdsFile);
-for (cds = cdsList; cds != NULL; cds = cds->next)
-    hashAddUnique(cdsHash, cds->name, cds);
-
 /* Load up sequences into hashes. */
 struct hash *txSeqHash = faReadAllIntoHash(txFa, dnaLower);
+struct hash *txPepHash = faReadAllIntoHash(txFaa, dnaUpper);
 struct hash *refSeqHash = faReadAllIntoHash(refSeqFa, dnaLower);
 struct hash *refPepHash = faReadAllIntoHash(refPepFa, dnaUpper);
 
@@ -90,18 +84,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
         {
 	/* Write out mRNA. */
 	txSeq = hashMustFindVal(txSeqHash, bed->name);
-	cds = hashFindVal(cdsHash, bed->name);
-	if (cds == NULL)
-	    protSeq = NULL;
-	else
-	    {
-	    AllocVar(protSeq);
-	    protSeq->size = (cds->end - cds->start)/3;
-	    protSeq->dna = needMem(protSeq->size+2);
-	    dnaTranslateSome(txSeq->dna + cds->start, protSeq->dna, protSeq->size);
-	    if (protSeq->dna[protSeq->size-1] == 0)
-		protSeq->size -= 1;
-	    }
+	protSeq = hashFindVal(txPepHash, bed->name);
 	}
 	
     if (protSeq != NULL)
