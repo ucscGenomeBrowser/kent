@@ -372,7 +372,7 @@ txCdsCluster pick.bed pick.cluster
 # and generate a new gene set.
 txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
 txCdsWeed pick.tce pick.info weeded.tce weeded.info
-cat txWalk/*.bed | txCdsToGene stdin txWalk.fa weeded.tce weeded.gtf weeded.fa \
+cat txWalk/*.bed | txCdsToGene stdin txWalk.fa weeded.tce weeded.gtf weeded.faa \
 	-bedOut=weeded.bed -exceptions=txWalk.exceptions
 
 # Assign permanent accessions to each transcript, and make up a number
@@ -402,9 +402,9 @@ hgLoadSqlTab hg18a knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.ta
 # Make files with protein and mrna accessions.  These will be taken from
 # RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
 # Load these sequences into database.
-txGeneProtAndRna weeded.bed separated.info txWalk.fa weeded.tce refSeq.fa \
-    refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscPep.fa
-hgPepPred hg18a generic knownGenePep ucscPep.fa
+txGeneProtAndRna weeded.bed separated.info txWalk.fa weeded.faa refSeq.fa \
+    refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
+hgPepPred hg18a generic knownGenePep ucscGenes.faa
 hgPepPred hg18a generic knownGeneMrna ucscGenes.fa
 
 # Make up knownGenes table, adding uniProt ID. Load into database. Takes 3
@@ -441,6 +441,55 @@ ixIxx knownGene.text knownGene.ix knownGene.ixx
 ln -s /cluster/data/hg18/bed/jkg/index/knownGene.ix  /gbdb/hg18a/knownGene.ix
 ln -s /cluster/data/hg18/bed/jkg/index/knownGene.ixx /gbdb/hg18a/knownGene.ixx
      
+# Create a bunch of knownToXxx tables:
+hgMapToGene hg18a allenBrainAli -type=psl knownGene knownToAllenBrain
+hgMapToGene hg18a ensGene knownGene knownToEnsembl
+hgMapToGene hg18a gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+hgMapToGene hg18a affyGnf1h knownGene knownToGnf1h
+hgMapToGene hg18a HInvGeneMrna knownGene knownToHInv
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg18a > refToLl.txt
+hgMapToGene hg18a refGene knownGene knownToLocusLink -lookup=refToLl.txt
+hgMapViaSwissProt hg18a knownGene name proteinID Pfam knownToPfam
+hgMapToGene hg18a refGene knownGene knownToRefSeq
+hgMapToGene "-type=bed 12" hg18a affyUclaNorm knownGene knownToU133
+hgMapToGene hg18a affyU133Plus2 knownGene knownToU133Plus2
+hgMapToGene hg18a affyU95 knownGene knownToU95
+
+# Create expression distance table - takes about an hour
+hgExpDistance hg18a hgFixed.gnfHumanAtlas2MedianRatio \
+    hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+    -lookup=knownToGnfAtlas2 &
+# This one takes a whle too...
+cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
+time hgExpDistance hg18 affyUclaNorm affyUclaExp knownExpDistance \
+	-weights=affyUcla.weight -lookup=knownToU133 &
+
+# Run nice Perl script to make all protein blast runs for
+# Gene Sorter and Known Genes details page.  Takes about
+# 45 minutes to run.
+mkdir hgNearBlastp4
+cd hgNearBlastp4
+cat << _EOF_ > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix human
+targetDb jk18
+queryDbs mm8 rn4 danRer4 ce3 sacCer1 dm2
+
+mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+jk18Fa /cluster/data/hg18/bed/jkg/ucscGenes.faa
+rn4Fa /cluster/data/rn4/bed/blastp/known.faa
+danRer4Fa /cluster/data/danRer4/bed/blastp/ensembl.faa
+ce3Fa /cluster/data/ce2/bed/blastp/wormPep140.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+
+buildDir /cluster/data/hg18/bed/jkg/hgNearBlastp4
+scratchDir /san/sanvol1/scratch/jkgHgNearBlastp4
+_EOF_
+doHgNearBlastp.pl config.ra |& tee do.log 
+
 ###########################################################################
 ## Load take 7 into the database. Takes 30 seconds.
 ssh hgwdev
@@ -988,7 +1037,9 @@ todo dmBlastTab
 todo drBlastTab
 todo foldUtr3
 todo foldUtr5
-fosEndPairs
+n/a fosEndPairs
+todo gnfAtlas2Distance
+todo gnfU95Distance
 todo humanBlastTab
 todo humanHprdP2P
 todo humanVidalP2P
@@ -1005,18 +1056,18 @@ done knownGene
 done knownGeneMrna
 done knownGenePep
 done knownIsoforms
-todo knownToAllenBrain
-todo knownToEnsembl
-todo knownToGnf1h
-todo knownToGnfAtlas2
-todo knownToHInv
-todo knownToHprd
-todo knownToLocusLink
-todo knownToPfam
-todo knownToRefSeq
-todo knownToU133
-todo knownToU133Plus2
-todo knownToU95
+done knownToAllenBrain
+done knownToEnsembl
+done knownToGnf1h
+done knownToGnfAtlas2
+done knownToHInv
+???? knownToHprd
+done knownToLocusLink
+done knownToPfam
+done knownToRefSeq
+done knownToU133
+done knownToU133Plus2
+done knownToU95
 todo knownToVisiGene
 todo mmBlastTab
 n/a multiz17way
