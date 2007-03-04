@@ -7,10 +7,11 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadRnaFold.c,v 1.2 2005/05/19 13:23:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgLoadRnaFold.c,v 1.3 2007/03/04 20:56:34 kent Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
+boolean warnEmpty;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,12 +23,14 @@ errAbort(
   "options:\n"
   "   -tab=dir - Output tab-separated files to this directory.\n"
   "   -noLoad  - If true don't load database and don't clean up tab files\n"
+  "   -warnEmpty - Warn rather than abort on empty files.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
+   {"warnEmpty", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -72,7 +75,17 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
         continue;
     safef(path, sizeof(path), "%s/%s", foldDir, name);
     lf = lineFileOpen(path, TRUE);
-    lineFileNeedNext(lf, &line, NULL);
+    if (!lineFileNext(lf, &line, NULL))
+        {
+	if (warnEmpty)
+	    {
+	    warn("%s is empty, skipping\n", name);
+	    lineFileClose(&lf);
+	    continue;
+	    }
+	else
+	    errAbort("%s is empty\n", name);
+	}
     if (!isupper(line[0]))
 	notFold(path, 1);
     fprintf(f, "%s\t", name);	/* Save name */
@@ -117,6 +130,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 doLoad = !optionExists("noLoad");
+warnEmpty = optionExists("warnEmpty");
 if (optionExists("tab"))
     {
     tabDir = optionVal("tab", tabDir);
