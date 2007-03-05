@@ -9,9 +9,6 @@ all:
 	    fi ;\
 	    done
 
-test::
-	cd clusterGenes && ${MAKE} test
-
 # List of directories to build
 USE_DIRS = $(DIRS)
 
