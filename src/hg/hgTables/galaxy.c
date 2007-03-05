@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.8 2007/02/28 20:39:08 giardine Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.9 2007/03/05 14:52:52 giardine Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -31,7 +31,7 @@ char *url = NULL;
 if (cartVarExists(cart, "GALAXY_URL"))
     url = cartString(cart, "GALAXY_URL");
 else
-    url = cloneString("http://main.g2.bx.psu.edu/");
+    url = cloneString("http://main.g2.bx.psu.edu/tool_runner");
 return url;
 }
 
