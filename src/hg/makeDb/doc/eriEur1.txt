@@ -1,0 +1,48 @@
+#########################################################################
+# Erinaceus europaeus -- European Hedgehog
+# Broad eriEur1 2X release
+
+#########################################################################
+# Download sequence (2006-03-04 kate)
+
+    ssh kkstore05
+    mkdir -p /cluster/store12/eriEur1
+    ln -s /cluster/store12/eriEur1 /cluster/data/eriEur1
+    cd /cluster/data/eriEur1
+    mkdir downloads
+    cd downloads
+    wget -nd -r ftp://ftp.broad.mit.edu/pub/assemblies/mammals/hedgehog/eriEur1
+
+#########################################################################
+# Create .ra file and run makeGenomeDb.pl
+    ssh hgwdev
+    cd /cluster/data/eriEur1
+    cat << '_EOF_' >eriEur1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db eriEur1
+clade mammal
+genomeCladePriority 37
+scientificName Erinaceus europaeus
+commonName hedgehog
+assemblyDate June 2006
+assemblyLabel Broad Institute eriEur1 (Draft_v1)
+orderKey 200
+mitoAcc 5835792
+fastaFiles /cluster/data/eriEur1/downloads/assembly.bases.gz
+agpFiles /cluster/data/eriEur1/downloads/assembly.agp
+qualFiles /cluster/data/eriEur1/downloads/scaffold.lifted.qac
+dbDbSpeciesDir hedgehog
+'_EOF_'
+
+# GOT HERE
+
+    makeGenomeDb.pl -verbose=2 -stop=seq eriEur1.config.ra > makeGenomeDb.out &
+
+################################################
+## WINDOWMASKER (2006-03-04 kate)
+    ssh kkstore05
+    cd /cluster/data/eriEur1/bed/
+    nice /cluster/bin/scripts/doWindowMasker.pl eriEur1 \
+        -workhorse=kolossus >& wmRun.log &
+
+
