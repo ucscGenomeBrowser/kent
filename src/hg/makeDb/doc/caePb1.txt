@@ -293,3 +293,122 @@ close (GL);
     #	 bin smallint(6) NOT NULL default '0',
 
     hgLoadBed -sqlTable=chrUn_gold.sql caePb1 chrUn_gold gold.tab
+
+##############################################################################
+## Repeat Masker does not recognize given species:
+#	Species "Caenorhabditis PB2801" is not known to RepeatMasker.
+
+##############################################################################
+## WindowMasker masking (DONE - 2007-03-02 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/caePb1/bed/WindowMasker
+    cd /cluster/data/caePb1/bed/WindowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+	caePb1 -buildDir=/cluster/data/caePb1/bed/WindowMasker \
+	    -workhorse=kolossus > doWM.out 2>&1 &
+    ## load result
+    ssh hgwdev
+    cd /cluster/data/caePb1/bed/WindowMasker
+    hgLoadBed -strict caePb1 windowmaskerSdust windowmasker.sdust.bed.gz
+
+##############################################################################
+## simpleRepeat masking (DONE - 2007-03-02 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/caePb1/bed/simpleRepeat
+    cd /cluster/data/caePb1/bed/simpleRepeat
+    nice -n +19 twoBitToFa ../../caePb1.unmasked.2bit stdout \
+	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+		-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/caePb1/bed/simpleRepeat
+    nice -n +19 hgLoadBed caePb1 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    featureBits caePb1 simpleRepeat
+    #	4938308 bases of 175247318 (2.818%) in intersection
+
+##############################################################################
+## combine trf mask with windowmasker (DONE - 2007-03-03 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/caePb1
+    cat << '_EOF_' > addTrf.csh
+#!/bin/csh -efx
+# This script will fail if any of its commands fail.
+
+set DB = caePb1
+set WORK_DIR = /cluster/data/${DB}
+set WM_DIR = /cluster/data/${DB}/bed/WindowMasker
+cd ${WORK_DIR}
+set inputTwoBit = ${WM_DIR}/${DB}.wmsk.sdust.2bit
+set tmpTwoBit = ${WM_DIR}/${DB}.sdTrf.n.2bit
+set outputTwoBit = ${WORK_DIR}/${DB}.sdTrf.2bit
+cat /cluster/data/${DB}/bed/simpleRepeat/trfMask.bed \
+        | twoBitMask -add -type=.bed ${inputTwoBit} stdin ${tmpTwoBit}
+twoBitToFa ${tmpTwoBit} stdout | sed -e "s/n/N/g" \
+        | sed -e "s/chrUN/chrUn/" | faToTwoBit stdin ${outputTwoBit}
+twoBitToFa ${outputTwoBit} stdout | faSize -showPercent stdin \
+        > faSize.${DB}.sdTrf.txt
+rm -f ${tmpTwoBit}
+cat faSize.${DB}.sdTrf.txt
+'_EOF_'
+# << happy emacs
+    chmod +x ./addTrf.csh
+    nice -n +19 ./addTrf.csh
+    #	produces this masked file:
+    # 	-rw-rw-r--  1 63185508 Mar  3 09:18 caePb1.sdTrf.2bit
+    #	faSize -showPercent on it indicates:
+    #	207333000 bases (32085682 N's 175247318 real
+    #	124302731 upper 50944587 lower) in 1 sequences in 1 files
+    #	%24.57 masked total, %29.07 masked real
+
+##############################################################################
+## create masked contigs for blastz (DONE - 2007-03-04 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/caePb1/maskedContigs
+    cd /cluster/data/caePb1/maskedContigs
+    ln -s ../downloads/super.lift .
+    #	copy over lft2BitToFa.pl from /cluster/data/gasAcu1/jkStuff
+    ../jkStuff/lft2BitToFa.pl ../caePb1.2bit super.lift > super.fa
+    faToTwoBit super.fa caePb1.supercontigs.sdTrf.2bit
+    twoBitInfo caePb1.supercontigs.sdTrf.2bit stdout | sort -k2nr \
+        > caePb1.supercontigs.sizes
+    #	Copy this 2bit file and sizes over to /san/sanvol1/scratch/worms/caePb1
+
+    #  the lft2BitToFa.pl script is:
+    cat << '_EOF_'
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use File::Basename;
+    
+sub usage()
+{
+printf "usage: %s <file.2bit> <file.lft> [more_files.lft]\n",  basename($0);
+printf "\tfasta output is to stdout, therefore route stdout to result file\n";
+exit 255;
+}   
+    
+my $argc = scalar(@ARGV);
+
+usage if ($argc < 2);
+
+my $twoBitFile = shift;
+    
+while (my $liftFile = shift)
+{   
+open (FH,"<$liftFile") or die "Can not open $liftFile";
+while (my $line=<FH>)
+    {
+    chomp $line;
+    my ($start, $contig, $length, $chrom, $chrom_length) = split('\s',$line);
+    my $cmd=sprintf("twoBitToFa $twoBitFile:%s:%d-%d stdout",
+        $chrom, $start, $start+$length);
+    print `$cmd | sed -e "s#^>.*#>$contig#"`;
+    }
+close (FH);
+}
+'_EOF_'
+# << happy emacs
