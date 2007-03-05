@@ -126,6 +126,9 @@ while ( $i <= $#files )
     unset echo
     if ( $stat ) then 
 	echo "error in cvs commit of merge $r into $dir/$f"
+	echo "cvs patch commmit failure for $r into $dir/$f " >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
+	echo "YOU NEED TO RESOLVE THIS MANUALLY AND COMMIT IT IN $BUILDDIR/v${BRANCHNN}_branch/"
+	echo "YOU MAY THEN NEED TO GO TO 32-BIT SANDBOX AND DO CVS UPDATE"
 	exit 1
     endif
     
@@ -150,7 +153,7 @@ end
 
 set mailMsg = "The v${BRANCHNN} branch has been patched as follows:\n$msg"
 set subject = '"'"Branch patch complete."'"'
-echo "$mailMsg" | mail -s "$subject" hartera galt heather kuhn ann
+echo "$mailMsg" | mail -s "$subject" $BUILDPERSON hartera galt heather kuhn ann
 
 date +%Y-%m-%d   >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
 echo "$msg"    >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
