@@ -1,8 +1,9 @@
 include ../../../inc/common.mk
 
-L = $(MYSQLLIBS) -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = ${MYSQLLIBS} -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
+
 
 O = hgLoadRnaFold.o
 
