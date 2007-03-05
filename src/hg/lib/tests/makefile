@@ -20,7 +20,7 @@ mkdirs:
 	@${MKDIR} output ${BIN_DIR}
 
 loaders:
-	rm loader
+	rm -f loader
 	ln -s ${CGI_BIN}/loader .
 
 spDbTest: spDbTest.o ${MYLIBS} mkdirs

@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customTrackTester.c,v 1.2 2006/10/20 14:50:03 kate Exp $";
+static char const rcsid[] = "$Id: customTrackTester.c,v 1.3 2007/03/05 23:57:56 kate Exp $";
 
 void usage()
 /* explain usage and exit */
@@ -87,6 +87,9 @@ for (ct = newCts; ct != NULL; ct = ct->next)
     while ((hel = hashNext(&hc)) != NULL)
         {
         char *setting = (char *)hel->name;
+        /* ignore DB table name -- it will always differ */
+        if (sameString(setting, "dbTableName"))
+            continue;
         char *expVal = (char *)hel->val;
         char *newVal = NULL;
         if ((newVal = (char *)hashFindVal(newSettings, setting)) == NULL)
