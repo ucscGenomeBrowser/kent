@@ -82,9 +82,13 @@ for (startBed = bedList; startBed != NULL; startBed = endBed)
 	if ( lastBed->chromEnd > bed->chromStart || !sameString(lastBed->name, bed->name) 
 		|| bed->strand[0] != lastBed->strand[0] 
 		|| !sameString(bed->chrom, lastBed->chrom) )
+	    {
 	    break;
-	if (!bigGapOk && lastBed->chromEnd - bed->chromStart > maxJoinSize)
+	    }
+	if (!bigGapOk && bed->chromStart - lastBed->chromEnd > maxJoinSize)
+	    {
 	    break;
+	    }
 	lastBed = bed;
 	}
     lastBed->next = NULL;
