@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpList.c,v 1.4 2005/11/19 02:02:28 kent Exp $";
+static char const rcsid[] = "$Id: gensatFtpList.c,v 1.5 2007/03/05 02:27:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -91,7 +91,6 @@ FILE *f = mustOpen(out, "w");
 char *line, *md5;
 char *oldPrefix = "/am/ftp-gensat/";
 int oldPrefixSize = strlen(oldPrefix);
-char *newPrefix = "ftp.ncbi.nlm.gov/pub/gensat/Institutions/";
 struct hash *suffixHash = newHash(0);
 
 while (lineFileNext(lf, &line, NULL))

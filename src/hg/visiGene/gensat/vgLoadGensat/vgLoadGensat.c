@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.10 2005/12/19 05:21:51 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.11 2007/03/05 02:27:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -228,10 +228,10 @@ while ((image = xapNext(xap, "GensatImage")) != NULL)
 	    level = levelAsNumber(level);
 	    cellType = blankOutNotDone(cellType);
 	    cellSubtype = blankOutNotDone(cellSubtype);
+	    pattern = blankOutNotDone(pattern);
 	    if (level != NULL)
-		fprintf(f, "\texpression\t%s\t%s\t%s\t%s\n", 
-		    region, level, cellType, cellSubtype);
-	    /* Todo - add expression pattern. */
+		fprintf(f, "\texpression\t%s\t%s\t%s\t%s\t%s\n", 
+		    region, level, cellType, cellSubtype, pattern);
 	    }
 	}
 

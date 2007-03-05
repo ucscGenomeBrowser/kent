@@ -6,7 +6,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.3 2005/11/26 17:30:07 kent Exp $";
+static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.4 2007/03/05 02:27:56 kent Exp $";
 
 boolean testOnly = FALSE;
 
@@ -63,7 +63,7 @@ int submitId = atoi(submissionSetId);
 char *submitName;
 struct dyString *query = dyStringNew(0);
 struct slInt *imageList = NULL, *imageProbeList = NULL;
-int imageFileCount, imageProbeCount = 0, contributorCount;
+int imageFileCount, contributorCount;
 
 /* As a sanity check get the name of submission set and print it */
 dyStringPrintf(query, "select name from submissionSet where id=%d",
