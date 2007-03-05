@@ -6408,7 +6408,7 @@ cat > autoMultiz.csh << 'EOF'
     set pairs = /san/sanvol1/scratch/$db/mafNet
     rm -fr $tmp
     mkdir -p $tmp
-    cp ../tree.nh,species.lst} $tmp
+    cp ../tree/tree.nh ../species.lst $tmp
     pushd $tmp
     foreach s (`cat species.lst`)
         set in = $pairs/$s/$c.maf
@@ -13231,14 +13231,74 @@ TMPDIR=/scratch/tmp
 ssh hgwdev
 knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+#########################################################################
+## BLASTZ OTOGAR1 - Bushbaby - (2007-02-26 kate)
+#
+# NOTE: using masked sequence (unlike Brian Raney's alignments)
+
+    cd /cluster/data/otoGar1
+    ln -s otoGar1.rmsk.2bit otoGar1.2bit
+    mkdir -p /san/sanvol1/scratch/otoGar1
+    cp -p otoGar1.2bit chrom.sizes /san/sanvol1/scratch/otoGar1
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastz.otoGar1.2007-02-26
+    cd /cluster/data/hg18/bed/blastz.otoGar1.2007-02-26
+
+    cat << '_EOF_' > DEF
+# human vs bushbaby
+# params from Hiram & Brian
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.sdTrf.2bit
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Bushbaby otoGar1 - single chunk big enough to run largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/otoGar1/otoGar1.2bit
+SEQ2_LEN=/cluster/data/otoGar1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.otoGar1.2007-02-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+    /cluster/bin/scripts/doBlastzChainNet.pl DEF \
+      -bigClusterHub=pk -smallClusterHub=pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+      >& do.log & tail -f do.log
+
+    # problems on cluster -- stale NFS mounts and a routing problem
+    # so batch failed with 4 retries.  I restarted cluster run 
+    # with retries=8, and all finished except 38.  These failed due
+    # to output files existing;  as the results look OK, I'm proceeding.
+
+    para time > run.time
+    /cluster/bin/scripts/doBlastzChainNet.pl DEF \
+      -continue=cat -bigClusterHub=pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
+                >&! do2.log &
+    tail -f do2.log
+
+    # failed due to pre-existing liftOver chain from Brian's run
+    /cluster/bin/scripts/doBlastzChainNet.pl DEF \
+      -continue=net -bigClusterHub=pk \
+                >&! do3.log &
+    tail -f do3.log
 
 ########################################################################
 # 25-Way Multiple Alignment
 
     ssh kkstore02
     cd /cluster/data/hg18/bed
-    mkdir multiz28way
-    cd multiz28way
+    mkdir multiz25way.2007-02-28
+    ln -s multiz25way.2007-02-28 multiz25way
+    cd multiz25way
 
     # start with 17way tree; update assemblies and add new species
     mkdir tree
@@ -13246,29 +13306,31 @@ knownToVisiGene hg18 -fromProbePsl=vgAllProbes
     cp ../../multiz17way/tree.nh tree.asm.nh
     # edit
     # create version for phyloGif program (replace spaces with commas)
+    cp 28way.gif /usr/local/apache/htdocs/phylo/images/hg18_28way.gif
+
     cd ..
 
 # Organisms: 
 (N)ew, (U)pdated, (S)ame species since 17way:
 U chimp (panTro2) (needs chain/net update on hg18)
 S rhesus (rheMac2)
-N bushbaby (oroGar1) "Otolemumr garnetti" (galago)
+-N bushbaby (oroGar1) "Otolemumr garnetti" (galago)
 N tree_shrew (tupBel1) "Tupaia belangeri"
 S rat (rn4)
 S mouse (mm8)
-N guinea_pig (cavPor0) "Cavia porcellus"
+-N guinea_pig (cavPor0) "Cavia porcellus"
 S rabbit (oryCun1)
-N shrew (sorAra0) "Sorex araneus"
-N hedgehog (eriEur0) "Erinaceus europaeus"
+-N shrew (sorAra0) "Sorex araneus"
+-N hedgehog (eriEur0) "Erinaceus europaeus"
 S dog (canFam2)
 N cat (felCat1) "Felis catus"
-N horse (equCab1) "Equus caballus"
-U cow (bosTau2 or bosTau3) checking with Heather
+-N horse (equCab1) "Equus caballus"
+U cow (bosTau3)
 S armadillo (dasNov1) "Dasypus novemcinctus"
-S elephant (loxAf1)
+S elephant (loxAfr1)
 S tenrec (echTel1)
 S opossum (monDom4)
-N platypus (ornAna1 or ornAna0) checking with Angie "Ornithorhychus anatinus"
+N platypus (ornAna1) "Ornithorhychus anatinus"
 U chicken (galGal3) (needs chain/net update on hg18)
 N lizard (anoCar1) "Anolis carolinensis" (Green Anole), Iguana family
 U frog (xenTro2) (needs chain/net update on hg18)
@@ -13293,7 +13355,7 @@ U zebrafish (danRer4) (needs chain/net update on hg18)
     ln -s blastz.fr2.2007-01-24 blastz.fr2
     ln -s blastz.ornAna1.2007-02-21 blastz.ornAna1
     ln -s blastz.oryLat1.swap blastz.oryLat1
-    # missing: cavPor0, equCab1, otoGar1, 
+    # missing: cavPor0, eriEur0, sorAra0, equCab1, otoGar1, 
     #   sorAra0 (blastz's run, but no net mafs): 
     #                   /cluster/data/sorAra0/bed/zb.hg18
     #   otoGar1 (repeatmasked, but no blastz): /cluster/data/otoGar1, Robert
@@ -13301,13 +13363,13 @@ U zebrafish (danRer4) (needs chain/net update on hg18)
     # copy net mafs to cluster-friendly storage, splitting chroms
     # into 50MB chunks  to improve run-time
     ssh hgwdev
-    cd /cluster/data/hg18/bed/multiz28way
+    cd /cluster/data/hg18/bed/multiz25way
     mkdir split
     cd split
     mafSplitPos hg18 50 mafSplit.bed
 
     ssh kkstore02
-    cd /cluster/data/hg18/bed/multiz28way
+    cd /cluster/data/hg18/bed/multiz25way
     cd split
 cat > split.csh << 'EOF'
     set dir = /san/sanvol1/scratch/hg18/splitMafNet
@@ -13346,6 +13408,9 @@ cat > split.csh << 'EOF'
 
 cat > autoMultiz.csh << 'EOF'
 #!/bin/csh -ef
+
+# needed till Erich reboots pk
+limit datasize 2000000
     set db = hg18
     set c = $1
     set maf = $2
@@ -13354,9 +13419,9 @@ cat > autoMultiz.csh << 'EOF'
     set pairs = /san/sanvol1/scratch/$db/splitMafNet
     rm -fr $tmp
     mkdir -p $tmp
-    cp ../tree/tree.23.nh ../species.23.lst $tmp
+    cp ../tree/tree.25.nh ../species.25.lst $tmp
     pushd $tmp
-    foreach s (`cat species.23.lst`)
+    foreach s (`cat species.25.lst`)
         set c2 = `echo $c | sed 's/__/./'`
         set in = $pairs/$s/$c2.maf
         set out = $db.$s.sing.maf
@@ -13372,7 +13437,7 @@ cat > autoMultiz.csh << 'EOF'
         endif
     end
     set path = ($run/penn $path); rehash
-    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.23.nh`" $db.*.sing.maf $c.maf
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.25.nh`" $db.*.sing.maf $c.maf
     popd
     cp $tmp/$c.maf $maf
     rm -fr $tmp
@@ -13382,7 +13447,7 @@ cat > autoMultiz.csh << 'EOF'
 
 cat  << 'EOF' > spec
 #LOOP
-./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz28way.2007-02-25/maf/$(root1).maf}
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz25way.2007-02-28/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
     # << emacs
@@ -13393,6 +13458,25 @@ cat  << 'EOF' > spec
     para check
     para push
     para time > run.time
+        # 3 hours!  (~8 min/species)
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/hg18/multiz25way/maf
+    ln -s /cluster/data/hg18/bed/multiz25way/maf/*.maf \
+                /gbdb/hg18/multiz25way/maf
+    cd /cluster/data/hg18/bed/multiz25way
+cat > loadMaf.csh << 'EOF'
+    date
+    hgLoadMaf -pathPrefix=/gbdb/hg18/multiz25way/maf hg18 multiz25way
+'EOF'
+     csh loadMaf.csh >&! loadMaf.log &
+
+     # load summary table
+     cat maf/*.maf |  nice hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
+                 -maxSize=200000  multiz25waySummary stdin
+
+        #Created 4300678 summary blocks from 160779404 components and 20170672 mafs from stdin
 
 
 #########################################################################
@@ -13465,3 +13549,7 @@ TMPDIR=/scratch/tmp
         ccdsKgMap
         ccdsMgcMap
     # << emacs
+
+# RECIPROCAL BEST CHIMP PANTRO2 (2007-03-02 kate)
+    cd /cluster/data/hg18/bed/blastz.panTro2
+    doRecipBest.pl hg18 panTro2 >&! rbest.log &
