@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: mm7.txt,v 1.8 2007/02/20 22:23:13 galt Exp $"
+#	"$Id: mm7.txt,v 1.9 2007/03/05 19:57:42 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12234,6 +12234,11 @@ NOTE: "Known genes" is no longer available for later versions of BioMart.
 ### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-07 - angie)
 ### fasta added 2006-06-21
 ### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+
+### NOTE -- as of 2007-03-01 the igtc track will be automatically 
+### updated on hgwdev by the scripts monthlyUpdateIgtc.csh and 
+### updateIgtc.pl in kent/src/hg/utils/automation/ .
+
     ssh hgwdev
     mkdir /cluster/data/mm7/bed/igtc
     cd /cluster/data/mm7/bed/igtc
