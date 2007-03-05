@@ -2,23 +2,25 @@
 /* snpMaskFlank - Print sequences centered on SNPs, exons only, with SNPs (single base substituions) 
    using IUPAC codes. */
 #include "common.h"
+#include "binRange.h"
 #include "dnaseq.h"
 #include "nib.h"
 #include "fa.h"
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.10 2006/08/25 15:47:49 angie Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.11 2007/03/05 20:17:54 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
+struct hash *snpHash = NULL;
+struct dnaSeq *seqAll;
 
 char geneTable[] = "refGene";
+char snpTable[] = "snp125";
 
 #define FLANKSIZE 50
 #define MAX_EXONS 100
-
-boolean strict = TRUE;
 
 void usage()
 /* Explain usage and exit. */
@@ -92,7 +94,7 @@ struct snpSimple
     char *observed;	
     };
 
-struct snpSimple *snpSimpleLoad(char **row)
+struct snpSimple *snpSimpleLoad(char *name, int start, char *strand, char *observed)
 /* Load a snpSimple from row fetched from snp
  * in database.  Dispose of this with snpSimpleFree(). 
    Complement observed if negative strand, preserving alphabetical order. */
@@ -102,10 +104,10 @@ int obsLen, i;
 char *obsComp;
 
 AllocVar(ret);
-ret->name = cloneString(row[0]);
-ret->chromStart = atoi(row[1]);
-strcpy(&ret->strand, row[2]);
-ret->observed   = cloneString(row[3]);
+ret->name = cloneString(name);
+ret->chromStart = start;
+strcpy(&ret->strand, strand);
+ret->observed   = cloneString(observed);
 
 if (ret->strand == '+') return ret;
 
@@ -165,41 +167,43 @@ for (el = *gList; el != NULL; el = next)
 *gList = NULL;
 }
 
-struct snpSimple *readSnps(char *chrom, int start, int end)
+struct binKeeper *readSnps(char *chrom)
 {
-struct snpSimple *list=NULL, *el;
+int chromSize = hChromSize(chrom);
+struct binKeeper *ret = binKeeperNew(0, chromSize);
+struct snpSimple *el = NULL;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int count = 0;
+int start = 0;
+int end = 0;
+char *class = NULL;
+char *locType = NULL;
 
-if (strict)
-    {
-    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
-    "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact' "
-    "and chromStart >= %d and chromEnd <= %d", chrom, start, end);
-    }
-else
-    {
-    /* this includes snps that are larger than one base */
-    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
-    "where chrom='%s' and class = 'snp' "
-    "and chromStart >= %d and chromEnd <= %d", chrom, start, end);
-    }
+safef(query, sizeof(query), "select name, chromStart, chromEnd, class, "
+    "locType, strand, observed from %s where chrom='%s' ", snpTable, chrom);
+
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = snpSimpleLoad(row);
-    slAddHead(&list,el);
+    class = cloneString(row[3]);
+    if (!sameString(class, "single")) continue;
+    locType = cloneString(row[4]);
+    if (!sameString(locType, "exact")) continue;
+    start = sqlUnsigned(row[1]);
+    end = sqlUnsigned(row[2]);
+    if (end != start + 1) continue;
     count++;
+    el = snpSimpleLoad(row[0], start, row[5], row[6]);
+    binKeeperAdd(ret, start, end, el);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-slReverse(&list);  /* could possibly skip if it made much difference in speed. */
 verbose(5, "query = %s\n", query);
-verbose(4, "Count of snps found = %d\n", count);
-return list;
+verbose(1, "Count of snps found = %d\n", count);
+return ret;
 }
 
 
@@ -213,6 +217,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
+verbose(1, "readGenes...\n");
 safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -236,7 +241,6 @@ boolean isComplex(char mychar)
     return FALSE;
 }
 
-// char* observedBlend(char* obs1, char* obs2)
 char *observedBlend(char *obs1, char *obs2)
 /* Used to handle dbSNP clustering errors with differing observed strings. */
 /* For example, if there are 2 SNPs with observed strings A/C and A/G
@@ -445,7 +449,7 @@ return (seqSize);
 /* pass in array that has sequences for each exon */
 /* start and end are absolute coords */
 /* size excludes intronic regions */
-struct dnaSeq *getFlankSeq(int start, int end, int size, 
+struct dnaSeq *getFlankSeq(FILE *fileHandle, int start, int end, int size, 
                            struct genePred *gene, struct dnaSeq *exonSeqArray[])
 {
 struct dnaSeq *newSeq;
@@ -459,9 +463,11 @@ int seqPos = 0;
 AllocVar(newSeq);
 newSeq->dna = needMem(size + 1);
 
+fprintf(fileHandle, "exons: ");
 if (startExon == endExon)
     {
     verbose(1, "    single exonPos = %d\n", startExon);
+    fprintf(fileHandle, "%d-%d\n", start, end);
     exonSize = end - start;
     assert (exonSize <= exonSeqArray[startExon]->size);
     offset = start - gene->exonStarts[startExon];
@@ -473,6 +479,7 @@ if (startExon == endExon)
 
 verbose(1, "    range of exonPos = %d to %d\n", startExon, endExon);
 exonSize = gene->exonEnds[startExon] - start;
+fprintf(fileHandle, "%d-%d,", gene->exonStarts[startExon], gene->exonEnds[startExon]); 
 offset = start - gene->exonStarts[startExon];
 memcpy(newSeq->dna, (exonSeqArray[startExon]->dna)+offset, exonSize);
 seqPos = exonSize;
@@ -480,6 +487,7 @@ seqPos = exonSize;
 exonPos = startExon + 1;
 while (exonPos < endExon)
     {
+    fprintf(fileHandle, "%d-%d,", gene->exonStarts[exonPos], gene->exonEnds[exonPos]);
     exonSize = gene->exonEnds[exonPos] - gene->exonStarts[exonPos];
     assert (exonSize <= exonSeqArray[exonPos]->size);
     memcpy(newSeq->dna+seqPos, exonSeqArray[exonPos]->dna, exonSize);
@@ -488,11 +496,27 @@ while (exonPos < endExon)
     }
 
 exonSize = end - gene->exonStarts[endExon];
+fprintf(fileHandle, "%d-%d\n", gene->exonStarts[endExon], gene->exonEnds[endExon]);
 assert (exonSize <= exonSeqArray[endExon]->size);
 memcpy(newSeq->dna+seqPos, exonSeqArray[endExon]->dna, exonSize);
 newSeq->dna[size] = 0;
 newSeq->size = size;
 return (newSeq);
+}
+
+struct dnaSeq *getSeqFrag(int start, int size)
+{
+struct dnaSeq *seq;
+DNA *dna = needMem(size+1);
+
+memcpy(dna, seqAll->dna + start, size);
+
+AllocVar(seq);
+seq->dna = dna;
+seq->size = size;
+
+return seq;
+
 }
 
 
@@ -503,16 +527,20 @@ void snpMaskFlank(char *nibFile, char *outFile)
 FILE *fileHandle = mustOpen(outFile, "w");
 struct genePred *genes = NULL, *gene = NULL;
 int exonPos = 0, exonStart = 0, exonEnd = 0, exonSize = 0;
-struct snpSimple *snps = NULL, *snp = NULL;
+struct snpSimple *thisSnp = NULL;
+struct binKeeper *snps = NULL;
+struct binElement *el, *elList = NULL;
 struct dnaSeq *seqOrig, *seqMasked, *seqFlank;
 char *ptr;
 int snpPos = 0;
 int flankStart = 0, flankEnd = 0, flankSize = 0;
 struct dnaSeq *exonSequence[MAX_EXONS];
+struct binElement *snpLists[MAX_EXONS];
 
 // for short circuit
 int geneCount = 0;
 
+snps = readSnps(chromName);
 genes = readGenes(chromName);
 
 for (gene = genes; gene != NULL; gene = gene->next)
@@ -529,21 +557,21 @@ for (gene = genes; gene != NULL; gene = gene->next)
         exonSize = exonEnd - exonStart;
         assert (exonSize > 0);
 
-        snps = readSnps(gene->chrom, exonStart, exonEnd);
+	elList = binKeeperFind(snps, exonStart, exonEnd);
+	snpLists[exonPos] = elList;
 
-        AllocVar(seqMasked);
-        seqMasked->dna = needMem(exonSize+1);
-        seqMasked = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, exonStart, exonSize);
+	seqMasked = getSeqFrag(exonStart, exonSize);
 
         /* first do all substitutions */
 	/* a flank may include other SNPs */
         ptr = seqMasked->dna;
-        for (snp = snps; snp != NULL; snp = snp->next)
+	for (el = elList; el != NULL; el = el->next)
             {
-	    snpPos = snp->chromStart - exonStart;
+	    thisSnp = (struct snpSimple *)el->val;
+	    snpPos = thisSnp->chromStart - exonStart;
 	    assert(snpPos >= 0);
 	    verbose(5, "before substitution %c\n", ptr[snpPos]);
-            ptr[snpPos] = iupac(snp->name, snp->observed, ptr[snpPos]);
+            ptr[snpPos] = iupac(thisSnp->name, thisSnp->observed, ptr[snpPos]);
 	    verbose(5, "after substitution %c\n", ptr[snpPos]);
             }
 
@@ -557,21 +585,22 @@ for (gene = genes; gene != NULL; gene = gene->next)
         exonEnd   = gene->exonEnds[exonPos];
 	verbose(5, "exonPos = %d\n", exonPos);
         /* could save these from last time */
-        snps = readSnps(gene->chrom, exonStart, exonEnd);
-	if (snps == NULL) continue;
+	elList = snpLists[exonPos];
+	if (elList == NULL) continue;
 
-	for (snp = snps; snp != NULL; snp = snp->next)
+	for (el = elList; el!= NULL; el = el->next)
 	    {
             char *snpName = needMem(64);
 
-	    snpPos = snp->chromStart;
+            thisSnp = (struct snpSimple *)el->val;
+	    snpPos = thisSnp->chromStart;
 
 	    /* include reference allele in fasta header line */
             strcat(snpName, "");
-	    strcat(snpName, snp->name);
+	    strcat(snpName, thisSnp->name);
 	    strcat(snpName, " (reference = ");
             /* could do a memcpy from sequence for full exon, potentially faster */
-            seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, snpPos, 1);
+	    seqOrig = getSeqFrag(snpPos, 1);
 	    ptr = seqOrig->dna;
 	    if (sameString(gene->strand, "-"))
 	        reverseComplement(seqOrig->dna, 1);
@@ -585,7 +614,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
             flankStart = findStartPos(FLANKSIZE, snpPos, gene, exonPos);
             flankEnd = findEndPos(FLANKSIZE, snpPos, gene, exonPos);
             flankSize = getExonSize(flankStart, flankEnd, gene);
-            seqFlank = getFlankSeq(flankStart, flankEnd, flankSize, gene, exonSequence);
+            seqFlank = getFlankSeq(fileHandle, flankStart, flankEnd, flankSize, 
+	                           gene, exonSequence);
 	    assert(flankSize == seqFlank->size);
 	    if (sameString(gene->strand, "-"))
 	        reverseComplement(seqFlank->dna, seqFlank->size);
@@ -593,7 +623,6 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	    freeDnaSeq(&seqFlank);
 
 	    }
-        snpSimpleFreeList(&snps);
         }
 
         /* free memory in exonSequence */
@@ -602,8 +631,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
     }
 
 geneFreeList(&genes);
-if (fclose(fileHandle) != 0)
-    errnoAbort("fclose failed");
+carefulClose(&fileHandle);
 }
 
 
@@ -616,7 +644,7 @@ database = argv[1];
 if(!hDbExists(database))
     errAbort("%s does not exist\n", database);
 hSetDb(database);
-if(!hTableExistsDb(database, "snp"))
+if(!hTableExistsDb(database, snpTable))
     errAbort("no snp table in %s\n", database);
 chromName = argv[2];
 if(hgOfficialChromName(chromName) == NULL)
@@ -624,6 +652,8 @@ if(hgOfficialChromName(chromName) == NULL)
 // check that nib file exists
 // or, use hNibForChrom from hdb.c
 dnaUtilOpen();
+verbose(1, "getting sequence\n");
+seqAll = nibLoadPartMasked(NIB_MASK_MIXED, argv[3], 0, hChromSize(chromName));
 snpMaskFlank(argv[3], argv[4]);
 return 0;
 }
