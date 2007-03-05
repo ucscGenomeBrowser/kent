@@ -8,7 +8,7 @@
 #include "rangeTree.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.6 2007/03/05 18:56:56 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.7 2007/03/05 19:50:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,6 +46,17 @@ lineFileClose(&lf);
 return number;
 }
 
+
+boolean exactMatch(struct bed *oldBed, struct bed *newBed)
+/* Return TRUE if it's an exact match. */
+{
+if (oldBed->blockCount != newBed->blockCount)
+    return FALSE;
+int oldSize = bedTotalBlockSize(oldBed);
+int newSize = bedTotalBlockSize(newBed);
+int overlap = bedSameStrandOverlap(oldBed, newBed);
+return  (oldSize == newSize && oldSize == overlap);
+}
 
 boolean compatibleExtension(struct bed *oldBed, struct bed *newBed)
 /* Return TRUE if newBed is a compatible extension of oldBed, meaning
@@ -109,10 +120,25 @@ for (bin = binList; bin != NULL; bin = bin->next)
     struct bed *oldBed = bin->val;
     if (oldBed->strand[0] == newBed->strand[0])
         {
-	if (compatibleExtension(oldBed, newBed))
+	if (exactMatch(oldBed, newBed))
 	    {
 	    matchingBed = oldBed;
 	    break;
+	    }
+	}
+    }
+if (matchingBed == NULL)
+    {
+    for (bin = binList; bin != NULL; bin = bin->next)
+	{
+	struct bed *oldBed = bin->val;
+	if (oldBed->strand[0] == newBed->strand[0])
+	    {
+	    if (compatibleExtension(oldBed, newBed))
+		{
+		matchingBed = oldBed;
+		break;
+		}
 	    }
 	}
     }
