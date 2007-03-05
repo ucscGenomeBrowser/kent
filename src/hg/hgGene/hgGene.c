@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.83 2007/03/02 08:54:36 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.84 2007/03/05 01:43:20 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -25,7 +25,6 @@ struct hash *oldCart;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
-char *curProtId = NULL;	/* Current protein Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
@@ -100,13 +99,6 @@ someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL || someAcc[0] == 0)
     return NULL;
 primaryAcc = spFindAcc(spConn, someAcc);
-if (curProtId != NULL)
-    {
-    safef(query, sizeof(query), 
-    	  "select spID from %s.kgXref where kgId='%s' and spDisplayID='%s'",
-	  database, curGeneId, curProtId);
-    primaryAcc = sqlQuickString(conn, query);
-    }
 freeMem(someAcc);
 return primaryAcc;
 }
@@ -447,12 +439,6 @@ if (protAcc != NULL)
 	errAbort("<br>%s seems to no longer be a valid protein ID in our latest UniProt DB.", protAcc);
 	}
 	
-    /* defensive logic to guard against curProtId being NULL */
-    if (curProtId == NULL)
-	{
-	curProtId = spDisplayId;
-	}
-
     if (strstr(spDisplayId, protAcc) == NULL)
 	{
 	hPrintf(" (aka %s", spDisplayId);
@@ -812,10 +798,6 @@ hSetDb(database);
 
 conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
-if (cgiVarExists(hggProt))
-    {
-    curProtId = cgiOptionalString(hggProt);
-    }
 curGeneType = cgiOptionalString(hggType);
 if (curGeneType == NULL) 
     {
