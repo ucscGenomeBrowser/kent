@@ -19,6 +19,10 @@ test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
 mkdirs:
 	@${MKDIR} output ${BIN_DIR}
 
+loaders:
+	rm loader
+	ln -s ${CGI_BIN}/loader .
+
 spDbTest: spDbTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.o ${MYLIBS} $L
 	${BIN_DIR}/spDbTest uniProt Q9FFH7 > output/spDbTest
@@ -36,7 +40,7 @@ genePredTest: ${BIN_DIR}/genePredTester mkdirs
 pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 	${MAKE} -f pslReaderTests.mk test
 
-customTrackTest: ${BIN_DIR}/customTrackTester mkdirs
+customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
 
 binTest: mkdirs ${BIN_DIR}/binTest
@@ -59,4 +63,4 @@ ${BIN_DIR}/customTrackTester: customTrackTester.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 clean:
-	rm -rf *.o bin output *.tmp
+	rm -rf *.o bin output *.tmp loader
