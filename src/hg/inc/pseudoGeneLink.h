@@ -11,7 +11,7 @@ struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
     {
     struct pseudoGeneLink *next;  /* Next in singly linked list. */
-    char *chrom;	/* Chromosome name for pseudogene */
+    char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* pseudogene alignment start position */
     unsigned chromEnd;	/* pseudogene alignment end position */
     char *name;	/* Name of pseudogene */
@@ -34,22 +34,22 @@ struct pseudoGeneLink
     unsigned geneOverlap;	/* bases overlapping */
     unsigned polyA;	/* count of As in polyA */
     int polyAstart;	/* start of polyA, relative to end of pseudogene */
-    unsigned exonCover;	/* number of exons in Gene covered */
+    int exonCover;	/* number of exons in Gene covered */
     unsigned intronCount;	/* number of introns in pseudogene */
     unsigned bestAliCount;	/* number of good mrnas aligning */
     unsigned matches;	/* matches + repMatches */
     unsigned qSize;	/* aligning bases in pseudogene */
     unsigned qEnd;	/* end of cdna alignment */
     unsigned tReps;	/* repeats in gene */
-    unsigned qReps;	/* repeats in pseudogene */
-    unsigned overlapDiag;	/* bases syntenic with mouse */
+    int overlapRhesus;	/* percent of retro that breaks net relative to Rhesus */
+    int overlapMouse;	/* percent of retro that breaks net relative to Mouse */
     unsigned coverage;	/* % of bases that align to gene */
-    int label;	/* 1=pseudogene,-1 not pseudogene -2 expressed retroGene*/
+    int label;	/* 1=pseudogene,-1 not pseudogene -2 expressed retroGene */
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome */
     unsigned oldScore;	/* another heuristic */
     int oldIntronCount;	/* old simple intron count */
-    int conservedIntrons;	/* conserved intron count */
-    char *intronScores;	/* Intron sizes in gene/pseudogene */
+    int processedIntrons;	/* intron prcessed out of retrogene */
+    int conservedSpliceSites;	/* conserved splice site count */
     int maxOverlap;	/* largest overlap with another mrna */
     char *refSeq;	/* Name of closest regSeq to gene */
     int rStart;	/* refSeq alignment start position */
@@ -64,7 +64,7 @@ struct pseudoGeneLink
     int overStart;	/* overlapping mrna start position */
     int overEnd;	/* overlapping mrna end position */
     char overStrand[3];	/* strand of overlapping mrna */
-    int adaBoost;	/* adaBoost label */
+    int overlapDog;	/* percent of retro that breaks net relative to dog */
     float posConf;	/* pvalue for positive */
     unsigned polyAlen;	/* length of polyA */
     };

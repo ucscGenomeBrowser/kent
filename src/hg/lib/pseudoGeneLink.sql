@@ -42,7 +42,7 @@ CREATE TABLE pseudoGeneLink (
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome
     oldScore int unsigned not null,	# another heuristic
     oldIntronCount int not null,	# old simple intron count
-    conservedIntrons int not null,	# conserved intron count
+    processedIntrons int not null,	# intron prcessed out of retrogene
     conservedSpliceSites int not null,	# conserved splice site count
     maxOverlap int not null,	# largest overlap with another mrna
     refSeq varchar(255) not null,	# Name of closest regSeq to gene
