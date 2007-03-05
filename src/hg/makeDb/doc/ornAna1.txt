@@ -285,6 +285,26 @@ ornAna1.perChromTables = no
 
 
 #########################################################################
+# SWAP HG18 CHAIN/NET (DONE 2/26/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/ornAna1/bed/blastz.hg18.swap
+    cd /cluster/data/ornAna1/bed/blastz.hg18.swap
+    doBlastzChainNet.pl -swap \
+      /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21/DEF >& do.log &
+    tail -f do.log
+
+
+#########################################################################
+# SWAP MM8 CHAIN/NET (DONE 3/2/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/ornAna1/bed/blastz.mm8.swap
+    cd /cluster/data/ornAna1/bed/blastz.mm8.swap
+    doBlastzChainNet.pl -swap \
+      /cluster/data/mm8/bed/blastz.ornAna1.2007-02-27/DEF >& do.log &
+    tail -f do.log
+
+
+#########################################################################
 # BLASTZ's...
 
 
