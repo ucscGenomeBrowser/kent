@@ -17,16 +17,14 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn2, *conn3;
-char *bioDB;
   
-char query2[256], query3[256];
-struct sqlResult *sr2, *sr3;
-char **row2, **row3;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 
 char *proteinDataDate;
  
-FILE   *o2, *o3;
-char *swissID, *pdb;
+FILE   *o2;
 char *entrez;
 
 char *chp;
