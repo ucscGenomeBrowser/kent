@@ -1,0 +1,364 @@
+# This file describes how the proteins070202 database was
+# built.  See also the sp070202 database doc, which needs
+# to be built first.
+
+hgsqladmin create proteins070202
+
+cd /cluster/data/proteins
+mkdir 070202
+cd 070202
+mkdir build
+
+# Get HGNC data
+~/src/hg/protein/getHgnc.pl >hgnc.tab
+
+hgsql proteins070202 < ~/src/hg/lib/hgnc.sql
+hgsql proteins070202 -e 'load data local infile "hgnc.tab" into table hgnc ignore 1 lines'
+ 
+pbHgnc 070202   
+hgsql proteins070202 < ~/src/hg/lib/hgncXref.sql
+hgsql proteins070202 -e 'load data local infile "hgncXref.tab" into table hgncXref'
+
+# make sure the pfamXref program is available:
+cd /cluster/data/proteins/070202/build
+
+# JK - GOT STUCK HERE FROM NO hugo table.
+spToProteins 070202
+
+# from mySQL prompt do the following:
+
+use proteins070202
+
+drop index displayId on spXref3;
+drop index accession on spXref3;
+drop index hugoSymbol on spXref3;
+
+load data local infile "good/spXref3.tab" into table spXref3;
+
+create index accession on spXref3(accession);
+create index displayId on spXref3(displayId);
+create index hugoSymbol on spXref3(hugoSymbol);
+
+# It took 30 seconds to load and less than 2 minutes to create each index.
+
+# load spOrganism table
+
+drop index displayID on spOrganism;
+drop index organism  on spOrganism;
+load data local infile 'spOrganism.tab' into table spOrganism;
+create index displayID on spOrganism(displayID);
+create index organism on spOrganism(organism);
+
+# Build spXref2 table.
+
+spToProteins2 070202
+
+#	Build spSecondaryID table
+cd /cluster/data/proteins/070202
+hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
+        otherAcc where otherAcc.acc = displayId.acc;" sp070202 \
+	| sed -e "1d" > spSecondaryID.tab
+hgsql -e \
+	'LOAD DATA local INFILE "spSecondaryID.tab" into table spSecondaryID;' \
+	proteins070202
+
+#	Build pfamXref and pfamDesc tables
+mkdir /san/sanvol1/scratch/proteins/pfam/070202
+cd    /san/sanvol1/scratch/proteins/pfam/070202
+wget --timestamping "ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz"
+#	100 Mb compressed, over 700 Mb uncompressed
+
+rm -f Pfam-A.full
+gunzip Pfam-A.full.gz
+pfamXref proteins070202 Pfam-A.full pfamADesc.tab pfamAXref.tab >pfamXref.log
+gzip Pfam-A.full &
+
+hgsql -e 'LOAD DATA local INFILE "pfamADesc.tab" into table pfamDesc;' proteins070202
+hgsql -e 'LOAD DATA local INFILE "pfamAXref.tab" into table pfamXref;' proteins070202
+
+#	Build the pdbSP table, new process using extDbRef data from spXXXXXX
+
+cd /san/sanvol1/scratch/proteins/pfam/070202
+
+hgsql sp070202 -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
+
+hgsql -e 'LOAD DATA local INFILE "pdbSP.tab" into table pdbSP;' proteins070202
+
+#	Build the spDisease table
+
+hgsql -N -e \
+'select comment.acc, displayId.val, commentVal.val from comment, commentVal, commentType ct, displayId where comment.commentType=ct.id and ct.val="DISEASE" and commentVal.id=comment.commentVal and displayId.acc=comment.acc;' \
+sp070202 > spDisease.tab
+
+hgsql -e 'LOAD DATA local INFILE "spDisease.tab" into table spDisease;'
+proteins070202
+
+# create swInterPro table
+
+wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
+gzip -d protein2ipr.dat.gz
+# rearange col positioin to match the old format
+cut -f 1 protein2ipr.dat >j1
+cut -f 2,3 protein2ipr.dat >j23
+cut -f 4,5,6 protein2ipr.dat >j456
+paste j1 j456 j23 > protein2interpro.dat
+rm j1 j456 j23
+
+hgsql proteins070202 -e 'load data local infile "protein2interpro.dat" into table interProXref;'
+#hgsql proteins070202 -e "drop table proteins070202.swInterPro"
+hgsql --skip-column-names proteins070202 -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
+hgsql proteins070202 -e 'load data local infile "swInterPro.tab" into table swInterPro;'
+
+# BUILD TABLES FOR pbGlobal (PB V1.1)
+
+cd /cluster/data/proteins/070202
+mkdir pbGlobal
+cd pbGlobal
+
+# Calculate Pi values for all proteins
+
+hgsql sp070202 -e "select acc from protein" >acc070202.lis
+nice pbCalPi acc070202.lis sp070202 pi070202.tab
+hgsql proteins070202 -e 'load data local infile "pi070202.tab" into table pepPi;'
+   
+# Build pepMwAa table
+
+hgsql sp070202 -N -e "select acc, molWeight, aaSize from info" >pepMwAa.tab
+hgsql proteins070202 -e 'load data local infile "pepMwAa.tab" into table pepMwAa'
+
+# Calculate global protein property distributions
+
+nice pbCalDistGlobal sp070202 proteins070202
+
+# This took about 35 minutes.
+# Load the tables
+
+hgsql proteins070202 -e 'delete from pepCCntDist'
+hgsql proteins070202 -e 'delete from pepHydroDist'
+hgsql proteins070202 -e 'delete from pepIPCntDist'
+hgsql proteins070202 -e 'delete from pepMolWtDist'
+hgsql proteins070202 -e 'delete from pepPiDist'
+hgsql proteins070202 -e 'delete from pepResDist'
+
+hgsql proteins070202 -e 'load data local infile "pepCCntDist.tab"  into table pepCCntDist'
+hgsql proteins070202 -e 'load data local infile "pepHydroDist.tab" into table pepHydroDist'
+hgsql proteins070202 -e 'load data local infile "pepIPCntDist.tab" into table pepIPCntDist'
+hgsql proteins070202 -e 'load data local infile "pepMolWtDist.tab" into table pepMolWtDist'
+hgsql proteins070202 -e 'load data local infile "pepPiDist.tab"    into table pepPiDist'
+hgsql proteins070202 -e 'load data local infile "pepResDist.tab"   into table pepResDist'
+
+# Calculate global AA residue distributions
+
+pbCalResStdGlobal 070202
+
+# Load distribution tables:
+
+hgsql proteins070202 -e 'delete from pbAnomLimit'
+hgsql proteins070202 -e 'delete from pbResAvgStd'
+
+hgsql proteins070202 -e 'load data local infile "pbAnomLimit.tab" into table pbAnomLimit'
+hgsql proteins070202 -e 'load data local infile "pbResAvgStd.tab" into table pbResAvgStd'
+
+# Get taxonomy names table from NCBI.
+
+cd /cluster/data/proteins/070202
+mkdir taxon
+cd taxon
+wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip
+unzip taxdmp.zip
+
+# Create table taxonNames in proteins070202
+
+# Load from the file names.dmp into taxonNames table.
+     
+hgsql proteins070202 -e 'load data local infile "names.dmp" into table taxonNames fields terminated by "|" enclosed by "\t";'
+
+# Load and edit pbStamp table
+
+cd /cluster/data/proteins/070202
+hgsql proteins060115 -e "select * from pbStamp" > pbStamp.tab
+
+hgsql proteins070202 -e 'delete from pbStamp'
+hgsql proteins070202 -e 'load data local infile "pbStamp.tab" into table pbStamp ignore 1 lines'
+
+# Found there are a few records in UniProt that has LF char in description line.
+# This was left over by last build.  No such problem this time.
+# hgsql proteins070202 -N -e 'delete from spXref3 where accession like "%\.%"'
+
+mkdir alias
+cd alias
+
+hgsql proteins070202 -N -e 'select accession, accession,  "uAcc", "2006-01-15" from spXref3' >j1.tmp
+hgsql proteins070202 -N -e 'select accession, accession2, "u2Ac", "2006-01-15" from spSecondaryID' >j2.tmp
+hgsql proteins070202 -N -e 'select accession, displayID,  "uDis", "2006-01-15" from spXref3' >j3.tmp
+
+hgsql proteins041115 -N -e 'select accession, displayID,  "oDis", "2004-11-15" from spXref3' >j4.tmp
+# PLEASE NOTE: proteins041115 was later deleted by Fan when hgwdev mySQL space was at 100%.
+
+cat j1.tmp j2.tmp j3.tmp j4.tmp >uniProtAlias.tab
+
+hgsql proteins070202 -e 'drop table uniProtAlias'
+
+hgsql proteins070202 <~/src/hg/lib/uniProtAlias.sql
+hgsql proteins070202 -e 'load data local infile "uniProtAlias.tab" into table uniProtAlias'
+hgsql proteins070202 -e 'create index alias on uniProtAlias(alias)'
+
+hgsql proteins070202 -e 'drop table spOldNew'
+hgsql proteins070202 <~/src/hg/lib/spOldNew.sql
+
+hgsql proteins050415 -N -e 'select * from spOldNew' >spOldNew.tab
+hgsql proteins070202 -e 'load data local infile "spOldNew.tab" into table spOldNew'
+hgsql proteins070202 -e 'create index oldDisplayId on spOldNew(oldDisplayId)'
+hgsql proteins070202 -e 'create index newDisplayId on spOldNew(newDisplayId)'
+
+# Build spDeleted table
+
+# Download list of deleted accession numbers from UniProt
+wget --timestamping http://ca.expasy.org/txt/delac_tr.txt
+cp delac_tr.txt spDeleted.tab
+
+# Edit spDeleted.tab to get rid of other lines except accession numbers
+
+vi spDeleted.tab
+
+hgsql proteins070202 -e 'load data local infile "spDeleted.tab" into table spDeleted'
+
+# Copy the ensemblXref3, sfAss, and sfDesc from proteines060115
+
+ssh hgwdev
+cd /cluster/data/proteins/070202
+hgsql proteins060115 -N -e 'select * from ensemblXref3' >ensemblXref3.tab
+hgsql proteins070202 -e 'delete from ensemblXref3'
+hgsql proteins070202 -e 'load data local infile "ensemblXref3.tab.old" into table ensemblXref3'
+# This table should be updated after Ensembl puts out their Human Build 36 release.
+
+hgsql proteins060115 -N -e 'select * from sfAssign' > sfAssign.tab
+hgsql proteins070202 -e 'delete from sfAssign'
+hgsql proteins070202 -e 'load data local infile "sfAssign.tab" into table sfAssign'
+
+hgsql proteins060115 -N -e 'select * from sfDes' >sfDes.tab
+hgsql proteins070202 -e 'delete from sfDes'
+hgsql proteins070202 -e 'load data local infile "sfDes.tab" into table sfDes'
+# The sfAssign and sfDes should be updated after we update our Superfamily track(s).
+
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
+
+hgsql proteome -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+
+hgsql proteome -e 'drop table spVariant'
+hgsql proteome < ~/src/hg/lib/spVariant.sql
+hgsql proteome -e 'load data local infile "spVariant.tab" into table spVariant'
+
+hgsql proteome -e 'create index parent on spVariant(parent)'
+
+# EXTEND pfamXref TO COVER VARIANT SPLICE PROTEINS
+
+hgsql proteome -N -e \
+'select pfamAC, variant, variant from spVariant, pfamXref where swissAC = parent and variant like "%-%" and swissAC=parent;' \
+>pfamXrefVar.tab
+
+hgsql proteome -N -e \
+'load data local infile "pfamXrefVar.tab" into table pfamXref'
+
+# First check to see if pbGateway and pbGlobal are working.
+
+# Then edit pbStamp.tab to adjust maximum y values for various stamps 
+# and load it to pbStamp tables until all their scales look reasonable.
+# For this particular release, no adjustment seems necessary.	
+
+# SWITCH SYMBOLIC PROTEIN DATABASE LINKS
+
+# Ask system admin to switch the following symbolic database links:
+
+       swissProt --> sp070202
+       proteins  --> proteins070202
+
+# Run some simple test on hgTracks, hgNear, hgGene, pbTracks, and pbGlobal  
+# to make sure things are running OK.
+    
+# Release to QA for formal testing.
+
+# Update hgncXref table.
+# A deficiency in pbHgnc was found and fixed.  Reran it again and
+# load the new data into proteins060115.hgncXref too.
+
+pbHgnc 070202
+
+hgsql proteins070202
+delete from hgncXref;
+load data local infile "hgncXref.tab" into table hgncXref;
+quit;
+
+# CREATE REACTOME TABLES (DONE, Fan 2/23/06)
+
+# Obtain the ucsc_events14.dat.txt and ucsc_entity14.dat from Reactome.
+# Contact: Gopinathrao, Gopal [gopinath@cshl.edu]
+# ...14.dat is actually a typo.  They should be 16 (for ver.16).
+
+mkdir /cluster/store10/reactome/reactome060223
+rm /cluster/data/reactome
+ln -s /cluster/store10/reactome/reactome060223 /cluster/data/reactome
+cd /cluster/data/reactome
+
+# save these two .dat files to this subdirectory.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events14.dat" into table spReactomeEvent ignore 4 lines'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity14.dat" into table spReactomeId ignore 6 lines'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg18 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg18.lis
+
+hgsql mm7 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm7.lis
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+# Email the above 3 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
+
+#########################################################
+# UPDATE REACTOME TABLES (DONE, Fan 8/18/06)
+
+# Obtain the ucsc_events18.dat.txt and ucsc_entity18.dat from Reactome.
+# Contact: Gopinathrao, Gopal [gopinath@cshl.edu]
+
+ssh hgwdev
+mkdir /cluster/store10/reactome/reactome060818
+rm /cluster/data/reactome
+ln -s /cluster/store10/reactome/reactome060818 /cluster/data/reactome
+cd /cluster/data/reactome
+
+# save these two .dat files to this subdirectory.
+
+# First run rmLf on these two files to remove extra CRs.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events18.dat" into table spReactomeEvent ignore 4 lines'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity18.dat" into table spReactomeId ignore 6 lines'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg18 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg18.lis
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+hgsql mm8 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm8.lis
+
+hgsql mm7 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm7.lis
+
+hgsql rn4 -N -e 'select kgId, kgXref.spId from kgXref,proteome.spReactomeId,proteome.spVariant where
+kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >rn4.lis
+
+# Email the above 5 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
