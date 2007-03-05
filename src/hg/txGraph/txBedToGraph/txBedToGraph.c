@@ -85,7 +85,7 @@ for (startBed = bedList; startBed != NULL; startBed = endBed)
 	    {
 	    break;
 	    }
-	if (!bigGapOk && bed->chromStart - lastBed->chromEnd > maxJoinSize)
+	if (!bigGapOk)
 	    {
 	    break;
 	    }
