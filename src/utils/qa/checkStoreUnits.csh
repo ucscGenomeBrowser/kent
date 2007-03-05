@@ -28,6 +28,13 @@ if ($#argv < 1 || $#argv > 1) then
   exit
 endif
 
+# ping the machines to load all the mounts
+set j=12
+while ( $j )
+  ls /cluster/store$j >& /dev/null
+  set j=`echo $j | awk '{print $1-1}'`
+end
+
 rm -f storefile
 df -h | egrep "store|bluearc|home|data|bin" \
   | sed -e "s/10.1.1.3:\/bluearc/                 /" \
