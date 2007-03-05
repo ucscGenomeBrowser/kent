@@ -34,6 +34,8 @@ while ( $j )
   ls /cluster/store$j >& /dev/null
   set j=`echo $j | awk '{print $1-1}'`
 end
+ls /cluster/bluearc >& /dev/null
+ls /cluster/home >& /dev/null
 
 rm -f storefile
 df -h | egrep "store|bluearc|home|data|bin" \
@@ -61,16 +63,6 @@ else
     # get them in order, most full unit first
     set j=`echo $j | awk '{print $1 + 1}'`
     set unit=$fullunit[$j]
-    # if the unit can't be logged into, simply mention it and stop processing
-    echo $unit | egrep 'bluearc|home|sanvol1|sanvol2' >& /dev/null
-    if ( ! $status ) then
-      # can't loginto bluearc or /cluster/home
-      echo "$unit is in the danger zone."
-      echo "  can't login to check."
-      echo "  notify admins."
-      echo
-      continue
-    endif
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
     if (-e $unit/du.$date) then
@@ -82,7 +74,15 @@ else
     echo "$unit\n"
 
     # get disk usage 4 dirs deep and sort by size
-    ssh $machine du -m --max-depth=4 $unit | sort -nr > tempfile
+    # if the unit can't be logged into, do the du through the wire
+    #   (ok per erich if only now and then)
+    echo $unit | egrep 'bluearc|home|sanvol1|sanvol2' >& /dev/null
+    if ( ! $status ) then
+      du -m --max-depth=4 $unit | sort -nr > tempfile
+    else
+      # use ssh to do the du locally
+      ssh $machine du -m --max-depth=4 $unit | sort -nr > tempfile
+    endif
     # when du value is the same, "-k2,2" flag puts subdir second
     sort -k1,1nr -k2,2 tempfile  > du.$storeName.$date.temp
     rm -f tempfile
