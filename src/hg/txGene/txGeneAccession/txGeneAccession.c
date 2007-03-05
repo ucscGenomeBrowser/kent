@@ -8,7 +8,7 @@
 #include "rangeTree.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.4 2007/03/03 17:24:00 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.5 2007/03/05 18:55:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -149,7 +149,7 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
     if (oldBed == NULL || hashLookup(usedHash, oldBed->name))
         {
 	char newAcc[16];
-	safef(newAcc, sizeof(newAcc), "TX%08d", ++txId);
+	safef(newAcc, sizeof(newAcc), "UC%07d", ++txId);
 	fprintf(f, "%s\t%s\n", newBed->name, newAcc);
 	}
     else
