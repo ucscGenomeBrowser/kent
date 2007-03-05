@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.38 2007/03/02 23:26:03 aamp Exp $"
+#	"$Id: mm8.txt,v 1.39 2007/03/05 19:58:15 angie Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -5930,6 +5930,11 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
 ### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-12 - angie)
 ### fasta added 2006-06-21
 ### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+
+### NOTE -- as of 2007-03-01 the igtc track will be automatically 
+### updated on hgwdev by the scripts monthlyUpdateIgtc.csh and 
+### updateIgtc.pl in kent/src/hg/utils/automation/ .
+
     ssh hgwdev
     mkdir /cluster/data/mm8/bed/igtc
     cd /cluster/data/mm8/bed/igtc
@@ -7830,6 +7835,48 @@ TMPDIR=/scratch/tmp
 #############################################################################
 # UPDATED mm8.knownToVisiGene (DONE galt 2007-02-15)
 
+
+#########################################################################
+# BLASTZ ORNANA1 (PLATYPUS) - (DONE 2007-03-02 angie)
+    ssh kkstore04
+    mkdir /cluster/data/mm8/bed/blastz.ornAna1.2007-02-27
+    cd /cluster/data/mm8/bed/blastz.ornAna1.2007-02-27
+
+    cat << '_EOF_' > DEF
+# mouse vs. platypus
+
+# Use same params as used for hg18-danRer4
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: ornAna1
+SEQ2_DIR=/iscratch/i/ornAna1/ornAna1.2bit
+SEQ2_LEN=/iscratch/i/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastz.ornAna1.2007-02-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    doBlastzChainNet.pl DEF \
+      -workhorse kkr6u00 \
+      -blastzOutRoot /cluster/bluearc/mm8.ornAna1 \
+      >& do.log & tail -f do.log
+
+
 ############################################################################
 # Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
 
@@ -7889,3 +7936,5 @@ ln -s ~/hg/lib/cgapSage/cgapSageLib.sql
 ln -s ~/hg/lib/cgapSage/cgapSage.sql 
 hgLoadBed -sqlTable=cgapSage.sql mm8 cgapSage cgapSage.bed
 hgLoadSqlTab mm8 cgapSageLib cgapSageLib.sql massaged.Mm.libraries 
+
+
