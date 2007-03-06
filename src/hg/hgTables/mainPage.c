@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.109 2007/03/02 14:25:44 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.110 2007/03/06 20:41:28 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -597,23 +597,35 @@ if (isPositional)
     hPrintf("<TR><TD><B>region:</B>\n");
 
     /* If regionType not allowed force it to "genome". */
-    if (!(sameString(regionType, "genome") ||
-        sameString(regionType, "range") ||
-	(doEncode && sameString(regionType, "encode") ) ) )
-	regionType = "genome";
+    if (!(sameString(regionType, hgtaRegionTypeEncode) ||
+        sameString(regionType, hgtaRegionTypeRange) ||
+        sameString(regionType, hgtaRegionTypeUserRegions) ||
+	(doEncode && sameString(regionType, hgtaRegionTypeEncode) ) ) )
+	regionType = hgtaRegionTypeEncode;
     jsTrackingVar("regionType", regionType);
-    makeRegionButton("genome", regionType);
-    hPrintf(" genome ");
+    makeRegionButton(hgtaRegionTypeGenome, regionType);
+    hPrintf("&nbsp;genome&nbsp;");
     if (doEncode)
         {
-	makeRegionButton("encode", regionType);
-	hPrintf(" ENCODE ");
+	makeRegionButton(hgtaRegionTypeEncode, regionType);
+	hPrintf("&nbsp;ENCODE&nbsp;");
 	}
-    makeRegionButton("range", regionType);
-    hPrintf(" position ");
+    makeRegionButton(hgtaRegionTypeRange, regionType);
+    hPrintf("&nbsp;position&nbsp;");
     hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=26 VALUE=\"%s\" onFocus=\"%s\">\n",
     	hgtaRange, range, jsRadioUpdate(hgtaRegionType, "regionType", "range"));
     cgiMakeButton(hgtaDoLookupPosition, "lookup");
+    hPrintf("&nbsp;");
+    if (userRegionsFileName() != NULL)
+	{
+	makeRegionButton(hgtaRegionTypeUserRegions, regionType);
+	hPrintf("&nbsp;defined regions&nbsp;");
+	cgiMakeButton(hgtaDoSetUserRegions, "change");
+	hPrintf("&nbsp;");
+	cgiMakeButton(hgtaDoClearUserRegions, "clear");
+	}
+    else
+	cgiMakeButton(hgtaDoSetUserRegions, "define regions");
     hPrintf("</TD></TR>\n");
     }
 else
@@ -633,7 +645,7 @@ if (!isWig && (!isPositional || !hti || isNotEmpty(hti->nameField)))
     cgiMakeButton(hgtaDoUploadIdentifiers, "upload list");
     if (identifierFileName() != NULL)
         {
-	hPrintf(" ");
+	hPrintf("&nbsp;");
 	cgiMakeButton(hgtaDoClearIdentifiers, "clear list");
 	}
     hPrintf("</TD></TR>\n");

@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.148 2007/02/28 20:39:08 giardine Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.149 2007/03/06 20:41:28 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -329,11 +329,11 @@ struct region *getRegions()
 {
 char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 struct region *regionList = NULL, *region;
-if (sameString(regionType, "genome"))
+if (sameString(regionType, hgtaRegionTypeGenome))
     {
     regionList = getRegionsFullGenome();
     }
-else if (sameString(regionType, "range"))
+else if (sameString(regionType, hgtaRegionTypeRange))
     {
     char *range = cartString(cart, hgtaRange);
     boolean parseOk = FALSE;
@@ -350,9 +350,14 @@ else if (sameString(regionType, "range"))
 	}
     region->name = NULL;	/*	unused for range	*/
     }
-else if (sameString(regionType, "encode"))
+else if (sameString(regionType, hgtaRegionTypeEncode))
     {
     regionList = getEncodeRegions();
+    }
+else if (sameString(regionType, hgtaRegionTypeUserRegions) &&
+	(NULL != userRegionsFileName()))
+    {
+    regionList = getUserRegions(userRegionsFileName());
     }
 else
     {
@@ -1547,6 +1552,14 @@ else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
     doSubtrackMergePage(conn);
 else if (cartVarExists(cart, hgtaDoLookupPosition))
     doLookupPosition(conn);
+else if (cartVarExists(cart, hgtaDoSetUserRegions))
+    doSetUserRegions(conn);
+else if (cartVarExists(cart, hgtaDoSubmitUserRegions))
+    doSubmitUserRegions(conn);
+else if (cartVarExists(cart, hgtaDoClearSetUserRegionsText))
+    doClearSetUserRegionsText(conn);
+else if (cartVarExists(cart, hgtaDoClearUserRegions))
+    doClearUserRegions(conn);
 else if (cartVarExists(cart, hgtaDoMetaData))
     doMetaData(conn);
 else	/* Default - put up initial page. */
