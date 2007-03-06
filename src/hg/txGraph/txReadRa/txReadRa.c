@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: txReadRa.c,v 1.1 2007/03/06 06:25:55 kent Exp $";
+static char const rcsid[] = "$Id: txReadRa.c,v 1.2 2007/03/06 08:25:57 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +18,7 @@ errAbort(
   "Output files are in outDir, including\n"
   "   cds.tab - cds entries for both genbank and refSeq\n"
   "   mrnaSize.tab - size entries for both genbank and refSeq\n"
+  "   exceptions.tab - Information on selenocystienes and other exceptions.\n"
   "   refSeqStatus.tab - Reviewed/Validated/Preliminary/etc. status for refSeq\n"
   "   refPepStatus.tab - Similar info for refSeq proteins\n"
   "   refToPep.tab - Maps refSeq mRNA to proteins\n"
@@ -48,6 +49,22 @@ if (val == NULL)
 return val;
 }
 
+void outIfFound(char *acc, struct hash *ra, char *tag, FILE *f)
+/* Output tag and value if found. */
+{
+char *val = hashFindVal(ra, tag);
+if (val != NULL)
+    fprintf(f, "%s\t%s\t%s\n", acc, tag, val);
+}
+
+void outputExceptions(char *acc, struct hash *ra, FILE *f)
+/* Output the exceptions to file. */
+{
+outIfFound(acc, ra, "selenocysteine", f);
+outIfFound(acc, ra, "translExcept", f);
+outIfFound(acc, ra, "exception", f);
+}
+
 void txReadRa(char *mrnaRa, char *refSeqRa, char *outDir)
 /* txReadRa - Read ra files from genbank and parse out relevant info into some 
  * tab-separated files. */
@@ -60,6 +77,7 @@ FILE *fStatus = openToWrite(outDir, "refSeqStatus.tab");
 FILE *fSize = openToWrite(outDir, "mrnaSize.tab");
 FILE *fRefToPep = openToWrite(outDir, "refToPep.tab");
 FILE *fPepStatus = openToWrite(outDir, "refPepStatus.tab");
+FILE *fExceptions = openToWrite(outDir, "exceptions.tab");
 
 struct hash *ra;
 while ((ra = raNextRecord(refSeq)) != NULL)
@@ -73,28 +91,30 @@ while ((ra = raNextRecord(refSeq)) != NULL)
     /* Translate rss into status. */
     char *status = NULL;
     if (sameString(rss, "rev"))
-        status = "Reviewed";
+	status = "Reviewed";
     else if (sameString(rss, "pro"))
-        status = "Provisional";
+	status = "Provisional";
     else if (sameString(rss, "pre"))
-        status = "Predicted";
+	status = "Predicted";
     else if (sameString(rss, "val"))
-        status = "Validated";
+	status = "Validated";
     else if (sameString(rss, "inf"))
-        status = "Inferred";
+	status = "Inferred";
     else
-        errAbort("Unrecognized rss field %s after line %d of %s", rss, 
-		refSeq->lineIx, refSeq->fileName);
+	errAbort("Unrecognized rss field %s after line %d of %s", rss, 
+	    refSeq->lineIx, refSeq->fileName);
 
-     fprintf(fStatus, "%s\t%s\n", acc, status);
-     if (prt != NULL)
-	 {
-         fprintf(fPepStatus, "%s\t%s\n", prt, status);
-	 fprintf(fRefToPep, "%s\t%s\n", acc, prt);
-	 }
-     fprintf(fSize, "%s\t%s\n", acc, siz);
-     if (cds != NULL)
-         fprintf(fCds, "%s\t%s\n", acc, cds);
+    fprintf(fStatus, "%s\t%s\n", acc, status);
+    if (prt != NULL)
+	{
+	chopSuffix(prt);
+	fprintf(fPepStatus, "%s\t%s\n", prt, status);
+	fprintf(fRefToPep, "%s\t%s\n", acc, prt);
+	}
+    fprintf(fSize, "%s\t%s\n", acc, siz);
+    if (cds != NULL)
+	fprintf(fCds, "%s\t%s\n", acc, cds);
+    outputExceptions(acc, ra, fExceptions);
     hashFree(&ra);
     }
 
@@ -106,6 +126,7 @@ while ((ra = raNextRecord(mrna)) != NULL)
     fprintf(fSize, "%s\t%s\n", acc, siz);
     if (cds != NULL)
     	fprintf(fCds, "%s\t%s\n", acc, cds);
+    outputExceptions(acc, ra, fExceptions);
     hashFree(&ra);
     }
 
@@ -114,6 +135,7 @@ carefulClose(&fStatus);
 carefulClose(&fSize);
 carefulClose(&fRefToPep);
 carefulClose(&fPepStatus);
+carefulClose(&fExceptions);
 }
 
 int main(int argc, char *argv[])
