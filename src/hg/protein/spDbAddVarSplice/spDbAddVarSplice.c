@@ -7,8 +7,10 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "fa.h"
+#include "jksql.h"
+#include "spDb.h"
 
-static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.2 2007/03/06 00:37:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.3 2007/03/06 04:38:10 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,10 +18,14 @@ void usage()
 errAbort(
   "spDbAddVarSplice - This adds information on the varient splices to the sp/uniProt database\n"
   "usage:\n"
-  "   spDbAddVarSplice varsplice.fasta outDir\n"
+  "   spDbAddVarSplice database varsplice.fasta outDir\n"
+  "Where:\n"
+  "   database is the database to add to\n"
+  "   varSplice.fasta is a fasta file with the splice varients\n"
+  "   outDir is where various output tab-generated files live.\n"
   "After this program is done, add the varProtein.txt file into both protein\n"
   "and varProtein tables, add varDisplayId.txt to displayId table, and varAcc.txt\n"
-  "into varAcc table\n"
+  "into varAcc table, and the varAccToTaxon.txt into the accToTaxon table.\n"
   );
 }
 
@@ -35,13 +41,15 @@ safef(path, sizeof(path), "%s/%s", dir, file);
 return mustOpen(path, "w");
 }
 
-void spDbAddVarSplice(char *inFile, char *outDir)
+void spDbAddVarSplice(char *database, char *inFile, char *outDir)
 /* spDbAddVarSplice - This adds information on the varient splices to the sp/uniProt database. */
 {
+struct sqlConnection *conn = sqlConnect(database);
 makeDir(outDir);
 FILE *varProtein = openToWrite(outDir, "varProtein.txt");
 FILE *varAcc = openToWrite(outDir, "varAcc.txt");
 FILE *varDisplayId = openToWrite(outDir, "varDisplayId.txt");
+FILE *varAccToTaxon = openToWrite(outDir, "varAccToTaxon.txt");
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 aaSeq seq;
 ZeroVar(&seq);
@@ -70,18 +78,24 @@ while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     fprintf(varAcc, "%s-%s\t%s\t%s\n", acc, version, acc, version);
     fprintf(varProtein, "%s-%s\t%s\n", acc, version, seq.dna);
     fprintf(varDisplayId, "%s-%s\t%s-%s\n", acc, version, acc, version);
+
+    /* Look up taxon of base protein and use it to write to varAccToTaxon table. */
+    int taxon = spTaxon(conn, acc);
+    fprintf(varAccToTaxon, "%s-%s\t%d\n", acc, version, taxon);
     }
 carefulClose(&varAcc);
 carefulClose(&varProtein);
 carefulClose(&varDisplayId);
+carefulClose(&varAccToTaxon);
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-spDbAddVarSplice(argv[1], argv[2]);
+spDbAddVarSplice(argv[1], argv[2], argv[3]);
 return 0;
 }
