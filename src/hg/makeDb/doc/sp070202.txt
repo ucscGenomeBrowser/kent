@@ -39,11 +39,12 @@ end
 # sp070202.organelle: Records: 3553  Deleted: 0  Skipped: 0  Warnings: 0
 
 # Add varsplic info 
-zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice stdin .
+zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp070202 stdin .
 hgsql sp070202 -e 'load data local infile "varProtein.txt" into table varProtein'
 hgsql sp070202 -e 'load data local infile "varProtein.txt" into table protein'
 hgsql sp070202 -e 'load data local infile "varAcc.txt" into table varAcc'
 hgsql sp070202 -e 'load data local infile "varDisplayId.txt" into table displayId'
+hgsql sp070202 -e 'load data local infile "varAccToTaxon.txt" into table accToTaxon'
 
 # Zip up tab files for people who prefer them to database.
 gzip *.txt
