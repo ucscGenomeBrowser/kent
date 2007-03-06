@@ -424,6 +424,18 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoGalaxyQuery "hgta_doGalaxyQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 #define hgtaDoMetaData "hgta_doMetaData"
+#define hgtaDoSetUserRegions "hgta_doSetUserRegions"
+#define hgtaDoClearSetUserRegionsText "hgta_doClearSetUserRegionsText"
+#define hgtaUserRegionsFile "hgta_userRegionsFile"
+#define hgtaUserRegionsTable "hgta_userRegionsTable"
+#define hgtaEnteredUserRegions "hgta_enteredUserRegions"
+#define hgtaEnteredUserRegionFile "hgta_enteredUserRegionFile"
+#define hgtaDoSubmitUserRegions "hgta_doSubmitUserRegions"
+#define hgtaDoClearUserRegions "hgta_doClearUserRegions"
+#define hgtaRegionTypeUserRegions "userRegions"
+#define hgtaRegionTypeEncode "encode"
+#define hgtaRegionTypeGenome "genome"
+#define hgtaRegionTypeRange "range"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -844,6 +856,19 @@ void doRemoveCustomTrack(struct sqlConnection *conn);
 void doSummaryStatsBed(struct sqlConnection *conn);
 /* Put up page showing summary stats for track that is in database
  * or that is bed-format custom. */
+
+void doSubmitUserRegions(struct sqlConnection *conn);
+/* Process submit in set regions page. */
+void doSetUserRegions(struct sqlConnection *conn);
+/* Respond to set regions button. */
+void doClearUserRegions(struct sqlConnection *conn);
+/* Respond to clear user regions button. */
+char *userRegionsFileName();
+/* File name defined regions are in, or NULL if no such file. */
+struct region *getUserRegions(char *fileName);
+/* Get user defined regions from fileName. */
+void doClearSetUserRegionsText(struct sqlConnection *conn);
+/* Respond to clear within user regions enter page. */
 
 /* --------------- Galaxy functions --------------- */
 boolean doGalaxy ();
