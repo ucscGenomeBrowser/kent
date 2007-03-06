@@ -22,7 +22,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.53 2007/03/02 22:34:56 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.54 2007/03/06 01:55:54 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1217,15 +1217,25 @@ if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
 else if (getMaxChromName)
     track->maxChromName = hGetMinIndexLength();
-//uglyf("<BR>track: %s</BR>", line);
 if (!strstr(line, "tdbType"))
     {
     /* for "external" (user-typed) track lines, save for later display
      * in the manager CGI */
-//uglyf("<BR>user track line before: %s</BR>", line);
     struct dyString *ds = dyStringNew(0);
-    dyStringPrintf(ds, "track %s", line);
-//uglyf("<BR>user track line after: %s</BR>", ds->string);
+    
+    /* exclude special setting used by table browser to indicate file needs
+     * to be parsed by the factory */
+    char *unparsed;
+    if ((unparsed = stringIn(CT_UNPARSED, line)) != NULL)
+        {
+        char *nextTok = skipToSpaces(unparsed);
+        if (!nextTok)
+            nextTok = "";
+        *unparsed = 0;
+        dyStringPrintf(ds, "track %s %s", line, nextTok);
+        }
+    else
+        dyStringPrintf(ds, "track %s", line);
     ctAddToSettings(track, "origTrackLine", dyStringCannibalize(&ds));
     }
 }
