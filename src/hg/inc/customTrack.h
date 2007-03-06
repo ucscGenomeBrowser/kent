@@ -21,6 +21,10 @@
 #define CT_MANAGE_BUTTON_LABEL   "manage custom tracks"
 #define CT_ADD_BUTTON_LABEL      "add custom tracks"
 
+/* setting used when creating custom tracks in table browser -- indicates
+ * custom track file in trash has not been through the factory parser */
+#define CT_UNPARSED              "unparsed"
+
 /* TODO: Remove this when hgCustom is ready for release. This cart variable is
  * only used to preserve old behavior during testing */
 
