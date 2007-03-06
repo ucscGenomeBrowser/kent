@@ -634,23 +634,17 @@ type bed 6 +
     longLabel SNPs from the YRI Population
     priority 4
 
-    track hapmapAllelesCombined
-    subTrack hapmapAlleles
-    shortLabel SNPs Combined
-    longLabel SNPs from All Populations
-    priority 5
-
     track hapmapAllelesChimp
     subTrack hapmapAlleles
     shortLabel Chimp Alleles
     longLabel Orthologous Alleles from Chimp (panTro2)
-    priority 6
+    priority 5
 
     track hapmapAllelesMacaque
     subTrack hapmapAlleles
     shortLabel Macaque Alleles
     longLabel Orthologous Alleles from Macaque (rheMac2)
-    priority 7
+    priority 6
 
 searchName hapmapAllelesCEU
 searchTable hapmapAllelesCEU
@@ -681,15 +675,6 @@ padding 250
 
 searchName hapmapAllelesYRI
 searchTable hapmapAllelesYRI
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex (rs[1-9][0-9]*)
-searchPriority 12
-padding 250
-
-searchName hapmapAllelesCombined
-searchTable hapmapAllelesCombined
 searchMethod exact
 searchType bed
 semiShortCircuit 1
