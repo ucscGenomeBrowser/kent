@@ -11,7 +11,7 @@ txGeneAccession: $O ${MYLIBS}
 	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneAccession${EXE}
 
 test:
-	txGeneAccession inOld.bed in.id inNew.bed output.tab -test
+	txGeneAccession inOld.bed in.id inNew.bed output.tab outOldToNew.tab -test
 	diff expected.tab output.tab
 
 clean:

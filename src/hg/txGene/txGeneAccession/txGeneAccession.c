@@ -8,7 +8,7 @@
 #include "rangeTree.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.8 2007/03/06 00:07:35 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.9 2007/03/06 01:52:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,12 +16,14 @@ void usage()
 errAbort(
   "txGeneAccession - Assign permanent accession number to genes.\n"
   "usage:\n"
-  "   txGeneAccession old.bed txLastId new.bed txToAcc.tab\n"
+  "   txGeneAccession old.bed txLastId new.bed txToAcc.tab oldToNew.tab\n"
   "where:\n"
   "   old.bed is a bed file with the previous build with accessions for names\n"
   "   txLastId is a file with the current highest txId\n"
   "   new.bed is a bed file with the current build with temp IDs for names\n"
   "   txToAcc.tab is the output mapping temp IDs to accessions\n"
+  "   oldToNew.tab gives information about the relationship between the accessions\n"
+  "                in old.bed and the new accessions\n"
   "Use old.bed from previous build for new builds on same assembly.  For new\n"
   "assemblies first liftOver old.bed, then use this.\n"
   "options:\n"
@@ -161,7 +163,34 @@ slFreeList(&binList);
 return matchingBed;
 }
 
-void txGeneAccession(char *oldBedFile, char *lastIdFile, char *newBedFile, char *outTab)
+struct bed *findMostOverlapping(struct bed *bed, struct hash *keeperHash)
+/* Try find most overlapping thing to bed in keeper hash. */
+{
+struct bed *bestBed = NULL;
+int bestOverlap = 0;
+struct binKeeper *bk = hashFindVal(keeperHash, bed->chrom);
+if (bk == NULL)
+    return NULL;
+struct binElement *bin, *binList = binKeeperFind(bk, bed->chromStart, bed->chromEnd);
+for (bin = binList; bin != NULL; bin = bin->next)
+    {
+    struct bed *bed2 = bin->val;
+    if (bed2->strand[0] == bed->strand[0])
+	{
+	int overlap = bedSameStrandOverlap(bed2, bed);
+	if (overlap > bestOverlap)
+	    {
+	    bestOverlap = overlap;
+	    bestBed = bed2;
+	    }
+	}
+    }
+slFreeList(&binList);
+return bestBed;
+}
+
+void txGeneAccession(char *oldBedFile, char *lastIdFile, char *newBedFile, char *txToAccFile,
+	char *oldToNewFile)
 /* txGeneAccession - Assign permanent accession number to genes. */
 {
 /* Read in all input. */
@@ -180,12 +209,16 @@ struct hash *oldHash = bedsIntoKeeperHash(oldList);
  * in two incompatible ways). */
 struct hash *usedHash = hashNew(16);
 
+/* Record our decisions in hash as well as file. */
+struct hash *idToAccHash = hashNew(16);
+
 /* Loop through new list first looking for exact matches. Record
  * exact matches in hash so we don't look for them again during
  * the next, "compatable" match phase. */
 struct hash *oldExactHash = hashNew(16), *newExactHash = hashNew(16);
 struct bed *oldBed, *newBed;
-FILE *f = mustOpen(outTab, "w");
+FILE *f = mustOpen(txToAccFile, "w");
+FILE *fOld = mustOpen(oldToNewFile, "w");
 for (newBed = newList; newBed != NULL; newBed = newBed->next)
     {
     oldBed = findExact(newBed, oldHash, usedHash);
@@ -195,12 +228,14 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	hashAdd(newExactHash, newBed->name, newBed);
 	hashAdd(usedHash, oldBed->name, NULL);
         fprintf(f, "%s\t%s\n", newBed->name, oldBed->name);
+	hashAdd(idToAccHash, newBed->name, oldBed->name);
+	fprintf(fOld, "%s:%d-%d\t%s\t%s\t%s\n", oldBed->chrom, oldBed->chromStart, oldBed->chromEnd,
+		oldBed->name, oldBed->name, "exact");
 	}
     }
 
 /* Loop through new bed looking for compatible things.  If
  * we can't find anything compatable, make up a new accession. */
-struct hash *oldChangedHash = hashNew(16), *newChangedHash = hashNew(16);
 for (newBed = newList; newBed != NULL; newBed = newBed->next)
     {
     if (!hashLookup(newExactHash, newBed->name))
@@ -211,17 +246,41 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	    char newAcc[16];
 	    safef(newAcc, sizeof(newAcc), "TX%08d", ++txId);
 	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);
+	    hashAdd(idToAccHash, newBed->name, newAcc);
+	    oldBed = findMostOverlapping(newBed, oldHash);
+	    char *oldAcc = (oldBed == NULL ? "" : oldBed->name);
+	    fprintf(fOld, "%s:%d-%d\t%s\t%s\t%s\n", newBed->chrom, newBed->chromStart, newBed->chromEnd,
+	    	oldAcc, newAcc, "new");
 	    }
 	else
 	    {
-	    hashAdd(oldChangedHash, oldBed->name, oldBed);
-	    hashAdd(newChangedHash, newBed->name, newBed);
 	    hashAdd(usedHash, oldBed->name, NULL);
 	    fprintf(f, "%s\t%s\n", newBed->name, oldBed->name);
+	    hashAdd(idToAccHash, newBed->name, oldBed->name);
+	    fprintf(fOld, "%s:%d-%d\t%s\t%s\t%s\n", newBed->chrom, newBed->chromStart, newBed->chromEnd,
+	    	oldBed->name, oldBed->name, "compatible");
 	    }
 	}
     }
 carefulClose(&f);
+
+/* Make a random-access data structure for old list. */
+struct hash *newHash = bedsIntoKeeperHash(newList);
+
+/* Write record of ones that don't map. */
+for (oldBed = oldList; oldBed != NULL; oldBed = oldBed->next)
+    {
+    if (!hashLookup(usedHash, oldBed->name))
+	{
+	char *newAcc = "";
+	struct bed *newBed = findMostOverlapping(oldBed, newHash);
+	if (newBed != NULL)
+	    newAcc = hashMustFindVal(idToAccHash, newBed->name);
+	fprintf(fOld, "%s:%d-%d\t%s\t%s\t%s\n", oldBed->chrom, oldBed->chromStart, oldBed->chromEnd,
+		oldBed->name, newAcc, "lost");
+	}
+    }
+carefulClose(&fOld);
 
 if (!optionExists("test"))
     {
@@ -235,8 +294,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 6)
     usage();
-txGeneAccession(argv[1], argv[2], argv[3], argv[4]);
+txGeneAccession(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
