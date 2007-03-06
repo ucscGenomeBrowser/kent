@@ -2220,6 +2220,7 @@ TMPDIR=/scratch/tmp
 
 ############################################################################
 ##  BLASTZ swap from panTro2 alignments (DONE 2006-05-04 markd)
+# FINISHED (2006-07-21 kate)
     ssh hgwdev
     mkdir /cluster/data/canFam2/bed/blastz.panTro2.swap
     ln -s blastz.panTro2.swap /cluster/data/canFam2/bed/blastz.panTro2
@@ -2234,6 +2235,12 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/canFam2/bed/blastz.panTro2.swap/axtChain
     nice netClass -verbose=0 -noAr noClass.net canFam2 panTro2 canFam2.panTro2.net
     nice gzip canFam2.panTro2.net
+
+    # Mark stopped here
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -continue=load \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/panTro2/bed/blastz.canFam2/DEF >& swap.2.out&
+
 
 ##########################################################################
 # NSCAN track - (2006-06-01 markd)

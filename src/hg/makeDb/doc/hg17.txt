@@ -20125,6 +20125,7 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     ## Run phastCons on Placental mammals
     ssh pk
     cd /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
+    mkdir placental
     mkdir run.cons.alt
     cd run.cons.alt
 
@@ -20168,7 +20169,14 @@ rm -fr $tmp
     # Create gsub file
     cat > template << 'EOF'
 #LOOP
+# template for 5% cov
 doPhast.csh $(root1) $(file1) 14 .2 .28 placental
+#ENDLOOP
+'EOF'
+    cat > template << 'EOF'
+#LOOP
+# template same as vertebrate
+doPhast.csh $(root1) $(file1) 14 .008 .28 placental
 #ENDLOOP
 'EOF'
     #	happy emacs
@@ -20185,6 +20193,93 @@ doPhast.csh $(root1) $(file1) 14 .2 .28 placental
     para try
     para check
     para push
+#.2
+#CPU time in finished jobs:      15164s     252.74m     4.21h    0.18d  0.000 y
+#IO & Wait Time:                 14852s     247.53m     4.13h    0.17d  0.000 y
+#Average job time:                  90s       1.50m     0.03h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             170s       2.83m     0.05h    0.00d
+#Submission to last job:         86364s    1439.40m    23.99h    1.00d
+
+#.008
+#CPU time in finished jobs:      13712s     228.53m     3.81h    0.16d  0.000 y
+#IO & Wait Time:                 14407s     240.12m     4.00h    0.17d  0.000 y
+#Average job time:                  84s       1.41m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             159s       2.65m     0.04h    0.00d
+#Submission to last job:          5291s      88.18m     1.47h    0.06d
+
+    ssh pk
+    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/placental
+    #	The sed's and the sort get the file names in chrom,start order
+    # (Hiram tricks -- split into columns on [.-/] with 
+    #    identifying x,y,z, to allow column sorting and
+    #    restoring the filename.  Warning: the sort column
+    # will depend on how deep you are in the dir
+    find ./bed -name "chr*.bed" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+	awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+	/cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/hg17/bed/multiz17way/cons/placental
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/cons/placental
+    hgLoadBed -strict hg17 phastConsElementsPlacental mostConserved.bed
+        # .2
+        # Loaded 3775983 elements of size 5
+        # .008
+        # Loaded 1290060 elements of size 5
+
+    # compare with vertebrate cons
+    hgsql hg17 -e "select count(*) from phastConsElements17way"
+        # 2212445
+    featureBits hg17 -enrichment refGene:cds phastConsElementsPlacental
+    featureBits hg17 -enrichment refGene:cds phastConsElementsPlacental_14_2_28
+    featureBits hg17 -enrichment refGene:cds phastConsElements17way
+
+    featureBits hg17 -enrichment refGene:cds phastConsElementsPlacental
+# refGene:cds 1.070%, phastConsElementsPlacental 3.844%, both 0.667%, cover 62.32%, enrich 16.21x
+# refGene:cds 1.069%, phastConsElementsPlacental_14_008_28 3.844%, both 0.667%, cover 62.37%, enrich 16.22x
+
+    featureBits hg17 -enrichment refGene:cds phastConsElementsPlacental_14_2_28
+#refGene:cds 1.070%, phastConsElementsPlacental_14_2_28 5.223%, both 0.691%, cover 64.62%, enrich 12.37x
+    featureBits hg17 -enrichment refGene:cds phastConsElements17way
+#refGene:cds 1.070%, phastConsElements17way 5.116%, both 0.763%, cover 71.27%, enrich 13.93x
+
+
+    # Create merged posterier probability file and wiggle track data files
+    #	pk is currently closer to the san than any other machine
+    ssh pk
+    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/placental
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    #next time try Angie's simpler sort, below
+    find ./pp -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+        nice wigEncode stdin phastConsPlacental.wig phastConsPlacental.wib
+    # about 23 minutes for above
+        # GOT HERE ON REDO
+        # NOTE: remember to flip /gbdb link from cons.old to cons
+
+    cp -p phastConsPlacental.wi?  \
+                /cluster/data/hg17/bed/multiz17way/cons/placental
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/cons/placental
+    ln -s \
+     /cluster/data/hg17/bed/multiz17way/cons/placental/phastConsPlacental.wib \
+        /gbdb/hg17/multiz17way/phastConsPlacental.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/multiz17way hg17 \
+        phastConsPlacental phastConsPlacental.wig
 
 ############################################################################
     ## Run phastCons on subgroups (mammals, placentals, and w/o low-cov)
@@ -20478,6 +20573,7 @@ cat > makeMaf.csh << 'EOF'
     ln -s /cluster/data/hg17/bed/blastz.rheMac1/axtNet \
          /usr/local/apache/htdocs/goldenPath/rheMac1/axtNet
     # Request push to downloads server
+
 
 # UPDATE OPOSSUM DOWNLOADS (2006-01-17 kate)
 # Fix overlaps

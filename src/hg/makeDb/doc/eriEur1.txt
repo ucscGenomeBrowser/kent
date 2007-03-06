@@ -34,15 +34,13 @@ qualFiles /cluster/data/eriEur1/downloads/scaffold.lifted.qac
 dbDbSpeciesDir hedgehog
 '_EOF_'
 
-# GOT HERE
-
     makeGenomeDb.pl -verbose=2 -stop=seq eriEur1.config.ra > makeGenomeDb.out &
 
 ################################################
 ## WINDOWMASKER (2006-03-04 kate)
     ssh kkstore05
     cd /cluster/data/eriEur1/bed/
-    nice /cluster/bin/scripts/doWindowMasker.pl eriEur1 \
-        -workhorse=kolossus >& wmRun.log &
+    nice /cluster/bin/scripts/doWindowMasker.pl \
+        -workhorse=kolossus eriEur1 >& wmRun.log &
 
 
