@@ -1,9 +1,17 @@
 <P>
-Region definitions are ordinary bed file format.  For example:
+Region definitions are ordinary 3 or 4 field bed file format.  For example:
+</P>
 <PRE>
 #  comment lines can be included starting with the # symbol
 chrX   151073054   151173000
-chrX   151183000   151190000
+chrX   151183000   151190000  optionalRegionName
 chrX   151283000   151290000
 chrX   151383000   151390000
 </PRE>
+
+<P>
+There is a limit of 1,000 defined regions.  Using the upload
+file function will replace any existing regions.  The fourth
+field, name, is optional and only for notation purposes, it is
+not used in the table browser.
+</P>
