@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.111 2007/03/06 22:14:35 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.112 2007/03/06 22:17:24 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -597,7 +597,7 @@ if (isPositional)
     hPrintf("<TR><TD><B>region:</B>\n");
 
     /* If regionType not allowed force it to "genome". */
-    if (!(sameString(regionType, hgtaRegionTypeEncode) ||
+    if (!(sameString(regionType, hgtaRegionTypeGenome) ||
         sameString(regionType, hgtaRegionTypeRange) ||
         sameString(regionType, hgtaRegionTypeUserRegions) ||
 	(doEncode && sameString(regionType, hgtaRegionTypeEncode) ) ) )
