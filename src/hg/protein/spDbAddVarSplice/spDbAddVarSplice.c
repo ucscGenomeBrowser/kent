@@ -8,7 +8,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.1 2007/02/03 02:15:53 kent Exp $";
+static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.2 2007/03/06 00:37:03 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -69,7 +69,7 @@ while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     /* Print out parsed results. */
     fprintf(varAcc, "%s-%s\t%s\t%s\n", acc, version, acc, version);
     fprintf(varProtein, "%s-%s\t%s\n", acc, version, seq.dna);
-    fprintf(varDisplayId, "%s-%s\t%s\n", acc, version, displayId);
+    fprintf(varDisplayId, "%s-%s\t%s-%s\n", acc, version, acc, version);
     }
 carefulClose(&varAcc);
 carefulClose(&varProtein);
