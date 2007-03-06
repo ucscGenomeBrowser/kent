@@ -4,37 +4,40 @@ ssh hgwdev
 mkdir /cluster/data/hg18/bed/jkg
 cd /cluster/data/hg18/bed/jkg
 
-# Get GenBank and RefSeq CDS  and other info. Best to get it now
-# so it is synced with the refSeq and mrna inputs, even 
-# though we won't process much of it until a later step.
-# Takes 2.5 minutes
-echo 'select acc,name from gbCdnaInfo,cds where type="mRNA" and cds=cds.id and cds != 0' | hgsql -N hg18 > cds.tab
-echo 'select mrnaAcc,status from refSeqStatus' | hgsql -N hg18 > refSeqStatus.tab
-echo 'select acc,status from mgcFullStatus' | hgsql -N hg18 > mgcStatus.tab
-echo 'select acc,size from gbSeq where type="mRNA"' | hgsql -N hg18 > mrnaSize.tab
-echo 'select mrnaAcc,protAcc from refLink' | hgsql -N hg18 > refToPep.tab
-echo 'select distinct name,sizePolyA from mrnaOrientInfo' | hgsql -N hg18 > sizePolyA.tab
-echo 'select l.protAcc,s.status from refLink l,refSeqStatus s where l.mrnaAcc=s.mrnaAcc' | \
-    hgsql -N hg18 > refPepStatus.tab
+# Get refseq and genbank .ra and fa files somehow - either
+# from Mark, or by running something like:
+# /cluster/data/genbank/bin/x86_64/gbGetSeqs -get=ra -gbRoot=/cluster/data/genbank \
+#        -native -db=hg18 refseq mrna refSeq.ra
+# /cluster/data/genbank/bin/x86_64/gbGetSeqs -get=ra -gbRoot=/cluster/data/genbank \
+#        -native -db=hg18 genbank mrna mrna.ra
+# Then convert these into some tab separated files, which takes 4 seconds:
+txReadRa mrna.ra refSeq.ra .
+
+# Get sequence files. Takes 70 seconds
 /cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 refseq pep refPep.fa
 /cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 refseq mrna refSeq.fa
 /cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank -native -db=hg18 genbank mrna mrna.fa
 
+# Get some other info from the database.  Best to get it about
+# the same time so it is synced with other data. Takes 4 seconds.
+echo 'select acc,status from mgcFullStatus' | hgsql -N hg18 > mgcStatus.tab
+echo 'select distinct name,sizePolyA from mrnaOrientInfo' | hgsql -N hg18 > sizePolyA.tab
+
 # Get refSeq, mrna and intronEst tables as psl.  Ignore the
 # stdin is empty messages, these are just from _random chroms
-# with no annotations.  Takes 7 seconds
-mkdir refSeq mrna est
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo fetching $c mrna and refSeq alignments
-    hgGetAnn -noMatchOk hg18 refSeqAli $c refSeq/$c.psl
-    hgGetAnn -noMatchOk hg18 mrna $c mrna/$c.psl
-    hgGetAnn -noMatchOk hg18 intronEst $c est/$c.psl
-end
+# with no annotations.  Takes 7 seconds.
+#mkdir refSeq mrna est
+#foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+#    hgGetAnn -noMatchOk hg18 refSeqAli $c refSeq/$c.psl
+#    hgGetAnn -noMatchOk hg18 mrna $c mrna/$c.psl
+#    hgGetAnn -noMatchOk hg18 intronEst $c est/$c.psl
+#end
 
 # Note this time, since there are blat changes not yet in the main pipeline
-# do:
-pslSplitOnTarget /cluster/store10/markd/genbank/realign/hg18/global/refseq.psl refSeq
-pslSplitOnTarget /cluster/store10/markd/genbank/realign/hg18/tightGlobal/mrna.psl mrna
+# do the following, which takes 41 seconds
+mkdir est
+pslSplitOnTarget /cluster/store10/markd/genbank/ncalign/results/hg18/refseq.psl refSeq
+pslSplitOnTarget /cluster/store10/markd/genbank/ncalign/results/hg18/genbank.psl mrna
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -44,24 +47,26 @@ foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
 	  echo creating empty mrna/$c.psl
           echo -n "" >mrna/$c.psl
     endif
+    hgGetAnn -noMatchOk hg18 intronEst $c est/$c.psl
+    if (! -e est/$c.psl) then
+	  echo creating empty est/$c.psl
+          echo -n "" >est/$c.psl
+    endif
 end
-txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/refseq.ra refSeq.exceptions
-txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/mrna.ra mrna.exceptions
 
 # Get list of accessions that are associated with antibodies from database.
 # This will be a good list but not 100% complete.  Cluster these to get
 # four or five antibody heavy regions.  Later we'll weed out input that
 # falls primarily in these regions, and, include the regions themselves
-# as special genes.
+# as special genes.  Takes 40 seconds
 txAbFragFind hg18 antibodyAccs
 pslCat mrna/*.psl -nohead | weedLines -invert antibodyAccs stdin antibody.psl
 clusterPsl antibody.psl stdout | awk '$10 > 20' | cut -f 1-12 > antibody.bed
 
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo checking splice sites on $c.psl and converting to bed.
     txPslToBed refSeq/$c.psl -noFixStrand -cds=cds.tab /cluster/data/hg18/hg18.2bit refSeq/$c.bed -unusual=refSeq/$c.unusual
-    txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/hg18/hg18.2bit stdout \
+    txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/hg18/hg18.2bit stdout -unusual=mrna/$c.unusual \
         | bedWeedOverlapping antibody.bed maxOverlap=0.5 stdin mrna/$c.bed
     txPslToBed est/$c.psl /cluster/data/hg18/hg18.2bit stdout \
         | bedWeedOverlapping antibody.bed maxOverlap=0.3 stdin est/$c.bed
@@ -70,7 +75,6 @@ end
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir bedToGraph
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo $c
     txBedToGraph -prefix=$c. refSeq/$c.bed refSeq mrna/$c.bed mrna bedToGraph/$c.txg
 end
 
@@ -90,8 +94,7 @@ end
 
 # Make evidence file for EST graph edges supported by at least 2 
 # ests.  Takes about 30 seconds.
-foreach c (`echo 'select chrom from chromInfo' | hgsql -N mm8`)
-    echo getting edges from ESTs on $c
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
     txgGoodEdges est/$c.txg  trim.weights 2 est est/$c.edges
 end
 
@@ -121,9 +124,18 @@ end
 rm -r est mrna refSeq
 
 # Unpack chains and nets, apply synteny filter and split by chromosome
+# Takes 5 minutes.  Make up phony empty nets for ones that are empty after
+# synteny filter.
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.all.chain.gz | chainSplit chains stdin
 zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.net.gz | netFilter -syn stdin | netSplit stdin nets
-cd ..
+cd nets
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    if (! -e $c.net) then
+	echo making phony $c.net
+        echo -n > $c.net
+    endif
+end
+cd ../..
 
 # Make txOrtho directory and a para spec file
 mkdir txOrtho
@@ -138,11 +150,7 @@ end
 cd ..
 
 # Do txOrtho parasol run on iServer (high RAM) cluster
-ssh kki
-cd /cluster/data/hg18/bed/jkg/txOrtho
-para create spec
-para make
-para time
+ssh kki "cd /cluster/data/hg18/bed/jkg/txOrtho; para make spec; para time"
 #Completed: 49 of 49 jobs
 #CPU time in finished jobs:       1916s      31.93m     0.53h    0.02d  0.000 y
 #IO & Wait Time:                   540s       9.00m     0.15h    0.01d  0.000 y
@@ -155,11 +163,9 @@ para time
 # of view, since they represent two different mouse edges both supporting
 # a human edge. However, from the human point of view we want only one
 # support from mouse orthology.  Just takes a second.
-ssh hgwdev
-cd /cluster/data/hg18/bed/jkg/txOrtho
+cd txOrtho
 mkdir uniqEdges
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo uniqifying ortho edges for $c
     cut -f 1-9 edges/$c.edges | sort | uniq > uniqEdges/$c.edges
 end
 cd ..
@@ -187,7 +193,6 @@ end
 # again...)
 mkdir txWalk
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo txWalk $c
     txWalk graphWithEvidence/$c.txg trim.weights 3 txWalk/$c.bed -evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25
 end
 
@@ -202,7 +207,6 @@ txgAnalyze txWalk.txg /cluster/data/hg18/hg18.2bit stdout | sort | uniq > altSpl
 # Get txWalk transcript sequences.  This'll take about 2 minutes
 rm -f txWalk.fa
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
-    echo transcript sequence for  $c
     sequenceForBed -db=hg18 -bedIn=txWalk/$c.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 end
 rm -rf txFaSplit
@@ -228,21 +232,18 @@ cat << '_EOF_' > borf
 chmod a+x borf
 
 # Do borf cluster run 
-ssh pk
-cd /cluster/data/hg18/bed/jkg/bestorf
-para create spec
-para make
-para time
+ssh pk "cd /cluster/data/hg18/bed/jkg/bestorf; para make spec; para time"
 #Completed: 195 of 195 jobs
-#CPU time in finished jobs:       1356s      22.59m     0.38h    0.02d  0.000 y
-#IO & Wait Time:                  1226s      20.44m     0.34h    0.01d  0.000 y
-#Average job time:                  13s       0.22m     0.00h    0.00d
+#CPU time in finished jobs:       1354s      22.56m     0.38h    0.02d  0.000 y
+#IO & Wait Time:                  1129s      18.82m     0.31h    0.01d  0.000 y
+#Average job time:                  13s       0.21m     0.00h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:              24s       0.40m     0.01h    0.00d
-#Submission to last job:            35s       0.58m     0.01h    0.00d
+#Longest finished job:              22s       0.37m     0.01h    0.00d
+#Submission to last job:            22s       0.37m     0.01h    0.00d
 
 
 # Fetch human protein set and table that describes if curated or not.
+# Takes about a minute
 hgsql -N sp070202 -e \
   'select p.acc, p.val from protein p, accToTaxon x where x.taxon=9606 and p.acc=x.acc'\
   |awk '{print ">" $1;print $2}' >uniProt.fa
@@ -265,18 +266,14 @@ end
 cd ..
 
 # Run protein/transcript blat job on cluster
-ssh pk
-cd /cluster/data/hg18/bed/jkg/blat/protein
-para create spec
-para make
-para time
-Completed: 390 of 390 jobs
-CPU time in finished jobs:      12996s     216.59m     3.61h    0.15d  0.000 y
-IO & Wait Time:                  1632s      27.21m     0.45h    0.02d  0.000 y
-Average job time:                  38s       0.63m     0.01h    0.00d
-Longest running job:                0s       0.00m     0.00h    0.00d
-Longest finished job:             119s       1.98m     0.03h    0.00d
-Submission to last job:           228s       3.80m     0.06h    0.00d
+ssh pk "cd /cluster/data/hg18/bed/jkg/blat/protein; para make spec; para time"
+#CPU time in finished jobs:      13571s     226.18m     3.77h    0.16d  0.000 y
+#IO & Wait Time:                  5645s      94.08m     1.57h    0.07d  0.000 y
+#Average job time:                  49s       0.82m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             137s       2.28m     0.04h    0.00d
+#Submission to last job:           137s       2.28m     0.04h    0.00d
+
 
 # Set up blat jobs for mrna vs. txWalk transcripts
 mkdir blat/rna
@@ -292,17 +289,15 @@ cd ..
 
 # Run rna/transcript blat on cluster.  This is a little i/o heavy, so use
 # maxNode=50, or optimize i/o somehow.
-ssh pk
-cd /cluster/data/hg18/bed/jkg/blat/rna
-para create spec
-para make -maxNode=50
+ssh pk "cd /cluster/data/hg18/bed/jkg/blat/rna; para make -maxNode=50 spec; para time"
 #Completed: 390 of 390 jobs
-#CPU time in finished jobs:      18774s     312.89m     5.21h    0.22d  0.001 y
-#IO & Wait Time:                 18804s     313.41m     5.22h    0.22d  0.001 y
-#Average job time:                  96s       1.61m     0.03h    0.00d
+#CPU time in finished jobs:      19127s     318.78m     5.31h    0.22d  0.001 y
+#IO & Wait Time:                 14795s     246.58m     4.11h    0.17d  0.000 y
+#Average job time:                  87s       1.45m     0.02h    0.00d
 #Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             606s      10.10m     0.17h    0.01d
-#Submission to last job:           898s      14.97m     0.25h    0.01d
+#Longest finished job:             581s       9.68m     0.16h    0.01d
+#Submission to last job:           843s      14.05m     0.23h    0.01d
+
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -319,10 +314,8 @@ pslCat -nohead protein/raw/ref*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -ignoreSize -minAli=0.85 stdin protein/refSeq.psl /dev/null
 pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
-# rm -r rna/raw protein/raw
+rm -r rna/raw protein/raw
 cd ..
-
-txCdsRaExceptions /cluster/store10/markd/genbank/realign/hg18/refseq.ra refSeq.exceptions
 
 # Create evidence derived from mRNA CDS and mRNA/transcript alignments
 # Takes 28 seconds.
@@ -330,28 +323,27 @@ rm -rf cdsEvidence
 mkdir cdsEvidence
 txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa \
 	cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab \
-	-unmapped=cdsEvidence/refSeqTx.unmapped -exceptions=refSeq.exceptions
+	-unmapped=cdsEvidence/refSeqTx.unmapped -exceptions=exceptions.tab
 txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa \
 	cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab \
 	-unmapped=cdsEvidence/mrna.unmapped
 txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa \
 	cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab \
 	-unmapped=cdsEvidence/refSeqProt.unmapped \
-	-exceptions=refSeq.exceptions -refToPep=refToPep.tab \
+	-exceptions=exceptions.tab -refToPep=refToPep.tab \
 	-dodgeStop=3 -minCoverage=0.3
 txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
-	-unmapped=cdsEvidence/uniProt.unmapped -refToPep=refToPep.tab
+	-unmapped=cdsEvidence/uniProt.unmapped -source=tremble
 cat bestorf/tab/*.borf | txCdsEvFromBorf stdin txWalk.fa cdsEvidence/bestorf.tce
 
 # Consolidate and pick best CDS.  Takes 4 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
-cat refSeq.exceptions mrna.exceptions > allIn.exceptions
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
 cat txWalk/*.bed | \
 	txCdsPick stdin unweighted.tce cds.weights pick.tce pick.picks \
 		-weightedTce=weighted.tce -refToPep=refToPep.tab \
-		-exceptionsIn=allIn.exceptions \
+		-exceptionsIn=exceptions.tab \
 		-exceptionsOut=txWalk.exceptions
 
 # Create gene prediction (GTF) and peptide fasta file.
@@ -368,17 +360,28 @@ cat mrna/*.psl refSeq/*.psl | txInfoAssemble pick.bed pick.tce all.borf \
 # Cluster purely based on CDS (in same frame). Takes 1 second
 txCdsCluster pick.bed pick.cluster
 
-# Flag suspicious CDS regions, and add this to info file. Weed out bad CDS
-# and generate a new gene set.
+# Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
+# Takes about 3 seconds.
 txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
 txCdsWeed pick.tce pick.info weeded.tce weeded.info
+
+# TODO - Put in step here that does additional weeding of genes....
+# Specifically get rid of near-coding transcripts that have
+# retained introns or bleeds longer than 100.
+
+# TODO - Additional classification of noncoding, including
+# antisense for ones that overlap protein coding genes on
+# minus strand by 22 or more bases.
+
+# Generate a new gene set.  Takes 7 seconds
 cat txWalk/*.bed | txCdsToGene stdin txWalk.fa weeded.tce weeded.gtf weeded.faa \
 	-bedOut=weeded.bed -exceptions=txWalk.exceptions
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
-# using.
-txGeneAccession /dev/null ~kent/src/hg/txGene/txGeneAccession/txLastId weeded.bed txToAcc.tab
+# using.  Takes about 10 seconds
+txGeneAccession ../jkg.bak/ucscGenes.bed ~kent/src/hg/txGene/txGeneAccession/txLastId \
+	weeded.bed txToAcc.tab oldToNew.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
 subColumn 1 pick.info txToAcc.tab accessioned.info
 subColumn 1 pick.picks txToAcc.tab ucscGenes.picks
@@ -386,22 +389,22 @@ subColumn 2 pick.nice txToAcc.tab ucscGenes.nice
 cat txWalk/*.ev | subColumn 1 stdin txToAcc.tab ucscGenes.ev
 
 # Separate the gene set into coding, noncoding, and nearCoding.
-# Cluster the coding and the noncoding sets.
+# Cluster the coding and the noncoding sets. Takes 3 seconds
 txGeneSeparateNoncoding ucscGenes.bed accessioned.info \
 	coding.bed nearCoding.bed noncoding.bed ucscGenes.info
 txCdsCluster coding.bed coding.cluster
 txBedToGraph noncoding.bed noncoding noncoding.txg
 
 # Do final clustering of transcripts into genes, and use this to build the
-# knownCanonical and related tables.
-txGeneCanonical coding.cluster ucscGenes.nice noncoding.txg ucscGenes.bed nearCoding.bed \
+# knownCanonical and related tables.  Takes 3 seconds
+txGeneCanonical coding.cluster ucscGenes.info noncoding.txg ucscGenes.bed nearCoding.bed \
 	canonical.tab isoforms.tab txCluster.tab
 hgLoadSqlTab hg18a knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgLoadSqlTab hg18a knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
 
 # Make files with protein and mrna accessions.  These will be taken from
 # RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
-# Load these sequences into database.
+# Load these sequences into database. Takes 17 seconds.
 txGeneProtAndRna weeded.bed separated.info txWalk.fa weeded.faa refSeq.fa \
     refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
 hgPepPred hg18a generic knownGenePep ucscGenes.faa
@@ -459,11 +462,16 @@ knownToVisiGene hg18a -fromProbePsl=vgAllProbes
 # Create expression distance table - takes about an hour
 hgExpDistance hg18a hgFixed.gnfHumanAtlas2MedianRatio \
     hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
-    -lookup=knownToGnfAtlas2 &
-# This one takes a whle too...
+    -lookup=knownToGnfAtlas2
+
+# Create another expression distance table, this one is quicker - 6 min..
+hgExpDistance hg18a hgFixed.gnfHumanU95MedianRatio \
+	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+
+# This one takes a whle too, 1 hour 22 minutes.
 cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
-time hgExpDistance hg18 affyUclaNorm affyUclaExp knownExpDistance \
-	-weights=affyUcla.weight -lookup=knownToU133 &
+time hgExpDistance hg18a affyUclaNorm affyUclaExp knownExpDistance \
+	-weights=affyUcla.weight -lookup=knownToU133
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -570,6 +578,36 @@ end
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
+
+# Create Vidal and Wanker protein/protein interaction networks and 
+# load them.  Takes about 8 minutes.
+cd /cluster/data/hg18/p2p
+hgNetDist vidal/humanVidal.p2p hg18a humanVidalP2P -threshold=2 \
+	-sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+hgNetDist wanker/humanWanker.p2p hg18a humanWankerP2P -threshold=2 -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+
+###########################################################################
+## Load take 8 into the database. Takes 2 minutes.
+ssh hgwdev
+cd /cluster/data/hg18/bed/jkg
+cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
+cat mrna/*.psl | hgLoadPsl hg18 stdin -table=jkgInputMrna
+hgLoadBed hg18 jkgRefSeqBed refSeq/*.bed
+hgLoadBed hg18 jkgMrnaBed mrna/*.bed
+hgLoadBed hg18 jkgAntibodyBed antibody.bed
+cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed hg18 jkgRefSeqUnusual  stdin
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph.sql hg18 jkgNativeGraph stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons stdin
+awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstExons stdin
+awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstIntrons stdin
+hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
+hgLoadBed hg18 jkgAltSplice altSplice.bed
+ldHgGene hg18 jkgTxCdsPick pick.gtf -gtf -genePredExt
+hgLoadCdsEvidence hg18 jkgTxCdsEvidence weighted.tce
+hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql pick.info
+ldHgGene hg18 jkgTxCdsRepick weeded.gtf -gtf -genePredExt
+
 
 ###########################################################################
 ## Load take 7 into the database. Takes 30 seconds.
@@ -1065,30 +1103,21 @@ txClusterAnalyser - Identify CDS that is not shared with dominant CDS
 
 ######################################################################
 # Stuff to consider for take 7
-o - Remove accessions in
-	markd/compbio/mgc/cListPaperData/data/hgdata/athersysRage.acc
-                                                invitrogenCrap.acc
-    from input.
-o - Do tighter near-best placements, using Robert & David's method.
-o - Separating clusters that contain non-overlapping refSeq clusters
-    into separate genes.  See chr22:16,936,036-17,018,244.
-o - When gene has retained intron and ORF doesn't overlap (in frame)
-    ORF of other genes in cluster, consider nuking ORF.
-o - Downweigh ORF score when NMD candidate: chr21:32,865,403-32,872,381.
 o - What happened to  NM_032476 at chr21:34,351,145-34,448,007?
     Looks like a txWalk problem.  Fixed.
-o - chrX:152,822,047-152,827,969 is a good place for CDS frame clustering
-    and maybe reevaluating of BC080603's CDS.
+o - When gene has retained intron and ORF doesn't overlap (in frame)
+    ORF of other genes in cluster, consider nuking ORF.  Hmm, this
+    seemed to cause more problems than it solved.
+o - Downweigh ORF score when NMD candidate: chr21:32,865,403-32,872,381.
+    (Perhaps taking this too far now)
 o - Another dubious ORF chrX:153,925,985-153,942,224 AX746776 from 
     incompletely processed transcript?  NMD candidate.
-o - Here refSeq has two genes with same transcript just to get different
-    proteins.  chrX:153,939,681-153,954,680
 o - chr19:59,394,825-59,444,662  A transcriptoinally active cluster.
     Looks like maybe falsesly separatee into two by refSeq.
 o - chrX:153,917,080-153,942,391 is a good example of a CDS to nuke.
     The bestorf score is 0. It is an NMD target. It doesn't overlap
     with other CDS's in region.
-o - chr13:112,573,175-112,597,164 is an example of a sinle exon transcript
+o - chr13:112,573,175-112,597,164 is an example of a single exon transcript
     that probably should be removed from overlapping too much a coding
     transcript.
 o - chr19_random:158,550-294,266 - very difficult region.  What we're
@@ -1098,9 +1127,51 @@ o - chr19_random:158,550-294,266 - very difficult region.  What we're
 o - chr5:69,470,446-69,917,303 - another very difficult region.
 o - chr22:43,456,057-43,654,296 - another region with transcripts that
     cross genes.  
-In all it looks like the CDS stripper is being overactive, that most of
-it's activity is in gene-crossing regions, rather than in the retained
-introns it was intended for.
+o - chrX:152,822,047-152,827,969 is a good place for CDS frame clustering
+    and maybe reevaluating of BC080603's CDS.
+
+######################################################################
+# Stuff to consider for take 8
+o - Leave in NMD ORFs, especially for RefSeq, just mark as bad?
+o - Change accession from TX12345678 to UC1234567?
+o - Put in soft-join at funny introns like we do with RefSeq.
+    It's just a bug that we don't.  Fixed!
+o - Add in antibody's as noncoding genes at a fairly late phase.
+o - Remove accessions in
+	markd/compbio/mgc/cListPaperData/data/hgdata/athersysRage.acc
+                                                invitrogenCrap.acc
+    from input.
+o - Do tighter near-best placements, using Robert & David's method.
+o - Separating clusters that contain non-overlapping refSeq clusters
+    into separate genes.  See chr22:16,936,036-17,018,244. BUt how???
+o - Here refSeq has two genes with same transcript just to get different
+    proteins.  chrX:153,939,681-153,954,680
+
+######################################################################
+# Examining 10 cases in KG2 not Take 7
+chr17:50,384,266-50,387,243 - AK124809. Single exon gene without
+  quite enough support.  1.5 mRNA.  0 EST, Exoniphy, Ortho.
+chr1:1,327,156-1,332,490 - AK000886 not enough evidence for this
+  isoform, which appears to have a retained intron.
+chr2:43,307,984-43,309,498 - Hmm.  Three mRNAs for this single exon
+  clone, but two of them are just in middle, CDS region.  Long UTR
+  of third clone washes this out, perhaps inappropriately.  No orthology
+  spliced est or exoniphy to rescue it.
+chr2:111,903,366-111,904,956 - Another single exon gene.  This one overlaps
+  a spliced gene.  Has a second RNA that covers most of it, and some
+  mouse orthologous transcription evidence.  Still, looks much like a
+  retained intron. Arguably should be rescued.
+chr2:201,742,307-201,744,647  Another single exon gene. 3 RNAs overlap
+  parts of it, but 2 are jsut a small part, and third only 2/3rds.  I wonder
+  if the coverage decision is made after the reduction to median though.
+  This might rescue this case, though not clear we should.
+chr3:47,578,733-47,597,286 - We choose shorter 3' UTR to follow refSeq.
+chr3:49,272,522-49,273,751 - Single exon gene with on other mRNA.
+   It does have a reasonable pile up of ESTs on the 3' end (also 
+   unspliced).
+chr3:196,899,961-196,903,089 - Single exon gene with 1.5 supporting mRNAs
+chr4:82,609,187-82,609,498 - Single exon gene with only 1 supportin RNA
+chr6:14,322,418-14,326,268 - Single exon gene with only 1 supporting RNA
 
 #####
 # Preparing hg18a -
@@ -1120,11 +1191,11 @@ done foldUtr3
 done foldUtr5
 n/a fosEndPairs
 done gnfAtlas2Distance
-todo gnfU95Distance
-???? humanBlastTab
-todo humanHprdP2P
-todo humanVidalP2P
-todo humanWankerP2P
+done gnfU95Distance
+???? humanBlastTab - looks to be obsolete
+???? humanHprdP2P
+done humanVidalP2P
+done humanWankerP2P
 done kgAlias
 done kgProtAlias
 ???? kgProtMap
@@ -1132,7 +1203,7 @@ done kgProtAlias
 done kgXref
 done knownBlastTab
 done knownCanonical
-todo knownExpDistance
+done knownExpDistance
 done knownGene
 done knownGeneMrna
 done knownGenePep
