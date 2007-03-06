@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.110 2007/03/06 20:41:28 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.111 2007/03/06 22:14:35 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -588,7 +588,7 @@ hPrintf("<TABLE BORDER=0>\n");
 
 /* Region line */
 {
-char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+char *regionType = cartUsualString(cart, hgtaRegionType, hgtaRegionTypeGenome);
 char *range = cartUsualString(cart, hgtaRange, "");
 if (isPositional)
     {

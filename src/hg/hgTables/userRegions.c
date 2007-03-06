@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.1 2007/03/06 20:41:28 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.2 2007/03/06 22:14:35 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -151,6 +151,7 @@ else
     {
     cartRemove(cart, hgtaUserRegionsFile);
     cartRemove(cart, hgtaEnteredUserRegionFile);
+    cartRemove(cart, hgtaRegionType);
     }
 mainPageAfterOpen(conn);
 htmlClose();
@@ -167,6 +168,7 @@ if (fileExists(fileName))
 else
     {
     cartRemove(cart, hgtaUserRegionsFile);
+    cartRemove(cart, hgtaRegionType);
     return NULL;
     }
 }
@@ -175,7 +177,6 @@ struct region *getUserRegions(char *fileName)
 /* Get user defined regions from fileName. */
 {
 struct region *list = NULL, *region;
-struct bed *bedList = NULL;
 struct lineFile *lf;
 char *words[4];
 int wordCount;
@@ -201,6 +202,7 @@ void doClearSetUserRegionsText(struct sqlConnection *conn)
 {
 cartRemove(cart, hgtaEnteredUserRegions);
 cartRemove(cart, hgtaEnteredUserRegionFile);
+cartRemove(cart, hgtaRegionType);
 doSetUserRegions(conn);
 }
 
@@ -214,6 +216,7 @@ fileName = userRegionsFileName();
 if (fileName != NULL)
     remove(fileName);
 cartRemove(cart, hgtaUserRegionsFile);
+cartRemove(cart, hgtaRegionType);
 mainPageAfterOpen(conn);
 htmlClose();
 }
