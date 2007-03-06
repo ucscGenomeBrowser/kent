@@ -69,9 +69,31 @@ void hapmapAllelesOutput(struct hapmapAlleles *el, FILE *f, char sep, char lastS
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 /* items for trackUi options and filters */
 
-#define HA_POP_MIXED "hapmapAlleles.popMixed"
-#define HA_GENO_AVAIL "hapmapAlleles.genoAvail"
-#define HA_OBSERVED "hapmapAlleles.observed"
+#define HA_POP_MIXED "hapmapAlleles.isMixed"
+#define HA_POP_COUNT "hapmapAlleles.popCount"
+#define HA_TYPE "hapmapAlleles.polyType"
+#define HA_MIN_FREQ "hapmapAlleles.minorAlleleFreqMinimum"
+#define HA_MAX_FREQ "hapmapAlleles.minorAlleleFreqMaximum"
+#define HA_MIN_HET "hapmapAlleles.hetMinimum"
+#define HA_MAX_HET "hapmapAlleles.hetMaximum"
+#define HA_MONO "hapmapAlleles.monomorphic"
+#define HA_CHIMP "hapmapAlleles.chimp"
+#define HA_CHIMP_QUAL "hapmapAlleles.chimpQualScore"
+#define HA_MACAQUE "hapmapAlleles.macaque"
+#define HA_MACAQUE_QUAL "hapmapAlleles.macaqueQualScore"
+
+#define HA_POP_MIXED_DEFAULT "both"
+#define HA_POP_COUNT_DEFAULT "any"
+#define HA_TYPE_DEFAULT      "all"
+#define HA_MIN_FREQ_DEFAULT  "0.0"
+#define HA_MAX_FREQ_DEFAULT  "0.5"
+#define HA_MIN_HET_DEFAULT   "0.0"
+#define HA_MAX_HET_DEFAULT   "0.5"
+#define HA_MONO_DEFAULT      FALSE
+#define HA_CHIMP_DEFAULT     "no filter"
+#define HA_CHIMP_QUAL_DEFAULT "0"
+#define HA_MACAQUE_DEFAULT   "no filter"
+#define HA_MACAQUE_QUAL_DEFAULT "0"
 
 #endif /* HAPMAPALLELES_H */
 
