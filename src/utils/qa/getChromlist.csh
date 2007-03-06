@@ -36,8 +36,10 @@ endif
 # echo "list chroms"
 
 if ($norandom == "true") then
-  hgsql -N -e "SELECT chrom FROM chromInfo" $db | grep -v "random" | sort 
+  hgsql -N -e "SELECT chrom FROM chromInfo" $db | grep -v "random" | sort \
+    $db.chromlist
 else
-  hgsql -N -e "SELECT chrom FROM chromInfo" $db | sort 
+  hgsql -N -e "SELECT chrom FROM chromInfo" $db | sort \
+    $db.chromlist
 endif
 
