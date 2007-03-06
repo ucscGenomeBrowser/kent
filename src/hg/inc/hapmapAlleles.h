@@ -89,7 +89,7 @@ void hapmapAllelesOutput(struct hapmapAlleles *el, FILE *f, char sep, char lastS
 #define HA_MAX_FREQ_DEFAULT  "0.5"
 #define HA_MIN_HET_DEFAULT   "0.0"
 #define HA_MAX_HET_DEFAULT   "0.5"
-#define HA_MONO_DEFAULT      FALSE
+#define HA_MONO_DEFAULT      "any"
 #define HA_CHIMP_DEFAULT     "no filter"
 #define HA_CHIMP_QUAL_DEFAULT "0"
 #define HA_MACAQUE_DEFAULT   "no filter"
