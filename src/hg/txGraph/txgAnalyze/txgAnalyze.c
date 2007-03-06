@@ -535,8 +535,28 @@ for (edge = graph->edgeList; edge != NULL; edge = edge->next)
 		{
 		char *refSource = refSourceAcc(graph, edge);
 		if (refSource != NULL && edge->evCount >= 10)
-		    fprintf(f, "%s\t%d\t%d\t%s.%d\t0\t%s\n",
-			graph->tName, start, end, refSource, ++eId, graph->strand);
+		    {
+		    /* Do one more scan making sure that it doesn't
+		     * intersect any exons except for us. */
+		    boolean anyOtherExon = FALSE;
+		    struct txEdge *ed;
+		    for (ed = graph->edgeList; ed != NULL; ed = ed->next)
+		        {
+			if (ed != edge)
+			    {
+			    int edStart = graph->vertices[ed->startIx].position;
+			    int edEnd = graph->vertices[ed->endIx].position;
+			    if (rangeIntersection(edStart, edEnd, start, end) > 0)
+				{
+			        anyOtherExon = TRUE;
+				break;
+				}
+			    }
+			}
+		    if (!anyOtherExon)
+			fprintf(f, "%s\t%d\t%d\t%s.%d\t0\t%s\n",
+			    graph->tName, start, end, refSource, ++eId, graph->strand);
+		    }
 		}
 	    }
 	}

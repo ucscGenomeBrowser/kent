@@ -1,26 +1,14 @@
-# Build txGraph source
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
-all:    
-	@for D in $(DIRS) x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE)  ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
+L = -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-DIRS = \
-    agxToTxg \
-    bedToTxEdges \
-    txAbFragFind \
-    txBedToGraph \
-    txOrtho \
-    txPslFilter \
-    txPslToBed \
-    txWalk \
-    txgAddEvidence \
-    txgAnalyze \
-    txgGoodEdges \
-    txgToAgx \
-    txgToXml \
-    txgTrim 
+O = txGraph.o
+
+txGraph: $O ${MYLIBS}
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGraph $O ${MYLIBS} $L
+	${STRIP} ${HOME}/bin/${MACHTYPE}/txGraph${EXE}
+
+clean:
+	rm -f $O
