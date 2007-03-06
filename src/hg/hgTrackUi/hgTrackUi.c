@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.345 2007/02/26 23:10:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.346 2007/03/06 05:28:57 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2142,53 +2142,111 @@ printf("  ");
 
 void hapmapAllelesUi(struct trackDb *tdb)
 /* Options for filtering hapmap alleles */
-/* Default is always "don't care" */
-/* May also add filters for orthoAvail, inRepeat, and zygosity */
+/* Default is always to not filter (include all data) */
+/* snp track puts the menu options in kent/src/hg/lib/snp125Ui.h */
+/* snp track also sets global variables, don't actually need this? */
 {
 char **menu;
 int menuSize = 0;
 int menuPos = 0;
+float minFreq = 0.0;
+float maxFreq = 0.0;
+float minHet = 0.0;
+float maxHet = 0.0;
+int minChimpQual = 0;
+int minMacaqueQual = 0;
 
 puts("<P>");
-puts("<B>Filters for the display of the All Populations data:</B>");
+puts("<B>Filters for the display of the HapMap SNPs data:</B>");
 puts("<BR><BR>\n");
 
 puts("<B>Major alleles mixed across populations:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "don't care";
+menu[menuPos++] = "both";
 menu[menuPos++] = "only mixed";
 menu[menuPos++] = "not mixed";
-cgiMakeDropList(HA_POP_MIXED, menu, menuSize, cartCgiUsualString(cart, HA_POP_MIXED, menu[0]));
+cgiMakeDropList(HA_POP_MIXED, menu, menuSize, 
+    cartCgiUsualString(cart, HA_POP_MIXED, HA_POP_MIXED_DEFAULT));
 freez(&menu);
 
-puts("<B>Genotypes available across populations:</B>&nbsp;");
+puts("<B>Population count:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "don't care";
-menu[menuPos++] = "all populations";
-menu[menuPos++] = "subset of populations";
-cgiMakeDropList(HA_GENO_AVAIL, menu, menuSize, cartCgiUsualString(cart, HA_GENO_AVAIL, menu[0]));
+menu[menuPos++] = "any";
+menu[menuPos++] = "all 4 populations";
+menu[menuPos++] = "1-3 populations";
+cgiMakeDropList(HA_POP_COUNT, menu, menuSize, 
+    cartCgiUsualString(cart, HA_POP_COUNT, HA_POP_COUNT_DEFAULT));
 freez(&menu);
 
-puts("<P>");
-puts("<B>Filters for the display of Human data:</B>");
-puts("<BR>\n");
-
-scoreUi(tdb, 500);
-puts("<B> Observed:</B>&nbsp;");
+puts("<B>Polymorphism Type:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "don't care";
+menu[menuPos++] = "all";
 menu[menuPos++] = "bi-alleleic";
 menu[menuPos++] = "transition";
 menu[menuPos++] = "transversion";
 menu[menuPos++] = "complex";
-cgiMakeDropList(HA_OBSERVED, menu, menuSize, cartCgiUsualString(cart, HA_OBSERVED, menu[0]));
+cgiMakeDropList(HA_TYPE, menu, menuSize, 
+    cartCgiUsualString(cart, HA_TYPE, HA_TYPE_DEFAULT));
 freez(&menu);
+
+puts("<BR><B>Minimum Minor Allele Frequency:</B>&nbsp;");
+minFreq = atof(cartUsualString(cart, HA_MIN_FREQ, HA_MIN_FREQ_DEFAULT));
+cgiMakeDoubleVar(HA_MIN_FREQ, minFreq, 6);
+
+puts("<BR><B>Maximum Minor Allele Frequency:</B>&nbsp;");
+maxFreq = atof(cartUsualString(cart, HA_MAX_FREQ, HA_MAX_FREQ_DEFAULT));
+cgiMakeDoubleVar(HA_MAX_FREQ, maxFreq, 6);
+
+puts("<BR><B>Minimum Heterozygosity:</B>&nbsp;");
+minHet = atof(cartUsualString(cart, HA_MIN_HET, HA_MIN_HET_DEFAULT));
+cgiMakeDoubleVar(HA_MIN_HET, minHet, 6);
+
+puts("<BR><B>Maximum Heterozygosity:</B>&nbsp;");
+maxHet = atof(cartUsualString(cart, HA_MAX_HET, HA_MAX_HET_DEFAULT));
+cgiMakeDoubleVar(HA_MAX_HET, maxHet, 6);
+
+puts("<BR><B>Display Monomorphic Only:</B>&nbsp;");
+cgiMakeCheckBox(HA_MONO, HA_MONO_DEFAULT);
+
+puts("<B>Chimp Allele:</B>&nbsp;");
+menuSize = 5;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "available";
+menu[menuPos++] = "matches major allele";
+menu[menuPos++] = "matches minor allele";
+menu[menuPos++] = "complex";
+cgiMakeDropList(HA_CHIMP, menu, menuSize, 
+    cartCgiUsualString(cart, HA_TYPE, HA_CHIMP_DEFAULT));
+freez(&menu);
+
+minChimpQual = atoi(cartUsualString(cart, HA_CHIMP_QUAL, HA_CHIMP_QUAL_DEFAULT));
+printf("<BR><B>Minimum Chimp Quality Score:</B>&nbsp;");
+cgiMakeIntVar(HA_CHIMP_QUAL, minChimpQual, 4);
+
+puts("<B>Macaque Allele:</B>&nbsp;");
+menuSize = 5;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "no filter";
+menu[menuPos++] = "available";
+menu[menuPos++] = "matches major allele";
+menu[menuPos++] = "matches minor allele";
+menu[menuPos++] = "complex";
+cgiMakeDropList(HA_MACAQUE, menu, menuSize, 
+    cartCgiUsualString(cart, HA_TYPE, HA_MACAQUE_DEFAULT));
+freez(&menu);
+
+minMacaqueQual = atoi(cartUsualString(cart, HA_MACAQUE_QUAL, HA_MACAQUE_QUAL_DEFAULT));
+printf("<BR><B>Minimum Macaque Quality Score:</B>&nbsp;");
+cgiMakeIntVar(HA_MACAQUE_QUAL, minMacaqueQual, 4);
 
 puts("</P>\n");
 }
