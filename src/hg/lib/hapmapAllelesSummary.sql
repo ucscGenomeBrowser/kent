@@ -14,7 +14,7 @@ CREATE TABLE hapmapAllelesSummary (
     strand enum ('+', '-', '?') default '?' not null,	# Which genomic strand contains the observed alleles
     observed varchar(255) not null,	# Observed string from genotype file
     allele1 enum('A', 'C', 'G', 'T') not null,	# This allele has been observed
-    allele2 enum('A', 'C', 'G', 'T', 'none') varchar(255) not null,	# This allele may not have been observed
+    allele2 enum('A', 'C', 'G', 'T', 'none') not null,	# This allele may not have been observed
     popCount int unsigned not null,	# How many populations have data
     isMixed varchar(255) not null,	# Are there different major alleles?
     majorAlleleCEU enum ('A', 'C', 'G', 'T', 'none') not null,	# major allele for the CEU population
