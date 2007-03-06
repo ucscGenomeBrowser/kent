@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.30 2006/10/20 14:35:46 kate Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.31 2007/03/06 00:52:58 kate Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -73,6 +73,7 @@ ct->wiggle = FALSE;
 ct->wigAscii = (char *)NULL;
 ct->wigFile = (char *)NULL;
 ct->wibFile = (char *)NULL;
+ctAddToSettings(ct, CT_UNPARSED, "true");
 return ct;
 }
 

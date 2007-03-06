@@ -25,7 +25,7 @@
 #include "customFactory.h"
 
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.164 2007/01/31 20:00:53 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.165 2007/03/06 00:52:58 kate Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -828,6 +828,12 @@ if (customTracksExist(cart, &ctFileName))
 /* merge new and old tracks */
 numAdded = slCount(newCts);
 ctList = customTrackAddToList(ctList, newCts, &replacedCts, FALSE);
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (trackDbSetting(ct->tdb, CT_UNPARSED))
+        {
+        ctRemoveFromSettings(ct, CT_UNPARSED);
+        changedCt = TRUE;
+        }
 if (newCts || removedCt || changedCt || ctConfigUpdate(ctFileName))
     customTracksSaveCart(cart, ctList);
 
