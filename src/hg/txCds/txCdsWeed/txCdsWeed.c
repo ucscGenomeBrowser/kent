@@ -6,7 +6,7 @@
 #include "txInfo.h"
 #include "cdsEvidence.h"
 
-static char const rcsid[] = "$Id: txCdsWeed.c,v 1.2 2007/02/28 00:44:47 kent Exp $";
+static char const rcsid[] = "$Id: txCdsWeed.c,v 1.3 2007/03/06 09:33:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,8 +43,8 @@ FILE *f = mustOpen(outTce, "w");
 for (cds = cdsList; cds != NULL; cds = cds->next)
     {
     struct txInfo *info = hashMustFindVal(infoHash, cds->name);
-    if (!info->nonsenseMediatedDecay && !info->cdsSingleInIntron
-        && !info->cdsSingleInUtr3)
+    if (info->isRefSeq || 
+    	(!info->nonsenseMediatedDecay && !info->cdsSingleInIntron && !info->cdsSingleInUtr3))
 	{
 	cdsEvidenceTabOut(cds, f);
 	}
