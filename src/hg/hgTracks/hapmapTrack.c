@@ -9,6 +9,20 @@
 #include "hapmapAllelesCombined.h"
 #include "hapmapAllelesOrtho.h"
 
+// char *mixedFilter = HA_POP_MIXED_DEFAULT;
+// char *popCountFilter = HA_POP_COUNT_DEFAULT;
+// char *observedFilter = HA_TYPE_DEFAULT;
+// float minFreqFilter = sqlFloat(HA_MIN_FREQ);
+// float maxFreqFilter = sqlFloat(HA_MAX_FREQ);
+// float minHetFilter = sqlFloat(HA_MIN_HET);
+// float maxHetFilter = sqlFloat(HA_MAX_HET);
+// boolean monoFilter = HA_MONO_DEFAULT;
+// char *chimpFilter = HA_CHIMP_DEFAULT;
+// int chimpQualFilter = atoi(HA_CHIMP_QUAL_DEFAULT);
+// char *macaqueFilter = HA_MACAQUE_DEFAULT;
+// int macaqueQualFilter = atoi(HA_MACAQUE_QUAL_DEFAULT);
+
+
 boolean isMixed(int allele1CountCEU, int allele1CountCHB, int allele1CountJPT, int allele1CountYRI,
                 int allele2CountCEU, int allele2CountCHB, int allele2CountJPT, int allele2CountYRI)
 /* return TRUE if different populations have a different major allele */
@@ -74,6 +88,81 @@ if (sameString(observed, "G/T")) return FALSE;
 return TRUE;
 }
 
+// void loadFilters()
+// {
+// mixedFilter = cartUsualString(cart, HA_POP_MIXED, HA_POP_MIXED_DEFAULT);
+// popCountFilter = cartUsualString(cart, HA_POP_COUNT, HA_POP_COUNT_DEFAULT);
+// observedFilter = cartUsualString(cart, HA_TYPE, HA_TYPE_DEFAULT);
+// minFreqFilter = sqlFloat(cartUsualString(cart, HA_MIN_FREQ, HA_MIN_FREQ_DEFAULT));
+// maxFreqFilter = sqlFloat(cartUsualString(cart, HA_MAX_FREQ, HA_MAX_FREQ_DEFAULT));
+// minHetFilter = sqlFloat(cartUsualString(cart, HA_MIN_HET, HA_MIN_HET_DEFAULT));
+// maxHetFilter = sqlFloat(cartUsualString(cart, HA_MAX_HET, HA_MAX_HET_DEFAULT));
+// boolean monoFilter = cartUsualBoolean(cart, HA_MONO, HA_MONO_DEFAULT);
+// chimpFilter = cartUsualString(cart, HA_CHIMP, HA_CHIMP_DEFAULT);
+// chimpQualFilter = 
+    // sqlUnsigned(cartUsualString(cart, HA_CHIMP_QUAL, HA_CHIMP_QUAL_DEFAULT));
+// macaqueFilter = cartUsualString(cart, HA_MACAQUE, HA_MACAQUE_DEFAULT);
+// macaqueQualFilter = 
+    // sqlUnsigned(cartUsualString(cart, HA_MACAQUE_QUAL, HA_MACAQUE_QUAL_DEFAULT));
+// }
+
+// boolean allDefaults()
+/* return TRUE if all filters are set to default values */
+// {
+// if (differentString(mixedFilter, HA_POP_MIXED_DEFAULT)) return FALSE;
+// if (differentString(popCountFilter, HA_POP_COUNT_DEFAULT)) return FALSE;
+// if (differentString(observedFilter, HA_TYPE_DEFAULT)) return FALSE;
+// if (minFreqFilter > sqlFloat(HA_MIN_FREQ_DEFAULT)) return FALSE;
+// if (maxFreqFilter < sqlFloat(HA_MAX_FREQ_DEFAULT)) return FALSE;
+// if (minHetFilter > sqlFloat(HA_MIN_HET_DEFAULT)) return FALSE;
+// if (maxFreqFilter < sqlFloat(HA_MAX_HET_DEFAULT)) return FALSE;
+// if (monoFilter != HA_MONO_DEFAULT) return FALSE;
+// if (differentString(chimpFilter, HA_CHIMP_DEFAULT)) return FALSE;
+// if (chimpQualFilter > sqlUnsigned(HA_CHIMP_QUAL_DEFAULT)) return FALSE;
+// if (differentString(macaqueFilter, HA_MACAQUE_DEFAULT)) return FALSE;
+// if (macaqueQualFilter > sqlUnsigned(HA_MACAQUE_QUAL_DEFAULT)) return FALSE;
+// }
+
+
+
+// static void hapmapLoadSimple(struct track *tg)
+/* load data, no filters */
+// {
+// struct sqlConnection *conn = hAllocConn();
+// struct sqlResult *sr = NULL;
+// char **row = NULL;
+/* do I need this? */
+// int rowOffset = 0;
+
+// if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+// {
+    // struct hapmapAllelesOrtho *orthoLoadItem, *orthoItemList = NULL;
+    // sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    // while ((row = sqlNextRow(sr)) != NULL)
+        // {
+        // orthoLoadItem = hapmapAllelesOrthoLoad(row+rowOffset);
+        // slAddHead(&orthoItemList, orthoLoadItem);
+        // }
+    // sqlFreeResult(&sr);
+    // hFreeConn(&conn);
+    // slSort(&orthoItemList, bedCmp);
+    // tg->items = orthoItemList;
+    // return;
+// }
+
+// struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL;
+// sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+// while ((row = sqlNextRow(sr)) != NULL)
+    // {
+    // simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
+    // slAddHead(&simpleItemList, simpleLoadItem);
+    // }
+// sqlFreeResult(&sr);
+// hFreeConn(&conn);
+// slSort(&simpleItemList, bedCmp);
+// tg->items = simpleItemList;
+// }
+
 
 static void hapmapLoad(struct track *tg)
 /* load filtered data */
@@ -82,83 +171,14 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
-char optionScoreStr[128];
-int optionScore;
-char extraWhere[128];
 
-char *observedFilter = cartCgiUsualString(cart, HA_OBSERVED, "don't care");
+// loadFilters();
 
-char *mixedFilter = cartCgiUsualString(cart, HA_POP_MIXED, "don't care");
-char *genoFilter = cartCgiUsualString(cart, HA_GENO_AVAIL, "don't care");
-boolean complexObserved = FALSE;
-boolean transitionObserved = FALSE;
-
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
-optionScore = cartUsualInt(cart, optionScoreStr, 0);
-
-if (sameString(tg->mapName, "hapmapAllelesCombined"))
-    {
-    struct hapmapAllelesCombined *combinedLoadItem, *combinedItemList = NULL;
-    boolean mixed = FALSE;
-    boolean popsAll = TRUE;
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        combinedLoadItem = hapmapAllelesCombinedLoad(row+rowOffset);
-
-        mixed = isMixed(combinedLoadItem->allele1CountCEU, combinedLoadItem->allele1CountCHB,
-                combinedLoadItem->allele1CountJPT, combinedLoadItem->allele1CountYRI,
-                combinedLoadItem->allele2CountCEU, combinedLoadItem->allele2CountCHB,
-                combinedLoadItem->allele2CountJPT, combinedLoadItem->allele2CountYRI);
-	if (sameString(mixedFilter, "not mixed") && mixed) continue;
-	if (sameString(mixedFilter, "only mixed") && !mixed) continue;
-
-        popsAll = isAllPops(combinedLoadItem->allele1CountCEU, combinedLoadItem->allele1CountCHB,
-                combinedLoadItem->allele1CountJPT, combinedLoadItem->allele1CountYRI,
-                combinedLoadItem->allele2CountCEU, combinedLoadItem->allele2CountCHB,
-                combinedLoadItem->allele2CountJPT, combinedLoadItem->allele2CountYRI);
-	if (sameString(genoFilter, "all populations") && !popsAll) continue;
-	if (sameString(genoFilter, "subset of populations") && popsAll) continue;
-
-        if (sameString(observedFilter, "don't care"))
-	    {
-            slAddHead(&combinedItemList, combinedLoadItem);
-	    continue;
-	    }
-
-        complexObserved = isComplexObserved(combinedLoadItem->observed);
-
-	if (sameString(observedFilter, "complex"))
-	    {
-	    if (complexObserved) slAddHead(&combinedItemList, combinedLoadItem);
-	    continue;
-	    }
-
-	if (sameString(observedFilter, "bi-alleleic")) 
-	    {
-	    if (!complexObserved) slAddHead(&combinedItemList, combinedLoadItem);
-	    continue;
-	    }
-
-	transitionObserved = isTransitionObserved(combinedLoadItem->observed);
-
-        if (sameString(observedFilter, "transition")) 
-	    {
-	    if (transitionObserved) slAddHead(&combinedItemList, combinedLoadItem);
-	    continue;
-	    }
-
-        if (sameString(observedFilter, "transversion")) 
-	    {
-	    if (!transitionObserved) slAddHead(&combinedItemList, combinedLoadItem);
-            }
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    slSort(&combinedItemList, bedCmp);
-    tg->items = combinedItemList;
-    return;
-    }
+// if (allDefaults()) 
+    // {
+    // hapmapLoadSimple(tg);
+    // return;
+    // }
 
 if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
 {
@@ -177,50 +197,10 @@ if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "ha
 }
 
 struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL;
-if (optionScore > 0)
-    {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
-    }
-else
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
-
-    if (sameString(observedFilter, "don't care"))
-        {
-        slAddHead(&simpleItemList, simpleLoadItem);
-        continue;
-        }
-
-    complexObserved = isComplexObserved(simpleLoadItem->observed);
-
-    if (sameString(observedFilter, "complex"))
-        {
-        if (complexObserved) slAddHead(&simpleItemList, simpleLoadItem);
-	continue;
-        }
-
-    if (sameString(observedFilter, "bi-alleleic")) 
-        {
-        if (!complexObserved) slAddHead(&simpleItemList, simpleLoadItem);
-	continue;
-        }
-
-    transitionObserved = isTransitionObserved(simpleLoadItem->observed);
-
-    if (sameString(observedFilter, "transition")) 
-        {
-	if (transitionObserved) slAddHead(&simpleItemList, simpleLoadItem);
-	continue;
-        }
-
-    if (sameString(observedFilter, "transversion")) 
-        {
-	if (!transitionObserved) slAddHead(&simpleItemList, simpleLoadItem);
-        }
+    slAddHead(&simpleItemList, simpleLoadItem);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
