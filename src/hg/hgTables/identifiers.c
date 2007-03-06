@@ -10,8 +10,9 @@
 #include "trackDb.h"
 #include "portable.h"
 #include "hgTables.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.9 2006/09/27 00:20:30 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.10 2007/03/06 22:39:17 hiram Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -63,7 +64,7 @@ if (idText != NULL && idText[0] != 0)
      * file name. */
     struct tempName tn;
     FILE *f;
-    makeTempName(&tn, "tables", ".key");
+    trashDirFile(&tn, "hgtData", "identifiers", ".key");
     f = mustOpen(tn.forCgi, "w");
     mustWrite(f, idText, strlen(idText));
     carefulClose(&f);

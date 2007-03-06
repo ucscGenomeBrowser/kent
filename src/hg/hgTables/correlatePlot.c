@@ -14,8 +14,9 @@
 #include "hgTables.h"
 #include "correlate.h"
 #include "histogram.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.14 2005/07/12 21:02:47 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.15 2007/03/06 22:39:17 hiram Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -412,7 +413,7 @@ bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
-makeTempName(&gifFileName, "hgtaPlot", ".gif");
+trashDirFile(&gifFileName, "hgtData", "hgtaScatter", ".gif");
 
 vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
 
@@ -610,7 +611,7 @@ bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
-makeTempName(&gifFileName, "hgtaPlot", ".gif");
+trashDirFile(&gifFileName, "hgtData", "hgtaResidual", ".gif");
 
 vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
 
@@ -731,7 +732,7 @@ struct histoResult *histoGram(float *values, size_t N, float binSize,
 */
 
 AllocVar(histoFileName);
-makeTempName(histoFileName, "hgtaPlot", ".gif");
+trashDirFile(histoFileName, "hgtData", "hgtaHisto", ".gif");
 
 safef(bottomLabelStr,ArraySize(bottomLabelStr), "# of data values: %d",
 	totalCounts);
