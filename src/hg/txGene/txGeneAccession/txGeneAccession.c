@@ -8,7 +8,7 @@
 #include "rangeTree.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.7 2007/03/05 19:50:26 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.8 2007/03/06 00:07:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -107,8 +107,8 @@ for (oldIx=0; oldIx < oldLastBlock; ++oldIx, ++newIx)
 return TRUE;
 }
 
-struct bed *findCompatible(struct bed *newBed, struct hash *oldHash)
-/* Try and find an old bed compatible with new bed. */
+struct bed *findExact(struct bed *newBed, struct hash *oldHash, struct hash *usedHash)
+/* Try and find an old bed identical with new bed. */
 {
 struct binKeeper *bk = hashFindVal(oldHash, newBed->chrom);
 if (bk == NULL)
@@ -120,19 +120,34 @@ for (bin = binList; bin != NULL; bin = bin->next)
     struct bed *oldBed = bin->val;
     if (oldBed->strand[0] == newBed->strand[0])
         {
-	if (exactMatch(oldBed, newBed))
+	if (!hashLookup(usedHash, oldBed->name))
 	    {
-	    matchingBed = oldBed;
-	    break;
+	    if (exactMatch(oldBed, newBed))
+		{
+		matchingBed = oldBed;
+		break;
+		}
 	    }
 	}
     }
-if (matchingBed == NULL)
+slFreeList(&binList);
+return matchingBed;
+}
+
+struct bed *findCompatible(struct bed *newBed, struct hash *oldHash, struct hash *usedHash)
+/* Try and find an old bed compatible with new bed. */
+{
+struct bed *matchingBed = NULL;
+struct binKeeper *bk = hashFindVal(oldHash, newBed->chrom);
+if (bk == NULL)
+    return NULL;
+struct binElement *bin, *binList = binKeeperFind(bk, newBed->chromStart, newBed->chromEnd);
+for (bin = binList; bin != NULL; bin = bin->next)
     {
-    for (bin = binList; bin != NULL; bin = bin->next)
+    struct bed *oldBed = bin->val;
+    if (oldBed->strand[0] == newBed->strand[0])
 	{
-	struct bed *oldBed = bin->val;
-	if (oldBed->strand[0] == newBed->strand[0])
+	if (!hashLookup(usedHash, oldBed->name))
 	    {
 	    if (compatibleExtension(oldBed, newBed))
 		{
@@ -165,23 +180,45 @@ struct hash *oldHash = bedsIntoKeeperHash(oldList);
  * in two incompatible ways). */
 struct hash *usedHash = hashNew(16);
 
-/* Loop through new bed looking for compatible things.  If
- * we can't find anything compatable, make up a new accession. */
-FILE *f = mustOpen(outTab, "w");
+/* Loop through new list first looking for exact matches. Record
+ * exact matches in hash so we don't look for them again during
+ * the next, "compatable" match phase. */
+struct hash *oldExactHash = hashNew(16), *newExactHash = hashNew(16);
 struct bed *oldBed, *newBed;
+FILE *f = mustOpen(outTab, "w");
 for (newBed = newList; newBed != NULL; newBed = newBed->next)
     {
-    oldBed = findCompatible(newBed, oldHash);
-    if (oldBed == NULL || hashLookup(usedHash, oldBed->name))
+    oldBed = findExact(newBed, oldHash, usedHash);
+    if (oldBed != NULL)
         {
-	char newAcc[16];
-	safef(newAcc, sizeof(newAcc), "TX%08d", ++txId);
-	fprintf(f, "%s\t%s\n", newBed->name, newAcc);
-	}
-    else
-	{
+	hashAdd(oldExactHash, oldBed->name, oldBed);
+	hashAdd(newExactHash, newBed->name, newBed);
 	hashAdd(usedHash, oldBed->name, NULL);
         fprintf(f, "%s\t%s\n", newBed->name, oldBed->name);
+	}
+    }
+
+/* Loop through new bed looking for compatible things.  If
+ * we can't find anything compatable, make up a new accession. */
+struct hash *oldChangedHash = hashNew(16), *newChangedHash = hashNew(16);
+for (newBed = newList; newBed != NULL; newBed = newBed->next)
+    {
+    if (!hashLookup(newExactHash, newBed->name))
+	{
+	oldBed = findCompatible(newBed, oldHash, usedHash);
+	if (oldBed == NULL)
+	    {
+	    char newAcc[16];
+	    safef(newAcc, sizeof(newAcc), "TX%08d", ++txId);
+	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);
+	    }
+	else
+	    {
+	    hashAdd(oldChangedHash, oldBed->name, oldBed);
+	    hashAdd(newChangedHash, newBed->name, newBed);
+	    hashAdd(usedHash, oldBed->name, NULL);
+	    fprintf(f, "%s\t%s\n", newBed->name, oldBed->name);
+	    }
 	}
     }
 carefulClose(&f);
