@@ -13,6 +13,8 @@
 #include "rangeTree.h"
 
 char *refType = "refSeq";
+FILE *fConst = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -25,12 +27,16 @@ errAbort(
   "   refType=xxx - The type for the reference type of evidence, used for\n"
   "                 the refJoined records indicating transcription across\n"
   "                 what's usually considered 2 genes.  Default is %s.\n"
+  "   constExon=out.bed - Write out constituative exons here.  This are\n"
+  "                 refSeq exons that don't overlap introns, and that\n"
+  "                 are supported by at least 10 lines of evidence.\n"
   , refType
   );
 }
 
 static struct optionSpec options[] = {
    {"refType", OPTION_STRING},
+   {"constExon", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -484,6 +490,59 @@ if (foundIt)
 lmCleanup(&lm);
 }
 
+char *refSourceAcc(struct txGraph *graph, struct txEdge *edge)
+/* Return refseq support for edge if any. */
+{
+struct txEvidence *ev;
+for (ev = edge->evList; ev != NULL; ev = ev->next)
+    {
+    struct txSource *source = &graph->sources[ev->sourceId];
+    if (sameString(source->type, refType))
+        return source->accession;
+    }
+return NULL;
+}
+
+void constExons(struct txGraph *graph, FILE *f)
+/* Write out constituitive exons. */
+{
+/* Create a tree with all introns. */
+struct rbTree *tree = rangeTreeNew();
+struct txEdge *edge;
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+    {
+    if (edge->type == ggIntron)
+        {
+	rangeTreeAdd(tree, graph->vertices[edge->startIx].position,
+			   graph->vertices[edge->endIx].position);
+	}
+    }
+
+/* Scan through all exons looking for ones that don't intersect 
+ * introns. */
+int eId = 0;
+for (edge = graph->edgeList; edge != NULL; edge = edge->next)
+    {
+    if (edge->type == ggExon)
+        {
+	struct txVertex *s = &graph->vertices[edge->startIx];
+	struct txVertex *e = &graph->vertices[edge->endIx];
+	if (s->type == ggHardStart && e->type == ggHardEnd)
+	    {
+	    int start = s->position;
+	    int end = e->position;
+	    if (!rangeTreeOverlaps(tree, start, end))
+		{
+		char *refSource = refSourceAcc(graph, edge);
+		if (refSource != NULL && edge->evCount >= 10)
+		    fprintf(f, "%s\t%d\t%d\t%s.%d\t0\t%s\n",
+			graph->tName, start, end, refSource, ++eId, graph->strand);
+		}
+	    }
+	}
+    }
+rangeTreeFree(&tree);
+}
 
 void txgAnalyze(char *inTxg, char *dnaPath, char *outFile)
 /* txgAnalyze - Analyse transcription graph for alt exons, alt 3', alt 5', 
@@ -511,11 +570,14 @@ while (lineFileRow(lf, row))
     strangeSplices(txg, chrom, f);
     bleedsIntoIntrons(txg, f);
     refSeparateButJoined(txg, f);
+    if (fConst != NULL)
+        constExons(txg, fConst);
     slFreeList(&exonsWithIntrons);
     txGraphFree(&txg);
     }
 carefulClose(&f);
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -524,6 +586,10 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 refType = optionVal("refType", refType);
+char *fileName = optionVal("constExon", NULL);
+if (fileName != NULL)
+    fConst = mustOpen(fileName, "w");
 txgAnalyze(argv[1], argv[2], argv[3]);
+carefulClose(&fConst);
 return 0;
 }
