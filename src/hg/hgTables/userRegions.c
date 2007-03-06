@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.2 2007/03/06 22:14:35 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.3 2007/03/06 22:25:24 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -200,8 +200,12 @@ return list;
 void doClearSetUserRegionsText(struct sqlConnection *conn)
 /* Respond to clear within user regions enter page. */
 {
+char *fileName = userRegionsFileName();
+if (fileName != NULL)
+    remove(fileName);
 cartRemove(cart, hgtaEnteredUserRegions);
 cartRemove(cart, hgtaEnteredUserRegionFile);
+cartRemove(cart, hgtaUserRegionsFile);
 cartRemove(cart, hgtaRegionType);
 doSetUserRegions(conn);
 }
@@ -209,16 +213,15 @@ doSetUserRegions(conn);
 void doClearUserRegions(struct sqlConnection *conn)
 /* Respond to clear user regions button. */
 {
-char *fileName;
+char *fileName = userRegionsFileName();
 
 htmlOpen("Table Browser (Cleared Region List)");
-fileName = userRegionsFileName();
 if (fileName != NULL)
     remove(fileName);
+cartRemove(cart, hgtaEnteredUserRegions);
+cartRemove(cart, hgtaEnteredUserRegionFile);
 cartRemove(cart, hgtaUserRegionsFile);
 cartRemove(cart, hgtaRegionType);
 mainPageAfterOpen(conn);
 htmlClose();
 }
-
-
