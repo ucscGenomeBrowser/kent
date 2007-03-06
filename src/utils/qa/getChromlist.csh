@@ -33,7 +33,6 @@ if ( $#argv == 2 ) then
   endif
 endif
 
-echo
 # echo "list chroms"
 
 if ($norandom == "true") then
@@ -41,6 +40,4 @@ if ($norandom == "true") then
 else
   hgsql -N -e "SELECT chrom FROM chromInfo" $db | sort 
 endif
-
-echo
 
