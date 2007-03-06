@@ -43,6 +43,7 @@ DIRS = \
 	kgPutBack \
 	kgXref \
 	kgXref2 \
+	pbHgnc \
 	pfamXref \
 	rmKGPepMrna \
 	spOrganism \
