@@ -379,49 +379,60 @@ while (lineFileRow(lf, row))
         info.sourceAcc += 1;
     info.isRefSeq = startsWith("NM_", info.sourceAcc);
 
-    /* Loop through all psl's associated with our RNA.  Figure out
-     * our overlap with each, and pick best one. */
-    struct hashEl *hel, *firstPslHel = hashLookup(pslHash, info.sourceAcc);
-    if (firstPslHel == NULL)
-        errAbort("%s is not in %s", info.sourceAcc, pslFile);
-    int mapCount = 0;
-    struct psl *psl, *bestPsl = NULL;
-    int coverage, bestCoverage = 0;
-    boolean isFlipped = (hashLookup(flipHash, info.sourceAcc) != NULL);
-    for (hel = firstPslHel; hel != NULL; hel = hashLookupNext(hel))
+    if (startsWith("abV", info.sourceAcc))
         {
-	psl = hel->val;
-	mapCount += 1;
-	coverage = pslBedOverlap(psl, bed);
-	if (coverage > bestCoverage)
+	/* Fake up some things for antibody frag. */
+	info.sourceSize = 10000;
+	info.aliCoverage = 1.0;
+	info.aliIdRatio = 1.0;
+	info. genoMapCount = 1;
+	}
+    else
+	{
+	/* Loop through all psl's associated with our RNA.  Figure out
+	 * our overlap with each, and pick best one. */
+	struct hashEl *hel, *firstPslHel = hashLookup(pslHash, info.sourceAcc);
+	if (firstPslHel == NULL)
+	    errAbort("%s is not in %s", info.sourceAcc, pslFile);
+	int mapCount = 0;
+	struct psl *psl, *bestPsl = NULL;
+	int coverage, bestCoverage = 0;
+	boolean isFlipped = (hashLookup(flipHash, info.sourceAcc) != NULL);
+	for (hel = firstPslHel; hel != NULL; hel = hashLookupNext(hel))
 	    {
-	    bestCoverage = coverage;
-	    bestPsl = psl;
-	    }
-	/* If we flipped it, try it on the opposite strand too. */
-	if (isFlipped)
-	    {
-	    psl->strand[0] = (psl->strand[0] == '+' ? '-' : '+');
+	    psl = hel->val;
+	    mapCount += 1;
 	    coverage = pslBedOverlap(psl, bed);
 	    if (coverage > bestCoverage)
 		{
 		bestCoverage = coverage;
 		bestPsl = psl;
 		}
-	    psl->strand[0] = (psl->strand[0] == '+' ? '-' : '+');
+	    /* If we flipped it, try it on the opposite strand too. */
+	    if (isFlipped)
+		{
+		psl->strand[0] = (psl->strand[0] == '+' ? '-' : '+');
+		coverage = pslBedOverlap(psl, bed);
+		if (coverage > bestCoverage)
+		    {
+		    bestCoverage = coverage;
+		    bestPsl = psl;
+		    }
+		psl->strand[0] = (psl->strand[0] == '+' ? '-' : '+');
+		}
 	    }
-	}
-    if (bestPsl == NULL)
-        errAbort("%s has no overlapping alignments with %s in %s", 
-		bed->name, info.sourceAcc, pslFile);
+	if (bestPsl == NULL)
+	    errAbort("%s has no overlapping alignments with %s in %s", 
+		    bed->name, info.sourceAcc, pslFile);
 
-    /* Figure out and save alignment statistics. */
-    int polyA = hashIntValDefault(sizePolyAHash, bed->name, 0);
-    info.sourceSize = bestPsl->qSize - polyA;
-    info.aliCoverage = (double)bestCoverage / info.sourceSize;
-    info.aliIdRatio = (double)(bestPsl->match + bestPsl->repMatch)/
-    			(bestPsl->match + bestPsl->misMatch + bestPsl->repMatch);
-    info. genoMapCount = mapCount;
+	/* Figure out and save alignment statistics. */
+	int polyA = hashIntValDefault(sizePolyAHash, bed->name, 0);
+	info.sourceSize = bestPsl->qSize - polyA;
+	info.aliCoverage = (double)bestCoverage / info.sourceSize;
+	info.aliIdRatio = (double)(bestPsl->match + bestPsl->repMatch)/
+			    (bestPsl->match + bestPsl->misMatch + bestPsl->repMatch);
+	info. genoMapCount = mapCount;
+	}
 
 
     /* Get orf size and start/end complete from cdsEv. */
