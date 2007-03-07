@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.17 2006/10/10 22:58:03 angie Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.18 2007/03/07 21:35:25 braney Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {
@@ -420,26 +420,29 @@ ts = te = tStart;
 nextB = NULL;
 for (b = chain->blockList; b != NULL; b = nextB)
     {
+	    int adjQStart;
+	    
 	    qStarts[blockIx] = b->qStart;
 	    tStarts[blockIx] = b->tStart;
 	    blocks[blockIx] = b->tEnd - b->tStart;
             j = b->tStart-tStart;
             //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
             //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
-            for (i = (b->qStart) ; i < b->qStart+(b->tEnd - b->tStart); i++)
+            adjQStart = b->qStart - chain->qStart;
+            for (i = 0 ; i < (b->tEnd - b->tStart); i++)
                 {
                 char qq ;
                 char tt ;
-                if (j > tSeq->size || i > qSeq->size)
+                if (j > chain->tSize || (qStart + i) > chain->qSize)
                     {
                     break;
                     //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
                     //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
                     assert(j <= tSeq->size);
-                    assert(i <= qSeq->size);
+                    assert(i + adjQStart <= qSeq->size);
                     }
-                qq = qSeq->dna[i];
-                tt = tSeq->dna[j++];
+                qq = qSeq->dna[i+adjQStart];
+                tt = tSeq->dna[j++ ];
                 if (toupper(qq) == toupper(tt))
                     {
                     if (tMasked && islower(tt))
