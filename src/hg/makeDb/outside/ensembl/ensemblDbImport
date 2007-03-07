@@ -7,7 +7,8 @@ delay=4
 ensDb=ensembl_${organism}_${version}
 input="ftp://ftp.ensembl.org/pub/current_$organism/data/mysql/${organism}_${version}"
 sql="${organism}_${version}.sql.gz"
-exceptions="/cluster/bin/scripts/ensemblSkipDownload"
+exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
+tables=`cat tables |grep -v -E $exp`
 cd $indir
 echo "Dropping database $ensDb in $delay seconds"
 sleep $delay
@@ -20,7 +21,6 @@ zcat $sql |sed -e 's/MyISAM DEFAULT/MyISAM/'|sed -e 's/CHARSET=latin1//' |sed -e
 echo "cat create_table.sql | hgsql $ensDb "
 cat create_table.sql | hgsql $ensDb 
 echo "Loading data"
-tables=`cat tables |grep -v -F -f $exceptions`
 for i in $tables ; do echo "hgLoadSqlTab $ensDb $i /dev/null $i.txt.table -oldTable ">> dbLoad.log; zcat $i.txt.table.gz > temp.txt ; hgLoadSqlTab $ensDb $i /dev/null temp.txt -oldTable 2>> dbLoad.log >> dbLoad.log; done
 echo "Fix chrom names"
 echo "hgsql $ensDb -e update seq_region set name = 'M' where name = 'MT';"
