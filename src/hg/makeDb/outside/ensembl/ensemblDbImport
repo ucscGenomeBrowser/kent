@@ -10,7 +10,7 @@ input="ftp://ftp.ensembl.org/pub/current_$organism/data/mysql/${organism}_${vers
 sql="${organism}_${version}.sql.gz"
 exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
 cd $indir
-tables=`cat tables |grep -v -E $exceptions`
+tables=`cat tables.tmp |grep -v -E $exceptions`
 echo "Dropping database $ensDb in $delay seconds"
 sleep $delay
 hgsql mysql -e "drop database $ensDb"
