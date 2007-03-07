@@ -8,7 +8,10 @@ db=$4
 #version=core_43_36e
 #outdir=/cluster/store8/ensembl/ensembl_core_43_36e/
 #db=hg18
+echo "ensemblDownload $organism $version $outdir"
 ensemblDownload $organism $version $outdir
+echo "ensemblDbImport $organism $version $outdir"
 ensemblDbImport $organism $version $outdir 
+echo "loadEnsembl $version $outdir $db"
 loadEnsembl $version $outdir $db 
 
