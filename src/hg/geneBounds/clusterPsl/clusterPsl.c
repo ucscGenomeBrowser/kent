@@ -14,9 +14,10 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.8 2007/02/14 12:44:00 kent Exp $";
+static char const rcsid[] = "$Id: clusterPsl.c,v 1.9 2007/03/07 04:49:38 kent Exp $";
 
 int maxMergeGap = 5;
+char *prefix = "c";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,8 +33,9 @@ errAbort(
   "   -agx=output.agx - Create splicing graphs. Note this is usually done\n"
   "                     with txBedToGraph these days.\n"
   "   -dna=db.2bit - DNA - two bit file or nib dir.\n"
-  "   -maxMergeGap=N Merge blocks separated by no more than this. Default %d\n",
-      maxMergeGap
+  "   -maxMergeGap=N Merge blocks separated by no more than this. Default %d\n"
+  "   -prefix=name - Prefix to add before number in bed name. Default %s\n"
+      , maxMergeGap, prefix
   );
 }
 
@@ -41,6 +43,7 @@ static struct optionSpec options[] = {
    {"agx", OPTION_STRING},
    {"dna", OPTION_STRING},
    {"maxMergeGap", OPTION_INT},
+   {"prefix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -243,7 +246,7 @@ int chromEnd = cluster->tEnd;
 
 assert(cluster->tStart == rangeList->start);
 fprintf(f, "%s\t%d\t%d\t", cluster->pslList->tName, chromStart, chromEnd);
-fprintf(f, "c%d\t", ++id);
+fprintf(f, "%s%d\t", prefix, ++id);
 fprintf(f, "0\t");	/* score field */
 fprintf(f, "%s\t", cluster->pslList->strand);
 fprintf(f, "%d\t", chromStart);	/* thick start */
@@ -348,6 +351,7 @@ if (argc != 3)
 if (optionExists("agx") && !optionExists("dna"))
    errAbort("Need to use dna option with agx option.");
 maxMergeGap = optionInt("maxMergeGap", maxMergeGap);
+prefix = optionVal("prefix", prefix);
 clusterPsl(argv[1], argv[2], optionVal("dna", NULL), optionVal("agx", NULL));
 return 0;
 }
