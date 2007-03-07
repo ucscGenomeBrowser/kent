@@ -8,6 +8,7 @@ ensDb=ensembl_$version
 input="ftp://ftp.ensembl.org/pub/current_$organism/data/mysql/${organism}_${version}"
 sql="${organism}_${version}.sql.gz"
 exceptions="/cluster/bin/scripts/ensemblSkipDownload"
+cd $outdir
 echo "Dropping database $ensDb in $delay seconds"
 sleep $delay
 hgsql mysql -e "drop database $ensDb"
