@@ -196,7 +196,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1221 2007/03/07 20:53:39 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1222 2007/03/07 21:19:37 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1830,6 +1830,16 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                if ((row = sqlNextRow(sr)) != NULL)
                   if (differentString("NULL",row[0]))
                       printf("<b>Gene Description :</b> %s<br>\n", row[0]);
+               sqlFreeResult(&sr);
+               }
+           if (sqlFieldIndex(conn, classTable, "type") > 0 )
+               {
+               safef(query, sizeof(query),
+                    "select type from %s where name = \"%s\"", classTable, name);
+               sr = sqlGetResult(conn, query);
+               if ((row = sqlNextRow(sr)) != NULL)
+                  if (differentString("NULL",row[0]))
+                      printf("<b>Gene Type :</b> %s<br>\n", row[0]);
                }
            }
         } }
