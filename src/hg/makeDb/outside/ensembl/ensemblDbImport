@@ -8,7 +8,7 @@ ensDb=ensembl_${organism}_${version}
 input="ftp://ftp.ensembl.org/pub/current_$organism/data/mysql/${organism}_${version}"
 sql="${organism}_${version}.sql.gz"
 exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
-tables=`cat tables |grep -v -E $exp`
+tables=`cat tables |grep -v -E $exceptions`
 cd $indir
 echo "Dropping database $ensDb in $delay seconds"
 sleep $delay

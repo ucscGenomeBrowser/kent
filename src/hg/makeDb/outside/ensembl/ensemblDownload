@@ -14,7 +14,7 @@ wget --timestamping --no-verbose $sql 2>> download.log
 #get list of tables excluding big alignment tables and others
 zgrep CREATE ${organism}_${version}.sql.gz |awk -F'`' '{print $2}' > tables
 exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
-tables=`cat tables |grep -v -E $exp`
+tables=`cat tables |grep -v -E $exceptions`
 #go get them! (if not already downloaded)
 echo "Starting download to $outdir from $input. Use tail -f download.log to watch progress"
 for i in $tables; do wget --timestamping --no-verbose $input/${i}.txt.table.gz; done  2>> download.log
