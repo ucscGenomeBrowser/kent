@@ -1,4 +1,4 @@
-#
+#!/bin/bash -e
 [ $# != 4 ] && echo "usage: loadEnsembl organism version input-directory db " && exit 1;
 organism=$1
 version=$2
@@ -10,13 +10,11 @@ cd $indir
 echo "Extract genes to ensGene.tab"
 hgsql $ensDb -N -B  -e 'select concat("chr",sr.name) as chrom, g.biotype, if(e.seq_region_strand > 0, fe.seq_region_start+seq_start-2, le.seq_region_end-seq_end) as cdsStart, if(e.seq_region_strand > 0, le.seq_region_start+seq_end-1, fe.seq_region_end-seq_start+1) as cdsEnd, e.seq_region_start-1 as exonStart, e.seq_region_end as exonEnd, ".",if(e.seq_region_strand < 0,"-","+") as strand, if(e.phase < 0, ".", e.phase) as phase, display_label, tsi.stable_id, gsi.stable_id, rank,g.description , g.gene_id, t.transcript_id from gene g, gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t left join translation r on r.transcript_id = t.transcript_id, exon_transcript et , transcript_stable_id tsi, xref x, exon fe , exon le where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id = x.xref_id and g.biotype not like "%pseudo%" order by tsi.stable_id, e.seq_region_start;' > ensGene.tab
 hgsql $ensDb -N -B  -e 'select concat("chr",sr.name) as chrom, g.biotype, if(e.seq_region_strand > 0, fe.seq_region_start+seq_start-2, le.seq_region_end-seq_end) as cdsStart, if(e.seq_region_strand > 0, le.seq_region_start+seq_end-1, fe.seq_region_end-seq_start+1) as cdsEnd, e.seq_region_start-1 as exonStart, e.seq_region_end as exonEnd, ".",if(e.seq_region_strand < 0,"-","+") as strand, if(e.phase < 0, ".", e.phase) as phase, "noXref", tsi.stable_id, gsi.stable_id, rank,g.description , g.gene_id, t.transcript_id from gene g, gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t left join translation r on r.transcript_id = t.transcript_id, exon_transcript et , transcript_stable_id tsi, exon fe , exon le where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id is null and g.biotype not like "%pseudo%" order by tsi.stable_id, e.seq_region_start;' >> ensGene.tab
-echo "ensGeneToGenePred < ensGene.tab > ensGene.gp"
 ensGeneToGenePred < ensGene.tab > ensGene.gp     
 wc -l ensGene.gp
 #extract pseudogenes
 echo "Extract pseudogenes to ensPseudo.tab"
 hgsql $ensDb -N -B -e 'select concat("chr",sr.name) as chrom, g.biotype, g.seq_region_start-1 as cdsStart, g.seq_region_end as cdsEnd,e.seq_region_start-1 as exonStart, e.seq_region_end as exonEnd, ".",if(e.seq_region_strand < 0,"-","+") as strand, if(e.phase < 0, ".", e.phase) as phase, g.biotype, tsi.stable_id, gsi.stable_id, rank,g.gene_id, t.transcript_id from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t, exon_transcript et , transcript_stable_id tsi,  gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and g.biotype like "%pseudo%" order by tsi.stable_id, e.seq_region_start;' > ensPseudo.tab
-echo "ensGeneToGenePred < ensPseudo.tab > ensPseudo.gp"
 ensGeneToGenePred < ensPseudo.tab > ensPseudo.gp     
 #extract ensInfo
 echo "extract Info details table to ensInfo.tab" 
@@ -24,6 +22,6 @@ hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, display_label, gsi.stable_
 hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, "noXref", gsi.stable_id, g.biotype, g.description, g.status from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t , exon_transcript et , transcript_stable_id tsi, gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id is null  ;' >> ensInfo.tab
 ldHgGene $db ensGene -predTab ensGene.gp -gtf -genePredExt 
 ldHgGene $db ensPseudo -predTab ensPseudo.gp -gtf -genePredExt 
-echo "hgLoadSqlTab $db ensInfo $HOME/kent/src/hg/lib/ensInfo.sql ensInfo.tab"
+echo "Loading ensInfo"
 hgLoadSqlTab $db ensInfo $HOME/kent/src/hg/lib/ensInfo.sql ensInfo.tab
 tawk '{print $4,$6}' ensInfo.tab |sort |uniq --count|sort -nr

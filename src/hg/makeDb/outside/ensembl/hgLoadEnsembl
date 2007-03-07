@@ -1,4 +1,4 @@
-#
+#!/bin/bash -e
 [ $# != 4 ] && echo "usage: hgLoadEnsembl organism version input-directory db " && echo "   for example: hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e hg18" && exit 1;
 organism=$1
 version=$2

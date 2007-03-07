@@ -1,3 +1,4 @@
+#!/bin/bash -e
 ##create mysql database
 [ $# != 3 ] && echo "usage: ensemblDbImport species version input-directory " && exit 1;
 organism=$1
@@ -16,16 +17,12 @@ hgsql mysql -e "drop database $ensDb"
 echo "Creating database $ensDb"
 hgsql mysql -e "create database $ensDb"
 echo "Creating empty tables in database $ensDb from $sql"
-echo "zcat $sql |sed -e 's/MyISAM DEFAULT/MyISAM/'|sed -e 's/CHARSET=latin1//' |sed -e 's/character set latin1 collate latin1_bin//' "
 zcat $sql |sed -e 's/MyISAM DEFAULT/MyISAM/'|sed -e 's/CHARSET=latin1//' |sed -e 's/character set latin1 collate latin1_bin//' > create_table.sql 
-echo "cat create_table.sql | hgsql $ensDb "
 cat create_table.sql | hgsql $ensDb 
 echo "Loading data"
 for i in $tables ; do echo "hgLoadSqlTab $ensDb $i /dev/null $i.txt.table -oldTable ">> dbLoad.log; zcat $i.txt.table.gz > temp.txt ; hgLoadSqlTab $ensDb $i /dev/null temp.txt -oldTable 2>> dbLoad.log >> dbLoad.log; done
 echo "Fix chrom names"
-echo "hgsql $ensDb -e update seq_region set name = 'M' where name = 'MT';"
 hgsql $ensDb -e "update seq_region set name = 'M' where name = 'MT';"
-echo "hgsql $endDb -e update seq_region set name = '6_cox_hap1' where name = 'c6_COX';"
 hgsql $ensDb -e "update seq_region set name = '6_cox_hap1' where name = 'c6_COX';"
 hgsql $ensDb -e "update seq_region set name = '6_qbl_hap2' where name = 'c6_QBL';"
 hgsql $ensDb -e "update seq_region set name = '5_h2_hap1' where name = 'c5_H2';"

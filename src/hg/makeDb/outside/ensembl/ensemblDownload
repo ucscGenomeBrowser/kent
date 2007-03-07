@@ -1,4 +1,4 @@
-#
+#!/bin/bash -e
 ##download ensembl or vega mysql tables
 [ $# != 3 ] && echo "usage: ensemblDownload species version output-directory" && echo "   for example: ensemblDownload homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e" && exit 1;
 organism=$1
@@ -9,14 +9,14 @@ sql="$input/${organism}_${version}.sql.gz"
 mkdir -p $outdir
 cd $outdir
 #get sql definition for all tables
-echo "wget -N $sql"
 wget --timestamping --no-verbose $sql 2>> download.log
 #get list of tables excluding big alignment tables and others
 zgrep CREATE ${organism}_${version}.sql.gz |awk -F'`' '{print $2}' > tables
 exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
 tables=`cat tables |grep -v -E $exceptions`
 #go get them! (if not already downloaded)
-echo "Starting download to $outdir from $input. Use tail -f download.log to watch progress"
+echo "Starting download to $outdir from $input. "
+echo "Use tail -f download.log to watch progress"
 for i in $tables; do wget --timestamping --no-verbose $input/${i}.txt.table.gz; done  2>> download.log
 zcat seq_region.txt.table.gz | sed -e 's/GeneScaffold/scaffold/'  > seq_region.txt.table
 gzip -f seq_region.txt.table
