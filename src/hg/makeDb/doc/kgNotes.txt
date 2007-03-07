@@ -61,7 +61,7 @@ end
 # as special genes.  Takes 40 seconds
 txAbFragFind hg18 antibodyAccs
 pslCat mrna/*.psl -nohead | weedLines -invert antibodyAccs stdin antibody.psl
-clusterPsl antibody.psl stdout | awk '$10 > 20' | cut -f 1-12 > antibody.bed
+clusterPsl -prefix=antibody.abV antibody.psl stdout | awk '$10 > 20' | cut -f 1-12 > antibody.bed
 
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
@@ -213,6 +213,10 @@ rm -rf txFaSplit
 mkdir txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
 
+# Fold in antibody stuff at a stage where it *won't* be taken up by alignments
+sequenceForBed -db=hg18 -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
+mv txWalk.fa abWalk.fa
+
 # Set up cluster run Victor Solovyev's Best Orf program.
 rm -rf bestorf
 mkdir bestorf
@@ -321,26 +325,26 @@ cd ..
 # Takes 28 seconds.
 rm -rf cdsEvidence
 mkdir cdsEvidence
-txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl txWalk.fa \
+txCdsEvFromRna refSeq.fa cds.tab blat/rna/refSeq.psl abWalk.fa \
 	cdsEvidence/refSeqTx.tce -refStatus=refSeqStatus.tab \
 	-unmapped=cdsEvidence/refSeqTx.unmapped -exceptions=exceptions.tab
-txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl txWalk.fa \
+txCdsEvFromRna mrna.fa cds.tab blat/rna/mrna.psl abWalk.fa \
 	cdsEvidence/mrnaTx.tce -mgcStatus=mgcStatus.tab \
 	-unmapped=cdsEvidence/mrna.unmapped
-txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl txWalk.fa \
+txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl abWalk.fa \
 	cdsEvidence/refSeqProt.tce -refStatus=refPepStatus.tab \
 	-unmapped=cdsEvidence/refSeqProt.unmapped \
 	-exceptions=exceptions.tab -refToPep=refToPep.tab \
 	-dodgeStop=3 -minCoverage=0.3
-txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
+txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl abWalk.fa \
 	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
 	-unmapped=cdsEvidence/uniProt.unmapped -source=tremble
-cat bestorf/tab/*.borf | txCdsEvFromBorf stdin txWalk.fa cdsEvidence/bestorf.tce
+cat bestorf/tab/*.borf | txCdsEvFromBorf stdin abWalk.fa cdsEvidence/bestorf.tce
 
 # Consolidate and pick best CDS.  Takes 4 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
-cat txWalk/*.bed | \
+cat txWalk/*.bed antibody.bed | \
 	txCdsPick stdin unweighted.tce cds.weights pick.tce pick.picks \
 		-weightedTce=weighted.tce -refToPep=refToPep.tab \
 		-exceptionsIn=exceptions.tab \
@@ -348,7 +352,7 @@ cat txWalk/*.bed | \
 
 # Create gene prediction (GTF) and peptide fasta file.
 # Takes 7 seconds.
-cat txWalk/*.bed | txCdsToGene stdin txWalk.fa pick.tce pick.gtf pick.fa \
+cat txWalk/*.bed antibody.bed | txCdsToGene stdin abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=txWalk.exceptions
 
 # Create gene info table. Takes 8 seconds
@@ -361,51 +365,58 @@ cat mrna/*.psl refSeq/*.psl | txInfoAssemble pick.bed pick.tce all.borf \
 txCdsCluster pick.bed pick.cluster
 
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
-# Takes about 3 seconds.
+# Map CDS to gene set.  Takes 10 seconds
 txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
-txCdsWeed pick.tce pick.info weeded.tce weeded.info
+txCdsWeed pick.tce pick.info weeded.tce weededCds.info
+cat txWalk/*.bed antibody.bed | txCdsToGene stdin abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
+	-bedOut=weededCds.bed -exceptions=txWalk.exceptions
 
-# TODO - Put in step here that does additional weeding of genes....
-# Specifically get rid of near-coding transcripts that have
-# retained introns or bleeds longer than 100.
+# Separate out transcripts into coding and 4 noncoding categories.
+# Generate new gene set that weeds out the junkiest. Takes 9 seconds.
+txGeneSeparateNoncoding weededCds.bed weededCds.info \
+	coding.bed nearCoding.bed nearCodingJunk.bed antisense.bed noncoding.bed separated.info
+cat coding.bed nearCoding.bed antisense.bed noncoding.bed | \
+    txCdsToGene stdin abWalk.fa weededCds.tce weeded.gtf weeded.faa \
+        -bedOut=weeded.bed -exceptions=txWalk.exceptions
+awk '$2 != "nearCodingJunk"' separated.info > weeded.info
+awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
 
-# TODO - Additional classification of noncoding, including
-# antisense for ones that overlap protein coding genes on
-# minus strand by 22 or more bases.
 
-# Generate a new gene set.  Takes 7 seconds
-cat txWalk/*.bed | txCdsToGene stdin txWalk.fa weeded.tce weeded.gtf weeded.faa \
-	-bedOut=weeded.bed -exceptions=txWalk.exceptions
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
-# using.  Takes about 10 seconds
-txGeneAccession ../jkg.bak/ucscGenes.bed ~kent/src/hg/txGene/txGeneAccession/txLastId \
+# using.  Takes 4 seconds
+txGeneAccession ../jkg.7/ucscGenes.bed ~kent/src/hg/txGene/txGeneAccession/txLastId \
 	weeded.bed txToAcc.tab oldToNew.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
-subColumn 1 pick.info txToAcc.tab accessioned.info
-subColumn 1 pick.picks txToAcc.tab ucscGenes.picks
-subColumn 2 pick.nice txToAcc.tab ucscGenes.nice
-cat txWalk/*.ev | subColumn 1 stdin txToAcc.tab ucscGenes.ev
+subColumn 1 weeded.info txToAcc.tab ucscGenes.info
+weedLines weeds.lst pick.picks stdout | subColumn 1 stdin txToAcc.tab ucscGenes.picks
+weedLines weeds.lst pick.nice stdout | subColumn 2 stdin txToAcc.tab ucscGenes.nice
+subColumn 4 coding.bed txToAcc.tab ucscCoding.bed
+subColumn 4 nearCoding.bed txToAcc.tab ucscNearCoding.bed
+subColumn 4 antisense.bed txToAcc.tab ucscAntisense.bed
+subColumn 4 noncoding.bed txToAcc.tab ucscNoncoding.bed
+cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.tab ucscGenes.ev
 
-# Separate the gene set into coding, noncoding, and nearCoding.
-# Cluster the coding and the noncoding sets. Takes 3 seconds
-txGeneSeparateNoncoding ucscGenes.bed accessioned.info \
-	coding.bed nearCoding.bed noncoding.bed ucscGenes.info
-txCdsCluster coding.bed coding.cluster
-txBedToGraph noncoding.bed noncoding noncoding.txg
-
-# Do final clustering of transcripts into genes, and use this to build the
-# knownCanonical and related tables.  Takes 3 seconds
-txGeneCanonical coding.cluster ucscGenes.info noncoding.txg ucscGenes.bed nearCoding.bed \
+# Cluster the coding and the noncoding sets, and make up canonical and
+# isoforms tables. Takes 3 seconds.
+txCdsCluster ucscCoding.bed coding.cluster
+txBedToGraph ucscNoncoding.bed noncoding noncoding.txg -prefix=non
+txBedToGraph ucscAntisense.bed antisense antisense.txg -prefix=anti
+cat noncoding.txg antisense.txg > senseAnti.txg
+txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNearCoding.bed \
 	canonical.tab isoforms.tab txCluster.tab
+
+#####################################################################################
+# Start loading up the database!  Here we load into hg18a, which is a slimmed
+# down copy of hg18.  Takes 2 seconds
 hgLoadSqlTab hg18a knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgLoadSqlTab hg18a knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
 
 # Make files with protein and mrna accessions.  These will be taken from
 # RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed separated.info txWalk.fa weeded.faa refSeq.fa \
+txGeneProtAndRna weeded.bed separated.info abWalk.fa weeded.faa refSeq.fa \
     refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
 hgPepPred hg18a generic knownGenePep ucscGenes.faa
 hgPepPred hg18a generic knownGeneMrna ucscGenes.fa
@@ -444,7 +455,7 @@ ixIxx knownGene.text knownGene.ix knownGene.ixx
 ln -s /cluster/data/hg18/bed/jkg/index/knownGene.ix  /gbdb/hg18a/knownGene.ix
 ln -s /cluster/data/hg18/bed/jkg/index/knownGene.ixx /gbdb/hg18a/knownGene.ixx
      
-# Create a bunch of knownToXxx tables:
+# Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 hgMapToGene hg18a allenBrainAli -type=psl knownGene knownToAllenBrain
 hgMapToGene hg18a ensGene knownGene knownToEnsembl
 hgMapToGene hg18a gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
@@ -500,6 +511,7 @@ _EOF_
 doHgNearBlastp.pl config.ra |& tee do.log 
 
 # Remove non-syntenic hits for mouse and rat
+# Takes a few minutes
 mkdir /gbdb/hg18a/liftOver
 ln -s /cluster/data/hg18/bed/liftOver/hg18ToRn4.over.chain.gz \
     /gbdb/hg18a/liftOver/hg18aToRn4.over.chain.gz
@@ -587,7 +599,7 @@ hgNetDist vidal/humanVidal.p2p hg18a humanVidalP2P -threshold=2 \
 hgNetDist wanker/humanWanker.p2p hg18a humanWankerP2P -threshold=2 -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
 
 ###########################################################################
-## Load take 8 into the database. Takes 2 minutes.
+## Load take 9 into the database. Takes 2 minutes.
 ssh hgwdev
 cd /cluster/data/hg18/bed/jkg
 cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq
@@ -605,9 +617,9 @@ hgLoadBed -strict hg18 jkgTxWalk txWalk/*.bed
 hgLoadBed hg18 jkgAltSplice altSplice.bed
 ldHgGene hg18 jkgTxCdsPick pick.gtf -gtf -genePredExt
 hgLoadCdsEvidence hg18 jkgTxCdsEvidence weighted.tce
-hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql pick.info
-ldHgGene hg18 jkgTxCdsRepick weeded.gtf -gtf -genePredExt
-
+hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql separated.info
+ldHgGene hg18 jkgTxCdsRepick weededCds.gtf -gtf -genePredExt
+ldHgGene hg18 jkgUcscGenes weeded.gtf -gtf -genePredExt
 
 ###########################################################################
 ## Load take 7 into the database. Takes 30 seconds.
@@ -1133,14 +1145,32 @@ o - chrX:152,822,047-152,827,969 is a good place for CDS frame clustering
 ######################################################################
 # Stuff to consider for take 8
 o - Leave in NMD ORFs, especially for RefSeq, just mark as bad?
+     - Done
 o - Change accession from TX12345678 to UC1234567?
+     - Not yet
 o - Put in soft-join at funny introns like we do with RefSeq.
     It's just a bug that we don't.  Fixed!
+     - Fixed, but this ended up making a lot of funny transcripts,
+       so took out the soft join.
 o - Add in antibody's as noncoding genes at a fairly late phase.
+     - Done.  Not a too horrible kludge
 o - Remove accessions in
 	markd/compbio/mgc/cListPaperData/data/hgdata/athersysRage.acc
                                                 invitrogenCrap.acc
     from input.
+
+
+######################################################################
+# Stuff to consider for take 10
+o - Gather some information on dog and maybe mouse conservation in
+    txInfo table.  Possibly:
+        ORF size in dog.
+	ORF size in mouse.
+	Ka/Ks within ORF in dog and mouse.
+	Transcript size in dog.
+	Transcript size in mouse.
+o - Put in rRNA/tRNA/snoRNA etc labels in category field of txInfo where
+    appropriate.
 o - Do tighter near-best placements, using Robert & David's method.
 o - Separating clusters that contain non-overlapping refSeq clusters
     into separate genes.  See chr22:16,936,036-17,018,244. BUt how???
