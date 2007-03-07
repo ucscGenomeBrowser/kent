@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.346 2007/03/06 05:28:57 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.347 2007/03/07 01:21:47 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2171,7 +2171,7 @@ cgiMakeDropList(HA_POP_MIXED, menu, menuSize,
     cartCgiUsualString(cart, HA_POP_MIXED, HA_POP_MIXED_DEFAULT));
 freez(&menu);
 
-puts("<B>Population count:</B>&nbsp;");
+puts("<BR><B>Population count:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2182,7 +2182,7 @@ cgiMakeDropList(HA_POP_COUNT, menu, menuSize,
     cartCgiUsualString(cart, HA_POP_COUNT, HA_POP_COUNT_DEFAULT));
 freez(&menu);
 
-puts("<B>Polymorphism Type:</B>&nbsp;");
+puts("<BR><B>Polymorphism Type:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2211,10 +2211,19 @@ puts("<BR><B>Maximum Heterozygosity:</B>&nbsp;");
 maxHet = atof(cartUsualString(cart, HA_MAX_HET, HA_MAX_HET_DEFAULT));
 cgiMakeDoubleVar(HA_MAX_HET, maxHet, 6);
 
-puts("<BR><B>Display Monomorphic Only:</B>&nbsp;");
-cgiMakeCheckBox(HA_MONO, HA_MONO_DEFAULT);
+puts("<BR><B>Monomorphic:</B>&nbsp;");
+menuSize = 4;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "any";
+menu[menuPos++] = "all";
+menu[menuPos++] = "some";
+menu[menuPos++] = "none";
+cgiMakeDropList(HA_MONO, menu, menuSize, 
+    cartCgiUsualString(cart, HA_MONO, HA_MONO_DEFAULT));
+freez(&menu);
 
-puts("<B>Chimp Allele:</B>&nbsp;");
+puts("<BR><B>Chimp Allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2231,7 +2240,7 @@ minChimpQual = atoi(cartUsualString(cart, HA_CHIMP_QUAL, HA_CHIMP_QUAL_DEFAULT))
 printf("<BR><B>Minimum Chimp Quality Score:</B>&nbsp;");
 cgiMakeIntVar(HA_CHIMP_QUAL, minChimpQual, 4);
 
-puts("<B>Macaque Allele:</B>&nbsp;");
+puts("<BR><B>Macaque Allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
