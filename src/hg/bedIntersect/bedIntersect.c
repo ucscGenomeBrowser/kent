@@ -5,7 +5,7 @@
 #include "options.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bedIntersect.c,v 1.6 2004/10/19 15:51:58 hiram Exp $";
+static char const rcsid[] = "$Id: bedIntersect.c,v 1.7 2007/03/07 01:46:42 angie Exp $";
 
 static boolean aHitAny = FALSE;
 static boolean bScore = FALSE;
@@ -69,7 +69,7 @@ while (lineFileRow(lf, row))
     hel = hashLookup(hash, row[0]);
     if (hel == NULL)
        {
-       bk = binKeeperNew(0, 511*1024*1024);
+       bk = binKeeperNew(0, 1024*1024*1024);
        hel = hashAdd(hash, row[0], bk);
        }
     bk = hel->val;

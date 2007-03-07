@@ -13,7 +13,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.29 2006/04/12 20:27:21 hiram Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.30 2007/03/07 01:46:43 angie Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -175,7 +175,7 @@ if (newSize > oldSize)
 return v;
 }
 
-#define NEEDMEM_LIMIT 100000000
+#define NEEDMEM_LIMIT 500000000
 
 void *needMem(size_t size)
 /* Need mem calls abort if the memory allocation fails. The memory

@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.50 2006/08/07 15:57:47 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.51 2007/03/07 01:46:43 angie Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -428,7 +428,7 @@ while (!gotLf)
 	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
-	if (bufSize >= 64*1024*1024)
+	if (bufSize >= 512*1024*1024)
 	    {
 	    errAbort("Line too long (more than %d chars) line %d of %s",
 		lf->bufSize, lf->lineIx+1, lf->fileName);
