@@ -1,0 +1,38 @@
+#
+[ $# != 3 ] && echo "usage: loadEnsembl version input-directory db " && exit 1;
+version=$1
+indir=$2
+db=$3
+ensDb=ensembl_$version
+cd $indir
+#extract genes
+echo "hgsql $ensDb -N -B < ensGene.sql > ensGene.tab"
+hgsql $ensDb -N -B < ensGene.sql > ensGene.tab
+echo "awk -f ensGene.awk < ensGene.tab > ensGene.gp"
+awk -f ensGene.awk < ensGene.tab > ensGene.gp     
+#extract pseudogenes
+echo "hgsql $ensDb -N -B < ensPseudo.sql > ensPseudo.tab"
+hgsql $ensDb -N -B < ensPseudo.sql > ensPseudo.tab
+echo "awk -f ensPseudo.awk < ensPseudo.tab > ensPseudo.gp"
+awk -f ensPseudo.awk < ensPseudo.tab > ensPseudo.gp     
+#extract ensInfo
+echo "hgsql $ensDb -N -B < ensGeneInfo.sql > ensInfo.tab"
+hgsql $ensDb -N -B < ensGeneInfo.sql > ensInfo.tab
+echo "hgsql $ensDb -N -B < ensPseudoInfo.sql >> ensInfo.tab"
+hgsql $ensDb -N -B < ensPseudoInfo.sql >> ensInfo.tab
+#extract processed pseudogenes
+grep -P "\tprocessed" ensPseudo.tab > ensProcPseudo.tab
+awk -f ensPseudo.awk < ensProcPseudo.tab > ensProcPseudo.gp
+#extract non-processed pseudogenes
+grep -v processed ensPseudo.tab > ensNonProcPseudo.tab
+grep unprocessed ensPseudo.tab >> ensNonProcPseudo.tab
+awk -f ensPseudo.awk < ensNonProcPseudo.tab > ensNonProcPseudo.gp
+
+exit
+ldHgGene $db ensGene -predTab ensGene.gp -gtf -genePredExt 
+ldHgGene $db ensPseudoGene -predTab ensPseudo.gp -gtf -genePredExt 
+ldHgGene $db ensProcessedPseudo -predTab ensProcPseudo.gp -gtf -genePredExt
+ldHgGene $db ensNonProcessedPseudo -predTab ensNonProcPseudo.gp -gtf -genePredExt
+hgsql $db -N -B < /cluster/home/baertsch/kent/src/hg/lib/ensInfo.sql
+echo 'load data local infile "ensInfo.tab" into table ensInfo' | hgsql $db -N -B
+
