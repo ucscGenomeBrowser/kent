@@ -18,3 +18,5 @@ tables=`cat tables |grep -v -E $exceptions`
 #go get them! (if not already downloaded)
 echo "Starting download to $outdir from $input. Use tail -f download.log to watch progress"
 for i in $tables; do wget --timestamping --no-verbose $input/${i}.txt.table.gz; done  2>> download.log
+zcat seq_region.txt.table.gz | sed -e 's/GeneScaffold/scaffold/'  > seq_region.txt.table
+gzip -f seq_region.txt.table
