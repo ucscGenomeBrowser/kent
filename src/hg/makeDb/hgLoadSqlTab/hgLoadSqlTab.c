@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.3 2007/02/26 16:14:12 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.4 2007/03/07 01:47:32 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +21,7 @@ errAbort(
 "file.tab contains tab-separated text (rows of table)\n"
 "The actual table name will come from the command line, not the sql file.\n"
 "options:\n"
-"  -warn - warn or errors or warnings rather than abort\n"
+"  -warn - warn instead of abort on mysql errors or warnings\n"
 "  -notOnServer - file is *not* in a directory that the mysql server can see\n"
 "  -oldTable|-append - add to existing table\n"
   );
