@@ -1,10 +1,9 @@
 setenv BRANCHNN 153
 setenv TODAY 2007-02-26     # v153 final
 setenv LASTWEEK 2007-02-12     # v152 final
-setenv REVIEWDAY 2007-02-19    # preview of v153
-setenv LASTREVIEWDAY 2007-02-05    # preview of v152
+setenv REVIEWDAY 2007-03-05    # preview of v154
+setenv LASTREVIEWDAY 2007-02-19    # preview of v153
 
-setenv BUILDPERSON aamp
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 titan
 
