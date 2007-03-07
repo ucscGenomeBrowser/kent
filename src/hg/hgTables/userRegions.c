@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.3 2007/03/06 22:25:24 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.4 2007/03/07 05:16:56 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -127,7 +127,8 @@ if (hasData)
 	slAddHead(&bedList, bedEl);
 	}
     lineFileClose(&lf);
-    slSort(&bedList, bedCmp);
+//    slSort(&bedList, bedCmp);
+    slReverse(&bedList);
 
     trashDirFile(&tn, "hgtData", "user", ".region");
     f = mustOpen(tn.forCgi, "w");
@@ -194,6 +195,7 @@ while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
 	region->name = NULL;
     slAddHead(&list, region);
     }
+slReverse(&list);
 return list;
 }
 
