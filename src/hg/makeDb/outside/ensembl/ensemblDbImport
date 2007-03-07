@@ -18,9 +18,12 @@ echo "Creating empty tables in database $db from $sql"
 echo "zcat $sql |sed -e 's/MyISAM DEFAULT/MyISAM/'|sed -e 's/CHARSET=latin1//' |sed -e 's/character set latin1 collate latin1_bin//' > create_table.sql "
 zcat $sql |sed -e 's/MyISAM DEFAULT/MyISAM/'|sed -e 's/CHARSET=latin1//' |sed -e 's/character set latin1 collate latin1_bin//' > create_table.sql 
 cat create_table.sql | hgsql $ensDb 
-echo "fix chrom names"
-echo "hgsql ensembl_core_43_36e < /cluster/bin/scripts/ensemblSeqRegionUpdate.sql"
-hgsql ensembl_core_43_36e < /cluster/bin/scripts/ensemblSeqRegionUpdate.sql
+echo "Fix chrom names"
+hgsql $ensDb -e "update seq_region set name = 'M' where name = 'MT';"
+hgsql $endDb -e "update seq_region set name = '6_cox_hap1' where name = 'c6_COX';"
+hgsql $endDb -e "update seq_region set name = '6_qbl_hap2' where name = 'c6_QBL';"
+hgsql $endDb -e "update seq_region set name = '5_h2_hap1' where name = 'c5_H2';"
+hgsql $endDb -e "update seq_region set name = '22_h2_hap1' where name = 'c22_H2';"
 echo "Loading data"
 tables=`cat tables |grep -v -F -f $exceptions`
 for i in $tables ; do echo "hgLoadSqlTab $ensDb $i /dev/null $i.txt.table -oldTable ">> dbLoad.log; zcat $i.txt.table.gz > temp.txt ; hgLoadSqlTab $ensDb $i /dev/null temp.txt -oldTable 2>> dbLoad.log >> dbLoad.log; done
