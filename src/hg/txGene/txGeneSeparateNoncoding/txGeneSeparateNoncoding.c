@@ -8,7 +8,7 @@
 #include "txInfo.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.3 2007/03/06 22:41:50 kent Exp $";
+static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.4 2007/03/07 05:16:29 kent Exp $";
 
 int minNearOverlap=20;
 
@@ -114,6 +114,9 @@ for (i=0; i<blockCount; ++i)
 return total;
 }
 
+int codingCount = 0, codingJunkCount = 0, nearCodingCount = 0, junkCount = 0,
+	antisenseCount = 0, noncodingCount = 0;
+
 struct rbTree *codingTree(struct bed *bedList)
 /* Return rangeTree for all coding transcripts in list. */
 {
@@ -129,7 +132,7 @@ return rangeTree;
 
 void separateStrand(struct bed *inList, struct hash *infoHash,
 	struct rbTree *tree, struct rbTree *antitree,
-	struct bed **retCoding, struct bed **retNearCoding, 
+	struct bed **retCoding, struct bed **retNearCoding, struct bed **retNearCodingJunk,
 	struct bed **retAntisense, struct bed **retNoncoding)
 /* Separate list of beds from single strand into the 4 categories.
  * The tree covers the coding transcripts for this strand, and the
@@ -138,46 +141,63 @@ void separateStrand(struct bed *inList, struct hash *infoHash,
 struct bed *bed, *nextBed;
 for (bed = inList; bed != NULL; bed = nextBed)
     {
-    boolean uglyUgly = sameString(bed->name, "chr16.1212.1.DQ599768");
-    if (uglyUgly) uglyf("got you %s. thickStart %d, thickENd %d\n", bed->name, bed->thickStart, bed->thickEnd);
-
     nextBed = bed->next;
     struct txInfo *info = hashMustFindVal(infoHash, bed->name);
     if (bed->thickStart < bed->thickEnd)
 	{
-	if (uglyUgly) uglyf("  coding\n");
 	slAddHead(retCoding, bed);
 	info->category = "coding";
+	if (info->retainedIntron || info->bleedIntoIntron >= 100 || info->nonsenseMediatedDecay)
+	    ++codingJunkCount;
+	else
+	    ++codingCount;
 	}
     else
         {
-	if (bedOverlapWithRangeTree(tree, bed) >= minNearOverlap)
+	if (startsWith("antibody.abV", bed->name))
 	    {
-	    slAddHead(retNearCoding, bed);
-	    info->category = "nearCoding";
+	    slAddHead(retNoncoding, bed);
+	    info->category = "antibodyParts";
+	    ++noncodingCount;
+	    }
+	else if (bedOverlapWithRangeTree(tree, bed) >= minNearOverlap)
+	    {
+	    if (info->retainedIntron || info->bleedIntoIntron >= 100)
+		{
+		slAddHead(retNearCodingJunk, bed);
+		info->category = "nearCodingJunk";
+	        ++junkCount;
+		}
+	    else
+		{
+		slAddHead(retNearCoding, bed);
+		info->category = "nearCoding";
+	        ++nearCodingCount;
+		}
 	    }
 	else if (bedOverlapWithRangeTree(antitree, bed) >= minNearOverlap)
 	    {
 	    slAddHead(retAntisense, bed);
 	    info->category = "antisense";
+	    ++antisenseCount;
 	    }
 	else
 	    {
 	    slAddHead(retNoncoding, bed);
 	    info->category = "noncoding";
+	    ++noncodingCount;
 	    }
-	if (uglyUgly) uglyf("  %s\n", info->category);
 	}
     }
 }
 
 void separateChrom(struct chrom *chrom, struct hash *infoHash,
-	struct bed **retCoding, struct bed **retNearCoding, 
+	struct bed **retCoding, struct bed **retNearCoding, struct bed **retNearCodingJunk,
 	struct bed **retAntisense, struct bed **retNoncoding)
 /* Separate bed list into four parts depending on whether or not
  * it's coding. */
 {
-*retCoding = *retNearCoding = *retAntisense = *retNoncoding = NULL;
+*retCoding = *retNearCoding = *retNearCodingJunk = *retAntisense = *retNoncoding = NULL;
 
 /* Make trees that cover coding on both strands. */
 struct rbTree *plusCoding = codingTree(chrom->plusList);
@@ -185,9 +205,9 @@ struct rbTree *minusCoding = codingTree(chrom->minusList);
 
 /* Split things up. */
 separateStrand(chrom->plusList, infoHash, plusCoding, minusCoding,
-	retCoding, retNearCoding, retAntisense, retNoncoding);
+	retCoding, retNearCoding, retNearCodingJunk, retAntisense, retNoncoding);
 separateStrand(chrom->minusList, infoHash, minusCoding, plusCoding,
-	retCoding, retNearCoding, retAntisense, retNoncoding);
+	retCoding, retNearCoding, retNearCodingJunk, retAntisense, retNoncoding);
 
 /* Clean up and go home. */
 rbTreeFree(&plusCoding);
@@ -195,8 +215,8 @@ rbTreeFree(&minusCoding);
 }
 
 void txGeneSeparateNoncoding(char *inBed, char *inInfo,
-	char *outCoding, char *outNearCoding, char *outAntisense,
-	char *outNoncoding, char *outInfo)
+	char *outCoding, char *outNearCoding, char *outNearCodingJunk,
+	char *outAntisense, char *outNoncoding, char *outInfo)
 /* txGeneSeparateNoncoding - Separate genes into four piles - coding, 
  * non-coding that overlap coding, antisense to coding, and independent non-coding. */
 {
@@ -216,6 +236,7 @@ slSort(&inBedList, bedCmpChromStrandStart);
 /* Open up output files. */
 FILE *fCoding = mustOpen(outCoding, "w");
 FILE *fNearCoding = mustOpen(outNearCoding, "w");
+FILE *fNearCodingJunk = mustOpen(outNearCodingJunk, "w");
 FILE *fNoncoding = mustOpen(outNoncoding, "w");
 FILE *fAntisense = mustOpen(outAntisense, "w");
 
@@ -226,26 +247,33 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     verbose(2, "chrom %s\n", chrom->name); 
 
     /* Do the separation. */
-    struct bed *codingList, *nearCodingList, *antisenseList, *noncodingList;
-    separateChrom(chrom, infoHash, &codingList, &nearCodingList, &antisenseList, &noncodingList);
+    struct bed *codingList, *nearCodingList, *nearCodingJunkList, *antisenseList, *noncodingList;
+    separateChrom(chrom, infoHash, &codingList, &nearCodingList, 
+    	&nearCodingJunkList, &antisenseList, &noncodingList);
     verbose(2, "%d coding, %d near, %d anti, %d non\n", 
     	slCount(codingList), slCount(nearCodingList), slCount(antisenseList), slCount(noncodingList));
 
     /* Write lists to respective files. */
     writeBedList(codingList, fCoding);
     writeBedList(nearCodingList, fNearCoding);
+    writeBedList(nearCodingJunkList, fNearCodingJunk);
     writeBedList(antisenseList, fAntisense);
     writeBedList(noncodingList, fNoncoding);
     }
 carefulClose(&fCoding);
 carefulClose(&fNearCoding);
+carefulClose(&fNearCodingJunk);
 carefulClose(&fNoncoding);
 carefulClose(&fAntisense);
 
+verbose(1, "coding %d, codingJunk %d, nearCoding %d, junk %d, antisense %d, noncoding %d\n",
+	codingCount, codingJunkCount, nearCodingCount, junkCount, antisenseCount, noncodingCount);
 /* Write out updated info file */
 FILE *f = mustOpen(outInfo, "w");
 for (info = infoList; info != NULL; info = info->next)
+    {
     txInfoTabOut(info, f);
+    }
 carefulClose(&f);
 }
 
@@ -253,9 +281,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 8)
+if (argc != 9)
     usage();
 minNearOverlap = optionInt("minNearOverlap", minNearOverlap);
-txGeneSeparateNoncoding(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
+txGeneSeparateNoncoding(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8]);
 return 0;
 }
