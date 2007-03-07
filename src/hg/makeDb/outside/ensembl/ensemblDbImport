@@ -1,6 +1,6 @@
 #!/bin/bash -e
 ##create mysql database
-[ $# != 3 ] && echo "usage: ensemblDbImport species version input-directory " && exit 1;
+[ $# != 3 ] && echo "usage: ensemblDbImport species version input-directory " >&2 && exit 1;
 organism=$1
 version=$2
 indir=$3

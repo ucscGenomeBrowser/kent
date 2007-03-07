@@ -1,5 +1,5 @@
 #!/bin/bash -e
-[ $# != 4 ] && echo "usage: loadEnsembl organism version input-directory db " && exit 1;
+[ $# != 4 ] && echo "usage: loadEnsembl organism version input-directory db " >&2 && exit 1;
 organism=$1
 version=$2
 indir=$3

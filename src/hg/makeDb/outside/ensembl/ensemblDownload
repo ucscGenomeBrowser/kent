@@ -1,6 +1,6 @@
 #!/bin/bash -e
 ##download ensembl or vega mysql tables
-[ $# != 3 ] && echo "usage: ensemblDownload species version output-directory" && echo "   for example: ensemblDownload homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e" && exit 1;
+[ $# != 3 ] && echo "usage: ensemblDownload species version output-directory" >&2 && echo "   for example: ensemblDownload homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e" >&2 && exit 1;
 organism=$1
 version=$2
 outdir=$3
