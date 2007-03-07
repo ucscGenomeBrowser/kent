@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.4 2007/02/28 08:50:54 kent Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.5 2007/03/07 18:08:50 kent Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -97,12 +97,15 @@ printf("%s",
 "relevant to the predicted protein product if any.\n"
 "\n"
 "<UL>\n"
-"<LI><B>category</B> - This is either <i>coding</i>, <i>noncoding</i>, or \n"
+"<LI><B>category</B> - This is either <i>coding</i>, <i>noncoding</i>,\n"
+"<i>antisense</i> or \n"
 "<i>nearCoding</i>. A coding transcript is one where the evidence is relatively\n"
 "good that it produces a protein. The nearCoding transcripts overlap coding\n"
-"transcripts by at least 20 bases, but themselves do not seem to produce \n"
+"transcripts by at least 20 bases on the same strand, but themselves do not seem to produce \n"
 "protein products.  In many cases this is because they are splicing varients\n"
 "with introns after the stop codon, that therefore undergo nonsense mediated decay. \n"
+"Antisense transcripts overlap coding transcripts by at least 20 bases on the oppposite\n"
+"strand.\n"
 "The other transcripts, which are neither coding, nor overlapping coding,\n"
 "are categorized as noncoding.</LI>\n"
 "<LI><B>exon count</B> - The number of exons in the gene. Single exon genes are\n"
