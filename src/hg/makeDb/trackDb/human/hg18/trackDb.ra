@@ -18,13 +18,13 @@ type genePred geneidPep
 
 track ensGene
 shortLabel Ensembl Genes
-longLabel Ensembl (Build 38) Gene Predictions
+longLabel Ensembl (Build 43) Gene Predictions
 group genes
 priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
-ensArchive apr2006
+#ensArchive dec2006
 
 track acembly
 shortLabel AceView Genes
