@@ -235,7 +235,7 @@ return count;
 
 char *getMajorAllele(struct hapmapAllelesSummary *summaryItem)
 {
-if (sameString(summaryItem->isMixed, "TRUE"))
+if (sameString(summaryItem->isMixed, "YES"))
     return NULL;
 if (summaryItem->totalAlleleCountCEU > 0)
     return summaryItem->majorAlleleCEU;
@@ -249,7 +249,7 @@ return summaryItem->majorAlleleYRI;
 char *getMinorAllele(struct hapmapAllelesSummary *summaryItem, char *majorAllele)
 {
 if (!majorAllele) return NULL;
-if (sameString(summaryItem->isMixed, "TRUE"))
+if (sameString(summaryItem->isMixed, "YES"))
     return NULL;
 if (sameString(summaryItem->allele1, majorAllele))
     return summaryItem->allele2;
@@ -265,9 +265,9 @@ boolean complexObserved = isComplexObserved(summaryItem->observed);
 boolean transitionObserved = isTransitionObserved(summaryItem->observed);
 
 if (sameString(mixedFilter, "only mixed") && 
-    sameString(summaryItem->isMixed, "FALSE")) return TRUE;
+    sameString(summaryItem->isMixed, "NO")) return TRUE;
 if (sameString(mixedFilter, "not mixed") &&
-    sameString(summaryItem->isMixed, "TRUE")) return TRUE;
+    sameString(summaryItem->isMixed, "YES")) return TRUE;
 
 if (sameString(popCountFilter, "all 4 populations") && summaryItem->popCount != 4) 
     return TRUE;
@@ -376,7 +376,6 @@ struct hapmapAllelesOrtho *orthoItem = orthoList;
 struct hapmapAllelesSummary *summaryItem = summaryList;
 struct hapmapAllelesOrtho *ret = NULL;
 
-fprintf(stderr, "starting filterOrthoList\n");
 while (orthoItem)
     {
     if (!orthoMatchSummary(orthoItem, summaryItem))
@@ -389,7 +388,6 @@ while (orthoItem)
     orthoItem = orthoItem->next;
     summaryItem = summaryItem->next;
     }
-fprintf(stderr, "done with filterOrthoList\n");
 return ret;
 }
 
@@ -402,7 +400,6 @@ struct hapmapAlleles *simpleItem = simpleList;
 struct hapmapAllelesSummary *summaryItem = summaryList;
 struct hapmapAlleles *ret = NULL;
 
-fprintf(stderr, "starting filterSimpleList\n");
 while (simpleItem)
     {
     if (!simpleMatchSummary(simpleItem, summaryItem))
@@ -415,7 +412,6 @@ while (simpleItem)
     simpleItem = simpleItem->next;
     summaryItem = summaryItem->next;
     }
-fprintf(stderr, "done with filterSimpleList\n");
 return ret;
 }
 
@@ -438,19 +434,15 @@ if (allDefaults())
     }
 
 /* first load summary data */
-fprintf(stderr, "getting hapmap summary data...\n");
 struct hapmapAllelesSummary *summaryLoadItem, *summaryItemList = NULL;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-fprintf(stderr, "rowOffset = %d\n", rowOffset);
+sr = hRangeQuery(conn, "hapmapAllelesSummary", chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     summaryLoadItem = hapmapAllelesSummaryLoad(row+rowOffset);
     slAddHead(&summaryItemList, summaryLoadItem);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 slSort(&summaryItemList, bedCmp);
-fprintf(stderr, "got hapmap summary data\n");
 
 if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
 {
@@ -470,6 +462,7 @@ if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "ha
 }
 
 struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL, *simpleItemsFiltered = NULL;
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
