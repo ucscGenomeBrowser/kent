@@ -3,7 +3,7 @@
 version=$1
 indir=$2
 db=$3
-ensDb=ensembl_$version
+ensDb=ensembl_${organism}_${version}
 cd $indir
 #extract genes
 echo "Extract genes to ensGene.tab"

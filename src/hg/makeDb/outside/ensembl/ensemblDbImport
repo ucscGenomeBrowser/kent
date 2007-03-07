@@ -1,14 +1,14 @@
 ##create mysql database
-[ $# != 3 ] && echo "usage: ensemblDbImport species version output-directory " && exit 1;
+[ $# != 3 ] && echo "usage: ensemblDbImport species version input-directory " && exit 1;
 organism=$1
 version=$2
-outdir=$3
+indir=$3
 delay=4
-ensDb=ensembl_$version
+ensDb=ensembl_${organism}_${version}
 input="ftp://ftp.ensembl.org/pub/current_$organism/data/mysql/${organism}_${version}"
 sql="${organism}_${version}.sql.gz"
 exceptions="/cluster/bin/scripts/ensemblSkipDownload"
-cd $outdir
+cd $indir
 echo "Dropping database $ensDb in $delay seconds"
 sleep $delay
 hgsql mysql -e "drop database $ensDb"
