@@ -1,8 +1,9 @@
 #
-[ $# != 3 ] && echo "usage: loadEnsembl version input-directory db " && exit 1;
-version=$1
-indir=$2
-db=$3
+[ $# != 4 ] && echo "usage: loadEnsembl organism version input-directory db " && exit 1;
+organism=$1
+version=$2
+indir=$3
+db=$4
 ensDb=ensembl_${organism}_${version}
 cd $indir
 #extract genes

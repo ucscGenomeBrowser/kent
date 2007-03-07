@@ -12,6 +12,6 @@ echo "ensemblDownload $organism $version $outdir"
 ensemblDownload $organism $version $outdir
 echo "ensemblDbImport $organism $version $outdir"
 ensemblDbImport $organism $version $outdir 
-echo "loadEnsembl $version $outdir $db"
-loadEnsembl $version $outdir $db 
+echo "loadEnsembl $organism $version $outdir $db"
+loadEnsembl $organism $version $outdir $db 
 
