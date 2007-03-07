@@ -7,5 +7,5 @@ CREATE TABLE ensInfo (
     geneDesc varchar(255) not null,	# Ensembl gene description
     confidence varchar(255) not null,	# Ensembl gene confidence
               #Indices
-    PRIMARY KEY(transcriptId)
+    PRIMARY KEY(name)
 );
