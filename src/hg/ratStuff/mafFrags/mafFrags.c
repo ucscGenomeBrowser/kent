@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.2 2004/02/02 23:45:00 kent Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.3 2007/03/08 08:41:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,13 +22,120 @@ errAbort(
   "   mafFrags database track in.bed out.maf\n"
   "options:\n"
   "   -orgs=org.txt - File with list of databases/organisms in order\n"
+  "   -bed12 - If set, in.bed is a bed 12 file, including exons\n"
+  "   -thickOnly - Only extract subset between thickStart/thickEnd\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"orgs", OPTION_STRING},
+   {"bed12", OPTION_BOOLEAN},
+   {"thickOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean bed12 = FALSE;
+boolean thickOnly = FALSE;
+
+struct mafAli *mafFromBed12(char *database, char *track, struct bed *bed, 
+	struct slName *orgList)
+/* Construct a maf out of exons in bed. */
+{
+/* Loop through all block in bed, collecting a list of mafs, one
+ * for each block.  While we're at make a hash of all species seen. */
+struct hash *speciesHash = hashNew(0);
+struct mafAli *mafList = NULL, *maf, *bigMaf;
+struct mafComp *comp, *bigComp;
+int totalTextSize = 0;
+int i;
+for (i=0; i<bed->blockCount; ++i)
+    {
+    int start = bed->chromStart + bed->chromStarts[i];
+    int end = start + bed->blockSizes[i];
+    if (thickOnly)
+        {
+	start = max(start, bed->thickStart);
+	end = min(end, bed->thickEnd);
+	}
+    if (start < end)
+        {
+	maf = hgMafFrag(database, track, bed->chrom, start, end, '+',
+	   database, NULL);
+	slAddHead(&mafList, maf);
+	for (comp = maf->components; comp != NULL; comp = comp->next)
+	    hashStore(speciesHash, comp->src);
+	totalTextSize += maf->textSize; 
+	}
+    }
+slReverse(&mafList);
+
+/* Add species in order list too */
+struct slName *org;
+for (org = orgList; org != NULL; org = org->next)
+    hashStore(speciesHash, org->name);
+
+/* Allocate memory for return maf that contains all blocks concatenated together. 
+ * Also fill in components with any species seen at all. */
+AllocVar(bigMaf);
+bigMaf->textSize = totalTextSize;
+struct hashCookie it = hashFirst(speciesHash);
+struct hashEl *hel;
+while ((hel = hashNext(&it)) != NULL)
+    {
+    AllocVar(bigComp);
+    bigComp->src = cloneString(hel->name);
+    bigComp->text = needLargeMem(totalTextSize + 1);
+    memset(bigComp->text, '.', totalTextSize);
+    bigComp->text[totalTextSize] = 0;
+    bigComp->strand = '+';
+    hel->val = bigComp;
+    slAddHead(&bigMaf->components, bigComp);
+    }
+
+/* Loop through maf list copying in data. */
+int textOffset = 0;
+for (maf = mafList; maf != NULL; maf = maf->next)
+    {
+    for (comp = maf->components; comp != NULL; comp = comp->next)
+        {
+	bigComp = hashMustFindVal(speciesHash, comp->src);
+	memcpy(bigComp->text + textOffset, comp->text, maf->textSize);
+	bigComp->size += comp->size;
+	}
+    textOffset += maf->textSize;
+    }
+
+/* Cope with strand of darkness. */
+if (bed->strand[0] == '-')
+    {
+    for (comp = bigMaf->components; comp != NULL; comp = comp->next)
+	reverseComplement(comp->text, bigMaf->textSize);
+    }
+
+/* If got an order list then reorder components according to it. */
+if (orgList != NULL)
+    {
+    struct mafComp *newList = NULL;
+    for (org = orgList; org != NULL; org = org->next)
+        {
+	comp = hashMustFindVal(speciesHash, org->name);
+	slAddHead(&newList, comp);
+	}
+    slReverse(&newList);
+    bigMaf->components = newList;
+    }
+
+/* Rename our own component to bed name */
+comp = hashMustFindVal(speciesHash, database);
+freeMem(comp->src);
+comp->src = cloneString(bed->name);
+
+
+/* Clean up and go home. */
+hashFree(&speciesHash);
+mafAliFreeList(&mafList);
+return bigMaf;
+}
 
 void mafFrags(char *database, char *track, char *bedFile, char *mafFile)
 /* mafFrags - Collect MAFs from regions specified in a 6 column bed file. */
@@ -36,7 +143,6 @@ void mafFrags(char *database, char *track, char *bedFile, char *mafFile)
 struct slName *orgList = NULL;
 struct lineFile *lf = lineFileOpen(bedFile, TRUE);
 FILE *f = mustOpen(mafFile, "w");
-char *row[6];
 
 hSetDb(database);
 if (optionExists("orgs"))
@@ -46,19 +152,33 @@ if (optionExists("orgs"))
     readInGulp(orgFile, &buf, NULL);
     orgList = stringToSlNames(buf);
     }
-
 mafWriteStart(f, "zero");
-while (lineFileRow(lf, row))
+
+if (bed12)
     {
-    struct bed *bed = bedLoadN(row, ArraySize(row));
-    struct mafAli *maf;
-    // uglyf("%s %s:%d%s%d\n", bed->name, bed->chrom, bed->chromStart, bed->strand, bed->chromEnd);
-    maf = hgMafFrag(database, track, 
-    	bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
-	bed->name, orgList);
-    mafWrite(f, maf);
-    mafAliFree(&maf);
-    bedFree(&bed);
+    char *row[12];
+    while (lineFileRow(lf, row))
+	{
+	struct bed *bed = bedLoadN(row, ArraySize(row));
+	struct mafAli *maf = mafFromBed12(database, track, bed, orgList);
+	mafWrite(f, maf);
+	mafAliFree(&maf);
+	bedFree(&bed);
+	}
+    }
+else
+    {
+    char *row[6];
+    while (lineFileRow(lf, row))
+	{
+	struct bed *bed = bedLoadN(row, ArraySize(row));
+	struct mafAli *maf = hgMafFrag(database, track, 
+	    bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
+	    bed->name, orgList);
+	mafWrite(f, maf);
+	mafAliFree(&maf);
+	bedFree(&bed);
+	}
     }
 mafWriteEnd(f);
 carefulClose(&f);
@@ -70,6 +190,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+bed12 = optionExists("bed12");
+thickOnly = optionExists("thickOnly");
 mafFrags(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
