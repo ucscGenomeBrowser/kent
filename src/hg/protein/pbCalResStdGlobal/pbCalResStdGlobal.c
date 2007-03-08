@@ -94,14 +94,11 @@ return(highestCnt);
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn2;
-char query[256], query2[256];
-struct sqlResult *sr, *sr2;
-char **row, **row2;
-char *r1, *r2;
-char cond_str[255];
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
 char spDbName[255];
 char proteinsDbName[255];
-char emptyStr[1] = {""};
 FILE *o1, *o2, *o3;
 FILE *fh[23];
 char temp_str[1000];;
@@ -110,18 +107,12 @@ char *aaSeq;
 char *chp;
 int i, j, len;
 int ihi, ilow;
-char *answer;
-char *protDisplayId;
 int aaResCnt[30];
-double aaResCntDouble[30];
 char aaAlphabet[30];
 int aaResFound;
-int totalResCnt;
 float fvalue1, fvalue2;
 float p1, p2;
 int icnt, jcnt;
-double aaLenDouble[100000];
-char *taxon;
 int sortedCnt;
 
 if (argc != 2) usage();
