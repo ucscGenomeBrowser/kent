@@ -13,6 +13,7 @@
 #include "customPp.h"
 #include "customFactory.h"
 #include "chromGraphFactory.h"
+#include "trashDir.h"
 
 #define affy500Table "snpArrayAffy500"
 
@@ -610,7 +611,7 @@ for (i=posColCount; i<colCount; ++i)
     struct tempName tempName;
     char buf[16];
     safef(buf, sizeof(buf), "hggUp%d", i);
-    makeTempName(&tempName, buf, ".cgb");
+    trashDirFile(&tempName, "hgg", buf, ".cgb");
     safef(buf, sizeof(buf), "%d", i+1-posColCount);
     fileEl = labeledFileNew(tempName.forCgi, buf);
     slAddHead(&fileList, fileEl);
