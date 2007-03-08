@@ -13553,3 +13553,84 @@ TMPDIR=/scratch/tmp
 # RECIPROCAL BEST CHIMP PANTRO2 (2007-03-02 kate)
     cd /cluster/data/hg18/bed/blastz.panTro2
     doRecipBest.pl hg18 panTro2 >&! rbest.log &
+
+#########################################################################
+# EPONINE-TSS (TRANSCRIPTON START SITE) PREDICTION 
+# (DONE, 2007-03-08, hartera)
+# The Eponine software is version 2 and has not changed in several years
+# (contact: Thomas Down at Sanger, td2@sanger.ac.uk). The version downloaded
+# for hg16 should be the same as the current version but download again just
+# to check. The application includes the TSS model file: eponine-tss2.xml 
+
+     ssh kkstore02
+     # Eponine runs fine on 2.5Mb contig, but barfs on much larger contig;
+     # chop up sequence at gaps into ~2.5Mb chunks for cluster run.
+     mkdir /san/sanvol1/scratch/hg18/chunks
+     cd /cluster/data/hg18
+     foreach f (?{,?}/NT_*/NT_??????.fa)
+       set ctg = $f:t:r
+       /cluster/bin/x86_64/faSplit -minGapSize=10 \
+        -lift=/san/sanvol1/scratch/hg18/chunks/${ctg}.lft \
+        gap $f 2500000 /san/sanvol1/scratch/hg18/chunks/${ctg}.chunk
+     end
+     # seems to ignore the chunk part of the file name
+     mkdir /cluster/data/hg18/bed/eponine
+     cd /cluster/data/hg18/bed/eponine
+     wget --timestamping \
+       http://www.sanger.ac.uk/Software/analysis/eponine/eponine-scan.jar
+     # file has the same date and same size as the one downloaded for hg16
+     # the script requires all of the path setting found in my .tcshrc file.
+     # Using only set path = (/usr/java/jre1.5.0_06/bin $path)
+     # as in the doEpo file for hg16 does not work.
+     cat << '_EOF_' > doEpo
+#!/bin/csh -ef
+set path = (/usr/java/jre1.5.0_06/bin /bin /usr/bin /usr/X11R6/bin \
+             /usr/local/bin . /cluster/home/hartera/bin/x86_64 \
+             /cluster/bin/x86_64 /projects/compbio/bin/x86_64 \
+             /projects/compbio/bin /projects/compbio/bin/x86_64-linux \
+             /cluster/bin/scripts)
+java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
+'_EOF_'
+     chmod a+x doEpo
+     cp /dev/null jobList
+     foreach f (/san/sanvol1/scratch/hg18/chunks/NT*.fa)
+        echo "./doEpo {check in line+ $f} {check out exists out/$f:t:r.gff}" \
+      >> jobList
+     end
+     mkdir out
+     ssh pk
+     cd /cluster/data/hg18/bed/eponine
+     /parasol/bin/para create jobList
+     /parasol/bin/para try, check, push, check etc.....
+     /parasol/bin/para time
+# Completed: 1408 of 1408 jobs
+# CPU time in finished jobs:     105248s    1754.13m    29.24h    1.22d  0.003 y
+# IO & Wait Time:                  4369s      72.82m     1.21h    0.05d  0.000 y
+# Average job time:                  78s       1.30m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             104s       1.73m     0.03h    0.00d
+# Submission to last job:          1295s      21.58m     0.36h    0.01d
+     
+    # lift chunks -> contigs
+    mkdir contigs/
+    foreach l (/san/sanvol1/scratch/hg18/chunks/*.lft)
+      set ctg = $l:t:r
+      liftUp contigs/$ctg.gff $l warn out/${ctg}*.gff
+    end
+    # lift contigs -> chrom
+    liftUp eponine.gff /cluster/data/hg18/jkStuff/liftAll.lft \
+           warn contigs/NT_*.gff
+    # Translate to bed 4 + float-score -- it would be a shame to lose 
+    # those scores in genePred or bed 5 (int score)
+    awk 'BEGIN {i=0;} \
+         {printf "%s\t%d\t%d\t%s.%d\t%s\t%s\n", $1, $4-1, $5, $1, i, $6, $7; \
+          i = i + 1;}' \
+      eponine.gff > eponine.bed
+    # load up
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/eponine
+    sed -e 's/bed6FloatScore/eponine/g' \
+      $HOME/kent/src/hg/lib/bed6FloatScore.sql > eponine.sql
+    hgLoadBed hg18 eponine eponine.bed -tab -sqlTable=eponine.sql
+    # Loaded 61359 elements of size 6
+    # trackDb.ra entry and eponine.html already exist in trackDb directory.
