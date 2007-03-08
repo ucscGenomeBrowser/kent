@@ -264,10 +264,10 @@ boolean filterOne(struct hapmapAllelesSummary *summaryItem)
 boolean complexObserved = isComplexObserved(summaryItem->observed);
 boolean transitionObserved = isTransitionObserved(summaryItem->observed);
 
-if (sameString(mixedFilter, "only mixed") && 
-    sameString(summaryItem->isMixed, "NO")) return TRUE;
-if (sameString(mixedFilter, "not mixed") &&
-    sameString(summaryItem->isMixed, "YES")) return TRUE;
+if (sameString(mixedFilter, "only mixed") && sameString(summaryItem->isMixed, "NO")) 
+    return TRUE;
+if (sameString(mixedFilter, "not mixed") && sameString(summaryItem->isMixed, "YES")) 
+    return TRUE;
 
 if (sameString(popCountFilter, "all 4 populations") && summaryItem->popCount != 4) 
     return TRUE;
@@ -282,12 +282,12 @@ if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
 if (sameString(observedFilter, "tranversion") && transitionObserved) return TRUE;
 
 float minFreq = getMinFreq(summaryItem);
-if (minFreq < minFreqFilter) return TRUE;
+if (minFreq/1000.0 < minFreqFilter) return TRUE;
 float maxFreq = getMaxFreq(summaryItem);
-if (maxFreq > maxFreqFilter) return TRUE;
+if (maxFreq/1000.0 > maxFreqFilter) return TRUE;
 
-if (summaryItem->score < minHetFilter) return TRUE;
-if (summaryItem->score > maxHetFilter) return TRUE;
+if (summaryItem->score/1000.0 < minHetFilter) return TRUE;
+if (summaryItem->score/1000.0 > maxHetFilter) return TRUE;
 
 int monoCount = getMonoCount(summaryItem);
 if (sameString(monoFilter, "all") && monoCount < summaryItem->popCount) return TRUE;
@@ -295,73 +295,75 @@ if (sameString(monoFilter, "some") && monoCount == summaryItem->popCount) return
 if (sameString(monoFilter, "some") && monoCount == 0) return TRUE;
 if (sameString(monoFilter, "none") && monoCount > 0) return TRUE;
 
-if (sameString(chimpFilter, "available") && 
-    sameString(summaryItem->chimpAllele, "none")) return TRUE;
-if (sameString(chimpFilter, "available") && 
-    sameString(summaryItem->chimpAllele, "N")) return TRUE;
+if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "none")) 
+	return TRUE;
+if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "N")) 
+	return TRUE;
 
 /* If mixed, then we can't compare ortho allele. */
-if (sameString(chimpFilter, "matches major allele") && 
-        summaryItem->isMixed) return TRUE;
-if (sameString(chimpFilter, "matches minor allele") && 
-        summaryItem->isMixed) return TRUE;
-if (sameString(chimpFilter, "complex") && 
-        summaryItem->isMixed) return TRUE;
+if (sameString(chimpFilter, "matches major allele") && summaryItem->isMixed) 
+    return TRUE;
+if (sameString(chimpFilter, "matches minor allele") && summaryItem->isMixed) 
+    return TRUE;
+if (sameString(chimpFilter, "complex") && summaryItem->isMixed) 
+    return TRUE;
 
 char *majorAllele = getMajorAllele(summaryItem);
-if (sameString(chimpFilter, "matches major allele") && 
-    differentString(summaryItem->chimpAllele, majorAllele)) return TRUE;
+if (sameString(chimpFilter, "matches major allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
+    return TRUE;
 char *minorAllele = getMinorAllele(summaryItem, majorAllele);
 /* if monomorphic, minorAllele will be "none" */
-if (sameString(chimpFilter, "matches minor allele") &&
-    sameString(minorAllele, "none")) return TRUE;
-if (sameString(chimpFilter, "matches minor allele") && 
-    differentString(summaryItem->chimpAllele, minorAllele)) return TRUE;
+if (sameString(chimpFilter, "matches minor allele") && sameString(minorAllele, "none")) 
+    return TRUE;
+if (sameString(chimpFilter, "matches minor allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
+    return TRUE;
 /* complex means doesn't match major or minor allele */
-if (sameString(chimpFilter, "complex") &&
-    sameString(summaryItem->chimpAllele, majorAllele)) return TRUE;
-if (sameString(chimpFilter, "complex") &&
-    sameString(summaryItem->chimpAllele, minorAllele) &&
-    differentString(minorAllele, "none")) return TRUE;
+if (sameString(chimpFilter, "complex") && sameString(summaryItem->chimpAllele, majorAllele)) 
+    return TRUE;
+if (sameString(chimpFilter, "complex") && sameString(summaryItem->chimpAllele, minorAllele) &&
+    differentString(minorAllele, "none")) 
+    return TRUE;
 
-if (summaryItem->chimpAlleleQuality < chimpQualFilter) return TRUE;
+if (summaryItem->chimpAlleleQuality < chimpQualFilter) 
+    return TRUE;
 
-if (sameString(chimpFilter, "available") && 
-    sameString(summaryItem->chimpAllele, "none")) return TRUE;
-if (sameString(chimpFilter, "available") && 
-    sameString(summaryItem->chimpAllele, "N")) return TRUE;
+if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "none")) 
+    return TRUE;
+if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "N")) 
+    return TRUE;
 
 /* same filters for macaque as for chimp */
-if (sameString(macaqueFilter, "available") && 
-    sameString(summaryItem->macaqueAllele, "none")) return TRUE;
-if (sameString(macaqueFilter, "available") && 
-    sameString(summaryItem->macaqueAllele, "N")) return TRUE;
+if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "none")) 
+    return TRUE;
+if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "N")) 
+    return TRUE;
 
 /* If mixed, then we can't compare ortho allele. */
-if (sameString(macaqueFilter, "matches major allele") && 
-        summaryItem->isMixed) return TRUE;
-if (sameString(macaqueFilter, "matches minor allele") && 
-        summaryItem->isMixed) return TRUE;
-if (sameString(macaqueFilter, "complex") && 
-        summaryItem->isMixed) return TRUE;
+if (sameString(macaqueFilter, "matches major allele") && summaryItem->isMixed) 
+    return TRUE;
+if (sameString(macaqueFilter, "matches minor allele") && summaryItem->isMixed) 
+    return TRUE;
+if (sameString(macaqueFilter, "complex") && summaryItem->isMixed) 
+    return TRUE;
 
 majorAllele = getMajorAllele(summaryItem);
-if (sameString(macaqueFilter, "matches major allele") && 
-    differentString(summaryItem->macaqueAllele, majorAllele)) return TRUE;
+if (sameString(macaqueFilter, "matches major allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
+    return TRUE;
 minorAllele = getMinorAllele(summaryItem, majorAllele);
 /* if monomorphic, minorAllele will be "none" */
-if (sameString(macaqueFilter, "matches minor allele") &&
-    sameString(minorAllele, "none")) return TRUE;
-if (sameString(macaqueFilter, "matches minor allele") && 
-    differentString(summaryItem->macaqueAllele, minorAllele)) return TRUE;
+if (sameString(macaqueFilter, "matches minor allele") && sameString(minorAllele, "none")) 
+    return TRUE;
+if (sameString(macaqueFilter, "matches minor allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
+    return TRUE;
 /* complex means doesn't match major or minor allele */
-if (sameString(macaqueFilter, "complex") &&
-    sameString(summaryItem->macaqueAllele, majorAllele)) return TRUE;
-if (sameString(macaqueFilter, "complex") &&
-    sameString(summaryItem->macaqueAllele, minorAllele) &&
-    differentString(minorAllele, "none")) return TRUE;
+if (sameString(macaqueFilter, "complex") && sameString(summaryItem->macaqueAllele, majorAllele)) 
+    return TRUE;
+if (sameString(macaqueFilter, "complex") && sameString(summaryItem->macaqueAllele, minorAllele) &&
+    differentString(minorAllele, "none")) 
+    return TRUE;
 
-if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) return TRUE;
+if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) 
+    return TRUE;
 
 return FALSE;
 }
@@ -374,6 +376,7 @@ struct hapmapAllelesOrtho *filterOrthoList(struct hapmapAllelesOrtho *orthoList,
 {
 struct hapmapAllelesOrtho *orthoItem = orthoList;
 struct hapmapAllelesSummary *summaryItem = summaryList;
+struct hapmapAllelesOrtho *orthoItemClone = NULL;
 struct hapmapAllelesOrtho *ret = NULL;
 
 while (orthoItem)
@@ -384,10 +387,15 @@ while (orthoItem)
        continue;
        }
     if (!filterOne(summaryItem))
-        slAddHead(&ret, orthoItem);
+        {
+	orthoItemClone = CloneVar(orthoItem);
+	orthoItemClone->next = NULL;
+        slSafeAddHead(&ret, orthoItemClone);
+	}
     orthoItem = orthoItem->next;
     summaryItem = summaryItem->next;
     }
+slSort(&ret, bedCmp);
 return ret;
 }
 
@@ -398,6 +406,7 @@ struct hapmapAlleles *filterSimpleList(struct hapmapAlleles *simpleList,
 {
 struct hapmapAlleles *simpleItem = simpleList;
 struct hapmapAllelesSummary *summaryItem = summaryList;
+struct hapmapAlleles *simpleItemClone = NULL;
 struct hapmapAlleles *ret = NULL;
 
 while (simpleItem)
@@ -408,10 +417,15 @@ while (simpleItem)
        continue;
        }
     if (!filterOne(summaryItem))
-        slAddHead(&ret, simpleItem);
+        {
+	simpleItemClone = CloneVar(simpleItem);
+	simpleItemClone->next = NULL;
+        slSafeAddHead(&ret, simpleItemClone);
+	}
     simpleItem = simpleItem->next;
     summaryItem = summaryItem->next;
     }
+slSort(&ret, bedCmp);
 return ret;
 }
 
@@ -472,7 +486,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slSort(&simpleItemList, bedCmp);
 simpleItemsFiltered = filterSimpleList(simpleItemList, summaryItemList);
-tg->items = simpleItemList;
+tg->items = simpleItemsFiltered;
 }
 
 void hapmapDrawAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
