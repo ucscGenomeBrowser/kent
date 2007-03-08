@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.3 2007/03/08 08:41:38 kent Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.4 2007/03/08 17:29:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -88,6 +88,7 @@ while ((hel = hashNext(&it)) != NULL)
     memset(bigComp->text, '.', totalTextSize);
     bigComp->text[totalTextSize] = 0;
     bigComp->strand = '+';
+    bigComp->srcSize = totalTextSize;	/* It's safe if a bit of a lie. */
     hel->val = bigComp;
     slAddHead(&bigMaf->components, bigComp);
     }
