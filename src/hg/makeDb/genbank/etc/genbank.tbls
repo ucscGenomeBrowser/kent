@@ -20,7 +20,7 @@
 ^gbSeq$
 ^gbExtFile$
 ^gbStatus$
-^gbLoaded$      
+^gbLoaded$
 ^gbMiscDiff$
 ^all_mrna$
 ^chr.+_mrna$
