@@ -45,8 +45,7 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "Update Times (hgwdev vs. bgwbeta):"
 echo
-~kuhn/bin/updateTimes.csh $db $trackname
-
+updateTimes.csh $db $trackname
 
 
 # -------------------------------------------------
@@ -78,8 +77,7 @@ echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "Chrom List:"
 echo
-~kuhn/bin/getChromlist.csh $db
-
+getChromlist.csh $db
 
 # -------------------------------------------------
 # check for each chrom having data:
@@ -108,20 +106,9 @@ end
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "looking for largest coords:"
-rm -f $db.$track.offEnd
-# echo " chrom: $chrom"
-# echo " chrom_track:  ${chrom}_$track"
-hgsql -N -e "SELECT chromInfo.chrom, chromInfo.size, \
-   chromInfo.size - MAX($track.tEnd) \
-   FROM chromInfo, $track \
-   WHERE chromInfo.chrom = $track.tName  \
-   GROUP BY chromInfo.chrom" $db >> $db.$track.offEnd
 
-echo
-echo "lines from $db.KG.tx.offEnd > 0:"
-awk '{if($2<0) {print $2} }' $db.$track.offEnd
-echo "expect blank or check file $db.$track.offEnd"
-echo
+~kuhn/bin/checkOffend.csh $db net$Org
+
 
 # -------------------------------------------------
 # check that all levels fall between 1-12 inclusive:
@@ -256,7 +243,8 @@ echo "expect '+ -'"
 echo
 
 hgsql -N -e "SELECT DISTINCT(strand) FROM ${trackname}" $db
-set numBlank = `hgsql -N -e 'SELECT COUNT(*) FROM '$trackname' WHERE strand LIKE " "' $db`
+
+set numBlank = `hgsql -N -e 'SELECT COUNT(*) FROM '$trackname' WHERE strand != "+" AND strand != "-"' $db`
 
 if ($numBlank > 0) then
   echo "In addition to the above strand values, there are $numBlank blank strand values.  These should be checked by hand."
@@ -381,7 +369,7 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "checking that qDup >= 0 for type != gap:"
 echo
 
-set types=`hgsql -N -e 'SELECT DISTINCT(type) FROM '$trackname' WHERE type != "gap"' $db`;
+#set types=`hgsql -N -e 'SELECT DISTINCT(type) FROM '$trackname' WHERE type != "gap"' $db`;
 
 foreach type ($types)
 
@@ -429,14 +417,11 @@ else
   set pass2='T'
 endif
 
-if ($pass1 == 'T') then
-  if ($pass2 == 'T') then
+if ($pass1 == 'T' && $pass2 == 'T') then
     echo passed both tests.
   endif
 endif
 echo
-
-
 
 
 # -------------------------------------------------
@@ -448,7 +433,7 @@ echo "checking that for type != gap, if qOver > 0, then qFar = 0:"
 echo
 
 
-set types=`hgsql -N -e 'SELECT DISTINCT(type) FROM '$trackname' WHERE type != "gap"' $db`;
+#set types=`hgsql -N -e 'SELECT DISTINCT(type) FROM '$trackname' WHERE type != "gap"' $db`;
 
 foreach type ($types)
 
@@ -478,7 +463,7 @@ echo "checking MIN and MAX values for chainId (for type != gap):"
 echo
 
 
-set types=`hgsql -N -e 'SELECT DISTINCT(type) FROM '$trackname' WHERE type != "gap"' $db`;
+#set types=`hgsql -N -e 'SELECT DISTINCT(type) FROM '$trackname' WHERE type != "gap"' $db`;
 
 foreach type ($types)
 
