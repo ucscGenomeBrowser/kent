@@ -13,7 +13,7 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.2 2007/02/14 00:06:46 heather Exp $";
+static char const rcsid[] = "$Id: hapmap2.c,v 1.3 2007/03/08 05:08:26 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -91,6 +91,7 @@ if (!helYRI)
 }
 
 boolean differentChrom(struct hashEl *hel1, struct hashEl *hel2)
+/* move this to kent/src/hg/lib/hapmapAlleles.c */
 /* if either is missing, we can't say these are different */
 {
 struct hapmapAlleles *ha1, *ha2;
@@ -103,6 +104,7 @@ return TRUE;
 }
 
 boolean differentStrand(struct hashEl *hel1, struct hashEl *hel2)
+/* move this to kent/src/hg/lib/hapmapAlleles.c */
 /* if either is missing, we can't say these are different */
 {
 struct hapmapAlleles *ha1, *ha2;
@@ -115,6 +117,7 @@ return TRUE;
 }
 
 boolean differentObserved(struct hashEl *hel1, struct hashEl *hel2)
+/* move this to kent/src/hg/lib/hapmapAlleles.c */
 /* if either is missing, we can't say these are different */
 {
 struct hapmapAlleles *ha1, *ha2;
@@ -127,6 +130,7 @@ return TRUE;
 }
 
 boolean differentChromStart(struct hashEl *hel1, struct hashEl *hel2)
+/* move this to kent/src/hg/lib/hapmapAlleles.c */
 {
 struct hapmapAlleles *ha1, *ha2;
 if (!hel1) return FALSE;
@@ -204,26 +208,26 @@ struct hapmapAlleles *ha = NULL;
 if (helCEU)
     {
     ha = (struct hapmapAlleles *)helCEU->val;
-    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
-    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
+    if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 if (helCHB)
     {
     ha = (struct hapmapAlleles *)helCHB->val;
-    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
-    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
+    if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 if (helJPT)
     {
     ha = (struct hapmapAlleles *)helJPT->val;
-    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
-    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
+    if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 if (helYRI)
     {
     ha = (struct hapmapAlleles *)helYRI->val;
-    if (sameString(ha->allele1, allele)) count = count + ha->allele1Count;
-    if (sameString(ha->allele2, allele)) count = count + ha->allele2Count;
+    if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
+    if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 return count;
 }
@@ -249,41 +253,45 @@ return TRUE;
 
 }
 
-int getAvhet(struct hashEl *helCEU, struct hashEl *helCHB, 
-             struct hashEl *helJPT, struct hashEl *helYRI)
-/* calculate average heterozygosity */
+int calcHet(struct hashEl *helCEU, struct hashEl *helCHB, struct hashEl *helJPT, struct hashEl *helYRI)
+/* calculate heterozygosity (2pq) */
+/* convert from individuals to alleles */
 {
-int heteroCount = 0;
-int homoCount = 0;
 struct hapmapAlleles *ha;
+int allele1Count = 0;
+int allele2Count = 0;
 int total = 0;
+float p = 0.0; // freq1
+float q = 0.0; // freq2
 if (helCEU)
     {
     ha = (struct hapmapAlleles *)helCEU->val;
-    homoCount = homoCount + ha->allele1Count + ha->allele2Count;
-    heteroCount = heteroCount + ha->heteroCount;
+    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
+    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
     }
 if (helCHB)
     {
     ha = (struct hapmapAlleles *)helCHB->val;
-    homoCount = homoCount + ha->allele1Count + ha->allele2Count;
-    heteroCount = heteroCount + ha->heteroCount;
+    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
+    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
     }
 if (helJPT)
     {
     ha = (struct hapmapAlleles *)helJPT->val;
-    homoCount = homoCount + ha->allele1Count + ha->allele2Count;
-    heteroCount = heteroCount + ha->heteroCount;
+    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
+    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
     }
 if (helYRI)
     {
     ha = (struct hapmapAlleles *)helYRI->val;
-    homoCount = homoCount + ha->allele1Count + ha->allele2Count;
-    heteroCount = heteroCount + ha->heteroCount;
+    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
+    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
     }
-total = homoCount + heteroCount;
+total = allele1Count + allele2Count;
 if (total == 0) return 0;
-return heteroCount * 1000 / total;
+p = (float)allele1Count / (float)total;
+q = (float)allele2Count / (float)total;
+return 2000*p*q;
 }
 
 boolean confirmAllele(struct hashEl *hel, char *allele)
@@ -294,12 +302,12 @@ ha = (struct hapmapAlleles *)hel->val;
 if (sameString(ha->allele1, allele))
     {
     if (ha->heteroCount > 0) return TRUE;
-    if (ha->allele1Count > 0) return TRUE;
+    if (ha->homoCount1 > 0) return TRUE;
     }
 if (sameString(ha->allele2, allele))
     {
     if (ha->heteroCount > 0) return TRUE;
-    if (ha->allele2Count > 0) return TRUE;
+    if (ha->homoCount2 > 0) return TRUE;
     }
 return FALSE;
 }
@@ -336,7 +344,7 @@ if (count > 0) return "T";
 
 /* degenerate case, no data */
 /* should never get here */
-return "?";
+return "none";
 }
 
 
@@ -377,7 +385,7 @@ if (confirmAllele(helYRI, "T")) count++;
 if (count > 0 && differentString(allele1, "T")) return "T";
 
 /* no allele found, all populations are monomorphic */
-return "?";
+return "none";
 }
 
 int getHomoCount(struct hashEl *hel, char *allele)
@@ -385,8 +393,8 @@ int getHomoCount(struct hashEl *hel, char *allele)
 struct hapmapAlleles *ha = NULL;
 if (!hel) return 0;
 ha = (struct hapmapAlleles *)hel->val;
-if (sameString(ha->allele1, allele)) return ha->allele1Count;
-if (sameString(ha->allele2, allele)) return ha->allele2Count;
+if (sameString(ha->allele1, allele)) return ha->homoCount1;
+if (sameString(ha->allele2, allele)) return ha->homoCount2;
 return 0;
 }
 
@@ -430,18 +438,18 @@ if (sameString(ha->allele2, "?"))
     return hel;
     }
 char *allele1 = cloneString(ha->allele1);
-int allele1Count = ha->allele1Count;
+int homoCount1 = ha->homoCount1;
 char *allele2 = cloneString(ha->allele2);
-int allele2Count = ha->allele2Count;
+int homoCount2 = ha->homoCount2;
 
 reverseComplement(allele1, 1);
 reverseComplement(allele2, 1);
 
 strcpy(ha->allele1, allele2);
-ha->allele1Count = allele2Count;
+ha->homoCount1 = homoCount2;
 
 strcpy(ha->allele2, allele1);
-ha->allele2Count = allele1Count;
+ha->homoCount2 = homoCount1;
 
 strcpy(ha->strand, "+");
 ha->observed = reverseObserved(ha->observed);
@@ -455,9 +463,9 @@ return hel;
 
 struct hapmapAllelesCombined *mergeOne(struct hashEl *helCEU, struct hashEl *helCHB, 
                                        struct hashEl *helJPT, struct hashEl *helYRI)
-/* score is average heterozygosity */
+/* score is heterozygosity */
 {
-int score = getAvhet(helCEU, helCHB, helJPT, helYRI);
+int score = calcHet(helCEU, helCHB, helJPT, helYRI);
 struct hapmapAllelesCombined *ret = NULL;
 struct hapmapAlleles *sample = NULL;
 char *allele1, *allele2;
@@ -484,12 +492,13 @@ ret->name = cloneString(sample->name);
 ret->score = score;
 strcpy(ret->strand, sample->strand);
 ret->observed = cloneString(sample->observed);
+/* allele1 is always a single character */
 strcpy(ret->allele1, allele1);
 ret->allele1CountCEU = getHomoCount(helCEU, allele1);
 ret->allele1CountCHB = getHomoCount(helCHB, allele1);
 ret->allele1CountJPT = getHomoCount(helJPT, allele1);
 ret->allele1CountYRI = getHomoCount(helYRI, allele1);
-strcpy(ret->allele2, allele2);
+ret->allele2 = cloneString(allele2);
 ret->allele2CountCEU = getHomoCount(helCEU, allele2);
 ret->allele2CountCHB = getHomoCount(helCHB, allele2);
 ret->allele2CountJPT = getHomoCount(helJPT, allele2);
@@ -521,10 +530,10 @@ verbose(1, "name = %s\n", ha->name);
 verbose(1, "score = %d\n", ha->score);
 verbose(1, "strand = %s\n", ha->strand);
 verbose(1, "allele1 = %s\n", ha->allele1);
-verbose(1, "allele1Count = %d\n", ha->allele1Count);
+verbose(1, "homoCount1 = %d\n", ha->homoCount1);
 verbose(1, "allele2 = %s\n", ha->allele2);
-verbose(1, "allele2Count = %d\n", ha->allele2Count);
-verbose(1, "heteroCount = %d\n", ha->allele2Count);
+verbose(1, "homoCount2 = %d\n", ha->homoCount2);
+verbose(1, "heteroCount = %d\n", ha->heteroCount);
 verbose(1, "------------------------\n");
 }
 
@@ -571,6 +580,7 @@ while ((nameHashElement = hashNext(&cookie)) != NULL)
     helCHB = hashLookup(hashCHB, nameHashElement->name);
     helJPT = hashLookup(hashJPT, nameHashElement->name);
     helYRI = hashLookup(hashYRI, nameHashElement->name);
+    /* should convert to instance of hapmapAlleles here */
 
     logMissing(nameHashElement->name, helCEU, helCHB, helJPT, helYRI);
 
