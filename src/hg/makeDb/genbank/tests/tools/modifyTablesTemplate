@@ -51,6 +51,10 @@ proc loadDbs {dbFile} {
     return $dbs
 }
 
+proc haveTable {db tbl} {
+    return [expr {[llength [loadRows $db "show tables like \"$tbl\""]] > 0}]
+}
+
 proc loadRows {db sql} {
     set rows {}
     foreach line [split [exec hgsql -N -e $sql $db] \n] {
