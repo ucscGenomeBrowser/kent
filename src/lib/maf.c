@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.29 2006/10/16 05:32:04 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.30 2007/03/08 17:28:50 kent Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -283,7 +283,7 @@ for (comp = ali->components; comp != NULL; comp = comp->next)
 /* Write out each component. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
     {
-    if (comp->size == 0)
+    if (comp->size == 0 && comp->leftStatus)
 	fprintf(f, "e %-*s %*d %*d %c %*d %c\n", 
 	    srcChars, comp->src, startChars, comp->start, 
 	    sizeChars, comp->leftLen, comp->strand, 
