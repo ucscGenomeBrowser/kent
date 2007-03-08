@@ -3462,7 +3462,14 @@ searchType genePred
 termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
 searchPriority 50
 
+searchTable eponine
+searchType bed
+searchMethod exact
+termRegex chr[0-9]+[.][0-9]+
+searchPriority 50
+
 searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
+
 
