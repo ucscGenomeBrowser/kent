@@ -1,19 +1,13 @@
 #!/bin/bash -e
+# hgLoadEnsembl - Download enembl gene predictions from ftp site and create tracks in the browser.
 [ $# != 4 ] && echo "usage: hgLoadEnsembl organism version input-directory db " >&2 && echo "   for example: hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e hg18" >&2 && exit 1;
 organism=$1
 version=$2
 outdir=$3
 db=$4
 ensDb=ensembl_${organism}_${version}
-#organism=homo_sapiens
-#version=core_43_36e
-#outdir=/cluster/store8/ensembl/ensembl_core_43_36e/
-#db=hg18
-echo "ensemblDownload $organism $version $outdir"
 ensemblDownload $organism $version $outdir
-echo "ensemblDbImport $organism $version $outdir"
 ensemblDbImport $organism $version $outdir 
-echo "loadEnsembl $organism $version $outdir $db"
 loadEnsembl $organism $version $outdir $db 
 echo "dropping database $ensDb in 5 seconds"
 sleep 5
