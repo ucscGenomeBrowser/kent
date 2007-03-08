@@ -13,7 +13,7 @@
 #include "gbMiscDiff.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.9 2006/10/07 20:47:15 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.10 2007/03/08 07:24:19 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -44,6 +44,7 @@ off_t raProtFaOff;
 unsigned raProtFaSize;
 struct dyString* raLocusTag = NULL;
 unsigned raGi;
+char raMol[16];
 struct gbMiscDiff *raMiscDiffs = NULL;
 static struct hash *raMiscDiffTbl = NULL; /* hash of raMiscDiff objects, keyed
                                            * by misc.n */
@@ -316,14 +317,9 @@ for (gmd = raMiscDiffs; gmd != NULL; gmd = gmd->next)
     safef(gmd->acc, sizeof(gmd->acc), "%s", raAcc);
 }
 
-char* gbMDParseEntry()
-/* Parse the next record from a ra file into current metadata state.
- * Returns accession or NULL on EOF. */
+static void resetEntry()
+/* reset the stat of the entry stored in the globals */
 {
-int lineCnt = 0;
-char *tag, *val;
-
-/* reset globals for new record */
 raFieldClearLastIds();
 raAcc[0] = '\0';
 raDir = '0';
@@ -352,86 +348,106 @@ dyStringClear(raLocusTag);
 hashFree(&raMiscDiffTbl);
 gbMiscDiffFreeList(&raMiscDiffs);
 raGi = 0;
+raMol[0] = '\0';
+}
 
+static void parseRaLine(char *tag)
+/* parse one line from the ra */
+{
+char *val = strchr(tag, ' ');
+if (val == NULL)
+    errAbort("Badly formatted tag %s:%d", gRaLf->fileName, gRaLf->lineIx);
+*val++ = 0;
+if (sameString(tag, "acc"))
+    {
+    char *s = firstWordInLine(val);
+    strncpy(raAcc, s, GB_ACC_BUFSZ);
+    }
+else if (sameString(tag, "dir"))
+    raDir = val[0];
+else if (sameString(tag, "dat"))
+    raModDate = gbParseDate(gRaLf, val);
+else if (sameString(tag, "ver"))
+    raVersion = gbParseInt(gRaLf, firstWordInLine(val));
+else if (sameString(tag, "siz"))
+    raDnaSize = gbParseUnsigned(gRaLf, val);
+else if (sameString(tag, "fao"))
+    raFaOff = gbParseFileOff(gRaLf, val);
+else if (sameString(tag, "fas"))
+    raFaSize = gbParseUnsigned(gRaLf, val);
+else if (sameString(tag, "prt"))
+    {
+    /* version is optional, remove it if it exists  */
+    if (strchr(val, '.') != NULL)
+        raProtVersion = gbSplitAccVer(val, raProtAcc);
+    else
+        safef(raProtAcc, sizeof(raProtAcc), "%s", val);
+    }
+else if (sameString(tag, "prs"))
+    raProtSize = gbParseUnsigned(gRaLf, val);
+else if (sameString(tag, "pfo"))
+    raProtFaOff = gbParseFileOff(gRaLf, val);
+else if (sameString(tag, "pfs"))
+    raProtFaSize = gbParseUnsigned(gRaLf, val);
+else if (sameString(tag, "rss"))
+    raRefSeqStatus = parseRefSeqStatus(val);
+else if (sameString(tag, "rsc"))
+    raRefSeqCompleteness = parseRefSeqCompletness(val);
+else if (sameString(tag, "rsu"))
+    dyStringAppend(raRefSeqSummary, val);
+else if (sameString(tag, "loc"))
+    raLocusLinkId = gbParseUnsigned(gRaLf, val);
+else if (sameString(tag, "gni"))
+    raGeneId = gbParseUnsigned(gRaLf, val);
+else if (sameString(tag, "lot"))
+    dyStringAppend(raLocusTag, val);
+else if (sameString(tag, "mim"))
+    {
+    /* might have multiple values, just use first */
+    raOmimId = gbParseUnsigned(gRaLf, firstWordInLine(val));
+    }
+else if (sameString(tag, "ngi"))
+    raGi = gbParseUnsigned(gRaLf, val);
+else if (startsWith("mdiff.", tag))
+    parseMdiffRow(tag, val);
+else
+    {
+    /* save under hashed name */
+    if (sameString(tag, "cds"))
+        safef(raCds, sizeof(raCds), "%s", val);
+    raFieldSet(tag, val);
+    }
+}
+
+char* gbMDParseEntry()
+/* Parse the next record from a ra file into current metadata state.
+ * Returns accession or NULL on EOF. */
+{
+int lineCnt = 0;
+char *line;
+resetEntry();
 for (;;)
     {
-    if (!lineFileNext(gRaLf, &tag, NULL))
+    if (!lineFileNext(gRaLf, &line, NULL))
         {
         if (lineCnt > 0)
             errAbort("Unexpected eof in %s", gRaLf->fileName);
         return NULL;
         }
-    if (tag[0] == 0)
+    lineCnt++;
+    if (line[0] == 0)
         break;
-    val = strchr(tag, ' ');
-    if (val == NULL)
-        errAbort("Badly formatted tag %s:%d", gRaLf->fileName, gRaLf->lineIx);
-    *val++ = 0;
-    if (sameString(tag, "acc"))
-        {
-        char *s = firstWordInLine(val);
-        strncpy(raAcc, s, GB_ACC_BUFSZ);
-        }
-    else if (sameString(tag, "dir"))
-        raDir = val[0];
-    else if (sameString(tag, "dat"))
-        raModDate = gbParseDate(gRaLf, val);
-    else if (sameString(tag, "ver"))
-        raVersion = gbParseInt(gRaLf, firstWordInLine(val));
-    else if (sameString(tag, "siz"))
-        raDnaSize = gbParseUnsigned(gRaLf, val);
-    else if (sameString(tag, "fao"))
-        raFaOff = gbParseFileOff(gRaLf, val);
-    else if (sameString(tag, "fas"))
-        raFaSize = gbParseUnsigned(gRaLf, val);
-    else if (sameString(tag, "prt"))
-        {
-        /* version is optional, remove it if it exists  */
-        if (strchr(val, '.') != NULL)
-            raProtVersion = gbSplitAccVer(val, raProtAcc);
-        else
-            safef(raProtAcc, sizeof(raProtAcc), "%s", val);
-        }
-    else if (sameString(tag, "prs"))
-        raProtSize = gbParseUnsigned(gRaLf, val);
-    else if (sameString(tag, "pfo"))
-        raProtFaOff = gbParseFileOff(gRaLf, val);
-    else if (sameString(tag, "pfs"))
-        raProtFaSize = gbParseUnsigned(gRaLf, val);
-    else if (sameString(tag, "rss"))
-        raRefSeqStatus = parseRefSeqStatus(val);
-    else if (sameString(tag, "rsc"))
-        raRefSeqCompleteness = parseRefSeqCompletness(val);
-    else if (sameString(tag, "rsu"))
-        dyStringAppend(raRefSeqSummary, val);
-    else if (sameString(tag, "loc"))
-        raLocusLinkId = gbParseUnsigned(gRaLf, val);
-    else if (sameString(tag, "gni"))
-        raGeneId = gbParseUnsigned(gRaLf, val);
-    else if (sameString(tag, "lot"))
-        dyStringAppend(raLocusTag, val);
-    else if (sameString(tag, "mim"))
-        {
-        /* might have multiple values, just use first */
-        raOmimId = gbParseUnsigned(gRaLf, firstWordInLine(val));
-        }
-    else if (sameString(tag, "ngi"))
-        raGi = gbParseUnsigned(gRaLf, val);
-    else if (startsWith("mdiff.", tag))
-        parseMdiffRow(tag, val);
-    else
-        {
-        /* save under hashed name */
-        if (sameString(tag, "cds"))
-            safef(raCds, sizeof(raCds), "%s", val);
-        raFieldSet(tag, val);
-        }
+    parseRaLine(line);
     }
 
 /* If we didn't get the gene name, substitute the locus tag if available.
  * This is needed by Drosophila, others */
 if ((raFieldCurId("gen") == 0) && (raLocusTag->stringSize > 0))
     raFieldSet("gen", raLocusTag->string);
+
+/* if there is no mol, default to mRNA for older ra files */
+if (strlen(raMol) == 0)
+    safecpy(raMol, sizeof(raMol), "mRNA");
 
 /* do a little error checking. */
 if (strlen(raAcc) == 0)

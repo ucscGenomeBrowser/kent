@@ -32,6 +32,7 @@ extern off_t raProtFaOff;
 extern unsigned raProtFaSize;
 extern struct dyString* raLocusTag;
 extern unsigned raGi;
+extern char raMol[];
 extern struct gbMiscDiff *raMiscDiffs;
 
 char* gbMDParseEntry();

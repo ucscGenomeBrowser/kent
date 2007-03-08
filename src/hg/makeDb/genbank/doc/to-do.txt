@@ -1089,3 +1089,17 @@ Warning: NR_001874: malformed RefSeq CDS:
 - BC050659 misc_diff was not in ra file, thus not loaded.
 
 - switch human and mouse to using global near best.
+
+- can we use less conservative *SizeLoose() function for polyA determination
+  in pslCDNAFilter??? (need both sequence and alignment).
+
+- display MGC genes as some kind of hybrid of genePred and psl.
+
+- change refseq to not display validated as dark
+
+- mgcGenes search doesn't appear to work.
+
+-JK: In the global near best are we using the pslCalcMilliBad?  If
+  so we may have already reached the limit of it's one part per 1000
+  precision.   
+

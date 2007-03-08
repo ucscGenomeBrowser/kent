@@ -4,7 +4,7 @@ include ${GBROOT}/common.mk
 PROGS = ${BINDIR}/gbProcessStep ${BINARCH}/gbProcess ${BINARCH}/gbProcessedCheck \
 	${BINDIR}/gbMkOrganismList
 
-O = gbProcess.o gbFilter.o gbParse.o
+O = gbProcess.o gbParse.o
 
 all: ${PROGS}
 

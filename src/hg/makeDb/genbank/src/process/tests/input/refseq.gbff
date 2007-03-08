@@ -572,3 +572,341 @@ ORIGIN
       841 cgcctcctgc atgcatgggg ctacacatat cgcttgtgtc tgctctgcgg cctcttagcc
       901 ttcctcgacg gcatacggac cttttcgtcc tccgccggcg acttgtttct tgacgcctaa
 //
+LOCUS       NR_003125                332 bp    snoRNA  linear   PRI 18-NOV-2006
+DEFINITION  Homo sapiens RNA, small nucleolar (LOC85391) on chromosome 11.
+ACCESSION   NR_003125
+VERSION     NR_003125.1  GI:112734746
+KEYWORDS    .
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 332)
+  AUTHORS   Rensing,S.A. and Maier,U.G.
+  TITLE     Phylogenetic analysis of the stress-70 protein family
+  JOURNAL   J. Mol. Evol. 39 (1), 80-86 (1994)
+   PUBMED   7545947
+REFERENCE   2  (bases 1 to 332)
+  AUTHORS   Liu,J. and Maxwell,E.S.
+  TITLE     Mouse U14 snRNA is encoded in an intron of the mouse cognate hsc70
+            heat shock gene
+  JOURNAL   Nucleic Acids Res. 18 (22), 6565-6571 (1990)
+   PUBMED   2251119
+REFERENCE   3  (bases 1 to 332)
+  AUTHORS   Dworniczak,B. and Mirault,M.E.
+  TITLE     Structure and expression of a human gene coding for a 71 kd heat
+            shock 'cognate' protein
+  JOURNAL   Nucleic Acids Res. 15 (13), 5181-5197 (1987)
+   PUBMED   3037489
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence was derived from AP000926.6.
+FEATURES             Location/Qualifiers
+     source          1..332
+                     /organism="Homo sapiens"
+                     /mol_type="snoRNA"
+                     /db_xref="taxon:9606"
+                     /chromosome="11"
+                     /map="11q23.3-q25"
+     gene            1..332
+                     /gene="LOC85391"
+                     /note="RNA, small nucleolar"
+                     /db_xref="GeneID:85391"
+ORIGIN      
+        1 tttgtgtttt tttttttttt ttttcctccc ccactcaatg gaggggaagg ggatggtaaa
+       61 ccaagcttga gctggatttc agtgtagggt cacaatgatg aatggtccaa aacattcgcg
+      121 gtttccacca gaattcaagg tgttggcaac taccttcctt ggatgtctga gtgacccaag
+      181 atgttaagga agaataaggc cctattttaa tgttggtagt ggccctcttg taagagtttg
+      241 cgccagactt ttagtatcag attgcgtcag ggagaaagaa gggttattaa cattaaaaga
+      301 acttgcagta attccttttt ctcttcctca ga
+//
+
+LOCUS       NR_002753                119 bp    snRNA   linear   PRI 21-NOV-2006
+DEFINITION  Homo sapiens RNA, U5F small nuclear (RNU5F) on chromosome 1.
+ACCESSION   NR_002753
+VERSION     NR_002753.1  GI:84872035
+KEYWORDS    .
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 119)
+  AUTHORS   Sontheimer,E.J. and Steitz,J.A.
+  TITLE     Three novel functional variants of human U5 small nuclear RNA
+  JOURNAL   Mol. Cell. Biol. 12 (2), 734-746 (1992)
+   PUBMED   1310151
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence was derived from M77840.1.
+FEATURES             Location/Qualifiers
+     source          1..119
+                     /organism="Homo sapiens"
+                     /mol_type="snRNA"
+                     /db_xref="taxon:9606"
+                     /chromosome="1"
+                     /map="1p34.1"
+     gene            1..119
+                     /gene="RNU5F"
+                     /note="RNA, U5F small nuclear; synonym: U5F"
+                     /db_xref="GeneID:26828"
+                     /db_xref="HGNC:10216"
+ORIGIN      
+        1 natctctggt ttctcttcat aacgaataaa tcttttgcct tttactaaag atttccgtgg
+       61 agagaaacaa ctatgagttt atggttaaat tttttgaagt cttgcctagg caaggctcg
+//
+
+LOCUS       NR_002732                345 bp    RNA     linear   PRI 18-NOV-2006
+DEFINITION  Homo sapiens DKFZP564B147 protein (DKFZP564B147) on chromosome X.
+ACCESSION   NR_002732 XR_001084 XR_001085 XR_001086 XR_001087 XR_001437
+            XR_001438 XR_001439 XR_001440
+VERSION     NR_002732.1  GI:84872012
+KEYWORDS    .
+SOURCE      Homo sapiens (human)
+  ORGANISM  Homo sapiens
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Hominidae; Homo.
+REFERENCE   1  (bases 1 to 345)
+  AUTHORS   Strausberg,R.L., Feingold,E.A., Grouse,L.H., Derge,J.G.,
+            Klausner,R.D., Collins,F.S., Wagner,L., Shenmen,C.M., Schuler,G.D.,
+            Altschul,S.F., Zeeberg,B., Buetow,K.H., Schaefer,C.F., Bhat,N.K.,
+            Hopkins,R.F., Jordan,H., Moore,T., Max,S.I., Wang,J., Hsieh,F.,
+            Diatchenko,L., Marusina,K., Farmer,A.A., Rubin,G.M., Hong,L.,
+            Stapleton,M., Soares,M.B., Bonaldo,M.F., Casavant,T.L.,
+            Scheetz,T.E., Brownstein,M.J., Usdin,T.B., Toshiyuki,S.,
+            Carninci,P., Prange,C., Raha,S.S., Loquellano,N.A., Peters,G.J.,
+            Abramson,R.D., Mullahy,S.J., Bosak,S.A., McEwan,P.J.,
+            McKernan,K.J., Malek,J.A., Gunaratne,P.H., Richards,S.,
+            Worley,K.C., Hale,S., Garcia,A.M., Gay,L.J., Hulyk,S.W.,
+            Villalon,D.K., Muzny,D.M., Sodergren,E.J., Lu,X., Gibbs,R.A.,
+            Fahey,J., Helton,E., Ketteman,M., Madan,A., Rodrigues,S.,
+            Sanchez,A., Whiting,M., Madan,A., Young,A.C., Shevchenko,Y.,
+            Bouffard,G.G., Blakesley,R.W., Touchman,J.W., Green,E.D.,
+            Dickson,M.C., Rodriguez,A.C., Grimwood,J., Schmutz,J., Myers,R.M.,
+            Butterfield,Y.S., Krzywinski,M.I., Skalska,U., Smailus,D.E.,
+            Schnerch,A., Schein,J.E., Jones,S.J. and Marra,M.A.
+  CONSRTM   Mammalian Gene Collection Program Team
+  TITLE     Generation and initial analysis of more than 15,000 full-length
+            human and mouse cDNA sequences
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 99 (26), 16899-16903 (2002)
+   PUBMED   12477932
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence was derived from CR542228.1.
+            On or before Mar 4, 2006 this sequence version replaced
+            gi:89060170, gi:89060171, gi:89060172, gi:89060173, gi:89061023,
+            gi:89061024, gi:89061025, gi:89061026.
+FEATURES             Location/Qualifiers
+     source          1..345
+                     /organism="Homo sapiens"
+                     /mol_type="other RNA"
+                     /db_xref="taxon:9606"
+                     /chromosome="X"
+                     /map="Xq26.3"
+     gene            1..345
+                     /gene="DKFZP564B147"
+                     /note="DKFZP564B147 protein; synonym: MGC8471"
+                     /pseudo
+                     /db_xref="GeneID:26071"
+ORIGIN      
+        1 atgcacattt ggacgctgtc ctgcacttca ggtgcaagct gggctcctgt tacatactgg
+       61 acagaccacc cacagccgct gctgccaacc cacctccact cctccagact gccagccaac
+      121 tacatcattc tgcccacaga cctacgctac cactgccatc gccatccacc gcatctcacc
+      181 aacagactgt ggctcctagt gatgtggact cacctcggag gtatccgagc tggacacagc
+      241 ccctggacag tgatccagac agctggccgt cccccaagga gcctgtcacc ttcagcgaga
+      301 cccatttcct ccccatcccc agagacctct tgtgttcctg ccaca
+//
+
+LOCUS       XR_014866               1375 bp    RNA     linear   PRI 14-JUN-2006
+DEFINITION  PREDICTED: Macaca mulatta MGC15407-like (LOC677698), misc RNA.
+ACCESSION   XR_014866
+VERSION     XR_014866.1  GI:109102962
+KEYWORDS    .
+SOURCE      Macaca mulatta (rhesus monkey)
+  ORGANISM  Macaca mulatta
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+            Catarrhini; Cercopithecidae; Cercopithecinae; Macaca.
+COMMENT     MODEL REFSEQ:  This record is predicted by automated computational
+            analysis. This record is derived from an annotated genomic sequence
+            (NW_001099000) using gene prediction method: GNOMON, supported by
+            mRNA and EST evidence.
+            Also see:
+                Documentation of NCBI's Annotation Process
+            
+FEATURES             Location/Qualifiers
+     source          1..1375
+                     /organism="Macaca mulatta"
+                     /mol_type="other RNA"
+                     /isolate="17573"
+                     /db_xref="taxon:9544"
+                     /chromosome="13"
+                     /sex="female"
+                     /country="USA: Southwest National Primate Research Center
+                     at the Southwest Foundation for Biomedical Research, San
+                     Antonio, TX"
+                     /note="derived from Indian origin rhesus"
+     gene            1..1375
+                     /gene="LOC677698"
+                     /note="Derived by automated computational analysis using
+                     gene prediction method: GNOMON. Supporting evidence
+                     includes similarity to: 3 mRNAs, 76 ESTs, 2 Proteins"
+                     /db_xref="GeneID:677698"
+ORIGIN      
+        1 gggccgcggt ctagggcggc tacgtgtgtt gccatagcga ccattttgcg ttaactggtt
+       61 ggtagcttcc ctcctggggg ttgagcgact gcgggccagc tcttccccta ctccctctcg
+      121 gctccttgtg gcccaaaggc ctaagcaggg tccggcggtc tggcctaggg atattccccg
+      181 ttgccccttt ggggcgggat ggctgcggag gaagaggacg aggtggagtg gatggtggag
+      241 agcatcgcgg gattcctgcg aggcccagac tggtccatcc ccatcttgga ctttgtggaa
+      301 cagaaatgtg aagttaactg caaaggaggg catgtgataa cttcaggaag cccagaacca
+      361 gtgttttttg atggcctgta ttccccttgt ttttgatgat gaagaagaaa gcaaattgac
+      421 ctatacagag attcatcagg aatacaaaga actagttgaa aagctgttag aaggttacct
+      481 caaagaaatt ggaattaatg aagatcaatt tcaagaagca tgcacttctc ctcttgcaaa
+      541 gacccatacc tcacaggcca ttttgcaacc tgtgttggca gcagaagatt ttactatctt
+      601 taaagcaatg atggtccaga aaaacattga aatgcagctg caagccattc gaataattca
+      661 agagagaaat ggtgtattac ctgactgctt aaccgatggc tctgatgtgg tcagtgacct
+      721 tgaacaggaa gagatgaaaa tcctgaggga agttcttaga aaatcaaaag aggaatatga
+      781 ccaggaagaa gaaaggaaga ggaagaaaca gttatcagag gctaaaacag aagagcccac
+      841 agtgcattcc agtgaagctg caataatgaa taattcccaa ggggatgttg aacattttac
+      901 acacccaccc tcagaagtta aagtgcattt tgctaatcag tcaatagaac ctttgggaag
+      961 aaaagtggaa aggtctgaaa cttcctccct gccacaaaaa ggcctgaaga ttcctggctt
+     1021 agagcatgcg agcattgaag gaccaatagc aagtttatca gtacttggaa cagaagaact
+     1081 tcggcaacga gaacactatc tcaagcagaa gagagataag ttgatgtcca tgagaaagga
+     1141 tatgaggact aagcagatac aaaatacgga gcagaaagga aaacccactg gggaggtaga
+     1201 ggaaatgaca gagaaagcag aaatgacagc agaggagaag caaacattac taaagaggag
+     1261 actgcttgca gagaaactca aagaagaagt tattaataag taataattaa gaacaattta
+     1321 acaaaatgga agttcaaatt gtcttaaaaa taaattattt agtccttcca ccgag
+//
+
+LOCUS       XM_001033044             378 bp    mRNA    linear   INV 25-NOV-2006
+DEFINITION  Tetrahymena thermophila SB210 hypothetical protein
+            (TTHERM_00471580) mRNA, complete cds.
+ACCESSION   XM_001033044
+VERSION     XM_001033044.1  GI:118401446
+KEYWORDS    .
+SOURCE      Tetrahymena thermophila SB210
+  ORGANISM  Tetrahymena thermophila SB210
+            Eukaryota; Alveolata; Ciliophora; Oligohymenophorea;
+            Hymenostomatida; Tetrahymenina; Tetrahymenidae; Tetrahymena.
+REFERENCE   1  (bases 1 to 378)
+  AUTHORS   Eisen,J.A., Coyne,R.S., Wu,M., Wu,D., Thiagarajan,M., Wortman,J.R.,
+            Badger,J.H., Ren,Q., Amedeo,P., Jones,K.M., Tallon,L.J.,
+            Delcher,A.L., Salzberg,S.L., Silva,J.C., Haas,B.J., Majoros,W.H.,
+            Farzad,M., Carlton,J.M., Smith,R.K., Garg,J., Pearlman,R.E.,
+            Karrer,K.M., Sun,L., Manning,G., Elde,N.C., Turkewitz,A.P.,
+            Asai,D.J., Wilkes,D.E., Wang,Y., Cai,H., Collins,K., Stewart,B.A.,
+            Lee,S.R., Wilamowska,K., Weinberg,Z., Ruzzo,W.L., Wloga,D.,
+            Gaertig,J., Frankel,J., Tsao,C.C., Gorovsky,M.A., Keeling,P.J.,
+            Waller,R.F., Patron,N.J., Cherry,J.M., Stover,N.A., Krieger,C.J.,
+            Del Toro,C., Ryder,H.F., Williamson,S.C., Barbeau,R.A.,
+            Hamilton,E.P. and Orias,E.
+  TITLE     Macronuclear Genome Sequence of the Ciliate Tetrahymena
+            thermophila, a Model Eukaryote
+  JOURNAL   (er) PLoS Biol. 4 (9) (2006) In press
+   PUBMED   16933976
+  REMARK    Submitted
+REFERENCE   2  (bases 1 to 378)
+  AUTHORS   Eisen,J.A., Wu,M., Wu,D., Nierman,W.C., Orias,E., Delcher,A.L. and
+            Salzberg,S.L.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (09-DEC-2005) Eukaryotic Genomics, The Institute for
+            Genomic Research, 9712 Medical Center Drive, Rockville, MD 20850,
+            USA
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. This record is derived from an annotated genomic
+            sequence (NW_001220637).
+            COMPLETENESS: incomplete on both ends.
+FEATURES             Location/Qualifiers
+     source          1..378
+                     /organism="Tetrahymena thermophila SB210"
+                     /macronuclear
+                     /mol_type="mRNA"
+                     /strain="SB210"
+                     /db_xref="taxon:312017"
+     gene            <1..>378
+                     /locus_tag="TTHERM_00471580"
+                     /db_xref="GeneID:4524132"
+     CDS             1..378
+                     /locus_tag="TTHERM_00471580"
+                     /codon_start=1
+                     /transl_table=6
+                     /product="hypothetical protein"
+                     /protein_id="XP_001033044.1"
+                     /db_xref="GI:118401447"
+                     /db_xref="GeneID:4524132"
+                     /translation="MIYITMFESSFKKDFSESCKFFISSSTTNKPSIEPLVIQSQSSQ
+                     KFKYCKLLKIFSQYISDGSKPFVKADLINRGHKLVWKYCDQGLNINYLLICDALYHSE
+                     HILKDQNFQLKQNHRRFNYGIKY"
+ORIGIN      
+        1 atgatttata taaccatgtt tgaatcgtct ttcaagaagg attttagcga gtcttgtaaa
+       61 ttttttattt cttcatctac cactaataaa ccttcaatag aaccactagt tatatagtct
+      121 taatcaagct aaaaatttaa atattgcaag cttctaaaaa tattctcata atacatcagt
+      181 gatggaagta agccatttgt taaagcagat ttaatcaata gagggcataa attagtttgg
+      241 aaatattgtg attaaggact aaatataaac tacctgctta tttgtgatgc tttataccat
+      301 tccgaacata ttttaaaaga ttaaaacttt taacttaaat aaaaccatag aagattcaac
+      361 tatggcatta aatattga
+//
+
+LOCUS       XM_001019214             162 bp    mRNA    linear   INV 25-NOV-2006
+DEFINITION  Tetrahymena thermophila SB210 hypothetical protein
+            (TTHERM_00997740) mRNA, complete cds.
+ACCESSION   XM_001019214
+VERSION     XM_001019214.1  GI:118372032
+KEYWORDS    .
+SOURCE      Tetrahymena thermophila SB210
+  ORGANISM  Tetrahymena thermophila SB210
+            Eukaryota; Alveolata; Ciliophora; Oligohymenophorea;
+            Hymenostomatida; Tetrahymenina; Tetrahymenidae; Tetrahymena.
+REFERENCE   1  (bases 1 to 162)
+  AUTHORS   Eisen,J.A., Coyne,R.S., Wu,M., Wu,D., Thiagarajan,M., Wortman,J.R.,
+            Badger,J.H., Ren,Q., Amedeo,P., Jones,K.M., Tallon,L.J.,
+            Delcher,A.L., Salzberg,S.L., Silva,J.C., Haas,B.J., Majoros,W.H.,
+            Farzad,M., Carlton,J.M., Smith,R.K., Garg,J., Pearlman,R.E.,
+            Karrer,K.M., Sun,L., Manning,G., Elde,N.C., Turkewitz,A.P.,
+            Asai,D.J., Wilkes,D.E., Wang,Y., Cai,H., Collins,K., Stewart,B.A.,
+            Lee,S.R., Wilamowska,K., Weinberg,Z., Ruzzo,W.L., Wloga,D.,
+            Gaertig,J., Frankel,J., Tsao,C.C., Gorovsky,M.A., Keeling,P.J.,
+            Waller,R.F., Patron,N.J., Cherry,J.M., Stover,N.A., Krieger,C.J.,
+            Del Toro,C., Ryder,H.F., Williamson,S.C., Barbeau,R.A.,
+            Hamilton,E.P. and Orias,E.
+  TITLE     Macronuclear Genome Sequence of the Ciliate Tetrahymena
+            thermophila, a Model Eukaryote
+  JOURNAL   (er) PLoS Biol. 4 (9) (2006) In press
+   PUBMED   16933976
+  REMARK    Submitted
+REFERENCE   2  (bases 1 to 162)
+  AUTHORS   Eisen,J.A., Wu,M., Wu,D., Nierman,W.C., Orias,E., Delcher,A.L. and
+            Salzberg,S.L.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-FEB-2005) Eukaryotic Genomics, The Institute for
+            Genomic Research, 9712 Medical Center Drive, Rockville, MD 20850,
+            USA
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. This record is derived from an annotated genomic
+            sequence (NW_001219324).
+            COMPLETENESS: incomplete on both ends.
+FEATURES             Location/Qualifiers
+     source          1..162
+                     /organism="Tetrahymena thermophila SB210"
+                     /macronuclear
+                     /mol_type="mRNA"
+                     /strain="SB210"
+                     /db_xref="taxon:312017"
+     gene            <1..>162
+                     /locus_tag="TTHERM_00997740"
+                     /db_xref="GeneID:4509950"
+     CDS             1..162
+                     /locus_tag="TTHERM_00997740"
+                     /codon_start=1
+                     /transl_table=6
+                     /product="hypothetical protein"
+                     /protein_id="XP_001019214.1"
+                     /db_xref="GI:118372033"
+                     /db_xref="GeneID:4509950"
+                     /translation="MSATLGKKLRFSHEPQQPQCLQLGDHCDVEELFDFCCQGTSCHP
+                     ILYVCDEDY"
+ORIGIN      
+        1 atgagcgcaa ctttaggaaa gaaattaaga tttagtcatg aaccttaata gccttaatgt
+       61 ctttagttag gagatcattg tgatgttgaa gaattatttg atttttgctg ctagggtaca
+      121 tcttgccacc caatattata tgtttgtgat gaagattatt ga
+//
+

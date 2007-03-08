@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.17 2007/01/10 05:10:08 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.18 2007/03/08 07:24:20 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -179,7 +179,7 @@ for (;;)
 }
 
 static struct gbField *newField(char *readName, char *writeName, 
-    unsigned flags, int initValSize)
+    unsigned flags, int indent, int initValSize)
 /* Make a new gbField struct. */
 {
 struct gbField *gbf;
@@ -189,6 +189,7 @@ gbf->writeName = writeName;
 gbf->val = dyStringNew(initValSize);
 if (flags & GBF_TRACK_VALS)
     gbf->valHash = newHash(0);
+gbf->indent = indent;
 gbf->flags = flags;
 return gbf;
 }
@@ -199,97 +200,97 @@ void gbfInit()
 struct gbField *gbs = NULL;
 struct gbField *c0, *c1, *c2;
 
-gbLocusField = c0 = newField("LOCUS", NULL, GBF_NONE, 16);
+gbLocusField = c0 = newField("LOCUS", NULL, GBF_NONE, 0, 16);
 slAddTail(&gbs, c0);
 
-gbAccessionField = c0 = newField("ACCESSION", "acc", GBF_NONE, 32);
+gbAccessionField = c0 = newField("ACCESSION", "acc", GBF_NONE, 0, 32);
 slAddTail(&gbs, c0);
 
-gbVersionField = c0 = newField("VERSION", NULL, GBF_NONE, 32);
+gbVersionField = c0 = newField("VERSION", NULL, GBF_NONE, 0, 32);
 slAddTail(&gbs, c0);
 
-gbDefinitionField = c0 = newField("DEFINITION", "def", GBF_MULTI_LINE, 1024);
+gbDefinitionField = c0 = newField("DEFINITION", "def", GBF_MULTI_LINE, 0, 1024);
 slAddTail(&gbs, c0);
 
-gbKeywordsField = c0 = newField("KEYWORDS", "key", GBF_TRACK_VALS|GBF_MULTI_LINE, 1024);
+gbKeywordsField = c0 = newField("KEYWORDS", "key", GBF_TRACK_VALS|GBF_MULTI_LINE, 0, 1024);
 slAddTail(&gbs, c0);
 
-c0 = newField("SOURCE", "src", GBF_TRACK_VALS, 128);
+c0 = newField("SOURCE", "src", GBF_TRACK_VALS, 0, 128);
 slAddTail(&gbs, c0);
-gbOrganismField = c1 = newField("ORGANISM", "org", GBF_TRACK_VALS, 64);
+gbOrganismField = c1 = newField("ORGANISM", "org", GBF_TRACK_VALS, 2, 64);
 slAddTail(&c0->children, c1);
 
-c0 = newField("REFERENCE", NULL, GBF_NONE, 64);
+c0 = newField("REFERENCE", NULL, GBF_NONE, 0, 64);
 slAddTail(&gbs, c0);
-gbAuthorsField = c1 = newField("AUTHORS", "aut", GBF_TRACK_VALS|GBF_MULTI_LINE, 4*1024);
+gbAuthorsField = c1 = newField("AUTHORS", "aut", GBF_TRACK_VALS|GBF_MULTI_LINE, 2, 4*1024);
 slAddTail(&c0->children, c1);
 
-gbJournalField = c1 = newField("JOURNAL", NULL, GBF_MULTI_LINE, 256);
+gbJournalField = c1 = newField("JOURNAL", NULL, GBF_MULTI_LINE, 2, 256);
 slAddTail(&c0->children, c1);
 
-gbCommentField = c0 = newField("COMMENT", "com", GBF_MULTI_LINE, 8*1024);
+gbCommentField = c0 = newField("COMMENT", "com", GBF_MULTI_LINE, 0, 8*1024);
 slAddTail(&gbs, c0);
 
 /* FEATURES */
-c0 = newField("FEATURES", NULL, GBF_NONE, 128);
+c0 = newField("FEATURES", NULL, GBF_NONE, 0, 128);
 slAddTail(&gbs, c0);
 
 /* FEATURES source */
-c1 = newField("source", NULL, GBF_NONE, 128);
+c1 = newField("source", NULL, GBF_NONE, 5, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/clone_lib", "lib", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
+c2 = newField("/clone_lib", "lib", GBF_TRACK_VALS|GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
 
-gbCloneField = c2 = newField("/clone", "clo", GBF_NONE, 128);
+gbCloneField = c2 = newField("/clone", "clo", GBF_NONE, 21, 128);
 slAddTail(&c1->children, c2);
         
-gbSexField = c2 = newField("/sex", "sex", GBF_TRACK_VALS, 128);         
+gbSexField = c2 = newField("/sex", "sex", GBF_TRACK_VALS, 21, 128);         
 slAddTail(&c1->children, c2);
 
-gbTissueField = c2 = newField("/tissue_type", "tis", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
+gbTissueField = c2 = newField("/tissue_type", "tis", GBF_TRACK_VALS|GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
 
-gbDevStageField = c2 = newField("/dev_stage", "dev", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
+gbDevStageField = c2 = newField("/dev_stage", "dev", GBF_TRACK_VALS|GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
     
-c2 = newField("/cell_line", "cel", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
+c2 = newField("/cell_line", "cel", GBF_TRACK_VALS|GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
     
-gbChromosomeField = c2 = newField("/chromosome", "chr", GBF_TRACK_VALS, 16);
+gbChromosomeField = c2 = newField("/chromosome", "chr", GBF_TRACK_VALS, 21, 16);
 slAddTail(&c1->children, c2);
 
-gbMapField = c2 = newField("/map", "map", GBF_TRACK_VALS, 128);
+gbMapField = c2 = newField("/map", "map", GBF_TRACK_VALS, 21, 128);
 slAddTail(&c1->children, c2);
 
-gbSourceOrganism = c2 = newField("/organism", NULL, GBF_MULTI_VAL|GBF_MULTI_SEMI, 128);
+gbSourceOrganism = c2 = newField("/organism", NULL, GBF_MULTI_VAL|GBF_MULTI_SEMI, 21, 128);
 slAddTail(&c1->children, c2);
 
 /* FEATURES gene */
-c1 = newField("gene", NULL, GBF_NONE, 128);
+c1 = newField("gene", NULL, GBF_NONE, 5, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 128); 
+c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 21, 128); 
 slAddTail(&c1->children, c2);
 gbGeneDbxField = c2;
 
 /* FEATURES CDS */
-c1 = newField("CDS", "cds", GBF_MULTI_LINE, 128);
+c1 = newField("CDS", "cds", GBF_MULTI_LINE, 5, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/gene", "gen", GBF_TRACK_VALS, 128);
+c2 = newField("/gene", "gen", GBF_TRACK_VALS, 21, 128);
 slAddTail(&c1->children, c2);
-c2 = newField("/locus_tag", "lot", GBF_TRACK_VALS, 128);
+c2 = newField("/locus_tag", "lot", GBF_TRACK_VALS, 21, 128);
 
 slAddTail(&c1->children, c2);
 
-c2 = newField("/product", "pro", GBF_NONE, 128);
+c2 = newField("/product", "pro", GBF_NONE, 21, 128);
 slAddTail(&c1->children, c2);
 
-gbProteinIdField = newField("/protein_id", "prt", GBF_NONE, 32);
+gbProteinIdField = newField("/protein_id", "prt", GBF_NONE, 21, 32);
 slAddTail(&c1->children, gbProteinIdField);
 
-gbTranslationField = newField("/translation", NULL, GBF_MULTI_LINE|GBF_CONCAT_VAL, 128);
+gbTranslationField = newField("/translation", NULL, GBF_MULTI_LINE|GBF_CONCAT_VAL, 21, 128);
 slAddTail(&c1->children, gbTranslationField);
 
-c2 = newField("/note", "cno", GBF_MULTI_LINE, 128);
+c2 = newField("/note", "cno", GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
 gbStruct = gbs;
 gbKeywordsField->flags |= GBF_TO_LOWER;
@@ -297,41 +298,41 @@ gbTissueField->flags |= GBF_TO_LOWER;
 gbSexField->flags |= GBF_TO_LOWER;
 gbDevStageField->flags |= GBF_TO_LOWER;
 
-c2 = newField("/protein_id", "prt", GBF_NONE, 128); 
+c2 = newField("/protein_id", "prt", GBF_NONE, 21, 128); 
 slAddTail(&c1->children, c2);
 gbPrtField = c2;
 
-c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 128); 
+c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 21, 128); 
 slAddTail(&c1->children, c2);
 gbCdsDbxField = c2;
 
-c2 = newField("/transl_except", "translExcept", GBF_MULTI_VAL, 128); 
+c2 = newField("/transl_except", "translExcept", GBF_MULTI_VAL, 21, 128); 
 slAddTail(&c1->children, c2);
 
-c2 = newField("/exception", "exception", GBF_MULTI_VAL|GBF_SUB_SPACE, 128); 
+c2 = newField("/exception", "exception", GBF_MULTI_VAL|GBF_SUB_SPACE, 21, 128); 
 slAddTail(&c1->children, c2);
 
-c2 = newField("/selenocysteine", "selenocysteine", GBF_BOOLEAN, 32); 
+c2 = newField("/selenocysteine", "selenocysteine", GBF_BOOLEAN, 21, 32); 
 slAddTail(&c1->children, c2);
 
 /* FEATURES misc_difference */
-gbMiscDiffField = c1 = newField("misc_difference", NULL, GBF_MULTI_LINE, 128);
+gbMiscDiffField = c1 = newField("misc_difference", NULL, GBF_MULTI_LINE, 5, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/gene", NULL, GBF_NONE, 128);
+c2 = newField("/gene", NULL, GBF_NONE, 21, 128);
 slAddTail(&c1->children, c2);
-c2 = newField("/note", NULL, GBF_MULTI_LINE, 128);
+c2 = newField("/note", NULL, GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
-c2 = newField("/replace", NULL, GBF_NONE, 128);
+c2 = newField("/replace", NULL, GBF_NONE, 21, 128);
 slAddTail(&c1->children, c2);
 
 /* for refseq, we parse data stuff into comment. */
-gbRefSeqStatusField = newField("refSeqStatus", "rss", GBF_NONE, 128);
+gbRefSeqStatusField = newField("refSeqStatus", "rss", GBF_NONE, -1, 128);
 gbRefSeqRoot = gbRefSeqStatusField;
-gbRefSeqSummaryField = newField("refSeqSummary", "rsu", GBF_NONE, 1024);
+gbRefSeqSummaryField = newField("refSeqSummary", "rsu", GBF_NONE, -1, 1024);
 slAddTail(&gbRefSeqRoot, gbRefSeqSummaryField);
-gbRefSeqCompletenessField = newField("refSeqCompleteness", "rsc", GBF_NONE, 128);
+gbRefSeqCompletenessField = newField("refSeqCompleteness", "rsc", GBF_NONE, -1, 128);
 slAddTail(&gbRefSeqRoot, gbRefSeqCompletenessField);
-gbRefSeqDerivedField = newField("refSeqDerived", "rsd", GBF_NONE, 256);
+gbRefSeqDerivedField = newField("refSeqDerived", "rsd", GBF_NONE, -1, 256);
 slAddTail(&gbRefSeqRoot, gbRefSeqDerivedField);
 }
 
@@ -546,7 +547,7 @@ while (lineFileNext(lf, &line, &lineSize))
     firstWord = line+indent;
     for (gbf = first; gbf != NULL; gbf = gbf->next)
         {
-        if (startsWith(gbf->readName, firstWord))
+        if (startsWith(gbf->readName, firstWord) && (gbf->indent == indent))
             {
             int subIndent;
             if (gbf->readName[0] == '/')
@@ -831,11 +832,10 @@ static void refSeqParse()
 /* do special parsing of RefSeq data that was stuck in a comment */
 {
 char *next, *name, *value;
-if (!(startsWith("XM_", getCurAcc()) || (startsWith("NW_", getCurAcc()))))
+if (startsWith("NM_", getCurAcc()) || startsWith("NR_", getCurAcc()))
     {
     parseRefSeqStatus();
-    if (!startsWith("XR_", getCurAcc()))
-        parseRefSeqDerived();
+    parseRefSeqDerived();
     }
     
 /* start searching for fields past the end of the status.

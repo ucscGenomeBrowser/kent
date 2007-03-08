@@ -36,6 +36,8 @@ struct gbField
     struct gbFieldUseCounter *valList;  /* List of all vals (may be null) */
     struct dyString *val;               /* String value. */
     unsigned flags;                     /* Various flags. */
+    int indent;                         /* expected indentation level, -1 if
+                                           parsed from other fields */
     char *readName;                     /* GenBank's name for field. */
     char *writeName;                    /* Jim's name for field.  If null field not saved. */
     };

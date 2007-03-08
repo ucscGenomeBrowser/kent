@@ -129,3 +129,66 @@ siz 960
 fao 8981
 fas 993
 
+acc NR_003125
+def Homo sapiens RNA, small nucleolar (LOC85391) on chromosome 11.
+key .
+src Homo sapiens (human)
+org Homo sapiens
+aut Rensing,S.A. and Maier,U.G.
+chr 11
+map 11q23.3-q25
+rss pro
+rsd AP000926.6
+ver 1
+ngi 112734746
+mol snoRNA
+cat PRI
+dat 2006-10-18
+dbx GeneID:85391
+gni 85391
+siz 332
+fao 9974
+fas 352
+
+acc NR_002753
+def Homo sapiens RNA, U5F small nuclear (RNU5F) on chromosome 1.
+key .
+src Homo sapiens (human)
+org Homo sapiens
+aut Sontheimer,E.J. and Steitz,J.A.
+chr 1
+map 1p34.1
+rss pro
+rsd M77840.1
+ver 1
+ngi 84872035
+mol snRNA
+cat PRI
+dat 2006-10-21
+dbx GeneID:26828 HGNC:10216
+gni 26828
+siz 119
+fao 10326
+fas 135
+
+acc NR_002732
+def Homo sapiens DKFZP564B147 protein (DKFZP564B147) on chromosome X.
+key .
+src Homo sapiens (human)
+org Homo sapiens
+aut Strausberg,R.L., Feingold,E.A., Grouse,L.H., Derge,J.G., Klausner,R.D., Collins,F.S., Wagner,L., Shenmen,C.M., Schuler,G.D., Altschul,S.F., Zeeberg,B., Buetow,K.H., Schaefer,C.F., Bhat,N.K., Hopkins,R.F., Jordan,H., Moore,T., Max,S.I., Wang,J., Hsieh,F., Diatchenko,L., Marusina,K., Farmer,A.A., Rubin,G.M., Hong,L., Stapleton,M., Soares,M.B., Bonaldo,M.F., Casavant,T.L., Scheetz,T.E., Brownstein,M.J., Usdin,T.B., Toshiyuki,S., Carninci,P., Prange,C., Raha,S.S., Loquellano,N.A., Peters,G.J., Abramson,R.D., Mullahy,S.J., Bosak,S.A., McEwan,P.J., McKernan,K.J., Malek,J.A., Gunaratne,P.H., Richards,S., Worley,K.C., Hale,S., Garcia,A.M., Gay,L.J., Hulyk,S.W., Villalon,D.K., Muzny,D.M., Sodergren,E.J., Lu,X., Gibbs,R.A., Fahey,J., Helton,E., Ketteman,M., Madan,A., Rodrigues,S., Sanchez,A., Whiting,M., Madan,A., Young,A.C., Shevchenko,Y., Bouffard,G.G., Blakesley,R.W., Touchman,J.W., Green,E.D., Dickson,M.C., Rodriguez,A.C., Grimwood,J., Schmutz,J., Myers,R.M., Butterfield,Y.S., Krzywinski,M.I., Skalska,U., Smailus,D.E., Schnerch,A., Schein,J.E., Jones,S.J. and Marra,M.A.
+chr X
+map Xq26.3
+rss pro
+rsd CR542228.1
+ver 1
+ngi 84872012
+mol RNA
+cat PRI
+dat 2006-10-18
+dbx GeneID:26071
+gni 26071
+siz 345
+fao 10461
+fas 365
+

@@ -24,6 +24,12 @@ static struct gbFa* gOutFa = NULL;
 /* global options from command line */
 static boolean gInclVersion;
 
+static boolean isProtCodingRefSeq(char *acc)
+/* is a refseq protein coding */
+{
+return startsWith("NM_", acc) || startsWith("XM_", acc);
+}
+
 static boolean readRaInfo(struct lineFile* inLf, char acc[GB_ACC_BUFSZ], 
                           short* version, char pepAcc[GB_ACC_BUFSZ], short *pepVersion)
 /* read the accession/version info from next ra record */
@@ -52,7 +58,7 @@ if (acc[0] == '\0')
     errAbort("%s:%d: no acc entry in ra record", inLf->fileName,  startLineIx);
 if (version <= 0)
     errAbort("%s:%d: no ver entry in ra record", inLf->fileName,  startLineIx);
-if (pepAcc[0] == '\0')
+if (isProtCodingRefSeq(acc) && (pepAcc[0] == '\0'))
     errAbort("%s:%d: no prt entry in ra record", inLf->fileName,  startLineIx);
 return TRUE;
 }
@@ -127,7 +133,10 @@ short version, pepVersion;
 gbProcessedGetPath(select, "ra.gz", inRa);
 inLf = gzLineFileOpen(inRa); 
 while (readRaInfo(inLf, acc, &version, pepAcc, &pepVersion))
-    processRaRecord(select, idHash, acc, version, pepAcc, pepVersion, pepIdTbl);
+    {
+    if (isProtCodingRefSeq(acc))
+        processRaRecord(select, idHash, acc, version, pepAcc, pepVersion, pepIdTbl);
+    }
 gzLineFileClose(&inLf);
 }
 

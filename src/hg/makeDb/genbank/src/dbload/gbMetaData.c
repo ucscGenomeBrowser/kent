@@ -33,7 +33,7 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.36 2007/01/18 17:00:32 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.37 2007/03/08 07:24:19 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -61,7 +61,9 @@ static char* gbCdnaInfoCreate =
   "productName int unsigned not null,"            /* Ref in productName table. */
   "author int unsigned not null,"                 /* Ref in author table. */
   "gi int unsigned not null,"                     /* NCBI GI number. */
-           /* Extra indices. */
+  "mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"
+  "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA') not null,\n"
+  /* Extra indices. */
   "unique(acc),"
   "index(type),"
   "index(library),"
@@ -77,10 +79,11 @@ static char* gbCdnaInfoCreate =
 
 static char* refSeqStatusCreate = 
 "CREATE TABLE refSeqStatus ("
-"  mrnaAcc varchar(255) not null,"
-"  status enum('Unknown', 'Reviewed', "
-"    'Validated', 'Provisional', 'Predicted', 'Inferred') not null,"
-"  PRIMARY KEY(mrnaAcc))";
+"    mrnaAcc varchar(255) not null,"
+"    status enum('Unknown', 'Reviewed', 'Validated', 'Provisional', 'Predicted', 'Inferred') not null,"
+"    mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"
+"             'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA') not null,\n"
+"    PRIMARY KEY(mrnaAcc))";
 
 static char* refLinkCreate = 
 "CREATE TABLE refLink (\n"
@@ -92,7 +95,7 @@ static char* refLinkCreate =
 "    prodName int unsigned not null,    # pointer to productName table\n"
 "    locusLinkId int unsigned not null, # Locus Link ID\n"
 "    omimId int unsigned not null,      # OMIM ID\n"
-"              #Indices\n"
+"    #Indices\n"
 "    PRIMARY KEY(mrnaAcc),\n"
 "    index(name(10)),\n"
 "    index(protAcc(10)),\n"
@@ -182,6 +185,10 @@ static struct extFileTbl* extFiles = NULL;
 
 static boolean haveGi = FALSE; /* does the gbCdnaInfo table have the gi
                                 * column? */
+static boolean haveMol = FALSE; /* does the gbCdnaInfo table have the mol
+                                 * column? */
+static boolean haveRsMol = FALSE; /* does the refSeqStatus table have the mol
+                                   * column? */
 static boolean haveMgc = FALSE; /* does this organism have MGC tables */
 static boolean loadMiscDiff = FALSE;  /* load gbMiscDiff records */
 
@@ -218,9 +225,15 @@ if (!sqlTableExists(conn, "gbCdnaInfo"))
     {
     sqlUpdate(conn, gbCdnaInfoCreate);
     haveGi = TRUE;
+    haveMol = TRUE;
     }
 else
+    {
     haveGi = sqlFieldIndex(conn, "gbCdnaInfo", "gi") >= 0;
+    haveMol = sqlFieldIndex(conn, "gbCdnaInfo", "mol") >= 0;
+    if (haveMol && !haveGi)
+        errAbort("must have gi column to have mol");
+    }
 
 /* load gbMiscDiff table only if MGC tables are loaded */
 /* do we have MGC on this ? */
@@ -236,7 +249,14 @@ if (gbCdnaInfoUpd == NULL)
 if (gSrcDb == GB_REFSEQ)
     {
     if (!sqlTableExists(conn, "refSeqStatus"))
+        {
         sqlUpdate(conn, refSeqStatusCreate);
+        haveRsMol = TRUE;
+        }
+    else
+        {
+        haveRsMol = sqlFieldIndex(conn, "refSeqStatus", "mol") >= 0;
+        }
     if (refSeqStatusUpd == NULL)
         refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", gTmpDir, (gbVerbose >= 4),
                                         &allUpdaters);
@@ -303,7 +323,19 @@ static void gbCdnaInfoUpdate(struct gbStatus* status, struct sqlConnection *conn
 {
 if (status->stateChg & GB_NEW)
     {
-    if (haveGi)
+    if (haveMol)
+        sqlUpdaterAddRow(gbCdnaInfoUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%s",
+                         status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
+                         ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
+                         raFieldCurId("src"), raFieldCurId("org"),
+                         raFieldCurId("lib"), raFieldCurId("clo"),
+                         raFieldCurId("sex"), raFieldCurId("tis"),
+                         raFieldCurId("dev"), raFieldCurId("cel"),
+                         raFieldCurId("cds"), raFieldCurId("key"),
+                         raFieldCurId("def"), raFieldCurId("gen"),
+                         raFieldCurId("pro"), raFieldCurId("aut"),
+                         raGi, raMol);
+    else if (haveGi)
         sqlUpdaterAddRow(gbCdnaInfoUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
                          status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
                          ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
@@ -329,7 +361,22 @@ if (status->stateChg & GB_NEW)
     }
 else if (status->stateChg & GB_META_CHG)
     {
-    if (haveGi)
+    if (haveMol)
+        sqlUpdaterModRow(gbCdnaInfoUpd, 1, "version='%u', moddate='%s', direction='%c', "
+                         "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
+                         "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
+                         "description=%u, geneName=%u, productName=%u, author=%u, gi=%u, mol='%s' "
+                         "WHERE id=%u",
+                         raVersion, gbFormatDate(raModDate), raDir,
+                         raFieldCurId("src"), raFieldCurId("org"),
+                         raFieldCurId("lib"), raFieldCurId("clo"),
+                         raFieldCurId("sex"), raFieldCurId("tis"),
+                         raFieldCurId("dev"), raFieldCurId("cel"),
+                         raFieldCurId("cds"), raFieldCurId("key"),
+                         raFieldCurId("def"), raFieldCurId("gen"),
+                         raFieldCurId("pro"), raFieldCurId("aut"),
+                         raGi, raMol, status->gbSeqId);
+    else if (haveGi)
         sqlUpdaterModRow(gbCdnaInfoUpd, 1, "version='%u', moddate='%s', direction='%c', "
                          "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
                          "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
@@ -411,10 +458,21 @@ static void refSeqStatusUpdate(struct gbStatus* status)
 /* Update the refSeqStatus table for the current entry */
 {
 if (status->stateChg & GB_NEW)
-    sqlUpdaterAddRow(refSeqStatusUpd, "%s\t%s", raAcc, raRefSeqStatus);
+    {
+    if (haveRsMol)
+        sqlUpdaterAddRow(refSeqStatusUpd, "%s\t%s\t%s", raAcc, raRefSeqStatus, raMol);
+    else
+        sqlUpdaterAddRow(refSeqStatusUpd, "%s\t%s", raAcc, raRefSeqStatus);
+    }
 else if (status->stateChg & GB_META_CHG)
-    sqlUpdaterModRow(refSeqStatusUpd, 1, "status='%s' WHERE mrnaAcc='%s'",
-                     raRefSeqStatus, raAcc);
+    {
+    if (haveRsMol)
+        sqlUpdaterModRow(refSeqStatusUpd, 1, "status='%s', mol='%s' WHERE mrnaAcc='%s'",
+                         raRefSeqStatus, raMol, raAcc);
+    else
+        sqlUpdaterModRow(refSeqStatusUpd, 1, "status='%s' WHERE mrnaAcc='%s'",
+                         raRefSeqStatus, raAcc);
+    }
 }
 
 static void refSeqSummaryUpdate(struct sqlConnection *conn, struct gbStatus* status)
