@@ -7,7 +7,7 @@ set task FIXME
 proc modifyDb {logFh db} {
     prLog $logFh "begin $db"
 
-    # FIXME: implement me in
+    # FIXME: implement me
     exec hgsql -e $sql $db >&@$logFh
 
     prLog $logFh "end $db"
@@ -15,7 +15,7 @@ proc modifyDb {logFh db} {
 
 
 
-set logDir misc/$task
+set logDir misc/$task.logs
 
 set host [exec hostname]
 if {$host == "hgwdev"} {
@@ -49,6 +49,23 @@ proc loadDbs {dbFile} {
     }
     close $fh
     return $dbs
+}
+
+proc loadRows {db sql} {
+    set rows {}
+    foreach line [split [exec hgsql -N -e $sql $db] \n] {
+        lappend rows [split $line \t]
+    }
+    return $rows
+}
+
+proc hasColumn {db tbl col} {
+    foreach row [loadRows $db "describe $tbl"] {
+        if {[lindex $row 0] == $col} {
+            return 1
+        }
+    }
+    return 0
 }
 
 proc prLog {logFh msg} {
