@@ -8,7 +8,7 @@
 #include "rangeTree.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.9 2007/03/06 01:52:20 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.10 2007/03/08 05:45:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -77,9 +77,9 @@ if (oldSize == newSize && oldSize == overlap)
     return TRUE;
 
 /* Next handle case where old bed is a single exon.  For this
- * just require that old bed is a proper superset of new bed. */
+ * just require that old bed is a nearly proper superset of new bed. */
 if (oldBed->blockCount == 0)
-    return overlap == oldSize;
+    return overlap >= 0.95*oldSize;
 
 /* Otherwise we look for first intron start in old bed, and then
  * flip through new bed until we find an intron that starts at the
