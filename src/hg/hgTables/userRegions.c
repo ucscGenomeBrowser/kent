@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.4 2007/03/07 05:16:56 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.5 2007/03/08 23:53:47 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -54,6 +54,63 @@ puts(helpBuf);
 htmlClose();
 }
 
+static struct bed *parseRegionInput(char *inputString)
+/* scan the user region definition, turn into a bed list */
+{
+int itemCount = 0;
+struct bed *bedList = NULL;
+struct bed *bedEl;
+int wordCount;
+char *words[5];
+struct lineFile *lf;
+
+lf = lineFileOnString("userData", TRUE, inputString);
+while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
+    {
+    if (!((3 == wordCount) || (4 == wordCount)))
+	{
+	int i;
+	struct dyString *errMessage = dyStringNew(0);
+	for (i = 0; i < wordCount; ++i)
+	    dyStringPrintf(errMessage, "%s ", words[i]);
+	errAbort("line %d: '%s'<BR>\n"
+	"illegal bed size, expected 3 or 4 fields, found %d\n",
+		    lf->lineIx, dyStringCannibalize(&errMessage), wordCount);
+	}
+    ++itemCount;
+    if (itemCount > 1000)
+	{
+	warn("limit 1000 region definitions reached at line %d<BR>\n",
+		lf->lineIx);
+	break;
+	}
+    AllocVar(bedEl);
+    bedEl->chrom = hgOfficialChromName(words[0]);
+    if (NULL == bedEl->chrom)
+	errAbort("at line %d, chrom name '%s' %s %s not recognized in this assembly %d",
+	    lf->lineIx, words[0], words[1], words[2], wordCount);
+    bedEl->chromStart = sqlUnsigned(words[1]);
+    bedEl->chromEnd = sqlUnsigned(words[2]);
+    if (wordCount > 3)
+	bedEl->name = cloneString(words[3]);
+    else
+	bedEl->name = NULL;
+/* if we wanted to give artifical names to each item */
+#ifdef NOT
+	{
+	char name[128];
+	safef(name, ArraySize(name), "item_%04d", itemCount);
+	bedEl->name = cloneString(name);
+	}
+#endif
+    slAddHead(&bedList, bedEl);
+    }
+lineFileClose(&lf);
+//    slSort(&bedList, bedCmp);	/* this would do chrom,chromStart order */
+slReverse(&bedList);	/* with no sort, it is in order as user entered */
+return (bedList);
+}
+
 void doSubmitUserRegions(struct sqlConnection *conn)
 /* Process submit in set regions page. */
 {
@@ -65,7 +122,8 @@ boolean hasData = (idText != NULL && idText[0] != 0) ||
 /* beware, the string pointers from cartString() point to strings in the
  * cart hash.  If they are manipulated and changed, they will get saved
  * back to the cart in their changed form.  You don't want to be
- * altering them like that.
+ * altering them like that.  Thus, the idText is duplicated below with
+ * the cloneString(idText)
  */
 htmlOpen("Table Browser (Region definitions)");
 
@@ -84,51 +142,13 @@ else
 
 if (hasData)
     {
-    /* Write variable to temp file and save temp
-     * file name. */
-    int itemCount = 0;
-    struct bed *bedList = NULL;
     struct tempName tn;
-    struct bed *bedEl;
-    int wordCount;
-    char *words[5];
-    struct lineFile *lf;
     FILE *f;
-    lf = lineFileOnString("userData", TRUE, idText);
-    while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
-	{
-	if (!((3 == wordCount) || (4 == wordCount)))
-	    {
-	    errAbort("%s %s %s<BR>\n"
-	    "illegal bed size, expected 3 or 4 fields, found %d at line %d\n",
-			words[0], words[1], words[2], wordCount, lf->lineIx );
-	    }
-	++itemCount;
-	if (itemCount > 1000)
-	    {
-	    warn("limit 1000 region definitions reached<BR>\n");
-	    break;
-	    }
-	AllocVar(bedEl);
-	bedEl->chrom = cloneString(words[0]);
-	bedEl->chromStart = sqlUnsigned(words[1]);
-	bedEl->chromEnd = sqlUnsigned(words[2]);
-	if (wordCount > 3)
-	    bedEl->name = cloneString(words[3]);
-	else
-	    bedEl->name = NULL;
-#ifdef NOT
-	    {
-	    char name[128];
-	    safef(name, ArraySize(name), "item_%04d", ++itemCount);
-	    bedEl->name = cloneString(name);
-	    }
-#endif
-	slAddHead(&bedList, bedEl);
-	}
-    lineFileClose(&lf);
-//    slSort(&bedList, bedCmp);
-    slReverse(&bedList);
+    struct bed *bedEl;
+    struct bed *bedList = parseRegionInput(idText);
+
+    if (NULL == bedList)
+	errAbort("no valid data points found in input");
 
     trashDirFile(&tn, "hgtData", "user", ".region");
     f = mustOpen(tn.forCgi, "w");
