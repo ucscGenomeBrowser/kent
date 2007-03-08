@@ -708,3 +708,32 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     nice -n +19 featureBits felCat3 -enrichment genscan:CDS geneid
     #	genscan:CDS 2.838%, geneid 1.440%, both 0.816%, cover 28.76%,
     #	enrich 19.97x
+
+
+##########################################################################
+# NSCAN track - (2007-03-08 markd)
+# uses hg18 as informat, with pseudogene masking 
+#
+    cd /cluster/data/felCat3/bed/nscan/
+
+    # obtainedf NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv http://mblab.wustl.edu/predictions/cat/felCat3.gtf
+    wget -nv http://mblab.wustl.edu/predictions/cat/felCat3/felCat3.ptx.fa
+
+    gzip -9 felCat3.*
+    chmod a-w *.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt felCat3 nscanGene felCat3.nscan.gtf.gz
+    # add .a suffix to match transcript id
+    hgPepPred -suffix=.a felCat3 generic nscanPep chr_ptx/*.fa.gz
+    rm -f *.tab
+
+    # update trackDb; need a felCat3-specific page to describe informants
+    human/felCat3/nscanGene.html    
+    human/felCat3/trackDb.ra
+
+
