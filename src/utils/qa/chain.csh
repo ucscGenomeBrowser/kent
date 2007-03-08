@@ -43,7 +43,7 @@ echo "Org: $Org"
 # -------------------------------------------------
 # get chroms from chromInfo:
 
-~kuhn/bin/getChromlist.csh $db
+getChromlist.csh $db
 
 # ------------------------------------------------
 # check updateTimes for each table:
@@ -103,17 +103,27 @@ echo
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check that all chainIds in Link table are used in the other table"
-echo "if there is no output here, then it passes."
+echo "uses commTrio to compare two counts"
 
-foreach chrom (`cat $db.chromlist`)
-  set numChainIdList = `hgsql -N -e "SELECT COUNT(DISTINCT(chainId)) FROM ${chrom}_chain${Org}Link" $db`
-  set numIdList = `hgsql -N -e "SELECT COUNT(DISTINCT(id)) FROM ${chrom}_chain${Org}" $db`
+hgsql -N -e "SELECT DISTINCT(chainId) FROM ${chrom}_chain${Org}Link" $db > numChainIdList
 
-  if ($numChainIdList != $numIdList) then
-    echo "Not all of the chainId names in the ${chrom}_chain${Org}Link table appear in the ${chrom}_chain${Org} table"
-    echo "You should check the ${chrom}_chain${Org}Link table by hand to determine the problem."
-  endif
-end #foreach
+hgsql -N -e "SELECT DISTINCT(id) FROM ${chrom}_chain${Org}" $db > numIdList
+
+commTrio.csh numChainIdList numIdList rm
+rm numIdList 
+rm numChainIdList
+
+
+# foreach chrom (`cat $db.chromlist`)
+#  set numChainIdList = `hgsql -N -e "SELECT COUNT(DISTINCT(chainId)) FROM ${chrom}_chain${Org}Link" $db`
+#  set numIdList = `hgsql -N -e "SELECT COUNT(DISTINCT(id)) FROM ${chrom}_chain${Org}" $db`
+
+
+#  if ($numChainIdList != $numIdList) then
+#    echo "Not all of the chainId names in the ${chrom}_chain${Org}Link table appear in the ${chrom}_chain${Org} table"
+#    echo "You should check the ${chrom}_chain${Org}Link table by hand to determine the problem."
+#  endif
+# end #foreach
 echo
 
 
@@ -143,7 +153,7 @@ echo
 echo
 echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "check for rowcounts in each table:"
-echo "only blank tables are reported"
+echo "rowcounts are listed - pay attention to counts of 0"
 echo
 
 echo "for chrN_chain${Org}:"
@@ -152,6 +162,7 @@ foreach chrom (`cat $db.chromlist`)
   if ($var1 == 0) then
     echo "${chrom}_chain${Org} is empty"
   else
+    echo "${chrom}_chain${Org} rowcount = $var1"
     # echo $chrom  # debug
   endif
 end
@@ -163,6 +174,7 @@ foreach chrom (`cat $db.chromlist`)
   if ($var2 == 0) then
     echo "${chrom}_chain${Org} is empty"
   else
+    echo "${chrom}_chain${Org} rowcount = $var2"
     # echo $chrom  # debug
   endif
 end
@@ -199,10 +211,12 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "use these three rows to check (manually) that qStrand is displayed properly in the browser:"
 echo
 
-hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
-    FROM chr3_$track WHERE tStart > 10000000 LIMIT 3" $db
-echo
+set last=''
+set last=`hgsql -N -e "SELECT MAX(chrom) FROM chromInfo" $db`
 
+hgsql -t -e "SELECT tName, tStart, tEnd, qName, qStrand \
+    FROM ${last}_$track WHERE tStart > 10000000 LIMIT 3" $db
+echo
 
 # -------------------------------------------------
 # check that tables are sorted by tStart:
