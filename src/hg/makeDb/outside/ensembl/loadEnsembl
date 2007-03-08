@@ -31,5 +31,8 @@ ldHgGene $db ensGene -predTab ensGene.gp -gtf -genePredExt
 ldHgGene $db ensPseudo -predTab ensPseudo.gp -gtf -genePredExt 
 hgLoadSqlTab $db ensInfo $HOME/kent/src/hg/lib/ensInfo.sql ensInfo.tab
 hgLoadSqlTab $db ensGtp $HOME/kent/src/hg/lib/ensGtp.sql ensGtp.tab
-hgLoadSqlTab $db ensemblXref $HOME/kent/src/hg/lib/ensemblXref.sql ensemblXref.tab
+hgLoadSqlTab $db ensGeneXref $HOME/kent/src/hg/lib/ensGeneXref.sql ensGeneXref.tab
 tawk '{print $4,$6}' ensInfo.tab |sort |uniq --count|sort -nr
+cleanGeneTable $db ensGene
+cleanGeneTable $db ensPseudo
+
