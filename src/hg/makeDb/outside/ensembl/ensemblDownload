@@ -9,14 +9,13 @@ sql="$input/${organism}_${version}.sql.gz"
 mkdir -p $outdir
 cd $outdir
 #get sql definition for all tables
-wget --timestamping --no-verbose $sql 2>> download.log
+wget --timestamping --no-verbose $sql 
 #get list of tables excluding big alignment tables and others
 zgrep CREATE ${organism}_${version}.sql.gz |awk -F'`' '{print $2}' > tables.tmp
 exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
 tables=`cat tables.tmp |grep -v -E $exceptions`
 #go get them! (if not already downloaded)
 echo "Starting download to $outdir from $input. "
-echo "Use tail -f download.log to watch progress"
-for i in $tables; do wget --timestamping --no-verbose $input/${i}.txt.table.gz; done  2>> download.log
+for i in $tables; do wget --timestamping --no-verbose $input/${i}.txt.table.gz; done  
 zcat seq_region.txt.table.gz | sed -e 's/GeneScaffold/scaffold/'  > seq_region.txt.table
 gzip -f seq_region.txt.table
