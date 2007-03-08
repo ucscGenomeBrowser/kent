@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.347 2007/03/07 01:21:47 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.348 2007/03/08 04:55:11 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2145,6 +2145,7 @@ void hapmapAllelesUi(struct trackDb *tdb)
 /* Default is always to not filter (include all data) */
 /* snp track puts the menu options in kent/src/hg/lib/snp125Ui.h */
 /* snp track also sets global variables, don't actually need this? */
+/* Consider using radio buttons */
 {
 char **menu;
 int menuSize = 0;
@@ -2158,9 +2159,10 @@ int minMacaqueQual = 0;
 
 puts("<P>");
 puts("<B>Filters for the display of the HapMap SNPs data:</B>");
-puts("<BR><BR>\n");
+puts("<BR>\n");
 
-puts("<B>Major alleles mixed across populations:</B>&nbsp;");
+puts("<BR><B>Population</B>");
+puts("<B>Major Allele Mixture:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2171,7 +2173,7 @@ cgiMakeDropList(HA_POP_MIXED, menu, menuSize,
     cartCgiUsualString(cart, HA_POP_MIXED, HA_POP_MIXED_DEFAULT));
 freez(&menu);
 
-puts("<BR><B>Population count:</B>&nbsp;");
+puts("<B>Count:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2182,7 +2184,19 @@ cgiMakeDropList(HA_POP_COUNT, menu, menuSize,
     cartCgiUsualString(cart, HA_POP_COUNT, HA_POP_COUNT_DEFAULT));
 freez(&menu);
 
-puts("<BR><B>Polymorphism Type:</B>&nbsp;");
+puts("<B>Monomorphism:</B>&nbsp;");
+menuSize = 4;
+menu = needMem((size_t)(menuSize * sizeof(char *)));
+menuPos = 0;
+menu[menuPos++] = "any";
+menu[menuPos++] = "all";
+menu[menuPos++] = "some";
+menu[menuPos++] = "none";
+cgiMakeDropList(HA_MONO, menu, menuSize, 
+    cartCgiUsualString(cart, HA_MONO, HA_MONO_DEFAULT));
+freez(&menu);
+
+puts("<BR><BR><B>Polymorphism Type:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2195,35 +2209,24 @@ cgiMakeDropList(HA_TYPE, menu, menuSize,
     cartCgiUsualString(cart, HA_TYPE, HA_TYPE_DEFAULT));
 freez(&menu);
 
-puts("<BR><B>Minimum Minor Allele Frequency:</B>&nbsp;");
+puts("<BR><BR><B>Minor Allele Frequency Minimum:</B>&nbsp;");
 minFreq = atof(cartUsualString(cart, HA_MIN_FREQ, HA_MIN_FREQ_DEFAULT));
 cgiMakeDoubleVar(HA_MIN_FREQ, minFreq, 6);
 
-puts("<BR><B>Maximum Minor Allele Frequency:</B>&nbsp;");
+puts("<B>Maximum:</B>&nbsp;");
 maxFreq = atof(cartUsualString(cart, HA_MAX_FREQ, HA_MAX_FREQ_DEFAULT));
 cgiMakeDoubleVar(HA_MAX_FREQ, maxFreq, 6);
 
-puts("<BR><B>Minimum Heterozygosity:</B>&nbsp;");
+puts("<BR><B>Heterozygosity</B>");
+puts("<B>Minimum:</B>&nbsp;");
 minHet = atof(cartUsualString(cart, HA_MIN_HET, HA_MIN_HET_DEFAULT));
 cgiMakeDoubleVar(HA_MIN_HET, minHet, 6);
 
-puts("<BR><B>Maximum Heterozygosity:</B>&nbsp;");
+puts("<B>Maximum:</B>&nbsp;");
 maxHet = atof(cartUsualString(cart, HA_MAX_HET, HA_MAX_HET_DEFAULT));
 cgiMakeDoubleVar(HA_MAX_HET, maxHet, 6);
 
-puts("<BR><B>Monomorphic:</B>&nbsp;");
-menuSize = 4;
-menu = needMem((size_t)(menuSize * sizeof(char *)));
-menuPos = 0;
-menu[menuPos++] = "any";
-menu[menuPos++] = "all";
-menu[menuPos++] = "some";
-menu[menuPos++] = "none";
-cgiMakeDropList(HA_MONO, menu, menuSize, 
-    cartCgiUsualString(cart, HA_MONO, HA_MONO_DEFAULT));
-freez(&menu);
-
-puts("<BR><B>Chimp Allele:</B>&nbsp;");
+puts("<BR><BR><B>Chimp Allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2237,7 +2240,7 @@ cgiMakeDropList(HA_CHIMP, menu, menuSize,
 freez(&menu);
 
 minChimpQual = atoi(cartUsualString(cart, HA_CHIMP_QUAL, HA_CHIMP_QUAL_DEFAULT));
-printf("<BR><B>Minimum Chimp Quality Score:</B>&nbsp;");
+printf("<B>Minimum Quality Score:</B>&nbsp;");
 cgiMakeIntVar(HA_CHIMP_QUAL, minChimpQual, 4);
 
 puts("<BR><B>Macaque Allele:</B>&nbsp;");
@@ -2254,7 +2257,7 @@ cgiMakeDropList(HA_MACAQUE, menu, menuSize,
 freez(&menu);
 
 minMacaqueQual = atoi(cartUsualString(cart, HA_MACAQUE_QUAL, HA_MACAQUE_QUAL_DEFAULT));
-printf("<BR><B>Minimum Macaque Quality Score:</B>&nbsp;");
+printf("<B>Minimum Quality Score:</B>&nbsp;");
 cgiMakeIntVar(HA_MACAQUE_QUAL, minMacaqueQual, 4);
 
 puts("</P>\n");
