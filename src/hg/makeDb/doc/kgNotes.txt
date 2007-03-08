@@ -213,6 +213,18 @@ rm -rf txFaSplit
 mkdir txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
 
+# Get parts of multiple alignments corresponding to transcripts.
+# Takes 43 minutes.
+echo hg18 panTro2 rheMac2 otoGar1 tupBel1 mm8 rn4 \
+	cavPor2 oryCun1 canFam2 felCat1 equCab1 bosTau3 \
+	dasNov1 loxAfr1 echTel1 monDom4 ornAna1 galGal3 \
+	anoCar1 xenTro2 fr2 tetNig1 gasAcu1 oryLat1 danRer4 > allOrgs.txt
+echo hg18 panTro2 rheMac2 mm8 canFam2 > ourOrgs.txt
+foreach c (`echo 'select chrom from chromInfo' | hgsql -N hg18`)
+    mafFrags hg18 multiz25way txWalk/$c.bed stdout -bed12 -orgs=allOrgs.txt \
+       | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
+end
+
 # Fold in antibody stuff at a stage where it *won't* be taken up by alignments
 sequenceForBed -db=hg18 -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName >> txWalk.fa
 mv txWalk.fa abWalk.fa
