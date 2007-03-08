@@ -727,9 +727,8 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     # load tracks.  Note that these have *utr features, rather than
     # exon features.  currently ldHgGene creates separate genePred exons
     # for these.
-    ldHgGene -bin -gtf -genePredExt felCat3 nscanGene felCat3.nscan.gtf.gz
-    # add .a suffix to match transcript id
-    hgPepPred -suffix=.a felCat3 generic nscanPep chr_ptx/*.fa.gz
+    ldHgGene -bin -gtf -genePredExt felCat3 nscanGene felCat3.gtf.gz
+    hgPepPred felCat3 generic nscanPep felCat3.ptx.fa.gz
     rm -f *.tab
 
     # update trackDb; need a felCat3-specific page to describe informants
