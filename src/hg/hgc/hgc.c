@@ -196,7 +196,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1222 2007/03/07 21:19:37 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1223 2007/03/08 23:19:27 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6626,7 +6626,11 @@ if (hTableExists("superfamily"))
   	}
     else
 	{
-    	if (hTableExists("ensemblXref2"))
+    	if (hTableExists("ensGeneXref"))
+            {
+	    proteinID = sqlGetField(conn, database, "ensGeneXref","translation_name", cond_str);
+            }
+        else if (hTableExists("ensemblXref2"))
 	    {
 	    proteinID = sqlGetField(conn, database, "ensemblXref2","translation_name", cond_str);
   	    }
