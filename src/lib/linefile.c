@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.51 2007/03/07 01:46:43 angie Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.52 2007/03/08 23:46:43 hiram Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -362,7 +362,10 @@ while (!gotLf)
     int readSize = bufSize - sizeLeft;
 
     if (oldEnd > 0 && sizeLeft > 0)
+	{
 	memmove(buf, buf+oldEnd, sizeLeft);
+	endIx = sizeLeft;
+	}
     lf->bufOffsetInFile += oldEnd;
     if (lf->fd >= 0)
 	readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
@@ -372,12 +375,11 @@ while (!gotLf)
     if ((readSize == 0) && (endIx > oldEnd))
 	{
 	/* If there is no newline at end of file, we will end up here. */
-	endIx++;
 	if (lf->zTerm)
 	    {
-	    buf[endIx-1] = 0;
+	    buf[endIx] = 0;
 	    }
-	lf->lineStart = newStart = lf->lineEnd;
+	lf->lineStart = newStart = 0;
 	lf->lineEnd = endIx;
 	++lf->lineIx;
 	if (retSize != NULL)
@@ -449,6 +451,7 @@ if (lf->zTerm)
 	buf[endIx-2] = 0;
 	}
     }
+
 lf->lineStart = newStart = lf->lineEnd;
 lf->lineEnd = endIx;
 ++lf->lineIx;
