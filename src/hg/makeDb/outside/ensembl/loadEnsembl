@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# loadEnsembl - export genePred files and tab files from ensembl native database and load them into browser database.
 [ $# != 4 ] && echo "usage: loadEnsembl organism version input-directory db " >&2 && exit 1;
 organism=$1
 version=$2
@@ -16,12 +17,19 @@ wc -l ensGene.gp
 echo "Extract pseudogenes to ensPseudo.tab"
 hgsql $ensDb -N -B -e 'select concat("chr",sr.name) as chrom, g.biotype, g.seq_region_start-1 as cdsStart, g.seq_region_end as cdsEnd,e.seq_region_start-1 as exonStart, e.seq_region_end as exonEnd, ".",if(e.seq_region_strand < 0,"-","+") as strand, if(e.phase < 0, ".", e.phase) as phase, g.biotype, tsi.stable_id, gsi.stable_id, rank,g.gene_id, t.transcript_id from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t, exon_transcript et , transcript_stable_id tsi,  gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and g.biotype like "%pseudo%" order by tsi.stable_id, e.seq_region_start;' > ensPseudo.tab
 ensGeneToGenePred < ensPseudo.tab > ensPseudo.gp     
-#extract ensInfo
+#extract ensInfo and estGtp
 echo "extract Info details table to ensInfo.tab" 
 hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, display_label, gsi.stable_id, g.biotype, g.description, g.status from gene g, gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t left join translation r on r.transcript_id = t.transcript_id, exon_transcript et , transcript_stable_id tsi, xref x, exon fe , exon le where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id = x.xref_id order by tsi.stable_id;' > ensInfo.tab
 hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, "noXref", gsi.stable_id, g.biotype, g.description, g.status from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t , exon_transcript et , transcript_stable_id tsi, gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id is null  ;' >> ensInfo.tab
+hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, display_label, gsi.stable_id, rsi.stable_id from gene g, tranlation_stable_id rsi, gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t left join translation r on r.transcript_id = t.transcript_id, exon_transcript et , transcript_stable_id tsi, xref x, exon fe , exon le where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and rsi.translation_id = r.translate_id and tsi.transcript_id = t.transcript_id and t.display_xref_id = x.xref_id order by tsi.stable_id;' > ensGtp.tab
+#extract cross reference table 
+hgsql $ensDb -N -B -e "select * from external_db" |sort> externalDb.tab
+
+hgsql $ensDb -N -B -e 'select distinct  db_name, gsi.stable_id, gsi.version, tsi.stable_id, tsi.version, rsi.stable_id, rsi.version, display_label, dbprimary_acc from gene g, translation_stable_id rsi, gene_stable_id gsi, seq_region sr , transcript t , translation r, transcript_stable_id tsi, xref x, external_db ex where r.transcript_id = t.transcript_id and gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and rsi.translation_id = r.translation_id and tsi.transcript_id = t.transcript_id and t.display_xref_id = x.xref_id and x.external_db_id = ex.external_db_id and ex.db_name in ("Uniprot/SPTREMBL", "Uniprot/SWISSPROT", "Uniprot/Varsplic") ;' |sort> ensemblXref3.temp.tab
+ 
 ldHgGene $db ensGene -predTab ensGene.gp -gtf -genePredExt 
 ldHgGene $db ensPseudo -predTab ensPseudo.gp -gtf -genePredExt 
-echo "Loading ensInfo"
 hgLoadSqlTab $db ensInfo $HOME/kent/src/hg/lib/ensInfo.sql ensInfo.tab
+hgLoadSqlTab $db ensGtp $HOME/kent/src/hg/lib/ensGtp.sql ensGtp.tab
+hgLoadSqlTab $db ensemblXref3 $HOME/kent/src/hg/lib/ensemblXref3.sql ensemblXref3.tab
 tawk '{print $4,$6}' ensInfo.tab |sort |uniq --count|sort -nr
