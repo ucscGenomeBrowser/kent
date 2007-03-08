@@ -474,44 +474,103 @@ gasAcu1.downloadDir = gasAcu1
 
 
 #########################################################################
-# ENSEMBL GENES (DONE 11/27/06 angie)
+# EXTRACT CHROM TO SCAFFOLD LIFTUP (DONE 3/6/07 angie)
+# Ensembl genes use scaffold_* instead of chrUn.  Broad doesn't seem to 
+# provide a scaffold->chrom mapping in their download files, but here's
+# a way to extract one from ctg->chrom and ctg->scaffold agp...
+    cd /cluster/data/gasAcu1/downloads
+    # Distill contig coordinates to a single field that will be the same
+    # for ctg->chrom and ctg->scaf maps:
+    awk '$5 != "N" {print $6 ":" $7 ":" $8 "\t" $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $9;}' \
+      UCSC.gasAcu1.agp \
+    | sort > chrom.tmp
+    awk '$5 != "N" {print $6 ":" $7 ":" $8 "\t" $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $9;}' \
+      assembly.agp \
+    | sort > scaf.tmp
+    # Join the maps into what is AGP except it has a bunch of lines for 
+    # each scaffold that must be collapsed into one line per scaffold:
+    join -t "	" -o '1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 1.7' chrom.tmp scaf.tmp \
+    | sort -k 1,1 -k 2n,2n \
+      > tmp.agp
+    # Make sure the join went right (same #lines in all):
+    wc -l chrom.tmp scaf.tmp tmp.agp
+#  16967 chrom.tmp
+#  16967 scaf.tmp
+#  16967 tmp.agp
+    # Now collapse the many per-contig lines for each scaffold into a single
+    # line per scaffold.  This produces gapless AGP with sequence numbers 
+    # that aren't consecutive (but still monotonically increasing):
+    perl -we 'while (<>) { \
+                chomp; @w = split; \
+                if (! defined $lastScaf) { \
+                  ($chr, $chrS, $chrE, $seq, $type, \
+                   $lastScaf, $firstScafS, $firstScafE, $strand) = @w; \
+                  $lastScafS = $firstScafS;  $lastScafE = $firstScafE; \
+                } elsif ($lastScaf ne $w[5]) { \
+                  $scafS = ($firstScafS < $lastScafS) ? $firstScafS : $lastScafS;\
+                  $scafE = ($firstScafE > $lastScafE) ? $firstScafE : $lastScafE;\
+                  print "$chr\t$chrS\t$chrE\t$seq\t$type\t" . \
+                        "$lastScaf\t$scafS\t$scafE\t$strand\n"; \
+                  ($chr, $chrS, $chrE, $seq, $type, \
+                   $lastScaf, $firstScafS, $firstScafE, $strand) = @w; \
+                  $lastScafS = $firstScafS;  $lastScafE = $firstScafE; \
+                } else { \
+                  ($thisChr,undef,$chrE,undef,undef, \
+                   undef,$lastScafS,$lastScafE,undef) = @w; \
+                  die "$lastScaf $lastScafE: $thisChr != $chr" \
+                    if ($thisChr ne $chr); \
+                } \
+              } \
+              $scafS = ($firstScafS < $lastScafS) ? $firstScafS : $lastScafS;\
+              $scafE = ($firstScafE > $lastScafE) ? $firstScafE : $lastScafE;\
+              print "$chr\t$chrS\t$chrE\t$seq\t$type\t" . \
+                    "$lastScaf\t$scafS\t$scafE\t$strand\n"; \
+              ' tmp.agp \
+      > UCSC.chromToScaffoldSansGaps.agp
+    # fortunately agpToLift doesn't need gap lines in its input, just frags:
+    agpToLift -revStrand < UCSC.chromToScaffoldSansGaps.agp \
+      > ../jkStuff/UCSC.chromToScaffoldSansGaps.lft
+
+
+#########################################################################
+# ENSEMBL GENES (DONE 11/27/06 angie - RELOADED 3/8/07 angie)
+    ssh hgwdev
     mkdir /cluster/data/gasAcu1/bed/ensembl
     cd /cluster/data/gasAcu1/bed/ensembl
-    # Get the ensembl gene data from 
-    # http://www.ensembl.org/Gasterosteus_aculeatus/martview
-    # Follow this sequence through the pages:
-    # Page 1) Make sure that the Gasterosteus_aculeatus choice is selected. Hit next.
-    # Page 2) Make sure nothing is selected on the Filter page.
-    # Page 3) Choose the "Structures" box (under "Select the Attributes Page").
-    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
-    # Save as ensembl.gff.gz
+    # Go to www.ensembl.org and click around their evolving interface 
+    # to get the following types of data:
+    # 1. a tab-separated file that relates Ensembl gene, transcript and
+    #    protein IDs.  Save as ensGtp.txt.gz  
+    # 2. peptide fasta with transcript IDs in header -> ensemblPep.fa.gz
+
+    # They have started dumping GTF files so we can download that directly:
+    wget 'ftp://ftp.ensembl.org/pub/current_gasterosteus_aculeatus/data/gtf/*'
+
     # Add "chr" to front of each line in the gene data gtf file to make 
     # it compatible with our software.
-    gunzip -c ensembl.gff.gz \
-    | grep -v ^scaffold \
+    # Also need to lift scaffold coords up to chrUn:
+    gunzip -c Gasterosteus_aculeatus.BROADS1.43.gtf.gz \
     | sed -e 's/^group/chr/; s/^MT/chrM/;' \
+    | liftUp -type=.gtf stdout ../../jkStuff/UCSC.chromToScaffoldSansGaps.lft \
+       carry stdin \
     > ensGene.gtf
-    ssh hgwdev
     ldHgGene -gtf -genePredExt gasAcu1 ensGene \
       /cluster/data/gasAcu1/bed/ensembl/ensGene.gtf
 
-    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
-    # hgKnownToSuper.  Use ensMart to create it as above, except:
-    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
-    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
-    # Choose Text, tab-separated as the output format.  Result name ensGtp.
-    # Save file as ensGtp.txt.gz
-    gunzip ensGtp.txt.gz
+    # strip header line:
+    gunzip -c ensGtp.txt.gz | tail +2 > ensGtp.txt
     hgLoadSqlTab gasAcu1 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.txt
 
-    # Load Ensembl peptides:
-    # Get them from ensembl as above in the gene section except for
-    # Page 3) Choose the "Sequences" box. 
-    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
-    # Save file as ensemblPep.fa.gz
     gunzip -c ensemblPep.fa.gz \
-    | perl -wpe 's/^>.*\|(ENSGACT\d+\.\d+).*/>$1/' \
+    | perl -wpe 's/\|.*//' \
     > ensPep.fa
+    # ONE TIME ONLY... seven protein sequences were chopped up in the file 
+    # from BioMart and the fragments appeared as competing duplicate 
+    # sequences.  Ensembl helpdesk is still looking at it but sent the 
+    # correct whole sequences for the seven, so I'm manually editing those 
+    # in.  The ID's are ENSGACT00000000021, ENSGACT00000000176, 
+    # ENSGACT00000017572, ENSGACT00000011000, ENSGACT00000000042, 
+    # ENSGACT00000000087, ENSGACT00000022185.
     hgPepPred gasAcu1 generic ensPep ensPep.fa
 
 
