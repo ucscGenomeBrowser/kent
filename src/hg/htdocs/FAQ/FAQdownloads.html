@@ -1691,7 +1691,7 @@
 			<P>
 			To connect to the database, you must use a computer on which the MySQL
 			client libraries have been installed. The UCSC server is running MySQL
-			4.0.20; for best results, we recommend you use clients of the same revision.
+			4.0.27; for best results, we recommend you use clients of the same revision.
 			The v4.0 MySQL clients may be downloaded from
 			<A HREF="http://downloads.mysql.com/archives.php?p=mysql-4.0" 
 		   	TARGET=_blank>http://downloads.mysql.com/archives.php?p=mysql-4.0</A>. 
@@ -1706,6 +1706,16 @@
 			Once connected to the database, you may use a wide range of MySQL commands
 			to query the database. As a courtesy to others, please observe the following
 			guidelines when using the database:
+			<P>
+			The MySQL database can also be used by the numerous utilities
+			in the <A HREF="FAQlicense">kent source</A> tree.  Add the following
+			specifications to your $HOME/.hg.conf file:
+			<PRE>
+    db.host=genome-mysql.cse.ucsc.edu
+    db.user=genomep
+    db.password=password
+			</PRE>
+			Remember to chmod your .hg.conf file to 600 permissions.
 			<UL>
 			<LI>
 			Avoid excessive or heavy queries that may impact the server performance.
