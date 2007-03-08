@@ -9,6 +9,7 @@
 #include "portable.h"
 #include "hgRelate.h"
 #include "dbLoadOptions.h"
+#include "gbConf.h"
 #include "gbIndex.h"
 #include "gbRelease.h"
 #include "gbUpdate.h"
@@ -31,7 +32,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.33 2006/06/03 07:34:25 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.34 2007/03/08 22:47:39 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -759,6 +760,7 @@ errAbort(
   "      Must specify -type=est, mostly useful for debugging.\n"
   "\n"
   "     -gbdbGenBank=dir - set gbdb path to dir, default /gbdb/genbank\n"
+  "      Can also be set with gbdb.genbank in conf file\n"
   "\n"
   "     -maxShrinkage=frac - specify the maximum shrinkage in the size of the\n"
   "      genbank partition being updated.  If 1.0-(numNew/numOld) > frac,\n"
@@ -861,7 +863,13 @@ else
     gForceIgnoreDelete = optionExists("forceIgnoreDelete");
 
     gMaxShrinkage = optionFloat("maxShrinkage", 0.1);
-    gGbdbGenBank = optionVal("gbdbGenBank", "/gbdb/genbank");
+
+    
+    gGbdbGenBank = optionVal("gbdbGenBank", NULL);
+    if (gGbdbGenBank == NULL)
+        gGbdbGenBank = gbConfGet(gOptions.conf, "gbdb.genbank");
+    if (gGbdbGenBank == NULL)
+        gGbdbGenBank = "/gbdb/genbank";
     gWorkDir = optionVal("workdir", "work/load");
 
     hgSetDb(gDatabase);

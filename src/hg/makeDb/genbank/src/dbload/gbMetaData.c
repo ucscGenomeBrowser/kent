@@ -33,7 +33,7 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.37 2007/03/08 07:24:19 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.38 2007/03/08 22:47:40 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -591,7 +591,7 @@ status->modDate = raModDate;
 if (!genbankCdsParse(raCds, &status->cds))
     {
     /* not valid CDS, only warn if RefSeq, where we expect to be better */
-    if (gSrcDb == GB_REFSEQ)
+    if ((gSrcDb == GB_REFSEQ) && gbIsProteinCodingRefSeq(status->acc))
         gbWarn("%s: malformed RefSeq CDS: %s", status->acc, raCds);
     }
 

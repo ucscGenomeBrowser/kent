@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.20 2006/09/28 15:43:13 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.21 2007/03/08 22:47:39 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -258,30 +258,18 @@ else
     if (aligned->version < tmpStatus->version)
         errAbort("version for %s in release (%d) is less than one in database (%d)",
                  entry->acc, aligned->version, tmpStatus->version);
-#if 0
-    /* FIXME: change to warning */
-    if (processed->modDate < tmpStatus->modDate)
-        errAbort("modDate for %s in release (%s) is before one in database (%s)",
-                 entry->acc, gbFormatDate(processed->modDate),
-                 gbFormatDate(tmpStatus->modDate));
-#else
     if (processed->modDate < tmpStatus->modDate)
         {
         fprintf(stderr, "Warning: modDate for %s in release (%s) is before one in database (%s)\n",
                 entry->acc, gbFormatDate(processed->modDate),
                 gbFormatDate(tmpStatus->modDate));
         }
-#endif
     /* flag updates for changed for latter processing, order of checks is
      * very important.*/
     if ((aligned->version > tmpStatus->version)
         || (aligned->numAligns != tmpStatus->numAligns))
         markSeqChanged(statusTbl, tmpStatus, processed, aligned);
-#if 0 /*FIXME: more of changing warning from above */
-    else if (processed->modDate > tmpStatus->modDate)
-#else
     else if (processed->modDate != tmpStatus->modDate)
-#endif
         markMetaChanged(ssData->select, statusTbl, tmpStatus, processed,
                         aligned);
     else if (statusTbl->extFileUpdate

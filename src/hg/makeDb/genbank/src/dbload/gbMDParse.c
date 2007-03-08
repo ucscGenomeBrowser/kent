@@ -13,7 +13,7 @@
 #include "gbMiscDiff.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.10 2007/03/08 07:24:19 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.11 2007/03/08 22:47:39 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -361,7 +361,12 @@ if (val == NULL)
 if (sameString(tag, "acc"))
     {
     char *s = firstWordInLine(val);
-    strncpy(raAcc, s, GB_ACC_BUFSZ);
+    safecpy(raAcc, sizeof(raAcc), s);
+    }
+else if (sameString(tag, "mol"))
+    {
+    char *s = firstWordInLine(val);
+    safecpy(raMol, sizeof(raMol), s);
     }
 else if (sameString(tag, "dir"))
     raDir = val[0];

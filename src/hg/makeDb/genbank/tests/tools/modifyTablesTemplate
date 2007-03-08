@@ -1,0 +1,77 @@
+#!/usr/bin/env tclsh
+
+#
+# template script for doing one off table modifications
+#
+set task FIXME
+proc modifyDb {logFh db} {
+    prLog $logFh "begin $db"
+
+    # FIXME: implement me in
+    exec hgsql -e $sql $db >&@$logFh
+
+    prLog $logFh "end $db"
+}
+
+
+
+set logDir misc/$task
+
+set host [exec hostname]
+if {$host == "hgwdev"} {
+    cd /cluster/data/genbank
+} else {
+    cd /genbank
+}
+
+
+switch $host {
+    hgwdev {
+        set dbFile etc/hgwdev.dbs
+    }
+    hgwbeta {
+        set dbFile etc/hgwbeta.dbs
+    }
+    mgc {
+        set dbFile etc/mgc.dbs
+    }
+    default {
+        set dbFile etc/rr.dbs
+    }
+}
+
+proc loadDbs {dbFile} {
+    set fh [open $dbFile]
+    while {[gets $fh line] >= 0} {
+        if {![string match "*\#*" $line]} {
+            lappend dbs $line
+        }
+    }
+    close $fh
+    return $dbs
+}
+
+proc prLog {logFh msg} {
+    puts $logFh "[clock format [clock seconds]] $msg"
+}
+
+proc doModify {logFh dbFile} {
+    set dbs [loadDbs $dbFile]
+    foreach db $dbs {
+        modifyDb $logFh $db
+    }
+}
+
+catch {file mkdir $logDir}
+catch {file mkdir $logDir}
+set logFh [open $logDir/$host.log w]
+fconfigure $logFh -buffering line
+if {[catch {
+    doModify $logFh $dbFile
+} msg]} {
+    prLog $logFh "Error: $msg"
+    exit 1
+}
+
+prLog $logFh "Finished"
+

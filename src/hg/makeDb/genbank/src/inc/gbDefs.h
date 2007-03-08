@@ -104,6 +104,13 @@ char* gbSrcDbName(unsigned srcDb);
 unsigned gbGuessSrcDb(char* acc);
 /* Guess the src db from an accession */
 
+INLINE boolean gbIsProteinCodingRefSeq(char *acc)
+/* is a refseq accession for a protein coding gene */
+{
+return startsWith("NM_", acc) || startsWith("XM_", acc);
+}
+
+
 unsigned gbOrgCatIdx(unsigned orgCat);
 /* To convert a organism category const (or flag set containing it) to a
  * zero-based index */
