@@ -7,10 +7,10 @@ nib=$2
 table=$3
 checkTable=$4
 detailsTable=$5
-~markd/bin/${MACHTYPE}/gene-check -genome-seqs $nib -ok-genepred-out ${table}.filter.gp -details-out ${detailsTable}.tmp ${table} ${checkTable}.tmp 2> ${checkTable}.err 
+~markd/bin/${MACHTYPE}/gene-check -compat -genome-seqs $nib -ok-genepred-out ${table}.filter.gp -details-out ${detailsTable}.tmp ${table} ${checkTable}.tmp 2> ${checkTable}.err 
 tail +3 ${checkTable}.tmp > check.tmp
 mv check.tmp ${checkTable}.tmp
 tail +3 ${detailsTable}.tmp > detail.tmp
 mv detail.tmp ${detailsTable}.tmp
-hgLoadSqlTab $db $checkTable  $HOME/kent/src/hg/lib/geneCheck.sql ${checkTable}.tmp 
 hgLoadSqlTab $db $detailsTable $HOME/kent/src/hg/lib/geneCheckDetails.sql ${detailsTable}.tmp 
+hgLoadSqlTab $db $checkTable  $HOME/kent/src/hg/lib/geneCheck.sql ${checkTable}.tmp 
