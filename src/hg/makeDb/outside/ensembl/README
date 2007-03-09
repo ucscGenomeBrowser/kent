@@ -7,4 +7,4 @@ geneCheckAndLoad - runs gene-check on a genePred and loads the two details table
 ensemblSuperfamily -  load superfamily track using Ensembl cross reference
 loadEnsembl - loads data created by exportEnsembl into ensGene, creates and loads ensInfo table with attributes
 ensemblGetAll - generates script to load all ensembl builds, requires manual editting to add ucsc database
-ensGeneToGenePred - awk script called by loadEnsembl
+ensGeneToGenePred - awk script called by loadEnsembl that converts dump of ensembl exons to genePred format
