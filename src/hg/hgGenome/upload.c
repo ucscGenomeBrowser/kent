@@ -175,48 +175,9 @@ if (val[0] != 0)
 void updateCustomTracks(struct customTrack *upList) 
 /* Update custom tracks file with current upload data */
 {
-struct customTrack *outList = NULL;
-struct tempName tempName;
-char *varName = customTrackFileVar(database);
-char *fileName = cartOptionalString(cart, varName);
-if (fileName == NULL || !fileExists(fileName))
-    {
-    trashDirFile(&tempName, "hgg", "up", ".bed");
-    fileName = tempName.forCgi;
-    outList = upList;
-    }
-else
-    {
-    struct customTrack *ct, *next, *oldList = customTracksParseCart(cart, NULL, NULL);
-
-    /* Create hash with new tracks. */
-    struct hash *upHash = hashNew(0);
-    for (ct = upList; ct != NULL; ct = ct->next)
-	 hashAdd(upHash, ct->tdb->tableName, ct);
-
-    /* Make list with all old tracks that are not being replaced */
-    for (ct = oldList; ct != NULL; ct = next)
-        {
-	next = ct->next;
-	if (!hashLookup(upHash, ct->tdb->tableName))
-	    {
-	    slAddHead(&outList, ct);
-	    }
-	}
-
-    /* Add new tracks to list. */
-    for (ct = upList; ct != NULL; ct = next)
-        {
-	next = ct->next;
-	slAddHead(&outList, ct);
-	}
-    slReverse(&outList);
-    hashFree(&upHash);
-    }
-
-customTracksSaveFile(outList, fileName);
-cartSetString(cart, varName, fileName);
-
+struct customTrack *oldList = customTracksParseCart(cart, NULL, NULL);
+struct customTrack *outList = customTrackAddToList(oldList, upList, NULL, FALSE);
+customTracksSaveCart(cart, outList);
 hPrintf("This data is now available in the drop-down menus on the ");
 hPrintf("main page for graphing.<BR>");
 }
