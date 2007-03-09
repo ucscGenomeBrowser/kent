@@ -9,6 +9,7 @@ ensDb=ensembl_${organism}_${version}
 input="ftp://ftp.ensembl.org/pub/current_$organism/data/mysql/${organism}_${version}"
 sql="${organism}_${version}.sql.gz"
 exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
+# create mysql ensembl database from downloaded sql and data (drop old one first)
 cd $indir
 tables=`cat tables.tmp |grep -v -E $exceptions`
 echo "Dropping database $ensDb in $delay seconds"
@@ -21,8 +22,10 @@ zcat $sql |sed -e 's/MyISAM DEFAULT/MyISAM/'|sed -e 's/CHARSET=latin1//' |sed -e
 hgsql $ensDb < create_table.sql 
 echo "Loading data"
 for i in $tables ; do echo "hgLoadSqlTab $ensDb $i /dev/null $i.txt.table -oldTable ">> dbLoad.log; zcat $i.txt.table.gz > temp.txt ; hgLoadSqlTab $ensDb $i /dev/null temp.txt -oldTable 2>> dbLoad.log >> dbLoad.log; done
+# rename chromosomes to conform to ucsc standards
 echo "Fix chrom names"
 hgsql $ensDb -e "update seq_region set name = 'M' where name = 'MT';"
+hgsql $ensDb -e "update seq_region set name = concat('chr',name) where name between 1 and 99;"
 hgsql $ensDb -e "update seq_region set name = '6_cox_hap1' where name = 'c6_COX';"
 hgsql $ensDb -e "update seq_region set name = '6_qbl_hap2' where name = 'c6_QBL';"
 hgsql $ensDb -e "update seq_region set name = '5_h2_hap1' where name = 'c5_H2';"
