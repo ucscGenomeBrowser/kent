@@ -12,6 +12,8 @@ ensemblDbImport $organism $version $workingdir
 exportEnsembl $organism $version $workingdir 
 geneCheckAndLoad $db /cluster/data/$db/nib ensGene.gp ensGeneChk ensGeneChkDetails
 loadEnsembl $workingdir $db 
+ensemblSuperfamily $db superfam060619
 echo "dropping database $ensDb in 5 seconds"
 sleep 5
 hgsql mysql -e "drop database if exists $ensDb"
+
