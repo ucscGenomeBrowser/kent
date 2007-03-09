@@ -1,5 +1,4 @@
 #
-cp cleanGeneTable ~/bin/scripts
 cp ensGeneToGenePred ~/bin/scripts
 cp ensemblDbImport ~/bin/scripts
 cp ensemblDownload ~/bin/scripts
@@ -9,7 +8,6 @@ cp geneCheckAndLoad ~/bin/scripts
 cp exportEnsembl ~/bin/scripts
 cp loadEnsembl ~/bin/scripts
 cp hgLoadEnsembl ~/bin/scripts
-cp cleanGeneTable /cluster/bin/scripts
 cp ensGeneToGenePred /cluster/bin/scripts
 cp ensemblDbImport /cluster/bin/scripts
 cp ensemblDownload /cluster/bin/scripts
