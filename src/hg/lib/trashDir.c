@@ -1,6 +1,6 @@
 /* trashDir.c - temporary file creation and directory creation in /trash */
 
-static char const rcsid[] = "$Id: trashDir.c,v 1.3 2007/02/10 00:04:14 hiram Exp $";
+static char const rcsid[] = "$Id: trashDir.c,v 1.4 2007/03/09 19:33:49 hiram Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -22,6 +22,18 @@ if (! hashLookup(dirHash,dirName))
     hashAddInt(dirHash, dirName, 1);	/* remember, been here, done that */
     mkdirTrashDirectory(dirName);
     }
-safef(prefix, sizeof(prefix), "%s/%s", dirName,base);
+/* no need to duplicate the _ at the end of base, makeTempName is going
+ *	to add _ to the given base, some CGIs pass "base_"
+ */
+if (endsWith(base,"_"))
+    {
+    char *t = cloneString(base);
+    int len = strlen(t);
+    t[len-1] = (char) NULL;	/* remove ending _ */
+    safef(prefix, sizeof(prefix), "%s/%s", dirName,t);
+    freeMem(t);
+    }
+else
+    safef(prefix, sizeof(prefix), "%s/%s", dirName,base);
 makeTempName(tn, prefix, suffix);
 }

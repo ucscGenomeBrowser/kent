@@ -25,7 +25,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.166 2007/03/09 04:49:30 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.167 2007/03/09 19:33:48 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -526,7 +526,7 @@ for (track = trackList; track != NULL; track = track->next)
         if (!track->htmlFile)
             {
             static struct tempName tn;
-            trashDirFile(&tn, "ct", "ct", ".html");
+            trashDirFile(&tn, "ct", CT_PREFIX, ".html");
             track->htmlFile = tn.forCgi;
             }
         writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
@@ -561,7 +561,7 @@ if (ctList)
         {
         /* expired custom tracks file */
         static struct tempName tn;
-	trashDirFile(&tn, "ct", "ct", ".bed");
+	trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
         ctFileName = tn.forCgi;
         cartSetString(cart, ctFileVar, ctFileName);
         }
