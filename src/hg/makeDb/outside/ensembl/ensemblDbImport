@@ -26,7 +26,7 @@ for i in $tables ; do echo "hgLoadSqlTab $ensDb $i /dev/null $i.txt.table -oldTa
 echo "Fix chrom names"
 hgsql $ensDb -e "update seq_region set name = 'chrM' where name = 'MT';"
 hgsql $ensDb -e "update seq_region set name = concat('chr',name) where name between 1 and 99;"
-hgsql $ensDb -e "update seq_region set name = concat('chr',name) where name in ("M","W","X","Y","Z","Un");"
+hgsql $ensDb -e "update seq_region set name = concat('chr',name) where name in ('M','W','X','Y','Z','Un');"
 hgsql $ensDb -e "update seq_region set name = '6_cox_hap1' where name = 'c6_COX';"
 hgsql $ensDb -e "update seq_region set name = '6_qbl_hap2' where name = 'c6_QBL';"
 hgsql $ensDb -e "update seq_region set name = '5_h2_hap1' where name = 'c5_H2';"
