@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.350 2007/03/09 01:35:22 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.351 2007/03/09 03:11:48 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2166,7 +2166,7 @@ puts("<B>Major Allele Mixture:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "both";
+menu[menuPos++] = "any";
 menu[menuPos++] = "only mixed";
 menu[menuPos++] = "not mixed";
 cgiMakeDropList(HA_POP_MIXED, menu, menuSize, 
@@ -2200,8 +2200,8 @@ puts("<BR><BR><B>Polymorphism Type:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "all";
-menu[menuPos++] = "bi-alleleic";
+menu[menuPos++] = "any";
+menu[menuPos++] = "bi-allelic";
 menu[menuPos++] = "transition";
 menu[menuPos++] = "transversion";
 menu[menuPos++] = "complex";
@@ -2230,7 +2230,7 @@ puts("<BR><BR><B>Chimp Allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "no filter";
+menu[menuPos++] = "any";
 menu[menuPos++] = "available";
 menu[menuPos++] = "matches major allele";
 menu[menuPos++] = "matches minor allele";
@@ -2247,7 +2247,7 @@ puts("<BR><B>Macaque Allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
-menu[menuPos++] = "no filter";
+menu[menuPos++] = "any";
 menu[menuPos++] = "available";
 menu[menuPos++] = "matches major allele";
 menu[menuPos++] = "matches minor allele";
