@@ -1,5 +1,6 @@
 #!/bin/awk -f
 #ensGeneToGenePred - converts a mysql dump of ensembl exons to an extended genePred file. 
+#if the gene is single exon, set to frame to 0 to override bad data from ensembl
 BEGIN {OFS="\t";pname="first"}
 pname==$11 && $9 != "." {
         eStart=eStart","$5; 
@@ -15,8 +16,11 @@ pname==$11 && $9 == "." {
         txEnd=$6; 
         frames=frames",-1"
 }
-pname!=$11 && $9 != "." && pname !="first"{
-        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart, eEnd, 0, name2, "cmpl", "cmpl", frames; 
+pname!=$11 && pname != "first" && cnt == 1{
+       frames = "0";
+}
+pname!=$11 && pname != "first" {
+        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart",", eEnd",", 0, name2, "cmpl", "cmpl", frames","; 
 }
 pname!=$11 && $9 != "." {
         txStart=$5; 
@@ -31,9 +35,6 @@ pname!=$11 && $9 != "." {
         frames=$9; 
         cnt=1; 
         strand=$8
-}
-pname!=$11 && $9 == "." && pname != "first"{
-        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart, eEnd, 0, name2, "cmpl", "cmpl", frames; 
 }
 pname!=$11 && $9 == "." {
         txStart=$5; 
@@ -50,5 +51,5 @@ pname!=$11 && $9 == "." {
         strand=$8
 }
 END {
-        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart, eEnd, 0, name2, "cmpl", "cmpl", frames; 
+        print pname, pChr, strand, txStart, txEnd, cdsStart, cdsEnd, cnt, eStart",", eEnd",", 0, name2, "cmpl", "cmpl", frames","; 
 }
