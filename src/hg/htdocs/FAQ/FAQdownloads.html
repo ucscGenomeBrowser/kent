@@ -1699,23 +1699,13 @@
 			using the command: 
 			<BR>
 			<PRE>
-    <TT>mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</TT>
-			</PRE>
+    <TT>mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</TT></PRE>
 			The <em>-A</em> flag is optional but is recommended for speed.
 			<P>
 			Once connected to the database, you may use a wide range of MySQL commands
-			to query the database. As a courtesy to others, please observe the following
+			to query the database. 
+			As a courtesy to others, please observe the following
 			guidelines when using the database:
-			<P>
-			The MySQL database can also be used by the numerous utilities
-			in the <A HREF="FAQlicense">kent source</A> tree.  Add the following
-			specifications to your $HOME/.hg.conf file:
-			<PRE>
-    db.host=genome-mysql.cse.ucsc.edu
-    db.user=genomep
-    db.password=password
-			</PRE>
-			Remember to chmod your .hg.conf file to 600 permissions.
 			<UL>
 			<LI>
 			Avoid excessive or heavy queries that may impact the server performance.
@@ -1727,6 +1717,15 @@
 			<LI>
 			Attachments by local mirror sites are prohibited.
 			</UL>
+			<P>
+			The MySQL database can also be used by the numerous utilities
+			in the <A HREF="FAQlicense.html#license3">kent source</A> tree.  Add the following
+			specifications to your $HOME/.hg.conf file (remember to 			chmod your .hg.conf file to 600 permissions):
+			<PRE>
+    db.host=genome-mysql.cse.ucsc.edu
+    db.user=genomep
+    db.password=password </PRE> 
+			<P>
 			If you prefer a more structured graphical interface to the UCSC database
 			tables, use the 
 			<A HREF="../cgi-bin/hgTables">Table Browser</A>.
