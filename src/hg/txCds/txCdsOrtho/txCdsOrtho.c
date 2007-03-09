@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.1 2007/03/09 06:24:02 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.2 2007/03/09 07:29:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -127,9 +127,12 @@ stripChar(xenoText, '-');
 int xenoTextSize = strlen(xenoText);
 
 /* Figure out biggest ORF in best frame and output it. */
-int orfSize = biggestOrf(xenoText + relFrame, xenoTextSize - relFrame);
-fprintf(f, "%s\t%s\t%d\t%d\t%f\n", native->src, xeno->src, orfSize*3, cdsEnd - cdsStart,
-	orfSize*3.0/(cdsEnd - cdsStart));
+int orfSize = biggestOrf(xenoText + bestFrame, xenoTextSize - bestFrame)*3;
+int possibleSize = cdsEnd - cdsStart;
+if (orfSize > possibleSize) orfSize = possibleSize;
+fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%f\n", native->src, cdsStart, cdsEnd, 
+	xeno->src, orfSize, possibleSize,
+	(double)orfSize/(possibleSize));
 
 /* Clean up and go home. */
 freez(&xenoText);
