@@ -138,9 +138,6 @@ void ctAddToSettings(struct customTrack *ct, char *name, char *val);
 void ctRemoveFromSettings(struct customTrack *ct, char *name);
 /*	remove a variable from tdb settings */
 
-void customTrackTrashFile(struct tempName *tn, char *suffix);
-/*	obtain a customTrackTrashFile name	*/
-
 struct trackDb *customTrackTdbDefault();
 /* Return default custom table: black, dense, etc. */
 
