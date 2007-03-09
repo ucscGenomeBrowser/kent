@@ -3,5 +3,5 @@
 [ $# != 2 ] && echo "usage: cleanGeneTable db table " >&2 && exit 1;
 db=$1
 table=$2
-hgsql $db -N -B -e "select name from $table e, chromInfo i where e.chrom = i.chrom and txEnd > size ;" > badGenes
-for i in `cat badGenes` ; do echo Deleting $i ; hgsql $db -e "delete from $table where name = '$i'" ; done
+hgsql $db -N -B -e "select name from $table e, chromInfo i where e.chrom = i.chrom and txEnd > size ;" > badGenes.tmp
+for i in `cat badGenes.tmp` ; do echo Deleting $i ; hgsql $db -e "delete from $table where name = '$i'" ; done
