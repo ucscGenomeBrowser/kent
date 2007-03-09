@@ -1,13 +1,13 @@
 #!/bin/bash -e
 #run create attribute files with results of gene-check and load database tables
-[ $# != 5 ] && echo "usage: geneCheckAndLoad db nib-directory genePred.gp checkTable checkDetails " >&2 && exit 1;
+[ $# != 5 ] && echo "usage: geneCheckAndLoad db twoBitOrNib genePred.gp checkTable checkDetails " >&2 && exit 1;
 set -x
 db=$1
 nib=$2
 table=$3
 checkTable=$4
 detailsTable=$5
-~markd/bin/${MACH_TYPE}/gene-check -nib-dir $nib -ok-genepred-out ${table}.filter.gp -details-out ${detailsTable}.tmp ${table} ${checkTable}.tmp 2> ${checkTable}.err 
+~markd/bin/${MACH_TYPE}/gene-check -genome-seqs $nib -ok-genepred-out ${table}.filter.gp -details-out ${detailsTable}.tmp ${table} ${checkTable}.tmp 2> ${checkTable}.err 
 tail +3 ${checkTable}.tmp > check.tmp
 mv check.tmp ${checkTable}.tmp
 tail +3 ${detailsTable}.tmp > detail.tmp
