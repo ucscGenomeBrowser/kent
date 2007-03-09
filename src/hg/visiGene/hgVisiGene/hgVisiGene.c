@@ -19,6 +19,7 @@
 #include "probePage.h"
 #include "configPage.h"
 #include "printCaption.h"
+#include "trashDir.h"
 
 /* Globals */
 struct cart *cart;		/* Current CGI values */
@@ -517,7 +518,9 @@ if (forceImageToList)
     else
         imageId = 0;
     }
-makeTempName(&matchTempName, "visiMatch", ".tab");
+
+trashDirFile(&matchTempName, "vg", "visiMatch", ".tab");
+
 matchFile = matchTempName.forCgi;
 saveMatchFile(matchFile, matchList);
 cartSetString(cart, hgpMatchFile, matchFile);
