@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.349 2007/03/09 00:48:37 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.350 2007/03/09 01:35:22 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2234,7 +2234,7 @@ menu[menuPos++] = "no filter";
 menu[menuPos++] = "available";
 menu[menuPos++] = "matches major allele";
 menu[menuPos++] = "matches minor allele";
-menu[menuPos++] = "complex";
+menu[menuPos++] = "mismatch";
 cgiMakeDropList(HA_CHIMP, menu, menuSize, 
     cartCgiUsualString(cart, HA_CHIMP, HA_CHIMP_DEFAULT));
 freez(&menu);
@@ -2251,7 +2251,7 @@ menu[menuPos++] = "no filter";
 menu[menuPos++] = "available";
 menu[menuPos++] = "matches major allele";
 menu[menuPos++] = "matches minor allele";
-menu[menuPos++] = "complex";
+menu[menuPos++] = "mismatch";
 cgiMakeDropList(HA_MACAQUE, menu, menuSize, 
     cartCgiUsualString(cart, HA_MACAQUE, HA_MACAQUE_DEFAULT));
 freez(&menu);
