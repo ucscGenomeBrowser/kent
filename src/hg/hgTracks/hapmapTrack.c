@@ -279,7 +279,7 @@ if (sameString(observedFilter, "bi-alleleic") && complexObserved) return TRUE;
 if (sameString(observedFilter, "transition") && complexObserved) return TRUE;
 if (sameString(observedFilter, "transition") && !transitionObserved) return TRUE;
 if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
-if (sameString(observedFilter, "tranversion") && transitionObserved) return TRUE;
+if (sameString(observedFilter, "transversion") && transitionObserved) return TRUE;
 
 float minFreq = getMinFreq(summaryItem);
 if (minFreq/1000.0 < minFreqFilter) return TRUE;
