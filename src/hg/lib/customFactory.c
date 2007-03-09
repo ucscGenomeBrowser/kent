@@ -21,8 +21,9 @@
 #include "customTrack.h"
 #include "customPp.h"
 #include "customFactory.h"
+#include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.54 2007/03/06 01:55:54 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.55 2007/03/09 04:48:53 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -91,7 +92,7 @@ struct sqlConnection *ctConn = sqlCtConn(TRUE);
 safef(prefix, sizeof(prefix), "t%d", dbTrackCount);
 track->dbTableName = sqlTempTableName(ctConn, prefix);
 ctAddToSettings(track, "dbTableName", track->dbTableName);
-customTrackTrashFile(&tn, ".err");
+trashDirFile(&tn, "ct", "ct", ".err");
 track->dbStderrFile = cloneString(tn.forCgi);
 track->dbDataLoad = TRUE;	
 track->dbTrack = TRUE;
@@ -1024,7 +1025,7 @@ else
     {
 
     /* Make up wib file name and add to settings. */
-    customTrackTrashFile(&tn, ".wib");
+    trashDirFile(&tn, "ct", "ct", ".wib");
     track->wibFile = cloneString(tn.forCgi);
     ctAddToSettings(track, "wibFile", track->wibFile);
 

@@ -23,9 +23,9 @@
 #include "wiggle.h"
 #include "hgConfig.h"
 #include "customFactory.h"
+#include "trashDir.h"
 
-
-static char const rcsid[] = "$Id: customTrack.c,v 1.165 2007/03/06 00:52:58 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.166 2007/03/09 04:49:30 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -38,24 +38,6 @@ static char const rcsid[] = "$Id: customTrack.c,v 1.165 2007/03/06 00:52:58 kate
  *  altColor = R,G,B secondary color.
  *  priority = number.
  */
-
-/*	forward declaration, function used before the code appears	*/
-
-void customTrackTrashFile(struct tempName *tn, char *suffix)
-/*	obtain a customTrackTrashFile name	*/
-{
-static boolean firstTime = TRUE;
-char prefix[16];
-if (firstTime)
-    {
-    mkdirTrashDirectory("ct");
-    firstTime = FALSE;
-    }
-safef(prefix, sizeof(prefix), "ct/%s", CT_PREFIX);
-/* remove extra trailing underscore, as makeTempName will append one */
-chopSuffixAt(prefix, '_');
-makeTempName(tn, prefix, suffix);
-}
 
 struct trackDb *customTrackTdbDefault()
 /* Return default custom table: black, dense, etc. */
@@ -544,7 +526,7 @@ for (track = trackList; track != NULL; track = track->next)
         if (!track->htmlFile)
             {
             static struct tempName tn;
-            customTrackTrashFile(&tn, ".html");
+            trashDirFile(&tn, "ct", "ct", ".html");
             track->htmlFile = tn.forCgi;
             }
         writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
@@ -579,7 +561,7 @@ if (ctList)
         {
         /* expired custom tracks file */
         static struct tempName tn;
-        customTrackTrashFile(&tn, ".bed");
+	trashDirFile(&tn, "ct", "ct", ".bed");
         ctFileName = tn.forCgi;
         cartSetString(cart, ctFileVar, ctFileName);
         }
