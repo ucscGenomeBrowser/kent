@@ -301,12 +301,12 @@ if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele,
 	return TRUE;
 
 /* If mixed, then we can't compare ortho allele. */
-if (sameString(chimpFilter, "matches major allele") && summaryItem->isMixed) 
-    return TRUE;
-if (sameString(chimpFilter, "matches minor allele") && summaryItem->isMixed) 
-    return TRUE;
-if (sameString(chimpFilter, "complex") && summaryItem->isMixed) 
-    return TRUE;
+if (sameString(chimpFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
+if (sameString(chimpFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
+if (sameString(chimpFilter, "mismatch") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
 
 char *majorAllele = getMajorAllele(summaryItem);
 if (sameString(chimpFilter, "matches major allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
@@ -317,10 +317,10 @@ if (sameString(chimpFilter, "matches minor allele") && sameString(minorAllele, "
     return TRUE;
 if (sameString(chimpFilter, "matches minor allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
     return TRUE;
-/* complex means doesn't match major or minor allele */
-if (sameString(chimpFilter, "complex") && sameString(summaryItem->chimpAllele, majorAllele)) 
+/* mismatch means doesn't match major or minor allele */
+if (sameString(chimpFilter, "mismatch") && sameString(summaryItem->chimpAllele, majorAllele)) 
     return TRUE;
-if (sameString(chimpFilter, "complex") && sameString(summaryItem->chimpAllele, minorAllele) &&
+if (sameString(chimpFilter, "mismatch") && sameString(summaryItem->chimpAllele, minorAllele) &&
     differentString(minorAllele, "none")) 
     return TRUE;
 
@@ -339,12 +339,12 @@ if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAll
     return TRUE;
 
 /* If mixed, then we can't compare ortho allele. */
-if (sameString(macaqueFilter, "matches major allele") && summaryItem->isMixed) 
-    return TRUE;
-if (sameString(macaqueFilter, "matches minor allele") && summaryItem->isMixed) 
-    return TRUE;
-if (sameString(macaqueFilter, "complex") && summaryItem->isMixed) 
-    return TRUE;
+if (sameString(macaqueFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
+if (sameString(macaqueFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
+if (sameString(macaqueFilter, "mismatch") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
 
 majorAllele = getMajorAllele(summaryItem);
 if (sameString(macaqueFilter, "matches major allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
@@ -355,10 +355,10 @@ if (sameString(macaqueFilter, "matches minor allele") && sameString(minorAllele,
     return TRUE;
 if (sameString(macaqueFilter, "matches minor allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
     return TRUE;
-/* complex means doesn't match major or minor allele */
-if (sameString(macaqueFilter, "complex") && sameString(summaryItem->macaqueAllele, majorAllele)) 
+/* mismatch means doesn't match major or minor allele */
+if (sameString(macaqueFilter, "mismatch") && sameString(summaryItem->macaqueAllele, majorAllele)) 
     return TRUE;
-if (sameString(macaqueFilter, "complex") && sameString(summaryItem->macaqueAllele, minorAllele) &&
+if (sameString(macaqueFilter, "mismatch") && sameString(summaryItem->macaqueAllele, minorAllele) &&
     differentString(minorAllele, "none")) 
     return TRUE;
 
