@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # loadEnsembl - load tab files created by exportEnsembl into browser database.
-[ $# != 4 ] && echo "usage: loadEnsembl input-directory db " >&2 && exit 1;
+[ $# != 2 ] && echo "usage: loadEnsembl input-directory db " >&2 && exit 1;
 indir=$1
 db=$2
 cd $indir
