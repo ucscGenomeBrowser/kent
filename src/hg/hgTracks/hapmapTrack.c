@@ -257,6 +257,35 @@ return summaryItem->allele1;
 
 }
 
+boolean orthoAlleleCheck(struct hapmapAllelesSummary *summaryItem, char *species)
+/* return TRUE if disqualified from being ortho mismatch */
+{
+char *orthoAllele = NULL;
+
+if (sameString(species, "chimp"))
+    orthoAllele = cloneString(summaryItem->chimpAllele);
+else if (sameString(species, "macaque"))
+    orthoAllele = cloneString(summaryItem->macaqueAllele);
+else
+    return TRUE;
+
+if (isComplexObserved(summaryItem->observed)) 
+    {
+    if (sameString(orthoAllele, summaryItem->allele1)) return TRUE;
+    /* monomorphic are disqualified due to insufficient info; can't prove this is an ortho mismatch */
+    if (sameString(summaryItem->allele2, "none")) return TRUE;
+    if (sameString(orthoAllele, summaryItem->allele2)) return TRUE;
+    }
+
+/* simple case: check for match in observed string */
+/* this is inconclusive of monomorphic */
+char *subString = strstr(summaryItem->observed, orthoAllele);
+if (subString) return TRUE;
+
+return FALSE;
+
+}
+
 
 boolean filterOne(struct hapmapAllelesSummary *summaryItem)
 /* return TRUE if summaryItem matches any filters */
@@ -295,75 +324,50 @@ if (sameString(monoFilter, "some") && monoCount == summaryItem->popCount) return
 if (sameString(monoFilter, "some") && monoCount == 0) return TRUE;
 if (sameString(monoFilter, "none") && monoCount > 0) return TRUE;
 
+/* orthoAlleles */
 if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "none")) 
-	return TRUE;
+    return TRUE;
+if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "none")) 
+    return TRUE;
 if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "N")) 
-	return TRUE;
+    return TRUE;
+if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "N")) 
+    return TRUE;
+
+/* handle mismatches first - interesting and tricky */
+if (sameString(chimpFilter, "mismatch")) return orthoAlleleCheck(summaryItem, "chimp");
+if (sameString(macaqueFilter, "mismatch")) return orthoAlleleCheck(summaryItem, "macaque");
 
 /* If mixed, then we can't compare ortho allele. */
 if (sameString(chimpFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
+if (sameString(macaqueFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
+    return FALSE;
 if (sameString(chimpFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
-if (sameString(chimpFilter, "mismatch") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(macaqueFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
 
 char *majorAllele = getMajorAllele(summaryItem);
 if (sameString(chimpFilter, "matches major allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
     return TRUE;
-char *minorAllele = getMinorAllele(summaryItem, majorAllele);
-/* if monomorphic, minorAllele will be "none" */
-if (sameString(chimpFilter, "matches minor allele") && sameString(minorAllele, "none")) 
-    return TRUE;
-if (sameString(chimpFilter, "matches minor allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
-    return TRUE;
-/* mismatch means doesn't match major or minor allele */
-if (sameString(chimpFilter, "mismatch") && sameString(summaryItem->chimpAllele, majorAllele)) 
-    return TRUE;
-if (sameString(chimpFilter, "mismatch") && sameString(summaryItem->chimpAllele, minorAllele) &&
-    differentString(minorAllele, "none")) 
-    return TRUE;
-
-if (summaryItem->chimpAlleleQuality < chimpQualFilter) 
-    return TRUE;
-
-if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "none")) 
-    return TRUE;
-if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "N")) 
-    return TRUE;
-
-/* same filters for macaque as for chimp */
-if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "none")) 
-    return TRUE;
-if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "N")) 
-    return TRUE;
-
-/* If mixed, then we can't compare ortho allele. */
-if (sameString(macaqueFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
-if (sameString(macaqueFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
-if (sameString(macaqueFilter, "mismatch") && sameString(summaryItem->isMixed, "YES")) 
-    return FALSE;
-
-majorAllele = getMajorAllele(summaryItem);
 if (sameString(macaqueFilter, "matches major allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
     return TRUE;
-minorAllele = getMinorAllele(summaryItem, majorAllele);
-/* if monomorphic, minorAllele will be "none" */
-if (sameString(macaqueFilter, "matches minor allele") && sameString(minorAllele, "none")) 
+
+/* can't filter if allele2 is "none" */
+if (sameString(chimpFilter, "matches minor allele") && sameString(summaryItem->allele2, "none"))
+    return FALSE;
+if (sameString(macaqueFilter, "matches minor allele") && sameString(summaryItem->allele2, "none"))
+    return FALSE;
+
+char *minorAllele = getMinorAllele(summaryItem, majorAllele);
+if (sameString(chimpFilter, "matches minor allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
     return TRUE;
 if (sameString(macaqueFilter, "matches minor allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
     return TRUE;
-/* mismatch means doesn't match major or minor allele */
-if (sameString(macaqueFilter, "mismatch") && sameString(summaryItem->macaqueAllele, majorAllele)) 
-    return TRUE;
-if (sameString(macaqueFilter, "mismatch") && sameString(summaryItem->macaqueAllele, minorAllele) &&
-    differentString(minorAllele, "none")) 
-    return TRUE;
 
-if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) 
-    return TRUE;
+if (summaryItem->chimpAlleleQuality < chimpQualFilter) return TRUE;
+if (summaryItem->macaqueAlleleQuality < macaqueQualFilter) return TRUE;
 
 return FALSE;
 }
