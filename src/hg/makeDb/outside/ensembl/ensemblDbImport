@@ -13,7 +13,7 @@ cd $indir
 tables=`cat tables.tmp |grep -v -E $exceptions`
 echo "Dropping database $ensDb in $delay seconds"
 sleep $delay
-hgsql mysql -e "drop database $ensDb"
+hgsql mysql -e "drop database if exists $ensDb"
 echo "Creating database $ensDb"
 hgsql mysql -e "create database $ensDb"
 echo "Creating empty tables in database $ensDb from $sql"

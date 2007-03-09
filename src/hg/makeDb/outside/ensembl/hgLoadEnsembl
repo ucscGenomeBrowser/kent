@@ -11,4 +11,4 @@ ensemblDbImport $organism $version $outdir
 loadEnsembl $organism $version $outdir $db 
 echo "dropping database $ensDb in 5 seconds"
 sleep 5
-hgsql mysql -e "drop database $ensDb"
+hgsql mysql -e "drop database if exists $ensDb"
