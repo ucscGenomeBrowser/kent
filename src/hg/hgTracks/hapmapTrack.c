@@ -278,7 +278,7 @@ if (isComplexObserved(summaryItem->observed))
     }
 
 /* simple case: check for match in observed string */
-/* this is inconclusive of monomorphic */
+/* this is inclusive of monomorphic */
 char *subString = strstr(summaryItem->observed, orthoAllele);
 if (subString) return TRUE;
 
@@ -288,7 +288,7 @@ return FALSE;
 
 
 boolean filterOne(struct hapmapAllelesSummary *summaryItem)
-/* return TRUE if summaryItem matches any filters */
+/* return TRUE if summaryItem is disqualified for any reason */
 {
 boolean complexObserved = isComplexObserved(summaryItem->observed);
 boolean transitionObserved = isTransitionObserved(summaryItem->observed);
