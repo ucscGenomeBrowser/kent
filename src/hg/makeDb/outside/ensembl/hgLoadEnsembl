@@ -6,6 +6,7 @@ version=$2
 workingdir=$3
 db=$4
 ensDb=ensembl_${organism}_${version}
+cd $workingdir
 ensemblDownload $organism $version $workingdir
 ensemblDbImport $organism $version $workingdir 
 exportEnsembl $organism $version $workingdir 
