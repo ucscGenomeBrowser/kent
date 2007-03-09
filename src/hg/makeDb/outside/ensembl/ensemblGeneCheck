@@ -1,9 +1,0 @@
-#!/bin/bash -e
-#run create attribute files with results of gene-check and load database tables
-[ $# != 3 ] && echo "usage: ensemblGeneCheck db nib-directory genePred.gp " >&2 && exit 1;
-db=$1
-nib=$2
-table=$3
-gene-check -nib-dir $nib -details-out ${table}ChkDetails.out $3 ${table}Chk.out 2> ${table}Chk.err &
-hgLoadSqlTab $db ${table%.gp}Chk $HOME/kent/src/hg/lib/geneCheck.sql ${table}Chk.out 
-hgLoadSqlTab $db ${table%.gp}ChkDetails $HOME/kent/src/hg/lib/geneCheck.sql ${table}ChkDetails.out 

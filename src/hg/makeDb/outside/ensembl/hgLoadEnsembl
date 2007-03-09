@@ -3,12 +3,14 @@
 [ $# != 4 ] && echo "usage: hgLoadEnsembl organism version input-directory db " >&2 && echo "   for example: hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e hg18" >&2 && exit 1;
 organism=$1
 version=$2
-outdir=$3
+workingdir=$3
 db=$4
 ensDb=ensembl_${organism}_${version}
-ensemblDownload $organism $version $outdir
-ensemblDbImport $organism $version $outdir 
-loadEnsembl $organism $version $outdir $db 
+ensemblDownload $organism $version $workingdir
+ensemblDbImport $organism $version $workingdir 
+exportEnsembl $organism $version $workingdir 
+geneCheckAndLoad $db /cluster/data/$db/nib ensGene.gp ensGeneChk ensGeneChkDetails
+loadEnsembl $workingdir $db 
 echo "dropping database $ensDb in 5 seconds"
 sleep 5
 hgsql mysql -e "drop database if exists $ensDb"
