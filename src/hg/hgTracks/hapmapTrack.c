@@ -146,11 +146,11 @@ return TRUE;
 
 float getMinFreq(struct hapmapAllelesSummary *summaryItem)
 {
-float freqCEU = 0.0;
-float freqCHB = 0.0;
-float freqJPT = 0.0;
-float freqYRI = 0.0;
-float ret = 0.0;
+float freqCEU = 0.5;
+float freqCHB = 0.5;
+float freqJPT = 0.5;
+float freqYRI = 0.5;
+float ret = 0.5;
 
 if (summaryItem->totalAlleleCountCEU > 0)
     {
@@ -310,10 +310,13 @@ if (sameString(observedFilter, "transition") && !transitionObserved) return TRUE
 if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
 if (sameString(observedFilter, "transversion") && transitionObserved) return TRUE;
 
-float minFreq = getMinFreq(summaryItem);
-if (minFreq/1000.0 < minFreqFilter) return TRUE;
-float maxFreq = getMaxFreq(summaryItem);
-if (maxFreq/1000.0 > maxFreqFilter) return TRUE;
+if (sameString(summaryItem->isMixed, "NO"))
+    {
+    float minFreq = getMinFreq(summaryItem);
+    if (minFreq < minFreqFilter) return TRUE;
+    float maxFreq = getMaxFreq(summaryItem);
+    if (maxFreq > maxFreqFilter) return TRUE;
+    }
 
 if (summaryItem->score/1000.0 < minHetFilter) return TRUE;
 if (summaryItem->score/1000.0 > maxHetFilter) return TRUE;
