@@ -82,17 +82,20 @@ void hapmapAllelesOutput(struct hapmapAlleles *el, FILE *f, char sep, char lastS
 #define HA_MACAQUE "hapmapAlleles.macaque"
 #define HA_MACAQUE_QUAL "hapmapAlleles.macaqueQualScore"
 
-#define HA_POP_MIXED_DEFAULT "both"
+#define HA_POP_MIXED_DEFAULT "any"
 #define HA_POP_COUNT_DEFAULT "any"
-#define HA_TYPE_DEFAULT      "all"
+#define HA_TYPE_DEFAULT      "any"
+
 #define HA_MIN_FREQ_DEFAULT  "0.0"
 #define HA_MAX_FREQ_DEFAULT  "0.5"
 #define HA_MIN_HET_DEFAULT   "0.0"
 #define HA_MAX_HET_DEFAULT   "0.5"
+
 #define HA_MONO_DEFAULT      "any"
-#define HA_CHIMP_DEFAULT     "no filter"
+
+#define HA_CHIMP_DEFAULT     "any"
 #define HA_CHIMP_QUAL_DEFAULT "0"
-#define HA_MACAQUE_DEFAULT   "no filter"
+#define HA_MACAQUE_DEFAULT   "any"
 #define HA_MACAQUE_QUAL_DEFAULT "0"
 
 #endif /* HAPMAPALLELES_H */
