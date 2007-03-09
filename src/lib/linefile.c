@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.52 2007/03/08 23:46:43 hiram Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.53 2007/03/09 22:55:31 hiram Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -364,7 +364,6 @@ while (!gotLf)
     if (oldEnd > 0 && sizeLeft > 0)
 	{
 	memmove(buf, buf+oldEnd, sizeLeft);
-	endIx = sizeLeft;
 	}
     lf->bufOffsetInFile += oldEnd;
     if (lf->fd >= 0)
@@ -374,12 +373,9 @@ while (!gotLf)
 
     if ((readSize == 0) && (endIx > oldEnd))
 	{
-	/* If there is no newline at end of file, we will end up here. */
-	if (lf->zTerm)
-	    {
-	    buf[endIx] = 0;
-	    }
-	lf->lineStart = newStart = 0;
+	endIx = sizeLeft;
+	buf[endIx] = 0;
+	lf->bytesInBuf = newStart = lf->lineStart = 0;
 	lf->lineEnd = endIx;
 	++lf->lineIx;
 	if (retSize != NULL)
