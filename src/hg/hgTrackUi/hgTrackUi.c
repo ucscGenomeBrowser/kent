@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.351 2007/03/09 03:11:48 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.352 2007/03/09 03:14:52 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2167,7 +2167,7 @@ menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
 menu[menuPos++] = "any";
-menu[menuPos++] = "only mixed";
+menu[menuPos++] = "mixed";
 menu[menuPos++] = "not mixed";
 cgiMakeDropList(HA_POP_MIXED, menu, menuSize, 
     cartCgiUsualString(cart, HA_POP_MIXED, HA_POP_MIXED_DEFAULT));

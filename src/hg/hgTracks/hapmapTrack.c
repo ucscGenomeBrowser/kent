@@ -293,7 +293,7 @@ boolean filterOne(struct hapmapAllelesSummary *summaryItem)
 boolean complexObserved = isComplexObserved(summaryItem->observed);
 boolean transitionObserved = isTransitionObserved(summaryItem->observed);
 
-if (sameString(mixedFilter, "only mixed") && sameString(summaryItem->isMixed, "NO")) 
+if (sameString(mixedFilter, "mixed") && sameString(summaryItem->isMixed, "NO")) 
     return TRUE;
 if (sameString(mixedFilter, "not mixed") && sameString(summaryItem->isMixed, "YES")) 
     return TRUE;
