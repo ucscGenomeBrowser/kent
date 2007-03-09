@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.348 2007/03/08 04:55:11 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.349 2007/03/09 00:48:37 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2236,7 +2236,7 @@ menu[menuPos++] = "matches major allele";
 menu[menuPos++] = "matches minor allele";
 menu[menuPos++] = "complex";
 cgiMakeDropList(HA_CHIMP, menu, menuSize, 
-    cartCgiUsualString(cart, HA_TYPE, HA_CHIMP_DEFAULT));
+    cartCgiUsualString(cart, HA_CHIMP, HA_CHIMP_DEFAULT));
 freez(&menu);
 
 minChimpQual = atoi(cartUsualString(cart, HA_CHIMP_QUAL, HA_CHIMP_QUAL_DEFAULT));
@@ -2253,7 +2253,7 @@ menu[menuPos++] = "matches major allele";
 menu[menuPos++] = "matches minor allele";
 menu[menuPos++] = "complex";
 cgiMakeDropList(HA_MACAQUE, menu, menuSize, 
-    cartCgiUsualString(cart, HA_TYPE, HA_MACAQUE_DEFAULT));
+    cartCgiUsualString(cart, HA_MACAQUE, HA_MACAQUE_DEFAULT));
 freez(&menu);
 
 minMacaqueQual = atoi(cartUsualString(cart, HA_MACAQUE_QUAL, HA_MACAQUE_QUAL_DEFAULT));
