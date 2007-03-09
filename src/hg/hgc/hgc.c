@@ -195,8 +195,11 @@
 #include "ccdsClick.h"
 #include "memalloc.h"
 #include "trashDir.h"
+#include "geneCheckWidget.h"
+#include "geneCheck.h"
+#include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1224 2007/03/09 08:57:50 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1225 2007/03/09 19:10:12 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6722,6 +6725,7 @@ int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 char condStr[256];
+char geneCheck[256];
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -6749,6 +6753,27 @@ if (sqlGetField(conn, database, tdb->tableName, "name", condStr) != NULL)
 	    	mrnaTable = words[2];
 	    genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
 	    }
+        }
+    }
+
+safef(geneCheck, sizeof(geneCheck), "%sChk", tdb->tableName);
+if (hTableExists(geneCheck))
+    {
+    struct geneCheck *gc
+        = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckLoad, sqlQueryMust|sqlQuerySingle,
+                       "select * from %s where acc='%s'", 
+                       geneCheck, item);
+    geneCheckWidgetSummary(gc, "transMap", "Gene checks\n");
+    /* display gene-check details */
+    safef(geneCheck, sizeof(geneCheck), "%sChkDetails", tdb->tableName);
+    if (hTableExists(geneCheck))
+        {
+        struct geneCheckDetails *gcdList
+            = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckDetailsLoad, sqlQueryMulti,
+                           "select * from %s where acc='%s'",
+                           geneCheck,  item);
+        geneCheckWidgetDetails(cart, gc, gcdList, "transMap", "Gene check details", NULL);
+        geneCheckDetailsFreeList(&gcdList);
         }
     }
 
