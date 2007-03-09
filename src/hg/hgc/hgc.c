@@ -196,7 +196,7 @@
 #include "memalloc.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1223 2007/03/08 23:19:27 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1224 2007/03/09 08:57:50 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6669,8 +6669,15 @@ if (hTableExists("superfamily"))
                 }
             else
                 {
-                warn("Organism %s not found!", organism);
-                return;
+                if (sameWord(organism, "dog"))
+                    {
+                    genomeStr = "dg";
+                    }
+                else
+                    {
+                    warn("Organism %s not found!", organism);
+                    return;
+                    }
                 }
             }
         }
