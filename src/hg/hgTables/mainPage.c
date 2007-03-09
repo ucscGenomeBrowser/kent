@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.112 2007/03/06 22:17:24 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.113 2007/03/09 21:09:09 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -415,13 +415,9 @@ for (ot = otList; ot != NULL; ot = ot->next)
     hPrintf(">%s\n", ot->label);
     }
 hPrintf("</SELECT>\n");
-if (startsWith("hgwdev-giardine", cgiServerName()) ||
-    startsWith("hgwdev.cse", cgiServerName())) 
-    {
-    hPrintf(" ");
-    cartMakeCheckBox(cart, "sendToGalaxy", FALSE);
-    hPrintf(" Send output to Galaxy");
-    }
+hPrintf(" ");
+cartMakeCheckBox(cart, "sendToGalaxy", FALSE);
+hPrintf(" Send output to <A HREF=\"http://g2.bx.psu.edu\" target=_BLANK>Galaxy</A>");
 hPrintf("</TD></TR>\n");
 }
 
@@ -440,9 +436,6 @@ struct outputType otGff = { NULL,
 struct outputType otBed = { NULL, 
     outBed,
     "BED - browser extensible data", };
-struct outputType otGalaxy = { NULL,
-    outGalaxy,
-    "query results to Galaxy", };
 struct outputType otCustomTrack = { NULL, 
     outCustomTrack,
     "custom track", };
@@ -833,9 +826,7 @@ hPrintf("%s",
   "DNA sequence covered by a track. See <A HREF=\"#Help\">Using the Table "
   "Browser</A> for a description of the controls in this form. "
   "For more complex queries, you may want to use "
-#ifdef SOON
   "<A HREF=\"http://main.g2.bx.psu.edu\" target=_BLANK>Galaxy</A> or "
-#endif /* SOON */
   "our <A HREF=\"http://genome.ucsc.edu/FAQ/FAQdownloads#download29\">public "
   "MySQL server</A>. Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "

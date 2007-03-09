@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.9 2007/03/05 14:52:52 giardine Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.10 2007/03/09 21:09:09 giardine Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -48,10 +48,21 @@ void sendParamsToGalaxy(char *doParam, char *paramVal)
 {
 char *shortLabel = curTable;
 char hgsid[64];
+char *output = cartString(cart, hgtaOutputType);
 
 if (curTrack != NULL)
     shortLabel = curTrack->shortLabel;
 htmlOpen("Output %s as %s", "results to Galaxy", shortLabel);
+if (sameString(output, outPrimaryTable) || sameString(output, outSelectedFields))
+    {
+    if (anySubtrackMerge(database, curTable))
+        errAbort("Can't do all fields output when subtrack merge is on. "
+        "Please go back and select another output type (BED or custom track is good), or clear the subtrack merge.");
+    if (anyIntersection())
+        errAbort("Can't do all fields output when intersection is on. "
+        "Please go back and select another output type (BED or custom track is good), or clear the intersection.");
+
+    }
 startGalaxyForm();
 /* send the hgta_do parameter that won't be in the cart */
 cgiMakeHiddenVar(doParam, paramVal);

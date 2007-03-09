@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.15 2007/02/28 20:39:08 giardine Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.16 2007/03/09 21:09:10 giardine Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -91,9 +91,6 @@ hPrintf("%s",
 "        <LI><em><B>BED</B></em> - positions of data items in a standard\n"
 "        UCSC Browser format.</LI>\n"
 "        \n"
-"        <LI><em><B>Send output to Galaxy</B></em> - displays results of query in \n"
-"        Galaxy a framework for interactive genome analysis.\n"
-"        \n"
 "        <LI><em><B>GTF</B></em> - positions of all data items in a standard\n"
 "        gene prediction format. (Both BED and GTF formats can be\n"
 "        used as the basis for custom tracks).</LI>\n"
@@ -112,6 +109,9 @@ hPrintf("%s",
 "        </UL>\n"
 "        </LI>\n"
 "        \n"
+"        <LI><B>Send output to Galaxy:</B> displays results of query in \n"
+"        <A HREF=\"http://g2.bx.psu.edu\">Galaxy</A>, a framework for \n"
+"        interactive genome analysis.\n"
 "        <LI><B>file type returned: </B>When a filename is entered in the \n"
 "	 &quot;output file&quot; text box, specifies the format of the output file:\n"
 "        <UL>\n"
