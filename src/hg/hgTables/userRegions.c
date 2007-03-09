@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.5 2007/03/08 23:53:47 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.6 2007/03/09 23:24:44 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -54,6 +54,28 @@ puts(helpBuf);
 htmlClose();
 }
 
+static boolean illegalCoordinate(char *chrom, int start, int end)
+/* verify start and end are legal for this chrom */
+{
+int maxEnd = hChromSize(chrom);
+if (start < 0)
+    {
+    warn("chromStart (%d) less than zero", start);
+    return TRUE;
+    }
+if (end > maxEnd)
+    {
+    warn("chromEnd (%d) greater than chrom length (%s:%d)", end, chrom, maxEnd);
+    return TRUE;
+    }
+if (start >= end)
+    {
+    warn("chromStart (%d) must be less than chromEnd (%s:%d)", start, chrom, end);
+    return TRUE;
+    }
+return FALSE;
+}
+
 static struct bed *parseRegionInput(char *inputString)
 /* scan the user region definition, turn into a bed list */
 {
@@ -89,8 +111,11 @@ while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
     if (NULL == bedEl->chrom)
 	errAbort("at line %d, chrom name '%s' %s %s not recognized in this assembly %d",
 	    lf->lineIx, words[0], words[1], words[2], wordCount);
-    bedEl->chromStart = sqlUnsigned(words[1]);
-    bedEl->chromEnd = sqlUnsigned(words[2]);
+    bedEl->chromStart = sqlSigned(words[1]);
+    bedEl->chromEnd = sqlSigned(words[2]);
+    if (illegalCoordinate(bedEl->chrom, bedEl->chromStart, bedEl->chromEnd))
+	errAbort("illegal input at line %d: %s %d %d",
+		lf->lineIx, bedEl->chrom, bedEl->chromStart, bedEl->chromEnd);
     if (wordCount > 3)
 	bedEl->name = cloneString(words[3]);
     else
