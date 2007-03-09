@@ -32,7 +32,7 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 char *region;
 float E,score;
 
-char *translation_name;
+char *translation_name = NULL;
 
 char *genomeDb, *superfamDb;
 char gene_name[200];
@@ -48,11 +48,12 @@ superfamDb = argv[2];
 o3 = mustOpen("j.dat", "w");
 o4 = mustOpen("jj.dat", "w");
 
+hSetDb(genomeDb);
 conn = hAllocConn();
 connEnsGene= hAllocConn();
 connSf= hAllocConn();
 
-sprintf(query2,"select * from %s.ensGene;", genomeDb);
+safef(query2,sizeof(query2),"select * from %s.ensGene;", genomeDb);
 
 sr2 = sqlMustGetResult(connEnsGene, query2);
 row2 = sqlNextRow(sr2);
@@ -76,8 +77,16 @@ while (row2 != NULL)
     chp = strstr(name, ".");
     if (chp != NULL) *chp = '\0';
 
-    sprintf(cond_str, "transcript='%s'", name);
-    translation_name = sqlGetField(conn, genomeDb, "ensemblXref3", "protein", cond_str);
+    if (hTableExistsDb(genomeDb, "ensGeneXref"))
+        {
+        safef(cond_str, sizeof(cond_str), "transcript_name='%s'", name);
+        translation_name = sqlGetField(conn, genomeDb, "ensGeneXref", "translation_name", cond_str);
+        }
+    if (hTableExistsDb(genomeDb,"ensemblXref3") && translation_name == NULL)
+        {
+        safef(cond_str, sizeof(cond_str), "transcript='%s'", name);
+        translation_name = sqlGetField(conn, genomeDb, "ensemblXref3", "protein", cond_str);
+        }
     if (translation_name == NULL) 
 	{
 	printf("transcript not found, skipping %s\n", name);
