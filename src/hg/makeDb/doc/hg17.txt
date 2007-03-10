@@ -18602,6 +18602,30 @@ cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapAllelesCombined hapmapAllelesChimp hapmapAllelesMacaque
 hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
 
+# histogram of heterozygosity:
+
+  0 ************************************************************ 883400
+ 25 ************** 204000
+ 50 ************* 188703
+ 75 *********** 157404
+100 ********** 143119
+125 ********* 131575
+150 ********* 126916
+175 ********* 128585
+200 ******** 123440
+225 ******** 119815
+250 ******** 120646
+275 ******** 120239
+300 ******** 122654
+325 ********* 128233
+350 ********* 130069
+375 ********** 144699
+400 ********** 152829
+425 ************ 172513
+450 *************** 225645
+475 ********************************** 503166
+500  5927
+
 ############################################################################################
 
 ### HapMap LD (Daryl; February 11, 2006)
