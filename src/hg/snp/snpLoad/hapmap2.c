@@ -13,7 +13,7 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.3 2007/03/08 05:08:26 heather Exp $";
+static char const rcsid[] = "$Id: hapmap2.c,v 1.4 2007/03/10 05:13:35 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -253,46 +253,6 @@ return TRUE;
 
 }
 
-int calcHet(struct hashEl *helCEU, struct hashEl *helCHB, struct hashEl *helJPT, struct hashEl *helYRI)
-/* calculate heterozygosity (2pq) */
-/* convert from individuals to alleles */
-{
-struct hapmapAlleles *ha;
-int allele1Count = 0;
-int allele2Count = 0;
-int total = 0;
-float p = 0.0; // freq1
-float q = 0.0; // freq2
-if (helCEU)
-    {
-    ha = (struct hapmapAlleles *)helCEU->val;
-    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
-    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
-    }
-if (helCHB)
-    {
-    ha = (struct hapmapAlleles *)helCHB->val;
-    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
-    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
-    }
-if (helJPT)
-    {
-    ha = (struct hapmapAlleles *)helJPT->val;
-    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
-    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
-    }
-if (helYRI)
-    {
-    ha = (struct hapmapAlleles *)helYRI->val;
-    allele1Count = allele1Count + (2*ha->homoCount1) + ha->heteroCount;
-    allele2Count = allele2Count + (2*ha->homoCount2) + ha->heteroCount;
-    }
-total = allele1Count + allele2Count;
-if (total == 0) return 0;
-p = (float)allele1Count / (float)total;
-q = (float)allele2Count / (float)total;
-return 2000*p*q;
-}
 
 boolean confirmAllele(struct hashEl *hel, char *allele)
 {
@@ -463,9 +423,7 @@ return hel;
 
 struct hapmapAllelesCombined *mergeOne(struct hashEl *helCEU, struct hashEl *helCHB, 
                                        struct hashEl *helJPT, struct hashEl *helYRI)
-/* score is heterozygosity */
 {
-int score = calcHet(helCEU, helCHB, helJPT, helYRI);
 struct hapmapAllelesCombined *ret = NULL;
 struct hapmapAlleles *sample = NULL;
 char *allele1, *allele2;
@@ -489,7 +447,7 @@ ret->chrom = cloneString(sample->chrom);
 ret->chromStart = sample->chromStart;
 ret->chromEnd = sample->chromEnd;
 ret->name = cloneString(sample->name);
-ret->score = score;
+ret->score = 0;
 strcpy(ret->strand, sample->strand);
 ret->observed = cloneString(sample->observed);
 /* allele1 is always a single character */
