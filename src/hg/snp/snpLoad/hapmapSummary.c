@@ -38,7 +38,7 @@
 #include "hdb.h"
 #include "hapmapAllelesCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSummary.c,v 1.5 2007/03/10 03:03:13 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSummary.c,v 1.6 2007/03/10 05:11:24 heather Exp $";
 
 struct orthoAllele
     {
@@ -191,9 +191,41 @@ verbose(1, "heteroCountJPT = %d\n", hmac->heteroCountJPT);
 verbose(1, "heteroCountYRI = %d\n", hmac->heteroCountYRI);
 }
 
+
+int calcHet(struct hapmapAllelesCombined *hmac)
+/* calculate heterozygosity (2pq) */
+/* convert from individuals to alleles */
+{
+int allele1Count = 0;
+int allele2Count = 0;
+int total = 0;
+float p = 0.0; // freq1
+float q = 0.0; // freq2
+
+allele1Count = allele1Count + (2 * hmac->allele1CountCEU) + hmac->heteroCountCEU;
+allele1Count = allele1Count + (2 * hmac->allele1CountCHB) + hmac->heteroCountCHB;
+allele1Count = allele1Count + (2 * hmac->allele1CountJPT) + hmac->heteroCountJPT;
+allele1Count = allele1Count + (2 * hmac->allele1CountYRI) + hmac->heteroCountYRI;
+
+allele2Count = allele2Count + (2 * hmac->allele2CountCEU) + hmac->heteroCountCEU;
+allele2Count = allele2Count + (2 * hmac->allele2CountCHB) + hmac->heteroCountCHB;
+allele2Count = allele2Count + (2 * hmac->allele2CountJPT) + hmac->heteroCountJPT;
+allele2Count = allele2Count + (2 * hmac->allele2CountYRI) + hmac->heteroCountYRI;
+
+total = allele1Count + allele2Count;
+
+if (total == 0) return 0;
+
+p = (float)allele1Count / (float)total;
+q = (float)allele2Count / (float)total;
+
+return 2000*p*q;
+}
+
+
 void processSnps(char *inputTableName, struct hash *orthoHash1, struct hash *orthoHash2)
 /* read combined table, write summary table */
-/* bin chrom chromStart chromEnd name score (avHet) strand observed
+/* bin chrom chromStart chromEnd name score (heterozygosity) strand observed
    populations (set of CEU, CHB, JPT, YRI)
    majorAlleleCEU majorAlleleCountCEU totalAlleleCountCEU
    majorAlleleCHB majorAlleleCountCHB totalAlleleCountCHB
@@ -213,16 +245,18 @@ struct hapmapAllelesCombined *hmac = NULL;
 struct orthoAllele *a = NULL;
 struct alleleSummary *i = NULL;
 int popCount = 0;
+int score = 0;
 
 safef(query, sizeof(query), "select * from %s", inputTableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hmac = hapmapAllelesCombinedLoad(row + 1);
-    /* first 7 columns same */
+    score = calcHet(hmac);
+    /* update score (column 5); otherwise first 9 columns are the same */
     fprintf(outputFileHandle, "%s\t%d\t%d\t%s\t%d\t%s\t%s\t%s\t%s\t", 
 	    hmac->chrom, hmac->chromStart, hmac->chromEnd, hmac->name, 
-	    hmac->score, hmac->strand, hmac->observed, hmac->allele1, hmac->allele2);
+	    score, hmac->strand, hmac->observed, hmac->allele1, hmac->allele2);
     popCount = getPopCount(hmac);
     fprintf(outputFileHandle, "%d\t", popCount);
     if (isMixed(hmac))
