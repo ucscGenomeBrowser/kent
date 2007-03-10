@@ -199,7 +199,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1225 2007/03/09 19:10:12 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1226 2007/03/10 01:31:18 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6763,7 +6763,11 @@ if (hTableExists(geneCheck))
         = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckLoad, sqlQueryMust|sqlQuerySingle,
                        "select * from %s where acc='%s'", 
                        geneCheck, item);
+    printf("<TABLE>\n");
+    printf("<TBODY>\n");
+    printf("<tr><td>\n");
     geneCheckWidgetSummary(gc, "transMap", "Gene checks\n");
+    printf("</td><td>\n");
     /* display gene-check details */
     safef(geneCheck, sizeof(geneCheck), "%sChkDetails", tdb->tableName);
     if (hTableExists(geneCheck))
@@ -6775,6 +6779,7 @@ if (hTableExists(geneCheck))
         geneCheckWidgetDetails(cart, gc, gcdList, "transMap", "Gene check details", NULL);
         geneCheckDetailsFreeList(&gcdList);
         }
+    printf("</td></tr></tbody></table>\n");
     }
 
 printTrackHtml(tdb);
