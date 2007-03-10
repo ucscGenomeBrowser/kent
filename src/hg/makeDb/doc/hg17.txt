@@ -18411,6 +18411,8 @@ hgLoadBed hg17 hapmapAllelesJPT -sqlTable=hapmapAllelesJPT.sql JPT.condense
 hgLoadBed hg17 hapmapAllelesYRI -sqlTable=hapmapAllelesYRI.sql YRI.condense
 
 # save some more space
+ssh kkstore05
+cd /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant
 gzip *condense
 
 # sanity check
@@ -18517,7 +18519,13 @@ other        1,226
 6       microsat
 2       het
 
-# 3rd step: check against hg17.snp125
+# check for collisions (more than one SNP at the same location)
+# none found
+ssh hgwdev
+cd /cluster/data/hg17/bed/hapmap/rel21a
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckCluster2 hg17 hapmapAllelesCombined > snpCheckCluster2.out
+
+# check against hg17.snp125
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapLookup hg17 hapmapAllelesCombined snp125 snp125Exceptions
@@ -18585,6 +18593,14 @@ hapmapMixed hg17
 # countJPT = 48791
 # countYRI = 309105
 
+# Generate summary table (used by filters)
+# Summary table includes ortho allele and ortho qual score
+# Summary table score is heterozygosity
+# Individual zygosity is *not* preserved
+ssh hgwdev
+cd /cluster/data/hg17/bed/hapmap/rel21a
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapAllelesCombined hapmapAllelesChimp hapmapAllelesMacaque
+hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
 
 ############################################################################################
 
