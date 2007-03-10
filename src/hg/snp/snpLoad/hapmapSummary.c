@@ -38,7 +38,7 @@
 #include "hdb.h"
 #include "hapmapAllelesCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSummary.c,v 1.4 2007/03/06 00:17:59 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSummary.c,v 1.5 2007/03/10 03:03:13 heather Exp $";
 
 struct orthoAllele
     {
@@ -119,12 +119,12 @@ if (sum == 0)
 else if (allele1Count >= allele2Count)
     {
     s->allele = cloneString(allele1);
-    s->count = allele1Count;
+    s->count = (2 * allele1Count) + heteroCount;
     }
 else
     {
     s->allele = cloneString(allele2);
-    s->count = allele2Count;
+    s->count = (2 * allele2Count) + heteroCount;
     }
 s->total = sum;
 return s;
