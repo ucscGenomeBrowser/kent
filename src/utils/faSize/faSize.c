@@ -4,9 +4,7 @@
 #include "dnautil.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: faSize.c,v 1.8 2007/02/28 18:31:49 hiram Exp $";
-
-static boolean showPercent = FALSE;
+static char const rcsid[] = "$Id: faSize.c,v 1.9 2007/03/10 01:07:07 hiram Exp $";
 
 void usage()
 /* Print usage info and exit. */
@@ -16,8 +14,7 @@ errAbort("faSize - print total base count in fa files.\n"
 	 "   faSize file(s).fa\n"
 	 "Command flags\n"
 	 "   -detailed        outputs name and size of each record\n"
-         "                    has the side effect of printing nothing else\n"
-	 "   -showPercent     show %% of sequence masked\n");
+         "                    has the side effect of printing nothing else\n");
 }
 
 struct faInfo
@@ -200,14 +197,15 @@ if (!detailed)
     printf("%llu bases (%llu N's %llu real %llu upper %llu lower) in %d sequences in %d files\n",
 	baseCount, nCount, baseCount - nCount, uCount, lCount, seqCount, fileCount);
     printStats(&fiList);
-    if (showPercent)
-	{
-	double perCentMasked = 100.0*(double)lCount/(double)baseCount;
-	double perCentRealMasked =
-		100.0*(double)lCount/(double)(baseCount - nCount);
-	printf("%%%.2f masked total, %%%.2f masked real\n",
-		perCentMasked, perCentRealMasked);
-	}
+    double perCentMasked = 100.0;
+    double perCentRealMasked = 100.0;
+    if (baseCount > 0)
+	perCentMasked = 100.0*(double)lCount/(double)baseCount;
+    if ((baseCount - nCount) > 0)
+	perCentRealMasked = 100.0*(double)lCount/(double)(baseCount - nCount);
+
+    printf("%%%.2f masked total, %%%.2f masked real\n",
+	    perCentMasked, perCentRealMasked);
     }
 }
 
@@ -217,7 +215,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (argc < 2)
     usage();
-showPercent = cgiBoolean("showPercent");
 faSize(argv+1, argc-1);
 return 0;
 }
