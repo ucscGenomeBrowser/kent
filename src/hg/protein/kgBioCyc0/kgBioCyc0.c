@@ -30,7 +30,7 @@ char query2[256], query3[256];
 struct sqlResult *sr2, *sr3;
 char **row2, **row3;
 
-FILE   *outf, *o3;
+FILE   *outf;
 char *kgId;
 
 if (argc != 4) usage();
@@ -89,9 +89,18 @@ while (row2 != NULL)
     	sqlFreeResult(&sr3);
 	if (strcmp(geneId, "") != 0)
 	    {
-	    sprintf(query3, 
-	    	"select kgId from %s.kgXref k, %s.ensemblXref3 e where e.gene='%s' and k.spId=e.swissAcc", 
-    	    	gdb, ensGdb, geneId);
+            if (hTableExists("ensemblXref3"))
+                {
+                safef(query3, sizeof(query3),
+                    "select kgId from %s.kgXref k, %s.ensemblXref3 e where e.gene='%s' and k.spId=e.swissAcc", 
+                    gdb, ensGdb, geneId);
+                }
+            else if (hTableExists("ensGeneXref"))
+                {
+                safef(query3, sizeof(query3),
+                    "select kgId from %s.kgXref k, %s.ensGeneXref e where e.gene='%s' and k.spId=e.external_name and external_db like 'UniProt%%'", 
+                    gdb, ensGdb, geneId);
+                }
     	    sr3 = sqlMustGetResult(conn3, query3);
     	    row3 = sqlNextRow(sr3);
 	    if (row3 != NULL)
