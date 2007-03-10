@@ -38,7 +38,7 @@
 #include "hdb.h"
 #include "hapmapAllelesCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSummary.c,v 1.6 2007/03/10 05:11:24 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSummary.c,v 1.7 2007/03/10 05:36:40 heather Exp $";
 
 struct orthoAllele
     {
@@ -100,15 +100,10 @@ return ret;
 
 
 struct alleleSummary *getAlleleSummary(char *allele1, int allele1Count, char *allele2, int allele2Count, int heteroCount)
+/* convert from individuals to alleles */
 {
-int sum = allele1Count + allele2Count + heteroCount;
+int sum = 2 * (allele1Count + allele2Count + heteroCount);
 struct alleleSummary *s = NULL;
-
-// verbose(1, "allele1 = %s\n", allele1);
-// verbose(1, "allele1Count = %d\n", allele1Count);
-// verbose(1, "allele2 = %s\n", allele2);
-// verbose(1, "allele2Count = %d\n", allele2Count);
-// verbose(1, "heteroCount = %d\n", heteroCount);
 
 AllocVar(s);
 if (sum == 0)
