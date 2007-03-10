@@ -310,10 +310,18 @@ if (sameString(observedFilter, "transition") && !transitionObserved) return TRUE
 if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
 if (sameString(observedFilter, "transversion") && transitionObserved) return TRUE;
 
-if (sameString(summaryItem->isMixed, "NO"))
+if (minFreqFilter > sqlFloat(HA_MIN_FREQ_DEFAULT))
     {
+    /* disqualify mixed items when freq filter is set */
+    if (sameString(summaryItem->isMixed, "YES")) return TRUE;
     float minFreq = getMinFreq(summaryItem);
     if (minFreq < minFreqFilter) return TRUE;
+    }
+
+if (maxFreqFilter < sqlFloat(HA_MAX_FREQ_DEFAULT))
+    {
+    /* disqualify mixed items when freq filter is set */
+    if (sameString(summaryItem->isMixed, "YES")) return TRUE;
     float maxFreq = getMaxFreq(summaryItem);
     if (maxFreq > maxFreqFilter) return TRUE;
     }
