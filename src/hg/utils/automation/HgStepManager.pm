@@ -5,7 +5,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/HgStepManager.pm instead.
 
-# $Id: HgStepManager.pm,v 1.2 2007/02/23 23:16:22 angie Exp $
+# $Id: HgStepManager.pm,v 1.3 2007/03/10 16:47:21 kate Exp $
 package HgStepManager;
 
 use warnings;
@@ -164,7 +164,8 @@ sub execute {
   foreach my $stepName ( @{$this->{'stepNames'}} ) {
     if ($this->stepOrder($startStep) <= $this->stepOrder($stepName) &&
 	$this->stepOrder($stepName)  <= $this->stepOrder($stopStep)) {
-      &HgAutomate::verbose(1, "HgStepManager: executing step '$stepName'.\n");
+      my $now = localtime();
+      &HgAutomate::verbose(1, "HgStepManager: executing step '$stepName' $now.\n");
       &{$this->{'stepHash'}->{$stepName}->{'func'}}();
     }
   }
