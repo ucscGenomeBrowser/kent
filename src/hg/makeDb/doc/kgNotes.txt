@@ -353,8 +353,15 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl abWalk.fa \
 	-unmapped=cdsEvidence/uniProt.unmapped -source=tremble
 cat bestorf/tab/*.borf | txCdsEvFromBorf stdin abWalk.fa cdsEvidence/bestorf.tce
 
-# Consolidate and pick best CDS.  Takes 4 seconds
+# Consolidate CDS and look for longest ORFs in other species.  Takes 40 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
+cut -f 1-3 unweighted.tce | uniq > cdsIntervals.tab
+cat txWalk/*.maf | txCdsOrtho cdsIntervals.tab stdin cdsOrtho.tab
+
+# Generate data for SVM.
+cat txWalk/*.bed | txCdsSvmInput stdin unweighted.tce cdsOrtho.tab svm.list svm.vector
+
+# Pick best CDS. Take 4 seconds
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
 cat txWalk/*.bed antibody.bed | \
 	txCdsPick stdin unweighted.tce cds.weights pick.tce pick.picks \
@@ -1297,3 +1304,9 @@ n/a xenoMrna
 n/a xenoRefFlat
 n/a xenoRefGene
 n/a xenoRefSeqAli
+
+#####################
+SVM STUFF
+cat txWalk/*.bed | txCdsSvmInput stdin NR_unweighted.tce cdsOrtho.tab -bad bad.lst train.vector
+cat txWalk/*.bed | txCdsSvmInput stdin NM_unweighted.tce cdsOrtho.tab -good good.lst stdout | randomLines stdin 604 stdout >> train.vector
+svm_learn train.vector train.model
