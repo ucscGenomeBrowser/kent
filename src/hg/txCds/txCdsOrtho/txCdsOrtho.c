@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.2 2007/03/09 07:29:00 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.3 2007/03/10 17:57:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,24 +31,33 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int biggestOrf(char *dna, int size)
+int biggestOrf(char *dna, int size, int *retStart, int *retEnd)
 /* Return size of biggest ORF (region without a stop codon) in DNA 
  * Just checks frame 0. */
 {
 int lastCodon = size - 3;
 int i;
-int bestOrfSize = 0, orfSize = 0;
+int bestOrfSize = 0, orfSize = 0, start=0,bestStart=0,bestEnd=0;
 for (i=0; i<=lastCodon; i += 3)
     {
     if (isStopCodon(dna+i))
+	{
         orfSize = 0;
+	start = i;
+	}
     else
         {
 	orfSize += 1;
 	if (orfSize > bestOrfSize)
+	    {
 	    bestOrfSize = orfSize;
+	    bestStart = start;
+	    bestEnd = i+3;
+	    }
 	}
     }
+*retStart = bestStart;
+*retEnd = bestEnd;
 return bestOrfSize;
 }
 
@@ -127,11 +136,13 @@ stripChar(xenoText, '-');
 int xenoTextSize = strlen(xenoText);
 
 /* Figure out biggest ORF in best frame and output it. */
-int orfSize = biggestOrf(xenoText + bestFrame, xenoTextSize - bestFrame)*3;
+int orfStart,orfEnd;
+int orfSize = biggestOrf(xenoText + bestFrame, xenoTextSize - bestFrame, &orfStart, &orfEnd)*3;
+int missingSize = countCharsN(xenoText + orfStart, '.', orfSize);
 int possibleSize = cdsEnd - cdsStart;
 if (orfSize > possibleSize) orfSize = possibleSize;
-fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%f\n", native->src, cdsStart, cdsEnd, 
-	xeno->src, orfSize, possibleSize,
+fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%d\t%f\n", native->src, cdsStart, cdsEnd, 
+	xeno->src, missingSize, orfSize, possibleSize,
 	(double)orfSize/(possibleSize));
 
 /* Clean up and go home. */
