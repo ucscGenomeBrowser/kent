@@ -199,7 +199,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1226 2007/03/10 01:31:18 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1227 2007/03/11 15:58:11 baertsch Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6866,6 +6866,25 @@ if (itemForUrl == NULL)
 genericHeader(tdb, item);
 
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
+if (hTableExists("ensGeneXref"))
+    {
+    sprintf(query, "translation_name='%s'", item);
+    transcript = sqlGetField(conn, database, "ensGeneXref", "transcript_name", query);
+    
+    sprintf(query, 
+    	    "select chrom, chromStart, chromEnd from superfamily where name='%s';", transcript);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        chrom      = row[0];
+        chromStart = row[1];
+        chromEnd   = row[2];
+        printf("<HR>");
+        printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, TRUE, transcript);
+        }
+    sqlFreeResult(&sr);
+    }
 if (hTableExists("ensemblXref3"))
     {
     sprintf(query, "protein='%s'", item);

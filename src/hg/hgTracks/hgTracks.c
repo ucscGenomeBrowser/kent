@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1294 2007/03/03 21:35:15 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1295 2007/03/11 15:55:15 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3670,7 +3670,11 @@ struct bed *sw = item;
 
 // This is necessary because Ensembl kept changing their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
-if (hTableExists("ensemblXref2"))
+if (hTableExists("ensGeneXref"))
+    {
+    proteinName = sqlGetField(conn, database, "ensGeneXref", "translation_name", conditionStr);
+    }
+else if (hTableExists("ensemblXref2"))
     {
     proteinName = sqlGetField(conn, database, "ensemblXref2", "translation_name", conditionStr);
     }
@@ -3723,7 +3727,11 @@ struct bed *sw = item;
 
 // This is necessary because Ensembl kept changing their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
-if (hTableExists("ensemblXref2"))
+if (hTableExists("ensGeneXref"))
+    {
+    proteinName = sqlGetField(conn, database, "ensGeneXref", "translation_name", conditionStr);
+    }
+else if (hTableExists("ensemblXref2"))
     {
     proteinName = sqlGetField(conn, database, "ensemblXref2", "translation_name", conditionStr);
     }
