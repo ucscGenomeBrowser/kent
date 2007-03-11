@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.18 2007/03/07 21:35:25 braney Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.19 2007/03/11 14:24:41 braney Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {
@@ -356,6 +356,7 @@ void aliStringToPsl(struct lineFile *lf, char *qNameParm, char *tNameParm,
 {
 static char *tName = NULL, *qName = NULL;
 static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
+static bool onNegStrand = FALSE;
 //struct dyString *q = newDyString(16*1024);
 //struct dyString *t = newDyString(16*1024);
 unsigned match = 0;	/* Number of bases that match */
@@ -388,6 +389,7 @@ if (qName == NULL || !sameString(qName, qNameParm))
     qName = cloneString(qNameParm);
     readCachedSeqPart(qName, qStart, qEnd-qStart, FALSE,
     	qHash, fileCache, &qSeq, &qOffset , &qIsNib);
+    onNegStrand = FALSE;
     if (qIsNib && strand == '-')
 	    qOffset = qSize - qEnd;
     }
@@ -399,8 +401,11 @@ if (tIsNib || tName == NULL || !sameString(tName, tNameParm) )
     readCachedSeqPart(tName, tStart, tEnd-tStart, tMasked,
 	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
     }
-if (strand == '-')
+if ((!onNegStrand && (strand == '-')) || (onNegStrand && (strand == '+')) )
+    {
     reverseComplement(qSeq->dna, qSeq->size);
+    onNegStrand = !onNegStrand;
+    }
 for (b = chain->blockList; b != NULL; b = nextB)
     {
     blockCount++;
@@ -420,29 +425,28 @@ ts = te = tStart;
 nextB = NULL;
 for (b = chain->blockList; b != NULL; b = nextB)
     {
-	    int adjQStart;
-	    
 	    qStarts[blockIx] = b->qStart;
 	    tStarts[blockIx] = b->tStart;
 	    blocks[blockIx] = b->tEnd - b->tStart;
-            j = b->tStart-tStart;
+            j = tIsNib ? b->tStart-tStart : b->tStart;  // cmclean change to correctly find target coordinates from all files
+	    i = qIsNib ? b->qStart-qStart : b->qStart;
             //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
             //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
-            adjQStart = b->qStart - chain->qStart;
-            for (i = 0 ; i < (b->tEnd - b->tStart); i++)
+	    int counter;
+            for (counter = 0 ; counter < (b->tEnd - b->tStart); counter++)
                 {
                 char qq ;
                 char tt ;
-                if (j > chain->tSize || (qStart + i) > chain->qSize)
+                if (j > tSeq->size || i > qSeq->size)
                     {
                     break;
                     //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
                     //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
                     assert(j <= tSeq->size);
-                    assert(i + adjQStart <= qSeq->size);
+                    assert(i <= qSeq->size);
                     }
-                qq = qSeq->dna[i+adjQStart];
-                tt = tSeq->dna[j++ ];
+                qq = qSeq->dna[i++];
+                tt = tSeq->dna[j++];
                 if (toupper(qq) == toupper(tt))
                     {
                     if (tMasked && islower(tt))
