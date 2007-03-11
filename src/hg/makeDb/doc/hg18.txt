@@ -10278,7 +10278,7 @@ cd ../data
 
 cd /cluster/data/dbSNP/126/shared
 hgsql hg18snp126 < UniVariation.sql
-zcat UniVariation.bcp.gz | hgsql -e 'load data local infile "/dev/stdin" into table UniVariation'
+zcat UniVariation.bcp.gz | hgsql -e 'load data local infile "/dev/stdin" into table UniVariation' hg18snp126
 
 # create working /scratch dir
 cd /scratch/snp
