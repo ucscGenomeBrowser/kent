@@ -1,12 +1,12 @@
 /* Various genbank related constants and some functions that operate on them.
  * these are uses by many modules and don't really make sense anywhere. */
+#include "common.h"
 #include "gbDefs.h"
 #include "gbRelease.h"
 #include "gbUpdate.h"
 #include "gbGenome.h"
-#include "common.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.3 2003/10/06 05:01:35 markd Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.4 2007/03/11 16:05:17 markd Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
