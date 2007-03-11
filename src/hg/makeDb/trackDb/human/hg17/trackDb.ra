@@ -1464,8 +1464,8 @@ type bed 6 .
     priority 3 
 
 track chimpParalogy
-shortLabel Chimp Paralogy
-longLabel Chimp Paralogy
+shortLabel Chimp Seg Dups
+longLabel Chimp Segmental Duplications
 group varRep
 priority 330
 visibility hide
