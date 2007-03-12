@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.8 2007/03/12 18:59:49 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.9 2007/03/12 21:46:32 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -217,6 +217,8 @@ if ( (strlen(lineLimitText) > 0) && (strlen(lineLimitText) != strlen(idText)) )
     idText = lineLimitText;
     cartSetString(cart, hgtaEnteredUserRegions, lineLimitText);
     }
+else
+    freeMem(lineLimitText);
 
 if (hasData)
     {
