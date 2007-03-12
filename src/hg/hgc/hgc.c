@@ -149,7 +149,6 @@
 #include "encodeStanfordPromotersAverage.h"
 #include "encodeIndels.h"
 #include "encodeHapMapAlleleFreq.h"
-#include "hapmapSnps.h"
 #include "hapmapAlleleFreq.h"
 #include "hapmapAlleles.h"
 #include "hapmapAllelesCombined.h"
@@ -199,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1228 2007/03/12 03:25:08 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1229 2007/03/12 16:47:37 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16327,71 +16326,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doHapmapSnps(struct trackDb *tdb, char *itemName)
-{
-char *table = tdb->tableName;
-struct hapmapSnps hms;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
-int start = cartInt(cart, "o");
-int derivedAllele=0;
-
-genericHeader(tdb, itemName);
-
-if (sameString(hms.cState,hms.rState))
-    {
-    if (sameString(hms.cState,hms.hReference))
-	derivedAllele=1;
-    if (sameString(hms.cState,hms.hOther))
-	derivedAllele=2;
-    }
-safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hapmapSnpsStaticLoad(row+rowOffset, &hms);
-    bedPrintPos((struct bed *)&hms, 3);
-    printf("<BR>\n");
-    printf("<B>Human Alleles and strand:</B> %s/%s (%s)<BR>\n", hms.hReference, hms.hOther, hms.strand);
-    printf("<B>Chimp Base and Quality Score:</B> %s (%u)<BR>\n", hms.cState, hms.cQual);
-    printf("<B>Rhesus Base and Quality Score:</B> %s (%u)<BR><BR>\n", hms.rState, hms.rQual);
-    printf("<BR><table><th><td>Population</td><td>Reference</td><td>Other</td><td>MAF</td><td>DAF</td></th>\n");
-    if (derivedAllele==0)
-	{
-	printf("<tr><td>YRI</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rYri,hms.oYri,1.0*(hms.rYri<hms.oYri?hms.rYri:hms.oYri)/(hms.rYri+hms.oYri));
-	printf("<tr><td>CEU</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rCeu,hms.oCeu,1.0*(hms.rCeu<hms.oCeu?hms.rCeu:hms.oCeu)/(hms.rCeu+hms.oCeu));
-	printf("<tr><td>CHB</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rChb,hms.oChb,1.0*(hms.rChb<hms.oChb?hms.rChb:hms.oChb)/(hms.rChb+hms.oChb));
-	printf("<tr><td>JPT</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rJpt,hms.oJpt,1.0*(hms.rJpt<hms.oJpt?hms.rJpt:hms.oJpt)/(hms.rJpt+hms.oJpt));
-	printf("<tr><td>JPT+CHB</td><td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rJptChb,hms.oJptChb,1.0*(hms.rJptChb<hms.oJptChb?hms.rJptChb:hms.oJptChb)/(hms.rJptChb+hms.oJptChb));
-	}
-    if (derivedAllele==1)
-	{
-	printf("<tr><td>YRI</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rYri,hms.oYri,1.0*(hms.rYri<hms.oYri?hms.rYri:hms.oYri)/(hms.rYri+hms.oYri),1.0*hms.oYri/(hms.rYri+hms.oYri));
-	printf("<tr><td>CEU</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rCeu,hms.oCeu,1.0*(hms.rCeu<hms.oCeu?hms.rCeu:hms.oCeu)/(hms.rCeu+hms.oCeu),1.0*hms.oCeu/(hms.rCeu+hms.oCeu));
-	printf("<tr><td>CHB</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rChb,hms.oChb,1.0*(hms.rChb<hms.oChb?hms.rChb:hms.oChb)/(hms.rChb+hms.oChb),1.0*hms.oChb/(hms.rChb+hms.oChb));
-	printf("<tr><td>JPT</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJpt,hms.oJpt,1.0*(hms.rJpt<hms.oJpt?hms.rJpt:hms.oJpt)/(hms.rJpt+hms.oJpt),1.0*hms.oJpt/(hms.rJpt+hms.oJpt));
-	printf("<tr><td>JPT+CHB</td><td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJptChb,hms.oJptChb,1.0*(hms.rJptChb<hms.oJptChb?hms.rJptChb:hms.oJptChb)/(hms.rJptChb+hms.oJptChb),1.0*hms.oJptChb/(hms.rJptChb+hms.oJptChb));
-	}
-    if (derivedAllele==2)
-	{
-	printf("<tr><td>YRI</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rYri,hms.oYri,1.0*(hms.rYri<hms.oYri?hms.rYri:hms.oYri)/(hms.rYri+hms.oYri),1.0*hms.rYri/(hms.rYri+hms.oYri));
-	printf("<tr><td>CEU</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rCeu,hms.oCeu,1.0*(hms.rCeu<hms.oCeu?hms.rCeu:hms.oCeu)/(hms.rCeu+hms.oCeu),1.0*hms.rCeu/(hms.rCeu+hms.oCeu));
-	printf("<tr><td>CHB</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rChb,hms.oChb,1.0*(hms.rChb<hms.oChb?hms.rChb:hms.oChb)/(hms.rChb+hms.oChb),1.0*hms.rChb/(hms.rChb+hms.oChb));
-	printf("<tr><td>JPT</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJpt,hms.oJpt,1.0*(hms.rJpt<hms.oJpt?hms.rJpt:hms.oJpt)/(hms.rJpt+hms.oJpt),1.0*hms.rJpt/(hms.rJpt+hms.oJpt));
-	printf("<tr><td>JPT+CHB</td><td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJptChb,hms.oJptChb,1.0*(hms.rJptChb<hms.oJptChb?hms.rJptChb:hms.oJptChb)/(hms.rJptChb+hms.oJptChb),1.0*hms.rJptChb/(hms.rJptChb+hms.oJptChb));
-	}
-    }
-printf("</table>");
-printTrackHtml(tdb);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
 
 void printSnpAllele(char *orthoDb, int snpVersion, char *rsId)
 /* check whether snpAlleles exists for a database */
@@ -18570,10 +18504,6 @@ else if (sameString("dvBed", track))
 else if (startsWith("hapmapAlleleFreq", track))
     {
     doHapmapAlleleFreq(tdb, item);
-    }
-else if (startsWith("hapmapSnps", track))
-    {
-    doHapmapSnps(tdb, item);
     }
 else if (sameString("hapmapAllelesCombined", track))
     {
