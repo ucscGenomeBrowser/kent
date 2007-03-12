@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.7 2007/03/12 18:13:14 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.8 2007/03/12 18:59:49 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -89,7 +89,19 @@ struct lineFile *lf;
 lf = lineFileOnString("userData", TRUE, inputString);
 while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
     {
-    if (!((3 == wordCount) || (4 == wordCount)))
+    char *chromName = NULL;
+    int chromStart = 0;
+    int chromEnd = 0;
+    char *regionName = NULL;
+    /*	might be something of the form: chrom:start-end optionalRegionName */
+    if (((1 == wordCount) || (2 == wordCount)) &&
+	    hgParseChromRangeDb(words[0], &chromName,
+		&chromStart, &chromEnd, FALSE))
+	{
+	if (2 == wordCount)
+	    regionName = cloneString(words[1]);
+	}
+    else if (!((3 == wordCount) || (4 == wordCount)))
 	{
 	int i;
 	struct dyString *errMessage = dyStringNew(0);
@@ -99,6 +111,14 @@ while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
 	"illegal bed size, expected 3 or 4 fields, found %d\n",
 		    lf->lineIx, dyStringCannibalize(&errMessage), wordCount);
 	}
+    else
+	{
+	chromName = hgOfficialChromName(words[0]);
+	chromStart = sqlSigned(words[1]);
+	chromEnd = sqlSigned(words[2]);
+	if (wordCount > 3)
+	    regionName = cloneString(words[3]);
+	}
     ++itemCount;
     if (itemCount > 1000)
 	{
@@ -107,17 +127,17 @@ while (0 != (wordCount = lineFileChopNext(lf, words, ArraySize(words))))
 	break;
 	}
     AllocVar(bedEl);
-    bedEl->chrom = hgOfficialChromName(words[0]);
+    bedEl->chrom = chromName;
     if (NULL == bedEl->chrom)
 	errAbort("at line %d, chrom name '%s' %s %s not recognized in this assembly %d",
 	    lf->lineIx, words[0], words[1], words[2], wordCount);
-    bedEl->chromStart = sqlSigned(words[1]);
-    bedEl->chromEnd = sqlSigned(words[2]);
+    bedEl->chromStart = chromStart;
+    bedEl->chromEnd = chromEnd;
     if (illegalCoordinate(bedEl->chrom, bedEl->chromStart, bedEl->chromEnd))
 	errAbort("illegal input at line %d: %s %d %d",
 		lf->lineIx, bedEl->chrom, bedEl->chromStart, bedEl->chromEnd);
     if (wordCount > 3)
-	bedEl->name = cloneString(words[3]);
+	bedEl->name = regionName;
     else
 	bedEl->name = NULL;
 /* if we wanted to give artifical names to each item */
@@ -140,6 +160,7 @@ static char *limitText(char *text)
 /* read text string and limit to 1000 actual data lines */
 {
 struct dyString *limitedText = dyStringNew(0);
+/* yes, opening with FALSE so as not to destroy the original string */
 struct lineFile *lf = lineFileOnString("limitText", FALSE, text);
 char *lineStart = NULL;
 int lineLength = 0;
