@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.11 2007/03/05 20:17:54 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.12 2007/03/12 21:18:00 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -20,7 +20,7 @@ char geneTable[] = "refGene";
 char snpTable[] = "snp125";
 
 #define FLANKSIZE 50
-#define MAX_EXONS 100
+#define MAX_EXONS 150
 
 void usage()
 /* Explain usage and exit. */
@@ -92,9 +92,10 @@ struct snpSimple
     int chromStart;       
     char strand;
     char *observed;	
+    char *func;
     };
 
-struct snpSimple *snpSimpleLoad(char *name, int start, char *strand, char *observed)
+struct snpSimple *snpSimpleLoad(char *name, int start, char *strand, char *observed, char *func)
 /* Load a snpSimple from row fetched from snp
  * in database.  Dispose of this with snpSimpleFree(). 
    Complement observed if negative strand, preserving alphabetical order. */
@@ -107,7 +108,8 @@ AllocVar(ret);
 ret->name = cloneString(name);
 ret->chromStart = start;
 strcpy(&ret->strand, strand);
-ret->observed   = cloneString(observed);
+ret->observed = cloneString(observed);
+ret->func = cloneString(func);
 
 if (ret->strand == '+') return ret;
 
@@ -183,7 +185,7 @@ char *class = NULL;
 char *locType = NULL;
 
 safef(query, sizeof(query), "select name, chromStart, chromEnd, class, "
-    "locType, strand, observed from %s where chrom='%s' ", snpTable, chrom);
+    "locType, strand, observed, func from %s where chrom='%s' ", snpTable, chrom);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -196,7 +198,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     end = sqlUnsigned(row[2]);
     if (end != start + 1) continue;
     count++;
-    el = snpSimpleLoad(row[0], start, row[5], row[6]);
+    el = snpSimpleLoad(row[0], start, row[5], row[6], row[7]);
     binKeeperAdd(ret, start, end, el);
     }
 sqlFreeResult(&sr);
@@ -590,7 +592,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
 
 	for (el = elList; el!= NULL; el = el->next)
 	    {
-            char *snpName = needMem(64);
+            char *snpName = needMem(512);
 
             thisSnp = (struct snpSimple *)el->val;
 	    snpPos = thisSnp->chromStart;
@@ -607,13 +609,15 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	    strcat(snpName, ptr);
 	    strcat(snpName, ")");
 	    if (sameString(gene->strand, "-"))
-	      strcat(snpName, " (negative strand)");
+	      strcat(snpName, " (negative strand) ");
+	    strcat(snpName, thisSnp->func);
 	    verbose(1, "    snp = %s, snpPos = %d\n", snpName, snpPos);
 
             /* get flank start and end in absolute coords */
             flankStart = findStartPos(FLANKSIZE, snpPos, gene, exonPos);
             flankEnd = findEndPos(FLANKSIZE, snpPos, gene, exonPos);
             flankSize = getExonSize(flankStart, flankEnd, gene);
+            fprintf(fileHandle, "flankStart = %d, flankEnd = %d\n", flankStart, flankEnd);
             seqFlank = getFlankSeq(fileHandle, flankStart, flankEnd, flankSize, 
 	                           gene, exonSequence);
 	    assert(flankSize == seqFlank->size);
