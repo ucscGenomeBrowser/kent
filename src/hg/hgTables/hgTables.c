@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.149 2007/03/06 20:41:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.150 2007/03/12 22:12:02 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -627,7 +627,14 @@ char *name = cartOptionalString(cart, varName);
 struct trackDb *track = NULL;
 
 if (name != NULL)
+    {
+    /* getFullTrackList tweaks tdb->tableName mrna to all_mrna, so in
+     * case mrna is passed in (e.g. from hgc link to schema page)
+     * tweak it here too: */
+    if (sameString(name, "mrna"))
+	name = "all_mrna";
     track = findTrackInGroup(name, trackList, group);
+    }
 if (track == NULL)
     {
     if (group == NULL || sameString(group->name, "all"))
