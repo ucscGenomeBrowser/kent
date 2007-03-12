@@ -1,19 +1,19 @@
 /* hapmap2 - 2nd step in processing: */
-/* create hapmapAllelesCombined table, given 4 hapmapAllelesPop tables */
+/* create hapmapSnpsCombined table, given 4 hapmapSnpsPop tables */
 /* relies on hashes so will consume memory! */
 
 /* Check for multiple alignments when building hash for each pop. Not expecting any. */
 
 #include "common.h"
 
-#include "hapmapAlleles.h"
+#include "hapmapSnps.h"
 #include "hapmapAllelesCombined.h"
 #include "hash.h"
 #include "hdb.h"
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.4 2007/03/10 05:13:35 heather Exp $";
+static char const rcsid[] = "$Id: hapmap2.c,v 1.5 2007/03/12 17:28:31 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -49,7 +49,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char query[64];
 char **row = NULL;
-struct hapmapAlleles *loadItem = NULL;
+struct hapmapSnps *loadItem = NULL;
 struct hashEl *hel = NULL;
 
 ret = newHash(18);
@@ -58,7 +58,7 @@ safef(query, sizeof(query), "select * from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    loadItem = hapmapAllelesLoad(row + 1);
+    loadItem = hapmapSnpsLoad(row + 1);
     /* we want to capture all names in nameHash */
     addIfNew(loadItem->name);
     /* attempt to add to population hash */
@@ -91,52 +91,52 @@ if (!helYRI)
 }
 
 boolean differentChrom(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapAlleles.c */
+/* move this to kent/src/hg/lib/hapmapSnps.c */
 /* if either is missing, we can't say these are different */
 {
-struct hapmapAlleles *ha1, *ha2;
+struct hapmapSnps *ha1, *ha2;
 if (!hel1) return FALSE;
 if (!hel2) return FALSE;
-ha1 = (struct hapmapAlleles *)hel1->val;
-ha2 = (struct hapmapAlleles *)hel2->val;
+ha1 = (struct hapmapSnps *)hel1->val;
+ha2 = (struct hapmapSnps *)hel2->val;
 if (sameString(ha1->chrom, ha2->chrom)) return FALSE;
 return TRUE;
 }
 
 boolean differentStrand(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapAlleles.c */
+/* move this to kent/src/hg/lib/hapmapSnps.c */
 /* if either is missing, we can't say these are different */
 {
-struct hapmapAlleles *ha1, *ha2;
+struct hapmapSnps *ha1, *ha2;
 if (!hel1) return FALSE;
 if (!hel2) return FALSE;
-ha1 = (struct hapmapAlleles *)hel1->val;
-ha2 = (struct hapmapAlleles *)hel2->val;
+ha1 = (struct hapmapSnps *)hel1->val;
+ha2 = (struct hapmapSnps *)hel2->val;
 if (sameString(ha1->strand, ha2->strand)) return FALSE;
 return TRUE;
 }
 
 boolean differentObserved(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapAlleles.c */
+/* move this to kent/src/hg/lib/hapmapSnps.c */
 /* if either is missing, we can't say these are different */
 {
-struct hapmapAlleles *ha1, *ha2;
+struct hapmapSnps *ha1, *ha2;
 if (!hel1) return FALSE;
 if (!hel2) return FALSE;
-ha1 = (struct hapmapAlleles *)hel1->val;
-ha2 = (struct hapmapAlleles *)hel2->val;
+ha1 = (struct hapmapSnps *)hel1->val;
+ha2 = (struct hapmapSnps *)hel2->val;
 if (sameString(ha1->observed, ha2->observed)) return FALSE;
 return TRUE;
 }
 
 boolean differentChromStart(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapAlleles.c */
+/* move this to kent/src/hg/lib/hapmapSnps.c */
 {
-struct hapmapAlleles *ha1, *ha2;
+struct hapmapSnps *ha1, *ha2;
 if (!hel1) return FALSE;
 if (!hel2) return FALSE;
-ha1 = (struct hapmapAlleles *)hel1->val;
-ha2 = (struct hapmapAlleles *)hel2->val;
+ha1 = (struct hapmapSnps *)hel1->val;
+ha2 = (struct hapmapSnps *)hel2->val;
 if (ha1->chromStart == ha2->chromStart) return FALSE;
 return TRUE;
 }
@@ -204,28 +204,28 @@ int getAlleleCount(char *allele, struct hashEl *helCEU, struct hashEl *helCHB,
 /* don't include heterozygous */
 {
 int count = 0;
-struct hapmapAlleles *ha = NULL;
+struct hapmapSnps *ha = NULL;
 if (helCEU)
     {
-    ha = (struct hapmapAlleles *)helCEU->val;
+    ha = (struct hapmapSnps *)helCEU->val;
     if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
     if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 if (helCHB)
     {
-    ha = (struct hapmapAlleles *)helCHB->val;
+    ha = (struct hapmapSnps *)helCHB->val;
     if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
     if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 if (helJPT)
     {
-    ha = (struct hapmapAlleles *)helJPT->val;
+    ha = (struct hapmapSnps *)helJPT->val;
     if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
     if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
 if (helYRI)
     {
-    ha = (struct hapmapAlleles *)helYRI->val;
+    ha = (struct hapmapSnps *)helYRI->val;
     if (sameString(ha->allele1, allele)) count = count + ha->homoCount1;
     if (sameString(ha->allele2, allele)) count = count + ha->homoCount2;
     }
@@ -256,9 +256,9 @@ return TRUE;
 
 boolean confirmAllele(struct hashEl *hel, char *allele)
 {
-struct hapmapAlleles *ha;
+struct hapmapSnps *ha;
 if (!hel) return FALSE;
-ha = (struct hapmapAlleles *)hel->val;
+ha = (struct hapmapSnps *)hel->val;
 if (sameString(ha->allele1, allele))
     {
     if (ha->heteroCount > 0) return TRUE;
@@ -350,9 +350,9 @@ return "none";
 
 int getHomoCount(struct hashEl *hel, char *allele)
 {
-struct hapmapAlleles *ha = NULL;
+struct hapmapSnps *ha = NULL;
 if (!hel) return 0;
-ha = (struct hapmapAlleles *)hel->val;
+ha = (struct hapmapSnps *)hel->val;
 if (sameString(ha->allele1, allele)) return ha->homoCount1;
 if (sameString(ha->allele2, allele)) return ha->homoCount2;
 return 0;
@@ -360,9 +360,9 @@ return 0;
 
 int getHeteroCount(struct hashEl *hel)
 {
-struct hapmapAlleles *ha = NULL;
+struct hapmapSnps *ha = NULL;
 if (!hel) return 0;
-ha = (struct hapmapAlleles *)hel->val;
+ha = (struct hapmapSnps *)hel->val;
 return ha->heteroCount;
 }
 
@@ -384,9 +384,9 @@ return observed;
 struct hashEl *forcePositive(struct hashEl *hel)
 /* convert to positive strand */
 {
-struct hapmapAlleles *ha;
+struct hapmapSnps *ha;
 if (!hel) return NULL;
-ha = (struct hapmapAlleles *)hel->val;
+ha = (struct hapmapSnps *)hel->val;
 if (sameString(ha->strand, "+")) return hel;
 if (sameString(ha->allele2, "?"))
     {
@@ -425,20 +425,20 @@ struct hapmapAllelesCombined *mergeOne(struct hashEl *helCEU, struct hashEl *hel
                                        struct hashEl *helJPT, struct hashEl *helYRI)
 {
 struct hapmapAllelesCombined *ret = NULL;
-struct hapmapAlleles *sample = NULL;
+struct hapmapSnps *sample = NULL;
 char *allele1, *allele2;
 
 allele1 = getAllele1(helCEU, helCHB, helJPT, helYRI);
 allele2 = getAllele2(allele1, helCEU, helCHB, helJPT, helYRI);
 
 if (helCEU)
-    sample = (struct hapmapAlleles *)helCEU->val;
+    sample = (struct hapmapSnps *)helCEU->val;
 else if (helCHB)
-    sample = (struct hapmapAlleles *)helCHB->val;
+    sample = (struct hapmapSnps *)helCHB->val;
 else if (helJPT)
-    sample = (struct hapmapAlleles *)helJPT->val;
+    sample = (struct hapmapSnps *)helJPT->val;
 else if (helYRI)
-    sample = (struct hapmapAlleles *)helYRI->val;
+    sample = (struct hapmapSnps *)helYRI->val;
 else
     return NULL;
 
@@ -481,9 +481,9 @@ fprintf(outputFileHandle, "%d %d %d %d\n", hac->heteroCountCEU, hac->heteroCount
 void showAllele(struct hashEl *hel)
 /* helper function for debugging */
 {
-struct hapmapAlleles *ha = NULL;
+struct hapmapSnps *ha = NULL;
 if (!hel) return;
-ha = (struct hapmapAlleles *)hel->val;
+ha = (struct hapmapSnps *)hel->val;
 verbose(1, "name = %s\n", ha->name);
 verbose(1, "score = %d\n", ha->score);
 verbose(1, "strand = %s\n", ha->strand);
@@ -538,7 +538,7 @@ while ((nameHashElement = hashNext(&cookie)) != NULL)
     helCHB = hashLookup(hashCHB, nameHashElement->name);
     helJPT = hashLookup(hashJPT, nameHashElement->name);
     helYRI = hashLookup(hashYRI, nameHashElement->name);
-    /* should convert to instance of hapmapAlleles here */
+    /* should convert to instance of hapmapSnps here */
 
     logMissing(nameHashElement->name, helCEU, helCHB, helJPT, helYRI);
 
@@ -602,13 +602,13 @@ errorFileHandle = mustOpen("hapmap2.errors", "w");
 
 nameHash = newHash(18);
 verbose(1, "building CEU hash...\n");
-hashCEU = getHash("hapmapAllelesCEU");  
+hashCEU = getHash("hapmapSnpsCEU");  
 verbose(1, "building CHB hash...\n");
-hashCHB = getHash("hapmapAllelesCHB");  
+hashCHB = getHash("hapmapSnpsCHB");  
 verbose(1, "building JPT hash...\n");
-hashJPT = getHash("hapmapAllelesJPT");  
+hashJPT = getHash("hapmapSnpsJPT");  
 verbose(1, "building YRI hash...\n");
-hashYRI = getHash("hapmapAllelesYRI");  
+hashYRI = getHash("hapmapSnpsYRI");  
 
 verbose(1, "merging...\n");
 mergeAll();
