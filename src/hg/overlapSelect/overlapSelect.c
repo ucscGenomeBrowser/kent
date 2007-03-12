@@ -25,6 +25,7 @@ static struct optionSpec optionSpecs[] = {
     {"inRange", OPTION_BOOLEAN},
     {"nonOverlapping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
+    {"oppositeStrand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
     {"idMatch", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
@@ -414,8 +415,12 @@ if (optionExists("inRange"))
 /* select options */
 useAggregate = optionExists("aggregate");
 nonOverlapping = optionExists("nonOverlapping");
+if (optionExists("strand") && optionExists("oppositeStrand"))
+    errAbort("can only specify one of -strand and -oppositeStrand");
 if (optionExists("strand"))
-    selectOpts |= selUseStrand;
+    selectOpts |= selStrand;
+if (optionExists("oppositeStrand"))
+    selectOpts |= selOppositeStrand;
 if (optionExists("excludeSelf") && (optionExists("idMatch")))
     errAbort("can't specify both -excludeSelf and -idMatch");
 if (optionExists("excludeSelf"))

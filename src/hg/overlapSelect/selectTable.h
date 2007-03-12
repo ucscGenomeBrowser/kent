@@ -8,12 +8,13 @@ struct rowReader;
 enum selectOpts
 /* selection table options */
 {
-    selExcludeSelf  = 0x01,    /* skipping matching records */
-    selUseStrand    = 0x02,    /* select by strand */
-    selSelectCds    = 0x04,    /* only use CDS range for select table */
-    selSelectRange  = 0x08,    /* use entire range, not just blocks */
-    selSaveLines    = 0x10,    /* save lines for merge */
-    selIdMatch      = 0x20     /* ids must match and overlap  */
+    selExcludeSelf    = 0x01,    /* skipping matching records */
+    selStrand         = 0x02,    /* select by strand */
+    selSelectCds      = 0x04,    /* only use CDS range for select table */
+    selSelectRange    = 0x08,    /* use entire range, not just blocks */
+    selSaveLines      = 0x10,    /* save lines for merge */
+    selIdMatch        = 0x20,    /* ids must match and overlap  */
+    selOppositeStrand = 0x40    /* select by opposite strand */
 };
 
 struct overlapCriteria

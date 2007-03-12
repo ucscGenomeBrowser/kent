@@ -120,7 +120,9 @@ return TRUE;
 static boolean passCriteria(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
 /* see if the global criteria for overlap are satisfied */
 {
-if ((opts & selUseStrand) && (inCa->strand != selCa->strand))
+if ((opts & selStrand) && (inCa->strand != selCa->strand))
+    return FALSE;
+if ((opts & selOppositeStrand) && (inCa->strand == selCa->strand))
     return FALSE;
 if ((opts & selExcludeSelf) && isSelfMatch(opts, inCa, selCa))
     return FALSE;

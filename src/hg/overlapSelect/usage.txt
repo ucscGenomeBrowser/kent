@@ -34,6 +34,7 @@ Options:
   -inRange - Use entire range instead of blocks of records in the inFile.
   -nonOverlapping - select non-overlaping instead of overlaping records
   -strand - must be on the same strand to be considered overlaping
+  -oppositeStrand - must be on the opposite strand to be considered overlaping
   -excludeSelf - don't compare records with the same coordinates and name.
       Warning: using only one of -inCds or -selectCds will result in different
       coordinates for the same record.

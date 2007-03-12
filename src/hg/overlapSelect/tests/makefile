@@ -153,7 +153,7 @@ exludeself_nonover_mrna2: mkout
 ###
 # select by column tests
 ###
-columnSelectTests: colSelect colExclude
+columnSelectTests: colSelect colExclude colSelectStrand
 
 # select by column
 colSelect: mkout
@@ -544,7 +544,7 @@ rangeTests: range_psl_over_NM_015110gp range_psl_nonover_NM_015110gp \
 	    range_psl_over_NM_015110bed range_psl_nonover_NM_015110bed \
 	    range_NM_015110gp_over_psl range_NM_015110gp_nonover_psl \
 	    range_NM_015110bed_over_psl range_NM_015110bed_nonover_psl \
-	    range_nostrand_gp_gp range_strand_gp_gp \
+	    range_nostrand_gp_gp range_strand_gp_gp range_oppositeStrand_gp_gp \
 	    range_nostrand_gp_nonover_gp range_strand_gp_nonover_gp
 
 # range select psls overlaping NM_015110 with gp
@@ -597,6 +597,11 @@ range_nostrand_gp_gp: mkout
 # -selectRange contained in intron on both strands (with -strand)
 range_strand_gp_gp: mkout
 	${OVERSEL} -selectRange -strand input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+# -selectRange contained in intron on both strands (with -oppositeStrand)
+range_oppositeStrand_gp_gp: mkout
+	${OVERSEL} -selectRange -oppositeStrand input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
 	${DIFF} expected/$@.gp output/$@.gp
 
 # -selectRange contained in intron on both strands (without -strand), non-overlaping
