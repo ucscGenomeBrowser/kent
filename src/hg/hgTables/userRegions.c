@@ -14,7 +14,7 @@
 #include "hui.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: userRegions.c,v 1.6 2007/03/09 23:24:44 hiram Exp $";
+static char const rcsid[] = "$Id: userRegions.c,v 1.7 2007/03/12 18:13:14 hiram Exp $";
 
 void doSetUserRegions(struct sqlConnection *conn)
 /* Respond to set regions button. */
@@ -136,6 +136,30 @@ slReverse(&bedList);	/* with no sort, it is in order as user entered */
 return (bedList);
 }
 
+static char *limitText(char *text)
+/* read text string and limit to 1000 actual data lines */
+{
+struct dyString *limitedText = dyStringNew(0);
+struct lineFile *lf = lineFileOnString("limitText", FALSE, text);
+char *lineStart = NULL;
+int lineLength = 0;
+int legitimateLineCount = 0;
+while (legitimateLineCount < 1000 && lineFileNext(lf, &lineStart, &lineLength))
+    {
+    char *s, c;
+    s = skipLeadingSpaces(lineStart);
+    c = s[0];
+    if (c != 0 && c != '#')
+	++legitimateLineCount;
+    dyStringAppendN(limitedText, lineStart, lineLength);
+    }
+if ((legitimateLineCount == 1000) && lineFileNext(lf, &lineStart, &lineLength))
+    warn("WARNING: defined regions limit of 1000 definitions reached at line %d<BR>\n",
+		lf->lineIx-1);
+lineFileClose(&lf);
+return (dyStringCannibalize(&limitedText));
+}
+
 void doSubmitUserRegions(struct sqlConnection *conn)
 /* Process submit in set regions page. */
 {
@@ -164,6 +188,14 @@ if (userRegionFile != NULL && userRegionFile[0] != 0)
     }
 else
     idText = cloneString(idText);
+
+char *lineLimitText = limitText(idText);
+if ( (strlen(lineLimitText) > 0) && (strlen(lineLimitText) != strlen(idText)) )
+    {
+    freeMem(idText);
+    idText = lineLimitText;
+    cartSetString(cart, hgtaEnteredUserRegions, lineLimitText);
+    }
 
 if (hasData)
     {
