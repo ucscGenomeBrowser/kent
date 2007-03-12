@@ -6,7 +6,6 @@
 #include "hgTracks.h"
 
 #include "hapmapSnps.h"
-#include "hapmapAllelesCombined.h"
 #include "hapmapAllelesOrtho.h"
 #include "hapmapAllelesSummary.h"
 
@@ -505,8 +504,8 @@ tg->items = simpleItemsFiltered;
 }
 
 void hapmapDrawAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
-/* Draw the hapmap alleles at a given position. */
-/* Display major allele when zoomed to base level. */
+/* Draw the hapmap snps at a given position. */
+/* Display allele when zoomed to base level. */
 {
 
 if (!zoomedToBaseLevel)
@@ -523,29 +522,7 @@ char *strand = NULL;
 int chromStart = 0;
 int chromEnd = 0;
 
-if (sameString(tg->mapName, "hapmapAllelesCombined"))
-    {
-    /* this needs to be normalized */
-    struct hapmapAllelesCombined *thisItem = item;
-    int count1 = 0;
-    int count2 = 0;
-    chromStart = thisItem->chromStart;
-    chromEnd = thisItem->chromEnd;
-    strand = cloneString(thisItem->strand);
-    count1 = count1 + thisItem->allele1CountCEU;
-    count1 = count1 + thisItem->allele1CountCHB;
-    count1 = count1 + thisItem->allele1CountJPT;
-    count1 = count1 + thisItem->allele1CountYRI;
-    count2 = count2 + thisItem->allele2CountCEU;
-    count2 = count2 + thisItem->allele2CountCHB;
-    count2 = count2 + thisItem->allele2CountJPT;
-    count2 = count2 + thisItem->allele2CountYRI;
-    if (count1 >= count2)
-        allele = cloneString(thisItem->allele1);
-    else
-        allele = cloneString(thisItem->allele2);
-    }
-else if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
+if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
     {
     struct hapmapAllelesOrtho *thisItem = item;
     chromStart = thisItem->chromStart;
