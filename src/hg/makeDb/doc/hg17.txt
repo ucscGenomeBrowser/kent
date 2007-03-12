@@ -18403,12 +18403,12 @@ gzip *merge
 # load
 ssh hgwdev
 cd /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant
-cp /cluster/home/heather/kent/src/hg/lib/hapmapAlleles.sql .
-# modify hapmapAlleles for 4 populations
-hgLoadBed hg17 hapmapAllelesCEU -sqlTable=hapmapAllelesCEU.sql CEU.condense
-hgLoadBed hg17 hapmapAllelesCHB -sqlTable=hapmapAllelesCHB.sql CHB.condense
-hgLoadBed hg17 hapmapAllelesJPT -sqlTable=hapmapAllelesJPT.sql JPT.condense
-hgLoadBed hg17 hapmapAllelesYRI -sqlTable=hapmapAllelesYRI.sql YRI.condense
+cp /cluster/home/heather/kent/src/hg/lib/hapmapSnps.sql .
+# modify hapmapSnps for 4 populations
+hgLoadBed hg17 hapmapSnpsCEU -sqlTable=hapmapSnpsCEU.sql CEU.condense
+hgLoadBed hg17 hapmapSnpsCHB -sqlTable=hapmapSnpsCHB.sql CHB.condense
+hgLoadBed hg17 hapmapSnpsJPT -sqlTable=hapmapSnpsJPT.sql JPT.condense
+hgLoadBed hg17 hapmapSnpsYRI -sqlTable=hapmapSnpsYRI.sql YRI.condense
 
 # save some more space
 ssh kkstore05
@@ -18416,28 +18416,28 @@ cd /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant
 gzip *condense
 
 # sanity check
-mysql> select count(*) from hapmapAllelesCEU where homoCount1 + homoCount2 + heteroCount = 0;
+mysql> select count(*) from hapmapSnpsCEU where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
 |        0 |
 +----------+
 
-mysql> select count(*) from hapmapAllelesCHB where homoCount1 + homoCount2 + heteroCount = 0;
+mysql> select count(*) from hapmapSnpsCHB where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
 |        0 |
 +----------+
 
-mysql> select count(*) from hapmapAllelesJPT where homoCount1 + homoCount2 + heteroCount = 0;
+mysql> select count(*) from hapmapSnpsJPT where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
 |        0 |
 +----------+
 
-mysql> select count(*) from hapmapAllelesYRI where homoCount1 + homoCount2 + heteroCount = 0;
+mysql> select count(*) from hapmapSnpsYRI where homoCount1 + homoCount2 + heteroCount = 0;
 +----------+
 | count(*) |
 +----------+
@@ -18445,24 +18445,24 @@ mysql> select count(*) from hapmapAllelesYRI where homoCount1 + homoCount2 + het
 +----------+
 
 # create indexes
-mysql> alter table hapmapAllelesCEU add index name (name);
-mysql> alter table hapmapAllelesCEU add index chrom (chrom, bin);
-mysql> alter table hapmapAllelesCHB add index name (name);
-mysql> alter table hapmapAllelesCHB add index chrom (chrom, bin);
-mysql> alter table hapmapAllelesJPT add index name (name);
-mysql> alter table hapmapAllelesJPT add index chrom (chrom, bin);
-mysql> alter table hapmapAllelesYRI add index name (name);
-mysql> alter table hapmapAllelesYRI add index chrom (chrom, bin);
+mysql> alter table hapmapSnpsCEU add index name (name);
+mysql> alter table hapmapSnpsCEU add index chrom (chrom, bin);
+mysql> alter table hapmapSnpsCHB add index name (name);
+mysql> alter table hapmapSnpsCHB add index chrom (chrom, bin);
+mysql> alter table hapmapSnpsJPT add index name (name);
+mysql> alter table hapmapSnpsJPT add index chrom (chrom, bin);
+mysql> alter table hapmapSnpsYRI add index name (name);
+mysql> alter table hapmapSnpsYRI add index chrom (chrom, bin);
 
-# 2nd step in processing: create hapmapAllelesCombined
+# 2nd step in processing: create hapmapSnpsCombined
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmap2 hg17
-hgLoadBed hg17 hapmapAllelesCombined -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesCombined.sql hapmapAllelesCombined.tab
+hgLoadBed hg17 hapmapSnpsCombined -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapSnpsCombined.sql hapmapSnpsCombined.tab
 
-# create indexes
-mysql> alter table hapmapAllelesCombined add index name (name);
-mysql> alter table hapmapAllelesCombined add index chrom (chrom, bin);
+# create indexes (not used by browser)
+mysql> alter table hapmapSnpsCombined add index name (name);
+mysql> alter table hapmapSnpsCombined add index chrom (chrom, bin);
 
 # errors
 # nothing that isn't biallelic
@@ -18478,7 +18478,7 @@ grep -v missing hapmap2.errors
 # different strands for rs5768
 
 # cleanup to save space
-rm hapmapAllelesCombined.tab
+rm hapmapSnpsCombined.tab
 
 # monomorphism
 
@@ -18523,12 +18523,12 @@ other        1,226
 # none found
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckCluster2 hg17 hapmapAllelesCombined > snpCheckCluster2.out
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckCluster2 hg17 hapmapSnpsCombined > snpCheckCluster2.out
 
 # check against hg17.snp125
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
-/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapLookup hg17 hapmapAllelesCombined snp125 snp125Exceptions
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapLookup hg17 hapmapSnpsCombined snp125 snp125Exceptions
 
 # 1817 total that are complex type from dbSNP (hapmapLookup.log)
 # This is not based on observed string, only on size, class and locType
@@ -18599,7 +18599,7 @@ hapmapMixed hg17
 # Individual zygosity is *not* preserved
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
-/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapAllelesCombined hapmapAllelesChimp hapmapAllelesMacaque
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
 
 # histogram of heterozygosity:
@@ -22116,14 +22116,14 @@ alter table snp125OrthoRheMac2 add index chrom (chrom, bin);
 # skip if lift wasn't size 1
 # this run 124822 skipped
 cd /cluster/data/hg17/bed/hapmap/rel21a
-/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoPanTro2
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapSnpsCombined snp125OrthoPanTro2
 hgLoadBed hg17 hapmapAllelesChimp hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesChimp.sql
 alter table hapmapAllelesChimp add index name(name);
 alter table hapmapAllelesChimp add index chrom (chrom, bin);
 
 # get hapmap subset for macaque
 # this run 106607 skipped
-/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapAllelesCombined snp125OrthoRheMac2
+/cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapOrtho hg17 hapmapSnpsCombined snp125OrthoRheMac2
 hgLoadBed hg17 hapmapAllelesMacaque hapmapOrtho.tab -tab -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesMacaque.sql
 rm hapmapOrtho.tab
 rm hapmapOrtho.err
