@@ -7,13 +7,13 @@
 #include "common.h"
 
 #include "hapmapSnps.h"
-#include "hapmapAllelesCombined.h"
+#include "hapmapSnpsCombined.h"
 #include "hash.h"
 #include "hdb.h"
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.5 2007/03/12 17:28:31 heather Exp $";
+static char const rcsid[] = "$Id: hapmap2.c,v 1.6 2007/03/12 22:56:47 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -421,10 +421,10 @@ return hel;
 
 
 
-struct hapmapAllelesCombined *mergeOne(struct hashEl *helCEU, struct hashEl *helCHB, 
-                                       struct hashEl *helJPT, struct hashEl *helYRI)
+struct hapmapSnpsCombined *mergeOne(struct hashEl *helCEU, struct hashEl *helCHB, 
+                                    struct hashEl *helJPT, struct hashEl *helYRI)
 {
-struct hapmapAllelesCombined *ret = NULL;
+struct hapmapSnpsCombined *ret = NULL;
 struct hapmapSnps *sample = NULL;
 char *allele1, *allele2;
 
@@ -452,15 +452,15 @@ strcpy(ret->strand, sample->strand);
 ret->observed = cloneString(sample->observed);
 /* allele1 is always a single character */
 strcpy(ret->allele1, allele1);
-ret->allele1CountCEU = getHomoCount(helCEU, allele1);
-ret->allele1CountCHB = getHomoCount(helCHB, allele1);
-ret->allele1CountJPT = getHomoCount(helJPT, allele1);
-ret->allele1CountYRI = getHomoCount(helYRI, allele1);
+ret->homoCount1CEU = getHomoCount(helCEU, allele1);
+ret->homoCount1CHB = getHomoCount(helCHB, allele1);
+ret->homoCount1JPT = getHomoCount(helJPT, allele1);
+ret->homoCount1YRI = getHomoCount(helYRI, allele1);
 ret->allele2 = cloneString(allele2);
-ret->allele2CountCEU = getHomoCount(helCEU, allele2);
-ret->allele2CountCHB = getHomoCount(helCHB, allele2);
-ret->allele2CountJPT = getHomoCount(helJPT, allele2);
-ret->allele2CountYRI = getHomoCount(helYRI, allele2);
+ret->homoCount2CEU = getHomoCount(helCEU, allele2);
+ret->homoCount2CHB = getHomoCount(helCHB, allele2);
+ret->homoCount2JPT = getHomoCount(helJPT, allele2);
+ret->homoCount2YRI = getHomoCount(helYRI, allele2);
 ret->heteroCountCEU = getHeteroCount(helCEU);
 ret->heteroCountCHB = getHeteroCount(helCHB);
 ret->heteroCountJPT = getHeteroCount(helJPT);
@@ -468,14 +468,14 @@ ret->heteroCountYRI = getHeteroCount(helYRI);
 return ret;
 }
 
-void writeOutput(struct hapmapAllelesCombined *hac, FILE *outputFileHandle)
-/* output one hapmapAllelesCombined */
+void writeOutput(struct hapmapSnpsCombined *hap, FILE *outputFileHandle)
+/* output one hapmapSnpsCombined */
 {
-fprintf(outputFileHandle, "%s %d %d %s ", hac->chrom, hac->chromStart, hac->chromEnd, hac->name);
-fprintf(outputFileHandle, "%d %s %s ", hac->score, hac->strand, hac->observed);
-fprintf(outputFileHandle, "%s %d %d %d %d ", hac->allele1, hac->allele1CountCEU, hac->allele1CountCHB, hac->allele1CountJPT, hac->allele1CountYRI);
-fprintf(outputFileHandle, "%s %d %d %d %d ", hac->allele2, hac->allele2CountCEU, hac->allele2CountCHB, hac->allele2CountJPT, hac->allele2CountYRI);
-fprintf(outputFileHandle, "%d %d %d %d\n", hac->heteroCountCEU, hac->heteroCountCHB, hac->heteroCountJPT, hac->heteroCountYRI);
+fprintf(outputFileHandle, "%s %d %d %s ", hap->chrom, hap->chromStart, hap->chromEnd, hap->name);
+fprintf(outputFileHandle, "%d %s %s ", hap->score, hap->strand, hap->observed);
+fprintf(outputFileHandle, "%s %d %d %d %d ", hap->allele1, hap->homoCount1CEU, hap->homoCount1CHB, hap->homoCount1JPT, hap->homoCount1YRI);
+fprintf(outputFileHandle, "%s %d %d %d %d ", hap->allele2, hap->homoCount2CEU, hap->homoCount2CHB, hap->homoCount2JPT, hap->homoCount2YRI);
+fprintf(outputFileHandle, "%d %d %d %d\n", hap->heteroCountCEU, hap->heteroCountCHB, hap->heteroCountJPT, hap->heteroCountYRI);
 }	    
 
 void showAllele(struct hashEl *hel)
@@ -495,8 +495,8 @@ verbose(1, "heteroCount = %d\n", ha->heteroCount);
 verbose(1, "------------------------\n");
 }
 
-struct hapmapAllelesCombined *fixStrandAndMerge(struct hashEl *helCEU, struct hashEl *helCHB, 
-                                                struct hashEl *helJPT, struct hashEl *helYRI)
+struct hapmapSnpsCombined *fixStrandAndMerge(struct hashEl *helCEU, struct hashEl *helCHB, 
+                                             struct hashEl *helJPT, struct hashEl *helYRI)
 /* force everything to positive strand */
 {
 boolean allMatch = TRUE;
@@ -525,9 +525,9 @@ struct hashEl *helCHB = NULL;
 struct hashEl *helJPT = NULL;
 struct hashEl *helYRI = NULL;
 boolean allMatch = TRUE;
-struct hapmapAllelesCombined *hac = NULL;
+struct hapmapSnpsCombined *hap = NULL;
 
-safef(outputFileName, sizeof(outputFileName), "hapmapAllelesCombined.tab");
+safef(outputFileName, sizeof(outputFileName), "hapmapSnpsCombined.tab");
 outputFileHandle = mustOpen(outputFileName, "w");
 
 cookie = hashFirst(nameHash);
@@ -561,9 +561,9 @@ while ((nameHashElement = hashNext(&cookie)) != NULL)
     if (!allMatch)
         {
 	fprintf(errorFileHandle, "different strands for %s\n", nameHashElement->name);
-	hac = fixStrandAndMerge(helCEU, helCHB, helJPT, helYRI);
-	if (hac)
-	    writeOutput(hac, outputFileHandle);
+	hap = fixStrandAndMerge(helCEU, helCHB, helJPT, helYRI);
+	if (hap)
+	    writeOutput(hap, outputFileHandle);
 	continue;
 	}
 
@@ -583,9 +583,9 @@ while ((nameHashElement = hashNext(&cookie)) != NULL)
 	continue;
 	}
         
-    hac = mergeOne(helCEU, helCHB, helJPT, helYRI);
-    if (hac) 
-        writeOutput(hac, outputFileHandle);
+    hap = mergeOne(helCEU, helCHB, helJPT, helYRI);
+    if (hap) 
+        writeOutput(hap, outputFileHandle);
 
     }
 carefulClose(&outputFileHandle);
