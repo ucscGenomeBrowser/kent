@@ -8049,6 +8049,11 @@ time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 
 # Done! Jan  9 06:11
 
+    # Reciprocal best net mafs for multiz
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.dasNov1
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 dasNov1 >&! rbest.log &
+
 #########################################################################
 # BLASTZ DOG CanFam2 second time (DONE - 2005-12-28 - 2005-12-29 Fan)
 
@@ -8254,6 +8259,12 @@ tail load4.out
 # Last one seems was due to out of memory problem.
 # Per Hiram, we no longer do swap for 2X genomes, unless specifically requested.
 # Mark made an inquiry, but said he can get by with hg18->loxAfr1 nets.
+
+    # reciprocal best net mafs for multiz (2007-03-09 kate)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.loxAfr1
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 loxAfr1 >&! rbest.log &
+
 #########################################################################
 # BLASTZ COW BosTau2 second time (STARTED - 2006-01-07 Fan)
 
@@ -8428,6 +8439,11 @@ time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 `pwd`/DEF > swap-download.out 2>&1 &
 
 # Done! On Jan 12 09:18
+
+    # reciprocal best net mafs for multiz (2007-03-09 kate)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.echTel1
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 echTel1 >&! rbest.log &
 
 #########################################################################
 # BLASTZ CHICKEN GalGal2 second time (DONE - 2005-12-28 Fan)
@@ -9841,8 +9857,124 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
     zcat /cluster/data/hg18/bed/blastz.rn4/axtChain/hg18.rn4.syn.net.gz | hgLoadNet hg18 netSyntenyRn4 stdin
     zcat /cluster/data/hg18/bed/blastz.canFam2/axtChain/hg18.canFam2.syn.net.gz | hgLoadNet hg18 netSyntenyCanFam2 stdin
 
+    # add more distant vertebrates to track so we can evaluate
+    # syntenic netting for multiple alignment (2007-03-10 kate)
+    cd /cluster/data/hg18/bed
+    netFilter -syn blastz.danRer4/axtChain/hg18.danRer4.net.gz | \
+        hgLoadNet hg18 netSyntenyDanRer4 stdin
+    netFilter -syn blastz.galGal3/axtChain/hg18.galGal3.net.gz | \
+        hgLoadNet hg18 netSyntenyGalGal3 stdin
+    netFilter -syn blastz.monDom4/axtChain/hg18.monDom4.net.gz | \
+        hgLoadNet -warn hg18 netSyntenyMonDom4 stdin
+    netFilter -syn blastz.ornAna1/axtChain/hg18.ornAna1.net.gz | \
+        hgLoadNet hg18 netSyntenyOrnAna1 stdin
+    netFilter -syn blastz.anoCar1/axtChain/hg18.anoCar1.net.gz | \
+        hgLoadNet hg18 netSyntenyAnoCar1 stdin
+    netFilter -syn blastz.xenTro2/axtChain/hg18.xenTro2.net.gz | \
+        hgLoadNet hg18 netSyntenyXenTro2 stdin
+    netFilter -syn blastz.fr2/axtChain/hg18.fr2.net.gz | \
+        hgLoadNet hg18 netSyntenyFr2 stdin
+    netFilter -syn blastz.equCab1/axtChain/hg18.equCab1.net.gz | \
+        hgLoadNet hg18 netSyntenyEquCab1 stdin
+    netFilter -syn blastz.bosTau3/axtChain/hg18.bosTau3.net.gz | \
+        hgLoadNet -warn hg18 netSyntenyBosTau3 stdin
+    netFilter -syn blastz.oryLat1/axtChain/hg18.oryLat1.net.gz | \
+        hgLoadNet hg18 netSyntenyOryLat1 stdin
+
+cat > netCov.csh << 'EOF'
+    #!/bin/csh -ef
+    foreach db (PanTro2 RheMac2 Mm8 Rn4 CanFam2 EquCab1 BosTau3 MonDom4 OrnAna1 GalGal3 AnoCar1 XenTro2 DanRer4 Fr2 OryLat1)
+        echo -n "       "
+        featureBits -countGaps -chrom=chr1 hg18 refGene:cds net$db -enrichment
+        featureBits -countGaps -chrom=chr1 hg18 refGene:cds netSynteny$db -enrichment
+        echo ""
+    end
+'EOF'
+    csh netCov.csh >&! netCov.log &
+cat netCov.log
+       #refGene:cds 1.282%, netPanTro2 99.979%, both 1.282%, cover 100.00%, enrich 1.00x
+#refGene:cds 1.282%, netSyntenyPanTro2 99.978%, both 1.282%, cover 100.00%, enrich 1.00x
+       #refGene:cds 1.282%, netRheMac2 99.970%, both 1.282%, cover 100.00%, enrich 1.00x
+#refGene:cds 1.282%, netSyntenyRheMac2 99.961%, both 1.282%, cover 99.97%, enrich 1.00x
+       #refGene:cds 1.282%, netMm8 98.650%, both 1.278%, cover 99.69%, enrich 1.01x
+#refGene:cds 1.282%, netSyntenyMm8 98.352%, both 1.255%, cover 97.89%, enrich 1.00x
+       #refGene:cds 1.282%, netRn4 98.404%, both 1.281%, cover 99.89%, enrich 1.02x
+#refGene:cds 1.282%, netSyntenyRn4 98.074%, both 1.258%, cover 98.10%, enrich 1.00x
+       #refGene:cds 1.282%, netCanFam2 99.527%, both 1.281%, cover 99.91%, enrich 1.00x
+#refGene:cds 1.282%, netSyntenyCanFam2 99.274%, both 1.272%, cover 99.16%, enrich 1.00x
+       #refGene:cds 1.282%, netEquCab1 99.457%, both 1.281%, cover 99.87%, enrich 1.00x
+#refGene:cds 1.282%, netSyntenyEquCab1 99.020%, both 1.270%, cover 99.06%, enrich 1.00x
+       #refGene:cds 1.282%, netBosTau3 99.641%, both 1.282%, cover 100.00%, enrich 1.00x
+#refGene:cds 1.282%, netSyntenyBosTau3 99.493%, both 1.280%, cover 99.81%, enrich 1.00x
+       #refGene:cds 1.282%, netMonDom4 98.718%, both 1.279%, cover 99.72%, enrich 1.01x
+#refGene:cds 1.282%, netSyntenyMonDom4 98.029%, both 1.260%, cover 98.26%, enrich 1.00x
+       #refGene:cds 1.282%, netOrnAna1 68.119%, both 1.168%, cover 91.06%, enrich 1.34x
+#refGene:cds 1.282%, netSyntenyOrnAna1 56.729%, both 0.714%, cover 55.67%, enrich 0.98x
+       #refGene:cds 1.282%, netGalGal3 82.246%, both 1.189%, cover 92.68%, enrich 1.13x
+#refGene:cds 1.282%, netSyntenyGalGal3 80.379%, both 1.101%, cover 85.86%, enrich 1.07x
+       #refGene:cds 1.282%, netAnoCar1 63.263%, both 1.128%, cover 87.97%, enrich 1.39x
+#refGene:cds 1.282%, netSyntenyAnoCar1 54.068%, both 0.816%, cover 63.65%, enrich 1.18x
+       #refGene:cds 1.282%, netXenTro2 45.072%, both 1.057%, cover 82.44%, enrich 1.83x
+#refGene:cds 1.282%, netSyntenyXenTro2 31.985%, both 0.596%, cover 46.44%, enrich 1.45x
+       #refGene:cds 1.282%, netDanRer4 28.211%, both 1.012%, cover 78.87%, enrich 2.80x
+#refGene:cds 1.282%, netSyntenyDanRer4 7.631%, both 0.177%, cover 13.83%, enrich 1.81x
+       #refGene:cds 1.282%, netFr2 26.938%, both 0.975%, cover 76.03%, enrich 2.82x
+#refGene:cds 1.282%, netSyntenyFr2 7.991%, both 0.200%, cover 15.62%, enrich 1.95x
+
+    # Conclusion: CDS coverage loss is small in all placentals and opossum, so
+    # use syntenic net mafs for these in multiz.  
+    # Ask about chicken -- it's marginal
+    # Robert prepped synMafNet's for some species, but the files lack
+    # soft-masked sequence, so redo if time.
+
     # (set up trackDb.ra entry for composite track)
 
+
+# SYNTENIC NET MAFS FOR MULTIZ (2007-03-09 kate)
+# Compare with Robert's
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.rheMac2
+    mv mafSynNet mafSynNet.robert
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.panTro2
+
+    # need DEF file for syntenic net, but this was
+    # a swapped run, so we will simulate
+    cp /cluster/data/panTro2/bed/blastz.hg18/DEF .
+    # edit to reverse target and query, and change BASE dir
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
+    rm DEF
+
+    # edit DEF file to reference kolossus-accessible sequence and chrom.sizes
+    cd /cluster/data/hg18/bed/blastz.monDom4
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
+
+    cd /cluster/data/hg18/bed/blastz.equCab1
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
+
+    cd /cluster/data/hg18/bed/blastz.bosTau3
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
+
+    cd /cluster/data/hg18/bed/blastz.mm8
+    cp /cluster/data/mm8/bed/blastz.hg18/DEF .
+    # edit to reverse target & query, change BASE
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log
+    rm -f DEF
+
+    cd /cluster/data/hg18/bed/blastz.rn4
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log
+
+    cd /cluster/data/hg18/bed/blastz.canFam2
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
 
 ##########################################################################
 # EVOFOLD (Done, 05/12/06) Jakob Skou Pedersen
@@ -11488,13 +11620,16 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
     doBlastzChainNet.pl DEF \
-      -bigClusterHub pk
-      -chainMinScore=3000 -chainLinearGap=medium
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium \
       -blastzOutRoot /cluster/bluearc/felCat3/blastz.hg18 >& do.log &
     tail -f do.log
 
     nice featureBits -chrom=chr1 hg18 chainFelCat3Link
     # 86932463 bases of 224999719 (38.637%) in intersection
+
+    # reciprocal best net mafs for multiz
+     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 felCat3 >&! rbest.log &
 
 ##############################################################################
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE weirauch 11/19/06)
@@ -13170,7 +13305,7 @@ chainOne $(path1)
 
 #########################################################################
 ## BLASTZ ANOCAR1 - Lizard - (DONE - 2007-02-17 - 2007-02-18 - Hiram)
-    ssh kkstore05
+    ssh kkstore02
     mkdir /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
     cd /cluster/data/hg18/bed/blastz.anoCar1.2007-02-17
 
@@ -13291,14 +13426,142 @@ TMPDIR=/scratch/tmp
                 >&! do3.log &
     tail -f do3.log
 
+    # reciprocal best net mafs for multiz
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 otoGar1 >&! rbest.log &
+
+#########################################################################
+# BLASTZ/CHAIN/NET CAVPOR2 (IN PROGRESS 2007-03-06 kate)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.cavPor2.2007-03-06
+    cd /cluster/data/hg18/bed/blastz.cavPor2.2007-03-06
+    cat << '_EOF_' > DEF
+# human vs. guinea pig
+
+# dynamic masking param
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Guinea pig cavPor2
+# using cat-like params, as this has similar #scaffolds
+SEQ2_DIR=/san/sanvol1/scratch/cavPor2/cavPor2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/cavPor2/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+# this makes ~200K jobs
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.cavPor2.2007-03-06
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+    tail -f do.log
+
+    # cluster brought down by site work
+    # restart on 3/7
+
+    ssh pk
+    cd /cluster/data/hg18/bed/blastz.cavPor2.2007-03-06/run.blastz
+    para recover jobList jobList2
+    para make jobList2 >&! do2.log &
+    para time > run.time
+
+    # entire run took probably 36 hours cluster time
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.cavPor2.2007-03-06
+    /cluster/bin/scripts/doBlastzChainNet.pl DEF \
+      -bigClusterHub pk -continue=cat -stop cleanup \
+      -chainMinScore=3000 -chainLinearGap=medium >& do3.log &
+
+    # reciprocal best net mafs for multiz
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 cavPor2 >&! rbest.log &
+
+#########################################################################
+# BLASTZ/CHAIN/NET ERIEUR1 (IN PROGRESS 2007-03-08 kate)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.eriEur1.2007-03-08
+    cd /cluster/data/hg18/bed/blastz.eriEur1.2007-03-08
+    cat << '_EOF_' > DEF
+# human vs. hedgehog
+
+# dynamic masking param
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: hedgehog eriEur1
+# using cat-like params, as this has similar #scaffolds
+SEQ2_DIR=/san/sanvol1/scratch/eriEur1/eriEur1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/eriEur1/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+# this makes ~200K jobs
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.eriEur1.2007-03-08
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+    tail -f do.log
+
+#########################################################################
+# BLASTZ/CHAIN/NET SORARA1 (IN PROGRESS 2007-03-08 kate)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.sorAra1.2007-03-08
+    cd /cluster/data/hg18/bed/blastz.sorAra1.2007-03-08
+    cat << '_EOF_' > DEF
+# human vs. hedgehog
+
+# dynamic masking param
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: shrew sorAra1
+# using cat-like params, as this has similar #scaffolds
+SEQ2_DIR=/san/sanvol1/scratch/sorAra1/sorAra1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/sorAra1/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+# this makes ~200K jobs
+SEQ2_LIMIT=500
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.sorAra1.2007-03-08
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk \
+      -chainMinScore=3000 -chainLinearGap=medium >& do.log &
+    tail -f do.log
+
+
 ########################################################################
 # 25-Way Multiple Alignment
 
     ssh kkstore02
     cd /cluster/data/hg18/bed
-    mkdir multiz25way.2007-02-28
-    ln -s multiz25way.2007-02-28 multiz25way
-    cd multiz25way
+    mkdir multiz25way.2007-03-10
+    ln -s multiz25way.2007-03-10 multiz25wayStrict
+    cd multiz25wayStrict
 
     # start with 17way tree; update assemblies and add new species
     mkdir tree
@@ -13314,16 +13577,16 @@ TMPDIR=/scratch/tmp
 (N)ew, (U)pdated, (S)ame species since 17way:
 U chimp (panTro2) (needs chain/net update on hg18)
 S rhesus (rheMac2)
--N bushbaby (oroGar1) "Otolemumr garnetti" (galago)
+-N bushbaby (otoGar1) "Otolemur garnetti" (galago)
 N tree_shrew (tupBel1) "Tupaia belangeri"
 S rat (rn4)
 S mouse (mm8)
--N guinea_pig (cavPor0) "Cavia porcellus"
+-N guinea_pig (cavPor2) "Cavia porcellus"
 S rabbit (oryCun1)
--N shrew (sorAra0) "Sorex araneus"
--N hedgehog (eriEur0) "Erinaceus europaeus"
+-N shrew (sorAra1) "Sorex araneus"
+-N hedgehog (eriEur1) "Erinaceus europaeus"
 S dog (canFam2)
-N cat (felCat1) "Felis catus"
+N cat (felCat3) "Felis catus"
 -N horse (equCab1) "Equus caballus"
 U cow (bosTau3)
 S armadillo (dasNov1) "Dasypus novemcinctus"
@@ -13341,64 +13604,135 @@ N medaka (oryLat1) "Oryzias latipees"
 U zebrafish (danRer4) (needs chain/net update on hg18)
 
     # create species list
-    sed -e 's/[()]//g' -e 's/ /\n/g' tree/tree.asm.nh | \
+    sed -e 's/[()]//g' -e 's/ /\n/g' tree/tree.25.nh | \
         sed -e '/^$/d'| sort > species.lst
     wc -l species.lst
         # 28 species.lst
 
     # verify all blastz's exists
+cat > listMafs.csh << 'EOF'
     foreach db (`cat species.lst`)
-        ls -d /cluster/data/hg18/bed/blastz.$db/mafNet/chr1.maf.gz
+        set bdir = /cluster/data/hg18/bed/blastz.$db
+        if (-e $bdir/mafRBestNet/chr1.maf.gz) then
+            echo "$db mafRBestNet"
+        else if (-e $bdir/mafSynNet/chr1.maf.gz) then
+            echo "$db mafSynNet"
+        else if (-e $bdir/mafNet/chr1.maf.gz) then
+            echo "$db mafNet"
+        else 
+            echo "$db mafs not found"
+        endif
     end
+'EOF'
+
+    # Maf types:
+    # 2X mammals -> reciprocal best net
+    # high cov placental mammals -> syntenic net
+    # other -> standard net
+
+    csh listMafs.csh > listMafs.log &
+    cat listMafs.log
+# anoCar1 mafNet
+# bosTau3 mafSynNet
+# canFam2 mafNet
+# danRer4 mafNet
+# dasNov1 mafRBestNet
+# echTel1 mafRBestNet
+# equCab1 mafSynNet
+# felCat3 mafRBestNet
+# fr2 mafNet
+# galGal3 mafNet
+# gasAcu1 mafNet
+# loxAfr1 mafRBestNet
+# mm8 mafSynNet
+# monDom4 mafNet
+# ornAna1 mafNet
+# oryCun1 mafRBestNet
+# oryLat1 mafNet
+# otoGar1 mafRBestNet
+# panTro2 mafSynNet
+# rheMac2 mafSynNet
+# rn4 mafSynNet
+# tetNig1 mafNet
+# tupBel1 mafRBestNet
+# xenTro2 mafNet
+
     # add links of the formt blastz.<db> to blastz.<db>.<date> dirs:
     cd /cluster/data/hg18/bed
     ln -s blastz.fr2.2007-01-24 blastz.fr2
     ln -s blastz.ornAna1.2007-02-21 blastz.ornAna1
     ln -s blastz.oryLat1.swap blastz.oryLat1
-    # missing: cavPor0, eriEur0, sorAra0, equCab1, otoGar1, 
-    #   sorAra0 (blastz's run, but no net mafs): 
-    #                   /cluster/data/sorAra0/bed/zb.hg18
-    #   otoGar1 (repeatmasked, but no blastz): /cluster/data/otoGar1, Robert
 
     # copy net mafs to cluster-friendly storage, splitting chroms
     # into 50MB chunks  to improve run-time
     ssh hgwdev
-    cd /cluster/data/hg18/bed/multiz25way
-    mkdir split
-    cd split
+    cd /cluster/data/hg18/bed/multiz25wayStrict
+    mkdir run.split
+    cd run.split
     mafSplitPos hg18 50 mafSplit.bed
 
-    ssh kkstore02
-    cd /cluster/data/hg18/bed/multiz25way
-    cd split
-cat > split.csh << 'EOF'
-    set dir = /san/sanvol1/scratch/hg18/splitMafNet
-    mkdir -p $dir
-    foreach db (`cat ../species.lst`)
-        set mdir = /cluster/data/hg18/bed/blastz.$db/mafNet
-        if (-e $mdir) then
-            echo "$db"
-            mkdir -p $dir/$db
-            foreach f ($mdir/*)
-                set c = $f:t:r:r
-                echo "  $c"
-                nice mafSplit mafSplit.bed $dir/$db/ $f
-            end
-            echo "gzipping $dir/$db mafs"
-            nice gzip $dir/$db/*
-        endif
-    end
+    ssh kki
+    cd /cluster/data/hg18/bed/multiz25wayStrict
+    mkdir run.split
+    cd run.split
+    cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+set db = $1
+set sdir = /san/sanvol1/scratch/hg18/splitStrictMafNet
+mkdir -p $sdir
+if (-e $sdir/$db) then
+    echo "directory $sdir/$db already exists -- remove and retry"
+    exit 1
+endif
+set bdir = /cluster/data/hg18/bed/blastz.$db
+if (! -e $bdir) then
+    echo "directory $bdir not found"
+    exit 1
+endif
+mkdir -p $sdir/$db
+if (-e $bdir/mafRBestNet) then
+    set mdir = $bdir/mafRBestNet
+else if (-e $bdir/mafSynNet) then
+    set mdir = $bdir/mafSynNet
+else if (-e $bdir/mafNet) then
+    set mdir = $bdir/mafNet
+else
+    echo "$bdir maf dir not found"
+    exit 1
+endif
+echo $mdir
+foreach f ($mdir/*)
+    set c = $f:t:r:r
+    echo "  $c"
+    nice mafSplit mafSplit.bed $sdir/$db/ $f
+end
+echo "gzipping $sdir/$db mafs"
+nice gzip $sdir/$db/*
+endif
+echo $mdir > $db.done
 'EOF'
-    csh split.csh >&! split.log
-    # 3 hours for 23 assemblies (8 minutes per)
+# << happy emacs
+    chmod +x doSplit.csh
 
-    set dir = /san/sanvol1/scratch/hg18/splitMafNet
-    ls $dir/fr2 | sed -e 's/.maf.gz//' -e 's/\./__/' > chromChunks.lst
-    wc -l chromChunks.lst
-        # 93
-    cd ..
+    grep -v hg18  ../species.25.lst > split.lst
+    cat > spec << 'EOF'
+#LOOP
+doSplit.csh $(path1) {check out line+ $(path1).done}
+#ENDLOOP
+'EOF'
+    gensub2 split.lst single spec jobList
+    para create jobList
+        # 24 jobs
+    para try
+    para check
+    para push
+    # till complete
+    para time >&! run.time
+    # 30 minutes
 
     # run multiz
+    ssh pk
+    cd /cluster/data/hg18/bed/multiz25wayStrict
     mkdir -p maf run
     cd run
     mkdir penn
@@ -13406,17 +13740,24 @@ cat > split.csh << 'EOF'
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
 
+    # list chrom chunks, any db dir will do; better would be for the
+    # splitter to generate this file
+    # We temporarily use __ instead of . to delimit chunk in filename
+    # so we can use $(root) to get basename
+    set mdir = /san/sanvol1/scratch/hg18/splitStrictMafNet
+    ls $mdir/fr2 | sed -e 's/.maf.gz//' -e 's/\./__/' > chromChunks.lst
+    wc -l chromChunks.lst
+        # 93
+
 cat > autoMultiz.csh << 'EOF'
 #!/bin/csh -ef
 
-# needed till Erich reboots pk
-limit datasize 2000000
     set db = hg18
     set c = $1
     set maf = $2
     set run = `pwd`
     set tmp = /scratch/tmp/$db/multiz.$c
-    set pairs = /san/sanvol1/scratch/$db/splitMafNet
+    set pairs = /san/sanvol1/scratch/$db/splitStrictMafNet
     rm -fr $tmp
     mkdir -p $tmp
     cp ../tree/tree.25.nh ../species.25.lst $tmp
@@ -13447,11 +13788,11 @@ limit datasize 2000000
 
 cat  << 'EOF' > spec
 #LOOP
-./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz25way.2007-02-28/maf/$(root1).maf}
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz25wayStrict/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
     # << emacs
-    gensub2 ../split/chromChunks.lst single spec jobList
+    gensub2 chromChunks.lst single spec jobList
     para create jobList
         # 93 jobs
     para try
@@ -13462,21 +13803,19 @@ cat  << 'EOF' > spec
 
     # load tables for a look
     ssh hgwdev
-    mkdir -p /gbdb/hg18/multiz25way/maf
-    ln -s /cluster/data/hg18/bed/multiz25way/maf/*.maf \
-                /gbdb/hg18/multiz25way/maf
-    cd /cluster/data/hg18/bed/multiz25way
+    mkdir -p /gbdb/hg18/multiz25wayStrict/maf
+    ln -s /cluster/data/hg18/bed/multiz25wayStrict/maf/*.maf \
+                /gbdb/hg18/multiz25wayStrict/maf
+    cd /cluster/data/hg18/bed/multiz25wayStrict
 cat > loadMaf.csh << 'EOF'
     date
-    hgLoadMaf -pathPrefix=/gbdb/hg18/multiz25way/maf hg18 multiz25way
-'EOF'
-     csh loadMaf.csh >&! loadMaf.log &
+    hgLoadMaf -pathPrefix=/gbdb/hg18/multiz25wayStrict/maf hg18 multiz25wayStrict
 
      # load summary table
      cat maf/*.maf |  nice hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
-                 -maxSize=200000  multiz25waySummary stdin
-
-        #Created 4300678 summary blocks from 160779404 components and 20170672 mafs from stdin
+                 -maxSize=200000  multiz25wayStrict Summary stdin
+'EOF'
+     csh loadMaf.csh >&! loadMaf.log &
 
 
 #########################################################################
@@ -13551,8 +13890,11 @@ TMPDIR=/scratch/tmp
     # << emacs
 
 # RECIPROCAL BEST CHIMP PANTRO2 (2007-03-02 kate)
+#       Requested by Daryl
     cd /cluster/data/hg18/bed/blastz.panTro2
     doRecipBest.pl hg18 panTro2 >&! rbest.log &
+
+
 
 #########################################################################
 # EPONINE-TSS (TRANSCRIPTON START SITE) PREDICTION 
