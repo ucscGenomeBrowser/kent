@@ -2032,6 +2032,119 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap > swap.log 2>&1 &
 
+#######################################################################
+## BLASTZ FUGU FR2 - (DONE - 2007-03-09 - 2007-03-12 - Hiram)
+    ssh kkstore03
+    mkdir /cluster/data/galGal3/bed/blastz.fr2.2007-03-09
+    cd /cluster/data/galGal3/bed/blastz.fr2.2007-03-09
+
+    cat << '_EOF_' > DEF
+# chicken vs. fugu 
+
+# Use same params as used for galGal3-xenTro1 (see makeXenTro1.doc)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/san/sanvol1/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu fr2 
+SEQ2_DIR=/san/sanvol1/scratch/fr2/fr2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr2/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr2/fr2.scaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr2/liftAll.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.fr2.2007-03-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+    -qRepeats=windowmaskerSdust \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-blastzOutRoot=/cluster/bluearc/galGal3Fr2 > do.log  2>&1
+    cat fb.galGal3.chainFr2Link.txt
+    #	30935323 bases of 1042591351 (2.967%) in intersection
+
+    mkdir /cluster/data/fr2/bed/blastz.galGal3.swap
+    cd /cluster/data/fr2/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl -verbose=2 -qRepeats=windowmaskerSdust \
+	/cluster/data/galGal3/bed/blastz.fr2.2007-03-09/DEF \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log  2>&1 &
+    time doBlastzChainNet.pl -verbose=2 -qRepeats=windowmaskerSdust \
+	/cluster/data/galGal3/bed/blastz.fr2.2007-03-09/DEF \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net -swap > swap_net.log  2>&1 &
+    #	real    3m1.239s
+    cat fb.fr2.chainGalGal3Link.txt
+    #	36175581 bases of 393312790 (9.198%) in intersection
+
+#######################################################################
+## BLASTZ FUGU FR1 - (DONE - 2007-03-09 - 2007-03-12 - Hiram)
+    ssh kkstore03
+    mkdir /cluster/data/galGal3/bed/blastz.fr1.2007-03-09
+    cd /cluster/data/galGal3/bed/blastz.fr1.2007-03-09
+
+    cat << '_EOF_' > DEF
+# chicken vs. fugu 
+
+# Use same params as used for galGal3-xenTro1 (see makeXenTro1.doc)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/san/sanvol1/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu fr1 
+SEQ2_DIR=/san/sanvol1/scratch/fr1/chrUn.sdTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr1/fr1.UnScaffolds.sdTrf.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr1/scaffold.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/fr1/UnScaffolds/ordered.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.fr1.2007-03-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 DEF \
+    -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-blastzOutRoot=/cluster/bluearc/galGal3Fr1 > do.log  2>&1
+    cat fb.galGal3.chainFr1Link.txt
+    #	29604522 bases of 1042591351 (2.840%) in intersection
+
+    mkdir /cluster/data/fr1/bed/blastz.galGal3.swap
+    cd /cluster/data/fr1/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl -verbose=2 -qRepeats=windowmaskerSdust \
+	/cluster/data/galGal3/bed/blastz.fr1.2007-03-09/DEF \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log  2>&1 &
+    #	real    3m14.494s
+    cat fb.fr1.chainGalGal3Link.txt
+    #	33536400 bases of 315518167 (10.629%) in intersection
 
 #######################################################################
 # BLASTZ PLATYPUS ORNANA1 (DONE 3/8/07 angie)
@@ -2072,5 +2185,3 @@ TMPDIR=/scratch/tmp
     ssh -x hgwdev time nice featureBits galGal3 chainOrnAna1Link \
 	> fb.galGal3.chainOrnAna1Link.txt
 #105102316 bases of 1042591351 (10.081%) in intersection
-
-
