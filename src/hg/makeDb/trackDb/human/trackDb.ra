@@ -601,7 +601,7 @@ altColor 0,0,0
 spectrum on
 type bed 12 .
 
-track hapmapAlleles
+track hapmapSnps
 compositeTrack on
 shortLabel HapMap SNPs
 longLabel HapMap SNPs
@@ -610,44 +610,44 @@ priority 144.48
 visibility hide
 type bed 6 + 
 
-    track hapmapAllelesCEU
-    subTrack hapmapAlleles
+    track hapmapSnpsCEU
+    subTrack hapmapSnps
     shortLabel SNPs CEU
     longLabel SNPs from the CEU Population
     priority 1
 
-    track hapmapAllelesCHB
-    subTrack hapmapAlleles
+    track hapmapSnpsCHB
+    subTrack hapmapSnps
     shortLabel SNPs CHB
     longLabel SNPs from the CHB Population
     priority 2
 
-    track hapmapAllelesJPT
-    subTrack hapmapAlleles
+    track hapmapSnpsJPT
+    subTrack hapmapSnps
     shortLabel SNPs JPT
     longLabel SNPs from the JPT Population
     priority 3
 
-    track hapmapAllelesYRI
-    subTrack hapmapAlleles
+    track hapmapSnpsYRI
+    subTrack hapmapSnps
     shortLabel SNPs YRI
     longLabel SNPs from the YRI Population
     priority 4
 
     track hapmapAllelesChimp
-    subTrack hapmapAlleles
+    subTrack hapmapSnps
     shortLabel Chimp Alleles
     longLabel Orthologous Alleles from Chimp (panTro2)
     priority 5
 
     track hapmapAllelesMacaque
-    subTrack hapmapAlleles
+    subTrack hapmapSnps
     shortLabel Macaque Alleles
     longLabel Orthologous Alleles from Macaque (rheMac2)
     priority 6
 
-searchName hapmapAllelesCEU
-searchTable hapmapAllelesCEU
+searchName hapmapSnpsCEU
+searchTable hapmapSnpsCEU
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -655,8 +655,8 @@ termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAllelesCHB
-searchTable hapmapAllelesCHB
+searchName hapmapSnpsCHB
+searchTable hapmapSnpsCHB
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -664,8 +664,8 @@ termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAllelesJPT
-searchTable hapmapAllelesJPT
+searchName hapmapSnpsJPT
+searchTable hapmapSnpsJPT
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -673,8 +673,8 @@ termRegex (rs[1-9][0-9]*)
 searchPriority 12
 padding 250
 
-searchName hapmapAllelesYRI
-searchTable hapmapAllelesYRI
+searchName hapmapSnpsYRI
+searchTable hapmapSnpsYRI
 searchMethod exact
 searchType bed
 semiShortCircuit 1
