@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.352 2007/03/09 03:14:52 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.353 2007/03/12 03:36:59 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2286,6 +2286,8 @@ else if (sameString(track, "snp"))
 else if (sameString(track, "snp125"))
 	snp125Ui(tdb);
 else if (sameString(track, "snp126"))
+	snp125Ui(tdb);
+else if (sameString(track, "snp127"))
 	snp125Ui(tdb);
 else if (sameString(track, "rertyHumanDiversityLd"))
         ldUi(tdb);
