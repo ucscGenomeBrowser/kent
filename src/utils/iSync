@@ -2,7 +2,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/iSync instead.
 
-# $Id: iSync,v 1.5 2004/12/08 19:06:32 hiram Exp $
+# $Id: iSync,v 1.6 2007/03/12 21:20:32 fanhsu Exp $
 
 set RUNNING = `ps -ef | grep rsync | grep -v grep | wc -l`
 
@@ -18,7 +18,7 @@ if ($HOST != "kkr1u00.kilokluster.ucsc.edu" && $HOST != "kkr1u00") then
     echo "You must run iSync on kkr1u00.kilokluster.ucsc.edu"
     exit 255
 endif
-foreach i (kkr3u00 kkr4u00 kkr5u00 kkr6u00 kkr7u00 kkr8u00)
+foreach i (kkr3u00 kkr4u00 kkr5u00 kkr6u00 kkr7u00)
     $rsync -q /iscratch/i/ $i\:/iscratch/i/ &
 end
 $rsync -v /iscratch/i/ kkr2u00:/iscratch/i/
