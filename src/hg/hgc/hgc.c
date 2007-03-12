@@ -199,7 +199,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1227 2007/03/11 15:58:11 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1228 2007/03/12 03:25:08 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18170,6 +18170,10 @@ else if (sameWord(track, "snp125"))
 else if (sameWord(track, "snp126"))
     {
     doSnpWithVersion(tdb, item, 126);
+    }
+else if (sameWord(track, "snp127"))
+    {
+    doSnpWithVersion(tdb, item, 127);
     }
 else if (sameWord(track, "cnpIafrate"))
     {
