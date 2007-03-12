@@ -126,7 +126,8 @@ else
     {
     /* Step forward looking for first gap big enough to be an intron*/
     int i;
-    for (i=0; i<bed->blockCount-2; ++i)
+    int lastBlock = bed->blockCount-1;
+    for (i=0; i<lastBlock; ++i)
         {
 	int gapStart = bed->chromStarts[i] + bed->blockSizes[i] + bed->chromStart;
 	int gapEnd = bed->chromStarts[i+1] + bed->chromStart;
