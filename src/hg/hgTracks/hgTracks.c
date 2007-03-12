@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1296 2007/03/12 03:24:16 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1297 2007/03/12 18:19:34 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13037,7 +13037,7 @@ registerTrackHandler("transMapAncMRnaAliGene", transMapMethods);
 
 registerTrackHandler("retroposons", dbRIPMethods);
 
-registerTrackHandler("hapmapAlleles", hapmapMethods);
+registerTrackHandler("hapmapSnps", hapmapMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
