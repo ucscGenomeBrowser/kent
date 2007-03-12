@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.13 2007/02/16 22:09:25 hiram Exp $"
+#       "$Id: fr2.txt,v 1.14 2007/03/12 22:22:48 hiram Exp $"
 #
 
 ##########################################################################
@@ -1575,3 +1575,27 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
 	Takifugu_rubripes.jpg
     ##  check this file into the browser/images CVS source tree and
     ##	copy to /usr/local/apache/htdocs/images
+
+##########################################################################
+## RepeatMasker run to cover all bases (DONE - 2007-03-07 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/fr2/bed/RepeatMasker
+    cd /cluster/data/fr2/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl -verbose=2 -bigClusterHub=kk \
+	-buildDir=/cluster/data/fr2/bed/RepeatMasker fr2 > do.log 2>&1
+
+###########################################################################
+## Chicken/Fugu chain/net swap - (DONE - 2007-03-12 - Hiram)
+    mkdir /cluster/data/fr2/bed/blastz.galGal3.swap
+    cd /cluster/data/fr2/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl -verbose=2 -qRepeats=windowmaskerSdust \
+	/cluster/data/galGal3/bed/blastz.fr2.2007-03-09/DEF \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log  2>&1 &
+    time doBlastzChainNet.pl -verbose=2 -qRepeats=windowmaskerSdust \
+	/cluster/data/galGal3/bed/blastz.fr2.2007-03-09/DEF \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net -swap > swap_net.log  2>&1 &
+    #	real    3m1.239s
+    cat fb.fr2.chainGalGal3Link.txt
+    #	36175581 bases of 393312790 (9.198%) in intersection

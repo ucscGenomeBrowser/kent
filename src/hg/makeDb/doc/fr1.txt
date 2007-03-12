@@ -2356,3 +2356,14 @@ XXXX - running 2007-01-11 20:55
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-swap -stop=net -bigClusterHub=pk > swap.log 2>&1 &
 
+###########################################################################
+## Chicken/Fugu chain/net swap - (DONE - 2007-03-12 - Hiram)
+    mkdir /cluster/data/fr1/bed/blastz.galGal3.swap
+    cd /cluster/data/fr1/bed/blastz.galGal3.swap
+    time doBlastzChainNet.pl -verbose=2 -qRepeats=windowmaskerSdust \
+	/cluster/data/galGal3/bed/blastz.fr1.2007-03-09/DEF \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap > swap.log  2>&1 &
+    #	real    3m14.494s
+    cat fb.fr1.chainGalGal3Link.txt
+    #	33536400 bases of 315518167 (10.629%) in intersection
