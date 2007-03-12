@@ -5,14 +5,10 @@
 #ifndef HAPMAPSNPS_H
 #define HAPMAPSNPS_H
 
-#ifndef JKSQL_H
-#include "jksql.h"
-#endif
-
-#define HAPMAPSNPS_NUM_COLS 27
+#define HAPMAPSNPS_NUM_COLS 12
 
 struct hapmapSnps
-/* HapMap allele counts by population and derived alleles */
+/* HapMap genotype summary */
     {
     struct hapmapSnps *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
@@ -21,27 +17,12 @@ struct hapmapSnps
     char *name;	/* Reference SNP identifier from dbSnp */
     unsigned score;	/* Not used */
     char strand[2];	/* Which genomic strand contains the observed alleles */
-    char hReference[2];	/* Reference allele for human */
-    char hOther[2];	/* Other allele for human */
-    char cState[2];	/* Chimp state */
-    char rState[2];	/* Rhesus state */
-    unsigned cQual;	/* chimp quality score */
-    unsigned rQual;	/* rhesus quality score */
-    unsigned rYri;	/* Reference allele count for the YRI population */
-    unsigned rCeu;	/* Reference allele count for the CEU population */
-    unsigned rChb;	/* Reference allele count for the CHB population */
-    unsigned rJpt;	/* Reference allele count for the JPT population */
-    unsigned rJptChb;	/* Reference allele count for the JPT+CHB population */
-    unsigned oYri;	/* Other allele count for the YRI population */
-    unsigned oCeu;	/* Other allele count for the CEU population */
-    unsigned oChb;	/* Other allele count for the CHB population */
-    unsigned oJpt;	/* Other allele count for the JPT population */
-    unsigned oJptChb;	/* Other allele count for the JPT+CHB population */
-    unsigned nYri;	/* Sample Size for the YRI population */
-    unsigned nCeu;	/* Sample Size for the CEU population */
-    unsigned nChb;	/* Sample Size for the CHB population */
-    unsigned nJpt;	/* Sample Size for the JPT population */
-    unsigned nJptChb;	/* Sample Size for the JPT+CHB population */
+    char *observed;	/* Observed string from genotype file */
+    char allele1[2];	/* This allele has been observed */
+    unsigned homoCount1;	/* Count of individuals who are homozygous for allele1 */
+    char *allele2;	/* This allele may not have been observed */
+    unsigned homoCount2;	/* Count of individuals who are homozygous for allele2 */
+    unsigned heteroCount;	/* Count of individuals who are heterozygous */
     };
 
 void hapmapSnpsStaticLoad(char **row, struct hapmapSnps *ret);
@@ -63,31 +44,6 @@ struct hapmapSnps *hapmapSnpsLoadAllByChar(char *fileName, char chopper);
 #define hapmapSnpsLoadAllByTab(a) hapmapSnpsLoadAllByChar(a, '\t');
 /* Load all hapmapSnps from tab separated file.
  * Dispose of this with hapmapSnpsFreeList(). */
-
-struct hapmapSnps *hapmapSnpsLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all hapmapSnps from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with hapmapSnpsFreeList(). */
-
-void hapmapSnpsSaveToDb(struct sqlConnection *conn, struct hapmapSnps *el, char *tableName, int updateSize);
-/* Save hapmapSnps as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use hapmapSnpsSaveToDbEscaped() */
-
-void hapmapSnpsSaveToDbEscaped(struct sqlConnection *conn, struct hapmapSnps *el, char *tableName, int updateSize);
-/* Save hapmapSnps as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than hapmapSnpsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct hapmapSnps *hapmapSnpsCommaIn(char **pS, struct hapmapSnps *ret);
 /* Create a hapmapSnps out of a comma separated string. 
@@ -111,6 +67,37 @@ void hapmapSnpsOutput(struct hapmapSnps *el, FILE *f, char sep, char lastSep);
 /* Print out hapmapSnps as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+/* items for trackUi options and filters */
+
+#define HAP_POP_MIXED "hapmapSnps.isMixed"
+#define HAP_POP_COUNT "hapmapSnps.popCount"
+#define HAP_TYPE "hapmapSnps.polyType"
+#define HAP_MIN_FREQ "hapmapSnps.minorAlleleFreqMinimum"
+#define HAP_MAX_FREQ "hapmapSnps.minorAlleleFreqMaximum"
+#define HAP_MIN_HET "hapmapSnps.hetMinimum"
+#define HAP_MAX_HET "hapmapSnps.hetMaximum"
+#define HAP_MONO "hapmapSnps.monomorphic"
+#define HAP_CHIMP "hapmapSnps.chimp"
+#define HAP_CHIMP_QUAL "hapmapSnps.chimpQualScore"
+#define HAP_MACAQUE "hapmapSnps.macaque"
+#define HAP_MACAQUE_QUAL "hapmapSnps.macaqueQualScore"
+
+#define HAP_POP_MIXED_DEFAULT "any"
+#define HAP_POP_COUNT_DEFAULT "any"
+#define HAP_TYPE_DEFAULT      "any"
+
+#define HAP_MIN_FREQ_DEFAULT  "0.0"
+#define HAP_MAX_FREQ_DEFAULT  "0.5"
+#define HAP_MIN_HET_DEFAULT   "0.0"
+#define HAP_MAX_HET_DEFAULT   "0.5"
+
+#define HAP_MONO_DEFAULT      "any"
+
+#define HAP_CHIMP_DEFAULT     "any"
+#define HAP_CHIMP_QUAL_DEFAULT "0"
+#define HAP_MACAQUE_DEFAULT   "any"
+#define HAP_MACAQUE_QUAL_DEFAULT "0"
 
 #endif /* HAPMAPSNPS_H */
+
 

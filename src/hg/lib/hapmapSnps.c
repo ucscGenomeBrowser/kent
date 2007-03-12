@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapSnps.h"
 
-static char const rcsid[] = "$Id: hapmapSnps.c,v 1.2 2006/02/27 07:56:16 daryl Exp $";
+static char const rcsid[] = "$Id: hapmapSnps.c,v 1.3 2007/03/12 17:11:43 heather Exp $";
 
 void hapmapSnpsStaticLoad(char **row, struct hapmapSnps *ret)
 /* Load a row from hapmapSnps table into ret.  The contents of ret will
@@ -20,28 +20,13 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
-strcpy(ret->hReference, row[6]);
-strcpy(ret->hOther, row[7]);
-strcpy(ret->cState, row[8]);
-strcpy(ret->rState, row[9]);
-ret->cQual = sqlUnsigned(row[10]);
-ret->rQual = sqlUnsigned(row[11]);
-ret->rYri = sqlUnsigned(row[12]);
-ret->rCeu = sqlUnsigned(row[13]);
-ret->rChb = sqlUnsigned(row[14]);
-ret->rJpt = sqlUnsigned(row[15]);
-ret->rJptChb = sqlUnsigned(row[16]);
-ret->oYri = sqlUnsigned(row[17]);
-ret->oCeu = sqlUnsigned(row[18]);
-ret->oChb = sqlUnsigned(row[19]);
-ret->oJpt = sqlUnsigned(row[20]);
-ret->oJptChb = sqlUnsigned(row[21]);
-ret->nYri = sqlUnsigned(row[22]);
-ret->nCeu = sqlUnsigned(row[23]);
-ret->nChb = sqlUnsigned(row[24]);
-ret->nJpt = sqlUnsigned(row[25]);
-ret->nJptChb = sqlUnsigned(row[26]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
+ret->observed = row[6];
+safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
+ret->homoCount1 = sqlUnsigned(row[8]);
+ret->allele2 = row[9];
+ret->homoCount2 = sqlUnsigned(row[10]);
+ret->heteroCount = sqlUnsigned(row[11]);
 }
 
 struct hapmapSnps *hapmapSnpsLoad(char **row)
@@ -56,28 +41,13 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
-strcpy(ret->hReference, row[6]);
-strcpy(ret->hOther, row[7]);
-strcpy(ret->cState, row[8]);
-strcpy(ret->rState, row[9]);
-ret->cQual = sqlUnsigned(row[10]);
-ret->rQual = sqlUnsigned(row[11]);
-ret->rYri = sqlUnsigned(row[12]);
-ret->rCeu = sqlUnsigned(row[13]);
-ret->rChb = sqlUnsigned(row[14]);
-ret->rJpt = sqlUnsigned(row[15]);
-ret->rJptChb = sqlUnsigned(row[16]);
-ret->oYri = sqlUnsigned(row[17]);
-ret->oCeu = sqlUnsigned(row[18]);
-ret->oChb = sqlUnsigned(row[19]);
-ret->oJpt = sqlUnsigned(row[20]);
-ret->oJptChb = sqlUnsigned(row[21]);
-ret->nYri = sqlUnsigned(row[22]);
-ret->nCeu = sqlUnsigned(row[23]);
-ret->nChb = sqlUnsigned(row[24]);
-ret->nJpt = sqlUnsigned(row[25]);
-ret->nJptChb = sqlUnsigned(row[26]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
+ret->observed = cloneString(row[6]);
+safecpy(ret->allele1, sizeof(ret->allele1), row[7]);
+ret->homoCount1 = sqlUnsigned(row[8]);
+ret->allele2 = cloneString(row[9]);
+ret->homoCount2 = sqlUnsigned(row[10]);
+ret->heteroCount = sqlUnsigned(row[11]);
 return ret;
 }
 
@@ -87,7 +57,7 @@ struct hapmapSnps *hapmapSnpsLoadAll(char *fileName)
 {
 struct hapmapSnps *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[27];
+char *row[12];
 
 while (lineFileRow(lf, row))
     {
@@ -105,7 +75,7 @@ struct hapmapSnps *hapmapSnpsLoadAllByChar(char *fileName, char chopper)
 {
 struct hapmapSnps *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[27];
+char *row[12];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -115,76 +85,6 @@ while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
 lineFileClose(&lf);
 slReverse(&list);
 return list;
-}
-
-struct hapmapSnps *hapmapSnpsLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all hapmapSnps from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with hapmapSnpsFreeList(). */
-{
-struct hapmapSnps *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = hapmapSnpsLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void hapmapSnpsSaveToDb(struct sqlConnection *conn, struct hapmapSnps *el, char *tableName, int updateSize)
-/* Save hapmapSnps as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use hapmapSnpsSaveToDbEscaped() */
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u)", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->hReference,  el->hOther,  el->cState,  el->rState,  el->cQual,  el->rQual,  el->rYri,  el->rCeu,  el->rChb,  el->rJpt,  el->rJptChb,  el->oYri,  el->oCeu,  el->oChb,  el->oJpt,  el->oJptChb,  el->nYri,  el->nCeu,  el->nChb,  el->nJpt,  el->nJptChb);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
-
-void hapmapSnpsSaveToDbEscaped(struct sqlConnection *conn, struct hapmapSnps *el, char *tableName, int updateSize)
-/* Save hapmapSnps as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than hapmapSnpsSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *hReference, *hOther, *cState, *rState;
-chrom = sqlEscapeString(el->chrom);
-name = sqlEscapeString(el->name);
-strand = sqlEscapeString(el->strand);
-hReference = sqlEscapeString(el->hReference);
-hOther = sqlEscapeString(el->hOther);
-cState = sqlEscapeString(el->cState);
-rState = sqlEscapeString(el->rState);
-
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s','%s','%s',%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u)", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  hReference,  hOther,  cState,  rState, el->cQual , el->rQual , el->rYri , el->rCeu , el->rChb , el->rJpt , el->rJptChb , el->oYri , el->oCeu , el->oChb , el->oJpt , el->oJptChb , el->nYri , el->nCeu , el->nChb , el->nJpt , el->nJptChb );
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&chrom);
-freez(&name);
-freez(&strand);
-freez(&hReference);
-freez(&hOther);
-freez(&cState);
-freez(&rState);
 }
 
 struct hapmapSnps *hapmapSnpsCommaIn(char **pS, struct hapmapSnps *ret)
@@ -202,27 +102,12 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
-sqlFixedStringComma(&s, ret->hReference, sizeof(ret->hReference));
-sqlFixedStringComma(&s, ret->hOther, sizeof(ret->hOther));
-sqlFixedStringComma(&s, ret->cState, sizeof(ret->cState));
-sqlFixedStringComma(&s, ret->rState, sizeof(ret->rState));
-ret->cQual = sqlUnsignedComma(&s);
-ret->rQual = sqlUnsignedComma(&s);
-ret->rYri = sqlUnsignedComma(&s);
-ret->rCeu = sqlUnsignedComma(&s);
-ret->rChb = sqlUnsignedComma(&s);
-ret->rJpt = sqlUnsignedComma(&s);
-ret->rJptChb = sqlUnsignedComma(&s);
-ret->oYri = sqlUnsignedComma(&s);
-ret->oCeu = sqlUnsignedComma(&s);
-ret->oChb = sqlUnsignedComma(&s);
-ret->oJpt = sqlUnsignedComma(&s);
-ret->oJptChb = sqlUnsignedComma(&s);
-ret->nYri = sqlUnsignedComma(&s);
-ret->nCeu = sqlUnsignedComma(&s);
-ret->nChb = sqlUnsignedComma(&s);
-ret->nJpt = sqlUnsignedComma(&s);
-ret->nJptChb = sqlUnsignedComma(&s);
+ret->observed = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->allele1, sizeof(ret->allele1));
+ret->homoCount1 = sqlUnsignedComma(&s);
+ret->allele2 = sqlStringComma(&s);
+ret->homoCount2 = sqlUnsignedComma(&s);
+ret->heteroCount = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -236,6 +121,8 @@ struct hapmapSnps *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->observed);
+freeMem(el->allele2);
 freez(pEl);
 }
 
@@ -274,54 +161,22 @@ fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->hReference);
+fprintf(f, "%s", el->observed);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->hOther);
+fprintf(f, "%s", el->allele1);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->cState);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->homoCount1);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->rState);
+fprintf(f, "%s", el->allele2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->cQual);
+fprintf(f, "%u", el->homoCount2);
 fputc(sep,f);
-fprintf(f, "%u", el->rQual);
-fputc(sep,f);
-fprintf(f, "%u", el->rYri);
-fputc(sep,f);
-fprintf(f, "%u", el->rCeu);
-fputc(sep,f);
-fprintf(f, "%u", el->rChb);
-fputc(sep,f);
-fprintf(f, "%u", el->rJpt);
-fputc(sep,f);
-fprintf(f, "%u", el->rJptChb);
-fputc(sep,f);
-fprintf(f, "%u", el->oYri);
-fputc(sep,f);
-fprintf(f, "%u", el->oCeu);
-fputc(sep,f);
-fprintf(f, "%u", el->oChb);
-fputc(sep,f);
-fprintf(f, "%u", el->oJpt);
-fputc(sep,f);
-fprintf(f, "%u", el->oJptChb);
-fputc(sep,f);
-fprintf(f, "%u", el->nYri);
-fputc(sep,f);
-fprintf(f, "%u", el->nCeu);
-fputc(sep,f);
-fprintf(f, "%u", el->nChb);
-fputc(sep,f);
-fprintf(f, "%u", el->nJpt);
-fputc(sep,f);
-fprintf(f, "%u", el->nJptChb);
+fprintf(f, "%u", el->heteroCount);
 fputc(lastSep,f);
 }
 
