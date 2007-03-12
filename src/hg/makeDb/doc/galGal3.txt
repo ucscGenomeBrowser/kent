@@ -2031,3 +2031,46 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap > swap.log 2>&1 &
+
+
+#######################################################################
+# BLASTZ PLATYPUS ORNANA1 (DONE 3/8/07 angie)
+    ssh kkstore05
+    mkdir /cluster/data/galGal3/bed/blastz.ornAna1.2007-03-08
+    cd /cluster/data/galGal3/bed/blastz.ornAna1.2007-03-08
+    cat << '_EOF_' > DEF
+# chicken vs. platypus
+
+# Use same params as used for galGal3-xenTro2 but back off L to 6000.
+# If that causes us to get swamped, we can go back up to 8000.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Chicken galGal3
+SEQ1_DIR=/san/sanvol1/galGal3/nib
+SEQ1_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Platypus ornAna1 - largest chunk big enough for largest scaffold
+SEQ2_DIR=/san/sanvol1/scratch/ornAna1/ornAna1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/cluster/data/galGal3/bed/blastz.ornAna1.2007-03-08
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl DEF \
+      -bigClusterHub pk -smallClusterHub pk \
+      >& do.log & tail -f do.log
+    ssh -x hgwdev time nice featureBits galGal3 chainOrnAna1Link \
+	> fb.galGal3.chainOrnAna1Link.txt
+#105102316 bases of 1042591351 (10.081%) in intersection
+
+
