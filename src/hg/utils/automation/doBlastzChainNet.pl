@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.6 2007/03/12 02:57:05 kate Exp $
+# $Id: doBlastzChainNet.pl,v 1.7 2007/03/12 18:50:34 kate Exp $
 
 # to-do items:
 # - lots of testing
@@ -1390,19 +1390,6 @@ Do not use with scaffold-based reference genome";
   if (! -e "$successFile" && ! $opt_debug) {
       die "doSyntenicNet: looks like previous stage was not successful " .
           "(can't find $successFile).\n";
-  }
-  # Verify accessibility of files in DEF file.
-  if (! -e $defVars{'SEQ1_DIR'})
-    die "doSyntenicNet: can't access $defVars{'SEQ1_DIR'} from $workhorse\n";
-  }
-  if (! -e $devVars{'SEQ1_LEN'}) {
-    die "doSyntenicNet: can't access $defVars{'SEQ1_LEN'} from $workhorse\n";
-  }
-  if (! -e $defVars{'SEQ2_DIR'}) {
-    die "doSyntenicNet: can't access $defVars{'SEQ2_DIR'} from $workhorse\n";
-  }
-  if (! -e $devVars{'SEQ2_LEN'}) {
-    die "doSyntenicNet: can't access $defVars{'SEQ2_LEN'} from $workhorse\n";
   }
   my $bossScript = new HgRemoteScript("$runDir/netSynteny.csh", $workhorse,
                                     $runDir, $whatItDoes, $DEF);
