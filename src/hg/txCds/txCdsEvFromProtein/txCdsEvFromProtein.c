@@ -15,7 +15,7 @@ char *refStatusFile = NULL;
 char *uniStatusFile = NULL;
 FILE *fUnmapped = NULL;
 char *defaultSource = "blatUniprot";
-struct hash *refToPepHash = NULL;
+struct hash *pepToRefHash = NULL;
 int dodgeStop = 0;
 double minCoverage = 0.75;
 
@@ -42,7 +42,8 @@ errAbort(
   "   -refToPep=refToPep.tab - Put refSeq mrna to protein mapping file here\n"
   "            Usually used with exceptions flag when processing refSeq\n"
   "   -dodgeStop=N - Dodge (put gaps in place of) up to this many stop codons\n"
-  "            Remark about it in unmapped file though\n"
+  "            Remark about it in unmapped file though. Also allows frame shifts\n"
+  "            This *only* is applied to refPep/refSeq alignments\n"
   "   -minCoverage=0.N - minimum coverage of protein to accept, default %g\n"
   , defaultSource, minCoverage
   );
@@ -255,14 +256,19 @@ void mapAndOutput(char *source, aaSeq *protSeq, struct psl *psl,
 {
 boolean selenocysteine = FALSE;
 boolean doDodge = FALSE;
+int lDodgeStop = 0;
 if (hashLookup(selenocysteineHash, psl->qName))
     selenocysteine = TRUE;
-if (refToPepHash != NULL)
+if (pepToRefHash != NULL)
     {
-    char *refAcc = hashFindVal(refToPepHash, psl->qName);
+    char *refAcc = hashFindVal(pepToRefHash, psl->qName);
     if (refAcc != NULL)
+	{
         if (hashLookup(selenocysteineHash, refAcc))
 	    selenocysteine = TRUE;
+	if (endsWith(psl->tName, refAcc))
+	    lDodgeStop = dodgeStop;
+	}
     }
 	    
 if (!sameString(psl->strand, "++"))
@@ -275,9 +281,9 @@ removeNegativeGaps(psl);
 int stopCount = aliCountStopCodons(psl, txSeq, selenocysteine);
 if (stopCount > 0)
     {
-    if (dodgeStop)
+    if (lDodgeStop)
 	{
-	if (stopCount > dodgeStop)
+	if (stopCount > lDodgeStop)
 	    {
 	    unmappedPrint("%s alignment with %s has too many (%d) stop codons\n", 
 	    	psl->qName, psl->tName, stopCount);
@@ -295,6 +301,28 @@ if (stopCount > 0)
 	unmappedPrint("%s alignment with %s has stop codons\n", psl->qName, psl->tName);
 	return;
 	}
+    }
+if (psl->blockCount > 1)
+    {
+    /* Make sure that all blocks are in same frame. */
+    int frame = psl->tStarts[0]%3;
+    int i;
+    for (i=1; i<psl->blockCount; ++i)
+        if (frame != psl->tStarts[i]%3)
+	    {
+	    if (lDodgeStop > 0)
+		{
+		unmappedPrint("%s alignment with %s allowing frame shift\n", 
+		    psl->qName, psl->tName, stopCount);
+		}
+	    else
+		{
+		unmappedPrint("%s alignment with %s in multiple different frames\n", 
+		    psl->qName, psl->tName);
+		return;
+		}
+	    }
+
     }
 int mappedStart = psl->tStart;
 int mappedEnd = psl->tEnd;
@@ -408,7 +436,7 @@ defaultSource = optionVal("source", defaultSource);
 if (optionExists("unmapped"))
     fUnmapped = mustOpen(optionVal("unmapped", NULL), "w");
 if (optionExists("refToPep"))
-    refToPepHash = hashTwoColumnFileReverse(optionVal("refToPep", NULL));
+    pepToRefHash = hashTwoColumnFileReverse(optionVal("refToPep", NULL));
 dodgeStop = optionInt("dodgeStop", dodgeStop);
 minCoverage = optionDouble("minCoverage", minCoverage);
 makeExceptionHashes();
