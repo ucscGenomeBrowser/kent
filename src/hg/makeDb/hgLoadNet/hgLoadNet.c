@@ -10,7 +10,7 @@
 #include "chainNet.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.15 2006/05/02 15:51:28 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.16 2007/03/12 21:57:10 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -55,6 +55,7 @@ void loadDatabase(char *database, char *tab, char *track)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
+char comment[256];
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -113,6 +114,10 @@ dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 verbose(1, "Loading %s into %s\n", track, database);
 sqlUpdate(conn, dy->string);
+/* add a comment to the history table and finish up connection */
+safef(comment, sizeof(comment),
+      "Loaded net table %s", track);
+hgHistoryComment(conn, comment);
 sqlDisconnect(&conn);
 }
 
