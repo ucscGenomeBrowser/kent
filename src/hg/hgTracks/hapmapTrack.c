@@ -5,22 +5,22 @@
 #include "hdb.h"
 #include "hgTracks.h"
 
-#include "hapmapAlleles.h"
+#include "hapmapSnps.h"
 #include "hapmapAllelesCombined.h"
 #include "hapmapAllelesOrtho.h"
 #include "hapmapAllelesSummary.h"
 
-char *mixedFilter = HA_POP_MIXED_DEFAULT;
-char *popCountFilter = HA_POP_COUNT_DEFAULT;
-char *observedFilter = HA_TYPE_DEFAULT;
+char *mixedFilter = HAP_POP_MIXED_DEFAULT;
+char *popCountFilter = HAP_POP_COUNT_DEFAULT;
+char *observedFilter = HAP_TYPE_DEFAULT;
 float minFreqFilter = 0.0;
 float maxFreqFilter = 0.5;
 float minHetFilter = 0.0;
 float maxHetFilter = 0.5;
-char *monoFilter = HA_MONO_DEFAULT;
-char *chimpFilter = HA_CHIMP_DEFAULT;
+char *monoFilter = HAP_MONO_DEFAULT;
+char *chimpFilter = HAP_CHIMP_DEFAULT;
 int chimpQualFilter = 0;
-char *macaqueFilter = HA_MACAQUE_DEFAULT;
+char *macaqueFilter = HAP_MACAQUE_DEFAULT;
 int macaqueQualFilter = 0;
 
 
@@ -45,37 +45,37 @@ return TRUE;
 
 void loadFilters()
 {
-mixedFilter = cartUsualString(cart, HA_POP_MIXED, HA_POP_MIXED_DEFAULT);
-popCountFilter = cartUsualString(cart, HA_POP_COUNT, HA_POP_COUNT_DEFAULT);
-observedFilter = cartUsualString(cart, HA_TYPE, HA_TYPE_DEFAULT);
-minFreqFilter = sqlFloat(cartUsualString(cart, HA_MIN_FREQ, HA_MIN_FREQ_DEFAULT));
-maxFreqFilter = sqlFloat(cartUsualString(cart, HA_MAX_FREQ, HA_MAX_FREQ_DEFAULT));
-minHetFilter = sqlFloat(cartUsualString(cart, HA_MIN_HET, HA_MIN_HET_DEFAULT));
-maxHetFilter = sqlFloat(cartUsualString(cart, HA_MAX_HET, HA_MAX_HET_DEFAULT));
-monoFilter = cartUsualString(cart, HA_MONO, HA_MONO_DEFAULT);
-chimpFilter = cartUsualString(cart, HA_CHIMP, HA_CHIMP_DEFAULT);
+mixedFilter = cartUsualString(cart, HAP_POP_MIXED, HAP_POP_MIXED_DEFAULT);
+popCountFilter = cartUsualString(cart, HAP_POP_COUNT, HAP_POP_COUNT_DEFAULT);
+observedFilter = cartUsualString(cart, HAP_TYPE, HAP_TYPE_DEFAULT);
+minFreqFilter = sqlFloat(cartUsualString(cart, HAP_MIN_FREQ, HAP_MIN_FREQ_DEFAULT));
+maxFreqFilter = sqlFloat(cartUsualString(cart, HAP_MAX_FREQ, HAP_MAX_FREQ_DEFAULT));
+minHetFilter = sqlFloat(cartUsualString(cart, HAP_MIN_HET, HAP_MIN_HET_DEFAULT));
+maxHetFilter = sqlFloat(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
+monoFilter = cartUsualString(cart, HAP_MONO, HAP_MONO_DEFAULT);
+chimpFilter = cartUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT);
 chimpQualFilter = 
-    sqlUnsigned(cartUsualString(cart, HA_CHIMP_QUAL, HA_CHIMP_QUAL_DEFAULT));
-macaqueFilter = cartUsualString(cart, HA_MACAQUE, HA_MACAQUE_DEFAULT);
+    sqlUnsigned(cartUsualString(cart, HAP_CHIMP_QUAL, HAP_CHIMP_QUAL_DEFAULT));
+macaqueFilter = cartUsualString(cart, HAP_MACAQUE, HAP_MACAQUE_DEFAULT);
 macaqueQualFilter = 
-    sqlUnsigned(cartUsualString(cart, HA_MACAQUE_QUAL, HA_MACAQUE_QUAL_DEFAULT));
+    sqlUnsigned(cartUsualString(cart, HAP_MACAQUE_QUAL, HAP_MACAQUE_QUAL_DEFAULT));
 }
 
 boolean allDefaults()
 /* return TRUE if all filters are set to default values */
 {
-if (differentString(mixedFilter, HA_POP_MIXED_DEFAULT)) return FALSE;
-if (differentString(popCountFilter, HA_POP_COUNT_DEFAULT)) return FALSE;
-if (differentString(observedFilter, HA_TYPE_DEFAULT)) return FALSE;
-if (minFreqFilter > sqlFloat(HA_MIN_FREQ_DEFAULT)) return FALSE;
-if (maxFreqFilter < sqlFloat(HA_MAX_FREQ_DEFAULT)) return FALSE;
-if (minHetFilter > sqlFloat(HA_MIN_HET_DEFAULT)) return FALSE;
-if (maxFreqFilter < sqlFloat(HA_MAX_HET_DEFAULT)) return FALSE;
-if (differentString(monoFilter, HA_MONO_DEFAULT)) return FALSE;
-if (differentString(chimpFilter, HA_CHIMP_DEFAULT)) return FALSE;
-if (chimpQualFilter > sqlUnsigned(HA_CHIMP_QUAL_DEFAULT)) return FALSE;
-if (differentString(macaqueFilter, HA_MACAQUE_DEFAULT)) return FALSE;
-if (macaqueQualFilter > sqlUnsigned(HA_MACAQUE_QUAL_DEFAULT)) return FALSE;
+if (differentString(mixedFilter, HAP_POP_MIXED_DEFAULT)) return FALSE;
+if (differentString(popCountFilter, HAP_POP_COUNT_DEFAULT)) return FALSE;
+if (differentString(observedFilter, HAP_TYPE_DEFAULT)) return FALSE;
+if (minFreqFilter > sqlFloat(HAP_MIN_FREQ_DEFAULT)) return FALSE;
+if (maxFreqFilter < sqlFloat(HAP_MAX_FREQ_DEFAULT)) return FALSE;
+if (minHetFilter > sqlFloat(HAP_MIN_HET_DEFAULT)) return FALSE;
+if (maxFreqFilter < sqlFloat(HAP_MAX_HET_DEFAULT)) return FALSE;
+if (differentString(monoFilter, HAP_MONO_DEFAULT)) return FALSE;
+if (differentString(chimpFilter, HAP_CHIMP_DEFAULT)) return FALSE;
+if (chimpQualFilter > sqlUnsigned(HAP_CHIMP_QUAL_DEFAULT)) return FALSE;
+if (differentString(macaqueFilter, HAP_MACAQUE_DEFAULT)) return FALSE;
+if (macaqueQualFilter > sqlUnsigned(HAP_MACAQUE_QUAL_DEFAULT)) return FALSE;
 return TRUE;
 }
 
@@ -105,11 +105,11 @@ if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "ha
     return;
 }
 
-struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL;
+struct hapmapSnps *simpleLoadItem, *simpleItemList = NULL;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
+    simpleLoadItem = hapmapSnpsLoad(row+rowOffset);
     slAddHead(&simpleItemList, simpleLoadItem);
     }
 sqlFreeResult(&sr);
@@ -131,7 +131,7 @@ if (differentString(orthoItem->name, summaryItem->name)) return FALSE;
 return TRUE;
 }
 
-boolean simpleMatchSummary(struct hapmapAlleles *simpleItem, 
+boolean simpleMatchSummary(struct hapmapSnps *simpleItem, 
                            struct hapmapAllelesSummary *summaryItem)
 /* compare a simple item to a summary item */
 /* return FALSE if not matching */
@@ -310,7 +310,7 @@ if (sameString(observedFilter, "transition") && !transitionObserved) return TRUE
 if (sameString(observedFilter, "transversion") && complexObserved) return TRUE;
 if (sameString(observedFilter, "transversion") && transitionObserved) return TRUE;
 
-if (minFreqFilter > sqlFloat(HA_MIN_FREQ_DEFAULT))
+if (minFreqFilter > sqlFloat(HAP_MIN_FREQ_DEFAULT))
     {
     /* disqualify mixed items when freq filter is set */
     if (sameString(summaryItem->isMixed, "YES")) return TRUE;
@@ -318,7 +318,7 @@ if (minFreqFilter > sqlFloat(HA_MIN_FREQ_DEFAULT))
     if (minFreq < minFreqFilter) return TRUE;
     }
 
-if (maxFreqFilter < sqlFloat(HA_MAX_FREQ_DEFAULT))
+if (maxFreqFilter < sqlFloat(HAP_MAX_FREQ_DEFAULT))
     {
     /* disqualify mixed items when freq filter is set */
     if (sameString(summaryItem->isMixed, "YES")) return TRUE;
@@ -414,15 +414,15 @@ slSort(&ret, bedCmp);
 return ret;
 }
 
-struct hapmapAlleles *filterSimpleList(struct hapmapAlleles *simpleList, 
-                                       struct hapmapAllelesSummary *summaryList)
+struct hapmapSnps *filterSimpleList(struct hapmapSnps *simpleList, 
+                                    struct hapmapAllelesSummary *summaryList)
 /* delete from simpleList based on filters */
 /* could use slList and combine filterOrthoList() with filterSimpleList() */
 {
-struct hapmapAlleles *simpleItem = simpleList;
+struct hapmapSnps *simpleItem = simpleList;
 struct hapmapAllelesSummary *summaryItem = summaryList;
-struct hapmapAlleles *simpleItemClone = NULL;
-struct hapmapAlleles *ret = NULL;
+struct hapmapSnps *simpleItemClone = NULL;
+struct hapmapSnps *ret = NULL;
 
 while (simpleItem)
     {
@@ -490,11 +490,11 @@ if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "ha
     return;
 }
 
-struct hapmapAlleles *simpleLoadItem, *simpleItemList = NULL, *simpleItemsFiltered = NULL;
+struct hapmapSnps *simpleLoadItem, *simpleItemList = NULL, *simpleItemsFiltered = NULL;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    simpleLoadItem = hapmapAllelesLoad(row+rowOffset);
+    simpleLoadItem = hapmapSnpsLoad(row+rowOffset);
     slAddHead(&simpleItemList, simpleLoadItem);
     }
 sqlFreeResult(&sr);
@@ -555,7 +555,7 @@ else if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName
     }
 else
     {
-    struct hapmapAlleles *thisItem = item;
+    struct hapmapSnps *thisItem = item;
     chromStart = thisItem->chromStart;
     chromEnd = thisItem->chromEnd;
     strand = cloneString(thisItem->strand);
@@ -607,7 +607,7 @@ if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "ha
     }
 else
     {
-    struct hapmapAlleles *thisItem = item;
+    struct hapmapSnps *thisItem = item;
     /* Could also use score, since I've set that based on minor allele frequency. */
     totalCount = thisItem->homoCount1 + thisItem->homoCount2;
     minorCount = min(thisItem->homoCount1, thisItem->homoCount2);

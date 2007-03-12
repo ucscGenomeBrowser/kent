@@ -149,7 +149,7 @@
 #include "encodeStanfordPromotersAverage.h"
 #include "encodeIndels.h"
 #include "encodeHapMapAlleleFreq.h"
-#include "hapmapAlleles.h"
+#include "hapmapSnps.h"
 #include "hapmapAllelesCombined.h"
 #include "hapmapAllelesOrtho.h"
 #include "sgdDescription.h"
@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1230 2007/03/12 17:03:52 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1231 2007/03/12 18:10:17 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16105,10 +16105,11 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doHapmapAlleles(struct trackDb *tdb, char *itemName)
+void doHapmapSnps(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
-struct hapmapAlleles *hma;
+/* hma isn't a great variable name */
+struct hapmapSnps *hma;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -16128,7 +16129,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
 {
-    hma = hapmapAllelesLoad(row+rowOffset);
+    hma = hapmapSnpsLoad(row+rowOffset);
     printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
     printf("<BR><B>Polymorphism type:</B> %s<BR>\n", hma->observed);
@@ -18468,12 +18469,12 @@ else if (sameString("hapmapAllelesCombined", track))
     {
     doHapmapAllelesCombined(tdb, item);
     }
-else if (sameString("hapmapAllelesCEU", track) ||
-         sameString("hapmapAllelesCHB", track) ||
-	 sameString("hapmapAllelesJPT", track) ||
-	 sameString("hapmapAllelesYRI", track))
+else if (sameString("hapmapSnpsCEU", track) ||
+         sameString("hapmapSnpsCHB", track) ||
+	 sameString("hapmapSnpsJPT", track) ||
+	 sameString("hapmapSnpsYRI", track))
     {
-    doHapmapAlleles(tdb, item);
+    doHapmapSnps(tdb, item);
     }
 else if (sameString("hapmapAllelesChimp", track) ||
          sameString("hapmapAllelesMacaque", track))
