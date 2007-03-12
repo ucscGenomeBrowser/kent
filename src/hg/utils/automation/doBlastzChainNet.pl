@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.5 2007/02/26 02:25:20 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.6 2007/03/12 02:57:05 kate Exp $
 
 # to-do items:
 # - lots of testing
@@ -52,6 +52,7 @@ use vars qw/
     $opt_tRepeats
     $opt_qRepeats
     $opt_readmeOnly
+    $opt_syntenicNet
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -65,6 +66,7 @@ my $stepper = new HgStepManager(
       { name => 'load',       func => \&loadUp },
       { name => 'download',   func => \&doDownloads },
       { name => 'cleanup',    func => \&cleanup },
+      { name => 'syntenicNet',func => \&doSyntenicNet }
     ]
 			       );
 
@@ -107,6 +109,7 @@ print STDERR <<_EOF_
                                   axtChain command.  (default: loose)
     -tRepeats table       Add -tRepeats=table to netClass (default: none)
     -qRepeats table       Add -qRepeats=table to netClass (default: none)
+    -syntenicNet          Perform optional syntenicNet step
 _EOF_
   ;
 print STDERR &HgAutomate::getCommonOptionHelp($dbHost, $workhorse,
@@ -124,6 +127,7 @@ Automates UCSC's blastz/chain/net pipeline:
     7. Addition of gap/repeat info to nets on hgwdev (not for self).
     8. Loading of chain and net tables on hgwdev (no nets for self).
     9. Setup of download directory on hgwdev.
+    10.Optional (-syntenicNet flag): Generation of syntenic mafNet files.
 DEF is a Scott Schwartz-style bash script containing blastz parameters.
 This script makes a lot of assumptions about conventional placements of 
 certain files, and what will be in the DEF vars.  Stick to the conventions 
@@ -266,6 +270,7 @@ sub checkOptions {
 		      "tRepeats=s",
 		      "qRepeats=s",
 		      "readmeOnly",
+                      "syntenicNet"
 		     );
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -903,6 +908,7 @@ axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtNet/$tDb.$qDb.net.axt.gz \\
 _EOF_
       );
   }
+
   $bossScript->execute();
 }	#	sub netChains {}
 
@@ -1361,6 +1367,68 @@ _EOF_
   $bossScript->execute();
 }
 
+sub doSyntenicNet {
+  # Create syntenic net mafs for multiz 
+  my $whatItDoes =
+"It filters the net for synteny and creates syntenic net MAF files for 
+multiz. Use this option when the query genome is high-coverage and not
+too distant from the reference.  Suppressed unless -syntenicNet is included.
+Do not use with scaffold-based reference genome";
+  if (not $opt_syntenicNet) {
+    return;
+  }
+  my $runDir = "$buildDir/axtChain";
+  # First, make sure we're starting clean.
+  my $successDir = "$buildDir/mafSynNet";
+  if (-e $successDir) {
+      die "doSyntenicNet: looks like this was run successfully already " .
+          "($successDir).  To re-run, " .
+          "move aside/remove $successDir and run again.\n";
+  }
+  # Make sure previous stage was successful.
+  my $successFile = "$runDir/$tDb.$qDb.net.gz";
+  if (! -e "$successFile" && ! $opt_debug) {
+      die "doSyntenicNet: looks like previous stage was not successful " .
+          "(can't find $successFile).\n";
+  }
+  # Verify accessibility of files in DEF file.
+  if (! -e $defVars{'SEQ1_DIR'})
+    die "doSyntenicNet: can't access $defVars{'SEQ1_DIR'} from $workhorse\n";
+  }
+  if (! -e $devVars{'SEQ1_LEN'}) {
+    die "doSyntenicNet: can't access $defVars{'SEQ1_LEN'} from $workhorse\n";
+  }
+  if (! -e $defVars{'SEQ2_DIR'}) {
+    die "doSyntenicNet: can't access $defVars{'SEQ2_DIR'} from $workhorse\n";
+  }
+  if (! -e $devVars{'SEQ2_LEN'}) {
+    die "doSyntenicNet: can't access $defVars{'SEQ2_LEN'} from $workhorse\n";
+  }
+  my $bossScript = new HgRemoteScript("$runDir/netSynteny.csh", $workhorse,
+                                    $runDir, $whatItDoes, $DEF);
+  $bossScript->add(<<_EOF_
+# filter net for synteny and create syntenic net mafs
+netFilter -syn $tDb.$qDb.net.gz  \\
+    | netSplit stdin synNet
+chainSplit chain $tDb.$qDb.all.chain.gz
+cd ..
+mkdir $successDir
+foreach f (axtChain/synNet/*.net)
+  netToAxt \$f axtChain/chain/\$f:t:r.chain \\
+    $defVars{'SEQ1_DIR'} $defVars{'SEQ2_DIR'} stdout \\
+  | axtSort stdin stdout \\
+  | axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. stdin \\
+    $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
+    stdout \\
+| gzip -c > mafSynNet/\$f:t:r:r:r:r:r.maf.gz
+end
+rm -fr $runDir/synNet
+rm -fr $runDir/chain
+_EOF_
+      );
+  $bossScript->execute();
+}
+
 
 #########################################################################
 #
@@ -1368,6 +1436,8 @@ _EOF_
 
 # Prevent "Suspended (tty input)" hanging:
 &HgAutomate::closeStdin();
+
+#$opt_debug = 1;
 
 &checkOptions();
 
@@ -1410,8 +1480,8 @@ if ($opt_swap) {
   if (! -d $buildDir) {
     &HgAutomate::mustMkdir($buildDir);
   }
-  if (! $opt_blastzOutRoot &&
-      $stepper->stepPrecedes($stepper->getStartStep(), 'chainRun')) {
+if (! $opt_blastzOutRoot &&
+  $stepper->stepPrecedes($stepper->getStartStep(), 'chainRun')) {
     &enforceClusterNoNo($buildDir,
 	    'blastz/chain/net build directory (or use -blastzOutRoot)');
   }

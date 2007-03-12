@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.1 2006/10/10 22:55:01 angie Exp $
+# $Id: doRecipBest.pl,v 1.2 2007/03/12 02:57:05 kate Exp $
 
 use Getopt::Long;
 use warnings;
@@ -71,15 +71,16 @@ Assumptions:
    \$db.2bit (for both \$tDb and \$qDb).
 3. The buildDir contains axtChain/\$tDb.\$qDb.over.chain.gz and the download dir
    goldenPath/\$tDb/vs\$QDb already exists.
+4. The blastz DEF file is located in $hgAutomate::clusterData/\$tDb/blastz.$qDb.
 " if ($detailed);
   print "\n";
   exit $status;
 }
 
-
 # Globals:
+my %defVars = ();
 # Command line args: tDb qDb
-my ($tDb, $qDb);
+my ($DEF, $tDb, $qDb);
 # Other:
 my ($buildDir);
 my ($QDb);
@@ -98,7 +99,6 @@ sub checkOptions {
   $dbHost = $opt_dbHost if ($opt_dbHost);
 }
 
-
 #########################################################################
 # * step: recipBest [workhorse]
 sub doRecipBest {
@@ -116,6 +116,8 @@ sub doRecipBest {
 
   my $t2bit = "$HgAutomate::clusterData/$tDb/$tDb.2bit";
   my $q2bit = "$HgAutomate::clusterData/$qDb/$qDb.2bit";
+  my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
+  my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
   $bossScript->add(<<_EOF_
 # Swap $tDb-best chains to be $qDb-referenced:
 chainStitchId $tDb.$qDb.over.chain.gz stdout \\
@@ -185,8 +187,28 @@ endif
 mkdir experiments
 mv *.bed *.psl experiments
 
+# Make rbest net axt's download: one .axt per $tDb seq.
+netSplit $tDb.$qDb.rbest.net.gz rBestNet
+chainSplit rBestChain $tDb.$qDb.rbest.chain.gz
+cd ..
+mkdir axtRBestNet
+foreach f (axtChain/rBestNet/*.net)
+    netToAxt \$f axtChain/rBestChain/\$f:t:r.chain \\
+    $seq1Dir $seq2Dir stdout \\
+    | axtSort stdin stdout \\
+    | gzip -c > axtRBestNet/\$f:t:r.$tDb.$qDb.net.axt.gz
+  end
+
+# Make rbest mafNet for multiz: one .maf per $tDb seq.
+mkdir mafRBestNet
+foreach f (axtRBestNet/*.$tDb.$qDb.net.axt.gz)
+    axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. \$f \\
+        $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
+            stdout \\
+      | gzip -c > mafRBestNet/\$f:t:r:r:r:r:r.maf.gz
+end
 _EOF_
-  );
+);
   $bossScript->execute();
 } # doRecipBest
 
@@ -235,14 +257,42 @@ cd $downloadDir/reciprocalBest
 ln -s $runDir/*.rbest.*.gz .
 ln -s $runDir/md5sum.rbest.txt md5sum.txt
 ln -s $readme README.txt
+mkdir axtRBestNet
+ln -s $buildDir/axtRBestNet/$tDb.$qDb.net.axt.gz axtRBestNet/
 _EOF_
   );
   $bossScript->execute();
 } # doDownload
 
+#########################################################################
+# simplified DEF file parser from doBlastzChainNet.pl
+
+sub loadDef {
+  # Read parameters from a bash script with Scott's param variable names:
+  my $fh = &HgAutomate::mustOpen("$buildDir/DEF");
+  while (<$fh>) {
+    s/^\s*export\s+//;
+    next if (/^\s*#/ || /^\s*$/);
+    if (/(\w+)\s*=\s*(.*)/) {
+      my ($var, $val) = ($1, $2);
+      while ($val =~ /\$(\w+)/) {
+	my $subst = $defVars{$1};
+	if (defined $subst) {
+	  $val =~ s/\$$1/$subst/;
+	} else {
+	  die "Can't find value to substitute for \$$1 in $DEF var $var.\n";
+	}
+      }
+      $defVars{$var} = $val;
+    }
+  }
+  close($fh);
+}
 
 #########################################################################
 # main
+
+#$opt_debug = 1;
 
 # Prevent "Suspended (tty input)" hanging:
 &HgAutomate::closeStdin();
@@ -256,6 +306,11 @@ $QDb = ucfirst($qDb);
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/blastz.$qDb";
+
+&loadDef($DEF);
+
+my $splitRef =  (`wc -l < $defVars{SEQ2_LEN}` <=
+                   $HgAutomate::splitThreshold);
 
 # Do everything.
 $stepper->execute();
