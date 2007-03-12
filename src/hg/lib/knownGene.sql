@@ -11,8 +11,8 @@ CREATE TABLE knownGene (
   exonStarts longblob NOT NULL,			# Exon start positions
   exonEnds longblob NOT NULL,			# Exon end positions
   proteinID varchar(40) NOT NULL default '',	# SWISS-PROT protein ID
-  alignID varchar(12) NOT NULL default '',	# Unique identifier for each alignment	
-  KEY name (name(16)),
+  alignID varchar(255) NOT NULL default '',	# Unique identifier for each alignment	
+  KEY name (name),
   KEY chrom (chrom(16),txStart),
   KEY chrom_2 (chrom(16),txEnd),
   KEY protein (proteinID(16)),
