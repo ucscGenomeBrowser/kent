@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsBadBed.c,v 1.1 2007/03/12 08:27:05 kent Exp $";
+static char const rcsid[] = "$Id: txCdsBadBed.c,v 1.2 2007/03/12 17:36:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -74,12 +74,12 @@ for (i=0; i<gp->exonCount; ++i)
 	}
     }
 
-/* Output first 9 fields of bed12. */
+/* Output first 10 fields of bed12. */
 if (size > minSize)
     {
     fprintf(f, "%s\t%d\t%d\t", gp->chrom, newStart, newEnd);
     fprintf(f, "%s_%d_%s\t", type, id, gp->name);
-    fprintf(f, "0\t%s\t%d\t", gp->strand, blockCount);
+    fprintf(f, "0\t%s\t0\t0\t0\t%d\t", gp->strand, blockCount);
 
     /* Output blockSizes field */
     for (i=0; i<gp->exonCount; ++i)
