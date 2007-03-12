@@ -58,6 +58,7 @@ type genePred
 
 release alpha
 track multiz25wayStrict
+summary multiz25wayStrictSummary
 shortLabel Strict 25-Way
 longLabel Vertebrate Multiz Alignment & Conservation (25 Species): Reciprocal Best and Syntenic Nets
 group compGeno
@@ -75,6 +76,7 @@ treeImage phylo/hg18_28way.gif
 
 release alpha
 track multiz25way
+summary multiz25waySummary
 shortLabel 25-Way Cons
 longLabel Vertebrate Multiz Alignment & Conservation (25 Species)
 group compGeno
