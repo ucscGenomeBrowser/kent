@@ -34,7 +34,7 @@ echo "Tagging new branch $BRANCHNN"
 
 # rtag the new branch
 set temp = "v$BRANCHNN""_branch"
-cvs -d hgwdev:$CVSROOT rtag -b "$temp" kent >& /dev/null
+cvs -d hgwdev:$CVSROOT rtag -Fb "$temp" kent >& /dev/null
 if ( $status ) then
  echo "cvs rtag failed for branch-tag $temp with new version# $BRANCHNN on $HOST"
  exit 1
