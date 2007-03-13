@@ -86,8 +86,8 @@ urlLabel MGI QTL Detail:
 track igtc
 shortLabel Gene Trap
 longLabel International Gene Trap Consortium Sequence Tag Alignments
-group map
-priority 30
+group genes 
+priority 64 
 visibility hide
 type psl .
 url http://www.genetrap.org/cgi-bin/annotation.py?cellline=$$
