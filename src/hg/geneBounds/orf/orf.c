@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orf.c,v 1.5 2006/04/07 15:25:26 angie Exp $";
+static char const rcsid[] = "$Id: orf.c,v 1.6 2007/03/13 23:01:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +18,7 @@ errAbort(
   "options:\n"
   "   -checkIn=seq.cds - File that says size and cds position of sequences\n"
   "   -checkOut=twinOrf.check - File that compares our cds position to real\n"
+  "   -cdsOut=out.cds - File that just says where ORF we predict is and score,not rest\n"
   );
 }
 
@@ -294,7 +295,7 @@ transProbLookup[aUtr3][aUtr3] = always;
 
 
 double traceBack(double *scores, State **allStates, struct dnaSeq *seq, FILE *f,
-	struct hash *checkInHash, FILE *checkOut)
+	struct hash *checkInHash, FILE *checkOut, FILE  *cdsOut)
 /* Trace back, adding symbol track.  Then print out result.  Return score. */
 {
 int i;
@@ -336,30 +337,33 @@ for (i=0; i<symCount; i += lineSize)
     fputc('\n', f);
     }
 
+static char isCdsChar[256];
+isCdsChar['A'] = TRUE;
+isCdsChar['Z'] = TRUE;
+isCdsChar['1'] = TRUE;
+isCdsChar['2'] = TRUE;
+isCdsChar['3'] = TRUE;
+int cdsStart = symCount, cdsEnd = 0;
+for (i=0; i<symCount; ++i)
+    {
+    if (isCdsChar[tStates[i]])
+	{
+	if (i < cdsStart)
+	     cdsStart = i;
+	if (i >= cdsEnd)
+	     cdsEnd = i+1;
+	}
+    }
 if (checkInHash != NULL && checkOut != NULL)
     {
     struct mrnaInfo *mi = hashMustFindVal(checkInHash, seq->name);
-    int i, cdsStart = symCount, cdsEnd = 0;
-    static char isCdsChar[256];
-    isCdsChar['A'] = TRUE;
-    isCdsChar['Z'] = TRUE;
-    isCdsChar['1'] = TRUE;
-    isCdsChar['2'] = TRUE;
-    isCdsChar['3'] = TRUE;
-    for (i=0; i<symCount; ++i)
-        {
-	if (isCdsChar[tStates[i]])
-	    {
-	    if (i < cdsStart)
-	         cdsStart = i;
-	    if (i >= cdsEnd)
-	         cdsEnd = i+1;
-	    }
-	}
     fprintf(checkOut, "%s\t%d\t%d\t%d\t%d\t%d\n", 
     	mi->name, mi->size, mi->cdsStart, mi->cdsEnd, 
 	cdsStart, cdsEnd);
     }
+if (cdsOut != NULL)
+    fprintf(cdsOut, "%s\t%d\t%d\t%d\t%f\n", seq->name, seq->size, cdsStart, cdsEnd, maxScore);
+
 freeMem(tStates);
 return maxScore;
 }
@@ -380,7 +384,7 @@ return odds;
 
 double fullDynamo(struct trainingData *td, struct dynoData *dyno, 
 	struct dnaSeq *seq,  FILE *f, struct hash *checkInHash, 
-	FILE *checkOut)
+	FILE *checkOut, FILE *cdsOut)
 /* Run dynamic programming algorithm on HMM. Return score. */
 {
 DNA *dna = seq->dna;
@@ -534,7 +538,7 @@ for (dnaIx=0; dnaIx<scanSize; dnaIx += 1)
 
 /* Find best scoring final cell and trace backwards to
  * reconstruct full path. */
-score = traceBack(dyno->prevScores, allStates, seq, f, checkInHash, checkOut);
+score = traceBack(dyno->prevScores, allStates, seq, f, checkInHash, checkOut, cdsOut);
 
 /* Clean up and return. */
 for (i=0; i<stateCount; ++i)
@@ -544,10 +548,10 @@ return score;
 }
 
 void oneOrf(struct trainingData *td, struct dynoData *dyno, struct dnaSeq *seq, FILE *f,
-	struct hash *checkInHash, FILE *checkOut)
+	struct hash *checkInHash, FILE *checkOut, FILE *cdsOut)
 /* Try and find one orf in axt. */
 {
-fullDynamo(td, dyno, seq, f, checkInHash, checkOut);
+fullDynamo(td, dyno, seq, f, checkInHash, checkOut, cdsOut);
 }
 
 struct hash *readCheckIn(char *fileName)
@@ -573,7 +577,8 @@ else
     }
 }
 
-void orf(char *statsFile, char *faFile, char *outFile, char *checkInFile, char *checkOutFile)
+void orf(char *statsFile, char *faFile, char *outFile, char *checkInFile, char *checkOutFile,
+	char *cdsOutFile)
 /* orf - Find orf for cDNAs. */
 {
 struct trainingData *td = loadTrainingData(statsFile);
@@ -583,17 +588,20 @@ FILE *f = mustOpen(outFile, "w");
 struct dnaSeq seq;
 struct hash *checkInHash = readCheckIn(checkInFile);
 FILE *checkOut = NULL;
+FILE *cdsOut = NULL;
 
 if (checkOutFile == NULL && checkInFile != NULL)
     errAbort("CheckOut without checkIn");
 if (checkOutFile != NULL)
      checkOut = mustOpen(checkOutFile, "w");
+if (cdsOutFile != NULL)
+     cdsOut = mustOpen(cdsOutFile, "w");
 
 makeTransitionProbs(dyno->transProbLookup);
 ZeroVar(&seq);
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
-    oneOrf(td, dyno, &seq, f, checkInHash, checkOut);
+    oneOrf(td, dyno, &seq, f, checkInHash, checkOut, cdsOut);
     }
 }
 
@@ -607,6 +615,7 @@ always = scaledLog(1.0);
 log4 = scaledLog(4.0);
 if (argc != 4)
     usage();
-orf(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL));
+orf(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL),
+	optionVal("cdsOut", NULL));
 return 0;
 }
