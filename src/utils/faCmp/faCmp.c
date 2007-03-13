@@ -7,7 +7,7 @@
 #include "options.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: faCmp.c,v 1.4 2003/07/07 22:04:11 hiram Exp $";
+static char const rcsid[] = "$Id: faCmp.c,v 1.5 2007/03/13 12:21:00 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,10 +19,19 @@ errAbort(
   "options:\n"
   "    -softMask - use the soft masking information during the compare\n"
   "                Differences will be noted if the masking is different.\n"
+  "    -sortName - sort input files by name before comparing\n"
   "default:\n"
   "    no masking information is used during compare.  It is as if both\n"
   "    sequences were not masked.\n"
   );
+}
+
+int faSortByName(const void *va, const void *vb)    
+/* used for slSorting dnaSeq */
+{
+const struct dnaSeq *a = *((struct dnaSeq **)va);
+const struct dnaSeq *b = *((struct dnaSeq **)vb);
+return(strcmp(a->name, b->name));
 }
 
 void faCmp(int options, char *aFile, char *bFile)
@@ -45,11 +54,19 @@ if ( NIB_MASK_MIXED & options ) {
 }
 aCount = slCount(aList);
 bCount = slCount(bList);
+if ( optionExists("sortName") )
+    {
+    verbose(1, "sorting %s\n",aFile);
+    slSort(&aList, faSortByName);
+    verbose(1, "sorting %s\n",bFile);
+    slSort(&bList, faSortByName);
+    }
 
 if (aCount != bCount)
    errAbort("%d sequences in %s, %d in %s", aCount, aFile, bCount, bFile);
 for (a = aList, b = bList; a != NULL && b != NULL; a = a->next, b = b->next)
     {
+    verbose(2, "comparing %s to %s\n",a->name, b->name);
     if (a->size != b->size)
         errAbort("%s in %s has %d bases.  %s in %s has %d bases",
 		a->name, aFile, a->size, b->name, bFile, b->size);
