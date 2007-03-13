@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.354 2007/03/12 18:10:48 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.355 2007/03/13 23:09:04 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2162,7 +2162,7 @@ puts("<B>Filters for the display of the HapMap SNPs data:</B>");
 puts("<BR>\n");
 
 puts("<BR><B>Population</B>");
-puts("<B>Major Allele Mixture:</B>&nbsp;");
+puts("<B>Major allele mixture:</B>&nbsp;");
 menuSize = 3;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2196,7 +2196,7 @@ cgiMakeDropList(HAP_MONO, menu, menuSize,
     cartCgiUsualString(cart, HAP_MONO, HAP_MONO_DEFAULT));
 freez(&menu);
 
-puts("<BR><BR><B>Polymorphism Type:</B>&nbsp;");
+puts("<BR><BR><B>Polymorphism type:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2209,24 +2209,26 @@ cgiMakeDropList(HAP_TYPE, menu, menuSize,
     cartCgiUsualString(cart, HAP_TYPE, HAP_TYPE_DEFAULT));
 freez(&menu);
 
-puts("<BR><BR><B>Minor Allele Frequency Minimum:</B>&nbsp;");
+puts("<BR><BR><B>Minor allele frequency:  min:</B>&nbsp;");
 minFreq = atof(cartUsualString(cart, HAP_MIN_FREQ, HAP_MIN_FREQ_DEFAULT));
 cgiMakeDoubleVar(HAP_MIN_FREQ, minFreq, 6);
 
-puts("<B>Maximum:</B>&nbsp;");
+puts("<B>max:</B>&nbsp;");
 maxFreq = atof(cartUsualString(cart, HAP_MAX_FREQ, HAP_MAX_FREQ_DEFAULT));
 cgiMakeDoubleVar(HAP_MAX_FREQ, maxFreq, 6);
+puts("(range: 0.0 to 0.5)\n");
 
-puts("<BR><B>Heterozygosity</B>");
-puts("<B>Minimum:</B>&nbsp;");
+puts("<BR><B>Heterozygosity: </B>");
+puts("<B>min:</B>&nbsp;");
 minHet = atof(cartUsualString(cart, HAP_MIN_HET, HAP_MIN_HET_DEFAULT));
 cgiMakeDoubleVar(HAP_MIN_HET, minHet, 6);
 
-puts("<B>Maximum:</B>&nbsp;");
+puts("<B>max:</B>&nbsp;");
 maxHet = atof(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
 cgiMakeDoubleVar(HAP_MAX_HET, maxHet, 6);
+puts("(range: 0.0 to 0.5)\n");
 
-puts("<BR><BR><B>Chimp Allele:</B>&nbsp;");
+puts("<BR><BR><B>Chimp allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2240,10 +2242,11 @@ cgiMakeDropList(HAP_CHIMP, menu, menuSize,
 freez(&menu);
 
 minChimpQual = atoi(cartUsualString(cart, HAP_CHIMP_QUAL, HAP_CHIMP_QUAL_DEFAULT));
-printf("<B>Minimum Quality Score:</B>&nbsp;");
+printf("<B>Minimum quality score:</B>&nbsp;");
 cgiMakeIntVar(HAP_CHIMP_QUAL, minChimpQual, 4);
+puts("(range: 0 to 100)\n");
 
-puts("<BR><B>Macaque Allele:</B>&nbsp;");
+puts("<BR><B>Macaque allele:</B>&nbsp;");
 menuSize = 5;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
@@ -2257,8 +2260,9 @@ cgiMakeDropList(HAP_MACAQUE, menu, menuSize,
 freez(&menu);
 
 minMacaqueQual = atoi(cartUsualString(cart, HAP_MACAQUE_QUAL, HAP_MACAQUE_QUAL_DEFAULT));
-printf("<B>Minimum Quality Score:</B>&nbsp;");
+printf("<B>Minimum quality score:</B>&nbsp;");
 cgiMakeIntVar(HAP_MACAQUE_QUAL, minMacaqueQual, 4);
+puts("(range: 0 to 100)\n");
 
 puts("</P>\n");
 }
