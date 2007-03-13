@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.23 2006/03/10 17:43:36 angie Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.24 2007/03/13 20:43:05 kent Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -286,6 +286,7 @@ if (size & 1)
     byte = (dVal1<<4);
     putc(byte, f);
     }
+carefulClose(&f);
 }
 
 struct dnaSeq *nibLdPartMasked(int options, char *fileName, FILE *f, int seqSize, int start, int size)
