@@ -24,7 +24,7 @@ static void usage(char *msg)
 {
 errAbort("%s\n"
     "\n"
-    "genePredToMrna - extract mrna from genePred files\n"
+    "genePredToMrna - extract mrna from genePred files with coding region in upper case, utr lower.\n"
     "\n"
     "genePredToMrna [options] db inGenePred out.fa\n"
     "\n"
@@ -60,9 +60,22 @@ cdnaSeq->size = cdnaSize;
 cdnaSeq->name = cloneString(gp->name);
 for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     {
+    int i = 0;
+    char *p, *pEnd;
     exonStart = gp->exonStarts[exonIx];
     exonSize = gp->exonEnds[exonIx] - exonStart;
     memcpy(cdnaSeq->dna + cdnaOffset, genoSeq->dna + (exonStart - txStart), exonSize);
+    p = (cdnaSeq->dna + cdnaOffset); 
+    pEnd = (cdnaSeq->dna + cdnaOffset+ exonSize); 
+    while (p != pEnd)
+        {
+        if (((exonStart + i) < gp->cdsStart) ||
+            ((exonStart + i) >= gp->cdsEnd))
+            {
+            *p = tolower(*p);
+            }
+        i++; p++;
+        }
     cdnaOffset += exonSize;
     }
 assert(cdnaOffset == cdnaSeq->size);
