@@ -150,8 +150,8 @@
 #include "encodeIndels.h"
 #include "encodeHapMapAlleleFreq.h"
 #include "hapmapSnps.h"
-#include "hapmapAllelesCombined.h"
 #include "hapmapAllelesOrtho.h"
+#include "hapmapAllelesSummary.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1231 2007/03/12 18:10:17 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1232 2007/03/13 00:06:57 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16105,102 +16105,49 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doHapmapSnps(struct trackDb *tdb, char *itemName)
-{
-char *table = tdb->tableName;
-/* hma isn't a great variable name */
-struct hapmapSnps *hma;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-int rowOffset = hOffsetPastBin(seqName, table);
-int start = cartInt(cart, "o");
-int majorCount = 0;
-int minorCount = 0;
-char *majorAllele = NULL;
-char *minorAllele = NULL;
 
-genericHeader(tdb, itemName);
-
-safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-{
-    hma = hapmapSnpsLoad(row+rowOffset);
-    printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
-    printf("<BR><B>Polymorphism type:</B> %s<BR>\n", hma->observed);
-    printf("<B>Strand:</B> %s<BR>\n", hma->strand);
-    if (hma->homoCount1 >= hma->homoCount2)
-        {
-	majorAllele = cloneString(hma->allele1);
-	majorCount = hma->homoCount1;
-	minorCount = hma->homoCount2;
-	minorAllele = cloneString(hma->allele2);
-        }
-    else 
-        {
-	majorAllele = cloneString(hma->allele2);
-	majorCount = hma->homoCount2;
-	minorCount = hma->homoCount1;
-	minorAllele = cloneString(hma->allele1);
-	}
-    printf("<B>Count of individuals:</B> %d<BR>\n", majorCount + minorCount + hma->heteroCount);
-    printf("<B>Minor allele frequency: </B> %d%%<BR>\n", hma->score / 10);
-    printf("<B>Major allele:</B> %s<BR>\n", majorAllele);
-    printf("<B>Count of individuals who are homozygous for major allele:</B> %d<BR>\n", majorCount);
-    if (differentString(minorAllele, "none"))
-       {
-       printf("<B>Minor allele:</B> %s<BR>\n", minorAllele);
-       printf("<B>Count of individuals who are homozygous for minor allele:</B> %d<BR>\n", minorCount);
-       }
-    else
-       printf("<B>Minor Allele:</B> not available (monomorphic) <BR>\n");
-    printf("<B>Count of individuals who are heterozygous:</B> %d<BR>\n", hma->heteroCount);
-	    
-    bedPrintPos((struct bed *)hma, 3);
-
-}
-printTrackHtml(tdb);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
-void showHapmapMonomorphic(struct hapmapAllelesCombined *hmac)
+void showHapmapMonomorphic(struct hapmapAllelesSummary *summaryItem)
+/* yellow color isn't great */
 {
 printf("<TR>");
 printf("<TD>%s</TD>", "CEU");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountCEU * 2);
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
 printf("</TR>\n");
 printf("<TD>%s</TD>", "CHB");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountCHB * 2);
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
 printf("</TR>\n");
 printf("<TD>%s</TD>", "JPT");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountJPT * 2);
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
 printf("</TR>\n");
 printf("<TD>%s</TD>", "YRI");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", hmac->allele1CountYRI * 2);
+printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
 printf("</TR>\n");
 }
 
-void showOneHapmapRow(char *pop, int count1, int count2, int heteroCount)
+void showOneHapmapRow(char *pop, char *allele1, char *allele2, char *majorAllele,
+                      int majorCount, int totalCount)
+/* yellow color isn't great */
 {
-int total = count1 + count2 + heteroCount;
+int count1 = 0;
+int count2 = 0;
 float freq1 = 0.0;
 float freq2 = 0.0;
 
-if (total == 0) return;
+if (majorCount == 0) return;
 
-/* convert from individuals to alleles */
-count1 = (count1 * 2) + heteroCount;
-count2 = (count2 * 2) + heteroCount;
-total = total * 2;
+if (sameString(allele1, majorAllele))
+    {
+    count1 = majorCount;
+    count2 = totalCount - majorCount;
+    }
+else
+    {
+    count2 = majorCount;
+    count1 = totalCount - majorCount;
+    }
 
-freq1 = 100.0 * count1 / total;
-freq2 = 100.0 * count2 / total;
+freq1 = 100.0 * count1 / totalCount;
+freq2 = 100.0 * count2 / totalCount;
 
 printf("<TR>");
 printf("<TD>%s</TD>", pop);
@@ -16219,10 +16166,10 @@ printf("</TR>\n");
 }
 
 
-void doHapmapAllelesCombined(struct trackDb *tdb, char *itemName)
+void doHapmapSnpsSummary(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
-struct hapmapAllelesCombined *hmac;
+struct hapmapAllelesSummary *summaryItem;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -16230,6 +16177,62 @@ char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 float avHet = 0.0;
+ 
+safef(query, sizeof(query), "select * from hapmapAllelesSummary where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+summaryItem = hapmapAllelesSummaryLoad(row+rowOffset);
+ 
+printf("<B>Summary over all populations:</B><BR>\n");
+avHet = summaryItem->score / 1000.0;
+printf("<B>Heterozygosity:</B> %3.2f%%<BR>\n", avHet);
+printf("<B>Population count:</B> %d</BR>\n", summaryItem->popCount); 
+printf("<B>Mixed:</B> %s</BR>\n", summaryItem->isMixed);
+printf("<B>Chimp allele:</B> %s \n", summaryItem->chimpAllele);
+printf("<B>Chimp allele quality score:</B> %d</BR>\n", summaryItem->chimpAlleleQuality);
+printf("<B>Macaque allele:</B> %s \n", summaryItem->macaqueAllele);
+printf("<B>Macaque allele quality score:</B> %d</BR>\n", summaryItem->macaqueAlleleQuality);
+
+printf("<B>Allele frequencies:</B><BR>\n");
+printf("<TABLE BORDER=1>\n");
+if (differentString(summaryItem->allele2, "none"))
+    {
+    printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", summaryItem->allele1, summaryItem->allele2);
+    showOneHapmapRow("CEU", summaryItem->allele1, summaryItem->allele2, summaryItem->majorAlleleCEU,
+                            summaryItem->majorAlleleCountCEU, summaryItem->totalAlleleCountCEU);
+    showOneHapmapRow("CHB", summaryItem->allele1, summaryItem->allele2, summaryItem->majorAlleleCHB,
+                            summaryItem->majorAlleleCountCHB, summaryItem->totalAlleleCountCHB);
+    showOneHapmapRow("JPT", summaryItem->allele1, summaryItem->allele2, summaryItem->majorAlleleJPT,
+                            summaryItem->majorAlleleCountJPT, summaryItem->totalAlleleCountJPT);
+    showOneHapmapRow("YRI", summaryItem->allele1, summaryItem->allele2, summaryItem->majorAlleleYRI,
+                            summaryItem->majorAlleleCountYRI, summaryItem->totalAlleleCountYRI);
+    }
+    else 
+    {
+    printf("<TR><TH>Population</TH> <TH>%s</TH></TR>\n", summaryItem->allele1);
+    showHapmapMonomorphic(summaryItem);
+    }
+printf("</TABLE>\n");
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doHapmapSnps(struct trackDb *tdb, char *itemName)
+/* assume just one hapmap snp at a given location */
+{
+char *table = tdb->tableName;
+struct hapmapSnps *thisItem;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+int majorCount = 0;
+int minorCount = 0;
+char *majorAllele = NULL;
+char *minorAllele = NULL;
 
 genericHeader(tdb, itemName);
 
@@ -16237,46 +16240,46 @@ safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+row = sqlNextRow(sr);
+thisItem = hapmapSnpsLoad(row+rowOffset);
+printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank> %s</A><BR>\n", itemName, itemName);
+bedPrintPos((struct bed *)thisItem, 3);
+printf("<BR><B>Polymorphism type:</B> %s<BR>\n", thisItem->observed);
+printf("<B>Strand:</B> %s<BR>\n", thisItem->strand);
+if (thisItem->homoCount1 >= thisItem->homoCount2)
     {
-    hmac = hapmapAllelesCombinedLoad(row+rowOffset);
-    printf("<B>SNP rsId:</B> <A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("type=rs&rs=%s\" TARGET=_blank> %s</A>\n", itemName, itemName);
-    printf("<BR><B>Polymorphism assayed:</B> %s<BR>\n", hmac->observed);
-    printf("<B>Strand:</B> %s<BR>\n", hmac->strand);
-
-    printf("<B>Allele1:</B> %s<BR>\n", hmac->allele1);
-    if (differentString(hmac->allele2, "none"))
-        printf("<B>Allele2:</B> %s<BR>\n", hmac->allele2);
-    else
-       printf("<B>Allele2:</B> not available (monomorphic) <BR>\n");
-    avHet = hmac->score / 1000.0;
-    printf("<B>Average heterozygosity:</B> %3.2f%%<BR>\n", avHet);
-
-    htmlHorizontalLine();
-    printf("<B>Allele frequencies:</B><BR>\n");
-    printf("<TABLE BORDER=1>\n");
-    if (differentString(hmac->allele2, "none"))
-        {
-        printf("<TR><TH>Population</TH> <TH>%s</TH> <TH>%s</TH></TR>\n", hmac->allele1, hmac->allele2);
-        showOneHapmapRow("CEU", hmac->allele1CountCEU, hmac->allele2CountCEU, hmac->heteroCountCEU);
-        showOneHapmapRow("CHB", hmac->allele1CountCHB, hmac->allele2CountCHB, hmac->heteroCountCHB);
-        showOneHapmapRow("JPT", hmac->allele1CountJPT, hmac->allele2CountJPT, hmac->heteroCountJPT);
-        showOneHapmapRow("YRI", hmac->allele1CountYRI, hmac->allele2CountYRI, hmac->heteroCountYRI);
-        }
-    else 
-        {
-        printf("<TR><TH>Population</TH> <TH>%s</TH></TR>\n", hmac->allele1);
-        showHapmapMonomorphic(hmac);
-	}
-    printf("</TABLE>\n");
-    htmlHorizontalLine();
-
-    bedPrintPos((struct bed *)hmac, 3);
-
+    majorAllele = cloneString(thisItem->allele1);
+    majorCount = thisItem->homoCount1;
+    minorCount = thisItem->homoCount2;
+    minorAllele = cloneString(thisItem->allele2);
     }
-printTrackHtml(tdb);
+else 
+    {
+    majorAllele = cloneString(thisItem->allele2);
+    majorCount = thisItem->homoCount2;
+    minorCount = thisItem->homoCount1;
+    minorAllele = cloneString(thisItem->allele1);
+    }
+printf("<B>Count of individuals:</B> %d<BR>\n", majorCount + minorCount + thisItem->heteroCount);
+printf("<B>Minor allele frequency: </B> %d%%<BR>\n", thisItem->score / 10);
+printf("<B>Major allele:</B> %s \n", majorAllele);
+printf("<B>Count of individuals who are homozygous for major allele:</B> %d<BR>\n", majorCount);
+if (differentString(minorAllele, "none"))
+    {
+    printf("<B>Minor allele:</B> %s \n", minorAllele);
+    printf("<B>Count of individuals who are homozygous for minor allele:</B> %d<BR>\n", minorCount);
+    }
+else
+    printf("<B>Minor Allele:</B> not available (monomorphic) <BR>\n");
+printf("<B>Count of individuals who are heterozygous:</B> %d<BR>\n", thisItem->heteroCount);
+	    
 sqlFreeResult(&sr);
+
+htmlHorizontalLine();
+/* get summary data here */
+doHapmapSnpsSummary(tdb, itemName);
+printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
@@ -18464,10 +18467,6 @@ else if (sameString("interPro", track))
 else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
-    }
-else if (sameString("hapmapAllelesCombined", track))
-    {
-    doHapmapAllelesCombined(tdb, item);
     }
 else if (sameString("hapmapSnpsCEU", track) ||
          sameString("hapmapSnpsCHB", track) ||
