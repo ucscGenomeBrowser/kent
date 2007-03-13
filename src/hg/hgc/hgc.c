@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1235 2007/03/13 03:55:35 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1236 2007/03/13 04:28:17 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16108,33 +16108,61 @@ hFreeConn(&conn);
 
 
 void showHapmapMonomorphic(struct hapmapAllelesSummary *summaryItem)
-/* yellow color isn't great */
 {
-printf("<TR>");
-printf("<TD>%s</TD>", "CEU");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
-printf("</TR>\n");
-printf("<TD>%s</TD>", "CHB");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
-printf("</TR>\n");
-printf("<TD>%s</TD>", "JPT");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
-printf("</TR>\n");
-printf("<TD>%s</TD>", "YRI");
-printf("<TD bgcolor = \"yellow\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
-printf("</TR>\n");
+if (summaryItem->totalAlleleCountCEU > 0)
+    {
+    printf("<TR>");
+    printf("<TD>CEU</TD>");
+    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
+    printf("</TR>\n");
+    }
+else
+    printf("<TR><TD>CEU</TD><TD>not available</TD></TR>\n");
+
+if (summaryItem->totalAlleleCountCHB > 0)
+    {
+    printf("<TR>");
+    printf("<TD>CHB</TD>");
+    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
+    printf("</TR>\n");
+    }
+else
+    printf("<TR><TD>CHB</TD><TD>not available</TD></TR>\n");
+
+if (summaryItem->totalAlleleCountJPT > 0)
+    {
+    printf("<TR>");
+    printf("<TD>JPT</TD>");
+    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
+    printf("</TR>\n");
+    }
+else
+    printf("<TR><TD>JPT</TD><TD>not available</TD></TR>\n");
+
+if (summaryItem->totalAlleleCountYRI > 0)
+    {
+    printf("<TR>");
+    printf("<TD>YRI</TD>");
+    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
+    printf("</TR>\n");
+    }
+else
+    printf("<TR><TD>YRI</TD><TD>not available</TD></TR>\n");
 }
 
 void showOneHapmapRow(char *pop, char *allele1, char *allele2, char *majorAllele,
                       int majorCount, int totalCount)
-/* yellow color isn't great */
 {
 int count1 = 0;
 int count2 = 0;
 float freq1 = 0.0;
 float freq2 = 0.0;
 
-if (majorCount == 0) return;
+if (majorCount == 0) 
+    {
+    printf("<TR><TD>%s</TD><TD>not available</TD><TD>not available</TD></TR>\n", pop);
+    return;
+    }
 
 if (sameString(allele1, majorAllele))
     {
@@ -16154,13 +16182,13 @@ printf("<TR>");
 printf("<TD>%s</TD>", pop);
 if (count1 > count2)
     {
-    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD bgcolor = \"gray\">%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
 else
     {
     printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD bgcolor = \"yellow\">%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD bgcolor = \"gray\">%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
@@ -16185,29 +16213,32 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 summaryItem = hapmapAllelesSummaryLoad(row+rowOffset);
 
-het = summaryItem->score / 1000.0;
-printf("<B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
+if (differentString(summaryItem->chimpAllele, "none") || 
+    differentString(summaryItem->macaqueAllele, "none"))
+    {
+    printf("<BR><B>Ortho alleles:</B><BR>\n");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Qual Score</TH></TR>\n");
+    if (differentString(summaryItem->chimpAllele, "none"))
+        {
+        printf("<TR>");
+        printf("<TD>Chimp</TD>");
+        printf("<TD>%s</TD>", summaryItem->chimpAllele);
+        printf("<TD>%d</TD>", summaryItem->chimpAlleleQuality);
+        printf("</TR>");
+	}
+    if (differentString(summaryItem->macaqueAllele, "none"))
+        {
+        printf("<TR>");
+        printf("<TD>Macaque</TD>");
+        printf("<TD>%s</TD>", summaryItem->macaqueAllele);
+        printf("<TD>%d</TD>", summaryItem->macaqueAlleleQuality);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    }
 
-htmlHorizontalLine();
-
-printf("<B>Ortho alleles:</B><BR>\n");
-printf("<TABLE BORDER=1>\n");
-printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Qual Score</TH></TR>\n");
-printf("<TR>");
-printf("<TD>Chimp</TD>");
-printf("<TD>%s</TD>", summaryItem->chimpAllele);
-printf("<TD>%d</TD>", summaryItem->chimpAlleleQuality);
-printf("</TR>");
-printf("<TR>");
-printf("<TD>Macaque</TD>");
-printf("<TD>%s</TD>", summaryItem->macaqueAllele);
-printf("<TD>%d</TD>", summaryItem->macaqueAlleleQuality);
-printf("</TR>");
-printf("</TABLE>\n");
-
-htmlHorizontalLine();
- 
-printf("<B>Allele frequencies:</B><BR>\n");
+printf("<BR><B>Allele frequencies over all populations:</B><BR>\n");
 printf("<TABLE BORDER=1>\n");
 if (differentString(summaryItem->allele2, "none"))
     {
@@ -16227,6 +16258,9 @@ if (differentString(summaryItem->allele2, "none"))
     showHapmapMonomorphic(summaryItem);
     }
 printf("</TABLE>\n");
+
+het = summaryItem->score / 1000.0;
+printf("<BR><B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
 
 
 sqlFreeResult(&sr);
@@ -16276,22 +16310,34 @@ else
     minorCount = thisItem->homoCount1;
     minorAllele = cloneString(thisItem->allele1);
     }
-printf("<B>Count of individuals:</B> %d<BR>\n", majorCount + minorCount + thisItem->heteroCount);
-printf("<B>Minor allele frequency: </B> %d%%<BR>\n", thisItem->score / 10);
-printf("<B>Major allele:</B> %s \n", majorAllele);
-printf("<B>Count of individuals who are homozygous for major allele:</B> %d<BR>\n", majorCount);
-if (differentString(minorAllele, "none"))
-    {
-    printf("<B>Minor allele:</B> %s \n", minorAllele);
-    printf("<B>Count of individuals who are homozygous for minor allele:</B> %d<BR>\n", minorCount);
-    }
-else
-    printf("<B>Minor Allele:</B> not available (monomorphic) <BR>\n");
-printf("<B>Count of individuals who are heterozygous:</B> %d<BR>\n", thisItem->heteroCount);
-	    
+
+printf("<BR><B>Genotype counts:</B><BR>\n");
+printf("<TABLE BORDER=1>\n");
+
+printf("<TR>");
+printf("<TD>Major Allele (%s)</TD>", majorAllele);
+printf("<TD>%d individuals</TD>", majorCount);
+printf("</TR>");
+
+printf("<TR>");
+printf("<TD>Minor Allele (%s)</TD>", minorAllele);
+printf("<TD>%d individuals</TD>", minorCount);
+printf("</TR>");
+
+printf("<TR>");
+printf("<TD>Heterozygotes</TD>");
+printf("<TD>%d individuals</TD>", thisItem->heteroCount);
+printf("</TR>");
+
+printf("<TR>");
+printf("<TD>Total</TD>");
+printf("<TD>%d individuals</TD>", majorCount + minorCount + thisItem->heteroCount);
+printf("</TR>");
+
+printf("</TABLE>\n");
+
 sqlFreeResult(&sr);
 
-htmlHorizontalLine();
 /* get summary data here */
 doHapmapSnpsSummary(tdb, itemName);
 printTrackHtml(tdb);
