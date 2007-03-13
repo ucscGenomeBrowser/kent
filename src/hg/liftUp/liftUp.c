@@ -6,6 +6,7 @@
 #include "hash.h"
 #include "psl.h"
 #include "genePred.h"
+#include "genePredReader.h"
 #include "xAli.h"
 #include "rmskOut.h"
 #include "chromInserts.h"
@@ -17,12 +18,13 @@
 #include "verbose.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.41 2006/10/19 05:11:57 markd Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.42 2007/03/13 02:59:35 baertsch Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
 boolean ignoreVersions = FALSE;  /* drop NCBI versions */
+boolean extGenePred = FALSE;  /* load extended genePred */
 int dots=0;	/* Put out I'm alive dot now and then? */
 int gapsize = 0;        /* optional non-default gap size */
 
@@ -67,6 +69,7 @@ errAbort(
  "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
  "   -gapsize change contig gapsize from default\n"
  "   -ignoreVersions - Ignore NCBI-style version number in sequence ids of input files\n"
+ "   -extGenePred lift extended genePred\n"
  );
 }
 
@@ -89,6 +92,7 @@ static struct optionSpec optionSpecs[] = {
     {"wabaQ", OPTION_BOOLEAN},
     {"wabaq", OPTION_BOOLEAN},
     {"ignoreVersions", OPTION_BOOLEAN},
+    {"extGenePred", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -1100,6 +1104,34 @@ for (iSrc = 0; iSrc < sourceCount; iSrc++)
 carefulClose(&dest);
 }
 
+void liftGenePredExt(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift a genePred files. */
+{
+char *row[GENEPREDX_NUM_COLS];
+struct lineFile* lf;
+FILE* dest = mustOpen(destFile, "w");
+int iSrc;
+int colCount;
+
+for (iSrc = 0; iSrc < sourceCount; iSrc++)
+    {
+    verbose(1, "Lifting %s\n", sources[iSrc]);
+    lf = lineFileOpen(sources[iSrc], TRUE);
+    while ((colCount = lineFileChopNextTab(lf, row, ArraySize(row))))
+        {
+        struct genePred* gp = genePredExtLoad(row, colCount);
+        if (liftGenePredObj(liftHash, gp, lf))
+            genePredTabOut(gp, dest);
+        genePredFree(&gp);
+        }
+    lineFileClose(&lf);
+    if (dots)
+        verbose(1, "\n");
+    }
+
+carefulClose(&dest);
+}
+
 struct bedInfo
 /* Info on a line of a bed file. */
     {
@@ -1489,7 +1521,10 @@ else if (endsWith(destType, ".gp") || endsWith(destType, ".genepred"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
-    liftGenePred(destFile, liftHash, sourceCount, sources);
+    if (extGenePred)
+        liftGenePredExt(destFile, liftHash, sourceCount, sources);
+    else
+        liftGenePred(destFile, liftHash, sourceCount, sources);
     }
 else if (endsWith(destType, ".bscore"))
     {
@@ -1553,6 +1588,7 @@ nosort = optionExists("nosort");
 isPtoG = optionExists("isPtoG");
 dots = optionInt("dots", dots);
 gapsize = optionInt("gapsize", gapsize);
+extGenePred = optionExists("extGenePred");
 ignoreVersions = optionExists("ignoreVersions");
 if (gapsize !=0)
     chromInsertsSetDefaultGapSize(gapsize);
