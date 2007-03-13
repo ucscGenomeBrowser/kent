@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.47 2007/03/02 22:04:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.48 2007/03/13 21:47:16 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -89,6 +89,9 @@ errAbort(
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
   "   -allowStartEqualEnd  - during strict, allow Start==End OK\n"
+  "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
+  "   -customTrackLoader  - turns on: -noNameIx, -ignoreEmpty,\n"
+  "                       -allowStartEqualEnd, -allowNegativeScores -verbose=0\n"
   "   -verbose=N - verbose level for extra information to STDERR"
   );
 }
@@ -164,6 +167,9 @@ while (lineFileNext(lf, &line, NULL))
 	wordCount = chopTabs(line, words);
     else
 	wordCount = chopLine(line, words);
+    /* ignore empty lines	*/
+    if (0 == wordCount)
+	continue;
     lineFileExpectWords(lf, bedSize, wordCount);
     AllocVar(bed);
     bed->chrom = cloneString(words[0]);
