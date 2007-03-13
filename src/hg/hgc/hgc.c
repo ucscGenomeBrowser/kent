@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1233 2007/03/13 03:25:37 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1234 2007/03/13 03:43:00 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16177,24 +16177,26 @@ char **row;
 char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
-float avHet = 0.0;
+float het = 0.0;
  
 safef(query, sizeof(query), "select * from hapmapAllelesSummary where chrom = '%s' and "
       "chromStart=%d and name = '%s'", seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 summaryItem = hapmapAllelesSummaryLoad(row+rowOffset);
- 
-printf("<B>Summary over all populations:</B><BR>\n");
-avHet = summaryItem->score / 1000.0;
-printf("<B>Heterozygosity:</B> %3.2f%%<BR>\n", avHet);
-printf("<B>Population count:</B> %d</BR>\n", summaryItem->popCount); 
-printf("<B>Mixed:</B> %s</BR>\n", summaryItem->isMixed);
+
+het = summaryItem->score / 1000.0;
+printf("<B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
+
+htmlHorizontalLine();
+
 printf("<B>Chimp allele:</B> %s \n", summaryItem->chimpAllele);
 printf("<B>Chimp allele quality score:</B> %d</BR>\n", summaryItem->chimpAlleleQuality);
 printf("<B>Macaque allele:</B> %s \n", summaryItem->macaqueAllele);
 printf("<B>Macaque allele quality score:</B> %d</BR>\n", summaryItem->macaqueAlleleQuality);
 
+htmlHorizontalLine();
+ 
 printf("<B>Allele frequencies:</B><BR>\n");
 printf("<TABLE BORDER=1>\n");
 if (differentString(summaryItem->allele2, "none"))
@@ -16215,6 +16217,8 @@ if (differentString(summaryItem->allele2, "none"))
     showHapmapMonomorphic(summaryItem);
     }
 printf("</TABLE>\n");
+
+
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
