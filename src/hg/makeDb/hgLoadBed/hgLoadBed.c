@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.48 2007/03/13 21:47:16 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.49 2007/03/13 23:10:11 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -363,7 +363,10 @@ writeBedTab(tab, bedList, bedSize);
 if ( ! noLoad )
     {
     verbose(1, "Loading %s\n", database);
-    sqlLoadTabFile(conn, tab, track, loadOptions);
+    if (customTrackLoader)
+	sqlLoadTabFile(conn, tab, track, loadOptions|SQL_TAB_FILE_WARN_ON_WARN);
+    else
+	sqlLoadTabFile(conn, tab, track, loadOptions);
 
     /* add a comment to the history table and finish up connection */
     safef(comment, sizeof(comment),
