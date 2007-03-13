@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.4 2007/03/13 04:37:11 kate Exp $
+# $Id: doRecipBest.pl,v 1.5 2007/03/13 04:37:56 kate Exp $
 
 use Getopt::Long;
 use warnings;
@@ -292,7 +292,7 @@ sub loadDef {
 #########################################################################
 # main
 
-$opt_debug = 1;
+#$opt_debug = 1;
 
 # Prevent "Suspended (tty input)" hanging:
 &HgAutomate::closeStdin();
