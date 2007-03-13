@@ -15,7 +15,7 @@ CREATE TABLE hapmapSnps (
     observed varchar(255) not null,			# Observed string from genotype file
     allele1 enum('A', 'C', 'G', 'T')  not null,		# This allele has been observed
     homoCount1 int unsigned not null,			# Count of individuals who are homozygous for allele1
-    allele2 enum("C", "G", "T", "none") not null,	# This allele may not have been observed
+    allele2 enum('C', 'G', 'T', 'none') not null,	# This allele may not have been observed
     homoCount2 int unsigned not null,			# Count of individuals who are homozygous for allele2
     heteroCount int unsigned not null			# Count of individuals who are heterozygous
 );
