@@ -18609,6 +18609,8 @@ ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
+mysql> alter table hapmapAllelesSummary add index name (name);
+mysql> alter table hapmapAllelesSummary add index chrom (chrom, bin);
 # sanity check
 mysql> select count(*) from hapmapAllelesSummary where majorAlleleCountCEU > totalAlleleCountCEU;
 +----------+
