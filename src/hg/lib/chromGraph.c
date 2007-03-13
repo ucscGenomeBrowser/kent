@@ -12,7 +12,7 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.14 2007/01/24 01:25:57 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.15 2007/03/13 22:37:25 galt Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -567,7 +567,7 @@ mustReadOne(f, cgb->val);
 return TRUE;
 }
 
-struct bed3 *chromGraphBinToBed3(char *fileName, boolean threshold)
+struct bed3 *chromGraphBinToBed3(char *fileName, double threshold)
 /* Stream through making list of all places above threshold. */
 {
 struct bed3 *list = NULL, *bed = NULL;
