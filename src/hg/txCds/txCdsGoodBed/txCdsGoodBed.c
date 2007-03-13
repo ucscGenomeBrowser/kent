@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.2 2007/03/13 08:00:43 kent Exp $";
+static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.3 2007/03/13 20:26:17 kent Exp $";
 
 double frag = 0.15;
 
@@ -62,43 +62,43 @@ for (i=0; i<gp->exonCount; ++i)
     }
 }
 
-void gpPartOutAsCds(struct genePred *gp, int start, int end, FILE *f,
+
+
+void gpPartOutAsCds(struct genePred *gp, int partStart, int partEnd, FILE *f,
 	char *type, int id)
 /* Write out CDS region of this fragment of gp.  It may in fact be empty,
  * which we'll represent as start=0, end=0 */
 {
+/* Truncate cds to fit inside of the interval we're actually outputting. 
+ * If this results in us losing the CDS, just output a stub quickly. */
 fprintf(f, "%s_%d_%s\t", type, id, gp->name);
-start = max(start, gp->cdsStart);
-end = min(end, gp->cdsEnd);
-if (start >= end)
-    fprintf(f, "0\t0\n");
-else
+int genoCdsStart = max(partStart, gp->cdsStart);
+int genoCdsEnd = min(partEnd, gp->cdsEnd);
+if (genoCdsStart >= genoCdsEnd)
     {
-    int cdnaPos = 0;
-    int cdsStart = 0, cdsEnd = 0;
-    boolean gotStart = FALSE, gotEnd = FALSE;
-    int i;
-    for (i=0; i<gp->exonCount; ++i)
-	{
-	int exonStart = gp->exonStarts[i];
-	int exonEnd = gp->exonEnds[i];
-	int exonSize = exonEnd - exonStart;
-	if (exonStart <= start && start < exonEnd)
-	    {
-	    cdsStart = cdnaPos + (start - exonStart);
-	    gotStart = TRUE;
-	    }
-	if (exonStart < end && end <= exonEnd)
-	    {
-	    cdsEnd = cdnaPos + (end - exonStart);
-	    gotEnd = TRUE;
-	    }
-	cdnaPos += exonSize;
-	}
-    assert(gotStart);
-    assert(gotEnd);
-    fprintf(f, "%d\t%d\n", cdsStart, cdsEnd);
+    fprintf(f, "0\t0\n");
+    return;
     }
+
+/*  Figure out amount of exonic sequence that is inside of our part
+ *  and also in the first UTR or the CDS. */
+int i;
+int cdnaUtrUpSize = 0;
+int cdnaCdsSize = 0;
+for (i=0; i<gp->exonCount; ++i)
+    {
+    int exonStart = gp->exonStarts[i];
+    int exonEnd = gp->exonEnds[i];
+    int utrStart = max(gp->txStart, exonStart);
+    int utrEnd = min(gp->cdsStart, exonEnd);
+    int cdsStart = max(gp->cdsStart, exonStart);
+    int cdsEnd = min(gp->cdsEnd, exonEnd);
+    cdnaUtrUpSize += positiveRangeIntersection(utrStart, utrEnd, partStart, partEnd);
+    cdnaCdsSize += positiveRangeIntersection(cdsStart, cdsEnd, partStart, partEnd);
+    }
+
+/* Output CDS start/end. */
+fprintf(f, "%d\t%d\n", cdnaUtrUpSize, cdnaUtrUpSize+cdnaCdsSize);
 }
 
 void txCdsGoodBed(char *database, char *outBed, char *outCds)
