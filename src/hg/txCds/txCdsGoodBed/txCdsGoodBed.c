@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.1 2007/03/13 05:33:28 kent Exp $";
+static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.2 2007/03/13 08:00:43 kent Exp $";
 
 double frag = 0.15;
 
@@ -23,7 +23,7 @@ errAbort(
   "of them so as not to end up with a SVM that *requires* a complete \n"
   "transcript.\n"
   "usage:\n"
-  "   txCdsGoodBed database output.bed\n"
+  "   txCdsGoodBed database output.bed output.cds\n"
   "options:\n"
   "   -frag=0.N - Amount to fragment. Default %g\n"
   , frag
@@ -62,7 +62,46 @@ for (i=0; i<gp->exonCount; ++i)
     }
 }
 
-void txCdsGoodBed(char *database, char *out)
+void gpPartOutAsCds(struct genePred *gp, int start, int end, FILE *f,
+	char *type, int id)
+/* Write out CDS region of this fragment of gp.  It may in fact be empty,
+ * which we'll represent as start=0, end=0 */
+{
+fprintf(f, "%s_%d_%s\t", type, id, gp->name);
+start = max(start, gp->cdsStart);
+end = min(end, gp->cdsEnd);
+if (start >= end)
+    fprintf(f, "0\t0\n");
+else
+    {
+    int cdnaPos = 0;
+    int cdsStart = 0, cdsEnd = 0;
+    boolean gotStart = FALSE, gotEnd = FALSE;
+    int i;
+    for (i=0; i<gp->exonCount; ++i)
+	{
+	int exonStart = gp->exonStarts[i];
+	int exonEnd = gp->exonEnds[i];
+	int exonSize = exonEnd - exonStart;
+	if (exonStart <= start && start < exonEnd)
+	    {
+	    cdsStart = cdnaPos + (start - exonStart);
+	    gotStart = TRUE;
+	    }
+	if (exonStart < end && end <= exonEnd)
+	    {
+	    cdsEnd = cdnaPos + (end - exonStart);
+	    gotEnd = TRUE;
+	    }
+	cdnaPos += exonSize;
+	}
+    assert(gotStart);
+    assert(gotEnd);
+    fprintf(f, "%d\t%d\n", cdsStart, cdsEnd);
+    }
+}
+
+void txCdsGoodBed(char *database, char *outBed, char *outCds)
 /* txCdsGoodBed - Create positive example training set for SVM. This is based on
  * the refSeq reviewed genes, but we fragment a certain percentage of them so as 
  * not to end up with a SVM that *requires* a complete transcript. */
@@ -74,7 +113,8 @@ if (!sqlTableExists(conn, refTrack))
     errAbort("table %s doesn't exist in %s", refTrack, database);
 if (!sqlTableExists(conn, statusTable))
     errAbort("table %s doesn't exist in %s", statusTable, database);
-FILE *f = mustOpen(out, "w");
+FILE *fBed = mustOpen(outBed, "w");
+FILE *fCds = mustOpen(outCds, "w");
 char *query =
    "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds "
    "from refGene r,refSeqStatus s where r.name=s.mrnaAcc and s.status='Reviewed'";
@@ -96,18 +136,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 	     gpFragLimits(gp, midRatio, 1.0, &start, &end);
 	type = "refFrag";
 	}
-    gpPartOutAsBed(gp, start, end, f, type, ++id, 0);
+    gpPartOutAsBed(gp, start, end, fBed, type, ++id, 0);
+    gpPartOutAsCds(gp, start, end, fCds, type, id);
     }
-carefulClose(&f);
+carefulClose(&fBed);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 frag = optionDouble("frag", frag);
-txCdsGoodBed(argv[1], argv[2]);
+txCdsGoodBed(argv[1], argv[2], argv[3]);
 return 0;
 }
