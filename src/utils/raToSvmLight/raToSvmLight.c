@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: raToSvmLight.c,v 1.1 2007/03/13 03:26:36 kent Exp $";
+static char const rcsid[] = "$Id: raToSvmLight.c,v 1.2 2007/03/13 21:31:05 kent Exp $";
 
 boolean good = FALSE;
 boolean bad = FALSE;
@@ -79,7 +79,7 @@ slAddHead(pList, iv);
 void raToSvmLight(char *inFile, char *keyField, char *outFeatures, char *outKeys)
 /* raToSvmLight - Convert .ra file to feature vector input for svmLight. */
 {
-/* Read file into a list of ra hashes.  Build up symbol/int mapping */
+/* Read file into a list of ra hashes.  Build up symbol table mapping */
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 struct hash *ra, *raList = NULL;
 struct hash *symHash = hashNew(0);
@@ -92,12 +92,23 @@ while ((ra = raNextRecord(lf)) != NULL)
          {
 	 if (!sameString(el->name, keyField))
 	     if (!hashLookup(symHash, el->name))
-		 hashAddInt(symHash, el->name, ++id);
+		 hashAdd(symHash, el->name, NULL);
 	 }
     slAddHead(&raList, ra);
     }
 lineFileClose(&lf);
 slReverse(&raList);
+
+/* Alphabetize symbols and assign IDs.  (The alphabetization is so that
+ * different files missing data in different places still end up with
+ * same IDs. */
+struct hashEl *el, *list = hashElListHash(symHash);
+slSort(&list, hashElCmp);
+for (el = list; el != NULL; el = el->next)
+    {
+    struct hashEl *realEl = hashLookup(symHash, el->name);
+    realEl->val = intToPt(++id);
+    }
 
 /* For each ra, convert to feature list, sort, and output. */
 FILE *f = mustOpen(outFeatures, "w");
