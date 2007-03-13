@@ -39,7 +39,6 @@ DIRS = \
 	polyInfo \
 	promoSeqFromCluster \
 	raToCds \
-	selectTrainedHits \
 	twinOrf \
 	twinOrf2 \
 	twinOrf3 \
