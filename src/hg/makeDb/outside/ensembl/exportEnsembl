@@ -1,5 +1,15 @@
 #!/bin/bash -e
 # exportEnsembl - export genePred files and tab files from ensembl native database. 
+liftfile="blank"
+while getopts ":l:" theOption; do
+        case $theOption in
+                l ) echo "liftfile= $OPTARG" ; liftfile=$OPTARG  ; echo liftfile $liftfile ;shift 2 ;;
+                \? ) echo "Unknown option chosen"
+                        exit 1;;
+                * ) echo "You need to supply an option!"
+                        exit 2;;
+        esac
+done
 [ $# != 3 ] && echo "usage: exportEnsembl organism version input-directory " >&2 && exit 1;
 organism=$1
 version=$2
@@ -26,3 +36,5 @@ hgsql $ensDb -N -B -e 'select distinct gsi.stable_id, tsi.stable_id, rsi.stable_
 
 hgsql $ensDb -N -B -e 'select distinct "'$version'", logic_name, t.biotype, g.gene_id,  gsi.stable_id, gsi.version, t.transcript_id, tsi.stable_id, tsi.version,rsi.stable_id, r.translation_id, rsi.version, db_name, dbprimary_acc, t.status from gene g, translation_stable_id rsi, gene_stable_id gsi, seq_region sr , analysis a, transcript t left outer join xref x on t.display_xref_id = x.xref_id , translation r, transcript_stable_id tsi where r.transcript_id = t.transcript_id and gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and rsi.translation_id = r.translation_id and tsi.transcript_id = t.transcript_id and a.analysis_id = t.analysis_id;' > ensGeneXref.tab
  
+[ $liftfile != "blank" ] && mv ensGene.gp ensGene.unlifted.gp && liftUp ensGene.gp $liftfile carry ensGene.unlifted.gp -extGenePred;
+[ $liftfile != "blank" ] && mv ensPseudo.gp ensPseudo.unlifted.gp && liftUp ensPseudo.gp $liftfile carry ensPseudo.unlifted.gp -extGenePred;
