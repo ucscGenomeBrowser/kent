@@ -6,7 +6,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: raMerge.c,v 1.1 2007/03/13 00:51:27 kent Exp $";
+static char const rcsid[] = "$Id: raMerge.c,v 1.2 2007/03/13 01:41:20 kent Exp $";
 
 boolean dupeOk = FALSE, uniqDupeOk = FALSE;
 
@@ -14,7 +14,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "raMerge - Merge together info in two ra files, doing a record-by-record concatenation for the most part.\n"
+  "raMerge - Merge together info in two ra files, producing records that are a\n"
+  "concatenation of all the input records\n"
   "usage:\n"
   "   raMerge keyField file1.ra file2.ra ... fileN.ra\n"
   "options:\n"
