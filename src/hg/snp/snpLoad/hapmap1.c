@@ -26,9 +26,9 @@
    strand
    observed
    allele1
-   allele1Count (homozygotes)
-   allele2 (if not found, use '?')
-   allele2Count (homozygotes)
+   homoCount1 (count of individuals who are homozygous for allele1)
+   allele2 (if not found, use "none")
+   homoCount2 (count of individuals who are homozygous for allele2)
    heteroCount */
 
 #include "common.h"
@@ -37,7 +37,7 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmap1.c,v 1.4 2007/02/09 03:38:41 heather Exp $";
+static char const rcsid[] = "$Id: hapmap1.c,v 1.5 2007/03/13 22:07:19 heather Exp $";
 
 FILE *logFileHandle = NULL;
 FILE *outputFileHandle = NULL;
@@ -166,7 +166,7 @@ if (tCountHomo > 0 || tCountHetero > 0)
 
 /* handle monomorphic */
 if (status == 1)
-    fprintf(outputFileHandle, "? 0 ");
+    fprintf(outputFileHandle, "none 0 ");
 
 /* maximum 2 of these can be greater than zero */
 fprintf(outputFileHandle, "%d\n", (aCountHetero + cCountHetero + gCountHetero + tCountHetero)/2);
