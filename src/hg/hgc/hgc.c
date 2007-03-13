@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1234 2007/03/13 03:43:00 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1235 2007/03/13 03:55:35 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16190,10 +16190,20 @@ printf("<B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
 
 htmlHorizontalLine();
 
-printf("<B>Chimp allele:</B> %s \n", summaryItem->chimpAllele);
-printf("<B>Chimp allele quality score:</B> %d</BR>\n", summaryItem->chimpAlleleQuality);
-printf("<B>Macaque allele:</B> %s \n", summaryItem->macaqueAllele);
-printf("<B>Macaque allele quality score:</B> %d</BR>\n", summaryItem->macaqueAlleleQuality);
+printf("<B>Ortho alleles:</B><BR>\n");
+printf("<TABLE BORDER=1>\n");
+printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Qual Score</TH></TR>\n");
+printf("<TR>");
+printf("<TD>Chimp</TD>");
+printf("<TD>%s</TD>", summaryItem->chimpAllele);
+printf("<TD>%d</TD>", summaryItem->chimpAlleleQuality);
+printf("</TR>");
+printf("<TR>");
+printf("<TD>Macaque</TD>");
+printf("<TD>%s</TD>", summaryItem->macaqueAllele);
+printf("<TD>%d</TD>", summaryItem->macaqueAlleleQuality);
+printf("</TR>");
+printf("</TABLE>\n");
 
 htmlHorizontalLine();
  
