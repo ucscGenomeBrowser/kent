@@ -11,9 +11,9 @@ mv ensGene.nohap.gp ensGene.gp
 tawk '$2!~/hap/{print $0}' ensPseudo.gp > ensPseudo.nohap.gp
 mv ensPseudo.nohap.gp ensPseudo.gp
 hgsql $db -e "drop table if exists ensGene"
-ldHgGene $db ensGene -predTab ensGene.gp -gtf -genePredExt 
+ldHgGene $db ensGene -predTab ensGene.gp -gtf -genePredExt -bin
 hgsql $db -e "drop table if exists ensPseudo"
-ldHgGene $db ensPseudo -predTab ensPseudo.gp -gtf -genePredExt 
+ldHgGene $db ensPseudo -predTab ensPseudo.gp -gtf -genePredExt -bin
 hgsql $db -e "drop table if exists ensInfo"
 hgLoadSqlTab $db ensInfo $HOME/kent/src/hg/lib/ensInfo.sql ensInfo.tab
 hgsql $db -e "drop table if exists ensGtp"
