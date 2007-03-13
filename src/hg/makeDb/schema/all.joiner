@@ -1348,6 +1348,12 @@ identifier rhMapName
     danRer3.rhMap.qName dupeOk
     danRer3.rhMapInfo.name minCheck=0.94 unique
  
+identifier igtcName
+"IGTC (genetrap.org) sequence name"
+    $mm.seq.acc
+    $mm.igtc.qName
+
+
 # "Biological" Gene Names
 
 identifier hugoName external=HUGO fuzzy
