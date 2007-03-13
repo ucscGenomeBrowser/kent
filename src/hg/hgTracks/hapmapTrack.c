@@ -48,16 +48,57 @@ mixedFilter = cartUsualString(cart, HAP_POP_MIXED, HAP_POP_MIXED_DEFAULT);
 popCountFilter = cartUsualString(cart, HAP_POP_COUNT, HAP_POP_COUNT_DEFAULT);
 observedFilter = cartUsualString(cart, HAP_TYPE, HAP_TYPE_DEFAULT);
 minFreqFilter = sqlFloat(cartUsualString(cart, HAP_MIN_FREQ, HAP_MIN_FREQ_DEFAULT));
+if (minFreqFilter < 0.0) 
+    {
+    minFreqFilter = 0.0;
+    cartSetDouble(cart, HAP_MIN_FREQ, 0.0);
+    }
 maxFreqFilter = sqlFloat(cartUsualString(cart, HAP_MAX_FREQ, HAP_MAX_FREQ_DEFAULT));
+if (maxFreqFilter > 0.5) 
+    {
+    maxFreqFilter = 0.5;
+    cartSetDouble(cart, HAP_MAX_FREQ, 0.5);
+    }
 minHetFilter = sqlFloat(cartUsualString(cart, HAP_MIN_HET, HAP_MIN_HET_DEFAULT));
+if (minHetFilter < 0.0) 
+    {
+    minHetFilter = 0.0;
+    cartSetDouble(cart, HAP_MIN_HET, 0.0);
+    }
 maxHetFilter = sqlFloat(cartUsualString(cart, HAP_MAX_HET, HAP_MAX_HET_DEFAULT));
+if (maxHetFilter > 0.5) 
+    {
+    maxHetFilter = 0.5;
+    cartSetDouble(cart, HAP_MAX_HET, 0.5);
+    }
 monoFilter = cartUsualString(cart, HAP_MONO, HAP_MONO_DEFAULT);
 chimpFilter = cartUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT);
 chimpQualFilter = 
     sqlUnsigned(cartUsualString(cart, HAP_CHIMP_QUAL, HAP_CHIMP_QUAL_DEFAULT));
+if (chimpQualFilter < 0) 
+    {
+    chimpQualFilter = 0;
+    cartSetInt(cart, HAP_CHIMP_QUAL, 0);
+    }
+if (chimpQualFilter > 100) 
+    {
+    chimpQualFilter = 100;
+    cartSetInt(cart, HAP_CHIMP_QUAL, 100);
+    }
+
 macaqueFilter = cartUsualString(cart, HAP_MACAQUE, HAP_MACAQUE_DEFAULT);
 macaqueQualFilter = 
     sqlUnsigned(cartUsualString(cart, HAP_MACAQUE_QUAL, HAP_MACAQUE_QUAL_DEFAULT));
+if (macaqueQualFilter < 0) 
+    {
+    macaqueQualFilter = 0;
+    cartSetInt(cart, HAP_MACAQUE_QUAL, 0);
+    }
+if (macaqueQualFilter > 100) 
+    {
+    macaqueQualFilter = 100;
+    cartSetInt(cart, HAP_MACAQUE_QUAL, 100);
+    }
 }
 
 boolean allDefaults()
