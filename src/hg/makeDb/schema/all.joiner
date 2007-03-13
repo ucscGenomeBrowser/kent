@@ -1719,6 +1719,16 @@ identifier dbSnpRnId typeOf=dbSnpId
     hgFixed.dbSnpRsRn.rsId
     $rn.snpMap.name
 
+identifier hapmapSnpId 
+"HapMap SNPs"
+    hg17.hapmapAllelesSummary.name
+    hg17.hapmapSnpsCEU.name
+    hg17.hapmapSnpsCHB.name
+    hg17.hapmapSnpsJPT.name
+    hg17.hapmapSnpsYRI.name
+    hg17.hapmapAllelesChimp.name
+    hg17.hapmapAllelesMacaque.name
+
 identifier hapmapLdSnpId external=dbSNP fuzzy
 "HapMap dbSNP ID"
     $hg.hapmapLdCeu.name unique
