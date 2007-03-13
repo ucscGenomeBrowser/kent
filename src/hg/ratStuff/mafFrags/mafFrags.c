@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.4 2007/03/08 17:29:32 kent Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.5 2007/03/13 22:27:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,7 @@ errAbort(
   "   -orgs=org.txt - File with list of databases/organisms in order\n"
   "   -bed12 - If set, in.bed is a bed 12 file, including exons\n"
   "   -thickOnly - Only extract subset between thickStart/thickEnd\n"
+  "   -meFirst - Put native sequence first in maf\n"
   );
 }
 
@@ -31,11 +32,13 @@ static struct optionSpec options[] = {
    {"orgs", OPTION_STRING},
    {"bed12", OPTION_BOOLEAN},
    {"thickOnly", OPTION_BOOLEAN},
+   {"meFirst", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 boolean bed12 = FALSE;
 boolean thickOnly = FALSE;
+boolean meFirst = FALSE;
 
 struct mafAli *mafFromBed12(char *database, char *track, struct bed *bed, 
 	struct slName *orgList)
@@ -138,6 +141,18 @@ mafAliFreeList(&mafList);
 return bigMaf;
 }
 
+void moveMeToFirst(struct mafAli *maf, char *myName)
+/* Find component matching myName, and move it to first. */
+{
+struct mafComp *comp;
+for (comp = maf->components; comp != NULL; comp = comp->next)
+    if (sameString(comp->src, myName))
+        break;
+assert(comp != NULL);
+slRemoveEl(&maf->components, comp);
+slAddHead(&maf->components, comp);
+}
+
 void mafFrags(char *database, char *track, char *bedFile, char *mafFile)
 /* mafFrags - Collect MAFs from regions specified in a 6 column bed file. */
 {
@@ -162,6 +177,8 @@ if (bed12)
 	{
 	struct bed *bed = bedLoadN(row, ArraySize(row));
 	struct mafAli *maf = mafFromBed12(database, track, bed, orgList);
+	if (meFirst)
+	    moveMeToFirst(maf, bed->name);
 	mafWrite(f, maf);
 	mafAliFree(&maf);
 	bedFree(&bed);
@@ -176,6 +193,8 @@ else
 	struct mafAli *maf = hgMafFrag(database, track, 
 	    bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
 	    bed->name, orgList);
+	if (meFirst)
+	    moveMeToFirst(maf, bed->name);
 	mafWrite(f, maf);
 	mafAliFree(&maf);
 	bedFree(&bed);
@@ -193,6 +212,7 @@ if (argc != 5)
     usage();
 bed12 = optionExists("bed12");
 thickOnly = optionExists("thickOnly");
+meFirst = optionExists("meFirst");
 mafFrags(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
