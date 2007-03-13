@@ -8049,10 +8049,17 @@ time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 
 # Done! Jan  9 06:11
 
-    # Reciprocal best net mafs for multiz
+    # Reciprocal best net mafs for multiz (kate)
     ssh kkstore02
     cd /cluster/data/hg18/bed/blastz.dasNov1
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 dasNov1 >&! rbest.log &
+    
+    # Load nets (2007-03-12 kate)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.dasNov1/axtChain
+    netFilter -minGap=10 noClass.net | hgLoadNet -warn hg18 netDasNov1 stdin
+    netFilter -minGap=10 hg18.dasNov1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestDasNov1 stdin
 
 #########################################################################
 # BLASTZ DOG CanFam2 second time (DONE - 2005-12-28 - 2005-12-29 Fan)
@@ -8264,6 +8271,14 @@ tail load4.out
     ssh kkstore02
     cd /cluster/data/hg18/bed/blastz.loxAfr1
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 loxAfr1 >&! rbest.log &
+
+    # load net and reciprocal best net for comparison
+    # note sure why these tables and cleanup aren't done -- ask Fan
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.loxAfr1/axtChain
+    netFilter -minGap=10 noClass.net | hgLoadNet -warn hg18 netLoxAfr1 stdin
+    netFilter -minGap=10 hg18.loxAfr1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestLoxAfr1 stdin
 
 #########################################################################
 # BLASTZ COW BosTau2 second time (STARTED - 2006-01-07 Fan)
@@ -9975,6 +9990,38 @@ cat netCov.log
     cd /cluster/data/hg18/bed/blastz.canFam2
     ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
         -syntenicNet -continue syntenicNet >&! synnet.log &
+
+# NET AND RECIPROCAL BEST TABLES FOR 2X MAMMALS
+    # load net and reciprocal best net for comparison
+
+    # rabbit
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.oryCun1/axtChain
+    netFilter -minGap=10 hg18.oryCun1.net | hgLoadNet -warn hg18 netOryCun1 stdin
+    netFilter -minGap=10 hg18.oryCun1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestOryCun1 stdin
+
+    # tenrec
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.echTel1/axtChain
+    netFilter -minGap=10 hg18.echTel1.net.gz | hgLoadNet -warn hg18 netEchTel1 stdin
+    netFilter -minGap=10 hg18.echTel1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestEchTel1 stdin
+
+    # net coverage
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+cat > netRBestCov.csh << 'EOF'
+    #!/bin/csh -ef
+    foreach db (OtoGar1 OryCun1 CavPor2 LoxAfr1 EchTel1 DasNov1)
+        echo -n "     "
+        featureBits -countGaps -chrom=chr1 hg18 refGene:cds net$db -enrichment
+        featureBits -countGaps -chrom=chr1 hg18 refGene:cds netRBest$db -enrichment
+        echo ""
+    end
+'EOF'
+    csh netRBestCov.csh >&! netRBestCov.log &
+
 
 ##########################################################################
 # EVOFOLD (Done, 05/12/06) Jakob Skou Pedersen
@@ -13429,6 +13476,12 @@ TMPDIR=/scratch/tmp
     # reciprocal best net mafs for multiz
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 otoGar1 >&! rbest.log &
 
+    # Load net (2007-03-12 kate)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.otoGar1/axtChain
+    netFilter -minGap=10 hg18.otoGar1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestOtoGar1 stdin
+
 #########################################################################
 # BLASTZ/CHAIN/NET CAVPOR2 (IN PROGRESS 2007-03-06 kate)
     ssh kkstore02
@@ -13482,6 +13535,15 @@ BASE=/cluster/data/hg18/bed/blastz.cavPor2.2007-03-06
 
     # reciprocal best net mafs for multiz
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 cavPor2 >&! rbest.log &
+
+    # load nets manually -- automated loading fails as classification info 
+    #  not available (no database)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.cavPor2/axtChain
+    netFilter -minGap=10 noClass.net | hgLoadNet -warn hg18 netCavPor2 stdin
+    netFilter -minGap=10 hg18.cavPor2.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestCavPor2 stdin
+
 
 #########################################################################
 # BLASTZ/CHAIN/NET ERIEUR1 (IN PROGRESS 2007-03-08 kate)
@@ -13553,6 +13615,64 @@ BASE=/cluster/data/hg18/bed/blastz.sorAra1.2007-03-08
       -chainMinScore=3000 -chainLinearGap=medium >& do.log &
     tail -f do.log
 
+    # stopped during load step due to missing database for classifying net
+
+    # Reciprocal best net mafs for multiz (2007-03-12 kate)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.sorAra1
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 sorAra1 >&! rbest.log &
+    
+    # Load nets (2007-03-12 kate)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.sorAra1/axtChain
+    netFilter -minGap=10 noClass.net | hgLoadNet -warn hg18 netSorAra1 stdin
+    netFilter -minGap=10 hg18.sorAra1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestSorAra1 stdin
+
+
+#########################################################################
+# BLASTZ ORNANA1 (PLATYPUS) - (DONE 2007-02-23 angie)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+    cd /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+
+    # If I had to do it over, I would go with a larger SEQ2_LIMIT because 
+    # there were 437k jobs, avg <40s.
+
+    cat << '_EOF_' > DEF
+# human vs. platypus
+
+# Use same params as used for hg18-danRer4
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: hg18
+SEQ1_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: ornAna1
+SEQ2_DIR=/san/sanvol1/scratch/ornAna1/ornAna1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=75
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << emacs
+
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+      -blastzOutRoot /san/sanvol1/scratch/hg18.ornAna1 \
+      -bigClusterHub pk -smallClusterHub pk \
+      >& do.log & tail -f do.log
 
 ########################################################################
 # 25-Way Multiple Alignment
@@ -13813,54 +13933,10 @@ cat > loadMaf.csh << 'EOF'
 
      # load summary table
      cat maf/*.maf |  nice hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
-                 -maxSize=200000  multiz25wayStrict Summary stdin
+                 -maxSize=200000  multiz25wayStrictSummary stdin
 'EOF'
      csh loadMaf.csh >&! loadMaf.log &
 
-
-#########################################################################
-# BLASTZ ORNANA1 (PLATYPUS) - (DONE 2007-02-23 angie)
-    ssh kkstore02
-    mkdir /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
-    cd /cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
-
-    # If I had to do it over, I would go with a larger SEQ2_LIMIT because 
-    # there were 437k jobs, avg <40s.
-
-    cat << '_EOF_' > DEF
-# human vs. platypus
-
-# Use same params as used for hg18-danRer4
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_M=50
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-BLASTZ=blastz.v7.x86_64
-
-# TARGET: hg18
-SEQ1_DIR=/scratch/hg/hg18/hg18.2bit
-SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
-SEQ1_CHUNK=20000000
-SEQ1_LAP=10000
-
-# QUERY: ornAna1
-SEQ2_DIR=/san/sanvol1/scratch/ornAna1/ornAna1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/ornAna1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=75
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.ornAna1.2007-02-21
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << emacs
-
-    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
-      -blastzOutRoot /san/sanvol1/scratch/hg18.ornAna1 \
-      -bigClusterHub pk -smallClusterHub pk \
-      >& do.log & tail -f do.log
 
 ############################################################################
 # Reload CCDS (ccdsInfo, ccdsGene, ccdsKgMap) (2007-03-02 markd)
