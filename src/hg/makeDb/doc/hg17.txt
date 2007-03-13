@@ -18444,6 +18444,14 @@ mysql> select count(*) from hapmapSnpsYRI where homoCount1 + homoCount2 + hetero
 |        0 |
 +----------+
 
+mysql> select max(score) from hapmapSnpsCEU;  
++------------+
+| max(score) |
++------------+
+|        500 |
++------------+
+
+
 # create indexes
 mysql> alter table hapmapSnpsCEU add index name (name);
 mysql> alter table hapmapSnpsCEU add index chrom (chrom, bin);
@@ -18601,6 +18609,47 @@ ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap/rel21a
 /cluster/home/heather/kent/src/hg/snp/snpLoad/hapmapSummary hg17 hapmapSnpsCombined hapmapAllelesChimp hapmapAllelesMacaque
 hgLoadBed hg17 hapmapAllelesSummary -sqlTable=/cluster/home/heather/kent/src/hg/lib/hapmapAllelesSummary.sql hapmapSummary.tab -tab
+# sanity check
+mysql> select count(*) from hapmapAllelesSummary where majorAlleleCountCEU > totalAlleleCountCEU;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+mysql> select count(*) from hapmapAllelesSummary where majorAlleleCountCHB > totalAlleleCountCHB;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+mysql> select max(score) from hapmapAllelesSummary;
++------------+
+| max(score) |
++------------+
+|        500 |
++------------+
+
+mysql> select count(*), popCount from hapmapAllelesSummary group by popCount;
++----------+----------+
+| count(*) | popCount |
++----------+----------+
+|    52479 |        1 |
+|    72977 |        2 |
+|   207643 |        3 |
+|  3700478 |        4 |
++----------+----------+
+
+mysql> select count(*), isMixed from hapmapAllelesSummary group by isMixed; 
+
++----------+---------+
+| count(*) | isMixed |
++----------+---------+
+|  3192896 | NO      |
+|   840681 | YES     |
++----------+---------+
+
 
 # histogram of heterozygosity:
 
