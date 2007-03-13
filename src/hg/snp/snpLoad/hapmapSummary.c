@@ -1,6 +1,6 @@
 /* hapmapSummary */
 /* hash in ortho alleles */
-/* read through hapmapAllelesCombined */
+/* read through hapmapSnpsCombined */
 /* don't preserve individual status */
 /* used for filtering */
 /* output format: */
@@ -9,11 +9,11 @@
    chromStart
    chromEnd
    name
-   score (avHet)
+   score (heterozygosity defined as 2pq)
    strand
    observed
    popCount
-   isMixed (TRUE or FALSE)
+   isMixed (YES or NO)
    majorAlleleCEU
    majorAlleleCountCEU
    totalAlleleCountCEU
@@ -38,7 +38,7 @@
 #include "hdb.h"
 #include "hapmapAllelesCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSummary.c,v 1.7 2007/03/10 05:36:40 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSummary.c,v 1.8 2007/03/13 20:56:36 heather Exp $";
 
 struct orthoAllele
     {
@@ -255,9 +255,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     popCount = getPopCount(hmac);
     fprintf(outputFileHandle, "%d\t", popCount);
     if (isMixed(hmac))
-        fprintf(outputFileHandle, "TRUE\t");
+        fprintf(outputFileHandle, "YES\t");
     else
-        fprintf(outputFileHandle, "FALSE\t");
+        fprintf(outputFileHandle, "NO\t");
 
     i = getAlleleSummary(hmac->allele1, hmac->allele1CountCEU, 
                          hmac->allele2, hmac->allele2CountCEU,
