@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.3 2007/03/13 20:26:17 kent Exp $";
+static char const rcsid[] = "$Id: txCdsGoodBed.c,v 1.4 2007/03/14 02:21:26 kent Exp $";
 
 double frag = 0.15;
 
@@ -84,21 +84,28 @@ if (genoCdsStart >= genoCdsEnd)
  *  and also in the first UTR or the CDS. */
 int i;
 int cdnaUtrUpSize = 0;
+int cdnaUtrDownSize = 0;
 int cdnaCdsSize = 0;
 for (i=0; i<gp->exonCount; ++i)
     {
     int exonStart = gp->exonStarts[i];
     int exonEnd = gp->exonEnds[i];
-    int utrStart = max(gp->txStart, exonStart);
-    int utrEnd = min(gp->cdsStart, exonEnd);
+    int utrUpStart = max(gp->txStart, exonStart);
+    int utrUpEnd = min(gp->cdsStart, exonEnd);
+    int utrDownStart = max(gp->cdsEnd, exonStart);
+    int utrDownEnd = min(gp->txEnd, exonEnd);
     int cdsStart = max(gp->cdsStart, exonStart);
     int cdsEnd = min(gp->cdsEnd, exonEnd);
-    cdnaUtrUpSize += positiveRangeIntersection(utrStart, utrEnd, partStart, partEnd);
+    cdnaUtrUpSize += positiveRangeIntersection(utrUpStart, utrUpEnd, partStart, partEnd);
+    cdnaUtrDownSize += positiveRangeIntersection(utrDownStart, utrDownEnd, partStart, partEnd);
     cdnaCdsSize += positiveRangeIntersection(cdsStart, cdsEnd, partStart, partEnd);
     }
 
 /* Output CDS start/end. */
-fprintf(f, "%d\t%d\n", cdnaUtrUpSize, cdnaUtrUpSize+cdnaCdsSize);
+if (gp->strand[0] == '+')
+    fprintf(f, "%d\t%d\n", cdnaUtrUpSize, cdnaUtrUpSize+cdnaCdsSize);
+else
+    fprintf(f, "%d\t%d\n", cdnaUtrDownSize, cdnaUtrDownSize+cdnaCdsSize);
 }
 
 void txCdsGoodBed(char *database, char *outBed, char *outCds)
