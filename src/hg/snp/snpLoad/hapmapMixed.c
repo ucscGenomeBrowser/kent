@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmapMixed.c,v 1.2 2007/03/14 20:33:56 heather Exp $";
+static char const rcsid[] = "$Id: hapmapMixed.c,v 1.3 2007/03/14 21:19:36 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,53 +29,6 @@ if (count1 >= count2)
     return allele1;
 return allele2;
 }
-
-
-int getPopCount(struct hapmapSnpsCombined *thisItem)
-/* move this to kent/src/hg/lib */
-{
-int ret = 0;
-if (thisItem->homoCount1CEU > 0 || thisItem->homoCount2CEU > 0 || thisItem->heteroCountCEU > 0) ret++;
-if (thisItem->homoCount1CHB > 0 || thisItem->homoCount2CHB > 0 || thisItem->heteroCountJPT > 0) ret++;
-if (thisItem->homoCount1JPT > 0 || thisItem->homoCount2JPT > 0 || thisItem->heteroCountCHB > 0) ret++;
-if (thisItem->homoCount1YRI > 0 || thisItem->homoCount2YRI > 0 || thisItem->heteroCountYRI > 0) ret++;
-return ret;
-}
-
-
-boolean isMixed(struct hapmapSnpsCombined *thisItem)
-/* move this to kent/src/hg/lib */
-/* return TRUE if different populations have a different major allele */
-/* don't need to consider heteroCount */
-{
-int allele1Count = 0;
-int allele2Count = 0;
-
-if (thisItem->homoCount1CEU >= thisItem->homoCount2CEU && thisItem->homoCount1CEU > 0) 
-    allele1Count++;
-else if (thisItem->homoCount2CEU > 0)
-    allele2Count++;
-
-if (thisItem->homoCount1CHB >= thisItem->homoCount2CHB && thisItem->homoCount1CHB > 0) 
-    allele1Count++;
-else if (thisItem->homoCount2CHB > 0)
-    allele2Count++;
-
-if (thisItem->homoCount1JPT >= thisItem->homoCount2JPT && thisItem->homoCount1JPT > 0) 
-    allele1Count++;
-else if (thisItem->homoCount2JPT > 0)
-    allele2Count++;
-
-if (thisItem->homoCount1YRI >= thisItem->homoCount2YRI && thisItem->homoCount1YRI > 0) 
-    allele1Count++;
-else if (thisItem->homoCount2YRI > 0)
-    allele2Count++;
-
-if (allele1Count > 0 && allele2Count > 0) return TRUE;
-
-return FALSE;
-}
-
 
 void hapmapMixed()
 /* read through input */
