@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orfEnum.c,v 1.2 2007/03/14 01:41:34 kent Exp $";
+static char const rcsid[] = "$Id: orfEnum.c,v 1.3 2007/03/14 04:55:16 kent Exp $";
 
 int minSize=24;
 boolean doAll = TRUE;
@@ -63,20 +63,6 @@ struct orfInfo
     bool gotAtg;	/* TRUE if has initial ATG. */
     bool kozak;		/* Has a Kozak consensus. */
     };
-
-boolean isKozak(char *dna, int dnaSize, int pos)
-/* Return TRUE if it's a Kozak compatible start. */
-{
-if (pos + 3 < dnaSize && dna[pos+3] == 'g')
-    return TRUE;
-if (pos >= 3)
-    {
-    char c = dna[pos-3];
-    if (c == 'a' || c == 'g')
-        return TRUE;
-    }
-return FALSE;
-}
 
 struct orfInfo *orfInfoNew(DNA *dna, int dnaSize, char *name, int start, int end)
 /* Return new orfInfo. */
