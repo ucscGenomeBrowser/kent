@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.11 2007/02/28 00:03:09 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.12 2007/03/14 21:47:42 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -632,6 +632,13 @@ if (!checkPwd(currentPassword, password))
     return;
     }
 freez(&password);
+if (!newPassword || sameString(newPassword,"") || (strlen(newPassword)<8))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("New password must be at least 8 characters long.");
+    changePasswordPage(conn);
+    return;
+    }
 if (!checkPwdCharClasses(newPassword))
     {
     freez(&errMsg);
