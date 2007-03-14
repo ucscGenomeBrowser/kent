@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.55 2007/03/09 04:48:53 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.56 2007/03/14 18:25:43 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -62,22 +62,72 @@ if (!hgIsOfficialChromName(word))
     lineFileAbort(lf, "%s not a chromosome", word);
 }
 
+static char *saveHost = NULL;
+static char *saveUser = NULL;
+static char *savePassword = NULL;
+
+static void saveCurrentEnv()
+/* while fiddling with environment for pipeline loaders, remember previous env
+ */
+{
+char *val = NULL;
+freeMem(saveHost);	/* clear these if previously used	*/
+freeMem(saveUser);
+freeMem(savePassword);
+val = getenv("HGDB_HOST");
+if (val && (strlen(val) > 0))
+    saveHost = cloneString(val);
+else
+    saveHost = NULL;
+val = getenv("HGDB_USER");
+if (val && (strlen(val) > 0))
+    saveUser = cloneString(val);
+else
+    saveUser = NULL;
+val = getenv("HGDB_PASSWORD");
+if (val && (strlen(val) > 0))
+    savePassword = cloneString(val);
+else
+    savePassword = NULL;
+}
+
+static void restorePrevEnv()
+/* while fiddling with environment for pipeline loaders, restore environment */
+{
+/* can not eliminate the variables from the environment, but can make
+ * them be empty strings.  This will be good enough for getCfgValue()
+ * in hdb.c and jksql.c
+ */
+if (saveHost)
+    envUpdate("HGDB_HOST", saveHost);
+else
+    envUpdate("HGDB_HOST", "");
+if (saveUser)
+    envUpdate("HGDB_USER", saveUser);
+else
+    envUpdate("HGDB_USER", "");
+if (savePassword)
+    envUpdate("HGDB_PASSWORD", savePassword);
+else
+    envUpdate("HGDB_PASSWORD", "");
+freeMem(saveHost);	/* clear these if previously used	*/
+freeMem(saveUser);
+freeMem(savePassword);
+}
+
 char *customTrackTempDb()
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 {
-static boolean firstTime = TRUE;
-if (firstTime)
-    {
-    /*	set environment for pipeline commands, one time only is sufficient */
-    char *host = cfgOptionDefault("customTracks.host", NULL);
-    char *user = cfgOptionDefault("customTracks.user", NULL);
-    char *pass = cfgOptionDefault("customTracks.password", NULL);
-    envUpdate("HGDB_HOST", host);
-    envUpdate("HGDB_USER", user);
-    envUpdate("HGDB_PASSWORD", pass);
-    firstTime = FALSE;
-    }
+/*	set environment for pipeline commands */
+char *host = cfgOptionDefault("customTracks.host", NULL);
+char *user = cfgOptionDefault("customTracks.user", NULL);
+char *pass = cfgOptionDefault("customTracks.password", NULL);
+
+saveCurrentEnv();
+envUpdate("HGDB_HOST", host);
+envUpdate("HGDB_USER", user);
+envUpdate("HGDB_PASSWORD", pass);
 return (CUSTOM_TRASH);
 }
 
@@ -251,6 +301,7 @@ if (dbRequested)
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
+    restorePrevEnv();			/* restore environment */
     }
 return track;
 }
@@ -948,6 +999,7 @@ if (dbRequested)
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
+    restorePrevEnv();			/* restore environment */
     track->wigFile = NULL;
 
     /* Figure out lower and upper limits with db query */
