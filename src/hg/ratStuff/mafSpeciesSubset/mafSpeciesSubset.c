@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafSpeciesSubset.c,v 1.1 2007/03/08 09:34:39 kent Exp $";
+static char const rcsid[] = "$Id: mafSpeciesSubset.c,v 1.2 2007/03/14 04:16:16 kent Exp $";
 
 boolean keepFirst = FALSE;
 
@@ -36,42 +36,6 @@ static struct optionSpec options[] = {
    {"keepFirst", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-boolean mafColumnEmpty(struct mafAli *maf, int col)
-/* Return TRUE if the column is all '-' or '.' */
-{
-assert(col < maf->textSize);
-struct mafComp *comp;
-for (comp = maf->components; comp != NULL; comp = comp->next)
-    {
-    char c = comp->text[col];
-    if (c != '.' && c != '-')
-        return FALSE;
-    }
-return TRUE;
-}
-
-void mafStripEmptyColumns(struct mafAli *maf)
-/* Remove columns that are all '-' or '.' from  maf. */
-{
-/* Selectively copy over non-empty columns. */
-int readIx=0, writeIx = 0;
-struct mafComp *comp;
-for (readIx=0; readIx < maf->textSize; ++readIx)
-    {
-    if (!mafColumnEmpty(maf, readIx))
-        {
-	for (comp = maf->components; comp != NULL; comp = comp->next)
-	    comp->text[writeIx] = comp->text[readIx];
-	++writeIx;
-	}
-    }
-
-/* Zero terminate text, and update textSize. */
-for (comp = maf->components; comp != NULL; comp = comp->next)
-    comp->text[writeIx] = 0;
-maf->textSize = writeIx;
-}
 
 boolean prefixInHash(struct hash *hash, char *name)
 /* Return true  if name, or name up to first dot is in hash. */
