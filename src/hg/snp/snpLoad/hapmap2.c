@@ -2,6 +2,8 @@
 /* create hapmapSnpsCombined table, given 4 hapmapSnpsPop tables */
 /* relies on hashes so will consume memory! */
 
+/* This program relies on passing around hashes, there might be a better way */
+
 /* Check for multiple alignments when building hash for each pop. Not expecting any. */
 
 #include "common.h"
@@ -13,7 +15,7 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hapmap2.c,v 1.6 2007/03/12 22:56:47 heather Exp $";
+static char const rcsid[] = "$Id: hapmap2.c,v 1.7 2007/03/14 18:49:19 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 
@@ -91,7 +93,6 @@ if (!helYRI)
 }
 
 boolean differentChrom(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapSnps.c */
 /* if either is missing, we can't say these are different */
 {
 struct hapmapSnps *ha1, *ha2;
@@ -104,7 +105,6 @@ return TRUE;
 }
 
 boolean differentStrand(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapSnps.c */
 /* if either is missing, we can't say these are different */
 {
 struct hapmapSnps *ha1, *ha2;
@@ -117,7 +117,6 @@ return TRUE;
 }
 
 boolean differentObserved(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapSnps.c */
 /* if either is missing, we can't say these are different */
 {
 struct hapmapSnps *ha1, *ha2;
@@ -130,7 +129,6 @@ return TRUE;
 }
 
 boolean differentChromStart(struct hashEl *hel1, struct hashEl *hel2)
-/* move this to kent/src/hg/lib/hapmapSnps.c */
 {
 struct hapmapSnps *ha1, *ha2;
 if (!hel1) return FALSE;
