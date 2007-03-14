@@ -22,4 +22,5 @@ table gbCdnaInfo
     uint productName; "Link to id in productName table"
     uint author;      "Link to id in author table"
     uint gi;          "Genbank identifier"
+    enum ('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA', 'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA') mol; "molecule type"
     )
