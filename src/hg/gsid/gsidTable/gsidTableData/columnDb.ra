@@ -96,11 +96,10 @@ visibility on
 type string
 filterDropDown on
 
-name seqAvail
-shortLabel seq
-longLabel Sequence is Available?
+name comment
+shortLabel comment
+longLabel Special comment
 priority 13
 visibility on
-type remap "y"="yes" "No Sequence data"="no"
+type string
 filterDropDown on
-
