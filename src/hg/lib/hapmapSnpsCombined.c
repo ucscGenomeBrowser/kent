@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapSnpsCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSnpsCombined.c,v 1.1 2007/03/12 22:22:04 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSnpsCombined.c,v 1.2 2007/03/14 22:51:17 heather Exp $";
 
 void hapmapSnpsCombinedStaticLoad(char **row, struct hapmapSnpsCombined *ret)
 /* Load a row from hapmapSnpsCombined table into ret.  The contents of ret will
@@ -226,4 +226,105 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+
+int getPopCount(struct hapmapSnpsCombined *thisItem)
+{
+int ret = 0;
+if (thisItem->homoCount1CEU > 0 || thisItem->homoCount2CEU > 0 || thisItem->heteroCountCEU > 0) ret++;
+if (thisItem->homoCount1CHB > 0 || thisItem->homoCount2CHB > 0 || thisItem->heteroCountJPT > 0) ret++;
+if (thisItem->homoCount1JPT > 0 || thisItem->homoCount2JPT > 0 || thisItem->heteroCountCHB > 0) ret++;
+if (thisItem->homoCount1YRI > 0 || thisItem->homoCount2YRI > 0 || thisItem->heteroCountYRI > 0) ret++;
+return ret;
+}
+
+
+boolean isMixed(struct hapmapSnpsCombined *thisItem)
+/* return TRUE if different populations have a different major allele */
+/* don't need to consider heteroCount */
+{
+int allele1Count = 0;
+int allele2Count = 0;
+
+if (thisItem->homoCount1CEU >= thisItem->homoCount2CEU && thisItem->homoCount1CEU > 0) 
+    allele1Count++;
+else if (thisItem->homoCount2CEU > 0)
+    allele2Count++;
+
+if (thisItem->homoCount1CHB >= thisItem->homoCount2CHB && thisItem->homoCount1CHB > 0) 
+    allele1Count++;
+else if (thisItem->homoCount2CHB > 0)
+    allele2Count++;
+
+if (thisItem->homoCount1JPT >= thisItem->homoCount2JPT && thisItem->homoCount1JPT > 0) 
+    allele1Count++;
+else if (thisItem->homoCount2JPT > 0)
+    allele2Count++;
+
+if (thisItem->homoCount1YRI >= thisItem->homoCount2YRI && thisItem->homoCount1YRI > 0) 
+    allele1Count++;
+else if (thisItem->homoCount2YRI > 0)
+    allele2Count++;
+
+if (allele1Count > 0 && allele2Count > 0) return TRUE;
+
+return FALSE;
+}
+
+void printOne(struct hapmapSnpsCombined *thisItem)
+{
+verbose(1, "chrom = %s\n", thisItem->chrom);
+verbose(1, "chromStart = %d\n", thisItem->chromStart);
+verbose(1, "chromEnd = %d\n", thisItem->chromEnd);
+verbose(1, "name = %s\n", thisItem->name);
+verbose(1, "score = %d\n", thisItem->score);
+verbose(1, "strand = %s\n", thisItem->strand);
+verbose(1, "observed = %s\n", thisItem->observed);
+verbose(1, "allele1 = %s\n", thisItem->allele1);
+verbose(1, "homoCount1CEU = %d\n", thisItem->homoCount1CEU);
+verbose(1, "homoCount1CHB = %d\n", thisItem->homoCount1CHB);
+verbose(1, "homoCount1JPT = %d\n", thisItem->homoCount1JPT);
+verbose(1, "homoCount1YRI = %d\n", thisItem->homoCount1YRI);
+verbose(1, "allele2 = %s\n", thisItem->allele2);
+verbose(1, "homoCount2CEU = %d\n", thisItem->homoCount2CEU);
+verbose(1, "homoCount2CHB = %d\n", thisItem->homoCount2CHB);
+verbose(1, "homoCount2JPT = %d\n", thisItem->homoCount2JPT);
+verbose(1, "homoCount2YRI = %d\n", thisItem->homoCount2YRI);
+verbose(1, "heteroCountCEU = %d\n", thisItem->heteroCountCEU);
+verbose(1, "heteroCountCHB = %d\n", thisItem->heteroCountCHB);
+verbose(1, "heteroCountJPT = %d\n", thisItem->heteroCountJPT);
+verbose(1, "heteroCountYRI = %d\n", thisItem->heteroCountYRI);
+}
+
+
+int calcHet(struct hapmapSnpsCombined *thisItem)
+/* calculate heterozygosity (2pq) */
+/* convert from individuals to alleles */
+{
+int allele1Count = 0;
+int allele2Count = 0;
+int total = 0;
+float p = 0.0; // freq1
+float q = 0.0; // freq2
+
+allele1Count = allele1Count + (2 * thisItem->homoCount1CEU) + thisItem->heteroCountCEU;
+allele1Count = allele1Count + (2 * thisItem->homoCount1CHB) + thisItem->heteroCountCHB;
+allele1Count = allele1Count + (2 * thisItem->homoCount1JPT) + thisItem->heteroCountJPT;
+allele1Count = allele1Count + (2 * thisItem->homoCount1YRI) + thisItem->heteroCountYRI;
+
+allele2Count = allele2Count + (2 * thisItem->homoCount2CEU) + thisItem->heteroCountCEU;
+allele2Count = allele2Count + (2 * thisItem->homoCount2CHB) + thisItem->heteroCountCHB;
+allele2Count = allele2Count + (2 * thisItem->homoCount2JPT) + thisItem->heteroCountJPT;
+allele2Count = allele2Count + (2 * thisItem->homoCount2YRI) + thisItem->heteroCountYRI;
+
+total = allele1Count + allele2Count;
+
+if (total == 0) return 0;
+
+p = (float)allele1Count / (float)total;
+q = (float)allele2Count / (float)total;
+
+return 2000*p*q;
+}
+
 

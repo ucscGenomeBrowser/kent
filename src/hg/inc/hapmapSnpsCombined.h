@@ -77,5 +77,15 @@ void hapmapSnpsCombinedOutput(struct hapmapSnpsCombined *el, FILE *f, char sep, 
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+int getPopCount(struct hapmapSnpsCombined *thisItem);
+
+boolean isMixed(struct hapmapSnpsCombined *thisItem);
+/* return TRUE if different populations have a different major allele */
+
+void printOne(struct hapmapSnpsCombined *thisItem);
+
+int calcHet(struct hapmapSnpsCombined *thisItem);
+/* calculate heterozygosity (2pq) */
+
 #endif /* HAPMAPSNPSCOMBINED_H */
 
