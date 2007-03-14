@@ -69,7 +69,6 @@ longLabel UCSC Transcript ID
 priority 2.3
 visibility off
 type knownDetails kgXref kgID kgID
-search exact
 
 name genbank
 shortLabel GenBank
