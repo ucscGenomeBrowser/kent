@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsBadBed.c,v 1.2 2007/03/12 17:36:32 kent Exp $";
+static char const rcsid[] = "$Id: txCdsBadBed.c,v 1.3 2007/03/14 23:46:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,63 +48,6 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 slReverse(&bedList);
 return bedList;
-}
-
-void gpPartOutAsBed(struct genePred *gp, int start, int end, FILE *f, 
-	char *type, int id, int minSize)
-/* Write out part of gp as bed12. */
-{
-/* Figure out # of blocks and min/max of area inside start/end */
-int blockCount = 0;
-int newStart = gp->txEnd, newEnd = gp->txStart;
-int size = 0;
-int i;
-for (i=0; i<gp->exonCount; ++i)
-    {
-    int exonStart = gp->exonStarts[i];
-    int exonEnd = gp->exonEnds[i];
-    exonStart = max(start, exonStart);
-    exonEnd = min(end, exonEnd);
-    if (exonStart < exonEnd)
-        {
-	++blockCount;
-	newStart = min(exonStart, newStart);
-	newEnd = max(exonEnd, newEnd);
-	size += exonEnd - exonStart;
-	}
-    }
-
-/* Output first 10 fields of bed12. */
-if (size > minSize)
-    {
-    fprintf(f, "%s\t%d\t%d\t", gp->chrom, newStart, newEnd);
-    fprintf(f, "%s_%d_%s\t", type, id, gp->name);
-    fprintf(f, "0\t%s\t0\t0\t0\t%d\t", gp->strand, blockCount);
-
-    /* Output blockSizes field */
-    for (i=0; i<gp->exonCount; ++i)
-	{
-	int exonStart = gp->exonStarts[i];
-	int exonEnd = gp->exonEnds[i];
-	exonStart = max(start, exonStart);
-	exonEnd = min(end, exonEnd);
-	if (exonStart < exonEnd)
-	    fprintf(f, "%d,", exonEnd - exonStart);
-	}
-    fprintf(f, "\t");
-
-    /* Output chromStarts field */
-    for (i=0; i<gp->exonCount; ++i)
-	{
-	int exonStart = gp->exonStarts[i];
-	int exonEnd = gp->exonEnds[i];
-	exonStart = max(start, exonStart);
-	exonEnd = min(end, exonEnd);
-	if (exonStart < exonEnd)
-	    fprintf(f, "%d,", exonStart - newStart);
-	}
-    fprintf(f, "\n");
-    }
 }
 
 void txCdsBadBed(char *database, 
