@@ -208,5 +208,11 @@ void mafSrcDb(char *name, char *retDb, int retDbSize);
 /* Parse out just database part of name (up to but not including
  * first dot). If dot found, return entire name */
 
+boolean mafColumnEmpty(struct mafAli *maf, int col);
+/* Return TRUE if the column is all '-' or '.' */
+
+void mafStripEmptyColumns(struct mafAli *maf);
+/* Remove columns that are all '-' or '.' from  maf. */
+
 #endif /* MAF_H */
 

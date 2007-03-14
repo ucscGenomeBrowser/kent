@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.30 2007/03/08 17:28:50 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.31 2007/03/14 03:05:38 kent Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -662,3 +662,40 @@ if (len >= retDbSize)
 memcpy(retDb, name, len);
 retDb[len] = 0;
 }
+
+boolean mafColumnEmpty(struct mafAli *maf, int col)
+/* Return TRUE if the column is all '-' or '.' */
+{
+assert(col < maf->textSize);
+struct mafComp *comp;
+for (comp = maf->components; comp != NULL; comp = comp->next)
+    {
+    char c = comp->text[col];
+    if (c != '.' && c != '-')
+        return FALSE;
+    }
+return TRUE;
+}
+
+void mafStripEmptyColumns(struct mafAli *maf)
+/* Remove columns that are all '-' or '.' from  maf. */
+{
+/* Selectively copy over non-empty columns. */
+int readIx=0, writeIx = 0;
+struct mafComp *comp;
+for (readIx=0; readIx < maf->textSize; ++readIx)
+    {
+    if (!mafColumnEmpty(maf, readIx))
+        {
+	for (comp = maf->components; comp != NULL; comp = comp->next)
+	    comp->text[writeIx] = comp->text[readIx];
+	++writeIx;
+	}
+    }
+
+/* Zero terminate text, and update textSize. */
+for (comp = maf->components; comp != NULL; comp = comp->next)
+    comp->text[writeIx] = 0;
+maf->textSize = writeIx;
+}
+
