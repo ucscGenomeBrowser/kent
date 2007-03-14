@@ -105,6 +105,10 @@ AA lookupCodon(DNA *dna);
 boolean isStopCodon(DNA *dna);
 /* Return TRUE if it's a stop codon. */
 
+boolean isKozak(char *dna, int dnaSize, int pos);
+/* Return TRUE if it's a Kozak compatible start, using a relatively
+ * weak definition (either A/G 3 bases before or G after) . */
+
 boolean isReallyStopCodon(char *dna, boolean selenocysteine);
 /* Return TRUE if it's really a stop codon, even considering
  * possibilility of selenocysteine. */

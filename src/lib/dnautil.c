@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.48 2007/02/26 23:02:18 angie Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.49 2007/03/14 04:54:55 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -222,6 +222,28 @@ boolean isStopCodon(DNA *dna)
 {
 return lookupCodon(dna) == 0;
 }
+
+boolean isKozak(char *dna, int dnaSize, int pos)
+/* Return TRUE if it's a Kozak compatible start. */
+{
+if (lookupCodon(dna+pos) != 'M')
+   {
+   return FALSE;
+   }
+if (pos + 3 < dnaSize)
+    {
+    if (ntVal[(int)dna[pos+3]] == G_BASE_VAL)
+        return TRUE;
+    }
+if (pos >= 3)
+    {
+    int c = ntVal[(int)dna[pos-3]];
+    if (c == A_BASE_VAL || c == G_BASE_VAL)
+        return TRUE;
+    }
+return FALSE;
+}
+
 
 boolean isReallyStopCodon(char *dna, boolean selenocysteine)
 /* Return TRUE if it's really a stop codon, even considering
