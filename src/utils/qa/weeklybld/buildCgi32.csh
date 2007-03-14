@@ -17,6 +17,9 @@ if ("$HOST" != "$BOX32") then
  exit 1
 endif
 
+rm -fr $BUILDDIR/cgi-bin-32
+mkdir $BUILDDIR/cgi-bin-32
+
 cd $BUILDDIR/v${BRANCHNN}_branch/kent/src
 
 make libs >& make.log
@@ -44,8 +47,8 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" != "0" ) then
  echo "alpha errs found:"
  echo "$res"
- echo "ignore the one error from vgGetText for now."
- #exit 1
+ #echo "ignore the one error from vgGetText for now."
+ exit 1
 endif
 #
 
@@ -57,14 +60,6 @@ rm -fr visiGeneData
 rm -fr hgcData
 rm -fr hgCgiData
 rm -fr hgSubjData
-
-echo "the customTrack loader is to be released soon, then remove the next line:"
-rm -fr loader
-
-#echo "the hgSession cgi is to be released soon, then remove the next line:"
-#if (-e hgSession) then
-#    rm hgSession
-#endif    
 
 #echo "debug: skipping scp"
 scp -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/
