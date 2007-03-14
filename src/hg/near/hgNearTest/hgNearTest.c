@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.22 2006/07/31 05:38:08 galt Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.23 2007/03/14 10:10:17 galt Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -21,6 +21,7 @@ char *clOrg = NULL;	/* Organism from command line. */
 char *clDb = NULL;	/* DB from command line */
 char *clSearch = NULL;	/* Search var from command line. */
 int clRepeat = 3;	/* Number of repetitions. */
+int seed = 0;           /* seed for random number generator */
 
 void usage()
 /* Explain usage and exit. */
@@ -36,17 +37,19 @@ errAbort(
   "   -dataDir=dataDir - Use selected data dir, default %s\n"
   "   -repeat=N - Number of times to repeat test (on random genes)\n"
   "               (default %d)\n"
+  "   -seed flag to specify seed for random number generator as debugging aid.\n"
   , dataDir, clRepeat);
 }
 
 
 static struct optionSpec options[] = {
-   {"org", OPTION_STRING},
-   {"db", OPTION_STRING},
-   {"search", OPTION_STRING},
-   {"dataDir", OPTION_STRING},
-   {"repeat", OPTION_INT},
-   {NULL, 0},
+    {"org", OPTION_STRING},
+    {"db", OPTION_STRING},
+    {"search", OPTION_STRING},
+    {"dataDir", OPTION_STRING},
+    {"repeat", OPTION_INT},
+    {"seed", OPTION_INT},
+    {NULL, 0},
 };
 
 struct nearTest
@@ -131,10 +134,10 @@ for (;;)
     if (e == NULL)
         break;
     row = cloneStringZ(s, e-s);
-    acc = qaStringBetween(row, "_blank>", "</a>");
+    acc = qaStringBetween(row, ">", "</a>");
     if (acc == NULL)
         {
-	warn("Can't find between _blank> and </a> while counting uniq row %s",
+	warn("Can't find acc text between > and </a> while counting uniq row %s",
 		row);
 	freez(&row);
 	break;
@@ -427,7 +430,7 @@ struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
 char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
 char *accColumn = hashMustFindVal(genomeRa, "idColumn");
 
-struct slName *geneList = sqlRandomSample(db, canonicalTable, "transcript", clRepeat);
+struct slName *geneList = sqlRandomSampleWithSeed(db, canonicalTable, "transcript", clRepeat, seed);
 struct htmlPage *dbPage;
 struct slName *ptr;
 
@@ -578,6 +581,7 @@ htmlPageFree(&rootPage);
 slReverse(&nearTestList);
 
 reportSummary(nearTestList, stdout);
+fprintf(f,"seed=%d\n",seed);
 reportAll(nearTestList, f);
 fprintf(f, "---------------------------------------------\n");
 reportSummary(nearTestList, f);
@@ -608,6 +612,12 @@ clOrg = optionVal("org", clOrg);
 clSearch = optionVal("search", clSearch);
 dataDir = optionVal("dataDir", dataDir);
 clRepeat = optionInt("repeat", clRepeat);
+
+/* Seed the randome number generator. */
+seed = optionInt("seed",time(NULL));
+printf("seed=%d\n",seed);
+srand(seed);
+
 hgNearTest(argv[1], argv[2]);
 carefulCheckHeap();
 return 0;
