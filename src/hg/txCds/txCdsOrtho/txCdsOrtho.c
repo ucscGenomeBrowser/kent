@@ -4,9 +4,12 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
+#include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.3 2007/03/10 17:57:24 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.4 2007/03/14 23:47:31 kent Exp $";
+
+FILE *fRa = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,13 +26,50 @@ errAbort(
   "           the database name and sequence for the other organism\n"
   "    out.tab is the output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -ra=out.ra - Put out as ra as well as tab\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"ra", OPTION_STRING},
    {NULL, 0},
 };
+
+struct cdsInterval
+/* Name, start, end of CDS. */
+    {
+    struct cdsInterval *next;
+    char *name;		/* Name of gene. */
+    int start;		/* Gene start. */
+    int end;		/* Gene end. */
+    };
+
+struct cdsInterval *cdsIntervalLoad(char **row)
+/* Create a cdsInterval from an array of strings. */
+{
+struct cdsInterval *cds;
+AllocVar(cds);
+cds->name = cloneString(row[0]);
+cds->start = sqlUnsigned(row[1]);
+cds->end = sqlUnsigned(row[2]);
+return cds;
+}
+
+struct cdsInterval *cdsIntervalLoadAll(char *fileName)
+/* Load all cdsIntervals in file, and return as list. */
+{
+struct cdsInterval *el, *list = NULL;
+char *row[3];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while (lineFileRow(lf, row))
+    {
+    el = cdsIntervalLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
 
 int biggestOrf(char *dna, int size, int *retStart, int *retEnd)
 /* Return size of biggest ORF (region without a stop codon) in DNA 
@@ -129,6 +169,20 @@ for (relFrame = 0; relFrame < 3; ++relFrame)
 verbose(3, "Best frame for %s:%d-%d vs %s is %d with count of %d of %d\n", 
 	native->src, cdsStart, cdsEnd, xeno->src, bestFrame, bestCount, totalCount);
 
+/* Scan through one more time counting up missing sequence in CDS. */
+int cdsBasesInXeno = 0;
+int nativeCdsSize = 0;
+for (i = startCol; i<endCol; ++i)
+    {
+    if (native->text[i] != '-')
+        {
+	char c = xeno->text[i];
+	if (c != '.' && c != '-')
+	    cdsBasesInXeno += 1;
+	nativeCdsSize += 1;
+	}
+    }
+
 /* Get xeno sequence in CDS region minus the dashes */
 int cdsColCount = endCol - startCol;
 char *xenoText = cloneStringZ(xeno->text + startCol, cdsColCount);
@@ -138,12 +192,22 @@ int xenoTextSize = strlen(xenoText);
 /* Figure out biggest ORF in best frame and output it. */
 int orfStart,orfEnd;
 int orfSize = biggestOrf(xenoText + bestFrame, xenoTextSize - bestFrame, &orfStart, &orfEnd)*3;
-int missingSize = countCharsN(xenoText + orfStart, '.', orfSize);
 int possibleSize = cdsEnd - cdsStart;
 if (orfSize > possibleSize) orfSize = possibleSize;
 fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%d\t%f\n", native->src, cdsStart, cdsEnd, 
-	xeno->src, missingSize, orfSize, possibleSize,
+	xeno->src, nativeCdsSize - cdsBasesInXeno, orfSize, possibleSize,
 	(double)orfSize/(possibleSize));
+
+/* Handle output to ra file. */
+if (fRa)
+    {
+    double orfCov = (double)cdsBasesInXeno/nativeCdsSize;
+    double orfRatio = (double)orfSize/possibleSize;
+    fprintf(fRa, "%sOrfSize %d\n", xeno->src, orfSize);
+    fprintf(fRa, "%sOrfRatio %f\n", xeno->src, orfRatio);
+    fprintf(fRa, "%sOrfCoverage %f\n", xeno->src, orfCov);
+    fprintf(fRa, "%sOrfCovRatio %f\n", xeno->src, orfCov*orfRatio);
+    }
 
 /* Clean up and go home. */
 freez(&xenoText);
@@ -154,16 +218,32 @@ void evaluateAndWrite(char *txName, int cdsStart, int cdsEnd, struct mafAli *maf
 {
 struct mafComp *native, *xeno;
 native = maf->components;
+if (fRa)
+    fprintf(fRa, "name %s\n", native->src);
 for (xeno = native->next; xeno != NULL; xeno = xeno->next)
     evaluateOneSpecies(native, cdsStart, cdsEnd, xeno, maf->textSize, f);
+if (fRa)
+    fprintf(fRa, "\n");
+}
+
+struct mafComp *findCompInHash(struct mafComp *list, struct hash *hash)
+/* Return first component that is also in hash. */
+{
+struct mafComp *comp;
+for (comp = list; comp != NULL; comp = comp->next)
+    if (hashLookup(hash, comp->src))
+	return comp;
+return NULL;
 }
 
 void txCdsOrtho(char *cdsTab, char *txMaf, char *outTab)
 /* txCdsOrtho - Figure out how CDS looks in other organisms.. */
 {
-/* Open tab separated input here (so will fail quickly without reading
- * 100 meg of MAF data if there's a typo in file name */
-struct lineFile *lf = lineFileOpen(cdsTab, TRUE);
+/* Load cds into list and hash. */
+struct cdsInterval *cds, *cdsList = cdsIntervalLoadAll(cdsTab);
+struct hash *cdsHash = hashNew(20);
+for (cds = cdsList; cds != NULL; cds = cds->next)
+    hashAdd(cdsHash, cds->name, cds);
 
 /* Read in MAF and put it into a hash table keyed by tx. */
 struct mafFile *mf = mafReadAll(txMaf);
@@ -172,22 +252,25 @@ verbose(2, "Read %d multiple alignment records from %s\n", slCount(mf->alignment
 struct hash *mafHash = hashNew(18);
 for (maf = mf->alignments; maf != NULL; maf = maf->next)
     {
-    struct mafComp *comp = maf->components;
+    /* Rearrange maf, to put component that hits hash on top. */
+    struct mafComp *comp = findCompInHash(maf->components, cdsHash);
     if (comp == NULL)
-        errAbort("Empty maf in %s", txMaf);
+        errAbort("No component from %s for a maf.", cdsTab);
+    slRemoveEl(&maf->components, comp);
+    slAddHead(&maf->components, comp);
     hashAdd(mafHash, comp->src, maf);
     }
-char *row[3];
+
 FILE *f = mustOpen(outTab, "w");
-while (lineFileRow(lf, row))
+for (cds = cdsList; cds != NULL; cds = cds->next)
     {
-    char *txName = row[0];
-    int cdsStart = lineFileNeedNum(lf, row, 1);
-    int cdsEnd = lineFileNeedNum(lf, row, 2);
-    maf = hashFindVal(mafHash, txName);
-    if (maf == NULL)
-        errAbort("%s is in %s but not %s", txName, cdsTab, txMaf);
-    evaluateAndWrite(txName, cdsStart, cdsEnd, maf, f);
+    if (cds->end > cds->start)
+	{
+	maf = hashFindVal(mafHash, cds->name);
+	if (maf == NULL)
+	    errAbort("%s is in %s but not %s", cds->name, cdsTab, txMaf);
+	evaluateAndWrite(cds->name, cds->start, cds->end, maf, f);
+	}
     }
 carefulClose(&f);
 }
@@ -199,6 +282,10 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 dnaUtilOpen();
+char *fileName = optionVal("ra", NULL);
+if (fileName != NULL)
+    fRa = mustOpen(fileName, "w");
 txCdsOrtho(argv[1], argv[2], argv[3]);
+carefulClose(&fRa);
 return 0;
 }
