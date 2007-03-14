@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.13 2007/03/14 22:22:32 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.14 2007/03/14 22:24:23 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -527,6 +527,8 @@ encryptNewPwd(password, encPwd, sizeof(encPwd));
 
 safef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
 sqlUpdate(conn, query);
+
+updatePasswordsFile(conn);
 
 safef(cmd,sizeof(cmd), 
 "echo 'Your new password is: %s' | mail -s \"Lost GSID HIV password\" %s"
