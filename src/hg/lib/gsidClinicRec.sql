@@ -1,13 +1,3 @@
--- MySQL dump 9.11
---
--- Host: localhost    Database: hiv1
--- ------------------------------------------------------
--- Server version	4.0.27-standard
-
---
--- Table structure for table `gsidClinicRec`
---
-
 CREATE TABLE gsidClinicRec (
   specimenId varchar(255) NOT NULL default '',
   subjId varchar(255) NOT NULL default '',
