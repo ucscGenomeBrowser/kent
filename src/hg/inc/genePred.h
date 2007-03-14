@@ -282,5 +282,9 @@ void genePredGrow(struct genePred *gp, unsigned *exonSpacePtr);
 struct rbTree *genePredToRangeTree(struct genePred *gp, boolean cdsOnly);
 /* Convert genePred into a range tree. */
 
+void gpPartOutAsBed(struct genePred *gp, int start, int end, FILE *f, 
+	char *type, int id, int minSize);
+/* Write out part of gp as bed12. */
+
 #endif /* GENEPRED_H */
 
