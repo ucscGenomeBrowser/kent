@@ -1615,6 +1615,82 @@ type netAlign
     type netAlign canFam2 chainCanFam2
     otherDb canFam2
 
+track rBestNet
+shortLabel Reciprocal Best Nets
+longLabel Reciprocal Best Alignment Nets
+compositeTrack on
+group compGeno
+priority 301
+visibility hide
+spectrum on
+type netAlign
+
+    track netRBestOtoGar1
+    subTrack rBestNet
+    shortLabel Bushbaby RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 301.5
+    visibility hide
+    spectrum on
+    type netAlign otoGar1 chainOtoGar1
+    otherDb otoGar1
+
+    track netRBestOryCun1
+    subTrack rBestNet
+    shortLabel Rabbit RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 301.7
+    visibility hide
+    spectrum on
+    type netAlign oryCun1 chainOryCun1
+    otherDb oryCun1
+
+    track netRBestCavPor2
+    subTrack rBestNet
+    shortLabel Guineapig RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 301.9
+    visibility hide
+    spectrum on
+    type netAlign cavPor2 chainCavPor2
+    otherDb cavPor2
+
+    track netRBestEchTel1
+    subTrack rBestNet
+    shortLabel Tenrec RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 301.11
+    visibility hide
+    spectrum on
+    type netAlign echoTel1 chainEchTel1
+    otherDb echTel1
+
+    track netRBestLoxAfr1
+    subTrack rBestNet
+    shortLabel Elephant RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 301.13
+    visibility hide
+    spectrum on
+    type netAlign loxAfr1 chainLoxAfr1
+    otherDb loxAfr1
+
+    track netRBestDasNov1
+    subTrack rBestNet
+    shortLabel Armadillo RBest Net
+    longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Alignment Net
+    group compGeno
+    priority 301.15
+    visibility hide
+    spectrum on
+    type netAlign dasNov1 chainDasNov1
+    otherDb dasNov1
+
 searchTable wgRna
 searchMethod fuzzy
 searchType bed
