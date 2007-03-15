@@ -9,7 +9,7 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.3 2007/03/15 01:32:13 galt Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.4 2007/03/15 17:00:20 fanhsu Exp $";
 
 
 static void getSeqFromBlob(struct sqlConnection *conn,
@@ -34,7 +34,8 @@ for (si = siList; si != NULL; si = si->next)
         {
         char *id = row[0];
         char *seq = row[1];
-        hPrintf(">%s\n", id);
+        hPrintf(">%s", id);
+        hPrintf("|%s\n", subjId);
         writeSeqWithBreaks(stdout, seq, strlen(seq), 60);
         hPrintf("\n");
         }
