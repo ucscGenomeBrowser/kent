@@ -12,7 +12,7 @@ txCdsPredict: $O ${MYLIBS}
 
 test:
 	txCdsPredict in.fa out.cds
-	cmp expected.cds out.cds
+	diff expected.cds out.cds
 
 clean:
 	rm -f $O
