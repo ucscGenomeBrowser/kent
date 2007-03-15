@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: twinOrf3.c,v 1.5 2006/04/07 15:11:38 angie Exp $";
+static char const rcsid[] = "$Id: twinOrf3.c,v 1.6 2007/03/15 00:57:53 kent Exp $";
 
 double utrPenalty = 0.15;
 double firstBonus = 15.0;
@@ -22,9 +22,19 @@ errAbort(
   "   -checkOut=twinOrf.check - File that compares our cds position to real\n"
   "   -utrPenalty=N - Penalize UTR score to encourage long orfs. (default %4.3f)\n" 
   "   -firstBonus=N - Bonus for ATG being first ATG.  (default %4.3f)\n"
+  "   -cdsOut=out.cds - File that just says where ORF we predict is and score,not rest\n"
   , utrPenalty, firstBonus
   );
 }
+
+static struct optionSpec options[] = {
+   {"checkIn", OPTION_STRING},
+   {"checkOut", OPTION_STRING},
+   {"utrPenalty", OPTION_DOUBLE},
+   {"firstBonus", OPTION_DOUBLE},
+   {"cdsOut", OPTION_STRING},
+   {NULL, 0},
+};
 
 struct mrnaInfo
 /* Cds position and related stuff - just for testing. */
@@ -260,7 +270,7 @@ return count;
 }
 
 double upcTraceback(char *name, double *scores, State **allStates, struct axt *axt, 
-	struct hash *checkInHash, FILE *checkOut, FILE *f)
+	struct hash *checkInHash, FILE *checkOut, FILE *cdsOut, FILE *f)
 /* Trace back, adding symbol track.  Then print out result.  Return score. */
 {
 int i;
@@ -307,30 +317,37 @@ for (i=0; i<symCount; i += lineSize)
     fputc('\n', f);
     }
 
+int cdsStart = symCount, cdsEnd = 0;
+static char isCdsChar[256];
+isCdsChar['A'] = TRUE;
+isCdsChar['Z'] = TRUE;
+isCdsChar['1'] = TRUE;
+isCdsChar['2'] = TRUE;
+isCdsChar['3'] = TRUE;
+for (i=0; i<symCount; ++i)
+    {
+    if (isCdsChar[tStates[i]])
+	{
+	if (i < cdsStart)
+	     cdsStart = i;
+	if (i >= cdsEnd)
+	     cdsEnd = i+1;
+	}
+    }
+
 if (checkInHash != NULL && checkOut != NULL)
     {
     struct mrnaInfo *mi = hashMustFindVal(checkInHash, axt->tName);
-    int i, cdsStart = symCount, cdsEnd = 0;
-    static char isCdsChar[256];
-    isCdsChar['A'] = TRUE;
-    isCdsChar['Z'] = TRUE;
-    isCdsChar['1'] = TRUE;
-    isCdsChar['2'] = TRUE;
-    isCdsChar['3'] = TRUE;
-    for (i=0; i<symCount; ++i)
-        {
-	if (isCdsChar[tStates[i]])
-	    {
-	    if (i < cdsStart)
-	         cdsStart = i;
-	    if (i >= cdsEnd)
-	         cdsEnd = i+1;
-	    }
-	}
     fprintf(checkOut, "%s\t%d\t%d\t%d\t%d\t%d\n", 
     	mi->name, mi->size, mi->cdsStart, mi->cdsEnd, 
 	countReal(axt->tSym, cdsStart),
 	countReal(axt->tSym, cdsEnd));
+    }
+
+if (cdsOut != NULL)
+    {
+    fprintf(cdsOut, "%s\t%d\t%d\t%d\t%f\n", name, countReal(axt->tSym, axt->symCount), 
+    	countReal(axt->tSym, cdsStart), countReal(axt->tSym, cdsEnd), maxScore);
     }
 freeMem(tStates);
 return maxScore;
@@ -875,7 +892,7 @@ return probM2(o, qCodon, tCodon);
 
 
 double fullDynamo(struct trainingData *td, struct dynoData *dyno, struct axt *axt, 
-	struct hash *checkInHash, FILE *checkOut, FILE *f)
+	struct hash *checkInHash, FILE *checkOut, FILE *cdsOut, FILE *f)
 /* Run dynamic programming algorithm on HMM. Return score. */
 {
 double score = 0;
@@ -1244,7 +1261,8 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 
 /* Find best scoring final cell and trace backwards to
  * reconstruct full path. */
-score = upcTraceback(axt->tName, dyno->prevScores, allStates, axt, checkInHash, checkOut, f);
+score = upcTraceback(axt->tName, dyno->prevScores, allStates, axt, checkInHash, 
+	checkOut, cdsOut, f);
 
 /* Clean up and return. */
 for (i=0; i<stateCount; ++i)
@@ -1255,10 +1273,10 @@ return score;
 
 
 void oneOrf(struct trainingData *td, struct dynoData *dyno, struct axt *axt, 
-	struct hash *checkInHash, FILE *checkOut, FILE *f)
+	struct hash *checkInHash, FILE *checkOut, FILE *cdsOut, FILE *f)
 /* Try and find one orf in axt. */
 {
-fullDynamo(td, dyno, axt, checkInHash, checkOut, f);
+fullDynamo(td, dyno, axt, checkInHash, checkOut, cdsOut, f);
 }
 
 struct hash *readCheckIn(char *fileName)
@@ -1286,7 +1304,7 @@ else
 
 
 void twinOrf2(char *statsFile, char *axtFile, char *outFile, 
-	char *checkInFile, char *checkOutFile)
+	char *checkInFile, char *checkOutFile, char *cdsOutFile)
 /* twinOrf2 - Predict open reading frame in cDNA given a cross species 
  * alignment. */
 {
@@ -1296,37 +1314,43 @@ struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct hash *checkInHash = readCheckIn(checkInFile);
 FILE *checkOut = NULL;
+FILE *cdsOut = NULL;
 struct axt *axt;
 
 if (checkOutFile != NULL)
      checkOut = mustOpen(checkOutFile, "w");
+if (cdsOutFile != NULL)
+     cdsOut = mustOpen(cdsOutFile, "w");
 never = scaledLog(neverProb);
 always = scaledLog(1.0);
 makeTransitionProbs(dyno->transProbLookup);
 while ((axt = axtRead(lf)) != NULL)
     {
-    uglyf("%s\n", axt->tName);
+    verbose(2, "%s\n", axt->tName);
     tolowers(axt->qSym);
     tolowers(axt->tSym);
-    oneOrf(td, dyno, axt, checkInHash, checkOut, f);
+    oneOrf(td, dyno, axt, checkInHash, checkOut, cdsOut, f);
     axtFree(&axt);
     }
 lineFileClose(&lf);
 carefulClose(&f);
+carefulClose(&cdsOut);
+carefulClose(&checkOut);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 if (optionVal("checkOut", NULL) && !optionVal("checkIn", NULL))
     errAbort("CheckOut without checkIn");
-utrPenalty = optionFloat("utrPenalty", utrPenalty);
-firstBonus = optionFloat("firstBonus", firstBonus);
+utrPenalty = optionDouble("utrPenalty", utrPenalty);
+firstBonus = optionDouble("firstBonus", firstBonus);
 initSymToIx();
-twinOrf2(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL));
+twinOrf2(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL),
+	optionVal("cdsOut", NULL));
 return 0;
 }
 
