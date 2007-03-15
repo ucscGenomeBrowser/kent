@@ -3,14 +3,16 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "localmem.h"
 #include "orfInfo.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "bed.h"
 #include "fa.h"
 #include "rangeTree.h"
+#include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.3 2007/03/15 08:16:33 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.4 2007/03/15 19:52:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +25,17 @@ errAbort(
   "   mrna name, mrna size, cds start, cds end, score\n"
   "options:\n"
   "   -nmd=in.bed - Use in.bed to look for evidence of nonsense mediated decay.\n"
+  "   -maf=in.maf - Look for conservation of orf in other species.  Beware each\n"
+  "                 species is considered independent evidence. Recommend that you\n"
+  "                 use maf with just 3-5 well chosen species.  For human a good mix\n"
+  "                 is human/rhesus/dog/mouse.  Use mafFrags and mafSpeciesSubset to\n"
+  "                 generate this peculiar maf.\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"nmd", OPTION_STRING},
+   {"maf", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -45,17 +53,23 @@ else
     return 0;
 }
 
-int findOrfEnd(struct dnaSeq *seq, int start)
+int findOrfEnd(char *dna, int dnaSize, int start)
 /* Figure out end of orf that starts at start */
 {
-int lastPos = seq->size-3;
+int lastPos = dnaSize-3;
 int i;
 for (i=start+3; i<lastPos; i += 3)
     {
-    if (isStopCodon(seq->dna+i))
+    if (isStopCodon(dna+i))
         return i+3;
     }
-return seq->size;
+return dnaSize;
+}
+
+int orfEndInSeq(struct dnaSeq *seq, int start)
+/* Figure out end of orf that starts at start */
+{
+return findOrfEnd(seq->dna, seq->size, start);
 }
 
 
@@ -135,7 +149,7 @@ for (i=0; i<=endPos; ++i)
     {
     if (startsWith("atg", seq->dna + i))
         {
-        int orfEnd = findOrfEnd(seq, i);
+        int orfEnd = orfEndInSeq(seq, i);
 	rangeTreeAdd(upAtgRanges, i, orfEnd);
         if (isKozak(seq->dna, seq->size, i))
 	    rangeTreeAdd(upKozakRanges, i, orfEnd);
@@ -178,22 +192,181 @@ else
     return rnaSize - bed->blockSizes[0];
 }
 
-struct orfInfo *orfsOnRna(struct dnaSeq *seq, struct hash *nmdHash)
+struct orthoCds
+/* Information on a single CDS at a single position. */
+    {
+    int start;	        /* CDS end */
+    int end;            /* CDS start */
+    char base;		/* Base in other species at this position. */
+    };
+
+struct orthoCdsArray
+/* Information on all CDS's in other species for one RNA. */
+    {
+    struct orthoCdsArray *next;
+    char *species;	/* Species (or database) name */
+    struct orthoCds *cdsArray;  /* Array of CDSs. */
+    int arraySize;	/* Size of array */
+    };
+
+void dumpOrthoArray(struct orthoCdsArray *array, FILE *f)
+/* Print out debugging info about orthoArray. */
+{
+fprintf(f, "%s %d\n", array->species, array->arraySize);
+int i;
+for (i=0; i<array->arraySize; ++i)
+    {
+    struct orthoCds *oc = &array->cdsArray[i];
+    char base = oc->base;
+    if (base == 0) base = '?';
+    fprintf(f, "   %d: %d-%d (%d) %c\n", i, oc->start, oc->end, oc->end - oc->start, base);
+    }
+}
+
+void applyOrf(int start, int end, char *xDna, int *xToN, struct orthoCds *array)
+/* Given start/end in xeno coordinates, map to native coordinates and save info
+ * to for all codons in frame in array. */
+{
+int xIx;
+int nStart = xToN[start], nEnd = xToN[end];
+uglyf("applyOrf %d %d (native %d %d)\n", start, end, nStart, nEnd);
+for (xIx=start; xIx<end; xIx += 3)
+    {
+    int nIx = xToN[xIx];
+    struct orthoCds *oc = &array[nIx];
+    oc->start = nStart;
+    oc->end = nEnd;
+    }
+}
+
+void fillInArrayFromPair(struct lm *lm, struct mafComp *native, struct mafComp *xeno,
+	struct orthoCds *array, int arraySize, int symCount)
+/* Figure out the CDS in xeno for each position in native. */
+{
+char *nText = native->text, *xText = xeno->text;
+int nSize = arraySize, xSize = symCount - countChars(xText, '-');
+
+/* Create an array that for each point in native gives you the index of corresponding
+ * point in xeno, and another array that does the opposite. */
+int *nToX, *xToN;
+lmAllocArray(lm, nToX, nSize+1);
+lmAllocArray(lm, xToN, xSize+1);
+int i;
+int nIx = 0, xIx = 0;
+for (i=0; i<symCount; ++i)
+    {
+    char n = nText[i], x = xText[i];
+    if (n == '.')
+       errAbort("Dot in native component %s of maf. Can't handle it.", native->src);
+    nToX[nIx] = xIx;
+    xToN[xIx] = nIx;
+    if (n != '-')
+	{
+	array[nIx].base = x;
+	nToX[nIx] = xIx;
+	++nIx;
+	}
+    if (x != '-')
+       ++xIx;
+    }
+assert(xIx == xSize);
+assert(nIx == nSize);
+
+/* Put an extra value at end of arrays to simplify logic. */
+nToX[nSize] = xSize;
+xToN[xSize] = nSize;
+
+/* Create xeno sequence without the '-' chars */
+char *xDna = lmCloneString(lm, xText);
+tolowers(xDna);
+stripChar(xDna, '-');
+
+uglyf("xToN:");
+for (i=0; i<xSize; ++i) uglyf(" %d", xToN[i]);
+uglyf("\n");
+
+/* Step through this, one frame at a time, looking for best ORF */
+int frame;
+for (frame=0; frame<3; ++frame)
+    {
+    /* Calculate some things constant for this frame, and deal with
+     * ORF that starts at beginning (may not have ATG) */
+    int lastPos = xSize-3;
+    int frameDnaSize = xSize-frame;
+    int start = frame, end = findOrfEnd(xDna, frameDnaSize, frame);
+    applyOrf(start, end, xDna, xToN, array);
+    for (start = end; start<=lastPos; )
+        {
+	uglyf("start %d %c%c%c\n", start, xDna[start], xDna[start+1], xDna[start+2]);
+	if (startsWith("atg", xDna+start))
+	    {
+	    end = findOrfEnd(xDna, frameDnaSize, start);
+	    applyOrf(start, end, xDna, xToN, array);
+	    start = end;
+	    }
+	else
+	    start += 3;
+	}
+    }
+
+}
+
+struct orthoCdsArray *calcOrthoArray(struct mafAli *maf, struct lm *lm)
+/* Given maf, figure out orthoCdsArray list, one for each other
+ * species.  (Assume first species is native.) */
+{
+struct orthoCdsArray *array, *arrayList = NULL;
+struct mafComp *nativeComp = maf->components;
+int nativeSize = nativeComp->size;
+struct mafComp *comp;
+for (comp = maf->components->next; comp != NULL; comp = comp->next)
+    {
+    AllocVar(array);
+    array->species = lmCloneString(lm, comp->src);
+    array->arraySize = nativeSize;
+    lmAllocArray(lm, array->cdsArray, nativeSize);
+    fillInArrayFromPair(lm, nativeComp, comp, array->cdsArray, nativeSize, maf->textSize);
+    slAddHead(&arrayList, array);
+    }
+slReverse(&arrayList);
+return arrayList;
+}
+
+struct orfInfo *orfsOnRna(struct dnaSeq *seq, struct hash *nmdHash, struct hash *mafHash,
+	int otherSpeciesCount)
 /* Return scored list of all ORFs on RNA. */
 {
 DNA *dna = seq->dna;
 int lastPos = seq->size - 3;
 int startPos;
 struct orfInfo *orfList = NULL, *orf;
+struct lm *lm = lmInit(64*1024);
+
+/* Figure out the key piece of info for NMD. */
 int lastIntronPos = findLastIntronPos(nmdHash, seq->name);
+double orthoWeightPer = 0;
+struct orthoCdsArray *orthoArray = NULL;
+
+/* Calculate stuff useful for orthology */
+if (otherSpeciesCount > 0)
+    {
+    orthoWeightPer = 1.0/otherSpeciesCount;
+    struct mafAli *maf = hashFindVal(mafHash, seq->name);
+    if (maf != NULL)
+	{
+	orthoArray = calcOrthoArray(maf, lm);
+	uglyf("%s: ", seq->name);
+	dumpOrthoArray(orthoArray, uglyOut);
+	}
+    }
 
 /* Allocate some arrays that keep track of bases in
  * upstream.  This dramatically speeds up processing
  * of TTN and other long transcripts which otherwise
  * can take almost a minute each. */
 int *upAtgCount, *upKozakCount;
-AllocArray(upAtgCount, seq->size);
-AllocArray(upKozakCount, seq->size);
+lmAllocArray(lm, upAtgCount, seq->size);
+lmAllocArray(lm, upKozakCount, seq->size);
 calcUpstreams(seq, upAtgCount, upKozakCount);
 
 /* Go through sequence making up a record for each 
@@ -202,7 +375,7 @@ for (startPos=0; startPos<=lastPos; ++startPos)
     {
     if (startsWith("atg", dna+startPos))
         {
-	int stopPos = findOrfEnd(seq, startPos);
+	int stopPos = orfEndInSeq(seq, startPos);
 	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount, lastIntronPos);
 	slAddHead(&orfList, orf);
 	}
@@ -210,15 +383,15 @@ for (startPos=0; startPos<=lastPos; ++startPos)
 slReverse(&orfList);
 
 /* Clean up and go home. */
-freeMem(upAtgCount);
-freeMem(upKozakCount);
+lmCleanup(&lm);
 return orfList;
 }
 
-void txCdsPredict(char *inFa, char *outCds, char *nmdBed)
+void txCdsPredict(char *inFa, char *outCds, char *nmdBed, char *mafFile)
 /* txCdsPredict - Somewhat simple-minded ORF predictor using a weighting scheme.. */
 {
 struct dnaSeq *rna, *rnaList = faReadAllDna(inFa);
+verbose(2, "Read %d sequences from %s\n", slCount(rnaList), inFa);
 
 /* Make up hash of bed records for NMD analysis. */
 struct hash *nmdHash = hashNew(18);
@@ -227,14 +400,36 @@ if (nmdBed != NULL)
     struct bed *bed, *bedList = bedLoadNAll(nmdBed, 12);
     for (bed = bedList; bed != NULL; bed = bed->next)
         hashAdd(nmdHash, bed->name, bed);
+    verbose(2, "Read %d beds from %s\n", nmdHash->elCount, nmdBed);
+    }
+
+/* Make up hash of maf records for conservation analysis. */
+struct hash *mafHash = hashNew(18);
+int otherSpeciesCount = 0;
+if (mafFile != NULL)
+    {
+    struct mafFile *mf = mafReadAll(mafFile);
+    struct mafAli *maf;
+    for (maf = mf->alignments; maf != NULL; maf = maf->next)
+	hashAdd(mafHash, maf->components->src, maf);
+    verbose(2, "Read %d alignments from %s\n", mafHash->elCount, mafFile);
+
+    struct hash *uniqSpeciesHash = hashNew(0);
+    for (maf = mf->alignments; maf != NULL; maf = maf->next)
+        {
+	struct mafComp *comp;
+	for (comp = maf->components->next;  comp != NULL; comp = comp->next)
+	    hashStore(uniqSpeciesHash, comp->src);
+	}
+    otherSpeciesCount = uniqSpeciesHash->elCount;
+    verbose(2, "%d other species in %s\n", otherSpeciesCount, mafFile);
     }
 
 FILE *f = mustOpen(outCds, "w");
-verbose(2, "read %d seqs from %s\n", slCount(rnaList), inFa);
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     verbose(3, "%s\n", rna->name);
-    struct orfInfo *orfList = orfsOnRna(rna, nmdHash);
+    struct orfInfo *orfList = orfsOnRna(rna, nmdHash, mafHash, otherSpeciesCount);
     if (orfList != NULL)
 	{
 	slSort(&orfList, orfInfoCmpScore);
@@ -251,6 +446,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-txCdsPredict(argv[1], argv[2], optionVal("nmd", NULL));
+txCdsPredict(argv[1], argv[2], optionVal("nmd", NULL), optionVal("maf", NULL));
 return 0;
 }
