@@ -6,7 +6,7 @@ dropdb=0
 nibdir=blank
 liftfile=blank
 count=$#
-while getopts "skn:l:" theOption; do 
+while getopts "skdn:l:" theOption; do 
         case $theOption in
                 s ) echo "Skipping Download step" ; doDownload=0; shift ; let count=$count-1 ; let OPTIND=1;;
                 k ) echo "to be loaded knownToEnsembl" ; kg=1 ; shift ; let count=$count-1; let OPTIND=1;;
