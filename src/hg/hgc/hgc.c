@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1237 2007/03/13 14:10:53 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1238 2007/03/15 20:20:45 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2899,6 +2899,8 @@ struct dyString *query = newDyString(512);
 char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
