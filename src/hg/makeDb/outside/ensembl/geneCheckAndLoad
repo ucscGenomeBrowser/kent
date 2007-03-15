@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #run create attribute files with results of gene-check and load database tables
-[ $# != 5 ] && echo "usage: geneCheckAndLoad db twoBitOrNib genePred.gp checkTable checkDetails " >&2 && exit 1;
 set -x
+[ $# != 5 ] && echo "usage: geneCheckAndLoad db twoBitOrNib genePred.gp checkTable checkDetails " >&2 && exit 1;
 db=$1
 nib=$2
 table=$3
