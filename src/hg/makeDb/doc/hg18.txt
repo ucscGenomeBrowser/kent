@@ -14052,3 +14052,15 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
     hgLoadBed hg18 eponine eponine.bed -tab -sqlTable=eponine.sql
     # Loaded 61359 elements of size 6
     # trackDb.ra entry and eponine.html already exist in trackDb directory.
+
+###########################################################################
+# ACEScan Track (DONE 2007-03-15  Andy
+
+ssh hgwdev
+cd /cluster/data/hg18/bed
+mkdir acescan
+cd acescan/
+cp /cluster/data/hg17/bed/acescan/acescan.hg17.gp .
+liftOver -genePred acescan.hg17.gp /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
+  acescan.hg18.gp unmapped
+ldHgGene -predTab hg18 acescan acescan.hg18.gp

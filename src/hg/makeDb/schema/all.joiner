@@ -2499,6 +2499,7 @@ tablesIgnored $apiMel
     modelRefGene
 
 tablesIgnored $hg
+    acescan
     affyTranscriptome
     zoom1_affyTranscriptome
     zoom2_affyTranscriptome
