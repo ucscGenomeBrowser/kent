@@ -2570,6 +2570,7 @@ tablesIgnored $hg
     encodeUncFairePeaks
     encodeUncFairePeaksChipotle
     encodeUvaDnaRep%
+    eponine
     pseudoYale
     wgRna
 
