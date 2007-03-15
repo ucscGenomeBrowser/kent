@@ -18,7 +18,7 @@
 #include "verbose.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.42 2007/03/13 02:59:35 baertsch Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.43 2007/03/15 01:45:17 angie Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -45,6 +45,8 @@ errAbort(
  "with the coordinates translated as per liftSpec.  LiftSpec\n"
  "is tab-delimited with each line of the form:\n"
  "   offset oldName oldSize newName newSize\n"
+ "LiftSpec may optionally have a sixth column specifying + or - strand,\n"
+ "but strand is not supported for all input types.\n"
  "The 'how' parameter controls what the program will do with\n"
  "items which are not in the liftSpec.  It must be one of:\n"
  "   carry - Items not in liftSpec are carried to dest without translation\n"
@@ -199,6 +201,13 @@ char flipStrand(char strand)
 return (strand == '-' ? '+' : '-');
 }
 
+void cantHandleSpecRevStrand(struct liftSpec *spec)
+/* abort if spec has a minus strand and we don't (yet) support that. */
+{
+if (spec && spec->strand == '-')
+    errAbort("Can't handle lifts with - strands for this input type");
+}
+
 void liftOut(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
 /* Lift up coordinates in .out file. */
 {
@@ -264,6 +273,7 @@ for (i=0; i<sourceCount; ++i)
 	    }
 	else
 	    {
+	    cantHandleSpecRevStrand(spec);
 	    begin += spec->offset;
 	    end += spec->offset;
 	    left = spec->newSize - end;
@@ -373,8 +383,7 @@ for (i=0; i<sourceCount; ++i)
 	        {
 		if (!isPtoG)
 		    {
-		    if (spec->strand == '-')
-			errAbort("Can't handle lifts with - strands on query side");
+		    cantHandleSpecRevStrand(spec);
 		    psl->qStart += offset;
 		    psl->qEnd += offset;
 		    }
@@ -546,6 +555,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	    {
 	    int offset;
 	    char strand = (querySide ? a.qStrand : a.tStrand);
+	    cantHandleSpecRevStrand(spec);
 	    if (strand == '-')
 		{
 		int ctgEnd = spec->offset + spec->oldSize;
@@ -706,6 +716,7 @@ void liftFillsT(struct cnFill *fillList, struct liftSpec *spec)
     struct cnFill *fill;
     for (fill=fillList;  fill != NULL;  fill=fill->next)
         {
+	cantHandleSpecRevStrand(spec);
         fill->tStart += spec->offset;
         if (fill->children != NULL)
             liftFillsT(fill->children, spec);
@@ -731,6 +742,7 @@ void liftFillsQ(struct cnFill *fillList, struct hash *nameHash,
             }
         else
             {
+	    cantHandleSpecRevStrand(spec);
             fill->qName = spec->newName;
             fill->qStart += spec->offset;
             }
@@ -750,6 +762,7 @@ void liftNet(char *destFile, struct hash *liftHash,
         int sourceCount, char *sources[], boolean querySide)
 /* Lift up coordinates in .net file. */
 {
+
     FILE *f = mustOpen(destFile, "w");
     int sourceIx;
     int dotMod = dots;
@@ -832,6 +845,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	    }
 	if (querySide)
 	    {
+	    cantHandleSpecRevStrand(spec);
 	    offset = spec->offset;
 	    xa->qStart += offset;
 	    xa->qEnd += offset;
@@ -942,6 +956,7 @@ void liftAgp(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
                     strcpy(lastContig, contig);
                     }
                 spec = findLift(liftHash, contig, lf);
+		cantHandleSpecRevStrand(spec);
                 start = numField(words, 1, 0, lf) + spec->offset;
                 end = numField(words, 2, 0, lf) + spec->offset;
                 if (end > lastEnd) lastEnd = end;
@@ -1058,6 +1073,7 @@ struct liftSpec *spec = findLift(liftHash, gp->chrom, lf);
 if (spec == NULL)
     return ((how == carryMissing) ? TRUE : FALSE);
 
+cantHandleSpecRevStrand(spec);
 gp->txStart += spec->offset;
 gp->txEnd += spec->offset;
 /* sometimes no cds is indicated by zero, sometimes by setting both to
@@ -1257,6 +1273,7 @@ for (i=0; i<sourceCount; ++i)
 		}
 	    else
 		{
+		cantHandleSpecRevStrand(spec);
 		chrom2 = spec->newName;
 		start2 += spec->offset;
 		end2 += spec->offset;
@@ -1421,6 +1438,7 @@ for (i=0; i<sourceCount; ++i)
     spec = findLift(liftHash, contig, lf);
     if (spec == NULL)
         continue;
+    cantHandleSpecRevStrand(spec);
     offset = spec->offset;
     lf = lineFileMayOpen(source, TRUE);
     if (lf == NULL)
