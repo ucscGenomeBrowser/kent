@@ -9,7 +9,7 @@
 #include "fa.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.1 2007/03/15 05:53:48 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.2 2007/03/15 06:49:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,7 +56,8 @@ for (i=start+3; i<lastPos; i += 3)
 return seq->size;
 }
 
-double orfScore(struct orfInfo *orf, struct dnaSeq *seq)
+
+double orfScore(struct orfInfo *orf, struct dnaSeq *seq, int *upAtgCount, int *upKozakCount)
 /* Return a fairly ad-hoc score for orf. Each base in ORF
  * is worth one point, and we go from there.... */
 {
@@ -78,40 +79,66 @@ if (startsWith("atg", dna + orf->start))
 if (isStopCodon(dna + orf->end - 3))
     score += 50;
 
+/* Penalize by upstream bases. */
+score -= upAtgCount[orf->start]*0.5;
+score -= upKozakCount[orf->start]*0.5;
+
+return score;
+}
+
+void setArrayCountsFromRangeTree(struct rbTree *rangeTree, int *array, int seqSize)
+/* Given a range tree that covers stuff from 0 to seqSize, 
+ * fill in array with amount of bases covered by range tree
+ * before a given position in array. */
+{
+struct range *range, *rangeList = rangeTreeList(rangeTree);
+if (rangeList == NULL)
+    return;
+range = rangeList;
+int i, count = 0;
+for (i=0; i<seqSize; ++i)
+    {
+    array[i] = count;
+    if (i >= range->end)
+	{
+        range = range->next;
+	if (range == NULL)
+	    {
+	    for (;i<seqSize; ++i)
+	       array[i] = count; 
+	    return;
+	    }
+	}
+    if (range->start <= i)
+        ++count;
+    }
+}
+
+
+void calcUpstreams(struct dnaSeq *seq, int *upAtgCount, int *upKozakCount)
 /* Count up upstream ATG and Kozak */
+{
 struct rbTree *upAtgRanges = rangeTreeNew(), *upKozakRanges = rangeTreeNew();
-int upAtg = 0, upKozak = 0;
+int endPos = seq->size-3;
 int i;
-for (i=0; i<orf->start; ++i)
+for (i=0; i<=endPos; ++i)
     {
     if (startsWith("atg", seq->dna + i))
         {
         int orfEnd = findOrfEnd(seq, i);
-        if (orfEnd < orf->start)
-            rangeTreeAdd(upAtgRanges, i, orfEnd);
-        ++upAtg;
+	rangeTreeAdd(upAtgRanges, i, orfEnd);
         if (isKozak(seq->dna, seq->size, i))
-            {
-            ++upKozak;
-            if (orfEnd < orf->start)
-                rangeTreeAdd(upKozakRanges, i, orfEnd);
-            }
+	    rangeTreeAdd(upKozakRanges, i, orfEnd);
         }
     }
-int upAtgBases = rangeTreeOverlapSize(upAtgRanges, 0, orf->start);
-int upKozakBases = rangeTreeOverlapSize(upKozakRanges, 0, orf->start);
-
-/* Penalize by upstream bases. */
-score -= upAtgBases*0.5;
-score -= upKozakBases*0.5;
-
-/* Clean up and return total score. */
+setArrayCountsFromRangeTree(upAtgRanges, upAtgCount, seq->size);
+setArrayCountsFromRangeTree(upKozakRanges, upKozakCount, seq->size);
 rangeTreeFree(&upAtgRanges);
 rangeTreeFree(&upKozakRanges);
-return score;
 }
 
-struct orfInfo *orfInfoNew(struct dnaSeq *seq, int start, int end)
+struct orfInfo *orfInfoNew(struct dnaSeq *seq, int start, int end,
+	int *upAtgCount, int *upKozakCount)
 /* Return new orfInfo on given sequence at given position. */
 {
 struct orfInfo *orf;
@@ -120,7 +147,7 @@ orf->rnaName = cloneString(seq->name);
 orf->rnaSize = seq->size;
 orf->start = start;
 orf->end = end;
-orf->score = orfScore(orf, seq);
+orf->score = orfScore(orf, seq, upAtgCount, upKozakCount);
 return orf;
 }
 
@@ -131,16 +158,32 @@ DNA *dna = seq->dna;
 int lastPos = seq->size - 3;
 int startPos;
 struct orfInfo *orfList = NULL, *orf;
+
+/* Allocate some arrays that keep track of bases in
+ * upstream.  This dramatically speeds up processing
+ * of TTN and other long transcripts which otherwise
+ * can take almost a minute each. */
+int *upAtgCount, *upKozakCount;
+AllocArray(upAtgCount, seq->size);
+AllocArray(upKozakCount, seq->size);
+calcUpstreams(seq, upAtgCount, upKozakCount);
+
+/* Go through sequence making up a record for each 
+ * start codon we find. */
 for (startPos=0; startPos<=lastPos; ++startPos)
     {
     if (startsWith("atg", dna+startPos))
         {
 	int stopPos = findOrfEnd(seq, startPos);
-	orf = orfInfoNew(seq, startPos, stopPos);
+	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount);
 	slAddHead(&orfList, orf);
 	}
     }
 slReverse(&orfList);
+
+/* Clean up and go home. */
+freeMem(upAtgCount);
+freeMem(upKozakCount);
 return orfList;
 }
 
