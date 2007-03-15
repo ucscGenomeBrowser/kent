@@ -79,11 +79,11 @@ missingError: output
 	diff expected/missingError.psl output/missingError.psl
 
 bed8: output
-	${BINDIR}/liftUp output/$@.bed input/contig.lft error input/bed8contig.bed
+	${BINDIR}/liftUp -type=.bed8 output/$@.bed input/contig.lft error input/bed8contig.bed
 	diff expected/$@.bed output/$@.bed
 
 bed8version: output
-	${BINDIR}/liftUp -ignoreVersions output/$@.bed input/contigNoVer.lft error input/bed8contig.bed
+	${BINDIR}/liftUp -type=.bed8 -ignoreVersions output/$@.bed input/contigNoVer.lft error input/bed8contig.bed
 	diff expected/bed8.bed output/$@.bed
 
 output:
