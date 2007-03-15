@@ -167,6 +167,15 @@ priority 54
 type bed 12
 visibility hide
 
+track acescan
+shortLabel ACEScan
+longLabel ACEScan alternative conserved Human-Mouse exon predictions
+group genes
+priority 55
+visibility hide
+color 125,38,205
+type genePred
+
 track HInvGeneMrna
 shortLabel H-Inv
 longLabel H-Invitational Genes mRNA Alignments
@@ -1843,12 +1852,18 @@ searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
 
+searchTable acescan
+searchMethod fuzzy
+searchType genePred
+termRegex .*_pred\.[0-9]+
+searchPriority 50
+
 searchTable ecoresTetNig1
 searchType genePred
 shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
- 
+
 searchName gvNameSearch
 searchTable gvPos
 query select chrom, chromStart, chromEnd, name from %s where name = '%s'
