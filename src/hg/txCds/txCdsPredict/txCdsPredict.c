@@ -6,10 +6,11 @@
 #include "orfInfo.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "bed.h"
 #include "fa.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.2 2007/03/15 06:49:16 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.3 2007/03/15 08:16:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,11 +22,12 @@ errAbort(
   "Output is five columns:\n"
   "   mrna name, mrna size, cds start, cds end, score\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -nmd=in.bed - Use in.bed to look for evidence of nonsense mediated decay.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"nmd", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -57,7 +59,8 @@ return seq->size;
 }
 
 
-double orfScore(struct orfInfo *orf, struct dnaSeq *seq, int *upAtgCount, int *upKozakCount)
+double orfScore(struct orfInfo *orf, struct dnaSeq *seq, int *upAtgCount, int *upKozakCount,
+	int lastIntronPos)
 /* Return a fairly ad-hoc score for orf. Each base in ORF
  * is worth one point, and we go from there.... */
 {
@@ -83,6 +86,13 @@ if (isStopCodon(dna + orf->end - 3))
 score -= upAtgCount[orf->start]*0.5;
 score -= upKozakCount[orf->start]*0.5;
 
+/* Penalize NMD */
+if (lastIntronPos > 0)
+    {
+    int nmdDangle = lastIntronPos - orf->end;
+    if (nmdDangle >= 55)
+        score -= 400;
+    }
 return score;
 }
 
@@ -138,7 +148,7 @@ rangeTreeFree(&upKozakRanges);
 }
 
 struct orfInfo *orfInfoNew(struct dnaSeq *seq, int start, int end,
-	int *upAtgCount, int *upKozakCount)
+	int *upAtgCount, int *upKozakCount, int lastIntronPos)
 /* Return new orfInfo on given sequence at given position. */
 {
 struct orfInfo *orf;
@@ -147,17 +157,35 @@ orf->rnaName = cloneString(seq->name);
 orf->rnaSize = seq->size;
 orf->start = start;
 orf->end = end;
-orf->score = orfScore(orf, seq, upAtgCount, upKozakCount);
+orf->score = orfScore(orf, seq, upAtgCount, upKozakCount, lastIntronPos);
 return orf;
 }
 
-struct orfInfo *orfsOnRna(struct dnaSeq *seq)
+int findLastIntronPos(struct hash *bedHash, char *name)
+/* Find last intron position in RNA coordinates if we have
+ * a bed for this mRNA.  Otherwise (or if it's single exon)
+ * return 0. */
+{
+struct bed *bed = hashFindVal(bedHash, name);
+if (bed == NULL)
+    return 0;
+if (bed->blockCount < 2)
+    return 0;
+int rnaSize = bedTotalBlockSize(bed);
+if (bed->strand[0] == '+')
+    return rnaSize - bed->blockSizes[bed->blockCount-1];
+else
+    return rnaSize - bed->blockSizes[0];
+}
+
+struct orfInfo *orfsOnRna(struct dnaSeq *seq, struct hash *nmdHash)
 /* Return scored list of all ORFs on RNA. */
 {
 DNA *dna = seq->dna;
 int lastPos = seq->size - 3;
 int startPos;
 struct orfInfo *orfList = NULL, *orf;
+int lastIntronPos = findLastIntronPos(nmdHash, seq->name);
 
 /* Allocate some arrays that keep track of bases in
  * upstream.  This dramatically speeds up processing
@@ -175,7 +203,7 @@ for (startPos=0; startPos<=lastPos; ++startPos)
     if (startsWith("atg", dna+startPos))
         {
 	int stopPos = findOrfEnd(seq, startPos);
-	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount);
+	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount, lastIntronPos);
 	slAddHead(&orfList, orf);
 	}
     }
@@ -187,16 +215,26 @@ freeMem(upKozakCount);
 return orfList;
 }
 
-void txCdsPredict(char *inFa, char *outCds)
+void txCdsPredict(char *inFa, char *outCds, char *nmdBed)
 /* txCdsPredict - Somewhat simple-minded ORF predictor using a weighting scheme.. */
 {
 struct dnaSeq *rna, *rnaList = faReadAllDna(inFa);
+
+/* Make up hash of bed records for NMD analysis. */
+struct hash *nmdHash = hashNew(18);
+if (nmdBed != NULL)
+    {
+    struct bed *bed, *bedList = bedLoadNAll(nmdBed, 12);
+    for (bed = bedList; bed != NULL; bed = bed->next)
+        hashAdd(nmdHash, bed->name, bed);
+    }
+
 FILE *f = mustOpen(outCds, "w");
 verbose(2, "read %d seqs from %s\n", slCount(rnaList), inFa);
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     verbose(3, "%s\n", rna->name);
-    struct orfInfo *orfList = orfsOnRna(rna);
+    struct orfInfo *orfList = orfsOnRna(rna, nmdHash);
     if (orfList != NULL)
 	{
 	slSort(&orfList, orfInfoCmpScore);
@@ -213,6 +251,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-txCdsPredict(argv[1], argv[2]);
+txCdsPredict(argv[1], argv[2], optionVal("nmd", NULL));
 return 0;
 }
