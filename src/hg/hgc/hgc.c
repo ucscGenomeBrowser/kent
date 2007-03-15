@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1238 2007/03/15 20:20:45 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1239 2007/03/15 22:44:50 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11813,7 +11813,7 @@ if (seqNib == NULL)
 if (sameString(strand,"-"))
     reverseComplement(seqNib->dna, seqNib->size);
 
-printf("\n<BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
+printf("\n<BR><BR><B>Alignment between the SNP's flanking sequences and the Genomic sequence:</B>");
 
 printf("<PRE><B>Genomic Sequence:</B><BR>");
 writeSeqWithBreaks(stdout, seqNib->dna, seqNib->size, displayLength);
@@ -12710,6 +12710,36 @@ snp.strand[1] = '\0';
 return snp;
 }
 
+void checkForHapmap(struct trackDb *tdb, char *itemName)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256];
+
+if (!hTableExists("hapmapAllelesSummary")) return;
+safef(query, sizeof(query), "select * from hapmapAllelesSummary where name = '%s'", itemName);
+sr = sqlGetResult(conn, query);
+if (!sr) return;
+printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B>", hgTracksPathAndSettings());
+
+/* possible extra detail */
+// char **row;
+// int rowOffset = hOffsetPastBin(seqName, "hapmapAllelesSummary");
+// struct hapmapAllelesSummary *hapmapItem = NULL;
+// row = sqlNextRow(sr);
+// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
+// if (differentString(hapmapItem->majorAlleleCEU, "none")) printf("CEU ");
+// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
+// if (differentString(hapmapItem->majorAlleleCHB, "none")) printf("CHB ");
+// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
+// if (differentString(hapmapItem->majorAlleleJPT, "none")) printf("JPT ");
+// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
+// if (differentString(hapmapItem->majorAlleleYRI, "none")) printf("YRI ");
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doSnp125(struct trackDb *tdb, char *itemName)
 /* Process SNP details. */
 {
@@ -12761,9 +12791,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
+sqlFreeResult(&sr);
+checkForHapmap(tdb, itemName);
 printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
@@ -12825,9 +12856,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedPrintPos((struct bed *)&snp, 3);
 	}
     }
+sqlFreeResult(&sr);
+checkForHapmap(tdb, itemName);
 printSnpAlignment2(snpAlign);
 printTrackHtml(tdb);
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
