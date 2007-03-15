@@ -1,20 +1,43 @@
 #!/bin/bash -e
 # hgLoadEnsembl - Download enembl gene predictions from ftp site and create tracks in the browser.
-[ $# != 4 ] && echo "usage: hgLoadEnsembl organism version input-directory db " >&2 && echo "   for example: hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e hg18" >&2 && exit 1;
+doDownload=1
+kg=0
+dropdb=0
+nibdir=blank
+liftfile=blank
+count=$#
+while getopts "skn:l:" theOption; do 
+        case $theOption in
+                s ) echo "Skipping Download step" ; doDownload=0; shift ; let count=$count-1 ; let OPTIND=1;;
+                k ) echo "to be loaded knownToEnsembl" ; kg=1 ; shift ; let count=$count-1; let OPTIND=1;;
+                d ) dropdb=1 ; shift ; let count=$count-1; let OPTIND=1;;
+                n ) nibdir=$OPTARG  ; shift 2  ; let count=$count-2; let OPTIND=1;;
+                l ) liftfile=$OPTARG  ; shift 2  ; let count=$count-2; let OPTIND=1;;
+                \? ) echo "Unknown option chosen"
+                        exit 1;;
+                * ) echo "You need to supply an option!"
+                        exit 2;;
+        esac
+done
+[ $count != 4 ] && echo "usage: hgLoadEnsembl [options] organism version input-directory db " >&2 && \
+     echo "      -n nibdir - nib or twobit files for performing gene checks. [Default: /cluster/data/<db>/<db>.2bit]" >&2 && \
+     echo "      -d skip download from ensembl ftp site" >&2 && \
+     echo "   for example: hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e hg18" >&2 && exit 1;
 organism=$1
 version=$2
 workingdir=$3
 db=$4
 ensDb=ensembl_${organism}_${version}
+[ $nibdir == "blank" ] && nibdir=/cluster/data/$db/$db.2bit;
+echo organism $organism db $db nibdir $nibdir  lift=$liftfile
 mkdir -p $workingdir
 cd $workingdir
-ensemblDownload $organism $version $workingdir
+[ $doDownload == 1 ] && ensemblDownload $organism $version $workingdir;
 ensemblDbImport $organism $version $workingdir 
-exportEnsembl $organism $version $workingdir 
-geneCheckAndLoad $db /cluster/data/$db/nib ensGene.gp ensGeneChk ensGeneChkDetails
+[ $liftfile == "blank" ] && exportEnsembl $organism $version $workingdir ;
+[ $liftfile != "blank" ] && exportEnsembl -l $liftfile $organism $version $workingdir ;
+geneCheckAndLoad $db $nibdir ensGene.gp ensGeneChk ensGeneChkDetails
 loadEnsembl $workingdir $db 
 ensemblSuperfamily $db superfam060619
-echo "dropping database $ensDb in 5 seconds"
-sleep 5
-hgsql mysql -e "drop database if exists $ensDb"
-
+[ $kg == 1 ] hgMapToGene $db ensGene knownGene knownToEnsembl
+[ $dropdb == 1 ] && echo "dropping database $ensDb in 5 seconds" && sleep 5 && hgsql mysql -e "drop database if exists $ensDb";
