@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1239 2007/03/15 22:44:50 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1240 2007/03/15 22:53:53 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12713,30 +12713,15 @@ return snp;
 void checkForHapmap(struct trackDb *tdb, char *itemName)
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
 char query[256];
+int count = 0;
 
 if (!hTableExists("hapmapAllelesSummary")) return;
-safef(query, sizeof(query), "select * from hapmapAllelesSummary where name = '%s'", itemName);
-sr = sqlGetResult(conn, query);
-if (!sr) return;
+safef(query, sizeof(query), "select count(*) from hapmapAllelesSummary where name = '%s'", itemName);
+count = sqlQuickNum(conn, query);
+if (count != 1) return;
 printf("<BR><B><A HREF=\"%s&hapmapSnps=dense\"> HapMap SNP</A> </B>", hgTracksPathAndSettings());
 
-/* possible extra detail */
-// char **row;
-// int rowOffset = hOffsetPastBin(seqName, "hapmapAllelesSummary");
-// struct hapmapAllelesSummary *hapmapItem = NULL;
-// row = sqlNextRow(sr);
-// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
-// if (differentString(hapmapItem->majorAlleleCEU, "none")) printf("CEU ");
-// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
-// if (differentString(hapmapItem->majorAlleleCHB, "none")) printf("CHB ");
-// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
-// if (differentString(hapmapItem->majorAlleleJPT, "none")) printf("JPT ");
-// hapmapItem = hapmapAllelesSummaryLoad(row+rowOffset);
-// if (differentString(hapmapItem->majorAlleleYRI, "none")) printf("YRI ");
-
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
