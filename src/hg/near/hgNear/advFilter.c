@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.26 2006/03/06 18:02:33 angie Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.27 2007/03/15 23:25:09 angie Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -254,7 +254,8 @@ boolean passPresent[2];
 int onOff = 0;
 
 makeTitle("Gene Sorter Filter", "hgNearHelp.html#Filter");
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=%s>\n",
+	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
 controlPanelStart();
@@ -344,7 +345,11 @@ else
 /* Now lookup names and sort. */
 for (gp = list; gp != NULL; gp = gp->next)
     {
+    char *oldName = gp->name;
     gp->name = col->cellVal(col, gp, conn);
+    if (gp->name == NULL)
+	errAbort("Unable to find cellVal for %s -- tables out of sync?",
+		 oldName);
     }
 slSort(&list, genePosCmpName);
 
