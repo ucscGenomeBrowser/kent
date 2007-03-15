@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.56 2007/03/14 18:25:43 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.57 2007/03/15 22:31:39 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1456,10 +1456,12 @@ char *ctGenome(struct customTrack *ct)
 return trackDbSetting(ct->tdb, "genome");
 }
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
-                                        struct slName **retBrowserLines)
+static struct customTrack *customFactoryParseOptionalDb(char *text,
+	boolean isFile, struct slName **retBrowserLines,
+	boolean mustBeCurrentDb)
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.*/
+ * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track 
+ * is for some database other than hGetDb(), and fill in maxChromName. */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -1488,7 +1490,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
     //char *type = NULL;
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx, TRUE);
+	track = trackLineToTrack(line, cpp->fileStack->lineIx,
+				 mustBeCurrentDb);
         }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
@@ -1498,7 +1501,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
                         "track name='%s' description='%s'",
                         CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack( defaultLine, 1, TRUE);
+        track = trackLineToTrack( defaultLine, 1, mustBeCurrentDb);
         customPpReuse(cpp, line);
 	}
     else
@@ -1511,8 +1514,14 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);
-    if (ctDb && differentString(ctDb, hGetDb()))
-        errAbort("can't load %s data into %s custom tracks", ctDb, hGetDb());
+    if (mustBeCurrentDb)
+	{
+	if (ctDb == NULL)
+	    ctDb = hGetDb();
+	else if (differentString(ctDb, hGetDb()))
+	    errAbort("can't load %s data into %s custom tracks",
+		     ctDb, hGetDb());
+	}
     struct customTrack *oneList = NULL, *oneTrack;
 
     if (track->dbDataLoad)
@@ -1571,8 +1580,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
                 ctAddToSettings(track, "inputType", fac->name);
             if (dataUrl)
                 ctAddToSettings(track, "dataUrl", dataUrl);
-            if (!ctGenome(track))
-                ctAddToSettings(track, "genome", hGetDb());
+            if (!ctGenome(track) && ctDb)
+                ctAddToSettings(track, "genome", ctDb);
 	    }
 	}
     trackList = slCat(trackList, oneList);
@@ -1620,6 +1629,22 @@ if (retBrowserLines != NULL)
 customPpFree(&cpp);
 sqlDisconnect(&ctConn);
 return trackList;
+}
+
+struct customTrack *customFactoryParse(char *text, boolean isFile,
+	struct slName **retBrowserLines)
+/* Parse text into a custom set of tracks.  Text parameter is a
+ * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+{
+return customFactoryParseOptionalDb(text, isFile, retBrowserLines, TRUE);
+}
+
+struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+					    struct slName **retBrowserLines)
+/* Parse text into a custom set of tracks.  Text parameter is a
+ * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
+{
+return customFactoryParseOptionalDb(text, isFile, retBrowserLines, FALSE);
 }
 
 void customFactoryTestExistence(char *fileName, boolean *retGotLive,
