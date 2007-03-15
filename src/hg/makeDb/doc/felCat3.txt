@@ -736,3 +736,37 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     human/felCat3/trackDb.ra
 
 
+##########################################################################
+# SYNTENIC NETS (Heather, Mar 2007)
+    ssh hgwdev
+    cd /cluster/data/felCat3/bed
+
+    cd blastz.hg18.2006-11-10.swap/axtChain
+    netFilter -syn felCat3.hg18.net.gz | hgLoadNet felCat3 netSyntenyHg18 stdin
+
+    featureBits -countGaps felCat3 refGene:cds netHg18 -enrichment
+    # refGene:cds 0.005%, netHg18 66.952%, both 0.005%, cover 99.78%, enrich 1.49x
+
+    featureBits -countGaps felCat3 refGene:cds netSyntenyHg18 -enrichment
+    # refGene:cds 0.005%, netSyntenyHg18 53.767%, both 0.004%, cover 79.25%, enrich 1.47x
+
+    cd blastz.mm8.2006-11-15.swap/axtChain
+    netFilter -syn felCat3.mm8.net.gz | hgLoadNet felCat3 netSyntenyMm8 stdin
+
+    featureBits -countGaps felCat3 refGene:cds netMm8 -enrichment
+    # refGene:cds 0.005%, netMm8 36.836%, both 0.005%, cover 99.33%, enrich 2.70x
+
+    featureBits -countGaps felCat3 refGene:cds netSyntenyMm8 -enrichment
+    # refGene:cds 0.005%, netSyntenyMm8 23.421%, both 0.003%, cover 56.22%, enrich 2.40x
+
+    cd blastz.canFam2.2006-11-18.swap
+    netFilter -syn felCat3.canFam2.net.gz | hgLoadNet felCat3 netSyntenyCanFam2 stdin
+
+    featureBits -countGaps felCat3 refGene:cds netCanFam2 -enrichment
+    # refGene:cds 0.005%, netCanFam2 78.072%, both 0.005%, cover 99.82%, enrich 1.28x
+    
+    featureBits -countGaps felCat3 refGene:cds netSyntenyCanFam2 -enrichment
+    # refGene:cds 0.005%, netSyntenyCanFam2 67.261%, both 0.005%, cover 88.77%, enrich 1.32x
+
+
+
