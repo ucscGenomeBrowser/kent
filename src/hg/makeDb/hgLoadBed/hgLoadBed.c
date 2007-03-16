@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.50 2007/03/16 00:07:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.51 2007/03/16 17:08:48 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -177,6 +177,9 @@ while (lineFileNext(lf, &line, NULL))
     if (bed->chromEnd < 1)
 	errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
 		lf->lineIx, dupe);
+    if (bed->chromStart > bed->chromEnd)
+	errAbort("ERROR: line %d:'%s'\nchromStart after chromEnd (%d > %d)\n",
+	    lf->lineIx, dupe, bed->chromStart, bed->chromEnd);
     bed->line = dupe;
     slAddHead(pList, bed);
     }
