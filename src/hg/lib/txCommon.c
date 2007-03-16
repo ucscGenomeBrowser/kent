@@ -23,7 +23,7 @@ if (periodCount < 2)
     	tempName); 
 s += 1;
 int len = strlen(s);
-if (len < 8 || len > 16)
+if (len < 8 || len > 18)
     errAbort("Accession seems a little too long or short in %s", tempName);
 return s;
 }
