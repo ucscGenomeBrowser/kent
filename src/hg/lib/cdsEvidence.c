@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "cdsEvidence.h"
 
-static char const rcsid[] = "$Id: cdsEvidence.c,v 1.2 2007/02/26 17:02:33 kent Exp $";
+static char const rcsid[] = "$Id: cdsEvidence.c,v 1.3 2007/03/16 17:34:48 kent Exp $";
 
 struct cdsEvidence *cdsEvidenceLoad(char **row)
 /* Load a cdsEvidence from row fetched with select * from cdsEvidence
@@ -252,5 +252,19 @@ for (i=0; i<bed->blockCount; ++i)
 	}
     txStart = txEnd;
     }
+}
+
+int cdsEvidenceCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score (descending). */
+{
+const struct cdsEvidence *a = *((struct cdsEvidence **)va);
+const struct cdsEvidence *b = *((struct cdsEvidence **)vb);
+double diff = b->score - a->score;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
 }
 

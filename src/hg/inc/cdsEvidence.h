@@ -73,5 +73,8 @@ struct hash *cdsEvidenceReadAllIntoHash(char *fileName);
 void cdsEvidenceSetBedThick(struct cdsEvidence *cds, struct bed *bed);
 /* Set thickStart/thickEnd on bed from cdsEvidence. */
 
+int cdsEvidenceCmpScore(const void *va, const void *vb);
+/* Compare to sort based on score (descending). */
+
 #endif /* CDSEVIDENCE_H */
 
