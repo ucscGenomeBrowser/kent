@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.4 2007/03/15 19:52:28 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.5 2007/03/16 02:30:57 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,9 +72,69 @@ int orfEndInSeq(struct dnaSeq *seq, int start)
 return findOrfEnd(seq->dna, seq->size, start);
 }
 
+struct orthoCds
+/* Information on a single CDS at a single position. */
+    {
+    int start;	        /* CDS end */
+    int end;            /* CDS start */
+    char base;		/* Base in other species at this position. */
+    };
+
+struct orthoCdsArray
+/* Information on all CDS's in other species for one RNA. */
+    {
+    struct orthoCdsArray *next;
+    char *species;	/* Species (or database) name */
+    struct orthoCds *cdsArray;  /* Array of CDSs. */
+    int arraySize;	/* Size of array */
+    };
+
+void dumpOrthoArray(struct orthoCdsArray *ortho, FILE *f)
+/* Print out debugging info about orthoArray. */
+{
+fprintf(f, "%s %d\n", ortho->species, ortho->arraySize);
+int i;
+for (i=0; i<ortho->arraySize; ++i)
+    {
+    struct orthoCds *oc = &ortho->cdsArray[i];
+    char base = oc->base;
+    if (base == 0) base = '?';
+    fprintf(f, "   %d: %d-%d (%d) %c\n", i, oc->start, oc->end, oc->end - oc->start, base);
+    }
+}
+
+int orthoScore(struct orthoCdsArray *ortho, struct orfInfo *orf)
+/* Return score consisting of 1 per real base in overlapping orthologous CDS */
+{
+int biggestSize = 0;
+int biggestStart = -1, biggestEnd = -1;
+int i;
+int score = 0;
+for (i=orf->start; i<orf->end; i += 3)
+    {
+    struct orthoCds *cds = &ortho->cdsArray[i];
+    int size = rangeIntersection(cds->start, cds->end, orf->start, orf->end);
+    if (size > biggestSize)
+        {
+	biggestSize = size;
+	biggestStart = cds->start;
+	biggestEnd = cds->end;
+	}
+    }
+biggestStart = max(biggestStart, orf->start);
+biggestEnd = min(biggestEnd, orf->end);
+for (i=biggestStart; i < biggestEnd; ++i)
+    {
+    char base = ortho->cdsArray[i].base;
+    if (base != '.' && base != '-')
+        score += 1;
+    }
+// uglyf("orthoScore for %s %d-%d %s is %d\n", orf->rnaName, orf->start, orf->end, ortho->species, score);
+return score;
+}
 
 double orfScore(struct orfInfo *orf, struct dnaSeq *seq, int *upAtgCount, int *upKozakCount,
-	int lastIntronPos)
+	int lastIntronPos, struct orthoCdsArray *orthoList, double orthoWeightPer)
 /* Return a fairly ad-hoc score for orf. Each base in ORF
  * is worth one point, and we go from there.... */
 {
@@ -107,6 +167,14 @@ if (lastIntronPos > 0)
     if (nmdDangle >= 55)
         score -= 400;
     }
+
+/* Add in bits from ortho species. */
+struct orthoCdsArray *ortho;
+for (ortho = orthoList; ortho != NULL; ortho = ortho->next)
+    {
+    score += orthoWeightPer * orthoScore(ortho, orf);
+    }
+
 return score;
 }
 
@@ -162,7 +230,8 @@ rangeTreeFree(&upKozakRanges);
 }
 
 struct orfInfo *orfInfoNew(struct dnaSeq *seq, int start, int end,
-	int *upAtgCount, int *upKozakCount, int lastIntronPos)
+	int *upAtgCount, int *upKozakCount, int lastIntronPos,
+	struct orthoCdsArray *orthoList, double orthoWeightPer)
 /* Return new orfInfo on given sequence at given position. */
 {
 struct orfInfo *orf;
@@ -171,7 +240,8 @@ orf->rnaName = cloneString(seq->name);
 orf->rnaSize = seq->size;
 orf->start = start;
 orf->end = end;
-orf->score = orfScore(orf, seq, upAtgCount, upKozakCount, lastIntronPos);
+orf->score = orfScore(orf, seq, upAtgCount, upKozakCount, lastIntronPos,
+	orthoList, orthoWeightPer);
 return orf;
 }
 
@@ -192,44 +262,13 @@ else
     return rnaSize - bed->blockSizes[0];
 }
 
-struct orthoCds
-/* Information on a single CDS at a single position. */
-    {
-    int start;	        /* CDS end */
-    int end;            /* CDS start */
-    char base;		/* Base in other species at this position. */
-    };
-
-struct orthoCdsArray
-/* Information on all CDS's in other species for one RNA. */
-    {
-    struct orthoCdsArray *next;
-    char *species;	/* Species (or database) name */
-    struct orthoCds *cdsArray;  /* Array of CDSs. */
-    int arraySize;	/* Size of array */
-    };
-
-void dumpOrthoArray(struct orthoCdsArray *array, FILE *f)
-/* Print out debugging info about orthoArray. */
-{
-fprintf(f, "%s %d\n", array->species, array->arraySize);
-int i;
-for (i=0; i<array->arraySize; ++i)
-    {
-    struct orthoCds *oc = &array->cdsArray[i];
-    char base = oc->base;
-    if (base == 0) base = '?';
-    fprintf(f, "   %d: %d-%d (%d) %c\n", i, oc->start, oc->end, oc->end - oc->start, base);
-    }
-}
-
 void applyOrf(int start, int end, char *xDna, int *xToN, struct orthoCds *array)
 /* Given start/end in xeno coordinates, map to native coordinates and save info
  * to for all codons in frame in array. */
 {
 int xIx;
 int nStart = xToN[start], nEnd = xToN[end];
-uglyf("applyOrf %d %d (native %d %d)\n", start, end, nStart, nEnd);
+// uglyf("applyOrf %d %d (native %d %d)\n", start, end, nStart, nEnd);
 for (xIx=start; xIx<end; xIx += 3)
     {
     int nIx = xToN[xIx];
@@ -281,9 +320,11 @@ char *xDna = lmCloneString(lm, xText);
 tolowers(xDna);
 stripChar(xDna, '-');
 
+#ifdef DEBUG
 uglyf("xToN:");
 for (i=0; i<xSize; ++i) uglyf(" %d", xToN[i]);
 uglyf("\n");
+#endif /* DEBUG */
 
 /* Step through this, one frame at a time, looking for best ORF */
 int frame;
@@ -297,7 +338,7 @@ for (frame=0; frame<3; ++frame)
     applyOrf(start, end, xDna, xToN, array);
     for (start = end; start<=lastPos; )
         {
-	uglyf("start %d %c%c%c\n", start, xDna[start], xDna[start+1], xDna[start+2]);
+	// uglyf("start %d %c%c%c\n", start, xDna[start], xDna[start+1], xDna[start+2]);
 	if (startsWith("atg", xDna+start))
 	    {
 	    end = findOrfEnd(xDna, frameDnaSize, start);
@@ -311,7 +352,7 @@ for (frame=0; frame<3; ++frame)
 
 }
 
-struct orthoCdsArray *calcOrthoArray(struct mafAli *maf, struct lm *lm)
+struct orthoCdsArray *calcOrthoList(struct mafAli *maf, struct lm *lm)
 /* Given maf, figure out orthoCdsArray list, one for each other
  * species.  (Assume first species is native.) */
 {
@@ -345,7 +386,7 @@ struct lm *lm = lmInit(64*1024);
 /* Figure out the key piece of info for NMD. */
 int lastIntronPos = findLastIntronPos(nmdHash, seq->name);
 double orthoWeightPer = 0;
-struct orthoCdsArray *orthoArray = NULL;
+struct orthoCdsArray *orthoList = NULL;
 
 /* Calculate stuff useful for orthology */
 if (otherSpeciesCount > 0)
@@ -354,9 +395,9 @@ if (otherSpeciesCount > 0)
     struct mafAli *maf = hashFindVal(mafHash, seq->name);
     if (maf != NULL)
 	{
-	orthoArray = calcOrthoArray(maf, lm);
-	uglyf("%s: ", seq->name);
-	dumpOrthoArray(orthoArray, uglyOut);
+	orthoList = calcOrthoList(maf, lm);
+	// uglyf("%s: ", seq->name);
+	// dumpOrthoArray(orthoArray, uglyOut);
 	}
     }
 
@@ -376,7 +417,8 @@ for (startPos=0; startPos<=lastPos; ++startPos)
     if (startsWith("atg", dna+startPos))
         {
 	int stopPos = orfEndInSeq(seq, startPos);
-	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount, lastIntronPos);
+	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount, 
+		lastIntronPos, orthoList, orthoWeightPer);
 	slAddHead(&orfList, orf);
 	}
     }
