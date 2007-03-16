@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orfEnum.c,v 1.3 2007/03/14 04:55:16 kent Exp $";
+static char const rcsid[] = "$Id: orfEnum.c,v 1.4 2007/03/16 16:51:30 kent Exp $";
 
 int minSize=24;
 boolean doAll = TRUE;
@@ -109,7 +109,7 @@ if (orf->size >= minSize)
 }
 
 int orfInfoCmpStart(const void *va, const void *vb)
-/* Compare to sort based on score (descending). */
+/* Compare to sort based on start . */
 {
 const struct orfInfo *a = *((struct orfInfo **)va);
 const struct orfInfo *b = *((struct orfInfo **)vb);
