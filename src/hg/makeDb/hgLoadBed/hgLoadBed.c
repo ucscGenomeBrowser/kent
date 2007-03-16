@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.49 2007/03/13 23:10:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.50 2007/03/16 00:07:52 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -79,7 +79,6 @@ errAbort(
   "   -notItemRgb  - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
-  "               - and it must be the last column of the input file.\n"
   "   -maxChromNameLength=N  - specify max chromName length to avoid\n"
   "               - reference to chromInfo table\n"
   "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
@@ -175,6 +174,9 @@ while (lineFileNext(lf, &line, NULL))
     bed->chrom = cloneString(words[0]);
     bed->chromStart = lineFileNeedNum(lf, words, 1);
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
+    if (bed->chromEnd < 1)
+	errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
+		lf->lineIx, dupe);
     bed->line = dupe;
     slAddHead(pList, bed);
     }
@@ -400,9 +402,9 @@ if ((0 == bedSize) && ignoreEmpty)
 if (hasBin)
     bedSize--;
 
-/*	verify proper usage of bedGraph column, must be last one */
-if ((bedGraph > 0) && (bedSize != bedGraph))
-    errAbort("bedGraph column %d must be last column, last column is %d",
+/*	verify proper usage of bedGraph column, can not be more than columns */
+if ((bedGraph > 0) && (bedGraph > bedSize))
+    errAbort("bedGraph column %d can not be past last column, last column is %d",
 	bedGraph, bedSize);
 
 for (i=0; i<bedCount; ++i)
