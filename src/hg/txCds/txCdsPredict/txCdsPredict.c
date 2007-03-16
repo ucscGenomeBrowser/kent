@@ -5,7 +5,7 @@
 #include "options.h"
 #include "memalloc.h"
 #include "localmem.h"
-#include "orfInfo.h"
+#include "cdsEvidence.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "bed.h"
@@ -13,7 +13,7 @@
 #include "rangeTree.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.6 2007/03/16 03:09:07 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.7 2007/03/16 17:48:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,20 +39,6 @@ static struct optionSpec options[] = {
    {"maf", OPTION_STRING},
    {NULL, 0},
 };
-
-int orfInfoCmpScore(const void *va, const void *vb)
-/* Compare to sort based on score (descending). */
-{
-const struct orfInfo *a = *((struct orfInfo **)va);
-const struct orfInfo *b = *((struct orfInfo **)vb);
-double diff = b->score - a->score;
-if (diff < 0)
-    return -1;
-else if (diff > 0)
-    return 1;
-else
-    return 0;
-}
 
 int findOrfEnd(char *dna, int dnaSize, int start)
 /* Figure out end of orf that starts at start */
@@ -104,7 +90,7 @@ for (i=0; i<ortho->arraySize; ++i)
     }
 }
 
-int orthoScore(struct orthoCdsArray *ortho, struct orfInfo *orf)
+int orthoScore(struct orthoCdsArray *ortho, struct cdsEvidence *orf)
 /* Return score consisting of 1 per real base in overlapping orthologous CDS */
 {
 int biggestSize = 0;
@@ -130,11 +116,11 @@ for (i=biggestStart; i < biggestEnd; ++i)
     if (base != '.' && base != '-')
         score += 1;
     }
-// uglyf("orthoScore for %s %d-%d %s is %d\n", orf->rnaName, orf->start, orf->end, ortho->species, score);
+// uglyf("orthoScore for %s %d-%d %s is %d\n", orf->name, orf->start, orf->end, ortho->species, score);
 return score;
 }
 
-double orfScore(struct orfInfo *orf, struct dnaSeq *seq, int *upAtgCount, int *upKozakCount,
+double orfScore(struct cdsEvidence *orf, struct dnaSeq *seq, int *upAtgCount, int *upKozakCount,
 	int lastIntronPos, struct orthoCdsArray *orthoList, double orthoWeightPer)
 /* Return a fairly ad-hoc score for orf. Each base in ORF
  * is worth one point, and we go from there.... */
@@ -230,19 +216,27 @@ rangeTreeFree(&upAtgRanges);
 rangeTreeFree(&upKozakRanges);
 }
 
-struct orfInfo *orfInfoNew(struct dnaSeq *seq, int start, int end,
+struct cdsEvidence *createCds(struct dnaSeq *seq, int start, int end,
 	int *upAtgCount, int *upKozakCount, int lastIntronPos,
 	struct orthoCdsArray *orthoList, double orthoWeightPer)
-/* Return new orfInfo on given sequence at given position. */
+/* Return new cdsEvidence on given sequence at given position. */
 {
-struct orfInfo *orf;
+struct cdsEvidence *orf;
 AllocVar(orf);
-orf->rnaName = cloneString(seq->name);
-orf->rnaSize = seq->size;
+orf->name = cloneString(seq->name);
 orf->start = start;
 orf->end = end;
+orf->source = cloneString("txCdsPredict");
+orf->accession = cloneString(".");
 orf->score = orfScore(orf, seq, upAtgCount, upKozakCount, lastIntronPos,
 	orthoList, orthoWeightPer);
+orf->startComplete = startsWith("atg", seq->dna + start);
+orf->endComplete = isStopCodon(seq->dna + end - 3);
+orf->cdsCount = 1;
+AllocArray(orf->cdsStarts, 1);
+orf->cdsStarts[0] = start;
+AllocArray(orf->cdsSizes, 1);
+orf->cdsSizes[0] = end - start;
 return orf;
 }
 
@@ -377,14 +371,14 @@ slReverse(&arrayList);
 return arrayList;
 }
 
-struct orfInfo *orfsOnRna(struct dnaSeq *seq, struct hash *nmdHash, struct hash *mafHash,
+struct cdsEvidence *orfsOnRna(struct dnaSeq *seq, struct hash *nmdHash, struct hash *mafHash,
 	int otherSpeciesCount)
 /* Return scored list of all ORFs on RNA. */
 {
 DNA *dna = seq->dna;
 int lastPos = seq->size - 3;
 int startPos;
-struct orfInfo *orfList = NULL, *orf;
+struct cdsEvidence *orfList = NULL, *orf;
 struct lm *lm = lmInit(64*1024);
 
 /* Figure out the key piece of info for NMD. */
@@ -421,7 +415,7 @@ for (startPos=0; startPos<=lastPos; ++startPos)
     if (startsWith("atg", dna+startPos))
         {
 	int stopPos = orfEndInSeq(seq, startPos);
-	orf = orfInfoNew(seq, startPos, stopPos, upAtgCount, upKozakCount, 
+	orf = createCds(seq, startPos, stopPos, upAtgCount, upKozakCount, 
 		lastIntronPos, orthoList, orthoWeightPer);
 	slAddHead(&orfList, orf);
 	}
@@ -475,13 +469,13 @@ FILE *f = mustOpen(outCds, "w");
 for (rna = rnaList; rna != NULL; rna = rna->next)
     {
     verbose(3, "%s\n", rna->name);
-    struct orfInfo *orfList = orfsOnRna(rna, nmdHash, mafHash, otherSpeciesCount);
+    struct cdsEvidence *orfList = orfsOnRna(rna, nmdHash, mafHash, otherSpeciesCount);
     if (orfList != NULL)
 	{
-	slSort(&orfList, orfInfoCmpScore);
-	orfInfoTabOut(orfList, f);
+	slSort(&orfList, cdsEvidenceCmpScore);
+	cdsEvidenceTabOut(orfList, f);
 	}
-    orfInfoFreeList(&orfList);
+    cdsEvidenceFreeList(&orfList);
     }
 carefulClose(&f);
 }
