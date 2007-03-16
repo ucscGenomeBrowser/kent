@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: txReadRa.c,v 1.2 2007/03/06 08:25:57 kent Exp $";
+static char const rcsid[] = "$Id: txReadRa.c,v 1.3 2007/03/16 09:19:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,20 +49,20 @@ if (val == NULL)
 return val;
 }
 
-void outIfFound(char *acc, struct hash *ra, char *tag, FILE *f)
+void outIfFound(char *acc, char *ver, struct hash *ra, char *tag, FILE *f)
 /* Output tag and value if found. */
 {
 char *val = hashFindVal(ra, tag);
 if (val != NULL)
-    fprintf(f, "%s\t%s\t%s\n", acc, tag, val);
+    fprintf(f, "%s.%s\t%s\t%s\n", acc, ver, tag, val);
 }
 
-void outputExceptions(char *acc, struct hash *ra, FILE *f)
+void outputExceptions(char *acc, char *ver, struct hash *ra, FILE *f)
 /* Output the exceptions to file. */
 {
-outIfFound(acc, ra, "selenocysteine", f);
-outIfFound(acc, ra, "translExcept", f);
-outIfFound(acc, ra, "exception", f);
+outIfFound(acc, ver, ra, "selenocysteine", f);
+outIfFound(acc, ver, ra, "translExcept", f);
+outIfFound(acc, ver, ra, "exception", f);
 }
 
 void txReadRa(char *mrnaRa, char *refSeqRa, char *outDir)
@@ -78,6 +78,7 @@ FILE *fSize = openToWrite(outDir, "mrnaSize.tab");
 FILE *fRefToPep = openToWrite(outDir, "refToPep.tab");
 FILE *fPepStatus = openToWrite(outDir, "refPepStatus.tab");
 FILE *fExceptions = openToWrite(outDir, "exceptions.tab");
+FILE *fAccVer = openToWrite(outDir, "accVer.tab");
 
 struct hash *ra;
 while ((ra = raNextRecord(refSeq)) != NULL)
@@ -85,6 +86,7 @@ while ((ra = raNextRecord(refSeq)) != NULL)
     char *acc = requiredField(ra, refSeq, "acc");
     char *rss = requiredField(ra, refSeq, "rss");
     char *siz = requiredField(ra, refSeq, "siz");
+    char *ver = requiredField(ra, mrna, "ver");
     char *prt = hashFindVal(ra, "prt");
     char *cds = hashFindVal(ra, "cds");
 
@@ -104,17 +106,17 @@ while ((ra = raNextRecord(refSeq)) != NULL)
 	errAbort("Unrecognized rss field %s after line %d of %s", rss, 
 	    refSeq->lineIx, refSeq->fileName);
 
-    fprintf(fStatus, "%s\t%s\n", acc, status);
+    fprintf(fStatus, "%s.%s\t%s\n", acc, ver, status);
     if (prt != NULL)
 	{
-	chopSuffix(prt);
 	fprintf(fPepStatus, "%s\t%s\n", prt, status);
-	fprintf(fRefToPep, "%s\t%s\n", acc, prt);
+	fprintf(fRefToPep, "%s.%s\t%s\n", acc, ver, prt);
 	}
-    fprintf(fSize, "%s\t%s\n", acc, siz);
+    fprintf(fSize, "%s.%s\t%s\n", acc, ver, siz);
     if (cds != NULL)
-	fprintf(fCds, "%s\t%s\n", acc, cds);
-    outputExceptions(acc, ra, fExceptions);
+	fprintf(fCds, "%s.%s\t%s\n", acc, ver, cds);
+    outputExceptions(acc, ver, ra, fExceptions);
+    fprintf(fAccVer, "%s\t%s.%s\n", acc, acc, ver);
     hashFree(&ra);
     }
 
@@ -122,11 +124,13 @@ while ((ra = raNextRecord(mrna)) != NULL)
     {
     char *acc = requiredField(ra, mrna, "acc");
     char *siz = requiredField(ra, mrna, "siz");
+    char *ver = requiredField(ra, mrna, "ver");
     char *cds = hashFindVal(ra, "cds");
-    fprintf(fSize, "%s\t%s\n", acc, siz);
+    fprintf(fSize, "%s.%s\t%s\n", acc, ver, siz);
     if (cds != NULL)
-    	fprintf(fCds, "%s\t%s\n", acc, cds);
-    outputExceptions(acc, ra, fExceptions);
+    	fprintf(fCds, "%s.%s\t%s\n", acc, ver, cds);
+    outputExceptions(acc, ver, ra, fExceptions);
+    fprintf(fAccVer, "%s\t%s.%s\n", acc, acc, ver);
     hashFree(&ra);
     }
 
@@ -136,6 +140,7 @@ carefulClose(&fSize);
 carefulClose(&fRefToPep);
 carefulClose(&fPepStatus);
 carefulClose(&fExceptions);
+carefulClose(&fAccVer);
 }
 
 int main(int argc, char *argv[])
