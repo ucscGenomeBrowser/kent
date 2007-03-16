@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.57 2007/03/15 22:31:39 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.58 2007/03/16 17:07:15 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -296,8 +296,11 @@ if (dbRequested)
     FILE *out = pipelineFile(dataPipe);
     struct bed *bed;
     for (bed = track->bedList; bed != NULL; bed = bed->next)
+	{
 	bedOutputN(bed, track->fieldCount, out, '\t', '\n');
-    if(pipelineWait(dataPipe))
+	}
+    fflush(out);		/* help see error from loader failure */
+    if(ferror(out) || pipelineWait(dataPipe))
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
@@ -318,6 +321,8 @@ customFactoryCheckChromName(bed->chrom, lf);
 
 bed->chromStart = lineFileNeedNum(lf, row, 1);
 bed->chromEnd = lineFileNeedNum(lf, row, 2);
+if (bed->chromEnd < 1)
+    lineFileAbort(lf, "chromEnd less than 1 (%d)", bed->chromEnd);
 if (bed->chromEnd < bed->chromStart)
     lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
     	bed->chromStart, bed->chromEnd);
@@ -995,7 +1000,8 @@ if (dbRequested)
     FILE *out = pipelineFile(dataPipe);
     copyOpenFile(in, out);
     carefulClose(&in);
-    if (pipelineWait(dataPipe))
+    fflush(out);		/* help see error from loader failure */
+    if(ferror(out) || pipelineWait(dataPipe))
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
