@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: orfCompare.c,v 1.1 2007/03/15 02:28:11 kent Exp $";
+static char const rcsid[] = "$Id: orfCompare.c,v 1.2 2007/03/16 16:51:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,11 +16,14 @@ errAbort(
   "where a.cds and b.cds are both three column files of form\n"
   "  <name> <start> <end>\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -bad=bad.tab - put in ones where a&b really disagree here\n"
   );
 }
 
+FILE *fBad = NULL;
+
 static struct optionSpec options[] = {
+   {"bad", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -73,6 +76,16 @@ for (orf = list; orf != NULL; orf = orf->next)
 return hash;
 }
 
+void badOut(struct orf *a, struct orf *b, char *why)
+/* Print out why a/b don't match */
+{
+if (fBad)
+    {
+    fprintf(fBad, "%s\t%d\t%d\t%d\t%d\t%s\n", a->name, a->start, a->end,
+    	b->start, b->end, why);
+    }
+}
+
 void orfCompare(char *aFile, char *bFile)
 /* orfCompare - Compare two sets of ORF predictions.. */
 {
@@ -104,7 +117,15 @@ for (a = aList; a != NULL; a = a->next)
 		double ratio = min(aRatio,bRatio);
 		if (ratio >= 0.80)
 		    ++sameFrameOverlap80;
+		else
+		    {
+		    char why[64];
+		    safef(why, sizeof(why), "overlap %4.1f%%", 100.0*ratio);
+		    badOut(a, b, why);
+		    }
 		}
+	    else
+	        badOut(a, b, "framed");
 	    }
 	}
     }
@@ -129,6 +150,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+char *fileName = optionVal("bad", NULL);
+if (fileName != NULL)
+    fBad = mustOpen(fileName, "w");
 orfCompare(argv[1], argv[2]);
+carefulClose(&fBad);
 return 0;
 }
