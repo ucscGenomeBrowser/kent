@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "memalloc.h"
 #include "localmem.h"
 #include "orfInfo.h"
 #include "dnautil.h"
@@ -12,7 +13,7 @@
 #include "rangeTree.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.5 2007/03/16 02:30:57 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.6 2007/03/16 03:09:07 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -262,19 +263,22 @@ else
     return rnaSize - bed->blockSizes[0];
 }
 
-void applyOrf(int start, int end, char *xDna, int *xToN, struct orthoCds *array)
+void applyOrf(int start, int end, char *xDna, int *xToN, struct orthoCds *array, int arraySize)
 /* Given start/end in xeno coordinates, map to native coordinates and save info
  * to for all codons in frame in array. */
 {
 int xIx;
 int nStart = xToN[start], nEnd = xToN[end];
-// uglyf("applyOrf %d %d (native %d %d)\n", start, end, nStart, nEnd);
+// uglyf("applyOrf %d %d (native %d %d of %d)\n", start, end, nStart, nEnd, arraySize);
 for (xIx=start; xIx<end; xIx += 3)
     {
     int nIx = xToN[xIx];
-    struct orthoCds *oc = &array[nIx];
-    oc->start = nStart;
-    oc->end = nEnd;
+    if (nIx < arraySize)
+	{
+	struct orthoCds *oc = &array[nIx];
+	oc->start = nStart;
+	oc->end = nEnd;
+	}
     }
 }
 
@@ -335,14 +339,14 @@ for (frame=0; frame<3; ++frame)
     int lastPos = xSize-3;
     int frameDnaSize = xSize-frame;
     int start = frame, end = findOrfEnd(xDna, frameDnaSize, frame);
-    applyOrf(start, end, xDna, xToN, array);
+    applyOrf(start, end, xDna, xToN, array, arraySize);
     for (start = end; start<=lastPos; )
         {
 	// uglyf("start %d %c%c%c\n", start, xDna[start], xDna[start+1], xDna[start+2]);
 	if (startsWith("atg", xDna+start))
 	    {
 	    end = findOrfEnd(xDna, frameDnaSize, start);
-	    applyOrf(start, end, xDna, xToN, array);
+	    applyOrf(start, end, xDna, xToN, array, arraySize);
 	    start = end;
 	    }
 	else
@@ -485,6 +489,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+// pushCarefulMemHandler(1024*1024*512*3);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
