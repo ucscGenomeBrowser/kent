@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.27 2007/03/15 23:25:09 angie Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.28 2007/03/16 23:50:19 galt Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -323,7 +323,7 @@ void doAdvFilterListCol(struct sqlConnection *conn, struct column *colList,
 	char *colName)
 /* List a column for genes matching advanced filter. */
 {
-struct genePos *gp, *list = NULL;
+struct genePos *gp, *list = NULL, *newList = NULL, *gpNext = NULL;
 struct column *col = findNamedColumn(colName);
 
 if (col == NULL)
@@ -343,14 +343,23 @@ else
     }
 
 /* Now lookup names and sort. */
-for (gp = list; gp != NULL; gp = gp->next)
+for (gp = list; gp != NULL; gp = gpNext)
     {
     char *oldName = gp->name;
     gp->name = col->cellVal(col, gp, conn);
+    gpNext = gp->next;
     if (gp->name == NULL)
-	errAbort("Unable to find cellVal for %s -- tables out of sync?",
+	{
+	warn("Unable to find cellVal for %s -- tables out of sync?",
 		 oldName);
+	}
+    else
+	{
+	slAddHead(&newList,gp);
+	}
+    
     }
+list = newList;
 slSort(&list, genePosCmpName);
 
 /* Display. */
