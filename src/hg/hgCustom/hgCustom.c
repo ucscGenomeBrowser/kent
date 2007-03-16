@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.113 2007/01/19 20:00:42 markd Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.114 2007/03/16 17:14:53 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -121,9 +121,9 @@ else
     gotClade = hGotClade();
 
 /* main form */
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" "
+printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
     " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
-    hgCustomName());
+    hgCustomName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
 if (!isUpdateForm)
@@ -581,8 +581,8 @@ if (assemblyMenu)
     }
 
 /* the main form contains a table of all tracks, with checkboxes to delete */
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n",
-           hgCustomName());
+printf("<FORM ACTION=\"%s\" METHOD=\"%s\" NAME=\"mainForm\">\n",
+           hgCustomName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
 if (assemblyMenu)
