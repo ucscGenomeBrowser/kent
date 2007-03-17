@@ -13,12 +13,13 @@
 #include "seqData.h"
 #include "pslData.h"
 #include "raData.h"
+#include "oiData.h"
 #include "pepData.h"
 #include "hash.h"
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.15 2007/02/18 22:13:32 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.16 2007/03/17 17:45:05 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -43,7 +44,7 @@ static unsigned gOrgCats;
 static boolean gInclVersion;
 static boolean gAllowMissing;
 static FILE* gMissingFh = NULL;
-static char* gGetWhat;  /* "seq", "psl", "intronPsl", "ra" */
+static char* gGetWhat;  /* "seq", "psl", "intronPsl", "ra", "oi" */
 static unsigned gGetState;  /* getting GB_PROCESSED | GB_ALIGNED */
 static char* gDatabase;
 
@@ -277,6 +278,8 @@ for (update = select->release->updates; update != NULL; update = update->next)
             seqDataProcessUpdate(select);
         else if (sameString(gGetWhat, "ra"))
             raDataProcessUpdate(select);
+        else if (sameString(gGetWhat, "oi"))
+            oiDataProcessUpdate(select);
         else
             pslDataProcessUpdate(select);
         gbVerbLeave(2, "process update: %s", update->name);
@@ -340,7 +343,7 @@ struct gbSelect* select;
 selectList = gbIndexGetPartitions(index, gGetState, gSrcDb, NULL,
                                   gType, gOrgCats, NULL);
 if (selectList == NULL)
-    errAbort("no matching release or types need, make sure -gbRoot is correct");
+    errAbort("no matching releases or types, make sure -gbRoot is correct");
 
 if (gPep)
     pepDataOpen(gInclVersion, outFile);
@@ -348,6 +351,8 @@ else if (sameString(gGetWhat, "seq"))
     seqDataOpen(gInclVersion, outFile);
 else if (sameString(gGetWhat, "ra"))
     raDataOpen(outFile);
+else if (sameString(gGetWhat, "oi"))
+    oiDataOpen(gInclVersion, outFile);
 else
     pslDataOpen(gGetWhat, gInclVersion, outFile);
 
@@ -360,6 +365,8 @@ else if (sameString(gGetWhat, "seq"))
     seqDataClose();
 else if (sameString(gGetWhat, "ra"))
     raDataClose();
+else if (sameString(gGetWhat, "oi"))
+    oiDataClose();
 else
     pslDataClose();
 slFreeList(&selectList);
@@ -377,7 +384,7 @@ errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "Get sequences or alignments of some partition GenBank or RefSeq.\n"
          "\n"
          " Options:\n"
-         "    -get=what - what is seq, psl, or intronPsl, ra.  Default is\n"
+         "    -get=what - what is seq, psl, intronPsl, ra, or oi.  Default is\n"
          "     seq.\n"
          "    -gbRoot=rootdir - specified the genbank root directory.  This\n"
          "     must contain the data/processed/ directory.  Defaults to \n"
@@ -405,7 +412,7 @@ errAbort("   gbGetSeqs [options] srcDb type outFile [ids ...]\n"
          "             others are PSLs.  It will be compressed if it ends\n"
          "             in .gz.\n"
          "     ids - If sequence ids are specified, only they are extracted.\n"
-         "           They may optionally include the version numnber.\n"
+         "           They may optionally include the version number.\n"
          "\n");
 }
 
@@ -449,8 +456,9 @@ gGetWhat = optionVal("get", "seq");
 if (!(sameString(gGetWhat, "seq")
       || sameString(gGetWhat, "psl")
       || sameString(gGetWhat, "intronPsl")
-      || sameString(gGetWhat, "ra")))
-    errAbort("invalid value for -get, expected seq, psl, intronPsl, or ra: %s",
+      || sameString(gGetWhat, "ra")
+      || sameString(gGetWhat, "oi")))
+    errAbort("invalid value for -get, expected seq, psl, intronPsl, ra, or oi: %s",
              gGetWhat);
 if (gPep && !sameString(gGetWhat, "seq"))
     errAbort("can only specify -get=seq with type of pep");
@@ -461,9 +469,18 @@ if ((sameString(gGetWhat, "psl") || sameString(gGetWhat, "intronPsl")))
         errAbort("must specify -db to get psl alignments");
     gGetState = GB_ALIGNED;
     }
+else if (sameString(gGetWhat, "oi"))
+    {
+    if (gDatabase == NULL)
+        errAbort("must specify -db with -get=oi");
+    if (!optionExists("native"))
+        errAbort("must specify -native with -get=oi");
+    if (optionExists("xeno"))
+        errAbort("can not specify -xeno with -get=oi");
+    gGetState = GB_ALIGNED;
+    }
 else
     gGetState = GB_PROCESSED;
-
 if (optionExists("accFile"))
     loadAccSelectFile(optionVal("accFile", NULL));
 
