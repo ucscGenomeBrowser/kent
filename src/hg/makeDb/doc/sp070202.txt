@@ -38,13 +38,16 @@ end
 # Changed organelle.val from varchar to longblob.
 # sp070202.organelle: Records: 3553  Deleted: 0  Skipped: 0  Warnings: 0
 
-# Add varsplic info 
+# Add varsplice info 
 zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp070202 stdin .
-hgsql sp070202 -e 'load data local infile "varProtein.txt" into table varProtein'
-hgsql sp070202 -e 'load data local infile "varProtein.txt" into table protein'
-hgsql sp070202 -e 'load data local infile "varAcc.txt" into table varAcc'
-hgsql sp070202 -e 'load data local infile "varDisplayId.txt" into table displayId'
-hgsql sp070202 -e 'load data local infile "varAccToTaxon.txt" into table accToTaxon'
+hgLoadSqlTab sp070202 -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp070202 -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp070202 -append varAcc /dev/null varAcc.txt
+hgLoadSqlTab sp070202 -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp070202 -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp070202 -append geneLogic /dev/null varGeneLogic.txt
+hgLoadSqlTab sp070202 -append gene /dev/null varGene.txt
+hgLoadSqlTab sp070202 -append description /dev/null varDescription.txt
 
 # Zip up tab files for people who prefer them to database.
 gzip *.txt
