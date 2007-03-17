@@ -246,6 +246,7 @@ cat << '_EOF_' > borf
 /cluster/bin/x86_64/bestorf /cluster/bin/x86_64/bestorf_hume.dat $1
 '_EOF_'
 chmod a+x borf
+cd ..
 
 # Do borf cluster run 
 ssh pk "cd /cluster/data/hg18/bed/jkg/bestorf; para make spec; para time"
@@ -351,15 +352,13 @@ txCdsEvFromProtein refPep.fa blat/protein/refSeq.psl abWalk.fa \
 txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl abWalk.fa \
 	cdsEvidence/uniProt.tce -uniStatus=uniCurated.tab \
 	-unmapped=cdsEvidence/uniProt.unmapped -source=tremble
-cat bestorf/tab/*.borf | txCdsEvFromBorf stdin abWalk.fa cdsEvidence/bestorf.tce
+cat bestorf/tab/*.borf > all.borf
+txCdsEvFromBorf all.borf abWalk.fa cdsEvidence/bestorf.tce
 
 # Consolidate CDS and look for longest ORFs in other species.  Takes 40 seconds
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 cut -f 1-3 unweighted.tce | uniq > cdsIntervals.tab
 cat txWalk/*.maf | txCdsOrtho cdsIntervals.tab stdin cdsOrtho.tab
-
-# Generate data for SVM.
-cat txWalk/*.bed | txCdsSvmInput stdin unweighted.tce cdsOrtho.tab svm.list svm.vector
 
 # Pick best CDS. Take 4 seconds
 cp ~/kent/src/hg/txCds/txCdsPick/cds.weights .
@@ -375,7 +374,6 @@ cat txWalk/*.bed antibody.bed | txCdsToGene stdin abWalk.fa pick.tce pick.gtf pi
 	-bedOut=pick.bed -exceptions=txWalk.exceptions
 
 # Create gene info table. Takes 8 seconds
-cat bestorf/tab/*.borf > all.borf
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
 cat mrna/*.psl refSeq/*.psl | txInfoAssemble pick.bed pick.tce all.borf \
 	altSplice.bed txWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
@@ -386,7 +384,7 @@ txCdsCluster pick.bed pick.cluster
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
 # Map CDS to gene set.  Takes 10 seconds
 txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
-txCdsWeed pick.tce pick.info weeded.tce weededCds.info
+txCdsWeed pick.tce pick.info cdsOrtho.tab weededCds.tce weededCds.info
 cat txWalk/*.bed antibody.bed | txCdsToGene stdin abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=txWalk.exceptions
 
@@ -394,13 +392,13 @@ cat txWalk/*.bed antibody.bed | txCdsToGene stdin abWalk.fa weededCds.tce weeded
 # Generate new gene set that weeds out the junkiest. Takes 9 seconds.
 txGeneSeparateNoncoding weededCds.bed weededCds.info \
 	coding.bed nearCoding.bed nearCodingJunk.bed antisense.bed noncoding.bed separated.info
-cat coding.bed nearCoding.bed antisense.bed noncoding.bed | \
-    txCdsToGene stdin abWalk.fa weededCds.tce weeded.gtf weeded.faa \
-        -bedOut=weeded.bed -exceptions=txWalk.exceptions
 awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
+cat coding.bed nearCoding.bed antisense.bed noncoding.bed > weeded.bed
+txGeneFromBed weeded.bed pick.picks weeded.gp
 
-
+# Generate data for SVM.
+cat txWalk/*.bed | txCdsSvmInput stdin unweighted.tce cdsOrtho.tab separated.info svm.list svm.vector
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
@@ -638,10 +636,10 @@ ldHgGene hg18 jkgTxCdsPick pick.gtf -gtf -genePredExt
 hgLoadCdsEvidence hg18 jkgTxCdsEvidence weighted.tce
 hgLoadSqlTab hg18 jkgTxInfo ~/kent/src/hg/lib/txInfo.sql separated.info
 ldHgGene hg18 jkgTxCdsRepick weededCds.gtf -gtf -genePredExt
-ldHgGene hg18 jkgUcscGenes weeded.gtf -gtf -genePredExt
+hgLoadSqlTab hg18 jkgUcscGenes ~/kent/src/hg/lib/knownGene.sql weeded.gp
 
 ###########################################################################
-## Load take 7 into the database. Takes 30 seconds.
+## Load take 10 into the database. Takes 30 seconds.
 ssh hgwdev
 cd /cluster/data/hg18/bed/jkg
 cat refSeq/*.psl | hgLoadPsl hg18 stdin -table=jkgInputRefSeq2
@@ -650,17 +648,18 @@ hgLoadBed hg18 jkgRefSeqBed2 refSeq/*.bed
 hgLoadBed hg18 jkgMrnaBed2 mrna/*.bed
 hgLoadBed hg18 jkgAntibodyBed2 antibody.bed
 cat refSeq/*.unusual | cut -f 1-4 |  hgLoadBed hg18 jkgRefSeqUnusual2  stdin
-cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18a jkgNativeGraph2 stdin
+cat bedToGraph/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb -sqlTable=jkgNativeGraph2.sql hg18 jkgNativeGraph2 stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoExons2 stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' txOrtho/edges/*.edges | hgLoadBed hg18 jkgOrthoIntrons2 stdin
 awk '$8=="exon" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstExons2 stdin
 awk '$8=="intron" {print $1,$2,$3,$4,$5,$6}' est/*.edges | hgLoadBed hg18 jkgEstIntrons2 stdin
-hgLoadBed -strict hg18 jkgTxWalk2 txWalk/*.bed
+hgLoadBed -strict hg18 jkgTxWalk2 abWalk.bed
 hgLoadBed hg18 jkgAltSplice2 altSplice.bed
 ldHgGene hg18 jkgTxCdsPick2 pick.gtf -gtf -genePredExt
-hgLoadCdsEvidence hg18 jkgTxCdsEvidence2 weighted.tce
+hgLoadCdsEvidence hg18 jkgTxCdsEvidence2 unweighted.tce
 hgLoadSqlTab hg18 jkgTxInfo2 ~/kent/src/hg/lib/txInfo.sql separated.info
-ldHgGene hg18 jkgTxCdsRepick2 weeded.gtf -gtf -genePredExt
+ldHgGene hg18 jkgTxCdsRepick2 weededCds.gtf -gtf -genePredExt
+hgLoadSqlTab hg18 jkgUcscGenes2 ~/kent/src/hg/lib/knownGene.sql weeded.gp
 
 
 ###########################################################################
@@ -1310,3 +1309,16 @@ SVM STUFF
 cat txWalk/*.bed | txCdsSvmInput stdin NR_unweighted.tce cdsOrtho.tab -bad bad.lst train.vector
 cat txWalk/*.bed | txCdsSvmInput stdin NM_unweighted.tce cdsOrtho.tab -good good.lst stdout | randomLines stdin 604 stdout >> train.vector
 svm_learn train.vector train.model
+#######################
+Issues for take 10
+chr10:70,562,806-70,562,873 - Here a refSeq peptide gets mapped, somehow
+    forces a geomic frame shift up throughthe remapping.  This gets lost in the
+    final gene set though....  This is back more or less.  The shifted codon
+    in the mRNA gets cut out.  This is reasonable now.
+chr14:104,277,141-104,277,163 - Another case where boundaries wiggle in
+    ucscGenes vs cds Mappings....  In this case no "genomic frame shift"
+    Still does involve using a refPepValidated that's in two frames though.
+chr21.490.2.AK128598 chr21:44,050,073-44,056,876 - A case with CDS in
+    long exon bleed. Should be flagged for NMD but isn't.
+NM_014638 Another case where boundaries shift in ucscGenes vs. cds mappings.
+    fixed.
