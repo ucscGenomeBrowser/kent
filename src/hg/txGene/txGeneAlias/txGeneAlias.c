@@ -9,7 +9,7 @@
 #include "kgXref.h"
 
 
-static char const rcsid[] = "$Id: txGeneAlias.c,v 1.2 2007/03/03 16:25:34 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAlias.c,v 1.3 2007/03/17 18:54:29 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -117,18 +117,21 @@ while (lineFileRowTab(lf, words))
 	}
     /* Throw in gene names from genbank. */
     /* At some point we may want to restrict this to the primary transcript in a cluster. */
-    ev = hashMustFindVal(evHash,  id);
-    int i;
-    for (i=0; i<ev->accCount; ++i)
-        {
-	safef(query, sizeof(query), "select geneName from gbCdnaInfo where acc='%s'", acc);
-	int nameId = sqlQuickNum(gConn, query);
-	if (nameId != 0)
+    ev = hashFindVal(evHash,  id);
+    if (ev != NULL)
+	{
+	int i;
+	for (i=0; i<ev->accCount; ++i)
 	    {
-	    char name[64];
-	    safef(query, sizeof(query), "select name from geneName where id=%d", nameId);
-	    if (sqlQuickQuery(gConn, query, name, sizeof(name)))
-	        outAlias(fAlias, id, name);
+	    safef(query, sizeof(query), "select geneName from gbCdnaInfo where acc='%s'", acc);
+	    int nameId = sqlQuickNum(gConn, query);
+	    if (nameId != 0)
+		{
+		char name[64];
+		safef(query, sizeof(query), "select name from geneName where id=%d", nameId);
+		if (sqlQuickQuery(gConn, query, name, sizeof(name)))
+		    outAlias(fAlias, id, name);
+		}
 	    }
 	}
 
