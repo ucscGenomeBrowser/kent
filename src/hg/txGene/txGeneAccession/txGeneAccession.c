@@ -6,9 +6,31 @@
 #include "bed.h"
 #include "binRange.h"
 #include "rangeTree.h"
+#include "sqlNum.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.10 2007/03/08 05:45:20 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.11 2007/03/17 05:37:28 kent Exp $";
+
+void idToAcc(int id, char acc[16])
+/* Convert ID to accession. */
+{
+if (id >= 17576000)
+    errAbort("Out of accessions!");
+acc[8] = 0;
+acc[7] = id%26 + 'a';
+id /= 26;
+acc[6] = id%26 + 'a';
+id /= 26;
+acc[5] = id%26 + 'a';
+id /= 26;
+acc[4] = id%10 + '0';
+id /= 10;
+acc[3] = id%10 + '0';
+id /= 10;
+acc[2] = id%10 + '0';
+acc[1] = 'c';
+acc[0] = 'u';
+}
 
 void usage()
 /* Explain usage and exit. */
@@ -244,7 +266,8 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	if (oldBed == NULL)
 	    {
 	    char newAcc[16];
-	    safef(newAcc, sizeof(newAcc), "TX%08d", ++txId);
+	    idToAcc(++txId, newAcc);
+	    strcat(newAcc, ".1");
 	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);
 	    hashAdd(idToAccHash, newBed->name, newAcc);
 	    oldBed = findMostOverlapping(newBed, oldHash);
@@ -254,11 +277,19 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	    }
 	else
 	    {
+	    char *acc = cloneString(oldBed->name);
+	    char *ver = strchr(oldBed->name, '.');
+	    if (ver == NULL)
+	        errAbort("No version found in %s", oldBed->name);
+	    *ver++ = 0;
+	    int version = sqlUnsigned(ver);
+	    char newAcc[16];
+	    safef(newAcc, sizeof(newAcc), "%s.%d", acc, version+1);
 	    hashAdd(usedHash, oldBed->name, NULL);
-	    fprintf(f, "%s\t%s\n", newBed->name, oldBed->name);
-	    hashAdd(idToAccHash, newBed->name, oldBed->name);
+	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);
+	    hashAdd(idToAccHash, newBed->name, newAcc);
 	    fprintf(fOld, "%s:%d-%d\t%s\t%s\t%s\n", newBed->chrom, newBed->chromStart, newBed->chromEnd,
-	    	oldBed->name, oldBed->name, "compatible");
+	    	oldBed->name, newAcc, "compatible");
 	    }
 	}
     }
