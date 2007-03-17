@@ -1,3 +1,10 @@
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 9
+visibility hide
+
 # Local declaration so that local gold.html is picked up.
 track gold
 shortLabel Assembly
@@ -31,4 +38,3 @@ cdsDrawOptions enabled
 baseColorUseCds genbank
 baseColorUseSequence genbank
 showDiffBasesAllScales .
-
