@@ -8,9 +8,10 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "txInfo.h"
+#include "txCommon.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.2 2007/03/04 10:43:42 kent Exp $";
+static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.3 2007/03/17 22:40:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -67,11 +68,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     bioSeq *txSeq, *protSeq;
     if (info->isRefSeq)
         {
-	/* Parse out refSeq accession. */
-	char *refAcc = strrchr(bed->name, '.');
-	if (refAcc == NULL)
-	    errAbort("Can't find last period in %s", bed->name);
-	refAcc += 1;
+	char *refAcc = txAccFromTempName(bed->name);
 	if (!startsWith("NM_", refAcc))
 	    errAbort("Don't think I did find that refSeq acc, got %s", refAcc);
 
