@@ -7,11 +7,11 @@
 #include "cdsEvidence.h"
 #include "cdsPick.h"
 #include "bed.h"
+#include "txCommon.h"
 
 /* Variables set via command line. */
-struct hash *refToPepHash = NULL;
-struct hash *pepToRefHash = NULL;
 FILE *exceptionsOut = NULL;
+double threshold = 617.9;
 
 void usage()
 /* Explain usage and exit. */
@@ -19,33 +19,38 @@ void usage()
 errAbort(
   "txCdsPick - Pick best CDS if any for transcript given evidence.\n"
   "usage:\n"
-  "   txCdsPick in.bed in.tce in.weights out.tce out.cdsPick\n"
+  "   txCdsPick in.bed in.tce refToPep.tab out.tce out.cdsPick\n"
   "where:\n"
   "   in.bed is the input transcripts, often from txWalk\n"
   "   in.tce is the evidence in cdsEvidence format\n"
-  "   in.weights is a file describing how to weigh each source\n"
-  "              of evidence. Columns are source, weight.\n"
+  "   refToPep.tab is a two column file with refSeq mRNA ids in first\n"
+  "          column and refSeq protein id's in the second column\n"
   "   out.tce is best cdsEvidence line for coding transcripts, with\n"
-  "              weight adjusted\n"
+  "              weight adjusted for refSeq hits\n"
   "   out.cdsPick is a tab-separated file in cdsPick format for all transcripts\n"
   "options:\n"
-  "   -weightedTce=weighted.tce - output all weighted cdsEvidence here\n"
-  "   -refToPep=refToPep.tab - lets refSeq mappings to associated protein have\n"
-  "              higher priority.  Highly recommended.\n"
   "   -exceptionsIn=exceptions.tab - input exceptions. A file with info on\n"
   "            selenocysteine and other exceptions.  You get this file by running\n"
   "            files txCdsRaExceptions on ra files parsed out of genbank flat\n"
   "            files.\n"
   "   -exceptionsOut=exceptions.tab - output exceptions. In same format as\n"
   "            input exceptions\n"
+  "   -threshold=0.N - Set score threshold to be a protein. Default %f\n"
+  "            This is calculated for maximum separation of negative and\n"
+  "            positive examples in training set using bestThreshold on\n"
+  "            txCdsPredict scores.\n"
+  , threshold
   );
 }
 
+double refSeqWeight = 100000;
+double txCdsPredictWeight = 10000;
+double weightedThreshold;
+
 static struct optionSpec options[] = {
-   {"weightedTce", OPTION_STRING},
-   {"refToPep", OPTION_STRING},
    {"exceptionsIn", OPTION_STRING},
    {"exceptionsOut", OPTION_STRING},
+   {"threshold", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -64,51 +69,20 @@ else
     selenocysteineHash = altStartHash = hashNew(4);
 }
 
-struct weight
-/* A named weight. */
-    {
-    char *type;		/* Not allocated here */
-    double value;	/* Weight value */
-    };
-
-struct hash *hashWeights(char *in)
-/* Return hash full of weights. */
+void hashRefToPep(char *fileName, struct hash **retRefToPep, struct hash **retPepToRef)
+/* Return hash with protein keys and peptide values. */
 {
-struct lineFile *lf = lineFileOpen(in, TRUE);
-char *row[2];
-struct hash *hash = hashNew(0);
-while (lineFileRow(lf, row))
-    {
-    struct weight *weight;
-    AllocVar(weight);
-    weight->value = lineFileNeedDouble(lf, row, 1);
-    hashAddSaveName(hash, row[0], weight, &weight->type);
-    }
-lineFileClose(&lf);
-return hash;
-}
-
-double weightFromHash(struct hash *hash, char *name)
-/* Find weight given name. */
-{
-struct weight *weight = hashFindVal(hash, name);
-if (weight == NULL)
-    errAbort("Can't find %s in weight file", name);
-return weight->value;
-}
-
-void hashRefToPep(char *fileName)
-/* Create refToPep and pepToRef hashes from reading file. */
-{
-refToPepHash = hashNew(19);
-pepToRefHash = hashNew(19);
+struct hash *pepToRefHash = hashNew(19);
+struct hash *refToPepHash = hashNew(19);
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 while (lineFileRow(lf, row))
     {
-    hashAdd(refToPepHash, row[0], cloneString(row[1]));
     hashAdd(pepToRefHash, row[1], cloneString(row[0]));
+    hashAdd(refToPepHash, row[0], cloneString(row[1]));
     }
+*retRefToPep = refToPepHash;
+*retPepToRef = pepToRefHash;
 }
 
 struct txCdsInfo
@@ -119,16 +93,8 @@ struct txCdsInfo
     struct cdsEvidence *cdsList; /* List of cds evidence. */
     };
 
-int cdsEvidenceCmpScore(const void *va, const void *vb)
-/* Compare to sort based on score (descending). */
-{
-const struct cdsEvidence *a = *((struct cdsEvidence **)va);
-const struct cdsEvidence *b = *((struct cdsEvidence **)vb);
-return b->score - a->score;
-}
-
-struct hash *loadAndWeighTce(char *fileName, struct hash *weightHash,
-	char *outTce)
+struct hash *loadAndWeighTce(char *fileName, struct hash *refToPepHash,
+	struct hash *pepToRefHash)
 /* Load transcript cds evidence from file into hash of
  * txCdsInfo. */
 {
@@ -141,6 +107,7 @@ while  (lineFileRow(lf, row))
     {
     /* Convert row to cdsEvidence structure. */
     struct cdsEvidence *cds = cdsEvidenceLoad(row);
+    char *acc = txAccFromTempName(cds->name);
 
     tx = hashFindVal(hash, cds->name);
     if (tx == NULL)
@@ -149,48 +116,30 @@ while  (lineFileRow(lf, row))
 	hashAddSaveName(hash, cds->name, tx, &tx->name);
 	slAddHead(&txList, tx);
 	}
-    cds->score *= weightFromHash(weightHash, cds->source);
-    cds->score *= (cds->end - cds->start) * 0.01;
-    if (!cds->startComplete)
-        cds->score *= 0.95;
-    if (!cds->endComplete)
-        cds->score *= 0.95;
-    int pieces = cds->cdsCount;
-    cds->score *= 2.0/(pieces*pieces*pieces);
-
-    /* Parse accession out of name.  I wish this were a proper field.... */
-    char *acc = strrchr(cds->name, '.');
-    if (acc == NULL)
-	errAbort("Can't find . before accession line %d of %s", 
-		lf->lineIx, lf->fileName);
-    acc += 1;	/* Skip over accession part. */
-    int accLen = strlen(acc);
-    if (accLen < 6 || accLen > 16)
-        errAbort("%s doesn't seem to be an accession line %d of %s",
-		acc, lf->lineIx, lf->fileName);
 
     /* Track whether it's refSeq, and the associated protein. */
     char *refSeqAcc = NULL, *refPepAcc = NULL;
-    if (refToPepHash != NULL)
-        {
-	refPepAcc = hashFindVal(refToPepHash, acc);
-	if (refPepAcc != NULL)
-	    refSeqAcc = acc;
-	}
+
+    refPepAcc = hashFindVal(refToPepHash, acc);
+    refSeqAcc = hashFindVal(pepToRefHash, acc);
+    if (refPepAcc != NULL && refSeqAcc == NULL)
+	refSeqAcc = acc;
+    if (refSeqAcc != NULL && refPepAcc == NULL)
+        refPepAcc = acc;
 
     /* If we are refSeq, bump our score for matches to our own 
      * bits by a huge factor. */
-    if (refSeqAcc != NULL && startsWith("RefSeq", cds->source) 
-    	&& sameString(cds->accession, refSeqAcc))
-	cds->score += 1000000;
     if (refPepAcc != NULL && startsWith("RefPep", cds->source)
         && sameString(cds->accession, refPepAcc))
-	cds->score += 1000000;
+	cds->score += refSeqWeight;
+    if (refSeqAcc != NULL && startsWith("RefSeq", cds->source)
+        && sameString(cds->accession, refSeqAcc))
+	cds->score += refSeqWeight + 100;
 
-    /* If we are Genbank, and the same as this gene, then bump
-     * score a more modest amount. */
-    if (sameString("genbankCds", cds->source) && sameString(cds->accession, acc))
-        cds->score *= 1.2;
+    /* If we are txCdsPredict bump weight too.  Only RefSeq and txCdsPredict
+     * can actually possibly make it over real threshold. */
+    if (sameString("txCdsPredict", cds->source))
+        cds->score += txCdsPredictWeight;
     slAddHead(&tx->cdsList, cds);
     }
 lineFileClose(&lf);
@@ -198,50 +147,30 @@ slReverse(&txList);
 
 /* Sort all cdsLists by score. */
 for (tx = txList; tx != NULL; tx = tx->next)
-    {
     slSort(&tx->cdsList, cdsEvidenceCmpScore);
-    }
-
-/* Optionally output all weighted evidence. */
-char *weightedTce = optionVal("weightedTce", NULL);
-if (weightedTce != NULL)
-    {
-    FILE *f = mustOpen(weightedTce, "w");
-    for (tx = txList; tx != NULL; tx = tx->next)
-	{
-	struct cdsEvidence *cds;
-	for (cds = tx->cdsList; cds != NULL; cds = cds->next)
-	     cdsEvidenceTabOut(cds, f);
-	}
-    carefulClose(&f);
-    }
 
 return hash;
 }
 
-void transferExceptions(char *inName, char *inSource, char *outName, FILE *f)
+void transferExceptions(char *inName, char *inSource, struct hash *pepToRefHash,
+	char *outName, FILE *f)
 /* Write out exceptions attatched to inName to file, this time
  * attached to outName. */
 {
-if (pepToRefHash && startsWith("RefPep", inSource))
-    {
-    inName = hashFindVal(pepToRefHash, inName);
-    if (inName == NULL)
-        return;
-    }
+if (startsWith("RefPep", inSource))
+    inName = hashMustFindVal(pepToRefHash, inName);
 if (hashLookup(selenocysteineHash, inName))
     fprintf(f, "%s\tselenocysteine\tyes\n", outName);
 if (hashLookup(altStartHash, inName))
     fprintf(f, "%s\texception\talternative_start_codon\n", outName);
 }
 
-void txCdsPick(char *inBed, char *inTce, char *inWeights, 
-	char *outTce, char *outPick)
+void txCdsPick(char *inBed, char *inTce, char *refToPepTab, char *outTce, char *outPick)
 /* txCdsPick - Pick best CDS if any for transcript given evidence.. */
 {
-struct hash *weightHash = hashWeights(inWeights);
-verbose(2, "Read %d weights from %s\n", weightHash->elCount, inWeights);
-struct hash *txCdsInfoHash = loadAndWeighTce(inTce, weightHash, outTce);
+struct hash *pepToRefHash, *refToPepHash;
+hashRefToPep(refToPepTab, &refToPepHash, &pepToRefHash);
+struct hash *txCdsInfoHash = loadAndWeighTce(inTce, refToPepHash, pepToRefHash);
 verbose(2, "Read info on %d transcripts from %s\n", 
 	txCdsInfoHash->elCount, inTce);
 struct lineFile *lf = lineFileOpen(inBed, TRUE);
@@ -255,8 +184,8 @@ while (lineFileRow(lf, row))
     struct cdsPick pick;
     ZeroVar(&pick);
     pick.name = bed->name;
-    pick.refSeq = pick.refProt = pick.swissProt = pick.uniProt = pick.genbank = "";
-    if (tx != NULL && tx->cdsList->score >= 2000)
+    pick.refSeq = pick.refProt = pick.swissProt = pick.uniProt = "";
+    if (tx != NULL && tx->cdsList->score >= weightedThreshold)
         {
 	struct cdsEvidence *cds, *bestCds = tx->cdsList;
 	int bestSize = bestCds->end - bestCds->start;
@@ -274,27 +203,28 @@ while (lineFileRow(lf, row))
 	    if (rangeIntersection(bestCds->start, bestCds->end, cds->start, cds->end)
 	    	>= minSize)
 		{
-		if (startsWith("RefSeq", source) && pick.refSeq[0] == 0)
-		    pick.refSeq = cds->accession;
-		else if (startsWith("RefPep", source) && pick.refProt[0] == 0)
+		if (startsWith("RefPep", source) && pick.refProt[0] == 0)
+		    {
 		    pick.refProt = cds->accession;
+		    pick.refSeq = hashMustFindVal(pepToRefHash, cds->accession);
+		    }
+		else if (startsWith("RefSeq", source) && pick.refSeq[0] == 0)
+		    {
+		    }
 		else if (sameString("swissProt", source) && pick.swissProt[0] == 0)
 		    {
 		    pick.swissProt = cds->accession;
 		    if (pick.uniProt[0] == 0)
 		        pick.uniProt = cds->accession;
 		    }
-		else if (sameString("genbankCds", source) && pick.genbank[0] == 0)
-		    pick.genbank = cds->accession;
-		else if (sameString("tremble", source) && pick.uniProt[0] == 0)
+		else if (sameString("trembl", source) && pick.uniProt[0] == 0)
 		    pick.uniProt = cds->accession;
-		else if (sameString("bestorf", source))
-		    pick.wBorfScore = cds->score;
 		}
 	    }
 
 	if (exceptionsOut)
-	    transferExceptions(bestCds->accession, bestCds->source, bed->name, exceptionsOut);
+	    transferExceptions(bestCds->accession, bestCds->source, pepToRefHash,
+	    	bed->name, exceptionsOut);
 	}
     else
         {
@@ -313,8 +243,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
-if (optionExists("refToPep"))
-    hashRefToPep(optionVal("refToPep", NULL));
 makeExceptionHashes();
 char *fileName = optionVal("exceptionsOut", NULL);
 if (fileName != NULL)
@@ -323,6 +251,8 @@ if (fileName != NULL)
     if (!optionExists("exceptionsIn"))
         errAbort("Must use exceptionsIn flag with exceptionsOut.");
     }
+threshold = optionDouble("threshold", threshold);
+weightedThreshold = threshold + txCdsPredictWeight;
 txCdsPick(argv[1], argv[2], argv[3], argv[4], argv[5]);
 carefulClose(&exceptionsOut);
 return 0;
