@@ -9,15 +9,13 @@ CREATE TABLE cdsPick (
     start int not null,	# CDS start within transcript, zero based
     end int not null,	# CDS end, non-inclusive
     source varchar(255) not null,	# Source of best evidence
-    score double not null,	# Higher is better. Typically from 0 to 30000
+    score double not null,	# Higher is better.
     startComplete tinyint unsigned not null,	# Starts with ATG?
     endComplete tinyint unsigned not null,	# Ends with stop codon?
     swissProt varchar(255) not null,	# Matching swissProt if available.
     uniProt varchar(255) not null,	# Matching uniProt if available.
     refProt varchar(255) not null,	# RefSeq protein if available.
     refSeq varchar(255) not null,	# RefSeq transcript if available.
-    genbank varchar(255) not null,	# Best scoring genbank accession.
-    wBorfScore double not null,	# Reweighted bestorf score.
               #Indices
     PRIMARY KEY(name)
 );

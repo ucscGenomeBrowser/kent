@@ -5,7 +5,7 @@
 #ifndef CDSPICK_H
 #define CDSPICK_H
 
-#define CDSPICK_NUM_COLS 13
+#define CDSPICK_NUM_COLS 11
 
 struct cdsPick
 /* Information on CDS that we picked from competing cdsEvidence */
@@ -15,15 +15,13 @@ struct cdsPick
     int start;	/* CDS start within transcript, zero based */
     int end;	/* CDS end, non-inclusive */
     char *source;	/* Source of best evidence */
-    double score;	/* Higher is better. Typically from 0 to 30000 */
+    double score;	/* Higher is better. */
     unsigned char startComplete;	/* Starts with ATG? */
     unsigned char endComplete;	/* Ends with stop codon? */
     char *swissProt;	/* Matching swissProt if available. */
     char *uniProt;	/* Matching uniProt if available. */
     char *refProt;	/* RefSeq protein if available. */
     char *refSeq;	/* RefSeq transcript if available. */
-    char *genbank;	/* Best scoring genbank accession. */
-    double wBorfScore;	/* Reweighted bestorf score. */
     };
 
 void cdsPickStaticLoad(char **row, struct cdsPick *ret);

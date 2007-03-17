@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "cdsPick.h"
 
-static char const rcsid[] = "$Id: cdsPick.c,v 1.1 2007/02/20 18:28:02 kent Exp $";
+static char const rcsid[] = "$Id: cdsPick.c,v 1.2 2007/03/17 22:35:28 kent Exp $";
 
 void cdsPickStaticLoad(char **row, struct cdsPick *ret)
 /* Load a row from cdsPick table into ret.  The contents of ret will
@@ -26,8 +26,6 @@ ret->swissProt = row[7];
 ret->uniProt = row[8];
 ret->refProt = row[9];
 ret->refSeq = row[10];
-ret->genbank = row[11];
-ret->wBorfScore = sqlDouble(row[12]);
 }
 
 struct cdsPick *cdsPickLoad(char **row)
@@ -48,8 +46,6 @@ ret->swissProt = cloneString(row[7]);
 ret->uniProt = cloneString(row[8]);
 ret->refProt = cloneString(row[9]);
 ret->refSeq = cloneString(row[10]);
-ret->genbank = cloneString(row[11]);
-ret->wBorfScore = sqlDouble(row[12]);
 return ret;
 }
 
@@ -59,7 +55,7 @@ struct cdsPick *cdsPickLoadAll(char *fileName)
 {
 struct cdsPick *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -77,7 +73,7 @@ struct cdsPick *cdsPickLoadAllByChar(char *fileName, char chopper)
 {
 struct cdsPick *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -109,8 +105,6 @@ ret->swissProt = sqlStringComma(&s);
 ret->uniProt = sqlStringComma(&s);
 ret->refProt = sqlStringComma(&s);
 ret->refSeq = sqlStringComma(&s);
-ret->genbank = sqlStringComma(&s);
-ret->wBorfScore = sqlDoubleComma(&s);
 *pS = s;
 return ret;
 }
@@ -128,7 +122,6 @@ freeMem(el->swissProt);
 freeMem(el->uniProt);
 freeMem(el->refProt);
 freeMem(el->refSeq);
-freeMem(el->genbank);
 freez(pEl);
 }
 
@@ -181,12 +174,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->refSeq);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->genbank);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%g", el->wBorfScore);
 fputc(lastSep,f);
 }
 
