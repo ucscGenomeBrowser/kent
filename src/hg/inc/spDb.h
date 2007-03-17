@@ -21,7 +21,7 @@
 #define UNIPROT_DB_NAME  "uniProt"
 #define PROTEOME_DB_NAME "proteome"
 
-typedef char SpAcc[9];	/* Enough space for accession and 0 terminator. */
+typedef char SpAcc[12];	/* Enough space for accession and 0 terminator. */
 
 struct spFeature
 /* A swissProt feature - that is an annotation attatched to
