@@ -13,7 +13,7 @@
 #include "rangeTree.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsPredict.c,v 1.7 2007/03/16 17:48:40 kent Exp $";
+static char const rcsid[] = "$Id: txCdsPredict.c,v 1.8 2007/03/17 03:31:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -223,6 +223,9 @@ struct cdsEvidence *createCds(struct dnaSeq *seq, int start, int end,
 {
 struct cdsEvidence *orf;
 AllocVar(orf);
+int size = end - start;
+size -= size % 3;
+end = start + size;
 orf->name = cloneString(seq->name);
 orf->start = start;
 orf->end = end;
@@ -236,7 +239,7 @@ orf->cdsCount = 1;
 AllocArray(orf->cdsStarts, 1);
 orf->cdsStarts[0] = start;
 AllocArray(orf->cdsSizes, 1);
-orf->cdsSizes[0] = end - start;
+orf->cdsSizes[0] = size;
 return orf;
 }
 
