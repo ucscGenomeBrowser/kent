@@ -10,7 +10,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.3 2007/03/06 04:38:10 kent Exp $";
+static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.4 2007/03/17 18:12:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,11 +45,15 @@ void spDbAddVarSplice(char *database, char *inFile, char *outDir)
 /* spDbAddVarSplice - This adds information on the varient splices to the sp/uniProt database. */
 {
 struct sqlConnection *conn = sqlConnect(database);
+char query[256];
 makeDir(outDir);
 FILE *varProtein = openToWrite(outDir, "varProtein.txt");
 FILE *varAcc = openToWrite(outDir, "varAcc.txt");
 FILE *varDisplayId = openToWrite(outDir, "varDisplayId.txt");
 FILE *varAccToTaxon = openToWrite(outDir, "varAccToTaxon.txt");
+FILE *varDescription = openToWrite(outDir, "varDescription.txt");
+FILE *varGene = openToWrite(outDir, "varGene.txt");
+FILE *varGeneLogic = openToWrite(outDir, "varGeneLogic.txt");
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 aaSeq seq;
 ZeroVar(&seq);
@@ -61,18 +65,21 @@ while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         errAbort("Expecting name to be in format accession-N|DISP_ID, got %s\n", seq.name);
     chopString(seq.name, "-|", row, ArraySize(row));
     char *acc = row[0];
-    int accLen = strlen(acc);
     char *version = row[1];
     char *displayId = row[2];
+    int accLen = strlen(acc);
+    int verLen = strlen(version);
     int displayIdLen = strlen(displayId);
 
     /* Do some tests. */
     if (accLen < 6 || accLen > 8 || isdigit(acc[0]) || !isdigit(acc[accLen-1]))
         errAbort("wierd accession %s before line %d of %s", acc, lf->lineIx, lf->fileName);
-    if (!isdigit(version[0]) || strlen(version) > 4)
+    if (!isdigit(version[0]) || verLen > 4)
         errAbort("wierd version %s before line %d of %s", version, lf->lineIx, lf->fileName);
     if (countChars(displayId, '_') != 1 || displayIdLen < 6 || displayIdLen > 16)
         errAbort("wierd displayId %s before line %d of %s", displayId, lf->lineIx, lf->fileName);
+    if (accLen + 1 + verLen >= sizeof(SpAcc))
+        errAbort("Need to increase size of SpAcc in spDb.h because of %s-%s", acc, version);
 
     /* Print out parsed results. */
     fprintf(varAcc, "%s-%s\t%s\t%s\n", acc, version, acc, version);
@@ -82,11 +89,33 @@ while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     /* Look up taxon of base protein and use it to write to varAccToTaxon table. */
     int taxon = spTaxon(conn, acc);
     fprintf(varAccToTaxon, "%s-%s\t%d\n", acc, version, taxon);
+
+    /*Transfer description. */
+    char *description = spDescription(conn, acc);
+    fprintf(varDescription, "%s-%s\t%s\n", acc, version, description);
+    freez(&description);
+
+    /* Transfer gene logic. */
+    safef(query, sizeof(query), "select val from geneLogic where acc = '%s'", acc);
+    char *geneLogic = sqlQuickString(conn, query);
+    if (geneLogic != NULL)
+        fprintf(varGeneLogic, "%s-%s\t%s\n", acc, version, geneLogic);
+    freez(&geneLogic);
+
+    /* Transfer genes. */
+    struct slName *gene, *geneList = spGenes(conn, acc);
+    for (gene = geneList; gene != NULL; gene = gene->next)
+        fprintf(varGene, "%s-%s\t%s\n", acc, version, gene->name);
+    slFreeList(&geneList);
+
     }
 carefulClose(&varAcc);
 carefulClose(&varProtein);
 carefulClose(&varDisplayId);
 carefulClose(&varAccToTaxon);
+carefulClose(&varDescription);
+carefulClose(&varGene);
+carefulClose(&varGeneLogic);
 sqlDisconnect(&conn);
 }
 
