@@ -6,7 +6,7 @@
 #include "bed.h"
 #include "cdsPick.h"
 
-static char const rcsid[] = "$Id: txGeneFromBed.c,v 1.1 2007/03/02 06:59:41 kent Exp $";
+static char const rcsid[] = "$Id: txGeneFromBed.c,v 1.2 2007/03/17 23:10:59 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,13 +72,18 @@ struct bed *bed, *bedList = bedLoadNAll(inBed, 12);
 FILE *f = mustOpen(outKg, "w");
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    char *uniProtAcc = "";
+    char *protAcc = "";
     if (bed->thickStart < bed->thickEnd)
 	{
         pick = hashMustFindVal(pickHash, bed->name);
-	uniProtAcc = pick->uniProt;
+	if (pick->swissProt[0])
+	    protAcc = pick->swissProt;
+	else if (pick->refProt[0])
+	    protAcc = pick->refProt;
+	else if (pick->uniProt[0])
+	    protAcc = pick->uniProt;
 	}
-    outputKg(bed, uniProtAcc, f);
+    outputKg(bed, protAcc, f);
     }
 carefulClose(&f);
 }
