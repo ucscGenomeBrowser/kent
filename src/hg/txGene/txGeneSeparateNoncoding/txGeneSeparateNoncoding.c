@@ -8,7 +8,7 @@
 #include "txInfo.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.4 2007/03/07 05:16:29 kent Exp $";
+static char const rcsid[] = "$Id: txGeneSeparateNoncoding.c,v 1.5 2007/03/17 04:20:58 kent Exp $";
 
 int minNearOverlap=20;
 
@@ -154,7 +154,7 @@ for (bed = inList; bed != NULL; bed = nextBed)
 	}
     else
         {
-	if (startsWith("antibody.abV", bed->name))
+	if (startsWith("ab.ab", bed->name))
 	    {
 	    slAddHead(retNoncoding, bed);
 	    info->category = "antibodyParts";
