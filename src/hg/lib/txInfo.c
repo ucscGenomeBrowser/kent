@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: txInfo.c,v 1.5 2007/03/04 06:54:40 kent Exp $";
+static char const rcsid[] = "$Id: txInfo.c,v 1.6 2007/03/17 22:34:43 kent Exp $";
 
 void txInfoStaticLoad(char **row, struct txInfo *ret)
 /* Load a row from txInfo table into ret.  The contents of ret will
@@ -25,7 +25,7 @@ ret->aliIdRatio = sqlDouble(row[6]);
 ret->genoMapCount = sqlSigned(row[7]);
 ret->exonCount = sqlSigned(row[8]);
 ret->orfSize = sqlSigned(row[9]);
-ret->bestorfScore = sqlDouble(row[10]);
+ret->cdsScore = sqlDouble(row[10]);
 ret->startComplete = sqlUnsigned(row[11]);
 ret->endComplete = sqlUnsigned(row[12]);
 ret->nonsenseMediatedDecay = sqlUnsigned(row[13]);
@@ -57,7 +57,7 @@ ret->aliIdRatio = sqlDouble(row[6]);
 ret->genoMapCount = sqlSigned(row[7]);
 ret->exonCount = sqlSigned(row[8]);
 ret->orfSize = sqlSigned(row[9]);
-ret->bestorfScore = sqlDouble(row[10]);
+ret->cdsScore = sqlDouble(row[10]);
 ret->startComplete = sqlUnsigned(row[11]);
 ret->endComplete = sqlUnsigned(row[12]);
 ret->nonsenseMediatedDecay = sqlUnsigned(row[13]);
@@ -128,7 +128,7 @@ ret->aliIdRatio = sqlDoubleComma(&s);
 ret->genoMapCount = sqlSignedComma(&s);
 ret->exonCount = sqlSignedComma(&s);
 ret->orfSize = sqlSignedComma(&s);
-ret->bestorfScore = sqlDoubleComma(&s);
+ret->cdsScore = sqlDoubleComma(&s);
 ret->startComplete = sqlUnsignedComma(&s);
 ret->endComplete = sqlUnsignedComma(&s);
 ret->nonsenseMediatedDecay = sqlUnsignedComma(&s);
@@ -200,7 +200,7 @@ fprintf(f, "%d", el->exonCount);
 fputc(sep,f);
 fprintf(f, "%d", el->orfSize);
 fputc(sep,f);
-fprintf(f, "%g", el->bestorfScore);
+fprintf(f, "%g", el->cdsScore);
 fputc(sep,f);
 fprintf(f, "%u", el->startComplete);
 fputc(sep,f);
@@ -231,16 +231,13 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 double txInfoCodingScore(struct txInfo *info, boolean boostRefSeq)
-/* Return coding score for info.  This is just the bestorf score,
- * plus another 750 if it's a refSeq.  750 is quite a bit for a
- * bestorf score, only about 1% of proteins score more than that. 
- * If it's an NMD target then divide by 50. */
+/* Return coding score for info.  This is just the cdsScore score,
+ * plus another 1000 if it's a refSeq.  1000 is quite a bit for a
+ * cdsScore score, equivalent to another 1000 bases in the coding region. */
 {
-double score = info->bestorfScore;
+double score = info->cdsScore;
 if (boostRefSeq && info->isRefSeq)
-    score += 750;
-if (info->nonsenseMediatedDecay)
-    score *= 0.02;
+    score += 1000;
 return score;
 }
 

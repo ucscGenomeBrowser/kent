@@ -21,7 +21,7 @@ struct txInfo
     int genoMapCount;	/* Number of times source aligns in genome. */
     int exonCount;	/* Number of exons (excludes gaps from frame shift/stops) */
     int orfSize;	/* Size of ORF */
-    double bestorfScore;	/* Score of best CDS according to bestorf */
+    double cdsScore;	/* Score of best CDS according to txCdsPredict */
     unsigned char startComplete;	/* Starts with ATG */
     unsigned char endComplete;	/* Ends with stop codon */
     unsigned char nonsenseMediatedDecay;	/* If true, is a nonsense mediated decay candidate. */
@@ -80,10 +80,9 @@ void txInfoOutput(struct txInfo *el, FILE *f, char sep, char lastSep);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 double txInfoCodingScore(struct txInfo *info, boolean boostRefSeq);
-/* Return coding score for info.  This is just the bestorf score,
- * plus another 750 if it's a refSeq.  750 is quite a bit for a
- * bestorf score, only about 1% of proteins score more than that. 
- * If it's an NMD target then divide by 50. */
+/* Return coding score for info.  This is just the cdsScore score,
+ * plus another 1000 if it's a refSeq.  1000 is quite a bit for a
+ * cdsScore score, equivalent to another 1000 bases in the coding region. */
 
 #endif /* TXINFO_H */
 

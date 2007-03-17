@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.5 2007/03/07 18:08:50 kent Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.6 2007/03/17 22:36:06 kent Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -51,8 +51,8 @@ if (sqlTableExists(conn, txInfoTable))
 	webPrintDoubleCell(info->aliIdRatio*100);
 	webPrintLinkTableNewRow();
 	
-	webPrintLinkCell("<B>bestorf score:</B>");
-	webPrintDoubleCell(info->bestorfScore);
+	webPrintLinkCell("<B>txCdsPredict score:</B>");
+	webPrintDoubleCell(info->cdsScore);
 	webPrintLinkCell("<B>frame shift in genome:</B>");
 	webPrintLinkCell(info->genomicFrameShift  ? "yes" : "no");
 	webPrintLinkCell("<B>% Coverage:</B>");

@@ -15,7 +15,7 @@ CREATE TABLE txInfo (
     genoMapCount int not null,	# Number of times source aligns in genome.
     exonCount int not null,	# Number of exons (excludes gaps from frame shift/stops)
     orfSize int not null,	# Size of ORF
-    bestorfScore double not null,	# Score of best CDS according to bestorf
+    cdsScore double not null,	# Score of best CDS according to txCdsPredict
     startComplete tinyint unsigned not null,	# Starts with ATG
     endComplete tinyint unsigned not null,	# Ends with stop codon
     nonsenseMediatedDecay tinyint unsigned not null,	# If true, is a nonsense mediated decay candidate.

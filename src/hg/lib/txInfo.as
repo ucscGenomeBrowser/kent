@@ -11,7 +11,7 @@ table txInfo
     int genoMapCount;	"Number of times source aligns in genome."
     int exonCount;	"Number of exons (excludes gaps from frame shift/stops)"
     int orfSize;	"Size of ORF"
-    double bestorfScore; "Score of best CDS according to bestorf"
+    double cdsScore; "Score of best CDS according to txCdsPredict"
     ubyte startComplete;  "Starts with ATG"
     ubyte endComplete; "Ends with stop codon"
     ubyte nonsenseMediatedDecay; "If true, is a nonsense mediated decay candidate."
