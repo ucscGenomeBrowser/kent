@@ -6,11 +6,11 @@
 #include "options.h"
 #include "bed.h"
 #include "cdsEvidence.h"
-#include "borf.h"
 #include "binRange.h"
 #include "genbank.h"
 #include "psl.h"
 #include "txInfo.h"
+#include "txCommon.h"
 #include "rangeTree.h"
 
 void usage()
@@ -19,7 +19,7 @@ void usage()
 errAbort(
   "txInfoAssemble - Assemble information from various sources into txInfo table.\n"
   "usage:\n"
-  "   txInfoAssemble bestCds.bed best.tce all.borf altSplice.bed txWalk.exceptions sizePolyA.tab all.psl flippedRna out.info\n"
+  "   txInfoAssemble bestCds.bed best.tce predict.tce altSplice.bed txWalk.exceptions sizePolyA.tab all.psl flippedRna out.info\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -314,7 +314,7 @@ rangeTreeFree(&rangeTree);
 return totalOverlap;
 }
 
-void txInfoAssemble(char *txBedFile, char *cdsEvFile, char *borfFile, char *altSpliceFile,
+void txInfoAssemble(char *txBedFile, char *cdsEvFile, char *txCdsPredictFile, char *altSpliceFile,
 	char *exceptionFile, char *sizePolyAFile, char *pslFile, char *flipFile, char *outFile)
 /* txInfoAssemble - Assemble information from various sources into txInfo table.. */
 {
@@ -326,11 +326,11 @@ for (cdsEv = cdsEvList; cdsEv != NULL; cdsEv = cdsEv->next)
 verbose(2, "Loaded %d elements from %s\n", cdsEvHash->elCount, cdsEvFile);
 
 /* Build up hash of bestorf structures keyed by transcript name */
-struct hash *borfHash = hashNew(18);
-struct borf *borf, *borfList = borfLoadAll(borfFile);
-for (borf = borfList; borf != NULL; borf = borf->next)
-     hashAddUnique(borfHash, borf->name, borf);
-verbose(2, "Loaded %d borfs from %s\n", borfHash->elCount, borfFile);
+struct hash *predictHash = hashNew(18);
+struct cdsEvidence *predict, *predictList = cdsEvidenceLoadAll(txCdsPredictFile);
+for (predict = predictList; predict != NULL; predict = predict->next)
+     hashAddUnique(predictHash, predict->name, predict);
+verbose(2, "Loaded %d predicts from %s\n", predictHash->elCount, txCdsPredictFile);
 
 /* Build up structure for random access of retained introns */
 struct bed *altSpliceList = bedLoadNAll(altSpliceFile, 6);
@@ -373,14 +373,10 @@ while (lineFileRow(lf, row))
     /* Figure out name, sourceAcc, and isRefSeq from bed->name */
     info.name = bed->name;
     info.category = "n/a";
-    info.sourceAcc = strrchr(bed->name, '.');
-    if (info.sourceAcc == NULL)
-        info.sourceAcc = bed->name;
-    else
-        info.sourceAcc += 1;
+    info.sourceAcc = txAccFromTempName(bed->name);
     info.isRefSeq = startsWith("NM_", info.sourceAcc);
 
-    if (startsWith("abV", info.sourceAcc))
+    if (startsWith("antibody.", info.sourceAcc))
         {
 	/* Fake up some things for antibody frag. */
 	info.sourceSize = 10000;
@@ -448,10 +444,10 @@ while (lineFileRow(lf, row))
 	    }
 	}
 
-    /* Get bestorf score from borf. */
-    borf = hashFindVal(borfHash, bed->name);
-    if (borf != NULL)
-        info.bestorfScore = borf->score;
+    /* Get score from prediction. */
+    predict = hashFindVal(predictHash, bed->name);
+    if (predict != NULL)
+        info.cdsScore = predict->score;
 
     /* Figure out nonsense-mediated-decay from bed itself. */
     info.nonsenseMediatedDecay = isNonsenseMediatedDecayTarget(bed);
