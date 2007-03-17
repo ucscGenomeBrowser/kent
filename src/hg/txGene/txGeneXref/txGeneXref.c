@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.3 2007/03/03 21:16:22 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.4 2007/03/17 18:44:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,12 +56,12 @@ struct sqlConnection *uConn = sqlConnect(uniProtDb);
 /* Read in info file, and loop through it to make out file. */
 struct txInfo *info, *infoList = txInfoLoadAll(infoFile);
 FILE *f = mustOpen(outFile, "w");
+int missingEvCount = 0;
+char *missingEvAcc = NULL;
 for (info = infoList; info != NULL; info = info->next)
     {
-    pick = hashFindVal(pickHash, info->name);
-    ev = hashMustFindVal(evHash, info->name);
     char *kgID = info->name;
-    char *mRNA = ev->primary;
+    char *mRNA = "";
     char *spID = "";
     char *spDisplayID = "";
     char *geneSymbol = NULL;
@@ -69,6 +69,16 @@ for (info = infoList; info != NULL; info = info->next)
     char *protAcc = "";
     char *description = NULL;
     char query[256];
+    pick = hashFindVal(pickHash, info->name);
+    ev = hashFindVal(evHash, info->name);
+    if (ev == NULL)
+	{
+        missingEvCount += 1;
+	missingEvAcc = info->name;
+	mRNA = cloneString("");
+	}
+    else
+	mRNA = ev->primary;
     if (pick != NULL)
        {
        /* Fill in the relatively straightforward fields. */
@@ -78,7 +88,9 @@ for (info = infoList; info != NULL; info = info->next)
 	    spID = pick->uniProt;
 	    protAcc = pick->refProt;
 	    if (pick->uniProt[0] != 0)
+	       {
 	       spDisplayID = spAnyAccToId(uConn, spID);
+	       }
 	    }
 
        /* Fill in gene symbol and description from refseq if possible. */
@@ -117,28 +129,38 @@ for (info = infoList; info != NULL; info = info->next)
     /* Still no joy? Try genbank RNA records. */
     if (geneSymbol == NULL || description == NULL)
 	{
-	int i;
-	for (i=0; i<ev->accCount; ++i)
+	if (ev != NULL)
 	    {
-	    char *acc = ev->accs[i];
-	    if (geneSymbol == NULL)
+	    int i;
+	    for (i=0; i<ev->accCount; ++i)
 		{
-		safef(query, sizeof(query), 
-		    "select geneName.name from gbCdnaInfo,geneName "
-		    "where geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
-		geneSymbol = sqlQuickString(gConn, query);
-	        if (sameString(geneSymbol, "n/a"))
-	           geneSymbol = NULL;
-		}
-	    if (description == NULL)
-		{
-		safef(query, sizeof(query), 
-		    "select description.name from gbCdnaInfo,description "
-		    "where description.id=gbCdnaInfo.description "
-		    "and gbCdnaInfo.acc = '%s'", acc);
-		description = sqlQuickString(gConn, query);
-	        if (sameString(description, "n/a"))
-	           description = NULL;
+		char *acc = ev->accs[i];
+		chopSuffix(acc);
+		if (geneSymbol == NULL)
+		    {
+		    safef(query, sizeof(query), 
+			"select geneName.name from gbCdnaInfo,geneName "
+			"where geneName.id=gbCdnaInfo.geneName and gbCdnaInfo.acc = '%s'", acc);
+		    geneSymbol = sqlQuickString(gConn, query);
+		    if (geneSymbol != NULL)
+			{
+			if (sameString(geneSymbol, "n/a"))
+			   geneSymbol = NULL;
+			}
+		    }
+		if (description == NULL)
+		    {
+		    safef(query, sizeof(query), 
+			"select description.name from gbCdnaInfo,description "
+			"where description.id=gbCdnaInfo.description "
+			"and gbCdnaInfo.acc = '%s'", acc);
+		    description = sqlQuickString(gConn, query);
+		    if (description != NULL)
+			{
+			if (sameString(description, "n/a"))
+			   description = NULL;
+			}
+		    }
 		}
 	    }
 	}
@@ -162,7 +184,9 @@ for (info = infoList; info != NULL; info = info->next)
     fprintf(f, "%s\t", protAcc);
     fprintf(f, "%s\n", description);
     }
-
+if (missingEvCount > 4)
+    errAbort("%d accessions in %s but not %s. Example: %s\n", 
+    	missingEvCount, infoFile, evFile, missingEvAcc);
 carefulClose(&f);
 }
 
