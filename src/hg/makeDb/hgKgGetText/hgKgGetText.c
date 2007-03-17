@@ -7,7 +7,9 @@
 #include "kgXref.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: hgKgGetText.c,v 1.4 2006/04/27 17:42:44 angie Exp $";
+static char const rcsid[] = "$Id: hgKgGetText.c,v 1.5 2007/03/17 23:12:08 kent Exp $";
+
+char *summaryTable = "refSeqSummary";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,12 +21,16 @@ errAbort(
   "of all descriptive text for known genes.\n"
   "usage:\n"
   "   hgKgGetText database out.txt\n"
+  "options:\n"
+  "   summaryTable=table Use given table to get summary info, default %s"
+  , summaryTable
   );
 }
 
 boolean gotRefSeqSummary;
 
 static struct optionSpec options[] = {
+   {"summaryTable", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -55,8 +61,9 @@ struct hash *getRefSeqSummary(struct sqlConnection *conn)
 /* Return hash keyed by refSeq NM_ id, with description values. */
 {
 struct hash *hash = hashNew(16);
-struct sqlResult *sr = sqlGetResult(conn, 
-	"select mrnaAcc,summary from refSeqSummary");
+char query[256];
+safef(query, sizeof(query), "select mrnaAcc,summary from %s", summaryTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -64,7 +71,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], cloneString(row[1]));
     }
 sqlFreeResult(&sr);
-verbose(1, "%d refSeqSummary elements\n", hash->elCount);
+verbose(1, "%d %s elements\n", hash->elCount, summaryTable);
 return hash;
 }
 
@@ -130,6 +137,13 @@ addSimple(kg->kgID, "kgProtAlias", "kgID", "alias", conn, uniqHash, f);
 if (refSeqHash != NULL)
     {
     char *s = hashFindVal(refSeqHash, kg->refseq);
+    if (s == NULL && strchr(kg->refseq, '.') != NULL)
+	{
+	char *accOnly = cloneString(kg->refseq);
+	chopSuffix(accOnly);
+	s = hashFindVal(refSeqHash, accOnly);
+	freeMem(accOnly);
+	}
     if (s == NULL)
         s = "";
     fprintf(f, "\t%s", s);
@@ -164,11 +178,11 @@ struct kgXref *kgList = NULL, *kg;
 struct hash *refSeqHash = NULL;
 /* Return hash keyed by refSeq NM_ id, with description values. */
 
-gotRefSeqSummary = sqlTableExists(conn, "refSeqSummary");
+gotRefSeqSummary = sqlTableExists(conn, summaryTable);
 if (gotRefSeqSummary)
     refSeqHash = getRefSeqSummary(conn);
 else
-    warn("No refSeqSummary table in %s, proceeding without...", database);
+    warn("No %s table in %s, proceeding without...", summaryTable, database);
 kgList = getKgList(conn);
 verbose(1, "Read in %d known genes from %s\n", slCount(kgList), database);
 
@@ -183,6 +197,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+summaryTable = optionVal("summaryTable", summaryTable);
 hgKgGetText(argv[1], argv[2]);
 return 0;
 }
