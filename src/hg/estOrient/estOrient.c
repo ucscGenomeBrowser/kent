@@ -5,6 +5,7 @@
 #include "pslReader.h"
 #include "estOrientInfo.h"
 #include "hash.h"
+#include "genbank.h"
 #include "sqlNum.h"
 #include "jksql.h"
 #include "hdb.h"
@@ -18,13 +19,17 @@ static struct optionSpec optionSpecs[] =
     {"disoriented", OPTION_STRING},
     {"info", OPTION_STRING},
     {"inclVer", OPTION_BOOLEAN},
+    {"fileInput", OPTION_BOOLEAN},
+    {"estOrientInfo", OPTION_STRING},
     {NULL, 0}
 };
 
 static struct slName *gChroms = NULL;
 static boolean gKeepDisoriented = FALSE;
 static boolean gInclVer = FALSE;
+static boolean gFileInput = FALSE;
 static char *gDisoriented = NULL;
+static char *gEstOrientInfoFile = NULL;
 static char *gInfo = NULL;
 
 void usage(char *msg, ...)
@@ -49,6 +54,11 @@ errAbort("\n%s",
          "    be determined to this file.\n"
          "   -inclVer - add NCBI version number to accession if not already\n"
          "    present.\n"
+         "   -fileInput - estTable is a psl file\n"
+         "   -estOrientInfo=file - instead of getting the orientation information\n"
+         "    from the estOrientInfo table, load it from this file.  This data is the\n"
+         "    output of polyInfo command.  If this option is specified, the direction\n"
+         "    will not be looked up in the gbCdnaInfo table and db can be `no'.\n"
          "   -info=infoFile - write information about each EST to this tab\n"
          "    separated file \n"
          "       qName tName tStart tEnd origStrand newStrand orient\n"
@@ -103,17 +113,23 @@ gbCacheNeed(conn, acc);
 return gbCacheVer;
 }
 
-static struct hash *loadOrientation(struct sqlConnection *conn, char *chrom)
-/* load data from estOrientInfo table for chrom. */
+static struct hash *loadOrientInfoTbl(struct sqlConnection *conn, char *chrom)
+/* load data from estOrientInfo table for chrom, or all if chrom is NULL */
 {
-struct hash *orientHash = hashNew(23);
+struct hash *orientHash = hashNew(24);
 struct sqlResult *sr;
 int rowOff;
 char **row;
 
 /* to save memory, only select ones where orientation was determined from
  * introns. */
-sr = hChromQuery(conn, "estOrientInfo", chrom, "(intronOrientation != 0)", &rowOff);
+if (chrom != NULL)
+    sr = hChromQuery(conn, "estOrientInfo", chrom, "(intronOrientation != 0)", &rowOff);
+else
+    {
+    rowOff = (sqlFieldIndex(conn, "estOrientInfo", "bin") < 0) ? 0 : 1;
+    sr = sqlGetResult(conn, "select * from estOrientInfo where (intronOrientation != 0)");
+    }
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -123,16 +139,34 @@ while ((row = sqlNextRow(sr)) != NULL)
 return orientHash;
 }
 
-static struct estOrientInfo *findOrientInfo(struct hash *orientHash, struct psl *psl)
+static struct hash *loadOrientInfoFile(char *orientInfoFile)
+/* load data estOrientInfo data from a file */
+{
+struct hash *orientHash = hashNew(24);
+struct lineFile *lf = lineFileOpen(orientInfoFile, TRUE);
+char *row[EST_ORIENT_INFO_NUM_COLS];
+while (lineFileNextRowTab(lf, row, EST_ORIENT_INFO_NUM_COLS))
+    {
+    struct estOrientInfo *eoi = estOrientInfoLoadLm(row, orientHash->lm);
+    if (eoi->intronOrientation != 0)
+        hashAdd(orientHash, eoi->name, eoi);
+    }
+lineFileClose(&lf);
+return orientHash;
+}
+
+
+static struct estOrientInfo *findOrientInfo(struct hash *orientHash, char *acc, struct psl *psl)
 /* search for an orientInfo object for a psl. */
 {
 /* can be multiple entries for a name, find overlap */
-struct hashEl *hel = hashLookup(orientHash, psl->qName);
+struct hashEl *hel = hashLookup(orientHash, acc);
 while (hel != NULL)
     {
     struct estOrientInfo *eoi = hel->val;
-    if ((eoi->chromStart == psl->tStart) && (eoi->chromEnd == psl->tEnd))
-        return eoi;  /* hit (already restricted to chrom) */
+    if ((eoi->chromStart == psl->tStart) && (eoi->chromEnd == psl->tEnd)
+        && sameString(eoi->chrom, psl->tName))
+        return eoi;
     hel = hashLookupNext(hel);
     }
 return NULL;
@@ -142,13 +176,19 @@ static int getOrient(struct sqlConnection *conn, struct hash *orientHash,
                      struct psl *est)
 /* get orientation of an EST, or 0 if unknown */
 {
+char acc[GENBANK_ACC_BUFSZ];
 int orient = 0;
-struct estOrientInfo *eoi = findOrientInfo(orientHash, est);
+genbankDropVer(acc, est->qName);
+
+// try both without and with version
+struct estOrientInfo *eoi = findOrientInfo(orientHash, acc, est);
+if ((eoi == NULL) && !sameString(acc, est->qName))
+    eoi = findOrientInfo(orientHash, est->qName, est);
 if (eoi != NULL)
     orient = eoi->intronOrientation;
-if (orient == 0)
+if ((orient == 0) && (conn != NULL))
     {
-    int readDir = cDnaReadDirection(conn, est->qName);
+    int readDir = cDnaReadDirection(conn, acc);
     if (readDir == 5) 
         orient = 1;
     else if (readDir == 3) 
@@ -174,12 +214,19 @@ if (strchr(est->qName, '.') == NULL)
     }
 }
 
+static void revOrient(struct psl *est)
+/* reverse query orientation on an EST */
+{
+est->strand[0] = ((est->strand[0] == '+') ? '-' : '+');
+reverseIntRange(&est->qStart, &est->qEnd, est->qSize);
+}
+
 static void processEst(struct sqlConnection *conn, struct hash *orientHash,
                        struct psl *est, FILE *outPslFh, FILE *disorientedFh,
                        FILE *infoFh)
 /* adjust orientation of an EST and output */
 {
-int orient = getOrient(conn, orientHash, est);
+int orient = getOrient(conn, orientHash, est); 
 char origStrand[3];
 safecpy(origStrand, sizeof(origStrand), est->strand);
 if (gInclVer)
@@ -187,7 +234,7 @@ if (gInclVer)
 if ((orient != 0) || gKeepDisoriented)
     {
     if (orient < 0)
-        est->strand[0] = ((est->strand[0] == '+') ? '-' : '+');
+        revOrient(est);
     pslTabOut(est, outPslFh);
     }
 else if (disorientedFh != NULL)
@@ -198,16 +245,15 @@ if (infoFh != NULL)
             origStrand, est->strand, orient);
 }
 
-static void orientEstsChrom(struct sqlConnection *conn, struct sqlConnection *conn2,
-                            char *chrom, char *estTable, FILE *outPslFh,
-                            FILE *disorientedFh, FILE *infoFh)
+static void orientEstsChromTbl(struct sqlConnection *conn, struct sqlConnection *conn2,
+                               char *chrom, char *estTable, FILE *outPslFh,
+                               FILE *disorientedFh, FILE *infoFh)
 /* orient ESTs on one chromsome */
 {
-struct pslReader *pr;
 struct psl *psl;
-struct hash *orientHash = loadOrientation(conn, chrom);
+struct hash *orientHash = loadOrientInfoTbl(conn, chrom);
 
-pr = pslReaderChromQuery(conn, estTable, chrom, NULL);
+struct pslReader *pr = pslReaderChromQuery(conn, estTable, chrom, NULL);
 while ((psl = pslReaderNext(pr)) != NULL)
     {
     processEst(conn2, orientHash, psl, outPslFh, disorientedFh, infoFh);
@@ -218,13 +264,52 @@ pslReaderFree(&pr);
 hashFree(&orientHash);
 }
 
-static void estOrient(char *db, char *estTable, char *outPslFile)
-/* convert ESTs so that orientation matches directory of transcription */
+static void orientEstsTbl(char *db, char *estTable, FILE *outPslFh,
+                          FILE *disorientedFh, FILE *infoFh)
+/* orient ESTs from a table */
 {
 struct sqlConnection *conn = sqlConnectReadOnly(db);
 struct sqlConnection *conn2 = sqlConnectReadOnly(db);
 struct slName *chroms = NULL;
 struct slName *chrom;
+if (gChroms != NULL)
+    chroms = gChroms;
+else
+    chroms = hAllChromNamesDb(db);
+slNameSort(&chroms);
+
+for (chrom = chroms; chrom != NULL; chrom = chrom->next)
+    orientEstsChromTbl(conn, conn2, chrom->name, estTable, outPslFh, disorientedFh, infoFh);
+
+sqlDisconnect(&conn);
+sqlDisconnect(&conn2);
+}
+
+static void orientEstsFile(char *db, char *estFile, FILE *outPslFh,
+                           FILE *disorientedFh, FILE *infoFh)
+/* orient ESTs on one chromsome */
+{
+struct sqlConnection *conn = sameString(db, "no") ? NULL : sqlConnectReadOnly(db);
+struct psl *psl;
+struct hash *orientHash = (gEstOrientInfoFile != NULL)
+    ? loadOrientInfoFile(gEstOrientInfoFile)
+    : loadOrientInfoTbl(conn, NULL);
+
+struct pslReader *pr = pslReaderFile(estFile, NULL);
+while ((psl = pslReaderNext(pr)) != NULL)
+    {
+    processEst(conn, orientHash, psl, outPslFh, disorientedFh, infoFh);
+    pslFree(&psl);
+    }
+
+pslReaderFree(&pr);
+hashFree(&orientHash);
+sqlDisconnect(&conn);
+}
+
+static void estOrient(char *db, char *estTable, char *outPslFile)
+/* convert ESTs so that orientation matches directory of transcription */
+{
 FILE * outPslFh = mustOpen(outPslFile, "w");
 FILE *disorientedFh = NULL;
 if (gDisoriented != NULL)
@@ -235,18 +320,11 @@ if (gInfo != NULL)
     infoFh = mustOpen(gInfo, "w");
     fprintf(infoFh, "#qName\ttName\ttStart\ttEnd\torigStrand\tnewStrand\torient\n");
     }
-
-if (gChroms != NULL)
-    chroms = gChroms;
+if (gFileInput)
+    orientEstsFile(db, estTable, outPslFh, disorientedFh, infoFh);
 else
-    chroms = hAllChromNamesDb(db);
-slNameSort(&chroms);
+    orientEstsTbl(db, estTable, outPslFh, disorientedFh, infoFh);
 
-for (chrom = chroms; chrom != NULL; chrom = chrom->next)
-    orientEstsChrom(conn, conn2, chrom->name, estTable, outPslFh, disorientedFh, infoFh);
-
-sqlDisconnect(&conn);
-sqlDisconnect(&conn2);
 carefulClose(&infoFh);
 carefulClose(&disorientedFh);
 carefulClose(&outPslFh);
@@ -259,15 +337,26 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage("wrong # of args:");
 ZeroVar(&gbCacheAcc);
+char *db = argv[1], *estTable = argv[2], *outPslFile = argv[3];
 gChroms = optionMultiVal("chrom", NULL);
 gKeepDisoriented = optionExists("keepDisoriented");
 gDisoriented = optionVal("disoriented", NULL);
 gInfo = optionVal("info", NULL);
 gInclVer = optionExists("inclVer");
+gFileInput = optionExists("fileInput");
+gEstOrientInfoFile = optionVal("estOrientInfo", NULL);
 if (gKeepDisoriented && (gDisoriented != NULL))
     errAbort("can't specify both -keepDisoriented and -disoriented");
+if (gFileInput && (gChroms != NULL))
+    errAbort("can't specify both -fileInput and -chrom");
+if (gFileInput && gInclVer)
+    errAbort("can't specify both -fileInput and -inclVer");
+if ((db == "no") && !gFileInput)
+    errAbort("must specify -fileInput with db set to \"no\"");
+if ((db == "no") && !gEstOrientInfoFile)
+    errAbort("must specify -estOrientInfo with db set to \"no\"");
 
-estOrient(argv[1], argv[2], argv[3]);
+estOrient(db, estTable, outPslFile);
 return 0;
 }
 

@@ -25,5 +25,3 @@ clean:
 	rm -f $O $B estOrient
 	cd tests && ${MAKE} clean
 
-savebak:
-	savebak estOrient makefile *.c
