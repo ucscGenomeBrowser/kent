@@ -5,7 +5,7 @@
 #ifndef SNORNAS_H
 #define SNORNAS_H
 
-#define SNORNAS_NUM_COLS 17
+#define SNORNAS_NUM_COLS 18
 
 struct snoRNAs
 /* C/D box snoRNA genes */
@@ -27,6 +27,7 @@ struct snoRNAs
     char *dBox;	/* D box feature */
     char *cpBox;	/* C' box feature */
     char *dpBox;	/* D' box feature */
+    float hmmScore;	/* score to HMM snoRNA model */
     char *snoscanOutput;	/* Full snoscan output for snoRNA */
     };
 
