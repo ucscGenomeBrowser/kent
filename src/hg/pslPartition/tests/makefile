@@ -1,9 +1,9 @@
 include ../../../inc/common.mk
 
 PPART = ../pslPartition
-DIFF = diff -u
+DIFF = diff
 
-test: defaultsTest level0Test level1Test partSize3Test partSize10Test
+test: defaultsTest level0Test level1Test partSize3Test partSize10Test dropContainedTest
 
 # not really the default any more
 defaultsTest:
@@ -20,6 +20,10 @@ partSize3Test:
 
 partSize10Test:
 	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=3 -partSize=10'
+
+# test of dropping PSLs completely contained in the exon of another PSL'
+dropContainedTest:
+	${MAKE} runTest ID=$@ IN=contained.psl OPTS='-partSize=0 -dropContained'
 
 # recursive target to execute a test
 # arguments: ID, IN, OPTS
