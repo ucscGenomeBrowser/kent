@@ -8,7 +8,9 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.4 2005/07/15 00:52:49 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.5 2007/03/18 00:10:14 kent Exp $";
+
+char *uniProt = UNIPROT_DB_NAME;
 
 void usage()
 /* Explain usage and exit. */
@@ -26,10 +28,13 @@ errAbort(
   "   outTable is the output name/value table\n"
   "example:\n"
   "   hgMapViaSwissProt hg16 knownGene name proteinID Pfam knownToPfam\n"
+  "options:\n"
+  "   uniProt=sp070202 - Set uniProt database to something specific\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"uniProt", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -56,7 +61,7 @@ void hgMapViaSwissProt(char *database, char *inTable,
  * via SwissProt. */
 {
 struct sqlConnection *dbConn = sqlConnect(database);
-struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
+struct sqlConnection *spConn = sqlConnect(uniProt);
 char geneQuery[256], query[256];
 struct sqlResult *geneSr, *sr;
 char **geneRow, **row;
@@ -119,6 +124,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 7)
     usage();
+uniProt = optionVal("uniProt", uniProt);
 hgMapViaSwissProt(argv[1],argv[2],argv[3],argv[4],argv[5],argv[6]);
 return 0;
 }
