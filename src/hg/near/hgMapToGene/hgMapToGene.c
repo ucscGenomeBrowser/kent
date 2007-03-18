@@ -11,7 +11,7 @@
 #include "hgConfig.h"
 
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.13 2006/06/28 16:19:01 angie Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.14 2007/03/18 00:04:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,6 +42,7 @@ errAbort(
   "   -verbose=N - Print intermediate status info if N > 0\n"
   "   -intronsToo - Include introns\n"
   "   -createOnly - Just create mapTable, don't populate it\n"
+  "   -tempDb - Database to look for genes track and where to put result\n"
   "   -lookup=lookup.txt - Lookup.txt is a 2 column file\n"
   "            <trackId><lookupId>\n"
   "           The trackId from the geneTrack gets replaced with lookupId\n"
@@ -52,6 +53,7 @@ boolean cdsOnly = FALSE;
 boolean intronsToo = FALSE;
 boolean createOnly = FALSE;
 char *prefix = NULL;
+char *trackDb = NULL;
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
@@ -63,6 +65,7 @@ static struct optionSpec options[] = {
    {"createOnly", OPTION_BOOLEAN},
    {"lookup", OPTION_STRING},
    {"geneTableType", OPTION_STRING},
+   {"tempDb", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -161,7 +164,7 @@ if (val != NULL)
     fprintf(f, "%s\t%s\n", key, val);
 }
 
-void oneChromStrandTrackToGene(struct sqlConnection *conn, 
+void oneChromStrandTrackToGene(struct sqlConnection *conn, struct sqlConnection *tConn,
 			     char *chrom, char strand,
 			     char *geneTable, char *geneTableType, 
 			     char *otherTable,  char *otherType,
@@ -260,7 +263,7 @@ else
 sqlFreeResult(&sr);
 
 /* Scan through gene preds looking for best overlap if any. */
-sr = hChromQuery(conn, geneTable, chrom, extra, &rowOffset);
+sr = hChromQuery(tConn, geneTable, chrom, extra, &rowOffset);
 numCols = sqlCountColumns(sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -323,7 +326,8 @@ sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
-void hgMapTableToGene(struct sqlConnection *conn, char *geneTable, char *geneTableType,
+void hgMapTableToGene(struct sqlConnection *conn, struct sqlConnection *tConn,
+	char *geneTable, char *geneTableType,
 	char *otherTable, char *otherType, char *outTable,
 	struct hash *lookupHash)
 /* hgMapTableToGene - Create a table that maps geneTable to otherTable, 
@@ -343,11 +347,10 @@ if (!createOnly)
     chromList = hAllChromNames();
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
-	if (verboseLevel() > 0)
-	    printf("%s\n", chrom->name);
-	oneChromStrandTrackToGene(conn, chrom->name, '+', geneTable, geneTableType,  
+	verbose(2, "%s\n", chrom->name);
+	oneChromStrandTrackToGene(conn, tConn, chrom->name, '+', geneTable, geneTableType,  
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
-	oneChromStrandTrackToGene(conn, chrom->name, '-', geneTable, geneTableType,
+	oneChromStrandTrackToGene(conn, tConn, chrom->name, '-', geneTable, geneTableType,
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
 	}
     hashFree(&dupeHash);
@@ -356,12 +359,12 @@ if (!createOnly)
 /* Create and load table from tab file. */
 if (createOnly)
     {
-    createTable(conn, outTable, !doAll);
+    createTable(tConn, outTable, !doAll);
     }
 else if (!optionExists("noLoad"))
     {
-    createTable(conn, outTable, !doAll);
-    hgLoadTabFile(conn, tempDir, outTable, &f);
+    createTable(tConn, outTable, !doAll);
+    hgLoadTabFile(tConn, tempDir, outTable, &f);
     hgRemoveTabFile(tempDir, outTable);
     }
 
@@ -372,9 +375,6 @@ char *tdbType(struct sqlConnection *conn, char *track)
 {
 char query[512];
 char *type, typeBuf[128];
-char *trackDb = cfgOption("db.trackDb");
-if(trackDb == NULL)
-    trackDb = "trackDb";
 safef(query, sizeof(query), "select type from %s where tableName = '%s'", trackDb, track);
 type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
 if (type == NULL)
@@ -397,7 +397,9 @@ return hash;
 void hgMapToGene(char *database, char *track, char *geneTrack, char *newTable)
 /* hgMapToGene - Map a track to a genePred track.. */
 {
+char *tempDb = optionVal("tempDb", database);
 struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *tConn = sqlConnect(tempDb);
 char *type = optionVal("type", NULL);
 char *lookupFile = optionVal("lookup", NULL);
 struct hash *lookupHash = NULL;
@@ -414,8 +416,9 @@ if(geneTableType == NULL)
     
 if (!startsWith("genePred", geneTableType) && !startsWith("bed", geneTableType))
     errAbort("%s is neither a genePred or bed type track", geneTrack);
-hgMapTableToGene(conn, geneTrack, geneTableType, track, type, newTable, lookupHash);
+hgMapTableToGene(conn, tConn, geneTrack, geneTableType, track, type, newTable, lookupHash);
 sqlDisconnect(&conn);
+sqlDisconnect(&tConn);
 }
 
 int main(int argc, char *argv[])
@@ -426,6 +429,9 @@ cdsOnly = optionExists("cds");
 intronsToo = optionExists("intronsToo");
 createOnly = optionExists("createOnly");
 prefix = optionVal("prefix", NULL);
+trackDb = cfgOption("db.trackDb");
+if(trackDb == NULL)
+    trackDb = "trackDb";
 
 if (argc != 5)
     usage();
