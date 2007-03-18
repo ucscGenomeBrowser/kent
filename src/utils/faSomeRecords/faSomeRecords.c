@@ -5,7 +5,15 @@
 #include "fa.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faSomeRecords.c,v 1.2 2003/05/06 07:41:06 kate Exp $";
+static char const rcsid[] = "$Id: faSomeRecords.c,v 1.3 2007/03/18 17:24:53 markd Exp $";
+
+/* command line options */
+static struct optionSpec optionSpecs[] =
+{
+    {"exclude", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+static boolean gExclude = FALSE;  // output sequences not in list file
 
 void usage()
 /* Explain usage and exit. */
@@ -15,7 +23,7 @@ errAbort(
   "usage:\n"
   "   faSomeRecords in.fa listFile out.fa\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -exclude - output sequences not in the list file.\n"
   );
 }
 
@@ -45,16 +53,15 @@ while (lineFileNext(lf, &line, NULL))
     if (line[0] == '>')
 	{
 	char *d = cloneString(line);
-	passMe = FALSE;
+	passMe = gExclude;
 	line += 1;
 	word = nextWord(&line);
 	if (word != NULL)
 	    {
 	    if (hashLookup(hash, word))
-		{
-		fprintf(f, "%s\n", d);
-		passMe = TRUE;
-		}
+		passMe = !gExclude;
+            if (passMe)
+                fprintf(f, "%s\n", d);
 	    }
 	freeMem(d);
 	}
@@ -68,9 +75,10 @@ while (lineFileNext(lf, &line, NULL))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
+gExclude = optionExists("exclude");
 faSomeRecords(argv[1], argv[2], argv[3]);
 return 0;
 }
