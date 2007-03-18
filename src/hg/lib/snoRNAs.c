@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snoRNAs.h"
 
-static char const rcsid[] = "$Id: snoRNAs.c,v 1.1 2006/12/07 23:11:43 lowe Exp $";
+static char const rcsid[] = "$Id: snoRNAs.c,v 1.2 2007/03/18 21:53:56 lowe Exp $";
 
 void snoRNAsStaticLoad(char **row, struct snoRNAs *ret)
 /* Load a row from snoRNAs table into ret.  The contents of ret will
@@ -21,7 +21,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->snoScore = atof(row[6]);
+ret->snoScore = sqlFloat(row[6]);
 ret->targetList = row[7];
 ret->orthologs = row[8];
 ret->guideLen = row[9];
@@ -31,7 +31,8 @@ ret->cBox = row[12];
 ret->dBox = row[13];
 ret->cpBox = row[14];
 ret->dpBox = row[15];
-ret->snoscanOutput = row[16];
+ret->hmmScore = sqlFloat(row[16]);
+ret->snoscanOutput = row[17];
 }
 
 struct snoRNAs *snoRNAsLoad(char **row)
@@ -47,7 +48,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->snoScore = atof(row[6]);
+ret->snoScore = sqlFloat(row[6]);
 ret->targetList = cloneString(row[7]);
 ret->orthologs = cloneString(row[8]);
 ret->guideLen = cloneString(row[9]);
@@ -57,7 +58,8 @@ ret->cBox = cloneString(row[12]);
 ret->dBox = cloneString(row[13]);
 ret->cpBox = cloneString(row[14]);
 ret->dpBox = cloneString(row[15]);
-ret->snoscanOutput = cloneString(row[16]);
+ret->hmmScore = sqlFloat(row[16]);
+ret->snoscanOutput = cloneString(row[17]);
 return ret;
 }
 
@@ -67,7 +69,7 @@ struct snoRNAs *snoRNAsLoadAll(char *fileName)
 {
 struct snoRNAs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -85,7 +87,7 @@ struct snoRNAs *snoRNAsLoadAllByChar(char *fileName, char chopper)
 {
 struct snoRNAs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -122,6 +124,7 @@ ret->cBox = sqlStringComma(&s);
 ret->dBox = sqlStringComma(&s);
 ret->cpBox = sqlStringComma(&s);
 ret->dpBox = sqlStringComma(&s);
+ret->hmmScore = sqlFloatComma(&s);
 ret->snoscanOutput = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -220,6 +223,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->dpBox);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%g", el->hmmScore);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->snoscanOutput);

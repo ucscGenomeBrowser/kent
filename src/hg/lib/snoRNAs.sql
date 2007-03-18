@@ -5,7 +5,6 @@
 
 #C/D box snoRNA genes
 CREATE TABLE snoRNAs (
-    bin int unsigned not null, 
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -22,7 +21,10 @@ CREATE TABLE snoRNAs (
     dBox varchar(255) not null,	# D box feature
     cpBox varchar(255) not null,	# C' box feature
     dpBox varchar(255) not null,	# D' box feature
+    hmmScore float not null,	# score to HMM snoRNA model
     snoscanOutput longblob not null,	# Full snoscan output for snoRNA
               #Indices
+    bin int unsigned not null, 
+    INDEX(bin),
     PRIMARY KEY(name)
 );

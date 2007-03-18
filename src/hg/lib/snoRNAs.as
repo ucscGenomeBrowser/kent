@@ -17,5 +17,7 @@ table snoRNAs
   string dBox;           "D box feature"
   string cpBox;           "C' box feature"
   string dpBox;           "D' box feature"
+  float hmmScore;         "score to HMM snoRNA model"
   lstring snoscanOutput;   "Full snoscan output for snoRNA"
   )
+
