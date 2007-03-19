@@ -16,7 +16,7 @@
 #include "trashDir.h"
 #include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.66 2007/03/15 22:33:11 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.67 2007/03/19 22:50:56 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -174,8 +174,10 @@ for (el = elList; el != NULL; el = el->next)
     if (startsWith(CT_FILE_VAR_PREFIX, el->name))
 	{
 	struct slName *browserLines = NULL;
-	struct customTrack *ctList;
-	ctList = customFactoryParseAnyDb((char *)el->val, TRUE, &browserLines);
+	struct customTrack *ctList = NULL;
+	char *ctFileName = (char *)(el->val);
+	if (fileExists(ctFileName))
+	    ctList = customFactoryParseAnyDb(ctFileName, TRUE, &browserLines);
 	/* Save off only if the custom tracks are live -- if none are live,
 	 * leave cart variables in place so hgSession can detect and inform 
 	 * the user. */
