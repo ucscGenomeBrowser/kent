@@ -13,7 +13,7 @@ $HOME/bin/$MACHTYPE/testSearch $BUILDDIR/v$BRANCHNN}_branch/kent/src/hg/qa/searc
 # creates branch.search.log - look for unusual errors
 
 #-- to check for errors: 
-set res = `cat ./logs/search-v${BRANCHNN}.log | egrep "match" 
+set res = `cat ./logs/search-v${BRANCHNN}.log | egrep "Error" 
 
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" == "0" ) then
