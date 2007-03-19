@@ -109,7 +109,7 @@ EOF
 # MAKE DOWNLOADABLE / GOLDENPATH FILES (DONE Heather Oct. 20, 2006)
     cd /cluster/data/felCat3
     ln -s /cluster/data/felCat3/bed/RepeatMasker.2006-10-16/felCat3.fa.out /cluster/data/felCat3
-    ~/kent/src/utils/makeDownloads.pl felCat3 -verbose=2 >& jkStuff/downloads.log &
+    ~/kent/src/utils/automation/makeDownloads.pl felCat3 -verbose=2 >& jkStuff/downloads.log &
     tail -f jkStuff/downloads.log
     # Edit README.txt files when done:
 # *** Edit each README.txt to resolve any notes marked with "***":
@@ -767,6 +767,8 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     
     featureBits -countGaps felCat3 refGene:cds netSyntenyCanFam2 -enrichment
     # refGene:cds 0.005%, netSyntenyCanFam2 67.261%, both 0.005%, cover 88.77%, enrich 1.32x
+
+    # add to trackDb
 
 
 
