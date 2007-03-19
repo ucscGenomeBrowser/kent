@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.3 2007/03/19 18:45:39 heather Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.4 2007/03/19 21:37:12 heather Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -141,7 +141,6 @@ void compareResults(struct searchTestCase *expected, struct searchTestCase *actu
 {
 struct searchResults *result1, *result2;
 
-verbose(1, "comparing %s and %s\n", expected->searchTerm, actual->searchTerm);
 if (differentString(expected->searchTerm, actual->searchTerm))
     {
     fprintf(stderr, "mismatched search terms: expected = %s, actual = %s\n", expected->searchTerm, actual->searchTerm);
@@ -158,7 +157,6 @@ if (expected->posCount != actual->posCount)
     return;
     }
 
-verbose(1, "reading through expected list\n");
 result1 = expected->results;
 while (result1)
     {
@@ -199,7 +197,6 @@ while (result1)
     result1 = result1->next;
     }
 
-verbose(1, "reading through actual list\n");
 result1 = actual->results;
 while (result1)
     {
@@ -251,6 +248,7 @@ struct searchTestCase *morphOutput = NULL;
 while (testCaseList)
     {
     hSetDb(testCaseList->database);
+    verbose(1, "database = %s, searchTerm = %s\n", testCaseList->database, testCaseList->searchTerm);
     hgpList = hgPositionsFind(testCaseList->searchTerm, "", "hgTracks", cart, FALSE);
     /* handle cases where there are no expected matches */
     if (testCaseList->posCount == 0)
