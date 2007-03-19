@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.2 2007/03/17 06:07:18 heather Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.3 2007/03/19 18:45:39 heather Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 struct searchTestCase *testCases =  NULL;
 
 cgiSpoof(&argc, argv);
-cart = cartAndCookie(hUserCookie(), excludeVars, NULL);
+cart = cartForSession(hUserCookie(), excludeVars, NULL);
 
 if (argc != 2)
     usage();
