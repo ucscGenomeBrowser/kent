@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.47 2007/03/02 22:04:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.51 2007/03/16 17:08:48 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -79,7 +79,6 @@ errAbort(
   "   -notItemRgb  - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
-  "               - and it must be the last column of the input file.\n"
   "   -maxChromNameLength=N  - specify max chromName length to avoid\n"
   "               - reference to chromInfo table\n"
   "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
@@ -89,6 +88,9 @@ errAbort(
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
   "   -allowStartEqualEnd  - during strict, allow Start==End OK\n"
+  "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
+  "   -customTrackLoader  - turns on: -noNameIx, -ignoreEmpty,\n"
+  "                       -allowStartEqualEnd, -allowNegativeScores -verbose=0\n"
   "   -verbose=N - verbose level for extra information to STDERR"
   );
 }
@@ -164,11 +166,20 @@ while (lineFileNext(lf, &line, NULL))
 	wordCount = chopTabs(line, words);
     else
 	wordCount = chopLine(line, words);
+    /* ignore empty lines	*/
+    if (0 == wordCount)
+	continue;
     lineFileExpectWords(lf, bedSize, wordCount);
     AllocVar(bed);
     bed->chrom = cloneString(words[0]);
     bed->chromStart = lineFileNeedNum(lf, words, 1);
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
+    if (bed->chromEnd < 1)
+	errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
+		lf->lineIx, dupe);
+    if (bed->chromStart > bed->chromEnd)
+	errAbort("ERROR: line %d:'%s'\nchromStart after chromEnd (%d > %d)\n",
+	    lf->lineIx, dupe, bed->chromStart, bed->chromEnd);
     bed->line = dupe;
     slAddHead(pList, bed);
     }
@@ -357,7 +368,10 @@ writeBedTab(tab, bedList, bedSize);
 if ( ! noLoad )
     {
     verbose(1, "Loading %s\n", database);
-    sqlLoadTabFile(conn, tab, track, loadOptions);
+    if (customTrackLoader)
+	sqlLoadTabFile(conn, tab, track, loadOptions|SQL_TAB_FILE_WARN_ON_WARN);
+    else
+	sqlLoadTabFile(conn, tab, track, loadOptions);
 
     /* add a comment to the history table and finish up connection */
     safef(comment, sizeof(comment),
@@ -391,9 +405,9 @@ if ((0 == bedSize) && ignoreEmpty)
 if (hasBin)
     bedSize--;
 
-/*	verify proper usage of bedGraph column, must be last one */
-if ((bedGraph > 0) && (bedSize != bedGraph))
-    errAbort("bedGraph column %d must be last column, last column is %d",
+/*	verify proper usage of bedGraph column, can not be more than columns */
+if ((bedGraph > 0) && (bedGraph > bedSize))
+    errAbort("bedGraph column %d can not be past last column, last column is %d",
 	bedGraph, bedSize);
 
 for (i=0; i<bedCount; ++i)

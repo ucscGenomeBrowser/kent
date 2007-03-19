@@ -13,8 +13,10 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "wikiLink.h"
+#include "trashDir.h"
+#include "customFactory.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.65 2007/02/23 00:50:31 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.67 2007/03/19 22:50:56 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -161,6 +163,38 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
+static void cartCopyCustomTracks(struct cart *cart)
+/* If cart contains any live custom tracks, save off a new copy of them, 
+ * to prevent clashes by multiple loaders of the same session. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (startsWith(CT_FILE_VAR_PREFIX, el->name))
+	{
+	struct slName *browserLines = NULL;
+	struct customTrack *ctList = NULL;
+	char *ctFileName = (char *)(el->val);
+	if (fileExists(ctFileName))
+	    ctList = customFactoryParseAnyDb(ctFileName, TRUE, &browserLines);
+	/* Save off only if the custom tracks are live -- if none are live,
+	 * leave cart variables in place so hgSession can detect and inform 
+	 * the user. */
+	if (ctList)
+	    {
+	    static struct tempName tn;
+	    char *ctFileVar = el->name;
+	    char *ctFileName;
+	    trashDirFile(&tn, "ct", CT_PREFIX, ".bed");
+	    ctFileName = tn.forCgi;
+	    cartSetString(cart, ctFileVar, ctFileName);
+	    customTracksSaveFile(ctList, ctFileName);
+	    }
+	}
+    }
+}
+
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart)
 /* If permitted, load the contents of the given user's session. */
@@ -194,6 +228,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetInt(cart, sessionVar, hgsid);
+	cartCopyCustomTracks(cart);
 	hDisconnectCentral(&conn2);
 	}
     else
@@ -238,6 +273,7 @@ while (lineFileNext(lf, &line, &size))
 	    }
 	} /* not hgsid */
     } /* each line */
+cartCopyCustomTracks(cart);
 }
 
 struct cart *cartNew(unsigned int userId, unsigned int sessionId, 

@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.7 2006/03/06 17:46:34 angie Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.8 2007/03/16 21:56:35 fanhsu Exp $";
 
 static boolean goExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -86,7 +86,7 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
 	    hasFirst = TRUE;
 	    }
         hPrintf("<A HREF = \"");
-	hPrintf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+	hPrintf("http://amigo.geneontology.org/cgi-bin/amigo/go.cgi?view=details&search_constraint=terms&depth=0&query=%s", goID);
 	hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
 	}
     if (hasFirst)

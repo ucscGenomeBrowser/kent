@@ -80,7 +80,12 @@ void customFactoryAdd(struct customFactory *fac);
 struct customTrack *customFactoryParse(char *text, boolean isFile,
 	struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.*/
+ * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+
+struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+					    struct slName **retBrowserLines);
+/* Parse text into a custom set of tracks.  Text parameter is a
+ * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
 
 void customFactoryTestExistence(char *fileName, boolean *retGotLive,
 				boolean *retGotExpired);

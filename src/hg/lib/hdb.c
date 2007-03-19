@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.314 2007/02/07 20:37:29 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.315 2007/03/14 18:16:32 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -58,10 +58,11 @@ static char *hdbTrackDb = NULL;
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
  * with the env take precedence.
+ *	This function is duplicated in jksql.c !
  */
 {
 char *val = getenv(envName);
-if (val == NULL)
+if (val == NULL || (0 == strlen(val)))
     val = cfgOption(cfgName);
 return val;
 }

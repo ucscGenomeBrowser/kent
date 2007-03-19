@@ -187,7 +187,7 @@ boolean chromGraphBinSeekToChrom(struct chromGraphBin *cgb, char *chromName);
 void chromGraphBinRewind(struct chromGraphBin *cgb);
 /* Position file pointer back to the first chromosome */
 
-struct bed3 *chromGraphBinToBed3(char *fileName, boolean threshold);
+struct bed3 *chromGraphBinToBed3(char *fileName, double threshold);
 /* Stream through making list of all places above threshold. */
 
 #endif /* CHROMGRAPH_H */

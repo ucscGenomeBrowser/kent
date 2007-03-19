@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.97 2006/11/16 23:45:10 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.99 2007/03/14 18:16:32 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -49,10 +49,11 @@ static struct dlList *sqlOpenConnections;
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
  * with the env take precedence.
+ *	This function is duplicated in hdb.c !
  */
 {
 char *val = getenv(envName);
-if (val == NULL)
+if (val == NULL || (0 == strlen(val)))
     val = cfgOption(cfgName);
 return val;
 }
@@ -1736,15 +1737,18 @@ sqlFreeResult(&sr);
 return enumDef;
 }
 
-struct slName *sqlRandomSample(char *db, char *table, char *field, int count)
-/* Get random sample from database. */
+struct slName *sqlRandomSampleWithSeed(char *db, char *table, char *field, int count, int seed)
+/* Get random sample from database specifiying rand number seed, or -1 for none */
 {
 struct sqlConnection *conn = sqlConnect(db);
 char query[256], **row;
 struct sqlResult *sr;
 struct slName *list = NULL, *el;
-safef(query, sizeof(query), "select distinct %s from %s order by rand() limit %d", 
-	field, table, count);
+char seedString[256] = "";
+if (seed != -1)
+    safef(seedString,sizeof(seedString),"%d",seed);
+safef(query, sizeof(query), "select distinct %s from %s order by rand(%s) limit %d", 
+	field, table, seedString, count);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1755,6 +1759,13 @@ sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 return list;
 }
+
+struct slName *sqlRandomSample(char *db, char *table, char *field, int count)
+/* Get random sample from database. */
+{
+return sqlRandomSampleWithSeed(db, table, field, count, -1);
+}
+
 
 static struct sqlFieldInfo *sqlFieldInfoParse(char **row)
 /* parse a row into a sqlFieldInfo object */

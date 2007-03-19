@@ -368,9 +368,17 @@ int colsRead;
 int i;
 struct labeledFile *fileEl;
 if ((line = customFactoryNextRealTilTrack(cpp)) == NULL)
-    errAbort("%s is empty", cpp->fileStack->fileName);
+    errAbort("%s is empty", cpp->fileStack ? cpp->fileStack->fileName : "input");
 colsRead = chopper(line, row, colCount);
-lineFileExpectWords(cpp->fileStack, colCount, colsRead);
+if (colCount != colsRead)
+    {
+    if (cpp->fileStack)
+	errAbort("Expecting %d words line %d of %s got %d", 
+	    colCount, cpp->fileStack->lineIx, cpp->fileStack->fileName, colsRead);
+    else
+    	errAbort("Expecting %d words got %d", 
+	    colCount, colsRead);
+    }
 for (i=dataStart, fileEl = fileList; i < colCount; i++, fileEl = fileEl->next)
     {
     char *label = row[i];
@@ -395,6 +403,72 @@ sqlFreeResult(&sr);
 return hash;
 }
 
+static int cppNeedNum(struct customPp *cpp, char *words[], int wordIx)
+/* Make sure that words[wordIx] is an ascii integer, and return
+ * binary representation of it. Conversion stops at first non-digit char. */
+{
+char *ascii = words[wordIx];
+char c = ascii[0];
+struct lineFile *lf = cpp->fileStack;
+if (c != '-' && !isdigit(c))
+    {
+    if (lf)
+    	errAbort("Expecting number field %d line %d of %s, got %s", 
+	    wordIx+1, lf->lineIx, lf->fileName, ascii);
+    else
+    	errAbort("Expecting number field %d got %s", 
+	    wordIx+1, ascii);
+    }
+return atoi(ascii);
+}
+
+double cppNeedDouble(struct customPp *cpp, char *words[], int wordIx)
+/* Make sure that words[wordIx] is an ascii double value, and return
+ * binary representation of it. */
+{
+char *valEnd;
+char *val = words[wordIx];
+double doubleValue;
+struct lineFile *lf = cpp->fileStack;
+
+doubleValue = strtod(val, &valEnd);
+if ((*val == '\0') || (*valEnd != '\0'))
+    {
+    if (lf)
+	errAbort("Expecting double field %d line %d of %s, got %s",
+	    wordIx+1, lf->lineIx, lf->fileName, val);
+    else
+	errAbort("Expecting double field %d got %s",
+	    wordIx+1, val);
+    }
+return doubleValue;
+}
+
+void cppVaAbort(struct customPp *cpp, char *format, va_list args)
+/* Print file name, line number, and error message, and abort. */
+{
+struct dyString *dy = dyStringNew(0);
+struct lineFile *lf = cpp->fileStack;
+if (lf)
+    dyStringPrintf(dy,  "Error line %d of %s: ", lf->lineIx, lf->fileName);
+else
+    dyStringPrintf(dy,  "Error: ");
+dyStringVaPrintf(dy, format, args);
+errAbort("%s", dy->string);
+dyStringFree(&dy);
+}
+
+void cppAbort(struct customPp *cpp, char *format, ...)
+/* Print file name, line number, and error message, and abort. */
+{
+va_list args;
+va_start(args, format);
+cppVaAbort(cpp, format, args);
+va_end(args);
+}
+
+
+
 static void processGenomic(struct sqlConnection *conn, struct customPp *cpp, 
 	int colCount, char *formatType, boolean firstLineLabels,
 	struct labeledFile *fileList, boolean report)
@@ -418,22 +492,19 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     chopper(line, row, colCount);
     char *chrom = cloneString(row[0]);
-    int start = lineFileNeedNum(cpp->fileStack, row, 1);
+    int start = cppNeedNum(cpp, row, 1);
     ci = hashFindVal(chromHash, chrom);
     if (ci == NULL)
-	lineFileAbort(cpp->fileStack,
-		 "Chromosome %s not found in this assembly (%s).", 
+	cppAbort(cpp, "Chromosome %s not found in this assembly (%s).", 
 		 chrom, hGetDb());
     if (start >= ci->size)
 	{
-	lineFileAbort(cpp->fileStack,
-		 "Chromosome %s is %d bases long, but got coordinate %d.",
+	cppAbort(cpp, "Chromosome %s is %d bases long, but got coordinate %d.",
 		 chrom, ci->size, start);
 	}
     else if (start < 0)
         {
-	lineFileAbort(cpp->fileStack,
-		 "Negative base position %d on chromosome %s.",
+	cppAbort(cpp, "Negative base position %d on chromosome %s.",
 		 start, chrom);
 	}
     for (i=2, fileEl = fileList; i<colCount; ++i, fileEl = fileEl->next)
@@ -444,7 +515,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 	    AllocVar(cg);
 	    cg->chrom = chrom;
 	    cg->chromStart = start;
-	    cg->val = lineFileNeedDouble(cpp->fileStack, row, i);
+	    cg->val = cppNeedDouble(cpp, row, i);
 	    slAddHead(&fileEl->cgList, cg);
 	    }
 	}
@@ -557,7 +628,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
 		AllocVar(cg);
 		cg->chrom = pos->chrom;
 		cg->chromStart = pos->pos;
-		cg->val = lineFileNeedDouble(cpp->fileStack, row, i);
+		cg->val = cppNeedDouble(cpp, row, i);
 		slAddHead(&fileEl->cgList, cg);
 		}
 	    }

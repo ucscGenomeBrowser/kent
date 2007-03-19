@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.55 2007/03/09 04:48:53 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.58 2007/03/16 17:07:15 hiram Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -62,22 +62,72 @@ if (!hgIsOfficialChromName(word))
     lineFileAbort(lf, "%s not a chromosome", word);
 }
 
+static char *saveHost = NULL;
+static char *saveUser = NULL;
+static char *savePassword = NULL;
+
+static void saveCurrentEnv()
+/* while fiddling with environment for pipeline loaders, remember previous env
+ */
+{
+char *val = NULL;
+freeMem(saveHost);	/* clear these if previously used	*/
+freeMem(saveUser);
+freeMem(savePassword);
+val = getenv("HGDB_HOST");
+if (val && (strlen(val) > 0))
+    saveHost = cloneString(val);
+else
+    saveHost = NULL;
+val = getenv("HGDB_USER");
+if (val && (strlen(val) > 0))
+    saveUser = cloneString(val);
+else
+    saveUser = NULL;
+val = getenv("HGDB_PASSWORD");
+if (val && (strlen(val) > 0))
+    savePassword = cloneString(val);
+else
+    savePassword = NULL;
+}
+
+static void restorePrevEnv()
+/* while fiddling with environment for pipeline loaders, restore environment */
+{
+/* can not eliminate the variables from the environment, but can make
+ * them be empty strings.  This will be good enough for getCfgValue()
+ * in hdb.c and jksql.c
+ */
+if (saveHost)
+    envUpdate("HGDB_HOST", saveHost);
+else
+    envUpdate("HGDB_HOST", "");
+if (saveUser)
+    envUpdate("HGDB_USER", saveUser);
+else
+    envUpdate("HGDB_USER", "");
+if (savePassword)
+    envUpdate("HGDB_PASSWORD", savePassword);
+else
+    envUpdate("HGDB_PASSWORD", "");
+freeMem(saveHost);	/* clear these if previously used	*/
+freeMem(saveUser);
+freeMem(savePassword);
+}
+
 char *customTrackTempDb()
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
 {
-static boolean firstTime = TRUE;
-if (firstTime)
-    {
-    /*	set environment for pipeline commands, one time only is sufficient */
-    char *host = cfgOptionDefault("customTracks.host", NULL);
-    char *user = cfgOptionDefault("customTracks.user", NULL);
-    char *pass = cfgOptionDefault("customTracks.password", NULL);
-    envUpdate("HGDB_HOST", host);
-    envUpdate("HGDB_USER", user);
-    envUpdate("HGDB_PASSWORD", pass);
-    firstTime = FALSE;
-    }
+/*	set environment for pipeline commands */
+char *host = cfgOptionDefault("customTracks.host", NULL);
+char *user = cfgOptionDefault("customTracks.user", NULL);
+char *pass = cfgOptionDefault("customTracks.password", NULL);
+
+saveCurrentEnv();
+envUpdate("HGDB_HOST", host);
+envUpdate("HGDB_USER", user);
+envUpdate("HGDB_PASSWORD", pass);
 return (CUSTOM_TRASH);
 }
 
@@ -246,11 +296,15 @@ if (dbRequested)
     FILE *out = pipelineFile(dataPipe);
     struct bed *bed;
     for (bed = track->bedList; bed != NULL; bed = bed->next)
+	{
 	bedOutputN(bed, track->fieldCount, out, '\t', '\n');
-    if(pipelineWait(dataPipe))
+	}
+    fflush(out);		/* help see error from loader failure */
+    if(ferror(out) || pipelineWait(dataPipe))
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
+    restorePrevEnv();			/* restore environment */
     }
 return track;
 }
@@ -267,6 +321,8 @@ customFactoryCheckChromName(bed->chrom, lf);
 
 bed->chromStart = lineFileNeedNum(lf, row, 1);
 bed->chromEnd = lineFileNeedNum(lf, row, 2);
+if (bed->chromEnd < 1)
+    lineFileAbort(lf, "chromEnd less than 1 (%d)", bed->chromEnd);
 if (bed->chromEnd < bed->chromStart)
     lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
     	bed->chromStart, bed->chromEnd);
@@ -944,10 +1000,12 @@ if (dbRequested)
     FILE *out = pipelineFile(dataPipe);
     copyOpenFile(in, out);
     carefulClose(&in);
-    if (pipelineWait(dataPipe))
+    fflush(out);		/* help see error from loader failure */
+    if(ferror(out) || pipelineWait(dataPipe))
 	pipelineFailExit(track);	/* prints error and exits */
     unlink(track->dbStderrFile);	/* no errors, not used */
     pipelineFree(&dataPipe);
+    restorePrevEnv();			/* restore environment */
     track->wigFile = NULL;
 
     /* Figure out lower and upper limits with db query */
@@ -1404,10 +1462,12 @@ char *ctGenome(struct customTrack *ct)
 return trackDbSetting(ct->tdb, "genome");
 }
 
-struct customTrack *customFactoryParse(char *text, boolean isFile,
-                                        struct slName **retBrowserLines)
+static struct customTrack *customFactoryParseOptionalDb(char *text,
+	boolean isFile, struct slName **retBrowserLines,
+	boolean mustBeCurrentDb)
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.*/
+ * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track 
+ * is for some database other than hGetDb(), and fill in maxChromName. */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -1436,7 +1496,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
     //char *type = NULL;
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx, TRUE);
+	track = trackLineToTrack(line, cpp->fileStack->lineIx,
+				 mustBeCurrentDb);
         }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
@@ -1446,7 +1507,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
                         "track name='%s' description='%s'",
                         CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack( defaultLine, 1, TRUE);
+        track = trackLineToTrack( defaultLine, 1, mustBeCurrentDb);
         customPpReuse(cpp, line);
 	}
     else
@@ -1459,8 +1520,14 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     /* verify database for custom track */
     char *ctDb = ctGenome(track);
-    if (ctDb && differentString(ctDb, hGetDb()))
-        errAbort("can't load %s data into %s custom tracks", ctDb, hGetDb());
+    if (mustBeCurrentDb)
+	{
+	if (ctDb == NULL)
+	    ctDb = hGetDb();
+	else if (differentString(ctDb, hGetDb()))
+	    errAbort("can't load %s data into %s custom tracks",
+		     ctDb, hGetDb());
+	}
     struct customTrack *oneList = NULL, *oneTrack;
 
     if (track->dbDataLoad)
@@ -1519,8 +1586,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
                 ctAddToSettings(track, "inputType", fac->name);
             if (dataUrl)
                 ctAddToSettings(track, "dataUrl", dataUrl);
-            if (!ctGenome(track))
-                ctAddToSettings(track, "genome", hGetDb());
+            if (!ctGenome(track) && ctDb)
+                ctAddToSettings(track, "genome", ctDb);
 	    }
 	}
     trackList = slCat(trackList, oneList);
@@ -1568,6 +1635,22 @@ if (retBrowserLines != NULL)
 customPpFree(&cpp);
 sqlDisconnect(&ctConn);
 return trackList;
+}
+
+struct customTrack *customFactoryParse(char *text, boolean isFile,
+	struct slName **retBrowserLines)
+/* Parse text into a custom set of tracks.  Text parameter is a
+ * file name if 'isFile' is set.  Die if the track is not for hGetDb(). */
+{
+return customFactoryParseOptionalDb(text, isFile, retBrowserLines, TRUE);
+}
+
+struct customTrack *customFactoryParseAnyDb(char *text, boolean isFile,
+					    struct slName **retBrowserLines)
+/* Parse text into a custom set of tracks.  Text parameter is a
+ * file name if 'isFile' is set.  Track does not have to be for hGetDb(). */
+{
+return customFactoryParseOptionalDb(text, isFile, retBrowserLines, FALSE);
 }
 
 void customFactoryTestExistence(char *fileName, boolean *retGotLive,
