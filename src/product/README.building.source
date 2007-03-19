@@ -83,5 +83,17 @@ Known problems:
 	in src/inc/common.mk or add the -Wno-unused-variable to instruct
 	the compiler to allow these warnings without an exit.
 
+3.  The build fails during a link of any program under the src/hg/
+	hierarchy with an error something like:
+	undefined reference to `SSL_CTX_free'
+	undefined reference to `ERR_get_error_line_data'
+	undefined reference to `SSL_read'
+	undefined reference to `SSL_get_error'
+	undefined reference to `SSL_write'
+    This error is due to your mysql libraries have been compiled with SSL
+	functionality enabled.  To fix this build problem, add '-lssl'
+	to your MYSQLLIBS environment variable to satisify these SSL
+	library functions.
+
 ====================================================================
-This file last updated: $Date: 2007/02/23 21:51:12 $
+This file last updated: $Date: 2007/03/19 23:15:30 $
