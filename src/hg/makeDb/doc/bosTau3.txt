@@ -227,6 +227,14 @@ mv makeGenomeDb.log makeGenomeDb.log.1
 
     # Make a filtered version for sequence masking:
     awk '{if ($5 <= 12) print;}' all.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom
+
+    # cleanup
+    cd /cluster/data/bosTau3/bed
+    mv simpleRepeat simpleRepeatOct13
+    mv simpleRepeat2 simpleRepeatOct14
+    mv simpleRepeat3 simpleRepeatFeb23
+    mv simpleRepeat4 simpleRepeat
 
 
 #########################################################################
@@ -256,8 +264,8 @@ mv makeGenomeDb.log makeGenomeDb.log.1
 
     ssh kolossus
     cd /cluster/data/bosTau3
-    time twoBitMask bosTau3.rmsk.2bit -add bed/simpleRepeat4/trfMask.bed bosTau3.2bit
-    # Warning: BED file bed/simpleRepeat4/trfMask.bed has >=13 fields which
+    time twoBitMask bosTau3.rmsk.2bit -add bed/simpleRepeat/trfMask.bed bosTau3.2bit
+    # Warning: BED file bed/simpleRepeat/trfMask.bed has >=13 fields which
     # means it might contain block coordinates, but this program uses only the
     # first three fields (the entire span -- no support for blocks).
     # 2.870u 6.542s 0:21.16 44.4%     0+0k 0+0io 5pf+0w
@@ -265,13 +273,19 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     # Link to it from /gbdb:
     ln -s /cluster/data/bosTau3/bosTau3.2bit /gbdb/bosTau3/bosTau3.2bit
 
+    # Ask cluster-admin to bring up BLAT server
+
+    echo 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) VALUES ("bosTau3", "blat11", 17782, 1, 0); \
+          INSERT INTO blatServers (db, host, port, isTrans, canPcr) VALUES ("bosTau3", "blat11", 17783, 0, 1);' \
+          | hgsql -h genome-testdb hgcentraltest
+
 
 #########################################################################
-# MAKE DOWNLOADABLE / GOLDENPATH FILES
-cd /cluster/data/bosTau3
-ln -s /cluster/data/bosTau3/bed/RepeatMasker.2006-10-16/bosTau3.fa.out /cluster/data/bosTau3
+# MAKE DOWNLOADABLE / GOLDENPATH FILES (Heather March 2007)
+    cd /cluster/data/bosTau3
+    ln -s /cluster/data/bosTau3/bed/RepeatMasker.2006-10-16/bosTau3.fa.out /cluster/data/bosTau3
+    makeDownloads.pl bosTau3 -verbose=2 >& jkStuff/downloads.log &
 
-# TO DO: makeDownloads.pl
 
 #########################################################################
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (Heather, Feb. 2007)
@@ -288,8 +302,9 @@ ln -s /cluster/data/bosTau3/bed/RepeatMasker.2006-10-16/bosTau3.fa.out /cluster/
 # Do target = hg18 first because bosTau3 is 13k scaffolds (documented in hg18.txt)
 # Then do swap
 
-mkdir /cluster/data/bosTau3/bed/blastz.hg18.2007-02-25
-ln -s /cluster/data/bosTau3/bed/blastz.hg18.2007-02-25 /cluster/data/bosTau3/bed/blastz.hg18
-cd /cluster/data/bosTau3/bed/blastz.hg18
-doBlastzChainNet.pl /cluster/data/hg18/bed/blastz.bosTau3/DEF -swap >& do.log &
-featureBits bosTau3 chainHg18Link
+    mkdir /cluster/data/bosTau3/bed/blastz.hg18.2007-02-25
+    ln -s /cluster/data/bosTau3/bed/blastz.hg18.2007-02-25 /cluster/data/bosTau3/bed/blastz.hg18
+    cd /cluster/data/bosTau3/bed/blastz.hg18
+    doBlastzChainNet.pl /cluster/data/hg18/bed/blastz.bosTau3/DEF -swap >& do.log &
+    featureBits bosTau3 chainHg18Link
+    # 1378293354 bases of 2731807384 (50.454%) in intersection
