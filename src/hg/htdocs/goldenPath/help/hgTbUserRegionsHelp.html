@@ -13,11 +13,13 @@ chrX   151383000   151390000
 There is a limit of 1,000 defined regions.  Using the upload
 file function will replace any existing regions.  The fourth
 field, name, is optional and for notation purposes only, it is
-not used in the table browser.
+not used in the table browser.  These are 0-relative coordinates,
+first base on a chromosome is 0.
 </P>
 <P>
 Coordinates can also be entered in the form:
 <PRE>
-chrX:151,283,000-151,290,000  optionalRegionName
+chrX:151,283,001-151,290,000  optionalRegionName
 </PRE>
+These are 1-relative coordinates, first base on a chromosome is 1.
 </P>
