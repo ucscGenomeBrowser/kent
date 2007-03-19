@@ -122,22 +122,30 @@ baseColorDefault genomicCodons
     priority 2
 
 track augustus
-shortLabel Augustus Genes
+compositeTrack on
+shortLabel Augustus
 longLabel Augustus Gene Predictions
 group genes
 priority 51.7
 visibility hide
-color 180,0,0
 type genePred
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
 
-track augustusHints
-shortLabel Augustus Hints
-longLabel Augustus Gene Predictions Using Hints
-group genes
-priority 51.7
-visibility hide
-color 139,0,0
-type genePred
+    track augustusHints
+    subTrack augustus
+    shortLabel Augustus Hints
+    longLabel Augustus Gene Predictions Using Hints
+    priority 1
+    color 139,0,0
+
+    track augustusXRA
+    subTrack augustus
+    shortLabel Augustus De Novo
+    longLabel Augustus De Novo Gene Predictions
+    priority 2
+    color 180,0,0
 
 track pseudoExpressed
 shortLabel Expressed Retro
