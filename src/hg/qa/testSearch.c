@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.4 2007/03/19 21:37:12 heather Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.5 2007/03/19 23:18:02 heather Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -58,7 +58,7 @@ while (lineFileNext(lf, &line, NULL))
     elementCount = chopString(line, " ", headerLine, ArraySize(headerLine));
     if (elementCount != 3)
         {
-	fprintf(stderr, "formatting problem, exitting\n");
+	fprintf(stderr, "Error: formatting problem, exitting\n");
 	return NULL;
 	}
     resultList = NULL;
@@ -69,7 +69,7 @@ while (lineFileNext(lf, &line, NULL))
 	elementCount = chopString(line, " ", resultLine, ArraySize(resultLine));
 	if (elementCount != 5)
 	    {
-	    fprintf(stderr, "formatting problem, exitting\n");
+	    fprintf(stderr, "Error: formatting problem, exitting\n");
 	    return NULL;
 	    }
 	AllocVar(result);
@@ -143,17 +143,18 @@ struct searchResults *result1, *result2;
 
 if (differentString(expected->searchTerm, actual->searchTerm))
     {
-    fprintf(stderr, "mismatched search terms: expected = %s, actual = %s\n", expected->searchTerm, actual->searchTerm);
+    fprintf(stderr, "Error: mismatched search terms: expected = %s, actual = %s\n", 
+            expected->searchTerm, actual->searchTerm);
     return;
     }
 if (differentString(expected->database, actual->database))
     {
-    fprintf(stderr, "mismatched databases: expected = %s, actual = %s\n", expected->database, actual->database);
+    fprintf(stderr, "Error: mismatched databases: expected = %s, actual = %s\n", expected->database, actual->database);
     return;
     }
 if (expected->posCount != actual->posCount)
     {
-    fprintf(stderr, "mismatched posCount: expected = %d, actual = %d\n", expected->posCount, actual->posCount);
+    fprintf(stderr, "Error: mismatched posCount: expected = %d, actual = %d\n", expected->posCount, actual->posCount);
     return;
     }
 
@@ -193,7 +194,7 @@ while (result1)
 	break;
         }
     if (!matchFound)
-	fprintf(stderr, "no match found for expected result %s\n", result1->tableName);
+	fprintf(stderr, "Error: no match found for expected result %s\n", result1->tableName);
     result1 = result1->next;
     }
 
@@ -233,7 +234,7 @@ while (result1)
 	break;
         }
     if (!matchFound)
-	fprintf(stderr, "no match found for actual result %s\n", result1->tableName);
+	fprintf(stderr, "Error: no match found for actual result %s\n", result1->tableName);
     result1 = result1->next;
     }
 
@@ -258,7 +259,7 @@ while (testCaseList)
 	    testCaseList = testCaseList->next;
 	    continue;
 	    }
-	fprintf(stderr, "expected no matches, got some\n");
+	fprintf(stderr, "Error: expected no matches, got some\n");
 	fprintf(stderr, "database = %s, searchTerm = %s\n", 
 	        testCaseList->database, testCaseList->searchTerm);
 	continue;
