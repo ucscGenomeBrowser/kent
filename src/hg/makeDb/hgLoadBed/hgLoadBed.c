@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.51 2007/03/16 17:08:48 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.52 2007/03/20 02:56:33 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -22,8 +22,7 @@ boolean oldTable = FALSE;	/* Don't redo table. */
 boolean noLoad = FALSE;		/* Do not load DB or remove tab file */
 boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
 boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
-boolean strict = FALSE;		/* do sanity checks on chrom start,end */
-boolean allowStartEqualEnd = FALSE;  /* TRUE,  during strict, start == end OK */
+boolean noStrict = FALSE;	/* skip the coord sanity checks */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 int maxChromNameLength = 0;		/* specify to avoid chromInfo */
@@ -32,7 +31,7 @@ boolean nameIx = TRUE;	/*	FALSE == do not create the name index */
 boolean ignoreEmpty = FALSE;	/* TRUE == empty input files are not an error */
 boolean allowNegativeScores = FALSE;	/* TRUE == score column set to int */
 boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options*/
-/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores
+/* turns on: noNameIx, ignoreEmpty, allowNegativeScores
 	-verbose=0 */
 
 /* command line option specifications */
@@ -48,8 +47,8 @@ static struct optionSpec optionSpecs[] = {
     {"noLoad", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
-    {"strict", OPTION_BOOLEAN},
-    {"allowStartEqualEnd", OPTION_BOOLEAN},
+    {"noStrict", OPTION_BOOLEAN},
+    {"nostrict", OPTION_BOOLEAN},
     {"maxChromNameLength", OPTION_INT},
     {"tmpDir", OPTION_STRING},
     {"noNameIx", OPTION_BOOLEAN},
@@ -85,12 +84,11 @@ errAbort(
   "                   - which will be removed after loading\n"
   "   -noNameIx  - no index for the name column (default creates index)\n"
   "   -ignoreEmpty  - no error on empty input file\n"
-  "   -strict  - do sanity testing,\n"
-  "            - issue warnings when: chromStart >= chromEnd\n"
-  "   -allowStartEqualEnd  - during strict, allow Start==End OK\n"
+  "   -noStrict  - don't perform coord sanity checks\n"
+  "              - by default we abort when: chromStart > chromEnd\n"
   "   -allowNegativeScores  - sql definition of score column is int, not unsigned\n"
   "   -customTrackLoader  - turns on: -noNameIx, -ignoreEmpty,\n"
-  "                       -allowStartEqualEnd, -allowNegativeScores -verbose=0\n"
+  "                         -allowNegativeScores -verbose=0\n"
   "   -verbose=N - verbose level for extra information to STDERR"
   );
 }
@@ -174,12 +172,15 @@ while (lineFileNext(lf, &line, NULL))
     bed->chrom = cloneString(words[0]);
     bed->chromStart = lineFileNeedNum(lf, words, 1);
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
-    if (bed->chromEnd < 1)
-	errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
-		lf->lineIx, dupe);
-    if (bed->chromStart > bed->chromEnd)
-	errAbort("ERROR: line %d:'%s'\nchromStart after chromEnd (%d > %d)\n",
-	    lf->lineIx, dupe, bed->chromStart, bed->chromEnd);
+    if (! noStrict)
+	{
+	if (bed->chromEnd < 1)
+	    errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
+		     lf->lineIx, dupe);
+	if (bed->chromStart > bed->chromEnd)
+	    errAbort("ERROR: line %d:'%s'\nchromStart after chromEnd (%d > %d)\n",
+		     lf->lineIx, dupe, bed->chromStart, bed->chromEnd);
+	}
     bed->line = dupe;
     slAddHead(pList, bed);
     }
@@ -194,23 +195,6 @@ char *words[64];
 int i, wordCount;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    if (strict)
-	{
-	if (allowStartEqualEnd)
-	    {
-	    if (bed->chromStart > bed->chromEnd)
-		{
-		verbose(1,"WARNING: start > end: %s\n", bed->line);
-		continue;
-		}
-	    } else {
-	    if (bed->chromStart >= bed->chromEnd)
-		{
-		verbose(1,"WARNING: start >= end: %s\n", bed->line);
-		continue;
-		}
-	    }
-	}
     if (!noBin)
         fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
     if (strictTab)
@@ -455,20 +439,18 @@ bedGraph = optionInt("bedGraph",0);
 notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
-strict = optionExists("strict");
-allowStartEqualEnd = optionExists("allowStartEqualEnd");
+noStrict = optionExists("noStrict") || optionExists("nostrict");
 tmpDir = optionVal("tmpDir", tmpDir);
 nameIx = ! optionExists("noNameIx");
 ignoreEmpty = optionExists("ignoreEmpty");
 allowNegativeScores = optionExists("allowNegativeScores");
 customTrackLoader = optionExists("customTrackLoader");
-/* turns on: noNameIx, ignoreEmpty, allowStartEqualEnd, allowNegativeScores
+/* turns on: noNameIx, ignoreEmpty, allowNegativeScores
 	-verbose=0 */
 if (customTrackLoader)
     {
     ignoreEmpty = TRUE;
     nameIx = FALSE;
-    allowStartEqualEnd = TRUE;
     allowNegativeScores = TRUE;
     verboseSetLevel(0);
     }
