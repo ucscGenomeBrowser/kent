@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1241 2007/03/20 02:54:59 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1242 2007/03/20 15:22:42 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6761,7 +6761,7 @@ char supfamURL[512];
 char *genomeStr = "";
 char *genomeStrEnsembl = "";
 struct sqlConnection *conn = hAllocConn();
-char cond_str[256], cond_str2[256];
+char cond_str[256], cond_str2[256], cond_str3[256];
 char *proteinID = NULL;
 char *ans;
 char *ensPep;
@@ -6803,8 +6803,8 @@ if (hTableExists("superfamily"))
     if (hTableExists("ensemblXref3"))
     	{
     	/* use ensemblXref3 for Ensembl data release after ensembl34d */
-    	safef(cond_str, sizeof(cond_str), "transcript='%s'", shortItemName);
-    	ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+    	safef(cond_str3, sizeof(cond_str3), "transcript='%s'", shortItemName);
+    	ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str3);
 	if (ensPep != NULL) proteinID = ensPep;
 	}
 
