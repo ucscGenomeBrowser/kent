@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.58 2007/03/16 17:07:15 hiram Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.59 2007/03/20 22:23:09 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1167,8 +1167,7 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 }
 
 static void customTrackUpdateFromSettings(struct customTrack *track, 
-				   char *line, int lineIx,
-				   boolean getMaxChromName)
+					  char *line, int lineIx)
 /* replace settings in track with those from new track line */
 {
 char *pLine = line;
@@ -1177,6 +1176,7 @@ line = skipLeadingSpaces(pLine);
 struct hash *newSettings = hashVarLine(line, lineIx);
 struct hashCookie hc = hashFirst(newSettings);
 struct hashEl *hel = NULL;
+
 while ((hel = hashNext(&hc)) != NULL)
     ctAddToSettings(track, hel->name, hel->val);
 
@@ -1274,8 +1274,8 @@ if ((val = hashFindVal(hash, "offset")) != NULL)
     track->offset = atoi(val);
 if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
-else if (getMaxChromName)
-    track->maxChromName = hGetMinIndexLength();
+else
+    track->maxChromName = hGetMinIndexLengthDb(ctGenome(track));
 if (!strstr(line, "tdbType"))
     {
     /* for "external" (user-typed) track lines, save for later display
@@ -1350,7 +1350,7 @@ char *line;
 struct slName *browserLines = NULL;
 while (lineFileNextReal(lf, &line))
     if (startsWithWord("track", line))
-        customTrackUpdateFromSettings(ct, line, 1, TRUE);
+        customTrackUpdateFromSettings(ct, line, 1);
     else if (startsWithWord("browser", line))
         slNameAddTail(&browserLines, line);
     else
@@ -1387,8 +1387,7 @@ for (bl = ctBrowserLines(ct); bl != NULL; bl = bl->next)
 return (dyStringCannibalize(&ds));
 }
 
-static struct customTrack *trackLineToTrack(char *line, int lineIx,
-					    boolean getMaxChromName)
+static struct customTrack *trackLineToTrack(char *line, int lineIx)
 /* Convert a track specification line to a custom track structure. */
 {
 /* Make up basic track with associated tdb.  Fill in settings
@@ -1397,7 +1396,7 @@ struct customTrack *track;
 AllocVar(track);
 struct trackDb *tdb = customTrackTdbDefault();	
 track->tdb = tdb;
-customTrackUpdateFromSettings(track, line, lineIx, getMaxChromName);
+customTrackUpdateFromSettings(track, line, lineIx);
 return track;
 }
 
@@ -1467,7 +1466,7 @@ static struct customTrack *customFactoryParseOptionalDb(char *text,
 	boolean mustBeCurrentDb)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.  If mustBeCurrentDb, die if custom track 
- * is for some database other than hGetDb(), and fill in maxChromName. */
+ * is for some database other than hGetDb(). */
 {
 struct customTrack *trackList = NULL, *track = NULL;
 char *line = NULL;
@@ -1496,8 +1495,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     //char *type = NULL;
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx,
-				 mustBeCurrentDb);
+	track = trackLineToTrack(line, cpp->fileStack->lineIx);
         }
     else if (trackList == NULL)
     /* In this case we handle simple files with a single track
@@ -1507,7 +1505,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
                         "track name='%s' description='%s'",
                         CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack( defaultLine, 1, mustBeCurrentDb);
+        track = trackLineToTrack(defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else
@@ -1692,7 +1690,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
 
     if (startsWithWord("track", line))
         {
-	track = trackLineToTrack(line, cpp->fileStack->lineIx, FALSE);
+	track = trackLineToTrack(line, cpp->fileStack->lineIx);
         }
     else if (trackList == NULL)
 	/* In this case we handle simple files with a single track
@@ -1702,7 +1700,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         safef(defaultLine, sizeof defaultLine, 
 	      "track name='%s' description='%s'",
 	      CT_DEFAULT_TRACK_NAME, CT_DEFAULT_TRACK_DESCR);
-        track = trackLineToTrack(defaultLine, 1, FALSE);
+        track = trackLineToTrack(defaultLine, 1);
         customPpReuse(cpp, line);
 	}
     else
