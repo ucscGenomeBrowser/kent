@@ -220,6 +220,25 @@ boolean ffFindAndScore(DNA *needle, int needleSize, DNA *haystack, int haySize,
 
 /************* lib/fuzzyShow - display alignments. ****************/
 
+int ffShAliPartPart(FILE *f, struct ffAli *partAliList, struct ffAli *wholeAliList,
+    char *needleName, DNA *needle, int needleSize, int needleNumOffset,
+    char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
+    int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
+    boolean showJumpTable, 
+    boolean showNeedle, boolean showHaystack,
+    boolean showSideBySide, boolean upcMatch,
+    int cdsS, int cdsE);
+/* Display parts of alignment on html page: partAliList is more restricted and 
+ * is used to draw the haystack sequence, and wholeAliList is a superset of 
+ * partAliList and is used to draw the needle sequence.  If the two lists are 
+ * the same, then the behavior is the same as ffShAliPart has always been, but
+ * if the two lists are different, the subset of the needle from partAliList 
+ * is displayed in bold. 
+ * Note: needle must correspond to wholeAliList.  haystack must correspond to 
+ * partAliList.
+ * Returns number of blocks (after merging blocks separated by blockMaxGap or 
+ * less). */
+
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
