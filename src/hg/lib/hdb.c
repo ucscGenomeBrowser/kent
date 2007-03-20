@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.315 2007/03/14 18:16:32 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.316 2007/03/20 22:20:10 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -157,14 +157,14 @@ if ((chrom = hgOfficialChromName(name)) != NULL && sameString(name, chrom))
 return FALSE;
 }
 
-int hGetMinIndexLength()
-/* get the minimum index size for the current database that won't smoosh 
+int hGetMinIndexLengthDb(char *db)
+/* get the minimum index size for the given database that won't smoosh 
  * together chromNames. */
 {
 static boolean minLen = 0;
 if (minLen <= 0)
     {
-    struct slName *nameList = hAllChromNames();
+    struct slName *nameList = hAllChromNamesDb(db);
     struct slName *name, *last;
     int len = 4;
     slSort(&nameList, slNameCmp);
@@ -182,6 +182,13 @@ if (minLen <= 0)
     minLen = len;
     }
 return minLen;
+}
+
+int hGetMinIndexLength()
+/* get the minimum index size for the current database that won't smoosh 
+ * together chromNames. */
+{
+return hGetMinIndexLengthDb(hGetDb());
 }
 
 void hDefaultConnect()

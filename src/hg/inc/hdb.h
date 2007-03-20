@@ -805,6 +805,13 @@ int hGetMinIndexLength();
  * the largest chromosome.  Allow one exception cuz we're nice
  */
 
+int hGetMinIndexLengthDb(char *db);
+/* get the minimum index size for the given database that won't smoosh
+ * together chromNames such that any group of smooshed entries has a
+ * cumulative size greater than the the largest chromosome.  Allow one
+ * exception cuz we're nice
+ */
+
 int chrStrippedCmp(char *chrA, char *chrB);
 /*	compare chrom names after stripping chr, Scaffold_ or ps_ prefix */
 
