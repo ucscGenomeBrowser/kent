@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1240 2007/03/15 22:53:53 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1241 2007/03/20 02:54:59 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4425,8 +4425,8 @@ hgFreeConn(&conn);
 hgFreeConn(&conn2);
 }
 
-void printAlignments(struct psl *pslList, 
-		     int startFirst, char *hgcCommand, char *typeName, char *itemIn)
+void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+		     char *typeName, char *itemIn)
 /* Print list of mRNA alignments. */
 {
 struct psl *psl;
@@ -4463,6 +4463,16 @@ for (same = 1; same >= 0; same -= 1)
 	}
     }
 printf("</TT></PRE>");
+
+psl = pslList;
+if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
+    {
+    safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
+	  psl->tStart, typeName);
+    hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
+		       otherString, psl->tName);
+    printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
+    }
 }
 
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
@@ -5315,59 +5325,92 @@ freeDnaSeq(&tSeq);
 return blockCount;
 }
 
-int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, 
-		     FILE *body, int cdsS, int cdsE)
-/* Show alignment for accession. */
+struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
+				    boolean *retIsRc, struct dnaSeq **retSeq,
+				    int *retTStart)
+/* Given psl, dig up target sequence and convert to ffAli. */
 {
-struct dnaSeq *dnaSeq;
-DNA *rna;
-int rnaSize;
-boolean isRc = FALSE;
-struct ffAli *ffAli;
 int tStart, tEnd, tRcAdjustedStart;
-int blockCount;
+struct dnaSeq *dnaSeq;
 
-/* Get RNA and DNA sequence.  */
-rna = rnaSeq->dna;
-rnaSize = rnaSeq->size;
 tStart = psl->tStart - 100;
 if (tStart < 0) tStart = 0;
+if (retTStart)
+    *retTStart = tStart;
+
 tEnd  = psl->tEnd + 100;
 if (tEnd > psl->tSize) tEnd = psl->tSize;
+
 dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
+if (retSeq)
+    *retSeq = dnaSeq;
 
-/* Write body heading info. */
-fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart+1, psl->tEnd);
-fprintf(body, "Click on links in the frame to the left to navigate through "
-	"the alignment.\n");
-
-if (rnaSize != psl->qSize)
-    {
-    fprintf(body, "<p><b>Cannot display alignment. Size of rna %s is %d has changed since alignment was performed when it was %d.\n",
-            psl->qName, rnaSize, psl->qSize);
-    return 0;
-    }
-/* Convert psl alignment to ffAli. */
 tRcAdjustedStart = tStart;
 if (psl->strand[0] == '-')
     {
-    isRc = TRUE;
+    if (retIsRc)
+	*retIsRc = TRUE;
     reverseComplement(dnaSeq->dna, dnaSeq->size);
-    pslRcBoth(psl);
+    pslRcBoth(psl); 
     tRcAdjustedStart = psl->tSize - tEnd;
-    /*if (cdsE != 0)
-        {
-        cdsS = psl->tSize - cdsS;
-        cdsE = psl->tSize - cdsE;
-        }*/
     }
-ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
+return pslToFfAli(psl, qSeq, dnaSeq, tRcAdjustedStart);
+}
 
-blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
-			 dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
-			 8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE, cdsS, cdsE);
+int showPartialDnaAlignment(struct psl *partPsl, struct psl *wholePsl,
+			    struct dnaSeq *rnaSeq, FILE *body,
+			    int cdsS, int cdsE)
+/* Show alignment for accession.  If partPsl and wholePsl are different 
+ * pointers, then partPsl must be a subset of wholePsl (e.g. trimmed to 
+ * browser window coords) and while the entire rnaSeq will be displayed 
+ * and highlighted according to wholePsl, the partPsl subset will be in 
+ * bold.  The dna is always displayed according to partPsl. */
+{
+struct dnaSeq *partDnaSeq, *wholeDnaSeq;
+int partTStart, wholeTStart;
+DNA *rna;
+int rnaSize;
+boolean isRc = FALSE;
+struct ffAli *partFfAli, *wholeFfAli;
+int blockCount;
+
+/* Get RNA sequence and convert psl to ffAli.  */
+rna = rnaSeq->dna;
+rnaSize = rnaSeq->size;
+
+partFfAli = pslToFfAliAndSequence(partPsl, rnaSeq, &isRc, &partDnaSeq,
+				  &partTStart);
+if (wholePsl == partPsl)
+    {
+    wholeFfAli = partFfAli;
+    wholeDnaSeq = partDnaSeq;
+    wholeTStart = partTStart;
+    }
+else
+    wholeFfAli = pslToFfAliAndSequence(wholePsl, rnaSeq, &isRc, &wholeDnaSeq,
+				       &wholeTStart);
+
+/* Write body heading info. */
+fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	partPsl->qName, partPsl->tName, partPsl->tStart+1, partPsl->tEnd);
+fprintf(body, "Click on links in the frame to the left to navigate through "
+	"the alignment.\n");
+
+if (rnaSize != partPsl->qSize)
+    {
+    fprintf(body, "<p><b>Cannot display alignment. Size of rna %s is %d has changed since alignment was performed when it was %d.\n",
+            partPsl->qName, rnaSize, partPsl->qSize);
+    return 0;
+    }
+
+blockCount = ffShAliPartPart(body, partFfAli, wholeFfAli, partPsl->qName,
+			 rna, rnaSize, 0, 
+			 partDnaSeq->name, partDnaSeq->dna, partDnaSeq->size,
+			 partTStart, 8, FALSE, isRc,
+			 FALSE, TRUE, TRUE, TRUE, TRUE,
+			 cdsS, cdsE);
 return blockCount;
 }
 
@@ -5387,7 +5430,7 @@ trashDirFile(&bodyTn, "body", "body", ".html");
 body = mustOpen(bodyTn.forCgi, "w");
 htmStart(body, psl->qName);
 if (qType == gftRna || qType == gftDna)
-    blockCount = showDnaAlignment(psl, oSeq, body, cdsS, cdsE);
+    blockCount = showPartialDnaAlignment(psl, psl, oSeq, body, cdsS, cdsE);
 else 
     blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 htmEnd(body);
@@ -5402,6 +5445,53 @@ htmStart(index, qName);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
 fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
+for (i=1; i<=blockCount; ++i)
+    {
+    fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
+	    bodyTn.forCgi, i, i);
+    }
+fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+fclose(index);
+chmod(indexTn.forCgi, 0666);
+
+/* Write (to stdout) the main html page containing just the frame info. */
+puts("<FRAMESET COLS = \"13%,87% \" >");
+printf("  <FRAME SRC=\"%s\" NAME=\"index\">\n", indexTn.forCgi);
+printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyTn.forCgi);
+puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
+puts("</FRAMESET>");
+puts("</HTML>\n");
+exit(0);	/* Avoid cartHtmlEnd. */
+}
+
+
+void showSomePartialDnaAlignment(struct psl *partPsl, struct psl *wholePsl,
+				 bioSeq *oSeq, char *qName, int cdsS, int cdsE)
+/* Display protein or DNA alignment in a frame. */
+{
+int blockCount, i;
+struct tempName indexTn, bodyTn;
+FILE *index, *body;
+
+trashDirFile(&indexTn, "index", "index", ".html");
+trashDirFile(&bodyTn, "body", "body", ".html");
+
+/* Writing body of alignment. */
+body = mustOpen(bodyTn.forCgi, "w");
+htmStart(body, partPsl->qName);
+blockCount = showPartialDnaAlignment(partPsl, wholePsl, oSeq, body, cdsS, cdsE);
+htmEnd(body);
+fclose(body);
+chmod(bodyTn.forCgi, 0666);
+
+/* Write index. */
+index = mustOpen(indexTn.forCgi, "w");
+if (qName == NULL)
+    qName = partPsl->qName;
+htmStart(index, qName);
+fprintf(index, "<H3>Alignment of %s</H3>", qName);
+fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), partPsl->tName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
@@ -5501,6 +5591,101 @@ if (startsWith("xeno", type))
     showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 else
     showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+hFreeConn(&conn);
+}
+
+void htcCdnaAliInWindow(char *acc)
+/* Show part of alignment in browser window for accession. */
+{
+char query[256];
+char table[64];
+char accTmp[64];
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+struct psl *wholePsl, *partPsl;
+struct dnaSeq *rnaSeq;
+char *track;
+int start;
+unsigned int cdsStart = 0, cdsEnd = 0;
+boolean hasBin;
+char accChopped[512] ;
+safef(accChopped, sizeof(accChopped), "%s",acc);
+chopSuffix(accChopped);
+
+/* Get some environment vars. */
+track = cartString(cart, "aliTrack");
+start = cartInt(cart, "o");
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n",
+       accChopped, track);
+
+/* Get cds start and stop, if available */
+conn = hAllocConn();
+if (sqlTableExists(conn, "gbCdnaInfo"))
+    {
+    safef(query, sizeof(query), "select cds from gbCdnaInfo where acc = '%s'",
+	  accChopped);
+    sr = sqlGetResult(conn, query); 
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+        safef(query, sizeof(query), "select name from cds where id = '%d'",
+	      atoi(row[0]));
+	sqlFreeResult(&sr);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    genbankParseCds(row[0], &cdsStart, &cdsEnd);
+	}
+    sqlFreeResult(&sr);
+    }
+
+/* Look up alignments in database */
+hFindSplitTable(seqName, track, table, &hasBin);
+safef(query, sizeof(query),
+      "select * from %s where qName = '%s' and tStart=%d",
+      table, acc, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s at %d", acc, start);
+wholePsl = pslLoad(row+hasBin);
+sqlFreeResult(&sr);
+
+/* get bz rna snapshot for blastz alignments */
+if (sameString("mrnaBlastz", track) || sameString("pseudoMrna", track))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    int retId = 0;
+    char *gbdate = NULL;
+    safef(accTmp, sizeof(accTmp),"bz-%s",acc);
+    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
+        rnaSeq = hRnaSeq(acc);
+    hFreeConn(&conn);
+    }
+else if (sameString("HInvGeneMrna", track))
+    {
+    /* get RNA accession for the gene id in the alignment */
+    safef(query, sizeof(query), "select mrnaAcc from HInv where geneId='%s'",
+	  acc);
+    rnaSeq = hRnaSeq(sqlQuickString(conn, query));
+    }
+else
+    rnaSeq = hRnaSeq(acc);
+
+/* Get partial psl for part of alignment in browser window: */
+if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
+    partPsl = wholePsl;
+else
+    partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
+
+if (startsWith("xeno", track))
+    showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
+				NULL, cdsStart, cdsEnd);
+else
+    showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
+				NULL, cdsStart, cdsEnd);
 hFreeConn(&conn);
 }
 
@@ -17987,6 +18172,10 @@ else if (containsStringNoCase(track, "blastzStrictChain")
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
     htcLongXenoPsl2(track, item);
+    }
+else if (sameWord(track, "htcCdnaAliInWindow"))
+    {
+    htcCdnaAliInWindow(item);
     }
 else if (sameWord(track, "htcPseudoGene"))
     {
