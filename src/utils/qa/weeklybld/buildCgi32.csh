@@ -62,7 +62,7 @@ rm -fr hgCgiData
 rm -fr hgSubjData
 
 #echo "debug: skipping scp"
-scp -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/
+scp -r -p * qateam@hgdownload:/mirrordata/apache/cgi-bin-i386/
 
 echo
 echo "32-bit cgis built on $HOST and scp'd to hgdownload"
