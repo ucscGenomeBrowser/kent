@@ -21,7 +21,7 @@ load: clean
 	done
 	for TEST in ${BEDS} ; do \
 	  hgLoadBed test $${TEST}Good input/$${TEST}Good.bed -verbose=0 ; \
-	  hgLoadBed test $${TEST}Bad  input/$${TEST}Bad.bed -verbose=0 ; \
+	  hgLoadBed -noStrict test $${TEST}Bad  input/$${TEST}Bad.bed -verbose=0 ; \
 	done
 	for TEST in ${PSLS} ; do \
 	 hgLoadPsl test -table=$${TEST}Good input/$${TEST}Good.psl -verbose=0 ; \
