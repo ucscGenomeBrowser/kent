@@ -197,7 +197,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1242 2007/03/20 15:22:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1243 2007/03/20 21:04:19 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5491,6 +5491,8 @@ if (qName == NULL)
 htmStart(index, qName);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
+if (partPsl != wholePsl)
+    fprintf(index, "<A HREF=\"../%s#cDNAStart\" TARGET=\"body\">%s in browser window</A><BR>\n", bodyTn.forCgi, qName);
 fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), partPsl->tName);
 for (i=1; i<=blockCount; ++i)
     {
@@ -5502,7 +5504,12 @@ fclose(index);
 chmod(indexTn.forCgi, 0666);
 
 /* Write (to stdout) the main html page containing just the frame info. */
-puts("<FRAMESET COLS = \"13%,87% \" >");
+if (partPsl != wholePsl)
+    printf("<FRAMESET COLS = \"13%%,87%% \" "
+	   "ONLOAD=\"body.location.href = '%s#cDNAStart';\">\n",
+	   bodyTn.forCgi);
+else
+    puts("<FRAMESET COLS = \"13%,87% \" >");
 printf("  <FRAME SRC=\"%s\" NAME=\"index\">\n", indexTn.forCgi);
 printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyTn.forCgi);
 puts("<NOFRAMES><BODY></BODY></NOFRAMES>");

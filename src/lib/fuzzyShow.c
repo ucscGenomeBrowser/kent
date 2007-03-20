@@ -12,24 +12,24 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.19 2007/03/20 02:53:04 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.20 2007/03/20 21:04:19 angie Exp $";
 
 static void ffShNeedle(FILE *f, DNA *needle, int needleSize,
 		       int needleNumOffset, char *colorFlags,
 		       struct ffAli *aliList, boolean upcMatch,
 		       int cdsS, int cdsE,
-		       boolean boldRange, int boldStart, int boldEnd)
+		       boolean accentRange, int accentStart, int accentEnd)
 /* Display the needle sequence with HTML highlighting. */
 {
 struct cfm *cfm = cfmNew(10, 50, TRUE, FALSE, f, needleNumOffset);
 char *n = cloneMem(needle, needleSize);
-char *boldFlags = needMem(needleSize);
+char *accentFlags = needMem(needleSize);
 struct ffAli *leftAli = aliList;
 struct ffAli *ali;
 long i;
 
 zeroBytes(colorFlags, needleSize);
-zeroBytes(boldFlags, needleSize);
+zeroBytes(accentFlags, needleSize);
 fprintf(f, "<TT><PRE>\n");
 if (aliList != NULL)
     {
@@ -58,21 +58,23 @@ for (ali = leftAli; ali != NULL; ali = ali->right)
 	    if (upcMatch)
 		n[off+i] = toupper(n[off+i]);
 	    }
-	if (boldRange)
+	if (accentRange)
 	    {
-	    if (off+i >= boldStart && off+i < boldEnd)
-		boldFlags[off+i] = TRUE;
+	    if (off+i >= accentStart && off+i < accentEnd)
+		accentFlags[off+i] = TRUE;
 	    }
 	}
     }
 for (i=0; i<needleSize; ++i)
     {
+    if (accentRange && i == accentStart)
+	fprintf(f, "<A NAME=cDNAStart></A>");
     cfmOutExt(cfm, n[i], seqOutColorLookup[(int)colorFlags[i]],
-	      FALSE, boldFlags[i], FALSE);
+	      accentFlags[i], accentFlags[i], FALSE);
     }
 cfmFree(&cfm);
 freeMem(n);
-freeMem(boldFlags);
+freeMem(accentFlags);
 fprintf(f, "</TT></PRE>\n");
 htmHorizontalLine(f);
 }
@@ -112,10 +114,12 @@ if (showJumpTable)
     {
     fputs("<CENTER><P><TABLE BORDER=1 WIDTH=\"97%\"><TR>", f);
     fputs("<TD WIDTH=\"23%\"><P ALIGN=CENTER><A HREF=\"#cDNA\">cDNA Sequence</A></TD>", f);
+    if (partAliList != wholeAliList)
+	fputs("<TD WIDTH=\"23%\"><P ALIGN=CENTER><A HREF=\"#cDNAStart\">cDNA Sequence in window</A></TD>", f);
     fputs("<TD WIDTH=\"27%\"><P ALIGN=\"CENTER\"><A HREF=\"#genomic\">Genomic Sequence</A></TD>", f);
     fputs("<TD WIDTH=\"29%\"><P ALIGN=\"CENTER\"><A HREF=\"#1\">cDNA in Genomic</A></TD>", f);
     fputs("<TD WIDTH=\"21%\"><P ALIGN=\"CENTER\"><A HREF=\"#ali\">Side by Side</A></TD>", f);
-    fputs("</TR></TABLE>", f);
+    fputs("</TR></TABLE>\n", f);
     }
 if (cdsE > 0) 
     {
@@ -124,22 +128,22 @@ if (cdsE > 0)
     fprintf(f, "Matching bases in UTR regions of cDNA and genomic sequences are colored red%s. ", 
 	    (upcMatch ? " and capitalized" : ""));
     fputs("Light blue (coding) or orange (UTR) bases mark the boundaries of gaps in either sequence "
-	  "(often splice sites). ", f);
+	  "(often splice sites).\n", f);
     } 
 else 
     {
     fprintf(f, "Matching bases in cDNA and genomic sequences are colored blue%s. ", 
 	    (upcMatch ? " and capitalized" : ""));
     fputs("Light blue bases mark the boundaries of gaps in either sequence "
-	  "(often splice sites). ", f);
+	  "(often splice sites).\n", f);
     } 
 if (showNeedle && (partAliList != wholeAliList))
     fputs("Bases that were in the selected browser region are shown in bold, "
 	  "and only the alignment for these bases is displayed in the "
-	  "Genomic and Side by Side sections.", f);
+	  "Genomic and Side by Side sections.\n", f);
 
 if (showJumpTable)
-    fputs("</P></CENTER>", f);
+    fputs("</P></CENTER>\n", f);
 htmHorizontalLine(f);
 
 fprintf(f, "<H4><A NAME=cDNA></A>cDNA %s%s</H4>\n", needleName, (rcNeedle ? " (reverse complemented)" : ""));
@@ -156,19 +160,22 @@ else
 if (rcNeedle)
     reverseComplement(needle, needleSize);
 
-if (partAliList != wholeAliList)
+if (showNeedle)
     {
-    struct ffAli *rightAli;
-    for (rightAli = partAliList; rightAli->right != NULL;
-	 rightAli = rightAli->right)
-	;
-    ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
-	       wholeAliList, upcMatch, cdsS, cdsE,
-	       TRUE, (leftAli->nStart-needle), (rightAli->nEnd-needle));
-    }
-else
-    ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
-	       wholeAliList, upcMatch, cdsS, cdsE, FALSE, 0, 0);
+    if (partAliList != wholeAliList)
+	{
+	struct ffAli *rightAli;
+	for (rightAli = partAliList; rightAli->right != NULL;
+	     rightAli = rightAli->right)
+	    ;
+	ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
+		   wholeAliList, upcMatch, cdsS, cdsE,
+		   TRUE, (leftAli->nStart-needle), (rightAli->nEnd-needle));
+	}
+    else
+	ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
+		   wholeAliList, upcMatch, cdsS, cdsE, FALSE, 0, 0);
+    }    
 
 if (showHaystack)
     {
