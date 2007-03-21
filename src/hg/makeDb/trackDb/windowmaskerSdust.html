@@ -1,5 +1,8 @@
 <H2>Description</H2>
-This track depicts masked sequence as determined by WindowMasker
+This track depicts masked sequence as determined by WindowMasker.  The 
+WindowMasker tool is included in the NCBI C++ toolkit. The source code 
+for the entire toolkit is available 
+<A HREF="ftp://ftp.ncbi.nih.gov/toolbox/ncbi_tools++/CURRENT/" TARGET=_blank>here</A>.
 
 <H2>Methods</H2>
 WindowMasker was operated with the following parameters:
@@ -7,7 +10,7 @@ WindowMasker was operated with the following parameters:
 windowmasker -mk_counts true -input $db.fa -output wm_counts
 windowmasker -ustat wm_counts -sdust true -input $db.fa -output repeats.bed
 </PRE>
-The repeats.bed (bed3) file was loaded into the "windowmaskerSdust" table for
+The repeats.bed (BED3) file was loaded into the "windowmaskerSdust" table for
 this track.
 
 <H2>References</H2>
