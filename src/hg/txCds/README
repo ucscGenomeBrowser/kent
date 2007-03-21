@@ -6,7 +6,7 @@ The overall pipeline is to convert various lines of evidence to
 a common cdsEvidence format with:
    txCdsEvFromRna - handles refSeq and genbank mRNA alignments
    txCdsEvFromProtein - handles uniProt and refSeq protein alignments
-   txCdsEvFromBorf - handles bestorf (via borfBig) predictions
+   txCdsPredict - does predictions
 These are then all concatenated together, and the best CDS for each
 transcript is picked with
    txCdsPick
@@ -38,86 +38,4 @@ transcripts with
 The noncoding ones are clustered again with
    txBedToGraph
 
-
-The thinking behind this is to have each of the txCdsEv programs
-generate a score between 0 and 1000 indicating their certainty.
-To do this we look at the distribution of the scores for validated
-and reviewed RefSeqs, and compare them to the scores for non-ref-seqs.
-We assume the RefSeqs is the pure distribution, and the non-ref-seqs
-are a mixture of noise with the pure distribution.  We try to
-map the distributions in such a way that they map to 1000 for the ones
-they are 95% sure are coding, and 0 to the ones they are 95% sure are
-not coding.  Since we're just doing this by eyeballing histograms,
-it's not super precise.  Hopefully it will have a reasonable effect
-though.
-
-Distribution of bestOrf scores on refSeq reviewed or validated:
- 0 ****** 176
- 20 ******************************** 920
- 40 ***************************************************** 1520
- 60 ************************************************************ 1731
- 80 *********************************************************** 1704
-100 ********************************************************** 1660
-120 *************************************************** 1481
-140 ******************************************** 1274
-160 *************************************** 1114
-180 *********************************** 1018
-200 ******************************* 880
-220 ************************ 698
-240 ********************* 611
-260 ****************** 525
-280 **************** 470
-300 ************* 361
-320 ************ 336
-340 ********* 258
-360 ******** 227
-380 ****** 185
-400 ****** 162
-420 ***** 146
-440 **** 121
-460 **** 109
-480 *** 85
-500 *** 87
-520 *** 81
-540 ** 54
-560 ** 44
-580 ** 54
-<minVal or >=600 ****************** 526
-
-The lower 5% is at 37.  Upper 5% is at 481.  So normalize by
-zScore = (score-37)*1000.0/(481-37) clipped to between 0 and 1000
-
-Distribution of bestorf scores on non-refSeq.  
-
-  0 *** *************************** 3192
- 20 ************** ********************************************** 6288
- 40 ************************ **************** 4166
- 60 ************************** ****** 3358
- 80 ************************** * 2821
-100 ********************** * 2420
-120 ****************** * 2009
-140 **************** 1712
-160 ************ 1273
-180 *********** 1114
-200 ********* 918
-220 ****** 670
-240 ***** 564
-260 **** 423
-280 *** 351
-300 *** 289
-320 *** 285
-340 ** 196
-360 ** 167
-380 * 154
-400 * 91
-420 * 98
-440 * 86
-460 * 72
-480  49
-500  46
-520 * 58
-540  26
-560  22
-580  30
-<minVal or >=600 ** 249
 
