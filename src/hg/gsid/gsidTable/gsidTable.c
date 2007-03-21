@@ -19,7 +19,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.8 2007/03/21 19:53:13 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.9 2007/03/21 21:31:19 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -448,9 +448,6 @@ void colSortLink(struct column *col)
 
 char *plusMinus = "%2B";  /* "+" cgi encoded */
 
-//debug
-//hPrintf("orderOn=[%s] col->name=[%s]<br>\n",orderOn, col->name);
-
 if (sameString(orderOn+1,col->name)&&orderOn[0]=='+')
     plusMinus = "-";
 hPrintf("<A href=\"gsidTable?org=%s&db=%s&%s&%s=%s%s\" >", 
@@ -502,7 +499,7 @@ if (s == NULL)
 else
     {
     if (needsLink)
-	hPrintf("<A HREF=\"gsidSubj?hgs_subj=%s&submit=Go%21\">",s);
+	hPrintf("<A HREF=\"gsidSubj?%s&hgs_subj=%s&submit=Go%21\">",cartSidUrlString(cart),s);
     hPrintNonBreak(s);
     if (needsLink)
 	hPrintf("</A>");

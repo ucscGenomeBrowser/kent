@@ -1,22 +1,14 @@
 /* configure - Do configuration page. */
 
 #include "common.h"
-//#include "linefile.h"
-//#include "hash.h"
-//#include "cheapcgi.h"
-//#include "obscure.h"
 #include "jksql.h"
-//#include "htmshell.h"
-//#include "hdb.h"
 #include "cart.h"
 #include "hPrint.h"
-//#include "web.h"
-//#include "hgExp.h"
 #include "hgColors.h"
 
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.1 2006/11/17 23:13:22 galt Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.2 2007/03/21 21:31:19 galt Exp $";
 
 char *configVarName(struct column *col, char *varName)
 /* Return variable name for configuration. */
