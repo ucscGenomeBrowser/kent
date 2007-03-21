@@ -131,6 +131,7 @@ EOF
     mkdir -p /iscratch/i/felCat3
     cp -p /cluster/data/felCat3/felCat3.2bit .
     cp -p /cluster/data/felCat3/chrom.sizes .
+    cp -p /cluster/data/felCat3/11.ooc .
     iSync 
 
 #########################################################################
