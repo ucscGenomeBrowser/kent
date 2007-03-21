@@ -6,7 +6,7 @@ hgLoadEnsembl pan_troglodytes core_43_21b /cluster/store8/ensembl/pan_troglodyte
 hgLoadEnsembl macaca_mulatta core_43_10c /cluster/store8/ensembl/macaca_mulatta_43_10c rheMac2
 hgLoadEnsembl tupaia_belangeri core_43_1 /cluster/store8/ensembl/tupaia_belangeri_43_1 tupBel1
 hgLoadEnsembl canis_familiaris core_43_2a /cluster/store8/ensembl/canis_familiaris_43_2a canFam2
-hgLoadEnsembl felis_catus core_43_1 /cluster/store8/ensembl/felis_catus_43_1 felCat3
+#hgLoadEnsembl felis_catus core_43_1 /cluster/store8/ensembl/felis_catus_43_1 felCat3
 hgLoadEnsembl bos_taurus core_43_3 /cluster/store8/ensembl/bos_taurus_43_3 bosTau3
 hgLoadEnsembl dasypus_novemcinctus core_43_1b /cluster/store8/ensembl/dasypus_novemcinctus_43_1b dasNov1
 hgLoadEnsembl gallus_gallus core_43_2a /cluster/store8/ensembl/gallus_gallus_43_2a galGal3
@@ -15,12 +15,12 @@ hgLoadEnsembl danio_rerio core_43_6d /cluster/store8/ensembl/danio_rerio_43_6d d
 hgLoadEnsembl monodelphis_domestica core_43_3c /cluster/store8/ensembl/monodelphis_domestica_43_3c monDom4
 hgLoadEnsembl oryzias_latipes core_43_1a /cluster/store8/ensembl/oryzias_latipes_43_1a oryLat1
 hgLoadEnsembl echinops_telfairi core_43_1b /cluster/store8/ensembl/echinops_telfairi_43_1b echTel1
-hgLoadEnsembl loxodonta_africana core_43_1b /cluster/store8/ensembl/loxodonta_africana_43_1b loxAfr1
+#hgLoadEnsembl loxodonta_africana core_43_1b /cluster/store8/ensembl/loxodonta_africana_43_1b loxAfr1
 hgLoadEnsembl gasterosteus_aculeatus core_43_1b /cluster/store8/ensembl/gasterosteus_aculeatus_43_1b gasAcu1
 hgLoadEnsembl ornithorhynchus_anatinus core_43_1a /cluster/store8/ensembl/ornithorhynchus_anatinus_43_1a ornAna1
 hgLoadEnsembl xenopus_tropicalis core_43_41d /cluster/store8/ensembl/xenopus_tropicalis_43_41d xenTro2
 hgLoadEnsembl tetraodon_nigroviridis core_43_1h /cluster/store8/ensembl/tetraodon_nigroviridis_43_1h tetNig1
-hgLoadEnsembl takifugu_rubripes core_43_4e /cluster/store8/ensembl/takifugu_rubripes_43_4e fr2
+hgLoadEnsembl -l /cluster/data/fr2/jkStuff/liftAll.lft takifugu_rubripes core_43_4e /cluster/store8/ensembl/takifugu_rubripes_43_4e fr2
 hgLoadEnsembl ciona_intestinalis core_43_2e /cluster/store8/ensembl/ciona_intestinalis_43_2e ci2
 hgLoadEnsembl ciona_savignyi core_43_2c /cluster/store8/ensembl/ciona_savignyi_43_2c cioSav2
 hgLoadEnsembl caenorhabditis_elegans core_43_160a /cluster/store8/ensembl/caenorhabditis_elegans_43_160a ce4
