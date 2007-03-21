@@ -261,7 +261,12 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     ssh kkr1u00
     cd /iscratch/i/bosTau3
     cp -p /cluster/bluearc/bosTau3/11.ooc .
-    iSync
+    # alternate to iSync suggested by Hiram
+    /bin/bash
+    for R in 2 3 4 5 6 7
+    do
+        rsync -a --progress ./ kkr${R}u00:/iscratch/i/bosTau3
+    done
 
 
 #########################################################################
@@ -310,7 +315,12 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     cp -p /cluster/data/bosTau3/bosTau3.2bit .
     cp -p /cluster/data/bosTau3/chrom.sizes .
     cp -p /cluster/data/bosTau3/11.ooc .
-    iSync
+    # alternate to iSync suggested by Hiram
+    /bin/bash
+    for R in 2 3 4 5 6 7
+    do
+        rsync -a --progress ./ kkr${R}u00:/iscratch/i/bosTau3
+    done
 
 #########################################################################
 # BLASTZ/CHAIN/NET HG18 (Done Feb 2007 heather)
