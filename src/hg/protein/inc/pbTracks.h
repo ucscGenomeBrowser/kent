@@ -9,6 +9,10 @@
 #define NEUTRAL    3
 #define POLAR      4
 
+#define DB_SRC_UNKNOWN 0
+#define DB_SRC_UNIPROT 1
+#define DB_SRC_REFSEQ  2
+
 #define MAX_PB_PIXWIDTH 10000
 
 #define MAX_PB_ORG 50		/* max number of oganisms that support PB */
