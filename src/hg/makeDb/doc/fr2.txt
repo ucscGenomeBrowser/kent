@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.14 2007/03/12 22:22:48 hiram Exp $"
+#       "$Id: fr2.txt,v 1.15 2007/03/21 17:32:20 hiram Exp $"
 #
 
 ##########################################################################
@@ -1561,6 +1561,22 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
     cd goldenPath/bigZips
     ln -s \
 	/cluster/data/fr2/bed/WindowMasker.2007-01-22/chromWMSdust.bed.tar.gz .
+    # get GenBank native mRNAs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/i386/gbGetSeqs -db=fr2 -native \
+	GenBank mrna /cluster/data/fr2/goldenPath/bigZips/mrna.fa
+    # get GenBank xeno mRNAs
+    ./bin/i386/gbGetSeqs -db=fr2 -xeno \
+	GenBank mrna /cluster/data/fr2/goldenPath/bigZips/xenoMrna.fa
+    cd /cluster/data/fr2/goldenPath/bigZips
+    ssh kkstore05
+    gzip mrna.fa xenoMrna.fa
+    md5sum *.gz > md5sum.txt
+    #	Edit the README.txt file to be correct
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/fr2/bigZips
+    ln -s /cluster/data/fr2/goldenPath/bigZips/* .
 
 ############################################################################
 ## Fugu Photograph - obtained from Byrappa Venkatesh in email 2007-02-15
