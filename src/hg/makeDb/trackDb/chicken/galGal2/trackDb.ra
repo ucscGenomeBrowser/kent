@@ -392,8 +392,6 @@ visibility hide
 color 0,60,120
 altColor 200,220,255
 type bed 12 .
-url http://www.genoscope.cns.fr/comparative?premier=Chicken&deuxieme=Tetraodon&position=$$
-urlLabel Exofish Ecotig Display Link:
 otherDb tetNig1
 
 track cpgIslandExt
