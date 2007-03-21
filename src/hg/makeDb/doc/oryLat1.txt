@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.22 2007/03/21 17:32:57 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.23 2007/03/21 23:51:22 hiram Exp $"
 #
 
 ##########################################################################
@@ -3130,4 +3130,116 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/oryLat1/bed/RepeatMasker
     time nice -n +19 doRepeatMasker.pl -verbose=2 -bigClusterHub=kk \
 	-buildDir=/cluster/data/oryLat1/bed/RepeatMasker oryLat1 > do.log 2>&1 &
+
+#########################################################################
+## Remake the gold tables to be whole scaffolds only (DONE - 2007-03-21 - Hiram)
+    cd /cluster/data/oryLat1/rawData
+    mkdir gold_tables
+    cat << '_EOF_' > mkGoldTab.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+open (FH,"<allSeqLevel.agp") or die "Can not read allSeqLevel.agp";
+
+my $scafName = "";
+my $scafLen = 0;
+my $scafType = "";
+my $chrName = "";
+my $chrStart = 0;
+my $chrEnd = 0;
+my $ix = 1;
+
+while (my $line = <FH>) {
+    if ($line =~ m/scaffold[0-9]+_contig/) {
+        chomp $line;
+        my ($chr, $start, $end, $seqId, $type, $scafContig, $ctgStart, $ctgEnd, 
+$strand) = split('\s+',$line);
+        --$start;
+        --$ctgStart;
+        my $ctgLen = $ctgEnd - $ctgStart;
+        my $chrLen = $end - $start;
+        die "lengths: $ctgLen != $chrLen" if ($ctgLen != $chrLen);
+        $scafContig =~ s/_contig[0-9]+//;
+        if (length($scafName) > 0) {
+            if ($scafName ne $scafContig) {
+                $scafLen = $chrEnd - $chrStart;
+                printf "%s\t%d\t%d\t%d\t%s\t%s\t0\t%d\t+\n",
+                    $chrName, $chrStart, $chrEnd, $ix++, $scafType,
+                        $scafName, $scafLen;
+                $scafName = $scafContig;
+                $chrStart = $start;
+            }
+        } else {
+            $scafName = $scafContig;
+            $chrStart = $start;
+        }
+        $chrEnd = $end;
+        $chrName = $chr;
+        $scafType = $type;
+    }
+}
+# and the last one
+printf "%s\t%d\t%d\t%d\t%s\t%s\t0\t%d\t+\n",
+    $chrName, $chrStart, $chrEnd, $ix++, $scafType, $scafName, $scafLen;
+
+close(FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGoldTab.pl
+    ./mkGoldTab.pl | splitFileByColumn -ending=_gold.tab -tab stdin gold_tables
+
+    cd gold_tables
+    sed -e "s/agpFrag/chrZX_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chr_gold.sql
+    # edit that .sql file to add the bin column
+    #	 bin smallint(6) NOT NULL default '0',
+
+    ls *._gold.tab | sed -e "s/._gold.tab//" | while read C
+do
+    echo ${C}_gold
+    sed -e "s/chrZX/${C}/" chr_gold.sql > t.sql
+    exit 0
+done
+    ls *._gold.tab | sed -e "s/._gold.tab//" | while read C
+do
+    echo ${C}_gold
+    sed -e "s/chrZX/${C}/" chr_gold.sql > t.sql
+    hgLoadBed -sqlTable=t.sql oryLat1 ${C}_gold ${C}._gold.tab
+    rm -f t.sql
+done
+
+#########################################################################
+## Creating a ctgPos2 table (DONE - 2007-03-21 - Hiram)
+    cd /cluster/data/oryLat1/rawData
+    cat << '_EOF_' > mkCtgPos2.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+open (FH,"<allSeqLevel.agp") or die "Can not read allSeqLevel.agp";
+
+while (my $line = <FH>) {
+    if ($line =~ m/scaffold[0-9]+_contig/) {
+        chomp $line;
+        my ($chr, $start, $end, $seqId, $type, $scafContig, $ctgStart, $ctgEnd, $strand) = split('\s+',$line);
+        --$start;
+        --$ctgStart;
+        my $ctgLen = $ctgEnd - $ctgStart;
+        my $chrLen = $end - $start;
+        die "lengths: $ctgLen != $chrLen" if ($ctgLen != $chrLen);
+        $scafContig =~ s/scaffold[0-9]+_//;
+        printf "%s\t%d\t%s\t%d\t%d\t%s\n",
+                $scafContig, $ctgLen, $chr, $start, $end, $type;
+    }
+}
+
+close(FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkCtgPos2.pl
+    ./mkCtgPos2.pl > ctgPos2.tab
+    hgLoadSqlTab oryLat1 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
