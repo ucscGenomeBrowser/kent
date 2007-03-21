@@ -219,6 +219,8 @@ while (lineFileRow(lf, row))
 		    }
 		else if (sameString("trembl", source) && pick.uniProt[0] == 0)
 		    pick.uniProt = cds->accession;
+		else
+		    warn("Unknown source %s", source);
 		}
 	    }
 

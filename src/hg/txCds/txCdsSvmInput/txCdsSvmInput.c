@@ -8,7 +8,7 @@
 #include "cdsOrtho.h"
 #include "txInfo.h"
 
-static char const rcsid[] = "$Id: txCdsSvmInput.c,v 1.1 2007/03/10 17:56:05 kent Exp $";
+static char const rcsid[] = "$Id: txCdsSvmInput.c,v 1.2 2007/03/21 23:01:59 kent Exp $";
 
 boolean good = FALSE;
 boolean bad = FALSE;
@@ -209,10 +209,12 @@ for (cds = start; cds != end; cds = cds->next)
         outEvidence(lm, 70, cds, &list);
     else if (sameString(source, "genbankCds"))
         outEvidence(lm, 75, cds, &list);
-    else if (sameString(source, "tremble"))
+    else if (sameString(source, "trembl"))
         outEvidence(lm, 80, cds, &list);
     else if (sameString(source, "bestorf"))
         outEvidence(lm, 85, cds, &list);
+    else
+        warn("Unknown source %s\n", source);
 #ifdef SOON
 #endif /* SOON */
     }

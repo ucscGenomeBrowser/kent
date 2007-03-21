@@ -63,7 +63,7 @@ double infoCodingScore(struct txInfo *info, boolean boostRefSeq)
  * bestorf score, only about 1% of proteins score more than that. 
  * If it's an NMD target then divide by 50. */
 {
-double score = info->bestorfScore;
+double score = info->cdsScore;
 if (boostRefSeq && info->isRefSeq)
     score += 750;
 if (info->nonsenseMediatedDecay)

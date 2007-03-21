@@ -117,7 +117,7 @@ if (uniStatusFile != NULL)
 	if (row[1][0] == '1')
 	    source = "swissProt";
 	else
-	    source = "tremble";
+	    source = "trembl";
 	hashAdd(sourceHash, row[0], source);
 	}
     lineFileClose(&lf);

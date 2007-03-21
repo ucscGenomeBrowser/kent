@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.4 2007/03/14 23:47:31 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.5 2007/03/21 23:01:59 kent Exp $";
 
 FILE *fRa = NULL;
 
@@ -106,13 +106,16 @@ void evaluateOneSpecies(struct mafComp *native, int cdsStart, int cdsEnd,
 /* See how well maf in xeno species matches up with maf in other. */
 {
 /* Figure out start and end columns, as opposed to native coordinates. */
-int startCol = 0, endCol = 0, i;
+int kozStart = cdsStart-3;
+int kozCol = -1, startCol = 0, endCol = -1, i;
 int nativePos = 0;
 for (i=0; i < textSize; ++i)
     {
     char c = native->text[i];
     if (c != '-')
         {
+	if (nativePos == kozStart)
+	    kozCol = i;
 	if (nativePos == cdsStart)
 	    startCol = i;
 	++nativePos;
@@ -183,6 +186,56 @@ for (i = startCol; i<endCol; ++i)
 	}
     }
 
+/* Figure out if have atg, kozak, stop in native species. */
+boolean nativeKozak = FALSE, nativeAtg = FALSE, nativeStop = FALSE;
+char *nativeSeq = cloneString(native->text);
+int nativeSize = strlen(nativeSeq);
+stripChar(nativeSeq, '-');
+tolowers(nativeSeq);
+nativeAtg = startsWith("atg", nativeSeq + cdsStart);
+nativeKozak = isKozak(nativeSeq, nativeSize, cdsStart);
+nativeStop = isStopCodon(nativeSeq + cdsEnd - 3);
+freez(&nativeSeq);
+
+/* Figure out if atg is conserved, and also if kozak criteria is conserved. */
+boolean atgConserved = FALSE, kozakConserved = FALSE;
+if (startCol >= 0 && nativeAtg)
+    {
+    char codon[3];
+    codon[0] = xeno->text[startCol];
+    codon[1] = xeno->text[startCol+1];
+    codon[2] = xeno->text[startCol+2];
+    toUpperN(codon, 3);
+    atgConserved = (memcmp(codon, "ATG", 3) == 0);
+    if (atgConserved && nativeKozak)
+        {
+	int ix = startCol+3;
+	if (ix < textSize)
+	   {
+	   char c = xeno->text[ix];
+	   if (c == 'g' || c == 'G')
+	       kozakConserved = TRUE;
+	   }
+	if (kozCol >= 0 && !kozakConserved)
+	   {
+	   char c = xeno->text[kozCol];
+	   if (c == 'g' || c == 'G' || c == 'a' || c == 'A')
+	       kozakConserved = TRUE;
+	   }
+	}
+    }
+
+/* Figure out if stop codon is conserved */
+boolean stopConserved = FALSE;
+if (endCol > 0 && nativeStop)
+    {
+    char codon[3];
+    codon[0] = xeno->text[endCol-3];
+    codon[1] = xeno->text[endCol-2];
+    codon[2] = xeno->text[endCol-1];
+    stopConserved = isStopCodon(codon);
+    }
+
 /* Get xeno sequence in CDS region minus the dashes */
 int cdsColCount = endCol - startCol;
 char *xenoText = cloneStringZ(xeno->text + startCol, cdsColCount);
@@ -194,9 +247,11 @@ int orfStart,orfEnd;
 int orfSize = biggestOrf(xenoText + bestFrame, xenoTextSize - bestFrame, &orfStart, &orfEnd)*3;
 int possibleSize = cdsEnd - cdsStart;
 if (orfSize > possibleSize) orfSize = possibleSize;
-fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%d\t%f\n", native->src, cdsStart, cdsEnd, 
+fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%d\t%f\t%d\t%d\t%d\t%d\t%d\t%d\n", 
+	native->src, cdsStart, cdsEnd, 
 	xeno->src, nativeCdsSize - cdsBasesInXeno, orfSize, possibleSize,
-	(double)orfSize/(possibleSize));
+	(double)orfSize/(possibleSize), atgConserved, kozakConserved, stopConserved,
+	nativeAtg, nativeKozak, nativeStop);
 
 /* Handle output to ra file. */
 if (fRa)
