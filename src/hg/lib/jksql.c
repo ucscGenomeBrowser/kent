@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.99 2007/03/14 18:16:32 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.100 2007/03/21 21:04:04 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -46,10 +46,9 @@ struct sqlResult
 
 static struct dlList *sqlOpenConnections;
 
-static char* getCfgValue(char* envName, char* cfgName)
+char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
  * with the env take precedence.
- *	This function is duplicated in hdb.c !
  */
 {
 char *val = getenv(envName);

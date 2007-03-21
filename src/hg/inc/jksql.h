@@ -425,4 +425,9 @@ char *sqlTempTableName(struct sqlConnection *conn, char *prefix);
  * uniqueness between different processes at least.  FreeMem the result
  * when you are done. */
 
+char* getCfgValue(char* envName, char* cfgName);
+/* get a configuration value, from either the environment or the cfg file,
+ * with the env take precedence.
+ */
+
 #endif /* JKSQL_H */
