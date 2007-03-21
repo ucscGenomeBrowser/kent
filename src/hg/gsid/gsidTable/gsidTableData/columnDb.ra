@@ -18,22 +18,22 @@ type remap "Vaccine"="+" "Placebo"="-"
 filterDropDown on
 
 #(not in main table gsidSubjInfo)
-#name hivQuan
-#shortLabel HIV
-#longLabel HIV Quantity
-#priority 3
-#visibility on
-#type integer
-#query select hivQuan from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
+name hivQuan
+shortLabel HIV
+longLabel HIV Quantity
+priority 3
+visibility on
+type integer
+query select hivQuan from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
 
 #(not in main table gsidSubjInfo)
-#name cd4Count
-#shortLabel CD4
-#longLabel CD4 Count
-#priority 4
-#visibility on
-#type integer
-#query select cd4Count from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
+name cd4Count
+shortLabel CD4
+longLabel CD4 Count
+priority 4
+visibility on
+type integer
+query select cd4Count from gsidClinicRec where subjId='%s' order by daysCollection desc limit 1;
 
 name daysInfectL
 shortLabel DILN
