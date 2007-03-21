@@ -1,16 +1,23 @@
 #!/bin/bash -e
 # exportEnsembl - export genePred files and tab files from ensembl native database. 
+count=$#
 liftfile="blank"
-while getopts ":l:" theOption; do
+pseudo=0
+while getopts ":pl:" theOption; do
         case $theOption in
-                l ) echo "liftfile= $OPTARG" ; liftfile=$OPTARG  ; echo liftfile $liftfile ;shift 2 ;;
+                l ) liftfile=$OPTARG  ; shift 2  ; let count=$count-2; let OPTIND=1;;
+                p ) pseudo=1 ; shift ; let count=$count-1; let OPTIND=1;;
                 \? ) echo "Unknown option chosen"
                         exit 1;;
                 * ) echo "You need to supply an option!"
                         exit 2;;
         esac
 done
-[ $# != 3 ] && echo "usage: exportEnsembl organism version input-directory " >&2 && exit 1;
+[ $count != 3 ] && echo "usage: exportEnsembl [options] organism version input-directory " >&2 && \
+     echo "      -l liftfile - lift genePreds using this file (usually for contigs to random chroms)" >&2 && \
+     echo "      -p load pseudogene track" >&2 && \
+     echo "   for example: exportEnsembl -l lift homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e" >&2 && exit 1;
+set -x
 organism=$1
 version=$2
 indir=$3
@@ -23,18 +30,22 @@ hgsql $ensDb -N -B  -e 'select sr.name as chrom, g.biotype, if(e.seq_region_stra
 ensGeneToGenePred < ensGene.tab > ensGene.gp     
 wc -l ensGene.gp
 #extract pseudogenes
-echo "Extract pseudogenes to ensPseudo.tab"
-hgsql $ensDb -N -B -e 'select sr.name as chrom, g.biotype, g.seq_region_start-1 as cdsStart, g.seq_region_end as cdsEnd,e.seq_region_start-1 as exonStart, e.seq_region_end as exonEnd, ".",if(e.seq_region_strand < 0,"-","+") as strand, e.phase, g.biotype, tsi.stable_id, gsi.stable_id, rank,g.gene_id, t.transcript_id from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t, exon_transcript et , transcript_stable_id tsi,  gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and g.biotype like "%pseudo%" order by tsi.stable_id, e.seq_region_start;' > ensPseudo.tab
-ensGeneToGenePred < ensPseudo.tab > ensPseudo.gp     
+[ $pseudo == 1 ] && echo "Extract pseudogenes to ensPseudo.tab";
+[ $pseudo == 1 ] && hgsql $ensDb -N -B -e 'select sr.name as chrom, g.biotype, g.seq_region_start-1 as cdsStart, g.seq_region_end as cdsEnd,e.seq_region_start-1 as exonStart, e.seq_region_end as exonEnd, ".",if(e.seq_region_strand < 0,"-","+") as strand, e.phase, g.biotype, tsi.stable_id, gsi.stable_id, rank,g.gene_id, t.transcript_id from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t, exon_transcript et , transcript_stable_id tsi,  gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and g.biotype like "%pseudo%" order by tsi.stable_id, e.seq_region_start;' > ensPseudo.tab;
+[ $pseudo == 1 ] && ensGeneToGenePred < ensPseudo.tab > ensPseudo.gp    ;
 #extract ensInfo and estGtp
 echo "extract Info details table to ensInfo.tab" 
 hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, display_label, gsi.stable_id, g.biotype, g.description, g.status from gene g, gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t left join translation r on r.transcript_id = t.transcript_id, exon_transcript et , transcript_stable_id tsi, xref x, exon fe , exon le where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id = x.xref_id order by tsi.stable_id;' > ensInfo.tab
+#hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, display_label, gsi.stable_id, g.biotype, g.description, g.status from gene g, gene_stable_id gsi, seq_region sr , exon_stable_id es, object_xref o, exon e, transcript t left join translation r on r.transcript_id = t.transcript_id, exon_transcript et , transcript_stable_id tsi, xref x, exon fe , exon le where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and tsi.transcript_id = t.transcript_id and o.xref_id = x.xref_id and ensembl_id = t.transcript_id order by tsi.stable_id;' > ensInfo.tab
+#hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, display_label, gsi.stable_id, g.biotype, g.description, g.status from gene g, gene_stable_id gsi, seq_region sr , exon_stable_id es, object_xref o, exon e, transcript t,  translation r,  exon_transcript et , transcript_stable_id tsi, xref x, exon fe , exon le where r.transcript_id = t.transcript_id and gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and start_exon_id = fe.exon_id and end_exon_id = le.exon_id and tsi.transcript_id = t.transcript_id and o.xref_id = x.xref_id and ensembl_id = t.transcript_id order by tsi.stable_id;' > ensInfo.tab
 hgsql $ensDb -N -B -e 'select distinct tsi.stable_id, "noXref", gsi.stable_id, g.biotype, g.description, g.status from gene_stable_id gsi, seq_region sr , exon_stable_id es, exon e, transcript t , exon_transcript et , transcript_stable_id tsi, gene g where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and t.transcript_id = et.transcript_id and et.exon_id = e.exon_id and e.exon_id = es.exon_id and tsi.transcript_id = t.transcript_id and t.display_xref_id is null  ;' >> ensInfo.tab
 hgsql $ensDb -N -B -e 'select distinct gsi.stable_id, tsi.stable_id, rsi.stable_id from gene g, translation_stable_id rsi, gene_stable_id gsi, seq_region sr , transcript t left join translation r on r.transcript_id = t.transcript_id, transcript_stable_id tsi where gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and rsi.translation_id = r.translation_id and tsi.transcript_id = t.transcript_id order by tsi.stable_id;' > ensGtp.tab
 #extract cross reference table 
 #hgsql $ensDb -N -B -e "select * from external_db" > externalDb.tab
 
-hgsql $ensDb -N -B -e 'select distinct "'$version'", logic_name, t.biotype, g.gene_id,  gsi.stable_id, gsi.version, t.transcript_id, tsi.stable_id, tsi.version,rsi.stable_id, r.translation_id, rsi.version, db_name, dbprimary_acc, t.status from gene g, translation_stable_id rsi, gene_stable_id gsi, seq_region sr , analysis a, transcript t left outer join xref x on t.display_xref_id = x.xref_id , translation r, transcript_stable_id tsi where r.transcript_id = t.transcript_id and gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and rsi.translation_id = r.translation_id and tsi.transcript_id = t.transcript_id and a.analysis_id = t.analysis_id;' > ensGeneXref.tab
+#hgsql $ensDb -N -B -e 'select distinct "'$version'", logic_name, t.biotype, g.gene_id,  gsi.stable_id, gsi.version, t.transcript_id, tsi.stable_id, tsi.version,rsi.stable_id, r.translation_id, rsi.version, db_name, dbprimary_acc, t.status from gene g, translation_stable_id rsi, gene_stable_id gsi, seq_region sr , analysis a, transcript t left outer join xref x on t.display_xref_id = x.xref_id , translation r, transcript_stable_id tsi where r.transcript_id = t.transcript_id and gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and rsi.translation_id = r.translation_id and tsi.transcript_id = t.transcript_id and a.analysis_id = t.analysis_id;' > ensGeneXref.tab
+hgsql $ensDb -N -B -e 'select distinct "'$version'", logic_name, t.biotype, g.gene_id,  gsi.stable_id, gsi.version, t.transcript_id, tsi.stable_id, tsi.version,rsi.stable_id, r.translation_id, rsi.version, db_name, dbprimary_acc, t.status from object_xref o, gene g, translation_stable_id rsi, gene_stable_id gsi, seq_region sr , analysis a, transcript t, xref x, translation r, transcript_stable_id tsi where o.xref_id = x.xref_id and ensembl_id = t.transcript_id and r.transcript_id = t.transcript_id and gsi.gene_id=g.gene_id and g.seq_region_id = sr.seq_region_id and g.gene_id = t.gene_id and rsi.translation_id = r.translation_id and tsi.transcript_id = t.transcript_id and a.analysis_id = t.analysis_id and db_name not like "AFFY%";' > ensGeneXref.tab
  
 [ $liftfile != "blank" ] && mv ensGene.gp ensGene.unlifted.gp && liftUp ensGene.gp $liftfile carry ensGene.unlifted.gp -extGenePred;
-[ $liftfile != "blank" ] && mv ensPseudo.gp ensPseudo.unlifted.gp && liftUp ensPseudo.gp $liftfile carry ensPseudo.unlifted.gp -extGenePred;
+[ $liftfile != "blank" && $pseudo == 1 ] && mv ensPseudo.gp ensPseudo.unlifted.gp && liftUp ensPseudo.gp $liftfile carry ensPseudo.unlifted.gp -extGenePred;
+echo "Finished Export"
