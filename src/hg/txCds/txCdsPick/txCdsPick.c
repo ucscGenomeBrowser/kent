@@ -203,24 +203,41 @@ while (lineFileRow(lf, row))
 	    if (rangeIntersection(bestCds->start, bestCds->end, cds->start, cds->end)
 	    	>= minSize)
 		{
-		if (startsWith("RefPep", source) && pick.refProt[0] == 0)
+		if (startsWith("RefPep", source))
 		    {
-		    pick.refProt = cds->accession;
-		    pick.refSeq = hashMustFindVal(pepToRefHash, cds->accession);
+		    if (pick.refProt[0] == 0)
+			{
+			pick.refProt = cds->accession;
+			pick.refSeq = hashMustFindVal(pepToRefHash, cds->accession);
+			}
 		    }
-		else if (startsWith("RefSeq", source) && pick.refSeq[0] == 0)
+		else if (startsWith("RefSeq", source))
 		    {
+		    if (pick.refSeq[0] == 0)
+		        pick.refSeq = cds->accession;
 		    }
-		else if (sameString("swissProt", source) && pick.swissProt[0] == 0)
+		else if (sameString("swissProt", source))
 		    {
-		    pick.swissProt = cds->accession;
+		    if (pick.swissProt[0] == 0)
+			{
+			pick.swissProt = cds->accession;
+			if (pick.uniProt[0] == 0)
+			    pick.uniProt = cds->accession;
+			}
+		    }
+		else if (sameString("trembl", source))
+		    {
 		    if (pick.uniProt[0] == 0)
-		        pick.uniProt = cds->accession;
+			pick.uniProt = cds->accession;
 		    }
-		else if (sameString("trembl", source) && pick.uniProt[0] == 0)
-		    pick.uniProt = cds->accession;
+		else if (sameString("txCdsPredict", source))
+		    {
+		    }
+		else if (sameString("genbankCds", source))
+		    {
+		    }
 		else
-		    warn("Unknown source %s", source);
+		    errAbort("Unknown source %s", source);
 		}
 	    }
 
