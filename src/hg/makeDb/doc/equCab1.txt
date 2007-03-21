@@ -208,8 +208,12 @@ EOF
     ## copy the .csh scripts from xenTro2 WindowMasker run, edit to fixup
     #	reference to correct DB and work directory.
     time nice -n +19 ./doCount.csh > doCount.out 2>&1
-XXX - running 2007-02-20 11:40
+    #	real    78m24.832s
+    #	user    61m36.550s
+    #	sys     2m28.392s
     time nice -n +19 ./doSdust.csh > doSdust.out 2>&1
+
+    ### Surprisingly, this did not mask more than RepeatMasker ?
     
     ssh kkstore05
     cd /cluster/data/equCab1/bed/WindowMasker.2007-02-20
@@ -218,19 +222,19 @@ XXX - running 2007-02-20 11:40
     #	this addTrf properly gets the n's changed to N which WM masked
     nice -n +19 ./addTrf.csh
     #	measuring faSize of resulting equCab1.sdTrf.2bit:
-    #	1513925492 bases (154525475 N's 1359400017 real
-    #	835902481 upper 523497536 lower) in 19759 sequences in 1 files
-    #	%38.51 = 523497536 / 1359400017
+    #	2462493800 bases (40570105 N's 2421923695 real 1686809847 upper
+    #	735113848 lower) in 34 sequences in 1 files
+    #	%29.85 masked total, %30.35 masked real
+
     #	vs. existing equCab1.2bit
-    #	1513925492 bases (154525475 N's 1359400017 real
-    #	1092281194 upper 267118823 lower) in 19759 sequences in 1 files
-    #	%19.65 = 267118823 / 1359400017
+    #	2462493800 bases (40570105 N's 2421923695 real
+    #	1427706342 upper 994217353 lower) in 34 sequences in 1 files
+    #	%40.37 masked total, %41.05 masked real
 
     ssh hgwdev
     cd /cluster/data/equCab1/bed/WindowMasker.2007-02-20
     time nice -n +19 ./load.csh > load.out 2>&1
-    #	Loaded 7013938 elements of size 3
-    #	real    2m29.659s
+    #	Loaded 14600828 elements of size 3
 
 ##########################################################################
 ## ADD BLAT SERVER (DONE - 2007-02-20 - Fan)
@@ -258,6 +262,7 @@ XXX - running 2007-02-20 11:40
     cp -p /cluster/bluearc/equCab1/11.ooc .
     cp /cluster/data/equCab1/equCab1.2bit . -p
     iSync
+
 ##########################################################################
 # BLASTZ/CHAIN/NET RN4 (DONE 2/18/07 Fan)
     ssh kkstore05
