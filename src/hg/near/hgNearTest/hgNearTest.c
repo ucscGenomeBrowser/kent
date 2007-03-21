@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.23 2007/03/14 10:10:17 galt Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.24 2007/03/21 21:17:55 heather Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -613,7 +613,7 @@ clSearch = optionVal("search", clSearch);
 dataDir = optionVal("dataDir", dataDir);
 clRepeat = optionInt("repeat", clRepeat);
 
-/* Seed the randome number generator. */
+/* Seed the random number generator. */
 seed = optionInt("seed",time(NULL));
 printf("seed=%d\n",seed);
 srand(seed);
