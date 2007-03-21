@@ -198,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1245 2007/03/21 03:43:07 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1246 2007/03/21 04:25:32 kate Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6910,49 +6910,6 @@ if (hTableExists("ensGtp") && (proteinID == NULL))
 freeMem(shortItemName);
 }
 
-void doGencodeGene(struct trackDb *tdb, char *item, char *itemForUrl)
-/* Put up Gencode Gene track info. */
-{
-int start = cartInt(cart, "o");
-struct sqlConnection *conn = hAllocConn();
-char geneCheck[256];
-
-genericHeader(tdb, item);
-printf("<BR>\n");
-genericGenePredClick(conn, tdb, item, start, NULL, NULL);
-safef(geneCheck, sizeof(geneCheck), "%sChk", tdb->tableName);
-if (hTableExists(geneCheck))
-    {
-    struct geneCheck *gc = 
-        sqlQueryObjs(conn, (sqlLoadFunc)geneCheckLoad, sqlQuerySingle,
-                       "select * from %s where acc='%s'", 
-                       geneCheck, item);
-    if (gc != NULL)
-        {
-        printf("<TABLE>\n");
-        printf("<TBODY>\n");
-        printf("<tr><td>\n");
-        geneCheckWidgetSummary(gc, "transMap", "<B>Gene checks:</B>\n");
-        printf("</td><td>\n");
-        /* display gene-check details */
-        safef(geneCheck, sizeof(geneCheck), "%sChkDetails", tdb->tableName);
-        if (hTableExists(geneCheck))
-            {
-            struct geneCheckDetails *gcdList = sqlQueryObjs(
-                    conn, (sqlLoadFunc)geneCheckDetailsLoad, sqlQueryMulti,
-                        "select * from %s where acc='%s'",
-                               geneCheck,  item);
-            if (gcdList != NULL)
-                geneCheckWidgetDetails(cart, gc, gcdList, 
-                        "transMap", "<B>Gene check details:</B>", NULL);
-            geneCheckDetailsFreeList(&gcdList);
-            }
-        printf("</td></tr></TBODY></TABLE>\n");
-        }
-    }
-printTrackHtml(tdb);
-hFreeConn(&conn);
-}
 void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Ensembl Gene track info. */
 {
@@ -18786,10 +18743,6 @@ else if (startsWith("flyreg", track))
     doFlyreg(tdb, item);
     }
 /* ENCODE tracks */
-else if (startsWith("encodeGencodeGene", track))
-    {
-    doGencodeGene(tdb, item, NULL);
-    }
 else if (startsWith("encodeGencodeIntron", track) &&
 	 sameString(tdb->type, "bed 6 +"))
     {
