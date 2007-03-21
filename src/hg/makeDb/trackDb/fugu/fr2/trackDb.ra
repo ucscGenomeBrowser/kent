@@ -51,3 +51,9 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex NEWSINFRUT[0-9]+
+searchPriority 50
