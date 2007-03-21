@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.59 2007/03/20 22:23:09 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.60 2007/03/21 16:46:11 kate Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -1275,7 +1275,12 @@ if ((val = hashFindVal(hash, "offset")) != NULL)
 if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
 else
-    track->maxChromName = hGetMinIndexLengthDb(ctGenome(track));
+    {
+    char *ctDb = ctGenome(track);
+    if (!ctDb)
+        ctDb = hGetDb();
+    track->maxChromName = hGetMinIndexLengthDb(ctDb);
+    }
 if (!strstr(line, "tdbType"))
     {
     /* for "external" (user-typed) track lines, save for later display
