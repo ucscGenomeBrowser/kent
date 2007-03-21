@@ -258,6 +258,11 @@ mv makeGenomeDb.log makeGenomeDb.log.1
     ls -1 /cluster/data/bosTau3/bosTau3.2bit > nib.lst
     blat nib.lst /dev/null /dev/null -tileSize=11 -makeOoc=/cluster/bluearc/bosTau3/11.ooc -repMatch=1005
 
+    ssh kkr1u00
+    cd /iscratch/i/bosTau3
+    cp -p /cluster/bluearc/bosTau3/11.ooc .
+    iSync
+
 
 #########################################################################
 # MASK SEQUENCE WITH FILTERED TRF IN ADDITION TO RM (Heather, Feb. 2007)
@@ -290,12 +295,22 @@ mv makeGenomeDb.log makeGenomeDb.log.1
 #########################################################################
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (Heather, Feb. 2007)
 
+    # pitakluster:
     ssh pk
     mkdir /san/sanvol1/scratch/bosTau3
     cp -p /cluster/data/bosTau3/bosTau3.2bit /san/sanvol1/scratch/bosTau3
     cp -p /cluster/data/bosTau3/chrom.sizes /san/sanvol1/scratch/bosTau3
     mkdir /san/sanvol1/scratch/bosTau3/rmsk
     cp -p /cluster/data/bosTau3/bosTau3.fa.out /san/sanvol1/scratch/bosTau3/rmsk
+
+    # small cluster:
+    ssh kkr1u00
+    mkdir -p /iscratch/i/bosTau3
+    cd /iscratch/i/bosTau3
+    cp -p /cluster/data/bosTau3/bosTau3.2bit .
+    cp -p /cluster/data/bosTau3/chrom.sizes .
+    cp -p /cluster/data/bosTau3/11.ooc .
+    iSync
 
 #########################################################################
 # BLASTZ/CHAIN/NET HG18 (Done Feb 2007 heather)
