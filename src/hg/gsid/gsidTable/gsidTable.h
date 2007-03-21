@@ -105,6 +105,8 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define advFilterListVarName "gsidTable.do.advFilterList"
         /* Advanced filter submit list. */
 
+#define gsidSubjList "gsidTable.gsidSubjList"
+
 #define keyWordUploadPrefix "gsidTable.do.keyUp." /* Prefix for keyword uploads. */
 #define keyWordPastePrefix "gsidTable.do.keyPaste." /* Prefix for keyword paste-ins. */
 #define keyWordPastedPrefix "gsidTable.do.keyPasted."
@@ -124,6 +126,8 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 
 /* ---- General purpose helper routines. ---- */
 
+void saveSubjList(struct subjInfo *subjList);
+/* save the filtered list of subject gsids to a file for other applications to use */
 
 boolean gotAdvFilter();
 /* Return TRUE if advanced filter variables are set. */

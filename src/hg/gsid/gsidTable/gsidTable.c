@@ -1,31 +1,25 @@
 /* gsidTable - GSID Table View */
 
-// TODO: rename struct subjInfo to subjInfo
-
 #include "common.h"
-//#include "linefile.h"
 #include "hash.h"
-//#include "dystring.h"
 #include "obscure.h"
-//#include "portable.h"
 #include "cheapcgi.h"
 #include "memalloc.h"
 #include "jksql.h"
 #include "htmshell.h"
-//#include "subText.h"
 #include "cart.h"
-//#include "dbDb.h"
 #include "hPrint.h"
 #include "hdb.h"
 #include "hui.h"
 #include "web.h"
 #include "ra.h"
 #include "hgColors.h"
+#include "trashDir.h"
 
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.7 2007/03/14 16:37:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.8 2007/03/21 19:53:13 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1167,6 +1161,26 @@ return ret;
 }
 
 
+void saveSubjList(struct subjInfo *subjList)
+/* save the filtered list of subject gsids to a file for other applications to use */
+{
+char *outName = cartOptionalString(cart, gsidSubjList);
+struct tempName tn;
+if (!outName) 
+    {
+    trashDirFile(&tn, "ct", "gsidSubj", ".list");
+    outName = tn.forCgi;
+    }
+FILE *outF = mustOpen(outName,"w");
+while (subjList)
+    {
+    writeString(outF, subjList->fields[0]);
+    writeString(outF, "\n");
+    subjList=subjList->next;
+    }
+carefulClose(&outF);
+cartSetString(cart, gsidSubjList, outName);
+}
 
 
 struct column *curOrder(struct column *ordList)
@@ -1229,6 +1243,8 @@ if (orderOn[0]=='-')
 si = slElementFromIx(subjList, maxCount-1);
 if (si != NULL)
     si->next = NULL;
+
+saveSubjList(subjList);
 
 return subjList;
 }
