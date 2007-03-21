@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.21 2007/02/16 22:12:06 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.22 2007/03/21 17:32:57 hiram Exp $"
 #
 
 ##########################################################################
@@ -3080,5 +3080,54 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/oryLat1/goldenPath/bigZips
     ln -s \
     /cluster/data/oryLat1/bed/WindowMasker.2006-11-29/chromWMSdust.bed.tar.gz .
-    #	remove the chromOut.tar.gz file and re-make the md5sum.txt
-    md5sum *gz > md5sum.txt
+    
+    # get GenBank native mRNAs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/x86_64/gbGetSeqs -db=oryLat1 -native \
+	GenBank mrna /cluster/data/oryLat1/goldenPath/bigZips/mrna.fa
+    # get GenBank xeno mRNAs
+    ./bin/x86_64/gbGetSeqs -db=oryLat1 -xeno \
+	GenBank mrna /cluster/data/oryLat1/goldenPath/bigZips/xenoMrna.fa
+    cd /cluster/data/oryLat1/goldenPath/bigZips
+    ssh kkstore04
+    gzip mrna.fa xenoMrna.fa
+    md5sum *.gz > md5sum.txt
+    #	Edit the README.txt file to be correct
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/oryLat1/bigZips
+    ln -s /cluster/data/oryLat1/goldenPath/bigZips/* .
+
+
+############################################################################
+##  swap human alignments done properly with oryLat1 contigs
+##	(DONE - 2005-02-25 - Hiram)
+    ## previous measurement on human
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.oryLat1.2007-02-24
+    nice -n +19 featureBits  hg18 chainOryLat1Link \
+	> fb.hg18.chainOryLat1Link.txt 2>&1 &
+    #	57393910 bases of 2881515245 (1.992%) in intersection
+
+    ssh kkstore04
+    mkdir /cluster/data/oryLat1/bed/blastz.hg18.swap
+    cd /cluster/data/oryLat1/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -chainMinScore=2000 -chainLinearGap=loose \
+	/cluster/data/hg18/bed/blastz.oryLat1.2007-02-24/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 -swap > swap.log 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/blastz.hg18.swap
+    nice -n +19 featureBits  oryLat1 chainHg18Link \
+	> fb.oryLat1.chainHg18Link.txt 2>&1 &
+    #	48002423 bases of 700386597 (6.854%) in intersection
+
+##########################################################################
+## RepeatMasker run to cover all bases (DONE - 2007-03-07 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/oryLat1/bed/RepeatMasker
+    cd /cluster/data/oryLat1/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl -verbose=2 -bigClusterHub=kk \
+	-buildDir=/cluster/data/oryLat1/bed/RepeatMasker oryLat1 > do.log 2>&1 &
+
