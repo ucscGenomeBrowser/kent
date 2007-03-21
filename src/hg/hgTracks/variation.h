@@ -21,6 +21,7 @@
 #include "memgfx.h"
 #include "cnpIafrate.h"
 #include "cnpSebat.h"
+#include "cnpSebat2.h"
 #include "cnpSharp.h"
 #include "cnpRedon.h"
 #include "cnpSharpSample.h"
@@ -207,7 +208,18 @@ Color cnpSebatColor(struct track *tg, void *item, struct vGfx *vg);
 /* green for GAIN, red for LOSS, blue for both */
 
 void cnpSebatMethods(struct track *tg);
-/* methods for cnpSharp */
+/* methods for cnpSebat */
+
+void cnpSebat2LoadItems(struct track *tg);
+/* loader for cnpSebat2 table */
+
+void cnpSebat2FreeItems(struct track *tg);
+
+Color cnpSebat2Color(struct track *tg, void *item, struct vGfx *vg);
+/* green for GAIN, red for LOSS */
+
+void cnpSebat2Methods(struct track *tg);
+/* methods for cnpSebat2 */
 
 
 void cnpSharpLoadItems(struct track *tg);

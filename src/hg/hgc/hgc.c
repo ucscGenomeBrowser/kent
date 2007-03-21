@@ -75,6 +75,7 @@
 #include "snp125Exceptions.h"
 #include "cnpIafrate.h"
 #include "cnpSebat.h"
+#include "cnpSebat2.h"
 #include "cnpSharp.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
@@ -197,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1243 2007/03/20 21:04:19 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1244 2007/03/21 03:03:33 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12448,6 +12449,34 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doCnpSebat2(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct cnpSebat2 cnpSebat2;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cnpSebat2StaticLoad(row+rowOffset, &cnpSebat2);
+    bedPrintPos((struct bed *)&cnpSebat2, 3);
+    printf("<BR><B>Number of probes</B>: %d\n",cnpSebat2.probes);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 void printCnpSharpDetails(struct cnpSharp cnpSharp)
 {
 printf("<B>Name:               </B> %s <BR>\n",     cnpSharp.name);
@@ -18362,6 +18391,10 @@ else if (sameWord(track, "cnpIafrate"))
 else if (sameWord(track, "cnpSebat"))
     {
     doCnpSebat(tdb, item);
+    }
+else if (sameWord(track, "cnpSebat2"))
+    {
+    doCnpSebat2(tdb, item);
     }
 else if (sameWord(track, "cnpSharp"))
     {

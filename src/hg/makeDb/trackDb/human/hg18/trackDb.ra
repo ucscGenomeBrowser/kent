@@ -931,13 +931,21 @@ priority 146
 visibility hide
 type bed 4 +
 
+    track cnpSebat2
+    subTrack cnp
+    shortLabel Sebat CNPs
+    longLabel Copy Number Polymorphisms from ROMA (Sebat)
+    noInherit on
+    type bed 4 +
+    priority 3
+
     track cnpTuzun
     subTrack cnp
     shortLabel Tuzun Fosmids
     longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
     type bed 4 .
-    priority 3
+    priority 4
 
     track delMccarroll
     subTrack cnp
@@ -945,7 +953,7 @@ type bed 4 +
     longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
     type bed 4 .
-    priority 4
+    priority 5
 
     track delHinds
     subTrack cnp
@@ -953,7 +961,7 @@ type bed 4 +
     longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
     type bed 4 .
-    priority 5
+    priority 7
 
     track cnpLocke
     subTrack cnp
@@ -961,7 +969,7 @@ type bed 4 +
     longLabel Locke
     noInherit on
     type bed 4 +
-    priority 6
+    priority 8
 
     track cnpRedon
     subTrack cnp
@@ -969,7 +977,7 @@ type bed 4 +
     longLabel Copy Number Polymorphisms from SNP and BAC microarrays (Redon)
     noInherit on
     type bed 6 .
-    priority 7
+    priority 9
 
 track chainSelf
 shortLabel Self Chain 

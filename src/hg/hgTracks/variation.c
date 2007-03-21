@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.118 2007/01/05 16:10:48 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.119 2007/03/21 03:02:50 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1721,6 +1721,11 @@ void cnpSebatLoadItems(struct track *tg)
 bedLoadItem(tg, "cnpSebat", (ItemLoader)cnpSebatLoad);
 }
 
+void cnpSebat2LoadItems(struct track *tg)
+{
+bedLoadItem(tg, "cnpSebat2", (ItemLoader)cnpSebat2Load);
+}
+
 void cnpFosmidLoadItems(struct track *tg)
 {
 bedLoadItem(tg, "cnpFosmid", (ItemLoader)bedLoad);
@@ -1744,6 +1749,11 @@ cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
 void cnpSebatFreeItems(struct track *tg)
 {
 cnpSebatFreeList((struct cnpSebat**)&tg->items);
+}
+
+void cnpSebat2FreeItems(struct track *tg)
+{
+cnpSebat2FreeList((struct cnpSebat2**)&tg->items);
 }
 
 void cnpFosmidFreeItems(struct track *tg)
@@ -1792,6 +1802,17 @@ if (sameString(cnpSe->name, "Loss"))
     return MG_RED;
 if (sameString(cnpSe->name, "Gain and Loss"))
     return MG_BLUE;
+return MG_BLACK;
+}
+
+Color cnpSebat2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct cnpSebat2 *cnpSe = item;
+
+if (sameString(cnpSe->name, "Gain"))
+    return MG_GREEN;
+if (sameString(cnpSe->name, "Loss"))
+    return MG_RED;
 return MG_BLACK;
 }
 
@@ -1849,6 +1870,14 @@ tg->loadItems = cnpSebatLoadItems;
 tg->freeItems = cnpSebatFreeItems;
 tg->itemColor = cnpSebatItemColor;
 tg->itemNameColor = cnpSebatItemColor;
+}
+
+void cnpSebat2Methods(struct track *tg)
+{
+tg->loadItems = cnpSebat2LoadItems;
+tg->freeItems = cnpSebat2FreeItems;
+tg->itemColor = cnpSebat2ItemColor;
+tg->itemNameColor = cnpSebat2ItemColor;
 }
 
 void cnpFosmidMethods(struct track *tg)
