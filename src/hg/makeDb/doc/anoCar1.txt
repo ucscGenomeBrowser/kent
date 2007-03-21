@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-# Anolis carolinensis - Broad Institute 1.0
+# Lizard - Anolis carolinensis - Broad Institute 1.0
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-02-16 - Hiram)
@@ -717,9 +717,70 @@ TMPDIR=/scratch/tmp
     #	real    2m1.527s
     #	82784787 bases of 1741478929 (4.754%) in intersection
 
-    #	% Coverage of Lizard by
-    #	6.456 - Human hg18 5000,loose
-    #	6.263 - Chicken galGal3 5000,loose
-    #	4.816 - Frog xenTro2 5000,loose
-    #	4.754 - Mouse mm8 5000,loose
-    #	3.127 - Stickleback gasAcu1 5000,loose
+    #	% Coverage of Lizard by:    (chainMinScore,chainLinearGap,type masking)
+    #	6.456 - Human hg18	(5000,loose,windowMasker)
+    #	6.263 - Chicken galGal3	(5000,loose,windowMasker)
+    #	4.816 - Frog xenTro2	(5000,loose,windowMasker)
+    #	4.754 - Mouse mm8	(5000,loose,windowMasker)
+    #	3.127 - Stickleback gasAcu1	(5000,loose,windowMasker)
+
+    #	% coverage of Chicken by:
+    #	10.238 - Lizard anoCar1	(5000,loose,windowMasker)
+    #	8.795 - Human hg18	(5000,loose,rmsk)
+    #	6.745 - Mouse mm8	(5000,loose,rmsk)
+    #	5.330 - Frog xenTro2	(5000,loose,rmsk)
+    #	3.144 - Stickleback gasAcu1	(2000,loose,windowMasker)
+
+    #	% coverage of Frog by:
+    #	6.217 - Lizard anoCar1	(5000,loose,windowMasker)
+    #	5.634 - Human hg18	(5000,loose,rmsk)
+    #	5.358 - Mouse mm8	(5000,loose,rmsk)
+    #	4.776 - Chicken galGal3	(5000,loose,rmsk)
+    #	x.xxx - Stickleback gasAcu1	(not yet done)
+
+    #	% coverage of Human by:
+    #	34.514 - Mouse mm8	(3000,medium,rmsk)
+    #	4.774 - Lizard anoCar1	(5000,loose,windowMasker)
+    #	3.589 - Chicken galGal3	(5000,loose,rmsk)
+    #	2.623 - Frog xenTro2	(5000,loose,rmsk)
+    #	1.923 - Stickleback gasAcu1	(2000,loose,rmsk)
+
+##########################################################################
+## RepeatMasker run to cover all bases (DONE - 2007-03-07 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/anoCar1/bed/RepeatMasker
+    cd /cluster/data/anoCar1/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl -verbose=2 -bigClusterHub=kk \
+	-buildDir=/cluster/data/anoCar1/bed/RepeatMasker anoCar1 > do.log 2>&1 &
+
+############################################################################
+##  DOWNLOADS - (DONE - 2007-02-12 - 2007-02-16 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/anoCar1
+    ln -s bed/RepeatMasker/anoCar1.fa.out .
+
+    ~/kent/src/hg/utils/automation/makeDownloads.pl anoCar1 \
+	> makeDownloads.out 2>&1
+    #	Doesn't work due to missing Repeat masker outputs
+    #	Create WindowMasker separate files by chrom, for downloads
+    ssh kkstore05
+    cd /cluster/data/anoCar1/goldenPath/bigZips
+    ln -s ../../bed/WindowMasker.2007-02-16/windowmasker.sdust.bed.gz \
+	./anoCar1.WMSdust.bed.gz
+
+    # get GenBank native mRNAs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/x86_64/gbGetSeqs -db=anoCar1 -native \
+	GenBank mrna /cluster/data/anoCar1/goldenPath/bigZips/mrna.fa
+    # get GenBank xeno mRNAs
+    ./bin/x86_64/gbGetSeqs -db=anoCar1 -xeno \
+	GenBank mrna /cluster/data/anoCar1/goldenPath/bigZips/xenoMrna.fa
+    ssh kkstore05
+    cd /cluster/data/anoCar1/goldenPath/bigZips
+    gzip *.fa
+    md5sum *.gz > md5sum.txt
+    #	Edit the README.txt file to be correct
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/anoCar1/bigZips
+    ln -s /cluster/data/anoCar1/goldenPath/bigZips/* .
