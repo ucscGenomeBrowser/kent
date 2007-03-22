@@ -5,7 +5,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafIndex.c,v 1.1 2004/06/14 17:46:43 kent Exp $";
+static char const rcsid[] = "$Id: mafIndex.c,v 1.2 2007/03/22 06:58:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,12 +32,11 @@ struct mafAli *maf;
 struct mafComp *mc;
 off_t pos;
 
-struct mafAli *mafNextWithPos(struct mafFile *mf, off_t *retOffset);
 while ((maf = mafNextWithPos(mf, &pos)) != NULL)
     {
     mc = mafMayFindComponent(maf, target);
     if (mc != NULL)
-	fprintf(f, "%d %d %lld\n", mc->start, mc->size, pos); 
+	fprintf(f, "%d %d %llu\n", mc->start, mc->size, (unsigned long long)pos); 
     }
 mafFileFree(&mf);
 carefulClose(&f);
