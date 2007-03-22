@@ -3,16 +3,20 @@
 doDownload=1
 kg=0
 dropdb=0
+pseudo=0
 nibdir=blank
 liftfile=blank
+superfamily=blank
 count=$#
-while getopts "skdn:l:" theOption; do 
+while getopts "skpdn:l:f:" theOption; do 
         case $theOption in
                 s ) echo "Skipping Download step" ; doDownload=0; shift ; let count=$count-1 ; let OPTIND=1;;
                 k ) echo "to be loaded knownToEnsembl" ; kg=1 ; shift ; let count=$count-1; let OPTIND=1;;
                 d ) dropdb=1 ; shift ; let count=$count-1; let OPTIND=1;;
+                p ) pseudo=1 ; shift ; let count=$count-1; let OPTIND=1;;
                 n ) nibdir=$OPTARG  ; shift 2  ; let count=$count-2; let OPTIND=1;;
                 l ) liftfile=$OPTARG  ; shift 2  ; let count=$count-2; let OPTIND=1;;
+                f ) superfamily=$OPTARG  ; shift 2  ; let count=$count-2; let OPTIND=1;;
                 \? ) echo "Unknown option chosen"
                         exit 1;;
                 * ) echo "You need to supply an option!"
@@ -22,8 +26,10 @@ done
 [ $count != 4 ] && echo "usage: hgLoadEnsembl [options] organism version input-directory db " >&2 && \
      echo "      -n nibdir - nib or twobit files for performing gene checks. [Default: /cluster/data/<db>/<db>.2bit]" >&2 && \
      echo "      -s skip download from ensembl ftp site" >&2 && \
+     echo "      -p load pseudogene track" >&2 && \
      echo "      -k load knownToEnsembl from knownGene" >&2 && \
      echo "      -l liftfile - lift genePreds using this file (usually for contigs to random chroms)" >&2 && \
+     echo "      -f superfamilyDb - create superfamily tables from specified database (use downloadSuperfamily to create it)" >&2 && \
      echo "      -d drop temporary mysql database after finishing" >&2 && \
      echo "   for example: hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/ensembl_core_43_36e hg18" >&2 && exit 1;
 organism=$1
@@ -41,6 +47,6 @@ ensemblDbImport $organism $version $workingdir
 [ $liftfile != "blank" ] && exportEnsembl -l $liftfile $organism $version $workingdir ;
 geneCheckAndLoad $db $nibdir ensGene.gp ensGeneChk ensGeneChkDetails
 loadEnsembl $workingdir $db 
-ensemblSuperfamily $db superfam060619
-[ $kg == 1 ] hgMapToGene $db ensGene knownGene knownToEnsembl
+[ $superfamily != "blank" ] && ensemblSuperfamily $db $superfamily;
+[ $kg == 1 ] && hgMapToGene $db ensGene knownGene knownToEnsembl ;
 [ $dropdb == 1 ] && echo "dropping database $ensDb in 5 seconds" && sleep 5 && hgsql mysql -e "drop database if exists $ensDb";
