@@ -264,6 +264,15 @@ struct knownGenesExtra
     char *name;                 /* name to be used on label */
     };
 
+/* global GSID subject list */
+struct gsidSubj
+    {
+    struct gsidSubj  *next;
+    char *subjId;
+    };
+
+extern struct gsidSubj *gsidSelectedSubjList;
+
 extern struct trackLayout tl;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
