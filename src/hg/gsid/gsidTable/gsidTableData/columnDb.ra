@@ -56,7 +56,7 @@ longLabel Gender at birth
 priority 7
 visibility on
 type remap "Male"="M" "Female"="F"
-filterDropDown
+filterDropDown on
 
 name age
 shortLabel age
@@ -96,10 +96,9 @@ visibility on
 type string
 filterDropDown on
 
-#name comment
-#shortLabel comment
-#longLabel Special comment
-#priority 13
-#visibility on
-#type string
-#filterDropDown on
+name comment
+shortLabel comment
+longLabel Special comment
+priority 13
+visibility off
+type string
