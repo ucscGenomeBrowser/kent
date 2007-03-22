@@ -198,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1246 2007/03/21 04:25:32 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1247 2007/03/22 19:50:57 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15693,6 +15693,14 @@ else
 	if (bed)
 	    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
 		TRUE, NULL);
+	if (ct->dbTrack)
+	    {
+	    struct sqlConnection *conn = sqlCtConn(TRUE);
+	    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
+	    if (date != NULL)
+		printf("<B>Data last updated:</B> %s<BR>\n", date);
+	    sqlDisconnect(&conn);
+	    }
 	printTrackHtml(ct->tdb);
 	return;
 	}
