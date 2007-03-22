@@ -198,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1247 2007/03/22 19:50:57 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1248 2007/03/22 20:11:31 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15680,6 +15680,7 @@ else
 	    bed = bedLoadN(row+rowOffset, ct->fieldCount);
 	    ++rcCount;
 	    }
+	sqlFreeResult(&sr);
 	sqlDisconnect(&conn);
 	}
     if (ct->fieldCount < 4)
