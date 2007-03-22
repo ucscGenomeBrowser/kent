@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.60 2006/06/14 22:17:14 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.61 2007/03/22 20:46:59 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -544,6 +544,7 @@ if (isCustom)
 	    unsigned span = minSpan(trashConn, splitTableOrFileName,
 		region->chrom, region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
+	    sqlDisconnect(&trashConn);
 	    }
 	valuesMatched = getWigglePossibleIntersection(wds, region,
 	    CUSTOM_TRASH, table2, &intersectBedList,
