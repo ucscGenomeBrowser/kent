@@ -19,7 +19,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.9 2007/03/21 21:31:19 galt Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.10 2007/03/22 16:35:09 fanhsu Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1171,8 +1171,7 @@ if (!outName)
 FILE *outF = mustOpen(outName,"w");
 while (subjList)
     {
-    writeString(outF, subjList->fields[0]);
-    writeString(outF, "\n");
+    fprintf(outF, "%s\n", subjList->fields[0]);
     subjList=subjList->next;
     }
 carefulClose(&outF);
