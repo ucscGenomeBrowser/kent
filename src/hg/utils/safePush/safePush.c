@@ -9,7 +9,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.5 2006/05/20 00:59:31 kent Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.6 2007/03/22 20:07:27 heather Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, allDatabases, test;
@@ -70,17 +70,6 @@ static struct optionSpec options[] = {
    {"single", OPTION_STRING},
    {NULL, 0},
 };
-
-static char* getCfgValue(char* envName, char* cfgName)
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
- */
-{
-char *val = getenv(envName);
-if (val == NULL)
-    val = cfgOption(cfgName);
-return val;
-}
 
 struct hash *getMysqlVars(char *host)
 /* Return hash full of MYSQL variables. */
