@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.4 2007/03/17 18:44:44 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.5 2007/03/22 06:59:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +27,13 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+void removePickVersions(struct cdsPick *pick)
+/* Remove version suffixes from various pick fields. */
+{
+chopSuffix(pick->refProt);
+chopSuffix(pick->refSeq);
+}
+
 void txGeneXref(char *genomeDb, char *uniProtDb, char *infoFile, char *pickFile, 
 	char *evFile, char *outFile)
 /* txGeneXref - Make kgXref type table for genes.. */
@@ -40,6 +47,7 @@ char *row[CDSPICK_NUM_COLS];
 while (lineFileRowTab(lf, row))
     {
     pick = cdsPickLoad(row);
+    removePickVersions(pick);
     hashAdd(pickHash, pick->name, pick);
     }
 
@@ -78,7 +86,10 @@ for (info = infoList; info != NULL; info = info->next)
 	mRNA = cloneString("");
 	}
     else
-	mRNA = ev->primary;
+	{
+	mRNA = cloneString(ev->primary);
+	chopSuffix(mRNA);
+	}
     if (pick != NULL)
        {
        /* Fill in the relatively straightforward fields. */
