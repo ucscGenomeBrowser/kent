@@ -1,6 +1,6 @@
 #!/bin/bash -e
-hgLoadEnsembl homo_sapiens core_43_36e /cluster/store8/ensembl/homo_sapiens_43_36e hg18
-hgLoadEnsembl -l /cluster/store8/ensembl/run.mm8/lift.mm8 mus_musculus core_43_36d /cluster/store8/ensembl/mus_musculus_43_36d mm8
+hgLoadEnsembl -f superfam_18Mar2007 -l /cluster/store8/ensembl/run.build43/lift.hg18 homo_sapiens core_43_36e /cluster/store8/ensembl/homo_sapiens_43_36e hg18
+hgLoadEnsembl -l /cluster/store8/ensembl/run.build43/lift.mm8 mus_musculus core_43_36d /cluster/store8/ensembl/mus_musculus_43_36d mm8
 hgLoadEnsembl rattus_norvegicus core_43_34m /cluster/store8/ensembl/rattus_norvegicus_43_34m rn4
 hgLoadEnsembl pan_troglodytes core_43_21b /cluster/store8/ensembl/pan_troglodytes_43_21b panTro2
 hgLoadEnsembl macaca_mulatta core_43_10c /cluster/store8/ensembl/macaca_mulatta_43_10c rheMac2
