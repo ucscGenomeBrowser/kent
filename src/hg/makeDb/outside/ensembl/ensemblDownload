@@ -12,7 +12,7 @@ cd $outdir
 wget --timestamping --no-verbose $sql 
 #get list of tables excluding big alignment tables and others
 zgrep CREATE ${organism}_${version}.sql.gz |awk -F'`' '{print $2}' > tables.tmp
-exceptions="dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
+exceptions="density|ditag|dna|dna_align_feature|oligo|protein_align_feature|repeat_feature"
 tables=`cat tables.tmp |grep -v -E $exceptions`
 #go get them! (if not already downloaded)
 echo "Starting download to $outdir from $input. "
