@@ -10,12 +10,14 @@ set scratchDir = /san/sanvol1/scratch
 
 # Databases
 set db = hg18
-set tempDb = hg18b
+set tempDb = tmpFoo2
 set xdb = mm8
+set Xdb = Mm8
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp070202
 set ratDb = rn4
+set RatDb = Rn4
 set fishDb = danRer4
 set flyDb = dm2
 set wormDb = ce3
@@ -26,7 +28,7 @@ set tempFa = $dir/ucscGenes.faa
 set xdbFa = /cluster/data/mm8/bed/geneSorter/blastp/known.faa
 set ratFa = /cluster/data/rn4/bed/blastp/known.faa
 set fishFa = /cluster/data/danRer4/bed/blastp/ensembl.faa
-set flyFa = /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+set flyFa = /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
 set wormFa = /cluster/data/ce3/bed/blastp/wormPep140.faa
 set yeastFa = /cluster/data/sacCer1/bed/blastp/sgdPep.faa
 
@@ -286,7 +288,7 @@ cd ..
 
 # Run rna/transcript blat on cluster.  This is a little i/o heavy, so use
 # maxNode=50, or optimize i/o somehow.
-ssh pk "cd $dir/blat/rna; para make -maxNode=50 spec"
+ssh $cpuFarm "cd $dir/blat/rna; para make -maxNode=50 spec"
 #Completed: 390 of 390 jobs
 #CPU time in finished jobs:      19127s     318.78m     5.31h    0.22d  0.001 y
 #IO & Wait Time:                 14795s     246.58m     4.11h    0.17d  0.000 y
@@ -307,7 +309,7 @@ end
 cd ..
 
 # Run protein/transcript blat job on cluster
-ssh pk "$dir; para make spec;"
+ssh $cpuFarm "$dir; para make spec;"
 #CPU time in finished jobs:      13571s     226.18m     3.77h    0.16d  0.000 y
 #IO & Wait Time:                  5645s      94.08m     1.57h    0.07d  0.000 y
 #Average job time:                  49s       0.82m     0.01h    0.00d
@@ -386,7 +388,8 @@ txCdsCluster pick.bed pick.cluster
 txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
 txCdsWeed pick.tce pick.info weededCds.tce weededCds.info
 txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
-	-bedOut=weededCds.bed -exceptions=abWalk.exceptions
+	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
+	-tweaked=weededCds.tweaked
 
 # Separate out transcripts into coding and 4 uncoding categories.
 # Generate new gene set that weeds out the junkiest. Takes 9 seconds.
@@ -396,6 +399,25 @@ awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
 cat coding.bed nearCoding.bed antisense.bed uncoding.bed | sort -k1,1 -k2,3n >weeded.bed
 txGeneFromBed weeded.bed pick.picks weeded.gp
+
+# Make up a little alignment file for the ones that got tweaked.
+sed -r 's/.*NM_//' weededCds.tweaked | awk '{printf("NM_%s\n", $1);}' > tweakedNm.lst
+fgrep -f tweakedNm.lst refToPep.tab | cut -f 2 > tweakedNp.lst
+fgrep -f weededCds.tweaked weededCds.bed > tweakedNm.bed
+sequenceForBed -db=$db -bedIn=tweakedNm.bed -fastaOut=tweakedNm.fa -upCase -keepName
+faSomeRecords refPep.fa tweakedNp.lst tweakedNp.fa
+blat -q=prot -t=dnax -noHead tweakedNm.fa tweakedNp.fa stdout | sort -k 10 > tweaked.psl
+
+# Make an alignment file for refSeqs that swaps in the tweaked ones
+weedLines weededCds.tweaked blat/protein/refSeq.psl refTweaked.psl
+cat tweaked.psl >> refTweaked.psl
+
+# Make precursor to kgProtMap table.  This is a psl file that maps just the CDS of the gene
+# to the genome.
+txGeneCdsMap weeded.bed weeded.info pick.picks refTweaked.psl \
+	refToPep.tab /cluster/data/$db/chrom.sizes cdsToRna.psl \
+	rnaToGenome.psl
+pslMap cdsToRna.psl rnaToGenome.psl cdsToGenome.psl
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
@@ -410,12 +432,13 @@ subColumn 4 coding.bed txToAcc.tab ucscCoding.bed
 subColumn 4 nearCoding.bed txToAcc.tab ucscNearCoding.bed
 subColumn 4 antisense.bed txToAcc.tab ucscAntisense.bed
 subColumn 4 uncoding.bed txToAcc.tab ucscUncoding.bed
+subColumn 10 cdsToGenome.psl txToAcc.tab ucscProtMap.psl
 cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.tab ucscGenes.ev
 
 # Make files with protein and mrna accessions.  These will be taken from
 # RefSeq for the RefSeq ones, and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed separated.info abWalk.fa weededCds.faa refSeq.fa \
+txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa refSeq.fa \
     refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa
 
 # Cluster the coding and the uncoding sets, and make up canonical and
@@ -427,15 +450,24 @@ cat uncoding.txg antisense.txg > senseAnti.txg
 txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNearCoding.bed \
 	canonical.tab isoforms.tab txCluster.tab
 
+# Make up final splicing graph just containing our genes, and final alt splice
+# table.
+txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
+txgAnalyze ucscGenes.txg /cluster/data/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
+
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
 # We do this initially in a temporary database.
 
+# Create temporary database with a few small tables from main database
 hgsqladmin create $tempDb
-hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
-hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
+hgsqldump $db chromInfo | hgsql $tempDb
+hgsqldump $db trackDb_$user | hgsql $tempDb
 
+# Load in isoforms, canonical, and gene sequence tables
+hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
+hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
@@ -443,6 +475,7 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 # seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.gp
 hgLoadSqlTab $tempDb knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
+hgLoadBed $tempDb knownAlt altSplice.bed
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -489,7 +522,7 @@ hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
 hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
 knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
 
-# Create a expression distance table, this is relatively quick - 10 min.
+# Create a small expression distance table, this is relatively quick - 10 min.
 time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
 	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
 
@@ -497,11 +530,6 @@ time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
 time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
     hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
     -lookup=knownToGnfAtlas2
-
-# This one takes a while too, 1 hour 22 minutes.
-cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
-time hgExpDistance $tempDb affyUclaNorm affyUclaExp knownExpDistance \
-	-weights=affyUcla.weight -lookup=knownToU133
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -514,7 +542,7 @@ cat << _EOF_ > config.ra
 # mouse, rat, zebrafish, worm, yeast, fly
 
 targetGenesetPrefix known
-targetDb tmpFoo2
+targetDb $tempDb
 queryDbs $xdb $ratDb $fishDb $flyDb $wormDb $yeastDb
 
 tmpFoo2Fa $tempFa
@@ -529,4 +557,102 @@ buildDir $dir/hgNearBlastp
 scratchDir $scratchDir/jkgHgNearBlastp
 _EOF_
 doHgNearBlastp.pl config.ra |& tee do.log 
+
+# Remove non-syntenic hits for mouse and rat
+# Takes a few minutes
+mkdir /gbdb/$tempDb/liftOver
+ln -s /cluster/data/hg18/bed/liftOver/${db}To$RatDb.over.chain.gz \
+    /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
+ln -s /cluster/data/hg18/bed/liftOver/${db}To${Xdb}.over.chain.gz \
+    /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
+synBlastp.csh $tempDb $ratDb
+synBlastp.csh $tempDb $xdb
+
+# Make reciprocal best subset for the blastp pairs that are too
+# Far for synteny to help
+
+# Us vs. fish
+set aToB = run.$tempDb.$fishDb
+set bToA = run.$fishDb.$tempDb
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
+hgLoadBlastTab $fishDb tfBlastTab $bToA/recipBest.tab
+
+# Us vs. fly
+set aToB = run.$tempDb.$flyDb
+set bToA = run.$flyDb.$tempDb
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
+hgLoadBlastTab $flyDb tfBlastTab $bToA/recipBest.tab
+
+# Us vs. worm
+set aToB = run.$tempDb.$wormDb
+set bToA = run.$wormDb.$tempDb
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
+hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
+
+# Us vs. yeast
+set aToB = run.$tempDb.$yeastDb
+set bToA = run.$yeastDb.$tempDb
+cat $aToB/out/*.tab > $aToB/all.tab
+cat $bToA/out/*.tab > $bToA/all.tab
+blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
+hgLoadBlastTab $tempDb csBlastTab $aToB/recipBest.tab
+hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
+
+# Clean up
+cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
+rm -r run.*/out
+gzip run.*/all.tab
+
+# MAKE FOLDUTR TABLES 
+# First set up directory structure and extract UTR sequence on hgwdev
+cd $dir
+mkdir -p rnaStruct
+cd rnaStruct
+mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+utrFa $tempDb knownGene utr3 utr3/utr.fa
+utrFa $tempDb knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+faSplit sequence utr3/utr.fa 10000 utr3/split/s
+faSplit sequence utr5/utr.fa 10000 utr5/split/s
+ls -1 utr3/split > utr3/in.lst
+ls -1 utr5/split > utr5/in.lst
+cd utr3
+cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+gensub2 in.lst single gsub spec
+cp gsub ../utr5
+cd ../utr5
+gensub2 in.lst single gsub spec
+
+# Do cluster runs for UTRs
+ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make spec"
+ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make spec"
+
+# Load database
+    ssh hgwdev
+    cd $dir/rnaStruct/utr5
+    hgLoadRnaFold $tempDb foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold -warnEmpty $tempDb foldUtr3 fold
+# There are a three warnings on empty files.  Seems to be a problem in
+# RNAfold, so not easy for us to fix. Consequence is not too bad, just a
+# few 3' UTRs will be missing annotation.
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
 
