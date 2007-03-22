@@ -14094,3 +14094,12 @@ cp /cluster/data/hg17/bed/acescan/acescan.hg17.gp .
 liftOver -genePred acescan.hg17.gp /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz \
   acescan.hg18.gp unmapped
 ldHgGene -predTab hg18 acescan acescan.hg18.gp
+
+##############################################################################
+# Update central DB gdbPdb table in preparation for KG III (DONE 3/22/07, Fan)
+
+   mysql -u hgcat -p$HGPSWD -h genome-testdb -A hgcentraltest
+      update gdbPdb set proteomeDb  = "proteins070202" where genomeDb = "hg18";
+      quit
+
+      
