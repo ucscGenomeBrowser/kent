@@ -1130,7 +1130,6 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type bed 5 .
-url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
 shortLabel Tetraodon Blat

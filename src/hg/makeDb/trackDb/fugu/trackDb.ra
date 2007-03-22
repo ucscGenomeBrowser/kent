@@ -159,8 +159,6 @@ color 0,60,120
 altColor 200,220,255
 type bed 12 .
 otherDb mm3
-url http://www.genoscope.cns.fr/comparative?premier=Takifugu&deuxieme=Mouse&position=$$
-urlLabel Exofish Ecotig Display Link:
 
 track ecoresRn3
 shortLabel Rat Ecores
@@ -172,8 +170,6 @@ color 0,60,120
 altColor 200,220,255
 type bed 12 .
 otherDb rn3
-url http://www.genoscope.cns.fr/comparative?premier=Takifugu&deuxieme=Rat&position=$$
-urlLabel Exofish Ecotig Display Link:
 
 track ecoresHg16
 shortLabel Human Ecores
@@ -185,8 +181,6 @@ color 0,60,120
 altColor 200,220,255
 type bed 12 .
 otherDb hg16
-url http://www.genoscope.cns.fr/comparative?premier=Takifugu&deuxieme=Human&position=$$
-urlLabel Exofish Ecotig Display Link:
 
 searchTable gold
 searchType gold

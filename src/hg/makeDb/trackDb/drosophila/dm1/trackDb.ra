@@ -187,7 +187,6 @@ color 0,60,120
 altColor 200,220,255
 type bed 12 .
 otherDb anoGam1
-url http://www.genoscope.cns.fr/comparative?premier=Drosophila&deuxieme=Anopheles&position=$$
 
 track b100i100
 shortLabel b100i100
