@@ -2,6 +2,7 @@
  * psl (blat format) based tracks. */
 
 #include "common.h"
+#include "hCommon.h"
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -9,6 +10,7 @@
 #include "hgTracks.h"
 #include "psl.h"
 #include "cds.h"
+#include "../gsid/gsidTable/gsidTable.h"
 
 int pslGrayIx(struct psl *psl, boolean isXeno, int maxShade)
 /* Figure out gray level for an RNA block. */
@@ -341,6 +343,73 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 return lfFromPslx(psl, 1, isXeno, FALSE, NULL);
 }
 
+boolean  gsidSelectedSubjListLoaded = FALSE;
+
+void initializeGsidSubjList()
+{
+FILE *inf;
+char line[255];
+struct gsidSubj *subj;
+
+char *subjListFileName;
+
+subjListFileName = cartOptionalString(cart, gsidSubjList);
+if (subjListFileName)
+    {
+    inf = fopen(subjListFileName, "r");
+    while (fgets(line, 200, inf) != NULL)
+    	{
+    	*(line + strlen(line) - 1) = '\0';
+    	AllocVar(subj);
+    	subj->subjId = cloneString(line);
+    	slAddHead(&gsidSelectedSubjList, subj);
+    	}
+    slReverse(&gsidSelectedSubjList);
+    fclose(inf);
+    gsidSelectedSubjListLoaded = TRUE;
+    }
+}
+
+/* special processing for GSID entries */
+/* check if the entry belongs to a subject that is selected */
+boolean isSelected(char *seqId, struct sqlConnection *conn2)
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *subjId, *dnaSeqId;
+struct sqlConnection *conn;
+struct gsidSubj *subj;
+
+if (!gsidSelectedSubjListLoaded) initializeGsidSubjList();
+subj = gsidSelectedSubjList;
+
+conn= hAllocConn();
+
+while (subj != NULL)
+    {
+    subjId = subj->subjId;
+    sprintf(query,"select dnaSeqId from gsIdXref where subjId='%s'", subjId);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    while (row != NULL)
+    	{
+    	dnaSeqId = row[0];
+    	//if (strstr(dnaSeqId, seqId)) 
+    	if (sameWord(dnaSeqId, seqId)) 
+	    {
+	    return(TRUE);
+	    }
+        row = sqlNextRow(sr);
+    	}
+    sqlFreeResult(&sr);
+    subj = subj->next;
+    }
+
+hFreeConn(&conn); 
+return(FALSE);
+}
+
 static void connectedLfFromPslsInRange(struct sqlConnection *conn,
     struct track *tg, int start, int end, char *chromName,
     boolean isXeno, boolean nameGetsPos, int sizeMul)
@@ -354,7 +423,8 @@ int rowOffset;
 char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
 char optionChr[128]; /* Option -  chromosome filter */
-char extraWhere[128] ;
+char extraWhere[128];
+boolean checkSelected = hIsGsidServer();  /* special filter processing for GSID entries */
 
 safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
@@ -376,7 +446,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
     lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
-    slAddHead(&lfList, lf);
+    if (checkSelected)
+	{
+    	if (isSelected(lf->name, conn)) slAddHead(&lfList, lf);
+	}
+    else
+	{
+    	slAddHead(&lfList, lf);
+	}
     pslFree(&psl);
     }
 slReverse(&lfList);
@@ -387,7 +464,6 @@ if (tg->extraUiData)
 tg->items = lfList;
 sqlFreeResult(&sr);
 }
-
 
 static void lfFromPslsInRange(struct track *tg, int start, int end, 
 	char *chromName, boolean isXeno, boolean nameGetsPos, int sizeMul)
