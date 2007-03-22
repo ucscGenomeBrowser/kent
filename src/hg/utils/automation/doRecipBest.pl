@@ -6,7 +6,7 @@
 # This script should probably be folded back into doBlastzChainNet.pl
 # eventually.
 
-# $Id: doRecipBest.pl,v 1.6 2007/03/13 04:44:39 kate Exp $
+# $Id: doRecipBest.pl,v 1.7 2007/03/22 15:06:43 kate Exp $
 
 use Getopt::Long;
 use warnings;
@@ -71,7 +71,6 @@ Assumptions:
    \$db.2bit (for both \$tDb and \$qDb).
 3. The buildDir contains axtChain/\$tDb.\$qDb.over.chain.gz and the download dir
    goldenPath/\$tDb/vs\$QDb already exists.
-4. The blastz DEF file is located in $HgAutomate::clusterData/\$tDb/blastz.\$qDb.
 " if ($detailed);
   print "\n";
   exit $status;
@@ -80,10 +79,11 @@ Assumptions:
 # Globals:
 my %defVars = ();
 # Command line args: tDb qDb
-my ($DEF, $tDb, $qDb);
+my ($tDb, $qDb);
 # Other:
-my ($buildDir);
 my ($QDb);
+my ($buildDir);
+my ($splitRef);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -116,8 +116,6 @@ sub doRecipBest {
 
   my $t2bit = "$HgAutomate::clusterData/$tDb/$tDb.2bit";
   my $q2bit = "$HgAutomate::clusterData/$qDb/$qDb.2bit";
-  my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
-  my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
   $bossScript->add(<<_EOF_
 # Swap $tDb-best chains to be $qDb-referenced:
 chainStitchId $tDb.$qDb.over.chain.gz stdout \\
@@ -186,7 +184,12 @@ endif
 
 mkdir experiments
 mv *.bed *.psl experiments
+_EOF_
+    );
 
+    # Create axt and maf files
+if ($splitRef) {
+  $bossScript->add(<<_EOF_
 # Make rbest net axt's download: one .axt per $tDb seq.
 netSplit $tDb.$qDb.rbest.net.gz rBestNet
 chainSplit rBestChain $tDb.$qDb.rbest.chain.gz
@@ -194,7 +197,7 @@ cd ..
 mkdir axtRBestNet
 foreach f (axtChain/rBestNet/*.net)
     netToAxt \$f axtChain/rBestChain/\$f:t:r.chain \\
-    $seq1Dir $seq2Dir stdout \\
+    $t2bit $q2bit stdout \\
     | axtSort stdin stdout \\
     | gzip -c > axtRBestNet/\$f:t:r.$tDb.$qDb.net.axt.gz
   end
@@ -203,12 +206,30 @@ foreach f (axtChain/rBestNet/*.net)
 mkdir mafRBestNet
 foreach f (axtRBestNet/*.$tDb.$qDb.net.axt.gz)
     axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. \$f \\
-        $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
+        $HgAutomate::clusterData/{$tDb,$qDb}/chrom.sizes \\
             stdout \\
       | gzip -c > mafRBestNet/\$f:t:r:r:r:r:r.maf.gz
 end
 _EOF_
-);
+    );
+  } else {
+  $bossScript->add(<<_EOF_
+# Make rbest net axt's download
+mkdir ../axtRBestNet
+netToAxt $tDb.$qDb.rbest.net.gz $tDb.$qDb.rbest.chain.gz \\
+    $t2bit $q2bit stdout \\
+    | axtSort stdin stdout \\
+    | gzip -c > ../axtRBestNet/$tDb.$qDb.rbest.axt.gz
+
+# Make rbest mafNet for multiz
+mkdir ../mafRBestNet
+axtToMaf -tPrefix=$tDb. -qPrefix=$qDb. ../axtRBestNet/$tDb.$qDb.rbest.axt.gz \\
+        $HgAutomate::clusterData/{$tDb,$qDb}/chrom.sizes  \\
+                stdout \\
+      | gzip -c > ../mafRBestNet/$tDb.$qDb.rbest.maf.gz
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doRecipBest
 
@@ -265,31 +286,6 @@ _EOF_
 } # doDownload
 
 #########################################################################
-# simplified DEF file parser from doBlastzChainNet.pl
-
-sub loadDef {
-  # Read parameters from a bash script with Scott's param variable names:
-  my $fh = &HgAutomate::mustOpen("$buildDir/DEF");
-  while (<$fh>) {
-    s/^\s*export\s+//;
-    next if (/^\s*#/ || /^\s*$/);
-    if (/(\w+)\s*=\s*(.*)/) {
-      my ($var, $val) = ($1, $2);
-      while ($val =~ /\$(\w+)/) {
-	my $subst = $defVars{$1};
-	if (defined $subst) {
-	  $val =~ s/\$$1/$subst/;
-	} else {
-	  die "Can't find value to substitute for \$$1 in $DEF var $var.\n";
-	}
-      }
-      $defVars{$var} = $val;
-    }
-  }
-  close($fh);
-}
-
-#########################################################################
 # main
 
 #$opt_debug = 1;
@@ -297,20 +293,18 @@ sub loadDef {
 # Prevent "Suspended (tty input)" hanging:
 &HgAutomate::closeStdin();
 
-# Make sure we have valid options and exactly 1 argument:
+# Make sure we have valid options and correct number of args
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 2);
 ($tDb, $qDb) = @ARGV;
+
 $QDb = ucfirst($qDb);
+$splitRef =  (`wc -l < $HgAutomate::clusterData/$tDb/chrom.sizes` 
+                        <= $HgAutomate::splitThreshold);
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/blastz.$qDb";
-
-&loadDef($DEF);
-
-my $splitRef =  (`wc -l < $defVars{SEQ2_LEN}` <=
-                   $HgAutomate::splitThreshold);
 
 # Do everything.
 $stepper->execute();
