@@ -372,40 +372,41 @@ if (subjListFileName)
 
 /* special processing for GSID entries */
 /* check if the entry belongs to a subject that is selected */
-boolean isSelected(char *seqId, struct sqlConnection *conn2)
+boolean isSelected(char *seqId)
 {
 char query[256];
 struct sqlResult *sr;
 char **row;
-char *subjId, *dnaSeqId;
+char *subjId, *testSubjId;
 struct sqlConnection *conn;
 struct gsidSubj *subj;
 
 if (!gsidSelectedSubjListLoaded) initializeGsidSubjList();
-subj = gsidSelectedSubjList;
 
 conn= hAllocConn();
 
-while (subj != NULL)
+sprintf(query,"select subjId from gsIdXref where dnaSeqId='%s'", seqId);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL) 
     {
-    subjId = subj->subjId;
-    sprintf(query,"select dnaSeqId from gsIdXref where subjId='%s'", subjId);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    while (row != NULL)
+    subjId = row[0];
+    
+    /* scan thru subj ID list */
+    subj = gsidSelectedSubjList;
+    while (subj != NULL)
     	{
-    	dnaSeqId = row[0];
-    	//if (strstr(dnaSeqId, seqId)) 
-    	if (sameWord(dnaSeqId, seqId)) 
+    	testSubjId = subj->subjId;
+    	if (sameWord(subjId, testSubjId))
 	    {
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn); 
 	    return(TRUE);
 	    }
-        row = sqlNextRow(sr);
+    	subj = subj->next;
     	}
-    sqlFreeResult(&sr);
-    subj = subj->next;
     }
-
+sqlFreeResult(&sr);
 hFreeConn(&conn); 
 return(FALSE);
 }
@@ -448,7 +449,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
     if (checkSelected)
 	{
-    	if (isSelected(lf->name, conn)) slAddHead(&lfList, lf);
+    	if (isSelected(lf->name)) slAddHead(&lfList, lf);
 	}
     else
 	{
