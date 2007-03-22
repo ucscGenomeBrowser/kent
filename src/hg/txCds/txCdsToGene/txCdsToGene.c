@@ -16,6 +16,7 @@
 
 /* Variables set from command line. */
 FILE *fBed = NULL;
+FILE *fTweaked = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,12 +39,15 @@ errAbort(
   "            and other exceptions.  You get this file by running\n"
   "            files txCdsRaExceptions on ra files parsed out of genbank flat\n"
   "            files.\n"
+  "   -tweaked=output.tweaked - Save list of places we had to tweak beds to dodge\n"
+  "            frame shifts, etc. here\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"bedOut", OPTION_STRING},
    {"exceptions", OPTION_STRING},
+   {"tweaked", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -356,6 +360,8 @@ while (lineFileRow(lf, row))
 	if (cds->cdsCount > 1)
 	    {
 	    struct bed *newBed = breakUpBedAtCdsBreaks(cds, bed);
+	    if (fTweaked)
+	        fprintf(fTweaked, "%s\n", newBed->name);
 	    bedFree(&bed);
 	    bed = newBed;
 	    }
@@ -399,7 +405,11 @@ char *bedOut = optionVal("bedOut", NULL);
 makeExceptionHashes();
 if (bedOut != NULL)
     fBed = mustOpen(bedOut, "w");
+char *tweaked = optionVal("tweaked", NULL);
+if (tweaked != NULL)
+    fTweaked = mustOpen(tweaked, "w");
 txCdsToGene(argv[1], argv[2], argv[3], argv[4], argv[5]);
 carefulClose(&fBed);
+carefulClose(&fTweaked);
 return 0;
 }
