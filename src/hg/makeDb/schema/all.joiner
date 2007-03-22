@@ -2510,6 +2510,7 @@ tablesIgnored $hg
     zoom1_affyTranscriptome
     zoom2_affyTranscriptome
     chimpDels
+    chimpParalogy
     chimpSimpleDiff
     ctgPos
     celeraCoverage
