@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.31 2007/03/06 00:52:58 kate Exp $";
+static char const rcsid[] = "$Id: custom.c,v 1.32 2007/03/22 20:33:02 hiram Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */
@@ -566,6 +566,8 @@ if (ct->dbTrack)
 	    slAddHead(pBedList, copy);
 	    }
 	}
+    sqlFreeResult(&sr);
+    sqlDisconnect(&conn);
     }
 else
     {

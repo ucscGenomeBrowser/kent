@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.20 2006/08/10 06:40:33 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.21 2007/03/22 20:33:03 hiram Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -258,7 +258,6 @@ boolean hasBlocks = hti->hasBlocks;
 boolean hasScore = (hti->scoreField[0] != 0);
 int fieldCount;
 
-
 htmlOpen("%s (%s) Summary Statistics", curTableLabel(), curTable);
 
 for (region = regionList; region != NULL; region = region->next)
@@ -370,5 +369,3 @@ else if (isChromGraph(curTrack))
 else
     doSummaryStatsBed(conn);
 }
-
-
