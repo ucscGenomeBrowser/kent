@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1298 2007/03/21 03:02:50 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1299 2007/03/22 17:20:35 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -212,6 +212,9 @@ char *rulerMenu[] =
  * that were found to contain the searched-upon
  * position string */
 struct hgPositions *hgp = NULL;
+
+/* subject list used for GSID */
+struct gsidSubj *gsidSelectedSubjList;
 
 struct trackLayout tl;
 
