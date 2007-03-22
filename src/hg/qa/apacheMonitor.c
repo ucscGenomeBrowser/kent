@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.10 2006/08/08 17:11:33 angie Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.11 2007/03/22 15:26:01 heather Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -58,17 +58,6 @@ errAbort(
     "options:\n"
     "    -store  Write to status500 table");
 }
-
-static char* getCfgValue(char* envName, char* cfgName)
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
-*/
-{
-char *val = getenv(envName);
-if (val == NULL)
-    val = cfgOption(cfgName);
-    return val;
-}    
 
 void logStatus(int status)
 {
