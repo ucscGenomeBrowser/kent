@@ -21,7 +21,7 @@
 #include "wiggle.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: galaxy.c,v 1.10 2007/03/09 21:09:09 giardine Exp $";
+static char const rcsid[] = "$Id: galaxy.c,v 1.11 2007/03/22 23:38:08 hiram Exp $";
 
 char *getGalaxyUrl()
 /* returns the url for the galaxy cgi, based on script name */
@@ -104,7 +104,7 @@ cgiMakeHiddenVar("db", database);
 if (cartVarExists(cart, "org"))
     cgiMakeHiddenVar("org", cartString(cart, "org"));
 cgiMakeHiddenVar("hgta_table", curTable);
-cgiMakeHiddenVar("hgta_track", cartString(cart, "hgta_track"));
+cgiMakeHiddenVar(hgtaTrack, cartString(cart, hgtaTrack));
 if (cartVarExists(cart, "hgta_regionType"))
     cgiMakeHiddenVar("hgta_regionType", cartString(cart, "hgta_regionType"));
 if (cartVarExists(cart, "hgta_outputType"))
