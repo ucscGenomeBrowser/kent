@@ -9494,3 +9494,63 @@ TMPDIR=/scratch/tmp
     time nice -n +19 featureBits fr2 chainDanRer4Link \
 	> fb.fr2.chainDanRer4Link.txt 2>&1
     #	80963231 bases of 393312790 (20.585%) in intersection
+
+# ASZ (3-22-2007)this process failed to create four tables, so I created 
+# them an left them empty (as discussed with Hiram).
+
+ CREATE TABLE `danRer4`.`chrUn_random_chainFr2` (
+`bin` smallint( 5 ) unsigned NOT NULL default '0',
+`score` double NOT NULL default '0',
+`tName` varchar( 255 ) NOT NULL default '',
+`tSize` int( 10 ) unsigned NOT NULL default '0',
+`tStart` int( 10 ) unsigned NOT NULL default '0',
+`tEnd` int( 10 ) unsigned NOT NULL default '0',
+`qName` varchar( 255 ) NOT NULL default '',
+`qSize` int( 10 ) unsigned NOT NULL default '0', 
+`qStrand` char( 1 ) NOT NULL default '',
+`qStart` int( 10 ) unsigned NOT NULL default '0',
+`qEnd` int( 10 ) unsigned NOT NULL default '0',
+`id` int( 10 ) unsigned NOT NULL default '0',
+KEY `bin` ( `bin` ) ,
+KEY `id` ( `id` )
+) TYPE = MYISAM ;
+
+ CREATE TABLE `danRer4`.`chrUn_random_chainFr2Link` (
+`bin` smallint( 5 ) unsigned NOT NULL default '0',
+`tName` varchar( 255 ) NOT NULL default '',
+`tStart` int( 10 ) unsigned NOT NULL default '0',
+`tEnd` int( 10 ) unsigned NOT NULL default '0',
+`qStart` int( 10 ) unsigned NOT NULL default '0',
+`chainId` int( 10 ) unsigned NOT NULL default '0',
+KEY `bin` ( `bin` ) ,
+KEY `chainId` ( `chainId` )
+) TYPE = MYISAM ;
+
+ CREATE TABLE `danRer4`.`chrNA_random_chainFr2` (
+`bin` smallint( 5 ) unsigned NOT NULL default '0',
+`score` double NOT NULL default '0',
+`tName` varchar( 255 ) NOT NULL default '',
+`tSize` int( 10 ) unsigned NOT NULL default '0',
+`tStart` int( 10 ) unsigned NOT NULL default '0',
+`tEnd` int( 10 ) unsigned NOT NULL default '0',
+`qName` varchar( 255 ) NOT NULL default '',
+`qSize` int( 10 ) unsigned NOT NULL default '0', 
+`qStrand` char( 1 ) NOT NULL default '',
+`qStart` int( 10 ) unsigned NOT NULL default '0',
+`qEnd` int( 10 ) unsigned NOT NULL default '0',
+`id` int( 10 ) unsigned NOT NULL default '0',
+KEY `bin` ( `bin` ) ,
+KEY `id` ( `id` )
+) TYPE = MYISAM ;
+
+ CREATE TABLE `danRer4`.`chrNA_random_chainFr2Link` (
+`bin` smallint( 5 ) unsigned NOT NULL default '0',
+`tName` varchar( 255 ) NOT NULL default '',
+`tStart` int( 10 ) unsigned NOT NULL default '0',
+`tEnd` int( 10 ) unsigned NOT NULL default '0',
+`qStart` int( 10 ) unsigned NOT NULL default '0',
+`chainId` int( 10 ) unsigned NOT NULL default '0',
+KEY `bin` ( `bin` ) ,
+KEY `chainId` ( `chainId` )
+) TYPE = MYISAM ;
+
