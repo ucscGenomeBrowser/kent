@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.14 2007/03/23 00:31:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.15 2007/03/23 17:32:11 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -878,7 +878,7 @@ int j;
 char *chp, *chp2;
 int  sfCnt;
 int  int_start, int_end;
-   
+
 if (!hTableExistsDb(protDbName, "sfAssign")) return(0);
 if (!hTableExistsDb(protDbName, "ensemblXref3")) return(0);
 
@@ -1355,8 +1355,8 @@ char strand;
 char *kgId, *kgPep, *protPep;
 char cond_str[255];
 char *answer;
-int i, ll;
-char *chp1, *chp2;
+//int i, ll;
+//char *chp1, *chp2;
 
 g_font = mgSmallFont();
 safef(pbScaleStr, sizeof(pbScaleStr), "%d", pbScale);
@@ -1431,15 +1431,11 @@ l=strlen(aa);
 
 /* initialize AA properties */
 aaPropertyInit(&hasResFreq);
-
-//if (kgVersion != KG_III)
-//{
 sfCount = getSuperfamilies2(proteinID);
 if (sfCount == 0)
     {
     sfCount = getSuperfamilies(proteinID);
     }
-//}
 if (mrnaID != NULL)
     {
     if (kgVersion == KG_III)
@@ -1451,7 +1447,7 @@ if (mrnaID != NULL)
 	    {
 	    safef(cond_str, sizeof(cond_str), "name='%s'", kgId);
             kgPep = sqlGetField(NULL, database, "knownGenePep", "seq", cond_str);
-      	    printf("<pre><br>%s", kgPep);fflush(stdout);
+      	    //printf("<pre><br>%s", kgPep);fflush(stdout);
 	    if (kgPep != NULL)
 	    	{
 		if (strstr(protDbName, "proteins") != NULL)
@@ -1461,12 +1457,12 @@ if (mrnaID != NULL)
 		
 		    safef(cond_str, sizeof(cond_str), "acc='%s'", proteinID);
             	    protPep = sqlGetField(NULL, uniProtDbName, "protein", "val", cond_str);
-            	    printf("<br>%s\n", protPep);fflush(stdout);
+            	    //printf("<br>%s\n", protPep);fflush(stdout);
             	    if (protPep != NULL)
 		    	{
 			if (sameWord(kgPep, protPep))
 			    {
-			    printf("<br>MATCH!\n");fflush(stdout);
+			    //printf("<br>MATCH!\n");fflush(stdout);
 		    	    safef(cond_str, sizeof(cond_str), "qName='%s'", kgId);
             	    	    answer = sqlGetField(NULL, database, kgProtMapTableName, 
 			    			 "qName", cond_str);
@@ -1479,6 +1475,7 @@ if (mrnaID != NULL)
 			    	doExonTrack = TRUE;
 			    	}
 			    }
+			/*
 			else
 			    {
 			    chp1 = kgPep;
@@ -1499,7 +1496,8 @@ if (mrnaID != NULL)
 				chp1++; chp2++;
 				}
 			    }
-			    printf("</pre>");fflush(stdout);
+			    //printf("</pre>");fflush(stdout);
+			*/
 			}
 		    }
 		}
