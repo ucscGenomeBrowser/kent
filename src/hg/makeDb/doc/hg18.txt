@@ -5016,7 +5016,7 @@ TMPDIR=/scratch/tmp
 
 # Create working subdirectories and temporary databases (kgHg18A)
 
-  ssh hgwdev
+    ssh hgwdev
   cd /cluster/store11/kg
   mkdir kgHg18A  
   ln -s /cluster/store11/kg/kgHg18A /cluster/store6/kgDB/bed/kgHg18A
@@ -9991,6 +9991,11 @@ cat netCov.log
     ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
         -syntenicNet -continue syntenicNet >&! synnet.log &
 
+    # use syntenic net on opossum too
+    cd /cluster/data/hg18/bed/blastz.monDom4
+    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl DEF \
+        -syntenicNet -continue syntenicNet >&! synnet.log &
+
 # NET AND RECIPROCAL BEST TABLES FOR 2X MAMMALS
     # load net and reciprocal best net for comparison
 
@@ -13610,6 +13615,20 @@ BASE=/cluster/data/hg18/bed/blastz.eriEur1.2007-03-08
       -chainMinScore=3000 -chainLinearGap=medium >& do.log &
     tail -f do.log
 
+    # Reciprocal best net mafs for multiz (kate)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blastz.eriEur1
+    ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 eriEur1 >&! rbest.log &
+
+    #GOT HERE
+    
+    # Load nets (2007-03-12 kate)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.dasNov1/axtChain
+    netFilter -minGap=10 noClass.net | hgLoadNet -warn hg18 netDasNov1 stdin
+    netFilter -minGap=10 hg18.dasNov1.rbest.net.gz |  \
+        hgLoadNet -warn hg18 netRBestDasNov1 stdin
+
 #########################################################################
 # BLASTZ/CHAIN/NET SORARA1 (IN PROGRESS 2007-03-08 kate)
     ssh kkstore02
@@ -13651,6 +13670,8 @@ BASE=/cluster/data/hg18/bed/blastz.sorAra1.2007-03-08
     ssh kkstore02
     cd /cluster/data/hg18/bed/blastz.sorAra1
     ~/kent/src/hg/utils/automation/doRecipBest.pl hg18 sorAra1 >&! rbest.log &
+
+    # GOT HERE
     
     # Load nets (2007-03-12 kate)
     ssh hgwdev
@@ -13705,23 +13726,30 @@ TMPDIR=/scratch/tmp
       >& do.log & tail -f do.log
 
 ########################################################################
-# 25-Way Multiple Alignment
+# 28-Way Multiple Alignment
 
     ssh kkstore02
     cd /cluster/data/hg18/bed
-    mkdir multiz25way.2007-03-10
-    ln -s multiz25way.2007-03-10 multiz25wayStrict
-    cd multiz25wayStrict
+    mkdir multiz28way.2007-03-20
+    ln -s multiz28way.2007-03-20 multiz28way
+    cd multiz28way
 
     # start with 17way tree; update assemblies and add new species
     mkdir tree
     cd tree
-    cp ../../multiz17way/tree.nh tree.asm.nh
-    # edit
+    cp /cluster/data/hg18/bed/multiz17way/tree.nh tree.asm.nh
+    # edit and create tree.28.nh, with Webb's assistance
+    echo `sed 's/[a-zA-Z0-9]*_//g' tree.asm.nh` > tree.28.nh
+    # 
     # create version for phyloGif program (replace spaces with commas)
     cp 28way.gif /usr/local/apache/htdocs/phylo/images/hg18_28way.gif
 
+    # create species list
     cd ..
+    sed -e 's/[()]//g' -e 's/ /\n/g' tree/tree.28.nh | \
+        sed -e '/^$/d'| sort > species.28.lst
+    wc -l species.28.lst
+    ln -s species.28.lst species.lst
 
 # Organisms: 
 (N)ew, (U)pdated, (S)ame species since 17way:
@@ -13753,12 +13781,6 @@ N stickleback (gasAcu1) "Gasterosteus aculeatus"
 N medaka (oryLat1) "Oryzias latipees"
 U zebrafish (danRer4) (needs chain/net update on hg18)
 
-    # create species list
-    sed -e 's/[()]//g' -e 's/ /\n/g' tree/tree.25.nh | \
-        sed -e '/^$/d'| sort > species.lst
-    wc -l species.lst
-        # 28 species.lst
-
     # verify all blastz's exists
 cat > listMafs.csh << 'EOF'
     foreach db (`cat species.lst`)
@@ -13777,35 +13799,11 @@ cat > listMafs.csh << 'EOF'
 
     # Maf types:
     # 2X mammals -> reciprocal best net
-    # high cov placental mammals -> syntenic net
+    # high cov placental mammals and opossum -> syntenic net
     # other -> standard net
 
     csh listMafs.csh > listMafs.log &
     cat listMafs.log
-# anoCar1 mafNet
-# bosTau3 mafSynNet
-# canFam2 mafNet
-# danRer4 mafNet
-# dasNov1 mafRBestNet
-# echTel1 mafRBestNet
-# equCab1 mafSynNet
-# felCat3 mafRBestNet
-# fr2 mafNet
-# galGal3 mafNet
-# gasAcu1 mafNet
-# loxAfr1 mafRBestNet
-# mm8 mafSynNet
-# monDom4 mafNet
-# ornAna1 mafNet
-# oryCun1 mafRBestNet
-# oryLat1 mafNet
-# otoGar1 mafRBestNet
-# panTro2 mafSynNet
-# rheMac2 mafSynNet
-# rn4 mafSynNet
-# tetNig1 mafNet
-# tupBel1 mafRBestNet
-# xenTro2 mafNet
 
     # add links of the formt blastz.<db> to blastz.<db>.<date> dirs:
     cd /cluster/data/hg18/bed
@@ -13816,14 +13814,13 @@ cat > listMafs.csh << 'EOF'
     # copy net mafs to cluster-friendly storage, splitting chroms
     # into 50MB chunks  to improve run-time
     ssh hgwdev
-    cd /cluster/data/hg18/bed/multiz25wayStrict
+    cd /cluster/data/hg18/bed/multiz28way
     mkdir run.split
     cd run.split
     mafSplitPos hg18 50 mafSplit.bed
 
     ssh kki
-    cd /cluster/data/hg18/bed/multiz25wayStrict
-    mkdir run.split
+    cd /cluster/data/hg18/bed/multiz28way
     cd run.split
     cat << 'EOF' > doSplit.csh
 #!/bin/csh -ef
@@ -13864,7 +13861,7 @@ echo $mdir > $db.done
 # << happy emacs
     chmod +x doSplit.csh
 
-    grep -v hg18  ../species.25.lst > split.lst
+    grep -v hg18  ../species.28.lst > split.lst
     cat > spec << 'EOF'
 #LOOP
 doSplit.csh $(path1) {check out line+ $(path1).done}
@@ -13882,13 +13879,14 @@ doSplit.csh $(path1) {check out line+ $(path1).done}
 
     # run multiz
     ssh pk
-    cd /cluster/data/hg18/bed/multiz25wayStrict
+    cd /cluster/data/hg18/bed/multiz28way
     mkdir -p maf run
     cd run
     mkdir penn
-    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
-    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
-    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+    #cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    #cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    #cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+    cp -p /cluster/bin/penn/multiz.v11.2007-03-19/multiz-tba/{autoMZ,multiz,maf_project} penn
 
     # list chrom chunks, any db dir will do; better would be for the
     # splitter to generate this file
@@ -13910,9 +13908,9 @@ cat > autoMultiz.csh << 'EOF'
     set pairs = /san/sanvol1/scratch/$db/splitStrictMafNet
     rm -fr $tmp
     mkdir -p $tmp
-    cp ../tree/tree.25.nh ../species.25.lst $tmp
+    cp ../tree/tree.28.nh ../species.28.lst $tmp
     pushd $tmp
-    foreach s (`cat species.25.lst`)
+    foreach s (`cat species.28.lst`)
         set c2 = `echo $c | sed 's/__/./'`
         set in = $pairs/$s/$c2.maf
         set out = $db.$s.sing.maf
@@ -13928,7 +13926,7 @@ cat > autoMultiz.csh << 'EOF'
         endif
     end
     set path = ($run/penn $path); rehash
-    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.25.nh`" $db.*.sing.maf $c.maf
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.28.nh`" $db.*.sing.maf $c.maf
     popd
     cp $tmp/$c.maf $maf
     rm -fr $tmp
@@ -13938,7 +13936,7 @@ cat > autoMultiz.csh << 'EOF'
 
 cat  << 'EOF' > spec
 #LOOP
-./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz25wayStrict/maf/$(root1).maf}
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz28way/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
     # << emacs
@@ -13949,23 +13947,121 @@ cat  << 'EOF' > spec
     para check
     para push
     para time > run.time
-        # 3 hours!  (~8 min/species)
+        # 4 hours!  (~9 min/species)
 
     # load tables for a look
     ssh hgwdev
-    mkdir -p /gbdb/hg18/multiz25wayStrict/maf
-    ln -s /cluster/data/hg18/bed/multiz25wayStrict/maf/*.maf \
-                /gbdb/hg18/multiz25wayStrict/maf
-    cd /cluster/data/hg18/bed/multiz25wayStrict
+    mkdir -p /gbdb/hg18/multiz28way/maf
+    ln -s /cluster/data/hg18/bed/multiz28way/maf/*.maf \
+                /gbdb/hg18/multiz28way/maf
+    cd /cluster/data/hg18/bed/multiz28way
 cat > loadMaf.csh << 'EOF'
     date
-    hgLoadMaf -pathPrefix=/gbdb/hg18/multiz25wayStrict/maf hg18 multiz25wayStrict
+    hgLoadMaf -pathPrefix=/gbdb/hg18/multiz28way/maf hg18 multiz28way
 
      # load summary table
      cat maf/*.maf |  nice hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
-                 -maxSize=200000  multiz25wayStrictSummary stdin
+                 -maxSize=200000  multiz28waySummary stdin
 'EOF'
      csh loadMaf.csh >&! loadMaf.log &
+
+    # look at coverage
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz25wayStrict
+    mkdir mafCov
+    cd mafCov
+    cat ../maf/chr7__*.maf | nice mafRanges stdin hg18 \
+        -otherDb=canFam2 chr7.canFam2.bed | bedSort > chr7.canFam2.bed
+    echo canFam2 > species.lst
+    cat ../maf/chr7__*.maf | mafSpeciesSubset stdin species.lst stdout | \
+        mafToAxt stdin hg18 canFam2 stdout | \
+        axtToPsl stdin /cluster/data/hg18/chrom.sizes \
+                /cluster/data/canFam2/chrom.sizes chr7.canFam2.psl
+
+    cat ../maf/chr7__*.maf | nice mafRanges stdin hg18 -otherDb=oryCun1 chr7.oryCun1.bed
+    cat ../maf/chr7__*.maf | nice mafRanges stdin hg18 -otherDb=tetNig1 chr7.tetNig1.bed
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz25wayStrict/mafCov
+    # canFam2 syntenic net vs standard net
+    nice featureBits hg18 -chrom=chr7 chr7.canFam2.bed
+        # 82967535 bases of 154952424 (53.544%) in intersection
+    nice featureBits hg18 -chrom=chr7 ../../multiz25way/mafCov/chr7.canFam2.bed
+        # 86391682 bases of 154952424 (55.754%) in intersection
+    nice featureBits hg18 -chrom=chr7 ../../multiz17way/mafCov/chr7.canFam2.bed
+        # 86248995 bases of 154952424 (55.662%) in intersection
+    
+    # compare using another method
+    cat ../maf/chr7__*.maf | mafSpeciesSubset stdin species.lst chr7.canFam2.maf
+    mafToAxt chr7.canFam2.maf hg18 canFam2 chr7.canFam2.axt
+    axtToPsl chr7.canFam2.axt /cluster/data/hg18/chrom.sizes \
+        /cluster/data/canFam2/chrom.sizes chr7.canFam2.psl
+    nice featureBits hg18 -chrom=chr7 chr7.canFam2.psl
+        # 75497734 bases of 154952424 (48.723%) in intersection
+
+    # oryCun1 reciprocal best net vs standard net
+    nice featureBits hg18 -chrom=chr7 chr7.oryCun1.bed
+        # 53157578 bases of 154952424 (34.306%) in intersection
+    nice featureBits hg18 -chrom=chr7 ../../multiz25way/mafCov/chr7.oryCun1.bed
+        # 56858022 bases of 154952424 (36.694%) in intersection
+
+    # tetNig1 both used standard net
+    nice featureBits hg18 -chrom=chr7 chr7.tetNig1.bed
+        # 2905058 bases of 154952424 (1.875%) in intersection
+    nice featureBits hg18 -chrom=chr7 ../../multiz25way/mafCov/chr7.tetNig1.bed
+        # 2901708 bases of 154952424 (1.873%) in intersection
+
+    # Gap Annotation
+    # prepare bed files with gap info
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz28way
+cat > doNBed.csh << 'EOF'
+    foreach db (`cat species.lst`)
+        echo -n "$db "
+        set cdir = /cluster/data/$db
+        if (! -e $cdir/$db.N.bed) then
+            echo "creating N.bed"
+            twoBitInfo -nBed $cdir/$db.2bit $cdir/$db.N.bed
+        else
+            echo ""
+        endif
+    end
+'EOF'
+    csh doNBed.csh >&! doNBed.log &
+
+    ssh pk
+    cd /cluster/data/hg18/bed/multiz28way
+    mkdir anno 
+    cd anno
+    mkdir maf run
+    cd run
+
+    foreach i (`cat /cluster/data/hg18/bed/multiz28way/species.lst | grep -v hg18`)
+        ln -s  /cluster/data/$i/chrom.sizes $i.len
+        ln -s  /cluster/data/$i/$i.N.bed $i.bed
+        echo $i.bed  >> nBeds
+        echo $i.len  >> sizes
+    end
+
+cat > doAnno.csh << 'EOF'
+#!/bin/csh -ef
+    set dir = /cluster/data/hg18/bed/multiz28way
+    set c = $1
+    cat $dir/maf/${c}__*.maf | \
+        nice mafAddIRows -nBeds=nBeds -sizes=sizes stdin \
+                /cluster/data/hg18/hg18.2bit $dir/anno/maf/$c.maf
+'EOF'
+#<< happy emacs
+    chmod +x doAnno.csh
+
+cat > spec << 'EOF'
+#LOOP
+./doAnno.csh $(root1) {check out line+ /cluster/data/hg18/bed/multiz28way/anno/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+#<< happy emacs
+    awk '{print $1}' /cluster/data/hg18/chrom.sizes > chroms.lst
+    gensub2 chroms.lst single spec jobList
 
 
 ############################################################################
