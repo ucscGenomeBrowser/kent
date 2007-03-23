@@ -17,7 +17,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.32 2007/02/09 23:53:03 hiram Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.33 2007/03/23 23:28:21 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -31,6 +31,8 @@ char *hgsid;
 char hgsidStr[50];
 
 boolean IAmPbTracks = FALSE;
+
+int kgVersion = KG_UNKNOWN;
 
 boolean proteinInSupportedGenome;  /* The protein is in supported genome DB */
 int protCntInSupportedGenomeDb; /* The protein count in supported genome DBs */
