@@ -13,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.53 2007/03/09 22:55:31 hiram Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.54 2007/03/23 08:12:42 kent Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -711,6 +711,19 @@ for (i=0; i<lineCount; ++i)
     if (!lineFileNext(lf, &line, &lineSize))
         errAbort("Premature end of file in %s", lf->fileName);
     }
+}
+
+char *lineFileSkipToLineStartingWith(struct lineFile *lf, char *start, int maxCount)
+/* Skip to next line that starts with given string.  Return NULL
+ * if no such line found, otherwise return the line. */
+{
+char *line;
+while (lineFileNext(lf, &line, NULL) && --maxCount >= 0)
+    {
+    if (startsWith(start, line))
+        return line;
+    }
+return NULL;
 }
 
 boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,

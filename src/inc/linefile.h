@@ -176,6 +176,10 @@ double lineFileNeedDouble(struct lineFile *lf, char *words[], int wordIx);
 void lineFileSkip(struct lineFile *lf, int lineCount);
 /* Skip a number of lines. */
 
+char *lineFileSkipToLineStartingWith(struct lineFile *lf, char *start, int maxCount);
+/* Skip to next line that starts with given string.  Return NULL
+ * if no such line found, otherwise return the line. */
+
 boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 				boolean *chunked, int *contentLength);
 /* Extract HTTP response header from lf into hdr, tell if it's 
