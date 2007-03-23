@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.16 2006/08/18 17:13:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.17 2007/03/23 17:50:22 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -34,12 +34,15 @@ static void keggLink(struct pathwayLink *pl, struct sqlConnection *conn,
 {
 char query[512], **row;
 struct sqlResult *sr;
+
 safef(query, sizeof(query), 
-	"select keggPathway.locusID,keggPathway.mapID,keggMapDesc.description"
-	" from keggPathway,keggMapDesc"
-	" where keggPathway.kgID='%s'"
-	" and keggPathway.mapID = keggMapDesc.mapID"
+	"select k.locusID, k.mapID, keggMapDesc.description"
+	" from keggPathway k, keggMapDesc, kgXref x"
+	" where k.kgID=mRNA "
+	" and x.kgID='%s'"
+	" and k.mapID = keggMapDesc.mapID"
 	, geneId);
+
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -56,7 +59,7 @@ static int keggCount(struct pathwayLink *pl, struct sqlConnection *conn,
 {
 char query[256];
 safef(query, sizeof(query), 
-	"select count(*) from keggPathway where kgID='%s'", geneId);
+	"select count(*) from keggPathway k, kgXref x where k.kgID=x.mRNA and x.kgId='%s'", geneId);
 return sqlQuickNum(conn, query);
 }
 
