@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.60 2007/03/21 16:46:11 kate Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.61 2007/03/23 21:28:19 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -54,11 +54,11 @@ if (line != NULL && startsWithWord("track", line))
 return line;
 }
 
-void customFactoryCheckChromName(char *word, struct lineFile *lf)
+void customFactoryCheckChromNameDb(char *db, char *word, struct lineFile *lf)
 /* Make sure it's a chromosome or a contig.  Well, at the moment,
  * just make sure it's a chromosome. */
 {
-if (!hgIsOfficialChromName(word))
+if (!hgIsOfficialChromNameDb(db, word))
     lineFileAbort(lf, "%s not a chromosome", word);
 }
 
@@ -149,13 +149,41 @@ track->dbTrack = TRUE;
 sqlDisconnect(&ctConn);
 }
 
+char *ctGenomeOrCurrent(struct customTrack *ct)
+/* return database setting */
+{
+char *ctDb = ctGenome(ct);
+if (ctDb == NULL)
+    ctDb = hGetDb();
+return ctDb;
+}
+
+static boolean sameType(char *a, char *b)
+/* Case-sensitive comparison of first word if multiple words, 
+ * so that we can compare types like "bed" vs. "bed 3 ." etc. 
+ * Tolerates one null input but not two. */
+{
+if (a == NULL && b == NULL)
+    errAbort("sameType should not be called when both inputs are NULL.");
+else if (a == NULL || b == NULL)
+    return FALSE;
+char *aCopy = cloneString(a);
+char *bCopy = cloneString(b);
+char *aWord = firstWordInLine(aCopy);
+char *bWord = firstWordInLine(bCopy);
+boolean same = sameString(aWord, bWord);
+freeMem(aCopy);
+freeMem(bCopy);
+return same;
+}
+
 /*** BED Factory ***/
 
-static boolean rowIsBed(char **row, int wordCount)
+static boolean rowIsBed(char **row, int wordCount, char *db)
 /* Return TRUE if row is consistent with BED format. */
 {
 return wordCount >= 3 && wordCount <= bedKnownFields 
-	&& hgIsOfficialChromName(row[0])
+	&& hgIsOfficialChromNameDb(db, row[0])
 	&& isdigit(row[1][0]) && isdigit(row[2][0]);
 }
 
@@ -164,7 +192,7 @@ static boolean bedRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
-if (type != NULL && !sameString(type, fac->name))
+if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -172,7 +200,8 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[bedKnownFields+1];
 int wordCount = chopLine(dupe, row);
-boolean isBed = rowIsBed(row, wordCount);
+char *ctDb = ctGenomeOrCurrent(track);
+boolean isBed = rowIsBed(row, wordCount, ctDb);
 freeMem(dupe);
 if (isBed)
     track->fieldCount = wordCount;
@@ -309,7 +338,7 @@ if (dbRequested)
 return track;
 }
 
-static struct bed *customTrackBed(char *row[13], int wordCount, 
+static struct bed *customTrackBed(char *db, char *row[13], int wordCount, 
 	struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to a bed. */
 {
@@ -317,7 +346,7 @@ struct bed * bed;
 int count;
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, row[0]);
-customFactoryCheckChromName(bed->chrom, lf);
+customFactoryCheckChromNameDb(db, bed->chrom, lf);
 
 bed->chromStart = lineFileNeedNum(lf, row, 1);
 bed->chromEnd = lineFileNeedNum(lf, row, 2);
@@ -454,13 +483,14 @@ static struct customTrack *bedLoader(struct customFactory *fac,
 /* Load up bed data until get next track line. */
 {
 char *line;
+char *db = ctGenomeOrCurrent(track);
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[bedKnownFields];
     int wordCount = chopLine(line, row);
     struct lineFile *lf = cpp->fileStack;
     lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
-    struct bed *bed = customTrackBed(row, wordCount, chromHash, lf);
+    struct bed *bed = customTrackBed(db, row, wordCount, chromHash, lf);
     slAddHead(&track->bedList, bed);
     }
 slReverse(&track->bedList);
@@ -549,7 +579,7 @@ static boolean gffRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a gff track */
 {
-if (type != NULL && !sameString(type, fac->name))
+if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 char *line = customPpNextReal(cpp);
 if (line == NULL)
@@ -572,7 +602,7 @@ static boolean gtfRecognizer(struct customFactory *fac,
    First run the GFF recognizer, then check for GTF group syntax */
 {
 boolean isGtf = FALSE;
-if (type != NULL && !sameString(type, fac->name))
+if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 /* GTF is an extension of GFF, so run the GFF recognizer first.
  * This will also create a GFF file handle for the track */
@@ -676,12 +706,13 @@ static struct customTrack *gffLoader(struct customFactory *fac,
 /* Load up gff data until get next track line. */
 {
 char *line;
+char *ctDb = ctGenomeOrCurrent(track);
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     char *row[9];
     int wordCount = chopTabs(line, row);
     struct lineFile *lf = cpp->fileStack;
-    customFactoryCheckChromName(row[0], lf);
+    customFactoryCheckChromNameDb(ctDb, row[0], lf);
     gffFileAddRow(track->gffHelper, 0, row, wordCount, lf->fileName, 
     	lf->lineIx);
     }
@@ -760,7 +791,7 @@ static boolean pslRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a bed track */
 {
-if (type != NULL && !sameString(type, fac->name))
+if (type != NULL && !sameType(type, fac->name))
     return FALSE;
 char *line = customPpNextReal(cpp);
 if (line == NULL)
@@ -782,8 +813,8 @@ customPpReuse(cpp, line);
 return isPsl;
 }
 
-static struct bed *customTrackPsl(boolean isProt, char **row, int wordCount, 
-	struct hash *chromHash, struct lineFile *lf)
+static struct bed *customTrackPsl(char *db, boolean isProt, char **row,
+	int wordCount, struct hash *chromHash, struct lineFile *lf)
 /* Convert a psl format row of strings to a bed. */
 {
 struct psl *psl = pslLoad(row);
@@ -796,7 +827,7 @@ if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize
     {
     lineFileAbort(lf, "mangled psl format");
     }
-customFactoryCheckChromName(psl->tName, lf);
+customFactoryCheckChromNameDb(db, psl->tName, lf);
 
 /* Allocate bed and fill in from psl. */
 AllocVar(bed);
@@ -860,6 +891,7 @@ static struct customTrack *pslLoader(struct customFactory *fac,
 {
 char *line;
 boolean pslIsProt = FALSE;
+char *ctDb = ctGenomeOrCurrent(track);
 while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     {
     /* Skip over pslLayout version lines noting if they are
@@ -876,7 +908,7 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     int wordCount = chopLine(line, row);
     struct lineFile *lf = cpp->fileStack;
     lineFileExpectAtLeast(lf, PSL_NUM_COLS, wordCount);
-    struct bed *bed = customTrackPsl(pslIsProt, row, 
+    struct bed *bed = customTrackPsl(ctDb, pslIsProt, row, 
     	wordCount, chromHash, lf);
     slAddHead(&track->bedList, bed);
     }
@@ -1276,9 +1308,7 @@ if ((val = hashFindVal(hash, "maxChromName")) != NULL)
     track->maxChromName = sqlSigned(val);
 else
     {
-    char *ctDb = ctGenome(track);
-    if (!ctDb)
-        ctDb = hGetDb();
+    char *ctDb = ctGenomeOrCurrent(track);
     track->maxChromName = hGetMinIndexLengthDb(ctDb);
     }
 if (!strstr(line, "tdbType"))
@@ -1548,7 +1578,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
      * to load track into database. */
         {
 	/* Load track from appropriate factory */
-        char *type = trackDbSetting(track->tdb, "type");
+        char *type = track->tdb->type;
 	struct customFactory *fac = customFactoryFind(cpp, type, track);
 	if (fac == NULL)
 	    {
