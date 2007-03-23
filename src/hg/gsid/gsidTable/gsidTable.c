@@ -19,7 +19,7 @@
 #include "gsidTable.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidTable.c,v 1.10 2007/03/22 16:35:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: gsidTable.c,v 1.11 2007/03/23 20:36:25 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -500,6 +500,11 @@ else
     {
     if (needsLink)
 	hPrintf("<A HREF=\"gsidSubj?%s&hgs_subj=%s&submit=Go%21\">",cartSidUrlString(cart),s);
+    if (sameString(s,""))
+	{
+	freeMem(s);
+	s = cloneString("&nbsp;");
+	}
     hPrintNonBreak(s);
     if (needsLink)
 	hPrintf("</A>");
