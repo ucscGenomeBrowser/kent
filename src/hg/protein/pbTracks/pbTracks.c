@@ -15,8 +15,9 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 #include "trashDir.h"
+#include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.46 2007/03/23 00:32:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.47 2007/03/23 23:10:26 hiram Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -147,45 +148,6 @@ void smallBreak()
 /* Draw small horizontal break */
 {
 hPrintf("<FONT SIZE=1><BR></FONT>\n");
-}
-
-char * convertEpsToPdf(char *epsFile)
-/* Convert EPS to PDF and return filename, or NULL if failure. */
-{
-char *pdfTmpName = NULL, *pdfName=NULL;
-char cmdBuffer[2048];
-int sysVal = 0;
-struct lineFile *lf = NULL;
-char *line;
-int lineSize=0;
-float width=0, height=0;
-pdfTmpName = cloneString(epsFile);
-
-/* Get the dimensions of bounding box. */
-lf = lineFileOpen(epsFile, TRUE);
-while(lineFileNext(lf, &line, &lineSize))
-    {
-    if(strstr( line, "BoundingBox:"))
-        {
-        char *words[5];
-        chopLine(line, words);
-        width = atof(words[3]);
-        height = atof(words[4]);
-        break;
-        }
-    }
-lineFileClose(&lf);
-
-/* Do conversion. */
-chopSuffix(pdfTmpName);
-pdfName = addSuffix(pdfTmpName, ".pdf");
-safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s",
-      round(width), round(height), epsFile, pdfName);
-sysVal = system(cmdBuffer);
-if(sysVal != 0)
-    freez(&pdfName);
-freez(&pdfTmpName);
-return pdfName;
 }
 
 void makeActiveImagePB(char *psOutput, char *psOutput2)
