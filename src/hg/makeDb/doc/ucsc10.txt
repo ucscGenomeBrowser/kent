@@ -384,7 +384,8 @@ cat mrna/*.psl refSeq/*.psl | txInfoAssemble pick.bed pick.tce cdsEvidence/txCds
 txCdsCluster pick.bed pick.cluster
 
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
-# Map CDS to gene set.  Takes 10 seconds
+# Map CDS to gene set.  Takes 10 seconds.  Might want to reconsider using
+# txCdsWeed here.
 txCdsSuspect pick.bed txWalk.txg pick.cluster prelim.info pick.suspect pick.info -niceProt=pick.nice
 txCdsWeed pick.tce pick.info weededCds.tce weededCds.info
 txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
@@ -656,3 +657,35 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make spec"
     cd ../utr5
     rm -r split fold err batch.bak
 
+# Make pfam run.  Actual cluster run is about 6 hours.
+# First get pfam global HMMs into /san/sanvol1/pfam somehow.
+cd /san/sanvol1/scratch/$db
+mkdir ucscGenes
+cd ucscGenes
+mkdir splitProt
+faSplit sequence $dir/ucscGenes.faa 10000 splitProt
+mkdir pfam
+cd pfam
+ls -1 ../splitProt > in.lst
+cat << _EOF_ > doPfam
+#!/bin/tcsh -ef
+/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/pfam/Pfam_fs $1 > $2
+_EOF_
+chmod a+x doPfam
+cat << _EOF_ > gsub
+#LOOP
+doPfam ../splitProt/$(path1) out/$(root1).pf
+#ENDLOOP
+_EOF_
+gensub2 in.lst single gsub spec
+ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/pfam; para make"
+
+# Convert output to tab-separated file. 
+cd $dir
+catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab stdin ucscPfam.tab
+
+# Do scop run 
+
+# Conver scop output to tab-separated file
+catDir /san/sanvol1/scratch/$db/ucscGenes/scop/out | hmmPfamToTab stdin stdout | \
+    scopCollapse stdin /cluster/store12/scop/model.tab ucscScop.tab scopDesc.tab
