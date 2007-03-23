@@ -33,7 +33,7 @@
 <!--start of INSTALLING---------------------------------------------->
 
 <P>
-NOTE: These instructions are intended for Unix systems only.
+NOTE: These instructions are intended for Unix/Linux systems only.
 Building the source on other systems is beyond the scope of
 these instructions.
 <P>
@@ -42,7 +42,7 @@ SEE ALSO: README files in the source tree describing the build process:
 <LI> src/README
 <LI> src/product/README.*
 <LI> src/hg/makeDb/trackDB/README
-<LI> src/hg/makeDb/make*.doc   (plain text files)
+<LI> src/hg/makeDb/doc/&lt;db&gt;.txt  (plain text files)
 </UL>
 <P>
 <OL>
@@ -50,8 +50,11 @@ SEE ALSO: README files in the source tree describing the build process:
 Check that the environment variable MACHTYPE exists on your system.
 It should be present on Unix systems. On Linux systems, MACHTYPE will probably 
 be <em>i686</em>, and for a Sun it will probably be <em>sparc</em>. If 
-necessary, set this environment variable. <BR>
-<TT>MACHTYPE=i686</TT>
+necessary, set this environment variable in your shell environment:<BR>
+<TT>MACHTYPE=i686</TT><BR>
+It should be a simple non-hyphenated word such as: 
+<TT>i386 i686 sparc alpha x86_64 ppc, etc...</TT>
+</P>
 <P>
 <LI>
 Create a subdirectory named <em>/bin/$MACHTYPE</em> in your home directory. 
@@ -94,39 +97,28 @@ tree is also available via <A HREF="cvs.html">CVS</A>).
 <P>
 <LI>
 Go to the <em>kent/src</em> directory and type: <TT>make libs</TT>. This builds 
-the libraries in the directories:
+the libraries from the source directories:
 	<UL>
-	<LI> <em>kent/src/lib</em>
-	<LI> <em>kent/src/jkOwnLib</em>
-	<LI> <em>kent/src/hg/lib</em>
+	<LI> jkweb.a from <em>kent/src/lib</em>
+	<LI> jkOwnLib.a from <em>kent/src/jkOwnLib</em>
+	<LI> jkhgap.a from <em>kent/src/hg/lib</em>
+	<LI> jkhpap.a from <em>kent/src/hg/protein/lib</em>
 	</UL>
+Placing those lib.a files into <em>src/lib/$MACHTYPE</em>
+</P>
 <P>
 <LI>
 Go to the <em>kent/src/hg</em> directory and type: <TT>make compile</TT>.
+</P>
 <P>
 Then, type: 
 <TT>make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path</TT>.  
+</P>
 <P>
-This builds the cgi binaries from the directories:
-	<UL>
-	<LI> <em>kent/src/hg/cartReset</em>
-	<LI> <em>kent/src/hg/das</em>
-	<LI> <em>kent/src/hg/hgBlat</em>
-	<LI> <em>kent/src/hg/hgConvert</em>
-	<LI> <em>kent/src/hg/hgLiftOver</em>
-	<LI> <em>kent/src/hg/hgGateway</em>
-	<LI> <em>kent/src/hg/hgGene</em>
-	<LI> <em>kent/src/hg/hgPcr</em>
-	<LI> <em>kent/src/hg/hgTables</em>
-	<LI> <em>kent/src/hg/hgText</em>
-	<LI> <em>kent/src/hg/hgTracks</em>
-	<LI> <em>kent/src/hg/hgTracksUi</em>
-	<LI> <em>kent/src/hg/hgc</em>
-	<LI> <em>kent/src/hg/cartDump</em>
-	<LI> <em>kent/src/hg/near/hgNear</em>
-	</UL>
-<P>
-The resulting binaries are moved to <em>/destination/prefix/cgi-bin/path</em>. 
+The resulting binaries are moved to <em>/destination/prefix/cgi-bin/path</em>, 
+with additional data and custom track loader binaries also being installed
+in this cgi-bin hierarchy.
+</P>
 <P>Pre-compiled Red-Hat (2.6.12-1.1381_FC3smp) AMD Opteron x86_64 64-bit
 binaries can be fetched with the rsync command:<BR><BR>
 <TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGI_BIN/ </TT><BR><BR>
@@ -146,11 +138,13 @@ There are hundreds of utilities used for processing genome assemblies
 and preparing data for creating tracks in the browser.  The file 
 <em>./kent/src/README</em> is a general guideline to the major processing
 categories in the source tree file.
+</P>
 <P>
 To see examples of how the various programs are used and
-how tracks are created, examine any of the <em>make*.doc</em> files in
-<em>./kent/src/hg/makeDb/make*.doc</em> (these are ordinary text files, 
-not Microsoft word doc files). </P>
+how tracks are created, examine any of the <em>&lt;db&gt;.txt</em> files in
+<em>./kent/src/hg/makeDb/doc/&lt;db&gt;.txt</em> (these are ordinary text
+files, not Microsoft word doc files).
+</P>
 </OL>
 <P>
 
