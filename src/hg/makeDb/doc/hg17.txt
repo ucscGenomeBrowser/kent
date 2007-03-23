@@ -22191,6 +22191,41 @@ alter table hapmapAllelesMacaque add index chrom (chrom, bin);
 # Data is missing chromEnd.  I am setting chromEnd = chromStart + 1 as a
 # kludge for now.
 # Solution is to interpolate range but remove gaps.
+
+## ****************************************
+# This is a bad assumption about the data format -- here is a description.
+## ****************************************
+# The recombination rates are for the regions _between_ snps, so these
+# files need to be processed slightly differently.  For each line i in
+# the file (except the header and the last line), the recombination
+# rate is for the position on the current line minus 1 [pos(${i})-1] to
+# the position on the subsequent line [pos({$i+1})].  The precision is
+# a bit obnoxious and can be truncated to 3 or 4 significant figures.
+# (Note that the recombination rate on the last line is 0, as this is a
+# placeholder.)  Here is an example:
+#
+# > head genetic_map_chr1.txt 
+# position COMBINED_rate(cM/Mb) Genetic_Map(cM)
+# 45413 2.98182170902573 0
+# 72434 2.08241435350679 0.0805718043995841
+# 78032 2.08135840137317 0.0922291599505152
+# 244859 2.88844902005393 0.439455937976397
+# 604461 2.88749757426825 1.47814798248583
+# 604484 2.88586385769306 1.47821439493004
+# 605296 2.88389196108775 1.48055771638249
+#
+### BED format (like a bedGraph)
+# chr1 45412  72434  2.982
+# chr1 72433  78302  2.082
+# chr1 78031  244859 2.081
+# chr1 244858 604461 2.888
+# chr1 604460 604484 2.887
+# chr1 604483 605296 2.886
+# chr1 605295 .....  2.884
+#
+# See /cluster/data/hg16/bed/hapmap/recombination/Perlegen/makeBed.pl for an example.  /cluster/data/hg16/bed/hapmap/recombination/Perlegen/cmds.csh is also useful. 
+## ****************************************
+
 ssh hgwdev
 cd /cluster/data/hg17/bed/hapmap
 mkdir recombination
