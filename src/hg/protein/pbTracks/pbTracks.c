@@ -16,11 +16,13 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.45 2007/02/10 00:19:33 hiram Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.46 2007/03/23 00:32:43 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
 boolean IAmPbTracks = TRUE;
+
+int kgVersion = KG_UNKNOWN;
 
 boolean proteinInSupportedGenome=TRUE;  /* The protein is in supported genome DB */
                                         /* This is a new variable necessary for PB V1.0
@@ -402,6 +404,12 @@ cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 
 hSetDb(database);
+if (sameWord(database, "hg18"))
+    {
+    kgVersion = KG_III;
+    strcpy(kgProtMapTableName, "kgProtMap2");
+    }
+
 protDbName = hPdbFromGdb(database);
 spConn = sqlConnect(UNIPROT_DB_NAME);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
@@ -474,8 +482,16 @@ else
     errAbort(" ");
     }
   }
-safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
-mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+if (kgVersion == KG_III)
+    {
+    safef(cond_str, sizeof(cond_str), "spID='%s'", proteinID);
+    mrnaID = sqlGetField(conn, database, "kgXref", "kgId", cond_str);
+    }
+else
+    {
+    safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
+    mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    }
 
 safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
