@@ -12,6 +12,7 @@
 #include "gfxPoly.h"
 #include "memgfx.h"
 #include "vGfx.h"
+#include "psGfx.h"
 #include "browserGfx.h"
 #include "cheapcgi.h"
 #include "hPrint.h"
@@ -107,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1300 2007/03/22 17:28:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1301 2007/03/23 02:20:58 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13577,45 +13578,6 @@ if (stringVal == NULL || !isdigit(stringVal[0]))
     }
 x = atof(stringVal);
 return round(x*guideBases);
-}
-
-char * convertEpsToPdf(char *epsFile) 
-/* Convert EPS to PDF and return filename, or NULL if failure. */
-{
-char *pdfTmpName = NULL, *pdfName=NULL;
-char cmdBuffer[2048];
-int sysVal = 0;
-struct lineFile *lf = NULL;
-char *line;
-int lineSize=0;
-float width=0, height=0;
-pdfTmpName = cloneString(epsFile);
-
-/* Get the dimensions of bounding box. */
-lf = lineFileOpen(epsFile, TRUE);
-while(lineFileNext(lf, &line, &lineSize)) 
-    {
-    if(strstr( line, "BoundingBox:")) 
-	{
-	char *words[5];
-	chopLine(line, words);
-	width = atof(words[3]);
-	height = atof(words[4]);
-	break;
-	}
-    }
-lineFileClose(&lf);
-	
-/* Do conversion. */
-chopSuffix(pdfTmpName);
-pdfName = addSuffix(pdfTmpName, ".pdf");
-safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s", 
-      round(width), round(height), epsFile, pdfName);
-sysVal = system(cmdBuffer);
-if(sysVal != 0)
-    freez(&pdfName);
-freez(&pdfTmpName);
-return pdfName;
 }
 
 void handlePostscript()
