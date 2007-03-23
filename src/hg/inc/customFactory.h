@@ -55,10 +55,6 @@ char *customFactoryNextRealTilTrack(struct customPp *cpp);
  * Return NULL at end of input or at line starting with
  * "track." */
 
-void customFactoryCheckChromName(char *word, struct lineFile *lf);
-/* Make sure it's a chromosome or a contig.  Well, at the moment,
- * just make sure it's a chromosome. */
-
 char *customTrackTempDb();
 /* Get custom database.  If first time set up some
  * environment variables that the loaders will need. */
