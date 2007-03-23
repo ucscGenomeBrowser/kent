@@ -406,6 +406,7 @@ release alpha
     longLabel PhastCons Placental Mammal Conserved Elements (5.2%, len=14,cov=.2, rho=2.8)
     priority 3
 
+release alpha
 track multiz8way
 shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
@@ -418,7 +419,8 @@ altColor 50,50,50
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
-pairwise netBlastz
+#pairwise netBlastz
+summary multiz8waySummary
 yLineOnOff Off
 autoScaleDefault Off
 spanList 1
