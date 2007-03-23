@@ -27,6 +27,13 @@
 
 extern boolean IAmPbTracks;	/* global flag indicating the program running is pbTracks or not */
 
+#define KG_UNKNOWN 0
+#define KG_I   1
+#define KG_II  2
+#define KG_III 3
+
+extern int kgVersion;		/* KG version */
+
 extern Color pbRed, pbBlue;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
