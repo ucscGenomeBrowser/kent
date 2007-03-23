@@ -46,6 +46,7 @@
 #define hggUpload hggDo "Upload"
 #define hggSubmitUpload hggDo "SubmitUpload"
 #define hggClick hggDo "Click"
+#define hggPsOutput hggDo "PsOutput"
 #define hggClickX hggClick ".x"
 #define hggClickY hggClick ".y"
 
@@ -150,6 +151,9 @@ void hggDoUsualHttp();
  * HTTP header and write cart back to database. */
 
 /*** Functions imported from other modules. ***/
+
+void handlePostscript(struct sqlConnection *conn);
+/* Do graphic as eps/pdf. */
 
 void mainPage(struct sqlConnection *conn);
 /* Do main page of application:  hotlinks bar, controls, graphic. */

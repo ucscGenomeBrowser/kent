@@ -31,7 +31,7 @@
 #include "jsHelper.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.54 2007/01/17 20:31:10 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.55 2007/03/23 03:15:09 galt Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -448,7 +448,10 @@ else if (cartVarExists(cart, hggSort))
 else
     {
     /* Default case - start fancy web page. */
-    mainPage(conn);
+    if (cgiVarExists(hggPsOutput))
+    	handlePostscript(conn);
+    else
+	mainPage(conn);
     }
 cartRemovePrefix(cart, hggDo);
 }

@@ -2,6 +2,7 @@
  * on the top and the graphic. */
 
 #include "common.h"
+#include "psGfx.h"
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
@@ -28,7 +29,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.15 2007/02/09 23:19:52 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.16 2007/03/23 03:15:09 galt Exp $";
 
 
 static char *allColors[] = {
@@ -242,7 +243,7 @@ if (gg != NULL)
 }
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
-	int graphRows, int graphCols, int oneRowHeight)
+	int graphRows, int graphCols, int oneRowHeight, char *psOutput)
 /* Create genome GIF file and HTML that includes it. */
 {
 struct vGfx *vg;
@@ -254,12 +255,21 @@ int yOffset = 2*spacing;
 int innerHeight = oneRowHeight - 3*spacing;
 int i,j;
 
-/* Create gif file and make reference to it in html. */
-trashDirFile(&gifTn, "hgg", "ideo", ".gif");
-vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
 
-hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
-	    gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
+if (psOutput)
+    {
+    vg = vgOpenPostScript(gl->picWidth, gl->picHeight, psOutput);
+    }
+else
+    {
+
+    /* Create gif file and make reference to it in html. */
+    trashDirFile(&gifTn, "hgg", "ideo", ".gif");
+    vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
+
+    hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
+		gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
+    }
 
 /* Get our grayscale. */
 hMakeGrayShades(vg, shadesOfGray, maxShade);
@@ -288,10 +298,13 @@ for (i=0; i<graphRows; ++i)
     yOffset += oneRowHeight;
     }
 
-vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
-vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
-vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
+if (!psOutput)  /* not needed for postscript output */
+    {
+    vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
+    vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
+    vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
+    vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
+    }
 vgClose(&vg);
 }
 
@@ -399,10 +412,76 @@ static char *onChangeOther()
 return "onChange=\"changeOther();\"";
 }
 
+boolean renderGraphic(struct sqlConnection *conn, char *psOutput)
+/* draw just the graphic */
+{
+struct genoLay *gl;
+int graphRows = linesOfGraphs();
+int graphCols = graphsPerLine();
+boolean result = FALSE;
+if (ggList != NULL)
+    {
+    /* Get genome layout.  This can fail so it is wrapped in an error
+     * catcher. */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	gl = ggLayout(conn, graphRows, graphCols);
+
+	/* Draw picture. Enclose in table to add a couple of pixels between
+	 * it and controls on IE. */
+	genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad, psOutput);
+	result = TRUE;
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	 warn(errCatch->message->string);
+    errCatchFree(&errCatch); 
+    }
+else
+    {
+    hPrintf("<BR>No graph data is available for this assembly.  "
+	    "You can still upload your own data.");
+    }
+return result;
+}
+
+void handlePostscript(struct sqlConnection *conn)
+/* Deal with Postscript output. */
+{
+struct tempName psTn;
+char *pdfFile = NULL;
+trashDirFile(&psTn, "hgg", "hgg", ".eps");
+cartWebStart(cart, "%s Genome Graphs", genome);
+printf("<H1>PostScript/PDF Output</H1>\n");
+printf("PostScript images can be printed at high resolution "
+       "and edited by many drawing programs such as Adobe "
+       "Illustrator.<BR>");
+
+boolean result = renderGraphic(conn, psTn.forCgi);
+if (result)
+    {
+    printf("<A HREF=\"%s\">Click here</A> "
+	   "to download the current browser graphic in PostScript.  ", psTn.forCgi);
+    pdfFile = convertEpsToPdf(psTn.forCgi);
+    if(pdfFile != NULL)
+	{
+	printf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
+	printf("<A TARGET=_blank HREF=\"%s\">Click here</A> "
+	       "to download the current browser graphic in PDF.", pdfFile);
+	}
+    else
+	printf("<BR><BR>PDF format not available");
+    freez(&pdfFile);
+    }
+cartWebEnd();
+}
+
+
+
 void mainPage(struct sqlConnection *conn)
 /* Do main page of application:  hotlinks bar, controls, graphic. */
 {
-struct genoLay *gl;
 int graphRows = linesOfGraphs();
 int graphCols = graphsPerLine();
 int i, j;
@@ -482,36 +561,15 @@ cgiMakeOptionalButton(hggSort, "sort genes",
 	realCount == 0 || !hgNearOk(database));
 hPrintf("<BR>");
 
+hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
 
-if (ggList != NULL)
-    {
-    /* Get genome layout.  This can fail so it is wrapped in an error
-     * catcher. */
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	{
-	gl = ggLayout(conn, graphRows, graphCols);
+boolean result = renderGraphic(conn, NULL);
 
-	/* Draw picture. Enclose in table to add a couple of pixels between
-	 * it and controls on IE. */
-	hPrintf("<TABLE CELLPADDING=2><TR><TD>\n");
-	genomeGif(conn, gl, graphRows, graphCols, graphHeight()+betweenRowPad);
-	hPrintf("</TD></TR></TABLE>\n");
+hPrintf("</TD></TR></TABLE>\n");
+if (result)
+    /* Write a little click-on-help */
+    hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
 
-	/* Write a little click-on-help */
-	hPrintf("<i>Click on a chromosome to open Genome Browser at that position.</i>");
-
-	}
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	 warn(errCatch->message->string);
-    errCatchFree(&errCatch); 
-    }
-else
-    {
-    hPrintf("<BR>No graph data is available for this assembly.  You can still upload your own "
-            "data.");
-    }
 hPrintf("</FORM>\n");
 
 /* Hidden form - fo the benefit of javascript. */
