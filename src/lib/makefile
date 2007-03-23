@@ -12,7 +12,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     fuzzyShow.o gapCalc.o gdf.o gemfont.o gfNet.o gff.o gfxPoly.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
-    histogram.o hmmstats.o htmlPage.o htmshell.o \
+    histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
     internet.o intExp.o jointalign.o jpegSize.o \
     keys.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o \
