@@ -768,7 +768,24 @@ augustus/src/augustus --AUGUSTUS_CONFIG_PATH=/cluster/data/felCat3/bed/augustus/
     featureBits -countGaps felCat3 refGene:cds netSyntenyCanFam2 -enrichment
     # refGene:cds 0.005%, netSyntenyCanFam2 67.261%, both 0.005%, cover 88.77%, enrich 1.32x
 
-    # add to trackDb
+##########################################################################
+# RECIPROCAL BEST NETS (2007-03-19 kate)
 
+    ssh kkstore05
+    cd /cluster/data/felCat3
+    cd bed/blastz.hg18
+    ~/kent/src/hg/utils/automation/doRecipBest.pl felCat3 hg18 >&! rbest.log  &
+
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed
+    cd blastz.mm8.2006-11-15.swap
+    ~/kent/src/hg/utils/automation/doRecipBest.pl felCat3 mm8 \
+        -buildDir=`pwd` >&! rbest.log  &
+
+    ssh kkstore05
+    cd /cluster/data/felCat3/bed
+    cd blastz.canFam2.2006-11-18.swap
+    ~/kent/src/hg/utils/automation/doRecipBest.pl felCat3 canFam2 \
+        -buildDir=`pwd` >&! rbest.log  &
 
 
