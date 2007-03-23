@@ -1,3 +1,20 @@
+track quality
+shortLabel Quality Scores
+longLabel $Organism Sequencing Quality Scores
+group map
+priority 23.6
+visibility hide
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8.chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18.chr19,chr20,chr21,chr22,chr23,chr24
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+windowingFunction Mean
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+spanList 1,1024
+type wig 0 100 
+
 track ctgPos2
 shortLabel Contigs
 longLabel Assembly Contigs
