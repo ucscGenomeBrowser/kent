@@ -108,5 +108,8 @@ void psPopClipRect(struct psGfx *ps);
 void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled);
 /* Draw a possibly filled polygon */
 
+char * convertEpsToPdf(char *epsFile);
+/* Convert EPS to PDF and return filename, or NULL if failure. */
+
 #endif /* PSGFX_H */
 

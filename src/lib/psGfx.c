@@ -6,8 +6,9 @@
 #include "common.h"
 #include "gfxPoly.h"
 #include "psGfx.h"
+#include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.17 2005/04/10 14:41:24 markd Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.18 2007/03/23 02:18:52 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -336,5 +337,44 @@ if (filled)
     fprintf(f, "fill\n");
 else
     fprintf(f, "stroke\n");
+}
+
+char * convertEpsToPdf(char *epsFile) 
+/* Convert EPS to PDF and return filename, or NULL if failure. */
+{
+char *pdfTmpName = NULL, *pdfName=NULL;
+char cmdBuffer[2048];
+int sysVal = 0;
+struct lineFile *lf = NULL;
+char *line;
+int lineSize=0;
+float width=0, height=0;
+pdfTmpName = cloneString(epsFile);
+
+/* Get the dimensions of bounding box. */
+lf = lineFileOpen(epsFile, TRUE);
+while(lineFileNext(lf, &line, &lineSize)) 
+    {
+    if(strstr( line, "BoundingBox:")) 
+	{
+	char *words[5];
+	chopLine(line, words);
+	width = atof(words[3]);
+	height = atof(words[4]);
+	break;
+	}
+    }
+lineFileClose(&lf);
+	
+/* Do conversion. */
+chopSuffix(pdfTmpName);
+pdfName = addSuffix(pdfTmpName, ".pdf");
+safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s", 
+      round(width), round(height), epsFile, pdfName);
+sysVal = system(cmdBuffer);
+if(sysVal != 0)
+    freez(&pdfName);
+freez(&pdfTmpName);
+return pdfName;
 }
 
