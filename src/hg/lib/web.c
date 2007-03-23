@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.116 2007/03/02 18:49:09 kate Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.117 2007/03/23 22:26:59 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -313,6 +313,12 @@ else
 	       uiState);
 	puts("           PCR</A> &nbsp;&nbsp;&nbsp;");
 	}
+    if (endsWith(scriptName, "hgGenome"))
+	{
+	printf("       <A HREF=\"../cgi-bin/hgGenome%s&hgGenome_doPsOutput=on\" class=\"topbar\">\n",
+	       uiState);
+	puts("           PDF/PS</A> &nbsp;&nbsp;&nbsp;");
+	}
     if (wikiLinkEnabled())
 	{
 	printf("<A HREF=\"/cgi-bin/hgSession%s%shgS_doMainPage=1\" "
@@ -333,6 +339,8 @@ else
 	    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
     	else if (endsWith(scriptName, "hgTables"))
 	    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
+    	else if (endsWith(scriptName, "hgGenome"))
+	    puts("       <A HREF=\"/goldenPath/help/hgGenomeHelp.html\"");
     	else if (endsWith(scriptName, "hgSession"))
 	    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#Sessions\"");
     	else 
