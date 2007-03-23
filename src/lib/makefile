@@ -25,7 +25,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     seqOut.o seqStats.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     slog.o snof.o snofmake.o snofsig.o \
-    spacedSeed.o spaceSaver.o \
+    spacedColumn.o spacedSeed.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o tabRow.o textOut.o tokenizer.o trix.o \
     twoBit.o verbose.o vGfx.o vGif.o wildcmp.o wormdna.o \
     xa.o xAli.o xap.o xenshow.o xmlEscape.o xp.o 
