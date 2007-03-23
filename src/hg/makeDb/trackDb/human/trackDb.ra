@@ -731,6 +731,14 @@ visibility hide
 type bed 6 +
 url https://www.affymetrix.com/LinkServlet?probeset=$$
 
+track chimpParalogy
+shortLabel Chimp Seg Dups
+longLabel Chimp Segmental Duplications
+group varRep
+priority 330
+visibility hide
+type bed 3 .
+
 track chainSelf
 shortLabel Self Chain 
 longLabel Chained Self-Alignments
