@@ -204,6 +204,10 @@ boolean hgIsOfficialChromName(char *name);
 /* Determine if name is exact (case-sensitive) match with
  * a chromosome in the current assembly */
 
+boolean hgIsOfficialChromNameDb(char *db, char *name);
+/* Determine if name is exact (case-sensitive) match with
+ * a chromosome in the given assembly */
+
 boolean hgNearOk(char *database);
 /* Return TRUE if ok to put up familyBrowser (hgNear) 
  * on this database. */

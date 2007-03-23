@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.317 2007/03/21 21:04:03 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.318 2007/03/23 21:10:16 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -119,7 +119,7 @@ if (ci == NULL)
 return ci;
 }
 
-char *hgOfficialChromName(char *name)
+char *hgOfficialChromNameDb(char *db, char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
@@ -127,21 +127,35 @@ struct chromInfo *ci = NULL;
 char buf[HDB_MAX_CHROM_STRING];
 strncpy(buf, name, HDB_MAX_CHROM_STRING);
 buf[HDB_MAX_CHROM_STRING-1] = 0;
-ci = getChromInfo(hGetDb(), buf);
+ci = getChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 else
     return NULL;
 }
 
+char *hgOfficialChromName(char *name)
+/* Returns "canonical" name of chromosome or NULL
+ * if not a chromosome. (Case-insensitive search w/sameWord()) */
+{
+return hgOfficialChromNameDb(hGetDb(), name);
+}
+
+boolean hgIsOfficialChromNameDb(char *db, char *name)
+/* Determine if name is exact (case-sensitive) match with
+ * a chromosome in the given assembly */
+{
+char *chrom;
+return ((chrom = hgOfficialChromNameDb(db, name)) != NULL &&
+	sameString(name, chrom));
+}
+
+
 boolean hgIsOfficialChromName(char *name)
 /* Determine if name is exact (case-sensitive) match with
  * a chromosome in the current assembly */
 {
-char *chrom;
-if ((chrom = hgOfficialChromName(name)) != NULL && sameString(name, chrom))
-    return TRUE;
-return FALSE;
+return hgIsOfficialChromNameDb(hGetDb(), name);
 }
 
 int hGetMinIndexLengthDb(char *db)
