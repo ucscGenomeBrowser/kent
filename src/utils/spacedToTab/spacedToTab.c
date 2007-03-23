@@ -3,8 +3,10 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: spacedToTab.c,v 1.2 2007/03/23 06:02:42 kent Exp $";
+static char const rcsid[] = "$Id: spacedToTab.c,v 1.3 2007/03/23 06:21:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,11 +17,13 @@ errAbort(
   "usage:\n"
   "   spacedToTab in.txt out.tab\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -sizes=X,Y,Z - Force it to have columns of the given widths.\n"
+  "                 The final char in each column should be space or newline\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"sizes", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -31,7 +35,7 @@ struct spacedColumn
     int size;	/* Size of column. */
     };
 
-struct spacedColumn *spacedColumnListFromSample(char *sample)
+struct spacedColumn *spacedColumnFromSample(char *sample)
 /* Return spaced column list from a sampleline , which is assumed to
  * have no spaces except between columns */
 {
@@ -50,7 +54,7 @@ slReverse(&colList);
 return colList;
 }
 
-struct spacedColumn *spacedColumnListFromLineFile(struct lineFile *lf)
+struct spacedColumn *spacedColumnFromLineFile(struct lineFile *lf)
 /* Scan through lineFile and figure out column spacing. Assumes
  * file contains nothing but columns. */
 {
@@ -76,21 +80,21 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     }
 projection[widestLine] = 0;
-colList = spacedColumnListFromSample(projection);
+colList = spacedColumnFromSample(projection);
 freeMem(projection);
 return colList;
 }
 
-struct spacedColumn *spacedColumnListFromFile(char *fileName)
+struct spacedColumn *spacedColumnFromFile(char *fileName)
 /* Read file and figure out where columns are. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct spacedColumn *colList = spacedColumnListFromLineFile(lf);
+struct spacedColumn *colList = spacedColumnFromLineFile(lf);
 lineFileClose(&lf);
 return colList;
 }
 
-int spacedColumnListBiggestSize(struct spacedColumn *colList)
+int spacedColumnBiggestSize(struct spacedColumn *colList)
 /* Return size of biggest column. */
 {
 int maxSize = 0;
@@ -122,10 +126,47 @@ for (i=0, col = colList; col != NULL; col = col->next, ++i)
 return TRUE;
 }
 
-void spacedToTab(char *inFile, char *outFile)
+struct spacedColumn *spacedColumnFromWidthArray(int array[], int size)
+/* Return a list of spaced columns corresponding to widths in array.
+ * The final char in each column should be whitespace. */
+{
+struct spacedColumn *col, *colList = NULL;
+int i;
+int start = 0;
+for (i=0; i<size; ++i)
+    {
+    int width = array[i];
+    AllocVar(col);
+    col->start = start;
+    col->size = width-1;
+    slAddHead(&colList, col);
+    start += width;
+    }
+slReverse(&colList);
+return colList;
+}
+
+struct spacedColumn *spacedColumnFromSizeCommaList(char *commaList)
+/* Given an comma-separated list of widths in ascii, return
+ * a list of spacedColumns. */
+{
+struct slName *ascii, *asciiList = commaSepToSlNames(commaList);
+int colCount = slCount(asciiList);
+int widths[colCount], i;
+for (ascii = asciiList, i=0; ascii != NULL; ascii = ascii->next, ++i)
+    widths[i] = sqlUnsigned(ascii->name);
+slFreeList(&asciiList);
+return spacedColumnFromWidthArray(widths, colCount);
+}
+
+void spacedToTab(char *inFile, char *outFile, char *colSizes)
 /* spacedToTab - Convert fixed width space separated fields to tab separated. */
 {
-struct spacedColumn *colList = spacedColumnListFromFile(inFile);
+struct spacedColumn *colList;
+if (colSizes != NULL)
+    colList = spacedColumnFromSizeCommaList(colSizes);
+else
+    colList = spacedColumnFromFile(inFile);
 int colCount = slCount(colList);
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 char *line;
@@ -156,6 +197,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-spacedToTab(argv[1],argv[2]);
+char *colSizes = optionVal("sizes", NULL);
+spacedToTab(argv[1],argv[2], colSizes);
 return 0;
 }
