@@ -6,7 +6,7 @@
 #include "spacedColumn.h"
 #include "hmmPfamParse.h"
 
-static char const rcsid[] = "$Id: hmmPfamParse.c,v 1.2 2007/03/23 16:14:46 kent Exp $";
+static char const rcsid[] = "$Id: hmmPfamParse.c,v 1.3 2007/03/23 16:38:40 kent Exp $";
 
 void hpfModelFree(struct hpfModel **pMod)
 /* Free memory associated with hpfModel */
@@ -109,7 +109,7 @@ char *line = lineFileSkipToLineStartingWith(lf, queryPat, 100);
 if (line == NULL)
     return NULL;
 line += strlen(queryPat);
-char *query = nextWord(&line);
+char *query = cloneString(nextWord(&line));
 if (query == NULL)
     parseErr(lf, "Missing sequence name");
 
@@ -126,7 +126,7 @@ if (colCount < 5)
 /* Parse out all the models. */
 struct hpfResult *hr;
 AllocVar(hr);
-hr->name =cloneString(query);
+hr->name = query;
 for (;;)
     {
     lineFileNeedNext(lf, &line, NULL);
