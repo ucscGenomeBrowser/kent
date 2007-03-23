@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.11 2006/06/01 18:53:53 hiram Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.12 2007/03/23 23:37:24 galt Exp $";
 
 char *db = "visiGene";
 
@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 db = optionVal("db", db);
-if (argc < 3 || ((argc&1) != 0))
+if (argc < 3)
     usage();
 vgGetText(argv[1], (argc-2), argv+2);
 return 0;
