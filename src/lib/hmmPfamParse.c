@@ -6,7 +6,7 @@
 #include "spacedColumn.h"
 #include "hmmPfamParse.h"
 
-static char const rcsid[] = "$Id: hmmPfamParse.c,v 1.1 2007/03/23 08:12:18 kent Exp $";
+static char const rcsid[] = "$Id: hmmPfamParse.c,v 1.2 2007/03/23 16:14:46 kent Exp $";
 
 void hpfModelFree(struct hpfModel **pMod)
 /* Free memory associated with hpfModel */
@@ -185,7 +185,7 @@ for (;;)
     slAddTail(&mod->domainList, dom);
     }
 slFreeList(&colList);
-if (!lineFileSkipToLineStartingWith(lf, "//", 100000))
+if (!lineFileSkipToLineStartingWith(lf, "//", 10000000))
     parseErr(lf, "Expecting //");
 return hr;
 }
