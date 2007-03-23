@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.16 2006/07/11 22:25:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.17 2007/03/23 17:15:06 fanhsu Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -642,7 +642,17 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 /* Process KEGG Pathway link data */
 if (sqlTableExists(conn, "keggPathway"))
     {
-    safef(query, sizeof(query), "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
+    if (kgVersion == KG_III)
+    	{
+	safef(query, sizeof(query), 
+	      "select * from %s.keggPathway k, %s.kgXref x where k.kgID = x.mRNA and x.kgId='%s'", 
+	      database, database, mrnaName);
+	}
+    else
+    	{
+	safef(query, sizeof(query), 
+	      "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
+	}
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
