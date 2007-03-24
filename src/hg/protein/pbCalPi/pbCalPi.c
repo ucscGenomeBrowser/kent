@@ -1,6 +1,14 @@
 /* pbCalPi - Calculate pI values from a list of protein IDs */
 #include "pbCalPi.h"
 
+#ifdef __CYGWIN32__
+int main(int argc, char *argv[])
+{   
+fprintf(stderr, "Sorry, necessary lib function exp10 not supported on cygwin.\n");
+return 1;
+}
+#else
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -125,3 +133,4 @@ fclose(outf1);
 return(0);
 }
 
+#endif /* only works if not __CYGWIN32__ */
