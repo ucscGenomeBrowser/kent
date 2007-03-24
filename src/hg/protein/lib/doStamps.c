@@ -14,7 +14,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doStamps.c,v 1.3 2006/07/06 21:05:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: doStamps.c,v 1.4 2007/03/24 03:34:30 fanhsu Exp $";
 
 Color boundaryColor;
 
@@ -754,7 +754,14 @@ if (!proteinInSupportedGenome)
 	}
 	
 /* draw exon count stamp */
-safef(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
+if (kgVersion == KG_III)
+    {
+    safef(cond_str, sizeof(cond_str), "qName='%s'", mrnaID);
+    }
+else
+    {
+    safef(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
+    }
 answer = sqlGetField(NULL, database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
     {
