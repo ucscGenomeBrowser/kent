@@ -77,7 +77,7 @@ cat /cluster/data/genbank/etc/genbank.tbls | sed -e 's/^^//; s/.$//' \
 echo gbLoaded >> genbank.local
 
 foreach machine ( $mach1 $mach2 )
-  # get the update times
+  # get the full table status
   getTableStatus.csh $db $machine > $machine.tmp
   if ( $status ) then
     cat $machine.tmp
@@ -105,7 +105,8 @@ foreach machine ( $mach1 $mach2 )
   rm $machine.tmp
 
   # strip genbank
-  cat $machine.status | egrep -v -f genbank.local > $machine.out
+  cat $machine.status | egrep -v -f genbank.local | grep -v gbDelete_tmp \
+     > $machine.out
   rm -f $machine.status
 end
 
