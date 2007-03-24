@@ -605,7 +605,7 @@ set bToA = run.$yeastDb.$tempDb
 cat $aToB/out/*.tab > $aToB/all.tab
 cat $bToA/out/*.tab > $bToA/all.tab
 blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.tab
-hgLoadBlastTab $tempDb csBlastTab $aToB/recipBest.tab
+hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
 # Clean up
@@ -684,7 +684,24 @@ ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/pfam; para make"
 cd $dir
 catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab stdin ucscPfam.tab
 
-# Do scop run 
+# Do scop run. Takes about 6 hours
+# First get pfam global HMMs into /san/sanvol1/scop somehow.
+cd /san/sanvol1/scratch/$db/ucscGenes
+mkdir scop
+cd scop
+ls -1 ../splitProt > in.lst
+cat << _EOF_ > doScop
+#!/bin/tcsh -ef
+/san/sanvol1/pfam/hmmpfam -E 0.1 /san/sanvol1/scop/scop.hmm $1 > $2
+_EOF_
+chmod a+x doScop
+cat << _EOF_ > gsub
+#LOOP
+doScop ../splitProt/$(path1) out/$(root1).pf
+#ENDLOOP
+_EOF_
+gensub2 in.lst single gsub spec
+ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/scop; para make"
 
 # Conver scop output to tab-separated file
 catDir /san/sanvol1/scratch/$db/ucscGenes/scop/out | hmmPfamToTab stdin stdout | \
