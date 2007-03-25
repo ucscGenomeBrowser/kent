@@ -5,7 +5,9 @@
 #include "options.h"
 #include "hmmPfamParse.h"
 
-static char const rcsid[] = "$Id: hmmPfamToTab.c,v 1.1 2007/03/23 08:21:15 kent Exp $";
+static char const rcsid[] = "$Id: hmmPfamToTab.c,v 1.2 2007/03/25 18:44:47 kent Exp $";
+
+double eVal = 0.0001;
 
 void usage()
 /* Explain usage and exit. */
@@ -15,11 +17,13 @@ errAbort(
   "usage:\n"
   "   hmmPfamToTab inFile out.tab\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -eVal=0.N - Set eVal threshold. Default %g\n"
+  , eVal
   );
 }
 
 static struct optionSpec options[] = {
+   {"eVal", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -36,7 +40,10 @@ while ((hr = hpfNext(lf)) != NULL)
          {
 	 struct hpfDomain *dom;
 	 for (dom = mod->domainList; dom != NULL; dom = dom->next)
-	     fprintf(f, "%s\t%d\t%d\t%s\n", hr->name, dom->qStart, dom->qEnd, mod->name);
+	     {
+	     if (dom->eVal <= eVal)
+		 fprintf(f, "%s\t%d\t%d\t%s\n", hr->name, dom->qStart, dom->qEnd, mod->name);
+	     }
 	 }
      hpfResultFree(&hr);
      }
@@ -49,6 +56,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+eVal = optionDouble("eVal", eVal);
 hmmPfamToTab(argv[1], argv[2]);
 return 0;
 }
