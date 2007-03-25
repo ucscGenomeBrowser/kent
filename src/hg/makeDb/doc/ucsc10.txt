@@ -516,7 +516,6 @@ hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
 hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
-hgMapViaSwissProt $tempDb -uniProt=$spDb knownGene name proteinID Pfam knownToPfam
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
 hgMapToGene "-type=bed 12" $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
 hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
@@ -683,6 +682,11 @@ ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/pfam; para make"
 # Convert output to tab-separated file. 
 cd $dir
 catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab stdin ucscPfam.tab
+
+# Convert output to knownToPfam table
+awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' pfamDesc.tab > sub.foo
+cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.foo knownToPfam.tab
+hgLoadSqlTable $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
