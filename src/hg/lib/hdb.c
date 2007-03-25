@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.318 2007/03/23 21:10:16 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.319 2007/03/25 21:35:00 fanhsu Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -4473,3 +4473,21 @@ freez(&dbBOrg);
 return result;
 }
 
+struct slName *getDomainList(struct sqlConnection *conn, char *ucscGeneId,
+	char *domainDb)
+/* Get list of accessions from external database associated with 
+ * protein domain entity.  The db parameter can be "Pfam", "Scop", etc. */
+{
+char query[255];
+char lowerCaseName[255];
+
+/* Capitalize first character for description table name */
+safef(lowerCaseName, sizeof(lowerCaseName), "%s", domainDb);
+lowerCaseName[0] = tolower(lowerCaseName[0]);
+
+safef(query, sizeof(query), 
+    "select acc from ucsc%s u, %sDesc p"
+    " where ucscId  = '%s' and u.domainName=p.name "
+    , domainDb, lowerCaseName, ucscGeneId);
+return sqlQuickList(conn, query);
+}
