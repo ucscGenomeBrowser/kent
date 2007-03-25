@@ -838,4 +838,7 @@ int getTableSize(char *table);
 boolean isNewChimp(char *database) ;
 /* database is panTro2 or later */
 
+struct slName *getDomainList(struct sqlConnection *conn, char *ucscGeneId,
+       char *domainDb)
+
 #endif /* HDB_H */
