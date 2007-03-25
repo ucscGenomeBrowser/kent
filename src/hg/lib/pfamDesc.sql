@@ -1,8 +1,7 @@
 CREATE TABLE pfamDesc (
-  pfamAC          varchar(40) NOT NULL,
-  pfamID          varchar(255) NOT NULL,
-  description     varchar(255),
-  KEY  (pfamID),
-  KEY  (pfamAC)
+acc   	    varchar(255) NOT NULL,
+name  	    varchar(255) NOT NULL,
+description varchar(255) NOT NULL,
+KEY 	    acc  (Acc(16)),
+KEY 	    name (name(16))
 ) TYPE=MyISAM;
-
