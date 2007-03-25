@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.84 2007/03/05 01:43:20 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.85 2007/03/25 14:21:08 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -32,7 +32,7 @@ int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 char *curGeneType;		/* Type of gene track */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
-
+int  kgVersion;			/* KG version */
 
 void usage()
 /* Explain usage and exit. */

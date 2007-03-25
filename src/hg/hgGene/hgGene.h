@@ -232,3 +232,10 @@ struct genePred *curGenePred;	/* Current gene prediction structure. */
 extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 extern char *swissProtAcc;	/* SwissProt accession (may be NULL). */
+
+#define KG_UNKNOWN 0
+#define KG_I       1
+#define KG_II      2
+#define KG_III     3
+extern int kgVersion;           /* KG version */
+
