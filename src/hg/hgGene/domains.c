@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.15 2006/04/07 23:19:33 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.16 2007/03/25 21:56:05 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -74,26 +74,53 @@ if (list != NULL)
     slFreeList(&list);
     }
 
-list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
-if (list != NULL)
+if (kgVersion == KG_III)
     {
-    char *pfamDescSql = genomeSetting("pfamDescSql");
-    hPrintf("<B>Pfam Domains:</B><BR>");
-    for (el = list; el != NULL; el = el->next)
-	{
-	char query[256];
-	char *description;
-	safef(query, sizeof(query), pfamDescSql, el->name);
-	description = sqlQuickString(conn, query);
-	if (description == NULL)
-	    description = cloneString("n/a");
-	hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
-	    el->name);
-	hPrintf("%s</A> - %s<BR>\n", el->name, description);
-	freez(&description);
+    list = getDomainList(conn, geneId,  "Pfam");
+    if (list != NULL)
+    	{
+    	hPrintf("<B>Pfam Domains:</B><BR>");
+    	for (el = list; el != NULL; el = el->next)
+	    {
+	    char query[256];
+	    char *description;
+	    safef(query, sizeof(query), 
+	          "select description from pfamDesc where acc='%s'", el->name);
+	    description = sqlQuickString(conn, query);
+	    if (description == NULL)
+	    	description = cloneString("n/a");
+	    hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    	    el->name);
+	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	    freez(&description);
+	    }
+        slFreeList(&list);
+        hPrintf("<BR>\n");
 	}
-    slFreeList(&list);
-    hPrintf("<BR>\n");
+    }
+else
+    {
+    list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
+    if (list != NULL)
+    	{
+    	char *pfamDescSql = genomeSetting("pfamDescSql");
+    	hPrintf("<B>Pfam Domains:</B><BR>");
+    	for (el = list; el != NULL; el = el->next)
+	    {
+	    char query[256];
+	    char *description;
+	    safef(query, sizeof(query), pfamDescSql, el->name);
+	    description = sqlQuickString(conn, query);
+	    if (description == NULL)
+	    	description = cloneString("n/a");
+		hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    	        el->name);
+	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	    freez(&description);
+	    }
+    	slFreeList(&list);
+    	hPrintf("<BR>\n");
+    	}
     }
 
 list = spExtDbAcc1List(spConn, swissProtAcc, "PDB");
