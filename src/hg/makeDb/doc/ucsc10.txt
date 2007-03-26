@@ -679,6 +679,16 @@ _EOF_
 gensub2 in.lst single gsub spec
 ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/pfam; para make"
 
+# Make up pfamDesc.tab by converting pfam to a ra file first
+cat << _EOF_ > makePfamRa.awk
+/^NAME/ {print}
+/^ACC/ {print}
+/^DESC/ {print; printf("\n");}
+_EOF_
+awk -f makePfamRa.awk  /cluster/store12/pfam/Pfam_fs > pfamDesc.ra
+raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
+   awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
+
 # Convert output to tab-separated file. 
 cd $dir
 catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab stdin ucscPfam.tab
