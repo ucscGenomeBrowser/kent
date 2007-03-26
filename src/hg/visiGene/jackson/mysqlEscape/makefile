@@ -1,26 +1,24 @@
+include ../../../../inc/common.mk
 
 JKSRCDIR = ../../../../../../kent/src
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
+XINC = -I$(MYSQLINC)
 
-EXE = mysqlEscape
-
-.c.o:
-	gcc -ggdb -Wimplicit -I$(MYSQLINC) -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
+A = mysqlEscape
 
 L = $(MYSQLLIBS) -lm
 MYLIBS = $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a 
 
 
-all: $(EXE)
+all: $(A)
 
 
-O = $(EXE).o
+O = $(A).o
 
-$(EXE): $O 
-	gcc $O $(MYLIBS) $L -o $(EXE)
-	strip $(EXE)
-	chmod a+rx $(EXE)
-	cp $(EXE) /cluster/home/$(USER)/bin/$(MACHTYPE)/
+$(A): $O 
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $L -o ${BINDIR}/$(A)
+	${STRIP} ${BINDIR}/$(A)${EXE}
+	chmod a+rx ${BINDIR}/$(A)${EXE}
 
 backup:
 	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(EXE)%s.zip *\n",$$1);}' > tempX
@@ -32,5 +30,5 @@ backup:
 
 clean:
 	rm -f *.o
-	rm -f $(EXE)
+	rm -f $(A)${EXE}
 
