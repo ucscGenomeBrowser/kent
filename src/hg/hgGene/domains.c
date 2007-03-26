@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.16 2007/03/25 21:56:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.17 2007/03/26 01:08:40 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -76,6 +76,7 @@ if (list != NULL)
 
 if (kgVersion == KG_III)
     {
+    /* Do Pfam domains here. */
     list = getDomainList(conn, geneId,  "Pfam");
     if (list != NULL)
     	{
@@ -90,6 +91,29 @@ if (kgVersion == KG_III)
 	    if (description == NULL)
 	    	description = cloneString("n/a");
 	    hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    	    el->name);
+	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	    freez(&description);
+	    }
+        slFreeList(&list);
+        hPrintf("<BR>\n");
+	}
+    
+    /* Do SCOP domains here */
+    list = getDomainList(conn, geneId,  "Scop");
+    if (list != NULL)
+    	{
+    	hPrintf("<B>SCOP Domains:</B><BR>");
+    	for (el = list; el != NULL; el = el->next)
+	    {
+	    char query[256];
+	    char *description;
+	    safef(query, sizeof(query), 
+	          "select description from scopDesc where acc='%s'", el->name);
+	    description = sqlQuickString(conn, query);
+	    if (description == NULL)
+	    	description = cloneString("n/a");
+	    hPrintf("<A HREF=\"http://scop.berkeley.edu/search.cgi?sunid=%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
