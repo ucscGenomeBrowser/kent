@@ -47,6 +47,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	oryLat1 \
 	ornAna1 \
 	fr1 fr2 \
+	braFlo1 \
 	cioSav1 \
 	danRer2 danRer3 danRer4 \
 	gasAcu1 \
@@ -70,6 +71,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	ce1 ce2 ce3 \
 	cb1 cb2 \
 	caeRem1 \
+	caePb1 \
 	falciparum \
 	sacCer1 \
 	sc1 \
