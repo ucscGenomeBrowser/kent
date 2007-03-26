@@ -1,3 +1,80 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis elegans
+#	Washington University School of Medicine GSC and Sanger Institute WS170
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2007-02-23 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/store5/worm/ce4
+    ln -s /cluster/store5/worm/ce4 /cluster/data/ce4
+    cd /cluster/data/ce4
+    mkdir WS170
+    cd WS170
+    wget --timestamping -m -np -nd \
+	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS170/CHROMOSOMES/"
+
+#########################################################################
+## Translate Sanger/Wormbase chrom names into UCSC names
+##	(DONE - 2007-02-23 - Hiram)
+    ## bash syntax, this sequence captured in toUCSC_Fa.sh
+WSxxx=WS170
+export WSxxx
+
+if [ -d downloads ]; then
+    mv downloads downloads.0
+    rm -fr downloads.0 &
+fi
+
+mkdir downloads
+mkdir downloads/fasta
+mkdir downloads/agp
+
+for C in I II III IV V X
+do
+    echo -n "${C} "
+    zcat ${WSxxx}/CHROMOSOME_${C}.dna.gz | tr '[a-z]' '[A-Z]' | \
+            sed -e "s/CHROMOSOME_/chr/" > downloads/fasta/chr${C}.fa
+    sed -e "s/^/chr/" ${WSxxx}/CHROMOSOME_${C}.agp > downloads/agp/chr${C}.agp
+done
+
+C=M
+echo -n "${C} "
+zcat ${WSxxx}/CHROMOSOME_MtDNA.dna.gz | tr '[a-z]' '[A-Z]' | \
+	sed -e "s/CHROMOSOME_MTDNA/chrM/" > downloads/fasta/chr${C}.fa
+echo "chrM 1 13794 1 F X54252.1 1 13794 +" | sed -e "s/  */\t/g" > \
+        downloads/agp/chr${C}.agp
+
+gzip downloads/fasta/chr*.fa
+gzip downloads/agp/chr*.agp
+
+#########################################################################
+## Create config.ra file, and run makeGenomeDb.pl (DONE - 2007-02-23 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/ce4
+    cat << '_EOF_' > ce4.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ce4
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Jan. 2007
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WS170
+orderKey 858
+mitoAcc none
+fastaFiles /cluster/data/ce4/downloads/fasta/chr*.fa.gz
+agpFiles /cluster/data/ce4/downloads/agp/chr*.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+'_EOF_'
+    # << happy emacs
+
+    nice -n +19 makeGenomeDb.pl ce4.config.ra > makeGenomeDb.out 2>&1
+
+#########################################################################
+### The sequences below were an experiment beginning early 2006
 
 # FETCH acedb database for construction of Sanger Links table
 #	DONE - 2006-01-09 - Hiram
