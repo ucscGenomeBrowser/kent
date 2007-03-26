@@ -198,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1249 2007/03/26 18:14:09 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1250 2007/03/26 18:41:19 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -4466,7 +4466,8 @@ for (same = 1; same >= 0; same -= 1)
 printf("</TT></PRE>");
 
 psl = pslList;
-if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
+if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL &&
+    !startsWith("xeno", typeName))
     {
     safef(otherString, sizeof(otherString), "%d&aliTrack=%s",
 	  psl->tStart, typeName);
