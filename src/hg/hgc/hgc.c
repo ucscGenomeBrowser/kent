@@ -198,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1248 2007/03/22 20:11:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1249 2007/03/26 18:14:09 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5689,8 +5689,7 @@ else
     partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
 
 if (startsWith("xeno", track))
-    showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
-				NULL, cdsStart, cdsEnd);
+    errAbort("htcCdnaAliInWindow does not support translated alignments.");
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
 				NULL, cdsStart, cdsEnd);
