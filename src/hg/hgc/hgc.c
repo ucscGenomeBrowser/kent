@@ -198,7 +198,7 @@
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1250 2007/03/26 18:41:19 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1251 2007/03/26 19:51:36 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5396,7 +5396,9 @@ else
 
 /* Write body heading info. */
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
-	partPsl->qName, partPsl->tName, partPsl->tStart+1, partPsl->tEnd);
+	partPsl->qName, partPsl->tName,
+	(isRc ? (partPsl->tSize - partPsl->tEnd)+1 : partPsl->tStart+1),
+	(isRc ? (partPsl->tSize - partPsl->tStart) : partPsl->tEnd));
 fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
