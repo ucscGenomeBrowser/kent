@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.100 2007/03/21 21:04:04 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.101 2007/03/26 18:48:45 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1458,7 +1458,8 @@ struct hash *hash = newHash(8);
 sr = sqlGetResult(conn, "show databases");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hashAdd(hash, row[0], NULL);
+    if (!startsWith("mysql", row[0]))  /* Avoid internal databases. */
+	hashAdd(hash, row[0], NULL);
     }
 sqlDisconnect(&conn);
 return hash;
