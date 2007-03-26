@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.8 2006/09/29 20:40:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.9 2007/03/26 22:21:28 fanhsu Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -45,6 +45,7 @@ struct slName *el, *list;
 char *samDb;
 char condStr[128];
 char *parentId;
+char *kgId = NULL;
 
 /* Use parent protein ID for domain links */
 
@@ -79,28 +80,87 @@ if (list != NULL)
     slFreeList(&list);
     }
 
-list = spExtDbAcc1List(spConn, parentId, "Pfam");
-if (list != NULL)
+if (kgVersion == KG_III)
     {
-    hPrintf("<B>Pfam Domains:</B>\n<UL>");fflush(stdout);
-    for (el = list; el != NULL; el = el->next)
-	{
-	char query[256];
-	char *description;
-        safef(query, sizeof(query), "select description from %s.pfamDesc where pfamAC='%s'", 
-		protDbName, el->name);
-	description = sqlQuickString(spConn, query);
-	if (description == NULL)
-	    description = cloneString("n/a");
-	hPrintf("<LI><A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
-	    el->name);
-	hPrintf("%s</A> - %s</LI>\n", el->name, description);
-	freez(&description);
+    struct sqlConnection *hgConn;   /* Connection to genome database. */
+    hgConn = sqlConnect(database);
+   
+    safef(condStr, sizeof(condStr), "spId='%s'", swissProtAcc);
+    kgId = sqlGetField(hgConn, database, "kgXref", "kgId", condStr);
+   
+    /* Do Pfam domains here. */
+    list = NULL;
+    if (kgId != NULL) list = getDomainList(hgConn, kgId,  "Pfam");
+    if (list != NULL)
+    	{
+    	hPrintf("<B>Pfam Domains:</B><BR>");
+    	for (el = list; el != NULL; el = el->next)
+	    {
+	    char query[256];
+	    char *description;
+	    safef(query, sizeof(query), 
+	          "select description from %s.pfamDesc where acc='%s'", database, el->name);
+	    description = sqlQuickString(hgConn, query);
+	    if (description == NULL)
+	    	description = cloneString("n/a");
+	    hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    	    el->name);
+	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	    freez(&description);
+	    }
+        slFreeList(&list);
+        hPrintf("<BR>\n");
 	}
-    slFreeList(&list);
-    hPrintf("</UL>\n");
-    }
     
+    /* Do SCOP domains here */
+    list = NULL;
+    if (kgId != NULL) list = getDomainList(hgConn, kgId,  "Scop");
+    if (list != NULL)
+    	{
+    	hPrintf("<B>SCOP Domains:</B><BR>");
+    	for (el = list; el != NULL; el = el->next)
+	    {
+	    char query[256];
+	    char *description;
+	    safef(query, sizeof(query), 
+	          "select description from %s.scopDesc where acc='%s'", database, el->name);
+	    description = sqlQuickString(hgConn, query);
+	    if (description == NULL)
+	    	description = cloneString("n/a");
+	    hPrintf("<A HREF=\"http://scop.berkeley.edu/search.cgi?sunid=%s\" TARGET=_blank>", 
+	    	    el->name);
+	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	    freez(&description);
+	    }
+        slFreeList(&list);
+        hPrintf("<BR>\n");
+	}
+    }
+else
+    {
+    list = spExtDbAcc1List(spConn, parentId, "Pfam");
+    if (list != NULL)
+    	{
+    	hPrintf("<B>Pfam Domains:</B>\n<UL>");fflush(stdout);
+    	for (el = list; el != NULL; el = el->next)
+	    {
+	    char query[256];
+	    char *description;
+            safef(query, sizeof(query), "select description from %s.pfamDesc where pfamAC='%s'", 
+		  protDbName, el->name);
+	    description = sqlQuickString(spConn, query);
+	    if (description == NULL)
+	    	description = cloneString("n/a");
+	    hPrintf("<LI><A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    	    el->name);
+	    hPrintf("%s</A> - %s</LI>\n", el->name, description);
+	    freez(&description);
+	    }
+    	slFreeList(&list);
+    	hPrintf("</UL>\n");
+    	}
+    }
+
 /* do not use parent protein, since 3D structure is determined by specific protein sequence */
 list = spExtDbAcc1List(spConn, swissProtAcc, "PDB");
 if (list != NULL)
