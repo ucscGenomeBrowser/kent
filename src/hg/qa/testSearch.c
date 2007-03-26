@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.5 2007/03/19 23:18:02 heather Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.6 2007/03/26 18:15:11 heather Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -194,7 +194,11 @@ while (result1)
 	break;
         }
     if (!matchFound)
+        {
 	fprintf(stderr, "Error: no match found for expected result %s\n", result1->tableName);
+        fprintf(stderr, "position = %s:%d-%d\n", result1->chrom, result1->start, result1->end);
+        fprintf(stderr, "browserName = %s\n", result1->browserName);
+	}
     result1 = result1->next;
     }
 
@@ -234,7 +238,11 @@ while (result1)
 	break;
         }
     if (!matchFound)
+        {
 	fprintf(stderr, "Error: no match found for actual result %s\n", result1->tableName);
+        fprintf(stderr, "position = %s:%d-%d\n", result1->chrom, result1->start, result1->end);
+        fprintf(stderr, "browserName = %s\n", result1->browserName);
+	}
     result1 = result1->next;
     }
 
