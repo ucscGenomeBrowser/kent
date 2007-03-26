@@ -12,7 +12,7 @@
 #include "htmshell.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.26 2005/11/01 23:04:03 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.27 2007/03/26 18:11:48 angie Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -78,7 +78,9 @@ if (cfm->wordLen)
     {
     if (++cfm->inWord >= cfm->wordLen)
 	{
+	cfmPopFormat(cfm);
 	fputc(' ', cfm->out);
+	cfmPushFormat(cfm);
 	cfm->inWord = 0;
 	}
     }
@@ -94,7 +96,9 @@ if (cfm->lineLen)
 	        pos = 1-pos;
 		}
 	    pos += cfm->numOff;
+	    cfmPopFormat(cfm);
 	    fprintf(cfm->out, " %d", pos);
+	    cfmPushFormat(cfm);
 	    }
 	fprintf(cfm->out, "\n");
 	cfm->inLine = 0;
