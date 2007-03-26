@@ -1,0 +1,186 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the Lancelet
+# genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
+#
+#       "$Id: braFlo1.txt,v 1.1 2007/03/26 22:23:12 hiram Exp $"
+#
+
+##########################################################################
+### Fetch sequence       (DONE - 2007-03-26 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/store12/braFlo1
+    ln -s /cluster/store12/braFlo1 /cluster/data/braFlo1
+    mkdir /cluster/data/braFlo1/downloads
+    cd /cluster/data/braFlo1/downloads
+    wget --timestamping \
+'ftp://ftp.jgi-psf.org/pub/JGI_data/Branchiostoma_floridae/v1.0/Branchiostoma.fasta.gz'
+    wget --timestamping \
+'ftp://ftp.jgi-psf.org/pub/JGI_data/Branchiostoma_floridae/v1.0/proteins.Brafl1.fasta.gz'
+    wget --timestamping \
+'ftp://ftp.jgi-psf.org/pub/JGI_data/Branchiostoma_floridae/v1.0/transcripts.Brafl1.fasta.gz'
+    gunzip Branchiostoma.fasta.gz
+    scaffoldFaToAgp Branchiostoma.fasta
+
+##########################################################################
+## Set up initial database (DONE - 2007-03-26 - Hiram)
+    cd /cluster/data/braFlo1
+    cat << '_EOF_' > braFlo1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db braFlo1
+clade cephalochordata
+genomeCladePriority 20
+scientificName Branchiostoma floridae
+commonName Lancelet
+assemblyDate Mar. 2006
+assemblyLabel JGI v.1.0 (March 2006)
+orderKey 799
+mitoAcc 5881414
+fastaFiles /cluster/data/braFlo1/downloads/Branchiostoma.fasta
+agpFiles /cluster/data/braFlo1/downloads/Branchiostoma.agp
+# qualFiles none
+dbDbSpeciesDir lancelet
+'_EOF_'
+    time nice -n +19 makeGenomeDb.pl braFlo1.config.ra > makeGenomeDb.out 2>&1
+
+    hgsql -e 'INSERT INTO clade (name, label, priority)
+VALUES ("cephalochordata", "Cephalochordata", 35);' hgcentraltest
+
+##########################################################################
+## RepeatMasker (DONE - 2007-03-26 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/braFlo1/bed/RepeatMasker
+    cd /cluster/data/braFlo1/bed/RepeatMasker
+    time nice -n +10 doRepeatMasker.pl braFlo1 \
+	-buildDir=/cluster/data/braFlo1/bed/RepeatMasker > do.log 2>&1 &
+    # about 11 minutes
+    cd /cluster/data/braFlo1
+    twoBitToFa braFlo1.rmsk.2bit stdout | faSize -showPercent stdin
+    #	926386587 bases (95184565 N's 831202022 real
+    #	806238402 upper 24963620 lower) in 2 sequences in 1 files
+    #	twoBitToFa braFlo1.rmsk.2bit stdout | faSize -showPercent stdin
+    #	%2.69 masked total, %3.00 masked real
+
+#########################################################################
+# SIMPLE REPEATS (TRF) (DONE 2007-01-22 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/braFlo1/bed/simpleRepeat
+    cd /cluster/data/braFlo1/bed/simpleRepeat
+    for C in chrM chrUn
+do
+    mkdir /scratch/tmp/braFlo1.trf
+    twoBitToFa -seq="${C}" ../../braFlo1.unmasked.2bit \
+	/scratch/tmp/braFlo1.trf/${C}.fa
+    time nice -n 19 trfBig -trf=/cluster/bin/i386/trf \
+	/scratch/tmp/braFlo1.trf/${C}.fa /dev/null \
+	-bedAt=${C}.bed -tempDir=/scratch/tmp/braFlo1.trf > ${C}.log 2>&1
+    rm -fr /scratch/tmp/braFlo1.trf
+    echo ${C} done
+done
+    #	real    187m42.772s
+    #	no repeats found on chrM
+    # Make a filtered version for sequence masking:
+    awk '{if ($5 <= 12) print;}' chrUn.bed > trfMask.bed
+
+  # Load unfiltered repeats into the database:
+    ssh hgwdev
+    hgLoadBed braFlo1 simpleRepeat \
+      /cluster/data/braFlo1/bed/simpleRepeat/chrUn.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+################################################
+## WINDOWMASKER (DONE - 2007-03-26 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/braFlo1/bed/WindowMasker
+    cd /cluster/data/braFlo1/bed/WindowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl braFlo1 \
+      -buildDir=/cluster/data/braFlo1/bed/WindowMasker \
+	-workhorse=kolossus > wmRun.log 2>&1 &
+    #	real    82m55.387s
+
+    # Masking statistics
+    twoBitToFa braFlo1.wmsk.sdust.2bit stdout | faSize stdin
+    #	926386587 bases (95184565 N's 831202022 real
+    #	611909619 upper 219292403 lower) in 2 sequences in 1 files
+    #	%23.67 masked total, %26.38 masked real
+
+    ssh hgwdev
+    time nice -n +19 \
+	hgLoadBed -strict braFlo1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 4263263 elements of size 3
+
+    ## Add trfMask.bed to this wmsk.sdust.2bit file
+    cd /cluster/data/braFlo1
+    cat bed/simpleRepeat/trfMask.bed \
+	| twoBitMask -add -type=.bed bed/WindowMasker/braFlo1.wmsk.sdust.2bit \
+	stdin braFlo1.wmTrf.2bit
+    twoBitToFa braFlo1.wmTrf.2bit stdout | faSize stdin
+    #	926386587 bases (95184565 N's 831202022 real
+    #	611655540 upper 219546482 lower) in 2 sequences in 1 files
+    #	%23.70 masked total, %26.41 masked real
+    ln -s braFlo1.wmTrf.2bit braFlo1.2bit
+    ln -s /cluster/data/braFlo1/braFlo1.2bit /gbdb/braFlo1/braFlo1.2bit
+
+#########################################################################
+## Create masked scaffolds-only 2bit file (DONE - 2007-03-26 - Hiram)
+    ssh kkstore05
+    mkdir /cluster/data/braFlo1/scaffolds
+    cp -p /cluster/data/oryLat1/jkStuff/lft2BitToFa.pl \
+	/cluster/data/braFlo1/jkStuff
+    cp -p /cluster/data/oryLat1/jkStuff/agpToLift.pl \
+	/cluster/data/braFlo1/jkStuff
+    cd /cluster/data/braFlo1/scaffolds
+    ln -s ../Un/chrUn.agp .
+    ../jkStiff/agpToLift.pl chrUn.agp > braFlo1.lift
+    ../jkStuff/lft2BitToFa.pl ../braFlo1.2bit braFlo1.lift \
+	> chrUn.scaffolds.fa
+    twoBitToFa ../braFlo1.2bit chrM.fa
+    faToTwoBit chrUn.scaffolds.fa chrM.fa braFlo1UnScaffolds.2bit
+    twoBitInfo braFlo1UnScaffolds.2bit stdout | sort -k2nr \
+	> braFlo1UnScaffolds.sizes
+    cp -p braFlo1UnScaffolds.sizes braFlo1UnScaffolds.2bit braFlo1.lift \
+	 /san/sanvol1/scratch/braFlo1
+
+#########################################################################
+## BLASTZ HUMAN HG18 (DONE - 2007-03-26 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+    cd /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+    cat << '_EOF_' > DEF
+# human vs lancelet
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.sdTrf.2bit
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Lancelet braFlo1 - largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ2_DIR=/san/sanvol1/scratch/braFlo1/braFlo1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/braFlo1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/braFlo1/braFlo1.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 \
+	-blastzOutRoot /cluster/bluearc/hg18BraFlo1 > do.log 2>&1 &
+XXXX - running 2007-03-26 15:20
