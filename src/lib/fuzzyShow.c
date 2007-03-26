@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.20 2007/03/20 21:04:19 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.21 2007/03/26 18:12:52 angie Exp $";
 
 static void ffShNeedle(FILE *f, DNA *needle, int needleSize,
 		       int needleNumOffset, char *colorFlags,
@@ -138,7 +138,8 @@ else
 	  "(often splice sites).\n", f);
     } 
 if (showNeedle && (partAliList != wholeAliList))
-    fputs("Bases that were in the selected browser region are shown in bold, "
+    fputs("Bases that were in the selected browser region are shown in bold "
+	  "and underlined, "
 	  "and only the alignment for these bases is displayed in the "
 	  "Genomic and Side by Side sections.\n", f);
 
@@ -181,6 +182,8 @@ if (showHaystack)
     {
     struct cfm *cfm = cfmNew(10, 50, TRUE, rcHaystack, f, hayNumOffset);
     char *h = cloneMem(haystack, haySize);
+    char *accentFlags = needMem(haySize);
+    zeroBytes(accentFlags, haySize);
     fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
     	haystackName,
 	(rcHaystack ? "(reverse strand)" : ""));
@@ -210,6 +213,7 @@ if (showHaystack)
 		if (upcMatch)
 		    h[off+i] = toupper(h[off+i]);
 		}
+	    accentFlags[off+i] = TRUE;
 	    }
 	}
     if (leftAli != NULL)
@@ -231,7 +235,8 @@ if (showHaystack)
 	    lastAli = ali;
 	    ali = ali->right;
 	    }
-	cfmOut(cfm, h[i], seqOutColorLookup[(int)colorFlags[i]]);
+	cfmOutExt(cfm, h[i], seqOutColorLookup[(int)colorFlags[i]],
+		  accentFlags[i], accentFlags[i], FALSE);
 	}
     cfmFree(&cfm);
     freeMem(h);
