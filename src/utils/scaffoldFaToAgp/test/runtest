@@ -2,12 +2,14 @@
 
 # run on test file, diff with "golden" file
 
-${HOME}/bin/i386/scaffoldFaToAgp test.fa  >& /dev/null
+${HOME}/bin/${MACHTYPE}/scaffoldFaToAgp test.fa  >& /dev/null
 
 diff test.agp test.agp.gold > /dev/null
 set status1 = $status
 diff test.lft test.lft.gold > /dev/null
-if ($status || $status1) then
+set status2 = $status
+diff test.gap test.gap.gold > /dev/null
+if ($status || $status1 || $status2) then
     echo '*** FAIL ***'
 endif
-rm -f test.lft test.agp
+rm -f test.lft test.agp test.gap
