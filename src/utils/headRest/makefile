@@ -8,7 +8,7 @@ O = headRest.o
 
 headRest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/headRest $O ${MYLIBS} $L
-	strip ${BINDIR}/headRest
+	${STRIP} ${BINDIR}/headRest${EXE}
 
 clean:
 	rm -f $O

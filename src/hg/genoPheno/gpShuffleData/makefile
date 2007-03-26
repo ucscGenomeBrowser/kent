@@ -8,7 +8,7 @@ O = gpShuffleData.o
 
 gpShuffleData: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gpShuffleData $O ${MYLIBS} $L
-	strip ${BINDIR}/gpShuffleData
+	${STRIP} ${BINDIR}/gpShuffleData${EXE}
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ O = hgKgGetText.o
 
 hgKgGetText: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/hgKgGetText $O ${MYLIBS} $L
-	strip ${BINDIR}/hgKgGetText
+	${STRIP} ${BINDIR}/hgKgGetText${EXE}
 
 clean:
 	rm -f $O

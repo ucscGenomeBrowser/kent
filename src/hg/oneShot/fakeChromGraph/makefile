@@ -8,7 +8,7 @@ O = fakeChromGraph.o
 
 fakeChromGraph: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/fakeChromGraph $O ${MYLIBS} $L
-	strip ${BINDIR}/fakeChromGraph
+	${STRIP} ${BINDIR}/fakeChromGraph${EXE}
 
 clean:
 	rm -f $O

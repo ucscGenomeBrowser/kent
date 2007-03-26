@@ -8,7 +8,7 @@ O = testSearch.o
 
 testSearch: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/testSearch $O ${MYLIBS} $L
-	strip ${BINDIR}/testSearch
+	${STRIP} ${BINDIR}/testSearch${EXE}
 
 clean:
 	rm -f $O

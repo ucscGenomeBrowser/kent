@@ -8,7 +8,7 @@ O = gensatImageDownload.o ../lib/gs.o
 
 gensatImageDownload: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gensatImageDownload $O ${MYLIBS} $L
-	strip ${BINDIR}/gensatImageDownload
+	${STRIP} ${BINDIR}/gensatImageDownload${EXE}
 
 clean:
 	rm -f $O

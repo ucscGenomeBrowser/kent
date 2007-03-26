@@ -8,7 +8,7 @@ O = vgPatchJax.o
 
 vgPatchJax: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgPatchJax $O ${MYLIBS} $L
-	strip ${BINDIR}/vgPatchJax
+	${STRIP} ${BINDIR}/vgPatchJax${EXE}
 
 clean:
 	rm -f $O

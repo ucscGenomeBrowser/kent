@@ -8,7 +8,7 @@ O = nibbParseImageDir.o
 
 nibbParseImageDir: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/nibbParseImageDir $O ${MYLIBS} $L
-	strip ${BINDIR}/nibbParseImageDir
+	${STRIP} ${BINDIR}/nibbParseImageDir${EXE}
 
 clean:
 	rm -f $O

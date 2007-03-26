@@ -8,7 +8,7 @@ O = vgLoadGensat.o ../lib/gs.o
 
 vgLoadGensat: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgLoadGensat $O ${MYLIBS} $L
-	strip ${BINDIR}/vgLoadGensat
+	${STRIP} ${BINDIR}/vgLoadGensat${EXE}
 
 clean:
 	rm -f $O

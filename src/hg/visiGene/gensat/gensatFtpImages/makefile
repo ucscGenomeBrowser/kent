@@ -8,7 +8,7 @@ O = gensatFtpImages.o
 
 gensatFtpImages: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gensatFtpImages $O ${MYLIBS} $L
-	strip ${BINDIR}/gensatFtpImages
+	${STRIP} ${BINDIR}/gensatFtpImages${EXE}
 
 clean:
 	rm -f $O

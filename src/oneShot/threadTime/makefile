@@ -8,7 +8,7 @@ O = threadTime.o
 
 threadTime: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/threadTime $O ${MYLIBS} $L
-	strip ${BINDIR}/threadTime
+	${STRIP} ${BINDIR}/threadTime${EXE}
 
 clean:
 	rm -f $O

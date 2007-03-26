@@ -8,7 +8,7 @@ O = rowsToCols.o
 
 rowsToCols: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/rowsToCols $O ${MYLIBS} $L
-	strip ${BINDIR}/rowsToCols
+	${STRIP} ${BINDIR}/rowsToCols${EXE}
 
 clean:
 	rm -f $O

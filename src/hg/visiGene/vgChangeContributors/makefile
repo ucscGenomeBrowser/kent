@@ -9,7 +9,7 @@ O = vgChangeContributors.o
 
 vgChangeContributors: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgChangeContributors $O ${MYLIBS} $L
-	strip ${BINDIR}/vgChangeContributors
+	${STRIP} ${BINDIR}/vgChangeContributors${EXE}
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ O = vgLoadJax.o
 
 vgLoadJax: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgLoadJax $O ${MYLIBS} $L
-	strip ${BINDIR}/vgLoadJax
+	${STRIP} ${BINDIR}/vgLoadJax${EXE}
 
 forwardSlices: forwardSlices.o ${MYLIBS}
 	${CC} ${COPT} -o forwardSlices forwardSlices.o ${MYLIBS} $L

@@ -8,7 +8,7 @@ O = gpFakeData.o
 
 gpFakeData: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gpFakeData $O ${MYLIBS} $L
-	strip ${BINDIR}/gpFakeData
+	${STRIP} ${BINDIR}/gpFakeData${EXE}
 
 clean:
 	rm -f $O

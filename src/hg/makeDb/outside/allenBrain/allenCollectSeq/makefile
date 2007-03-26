@@ -8,7 +8,7 @@ O = allenCollectSeq.o
 
 allenCollectSeq: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/allenCollectSeq $O ${MYLIBS} $L
-	strip ${BINDIR}/allenCollectSeq
+	${STRIP} ${BINDIR}/allenCollectSeq${EXE}
 
 clean:
 	rm -f $O

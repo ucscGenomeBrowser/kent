@@ -8,7 +8,7 @@ O = nibbPrepImages.o
 
 nibbPrepImages: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/nibbPrepImages $O ${MYLIBS} $L
-	strip ${BINDIR}/nibbPrepImages
+	${STRIP} ${BINDIR}/nibbPrepImages${EXE}
 
 clean:
 	rm -f $O

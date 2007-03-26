@@ -20,7 +20,7 @@ alpha:: compile
 
 compile: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgGetText $O ${MYLIBS} $L
-	strip ${BINDIR}/vgGetText
+	${STRIP} ${BINDIR}/vgGetText${EXE}
 
 clean:
 	rm -f $O

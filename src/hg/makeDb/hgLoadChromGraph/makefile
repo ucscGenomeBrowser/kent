@@ -8,7 +8,7 @@ O = hgLoadChromGraph.o
 
 hgLoadChromGraph: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/hgLoadChromGraph $O ${MYLIBS} $L
-	strip ${BINDIR}/hgLoadChromGraph
+	${STRIP} ${BINDIR}/hgLoadChromGraph${EXE}
 
 clean:
 	rm -f $O

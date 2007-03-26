@@ -8,7 +8,7 @@ O = toDev64.o
 
 toDev64: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/toDev64 $O ${MYLIBS} $L
-	strip ${BINDIR}/toDev64
+	${STRIP} ${BINDIR}/toDev64${EXE}
 
 clean:
 	rm -f $O

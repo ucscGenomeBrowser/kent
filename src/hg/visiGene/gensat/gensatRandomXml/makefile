@@ -8,7 +8,7 @@ O = gensatRandomXml.o ../lib/gs.o
 
 gensatRandomXml: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gensatRandomXml $O ${MYLIBS} $L
-	strip ${BINDIR}/gensatRandomXml
+	${STRIP} ${BINDIR}/gensatRandomXml${EXE}
 
 clean:
 	rm -f $O

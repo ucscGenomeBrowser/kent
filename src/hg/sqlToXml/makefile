@@ -8,7 +8,7 @@ O = sqlToXml.o
 
 sqlToXml: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/sqlToXml $O ${MYLIBS} $L
-	strip ${BINDIR}/sqlToXml
+	${STRIP} ${BINDIR}/sqlToXml${EXE}
 
 clean:
 	rm -f $O

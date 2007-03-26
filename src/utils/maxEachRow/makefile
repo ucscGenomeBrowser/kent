@@ -8,7 +8,7 @@ O = maxEachRow.o
 
 maxEachRow: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/maxEachRow $O ${MYLIBS} $L
-	strip ${BINDIR}/maxEachRow
+	${STRIP} ${BINDIR}/maxEachRow${EXE}
 
 clean:
 	rm -f $O

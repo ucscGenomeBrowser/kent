@@ -8,7 +8,7 @@ O = xmlCat.o
 
 xmlCat: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/xmlCat $O ${MYLIBS} $L
-	strip ${BINDIR}/xmlCat
+	${STRIP} ${BINDIR}/xmlCat${EXE}
 
 test:: 
 	doTest

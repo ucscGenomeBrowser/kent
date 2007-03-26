@@ -8,7 +8,7 @@ O = minEachRow.o
 
 minEachRow: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/minEachRow $O ${MYLIBS} $L
-	strip ${BINDIR}/minEachRow
+	${STRIP} ${BINDIR}/minEachRow${EXE}
 
 clean:
 	rm -f $O

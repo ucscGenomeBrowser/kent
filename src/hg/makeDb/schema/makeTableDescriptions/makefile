@@ -8,7 +8,7 @@ O = makeTableDescriptions.o
 
 makeTableDescriptions: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/makeTableDescriptions $O ${MYLIBS} $L
-	strip ${BINDIR}/makeTableDescriptions
+	${STRIP} ${BINDIR}/makeTableDescriptions${EXE}
 
 clean:
 	rm -f $O

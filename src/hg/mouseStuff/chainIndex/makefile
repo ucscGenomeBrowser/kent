@@ -8,7 +8,7 @@ O = chainIndex.o
 
 chainIndex: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/chainIndex $O ${MYLIBS} $L
-	strip ${BINDIR}/chainIndex
+	${STRIP} ${BINDIR}/chainIndex${EXE}
 
 clean:
 	rm -f $O

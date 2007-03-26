@@ -8,7 +8,7 @@ O = gensatFtpList.o
 
 gensatFtpList: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gensatFtpList $O ${MYLIBS} $L
-	strip ${BINDIR}/gensatFtpList
+	${STRIP} ${BINDIR}/gensatFtpList${EXE}
 
 clean:
 	rm -f $O

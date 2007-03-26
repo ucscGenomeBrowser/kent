@@ -8,7 +8,7 @@ O = fakeBedGraph.o
 
 fakeBedGraph: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/fakeBedGraph $O ${MYLIBS} $L
-	strip ${BINDIR}/fakeBedGraph
+	${STRIP} ${BINDIR}/fakeBedGraph${EXE}
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ O = vgLoadNibb.o
 
 vgLoadNibb: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgLoadNibb $O ${MYLIBS} $L
-	strip ${BINDIR}/vgLoadNibb
+	${STRIP} ${BINDIR}/vgLoadNibb${EXE}
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ O = autoDtd.o
 
 autoDtd: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/autoDtd $O ${MYLIBS} $L
-	strip ${BINDIR}/autoDtd
+	${STRIP} ${BINDIR}/autoDtd${EXE}
 
 clean:
 	rm -f $O

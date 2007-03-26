@@ -8,7 +8,7 @@ O = shuffleLines.o
 
 shuffleLines: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/shuffleLines $O ${MYLIBS} $L
-	strip ${BINDIR}/shuffleLines
+	${STRIP} ${BINDIR}/shuffleLines${EXE}
 
 clean:
 	rm -f $O

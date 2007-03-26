@@ -8,7 +8,7 @@ O = nibbNameFix.o
 
 nibbNameFix: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/nibbNameFix $O ${MYLIBS} $L
-	strip ${BINDIR}/nibbNameFix
+	${STRIP} ${BINDIR}/nibbNameFix${EXE}
 
 clean:
 	rm -f $O

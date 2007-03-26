@@ -8,7 +8,7 @@ O = lineFileSplit.o
 
 lineFileSplit: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/lineFileSplit $O ${MYLIBS} $L
-	strip ${BINDIR}/lineFileSplit
+	${STRIP} ${BINDIR}/lineFileSplit${EXE}
 
 clean:
 	rm -f $O

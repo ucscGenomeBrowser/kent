@@ -8,7 +8,7 @@ O = dateXmlCgi.o
 
 dateXmlCgi: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/dateXmlCgi $O ${MYLIBS} $L
-	strip ${BINDIR}/dateXmlCgi
+	${STRIP} ${BINDIR}/dateXmlCgi${EXE}
 
 clean:
 	rm -f $O

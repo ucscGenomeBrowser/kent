@@ -8,7 +8,7 @@ O = dbSnoop.o
 
 dbSnoop: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/dbSnoop $O ${MYLIBS} $L
-	strip ${BINDIR}/dbSnoop
+	${STRIP} ${BINDIR}/dbSnoop${EXE}
 
 clean:
 	rm -f $O

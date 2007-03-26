@@ -8,7 +8,7 @@ O = allenCleanup.o
 
 allenCleanUp: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/allenCleanup $O ${MYLIBS} $L
-	strip ${BINDIR}/allenCleanup
+	${STRIP} ${BINDIR}/allenCleanup${EXE}
 
 test: allenCleanUp
 	allenCleanup \

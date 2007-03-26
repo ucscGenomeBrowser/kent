@@ -8,7 +8,7 @@ O = safePush.o
 
 safePush: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/safePush $O ${MYLIBS} $L
-	strip ${BINDIR}/safePush
+	${STRIP} ${BINDIR}/safePush${EXE}
 
 clean:
 	rm -f $O

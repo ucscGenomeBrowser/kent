@@ -8,7 +8,7 @@ O = pslRecalcMatch.o
 
 pslRecalcMatch: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/pslRecalcMatch $O ${MYLIBS} $L
-	strip ${BINDIR}/pslRecalcMatch
+	${STRIP} ${BINDIR}/pslRecalcMatch${EXE}
 
 clean:
 	rm -f $O

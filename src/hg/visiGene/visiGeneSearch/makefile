@@ -8,7 +8,7 @@ O = visiGeneSearch.o
 
 visiGeneSearch: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/visiGeneSearch $O ${MYLIBS} $L
-	strip ${BINDIR}/visiGeneSearch
+	${STRIP} ${BINDIR}/visiGeneSearch${EXE}
 
 clean:
 	rm -f $O

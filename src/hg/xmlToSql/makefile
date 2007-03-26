@@ -8,7 +8,7 @@ O = xmlToSql.o elStat.o rename.o tables.o
 
 xmlToSql: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/xmlToSql $O ${MYLIBS} $L
-	strip ${BINDIR}/xmlToSql
+	${STRIP} ${BINDIR}/xmlToSql${EXE}
 
 clean:
 	rm -f $O

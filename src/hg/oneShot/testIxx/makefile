@@ -8,7 +8,7 @@ O = testIxx.o
 
 testIxx: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/testIxx $O ${MYLIBS} $L
-	strip ${BINDIR}/testIxx
+	${STRIP} ${BINDIR}/testIxx${EXE}
 
 clean:
 	rm -f $O

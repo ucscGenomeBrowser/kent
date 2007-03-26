@@ -8,7 +8,7 @@ O = sessionDbCrawl.o
 
 sessionDbCrawl: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/sessionDbCrawl $O ${MYLIBS} $L
-	strip ${BINDIR}/sessionDbCrawl
+	${STRIP} ${BINDIR}/sessionDbCrawl${EXE}
 
 clean:
 	rm -f $O

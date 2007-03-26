@@ -8,7 +8,7 @@ O = tTestTwo.o
 
 tTestTwo: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/tTestTwo $O ${MYLIBS} $L
-	strip ${BINDIR}/tTestTwo
+	${STRIP} ${BINDIR}/tTestTwo${EXE}
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ O = wgetMd5.o
 
 wgetMd5: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/wgetMd5 $O ${MYLIBS} $L
-	strip ${BINDIR}/wgetMd5
+	${STRIP} ${BINDIR}/wgetMd5${EXE}
 
 clean:
 	rm -f $O

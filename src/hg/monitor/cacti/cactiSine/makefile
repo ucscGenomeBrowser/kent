@@ -8,7 +8,7 @@ O = cactiSine.o
 
 cactiSine: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/cactiSine $O ${MYLIBS} $L
-	strip ${BINDIR}/cactiSine
+	${STRIP} ${BINDIR}/cactiSine${EXE}
 
 clean:
 	rm -f $O

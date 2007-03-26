@@ -8,7 +8,7 @@ O = nibbImageProbes.o
 
 nibbImageProbes: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/nibbImageProbes $O ${MYLIBS} $L
-	strip ${BINDIR}/nibbImageProbes
+	${STRIP} ${BINDIR}/nibbImageProbes${EXE}
 
 clean:
 	rm -f $O

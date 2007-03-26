@@ -8,7 +8,7 @@ O = testIndex.o
 
 testIndex: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/testIndex $O ${MYLIBS} $L
-	strip ${BINDIR}/testIndex
+	${STRIP} ${BINDIR}/testIndex${EXE}
 
 clean:
 	rm -f $O

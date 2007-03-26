@@ -8,7 +8,7 @@ O = gensatFixFull.o
 
 gensatFixFull: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/gensatFixFull $O ${MYLIBS} $L
-	strip ${BINDIR}/gensatFixFull
+	${STRIP} ${BINDIR}/gensatFixFull${EXE}
 
 clean:
 	rm -f $O

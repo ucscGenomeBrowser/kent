@@ -8,7 +8,7 @@ O = vgRemoveSubmission.o
 
 vgRemoveSubmission: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/vgRemoveSubmission $O ${MYLIBS} $L
-	strip ${BINDIR}/vgRemoveSubmission
+	${STRIP} ${BINDIR}/vgRemoveSubmission${EXE}
 
 clean:
 	rm -f $O
