@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hapmapSnpsCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSnpsCombined.c,v 1.2 2007/03/14 22:51:17 heather Exp $";
+static char const rcsid[] = "$Id: hapmapSnpsCombined.c,v 1.3 2007/03/26 17:14:12 heather Exp $";
 
 void hapmapSnpsCombinedStaticLoad(char **row, struct hapmapSnpsCombined *ret)
 /* Load a row from hapmapSnpsCombined table into ret.  The contents of ret will
@@ -324,7 +324,8 @@ if (total == 0) return 0;
 p = (float)allele1Count / (float)total;
 q = (float)allele2Count / (float)total;
 
-return 2000*p*q;
+/* 1000 is to normalize to store as integer */
+return (int)1000*2*p*q;
 }
 
 
