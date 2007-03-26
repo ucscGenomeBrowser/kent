@@ -91,7 +91,6 @@ int bn = -1;   /* next newline token */
 int bt = -1;   /* next tab token */
 int be = 0;    /* end of data 0-based */
 int nread = -1;
-int size = 0;
 int fieldCount = 0;
 int rowCount = 1;
 int lastFC = -1;
@@ -102,7 +101,6 @@ int is = 0;
 int blimit = 0;
 int overlap = max(strlen(TTERM),strlen(NTERM)) - 1;
 int oi = 0;
-boolean tagLeft = TRUE;
 struct dyString *field = dyStringNew(0);
 char *tOut = TTERM;  // this can be changed to desired character or string
 char *nOut = NTERM; 
@@ -248,5 +246,6 @@ putOut(out, &oi, NULL, -1);
 
 verbose(1,"#fields=%d (fieldCount var=%d), #rows=%d\n", lastFC, fieldCount, rowCount-1);
 
+return 0;
 }
 
