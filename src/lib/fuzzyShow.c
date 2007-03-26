@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.21 2007/03/26 18:12:52 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.22 2007/03/26 19:37:05 angie Exp $";
 
 static void ffShNeedle(FILE *f, DNA *needle, int needleSize,
 		       int needleNumOffset, char *colorFlags,
@@ -213,7 +213,8 @@ if (showHaystack)
 		if (upcMatch)
 		    h[off+i] = toupper(h[off+i]);
 		}
-	    accentFlags[off+i] = TRUE;
+	    if (partAliList != wholeAliList)
+		accentFlags[off+i] = TRUE;
 	    }
 	}
     if (leftAli != NULL)
