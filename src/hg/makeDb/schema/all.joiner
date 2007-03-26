@@ -76,6 +76,12 @@ set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
+# Older format (KG 2)
+set kgDb2 hg15,hg16,hg17,mm3,mm4,mm5,mm6,mm7,mm8,rn2,rn3,rn4
+# Newer format (KG 3 aka UCSC Genes)
+set kgDb3 hg18
+
+# Protein browser databases.
 set pbDb hg18,hg17,hg16,mm4,mm6,mm7,mm8,rn3 
 set pbDb2 mm4,rn3
 set pbDb3 hg16,hg17,hg18
@@ -134,11 +140,12 @@ identifier UniProtId external=UniProt
      go.goaPart.dbObjectSymbol minCheck=0.95
      $gbd.dupSpMrna.proteinID minCheck=0.80
      $gbd.dupSpMrna.dupProteinID minCheck=0.50
-     $kgDb.kgProtAlias.displayID minCheck=0.80
-     $kgDb.kgSpAlias.alias minCheck=0.20
-     $kgDb.kgXref.spDisplayID minCheck=0.80
-     $kgDb.knownCanonical.protein minCheck=0.80
-     $kgDb.knownGene.proteinID minCheck=0.80
+     $kgDb2.kgProtAlias.displayID minCheck=0.80
+     $kgDb2.kgSpAlias.alias minCheck=0.20
+     $kgDb2.kgXref.spDisplayID minCheck=0.80
+     $kgDb3.kgXref.spDisplayID minCheck=0.50
+     $kgDb2.knownCanonical.protein minCheck=0.80
+     $kgDb2.knownGene.proteinID minCheck=0.80
      $gbd.spMrna.spID minCheck=0.80
      dm1.bdgpSwissProt.spSymbol minCheck=0.80
      dm1.flyBaseSwissProt.spSymbol minCheck=0.80
@@ -162,10 +169,13 @@ identifier UniProtAccession external=UniProt
      proteome.uniProtAlias.acc minCheck=0.9
      proteome.spReactomeId.spID minCheck=0.9
      proteome.spReactomeEvent.spID minCheck=0.9
-     $kgDb.kgProtAlias.alias  minCheck=0.2
-     $kgDb.kgSpAlias.spId  minCheck=0.2
-     $kgDb.kgProtMap.qName minCheck=0.9
-     $kgDb.kgXref.spID minCheck=0.9
+     $kgDb2.kgProtAlias.alias  minCheck=0.2
+     $kgDb2.kgSpAlias.spID  minCheck=0.2
+     $kgDb2.kgProtMap.qName minCheck=0.9
+     $kgDb2.kgXref.spID minCheck=0.9
+     $kgDb3.kgSpAlias.spID minCheck=0.50
+     $kgDb3.kgXref.spID minCheck=0.50
+     $kgDb3.knownGene.proteinID minCheck=0.50
      $gbd.pepMwAa.accession minCheck=0.9
      $gbd.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
@@ -454,8 +464,8 @@ identifier vgPrb
 
 identifier gencodeGeneNameJun05 dependency
 "Link together Gencode gene model and class for June 05 Data Freeze"
-    $hg.encodeGencodeGeneJun05.name
-    $hg.gencodeGeneClassJun05.name full unique
+    hg17.encodeGencodeGeneJun05.name
+    hg17.gencodeGeneClassJun05.name full unique
 
 identifier gencodeGeneNameKnownOct05 dependency
 "Link together Gencode gene model (Known) and class for Oct 05 Data Freeze"
@@ -1090,7 +1100,7 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     mm8.geneNetworkId.id minCheck=0.80
     rn3.geneNetworkId.id minCheck=0.40
 
-identifier knownGeneId typeOf=nativeMrnaAccession dependency
+identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
     $kgDb.bioCycPathway.kgID
@@ -1134,8 +1144,6 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownGeneMrna.name full
     $kgDb.knownGenePep.name full
     $kgDb.knownGeneLink.name
-#   $kgDb.knownGnfDistance.query  (changed to gnfU95Distance)
-#   $kgDb.knownGnfDistance.target  (changed to gnfU95Distance)
     $kgDb.knownIsoforms.transcript full
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
@@ -1148,13 +1156,6 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
     $kgDb.knownToAllenBrain.name
-#   $kgDb.blastKGPep00.name minCheck=0.90 (knownGene updated)
-#   $kgDb.blastKGPep01.name minCheck=0.99 (another knownGene update)
-#   $kgDb.blastKGRef01.acc minCheck=0.99
-    $kgDb.blastKGPep02.name minCheck=0.99
-    $kgDb.blastKGRef02.acc minCheck=0.99
-    $kgDb.blastKGPep04.name minCheck=0.99
-    $kgDb.blastKGRef04.acc minCheck=0.99
     $kgDb.refSeqKg.kgId minCheck=0.50
     $kgDb.rankProp.query
     $kgDb.rankProp.target
@@ -1162,20 +1163,13 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.pPsiBlast.kgId2
     $kgDb.knownToVisiGene.name
     $ccdsDb.ccdsKgMap.geneId
+    $kgDb3.knownCanonical.protein exclude=
+    $kgDb3.kgProtMap.qName 
 
 identifier knownToHprdName
 "Dependencies on knownToHprd.name"
     $kgDb.knownToHprd.name dupeOk
     $kgDb.humanHprdP2P.target
-
-
-identifier knownAlignId
-"Which (of sometimes multiple) mapping of a known gene"
-    $kgDb,!hg18,!mm8.knownGene.alignID
-
-identifier knownAlignIdWithNull
-"Which (of sometimes multiple) mapping of a known gene (allow null values)"
-    hg18,mm8.knownGene.alignID exclude=  
 
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
@@ -2072,6 +2066,12 @@ identifier dbRIPNameSVA fuzzy
 "Retroposon, dbRIP database name id to polymorphism statistics link"
     hg17.dbRIPSVA.name unique
     hg17.polyGenotype.name
+
+identifier jkgTranscriptId
+"Known genes 3 trancript identifier"
+    $hg,$mm.jkgTxCdsRepick.name
+    $hg,$mm.jkgTxInfo.name
+    $hg,$mm.jkgTxCdsEvidence.name
 
 # Dependencies not already captured in identifiers
 
