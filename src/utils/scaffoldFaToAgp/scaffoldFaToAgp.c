@@ -17,7 +17,7 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.7 2006/04/14 03:17:47 hartera Exp $";
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.8 2007/03/26 17:07:55 hiram Exp $";
 
 #define SCAFFOLD_GAP_TYPE "contig"   
 #define FRAGMENT_GAP_TYPE "frag"        /* within scaffolds (bridged) */
@@ -87,6 +87,8 @@ while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
     chromSize += scaffoldGapSize;
     scaffoldCount++;
     }
+/* do not need the final useless gap */
+chromSize -= scaffoldGapSize;
 printf("scaffold gap size is %d, total scaffolds: %d\n",
          scaffoldGapSize, scaffoldCount);
 printf("chrom size is %d\n", chromSize);
@@ -131,7 +133,9 @@ printf("writing %s\n", outPath);
 /* read in scaffolds from fasta file, and generate
  * the three files */
 lineFileSeek(lf, 0, SEEK_SET);
-while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
+boolean allDone = FALSE;
+allDone = ! faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name);
+while (! allDone)
     {
     end = start + size;
 
@@ -167,6 +171,11 @@ while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
     /* Note: may want to suppress final gap -- not needed as separator */
     start = end + 1;
     end = start + scaffoldGapSize - 1;
+
+    /*	Avoid an extra gap on the end - not needed */
+    allDone = ! faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name);
+    if (allDone)
+	break;
 
     scaffoldGap.ix = fileNumber++;
     scaffoldGap.chromStart = start;
