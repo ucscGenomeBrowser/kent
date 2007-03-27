@@ -625,6 +625,12 @@ struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 boolean hTrackCanPack(char *trackName);
 /* Return TRUE if this track can be packed. */
 
+bool hTrackIsSubtrack(char *trackName);
+/* Return TRUE if this track is a subtrack. */
+
+char *hGetParent(char *subtrackName);
+/* Return parent of subtrack. */
+
 char *hTrackOpenVis(char *trackName);
 /* Return "pack" if track is packable, otherwise "full". */
 

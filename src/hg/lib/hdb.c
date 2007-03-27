@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.320 2007/03/27 17:54:13 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.321 2007/03/27 22:44:02 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3675,6 +3675,39 @@ char *hTrackOpenVis(char *trackName)
 {
 return hTrackCanPack(trackName) ? "pack" : "full";
 }
+
+bool hTrackIsSubtrack(char *trackName)
+/* Return TRUE if this track is a subtrack. */
+/* Wrapper around trackDbIsSubtrack */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdb = hMaybeTrackInfo(conn, trackName);
+boolean ret = FALSE;
+if (tdb != NULL)
+    {
+    ret = trackDbIsSubtrack(tdb);
+    trackDbFree(&tdb);
+    }
+hFreeConn(&conn);
+return ret;
+}
+
+char *hGetParent(char *subtrackName)
+/* Given a subtrack table, find its parent */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
+char *ret = NULL;
+if (tdb != NULL)
+    {
+    ret = trackDbSetting(tdb, "subTrack");
+    trackDbFree(&tdb);
+    }
+hFreeConn(&conn);
+return ret;
+}
+
+
 
 static struct dbDb *hGetIndexedDbsMaybeClade(char *theDb)
 /* Get list of active databases, in theDb's clade if theDb is not NULL.
