@@ -227,13 +227,15 @@ struct hash *dupeHash = newHash(17);
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
-        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank,probe.id,submissionSet.privateUser "
-	"from image,imageFile,imageProbe,probe,gene,submissionSet "
-	"where image.imageFile = imageFile.id "
-	"and image.id = imageProbe.image "
-	"and imageProbe.probe = probe.id "
-	"and probe.gene = gene.id "
-	"and image.submissionSet=submissionSet.id");
+        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank"
+	",probe.id,submissionSet.privateUser,vgPrbMap.vgPrb"
+	" from image,imageFile,imageProbe,probe,gene,submissionSet,vgPrbMap"
+	" where image.imageFile = imageFile.id"
+	" and image.id = imageProbe.image"
+	" and imageProbe.probe = probe.id"
+	" and probe.gene = gene.id"
+	" and image.submissionSet=submissionSet.id"
+	" and vgPrbMap.probe = probe.id");
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -245,7 +247,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (fromProbePsl)
 	    {
 	    char vgPrb_Id[256];
-	    safef(vgPrb_Id, sizeof(vgPrb_Id), "vgPrb_%s",row[6]);
+	    safef(vgPrb_Id, sizeof(vgPrb_Id), "vgPrb_%s",row[8]);
 	    addPrioritizedImage(probeImageHash, id, priority, vgPrb_Id);
 	    }
 	else
