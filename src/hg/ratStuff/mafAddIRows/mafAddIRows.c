@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.14 2006/08/10 16:15:16 angie Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.15 2007/03/27 17:51:08 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -29,9 +29,6 @@ errAbort(
   "usage:\n"
   "   mafAddIRows mafIn twoBitFile mafOut\n"
   "options:\n"
-  "   -sizes=listOfChromSizes\n"
-  "       where listOfChromSizes is a list of chrom.sizes files named with\n"
-  "       the species name in the maf\n"
   "   -nBeds=listOfBedFiles\n"
   "       reads in list of bed files, one per species, with N locations\n"
   "   -addN\n"
@@ -43,10 +40,14 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"nBeds", OPTION_STRING},
-   {"sizes", OPTION_STRING},
    {"addN", OPTION_BOOLEAN},
    {"addDash", OPTION_BOOLEAN},
    {NULL, 0},
+};
+
+struct bedHead
+{
+    struct bed *list;
 };
 
 struct blockStatus
@@ -172,7 +173,8 @@ for(; strandHead ; strandHead = strandHead->next)
     struct linkBlock *link, *prevLink;
     struct hashEl *hel = hashLookup(bedHash, strandHead->species);
     struct hash *chromHash = (hel != NULL) ? hel->val : NULL;
-    struct binKeeper *bk = (chromHash != NULL) ? hashFindVal(chromHash, strandHead->qName): NULL;
+    struct bedHead *bedHead = (chromHash != NULL) ? 
+	hashFindVal(chromHash, strandHead->qName): NULL;
 
     slReverse(&strandHead->links);
 
@@ -182,9 +184,9 @@ for(; strandHead ; strandHead = strandHead->next)
 	{
 	int tDiff = link->cb.tStart - prevLink->cb.tEnd;
 	int qDiff = link->cb.qStart - prevLink->cb.qEnd;
-	struct binElement *hitList = NULL, *hit;
 	int nCount = 0;
 	int nStart, nEnd;
+	struct bed *bed;
 
 	if (strandHead->strand == '+')
 	    {
@@ -196,17 +198,23 @@ for(; strandHead ; strandHead = strandHead->next)
 	    nEnd = strandHead->qSize - prevLink->cb.qEnd;
 	    nStart = strandHead->qSize - link->cb.qStart;
 	    }
-	if ((nStart != nEnd) && (bk != NULL))
+
+	/* a very inefficient search for an N bed */
+	if ((nEnd - nStart > 0) && (bedHead))
 	    {
-	    hitList = binKeeperFind(bk, nStart, nEnd);
+	    for(bed = bedHead->list; bed; bed = bed->next)
+		{
+		if (bed->chromStart >= nEnd)
+		    break;
+
+		if ( bed->chromEnd > nStart)
+		    {
+		    nCount += positiveRangeIntersection(nStart, nEnd, 
+			bed->chromStart, bed->chromEnd);
+		    }
+		}
 	    }
-	if (hitList)
-	    ; //printf("one N region in gap. Fix me");
-	else if (hitList && hitList->next)
-	    printf("more than one N region in gap. Fix me");
-	for (hit = hitList; hit != NULL; hit = hit->next)
-	    nCount += positiveRangeIntersection(nStart, nEnd, hit->start, hit->end);
-	slFreeList(&hitList);
+
 
 	if ((qDiff && (100 * nCount / qDiff > 95))
 		&& (tDiff && (100 * nCount / tDiff > 10)))
@@ -238,8 +246,9 @@ void bridgeSpecies(struct mafAli *mafList, struct subSpecies *subSpecies)
 {
 struct mafAli *maf;
 int pushState, leftLen;
-struct mafComp *masterMc, *mc;
+struct mafComp *masterMc, *mc, *prevMc;
 
+prevMc = mc = NULL;
 for(; subSpecies; subSpecies = subSpecies->next)
     {
     //printf("bridging %s\n",subSpecies->name);
@@ -248,12 +257,26 @@ for(; subSpecies; subSpecies = subSpecies->next)
     for(maf = mafList; maf ;  maf = maf->next)
 	{
 	masterMc = maf->components;
-	if ((mc = mafMayFindCompSpecies(maf, subSpecies->name,'.')) == NULL)
+	prevMc = mc;
+	if ((mc = mafMayFindCompPrefix(maf, subSpecies->name,NULL)) == NULL)
 	    {
 	    continue;
 	    }
 	if (mc->leftStatus == 0) 
 	    errAbort("zero left status\n");
+#ifdef NOTNOW
+	if (pushState && (mc->leftStatus == MAF_INSERT_STATUS))
+	    {
+	    if (prevMc && 
+		!((prevMc->rightStatus == mc->leftStatus) &&
+		(prevMc->rightLen == mc->leftLen)))
+		{
+		printf("boo\n");
+		mc->leftStatus = MAF_NEW_NESTED_STATUS;
+		mc->leftLen = 0;
+		}
+	    }
+#endif
 	if (mc->leftStatus == MAF_NEW_STATUS)
 	    {
 	    if (pushState)
@@ -369,7 +392,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 				prevMaf->next = newMaf;
 			    else
 				mafList = newMaf;
-			    //masterMc = miniMasterMc; 
+			    //masterMc = miniMasterMc;
 			    }
 			else
 			    {
@@ -421,7 +444,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	mc = NULL;
 	if ((blockStatus->masterStart <= masterMc->start) && 
 	    (blockStatus->masterEnd > masterMc->start) && 
-	 ((mc = mafMayFindCompSpecies(maf, species->name,'.')) == NULL))
+	 ((mc = mafMayFindCompPrefix(maf, species->name,NULL)) == NULL))
 	    {
 	    if (blockStatus->mc != NULL)
 		{
@@ -482,80 +505,54 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
     }
 }
 
-struct hash *readSize(char *fileName)
-{
-char *row[2];
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *hash = newHash(6);
-struct hashEl *hel;
-
-while (lineFileRow(lf, row))
-    {
-    hel = hashLookup(hash, row[0]);
-    if (hel == NULL)
-	hashAdd(hash, row[0], cloneString(row[1]));
-    else
-	errAbort("already have size for %s\n",row[0]);
-    }
-lineFileClose(&lf);
-return hash;
-}
-struct hash *readBed(char *fileName, struct hash *sizeHash)
-/* Read bed and return it as a hash keyed by chromName
- * with binKeeper values. */
+struct hash *readBed(char *fileName)
+/* Read bed and return it as a hash keyed by chromName */
 {
 char *row[3];
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct binKeeper *bk;
+struct bedHead *bedHead = NULL;
 struct hash *hash = newHash(6);
-struct hashEl *hel;
+struct hashEl *hel, *lastHel = NULL;
 struct bed3 *bed;
 int size;
 
 while (lineFileRow(lf, row))
     {
     hel = hashLookup(hash, row[0]);
+    if ((lastHel) && (hel != lastHel))
+	{
+	assert(bedHead != NULL);
+	slReverse(&bedHead->list);
+	}
+
     if (hel == NULL)
        {
 	char *ptr;
 
-	if (sizeHash == NULL)
-	    errAbort("reading %s don't have size for %s\n",fileName,row[0]);
-	if ((ptr = hashFindVal(sizeHash, row[0])) == NULL)
-	    errAbort("reading %s don't have size for %s\n",fileName,row[0]);
-	size = atoi(ptr);
-	//printf("got %d for %s\n",size,row[0]);
-	bk = binKeeperNew(0, size);
+	AllocVar(bedHead);
 	if ((ptr = strchr(row[0], '.')) != NULL)
 	    ptr++;
 	else 
 	    ptr = row[0];
-	hel = hashAdd(hash, ptr, bk);
+	hel = hashAdd(hash, ptr, bedHead);
 	}
-    bk = hel->val;
+    bedHead = hel->val;
     AllocVar(bed);
     bed->chrom = hel->name;
     bed->chromStart = lineFileNeedNum(lf, row, 1);
     bed->chromEnd = lineFileNeedNum(lf, row, 2);
     if (bed->chromStart > bed->chromEnd)
         errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
-    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+    slAddHead(&bedHead->list, (struct bed *)bed);
+    lastHel = hel;
     }
+
+slReverse(&bedHead->list);
 lineFileClose(&lf);
 return hash;
 }
 
-void addSize(char *file, struct hash *fileHash)
-{
-char name[128];
-
-if (!endsWith(file, ".len"))
-    errAbort("filenames in size list must end in '.len'");
-splitPath(file, NULL, name, NULL);
-hashAdd(fileHash, name, readSize(file));
-}
-
-void addBed(char *file, struct hash *fileHash, struct hash *sizeFileHash)
+void addBed(char *file, struct hash *fileHash)
 {
 char name[128];
 struct hash *sizeHash;
@@ -564,12 +561,10 @@ if (!endsWith(file, ".bed"))
     errAbort("filenames in bed list must end in '.bed'");
 
 splitPath(file, NULL, name, NULL);
-sizeHash = hashFindVal(sizeFileHash,name);
-hashAdd(fileHash, name, readBed(file,sizeHash));
+hashAdd(fileHash, name, readBed(file));
 }
 
-void mafAddIRows(char *mafIn, char *twoBitIn,  char *mafOut, char *nBedFile,
-		    char *sizeFile)
+void mafAddIRows(char *mafIn, char *twoBitIn,  char *mafOut, char *nBedFile)
 /* mafAddIRows - Filter out maf files. */
 {
 FILE *f = mustOpen(mafOut, "w");
@@ -577,16 +572,6 @@ struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 struct mafAli *mafList, *maf;
 struct mafFile *mf = mafOpen(mafIn);
 struct hash *bedHash = newHash(6); 
-struct hash *sizeFileHash = newHash(6); 
-
-if (sizeFile != NULL)
-    {
-    struct lineFile *lf = lineFileOpen(sizeFile, TRUE);
-    char *row[1];
-    while (lineFileRow(lf, row))
-	addSize(row[0], sizeFileHash);
-    lineFileClose(&lf);
-    }
 
 if (nBedFile != NULL)
     {
@@ -594,7 +579,7 @@ if (nBedFile != NULL)
     char *row[1];
     while (lineFileRow(lf, row))
 	{
-	addBed(row[0], bedHash, sizeFileHash);
+	addBed(row[0], bedHash);
 	}
     lineFileClose(&lf);
     }
@@ -616,20 +601,15 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *nBedFile;
-char *sizeFile;
 
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 
-sizeFile = optionVal("sizes", NULL);
 nBedFile = optionVal("nBeds", NULL);
 addN = optionExists("addN");
 addDash = optionExists("addDash");
 
-if (nBedFile && (sizeFile == NULL))
-    errAbort("sizes file list must be specified if nBed file list is\n");
-
-mafAddIRows(argv[1], argv[2], argv[3], nBedFile,sizeFile);
+mafAddIRows(argv[1], argv[2], argv[3], nBedFile);
 return 0;
 }
