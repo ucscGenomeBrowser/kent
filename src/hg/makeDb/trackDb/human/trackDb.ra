@@ -201,14 +201,6 @@ priority 74.1
 visibility hide
 type altGraphX
 
-track altGraphRna
-shortLabel AltSplice mRNA
-longLabel Alternative Splicing from mRNAs ignore mouse
-group rna
-priority 74.1
-visibility hide
-type altGraphX
-
 track mgcIntrons
 shortLabel mgcIntronPicks
 longLabel Introns and Flanking Exons for RACE PCR

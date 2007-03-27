@@ -178,6 +178,14 @@ searchType genePred
 termRegex chr[0-9a-zA-Z_].*\.[0-9]+\.[0-9]
 searchPriority 50
 
+track altGraphRna
+shortLabel jk altSplice 
+longLabel Alternative Splicing from mRNAs ignore mouse
+group x
+priority 12.2
+visibility hide
+type altGraphX
+
 track chainHg18WM
 shortLabel Hg18 Chain WM
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments - Window Masker masked
