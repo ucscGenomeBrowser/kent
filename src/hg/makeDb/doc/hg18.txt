@@ -14198,4 +14198,24 @@ ldHgGene -predTab hg18 acescan acescan.hg18.gp
       update gdbPdb set proteomeDb  = "proteins070202" where genomeDb = "hg18";
       quit
 
-      
+     
+##############################################################################
+# UPDATE CGAP TABLES (DONE, 3/26/07, Fan)
+
+    cd /cluster/data/hg18/bed/ucsc.10
+    mkdir cgap
+    cd cgap
+    
+    wget --timestamping -O Hs_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Hs_GeneData.dat"
+    hgCGAP Hs_GeneData.dat
+        
+    cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
+    hgLoadSqlTab hg18 cgapAlias ~/kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab
+
+    hgLoadSqlTab hg18 cgapBiocPathway ~/kent/src/hg/lib/cgapBiocPathway.sql ./cgapBIOCARTA.tab
+
+    cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
+    hgLoadSqlTab hg18 cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+##############################################################################
+			    
+     
