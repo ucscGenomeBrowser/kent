@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.22 2007/03/26 19:37:05 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.23 2007/03/27 23:21:25 angie Exp $";
 
 static void ffShNeedle(FILE *f, DNA *needle, int needleSize,
 		       int needleNumOffset, char *colorFlags,
@@ -79,42 +79,101 @@ fprintf(f, "</TT></PRE>\n");
 htmHorizontalLine(f);
 }
 
-int ffShAliPartPart(FILE *f, struct ffAli *partAliList, struct ffAli *wholeAliList,
+int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
     int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
     boolean showJumpTable, 
     boolean showNeedle, boolean showHaystack,
     boolean showSideBySide, boolean upcMatch,
-    int cdsS, int cdsE)
-/* Display parts of alignment on html page: partAliList is more
- * restricted and is used to draw the haystack sequence, and
- * wholeAliList is a superset of partAliList and is used to draw the
- * needle sequence.  If the two list *pointers* are the same, then the
- * behavior is the same as ffShAliPart has always been, but if the two
- * lists are different, then the subset of the needle from partAliList
- * is displayed in bold.
- * Note: needle must correspond to wholeAliList.  haystack must 
- * correspond to partAliList.
- * Returns number of blocks (after merging blocks separated by 
- * blockMaxGap or less). */
+    int cdsS, int cdsE, int hayPartS, int hayPartE)
+/* Display parts of alignment on html page.  If hayPartS..hayPartE is a 
+ * smaller subrange of the alignment, highlight that part of the alignment 
+ * in both needle and haystack with underline & bold, and show only that 
+ * part of the haystack (plus padding).  Returns number of blocks (after
+ * merging blocks separated by blockMaxGap or less). */
 {
 long i;
 struct ffAli *ali;
 struct ffAli *lastAli;
-struct ffAli *leftAli = partAliList;
-int startMatchIx;
+struct ffAli *leftAli = aliList;
+struct ffAli *rightAli = aliList;
 int charsInLine;
 struct baf baf;
 int maxSize = (needleSize > haySize ? needleSize : haySize);
 char *colorFlags = needMem(maxSize);
 int anchorCount = 0;
+boolean restrictToWindow = FALSE;
+int hayOffStart = 0, hayOffEnd = haySize;
+int hayPaddedOffStart = 0, hayPaddedOffEnd = haySize;
+int hayExtremity = rcHaystack ? (hayNumOffset + haySize) : hayNumOffset;
+int nPartS=0, nPartE=0;
+
+if (aliList != NULL)
+    {
+    while (leftAli->left != NULL) leftAli = leftAli->left;
+    while (rightAli->right != NULL) rightAli = rightAli->right;
+    }
+
+/* If we are only showing part of the alignment, translate haystack window
+ * coords to needle window coords and haystack-offset window coords: */
+if (hayPartS > (hayNumOffset + (leftAli->hStart - haystack)) ||
+    (hayPartE > 0 && hayPartE < (hayNumOffset + (rightAli->hEnd - haystack))))
+    {
+    DNA *haystackPartS;
+    DNA *haystackPartE;
+    restrictToWindow = TRUE;
+    if (rcHaystack)
+	{
+	haystackPartS = haystack + (haySize - (hayPartE - hayNumOffset));
+	haystackPartE = haystack + (haySize - (hayPartS - hayNumOffset));
+	}
+    else
+	{
+	haystackPartS = haystack + hayPartS - hayNumOffset;
+	haystackPartE = haystack + hayPartE - hayNumOffset;
+	}
+    boolean foundStart = FALSE;
+    hayOffStart = haystackPartS - haystack;
+    hayOffEnd = haystackPartE - haystack;
+    for (ali = leftAli;  ali != NULL;  ali = ali->right)
+	{
+	if (haystackPartS < ali->hEnd && !foundStart)
+	    {
+	    int offset = haystackPartS - ali->hStart;
+	    if (offset < 0)
+		offset = 0;
+	    nPartS = offset + ali->nStart - needle;
+	    hayOffStart = offset + ali->hStart - haystack;
+	    foundStart = TRUE;
+	    }
+	if (haystackPartE > ali->hStart)
+	    {
+	    if (haystackPartE > ali->hEnd)
+		{
+		nPartE = ali->nEnd - needle;
+		hayOffEnd = ali->hEnd - haystack;
+		}
+	    else
+		{
+		nPartE = haystackPartE - ali->hStart + ali->nStart - needle;
+		hayOffEnd = haystackPartE - haystack;
+		}
+	    }
+	}
+    hayPaddedOffStart = max(0, (hayOffStart - 100));
+    hayPaddedOffEnd = min(haySize, (hayOffEnd + 100));
+    if (rcHaystack)
+	hayExtremity = hayNumOffset + haySize - hayPaddedOffStart;
+    else
+	hayExtremity = hayNumOffset + hayPaddedOffEnd;
+    }
 
 if (showJumpTable)
     {
     fputs("<CENTER><P><TABLE BORDER=1 WIDTH=\"97%\"><TR>", f);
     fputs("<TD WIDTH=\"23%\"><P ALIGN=CENTER><A HREF=\"#cDNA\">cDNA Sequence</A></TD>", f);
-    if (partAliList != wholeAliList)
+    if (restrictToWindow)
 	fputs("<TD WIDTH=\"23%\"><P ALIGN=CENTER><A HREF=\"#cDNAStart\">cDNA Sequence in window</A></TD>", f);
     fputs("<TD WIDTH=\"27%\"><P ALIGN=\"CENTER\"><A HREF=\"#genomic\">Genomic Sequence</A></TD>", f);
     fputs("<TD WIDTH=\"29%\"><P ALIGN=\"CENTER\"><A HREF=\"#1\">cDNA in Genomic</A></TD>", f);
@@ -137,7 +196,7 @@ else
     fputs("Light blue bases mark the boundaries of gaps in either sequence "
 	  "(often splice sites).\n", f);
     } 
-if (showNeedle && (partAliList != wholeAliList))
+if (showNeedle && restrictToWindow)
     fputs("Bases that were in the selected browser region are shown in bold "
 	  "and underlined, "
 	  "and only the alignment for these bases is displayed in the "
@@ -149,38 +208,23 @@ htmHorizontalLine(f);
 
 fprintf(f, "<H4><A NAME=cDNA></A>cDNA %s%s</H4>\n", needleName, (rcNeedle ? " (reverse complemented)" : ""));
 
+/* NOTE: if rcHaystack, hayNumOffset changes here into the end, not start! */
 if (rcHaystack) 
     hayNumOffset += haySize;
 
-if (partAliList == NULL)
-    leftAli = NULL;
-else
-    {
-    while (leftAli->left != NULL) leftAli = leftAli->left;
-    }
 if (rcNeedle)
     reverseComplement(needle, needleSize);
 
 if (showNeedle)
     {
-    if (partAliList != wholeAliList)
-	{
-	struct ffAli *rightAli;
-	for (rightAli = partAliList; rightAli->right != NULL;
-	     rightAli = rightAli->right)
-	    ;
-	ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
-		   wholeAliList, upcMatch, cdsS, cdsE,
-		   TRUE, (leftAli->nStart-needle), (rightAli->nEnd-needle));
-	}
-    else
-	ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
-		   wholeAliList, upcMatch, cdsS, cdsE, FALSE, 0, 0);
-    }    
+    ffShNeedle(f, needle, needleSize, needleNumOffset, colorFlags,
+	       aliList, upcMatch, cdsS, cdsE,
+	       restrictToWindow, nPartS, nPartE);
+    }
 
 if (showHaystack)
     {
-    struct cfm *cfm = cfmNew(10, 50, TRUE, rcHaystack, f, hayNumOffset);
+    struct cfm *cfm = cfmNew(10, 50, TRUE, rcHaystack, f, hayExtremity);
     char *h = cloneMem(haystack, haySize);
     char *accentFlags = needMem(haySize);
     zeroBytes(accentFlags, haySize);
@@ -213,17 +257,15 @@ if (showHaystack)
 		if (upcMatch)
 		    h[off+i] = toupper(h[off+i]);
 		}
-	    if (partAliList != wholeAliList)
+	    if (restrictToWindow && off+i >= hayOffStart && off+i < hayOffEnd)
 		accentFlags[off+i] = TRUE;
 	    }
 	}
-    if (leftAli != NULL)
-	startMatchIx = leftAli->hStart - haystack;
-    else
-	startMatchIx = 0;
     ali = leftAli;
     lastAli = NULL;
-    for (i=0; i<haySize; ++i)
+    while (ali && (ali->hEnd - haystack) <= hayPaddedOffStart)
+	ali = ali->right;
+    for (i = hayPaddedOffStart; i < hayPaddedOffEnd; ++i)
 	{
 	/* Put down "anchor" on first match position in haystack
 	 * so user can hop here with a click on the needle. */
@@ -259,6 +301,10 @@ if (showSideBySide)
 	int aliLen;
 	int i;
 
+	if ((ali->hEnd - haystack) <= hayOffStart ||
+	    (ali->hStart - haystack) >= hayOffEnd)
+	    continue;
+
 	/* Decide whether to put in a line break and/or blank characters */
 	if (lastAli != NULL)
 	    {
@@ -289,12 +335,20 @@ if (showSideBySide)
 	    }
 	if (doBreak)
 	    bafFlushLine(&baf);
-	bafSetAli(&baf, ali);
+	int offset = max(0, (hayOffStart - (ali->hStart - haystack)));
+	int nStart = offset + ali->nStart - needle;
+	int hStart = offset + ali->hStart - haystack;
+	bafSetPos(&baf, nStart, hStart);
 	if (doBreak || lastAli == NULL)
 	    bafStartLine(&baf);
 	aliLen = ali->nEnd - ali->nStart;
 	for (i=0; i<aliLen; ++i)
 	    {
+	    int hayOff = i + (ali->hStart - haystack);
+	    if (hayOff < hayOffStart)
+		continue;
+	    if (hayOff >= hayOffEnd)
+		break;
 	    bafOut(&baf, ali->nStart[i], ali->hStart[i]);
 	    }
 	lastAli = ali;
@@ -311,24 +365,6 @@ if (rcNeedle)
 return anchorCount;
 }
 
-int ffShAliPart(FILE *f, struct ffAli *aliList, 
-    char *needleName, DNA *needle, int needleSize, int needleNumOffset,
-    char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
-    int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
-    boolean showJumpTable, 
-    boolean showNeedle, boolean showHaystack,
-    boolean showSideBySide, boolean upcMatch,
-    int cdsS, int cdsE)
-/* Display parts of allignment on html page.  Returns number of blocks (after
- * merging blocks separated by blockMaxGap or less). */
-{
-return ffShAliPartPart(f, aliList, aliList, needleName, needle, needleSize,
-    needleNumOffset,
-    haystackName, haystack, haySize, hayNumOffset, blockMaxGap, rcNeedle,
-    rcHaystack, showJumpTable, showNeedle, showHaystack, showSideBySide,
-    upcMatch, cdsS, cdsE);
-}
-
 int ffShAli(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
@@ -338,7 +374,7 @@ int ffShAli(FILE *f, struct ffAli *aliList,
 {
 return ffShAliPart(f, aliList, needleName, needle, needleSize, needleNumOffset,
     haystackName, haystack, haySize, hayNumOffset, blockMaxGap, rcNeedle, FALSE,
-    TRUE, TRUE, TRUE, TRUE, FALSE,0,0);
+    TRUE, TRUE, TRUE, TRUE, FALSE, 0, 0, 0, 0);
 }
 
 void ffShowAli(struct ffAli *aliList, char *needleName, DNA *needle, int needleNumOffset,

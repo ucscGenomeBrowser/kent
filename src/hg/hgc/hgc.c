@@ -199,7 +199,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1252 2007/03/27 05:50:33 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1253 2007/03/27 23:21:25 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5331,7 +5331,8 @@ return blockCount;
 struct ffAli *pslToFfAliAndSequence(struct psl *psl, struct dnaSeq *qSeq,
 				    boolean *retIsRc, struct dnaSeq **retSeq,
 				    int *retTStart)
-/* Given psl, dig up target sequence and convert to ffAli. */
+/* Given psl, dig up target sequence and convert to ffAli. 
+ * Note: if strand is -, this does a pslRcBoth to psl! */
 {
 int tStart, tEnd, tRcAdjustedStart;
 struct dnaSeq *dnaSeq;
@@ -5362,60 +5363,55 @@ if (psl->strand[0] == '-')
 return pslToFfAli(psl, qSeq, dnaSeq, tRcAdjustedStart);
 }
 
-int showPartialDnaAlignment(struct psl *partPsl, struct psl *wholePsl,
+int showPartialDnaAlignment(struct psl *wholePsl,
 			    struct dnaSeq *rnaSeq, FILE *body,
-			    int cdsS, int cdsE)
-/* Show alignment for accession.  If partPsl and wholePsl are different 
- * pointers, then partPsl must be a subset of wholePsl (e.g. trimmed to 
- * browser window coords) and while the entire rnaSeq will be displayed 
- * and highlighted according to wholePsl, the partPsl subset will be in 
- * bold.  The dna is always displayed according to partPsl. */
+			    int cdsS, int cdsE, boolean restrictToWindow)
+/* Show (part of) alignment for accession.  wholePsl is the whole alignment;
+ * if restrictToWindow then display the part of the alignment in the current 
+ * browser window. */
 {
-struct dnaSeq *partDnaSeq, *wholeDnaSeq;
-int partTStart, wholeTStart;
+struct dnaSeq *dnaSeq;
+int wholeTStart;
+int partTStart = wholePsl->tStart, partTEnd = wholePsl->tEnd;
 DNA *rna;
 int rnaSize;
 boolean isRc = FALSE;
-struct ffAli *partFfAli, *wholeFfAli;
+struct ffAli *wholeFfAli;
 int blockCount;
 
 /* Get RNA sequence and convert psl to ffAli.  */
 rna = rnaSeq->dna;
 rnaSize = rnaSeq->size;
 
-partFfAli = pslToFfAliAndSequence(partPsl, rnaSeq, &isRc, &partDnaSeq,
-				  &partTStart);
-if (wholePsl == partPsl)
+/* Don't forget -- this may change wholePsl! */
+wholeFfAli = pslToFfAliAndSequence(wholePsl, rnaSeq, &isRc, &dnaSeq,
+				   &wholeTStart);
+
+if (restrictToWindow)
     {
-    wholeFfAli = partFfAli;
-    wholeDnaSeq = partDnaSeq;
-    wholeTStart = partTStart;
+    partTStart = winStart;
+    partTEnd = winEnd;
     }
-else
-    wholeFfAli = pslToFfAliAndSequence(wholePsl, rnaSeq, &isRc, &wholeDnaSeq,
-				       &wholeTStart);
 
 /* Write body heading info. */
 fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
-	partPsl->qName, partPsl->tName,
-	(isRc ? (partPsl->tSize - partPsl->tEnd)+1 : partPsl->tStart+1),
-	(isRc ? (partPsl->tSize - partPsl->tStart) : partPsl->tEnd));
+	wholePsl->qName, wholePsl->tName, partTStart+1, partTEnd);
 fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
-if (rnaSize != partPsl->qSize)
+if (rnaSize != wholePsl->qSize)
     {
     fprintf(body, "<p><b>Cannot display alignment. Size of rna %s is %d has changed since alignment was performed when it was %d.\n",
-            partPsl->qName, rnaSize, partPsl->qSize);
+            wholePsl->qName, rnaSize, wholePsl->qSize);
     return 0;
     }
 
-blockCount = ffShAliPartPart(body, partFfAli, wholeFfAli, partPsl->qName,
+blockCount = ffShAliPart(body, wholeFfAli, wholePsl->qName,
 			 rna, rnaSize, 0, 
-			 partDnaSeq->name, partDnaSeq->dna, partDnaSeq->size,
-			 partTStart, 8, FALSE, isRc,
+			 dnaSeq->name, dnaSeq->dna, dnaSeq->size,
+			 wholeTStart, 8, FALSE, isRc,
 			 FALSE, TRUE, TRUE, TRUE, TRUE,
-			 cdsS, cdsE);
+			 cdsS, cdsE, partTStart, partTEnd);
 return blockCount;
 }
 
@@ -5435,7 +5431,7 @@ trashDirFile(&bodyTn, "body", "body", ".html");
 body = mustOpen(bodyTn.forCgi, "w");
 htmStart(body, psl->qName);
 if (qType == gftRna || qType == gftDna)
-    blockCount = showPartialDnaAlignment(psl, psl, oSeq, body, cdsS, cdsE);
+    blockCount = showPartialDnaAlignment(psl, oSeq, body, cdsS, cdsE, FALSE);
 else 
     blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 htmEnd(body);
@@ -5484,7 +5480,7 @@ trashDirFile(&bodyTn, "body", "body", ".html");
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
 htmStart(body, partPsl->qName);
-blockCount = showPartialDnaAlignment(partPsl, wholePsl, oSeq, body, cdsS, cdsE);
+blockCount = showPartialDnaAlignment(wholePsl, oSeq, body, cdsS, cdsE, TRUE);
 htmEnd(body);
 fclose(body);
 chmod(bodyTn.forCgi, 0666);
