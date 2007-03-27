@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.23 2007/03/21 23:51:22 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.24 2007/03/27 00:07:20 hiram Exp $"
 #
 
 ##########################################################################
@@ -3243,3 +3243,66 @@ close(FH);
     ./mkCtgPos2.pl > ctgPos2.tab
     hgLoadSqlTab oryLat1 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
+#########################################################################
+##  Creating quality tracks for the chromosomes (DONE - 2007-03-23 - Hiram)
+##  In email conversation with Budrul Ahsan ahsan@cb.k.u-tokyo.ac.jp
+##  obtain quality scores from:  (existed only temporarily here)
+    ssh kkstore04
+    mkdir /cluster/data/oryLat1/bed/qual
+    cd /cluster/data/oryLat1/bed/qual
+    wget --timestamping 'http://dev.utgenome.org/~utgb/medaka/medakaqual.tar.gz'
+    ##  These quality scores have scaffolds and ultracontigs mixed
+    ##	together.  Our chrUn only has scaffolds.  Separate out just the
+    ##	chrom scores from the scaffolds and ultracontigs
+    cat << '_EOF_' > onlyChroms.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,"<medakaver1.0.UCSC.fasta.qual") or
+        die "can not read medakaver1.0.UCSC.fasta.qual";
+open (OF,">chroms.fa.qual") or
+        die "can not write to chroms.fa.qual";
+
+my $nextOf = 1;
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        if ($line =~ m/^>scaf|^>ult/) {
+            if ($nextOf) {
+                close (OF);
+                open (OF,">chrUn.fa.qual") or
+                    die "can not write to chrUn.fa.qual";
+                $nextOf = 0;
+            }
+        } else {
+            $line =~ s/^>/>chr/;
+        }
+    }
+    printf OF "%s", $line;
+}
+
+close (OF);
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./onlyChroms.pl
+    ./onlyChroms.pl
+    # some of the numbers in this are incorrect, too large.  Truncate them
+    #	to 90 as per advice from Budrul in email
+    time nice -n +19 sed -e \
+"s/ 1[0-9][0-9]/ 90/g; s/ 2[0-9][0-9]/ 90/g; s/^1[0-9][0-9]/90/; s/^2[0-9][0-9]/90/;" \
+	chroms.fa.qual | qaToQac stdin fixed.chroms.qac
+    #	real    2m19.194s
+
+    time nice -n +19 qacToWig -fixed fixed.chroms.qac stdout \
+	| wigEncode stdin qual.wig qual.wib
+    #	Converted stdin, upper limit 99.00, lower limit 0.00
+    #	real    4m19.515s
+
+    ssh hgwdev
+    cd /cluster/data/oryLat1/bed/qual
+    time nice -n +19 hgLoadWiggle -tmpDir=/scratch/tmp \
+	-pathPrefix=/gbdb/oryLat1/wib oryLat1 quality qual.wig
+    #	real    0m22.997s
+    ln -s /cluster/data/oryLat1/bed/qual/qual.wib /gbdb/oryLat1/wib
