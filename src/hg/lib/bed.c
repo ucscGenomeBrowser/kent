@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.51 2007/03/03 20:34:17 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.52 2007/03/27 03:58:07 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -639,6 +639,8 @@ int bedTotalBlockSize(struct bed *bed)
 {
 int total = 0;
 int i;
+if (bed->blockCount == 0)
+    return bed->chromEnd - bed->chromStart;
 for (i=0; i<bed->blockCount; ++i)
     total += bed->blockSizes[i];
 return total;
@@ -1390,6 +1392,66 @@ int overlap = bedRangeTreeOverlap(b, rangeTree);
 /* Clean up and return result. */
 rangeTreeFree(&rangeTree);
 return overlap;
+}
+
+boolean bedExactMatch(struct bed *oldBed, struct bed *newBed)
+/* Return TRUE if it's an exact match. */
+{
+if (oldBed->blockCount != newBed->blockCount)
+    return FALSE;
+int oldSize = bedTotalBlockSize(oldBed);
+int newSize = bedTotalBlockSize(newBed);
+int overlap = bedSameStrandOverlap(oldBed, newBed);
+return  (oldSize == newSize && oldSize == overlap);
+}
+
+boolean bedCompatibleExtension(struct bed *oldBed, struct bed *newBed)
+/* Return TRUE if newBed is a compatible extension of oldBed, meaning
+ * all internal exons and all introns of old bed are contained, in the 
+ * same order in the new bed. */
+{
+/* New bed must have at least as many exons as old bed... */
+if (oldBed->blockCount > newBed->blockCount)
+    return 0;
+
+/* Look for an exact match */
+int oldSize = bedTotalBlockSize(oldBed);
+int newSize = bedTotalBlockSize(newBed);
+int overlap = bedSameStrandOverlap(oldBed, newBed);
+if (oldSize == newSize && oldSize == overlap)
+    return TRUE;
+
+/* Next handle case where old bed is a single exon.  For this
+ * just require that old bed is a nearly proper superset of new bed. */
+if (oldBed->blockCount == 0)
+    return overlap >= 0.95*oldSize;
+
+/* Otherwise we look for first intron start in old bed, and then
+ * flip through new bed until we find an intron that starts at the
+ * same place. */
+int oldFirstIntronStart = oldBed->chromStart + oldBed->chromStarts[0] + oldBed->blockSizes[0];
+int newLastBlock = newBed->blockCount-1, oldLastBlock = oldBed->blockCount-1;
+int newIx, oldIx;
+for (newIx=0; newIx < newLastBlock; ++newIx)
+    {
+    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
+    if (iStartNew == oldFirstIntronStart)
+        break;
+    }
+if (newIx == newLastBlock)
+    return FALSE;
+
+/* Now we go through all introns in old bed, and make sure they match. */
+for (oldIx=0; oldIx < oldLastBlock; ++oldIx, ++newIx)
+    {
+    int iStartOld = oldBed->chromStart + oldBed->chromStarts[oldIx] + oldBed->blockSizes[oldIx];
+    int iEndOld = oldBed->chromStart + oldBed->chromStarts[oldIx+1];
+    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
+    int iEndNew = newBed->chromStart + newBed->chromStarts[newIx+1];
+    if (iStartOld != iStartNew || iEndOld != iEndNew)
+        return FALSE;
+    }
+return TRUE;
 }
 
 struct bed3 *bed3New(char *chrom, int start, int end)

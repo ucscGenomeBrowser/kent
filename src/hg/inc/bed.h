@@ -71,6 +71,7 @@ struct bed4
     char *name;	/* Name of item */
     };
 
+
 void bedStaticLoad(char **row, struct bed *ret);
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -330,6 +331,14 @@ long long bedTotalSize(struct bed *bedList);
 
 int bedSameStrandOverlap(struct bed *a, struct bed *b);
 /* Return amount of block-level overlap on same strand between a and b */
+
+boolean bedExactMatch(struct bed *oldBed, struct bed *newBed);
+/* Return TRUE if it's an exact match. */
+
+boolean bedCompatibleExtension(struct bed *oldBed, struct bed *newBed);
+/* Return TRUE if newBed is a compatible extension of oldBed, meaning
+ * all internal exons and all introns of old bed are contained, in the 
+ * same order in the new bed. */
 
 struct rbTree *bedToRangeTree(struct bed *bed);
 /* Convert bed into a range tree. */

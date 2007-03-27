@@ -9,7 +9,7 @@
 #include "sqlNum.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneAccession.c,v 1.11 2007/03/17 05:37:28 kent Exp $";
+static char const rcsid[] = "$Id: txGeneAccession.c,v 1.12 2007/03/27 03:58:06 kent Exp $";
 
 void idToAcc(int id, char acc[16])
 /* Convert ID to accession. */
@@ -71,66 +71,6 @@ return number;
 }
 
 
-boolean exactMatch(struct bed *oldBed, struct bed *newBed)
-/* Return TRUE if it's an exact match. */
-{
-if (oldBed->blockCount != newBed->blockCount)
-    return FALSE;
-int oldSize = bedTotalBlockSize(oldBed);
-int newSize = bedTotalBlockSize(newBed);
-int overlap = bedSameStrandOverlap(oldBed, newBed);
-return  (oldSize == newSize && oldSize == overlap);
-}
-
-boolean compatibleExtension(struct bed *oldBed, struct bed *newBed)
-/* Return TRUE if newBed is a compatible extension of oldBed, meaning
- * all internal exons and all introns of old bed are contained, in the 
- * same order in the new bed. */
-{
-/* New bed must have at least as many exons as old bed... */
-if (oldBed->blockCount > newBed->blockCount)
-    return 0;
-
-/* Look for an exact match */
-int oldSize = bedTotalBlockSize(oldBed);
-int newSize = bedTotalBlockSize(newBed);
-int overlap = bedSameStrandOverlap(oldBed, newBed);
-if (oldSize == newSize && oldSize == overlap)
-    return TRUE;
-
-/* Next handle case where old bed is a single exon.  For this
- * just require that old bed is a nearly proper superset of new bed. */
-if (oldBed->blockCount == 0)
-    return overlap >= 0.95*oldSize;
-
-/* Otherwise we look for first intron start in old bed, and then
- * flip through new bed until we find an intron that starts at the
- * same place. */
-int oldFirstIntronStart = oldBed->chromStart + oldBed->chromStarts[0] + oldBed->blockSizes[0];
-int newLastBlock = newBed->blockCount-1, oldLastBlock = oldBed->blockCount-1;
-int newIx, oldIx;
-for (newIx=0; newIx < newLastBlock; ++newIx)
-    {
-    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
-    if (iStartNew == oldFirstIntronStart)
-        break;
-    }
-if (newIx == newLastBlock)
-    return FALSE;
-
-/* Now we go through all introns in old bed, and make sure they match. */
-for (oldIx=0; oldIx < oldLastBlock; ++oldIx, ++newIx)
-    {
-    int iStartOld = oldBed->chromStart + oldBed->chromStarts[oldIx] + oldBed->blockSizes[oldIx];
-    int iEndOld = oldBed->chromStart + oldBed->chromStarts[oldIx+1];
-    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
-    int iEndNew = newBed->chromStart + newBed->chromStarts[newIx+1];
-    if (iStartOld != iStartNew || iEndOld != iEndNew)
-        return FALSE;
-    }
-return TRUE;
-}
-
 struct bed *findExact(struct bed *newBed, struct hash *oldHash, struct hash *usedHash)
 /* Try and find an old bed identical with new bed. */
 {
@@ -146,7 +86,7 @@ for (bin = binList; bin != NULL; bin = bin->next)
         {
 	if (!hashLookup(usedHash, oldBed->name))
 	    {
-	    if (exactMatch(oldBed, newBed))
+	    if (bedExactMatch(oldBed, newBed))
 		{
 		matchingBed = oldBed;
 		break;
@@ -173,7 +113,7 @@ for (bin = binList; bin != NULL; bin = bin->next)
 	{
 	if (!hashLookup(usedHash, oldBed->name))
 	    {
-	    if (compatibleExtension(oldBed, newBed))
+	    if (bedCompatibleExtension(oldBed, newBed))
 		{
 		matchingBed = oldBed;
 		break;
@@ -278,7 +218,7 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	else
 	    {
 	    char *acc = cloneString(oldBed->name);
-	    char *ver = strchr(oldBed->name, '.');
+	    char *ver = strchr(acc, '.');
 	    if (ver == NULL)
 	        errAbort("No version found in %s", oldBed->name);
 	    *ver++ = 0;
