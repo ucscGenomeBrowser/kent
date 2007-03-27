@@ -74,6 +74,68 @@ dbDbSpeciesDir worm
     nice -n +19 makeGenomeDb.pl ce4.config.ra > makeGenomeDb.out 2>&1
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2007-01-18 - Hiram)
+    # Use -repMatch=40 (based on size -- for human we use 1024, and 
+    # C. elegans size is ~3.4% of human judging by gapless ce4 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/ce4
+    blat ce4.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=36
+    #	Wrote 43729 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/ce4
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-03-26,27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add ce4 just before ce3
+
+# ce4 (C. elegans)
+ce4.serverGenome = /cluster/data/ce4/ce4.2bit
+ce4.clusterGenome = /san/sanvol1/scratch/worms/ce4/ce4.2bit
+ce4.ooc = /san/sanvol1/scratch/worms/ce4/11.ooc
+ce4.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ce4.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ce4.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ce4.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ce4.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+ce4.maxIntron = 100000
+ce4.lift = no
+ce4.genbank.mrna.xeno.load = no
+ce4.downloadDir = ce4
+
+
+    cvs ci -m "Added ce4." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial ce4 &
+    #	logFile: var/build/logs/2007.03.27-15:39:56.ce4.initalign.log
+    #	real    61m33.930s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce4
+    #	logFile: var/dbload/hgwdev/logs/2007.03.27-16:43:00.dbload.log
+    #	real    14m41.601s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add ce4 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added ce4 - C. elegans WS170" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
 ### The sequences below were an experiment beginning early 2006
 
 # FETCH acedb database for construction of Sanger Links table
