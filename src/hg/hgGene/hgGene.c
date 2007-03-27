@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.86 2007/03/25 21:55:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.87 2007/03/27 07:05:39 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -299,7 +299,7 @@ if (ccdsKgs != NULL)
                 cartSidUrlString(cart), ccdsKg->ccdsId, ccdsKg->chrom, ccdsKg->chromStart, ccdsKg->chromStart,
                 ccdsKg->chromEnd, database, ccdsKg->ccdsId);
         }
-    hPrintf("<BR>");   
+    hPrintf(" ");   
     }
 }
 
@@ -371,8 +371,8 @@ if (sameWord(genome, "Zebrafish"))
         gotRefseqAli = idInRefseq(refseqAcc, conn);
         }
     }
-printCcds(id, conn);
     
+hPrintf("<B>UCSC ID:</B> %s ", id);
 if (gotRefseqAli)
     {
     hPrintf("<B>Representative Refseq: </B> <A HREF=\"");
@@ -455,6 +455,7 @@ if (protAcc != NULL)
 	hPrintf(")\n");
 	}
     }
+printCcds(id, conn);
 
 if (summaryTables != NULL)
     {
