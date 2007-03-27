@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.12 2007/03/23 23:37:24 galt Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.13 2007/03/27 00:09:18 galt Exp $";
 
 char *db = "visiGene";
 
@@ -124,6 +124,7 @@ for (i=0; i<knownDbCount; i += 1)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	char *kgID = cloneString(row[0]);
+	touppers(kgID);
 	touppers(row[1]);
 	hashAdd(nameToKnown, row[1], kgID);
 	hashAdd(uniProtToKnown, row[2], kgID);
