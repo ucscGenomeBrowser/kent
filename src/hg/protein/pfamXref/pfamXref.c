@@ -38,6 +38,7 @@ char *pfamID, *pfamAC;
 char *swissAC, *swissDisplayID;
 char emptyString[10] = {""};
 int done, gsDone, gsFound, idFound;
+char *chp2 = NULL;
 
 if (argc != 5) usage();
    
@@ -112,7 +113,9 @@ while (!done)
 		{
 		gsFound = 1;
 	    	chp = chp + 4;
+		chp2 = strstr(chp, ".");
     	    	*(chp + strlen(chp) - 1) = '\0'; // remove LF
+		if (chp2 != NULL) *chp2='\0';
     		swissAC = chp;
 
 		// get display ID from AC		
