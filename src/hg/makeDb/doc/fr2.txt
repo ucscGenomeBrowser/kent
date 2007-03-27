@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.15 2007/03/21 17:32:20 hiram Exp $"
+#       "$Id: fr2.txt,v 1.16 2007/03/27 20:31:30 hiram Exp $"
 #
 
 ##########################################################################
@@ -971,20 +971,22 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
 
 ############################################################################
 # ANNOTATE MULTIZ5WAY MAF AND LOAD TABLES (DONE - 2007-02-03 - Hiram)
+## re-done 2007-03-27 with corrected nBeds and sizes files - Hiram
     ssh kolossus
     mkdir /cluster/data/fr2/bed/multiz5way/anno
     cd /cluster/data/fr2/bed/multiz5way/anno
     mkdir maf run
     cd run
     rm -f sizes nBeds
-    ln -s  /cluster/data/fr2/chrom.sizes fr2.len
     twoBitInfo -nBed /cluster/data/fr2/fr2.{2bit,N.bed}
-    ln -s  /cluster/data/fr2/fr2.N.bed fr2.bed
+
     for DB in `cat /cluster/data/fr2/bed/multiz5way/species.lst`
     do
-      echo fr2.bed  >> nBeds
-      echo fr2.len  >> sizes
-      echo $DB
+        ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+        ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+	echo ${DB}.bed  >> nBeds
+	echo ${DB}.len  >> sizes
+	echo $DB
     done
 
     echo '#!/bin/csh -ef' > jobs.csh
@@ -1001,7 +1003,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
     time nice -n +19 ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
     tail -f jobs.log
-    #	almost 2 hours
+    #	real    165m43.716s
     # Load anno/maf
     ssh hgwdev
     cd /cluster/data/fr2/bed/multiz5way/anno/maf
@@ -1010,8 +1012,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
       /gbdb/fr2/multiz5way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/fr2/multiz5way/anno/maf fr2 multiz5way
-    #	Loaded 1469781 mafs in 2 files from /gbdb/fr2/multiz5way/anno/maf
-    #	real    0m41.881s
+    #	Loaded 1469786 mafs in 2 files from /gbdb/fr2/multiz5way/anno/maf
+    #	real    0m41.123s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -1021,15 +1023,16 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
     	nice -n +19 hgLoadMafSummary fr2 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz5waySummary stdin
     #	Created 146928 summary blocks from 3159326 components
-    #	and 1469781 mafs from stdin
-    #	real    0m56.026s
+    #	and 1469786 mafs from stdin
+
+    #	real    0m58.171s
 
     ssh hgwdev
     cd /cluster/data/fr2/bed/multiz5way/anno/maf
     sed -e 's/mafSummary/multiz5waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
       > /tmp/multiz5waySummary.sql
     time nice -n +19 hgLoadSqlTab fr2 multiz5waySummary \
-	/tmp/multiz5waySummary.sql multiz5waySummary.tab
+	~/kent/src/hg/lib/mafSummary.sql multiz5waySummary.tab
     #	real    0m1.941
 
 #######################################################################
@@ -1119,6 +1122,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/fr2/bed/multiz5way/maf/$(root
 
     ssh kkstore05
     cd /cluster/data/fr2/bed/multiz5way
+    ## re-done 2007-03-27 after correction to annotation step - Hiram
     time for M in anno/maf/chr*.maf
     do
 	B=`basename $M`
