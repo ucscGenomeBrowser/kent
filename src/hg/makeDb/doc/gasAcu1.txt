@@ -1080,11 +1080,14 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz7way/maf/$(
     ln -s  /cluster/data/gasAcu1/chrom.sizes gasAcu1.len
     twoBitInfo -nBed /cluster/data/gasAcu1/gasAcu1.sdTrf.{2bit,N.bed}
     ln -s  /cluster/data/gasAcu1/gasAcu1.sdTrf.N.bed gasAcu1.bed
-    for DB in `cat /cluster/data/gasAcu1/bed/multiz7way/species.lst`
+
+    for DB in `grep -v gasAcu1 /cluster/data/gasAcu1/bed/multiz7way/species.lst`
     do
-      echo gasAcu1.bed  >> nBeds
-      echo gasAcu1.len  >> sizes
-      echo $DB
+        ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+        ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+	echo ${DB}.bed  >> nBeds
+	echo ${DB}.len  >> sizes
+	echo $DB
     done
 
     echo '#!/bin/csh -ef' > jobs.csh
@@ -1433,6 +1436,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
 # ANNOTATE MULTIZ8WAY MAF AND LOAD TABLES (DONE - 2007-01-05 - Hiram)
 ##  re-done with new chrUn.maf 2007-01-13 - Hiram
 ##  re-done with fr2 instead of fr1 - 2007-02-02 - Hiram
+##  re-done with correct nBeds and sizes files, 2007-03-27 - Hiram
     ssh kolossus
     mkdir /cluster/data/gasAcu1/bed/multiz8way/anno
     cd /cluster/data/gasAcu1/bed/multiz8way/anno
@@ -1443,11 +1447,14 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     #	This were done before during the 7-way
     # twoBitInfo -nBed /cluster/data/gasAcu1/gasAcu1.sdTrf.{2bit,N.bed}
     ln -s  /cluster/data/gasAcu1/gasAcu1.sdTrf.N.bed gasAcu1.bed
-    for DB in `cat /cluster/data/gasAcu1/bed/multiz8way/species.lst`
+    for DB in \
+`cat /cluster/data/gasAcu1/bed/multiz8way/species.lst | sed -e "s/ gasAcu1//"`
     do
-      echo gasAcu1.bed  >> nBeds
-      echo gasAcu1.len  >> sizes
-      echo $DB
+        ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+        ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+	echo ${DB}.bed  >> nBeds
+	echo ${DB}.len  >> sizes
+	echo $DB
     done
 
     echo '#!/bin/csh -ef' > jobs.csh
@@ -1464,7 +1471,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     time nice -n +19 ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
     tail -f jobs.log
-    #	real    18m49.451s
+    #	this was run on titan (can not do this for larger genomes on titan)
+    #	real    48m40.965s
     # Load anno/maf
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
@@ -1473,8 +1481,8 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
       /gbdb/gasAcu1/multiz8way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/gasAcu1/multiz8way/anno/maf gasAcu1 multiz8way
-    #	Loaded 2395565 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
-    #	real    1m4.490s
+    #	Loaded 2395584 mafs in 23 files from /gbdb/gasAcu1/multiz8way/anno/maf
+    #	real    2m16.918s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -1484,15 +1492,16 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     	nice -n +19 hgLoadMafSummary gasAcu1 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz8waySummary stdin
     #	Created 322344 summary blocks from 6111763 components
-    #	and 2395565 mafs from stdin
-    #	real    1m36.569s
+    #	and 2395584 mafs from stdin
+    #	real    23m49.073s
+    #	-rw-rw-r--  1  15063781 Mar 27 12:02 multiz8waySummary.tab
 
     ssh hgwdev
     cd /cluster/data/gasAcu1/bed/multiz8way/anno/maf
     sed -e 's/mafSummary/multiz8waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
       > /tmp/multiz8waySummary.sql
     time nice -n +19 hgLoadSqlTab gasAcu1 multiz8waySummary \
-	/tmp/multiz8waySummary.sql multiz8waySummary.tab
+	~/kent/src/hg/lib/mafSummary.sql multiz8waySummary.tab
     #	real    0m4.525
 
 #########################################################################
@@ -1526,6 +1535,7 @@ autoMultiz $(root1) {check out line+ /cluster/data/gasAcu1/bed/multiz8way/maf/$(
     tail -f mafFrags.log
     #	real    3m12.000s
 
+    ## re-done after correction to anno/maf files 2007-03-27 - Hiram
     ssh kkstore05
     cd /cluster/data/gasAcu1/bed/multiz8way
     time for M in anno/maf/chr*.maf
