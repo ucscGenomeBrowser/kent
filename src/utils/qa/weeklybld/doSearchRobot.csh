@@ -16,7 +16,7 @@ $HOME/bin/$MACHTYPE/testSearch $BUILDDIR/v{$BRANCHNN}_branch/kent/src/hg/qa/sear
 set res = `cat ./logs/search-v${BRANCHNN}.log | egrep "Error" `
 
 set wc = `echo "$res" | wc -w` 
-if ( "$wc" == "0" ) then
+if ( "$wc" != "0" ) then
  echo "errs found:"
  echo "$res"
  echo "$res" | mail -s "'Errors in searchRobot on $HOST'" $USER hartera galt heather kuhn kent ann
