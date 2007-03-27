@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.192 2006/10/27 15:04:40 giardine Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.193 2007/03/27 22:45:15 heather Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2387,6 +2387,7 @@ char range[HGPOSRANGESIZE];
 char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+char *parent = NULL;
 
 if (useWeb)
     webStart(cart, "Select Position");
@@ -2394,6 +2395,8 @@ if (useWeb)
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
     char *vis = hTrackOpenVis(table->name);
+    boolean isSubtrack = hTrackIsSubtrack(table->name);
+    if (isSubtrack) parent = hGetParent(table->name);
     if (table->posList != NULL)
 	{
 	boolean excludeTable = FALSE;
@@ -2414,8 +2417,12 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 			hgAppName, hgAppCombiner, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&%s=%s&hgFind.matches=%s,\">",
-			extraCgi, table->name, vis, encMatches);
+		fprintf(f, "%s&", extraCgi);
+		if (isSubtrack && parent)
+		    fprintf(f, "%s=%s&", parent, vis);
+		else
+		    fprintf(f, "%s=%s&", table->name, vis);
+		fprintf(f, "hgFind.matches=%s,\">", encMatches);
 		htmTextOut(f, pos->name);
 		fprintf(f, " at %s</A>", range);
 		desc = pos->description;
