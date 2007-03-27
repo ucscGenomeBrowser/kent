@@ -1,5 +1,5 @@
 table knownGene
-"Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and TrEMBL-NEW and their corresponding mRNAs from GenBank"
+"Genes based on RefSeq, GenBank, and UniProt."
 (
 string  name;               "Name of gene"
 string  chrom;              "Reference sequence chromosome or scaffold"
