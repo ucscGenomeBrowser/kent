@@ -521,6 +521,7 @@ hgMapToGene "-type=bed 12" $db -tempDb=$tempDb affyUclaNorm knownGene knownToU13
 hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
 hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
 knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
+vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text mm7 mm8 hg17 hg18
 
 # Create a small expression distance table, this is relatively quick - 10 min.
 time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
