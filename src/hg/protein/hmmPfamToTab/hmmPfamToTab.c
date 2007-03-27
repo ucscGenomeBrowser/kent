@@ -5,9 +5,11 @@
 #include "options.h"
 #include "hmmPfamParse.h"
 
-static char const rcsid[] = "$Id: hmmPfamToTab.c,v 1.2 2007/03/25 18:44:47 kent Exp $";
+static char const rcsid[] = "$Id: hmmPfamToTab.c,v 1.3 2007/03/27 02:01:56 kent Exp $";
 
 double eVal = 0.0001;
+boolean eValCol = FALSE;
+boolean scoreCol = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,12 +20,15 @@ errAbort(
   "   hmmPfamToTab inFile out.tab\n"
   "options:\n"
   "   -eVal=0.N - Set eVal threshold. Default %g\n"
+  "   -eValCol  - Include eVal in output\n"
   , eVal
   );
 }
 
 static struct optionSpec options[] = {
    {"eVal", OPTION_DOUBLE},
+   {"eValCol", OPTION_BOOLEAN},
+   {"scoreCol", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -42,7 +47,14 @@ while ((hr = hpfNext(lf)) != NULL)
 	 for (dom = mod->domainList; dom != NULL; dom = dom->next)
 	     {
 	     if (dom->eVal <= eVal)
-		 fprintf(f, "%s\t%d\t%d\t%s\n", hr->name, dom->qStart, dom->qEnd, mod->name);
+		 {
+		 fprintf(f, "%s\t%d\t%d\t%s", hr->name, dom->qStart, dom->qEnd, mod->name);
+		 if (eValCol)
+		     fprintf(f, "\t%g", dom->eVal);
+		 if (scoreCol)
+		     fprintf(f, "\t%g", dom->score);
+		 fprintf(f, "\n");
+		 }
 	     }
 	 }
      hpfResultFree(&hr);
@@ -57,6 +69,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 eVal = optionDouble("eVal", eVal);
+eValCol = optionExists("eValCol");
+scoreCol = optionExists("scoreCol");
 hmmPfamToTab(argv[1], argv[2]);
 return 0;
 }
