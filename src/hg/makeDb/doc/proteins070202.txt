@@ -88,7 +88,7 @@ pfamXref proteins070202 Pfam-A.full pfamADesc.tab pfamAXref.tab >pfamXref.log
 gzip Pfam-A.full &
 
 hgLoadSqlTab proteins070202 pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamADesc.tab
-hgLoadSqlTab proteins070202 pfamXref ~/kent/src/hg/lib/pfamXref.sql pfamAXref.tab
+hgLoadSqlTab proteins070202 pfamXref ~/kent/src/hg/lib/proteome_pfamXref.sql pfamAXref.tab
 
 #	Build the pdbSP table, new process using extDbRef data from spXXXXXX
 
