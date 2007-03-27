@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.319 2007/03/25 21:35:00 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.320 2007/03/27 17:54:13 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -215,7 +215,7 @@ return cloneString(hdbTrackDb);
 }
 
 struct slName *hTrackDbList()
-/* Return list of trackDb tables from the config file.  Free list wen done. */
+/* Return list of trackDb tables from the config file.  Free list when done. */
 {
 char *name = hTrackDbName();
 struct slName *list = slNameListFromComma(name);
