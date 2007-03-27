@@ -197,8 +197,9 @@
 #include "geneCheckWidget.h"
 #include "geneCheck.h"
 #include "geneCheckDetails.h"
+#include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1251 2007/03/26 19:51:36 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1252 2007/03/27 05:50:33 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8528,6 +8529,38 @@ genericHeader(tdb, geneName);
 showHomologies(geneName, "softberryHom");
 if (sameWord(database, "sc1"))showSAM_T02(geneName);
 geneShowCommon(geneName, tdb, "softberryPep");
+printTrackHtml(tdb);
+}
+
+void doOldKnownGene(struct trackDb *tdb, char *geneName)
+/* Put up page of info on old known gene. */
+{
+genericHeader(tdb, geneName);
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+if (sqlTableExists(conn, "kg1ToKg2"))
+    {
+    char query[512];
+    safef(query, sizeof(query), 
+        "select * from kg1ToKg2 where oldId = '%s' and oldChrom='%s' and oldStart=%d",
+    	geneName, seqName, start);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	struct kg1ToKg2 *x = kg1ToKg2Load(row);
+	printf("<B>Old ID:</B> %s<BR>\n", x->oldId);
+	printf("<B>New ID:</B> %s<BR>\n", naForEmpty(x->newId));
+	printf("<B>Old/New Mapping:</B> %s<BR>\n", x->status);
+	if (x->note[0] != 0)
+	    printf("<B>Notes:</B> %s<BR>\n", x->note);
+	printf("<BR>\n");
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+
+geneShowCommon(geneName, tdb, NULL);
 printTrackHtml(tdb);
 }
 
@@ -18839,6 +18872,10 @@ else if (sameString("igtc", track))
 else if (startsWith("dbRIP", track))
     {
     dbRIP(tdb, item, NULL);
+    }
+else if (sameString("knownGene_1", track))
+    {
+    doOldKnownGene(tdb, item);
     }
 /* Lowe Lab Stuff */
 
