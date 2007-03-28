@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.88 2007/03/27 18:36:32 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.89 2007/03/28 23:48:52 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -309,7 +309,7 @@ char *getRefSeqAcc(char *id, char *table, char *idCol, struct sqlConnection *con
 char query[256];
 struct sqlResult *sr = NULL;
 char **row;
-char *refseqAcc = NULL;
+char *refSeqAcc = NULL;
 
 if (sqlTablesExist(conn, table))
     {
@@ -318,11 +318,11 @@ if (sqlTablesExist(conn, table))
     if (sr != NULL)
         {
         row = sqlNextRow(sr);
-        refseqAcc = cloneString(row[0]);
+        refSeqAcc = cloneString(row[0]);
         }
     }
 sqlFreeResult(&sr);
-return refseqAcc;
+return refSeqAcc;
 }
 
 void printDescription(char *id, struct sqlConnection *conn)
@@ -332,10 +332,8 @@ char *description = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
-char *refseqAcc = NULL;
-boolean gotRefseq = FALSE;
-boolean gotRnaAli = idInAllMrna(id, conn);
-boolean gotRefseqAli = idInRefseq(id, conn);
+char *refSeqAcc = "";
+char *mrnaAcc = "";
 char *oldDisplayId;
 char condStr[255];
 char *kgProteinID;
@@ -364,39 +362,33 @@ if (sameWord(genome, "Zebrafish"))
     /* get Gene Symbol and RefSeq accession from Zebrafish-specific */
     /* cross-reference table */
     printGeneSymbol(id, xrefTable, geneIdCol, conn);
-    refseqAcc = getRefSeqAcc(id, xrefTable, geneIdCol, conn);
-    if (refseqAcc != NULL)
-        {
-        gotRefseq = TRUE;
-        gotRefseqAli = idInRefseq(refseqAcc, conn);
-        }
-    }
-    
-hPrintf("<B>UCSC ID:</B> %s ", id);
-if (gotRefseqAli)
-    {
-    hPrintf("<B>Representative Refseq: </B> <A HREF=\"");
-    if (gotRefseq)
-        {
-        printOurRefseqUrl(stdout, refseqAcc);
-        hPrintf("\">%s</A>\n", refseqAcc);
-        }
-    else
-        {
-        printOurRefseqUrl(stdout, id);
-        hPrintf("\">%s</A>\n", id);
-        }
-    hPrintf("&nbsp&nbsp&nbsp");
+    refSeqAcc = getRefSeqAcc(id, xrefTable, geneIdCol, conn);
+    hPrintf("<B>ENSEMBL ID:</B> %s", id);
     }
 else
     {
-    if (gotRnaAli)
-    	{
-    	hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
-    	printOurMrnaUrl(stdout, id);
-    	hPrintf("\">%s</A>\n", id);
-    	hPrintf("&nbsp&nbsp&nbsp");
-    	}
+    char query[256];
+    safef(query, sizeof(query), "select refseq from kgXref where kgID='%s'", id);
+    refSeqAcc = sqlQuickString(conn, query);
+    safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
+    mrnaAcc = sqlQuickString(conn, query);
+    hPrintf("<B>UCSC ID:</B> %s", id);
+    }
+hPrintf("&nbsp&nbsp&nbsp");
+    
+if (refSeqAcc[0] != 0)
+    {
+    hPrintf("<B>Representative Refseq: </B> <A HREF=\"");
+    printOurRefseqUrl(stdout, refSeqAcc);
+    hPrintf("\">%s</A>\n", refSeqAcc);
+    hPrintf("&nbsp&nbsp&nbsp");
+    }
+else if (mrnaAcc[0] != 0)
+    {
+    hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
+    printOurMrnaUrl(stdout, mrnaAcc);
+    hPrintf("\">%s</A>\n", mrnaAcc);
+    hPrintf("&nbsp&nbsp&nbsp");
     }
 if (protAcc != NULL)
     {
