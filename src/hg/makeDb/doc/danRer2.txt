@@ -5328,3 +5328,48 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer2
+##########################################################################
+# BACENDS CLEANUP (DONE, 2007-03-27, hartera)
+   ssh kkstore04  
+   cd /cluster/data/danRer2/bed/
+   du -sh ZonLab
+   # 150G     ZonLab/
+   cd ZonLab
+   # Remove old BAC ENDS directories
+   nice rm -r bacends2 bacends3
+   cd bacends
+   rm bacEndsCov* bacEndsMinCov* bl2seq.out blast.out diff bacEnds \
+      bacEnds.names.uniq jobList
+   nice rm -r psl err minCov10MinAli92
+   # bacEnds.lifted.psl is lifted version of bacEnds.psl so remove latter
+   rm bacEnds.psl batch batch.bak *.lst para.results names.test template *.log
+   cd bacends.1
+   rm accs* bacEndAccs.aliases *.log allBacEnds* zfishaccs* diffaccs bacEnds \
+      BACEnd*
+   rm -r test test2
+   nice gzip *.psl
+   cd ../pairs
+   # bacEndSingles.bed is already in singles directory 
+   rm bacEnds.* bed.tab bacEndSingles.bed psl.tab bacEndSingles.sql *.bak 
+   rm -r old test
+   cd ../singles
+   rm bacEnds.*
+   rm -r old
+   cd ../scores
+   rm *.counts *.count *.hits good.txt error.log bed.tab bad.txt
+   rm -r test
+   cd ../duplicates
+   rm -r old2 test test1
+   rm error* sing *.counts singles.log.may10 log* out* bed.tab err
+   rm list list.aligns singles* *.uniq *.tmp *.tmp2 100names* pairs.* \
+      pairsTest*
+   rm -r badPrsTest pairsTest
+   cd ../cloneandStsAliases
+   rm *.bak dr1* dr2* xref.names.uniq zfishNew* zfishOld* *.tab accs.*
+   mv testTables/*.pl .
+   rm -r test testTables
+   cd /cluster/data/danRer2/bed/
+   du -sh ZonLab
+   # 46G     ZonLab/
+   # removed 104 GB 
+##########################################################################
