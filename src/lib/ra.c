@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.10 2006/06/28 20:25:55 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.11 2007/03/28 17:13:55 kent Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -87,7 +87,7 @@ freeMem(dupe);
 return hash;
 }
 
-boolean raFoldInOne(struct lineFile *lf, struct hash *hashOfHash)
+char *raFoldInOneRetName(struct lineFile *lf, struct hash *hashOfHash)
 /* Fold in one record from ra file into hashOfHash. 
  * This will add ra's and ra fields to whatever already
  * exists in the hashOfHash,  overriding fields of the
@@ -100,7 +100,7 @@ struct hashEl *hel;
 /* Get first nonempty non-comment line and make sure
  * it contains name. */
 if (!lineFileNextReal(lf, &line))
-    return FALSE;
+    return NULL;
 word = nextWord(&line);
 if (!sameString(word, "name"))
     errAbort("Expecting 'name' line %d of %s, got %s", 
@@ -139,7 +139,12 @@ for (;;)
     else
         hel->val = lmCloneString(ra->lm, line);
     }
-return TRUE;
+return hashFindVal(ra, "name");
+}
+
+boolean raFoldInOne(struct lineFile *lf, struct hash *hashOfHash)
+{
+return raFoldInOneRetName(lf, hashOfHash) != NULL;
 }
 
 void raFoldIn(char *fileName, struct hash *hashOfHash)
@@ -151,9 +156,17 @@ void raFoldIn(char *fileName, struct hash *hashOfHash)
 struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
 if (lf != NULL)
     {
-    while (raFoldInOne(lf, hashOfHash))
-        ;
+    struct hash *uniqHash = hashNew(0);
+    char *name;
+    while ((name = raFoldInOneRetName(lf, hashOfHash)) != NULL)
+	{
+	if (hashLookup(uniqHash, name))
+	    errAbort("%s duplicated in record ending line %d of %s", name, 
+	    	lf->lineIx, lf->fileName);
+	hashAdd(uniqHash, name, NULL);
+	}
     lineFileClose(&lf);
+    hashFree(&uniqHash);
     }
 }
 
