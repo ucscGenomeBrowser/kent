@@ -5053,3 +5053,72 @@ cat > template << 'EOF'
    # genbank release 157.0 now contains misc_diff fields for MGC clones
    # reloading mRNAs results in gbMiscDiff table being created.
    ./bin/gbDbLoadStep -reload -srcDb=genbank -type=mrna danRer1
+
+##########################################################################
+# CLEANUP (DONE, 2007-03-27, hartera)
+   ssh kkstore04
+   cd /cluster/data/danRer1/bed
+   # quality scores not used as no way to relate them to chroms
+   du -sh quality
+   # 9.7G quality/
+   nice rm -r quality
+   mv /cluster/store8/danRer1/bed/blastzSelf.2004-10-06 \
+      /cluster/data/danRer1/bed/
+   # then re-make symbolic link to this directory
+   rm blastzSelf
+   ln -s /cluster/data/danRer1/bed/blastzSelf.2004-10-06 \
+         /cluster/data/danRer1/bed/blastzSelf
+   # remove older directory
+   du -sh blastzSelf.2004-08-09
+   # 21M     blastzSelf.2004-08-09
+   rm -r blastzSelf.2004-08-09
+   # STS markers never made it into a track - messy data
+   du -sh STSmarkers
+   # 1.1G    STSmarkers/
+   cd /cluster/store8/danRer1
+   rm -r STSmarkers
+   cd /cluster/data/danRer1/bed/
+   rm STSmarkers 
+   du -sh Zonlab
+   # 112G    ZonLab/
+   cd /cluster/data/danRer1/bed/ZonLab
+   mv rhSeqAll/rhSeqAll.zip .
+   rm -r rhSeqAll
+   # du -sh tblastn
+   # 103G    tblastn
+   cd tblastn
+   nice rm -r tmp psl
+   rm kgpephg16table.notinfile hg16kgproseqs* *.tab
+   # remove *.out files of blast output as have *.format files
+   # and gzip *.format files
+   foreach f (./blastout/*.out)
+     nice rm -r $f 
+   end
+   foreach f (./blastout/*.format)
+     nice gzip $f
+   end
+   # BACENDS CLEANUP 
+   cd /cluster/data/danRer1/bed/bacends
+   rm out log jobList *.lst bed.tab pslCheck.log pairsNoReps.bed template
+   rm bacEndsPsl*
+   # bacEnds.lifted.psl is just lifted version of bacEnds.psl
+   rm bacEnds.psl 
+   nice gzip bacEnds.lifted.psl
+   rm singles/bacEnds*
+   rm pairs/bacEnds* pairs/psl.tab.gz
+   rm duplicates/bed.tab.gz duplicates/test.gz
+   cd scores
+   rm bed.tab.gz error.log.gz bacEndPairs.out* singles* pairs* badPairs.hits*
+   cd ../cloneandStsAliases
+   rm bacClones* bacEnds.* bacPrs.* *.sort markers* sanger* xref.* *.tab
+   rm -r old test1 test2 testTables testUniSTS tmp1 
+   cd /cluster/data/danRer1/bed/
+   du -sh ZonLab
+   # 44G     ZonLab/
+   # removed 59 GB
+   # move out presentations to another directory
+   ssh hgwdev
+   mv /cluster/data/danRer1/bed/ZonLab/presn/* \
+      /cse/staff/hartera/presentations/
+   rm -r /cluster/data/danRer1/bed/ZonLab/presn
+##########################################################################
