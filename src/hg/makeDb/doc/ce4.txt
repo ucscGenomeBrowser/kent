@@ -202,3 +202,97 @@ ce4.downloadDir = ce4
     #	should be relatively few names without descriptions:
     grep "no descr" dbg.out | wc
     #	     63     441    3477
+
+###############################################################################
+## SANGER GENE TRACK (DONE - 2007-03-28 - Hiram)
+    mkdir /cluster/data/ce4/bed/sangerGene
+    cd /cluster/data/ce4/bed/sangerGene
+    #	this tar file package was prepared at WormBase at Jim's request
+    #	to ease our loading task here.  From Anthony Rogers, ar2@sanger.ac.uk
+    #	URL in email to Jim 09 Feb 2007:
+    #	ftp://ftp.sanger.ac.uk/pub2/wormbase/WS170/wormbase_UCSC_WS170.tar.gz
+    #	Was unpacked into /cluster/data/ce4/downloads/tarFile
+    ln -s /cluster/data/ce4/downloads/tarFile/*.gff .
+    ldHgGene ce4 sangerGene *.gff
+    #	Read 55591 transcripts in 351460 lines in 6 files
+    #	55591 groups 6 seqs 8 sources 2 feature types
+    #	55591 gene predictions
+    ## Create orfToGene table.  They had one duplicate line in their file:
+    sort -u /cluster/data/ce4/downloads/tarFile/gene_name.txt \
+	| sed -e "s/  */\t/" > orfToGene.tab
+    hgLoadSqlTab ce4 orfToGene ~/kent/src/hg/lib/orfToGene.sql orfToGene.tab
+    ln -s /cluster/data/ce4/downloads/tarFile/paragraph.txt ./paragraph.tab
+    ln -s /cluster/data/ce4/downloads/tarFile/uniprot.txt ./uniprot.tab
+    cat << '_EOF_' > mkSangerLinks.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %geneToOrf;  #       key is uc(gene name), value is orf
+my %orfToGene;  #       key is uc(orf), value is gene name
+
+my $orfCount = 0;
+open (FH, "<orfToGene.tab") or die "can not read orfToGene.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($orf, $gene) = split('\t',$line);
+    die "gene name zero length" if (length($gene) < 1);
+    die "orf name zero length" if (length($orf) < 1);
+    $geneToOrf{uc($gene)} = $orf;
+    $orfToGene{uc($orf)} = $gene;
+    ++$orfCount;
+}
+
+close (FH);
+printf STDERR "read $orfCount orf designations from orfToGene.tab\n";
+
+open (LS,">sangerLinks.tab") or die "can not write to sangerLinks.tab";
+
+my $geneCount = 0;
+open (FH, "sort -u paragraph.tab|") or die "can not read paragraph.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($orf, $descr) = split('\t',$line);
+    die "gene name zero length" if (length($orf) < 1);
+    die "can not find orfToGene $orf" if (!exists($orfToGene{uc($orf)}));
+    my $orfGene = $orfToGene{uc($orf)};
+    die "orfGene name zero length" if (length($orfGene) < 1);
+    printf LS "%s\t%s\t%s\n", $orf, $orfGene, $descr;
+    ++$geneCount;
+}
+
+close (FH);
+printf STDERR "read $geneCount gene descriptions from paragraph.tab\n";
+close (LS);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSangerLinks.pl
+    ./mkSangerLinks.pl
+    #	read 27783 orf designations from orfToGene.tab
+    #	read 27783 gene descriptions from paragraph.tab
+
+    cp ~/kent/src/hg/lib/sangerLinks.sql .
+    # edit that to add the proteinID column and index:
+    #	proteinID varchar(40) NOT NULL,     # uniProt ID
+    #	INDEX(proteinID)
+
+    hgLoadSqlTab ce4 sangerLinks ./sangerLinks.sql sangerLinks.tab
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS170/wormpep170.tar.gz"
+    wget --timestamping \
+	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS170/wormrna170.tar.gz"
+    tar xvzf wormrna170.tar.gz
+    mv README README.wormrna170
+    tar xvzf wormpep170.tar.gz
+    #	creates files in directory wormpep170:
+    #	-rw-rw-r--  1 18238530 Jan  4 07:15 wp.fasta170
+    #	-rw-rw-r--  1   949522 Jan  4 07:15 wormpep.history170
+    #	-rw-rw-r--  1     1547 Jan  4 07:15 wormpep.diff170
+    #	-rw-rw-r--  1 31502715 Jan  9 07:19 wormpep.dna170
+    #	-rw-rw-r--  1  1510654 Jan  9 07:21 wormpep.table170
+    #	-rw-rw-r--  1 12658135 Jan  9 07:21 wormpep170
+    #	-rw-rw-r--  1   508392 Jan  9 07:21 wormpep.accession170
+    hgPepPred ce4 generic sangerPep wormpep170/wormpep170
+
+
