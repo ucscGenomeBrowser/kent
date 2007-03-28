@@ -17,7 +17,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.48 2007/03/27 18:37:33 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.49 2007/03/28 17:48:19 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -367,7 +367,7 @@ getDbAndGenome(cart, &database, &organism);
 
 hSetDb(database);
 /* if kgProtMap2 table exists, this means we are doing KG III */
-if (hTableExists("kgProtMap2")) kgVersion = KG_III;
+if (hTableExists("kgProtMap2")) 
     {
     kgVersion = KG_III;
     strcpy(kgProtMapTableName, "kgProtMap2");
