@@ -1277,6 +1277,9 @@ cat > load.csh << 'EOF'
 #    Files are on Gencode/IMIM web site, our contact for this round is France Denoed
 #    France requested 3 subtracks: genes, putatives, and pseudogenes        
 # NTOE: reloaded encodeGencodeKnown from updated _genes_ file 10/14 (kate)
+
+# Update 2007-03-28 (Kate)
+
     cd /cluster/data/encode
     mkdir -p Gencode/2005-10-07/lab
     cd Gencode/2005-10-07/lab
@@ -1326,6 +1329,15 @@ cat > load.csh << 'EOF'
     wc -l gencodeGeneClassOct.tab
         #  2961
     echo "LOAD DATA LOCAL INFILE 'gencodeGeneClassOct.tab' into table gencodeGeneClassOct" | hgsql hg17
+
+    ######################################################################
+    # Update 2007-03-28 from Julien Lagarde <jlagarde@imim.es>(Kate)
+
+    cd /cluster/data/encode/Gencode
+    mkdir -p 2007-03-28/lab
+    cd 2007-03-28/lab
+    wget -r -nv -nd -np ftp://genome.imim.es/pub/projects/gencode/data/havana-encode/current/gff/EN\*hg17.gff
+
 
 
 ##########################################################################
@@ -1637,6 +1649,8 @@ cat > load.csh << 'EOF'
 # NOTE: adjusted start coord -1 to coorespond to their DART entries --
 # verifying with Joel
 
+# new data submitted 3/20/07 by guoneng.zhong@yale.edu (kate)
+
     cd /cluster/data/encode/yale/rna/2005-10-14
 cat > loadBed.csh << 'EOF'
     foreach f (lab/*.bed)
@@ -1689,6 +1703,15 @@ cat > loadSig.csh << 'EOF'
         echo $table
         gzip -c $f > downloads/$table.bedGraph.gz
     end
+
+    # new data submitted 3/20/07 by guoneng.zhong@yale.edu (kate)
+    ssh kkstore03
+    cd /cluster/data/encode/yale/rna
+    mkdir -p 2007-03-20/lab
+    cd 2007-03-20/lab
+    mv /var/ftp/encode/joel_affy.tgz
+    tar xvfrz joel_affy.tgz
+
     
 ##########################################################################
 # Yale Chip/chip (2005-10-31 kate)
@@ -1884,6 +1907,19 @@ cat > loadSig.csh << 'EOF'
     mkdir lab
     cd lab
     tar xvfz jan07_batch.tgz
+
+# Resubmitted data submitted 2007-03-20 by guoneng.zhong@yale.edu
+    /cluster/data/encode/yale/chip
+    mkdir -p 2007-03-20/lab
+    cd 2007-03-20/lab
+    cp /var/ftp/encode/ucsc_resubmission.tgz .
+    tar tvfz *.tgz
+
+# New data submitted 2007-03-27 by guoneng.zhong@yale.edu
+    cd /cluster/data/encode/yale/chip/2007-03-27
+    mkdir lab
+    cd lab
+    unzip apr07_batch.zip
 
 
 ##########################################################################
