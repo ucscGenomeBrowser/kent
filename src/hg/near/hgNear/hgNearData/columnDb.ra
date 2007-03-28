@@ -68,7 +68,7 @@ shortLabel UCSC ID
 longLabel UCSC Transcript ID
 priority 2.3
 visibility off
-type knownDetails kgXref kgID kgID
+type acc
 
 name genbank
 shortLabel GenBank
@@ -302,11 +302,10 @@ shortLabel Pfam Domains
 longLabel Protein Family Domain Structure
 priority 9
 visibility off
-type pfam proteome.pfamXref proteome.pfamDesc
-queryFull select swissDisplayID,description from proteome.pfamXref,proteome.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteome.pfamDesc.pfamAC from proteome.pfamXref,proteome.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissDisplayID from proteome.pfamXref,proteome.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
-protKey on
+type pfam knownToPfam
+queryFull select name,description from knownToPfam,proteome.pfamDesc where pfamDesc.pfamAC = knownToPfam.value
+queryOne select description,value from proteome.pfamDesc,knownToPfam where knownToPfam.name = '%s' and knownToPfam.value = pfamDesc.pfamAC
+invQueryOne select name from knownToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = knownToPfam.value
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
 protDb proteome
 

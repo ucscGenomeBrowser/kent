@@ -67,11 +67,6 @@ queryFull select acc,pdb from  proteome.pdbSP,uniProt.displayId where val=sp
 queryOne select pdb,pdb from proteome.pdbSP,uniProt.displayId where val=sp and acc='%s'
 invQueryOne select acc from proteome.pdbSP,uniProt.displayId where val=sp and pdb='%s'
 
-name pfamDomains
-queryFull select swissAC,description from proteome.pfamXref,proteome.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteome.pfamDesc.pfamAC from proteome.pfamXref,proteome.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissAC from proteome.pfamXref,proteome.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
-
 name go
 goaIdColumn dbObjectId
 

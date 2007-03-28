@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.15 2007/03/23 17:32:11 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.16 2007/03/27 17:40:05 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -1614,8 +1614,19 @@ hPrintf(" &nbsp&nbsp Rescale to ");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
 hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
-if (proteinInSupportedGenome)
-   hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
+if (kgVersion == KG_III)
+    {
+    /* for KG III, the protein has to exist in the kgProtMap2 table 
+       (which will turn on doExonTrack flag)
+       to provide the genomic position data needed for DNA sequence display */
+    if ((proteinInSupportedGenome) && (doExonTrack))
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
+    }
+else
+    {
+    if (proteinInSupportedGenome) 
+   	hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
+    }
 hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
 
 g_vg = vg;

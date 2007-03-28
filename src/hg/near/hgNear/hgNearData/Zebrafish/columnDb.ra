@@ -55,6 +55,12 @@ priority 3.2
 visibility off
 type distance zebrafishZonWTDistance query target distance
  
+name pfamDomains
+type pfam ensToPfam
+queryFull select name,description from ensToPfam,proteome.pfamDesc where pfamDesc.pfamAC = ensToPfam.value
+queryOne select description,value from proteome.pfamDesc,ensToPfam where ensToPfam.name = '%s' and ensToPfam.value = pfamDesc.pfamAC
+invQueryOne select name from ensToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = ensToPfam.value
+
 name bitScore
 type distance ensZfishBlastTab query target bitScore
 

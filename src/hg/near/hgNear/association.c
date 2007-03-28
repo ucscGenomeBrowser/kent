@@ -349,7 +349,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 if (!gotOne)
+    {
     hPrintf("n/a");
+    }
 hPrintf("</TD>");
 freeHash(&uniqHash);
 }
