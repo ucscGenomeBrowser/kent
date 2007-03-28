@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapOrtho.c,v 1.2 2007/02/27 19:12:32 heather Exp $";
+static char const rcsid[] = "$Id: hapmapOrtho.c,v 1.3 2007/03/28 17:33:13 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,21 +18,34 @@ errAbort(
     "    hapmapOrtho db hapmapTable snpOrthoTable\n");
 }
 
+struct coords
+    {
+    char *chrom;
+    int start;
+    int end;
+    };
 
 struct hash *storeHapmap(char *tableName)
-/* store names only */
+/* store coords */
 {
 struct hash *ret = NULL;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
+struct coords *coordItem = NULL;
 
 ret = newHash(16);
-safef(query, sizeof(query), "select name from %s", tableName);
+safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-    hashAdd(ret, cloneString(row[0]), NULL);
+    {
+    AllocVar(coordItem);
+    coordItem->chrom = cloneString(row[1]);
+    coordItem->start = sqlUnsigned(row[2]);
+    coordItem->end = sqlUnsigned(row[3]);
+    hashAdd(ret, cloneString(row[0]), coordItem);
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ret;
@@ -52,6 +65,7 @@ int start = 0;
 int end = 0;
 FILE *outputFileHandle = mustOpen("hapmapOrtho.tab", "w");
 FILE *errorFileHandle = mustOpen("hapmapOrtho.err", "w");
+struct coords *coordItem = NULL;
 
 safef(query, sizeof(query), 
     "select chrom, chromStart, chromEnd, name, orthoScore, strand, refUCSC, observed, "
@@ -72,6 +86,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     hel = hashLookup(hapmapHash, rsId);
     if (hel == NULL) continue;
+    coordItem = (struct coords *)hel->val;
+    if (differentString(coordItem->chrom, row[0])) continue;
+    if (coordItem->start != start) continue;
+    if (coordItem->end != end) continue;
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], rsId);
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11], row[12]);
