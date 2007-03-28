@@ -130,7 +130,6 @@ void setupColumnPfam(struct column *col, char *parameters)
 setupColumnAssociation(col, parameters);
 if ((col->protDb = columnSetting(col, "protDb", NULL)) == NULL)
     errAbort("Missing required protDb field in column %s", col->name);
-col->protKey = TRUE;
 col->advFilter = pfamAdvFilter;
 col->filterControls = pfamFilterControls;
 }

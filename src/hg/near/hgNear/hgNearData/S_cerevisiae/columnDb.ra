@@ -21,6 +21,12 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 #name locusLink
 #type lookup sgdToLocusLink name value
 
+name pfamDomains
+type pfam sgdToPfam
+queryFull select name,description from sgdToPfam,proteome.pfamDesc where pfamDesc.pfamAC = sgdToPfam.value
+queryOne select description,value from proteome.pfamDesc,sgdToPfam where sgdToPfam.name = '%s' and sgdToPfam.value = pfamDesc.pfamAC
+invQueryOne select name from sgdToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = sgdToPfam.value
+
 name bitScore
 type distance sgdBlastTab query target bitScore
 
@@ -45,11 +51,6 @@ selected yeastChoCellCycleExps yeastChoCellCycleRatio yeastChoCellCycle 0,2,4,6,
 all yeastChoCellCycleExps yeastChoCellCycleRatio yeastChoCellCycle 0,1,2,3,4,5,-1,6,7,8,9,10,11,-1,12,13,14,15,16
 ratioMax 2.5
 absoluteMax 6000 
-
-name pfamDomains
-queryFull select swissAC,description from proteome.pfamXref,proteome.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteome.pfamDesc.pfamAC from proteome.pfamXref,proteome.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissAC from proteome.pfamXref,proteome.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 
 name sgdLocalization
 type association sgdLocalization
