@@ -5,6 +5,7 @@ type lookup sgdToName name value
 selfLink on
 
 name acc
+type acc
 shortLabel SGD ORF
 longLabel SGD ORF ID / Link to SGD
 visibility on

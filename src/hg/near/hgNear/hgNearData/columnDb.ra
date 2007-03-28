@@ -68,7 +68,7 @@ shortLabel UCSC ID
 longLabel UCSC Transcript ID
 priority 2.3
 visibility off
-type knownDetails kgXref kgID kgID
+type acc
 
 name genbank
 shortLabel GenBank

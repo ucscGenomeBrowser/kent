@@ -5,6 +5,7 @@ type lookup orfToGene name value
 selfLink on
 
 name acc
+type acc
 shortLabel WormBase
 longLabel WormBase Gene ID
 visibility on
