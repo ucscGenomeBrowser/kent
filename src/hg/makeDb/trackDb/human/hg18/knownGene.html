@@ -5,17 +5,17 @@ from RefSeq, Genbank, and UniProt. This is a moderately conservative set of
 predictions, requiring the support of one GenBank RNA sequence plus
 at least one additional line of evidence. The RefSeq RNAs are an exception to 
 this, requiring no additional evidence. The track includes both protein-coding
-and uncoding transcripts. Some of the uncoding transcripts may actually code
+and noncoding transcripts. Some of the noncoding transcripts may actually code
 for protein, but the evidence for the associated protein is at best weak.
 Compared to RefSeq, this gene set has generally about 10% more protein-coding 
-genes, approximately 5x as many uncoding genes, and about 2x as many splice 
+genes, approximately 5x as many putative noncoding genes, and about 2x as many splice 
 variants.
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 This track in general follows the display conventions for
 <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction
-tracks</A>. The exons for uncoding genes are represented by relatively thin 
+tracks</A>. The exons for putative noncoding genes are represented by relatively thin 
 blocks, while those for coding genes are thicker. The following color key
 is used:
 <UL>
@@ -50,12 +50,13 @@ the mouse graph has an edge that is orthologous to an edge in the human graph,
 add that to the evidence for the human edge.
 <LI>If an edge in the splicing graph is supported by two or more human ESTs, add
 that as evidence for the edge.
+<LI>If there is an Exonophy prediction for an exon, add that as evidence.
 <LI>Traverse the graph to generate all unique transcripts. The traversal is 
 guided by the initial RNAs to avoid a combinatorical explosion in alternative 
-splicing. Only transcripts that include an edge supported by one additional 
-line of evidence past the RNA are considered for output. Either two RNAs or two 
-additonal lines of evidence are required for single-exon genes. A RefSeq RNA 
-needs no additional evidence. 
+splicing. All refSeq transcripts are output. Other multi-exon transcripts require
+an edge supported by at least one additional line of evidence past the RNA  to be
+output.  Single exon genes require either two RNAs or two 
+additional lines of evidence beyond the single RNA. 
 <LI>Generate protein predictions. For non-RefSeq transcripts we use the 
 txCdsPredict program to determine if the transcript is protein-coding and if so,
 the locations of the start and stop codons. 
