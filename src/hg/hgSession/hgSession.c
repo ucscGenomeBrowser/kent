@@ -16,7 +16,7 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.25 2007/03/01 23:16:22 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.26 2007/03/28 21:14:24 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -385,7 +385,7 @@ cartSaveSession(cart);
 
 if (isNotEmpty(userName))
     showExistingSessions(userName);
-else
+else if (savedSessionsSupported)
     printf("<P>If you <A HREF=\"%s\">sign in</A>, "
 	   "you will also have the option to save named sessions.\n",
 	   wikiLinkUserLoginUrl(cartSessionId(cart)));
@@ -411,7 +411,7 @@ if (userName != NULL)
 	   "The Email link invokes your email tool with a message "
 	   "containing the Genome Browser link.</LI>\n");
     }
-else
+else if (wikiLinkEnabled())
     {
     printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able to save "
 	   "named sessions which will be displayed with Browser and Email "
