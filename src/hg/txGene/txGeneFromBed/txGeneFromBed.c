@@ -3,10 +3,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "fa.h"
 #include "bed.h"
 #include "cdsPick.h"
 
-static char const rcsid[] = "$Id: txGeneFromBed.c,v 1.2 2007/03/17 23:10:59 kent Exp $";
+static char const rcsid[] = "$Id: txGeneFromBed.c,v 1.3 2007/03/28 06:06:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,10 +15,12 @@ void usage()
 errAbort(
   "txGeneFromBed - Convert from bed to knownGenes format table (genePred + uniProt ID)\n"
   "usage:\n"
-  "   txGeneFromBed in.bed in.picks out.kg\n"
+  "   txGeneFromBed in.bed in.picks in.faa uniProt.fa refPep.fa out.kg\n"
   "where:\n"
   "   in.bed is input file in bed 12 format\n"
   "   in.picks is one of the outputs of txCdsPick\n"
+  "   in.faa is the proteins associated with the known genes\n"
+  "   uniProt.fa is the uniProt proteins\n"
   "   out.kg is known genes table in tab-separated format\n"
   "options:\n"
   "   -xxx=XXX\n"
@@ -50,9 +53,14 @@ fprintf(f, "%s\t", uniProtAcc);
 fprintf(f, "%s\n", bed->name);
 }
 
-void txGeneFromBed(char *inBed, char *inPicks, char *outKg)
+void txGeneFromBed(char *inBed, char *inPicks, char *ucscFa, char *uniProtFa, char *refPepFa, char *outKg)
 /* txGeneFromBed - Convert from bed to knownGenes format table (genePred + uniProt ID). */
 {
+/* Load protein sequence into hashes */
+struct hash *uniProtHash = faReadAllIntoHash(uniProtFa, dnaUpper);
+struct hash *ucscProtHash = faReadAllIntoHash(ucscFa, dnaUpper);
+struct hash *refProtHash =faReadAllIntoHash(refPepFa, dnaUpper);
+
 /* Load picks into hash.  We don't use cdsPicksLoadAll because empty fields
  * cause that autoSql-generated routine problems. */
 struct hash *pickHash = newHash(18);
@@ -72,18 +80,43 @@ struct bed *bed, *bedList = bedLoadNAll(inBed, 12);
 FILE *f = mustOpen(outKg, "w");
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    char *protAcc = "";
+    char *protAcc = NULL;
     if (bed->thickStart < bed->thickEnd)
 	{
         pick = hashMustFindVal(pickHash, bed->name);
+	struct dnaSeq *spSeq = NULL, *uniSeq = NULL, *refPep = NULL, *ucscSeq;
+	ucscSeq = hashMustFindVal(ucscProtHash, bed->name);
 	if (pick->swissProt[0])
+	    spSeq = hashMustFindVal(uniProtHash, pick->swissProt);
+	if (pick->uniProt[0])
+	    uniSeq = hashMustFindVal(uniProtHash, pick->uniProt);
+	if (pick->refProt[0])
+	    refPep = hashMustFindVal(refProtHash, pick->refProt);
+
+	/* First we look for an exact match between the ucsc protein and
+	 * something from swissProt/uniProt. */
+	if (spSeq != NULL && sameString(ucscSeq->dna, spSeq->dna))
 	    protAcc = pick->swissProt;
-	else if (pick->refProt[0])
-	    protAcc = pick->refProt;
-	else if (pick->uniProt[0])
+	if (protAcc == NULL && uniSeq != NULL && sameString(ucscSeq->dna, uniSeq->dna))
 	    protAcc = pick->uniProt;
+	if (protAcc == NULL && refPep != NULL && sameString(ucscSeq->dna, refPep->dna))
+	    {
+	    protAcc = cloneString(pick->refProt);
+	    chopSuffix(protAcc);
+	    }
+
+	if (protAcc == NULL)
+	    {
+	    if (pick->uniProt[0])
+	        protAcc = pick->uniProt;
+	    else 
+		{
+	        protAcc = cloneString(pick->refProt);
+		chopSuffix(protAcc);
+		}
+	    }
 	}
-    outputKg(bed, protAcc, f);
+    outputKg(bed, emptyForNull(protAcc), f);
     }
 carefulClose(&f);
 }
@@ -92,8 +125,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 7)
     usage();
-txGeneFromBed(argv[1], argv[2], argv[3]);
+txGeneFromBed(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
