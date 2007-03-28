@@ -56,33 +56,33 @@ visibility hide
 color 173,17,162
 type genePred
 
-#release alpha
-#track multiz28wayAnno
-#summary multiz28wayAnnoSummary
-#irows on
-#shortLabel 28-Way Cons 
-#longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
-#group compGeno
-#priority 104.1
-#visibility pack
-#color 0, 10, 100
-#altColor 0,90,10
-#type wigMaf 0.0 1.0
-#maxHeightPixels 100:40:11
-#speciesGroups primate placental_mammal vertebrate
-#sGroup_primate panTro2 rheMac2 otoGar1
-#sGroup_placental_mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-#sGroup_vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 fr2 tetNig1 gasAcu1 oryLat1 danRer4
-#treeImage phylo/hg18_28way.gif
+release alpha
+track multiz28wayAnno
+summary multiz28wayAnnoSummary
+irows on
+shortLabel 28-Way Cons 
+longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+speciesGroups primate placental_mammal vertebrate
+sGroup_primate panTro2 rheMac2 otoGar1
+sGroup_placental_mammal tupBel1 mm8 rn4 cavPor2 oryCun1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
+sGroup_vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 fr2 tetNig1 gasAcu1 oryLat1 danRer4
+treeImage phylo/hg18_28way.gif
 
 release alpha
 track multiz28way
 summary multiz28waySummary
 shortLabel 28-Way Unann Cons 
 longLabel Vertebrate Multiz Alignment & Conservation (28 Species) No gap annotation
-group compGeno
+group x
 priority 104.1
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -98,7 +98,7 @@ track multiz25wayStrict2
 summary multiz25wayStrict2Summary
 shortLabel Strict 25-Way Fix (Chr1)
 longLabel Vertebrate Multiz Alignment & Conservation (25 Species): Strict with Maf_Project V12
-group compGeno
+group x
 priority 104.1
 visibility hide
 color 0, 10, 100
@@ -117,7 +117,7 @@ track multiz25wayStrict
 summary multiz25wayStrictSummary
 shortLabel Strict 25-Way
 longLabel Vertebrate Multiz Alignment & Conservation (25 Species): Reciprocal Best and Syntenic Nets
-group compGeno
+group x
 priority 104.1
 visibility hide
 color 0, 10, 100
@@ -135,7 +135,7 @@ track multiz25way
 summary multiz25waySummary
 shortLabel 25-Way Cons
 longLabel Vertebrate Multiz Alignment & Conservation (25 Species)
-group compGeno
+group x
 priority 104.1
 visibility hide
 color 0, 10, 100
