@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.5 2007/03/22 06:59:14 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.6 2007/03/28 06:19:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ void usage()
 errAbort(
   "txGeneXref - Make kgXref type table for genes.\n"
   "usage:\n"
-  "   txGeneXref genomeDb uniProtDb gene.info genes.picks genes.ev output.xref\n"
+  "   txGeneXref genomeDb uniProtDb gene.gp gene.info genes.picks genes.ev output.xref\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -34,13 +34,27 @@ chopSuffix(pick->refProt);
 chopSuffix(pick->refSeq);
 }
 
-void txGeneXref(char *genomeDb, char *uniProtDb, char *infoFile, char *pickFile, 
+struct hash *makeGeneToProtHash(char *fileName)
+/* Create hash that links gene name to protein name. 
+ * Feed this in extended gene pred.*/
+{
+struct hash *hash = newHash(18);
+char *row[11];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while (lineFileRowTab(lf, row))
+    hashAdd(hash, row[0], cloneString(row[10]));
+lineFileClose(&lf);
+return hash;
+}
+
+void txGeneXref(char *genomeDb, char *uniProtDb, char *genePredFile, char *infoFile, char *pickFile, 
 	char *evFile, char *outFile)
 /* txGeneXref - Make kgXref type table for genes.. */
 {
 /* Load picks into hash.  We don't use cdsPicksLoadAll because empty fields
  * cause that autoSql-generated routine problems. */
 struct hash *pickHash = newHash(18);
+struct hash *geneToProtHash = makeGeneToProtHash(genePredFile);
 struct cdsPick *pick;
 struct lineFile *lf = lineFileOpen(pickFile, TRUE);
 char *row[CDSPICK_NUM_COLS];
@@ -77,6 +91,7 @@ for (info = infoList; info != NULL; info = info->next)
     char *protAcc = "";
     char *description = NULL;
     char query[256];
+    char *proteinId = hashMustFindVal(geneToProtHash, info->name);
     pick = hashFindVal(pickHash, info->name);
     ev = hashFindVal(evHash, info->name);
     if (ev == NULL)
@@ -96,12 +111,12 @@ for (info = infoList; info != NULL; info = info->next)
        refseq = pick->refSeq;
        if (info->orfSize > 0)
 	    {
-	    spID = pick->uniProt;
 	    protAcc = pick->refProt;
-	    if (pick->uniProt[0] != 0)
-	       {
+	    spID = proteinId;
+	    if (sameString(protAcc, spID))
+		spID = pick->uniProt;
+	    if (spID[0] != 0)
 	       spDisplayID = spAnyAccToId(uConn, spID);
-	       }
 	    }
 
        /* Fill in gene symbol and description from refseq if possible. */
@@ -179,10 +194,13 @@ for (info = infoList; info != NULL; info = info->next)
         geneSymbol = mRNA;
     if (description == NULL)
         description = mRNA;
+
     /* Get rid of some characters that will cause havoc downstream. */
     stripChar(geneSymbol, '\'');
     subChar(geneSymbol, '<', '[');
     subChar(geneSymbol, '>', ']');
+
+    /* Abbreviate geneSymbol if too long */
     if (strlen(geneSymbol) > 40)
         strcpy(geneSymbol+37, "...");
 
@@ -205,8 +223,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 7)
+if (argc != 8)
     usage();
-txGeneXref(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+txGeneXref(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 return 0;
 }
