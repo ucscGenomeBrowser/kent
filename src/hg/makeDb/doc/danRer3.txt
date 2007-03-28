@@ -6806,7 +6806,25 @@ table ensXRefZfish
     comm -13 refSeq.genes geneSeq.genes > geneSeqOnly
     wc -l *SeqOnly
     # 9542 geneSeqOnly
-    # 827 refSeqOnly 
+    # 827 refSeqOnly
+    # get certain fields from each file and merge
+    awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1, $2, $3, $4, $6;}' \
+        zfish.gene2refseq > zfish.gene2refseqSubset.txt
+    awk 'BEGIN {FS="\t"} {OFS="\t"} \
+        {print $2, $3, $5, $6, $9, $10, $11, $12;}' \
+        zfish.gene_info > zfish.gene_infoSubset.txt
+    # need to sort on the GeneID field (second field in refseq file and 
+    # first field in gene_info file):
+    sort -n -k2 zfish.gene2refseqSubset.txt | uniq \
+         > zfish.gene2refseqSubset.sort
+    sort -n -k1 zfish.gene_infoSubset.txt | uniq > zfish.gene_infoSubset.sort
+    # join the two files based on the GeneID (Entrez Gene ID) which is 
+    # the second field in refseq file and first field in gene_info file.
+    # Need to set the $tab variable in .tcshrc file:
+    # set tab = "	"
+    join -t "$tab" -1 2 -2 1 zfish.gene2refseqSubset.sort \
+         zfish.gene_infoSubset.sort \
+         > zfish.gene2refSeqPlusInfo.txt 
     # The program needs to be written to fill in these gaps for RefSeq ID,
     # Entrez Gene ID and RefSeq Peptide ID. It should then check for the
     # gene symbol using the ZFIN ID using RefSeq ID.  
@@ -8541,4 +8559,45 @@ line+ /san/sanvol1/scratch/danRer3/rhMap/psl/$(root1)_$(root2).psl}\n#ENDLOOP'
     # the ZFIN IDs to link to the relevant page at http://www.zfin.org 
     # and added an html page for the track.
 
+#########################################################################
+# BACENDS CLEANUP (DONE, 2007-03-27, hartera)
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/bacends
+    # 23G in bacends directory
+    # remove sequence file as already in bacSeqs dir
+    rm Zv5Bacends.fa
+    # du -sh psl   
+    # 12G psl
+    nice rm -r psl 
+    cd bacends.1
+    rm bacEndAccs.aliases bacEnds.log bacEnds.names.sort bacPrs.names bacs.log
+    rm ch211 intNames intNames.count out test test.pl bacEndSingles.txt
+    rm -r test2 bacEndAccs
+    rm BACClones* BACEndAccs.txt *.accs allBacEnds* bacEndSingles.names
+    cd ../scoresAndCoords
+    rm allBacEnds.names.* bacEndSinglesGoodScores.bed error.log *.tab \
+       singles.hits bacEnds.load.psl bacEnds.names 
+    rm -r tmp
+    cd ../pairsNew
+    # bacEndSingles.bed is already in singlesNew
+    rm bacEnds.* bed.tab bacEndSingles.bed
+    cd ../singlesNew
+    rm singles.coordcheck bed.tab bacEnds.*
+    cd ../duplicates
+    # duplicatesNew is latest directory so remove everthing else from
+    # duplicates directory
+    rm *
+    cd duplicatesNew
+    rm log* *.lfs
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
+    rm -r tmp
+    rm bacClones* bacs.names log
+    cd /cluster/data/danRer3/bed/
+    du -sh bacends
+    # 5.0G    bacends
+    # BAC ENDS track was remade in May 2006 (see REDO BACENDS section)
+    # so can remove bacEndsNew which is an old version from 2005"
+    du -sh newBacends
+    # 37G     newBacends
+    nice rm -r newBacends
 #########################################################################
