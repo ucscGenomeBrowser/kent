@@ -14,7 +14,7 @@ longLabel Vega Annotations
 group genes
 priority 37
 visibility hide
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chr23,chr24,chr25,chrUn_random
 type genePred
 url http://vega.sanger.ac.uk/Danio_rerio/geneview?transcript=$$
     
@@ -60,7 +60,7 @@ priority 80
 visibility hide
 type expRatio
 expScale 2.0
-expStep 0.10
+expStep 0.2
 groupings affyZonWildTypeGroups
 
 track affyZebrafish
@@ -432,6 +432,7 @@ visibility hide
 spectrum on
 type netAlign oryLat1 chainOryLat1
 otherDb oryLat1
+
 searchTable wz_ests
 searchMethod prefix
 searchType psl
