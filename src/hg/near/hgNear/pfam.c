@@ -49,14 +49,12 @@ if (terms != NULL)
     struct slName *term, *termList = stringToSlNames(terms);
     struct hash *passHash = newHash(17);
     struct hash *prevHash = NULL;
-    struct hash *protHash = newHash(17);
     struct genePos *gp;
 
-    /* Build up hash of genes keyed by protein names. (The geneHash
-     * passed in is keyed by the mrna name. */
+    /* Build up hash of all genes. */
+    struct hash *geneHash = newHash(18);
     for (gp = list; gp != NULL; gp = gp->next)
-	hashAdd(protHash, gp->protein, gp);
-
+        hashAdd(geneHash, gp->name, gp);
     for (term = termList; term != NULL; term = term->next)
         {
 	/* Build up a list of IDs of descriptions that match term. */
@@ -84,16 +82,16 @@ if (terms != NULL)
 	    {
 	    /* Build up query that includes all IDs. */
 	    dyStringClear(dy);
-	    dyStringAppend(dy, "select swissDisplayID from pfamXref where ");
-	    dyStringPrintf(dy, "pfamAC='%s'", idList->name);
+	    dyStringPrintf(dy, "select name from %s where ", col->table);
+	    dyStringPrintf(dy, "value='%s'", idList->name);
 	    for (id = idList->next; id != NULL; id = id->next)
-		dyStringPrintf(dy, "or pfamAC='%s'", id->name);
+		dyStringPrintf(dy, "or value='%s'", id->name);
 
 	    /* Execute query and put matchers into hash. */
-	    sr = sqlGetResult(conn, dy->string);
+	    sr = sqlGetResult(defaultConn, dy->string);
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
-		gp = hashFindVal(protHash, row[0]);
+		gp = hashFindVal(geneHash, row[0]);
 		if (gp != NULL)
 		    {
 		    char *name = gp->name;
@@ -115,7 +113,6 @@ if (terms != NULL)
 	    }
 	}
     list = weedUnlessInHash(list, passHash);
-    hashFree(&protHash);
     hashFree(&prevHash);
     hashFree(&passHash);
     dyStringFree(&dy);
@@ -128,6 +125,7 @@ void setupColumnPfam(struct column *col, char *parameters)
 /* Setup Pfam column. */
 {
 setupColumnAssociation(col, parameters);
+col->table = cloneString(parameters);
 if ((col->protDb = columnSetting(col, "protDb", NULL)) == NULL)
     errAbort("Missing required protDb field in column %s", col->name);
 col->advFilter = pfamAdvFilter;
