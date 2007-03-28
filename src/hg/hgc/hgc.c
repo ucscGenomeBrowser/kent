@@ -199,7 +199,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1253 2007/03/27 23:21:25 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1254 2007/03/28 17:27:18 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8716,7 +8716,7 @@ if (vif != NULL)
     /* change confidence to lower case and display with method for gene type */
     tolowers(vif->confidence);
     printf("<B>VEGA Gene Type:</B> %s %s<BR>\n", vif->confidence, vif->method);
-    printf("<B>VEGA Sanger Gene Name:</B> %s<BR>\n", vif->sangerName);
+    printf("<B>VEGA Gene Name:</B> %s<BR>\n", vif->sangerName);
     if (differentString(vif->geneDesc, "NULL"))
         printf("<B>VEGA Gene Description:</B> %s<BR>\n", vif->geneDesc);
     printf("<B>VEGA Gene Id:</B> %s<BR>\n", vif->geneId);
