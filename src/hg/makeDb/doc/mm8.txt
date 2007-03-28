@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.39 2007/03/05 19:58:15 angie Exp $"
+#	"$Id: mm8.txt,v 1.40 2007/03/28 21:59:37 hiram Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -3663,23 +3663,28 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     #	-rw-rw-r--   1 17334936245 Apr 20 10:31 multiz17way.maf
 
     #	Create per-chrom individual maf files for downloads
+    #	These are actually done after the annotation mafs are made
+    ##	re-done with corrected annotated mafs 2007-03-28 - Hiram
     ssh kkstore04
     cd /cluster/data/mm8/bed/multiz17way
     mkdir mafDownloads
-    time for M in maf/chr*.maf
+    time for M in anno/maf/chr*.maf
     do
 	B=`basename $M`
-	cp -p ${M} mafDownloads/${B}
-	gzip mafDownloads/${B}
+	nice -n +19 cp -p ${M} mafDownloads/${B}
+	nice -n +19 gzip mafDownloads/${B}
 	echo ${B} done
     done
-    #	real    56m3.024s
+    #	real    59m16.415s
+    cd mafDownloads
+    md5sum *.gz > md5sum.txt
+
     #	deliver to downloads
     ssh hgwdev
     ln -s /cluster/data/mm8/bed/multiz17way/mafDownloads \
 	/usr/local/apache/htdocs/goldenPath/mm8/multiz17way
 
-    # Load into database
+    # Load into database, actually annotation mafs are loaded later
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way
     mkdir /gbdb/mm8/multiz17way
@@ -3748,20 +3753,21 @@ done
 ############################################################################
 # ANNOTATE MULTIZ17WAY MAF AND LOAD TABLES (DONE - 2006-04-24 - Hiram)
 #	RE-DONE 2006-05-03 with danRer4 in place of danRer3
+## Redone to correct usage of nBeds and sizes file (2007-03-28 - Hiram)
     ssh kolossus
     mkdir /cluster/data/mm8/bed/multiz17way/anno
     cd /cluster/data/mm8/bed/multiz17way/anno
     mkdir maf run
     cd run
     rm -f sizes nBeds
-    ln -s  /cluster/data/mm8/chrom.sizes mm8.len
     twoBitInfo -nBed /cluster/data/mm8/mm8.{2bit,N.bed}
-    ln -s  /cluster/data/mm8/mm8.N.bed mm8.bed
     for DB in `cat /cluster/data/mm8/bed/multiz17way/species.lst`
     do
-      echo mm8.bed  >> nBeds
-      echo mm8.len  >> sizes
-      echo $DB
+        ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+        ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+	echo ${DB}.bed  >> nBeds
+	echo ${DB}.len  >> sizes
+	echo $DB
     done
 
     echo '#!/bin/csh -ef' > jobs.csh
@@ -3778,7 +3784,7 @@ done
     time ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
     tail -f jobs.log
-    #	real    102m8.005s
+    #	real    218m16.272s
 
     # Load anno/maf
     ssh hgwdev
@@ -3788,8 +3794,8 @@ done
       /gbdb/mm8/multiz17way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/mm8/multiz17way/anno/maf mm8 multiz17way
-    #	Loaded 12484353 mafs in 34 files from /gbdb/mm8/multiz17way/anno/maf
-    #	real    35m49.224s
+    #	Loaded 12484442 mafs in 34 files from /gbdb/mm8/multiz17way/anno/maf
+    #	real    8m14.757s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -3798,17 +3804,15 @@ done
     time cat *.maf | \
     	nice -n +19 hgLoadMafSummary mm8 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz17waySummary stdin
-    #	Created 3153839 summary blocks from 65123362 components and
-    #	12484353 mafs from stdin
-    #	real    12m56.199s
+    #	Created 3153839 summary blocks from 65123362 components
+    #	and 12484442 mafs from stdin
+    #	real    13m25.961s
 
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way/anno/maf
-    sed -e 's/mafSummary/multiz17waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
-      > multiz17waySummary.sql
     time nice -n +19 hgLoadSqlTab mm8 multiz17waySummary \
-	multiz17waySummary.sql multiz17waySummary.tab
-    #	real    13m46.003s
+	~/kent/src/hg/lib/mafSummary.sql multiz17waySummary.tab
+    #	real    0m53.525s
     rm *.tab
 
 #######################################################################
