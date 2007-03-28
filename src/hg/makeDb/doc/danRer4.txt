@@ -7636,7 +7636,7 @@ table vegaToCloneId
 '_EOF_'
     cd ~/kent/src/hg/lib/
     autoSql vegaToCloneId.as vegaToCloneId
-    # replace PRIMARY KEY(transcriptId) with Indices on genId and cloneId:
+    # replace PRIMARY KEY(transcriptId) with Indices on geneId and cloneId:
     perl -pi.bak -e \
     's/PRIMARY KEY\(transcriptId\)/INDEX\(transcriptId\),\nINDEX\(cloneId\)/' \
        vegaToCloneId.sql
@@ -7873,6 +7873,491 @@ GFF/GTF group RP71-1I20.1-001 on chr22+, this line is on chr22-, all group
 members must be on same seq and strand
    # Still has non-unique transcript IDs - need to wait for next release
    # of VEGA genes and Ensembl for this to be fixed. 
+   
+   # Received new update of VEGA from Ian Sealy (is1@sanger.ac.uk) on 
+   # 2007-02-14.
+   ssh kkstore04
+   cd /cluster/data/danRer4/bed/vega
+   wget --timestamping ftp://ftp.sanger.ac.uk/pub/is1/vega.gtf
+   # Load into database
+   # 2007-03-09
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/vega
+   ldHgGene -bin -genePredExt danRer4 vega vega.gtf
+    
+   invalid gffGroup detected on line: chr4 NOVEL   exon    35259893
+352599940.000000        +       .       gene_id "sinup"; transcript_id
+"siah2l-001"; 
+GFF/GTF group siah2l-001 on chr21-, this line is on chr4+, all group members
+must be on same seq and strand
+    # still get duplicate transcript IDs on different chromosome. 
+    # Below is what Kerston Howe (kj2@sanger.ac.uk) advised on these cases:
+# "this will continue to happen as long as the map still changes. The  
+# gene in question was annotated on two adjacent clones which were  
+# apparently then broken up and assigned to different chromosomes.  
+# Usually, this is not too alarming (just delete those cases, please)"
+    # Find other such cases:   
+    awk 'BEGIN{OFS="\t"} {print $1, $12}' vega.gtf > vegachromAndId.txt
+    sort vegachromAndId.txt | uniq > vegachromAndId.uniq
+    awk '{print $2}' vegachromAndId.uniq | sort | uniq -c | sort -nr \
+        > vegaIds.count
+# These transcript IDs all appear twice on different chromosomes. There could
+# be cases where there are transcripts that are duplicated on the same
+# chromosome.
+# 2 "taf6-001";
+# 2 "siah2l-001";
+# 2 "rasgrf2-001";
+# 2 "lmx1b-001";
+# 2 "fvt1-001";
+# 2 "ckmt2-002";
+# 2 "ckmt2-001";
+# 2 "accn2c-001";
+    # There are some cases where the gene is on the same chrom but different
+    # strands.
+    awk 'BEGIN{OFS="\t"} {print $1, $7, $12}' vega.gtf \
+        | sort | uniq > vegachromStrandAndId.uniq
+    awk '{print $1, $3}' vegachromStrandAndId.uniq | sort | uniq -c \
+        | sort -nr > vegaIdsAndChroms.count
+# These occur twice on different strands of the same chromosome:
+# 2 chr19 "DKEY-264N13.5-001";
+# 2 chr14 "stx5a-001";
+    
+    # Remove these from the GTF file as suggested by Kerstin Howe (Sanger)
+    head -8 vegaIds.count | awk '{print $2}' > transcriptIds.remove
+    head -2 vegaIdsAndChroms.count | awk '{print $3}' >> transcriptIds.remove
+    grep -v  -f transcriptIds.remove vega.gtf > vega2.gtf
+    # reload into danRer4 database
+    hgsql -e 'drop table vegaUpdate;' danRer4
+    ldHgGene -bin -genePredExt danRer4 vegaUpdate vega2.gtf
+    # successfully loads now.
+
+    # ldHgGene groups by transcript Id so use OTTER IDS instead
+    sed -e 's/transcript_id/other_transcript_id/' vega.gtf > vegaFormat.gtf
+    perl -pi.bak -e 's/otter_transcript_id/transcript_id/' vegaFormat.gtf
+    # Now it loads ok without removing duplicate transcript IDs:
+    ldHgGene -bin -genePredExt danRer4 vegaFormat vegaFormat.gtf
+    # Read 8817 transcripts in 119707 lines in 1 files
+    # 8817 groups 29 seqs 4 sources 2 feature types
+    # 8817 gene predictions
+
+    hgsql -N -e 'select distinct(name2) from vegaFormat;' danRer4 > name2
+    # Extra information obtained from Sanger:
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega
+    wget --timestamping \
+         ftp://ftp.sanger.ac.uk/pub/kj2/ZFIN/061111/noH/genes_for_tom.txt   
+    sort name2 > name2.sort
+    awk '{print $1}' genes_for_tom.txt | sort | uniq > genesfortom.symbs.sort
+    comm -23 name2.sort genesfortom.symbs.sort > vegaGtfOnly
+    wc -l vegaGtfOnly
+    # 4021
+    awk '{print $6}' genes_for_tom.txt | sort | uniq > genesfortom.altsymb.sort
+    comm -23 vegaGtfOnly genesfortom.altsymb.sort
+    # rest of symbols found as alternate symbols in column 6 of this file
+    # subtract this from original list
+    comm -13 vegaGtfOnly name2.sort > genesincol1
+    # Also received descriptions file and additional information from Sanger. 
+    # Now the track can be updated since the vega.gtf file loads into the 
+    # database see VEGA UPDATE section below.
+
+#######################################################################
+# VEGA UPDATE (DONE, 2007-03-26 - 2007-03-28, hartera)
+# Data provided by Kerstin Howe from Sanger: kj2@sanger.ac.uk
+# and also Ian Sealy: is1@sanger.ac.uk
+# GTF file sent on 2007-02-14 
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/vega.2007-02-14
+    cd /cluster/data/danRer4/bed/vega
+    ln -s /cluster/data/danRer4/bed/vega.2007-02-14 \
+          /cluster/data/danRer4/bed/vega
+    wget --timestamping ftp://ftp.sanger.ac.uk/pub/is1/vega.gtf
+    wget --timestamping \
+         ftp://ftp.sanger.ac.uk/pub/kj2/ZFIN/061111/noH/genes_for_tom.txt   
+    # list of gene descriptions by Kerstin Howe (2007-03-12)
+    mv for_rachel.txt vegaDescriptions.txt
+    mv genes_for_tom.txt vegaInformation.txt
+     
+    # vegaInfo is transcriptId, otterId, geneId, method and geneDesc
+    # Get otter transcript ID and otter gene ID:
+    awk 'BEGIN{OFS="\t"} \
+        {if (($17 ~ /otter_gene_id/) && ($19 ~ /otter_transcript_id/)) \
+        print $20, $18;}' vega.gtf \
+        > vegaIDs.txt
+    perl -pi.bak -e 's/;//g' vegaIDs.txt
+    perl -pi.bak -e 's/\"//g' vegaIDs.txt
+    # list of transcript ID and corresponding gene ID for Vega
+    sort vegaIDs.txt | uniq > vegaIDs.uniq
+    # then use the info file to grab those genes that are pseudogenes, get the
+    # transcript ID from the vegaIDs.txt file. Then grep out the pseudogenes
+    # to a separate file. Create an info file. Remove the .NOVEL or .PUTATIVE 
+    # or .KNOWN or .NOVEL from the method column and add as a separate 
+    # confidence column. 
+    # check number of items on each line: there are 4 or 6.
+    # Some genes have more than one clone ID in a comma separated list
+    # so create two files for loading into two tables. 
+    # Found that some of the clone ID fields have comma separated lists 
+    # and for OTTDARG00000006367, there are 30. Therefore create two info 
+    # tables where one is just for clone IDs.  
+    # NOTE: in future, make sure each row of vegaInfoZfish.txt output has 
+    # 8 fields. The pseudogene entries are missing an entry in the 
+    # confidence field so this should be an empty field.
+cat << '_EOF_' > formatVegaInfo.pl
+#!/usr/bin/perl -w
+use strict;
+
+# format Vega additional information into one file for vegaInfoZfish table
+# and another for the vegaToCloneIdZfish table which contains the
+# geneId and cloneId for each gene since there are multiple clone IDs for
+# some of the genes.
+my ($idsFile, $infoFile, $outFile1, $outFile2, %idsHash);
+$idsFile = $ARGV[0];  # list of Transcript IDs and Gene IDs
+$infoFile = $ARGV[1]; # information file for Vega genes
+$outFile1 = $ARGV[2]; # output1 is the formatted file of Vega info for table
+$outFile2 = $ARGV[3]; # output2 is a vega to clone ID conversion table
+
+open (IDS, $idsFile) || die "Can not open $idsFile: $!\n";
+open (INFO, $infoFile) || die "Can not open $infoFile: $!\n";
+open (OUT1, ">$outFile1") || die "Can not create $outFile1: $!\n";
+open (OUT2, ">$outFile2") || die "Can not create $outFile2: $!\n";
+open (STDERR, ">info.log") || die "Can not create info.log: $!\n";
+
+while (<IDS>)
+{
+my ($line, @f);
+chomp;
+$line = $_;
+@f = split(/\t/, $line);
+
+$idsHash{$f[1]} = $f[0];
+}
+close IDS;
+
+while (<INFO>)
+{
+my ($line,@fi,$id,$gene,$trans,@transIds, $tr,@clones, $c,@t, $method, $conf);
+chomp;
+$gene = "";
+$line = $_;
+@fi = split(/\t/, $line);
+$id = $gene = $fi[1];
+# get all the transcript IDs for a gene
+while (exists($idsHash{$id}))
+   {
+   $trans = $idsHash{$id};
+   push(@transIds, $trans);
+   $id = $trans;
+   }
+# push clone IDs into an array:
+@clones = split(/,/, $fi[2]);
+@t = split(/\./, $fi[3]);
+$method = $t[0];
+if ($#t > 0)
+{
+$conf = $t[1];
+}
+elsif ($#t == 0)
+   {
+   $conf = "";
+   }
+else
+   {
+   print STDERR "Should be 4 or 6 items per row, found $#fi \n";
+   }
+foreach $tr (@transIds)
+   {
+   print OUT1 "$tr\t$fi[1]\t$fi[0]";
+   if ($#fi == 5)
+      {
+      print OUT1 "\t$fi[4]\t$fi[5]\t$method\t\t$conf\n";
+      }
+   elsif ($#fi == 3)
+      {
+      print OUT1 "\t\t\t$method\t\t$conf\n";
+      }
+   # print out clone IDs for each transcript
+   foreach $c (@clones)
+      {
+      print OUT2 "$tr\t$c\n";
+      }
+   }
+if($gene && !exists($idsHash{$gene})) 
+   {
+   print STDERR "$gene\n";
+   }
+}
+close IDS;
+close INFO;
+close OUT1;
+close OUT2;
+close STDERR;
+'_EOF_'
+    chmod +x formatVegaInfo.pl 
+    wc -l genes_for_tom.txt
+    # 7169 genes_for_tom.txt
+    awk '{print $2}' vegaInformation.txt | sort | uniq > genesWithInfo.txt
+    awk '{if ($2 ~ /OTTDARG/) print $2;}' vegaIDs.uniq \
+        | sort | uniq > genesFromGtf.txt
+    # Number of genes with info AND in gtf file:
+    wc -l genesFromGtf.txt
+    # 6171 genesFromGtf.txt
+    comm -12 genesWithInfo.txt genesFromGtf.txt | wc -l
+    # 6171
+    # Number of genes wih no info:
+    comm -13 genesWithInfo.txt genesFromGtf.txt | wc -l
+    # 0
+    # Use perl script above to extract vegaInfo table information:
+    perl formatVegaInfo.pl vegaIDs.uniq vegaInformation.txt \ 
+         vegaInfoZfish.txt vegaToCloneId.txt
+    # info.log contains genes for which are not in the gff file of VEGA
+    # and this is empty as it should be.
+    wc -l vegaInfoZfish.txt
+    # 6171 vegaInfoZfish.txt
+    wc -l vegaToCloneId.txt
+    # 6738 vegaToCloneId.txt
+    awk '{print $1}' vegaInfoZfish.txt | sort | uniq -c | sort -nr > out2
+    # transcripts only have 1 entry
+    awk '{print $2}' vegaInfoZfish.txt | sort | uniq > infogenes.txt
+    comm -13 infogenes.txt genesFromGtf.txt 
+    # There are no genes in the GFF file that are not in vegaInfoZfish.txt
+    # Then remake the pseudogenes track from this.
+    # Next step is to find which transcripts are pseudogenes.
+    grep pseudogene vegaInfoZfish.txt | sort | uniq | wc -l
+    # There are only 52 in the info file, and all of these are in the GFF
+    # file. Anyway, this is too sparse for a separate track, but
+    # a subtrack could be created.
+    # Get transcript IDs for pseudogenes.
+    grep pseudogene vegaInfoZfish.txt | awk '{print $1}' > pseudogenes.ids 
+    grep -w -f pseudogenes.ids vega.gtf > vegaPseudoGene.gtf 
+    awk '{print $20}' vegaPseudoGene.gtf | sort | uniq | wc -l
+    # 52
+    grep -vw -f pseudogenes.ids vega.gtf > vegaGene.gtf
+    wc -l vega*gtf
+    # 119707 vega.gtf
+    # 119540 vegaGene.gtf
+    # 167 vegaPseudoGene.gtf
+    # Need to relabel IDs to get the name to be the otter transcript ID
+    # and name 2 to be the transcript_id (needs to be labeled as gene_id)
+    # Also, relabel the otter_transcript_id to be transcript_id as ldHgGene
+    # groups the rows by this ID.  
+    sed -e 's/gene_id/tmp_id/' vegaGene.gtf > vegaGeneFormat.gtf
+    perl -pi.bak -e 's/transcript_id/gene_id/' vegaGeneFormat.gtf
+    perl -pi.bak -e 's/otter_transcript_id/transcript_id/' vegaGeneFormat.gtf
+
+    # Do the same for the pseudogene GTF files:
+    sed -e 's/gene_id/tmp_id/' vegaPseudoGene.gtf > vegaPseudoGeneFormat.gtf
+    perl -pi.bak -e 's/transcript_id/gene_id/' vegaPseudoGeneFormat.gtf
+    perl -pi.bak -e 's/otter_transcript_id/transcript_id/' \
+         vegaPseudoGeneFormat.gtf
+    rm *.bak
+    # load GTF files for Vega genes and pseudogenes:
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega
+    hgsql -e 'drop table vegaGene;' danRer4
+    hgsql -e 'drop table vegaPseudoGene;' danRer4
+
+    ldHgGene -bin -genePredExt danRer4 vegaGene vegaGeneFormat.gtf
+    # Read 8765 transcripts in 119540 lines in 1 files
+    # 8765 groups 29 seqs 4 sources 2 feature types
+    # 8765 gene predictions
+
+    ldHgGene -bin -genePredExt danRer4 vegaPseudoGene vegaPseudoGeneFormat.gtf
+    # Read 52 transcripts in 167 lines in 1 files
+    # 52 groups 11 seqs 1 sources 1 feature types
+    # 52 gene predictions
+    
+    hgsql -N -e 'select distinct(chrom) from vegaGene;' danRer4 \
+         | sort | uniq 
+    hgsql -N -e 'select distinct(chrom) from vegaPseudoGene;' danRer4 \
+         | sort | uniq 
+    # includes several scaffolds so need to lift file to chrom level for 
+    # these and reload vegaGene. vegaPseudoGene has no scaffolds.
+    
+    # scaffolds in vegaGene:
+# chrZv6_scaffold3697
+# chrZv6_scaffold3723
+# chrZv6_scaffold3731
+# chrZv6_scaffold3734
+    # These are all on the chrUn_random virtual chrom
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega
+    sed -e 's/chrZv6_scaffold/Zv6_scaffold/g' vegaGeneFormat.gtf \
+           > vegaGeneFormat2.gtf 
+    liftUp vegaGeneFormatLifted.gtf \
+           /cluster/data/danRer4/jkStuff/liftAll.lft carry vegaGeneFormat2.gtf
+    # Reload vegaGene table:
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega
+    hgsql -e 'drop table vegaGene;' danRer4 
+    ldHgGene -bin -genePredExt danRer4 vegaGene vegaGeneFormatLifted.gtf
+    # Read 8765 transcripts in 119540 lines in 1 files
+    # 8765 groups 26 seqs 4 sources 2 feature types
+    # 8765 gene predictions
+
+    # Vega information tables:
+    # mySQL table definition and autosql-generated files created previously 
+    # for zebrafish-specific information (vegaInfoZfish) in the VEGA GENES 
+    # section above.
+    # Add clone_id to a separate table instead of this one. 
+    
+    # created a second table for the cloneId accessions since there
+    # are multiple ids for some VEGA genes. Otherwise, there would be 
+    # a comma separated list in this field or many rows repeated but just
+    # different in the cloneId field. Associate transcript ID to clone IDs.  
+    # see VEGA GENES section
+    # load these tables: 
+    cd /cluster/data/danRer4/bed/vega
+    hgsql -e 'drop table vegaInfoZfish;' danRer4
+    hgLoadSqlTab danRer4 vegaInfoZfish ~/kent/src/hg/lib/vegaInfoZfish.sql \
+                 vegaInfoZfish.txt
+    hgsql -e 'drop table vegaToCloneId;' danRer4
+    hgLoadSqlTab danRer4 vegaToCloneId ~/kent/src/hg/lib/vegaToCloneId.sql \
+                 vegaToCloneId.txt
+
+    # Add code to hgc.c so that this works for Zebrafish and creates the
+    # relevant links. Add searches by vega transcript ID, ZFIN ID and 
+    # clone ID. trackDb entry added as in VEGA GENES section above.
+    # Added track handler to hgTracks.c for vegaGeneZfish so that the
+    # transcript names from the name2 column of the genePred table is 
+    # used for the item name displayed in the track.
+    # Add a Vega zebrafish-specific html description to trackDb/zebrafish. 
+    # The Pseudogenes are a subtrack of the Genes track
+    # because it is too sparse to show as a separate track. 
+
+    # ADD Descriptions for Vega Genes 
+    # Looked into using description from BioMart for VEGA genes but easier
+    # to get them all directly from Sanger. Kerstin sent a list of 
+    # descriptions: for_rachel.txt
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/vega/description
+    # copy file here and rename
+    cd /cluster/data/danRer4/bed/vega/description
+    mv ../vegaDescriptions.txt .
+    # get list of VEGA gene IDs in vegaInfoZfish
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/vega/description
+    hgsql -N -e 'select distinct(geneId) from vegaInfoZfish;' danRer4 | sort \
+          > geneIdsFromInfo.sort
+    # get sorted list of gene IDs from description file:
+    awk '{print $1;}' vegaDescriptions.txt | sort | uniq > vegaDesc.ids.sort
+    wc -l *.sort
+    # 6171 geneIdsFromInfo.sort
+    # 14150 vegaDesc.ids.sort
+
+    comm -12 geneIdsFromInfo.sort vegaDesc.ids.sort | wc
+    # 6168
+    comm -23 geneIdsFromInfo.sort vegaDesc.ids.sort > genesNoDesc.txt
+    # There are 3 with no description
+    # OTTDARG00000004654
+    # OTTDARG00000018757
+    # OTTDARG00000018760
+    # Searched for these three at
+    # http://vega.sanger.ac.uk/Danio_rerio/index.html
+    # and found that these three do not have a description.
+    # add them to the descriptions list
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/vega/description
+    # add the three with no description to the descriptions list
+    cat vegaDescriptions.txt genesNoDesc.txt > vegaAll.txt
+    # remove header
+    tail +2 vegaAll.txt | sort | uniq > vegaAllDesc.txt
+    wc -l vegaAll*
+    # 23058 vegaAll.txt
+    # 15460 vegaAllDesc.txt
+    # clean up
+    rm genesNoDesc.txt geneIds* vegaDesc.ids.sort
+    # Then add these to the vegaInfoZish table
+cat << 'EOF' > addDesc.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($infoFile, $descFile, %descHash);
+$infoFile = $ARGV[0]; # vegaInfoZfish.txt file
+$descFile = $ARGV[1]; # file of descriptions
+
+open(INFO, $infoFile) || die "Can not open $infoFile : $!\n";
+open(DESC, $descFile) || die "Can not open $descFile : $!\n";
+open(ERROR, ">error.log") || die "Can not create error.log : $!\n";
+open(OUT, ">out.txt") || die "Can not create out.txt: $!\n";
+
+while (<DESC>)
+{
+my($line, @f, $id, $desc);
+chomp;
+$line = $_;
+@f = split(/\t/, $line);
+if ($f[0] =~ /^OTTDARG/)
+  {
+  $id = $f[0];
+  $desc = $f[1];
+  }
+else
+  {
+  print ERROR "OTTDARG ID is not found on a line of the descriptions file.\n";
+  }
+$descHash{$id} = $desc;
+}
+close DESC;
+
+while (<INFO>)
+{
+my ($li, @fi, $de, $i, $last);
+$de = "";
+chomp;
+$li = $_;
+@fi = split(/\t/, $li);
+if ($fi[1] =~ /OTTDARG/)
+   {
+   if (exists($descHash{$fi[1]}))
+      {
+      $de = $descHash{$fi[1]};
+      }
+   else
+      {
+      print ERROR "There is no description for $fi[1] available.\n";
+      }
+   }
+$last = $#fi;
+for ($i = 0; $i <= 5; $i++ )
+   {
+   print OUT "$fi[$i]\t";
+   }
+print OUT "$de\t";
+if ($last == 5)
+   {
+   # if there are only 5 fields, the last one is missing so add extra tab
+   print OUT "\t\n";
+   }
+else
+   {
+   print OUT "$fi[$last]\n";
+   }
+}
+close INFO;
+close ERROR;
+'EOF'
+    chmod +x addDesc.pl
+    # add new descriptions to vegaInfoZfish.txt file
+    perl addDesc.pl ../vegaInfoZfish.txt vegaAllDesc.txt
+    # check output in out.txt then rename
+    mv out.txt vegaInfoZfishWithDesc.txt
+    rm error.log # empty
+    # Reload vegaInfoZfish table 
+    ssh hgwdev  
+    cd /cluster/data/danRer4/bed/vega/description
+    hgsql -e 'drop table vegaInfoZfish;' danRer4
+    hgLoadSqlTab danRer4 vegaInfoZfish ~/kent/src/hg/lib/vegaInfoZfish.sql \
+                 vegaInfoZfishWithDesc.txt
+    # No errors loading
+    
+# Added code already to hgc.c so that this works for Zebrafish and creates the
+# relevant links. Add searches by vega transcript ID, ZFIN ID and 
+# clone ID. trackDb entry added as in VEGA GENES section above.
+# Added track handler to hgTracks.c for vegaGeneZfish so that the
+# transcript names from the name2 column of the genePred table are
+# used for the item name displayed in the track.
+# Add a Vega zebrafish-specific html description to trackDb/zebrafish. 
+# The Pseudogenes are a subtrack of the Genes track because it is too sparse 
+# to show as a separate track. 
 
 ##########################################################################
 # N-SCAN gene predictions (nscanGene) - (2006-08-30 markd)
@@ -8241,13 +8726,49 @@ drop minNonRepSize:     1004    72545
 # CGENZEB_456012678_0 now went down to 1. 
 # 89.2% aligned
 
+   # use minCover = 0.40
+   pslCDnaFilter -localNearBest=0.001 -minQSize=20 -minNonRepSize=8 \
+        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.40 raw.psl \
+        contig.psl
+seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+        weird over:     13      48
+        kept weird:     7       15
+    drop localBest:     1350    7451
+              kept:     14632   19009
+
+   # little difference using minCover=0.60
+
+
    cd /san/sanvol1/scratch/danRer4/compugen
    rm contig*
 # Use these parameters:
    pslCDnaFilter -localNearBest=0.001 -minQSize=20 -minNonRepSize=8 \
-        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.10 raw.psl \
+        -ignoreNs -bestOverlap -minId=0.95 -minCover=0.40 raw.psl \
         contig.psl
-   
+   # use minCover = 0.40
+    seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+        weird over:     13      48
+        kept weird:     7       15
+    drop localBest:     1350    7451
+              kept:     14632   19009
+    # use minCover=0.60
+ seqs    aligns
+             total:     15544   102554
+drop minNonRepSize:     1004    72545
+     drop minIdent:     825     3549
+     drop minCover:     198     507
+        weird over:     9       39
+        kept weird:     4       12
+    drop localBest:     1285    7009
+              kept:     14588   18944
+
+ 
    # lift up the coordinates to chrom level
    liftUp compugenZebrafish.psl \
           /cluster/data/danRer4/jkStuff/liftAll.lft warn contig.psl
@@ -8676,6 +9197,8 @@ CREATE TABLE ensBiotype (
 # 1942C.INSERTMUT and also changed another marker name to remove a forward 
 # slash. Remade rhMapZfishInfo table and removed spaces from primer sequences. 
 # (2007-02-14, hartera)
+# Collected stats on RH map alignments for Yi Zhou (DONE, 2007-03-28, hartera)
+
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/ZonLab/rhMap-2006-10-03
     cd /cluster/data/danRer4/bed/ZonLab
@@ -9342,6 +9865,94 @@ string rightPrimer;     "Reverse primer sequence"
     # and added an html page for the track.
     # Added the rhMapZfishInfo.h file to the makefile in src/hg/lib
     # and replaced rhMapInfo with rhMapZfishInfo in src/hg/hgc/hgc.c
+
+    # RH MAP STATISTICS
+    # Get some stats for Yi Zhou at Harvard (2007-03-20 & 2007-03-28)
+    # Of the 11514 markers with sequence information, 10818 aligned (94%)
+    # using a filter for 85% sequence identity and all portions of all 
+    # alignments for a sequence must be within 0.5% of the identity of the 
+    # best alignments for each portion of the marker. The query must have at
+    # least 0.33 of the sequence aligned and at least 16 bases must not be in
+    # repeat regions.
+    cd /cluster/data/danRer4/bed/ZonLab/rhMap
+    mkdir stats
+    cd stats
+    hgsql -e 'select count(distinct(qName)) from rhMap;' danRer4
+    # 10818
+    hgsql -N -e 'select qName from rhMap;' danRer4 | sort | uniq -c \
+          | sort -nr > qNames.count
+    # send this list too
+    # 1701 markers have 2 or more BLAT alignment that pass the filter.
+    hgsql -N -e 'select name, linkageGp from rhMapZfishInfo;' danRer4 \
+          > markers.linkageGroups
+    hgsql -N -e 'select qName, tName from rhMap;' danRer4 > rhMap.align.chroms
+
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/ZonLab/rhMap/stats
+    sed -e 's/LG/chr/' markers.linkageGroups > markers.rhMap.chroms
+    # some marker names contain "LG"
+    awk '{print $1}' markers.linkageGroups | grep "LG" 
+    # there are 18 and all begin with "TLG"
+    sed -e 's/Tchr/TLG/' markers.rhMap.chroms > markers.rhMap.chroms2
+    sort markers.rhMap.chroms2 | uniq > markers.rhMap.chroms.sort
+    wc -l markers.rhMap.chroms*
+    # 11514 markers.rhMap.chroms
+    # 11514 markers.rhMap.chroms.sort
+    # 11514 markers.rhMap.chroms2
+    # same when uniqued
+    sort rhMap.align.chroms | uniq > rhMap.align.chroms.sort
+    wc -l rhMap.align*
+    # 13025 rhMap.align.chroms
+    # 11344 rhMap.align.chroms.sort
+    
+    # Find how well the RH map and Zv6 agree in terms of chromosome 
+    # assignment given that linkage group number is the same as the 
+    # chromosome number.
+    comm -23 rhMap.align.chroms.sort markers.rhMap.chroms.sort \
+             > diffChromInGenome
+    # need to find just those in rhMap.align.chroms.sort that are 
+    # in rhMap.
+    awk '{print $1}' rhMap.align.chroms.sort | sort | uniq > rhMap.align.names
+    foreach n (`cat rhMap.align.names`)
+      echo $n
+      grep -w $n markers.rhMap.chroms.sort >> markers.rhMap.chroms.aligned
+    end
+    # 10818 in markers.rhMap.chroms.aligned
+    # 10818 rhMap.align.names
+    # then compare this list to the ones that are aligned to the genome
+    comm -13 rhMap.align.chroms.sort markers.rhMap.chroms.aligned \
+         > diffChromInRHMap
+    wc -l diffChromInRHMap
+    # 1392 diffChromInRHMap
+    # these are the markers that have a different chromosome (linkage group)
+    # assigned in the RH map to that found by BLAT alignment of the marker
+    # sequence to the genome. This list shows the linkage groups (chr) in the 
+    # RH map then generate a list of where these align in the genome
+    # These are markers that have at least one alignment to the same chrom
+    # as in the linkage map. They may be aligning to other chroms too.
+    awk '{print $1}' diffChromInRHMap > diffChromInRHMap.names
+    foreach n (`cat diffChromInRHMap.names`)
+      echo $n
+      grep -w $n rhMap.align.chroms.sort >> rhMap.genomeAlign.diffInRHmap
+    end
+    wc -l rhMap.genomeAlign.diffInRHmap
+    # 1562 rhMap.genomeAlign.diffInRHmap
+    # This is the list of markers that differ in chrom between the RH map
+    # and genome alignment with the list of chroms to which they are 
+    # aligned by BLAT in an alignment of the marker sequence to the genome. 
+    # There are more lines in this file because some markers align more than 
+    # once to the genome so they appear more than once in the file.
+    # Therefore of those markers aligned, 10818, there are 1392 (12.9%)
+    # that are aligning to a different chromosome.
+    # Some of these may be aligning to chrUn_random or chrNA_random
+    grep random rhMap.genomeAlign.diffInRHmap | awk '{print $1}' \
+         | sort | uniq > diffInRHmap.alignedToRandom
+    wc -l diffInRHmap.alignedToRandom
+    # 142 diffInRHmap.alignedToRandom
+    # Of the markers with different chroms in the genome alignment and the 
+    # linkage map, 142 (1.3% of 10818) are aligning to chrUn_random or 
+    # chrNA_random so the sequence containing these markers has
+    # not yet been placed on a chromosome.
 
 #########################################################################
 ##  Reorder Fish organisms (DONE - 2006-12-22 - Hiram)
