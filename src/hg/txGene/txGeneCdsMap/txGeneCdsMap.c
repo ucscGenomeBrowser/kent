@@ -12,13 +12,14 @@
 
 boolean uglyUgly;
 
-static char const rcsid[] = "$Id: txGeneCdsMap.c,v 1.1 2007/03/22 06:38:29 kent Exp $";
+static char const rcsid[] = "$Id: txGeneCdsMap.c,v 1.2 2007/03/28 20:19:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "txGeneCdsMap - Create mapping between CDS region of gene and genome.\n"
+  "This is used to build the exon track in the proteome browser.\n"
   "usage:\n"
   "   txGeneCdsMap in.bed in.info in.picks refPepToTx.psl refToPep.tab chrom.sizes cdsToRna.psl rnaToGenome.psl\n"
   "options:\n"
