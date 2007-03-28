@@ -697,7 +697,7 @@ catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab stdin ucscPfam
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' pfamDesc.tab > sub.foo
 cut -f 1,4 ucscPfam.tab | subColumn 2 stdin sub.foo knownToPfam.tab
-hgLoadSqlTable $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
+hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -718,6 +718,16 @@ _EOF_
 gensub2 in.lst single gsub spec
 ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/scop; para make"
 
-# Conver scop output to tab-separated file
-catDir /san/sanvol1/scratch/$db/ucscGenes/scop/out | hmmPfamToTab stdin stdout | \
-    scopCollapse stdin /cluster/store12/scop/model.tab ucscScop.tab scopDesc.tab
+# Convert scop output to tab-separated files
+catDir /san/sanvol1/scratch/$db/ucscGenes/scop/out | \
+	hmmPfamToTab -eValCol -scoreCol stdin scopPlusScore.tab
+scopCollapse scopPlusScore.tab /cluster/store12/scop/model.tab ucscScop.tab \
+	scopDesc.tab knownToSuper.tab
+hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
+
+# Regenerate ccdsKgMap table
+/cluster/data/genbank/bin/x86_64/mkCcdsGeneMap  -db=$db -loadDb ccdsGene knownGene ccdsKgMap
+
+# Map old to new mapping
+cat refSeq/*.bed mrna/*.bed | txGeneExplainUpdate1 knownGene_1.bed ucscGenes.bed stdin abWalk.bed kg1ToKg2.bed
+hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
