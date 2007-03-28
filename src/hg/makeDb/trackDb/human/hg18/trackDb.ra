@@ -317,7 +317,6 @@ color 90,0,150
 type bed 6 .
 
 track knownGene_1
-release beta
 shortLabel Old Known Genes
 longLabel Old UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
 group genes
