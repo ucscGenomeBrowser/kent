@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.15 2007/03/27 17:51:08 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.16 2007/03/28 16:03:30 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -514,7 +514,6 @@ struct bedHead *bedHead = NULL;
 struct hash *hash = newHash(6);
 struct hashEl *hel, *lastHel = NULL;
 struct bed3 *bed;
-int size;
 
 while (lineFileRow(lf, row))
     {
@@ -555,7 +554,6 @@ return hash;
 void addBed(char *file, struct hash *fileHash)
 {
 char name[128];
-struct hash *sizeHash;
 
 if (!endsWith(file, ".bed"))
     errAbort("filenames in bed list must end in '.bed'");
