@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.3 2007/03/27 00:06:56 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.4 2007/03/28 23:59:15 hiram Exp $"
 #
 
 ##########################################################################
@@ -29,7 +29,7 @@
     cat << '_EOF_' > braFlo1.config.ra
 # Config parameters for makeGenomeDb.pl:
 db braFlo1
-clade cephalochordata
+clade deuterostome
 genomeCladePriority 20
 scientificName Branchiostoma floridae
 commonName Lancelet
@@ -44,8 +44,6 @@ dbDbSpeciesDir lancelet
 '_EOF_'
     time nice -n +19 makeGenomeDb.pl braFlo1.config.ra > makeGenomeDb.out 2>&1
 
-    hgsql -e 'INSERT INTO clade (name, label, priority)
-VALUES ("cephalochordata", "Cephalochordata", 35);' hgcentraltest
     hgsql -e 'INSERT INTO chrM_gold
 (bin, chrom, chromStart, chromEnd, ix, type, frag, fragStart, fragEnd, strand)
 VALUES (585, "chrM", 0, 15083, 1, "F", "NC_000834.1", 0, 15083, "+");' braFlo1
@@ -164,43 +162,112 @@ done
  
 #########################################################################
 ## BLASTZ HUMAN HG18 (DONE - 2007-03-26 - Hiram)
+    # measurement on hg18
     ssh kkstore02
-    mkdir /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
     cd /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
-    cat << '_EOF_' > DEF
-# human vs lancelet
+    cat fb.hg18.chainBraFlo1Link.txt
+    #	26455595 bases of 2881515245 (0.918%) in intersection
 
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-
-# TARGET: Human Hg18
-SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.sdTrf.2bit
-SEQ1_LEN=/cluster/data/hg18/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-SEQ1_LIMIT=1
-
-# QUERY: Lancelet braFlo1 - largest chunk big enough for largest scaffold
-#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
-SEQ2_DIR=/san/sanvol1/scratch/braFlo1/braFlo1.2bit
-SEQ2_LEN=/san/sanvol1/scratch/braFlo1/chrom.sizes
-SEQ2_CTGDIR=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.2bit
-SEQ2_CTGLEN=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.sizes
-SEQ2_LIFT=/san/sanvol1/scratch/braFlo1/braFlo1.lift
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=30
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << happy emacs
-
-    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+    # and now the swap
+    mkdir /cluster/data/braFlo1/bed/blastz.hg18.swap
+    cd /cluster/data/braFlo1/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -chainMinScore=2000 -chainLinearGap=loose \
+	/cluster/data/hg18/bed/blastz.braFlo1.2007-03-26/DEF \
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -verbose=2 \
-	-blastzOutRoot /cluster/bluearc/hg18BraFlo1 > do.log 2>&1 &
-XXXX - running 2007-03-26 15:20
+	-swap > swap.log 2>&1 &
+    #	real    83m46.258s
+    cat fb.braFlo1.chainHg18Link.txt
+    #	30912893 bases of 923355587 (3.348%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2007-01-18 - Hiram)
+    # Use -repMatch=328 (based on size -- for human we use 1024, and 
+    # lancelet size is ~32% of human judging by gapless braFlo1 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/braFlo1
+    blat braFlo1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=328
+    #	Wrote 9536 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/braFlo1
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-03-26,27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add braFlo1 just after gasAcu1
+
+# braFlo1 (Branchiostoma floridae - Lancelet)
+braFlo1.serverGenome = /cluster/data/braFlo1/braFlo1.2bit
+braFlo1.clusterGenome = /san/sanvol1/scratch/braFlo1/braFlo1.2bit
+braFlo1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+braFlo1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+braFlo1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+braFlo1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+braFlo1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+braFlo1.ooc = /san/sanvol1/scratch/braFlo1/11.ooc
+braFlo1.lift = /cluster/data/braFlo1/jkStuff/liftAll.lft
+braFlo1.refseq.mrna.native.load = no
+braFlo1.refseq.mrna.xeno.load = yes
+braFlo1.genbank.mrna.xeno.load = yes
+braFlo1.genbank.est.native.load = yes
+braFlo1.downloadDir = braFlo1
+braFlo1.perChromTables = no
+
+    cvs ci -m "Added braFlo1." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    cvs ci -m "Added Branchiostoma floridae (lancelet)." src/lib/gbGenome.c
+    make install-server
+
+    ssh kkstore05
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial braFlo1 &
+    #	logFile: var/build/logs/2007.03.26-21:58:34.braFlo1.initalign.log
+    #	real    230m8.123s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad braFlo1
+    #	logFile: var/dbload/hgwdev/logs/2007.03.27-07:52:23.dbload.log
+    #	real    6m57.557s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add braFlo1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added braFlo1 - Branchiostoma floridae (lancelet)" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+############################################################################
+## Adding a photograph (DONE - 2007-03-28 - Hiram)
+## From Hector Escriva: hector.escriva@obs-banyuls.fr
+# Dr. Clawson
+# All the european teams working with amphioxus have changed to B.
+# lanceolatum species and none of us is still working with B. floridae. We
+# are able here to induce spawnings everyday (on B. lanceolatum) and this
+# is impossible with the american species which limits very much the
+# amount of experiments that one can perform. So I have pictures of B.
+# lanceolatum, which is morphologically the same as floridae (even me I
+# cannot distinghish them). So I send you here a picture of a B.
+# lanceolatum juvenile in which we clearly see the main morphological
+# aspects of this animal. You should however write the correct name of the
+# species in order to be serious.
+# I would also ask you to write in "Photo courtesy of", the name of my
+# technicien who did the picture and myself. Michael Fuentes and Hector Escriva.
+# Let me know if you agree with this picture.
+# Sincerely Hector Escriva
+    mkdir /cluster/data/braFlo1/photograph
+    cd /cluster/data/braFlo1/photograph
+    convert -sharpen 0 -normalize -geometry 350x200 \
+	PostmetamorphicLarvae.jpg Branchiostoma_lanceolatum.jpg
+
