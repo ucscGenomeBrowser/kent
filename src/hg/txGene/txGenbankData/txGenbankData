@@ -1,0 +1,39 @@
+#!/bin/sh -e
+
+usage="txGenbankData db
+
+
+Get GenBankand RefSeq alignments and metadata, and ReqSeq peptide sequences
+for input to the UCSC Genes pipeline.  Outputs the following files in the
+current directory:
+
+   \$db.genbank.psl.gz
+   \$db.genbank.ra.gz
+   \$db.refseq.psl.gz
+   \$db.refseq.ra.gz
+   \$db.refseq.pep.fa.gz
+"
+
+if [ $# != 1 ] ; then
+    echo "Wrong # args: $usage" >&2
+    exit 1
+fi
+db="$1"
+
+echo "Warning: using tmp gbRoot until GenBank fully converted handling non-coding RNA" >&2
+#gbRoot=/cluster/data/genbank
+gbRoot=/cluster/store10/markd/genbank
+gbGetSeqs=${gbRoot}/bin/x86_64/gbGetSeqs
+
+# function to get alignments and metadata.
+doGet() {
+    local srcDb="$1"
+    (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=psl -db=$db -native $srcDb mrna $srcDb.psl.gz)
+    (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=ra -db=$db -native $srcDb mrna $srcDb.ra.gz)
+}
+    
+
+doGet refseq
+(set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=seq -db=$db -native refseq pep refseq.pep.fa.gz)
+doGet genbank
+
