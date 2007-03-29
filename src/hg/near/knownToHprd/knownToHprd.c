@@ -34,12 +34,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct prioritizedImage 
-    {
-    int imageId;	/* ID of image */
-    float priority;	/* Image priority - smaller is more urgent */
-    };
-
 void createTable(struct sqlConnection *conn, char *tableName)
 /* Create our name/value table, dropping if it already exists. */
 {
