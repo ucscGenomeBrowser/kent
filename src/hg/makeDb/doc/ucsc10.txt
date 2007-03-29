@@ -20,7 +20,7 @@ set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer4
 set flyDb = dm2
-set wormDb = ce3
+set wormDb = ce2
 set yeastDb = sacCer1
 
 # Proteins in various species
@@ -399,7 +399,6 @@ txGeneSeparateNoncoding weededCds.bed weededCds.info \
 awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
 cat coding.bed nearCoding.bed antisense.bed uncoding.bed | sort -k1,1 -k2,3n >weeded.bed
-txGeneFromBed weeded.bed pick.picks weeded.gp
 
 # Make up a little alignment file for the ones that got tweaked.
 sed -r 's/.*NM_//' weededCds.tweaked | awk '{printf("NM_%s\n", $1);}' > tweakedNm.lst
@@ -474,12 +473,12 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
 # Make up knownGenes table, adding uniProt ID. Load into database. Takes 3
 # seconds.
-txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.gp
+txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
 hgLoadSqlTab $tempDb knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
 hgLoadBed $tempDb knownAlt altSplice.bed
 
 # Make up kgXref table.  Takes about 3 minutes.
-txGeneXref $db $spDb ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
+txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
 hgLoadSqlTab $tempDb kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
 
 # Make up and load kgColor table. Takes about a minute.
@@ -692,7 +691,7 @@ raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout | \
 
 # Convert output to tab-separated file. 
 cd $dir
-catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab stdin ucscPfam.tab
+catDir /san/sanvol1/scratch/$db/ucscGenes/pfam/out | hmmPfamToTab -eValCol stdin ucscPfam.tab
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' pfamDesc.tab > sub.foo
