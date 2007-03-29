@@ -118,14 +118,14 @@ outf = NULL;
 geneSymbol = NULL;
 
 /* figure out how many pages in total */
-safef(query2, sizeof(query2), "select count(*) from %s.knownGene", database);
+safef(query2, sizeof(query2), "select count(*) from %s.knownGene where proteinID != ''", database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgCnt = atoi(row2[0]);
 sqlFreeResult(&sr2);
 
 /* figure out how many KG IDs in total */
-safef(query2, sizeof(query2), "select count(*) from %s.kgXref", database);
+safef(query2, sizeof(query2), "select count(*) from %s.kgXref where spId!='' and protAcc!=''", database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgId = atoi(row2[0]);
@@ -133,7 +133,7 @@ sqlFreeResult(&sr2);
 totalKgPage = totalKgId/LINKSPERPAGE + 1;
 
 safef(query2, sizeof(query2),
-      "select kgID, geneSymbol, description from %s.kgXref order by geneSymbol",
+      "select kgID, geneSymbol, description from %s.kgXref where spId!='' and protAcc!='' order by geneSymbol",
       database); 
       
       /* for debugging */
