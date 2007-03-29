@@ -75,9 +75,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(mRnaHash, mRNA, cloneString(kgId));
     if (spId)
 	hashAdd(spIdHash, spId, cloneString(kgId));
-
-    //uglyf("kgId=%s mRNA=%s spId=%s\n",kgId,mRNA,spId);
-
     }
 sqlFreeResult(&sr);
 
@@ -89,7 +86,6 @@ while (lineFileRowTab(lf, lrow))
     struct hashEl *kgId = NULL;
     chopSuffixAt(cDna,'.');
 
-    //uglyf("hprdId=%s cDna=%s uniProt=%s\n",hprdId,cDna,uniProt);
     boolean found = FALSE;
     kgId = hashLookup(mRnaHash, cDna);	
     while(kgId)
@@ -125,8 +121,6 @@ lineFileClose(&lf);
 carefulClose(&f);
 
 verbose(2, "missing=%d\n",missing);
-
-uglyf("see %s/%s.tab\n",tempDir, outTable);
 
 createTable(hConn, outTable);
 hgLoadTabFile(hConn, tempDir, outTable, &f);
