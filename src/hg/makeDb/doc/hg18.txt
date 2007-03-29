@@ -14293,3 +14293,37 @@ TMPDIR=/scratch/tmp
     cp -Rfp knownGeneList/hg18/* /usr/local/apache/htdocs/knownGeneList/hg18
 
 ##############################################################################
+# Update entrez DB tables.
+
+   cd /cluster/store10/entrez
+   mkdir 070329
+   ln -s /cluster/store10/entrez/070329 /cluster/data/entrez/070329
+   cd /cluster/data/entrez/070329
+
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2accession.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
+   gzip -d *.gz
+
+   cut -f 2,4 gene2accession | sort -u | grep -v "-" | grep -v "NM_" | sed -e 's/\./\t/g'|cut -f 1-2 > entrezMrna.tab
+   cut -f 2,4 gene2refseq | grep "NM_"| sort -u | grep -v "-" | sed -e 's/\./\t/g' > entrezRefseq.tab
+   cut -f 2,4 gene2refseq | grep "NM_"| sort -u | grep -v "-" | sed -e 's/\./\t/g'|cut -f 1-2 > entrezRefseq.tab
+   cut -f 2,4,6 gene2accession | grep "NM_"| grep "NP_"|sort -u | sed -e 's/\./\t/g'|cut -f 1,2,4 > entrezRefProt.tab
+   
+   hgLoadSqlTab entrez entrezRefseq ~/src/hg/lib/entrezRefseq.sql ./entrezRefseq.tab
+   hgLoadSqlTab entrez entrezMrna ~/src/hg/lib/entrezMrna.sql ./entrezMrna.tab
+   hgLoadSqlTab entrez entrezRefProt ~/src/hg/lib/entrezRefProt.sql ./entrezRefProt.tab
+   
+   cd /cluster/data/hg18/bed/ucsc.10
+   hgsql entrez -N -e \
+        'select mrna, refseq from entrezRefseq, entrezMrna, hg18.all_mrna where qName=mrna and entrezRefseq.geneID=entrezMrna.geneID' \
+   >mrnaRefseq1.tab
+   
+# Include RefSeq as valid mRNA too.
+    hgsql hg18 -N -e 'select name, name from refGene' >mrnaRefseq2.tab
+
+    cat mrnaRefseq1.tab mrnaRefseq2.tab |sort -u >mrnaRefseq.tab
+
+    hgLoadSqlTab hg18 mrnaRefseq ~/src/hg/lib/mrnaRefseq.sql ./mrnaRefseq.tab
+    
+##############################################################################
