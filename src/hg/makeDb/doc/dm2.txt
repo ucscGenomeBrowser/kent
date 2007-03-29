@@ -4142,13 +4142,7 @@ _EOF_
 
 
 # FLYP2P (DONE 2/6/06 angie)
-    # See Galt's hgNetDist notes in hg/near/makeHgNear.doc...
-    ssh hgwdev
-    mkdir /cluster/data/dm2/bed/p2p
-    cd /cluster/data/dm2/bed/p2p
-    cp /cluster/data/dm1/p2p/flyP2P.tab .
-    hgNetDist flyP2P.tab dm2 flyP2P \
-      -sqlRemap='select fbgn,name from flyBase2004Xref'
+    # See hg/near/makeHgNear.doc...
 
 
 # MAKE ORGANISM-SPECIFIC HGNEARDATA AND HGGENEDATA FILES (DONE 2/7/06 angie)

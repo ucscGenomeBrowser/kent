@@ -542,6 +542,16 @@ hgNetDist wormP2P.tab ce2 wormP2P -threshold=2
 
 #----------------------------------------------------------
 
+# FLYP2P (DONE 2006-02-06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/p2p
+    cd /cluster/data/dm2/p2p
+    cp /cluster/data/dm1/p2p/flyP2P.tab .
+    hgNetDist flyP2P.tab dm2 flyP2P \
+      -sqlRemap='select fbgn,name from flyBase2004Xref'
+
+
+
 ## (galt 2006-07-31)
 # Human p2p Protein-to-protein network - P2P column and sort order
 # I used the hgNetDist program to calculate network-distances for all gene pairs from gene-to-gene edges in input data,
