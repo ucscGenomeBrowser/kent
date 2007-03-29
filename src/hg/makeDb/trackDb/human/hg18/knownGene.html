@@ -8,16 +8,17 @@ this, requiring no additional evidence. The track includes both protein-coding
 and putative non-coding transcripts. Some of these non-coding transcripts may 
 actually code for protein, but the evidence for the associated protein is weak
 at best. Compared to RefSeq, this gene set has generally about 10% more 
-protein-coding genes, approximately 5x as many putative non-coding genes, and 
-about 2x as many splice variants.</P>
+protein-coding genes, approximately five times as many putative non-coding 
+genes, and 
+about twice as many splice variants.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 This track in general follows the display conventions for
 <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction
-tracks</A>. The exons for putative non-coding genes are represented by 
-relatively thin blocks, while those for coding genes are thicker. The 
-following color key is used:
+tracks</A>.  The exons for putative noncoding genes and untranslated regions 
+are represented by relatively thin blocks, while those for coding open 
+reading frames are thicker.  The following color key is used:
 <UL>
 <LI>Black -- feature has a corresponding entry in the Protein Databank (PDB)
 <LI>Dark blue -- transcript has been reviewed or validated by either the 
@@ -37,42 +38,46 @@ information about this feature. </P>
 <P>
 The UCSC Genes are built using a multi-step pipeline:  
 <OL>
-<LI>Align RefSeq and GenBank RNA to the genome with BLAT, keeping only the best 
+<LI>RefSeq and GenBank RNAs are aligned to the genome with BLAT, keeping 
+only the best 
 alignments for each RNA and discarding alignments of less than 98% identity.
-<LI>Break up alignments at non-intronic gaps, throwing out small isolated 
-fragments.
-<LI>Create a splicing graph for each set of overlapping alignments. This graph 
+<LI>Alignments are broken up at non-intronic gaps, with small isolated 
+fragments thrown out.
+<LI>A splicing graph is created for each set of overlapping alignments. This 
+graph 
 has an edge for each exon or intron, and a vertex for each splice site, start, 
 and end.
 Each RNA that contributes to an edge is kept as evidence for that edge.
-<LI>Create a similar splicing graph in the mouse based on mouse RNA and ESTs. If
+<LI>A similar splicing graph is created in the mouse, based on mouse RNA and 
+ESTs. If
 the mouse graph has an edge that is orthologous to an edge in the human graph, 
-add that to the evidence for the human edge.
-<LI>If an edge in the splicing graph is supported by two or more human ESTs, add
-that as evidence for the edge.
-<LI>If there is an Exonophy prediction for an exon, add that as evidence.
-<LI>Traverse the graph to generate all unique transcripts. The traversal is 
+that is added to the evidence for the human edge.
+<LI>If an edge in the splicing graph is supported by two or more human ESTs, 
+it is added as evidence for the edge.
+<LI>If there is an Exonophy prediction for an exon, that is added as evidence.
+<LI>The graph is traversed to generate all unique transcripts. The traversal is 
 guided by the initial RNAs to avoid a combinatorical explosion in alternative 
 splicing. All refSeq transcripts are output. Other multi-exon transcripts 
 require an edge supported by at least one additional line of evidence past the 
 RNA  to be output.  Single exon genes require either two RNAs or two 
 additional lines of evidence beyond the single RNA. 
-<LI>Generate protein predictions. For non-RefSeq transcripts we use the 
+<LI>Protein predictions are generated. For non-RefSeq transcripts we use the 
 txCdsPredict program to determine if the transcript is protein-coding and if so,
 the locations of the start and stop codons. 
 The program weighs as positive evidence the length of the protein, the 
 presence of a Kozak consensus sequence at the start codon, and the length of 
 the orthologous predicted protein in other species.
 As negative evidence it considers nonsense-mediated decay and start codons in 
-any frame upstream of the predicted start codon. For RefSeq transcripts we use 
-the RefSeq protein prediction.
-<LI>Find the corresponding UniProt protein, if any.
+any frame upstream of the predicted start codon. For RefSeq transcripts 
+the RefSeq protein prediction is used.
+<LI>The corresponding UniProt protein is found, if any.
 </OL>
 
 <H2>Credits</H2>
 <P>
 The UCSC Genes track was produced at UCSC using a computational pipeline
-developed largely by Jim Kent.  It is based on data from NCBI
+developed by Jim Kent, Chuck Sugnet and Mark Diekhans.  
+It is based on data from NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq</A>,
 <A HREF="http://www.expasy.org/sprot/" TARGET=_blank>UniProt</A> 
 (including TrEMBL and TrEMBL-NEW) and 
