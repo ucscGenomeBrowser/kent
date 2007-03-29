@@ -14274,3 +14274,22 @@ TMPDIR=/scratch/tmp
     #	real    83m46.258s
     cat fb.braFlo1.chainHg18Link.txt
     #	30912893 bases of 923355587 (3.348%) in intersection
+
+##############################################################################
+# RE-BUILD knownGeneList, (DONE, 3/29/07, Fan)			    
+			    
+    cd /cluster/data/hg18/bed
+    rm -rf knownGeneList/hg18
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/hg18
+
+    hgKnownGeneList hg18
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/hg18
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/hg18
+    cp -Rfp knownGeneList/hg18/* /usr/local/apache/htdocs/knownGeneList/hg18
+
+##############################################################################
