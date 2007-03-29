@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.5 2007/03/21 23:01:59 kent Exp $";
+static char const rcsid[] = "$Id: txCdsOrtho.c,v 1.6 2007/03/29 07:05:52 kent Exp $";
 
 FILE *fRa = NULL;
 
@@ -199,6 +199,7 @@ freez(&nativeSeq);
 
 /* Figure out if atg is conserved, and also if kozak criteria is conserved. */
 boolean atgConserved = FALSE, kozakConserved = FALSE;
+int atgDots = 0, atgDashes = 0, kozakDots = 0, kozakDashes = 0;
 if (startCol >= 0 && nativeAtg)
     {
     char codon[3];
@@ -206,6 +207,8 @@ if (startCol >= 0 && nativeAtg)
     codon[1] = xeno->text[startCol+1];
     codon[2] = xeno->text[startCol+2];
     toUpperN(codon, 3);
+    atgDots = countCharsN(codon, '.', 3);
+    atgDashes = countCharsN(codon, '-', 3);
     atgConserved = (memcmp(codon, "ATG", 3) == 0);
     if (atgConserved && nativeKozak)
         {
@@ -215,24 +218,35 @@ if (startCol >= 0 && nativeAtg)
 	   char c = xeno->text[ix];
 	   if (c == 'g' || c == 'G')
 	       kozakConserved = TRUE;
+	   if (c == '.')
+	       ++kozakDots;
+	   if (c == '-')
+	       ++kozakDashes;
 	   }
 	if (kozCol >= 0 && !kozakConserved)
 	   {
 	   char c = xeno->text[kozCol];
 	   if (c == 'g' || c == 'G' || c == 'a' || c == 'A')
 	       kozakConserved = TRUE;
+	   if (c == '.')
+	       ++kozakDots;
+	   if (c == '-')
+	       ++kozakDashes;
 	   }
 	}
     }
 
 /* Figure out if stop codon is conserved */
 boolean stopConserved = FALSE;
+int stopDots = 0, stopDashes = 0;
 if (endCol > 0 && nativeStop)
     {
     char codon[3];
     codon[0] = xeno->text[endCol-3];
     codon[1] = xeno->text[endCol-2];
     codon[2] = xeno->text[endCol-1];
+    stopDots = countCharsN(codon, '.', 3);
+    stopDashes = countCharsN(codon, '-', 3);
     stopConserved = isStopCodon(codon);
     }
 
@@ -247,11 +261,12 @@ int orfStart,orfEnd;
 int orfSize = biggestOrf(xenoText + bestFrame, xenoTextSize - bestFrame, &orfStart, &orfEnd)*3;
 int possibleSize = cdsEnd - cdsStart;
 if (orfSize > possibleSize) orfSize = possibleSize;
-fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\t%d\t%f\t%d\t%d\t%d\t%d\t%d\t%d\n", 
-	native->src, cdsStart, cdsEnd, 
-	xeno->src, nativeCdsSize - cdsBasesInXeno, orfSize, possibleSize,
-	(double)orfSize/(possibleSize), atgConserved, kozakConserved, stopConserved,
-	nativeAtg, nativeKozak, nativeStop);
+fprintf(f, "%s\t%d\t%d\t%s\t", native->src, cdsStart, cdsEnd, xeno->src);
+fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t",
+	atgDots, atgDashes, kozakDots, kozakDashes, stopDots, stopDashes);
+fprintf(f, "%d\t%d\t%d\t%d\t",
+	atgConserved, kozakConserved, stopConserved, nativeAtg);
+fprintf(f, "%d\t%d\n", nativeKozak, nativeStop);
 
 /* Handle output to ra file. */
 if (fRa)
