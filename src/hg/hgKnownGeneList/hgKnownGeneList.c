@@ -21,7 +21,7 @@ char pageEndSymbol[MAXSUBDIR][20];
 char topStartSymbol[MAXTOP][20];
 char topEndSymbol[MAXTOP][20];
 int  currentPage;
-
+char emptyString[10] = {"&nbsp"};
 void usage()
 /* Explain usage and exit. */
 {
@@ -61,6 +61,7 @@ char **row, **row2;
 char buf[128];
 char *answer;
 char *kgID, *chrom, *txStart, *txEnd;
+char *mRNA;
 int i;
 int geneCnt  = 0;
 int pageNum  = 0;
@@ -116,16 +117,17 @@ currentPage = 0;
 /* put this in to avoid compiler complaining */
 outf = NULL;
 geneSymbol = NULL;
+char *protAcc = NULL;
 
 /* figure out how many pages in total */
-safef(query2, sizeof(query2), "select count(*) from %s.knownGene where proteinID != ''", database);
+safef(query2, sizeof(query2), "select count(k.name) from %s.knownGene k, %s.kgXref x where k.name=x.kgId and geneSymbol != ''", database, database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgCnt = atoi(row2[0]);
 sqlFreeResult(&sr2);
 
 /* figure out how many KG IDs in total */
-safef(query2, sizeof(query2), "select count(*) from %s.kgXref where spId!='' and protAcc!=''", database);
+safef(query2, sizeof(query2), "select count(*) from %s.kgXref where geneSymbol !=''", database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgId = atoi(row2[0]);
@@ -133,7 +135,7 @@ sqlFreeResult(&sr2);
 totalKgPage = totalKgId/LINKSPERPAGE + 1;
 
 safef(query2, sizeof(query2),
-      "select kgID, geneSymbol, description from %s.kgXref where spId!='' and protAcc!='' order by geneSymbol",
+      "select kgID, geneSymbol, description from %s.kgXref where geneSymbol!= '' order by geneSymbol",
       database); 
       
       /* for debugging */
@@ -182,7 +184,7 @@ while (kgIdCnt < totalKgId)
 	    	    genome, pageNum, totalKgPage);
 	    fprintf(outf, "<TABLE BORDER=1=CELLSPACING=1 CELLPADDING=3 BGCOLOR=\"#D9F8E4\"><TR>\n");
 	    fprintf(outf, 
-	    "<TR><TH>Gene Symbol</TH><TH>Known Gene ID</TH><TH>UniProt</TH><TH>Description</TH>\n");
+	    "<TR><TH>Gene Symbol</TH><TH>Known Gene ID</TH><TH>mRNA</TH><TH>UniProt</TH><TH>RefSeq Protein</TH><TH>Description</TH>\n");
 	    strcpy(startSymbol[pageNum], geneSymbol);
 	    strcpy(pageStartSymbol[currentPage], geneSymbol);
 	    newPage = FALSE;
@@ -199,9 +201,41 @@ while (kgIdCnt < totalKgId)
     	fprintf(outf,"</TD>\n");
 
 	safef(query3,sizeof(query3),"select spID from %s.kgXref where kgID = '%s'", database, kgID);
-	spID = sqlQuickQuery(conn3, query3, buf, sizeof(buf));
-
+	spID = cloneString(sqlQuickQuery(conn3, query3, buf, sizeof(buf)));
+	if (spID == NULL) 
+	    {
+	    spID = emptyString;
+	    }
+	else
+	    {
+	    if (sameWord(spID,"")) spID = emptyString;
+	    }
+	    
+	safef(query3,sizeof(query3),"select mRNA from %s.kgXref where kgID = '%s'", database, kgID);
+	mRNA = cloneString(sqlQuickQuery(conn3, query3, buf, sizeof(buf)));
+	if (mRNA == NULL) 
+	    {
+	    mRNA = emptyString;
+	    }
+	else
+	    {
+	    if (sameWord(mRNA,"")) mRNA = emptyString;
+	    }
+	    
+	safef(query3,sizeof(query3),"select protAcc from %s.kgXref where kgID = '%s'", database, kgID);
+	protAcc = sqlQuickQuery(conn3, query3, buf, sizeof(buf));
+	if (protAcc == NULL) 
+	    {
+	    protAcc = emptyString;
+	    }
+	else
+	    {
+	    if (sameWord(protAcc,"")) protAcc = emptyString;
+	    }
+	
+	fprintf(outf,"<TD>%s</TD>", mRNA);
 	fprintf(outf,"<TD>%s</TD>", spID);
+	fprintf(outf,"<TD>%s</TD>", protAcc);
     	fprintf(outf,"<TD>%s</TD>", desc );
     	fprintf(outf,"</TR>\n");
 	
