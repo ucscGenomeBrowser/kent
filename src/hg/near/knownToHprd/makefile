@@ -12,7 +12,8 @@ knownToHprd: $O ${MYLIBS}
 	${STRIP} ${BINDIR}/${A}${EXE}
 
 test: ${BINDIR}/${A}${EXE}
-	knownToHprd -verbose=2 hg18 /cluster/data/hg18/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+	knownToHprd -verbose=2 -keepTab hg18 \
+		/cluster/data/hg18/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 
 clean:
 	rm -f $O

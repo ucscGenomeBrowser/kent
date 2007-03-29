@@ -21,16 +21,15 @@ errAbort(
   "knownToHprd - Create knownToHprd table using HPRD flat file and kgXref\n"
   "usage:\n"
   "   knownToHprd database hprdFile\n"
-  );
-  /*
   "options:\n"
-  "   -xxx=XXX\n"
-  */
+  "   -keepTab - temp tab file not removed during cleanup.\n"
+  );
 }
 
 char *outTable = "knownToHprd";
 
 static struct optionSpec options[] = {
+   {"keepTab", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -82,7 +81,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-while (lineFileRow(lf, lrow))
+while (lineFileRowTab(lf, lrow))
     {
     char *hprdId = lrow[0];
     char *cDna = lrow[2];
@@ -96,7 +95,7 @@ while (lineFileRow(lf, lrow))
     while(kgId)
 	{
 	found = TRUE;
-	if (!hashFindVal(kgIdHash, kgId->val))  // each kgId only once 
+	if (!hashLookup(kgIdHash, kgId->val))  // each kgId only once 
 	    {
 	    hashAdd(kgIdHash, kgId->val, NULL);
 	    fprintf(f,"%s\t%s\n",(char *)kgId->val,hprdId);
@@ -108,7 +107,7 @@ while (lineFileRow(lf, lrow))
     while(kgId)
 	{
 	found = TRUE;
-	if (!hashFindVal(kgIdHash, kgId->val))  // each kgId only once 
+	if (!hashLookup(kgIdHash, kgId->val))  // each kgId only once 
 	    {
 	    hashAdd(kgIdHash, kgId->val, NULL);
 	    fprintf(f,"%s\t%s\n",(char *)kgId->val,hprdId);
@@ -131,7 +130,8 @@ uglyf("see %s/%s.tab\n",tempDir, outTable);
 
 createTable(hConn, outTable);
 hgLoadTabFile(hConn, tempDir, outTable, &f);
-hgRemoveTabFile(tempDir, outTable);
+if (!optionExists("keepTab"))
+    hgRemoveTabFile(tempDir, outTable);
 }
 
 int main(int argc, char *argv[])
