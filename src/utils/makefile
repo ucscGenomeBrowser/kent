@@ -104,6 +104,7 @@ DIRS = \
 	rowsToCols \
 	scaffoldFaToAgp \
 	scrambleFa \
+	sizeof \
 	spacedToTab \
 	splitFile \
 	splitFileByColumn \
