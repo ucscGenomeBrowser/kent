@@ -1,0 +1,227 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Caenorhabditis remanei
+#	From Wash U GSC
+#	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
+
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/store10/caeRem2
+    ln -s /cluster/store10/caeRem2 /cluster/data/caeRem2
+
+    cd /cluster/data/caeRem2
+    mkdir downloads
+    cd downloads
+    wget --timestamping \
+ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/submitted/Caenorhabditis_remanei-1.0/ASSEMBLY
+
+    wget --timestamping \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/submitted/Caenorhabditis_remanei-1.0/README" \
+	-O README.caeRem2
+
+    wget --timestamping -m -np -nd \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_remanei/assembly/submitted/Caenorhabditis_remanei-1.0/output/"
+
+##########################################################################
+## Create chrUn.agp file (DONE - 2007-03-16 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/caeRem2/downloads
+    cat << '_EOF_' > mkSuperLift.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $start = 1;
+my $end = 1;
+my $itemCount = 1;
+my $agpItemCount = 1;
+my $curContig = "";
+my $firstTime = 1;
+my $scaffoldGapSize = 1000;
+my $scafEnd = 1;
+my $superStart = 0;
+my $superEnd = 1;
+my $superLength = 0;
+my $chrUnSize = 161944676;
+my $chrUnName = "chrUn";
+my $ctgFragCount = 1;
+
+open (CT,">caeRem2.ctgPos2.tab") or die "Can not write to caeRem2.ctgPos2.tab";
+
+open (SC,">caeRem2.CtgScaf.agp") or die "Can not write to caeRem2.CtgScaf.agp";
+
+open (AG,">caeRem2.chrUn.agp") or die "Can not write to caeRem2.chrUn.agp";
+
+open (GL,">caeRem2.gold.tab") or die "Can not write to caeRem2.gold.tab";
+
+open (FH,'zcat supercontigs.agp.gz|') or
+	die "can not open zcat supercontigs.agp.gz";
+while (my $line=<FH>) {
+    chomp $line;
+    if ($line =~ m/fragment/) {
+	my ($name, $gStart, $gEnd, $gapCounter, $gapWN, $gapLen, $frag, $yesNo) =
+	    split('\s+',$line);
+	$end = $start + $gapLen - 1;
+	$scafEnd += $gapLen;
+	printf SC "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $start, $end, $agpItemCount, $gapWN, $gapLen, $frag, $yesNo;
+	printf AG "chrUn\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+		    $start, $end, $agpItemCount++, $gapWN, $gapLen, $frag, $yesNo;
+	$start = $end + 1;
+    } else {
+    my ($ctgName, $ctgStart, $ctgEnd, $ctgCounter, $ctgWN, $name, $cStart, $cEnd, $strand) =
+	split('\s+',$line);
+	my $ctgLen = $ctgEnd - $ctgStart + 1;
+	my $cLen = $cEnd - $cStart + 1;
+	die "not matching start, end:\n$line" if ($ctgLen != $cLen);
+	if (!$firstTime) {
+	    if ($ctgName ne $curContig) {
+		$superLength = $superEnd - $superStart;
+		$end = $start + $scaffoldGapSize - 1;
+		printf SC "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+		    $start, $end, $agpItemCount, $scaffoldGapSize;
+		printf AG "chrUn\t%d\t%d\t%d\tN\t%d\tscaffold\tno\n",
+		    $start, $end, $agpItemCount++, $scaffoldGapSize;
+		printf "%d\t%s\t%d\t%s\t%d\n",
+			$superStart, $curContig, $superLength, $chrUnName,
+				$chrUnSize;
+		printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+			$chrUnName, $superStart, $superEnd, $itemCount++,
+			$curContig, $superLength;
+		$start = $end + 1;
+		$scafEnd = $cStart - 1;
+		$superStart = $start - 1;
+		$ctgFragCount = 1;
+	    }
+	} else {
+	    $firstTime = 0;
+	    $scafEnd = 0;
+	}
+	$scafEnd += $ctgLen;
+	my $fragStart = $scafEnd - $ctgLen + 1;
+	$end = $start + $ctgLen - 1;
+	$superEnd = $end;
+	my $ctgFragName = sprintf("%s.%d", $ctgName, $ctgFragCount++);
+	my $ctgFragStart = 1;
+	my $ctgFragEnd = $scafEnd - $fragStart + 1;
+	printf SC "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+		$start, $end, $agpItemCount, $ctgWN, $ctgFragName,
+		$ctgFragStart, $ctgFragEnd, $strand;
+	printf AG "chrUn\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+		$start, $end, $agpItemCount++, $ctgWN, $ctgName,
+		$fragStart, $scafEnd, $strand;
+	printf CT "%s\t%d\tchrUn\t%d\t%d\tW\n",
+                $name, $ctgLen, $start-1, $end;
+
+	$start = $end + 1;
+	$curContig = $ctgName;
+    }
+}
+close (FH);
+close (AG);
+close (SC);
+$superLength = $superEnd - $superStart;
+printf "%d\t%s\t%d\t%s\t%d\n",
+    $superStart, $curContig, $superLength, $chrUnName, $chrUnSize;
+printf GL "%s\t%d\t%d\t%d\tW\t%s\t0\t%d\t+\n",
+	$chrUnName, $superStart, $superEnd, $itemCount++,
+	$curContig, $superLength;
+close (GL);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSuperLift.pl
+    ./mkSuperLift.pl > caeRem2.chrUn.lift
+
+    qaToQac contigs.fa.qual.gz stdout \
+        | qacAgpLift caeRem2.CtgScaf.agp stdin chrUn.qac
+
+###########################################################################
+## Initial genome build (DONE - 2007-03-29 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/caeRem2
+    cat << '_EOF_' > caeRem2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeRem2
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis remanei
+commonName C. remanei
+assemblyDate Mar. 2006
+assemblyLabel Washington University School of Medicine GSC C. remanei 1.0
+orderKey 879
+mitoAcc none
+fastaFiles /cluster/data/caeRem2/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/caeRem2/downloads/caeRem2.chrUn.agp
+# qualFiles /cluster/data/caeRem2/downloads/chrUn.qac
+dbDbSpeciesDir worm
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 makeGenomeDb.pl caeRem2.config.ra \
+	> makeGenomeDb.out 2>&1
+
+    ssh hgwdev
+    cd /cluster/data/caeRem2/downloads
+    sed -e "s/agpFrag/chrUn_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chrUn_gold.sql
+    # edit that .sql file to add the bin column
+    #	 bin smallint(6) NOT NULL default '0',
+
+    hgLoadBed -sqlTable=chrUn_gold.sql caeRem2 chrUn_gold caeRem2.gold.tab
+    hgLoadSqlTab caeRem2 ctgPos2 ~/kent/src/hg/lib/ctgPos2.sql \
+	caeRem2.ctgPos2.tab
+
+###########################################################################
+## Repeat Masker (DONE - 2007-03-29 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/caeRem2/bed/RepeatMasker
+    cd /cluster/data/caeRem2/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl caeRem2 \
+	-buildDir=/cluster/data/caeRem2/bed/RepeatMasker > do.log 2>&1
+    cd /cluster/data/caeRem2
+    twoBitToFa caeRem2.rmsk.2bit stdout | faSize stdout \
+	> caeRem2.rmsk.2bit.faSize
+    cat caeRem2.rmsk.2bit.faSize
+    #	161944676 bases (15087728 N's 146856948 real
+    #	145425741 upper 1431207 lower) in 1 sequences in 1 files
+    #	%0.88 masked total, %0.97 masked real
+    ln -s caeRem2.rmsk.2bit caeRem2.2bit
+
+    mkdir /san/sanvol1/scratch/worms/caeRem2 
+    cp -p caeRem2.2bit /san/sanvol1/scratch/worms/caeRem2
+    cp -p chrom.sizes /san/sanvol1/scratch/worms/caeRem2
+    cp -p downloads/caeRem2.chrUn.lift /san/sanvol1/scratch/worms/caeRem2
+
+###########################################################################
+## Window Masker (DONE - 2007-03-29 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/caeRem2/bed/WindowMasker
+    cd /cluster/data/caeRem2/bed/WindowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+	-workhorse kolossus \
+	-buildDir=/cluster/data/caeRem2/bed/WindowMasker caeRem2 > do.log 2>&1 &
+    #	real    12m19.926s
+     twoBitToFa caeRem2.wmsk.sdust.2bit stdout \
+	| faSize stdin > caeRem2.wmsk.sdust.2bit.faSize 2>&1
+    cat caeRem2.wmsk.sdust.2bit.faSize
+    #	161944676 bases (15087728 N's 146856948 real
+    #	100232042 upper 46624906 lower) in 1 sequences in 1 files
+    #	%28.79 masked total, %31.75 masked real
+
+    ssh hgwdev
+    cd /cluster/data/caeRem2/bed/WindowMasker
+    hgLoadBed -strict caeRem2 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1122372 elements of size 3
+ 
+###########################################################################
+## Simple Repeats (DONE - 2007-03-29 - Hiram)
+    ssh titan
+    mkdir /cluster/data/caeRem2/bed/simpleRepeat
+    cd /cluster/data/caeRem2/bed/simpleRepeat
+    time twoBitToFa ../../caeRem2.unmasked.2bit stdout \
+	| nice -n +19 trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+	-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp > do.out 2>&1
+
