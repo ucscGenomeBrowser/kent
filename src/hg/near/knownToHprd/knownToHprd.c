@@ -143,7 +143,7 @@ uglyf("see %s/%s.tab\n",tempDir, outTable);
 
 createTable(hConn, outTable);
 hgLoadTabFile(hConn, tempDir, outTable, &f);
-//hgRemoveTabFile(tempDir, outTable);
+hgRemoveTabFile(tempDir, outTable);
 }
 
 int main(int argc, char *argv[])
