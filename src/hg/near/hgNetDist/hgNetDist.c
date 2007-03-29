@@ -1,4 +1,4 @@
-/* hgNetDist - Gene/Interaction Network Distance loader for GS 
+/* hgNetDist - Gene/Interaction Network Distance path length calculator for GS 
    Galt Barber 2005-05-08
    This code assumes the network is bi-directional (undirected).
 */
@@ -12,18 +12,16 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.9 2006/10/20 20:59:33 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.10 2007/03/29 23:30:23 galt Exp $";
 
-boolean first=FALSE;
+boolean skipFirst=FALSE;
 boolean weighted=FALSE;
 float threshold=2.0;
-char *sqlRemap=NULL;
 
 static struct optionSpec options[] = {
-   {"first", OPTION_BOOLEAN},
+   {"skipFirst", OPTION_BOOLEAN},
    {"weighted", OPTION_BOOLEAN},
    {"threshold", OPTION_FLOAT},
-   {"sqlRemap", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -33,19 +31,17 @@ void usage()
 errAbort(
   "hgNetDist - GS loader for gene/protein interaction network distances.\n"
   "usage:\n"
-  "   hgNetDist input.tab database table\n"
+  "   hgNetDist input.tab output.tab\n"
   "This will read the input.tab file and calculate the distances\n"
   "between all the genes/proteins in the (interaction) network and store\n"
-  "the results in the database.table specified, for use with Gene Sorter.\n"
+  "the results in the output.tab specified, for use with hgLoadNetDist.\n"
   "Input .tab file format is 3 columns: gene1 gene2 value.\n"
-  "By default, the first row and the last column are ignored,\n"
-  "assuming the first row is a header and the last value is \n"
-  "the edge-weight/distance.\n"
+  "The value is the edge-weight/distance but is ignored by default, treated as 1.0.\n"
+  "Output .tab file format is 3 columns: gene1 gene2 pathLength.\n"
   "options:\n"
-  "   -first  - include 1st row in input, do not skip.\n"
+  "   -skipFirst  - skip the first header row in input.\n"
   "   -weighted  - count the 3rd column value as network edge weight.\n"
   "   -threshold=9.9  - maximum network distance allowed, default=%f.\n"
-  "   -sqlRemap='select col1, col2 from table' - specify query used to remap ids from col1 to col2 in input.tab.\n"
   , threshold
   );
 }
@@ -149,7 +145,7 @@ if (lf == NULL)
     return NULL;
     }
 
-if (!first)
+if (skipFirst)
     {
     /* skip first header row */
     lineFileNextRowTab(lf, row, rowCount);
@@ -166,32 +162,7 @@ return list;
 }
 
 
-void fetchRemapInfo(char *db)
-/* fetch id-remap as a hash using -sqlRemap="some sql" commandline option 
- * read all the gene aliases from database and put in aliasHash           
- */
-{
-struct sqlConnection* conn = NULL;
-struct sqlResult *sr;
-char **row;
-/* it is possible for each id to have multiple remap values in hash */
-if (sqlRemap == NULL) return;
-printf("beginning processing sqlRemap query [%s] \n",sqlRemap);
-aliasHash = newHash(8);
-hSetDb(db);
-conn = hAllocConn();
-sr = sqlGetResult(conn, sqlRemap);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hashAdd(aliasHash, row[0], cloneString(row[1]));
-    }
-sqlFreeResult(&sr);
-
-hFreeConn(&conn);
-}
-
-
-void hgNetDist(char *inTab, char *db, char *table)
+void hgNetDist(char *inTab, char *outTab)
 {
 
 struct edge *edges = NULL;
@@ -200,16 +171,11 @@ struct edge *edge = NULL;
 int k=0, i=0, j=0;
 float *dij=NULL, *dik=NULL, *dkj=NULL, *ddij=NULL, *tempswap=NULL;
 
-FILE *f=NULL, *missingF=NULL;
+FILE *f=NULL;
 
-int missingCount=0;
+verbose(2,"inTab=%s outTab=%s \n", inTab, outTab);
 
-char cmd[256];
-int status=-1;
-
-printf("inTab=%s db=%s table=%s \n", inTab, db, table);
-
-printf("reading edges %s \n",inTab);
+verbose(2,"reading edges %s \n",inTab);
 
 edges = readEdges(inTab);
 if (edges == NULL)
@@ -218,12 +184,12 @@ errAbort("readEdges returned NULL for %s.\n",inTab);
 }
 
 numEdges = slCount(edges);
-printf("slCount(edges)=%d for %s \n",numEdges,inTab);
+verbose(2,"slCount(edges)=%d for %s \n",numEdges,inTab);
 
 if (weighted)
     {
     slSort(&edges, slEdgeCmpWeight);
-    printf("slSort done for %s \n",inTab);
+    verbose(2,"slSort done for %s \n",inTab);
     }
 
 
@@ -232,16 +198,7 @@ if (weighted)
 geneHash = newHash(logBase2((numEdges*2)));  
 geneIds = needMem((numEdges*2)*sizeof(char*));  
 
-if (sqlRemap)
-    {
-    fetchRemapInfo(db);
-    missingHash = newHash(logBase2(numEdges));  
-    missingF = mustOpen("missing.tab","w");
-    }
-
-
-
-printf("beginning processing data %s ... \n",inTab);
+verbose(2,"beginning processing data %s ... \n",inTab);
 for(edge = edges; edge; edge = edge->next)
     {
     int n = 0;
@@ -259,7 +216,7 @@ for(edge = edges; edge; edge = edge->next)
 	}
     }
 
-printf("number of nodes=%d \n",numGenes);
+verbose(2,"number of nodes=%d \n",numGenes);
 
 /* allocate arrays for Floyd-Warshall */
 d  = (float *) needHugeMem(numGenes*numGenes*sizeof(float));  
@@ -308,7 +265,7 @@ for(k=0;k<numGenes;++k)
     {
    
     if ((k % 100)==0)
-    	printf("k=%d \n",k);
+    	verbose(2,"k=%d \n",k);
 	
     for(i=0;i<numGenes;++i)
 	{
@@ -344,8 +301,7 @@ for(k=0;k<numGenes;++k)
     }
 
 /* print final dyn prg array values */
-f = mustOpen("hgNetDist.tmp.tab","w");
-fprintf(f,"GeneX\tGeneY\tRepetitions\n");
+f = mustOpen(outTab,"w");
 for(i=0;i<numGenes;++i)
     {
     for(j=0;j<numGenes;++j)
@@ -354,88 +310,13 @@ for(i=0;i<numGenes;++i)
 	if ((*dij >= 0.0) && (*dij <= threshold))
 	    {
 	    char *gi=NULL, *gj=NULL;
-	    if (sqlRemap)
-		{ /* it is possible for each id to have multiple remap values in hash */
-	    	struct hashEl *hi=NULL, *hj=NULL, *hMissing=NULL, *hij=NULL;
-		int z;
-		char *missingKey = NULL;
-		hi = hashLookup(aliasHash,geneIds[i]);
-		hj = hashLookup(aliasHash,geneIds[j]);
-		for(z=0;z<2;z++)  /* do both i and j */
-		    {
-		    if (z==0)
-			{
-			missingKey = geneIds[i];
-			hij = hi;
-			}
-		    else
-			{
-			missingKey = geneIds[j];
-			hij = hj;
-			}
-		    if (!hij) 
-			{
-			hMissing = hashLookup(missingHash,missingKey);
-			if (!hMissing)
-			    {
-			    ++missingCount;
-			    hashAdd(missingHash, missingKey, NULL);
-			    fprintf(missingF, "%s\n", missingKey);
-			    }
-			}
-		    }		    
-		for(;hi;hi=hashLookupNext(hi))
-		    {
-	    	    gi = (char *)hi->val;
-		    for(;hj;hj=hashLookupNext(hj))
-			{
-    			gj = (char *)hj->val;
-			fprintf(f,"%s\t%s\t%f\n",gi,gj,*dij);
-    			}
-		    hj = hashLookup(aliasHash,geneIds[j]); /* reset it */
-		    }
-		}
-	    else
-		{
-		gi=geneIds[i];
-		gj=geneIds[j];
-		fprintf(f,"%s\t%s\t%f\n",gi,gj,*dij);
-		}
+	    gi=geneIds[i];
+	    gj=geneIds[j];
+	    fprintf(f,"%s\t%s\t%f\n",gi,gj,*dij);
 	    }
 	}
     }
 fclose(f);    
-if (sqlRemap)
-    {
-    fclose(missingF);
-    if (missingCount == 0)
-	{
-	unlink("missing.tab");
-	printf("no sqlRemap misses!\n");
-	}
-    else	    
-    	printf("%d sqlRemap misses!  see missing.tab\n", missingCount);
-    }
-
-safef(cmd, sizeof(cmd), 
-    "hgsql %s -e 'drop table if exists %s; create table %s (query varchar(255), target varchar(255), distance float);'",
-    db, table, table);
-printf("%s\n",cmd);
-if ((status=system(cmd))) errAbort("returned %d\n",status);
-
-safef(cmd, sizeof(cmd), 
-    "hgsql %s -e 'load data local infile \"hgNetDist.tmp.tab\" into table %s ignore 1 lines;'",
-    db, table);
-printf("%s\n",cmd);
-if ((status=system(cmd))) errAbort("returned %d\n",status);
-
-safef(cmd, sizeof(cmd), 
-    "hgsql %s -e 'create index query on %s (query(8));'",
-    db, table);
-printf("%s\n",cmd);
-if ((status=system(cmd))) errAbort("returned %d\n",status);
-
-remove("hgNetDist.tmp.tab");
 
 edgeFreeList(&edges);
 freeMem(d);
@@ -448,17 +329,16 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 3)
     usage();
 
-first = optionExists("first");
+skipFirst = optionExists("skipFirst");
 weighted = optionExists("weighted");
 threshold = optionFloat("threshold", threshold);
-sqlRemap = optionVal("sqlRemap", sqlRemap);
 
-hgNetDist(argv[1],argv[2],argv[3]);
+hgNetDist(argv[1],argv[2]);
 
-printf("\ndone.\n");
+verbose(2,"\ndone.\n");
 return 0;
 }
 
