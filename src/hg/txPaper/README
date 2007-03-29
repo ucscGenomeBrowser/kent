@@ -1,2 +1,10 @@
 This contains stuff to analyse the UCSC gene set, but
 not to build it.  It's mostly stuff hopefully for the paper.
+
+Here's some of what is done
+
+set gd = /cluster/data/hg18/bed/ucsc.10
+set wd = ~/kent/src/hg/txPaper
+
+cut -f 5 $gd/canonical.tab > $gd/canonical.lst
+txPaperPfam $gd/ucscGenes.info $gd/ucscPfam.tab $gd/canonical.lst $wd/tables/pfam
