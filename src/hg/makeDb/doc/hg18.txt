@@ -14327,3 +14327,26 @@ TMPDIR=/scratch/tmp
     hgLoadSqlTab hg18 mrnaRefseq ~/src/hg/lib/mrnaRefseq.sql ./mrnaRefseq.tab
     
 ##############################################################################
+# RE-BUILD KEGG RELATED TABLES FOR KG III.  (DONE, 3/29/07, Fan)
+
+    wget --timestamping -O hsa.html \
+    "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=hsa&mode=bfind&max_hit=1000&.cgifields=max_hit"
+
+    grep href hsa.html | perl -wpe "s/<[^>]+>//g" > hsa.lis
+
+# edit hsa.lis to get rid of the first blank line and last line which is an unrelated line.    
+    
+    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+
+    hgLoadSqlTab hg18 keggList ~/src/hg/lib/keggList.sql ./keggList.tab
+
+# Before running hgKegg3, make sure entrez DB is updated.
+
+    hgKegg3 hg18 hg18
+
+# Load resulting data
+
+    hgLoadSqlTab hg18 keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
+    hgLoadSqlTab hg18 keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+
+##############################################################################
