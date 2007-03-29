@@ -18,3 +18,14 @@ group map
 visibility dense
 type bed 3 +
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred nscanPep
+baseColorUseCds given
+baseColorDefault genomicCodons
+
