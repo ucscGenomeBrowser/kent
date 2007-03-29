@@ -8,3 +8,4 @@ set wd = ~/kent/src/hg/txPaper
 
 cut -f 5 $gd/canonical.tab > $gd/canonical.lst
 txPaperPfam $gd/ucscGenes.info $gd/ucscPfam.tab $gd/canonical.lst $wd/tables/pfam
+txPaperPfam $gd/ucscGenes.info $gd/scopPlusScore.tab $gd/scopDesc.tab $gd/canonical.lst $wd/tables/scop

@@ -8,7 +8,7 @@
 #include "txInfo.h"
 #include "protFeat.h"
 
-static char const rcsid[] = "$Id: txPaperPfam.c,v 1.1 2007/03/29 08:58:31 kent Exp $";
+static char const rcsid[] = "$Id: txPaperPfam.c,v 1.2 2007/03/29 11:08:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -86,7 +86,7 @@ slSort(pList, featCountCmp);
 for (count = *pList; count != NULL; count = count->next)
     total += count->count;
 fprintf(f, "%s total unique domains in proteins: %d\n", type, total);
-for (count = *pList, i=1; i<=10 && count != NULL; ++i, count = count->next)
+for (count = *pList, i=1; i<=25 && count != NULL; ++i, count = count->next)
     {
     fprintf(f, "   %4.2f%% (%d) %s \"%s\"\n", 100.0 * count->count / total, count->count,
     	count->feature, naForNull(hashFindVal(descHash, count->feature)));
