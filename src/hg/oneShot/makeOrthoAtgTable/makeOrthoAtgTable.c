@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.1 2007/03/22 06:52:23 kent Exp $";
+static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.2 2007/03/29 07:06:10 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "makeOrthoAtgTable - Create a table that lists how often atg, kozak, stop is conserved based on output from txCdsOrtho.\n"
   "usage:\n"
-  "   makeOrthoAtgTable totalOrfs XXX\n"
+  "   makeOrthoAtgTable totalOrfs species1.tab species2.tab ...\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -29,33 +29,49 @@ void analyzeOne(int totalOrfs, char *fileName)
 {
 int nativeAtgCount = 0, nativeKozakCount = 0, nativeStopCount = 0;
 int atgCount = 0, kozakCount = 0, stopCount=0, count = 0;
+int atgAli = 0, kozakAli = 0, stopAli = 0;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[16];
 while (lineFileRow(lf, row))
     {
-    boolean xenoAtg = (row[8][0] == '1');
-    boolean xenoKozak = (row[9][0] == '1');
-    boolean xenoStop = (row[10][0] == '1');
-    boolean nativeAtg = (row[11][0] == '1');
-    boolean nativeKozak = (row[12][0] == '1');
-    boolean nativeStop = (row[13][0] == '1');
+    boolean xenoAtg = (row[10][0] == '1');
+    boolean xenoKozak = (row[11][0] == '1');
+    boolean xenoStop = (row[12][0] == '1');
+    boolean nativeAtg = (row[13][0] == '1');
+    boolean nativeKozak = (row[14][0] == '1');
+    boolean nativeStop = (row[15][0] == '1');
+    int atgDotCount = lineFileNeedNum(lf, row, 4);
+    int kozakDotCount = lineFileNeedNum(lf, row, 6);
+    int stopDotCount = lineFileNeedNum(lf, row, 8);
     if (nativeAtg)
        {
        ++nativeAtgCount;
-       if (xenoAtg)
-           ++atgCount;
+       if (atgDotCount == 0)
+	   {
+	   ++atgAli;
+	   if (xenoAtg)
+	       ++atgCount;
+	   }
        }
     if (nativeKozak)
        {
        ++nativeKozakCount;
-       if (xenoKozak)
-           ++kozakCount;
+       if (kozakDotCount == 0 && atgDotCount == 0)
+	   {
+	   ++kozakAli;
+	   if (xenoKozak)
+	       ++kozakCount;
+	   }
        }
     if (nativeStop)
        {
        ++nativeStopCount;
-       if (xenoStop)
-           ++stopCount;
+       if (stopDotCount == 0)
+	   {
+	   ++stopAli;
+	   if (xenoStop)
+	       ++stopCount;
+	   }
        }
     ++count;
     }
@@ -73,15 +89,19 @@ hDisconnectCentral(&conn);
 
 printf("%s\t%s\t%s\t", organism, scientificName, dbName);
 printf("%4.2f%%\t", 100.0 * count/totalOrfs);
-printf("%4.2f%%\t", 100.0 * atgCount/nativeAtgCount);
-printf("%4.2f%%\t", 100.0 * kozakCount/nativeKozakCount);
-printf("%4.2f%%\n", 100.0 * stopCount/nativeStopCount);
+printf("%4.2f%%\t", 100.0 * atgAli/nativeAtgCount);
+printf("%4.2f%%\t", 100.0 * atgCount/atgAli);
+printf("%4.2f%%\t", 100.0 * kozakAli/nativeKozakCount);
+printf("%4.2f%%\t", 100.0 * kozakCount/kozakAli);
+printf("%4.2f%%\t", 100.0 * stopAli/nativeStopCount);
+printf("%4.2f%%\n", 100.0 * stopCount/stopAli);
 }
 
 void makeOrthoAtgTable(int totalOrfs, int fileCount, char *files[])
 /* makeOrthoAtgTable - Create a table that lists how often atg, kozak, stop is conserved based on output from txCdsOrtho.. */
 {
 int i;
+printf("species\tbinomial name\tdb\t%%genes\t%%orfAli\t%%orfId\t%%kozAli\t%%kozId\t%%stopAli\t%%stopId\n");
 for (i=0; i<fileCount; ++i)
     analyzeOne(totalOrfs, files[i]);
 }
