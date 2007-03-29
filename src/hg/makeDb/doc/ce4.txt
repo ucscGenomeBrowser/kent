@@ -272,12 +272,17 @@ close (LS);
     #	read 27783 orf designations from orfToGene.tab
     #	read 27783 gene descriptions from paragraph.tab
 
-    cp ~/kent/src/hg/lib/sangerLinks.sql .
-    # edit that to add the proteinID column and index:
-    #	proteinID varchar(40) NOT NULL,     # uniProt ID
-    #	INDEX(proteinID)
-
-    hgLoadSqlTab ce4 sangerLinks ./sangerLinks.sql sangerLinks.tab
+    hgLoadSqlTab ce4 sangerLinks ~/kent/src/hg/lib/sangerLinks.sql \
+	sangerLinks.tab
+    # Add proteinID field to sangerGene table, used by Gene Sorter
+    hgsql -e 'alter table sangerGene add proteinID varchar(40) NOT NULL;' ce4
+    # To add index on this column
+    hgsql -e 'alter table sangerGene add index(proteinID);' ce4
+    # Use SwissProt IDs in sangerLinks table to fill proteinID 
+    # column in the sangerGene table
+    hgsql -e 'update sangerGene as g, sangerLinks as l \
+      set g.proteinID = l.protName where g.name = l.orfName;' ce4
+    # check there are 21891 rows with the protName field filled
     wget --timestamping \
 	"ftp://ftp.sanger.ac.uk/pub/wormbase/WS170/wormpep170.tar.gz"
     wget --timestamping \
@@ -296,3 +301,48 @@ close (LS);
     hgPepPred ce4 generic sangerPep wormpep170/wormpep170
 
 
+##########################################################################
+## Blastz SELF (DONE - 2007-03-29 - Hiram
+    ssh kkstore02
+    mkdir /cluster/data/ce4/bed/blastz.ce4.2007-03-29
+    cd /cluster/data/ce4/bed
+    ln -s blastz.ce4.2007-03-29 blastzSelf
+    cd blastz.ce4.2007-03-29
+    cat << '_EOF_' > DEF
+# ce4 vs ce4 - Self alignment
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: elegans Ce4
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce4/ce4.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/ce4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: elegans Ce4
+SEQ2_DIR=/san/sanvol1/scratch/worms/ce4/ce4.rmskTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/ce4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/ce4/bed/blastz.ce4.2007-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/ce4Ce4 > do.log 2>&1 &
+    #	real    37m22.066s
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/blastz.ce4.2007-03-29
+    nice -n +19 featureBits ce4 chainSelfLink > fb.ce4.chainSelfLink.txt 2>&1
+    #	31186593 bases of 100281244 (31.099%) in intersection
+
+##########################################################################
+    ssh kkstore02
+    mkdir /cluster/data/ce4/bed/blastz.caeRem2.2007-03-29
+    cd /cluster/data/ce4/bed/blastz.caeRem2.2007-03-29
+    cat << '_EOF_' > DEF
+'_EOF_'
+    # << happy emacs
