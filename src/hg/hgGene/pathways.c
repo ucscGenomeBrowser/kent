@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.17 2007/03/23 17:50:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.18 2007/03/29 22:32:10 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -38,7 +38,7 @@ struct sqlResult *sr;
 safef(query, sizeof(query), 
 	"select k.locusID, k.mapID, keggMapDesc.description"
 	" from keggPathway k, keggMapDesc, kgXref x"
-	" where k.kgID=mRNA "
+	" where k.kgID=x.kgId "
 	" and x.kgID='%s'"
 	" and k.mapID = keggMapDesc.mapID"
 	, geneId);
@@ -59,7 +59,7 @@ static int keggCount(struct pathwayLink *pl, struct sqlConnection *conn,
 {
 char query[256];
 safef(query, sizeof(query), 
-	"select count(*) from keggPathway k, kgXref x where k.kgID=x.mRNA and x.kgId='%s'", geneId);
+	"select count(*) from keggPathway k, kgXref x where k.kgID=x.kgId and x.kgId='%s'", geneId);
 return sqlQuickNum(conn, query);
 }
 
