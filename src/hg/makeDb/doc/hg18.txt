@@ -14216,6 +14216,59 @@ ldHgGene -predTab hg18 acescan acescan.hg18.gp
 
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab hg18 cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+
 ##############################################################################
-			    
-     
+## BLASTZ HUMAN HG18 (DONE - 2007-03-26 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+    cd /cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+    cat << '_EOF_' > DEF
+# human vs lancelet
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.sdTrf.2bit
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=1
+
+# QUERY: Lancelet braFlo1 - largest chunk big enough for largest scaffold
+#       Largest scaffold 7,200,735 - 3032 scaffolds + chrM
+SEQ2_DIR=/san/sanvol1/scratch/braFlo1/braFlo1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/braFlo1/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/braFlo1/braFlo1UnScaffolds.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/braFlo1/braFlo1.lift
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.braFlo1.2007-03-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -chainMinScore=2000 -chainLinearGap=loose \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 \
+	-blastzOutRoot /cluster/bluearc/hg18BraFlo1 > do.log 2>&1 &
+    #	real    458m43.961s
+
+    cat fb.hg18.chainBraFlo1Link.txt
+    #	26455595 bases of 2881515245 (0.918%) in intersection
+
+    # and now the swap, also documented in braFlo1.txt
+    mkdir /cluster/data/braFlo1/bed/blastz.hg18.swap
+    cd /cluster/data/braFlo1/bed/blastz.hg18.swap
+    time doBlastzChainNet.pl -chainMinScore=2000 -chainLinearGap=loose \
+	/cluster/data/hg18/bed/blastz.braFlo1.2007-03-26/DEF \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -verbose=2 \
+	-swap > swap.log 2>&1 &
+XXX - running 2--7-03027 10:10
