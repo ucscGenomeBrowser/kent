@@ -14271,4 +14271,6 @@ TMPDIR=/scratch/tmp
 	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
 	-bigClusterHub=pk -verbose=2 \
 	-swap > swap.log 2>&1 &
-XXX - running 2--7-03027 10:10
+    #	real    83m46.258s
+    cat fb.braFlo1.chainHg18Link.txt
+    #	30912893 bases of 923355587 (3.348%) in intersection
