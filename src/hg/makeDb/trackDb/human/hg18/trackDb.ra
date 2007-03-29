@@ -316,7 +316,7 @@ visibility hide
 color 90,0,150
 type bed 6 .
 
-track knownGene_1
+track knownGeneOld2
 shortLabel Old Known Genes
 longLabel Old UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
 group genes
@@ -325,6 +325,7 @@ visibility hide
 color 82,82,160
 type genePred 
 hgsid on
+oldToNew kg2ToKg3
 baseColorUseCds given
 baseColorDefault genomicCodons
 
