@@ -12,13 +12,7 @@
 #include "dystring.h"
 #include "options.h"
 #include "jksql.h"
-#include "hgRelate.h"
-#include "genePred.h"
-#include "psl.h"
-#include "rangeTree.h"
-#include "binRange.h"
 #include "hdb.h"
-#include "visiGene.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -26,7 +20,7 @@ void usage()
 errAbort(
   "knownToHprd - Create knownToHprd table using HPRD flat file and kgXref\n"
   "usage:\n"
-  "   knownToVisiGene database hprdFile\n"
+  "   knownToHprd database hprdFile\n"
   );
   /*
   "options:\n"

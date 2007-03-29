@@ -6,7 +6,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = knownToVisiGene.o
 
-knownToGenePix: $O ${MYLIBS}
+knownToVisiGene: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/knownToVisiGene $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/knownToVisiGene${EXE}
 
