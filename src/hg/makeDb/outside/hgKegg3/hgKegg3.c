@@ -38,6 +38,7 @@ char cond_str[200];
 char *kgId;
 char *mapID;
 char *desc;
+char *mRNA;
 
 optionInit(&argc, argv, options);
 if (argc != 3)  usage();
@@ -58,8 +59,11 @@ while (row != NULL)
     {
     kgId = row[0];
 	
-    sprintf(cond_str, "mrna='%s'", kgId);
-    locusID = sqlGetField(conn3, "entrez", "geneIdMrna", "geneId", cond_str);
+    sprintf(cond_str, "kgId='%s'", kgId);
+    mRNA = sqlGetField(conn3, roDbName, "kgXref", "mRNA", cond_str);
+    
+    sprintf(cond_str, "mrna='%s'", mRNA);
+    locusID = sqlGetField(conn3, "entrez", "entrezMrna", "geneId", cond_str);
     if (locusID != NULL)
 	{
         sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
