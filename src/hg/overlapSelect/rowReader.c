@@ -47,10 +47,10 @@ static boolean rowReaderNextFile(struct rowReader *rr)
 char *line;
 if (!lineFileNextReal(rr->lf, &line))
     return FALSE;
-rr->numCols = chopString(line, "\t", NULL, 0);
+rr->numCols = chopByChar(line, '\t', NULL, 0);
 if (rr->numCols > rr->colSpace)
     growRow(rr, rr->numCols);
-chopString(line, "\t", rr->row, rr->numCols);
+chopByChar(line, '\t', rr->row, rr->numCols);
 return TRUE;
 }
 

@@ -19,7 +19,8 @@ test:   pslSelectTests \
 	idMatchTests \
 	rangeTests \
 	cds_id_out_gp \
-	wideTest
+	wideTest \
+	name2EmptyTest
 
 ###
 # selecting PSLs
@@ -623,6 +624,13 @@ cds_id_out_gp: mkout
 wideTest: mkout
 	${OVERSEL} input/wideSelect.bed input/wideIn.bed stdout > output/$@.bed
 	${DIFF} expected/$@.bed output/$@.bed
+
+# genePredExt with empty name caused grief
+name2EmptyTest: mkout
+	${OVERSEL} input/name2Empty.gp input/name2Empty.gp output/$@.gp
+	genePredCheck -verbose=0 output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
 
 mkout:
 	@${MKDIR} output
