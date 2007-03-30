@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = subColumn.o
 
 subColumn: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/subColumn $O ${MYLIBS} $L
+	${CC} ${COPT} -o ${BINDIR}/subColumn $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/subColumn${EXE}
 
 clean:
