@@ -521,6 +521,16 @@ hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
 hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
 knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text mm7 mm8 hg17 hg18
+knownToHprd hg18 /cluster/data/hg18/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+
+# Create Human P2P protein-interaction Gene Sorter columns
+hgLoadNetDist /cluster/data/hg18/p2p/hprd/hprd.pathLengths hg18 humanHprdP2P \
+    -sqlRemap="select distinct value, name from knownToHprd"
+hgLoadNetDist /cluster/data/hg18/p2p/vidal/humanVidal.pathLengths hg18 humanVidalP2P \
+    -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+hgLoadNetDist /cluster/data/hg18/p2p/wanker/humanWanker.pathLengths hg18 humanWankerP2P \
+    -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+
 
 # Create a small expression distance table, this is relatively quick - 10 min.
 time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
@@ -717,6 +727,7 @@ _EOF_
 gensub2 in.lst single gsub spec
 ssh pk "cd /san/sanvol1/scratch/$db/ucscGenes/scop; para make"
 
+
 # Convert scop output to tab-separated files
 catDir /san/sanvol1/scratch/$db/ucscGenes/scop/out | \
 	hmmPfamToTab -eValCol -scoreCol stdin scopPlusScore.tab
@@ -730,3 +741,4 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 # Map old to new mapping
 cat refSeq/*.bed mrna/*.bed | txGeneExplainUpdate1 knownGene_1.bed ucscGenes.bed stdin abWalk.bed kg1ToKg2.bed
 hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
+
