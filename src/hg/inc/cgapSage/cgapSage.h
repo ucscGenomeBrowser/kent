@@ -5,7 +5,7 @@
 #ifndef CGAPSAGE_H
 #define CGAPSAGE_H
 
-#define CGAPSAGE_NUM_COLS 12
+#define CGAPSAGE_NUM_COLS 14
 
 struct cgapSage
 /* Mappings and frequencies for CGAP SAGE tags */
@@ -23,6 +23,8 @@ struct cgapSage
     unsigned *libIds;	/* Ids of libraries (foreign keys) */
     unsigned *freqs;	/* Frequency of each tag per library */
     double *tagTpms;	/* Tag per million measurement of each lib */
+    unsigned numSnps;	/* Number of class=single SNPs in this region */
+    char **snps;	/* List of SNPs */
     };
 
 struct cgapSage *cgapSageLoad(char **row);

@@ -5,7 +5,6 @@
 
 #Mappings and frequencies for CGAP SAGE tags
 CREATE TABLE cgapSage (
-    bin smallint not null,    # Bin number for browser speedup
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start in Chromosome
     chromEnd int unsigned not null,	# End in Chromosome
@@ -18,6 +17,8 @@ CREATE TABLE cgapSage (
     libIds longblob not null,	# Ids of libraries (foreign keys)
     freqs longblob not null,	# Frequency of each tag per library
     tagTpms longblob not null,	# Tag per million measurement of each lib
+    numSnps int unsigned not null,	# Number of class=single SNPs in this region
+    snps longblob not null,	# List of SNPs
               #Indices
-    INDEX(chrom(8),bin)
+    PRIMARY KEY(chrom)
 );

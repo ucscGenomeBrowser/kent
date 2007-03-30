@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "cgapSage/cgapSage.h"
 
-static char const rcsid[] = "$Id: cgapSage.c,v 1.1 2007/01/30 00:05:39 aamp Exp $";
+static char const rcsid[] = "$Id: cgapSage.c,v 1.2 2007/03/30 03:47:21 aamp Exp $";
 
 struct cgapSage *cgapSageLoad(char **row)
 /* Load a cgapSage from row fetched with select * from cgapSage
@@ -18,12 +18,13 @@ struct cgapSage *ret;
 
 AllocVar(ret);
 ret->numLibs = sqlUnsigned(row[8]);
+ret->numSnps = sqlUnsigned(row[12]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
 {
@@ -41,6 +42,11 @@ int sizeOne;
 sqlDoubleDynamicArray(row[11], &ret->tagTpms, &sizeOne);
 assert(sizeOne == ret->numLibs);
 }
+{
+int sizeOne;
+sqlStringDynamicArray(row[13], &ret->snps, &sizeOne);
+assert(sizeOne == ret->numSnps);
+}
 return ret;
 }
 
@@ -50,7 +56,7 @@ struct cgapSage *cgapSageLoadAll(char *fileName)
 {
 struct cgapSage *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -68,7 +74,7 @@ struct cgapSage *cgapSageLoadAllByChar(char *fileName, char chopper)
 {
 struct cgapSage *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -131,6 +137,18 @@ for (i=0; i<ret->numLibs; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+ret->numSnps = sqlUnsignedComma(&s);
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->snps, ret->numSnps);
+for (i=0; i<ret->numSnps; ++i)
+    {
+    ret->snps[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -147,6 +165,10 @@ freeMem(el->name);
 freeMem(el->libIds);
 freeMem(el->freqs);
 freeMem(el->tagTpms);
+/* All strings in snps are allocated at once, so only need to free first. */
+if (el->snps != NULL)
+    freeMem(el->snps[0]);
+freeMem(el->snps);
 freez(pEl);
 }
 
@@ -218,6 +240,21 @@ if (sep == ',') fputc('{',f);
 for (i=0; i<el->numLibs; ++i)
     {
     fprintf(f, "%g", el->tagTpms[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+fprintf(f, "%u", el->numSnps);
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->numSnps; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->snps[i]);
+    if (sep == ',') fputc('"',f);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);

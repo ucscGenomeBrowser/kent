@@ -13,4 +13,6 @@ table cgapSage
 	uint[numLibs] libIds;   "Ids of libraries (foreign keys)"
 	uint[numLibs] freqs;    "Frequency of each tag per library"
 	double[numLibs] tagTpms;  "Tag per million measurement of each lib"
+	uint	numSnps;	"Number of class=single SNPs in this region"
+	string[numSnps] snps;	"List of SNPs"
 )
