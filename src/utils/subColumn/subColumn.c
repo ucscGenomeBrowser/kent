@@ -6,9 +6,10 @@
 #include "dystring.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: subColumn.c,v 1.2 2007/03/03 05:09:00 kent Exp $";
+static char const rcsid[] = "$Id: subColumn.c,v 1.3 2007/03/30 16:10:16 kent Exp $";
 
 boolean isList = FALSE;
+FILE *fMiss = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,11 +25,13 @@ errAbort(
   "    out.tab is the substituted output\n"
   "options:\n"
   "   -list - Column is a comma-separated list.  Substitute all elements in list\n"
+  "   -miss=fileName - Print misses to this file instead of aborting\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"list", OPTION_BOOLEAN},
+   {"miss", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -52,6 +55,8 @@ while (in != NULL && in[0] != 0)
     }
 return dy->string;
 }
+
+int missCount = 0;
 
 void subColumn(char *asciiColumn, char *inFile, char *subFile, char *outFile)
 /* subColumn - Substitute one column in a tab-separated file.. */
@@ -86,8 +91,17 @@ while ((rowCount = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
 		{
 		char *sub = hashFindVal(subHash, s);
 		if (sub == NULL)
-		    errAbort("%s not in %s line %d of %s", s, subFile, lf->lineIx, lf->fileName);
-		s = sub;
+		    {
+		    if (fMiss)
+			{
+		        fprintf(fMiss, "%s\n", s);
+			++missCount;
+			}
+		    else
+			errAbort("%s not in %s line %d of %s", s, subFile, lf->lineIx, lf->fileName);
+		    }
+		else
+		    s = sub;
 		}
 	    }
 	fputs(s, f);
@@ -107,6 +121,14 @@ optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 isList = optionExists("list");
+char *fileName = optionVal("miss", NULL);
+if (fileName != NULL)
+    fMiss = mustOpen(fileName, "w");
 subColumn(argv[1], argv[2], argv[3], argv[4]);
+if (fMiss != NULL)
+    {
+    carefulClose(&fMiss);
+    warn("missed %d\n", missCount);
+    }
 return 0;
 }
