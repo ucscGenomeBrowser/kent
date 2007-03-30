@@ -21,6 +21,10 @@ endif
 ifeq (${HOST},hgwdev)
     HG_WARN=${HG_WARN_ERR}
 endif
+# also if specifically requrested
+ifneq (${USE_HGWARN},)
+    HG_WARN=${HG_WARN_ERR}
+endif
 
 ifeq (${SCRIPTS},)
     SCRIPTS=/cluster/bin/scripts
@@ -28,7 +32,9 @@ endif
 ifeq (${CGI_BIN},)
     CGI_BIN=/usr/local/apache/cgi-bin
 endif
-BINDIR = ${HOME}/bin/${MACHTYPE}
+ifeq (${BINDIR},)
+    BINDIR = ${HOME}/bin/${MACHTYPE}
+endif
 MKDIR=mkdir -p
 ifeq (${STRIP},)
    STRIP=strip
