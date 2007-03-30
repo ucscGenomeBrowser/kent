@@ -23,7 +23,7 @@ char *pathway;
 
 char *gdb, *bioCycDb, *ensGdb;
 int i;
-char *geneId;
+char *geneId = NULL;
 char *symbol;
 
 char query2[256], query3[256];
@@ -48,7 +48,7 @@ row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
     pathway = row2[0];
-    for (i=0; i<68; i++)
+    for (i=0; i<63; i++)
     	{
 	/* first get kgId of genes with the same gene symbol */
     	sprintf(query3, "select gene_name%d from %s.pathways where UNIQUE_ID='%s'", 
@@ -77,57 +77,34 @@ while (row2 != NULL)
 	    	}
     	    sqlFreeResult(&sr3);
 	    }
-    	
 	/* then get kgIds with the same UniProt accession via Ensembl gene IDs */
 	sprintf(query3, "select gene_id%d from %s.pathways where UNIQUE_ID='%s'", 
     	    i+1, bioCycDb, pathway);
-
     	sr3 = sqlMustGetResult(conn3, query3);
     	row3 = sqlNextRow(sr3);
 	
-	geneId = strdup(row3[0]);
+	geneId = NULL;
+	if (row3 != NULL) 
+	    if (row3[0] != NULL) geneId = cloneString(row3[0]);
     	sqlFreeResult(&sr3);
-	if (strcmp(geneId, "") != 0)
-	    {
-            if (hTableExists("ensemblXref3"))
-                {
-                safef(query3, sizeof(query3),
-                    "select kgId from %s.kgXref k, %s.ensemblXref3 e where e.gene='%s' and k.spId=e.swissAcc", 
-                    gdb, ensGdb, geneId);
-                }
-            else if (hTableExists("ensGeneXref"))
-                {
-                safef(query3, sizeof(query3),
-                    "select kgId from %s.kgXref k, %s.ensGeneXref e where e.gene='%s' and k.spId=e.external_name and external_db like 'UniProt%%'", 
-                    gdb, ensGdb, geneId);
-                }
-    	    sr3 = sqlMustGetResult(conn3, query3);
-    	    row3 = sqlNextRow(sr3);
-	    if (row3 != NULL)
+	if (geneId != NULL) 
+	    if (strcmp(geneId, "") != 0)
 	    	{
-	    	kgId= row3[0];
-	    	if (strcmp(geneId, "") != 0)
+            	safef(query3, sizeof(query3),
+                      "select kgId from %s.kgXref k, %s.ensGeneXref e where e.gene_id='%s' and k.spId=e.external_name and external_db like 'UniProt%%'", 
+                      gdb, ensGdb, geneId);
+    	    	sr3 = sqlMustGetResult(conn3, query3);
+    	    	row3 = sqlNextRow(sr3);
+	    	if (row3 != NULL)
 	    	    {
-	    	    fprintf(outf, "%s\t%s\t%s\n", kgId, geneId, pathway);fflush(stdout);
+	    	    kgId= row3[0];
+	    	    if (strcmp(kgId, "") != 0)
+	    	    	{
+	    	    	fprintf(outf, "%s\t%s\t%s\n", kgId, geneId, pathway);fflush(stdout);
+	    	    	}
 	    	    }
+    	    	sqlFreeResult(&sr3);
 	    	}
-    	    sqlFreeResult(&sr3);
-	    sprintf(query3, 
-	    	"select kgId from %s.kgXref k, %s.ensemblXref3 e where e.gene='%s' and k.spId=e.tremblAcc", 
-    	    	gdb, ensGdb, geneId);
-
-    	    sr3 = sqlMustGetResult(conn3, query3);
-    	    row3 = sqlNextRow(sr3);
-	    if (row3 != NULL)
-	    	{
-	    	kgId= row3[0];
-	    	if (strcmp(kgId, "") != 0)
-	    	    {
-	    	    fprintf(outf, "%s\t%s\t%s\n", kgId, geneId, pathway);fflush(stdout);
-	    	    }
-	        }
-    	    sqlFreeResult(&sr3);
-	    }
 	}
     row2 = sqlNextRow(sr2);
     }
