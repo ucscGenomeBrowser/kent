@@ -9,8 +9,10 @@ current directory:
 
    \$db.genbank.psl.gz
    \$db.genbank.ra.gz
+   \$db.genbank.oi.gz
    \$db.refseq.psl.gz
    \$db.refseq.ra.gz
+   \$db.refseq.oi.gz
    \$db.refseq.pep.fa.gz
 "
 
@@ -30,8 +32,8 @@ doGet() {
     local srcDb="$1"
     (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=psl -db=$db -native $srcDb mrna $srcDb.psl.gz)
     (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=ra -db=$db -native $srcDb mrna $srcDb.ra.gz)
+    (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=oi -db=$db -native $srcDb mrna $srcDb.oi.gz)
 }
-    
 
 doGet refseq
 (set -x ; $gbGetSeqs -inclVersion -gbRoot=$gbRoot -get=seq -db=$db -native refseq pep refseq.pep.fa.gz)
