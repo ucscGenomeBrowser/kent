@@ -60,6 +60,7 @@ release alpha
 track multiz28wayAnno
 summary multiz28wayAnnoSummary
 irows on
+frames multiz28wayFrames
 shortLabel 28-Way Cons 
 longLabel Vertebrate Multiz Alignment & Conservation (28 Species)
 group compGeno
