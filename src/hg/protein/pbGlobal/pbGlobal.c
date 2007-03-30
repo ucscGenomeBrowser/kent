@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.34 2007/03/23 23:36:29 hiram Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.35 2007/03/30 02:59:09 kent Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -531,12 +531,15 @@ else
     	
 	safef(cond_str, sizeof(cond_str), "proteinID='%s'", answer);
     	chromStr    = sqlGetField(spConn, database, "knownGene", "chrom", cond_str);
-    	cdsStartStr = sqlGetField(spConn, database, "knownGene", "cdsStart", cond_str);
-    	cdsEndStr   = sqlGetField(spConn, database, "knownGene", "cdsEnd", cond_str);
-    	safef(posStr, sizeof(posStr), "%s:%s-%s", chromStr, cdsStartStr, cdsEndStr);
-	positionStr = strdup(posStr);
-	cartSetString(cart, "position", positionStr);
-    	cartSetString(cart, "organism", organism);
+	if (chromStr)
+	    {
+	    cdsStartStr = sqlGetField(spConn, database, "knownGene", "cdsStart", cond_str);
+	    cdsEndStr   = sqlGetField(spConn, database, "knownGene", "cdsEnd", cond_str);
+	    safef(posStr, sizeof(posStr), "%s:%s-%s", chromStr, cdsStartStr, cdsEndStr);
+	    positionStr = strdup(posStr);
+	    cartSetString(cart, "position", positionStr);
+	    cartSetString(cart, "organism", organism);
+	    }
 	}
     }
 /* print out key variables for debugging */
