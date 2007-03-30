@@ -28,12 +28,9 @@
 #include "tfbsConsSites.h"
 #include "hapmapSnps.h"
 
-#define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
-#define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
-#define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.355 2007/03/13 23:09:04 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.356 2007/03/30 17:59:39 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */

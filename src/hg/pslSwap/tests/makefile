@@ -26,8 +26,8 @@ withSeqNoRcTest:
 runTest:
 	${PSLSWAP} ${OPTS} input/${IN} output/${ID}.psl	
 	${PSLSWAP} ${OPTS} output/${ID}.psl output/${ID}.back.psl
-	pslCheck output/${ID}.psl
-	pslCheck output/${ID}.back.psl
+	pslCheck -verbose=0 output/${ID}.psl
+	pslCheck -verbose=0 output/${ID}.back.psl
 	diff expected/${ID}.psl output/${ID}.psl
 	diff input/${IN} output/${ID}.back.psl
 
@@ -39,8 +39,8 @@ runTest:
 runNoRcTest:
 	${PSLSWAP} -noRc ${OPTS} input/${IN} output/${ID}.psl	
 	${PSLSWAP} -noRc ${OPTS} output/${ID}.psl output/${ID}.back.psl
-	pslCheck output/${ID}.psl
-	pslCheck output/${ID}.back.psl
+	pslCheck -verbose=0 output/${ID}.psl
+	pslCheck -verbose=0 output/${ID}.back.psl
 	awk 'BEGIN{FS="\t"; OFS="\t"} {$$9=substr($$9,1,1); print $$0}' output/${ID}.back.psl >output/${ID}.back.fix.psl
 	diff expected/${ID}.psl output/${ID}.psl
 	diff input/${IN} output/${ID}.back.fix.psl
