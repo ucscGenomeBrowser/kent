@@ -90,7 +90,12 @@ else
     cartWebStart(theCart, "UCSC Proteome Browser Gateway \n");
 
 /* start with a clean slate */
-cartResetInDb(hUserCookie());
+cartResetInDb(hUserCookie());  
+/* This cartResetInDb does nothing since database will be overwritten
+ * with memory by cartWebEnd ... unless pgGateway crashes, in which
+ * case along with the crash it will wipe out all the users settings.
+ * Is that a nice thing to do?  -Jim */
+          
 
 pbGateway();
 cartWebEnd();
