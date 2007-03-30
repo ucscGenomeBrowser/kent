@@ -77,6 +77,7 @@
 #include "cnpSebat.h"
 #include "cnpSebat2.h"
 #include "cnpSharp.h"
+#include "delHinds2.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
@@ -199,7 +200,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1255 2007/03/29 02:28:41 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1256 2007/03/30 20:35:56 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12441,6 +12442,34 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doDelHinds2(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct delHinds2 thisItem;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    delHinds2StaticLoad(row+rowOffset, &thisItem);
+    bedPrintPos((struct bed *)&thisItem, 3);
+    printf("<BR><B>Frequency</B>: %3.2f%%\n",thisItem.frequency);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 void doCnpSebat(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
@@ -16684,7 +16713,6 @@ if (!hTableExistsDb(orthoDb, tableName))
 
 safef(query, sizeof(query), "select allele from %s where name = '%s'", tableName, rsId);
 sr = sqlGetResult(conn, query);
-fprintf(stderr, "query = %s\n", query);
 row = sqlNextRow(sr);
 if (!row) 
     {
@@ -18428,6 +18456,10 @@ else if (sameWord(track, "cnpSebat2"))
 else if (sameWord(track, "cnpSharp"))
     {
     doCnpSharp(tdb, item);
+    }
+else if (sameWord(track, "delHinds2"))
+    {
+    doDelHinds2(tdb, item);
     }
 else if (sameWord(track, "affy120K"))
     {
