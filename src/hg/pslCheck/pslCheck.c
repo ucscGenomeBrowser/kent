@@ -9,7 +9,7 @@
 #include "chromInfo.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.9 2007/01/05 08:07:03 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.10 2007/03/30 00:24:06 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -31,8 +31,9 @@ char *failFile = NULL;
 struct hash *targetSizes = NULL;
 struct hash *querySizes = NULL;
 
-/* global count of errors */
-int errCount = 0;
+/* global count of alignments checked and errors */
+static int chkCount = 0;
+static int errCount = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -143,6 +144,7 @@ if ((passFh != NULL) && (numErrs == 0))
 if ((failFh != NULL) && (numErrs > 0))
     pslTabOut(psl, failFh);
 errCount += numErrs;
+chkCount++;
 }
 
 static void checkPslFile(char *fileName, FILE *errFh,
@@ -221,5 +223,6 @@ if (optionExists("querySizes"))
     querySizes = loadSizes(optionVal("querySizes", NULL));
 checkFilesTbls(conn, argc-1, argv+1);
 sqlDisconnect(&conn);
+verbose(1, "checked: %d failed: %d\n", chkCount, errCount);
 return ((errCount == 0) ? 0 : 1);
 }
