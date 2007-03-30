@@ -13755,21 +13755,21 @@ TMPDIR=/scratch/tmp
 (N)ew, (U)pdated, (S)ame species since 17way:
 U chimp (panTro2) (needs chain/net update on hg18)
 S rhesus (rheMac2)
--N bushbaby (otoGar1) "Otolemur garnetti" (galago)
-N tree_shrew (tupBel1) "Tupaia belangeri"
+-N bushbaby (otoGar1) "Otolemur garnetti" (galago) 2X
+N tree_shrew (tupBel1) "Tupaia belangeri" 2X
 S rat (rn4)
 S mouse (mm8)
--N guinea_pig (cavPor2) "Cavia porcellus"
-S rabbit (oryCun1)
--N shrew (sorAra1) "Sorex araneus"
--N hedgehog (eriEur1) "Erinaceus europaeus"
+-N guinea_pig (cavPor2) "Cavia porcellus" 2X
+S rabbit (oryCun1) 2X
+-N shrew (sorAra1) "Sorex araneus" 2X
+-N hedgehog (eriEur1) "Erinaceus europaeus" 2X
 S dog (canFam2)
-N cat (felCat3) "Felis catus"
+N cat (felCat3) "Felis catus" 2X
 -N horse (equCab1) "Equus caballus"
 U cow (bosTau3)
-S armadillo (dasNov1) "Dasypus novemcinctus"
-S elephant (loxAfr1)
-S tenrec (echTel1)
+S armadillo (dasNov1) "Dasypus novemcinctus" 2X
+S elephant (loxAfr1) 2X
+S tenrec (echTel1) 2X
 S opossum (monDom4)
 N platypus (ornAna1) "Ornithorhychus anatinus"
 U chicken (galGal3) (needs chain/net update on hg18)
@@ -14015,6 +14015,11 @@ cat > loadMaf.csh << 'EOF'
     # prepare bed files with gap info
     ssh kkstore02
     cd /cluster/data/hg18/bed/multiz28way
+    mkdir anno
+    cd anno
+    mkdir maf run
+    cd run
+
 cat > doNBed.csh << 'EOF'
     foreach db (`cat species.lst`)
         echo -n "$db "
@@ -14029,19 +14034,17 @@ cat > doNBed.csh << 'EOF'
 'EOF'
     csh doNBed.csh >&! doNBed.log &
 
-    ssh pk
-    cd /cluster/data/hg18/bed/multiz28way
-    mkdir anno 
-    cd anno
-    mkdir maf run
-    cd run
-
-    foreach i (`cat /cluster/data/hg18/bed/multiz28way/species.lst | grep -v hg18`)
-        ln -s  /cluster/data/$i/chrom.sizes $i.len
-        ln -s  /cluster/data/$i/$i.N.bed $i.bed
-        echo $i.bed  >> nBeds
-        echo $i.len  >> sizes
+    rm -f nBeds sizes
+    foreach db (`grep -v hg18 ../../species.lst`)
+        echo "$db "
+        ln -s  /cluster/data/$db/$db.N.bed $db.bed
+        echo $db.bed  >> nBeds
+        ln -s  /cluster/data/$db/chrom.sizes $db.len
+        echo $db.len  >> sizes
     end
+    
+    ssh kki
+    cd /cluster/data/hg18/bed/multiz28way/anno/run
 
 cat > doAnno.csh << 'EOF'
 #!/bin/csh -ef
@@ -14049,7 +14052,7 @@ cat > doAnno.csh << 'EOF'
     set c = $1
     cat $dir/maf/${c}__*.maf | \
         nice mafAddIRows -nBeds=nBeds -sizes=sizes stdin \
-                /cluster/data/hg18/hg18.2bit $dir/anno/maf/$c.maf
+                /cluster/data/hg18/hg18.2bit $2
 'EOF'
 #<< happy emacs
     chmod +x doAnno.csh
@@ -14062,6 +14065,159 @@ cat > spec << 'EOF'
 #<< happy emacs
     awk '{print $1}' /cluster/data/hg18/chrom.sizes > chroms.lst
     gensub2 chroms.lst single spec jobList
+    para create jobList
+    para try
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way/anno
+    mkdir -p /gbdb/hg18/multiz28way/anno/maf
+    ln -s /cluster/data/hg18/bed/multiz28way/anno/maf/*.maf \
+                /gbdb/hg18/multiz28way/anno/maf
+cat > loadMaf.csh << 'EOF'
+    date
+    nice hgLoadMaf -pathPrefix=/gbdb/hg18/multiz28way/anno/maf \
+                hg18 multiz28wayAnno
+    date
+    cat maf/*.maf | \
+        nice hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz28wayAnnoSummary stdin
+    date
+'EOF'
+    csh loadMaf.csh >& loadMaf.log  &
+
+    # Gene frames
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way
+    mkdir frames
+    cd frames
+cat > showGenes.csh << 'EOF'
+    foreach db (`grep -v hg18  ../species.lst`)
+        echo "    $db"
+        echo -n "Tables: "
+        set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+        foreach table ($tables)
+            if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
+                $table == "knownGene") then
+                    echo -n "${table}: "
+                    hgsql $db -N -e "select count(*) from $table"
+            endif
+
+        end
+        echo -n "Mrnas: "
+        set orgName = `hgsql hgcentraltest -N -e \
+                "select scientificName from dbDb where name='$db'"`
+        set orgId = `hgsql hg18 -N -e \
+                "select id from organism where name='$orgName'"`
+        if ($orgId == "") then
+            echo "0"
+        else
+            hgsql hg18 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"
+        endif
+    end
+'EOF'
+
+    # based on output, pick gene tables, according to the following criteria:
+    # KG if present, else refGene if >10000 entries, else ensGene (unless dog),
+    # else mgcGenes, else mrnas if > 10000 else none.   In all cases 
+    # except none, add in refGene.
+
+hg18: knownGene
+bosTau3: mrna
+canFam2: mrna
+cavPor2: mrna
+danRer4: refGene (13K) or ensGene (36K ?)
+equCab1: mrna
+fr2: ensGene
+galGal3: mrna
+gasAcu1: ensGene
+mm8: knownGene
+monDom4: ensGene
+oryCun1: mrna
+panTro2: refGene
+rheMac2: ensGene
+rn4: knownGene ? (8K) or refGene (10K) or ensGene(34K) ?
+tetNig1: mrna
+xenTro2: mrna
+
+
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes: bostau3, canFam2, cavPor2, equCab1, galGal3, oryCun1, tetNig1, xenTro2
+cat > getGenes.csh << 'EOF'
+    rm -fr genes
+    mkdir -p genes
+    #set mrnaDbs = "bosTau3 canFam2 cavPor2 equCab1 galGal3 oryCun1 tetNig1 xenTro2"
+    # use only those with databases for now
+    set mrnaDbs = "bosTau3 canFam2 equCab1 galGal3 oryCun1 tetNig1 xenTro2"
+    foreach queryDb ($mrnaDbs)
+      set tmpExt = `mktemp temp.XXXXXX`
+      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
+      set tmpMrna = ${queryDb}.mrna.${tmpExt}
+      set tmpCds = ${queryDb}.cds.${tmpExt}
+      echo $queryDb
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       $queryDb > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} stdout | \
+        genePredSingleCover stdin stdout | gzip -2c > /scratch/tmp/$queryDb.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for panTro2
+    # using ensGene for danRer4, fr2, gasSAcu1, monDom4, rheMac2
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    set geneDbs = "hg18 mm8 rn4 danRer4 panTro2 fr2 gasAcu1 monDom4 rheMac2"
+    foreach queryDb ($geneDbs)
+      if ($queryDb == "danRer4" || $queryDb == "fr2" || $queryDb == "gasAcu1" || \
+                $queryDb == "monDom4" || $queryDb == "rheMac2") then
+        set geneTbl = ensGene
+      else if ($queryDb == "panTro2") then
+        set geneTbl = refGene
+      else if ($queryDb == "hg18" || $queryDb == "mm8" || $queryDb == "rn4") then
+        set geneTbl = knownGene
+      endif
+      hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from $geneTbl" ${queryDb} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+    end
+'EOF'
+    csh getGenes.csh >&! getGenes.log &
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz28way/frames
+    # leaving out cavPor2 (no db) and tetNig1 (too few gene preds)
+    (cat  ../maf/*.maf | nice genePredToMafFrames hg18 stdin stdout bosTau3 genes/bosTau3.gp.gz canFam2 genes/canFam2.gp.gz danRer4 genes/danRer4.gp.gz fr2 genes/fr2.gp.gz galGal3 genes/galGal3.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz oryCun1 genes/oryCun1.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz xenTro2 genes/xenTro2.gp.gz gasAcu1 genes/gasAcu1.gp.gz monDom4 genes/monDom4.gp.gz equCab1 genes/equCab1.gp.gz |  gzip > multiz28way.mafFrames.gz) >& frames.log &
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz28way/frames
+    nice hgLoadMafFrames hg18 multiz28wayFrames multiz28way.mafFrames.gz >& loadFrames. log &
+
+# from 17way:
+    hg18 = knownGene
+    rn4 = knownGene
+    mm8 = knownGene
+    panTro1 = ensGene
+    rheMac2 = mrna
+    oryCun1 = mrna
+    #dasNov1 = 
+    canFam2 = mrna
+    #loxAfr1 = 
+    bosTau2 = mrna
+    #echTel1 = 
+    #monDom4 = 
+    galGal2 = refGene
+    xenTro1 = mgcGenes
+    #tetNig1 =
+    fr1 = ensGene
+    danRer3 = mrna
 
 
 ############################################################################
@@ -14216,6 +14372,9 @@ ldHgGene -predTab hg18 acescan acescan.hg18.gp
 
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab hg18 cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+<<<<<<< hg18.txt
+			    
+=======
 
 ##############################################################################
 ## BLASTZ HUMAN HG18 (DONE - 2007-03-26 - Hiram)
@@ -14274,6 +14433,9 @@ TMPDIR=/scratch/tmp
     #	real    83m46.258s
     cat fb.braFlo1.chainHg18Link.txt
     #	30912893 bases of 923355587 (3.348%) in intersection
+<<<<<<< hg18.txt
+>>>>>>> 1.102
+=======
 
 ##############################################################################
 # RE-BUILD knownGeneList, (DONE, 3/29/07, Fan)			    
@@ -14383,3 +14545,4 @@ TMPDIR=/scratch/tmp
     hgLoadSqlTab hg18 bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
     
 #############################################################################
+>>>>>>> 1.106
