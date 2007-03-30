@@ -51,43 +51,26 @@ ssh $dbHost
 mkdir -p $dir
 cd $dir
 
-# Get refseq and genbank .ra and fa files somehow - either
-# from Mark, or by running something like:
-# /cluster/data/genbank/bin/x86_64/gbGetSeqs -get=ra -gbRoot=/cluster/data/genbank \
-#        -inclVersion -native -db=$db refseq mrna refSeq.ra
-# /cluster/data/genbank/bin/x86_64/gbGetSeqs -get=ra -gbRoot=/cluster/data/genbank \
-#        -inclVersion -native -db=$db genbank mrna mrna.ra
-# Then convert these into some tab separated files, which takes 4 seconds:
-cp $gbDir/genbank.ra mrna.ra
-cp $gbDir/refseq.ra refSeq.ra
+# Get Genbank info
+mkdir -p $gbDir
+cd $gbDir
+txGenbankData $db
+
+# Unpack and process RA Files
+cd $dir
+zcat $gbDir/genbank.ra.gz >mrna.ra
+zcat $gbDir/refseq.ra.gz > refSeq.ra
 txReadRa mrna.ra refSeq.ra .
 
-# Get sequence files. Takes 70 seconds
-#/cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank \
-#	-inclVersion -native -db=$db refseq pep refPep.fa
-/cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank \
-	-inclVersion -native -db=$db refseq mrna refSeq.fa
-/cluster/data/genbank/bin/x86_64/gbGetSeqs -gbRoot=/cluster/data/genbank \
-	-inclVersion -native -db=$db genbank mrna mrna.fa
-cp $gbDir/refseq.pep.fa refPep.fa
-cp $gbDir/genbank.psl mrna.psl
-cp $gbDir/refseq.psl refSeq.psl
-
+# Unpack sequence and psl files
+zcat $gbDir/refseq.pep.fa.gz > refPep.fa
+zcat $gbDir/genbank.psl.gz > mrna.psl
+zcat $gbDir/refseq.psl.gz > refSeq.psl
 
 # Get some other info from the database.  Best to get it about
 # the same time so it is synced with other data. Takes 4 seconds.
 echo 'select distinct name,sizePolyA from mrnaOrientInfo' | hgsql -N $db | \
-	subColumn 1 stdin accVer.tab sizePolyA.tab
-
-# Get refSeq, mrna and intronEst tables as psl.  Ignore the
-# stdin is empty messages, these are just from _random chroms
-# with no annotations.  Takes 7 seconds.
-#mkdir refSeq mrna est
-#foreach c (`echo 'select chrom from chromInfo' | hgsql -N $db`)
-#    hgGetAnn -noMatchOk $db refSeqAli $c refSeq/$c.psl
-#    hgGetAnn -noMatchOk $db mrna $c mrna/$c.psl
-#    hgGetAnn -noMatchOk $db intronEst $c est/$c.psl
-#end
+	subColumn -miss=sizePolyA.miss 1 stdin accVer.tab sizePolyA.tab
 
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna
@@ -122,6 +105,7 @@ clusterPsl -prefix=ab.ab.antibody. antibody.psl stdout | awk '$10 > 20' | cut -f
 foreach c (`echo 'select chrom from chromInfo' | hgsql -N $db`)
     txPslToBed refSeq/$c.psl -noFixStrand -cds=cds.tab /cluster/data/$db/$db.2bit refSeq/$c.bed -unusual=refSeq/$c.unusual
     txPslToBed mrna/$c.psl -cds=cds.tab /cluster/data/$db/$db.2bit stdout -unusual=mrna/$c.unusual \
+	| fgrep -v -w -f /cluster/data/genbank/data/exceptions/invitrogenFullLength.acc \
         | bedWeedOverlapping antibody.bed maxOverlap=0.5 stdin mrna/$c.bed
     txPslToBed est/$c.psl /cluster/data/$db/$db.2bit stdout \
         | bedWeedOverlapping antibody.bed maxOverlap=0.3 stdin est/$c.bed

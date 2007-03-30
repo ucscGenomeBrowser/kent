@@ -1328,3 +1328,8 @@ Notes for take 11:
 NM_004390, which overlaps another refseq, seems to have fallen out
 somewhere between the graph and walking stage.
 X17115 - use as IgM heavy chain?
+
+Please take out
+ /cluster/data/genbank/data/exceptions/invitrogenFullLength.acc
+
+Increase txCdsThreshold to 871.42.
