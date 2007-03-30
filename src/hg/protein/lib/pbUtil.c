@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.17 2007/03/23 17:15:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.18 2007/03/30 03:11:14 kent Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -514,12 +514,13 @@ hPrintf("\n<LI>Genome Browser - ");
 if (mrnaID != NULL)
     {
     hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s%s\"", mrnaID, database, hgsidStr);
+    hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
 else
     {
     hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s%s\"", spAcc, database, hgsidStr);
+    hPrintf(" TARGET=_BLANK>%s</A></LI>\n", spAcc);
     }
-hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
 }
 
 void doGeneSorterLink(char *spAcc, char *mrnaID, char *hgsidStr)
@@ -530,13 +531,14 @@ if (mrnaID != NULL)
     /* hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid); */
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"", 
     	    mrnaID, database, organism, hgsidStr);
+    hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", mrnaID);
     }
 else
     {
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&db=%s&org=%s%s\"", 
     	    spAcc, database, organism, hgsidStr);
+    hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", spAcc);
     }
-hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", mrnaID);
 hPrintf("\n");
 }
 
