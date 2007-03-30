@@ -77,6 +77,7 @@
 #include "cnpSebat.h"
 #include "cnpSebat2.h"
 #include "cnpSharp.h"
+#include "cnpSharp2.h"
 #include "delHinds2.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
@@ -200,7 +201,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1256 2007/03/30 20:35:56 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1257 2007/03/30 22:48:48 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12541,19 +12542,91 @@ printf("<B>DNA Percent:        </B> %.1f %%<BR>\n", cnpSharp.DNApercent*100);
 printf("<B>Disease Percent:    </B> %.1f %%<BR>\n", cnpSharp.diseaseSpotsPercent*100);
 }
 
+void printCnpSharpSampleData(char *itemName)
+{
+struct sqlConnection *hgFixed1 = sqlConnect("hgFixed");
+struct sqlConnection *hgFixed2 = sqlConnect("hgFixed");
+char query[256], query2[1024];
+char **row;
+struct sqlResult *sr1, *sr2;
+float sample, cutoff;
+
+printf("<BR>\n");
+safef(query, sizeof(query), "select distinct substring(sample,1,5) from cnpSharpCutoff order by sample");
+sr1 = sqlGetResult(hgFixed1, query);
+while ((row = sqlNextRow(sr1)) != NULL)
+    {
+    char *pop=row[0];
+    printf("<table border=\"1\" cellpadding=\"0\" ><tr>");
+    safef(query2, sizeof(query2),
+	  "select s1.sample, s1.gender, s1.value, c1.value, s2.value, c2.value "
+	  "from   cnpSharpSample s1, cnpSharpSample s2, cnpSharpCutoff c1, cnpSharpCutoff c2 "
+	  "where  s1.sample=s2.sample and s1.sample=c1.sample and s1.sample=c2.sample "
+	  "  and  s1.batch=1 and s2.batch=2 and c1.batch=1 and c2.batch=2 and s1.bac='%s' "
+	  "  and  s1.bac=s2.bac and s1.sample like '%s%%' order by s1.sample", itemName, pop);
+    sr2 = sqlGetResult(hgFixed2, query2);
+    while ((row = sqlNextRow(sr2)) != NULL)
+	{
+	if (sameString(row[1],"M")) printf("<TD width=160 bgcolor=\"#99FF99\">");
+	else                        printf("<TD width=160 bgcolor=\"#FFCCFF\">");
+	printf("%s</TD>\n",row[0]);
+	}
+    printf("</TR><TR>\n");
+    sqlFreeResult(&sr2);
+    sr2 = sqlGetResult(hgFixed2, query2);
+    while ((row = sqlNextRow(sr2)) != NULL)
+	{
+	sample = sqlFloat(row[2]);
+	cutoff = sqlFloat(row[3]);
+	if (sameString(row[2],"NA")) 
+	    printf("<TD width=160 >&nbsp; NA / %.3f </TD>\n",cutoff);
+	else if (sample>=cutoff)
+	    printf("<TD width=160  bgcolor=\"yellow\">&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
+	else if (sample<= 0-cutoff)
+	    printf("<TD width=160  bgcolor=\"gray\">&nbsp; %.3f / -%.3f </TD>\n",sample,cutoff);
+	else printf("<TD width=160 >&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
+	}
+    printf("</TR><TR>\n");
+    sqlFreeResult(&sr2);
+    sr2 = sqlGetResult(hgFixed2, query2);
+    while ((row = sqlNextRow(sr2)) != NULL)
+	{
+	sample = sqlFloat(row[4]);
+	cutoff = sqlFloat(row[5]);
+	if (sameString(row[4],"NA")) 
+	    printf("<TD width=160 >&nbsp; NA / %.3f </TD>\n",cutoff);
+	else if (sample>=cutoff)
+	    printf("<TD width=160  bgcolor=\"yellow\">&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
+	else if (sample<= 0-cutoff)
+	    printf("<TD width=160  bgcolor=\"gray\">&nbsp; %.3f / -%.3f </TD>\n",sample,cutoff);
+	else printf("<TD width=160 >&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
+	}
+    sqlFreeResult(&sr2);
+    printf("</tr></table>\n");
+    }
+sqlFreeResult(&sr1);
+hFreeConn(&hgFixed1);
+hFreeConn(&hgFixed2);
+
+printf("<BR><B>Legend for individual values in table:</B>\n");
+printf("&nbsp;&nbsp;<table>");
+printf("<TR><TD>Title Color:</TD><TD bgcolor=\"#FFCCFF\">Female</TD><TD bgcolor=\"#99FF99\">Male</TD></TR>\n");
+printf("<TR><TD>Value Color:</TD><TD bgcolor=\"yellow\" >Above Threshold</TD><TD bgcolor=\"gray\">Below negative threshold</TD></TR>\n");
+printf("<TR><TD>Data Format:</TD><TD>Value / Threshold</TD></TR>\n");
+printf("</table>\n");
+
+}
+
 void doCnpSharp(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
 struct cnpSharp cnpSharp;
 struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *hgFixed1 = sqlConnect("hgFixed");
-struct sqlConnection *hgFixed2 = sqlConnect("hgFixed");
-struct sqlResult *sr, *sr1, *sr2;
+struct sqlResult *sr;
 char **row;
-char query[256], query2[1024];
+char query[256]; 
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
-float sample, cutoff;
 char variantSignal;
 char *itemCopy = cloneString(itemName);
 
@@ -12580,69 +12653,38 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-printf("<BR>\n");
+printCnpSharpSampleData(itemName);
+printTrackHtml(tdb);
+}
+
+
+void doCnpSharp2(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct cnpSharp2 cnpSharp2;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+checkAndPrintCloneRegUrl(stdout, itemName);
 safef(query, sizeof(query),
-      "select distinct substring(sample,1,5) from cnpSharpCutoff order by sample");
-sr1 = sqlGetResult(hgFixed1, query);
-while ((row = sqlNextRow(sr1)) != NULL)
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *pop=row[0];
-    printf("<table border=\"1\" cellpadding=\"0\" ><tr>");
-    safef(query2, sizeof(query2),
-	  "select s1.sample, s1.gender, s1.value, c1.value, s2.value, c2.value "
-	  "from   cnpSharpSample s1, cnpSharpSample s2, cnpSharpCutoff c1, cnpSharpCutoff c2 "
-	  "where  s1.sample=s2.sample and s1.sample=c1.sample and s1.sample=c2.sample "
-	  "  and  s1.batch=1 and s2.batch=2 and c1.batch=1 and c2.batch=2 and s1.bac='%s' "
-	  "  and  s1.bac=s2.bac and s1.sample like '%s%%' order by s1.sample", itemName, pop);
-    sr2 = sqlGetResult(hgFixed2, query2);
-    while ((row = sqlNextRow(sr2)) != NULL)
-	{
-	if (sameString(row[1],"M")) printf("<TD width=160 bgcolor=\"#99FF99\">");
-	else                        printf("<TD width=160 bgcolor=\"#FFCCFF\">");
-	printf("%s</TD>\n",row[0]);
-	}
-    printf("</TR><TR>\n");
-    sqlFreeResult(&sr2);
-    sr2 = sqlGetResult(hgFixed2, query2);
-    while ((row = sqlNextRow(sr2)) != NULL)
-	{
-	sample=atof(row[2]);
-	cutoff=atof(row[3]);
-	if (sameString(row[2],"NA")) 
-	    printf("<TD width=160 >&nbsp; NA / %.3f </TD>\n",cutoff);
-	else if (sample>=cutoff)
-	    printf("<TD width=160  bgcolor=\"yellow\">&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
-	else if (sample<= 0-cutoff)
-	    printf("<TD width=160  bgcolor=\"gray\">&nbsp; %.3f / -%.3f </TD>\n",sample,cutoff);
-	else printf("<TD width=160 >&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
-	}
-    printf("</TR><TR>\n");
-    sqlFreeResult(&sr2);
-    sr2 = sqlGetResult(hgFixed2, query2);
-    while ((row = sqlNextRow(sr2)) != NULL)
-	{
-	sample=atof(row[4]);
-	cutoff=atof(row[5]);
-	if (sameString(row[4],"NA")) 
-	    printf("<TD width=160 >&nbsp; NA / %.3f </TD>\n",cutoff);
-	else if (sample>=cutoff)
-	    printf("<TD width=160  bgcolor=\"yellow\">&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
-	else if (sample<= 0-cutoff)
-	    printf("<TD width=160  bgcolor=\"gray\">&nbsp; %.3f / -%.3f </TD>\n",sample,cutoff);
-	else printf("<TD width=160 >&nbsp; %.3f / %.3f </TD>\n",sample,cutoff);
-	}
-    sqlFreeResult(&sr2);
-    printf("</tr></table>\n");
+    cnpSharp2StaticLoad(row+rowOffset, &cnpSharp2);
+    bedPrintPos((struct bed *)&cnpSharp2, 3);
+    printf("<B>Name: </B> %s <BR>\n", cnpSharp2.name);
+    printf("<B>Variation type: </B> %s <BR>\n", cnpSharp2.variationType);
     }
-sqlFreeResult(&sr1);
-sqlDisconnect(&hgFixed1);
-sqlDisconnect(&hgFixed2);
-printf("<BR><B>Legend for individual values in table:</B>\n");
-printf("&nbsp;&nbsp;<table>");
-printf("<TR><TD>Title Color:</TD><TD bgcolor=\"#FFCCFF\">Female</TD><TD bgcolor=\"#99FF99\">Male</TD></TR>\n");
-printf("<TR><TD>Value Color:</TD><TD bgcolor=\"yellow\" >Above Threshold</TD><TD bgcolor=\"gray\">Below negative threshold</TD></TR>\n");
-printf("<TR><TD>Data Format:</TD><TD>Value / Threshold</TD></TR>\n");
-printf("</table>\n");
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printCnpSharpSampleData(itemName);
 printTrackHtml(tdb);
 }
 
@@ -18456,6 +18498,10 @@ else if (sameWord(track, "cnpSebat2"))
 else if (sameWord(track, "cnpSharp"))
     {
     doCnpSharp(tdb, item);
+    }
+else if (sameWord(track, "cnpSharp2"))
+    {
+    doCnpSharp2(tdb, item);
     }
 else if (sameWord(track, "delHinds2"))
     {

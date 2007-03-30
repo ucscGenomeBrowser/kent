@@ -23,6 +23,7 @@
 #include "cnpSebat.h"
 #include "cnpSebat2.h"
 #include "cnpSharp.h"
+#include "cnpSharp2.h"
 #include "cnpRedon.h"
 #include "cnpSharpSample.h"
 #include "cnpSharpCutoff.h"
@@ -221,7 +222,6 @@ Color cnpSebat2Color(struct track *tg, void *item, struct vGfx *vg);
 void cnpSebat2Methods(struct track *tg);
 /* methods for cnpSebat2 */
 
-
 void cnpSharpLoadItems(struct track *tg);
 /* loader for cnpSharp table */
 
@@ -232,6 +232,17 @@ Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
 
 void cnpSharpMethods(struct track *tg);
 /* methods for cnpSharp */
+
+void cnpSharp2LoadItems(struct track *tg);
+/* loader for cnpSharp2 table */
+
+void cnpSharp2FreeItems(struct track *tg);
+
+Color cnpSharp2Color(struct track *tg, void *item, struct vGfx *vg);
+/* green for GAIN, red for LOSS, blue for both */
+
+void cnpSharp2Methods(struct track *tg);
+/* methods for cnpSharp2 */
 
 void cnpFosmidLoadItems(struct track *tg);
 /* loader for cnpFosmid table */
