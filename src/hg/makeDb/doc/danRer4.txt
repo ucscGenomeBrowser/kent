@@ -2481,6 +2481,10 @@ TMPDIR=/scratch/tmp
 
 ###########################################################################
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2006-05-01, hartera)
+# RE-MAKE DOWNLOADS FOR AGP, SOFT AND HARD MASKED CHROMS, REPEATMASKER OUT
+# BECAUSE THEY DID NOT INCLUDE NA_RANDOM AND UN_RANDOM 
+# (DONE, 2007-03-29, hartera)
+# NOTE THAT zipAll.csh MUST BE ALTERED ACCORDINGLY IN FUTURE.
    ssh kkstore01
    cd /cluster/data/danRer4
    #- Build the .tar.gz and *.gz files for bigZips
@@ -2520,6 +2524,7 @@ gzip *.fa
    csh -ef ./jkStuff/zipAll.csh >& zipAll.log &
    # Took about 35 minutes.    
    #- Look at zipAll.log to make sure all file lists look reasonable.
+
    # Make upstream files for zebrafish RefSeq and Copy the .gz files to
    # hgwdev:/usr/local/apache/...
    ssh hgwdev
@@ -2556,6 +2561,34 @@ gzip *.fa
    # Take a look at bigZips/* and chromosomes/*
    # copy README.txt's from danRer3 and update
 
+   # RE-MAKE DOWNLOADS FOR AGP, SOFT AND HARD MASKED CHROMS, REPEATMASKER OUT
+   # BECAUSE THEY DID NOT INCLUDE NA_RANDOM AND UN_RANDOM 
+   # (DONE, 2007-03-29, hartera)
+   # NOTE THAT zipAll.csh MUST BE ALTERED ACCORDINGLY IN FUTURE.
+   ssh kkstore04
+   cd /cluster/data/danRer4
+   #- Rebuild the .tar.gz (agp, files for bigZips
+   cat << '_EOF_' > jkStuff/zip2.csh
+rm -r bigZips/chromAgp.tar.gz
+rm -r bigZips/chromOut.tar.gz
+rm -r bigZips/chromFa.tar.gz
+rm -r bigZips/chromFaMasked.tar.gz
+tar cvzf bigZips/chromAgp.tar.gz ?{,?}{,_random}/chr*.agp
+tar cvzf bigZips/chromOut.tar.gz ?{,?}{,_random}/chr*.fa.out
+tar cvzf bigZips/chromFa.tar.gz ?{,?}{,_random}/chr*.fa
+tar cvzf bigZips/chromFaMasked.tar.gz ?{,?}{,_random}/chr*.fa.masked
+'_EOF_'
+   # << this line makes emacs coloring happy
+   chmod +x jkStuff/zip2.csh
+   csh -ef ./jkStuff/zip2.csh >& zip2.log &
+   # Took about 10 minutes
+   # Links to these files already exist from the 
+   # /usr/local/apache/htdocs/goldenpath/danRer4/bigZips directory.
+   # Recreate the md5sum there to include these new files.
+   cd /usr/local/apache/htdocs/goldenpath/danRer4/bigZips
+   rm md5sum.txt
+   md5sum *.gz > md5sum.txt
+   
 ###########################################################################
 # HUMAN (hg18) PROTEINS TRACK FOR hg18 (DONE, 2006-04-28 - 2006-05-03, hartera)
    ssh kkstore01
