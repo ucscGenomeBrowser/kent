@@ -1,12 +1,13 @@
 /* genePredCheck - validate genePred files or tables. */
 #include "common.h"
 #include "options.h"
+#include "verbose.h"
 #include "portable.h"
 #include "hdb.h"
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.3 2005/12/02 05:47:20 markd Exp $";
+static char const rcsid[] = "$Id: genePredCheck.c,v 1.4 2007/03/30 00:20:12 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -15,6 +16,7 @@ static struct optionSpec optionSpecs[] = {
 };
 char *gDb = NULL;
 int gErrCount = 0;  /* global count of errors */
+int gChkCount = 0;  /* global count of genes checked */
 
 void usage()
 /* Explain usage and exit. */
@@ -71,6 +73,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     safef(desc, sizeof(desc), "%s:%d", fileTbl, iRec);
     gErrCount += genePredCheck(desc, stderr, chromSize, gp);
     genePredFree(&gp);
+    gChkCount += 1;
     }
 genePredReaderFree(&gpr);
 if (conn != NULL)
@@ -87,5 +90,6 @@ if (argc < 2)
 gDb = optionVal("db", NULL);
 for (iarg = 1; iarg < argc; iarg++)
     checkGenePred(argv[iarg]);
+verbose(1, "checked: %d failed: %d\n", gChkCount, gErrCount);
 return ((gErrCount == 0) ? 0 : 1);
 }
