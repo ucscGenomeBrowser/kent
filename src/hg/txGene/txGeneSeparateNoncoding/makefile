@@ -8,8 +8,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txGeneSeparateNoncoding.o
 
 txGeneSeparateNoncoding: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGeneSeparateNoncoding $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneSeparateNoncoding${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txGeneSeparateNoncoding $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txGeneSeparateNoncoding${EXE}
 
 clean:
 	rm -f $O

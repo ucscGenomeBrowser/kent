@@ -10,7 +10,7 @@ O = $A.o
 
 all: compile
 	${STRIP} $A${EXE}
-	mv $A $$HOME/bin/$(MACHTYPE)/$A
+	mv $A ${BINDIR}/$A
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 

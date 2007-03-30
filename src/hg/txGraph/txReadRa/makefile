@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = txReadRa.o
 
 txReadRa: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txReadRa $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txReadRa${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txReadRa $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txReadRa${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txCdsEvFromRna.o
 
 txCdsEvFromRna: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsEvFromRna $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsEvFromRna${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsEvFromRna $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsEvFromRna${EXE}
 
 test:
 	txCdsEvFromRna inRna.fa in.cds in.psl inTx.fa output.ev -refStatus=inRefStatus.tab -unmapped=output.unmapped

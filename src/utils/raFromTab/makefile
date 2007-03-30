@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = raFromTab.o
 
 raFromTab: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/raFromTab $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/raFromTab${EXE}
+	${CC} ${COPT} -o ${BINDIR}/raFromTab $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/raFromTab${EXE}
 
 test:
 	raFromTab in.tab cols=first,last,occupation out1.ra

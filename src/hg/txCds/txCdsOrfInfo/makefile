@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = txCdsOrfInfo.o
 
 txCdsOrfInfo: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsOrfInfo $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsOrfInfo${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsOrfInfo $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsOrfInfo${EXE}
 
 clean:
 	rm -f $O

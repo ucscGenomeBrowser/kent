@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = raToTab.o
 
 raToTab: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/raToTab $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/raToTab${EXE}
+	${CC} ${COPT} -o ${BINDIR}/raToTab $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/raToTab${EXE}
 
 clean:
 	rm -f $O

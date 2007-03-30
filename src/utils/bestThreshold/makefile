@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = bestThreshold.o
 
 bestThreshold: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/bestThreshold $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/bestThreshold${EXE}
+	${CC} ${COPT} -o ${BINDIR}/bestThreshold $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/bestThreshold${EXE}
 
 test:
 	bestThreshold in.good in.bad > out

@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bedThickToCds.o
 
 bedThickToCds: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/bedThickToCds $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/bedThickToCds${EXE}
+	${CC} ${COPT} -o ${BINDIR}/bedThickToCds $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/bedThickToCds${EXE}
 
 test:
 	bedThickToCds in.bed out.cds

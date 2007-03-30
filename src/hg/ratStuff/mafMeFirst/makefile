@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = mafMeFirst.o
 
 mafMeFirst: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafMeFirst $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/mafMeFirst${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mafMeFirst $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/mafMeFirst${EXE}
 
 clean:
 	rm -f $O

@@ -12,8 +12,8 @@ all:
 	cd parasol && ${MAKE}
 
 install:
-	cp bin/para* bin/gensub2 $(HOME)/bin/i386
-	cp bin/para* bin/gensub2 /cluster/bin/i386
+	cp bin/para* bin/gensub2 ${BINDIR}
+	cp bin/para* bin/gensub2 /cluster/bin/${MACHTYPE}
 
 clean:
 	rm -f */*.o lib/*/*.a

@@ -5,7 +5,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceG
 
 % : %.c
 	${CC} ${COPT} ${CFLAGS} -Wimplicit -I../inc -I../../inc  -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) -lm
-	cp $@ $(HOME)/bin/$(ARCHTYPE)
+	cp $@ ${BINDIR}
 
 %Test: %Test.c 
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)

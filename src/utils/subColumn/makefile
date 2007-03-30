@@ -8,7 +8,7 @@ O = subColumn.o
 
 subColumn: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/subColumn $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/subColumn${EXE}
+	${STRIP} ${BINDIR}/subColumn${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = txPslFilter.o
 
 txPslFilter: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txPslFilter $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txPslFilter${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txPslFilter $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txPslFilter${EXE}
 
 clean:
 	rm -f $O

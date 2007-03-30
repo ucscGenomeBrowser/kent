@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txGeneAccession.o
 
 txGeneAccession: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGeneAccession $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneAccession${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txGeneAccession $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txGeneAccession${EXE}
 
 test:
 	txGeneAccession inOld.bed in.id inNew.bed output.tab outOldToNew.tab -test

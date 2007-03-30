@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = txGeneAltProt.o
 
 txGeneAltProt: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGeneAltProt $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneAltProt${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txGeneAltProt $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txGeneAltProt${EXE}
 
 clean:
 	rm -f $O

@@ -1,11 +1,10 @@
 include ../../inc/common.mk
-BIN_DIR = $(HOME)/bin
 CVSTOOLS=cvsFiles  cvsStatusFilter
 
-all: ${CVSTOOLS:%=${BIN_DIR}/%}
+all: ${CVSTOOLS:%=${BINDIR}/%}
 
-${BIN_DIR}/%: %
-	@${MKDIR} ${BIN_DIR}
+${BINDIR}/%: %
+	@${MKDIR} ${BINDIR}
 	chmod a+rx $<
 	cp -pf $< $@
 

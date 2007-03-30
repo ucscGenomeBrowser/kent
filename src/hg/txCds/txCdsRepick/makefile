@@ -8,8 +8,8 @@ O = txCdsRepick.o
 
 
 txCdsRepick: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsRepick $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsRepick${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsRepick $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsRepick${EXE}
 
 test:
 	txCdsRepick in.bed in.txg in.cluster in.info in.tce out.tce out.pp

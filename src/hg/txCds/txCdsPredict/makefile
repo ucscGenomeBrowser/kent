@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txCdsPredict.o
 
 txCdsPredict: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsPredict $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsPredict${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsPredict $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsPredict${EXE}
 
 test:
 	txCdsPredict in.fa out.cds

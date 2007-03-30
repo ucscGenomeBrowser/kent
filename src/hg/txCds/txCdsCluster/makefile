@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txCdsCluster.o
 
 txCdsCluster: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsCluster $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsCluster${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsCluster $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsCluster${EXE}
 
 test:
 	txCdsCluster input.bed output.clusters

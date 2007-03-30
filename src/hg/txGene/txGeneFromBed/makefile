@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txGeneFromBed.o
 
 txGeneFromBed: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGeneFromBed $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneFromBed${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txGeneFromBed $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txGeneFromBed${EXE}
 
 clean:
 	rm -f $O

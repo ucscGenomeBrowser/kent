@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = hmmPfamToTab.o
 
 hmmPfamToTab: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hmmPfamToTab $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hmmPfamToTab${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hmmPfamToTab $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hmmPfamToTab${EXE}
 
 test:
 	hmmPfamToTab in.pf out.tab

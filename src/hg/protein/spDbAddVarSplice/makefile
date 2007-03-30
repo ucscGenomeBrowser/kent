@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = spDbAddVarSplice.o
 
 spDbAddVarSplice: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/spDbAddVarSplice $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/spDbAddVarSplice${EXE}
+	${CC} ${COPT} -o ${BINDIR}/spDbAddVarSplice $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/spDbAddVarSplice${EXE}
 
 clean:
 	rm -f $O

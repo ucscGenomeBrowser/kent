@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txCdsEvFromProtein.o
 
 txCdsEvFromProtein: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsEvFromProtein $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsEvFromProtein${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsEvFromProtein $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsEvFromProtein${EXE}
 
 test:
 	txCdsEvFromProtein inProtein.fa in.psl inTx.fa output.tce -unmapped=output.unmapped -dodgeStop=3

@@ -8,8 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = makeOrthoAtgTable.o
 
 makeOrthoAtgTable: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/makeOrthoAtgTable $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/makeOrthoAtgTable${EXE}
+	${CC} ${COPT} -o ${BINDIR}/makeOrthoAtgTable $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/makeOrthoAtgTable${EXE}
 
 clean:
 	rm -f $O

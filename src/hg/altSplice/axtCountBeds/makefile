@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceG
 
 % : %.c
 	${CC} ${COPT} ${CFLAGS} -Wimplicit -I../inc -I../../inc  -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) -lm -lz
-	cp $@ $(HOME)/bin/$(ARCHTYPE)
+	cp $@ ${BINDIR}
 
 O =  axtCountBeds
 

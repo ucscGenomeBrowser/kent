@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txPslToBed.o
 
 txPslToBed: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txPslToBed $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txPslToBed${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txPslToBed $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txPslToBed${EXE}
 
 test:
 	txPslToBed -verbose=0 -cds=input.cds input.psl /cluster/data/hg18/hg18.2bit output.bed 

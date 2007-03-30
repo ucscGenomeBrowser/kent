@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = agxToXml.o
 
 agxToXml: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/agxToXml $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/agxToXml${EXE}
+	${CC} ${COPT} -o ${BINDIR}/agxToXml $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/agxToXml${EXE}
 
 test:
 	agxToXml input.agx output.xml

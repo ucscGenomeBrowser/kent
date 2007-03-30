@@ -7,12 +7,12 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bedWeedOverlapping.o
 
 bedWeedOverlapping: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/bedWeedOverlapping $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/bedWeedOverlapping${EXE}
+	${CC} ${COPT} -o ${BINDIR}/bedWeedOverlapping $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/bedWeedOverlapping${EXE}
 
 test:
 	bedWeedOverlapping inWeed.bed input.bed output.bed
 	diff expected.bed output.bed
-	
+
 clean:
 	rm -f $O

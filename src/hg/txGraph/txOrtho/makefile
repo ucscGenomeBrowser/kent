@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txOrtho.o
 
 txOrtho: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txOrtho $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txOrtho${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txOrtho $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txOrtho${EXE}
 
 test:
 	txOrtho input.txg input.chain input.net inOrtho.txg output.edges -verbose=0

@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = genePredToMrna.o
 
 genePredToMrna: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/genePredToMrna $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredToMrna $O $(MYLIBS) $L
 
 genePredToMrna.o: genePredToMrna.c 
 

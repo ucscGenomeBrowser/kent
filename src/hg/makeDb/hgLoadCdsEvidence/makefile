@@ -8,8 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadCdsEvidence.o
 
 hgLoadCdsEvidence: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgLoadCdsEvidence $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadCdsEvidence${EXE}
+	${CC} ${COPT} -o ${BINDIR}/hgLoadCdsEvidence $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/hgLoadCdsEvidence${EXE}
 
 clean:
 	rm -f $O

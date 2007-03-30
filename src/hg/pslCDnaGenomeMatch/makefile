@@ -10,11 +10,11 @@ M = pslCDnaGenomeMatch.o
 
 O = pslMismatch.o misMatch.o 
 pslCDnaGenomeMatch: $M $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch $M $(MARKDEBUG) $(MYLIBS) $L 
-#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch${EXE}
+	gcc -ggdb -o ${BINDIR}/pslCDnaGenomeMatch $M $(MARKDEBUG) $(MYLIBS) $L 
+#${STRIP} ${BINDIR}/pslCDnaGenomeMatch${EXE}
 
 misMatch: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/misMatch  $O $(MARKDEBUG) $(MYLIBS) $L 
+	gcc -ggdb -o ${BINDIR}/misMatch  $O $(MARKDEBUG) $(MYLIBS) $L 
 
 lib:
 	cd ../../lib && ${MAKE}

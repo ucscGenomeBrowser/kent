@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = txCdsRaExceptions.o
 
 txCdsRaExceptions: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsRaExceptions $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsRaExceptions${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsRaExceptions $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsRaExceptions${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txCdsSvmInput.o 
 
 txCdsSvmInput: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txCdsSvmInput $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txCdsSvmInput${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txCdsSvmInput $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txCdsSvmInput${EXE}
 
 test:
 	txCdsSvmInput in.bed in.tce in.ortho in.info out.lst out.vector

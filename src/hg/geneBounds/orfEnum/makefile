@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = orfEnum.o
 
 orfEnum: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/orfEnum $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/orfEnum${EXE}
+	${CC} ${COPT} -o ${BINDIR}/orfEnum $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/orfEnum${EXE}
 
 test:
 	orfEnum in.fa out.orf

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = mafFastFrags.o
 
 mafFastFrags: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafFastFrags $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/mafFastFrags${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mafFastFrags $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/mafFastFrags${EXE}
 
 clean:
 	rm -f $O

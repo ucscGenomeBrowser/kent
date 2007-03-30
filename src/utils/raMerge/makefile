@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = raMerge.o
 
 raMerge: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/raMerge $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/raMerge${EXE}
+	${CC} ${COPT} -o ${BINDIR}/raMerge $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/raMerge${EXE}
 
 test:
 	raMerge name in1.ra in2.ra in3.ra > out.ra

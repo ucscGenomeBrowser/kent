@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = clusterPsl.o
 
 clusterPsl: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/clusterPsl $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/clusterPsl${EXE}
+	${CC} ${COPT} -o ${BINDIR}/clusterPsl $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/clusterPsl${EXE}
 
 test:
 	clusterPsl -verbose=0 input.psl output.cluster

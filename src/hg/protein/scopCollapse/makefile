@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = scopCollapse.o
 
 scopCollapse: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/scopCollapse $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/scopCollapse${EXE}
+	${CC} ${COPT} -o ${BINDIR}/scopCollapse $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/scopCollapse${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = txGraph.o
 
 txGraph: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGraph $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txGraph${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txGraph $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txGraph${EXE}
 
 clean:
 	rm -f $O

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = bedToTxEdges.o
 
 bedToTxEdges: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/bedToTxEdges $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/bedToTxEdges${EXE}
+	${CC} ${COPT} -o ${BINDIR}/bedToTxEdges $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/bedToTxEdges${EXE}
 
 test:
 	bedToTxEdges tests/simple.in tests/simple.out

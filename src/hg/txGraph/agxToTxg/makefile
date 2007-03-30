@@ -8,8 +8,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = agxToTxg.o
 
 agxToTxg: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/agxToTxg $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/agxToTxg${EXE}
+	${CC} ${COPT} -o ${BINDIR}/agxToTxg $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/agxToTxg${EXE}
 
 test:
 	agxToTxg input.agx output.txg

@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = mafSpeciesSubset.o
 
 mafSpeciesSubset: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mafSpeciesSubset $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/mafSpeciesSubset${EXE}
+	${CC} ${COPT} -o ${BINDIR}/mafSpeciesSubset $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/mafSpeciesSubset${EXE}
 
 clean:
 	rm -f $O

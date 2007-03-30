@@ -8,8 +8,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = txGeneColor.o
 
 txGeneColor: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/txGeneColor $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/txGeneColor${EXE}
+	${CC} ${COPT} -o ${BINDIR}/txGeneColor $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/txGeneColor${EXE}
 
 clean:
 	rm -f $O

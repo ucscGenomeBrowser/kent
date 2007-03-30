@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 O = orfCompare.o
 
 orfCompare: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/orfCompare $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/orfCompare${EXE}
+	${CC} ${COPT} -o ${BINDIR}/orfCompare $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/orfCompare${EXE}
 
 test:
 	orfCompare inA.orf inB.orf > out.txt
