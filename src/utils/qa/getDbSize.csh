@@ -28,6 +28,7 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "    usage:  database | all | filename [index]"
   echo "           defaults to hgwbeta"
+  echo '           "filename" refers to list of dbs'
   echo
   exit
 else
