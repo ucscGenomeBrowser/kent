@@ -14350,3 +14350,36 @@ TMPDIR=/scratch/tmp
     hgLoadSqlTab hg18 keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
 
 ##############################################################################
+# UPDATE BIOCYCTABLES NEEDED BY hgGene (DONE 3/27/07 Fan)
+
+# First register with BioCyc to download their HumanCyc database
+# The site will email you the URL for download
+
+    wget --timesatmping \
+    http://bioinformatics.ai.sri.com/ecocyc/dist/flatfiles-52983746/humancyc-flatfiles.zip
+
+    unzip  humancyc-flatfiles.zip
+
+    cp genes.col genes.tab
+    cp pathways.col pathways.tab
+
+# delete the first 20 or so header lines from these two files.
+    vi genes.tab
+    vi pathways.tab
+
+    hgsql hg18 -e 'create database bioCyc070327'
+    
+    hgLoadSqlTab bioCyc070327 genes ~/src/hg/lib/bioCycGenes.sql ./genes.tab
+    hgLoadSqlTab bioCyc070327 pathways ~/src/hg/lib/bioCycPathways.sql ./pathways.tab
+    
+
+# Create bioCycMapDesc.tab
+    hgsql bioCyc070327 -N -e 'select UNIQUE_ID, NAME from pathways' |sort -u >  bioCycMapDesc.tab
+
+# Create bioCycPathway.tab
+    kgBioCyc0 bioCyc070327 hg18 hg18
+
+    hgLoadSqlTab hg18 bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
+    hgLoadSqlTab hg18 bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
+    
+#############################################################################
