@@ -726,3 +726,37 @@ priority 9.2
 # added pushQ entry
 
 ---
+#----------------------------------------------------------
+
+## (kg3 hg18 upgrade done galt 2007-03-29) 
+# kg3 hg18 upgrade of Human p2p Protein-to-protein network - P2P columns
+# I used the hgNetDist program to calculate network-distances for all gene pairs from
+# the interaction.p2p files and created *.pathLengths files as output.
+# These were then read by hgLoadNetDist to remap the ids and create the
+# actual mysql tables used.  Note that hgLoadNetDist was split off as a
+# separate program from hgNetDist to make the planned incremental kg3 upgrades
+# much easier and faster, since only the hgLoadNetDist has to be run
+# once the pathLengths files have been created.
+
+#hprd
+        hgNetDist -verbose=2 -weighted -threshold=2 \
+                /cluster/data/hg18/p2p/hprd/hprd.p2p \
+                /cluster/data/hg18/p2p/hprd/hprd.pathLengths
+        hgLoadNetDist /cluster/data/hg18/p2p/hprd/hprd.pathLengths hg18 humanHprdP2P \
+                -sqlRemap="select distinct value, name from knownToHprd"
+
+#vidal
+        hgNetDist -verbose=2 -skipFirst -threshold=2 \
+                /cluster/data/hg18/p2p/vidal/humanVidal.p2p \
+                /cluster/data/hg18/p2p/vidal/humanVidal.pathLengths
+        hgLoadNetDist /cluster/data/hg18/p2p/vidal/humanVidal.pathLengths hg18 humanVidalP2P \
+        -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+
+#wanker
+        hgNetDist -verbose=2 -skipFirst -threshold=2 \
+                /cluster/data/hg18/p2p/wanker/humanWanker.p2p \
+                /cluster/data/hg18/p2p/wanker/humanWanker.pathLengths
+        hgLoadNetDist /cluster/data/hg18/p2p/wanker/humanWanker.pathLengths hg18 humanWankerP2P \
+        -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+
+
