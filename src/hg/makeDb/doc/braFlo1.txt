@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.4 2007/03/28 23:59:15 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.5 2007/03/30 00:37:44 hiram Exp $"
 #
 
 ##########################################################################
@@ -237,6 +237,9 @@ braFlo1.perChromTables = no
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad braFlo1
     #	logFile: var/dbload/hgwdev/logs/2007.03.27-07:52:23.dbload.log
     #	real    6m57.557s
+    ## re-load to get the est track after adding that to the .conf file
+    #	var/dbload/hgwdev/logs/2007.03.29-17:09:35.dbload.log
+    #	real    19m2.168s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
