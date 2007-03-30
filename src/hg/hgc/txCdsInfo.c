@@ -9,7 +9,7 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.6 2007/03/17 22:36:06 kent Exp $";
+static char const rcsid[] = "$Id: txCdsInfo.c,v 1.7 2007/03/30 19:32:04 kent Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -114,14 +114,12 @@ printf("%s",
 "family.</LI>\n"
 "<LI><B>ORF size</B> - The size of the open reading frame in the mRNA. Divide by\n"
 "three to get the size of the protein.</LI>\n"
-"<LI><B>bestorf score</B> - The score from Victor Solovyev's bestorf program. This\n"
+"<LI><B>txCdsPredict score</B> - The score from the txCdsPredict program. This\n"
 "program weighs a variety of evidence including the presence of a Kozak consensus\n"
-"sequence at the start codon, the length of the ORF, the codon composition, and\n"
-"the presense of a signal leader sequence. The bestorf score ranges from 0 to 800.\n"
-"90% of RefSeq validated protein-coding transcripts have a bestorf score between 37 \n"
-"and 481. In the Known Genes set bestorf scores of 50 or higher are taken as \n"
-"evidence that the gene is coding, even in the absense of RefSeq or Genbank\n"
-"codin region annotations, or evidence from homology.</LI>\n"
+"sequence at the start codon, the length of the ORF, the presense of upstream\n"
+"ORFs, homology in other species, and nonsense mediated decay.  In general\n"
+"a score over 1000 is almost certain to be a protein, and scores over 800 have\n"
+"about a 90% chance of being a protein.</LI>\n"
 "<LI><B>has start codon</B> - Indicates if the initial codon is an ATG.</LI>\n"
 "<LI><B>has end codon</B> - Indicates if the last codon is TAA, TAG, or TGA.</LI>\n"
 "<LI><B>selenocysteine</B> - Indicates if this is one of the special proteins where\n"
