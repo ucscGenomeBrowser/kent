@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.31 2007/03/14 03:05:38 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.32 2007/03/31 18:45:27 braney Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -283,7 +283,7 @@ for (comp = ali->components; comp != NULL; comp = comp->next)
 /* Write out each component. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
     {
-    if (comp->size == 0 && comp->leftStatus)
+    if ((comp->size == 0) && (comp->leftStatus))
 	fprintf(f, "e %-*s %*d %*d %c %*d %c\n", 
 	    srcChars, comp->src, startChars, comp->start, 
 	    sizeChars, comp->leftLen, comp->strand, 
@@ -517,6 +517,19 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         return mc;
     }
 return NULL;
+}
+
+boolean mafMayFindAllComponents(struct mafAli *maf, struct hash *cHash) 
+/* Find component of given source that starts matches any string in the cHash.
+   Return NULL if not found. */
+{
+struct hashCookie cookie = hashFirst(cHash);
+struct hashEl *el;
+
+while ((el = hashNext(&cookie)) != NULL)
+    if (mafMayFindComponent(maf, el->name) == NULL)
+	return FALSE;
+return TRUE;
 }
 
 struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
