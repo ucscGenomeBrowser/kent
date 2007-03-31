@@ -138,6 +138,9 @@ struct mafComp *mafFindCompPrefix(struct mafAli *maf, char *pre, char *sep);
 /* Find component of given source that starts with pre followed by sep
    or die trying. */
 
+boolean mafMayFindAllComponents(struct mafAli *maf, struct hash *cHash);
+/* Check to see if all components in hash are in maf block.  Return FALSE if not found. */
+
 struct mafComp *mafMayFindComponentInHash(struct mafAli *maf, struct hash *cHash);
 /* Find component of given source that starts matches any string in the cHash.
    Return NULL if not found. */
