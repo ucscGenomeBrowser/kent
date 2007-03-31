@@ -108,6 +108,11 @@ void psPopClipRect(struct psGfx *ps);
 void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled);
 /* Draw a possibly filled polygon */
 
+void psFillEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad);
+
+void psDrawEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad,
+    int startAngle, int endAngle);
+
 char * convertEpsToPdf(char *epsFile);
 /* Convert EPS to PDF and return filename, or NULL if failure. */
 
