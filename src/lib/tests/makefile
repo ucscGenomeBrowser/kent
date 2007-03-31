@@ -40,37 +40,37 @@ pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
 	zcat output/$@.out.gz > output/$@.out
-	diff input/simple1.txt output/$@.out
+	diff -b input/simple1.txt output/$@.out
 
 # add come junk to make sure output gets truncated
 pipelineWriteMult: ${BIN_DIR}/pipelineTester mkdirs
 	cat input/google.html > output/$@.wc
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.wc "gzip -1" "gzip -dc" "wc"
-	diff expected/simple1.wc output/$@.wc
+	diff -b expected/simple1.wc output/$@.wc
 
 pipelineWriteFd: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -fdApi -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
 	zcat output/$@.out.gz > output/$@.out
-	diff input/simple1.txt output/$@.out
+	diff -b input/simple1.txt output/$@.out
 
 pipelineRead: ${BIN_DIR}/pipelineTester mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
 	${BIN_DIR}/pipelineTester -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
-	diff input/simple1.txt output/$@.out
+	diff -b input/simple1.txt output/$@.out
 
 pipelineReadMult: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -pipeData=output/$@.wc -otherEnd=input/simple1.txt "gzip -1" "gzip -dc" "wc"
-	diff expected/simple1.wc output/$@.wc
+	diff -b expected/simple1.wc output/$@.wc
 
 pipelineReadFd: ${BIN_DIR}/pipelineTester mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
 	${BIN_DIR}/pipelineTester -fdApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
-	diff input/simple1.txt output/$@.out
+	diff -b input/simple1.txt output/$@.out
 
 pipelineReadMem: ${BIN_DIR}/pipelineTester mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
 	${BIN_DIR}/pipelineTester -memApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
-	diff input/simple1.txt output/$@.out
+	diff -b input/simple1.txt output/$@.out
 
 pipelineExitCode: ${BIN_DIR}/pipelineTester
 	${BIN_DIR}/pipelineTester -exitCode=1 false
@@ -81,9 +81,9 @@ pipelineExitCode: ${BIN_DIR}/pipelineTester
 # before comparing.
 pipelineWriteErr: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -otherEnd=output/$@.out -stderr=output/$@.raw.err "sh -c 'echo OUT; echo ERR >&2'"  "sh -c 'echo OUT2; echo ERR2 >&2'"
-	diff expected/$@.out output/$@.out
+	diff -b expected/$@.out output/$@.out
 	sort output/$@.raw.err > output/$@.err
-	diff expected/$@.err output/$@.err
+	diff -b expected/$@.err output/$@.err
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} $L

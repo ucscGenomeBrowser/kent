@@ -5,8 +5,9 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "mime.h"
+extern char **environ;
 
-static char const rcsid[] = "$Id: mimeTester.c,v 1.3 2006/06/09 20:25:26 galt Exp $";
+static char const rcsid[] = "$Id: mimeTester.c,v 1.4 2007/03/31 04:32:27 markd Exp $";
 
 char *altHeader = NULL;
 
