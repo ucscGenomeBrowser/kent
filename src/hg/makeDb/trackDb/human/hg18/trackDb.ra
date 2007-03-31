@@ -992,6 +992,14 @@ priority 146
 visibility hide
 type bed 4 +
 
+    track cnpSharp2
+    subTrack cnp
+    shortLabel Sharp CNPs  
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
+    noInherit on
+    type bed 4 +
+    priority 1
+
     track cnpSebat2
     subTrack cnp
     shortLabel Sebat CNPs
@@ -1016,12 +1024,12 @@ type bed 4 +
     type bed 4 .
     priority 5
 
-    track delHinds
+    track delHinds2
     subTrack cnp
     shortLabel Hinds Dels
     longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
-    type bed 4 .
+    type bed 4 +
     priority 7
 
     track cnpLocke
