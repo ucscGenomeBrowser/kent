@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.18 2007/03/23 02:18:52 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.19 2007/03/31 18:46:04 braney Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -123,7 +123,7 @@ psXyOut(ps, x, y);
 fprintf(ps->f, "moveto\n");
 }
 
-static void psLineTo(struct psGfx *ps, double x, double y)
+void psLineTo(struct psGfx *ps, double x, double y)
 /* Draw line from current point to given point,
  * and make given point new current point. */
 {
@@ -337,6 +337,30 @@ if (filled)
     fprintf(f, "fill\n");
 else
     fprintf(f, "stroke\n");
+}
+
+
+void psFillEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad)
+{
+FILE *f = ps->f;
+fprintf(f, "newpath\n");
+psXyOut(ps, x, y);
+psWhOut(ps, xrad, yrad);
+fprintf(f, "%d %d ellipse\n",   0, 360);
+fprintf(f, "closepath\n");
+fprintf(f, "fill\n");
+}
+
+void psDrawEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad,
+    int startAngle, int endAngle)
+{
+FILE *f = ps->f;
+fprintf(f, "newpath\n");
+psXyOut(ps, x, y);
+psWhOut(ps, xrad, yrad);
+fprintf(f, "%d %d ellipse\n",  startAngle, endAngle);
+fprintf(f, "closepath\n");
+fprintf(f, "stroke\n");
 }
 
 char * convertEpsToPdf(char *epsFile) 
