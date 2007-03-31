@@ -137,7 +137,7 @@ boolean inArrayInt(unsigned el, unsigned *array, int size)
 
 }
 
-void addElement(char *el, char ***array, int *count)
+void addElement(char *el, char ***array, unsigned *count)
 /* Add a new element to a array of elements */
 {
   char *arrayCurr, arrayNew[MAX_ID_LIST];
@@ -163,7 +163,7 @@ void addElement(char *el, char ***array, int *count)
     }
 }
 
-void removeElement(char *el, char ***array, int *count)
+void removeElement(char *el, char ***array, unsigned *count)
 /* Add a new element to a array of elements */
 {
   char *arrayCurr, *arrayCurrDel, del[128];
@@ -195,7 +195,7 @@ void removeElement(char *el, char ***array, int *count)
     }
 }
   
-void addElementInt(unsigned el, unsigned **array, int *count)
+void addElementInt(unsigned el, unsigned **array, unsigned *count)
 /* Add a new element to a array of elements */
 {
   char *arrayCurr, arrayNew[MAX_ID_LIST];

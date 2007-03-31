@@ -111,9 +111,10 @@ struct linkedFeatures *lfFromSample(struct sample *sample)
 struct linkedFeatures *lf;
 struct simpleFeature *sf, *sfList = NULL;
 int grayIx = grayInRange(sample->score, 0, 1000);
-int *X = sample->samplePosition, start;
+int start, i;
+unsigned *X = sample->samplePosition;
 int *Y = sample->sampleHeight;
-int sampleCount = sample->sampleCount, i;
+unsigned sampleCount = sample->sampleCount;
 
 assert(X != NULL && Y != NULL && sampleCount > 0);
 AllocVar(lf);

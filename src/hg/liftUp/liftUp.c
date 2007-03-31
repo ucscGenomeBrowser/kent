@@ -18,7 +18,7 @@
 #include "verbose.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.43 2007/03/15 01:45:17 angie Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.44 2007/03/31 19:38:15 markd Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -475,9 +475,9 @@ for (i=0; i<sourceCount; ++i)
 			    }
 			psl->strand[1-strandChar] = 
 			    flipStrand(psl->strand[1-strandChar]);
-			reverseInts(blockSizes, blockCount);
-			reverseInts(psl->qStarts, blockCount);
-			reverseInts(psl->tStarts, blockCount);
+			reverseUnsigned(blockSizes, blockCount);
+			reverseUnsigned(psl->qStarts, blockCount);
+			reverseUnsigned(psl->tStarts, blockCount);
 			}
 		    }
 		}

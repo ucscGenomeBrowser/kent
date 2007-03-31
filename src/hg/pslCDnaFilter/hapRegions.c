@@ -256,7 +256,7 @@ else
             }
         }
     if (refPsl->strand[0] == '-')
-        reverseUnsignedRange(&qRange.start, &qRange.end, refPsl->qSize);
+        reverseIntRange(&qRange.start, &qRange.end, refPsl->qSize);
     }
 assert(qRange.start < qRange.end);
 return qRange;

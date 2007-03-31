@@ -201,7 +201,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1257 2007/03/30 22:48:48 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1258 2007/03/31 19:38:15 markd Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5602,7 +5602,7 @@ sqlFreeResult(&sr);
 if (sameString("mrnaBlastz", type) || sameString("pseudoMrna", type))
     {
     struct sqlConnection *conn = hAllocConn();
-    int retId = 0;
+    unsigned retId = 0;
     char *gbdate = NULL;
     sprintf(accTmp,"bz-%s",acc);
     if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
@@ -5688,7 +5688,7 @@ sqlFreeResult(&sr);
 if (sameString("mrnaBlastz", track) || sameString("pseudoMrna", track))
     {
     struct sqlConnection *conn = hAllocConn();
-    int retId = 0;
+    unsigned retId = 0;
     char *gbdate = NULL;
     safef(accTmp, sizeof(accTmp),"bz-%s",acc);
     if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)

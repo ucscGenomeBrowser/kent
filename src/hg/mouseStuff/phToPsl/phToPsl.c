@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: phToPsl.c,v 1.7 2006/06/20 16:44:18 angie Exp $";
+static char const rcsid[] = "$Id: phToPsl.c,v 1.8 2007/03/31 19:38:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,7 +51,7 @@ void *val = hashMustFindVal(hash, name);
 return ptToInt(val);
 }
 
-void countInserts(char *s, int size, int *retNumInsert, int *retBaseInsert)
+void countInserts(char *s, int size, unsigned *retNumInsert, int *retBaseInsert)
 /* Count up number and total size of inserts in s. */
 {
 char c, lastC = s[0];

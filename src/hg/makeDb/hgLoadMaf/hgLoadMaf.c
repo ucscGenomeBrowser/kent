@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.18 2006/05/01 16:33:35 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.19 2007/03/31 19:38:15 markd Exp $";
 
 /* Command line options */
 
@@ -144,7 +144,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
 	mr.chromStart = mc->start;
 	mr.chromEnd = mc->start + mc->size;
 	if (mc->strand == '-')
-	    reverseIntRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
+	    reverseUnsignedRange(&mr.chromStart, &mr.chromEnd, mc->srcSize);
 	mr.extFile = extId;
 	mr.offset = offset;
 

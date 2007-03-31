@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.34 2006/08/07 23:43:02 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.35 2007/03/31 19:38:14 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -343,7 +343,7 @@ struct clusterGene *cg1 = (*((struct slRef**)clr1))->val;
 struct clusterGene *cg2 = (*((struct slRef**)clr2))->val;
 int cmp = strcmp(cg1->track->name, cg2->track->name);
 if (cmp == 0)
-    strcmp(cg1->gp->name, cg2->gp->name);
+    cmp = strcmp(cg1->gp->name, cg2->gp->name);
 return cmp;
 }
 

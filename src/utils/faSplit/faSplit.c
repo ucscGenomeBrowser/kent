@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.34 2006/09/22 23:33:39 heather Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.35 2007/03/31 19:38:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -606,7 +606,7 @@ if (oneFile)
     f = mustOpen(fileName, "w");
     }
 else
-    fileName[0] = (char) NULL;
+    fileName[0] = '\0';
 if (liftFile)
     lift = mustOpen(liftFile, "w");
 

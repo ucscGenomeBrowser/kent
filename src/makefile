@@ -54,12 +54,10 @@ clean:
 	- find . -name \*.o -print | xargs rm
 	rm -f tags TAGS
 
-test::
-	cd lib && ${MAKE} test
-	cd blat && ${MAKE} test
-	cd gfServer && ${MAKE} test
-	cd hg && ${MAKE} test
-	cd utils && ${MAKE} test
+testDirs = lib blat gfServer hg
+test:: $(testDirs:%=%.test)
+%.test:
+	cd $* && ${MAKE} test
 
 LIB_TAGS_IN = lib/*.[hc] hg/lib/*.[hc] jkOwnLib/*.c inc/*.h hg/inc/*.h
 

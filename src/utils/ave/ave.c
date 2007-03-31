@@ -3,8 +3,9 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include <float.h>
 
-static char const rcsid[] = "$Id: ave.c,v 1.7 2005/11/06 23:13:10 hiram Exp $";
+static char const rcsid[] = "$Id: ave.c,v 1.8 2007/03/31 19:38:16 markd Exp $";
 
 int col = 1;
 bool tableOut = FALSE;
@@ -39,7 +40,7 @@ else
 void showStats(double *array, int count)
 /* Compute stats on sorted array */
 {
-double val, minVal = 9.9E999, maxVal = -9.9E999;
+double val, minVal = DBL_MAX, maxVal = -DBL_MAX;
 double total = 0, average;
 int i;
 int q1Index, q3Index;		/*	quartile positions	*/

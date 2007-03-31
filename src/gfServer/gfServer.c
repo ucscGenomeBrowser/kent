@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.53 2006/11/16 16:19:00 angie Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.54 2007/03/31 19:38:13 markd Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"canStop", OPTION_BOOLEAN},
@@ -486,7 +486,8 @@ struct genoFind *gf = NULL;
 static struct genoFind *transGf[2][3];
 char buf[256];
 char *line, *command;
-int fromLen, readSize;
+socklen_t fromLen;
+int readSize;
 int socketHandle = 0, connectionHandle = 0;
 int port = atoi(portName);
 time_t curtime;

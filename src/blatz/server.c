@@ -20,7 +20,7 @@
 int port = bzpDefaultPort;
 int cpuCount = 2;
 char *host = "localhost";
-char subnet[4] = {255,255,255,255};
+unsigned char subnet[4] = {255,255,255,255};
 
 void usage()
 /* Explain usage and exit. */

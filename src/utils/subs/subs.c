@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-static char const rcsid[] = "$Id: subs.c,v 1.8 2006/06/20 19:21:28 hiram Exp $";
+static char const rcsid[] = "$Id: subs.c,v 1.9 2007/03/31 19:38:16 markd Exp $";
 
 #define TRUE 1
 #define FALSE 0
@@ -45,7 +45,7 @@ Name *plist;				/* list of files to do subs on */
 #define HASH_ELS 256
 Sub *global_hash[HASH_ELS];		/* hash table for substitutions */
 
-int hash_function(register unsigned char *string)
+int hash_function(register char *string)
 /******************************************************************
  * Make up a number based on string.  A hash function should
  * try to make the number different for different strings.  Alas

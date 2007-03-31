@@ -351,9 +351,9 @@ if (gFileInput && (gChroms != NULL))
     errAbort("can't specify both -fileInput and -chrom");
 if (gFileInput && gInclVer)
     errAbort("can't specify both -fileInput and -inclVer");
-if ((db == "no") && !gFileInput)
+if (sameString(db, "no") && !gFileInput)
     errAbort("must specify -fileInput with db set to \"no\"");
-if ((db == "no") && !gEstOrientInfoFile)
+if (sameString(db, "no") && !gEstOrientInfoFile)
     errAbort("must specify -estOrientInfo with db set to \"no\"");
 
 estOrient(db, estTable, outPslFile);

@@ -9,7 +9,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: qacAgpLift.c,v 1.3 2006/08/22 23:12:15 angie Exp $";
+static char const rcsid[] = "$Id: qacAgpLift.c,v 1.4 2007/03/31 19:38:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -195,7 +195,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
                 }
             rleUncompress(qac->data, qac->compSize, buf, qac->uncSize);
             if (frag->strand[0] == '-')
-                reverseBytes(buf, qac->uncSize);
+                reverseBytes((char*)buf, qac->uncSize);
             memcpy(qa.qa + frag->chromStart, buf + frag->fragStart, fragSize);
             }
         else

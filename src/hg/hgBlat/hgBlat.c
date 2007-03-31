@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.112 2007/02/09 23:14:58 hiram Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.113 2007/03/31 19:38:14 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -322,9 +322,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
      *	together.
      */
     s = saferString;
-    for (c = seq->name; *c != (char)NULL; ++c)
+    for (c = seq->name; *c != '\0'; ++c)
 	{
-	if (c && (*c != (char)NULL))
+	if (c && (*c != '\0'))
 	    {
 	    if ( isalnum(*c) || (*c == '=') || (*c == '-') || (*c == '/') ||
 		(*c == '.') || (*c == ':') || (*c == ';') || (*c == '_') ||
@@ -332,9 +332,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 		*s++ = *c;
 	    }
 	}
-    *s = (char) NULL;
+    *s = '\0';
     freeMem(seq->name);
-    if (*saferString == (char)NULL)
+    if (*saferString == '\0')
 	{
 	freeMem(saferString);
 	saferString = cloneString("YourSeq");

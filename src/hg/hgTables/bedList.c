@@ -21,7 +21,7 @@
 #include "bedCart.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.55 2007/02/28 20:39:07 giardine Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.56 2007/03/31 19:38:14 markd Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -140,9 +140,9 @@ if (fieldCount < 12)
     return bed;
 bed->blockCount = blockCount = sqlUnsigned(row[7]);
 lmAllocArray(lm, bed->blockSizes, blockCount);
-sqlUnsignedArray(row[8], bed->blockSizes, blockCount);
+sqlSignedArray(row[8], bed->blockSizes, blockCount);
 lmAllocArray(lm, bed->chromStarts, blockCount);
-sqlUnsignedArray(row[9], bed->chromStarts, blockCount);
+sqlSignedArray(row[9], bed->chromStarts, blockCount);
 if (isGenePred)
     {
     /* Translate end coordinates to sizes. */

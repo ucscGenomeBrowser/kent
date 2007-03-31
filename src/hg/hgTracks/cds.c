@@ -16,7 +16,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.50 2007/02/26 23:22:30 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.51 2007/03/31 19:38:14 markd Exp $";
 
 /* Definitions of cds colors for coding coloring display */
 #define CDS_ERROR   0
@@ -155,7 +155,7 @@ for ( i=0; i<psl->blockCount; i++ )
     tStart = psl->tStarts[i];
     tEnd = tStart + psl->blockSizes[i];
     if (psl->strand[1] == '-') 
-         reverseIntRange(&tStart, &tEnd, psl->tSize);
+         reverseUnsignedRange(&tStart, &tEnd, psl->tSize);
 
     if (s >= tStart-3 && s < tEnd)
 	{
@@ -953,7 +953,7 @@ if(size < 3)
 	int i=0;
 	int idx = -1;
 	int newIdx = -1;
-	int *gaps = NULL;
+	unsigned *gaps = NULL;
 	boolean appendAtStart = FALSE;
 	AllocArray(gaps, psl->blockCount+2);
 
@@ -962,7 +962,7 @@ if(size < 3)
 	    unsigned tStart = psl->tStarts[i];
 	    unsigned tEnd = tStart + psl->blockSizes[i];
 	    if (psl->strand[1] == '-') 
-		reverseIntRange(&tStart, &tEnd, psl->tSize);
+		reverseUnsignedRange(&tStart, &tEnd, psl->tSize);
 
 	    if (s == tStart)
 		{
