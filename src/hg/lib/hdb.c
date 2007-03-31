@@ -34,7 +34,7 @@
 #include "chromInfo.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.321 2007/03/27 22:44:02 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.322 2007/03/31 16:45:49 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2660,12 +2660,14 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     fitField(hash, "strand", retStrand);
     fitField(hash, "thickStart", retCdsStart);
     fitField(hash, "thickEnd", retCdsEnd);
-    fitField(hash, "blockCount", retCount) ||
+    if (!fitField(hash, "blockCount", retCount))
 	fitField(hash, "lfCount", retCount);
-    fitField(hash, "chromStarts", retStarts) ||
-	fitField(hash, "blockStarts", retStarts) ||
-	fitField(hash, "lfStarts", retStarts);
-    fitField(hash, "blockSizes", retEndsSizes) ||
+    if (!fitField(hash, "chromStarts", retStarts))
+        {
+	if (!fitField(hash, "blockStarts", retStarts))
+            fitField(hash, "lfStarts", retStarts);
+        }
+    if (!fitField(hash, "blockSizes", retEndsSizes))
 	fitField(hash, "lfSizes", retEndsSizes);
     fitField(hash, "span", retSpan);
     }
@@ -2681,7 +2683,7 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
     {
-    fitField(hash, "geneName", retName) ||  // tweak for refFlat type
+    if (!fitField(hash, "geneName", retName))  // tweak for refFlat type
 	fitField(hash, "name", retName);
     fitField(hash, "score", retScore);      // some variants might have it...
     fitField(hash, "strand", retStrand);
