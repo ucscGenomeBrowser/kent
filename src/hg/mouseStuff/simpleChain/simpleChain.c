@@ -7,10 +7,11 @@
 #include "chain.h"
 #include "dystring.h"
 
-#ifndef MACHTYPE_x86_64
 int maxGap=250000;
 boolean outPsl = FALSE;
 int sizeMul = 1;
+char *onlyChrom = NULL;
+int intToPslSize = 1024 * 1024;
  
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +25,8 @@ errAbort(
   "   -maxGap=N    defines max gap possible (default 250,000)\n"
   "   -outPsl      output psl format instead of chain\n"
   "   -ignoreQ     ignore query name and link together everything\n"
+  "   -chrom=chr2  ignore alignments not on chr2\n"
+  "   -hSize=#     size of intToPsl hash table size (default 1024*1024)\n"
   );
 }
 
@@ -32,8 +35,19 @@ static struct optionSpec options[] = {
    {"prot", OPTION_BOOLEAN},
    {"outPsl", OPTION_BOOLEAN},
    {"ignoreQ", OPTION_BOOLEAN},
+   {"chrom", OPTION_STRING},
+   {"hSize", OPTION_INT},
    {NULL, 0},
 };
+
+struct intToPslStruct
+{
+struct intToPslStruct *next;
+int val;
+struct psl *psl;
+};
+
+struct intToPslStruct **intToPslArray;
 
 struct seqPair
 /* Pair of sequences. */
@@ -47,6 +61,42 @@ struct seqPair
     struct psl *psl;
     };
 
+
+int storePsl(struct psl *psl)
+{
+static int numId = 0;
+struct intToPslStruct *ptr;
+int ret = numId;
+
+AllocVar(ptr);
+ptr->psl = psl;
+ptr->val = numId;
+ptr->next = intToPslArray[numId % intToPslSize];
+intToPslArray[numId % intToPslSize] = ptr;
+
+numId++;
+
+return ret;
+}
+
+struct psl *getPsl(int val)
+{
+struct intToPslStruct *ptr;
+
+ptr = intToPslArray[val % intToPslSize];
+for(; ptr && (ptr->val != val); ptr = ptr->next)
+    ;
+
+if (ptr)
+    {
+    assert(ptr->val == val);
+    assert(ptr->psl != NULL);
+    return ptr->psl;
+    }
+
+errAbort("Can't find psl");
+return NULL;
+}
 
 void addPslBlocks(struct cBlock **pList, struct psl *psl)
 /* Add blocks (gapless subalignments) from psl to block list. */
@@ -75,7 +125,7 @@ int qStart = psl->qStarts[0];
 int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 int tStart = psl->tStarts[0];
 int tEnd = psl->tStarts[psl->blockCount - 1] + sizeMul * psl->blockSizes[psl->blockCount - 1];
-struct psl *totalPsl = (struct psl *)chain->id;
+struct psl *totalPsl = getPsl(chain->id);
 
 prevChainBlock = NULL;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
@@ -161,8 +211,8 @@ while(chainIn)
 
 		if (outPsl)
 		    {
-		    totalPsl1 = (struct psl *)chain1->id;
-		    totalPsl2 = (struct psl *)chain2->id;
+		    totalPsl1 = getPsl(chain1->id);
+		    totalPsl2 = getPsl(chain2->id);
 		    totalPsl1->match += totalPsl2->match;
 		    totalPsl1->misMatch += totalPsl2->misMatch;
 		    totalPsl1->repMatch += totalPsl2->repMatch;
@@ -238,7 +288,7 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 void chainToPslWrite(struct chain *inChain, FILE *outFile, int tSize, int qSize)
 /* write out a chain in psl format */
 {
-struct psl *totalPsl = (struct psl *)inChain->id;
+struct psl *totalPsl = getPsl(inChain->id);
 int lastTEnd=0, lastQEnd=0;
 struct psl psl;
 struct cBlock *chainBlock, *prevChainBlock = NULL;
@@ -361,6 +411,12 @@ count = 0;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     //assert((psl->strand[1] == 0) || (psl->strand[1] == '+'));
+    if ((onlyChrom != NULL) && (!sameString(onlyChrom, psl->tName)))
+	{
+	freez(&psl);
+	continue;
+	}
+
     count++;
     dyStringClear(dy);
     if ( optionExists("ignoreQ"))
@@ -431,7 +487,7 @@ for(sp = spList; sp; sp = sp->next)
 	if (outPsl)
 	    {
 	    AllocVar(newPsl);
-	    chain->id = (int)newPsl;
+	    chain->id = storePsl(newPsl);
 	    newPsl->strand[0] = psl->strand[0];
 	    newPsl->strand[1] = psl->strand[1];
 	    newPsl = 0;
@@ -473,14 +529,10 @@ if (argc != 3)
 maxGap = optionInt("maxGap", maxGap);
 outPsl = optionExists("outPsl");
 sizeMul = optionExists("prot") ? 3 : 1;
+onlyChrom = optionVal("chrom", NULL);
+intToPslSize = optionInt("hSize", intToPslSize);
+
+intToPslArray = needLargeMem(sizeof( struct intToPslStruct *) * intToPslSize);
 simpleChain(argv[1], argv[2]);
 return 0;
 }
-#else
-int
-main()
-{
-printf("Not supported on x86_64\n");
-exit(1);
-}
-#endif
