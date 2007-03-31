@@ -1,6 +1,6 @@
 /* trashDir.c - temporary file creation and directory creation in /trash */
 
-static char const rcsid[] = "$Id: trashDir.c,v 1.4 2007/03/09 19:33:49 hiram Exp $";
+static char const rcsid[] = "$Id: trashDir.c,v 1.5 2007/03/31 16:48:10 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -29,7 +29,7 @@ if (endsWith(base,"_"))
     {
     char *t = cloneString(base);
     int len = strlen(t);
-    t[len-1] = (char) NULL;	/* remove ending _ */
+    t[len-1] = '\0';	/* remove ending _ */
     safef(prefix, sizeof(prefix), "%s/%s", dirName,t);
     freeMem(t);
     }

@@ -25,7 +25,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.167 2007/03/09 19:33:48 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.168 2007/03/31 16:48:10 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -413,7 +413,7 @@ char *line;
 lf = lineFileOnString("settings", TRUE, settings);
 while (lineFileNext(lf, &line, NULL))
     {
-    if ((char)NULL != line[0])
+    if (line[0] != '\0')
 	{
 	char *blank;
 	blank = strchr(line, ' ');
@@ -424,7 +424,7 @@ while (lineFileNext(lf, &line, NULL))
 
 	    nameLen = (nameLen < 256) ? nameLen : 255;
 	    strncpy(name, line, nameLen);
-	    name[nameLen] = (char)NULL;
+	    name[nameLen] = '\0';
 	    fprintf(f, "\t%s='%s'", name, makeEscapedString(blank+1, '\''));
 	    }
 	else
