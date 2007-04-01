@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.52 2007/03/27 03:58:07 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.53 2007/04/01 09:29:27 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1463,5 +1463,85 @@ bed->chrom = cloneString(chrom);
 bed->chromStart = start;
 bed->chromEnd = end;
 return bed;
+}
+
+struct bed *bedThickOnly(struct bed *in)
+/* Return a bed that only has the thick part. (Which is usually the CDS). */
+{
+if (in->thickStart >= in->thickEnd)
+     return NULL;
+if (in->expCount != 0 || in->expIds != NULL || in->expScores != NULL)
+   errAbort("Sorry, bedThickOnly only works on beds with up to 12 fields.");
+
+/* Allocate output, and fill in simple fields. */
+struct bed *out;
+AllocVar(out);
+out->chrom = cloneString(in->chrom);
+out->chromStart = out->thickStart = in->thickStart;
+out->chromEnd = out->thickEnd = in->thickEnd;
+out->name = cloneString(in->name);
+out->strand[0] = in->strand[0];
+out->score = in->score;
+out->itemRgb = in->itemRgb;
+
+/* If need be fill in blocks. */
+if (in->blockCount > 0)
+   {
+   /* Count up blocks inside CDS. */
+   int i;
+   int outBlockCount = 0;
+   for (i=0; i<in->blockCount; ++i)
+       {
+       int start = in->chromStart + in->chromStarts[i];
+       int end = start + in->blockSizes[i];
+       if (start < in->thickStart) start = in->thickStart;
+       if (end > in->thickEnd) end = in->thickEnd;
+       if (start < end)
+           outBlockCount += 1;
+	}
+
+    /* This trivieal case shouldn't happen, but just in case, we deal with it. */
+    if (outBlockCount == 0)
+        {
+	freeMem(out);
+	return NULL;
+	}
+
+    /* Allocate block arrays for output. */
+    out->blockCount = outBlockCount;
+    AllocArray(out->chromStarts, outBlockCount);
+    AllocArray(out->blockSizes, outBlockCount);
+
+    /* Scan through input one more time, copying to out. */
+    int outBlockIx = 0;
+    for (i=0; i<in->blockCount; ++i)
+	{
+	int start = in->chromStart + in->chromStarts[i];
+	int end = start + in->blockSizes[i];
+	if (start < in->thickStart) start = in->thickStart;
+	if (end > in->thickEnd) end = in->thickEnd;
+	if (start < end)
+	    {
+	    out->chromStarts[outBlockIx] = start - out->chromStart;
+	    out->blockSizes[outBlockIx] = end - start;
+	    outBlockIx += 1;
+	    }
+	}
+
+    }
+return out;
+}
+
+struct bed *bedThickOnlyList(struct bed *inList)
+/* Return a list of beds that only are the thick part of input. */
+{
+struct bed *outList = NULL, *out, *in;
+for (in = inList; in != NULL; in = in->next)
+    {
+    if ((out = bedThickOnly(in)) != NULL)
+        slAddHead(&outList, out);
+    }
+slReverse(&outList);
+return outList;
 }
 

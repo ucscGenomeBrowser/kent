@@ -350,5 +350,11 @@ void bedIntoRangeTree(struct bed *bed, struct rbTree *rangeTree);
 int bedRangeTreeOverlap(struct bed *bed, struct rbTree *rangeTree);
 /* Return number of bases bed overlaps with rangeTree. */
 
+struct bed *bedThickOnly(struct bed *in);
+/* Return a bed that only has the thick part. (Which is usually the CDS). */
+
+struct bed *bedThickOnlyList(struct bed *inList);
+/* Return a list of beds that only are the thick part of input. */
+
 #endif /* BED_H */
 
