@@ -1166,6 +1166,11 @@ identifier knownGeneId dependency
     $kgDb3.knownCanonical.protein exclude=
     $kgDb3.kgProtMap.qName 
 
+identifier knownGeneOld2Id dependency 
+"Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
+    $kgDb.knownGeneOld2.name dupeOk
+    $kgDb.kgXrefOld2.kgID full
+
 identifier knownToHprdName
 "Dependencies on knownToHprd.name"
     $kgDb.knownToHprd.name dupeOk
@@ -2518,6 +2523,7 @@ tablesIgnored $hg
     celeraOverlay
     genomicSuperDups
     haplotype
+    kg2ToKg3
     perlegen
     promoterStanford
     recombRate
