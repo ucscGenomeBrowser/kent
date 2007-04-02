@@ -726,3 +726,15 @@ hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSupe
 cat refSeq/*.bed mrna/*.bed | txGeneExplainUpdate1 knownGene_1.bed ucscGenes.bed stdin abWalk.bed kg1ToKg2.bed
 hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
 
+# Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
+
+    hgsql hg18 -N -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+         
+    hgsql hg18 -N -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u  >kgSpAlias.tab
+    rm j.tmp
+
+    loadSqlTab hg18 kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
