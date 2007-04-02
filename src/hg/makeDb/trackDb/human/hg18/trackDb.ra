@@ -310,7 +310,7 @@ baseColorDefault genomicCodons
 
 track knownAlt
 shortLabel AltEvents
-longLabel Alternative Splicing, Alternative Promoter and Similar  Events in UCSC Genes 
+longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
 group genes
 priority 34.1
 visibility hide
