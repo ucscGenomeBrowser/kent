@@ -1,0 +1,99 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis briggsae
+#	Washington University School of Medicine GSC and Sanger Institute
+#
+#  $Id: cb3.txt,v 1.1 2007/04/02 22:53:51 hiram Exp $
+
+###########################################################################
+## Download sequence (DONE - 2007-01-22 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/store5/worm/cb3
+    ln -s /cluster/store5/worm/cb3 /cluster/data/cb3
+    mkdir /cluster/data/cb3/downloads
+    cd /cluster/data/cb3/downloads
+    wget --timestamping \
+"http://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_briggsae/assembly/draft/Caenorhabditis_briggsae-1.0/ASSEMBLY"
+    wget --timestamping \
+"http://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_briggsae/assembly/draft/Caenorhabditis_briggsae-1.0/README" \
+	-O README.cb3
+    wget --timestamping --cut-dirs=10 -m -np -nd \
+"ftp://genome.wustl.edu/pub/organism/Invertebrates/Caenorhabditis_briggsae/assembly/draft/Caenorhabditis_briggsae-1.0/output/chromosomes/"
+
+###########################################################################
+## Initial sequence (DONE - 2007-02-23 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/cb3
+    cat << '_EOF_' > cb3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db cb3
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis briggsae
+commonName C. briggsae
+assemblyDate Jan. 2007
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute cb3
+orderKey 868
+# AC186293
+mitoAcc 95102164
+fastaFiles /cluster/data/cb3/wormbase/chr*.fa.gz
+agpFiles /cluster/data/cb3/wormbase/chr*.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl cb3.config.ra > makeGenomeDb.out 2>&1
+
+###########################################################################
+## RepeatMasker (DONE - 2007-02-23 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/cb3
+    time nice -n +19 doRepeatMasker.pl cb3 > doRepeatMasker.out 2>&1 &
+    mv doRepeatMasker.out bed/RepeatMasker.2007-02-23
+    twoBitToFa cb3.rmskTrf.2bit stdout | faSize stdin > faSize.cb3.rmskTrf.txt
+    #	real    83m42.529s
+    #	108492946 bases (3041279 N's 105451667 real
+    #	84250398 upper 21201269 lower) in 13 sequences in 1 files
+    #	%19.54 masked total, %20.11 masked real
+
+###########################################################################
+## Simple Repeats (DONE - 2007-02-24 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/cb3/bed/simpleRepeat
+    cd /cluster/data/cb3/bed/simpleRepeat
+    twoBitToFa ../../cb3.unmasked.2bit stdout \
+    | trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+        -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+    #	real    41m11.623s
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/cb3/bed/simpleRepeat
+    nice -n +19 hgLoadBed cb3 simpleRepeat \
+      /cluster/data/cb3/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 32725 elements of size 16
+    featureBits cb3 simpleRepeat > fb.cb3.simpleRepeat.txt 2>&1
+    #	3984931 bases of 108433446 (3.675%) in intersection
+
+###########################################################################
+## WindowMasker (DONE - 2007-02-25 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/cb3/bed/WindowMasker
+    cd /cluster/data/cb3/bed/WindowMasker
+    time nice -n +19 ~/kent/src/hg/utils/automation/doWindowMasker.pl \
+	cb3 -buildDir=/cluster/data/cb3/bed/WindowMasker \
+	-workhorse=kolossus > doWM.out 2>&1 &
+    cat /cluster/data/cb3/bed/simpleRepeat/trfMask.bed \
+        | twoBitMask -add -type=.bed cb3.wmsk.sdust.2bit stdin cb3.sdTrf.n.2bit
+    twoBitToFa cb3.sdTrf.n.2bit stdout | sed -e "s/n/N/g" \
+        | sed -e "s/chrUN/chrUn/; s/raNdom/random/" \
+        | faToTwoBit stdin cb3.sdTrf.2bit
+    twoBitToFa cb3.sdTrf.2bit stdout | faSize stdin  >> faSize.cb3.sdTrf.txt
+    #	108492946 bases (3041279 N's 105451667 real
+    #	66936237 upper 38515430 lower) in 13 sequences in 1 files
+    #	%35.50 masked total, %36.52 masked real
+    ssh hgwdev
+    cd /cluster/data/cb3/bed/WindowMasker
+    hgLoadBed -strict cb3 windowmaskerSdust windowmasker.sdust.bed.gz

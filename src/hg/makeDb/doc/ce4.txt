@@ -3,6 +3,8 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
+#  $Id: ce4.txt,v 1.6 2007/04/02 22:53:51 hiram Exp $
+
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-02-23 - Hiram)
@@ -300,6 +302,124 @@ close (LS);
     #	-rw-rw-r--  1   508392 Jan  9 07:21 wormpep.accession170
     hgPepPred ce4 generic sangerPep wormpep170/wormpep170
 
+###############################################################################
+######## MAKING GENE SORTER TABLES #### (DONE - 2007-04-02 - Hiram)
+# These are instructions for building the
+# Gene Sorter browser.  Don't start these until
+# there is a sangerGene table with a proteinID column containing Swiss-Prot
+# protein IDs, and also Kim lab expression data is required (in hgFixed).
+
+    # Cluster together various alt-splicing isoforms.
+    # Creates the sangerIsoforms and sangerCanonical tables
+    # (DONE, 2004-05-21, hartera)
+    ssh hgwdev
+    hgClusterGenes ce4 sangerGene sangerIsoforms sangerCanonical
+    #	Got 20881 clusters, from 55591 genes in 7 chromosomes
+
+    featureBits ce4 sangerCanonical
+    #	57385184 bases of 100281244 (57.224%) in intersection
+    featureBits ce2 sangerCanonical
+    # 54156601 bases of 100291761 (53.999%) in intersection
+    featureBits ce1 sangerCanonical 
+    # 53654286 bases of 100277784 (53.506%) in intersection
+
+    # Create Self blastp table - sangerBlastTab
+    # Reload blastp data into sangerBlastTab and drop knownBlastTab 
+    # - table given the wrong name (DONE, 2004-05-28, hartera)
+    # Get sangerPep peptide sequences fasta file from sangerPep dir
+    # and create a blast database out of them.
+    mkdir -p /cluster/data/ce4/bed/blastp
+    cd /cluster/data/ce4/bed/blastp
+    cat < '_EOF_' > pepTabToFa.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH,"<../sangerGene/sangerPep.tab") or
+        die "can not open ../sangerGene/sangerPep.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($name,$seq) = split('\s+',$line);
+    printf ">%s\n%s\n", $name, $seq;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./pepTabToFa.pl
+    ./pepTabToFa.pl > wormPep170.faa
+    
+    /cluster/bluearc/blast229/formatdb -i wormPep170.faa \
+	-t wormPep170 -n wormPep170
+
+    # Copy database over to kluster storage
+    mkdir /san/sanvol1/scratch/worms/ce4/blastp
+    rsync -a ./ /san/sanvol1/scratch/worms/ce4/blastp/
+
+    cd /cluster/data/ce4/bed/blastp
+    mkdir split
+    faSplit sequence wormPep170.faa 1000 split/wp
+
+    # Make parasol run directory 
+    ssh pk
+    mkdir -p /cluster/data/ce4/bed/blastp/self
+    cd /cluster/data/ce4/bed/blastp/self
+    mkdir run
+    cd run
+    mkdir out
+
+# Make blast script
+    cat  << '_EOF_' > blastSome.csh
+#!/bin/csh -ef
+setenv BLASTMAT /cluster/bluearc/blast229/data
+/cluster/bluearc/blast229/blastall -p blastp \
+    -d /san/sanvol1/scratch/worms/ce4/blastp/wormPep170 \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << happy emacs
+    chmod a+x blastSome.csh
+    # Make gensub2 file
+    cat  << '_EOF_' > gsub
+#LOOP
+blastSome.csh {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+     # Create parasol batch
+
+     ls ../../split/*.fa > split.lst
+     gensub2 split.lst single gsub jobList
+     para create jobList
+     para try.... etc ...
+# Completed: 986 of 986 jobs
+# CPU time in finished jobs:      17327s     288.79m     4.81h    0.20d  0.001 y
+# IO & Wait Time:                  3136s      52.26m     0.87h    0.04d  0.000 y
+# Average job time:                  21s       0.35m     0.01h    0.00d
+# Longest finished job:              69s       1.15m     0.02h    0.00d
+# Submission to last job:          2155s      35.92m     0.60h    0.02d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/ce4/bed/blastp/self/run/out
+    hgLoadBlastTab ce4 sangerBlastTab *.tab
+    #	Scanning through 986 files
+    #	Loading database with 1214556 rows
+
+    # CREATE EXPRESSION DISTANCE TABLES FOR  
+    # KIM LAB EXPRESSION DATA
+    hgExpDistance ce4 hgFixed.kimWormLifeMedianRatio \
+	  hgFixed.kimWormLifeMedianExps kimExpDistance
+    #	Have 19134 elements in hgFixed.kimWormLifeMedianRatio
+    #	Got 19134 unique elements in hgFixed.kimWormLifeMedianRatio
+
+    # CREATE TABLE TO MAP BETWEEN SANGERGENES AND REFSEQ GENES
+    # sangerToRefSeq (DONE, 2007-04-02, hiram)
+    hgMapToGene ce4 refGene sangerGene sangerToRefSeq
+
+    # SET dbDb TABLE ENTRY FOR GENE SORTER (DONE, 2004-05-25, hartera)
+    # set hgNearOk to 1 on hgcentraltest to make Ce4 Gene Sorter viewable
+
+    hgsql -e 'update dbDb set hgNearOk = 1 where name = "ce4";' \
+         hgcentraltest
 
 ##########################################################################
 ## Blastz SELF (DONE - 2007-03-29 - Hiram
@@ -340,9 +460,68 @@ TMPDIR=/scratch/tmp
     #	31186593 bases of 100281244 (31.099%) in intersection
 
 ##########################################################################
+## BlastZ caeRem2 (DONE - 2007-03-29 - 2007-04-02 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/ce4/bed/blastz.caeRem2.2007-03-29
     cd /cluster/data/ce4/bed/blastz.caeRem2.2007-03-29
     cat << '_EOF_' > DEF
+# ce4 vs caeRem2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce4
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce4/ce4.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/ce4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: briggsae caeRem2, 9,660 contigs, longest 5,925,111
+SEQ2_DIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/caeRem2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/worms/caeRem2/caeRem2.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/ce4/bed/blastz.caeRem2.2007-03-29
+TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/ce4CaeRem2 > do.log 2>&1 &
+    #	real    37m18.578s
+
+##########################################################################
+## BlastZ cb3 (DONE - 2007-03-29 - 2007-04-02 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/ce4/bed/blastz.cb3.2007-03-29
+    cd /cluster/data/ce4/bed/blastz.cb3.2007-03-29
+    cat << '_EOF_' > DEF
+# ce4 vs cb3
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce4
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce4/ce4.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/ce4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: briggsae Cb3
+SEQ2_DIR=/san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/cb3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/ce4/bed/blastz.cb3.2007-02-25
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
+	-blastzOutRoot /cluster/bluearc/ce4Ce3 > do.log 2>&1 &
+    #  real    16m5.178s
+

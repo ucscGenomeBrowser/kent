@@ -4,6 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
+#  $Id: caeRem2.txt,v 1.2 2007/04/02 22:53:51 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -224,4 +225,36 @@ dbDbSpeciesDir worm
     time twoBitToFa ../../caeRem2.unmasked.2bit stdout \
 	| nice -n +19 trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
 	-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp > do.out 2>&1
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+    #	real    71m21.810s
+    ssh hgwdev
+    cd /cluster/data/caeRem2/bed/simpleRepeat
+    nice -n +19 hgLoadBed caeRem2 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 37049 elements of size 16
+    featureBits caeRem2 simpleRepeat > fb.caeRem2.simpleRepeat.txt 2>&1
+    #	8604824 bases of 146898439 (5.858%) in intersection
+    ssh kkstore01
+    cd /cluster/data/caeRem2
+    cat bed/simpleRepeat/trfMask.bed \
+        | twoBitMask -add -type=.bed caeRem2.rmsk.2bit stdin \
+	caeRem2.rmskTrf.2bit
+     twoBitToFa caeRem2.rmskTrf.2bit stdout | faSize stdin \
+	> faSize.caeRem2.rmskTrf.txt
+    cat faSize.caeRem2.rmskTrf.txt
+    #	161944676 bases (15087728 N's 146856948 real
+    #	145166254 upper 1690694 lower) in 1 sequences in 1 files
+    #	%1.04 masked total, %1.15 masked real
 
+###########################################################################
+### prepare contig 2bit file for blastz runs
+    ssh kkstore01
+    mkdir /cluster/data/caeRem2/maskedContigs
+    cd /cluster/data/caeRem2/maskedContigs
+    ln -s ../downloads/caeRem2.chrUn.lift .
+    ~/kent/src/hg/utils/lft2BitToFa.pl ../caeRem2.2bit \
+	caeRem2.chrUn.lift > caeRem2.contigs.fa
+    faToTwoBit caeRem2.contigs.fa caeRem2.contigs.2bit
+    twoBitInfo caeRem2.contigs.2bit stdout | sort -k2nr > caeRem2.contigs.sizes
+    cp -p caeRem2.contigs.2bit caeRem2.chrUn.lift caeRem2.contigs.sizes \
+	/san/sanvol1/scratch/worms/caeRem2
