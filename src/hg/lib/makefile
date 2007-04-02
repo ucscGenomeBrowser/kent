@@ -31,7 +31,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encodeHapMapAlleleFreq.o encodeIndels.o \
     encodeRegionInfo.o encodeRegionInfoCustom.o encodeRna.o \
     encodeStanfordPromoters.o encodeStanfordPromotersAverage.o \
-    ensFace.o ensPhusionBlast.o \
+    ensFace.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
