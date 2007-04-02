@@ -1,13 +1,6 @@
 /* pbCalPi - Calculate pI values from a list of protein IDs */
 #include "pbCalPi.h"
-
-#ifdef __CYGWIN32__
-int main(int argc, char *argv[])
-{   
-fprintf(stderr, "Sorry, necessary lib function exp10 not supported on cygwin.\n");
-return 1;
-}
-#else
+#include "math.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +13,11 @@ errAbort(
   "      spDb     is the swissprot database name\n"
   "      outFile  is the output file name of tab delineated file of protein accession number and pI value\n"
   "example: pbCalPi prot.lis sp040115 pepPi.tab\n");
+}
+
+float myExp10(float x)
+{
+return(powf(10.0, x));
 }
 
 float calPi(char *sequence)
@@ -60,25 +58,25 @@ for (i = 0, charge = 1.0; i < MAXLOOP && (phMax - phMin) > EPSI; i++)
     {
     phMid = phMin + (phMax - phMin) / 2.0;
 
-    cter = exp10(-cPk[cTermResidue][0]) /
-           (exp10(-cPk[cTermResidue][0]) + exp10(-phMid));
-    nter = exp10(-phMid) /
-           (exp10(-cPk[nTermResidue][1]) + exp10(-phMid));
+    cter = myExp10(-cPk[cTermResidue][0]) /
+           (myExp10(-cPk[cTermResidue][0]) + myExp10(-phMid));
+    nter = myExp10(-phMid) /
+           (myExp10(-cPk[nTermResidue][1]) + myExp10(-phMid));
 
-    carg = comp[R] * exp10(-phMid) /
-           (exp10(-cPk[R][2]) + exp10(-phMid));
-    chis = comp[H] * exp10(-phMid) /
-           (exp10(-cPk[H][2]) + exp10(-phMid));
-    clys = comp[K] * exp10(-phMid) /
-           (exp10(-cPk[K][2]) + exp10(-phMid));
-    casp = comp[D] * exp10(-cPk[D][2]) /
-           (exp10(-cPk[D][2]) + exp10(-phMid));
-    cglu = comp[E] * exp10(-cPk[E][2]) /
-           (exp10(-cPk[E][2]) + exp10(-phMid));
-    ccys = comp[C] * exp10(-cPk[C][2]) /
-           (exp10(-cPk[C][2]) + exp10(-phMid));
-    ctyr = comp[Y] * exp10(-cPk[Y][2]) /
-           (exp10(-cPk[Y][2]) + exp10(-phMid));
+    carg = comp[R] * myExp10(-phMid) /
+           (myExp10(-cPk[R][2]) + myExp10(-phMid));
+    chis = comp[H] * myExp10(-phMid) /
+           (myExp10(-cPk[H][2]) + myExp10(-phMid));
+    clys = comp[K] * myExp10(-phMid) /
+           (myExp10(-cPk[K][2]) + myExp10(-phMid));
+    casp = comp[D] * myExp10(-cPk[D][2]) /
+           (myExp10(-cPk[D][2]) + myExp10(-phMid));
+    cglu = comp[E] * myExp10(-cPk[E][2]) /
+           (myExp10(-cPk[E][2]) + myExp10(-phMid));
+    ccys = comp[C] * myExp10(-cPk[C][2]) /
+           (myExp10(-cPk[C][2]) + myExp10(-phMid));
+    ctyr = comp[Y] * myExp10(-cPk[Y][2]) /
+           (myExp10(-cPk[Y][2]) + myExp10(-phMid));
 
     charge = carg + clys + chis + nter -
              (casp + cglu + ctyr + ccys + cter);
@@ -132,5 +130,3 @@ while (lineFileRow(inf, row))
 fclose(outf1);
 return(0);
 }
-
-#endif /* only works if not __CYGWIN32__ */
