@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.41 2007/04/02 14:46:52 braney Exp $"
+#	"$Id: mm8.txt,v 1.42 2007/04/02 15:02:14 braney Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7942,7 +7942,7 @@ hgLoadBed -sqlTable=cgapSage.sql mm8 cgapSage cgapSage.bed
 hgLoadSqlTab mm8 cgapSageLib cgapSageLib.sql massaged.Mm.libraries 
 
 ############################
-# HUMAN (hg18) PROTEINS TRACK (DONE Fan 2007-02-19)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2007-04-02)
     ssh kkstore04
     bash 
 
