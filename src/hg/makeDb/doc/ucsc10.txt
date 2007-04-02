@@ -738,3 +738,65 @@ hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
     rm j.tmp
 
     loadSqlTab hg18 kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
+
+# RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
+
+# These are instructions for building tables 
+# needed for the Proteome Browser. 
+ 
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 070202.
+
+# Create the working directory
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/ucsc.10
+    mkdir pb
+    cd pb
+
+# Build the pepMwAa table
+
+  hgsql proteins070202 -N -e \
+"select info.acc, molWeight, aaSize from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgLoadSqlTab hg18 pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
+
+o Build the pepPi table
+
+    hgsql proteins070202 -e \
+    "select info.acc from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
+
+    hgsql hg18 -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+
+    pbCalPi protAcc.lis sp070202 pepPi.tab
+    hgLoadSqlTab hg18 pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
+
+# Calculate and load pep distributions
+
+    /cluster/home/fanhsu/bin/x86_64/pbCalDist sp070202 proteins070202 9606 hg18 >pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql hg18
+    load data local infile "pepExonCntDist.tab" into table hg18.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table hg18.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table hg18.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table hg18.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table hg18.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table hg18.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table hg18.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp070202 9606 hg18
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+    hgLoadSqlTab hg18 pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
+
+    hgLoadSqlTab hg18 pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
+
+# The old pbStamp table seems OK, so no adjustment needed.
+
+
