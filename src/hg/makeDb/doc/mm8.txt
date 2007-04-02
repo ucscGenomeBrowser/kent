@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.40 2007/03/28 21:59:37 hiram Exp $"
+#	"$Id: mm8.txt,v 1.41 2007/04/02 14:46:52 braney Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -7941,4 +7941,195 @@ ln -s ~/hg/lib/cgapSage/cgapSage.sql
 hgLoadBed -sqlTable=cgapSage.sql mm8 cgapSage cgapSage.bed
 hgLoadSqlTab mm8 cgapSageLib cgapSageLib.sql massaged.Mm.libraries 
 
+############################
+# HUMAN (hg18) PROTEINS TRACK (DONE Fan 2007-02-19)
+    ssh kkstore04
+    bash 
 
+    mkdir /cluster/data/mm8/blastDb
+    cd /cluster/data/mm8
+    ls noMask/*.fa | grep -v random > temp.lst
+    ls randomContigs/*.fa >> temp.lst
+    cat `cat temp.lst` > temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    mkdir -p /san/sanvol1/scratch/mm8/blastDb
+    cd /cluster/data/mm8/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/mm8/blastDb
+    done
+
+    mkdir -p /cluster/data/mm8/bed/tblastn.hg18KG
+    cd /cluster/data/mm8/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/mm8/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 2733 query.lst
+
+   # we want around 150000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(150000/`wc query.lst | awk "{print \\\$1}"`\)
+# 36727/(150000/2733) = 669.165940
+
+   mkdir -p /cluster/bluearc/mm8/bed/tblastn.hg18KG/kgfa
+   split -l 670 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/mm8/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/mm8/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/mm8/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/mm8/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/mm8/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/mm8/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0 
+    fi
+fi 
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    exit # back to bash
+    
+    ssh pk
+    cd /cluster/data/mm8/bed/tblastn.hg18KG
+    para create blastSpec
+
+    para time
+# Completed: 150315 of 150315 jobs
+# CPU time in finished jobs:   24349624s  405827.07m  6763.78h  281.82d  0.772 y
+# IO & Wait Time:               1825515s   30425.24m   507.09h   21.13d  0.058 y
+# Average job time:                 174s       2.90m     0.05h    0.00d
+# Longest finished job:             673s      11.22m     0.19h    0.01d
+# Submission to last job:         79743s    1329.05m    22.15h    0.92d
+
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/tblastn.hg18KG
+    for i in blastOut/*
+    do  
+	echo "cd $i; cat *.psl | pslSortAcc nohead chrom /tmp/ stdin ; cd ../.."
+    done > sort.jobs
+
+    sh -x sort.jobs
+
+    tcsh
+    mkdir chainRun
+    cd chainRun
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+/cluster/home/braney/bin/x86_64/simpleChain -prot -outPsl -maxGap=150000 $1
+`dirname $1`/c.`basename $1`.psl
+'_EOF_'
+    chmod +x chainOne
+    ls  ../blastOut/*/chrom/*.psl > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh pk
+    cd /cluster/data/mm8/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para maxNode 30
+    para try, check, push, check etc.
+
+#two batches 
+
+# Completed: 2574 of 2574 jobs
+# CPU time in finished jobs:    3338223s   55637.04m   927.28h   38.64d  0.106 y
+# IO & Wait Time:                 21934s     365.57m     6.09h    0.25d  0.001 y
+# Average job time:                1305s      21.76m     0.36h    0.02d
+# Longest finished job:           88204s    1470.07m    24.50h    1.02d
+# Submission to last job:         92614s    1543.57m    25.73h    1.07d
+
+# Completed: 2871 of 2871 jobs
+# CPU time in finished jobs:    2495054s   41584.24m   693.07h   28.88d  0.079 y
+# IO & Wait Time:                 47207s     786.78m    13.11h    0.55d  0.001 y
+# Average job time:                 885s      14.76m     0.25h    0.01d
+# Longest finished job:           59971s     999.52m    16.66h    0.69d
+# Submission to last job:         78852s    1314.20m    21.90h    0.91d
+
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/tblastn.hg18KG/blastOut
+    bash 
+    for i in kg??
+    do
+       cat $i/chrom/c.*.psl|awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/mm8/bed/tblastn.hg18KG/preLift.psl
+    cd /cluster/data/mm8/bed/tblastn.hg18KG 
+    liftUp -type=.psl -nohead stdout ../../jkStuff/liftAll.lft carry preLift.psl | sort -k 14,14 -k 16,16n -k 17,17n > blastHg18KG.psl
+    pslCheck blastHg18KG.psl
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/tblastn.hg18KG
+    hgLoadPsl mm8 blastHg18KG.psl
+
+    # check coverage
+    nice featureBits mm8 blastHg18KG 
+# 40445290 bases of 2567283971 (1.575%) in intersection
+# In comparison to cat and dog:
+    nice featureBits felCat3  blastHg18KG
+# 15218612 bases of 1642698377 (0.926%) in intersection
+    nice featureBits canFam2 blastHg18KG
+# 32565727 bases of 2384996543 (1.365%) in intersection
+
+    featureBits mm8 refGene:cds blastHg18KG  -enrichment
+# refGene:cds 1.157%, blastHg18KG 1.575%, both 0.927%, cover 80.15%, enrich
+# 50.88x
+
+    ssh kkstore04
+    rm -rf /cluster/data/mm8/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/mm8/bed/tblastn.hg18KG/blastOut
+#end tblastn
