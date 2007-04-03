@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.120 2007/03/30 22:48:17 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.121 2007/04/03 05:26:59 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1721,6 +1721,11 @@ void cnpIafrateLoadItems(struct track *tg)
 bedLoadItem(tg, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
 }
 
+void cnpIafrate2LoadItems(struct track *tg)
+{
+bedLoadItem(tg, "cnpIafrate2", (ItemLoader)cnpIafrate2Load);
+}
+
 void cnpSebatLoadItems(struct track *tg)
 {
 bedLoadItem(tg, "cnpSebat", (ItemLoader)cnpSebatLoad);
@@ -1754,6 +1759,11 @@ cnpSharp2FreeList((struct cnpSharp2**)&tg->items);
 void cnpIafrateFreeItems(struct track *tg)
 {
 cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
+}
+
+void cnpIafrate2FreeItems(struct track *tg)
+{
+cnpIafrate2FreeList((struct cnpIafrate2**)&tg->items);
 }
 
 void cnpSebatFreeItems(struct track *tg)
@@ -1811,6 +1821,21 @@ if (sameString(cnpIa->variationType, "Gain"))
 if (sameString(cnpIa->variationType, "Loss"))
     return MG_RED;
 if (sameString(cnpIa->variationType, "Gain and Loss"))
+    return MG_BLUE;
+return MG_BLACK;
+}
+
+Color cnpIafrate2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct cnpIafrate2 *cnpIa = item;
+int gainCount = cnpIa->normalGain + cnpIa->patientGain;
+int lossCount = cnpIa->normalLoss + cnpIa->patientLoss;
+
+if (gainCount > 0 && lossCount == 0)
+    return MG_GREEN;
+if (lossCount > 0 && gainCount == 0)
+    return MG_RED;
+if (gainCount > 0 && lossCount > 0)
     return MG_BLUE;
 return MG_BLACK;
 }
@@ -1893,6 +1918,14 @@ tg->loadItems = cnpIafrateLoadItems;
 tg->freeItems = cnpIafrateFreeItems;
 tg->itemColor = cnpIafrateItemColor;
 tg->itemNameColor = cnpIafrateItemColor;
+}
+
+void cnpIafrate2Methods(struct track *tg)
+{
+tg->loadItems = cnpIafrate2LoadItems;
+tg->freeItems = cnpIafrate2FreeItems;
+tg->itemColor = cnpIafrate2ItemColor;
+tg->itemNameColor = cnpIafrate2ItemColor;
 }
 
 void cnpSebatMethods(struct track *tg)

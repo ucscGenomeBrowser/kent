@@ -1000,6 +1000,14 @@ type bed 4 +
     type bed 4 +
     priority 1
 
+    track cnpIafrate2
+    subTrack cnp
+    shortLabel Iafrate CNPs
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
+    noInherit on
+    type bed 4 +
+    priority 2
+
     track cnpSebat2
     subTrack cnp
     shortLabel Sebat CNPs

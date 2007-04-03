@@ -20,6 +20,7 @@
 #include "gfxPoly.h"
 #include "memgfx.h"
 #include "cnpIafrate.h"
+#include "cnpIafrate2.h"
 #include "cnpSebat.h"
 #include "cnpSebat2.h"
 #include "cnpSharp.h"
@@ -199,6 +200,16 @@ Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg);
 void cnpIafrateMethods(struct track *tg);
 /* methods for cnpIafrate */
 
+void cnpIafrate2LoadItems(struct track *tg);
+/* loader for cnpIafrate2 table */
+
+void cnpIafrate2FreeItems(struct track *tg);
+
+Color cnpIafrate2Color(struct track *tg, void *item, struct vGfx *vg);
+/* green for GAIN, red for LOSS, blue for both */
+
+void cnpIafrate2Methods(struct track *tg);
+/* methods for cnpIafrate2 */
 
 void cnpSebatLoadItems(struct track *tg);
 /* loader for cnpSebat table */

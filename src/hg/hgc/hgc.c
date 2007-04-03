@@ -74,6 +74,7 @@
 #include "snpExceptions.h"
 #include "snp125Exceptions.h"
 #include "cnpIafrate.h"
+#include "cnpIafrate2.h"
 #include "cnpSebat.h"
 #include "cnpSebat2.h"
 #include "cnpSharp.h"
@@ -201,7 +202,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1258 2007/03/31 19:38:15 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1259 2007/04/03 05:28:33 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12443,6 +12444,44 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doCnpIafrate2(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct cnpIafrate2 thisItem;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+checkAndPrintCloneRegUrl(stdout,itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cnpIafrate2StaticLoad(row+rowOffset, &thisItem);
+    bedPrintPos((struct bed *)&thisItem, 3);
+    printf("<BR><B>Cohort Type</B>: %s\n",thisItem.cohortType);
+    if (strstr(thisItem.cohortType, "Control"))
+        {
+        printf("<BR><B>Control Gain Count</B>: %d\n",thisItem.normalGain);
+        printf("<BR><B>Control Loss Count</B>: %d\n",thisItem.normalLoss);
+	}
+    if (strstr(thisItem.cohortType, "Patient"))
+        {
+        printf("<BR><B>Patient Gain Count</B>: %d\n",thisItem.patientGain);
+        printf("<BR><B>Patient Loss Count</B>: %d\n",thisItem.patientLoss);
+	}
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doDelHinds2(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
@@ -18486,6 +18525,10 @@ else if (sameWord(track, "snp127"))
 else if (sameWord(track, "cnpIafrate"))
     {
     doCnpIafrate(tdb, item);
+    }
+else if (sameWord(track, "cnpIafrate2"))
+    {
+    doCnpIafrate2(tdb, item);
     }
 else if (sameWord(track, "cnpSebat"))
     {
