@@ -4,7 +4,7 @@ an edge for each exon or intron. They represent a fair approximation
 to a gene with possible multiple transcripts.
 
 The pipeline for generating these is
-    txPslToBed | txBedToTgx | txgOrtho | txgAddEvidence | txgTrim | txgWalk
+    txPslToBed | txBedToTgx | txOrtho | txgAddEvidence | txgWalk
 where txgAddEvidence may be run several times to add different
 evidence.  Here's a bit more info on each program:
 
