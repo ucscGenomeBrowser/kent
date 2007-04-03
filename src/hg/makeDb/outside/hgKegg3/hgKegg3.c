@@ -64,6 +64,14 @@ while (row != NULL)
     
     sprintf(cond_str, "mrna='%s'", mRNA);
     locusID = sqlGetField(conn3, "entrez", "entrezMrna", "geneId", cond_str);
+    
+    /* look for RefSeq if not found in mRNAs */
+    if (locusID == NULL)
+    	{
+    	sprintf(cond_str, "refseq='%s'", mRNA);
+    	locusID = sqlGetField(conn3, "entrez", "entrezRefseq", "geneId", cond_str);
+	}
+
     if (locusID != NULL)
 	{
         sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
