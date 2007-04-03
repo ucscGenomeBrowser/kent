@@ -15,7 +15,7 @@
 #include "txInfo.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.4 2007/03/04 07:07:20 kent Exp $";
+static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.5 2007/04/03 01:43:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -252,8 +252,9 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     slReverse(&gene->txList);
 
     /* Write out canonical file output */
+    bed = hashMustFindVal(bedHash, gene->niceTx->name);
     fprintf(fCan, "%s\t%d\t%d\t%d\t%s\t%s\n",
-    	gene->chrom, gene->start, gene->end, geneId,
+    	bed->chrom, bed->chromStart, bed->chromEnd, geneId,
 	gene->niceTx->name, gene->niceTx->name);
 
     /* Write out isoforms output. */
