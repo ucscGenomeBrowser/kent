@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.90 2007/04/03 02:13:28 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.91 2007/04/03 03:11:58 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -371,12 +371,12 @@ else
         {
 	safef(query, sizeof(query), "select value from %s where name='%s'", toRefTable,
 		id);
-	refSeqAcc = sqlQuickString(conn, query);
+	refSeqAcc = emptyForNull(sqlQuickString(conn, query));
 	}
     if (sqlTableExists(conn, "kgXref"))
 	{
 	safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
-	mrnaAcc = sqlQuickString(conn, query);
+	mrnaAcc = emptyForNull(sqlQuickString(conn, query));
 	}
     hPrintf("<B>UCSC ID:</B> %s", id);
     }
