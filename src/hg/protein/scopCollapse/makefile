@@ -14,6 +14,7 @@ clean:
 	rm -f $O
 
 test:
-	scopCollapse inFeat.tab inModel.tab outFeat.tab outDesc.tab
+	scopCollapse inFeat.tab inModel.tab outFeat.tab outDesc.tab outKnownToSuper.tab
 	diff expectedFeat.tab outFeat.tab
 	diff expectedDesc.tab outDesc.tab
+	diff expectedKnownToSuper.tab outKnownToSuper.tab

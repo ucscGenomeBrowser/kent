@@ -6,7 +6,7 @@
 #include "rangeTree.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: scopCollapse.c,v 1.2 2007/03/27 03:20:52 kent Exp $";
+static char const rcsid[] = "$Id: scopCollapse.c,v 1.3 2007/04/03 16:24:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "scopCollapse - Convert SCOP model to SCOP ID. Also make id/name converter file.\n"
   "usage:\n"
-  "   scopCollapse inFeat.tab inModel.tab outFeat.tab outDesc.tab\n"
+  "   scopCollapse inFeat.tab inModel.tab outFeat.tab outDesc.tab outKnownToSuper.tab\n"
   "where:\n"
   "   inFeat.tab is a 6 column file:\n"
   "       proteinName start end hmmId eVal score\n"
@@ -64,17 +64,21 @@ const struct protFeature *b = *((struct protFeature **)vb);
 return strcmp(a->name, b->name);
 }
 
-struct protFeature *highestScoringFeature(struct protFeature *start, struct protFeature *end)
+struct protFeature *highestScoringFeature(struct protFeature *start, struct protFeature *end,
+	int rangeStart, int rangeEnd)
 /* Return highest scoring feature from start up to end. */
 {
 struct protFeature *bestFeat = NULL, *feat;
 double bestScore = -1.0;
 for (feat = start; feat != end ; feat = feat->next)
     {
-    if (feat->score > bestScore)
-        {
-	bestFeat = feat;
-	bestScore = feat->score;
+    if (rangeIntersection(rangeStart, rangeEnd, feat->start, feat->end) > 0)
+	{
+	if (feat->score > bestScore)
+	    {
+	    bestFeat = feat;
+	    bestScore = feat->score;
+	    }
 	}
     }
 return bestFeat;
@@ -97,7 +101,7 @@ for (startFeature = prot->featureList; startFeature != NULL; startFeature = endF
     struct range *range, *rangeList = rangeTreeList(rangeTree);
     for (range = rangeList; range != NULL; range = range->next)
 	{
-	feature = highestScoringFeature(startFeature, endFeature);
+	feature = highestScoringFeature(startFeature, endFeature, range->start, range->end);
         fprintf(f, "%s\t%d\t%d\t%s\n", prot->name, range->start, range->end, startFeature->name);
 	fprintf(fKnownTo, "%s\t%s\t%d\t%d\t%g\n",
 		prot->name, (char *)hashMustFindVal(seedToScop, startFeature->name),
