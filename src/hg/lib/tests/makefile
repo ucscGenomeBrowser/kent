@@ -25,8 +25,8 @@ loaders:
 
 spDbTest: spDbTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.o ${MYLIBS} $L
-	${BIN_DIR}/spDbTest uniProt Q9FFH7 > output/spDbTest
-	${BIN_DIR}/spDbTest uniProt P29312 >> output/spDbTest
+	${BIN_DIR}/spDbTest sp070202 Q9FFH7 > output/spDbTest
+	${BIN_DIR}/spDbTest sp070202 P29312 >> output/spDbTest
 	diff expected/spDbTest output/spDbTest
 
 hdbTest: hdbTest.o ${MYLIBS} mkdirs
