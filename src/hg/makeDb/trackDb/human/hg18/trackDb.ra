@@ -309,7 +309,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
 track knownAlt
-shortLabel AltEvents
+shortLabel Alt Events
 longLabel Alternative Splicing, Alternative Promoter and Similar Events in UCSC Genes
 group genes
 priority 34.1
