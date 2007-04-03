@@ -13,7 +13,7 @@ CREATE TABLE ensXRefZfish (
     geneSymbol varchar(255) not null,	# Official ZFIN Gene Symbol
     refSeq varchar(255) not null,	# RefSeq DNA Accession
     protAcc varchar(255) not null,	# RefSeq Protein Accession
-    description varchar(255) not null,	# Description
+    description longblob not null,	# Description
               #Indices
     PRIMARY KEY(ensGeneId),
     KEY(zfinId),
