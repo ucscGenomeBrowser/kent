@@ -697,6 +697,34 @@ priority 72
 visibility dense
 type genePred
 
+track exonWalk2
+shortLabel ExonWalk2
+longLabel ExonWalk Alt-Splicing Transcripts - take 2
+color 23,58,58
+group genes
+priority 72.01
+visibility hide
+type genePred
+
+track exonWalkRna
+shortLabel ExonWalkRna
+longLabel ExonWalk Alt-Splicing Transcripts mRNA only, no orthology
+color 23,58,58
+group genes
+priority 72.02
+visibility hide
+type genePred
+
+track exonWalkRnaNoCds
+shortLabel ExonWalkRnaNoCds
+longLabel Exonwalk on Rna only, no orthology, no CDS mapping
+color 23,58,58
+group genes
+priority 72.03
+visibility hide
+type bed 12
+
+
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
@@ -2893,6 +2921,7 @@ priority 109.25
 visibility hide
 color 0,100,0
 type bed 5 .
+
 
 searchTable ctgPos
 searchMethod exact
