@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.6 2007/03/28 06:19:55 kent Exp $";
+static char const rcsid[] = "$Id: txGeneXref.c,v 1.7 2007/04/03 03:12:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -152,6 +152,14 @@ for (info = infoList; info != NULL; info = info->next)
 	   }
 
        }
+
+    /* If it's an antibody fragment use that as name. */
+    if (sameString(info->category, "antibodyParts"))
+        {
+	geneSymbol = cloneString("abParts");
+	description = cloneString("Parts of antibodies, mostly variable regions.");
+	}
+
     /* Still no joy? Try genbank RNA records. */
     if (geneSymbol == NULL || description == NULL)
 	{
