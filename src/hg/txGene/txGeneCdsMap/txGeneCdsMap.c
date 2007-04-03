@@ -10,9 +10,8 @@
 #include "txInfo.h"
 #include "rangeTree.h"
 
-boolean uglyUgly;
 
-static char const rcsid[] = "$Id: txGeneCdsMap.c,v 1.2 2007/03/28 20:19:51 kent Exp $";
+static char const rcsid[] = "$Id: txGeneCdsMap.c,v 1.3 2007/04/03 03:17:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,7 +47,6 @@ for (i=0; i<bed->blockCount; ++i)
     endUtrSize += positiveRangeIntersection(bed->thickEnd, bed->chromEnd, start, end);
     rnaSize += end - start;
     }
-if (uglyUgly) uglyf("fakeCdsToMrna %s, rnaSize %d, cdsSize %d\n", bed->name, rnaSize, cdsSize);
 
 /* Figure out CDS start position. */
 int cdsStart = (bed->strand[0] == '-' ? endUtrSize : startUtrSize);
@@ -102,7 +100,6 @@ fprintf(f, "%s\t%s\t%d\t0\t%d\t", bed->strand, bed->name, rnaSize, rnaSize);
 fprintf(f, "%s\t%d\t%d\t%d\t", bed->chrom, chromSize, bed->chromStart, bed->chromEnd);
 fprintf(f, "%d\t", intronCount+1);
 
-if (uglyUgly) uglyf("fakeRnaToGenome %s, rnaSize %d\n", bed->name, rnaSize);
 
 /* Output block sizes. */
 for (range = rangeList; range != NULL; range = range->next)
@@ -135,7 +132,6 @@ psl->qSize *= 3;
 psl->qStart *= 3;
 psl->qEnd *= 3;
 int i;
-if (uglyUgly) uglyf("protPslToCdsPsl %s, qSize %d, tSize %d\n", psl->tName, psl->qSize, psl->tSize);
 for (i=0; i<psl->blockCount; ++i)
     {
     psl->blockSizes[i] *= 3;
