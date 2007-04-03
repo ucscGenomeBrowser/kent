@@ -2382,6 +2382,7 @@ tablesIgnored $gbd
     grp
     hgFindSpec%
     history
+    knownAlt
     miRNA
     quality
     rnaCluster
