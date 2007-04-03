@@ -74,6 +74,13 @@ queryFull select acc,pdb from  proteome.pdbSP,uniProt.displayId where val=sp
 queryOne select pdb,pdb from proteome.pdbSP,uniProt.displayId where val=sp and acc='%s'
 invQueryOne select acc from proteome.pdbSP,uniProt.displayId where val=sp and pdb='%s'
 
+name pfamDomains
+type pfam bdgpToPfam
+queryFull select name,description from bdgpToPfam,proteome.pfamDesc where pfamDesc.pfamAC = bdgpToPfam.value
+queryOne select description,value from proteome.pfamDesc,bdgpToPfam where bdgpToPfam.name = '%s' and bdgpToPfam.value = pfamDesc.pfamAC
+invQueryOne select name from bdgpToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = bdgpToPfam.value
+
+
 name go
 goaIdColumn dbObjectId
 
