@@ -224,7 +224,7 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 
 #define dbVarName "db"      /* Which assembly to use. */
 #define orgVarName "org"      /* Which organism to use. */
-#define oldOrgVarName "near.oldOrg"	/* Which organism last saw. */
+#define oldDbVarName "near.oldDb"	/* Which database last saw. */
 #define confVarName "near.do.configure"	/* Configuration button */
 #define detailsVarName "near.do.details" /* Do details page. */
 #define orderInfoDoName "near.do.orderInfo" /* Put up order info page */
