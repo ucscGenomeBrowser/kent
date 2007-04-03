@@ -309,8 +309,10 @@ void altPromoter(struct txGraph *graph, FILE *f)
 {
 /* Set up an array to keep track of whether any edge ends in vertex. */
 boolean vNotStart[graph->vertexCount];	
+boolean vNotEnd[graph->vertexCount];
 struct lm *lm = lmInit(0);
 struct range *promoterList = NULL;
+struct range *polyaList = NULL;
 int i;
 for (i=0; i<graph->vertexCount; ++i)
     vNotStart[i] = FALSE;
@@ -318,44 +320,68 @@ struct txEdge *edge;
 for (edge = graph->edgeList; edge != NULL; edge = edge->next)
     {
     if (graph->strand[0] == '+')
+	{
         vNotStart[edge->endIx] = TRUE;
+	vNotEnd[edge->startIx] = TRUE;
+	}
     else
+	{
         vNotStart[edge->startIx] = TRUE;
+	vNotEnd[edge->endIx] = TRUE;
+	}
     }
 for (i=0; i<graph->vertexCount; ++i)
     {
-    if (!vNotStart[i])
-        {
-	int start = 0, end = 0;
-	boolean isTxStart = FALSE;
-	int pos = graph->vertices[i].position;
-	if (graph->strand[0] == '+')
+    int start = 0, end = 0;
+    boolean isTxStart = FALSE, isTxEnd = FALSE;
+    int pos = graph->vertices[i].position;
+    if (graph->strand[0] == '+')
+	{
+	if (graph->vertices[i].type == ggSoftStart)
 	    {
-	    if (graph->vertices[i].type == ggSoftStart)
-	        {
-		start = pos - 100;
-		end = pos + 50;
-		isTxStart = TRUE;
-		}
+	    start = pos - 100;
+	    end = pos + 50;
+	    isTxStart = TRUE;
 	    }
-	else
+	else if (graph->vertices[i].type == ggSoftEnd)
 	    {
-	    if (graph->vertices[i].type == ggSoftEnd)
-	        {
-		start = pos - 50;
-		end = pos + 100;
-		isTxStart = TRUE;
-		}
+	    start = pos-1;
+	    end = pos;
+	    isTxEnd = TRUE;
 	    }
-	if (isTxStart)
-	     {
-	     struct range *range;
-	     lmAllocVar(lm, range);
-	     range->start = start;
-	     range->end = end;
-	     slAddHead(&promoterList, range);
-	     }
 	}
+    else
+	{
+	if (graph->vertices[i].type == ggSoftEnd)
+	    {
+	    start = pos - 50;
+	    end = pos + 100;
+	    isTxStart = TRUE;
+	    }
+	else if (graph->vertices[i].type == ggSoftStart)
+	    {
+	    start = pos;
+	    end = pos+1;
+	    isTxEnd = TRUE;
+	    }
+	}
+    if (isTxStart || isTxEnd)
+	 {
+	 struct range *range;
+	 lmAllocVar(lm, range);
+	 range->start = start;
+	 range->end = end;
+	 if (isTxStart)
+	    {
+	    if (!vNotStart[i])
+		 slAddHead(&promoterList, range);
+	    }
+	 else
+	     {
+	     if (!vNotEnd[i])
+		 slAddHead(&polyaList, range);
+	     }
+	 }
     }
 if (slCount(promoterList) > 1)
     {
@@ -364,6 +390,15 @@ if (slCount(promoterList) > 1)
 	{
 	fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
 	    range->start, range->end, "altPromoter", graph->strand);
+	}
+    }
+if (slCount(polyaList) > 1)
+    {
+    struct range *range;
+    for (range = polyaList; range != NULL; range = range->next)
+	{
+	fprintf(f, "%s\t%d\t%d\t%s\t0\t%s\n", graph->tName,
+	    range->start, range->end, "altFinish", graph->strand);
 	}
     }
 lmCleanup(&lm);
