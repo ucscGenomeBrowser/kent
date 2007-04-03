@@ -83,6 +83,7 @@ set kgDb3 hg18
 
 # Protein browser databases.
 set pbDb hg18,hg17,hg16,mm4,mm6,mm7,mm8,rn3 
+set pbDb1 hg17,hg16,mm4,mm6,mm7,mm8,rn3 
 set pbDb2 mm4,rn3
 set pbDb3 hg16,hg17,hg18
 
@@ -2093,37 +2094,37 @@ dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedian
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 
 # FAN says: the following hg17 and mm6 tables are an exception
-dependency $pbDb,!hg17,!mm6.pbAnomLimit $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pbResAvgStd $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepCCntDist $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepExonCntDist $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepHydroDist $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepIPCntDist $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepMolWtDist $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepPi $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepPiDist $pbDb.kgProtMap
-dependency $pbDb,!hg17,!mm6.pepResDist $pbDb.kgProtMap
-dependency $pbDb.pepMwAaDist $pbDb.kgProtMap
-dependency $pbDb.pbAaDistA $pbDb.kgProtMap
-dependency $pbDb.pbAaDistC $pbDb.kgProtMap
-dependency $pbDb.pbAaDistD $pbDb.kgProtMap
-dependency $pbDb.pbAaDistE $pbDb.kgProtMap
-dependency $pbDb.pbAaDistF $pbDb.kgProtMap
-dependency $pbDb.pbAaDistG $pbDb.kgProtMap
-dependency $pbDb.pbAaDistH $pbDb.kgProtMap
-dependency $pbDb.pbAaDistI $pbDb.kgProtMap
-dependency $pbDb.pbAaDistK $pbDb.kgProtMap
-dependency $pbDb.pbAaDistL $pbDb.kgProtMap
-dependency $pbDb.pbAaDistM $pbDb.kgProtMap
-dependency $pbDb.pbAaDistN $pbDb.kgProtMap
-dependency $pbDb.pbAaDistP $pbDb.kgProtMap
-dependency $pbDb.pbAaDistQ $pbDb.kgProtMap
-dependency $pbDb.pbAaDistR $pbDb.kgProtMap
-dependency $pbDb.pbAaDistS $pbDb.kgProtMap
-dependency $pbDb.pbAaDistT $pbDb.kgProtMap
-dependency $pbDb.pbAaDistV $pbDb.kgProtMap
-dependency $pbDb.pbAaDistW $pbDb.kgProtMap
-dependency $pbDb.pbAaDistY $pbDb.kgProtMap
+dependency $pbDb,!hg17,!mm6.pbAnomLimit $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pbResAvgStd $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepCCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepExonCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepHydroDist $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepIPCntDist $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepMolWtDist $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepPi $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepPiDist $pbDb.knownGenePep
+dependency $pbDb,!hg17,!mm6.pepResDist $pbDb.knownGenePep
+dependency $pbDb.pepMwAaDist $pbDb.knownGenePep
+dependency $pbDb.pbAaDistA $pbDb.knownGenePep
+dependency $pbDb.pbAaDistC $pbDb.knownGenePep
+dependency $pbDb.pbAaDistD $pbDb.knownGenePep
+dependency $pbDb.pbAaDistE $pbDb.knownGenePep
+dependency $pbDb.pbAaDistF $pbDb.knownGenePep
+dependency $pbDb.pbAaDistG $pbDb.knownGenePep
+dependency $pbDb.pbAaDistH $pbDb.knownGenePep
+dependency $pbDb.pbAaDistI $pbDb.knownGenePep
+dependency $pbDb.pbAaDistK $pbDb.knownGenePep
+dependency $pbDb.pbAaDistL $pbDb.knownGenePep
+dependency $pbDb.pbAaDistM $pbDb.knownGenePep
+dependency $pbDb.pbAaDistN $pbDb.knownGenePep
+dependency $pbDb.pbAaDistP $pbDb.knownGenePep
+dependency $pbDb.pbAaDistQ $pbDb.knownGenePep
+dependency $pbDb.pbAaDistR $pbDb.knownGenePep
+dependency $pbDb.pbAaDistS $pbDb.knownGenePep
+dependency $pbDb.pbAaDistT $pbDb.knownGenePep
+dependency $pbDb.pbAaDistV $pbDb.knownGenePep
+dependency $pbDb.pbAaDistW $pbDb.knownGenePep
+dependency $pbDb.pbAaDistY $pbDb.knownGenePep
 dependency $pbDb2.superfamily $pbDb.ensGene $pbDb.ensTranscript $pbDb.sfAssign $pbDb.sfDes $pbDb.sfDescription
 dependency $pbDb3.superfamily $pbDb.ensGene $pbDb.ensemblXref3 $pbDb.sfAssign $pbDb.sfDes $pbDb.sfDescription
 
