@@ -1,6 +1,7 @@
 name global
 knownGene ensGene
 knownGenePep ensPep
+knownToRef ensToRefSeq
 summaryTables refSeqSummary ensXRefZfish
 nameSql select gene from ensGtp where transcript = '%s'
 descriptionSql select description from ensXRefZfish where ensGeneId = '%s'

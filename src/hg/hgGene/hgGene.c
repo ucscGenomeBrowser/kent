@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.89 2007/03/28 23:48:52 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.90 2007/04/03 02:13:28 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -339,8 +339,6 @@ char condStr[255];
 char *kgProteinID;
 char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
-char *xrefTable;
-char *geneIdCol;
 int  i, exonCnt, cdsExonCnt;
 int  cdsStart, cdsEnd;
 
@@ -357,8 +355,8 @@ if (sqlTablesExist(conn, "kgAlias"))
     }
 if (sameWord(genome, "Zebrafish"))
     {
-    xrefTable = "ensXRefZfish";
-    geneIdCol = "ensGeneId";
+    char *xrefTable = "ensXRefZfish";
+    char *geneIdCol = "ensGeneId";
     /* get Gene Symbol and RefSeq accession from Zebrafish-specific */
     /* cross-reference table */
     printGeneSymbol(id, xrefTable, geneIdCol, conn);
@@ -368,17 +366,25 @@ if (sameWord(genome, "Zebrafish"))
 else
     {
     char query[256];
-    safef(query, sizeof(query), "select refseq from kgXref where kgID='%s'", id);
-    refSeqAcc = sqlQuickString(conn, query);
-    safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
-    mrnaAcc = sqlQuickString(conn, query);
+    char *toRefTable = genomeOptionalSetting("knownToRef");
+    if (toRefTable != NULL && sqlTableExists(conn, toRefTable))
+        {
+	safef(query, sizeof(query), "select value from %s where name='%s'", toRefTable,
+		id);
+	refSeqAcc = sqlQuickString(conn, query);
+	}
+    if (sqlTableExists(conn, "kgXref"))
+	{
+	safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
+	mrnaAcc = sqlQuickString(conn, query);
+	}
     hPrintf("<B>UCSC ID:</B> %s", id);
     }
 hPrintf("&nbsp&nbsp&nbsp");
     
 if (refSeqAcc[0] != 0)
     {
-    hPrintf("<B>Representative Refseq: </B> <A HREF=\"");
+    hPrintf("<B>Refseq: </B> <A HREF=\"");
     printOurRefseqUrl(stdout, refSeqAcc);
     hPrintf("\">%s</A>\n", refSeqAcc);
     hPrintf("&nbsp&nbsp&nbsp");
