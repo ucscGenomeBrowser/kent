@@ -22,7 +22,7 @@ if ( $status ) then
 endif
 
 cd $JAVABUILD
-build
+./build
 
 echo "doJavaUtilBuild done."
 
