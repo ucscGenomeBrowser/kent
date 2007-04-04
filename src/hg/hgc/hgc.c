@@ -202,7 +202,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1259 2007/04/03 05:28:33 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1260 2007/04/04 16:45:00 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6814,10 +6814,10 @@ if (genomeStrEnsembl == NULL)
 
 /* print URL that links to Ensembl transcript details */
 if (archive != NULL)
-    sprintf(ensUrl, "http://%s.archive.ensembl.org/%s", 
+    safef(ensUrl, sizeof(ensUrl), "http://%s.archive.ensembl.org/%s", 
             archive, genomeStrEnsembl);
 else
-    sprintf(ensUrl, "http://www.ensembl.org/%s", genomeStrEnsembl);
+    safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
  
 printf("<B>Ensembl Gene Link: </B>");
 printf("<A HREF=\"%s/transview?transcript=%s\" "
@@ -6826,7 +6826,7 @@ printf("%s</A><br>", itemName);
 
 if (hTableExists("superfamily"))
     {
-    sprintf(cond_str, "transcript_name='%s'", shortItemName);    
+    safef(cond_str, sizeof(cond_str), "transcript_name='%s'", shortItemName);    
 
     /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
     proteinID = NULL;
@@ -6920,7 +6920,7 @@ if (hTableExists("ensGtp") && (proteinID == NULL))
     {
     /* shortItemName removes version number but sometimes the ensGtp */
     /* table has a transcript with version number so exact match not used */
-    sprintf(cond_str2, "transcript like '%s%%'", shortItemName);  
+    safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);  
     proteinID=sqlGetField(conn, database, "ensGtp","protein",cond_str2);
     if (proteinID != NULL)
 	{ 
