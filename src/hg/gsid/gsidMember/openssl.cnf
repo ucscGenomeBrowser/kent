@@ -4,6 +4,6 @@ distinguished_name = GSID_HIV
 [ GSID_HIV ]
 C  = US
 ST = CA
-L  = Santa Cruz
-O  = hiv.cse.ucsc.edu
-OU = hiv.cse.ucsc.edu
+L  = South San Francisco
+O  = gsidhivdatabrowser.org
+OU = gsidhivdatabrowser.org
