@@ -99,7 +99,7 @@ label LOVD
 url http://www.dmd.nl/nmdb/search.php?select_db=%s
 acc yes
 
-name PubMed
+name PubMed2
 label PubMed
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list_uids=%s
 acc yes
@@ -674,6 +674,78 @@ url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=ZAP70;view=full;mut=%s
 acc yes
 needsEncoded yes
 
+name F12base
+label F12base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=F12;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD40Lbase
+label CD40Lbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CD40L;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD59base
+label CD59base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CD59;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name IKBKGbase
+label IKBKGbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=IKBKG;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name NFKBIAbase
+label NFKBIAbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=NFKBIA;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name SH2D1Abase
+label SH2D1Abase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=SH2D1A;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name TCIRG1base
+label TCIRG1base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=TCIRG1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name UNGbase
+label UNGbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=UNG;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name HAX1base
+label HAX1base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=HAX1;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD3Ebase
+label CD3Ebase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CD3E;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name CD3Gbase
+label CD3Gbase
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=CD3G;view=full;mut=%s
+acc yes
+needsEncoded yes
+
+name NCF2base
+label NCF2base
+url http://bioinf.uta.fi/cgi-bin/fetch_idbase.cgi?gene=NCF2;view=full;mut=%s
+acc yes
+needsEncoded yes
+
 name RettBASE
 label RettBASE
 url http://mecp2.chw.edu.au/cgi-bin/mecp2/search/process-search.cgi?display=simple&submit=Display&sys_name=%s
@@ -686,3 +758,12 @@ url http://mecp2.chw.edu.au/cgi-bin/mecp2/search/process-search.cgi?display=simp
 acc yes
 needsEncoded yes
 
+name dbPEX
+label dbPEX
+url http://www.dbpex.org/search.php?select_db=%s
+acc yes
+
+name IPNMDB
+label IPNMDB
+url http://www.molgen.ua.ac.be/CMTMutations/DataSource/Mutations.cfm?ID=%s
+acc yes
