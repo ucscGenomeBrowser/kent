@@ -26,6 +26,7 @@ clean:
 
 
 DIRS = \
+	blastRecipBest \
 	gadPos \
 	kgAliasM \
 	kgAliasP \
