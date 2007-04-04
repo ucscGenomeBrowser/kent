@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.92 2007/04/03 16:45:59 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.93 2007/04/04 21:11:21 kuhn Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -452,6 +452,7 @@ if (protAcc != NULL)
 	    }
 	hPrintf(")\n");
 	}
+	hPrintf("&nbsp&nbsp&nbsp");
     }
 printCcds(id, conn);
 
