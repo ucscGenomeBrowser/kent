@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.193 2007/03/27 22:45:15 heather Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.194 2007/04/04 22:15:37 heather Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -799,46 +799,22 @@ static boolean findKnownGene(char *spec, struct hgPositions *hgp,
 {
 char *mrnaID;
 
-if (! hTableExists("knownGene"))
-    return FALSE;
+if (!hTableExists("knownGene")) return FALSE;
 
-if (findKnownGeneExact(spec, spec, hgp, tableName))
-    {    
-    return(TRUE);
-    }
-else
-    {
-    mrnaID = MrnaIDforProtein(spec);
+if (findKnownGeneExact(spec, spec, hgp, tableName)) return TRUE;
 
-    if (mrnaID == NULL)
-	{
-    	mrnaID = MrnaIDforProtein(spec);
-	}
-    if (mrnaID != NULL)
-	{
-	return(findKnownGeneExact(mrnaID, spec, hgp, tableName));
-	}
-    else
-	{
-	mrnaID = MrnaIDforGeneName(spec);
-	if (mrnaID != NULL)
-	    {
-	    return(findKnownGeneExact(mrnaID, spec, hgp, tableName));
-	    }
-	else
-	    {
-	    if (findKnownGeneLike(spec, hgp, tableName) == TRUE)
-	    	{
-		return(TRUE);
-		}
-	    else
-	    	{
-	    	return(findKnownGeneDescLike(spec, hgp, tableName));
-	    	}
-	    }
-	}
-    }
-return FALSE;
+mrnaID = MrnaIDforProtein(spec);
+
+if (mrnaID == NULL) mrnaID = MrnaIDforProtein(spec);
+if (mrnaID != NULL) return (findKnownGeneExact(mrnaID, spec, hgp, tableName));
+
+mrnaID = MrnaIDforGeneName(spec);
+if (mrnaID != NULL) return (findKnownGeneExact(mrnaID, spec, hgp, tableName));
+
+if (findKnownGeneLike(spec, hgp, tableName)) return TRUE;
+
+return (findKnownGeneDescLike(spec, hgp, tableName));
+
 }
 
 
