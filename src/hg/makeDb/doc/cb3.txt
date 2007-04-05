@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.1 2007/04/02 22:53:51 hiram Exp $
+#  $Id: cb3.txt,v 1.2 2007/04/05 00:41:32 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -97,3 +97,48 @@ dbDbSpeciesDir worm
     ssh hgwdev
     cd /cluster/data/cb3/bed/WindowMasker
     hgLoadBed -strict cb3 windowmaskerSdust windowmasker.sdust.bed.gz
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2007-04-04 - Hiram)
+    # Use -repMatch=40 (based on size -- for human we use 1024, and 
+    # C. briggsae size is ~3.4% of human judging by gapless cb3 vs. hg18 
+    # genome sizes from featureBits.
+    ssh kolossus
+    cd /cluster/data/cb3
+    blat cb3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/11.ooc -repMatch=36
+    #	Wrote 53058 overused 11-mers to jkStuff/11.ooc
+    cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/cb3
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-04-04 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add cb3 just before cb1
+
+# cb3 (C. briggsae)
+cb3.serverGenome = /cluster/data/cb3/cb3.2bit
+cb3.clusterGenome = /san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+cb3.ooc = /san/sanvol1/scratch/worms/cb3/11.ooc
+cb3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+cb3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+cb3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+cb3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+cb3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+cb3.refseq.mrna.native.load = yes
+cb3.genbank.mrna.xeno.load = no
+cb3.downloadDir = cb3
+
+    cvs ci -m "Added cb3." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial cb3 &
+    #	logFile: var/build/logs/2007.04.04-17:38:18.cb3.initalign.log
+XXX running - 2007-04-04 - 17:38
+    #	real    61m33.930s
+
