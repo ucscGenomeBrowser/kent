@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.14 2007/03/14 22:24:23 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.15 2007/04/05 22:16:16 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -351,11 +351,22 @@ dyStringPrintf(dy,"'");
 
 sqlUpdate(conn,dy->string);
 
-/* see if payment_status is completed */
 
 char *invoice = cgiUsualString("invoice","");
+
 char *paymentDate = cgiUsualString("payment_date","");
+
 /* handle expiration date */
+
+/* Could use <time.h> function strptime, 
+but perhaps getdate with the external file datemsk 
+is more flexible for GSID in the long run.
+struct tm *tm;
+AllocVar(tm);
+char *dateOk=strptime(paymentDate, "%H:%M:%S %b %d, %Y PST", tm);
+if (!dateOk) strptime(paymentDate, "%H:%M:%S %b %d, %Y PDT", tm);
+if (!dateOk)
+*/
 setenv("DATEMSK","./datemsk", TRUE);  /* required by getdate() */
 struct tm *tm=getdate(paymentDate);
 if (!tm)
@@ -380,6 +391,7 @@ if (!email)
     return;
     }
 
+/* see if payment_status is completed */
 char *paymentStatus = cgiUsualString("payment_status","");
 if (!sameString("Completed",paymentStatus))
     {
