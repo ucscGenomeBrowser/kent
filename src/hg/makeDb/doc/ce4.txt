@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.6 2007/04/02 22:53:51 hiram Exp $
+#  $Id: ce4.txt,v 1.7 2007/04/05 00:39:18 hiram Exp $
 
 
 #########################################################################
@@ -492,7 +492,18 @@ TMPDIR=/scratch/tmp
 
     time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=pk \
 	-blastzOutRoot /cluster/bluearc/ce4CaeRem2 > do.log 2>&1 &
-    #	real    37m18.578s
+    #	real     44m41.608s
+    cat fb.ce4.chainCaeRem2Link.txt
+    #	45160539 bases of 100281244 (45.034%) in intersection
+
+    mkdir /cluster/data/caeRem2/bed/blastz.ce4.swap
+    cd /cluster/data/caeRem2/bed/blastz.ce4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	/cluster/data/ce4/bed/blastz.caeRem2.2007-03-29/DEF \
+	-swap > swap.log 2>&1 &
+    #	real    3m52.831s
+    cat fb.caeRem2.chainCe4Link.txt
+    #	52254587 bases of 146898439 (35.572%) in intersection
 
 ##########################################################################
 ## BlastZ cb3 (DONE - 2007-03-29 - 2007-04-02 - Hiram)
@@ -525,3 +536,20 @@ TMPDIR=/scratch/tmp
 	-blastzOutRoot /cluster/bluearc/ce4Ce3 > do.log 2>&1 &
     #  real    16m5.178s
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-04-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce4", "blat14", "17786", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce4", "blat14", "17787", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## Reset default position to the unc-52 gene complex (DONE - 2004-04-04 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14645680-14667144"
+	where name="ce4";' hgcentraltest
