@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.17 2005/11/24 20:36:43 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.18 2007/04/05 07:30:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -25,6 +25,7 @@ static struct optionSpec optionSpecs[] = {
     {"utrMergeSize", OPTION_INT},
     {"genePredExt", OPTION_BOOLEAN},
     {"allCds", OPTION_BOOLEAN},
+    {"noCds", OPTION_BOOLEAN},
     {"keepInvalid", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
     {NULL, 0}
@@ -37,6 +38,7 @@ static unsigned gPslOptions = genePredPslDefaults;
 static boolean gRequireUtr = FALSE;
 static boolean gKeepInvalid = FALSE;
 static boolean gAllCds = FALSE;
+static boolean gNoCds = FALSE;
 static boolean gGenePredExt = FALSE;
 static boolean gQuiet = FALSE;
 
@@ -80,6 +82,7 @@ errAbort(
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
   "  -genePredExt - create a extended genePred, including frame information.\n"
   "  -allCds - consider PSL to be all CDS.\n"
+  "  -noCds - consider PSL to not contain any CDS.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "  -quiet - Don't print print info about dropped sequences.\n"
   "\n", genePredStdInsertMergeSize, genePredStdInsertMergeSize);
@@ -154,13 +157,20 @@ struct genbankCds getCds(struct sqlConnection *conn, struct psl *psl)
 /* Lookup the CDS, either in the database or hash, or generate for query.  If
  * not found and looks like a it has a genbank version, try without the
  * version.  If allCds is true, generate a cds that covers the query.  Conn
- * maybe null if gCdsTable exists or gAllCds is true.  If CDS can't be
+ * maybe null if gCdsTable exists or gAllCds or gNoCds are true.  If CDS can't be
  * obtained, start and end are both set to -1.  If there is an error parsing
  * it, start and end are both set to 0. */
 {
 struct genbankCds cds;
 ZeroVar(&cds);
-if (gAllCds)
+if (gNoCds)
+    {
+    cds.start = -1;
+    cds.end = -1;
+    cds.startComplete = FALSE;
+    cds.endComplete = FALSE;
+    }
+else if (gAllCds)
     {
     cds.start = psl->qStart;
     cds.end = psl->qEnd;
@@ -205,7 +215,7 @@ struct genePred* pslToGenePred(struct psl *psl, struct genbankCds *cds)
 {
 unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
 
-if ((cds->start == cds->end) && !gKeepInvalid)
+if ((cds->start == cds->end) && !(gKeepInvalid || gNoCds))
     return NULL;
 if (gRequireUtr && ((cds->start == 0) || (cds->end == psl->qSize)))
     {
@@ -339,15 +349,16 @@ else
 gGenePredExt = optionExists("genePredExt");
 gKeepInvalid = optionExists("keepInvalid");
 gAllCds = optionExists("allCds");
+gNoCds = optionExists("noCds");
 gQuiet = optionExists("quiet");
 
-if (gAllCds && ((cdsDb != NULL) || (cdsFile != NULL)))
-    errAbort("can't specify -allCds with -cdsDb or -cdsFile");
+if ((gAllCds || gNoCds) && ((cdsDb != NULL) || (cdsFile != NULL)))
+    errAbort("can't specify -allCds or -noCds with -cdsDb or -cdsFile");
 if (gAllCds && gRequireUtr)
     errAbort("can't specify -allCds with -requireUtr");
 /* this is a bit of work to implement */
-if (gAllCds && (db != NULL))
-    errAbort("can't specify -allCds with -db");
+if ((gAllCds || gNoCds) && (db != NULL))
+    errAbort("can't specify -allCds or -noCds with -db");
 
 optCnt = 0;
 if (db != NULL)
@@ -358,9 +369,11 @@ if (cdsFile != NULL)
     optCnt++;
 if (gAllCds)
     optCnt++;
+if (gNoCds)
+    optCnt++;
 
 if (optCnt == 1)
-    errAbort("must specify one and only one of -db, -cdsDb, -cdsFile, or -allCds");
+    errAbort("must specify one and only one of -db, -cdsDb, -cdsFile, -allCds, or -noCds");
 
 mrnaToGene(db, cdsDb, cdsFile, pslSpec, genePredFile);
 return 0;
