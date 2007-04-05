@@ -1,17 +1,17 @@
-/* bedThickOnly - Reduct bed to just thick parts.. */
+/* bedThickOnly - Reduce bed to just thick parts.. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedThickOnly.c,v 1.1 2007/04/03 01:54:50 kent Exp $";
+static char const rcsid[] = "$Id: bedThickOnly.c,v 1.2 2007/04/05 20:59:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bedThickOnly - Reduct bed to just thick parts.\n"
+  "bedThickOnly - Reduce bed to just thick parts.\n"
   "usage:\n"
   "   bedThickOnly in.bed out.bed\n"
   "options:\n"
@@ -24,7 +24,7 @@ static struct optionSpec options[] = {
 };
 
 void thickOnly(char *inBed, char *outBed)
-/* thickOnly - Reduct bed to just thick parts.. */
+/* thickOnly - Reduce bed to just thick parts.. */
 {
 struct lineFile *lf = lineFileOpen(inBed, TRUE);
 FILE *f = mustOpen(outBed, "w");
