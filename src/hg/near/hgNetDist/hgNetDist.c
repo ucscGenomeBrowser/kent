@@ -12,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.10 2007/03/29 23:30:23 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.11 2007/04/05 19:08:09 galt Exp $";
 
 boolean skipFirst=FALSE;
 boolean weighted=FALSE;
@@ -316,7 +316,7 @@ for(i=0;i<numGenes;++i)
 	    }
 	}
     }
-fclose(f);    
+carefulClose(&f);    
 
 edgeFreeList(&edges);
 freeMem(d);
