@@ -23,7 +23,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
     customFactory.o customPp.o customTrack.o cutter.o cytoBand.o \
-    dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delHinds2.o \
+    dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
     dless.o dnaMotifSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
     easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \
