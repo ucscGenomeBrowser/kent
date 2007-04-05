@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.5 2007/03/30 00:37:44 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.6 2007/04/05 00:39:35 hiram Exp $"
 #
 
 ##########################################################################
@@ -274,3 +274,14 @@ braFlo1.perChromTables = no
     convert -sharpen 0 -normalize -geometry 350x200 \
 	PostmetamorphicLarvae.jpg Branchiostoma_lanceolatum.jpg
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-04-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("braFlo1", "blat11", "17784", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("braFlo1", "blat11", "17785", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
