@@ -73,7 +73,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *mRNA = row[1];
     char *spId = row[2];
     hashAdd(mRnaHash, mRNA, cloneString(kgId));
-    if (spId)
+    if (spId && spId[0])
 	hashAdd(spIdHash, spId, cloneString(kgId));
     }
 sqlFreeResult(&sr);
@@ -87,8 +87,7 @@ while (lineFileRowTab(lf, lrow))
     chopSuffixAt(cDna,'.');
 
     boolean found = FALSE;
-    kgId = hashLookup(mRnaHash, cDna);	
-    while(kgId)
+    for (kgId = hashLookup(mRnaHash, cDna); kgId; kgId = hashLookupNext(kgId))
 	{
 	found = TRUE;
 	if (!hashLookup(kgIdHash, kgId->val))  // each kgId only once 
@@ -96,11 +95,9 @@ while (lineFileRowTab(lf, lrow))
 	    hashAdd(kgIdHash, kgId->val, NULL);
 	    fprintf(f,"%s\t%s\n",(char *)kgId->val,hprdId);
 	    }
-     	kgId = hashLookupNext(kgId);
 	}
 
-    kgId = hashLookup(spIdHash, uniProt);
-    while(kgId)
+    for (kgId = hashLookup(spIdHash, uniProt); kgId; kgId = hashLookupNext(kgId))
 	{
 	found = TRUE;
 	if (!hashLookup(kgIdHash, kgId->val))  // each kgId only once 
@@ -108,7 +105,6 @@ while (lineFileRowTab(lf, lrow))
 	    hashAdd(kgIdHash, kgId->val, NULL);
 	    fprintf(f,"%s\t%s\n",(char *)kgId->val,hprdId);
 	    }
-     	kgId = hashLookupNext(kgId);
 	}
 
     if (!found)
