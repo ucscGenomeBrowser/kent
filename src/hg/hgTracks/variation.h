@@ -283,6 +283,12 @@ Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
 void delConradMethods(struct track *tg);
 /* methods for delConrad */
 
+Color delConrad2Color(struct track *tg, void *item, struct vGfx *vg);
+/* always red */
+
+void delConrad2Methods(struct track *tg);
+/* methods for delConrad2 */
+
 Color delMccarrollColor(struct track *tg, void *item, struct vGfx *vg);
 /* always red */
 

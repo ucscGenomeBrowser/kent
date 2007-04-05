@@ -80,6 +80,7 @@
 #include "cnpSharp.h"
 #include "cnpSharp2.h"
 #include "delHinds2.h"
+#include "delConrad2.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
@@ -202,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1260 2007/04/04 16:45:00 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1261 2007/04/05 05:34:59 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12509,6 +12510,34 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doDelConrad2(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct delConrad2 thisItem;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    delConrad2StaticLoad(row+rowOffset, &thisItem);
+    bedPrintPos((struct bed *)&thisItem, 3);
+    printf("<BR><B>HapMap individual</B>: %s\n",thisItem.offspring);
+    printf("<BR><B>HapMap population</B>: %s\n",thisItem.population);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 void doCnpSebat(struct trackDb *tdb, char *itemName)
 {
@@ -18549,6 +18578,10 @@ else if (sameWord(track, "cnpSharp2"))
 else if (sameWord(track, "delHinds2"))
     {
     doDelHinds2(tdb, item);
+    }
+else if (sameWord(track, "delConrad2"))
+    {
+    doDelConrad2(tdb, item);
     }
 else if (sameWord(track, "affy120K"))
     {

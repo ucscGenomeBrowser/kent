@@ -1031,6 +1031,14 @@ type bed 4 +
     type bed 4 .
     priority 5
 
+    track delConrad2
+    subTrack cnp
+    shortLabel Conrad Dels
+    longLabel Deletions from Genotype Analysis (Conrad)
+    noInherit on
+    type bed 8 .
+    priority 6
+
     track delHinds2
     subTrack cnp
     shortLabel Hinds Dels
