@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.17 2007/03/26 01:08:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.18 2007/04/05 00:13:22 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -152,7 +152,7 @@ if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    int column = 0, maxColumn=4, rowCount=0;
+    int column = 0, maxColumn=3, rowCount=0;
     hPrintf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
     safef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
