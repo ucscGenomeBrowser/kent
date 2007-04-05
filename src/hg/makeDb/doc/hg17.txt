@@ -23597,3 +23597,25 @@ tail +2 acescan.gff > acescan.nh.gff
 ldHgGene -out=gp hg17 acescan acescan.nh.gff 
 rm *.gff
 ldHgGene -predTab hg17 acescan acescan.hg17.gp
+
+###########################################################################
+# augustusHints track (DONE 2007-4-5 Mario)
+
+mkdir -p /cluster/data/hg17/bed/augustus/usingHints/predictions/Trefseq.hmRNA.hsEST.R.Xp.final
+cd /cluster/data/hg17/bed/augustus/usingHints/predictions/Trefseq.hmRNA.hsEST.R.Xp.final
+wget http://augustus.gobics.de/predictions/hg17/usingEvidence/augustus.hg17.Trefseq.hmRNA.hsEST.R.Xp.gff
+wget http://augustus.gobics.de/predictions/hg17/usingEvidence/augustus.hg17.Trefseq.hmRNA.hsEST.R.pep.aa
+ldHgGene -bin hg17 augustusHints augustus.hg17.Trefseq.hmRNA.hsEST.R.Xp.gff
+hgPepPred hg17 generic augustusHintsPep augustus.hg17.Trefseq.hmRNA.hsEST.R.Xp.pep.aa
+
+###########################################################################
+# augustus de novo track (DONE 2007-4-5 Mario)
+
+mkdir -p /cluster/data/hg17/bed/augustus/usingHints/predictions/Xp.RA.it
+cd /cluster/data/hg17/bed/augustus/usingHints/predictions/Xp.RA.it
+wget http://augustus.gobics.de/predictions/hg17/deNovo/augustus.hg17.Xp.RA.it.gff
+wget http://augustus.gobics.de/predictions/hg17/deNovo/augustus.hg17.Xp.RA.it.pep.aa
+ldHgGene -bin hg17 augustusXRA augustus.hg17.Xp.RA.it.gff
+hgPepPred hg17 generic augustusXRAPep augustus.hg17.Xp.RA.it.pep.aa
+
+
