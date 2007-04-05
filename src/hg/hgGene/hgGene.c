@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.91 2007/04/03 03:11:58 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.92 2007/04/03 16:45:59 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -483,11 +483,14 @@ hPrintf("<BR><B>Exon Count:</B> %d\n", exonCnt);
 if (exonCnt > 1)
     {
     cdsExonCnt = 0;
-    for (i=0; i<exonCnt; i++)
-    	{
-	if ( (cdsStart <= curGenePred->exonEnds[i]) &&  
-	     (cdsEnd >= curGenePred->exonStarts[i]) )
-	     cdsExonCnt++;
+    if (cdsStart < cdsEnd)
+	{
+	for (i=0; i<exonCnt; i++)
+	    {
+	    if ( (cdsStart <= curGenePred->exonEnds[i]) &&  
+		 (cdsEnd >= curGenePred->exonStarts[i]) )
+		 cdsExonCnt++;
+	    }
 	}
     /* print CDS exon count only if it is different than exonCnt */
     if (cdsExonCnt != exonCnt) 

@@ -23,7 +23,7 @@
 #include "customFactory.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.61 2007/03/23 21:28:19 angie Exp $";
+static char const rcsid[] = "$Id: customFactory.c,v 1.62 2007/04/04 22:31:39 angie Exp $";
 
 /*** Utility routines used by many factories. ***/
 
@@ -933,7 +933,7 @@ static boolean wigRecognizer(struct customFactory *fac,
     	struct customTrack *track)
 /* Return TRUE if looks like we're handling a wig track */
 {
-return sameOk(type, fac->name);
+return (sameOk(type, fac->name) || sameType(type, "wig"));
 }
 
 static struct pipeline *wigLoaderPipe(struct customTrack *track)
@@ -1238,6 +1238,9 @@ tdb->type = hashFindVal(hash, "tdbType");
 /* might be an old-style wigType track */
 if (NULL == tdb->type)
     tdb->type = hashFindVal(hash, "wigType");
+/* might be a user-submitted CT that we're reading for the first time */
+if (NULL == tdb->type)
+    tdb->type = hashFindVal(hash, "type");
 track->dbTrackType = hashFindVal(hash, "dbTrackType");
 track->dbTableName = hashFindVal(hash, "dbTableName");
 if (track->dbTableName)

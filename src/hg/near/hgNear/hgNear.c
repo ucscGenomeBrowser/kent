@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.163 2007/04/03 04:12:36 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.164 2007/04/04 17:01:33 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1859,7 +1859,7 @@ cart = theCart;
 getDbAndGenome(cart, &database, &genome);
 makeSureDbHasHgNear();
 oldDb = cartOptionalString(cart, oldDbVarName);
-if (oldDb != NULL && !sameString(oldDb, database))
+if (isNotEmpty(oldDb) && !sameString(oldDb, database))
    cartRemove(cart, searchVarName);
 hSetDb(database);
 getGenomeSettings();

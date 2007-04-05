@@ -146,7 +146,6 @@ identifier UniProtId external=UniProt
      $kgDb2.kgXref.spDisplayID minCheck=0.80
      $kgDb3.kgXref.spDisplayID minCheck=0.50
      $kgDb2.knownCanonical.protein minCheck=0.80
-     $kgDb2.knownGene.proteinID minCheck=0.80
      $gbd.spMrna.spID minCheck=0.80
      dm1.bdgpSwissProt.spSymbol minCheck=0.80
      dm1.flyBaseSwissProt.spSymbol minCheck=0.80
@@ -176,7 +175,6 @@ identifier UniProtAccession external=UniProt
      $kgDb2.kgXref.spID minCheck=0.9
      $kgDb3.kgSpAlias.spID minCheck=0.50
      $kgDb3.kgXref.spID minCheck=0.50
-     $kgDb3.knownGene.proteinID minCheck=0.50
      $gbd.pepMwAa.accession minCheck=0.9
      $gbd.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
@@ -556,6 +554,16 @@ identifier nscanName dependency
 "Link together nscan predicted gene structure and peptide"
     $gbd.nscanGene.name
     $gbd.nscanPep.name unique
+
+identifier augustusHintsName dependency
+"Link together augustusHints predicted gene structure and peptide"
+   $gbd.augustusHints.name
+   $gbd.augustusHintsPep.name full unique
+
+identifier augustusXRAName dependency
+"Link together augustusXRA predicted gene structure and peptide"
+   $gbd.augustusXRA.name
+   $gbd.augustusXRAPep.name full unique
 
 identifier vegaName
 "Link together various VEGA human curated gene annotation"

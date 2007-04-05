@@ -18,7 +18,7 @@
 #include "trashDir.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.35 2007/03/30 02:59:09 kent Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.36 2007/04/03 18:59:17 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -548,6 +548,13 @@ proteinInSupportedGenome, proteinID, database, organism, protDbName);fflush(stdo
 */
 
 hSetDb(database);
+
+if (hTableExists("kgProtMap2"))
+    {
+    kgVersion = KG_III;
+    strcpy(kgProtMapTableName, "kgProtMap2");
+    }
+		
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
@@ -592,8 +599,16 @@ else
     
 if (proteinInSupportedGenome)
     {
-    safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
-    mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    if (kgVersion == KG_III)
+    	{
+    	safef(cond_str, sizeof(cond_str), "proteinID='%s'", proteinID);
+    	mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+	}
+    else
+    	{
+    	safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
+    	mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
+    	}
     }
 else
     {

@@ -4,7 +4,7 @@ name exonPrimer
 shortLabel ExonPrimer
 tables kgXref
 idSql select kgID from kgXref where kgID = '%s'
-#url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=hg18&acc=%s
-url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSCtest.pl?db=hg18&acc=%s
+url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=hg18&acc=%s
+#url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSCtest.pl?db=hg18&acc=%s
 priority 10
 

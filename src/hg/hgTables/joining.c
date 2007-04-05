@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.45 2006/10/17 01:15:41 aamp Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.46 2007/04/05 22:26:50 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -719,7 +719,8 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 	if (jf->separator == NULL)
 	    {
 	    char *s = chopKey(jf->chopBefore, jf->chopAfter, key->name);
-	    hashAdd(hash, s, jr);
+	    if (s[0] != 0)
+		hashAdd(hash, s, jr);
 	    }
 	else
 	    {
@@ -731,7 +732,8 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 		if (e != NULL)
 		    *e++ = 0;
 		s = chopKey(jf->chopBefore, jf->chopAfter, s);
-		hashAdd(hash, s, jr);
+		if (s[0] != 0)
+		    hashAdd(hash, s, jr);
 		s = e;
 		}
 	    }
