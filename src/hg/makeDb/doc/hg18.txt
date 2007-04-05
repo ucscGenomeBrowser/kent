@@ -14293,7 +14293,7 @@ cat > getGenes.csh << 'EOF'
    /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.chr22.gp \
         -i MAF ../maf/chr22__0.maf > chr22.mfa
 
-    # extract ENCODE regions from MAF's and collect by chrom
+    # extract ENCODE regions from MAF's
     ssh hgwdev
     cd /cluster/data/hg18/bed/multiz28way/4d
     hgsql hg18 -N -e  \
@@ -14307,20 +14307,74 @@ cat > encodeMafs.csh << 'EOF'
     set chroms = `awk '{print $1}' encodeRegions.bed | sort | uniq`
     foreach c ($chroms)
         echo $c
+        # needed till mafsInRegion is fixed to handle split maf files
+        cat ../maf/${c}__?.maf > $c.maf
         awk -v CHR=$c '$1 == CHR {print}' encodeRegions.bed > regions.bed
-        mafsInRegion regions.bed encodeMafs/$c.maf ../maf/${c}__?.maf
+        mafsInRegion regions.bed -outDir encodeMafs/ $c.maf
     end
 'EOF'
     csh encodeMafs.csh >&! encodeMafs.log &
 
-    # GOT HERE
-    # From Elliott's script:
+    # try it out on a few regions
+    set r = "ENm001"
+    set r = "ENr231"
+    perl -wpe 's/^s ([^.]+)\.\S+/s $1/' encodeMafs/$r.maf > $r.clean.maf
+    # see what mfa file looks like
+    /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.gp \
+                -i MAF $r.clean.maf > $r.mfa
+    # generate ss file
+    /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.gp \
+                -i MAF $r.clean.maf -o SS | \
+        /cluster/bin/phast/msa_view -i SS --tuple-size 1 - > $r.4d.ss
 
-    msa_view --aggregate "<species list>" chr*.mfa | \
+    # now on all regions
+cat > encode4d.csh << 'EOF'
+    mkdir ss
+    foreach f (encodeMafs/*.maf)
+        set r = $f:t:r
+        echo $r
+        perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $f > clean.maf
+    /cluster/bin/phast/msa_view --4d --features gencodeKnown.hg18.gp \
+                -i MAF clean.maf -o SS | \
+        /cluster/bin/phast/msa_view -i SS --tuple-size 1 - > ss/$r.4d.ss
+    end
+'EOF'
+    csh encode4d.csh >&! encode4d.log &
+
+    set species1 = `sed 's/$/,/g' ../species.lst`
+    set species = `echo $species1 | sed -e 's/ //g' -e 's/,$//'`
+
+    # From Elliott's script:
+    /cluster/bin/phast/msa_view --aggregate $species EN*.ss | \
         sed s/"> "/">"/ > all-4d_align.mfa
 
-    phyloFit --msa-format FASTA --subst-mod REV --tree tree.nh all-4d_align.mfa
-    cat phyloFit.mod |grep TREE |sed s/TREE\:\ // >> tree_4d.28way.nh
+    # tweak input tree -- remove common names, include commas
+    sed 's/[a-z][a-z]*_//g' ../tree/tree.web.commas.nh > tree.commas.nh
+
+    # From Elliott's script with Adam's mods (use --EM, MED)
+    /cluster/bin/phast/phyloFit --EM --precision MED \
+        --msa-format FASTA --subst-mod REV \
+        --tree tree.commas.nh all-4d_align.mfa
+    grep TREE phyloFit.mod | sed 's/TREE\:\ //' > tree_4d.28way.nh
+
+    # spruce up names for tree drawing
+    /cluster/bin/phast/tree_doctor \
+      --rename="hg18 -> human ; panTro2 -> chimp ; rheMac2 -> macaque ; otoGar1 -> bushbaby ; tupBel1 -> tree_shrew ; rn4 -> rat ; mm8 -> mouse ; cavPor2 -> guinea_pig ; oryCun1 -> rabbit ; sorAra1 -> shrew ; eriEur1 -> hedgehog ; canFam2 -> dog ; felCat3 -> cat ; equCab1 -> horse ; bosTau3 -> cow ; dasNov1 -> armadillo ; loxAfr1 -> elephant ; echTel1 -> tenrec ; monDom4 -> opossum ; ornAna1 -> platypus ; galGal3 -> chicken ; anoCar1 -> lizard ; xenTro2 -> frog ; tetNig1 -> tetraodon ; fr2 -> fugu ; gasAcu1 -> stickleback ; oryLat1 -> medaka ; danRer4 -> zebrafish" \
+      tree_4d.28way.nh > tree_4d.28way.common.nh
+
+    # hand-craft an alternate version using Elliott's latest ENCODE tree
+    # (now has shrew, hedgehog, cat, horse, guinea pig), and interpolating
+    # missing species using Hiram's methods (preserve total branch
+    # length when inserting sisters)
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but=human,chimp,macaque,galago,rat,mouse,guinea_pig,rabbit,cow,cat,dog,hedgehog,shrew,armadillo,elephant,tenrec,monodelphis,platypus,chicken,xenopus \
+        --rename="xenopus -> frog ; galago -> bushbaby; monodelphis -> opossum"\
+            encode2007.nh > encode2007.pruned.nh
+
+    # my 4d tree with only species in the pruned ENCODE tree
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but=human,chimp,macaque,bushbaby,rat,mouse,guinea_pig,rabbit,cow,cat,dog,hedgehog,shrew,armadillo,elephant,tenrec,opossum,platypus,chicken,frog \
+          tree_4d.28way.common.nh > tree_4d.20way.common.nh
 
 
 ############################################################################
