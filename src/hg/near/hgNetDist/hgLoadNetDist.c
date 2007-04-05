@@ -13,7 +13,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadNetDist.c,v 1.2 2007/03/30 00:11:29 galt Exp $";
+static char const rcsid[] = "$Id: hgLoadNetDist.c,v 1.3 2007/04/05 19:06:53 galt Exp $";
 
 char *sqlRemap=NULL;
 
@@ -88,6 +88,23 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+boolean handleMissing(struct hashEl *h, char *gene, struct hash *missingHash, FILE *missingFile)
+/* Write out info on gene to missing file if necessary. Return TRUE if it's the
+ * first time gene has gone missing. */
+{
+if (!h)  /* not found in alias Hash */
+    {
+    if (!hashLookup(missingHash, gene))
+	{
+	hashAdd(missingHash, gene, NULL);
+	fprintf(missingFile, "%s\n", gene);
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+
 
 void hgLoadNetDist(char *inTab, char *db, char *outTable)
 {
@@ -96,7 +113,7 @@ FILE *f = hgCreateTabFile(tempDir, outTable);
 
 struct sqlConnection *hConn = sqlConnect(db);
 
-FILE *missingF=NULL;
+FILE *missingFile=NULL;
 int missingCount=0;
 
 struct lineFile *lf=NULL;
@@ -107,7 +124,7 @@ if (sqlRemap)
     {
     fetchRemapInfo(db);
     missingHash = newHash(16);  
-    missingF = mustOpen("missing.tab","w");
+    missingFile = mustOpen("missing.tab","w");
     }
 
 /* read edges from file */
@@ -115,7 +132,7 @@ if (sqlRemap)
 
 lf=lineFileOpen(inTab, TRUE);
 
-/* print final dyn prg array values */
+/* print final values, remapping if needed */
 
 while (lineFileNextRowTab(lf, row, rowCount))
     {
@@ -125,34 +142,13 @@ while (lineFileNextRowTab(lf, row, rowCount))
     char *gi=NULL, *gj=NULL;
     if (sqlRemap)
 	{ /* it is possible for each id to have multiple remap values in hash */
-	struct hashEl *hi=NULL, *hj=NULL, *hMissing=NULL, *hij=NULL;
-	int z;
-	char *missingKey = NULL;
+	struct hashEl *hi=NULL, *hj=NULL, *hjSave=NULL;
 	hi = hashLookup(aliasHash,geneI);
 	hj = hashLookup(aliasHash,geneJ);
-	for(z=0;z<2;z++)  /* do both i and j */
-	    {
-	    if (z==0)
-		{
-		missingKey = geneI;
-		hij = hi;
-		}
-	    else
-		{
-		missingKey = geneJ;
-		hij = hj;
-		}
-	    if (!hij) 
-		{
-		hMissing = hashLookup(missingHash,missingKey);
-		if (!hMissing)
-		    {
-		    ++missingCount;
-		    hashAdd(missingHash, missingKey, NULL);
-		    fprintf(missingF, "%s\n", missingKey);
-		    }
-		}
-	    }		    
+	missingCount += handleMissing(hi, geneI, missingHash, missingFile);
+	missingCount += handleMissing(hj, geneJ, missingHash, missingFile);
+	hjSave = hj;
+	/* do all combinations of i and j */	
 	for(;hi;hi=hashLookupNext(hi))
 	    {
 	    gi = (char *)hi->val;
@@ -161,7 +157,7 @@ while (lineFileNextRowTab(lf, row, rowCount))
 		gj = (char *)hj->val;
 		fprintf(f,"%s\t%s\t%s\n",gi,gj,dij);
 		}
-	    hj = hashLookup(aliasHash,geneJ); /* reset it */
+	    hj = hjSave; /* reset it */
 	    }
 	}
     else
@@ -177,13 +173,11 @@ carefulClose(&f);
 
 if (sqlRemap)
     {
-    fclose(missingF);
+    carefulClose(&missingFile);
     if (missingCount == 0)
-	{
 	unlink("missing.tab");
-	}
     else	    
-    	printf("hgLoadNetDist %d id-remapping misses!  see missing.tab\n", missingCount);
+    	printf("hgLoadNetDist %d id-remapping misses, see missing.tab\n", missingCount);
     }
 
 createTable(hConn, outTable);
