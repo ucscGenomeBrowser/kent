@@ -25,72 +25,97 @@
                     TARGET=_blank>genome-announce</A> mailing list.</P>
 		   
                     <P>
-                    <FONT FACE="courier" SIZE=3><B>27 March 2007 - Stickleback
-		    Assembly Released in Genome Browser</B></FONT>
+                    <FONT FACE="courier" SIZE=3><B>6 April 2007 - New UCSC
+		    Gene Prediction Set Released</B></FONT>
                     <P>
+		    We are pleased to announce the release of a new gene 
+		    prediction set, UCSC Genes, on the latest human 
+		    Genome Browser (hg18, NCBI Build 36). This annotation,
+		    which includes putative noncoding genes as well as 
+		    protein-coding genes and 99.9% of RefSeq genes,
+		    is the next generation of the Known Genes set that UCSC 
+		    has been providing for the past few years and supersedes the
+		    existing Known Genes annotation on the hg18 assembly.
+		    <P>
+		    The UCSC Genes is a moderately conservative prediction set 
+		    based on data from RefSeq, GenBank, and UniProt. Each
+		    entry requires the support of one GenBank RNA sequence plus 
+		    at least one additional line of evidence, with the exception
+		    of RefSeq RNAs, which require no additional evidence. 
+		    Some of the noncoding transcripts in the set may actually 
+		    code for protein, but the evidence for the associated 
+		    protein is weak at best. Compared to RefSeq, this gene set 
+		    generally has about 10% more protein-coding genes, 
+		    approximately five times as many putative noncoding genes, 
+		    and about twice as many splice variants.
+		    </P>
+		    <P>
+		    The UCSC Genes set is produced using a computational 
+		    pipeline developed at UCSC by Jim Kent, Chuck Sugnet and 
+		    Mark Diekhans. For detailed information about the process 
+		    used to construct the genes set, see the 
+		    <A HREF="../cgi-bin/hgTrackUi?db=hg18&g=knownGene">track 
+		    description page</A>. In upcoming months, we plan to 
+		    release UCSC Genes sets on several organisms in addition
+		    to human.
+		    </P>
+		    <P>
+		    As part of this change, we are now using our own UCSC 
+		    Genes accession numbers as the primary key into the 
+		    underlying knownGene table, rather than the GenBank mRNA 
+		    accessions 
+		    we used in the previous Known Genes prediction set.
+		    Note that this may affect external sites who use URLs to 
+		    link into our genes track using the older-style accessions.
+		    </P>
+		    <P>
+		    We will continue to provide the older Known Genes track on 
+		    hg18 under the name &quot;Old Known Genes&quot;. You may
+		    find the following tables useful in referencing the older 
+		    gene set and converting between the two sets:
+		    <UL>
+		    <LI>
+		    knownGeneOld2: new name for table underlying the old Known 
+		    Genes (previously called knownGene)
+		    <LI>
+		    kgXrefOld2: new name for table that contains data for 
+		    converting old Known Genes IDs to other IDs (previously 
+		    called kgXref)
+		    <LI>
+		    kg2ToKg3: data for converting old Known Genes IDs 
+		    to the newer UCSC Genes IDs
+		    </UL></P>
+		    <P>
+		    We'd like to acknowledge the many people in the UCSC Genome
+		    Bioinformatics group who worked hard to release this new 
+		    annotation: UCSC developers Jim Kent, Chuck Sugnet, 
+		    Mark Diekhans, and Fan Hsu (with technical support from 
+		    other several
+		    other engineers in the group); our splendid QA team -- 
+		    Robert Kuhn, Ann Zweig, Kayla Smith, Archana Thakkapallayil,
+		    and Brooke Rhead; our build engineer -- Andy
+		    Pohl; and our sysadmin group. We'd also like to thank Tom
+		    Pringle for his input, the people and organizations 
+		    maintaining the RefSeq, UniProt, and GenBank databases, and 
+		    the scientists worldwide who have contributed to them. If 
+		    you have any questions about this new release,
+		    feel free to contact us at 
+		    <A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>
+		    (general questions) or 
+		    <A HREF="mailto:genome-mirror@soe.ucsc.edu">genome-mirror@soe.ucsc.edu</A> 
+		    (mirror-specific questions).
+		    </P>
+		    <P>
+		    <HR>
+                    <FONT FACE="courier" SIZE=3><B>27 March 2007 - Stickleback
+		    Assembly Released in Genome Browser: </B></FONT>
 		    We have released a Genome Browser and Blat server for 
 		    the Feb. 2006 v1.0 draft assembly of <em>Gasterosteus 
 		    aculeatus</em> produced by the 
 		    <A HREF="http://www.broad.mit.edu/" TARGET=_blank>Broad 
 		    Institute</A>.
-		    <P>
-		    This assembly has been sequenced to approximately 6X 
-		    coverage. An estimated  87% of the sequence has been 
-		    anchored to chromosomes (chrI - chrXXI). Of the remaining 
-		    unanchored scaffolds, those that could be localized to a 
-		    chromosome have been concatenated into the virtual 
-		    chromosome &quot;chrUn&quot; with 1000bp gaps between 
-		    scaffolds. The stickleback mitochondrial sequence is also 
-		    available as the virtual chromosome &quot;chrM&quot;.
+                    <A HREF="goldenPath/newsarch.html#032707">Read more</A>.
 		    </P>
-		    <P>
-		    Bulk downloads of the sequence and annotation data are 
-		    available via the Genome Browser
-		    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/gasAcu1/">FTP server</A> 
-		    or the
-		    <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#stickleback">Downloads</A>
-		    page.  These data have 
-		    <A HREF="../goldenPath/credits.html#stickleback_use">specific
-		    conditions for use</A>.
-		    </P>
-		    <P>
-		    The stickleback browser annotation tracks were generated by 
-		    UCSC and collaborators worldwide. See the
-		    <A HREF="/goldenPath/credits.html#stickleback_credits">Credits</A>
-		    page for a detailed list of the organizations and 
-		    individuals who contributed to this release.
-		    </P>
-		    <P>
-                    <HR>
-                    <FONT FACE="courier" SIZE=3><B>26 February 2007 - Zebrafish
-		    danRer1 Assembly Archived: </B></FONT>
-		    We have archived the initial zebrafish assembly, danRer1 
-		    (Nov. 2003). This assembly has been removed from our 
-		    primary website, but is still available for browsing and 
-		    downloading on our 
-		    <A HREF="http://genome-archive.cse.ucsc.edu/">archive server</A>. 
-		    Because of this move, blat searches on this assembly are no 
-		    longer supported.
-		    </P>
-		    <P>
-                    <FONT FACE="courier" SIZE=3><B>16 February 2007 - New 
-                    Browser Session-Sharing Function Available: </B></FONT>
-                    We are pleased to announce the release of a new session 
-                    management functionality 
-                    in the Genome Browser, which allows users to save and
-                    share browser sessions.
-                    <A HREF="goldenPath/newsarch.html#021607">Read more</A>.</P>
-		    <P>
-                    <FONT FACE="courier" SIZE=3><B>2 February 2007 - New Genome 
-                    Graphs Tool Available in Genome Browser: </B></FONT>
-                    We are pleased to announce the release of a new software 
-                    tool in the Genome Browser collection, the 
-                    <A HREF="cgi-bin/hgGenome">Genome Graphs</A> 
-                    tool. Genome Graphs offers the ability to 
-                    upload and display genome-wide data sets such as the 
-                    results of genome-wide SNP association studies, linkage 
-                    studies and homozygosity mapping. 
-                    <A HREF="goldenPath/newsarch.html#020207">Read more</A>.</P>
                         </TD><TD WIDTH=15>
                  </TD></TR></TABLE>
             <BR></TD></TR></TABLE>
