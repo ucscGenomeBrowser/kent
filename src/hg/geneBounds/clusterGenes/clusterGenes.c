@@ -11,10 +11,16 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.35 2007/03/31 19:38:14 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.36 2007/04/06 03:54:58 markd Exp $";
+
+/* Notes:
+ *  strand is passed as '*' when -ignoreStrand is specified.
+ */
 
 /* Command line driven variables. */
 char *clChrom = NULL;
+
+#define ignoredStrand '*'
 
 void usage()
 /* Explain usage and exit. */
@@ -37,6 +43,7 @@ errAbort(
   "   -trackNames - If specified, input are pairs of track names and files.\n"
   "    This is useful when the file names don't reflact the desired track\n"
   "    names.\n"
+  "   -ignoreStrand - cluster postive and negative strand together\n"
   "   -clusterBed=bed - output BED file for each cluster\n"
   "   -flatBed=bed - output BED file that contains the exons of all genes\n"
   "    flattned into a single record.\n"
@@ -62,6 +69,7 @@ static struct optionSpec options[] = {
    {"cds", OPTION_BOOLEAN},
    {"joinContained", OPTION_BOOLEAN},
    {"conflicted", OPTION_BOOLEAN},
+   {"ignoreStrand", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -70,6 +78,7 @@ boolean gUseCds;
 boolean gTrackNames;
 boolean gJoinContained = FALSE;
 boolean gDetectConflicted = FALSE;
+boolean gIgnoreStrand = FALSE;
 
 struct track
 /*  Object representing a track. */
@@ -138,14 +147,14 @@ struct genePred *trackFileGetGenes(struct track *track,
                                    char *chrom, char strand)
 /* get genes from a file track for chrom and strand. Must be called in
  * assending chrom and then +,- order.  By passed chroms are deleted from
- * list */
+ * list. */
 {
 struct genePred *genes = NULL;
 
 /* bypass and delete genes before this chrom/strand */
 while ((track->genes != NULL)
        && (strcmp(track->genes->chrom, chrom) < 0)
-       && (track->genes->strand[0] < strand))
+       && ((track->genes->strand[0] < strand) || (strand == ignoredStrand)))
     {
     struct genePred *gp = slPopHead(&track->genes);
     genePredFree(&gp);
@@ -154,7 +163,7 @@ while ((track->genes != NULL)
 /* add genes on same chrom/strand */
 while ((track->genes != NULL)
        && sameString(track->genes->chrom, chrom)
-       && (track->genes->strand[0] == strand))
+       && ((track->genes->strand[0] == strand) || (strand == ignoredStrand)))
     {
     slSafeAddHead(&genes, slPopHead(&track->genes));
     }
@@ -180,7 +189,10 @@ struct genePred *trackTableGetGenes(struct track *track,
 /* get genes from a table track for chrom and strand. */
 {
 char where[128];
-safef(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
+if (strand == ignoredStrand)
+    safef(where, sizeof(where), "chrom = '%s'", chrom);
+else
+    safef(where, sizeof(where), "chrom = '%s' and strand = '%c'", chrom, strand);
 return genePredReaderLoadQuery(conn, track->table,  where);
 }
 
@@ -792,7 +804,7 @@ return map;
 }
 
 void outputFlatBed(struct cluster *cluster, char strand, FILE *flatBedFh)
-/* output a clusters as a single bed record */
+/* output a clusters as a single bed record, with blocks */
 {
 static struct bed bed;  /* bed buffer */
 static int capacity = 0;
@@ -816,7 +828,7 @@ bed.chromEnd = cluster->end;
 bed.blockCount = 0;
 safef(nameBuf, sizeof(nameBuf), "cl%d", cluster->id);
 bed.name = nameBuf;
-bed.strand[0] = strand;
+bed.strand[0] = ((strand == ignoredStrand) ? '+' : strand);
 bed.thickStart = cluster->start;
 bed.thickEnd = cluster->end;
 
@@ -843,12 +855,24 @@ bedTabOutN(&bed, 12, flatBedFh);
 bitFree(&map);
 }
 
+void outputBed(struct cluster *cluster, char strand, FILE *clBedFh)
+/* output bed should bounds of cluser */
+{
+fprintf(clBedFh, "%s\t%d\t%d\t%d",
+        cluster->chrom, cluster->start, cluster->end,
+        cluster->id);
+if (strand != ignoredStrand)
+    fprintf(clBedFh, "\t0\t%c", strand);
+fputc('\n', clBedFh);
+}
+
 void outputClusters(struct cluster *clusterList, char strand, FILE *outFh,
                     FILE *clBedFh, FILE *flatBedFh)
 /* output clusters */
 {
 struct cluster *cluster;
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
+    {
     if (cluster->id >= 0)
         {
         struct clusterGene *cg;
@@ -856,12 +880,11 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
             prGene(outFh, cluster, cg);
         ++totalClusterCount;
         if (clBedFh != NULL)
-            fprintf(clBedFh, "%s\t%d\t%d\t%d\t0\t%c\n",
-                    cluster->chrom, cluster->start, cluster->end,
-                    cluster->id, strand);
+            outputBed(cluster, strand, clBedFh);
         if (flatBedFh != NULL)
             outputFlatBed(cluster, strand, flatBedFh);
         }
+    }
 }
 
 void clusterGenesOnStrand(struct sqlConnection *conn, struct track* tracks,
@@ -933,8 +956,13 @@ if (optionExists("flatBed"))
 
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, tracks, chrom->name, '+', outFh, clBedFh, flatBedFh);
-    clusterGenesOnStrand(conn, tracks, chrom->name, '-', outFh, clBedFh, flatBedFh);
+    if (gIgnoreStrand)
+        clusterGenesOnStrand(conn, tracks, chrom->name, ignoredStrand, outFh, clBedFh, flatBedFh);
+    else 
+        {
+        clusterGenesOnStrand(conn, tracks, chrom->name, '+', outFh, clBedFh, flatBedFh);
+        clusterGenesOnStrand(conn, tracks, chrom->name, '-', outFh, clBedFh, flatBedFh);
+        }
     }
 carefulClose(&clBedFh);
 carefulClose(&flatBedFh);
@@ -949,7 +977,7 @@ gUseCds = optionExists("cds");
 gTrackNames = optionExists("trackNames");
 gJoinContained = optionExists("joinContained");
 gDetectConflicted = optionExists("conflicted");
-
+gIgnoreStrand = optionExists("ignoreStrand");
 if (!gTrackNames)
     {
     if (argc < 4)
