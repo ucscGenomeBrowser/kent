@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.19 2007/03/31 18:46:04 braney Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.20 2007/04/06 01:24:52 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -146,10 +146,12 @@ if (x2 > clip->x2) x2 = clip->x2;
 if (y2 > clip->y2) y2 = clip->y2;
 width = x2 - x;
 height = y2 - y;
-
-psWhOut(ps, width, height);
-psXyOut(ps, x, y+height);
-fprintf(ps->f, "fillBox\n");
+if (width > 0.0 && height > 0.0)
+    {
+    psWhOut(ps, width, height);
+    psXyOut(ps, x, y+height);
+    fprintf(ps->f, "fillBox\n");
+    }
 }
 
 void psDrawLine(struct psGfx *ps, double x1, double y1, double x2, double y2)
