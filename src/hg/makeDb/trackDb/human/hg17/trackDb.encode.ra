@@ -2183,6 +2183,7 @@ dataVersion May 2006
     priority 2
 
 track encodeNhgriDukeDnaseHs
+release beta
 compositeTrack on
 shortLabel Duke/NHGRI DNase
 longLabel Duke/NHGRI DNaseI-Hypersensitivity
@@ -2236,6 +2237,33 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     subGroups group=raw
     priority 4
 
+    track encodeNhgriDnaseHsChipRawH9
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase H9 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (H9, New Chip method)
+    color 255,0,0
+    dataVersion ENCODE Feb 2007
+    subGroups group=raw
+    priority 5
+   
+    track encodeNhgriDnaseHsChipRawImr90
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase IMR90 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (IMR990, New Chip method)
+    color 238,40,100
+    dataVersion ENCODE Feb 2007
+    subGroups group=raw
+    priority 6
+
+    track encodeNhgriDnaseHsChipRawK562
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase K562 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (K562, New Chip method)
+    color 204,102,0
+    dataVersion ENCODE Feb 2007
+    subGroups group=raw
+    priority 7
+
     track encodeNhgriDnaseHsChipPvalGm06990
     subTrack encodeNhgriDukeDnaseHs
     shortLabel DNase GM069 Pval
@@ -2244,7 +2272,7 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 +
     useScore 1
     color 80,50,80
-    priority 5
+    priority 8
     subGroups group=pval
     dataVersion Aug 2006
 
@@ -2256,7 +2284,7 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 +
     useScore 1
     color 120,10,120
-    priority 6
+    priority 9
     subGroups group=pval
     dataVersion Aug 2006
 
@@ -2268,7 +2296,7 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 +
     useScore 1
     color 180,12,140
-    priority 7
+    priority 10
     subGroups group=pval
     dataVersion Aug 2006
 
@@ -2280,9 +2308,45 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 +
     useScore 1
     color 240,12,132
-    priority 8
+    priority 11
     subGroups group=pval
     dataVersion Sept 2006
+
+    track encodeNhgriDnaseHsChipPvalH9
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase H9 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (H9, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 255,0,0 
+    priority 12
+    subGroups group=pval
+    dataVersion Feb 2007
+
+    track encodeNhgriDnaseHsChipPvalImr90
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase IMR90 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (IMR90, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 238,40,100
+    priority 13
+    subGroups group=pval
+    dataVersion Feb 2007
+
+    track encodeNhgriDnaseHsChipPvalK562
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase K562 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (K562, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 204,102,0
+    priority 14
+    subGroups group=pval
+    dataVersion Feb 2007
 
     track encodeNhgriDnaseHsChipGm06990
     subTrack encodeNhgriDukeDnaseHs off
@@ -2294,7 +2358,7 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 .
     useScore 1
     subGroups group=oldChip
-    priority 9
+    priority 15
 
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDukeDnaseHs off
@@ -2306,7 +2370,7 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 .
     useScore 1
     subGroups group=oldChip
-    priority 10
+    priority 16
 
     track encodeNhgriDnaseHsMpssCd4
     subTrack encodeNhgriDukeDnaseHs off
@@ -2318,7 +2382,7 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 .
     useScore 1
     subGroups group=mpss
-    priority 11
+    priority 17
 
     track encodeNhgriDnaseHsMpssCd4Act
     subTrack encodeNhgriDukeDnaseHs off
@@ -2329,7 +2393,221 @@ subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Ol
     type bed 5 .
     useScore 1
     subGroups group=mpss
+    priority 18
+
+track encodeNhgriDukeDnaseHs
+release alpha
+html encodeNhgriDukeDnaseHsFeb07
+compositeTrack on
+shortLabel Duke/NHGRI DNase
+longLabel Duke/NHGRI DNaseI-Hypersensitivity
+group encodeChrom
+priority 61.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -2.259
+maxLimit 4.243
+viewLimits 0:1
+windowingFunction mean
+autoScale Off
+dataVersion ENCODE June & Oct 2005 Freezes and August 2006
+subGroup1 group Group raw=New_DNase-chip_Raw pval=New_DNase-chip_Pval oldChip=Old_DNase-chip mpss=MPSS
+
+    track encodeNhgriDnaseHsChipRawGm06990
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase GM069 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (GM06990, New Chip method)
+    color 80,50,80
+    dataVersion ENCODE Oct 2005 Freeze
+    subGroups group=raw
+    priority 1
+
+    track encodeNhgriDnaseHsChipRawCd4
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase CD4 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (CD4+, New Chip method)
+    color 120,10,120
+    subGroups group=raw
+    dataVersion ENCODE Oct 2005 Freeze
+    priority 2
+
+    track encodeNhgriDnaseHsChipRawHela
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase HeLa Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HeLaS3, New Chip method)
+    color 180,12,140
+    dataVersion Aug 2006
+    subGroups group=raw
+    priority 3
+
+    track encodeNhgriDnaseHsChipRawHepG2
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase HepG2 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (HepG2, New Chip method)
+    color 240,12,132
+    dataVersion Sept 2006
+    subGroups group=raw
+    priority 4
+
+    track encodeNhgriDnaseHsChipRawH9
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase H9 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (H9, New Chip method)
+    color 255,0,0
+    dataVersion ENCODE Feb 2007
+    subGroups group=raw
+    priority 5
+   
+    track encodeNhgriDnaseHsChipRawImr90
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase IMR90 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (IMR990, New Chip method)
+    color 238,40,100
+    dataVersion ENCODE Feb 2007
+    subGroups group=raw
+    priority 6
+
+    track encodeNhgriDnaseHsChipRawK562
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase K562 Raw
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity Raw (K562, New Chip method)
+    color 204,102,0
+    dataVersion ENCODE Feb 2007
+    subGroups group=raw
+    priority 7
+
+    track encodeNhgriDnaseHsChipPvalGm06990
+    subTrack encodeNhgriDukeDnaseHs
+    shortLabel DNase GM069 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (GM06990, New Chip method)
+    noInherit on
+    type bed 5 +
+    useScore 1
+    color 80,50,80
+    priority 8
+    subGroups group=pval
+    dataVersion Aug 2006
+
+    track encodeNhgriDnaseHsChipPvalCd4
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase CD4 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (CD4+, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 120,10,120
+    priority 9
+    subGroups group=pval
+    dataVersion Aug 2006
+
+    track encodeNhgriDnaseHsChipPvalHela
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase HeLa Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HeLaS3, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 180,12,140
+    priority 10
+    subGroups group=pval
+    dataVersion Aug 2006
+
+    track encodeNhgriDnaseHsChipPvalHepG2
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase HepG2 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (HepG2, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 240,12,132
+    priority 11
+    subGroups group=pval
+    dataVersion Sept 2006
+
+    track encodeNhgriDnaseHsChipPvalH9
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase H9 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (H9, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 255,0,0 
     priority 12
+    subGroups group=pval
+    dataVersion Feb 2007
+
+    track encodeNhgriDnaseHsChipPvalImr90
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase IMR90 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (IMR90, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 238,40,100
+    priority 13
+    subGroups group=pval
+    dataVersion Feb 2007
+
+    track encodeNhgriDnaseHsChipPvalK562
+    subTrack encodeNhgriDukeDnaseHs
+    noInherit on
+    shortLabel DNase K562 Pval
+    longLabel Duke/NHGRI DNaseI-Hypersensitivity P-Value (K562, New Chip method)
+    type bed 5 +
+    useScore 1
+    color 204,102,0
+    priority 14
+    subGroups group=pval
+    dataVersion Feb 2007
+
+    track encodeNhgriDnaseHsChipGm06990
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase GM069 Chip
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (GM06990, Old Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
+    color 80,50,80
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=oldChip
+    priority 15
+
+    track encodeNhgriDnaseHsChipCd4
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4 Chip
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Old Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
+    color 120,10,120
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=oldChip
+    priority 16
+
+    track encodeNhgriDnaseHsMpssCd4
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4 MS
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
+    color 120,10,120
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=mpss
+    priority 17
+
+    track encodeNhgriDnaseHsMpssCd4Act
+    subTrack encodeNhgriDukeDnaseHs off
+    shortLabel DNase CD4-act MS
+    longLabel Duke/NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
+    noInherit on
+    type bed 5 .
+    useScore 1
+    subGroups group=mpss
+    priority 18
 
 track encodeTbaAlign
 shortLabel TBA Alignment
