@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.194 2007/04/04 22:15:37 heather Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.195 2007/04/06 19:46:39 heather Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2363,7 +2363,6 @@ char range[HGPOSRANGESIZE];
 char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
-char *parent = NULL;
 
 if (useWeb)
     webStart(cart, "Select Position");
@@ -2371,8 +2370,7 @@ if (useWeb)
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
     char *vis = hTrackOpenVis(table->name);
-    boolean isSubtrack = hTrackIsSubtrack(table->name);
-    if (isSubtrack) parent = hGetParent(table->name);
+    char *parent = hGetParent(table->name);
     if (table->posList != NULL)
 	{
 	boolean excludeTable = FALSE;
@@ -2394,7 +2392,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
 		fprintf(f, "%s&", extraCgi);
-		if (isSubtrack && parent)
+		if (parent)
 		    fprintf(f, "%s=%s&", parent, vis);
 		else
 		    fprintf(f, "%s=%s&", table->name, vis);
