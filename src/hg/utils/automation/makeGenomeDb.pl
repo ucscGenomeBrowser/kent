@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/makeGenomeDb.pl instead.
 
-# $Id: makeGenomeDb.pl,v 1.4 2007/02/28 23:42:21 angie Exp $
+# $Id: makeGenomeDb.pl,v 1.5 2007/04/06 04:24:56 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -290,7 +290,7 @@ if (`grep '^>' $mitoFile | wc -l` != 1) then
 endif
 
 # Make sure what we got is of about the right size:
-set mSize = `faSize $mitoFile | awk '{print \$1;}'`
+set mSize = `faSize $mitoFile | grep bases | awk '{print \$1;}'`
 if (\$mSize < 10000 || \$mSize > 25000) then
   echo "getMito: $mitoFile"
   echo "         fasta size \$mSize is out of expected range [10000, 25000]"
