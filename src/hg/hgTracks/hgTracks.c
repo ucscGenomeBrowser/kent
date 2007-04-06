@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1306 2007/04/05 05:34:25 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1307 2007/04/06 03:48:14 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4762,6 +4762,9 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+struct dyString *dy = dyStringNew(256);
+struct dyString *dy2 = dyStringNew(256);
+char *infoTable = NULL, *infoCol = NULL;
 
 /* If vegaInfo is available, use it to determine the color:
  *  Known - black
@@ -4769,26 +4772,53 @@ char query[256];
  *  {Putative,Ig_Segment} - medium blue
  *  {Predicted_gene,Pseudogene,Ig_Pseudogene_Segment} - light blue
  *  None of the above - gray
- * If no vegaGene, color it normally. 
+ * If no vegaInfo, color it normally. 
+ * For Zebrafish, the info table is called vegaInfoZfish and the 
+ * categories are now different in zebrafish and in human from hg17 onwards.
+ * KNOWN - black
+ * NOVEL - dark blue
+ * PUTATIVE - medium blue
+ * PREDICTED - light blue
+ * others e.g. UNCLASSIFIED will be gray.
  */
+
 if (hTableExists("vegaInfo"))
+    dyStringPrintf(dy, "%s", "vegaInfo");
+else if (sameWord(organism, "Zebrafish") && hTableExists("vegaInfoZfish"))
+    dyStringPrintf(dy, "%s", "vegaInfoZfish");
+if (dy != NULL)
+    infoTable = dyStringCannibalize(&dy);
+
+/* for hg15 and hg16 coloring is based on entries in the confidence column */
+if (sameString(database, "hg15") || sameString(database, "hg16"))
+    dyStringPrintf(dy2, "%s", "method");
+/* for other databases, coloring is based on entries in the method column */
+else
+    dyStringPrintf(dy2, "%s", "confidence");
+if (dy2 != NULL)
+    infoCol = dyStringCannibalize(&dy2);
+
+if (infoTable != NULL && infoCol != NULL)
     {
-    sprintf(query, "select method from vegaInfo where transcriptId = '%s'",
-	    lf->name);
+    sprintf(query, "select %s from %s where transcriptId = '%s'",
+	    infoCol, infoTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
-	if (sameWord("Known", row[0]))
+	if (sameWord("Known", row[0]) ||
+            sameWord("KNOWN", row[0]))
 	    {
 	    col = blackIndex();
 	    }
 	else if (sameWord("Novel_CDS", row[0]) ||
-		 sameWord("Novel_Transcript", row[0]))
+		 sameWord("Novel_Transcript", row[0]) ||
+                 sameWord("NOVEL", row[0]))
 	    {
 	    /* Use the usual color (dark blue) */
 	    }
 	else if (sameWord("Putative", row[0]) ||
-		 sameWord("Ig_Segment", row[0]))
+		 sameWord("Ig_Segment", row[0]) || 
+                 sameWord("PUTATIVE", row[0]))
 	    {
 	    lighter.r = (6*normal->r + 4*255) / 10;
 	    lighter.g = (6*normal->g + 4*255) / 10;
@@ -4797,7 +4827,8 @@ if (hTableExists("vegaInfo"))
 	    }
 	else if (sameWord("Predicted_gene", row[0]) ||
 		 sameWord("Pseudogene", row[0]) ||
-		 sameWord("Ig_Pseudogene_Segment", row[0]))
+		 sameWord("Ig_Pseudogene_Segment", row[0]) ||
+                 sameWord("PREDICTED", row[0]))
 	    {
 	    lightest.r = (1*normal->r + 2*255) / 3;
 	    lightest.g = (1*normal->g + 2*255) / 3;
