@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1307 2007/04/06 03:48:14 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1308 2007/04/06 22:21:09 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -12924,6 +12924,7 @@ registerTrackHandler("vegaGeneZfish", vegaMethods);
 registerTrackHandler("pseudoGeneLink", retroGeneMethods);
 registerTrackHandler("pseudoGeneLink2", retroGeneMethods);
 registerTrackHandler("retroMrnaInfo", retroGeneMethods);
+registerTrackHandler("retroMrnaInfo2", retroGeneMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);
