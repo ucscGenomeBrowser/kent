@@ -203,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1262 2007/04/06 21:31:57 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1263 2007/04/06 23:39:24 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -18979,6 +18979,7 @@ else if (sameString("hapmapAllelesChimp", track) ||
     }
 else if (sameString("snpArrayAffy250Nsp", track) ||
          sameString("snpArrayAffy250Sty", track) ||
+         sameString("snpArrayAffyGenomeWide", track) ||
          sameString("snpArrayAffy10", track) ||
          sameString("snpArrayAffy10v2", track) ||
          sameString("snpArrayAffy50HindIII", track) ||

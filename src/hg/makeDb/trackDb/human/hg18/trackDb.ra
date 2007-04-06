@@ -1257,12 +1257,19 @@ type bed 4 .
     type bed 6 +
     priority 1
 
+    track snpArrayAffyGenomeWide
+    subTrack snpArray
+    shortLabel Affy SNP 5.0
+    longLabel Affymetrix SNP 5.0 
+    type bed 6 +
+    priority 2
+
     track snpArrayIllumina300
     subTrack snpArray
     shortLabel Illumina 300K
     longLabel Illumina HumanHap300 BeadChip
     type bed 4 .
-    priority 2
+    priority 3
 
 searchName illumina
 searchTable snpArrayIllumina300
