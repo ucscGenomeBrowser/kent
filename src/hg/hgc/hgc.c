@@ -203,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1261 2007/04/05 05:34:59 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1262 2007/04/06 21:31:57 hartera Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -8736,6 +8736,8 @@ if (vif != NULL)
     }
 geneShowCommon(name, tdb, "vegaPep");
 printTrackHtml(tdb);
+/* free the vegaInfoZfish struct */
+vegaInfoZfishFree(&vif);
 }
 
 void doVegaGene(struct trackDb *tdb, char *geneName)
