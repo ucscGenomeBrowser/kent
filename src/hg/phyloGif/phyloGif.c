@@ -66,7 +66,7 @@
 #include "errabort.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.14 2006/11/06 23:37:24 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.15 2007/04/06 19:20:14 baertsch Exp $";
 
 struct cart *cart=NULL;      /* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -79,6 +79,7 @@ boolean branchLabels = FALSE;   /* labelled branch lengths */
 boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
 boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
 int branchDecimals = 2;         /* show branch label length to two decimals by default */
+int branchMultiplier = 1;         /* multiply branch length by factor */
 char *escapePattern = NULL;      /* use to escape dash '-' char in input */
 char layoutErrMsg[1024] = "";
 
@@ -112,9 +113,10 @@ errAbort(
     "  -phyloGif_branchLabels - show length of branch as label\n"
     "     (used with -phyloGif_branchLengths)\n"
     "  -phyloGif_branchDecimals=N - show length of branch to N decimals, default %d\n"
+    "  -phyloGif_branchMultiplier=N - multiply branch length by N default %d\n"
     "  -phyloGif_htmlPage - wrap the output in an html page (cgi only)\n"
     "  -phyloGif_underscores - preserve underscores in input as spaces in output\n"
-    , msg, width, height, branchDecimals);
+    , msg, width, height, branchDecimals, branchMultiplier);
 }
 
 struct phyloLayout
@@ -288,7 +290,7 @@ if (branchLabels)
 	char patt[16];
 	char label[256];
 	safef(patt,sizeof(patt),"%%%d.%df",branchDecimals+2,branchDecimals);
-	safef(label,sizeof(label),patt,phyloTree->ident->length);  /* was %6.4f */
+	safef(label,sizeof(label),patt,(phyloTree->ident->length)*branchMultiplier);  /* was %6.4f */
     	mgTextCentered(mg, MARGIN+(this->hPos-phyloTree->ident->length)*minMaxFactor, v+(fHeight/2)*(isRightEdge?1:-1), 
 	    phyloTree->ident->length*minMaxFactor, fHeight, MG_BLACK, font, label);
 	}
@@ -369,6 +371,7 @@ if (useCart)
     lengthLegend = cartVarExists(cart,"phyloGif_lengthLegend");
     branchLabels = cartVarExists(cart,"phyloGif_branchLabels");
     branchDecimals = cartUsualInt(cart,"phyloGif_branchDecimals", branchDecimals);
+    branchMultiplier = cartUsualInt(cart,"phyloGif_branchMultiplier", branchMultiplier);
     preserveUnderscores = cartVarExists(cart,"phyloGif_underscores");
     }
 else
@@ -380,6 +383,7 @@ else
     lengthLegend = cgiVarExists("phyloGif_lengthLegend");
     branchLabels = cgiVarExists("phyloGif_branchLabels");
     branchDecimals = cgiUsualInt("phyloGif_branchDecimals", branchDecimals);
+    branchMultiplier = cartUsualInt(cart,"phyloGif_branchMultiplier", branchMultiplier);
     preserveUnderscores = cgiVarExists("phyloGif_underscores");
     }
     
@@ -399,6 +403,7 @@ if (useCart)
 	puts("<tr><td>&nbsp; Show length ruler?</td><td>"); cartMakeCheckBox(cart, "phyloGif_lengthLegend", lengthLegend); puts("</td></tr>");
 	puts("<tr><td>&nbsp; Show length values?</td><td>"); cartMakeCheckBox(cart, "phyloGif_branchLabels", branchLabels); puts("</td></tr>");
 	puts("<tr><td>&nbsp; How many decimal places?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchDecimals", branchDecimals,1); puts("</td></tr>");
+	puts("<tr><td>&nbsp; Multiply branch length by factor?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchMultiplier", branchMultiplier,5); puts("</td></tr>");
 	puts("<tr><td>Preserve Underscores?</td><td>"); cartMakeCheckBox(cart, "phyloGif_underscores", preserveUnderscores); puts("</td></tr>");
 	puts("<tr><td>Wrap in html page?</td><td>"); cartMakeCheckBox(cart, "phyloGif_htmlPage", htmlPageWrapper); puts("</td></tr>");
 
@@ -513,6 +518,7 @@ if (htmlPageWrapper)
     if (branchLabels)
 	printf("&phyloGif_branchLabels=1");
     printf("&phyloGif_branchDecimals=%d",branchDecimals);
+    printf("&phyloGif_branchMultipliers=%d",branchMultiplier);
     if (preserveUnderscores)
 	printf("&phyloGif_underscores=1");
     puts("\"></body></html>");
@@ -670,7 +676,9 @@ if (phyloTree)
 		{
 		int y = mgFontCharWidth(font,'0');
 		y += 0.5*mgFontCharWidth(font,'.');
-		safef(out,sizeof(out),"%3.2f",i/10.0);
+		safef(out,sizeof(out),"%3.2f",branchMultiplier*i/10.0);
+                if (branchMultiplier > 10)
+                    safef(out,sizeof(out),"%3.0f",branchMultiplier*i/10.0);
     		mgText(mg, MARGIN+x-y, height+fHeight, MG_BLACK, font, out);
 		dh=fHeight/2;
 		}
