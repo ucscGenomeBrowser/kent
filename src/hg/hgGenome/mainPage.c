@@ -29,7 +29,7 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.16 2007/03/23 03:15:09 galt Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.17 2007/04/06 21:21:21 galt Exp $";
 
 
 static char *allColors[] = {
@@ -298,13 +298,10 @@ for (i=0; i<graphRows; ++i)
     yOffset += oneRowHeight;
     }
 
-if (!psOutput)  /* not needed for postscript output */
-    {
-    vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
-    vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
-    vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
-    vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
-    }
+vgBox(vg, 0, 0, gl->picWidth, 1, MG_GRAY);
+vgBox(vg, 0, gl->picHeight-1, gl->picWidth, 1, MG_GRAY);
+vgBox(vg, 0, 0, 1, gl->picHeight, MG_GRAY);
+vgBox(vg, gl->picWidth-1, 0, 1, gl->picHeight, MG_GRAY);
 vgClose(&vg);
 }
 
