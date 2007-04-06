@@ -394,7 +394,7 @@ visibility hide
 color 50,70,120
 type bed 5 +
 useScore 1
-url http://enhancer-test.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
+url http://enhancer.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
 
 track humMusL 
 shortLabel Mouse Cons
