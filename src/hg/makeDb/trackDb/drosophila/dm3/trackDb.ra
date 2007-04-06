@@ -1,3 +1,21 @@
+track cytoBandIdeo
+shortLabel Chromosome Band (Low-res)
+longLabel Chromosome Bands (Low-resolution for Chromosome Ideogram)
+group map
+priority .1
+visibility dense
+altColor 200,150,150
+type bed 4 +
+
+track cytoBand
+shortLabel Chromosome Band
+longLabel Chromosome Bands
+group map
+priority .1
+visibility hide
+altColor 200,150,150
+type bed 4 +
+
 track bacEndPairs
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
@@ -7,6 +25,29 @@ visibility hide
 type bed 6 +
 exonArrows off
 notNCBI .
+
+track flyBaseGene
+shortLabel FlyBase Genes
+longLabel FlyBase Protein-Coding Genes
+group genes
+priority 34
+hgGene on
+hgsid on
+directUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+visibility pack
+color 0,100,180
+type genePred flyBasePep
+symbolTable flyBase2004Xref
+
+track flyBaseNoncoding
+shortLabel FB Noncoding
+longLabel FlyBase Noncoding Genes
+group genes
+priority 35
+visibility pack
+color 30,130,210
+type bed 12 .
+symbolTable flyBase2004Xref
 
 track flyBaseLiftGene
 shortLabel FlyBase 4.2 Genes
