@@ -1,0 +1,7 @@
+# Drosophila-specific sections.
+
+name bdgpExprInSitu
+shortLabel In Situs
+longLabel BDGP Expression In Situ Images
+priority 104
+
