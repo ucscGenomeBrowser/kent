@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.28 2007/03/05 01:41:21 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.29 2007/04/06 01:19:20 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -149,12 +149,13 @@ if (sameString(link->name, "protBrowser"))
     }
 if (sameString(link->name, "tbSchema"))
     {
-    struct trackDb *tdb = hTrackDbForTrack("knownGene");
+    char *geneTable = genomeSetting("knownGene");
+    struct trackDb *tdb = hTrackDbForTrack(geneTable);
     struct dyString *dy = NULL;
     if (tdb == NULL)
 	return NULL;
     dy = newDyString(256);
-    dyStringPrintf(dy, link->url, tdb->grp, curGeneType, curGeneType);
+    dyStringPrintf(dy, link->url, tdb->grp, geneTable, geneTable);
     trackDbFree(&tdb);
     addLinkExtras(link, dy);
     return dyStringCannibalize(&dy);

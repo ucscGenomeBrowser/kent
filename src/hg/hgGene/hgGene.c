@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.93 2007/04/04 21:11:21 kuhn Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.94 2007/04/06 01:19:20 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -29,7 +29,6 @@ char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
-char *curGeneType;		/* Type of gene track */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 int  kgVersion = KG_UNKNOWN;	/* KG version */
@@ -784,7 +783,7 @@ void doKgMethod(struct sqlConnection *conn)
 	{
         tdb = hTrackDbForTrack("ensGene");
 	}
-    tdb2 = hTrackDbForTrack(curGeneType);
+    tdb2 = hTrackDbForTrack(genomeSetting("knownGene"));
     hPrintf("%s", tdb2->html);
 
     cartWebEnd();
@@ -804,11 +803,6 @@ if (hTableExists("kgProtMap2")) kgVersion = KG_III;
 
 conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
-curGeneType = cgiOptionalString(hggType);
-if (curGeneType == NULL) 
-    {
-    curGeneType = cloneString("knownGene");
-    }
 getGenomeSettings();
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
