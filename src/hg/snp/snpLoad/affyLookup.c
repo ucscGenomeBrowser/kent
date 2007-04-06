@@ -3,7 +3,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyLookup.c,v 1.3 2006/09/19 20:47:35 heather Exp $";
+static char const rcsid[] = "$Id: affyLookup.c,v 1.4 2007/04/06 22:57:44 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;
@@ -89,7 +89,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (elList == NULL)
         {
 	missCount++;
-        fprintf(errorFileHandle, "Missing rsId for affy SNP %s\n", row[2]);
+        fprintf(errorFileHandle, "Missing rsId for affy SNP %s at %s:%s-%s\n", row[2], chromName, row[0], row[1]);
         fprintf(outputFileHandle, "%s\t%s\t%s\t", chromName, row[0], row[1]);
         fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t", row[2], row[3], row[4], row[5]);
         fprintf(outputFileHandle, "%s\n", "unknown");
@@ -103,7 +103,7 @@ while ((row = sqlNextRow(sr)) != NULL)
      if (elList->next != NULL)
         {
 	multipleCount++;
-        fprintf(errorFileHandle, "Multiple rsIds for affy SNP %s\n", row[4]);
+        fprintf(errorFileHandle, "Multiple rsIds for affy SNP %s at %s:%s-%s\n", row[2], chromName, row[0], row[1]);
 	}
     }
 hFreeConn(&conn);
