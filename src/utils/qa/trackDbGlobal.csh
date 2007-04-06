@@ -60,7 +60,6 @@ set dbs=`getAssemblies.csh chromInfo hgwbeta \
 # set file paths and URLs
 set today=`date +%Y-%m-%d`
 # set today="2005-01-23"
-# set today="2005-01-23"
 set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
 mkdir -p $dirPath/$today
@@ -81,19 +80,12 @@ foreach db ( $dbs )
   set active=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
      WHERE name = "'$db'"' hgcentral`
   if ( 0 == $active ) then
-    # getTableStatus no longer works for active=0 dbs since
-    #   using wget on hgTables
-    # get number of tables (chromInfo +/- trackDb, hgFindSpec if archived)
-    # set archived=`getTableStatus.csh $db $machine | wc -l`
-    # if ( $status ) then
-    #  echo "\nproblem with $db"
-    #  echo "getTableStatus.csh failed\n"
-    # endif
-    # if ( 3 == $archived || 1 == $archived ) then
+    set comment="staged"
+    set archived=`hgsql -h genome-centdb -N -e 'SELECT active FROM dbDb \
+       WHERE name = "'$db'"' hgcentarchive`
+    if ( 1 == $archived ) then
       set comment="archived"
-    # else
-    #   set comment="RRactive=0"
-    # endif
+    endif
     echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}'
     echo
     echo $db $comment | gawk '{printf "%7s %-10s", $1, $2}' >> $summaryFile
