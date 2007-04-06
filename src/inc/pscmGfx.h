@@ -39,7 +39,7 @@ void pscmUnclip(struct pscmGfx *pscm);
 int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b);
 /* Find color index for rgb. */
 
-static void pscmVerticalSmear(struct pscmGfx *pscm,
+void pscmVerticalSmear(struct pscmGfx *pscm,
 	int xOff, int yOff, int width, int height, 
 	Color *dots, boolean zeroClear);
 /* Put a series of one 'pixel' width vertical lines. */
