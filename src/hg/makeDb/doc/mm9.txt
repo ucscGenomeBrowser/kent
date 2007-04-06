@@ -1,0 +1,106 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# This file describes browser build for the mouse
+# genome, April 2007, ncbi mouse_37 - Mm9
+#
+#	"$Id: mm9.txt,v 1.1 2007/04/06 05:13:59 hiram Exp $"
+#
+
+#######################################################################
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2007-04-05 - Hiram)
+#
+#	Examine disk space issues, find some goodly amount of space
+    ssh kkstore02
+    mkdir /cluster/store5/mm9
+    ln -s /cluster/store5/mm9 /cluster/data/mm9
+    cd /cluster/data/mm9
+    mkdir ncbi
+    cd ncbi
+    cp -p /cluster/data/mm8/ncbi/.wgetrc .
+    WGETRC=`pwd`/.wgetrc
+    export WGETRC
+    ## After testing with the pre-release below, the real thing
+
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=4 --no-parent \
+	--no-host-directories --cut-dirs=1 \
+	ftp://ftp-private.ncbi.nih.gov/mouse_37
+    #	Downloaded: 2,201,934,141 bytes in 50 files
+    #	real    44m48.975s
+
+    #	The pre-release sequence, April 5th:
+    mkdir /cluster/data/mm9/pre_release
+    cd /cluster/data/mm9/pre_release
+    #	The .wgetrc is the anonymous user
+    cat << '_EOF_' > .wgetrc
+login = anonymous
+passwd = <your email address>
+'_EOF_'
+    chmod 600 .wgetrc
+    WGETRC=`pwd`/.wgetrc
+    export WGETRC
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=4 --no-parent \
+	--no-host-directories --cut-dirs=3 \
+	ftp://ftp.ncbi.nih.gov/genomes/M_musculus/pre_release
+    ##	Ran a quick test build with that to see if it would work
+
+    mkdir chrNamesFixed
+    for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y
+do
+    zcat chrfasta/chr${C}.fa.gz | sed -e "s/^>lcl|/>/; s/.fa.*//" \
+	| gzip -c > chrNamesFixed/chr${C}.fa.gz
+    echo chr${C} done
+done
+
+##########################################################################
+## Initial makeGenomeDb.pl (DONE - 2007-04-05 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/mm9
+    cat << '_EOF_' > mm9.config.ra
+# Config parameters for makeGenomeDb.pl:
+db mm9
+scientificName Mus musculus
+commonName Mouse
+assemblyDate Apr. 2007
+assemblyLabel NCBI Build 37
+orderKey 121
+mitoAcc 33115104
+fastaFiles /cluster/data/mm9/pre_release/chrNamesFixed/chr*.fa.gz
+agpFiles /cluster/data/mm9/pre_release/chrOnly.agp
+# qualFiles /dev/null
+dbDbSpeciesDir mouse
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 makeGenomeDb.pl mm9.config.ra > makeGenomeDb.out 2>&1 &
+    #	real    24m24.468s
+
+##########################################################################
+## Repeat masker (DONE - 2007-04-05 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/mm9/bed/RepeatMasker
+    cd /cluster/data/mm9/bed/RepeatMasker
+    time nice -n +19 doRepeatMasker.pl -bigClusterHub=kk \
+	-buildDir=/cluster/data/mm9/bed/RepeatMasker mm9 > do.out 2>&1 &
+XXX - running - 2007-04-05 22:10
+
+##############################################################################
+## simpleRepeat masking (DONE - 2007-04-05 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/mm9/bed/simpleRepeat
+    cd /cluster/data/mm9/bed/simpleRepeat
+    nice -n +19 twoBitToFa ../../mm9.unmasked.2bit stdout \
+	| trfBig -trf=/cluster/bin/i386/trf stdin /dev/null \
+		-bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
+XXX - running - 2007-04-05 22:13
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+    ssh hgwdev
+    cd /cluster/data/mm9/bed/simpleRepeat
+    nice -n +19 hgLoadBed mm9 simpleRepeat \
+      simpleRepeat.bed -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    featureBits mm9 simpleRepeat
+    #	4938308 bases of 175247318 (2.818%) in intersection
+
