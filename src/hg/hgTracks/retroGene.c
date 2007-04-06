@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.10 2007/03/03 21:35:16 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.11 2007/04/06 22:21:40 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct retroMrnaInfo *pg)
 /* Return a linked feature from a retroGene. */
@@ -33,6 +33,7 @@ lf->components = sfList;
 linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = pg->thickStart;
 lf->tallEnd = pg->thickEnd;
+lf->extra = pg;
 return lf;
 }
 void lfRetroGene(struct track *tg)
@@ -70,6 +71,7 @@ for (pg = list; pg != NULL; pg = pg->next)
 tg->items = lfList;
 }
 
+#ifdef junk
 void lookupRetroNames(struct track *tg)
 /* This converts the accession to a gene name where possible. */
 {
@@ -98,66 +100,16 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     /* prepend retro- to parent gene name */
     dyStringAppend(name, "retro-");
     /* lookup name using knowngene method */
-    if ((useGeneName) && hTableExists("refLink") && hTableExists("knownGeneLink"))
+    if ((useGeneName) && hTableExists("kgXref") )
         {
         char *gene = NULL;
         char cond_str[256];
-        char *seqType;
-        char *refSeqName;
-        char *proteinID;
-        char *hugoID;
-        sprintf(cond_str, "name='%s' and seqType='g'", geneName);
-        seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
+        char *geneSymbol;
+        safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+        geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
 
-        if (seqType != NULL)
-            {
-	    // special processing for RefSeq DNA based genes
-    	    sprintf(cond_str, "mrnaAcc = '%s'", geneName);
-    	    refSeqName = sqlGetField(conn, database, "refLink", "name", cond_str);
-	    if (refSeqName != NULL)
-		{
-		gene = cloneString(refSeqName);
-		}
-	    }
-	else if (protDbName != NULL)
-	    {
-	    sprintf(cond_str, "mrnaID='%s'", geneName);
-	    proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
- 
-            sprintf(cond_str, "displayID = '%s'", proteinID);
-	    hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
-	    if (!((hugoID == NULL) || (*hugoID == '\0')) )
-		{
-		gene = cloneString(hugoID);
-		}
-	    else
-	    	{
-                char query[256];
-                struct sqlResult *sr;
-                char **row;
-	    	sprintf(query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
-		        database, geneName);
-
-	    	sr = sqlGetResult(conn, query);
-	    	row = sqlNextRow(sr);
-	    	if (row != NULL)
-    	    	    {
-    	    	    sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
-    	    	    sqlFreeResult(&sr);
-    	    	    sr = sqlGetResult(conn, query); 
-    	    	    if ((row = sqlNextRow(sr)) != NULL)
-        	    	{
-                        if (strlen(row[0]) > 0)
-                            gene = cloneString(row[0]);
-		    	}
-            	    sqlFreeResult(&sr);
-	    	    }
-	    	else
-            	    {
-	    	    sqlFreeResult(&sr);
-	    	    }
-	    	}
-	    }
+        if (geneSymbol != NULL)
+            gene = cloneString(geneSymbol);
         if (gene != NULL)
             {
             dyStringAppend(name, gene);
@@ -165,14 +117,27 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
                 dyStringAppendC(name, '/');
             }
         else
+            {
+            if (hTableExists("refLink"))
+                {
+                safef(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", lf->name);
+                geneSymbol = sqlGetField(conn, database, "refLink", "name", cond_str);
+                if (geneSymbol != NULL)
+                    gene = cloneString(geneSymbol);
+                }
+            }
+        if (gene != NULL)
+            dyStringAppend(name, gene);
+        else
             dyStringAppend(name, geneName);
         }
     if (useAcc)
         dyStringAppend(name, geneName);
-    lf->extra = dyStringCannibalize(&name);
+    //lf->extra = dyStringCannibalize(&name);
     }
 hFreeConn(&conn);
 }
+#endif
 
 void loadRetroGene(struct track *tg)
 /* Load up RetroGenes. */
@@ -181,7 +146,6 @@ enum trackVisibility vis = tg->visibility;
 lfRetroGene(tg);
 if (vis != tvDense)
     {
-    lookupRetroNames(tg);
     slSort(&tg->items, linkedFeaturesCmpStart);
     }
 vis = limitVisibility(tg);
@@ -193,11 +157,71 @@ Color retroGeneColor(struct track *tg, void *item, struct vGfx *vg)
 return vgFindColorIx(vg, CHROM_20_R, CHROM_20_G, CHROM_20_B);
 }
 
+char *retroName(struct track *tg, void *item)
+/* Get name to use for retroGene item. */
+{
+struct linkedFeatures *lf = item;
+boolean isNative = sameString(tg->mapName, "pseudoGeneLink") ;
+boolean isRetroNative = sameString(tg->mapName, "retroMrnaInfo");
+char *refGeneLabel = cartUsualString(cart, (isNative ? "pseudoGeneLink.label" : (isRetroNative ? "retroMrnaInfo.label" : "xenoRefGene.label")), "gene") ;
+boolean useGeneName = sameString(refGeneLabel, "gene")
+    || sameString(refGeneLabel, "both");
+boolean useAcc = sameString(refGeneLabel, "accession")
+    || sameString(refGeneLabel, "both");
+struct dyString *name = dyStringNew(64);
+if  (useAcc || useGeneName)
+    dyStringAppend(name, "retro-");
+char *geneSymbol = NULL;
+if (lf->extra != NULL) 
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct retroMrnaInfo *r = lf->extra;
+    char cond_str[512];
+    if (r != NULL)
+        {
+        if ((useGeneName) && hTableExists("kgXref") )
+            {
+            char *gene = NULL;
+            char cond_str[256];
+            char *geneSymbol;
+            safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+            geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+
+            if (geneSymbol != NULL)
+                gene = cloneString(geneSymbol);
+            if (gene != NULL)
+                {
+                dyStringAppend(name, gene);
+                if (useAcc)
+                    dyStringAppendC(name, '/');
+                }
+            }
+        if ((useGeneName) && hTableExists("refLink") )
+            {
+            safef(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
+            geneSymbol = sqlGetField(conn, database, "refLink", "name", cond_str);
+            if (geneSymbol != NULL)
+                {
+                dyStringAppend(name, geneSymbol);
+                if (useAcc)
+                    dyStringAppendC(name, '/');
+                }
+            }
+        }
+    hFreeConn(&conn);
+    }
+if ((useGeneName) && geneSymbol == NULL)
+    dyStringAppend(name, lf->name);
+if (useAcc)
+    dyStringAppend(name, lf->name);
+return dyStringCannibalize(&name);
+}
+
 void retroGeneMethods(struct track *tg)
 /* Make track of retroGenes from bed */
 {
 tg->loadItems = loadRetroGene;
-tg->itemName = refGeneName;
+tg->itemName = retroName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = retroGeneColor;
 tg->exonArrows = TRUE;
