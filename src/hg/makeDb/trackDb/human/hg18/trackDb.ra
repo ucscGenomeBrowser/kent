@@ -1250,17 +1250,17 @@ priority 101
 visibility hide
 type bed 4 .
 
-    track snpArrayAffy500
-    subTrack snpArray
-    shortLabel Affy 500K
-    longLabel Affymetrix GeneChip Human Mapping 500K 
-    type bed 6 +
-    priority 1
-
     track snpArrayAffyGenomeWide
     subTrack snpArray
     shortLabel Affy SNP 5.0
     longLabel Affymetrix SNP 5.0 
+    type bed 6 +
+    priority 1
+
+    track snpArrayAffy500
+    subTrack snpArray
+    shortLabel Affy 500K
+    longLabel Affymetrix GeneChip Human Mapping 500K 
     type bed 6 +
     priority 2
 
