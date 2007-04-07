@@ -10423,7 +10423,7 @@ mv rs_chUn.fas.gz unarchive
 cat << '_EOF_' > concat.csh
 #!/bin/csh -ef
 rm -f rsAll.fas
-foreach file (rs_ch*.fas)
+foreach file (rs_ch*.fas.gz)
     echo $file
     zcat $file >> rsAll.fas
 end
@@ -10480,6 +10480,7 @@ cp /cluster/data/dbSNP/126/human/rs_fasta/*.gnl .
 # examine ContigInfo for group_term and edit pipeline.csh
 # use "ref_assembly" 
 
+cd /scratch/snp/126/human
 # filter ContigLoc into ContigLocFilter
 # this lifts from contig coords to chrom coords
 # phys_pos_from is used to check coords for non-random chroms
@@ -11274,6 +11275,36 @@ hgLoadBed hg18 snpArrayIllumina300 illumina.bed -sqlTable=snpArrayIllumina300.sq
 # cleanup
 rm hg17.data hg17.data.sort hg18.data.sort bed.tab join.out
 gzip illumina.bed
+
+##########################################################################
+# New SNP Array data (Heather April 2006)
+# Affymetrix introduced a new genotyping array in February
+# I got the data from Venu in April
+# It is based on dbSNP build 126
+# Venu reviewed the load
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/snp/affy
+    # There were 60 lines with no chrom, chromEnd or strand
+    grep -v NULL GenomeWideSNP_5_ucsc.tsv > genomewide.in
+    # little Perl script to add chromEnd & score for bed format
+    genomewide.pl < genomewide.id > genomewide.bed
+    # preliminary load
+    hgLoadBed hg18 snpArrayAffyGenomeWidePrelim genomewide.bed -tab -sqlTable=snpArrayAffyGenomeWidePrelim.sql
+    # based on position, lookup rsId
+    # 2 runs
+    # first run: don't include dbSNP if class != single or locType != exact or
+    # chromEnd != chromStart + 1
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg18 snpArrayAffyGenomeWidePrelim snp126
+    # missing count = 5279
+    # multiple count = 44
+    # second run: use all of snp126
+    /cluster/home/heather/kent/src/hg/snp/snpLoad/affyLookup hg18 snpArrayAffyGenomeWidePrelim snp126
+    # missing count = 5210
+    # multiple count = 724
+    # Use the first run (better to avoid nearly 700 multiples at the cost of
+    # 69 more unknown)
+    hgLoadBed hg18 snpArrayAffyGenomeWide affyLookup.out -tab -sqlTable=snpArrayAffyGenomeWide.sql
 
 ##########################################################################
 # Added gvPos table for Locus Variants (Belinda Giardine Sept 2006)
