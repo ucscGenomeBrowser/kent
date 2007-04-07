@@ -12583,6 +12583,73 @@ redon.pl < cnpRedon.hg18 > redon.bed
 hgLoadBed hg18 cnpRedon cnpRedon.bed
 
 #########################################################
+# Structural Variation from Lars Feuk (Heather Jan - April 2007)
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/sv
+    # 8 *txt files from Lars 
+
+    # Sharp (format different from hg17)
+    cp Sharp*txt sharp.in
+    # use editor to remove header from sharp.in
+    # grab the data we need
+    sharp.pl < sharp.in > sharp.prelim
+    # adjust
+    sharp2.pl < sharp.prelim > sharp.bed
+    hgLoadBed hg18 cnpSharp2 sharp.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/cnpSharp2.sql
+
+    # Iafrate (format different from hg17)
+    cp Iafrate*txt iafrate.in
+    # use editor to change TABTAB to TAB0TAB and get rid of header
+    iafrate.pl < iafrate.in > iafrate.bed
+    hgLoadBed hg18 cnpIafrate2 iafrate.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/cnpIafrate2.sql
+
+    # Sebat (format different from hg17)
+    cp Sebat*txt sebat.in
+    # use editor to get rid of header
+    sebat.pl < sebat.in > sebat.bed
+    hgLoadBed hg18 cnpSebat2 sebat.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/cnpSebat2.sql
+
+    # Tuzun (I called this cnpFosmid in hg17)
+    # simple bed 4 .
+    cp Tuzun*txt tuzun.in
+    # use editor to get rid of header
+    tuzun.pl < tuzun.in > tuzun.bed
+    hgLoadBed hg18 cnpTuzun tuzun.bed -tab 
+
+    # McCarroll (same format as hg17, simple bed 4 .)
+    # need to sort and assign ids
+    cp McCarroll*txt mccarroll.in
+    # use editor to get rid of header
+    mccarroll.pl < mccarroll.in > mccarroll.prelim
+    sort -g mccarroll.prelim > mccarroll.sort
+    mccarroll2.pl < mccarroll.sort > mccarroll.bed
+    hgLoadBed hg18 delMccarroll mccarroll.bed -tab 
+
+    # Conrad (different format from hg17)
+    cp Conrad*txt conrad.prelim
+    # use editor to shorten "Study" column
+    conrad.pl < conrad.prelim > conrad.prelim2
+    cp conrad.prelim2 conrad.prelim3
+    # use editor to sort conrad.prelim3 (lame)
+    # assign Ids
+    conradId.pl < conrad.prelim3 > conrad.bed
+    hgLoadBed hg18 delConrad2 conrad.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/delConrad2.sql
+
+    # Hinds (different format from hg17)
+    cp Hinds*txt hinds.in
+    # use editor to remove header
+    hinds.pl < hinds.in > hinds.bed
+    hgLoadBed hg18 delHinds2 hinds.bed -tab -sql=/cluster/home/heather/kent/src/hg/lib/delHinds2.sql
+
+    # Locke (new data)
+    cp Locke*txt locke.in
+    locke.pl < locke.in > locke.prelim
+    sort -g locke.prelim > locke.??
+    locke2.pl
+
+
+#########################################################
 # BUILD GAD TRACK (Done, 12/12/06, Fan)
 
    mkdir /cluster/store12/gad061211
