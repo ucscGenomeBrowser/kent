@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.31 2007/03/04 07:08:56 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.32 2007/04/07 00:06:19 angie Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -245,25 +245,25 @@ static void linkToDetailsCellPrint(struct column *col, struct genePos *gp,
 /* Print a link to known genes details page. */
 {
 char *s = col->cellVal(col, gp, conn);
-if (s == NULL) 
-    {
-    hPrintf("<TD>n/a</TD>", s);
-    }
-else
-    {
-    hPrintf("<TD>");
-    fillInKnownPos(gp, conn);
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\">", 
+fillInKnownPos(gp, conn);
+hPrintf("<TD>");
+hPrintf("<A HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\">", 
 	cartSidUrlString(cart), 
 	"db", database,
 	"hgg_gene", gp->name,
 	"hgg_chrom", gp->chrom,
 	"hgg_start", gp->start,
 	"hgg_end", gp->end);
+if (s == NULL) 
+    {
+    hPrintf("n/a");
+    }
+else
+    {
     hPrintNonBreak(s);
-    hPrintf("</A></TD>", s);
     freeMem(s);
     }
+hPrintf("</A></TD>");
 }
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn)
