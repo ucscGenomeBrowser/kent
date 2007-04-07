@@ -1412,13 +1412,12 @@ identifier wormBaseId external=WormBase dependency
     $ce.sangerToKim.name
     $ce.sangerToPfam.name
     $ce.sangerToRefSeq.name
-    #$ce.dmBlastTab.query
-    #$ce.drBlastTab.query
-    #$ce.hgBlastTab.query
-    #$ce.mmBlastTab.query
-    #$ce.rnBlastTab.query
-    #$ce.scBlastTab.query
-    #$ce.hgBlastTab.query
+    $ce.dmBlastTab.query
+    $ce.drBlastTab.query
+    $ce.hgBlastTab.query
+    $ce.mmBlastTab.query
+    $ce.rnBlastTab.query
+    $ce.scBlastTab.query
 
 identifier flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
