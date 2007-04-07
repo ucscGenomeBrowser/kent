@@ -149,7 +149,7 @@ gfxPolyAddPoint(poly, x, yEnd);
 vgDrawPoly(vg, poly, fgColor, TRUE);
 gfxPolyFree(&poly);
 
-/* Make up triangle on left of centromere and draw. */
+/* Make up triangle on right of centromere and draw. */
 poly = gfxPolyNew();
 gfxPolyAddPoint(poly, xEnd, y);
 gfxPolyAddPoint(poly, xCen, yCen);
