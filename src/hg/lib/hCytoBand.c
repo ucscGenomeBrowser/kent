@@ -157,31 +157,6 @@ gfxPolyAddPoint(poly, xEnd, yEnd);
 vgDrawPoly(vg, poly, fgColor, TRUE);
 gfxPolyFree(&poly);
 
-
-#ifdef OLD
-/* Get the coordinates of the edges and midpoint of the centromere. */
-origLeft = cenLeft = x;
-origRight = cenRight = x+width;
-
-/* Get the slope of a line through the midpoint of the 
-   centromere and use consecutively shorter lines as a poor
-   man's polygon fill. */
-leftSlope = (double)(cenMid - cenLeft+1)/(height*0.5);
-rightSlope = (double)(cenRight - cenMid+1)/(height*0.5);
-offset = 0;
-while(offset < height/2)
-    {
-    int yTop = y+offset;
-    int yBottom = y+height-offset;
-    vgLine(vg, cenLeft, yTop, cenMid, yTop, bgColor);
-    vgLine(vg, cenLeft, yBottom, cenMid, yBottom, bgColor);
-    vgLine(vg, cenMid, yTop, cenRight, yTop, bgColor);
-    vgLine(vg, cenMid, yBottom, cenRight, yBottom, bgColor);
-    offset++;
-    cenLeft = round(offset*leftSlope) + origLeft;
-    cenRight = origRight - round(offset*rightSlope);
-    }
-#endif /* OLD */
 }
 
 	
