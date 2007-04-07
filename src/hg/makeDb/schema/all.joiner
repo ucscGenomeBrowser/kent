@@ -1495,7 +1495,7 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.arbExpDistance.target
     $dm,!dm1.ceBlastTab.query
     $dm,!dm1.drBlastTab.query
-    $dm,!dm1.hgBlastTab.query
+    $dm,!dm1.hgBlastTab.query minCheck=0.99
     $dm,!dm1.mmBlastTab.query
     $dm,!dm1.rnBlastTab.query
     $dm,!dm1.scBlastTab.query
@@ -1534,7 +1534,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.ceBlastTab.query
     $sacCer.dmBlastTab.query
     $sacCer,!sacCer1.drBlastTab.query
-    $sacCer.hgBlastTab.query
+    $sacCer.hgBlastTab.query minCheck=0.999
     $sacCer.mmBlastTab.query
     $sacCer.rnBlastTab.query
     $sacCer.choExpDistance.target minCheck=0.60
