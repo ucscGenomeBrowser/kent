@@ -18,7 +18,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.95 2007/04/08 18:42:17 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.96 2007/04/08 19:37:03 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -339,7 +339,7 @@ char condStr[255];
 char *kgProteinID;
 char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
-int  i, exonCnt, cdsExonCnt;
+int  i, exonCnt = 0, cdsExonCnt = 0;
 int  cdsStart, cdsEnd;
 
 description = genoQuery(id, "descriptionSql", conn);
@@ -349,6 +349,19 @@ if (description != NULL)
 else
     hPrintf("%s<BR>", "No description available");
 freez(&description);
+if (summaryTables != NULL)
+    {
+    if (sqlTablesExist(conn, summaryTables))
+	{
+	char *summary = genoQuery(id, "summarySql", conn);
+	if (summary != NULL && summary[0] != 0)
+	    {
+	    hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
+	    freez(&summary);
+	    hPrintf("<BR>");
+	    }
+	}
+    }
 if (sqlTablesExist(conn, "kgAlias"))
     {
     printAlias(id, conn);
@@ -384,7 +397,7 @@ hPrintf("&nbsp&nbsp&nbsp");
     
 if (refSeqAcc[0] != 0)
     {
-    hPrintf("<B>Refseq: </B> <A HREF=\"");
+    hPrintf("<B>RefSeq Accession: </B> <A HREF=\"");
     printOurRefseqUrl(stdout, refSeqAcc);
     hPrintf("\">%s</A>\n", refSeqAcc);
     hPrintf("&nbsp&nbsp&nbsp");
@@ -396,6 +409,7 @@ else if (mrnaAcc[0] != 0)
     hPrintf("\">%s</A>\n", mrnaAcc);
     hPrintf("&nbsp&nbsp&nbsp");
     }
+hPrintf("<BR>");
 if (protAcc != NULL)
     {
     kgProteinID = cloneString("");
@@ -455,52 +469,33 @@ if (protAcc != NULL)
 	hPrintf("&nbsp&nbsp&nbsp");
     }
 printCcds(id, conn);
+hPrintf("<BR>");
 
-if (summaryTables != NULL)
-    {
-    hPrintf("<BR>");
-    if (sqlTablesExist(conn, summaryTables))
-	{
-	char *summary = genoQuery(id, "summarySql", conn);
-	if (summary != NULL)
-	    {
-	    hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
-	    freez(&summary);
-	    }
-	}
-    }
 /* print genome position and size */
-hPrintf("<BR><B>Position:</B> %s:%d-%d</A>\n", curGeneChrom, curGeneStart+1, curGeneEnd);
-hPrintf("<BR><B>Strand:</B> %s</A>\n", curGenePred->strand);
-hPrintf("<BR><B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
+hPrintf("<B>Position:</B> %s:%d-%d</A>\n", curGeneChrom, curGeneStart+1, curGeneEnd);
+hPrintf("&nbsp;&nbsp;<B>Strand:</B> %s</A>\n", curGenePred->strand);
+hPrintf("&nbsp;&nbsp;<B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
 
 /* print exon count(s) */
+hPrintf("<BR>");
 exonCnt = curGenePred->exonCount;
 cdsStart= curGenePred->cdsStart;
 cdsEnd  = curGenePred->cdsEnd;
-hPrintf("<BR><B>Exon Count:</B> %d\n", exonCnt);
+hPrintf("<B>Exon Count:</B> %d\n", exonCnt);
 
 /* count CDS exons */
-if (exonCnt > 1)
+if (cdsStart < cdsEnd)
     {
-    cdsExonCnt = 0;
-    if (cdsStart < cdsEnd)
+    for (i=0; i<exonCnt; i++)
 	{
-	for (i=0; i<exonCnt; i++)
-	    {
-	    if ( (cdsStart <= curGenePred->exonEnds[i]) &&  
-		 (cdsEnd >= curGenePred->exonStarts[i]) )
-		 cdsExonCnt++;
-	    }
+	if ( (cdsStart <= curGenePred->exonEnds[i]) &&  
+	     (cdsEnd >= curGenePred->exonStarts[i]) )
+	     cdsExonCnt++;
 	}
-    /* print CDS exon count only if it is different than exonCnt */
-    if (cdsExonCnt != exonCnt) 
-    	{
-	hPrintf("&nbsp&nbsp&nbsp");
-	hPrintf("<B>CDS Exon Count:</B> %d\n", cdsExonCnt);
-	}
-    }	
-
+    }
+/* print CDS exon count only if it is different than exonCnt */
+hPrintf("&nbsp&nbsp");
+hPrintf("<B>Coding Exon Count:</B> %d\n", cdsExonCnt);
 fflush(stdout);
 }
 
