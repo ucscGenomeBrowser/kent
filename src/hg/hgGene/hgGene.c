@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -17,7 +18,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.94 2007/04/06 01:19:20 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.95 2007/04/08 18:42:17 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -648,6 +649,14 @@ webFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
 webPrintLinkTableEnd();
 }
 
+char *sectionCloseVar(char *section)
+/* Get close variable for given section */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s%s_%s_%s", hggPrefix, "section", section, "close");
+return buf;
+}
+
 void printSections(struct section *sectionList, struct sqlConnection *conn,
 	char *geneId)
 /* Print each section in turn. */
@@ -655,8 +664,25 @@ void printSections(struct section *sectionList, struct sqlConnection *conn,
 struct section *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
-    webNewSection("<A NAME=\"%s\"></A>%s\n", section->name, section->longLabel);
-    section->print(section, conn, geneId);
+    char *closeVarName = sectionCloseVar(section->name);
+    boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
+    char *otherState = (isOpen ? "1" : "0");
+    char *indicator = (isOpen ? "-" : "+");
+    struct dyString *header = dyStringNew(0);
+    dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);	
+    dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\">%s</A>&nbsp;&nbsp;",
+    	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicator);
+    dyStringAppend(header, section->longLabel);
+    webNewSection(header->string);
+    if (isOpen)
+	{
+	section->print(section, conn, geneId);
+	}
+    else
+	{
+	printf("Press \"+\" in the title bar above to open this section.");
+	}
+    dyStringFree(&header);
     }
 }
 

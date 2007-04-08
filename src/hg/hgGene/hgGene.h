@@ -205,6 +205,7 @@ void doSamT02(char *proteinId, char *database);
 /* -------- CGI Data Variables ---------- */
 #define hggOrg "org"		/* Organism we're working on. */
 #define hggDb "db"		/* Database we're working on. */
+#define hggPrefix "hgg_"	/* Prefix to all 'local' cart vars. */
 #define hggGene "hgg_gene"	/* Main gene id. */
 #define hggProt "hgg_prot"      /* Main protein id. */
 #define hggChrom "hgg_chrom"	/* Chromosome gene is on. */
