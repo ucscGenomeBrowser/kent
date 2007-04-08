@@ -210,3 +210,11 @@ spectrum on
 type netAlign hg18 chainHg18WM
 otherDb hg18
 
+track exoniphy 
+shortLabel Exoniphy 
+longLabel Exoniphy Mouse/Rat/Human/Dog 
+group genes 
+priority 50.9 
+visibility hide 
+color 173,17,162 
+type genePred 
