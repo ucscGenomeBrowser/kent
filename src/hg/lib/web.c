@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.117 2007/03/23 22:26:59 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.118 2007/04/08 18:41:01 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -461,7 +461,8 @@ static void webEndSection()
 puts(
     "" "\n"
     "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
-    "	<br></TD></TR></TABLE>" "\n"
+//    "<BR>"
+    "	</TD></TR></TABLE>" "\n"
     "	</TD></TR></TABLE>" "\n"
     "	" );
 }
