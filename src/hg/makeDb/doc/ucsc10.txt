@@ -459,7 +459,7 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 # seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
 hgLoadSqlTab $tempDb knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
-hgLoadBed $tempDb knownAlt altSplice.bed
+hgLoadBed $tempDb knownAlt ucscSplice.bed
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
