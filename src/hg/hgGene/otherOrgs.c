@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.17 2007/03/28 23:52:42 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.18 2007/04/08 18:43:21 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -22,6 +22,7 @@ struct otherOrg
     char *idSql;	/* SQL to create ID. */
     char *idToProtIdSql;/* Convert from id to protein ID. */
     char *otherIdSql;	/* Convert from our id to other database ID. */
+    char *otherIdSql2;  /* Try this if first otherIdSql doesn't work. */
     char *genomeUrl;	/* URL of genome browser link. */
     char *sorterUrl;	/* URL of gene sorter link. */
     char *geneUrl;	/* URL of hgGene link */
@@ -82,6 +83,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    otherOrg->idSql = otherOrgRequiredField(ra, "idSql");
 	    otherOrg->idToProtIdSql = otherOrgOptionalField(ra, "idToProtIdSql");
 	    otherOrg->otherIdSql = otherOrgOptionalField(ra, "otherIdSql");
+	    otherOrg->otherIdSql2 = otherOrgOptionalField(ra, "otherIdSql2");
 	    otherOrg->genomeUrl = otherOrgOptionalField(ra, "genomeUrl");
 	    otherOrg->sorterUrl = otherOrgOptionalField(ra, "sorterUrl");
 	    otherOrg->geneUrl = otherOrgOptionalField(ra, "geneUrl");
@@ -149,16 +151,24 @@ static char *otherOrgExternalId(struct otherOrg *otherOrg, char *localId)
 /* Convert other organism UCSC id to external database ID. */
 {
 char *otherId = NULL;
-if (otherOrg->otherIdSql && localId != NULL)
+if (localId != NULL)
     {
-    struct sqlConnection *conn = sqlConnect(otherOrg->db);
-    char query[512];
-    safef(query, sizeof(query), otherOrg->otherIdSql, localId);
-    otherId = sqlQuickString(conn, query);
-    sqlDisconnect(&conn);
+    if (otherOrg->otherIdSql)
+	{
+	struct sqlConnection *conn = sqlConnect(otherOrg->db);
+	char query[512];
+	safef(query, sizeof(query), otherOrg->otherIdSql, localId);
+	otherId = sqlQuickString(conn, query);
+	if (otherId == NULL && otherOrg->otherIdSql2 != NULL)
+	    {
+	    safef(query, sizeof(query), otherOrg->otherIdSql2, localId);
+	    otherId = sqlQuickString(conn, query);
+	    }
+	sqlDisconnect(&conn);
+	}
+    else
+        otherId = cloneString(localId);
     }
-if (otherId == NULL && localId != NULL)
-    otherId = cloneString(localId);
 return otherId;
 }
 
