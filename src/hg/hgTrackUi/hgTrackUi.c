@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.356 2007/03/30 17:59:39 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.357 2007/04/08 19:05:54 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1185,7 +1185,7 @@ hFreeConn(&conn);
 
 printf("<B>Label:</B> ");
 safef(varName, sizeof(varName), "%s.label.gene", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
+option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "gene symbol");
 
@@ -1206,6 +1206,23 @@ if (omimAvail != NULL)
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
     }
+printf("<BR>\n");
+}
+
+void knownGeneShowWhatUi(struct trackDb *tdb)
+/* Put up line of controls that describe what parts to show. */
+{
+char varName[64];
+printf("<B>Show:</B> ");
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->tableName);
+boolean option = cartUsualBoolean(cart, varName, TRUE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "noncoding genes");
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->tableName);
+option = cartUsualBoolean(cart, varName, TRUE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
+printf("<BR>\n");
 }
 
 void knownGeneUI(struct trackDb *tdb)
@@ -1213,6 +1230,7 @@ void knownGeneUI(struct trackDb *tdb)
 {
 /* This is incompatible with adding Protein ID to lf->extra */
 knownGeneIdConfig(tdb); 
+knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
 }
 

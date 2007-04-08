@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1308 2007/04/06 22:21:09 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1309 2007/04/08 19:05:42 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3073,7 +3073,7 @@ return sfList;
 }
         
 
-struct linkedFeatures *connectedLfFromGenePredInRangeExtra(
+static struct linkedFeatures *connectedLfFromGenePredInRangeExtra(
         struct track *tg, struct sqlConnection *conn, char *table, 
 	char *chrom, int start, int end, boolean extra)
 /* Return linked features from range of a gene prediction table after 
@@ -3525,11 +3525,70 @@ if (hTableExists("kgXref"))
 hFreeConn(&conn);
 }
 
+struct linkedFeatures *stripShortLinkedFeatures(struct linkedFeatures *list)
+/* Remove linked features with no tall component from list. */
+{
+struct linkedFeatures *newList = NULL, *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    if (el->tallStart < el->tallEnd)
+        slAddHead(&newList, el);
+    }
+slReverse(&newList);
+return newList;
+}
+
+struct linkedFeatures *stripLinkedFeaturesNotInHash(struct linkedFeatures *list, struct hash *hash)
+/* Remove linked features not in hash from list. */
+{
+struct linkedFeatures *newList = NULL, *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    if (hashLookup(hash, el->name))
+        slAddHead(&newList, el);
+    }
+slReverse(&newList);
+return newList;
+}
+
 void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
+struct trackDb *tdb = tg->tdb;
 loadGenePredWithName2(tg);
-/* always do so that protein ID will be in struct */
+char varName[64];
+safef(varName, sizeof(varName), "%s.show.noncoding", tdb->tableName);
+boolean showNoncoding = cartUsualBoolean(cart, varName, TRUE);
+safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->tableName);
+boolean showSpliceVariants = cartUsualBoolean(cart, varName, TRUE);
+if (!showNoncoding)
+    tg->items = stripShortLinkedFeatures(tg->items);
+if (!showSpliceVariants)
+    {
+    char *canonicalTable = trackDbSettingOrDefault(tdb, "canonicalTable", "knownCanonical");
+    if (hTableExists(canonicalTable))
+        {
+	/* Create hash of items in canonical table in region. */
+	struct sqlConnection *conn = hAllocConn();
+	struct hash *hash = hashNew(0);
+	char query[512];
+	safef(query, sizeof(query), 
+		"select transcript from %s where chromStart < %d && chromEnd > %d", 
+		canonicalTable, winEnd, winStart);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+	    hashAdd(hash, row[0], NULL);
+	sqlFreeResult(&sr);
+	hFreeConn(&conn);
+
+	/* Get rid of non-canonical items. */
+	tg->items = stripLinkedFeaturesNotInHash(tg->items, hash);
+	hashFree(&hash);
+	}
+    }
 lookupKnownGeneNames(tg->items);
 slSort(&tg->items, linkedFeaturesCmpStart);
 limitVisibility(tg);
