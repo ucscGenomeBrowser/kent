@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: mm8.txt,v 1.42 2007/04/02 15:02:14 braney Exp $"
+#	"$Id: mm8.txt,v 1.43 2007/04/08 14:29:03 acs Exp $"
 #
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -8133,3 +8133,17 @@ chainOne $(path1)
     rm -rf /cluster/data/mm8/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/mm8/bed/tblastn.hg18KG/blastOut
 #end tblastn
+
+# EXONIPHY MM8, lifted from hg18 (DONE acs 2007-04-08)
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed
+    mkdir exoniphy
+    cd exoniphy
+    hgLoadGenePred -genePredExt mm8 exoniphy exoniphyMm8.gp
+
+    # exoniphyMm8.gp was prepared at Cornell as follows
+    hgsql hg18 -e "select * from exoniphy" --skip-column-names > exoniphyHg18.gp
+    liftOver -genePred exoniphyHg18.gp /usr/data/hg18/dbDerived/netSynteny/hg18.mm8.syn.chain exoniphyMm8.gp unmapped
+    (where hg18.mm8.syn.chain representes the human/mouse syntenic net)
+
