@@ -9,7 +9,7 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: method.c,v 1.5 2007/04/09 03:03:58 kent Exp $";
+static char const rcsid[] = "$Id: method.c,v 1.6 2007/04/09 16:55:52 kent Exp $";
 
 static void showInfoTable(struct sqlConnection *conn, char *geneName, char *txInfoTable)
 /* Print out stuff from txInfo table. */
@@ -194,7 +194,7 @@ static void methodPrint(struct section *section,
 {
 showInfoTable(conn, geneId, "kgTxInfo");
 hPrintf("Click ");
-hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_do_kgMethod=1&db=%s\" target=_blank>", database);
+hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_do_kgMethod=1&%s\">", cartSidUrlString(cart));
 hPrintf("here</A>\n");
 hPrintf(" for details on how this gene model was made and data restrictions if any.");
 }
