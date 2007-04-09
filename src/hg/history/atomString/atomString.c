@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: atomString.c,v 1.1 2007/04/09 16:39:53 braney Exp $";
+static char const rcsid[] = "$Id: atomString.c,v 1.2 2007/04/09 16:45:02 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -82,7 +82,6 @@ struct atomString *next;
 int num;
 int length;
 int count;
-//struct atom *atoms;
 struct instance *instances;
 };
 
@@ -96,81 +95,6 @@ if (stringHash == NULL)
     stringHash = newHash(4);
 
 return hashStoreName(stringHash, name);
-}
-
-/*
-void calcLens(struct atomString *strings)
-{
-for(; strings; strings = strings->next)
-    {
-    //slReverse(&strings->atoms);
-
-    struct atom *atoms = strings->atoms;
-    for(; atoms ; atoms = atoms->next)
-	{
-	strings->count++;
-	strings->length += atoms->length;
-	}
-    }
-}
-*/
-
-/*
-int atomCmp(const void *va, const void *vb)
-{
-const struct atom *a = *((struct atom **)va);
-const struct atom *b = *((struct atom **)vb);
-
-return a->order - b->order;
-}
-*/
-
-/*
-int stringCmp(const void *va, const void *vb)
-{
-const struct atomString *a = *((struct atomString **)va);
-const struct atomString *b = *((struct atomString **)vb);
-int dif;
-dif = b->length - a->length;
-
-return dif;
-}
-*/
-
-boolean checkContig(struct atom *a1, struct atom *a2)
-{
-struct instance *i1 = a1->instances;
-struct instance *i2 = a2->instances;
-
-//printf("in atoms %s %s\n",a1->name,a2->name);
-for(; (i1 != NULL) && (i2 != NULL); i1 = i1->next, i2 = i2->next)
-    {
-    if ((i1->strand == i2->strand) 
-	&& (i1->species == i2->species)
-	&& (i1->chrom == i2->chrom))
-	{
-	if (i1->strand == '+')
-	    {
-	    //printf("atoms %s %s prev end %d next start %d\n",a1->name,a2->name,i1->end,i2->start);
-	    if (i1->end > i2->start)
-		return FALSE;
-	    if (i1->end + maxGap < i2->start)
-		return FALSE;
-	    }
-	else
-	    {
-	    if (i2->end > i1->start)
-		return FALSE;
-	    if (i2->end + maxGap < i1->start)
-		return FALSE;
-	    }
-	}
-    else
-	return FALSE;
-    }
-
-//printf("returning %d\n", (i1 == NULL) && (i2 == NULL));
-return (i1 == NULL) && (i2 == NULL);
 }
 
 void buildStrings(struct atomString **strings, struct sequence *seq)
@@ -192,7 +116,6 @@ for(; data < last; )
 
     AllocVar(string);
     string->num = stringNum++;
-    //string->count++;
     slAddHead(strings, string);
     atom->stringNum = string->num;
 
@@ -206,7 +129,6 @@ for(; data < last; )
 	    instanceStarts[count++] = instance->end;
 	}
 
-    //printf("this atom %s\n",atom->name);
     for(;;)
 	{
 	struct atom *firstNextAtom = NULL;
@@ -224,7 +146,6 @@ for(; data < last; )
 		break;
 
 	    struct atom *nextAtom = nextInSeq->atom;
-	    //printf("next atom %s\n",nextAtom->name);
 
 	    if (nextAtom->stringNum)
 		break;
@@ -252,10 +173,6 @@ for(; data < last; )
 		break;
 
 	    struct atom *prevAtom = prevInSeq->atom;
-	    //printf("prev atom %s\n",prevAtom->name);
-
-	    //if (prevAtom->stringNum)
-		//break;
 
 	    if (firstPrevAtom == NULL)
 		firstPrevAtom = prevAtom;
@@ -266,14 +183,11 @@ for(; data < last; )
 	if (instance != NULL)
 	    break;
 
-	//printf("adding %s\n",firstNextAtom->name);
 	firstNextAtom->stringNum = string->num;
-	//string->count++;
 	atom = (*data)->atom;
 	data++;
 	}
 
-    //lastAtom = (firstNextAtom == NULL) ? atom1 : firstNextAtom;
     count = 0;
     for( instance = atom->instances;  instance; instance = instance->next)
 	{
@@ -328,13 +242,11 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	    AllocVar(anAtom);
 	    slAddHead(&atoms, anAtom);
 	    anAtom->name = cloneString(&bigWords[0][1]);
-	    //printf("adding %s to hash\n",anAtom->name);
 	    hashAdd(atomHash, anAtom->name, anAtom);
 	    anAtom->length = num;
 	    anAtom->numInstances = intCount;
 	    if (anAtom->numInstances >= NUMSTARTS)
 		errAbort("exceeded static max number dups %d\n",NUMSTARTS);
-	    //printf("defined atom %s\n",anAtom->name);
 	    }
 	else
 	    anAtom = NULL;
@@ -373,99 +285,14 @@ while( (wordsRead = lineFileChopNext(lf, bigWords, sizeof(bigWords)/sizeof(char 
 	instance->end = atoi(ptr);
 	instance->strand = *bigWords[1];
 	
-	//printf("got instance %s %s %d %d %c\n",instance->species,instance->chrom, instance->start, instance->end, instance->strand);
 	}
     }
 if (anAtom != NULL)
     slReverse(&anAtom->instances);
 lineFileClose(&lf);
-//slReverse(&atoms);
 
 return atoms;
 }
-
-#ifdef NOTNOW
-void sortAtoms(struct atom *atoms, struct sequence *sequence,
-	 struct hash *atomHash)
-{
-struct atom *anAtom = atoms;
-char **ptr = sequence->data;
-char **last = &sequence->data[sequence->length];
-int orderNum = 1;
-
-for(; anAtom; anAtom = anAtom->next)
-    anAtom->order = 0;
-
-for(; ptr < last; ptr++)
-    {
-    boolean isNeg = **ptr == '-';
-    char *name = (isNeg) ? *ptr + 1 : *ptr;
-    struct atom *anAtom = hashFindVal(atomHash, name);
-
-    if (anAtom == NULL)
-	continue;
-
-    if (anAtom->order == 0)
-	anAtom->order = orderNum++;
-    else if (anAtom->stringNum == 0)
-	errAbort("not supporting dups now");
-    }
-
-slSort(&atoms, atomCmp);
-}
-#endif
-
-#ifdef NOTNOW
-void outStrings(struct atomString *strings, char *stringName)
-{
-FILE *outF = mustOpen(stringName, "w");
-
-for(; strings; strings = strings->next)
-    {
-    struct atom *atom = strings->atoms, *last = NULL;
-    struct instance *instance;
-    int count = 0;
-
-    fprintf(outF, "%d\t%d\t%d\t",strings->num,strings->length,strings->count);
-
-    for( instance = atom->instances; instance;  instance = instance->next)
-	{
-	if (instance->strand == '+')
-	    starts[count++] = instance->start;
-	else
-	    starts[count++] = instance->end;
-	}
-
-    assert(count <= 4);
-
-    for(last=atom; atom ; last = atom, atom = atom->next)
-	;
-
-    count = 0;
-    for( instance = last->instances;  instance; instance = instance->next)
-	{
-	if (instance->strand == '+') 
-	//if (starts[count] < instance->end)
-	    fprintf(outF,"%s.%s:%d-%d.%c,",instance->species,instance->chrom,
-		starts[count], instance->end, instance->strand);
-	else
-	    fprintf(outF,"%s.%s:%d-%d.%c,",instance->species,instance->chrom,
-		instance->start, starts[count], instance->strand);
-	count++;
-	}
-    fprintf(outF,"\t");
-
-
-    atom = strings->atoms;
-    for(; atom ; atom = atom->next)
-	fprintf(outF, "%s,",atom->name);
-    fprintf(outF, "\n");
-
-    fflush(outF);
-    }
-
-}
-#endif
 
 struct sequence *getSequences(char *inName, struct hash *atomHash)
 {
@@ -540,7 +367,6 @@ for(; strings; strings = strings->next)
     struct instance *instance;
 
     fprintf(outF, ">%d %d %d\n",strings->num, strings->length, strings->count);
-    //fprintf(outF, "%d\t%d\t%d\t",strings->num,strings->length,strings->count);
 
     for( instance = strings->instances;  instance; instance = instance->next)
 	{
