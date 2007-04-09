@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.1 2006/10/09 20:44:33 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.2 2007/04/09 21:14:11 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -11,6 +11,7 @@ use strict;
 use FindBin qw($Bin);
 use lib "$Bin";
 use HgAutomate;
+use HgRemoteScript;
 
 # Hardcoded params:
 my $blastpParams = '-e 0.01 -m 8 -b'; # Keep -b at end -- value provided below.
@@ -23,10 +24,12 @@ use vars qw/
     $opt_clusterHub
     $opt_distrHost
     $opt_dbHost
+    $opt_workhorse
     $opt_blastPath
     $opt_noSelf
     $opt_targetOnly
     $opt_queryOnly
+    $opt_noLoad
     $opt_debug
     $opt_verbose
     $opt_help
@@ -36,6 +39,7 @@ use vars qw/
 my $clusterHub = 'pk';
 my $distrHost = 'pk';
 my $dbHost = 'hgwdev';
+my $workhorse = 'least loaded';
 my $blastPath = '/san/sanvol1/scratch/blast64/blast-2.2.11';
 my $defaultVerbose = 1;
 
@@ -54,6 +58,8 @@ options:
 			Default: $distrHost
     -dbHost mach	Mysql server into which we load *BlastTab tables.
 			Default: $dbHost
+    -workhorse mach     Use machine (default: $workhorse) for compute or
+                        memory-intensive steps.
     -blastPath dir	Directory in which the latest blat has been installed
 			(should also be compiled for the same architecture as
 			cluster hosts).
@@ -61,6 +67,7 @@ options:
     -noSelf		Don't do self alignments (update pairwise only).
     -targetOnly		Perform target vs. all queries, not vice versa.
     -queryOnly		Perform all queries vs. target, not vice versa.
+    -noLoad		Perform alignments but don't load database tables.
     -debug		Don't actually run commands, just display them.
     -verbose num	Set verbose level to num.  Default $defaultVerbose
     -help		Show detailed help (config.ra variables) and exit.
@@ -99,6 +106,15 @@ scratchDir xxx
   - Cluster-attached fast storage (usually under /san/sanvol1/scratch/... or
     /panasas/store/...) where fasta will be split/formatted and used during
     cluster blastp runs.
+
+
+Optional setting:
+
+recipBest xxx yyy zzz ...
+  - space-separated list of query databases for which we are to find
+    reciprocal-best blast hits.  Even if -targetOnly or -queryOnly is
+    specified, we will still do alignments in both directions if recipBest
+    is specified.
 " if ($detailed);
   print STDERR "\n";
   exit $status;
@@ -112,10 +128,12 @@ sub checkOptions {
   my $ok = GetOptions("clusterHub=s",
 		      "distrHost=s",
 		      "dbHost=s",
+		      "workhorse=s",
 		      "verbose=n",
 		      "noSelf",
 		      "targetOnly",
 		      "queryOnly",
+		      "noLoad",
 		      "debug",
 		      "help");
   &usage(1) if (!$ok);
@@ -132,7 +150,7 @@ sub checkOptions {
   }
 } # checkOptions
 
-my ($buildDir, $scratchDir, $tGenesetPrefix, $tDb, @qDbs, %dbToFasta);
+my ($buildDir, $scratchDir, $tGenesetPrefix, $tDb, @qDbs, %dbToFasta, %recipBest);
 sub parseConfig {
   # Parse config.ra file, make sure it contains the required variables.
   my ($config) = @_;
@@ -173,6 +191,17 @@ sub parseConfig {
     $dbToFasta{$db} = $fa;
     delete $vars{$faVar};
   }
+  # Optional variables.
+  my $recipBests = $vars{'recipBest'};
+  if ($recipBests) {
+    foreach my $r (split(/\s+/, $recipBests)) {
+      die "Error: recipBest item \"$r\" is not in queryDbs.\n"
+	if (scalar(grep(/^$r$/, @qDbs)) == 0);
+      $recipBest{$r} = 1;
+    }
+    delete $vars{'recipBest'};
+  }
+  # Bogus/misspelled variables.
   if (scalar(keys %vars) > 0) {
     die "Error: $config contains extra variable(s) that I don't know " .
       "what to do with: " . join(", ", sort keys %vars) . "\n";
@@ -294,10 +323,11 @@ sub dbToPrefix {
 }
 
 sub loadPairwise {
-  my ($tDb, $qDb, $tablePrefix, $max) = @_;
+  my ($tDb, $qDb, $tablePrefix, $max, $filePattern) = @_;
 
+  $filePattern = 'out/*.tab' if (! defined $filePattern);
   my $tableName = $tablePrefix . 'BlastTab';
-  my $runDir = "$buildDir/run.$tDb.$qDb/out";
+  my $runDir = "$buildDir/run.$tDb.$qDb";
   my $bossScript = "$buildDir/run.$tDb.$qDb/loadPairwise.csh";
   my $fh = HgAutomate::mustOpen(">$bossScript");
   print $fh <<_EOF_
@@ -309,13 +339,38 @@ sub loadPairwise {
 # This script will fail if any of its commands fail.
 
 cd $runDir
-hgLoadBlastTab $tDb $tableName -maxPer=$max *.tab
+hgLoadBlastTab $tDb $tableName -maxPer=$max $filePattern
 _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
+
+  return if ($opt_noLoad);
+
   &HgAutomate::run("ssh -x $dbHost nice $bossScript");
 } # loadPairwise
+
+
+sub recipBest {
+  my ($tDb, $qDb) = @_;
+  my $runDir = "$buildDir/run.$tDb.$qDb";
+  my $workhorse = &HgAutomate::chooseWorkhorse();
+  my $whatItDoes = "It runs blastRecipBest on the $tDb-$qDb and $qDb-$tDb " .
+                   "results.";
+  my $bossScript = new HgRemoteScript("$runDir/doRecipBest.csh", $workhorse,
+				      $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+cat $buildDir/run.$tDb.$qDb/out/*.tab \\
+  > $tDb.$qDb.all.tab
+cat $buildDir/run.$qDb.$tDb/out/*.tab \\
+  > $qDb.$tDb.all.tab
+blastRecipBest $tDb.$qDb.all.tab $qDb.$tDb.all.tab \\
+  $tDb.$qDb.recipBest.tab $qDb.$tDb.recipBest.tab
+mv $qDb.$tDb.recipBest.tab $buildDir/run.$qDb.$tDb/
+_EOF_
+    );
+  $bossScript->execute();
+} # recipBest
 
 
 sub cleanup {
@@ -331,26 +386,59 @@ sub celebrate {
   # Hooray, we're done.
   HgAutomate::verbose(1,
 	"\n *** All done!\n");
-  if (! $opt_queryOnly) {
-    HgAutomate::verbose(1,
-			" *** Check these tables in $tDb:\n *** ");
+  if ($opt_noLoad) {
     if (! $opt_noSelf) {
-      HgAutomate::verbose(1, $tGenesetPrefix . 'BlastTab ');
+      HgAutomate::verbose(1,
+	   " *** -noLoad was specified -- you can run this script " .
+	   "manually to load $tDb tables:\n");
+      HgAutomate::verbose(1,
+	   "        run.$tDb.$tDb/loadPairwise.csh\n\n");
     }
-    foreach my $qDb (@qDbs) {
-      my $qPrefix = &dbToPrefix($qDb);
-      HgAutomate::verbose(1, $qPrefix . 'BlastTab ');
+    if (! $opt_queryOnly) {
+      HgAutomate::verbose(1,
+	   " *** -noLoad was specified -- you can run these scripts " .
+	   "manually to load $tDb tables:\n");
+      foreach my $qDb (@qDbs) {
+	my $qPrefix = &dbToPrefix($qDb);
+	HgAutomate::verbose(1,
+	   "        run.$tDb.$qDb/loadPairwise.csh\n");
+      }
+      HgAutomate::verbose(1, "\n");
     }
-    HgAutomate::verbose(1, "\n");
-  }
-  if (! $opt_targetOnly) {
-    my $tPrefix = &dbToPrefix($tDb);
-    HgAutomate::verbose(1,
-	      " *** Check $tPrefix" . "BlastTab in these databases:\n *** ");
-    foreach my $qDb (@qDbs) {
-      HgAutomate::verbose(1, "$qDb ");
+    if (! $opt_targetOnly) {
+      my $tPrefix = &dbToPrefix($tDb);
+      HgAutomate::verbose(1,
+	   " *** -noLoad was specified -- you can run these scripts " .
+	   "manually to load ${tPrefix}BlastTab in query databases:\n");
+      foreach my $qDb (@qDbs) {
+	my $qPrefix = &dbToPrefix($qDb);
+	HgAutomate::verbose(1,
+	   "        run.$qDb.$tDb/loadPairwise.csh\n");
+      }
+      HgAutomate::verbose(1, "\n");
     }
-    HgAutomate::verbose(1, "\n");
+  } else {
+    if (! $opt_queryOnly) {
+      HgAutomate::verbose(1,
+			  " *** Check these tables in $tDb:\n *** ");
+      if (! $opt_noSelf) {
+	HgAutomate::verbose(1, $tGenesetPrefix . 'BlastTab ');
+      }
+      foreach my $qDb (@qDbs) {
+	my $qPrefix = &dbToPrefix($qDb);
+	HgAutomate::verbose(1, $qPrefix . 'BlastTab ');
+      }
+      HgAutomate::verbose(1, "\n");
+    }
+    if (! $opt_targetOnly) {
+      my $tPrefix = &dbToPrefix($tDb);
+      HgAutomate::verbose(1,
+	   " *** Check $tPrefix" . "BlastTab in these databases:\n *** ");
+      foreach my $qDb (@qDbs) {
+	HgAutomate::verbose(1, "$qDb ");
+      }
+      HgAutomate::verbose(1, "\n");
+    }
   }
   HgAutomate::verbose(1, "\n");
 } # celebrate
@@ -386,17 +474,30 @@ my $tPrefix = &dbToPrefix($tDb);
 foreach my $qDb (@qDbs) {
   my $qFasta = $dbToFasta{$qDb};
   my $qPrefix = &dbToPrefix($qDb);
-  if (! $opt_queryOnly) {
+  if ($recipBest{$qDb} || ! $opt_queryOnly) {
     # tDb vs qDb
     &formatSequence($qDb, $qFasta);
     &runPairwiseBlastp($tDb, $qDb, $pairwiseMaxPer);
+  }
+  if (! $recipBest{$qDb} && ! $opt_queryOnly) {
     &loadPairwise($tDb, $qDb, $qPrefix, $pairwiseMaxPer);
   }
-  if (! $opt_targetOnly) {
+  if ($recipBest{$qDb} || ! $opt_targetOnly) {
     # qDb vs tDb
     &splitSequence($qDb, $qFasta);
     &runPairwiseBlastp($qDb, $tDb, $pairwiseMaxPer);
+  }
+  if (! $recipBest{$qDb} && ! $opt_targetOnly) {
     &loadPairwise($qDb, $tDb, $tPrefix, $pairwiseMaxPer);
+  }
+  if ($recipBest{$qDb}) {
+    &recipBest($tDb, $qDb);
+    if (! $opt_queryOnly) {
+      &loadPairwise($tDb, $qDb, $qPrefix, $pairwiseMaxPer, "$tDb.$qDb.recipBest.tab");
+    }
+    if (! $opt_targetOnly) {
+      &loadPairwise($qDb, $tDb, $tPrefix, $pairwiseMaxPer, "$qDb.$tDb.recipBest.tab");
+    }
   }
 }
 
