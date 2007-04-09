@@ -609,9 +609,9 @@
 			I want to confirm the strand assignment for two 
 			human ESTs: 
 			<UL>
-			<LI>BQ016549 (chr22:20676822-20698290): + strand in text and - strand in graphical 
+			<LI>BQ016549 (chr22:22,310,674-22,332,143 on hg18): + strand in text and - strand in graphical 
 			display 
-			<LI>AA928010 (chr22:18713957-18723221): - strand in text and + strand in graphical 
+			<LI>AA928010 (chr22:20,345,264-20,354,528 on hg18): - strand in text and + strand in graphical 
 			display. 
 			</UL>
 			The graphical display goes with the orientation of the gene in that location."
@@ -619,15 +619,52 @@
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			When UCSC downloads mRNAs and ESTs from GenBank and aligns them to a genome 
 			assembly, each alignment has a direction (forward or reverse), which we 
-			record as + or - in the strand field of the database table. 
+			record as + or - in the strand field of the database table e.g. all_ests or chrN_est.
+             		The read direction is recorded in the gbCdnaInfo table and the estOrientation table is 
+                        also used in figuring out the direction of transcription which is not an easy task for 
+ 			ESTs.
 			<P>
-			Some GenBank EST 
+			ESTs are either sequenced from the 5' or the 3' end. Sequencing from the 3' end
+      			means that the resulting sequence matches the opposite strand of the cDNA clone. Therefore, it 
+			is the reverse complement of the actual mRNA sequence. For a 5' end read, the sequence is the same 
+ 			as that of the mRNA which it represents. One problem that may occur is that contributors of ESTs
+ 			to Genbank may reverse-complement a 3'-read sequence before depositing it in GenBank with the idea
+ 			that people will want to have the mRNA (transcription-direction) sequence.  It is not always 
+			possible to tell if this has been done. Therefore we do some calculations to try to determine the
+			correct direction of transcription for the EST sequence. 
+ 			<P>
+			If an EST alignment produces canonical introns (with gt-ag splice site pairs), this is used 
+			to determine the transcription direction. For example when an EST is aligned to the genome, a 
+			canonical intron would look like this:
+			<P>
+			<B>NNNNexonNNNNgtnnnnintronnnnnnnnagNNNNexon</B></P>
+			<P>
+			Here, the two nucleotides on either end of the intron show the canonical gt-ag splice site pairs. 
+			The method that we use to find transcription direction relies on finding gt-ag canonical pairs in one 
+			direction more often than in the opposite direction. The calculation is:
+                        <P>
+			<B>gt/ag introns minus ct/ac introns = intronOrientation</B> </P>
+ 			<P>	
+			The sign of this intronOrientation field (stored in the estOrientInfo table) gives the orientation of	
+			the transcript relative to the EST. Therefore, if intronOrientation is positive then the EST appears 
+			in the display with the arrows pointing in the same direction as the same direction as the EST 
+			alignment. If intronOrientation is negative, then the arrows point in the opposite directions. If 
+			there are no introns or all of the introns are non-canonical, then the introOrientation is set to zero.  
+			For both BQ016549 and AA928010, the intronOrientation is negative so the arrows on the Genome Browser 
+			display point in the opposite direction to that indicated by the alignment on the details page for 
+			each EST. <B>Note:</B> A low intronOrientation number could be wrong when calculated in this way.
+         		<P>
+ 			If the intronOrientation is set to zero, then the read direction is used to determine transcription 
+			direction. Some GenBank EST 
 			records specify a 3' or 5' read direction, and some don't. If no direction is 
 			specified, or if the direction is 5', the Genome Browser's graphical 
 			display uses the strand field of the database table (the alignment direction) 
 			to determine whether to draw the arrows pointing forward (+) or 
 			reverse (-).  However, when the direction is 3' in the GenBank record, 
-			the arrows are drawn opposite of the strand (alignment direction).
+			the arrows are drawn opposite of the strand (alignment direction). For reasons stated above, you	
+			should be suspicious of alignments where the direction is determined in this way because the read
+			direction in Genbank may not reflect the trasncription direction if the sequence has been 
+			reverse-complemented prior to Genbank submission.
 			<P>
 			The alignment details pages and the Table Browser do not take the GenBank 
 			record's read direction into account. They show only the alignment of the 
