@@ -106,6 +106,7 @@ while (row2 != NULL)
 
         sr = sqlMustGetResult(conn, query);
         row = sqlNextRow(sr);
+	
 	if (row !=NULL)
 	    {
 	    while (row != NULL)
@@ -142,7 +143,7 @@ while (row2 != NULL)
     	    sr5 = sqlMustGetResult(conn5, query5);
     	    row5 = sqlNextRow(sr5);
 
-    	    while (row5 != NULL)
+    	    if (row5 != NULL)
 		{
 		chrom 	   = row5[0];
 		chromStart = row5[1];
