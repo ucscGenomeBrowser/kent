@@ -7269,7 +7269,7 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
     # It also defines the labels for the track controls for showing 
     # All Arrays, Arrays Grouped By Replicate Means or
     # Arrays Grouped By Replicate Medians. This is in the description field.
-
+    
 ###########################################################################
 # HUMAN ORTHOLOGS ADDED TO AFFY ZEBRAFISH TRACK DETAILS
 # (DONE, 2006-06-08, hartera)
@@ -7997,7 +7997,10 @@ must be on same seq and strand
 # VEGA UPDATE (DONE, 2007-03-26 - 2007-03-28, hartera)
 # Data provided by Kerstin Howe from Sanger: kj2@sanger.ac.uk
 # and also Ian Sealy: is1@sanger.ac.uk
-# GTF file sent on 2007-02-14 
+# GTF file sent on 2007-02-14
+# Updated formatVegaInfo.pl script as not all transcripts were being included
+# in the vegaInfoZfish and the vegaToCloneId tables so all tables were
+# re-made (DONE, 2007-04-06, hartera)
     ssh kkstore04
     mkdir /cluster/data/danRer4/bed/vega.2007-02-14
     cd /cluster/data/danRer4/bed/vega
@@ -8034,6 +8037,8 @@ must be on same seq and strand
     # NOTE: in future, make sure each row of vegaInfoZfish.txt output has 
     # 8 fields. The pseudogene entries are missing an entry in the 
     # confidence field so this should be an empty field.
+    # Updated formatVegaInfo.pl as not getting all transcript IDs in the 
+    # vegaInfoZfish table (hartera, 2007-04-06)
 cat << '_EOF_' > formatVegaInfo.pl
 #!/usr/bin/perl -w
 use strict;
@@ -8061,24 +8066,24 @@ chomp;
 $line = $_;
 @f = split(/\t/, $line);
 
-$idsHash{$f[1]} = $f[0];
+# hash is keyed by gene ID but there could be more than one transcript
+# associated with a gene ID so need to create an array for the hash
+push @{$idsHash{$f[1]}}, $f[0];
 }
 close IDS;
 
 while (<INFO>)
 {
-my ($line,@fi,$id,$gene,$trans,@transIds, $tr,@clones, $c,@t, $method, $conf);
+my ($line,@fi,$id,$gene,@transIds, $tr,@clones, $c,@t, $method, $conf);
 chomp;
 $gene = "";
 $line = $_;
 @fi = split(/\t/, $line);
 $id = $gene = $fi[1];
 # get all the transcript IDs for a gene
-while (exists($idsHash{$id}))
+if (exists($idsHash{$id}))
    {
-   $trans = $idsHash{$id};
-   push(@transIds, $trans);
-   $id = $trans;
+   @transIds = @{$idsHash{$id}};
    }
 # push clone IDs into an array:
 @clones = split(/,/, $fi[2]);
@@ -8125,8 +8130,8 @@ close OUT2;
 close STDERR;
 '_EOF_'
     chmod +x formatVegaInfo.pl 
-    wc -l genes_for_tom.txt
-    # 7169 genes_for_tom.txt
+    wc -l vegaInformation.txt
+    # 7169 vegaInformation.txt
     awk '{print $2}' vegaInformation.txt | sort | uniq > genesWithInfo.txt
     awk '{if ($2 ~ /OTTDARG/) print $2;}' vegaIDs.uniq \
         | sort | uniq > genesFromGtf.txt
@@ -8138,36 +8143,45 @@ close STDERR;
     # Number of genes wih no info:
     comm -13 genesWithInfo.txt genesFromGtf.txt | wc -l
     # 0
-    # Use perl script above to extract vegaInfo table information:
+    # Use perl script above to extract vegaInfo table information.
+    # Re-did this with updated perl script to get all transcript IDs
+    # (hartera, 2007-04-07)
     perl formatVegaInfo.pl vegaIDs.uniq vegaInformation.txt \ 
          vegaInfoZfish.txt vegaToCloneId.txt
     # info.log contains genes for which are not in the gff file of VEGA
     # and this is empty as it should be.
     wc -l vegaInfoZfish.txt
-    # 6171 vegaInfoZfish.txt
+    # 8817 vegaInfoZfish.txt
     wc -l vegaToCloneId.txt
-    # 6738 vegaToCloneId.txt
+    # 9698 vegaToCloneId.txt
+    # The vegaToCloneId.txt file is also larger than before as it now 
+    # has all the transcript IDs (hartera, 2007-04-05).
     awk '{print $1}' vegaInfoZfish.txt | sort | uniq -c | sort -nr > out2
     # transcripts only have 1 entry
     awk '{print $2}' vegaInfoZfish.txt | sort | uniq > infogenes.txt
     comm -13 infogenes.txt genesFromGtf.txt 
     # There are no genes in the GFF file that are not in vegaInfoZfish.txt
+    # However, there are genes in the information file that do not have 
+    # transcripts represented that are in the GFF file.
     # Then remake the pseudogenes track from this.
     # Next step is to find which transcripts are pseudogenes.
     grep pseudogene vegaInfoZfish.txt | sort | uniq | wc -l
-    # There are only 52 in the info file, and all of these are in the GFF
+    # Once vegaInfoZfish.txt updated, found 53 pseudogenes so need to update
+    # the pseudogene track 
+    # There are only 53 in the info file, and all of these are in the GFF
     # file. Anyway, this is too sparse for a separate track, but
     # a subtrack could be created.
     # Get transcript IDs for pseudogenes.
     grep pseudogene vegaInfoZfish.txt | awk '{print $1}' > pseudogenes.ids 
     grep -w -f pseudogenes.ids vega.gtf > vegaPseudoGene.gtf 
     awk '{print $20}' vegaPseudoGene.gtf | sort | uniq | wc -l
-    # 52
+    # 53
+    # Need to remake the vegGene table:
     grep -vw -f pseudogenes.ids vega.gtf > vegaGene.gtf
     wc -l vega*gtf
     # 119707 vega.gtf
-    # 119540 vegaGene.gtf
-    # 167 vegaPseudoGene.gtf
+    # 119529 vegaGene.gtf
+    # 178 vegaPseudoGene.gtf
     # Need to relabel IDs to get the name to be the otter transcript ID
     # and name 2 to be the transcript_id (needs to be labeled as gene_id)
     # Also, relabel the otter_transcript_id to be transcript_id as ldHgGene
@@ -8183,27 +8197,28 @@ close STDERR;
          vegaPseudoGeneFormat.gtf
     rm *.bak
     # load GTF files for Vega genes and pseudogenes:
+    # Reloaded all tables after updating as above (2007-04-06, hartera)
     ssh hgwdev
     cd /cluster/data/danRer4/bed/vega
     hgsql -e 'drop table vegaGene;' danRer4
     hgsql -e 'drop table vegaPseudoGene;' danRer4
 
     ldHgGene -bin -genePredExt danRer4 vegaGene vegaGeneFormat.gtf
-    # Read 8765 transcripts in 119540 lines in 1 files
-    # 8765 groups 29 seqs 4 sources 2 feature types
-    # 8765 gene predictions
+    # Read 8764 transcripts in 119529 lines in 1 files
+    #  8764 groups 29 seqs 3 sources 2 feature types
+    # 8764 gene predictions
 
     ldHgGene -bin -genePredExt danRer4 vegaPseudoGene vegaPseudoGeneFormat.gtf
-    # Read 52 transcripts in 167 lines in 1 files
-    # 52 groups 11 seqs 1 sources 1 feature types
-    # 52 gene predictions
-    
+    # Read 53 transcripts in 178 lines in 1 files
+    #   53 groups 11 seqs 1 sources 1 feature types
+    # 53 gene predictions
+
     hgsql -N -e 'select distinct(chrom) from vegaGene;' danRer4 \
          | sort | uniq 
     hgsql -N -e 'select distinct(chrom) from vegaPseudoGene;' danRer4 \
          | sort | uniq 
-    # includes several scaffolds so need to lift file to chrom level for 
-    # these and reload vegaGene. vegaPseudoGene has no scaffolds.
+    # vegaGene includes several scaffolds so need to lift file to chrom 
+    # level for these and reload vegaGene. vegaPseudoGene has no scaffolds.
     
     # scaffolds in vegaGene:
 # chrZv6_scaffold3697
@@ -8222,9 +8237,9 @@ close STDERR;
     cd /cluster/data/danRer4/bed/vega
     hgsql -e 'drop table vegaGene;' danRer4 
     ldHgGene -bin -genePredExt danRer4 vegaGene vegaGeneFormatLifted.gtf
-    # Read 8765 transcripts in 119540 lines in 1 files
-    # 8765 groups 26 seqs 4 sources 2 feature types
-    # 8765 gene predictions
+    # Read 8764 transcripts in 119529 lines in 1 files
+    #   8764 groups 26 seqs 3 sources 2 feature types
+    # 8764 gene predictions
 
     # Vega information tables:
     # mySQL table definition and autosql-generated files created previously 
@@ -8260,8 +8275,9 @@ close STDERR;
     # Looked into using description from BioMart for VEGA genes but easier
     # to get them all directly from Sanger. Kerstin sent a list of 
     # descriptions: for_rachel.txt
+    # Add these again to updated tables (2007-04-06, hartera)
     ssh kkstore04
-    mkdir /cluster/data/danRer4/bed/vega/description
+    mkdir -p /cluster/data/danRer4/bed/vega/description
     # copy file here and rename
     cd /cluster/data/danRer4/bed/vega/description
     mv ../vegaDescriptions.txt .
