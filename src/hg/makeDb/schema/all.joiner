@@ -1626,7 +1626,6 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
-    $danRer.hgBlastTab.query
     $danRer.ceBlastTab.query
     $danRer.dmBlastTab.query
     $danRer.hgBlastTab.query
