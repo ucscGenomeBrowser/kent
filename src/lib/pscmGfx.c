@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.13 2005/05/05 22:20:53 daryl Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.14 2007/04/09 18:44:19 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -36,7 +36,7 @@ void pscmUnclip(struct pscmGfx *pscm)
  * gsave/grestores, which requires nesting.
  * Unfortunately the grestore will also likely
  * nuke our current font and color, so uncache it. */
-psPopG(pscm->ps);
+psPopClipRect(pscm->ps);
 pscm->curFont = NULL;
 pscm->curColor = -1;
 }
