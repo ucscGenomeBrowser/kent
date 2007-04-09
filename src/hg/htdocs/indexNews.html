@@ -31,33 +31,44 @@
 		    We are pleased to announce the release of a new gene 
 		    prediction set, UCSC Genes, on the latest human 
 		    Genome Browser (hg18, NCBI Build 36). This annotation,
-		    which includes putative noncoding genes as well as 
+		    which includes putative non-coding genes as well as 
 		    protein-coding genes and 99.9% of RefSeq genes,
 		    is the next generation of the Known Genes set that UCSC 
 		    has been providing for several years and supersedes the
 		    existing Known Genes annotation on the hg18 assembly.
+		    </P>
 		    <P>
 		    The UCSC Genes is a moderately conservative prediction set 
 		    based on data from RefSeq, GenBank, and UniProt. Each
 		    entry requires the support of one GenBank RNA sequence plus 
 		    at least one additional line of evidence, with the exception
 		    of RefSeq RNAs, which require no additional evidence. 
-		    Some of the noncoding transcripts in the set may actually 
+		    Some of the non-coding transcripts in the set may actually 
 		    code for protein, but the evidence for the associated 
 		    protein is weak at best. Compared to RefSeq, this gene set 
 		    generally has about 10% more protein-coding genes, 
-		    approximately five times as many putative noncoding genes, 
-		    and about twice as many splice variants.
+		    approximately five times as many putative non-coding genes, 
+		    and about twice as many splice variants. 
+		    </P>
+		    <P>
+		    A new companion track to UCSC Genes, Alt Events, shows 
+		    various types of alternative splicing, alternative promoter,
+		    and other events that result in more than a single 
+		    transcript from the same gene. This track is based on an 
+		    analysis by the txgAnalyse program of splicing graphs 
+		    produced by the txGraph program.  
 		    </P>
 		    <P>
 		    The UCSC Genes set is produced using a computational 
 		    pipeline developed at UCSC by Jim Kent, Chuck Sugnet and 
-		    Mark Diekhans. For detailed information about the process 
-		    used to construct the genes set, see the 
+		    Mark Diekhans. The programs used to construct the Alt Events
+		    data set were written by Jim Kent. For detailed information 
+		    about the process used to construct the genes set, see the 
 		    <A HREF="../cgi-bin/hgTrackUi?db=hg18&g=knownGene">track 
 		    description page</A>. In upcoming months, we plan to 
 		    release UCSC Genes sets on several organisms in addition
-		    to human.
+		    to human. The UCSC Genes annotations will be updated 
+		    approximately every three months.
 		    </P>
 		    <P>
 		    As part of this change, we are now using our own UCSC 
