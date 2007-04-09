@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1309 2007/04/08 19:05:42 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1310 2007/04/09 18:11:41 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -13775,6 +13775,9 @@ if (isGenome(position) || NULL ==
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     char *trackName = hgp->tableList->name;
+    char *parent = hGetParent(trackName);
+    if (parent)
+        trackName = cloneString(parent);
     cartSetString(cart, trackName, hTrackOpenVis(trackName));
     }
 
