@@ -490,12 +490,35 @@ color 170,80,0
 altColor 230,180,130
 type bed 6 +
 
+track chainFr2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 140
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain fr2
+otherDb fr2
+
+track netFr2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 140.1
+visibility hide
+spectrum on
+type netAlign fr2 chainFr2
+otherDb fr2
 
 track chainFr1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 140
+priority 140.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -509,7 +532,7 @@ track netFr1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 140.1
+priority 140.3
 visibility hide
 spectrum on
 type netAlign fr1 chainFr1
