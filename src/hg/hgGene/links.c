@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.30 2007/04/09 02:10:58 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.31 2007/04/09 02:31:19 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -224,10 +224,12 @@ int maxPerRow = 6, itemPos = 0;
 int rowIx = 0;
 struct link *link, *linkList = section->items;
 
-sequenceTablePrint(section, conn, geneId);
-printf("<BR>\n");
-
 webPrintLinkTableStart();
+printGenomicSeqLink(conn, geneId, curGeneChrom, curGeneStart, curGeneEnd);
+printMrnaSeqLink(conn,geneId);
+printProteinSeqLink(conn,geneId);
+hPrintf("</TR>\n<TR>");
+
 for (link = linkList; link != NULL; link = link->next)
     {
     char *url = linkGetUrl(link, conn, geneId);

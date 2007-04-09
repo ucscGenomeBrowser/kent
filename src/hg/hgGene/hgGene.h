@@ -174,9 +174,15 @@ void showSeqFromTable(struct sqlConnection *conn, char *geneId,
 	char *geneName, char *table);
 /* Show some sequence from given table. */
 
-void sequenceTablePrint(struct section *section, struct sqlConnection *conn,
-	char *geneId);
-/* Print the sequence table. */
+void printGenomicSeqLink(struct sqlConnection *conn, char *geneId,
+	char *chrom, int start, int end);
+/* Figure out known genes table, position of gene, link it. */
+
+void printProteinSeqLink(struct sqlConnection *conn, char *geneId);
+/* Print out link to fetch mRNA. */
+
+void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
+/* Print out link to fetch mRNA. */
 
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
