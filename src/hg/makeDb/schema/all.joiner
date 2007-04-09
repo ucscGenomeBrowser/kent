@@ -1624,7 +1624,15 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30
+    $danRer.ensZfishBlastTab.query
+    $danRer.ensZfishBlastTab.target
     $danRer.hgBlastTab.query
+    $danRer.ceBlastTab.query
+    $danRer.dmBlastTab.query
+    $danRer.hgBlastTab.query
+    $danRer.mmBlastTab.query
+    $danRer.rnBlastTab.query
+    $danRer.scBlastTab.query
 
 identifier ensemblTranscriptId3 external=Ensembl dependency
 "Ensembl Transcript ID"
