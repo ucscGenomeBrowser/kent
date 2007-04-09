@@ -126,7 +126,7 @@ type netAlign fr2 chainFr2
 otherDb fr2
 
 track chainFr1
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 278.2
@@ -138,7 +138,7 @@ type chain fr1
 otherDb fr1
 
 track netFr1
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 278.3
