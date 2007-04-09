@@ -7,6 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = hgNetDist
 O = $A.o
 
+all: hgNetDist hgLoadNetDist hprdP2p
+
 hgNetDist: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/$A $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/$A${EXE}
