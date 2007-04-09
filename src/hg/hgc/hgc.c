@@ -203,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1265 2007/04/09 23:36:00 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1266 2007/04/09 23:53:32 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16595,13 +16595,13 @@ printf("<TR>");
 printf("<TD>%s</TD>", pop);
 if (count1 > count2)
     {
-    printf("<TD bgcolor = \"gray\">%d (%3.2f%%)</TD>", count1, freq1);
+    printf("<TD bgcolor = \"lightgray\">%d (%3.2f%%)</TD>", count1, freq1);
     printf("<TD>%d (%3.2f%%)</TD>", count2, freq2);
     }
 else
     {
     printf("<TD>%d (%3.2f%%)</TD>", count1, freq1);
-    printf("<TD bgcolor = \"gray\">%d (%3.2f%%)</TD>", count2, freq2);
+    printf("<TD bgcolor = \"lightgray\">%d (%3.2f%%)</TD>", count2, freq2);
     }
 printf("</TR>\n");
 
@@ -16626,32 +16626,8 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 summaryItem = hapmapAllelesSummaryLoad(row+rowOffset);
 
-if (differentString(summaryItem->chimpAllele, "none") || 
-    differentString(summaryItem->macaqueAllele, "none"))
-    {
-    printf("<BR><B>Ortho alleles:</B><BR>\n");
-    printf("<TABLE BORDER=1>\n");
-    printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Qual Score</TH></TR>\n");
-    if (differentString(summaryItem->chimpAllele, "none"))
-        {
-        printf("<TR>");
-        printf("<TD>Chimp</TD>");
-        printf("<TD>%s</TD>", summaryItem->chimpAllele);
-        printf("<TD>%d</TD>", summaryItem->chimpAlleleQuality);
-        printf("</TR>");
-	}
-    if (differentString(summaryItem->macaqueAllele, "none"))
-        {
-        printf("<TR>");
-        printf("<TD>Macaque</TD>");
-        printf("<TD>%s</TD>", summaryItem->macaqueAllele);
-        printf("<TD>%d</TD>", summaryItem->macaqueAlleleQuality);
-        printf("</TR>");
-	}
-    printf("</TABLE>\n");
-    }
 
-printf("<BR><B>Allele frequencies in each population:</B><BR>\n");
+printf("<BR><B>Allele frequencies in each population (major allele highlighted):</B><BR>\n");
 printf("<TABLE BORDER=1>\n");
 if (differentString(summaryItem->allele2, "none"))
     {
@@ -16676,6 +16652,30 @@ het = summaryItem->score / 10.0;
 printf("<BR><B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
 
 
+if (differentString(summaryItem->chimpAllele, "none") || 
+    differentString(summaryItem->macaqueAllele, "none"))
+    {
+    printf("<BR><B>Orthologous alleles:</B><BR>\n");
+    printf("<TABLE BORDER=1>\n");
+    printf("<TR><TH>Species</TH> <TH>Allele</TH> <TH>Quality Score</TH></TR>\n");
+    if (differentString(summaryItem->chimpAllele, "none"))
+        {
+        printf("<TR>");
+        printf("<TD>Chimp</TD>");
+        printf("<TD>%s</TD>", summaryItem->chimpAllele);
+        printf("<TD>%d</TD>", summaryItem->chimpAlleleQuality);
+        printf("</TR>");
+	}
+    if (differentString(summaryItem->macaqueAllele, "none"))
+        {
+        printf("<TR>");
+        printf("<TD>Macaque</TD>");
+        printf("<TD>%s</TD>", summaryItem->macaqueAllele);
+        printf("<TD>%d</TD>", summaryItem->macaqueAlleleQuality);
+        printf("</TR>");
+	}
+    printf("</TABLE>\n");
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -16724,21 +16724,29 @@ else
     minorAllele = cloneString(thisItem->allele1);
     }
 
-printf("<BR><B>Genotype counts:</B><BR>\n");
+printf("<BR><B>Genotype counts for ");
+if (sameString(table, "hapmapSnpsCEU"))
+    printf("CEU:</B><BR>\n");
+if (sameString(table, "hapmapSnpsCHB"))
+    printf("CHB:</B><BR>\n");
+if (sameString(table, "hapmapSnpsJPT"))
+    printf("JPT:</B><BR>\n");
+if (sameString(table, "hapmapSnpsYRI"))
+    printf("YRI:</B><BR>\n");
 printf("<TABLE BORDER=1>\n");
 
 printf("<TR>");
-printf("<TD>Major Allele (%s)</TD>", majorAllele);
+printf("<TD>Major allele (%s) homozygotes</TD>", majorAllele);
 printf("<TD>%d individuals</TD>", majorCount);
 printf("</TR>");
 
 printf("<TR>");
-printf("<TD>Minor Allele (%s)</TD>", minorAllele);
+printf("<TD>Minor allele (%s) homozygotes</TD>", minorAllele);
 printf("<TD>%d individuals</TD>", minorCount);
 printf("</TR>");
 
 printf("<TR>");
-printf("<TD>Heterozygotes</TD>");
+printf("<TD>Heterozygotes (%s/%s)</TD>", majorAllele, minorAllele);
 printf("<TD>%d individuals</TD>", thisItem->heteroCount);
 printf("</TR>");
 
