@@ -618,7 +618,7 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(2000000000);
+// pushCarefulMemHandler(3000000000);
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
