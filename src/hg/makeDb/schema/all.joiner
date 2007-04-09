@@ -1432,7 +1432,7 @@ identifier flyBaseAlleleId
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
     $dm.fbGene.geneId
-    dm1.bdgpExprLink.flyBaseId minCheck=0.95
+    $dm.bdgpExprLink.flyBaseId minCheck=0.95
     dm1.bdgpGeneInfo.flyBaseId minCheck=0.95
     dm1.bdgpNonCodingInfo.flyBaseId minCheck=0.20
     dm1.bdgpSwissProt.flyBaseId minCheck=0.95
@@ -1508,8 +1508,8 @@ identifier flyBase2004IdDm external=FlyBase
     $dm,!dm1.flyBaseToPfam.name
     $dm,!dm1.flyBaseToCG.name
     $dm,!dm1.flyBaseToDescription.name
-    $dm,!dm1.flyP2P.query
-    $dm,!dm1.flyP2P.target
+    $dm,!dm1.flyP2P.query minCheck=0.98
+    $dm,!dm1.flyP2P.target minCheck=0.98
     hg17,hg18,danRer3,mm7,mm8,rn3,rn4,ce2,sacCer1.dmBlastTab.target minCheck=0.90
 
 identifier flyBase2004IdDp external=FlyBase
