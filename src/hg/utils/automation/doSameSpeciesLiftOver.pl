@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl instead.
 
-# $Id: doSameSpeciesLiftOver.pl,v 1.1 2006/10/09 20:44:34 angie Exp $
+# $Id: doSameSpeciesLiftOver.pl,v 1.2 2007/04/09 20:47:53 hiram Exp $
 
 use Getopt::Long;
 use warnings;
@@ -268,11 +268,11 @@ _EOF_
 # not need to be run on the build fileserver because it does not actually
 # split any sequences -- it merely computes ranges based on the chrom.sizes.
 rm -rf tParts
-partitionSequence.pl $tpSize 0 $tSeqScratch \\
+$Bin/partitionSequence.pl $tpSize 0 $tSeqScratch \\
    $tSizes 2000 \\
   -lstDir=tParts > t.lst
 rm -rf qParts
-partitionSequence.pl 10000000 0 $qSeqScratch \\
+$Bin/partitionSequence.pl 10000000 0 $qSeqScratch \\
   $qSizes 1000 \\
   -lstDir=qParts > q.lst
 
