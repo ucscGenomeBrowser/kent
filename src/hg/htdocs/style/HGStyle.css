@@ -21,10 +21,10 @@ A:visited.ug { text-decoration: none; font-family: arial, san-serif; color: #888
 A:active.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }                         
 A:hover.ug { text-decoration: none; font-family: arial, san-serif; color: #888888; font-size: 11pt; font-weight: 600; }
 
-A:link.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #000080; font-size: 16pt; font-weight: 600; }
-A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #800080; font-size: 16pt; font-weight: 600; }
-A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A00080; font-size: 16pt; font-weight: 600; }
-A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #000080; font-size: 16pt; font-weight: 600; }
+A:link.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
+A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
+A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
+A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
 
 A:link.toc { text-decoration: none; color: #0000CC;  }
 A:visited.toc { text-decoration: none; color: #0000CC;  }                         
