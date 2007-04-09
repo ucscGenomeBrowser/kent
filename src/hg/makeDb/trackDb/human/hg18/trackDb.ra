@@ -295,7 +295,7 @@ type psl .
 
 track knownGene
 shortLabel UCSC Genes
-longLabel UCSC Gene Predictions Based on RefSeq, UniProt, Genbank, and Comparative Genomics
+longLabel UCSC Gene Predictions Based on RefSeq, UniProt, GenBank, and Comparative Genomics
 group genes
 priority 34
 visibility pack
