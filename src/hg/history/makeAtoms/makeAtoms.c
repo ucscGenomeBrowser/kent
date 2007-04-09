@@ -10,7 +10,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: makeAtoms.c,v 1.1 2007/04/09 16:45:33 braney Exp $";
+static char const rcsid[] = "$Id: makeAtoms.c,v 1.2 2007/04/09 16:52:59 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -150,32 +150,6 @@ else
     offset = psl->qSize - (*qStart + *block) + diff;
 
 return offset;
-
-/*
-for(block=0; block < psl->blockCount; block++)
-    {
-    if (psl->tStarts[block] > base)
-    	return -1;
-
-    if (psl->tStarts[block] + psl->blockSizes[block] > base)
-    	break;
-    }
-
-if (block == psl->blockCount)
-    return -1;
-
-assert (base >= psl->tStarts[block]);
-
-diff = base - psl->tStarts[block];
-
-if (psl->strand[0] == '+')
-    offset = psl->qStarts[block] + diff;
-else
-    offset = psl->qSize - (psl->qStarts[block] + psl->blockSizes[block]) + diff;
-*strand = psl->strand[0];
-
-return offset;
-*/
 }
 
 void AddBaseToCol(struct column *aCol, struct species *species, 
@@ -189,8 +163,6 @@ slAddHead(&aCol->bases, abr);
 abr->species = species;
 abr->offset = offset;
 abr->strand = strand;
-
-//slSort(&aCol->bases, baseSort);
 }
 
 struct column *getSet(int base, struct psl *psl, struct hash *speciesHash)
@@ -220,14 +192,11 @@ for(; psl && (psl->tStart <= base); psl = psl->next)
 	    AddBaseToCol(aCol, species, offset, strand);
 	}
     }
-//slSort(&aSet->bases, baseSort);
 return aCol;
 }
 
 boolean colContig(struct column *colOne, struct atom *atom)
 {
-//slSort(&colOne->bases, baseSort);
-//slSort(&atom->run->bases, baseSort);
 struct aBase *one = colOne->bases;
 struct aBase *prev = atom->run->bases;
 
@@ -264,20 +233,6 @@ if (atom->run == NULL)
     }
 else 
     {
-    /*
-    struct aBase *one = atom->run->bases;
-    struct aBase *two = aCol->bases;
-
-    for(; one && two ; one = one->next, two = two->next)
-	{
-	if (one->strand != two->strand)
-	    errAbort("one->strand == two->strand");
-	if (two->offset != one->offset + atom->run->length)
-	    errAbort ("two->offset != one->offset + atom->run->length");
-	}
-
-    assert((one == NULL) && (two == NULL));
-    */
     atom->run->length++;
     }
 }
@@ -331,10 +286,6 @@ for(; aBase ; aBase = aBase->next)
     {
     struct species *species = aBase->species;
 
-    /*
-    if ( species->atomSequence[aBase->offset - species->chromStart] != 0)
-	errAbort("erroror");
-	*/
     species->atomSequence[aBase->offset - species->chromStart] = atom->num;
     }
 }
@@ -353,10 +304,7 @@ if (/*(aBase->strand == colBase->strand) &&*/ (aBase->species == colBase->specie
 	    *doReverse = TRUE;
 	return delta;
 	}
-    //printf("delta not good %d %d\n",delta,length);
     }
-//else
-    //printf("not same species %s %s\n",aBase->species->name,colBase->species->name);
 return -1;
 }
 
@@ -371,129 +319,20 @@ for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
     {
     if (prevBase)
 	{
-	    //printf("check %s %d\n", aBase->species->name, aBase->offset);
-	    //printf("agains %s %d\n", prevBase->species->name, prevBase->offset);
 	if (aBase->species == prevBase->species) 
 	    {
 	    int diff = aBase->offset - prevBase->offset;
 
 	    if (diff == 0)
 		{
-		//printf("drop %s %d\n", aBase->species->name, aBase->offset);
 		prevBase->next = aBase->next;
 		continue;
-		}
-	    else if ((diff > -30) &&  (diff < 30))
-		{
-		//printf("warn: species %s prevBase %d aBase %d diff %d\n",prevBase->species->name, prevBase->offset,aBase->offset, diff);
 		}
 	    }
 	}
     prevBase = aBase;
     }
 }
-
-#ifdef NOTNOW
-void MoveColumnFromAtom(int atomNum, struct aBase *colBase, struct column *aCol)
-{
-errAbort("not working");
-struct aBase *aBase;
-struct atom *atom = &atoms[atomNum - 1];
-struct run *run = atom->run;
-int delta = -1;
-boolean doReverse = FALSE;
-
-errAbort("no transitive");
-
-for( aBase = run->bases; aBase ; aBase = aBase->next)
-    if ((delta = baseInRange(aBase, run->length, colBase, &doReverse)) != -1)
-	break;
-
-//printf("delta %d length %d\n",delta,run->length);
-
-if (aBase == NULL)
-    errAbort("couldn't find column\n");
-
-
-for( aBase = run->bases; aBase ; aBase = aBase->next)
-    {
-    struct aBase *newBase;
-    struct species *species = aBase->species;
-
-    species->atomSequence[aBase->offset + delta - species->chromStart] = 0;
-
-    AllocVar(newBase);
-    newBase->offset = aBase->offset + delta;
-    newBase->species = aBase->species;
-    if (!doReverse)
-	newBase->strand = aBase->strand;
-    else
-	{
-	//printf("doing reverse\n");
-	newBase->strand = (aBase->strand == '+')? '-' : '+';
-	}
-    slAddHead(&aCol->bases, newBase);
-    }
-
-dropDups(aCol);
-
-/* fix up atoms */
-if (delta == 0)
-    {
-    run->length--;
-    for( aBase = run->bases; aBase ; aBase = aBase->next)
-	aBase->offset++;
-    }
-else if (delta == run->length - 1 )
-    {
-    run->length--;
-    }
-else
-    {
-    struct run *newRun;
-    struct atom *newAtom = getNewAtom();
-    int newAtomNum = newAtom->num;
-
-    AllocVar(newRun);
-    newAtom->run = newRun;
-    newRun->length = run->length - delta - 1;
-
-    for( aBase = run->bases; aBase ; aBase = aBase->next)
-	{
-	struct aBase *newBase;
-	struct species *species = aBase->species;
-	int ii;
-
-	AllocVar(newBase);
-	newBase->strand = aBase->strand;
-	newBase->species = aBase->species;
-	newBase->offset = aBase->offset + delta + 1;
-	for(ii=0; ii < newRun->length; ii++)
-	    species->atomSequence[newBase->offset + ii 
-	    	- species->chromStart] = newAtomNum;
-
-	slAddHead(&newRun->bases, newBase);
-	}
-
-
-    /* make current atom the part before delta */
-    run->length = delta;
-    }
-
-if (run->length == 0)
-    {
-    struct aBase *aBase, *nextBase;
-
-    for( aBase = atom->run->bases; aBase ; aBase = nextBase)
-	{
-	nextBase = aBase->next;
-	freez(&aBase);
-	}
-    //atom->run = NULL;
-    freez(&atom->run);
-    }
-}
-#endif
 
 
 boolean checkBases(struct column *aCol)
@@ -569,7 +408,6 @@ offset += species->chromStart;
 
 for(; aBase; aBase = aBase->next)
     {
-    //if (sameString(aBase->species->name,  species->name)
     if ((aBase->species ==  species)
         && (offset >= aBase->offset) && (offset < aBase->offset + length))
 	{
@@ -627,7 +465,6 @@ for(species = speciesList; species; species = species->next)
 	if (startsWith(species->name,psl->tName))
 	    {
 	    slAddHead(&species->pslList, psl);
-	    //printf("adding %s to list %s\n",psl->tName, species->name);
 	    }
 	}
     slSort(&species->pslList, pslCmpTarget);
@@ -638,17 +475,6 @@ for(species = speciesList; species; species = species->next)
     int base;
     struct atom *atom = NULL;
 
-//printf("species %s\n",species->name);
-//    if (species->pslList == NULL)
-//	errAbort("can't find alignments for %s\n",species->name);
-
-    /*
-    {
-    struct psl *aPsl = species->pslList;
-    for(; aPsl; aPsl = aPsl->next)
-	printf("got %s\n",aPsl->tName);
-    }
-    */
     for(base = species->chromStart; base < species->chromEnd; base++)
 	{
 	/* get rid of psl's we won't use since we're passed them */
@@ -665,22 +491,11 @@ for(species = speciesList; species; species = species->next)
 	    fflush(stdout);
 	    }
 
-	//if (aCol->bases->next)
-	//printf("checking atom %d to have col %d\n",atom->num,aCol->bases->next->offset);
 	if (checkBases(aCol))
 	    {
 	    deleteCol(aCol);
 	    continue;
 	    }
-
-/*
-struct aBase *aBase;
-for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
-    if (aBase->offset == -1)
-	errAbort("fofof\n");
-	if (aCol->bases == NULL)
-	    continue;
-	    */
 
 	if ((atom == NULL) || !colContig(aCol, atom))
 	    {
@@ -688,13 +503,10 @@ for( aBase = aCol->bases; aBase ;  aBase = aBase->next)
 	    atom = getNewAtom();
 	    }
 
-	//if (aCol->bases->next)
-	//printf("setting atom %d to have col %d\n",atom->num,aCol->bases->next->offset);
 	SetAtomForCol(atom, aCol);
 	AddColToAtom(atom, aCol);
 
-	//if (aCol->bases)
-	    deleteCol(aCol);
+	deleteCol(aCol);
 	}
     }
 
@@ -713,7 +525,6 @@ for(atom = atoms; atom < &atoms[numAtoms] ; atom++)
 	abr->order = count++;
 
     fprintf(outAtoms, ">%d %d %d\n", atom->num, atom->run->length,count);
-    //totalSize += abr->length;
 
     abr = atom->run->bases; 
     for(; abr; abr = abr->next)
@@ -722,9 +533,6 @@ for(atom = atoms; atom < &atoms[numAtoms] ; atom++)
 		abr->offset, abr->offset + atom->run->length, abr->strand);
 	}
     }
-
-//printf("%d atoms (average size %d)\n",numAtoms,totalSize / numAtoms);
-
 
 FILE *outSeq = mustOpen(outSeqName,"w");
 
