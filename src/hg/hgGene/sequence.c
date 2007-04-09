@@ -1,4 +1,4 @@
-/* sequence.c - Handle sequence section. */
+/* sequence.c - Handle sequence stuff - formerly a section, now part of links. */
 
 #include "common.h"
 #include "hash.h"
@@ -15,7 +15,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.18 2007/03/02 08:54:36 kent Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.19 2007/04/09 02:10:58 kent Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -123,9 +123,9 @@ if (protSize > 0)
 }
 
 
-static void sequencePrint(struct section *section, struct sqlConnection *conn,
+void sequenceTablePrint(struct section *section, struct sqlConnection *conn,
 	char *geneId)
-/* Print the sequence section. */
+/* Print the sequence table. */
 {
 char *table = genomeSetting("knownGene");
 struct dyString *query = newDyString(0);
@@ -170,7 +170,7 @@ struct section *sequenceSection(struct sqlConnection *conn,
 /* Create sequence section. */
 {
 struct section *section = sectionNew(sectionRa, "sequence");
-section->print = sequencePrint;
+section->print = sequenceTablePrint;
 return section;
 }
 

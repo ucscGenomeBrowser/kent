@@ -10,7 +10,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.18 2007/04/08 18:43:21 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.19 2007/04/09 02:10:58 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -177,7 +177,10 @@ static void otherOrgPrintLink(struct otherOrg *otherOrg,
 	char *otherId, char *urlFormat)
 /* If label and urlFormat exist then print up a link.  Otherwise print n/a. */
 {
-webPrintLinkCellStart();
+if (internalLink)
+    webPrintLinkCellStart();
+else
+    webPrintLinkOutCellStart();
 if (urlFormat != NULL && label != NULL)
     {
     if (otherId != NULL)

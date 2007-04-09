@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: method.c,v 1.3 2007/04/06 01:19:20 kent Exp $";
+static char const rcsid[] = "$Id: method.c,v 1.4 2007/04/09 02:10:58 kent Exp $";
 
 static void methodPrint(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -16,7 +16,7 @@ static void methodPrint(struct section *section,
 hPrintf("Click ");
 hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_do_kgMethod=1&db=%s\" target=_blank>", database);
 hPrintf("here</A>\n");
-hPrintf(" for details.");
+hPrintf(" for details on how this gene model was made and data restrictions if any.");
 }
 
 struct section *methodSection(struct sqlConnection *conn,

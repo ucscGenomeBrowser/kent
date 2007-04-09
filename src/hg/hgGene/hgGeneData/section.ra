@@ -1,6 +1,6 @@
 name links
-shortLabel Quick Links
-longLabel Quick Links to Tools and Databases
+shortLabel Sequence and Links
+longLabel Sequence and Links to Tools and Databases
 priority 10
 
 name swissProtComments
@@ -8,11 +8,11 @@ shortLabel UniProt Comments
 longLabel Comments and Description Text from UniProt (Swiss-Prot/TrEMBL)
 priority 20
 
-name sequence
-shortLabel Sequence
-longLabel Sequence
-priority 30
-
+#name sequence
+#shortLabel Sequence
+#longLabel Sequence
+#priority 30
+#
 name gad
 shortLabel Genetic Associations
 longLabel Genetic Association Studies of Complex Diseases and Disorders
@@ -78,8 +78,13 @@ shortLabel Localization
 longLabel Protein Localization
 priority 103
 
+name synonym
+shortLabel Other Names
+longLabel Other Names for This Gene
+priority 135
+
 name method
-shortLabel Methods
-longLabel Methods, Credits, and Data Use Restrictions
+shortLabel Info and Methods
+longLabel Gene Model Information, Methods, Credits, and Use Restrictions
 priority 140
 

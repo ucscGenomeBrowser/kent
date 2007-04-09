@@ -16,9 +16,8 @@
 #include "genePred.h"
 #include "hgColors.h"
 #include "hgGene.h"
-#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.96 2007/04/08 19:37:03 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.97 2007/04/09 02:10:57 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -86,23 +85,6 @@ if (!sameString(name, "global"))
 genomeSettings = hash;
 }
 
-static char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, 
-	char *geneId)
-/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.
- * spConn is existing SwissProt database conn.  May be NULL. */
-{
-char *proteinSql = genomeSetting("proteinSql");
-char query[256];
-char *someAcc, *primaryAcc = NULL;
-safef(query, sizeof(query), proteinSql, geneId);
-someAcc = sqlQuickString(conn, query);
-if (someAcc == NULL || someAcc[0] == 0)
-    return NULL;
-primaryAcc = spFindAcc(spConn, someAcc);
-freeMem(someAcc);
-return primaryAcc;
-}
-
 int gpRangeIntersection(struct genePred *gp, int start, int end)
 /* Return number of bases range start,end shares with genePred. */
 {
@@ -157,22 +139,25 @@ if (name == NULL)
 return name;
 }
 
-/* --------------- Page printers ----------------- */
+char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, 
+	char *geneId)
+/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.
+ * spConn is existing SwissProt database conn.  May be NULL. */
+{
+char *proteinSql = genomeSetting("proteinSql");
+char query[256];
+char *someAcc, *primaryAcc = NULL;
+safef(query, sizeof(query), proteinSql, geneId);
+someAcc = sqlQuickString(conn, query);
+if (someAcc == NULL || someAcc[0] == 0)
+    return NULL;
+primaryAcc = spFindAcc(spConn, someAcc);
+freeMem(someAcc);
+return primaryAcc;
+}
 
-static void printOurMrnaUrl(FILE *f, char *accession)
-/* Print URL for Entrez browser on a nucleotide. */
-{
-fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&o=%d&t=%d&l=%d&r=%d&db=%s",
-    cartSidUrlString(cart), accession, curGeneChrom, curGeneStart, curGeneEnd, curGeneStart,
-    curGeneEnd, database);
-}
-static void printOurRefseqUrl(FILE *f, char *accession)
-/* Print URL for Entrez browser on a nucleotide. */
-{
-fprintf(f, "../cgi-bin/hgc?%s&g=refGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
-    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneStart,
-    curGeneEnd, database);
-}
+
+/* --------------- Page printers ----------------- */
 
 boolean idInAllMrna(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in allMrna table */
@@ -197,148 +182,11 @@ safef(query, sizeof(query),
 return sqlQuickNum(conn, query) > 0;
 }
 
-int countAlias(char *id, struct sqlConnection *conn)
-/* Count how many valid gene symbols to be printed */
-{
-char query[256];
-struct sqlResult *sr;
-int cnt = 0;
-char **row;
-safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
-sr = sqlGetResult(conn, query);
-
-row = sqlNextRow(sr);
-while (row != NULL)
-    {
-    /* skip kgId and the maint gene symbol (curGeneName) */
-    if ((!sameWord(id, row[0])) && (!sameWord(row[0], curGeneName))) 
-    	{
-	cnt++;
-	}
-    row = sqlNextRow(sr);
-    }
-sqlFreeResult(&sr);
-return(cnt);
-}
-
-void printAlias(char *id, struct sqlConnection *conn)
-/* Print out description of gene given ID. */
-{
-char query[256];
-struct sqlResult *sr = NULL;
-char **row;
-int totalCount;
-int cnt = 0;
-
-totalCount = countAlias(id,conn);
-if (totalCount > 0)
-    {
-    hPrintf("<B>Alternate Gene Symbols:</B> ");
-    safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    while (cnt < totalCount)
-    	{
-        /* skip kgId and the maint gene symbol (curGeneName) */
-        if ((!sameWord(id, row[0])) && (!sameWord(row[0], curGeneName))) 
-		{
-    		hPrintf("%s", row[0]);
-		if (cnt < (totalCount-1)) hPrintf(", ");
-		cnt++;
-		}
-    	row = sqlNextRow(sr);
-    	}
-    hPrintf("<BR>");   
-    sqlFreeResult(&sr);
-    }
-}
-
-void printGeneSymbol (char *geneId, char *table, char *idCol, struct sqlConnection *conn)
-/* Print out official Entrez gene symbol from a cross-reference table.*/
-{
-char query[256];
-struct sqlResult *sr = NULL;
-char **row;
-char *geneSymbol;
-
-if (sqlTablesExist(conn, table))
-    {
-    hPrintf("<B>Entrez Gene Official Symbol:</B> ");
-    safef(query, sizeof(query), "select geneSymbol from %s where %s = '%s'", table, idCol, geneId);
-    sr = sqlGetResult(conn, query);
-    if (sr != NULL)
-        {
-        row = sqlNextRow(sr);
-
-        geneSymbol = cloneString(row[0]);
-        if (!sameString(geneSymbol, ""))
-            hPrintf("%s<BR>", geneSymbol);
-        }
-    }
-sqlFreeResult(&sr);
-}
-
-void printCcds(char *kgId, struct sqlConnection *conn)
-/* Print out CCDS ids most closely matching the kg. */
-{
-struct ccdsGeneMap *ccdsKgs = NULL;
-if (sqlTablesExist(conn, "ccdsKgMap"))
-    ccdsKgs = ccdsGeneMapSelectByGene(conn, "ccdsKgMap", kgId, 0.0);
-if (ccdsKgs != NULL)
-    {
-    struct ccdsGeneMap *ccdsKg;
-    hPrintf("<B>CCDS:</B> ");
-    /* since kg is not by location (even though we have a
-     * curGeneStart/curGeneEnd), we need to use the location in the 
-     * ccdsGeneMap */
-    for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
-        {
-        if (ccdsKg != ccdsKgs)
-            hPrintf(", ");
-        hPrintf("<A href=\"../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s\">%s</A>",
-                cartSidUrlString(cart), ccdsKg->ccdsId, ccdsKg->chrom, ccdsKg->chromStart, ccdsKg->chromStart,
-                ccdsKg->chromEnd, database, ccdsKg->ccdsId);
-        }
-    hPrintf(" ");   
-    }
-}
-
-char *getRefSeqAcc(char *id, char *table, char *idCol, struct sqlConnection *conn)
-/* Finds RefSeq accession from a cross-reference table. */
-{
-char query[256];
-struct sqlResult *sr = NULL;
-char **row;
-char *refSeqAcc = NULL;
-
-if (sqlTablesExist(conn, table))
-    {
-    safef(query, sizeof(query), "select refSeq from %s where %s = '%s'", table, idCol, id);
-    sr = sqlGetResult(conn, query);
-    if (sr != NULL)
-        {
-        row = sqlNextRow(sr);
-        refSeqAcc = cloneString(row[0]);
-        }
-    }
-sqlFreeResult(&sr);
-return refSeqAcc;
-}
-
 void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
 char *description = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
-char *protAcc = getSwissProtAcc(conn, spConn, id);
-char *spDisplayId;
-char *refSeqAcc = "";
-char *mrnaAcc = "";
-char *oldDisplayId;
-char condStr[255];
-char *kgProteinID;
-char *parAcc; /* parent accession of a variant splice protein */
-char *chp;
 int  i, exonCnt = 0, cdsExonCnt = 0;
 int  cdsStart, cdsEnd;
 
@@ -362,126 +210,15 @@ if (summaryTables != NULL)
 	    }
 	}
     }
-if (sqlTablesExist(conn, "kgAlias"))
-    {
-    printAlias(id, conn);
-    }
-if (sameWord(genome, "Zebrafish"))
-    {
-    char *xrefTable = "ensXRefZfish";
-    char *geneIdCol = "ensGeneId";
-    /* get Gene Symbol and RefSeq accession from Zebrafish-specific */
-    /* cross-reference table */
-    printGeneSymbol(id, xrefTable, geneIdCol, conn);
-    refSeqAcc = getRefSeqAcc(id, xrefTable, geneIdCol, conn);
-    hPrintf("<B>ENSEMBL ID:</B> %s", id);
-    }
-else
-    {
-    char query[256];
-    char *toRefTable = genomeOptionalSetting("knownToRef");
-    if (toRefTable != NULL && sqlTableExists(conn, toRefTable))
-        {
-	safef(query, sizeof(query), "select value from %s where name='%s'", toRefTable,
-		id);
-	refSeqAcc = emptyForNull(sqlQuickString(conn, query));
-	}
-    if (sqlTableExists(conn, "kgXref"))
-	{
-	safef(query, sizeof(query), "select mRNA from kgXref where kgID='%s'", id);
-	mrnaAcc = emptyForNull(sqlQuickString(conn, query));
-	}
-    hPrintf("<B>UCSC ID:</B> %s", id);
-    }
-hPrintf("&nbsp&nbsp&nbsp");
-    
-if (refSeqAcc[0] != 0)
-    {
-    hPrintf("<B>RefSeq Accession: </B> <A HREF=\"");
-    printOurRefseqUrl(stdout, refSeqAcc);
-    hPrintf("\">%s</A>\n", refSeqAcc);
-    hPrintf("&nbsp&nbsp&nbsp");
-    }
-else if (mrnaAcc[0] != 0)
-    {
-    hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
-    printOurMrnaUrl(stdout, mrnaAcc);
-    hPrintf("\">%s</A>\n", mrnaAcc);
-    hPrintf("&nbsp&nbsp&nbsp");
-    }
-hPrintf("<BR>");
-if (protAcc != NULL)
-    {
-    kgProteinID = cloneString("");
-    if (hTableExists("knownGene") && (!sameWord(cartOptionalString(cart, hggChrom),"none")))
-    	{
-    	safef(condStr, sizeof(condStr), "name = '%s' and chrom = '%s' and txStart=%s and txEnd=%s", 
-	        id, cartOptionalString(cart, hggChrom), 
-    	        cartOptionalString(cart, hggStart), 
-		cartOptionalString(cart, hggEnd));
-    	kgProteinID = sqlGetField(conn, database, "knownGene", "proteinID", condStr);
-    	}
-
-    hPrintf("<B>Protein: ");
-    if (strstr(kgProteinID, "-") != NULL)
-        {
-	parAcc = cloneString(kgProteinID);
-	chp = strstr(parAcc, "-");
-	*chp = '\0';
-	
-        /* show variant splice protein and the UniProt link here */
-	hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
-	    "TARGET=_blank>%s</A></B>, splice isoform of ",
-	    kgProteinID, kgProteinID);
-        hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
-	    "TARGET=_blank>%s</A></B>\n",
-	    parAcc, parAcc);
-	}
-    else
-        {
-        hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
-	    "TARGET=_blank>%s</A></B>\n",
-	    protAcc, protAcc);
-	}
-    /* show SWISS-PROT display ID if it is different than the accession ID */
-    /* but, if display name is like: Q03399 | Q03399_HUMAN, then don't show display name */
-    spDisplayId = spAnyAccToId(spConn, protAcc);
-    if (spDisplayId == NULL) 
-    	{
-	errAbort("<br>%s seems to no longer be a valid protein ID in our latest UniProt DB.", protAcc);
-	}
-	
-    if (strstr(spDisplayId, protAcc) == NULL)
-	{
-	hPrintf(" (aka %s", spDisplayId);
-	/* show once if the new and old displayId are the same */
- 	oldDisplayId = oldSpDisplayId(spDisplayId);
-	if (oldDisplayId != NULL)
- 	    {
-            if (!sameWord(spDisplayId, oldDisplayId)
-                && !sameWord(protAcc, oldDisplayId))
-	    	{
-	    	hPrintf(" or %s", oldDisplayId);
-	    	}
-	    }
-	hPrintf(")\n");
-	}
-	hPrintf("&nbsp&nbsp&nbsp");
-    }
-printCcds(id, conn);
-hPrintf("<BR>");
-
 /* print genome position and size */
-hPrintf("<B>Position:</B> %s:%d-%d</A>\n", curGeneChrom, curGeneStart+1, curGeneEnd);
-hPrintf("&nbsp;&nbsp;<B>Strand:</B> %s</A>\n", curGenePred->strand);
+hPrintf("<B>Strand:</B> %s</A>\n", curGenePred->strand);
 hPrintf("&nbsp;&nbsp;<B>Genomic Size:</B> %d\n", curGeneEnd - curGeneStart);
 
 /* print exon count(s) */
-hPrintf("<BR>");
 exonCnt = curGenePred->exonCount;
 cdsStart= curGenePred->cdsStart;
 cdsEnd  = curGenePred->cdsEnd;
-hPrintf("<B>Exon Count:</B> %d\n", exonCnt);
+hPrintf("&nbsp;&nbsp;<B>Exon Count:</B> %d\n", exonCnt);
 
 /* count CDS exons */
 if (cdsStart < cdsEnd)
@@ -494,7 +231,7 @@ if (cdsStart < cdsEnd)
 	}
     }
 /* print CDS exon count only if it is different than exonCnt */
-hPrintf("&nbsp&nbsp");
+hPrintf("&nbsp;&nbsp;");
 hPrintf("<B>Coding Exon Count:</B> %d\n", cdsExonCnt);
 fflush(stdout);
 }
@@ -583,7 +320,6 @@ struct section *sectionList = NULL;
 readRa("section.ra", &sectionRa);
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
 
 //addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
@@ -608,6 +344,7 @@ addGoodSection(transRegCodeMotifSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pseudoGeneSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(synonymSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 
 slSort(&sectionList, sectionCmpPriority);
@@ -766,49 +503,49 @@ return gp;
 }
 
 void doKgMethod(struct sqlConnection *conn)
-/* display knownGene.html content 
-(UCSC Known Genes Method, Credits, and Data Use Restrictions) */
+/* display knownGene.html content (UCSC Known Genes 
+ * Method, Credits, and Data Use Restrictions) */
+{
+struct trackDb *tdb, *tdb2;
+struct section *sectionList = NULL;
+struct section *section;
+
+sectionList = loadSectionList(conn);
+
+for (section = sectionList; section != NULL; section = section->next)
     {
-    struct trackDb *tdb, *tdb2;
-    struct section *sectionList = NULL;
-    struct section *section;
-
-    sectionList = loadSectionList(conn);
-
-    for (section = sectionList; section != NULL; section = section->next)
-    	{
-	if (sameWord(section->name, "method"))
-	    {
-	    cartWebStart(cart, section->longLabel);
-	    break;
-	    }
-    	}
-
-    /* default is knownGene */
-    tdb = hTrackDbForTrack("knownGene");
-    
-    /* deal with special genomes that do not have knownGene */
-    if (sameWord(genome, "D. melanogaster"))
+    if (sameWord(section->name, "method"))
 	{
-        tdb = hTrackDbForTrack("bdgpGene");
+	cartWebStart(cart, section->longLabel);
+	break;
 	}
-    if (sameWord(genome, "C. elegans"))
-	{
-        tdb = hTrackDbForTrack("sangerGene");
-	}
-    if (sameWord(genome, "S. cerevisiae"))
-	{
-        tdb = hTrackDbForTrack("sgdGene");
-	}
-    if (sameWord(genome, "Danio rerio"))
-	{
-        tdb = hTrackDbForTrack("ensGene");
-	}
-    tdb2 = hTrackDbForTrack(genomeSetting("knownGene"));
-    hPrintf("%s", tdb2->html);
-
-    cartWebEnd();
     }
+
+/* default is knownGene */
+tdb = hTrackDbForTrack("knownGene");
+
+/* deal with special genomes that do not have knownGene */
+if (sameWord(genome, "D. melanogaster"))
+    {
+    tdb = hTrackDbForTrack("bdgpGene");
+    }
+if (sameWord(genome, "C. elegans"))
+    {
+    tdb = hTrackDbForTrack("sangerGene");
+    }
+if (sameWord(genome, "S. cerevisiae"))
+    {
+    tdb = hTrackDbForTrack("sgdGene");
+    }
+if (sameWord(genome, "Danio rerio"))
+    {
+    tdb = hTrackDbForTrack("ensGene");
+    }
+tdb2 = hTrackDbForTrack(genomeSetting("knownGene"));
+hPrintf("%s", tdb2->html);
+
+cartWebEnd();
+}
 
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now

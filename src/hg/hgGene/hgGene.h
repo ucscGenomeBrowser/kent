@@ -128,6 +128,9 @@ struct section *transRegCodeMotifSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create dnaBindMotif section. */
 
+struct section *synonymSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create synonym (aka Other Names) section. */
 
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
@@ -140,6 +143,11 @@ struct section *xyzSection(struct sqlConnection *conn,
 char *getGeneName(char *id, struct sqlConnection *conn);
 /* Return gene name associated with ID.  Freemem
  * this when done. */
+
+char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, 
+	char *geneId);
+/* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.
+ * spConn is existing SwissProt database conn.  May be NULL. */
 
 char *genomeSetting(char *name);
 /* Return genome setting value.   Aborts if setting not found. */
@@ -165,6 +173,10 @@ char *getFlyBaseId(struct sqlConnection *conn, char *geneId);
 void showSeqFromTable(struct sqlConnection *conn, char *geneId,
 	char *geneName, char *table);
 /* Show some sequence from given table. */
+
+void sequenceTablePrint(struct section *section, struct sqlConnection *conn,
+	char *geneId);
+/* Print the sequence table. */
 
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */

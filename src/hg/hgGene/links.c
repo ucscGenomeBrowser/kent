@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.29 2007/04/06 01:19:20 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.30 2007/04/09 02:10:58 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -211,14 +211,8 @@ static boolean linksExists(struct section *section,
 /* Return TRUE if necessary database exists and has something
  * on this one. */
 {
-struct link *link, *linkList;
-linkList = section->items = getLinkList(conn, section->raFile);
-for (link = linkList; link != NULL; link = link->next)
-    {
-    if (linkGetUrl(link, conn, geneId))
-        return TRUE;
-    }
-return FALSE;
+section->items = getLinkList(conn, section->raFile);
+return TRUE;
 }
 
 
@@ -229,6 +223,9 @@ static void linksPrint(struct section *section, struct sqlConnection *conn,
 int maxPerRow = 6, itemPos = 0;
 int rowIx = 0;
 struct link *link, *linkList = section->items;
+
+sequenceTablePrint(section, conn, geneId);
+printf("<BR>\n");
 
 webPrintLinkTableStart();
 for (link = linkList; link != NULL; link = link->next)
@@ -243,7 +240,10 @@ for (link = linkList; link != NULL; link = link->next)
 	    itemPos = 1;
 	    ++rowIx;
 	    }
-	webPrintLinkCellStart();
+	if (link->useHgsid)
+	    webPrintLinkCellStart();
+	else
+	    webPrintLinkOutCellStart();
 	hPrintf("<A HREF=\"%s\"%s class=\"toc\">", url, target);
 	hPrintf("%s", link->shortLabel);
 	hPrintf("</A>");
@@ -251,7 +251,7 @@ for (link = linkList; link != NULL; link = link->next)
 	freez(&url);
 	}
     }
-webFinishPartialLinkTable(rowIx, itemPos, maxPerRow);
+webFinishPartialLinkOutTable(rowIx, itemPos, maxPerRow);
 webPrintLinkTableEnd();
 }
 

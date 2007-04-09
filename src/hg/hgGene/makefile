@@ -9,7 +9,8 @@ A = hgGene
 O = hgGene.o altSplice.o dnaBindMotif.o domains.o gad.o\
     flyBaseInfo.o go.o links.o microarray.o \
     method.o localization.o mrnaDescriptions.o otherOrgs.o\
-    pathways.o pseudoGene.o rnaStructure.o sequence.o swissProtComments.o
+    pathways.o pseudoGene.o rnaStructure.o sequence.o swissProtComments.o \
+    synonym.o
 
 include ../../inc/cgi_build_rules.mk
 
