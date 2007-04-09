@@ -203,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1264 2007/04/09 23:35:10 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1265 2007/04/09 23:36:00 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16651,7 +16651,7 @@ if (differentString(summaryItem->chimpAllele, "none") ||
     printf("</TABLE>\n");
     }
 
-printf("<BR><B>Allele frequencies over all populations:</B><BR>\n");
+printf("<BR><B>Allele frequencies in each population:</B><BR>\n");
 printf("<TABLE BORDER=1>\n");
 if (differentString(summaryItem->allele2, "none"))
     {
