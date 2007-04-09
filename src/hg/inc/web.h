@@ -203,6 +203,13 @@ void webPrintLinkTableEnd();
 void webPrintLinkCellStart();
 /* Print link cell start in our colors. */
 
+void webPrintLinkOutCellStart();
+/* Print link cell that goes out of our site. End with 
+ * webPrintLinkTableEnd. */
+
+void webPrintWideCellStart(int colSpan, char *bgColorRgb);
+/* Print link multi-column cell start in our colors. */
+
 void webPrintLinkCellRightStart();
 /* Print right-justified cell start in our colors. */
 
@@ -228,6 +235,9 @@ void webPrintLinkTableNewRow();
 /* start a new row */
 
 void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
+/* Fill out partially empty last row. */
+
+void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow);
 /* Fill out partially empty last row. */
 
 #endif /* WEB_H */

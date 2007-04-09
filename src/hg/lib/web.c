@@ -13,7 +13,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.118 2007/04/08 18:41:01 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.119 2007/04/09 06:54:13 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -1009,10 +1009,26 @@ printf("</TR></TABLE>\n");
 printf("</TD></TR></TABLE>\n");
 }
 
+void webPrintLinkOutCellStart()
+/* Print link cell that goes out of our site. End with 
+ * webPrintLinkTableEnd. */
+{
+printf("<TD BGCOLOR=\"#"HG_COL_LOCAL_TABLE"\">");
+}
+
+void webPrintWideCellStart(int colSpan, char *bgColorRgb)
+/* Print link multi-column cell start in our colors. */
+{
+printf("<TD BGCOLOR=\"#%s\"", bgColorRgb);
+if (colSpan > 1)
+    printf(" COLSPAN=%d", colSpan);
+printf(">");
+}
+
 void webPrintLinkCellStart()
 /* Print link cell start in our colors. */
 {
-printf("<TD BGCOLOR=\"#"HG_COL_TABLE"\">");
+webPrintWideCellStart(1, HG_COL_TABLE);
 }
 
 void webPrintLinkCellRightStart()
@@ -1073,7 +1089,8 @@ void webPrintLinkTableNewRow()
 printf("</TR>\n<TR>");
 }
 
-void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
+void finishPartialTable(int rowIx, int itemPos, int maxPerRow,
+	void (*cellStart)())
 /* Fill out partially empty last row. */
 {
 if (rowIx != 0 && itemPos < maxPerRow)
@@ -1081,9 +1098,21 @@ if (rowIx != 0 && itemPos < maxPerRow)
     int i;
     for (i=itemPos; i<maxPerRow; ++i)
         {
-	webPrintLinkCellStart();
+	cellStart();
 	webPrintLinkCellEnd();
 	}
     }
+}
+
+void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow)
+/* Fill out partially empty last row. */
+{
+finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkOutCellStart);
+}
+
+void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
+/* Fill out partially empty last row. */
+{
+finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 }
 
