@@ -3086,3 +3086,46 @@ BASE=/cluster/data/monDom4/bed/blastzGalGal3.2006-05-25
     # verify that the search spec matches the naming convention, sometimes
     # transcripts end with .a othertimes .0
     OK!
+
+
+#########################################################################
+# BLASTZ PLATYPUS ornAna1 (DONE 4/3/07 angie)
+    ssh pk
+    mkdir /cluster/data/monDom4/bed/blastz.ornAna1.2007-04-02
+    cd /cluster/data/monDom4/bed/blastz.ornAna1.2007-04-02
+    cat << '_EOF_' > DEF
+# opossum vs platypus
+BLASTZ=blastz.v7.x86_64
+
+# Use "mammal-fish" params even though this is mammal-mammal... 
+# pretty distant, hopefully not too many shared undermasked repeats, 
+# and if we get overwhelmed we can back off:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Opossum monDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/nib
+SEQ1_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Platypus ornAna1
+SEQ2_DIR=/san/sanvol1/scratch/ornAna1/ornAna1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/ornAna1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=300
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastz.ornAna1.2007-04-02
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl DEF -blastzOutRoot /san/sanvol1/scratch/monDom4ornAna1 \
+      -bigClusterHub=pk -smallClusterHub=pk \
+      -chainMinScore=5000 -chainLinearGap=loose \
+      >& do.log & tail -f do.log
+    ln -s blastz.ornAna1.2007-04-02 /cluster/data/monDom4/bed/blastz.ornAna1
+
+
