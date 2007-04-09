@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.195 2007/04/06 19:46:39 heather Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.196 2007/04/09 21:28:51 heather Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -501,7 +501,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	AllocVar(table);
 	dyStringClear(query);
 	dyStringPrintf(query, "%s Gene Predictions", tableName);
-	table->description = cloneString("Known Genes");
+	table->description = cloneString("UCSC Genes");
 	table->name = cloneString("knownGene");
 	slAddHead(&hgp->tableList, table);
 	}
@@ -527,7 +527,7 @@ static struct hgPosTable *addKnownGeneTable(struct hgPositions *hgp)
 {
 struct hgPosTable *table;
 AllocVar(table);
-table->description = cloneString("Known Genes");
+table->description = cloneString("UCSC Genes");
 table->name = cloneString("knownGene");
 slAddHead(&hgp->tableList, table);
 return table;
