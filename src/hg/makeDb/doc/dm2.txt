@@ -4034,82 +4034,108 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
 ##########################################################################
 # HGNEAR TABLES
 
-# GET LATEST PROTEIN SEQUENCE FOR ALL HGNEAR SPECIES (DONE 1/9/06 angie - OBSOLETE 10/12/06)
-    # hgGene Homolog links go to the Genome Browser as well as external db's,
-    # so use proteins from the latest "official" (hgNear-used) gene track 
-    # in each other hgNear organism.  
-
-
-#REDO THIS NEXT:
-# HGNEAR PROTEIN BLAST TABLES (DONE 1/31/06 angie)
+# HGNEAR PROTEIN BLAST TABLES (DONE 1/31/06 angie - REDONE 4/6/07)
 # mmBlastTab redone 5/1/06 -- makeMm8.doc run used outdated proteins
 # hgBlastTab redone 5/9/06 -- makeHg18.doc run used outdated proteins
+# Redone 4/3/07 with flybase4.3; mitochondrial proteins yanked 4/6/07 
+# because they aren't in flyBase2004Xref and were causing joinerCheck errors.
     ssh hgwdev
     mkdir /cluster/data/dm2/bed/hgNearBlastp
     cd /cluster/data/dm2/bed/hgNearBlastp
+    mkdir 070403
+    cd 070403
+    # Get the proteins used by the other hgNear organisms:
+    pepPredToFa hg18 knownGenePep hg18.known.faa
+    pepPredToFa mm8 knownGenePep mm8.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer3 ensPep danRer3.ensPep.faa
+    pepPredToFa dm2 flyBasePep dm2.flyBasePep.faa
+    pepPredToFa ce2 sangerPep ce2.sangerPep.faa
+    pepPredToFa sacCer1 sgdPep sacCer1.sgdPep.faa
+
+    # Galt's synBlastp.csh filtering, which uses liftOver chains,
+    # would be the next step if dm2 were reasonably closely related
+    # (like mammal-mammal) to another Gene Sorter organism.  But it is 
+    # pretty distant from all the others, so specify recipBest for all
+    # query databases.
     cat << _EOF_ > config.ra
 # Latest fly vs. other Gene Sorter orgs:
 # human, mouse, rat, zebrafish, worm, yeast
 
 targetGenesetPrefix flyBase
 targetDb dm2
-queryDbs hg17 mm7 rn3 danRer3 ce2 sacCer1
+queryDbs hg18 mm8 rn4 danRer3 ce2 sacCer1
+recipBest hg18 mm8 rn4 danRer3 ce2 sacCer1
 
-dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
-hg17Fa /cluster/data/hg17/bed/blastp/known.faa
-mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
-rn3Fa /cluster/data/rn3/bed/blastp/known.faa
-danRer3Fa /cluster/data/danRer3/bed/blastp/ensPep.faa
-ce2Fa /cluster/data/ce2/bed/blastp/wormPep165.faa
-sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+dm2Fa     /cluster/data/dm2/bed/hgNearBlastp/070403/dm2.flyBasePep.faa
+hg18Fa    /cluster/data/dm2/bed/hgNearBlastp/070403/hg18.known.faa
+mm8Fa     /cluster/data/dm2/bed/hgNearBlastp/070403/mm8.known.faa
+rn4Fa     /cluster/data/dm2/bed/hgNearBlastp/070403/rn4.known.faa
+danRer3Fa /cluster/data/dm2/bed/hgNearBlastp/070403/danRer3.ensPep.faa
+ce2Fa     /cluster/data/dm2/bed/hgNearBlastp/070403/ce2.sangerPep.faa
+sacCer1Fa /cluster/data/dm2/bed/hgNearBlastp/070403/sacCer1.sgdPep.faa
 
-buildDir /cluster/data/dm2/bed/hgNearBlastp
+buildDir /cluster/data/dm2/bed/hgNearBlastp/070403
 scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
 _EOF_
-    doHgNearBlastp.pl config.ra >& do.log &
+    # Run with -noLoad so we can eyeball files, manually load dm2 tables now,
+    # and later overload other databases' dmBlastTab tables.
+    ~/kent/src/hg/utils/automation/doHgNearBlastp.pl -noLoad -workhorse kkr4u00 config.ra >& do.log &
     tail -f do.log
-# *** Check these tables in dm2:
-# *** flyBaseBlastTab hgBlastTab mmBlastTab rnBlastTab drBlastTab ceBlastTab scBlastTab 
-# *** and dmBlastTab in these databases:
-# *** hg17 mm7 rn3 danRer3 ce2 sacCer1 
-    # 5/1/06: redo dm2.mmBlastTab and mm8.dmBlastTab
-    cat << _EOF_ > config.ra.mm
-# Redo vs. mm8:
+    # Ran these manually:
+# *** -noLoad was specified -- you can run this script manually to load dm2 tables:
+        run.dm2.dm2/loadPairwise.csh
+#Loading database with 1171077 rows
 
-targetGenesetPrefix flyBase
-targetDb dm2
-queryDbs mm8
+# *** -noLoad was specified -- you can run these scripts manually to load dm2 tables:
+        run.dm2.hg18/loadPairwise.csh
+#Loading database with 5833 rows
+        run.dm2.mm8/loadPairwise.csh
+#Loading database with 5557 rows
+        run.dm2.rn4/loadPairwise.csh
+#Loading database with 3015 rows
+        run.dm2.danRer3/loadPairwise.csh
+#Loading database with 5253 rows
+        run.dm2.ce2/loadPairwise.csh
+#Loading database with 4537 rows
+        run.dm2.sacCer1/loadPairwise.csh
+#Loading database with 2172 rows
 
-dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
-mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+    # 4/6/07: remove mitochondrial genes from *BlastTab because they 
+    # are missing from flyBase2004Xref and caused joinerCheck errors.
+    # Would have been better to have joinerCheck'd flyBasePep before 
+    # running doHgNearBlastp.
+    hgsql dm2 -e 'delete from flyBaseBlastTab where target like "mt:%"'
+    foreach table (hgBlastTab mmBlastTab rnBlastTab \
+                   drBlastTab ceBlastTab scBlastTab)
+      echo $table
+      hgsql dm2 -e 'delete from '$table' where query like "mt:%"'
+    end
 
-buildDir /cluster/data/dm2/bed/hgNearBlastp
-scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
-_EOF_
-    doHgNearBlastp.pl -noSelf config.ra.mm >& doMm.log & tail -f doMm.log
-    # 5/9/06: redo dm2.hgBlastTab and hg18.dmBlastTab
-    cat << _EOF_ > config.ra.hg
-# Redo vs. hg18:
-
-targetGenesetPrefix flyBase
-targetDb dm2
-queryDbs hg18
-
-dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
-hg18Fa /cluster/data/hg18/bed/geneSorter/blastp/known.faa
-
-buildDir /cluster/data/dm2/bed/hgNearBlastp
-scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
-_EOF_
-    doHgNearBlastp.pl -noSelf config.ra.hg >& doHg.log & tail -f doHg.log
+    # 4/6/07: dm2 FlyBase/hgNear/hgGene update is in the pushQ, so I think 
+    # it's a fine time to update dmBlastTab in other databases with the 
+    # latest, so hgwdev is all consistent.  When that push is done, will 
+    # need another push request for *.dmBlastTab loaded here.
+# *** -noLoad was specified -- you can run these scripts manually to load dmBlastTab in query databases:
+        run.hg18.dm2/loadPairwise.csh
+        run.mm8.dm2/loadPairwise.csh
+        run.rn4.dm2/loadPairwise.csh
+        run.danRer3.dm2/loadPairwise.csh
+        run.ce2.dm2/loadPairwise.csh
+        run.sacCer1.dm2/loadPairwise.csh
+    # Yank the "mt:%" targets from those to avoid joinerCheck errors.
+    foreach db (hg18 mm8 rn4 danRer3 ce2 sacCer1)
+      hgsql $db -e 'delete from dmBlastTab where target like "mt:%"'
+    end
 
 
-# CLUSTER GENES AND MAP TO OTHER DATA (DONE 2/6/06 angie)
+# CLUSTER GENES AND MAP TO OTHER DATA (DONE 2/6/06 angie - REDONE 4/3/07)
 # flyBaseToRefSeq regenerated 5/9/06
     ssh hgwdev
     # First we have to add a proteinId column to flyBaseGene.
     hgClusterGenes dm2 flyBaseGene flyBaseIsoforms flyBaseCanonical \
       -protAccQuery='select name,alias from flyBaseToUniProt'
+#Got 13566 clusters, from 19452 genes in 13 chromosomes
     # Create table that maps between flyBase genes and RefSeq
     # Re-ran 5/9/06 to resolve some joinerCheck errors about retired refSeqs:
     hgMapToGene dm2 refGene flyBaseGene flyBaseToRefSeq
@@ -4118,7 +4144,7 @@ _EOF_
 
     # Create a table that maps between flyBase genes and the 
     # Stanford Microarray Project expression data. (see makeHgFixed.doc)
-    hgsql dm2 -e 'create table flyBaseToCG \
+    hgsql dm2 -e 'drop table if exists flyBaseToCG; create table flyBaseToCG \
       select name,SUBSTRING_INDEX(name,"-",1) as value from flyBaseGene'
     hgsql dm2 -e 'create index name on flyBaseToCG(name(12))'
     hgExpDistance dm2 hgFixed.arbFlyLifeMedianRatio dummyArg \
@@ -4129,20 +4155,21 @@ _EOF_
     See README in /cluster/store1/geneOntology.
 
 
-# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS (DONE 2/6/06)
+# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS (DONE 2/6/06 - REDONE 4/3/07)
     # hgNear's knownDetails column type expects a single table that links 
     # transcript ID with uniProt description, so whip one up here:
     # (used by hgGene too though hgGene could join on the fly)
     ssh hgwdev
-    hgsql dm2 -e 'create table flyBaseToDescription \
+    hgsql dm2 -e 'drop table if exists flyBaseToDescription; \
+      create table flyBaseToDescription \
       select flyBaseToUniProt.name,uniProt.description.val \
-      from flyBaseToUniProt,uniProt.description 
+      from flyBaseToUniProt,uniProt.description \
       where flyBaseToUniProt.alias = uniProt.description.acc'
     hgsql dm2 -e 'create index name on flyBaseToDescription(name(12))'
 
 
 # FLYP2P (DONE 2/6/06 angie)
-    # See hg/near/makeHgNear.doc...
+    # See hg/near/makeNear.doc...
 
 
 # MAKE ORGANISM-SPECIFIC HGNEARDATA AND HGGENEDATA FILES (DONE 2/7/06 angie)
@@ -4342,7 +4369,7 @@ _EOF_
     #	26231 bases of 131698467 (0.020%) in intersection
 
 
-# FLYBASE IN SITU IMAGES / EXPRESSION (DONE 5/3/06 angie)
+# FLYBASE IN SITU IMAGES / EXPRESSION (DONE 5/3/06 angie - REDONE 4/7/07)
     # FlyBase has downloadable in situ images for BACs:
     # ftp://flybase.net/flybase/images/bac_insitu_pic/*
     # and FBti's:
@@ -4351,10 +4378,11 @@ _EOF_
     # Don't see that in the ftp listing, but they do make it easy to link in.
     ssh hgwdev
     cd /cluster/data/dm2/bed/flyBase
-    wget -O summary.txt.060503 \
+    wget -O summary.txt.070406 \
     'http://www.fruitfly.org/cgi-bin/ex/bquery.pl?qpage=entry&qtype=summarytext'
+    # remove header line.
     hgLoadSqlTab dm2 bdgpExprLink ~/kent/src/hg/lib/bdgpExprLink.sql \
-      summary.txt.060503
+      summary.txt.070406
 
 
 ###########################################################################
@@ -5283,7 +5311,7 @@ hgsql dm2
 
 
 #########################################################################
-# FLYBASE 4.3 ANNOTATIONS (DONE (except for contacting flybase-help) 10/11/06 angie)
+# FLYBASE 4.3 ANNOTATIONS (DONE (except for contacting flybase-help) 10/11/06 angie - UPDATED 4/6/07)
     ssh kkstore04
     mkdir /cluster/data/dm2/bed/flybase4.3
     cd /cluster/data/dm2/bed/flybase4.3
@@ -5380,6 +5408,10 @@ hgsql dm2
     # CG4110-RA and CG13904-RA had multiple mappings, both with consecutive 
     # FBtr's so I tossed out the earlier FBtr for both.  
 
+    # Do this next time around, to catch joinerCheck errors before 
+    # running doHgNearBlastp with these proteins:
+    runJoiner.csh dm2 flyBasePep
+
     # Some featureBits comparisons with refGene which shoudl be pretty much 
     # like version 4.0 with a few noncoding genes tossed in... but this is 
     # a bigger difference than we expect:
@@ -5414,6 +5446,10 @@ hgsql dm2
     end
     nice md5sum *.zip *.gz > md5sum.txt
     # Now go redo all the sections above for tables related to flyBase*.
+
+    # 4/6/07: remove mitochondrial genes from flyBasePep because they 
+    # are missing from flyBase2004Xref and caused joinerCheck errors.
+    hgsql dm2 -e 'delete from flyBasePep where name like "mt:%"'
 
 
 #########################################################################
