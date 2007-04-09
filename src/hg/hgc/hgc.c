@@ -203,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1263 2007/04/06 23:39:24 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1264 2007/04/09 23:35:10 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16672,7 +16672,7 @@ if (differentString(summaryItem->allele2, "none"))
     }
 printf("</TABLE>\n");
 
-het = summaryItem->score / 1000.0;
+het = summaryItem->score / 10.0;
 printf("<BR><B>Heterozygosity over all populations:</B> %3.2f%%<BR>\n", het);
 
 
