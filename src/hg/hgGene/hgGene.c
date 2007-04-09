@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.97 2007/04/09 02:10:57 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.98 2007/04/09 04:41:30 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -182,6 +182,17 @@ safef(query, sizeof(query),
 return sqlQuickNum(conn, query) > 0;
 }
 
+char *abbreviateSummary(char *summary)
+/* Get rid of some repetitious stuff. */
+{
+char *pattern = 
+"Publication Note:  This RefSeq record includes a subset "
+"of the publications that are available for this gene. "
+"Please see the Entrez Gene record to access additional publications.";
+stripString(summary, pattern);
+return summary;
+}
+
 void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
@@ -204,6 +215,7 @@ if (summaryTables != NULL)
 	char *summary = genoQuery(id, "summarySql", conn);
 	if (summary != NULL && summary[0] != 0)
 	    {
+	    summary = abbreviateSummary(summary);
 	    hPrintf("<B>%s:</B> %s", genomeSetting("summarySource"), summary);
 	    freez(&summary);
 	    hPrintf("<BR>");
