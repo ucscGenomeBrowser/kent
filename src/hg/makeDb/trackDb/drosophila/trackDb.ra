@@ -685,7 +685,7 @@ searchPriority 4.3
 
 searchTable flyBaseGene
 searchMethod exact
-termRegex CG[0-9]+-R.
+termRegex CG[0-9]+-R[A-Z][A-Z]?
 searchType genePred
 searchPriority 1
 
@@ -693,7 +693,7 @@ searchName flyBaseGenePrefix
 searchTable flyBaseGene
 searchMethod exact
 termRegex CG[0-9]+
-dontCheck CG[0-9]+-R[A-Z]
+dontCheck CG[0-9]+-R[A-Z][A-Z]?
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 searchPriority 1.1
 
