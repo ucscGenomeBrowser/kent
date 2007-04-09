@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.20 2007/04/06 01:24:52 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.21 2007/04/09 18:48:18 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -159,8 +159,8 @@ void psDrawLine(struct psGfx *ps, double x1, double y1, double x2, double y2)
 {
 FILE *f = ps->f;
 fprintf(f, "newpath\n");
-psMoveTo(ps, x1, y1);
-psXyOut(ps, x2, y2);
+psMoveTo(ps, x1+0.5, y1+0.5);
+psXyOut(ps, x2+0.5, y2+0.5);
 fprintf(ps->f, "lineto\n");
 fprintf(f, "stroke\n");
 }
@@ -326,11 +326,11 @@ void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled)
 FILE *f = ps->f;
 struct gfxPoint *p = poly->ptList;
 fprintf(f, "newpath\n");
-psMoveTo(ps, p->x, p->y);
+psMoveTo(ps, p->x+0.5, p->y+0.5);
 for (;;)
     {
     p = p->next;
-    psLineTo(ps, p->x, p->y);
+    psLineTo(ps, p->x+0.5, p->y+0.5);
     if (p == poly->ptList)
 	break;
     }
