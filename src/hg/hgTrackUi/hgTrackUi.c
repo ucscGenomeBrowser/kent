@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.358 2007/04/10 22:00:03 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.359 2007/04/10 22:36:41 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2203,9 +2203,9 @@ menuSize = 4;
 menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
 menu[menuPos++] = "no filter";
-menu[menuPos++] = "all";
-menu[menuPos++] = "some";
-menu[menuPos++] = "none";
+menu[menuPos++] = "all populations";
+menu[menuPos++] = "some populations";
+menu[menuPos++] = "no populations";
 cgiMakeDropList(HAP_MONO, menu, menuSize, 
     cartCgiUsualString(cart, HAP_MONO, HAP_MONO_DEFAULT));
 freez(&menu);
@@ -2248,9 +2248,9 @@ menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "available";
-menu[menuPos++] = "matches major allele";
-menu[menuPos++] = "matches minor allele";
-menu[menuPos++] = "mismatch";
+menu[menuPos++] = "matches major human allele";
+menu[menuPos++] = "matches minor human allele";
+menu[menuPos++] = "matches neither human allele";
 cgiMakeDropList(HAP_CHIMP, menu, menuSize, 
     cartCgiUsualString(cart, HAP_CHIMP, HAP_CHIMP_DEFAULT));
 freez(&menu);
@@ -2266,9 +2266,9 @@ menu = needMem((size_t)(menuSize * sizeof(char *)));
 menuPos = 0;
 menu[menuPos++] = "no filter";
 menu[menuPos++] = "available";
-menu[menuPos++] = "matches major allele";
-menu[menuPos++] = "matches minor allele";
-menu[menuPos++] = "mismatch";
+menu[menuPos++] = "matches major human allele";
+menu[menuPos++] = "matches minor human allele";
+menu[menuPos++] = "matches neither human allele";
 cgiMakeDropList(HAP_MACAQUE, menu, menuSize, 
     cartCgiUsualString(cart, HAP_MACAQUE, HAP_MACAQUE_DEFAULT));
 freez(&menu);
