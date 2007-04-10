@@ -82,20 +82,20 @@ void hapmapSnpsOutput(struct hapmapSnps *el, FILE *f, char sep, char lastSep);
 #define HAP_MACAQUE "hapmapSnps.macaque"
 #define HAP_MACAQUE_QUAL "hapmapSnps.macaqueQualScore"
 
-#define HAP_POP_MIXED_DEFAULT "any"
-#define HAP_POP_COUNT_DEFAULT "any"
-#define HAP_TYPE_DEFAULT      "any"
+#define HAP_POP_MIXED_DEFAULT "no filter"
+#define HAP_POP_COUNT_DEFAULT "no filter"
+#define HAP_TYPE_DEFAULT      "no filter"
 
 #define HAP_MIN_FREQ_DEFAULT  "0.0"
 #define HAP_MAX_FREQ_DEFAULT  "0.5"
 #define HAP_MIN_HET_DEFAULT   "0.0"
 #define HAP_MAX_HET_DEFAULT   "0.5"
 
-#define HAP_MONO_DEFAULT      "any"
+#define HAP_MONO_DEFAULT      "no filter"
 
-#define HAP_CHIMP_DEFAULT     "any"
+#define HAP_CHIMP_DEFAULT     "no filter"
 #define HAP_CHIMP_QUAL_DEFAULT "0"
-#define HAP_MACAQUE_DEFAULT   "any"
+#define HAP_MACAQUE_DEFAULT   "no filter"
 #define HAP_MACAQUE_QUAL_DEFAULT "0"
 
 #endif /* HAPMAPSNPS_H */
