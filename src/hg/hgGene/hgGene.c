@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.98 2007/04/09 04:41:30 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.99 2007/04/10 07:48:46 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -519,19 +519,8 @@ void doKgMethod(struct sqlConnection *conn)
  * Method, Credits, and Data Use Restrictions) */
 {
 struct trackDb *tdb, *tdb2;
-struct section *sectionList = NULL;
-struct section *section;
 
-sectionList = loadSectionList(conn);
-
-for (section = sectionList; section != NULL; section = section->next)
-    {
-    if (sameWord(section->name, "method"))
-	{
-	cartWebStart(cart, section->longLabel);
-	break;
-	}
-    }
+cartWebStart(cart, "Methods, Credits, and Use Restrictions");
 
 /* default is knownGene */
 tdb = hTrackDbForTrack("knownGene");
@@ -586,6 +575,8 @@ if (cartVarExists(cart, hggDoGetMrnaSeq))
     doGetMrnaSeq(conn, curGeneId, curGeneName);
 else if (cartVarExists(cart, hggDoKgMethod))
     doKgMethod(conn);
+else if (cartVarExists(cart, hggDoTxInfoDescription))
+    doTxInfoDescription(conn);
 else if (cartVarExists(cart, hggDoGetProteinSeq))
     doGetProteinSeq(conn, curGeneId, curGeneName);
 else if (cartVarExists(cart, hggDoRnaFoldDisplay))

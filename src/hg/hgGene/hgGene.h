@@ -192,6 +192,7 @@ void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
 #define hggDoRnaFoldDisplay "hgg_do_rnaFoldDisplay"
 #define hggDoOtherProteinSeq "hgg_do_otherProteinSeq"
 #define hggDoOtherProteinAli "hgg_do_otherProteinAli"
+#define hggDoTxInfoDescription "hgg_do_txInfoDescription"
 
 #define geneCgi "../cgi-bin/hgGene"
 
@@ -199,6 +200,9 @@ void printMrnaSeqLink(struct sqlConnection *conn, char *geneId);
 
 void doKgMethod(struct sqlConnection *conn);
 /* Present KG Method, Credits, and Data Use Restrictions. */
+
+void doTxInfoDescription(struct sqlConnection *conn);
+/* Put up info on fields in txInfo table. */
 
 void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 /* Get mRNA sequence in a simple page. */

@@ -9,88 +9,13 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: method.c,v 1.6 2007/04/09 16:55:52 kent Exp $";
+static char const rcsid[] = "$Id: method.c,v 1.7 2007/04/10 07:48:47 kent Exp $";
 
-static void showInfoTable(struct sqlConnection *conn, char *geneName, char *txInfoTable)
-/* Print out stuff from txInfo table. */
+void doTxInfoDescription(struct sqlConnection *conn)
+/* Put up info on fields in txInfo table. */
 {
-if (!sqlTableExists(conn, txInfoTable))
-    return;
-char query[512];
-safef(query, sizeof(query), "select * from %s where name='%s'", txInfoTable, geneName);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct txInfo *info = txInfoLoad(row);
-    webPrintLinkTableStart();
-    webPrintLinkCell("<B>category:</B>");
-    webPrintLinkCell(info->category);
-    webPrintLinkCell("<B>nonsense-mediated-decay:</B>");
-    webPrintLinkCell(info->nonsenseMediatedDecay  ? "yes" : "no");
-    webPrintLinkCell("<B>RNA accession:</B>");
-    webPrintLinkCell(info->sourceAcc);
-    webPrintLinkTableNewRow();
-
-    webPrintLinkCell("<B>exon count:</B>");
-    webPrintIntCell(info->exonCount);
-    webPrintLinkCell("<B>CDS single in 3' UTR:</B>");
-    webPrintLinkCell(info->cdsSingleInUtr3 ? "yes" : "no");
-    webPrintLinkCell("<B>RNA size:</B>");
-    webPrintIntCell(info->sourceSize);
-    webPrintLinkTableNewRow();
-
-    webPrintLinkCell("<B>ORF size:</B>");
-    webPrintIntCell(info->orfSize);
-    webPrintLinkCell("<B>CDS single in intron:</B>");
-    webPrintLinkCell(info->cdsSingleInIntron ? "yes" : "no");
-    webPrintLinkCell("<B>Alignment % ID:</B>");
-    webPrintDoubleCell(info->aliIdRatio*100);
-    webPrintLinkTableNewRow();
-    
-    webPrintLinkCell("<B>txCdsPredict score:</B>");
-    webPrintDoubleCell(info->cdsScore);
-    webPrintLinkCell("<B>frame shift in genome:</B>");
-    webPrintLinkCell(info->genomicFrameShift  ? "yes" : "no");
-    webPrintLinkCell("<B>% Coverage:</B>");
-    webPrintDoubleCell(info->aliCoverage*100);
-    webPrintLinkTableNewRow();
-
-    webPrintLinkCell("<B>has start codon:</B>");
-    webPrintLinkCell(info->startComplete ? "yes" : "no");
-    webPrintLinkCell("<B>stop codon in genome:</B>");
-    webPrintLinkCell(info->genomicStop ? "yes" : "no");
-    webPrintLinkCell("<B># of Alignments:</B>");
-    webPrintIntCell(info->genoMapCount);
-    webPrintLinkTableNewRow();
-
-    webPrintLinkCell("<B>has end codon:</B>");
-    webPrintLinkCell(info->endComplete ? "yes" : "no");
-    webPrintLinkCell("<B>retained intron:</B>");
-    webPrintLinkCell(info->retainedIntron ? "yes" : "no");
-    webPrintLinkCell("<B># AT/AC introns</B>");
-    webPrintIntCell(info->atacIntrons);
-    webPrintLinkTableNewRow();
-
-    webPrintLinkCell("<B>selenocysteine:</B>");
-    webPrintLinkCell(info->selenocysteine  ? "yes" : "no");
-    webPrintLinkCell("<B>end bleed into intron:</B>");
-    webPrintIntCell(info->bleedIntoIntron);
-    webPrintLinkCell("<B># strange splices:</B>");
-    webPrintIntCell(info->strangeSplice);
-
-    webPrintLinkTableEnd();
-
-    txInfoFree(&info);
-    }
-sqlFreeResult(&sr);
-
+cartWebStart(cart, "Gene Model Information Table Fields");
 printf("%s",
-"The table above summarizes many aspects of this transcripts.  Here is a more \n"
-"detailed description of each of the fields than can fit in the label.  Also\n"
-"see the CDS Prediction Information table below for additional information\n"
-"relevant to the predicted protein product if any.\n"
-"\n"
 "<UL>\n"
 "<LI><B>category</B> - This is either <i>coding</i>, <i>noncoding</i>,\n"
 "<i>antisense</i> or \n"
@@ -186,6 +111,84 @@ printf("%s",
 "neither GT/AG, GC/AG, nor AT/AC. Many of these are the result of sequencing\n"
 "errors, or polymorphisms between the DNA donors and the RNA donors.</LI>\n"
 "</UL>\n");
+cartWebEnd();
+}
+
+
+static void showInfoTable(struct sqlConnection *conn, char *geneName, char *txInfoTable)
+/* Print out stuff from txInfo table. */
+{
+if (!sqlTableExists(conn, txInfoTable))
+    return;
+char query[512];
+safef(query, sizeof(query), "select * from %s where name='%s'", txInfoTable, geneName);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct txInfo *info = txInfoLoad(row);
+    webPrintLinkTableStart();
+    webPrintLinkCell("<B>category:</B>");
+    webPrintLinkCell(info->category);
+    webPrintLinkCell("<B>nonsense-mediated-decay:</B>");
+    webPrintLinkCell(info->nonsenseMediatedDecay  ? "yes" : "no");
+    webPrintLinkCell("<B>RNA accession:</B>");
+    webPrintLinkCell(info->sourceAcc);
+    webPrintLinkTableNewRow();
+
+    webPrintLinkCell("<B>exon count:</B>");
+    webPrintIntCell(info->exonCount);
+    webPrintLinkCell("<B>CDS single in 3' UTR:</B>");
+    webPrintLinkCell(info->cdsSingleInUtr3 ? "yes" : "no");
+    webPrintLinkCell("<B>RNA size:</B>");
+    webPrintIntCell(info->sourceSize);
+    webPrintLinkTableNewRow();
+
+    webPrintLinkCell("<B>ORF size:</B>");
+    webPrintIntCell(info->orfSize);
+    webPrintLinkCell("<B>CDS single in intron:</B>");
+    webPrintLinkCell(info->cdsSingleInIntron ? "yes" : "no");
+    webPrintLinkCell("<B>Alignment % ID:</B>");
+    webPrintDoubleCell(info->aliIdRatio*100);
+    webPrintLinkTableNewRow();
+    
+    webPrintLinkCell("<B>txCdsPredict score:</B>");
+    webPrintDoubleCell(info->cdsScore);
+    webPrintLinkCell("<B>frame shift in genome:</B>");
+    webPrintLinkCell(info->genomicFrameShift  ? "yes" : "no");
+    webPrintLinkCell("<B>% Coverage:</B>");
+    webPrintDoubleCell(info->aliCoverage*100);
+    webPrintLinkTableNewRow();
+
+    webPrintLinkCell("<B>has start codon:</B>");
+    webPrintLinkCell(info->startComplete ? "yes" : "no");
+    webPrintLinkCell("<B>stop codon in genome:</B>");
+    webPrintLinkCell(info->genomicStop ? "yes" : "no");
+    webPrintLinkCell("<B># of Alignments:</B>");
+    webPrintIntCell(info->genoMapCount);
+    webPrintLinkTableNewRow();
+
+    webPrintLinkCell("<B>has end codon:</B>");
+    webPrintLinkCell(info->endComplete ? "yes" : "no");
+    webPrintLinkCell("<B>retained intron:</B>");
+    webPrintLinkCell(info->retainedIntron ? "yes" : "no");
+    webPrintLinkCell("<B># AT/AC introns</B>");
+    webPrintIntCell(info->atacIntrons);
+    webPrintLinkTableNewRow();
+
+    webPrintLinkCell("<B>selenocysteine:</B>");
+    webPrintLinkCell(info->selenocysteine  ? "yes" : "no");
+    webPrintLinkCell("<B>end bleed into intron:</B>");
+    webPrintIntCell(info->bleedIntoIntron);
+    webPrintLinkCell("<B># strange splices:</B>");
+    webPrintIntCell(info->strangeSplice);
+
+    webPrintLinkTableEnd();
+
+    txInfoFree(&info);
+    }
+sqlFreeResult(&sr);
+
 }
 
 static void methodPrint(struct section *section, 
@@ -194,7 +197,13 @@ static void methodPrint(struct section *section,
 {
 showInfoTable(conn, geneId, "kgTxInfo");
 hPrintf("Click ");
-hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_do_kgMethod=1&%s\">", cartSidUrlString(cart));
+hPrintf("<A HREF=\"../cgi-bin/hgGene?%s=1&%s\">", 
+	hggDoTxInfoDescription, cartSidUrlString(cart));
+hPrintf("here</A>\n");
+hPrintf(" for a detailed description of the fields of the table above.<BR>");
+
+hPrintf("Click ");
+hPrintf("<A HREF=\"../cgi-bin/hgGene?%s=1&%s\">", hggDoKgMethod, cartSidUrlString(cart));
 hPrintf("here</A>\n");
 hPrintf(" for details on how this gene model was made and data restrictions if any.");
 }
