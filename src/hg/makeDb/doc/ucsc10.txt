@@ -16,12 +16,16 @@ set Xdb = Mm8
 set ydb = canFam2
 set zdb = rheMac2
 set spDb = sp070202
+set pbDb = pbDb
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer4
 set flyDb = dm2
 set wormDb = ce2
 set yeastDb = sacCer1
+
+# Database to rebuild visiGene text from
+set vgTextDbs = mm7 mm8 hg17 hg18
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
@@ -31,6 +35,7 @@ set fishFa = /cluster/data/danRer4/bed/blastp/ensembl.faa
 set flyFa = /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
 set wormFa = /cluster/data/ce3/bed/blastp/wormPep140.faa
 set yeastFa = /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
 
 # Tracks
 set multiz = multiz17way
@@ -47,7 +52,6 @@ set ramFarm = kki
 set cpuFarm = pk
 
 # Create initial dir
-ssh $dbHost
 mkdir -p $dir
 cd $dir
 
@@ -55,6 +59,7 @@ cd $dir
 mkdir -p $gbDir
 cd $gbDir
 txGenbankData $db
+echo 'select acc,status from mgcFullStatus' | hgsql -N $db > mgcStatus.tab
 
 # Unpack and process RA Files
 cd $dir
@@ -64,6 +69,8 @@ txReadRa mrna.ra refSeq.ra .
 
 # Unpack sequence and psl files
 zcat $gbDir/refseq.pep.fa.gz > refPep.fa
+zcat $gbDir/genbank.fa.gz > mrna.fa
+zcat $gbDir/refseq.fa.gz > refSeq.fa
 zcat $gbDir/genbank.psl.gz > mrna.psl
 zcat $gbDir/refseq.psl.gz > refSeq.psl
 
@@ -293,7 +300,7 @@ end
 cd ..
 
 # Run protein/transcript blat job on cluster
-ssh $cpuFarm "$dir; para make spec;"
+ssh $cpuFarm "cd $dir; para make spec;"
 #CPU time in finished jobs:      13571s     226.18m     3.77h    0.16d  0.000 y
 #IO & Wait Time:                  5645s      94.08m     1.57h    0.07d  0.000 y
 #Average job time:                  49s       0.82m     0.01h    0.00d
@@ -495,40 +502,50 @@ ln -s $dir/index/knownGene.ixx /gbdb/$tempDb/knownGene.ixx
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
-hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
-hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
 hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
-hgMapToGene "-type=bed 12" $db -tempDb=$tempDb affyUclaNorm knownGene knownToU133
-hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
 knownToVisiGene $db -table=$tempDb.knownToVisiGene -fromProbePsl=vgAllProbes
-vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text mm7 mm8 hg17 hg18
-knownToHprd hg18 /cluster/data/hg18/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
+if ($db =~ hg*) then
+    hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
+    hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
+    hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
+    hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
+    knownToHprd $tempDb /cluster/data/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+    time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
+	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+    time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2
+endif
+if ($db =~ mm*) then
+    hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
+    hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+    hgMapToGene $db -tempDb=$tempDb affyU74  knownGene knownToU74
+    hgMapToGene $db -tempDb=$tempDb affyMOE430 knownGene knownToMOE430
+    hgMapToGene $db -tempDb=$tempDb affyMOE430 -prefix=A: knownGene knownToMOE430A
+    hgExpDistance $tempDb $db.affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
+    hgExpDistance $tempDb $db.affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
+    hgExpDistance $tempDb $db.affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
+    hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
+	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+endif
 
 # Create Human P2P protein-interaction Gene Sorter columns
-hgLoadNetDist /cluster/data/hg18/p2p/hprd/hprd.pathLengths hg18 humanHprdP2P \
+if ($db =~ hg*) then
+hgLoadNetDist /cluster/data/$db/p2p/hprd/hprd.pathLengths $db humanHprdP2P \
     -sqlRemap="select distinct value, name from knownToHprd"
-hgLoadNetDist /cluster/data/hg18/p2p/vidal/humanVidal.pathLengths hg18 humanVidalP2P \
+hgLoadNetDist /cluster/data/$db/p2p/vidal/humanVidal.pathLengths $db humanVidalP2P \
     -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
-hgLoadNetDist /cluster/data/hg18/p2p/wanker/humanWanker.pathLengths hg18 humanWankerP2P \
+hgLoadNetDist /cluster/data/$db/p2p/wanker/humanWanker.pathLengths $db humanWankerP2P \
     -sqlRemap="select distinct locusLinkID, kgID from refLink, kgXref where refLink.mrnaAcc = kgXref.mRNA"
+endif
 
-
-# Create a small expression distance table, this is relatively quick - 10 min.
-time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
-	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
-
-# Create main expression distance table - takes about an hour
-time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
-    hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
-    -lookup=knownToGnfAtlas2
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
 # 45 minutes to run.
-hgsqladmin create tmpFoo2
 mkdir hgNearBlastp
 cd hgNearBlastp
 cat << _EOF_ > config.ra
@@ -555,9 +572,9 @@ doHgNearBlastp.pl config.ra |& tee do.log
 # Remove non-syntenic hits for mouse and rat
 # Takes a few minutes
 mkdir /gbdb/$tempDb/liftOver
-ln -s /cluster/data/hg18/bed/liftOver/${db}To$RatDb.over.chain.gz \
+ln -s /cluster/data/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
-ln -s /cluster/data/hg18/bed/liftOver/${db}To${Xdb}.over.chain.gz \
+ln -s /cluster/data/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
 synBlastp.csh $tempDb $ratDb
 synBlastp.csh $tempDb $xdb
@@ -728,16 +745,16 @@ hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
-    hgsql hg18 -N -e \
+    hgsql $db -N -e \
     'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
          
-    hgsql hg18 -N -e \
+    hgsql $db -N -e \
     'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
     >>j.tmp
     cat j.tmp|sort -u  >kgSpAlias.tab
     rm j.tmp
 
-    loadSqlTab hg18 kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
+    loadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql ./kgSpAlias.tab
 
 # RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
 
@@ -751,51 +768,51 @@ hgLoadSqlTab $tempDb kg1ToKg2 ~/kent/src/hg/lib/kg1ToKg2.sql kg1ToKg2.bed
 # Create the working directory
 
     ssh hgwdev
-    cd /cluster/data/hg18/bed/ucsc.10
+    cd /cluster/data/$db/bed/ucsc.10
     mkdir pb
     cd pb
 
 # Build the pepMwAa table
 
-  hgsql proteins070202 -N -e \
-"select info.acc, molWeight, aaSize from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
+  hgsql pbDb -N -e \
+"select info.acc, molWeight, aaSize from $spDb.info, $spDb.accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
 
-hgLoadSqlTab hg18 pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
+hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
 o Build the pepPi table
 
-    hgsql proteins070202 -e \
-    "select info.acc from sp070202.info, sp070202.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
+    hgsql pbDb -e \
+    "select info.acc from $spDb.info, $spDb.accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > protAcc.lis
 
-    hgsql hg18 -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+    hgsql $tempDb -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
 
-    pbCalPi protAcc.lis sp070202 pepPi.tab
-    hgLoadSqlTab hg18 pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
+    pbCalPi protAcc.lis $spDb pepPi.tab
+    hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
 
 # Calculate and load pep distributions
 
-    /cluster/home/fanhsu/bin/x86_64/pbCalDist sp070202 proteins070202 9606 hg18 >pbCalDist.out
+    /cluster/home/fanhsu/bin/x86_64/pbCalDist $spDb pbDb $taxon $tempDb >pbCalDist.out
     wc  pbCalDist.out
 
-    hgsql hg18
-    load data local infile "pepExonCntDist.tab" into table hg18.pepExonCntDist;
-    load data local infile "pepCCntDist.tab" into table hg18.pepCCntDist;
-    load data local infile "pepHydroDist.tab" into table hg18.pepHydroDist;
-    load data local infile "pepMolWtDist.tab" into table hg18.pepMolWtDist;
-    load data local infile "pepResDist.tab" into table hg18.pepResDist;
-    load data local infile "pepIPCntDist.tab" into table hg18.pepIPCntDist;
-    load data local infile "pepPiDist.tab" into table hg18.pepPiDist;
+    hgsql $tempDb
+    load data local infile "pepExonCntDist.tab" into table pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table pepMolWtDist;
+    load data local infile "pepResDist.tab" into table pepResDist;
+    load data local infile "pepIPCntDist.tab" into table pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table pepPiDist;
     quit
 
 # Calculate frequency distributions
 
-    pbCalResStd sp070202 9606 hg18
+    pbCalResStd $spDb $taxon $tempDb
 
 # Create pbAnomLimit and pbResAvgStd tables
 
-    hgLoadSqlTab hg18 pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
+    hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
 
-    hgLoadSqlTab hg18 pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
+    hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
 
 # The old pbStamp table seems OK, so no adjustment needed.
 
