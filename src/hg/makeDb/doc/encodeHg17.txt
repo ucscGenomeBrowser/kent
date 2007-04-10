@@ -1278,8 +1278,9 @@ cat > load.csh << 'EOF'
 #    France requested 3 subtracks: genes, putatives, and pseudogenes        
 # NTOE: reloaded encodeGencodeKnown from updated _genes_ file 10/14 (kate)
 
-# Update 2007-03-28 (Kate)
-
+# Update 2007-03-28 (Kate). Received from Julien Lagarde (jlagarde@imim.es)
+# Julien requested 5 subtracks: reference genes, putative, polymorphic,
+# pseudogenes, polyA features. Track update (DONE, 2007-04-10, hartera)
     cd /cluster/data/encode
     mkdir -p Gencode/2005-10-07/lab
     cd Gencode/2005-10-07/lab
@@ -1351,7 +1352,10 @@ cat > load.csh << 'EOF'
 # Additional data submission from Greg (at Duke now) 9/22/06  -- HepG2 cell line
 # Additional data (DNAse array )for IMR90, K562 and H9 cells 
 #       (raw and pvalue) submitted 2/26/07
-
+# Track update to add subtracks for IMR90, K562 and H9 cells (Raw and Pval for 
+# DNase-chip method). Old Method subtracks (for GM06990 and CD4+ T cells) were 
+# removed and any references to them in the description were also removed.
+# (DONE, 2004-04-10, hartera)
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
     cd 2005-10-11/lab
@@ -1492,21 +1496,27 @@ cat > loadPval.csh << 'EOF'
 
     # copy files from FTP area
     cd 2007-02-26
-    # GOT HERE
-    ln -s lab/Crawford_DNase-chip_H9_pvalue_HG17.bed H9.pval.bed
-    ln -s lab/Crawford_DNase-chip_H9_RAW_hg17.bed H9.raw.bed
-    ln -s lab/Crawford_DNase-chip_IMR90_pvalue_HG17.bed Imr90.pval.bed
-    ln -s lab/Crawford_DNase-chip_IMR90_RAW_hg17.bed Imr90.raw.bed
-    ln -s lab/Crawford_DNase-chip_K562_pvalue_HG17.bed K562.pval.bed
-    ln -s lab/Crawford_DNase-chip_K562_RAW_hg17.bed K562.raw.bed
+    # (DONE, 2007-04-03, hartera)
+    ln -s lab/Crawford_DNase-chip_H9_pvalue.bed H9.pval.bed
+    ln -s lab/Crawford_DNase-chip_H9_RAW_HG17.bed H9.raw.bed
+    ln -s lab/Crawford_DNase-chip_IMR90_pvalue.bed Imr90.pval.bed
+    ln -s lab/Crawford_DNase-chip_IMR90_RAW_HG17.bed Imr90.raw.bed
+    ln -s lab/Crawford_DNase-chip_K562_pvalue.bed K562.pval.bed
+    ln -s lab/Crawford_DNase-chip_K562_RAW_HG17.bed K562.raw.bed
 
-    # load RAW
+    # load RAW (-strict is now default for hgLoadBed)
     foreach cell (H9 Imr90 K562)
         awk '{print $1, $2, $3, $5}' $cell.raw.bed | \
-                hgLoadBed -strict -bedGraph=4 hg17 \
+                hgLoadBed -bedGraph=4 hg17 \
                         encodeNhgriDnaseHsChipRaw$cell stdin
     end
-
+    # check table coordinates for raw data:
+     foreach cell (H9 Imr90 K562)
+         set table = encodeNhgriDnaseHsChipRaw$cell
+         echo $table
+         checkTableCoords hg17 $table
+     end
+  
     # load PVAL
     foreach cell (H9 Imr90 K562)
         set lcell = `echo $cell | sed 's/\(.*\)/\l\1/'`
@@ -1516,10 +1526,17 @@ cat > loadPval.csh << 'EOF'
                 $table.sql
         hgsql hg17 -e "DROP TABLE IF EXISTS $table"
         hgsql hg17 < $table.sql
-        hgLoadBed -strict -sqlTable=$table.sql hg17 \
-                $table $cell.pval.bed5+
+        hgLoadBed -sqlTable=$table.sql hg17 $table $cell.pval.bed5+
+        echo "Checking coords in $table"
         checkTableCoords hg17 $table
     end
+    # Added the new subtracks to the hg17/trackDb.encode.ra and updated the
+    # description.
+    # (2007-04-10, hartera)
+    # GM06990 and CD4+ T cell subtracks done by the old method were removed from
+    # trackDb/human/hg17/trackDb.encode.ra and also any references to them 
+    # in the description. Tables for these subtracks are: 
+    # encodeNhgriDnaseHsChipGm06990 and encodeNhgriDnaseHsChipCd4.
 
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)
@@ -2424,6 +2441,8 @@ cat > load.csh << 'EOF'
 # long label: ENCODE UW DNase/Array GM06690 - DNase I 
 # sensitivity/hypersensitivity in GM06990 Cells 
 # Data is for lymphoblastoid cells (GM06990).
+# Updated long label in trackDb.ra to: UW Array DNase I 
+# sensitivity/hypersensitivity in GM06990 Cells (hartera, 2007-02-26)
     cd /cluster/data/encode/Regulome
     mkdir -p 2006-05-04/lab
     cd 2006-05-04
@@ -2448,7 +2467,7 @@ cat > load.csh << 'EOF'
     # Add this to trackDb/human/hg17 as encodeRegulomeDnaseArray.html
     # trackDb entry - track is renamed as encodeRegulomeDnaseArray
     # Previously track was called encodeRegulomeCap.
-
+   
 ##########################################################################
 # SANGER CHIP/CHIP  (2006-03-16 kate)
 # Updated (2006-08-08 kate)
