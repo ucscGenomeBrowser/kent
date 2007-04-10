@@ -694,7 +694,7 @@ longLabel ExonWalk Alt-Splicing Transcripts
 color 23,58,58
 group genes
 priority 72
-visibility dense
+visibility hide
 type genePred
 
 track exonWalk2
@@ -1729,7 +1729,7 @@ shortLabel (dm2) D. mel. Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134
-visibility dense
+visibility hide
 spectrum on
 type netAlign dm2 chainDm2
 otherDb dm2
