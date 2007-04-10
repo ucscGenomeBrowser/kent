@@ -1,16 +1,16 @@
 <H2>Description</H2> 
 <P> 
-
 <A HREF="http://www.hapmap.org" TARGET=_blank>The HapMap Project</A>
-
 identified a set of approximately four million
 common SNPs, and genotyped these SNPs in four populations.
 The intent is that this data can be used as a reference for future studies
 of human disease. This track displays the genotype counts and allele
-frequencies of those SNPs. The data displayed are from release 21a (HapMap Phase II),
-based on 
+frequencies of those SNPs. The data displayed are from release 21a (HapMap 
+Phase II), based on 
 <A HREF="http://www.ncbi.nlm.nih.gov/SNP/index.html" TARGET=_blank>dbSNP</A>
-build 125.   This track also provides orthologous alleles from chimp and macaque.
+build 125.   This track also provides orthologous alleles from chimp and 
+macaque.
+</P>
 <P>
 The HapMap data are from these four human populations:
 <UL>
@@ -19,8 +19,8 @@ The HapMap data are from these four human populations:
 <LI>Han Chinese in Beijing, China (abbreviation: CHB)</LI>
 <LI>CEPH (Utah residents with ancestry from northern and western Europe) (abbreviation: CEU)</LI>
 </UL>
-
 Each of the populations is displayed in a separate subtrack.
+</P>
 <P>
 The CEU and YRI data are comprised of 90 individuals in parent-child trios. The UCSC display
 removes the data for the children, leaving 60 individuals in each population.
@@ -31,28 +31,34 @@ with over 97% of SNPs assayed in 45 or more individuals. The minimums for CEU
 and YRI are 26 and 24 respectively, with over 94% of SNPs assayed in 55 or more
 individuals.
 </P>
+<P>
 The HapMap assays provide biallelic results. Over 99.9% of HapMap SNPs are
 included in dbSNP build125 as biallelic; approximately 3,000 are more complex.
 Two-thirds of the HapMap SNPs are transitions: one-third are A/G, one-third
 are C/T.
+</P>
 <P>
 The orthologous alleles in chimp (panTro2) and macaque (rheMac2) 
 were derived using 
 <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html#Convert">liftOver</A>.
 Chimp alleles are available for over 96% 
 of the human HapMap SNPs; macaque alleles are available for 88%.
+</P>
 <P>
 15% of HapMap SNPs are monomorphic in all individuals in all populations.
 Within single populations, monomorphism ranged from 21.5% of the YRI
 individuals to 38% of the JPT individuals.
+</P>
 <P>
 Approximately 20% of HapMap SNPs have a different major allele in different
 populations.
+</P>
 <P>
-No two HapMap SNPs occupy the same position. Aside from seven SNPs from the pseudo
+No two HapMap SNPs occupy the same position. Aside from seven SNPs from the 
+pseudo
 autosomal region of chrX, no rsIds are included more than once. No HapMap SNPs
 occur on chrM or on "random" chromosomes.
-
+</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -60,28 +66,33 @@ The human SNPs are displayed using a color gradient based on minor allele
 frequency. The higher the minor allele frequency, the darker the display. 
 By definition, the maximum minor allele frequency is 50%. 
 When zoomed to base level, the major allele is displayed for each population. 
+</P>
 <P>
 Reversing the base position track will cause the HapMap display to reverse as
 well. This is the recommended configuration for SNPs on the negative strand.
+</P>
 <P>
-The orthologous alleles from chimp and macaque are displayed using a color gradient 
-based on quality score.
-Quality scores range from 0 to 100 representing low to high quality. For orthologous
-alleles, the higher the quality, the darker the display.   Quality scores are
-not available for chimp chromosomes chr21 and chrY.
+The orthologous alleles from chimp and macaque are displayed using a color 
+gradient based on quality score.
+Quality scores range from 0 to 100 representing low to high quality. For 
+orthologous alleles, the higher the quality, the darker the display. Quality 
+scores are not available for chimp chromosomes chr21 and chrY.
+</P>
 <P>
 Filters are provided for the data attributes described above. Additionally,
 a filter is provided for heterozgosity over all populations. The measure of
 heterozygosity used is 2pq (from Hardy-Weinberg equilibrium). 
 Filters are applied to all six subtracks, even
 if a subtrack is not displayed.
+</P>
 
 <H2>Credits</H2>
 <P>
 This track is based on <A HREF="http://www.hapmap.org/" TARGET=_BLANK>
 International HapMap Project</A> release 21a data, provided by the <A
 HREF="http://www.hapmap.org/downloads/" TARGET=_BLANK>HapMap Data Coordination
-Center</A>.
+Center</A>. 
+</P>
 
 <H2>References</H2>
 
@@ -108,3 +119,4 @@ TARGET=_blank>The International HapMap Project Web site</A>.
 <P>
 sftp://www.hapmap.org/downloads/genotypes/2007-01/rs_strand/non-redundant/genotypes_chr*_*_r21a_nr.txt.gz
 </P>
+<BR>
