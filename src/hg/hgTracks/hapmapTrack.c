@@ -616,28 +616,27 @@ static Color hapmapColor(struct track *tg, void *item, struct vGfx *vg)
 Color col;
 int totalCount = 0;
 int minorCount = 0;
-int grayLevel = 0;
+int gradient = 0;
 
 if (sameString(tg->mapName, "hapmapAllelesChimp") || sameString(tg->mapName, "hapmapAllelesMacaque"))
     {
     struct hapmapAllelesOrtho *thisItem = item;
-    grayLevel = grayInRange(thisItem->score, 0, 100);
-    }
-else
-    {
-    struct hapmapSnps *thisItem = item;
-    /* Could also use score, since I've set that based on minor allele frequency. */
-    totalCount = thisItem->homoCount1 + thisItem->homoCount2;
-    minorCount = min(thisItem->homoCount1, thisItem->homoCount2);
-    grayLevel = grayInRange(minorCount, 0, totalCount/2);
+    gradient = grayInRange(thisItem->score, 0, 100);
+    col = shadesOfBrown[gradient];
+    return col;
     }
 
-if (grayLevel < maxShade)
-    grayLevel++;
-if (grayLevel < maxShade)
-    grayLevel++;
-col = shadesOfGray[grayLevel];
+struct hapmapSnps *thisItem = item;
+/* Could also use score, since I've set that based on minor allele frequency. */
+totalCount = thisItem->homoCount1 + thisItem->homoCount2;
+minorCount = min(thisItem->homoCount1, thisItem->homoCount2);
+gradient = grayInRange(minorCount, 0, totalCount/2);
 
+if (gradient < maxShade)
+    gradient++;
+if (gradient < maxShade)
+    gradient++;
+col = shadesOfGray[gradient];
 return col;
 }
 
