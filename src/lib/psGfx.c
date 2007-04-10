@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.24 2007/04/10 07:51:18 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.25 2007/04/10 07:57:15 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -208,7 +208,6 @@ void psTextAt(struct psGfx *ps, double x, double y, char *text)
 /* Output text in current font at given position. */
 {
 char c;
-y -= 1.0; /* make text align better */
 psMoveTo(ps, x, y + ps->fontHeight);
 fprintf(ps->f, "(");
 while ((c = *text++) != 0)
@@ -225,7 +224,6 @@ void psTextRight(struct psGfx *ps, double x, double y,
 	char *text)
 /* Draw a line of text right justified in box defined by x/y/width/height */
 {
-y -= 1.0; /* make text align better */
 y += (height - ps->fontHeight)/2;
 psMoveTo(ps, x+width, y + ps->fontHeight);
 fprintf(ps->f, "(%s) showBefore\n", text);
@@ -237,7 +235,6 @@ void psTextCentered(struct psGfx *ps, double x, double y,
 /* Draw a line of text centered in box defined by x/y/width/height */
 {
 char c;
-y -= 1.0; /* make text align better */
 y += (height - ps->fontHeight)/2;
 psMoveTo(ps, x+width/2, y + ps->fontHeight);
 fprintf(ps->f, "(");
