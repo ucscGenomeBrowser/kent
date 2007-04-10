@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.15 2007/04/09 18:48:18 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.16 2007/04/10 05:46:46 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -25,20 +25,13 @@ static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
-psPushClipRect(pscm->ps, x, y, width, height);
+psClipRect(pscm->ps, x, y, width, height);
 }
 
 void pscmUnclip(struct pscmGfx *pscm)
 /* Set clipping rect to cover full thing. */
 {
-/* This is one of the most painful parts of the interface.
- * Postscript can only cleanly clip/unclip via
- * gsave/grestores, which requires nesting.
- * Unfortunately the grestore will also likely
- * nuke our current font and color, so uncache it. */
-psPopClipRect(pscm->ps);
-pscm->curFont = NULL;
-pscm->curColor = -1;
+psClipRect(pscm->ps, 0, 0, pscm->ps->pixWidth, pscm->ps->pixHeight);
 }
 
 static Color pscmClosestColor(struct pscmGfx *pscm, 
@@ -126,7 +119,6 @@ AllocVar(pscm);
 pscm->ps = psOpen(file, width, height, 72.0 * 7.5, 0, 0);
 pscm->colorHash = colHashNew();
 pscmSetDefaultColorMap(pscm);
-pscmSetClip(pscm, 0, 0, width, height);
 return pscm;
 }
 

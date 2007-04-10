@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.21 2007/04/09 18:48:18 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.22 2007/04/10 05:46:46 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -19,6 +19,21 @@ if (i == x)
    fprintf(f, "%d ", i);
 else
    fprintf(f, "%0.4f ", x);
+}
+
+void psClipRect(struct psGfx *ps, double x, double y, 
+	double width, double height)
+/* Set clipping rectangle. */
+{
+FILE *f = ps->f;
+fprintf(f, "cliprestore ");
+ps->clipMinX = x;
+ps->clipMinY = y;
+ps->clipMaxX = x + width;
+ps->clipMaxY = y + height;
+psXyOut(ps, x, y+height);
+psWhOut(ps, width, height);
+fprintf(f, "rectclip\n");
 }
 
 static void psWriteHeader(FILE *f, double width, double height)
@@ -43,7 +58,6 @@ struct psGfx *psOpen(char *fileName,
  * calculated to keep pixels square. */
 {
 struct psGfx *ps;
-struct psClipRect *clip;
 
 /* Allocate structure and open file. */
 AllocVar(ps);
@@ -68,12 +82,8 @@ ps->xOff = ptMargin;
 ps->yOff = ptMargin;
 ps->fontHeight = 10;
 
-/* Save initial clipping rectangle. */
-AllocVar(clip);
-clip->x1 = clip->y1 = 0;
-clip->x2 = pixWidth;
-clip->y2 = pixHeight;
-ps->clipStack = clip;
+/* Set initial clipping rectangle. */
+psClipRect(ps, 0, 0, ps->pixWidth, ps->pixHeight);
 
 /* Cope with fact y coordinates are bottom to top rather
  * than top to bottom. */
@@ -95,7 +105,6 @@ struct psGfx *ps = *pPs;
 if (ps != NULL)
     {
     carefulClose(&ps->f);
-    slFreeList(&ps->clipStack);
     freez(pPs);
     }
 }
@@ -137,13 +146,12 @@ void psDrawBox(struct psGfx *ps, double x, double y,
 {
 /* Do some clipping here to make the postScript
  * easier to edit in illustrator. */
-struct psClipRect *clip = ps->clipStack;
 double x2 = x + width;
 double y2 = y + height;
-if (x < clip->x1) x = clip->x1;
-if (y < clip->y1) y = clip->y1;
-if (x2 > clip->x2) x2 = clip->x2;
-if (y2 > clip->y2) y2 = clip->y2;
+if (x < ps->clipMinX) x = ps->clipMinX;
+if (y < ps->clipMinY) y = ps->clipMinY;
+if (x2 > ps->clipMaxX) x2 = ps->clipMaxX;
+if (y2 > ps->clipMaxY) y2 = ps->clipMaxY;
 width = x2 - x;
 height = y2 - y;
 if (width > 0.0 && height > 0.0)
@@ -287,37 +295,13 @@ fprintf(ps->f, "gsave\n");
 void psPopG(struct psGfx *ps)
 /* Pop off saved graphics state. */
 {
-fprintf(ps->f, "grestore %%unclip\n");
-}
-
-void psPushClipRect(struct psGfx *ps, double x, double y, 
-	double width, double height)
-/* Push clipping rectangle onto graphics stack. */
-{
-FILE *f = ps->f;
-struct psClipRect *clip;
-AllocVar(clip);
-clip->x1 = x;
-clip->y1 = y;
-clip->x2 = x + width;
-clip->y2 = y + height;
-slAddHead(&ps->clipStack, clip);
-fprintf(f, "gsave ");
-psXyOut(ps, x, y+height);
-psWhOut(ps, width, height);
-fprintf(f, "rectclip\n");
+fprintf(ps->f, "grestore\n");
 }
 
 void psPopClipRect(struct psGfx *ps)
-/* Get rid of clipping. Beware that this does a psPopG, so
- * other graphic variables will be reset to the time of
- * the corresponding psPushClipRect. */
+/* Get rid of clipping. */
 {
-struct psClipRect *clip = ps->clipStack;
-ps->clipStack = clip->next;
-assert(ps->clipStack != NULL);
-freeMem(clip);
-fprintf(ps->f, "grestore %%unclip\n");
+fprintf(ps->f, "cliprestore %%unclip\n");
 }
 
 void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled)
