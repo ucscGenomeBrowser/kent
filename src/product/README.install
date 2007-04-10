@@ -73,7 +73,14 @@ The example mysql user here is: "browser" with a password of: "genome"
 	ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash
 
 	A cron job should be set to periodically clean the files in trash.
-	Please note the example at ${CDROM}/example/CleanTrash.sh
+	For example, the following two find commands are used at UCSC
+	to implement two different aging schemes, 8 hours for most files
+	in trash, 48 hours for custom track files:
+
+	find /trash \! \( -regex "/trash/ct/.*" -or -regex "/trash/hgSs/.*" \) \
+	    -type f -amin +480 -exec rm -f {} \;
+	find /trash \( -regex "/trash/ct/.*" -or -regex "/trash/hgSs/.*" \) \
+	    -type f -amin +2880 -exec rm -f {} \;
 
 	The browser creates .gif files in the trash directory.
 	The 'chmod 777' allows the Apache WEB server to write into
@@ -207,7 +214,7 @@ done
 	Only the cb1 genome is available in this sample installation.
 
 	A cron job should be set to periodically clean the files in trash.
-	Please note the example at ${CDROM}/example/CleanTrash.sh
+	Note the example trash find command mentioned in section 5 above.
 
         src/lib/log.c optionally uses syslog to support logging
         by parasol and gfServer. This is not required for these
@@ -239,4 +246,4 @@ done
 
 
 ====================================================================
-This file last updated: $Date: 2005/03/08 23:26:23 $
+This file last updated: $Date: 2007/04/10 23:16:01 $
