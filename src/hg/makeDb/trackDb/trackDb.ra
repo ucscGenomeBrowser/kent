@@ -1062,7 +1062,7 @@ shortLabel Eponine TSS
 longLabel Eponine Predicted Transcription Start Sites
 group regulation
 priority 91.9
-visibility dense
+visibility hide
 color 0,100,100
 type bed 4 +
 
