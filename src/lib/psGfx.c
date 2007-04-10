@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.22 2007/04/10 05:46:46 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.23 2007/04/10 07:48:33 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -296,12 +296,6 @@ void psPopG(struct psGfx *ps)
 /* Pop off saved graphics state. */
 {
 fprintf(ps->f, "grestore\n");
-}
-
-void psPopClipRect(struct psGfx *ps)
-/* Get rid of clipping. */
-{
-fprintf(ps->f, "cliprestore %%unclip\n");
 }
 
 void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled)
