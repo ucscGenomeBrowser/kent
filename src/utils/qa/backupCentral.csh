@@ -38,7 +38,6 @@ set directory="hgcentral"
 set today=`date +%Y-%m-%d`
 # set today="2007-04-01"
 set dirPath="/usr/local/apache/htdocs/qa/test-results/$directory"
-set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/$directory"
 rm -rf $dirPath/$today/
 mkdir -p $dirPath/$today
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/$directory/$today"
@@ -54,5 +53,4 @@ foreach table ( blatServers clade dbDb defaultDb gdbPdb genomeClade liftOverChai
 end
 
 echo $urlPath
-
 
