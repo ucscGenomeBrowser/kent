@@ -370,10 +370,10 @@ if (summaryItem->score/1000.0 < minHetFilter) return TRUE;
 if (summaryItem->score/1000.0 > maxHetFilter) return TRUE;
 
 int monoCount = getMonoCount(summaryItem);
-if (sameString(monoFilter, "all") && monoCount < summaryItem->popCount) return TRUE;
-if (sameString(monoFilter, "some") && monoCount == summaryItem->popCount) return TRUE;
-if (sameString(monoFilter, "some") && monoCount == 0) return TRUE;
-if (sameString(monoFilter, "none") && monoCount > 0) return TRUE;
+if (sameString(monoFilter, "all populations") && monoCount < summaryItem->popCount) return TRUE;
+if (sameString(monoFilter, "some populations") && monoCount == summaryItem->popCount) return TRUE;
+if (sameString(monoFilter, "some populations") && monoCount == 0) return TRUE;
+if (sameString(monoFilter, "no populations") && monoCount > 0) return TRUE;
 
 /* orthoAlleles */
 if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "none")) 
@@ -386,35 +386,35 @@ if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAll
     return TRUE;
 
 /* handle mismatches first - interesting and tricky */
-if (sameString(chimpFilter, "mismatch")) return orthoAlleleCheck(summaryItem, "chimp");
-if (sameString(macaqueFilter, "mismatch")) return orthoAlleleCheck(summaryItem, "macaque");
+if (sameString(chimpFilter, "matches neither human allele")) return orthoAlleleCheck(summaryItem, "chimp");
+if (sameString(macaqueFilter, "matches neither human allele")) return orthoAlleleCheck(summaryItem, "macaque");
 
 /* If mixed, then we can't compare ortho allele. */
-if (sameString(chimpFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(chimpFilter, "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
-if (sameString(macaqueFilter, "matches major allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(macaqueFilter, "matches major human allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
-if (sameString(chimpFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(chimpFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
-if (sameString(macaqueFilter, "matches minor allele") && sameString(summaryItem->isMixed, "YES")) 
+if (sameString(macaqueFilter, "matches minor human allele") && sameString(summaryItem->isMixed, "YES")) 
     return FALSE;
 
 char *majorAllele = getMajorAllele(summaryItem);
-if (sameString(chimpFilter, "matches major allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
+if (sameString(chimpFilter, "matches major human allele") && differentString(summaryItem->chimpAllele, majorAllele)) 
     return TRUE;
-if (sameString(macaqueFilter, "matches major allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
+if (sameString(macaqueFilter, "matches major human allele") && differentString(summaryItem->macaqueAllele, majorAllele)) 
     return TRUE;
 
 /* can't filter if allele2 is "none" */
-if (sameString(chimpFilter, "matches minor allele") && sameString(summaryItem->allele2, "none"))
+if (sameString(chimpFilter, "matches minor human allele") && sameString(summaryItem->allele2, "none"))
     return FALSE;
-if (sameString(macaqueFilter, "matches minor allele") && sameString(summaryItem->allele2, "none"))
+if (sameString(macaqueFilter, "matches minor human allele") && sameString(summaryItem->allele2, "none"))
     return FALSE;
 
 char *minorAllele = getMinorAllele(summaryItem, majorAllele);
-if (sameString(chimpFilter, "matches minor allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
+if (sameString(chimpFilter, "matches minor human allele") && differentString(summaryItem->chimpAllele, minorAllele)) 
     return TRUE;
-if (sameString(macaqueFilter, "matches minor allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
+if (sameString(macaqueFilter, "matches minor human allele") && differentString(summaryItem->macaqueAllele, minorAllele)) 
     return TRUE;
 
 if (summaryItem->chimpAlleleQuality < chimpQualFilter) return TRUE;
