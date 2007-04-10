@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.99 2007/04/10 07:48:46 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.100 2007/04/10 16:32:42 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -412,10 +412,11 @@ for (section = sectionList; section != NULL; section = section->next)
     boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
     char *otherState = (isOpen ? "1" : "0");
     char *indicator = (isOpen ? "-" : "+");
+    char *indicatorImg = (isOpen ? "../images/remove.gif" : "../images/add.gif");
     struct dyString *header = dyStringNew(0);
     dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);	
-    dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\">%s</A>&nbsp;&nbsp;",
-    	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicator);
+    dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
+    	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
     webNewSection(header->string);
     if (isOpen)
