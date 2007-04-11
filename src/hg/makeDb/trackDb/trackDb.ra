@@ -120,6 +120,8 @@ group map
 priority 15
 visibility hide
 type bed 6 +
+color 0,0,0
+altColor 80,80,80
 exonArrows off
 
 track bacEndPairsBad
@@ -129,6 +131,8 @@ group map
 priority 16
 visibility hide
 type bed 6 +
+color 0,0,0
+altColor 90,90,90
 exonArrows off
 
 track bacEndPairsLong
@@ -138,6 +142,8 @@ group map
 priority 17
 visibility hide
 type bed 6 +
+color 0,0,0
+altColor 90,90,90
 exonArrows off
 
 track fosEndPairs
@@ -147,6 +153,8 @@ group map
 priority 18
 visibility hide
 type bed 6 +
+color 0,0,0
+altColor 90,90,90
 exonArrows off
 
 track fosEndPairsBad
@@ -156,6 +164,8 @@ group map
 priority 19
 visibility hide
 type bed 6 +
+color 0,0,0
+altColor 90,90,90
 exonArrows off
 
 track fosEndPairsLong
@@ -165,6 +175,8 @@ group map
 priority 20
 visibility hide
 type bed 6 +
+color 0,0,0
+altColor 90,90,90
 exonArrows off
 
 track chr18deletions

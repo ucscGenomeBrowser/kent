@@ -1145,15 +1145,6 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track bacEndPairs
-shortLabel BAC End Pairs
-longLabel BAC End Pairs
-group map
-priority 15
-visibility hide
-type bed 6 +
-exonArrows off
-
 track affyU133Plus2
 shortLabel Affy U133Plus2
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133 Plus 2.0

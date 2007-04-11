@@ -41,15 +41,6 @@ group map
 visibility hide
 type bed 3 +
 
-track bacEndPairs
-shortLabel BAC End Pairs
-longLabel BAC End Pairs
-group map
-priority 15
-visibility hide
-type bed 6 +
-exonArrows off
-
 track jaxQTL
 shortLabel QTL
 longLabel Quantitative Trait Loci From Jax/MGI
