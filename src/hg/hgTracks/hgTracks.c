@@ -107,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1312 2007/04/11 18:25:09 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1313 2007/04/11 23:50:38 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1773,7 +1773,7 @@ if (start != -1 && !lfs->noLine)
 	if (vis == tvFull || vis == tvPack) 
 	  clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 	  	lfs->orientation, bColor, TRUE);
-	vgLine(vg, x1, midY, x2, midY, color);
+//	vgLine(vg, x1, midY, x2, midY, color);
 	}
     }
 }
