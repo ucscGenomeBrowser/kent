@@ -11,6 +11,10 @@
 
 set machine="hgw1"
 set today=""
+set year=""
+set yearMonth=""
+set lastyear=""
+set dropdir=""
 set diffs=0
 set outfile=""
 set summaryFile=""
@@ -62,6 +66,21 @@ set today=`date +%Y-%m-%d`
 # set today="2005-01-23"
 set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
+
+# remove dirs one year old, one month at a time
+set year=`date +%Y`
+set yearMonth=`date +%Y-%m`
+set lastyear=`echo $year | awk '{print $1-1}'`
+set dropdir=`echo $yearMonth | sed -e "s/$year/$lastyear/"`
+
+# echo "year      $year"
+# echo "lastyear  $lastyear"
+# echo "today     $today"
+# echo "yearMonth $yearMonth"
+# echo "dropdir   $dropdir"
+rm -r "$dirPath/${dropdir}-*"
+
+# make new dir for today's output
 mkdir -p $dirPath/$today
 set summaryFile=$dirPath/$today/index.html
 set summaryUrl=$urlPath/$today/index.html
