@@ -1,9 +1,10 @@
 /* cgapSageFind - Find all the locations in the genome with SAGE data including SNP variants. */
 #include "common.h"
 #include "obscure.h"
+#include "dystring.h"
+#include "portable.h"
 #include "linefile.h"
 #include "hash.h"
-#include "options.h"
 #include "dnaLoad.h"
 #include "bed.h"
 #include "snp.h"
@@ -21,10 +22,6 @@ errAbort(
   "   cgapSageFind sequence frequencies.txt libraries.txt snps.txt output.bed\n"
   );
 }
-
-static struct optionSpec options[] = {
-   {NULL, 0},
-};
 
 int slPairValCmpReverse(const void *va, const void *vb)
 /* Compare two slPairs for sorting in reverse order on */
@@ -61,7 +58,7 @@ slAddHead(pList, newOne);
 struct hash *getFreqHash(char *freqFile)
 /* Read the frequency file in, and store it in a hash and return that. */
 {
-struct hash *freqHash = newHash(21);
+struct hash *freqHash = newHash(23);
 struct lineFile *lf = lineFileOpen(freqFile, TRUE);
 char *words[3];
 /* Assume there's a header and skip it. */
@@ -91,21 +88,15 @@ for (lib = libs; lib != NULL; lib = lib->next)
     safef(buf, sizeof(buf), "%d", lib->libId);
     hashAddInt(totTagsHash, buf, (int)lib->totalTags);
     }
+cgapSageLibFreeList(&libs);
 return totTagsHash;
 }
 
-void hashElSlPairListFree(struct hashEl *el)
+void hashElSlPairListFree(struct hashEl **pEl)
 /* Free up the list in one of the hashEls. */
 {
-struct slPair **pList = (struct slPair **)&el->val;
-slFreeList(pList);
-}
-
-void freeFreqHash(struct hash **pFreqHash)
-/* Free up the hash we created. */
-{
-hashTraverseEls(*pFreqHash, hashElSlPairListFree);
-hashFree(pFreqHash);
+struct slPair **pList = (struct slPair **)pEl;
+slPairFreeList(pList);
 }
 
 struct snp *narrowDownSnps(struct snp **pSnpList, char *chrom)
@@ -114,6 +105,8 @@ struct snp *narrowDownSnps(struct snp **pSnpList, char *chrom)
 struct snp *newList = NULL;
 struct snp *oldList = NULL;
 struct snp *cur;
+if (!pSnpList || !(*pSnpList))
+    return NULL;
 while ((cur = slPopHead(pSnpList)) != NULL)
     {
     if (sameString(cur->chrom, chrom))
@@ -126,12 +119,22 @@ slSort(&newList, bedCmp);
 return newList;
 }
 
-struct slRef *snpsInTag(struct snp *chromSnps, int pos, int start)
+struct slRef *snpsInTag(struct snp **pChromSnps, int pos, int start)
 /* Find the SNPs in the next 21 (TAG_SIZE) bases. */
 /* chromSnps is sorted so quit search after we go beyond range. */
 {
 struct slRef *snpList = NULL;
-struct snp *cur = chromSnps;
+struct snp *chromSnps, *cur;
+if (!pChromSnps || !(*pChromSnps))
+    return NULL;
+/* Pop off SNPs until we're at the current position. */
+cur = *pChromSnps;
+while (((cur = *pChromSnps) != NULL) && (cur->chromStart < (pos + start)))
+    {
+    cur = slPopHead(pChromSnps);
+    snpFree(&cur);
+    }
+cur = *pChromSnps;
 while (cur && (cur->chromStart < (pos + TAG_SIZE + start)))
     {
     if ((cur->chromStart >= pos + start) && (cur->chromStart < (pos + TAG_SIZE + start)))
@@ -159,64 +162,29 @@ if (base == 'C')
 return 'C';
 }
 
-struct dnaSeq *constructSnpVariants(struct dnaSeq *basicSeq, int pos, int start, 
-				    struct snp *snp)
-/* Given a short sequence and a SNP, construct the variants. */
-{
-struct dnaSeq *seqVars = NULL;
-int sizeClass = strlen(snp->class);
-int i;
-int snpPos = snp->chromStart - pos - start;
-for (i = 0; i < sizeClass; i += 2)
-    {
-    char snpBase = snp->class[i];
-    if (snp->strand[0] == '-')
-	snpBase = otherStrand(snpBase);
-    if (basicSeq->dna[snpPos] != snpBase)
-	{
-	struct dnaSeq *newVariant = cloneDnaSeq(basicSeq);
-	char seqName[1024];
-	newVariant->dna[snpPos] = snpBase;
-	safef(seqName, sizeof(seqName), "%s.%s", newVariant->name, snp->name);
-	freeMem(newVariant->name);
-	newVariant->name = cloneString(seqName);
-	slAddHead(&seqVars, newVariant);
-	}
-    }
-return seqVars;
-}
-
-boolean checkSeqCATG(struct dnaSeq *chrom, int pos)
+boolean checkSeqCATG(struct dnaSeq *chrom, int pos, int start, struct slRef *snpList)
 /* This function is meant to speed things up by quickly checking if the */
-/* current window begins or ends with a CATG. */
+/* current window begins or ends with a CATG or if there's SNPs in the first  */
+/* or last four bases. */
 {
+struct slRef *snpRef;
 if (startsWith("CATG", chrom->dna + pos))
     return TRUE;
 if (((pos + TAG_SIZE) < chrom->size) && (startsWith("CATG", chrom->dna + pos + TAG_SIZE - 4)))
     return TRUE;
+for (snpRef = snpList; snpRef != NULL; snpRef = snpRef->next)
+    {
+    struct snp *snp = snpRef->val;
+    if ((snp->chromStart < pos + start + 4) || (snp->chromStart >= pos + start + TAG_SIZE - 4))
+	return TRUE;
+    }
 return FALSE;
 }
 
-struct dnaSeq *addSnpVariants(struct dnaSeq *seqList, int pos, int start, struct snp *snp)
-/* Recursively add SNP variants to a list of sequences given a SNP. */
+void possiblyOutputATag(struct dnaSeq *seq, int pos, int start, struct snp **snpsUsedArray, 
+        int numSnps, struct hash *freqHash, struct hash *libTotHash, FILE *output)
+/* If this sequence permutation appears in the frequency hash, output it. */
 {
-struct dnaSeq *seqListHead = seqList;
-struct dnaSeq *seqListRest = NULL;
-struct dnaSeq *newVars;
-if (!seqListHead)
-    return NULL;
-seqListRest = seqListHead->next;
-seqListHead->next = constructSnpVariants(seqList, pos, start, snp);
-seqListHead = slCat(seqListHead, addSnpVariants(seqListRest, pos, start, snp));
-return seqListHead;
-}
-
-struct cgapSage *tagFromSeq(struct dnaSeq *seq, struct dnaSeq *chrom, int pos,
-			    int start, struct hash *freqHash, struct hash *libTotHash)
-/* Find out if the sequence is a tag in our frequencies hash. */
-/* Otherwise, return NULL. */
-{
-struct cgapSage *newTag;
 struct slPair *list;
 char strand = '+';
 if (endsWith(seq->dna, "CATG"))
@@ -225,80 +193,153 @@ if (endsWith(seq->dna, "CATG"))
     reverseComplement(seq->dna, seq->size);
     }
 else if (!startsWith("CATG", seq->dna))
-    return NULL;
+    return;
 list = hashFindVal(freqHash, seq->dna + 4); 
 if (list)
+    /* Output in cgapSage bed format. */
     {
-    char *snpName = chopPrefix(seq->name);
     struct slPair *cur;
-    int ix = 0;
-    AllocVar(newTag);
-    newTag->chrom = cloneString(chrom->name);
-    newTag->chromStart = pos + start;
-    newTag->chromEnd = pos + TAG_SIZE + start;
-    newTag->name = cloneString(seq->dna + 4);
-    newTag->score = 1000;
-    newTag->strand[0] = strand;
-    newTag->thickStart =  (strand == '+') ? newTag->chromStart : newTag->chromEnd-4;
-    newTag->thickEnd = newTag->thickStart + 4;
-    newTag->numLibs = slCount(list);
-    AllocArray(newTag->libIds, newTag->numLibs);
-    AllocArray(newTag->freqs, newTag->numLibs);
-    AllocArray(newTag->tagTpms, newTag->numLibs);
+    int chromStart = pos + start;
+    int chromEnd = chromStart + TAG_SIZE;
+    int thickStart = (strand == '+') ? chromStart : chromEnd - 4;
+    int thickEnd = thickStart + 4;
+    int numLibs = slCount(list);
+    int i;
+    int snpsUsed = 0;
+    /* chrom, chromStart, chromEnd  */
+    fprintf(output, "%s\t%d\t%d\t", seq->name, chromStart, chromEnd);
+    /* name */
+    fprintf(output, "%s\t", seq->dna + 4);
+    /* score, strand, thickStart, thickEnd */
+    fprintf(output, "1000\t%c\t%d\t%d\t", strand, thickStart, thickEnd);
+    /* numLibs */
+    fprintf(output, "%d\t", numLibs);
+    /* libIds */
+    for (cur = list; cur != NULL; cur = cur->next)
+	fprintf(output, "%s,", cur->name);
+    fprintf(output, "\t");
+    /* freqs */
+    for (cur = list; cur != NULL; cur = cur->next)
+	fprintf(output, "%d,", ptToInt(cur->val));
+    fprintf(output, "\t");
+    /* TPMs */
     for (cur = list; cur != NULL; cur = cur->next)
 	{
 	double totalTags = (double)hashIntVal(libTotHash, cur->name);
-	newTag->libIds[ix] = sqlUnsigned(cur->name);
-	newTag->freqs[ix] = (unsigned)ptToInt(cur->val);
-	newTag->tagTpms[ix] = (double)newTag->freqs[ix] * (1000000 / totalTags);
-	ix++;
+	int freq = ptToInt(cur->val);
+	double tpm = (double)freq * (1000000 / totalTags);
+	fprintf(output, "%.4f,", tpm);
 	}
-    if (!sameString(snpName, seq->name))
-	{
-	char *snps[128];
-	int numSnps = chopByChar(snpName, '.', snps, sizeof(snps));
-	int i;
-	newTag->numSnps = numSnps;
-	AllocArray(newTag->snps, numSnps);
-	for (i = 0; i < numSnps; i++)
-	    newTag->snps[i] = cloneString(snps[i]);
-	}
+    fprintf(output, "\t");
+    for (i = 0; i < numSnps; i++)
+	if (snpsUsedArray[i] != NULL)
+	    snpsUsed++;
+    /* numSNps */
+    fprintf(output, "%d\t", snpsUsed);
+    /* snps */
+    for (i = 0; i < numSnps; i++)
+	if (snpsUsedArray[i] != NULL)
+	    fprintf(output, "%s,", snpsUsedArray[i]->name);
+    fprintf(output, "\n");
     }
-else 
-    return NULL;
-return newTag;
 }
 
-struct cgapSage *findTagsAtPos(struct dnaSeq *chrom, int pos, int start,
-			       struct snp *chromSnps, struct hash *freqHash, struct hash *libTotHash)
+
+void findTagsRecursingPosition(struct dnaSeq *seq, struct dnaSeq *refCopy, 
+        int pos, int start, struct snp **snpArray,
+        struct snp **snpsUsedArray, int numSnps, struct hash *freqHash, 
+        struct hash *libTotHash, FILE *output, int ix, int snpIx)
+/* Recursively permute all possible 21-mers containing SNPs. Takes into account */
+/* that there can be more than one SNP per tag and even more than one SNP per */
+/* base. */
+{
+/* If we're at a SNP, go through the versions of it. */
+if (ix < TAG_SIZE)
+    {
+    int chromIx = start + pos + ix;
+    /* Deal with the possibility the current base is a SNP. */
+    /* If the current SNP chromStart is < the base we're on, move */
+    /* the snpIx. */
+    while ((snpIx < numSnps) && (snpArray[snpIx]->chromStart < chromIx))
+	snpIx++;
+    /* If this base has one or more SNPs, do stuff. */
+    if ((snpIx < numSnps) && (chromIx == snpArray[snpIx]->chromStart))
+	{
+	while ((snpIx < numSnps) && (chromIx == snpArray[snpIx]->chromStart))
+	    {
+	    int sizeClass = strlen(snpArray[snpIx]->class);
+	    int i;
+	    /* Loop through the SNP itself i.e. the strings "A/T", "C/G", etc. */
+	    for (i = 0; i < sizeClass; i += 2)
+		{
+		char snpBase = snpArray[snpIx]->class[i];
+		/* Stupid minus-strand SNPs.  How does that make sense?!?!? */
+		if (snpArray[snpIx]->strand[0] == '-')
+		    snpBase = otherStrand(snpBase);
+		seq->dna[ix] = snpBase;		    
+		/* Test the SNP base against the original base. */
+		if ((snpBase != refCopy->dna[ix]) && (snpBase != '-'))
+		    /* We're using this SNP, so reflect that in the snpsUsedArray. */
+		    snpsUsedArray[snpIx] = snpArray[snpIx];
+		else 
+		    snpsUsedArray[snpIx] = NULL;
+		findTagsRecursingPosition(seq, refCopy, pos, start, snpArray, snpsUsedArray, numSnps,
+					  freqHash, libTotHash, output, ix+1, snpIx);
+		}
+	    /* Check to see if the next SNP is on this base.  If so, clear */
+	    /* the usedArray at this snpIx, so when we deal with that SNP */
+	    /* on the next iteration of this while loop, there's no blatant */
+	    /* disagreement. */ 
+	    if ((snpIx+1 < numSnps) && (chromIx == snpArray[snpIx+1]->chromStart))
+		snpsUsedArray[snpIx] = NULL;
+	    snpIx++;
+	    }
+	}
+    else 
+	/* (if this base didn't have a SNP, just move on). */
+	findTagsRecursingPosition(seq, refCopy, pos, start, snpArray, snpsUsedArray, numSnps,
+				  freqHash, libTotHash, output, ix+1, snpIx);
+    }
+else
+    /* Finally, at the 21st level of recursion, output stuff. */
+    {
+    possiblyOutputATag(seq, pos, start, snpsUsedArray, numSnps, freqHash, libTotHash, output);
+    }
+}
+
+void findTagsAtPos(struct dnaSeq *chrom, int pos, int start,
+			       struct snp **pChromSnps, struct hash *freqHash, 
+			       struct hash *libTotHash, FILE *output)
 /* Find the tags at the specific position. */
 {
-struct slRef *snpList = snpsInTag(chromSnps, pos, start);
+struct slRef *snpList = snpsInTag(pChromSnps, pos, start);
 struct slRef *snpRef;
-struct dnaSeq *snpVariants;
 struct dnaSeq *seq;
-struct cgapSage *list = NULL;
-/* Do quick checks first. We need to know if the */
-if (!snpList && !checkSeqCATG(chrom, pos))
-    return NULL;
+struct dnaSeq *refCopy;
+struct snp **snpArray = NULL;
+struct snp **snpsUsedArray = NULL;
+int i = 0;
+int numSnps = slCount(snpList);
+if (!checkSeqCATG(chrom, pos, start, snpList))
+    return;
+if (numSnps > 0)
+    {
+    AllocArray(snpArray, numSnps);
+    AllocArray(snpsUsedArray, numSnps);
+    }
+for (snpRef = snpList; snpRef != NULL; snpRef = snpRef->next)
+    snpArray[i++] = (struct snp *)snpRef->val;
 /* Start by making the most basic one. */
 char *dna = cloneStringZ(chrom->dna + pos, TAG_SIZE);
-snpVariants = newDnaSeq(dna, TAG_SIZE, dna);
-/* Go through each SNP. */
-for (snpRef = snpList; snpRef != NULL; snpRef = snpRef->next)
-    {
-    struct snp *snp = snpRef->val;
-    addSnpVariants(snpVariants, pos, start, snpRef->val);
-    }
-/* Go through each SNP variant and see if it's a tag. */
-for (seq = snpVariants; seq != NULL; seq = seq->next)
-    {
-    struct cgapSage *newTag = tagFromSeq(seq, chrom, pos, start, freqHash, libTotHash);
-    if (newTag)
-	slAddHead(&list, newTag);
-    }
-slReverse(&list);
-return list;
+seq = newDnaSeq(dna, TAG_SIZE, chrom->name);
+/* Keep a copy so it's easy to tell which bases are introduced by SNPs. */
+refCopy = cloneDnaSeq(seq);
+findTagsRecursingPosition(seq, refCopy, pos, start, snpArray, snpsUsedArray, numSnps, 
+        freqHash, libTotHash, output, 0, 0);
+freez(&snpArray);
+freez(&snpsUsedArray);
+freeDnaSeq(&seq);
+freeDnaSeq(&refCopy);
 }
 
 int pickApartSeqName(char **pName)
@@ -326,46 +367,53 @@ if (numWords > 1)
 return start;
 }
 
-struct cgapSage *findTagsOnChrom(struct dnaSeq *chrom, int start, struct snp *chromSnps, 
-				 struct hash *freqHash, struct hash *libTotHash)
-/* Find the tags on just the given chromosome. */
+int skipPosPastNs(struct dnaSeq *chrom, int pos)
+/* If the next 21 bases have an 'N', skip to base after the 'N'. Then */
+/* check again... and so on. Return the nearest base where the next */
+/* 21 bases are clear of 'N's. */
 {
-struct cgapSage *cgapList = NULL;
-int pos;
-for (pos = 0; pos < chrom->size - TAG_SIZE; pos++)
+int i = pos + TAG_SIZE;
+int furthestN = pos;
+if (pos >= chrom->size - TAG_SIZE)
+    return pos;
+while (i > pos)
     {
-    struct cgapSage *foundTags = findTagsAtPos(chrom, pos, start, chromSnps, freqHash, libTotHash);
-    cgapList = slCat(cgapList, foundTags);
+    if ((chrom->dna[i] == 'N') || (chrom->dna[i] == 'X'))
+	{
+	furthestN = i;
+	break;
+	}
+    i--;
     }
-return cgapList;
+if (furthestN > pos)
+    pos = skipPosPastNs(chrom, furthestN + 1);
+return pos;
 }
 
-struct cgapSage *findTagLocations(struct dnaSeq *seqList, struct snp **pSnpList, 
-				  struct hash *freqHash, struct hash *libTotHash)
+void findTagsOnChrom(struct dnaSeq *chrom, int start, struct snp **pChromSnps, 
+          struct hash *freqHash, struct hash *libTotHash, FILE *output)
+/* Find the tags on just the given chromosome. */
+{
+int pos = 0;
+while ((pos = skipPosPastNs(chrom, pos)) < chrom->size - TAG_SIZE)
+    {
+    findTagsAtPos(chrom, pos, start, pChromSnps, freqHash, libTotHash, output);
+    pos++;
+    }
+}
+
+void findTagLocations(struct dnaSeq *seqList, struct snp **pSnpList, 
+          struct hash *freqHash, struct hash *libTotHash, FILE *output)
 /* Find the tags on all given sequences. */
 {
 struct dnaSeq *seq;
-struct cgapSage *theList = NULL;
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
     int start = pickApartSeqName(&(seq->name));
     struct snp *chromSnps = narrowDownSnps(pSnpList, seq->name);
-    struct cgapSage *chromTags = findTagsOnChrom(seq, start, chromSnps, freqHash, libTotHash);
-    theList = slCat(theList, chromTags);
+    findTagsOnChrom(seq, start, &chromSnps, freqHash, libTotHash, output);
     snpFreeList(&chromSnps);
     }
-return theList;
-}
-
-void cgapSageTabOutAll(struct cgapSage *sageList, char *output)
-/* Loop through the list and tabOut... how come autoSql doesn't make one of */
-/* these for all of them? */
-{
-FILE *f = mustOpen(output, "w");
-struct cgapSage *cur;
-for (cur = sageList; cur != NULL; cur = cur->next)
-    cgapSageTabOut(cur, f);
-carefulClose(&f);
 }
 
 void cgapSageFind(char *genome, char *freqFile, char *libsFile, char *snpFile, 
@@ -373,23 +421,22 @@ void cgapSageFind(char *genome, char *freqFile, char *libsFile, char *snpFile,
 /* cgapSageFind - Find all the locations in the genome with SAGE data */
 /* including SNP variants. */
 {
+FILE *output = mustOpen(outputBedFile, "w");
 struct hash *freqHash = getFreqHash(freqFile);
 struct hash *libTotHash = getTotTagsHash(libsFile);
 struct snp *snpList = snpLoadAllByTab(snpFile);
 struct dnaSeq *seqList = dnaLoadAll(genome);
-struct cgapSage *sageList = findTagLocations(seqList, &snpList, freqHash, libTotHash);
-cgapSageTabOutAll(sageList, outputBedFile);
-cgapSageFreeList(&sageList);
+findTagLocations(seqList, &snpList, freqHash, libTotHash, output);
 freeDnaSeqList(&seqList);
 snpFreeList(&snpList);
-freeFreqHash(&freqHash);
+hashFreeWithVals(&freqHash, hashElSlPairListFree);
 freeHash(&libTotHash);
+carefulClose(&output);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
 cgapSageFind(argv[1], argv[2], argv[3], argv[4], argv[5]);
