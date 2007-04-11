@@ -395,13 +395,28 @@ visibility pack
 color 34,139,34
 type genePred
 
+# keep adjacent to MGC
+track orfeomeGenes
+shortLabel ORFeome Clones
+longLabel ORFeome Collaboration Gene Clones
+group genes
+priority 36.1
+visibility hide
+color 34,139,34
+type genePred . orfeomeMRna
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track transMap
 compositeTrack on
 shortLabel TransMap
 longLabel TransMap Genes
 group genes
 type genePred
-priority 36.05
+priority 36.25
 visibility hide
 baseColorUseCds given
 baseColorDefault genomicCodons
@@ -463,7 +478,7 @@ compositeTrack on
 shortLabel TransMap Ancestor
 longLabel TransMap via Ancestor Tree Genes
 group genes
-priority 36.06
+priority 36.26
 visibility hide
 type genePred
 

@@ -789,7 +789,7 @@ longLabel ORFeome Collaboration Genes
 group orfeome
 priority 1
 visibility pack
-color 120,120,220
+color 34,139,34
 type genePred . orfeomeMRna
 exonArrows on
 cdsDrawOptions enabled
