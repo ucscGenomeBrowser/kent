@@ -1103,3 +1103,7 @@ Warning: NR_001874: malformed RefSeq CDS:
   so we may have already reached the limit of it's one part per 1000
   precision.   
 
+- gbSanity does nothing if there are no alignment files, it should complain.
+
+- fix gbSanity: Error: fr2: no psl table fr2.xenoEst
+
