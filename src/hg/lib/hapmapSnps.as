@@ -5,7 +5,7 @@ table hapmapSnps
     uint    chromStart; "Start position in chrom (0 based)"
     uint    chromEnd;   "End position in chrom (1 based)"
     string  name;       "Reference SNP identifier from dbSnp"
-    uint    score;      "Not used"
+    uint    score;      "Minor allele frequency normalized (0-500)"
     char[1] strand;     "Which genomic strand contains the observed alleles"
 
     string  observed;   "Observed string from genotype file"
