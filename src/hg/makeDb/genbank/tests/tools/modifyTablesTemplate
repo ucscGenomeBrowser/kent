@@ -33,7 +33,7 @@ switch $host {
         set dbFile etc/hgwbeta.dbs
     }
     mgc {
-        set dbFile etc/mgc.dbs
+        set dbFile etc/rr.dbs
     }
     default {
         set dbFile etc/rr.dbs
