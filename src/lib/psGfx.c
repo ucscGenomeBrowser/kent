@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.25 2007/04/10 07:57:15 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.26 2007/04/11 22:43:40 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -82,15 +82,15 @@ ps->xOff = ptMargin;
 ps->yOff = ptMargin;
 ps->fontHeight = 10;
 
-/* Set initial clipping rectangle. */
-psClipRect(ps, 0, 0, ps->pixWidth, ps->pixHeight);
-
 /* Cope with fact y coordinates are bottom to top rather
  * than top to bottom. */
 ps->yScale = -ps->yScale;
 ps->yOff = ps->ptHeight - ps->yOff;
 
 psWriteHeader(ps->f, ptWidth, ptHeight);
+
+/* Set initial clipping rectangle. */
+psClipRect(ps, 0, 0, ps->pixWidth, ps->pixHeight);
 
 /* Set line width to a single pixel. */
 fprintf(ps->f, "%f setlinewidth\n", ps->xScale);
