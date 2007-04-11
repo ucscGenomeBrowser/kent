@@ -203,7 +203,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1266 2007/04/09 23:53:32 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1267 2007/04/11 01:22:44 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16740,15 +16740,24 @@ printf("<TD>Major allele (%s) homozygotes</TD>", majorAllele);
 printf("<TD>%d individuals</TD>", majorCount);
 printf("</TR>");
 
-printf("<TR>");
-printf("<TD>Minor allele (%s) homozygotes</TD>", minorAllele);
-printf("<TD>%d individuals</TD>", minorCount);
-printf("</TR>");
+if (minorCount > 0)
+    {
+    printf("<TR>");
+    printf("<TD>Minor allele (%s) homozygotes</TD>", minorAllele);
+    printf("<TD>%d individuals</TD>", minorCount);
+    printf("</TR>");
+    }
 
-printf("<TR>");
-printf("<TD>Heterozygotes (%s/%s)</TD>", majorAllele, minorAllele);
-printf("<TD>%d individuals</TD>", thisItem->heteroCount);
-printf("</TR>");
+if (thisItem->heteroCount > 0)
+    {
+    printf("<TR>");
+    if (strcasecmp(majorAllele, minorAllele) < 0)
+        printf("<TD>Heterozygotes (%s/%s)</TD>", majorAllele, minorAllele);
+    else
+        printf("<TD>Heterozygotes (%s/%s)</TD>", minorAllele, majorAllele);
+    printf("<TD>%d individuals</TD>", thisItem->heteroCount);
+    printf("</TR>");
+    }
 
 printf("<TR>");
 printf("<TD>Total</TD>");
