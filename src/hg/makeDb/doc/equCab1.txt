@@ -974,28 +974,37 @@ doBlastzChainNet.pl DEF -chainMinScore=3000 -chainLinearGap=medium \
     time nice -n 19 featureBits equCab1 chainHg18Link \
 	> fb.equCab1.chainHg18Link.txt 2>&1
     # 1618657165 bases of 2421923695 (66.834%) in intersection
-#########################################################################
-##########################################################################
-# NSCAN track - ( robert)
-    mkdir /cluster/data/equCab1/bed/nscan/
-    cd /cluster/data/equCab1/bed/nscan/
-
-    # obtainedf NSCAN predictions from michael brent's group
-    # at WUSTL
-    wget http://mblab.wustl.edu/jeltje/howse.ucsc
-
-    # load tracks.  Note that these have *utr features, rather than
-    # exon features.  currently ldHgGene creates separate genePred exons
-    # for these.
-    ldHgGene -bin -gtf -genePredExt equCab1 nscanGene howse.ucsc
-    # add .a suffix to match transcript id
-
-    # update trackDb; need a horse-specific page to describe informants
-    human/equCab1/nscanGene.html    
-    human/equCab1/trackDb.ra
 
 ############################################################################
 ## Reset default position the HMGB1 gene (DONE - 2004-04-09 - Hiram)
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chr17:9817422-9822403"
 	where name="equCab1";' hgcentraltest
+
+##########################################################################
+# NSCAN track - (2007-03-08 markd)
+# uses hg18 as informat, with pseudogene masking 
+#
+    # remove old, alpha N-SCAN track built by robert
+    cd /cluster/data/equCab1/bed/nscan/
+
+    # obtained NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv http://mblab.wustl.edu/predictions/horse/equCab1.gtf
+    wget -nv http://mblab.wustl.edu/predictions/horse/equCab1.prot.fa
+
+    bzip2 equCab1.*
+    chmod a-w *.bz2
+
+    # load tracks.
+    ldHgGene -bin -gtf -genePredExt equCab1 nscanGene equCab1.gtf.bz2
+    hgPepPred equCab1 generic nscanPep equCab1.prot.fa.bz2
+    rm -f *.tab
+
+    # update trackDb; need a equCab1-specific page to describe informants
+    horse/equCab1/nscanGene.html    
+    horse/equCab1/trackDb.ra
+
+    # request push of 
+    nscanGene
+    nscanPep
