@@ -4,7 +4,7 @@
 # This file describes browser build for the Lancelet
 # genome, Branchiostoma floridae, March 2006, v.1.0 from JGI
 #
-#       "$Id: braFlo1.txt,v 1.6 2007/04/05 00:39:35 hiram Exp $"
+#       "$Id: braFlo1.txt,v 1.7 2007/04/11 23:50:18 hiram Exp $"
 #
 
 ##########################################################################
@@ -285,3 +285,9 @@ braFlo1.perChromTables = no
 	VALUES ("braFlo1", "blat11", "17785", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+############################################################################
+## Default position set at IFG-1 (DONE - 2007-04-09 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:619013791-619054719"
+	where name="braFlo1";' hgcentraltest

@@ -784,3 +784,10 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/anoCar1/bigZips
     ln -s /cluster/data/anoCar1/goldenPath/bigZips/* .
+
+############################################################################
+## Default position set at IFG-1 (DONE - 2007-04-09 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="scaffold_72:3056494-3141055"
+	where name="anoCar1";' hgcentraltest
+

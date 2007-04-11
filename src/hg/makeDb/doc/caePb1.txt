@@ -412,3 +412,9 @@ close (FH);
 }
 '_EOF_'
 # << happy emacs
+
+############################################################################
+## Default position (DONE - 2007-04-09 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrUn:123456-234567"
+	where name="caePb1";' hgcentraltest
