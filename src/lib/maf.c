@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.32 2007/03/31 18:45:27 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.33 2007/04/11 17:56:29 rico Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -190,9 +190,7 @@ for (;;)
 		lineFileExpectWords(lf, ArraySize(row), wordCount);
 		if (!sameString(row[1],ali->components->src))
 		    {
-		    AllocVar(comp);
-		    comp->src = cloneString(row[1]);
-		    slAddHead(&ali->components, comp);
+			errAbort("i line src mismatch\n");
 		    }
 
 		comp = ali->components;
@@ -200,6 +198,25 @@ for (;;)
 		comp->leftLen = atoi(row[3]);
 		comp->rightStatus = *row[4];
 		comp->rightLen = atoi(row[5]);
+		}
+		if (sameString(word, "q"))
+		{
+		struct mafComp *comp;
+		int wordCount;
+		char *row[3];
+
+		/* Chop line up by white space.  This involves a few +-1's because
+		 * have already chopped out first word. */
+		row[0] = word;
+		wordCount = chopByWhite(line, row+1, ArraySize(row)-1) + 1; /* +-1 because of "s" */
+		lineFileExpectWords(lf, ArraySize(row), wordCount);
+		if (!sameString(row[1],ali->components->src))
+			{
+				errAbort("q line src mismatch\n");
+			}
+
+			comp = ali->components;
+			comp->quality = cloneString(row[2]);
 		}
 	    }
 	slReverse(&ali->components);
@@ -295,10 +312,16 @@ for (comp = ali->components; comp != NULL; comp = comp->next)
 	    sizeChars, comp->size, comp->strand, 
 	    srcSizeChars, comp->srcSize, comp->text);
 
+	if (comp->quality)
+		fprintf(f, "q %-*s %s\n",
+		srcChars + startChars + sizeChars + srcSizeChars + 5,
+		comp->src, comp->quality);
+
 	if (comp->leftStatus)
 	    fprintf(f,"i %-*s %c %d %c %d\n",srcChars,comp->src,
 		comp->leftStatus,comp->leftLen,comp->rightStatus,comp->rightLen);
 	}
+
     }
 
 /* Write out blank separator line. */
@@ -330,6 +353,7 @@ if (obj == NULL)
     return;
 freeMem(obj->src);
 freeMem(obj->text);
+freeMem(obj->quality);
 freez(pObj);
 }
 
@@ -600,6 +624,8 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         subMc->start = mc->start + countNonDash(mc->text, textStart);
         subMc->size = countNonDash(mc->text+textStart, textSize);
         subMc->text = cloneStringZ(mc->text + textStart, textSize);
+		if (mc->quality != NULL)
+			subMc->quality = cloneStringZ(mc->quality + textStart, textSize);
         }
     else
 	{
@@ -649,6 +675,8 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     reverseIntRange(&mc->start, &e, mc->srcSize);
     if (mc->text != NULL)
         reverseComplement(mc->text, maf->textSize);
+	if (mc->quality != NULL)
+		reverseBytes(mc->quality, maf->textSize);
     if (mc->strand == '-')
         mc->strand = '+';
     else
@@ -700,15 +728,23 @@ for (readIx=0; readIx < maf->textSize; ++readIx)
     {
     if (!mafColumnEmpty(maf, readIx))
         {
-	for (comp = maf->components; comp != NULL; comp = comp->next)
-	    comp->text[writeIx] = comp->text[readIx];
-	++writeIx;
-	}
+		for (comp = maf->components; comp != NULL; comp = comp->next) 
+			{
+		    comp->text[writeIx] = comp->text[readIx];
+			if (comp->quality != NULL)
+				comp->quality[writeIx] = comp->quality[readIx];
+			}
+		++writeIx;
+		}
     }
 
 /* Zero terminate text, and update textSize. */
 for (comp = maf->components; comp != NULL; comp = comp->next)
+	{
     comp->text[writeIx] = 0;
+	if (comp->quality != NULL)
+		comp->quality[writeIx] = 0;
+	}
 maf->textSize = writeIx;
 }
 
