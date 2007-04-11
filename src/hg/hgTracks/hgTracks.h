@@ -333,6 +333,9 @@ void makeLoweShades(struct vGfx *vg);
 #define UNALIGNED_SEQ 'o'
 #define MAF_DOUBLE_GAP '='
 
+void abbr(char *s, char *fluff);
+/* Cut out fluff from s. */
+
 struct track *getTrackList(struct group **pGroupList);
 /* Return list of all tracks. */
 

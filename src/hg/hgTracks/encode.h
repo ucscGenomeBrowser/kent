@@ -13,4 +13,19 @@ Color encodeStanfordNRSFColor(struct track *tg, void *item, struct vGfx *vg);
 void encodeStanfordNRSFMethods(struct track *tg);
 /* custom methods for ENCODE Stanford NRSF data */
 
+void loadEncodeRna(struct track *tg);
+/* Load up encodeRna from database table to track items. */
+
+void freeEncodeRna(struct track *tg);
+/* Free up encodeRna items. */
+
+Color encodeRnaColor(struct track *tg, void *item, struct vGfx *vg);
+/* Return color of encodeRna track item. */
+
+char *encodeRnaName(struct track *tg, void *item);
+/* Return RNA gene name. */
+
+void encodeRnaMethods(struct track *tg);
+/* Make track for rna genes . */
+
 #endif /* ENCODE_H */

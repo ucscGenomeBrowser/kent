@@ -44,7 +44,6 @@
 #include "roughAli.h"
 #include "snp.h"
 #include "rnaGene.h"
-#include "encodeRna.h"
 #include "fishClones.h"
 #include "stsMarker.h"
 #include "stsMap.h"
@@ -108,7 +107,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1311 2007/04/11 17:34:55 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1312 2007/04/11 18:25:09 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6647,54 +6646,6 @@ tg->itemName = rnaGeneName;
 tg->itemColor = rnaGeneColor;
 }
 
-void loadEncodeRna(struct track *tg)
-/* Load up encodeRna from database table to track items. */
-{
-bedLoadItem(tg, "encodeRna", (ItemLoader)encodeRnaLoad);
-}
-
-void freeEncodeRna(struct track *tg)
-/* Free up encodeRna items. */
-{
-encodeRnaFreeList((struct encodeRna**)&tg->items);
-}
-
-Color encodeRnaColor(struct track *tg, void *item, struct vGfx *vg)
-/* Return color of encodeRna track item. */
-{
-struct encodeRna *el = item;
-
-if(el->isRmasked)     return MG_BLACK;
-if(el->isTranscribed) return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
-if(el->isPrediction)  return MG_RED;
-return MG_BLUE;
-}
-
-char *encodeRnaName(struct track *tg, void *item)
-/* Return RNA gene name. */
-{
-struct encodeRna *el = item;
-char *full = el->name;
-static char abbrev[64];
-char *e;
-
-strcpy(abbrev, skipChr(full));
-subChar(abbrev, '_', ' ');
-abbr(abbrev, " pseudogene");
-if ((e = strstr(abbrev, "-related")) != NULL)
-    strcpy(e, "-like");
-return abbrev;
-}
-
-void encodeRnaMethods(struct track *tg)
-/* Make track for rna genes . */
-{
-tg->loadItems = loadEncodeRna;
-tg->freeItems = freeEncodeRna;
-tg->itemName = encodeRnaName;
-tg->itemColor = encodeRnaColor;
-tg->itemNameColor = encodeRnaColor;
-}
 
 Color ncRnaColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of ncRna track item. */
