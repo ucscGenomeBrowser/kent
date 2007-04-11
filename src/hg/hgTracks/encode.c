@@ -25,3 +25,17 @@ void encodeErgeMethods(struct track *tg)
 tg->itemName = encodeErgeName;
 }
 
+Color encodeStanfordNRSFColor(struct track *tg, void *item, struct vGfx *vg)
+/* color by strand */
+{
+struct bed *thisItem = item;
+if (thisItem->strand[0] == '-') return MG_RED;
+return MG_GREEN;
+}
+
+void encodeStanfordNRSFMethods(struct track *tg)
+/* custom methods for ENCODE Stanford NRSF data */
+{
+tg->itemColor = encodeStanfordNRSFColor;
+tg->itemNameColor = encodeStanfordNRSFColor;
+}

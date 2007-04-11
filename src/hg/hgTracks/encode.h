@@ -7,4 +7,10 @@ char *encodeErgeName(struct track *tg, void *item);
 void encodeErgeMethods(struct track *tg);
 /* setup special methods for ENCODE dbERGE II tracks */
 
+Color encodeStanfordNRSFColor(struct track *tg, void *item, struct vGfx *vg);
+/* different color for negative strand */
+
+void encodeStanfordNRSFMethods(struct track *tg);
+/* custom methods for ENCODE Stanford NRSF data */
+
 #endif /* ENCODE_H */
