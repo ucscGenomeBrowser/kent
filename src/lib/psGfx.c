@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.26 2007/04/11 22:43:40 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.27 2007/04/11 22:47:33 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -25,14 +25,26 @@ void psClipRect(struct psGfx *ps, double x, double y,
 	double width, double height)
 /* Set clipping rectangle. */
 {
+double x2 = x + width;
+double y2 = y + height;
 FILE *f = ps->f;
 fprintf(f, "cliprestore ");
 ps->clipMinX = x;
 ps->clipMinY = y;
-ps->clipMaxX = x + width;
-ps->clipMaxY = y + height;
-psXyOut(ps, x, y+height);
-psWhOut(ps, width, height);
+ps->clipMaxX = x2;     /* one beyond actual limit */
+ps->clipMaxY = y2;
+/* adjust x2,y2 to real pixel-center */
+x2 -= 1;
+y2 -= 1;
+width = x2 - x;
+height = y2 - y;
+/* adjust for pixel fat, add a half-pixel all the way around the block */
+x -= 0.5;
+y -= 0.5;
+width = 0.5+width+0.5;
+height = 0.5+height+0.5;
+psXyOut(ps, x, y+height); 
+psWhOut(ps, width, height);       
 fprintf(f, "rectclip\n");
 }
 
@@ -78,8 +90,9 @@ else
    ps->yScale = ps->xScale;
    ptHeight = ps->ptHeight = pixHeight * ps->yScale + 2*ptMargin;
    }
-ps->xOff = ptMargin;
-ps->yOff = ptMargin;
+/* 0.5, 0.5 is the center of the pixel in upper-left corner which corresponds to (0,0) */
+ps->xOff = ptMargin + (0.5*ps->xScale);   
+ps->yOff = ptMargin + (0.5*ps->yScale);
 ps->fontHeight = 10;
 
 /* Cope with fact y coordinates are bottom to top rather
@@ -152,12 +165,20 @@ if (x < ps->clipMinX) x = ps->clipMinX;
 if (y < ps->clipMinY) y = ps->clipMinY;
 if (x2 > ps->clipMaxX) x2 = ps->clipMaxX;
 if (y2 > ps->clipMaxY) y2 = ps->clipMaxY;
+/* adjust x2,y2 to real pixel-center */
+x2 -= 1;
+y2 -= 1;
 width = x2 - x;
 height = y2 - y;
-if (width > 0.0 && height > 0.0)
+/* adjust for pixel fat, add a half-pixel all the way around the block */
+x -= 0.5;
+y -= 0.5;
+width = 0.5+width+0.5;
+height = 0.5+height+0.5;
+if (width >= 0 && height >= 0)
     {
     psWhOut(ps, width, height);
-    psXyOut(ps, x, y+height);
+    psXyOut(ps, x, y+height); 
     fprintf(ps->f, "fillBox\n");
     }
 }
@@ -167,8 +188,8 @@ void psDrawLine(struct psGfx *ps, double x1, double y1, double x2, double y2)
 {
 FILE *f = ps->f;
 fprintf(f, "newpath\n");
-psMoveTo(ps, x1+0.5, y1+0.5);
-psXyOut(ps, x2+0.5, y2+0.5);
+psMoveTo(ps, x1, y1);
+psXyOut(ps, x2, y2);
 fprintf(ps->f, "lineto\n");
 fprintf(f, "stroke\n");
 }
@@ -304,11 +325,11 @@ void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled)
 FILE *f = ps->f;
 struct gfxPoint *p = poly->ptList;
 fprintf(f, "newpath\n");
-psMoveTo(ps, p->x+0.5, p->y+0.5);
+psMoveTo(ps, p->x, p->y);
 for (;;)
     {
     p = p->next;
-    psLineTo(ps, p->x+0.5, p->y+0.5);
+    psLineTo(ps, p->x, p->y);
     if (p == poly->ptList)
 	break;
     }
