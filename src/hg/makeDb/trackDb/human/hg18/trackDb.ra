@@ -1280,36 +1280,43 @@ type bed 4 .
     type bed 6 +
     priority 1
 
-    track snpArrayAffy500
+    track snpArrayAffy250Nsp
     subTrack snpArray
-    shortLabel Affy 500K
-    longLabel Affymetrix GeneChip Human Mapping 500K 
+    shortLabel Affy 250KNsp
+    longLabel Affymetrix GeneChip Human Mapping 250K Nsp 
     type bed 6 +
     priority 2
 
-    track snpArrayIllumina300
+    track snpArrayAffy250Sty
     subTrack snpArray
-    shortLabel Illumina 300K
-    longLabel Illumina HumanHap300 BeadChip
-    type bed 4 .
+    shortLabel Affy 250KSty
+    longLabel Affymetrix GeneChip Human Mapping 250K Sty 
+    type bed 6 +
     priority 3
 
-searchName illumina
-searchTable snpArrayIllumina300
-searchMethod exact
-searchType bed
-termRegex (rs[0-9]+)
-searchPriority 12
-padding 250
-
-searchName affy500
-searchTable snpArrayAffy500
+searchName affyGenomeWide
+searchTable snpArrayAffyGenomeWide
 searchMethod exact
 searchType bed
 termRegex (SNP_A-[0-9]+)
 searchPriority 12
 padding 250
 
+searchName affy250Nsp
+searchTable snpArrayAffy250Nsp
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
+
+searchName affy250Sty
+searchTable snpArrayAffy250Sty
+searchMethod exact
+searchType bed
+termRegex (SNP_A-[0-9]+)
+searchPriority 12
+padding 250
 
 track divMMK
 shortLabel McDonald-Kreitman AR
