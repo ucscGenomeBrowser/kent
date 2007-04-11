@@ -63,6 +63,7 @@ struct mafComp
     int start;	 /* Start within sequence. Zero based. If strand is - is relative to src end. */
     int size;	 /* Size in sequence (does not include dashes).  */
     char *text;  /* The sequence including dashes. */
+    char *quality;  /* The quality data (same length as text, or NULL). */
     char leftStatus; /* the syntenic status of the alignment before us vis a vis ourselves */
     int leftLen;     /* length related information for the previous alignment for the species */
     char rightStatus; /* the syntenic status of the alignment after us vis a vis ourselves */
