@@ -491,7 +491,7 @@ type bed 4 +
 
 track gvPos
 release beta
-html gvPosOld.html
+html gvPosOld
 shortLabel Locus Variants
 longLabel Compilation of $Organism Disease Variants and Other Mutations
 group phenDis
