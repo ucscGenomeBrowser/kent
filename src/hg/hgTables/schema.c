@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.42 2007/03/22 20:46:59 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.43 2007/04/12 21:36:56 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -549,6 +549,7 @@ if (curTrack == NULL)
 if (sameString(curTrack->tableName, curTable))
     return TRUE;
 else if (startsWith("wigMaf", curTrack->type) &&
+	 trackDbSetting(curTrack, "wiggle") &&
 	 sameString(curTable, trackDbSetting(curTrack, "wiggle")))
     return TRUE;
 else if (curTrack->subtracks != NULL)
