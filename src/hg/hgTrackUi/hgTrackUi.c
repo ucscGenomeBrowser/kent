@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.359 2007/04/10 22:36:41 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.360 2007/04/12 09:52:06 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2428,6 +2428,8 @@ else if (sameString(track, "tfbsConsSites"))
     tfbsConsSitesUi(tdb);
 else if (sameString(track, "hapmapSnps"))
     hapmapSnpsUi(tdb);
+else if (sameString(track, "switchDbTss"))
+    scoreUi(tdb, 10000);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */

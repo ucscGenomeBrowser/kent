@@ -2551,6 +2551,7 @@ tablesIgnored $hg
     snp
     snp125ExceptionDesc
     snp126ExceptionDesc
+    switchDbTss
     syntenyMouse
     syntenyRat
     targetScanS

@@ -358,6 +358,15 @@ priority 89.2
 visibility hide
 type psl .
 
+track switchDbTss
+shortLabel Switchgear TSS
+longLabel Switchgear Genomics Transcription Start Sites
+group regulation
+priority 91.1
+visibility hide
+origAssembly hg17
+type bed 6 +
+
 track promoterStanford
 shortLabel Stanford Promoters
 longLabel Stanford Promoters

@@ -93,6 +93,7 @@
 #include "gencodeIntron.h"
 #include "cutterTrack.h"
 #include "retroGene.h"
+#include "switchGear.h"
 #include "dless.h"
 #include "liftOver.h"
 #include "hgConfig.h"
@@ -107,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1314 2007/04/12 09:12:28 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1315 2007/04/12 09:52:11 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1125,6 +1126,49 @@ else
 
 enum {blackShadeIx=9,whiteShadeIx=0};
 
+void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row), 
+				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
+				   void (*freeWhatever)(struct slList **pItem), char *scoreColumn)
+/* Make a linkedFeatures loader by providing three functions: (1) a regular */
+/* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
+/* translating function, and (3) a function to free the the thing loaded in (1). */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct linkedFeatures *lfList = NULL;
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
+char extraWhere[128] ;
+/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
+ * by default, and the variable is named after the composite track. */
+if (scoreColumn != NULL)
+    {
+    safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+	  tg->tdb->tableName);
+    optionScore = cartUsualInt(cart, optionScoreStr, 0);
+    if (optionScore > 0) 
+	{
+	safef(extraWhere, sizeof(extraWhere), "%s >= %d", scoreColumn, optionScore);
+	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+	}
+    }
+else
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct slList *item = itemLoader(row + rowOffset);
+    struct linkedFeatures *lf = lfFromWhatever(item);
+    slAddHead(&lfList, lf);
+    freeWhatever(&item);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
 
 char *linkedFeaturesSeriesName(struct track *tg, void *item)
 /* Return name of item */
@@ -12885,6 +12929,7 @@ registerTrackHandler("syntenyRatBerkSmall", syntenyMethods);
 registerTrackHandler("syntenySanger", syntenyMethods);
 registerTrackHandler("syntenyPevzner", syntenyMethods);
 registerTrackHandler("syntenyBaylor", syntenyMethods);
+registerTrackHandler("switchDbTss", switchDbTssMethods);
 registerTrackHandler("zdobnovHg16", lfChromColorMethods);
 registerTrackHandler("zdobnovMm3", lfChromColorMethods);
 registerTrackHandler("zdobnovRn3", lfChromColorMethods);

@@ -23619,3 +23619,22 @@ ldHgGene -bin hg17 augustusXRA augustus.hg17.Xp.RA.it.gff
 hgPepPred hg17 generic augustusXRAPep augustus.hg17.Xp.RA.it.pep.aa
 
 
+###########################################################################
+# SwitchDB TSS Track (DONE 2007-04-12 Andy)
+
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/switchDbTss
+cd /cluster/data/hg17/bed/switchDbTss
+# (obtained from Nathan Trinklein <nathant@switchgeargenomics.com>)
+cp ~/all_tss_switchdb.txt . 
+cat << "EOF" > reformat.awk
+{
+if (NR > 1)
+   {
+   printf("%s\t%d\t%d\t%s\t1000\t%s\t%s\t%s\t%s\t%s\n", $2, $8, $8+1, $6, $5, $7, $1, $3, $4);
+   }
+}
+EOF
+awk -f reformat.awk all_tss_switchdb.txt > switchDbTss.bed
+ln -s ~/kent/src/hg/lib/switchDbTss.sql
+hgLoadBed -sqlTable=switchDbTss.sql hg17 switchDbTss switchDbTss.bed

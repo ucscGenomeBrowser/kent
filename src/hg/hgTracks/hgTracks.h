@@ -502,6 +502,13 @@ void bedLoadItemByQuery(struct track *tg, char *table,
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
+void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row), 
+				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
+				   void (*freeWhatever)(struct slList **pItem), char *scoreColumn);
+/* Make a linkedFeatures loader by providing three functions: (1) a regular */
+/* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
+/* translating function, and (3) a function to free the thing loaded in (1). */
+
 struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax);
 /* Return a linked feature from a (full) bed. */
 

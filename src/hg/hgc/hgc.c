@@ -179,6 +179,7 @@
 #include "putaInfo.h"
 #include "gencodeIntron.h"
 #include "cutter.h"
+#include "switchDbTss.h"
 #include "chicken13kInfo.h"
 #include "gapCalc.h"
 #include "chainConnect.h"
@@ -203,7 +204,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1267 2007/04/11 01:22:44 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1268 2007/04/12 09:52:01 aamp Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6284,6 +6285,39 @@ else
     {
     puts("<P>Click directly on a CpG island for specific information on that island</P>");
     }
+printTrackHtml(tdb);
+}
+
+void doSwitchDbTss(struct trackDb *tdb, char *item)
+/* Print SwitchDB TSS details. */
+{
+char *track = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset = hOffsetPastBin(seqName, track);
+char query[256];
+genericHeader(tdb, item);
+safef(query, sizeof(query), "select * from %s where name = '%s'", track, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct switchDbTss tss;
+    switchDbTssStaticLoad(row+rowOffset, &tss);
+    printPosOnChrom(tss.chrom, tss.chromStart, tss.chromEnd, tss.strand, FALSE, item);
+    printf("<B>Gene Model:</B> %s<BR>\n", tss.gmName);
+    printf("<B>Gene Model Position:</B> "
+       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+       hgTracksPathAndSettings(), database, tss.chrom, tss.gmChromStart+1, tss.gmChromEnd);
+    printf("%s:%d-%d</A><BR>\n", tss.chrom, tss.gmChromStart+1, tss.gmChromEnd);
+    printf("<B>TSS Confidence Score:</B> %.1f<BR>\n", tss.confScore);
+    }
+else
+    {
+    puts("<P>Click directly on a TSS for specific information on that TSS</P>");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
@@ -18260,6 +18294,10 @@ else if (sameWord(track, "simpleRepeat"))
 else if (startsWith("cpgIsland", track))
     {
     doCpgIsland(tdb, item);
+    }
+else if (sameWord(track, "switchDbTss"))
+    {
+    doSwitchDbTss(tdb, item);
     }
 else if (sameWord(track, "omimAv"))
     {
