@@ -558,12 +558,12 @@ identifier nscanName dependency
 identifier augustusHintsName dependency
 "Link together augustusHints predicted gene structure and peptide"
    $gbd.augustusHints.name
-   $gbd.augustusHintsPep.name full unique
+   $gbd.augustusHintsPep.name chopBefore=. full unique
 
 identifier augustusXRAName dependency
 "Link together augustusXRA predicted gene structure and peptide"
    $gbd.augustusXRA.name
-   $gbd.augustusXRAPep.name full unique
+   $gbd.augustusXRAPep.name chopBefore=. full unique
 
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
