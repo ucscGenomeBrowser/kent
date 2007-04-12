@@ -13,7 +13,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.10 2006/07/19 15:19:54 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.11 2007/04/12 05:12:38 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -59,6 +59,7 @@ errAbort(
     "  -name2Fld - include name2 field\n"
     "  -cdsStatFld - include cdsStat fields\n"
     "  -exonFramesFld - include exonFrames field\n"
+    "  -genePredExt - include all extended fields\n"
     "  -maxRows=n - maximum number of records to process\n"
     "  -minRows=1 - error if less than this number of rows read\n"
     "  -needRows=n - error if this number of rows read doesn't match\n"
@@ -81,6 +82,7 @@ static struct optionSpec options[] = {
     {"name2Fld", OPTION_BOOLEAN},
     {"cdsStatFld", OPTION_BOOLEAN},
     {"exonFramesFld", OPTION_BOOLEAN},
+    {"genePredExt", OPTION_BOOLEAN},
     {"maxRows", OPTION_INT},
     {"minRows", OPTION_INT},
     {"needRows", OPTION_INT},
@@ -154,7 +156,7 @@ void readTableTask(char *db, char *table)
 /* Implements the readTable task */
 {
 FILE *outFh = NULL;
-struct sqlConnection *conn = sqlConnectReadOnly(db);
+struct sqlConnection *conn = sqlConnect(db);
 struct genePredReader* gpr = genePredReaderQuery(conn, table, gWhere);
 struct genePred* gp;
 int numRows = 0;
@@ -368,6 +370,8 @@ if (optionExists("cdsStatFld"))
     gOptFields |= genePredCdsStatFld;    
 if (optionExists("exonFramesFld"))
     gOptFields |= genePredExonFramesFld;
+if (optionExists("genePredExt"))
+    gOptFields |= genePredAllFlds;
 gMaxRows = optionInt("maxRows", gMaxRows);
 gMinRows = optionInt("minRows", gMinRows);
 gNeedRows = optionInt("minRows", gNeedRows);

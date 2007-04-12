@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.90 2007/03/14 03:06:15 kent Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.91 2007/04/12 05:12:37 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -412,11 +412,16 @@ else
     }
 }
 
+static boolean isStartStopCodon(char *feat)
+/* determine if a feature is GTF style start/stop codon */
+{
+return sameWord(feat, "stop_codon") || sameWord(feat, "start_codon");
+}
+
 static boolean isCds(char *feat)
 /* determine if a feature is CDS */
 {
-return sameWord(feat, "CDS") ||  sameWord(feat, "stop_codon")
-    || sameWord(feat, "start_codon");
+return sameWord(feat, "CDS") || isStartStopCodon(feat);
 }
 
 static void chkGroupLine(struct gffGroup *group, struct gffLine *gl, struct genePred *gp)
@@ -554,6 +559,80 @@ else
     }
 }
 
+static void checkForNoFrames(struct genePred *gp)
+/* check for requesting frame from a file without frames. */
+{
+int i;
+/* Complain if we have a CDS but exonFrames are all -1: */
+if (gp->cdsStart < gp->cdsEnd)
+    {
+    boolean foundReal = FALSE;
+    for (i = 0;  i < gp->exonCount;  i++)
+        {
+        if (gp->exonFrames[i] >= 0 && gp->exonFrames[i] <= 2)
+            {
+            foundReal = TRUE;
+            break;
+            }
+        }
+    if (! foundReal)
+        {
+        errAbort("Error: exonFrames field is being added, but I found a "
+                 "gene (%s) with CDS but no valid frames.  "
+                 "This can happen if ldHgGene is invoked with -genePredExt "
+                 "but no valid frames are given in the file.  If the 8th "
+                 "field of GFF/GTF file is always a placeholder, then don't use "
+                 "-genePredExt.",
+                 gp->name);
+        }
+    }
+}
+
+static struct gffLine *assignFrameForCdsExon(int start, int end, int *framePtr,
+                                             struct gffLine *gl)
+/* set the frame for an exon, advancing gl past end of this exon */
+{
+/* skip lines preceeding this exon */
+while ((gl != NULL) && (gl->end < start))
+    gl = gl->next;
+/* set frame from any overlapping records with frame. Don't include
+ * start/stop_codon, as it isn't a full exon. */
+while ((gl != NULL) && (rangeIntersection(gl->start, gl->end, start, end) > 0))
+    {
+    if (!isStartStopCodon(gl->feature))
+        {
+        int frame = phaseToFrame(gl->frame);
+        if (frame >= 0)
+            *framePtr = frame;
+        }
+    gl = gl->next;
+    }
+return gl;
+}
+
+static void assignFrame(struct gffGroup *group, struct genePred *gp)
+/* Assign frame from GFF after genePred has been built.*/
+{
+struct gffLine *gl = group->lineList;
+int start, end, i;
+boolean haveFrame = FALSE;
+for (i = 0; i < gp->exonCount; i++)
+    {
+    if (genePredCdsExon(gp, i, &start, &end))
+        {
+        gl = assignFrameForCdsExon(start, end, &(gp->exonFrames[i]), gl);
+        if (gp->exonFrames[i] >= 0)
+            haveFrame = TRUE;
+        }
+    }
+
+/* make sure stop has face if some exons in the gene had frame */
+if (haveFrame)
+    fixStopFrame(gp);
+checkForNoFrames(gp);
+}
+
+
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
                                          boolean isGtf, char *exonSelectWord, unsigned optFields,
                                          unsigned options)
@@ -568,8 +647,6 @@ int exonCount = 0;
 boolean haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
 unsigned *eStarts, *eEnds;
-int *eFrames;
-boolean haveFrame = FALSE;
 int i;
 
 /* should we count on start/stop codon annotation in GFFs? */
@@ -672,11 +749,10 @@ if (optFields & genePredCdsStatFld)
     }
 if (optFields & genePredExonFramesFld)
     {
-    gp->exonFrames = AllocArray(eFrames, exonCount);
+    AllocArray(gp->exonFrames, exonCount);
     for (i = 0; i < exonCount; i++)
         gp->exonFrames[i] = -1;
     }
-eFrames = gp->exonFrames;
 
 
 /* adjust tx range to include stop codon */
@@ -709,65 +785,16 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
                 eEnds[i] = gl->end;
             }
         }
-    /* frame: don't include start/stop_codon check here, only CDS. This is
-     * outside of the isExon test to handle GFF.  Here we check for being in
-     * CDS range of the gp, since some GFFs (ce sangerGene) have a feature
-     * just for the full CDS range.
-     */
-    if ((optFields & genePredExonFramesFld)
-        && (rangeIntersection(gp->cdsStart, gp->cdsEnd, eStarts[i], eEnds[i]) > 0)
-        && !sameWord(gl->feature, "stop_codon"))
-        {
-        /* set frame if this is a CDS, convert from GFF/GTF definition.
-         * Leave unchanged if no frame so as not to overwrite frame from
-         * other feature of the same exon */
-        int frame = phaseToFrame(gl->frame);
-        if (frame >= 0)
-            {
-            eFrames[i] = frame;
-            haveFrame = TRUE;
-            }
-        }
     }
 gp->exonCount = i+1;
-
-if (optFields & genePredExonFramesFld)
-    {
-    static boolean alreadyWarned = FALSE;
-    static boolean foundReal = FALSE;
-    /* Complain if we have a CDS but exonFrames are all -1: */
-    if (cdsStart < cdsEnd && !alreadyWarned && !foundReal)
-	{
-	for (i = 0;  i < exonCount;  i++)
-	    {
-	    if (gp->exonFrames[i] >= 0 && gp->exonFrames[i] <= 2)
-		{
-		foundReal = TRUE;
-		break;
-		}
-	    }
-	if (! foundReal)
-	    {
-	    warn("Warning: exonFrames field is being added, but I found a "
-		 "gene (%s) with CDS but no valid frames.  "
-		 "This can happen if ldHgGene is invoked with -genePredExt "
-		 "but no valid frames are given in the file.  If the 8th "
-		 "field of the file is always a placeholder, then don't use "
-		 "-genePredExt.",
-		 gp->name);
-	    alreadyWarned = TRUE;
-	    }
-	}
-    }
 
 /* adjust for flybase type of GFFs, with stop codon implied and outside of
  * CDS. */
 if ((options & genePredGxfImpliedStopAfterCds) && !haveStopCodon)
     adjImpliedStopAfterCds(gp);
 
-/* only fix frame if some entries in the gene had frame */
-if (haveFrame)
-    fixStopFrame(gp);
+if (optFields & genePredExonFramesFld)
+    assignFrame(group, gp);
 
 return gp;
 }

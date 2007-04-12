@@ -61,6 +61,7 @@ doFileTest: mkout
 	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp -info=${OUT_DIR}/${id}.info readFile input/genePred/${inGp}
 	diff -u input/genePred/${inGp} ${OUT_DIR}/${id}.gp
 	diff -u expected/genePred/${id}.info ${OUT_DIR}/${id}.info
+	genePredCheck -verbose=0 ${OUT_DIR}/${id}.gp
 
 ###
 # Test of loading and reading database tables.  When ids are not auto-assigned,
@@ -99,7 +100,7 @@ doTableTest: mkout
 	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp -info=${OUT_DIR}/${id}.info readTable ${DB} ${TEST_TBL}
 	diff -u ${expGp} ${OUT_DIR}/${id}.gp
 	diff -u expected/genePred/${id}.info ${OUT_DIR}/${id}.info
-
+	genePredCheck -verbose=0 ${OUT_DIR}/${id}.gp
 
 ###
 # test of genePredFromPsl2 with various various optional fields
@@ -125,6 +126,7 @@ doFromPslTest: mkout
 	${GENE_PRED_TESTER} ${opts} -output=${OUT_DIR}/${id}.gp fromPsl input/genePred/${inBase}.psl input/genePred/${inBase}.cds
 	${GENE_PRED_TESTER} ${opts} readFile ${OUT_DIR}/${id}.gp
 	diff -u ${EXP_DIR}/${id}.gp ${OUT_DIR}/${id}.gp
+	genePredCheck -verbose=0 ${OUT_DIR}/${id}.gp
 
 
 # tests of reading existing tables; these don't diff output, since tables
@@ -155,7 +157,7 @@ fromGxfTests: fromGxfMinTest fromGxfFrameTest \
 	fromGxfAcemblyTest fromGxfAcemblyFrameTest \
 	fromGxfNcbiTest fromGtfRegressTest fromGffRegressTest \
 	fromGffCeSangerTest fromGffCeSangerTypeTest \
-	fromGtfImpliedStopTest
+	fromGtfImpliedStopTest fromGffFrameBug
 
 doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
 
@@ -219,6 +221,10 @@ fromGffCeSangerTypeTest:
 fromGtfImpliedStopTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=flybase.gtf opts="-cdsStatFld -impliedStopAfterCds"
 
+# case where frame was lost
+fromGffFrameBug:
+	${doFromGxfTest} id=$@ what=fromGff inBase=frameBug.gff opts="-genePredExt -exonSelectWord=exon"
+
 # recursive target for GFF/GTF tests
 #  id - test id
 #  what - fromGtf or fromGff
@@ -229,7 +235,7 @@ doFromGxfTest: mkout
 	${GENE_PRED_TESTER} ${opts} -output=${OUT_DIR}/${id}.gp ${what} input/genePred/${inBase}
 	${GENE_PRED_TESTER} ${readOpts} readFile ${OUT_DIR}/${id}.gp
 	diff -u ${EXP_DIR}/${id}.gp ${OUT_DIR}/${id}.gp
-
+	genePredCheck -verbose=0 ${OUT_DIR}/${id}.gp
 
 mkout:
 	@${MKDIR} ${OUT_DIR}
