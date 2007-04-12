@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1315 2007/04/12 09:52:11 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1316 2007/04/12 23:25:35 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1134,7 +1134,7 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* translating function, and (3) a function to free the the thing loaded in (1). */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeatures *lfList = NULL;
