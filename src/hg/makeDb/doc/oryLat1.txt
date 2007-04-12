@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.24 2007/03/27 00:07:20 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.25 2007/04/12 22:21:18 markd Exp $"
 #
 
 ##########################################################################
@@ -2050,6 +2050,15 @@ oryLat1.downloadDir = oryLat1
         etc/hgwdev.dbs
     cvs ci -m "Added oryLat1." etc/align.dbs etc/hgwdev.dbs
     make etc-update
+
+   # add Xeno refseqs (2007-04-12 markd)
+   # add this to genbank.com:
+   oryLat1.refseq.mrna.xeno.load = yes
+
+   ssk kkstore02
+   cd /cluster/data/genbank
+   (./bin/gbAlignStep -initial -srcDb=refseq oryLat1)|&mail markd&
+   (./bin/gbDbLoadStep -srcDb=refseq oryLat1)|&mail markd&
 
 #########################################################################
 ## 5-Way Multiz (DONE - 2007-01-21 - Hiram)
