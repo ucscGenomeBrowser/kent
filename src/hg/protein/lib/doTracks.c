@@ -15,7 +15,7 @@
 #include "pbTracks.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: doTracks.c,v 1.16 2007/03/27 17:40:05 fanhsu Exp $";
+static char const rcsid[] = "$Id: doTracks.c,v 1.17 2007/04/12 22:24:14 fanhsu Exp $";
 
 int prevGBOffsetSav;
 char trackOffset[20];
@@ -1472,7 +1472,8 @@ if (mrnaID != NULL)
 					 kgProtMap2's qName uses kgId instead of 
 					 protein display ID */
     			    	getExonInfo(kgId, &exCount, &chrom, &strand);
-			    	doExonTrack = TRUE;
+			    	assert(exCount > 0);
+				doExonTrack = TRUE;
 			    	}
 			    }
 			/*
@@ -1507,7 +1508,8 @@ if (mrnaID != NULL)
     	{
 	doExonTrack = TRUE;
     	getExonInfo(proteinID, &exCount, &chrom, &strand);
-    	}
+    	assert(exCount > 0);
+	}
     /* do the following only if pbTracks called doTracks() */
     if (initialWindow && IAmPbTracks)
 	{
