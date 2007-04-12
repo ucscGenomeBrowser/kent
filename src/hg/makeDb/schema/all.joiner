@@ -2537,7 +2537,23 @@ tablesIgnored $hg
     celeraCoverage
     celeraDupPositive
     celeraOverlay
+    cnpFosmid
+    cnpIafrate
+    cnpIafrate2
+    cnpRedon
+    cnpSebat
+    cnpSebat2
+    cnpSharp
+    cnpSharp2
+    cnpSharpSampleCount
+    cnpSharpSamples
+    cnpTuzun
     ctgPos
+    delConrad
+    delConrad2
+    delHinds
+    delHinds2
+    delMccarroll
     eponine
     genomicSuperDups
     haplotype
