@@ -2534,15 +2534,17 @@ tablesIgnored $hg
     chimpDels
     chimpParalogy
     chimpSimpleDiff
-    ctgPos
     celeraCoverage
     celeraDupPositive
     celeraOverlay
+    ctgPos
+    eponine
     genomicSuperDups
     haplotype
     kg2ToKg3
     perlegen
     promoterStanford
+    pseudoYale
     recombRate
     slamMouse
     slamNonCodingMouse
@@ -2555,6 +2557,7 @@ tablesIgnored $hg
     syntenyMouse
     syntenyRat
     targetScanS
+    wgRna
     encodeAffyChIpRnapHl60PvalHr00
     encodeAffyChIpRnapHl60PvalHr02
     encodeAffyChIpRnapHl60PvalHr08
@@ -2602,9 +2605,6 @@ tablesIgnored $hg
     encodeUncFairePeaks
     encodeUncFairePeaksChipotle
     encodeUvaDnaRep%
-    eponine
-    pseudoYale
-    wgRna
 
 tablesIgnored $mm
     chr%_gold
