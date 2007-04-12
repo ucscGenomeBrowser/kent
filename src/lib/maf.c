@@ -9,7 +9,7 @@
 #include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.33 2007/04/11 17:56:29 rico Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.34 2007/04/12 18:54:23 rico Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -189,9 +189,7 @@ for (;;)
 		wordCount = chopByWhite(line, row+1, ArraySize(row)-1) + 1; /* +-1 because of "s" */
 		lineFileExpectWords(lf, ArraySize(row), wordCount);
 		if (!sameString(row[1],ali->components->src))
-		    {
-			errAbort("i line src mismatch\n");
-		    }
+		    errAbort("i line src mismatch: i is %s :: s is %s\n", row[1], ali->components->src);
 
 		comp = ali->components;
 		comp->leftStatus = *row[2];
@@ -211,9 +209,7 @@ for (;;)
 		wordCount = chopByWhite(line, row+1, ArraySize(row)-1) + 1; /* +-1 because of "s" */
 		lineFileExpectWords(lf, ArraySize(row), wordCount);
 		if (!sameString(row[1],ali->components->src))
-			{
-				errAbort("q line src mismatch\n");
-			}
+		    errAbort("q line src mismatch: q is %s :: s is %s\n", row[1], ali->components->src);
 
 			comp = ali->components;
 			comp->quality = cloneString(row[2]);
