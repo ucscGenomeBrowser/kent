@@ -15,7 +15,7 @@
 #include "hgConfig.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.101 2007/03/26 18:48:45 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.102 2007/04/12 22:48:33 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1745,10 +1745,20 @@ char query[256], **row;
 struct sqlResult *sr;
 struct slName *list = NULL, *el;
 char seedString[256] = "";
+/* The randomized-order, distinct-ing query can take a very long time on 
+ * very large tables.  So create a smaller temporary table and use that. 
+ * The temporary table is visible only to the current connection, so 
+ * doesn't have to be very uniquely named, and will disappear when the 
+ * connection is closed. */
+safef(query, sizeof(query),
+      "create temporary table tmp%s select %s from %s limit 100000",
+      table, field, table);
+sqlUpdate(conn, query);
 if (seed != -1)
     safef(seedString,sizeof(seedString),"%d",seed);
-safef(query, sizeof(query), "select distinct %s from %s order by rand(%s) limit %d", 
-	field, table, seedString, count);
+safef(query, sizeof(query), "select distinct %s from tmp%s "
+      "order by rand(%s) limit %d", 
+      field, table, seedString, count);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
