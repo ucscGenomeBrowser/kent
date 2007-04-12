@@ -790,7 +790,7 @@ group orfeome
 priority 1
 visibility pack
 color 34,139,34
-type genePred . orfeomeMRna
+type genePred . orfeomeMrna
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons

@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "orfeomeImageIds.h"
 
-static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.2 2007/01/19 19:46:38 markd Exp $";
+static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.3 2007/04/12 22:24:45 markd Exp $";
 
 /* Notes:
  *  - Identifies ORFeome clones by both image id and genbank keywords, as it
@@ -44,13 +44,13 @@ static struct optionSpec optionSpecs[] = {
 static char *orfeomeImageIdsFile = "etc/orfeome.imageIds";
 
 /* table names */
-static char *ORFEOME_MRNA_TBL = "orfeomeMRna";
+static char *ORFEOME_MRNA_TBL = "orfeomeMrna";
 static char *ORFEOME_GENES_TBL = "orfeomeGenes";
 
 /* list of all tables */
 static char *orfeomeTables[] =
 {
-    "orfeomeMRna",
+    "orfeomeMrna",
     "orfeomeGenes",
     NULL
 };

@@ -416,7 +416,7 @@ group genes
 priority 36.1
 visibility hide
 color 34,139,34
-type genePred . orfeomeMRna
+type genePred . orfeomeMrna
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
