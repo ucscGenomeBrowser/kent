@@ -12,7 +12,7 @@ O = $A.o altGraphXTrack.o bedGraph.o chainTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
         expRatioTracks.o goldTrack.o loweLabTracks.o \
 	mafTrack.o netTrack.o pslTrack.o rmskTrack.o \
-	sampleTracks.o wabaTrack.o wigTrack.o cds.o \
+	sampleTracks.o switchGear.o wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o
 
@@ -27,6 +27,7 @@ compile: $O
 wigTrack.o:	wigCommon.h
 bedGraph.o:	wigCommon.h
 
+switchGear.o:	switchGear.h
 cds.o:		cds.h
 hgTracks.o:	cds.h
 pslTrack.o:	cds.h
