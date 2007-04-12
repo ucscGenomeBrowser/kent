@@ -67,7 +67,7 @@ set today=`date +%Y-%m-%d`
 set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
 
-# remove dirs one year old, one month at a time
+# remove dirs from same month last year
 set year=`date +%Y`
 set yearMonth=`date +%Y-%m`
 set lastyear=`echo $year | awk '{print $1-1}'`
@@ -78,7 +78,13 @@ set dropdir=`echo $yearMonth | sed -e "s/$year/$lastyear/"`
 # echo "today     $today"
 # echo "yearMonth $yearMonth"
 # echo "dropdir   $dropdir"
-rm -r "$dirPath/${dropdir}-*"
+
+cd $dirPath 
+set dirs=`ls -l | grep $dropdir | grep ^d | awk '{print $9}'`
+foreach dir ( $dirs )
+  rm -r $dir
+end
+cd -
 
 # make new dir for today's output
 mkdir -p $dirPath/$today
