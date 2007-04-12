@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.19 2007/04/03 22:38:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.20 2007/04/12 22:17:57 fanhsu Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -718,7 +718,7 @@ struct sqlConnection *connCentral = hConnectCentral();
 char buf[128];
 char query[256];
 char *res;
-sprintf(query, "select organism from dbDb where name = '%s'",
+safef(query, sizeof(query), "select organism from dbDb where name = '%s'",
         database);
 res = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
 hDisconnectCentral(&connCentral);

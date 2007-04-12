@@ -52,29 +52,29 @@ o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
 table = optionVal("table", "knownGene");
-sprintf(query, "select name from %s.%s", roDbName, table);
+safef(query, sizeof(query), "select name from %s.%s", roDbName, table);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
     {
     kgId = row[0];
 	
-    sprintf(cond_str, "kgId='%s'", kgId);
+    safef(cond_str, sizeof(cond_str), "kgId='%s'", kgId);
     mRNA = sqlGetField(conn3, roDbName, "kgXref", "mRNA", cond_str);
     
-    sprintf(cond_str, "mrna='%s'", mRNA);
+    safef(cond_str, sizeof(cond_str), "mrna='%s'", mRNA);
     locusID = sqlGetField(conn3, "entrez", "entrezMrna", "geneId", cond_str);
     
     /* look for RefSeq if not found in mRNAs */
     if (locusID == NULL)
     	{
-    	sprintf(cond_str, "refseq='%s'", mRNA);
+    	safef(cond_str, sizeof(cond_str), "refseq='%s'", mRNA);
     	locusID = sqlGetField(conn3, "entrez", "entrezRefseq", "geneId", cond_str);
 	}
 
     if (locusID != NULL)
 	{
-        sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
+        safef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, locusID);
         sr3 = sqlGetResult(conn3, query3);
         while ((row3 = sqlNextRow(sr3)) != NULL)
             {
@@ -91,9 +91,9 @@ while (row != NULL)
 	/* printf("%s not found in Entrez.\n", kgId);fflush(stdout);*/
         if (differentString(table, "knownGene"))
             {
-            sprintf(cond_str, "name='%s'", kgId);
+            safef(cond_str, sizeof(cond_str), "name='%s'", kgId);
             locusID = sqlGetField(conn3, roDbName, table, "name2", cond_str);
-            sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
+            safef(query3, sizeof(query3), "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
             sr3 = sqlGetResult(conn3, query3);
             while ((row3 = sqlNextRow(sr3)) != NULL)
                 {
