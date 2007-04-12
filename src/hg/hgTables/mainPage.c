@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.114 2007/03/09 23:42:16 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.115 2007/04/12 21:57:30 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -630,8 +630,8 @@ else
     cgiMakeHiddenVar(hgtaRegionType, regionType);
     }
 
-/* Select identifiers line. */
-if (!isWig && (!isPositional || !hti || isNotEmpty(hti->nameField)))
+/* Select identifiers line (if applicable). */
+if (!isWig && getIdField(database, curTrack, curTable, hti) != NULL)
     {
     hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "paste list");
