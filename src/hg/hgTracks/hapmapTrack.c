@@ -376,14 +376,15 @@ if (sameString(monoFilter, "some populations") && monoCount == 0) return TRUE;
 if (sameString(monoFilter, "no populations") && monoCount > 0) return TRUE;
 
 /* orthoAlleles */
-if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "none")) 
-    return TRUE;
-if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "none")) 
-    return TRUE;
-if (sameString(chimpFilter, "available") && sameString(summaryItem->chimpAllele, "N")) 
-    return TRUE;
-if (sameString(macaqueFilter, "available") && sameString(summaryItem->macaqueAllele, "N")) 
-    return TRUE;
+/* if ortho data not available, then filters aren't used */
+if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "none"))
+    return FALSE;
+if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "none")) 
+    return FALSE;
+if (differentString(chimpFilter, "no filter") && sameString(summaryItem->chimpAllele, "N")) 
+    return FALSE;
+if (differentString(macaqueFilter, "no filter") && sameString(summaryItem->macaqueAllele, "N")) 
+    return FALSE;
 
 /* handle mismatches first - interesting and tricky */
 if (sameString(chimpFilter, "matches neither human allele")) return orthoAlleleCheck(summaryItem, "chimp");
