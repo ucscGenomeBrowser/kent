@@ -204,7 +204,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1268 2007/04/12 09:52:01 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1269 2007/04/12 16:41:36 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -16560,7 +16560,7 @@ if (summaryItem->totalAlleleCountCEU > 0)
     {
     printf("<TR>");
     printf("<TD>CEU</TD>");
-    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
+    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCEU);
     printf("</TR>\n");
     }
 else
@@ -16570,7 +16570,7 @@ if (summaryItem->totalAlleleCountCHB > 0)
     {
     printf("<TR>");
     printf("<TD>CHB</TD>");
-    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
+    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountCHB);
     printf("</TR>\n");
     }
 else
@@ -16580,7 +16580,7 @@ if (summaryItem->totalAlleleCountJPT > 0)
     {
     printf("<TR>");
     printf("<TD>JPT</TD>");
-    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
+    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountJPT);
     printf("</TR>\n");
     }
 else
@@ -16590,7 +16590,7 @@ if (summaryItem->totalAlleleCountYRI > 0)
     {
     printf("<TR>");
     printf("<TD>YRI</TD>");
-    printf("<TD bgcolor = \"gray\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
+    printf("<TD bgcolor = \"lightgray\">%d (100%%)</TD>", summaryItem->totalAlleleCountYRI);
     printf("</TR>\n");
     }
 else
