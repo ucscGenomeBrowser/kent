@@ -17,7 +17,7 @@
 #include "pbStamp.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbUtil.c,v 1.20 2007/04/12 22:17:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbUtil.c,v 1.21 2007/04/12 22:22:29 fanhsu Exp $";
 
 void hWrites(char *string)
 /* Write string with no '\n' if not suppressed. */
@@ -381,6 +381,7 @@ for (i=0; i<blockCount; i++)
 	}
     }
 *exonCount = blockCount;
+assert(*exonCount > 0);
 *chrom     = tNameStr;
 }
 
