@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.150 2007/03/12 22:12:02 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.151 2007/04/12 21:55:54 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -908,6 +908,16 @@ else if (track != NULL)
 	    }
 	joinerPairFreeList(&jpList);
 	}
+    }
+/* If we haven't found the answer but this looks like a non-positional table,
+ * use the first field. */
+if (idField == NULL && (hti == NULL || !hti->isPos))
+    {
+    struct sqlConnection *conn = hAllocOrConnect(db);
+    struct slName *fieldList = sqlListFields(conn, table);
+    idField = fieldList->name;
+    slFreeList(&fieldList);
+    hFreeOrDisconnect(&conn);
     }
 return idField;
 }
