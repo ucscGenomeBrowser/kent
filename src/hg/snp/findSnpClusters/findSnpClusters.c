@@ -29,6 +29,8 @@ errAbort(
 }
 
 struct bed *getClusters(struct snp *snpList)
+/* Simple cluster algorithm fixing a start point and extending each cluster */
+/* by moving the end until finally it goes too far to be called a cluster. */
 {
 struct snp *start = snpList; 
 struct snp *end; 
