@@ -23487,7 +23487,7 @@ wget -O custTrk "http://enhancer-test.lbl.gov/cgi-bin/customTrack.cgi"
 cat custTrk | head -116 | tail +2 > pos
 cat custTrk | tail +118 > neg
 cat pos | gawk '{print $1"\t"$2"\t"$3"\t"$4"\t900"}' > bed5
-cat neg | gawk '{print $1"\t"$2"\t"$3"\t"$4"\t100"}' >> bed5
+cat neg | gawk '{print $1"\t"$2"\t"$3"\t"$4"\t200"}' >> bed5
 wc -l bed5
 #301 bed5
 hgLoadBed hg17 vistaEnhancers bed5
