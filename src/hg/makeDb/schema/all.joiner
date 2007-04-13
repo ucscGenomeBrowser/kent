@@ -650,6 +650,16 @@ identifier gnfRatAtlas2
     $rn.gnfAtlas2.name
     $rn.affyU34A.qName
 
+identifier affyZonWildType
+"Affymetrix Zebrafish chip Zon Lab data probe ID"
+    hgFixed.zebrafishZonWTAll.name
+    hgFixed.zebrafishZonWTAllRatio.name unique
+    hgFixed.zebrafishZonWTMedian.name unique
+    hgFixed.zebrafishZonWTMedianRatio.name. unique
+    $danRer.ensToAffyZebrafish.name
+    $danRer.ensToAffyZonWildType.name
+    $danRer.affyZebrafish.qName
+
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
     $hg.affyU95.qName dupeOk
