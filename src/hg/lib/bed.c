@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.53 2007/04/01 09:29:27 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.54 2007/04/13 18:55:39 kate Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -258,7 +258,7 @@ struct bedLine *blList = NULL, *bl;
 char *line;
 int lineSize;
 
-printf("Reading %s\n", inFile);
+verbose(2, "Reading %s\n", inFile);
 lf = lineFileOpen(inFile, TRUE);
 while (lineFileNext(lf, &line, &lineSize))
     {
@@ -269,10 +269,10 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 lineFileClose(&lf);
 
-printf("Sorting\n");
+verbose(2, "Sorting\n");
 slSort(&blList, bedLineCmp);
 
-printf("Writing %s\n", outFile);
+verbose(2, "Writing %s\n", outFile);
 f = mustOpen(outFile, "w");
 for (bl = blList; bl != NULL; bl = bl->next)
     {
