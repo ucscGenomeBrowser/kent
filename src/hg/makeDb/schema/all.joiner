@@ -38,9 +38,10 @@ set strPur strPur1
 set felCat felCat3
 set gasAcu gasAcu1
 set oryLat oryLat1
+set equCab equCab1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryLat
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryLat,$equCab1
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
