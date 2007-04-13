@@ -230,6 +230,10 @@ echo
 hgsql -t -e "SELECT tName, tStart, tEnd, level, type, qName, strand FROM $trackname WHERE tStart > 10000000 LIMIT 3" $db
 echo
 
+echo "not gap"
+hgsql -t -e "SELECT tName, tStart, tEnd, level, type, qName, strand FROM $trackname WHERE tStart > 10000000 AND type != gap LIMIT 3" $db
+echo
+
 
 
 # -------------------------------------------------
