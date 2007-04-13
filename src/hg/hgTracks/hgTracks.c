@@ -108,7 +108,7 @@
 #include "hapmapTrack.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1316 2007/04/12 23:25:35 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1317 2007/04/13 05:50:38 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1143,16 +1143,19 @@ int optionScore;
 char extraWhere[128] ;
 /* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
  * by default, and the variable is named after the composite track. */
-if (scoreColumn != NULL)
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+      tg->tdb->tableName);
+if ((scoreColumn != NULL) && (cartVarExists(cart, optionScoreStr)))
     {
-    safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-	  tg->tdb->tableName);
     optionScore = cartUsualInt(cart, optionScoreStr, 0);
-    if (optionScore > 0) 
+    if (optionScore < 0)
 	{
-	safef(extraWhere, sizeof(extraWhere), "%s >= %d", scoreColumn, optionScore);
-	sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+	warn("%d is an invalid score for the filter on the %s track. Please choose a score in the valid range", optionScore, tg->tdb->tableName);
+	cartRemove(cart, optionScoreStr);
+	optionScore = 0;
 	}
+    safef(extraWhere, sizeof(extraWhere), "%s >= %d", scoreColumn, optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
     }
 else
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
