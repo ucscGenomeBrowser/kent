@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.92 2007/04/13 05:26:29 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.93 2007/04/13 05:58:24 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -28,29 +28,28 @@ static char *createSql =
 "   exonCount int unsigned not null,"	/* Number of exons */
 "   exonStarts longblob not null,"	/* Exon start positions */
 "   exonEnds longblob not null,"	/* Exon end positions */
-"   %s %s %s %s"                        /* Optional fields */
-"   INDEX(name(12)),"
-"   INDEX(chrom(%d),txStart),"
-"   INDEX(chrom(%d),txEnd)"
-")";
+"   INDEX(name)";
 
 static char *binFieldSql = 
 "    bin smallint unsigned not null,"
-"    INDEX(chrom(%d),bin),";
+"    INDEX(chrom,bin),";
+
+static char *noBinIndexSql = 
+"   INDEX(chrom,txStart),";
 
 static char *idFieldSql = 
-"    id int unsigned PRIMARY KEY auto_increment,";   /* Numeric id of gene annotation. */
+"   ,id int unsigned PRIMARY KEY auto_increment";   /* Numeric id of gene annotation. */
 
 static char *name2FieldSql = 
-"   name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
-"   INDEX(name2(10)),";
+"  ,name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
+"   INDEX(name2)";
 
 static char *cdsStatFieldSql = 
-"   cdsStartStat enum('none', 'unk', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
-"   cdsEndStat enum('none', 'unk', 'incmpl', 'cmpl') not null,";     /* Status of cdsEnd annotation */
+"  ,cdsStartStat enum('none', 'unk', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
+"   cdsEndStat enum('none', 'unk', 'incmpl', 'cmpl') not null";     /* Status of cdsEnd annotation */
 
 static char *exonFramesFieldSql = 
-"    exonFrames longblob not null,";    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */
+"   ,exonFrames longblob not null";    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */
 
 struct genePred *genePredLoad(char **row)
 /* Load a genePred from row fetched with select * from genePred
@@ -1182,25 +1181,22 @@ char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
  * consisting of the genePredFields values. Options are a bit set of
  * genePredCreateOpts. Returned string should be freed.  This will create all
  * optional fields that preceed the highest optFields column.  chromIndexLen
- * is the number of characters in target name to index.  If zero is specified,
- * it will default to 12. */
+ * is now ignored.. */
 {
 /* the >= is used so that we create preceeding fields. */
-char sqlCmd[1024], binFld[256];
-char *idFld = (optFields >= genePredIdFld) ? idFieldSql : "";
-char *name2Fld = (optFields >= genePredName2Fld) ? name2FieldSql : "";
-char *cdsStatFld = (optFields >= genePredCdsStatFld) ? cdsStatFieldSql : "";
-char *exonFramesFld = (optFields >= genePredExonFramesFld) ? exonFramesFieldSql : "";
+char sqlCmd[1024];
 
-if (chromIndexLen == 0)
-    chromIndexLen = 12;
-
-safef(binFld, sizeof(binFld), ((options & genePredWithBin) ? binFieldSql : ""),
-      chromIndexLen);
 safef(sqlCmd, sizeof(sqlCmd), createSql, table,
-      binFld, idFld, name2Fld, cdsStatFld, exonFramesFld,
-      chromIndexLen, chromIndexLen);
-
+      ((options & genePredWithBin) ? binFieldSql : noBinIndexSql));
+if (optFields >= genePredIdFld)
+    safecat(sqlCmd, sizeof(sqlCmd), idFieldSql);
+if (optFields >= genePredName2Fld)
+    safecat(sqlCmd, sizeof(sqlCmd), name2FieldSql);
+if (optFields >= genePredCdsStatFld)
+    safecat(sqlCmd, sizeof(sqlCmd), cdsStatFieldSql);
+if (optFields >= genePredExonFramesFld)
+    safecat(sqlCmd, sizeof(sqlCmd), exonFramesFieldSql);
+safecat(sqlCmd, sizeof(sqlCmd), ")");
 return cloneString(sqlCmd);
 }
 
