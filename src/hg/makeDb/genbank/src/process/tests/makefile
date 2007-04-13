@@ -4,7 +4,7 @@ include ${GBROOT}/common.mk
 VG=
 #VG=valgrind --tool=memcheck --num-callers=100 --leak-check=full --leak-resolution=high --show-reachable=yes 
 
-PROCESS = ${VG}${BINARCH}/gbProcess
+PROCESS = ${VG}${GB_BINARCH}/gbProcess
 
 all:
 

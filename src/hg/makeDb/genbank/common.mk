@@ -21,12 +21,12 @@ endif
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc
 CFLAGS = ${OPT} ${STATIC} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
 
-BINDIR = ${GBROOT}/bin
-BINARCH = ${BINDIR}/${MACHTYPE}
-LIBDIR = ${GBROOT}/lib
-LIBARCH = ${LIBDIR}/${MACHTYPE}
+GB_BINDIR = ${GBROOT}/bin
+GB_BINARCH = ${GB_BINDIR}/${MACHTYPE}
+GB_LIBDIR = ${GBROOT}/lib
+GB_LIBARCH = ${GB_LIBDIR}/${MACHTYPE}
 
-LIBGENBANK = $(LIBARCH)/libgenbank.a
+LIBGENBANK = $(GB_LIBARCH)/libgenbank.a
 
 MYLIBDIR = ${KENT}/lib/$(MACHTYPE)
 JKLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
@@ -41,11 +41,11 @@ STRINGIFY = stringify
 %.o: %.c
 	${CC} ${CFLAGS} -c -o $@ $<
 
-$(BINARCH)/%: ${O} makefile ${LIBGENBANK}
-	@${MKDIR} -p ${BINARCH}
+$(GB_BINARCH)/%: ${O} makefile ${LIBGENBANK}
+	@${MKDIR} -p ${GB_BINARCH}
 	gcc ${CFLAGS} -o $@ $O $(LIBS)
 
-${BINDIR}/%: %
-	@${MKDIR} -p ${BINDIR}
+${GB_BINDIR}/%: %
+	@${MKDIR} -p ${GB_BINDIR}
 	cp -f $< $@
 	chmod a-w,a+rx $@

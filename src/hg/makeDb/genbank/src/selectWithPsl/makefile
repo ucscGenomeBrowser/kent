@@ -3,7 +3,7 @@ include ${GBROOT}/common.mk
 
 O = selectWithPsl.o
 
-PROG = $(BINARCH)/selectWithPsl
+PROG = $(GB_BINARCH)/selectWithPsl
 
 all: ${PROG}
 

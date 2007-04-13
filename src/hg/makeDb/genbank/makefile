@@ -4,36 +4,13 @@ include ${GBROOT}/common.mk
 
 SUBDIRS = src tests
 
-all: ${SUBDIRS:%=%.suball} doJkprogs
+all: ${SUBDIRS:%=%.suball}
 %.suball:
 	${MAKE} -C $* all
 
-#doJkprogs: jkprogs
-doJkprogs:  # disabled
-
-# special version of these programs needed for now
-jkprogs: ${BINARCH}/blat \
-	 ${BINARCH}/polyInfo \
-	 ${BINARCH}/pslIntronsOnly \
-	 ${BINARCH}/pslCDnaFilter
-
-${BINARCH}/blat:
-	@${MKDIR} ${BINARCH}
-	HOME=`pwd` ${MAKE} -C ${KENT}/blat
-
-${BINARCH}/polyInfo:
-	@${MKDIR} ${BINARCH}
-	HOME=`pwd` ${MAKE} -C ${KENT}/hg/geneBounds/polyInfo
-
-${BINARCH}/pslIntronsOnly:
-	@${MKDIR} ${BINARCH}
-	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslIntronsOnly
-
-${BINARCH}/pslCDnaFilter:
-	@${MKDIR} ${BINARCH}
-	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslCDnaFilter
-
 clean: ${SUBDIRS:%=%.subclean}
+	rm -rf bin lib
+
 %.subclean:
 	${MAKE} -C $* clean
 

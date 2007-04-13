@@ -1,19 +1,19 @@
 GBROOT = ../..
 include ${GBROOT}/common.mk
 
-PROGS = ${BINDIR}/gbDbLoadStep \
-	$(BINARCH)/gbLoadRna \
-	${BINDIR}/dbload-stop \
-	${BINDIR}/dumpTableStats \
-	${BINDIR}/findUnusedReleases \
-	${BINDIR}/dumpGrepIndex
+PROGS = ${GB_BINDIR}/gbDbLoadStep \
+	$(GB_BINARCH)/gbLoadRna \
+	${GB_BINDIR}/dbload-stop \
+	${GB_BINDIR}/dumpTableStats \
+	${GB_BINDIR}/findUnusedReleases \
+	${GB_BINDIR}/dumpGrepIndex
 
 O = gbIgnoreDelete.o gbBuildState.o gbMDParse.o gbMetaData.o gbAlignData.o dbLoadOptions.o \
 	dbLoadPartitions.o gbLoadRna.o
 
 all: ${PROGS}
 
-$(BINARCH)/gbLoadRna: ${O} ${LIBGENBANK}
+$(GB_BINARCH)/gbLoadRna: ${O} ${LIBGENBANK}
 
 clean:
 	rm -f $(PROGS) ${O}

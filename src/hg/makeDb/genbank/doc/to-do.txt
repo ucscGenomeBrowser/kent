@@ -1107,3 +1107,9 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - fix gbSanity: Error: fr2: no psl table fr2.xenoEst
 
+- remove default alignment categories from genbank.conf
+- force occ to be in same directory as cluster genome.
+
+- change mgc/orefome tracks to only update if there is new data.
+
+- 

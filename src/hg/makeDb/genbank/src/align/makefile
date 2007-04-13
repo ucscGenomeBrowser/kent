@@ -3,30 +3,30 @@ include ${GBROOT}/common.mk
 
 O = gbAlignCommon.o gbAlignGet.o gbAlignInstall.o
 
-PROGS = ${BINDIR}/gbAlignSetup \
-	${BINDIR}/gbAlignRSync \
-	${BINDIR}/gbAlignIServerCopy \
-	${BINDIR}/gbAlignIServerClean \
-	${BINDIR}/gbAlignRun \
-	${BINDIR}/gbAlignFinish \
-	${BINDIR}/gbAlignStep \
-	${BINDIR}/gbBlat \
-	${BINDIR}/alignStats \
-	${BINDIR}/gbPython \
-	${BINARCH}/gbAlignGet \
-	${BINARCH}/gbAlignInstall
+PROGS = ${GB_BINDIR}/gbAlignSetup \
+	${GB_BINDIR}/gbAlignRSync \
+	${GB_BINDIR}/gbAlignIServerCopy \
+	${GB_BINDIR}/gbAlignIServerClean \
+	${GB_BINDIR}/gbAlignRun \
+	${GB_BINDIR}/gbAlignFinish \
+	${GB_BINDIR}/gbAlignStep \
+	${GB_BINDIR}/gbBlat \
+	${GB_BINDIR}/alignStats \
+	${GB_BINDIR}/gbPython \
+	${GB_BINARCH}/gbAlignGet \
+	${GB_BINARCH}/gbAlignInstall
 
 all: ${PROGS}
 
 clean:
 	rm -f ${O} ${PROGS}
 
-${BINARCH}/gbAlignGet: gbAlignGet.o gbAlignCommon.o  ${LIBGENBANK}
-	@${MKDIR} ${BINARCH}
-	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/gbAlignGet gbAlignCommon.o gbAlignGet.o $(LIBS)
-${BINARCH}/gbAlignInstall: $O gbAlignInstall.o gbAlignCommon.o ${MYLIBS}
-	@${MKDIR} ${BINARCH}
-	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o ${BINARCH}/gbAlignInstall gbAlignCommon.o gbAlignInstall.o $(LIBS)
+${GB_BINARCH}/gbAlignGet: gbAlignGet.o gbAlignCommon.o  ${LIBGENBANK}
+	@${MKDIR} ${GB_BINARCH}
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${GB_BINARCH}/gbAlignGet gbAlignCommon.o gbAlignGet.o $(LIBS)
+${GB_BINARCH}/gbAlignInstall: $O gbAlignInstall.o gbAlignCommon.o ${MYLIBS}
+	@${MKDIR} ${GB_BINARCH}
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o ${GB_BINARCH}/gbAlignInstall gbAlignCommon.o gbAlignInstall.o $(LIBS)
 
 
 DEP =   ../inc/gbAligned.h ../inc/gbEntry.h ../inc/gbUpdate.h \

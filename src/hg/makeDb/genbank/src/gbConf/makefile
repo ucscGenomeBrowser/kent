@@ -2,11 +2,11 @@ GBROOT = ../..
 include ${GBROOT}/common.mk
 
 O = gbConf.o
-PROGS = $(BINARCH)/gbConf
+PROGS = $(GB_BINARCH)/gbConf
 
 all: ${PROGS}
 
-$(BINARCH)/gbConf: ${O}
+$(GB_BINARCH)/gbConf: ${O}
 
 clean:
 	rm -f $(PROGS) $O

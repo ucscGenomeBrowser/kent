@@ -1,8 +1,8 @@
 GBROOT = ../..
 include ${GBROOT}/common.mk
 
-PROGS = ${BINDIR}/gbCopyStep \
-	${BINDIR}/gbMakeDownload
+PROGS = ${GB_BINDIR}/gbCopyStep \
+	${GB_BINDIR}/gbMakeDownload
 
 all: ${PROGS}
 

@@ -3,7 +3,7 @@ include ${GBROOT}/common.mk
 
 O = rtdbServer.o
 
-PROGS = $(BINARCH)/rtdbServer
+PROGS = $(GB_BINARCH)/rtdbServer
 
 all: ${PROGS}
 

@@ -3,7 +3,7 @@ include ${GBROOT}/common.mk
 
 O = gbFaCheck.o
 
-PROGS = $(BINARCH)/gbFaCheck
+PROGS = $(GB_BINARCH)/gbFaCheck
 
 all: ${PROGS}
 

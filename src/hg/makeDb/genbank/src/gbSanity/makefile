@@ -5,7 +5,7 @@ O = metaData.o chkMetaDataTbls.o chkGbIndex.o chkAlignTbls.o \
 	chkSeqTbl.o chkCommon.o \
 	../dbload/dbLoadOptions.o gbSanity.o
 
-PROGS = $(BINARCH)/gbSanity
+PROGS = $(GB_BINARCH)/gbSanity
 
 all: ${PROGS}
 

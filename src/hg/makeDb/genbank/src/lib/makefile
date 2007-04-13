@@ -19,7 +19,7 @@ PY_SRCS = \
 
 # files to compile into lib without compiling
 LIBSRCS = gbCommon.pm gbFtp.pm gbCommon.sh ${PY_SRCS}
-INSTLIBSRCS = ${LIBSRCS:%=${LIBDIR}/%}
+INSTLIBSRCS = ${LIBSRCS:%=${GB_LIBDIR}/%}
 
 all: ${LIBGENBANK} ${INSTLIBSRCS}
 
@@ -28,7 +28,7 @@ ${LIBGENBANK}: $(O)
 	ar rcu $@ $(O)
 	ranlib $@
 
-${LIBDIR}/%: %
+${GB_LIBDIR}/%: %
 	@${MKDIR} `dirname $@`
 	cp -f $< $@
 	chmod a-w,a+r $@
