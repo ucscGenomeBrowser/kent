@@ -80,6 +80,13 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.cgl.ucsf.edu/cgi-bin/genentech/genehub-gepis/web_search.pl?intype=1&xrefid=%s&species=human
 priority 10
 
+name treeFam
+shortLabel Treefam
+tables knownToTreeFam
+idSql select value from knownToTreefam where name = '%s';
+url http://www.treefam.org/cgi-bin/TFinfo.pl?ac=%s
+priority 10
+
 name cgap
 shortLabel CGAP
 tables cgapAlias kgXref
