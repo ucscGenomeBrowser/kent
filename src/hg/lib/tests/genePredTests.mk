@@ -26,7 +26,9 @@ TEST_TBL=gpTest_${USER}
 #   - incmpl.psl,cds - test creating genePreds where CDS of gene
 #     is incomplete on one end or the other.
 #   - flybase.gtf - used to test -impliedStopAfterCds
-
+#   - frameBug.gff - VEGA gtf that broke frame assignment
+#   - nscan.gtf - N-SCAN GTF with non-standard 5UTR features and bogus
+#     frame on them.
 test: fileTests tableTests fromPslTests compatTblTests fromGxfTests
 
 ###
@@ -157,7 +159,7 @@ fromGxfTests: fromGxfMinTest fromGxfFrameTest \
 	fromGxfAcemblyTest fromGxfAcemblyFrameTest \
 	fromGxfNcbiTest fromGtfRegressTest fromGffRegressTest \
 	fromGffCeSangerTest fromGffCeSangerTypeTest \
-	fromGtfImpliedStopTest fromGffFrameBug
+	fromGtfImpliedStopTest fromGffFrameTest fromGtfNscanTest
 
 doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
 
@@ -222,8 +224,11 @@ fromGtfImpliedStopTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=flybase.gtf opts="-cdsStatFld -impliedStopAfterCds"
 
 # case where frame was lost
-fromGffFrameBug:
+fromGffFrameTest:
 	${doFromGxfTest} id=$@ what=fromGff inBase=frameBug.gff opts="-genePredExt -exonSelectWord=exon"
+
+fromGtfNscanTest:
+	${doFromGxfTest} id=$@ what=fromGtf inBase=nscan.gtf opts="-genePredExt"
 
 # recursive target for GFF/GTF tests
 #  id - test id

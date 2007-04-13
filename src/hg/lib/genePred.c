@@ -12,7 +12,7 @@
 #include "rangeTree.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.91 2007/04/12 05:12:37 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.92 2007/04/13 05:26:29 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -593,7 +593,7 @@ static struct gffLine *assignFrameForCdsExon(int start, int end, int *framePtr,
 /* set the frame for an exon, advancing gl past end of this exon */
 {
 /* skip lines preceeding this exon */
-while ((gl != NULL) && (gl->end < start))
+while ((gl != NULL) && (gl->end <= start))
     gl = gl->next;
 /* set frame from any overlapping records with frame. Don't include
  * start/stop_codon, as it isn't a full exon. */
