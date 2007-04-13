@@ -14,7 +14,7 @@ shortLabel FlyBase
 tables bdgpGeneInfo
 idSql select flyBaseId from bdgpGeneInfo where bdgpName = '%s'
 preCutAt -
-url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
+url http://flybase.net/.bin/fbidq.html?%s
 priority 10
 
 name uniProt

@@ -13,7 +13,7 @@ name flyBase
 shortLabel FlyBase
 tables flyBase2004Xref
 idSql select fbgn from flyBase2004Xref where name = '%s'
-url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
+url http://flybase.net/.bin/fbidq.html?%s
 priority 10
 
 name uniProt
