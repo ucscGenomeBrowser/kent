@@ -12,11 +12,11 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.36 2006/07/19 06:51:45 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.37 2007/04/13 16:36:02 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
-boolean useBin = FALSE;         /* add bin column */
+boolean useBin = TRUE;          /* add bin column */
 char *outFile = NULL;	        /* Output file as alternative to database. */
 unsigned gOptFields = 0;        /* optional fields from cmdline */
 unsigned gCreateOpts = 0;       /* table create options from cmdline */
@@ -30,6 +30,7 @@ static struct optionSpec optionSpecs[] = {
     {"nonCoding", OPTION_BOOLEAN},
     {"gtf", OPTION_BOOLEAN},
     {"bin", OPTION_BOOLEAN},
+    {"nobin", OPTION_BOOLEAN},
     {"predTab", OPTION_BOOLEAN},
     {"requireCDS", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
@@ -45,7 +46,8 @@ errAbort(
     "usage:\n"
     "     ldHgGene database table file(s).gff\n"
     "options:\n"
-    "     -bin         Add bin column (recommended for larger tables\n"
+    "     -bin         Add bin column (now the default)\n"
+    "     -nobin       don't add binning (you probably don't want this)\n"
     "     -exon=type   Sets type field for exons to specific value\n"
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
@@ -212,7 +214,9 @@ if (optionExists("exon") && optionExists("gtf"))
 exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
-useBin = optionExists("bin");
+if (optionExists("bin") && optionExists("nobin"))
+    errAbort("can't specify both -bin and -nobin");
+useBin = !optionExists("nobin");
 if (optionExists("genePredExt"))
     gOptFields |= genePredAllFlds;
 if (useBin)

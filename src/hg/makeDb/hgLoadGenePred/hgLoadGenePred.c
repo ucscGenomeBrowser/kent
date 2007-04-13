@@ -7,18 +7,19 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.4 2007/02/11 04:22:45 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.5 2007/04/13 16:36:02 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"bin", OPTION_BOOLEAN},
+    {"nobin", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
     {"skipInvalid", OPTION_BOOLEAN},
     {"noValidate", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
-boolean gBin = FALSE;
+boolean gBin = TRUE;
 boolean gGenePredExt = FALSE;
 boolean gSkipInvalid = FALSE;
 boolean gNoValidate = FALSE;
@@ -35,7 +36,8 @@ errAbort("%s\n"
          "the genePreds/\n"
          "\n"
          "Options:\n"
-         "   -bin - add binning\n"
+         "   -bin - add binning (the default)\n"
+         "   -nobin - don't add binning (you probably don't want this)\n"
          "   -genePredExt - use extended genePred format\n"
          "   -skipInvalid - instead of aborting on genePreds that\n"
          "    don't pass genePredCheck, generate a warning and skip\n"
@@ -137,7 +139,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage("wrong # args");
-gBin = optionExists("bin");
+if (optionExists("bin") && optionExists("nobin"))
+    errAbort("can't specify both -bin and -nobin");
+gBin = !optionExists("nobin");
 gGenePredExt = optionExists("genePredExt");
 gSkipInvalid = optionExists("skipInvalid");
 gNoValidate = optionExists("noValidate");
