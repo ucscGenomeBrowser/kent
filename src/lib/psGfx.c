@@ -8,7 +8,7 @@
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.27 2007/04/11 22:47:33 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.28 2007/04/13 20:47:55 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -333,7 +333,6 @@ for (;;)
     if (p == poly->ptList)
 	break;
     }
-fprintf(f, "closepath\n");
 if (filled)
     fprintf(f, "fill\n");
 else
