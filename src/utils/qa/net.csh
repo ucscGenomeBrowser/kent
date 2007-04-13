@@ -227,7 +227,7 @@ echo "*~*~*~*~*~*~*~*~*~*~*~*~*~*"
 echo "use these three rows to check (manually) that qStrand is displayed properly in the browser:"
 echo
 
-hgsql -t -e "SELECT tName, tStart, tEnd, qName, strand FROM $trackname WHERE tStart > 10000000 LIMIT 3" $db
+hgsql -t -e "SELECT tName, tStart, tEnd, level, qName, strand FROM $trackname WHERE tStart > 10000000 LIMIT 3" $db
 echo
 
 
