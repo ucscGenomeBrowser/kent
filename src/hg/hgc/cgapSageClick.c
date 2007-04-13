@@ -62,6 +62,15 @@ printf("<B>Tag sequence</B>: %s<BR>\n", tag->name);
 printf("<B>Position:</B> "
        "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        hgTracksPathAndSettings(), database, tag->chrom, tag->chromStart+1, tag->chromEnd, tag->chrom, tag->chromStart+1, tag->chromEnd);
+if (tag->numSnps > 0)
+    {
+    int i;
+    printf("<B>Number of SNPs associated with tag</B>: %d<BR>\n", tag->numSnps);
+    printf("<B>SNPs associated with tag</B>: ");
+    for (i = 0; i < tag->numSnps-1; i++)
+	printf("%s, ", tag->snps[i]);
+    printf("%s<BR>\n", tag->snps[i]);
+    }
 }
 
 static void stringCellLabelVal(char *label, char *val, boolean newRow)
@@ -177,6 +186,7 @@ webPrintLabelCell("Tissue");
 webPrintLabelCell("Tag Frequency");
 webPrintLabelCell("Total Tags in Library");
 webPrintLabelCell("Tags Per Million");
+
 webPrintLinkTableNewRow();
 for (i = 0; i < N-1; i++)
     {
