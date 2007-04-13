@@ -1331,35 +1331,81 @@ type wig
 
     track divChimpMaskPVal
     subTrack divMMK
-    shortLabel -log(p-value) chimp
-    longLabel Negative log of p-value, chi-square test, chimp divergence
+    shortLabel -log(p-value) chimp old
+    longLabel Negative log of p-value, chi-square test, chimp divergence old
     subGroups specRec=ch
-    priority 1
+    priority 7
 
     track divChimpMaskNI
     subTrack divMMK
+    shortLabel NI chimp old
+    longLabel Neutrality index, chimp divergence  old
+    subGroups specRec=ch
+    color 0,0,250
+    priority 8
+
+    track divChimpMaskCorrQVal
+    subTrack divMMK
+    shortLabel -log(FDR) chimp old
+    longLabel Negative log of the false discovery rate, chimp divergence  old
+    subGroups specRec=ch
+    color 25,150,25
+    priority 9
+
+    track divRhesusMaskPVal
+    subTrack divMMK
+    shortLabel -log(p-value) rhesus old
+    longLabel Negative log of p-value, chi-square test, rhesus divergence old
+    subGroups specRec=rh
+    priority 10
+
+    track divRhesusMaskNI
+    subTrack divMMK
+    shortLabel NI rhesus old
+    longLabel Neutrality index, rhesus divergence old
+    subGroups specRec=rh
+    color 0,0,250
+    priority 11
+
+    track divRhesusMaskCorrQVal
+    subTrack divMMK
+    shortLabel -log(FDR) rhesus old
+    longLabel Negative log of the false discovery rate, rhesus divergence old
+    subGroups specRec=rh
+    color 25,150,25
+    priority 12
+
+    track mkarChimpPVal
+    subTrack divMMK
+    shortLabel -log(p-value) chimp
+    longLabel Negative log of p-value, Fisher's Exact, chimp divergence
+    subGroups specRec=ch
+    priority 1
+
+    track mkarChimpNI
+    subTrack divMMK
     shortLabel NI chimp
-    longLabel Neutrality index, chimp divergence 
+    longLabel Neutrality index, chimp divergence
     subGroups specRec=ch
     color 0,0,250
     priority 2
 
-    track divChimpMaskCorrQVal
+    track mkarChimpCorr
     subTrack divMMK
     shortLabel -log(FDR) chimp
-    longLabel Negative log of the false discovery rate, chimp divergence 
+    longLabel Negative log of the false discovery rate, chimp divergence
     subGroups specRec=ch
     color 25,150,25
     priority 3
 
-    track divRhesusMaskPVal
+    track mkarRhesusPVal
     subTrack divMMK
     shortLabel -log(p-value) rhesus
-    longLabel Negative log of p-value, chi-square test, rhesus divergence
+    longLabel Negative log of p-value, Fisher's Exact, rhesus divergence
     subGroups specRec=rh
     priority 4
 
-    track divRhesusMaskNI
+    track mkarRhesusNI
     subTrack divMMK
     shortLabel NI rhesus
     longLabel Neutrality index, rhesus divergence
@@ -1367,7 +1413,7 @@ type wig
     color 0,0,250
     priority 5
 
-    track divRhesusMaskCorrQVal
+    track mkarRhesusCorr
     subTrack divMMK
     shortLabel -log(FDR) rhesus
     longLabel Negative log of the false discovery rate, rhesus divergence
