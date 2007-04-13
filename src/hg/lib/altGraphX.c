@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.31 2007/02/11 06:00:42 kent Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.32 2007/04/13 18:32:47 markd Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -804,7 +804,8 @@ for(i=0; i<vertCount; i++)
 	}
     }
 slReverse(&ag->evidence);
-altGraphXFreeEdgeMatrix((bool ***)(&em), vertCount);
+bool **emb = (bool**)em;
+altGraphXFreeEdgeMatrix(&emb, vertCount);
 for(i=0; i<vertCount; i++)
     freez(&agEv[i]);
 freez(&agEv);
