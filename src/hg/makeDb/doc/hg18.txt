@@ -14813,3 +14813,42 @@ wc -l unMapped
 #12 unMapped    (12 are "deleted in new")
 ln -s ~/kent/src/hg/lib/switchDbTss.sql
 hgLoadBed -sqlTable=switchDbTss.sql hg18 switchDbTss hg18.bed 
+
+###########################################################################
+# ADD KG TO TREEFAM LINKS (DONE, 2007-04-13 Fan)
+
+# Generate ucscToEnsembl.txt and send it to TreeFam
+# zhongzhongchen [chenzhzh@genomics.org.cn]
+
+    hgsql hg18 -N -e 'select * from knownToEnsembl' >ucscToEnsembl.txt
+
+
+    ssh hgwdev
+    cd /cluster/store12
+    mkdir treeFam070413
+    ln -s /cluster/store12/treeFam070413 /cluster/data/treeFam
+    cd /cluster/data/treeFam
+
+# Receive the following files from TreeFam
+
+    ucscToEnsemblToTreefamToRefToUniprot.txt
+    ucscToEnsemblToTreefamToRef.txt
+    ucscToEnsemblTotreefam.txt
+
+# Use ucscToEnsemblTotreefam.txt to construct knownToTreefam table.
+
+    cut -f 1,3 ucscToEnsemblTotreefam.txt >knownToTreefam.tab
+
+    hgLoadSqlTab hg18 knownToTreefam \
+    ~/src/hg/lib/knownToTreefam.sql ./knownToTreefam.tab
+
+# Add the following section into kent/src/hg/hgGene/hgGeneData/links.ra
+
+    name treeFam
+    shortLabel Treefam
+    tables knownToTreefam
+    idSql select value from knownToTreefam where name = '%s';
+    url http://www.treefam.org/cgi-bin/TFinfo.pl?ac=%s
+    priority 10
+
+###########################################################################
