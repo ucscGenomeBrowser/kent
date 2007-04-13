@@ -204,7 +204,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1270 2007/04/12 23:15:54 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1271 2007/04/13 01:20:58 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2078,7 +2078,13 @@ if (hTableOrSplitExists(tdb->tableName))
     char *trackTable = trackDbSetting(tdb, "subTrack");
     char *tableName = tdb->tableName;
     if (trackTable == NULL)
-	trackTable = tableName;
+	{
+	/* Look for parentWigMaf passed in explicitly via CGI, not from cart.
+	 * tdb->type in this case is wig not wigMaf... */
+	trackTable = cgiUsualString("parentWigMaf", NULL);
+	if (trackTable == NULL)
+	    trackTable = tableName;
+	}
     else
 	{
 	/* trim off extra words in subTrack setting, if any: */
