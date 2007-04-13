@@ -121,7 +121,7 @@ breaks. An i line must immediately follow the s line that it describes
 The i lines have the following fields which are defined by 
 position rather than name=value pairs. 
     src - The name of one of the source sequences for the alignment.
-	    This should match the s line immediately above the i line.
+	    This should match the s line above the i line.
     leftStatus - the syntenic status of the alignment before us vis a vis ourselves.  
 	    Possible Values:
 	    MAF_INVERSE_STATUS	'V'
@@ -134,3 +134,35 @@ position rather than name=value pairs.
     rightStatus - the syntenic status of the alignment after us vis a vis ourselves 
 	     Possible values are same as leftStatus.
     rightLen - length related information for the following alignment for the species 
+
+'q' Lines
+
+The q lines are optional.  They are used to display quality data for a
+sequence.  Like the i lines, q lines follow the s line that it describes.
+The q lines contain the following fields:
+    src - The name of one of the source sequences for the alignment.
+          This should match the s line above the q line.
+    quality - The quality data for corresponding to the sequence on the s line.
+
+As we are generally interested in bases with low quality, the quality
+data in the maf is a compressed version of the actual quality data.
+The quality data in the maf is:
+
+    min( floor(actualy quality value/5), 9)
+
+This allows us to show more of the low-quality values.  The relationship
+between quality characters in the maf and the actualy quality value are
+summarized in the following table:
+
+    .: In Gap Q == FAKE_GAP_QUAL
+    0: 0 <= Q < 5 || Q == 98
+    1: 5 <= Q < 10
+    2: 10 <= Q < 15
+    3: 15 <= Q < 20
+    4: 20 <= Q < 25
+    5: 25 <= Q < 30
+    6: 30 <= Q < 35
+    7: 35 <= Q < 40
+    8: 40 <= Q < 45
+    9: 45 <= Q < 98
+    F: Q == 99
