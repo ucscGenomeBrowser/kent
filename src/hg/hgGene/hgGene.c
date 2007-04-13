@@ -17,7 +17,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.100 2007/04/10 16:32:42 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.101 2007/04/13 03:19:30 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -350,6 +350,7 @@ addGoodSection(flyBasePhenotypesSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(flyBaseSynonymsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(bdgpExprInSituSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(infoSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(methodSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(localizationSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(transRegCodeMotifSection(conn, sectionRa), conn, &sectionList);

@@ -84,6 +84,10 @@ struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GO annotations section. */
 
+struct section *infoSection(struct sqlConnection *conn,
+        struct hash *sectionRa);
+/* Create UCSC KG Model Info section. */
+
 struct section *methodSection(struct sqlConnection *conn,
         struct hash *sectionRa);
 /* Create UCSC KG Method section. */

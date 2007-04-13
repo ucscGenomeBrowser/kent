@@ -58,6 +58,11 @@ shortLabel GO Annotations
 longLabel Gene Ontology (GO) Annotations with Structured Vocabulary
 priority 100
 
+name localization
+shortLabel Localization
+longLabel Protein Localization
+priority 103
+
 name mrnaDescriptions
 shortLabel mRNA Descriptions
 longLabel Descriptions from all associated GenBank mRNAs
@@ -73,18 +78,18 @@ shortLabel Pathways
 longLabel Biochemical and Signaling Pathways
 priority 130
 
-name localization
-shortLabel Localization
-longLabel Protein Localization
-priority 103
-
 name synonym
 shortLabel Other Names
 longLabel Other Names for This Gene
 priority 135
 
-name method
-shortLabel Model and Methods
-longLabel Gene Model Information, Methods, Credits, and Use Restrictions
+name info
+shortLabel Model Information
+longLabel Gene Model Information
 priority 140
+
+name method
+shortLabel Methods
+longLabel Methods, Credits, and Use Restrictions
+priority 150
 
