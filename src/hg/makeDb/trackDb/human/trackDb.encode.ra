@@ -79,6 +79,69 @@ visibility hide
 type bed 6 +
 origAssembly hg17
 
+track encodeGencodeGeneMar07
+compositeTrack on
+shortLabel Gencode Genes Mar07
+longLabel Gencode Gene Annotations
+dataVersion Mar 2007
+group encodeGenes
+priority 10.7
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type genePred
+cdsDrawDefault genomic\ codons
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemClassTbl gencodeGeneClassMar07
+geneClasses Artifact Known Novel_CDS Novel_Transcript Putative TEC Polymorphic Processed_pseudogene Unprocessed_pseudogene
+gClass_Known 33,91,51
+gClass_Novel_CDS 33,91,51
+gClass_Novel_Transcript  84,188,0
+gClass_TEC  84,188,0
+gClass_Putative  84,188,0
+gClass_Artifact 163,168,163
+gClass_Polymorphic 160,32,240
+gClass_Processed_pseudogene 0,91,191
+gClass_Unprocessed_pseudogene 0,91,191
+origAssembly hg17
+
+    track encodeGencodeGeneKnownMar07
+    subTrack encodeGencodeGeneMar07
+    shortLabel Gencode Ref
+    longLabel Gencode Reference Genes
+    color 33,91,51
+    priority 1
+
+    track encodeGencodeGenePutativeMar07
+    subTrack encodeGencodeGeneMar07
+    shortLabel Gencode Putative
+    longLabel Gencode Putative Genes
+    color  84,188,0
+    priority 2
+
+    track encodeGencodeGenePolymorphicMar07
+    subTrack encodeGencodeGeneMar07
+    shortLabel Gencode PolyM
+    longLabel Gencode PolyMorphic
+    color 160,32,240
+    priority 3
+
+    track encodeGencodeGenePseudoMar07
+    subTrack encodeGencodeGeneMar07
+    shortLabel Gencode Pseudo
+    longLabel Gencode Pseudogenes
+    color 0,91,191
+    priority 4
+
+    track encodeGencodeGenePolyAMar07
+    subTrack encodeGencodeGeneMar07
+    shortLabel Gencode PolyA
+    longLabel Gencode polyA Features
+    noInherit on
+    type bed 9 .
+    itemRgb on
+    priority 5
+
 track encodeEgaspFull
 compositeTrack on
 shortLabel EGASP Full
