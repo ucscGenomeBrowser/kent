@@ -728,7 +728,8 @@ printf("<BR><B>Clone Source</B>: <A href=\"http://www.orfeomecollaboration.org/\
 
 prOrfeomeInfoLinks(conn, acc, mi);
 prSeqLinks(conn, tdb->tableName, acc);
-prAligns(conn, "orfeomeMRna", acc, start);
+// FIXME: could get mrna table name from trackDb
+prAligns(conn, "orfeomeMrna", acc, start);
 prMiscDiffs(conn, acc);
 prMethodsLink(conn, tdb->tableName);
 
