@@ -658,6 +658,7 @@ identifier affyZonWildType
     hgFixed.zebrafishZonWTMedianRatio.name. unique
     $danRer.ensToAffyZebrafish.name
     $danRer.ensToAffyZonWildType.name
+    $danRer.affyZonWildType.name
     $danRer.affyZebrafish.qName
 
 identifier affyU95
