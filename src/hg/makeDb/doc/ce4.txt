@@ -3,7 +3,7 @@
 # Caenorhabditis elegans
 #	Washington University School of Medicine GSC and Sanger Institute WS170
 
-#  $Id: ce4.txt,v 1.7 2007/04/05 00:39:18 hiram Exp $
+#  $Id: ce4.txt,v 1.8 2007/04/14 00:10:41 hiram Exp $
 
 
 #########################################################################
@@ -137,6 +137,70 @@ ce4.downloadDir = ce4
 	etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
+#########################################################################
+## Create goldenPath files for hgdownload (DONE - 2007-04-05 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/ce4/goldenPath
+    cd /cluster/data/ce4/goldenPath
+    mkdir bigZips chromosomes database
+    cd chromosomes
+    for C in I II III IV V X M
+do
+    twoBitToFa -seq=chr${C} ../../ce4.2bit stdout | gzip -c > chr${C}.fa.gz
+    echo chr${C} done
+done
+    #	check the sequence
+    faSize *.fa.gz
+    #	100281244 bases (0 N's 100281244 real 87008909
+    #	upper 13272335 lower) in 7 sequences in 7 files
+    #	%13.24 masked total, %13.24 masked real
+    twoBitToFa ../../ce4.2bit stdout | faSize stdin
+    #	100281244 bases (0 N's 100281244 real 87008909
+    #	upper 13272335 lower) in 7 sequences in 1 files
+    #	%13.24 masked total, %13.24 masked real
+
+    cd ../bigZips
+    splitFileByColumn -ending=agp ../../ce4.agp .
+    tar cvzf ./chromAgp.tar.gz ./chr*.agp
+    rm chr*.agp
+    for C in I II III IV V X M
+do
+    zcat ../chromosomes/chr${C}.fa.gz > chr${C}.fa
+    echo chr${C} done
+done
+    tar cvzf ./chromFa.tar.gz chr*.fa
+    rm chr*.fa
+
+    cp -p ../../*/chr*.fa.out .
+    tar cvzf ./chromOut.tar.gz chr*.fa.out
+    rm chr*.fa.out
+
+    splitFileByColumn -ending=bed ../../bed/simpleRepeat/trfMask.bed .
+    tar cvzf ./chromTrf.tar.gz chr*.bed
+    rm chr*.bed
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    # get GenBank native mRNAs
+    cd /cluster/data/genbank
+    ./bin/x86_64/gbGetSeqs -db=ce4 -native GenBank mrna \
+	/cluster/data/ce4/goldenPath/bigZips/mrna.fa
+    # get GenBank xeno mRNAs
+    ./bin/x86_64/gbGetSeqs -db=ce4 -xeno GenBank mrna \
+	/cluster/data/ce4/goldenPath/bigZips/xenoMrna.fa.gz
+    # get native GenBank ESTs
+    ./bin/x86_64/gbGetSeqs -db=ce4 -native GenBank est \
+	/cluster/data/ce4/goldenPath/bigZips/est.fa
+    # get native RefSeq mRNAs
+    ./bin/x86_64/gbGetSeqs -db=ce4 -native RefSeq mrna \
+	/cluster/data/ce4/goldenPath/bigZips/refMrna.fa
+
+    ssh kkstore02
+    cd /cluster/data/ce4/goldenPath/bigZips
+    gzip mrna.fa est.fa refMrna.fa
+    md5sum *.gz > md5sum.txt
+
+#########################################################################
 #########################################################################
 ### The sequences below were an experiment beginning early 2006
 
@@ -553,3 +617,4 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrII:14645680-14667144"
 	where name="ce4";' hgcentraltest
+
