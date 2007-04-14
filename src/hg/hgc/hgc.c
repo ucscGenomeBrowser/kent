@@ -204,7 +204,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1272 2007/04/14 00:02:25 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1273 2007/04/14 00:29:47 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -2159,6 +2159,7 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     htmlHorizontalLine();
     puts(tdb->html);
     }
+hPrintf("<BR>\n");
 }
 
 void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)

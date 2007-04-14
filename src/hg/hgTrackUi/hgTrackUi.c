@@ -30,7 +30,7 @@
 
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.360 2007/04/12 09:52:06 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.361 2007/04/14 00:29:02 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2640,6 +2640,7 @@ if (tdb == NULL)
 	    track, database, chromosome);
 cartWebStart(cart, "%s Track Settings", tdb->shortLabel);
 trackUi(tdb);
+printf("<BR>\n");
 webEnd();
 }
 
