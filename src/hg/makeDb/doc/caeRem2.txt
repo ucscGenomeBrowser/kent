@@ -4,7 +4,7 @@
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
 
-#  $Id: caeRem2.txt,v 1.3 2007/04/11 23:50:53 hiram Exp $
+#  $Id: caeRem2.txt,v 1.4 2007/04/14 00:09:02 hiram Exp $
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE - 2007-03-16 - Hiram)
@@ -264,3 +264,26 @@ dbDbSpeciesDir worm
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrUn:34567-45678"
 	where name="caeRem2";' hgcentraltest
+
+############################################################################
+## SWAP CB3 briggsae chain/net - (DONE - 2007-04-13 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/cb3/bed/blastz.caeRem2.2007-04-13
+    cat fb.cb3.chainCaeRem2Link.txt
+    #	53199792 bases of 108433446 (49.062%) in intersection
+
+    mkdir /cluster/data/caeRem2/bed/blastz.cb3.swap
+    cd /cluster/data/caeRem2/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
+	-swap \
+	/cluster/data/cb3/bed/blastz.caeRem2.2007-04-13/DEF > swap.log 2>&1 &
+    #	The typical failure:
+    #	netChains: looks like previous stage was not successful (can't find
+    #	[caeRem2.cb3.]all.chain[.gz]).
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
+	-continue=net -swap \
+	/cluster/data/cb3/bed/blastz.caeRem2.2007-04-13/DEF > net.log 2>&1 &
+    #	real    9m6.800s
+    cat fb.caeRem2.chainCb3Link.txt
+    #	63292118 bases of 146898439 (43.086%) in intersection
