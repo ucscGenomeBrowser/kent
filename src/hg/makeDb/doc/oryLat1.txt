@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.25 2007/04/12 22:21:18 markd Exp $"
+#	"$Id: oryLat1.txt,v 1.26 2007/04/14 00:14:10 hiram Exp $"
 #
 
 ##########################################################################
@@ -2256,11 +2256,13 @@ cat  << '_EOF_' > template
     ln -s  /cluster/data/oryLat1/chrom.sizes oryLat1.len
     twoBitInfo -nBed /cluster/data/oryLat1/oryLat1.sdTrf.{2bit,N.bed}
     ln -s  /cluster/data/oryLat1/oryLat1.sdTrf.N.bed oryLat1.bed
-    for DB in `cat /cluster/data/oryLat1/bed/multiz5way/species.lst`
+    for DB in `sed -e "s/ oryLat1//" /cluster/data/oryLat1/bed/multiz5way/species.lst`
     do
-      echo oryLat1.bed  >> nBeds
-      echo oryLat1.len  >> sizes
-      echo $DB
+        ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
+        ln -s  /cluster/data/${DB}/${DB}.N.bed ${DB}.bed
+	echo ${DB}.bed  >> nBeds
+	echo ${DB}.len  >> sizes
+	echo $DB
     done
 
     echo '#!/bin/csh -ef' > jobs.csh
@@ -2268,7 +2270,7 @@ cat  << '_EOF_' > template
     # do smaller jobs first so you can see some progress immediately:
     for F in `ls -1rS ../../maf/*.maf`
     do
-     echo mafAddIRows -nBeds=nBeds -sizes=sizes $F \
+     echo mafAddIRows -nBeds=nBeds $F \
       /cluster/data/oryLat1/oryLat1.sdTrf.2bit ../maf/`basename $F` >> jobs.csh
      echo "echo $F" >> jobs.csh
     done 
@@ -3315,3 +3317,98 @@ close (FH);
 	-pathPrefix=/gbdb/oryLat1/wib oryLat1 quality qual.wig
     #	real    0m22.997s
     ln -s /cluster/data/oryLat1/bed/qual/qual.wib /gbdb/oryLat1/wib
+
+##########################################################################
+## Obtain a tar.gz file from Budrul that was their handoff to Ensembl
+##  They only made this tar file available to me for a week, then they
+##	remove it.
+    ssh kkstore04
+    mkdir /cluster/data/oryLat1/downloads
+    cd /cluster/data/oryLat1/downloads
+    wget --timestamping 'http://dev.utgenome.org/~utgb/medakaAGP/EMBL.tar.gz'
+    tar xvzf EMBL.tar.gz
+    #	EMBL/200510.chr_random.agp.txt
+    #	EMBL/200510.scaffold.agp.txt
+    #	EMBL/200510.contig.fasta
+    #	EMBL/200510.ultracontig.agp.txt
+    #	EMBL/200510.chr.agp.txt
+    #	EMBL/200510.UCSC.fasta.qual
+
+###########################################################################
+## Fixup gold/gap table entries (DONE - 2007-04-11 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/oryLat1/bed/gap
+    cd /cluster/data/oryLat1/bed/gap
+    hgsql -e "show tables;" oryLat1 | grep gap | while read T
+do
+    hgsql -N -e "select * from $T;" oryLat1 > ${T}.tab
+    echo $T
+done
+    # change telomere to scaffold
+    hgsql -e "show tables;" oryLat1 | grep _gap | while read T
+do
+    hgsql -N -e 'update '$T' set type="scaffold" where type="telomere";' oryLat1
+done
+    #	the gold and ctgPos2 tables on chrM are empty
+    mkdir /cluster/data/oryLat1/bed/gold
+    cd /cluster/data/oryLat1/bed/gold
+    hgsql -e "show tables;" oryLat1 | grep gold | while read T
+do
+    hgsql -N -e "select * from $T;" oryLat1 > ${T}.tab
+    echo $T
+done
+    hgsql -N -e "select * from chrM_gold;" hg18 > hg18.chrM_gold.tab
+    #	Edit that to make it read:
+# 585  chrM  0   16714  1   F  NC_004387.1   0 16714   +
+    sed -e "s/agpFrag/chrM_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chrM_gold.sql
+    # edit that to add the bin column, then
+    #	bin smallint(6) NOT NULL default '0',
+    hgLoadSqlTab oryLat1 chrM_gold chrM_gold.sql chrM_gold.tab
+
+    hgsql -e 'INSERT INTO ctgPos2
+	(contig, size, chrom, chromStart, chromEnd, type)
+	VALUES ("NC_004387.1", 16714, "chrM", 0, 16714, "F");' oryLat1
+
+###########################################################################
+## Drop some entries from the ensGtp table since they are not all loaded
+## to keep joiner check happy
+## (DONE - 2007-04-11 - Hiram)
+    ssh hgwdev
+    hgsql -N -e "select name from ensGene;" oryLat1 \
+	| sort > name.ensGene.oryLat1.txt
+    hgsql -N -e "select transcript from ensGtp;" oryLat1 \
+	| sort > transcript.ensGtp.oryLat1
+    wc -l name.ensGene.oryLat1.txt transcript.ensGtp.oryLat1
+    #	23087 name.ensGene.oryLat1.txt
+    #	26148 transcript.ensGtp.oryLat1
+    comm -12 name.ensGene.oryLat1.txt transcript.ensGtp.oryLat1 | wc -l
+    #	23087
+    comm -13 name.ensGene.oryLat1.txt transcript.ensGtp.oryLat1 | wc -l
+    #	3061
+    comm -13 name.ensGene.oryLat1.txt transcript.ensGtp.oryLat1 \
+	> delete.transcript.ensGtp
+    for T in `cat delete.transcript.ensGtp`
+do
+    hgsql -e 'delete from ensGtp where transcript="'$T'";' oryLat1
+    echo $T
+done
+    hgsql -e "select count(*) from ensGtp;" oryLat1
+    #	23087
+    hgsql -N -e "select name from ensPep;" oryLat1 | sort > name.ensPep.oryLat1
+    comm -13 name.ensGene.oryLat1.txt name.ensPep.oryLat1 \
+	> delete.name.ensPep
+    for T in `cat delete.name.ensPep`
+do
+    hgsql -e 'delete from ensPep where name="'$T'";' oryLat1
+    echo $T
+done
+    hgsql -N -e "select name from ensPep;" oryLat1 | wc
+
+    runJoiner.csh oryLat1 ensGene
+    #	found identifiers:
+    #	ensemblTranscriptId
+    #	Checking keys on database oryLat1
+    #	 oryLat1.ensGtp.transcript - hits 23087 of 23087 ok
+    #	 oryLat1.ensPep.name - hits 23073 of 23073 ok
+    #	running -times flag
