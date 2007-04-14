@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.35 2007/01/27 05:18:25 markd Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.36 2007/04/14 17:07:27 markd Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -133,23 +133,20 @@ boolean hashMayRemove(struct hash *hash, char *name)
 /* Remove item of the given name from hash table, if present.
  * Return true if it was present */
 {
-struct hashEl *hel;
-void *ret;
-struct hashEl **pBucket = &hash->table[hashString(name)&hash->mask];
-for (hel = *pBucket; hel != NULL; hel = hel->next)
-    if (sameString(hel->name, name))
-        break;
-if (hel == NULL)
-    return FALSE;
-ret = hel->val;
-if (slRemoveEl(pBucket, hel))
-    hash->elCount -= 1;
-return TRUE;
+return (hashRemove(hash, name) != NULL);
+}
+
+void hashMustRemove(struct hash *hash, char *name)
+/* Remove item of the given name from hash table, or error
+ * if not present */
+{
+if (hashRemove(hash, name) == NULL)
+    errAbort("attempt to remove non-existant %s from hash", name);
 }
 
 void *hashRemove(struct hash *hash, char *name)
 /* Remove item of the given name from hash table. 
- * Returns value of removed item. */
+ * Returns value of removed item, or NULL if not in the table. */
 {
 struct hashEl *hel;
 void *ret;
@@ -158,10 +155,7 @@ for (hel = *pBucket; hel != NULL; hel = hel->next)
     if (sameString(hel->name, name))
         break;
 if (hel == NULL)
-    {
-    warn("Trying to remove non-existant %s from hash", name);
     return NULL;
-    }
 ret = hel->val;
 if (slRemoveEl(pBucket, hel))
     hash->elCount -= 1;
