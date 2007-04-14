@@ -33,7 +33,7 @@
 #include "gbSql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.38 2007/03/08 22:47:40 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.39 2007/04/14 02:42:59 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -738,6 +738,7 @@ if (srcDb == GB_REFSEQ)
     }
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
 sqlDeleterDel(deleter, conn, "gbCdnaInfo", "acc");
+sqlDeleterDel(deleter, conn, "gbSeq", "acc");
 /* seq must be last */
 sqlDeleterDel(deleter, conn, SEQ_TBL, "acc");
 }
