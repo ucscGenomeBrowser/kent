@@ -9,7 +9,7 @@
 #	Data release policy: http://medaka.utgenome.org/#policy
 #	Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#	"$Id: oryLat1.txt,v 1.26 2007/04/14 00:14:10 hiram Exp $"
+#	"$Id: oryLat1.txt,v 1.27 2007/04/14 04:22:55 hiram Exp $"
 #
 
 ##########################################################################
@@ -2247,6 +2247,7 @@ cat  << '_EOF_' > template
 
 ############################################################################
 # ANNOTATE MULTIZ5WAY MAF AND LOAD TABLES (DONE - 2007-01-21 - Hiram)
+## Reloaded 2007-04-13 to get the annotation correct
     ssh kolossus
     mkdir /cluster/data/oryLat1/bed/multiz5way/anno
     cd /cluster/data/oryLat1/bed/multiz5way/anno
@@ -2289,8 +2290,8 @@ cat  << '_EOF_' > template
       /gbdb/oryLat1/multiz5way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/oryLat1/multiz5way/anno/maf oryLat1 multiz5way
-    #	Loaded 1918228 mafs in 26 files from /gbdb/oryLat1/multiz5way/anno/maf
-    #	real    0m58.668s
+    #	Loaded 1918235 mafs in 26 files from /gbdb/oryLat1/multiz5way/anno/maf
+    #	real    1m1.468s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -2305,11 +2306,9 @@ cat  << '_EOF_' > template
 
     ssh hgwdev
     cd /cluster/data/oryLat1/bed/multiz5way/anno/maf
-    sed -e 's/mafSummary/multiz5waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
-      > /tmp/multiz5waySummary.sql
     time nice -n +19 hgLoadSqlTab oryLat1 multiz5waySummary \
-	/tmp/multiz5waySummary.sql multiz5waySummary.tab
-    #	real    0m5.563s
+	~/kent/src/hg/lib/mafSummary.sql multiz5waySummary.tab
+    #	real    0m6.295s
 
 #######################################################################
 # MULTIZ5WAY MAF FRAMES (DONE - 2007-01-21 - Hiram)
@@ -2396,6 +2395,7 @@ cat  << '_EOF_' > template
 	rm -f upstream${S}.maf
     done > mafFrags.log 2>&1 &
 
+    # re-done 2007-04-13 after proper annotation
     ssh kkstore04
     cd /cluster/data/oryLat1/bed/multiz5way
     time for M in anno/maf/chr*.maf
