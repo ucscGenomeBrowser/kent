@@ -4,7 +4,7 @@
 # This file describes browser build for the mouse
 # genome, April 2007, ncbi mouse_37 - Mm9
 #
-#	"$Id: mm9.txt,v 1.2 2007/04/07 20:00:54 hiram Exp $"
+#	"$Id: mm9.txt,v 1.3 2007/04/14 00:12:07 hiram Exp $"
 #
 
 #######################################################################
@@ -22,12 +22,11 @@
     export WGETRC
     ## After testing with the pre-release below, the real thing
 
-    wget --timestamping --force-directories --directory-prefix=. \
-	--dont-remove-listing --recursive --level=4 --no-parent \
-	--no-host-directories --cut-dirs=1 \
+    time nice -n +19 wget --timestamping --force-directories \
+	--directory-prefix=. --dont-remove-listing --recursive \
+	--level=4 --no-parent --no-host-directories --cut-dirs=1 \
 	ftp://ftp-private.ncbi.nih.gov/mouse_37
-    #	Downloaded: 2,201,934,141 bytes in 50 files
-    #	real    44m48.975s
+    #	Downloaded: 2,599,733,765 bytes in 196 files
 
     #	The pre-release sequence, April 5th:
     mkdir /cluster/data/mm9/pre_release
@@ -109,3 +108,16 @@ dbDbSpeciesDir mouse
 
     nice -n +19 featureBits mm9 simpleRepeat
     #	80038870 bases of 2620346127 (3.055%) in intersection
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-04-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm9", "blat14", "17790", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm9", "blat14", "17791", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
