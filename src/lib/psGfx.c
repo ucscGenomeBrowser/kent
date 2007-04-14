@@ -4,11 +4,11 @@
  * does is convert 0,0 from being at the bottom left to
  * being at the top left. */
 #include "common.h"
-#include "gfxPoly.h"
+#include "psPoly.h"
 #include "psGfx.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.28 2007/04/13 20:47:55 galt Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.29 2007/04/14 22:37:19 galt Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -25,24 +25,8 @@ void psClipRect(struct psGfx *ps, double x, double y,
 	double width, double height)
 /* Set clipping rectangle. */
 {
-double x2 = x + width;
-double y2 = y + height;
 FILE *f = ps->f;
 fprintf(f, "cliprestore ");
-ps->clipMinX = x;
-ps->clipMinY = y;
-ps->clipMaxX = x2;     /* one beyond actual limit */
-ps->clipMaxY = y2;
-/* adjust x2,y2 to real pixel-center */
-x2 -= 1;
-y2 -= 1;
-width = x2 - x;
-height = y2 - y;
-/* adjust for pixel fat, add a half-pixel all the way around the block */
-x -= 0.5;
-y -= 0.5;
-width = 0.5+width+0.5;
-height = 0.5+height+0.5;
 psXyOut(ps, x, y+height); 
 psWhOut(ps, width, height);       
 fprintf(f, "rectclip\n");
@@ -63,9 +47,9 @@ fprintf(f, "%s", s);
 }
 
 struct psGfx *psOpen(char *fileName, 
-	int pixWidth, int pixHeight, 	 /* Dimension of image in pixels. */
-	double ptWidth, double ptHeight, /* Dimension of image in points. */
-	double ptMargin)                 /* Image margin in points. */
+	double userWidth, double userHeight, /* Dimension of image in user's units. */
+	double ptWidth, double ptHeight,     /* Dimension of image in points. */
+	double ptMargin)                     /* Image margin in points. */
 /* Open up a new postscript file.  If ptHeight is 0, it will be
  * calculated to keep pixels square. */
 {
@@ -76,23 +60,23 @@ AllocVar(ps);
 ps->f = mustOpen(fileName, "w");
 
 /* Save page dimensions and calculate scaling factors. */
-ps->pixWidth = pixWidth;
-ps->pixHeight = pixHeight;
+ps->userWidth = userWidth;
+ps->userHeight = userHeight;
 ps->ptWidth = ptWidth;
-ps->xScale = (ptWidth - 2*ptMargin)/pixWidth;
+ps->xScale = (ptWidth - 2*ptMargin)/userWidth;
 if (ptHeight != 0.0)
    {
    ps->ptHeight = ptHeight;
-   ps->yScale = (ptHeight - 2*ptMargin) / pixHeight;
+   ps->yScale = (ptHeight - 2*ptMargin) / userHeight;
    }
 else
    {
    ps->yScale = ps->xScale;
-   ptHeight = ps->ptHeight = pixHeight * ps->yScale + 2*ptMargin;
+   ptHeight = ps->ptHeight = userHeight * ps->yScale + 2*ptMargin;
    }
 /* 0.5, 0.5 is the center of the pixel in upper-left corner which corresponds to (0,0) */
-ps->xOff = ptMargin + (0.5*ps->xScale);   
-ps->yOff = ptMargin + (0.5*ps->yScale);
+ps->xOff = ptMargin;
+ps->yOff = ptMargin;
 ps->fontHeight = 10;
 
 /* Cope with fact y coordinates are bottom to top rather
@@ -103,12 +87,19 @@ ps->yOff = ps->ptHeight - ps->yOff;
 psWriteHeader(ps->f, ptWidth, ptHeight);
 
 /* Set initial clipping rectangle. */
-psClipRect(ps, 0, 0, ps->pixWidth, ps->pixHeight);
+psClipRect(ps, 0, 0, ps->userWidth, ps->userHeight);
 
 /* Set line width to a single pixel. */
 fprintf(ps->f, "%f setlinewidth\n", ps->xScale);
 
 return ps;
+}
+
+void psTranslate(struct psGfx *ps, double xTrans, double yTrans)
+/* add a constant to translate all coordinates */
+{
+ps->xOff += xTrans*ps->xScale;   
+ps->yOff += yTrans*ps->yScale;
 }
 
 void psClose(struct psGfx **pPs)
@@ -157,25 +148,7 @@ void psDrawBox(struct psGfx *ps, double x, double y,
 	double width, double height)
 /* Draw a filled box in current color. */
 {
-/* Do some clipping here to make the postScript
- * easier to edit in illustrator. */
-double x2 = x + width;
-double y2 = y + height;
-if (x < ps->clipMinX) x = ps->clipMinX;
-if (y < ps->clipMinY) y = ps->clipMinY;
-if (x2 > ps->clipMaxX) x2 = ps->clipMaxX;
-if (y2 > ps->clipMaxY) y2 = ps->clipMaxY;
-/* adjust x2,y2 to real pixel-center */
-x2 -= 1;
-y2 -= 1;
-width = x2 - x;
-height = y2 - y;
-/* adjust for pixel fat, add a half-pixel all the way around the block */
-x -= 0.5;
-y -= 0.5;
-width = 0.5+width+0.5;
-height = 0.5+height+0.5;
-if (width >= 0 && height >= 0)
+if (width > 0 && height > 0)
     {
     psWhOut(ps, width, height);
     psXyOut(ps, x, y+height); 
@@ -319,11 +292,11 @@ void psPopG(struct psGfx *ps)
 fprintf(ps->f, "grestore\n");
 }
 
-void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled)
+void psDrawPoly(struct psGfx *ps, struct psPoly *poly, boolean filled)
 /* Draw a possibly filled polygon */
 {
 FILE *f = ps->f;
-struct gfxPoint *p = poly->ptList;
+struct psPoint *p = poly->ptList;
 fprintf(f, "newpath\n");
 psMoveTo(ps, p->x, p->y);
 for (;;)
@@ -340,7 +313,7 @@ else
 }
 
 
-void psFillEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad)
+void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad)
 {
 FILE *f = ps->f;
 fprintf(f, "newpath\n");
@@ -351,14 +324,16 @@ fprintf(f, "closepath\n");
 fprintf(f, "fill\n");
 }
 
-void psDrawEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad,
-    int startAngle, int endAngle)
+void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
+    double startAngle, double endAngle)
 {
 FILE *f = ps->f;
 fprintf(f, "newpath\n");
 psXyOut(ps, x, y);
 psWhOut(ps, xrad, yrad);
-fprintf(f, "%d %d ellipse\n",  startAngle, endAngle);
+psFloatOut(f, startAngle);
+psFloatOut(f, endAngle);
+fprintf(f, "ellipse\n");
 fprintf(f, "closepath\n");
 fprintf(f, "stroke\n");
 }

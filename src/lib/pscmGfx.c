@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.16 2007/04/10 05:46:46 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.17 2007/04/14 22:37:20 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -25,13 +25,29 @@ static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
-psClipRect(pscm->ps, x, y, width, height);
+double x2 = x + width;
+double y2 = y + height;
+pscm->clipMinX = x;
+pscm->clipMinY = y;
+pscm->clipMaxX = x2;     /* one beyond actual last pixel */
+pscm->clipMaxY = y2;
+/* adjust to pixel-centered coordinates */
+x2 -= 1;
+y2 -= 1;
+double x1 = x;
+double y1 = y;
+/* pad a half-pixel all the way around the box */
+x1 -= 0.5;
+y1 -= 0.5;
+x2 += 0.5;
+y2 += 0.5;
+psClipRect(pscm->ps, x1, y1, x2-x1, y2-y1);
 }
 
 void pscmUnclip(struct pscmGfx *pscm)
 /* Set clipping rect to cover full thing. */
 {
-psClipRect(pscm->ps, 0, 0, pscm->ps->pixWidth, pscm->ps->pixHeight);
+psClipRect(pscm->ps, 0, 0, pscm->ps->userWidth, pscm->ps->userHeight);
 }
 
 static Color pscmClosestColor(struct pscmGfx *pscm, 
@@ -117,8 +133,12 @@ struct pscmGfx *pscm;
 
 AllocVar(pscm);
 pscm->ps = psOpen(file, width, height, 72.0 * 7.5, 0, 0);
+psTranslate(pscm->ps,0.5,0.5);  /* translate all coordinates to pixel centers */
 pscm->colorHash = colHashNew();
 pscmSetDefaultColorMap(pscm);
+pscm->clipMinX = pscm->clipMinY = 0;
+pscm->clipMaxX = width;     
+pscm->clipMaxY = height;
 return pscm;
 }
 
@@ -145,6 +165,33 @@ if (colorIx != pscm->curColor)
     }
 }
 
+void pscmBoxToPs(struct pscmGfx *pscm, int x, int y, 
+	int width, int height)
+/* adjust coordinates for PS */
+{
+/* Do some clipping here to make the postScript
+ * easier to edit in illustrator. */
+double x2 = x + width;
+double y2 = y + height;
+
+if (x < pscm->clipMinX) x = pscm->clipMinX;
+if (y < pscm->clipMinY) y = pscm->clipMinY;
+if (x2 > pscm->clipMaxX) x2 = pscm->clipMaxX;
+if (y2 > pscm->clipMaxY) y2 = pscm->clipMaxY;
+
+/* adjust to pixel-centered coordinates */
+x2 -= 1;
+y2 -= 1;
+double x1 = x;
+double y1 = y;
+/* pad a half-pixel all the way around the box */
+x1 -= 0.5;
+y1 -= 0.5;
+x2 += 0.5;
+y2 += 0.5;
+psDrawBox(pscm->ps, x1, y1, x2-x1, y2-y1);
+}
+
 void pscmBox(struct pscmGfx *pscm, int x, int y, 
 	int width, int height, int color)
 /* Draw a box. */
@@ -153,12 +200,13 @@ void pscmBox(struct pscmGfx *pscm, int x, int y,
  * to draw the same little vertical tick over and
  * over again.  This tries to remove the worst of
  * the redundancy anyway. */
+
 static int lx, ly, lw, lh, lc=-1;
 if (x != lx || y != ly || width != lw || height != lh || color != lc || 
 	pscm != boxPscm)
     {
     pscmSetColor(pscm, color);
-    psDrawBox(pscm->ps, x, y, width, height);
+    pscmBoxToPs(pscm, x, y, width, height);
     lx = x;
     ly = y;
     lw = width;
@@ -265,8 +313,18 @@ void pscmDrawPoly(struct pscmGfx *pscm, struct gfxPoly *poly, Color color,
 	boolean filled)
 /* Draw a polygon, possibly filled, in color. */
 {
+struct gfxPoint *p = poly->ptList;
+struct psPoly *psPoly = psPolyNew();
 pscmSetColor(pscm, color);
-psDrawPoly(pscm->ps, poly, filled);
+for (;;)
+    {
+    psPolyAddPoint(psPoly,p->x, p->y);
+    p = p->next;
+    if (p == poly->ptList)
+	break;
+    }
+psDrawPoly(pscm->ps, psPoly, filled);
+psPolyFree(&psPoly);
 }
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)

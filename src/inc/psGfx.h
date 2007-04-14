@@ -7,32 +7,31 @@
 #ifndef PSGFX_H
 #define PSGFX_H
 
-#ifndef GFXPOLY_H
-#include "gfxPoly.h"
-#endif
+#include "psPoly.h"
 
 struct psGfx 
 /* A postScript output file. */
     {
-    FILE *f;                    /* File to write to. */
-    int pixWidth, pixHeight;	/* Size of image in virtual pixels. */
-    double ptWidth, ptHeight;   /* Size of image in points (1/72 of an inch) */
-    double xScale, yScale;      /* Conversion from pixels to points. */
-    double xOff, yOff;          /* Offset from pixels to points. */
-    double fontHeight;		/* Height of current font. */
-    int clipMinX, clipMaxX;     /* Clipping region upper left corner. */
-    int clipMinY, clipMaxY;     /* lower right, not inclusive */
+    FILE *f;                      /* File to write to. */
+    double userWidth, userHeight; /* Size of image in virtual pixels. */
+    double ptWidth, ptHeight;     /* Size of image in points (1/72 of an inch) */
+    double xScale, yScale;        /* Conversion from pixels to points. */
+    double xOff, yOff;            /* Offset from pixels to points. */
+    double fontHeight;		  /* Height of current font. */
     };
 
 struct psGfx *psOpen(char *fileName, 
-	int pixWidth, int pixHeight, 	 /* Dimension of image in pixels. */
-	double ptWidth, double ptHeight, /* Dimension of image in points. */
-	double ptMargin);                /* Image margin in points. */
+	double userWidth, double userHeight, /* Dimension of image in user's units. */
+	double ptWidth, double ptHeight,     /* Dimension of image in points. */
+	double ptMargin);                    /* Image margin in points. */
 /* Open up a new postscript file.  If ptHeight is 0, it will be
  * calculated to keep pixels square. */
 
 void psClose(struct psGfx **pPs);
 /* Close out postScript file. */
+
+void psTranslate(struct psGfx *ps, double xTrans, double yTrans);
+/* add a constant to translate all coordinates */
 
 void psClipRect(struct psGfx *ps, double x, double y, 
 	double width, double height);
@@ -93,13 +92,13 @@ void psPushG(struct psGfx *ps);
 void psPopG(struct psGfx *ps);
 /* Pop off saved graphics state. */
 
-void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled);
+void psDrawPoly(struct psGfx *ps, struct psPoly *poly, boolean filled);
 /* Draw a possibly filled polygon */
 
-void psFillEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad);
+void psFillEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad);
 
-void psDrawEllipse(struct psGfx *ps, int x, int y, int xrad, int yrad,
-    int startAngle, int endAngle);
+void psDrawEllipse(struct psGfx *ps, double x, double y, double xrad, double yrad,
+    double startAngle, double endAngle);
 
 char * convertEpsToPdf(char *epsFile);
 /* Convert EPS to PDF and return filename, or NULL if failure. */
