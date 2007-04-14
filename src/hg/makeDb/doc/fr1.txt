@@ -2367,3 +2367,18 @@ XXXX - running 2007-01-11 20:55
     #	real    3m14.494s
     cat fb.fr1.chainGalGal3Link.txt
     #	33536400 bases of 315518167 (10.629%) in intersection
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2007-04-09 - Hiram)
+    # This will find repeats within the genome that should not be matched
+    # against. Uses 11-mers.
+    # Use -repMatch=128 (based on size -- for human we use 1024, and
+    # fugu size is ~12% of human judging by gapless fr2 vs. hg18
+    # genome sizes from featureBits.
+
+    ssh kolossus
+    blat /cluster/data/fr1/fr1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/data/fr1/11.ooc -repMatch=128
+    #	Wrote 5850 overused 11-mers to /cluster/data/fr1/11.ooc
+
+    cp -p /cluster/data/fr1/11.ooc /cluster/bluearc/fr1
