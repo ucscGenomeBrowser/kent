@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.2 2007/04/05 00:41:32 hiram Exp $
+#  $Id: cb3.txt,v 1.3 2007/04/14 00:10:09 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -111,7 +111,20 @@ dbDbSpeciesDir worm
     cp -p jkStuff/11.ooc /san/sanvol1/scratch/worms/cb3
 
 #########################################################################
-# GENBANK AUTO UPDATE (DONE - 2007-04-04 - Hiram)
+## Create a lift file for genbank work
+    ssh kkstore02
+    cd /cluster/data
+    cp -p caePb1/jkStuff/agpToLift.pl cb3/jkStuff
+    cd cb3
+    for C in downloads/*.agp.gz
+do
+    zcat "${C}" | ./jkStuff/agpToLift.pl /dev/stdin
+done > jkStuff/liftAll.lft
+    cp -p jkStuff/liftAll.lft /san/sanvol1/scratch/worms/cb3
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2007-04-04-05 - Hiram)
+## re-run with refseq.mrna.xeno added - 2007-04-13 - Hiram
     # align with latest genbank process.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -122,14 +135,18 @@ dbDbSpeciesDir worm
 cb3.serverGenome = /cluster/data/cb3/cb3.2bit
 cb3.clusterGenome = /san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
 cb3.ooc = /san/sanvol1/scratch/worms/cb3/11.ooc
+cb3.lift = /san/sanvol1/scratch/worms/cb3/liftAll.lft
 cb3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 cb3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
 cb3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 cb3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 cb3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 cb3.refseq.mrna.native.load = yes
+cb3.refseq.mrna.xeno.load  = yes
+cb3.refseq.mrna.xeno.loadDesc = yes
 cb3.genbank.mrna.xeno.load = no
 cb3.downloadDir = cb3
+
 
     cvs ci -m "Added cb3." etc/genbank.conf
     # update /cluster/data/genbank/:
@@ -138,7 +155,199 @@ cb3.downloadDir = cb3
     ssh kkstore02
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial cb3 &
-    #	logFile: var/build/logs/2007.04.04-17:38:18.cb3.initalign.log
-XXX running - 2007-04-04 - 17:38
-    #	real    61m33.930s
+    #	logFile: var/build/logs/2007.04.13-16:07:24.cb3.initalign.log
+    #	real    38m57.377s - second time
+    #	real    64m21.661s - first time
 
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad cb3
+    #	logFile: var/dbload/hgwdev/logs/2007.04.13-16:52:24.dbload.log
+    #
+    #	logFile:  var/dbload/hgwdev/logs/2007.04.05-11:06:36.dbload.log
+    #	real    9m34.634s - first time
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-04-05 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cb3", "blat14", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("cb3", "blat14", "17789", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## Default position (DONE - 2007-04-09 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:7677406-7695567"
+	where name="cb3";' hgcentraltest
+
+############################################################################
+## Adding a Photograph, from Eric Hagg in email 2007-04-07 12:04
+    #	-rw-rw-r--  1 2082920 Apr  9 16:13 Cb-fem-3(nm63)-XX-#2-3.jpg
+    #	Cb-fem-3(nm63)-XX-#2-3.jpg JPEG 2600x2060
+    mkdir /cluster/data/cb3/photograph
+    cd /cluster/data/cb3/photograph
+    convert -sharpen 0 -normalize -gamma 1.7 \
+	-geometry "300x300" "Cb-fem-3(nm63)-XX-#2-3.jpg" \
+	Caenorhabditis_briggsae.jpg
+    #	check this .jpg file into the browser doc source tree
+    cvs add -kb Caenorhabditis_briggsae.jpg
+    cvs commit Caenorhabditis_briggsae.jpg
+    cp -p Caenorhabditis_briggsae.jpg /usr/local/apache/htdocs/images
+
+############################################################################
+## BlastZ caeRem2 - (WORKING - 2007-04-13 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/cb3/bed/blastz.caeRem2.2007-04-13
+    cd /cluster/data/cb3/bed/blastz.caeRem2.2007-04-13
+
+    cat << '_EOF_' > DEF
+# cb3 vs caeRem2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: briggsae Cb3
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb3/cb3.rmskTrf.2bit
+SEQ1_LEN=/san/sanvol1/scratch/worms/cb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: briggsae caeRem2, 9,660 contigs, longest 5,925,111
+SEQ2_DIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/worms/caeRem2/chrom.sizes
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.2bit
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/caeRem2/caeRem2.contigs.sizes
+SEQ2_LIFT=/san/sanvol1/scratch/worms/caeRem2/caeRem2.chrUn.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=50
+
+BASE=/cluster/data/cb3/bed/blastz.caeRem2.2007-04-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=kk \
+	-blastzOutRoot /cluster/bluearc/cb3CaeRem2 > do.log 2>&1 &
+    #	A single job thought it failed, it had not
+    time nice -n +19 doBlastzChainNet.pl DEF -verbose=2 -bigClusterHub=kk \
+	-continue=cat \
+	-blastzOutRoot /cluster/bluearc/cb3CaeRem2 > cat.log 2>&1 &
+    cat fb.cb3.chainCaeRem2Link.txt
+    #	53199792 bases of 108433446 (49.062%) in intersection
+
+    #	The following is also in caeRem2.txt
+    mkdir /cluster/data/caeRem2/bed/blastz.cb3.swap
+    cd /cluster/data/caeRem2/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
+	-swap \
+	/cluster/data/cb3/bed/blastz.caeRem2.2007-04-13/DEF > swap.log 2>&1 &
+    #	The typical failure:
+    #	netChains: looks like previous stage was not successful (can't find
+    #	[caeRem2.cb3.]all.chain[.gz]).
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 -bigClusterHub=kk \
+	-continue=net -swap \
+	/cluster/data/cb3/bed/blastz.caeRem2.2007-04-13/DEF > net.log 2>&1 &
+    #	real    9m6.800s
+    cat fb.caeRem2.chainCb3Link.txt
+    #	63292118 bases of 146898439 (43.086%) in intersection
+
+#########################################################################
+## Create goldenPath files for hgdownload (DONE - 2007-04-13 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/cb3/goldenPath
+    cd /cluster/data/cb3/goldenPath
+    mkdir bigZips chromosomes database
+    cd chromosomes
+    for C in `awk '{print $1}' ../../chrom.sizes`
+do
+    twoBitToFa -seq=${C} ../../cb3.2bit stdout | gzip -c > ${C}.fa.gz
+    echo ${C} done
+done
+    #	check the sequence
+    faSize *.fa.gz
+    #	108492946 bases (3041279 N's 105451667 real
+    #	84250398 upper 21201269 lower) in 13 sequences in 13 files
+    #	%19.54 masked total, %20.11 masked real
+
+    twoBitToFa ../../cb3.2bit stdout | faSize stdin
+    #	108492946 bases (3041279 N's 105451667 real
+    #	84250398 upper 21201269 lower) in 13 sequences in 1 files
+    #	%19.54 masked total, %20.11 masked real
+
+    #	the chrM definition is missing from cb3.agp
+    #	edit that file to add the line:
+# chrM  1  14420  1   F  AC186293.1   1 14420   +
+
+    cd ../bigZips
+    splitFileByColumn -ending=agp ../../cb3.agp .
+    tar cvzf ./chromAgp.tar.gz ./chr*.agp
+    rm chr*.agp
+    for C in `awk '{print $1}' ../../chrom.sizes`
+do
+    zcat ../chromosomes/${C}.fa.gz > ${C}.fa
+    echo chr${C} done
+done
+    #	Verify sequence
+    faSize ch*.fa
+    #	108492946 bases (3041279 N's 105451667 real
+    #	84250398 upper 21201269 lower) in 13 sequences in 13 files
+    #	%19.54 masked total, %20.11 masked real
+
+    tar cvzf ./chromFa.tar.gz chr*.fa
+    for F in chr*.fa
+do
+    maskOutFa $F hard $F.masked
+done
+    tar cvzf chromFaMasked.tar.gz ./chr*.fa.masked
+    rm chr*.fa chr*.fa.masked
+
+    cp -p ../../*/chr*.fa.out .
+    tar cvzf ./chromOut.tar.gz chr*.fa.out
+    rm chr*.fa.out
+
+    splitFileByColumn -ending=bed ../../bed/simpleRepeat/trfMask.bed .
+    tar cvzf ./chromTrf.tar.gz chr*.bed
+    rm chr*.bed
+
+    ssh hgwdev
+    # get GenBank native mRNAs
+    cd /cluster/data/genbank
+    ./bin/x86_64/gbGetSeqs -db=cb3 -native GenBank mrna \
+	/cluster/data/cb3/goldenPath/bigZips/mrna.fa.gz
+    # get GenBank xeno mRNAs
+    ./bin/x86_64/gbGetSeqs -db=cb3 -xeno GenBank mrna \
+	/cluster/data/cb3/goldenPath/bigZips/xenoMrna.fa.gz
+    # get native GenBank ESTs
+    ./bin/x86_64/gbGetSeqs -db=cb3 -native GenBank est \
+	/cluster/data/cb3/goldenPath/bigZips/est.fa.gz
+    #	There are no native RefSeq mRNAs
+    # get native RefSeq mRNAs
+    # ./bin/x86_64/gbGetSeqs -db=cb3 -native RefSeq mrna \
+    #	/cluster/data/cb3/goldenPath/bigZips/refMrna.fa
+
+    ssh kkstore02
+    cd /cluster/data/cb3/goldenPath/bigZips
+    md5sum *.gz > md5sum.txt
+    #	Fetch a README.txt file from something related to this and
+    #	ensure it is correct
+
+##########################################################################
+## Fixup chrM_gold missing table entry (DONE - 2007-04-13 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/cb3/bed/gold
+    cd /cluster/data/cb3/bed/gold
+    hgsql -N -e "select * from chrM_gold;" hg18 > chrM_gold.tab
+    #	Edit that to make it read:
+# 585  chrM  0   14420  1   F  AC186293.1   0 14420   +
+    sed -e "s/agpFrag/chrM_gold/" $HOME/kent/src/hg/lib/agpFrag.sql \
+	> chrM_gold.sql
+    # edit that to add the bin column, then
+    #	bin smallint(6) NOT NULL default '0',
+    hgLoadSqlTab cb3 chrM_gold chrM_gold.sql chrM_gold.tab
