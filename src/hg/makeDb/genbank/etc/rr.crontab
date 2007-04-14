@@ -13,5 +13,5 @@ MAILTO=genbank@cse.ucsc.edu
 
 # sat, all day load mRNAs and ESTS
 # poll every 15 minutes
-0,15,30,45 0-23 * * 6	/genbank/etc/hgwbeta-dbload -inclEsts
+0,15,30,45 0-23 * * 6	/genbank/etc/rr-dbload -inclEsts
 
