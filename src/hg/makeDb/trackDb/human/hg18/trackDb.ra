@@ -108,9 +108,9 @@ type bed 5 .
 
 release alpha
 track phastCons28wayPlacental
-shortLabel PhastCons Conservation in Placental Mammals, 28-way Vertebrate Multiz Alignment
-longLabel  28-Way Mammal Cons
-group encodeCompGeno
+shortLabel  28-Way Mammal Cons
+longLabel PhastCons Conservation in Placental Mammals, 28-way Vertebrate Multiz Alignment
+group compGeno
 priority 104.3
 type wig 0.0 1.0
 spanList 1
