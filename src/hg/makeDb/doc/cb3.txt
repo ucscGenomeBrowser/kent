@@ -3,7 +3,7 @@
 # Caenorhabditis briggsae
 #	Washington University School of Medicine GSC and Sanger Institute
 #
-#  $Id: cb3.txt,v 1.3 2007/04/14 00:10:09 hiram Exp $
+#  $Id: cb3.txt,v 1.4 2007/04/14 00:15:26 hiram Exp $
 
 ###########################################################################
 ## Download sequence (DONE - 2007-01-22 - Hiram)
@@ -164,7 +164,7 @@ cb3.downloadDir = cb3
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad cb3
     #	logFile: var/dbload/hgwdev/logs/2007.04.13-16:52:24.dbload.log
-    #
+    #	real    19m32.844s - second time
     #	logFile:  var/dbload/hgwdev/logs/2007.04.05-11:06:36.dbload.log
     #	real    9m34.634s - first time
 
