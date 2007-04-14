@@ -9,7 +9,7 @@
 #       Data release policy: http://medaka.utgenome.org/#policy
 #       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
 #
-#       "$Id: fr2.txt,v 1.16 2007/03/27 20:31:30 hiram Exp $"
+#       "$Id: fr2.txt,v 1.17 2007/04/14 00:11:22 hiram Exp $"
 #
 
 ##########################################################################
@@ -1619,3 +1619,19 @@ plot "mostCons.histo.txt" using 2:3 title " # of elements" with boxes, \
     #	real    3m1.239s
     cat fb.fr2.chainGalGal3Link.txt
     #	36175581 bases of 393312790 (9.198%) in intersection
+
+###########################################################################
+# Create liftover fr1 to fr2 (DONE - 2007-04-09 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/fr2/bed/blat.fr1
+    cd /cluster/data/fr2/bed/blat.fr1
+
+    time nice -n +19 doSameSpeciesLiftOver.pl fr1 fr2 -bigClusterHub pk \
+	-buildDir=/cluster/data/fr2/bed/blat.fr1 > do.log 2>&1
+
+    cp -p fr1ToFr2.over.chain.gz ../liftOver
+    cd ../liftOver
+    md5sum *.gz > ../../goldenPath/liftOver/md5sum.txt
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/fr2/liftOver
+    ln -s /cluster/data/fr2/bed/liftOver/fr1ToFr2.over.chain.gz .
