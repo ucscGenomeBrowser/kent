@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.17 2007/04/14 22:37:20 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.18 2007/04/14 22:51:44 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -228,7 +228,15 @@ void pscmLine(struct pscmGfx *pscm,
 /* Draw a line from one point to another. */
 {
 pscmSetColor(pscm, color);
-psDrawLine(pscm->ps, x1, y1, x2, y2);
+if ((x1==x2) || (y1 == y2))
+    {
+    /* pad a half-pixel at each end */
+    psDrawBox(pscm->ps, x1-0.5, y1-0.5, x2-x1+1, y2-y1+1);
+    }
+else
+    {
+    psDrawLine(pscm->ps, x1, y1, x2, y2);
+    }
 boxPscm = NULL;
 }
 
