@@ -15,7 +15,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.19 2007/04/15 00:33:35 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.20 2007/04/15 00:43:41 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -350,7 +350,24 @@ void pscmDrawPoly(struct pscmGfx *pscm, struct gfxPoly *poly, Color color,
 {
 struct gfxPoint *p = poly->ptList;
 struct psPoly *psPoly = psPolyNew();
+if (poly->ptCount < 1)  /* nothing to do */
+    {
+    return;
+    }
+if (poly->ptCount == 1)  /* a single point */
+    {
+    struct gfxPoint *p = poly->ptList;
+    pscmBox(pscm, p->x, p->y, 1, 1, color);
+    return;
+    }
+if (poly->ptCount == 2)  /* a single line */
+    {
+    struct gfxPoint *p1 = poly->ptList;
+    struct gfxPoint *p2 = p1->next;
+    pscmLine(pscm, p1->x, p1->y, p2->x, p2->y, color);
+    }
 pscmSetColor(pscm, color);
+
 for (;;)
     {
     psPolyAddPoint(psPoly,p->x, p->y);
