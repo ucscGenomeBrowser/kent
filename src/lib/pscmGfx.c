@@ -5,6 +5,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "hash.h"
 #include "memgfx.h"
 #include "gfxPoly.h"
 #include "colHash.h"
@@ -14,7 +15,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.18 2007/04/14 22:51:44 galt Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.19 2007/04/15 00:33:35 galt Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -22,6 +23,31 @@ static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
 				  * ends up cutting down the file size by 5x
 				  * in the whole chromosome case of the browser. */
 
+void pscmSetHint(struct pscmGfx *pscm, char *hint, char *value)
+/* set a hint */
+{
+if (!value) return;
+if (sameString(value,""))
+    {
+    hashRemove(pscm->hints, hint);
+    }
+struct hashEl *el = hashLookup(pscm->hints, hint);
+if (el) 
+    {
+    freeMem(el->val);
+    el->val = cloneString(value);
+    }
+else
+    {
+    hashAdd(pscm->hints, hint, cloneString(value));
+    }
+}
+
+char *pscmGetHint(struct pscmGfx *pscm, char *hint)
+/* get a hint */
+{
+return hashOptionalVal(pscm->hints, hint, "");
+}
 void pscmSetClip(struct pscmGfx *pscm, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
@@ -139,6 +165,7 @@ pscmSetDefaultColorMap(pscm);
 pscm->clipMinX = pscm->clipMinY = 0;
 pscm->clipMaxX = width;     
 pscm->clipMaxY = height;
+pscm->hints = hashNew(6);
 return pscm;
 }
 
@@ -332,8 +359,10 @@ for (;;)
 	break;
     }
 psDrawPoly(pscm->ps, psPoly, filled);
+
 psPolyFree(&psPoly);
 }
+
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
@@ -354,6 +383,8 @@ vg->unclip = (vg_unclip)pscmUnclip;
 vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
+vg->setHint = (vg_setHint)pscmSetHint;
+vg->getHint = (vg_getHint)pscmGetHint;
 return vg;
 }
 

@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.46 2006/06/30 05:49:10 galt Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.47 2007/04/15 00:33:35 galt Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -627,8 +627,17 @@ for (i=0; i<iWidth; ++i)
 return out;
 }
 
+void mgSetHint(char *hint)
+/* dummy function */
+{
+return;
+}
 
-
+char *mgGetHint(char *hint)
+/* dummy function */
+{
+return "";
+}
 
 void vgMgMethods(struct vGfx *vg)
 /* Fill in virtual graphics methods for memory based drawing. */
@@ -649,5 +658,7 @@ vg->unclip = (vg_unclip)mgUnclip;
 vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
+vg->setHint = (vg_setHint)mgSetHint;
+vg->getHint = (vg_getHint)mgGetHint;
 }
 

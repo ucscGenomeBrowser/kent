@@ -24,6 +24,7 @@ struct pscmGfx
     int colorsUsed;		/* Number of colors actually used. */
     int clipMinX, clipMaxX;     /* Clipping region upper left corner. */
     int clipMinY, clipMaxY;     /* lower right, not inclusive */
+    struct hash *hints;   /* Hints to guide behavior */
     };
 
 struct pscmGfx *pscmOpen(int width, int height, char *file);

@@ -7,6 +7,7 @@
 
 #ifndef MEMGFX_H
 #include "memgfx.h"
+#include "hash.h"
 #endif
 
 struct vGfx
@@ -77,6 +78,12 @@ struct vGfx
     	boolean filled);
     /* Draw polygon, possibly filled in color. */
 
+    void (*setHint)(void *v, char *hint, char *value);
+    /* Set hint */
+
+    char * (*getHint)(void *v, char *hint);
+    /* Get hint */
+
     };
 
 struct vGfx *vgOpenGif(int width, int height, char *fileName);
@@ -146,6 +153,16 @@ void vgClose(struct vGfx **pVg);
 #define vgDrawPoly(v,poly,color,filled) \
 	v->drawPoly(v->data,poly,color,filled)
     /* Draw a polygon in color, optionally filled. */
+
+#define vgSetHint(v,hint,value) \
+	v->setHint(v->data,hint,value)
+    /* Set hint */
+
+#define vgGetHint(v,hint) \
+	v->getHint(v->data,hint)
+    /* Get hint */
+
+
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
 /* Find color index corresponding to rgb color. */
