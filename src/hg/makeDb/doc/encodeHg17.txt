@@ -653,7 +653,9 @@ cat > doLoad.csh << 'EOF'
 #       New data for Oct. freeze (but submitted in hg16 coords)
 #       All data are bed3
 # Contact: Chris Taylor (cmt5n@cs.virginia.edu)
-
+# 2007-04-14: Chris Taylor sent data for the ENm011 region for the 
+# Replication track - this data was lost due to a problem with one of 
+# Affy's mapping files (hartera)
     cd /cluster/data/encode/UVa
     mkdir -p 2005-08-30
     cd 2005-08-30
@@ -727,7 +729,15 @@ cat > doLoad.csh << 'EOF'
     hgLoadWiggle -pathPrefix=$dir hg17 $table $table.wig
     ln -s `pwd`/$table.wib $dir
 
-
+    # Update of tracks to add lost data for ENm011 region for the 
+    # Replication track (hartera)
+    cd /cluster/data/encode/UVa/
+    mkdir 2007-04-14/download
+    cd 2007-04-14/download
+    # copy data updates here - sent by e-mail:
+    # Early_ENm011.bed, Late_ENm011.bed, Mid_ENm011.bed, Pans_ENm011.bed
+    
+     
 ##########################################################################
 # Indels from Jim Mullikin
 # Heather, Sept. 2005
@@ -1333,13 +1343,85 @@ cat > load.csh << 'EOF'
 
     ######################################################################
     # Update 2007-03-28 from Julien Lagarde <jlagarde@imim.es>(Kate)
-
+    # Track update with five subtracks (in progress, 2007-04-10, hartera).
+    # Gencode reference genes: "Known" and "Novel_CDS"
+    # Gencode putative: "Novel_Transcript", "Putative", "TEC", "Artifact"
+    # Gencode polymorphic: "Polymorphic"
+    # Gencode pseudogenes: "Processed_pseudogene", "Unprocessed_pseudogene"
+    # Gencode polyA features: "polyA_signal", "polyA_site", "pseudo_polyA"
+    # cut -f2 *chr_coords_hg17.gff | sort | uniq shows all the types.
+    # New description sent 2007-04-12, ucsc_description2.html
     cd /cluster/data/encode/Gencode
     mkdir -p 2007-03-28/lab
+    ln -s 2007-03-28 latest
     cd 2007-03-28/lab
     wget -r -nv -nd -np ftp://genome.imim.es/pub/projects/gencode/data/havana-encode/current/gff/EN\*hg17.gff
+    cd /cluster/data/encode/Gencode/2007-03-28
+    egrep -h 'Known|Novel_CDS' lab/*.gff > encodeGencodeGeneKnownMar07.gff
+    egrep -h 'Novel_Transcript|Putative|TEC|Artifact' lab/*.gff \
+          > encodeGencodeGenePutativeMar07.gff
+    egrep -h 'Polymorphic' lab/*.gff > encodeGencodeGenePolymorphicMar07.gff
+    egrep -h 'pseudogene' lab/*.gff > encodeGencodeGenePseudoMar07.gff
+    egrep -h 'polyA' lab/*.gff | \
+          awk 'BEGIN {FS="\t"} {OFS="\t"} {print $1, $4, $5, $2, "0", $7;}' | \
+          sed -e 's/VEGA_//' \
+          > encodeGencodeGenePolyA.bed
+    wc -l encode*
+    # total is 33492 which is the same number of lines in the lab/*.gff files.
+    
+    # load these into the database:
+    foreach c (Known Putative Polymorphic Pseudo)
+        set table = encodeGencodeGene${c}Mar07
+        echo $table
+        ldHgGene -genePredExt hg17 $table ${table}.gff             
+        genePredCheck -db=hg17 $table
+    end
+    # encodeGencodeGeneKnownMar07 - 2991 gene predictions
+    # encodeGencodeGenePutativeMar07 - 372 gene predictions
+    # encodeGencodeGenePolymorphicMar07 - 25 gene predictions
+    # encodeGencodeGenePseudoMar07 - 191 gene predictions
 
+    # everything looks fine with genePredCheck. A bug was fixed by Mark
+    # in ldHgGene since there was an error with loading initially. Tables
+    # were reloaded on 2007-04-12.
+ 
+    # The BED table can have an itemRgb column to specify coloring for items.
+    # polyA_signal: brown, polyA_site: orange, pseudo_polyA: pink
+    # Add the colours in r,g,b format in column 9:
+    awk 'BEGIN {OFS="\t"} {if ($4 ~ /signal/) print $0, "0", "0", "94,38,5"; \
+        else if ($4 ~ /site/) print $0, "0", "0", "255,102,0"; \
+        else if ($4 ~ /pseudo/) print $0, "0", "0", "255,153,255";}' \
+        encodeGencodeGenePolyA.bed > encodeGencodeGenePolyAMar07.bed 
+    # Load in the polyA features BED file:
+    hgLoadBed hg17 encodeGencodeGenePolyAMar07 encodeGencodeGenePolyAMar07.bed
+    # Loaded 1807 elements of size 6
 
+    # Create the gene class table:
+    # modify table name and add Polymorhpic class to enum:
+    sed -e 's/gencodeGeneClass/gencodeGeneClassMar07/' \
+        ~/kent/src/hg/lib/gencodeGeneClass.sql \
+        > gencodeGeneClassMar07.sql
+    perl -pi.bak -e \
+    "s/Unprocessed_pseudogene\'/Unprocessed_pseudogene\', \'Polymorphic\'/" \
+         gencodeGeneClassMar07.sql
+    rm *.bak
+
+    cat lab/*.gff | grep VEGA | grep -v polyA | \
+        awk '{printf "%s\t%s\n", $10, $2}' | \
+        sed -e 's/"//g' -e 's/;//' -e 's/VEGA_//' | \
+        sort | uniq > gencodeGeneClassMar07.tab
+    wc -l gencodeGeneClassMar07.tab
+    # 3579 gencodeGeneClassMar07.tab
+    # load into database:
+    hgLoadSqlTab hg17 gencodeGeneClassMar07 gencodeGeneClassMar07.sql \
+                 gencodeGeneClassMar07.tab
+
+    # Create a human/trackDb.encode.ra entry and the description page.
+    cp -p ucsc_description.html \
+       ~/kent/src/hg/makeDb/trackDb/human/encodeGencodeGeneMar07.html 
+
+    # E-mailed Julien Lagarde on 2007-04-13 to ask if a Gencode Introns
+    # track update is also required.
 
 ##########################################################################
 # NHGRI DNaseI HS (2005-10-24 kate)
@@ -3171,3 +3253,16 @@ hgLoadBed -notItemRgb -strict hg17 encodeUViennaRnaz rnazNoHeader.bed
 cp rnaz_track.html \
    ~/kent/src/hg/makeDb/trackDb/human/hg17/encodeUViennaRnaz.html
 # edit description and change re-format publications
+
+############################################################################
+# Gencode Loci RACEfrags - 5' RACE-ARRAY experiments on Gencode loci
+# Submitted on 2007-04-11 by France Denoeud: fdenoeud@genoscope.cns.fr
+# of the Gencode group. 
+    
+# Create a directory for the data and copy the data there. Data was 
+# sent by e-mail. (hartera, 2007-04-15)
+
+mkdir -p /cluster/data/encode/GencodeRACEfrags/2007-04-11/lab
+# Data is in file: RACEFRAGS_UCSC.gff
+# Also add the e-mails from France as a README.txt - these explain how the 
+# track should be displayed.
