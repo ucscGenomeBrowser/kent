@@ -204,7 +204,7 @@
 #include "geneCheckDetails.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1273 2007/04/14 00:29:47 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1274 2007/04/16 22:34:30 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -395,7 +395,7 @@ fprintf(f, "\"%s%s\"", genMapDbScript, clone);
 static void printFlyBaseUrl(FILE *f, char *fbId)
 /* Print URL for FlyBase browser. */
 {
-fprintf(f, "\"http://flybase.bio.indiana.edu/.bin/fbidq.html?%s\"", fbId);
+fprintf(f, "\"http://flybase.net/.bin/fbidq.html?%s\"", fbId);
 }
 
 static void printBDGPUrl(FILE *f, char *bdgpName)
@@ -16932,7 +16932,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *stripped = stripBDGPSuffix(psc->geneIds[i]);
 	    printf("<B>Gene%s BDGP ID:</B> "
-		   "<A HREF=\"http://flybase.bio.indiana.edu/.bin/fbquery?"
+		   "<A HREF=\"http://flybase.net/.bin/fbquery?"
 		   "query=%s&sections=FBgn&submit=issymbol\" TARGET=_BLANK>"
 		   "%s</A><BR>\n", gNum, stripped, psc->geneIds[i]);
 	    }
