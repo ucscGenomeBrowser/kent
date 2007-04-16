@@ -16,8 +16,8 @@ clean:
 load: clean
 	hgsql test < input/fakeChromInfo.sql
 	for TEST in ${GENEPREDS} ; do \
-	  ldHgGene -predTab test $${TEST}Good input/$${TEST}Good.tab -verbose=0 ; \
-	  ldHgGene -predTab test $${TEST}Bad  input/$${TEST}Bad.tab -verbose=0 ; \
+	  ldHgGene -nobin -predTab test $${TEST}Good input/$${TEST}Good.tab -verbose=0 ; \
+	  ldHgGene -nobin -predTab test $${TEST}Bad  input/$${TEST}Bad.tab -verbose=0 ; \
 	done
 	for TEST in ${BEDS} ; do \
 	  hgLoadBed test $${TEST}Good input/$${TEST}Good.bed -verbose=0 ; \
