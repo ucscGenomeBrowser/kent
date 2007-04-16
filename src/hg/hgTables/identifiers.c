@@ -13,7 +13,7 @@
 #include "trashDir.h"
 #include "web.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.11 2007/04/12 22:04:00 angie Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.12 2007/04/16 20:28:33 angie Exp $";
 
 
 static void getXrefInfo(char **retXrefTable, char **retIdField,
@@ -270,11 +270,17 @@ if (isNotEmpty(idText))
 	cartRemove(cart, hgtaPastedIdentifiers);
     if (foundTerms < totalTerms)
 	{
+	char *xrefTable, *aliasField;
+	getXrefInfo(&xrefTable, NULL, &aliasField);
 	warn("Note: some of the identifiers (e.g. %s) have no match in "
-	     "table %s, field %s.  "
+	     "table %s, field %s%s%s%s%s.  "
 	     "Try the \"describe table schema\" button for more "
 	     "information about the table and field.",
-	     exampleMiss, curTable, idField);
+	     exampleMiss, curTable, idField,
+	     (xrefTable ? " or in alias table " : ""),
+	     (xrefTable ? xrefTable : ""),
+	     (xrefTable ? ", field " : ""),
+	     (xrefTable ? aliasField : ""));
 	webNewSection("Table Browser");
 	}
     lmCleanup(&lm);
