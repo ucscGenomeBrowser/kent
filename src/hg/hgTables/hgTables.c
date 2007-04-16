@@ -25,7 +25,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.151 2007/04/12 21:55:54 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.152 2007/04/16 19:40:08 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -915,7 +915,9 @@ if (idField == NULL && (hti == NULL || !hti->isPos))
     {
     struct sqlConnection *conn = hAllocOrConnect(db);
     struct slName *fieldList = sqlListFields(conn, table);
-    idField = fieldList->name;
+    if (fieldList == NULL)
+	errAbort("getIdField: Can't find fields of table %s", table);
+    idField = cloneString(fieldList->name);
     slFreeList(&fieldList);
     hFreeOrDisconnect(&conn);
     }
