@@ -12,6 +12,8 @@
 #include "cds.h"
 #include "../gsid/gsidTable/gsidTable.h"
 
+#define SELECT_SUBJ	"selectSubject"
+
 int pslGrayIx(struct psl *psl, boolean isXeno, int maxShade)
 /* Figure out gray level for an RNA block. */
 {
@@ -425,7 +427,18 @@ char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
 char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128];
-boolean checkSelected = hIsGsidServer();  /* special filter processing for GSID entries */
+boolean checkSelected;  /* flag indicating if checking for selection of an entry is needed */
+char *setting; 
+
+checkSelected = FALSE;
+if (hIsGsidServer())
+    {
+    setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
+    if (isNotEmpty(setting))
+    	{
+    	if (sameString(setting, "on")) checkSelected = TRUE;
+        }
+    }
 
 safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
