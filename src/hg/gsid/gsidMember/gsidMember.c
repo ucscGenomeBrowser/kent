@@ -25,7 +25,7 @@
 #include "paypalSignEncrypt.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: gsidMember.c,v 1.15 2007/04/05 22:16:16 galt Exp $";
+static char const rcsid[] = "$Id: gsidMember.c,v 1.16 2007/04/16 22:55:12 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update", "gsidM_password", NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -196,8 +196,8 @@ if (isFirstField)
     dyStringAppend(dy,"insert into transactions set ");
 dyStringPrintf(dy,"%s%s='%s'",
     isFirstField ? "" : ", ",
-    varName,
-    cgiUsualString(varName,""));
+    sqlEscapeString(varName),
+    sqlEscapeString(cgiUsualString(varName,"")));
 struct cgiVar *this = NULL;
 for(this=cgiVars;this;this=this->next)
     {
@@ -340,7 +340,7 @@ dyStringPrintf(dy,", otherFields='");
 for(this=cgiVars;this;this=this->next)
     {
     if (!this->saved)
-	dyStringPrintf(dy,"%s=%s\\n",this->name,this->val);
+	dyStringPrintf(dy,"%s=%s\\n",sqlEscapeString(this->name),sqlEscapeString(this->val));
     /* remove these vars from the cart for better security/privacy */
     cartRemove(cart, this->name);	
     }
@@ -427,7 +427,7 @@ dyStringPrintf(dy,"update members set "
 , cgiUsualString("payment_gross","")
 , paymentDate
 , expireDate
-, email
+, sqlEscapeString(email)
 );
 
 //debug  TODO: clean that out of trash
@@ -537,7 +537,7 @@ password = generateRandomPassword();
 char encPwd[35] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 
-safef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
+safef(query,sizeof(query), "update members set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
 sqlUpdate(conn, query);
 
 updatePasswordsFile(conn);
@@ -664,7 +664,7 @@ if (!checkPwdCharClasses(newPassword))
     }
 char encPwd[35] = "";
 encryptNewPwd(newPassword, encPwd, sizeof(encPwd));
-safef(query,sizeof(query), "update members set password='%s' where email='%s'", encPwd, email);
+safef(query,sizeof(query), "update members set password='%s' where email='%s'", sqlEscapeString(encPwd), sqlEscapeString(email));
 sqlUpdate(conn, query);
 
 hPrintf
@@ -742,7 +742,7 @@ void drawPaymentButton(struct sqlConnection *conn, char *type)
 char query[256];
 char *email = cartUsualString(cart, "gsidM_email", "");
 
-safef(query, sizeof(query), "insert into invoices values(default, '%s')", email);
+safef(query, sizeof(query), "insert into invoices values(default, '%s')", sqlEscapeString(email));
 sqlUpdate(conn, query);
 int id = sqlLastAutoId(conn);
 char invoice[20];
@@ -923,7 +923,7 @@ char encPwd[35] = "";
 encryptNewPwd(password, encPwd, sizeof(encPwd));
 safef(query,sizeof(query), "insert into members set "
     "email='%s',password='%s',activated='%s',name='%s',phone='%s',institution='%s',type='%s'", 
-    email, encPwd, "N", name, phone, institution, type);
+    sqlEscapeString(email), sqlEscapeString(encPwd), "N", sqlEscapeString(name), sqlEscapeString(phone), sqlEscapeString(institution), type);
 sqlUpdate(conn, query);
 
 
@@ -1147,7 +1147,8 @@ for(email=list;email;email=email->next)
 	    uglyf("does not start with $1$<br>\n");
 	    char encPwd[35] = "";
     	    encryptNewPwd(password, encPwd, sizeof(encPwd));
-	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'", encPwd, email->name);
+	    safef(query,sizeof(query),"update members set password = '%s' where email='%s'", 
+		sqlEscapeString(encPwd), sqlEscapeString(email->name));
 	    uglyf("query: %s<br>\n",query);
 	    sqlUpdate(conn,query);
 	    }
