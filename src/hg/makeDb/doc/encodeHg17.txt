@@ -655,7 +655,9 @@ cat > doLoad.csh << 'EOF'
 # Contact: Chris Taylor (cmt5n@cs.virginia.edu)
 # 2007-04-14: Chris Taylor sent data for the ENm011 region for the 
 # Replication track - this data was lost due to a problem with one of 
-# Affy's mapping files (hartera)
+# Affy's mapping files (hartera). Update is add missing data is only for the 
+# Mid, Late and Pan-S subtracks of the UVa DNA Rep Seg track. The Early 
+# subtrack does not have data in this region. (DONE, hartera, 2007-04-16)
     cd /cluster/data/encode/UVa
     mkdir -p 2005-08-30
     cd 2005-08-30
@@ -663,7 +665,7 @@ cat > doLoad.csh << 'EOF'
 
     # Segregation data - 4 subtracks (Early, Mid, Late, Pan-S)
     # 4 custom tracks in a single file -- use Hiram's script to split
-    /cluster/data/encode/BU/2005-06-09/splitTracks.pl \
+    /cluster/data/encode/BU/orchid/2005-06-09/splitTracks.pl \
                 lab/segchunks.hg16.qced.bed
     # creates t0, t1, t2, t3
     awk < lab/segchunks.hg16.qced.bed '/track/ {print $2}'
@@ -730,13 +732,33 @@ cat > doLoad.csh << 'EOF'
     ln -s `pwd`/$table.wib $dir
 
     # Update of tracks to add lost data for ENm011 region for the 
-    # Replication track (hartera)
+    # Replication track - UVa DNA Rep Seg (hartera). This extra data is
+    # in hg17 coordinates.
     cd /cluster/data/encode/UVa/
-    mkdir 2007-04-14/download
-    cd 2007-04-14/download
+    mkdir 2007-04-14/lab
+    cd 2007-04-14/lab
     # copy data updates here - sent by e-mail:
     # Early_ENm011.bed, Late_ENm011.bed, Mid_ENm011.bed, Pans_ENm011.bed
     
+    # Early_ENm011.bed is empty because there were no Early intervals in 
+    # ENm011 so no need to update the encodeUvaDnaRepEarly subtrack table.
+    cd /cluster/data/encode/UVa/2007-04-14
+    grep -v "^track" ./lab/Mid_ENm011.bed > UvaDnaRepMid.bed
+    grep -v "^track" ./lab/Late_ENm011.bed > UvaDnaRepLate.bed
+    grep -v "^track" ./lab/Pans_ENm011.bed > UvaDnaRepPanS.bed
+
+    foreach s (Mid Late PanS)
+       echo $s
+       cat /cluster/data/encode/UVa/2005-10-15/encodeUvaDnaRep${s}.bed \
+           UvaDnaRep${s}.bed | sort -k1 > encodeUvaDnaRep${s}.bed
+    end
+
+    # Reload these tables
+    foreach f (encodeUvaDnaRep*.bed)
+        set d = $f:r
+        echo $d
+        hgLoadBed -noBin hg17 $d $d.bed
+    end
      
 ##########################################################################
 # Indels from Jim Mullikin
